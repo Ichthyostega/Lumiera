@@ -1,4 +1,8 @@
-# vim: set et sw=3 tw=0 fo=awqorc ft=python:
+# SCons Doxygen Bilder
+# 
+# Copyright (C) 2007  Dirk Reiners
+#
+# based on the version from http://www.scons.org/wiki/DoxygenBuilder?highlight=%28doxygen%29
 #
 # Astxx, the Asterisk C++ API and Utility Library.
 # Copyright (C) 2005, 2006  Matthew A. Nicholson
@@ -21,8 +25,9 @@ import os
 import os.path
 import glob
 from fnmatch import fnmatch
+import subprocess
 
-def DoxyfileParse(file_contents):
+def DoxyfileParse(file_contents, file_dir, env):
    """
    Parse a Doxygen source file and return a dictionary of all the values.
    Values will be strings and lists of strings.
@@ -30,20 +35,34 @@ def DoxyfileParse(file_contents):
    data = {}
 
    import shlex
+   
    lex = shlex.shlex(instream = file_contents, posix = True)
-   lex.wordchars += "*+./-:"
+   lex.wordchars += "*+./-:@$()"
    lex.whitespace = lex.whitespace.replace("\n", "")
-   lex.escape = ""
-
+   lex.escape = ""  
+      
    lineno = lex.lineno
    token = lex.get_token()
    key = token   # the first token should be a key
    last_token = ""
-   key_token = False
-   next_key = False
+   key_token = True
    new_data = True
-
+   
    def append_data(data, key, new_data, token):
+      if token[:2] == "$(":
+         try:
+            token = env[token[2:-1]]
+         except KeyError:
+            print "ERROR: Variable %s used in Doxygen file is not in environment!" % token
+            token = ""
+         # Convert space-separated list to actual list
+         token = token.split()
+         if len(token):
+            append_data(data, key, new_data, token[0])
+            for i in token[1:]:
+               append_data(data, key, True, i)
+         return
+         
       if new_data or len(data[key]) == 0:
          data[key].append(token)
       else:
@@ -64,6 +83,13 @@ def DoxyfileParse(file_contents):
                data[key] = list()
          elif token == "=":
             data[key] = list()
+         elif key == "@INCLUDE":
+         
+            filename = token
+            if not os.path.isabs(filename):
+               filename = os.path.join(file_dir, filename)
+
+            lex.push_source(open(filename), filename)
          else:
             append_data( data, key, new_data, token )
             new_data = True
@@ -74,6 +100,7 @@ def DoxyfileParse(file_contents):
       if last_token == '\\' and token != '\n':
          new_data = False
          append_data( data, key, new_data, '\\' )
+      
 
    # compress lists of len 1 into single strings
    for (k, v) in data.items():
@@ -107,7 +134,9 @@ def DoxySourceScan(node, env, path):
 
    sources = []
 
-   data = DoxyfileParse(node.get_contents())
+   conf_dir = os.path.dirname(str(node))
+
+   data = DoxyfileParse(node.get_contents(), conf_dir, env)
 
    if data.get("RECURSIVE", "NO") == "YES":
       recursive = True
@@ -118,6 +147,8 @@ def DoxySourceScan(node, env, path):
    exclude_patterns = data.get("EXCLUDE_PATTERNS", default_exclude_patterns)
 
    for node in data.get("INPUT", []):
+      if not os.path.isabs(node):
+         node = os.path.join(conf_dir, node)
       if os.path.isfile(node):
          sources.append(node)
       elif os.path.isdir(node):
@@ -154,7 +185,7 @@ def DoxyEmitter(source, target, env):
       "XML": ("NO", "xml"),
    }
 
-   data = DoxyfileParse(source[0].get_contents())
+   data = DoxyfileParse(source[0].get_contents(), os.path.dirname(str(source[0])), env)
 
    targets = []
    out_dir = data.get("OUTPUT_DIRECTORY", ".")
@@ -162,6 +193,7 @@ def DoxyEmitter(source, target, env):
    # add our output locations
    for (k, v) in output_formats.items():
       if data.get("GENERATE_" + k, v[0]) == "YES":
+         print os.path.join(out_dir, data.get(k + "_OUTPUT", v[1]))
          targets.append(env.Dir( os.path.join(out_dir, data.get(k + "_OUTPUT", v[1]))) )
 
    # don't clobber targets
@@ -173,6 +205,17 @@ def DoxyEmitter(source, target, env):
       env.Clean(node, node)
 
    return (targets, source)
+
+
+def DoxyAction(source, target, env):
+   """Doxygen action"""
+   e={}
+   for k,v in env.Dictionary().iteritems():
+      e[k] = str(v)
+   p = subprocess.Popen("cd %s && %s %s" % 
+      (os.path.dirname(str(source[0])), env["DOXYGEN"], os.path.basename(str(source[0]))), 
+      shell=True, env=e)
+   sts = os.waitpid(p.pid, 0)
 
 def generate(env):
    """
@@ -186,12 +229,10 @@ def generate(env):
    )
 
    doxyfile_builder = env.Builder(
-      action = env.Action("cd ${SOURCE.dir}  &&  ${DOXYGEN} ${SOURCE.file}"),
+      action = DoxyAction,
       emitter = DoxyEmitter,
       target_factory = env.fs.Entry,
       single_source = True,
-
-
       source_scanner =  doxyfile_scanner,
    )
 
