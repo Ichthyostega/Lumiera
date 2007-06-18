@@ -1,14 +1,11 @@
 window_sizes 1140 830 270 860 687 62
 diagrams
   active  componentdiagram_ref 128005 // Overview
-    860 687 100 4 0 0
+    860 687 66 4 0 0
 end
 show_stereotypes
+selected 
+package_ref 129 // Cin3
 open
-  component_ref 128005 // Builder
-  component_ref 128133 // Session
-  component_ref 128901 // Engine
-  
-  package_ref 128645 // Vault
 end
 end

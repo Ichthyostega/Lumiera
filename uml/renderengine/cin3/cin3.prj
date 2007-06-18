@@ -1,14 +1,15 @@
 format 38
 "Cin3"
-  revision 1
+  revision 2
   modified_by 5 "hiv"
+  cpp_root_dir "../../../src/"
 
 
   
   // class settings
   default_attribute_visibility protected default_relation_visibility protected default_operation_visibility public
   //class diagram settings
-  draw_all_relations yes hide_attributes no hide_operations no show_members_full_definition no show_members_visibility no show_members_stereotype no show_parameter_dir yes show_parameter_name yes package_name_in_tab no class_drawing_mode natural drawing_language uml show_context_mode no auto_label_position yes show_infonote no shadow yes
+  draw_all_relations yes hide_attributes no hide_operations no show_members_full_definition no show_members_visibility no show_members_stereotype no show_parameter_dir yes show_parameter_name yes package_name_in_tab yes class_drawing_mode natural drawing_language uml show_context_mode no auto_label_position yes show_infonote no shadow yes
   //use case diagram settings
   package_name_in_tab no show_context no auto_label_position yes draw_all_relations yes shadow yes
   //sequence diagram settings
@@ -18,7 +19,7 @@ format 38
   //object diagram settings
    write_horizontally yes package_name_in_tab no show_context no auto_label_position yes draw_all_relations yes shadow yes
   //component diagram settings
-  package_name_in_tab no show_context no auto_label_position yes draw_all_relations yes shadow yes
+  package_name_in_tab yes show_context no auto_label_position yes draw_all_relations yes shadow yes
   draw_component_as_icon no show_component_req_prov no show_component_rea no
   //deployment diagram settings
   package_name_in_tab no show_context no write_horizontally yes auto_label_position yes draw_all_relations yes shadow yes
@@ -36,6 +37,19 @@ format 38
 
   mark_for_import
   
+  package_ref 128005 // design
+
+  package_ref 128133 // AssetManager
+
+  package_ref 128261 // MObject
+
+  package_ref 128389 // RenderEngine
+
+  package_ref 128517 // CommonLib
+
+  package_ref 128645 // Vault
+
+  package_ref 128773 // GUI
 add_operation_profile
 
 end
