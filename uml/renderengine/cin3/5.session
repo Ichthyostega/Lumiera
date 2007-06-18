@@ -1,11 +1,16 @@
 window_sizes 1140 830 270 860 687 62
 diagrams
-  active  componentdiagram_ref 128005 // Overview
+  componentdiagram_ref 128005 // Overview
     860 687 66 4 0 0
+  active  classdiagram_ref 128133 // Session structure
+    860 687 100 4 37 0
 end
 show_stereotypes
-selected 
-package_ref 129 // Cin3
+selected attribute_ref 128133 // relType
 open
+  componentview_ref 128005 // Architecture
+  classrelation_ref 128645 // tracks (<directional aggregation by value>)
+  class_ref 128261 // Fixture
+  class_ref 129413 // RelativePlacement
 end
 end
