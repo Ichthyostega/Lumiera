@@ -1,0 +1,12 @@
+/wiki/backups/*
+*~
+a.out
+semantic.cache
+aclocal.m4
+Makefile
+Makefile.in
+autom4te*
+config.*
+configure
+*.tar.*
+build/*
