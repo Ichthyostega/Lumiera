@@ -828,13 +828,19 @@ Slider.prototype.stop = function()
 }
 //}}}</pre>
 </div>
-<div title="GitAliases" modifier="CehTeh" created="200706181050" changecount="1">
+<div title="GitAliases" modifier="CehTeh" modified="200706181107" created="200706181050" changecount="4">
 <pre>to make the admin/git_hooks/post-commit working add following to your .gitconfig:
 {{{
 [alias]
         sign = tag -s -f -m 'automatic generated on last commit'
         publish = push --all public
-}}}</pre>
+}}}
+
+these two commands are used by 'admin/git-hooks/post-commit'
+
+'git sign' creates a gpg-signed tag after each commit, named '$~BRANCH_signature' overriding an older tag of the same name. Thus the head revision is always gpg signed (it is not perfect, in some cases like some merges and other things the signature can become unsynced and needs to be fixed manually).
+
+'git publish' just sends the commit to some repository which has to be registered with 'git remote add public ...', in case you are working offline this will stuck and timeout, you may break it with ctrl-c, someone may fix it.</pre>
 </div>
 <div title="GitNotes" modifier="CehTeh" modified="200706181057" created="200706181049" changecount="2">
 <pre>I use some GitAliases to make signing and publishing easier.
