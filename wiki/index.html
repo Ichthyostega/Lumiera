@@ -747,8 +747,10 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="Cinelerra3Wiki" modifier="CehTeh" modified="200706172309" created="200706172308" changecount="2">
-<pre>This 'index.html' becomes the entry point of some tiddlywikis managed under git. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.</pre>
+<div title="Cinelerra3Wiki" modifier="CehTeh" modified="200706181051" created="200706172308" changecount="3">
+<pre>This 'index.html' becomes the entry point of some tiddlywikis managed under git. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.
+
+* I started a GitNotes where we will collect some information about git, howto and special setups</pre>
 </div>
 <div title="DefaultTiddlers" modifier="CehTeh" created="200706172308" changecount="1">
 <pre>GettingStarted
@@ -825,6 +827,22 @@ Slider.prototype.stop = function()
               config.commands.fullscreen.handler();
 }
 //}}}</pre>
+</div>
+<div title="GitAliases" modifier="CehTeh" created="200706181050" changecount="1">
+<pre>to make the admin/git_hooks/post-commit working add following to your .gitconfig:
+{{{
+[alias]
+        sign = tag -s -f -m 'automatic generated on last commit'
+        publish = push --all public
+}}}</pre>
+</div>
+<div title="GitNotes" modifier="CehTeh" modified="200706181057" created="200706181049" changecount="2">
+<pre>I use some GitAliases to make signing and publishing easier.
+
+the '.git' dir itself is not versioned/distributed since it usually contains site-specific things. Despite this we might want to distribute some maintenance scripts and hooks so I put the default hooks into admin/git_hooks/ and users can symlink from .git/hooks them when needed.
+
+For now I hope this aproach suffices, maybe we need admin/git_hooks/$HOOKNAME.$USER at some point when it turns out that people want personal hooks.
+</pre>
 </div>
 <div title="InlineJavaScript" modifier="Jeremy" created="200603090618" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200603090618">
 <pre>/***
