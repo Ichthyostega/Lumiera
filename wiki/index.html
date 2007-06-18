@@ -747,14 +747,56 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="Cinelerra3Wiki" modifier="CehTeh" modified="200706181051" created="200706172308" changecount="3">
+<div title="Cinelerra3DesignProcess" modifier="CehTeh" modified="200706181203" created="200706181202" changecount="2">
+<pre>! Cinelerra3 design process
+A lightweight formalized process how people can add proposals for the Cinelerra3 development.
+
+
+!! Description
+Use the Wiki at http://www.pipapo.org/pipawiki/Cinelerra3/DesignProcess to make it easy to add proposals in a well defined manner.
+
+I'd like to introduce a slightly formalized process for the ongoing Cinelerra3 planning:
+* Every proposal is instantiated as 'Idea', the author gives other people the opportunity to review and comment on it with extreme prejudice, while still working out details.
+* When the the 'Idea' in a proper form and worked out in most details it becomes a 'Draft'. This 'Draft' need to be carefully reviewed, commented, perhaps corrected and rated by the other Developers.
+* At some point we may decide that a 'Draft' becomes a 'Final' (I leave it open how this decision shall be done for now). 'Final' Documents will be imported into the repository (this wiki, you are reading such a Document right now!).
+
+* Sometimes proposals will become dropped for some reason, this is indicated by changing their state to 'Dropped', they still stay in the system for further reference.
+
+!!! Pros
+* simple
+* flexible
+* no much rules
+* persistent and at Final stage well documented process
+
+!!! Cons
+* could be abused/vandalized (but wiki can use ACL's)
+* depends on my server, this might be unfavorable or unreliable, ymmv.
+* will only work if all or almost all involved people agree on this process
+
+!!! Alternatives
+We could use some forum, Trac, Mailinglist or whatever instead.
+
+Just for Design documentation I would give [[Bouml|http://bouml.free.fr/]] a try. For myself, I am not very fond of UML Design tools, while Bouml looks quite promising and we could maintain the UML model in git repositories which would be more favorable than this centralized wiki. The backside is that this needs even more agreement between the developers, everyone has to install and use bouml (and learn its usage) and design is constrained by a external tool.
+
+This distributed wiki might be used instead the pipapo.org wiki, investigate that for future.
+
+!! Rationale
+Wiki works it is simple to use and just flexible enough to handle the task. I don't go to install any other software for such tasks on my server. While the design progresses I'd propose to move our work into git repositories and eventually phase this wiki pages out anyways. I'd rather like to start out distributed/git right away .. but git gives us only a fine storage layer, for a design process we need some good presentation layer (later when using git and starting the implementation everyones favorite editor serves for that) I have no better ideas yet to solve the presentation problem other than using this wiki (or maybe bouml).
+</pre>
+</div>
+<div title="Cinelerra3Wiki" modifier="CehTeh" modified="200706181204" created="200706172308" changecount="4">
 <pre>This 'index.html' becomes the entry point of some tiddlywikis managed under git. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.
 
-* I started a GitNotes where we will collect some information about git, howto and special setups</pre>
+* I started a GitNotes where we will collect some information about git, howto and special setups
+* we maintain (semi-) final design docs in DesignDocumentation</pre>
 </div>
 <div title="DefaultTiddlers" modifier="CehTeh" created="200706172308" changecount="1">
 <pre>GettingStarted
 Cinelerra3Wiki</pre>
+</div>
+<div title="DesignDocumentation" modifier="CehTeh" created="200706181207" changecount="1">
+<pre>* There is a [[Manifest]] explaining the vision of the Cinelerra3 project
+* The foundation how we work together is defined in Cinelerra3DesignProcess</pre>
 </div>
 <div title="FullScreenPlugin" modifier="CehTeh" modified="200706110313" created="200607241016" tags="systemConfig lewcidExtension" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110313">
 <pre>/***
@@ -1166,6 +1208,38 @@ config.formatters.push( {
 [[Cinelerra3Wiki]]
 [[Admin]]
 &lt;&lt;fullscreen&gt;&gt;</pre>
+</div>
+<div title="Manifest" modifier="CehTeh" modified="200706181214" created="200706181209" changecount="7">
+<pre>! Manifest
+This Proposal describe the general ideas how the community will work together to create Cinelerra3.
+
+!! Description
+I started with my personal opinions, so far people expressed their commitment with this text.
+
+!!! Background
+Cinelerra is quite an old project, there is an original version from heroinewarrior.com and a community fork at cinelerra.org. The original author claims that there was no-one producing useable input despite their proposes while cinelerra was in development, and indeed the cinelerra.org community only feeds back the source released by the original author into their SVN repository and maintains few fixes. There is not much development going on. Some people have created new functionality/features from time to time which have rarely been merged into the main repository and maintained by themselves.
+
+The Cinelerra community is a quite loose group of individuals, there is some fluctation on the developer base and almost all developers have day jobs which restricts their involvement time on the cinelerra project.
+
+Some of these things work quite well, there is an overall friendly relation between the involved people. People who know C++ and have the time to edit the source have satisfactory added their own features. The Mailing-list and the IRC channel is also quite helpful and even new users who ask stupid questions are welcome.
+
+But there are some bad things too. Notably there is not much progress on the community development. Users don't benefit from new improvements which other people have made. There is a endlessly growing list of bugs and feature requests, when someone sends a patch to the ML he has to invest quite some time to maintain it until it might be merged. Finally we don't know what heroine virtual is working on, until we see his next tarball.
+
+!! Solution for Cinelerra3
+Cinelerra is heroine's product, this time we should work together with him to make it pleasant and progressing for anyone.
+We are in need of a new development model which is acceptable by all involved people and benefits from the way Cinelerra development worked the years before, without maintaining the bad sides again: 
+
+# ''Make it easy to contribute''&lt;&lt;br&gt;&gt;Even if it is favorable when we have people which are continously working on Cinelerra, it's a fact that people show up, send a few patches and then disappear. The development model should be prepared for this by:
+## Good documentation
+## Well defined design and interfaces  
+## Establish some coding guidelines to make it easy for others maintain code written by others
+## Prefer known and simple aproaches/coding over bleeding edge and highly complex techniques 
+# ''Simple access''&lt;&lt;br&gt;&gt;We will use a fully distributed development model using git. I'll open a anonymous pushable repository which anyone can use to publish his changes.
+# ''Freedom to do, or not to do''&lt;&lt;br&gt;&gt;The model allows everyone to do as much as he wants. In a free project there is no way to put demands on people. This is good since it's easy to join and is open for anyone. The community might expect some responsibility for people maintaining their patches, but at worst, things which don't match our expected quality and when there is noone who keeps them up, will be removed. Since we are working in a distributed way with each developer maintaining his own repository and merging from other people, there is no easy way that bad code will leap into the project.
+# ''No Rule is better than a Rule which is not engaged''&lt;&lt;br&gt;&gt;We have to agree on some rules to make teamwork possible. These rules should be kept to a minimum required and accepted by all involved people. It is vital that we can trust each other on simple things, like properly formatted code or that patches one proposes to merge don't break the system etc..
+# ''Legal status must be clear''&lt;&lt;br&gt;&gt;Cinelerra is developed under the GPL, every contributor must acknowledge this. Even when we provide anonymous commits, every non trivial patch should be traceable to the person who made it, GPG signatures would be proper here - details need to be worked out.
+# ''All for Cinelerra''&lt;&lt;br&gt;&gt;The goal is to make the best Linux video editor to date, nothing less. Everyone puts in their best abilities. This project is not the place to blame people for things where they are not profound, help each other, make things right instead of blaming someone. Everyone should rate himself at what he can do best on the project.
+</pre>
 </div>
 <div title="MarkupPreHead" modifier="CehTeh" created="200706172303">
 <pre>&lt;!--{{{--&gt;
