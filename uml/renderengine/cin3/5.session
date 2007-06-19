@@ -1,16 +1,37 @@
-window_sizes 1140 830 270 860 687 62
+window_sizes 1140 830 287 843 687 62
 diagrams
   componentdiagram_ref 128005 // Overview
-    860 687 66 4 0 0
-  active  classdiagram_ref 128133 // Session structure
-    860 687 100 4 37 0
+    860 687 100 4 314 0
+  deploymentdiagram_ref 128261 // Overview Render Engine
+    674 551 100 4 109 12
+  classdiagram_ref 128133 // Session structure
+    674 551 100 4 538 0
+  active  classdiagram_ref 128389 // Render Entities
+    843 689 100 4 147 0
+  collaborationdiagram_ref 128517 // build process
+    674 551 100 4 0 0
+  classdiagram_ref 128645 // Components
+    674 551 100 4 0 0
 end
 show_stereotypes
-selected attribute_ref 128133 // relType
+selected classdiagram_ref 128389 // Render Entities
 open
-  componentview_ref 128005 // Architecture
+  class_ref 128005 // Session
   classrelation_ref 128645 // tracks (<directional aggregation by value>)
   class_ref 128261 // Fixture
+  class_ref 128645 // Placement
   class_ref 129413 // RelativePlacement
+  class_ref 129797 // ExplicitePlacement
+  class_ref 130181 // Constraint
+  class_ref 130565 // BuilderFacade
+  class_ref 130693 // ToolFactory
+  class_ref 130821 // ConManager
+  class_ref 131077 // Assembler
+  class_ref 132741 // StateProxy
+  class_ref 130309 // ControllerFacade
+  class_ref 130437 // PathManager
+  class_ref 130949 // RenderState
+  classview_ref 128133 // Engine Workings
+  class_ref 131205 // StreamProvider
 end
 end

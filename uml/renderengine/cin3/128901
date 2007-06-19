@@ -1,6 +1,6 @@
 format 38
-"Vault" // Vault
-  revision 2
+"Builder" // MObject::Builder
+  revision 1
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -26,8 +26,7 @@ format 38
   package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
   show_infonote default drawing_language default
   
-  comment "This package is used here just to hold entities thought to belong to the backend layer. The Backend is not in Focus for this Design draft."
-  classview 128517 "Backend Components"
+  classview 128261 "Builder Workings"
     //class diagram settings
     draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
     //collaboration diagram settings
@@ -44,8 +43,14 @@ format 38
     package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
     show_infonote default drawing_language default
     
-    class 131205 "StreamProvider"
-      visibility public stereotype "boundary"
+    collaborationdiagram 128517 "build process"
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+      comment "This figure shows the process of building and starting a RenderEngine"
+      size A4
+    end
+
+    class 130565 "BuilderFacade"
+      visibility package stereotype "boundary"
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
 ${inlines}
@@ -56,8 +61,7 @@ ${members}};
 "
       explicit_switch_type ""
       
-      comment "Note: just a Placeholder for my design. Cehteh will ceratinly know much better how to organize this"
-      operation 129285 "prepareStream"
+      operation 128517 "buildEngine"
 	public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -68,8 +72,19 @@ ${members}};
 	
 	
       end
+    end
 
-      operation 129541 "getReady"
+    class 130693 "ToolFactory"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 128773 "configure"
 	public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -79,6 +94,76 @@ ${members}};
 "
 	
 	
+      end
+    end
+
+    class 130821 "ConManager"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 129029 "getConnection"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+      end
+    end
+
+    class 131077 "Assembler"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 128901 "build"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+      end
+    end
+
+    class 132741 "StateProxy"
+      abstract visibility package stereotype "interface"
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
+${members}};
+"
+      explicit_switch_type ""
+      
+      classrelation 135941 // currFrame (<unidirectional association>)
+	relation 134533 --->
+	  a role_name "currFrame" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 135941 // currFrame (<unidirectional association>)
+	  b multiplicity "1" parent class_ref 133253 // Frame
       end
     end
   end

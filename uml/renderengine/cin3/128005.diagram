@@ -1,56 +1,56 @@
 format 38
 
 fragment 128005 "UI Layer"
-  xyzwh 320 22 2000 833 100
+  xyzwh 321 22 2000 829 100
 end
 fragment 128133 "Processing Layer"
-  xyzwh 64 155 2000 1092 657
+  xyzwh 64 156 2000 1089 655
   separator 4833
 end
 fragment 128261 "Backend Layer"
-  xyzwh 64 846 2000 1092 109
+  xyzwh 64 848 2000 1089 105
 end
 packagecanvas 128389 
   package_ref 128133 // AssetManager
-    xyzwh 560 200 2005 254 216
+    xyzwh 561 201 2005 252 214
 packagecanvas 128517 
   package_ref 128261 // MObject
-    xyzwh 93 200 2006 460 337
+    xyzwh 94 201 2006 458 335
 packagecanvas 128645 
   package_ref 128389 // RenderEngine
-    xyzwh 93 551 2005 460 237
+    xyzwh 94 551 2005 458 235
 componentcanvas 128773 component_ref 128005 // Builder
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 121 419 2015 231 107
+  xyzwh 121 419 2015 229 105
 componentcanvas 128901 component_ref 128133 // Session
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 121 242 2011 325 159
+  xyzwh 122 243 2011 323 156
 componentcanvas 129029 component_ref 128261 // Controller
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 378 419 2011 165 107
+  xyzwh 372 419 2011 175 105
 componentcanvas 129157 component_ref 128389 // EDL
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 290 302 2016 139 81
+  xyzwh 288 302 2016 143 79
 componentcanvas 129285 component_ref 128517 // Fixture
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 129 321 2016 134 68
+  xyzwh 124 319 2016 143 69
 note 129541 "Structures edited by the User"
   xyzwh 43 269 2016 181 41
 componentcanvas 129669 component_ref 128645 // AssetManagement
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 576 241 2010 210 162
+  xyzwh 577 241 2010 208 159
 componentcanvas 129797 component_ref 128773 // Dispatcher
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 412 33 2005 168 68
+  xyzwh 406 31 2005 179 69
 componentcanvas 129925 component_ref 128901 // Engine
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 118 601 2010 237 178
+  xyzwh 118 602 2010 235 176
 componentcanvas 130053 component_ref 129029 // Stream Provider
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 121 877 2005 231 68
+  xyzwh 121 876 2005 229 69
 componentcanvas 130181 component_ref 129157 // Cache
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 397 877 2005 168 68
+  xyzwh 391 876 2005 179 69
 note 131717 "Coordinates Playback and Rendering"
   xyzwh 483 494 2016 149 63
 note 131845 "border of the low-level, performance-critical part of the system"
@@ -66,7 +66,7 @@ simplerelationcanvas 131333 simplerelation_ref 128133
 line 130309 -_-_
   from ref 129797 z 2004 to ref 128901
 line 130821 -_-_ geometry HVr
-  from ref 129797 z 2004 to point 493 470
+  from ref 129797 z 2004 to point 493 469
   line 130949 z 2004 to ref 129029
 line 131077 -_-_
   from ref 129797 z 2004 to ref 129669
