@@ -1,5 +1,5 @@
 format 38
-"Vault" // Vault
+"Controller" // MObject::Controller
   revision 2
   modified_by 5 "hiv"
   // class settings
@@ -26,8 +26,7 @@ format 38
   package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
   show_infonote default drawing_language default
   
-  comment "This package is used here just to hold entities thought to belong to the backend layer. The Backend is not in Focus for this Design draft."
-  classview 128517 "Backend Components"
+  classview 128389 "Controller Workings"
     //class diagram settings
     draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
     //collaboration diagram settings
@@ -44,7 +43,12 @@ format 38
     package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
     show_infonote default drawing_language default
     
-    class 131205 "StreamProvider"
+    classdiagram 128645 "Controller Entities"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      size A4
+    end
+
+    class 130309 "ControllerFacade"
       visibility public stereotype "boundary"
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
@@ -56,8 +60,19 @@ ${members}};
 "
       explicit_switch_type ""
       
-      comment "Note: just a Placeholder for my design. Cehteh will ceratinly know much better how to organize this"
-      operation 129285 "prepareStream"
+    end
+
+    class 130437 "PathManager"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 128261 "buildProcessor"
 	public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
@@ -68,8 +83,19 @@ ${members}};
 	
 	
       end
+    end
 
-      operation 129541 "getReady"
+    class 130949 "RenderState"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 128389 "getStateProxy"
 	public explicit_return_type ""
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};

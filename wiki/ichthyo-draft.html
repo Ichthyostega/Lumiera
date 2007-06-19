@@ -44,7 +44,7 @@ DAMAGE.
 
 <style type="text/css">#contentWrapper {display:none;}</style><div id="SplashScreen" style="border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;"><b>My TiddlyWiki</b> is loading<blink> ...</blink><br><br><span style="font-size: 14px; color:red;">Requires Javascript.</span></div>
 <!--PRE-HEAD-END-->
-<title> Cinelerra3 - Distributed Developer Wiki </title>
+<title> Draft - some aspects of Cinelerra-3 design </title>
 <style type="text/css">
 #saveTest {display:none;}
 #messageArea {display:none;}
@@ -747,61 +747,34 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="Cinelerra3DesignProcess" modifier="CehTeh" modified="200706181203" created="200706181202" changecount="2">
-<pre>! Cinelerra3 design process
-A lightweight formalized process how people can add proposals for the Cinelerra3 development.
+<div title="BuildProcess" modifier="Ichthyostega" created="200706190658" changecount="1">
+<pre>All decisions on //how// the RenderProcess has to be carried out are concentrated in this rather complicated Builder Subsystem. The benefit of this aproach is, besides decoupling of subsystems, to keep the actually performance relevant video processing code so simple and transparent as possible. The price in terms of increased complexity to pay here in the Builder can be handled by making the Build Process genereic to a large degree, thus beeing able to decompose the various decisions into small decision modules, which can be judged solely by a Design By Contract aproach, without having to trace the actual workings of the Build Process as a whole.
 
-
-!! Description
-Use the Wiki at http://www.pipapo.org/pipawiki/Cinelerra3/DesignProcess to make it easy to add proposals in a well defined manner.
-
-I'd like to introduce a slightly formalized process for the ongoing Cinelerra3 planning:
-* Every proposal is instantiated as 'Idea', the author gives other people the opportunity to review and comment on it with extreme prejudice, while still working out details.
-* When the the 'Idea' in a proper form and worked out in most details it becomes a 'Draft'. This 'Draft' need to be carefully reviewed, commented, perhaps corrected and rated by the other Developers.
-* At some point we may decide that a 'Draft' becomes a 'Final' (I leave it open how this decision shall be done for now). 'Final' Documents will be imported into the repository (this wiki, you are reading such a Document right now!).
-
-* Sometimes proposals will become dropped for some reason, this is indicated by changing their state to 'Dropped', they still stay in the system for further reference.
-
-!!! Pros
-* simple
-* flexible
-* no much rules
-* persistent and at Final stage well documented process
-
-!!! Cons
-* could be abused/vandalized (but wiki can use ACL's)
-* depends on my server, this might be unfavorable or unreliable, ymmv.
-* will only work if all or almost all involved people agree on this process
-
-!!! Alternatives
-We could use some forum, Trac, Mailinglist or whatever instead.
-
-Just for Design documentation I would give [[Bouml|http://bouml.free.fr/]] a try. For myself, I am not very fond of UML Design tools, while Bouml looks quite promising and we could maintain the UML model in git repositories which would be more favorable than this centralized wiki. The backside is that this needs even more agreement between the developers, everyone has to install and use bouml (and learn its usage) and design is constrained by a external tool.
-
-This distributed wiki might be used instead the pipapo.org wiki, investigate that for future.
-
-!! Rationale
-Wiki works it is simple to use and just flexible enough to handle the task. I don't go to install any other software for such tasks on my server. While the design progresses I'd propose to move our work into git repositories and eventually phase this wiki pages out anyways. I'd rather like to start out distributed/git right away .. but git gives us only a fine storage layer, for a design process we need some good presentation layer (later when using git and starting the implementation everyones favorite editor serves for that) I have no better ideas yet to solve the presentation problem other than using this wiki (or maybe bouml).
+[img[Colaborations in the Build Process|renderengine/fig3.png]]</pre>
+</div>
+<div title="Cinelerra3Wiki" modifier="CehTeh" modified="200706172309" created="200706172308" changecount="2">
+<pre>This 'index.html' becomes the entry point of some tiddlywikis managed under git. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.</pre>
+</div>
+<div title="ColorPalette" modifier="Ichthyostega" modified="200706190041" created="200706190033" changecount="9">
+<pre>Background: #fefefd
+Foreground: #000
+PrimaryPale: #8fb
+PrimaryLight: #50d2ae
+PrimaryMid: #1b9989
+PrimaryDark: #0f3f56
+SecondaryPale: #ffc
+SecondaryLight: #fe8
+SecondaryMid: #db4
+SecondaryDark: #841
+TertiaryPale: #eef
+TertiaryLight: #ccd
+TertiaryMid: #99a
+TertiaryDark: #667
+Error: #f88</pre>
+</div>
+<div title="DefaultTiddlers" modifier="Ichthyostega" modified="200706190047" created="200706172308" changecount="2">
+<pre>RenderEngine
 </pre>
-</div>
-<div title="Cinelerra3Wiki" modifier="Ichthyostega" modified="200706190136" created="200706172308" changecount="4">
-<pre>This 'index.html' becomes the entry point of some tiddlywikis managed under git. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.
-
-* I started a GitNotes where we will collect some information about git, howto and special setups
-* we maintain (semi-) final design docs in DesignDocumentation
-
-!Design Draft
-to get started, we create design drafts emphasizing different aspects and regions of Cinelerra-3
-
-* Ichthyo focuses mainly on the Render Engine and its interconnection to the EDL. &lt;html&gt;&lt;a href=&quot;ichthyo-draft.html&quot;&gt;see this separate wiki page&lt;/a&gt;&lt;/html&gt;</pre>
-</div>
-<div title="DefaultTiddlers" modifier="CehTeh" created="200706172308" changecount="1">
-<pre>GettingStarted
-Cinelerra3Wiki</pre>
-</div>
-<div title="DesignDocumentation" modifier="CehTeh" created="200706181207" changecount="1">
-<pre>* There is a [[Manifest]] explaining the vision of the Cinelerra3 project
-* The foundation how we work together is defined in Cinelerra3DesignProcess</pre>
 </div>
 <div title="FullScreenPlugin" modifier="CehTeh" modified="200706110313" created="200607241016" tags="systemConfig lewcidExtension" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110313">
 <pre>/***
@@ -874,28 +847,6 @@ Slider.prototype.stop = function()
               config.commands.fullscreen.handler();
 }
 //}}}</pre>
-</div>
-<div title="GitAliases" modifier="CehTeh" modified="200706181107" created="200706181050" changecount="4">
-<pre>to make the admin/git_hooks/post-commit working add following to your .gitconfig:
-{{{
-[alias]
-        sign = tag -s -f -m 'automatic generated on last commit'
-        publish = push --all public
-}}}
-
-these two commands are used by 'admin/git-hooks/post-commit'
-
-'git sign' creates a gpg-signed tag after each commit, named '$~BRANCH_signature' overriding an older tag of the same name. Thus the head revision is always gpg signed (it is not perfect, in some cases like some merges and other things the signature can become unsynced and needs to be fixed manually).
-
-'git publish' just sends the commit to some repository which has to be registered with 'git remote add public ...', in case you are working offline this will stuck and timeout, you may break it with ctrl-c, someone may fix it.</pre>
-</div>
-<div title="GitNotes" modifier="CehTeh" modified="200706181057" created="200706181049" changecount="2">
-<pre>I use some GitAliases to make signing and publishing easier.
-
-the '.git' dir itself is not versioned/distributed since it usually contains site-specific things. Despite this we might want to distribute some maintenance scripts and hooks so I put the default hooks into admin/git_hooks/ and users can symlink from .git/hooks them when needed.
-
-For now I hope this aproach suffices, maybe we need admin/git_hooks/$HOOKNAME.$USER at some point when it turns out that people want personal hooks.
-</pre>
 </div>
 <div title="InlineJavaScript" modifier="Jeremy" created="200603090618" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200603090618">
 <pre>/***
@@ -1208,43 +1159,18 @@ config.formatters.push( {
 } )
 //}}}</pre>
 </div>
-<div title="MainMenu" modifier="CehTeh" modified="200706172306" created="200706172305" changecount="2">
-<pre>GettingStarted
-[[Cinelerra3Wiki]]
+<div title="MObjects" modifier="Ichthyostega" created="200706190636" changecount="1">
+<pre>The MObjects Subsystem contains everything related to the EDL and the various Media Objects placed within it.
+
+This Design strives at a StrongSeparation between the low-level Structures used to carry out the actual rendering and the high level Entities living in the EDL and beeing manipulated by the user. In this high level view, the Objects are grouped and located by [[Placements]], providing a flexible and open way to express different groupings, locatons and ordering constraints between the Media Objects.
+
+[img[Classess related to the EDL|renderengine/fig2.png]]</pre>
+</div>
+<div title="MainMenu" modifier="Ichthyostega" modified="200706190046" created="200706172305" changecount="3">
+<pre>[[RenderEngine]]
+[[MObjects]]
 [[Admin]]
 &lt;&lt;fullscreen&gt;&gt;</pre>
-</div>
-<div title="Manifest" modifier="CehTeh" modified="200706181214" created="200706181209" changecount="7">
-<pre>! Manifest
-This Proposal describe the general ideas how the community will work together to create Cinelerra3.
-
-!! Description
-I started with my personal opinions, so far people expressed their commitment with this text.
-
-!!! Background
-Cinelerra is quite an old project, there is an original version from heroinewarrior.com and a community fork at cinelerra.org. The original author claims that there was no-one producing useable input despite their proposes while cinelerra was in development, and indeed the cinelerra.org community only feeds back the source released by the original author into their SVN repository and maintains few fixes. There is not much development going on. Some people have created new functionality/features from time to time which have rarely been merged into the main repository and maintained by themselves.
-
-The Cinelerra community is a quite loose group of individuals, there is some fluctation on the developer base and almost all developers have day jobs which restricts their involvement time on the cinelerra project.
-
-Some of these things work quite well, there is an overall friendly relation between the involved people. People who know C++ and have the time to edit the source have satisfactory added their own features. The Mailing-list and the IRC channel is also quite helpful and even new users who ask stupid questions are welcome.
-
-But there are some bad things too. Notably there is not much progress on the community development. Users don't benefit from new improvements which other people have made. There is a endlessly growing list of bugs and feature requests, when someone sends a patch to the ML he has to invest quite some time to maintain it until it might be merged. Finally we don't know what heroine virtual is working on, until we see his next tarball.
-
-!! Solution for Cinelerra3
-Cinelerra is heroine's product, this time we should work together with him to make it pleasant and progressing for anyone.
-We are in need of a new development model which is acceptable by all involved people and benefits from the way Cinelerra development worked the years before, without maintaining the bad sides again: 
-
-# ''Make it easy to contribute''&lt;&lt;br&gt;&gt;Even if it is favorable when we have people which are continously working on Cinelerra, it's a fact that people show up, send a few patches and then disappear. The development model should be prepared for this by:
-## Good documentation
-## Well defined design and interfaces  
-## Establish some coding guidelines to make it easy for others maintain code written by others
-## Prefer known and simple aproaches/coding over bleeding edge and highly complex techniques 
-# ''Simple access''&lt;&lt;br&gt;&gt;We will use a fully distributed development model using git. I'll open a anonymous pushable repository which anyone can use to publish his changes.
-# ''Freedom to do, or not to do''&lt;&lt;br&gt;&gt;The model allows everyone to do as much as he wants. In a free project there is no way to put demands on people. This is good since it's easy to join and is open for anyone. The community might expect some responsibility for people maintaining their patches, but at worst, things which don't match our expected quality and when there is noone who keeps them up, will be removed. Since we are working in a distributed way with each developer maintaining his own repository and merging from other people, there is no easy way that bad code will leap into the project.
-# ''No Rule is better than a Rule which is not engaged''&lt;&lt;br&gt;&gt;We have to agree on some rules to make teamwork possible. These rules should be kept to a minimum required and accepted by all involved people. It is vital that we can trust each other on simple things, like properly formatted code or that patches one proposes to merge don't break the system etc..
-# ''Legal status must be clear''&lt;&lt;br&gt;&gt;Cinelerra is developed under the GPL, every contributor must acknowledge this. Even when we provide anonymous commits, every non trivial patch should be traceable to the person who made it, GPG signatures would be proper here - details need to be worked out.
-# ''All for Cinelerra''&lt;&lt;br&gt;&gt;The goal is to make the best Linux video editor to date, nothing less. Everyone puts in their best abilities. This project is not the place to blame people for things where they are not profound, help each other, make things right instead of blaming someone. Everyone should rate himself at what he can do best on the project.
-</pre>
 </div>
 <div title="MarkupPreHead" modifier="CehTeh" created="200706172303">
 <pre>&lt;!--{{{--&gt;
@@ -1252,6 +1178,19 @@ We are in need of a new development model which is acceptable by all involved pe
 &lt;!--}}}--&gt;
 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;&lt;b&gt;My TiddlyWiki&lt;/b&gt; is loading&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
+</div>
+<div title="Overview" modifier="Ichthyostega" created="200706190300" changecount="1">
+<pre>[img[Block Diagram|renderengine/fig1.png]]</pre>
+</div>
+<div title="OverviewRenderEngine" modifier="Ichthyostega" modified="200706190706" created="200706190647" changecount="4">
+<pre>Render Engine, [[Builder]] and [[Controller]] are closely related Subsystems. Actually, the [[Builder]] //creates// a newly configurated Render Engine //for every// RenderProcess. For doing so, he queries from the Session (or, to be more preciese, from the [[Fixture]] within the current Session all necessary Media Object Placement informations and derives from this informations the actual assembly of ProcessingNodes comprising the Render Engine. Thus:
+ * the source of the build process is a sequence of absolute (explicite) [[Placements]] called the [[Playlist]]
+ * the [[build process|BuildProcess]] is driven, configured and controlled by the [[Controller]] subsystem components, encompasing the actual playback configuration and State of the Sytem
+ * the resulting Render Engine is a list of [[Processors]], each configured to calculate a segment of the timeline with a uniform properties, and each of this Processors in turn is a graph of interconnected ProcessingNodes.
+
+see also: RenderEntities
+
+[img[Overview: Components of the Renderengine|renderengine/fig5.png]]</pre>
 </div>
 <div title="PageTemplate" modifier="CehTeh" modified="200706110330" created="200701131624" tags="MPTWTheme" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110330">
 <pre>&lt;!--{{{--&gt;
@@ -2054,14 +1993,41 @@ see : &lt;&lt;tag RSSFeed&gt;&gt; for the full list.
 
 </pre>
 </div>
-<div title="SideBarOptions" modifier="CehTeh" created="200706182001" changecount="1">
-<pre>&lt;&lt;search&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel &quot;options »&quot; &quot;Change TiddlyWiki advanced options&quot;&gt;&gt;</pre>
+<div title="RenderEngine" modifier="Ichthyostega" modified="200706190701" created="200706190056" changecount="12">
+<pre>The key idea of Ichthyo's Design-draft is, to use the ''Builder Pattern'' for the Render Engine, thus separating completely the //building// of the Render Pipeline from //running,// i.e. doing the actual Render. The Nodes in this Pipeline should process Video/Audio and do nothing else. No more any decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, done by the Builder. Make the actual processing nodes Template classes, parametrised by the color model and number of components. Make all Nodes on equal footing of each other, able to be connected freely within the limitations of the necessary input and output. Make the OpenGL rendering into alternate implementation of some operations together with an alternate signal flow (usable only if the whole Pipeline can be built up to support this changed signal flow), thus facturing out all the complexities of managing the data flow between core and hardware accelerated rendering out of the implementation of the actual processing. Introduce separate control data connections for the automation data, separating the case of true multi-channel-effects from the case where one node just gets remote controlled by another node (or two nodes using the sama automation data). Unfold any &quot;internal-multi&quot; effects into separate instances, e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks.
+
+!Why doesn't the current Design succeed with this?
+The design of Cinelerra 2 basically follows this design, but __fails because of two reasons__
+ * too much differentiation is put into the class hierarchy instead of configuring Instances differently. 
+   This causes overly heavy use of virtual functions and -- in order to ameliorate this -- falling back to hard wired branching
+ * far too much back-coupling to the internals of the EDL, forcing a overly rigid structure on the latter
+
+!Try to learn from this
+ * build up an NodeAbstraction powerfull enough to express //all necessarey Operations// without the need to recure on the actual object type
+ * need to redesign the internals of the EDL in a far more open manner. See MObjects
+ * strive at a StrongSeparation between EDL and Render Engine
+
+!!see also
+ * [[Overview]]
+ * OverviewRenderEngine
+ * BuildProcess
+ * RenderProcess</pre>
 </div>
-<div title="SiteSubtitle" modifier="CehTeh" created="200706181110" changecount="1">
-<pre>Distributed Developer Wiki</pre>
+<div title="RenderEntities" modifier="Ichthyostega" created="200706190715" changecount="1">
+<pre>As said, the Render Engine carries out the low-level and percormance critical tasks solely; all configuration and decision concerns are to be handled by [[Builder]] and [[Controller]]. While the actual connection of the Render Nodes can be highly complex, basically each Segment of the Timeline with uniform characteristics is handled by one Processor, which is a graph of ProcessingNodes discharging into a ExitNode. The Render Engine Components as such are //stateless// themselfs; for the actual calculations they are combined with a StateProxy object generated by and connected internally to the [[Controller]], while at the same time holding the Data Buffers (Frames) for the actual calculations.
+
+[img[Entities comprising the Render Engine|renderengine/fig6.png]]</pre>
 </div>
-<div title="SiteTitle" modifier="CehTeh" created="200706181110" changecount="1">
-<pre>Cinelerra3</pre>
+<div title="RenderProcess" modifier="Ichthyostega" created="200706190705" changecount="1">
+<pre>''TODO'' describe the Render Process.
+
+ * see also the [[Entities invoved in Rendering|RenderEntities]]</pre>
+</div>
+<div title="SiteSubtitle" modifier="Ichthyostega" created="200706190044" changecount="1">
+<pre>some aspects of Cinelerra-3 design</pre>
+</div>
+<div title="SiteTitle" modifier="Ichthyostega" created="200706190042" changecount="1">
+<pre>Draft</pre>
 </div>
 <div title="SplashScreenPlugin" modifier="Saq" modified="200607202048" created="200607191631" tags="lewcidExtension systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200607202048">
 <pre>/***
@@ -2281,9 +2247,6 @@ h1,h2,h3,h4,h5,h6 {
 }
 /*}}}*/
 </pre>
-</div>
-<div title="TabTimeline" modifier="CehTeh" created="200706182004" changecount="1">
-<pre>&lt;&lt;timeline better:true maxDays:14 maxEntries:20&gt;&gt;</pre>
 </div>
 <div title="TaskMacroPlugin" modifier="LukeBlanshard" modified="200605131931" created="200510261917" tags="systemConfig TaskMacro" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200605131931">
 <pre>/***

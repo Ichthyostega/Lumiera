@@ -1,6 +1,6 @@
 format 38
 "design" // design
-  revision 2
+  revision 4
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -56,6 +56,10 @@ Not a real code package, rather a container for design drafts, specifications, d
 
     component 128261 "Controller"
       stereotype "subsystem"
+      simplerelation 128261
+	-_->
+	  on component_ref 128005 // Builder
+      end
     end
 
     component 128645 "AssetManagement"
@@ -79,6 +83,9 @@ Not a real code package, rather a container for design drafts, specifications, d
     end
 
     component 129157 "Cache"
+    end
+
+    component 129285 "RenderPathManager"
     end
   end
 end
