@@ -747,6 +747,11 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
+<div title="BuildProcess" modifier="Ichthyostega" created="200706190658" changecount="1">
+<pre>All decisions on //how// the RenderProcess has to be carried out are concentrated in this rather complicated Builder Subsystem. The benefit of this aproach is, besides decoupling of subsystems, to keep the actually performance relevant video processing code so simple and transparent as possible. The price in terms of increased complexity to pay here in the Builder can be handled by making the Build Process genereic to a large degree, thus beeing able to decompose the various decisions into small decision modules, which can be judged solely by a Design By Contract aproach, without having to trace the actual workings of the Build Process as a whole.
+
+[img[Colaborations in the Build Process|renderengine/fig3.png]]</pre>
+</div>
 <div title="Cinelerra3Wiki" modifier="CehTeh" modified="200706172309" created="200706172308" changecount="2">
 <pre>This 'index.html' becomes the entry point of some tiddlywikis managed under git. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.</pre>
 </div>
@@ -1154,6 +1159,13 @@ config.formatters.push( {
 } )
 //}}}</pre>
 </div>
+<div title="MObjects" modifier="Ichthyostega" created="200706190636" changecount="1">
+<pre>The MObjects Subsystem contains everything related to the EDL and the various Media Objects placed within it.
+
+This Design strives at a StrongSeparation between the low-level Structures used to carry out the actual rendering and the high level Entities living in the EDL and beeing manipulated by the user. In this high level view, the Objects are grouped and located by [[Placements]], providing a flexible and open way to express different groupings, locatons and ordering constraints between the Media Objects.
+
+[img[Classess related to the EDL|renderengine/fig2.png]]</pre>
+</div>
 <div title="MainMenu" modifier="Ichthyostega" modified="200706190046" created="200706172305" changecount="3">
 <pre>[[RenderEngine]]
 [[MObjects]]
@@ -1169,6 +1181,16 @@ config.formatters.push( {
 </div>
 <div title="Overview" modifier="Ichthyostega" created="200706190300" changecount="1">
 <pre>[img[Block Diagram|renderengine/fig1.png]]</pre>
+</div>
+<div title="OverviewRenderEngine" modifier="Ichthyostega" modified="200706190706" created="200706190647" changecount="4">
+<pre>Render Engine, [[Builder]] and [[Controller]] are closely related Subsystems. Actually, the [[Builder]] //creates// a newly configurated Render Engine //for every// RenderProcess. For doing so, he queries from the Session (or, to be more preciese, from the [[Fixture]] within the current Session all necessary Media Object Placement informations and derives from this informations the actual assembly of ProcessingNodes comprising the Render Engine. Thus:
+ * the source of the build process is a sequence of absolute (explicite) [[Placements]] called the [[Playlist]]
+ * the [[build process|BuildProcess]] is driven, configured and controlled by the [[Controller]] subsystem components, encompasing the actual playback configuration and State of the Sytem
+ * the resulting Render Engine is a list of [[Processors]], each configured to calculate a segment of the timeline with a uniform properties, and each of this Processors in turn is a graph of interconnected ProcessingNodes.
+
+see also: RenderEntities
+
+[img[Overview: Components of the Renderengine|renderengine/fig5.png]]</pre>
 </div>
 <div title="PageTemplate" modifier="CehTeh" modified="200706110330" created="200701131624" tags="MPTWTheme" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110330">
 <pre>&lt;!--{{{--&gt;
@@ -1971,12 +1993,13 @@ see : &lt;&lt;tag RSSFeed&gt;&gt; for the full list.
 
 </pre>
 </div>
-<div title="RenderEngine" modifier="Ichthyostega" modified="200706190127" created="200706190056" changecount="10">
+<div title="RenderEngine" modifier="Ichthyostega" modified="200706190701" created="200706190056" changecount="12">
 <pre>The key idea of Ichthyo's Design-draft is, to use the ''Builder Pattern'' for the Render Engine, thus separating completely the //building// of the Render Pipeline from //running,// i.e. doing the actual Render. The Nodes in this Pipeline should process Video/Audio and do nothing else. No more any decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, done by the Builder. Make the actual processing nodes Template classes, parametrised by the color model and number of components. Make all Nodes on equal footing of each other, able to be connected freely within the limitations of the necessary input and output. Make the OpenGL rendering into alternate implementation of some operations together with an alternate signal flow (usable only if the whole Pipeline can be built up to support this changed signal flow), thus facturing out all the complexities of managing the data flow between core and hardware accelerated rendering out of the implementation of the actual processing. Introduce separate control data connections for the automation data, separating the case of true multi-channel-effects from the case where one node just gets remote controlled by another node (or two nodes using the sama automation data). Unfold any &quot;internal-multi&quot; effects into separate instances, e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks.
 
 !Why doesn't the current Design succeed with this?
-The design of Cinelerra 2 basically follows this design, but fails because of two reasons
- * too much differentiation is put into the class hierarchy instead of configuring Instances differently. Causes overly heavy use of factories and -- in order to ameliorate this -- falling back to hard wired branching
+The design of Cinelerra 2 basically follows this design, but __fails because of two reasons__
+ * too much differentiation is put into the class hierarchy instead of configuring Instances differently. 
+   This causes overly heavy use of virtual functions and -- in order to ameliorate this -- falling back to hard wired branching
  * far too much back-coupling to the internals of the EDL, forcing a overly rigid structure on the latter
 
 !Try to learn from this
@@ -1987,7 +2010,18 @@ The design of Cinelerra 2 basically follows this design, but fails because of tw
 !!see also
  * [[Overview]]
  * OverviewRenderEngine
+ * BuildProcess
  * RenderProcess</pre>
+</div>
+<div title="RenderEntities" modifier="Ichthyostega" created="200706190715" changecount="1">
+<pre>As said, the Render Engine carries out the low-level and percormance critical tasks solely; all configuration and decision concerns are to be handled by [[Builder]] and [[Controller]]. While the actual connection of the Render Nodes can be highly complex, basically each Segment of the Timeline with uniform characteristics is handled by one Processor, which is a graph of ProcessingNodes discharging into a ExitNode. The Render Engine Components as such are //stateless// themselfs; for the actual calculations they are combined with a StateProxy object generated by and connected internally to the [[Controller]], while at the same time holding the Data Buffers (Frames) for the actual calculations.
+
+[img[Entities comprising the Render Engine|renderengine/fig6.png]]</pre>
+</div>
+<div title="RenderProcess" modifier="Ichthyostega" created="200706190705" changecount="1">
+<pre>''TODO'' describe the Render Process.
+
+ * see also the [[Entities invoved in Rendering|RenderEntities]]</pre>
 </div>
 <div title="SiteSubtitle" modifier="Ichthyostega" created="200706190044" changecount="1">
 <pre>some aspects of Cinelerra-3 design</pre>

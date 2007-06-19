@@ -11,7 +11,7 @@ classinstance 129413 class_ref 128261 // Fixture
 classinstance 129797 class_ref 130693 // ToolFactory
   xyz 381 449 2000 name ""  xyz 381 449 2000
 classinstance 129925 class_ref 130821 // ConManager
-  xyz 147 450 2005 name ""  xyz 147 450 2005
+  xyz 142 486 2005 name ""  xyz 142 486 2005
 classinstance 130053 class_ref 130949 // RenderState
   xyz 550 424 2000 name ""  xyz 550 424 2000
 note 130565 "Note: Builder subsys is stateless"
@@ -35,12 +35,12 @@ linkcanvas 129541
   from ref 128133 z 1999 to ref 129285
 dirscanvas 130181 z 1000 linkcanvas_ref 129541
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "3 buildEngine()" xyz 364 316 3000
+  forward_label "3 buildEngine()" xyz 384 313 3000
 linkcanvas 129669
   from ref 129285 z 1999 to ref 129413
 dirscanvas 132357 z 1000 linkcanvas_ref 129669
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "4 getPlaylistForRender()" xyz 126 222 3000
+  forward_label "4 getPlaylistForRender()" xyz 216 167 3000
 linkcanvas 130309
   from ref 128133 z 1999 to ref 130053
 dirscanvas 132229 z 1000 linkcanvas_ref 130309
@@ -50,7 +50,7 @@ linkcanvas 130437
   from ref 129285 z 1999 to ref 129797
 dirscanvas 132485 z 1000 linkcanvas_ref 130437
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "5 configure()" xyz 357 345 3000
+  forward_label "5 configure()" xyz 362 355 3000
 linkcanvas 131077
   from ref 129285 z 1999 to ref 130693
 dirscanvas 132613 z 1000 linkcanvas_ref 131077
@@ -60,27 +60,27 @@ linkcanvas 131205
   from ref 130693 z 1999 to ref 129925
 dirscanvas 132741 z 1000 linkcanvas_ref 131205
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "7 getConnection()" xyz 194 453 3000
+  forward_label "7 getConnection()" xyz 224 457 3000
 linkcanvas 131461
   from ref 129925 z 1999 to ref 131333
 dirscanvas 132997 z 1000 linkcanvas_ref 131461
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "9 prepareStream()" xyz 218 524 3000
+  forward_label "9 prepareStream()" xyz 218 536 3000
 linkcanvas 131589
   from ref 129925 z 1999 to ref 129413
 dirscanvas 132869 z 1000 linkcanvas_ref 131589
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "8 getAutomation()" xyz 65 280 3000
+  forward_label "8 getAutomation()" xyz 71 294 3000
 linkcanvas 131845
   from ref 128005 z 1999 to ref 131717
 dirscanvas 133125 z 1000 linkcanvas_ref 131845
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "10 play()" xyz 668 317 3000
+  forward_label "10 play()" xyz 674 348 3000
 linkcanvas 131973
   from ref 131717 z 1999 to ref 131333
 dirscanvas 133253 z 1000 linkcanvas_ref 131973
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "11 getReady()" xyz 458 611 3000
+  forward_label "11 getReady()" xyz 427 603 3000
 msgs
   msg operation_ref 128261 // "buildProcessor()"
     forward ranks 1 "1" dirscanvas_ref 132101

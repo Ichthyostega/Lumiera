@@ -1,6 +1,6 @@
 format 38
 "RenderEngine" // RenderEngine
-  revision 2
+  revision 4
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -164,7 +164,6 @@ ${inlines}
 	    classrelation_ref 132869 // <generalisation>
 	  b multiplicity "" parent class_ref 131717 // ProcNode
       end
-
     end
 
     class 131717 "ProcNode"

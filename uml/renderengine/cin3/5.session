@@ -1,20 +1,21 @@
-window_sizes 1140 830 287 843 687 62
+window_sizes 1140 830 287 843 689 62
 diagrams
   componentdiagram_ref 128005 // Overview
-    860 687 100 4 314 0
+    860 687 100 4 525 0
   deploymentdiagram_ref 128261 // Overview Render Engine
-    674 551 100 4 109 12
+    674 551 100 4 0 12
   classdiagram_ref 128133 // Session structure
-    674 551 100 4 538 0
-  active  classdiagram_ref 128389 // Render Entities
+    674 551 100 4 0 0
+  classdiagram_ref 128389 // Render Entities
     843 689 100 4 147 0
-  collaborationdiagram_ref 128517 // build process
-    674 551 100 4 0 0
-  classdiagram_ref 128645 // Components
-    674 551 100 4 0 0
+  active  collaborationdiagram_ref 128517 // build process
+    674 551 100 4 0 181
+  classdiagram_ref 128645 // Controller Entities
+    674 551 100 4 538 0
 end
 show_stereotypes
-selected classdiagram_ref 128389 // Render Entities
+selected 
+  package_ref 129 // cin3
 open
   class_ref 128005 // Session
   classrelation_ref 128645 // tracks (<directional aggregation by value>)
