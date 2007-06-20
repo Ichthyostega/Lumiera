@@ -787,6 +787,17 @@ Look at [[Overview]] for the current design proposal</pre>
 <pre>DataBackend
 </pre>
 </div>
+<div title="File" modifier="CehTeh" modified="200706201552" created="200706201525" changecount="2">
+<pre>'File' is the superclass of all possible filetypes, it has a weak reference to a FileHandle which is managed in FileHandleCache, on creation only the existence (when reading) or access for write for new files are checked. 'File' stores some generic metadata about the underlying file and intended use. But actual opening is done on demand.
+
+Files content is memory mapped into the process address space, this is managed by FileMap objects and a FileMapCache. </pre>
+</div>
+<div title="FileHandle" modifier="CehTeh" created="200706201535" changecount="1">
+<pre>'FileHandle's are managed by the FileHandleCache, they are just storing the underlying OS file handles and managed in a lazy/weak way, (re)opened when needed and aging in the cache when not needed, since the amount of open file handles is limited aged ones will be closed and reused when the system needs to open another file.</pre>
+</div>
+<div title="FileHandleCache" modifier="CehTeh" created="200706201548" changecount="1">
+<pre>'FileHandleCache' storing a finite maximum number of [[FileHandle]]s as a list. As long the configured maximum of open files is not reached new file handles are stored at the begin of the list. Whenever a filehandle is accessed it is moved to the begin of the list too. Unused filehandles propagate towards the end of the list. When the maximum of open filehandles is reached, aged filehandles are closed and taken from the end. </pre>
+</div>
 <div title="FullScreenPlugin" modifier="CehTeh" modified="200706110313" created="200607241016" tags="systemConfig lewcidExtension" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110313">
 <pre>/***
 |Name|FullScreenPlugin|
@@ -1183,12 +1194,29 @@ DataBackend
 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;&lt;b&gt;My TiddlyWiki&lt;/b&gt; is loading&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
 </div>
-<div title="Overview" modifier="CehTeh" created="200706200040" changecount="1">
+<div title="Notes" modifier="CehTeh" modified="200706200110" created="200706200107" changecount="2">
+<pre>how is FileMetadata kept
+
+copying semantics of smart pointers
+
+explain opening/closing files (use() forget()?)
+
+difference between actual files and temporary. does it make sense to have temporary storage on diffent speed disks?
+
+statistics hit/fail max/min/avg timings, hard / soft fails, timing constraints, when is rerendering cheaper than caching?..
+
+adaptive rendering
+
+background rendering
+
+renderfarm</pre>
+</div>
+<div title="Overview" modifier="CehTeh" modified="200706201550" created="200706200040" changecount="3">
 <pre>Whenever cinelerra needs to access data this is done through the DataBackend described here. The backend uses memory mapping to make data available to the program. This is little different to more common open/read/write/close file access while giving superior performance and much better memory utilization.
 
-The data backend must be capable to handle more data than will fit into the memory or even address space on 32 bit archs.  Moreover a project may access more files than the OS can handle at a time, thus the Backend needs a FileHandleCache to manage filehandles dynamically.
+The data backend must be capable to handle more data than will fit into the memory or even address space on 32 bit archs.  Moreover a project may access more files than the OS can handle at a time, thus the for [[File]]s used by the Backend it needs a FileHandleCache to manage filehandles dynamically.
 
-Which parts of a File are actually mapped to physical ram is managed by the kernel, but we keep a FileCache to manage the mappings we set up.
+Which parts of a File are actually mapped to physical ram is managed by the kernel, but we keep a FileMapCache to manage the mappings we set up.
 
 To minimize latency and optimize cpu utilization we have a [[Prefetch]] thread which operates a [[Scheduler]] to render and cache frames which are expected to be consumed soon. This prefetcher keeps [[Statistics]] for optimizing performance.
 
