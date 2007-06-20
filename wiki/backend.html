@@ -787,23 +787,27 @@ Look at [[Overview]] for the current design proposal</pre>
 <pre>DataBackend
 </pre>
 </div>
-<div title="File" modifier="CehTeh" modified="200706201552" created="200706201525" changecount="2">
+<div title="File" modifier="CehTeh" modified="200706202209" created="200706201525" changecount="3">
 <pre>'File' is the superclass of all possible filetypes, it has a weak reference to a FileHandle which is managed in FileHandleCache, on creation only the existence (when reading) or access for write for new files are checked. 'File' stores some generic metadata about the underlying file and intended use. But actual opening is done on demand.
 
-Files content is memory mapped into the process address space, this is managed by FileMap objects and a FileMapCache. </pre>
+Files content is memory mapped into the process address space, this is managed by FileMap objects and a FileMapCache.
+</pre>
 </div>
-<div title="FileHandle" modifier="CehTeh" created="200706201535" changecount="1">
-<pre>'FileHandle's are managed by the FileHandleCache, they are just storing the underlying OS file handles and managed in a lazy/weak way, (re)opened when needed and aging in the cache when not needed, since the amount of open file handles is limited aged ones will be closed and reused when the system needs to open another file.</pre>
+<div title="FileHandle" modifier="CehTeh" modified="200706202208" created="200706201535" changecount="2">
+<pre>'FileHandle's are managed by the FileHandleCache, they are just storing the underlying OS file handles and managed in a lazy/weak way, (re)opened when needed and aging in the cache when not needed, since the amount of open file handles is limited aged ones will be closed and reused when the system needs to open another file.
+</pre>
 </div>
-<div title="FileHandleCache" modifier="CehTeh" created="200706201548" changecount="1">
-<pre>'FileHandleCache' storing a finite maximum number of [[FileHandle]]s as a list. As long the configured maximum of open files is not reached new file handles are stored at the begin of the list. Whenever a filehandle is accessed it is moved to the begin of the list too. Unused filehandles propagate towards the end of the list. When the maximum of open filehandles is reached, aged filehandles are closed and taken from the end. </pre>
+<div title="FileHandleCache" modifier="CehTeh" modified="200706202209" created="200706201548" changecount="3">
+<pre>'FileHandleCache' storing a finite maximum number of [[FileHandle]]s as a list. As long the configured maximum of open files is not reached new file handles are stored at the begin of the list. Whenever a filehandle is accessed it is moved to the begin of the list too. Unused filehandles propagate towards the end of the list. When the maximum of open filehandles is reached, aged filehandles are closed and taken from the end.
+</pre>
 </div>
-<div title="FileMap" modifier="CehTeh" modified="200706201945" created="200706201921" changecount="3">
+<div title="FileMap" modifier="CehTeh" modified="200706202210" created="200706201921" changecount="4">
 <pre>Each 'FileMap' object contains many [[Frame]]s as well as metadata. The actual layout depends on the type of the [[File]]. Mappings need to be page aligned while [[Frame]]s can can be anywhere within a file and dynamic sized.
 
 All established [[FileMap]]s are managed in a FileMapCache. This is similar to the FileHandleCache but mappings which are in use are checked out of the aging list and thus become locked from aging/purging.
 
-FileMap objects are transparent to the application, it will only requests [[Frame]]s as in position and size (and some other parameters).</pre>
+FileMap objects are transparent to the application, it will only requests [[Frame]]s as in position and size (and some other parameters).
+</pre>
 </div>
 <div title="FileMapCache" modifier="CehTeh" created="200706202207" changecount="1">
 <pre>The 'FileMapCache' keeps a list of FileMaps which are currently not in use and subject of aging.
@@ -1238,7 +1242,7 @@ background rendering
 
 renderfarm</pre>
 </div>
-<div title="Overview" modifier="CehTeh" modified="200706201921" created="200706200040" changecount="5">
+<div title="Overview" modifier="CehTeh" modified="200706202210" created="200706200040" changecount="6">
 <pre>Whenever cinelerra needs to access data this is done through the DataBackend described here. The backend uses memory mapping to make data available to the program. This is little different to more common open/read/write/close file access while giving superior performance and much better memory utilization.
 
 The data backend must be capable to handle more data than will fit into the memory or even address space on 32 bit archs.  Moreover a project may access more files than the OS can handle at a time, thus the for [[File]]s used by the Backend it needs a FileHandleCache to manage filehandles dynamically.
@@ -1247,7 +1251,8 @@ Which parts of a File are actually mapped to physical ram is managed by the kern
 
 To minimize latency and optimize cpu utilization we have a [[Prefetch]] thread which operates a [[Scheduler]] to render and cache frames which are expected to be consumed soon. This prefetcher keeps [[Statistics]] for optimizing performance.
 
-The core accesses data through smart pointers which are described in [[DataLocking]].</pre>
+The core accesses data through smart pointers which are described in [[DataLocking]].
+</pre>
 </div>
 <div title="PageTemplate" modifier="CehTeh" modified="200706110330" created="200701131624" tags="MPTWTheme" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110330">
 <pre>&lt;!--{{{--&gt;
