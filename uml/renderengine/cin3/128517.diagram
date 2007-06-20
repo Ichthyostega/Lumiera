@@ -40,7 +40,7 @@ linkcanvas 129669
   from ref 129285 z 1999 to ref 129413
 dirscanvas 132357 z 1000 linkcanvas_ref 129669
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "4 getPlaylistForRender()" xyz 216 167 3000
+  forward_label "4 getPlaylistForRender()" xyz 126 222 3000
 linkcanvas 130309
   from ref 128133 z 1999 to ref 130053
 dirscanvas 132229 z 1000 linkcanvas_ref 130309
@@ -70,7 +70,7 @@ linkcanvas 131589
   from ref 129925 z 1999 to ref 129413
 dirscanvas 132869 z 1000 linkcanvas_ref 131589
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "8 getAutomation()" xyz 71 294 3000
+  forward_label "8 getAutomation()" xyz 63 297 3000
 linkcanvas 131845
   from ref 128005 z 1999 to ref 131717
 dirscanvas 133125 z 1000 linkcanvas_ref 131845

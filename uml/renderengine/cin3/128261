@@ -1,6 +1,6 @@
 format 38
 "MObject" // MObject
-  revision 5
+  revision 6
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -48,6 +48,18 @@ format 38
       size A4
     end
 
+    objectdiagram 128773 "EDL Example1"
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      comment "A simple example showing how the actual objects are placed in the Fixture (=definitive playlist). It shows a Video and Audio clip placed on two tracks"
+      size A4
+    end
+
+    objectdiagram 128901 "EDL Example2"
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      comment "More complex example showing the Object graph in the EDL and how it is linked into the Fixture to yield the actual locations. In this example, an HUE Effect is applied on a part of the Clip"
+      size A4
+    end
+
     class 128005 "Session"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
@@ -68,12 +80,12 @@ ${inlines}
 	  b multiplicity "" parent class_ref 128133 // EDL
       end
 
-      classrelation 128261 // fixture (<directional aggregation by value>)
-	relation 128133 *-->
+      classrelation 128261 // fixture (<unidirectional association>)
+	relation 128133 --->
 	  a role_name "fixture" multiplicity "1" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
-	    classrelation_ref 128261 // fixture (<directional aggregation by value>)
+	    classrelation_ref 128261 // fixture (<unidirectional association>)
 	  b multiplicity "" parent class_ref 128261 // Fixture
       end
     end
@@ -170,6 +182,7 @@ ${inlines}
 	
 	
       end
+
     end
 
     class 128389 "Track"
@@ -200,7 +213,7 @@ ${members}};
       
       classrelation 129029 // placement (<association>)
 	relation 128645 ----
-	  a role_name "placement" multiplicity "1" protected
+	  a role_name "placement" multiplicity "1..*" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
 	    classrelation_ref 129029 // placement (<association>)
@@ -260,6 +273,15 @@ ${inlines}
 	    classrelation_ref 129925 // <generalisation>
 	  b multiplicity "" parent class_ref 128517 // MObject
       end
+
+      attribute 128517 "length"
+	protected explicit_type "long"
+	init_value "0"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+      end
     end
 
     class 128901 "Clip"
@@ -279,6 +301,17 @@ ${inlines}
 	    classrelation_ref 130053 // <generalisation>
 	  b multiplicity "" parent class_ref 128773 // AbstractMO
       end
+
+      attribute 128645 "start"
+	protected explicit_type "long"
+	init_value "0"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+	comment "startpos in source"
+      end
+
     end
 
     class 129029 "Effect"
@@ -297,6 +330,15 @@ ${inlines}
 	    cpp default "${type}"
 	    classrelation_ref 130181 // <generalisation>
 	  b multiplicity "" parent class_ref 128773 // AbstractMO
+      end
+
+      attribute 128901 "plugID"
+	protected explicit_type "string"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+	comment "Identifier of the Plugin to be used"
       end
     end
 
@@ -381,6 +423,48 @@ ${inlines}
 	    classrelation_ref 131333 // <generalisation>
 	  b multiplicity "" parent class_ref 128645 // Placement
       end
+
+      attribute 129029 "offset"
+	protected explicit_type "long"
+	init_value "0"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+	comment "Offset the actual position by this (time) value relative to the anchor point"
+      end
+
+      class 133893 "RelType"
+	visibility protected stereotype "enum"
+	cpp_decl "${comment}enum ${name} {
+${items}
+};
+"
+	java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+	idl_decl "${comment}enum ${name} {
+${items}};
+"
+	explicit_switch_type ""
+	
+	attribute 129157 "SAMETIME"
+	  public explicit_type ""
+	  cpp_decl "  ${name}${value},${comment}"
+	  java_decl ""
+	  idl_decl ""
+	  comment "place subject at the sime time then the anchor"
+	end
+
+	attribute 129285 "ATTACH"
+	  public explicit_type ""
+	  cpp_decl "  ${name}${value},${comment}"
+	  java_decl ""
+	  idl_decl ""
+	  comment "attach subject to anchor (e.g. an effect to a clip)"
+	end
+      end
     end
 
     class 129541 "Allocation"
@@ -400,6 +484,15 @@ ${inlines}
 	    cpp default "${type}"
 	    classrelation_ref 131205 // <generalisation>
 	  b multiplicity "" parent class_ref 128645 // Placement
+      end
+
+      attribute 128773 "repr"
+	protected explicit_type "string"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+	comment "human readable representation of the condition characterizing this allocaton, e.g. \"t >= 10\""
       end
     end
 
@@ -469,6 +562,7 @@ ${members}};
 	  b multiplicity "" parent class_ref 128389 // Track
 	  association_type class_ref 128389 // Track
       end
+
     end
 
     class 129925 "Auto"
