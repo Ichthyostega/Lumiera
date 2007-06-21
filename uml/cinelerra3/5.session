@@ -12,7 +12,8 @@ diagrams
     674 554 100 4 0 0
 end
 show_stereotypes
-selected objectdiagram_ref 128901 // EDL Example2
+selected 
+  package_ref 129 // cinelerra3
 open
   class_ref 128005 // Session
   classrelation_ref 128645 // tracks (<directional aggregation by value>)
