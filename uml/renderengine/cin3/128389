@@ -1,6 +1,6 @@
 format 38
 "RenderEngine" // RenderEngine
-  revision 4
+  revision 5
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -77,6 +77,18 @@ format 38
       size A4
     end
 
+    objectdiagram 129029 "Engine Example1"
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      comment "Example1 (from EDL) continued: here the RenderEngine to be created by the Builder from the Input shown in Example1"
+      size A4
+    end
+
+    objectdiagram 129157 "Engine Example2"
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      comment "Example2 (from EDL) continued: notably in this RenderEngine the Effect has been partitioned into 2 segments with constant configuration."
+      size A4
+    end
+
     class 131333 "RenderEngine"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
@@ -145,6 +157,24 @@ ${inlines}
 	    classrelation_ref 136325 // <dependency>
 	  b multiplicity "" parent class_ref 132741 // StateProxy
       end
+
+      attribute 129413 "start"
+	protected explicit_type "long"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+	comment "begin of the timerange covered by this processor"
+      end
+
+      attribute 129541 "end"
+	protected explicit_type "long"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+	comment "end of the timerange (excl)"
+      end
     end
 
     class 131589 "ExitNode"
@@ -164,6 +194,7 @@ ${inlines}
 	    classrelation_ref 132869 // <generalisation>
 	  b multiplicity "" parent class_ref 131717 // ProcNode
       end
+
     end
 
     class 131717 "ProcNode"
@@ -180,6 +211,15 @@ ${members}};
 "
       explicit_switch_type ""
       
+      classrelation 136965 // datasrc (<unidirectional association>)
+	relation 135429 --->
+	  a role_name "datasrc" multiplicity "" protected
+	    comment "The predecessor in a processing pipeline, i.e. a source to get data to be processed"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 136965 // datasrc (<unidirectional association>)
+	  b multiplicity "1" parent class_ref 131717 // ProcNode
+      end
     end
 
     class 131845 "Trafo"
@@ -256,6 +296,7 @@ ${inlines}
 	    classrelation_ref 133509 // <generalisation>
 	  b multiplicity "" parent class_ref 131845 // Trafo
       end
+
     end
 
     class 132357 "Mask"
@@ -386,14 +427,6 @@ ${members}};
 "
       explicit_switch_type ""
       
-      classrelation 135685 // <unidirectional association>
-	relation 134405 --->
-	  a role_name "" multiplicity "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
-"
-	    classrelation_ref 135685 // <unidirectional association>
-	  b multiplicity "1" parent class_ref 132741 // StateProxy
-      end
     end
 
     class 133381 "AFrame"

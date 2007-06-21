@@ -1,6 +1,6 @@
 format 38
 "MObject" // MObject
-  revision 6
+  revision 7
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -182,7 +182,6 @@ ${inlines}
 	
 	
       end
-
     end
 
     class 128389 "Track"
@@ -311,7 +310,6 @@ ${inlines}
 	idl_decl ""
 	comment "startpos in source"
       end
-
     end
 
     class 129029 "Effect"
@@ -562,7 +560,6 @@ ${members}};
 	  b multiplicity "" parent class_ref 128389 // Track
 	  association_type class_ref 128389 // Track
       end
-
     end
 
     class 129925 "Auto"

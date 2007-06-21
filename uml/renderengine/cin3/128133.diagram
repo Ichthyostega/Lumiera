@@ -34,7 +34,7 @@ classcanvas 130949 class_ref 128773 // AbstractMO
   end
 classcanvas 131461 class_ref 128901 // Clip
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 278 368 2000
+  xyz 279 361 2000
   end
 classcanvas 131717 class_ref 129029 // Effect
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -50,7 +50,7 @@ classcanvas 132229 class_ref 129285 // DirectPlacement
   end
 classcanvas 132869 class_ref 129413 // RelativePlacement
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 477 350 2000
+  xyz 471 346 2000
   end
 classcanvas 134149 class_ref 129541 // Allocation
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -148,7 +148,7 @@ relationcanvas 132997 relation_ref 129925 // <unidirectional association>
   from ref 132869 z 1999 to point 486 247
   line 133893 z 1999 to ref 129413
   role_a_pos 423 192 3000 no_role_b
-  multiplicity_a_pos 401 205 3000 multiplicity_b_pos 500 325 3000
+  multiplicity_a_pos 401 205 3000 multiplicity_b_pos 495 321 3000
 relationcanvas 134533 relation_ref 130309 // <generalisation>
   from ref 134405 z 1999 to ref 131973
   no_role_a no_role_b

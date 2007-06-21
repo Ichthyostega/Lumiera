@@ -61,7 +61,7 @@ classinstance 131845 class_ref 129413 // RelativePlacement
     "SAMETIME"
 end
 classinstance 132229 class_ref 129029 // Effect
-  xyz 561 71 2000 name ""
+  xyz 562 71 2000 name ""
   values
     attribute_ref 128517 // length
     "3"
@@ -131,7 +131,7 @@ objectlinkcanvas 132101 rel relation_ref 129925 // <unidirectional association>
   role_a_pos 304 104 3000 no_role_b
 objectlinkcanvas 132485 rel relation_ref 128645 // <association>
   from ref 132229 z 1999 to ref 132357
-  role_a_pos 612 172 3000 role_b_pos 612 150 3000
+  role_a_pos 613 172 3000 role_b_pos 613 150 3000
 objectlinkcanvas 132613 rel relation_ref 129925 // <unidirectional association>
   from ref 132357 z 1999 to ref 131717
   role_a_pos 460 109 3000 no_role_b

@@ -47,7 +47,7 @@ classinstance 131077 class_ref 128901 // Clip
     attribute_ref 128645 // start
     "176400"
 end
-textcanvas 131333 "Video and Audio Clip of length = 5 frames positioned at frame 2,  staring at t=4s in soucre.
+textcanvas 131333 "Video and Audio Clip of length = 5 frames positioned at frame 2,  starting at t=4s in soucre.
 (Values for PAL and 44.1)"
   xyzwh 457 335 2000 175 87
 objectlinkcanvas 128261 norel
