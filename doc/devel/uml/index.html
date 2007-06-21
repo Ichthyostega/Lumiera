@@ -1,0 +1,200 @@
+<!-- Documentation produced by the Html generator of Bouml (http://bouml.free.fr) -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>cinelerra3
+Documentation</title>
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body bgcolor="#ffffff">
+
+<div class = "title">cinelerra3<br />Documentation</div>
+<p></p>
+
+<!-- ============================================================= -->
+
+<a name="ref1"></a>
+<a name="ref2"></a>
+<h1 class ="package">1 Package design</h1>
+<p>All things concering the big picture.<br />Not a real code package, rather a container for design drafts, specifications, decisions.<br /></p><div class="sub">
+<a name="ref3"></a>
+<h2 class ="view">1.1 Component View Architecture</h2>
+<p>The various Components comprising the Cinelerra3 Video editing Application<br /></p>
+<div class="sub">
+<a name="ref4"></a>
+<p align="center"><img src="fig1.png" alt="" /></p>
+ <p align="center"><b>Overview</b></p><p><br /></p><p><br /></p>
+<p>This drawing shows the top level compoents and relations<br /></p><a name="ref5"></a>
+<table><tr><td><div class="element">Component <b>Builder</b></div></td></tr></table>
+<a name="ref6"></a>
+<table><tr><td><div class="element">Component <b>Session</b></div></td></tr></table>
+<div class="sub">
+<a name="ref7"></a>
+<table><tr><td><div class="element">Component <b>EDL</b></div></td></tr></table>
+<p>nested in <a href="index.html#ref6"><b>Session</b></a></p>
+<a name="ref8"></a>
+<table><tr><td><div class="element">Component <b>Fixture</b></div></td></tr></table>
+<p>nested in <a href="index.html#ref6"><b>Session</b></a></p>
+</div>
+<a name="ref9"></a>
+<table><tr><td><div class="element">Component <b>Controller</b></div></td></tr></table>
+<p>Depends on <a href="index.html#ref5"><b>Builder</b></a></p><div class="sub">
+</div>
+<a name="ref10"></a>
+<table><tr><td><div class="element">Component <b>AssetManagement</b></div></td></tr></table>
+<a name="ref11"></a>
+<table><tr><td><div class="element">Component <b>Dispatcher</b></div></td></tr></table>
+<a name="ref12"></a>
+<table><tr><td><div class="element">Component <b>Engine</b></div></td></tr></table>
+<p>Depends on <a href="index.html#ref13"><b>Stream Provider</b></a></p><div class="sub">
+</div>
+<a name="ref13"></a>
+<table><tr><td><div class="element">Component <b>Stream Provider</b></div></td></tr></table>
+<p>Depends on <a href="index.html#ref14"><b>Cache</b></a></p><div class="sub">
+</div>
+<a name="ref14"></a>
+<table><tr><td><div class="element">Component <b>Cache</b></div></td></tr></table>
+<a name="ref15"></a>
+<table><tr><td><div class="element">Component <b>RenderPathManager</b></div></td></tr></table>
+</div>
+</div>
+<a name="ref16"></a>
+<h1 class ="package">2 Package AssetManager</h1>
+<a name="ref17"></a>
+<h1 class ="package">3 Package MObject</h1>
+<div class="sub">
+<a name="ref18"></a>
+<h2 class ="view">3.1 Class View Session</h2>
+<div class="sub">
+<a name="ref19"></a>
+<p align="center"><img src="fig2.png" alt="" /></p>
+ <p align="center"><b>Session structure</b></p><p><br /></p><p><br /></p>
+<a name="ref20"></a>
+<p align="center"><img src="fig3.png" alt="" /></p>
+ <p align="center"><b>EDL Example1</b></p><p><br /></p><p><br /></p>
+<p>A simple example showing how the actual objects are placed in the Fixture (=definitive playlist). It shows a Video and Audio clip placed on two tracks<br /></p><a name="ref21"></a>
+<p align="center"><img src="fig4.png" alt="" /></p>
+ <p align="center"><b>EDL Example2</b></p><p><br /></p><p><br /></p>
+<p>More complex example showing the Object graph in the EDL and how it is linked into the Fixture to yield the actual locations. In this example, an HUE Effect is applied on a part of the Clip<br /></p><table><tr><td><div class="element">Class <b><a href="class22.html#ref22"><b>Session</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class25.html#ref25"><b>EDL</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class28.html#ref28"><b>Fixture</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class33.html#ref33"><b>Track</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class34.html#ref34"><b>MObject</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class36.html#ref36"><b>Placement</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class39.html#ref39"><b>AbstractMO</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class41.html#ref41"><b>Clip</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class43.html#ref43"><b>Effect</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class45.html#ref45"><b>Meta</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class46.html#ref46"><b>DirectPlacement</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class47.html#ref47"><b>RelativePlacement</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class54.html#ref54"><b>Allocation</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class56.html#ref56"><b>Label</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class57.html#ref57"><b>ExplicitePlacement</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class61.html#ref61"><b>Auto</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class62.html#ref62"><b>Wish</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class63.html#ref63"><b>Constraint</b></a></b></div></td></tr></table>
+</div>
+<a name="ref64"></a>
+<h2 class ="package">3.2 Package Builder</h2>
+<div class="sub">
+<a name="ref65"></a>
+<h3 class ="view">3.2.1 Class View Builder Workings</h3>
+<div class="sub">
+<a name="ref66"></a>
+<p align="center"><img src="fig5.png" alt="" /></p>
+ <p align="center"><b>build process</b></p><p><br /></p><p><br /></p>
+<p>This figure shows the process of building and starting a RenderEngine<br /></p><table><tr><td><div class="element">Class <b><a href="class67.html#ref67"><b>BuilderFacade</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class69.html#ref69"><b>ToolFactory</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class71.html#ref71"><b>ConManager</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class73.html#ref73"><b>Assembler</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class75.html#ref75"><b>StateProxy</b></a></b></div></td></tr></table>
+</div>
+</div>
+<a name="ref77"></a>
+<h2 class ="package">3.3 Package Controller</h2>
+<div class="sub">
+<a name="ref78"></a>
+<h3 class ="view">3.3.1 Class View Controller Workings</h3>
+<div class="sub">
+<a name="ref79"></a>
+<p align="center"><img src="fig6.png" alt="" /></p>
+ <p align="center"><b>Controller Entities</b></p><p><br /></p><p><br /></p>
+<table><tr><td><div class="element">Class <b><a href="class80.html#ref80"><b>ControllerFacade</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class81.html#ref81"><b>PathManager</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class83.html#ref83"><b>RenderState</b></a></b></div></td></tr></table>
+</div>
+</div>
+</div>
+<a name="ref85"></a>
+<h1 class ="package">4 Package RenderEngine</h1>
+<div class="sub">
+<a name="ref86"></a>
+<h2 class ="view">4.1 Deployment View Engine Parts</h2>
+<div class="sub">
+<a name="ref87"></a>
+<p align="center"><img src="fig7.png" alt="" /></p>
+ <p align="center"><b>Overview Render Engine</b></p><p><br /></p><p><br /></p>
+<a name="ref88"></a>
+<table><tr><td><div class="element">Node <b>timeline</b></div></td></tr></table>
+<a name="ref89"></a>
+<table><tr><td><div class="element">Node <b>playlist</b></div></td></tr></table>
+<a name="ref90"></a>
+<table><tr><td><div class="element">Node <b>proc</b></div></td></tr></table>
+<a name="ref91"></a>
+<table><tr><td><div class="element">Node <b>pnode</b></div></td></tr></table>
+<a name="ref92"></a>
+<table><tr><td><div class="element">Node <b>mStream</b></div></td></tr></table>
+<a name="ref93"></a>
+<table><tr><td><div class="element">Node <b>State</b></div></td></tr></table>
+</div>
+<a name="ref94"></a>
+<h2 class ="view">4.2 Class View Engine Workings</h2>
+<div class="sub">
+<a name="ref95"></a>
+<p align="center"><img src="fig8.png" alt="" /></p>
+ <p align="center"><b>Render Entities</b></p><p><br /></p><p><br /></p>
+<a name="ref96"></a>
+<p align="center"><img src="fig9.png" alt="" /></p>
+ <p align="center"><b>Engine Example1</b></p><p><br /></p><p><br /></p>
+<p>Example1 (from EDL) continued: here the RenderEngine to be created by the Builder from the Input shown in Example1<br /></p><a name="ref97"></a>
+<p align="center"><img src="fig10.png" alt="" /></p>
+ <p align="center"><b>Engine Example2</b></p><p><br /></p><p><br /></p>
+<p>Example2 (from EDL) continued: notably in this RenderEngine the Effect has been partitioned into 2 segments with constant configuration.<br /></p><table><tr><td><div class="element">Class <b><a href="class98.html#ref98"><b>RenderEngine</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class101.html#ref101"><b>Processor</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class105.html#ref105"><b>ExitNode</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class106.html#ref106"><b>ProcNode</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class108.html#ref108"><b>Trafo</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class109.html#ref109"><b>Link</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class110.html#ref110"><b>Hub</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class111.html#ref111"><b>Projector</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class112.html#ref112"><b>Mask</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class113.html#ref113"><b>PluginAdapter</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class114.html#ref114"><b>OpenGLPipe</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class115.html#ref115"><b>ARender</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class116.html#ref116"><b>VRender</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class117.html#ref117"><b>GLRender</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class118.html#ref118"><b>Frame</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class119.html#ref119"><b>AFrame</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class120.html#ref120"><b>VFrame</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class121.html#ref121"><b>GLBuf</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class122.html#ref122"><b>Source</b></a></b></div></td></tr></table>
+</div>
+</div>
+<a name="ref123"></a>
+<h1 class ="package">5 Package CommonLib</h1>
+<a name="ref124"></a>
+<h1 class ="package">6 Package Vault</h1>
+<p>This package is used here just to hold entities thought to belong to the backend layer. The Backend is not in Focus for this Design draft.<br /></p><div class="sub">
+<a name="ref125"></a>
+<h2 class ="view">6.1 Class View Backend Components</h2>
+<div class="sub">
+<table><tr><td><div class="element">Class <b><a href="class126.html#ref126"><b>FrameProvider</b></a></b></div></td></tr></table>
+</div>
+</div>
+<a name="ref129"></a>
+<h1 class ="package">7 Package GUI</h1>
+<p>GUI is here just a container to hold any entities considered to be User Interface related, which is not in focus for this Design draft<br /></p></body>
+</html>

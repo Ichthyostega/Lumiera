@@ -1,0 +1,104 @@
+format 38
+
+classinstance 128005 class_ref 131333 // RenderEngine
+  xyz 80 75 2000 name ""
+end
+classinstance 128133 class_ref 131461 // Processor
+  xyz 435 172 2000 name "audio1"
+  values
+    attribute_ref 129541 // end
+    "7/25"
+    attribute_ref 129413 // start
+    "2/25"
+end
+classinstance 128261 class_ref 131461 // Processor
+  xyz 280 172 2000 name "video1"
+  values
+    attribute_ref 129541 // end
+    "7/25"
+    attribute_ref 129413 // start
+    "2/25"
+end
+fragment 128517 "seq"
+  xyzwh 232 140 1994 367 113
+end
+classinstance 128645 class_ref 131589 // ExitNode
+  xyz 287 329 2000 name "video"
+end
+classinstance 128773 class_ref 131589 // ExitNode
+  xyz 443 330 2000 name "audio"
+end
+classinstance 129157 class_ref 132229 // Projector
+  xyz 287 386 2000 name "ouput"
+end
+classinstance 129285 class_ref 132229 // Projector
+  xyz 290 497 2000 name "input"
+end
+classinstance 129669 class_ref 132357 // Mask
+  xyz 306 442 2000 name ""
+end
+classinstance 129797 class_ref 133765 // Source
+  xyz 292 556 2000 name "vid_a"
+end
+classinstance 129925 class_ref 133765 // Source
+  xyz 444 398 2000 name "aud_a"
+end
+classinstance 131717 class_ref 132997 // VRender
+  xyz 188 427 2000 name "vid1"
+end
+classinstance 131845 class_ref 132869 // ARender
+  xyz 554 289 2000 name "au1"
+end
+classinstance 131973 class_ref 133509 // VFrame
+  xyz 112 492 2000 name ""
+end
+classinstance 132101 class_ref 133381 // AFrame
+  xyz 663 353 2000 name ""
+end
+note 133125 "render state proxy passed on"
+  xyzwh 123 355 2000 104 53
+textcanvas 133253 "Video and Audio Clip of length = 5 frames positioned at frame 2, producing two output streams (frame sequence)."
+  xyzwh 445 507 2000 175 83
+objectlinkcanvas 128389 rel relation_ref 131845 // <directional aggregation by value>
+  geometry VH
+  from ref 128005 z 1999 to point 120 205
+  line 81 z 1999 to ref 128261
+  role_a_pos 188 183 3000 no_role_b
+objectlinkcanvas 128901 rel relation_ref 131973 // <unidirectional association>
+  from ref 128261 z 1999 stereotype "<<has_a>>" xyz 301 284 3000 to ref 128645
+  role_a_pos 339 304 3000 no_role_b
+objectlinkcanvas 129029 rel relation_ref 131973 // <unidirectional association>
+  from ref 128133 z 1999 stereotype "<<has_a>>" xyz 457 285 3000 to ref 128773
+  role_a_pos 494 305 3000 no_role_b
+objectlinkcanvas 130437 rel relation_ref 135429 // <unidirectional association>
+  from ref 128645 z 1999 to ref 129157
+  role_a_pos 339 361 3000 no_role_b
+objectlinkcanvas 131205 rel relation_ref 135429 // <unidirectional association>
+  from ref 129157 z 1999 to ref 129669
+  role_a_pos 340 417 3000 no_role_b
+objectlinkcanvas 131333 rel relation_ref 135429 // <unidirectional association>
+  from ref 129669 z 1999 to ref 129285
+  role_a_pos 341 472 3000 no_role_b
+objectlinkcanvas 131461 rel relation_ref 135429 // <unidirectional association>
+  from ref 129285 z 1999 to ref 129797
+  role_a_pos 340 531 3000 no_role_b
+objectlinkcanvas 131589 rel relation_ref 135429 // <unidirectional association>
+  from ref 128773 z 1999 to ref 129925
+  role_a_pos 494 373 3000 no_role_b
+objectlinkcanvas 132229 rel relation_ref 134533 // <unidirectional association>
+  geometry VHr
+  from ref 131717 z 1999 to point 137 438
+  line 1 z 1999 to ref 131973
+  role_a_pos 149 467 3000 no_role_b
+objectlinkcanvas 132485 rel relation_ref 134533 // <unidirectional association>
+  geometry HV
+  from ref 131845 z 1999 to point 688 300
+  line 1 z 1999 to ref 132101
+  role_a_pos 700 328 3000 no_role_b
+line 132613 -_-_
+  from ref 128261 z 1999 to point 244 320
+  line 132741 z 1999 to ref 131717
+line 132869 -_-_
+  from ref 128133 z 1999 to point 583 259
+  line 132997 z 1999 to ref 131845
+end
