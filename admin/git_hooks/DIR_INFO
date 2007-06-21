@@ -1,2 +1,3 @@
-here are some git hook scripts taken out of .git/hooks since .git is not under revision control itself
+git hook scripts
+taken out of .git/hooks since .git is not under revision control itself
 if you want to use these, just symlink them
