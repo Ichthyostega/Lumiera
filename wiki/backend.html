@@ -801,8 +801,8 @@ Files content is memory mapped into the process address space, this is managed b
 <pre>'FileHandleCache' storing a finite maximum number of [[FileHandle]]s as a list. As long the configured maximum of open files is not reached new file handles are stored at the begin of the list. Whenever a filehandle is accessed it is moved to the begin of the list too. Unused filehandles propagate towards the end of the list. When the maximum of open filehandles is reached, aged filehandles are closed and taken from the end.
 </pre>
 </div>
-<div title="FileMap" modifier="CehTeh" modified="200706202210" created="200706201921" changecount="4">
-<pre>Each 'FileMap' object contains many [[Frame]]s as well as metadata. The actual layout depends on the type of the [[File]]. Mappings need to be page aligned while [[Frame]]s can can be anywhere within a file and dynamic sized.
+<div title="FileMap" modifier="CehTeh" modified="200706202350" created="200706201921" changecount="5">
+<pre>Each 'FileMap' object contains many [[Frame]]s. The actual layout depends on the type of the [[File]]. Mappings need to be page aligned while [[Frame]]s can can be anywhere within a file and dynamic sized.
 
 All established [[FileMap]]s are managed in a FileMapCache. This is similar to the FileHandleCache but mappings which are in use are checked out of the aging list and thus become locked from aging/purging.
 
@@ -1212,9 +1212,10 @@ config.formatters.push( {
 } )
 //}}}</pre>
 </div>
-<div title="MainMenu" modifier="CehTeh" modified="200706192236" created="200706192002" changecount="3">
+<div title="MainMenu" modifier="CehTeh" modified="200706220110" created="200706192002" changecount="5">
 <pre>''[[Cinelerra3|index.html]]''
 DataBackend
+[[Overview]]
 &lt;&lt;fullscreen&gt;&gt;
 </pre>
 </div>
@@ -1242,16 +1243,17 @@ background rendering
 
 renderfarm</pre>
 </div>
-<div title="Overview" modifier="CehTeh" modified="200706202210" created="200706200040" changecount="6">
+<div title="Overview" modifier="CehTeh" modified="200706202349" created="200706200040" changecount="9">
 <pre>Whenever cinelerra needs to access data this is done through the DataBackend described here. The backend uses memory mapping to make data available to the program. This is little different to more common open/read/write/close file access while giving superior performance and much better memory utilization.
 
 The data backend must be capable to handle more data than will fit into the memory or even address space on 32 bit archs.  Moreover a project may access more files than the OS can handle at a time, thus the for [[File]]s used by the Backend it needs a FileHandleCache to manage filehandles dynamically.
 
-Which parts of a File are actually mapped to physical ram is managed by the kernel, to keep a FileMapCache to manage the [[FileMap]]s we've set up.
+Which parts of a File are actually mapped to physical RAM is managed by the kernel, it keeps a FileMapCache to manage the [[FileMap]]s we've set up.
+
+The application itself only requests [[Frame]]s from the backend.
 
 To minimize latency and optimize cpu utilization we have a [[Prefetch]] thread which operates a [[Scheduler]] to render and cache frames which are expected to be consumed soon. This prefetcher keeps [[Statistics]] for optimizing performance.
 
-The core accesses data through smart pointers which are described in [[DataLocking]].
 </pre>
 </div>
 <div title="PageTemplate" modifier="CehTeh" modified="200706110330" created="200701131624" tags="MPTWTheme" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110330">
@@ -1779,6 +1781,27 @@ DAMAGE.
 &lt;html&gt;&lt;sub&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;scrollAnchorVisible('Top',null, event)&quot;&gt;[Top]&lt;/sub&gt;&lt;/a&gt;&lt;/html&gt;
 ***/</pre>
 </div>
+<div title="Prefetch" modifier="CehTeh" modified="200706220057" created="200706220043" changecount="2">
+<pre>There are 2 important points when we want to access data with low latency:
+# Since we handle much more data than it will fit into most computers RAM. The data which is backed in files has to be paged in and available when needed. The [[Prefetch]] Thread manages page hinting to the kernel (posix_madvise()..)
+# Intermediate [[Frame]]s must eventually be rendered to the cache. The Backend will send Renderjobs to the Controler.
+
+Both of these actions are managed by a [[Scheduler]].
+
+Whenever something queries a [[Frame]] from the backend it provides hints about what it is doing.
+These hints contain:
+
+* Timing constraints
+** When will the [[Frame]] be needed
+** could we drop the request when it won't be renderable in-time
+* Priority of this job (as soon as possible, or just in time?)
+* action (Playing forward, playing backward, tweeking, playback speed, recursive rendering of dependent frames)
+
+Notes:
+* the Backend will try to render related frames as as groups
+** this means that following frames are scheduled with lower priority, whenever the program requests them really the priority will be adjusted
+</pre>
+</div>
 <div title="RSSReaderPlugin" modifier="BidiX" modified="200704220833" created="200704132044" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200704220833">
 <pre>/***
 |''Name:''|RSSReaderPlugin|
@@ -2054,6 +2077,11 @@ see : &lt;&lt;tag RSSFeed&gt;&gt; for the full list.
 
 
 </pre>
+</div>
+<div title="Scheduler" modifier="CehTeh" created="200706220108" changecount="1">
+<pre>Scheduling is done with two priority queues, one for high priority jobs and one for low priority jobs. These priority queues are ordered by absolute time values (and a job identifier, details will be worked out at implementation time).
+
+There is also a variable defining how to handle too-late schedulings (proceed, abort) for each scheduled job. </pre>
 </div>
 <div title="SideBarOptions" modifier="CehTeh" created="200706200047" changecount="1">
 <pre>&lt;&lt;search&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel &quot;options »&quot; &quot;Change TiddlyWiki advanced options&quot;&gt;&gt;</pre>
