@@ -1,6 +1,6 @@
 format 38
 "design" // design
-  revision 4
+  revision 5
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -71,11 +71,11 @@ Not a real code package, rather a container for design drafts, specifications, d
     component 128901 "Engine"
       simplerelation 128133
 	-_->
-	  on component_ref 129029 // Stream Provider
+	  on component_ref 129029 // Frame (Stream) Provider
       end
     end
 
-    component 129029 "Stream Provider"
+    component 129029 "Frame (Stream) Provider"
       simplerelation 128005
 	-_->
 	  on component_ref 129157 // Cache

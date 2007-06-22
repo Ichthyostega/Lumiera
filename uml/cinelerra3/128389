@@ -1,6 +1,6 @@
 format 38
 "RenderEngine" // RenderEngine
-  revision 5
+  revision 6
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -48,7 +48,7 @@ format 38
     deploymentnode 128517 "pnode"
     end
 
-    deploymentnode 128645 "mStream"
+    deploymentnode 128645 "Frame"
     end
 
     deploymentnode 128773 "State"
@@ -194,7 +194,6 @@ ${inlines}
 	    classrelation_ref 132869 // <generalisation>
 	  b multiplicity "" parent class_ref 131717 // ProcNode
       end
-
     end
 
     class 131717 "ProcNode"
@@ -296,7 +295,6 @@ ${inlines}
 	    classrelation_ref 133509 // <generalisation>
 	  b multiplicity "" parent class_ref 131845 // Trafo
       end
-
     end
 
     class 132357 "Mask"
