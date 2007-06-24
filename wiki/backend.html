@@ -1226,7 +1226,7 @@ DataBackend
 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;&lt;b&gt;My TiddlyWiki&lt;/b&gt; is loading&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
 </div>
-<div title="Notes" modifier="CehTeh" modified="200706200110" created="200706200107" changecount="2">
+<div title="Notes" modifier="CehTeh" modified="200706231907" created="200706200107" changecount="3">
 <pre>how is FileMetadata kept
 
 copying semantics of smart pointers
@@ -1241,7 +1241,14 @@ adaptive rendering
 
 background rendering
 
-renderfarm</pre>
+renderfarm
+
+[[FrameDescriptor]]s and [[Frame]] details, Policies composing frames
+
+Storage and logging of EDL's, unlimited undo, database,...
+
+When to Cache and when not to cache, aka instant [[Frame]] reuse
+</pre>
 </div>
 <div title="Overview" modifier="CehTeh" modified="200706202349" created="200706200040" changecount="9">
 <pre>Whenever cinelerra needs to access data this is done through the DataBackend described here. The backend uses memory mapping to make data available to the program. This is little different to more common open/read/write/close file access while giving superior performance and much better memory utilization.
