@@ -747,8 +747,8 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BuildProcess" modifier="Ichthyostega" modified="200706220237" created="200706190658" tags="dynamic" changecount="6">
-<pre>All decisions on //how// the RenderProcess has to be carried out are concentrated in this rather complicated Builder Subsystem. The benefit of this approach is, besides decoupling of subsystems, to keep the actuall performance-intensive video processing code as simple and transparent as possible. The price, in terms of increased complexity, to pay in the Builder can be handled by making the Build Process generic to a large degree. Using a Design By Contract approach we can decompose the various decisions into small decision modules without having to trace the actual workings of the Build Process as a whole.
+<div title="BuildProcess" modifier="Ichthyostega" modified="200706231630" created="200706190658" tags="dynamic" changecount="7">
+<pre>All decisions on //how // the RenderProcess has to be carried out are concentrated in this rather complicated Builder Subsystem. The benefit of this approach is, besides decoupling of subsystems, to keep the actuall performance-intensive video processing code as simple and transparent as possible. The price, in terms of increased complexity &amp;mdash; to pay in the Builder &amp;mdash; can be handled by making the Build Process generic to a large degree. Using a Design By Contract approach we can decompose the various decisions into small decision modules without having to trace the actual workings of the Build Process as a whole.
 
 [img[Colaborations in the Build Process|uml/fig5.png]]
 </pre>

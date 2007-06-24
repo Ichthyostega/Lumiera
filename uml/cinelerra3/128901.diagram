@@ -153,7 +153,7 @@ objectlinkcanvas 133381 norel
 objectlinkcanvas 135685 rel relation_ref 128645 // <association>
   from ref 132997 z 1999 to point 600 432
   line 135813 z 1999 to ref 132357
-  role_a_pos 612 276 3000 role_b_pos 413 543 3000
+  role_a_pos 612 276 3000 role_b_pos 444 540 3000
 line 134149 -_-_
   from ref 131717 z 1993 to ref 132869
 line 134277 -_-_

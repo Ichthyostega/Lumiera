@@ -35,7 +35,7 @@ linkcanvas 129541
   from ref 128133 z 1999 to ref 129285
 dirscanvas 130181 z 1000 linkcanvas_ref 129541
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "3 buildEngine()" xyz 384 313 3000
+  forward_label "3 buildEngine()" xyz 364 316 3000
 linkcanvas 129669
   from ref 129285 z 1999 to ref 129413
 dirscanvas 132357 z 1000 linkcanvas_ref 129669
@@ -50,7 +50,7 @@ linkcanvas 130437
   from ref 129285 z 1999 to ref 129797
 dirscanvas 132485 z 1000 linkcanvas_ref 130437
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "5 configure()" xyz 362 355 3000
+  forward_label "5 configure()" xyz 357 345 3000
 linkcanvas 131077
   from ref 129285 z 1999 to ref 130693
 dirscanvas 132613 z 1000 linkcanvas_ref 131077
@@ -60,7 +60,7 @@ linkcanvas 131205
   from ref 130693 z 1999 to ref 129925
 dirscanvas 132741 z 1000 linkcanvas_ref 131205
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "7 getConnection()" xyz 224 457 3000
+  forward_label "7 getConnection()" xyz 203 469 3000
 linkcanvas 131461
   from ref 129925 z 1999 to ref 131333
 dirscanvas 132997 z 1000 linkcanvas_ref 131461
@@ -75,7 +75,7 @@ linkcanvas 131845
   from ref 128005 z 1999 to ref 131717
 dirscanvas 133125 z 1000 linkcanvas_ref 131845
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "10 play()" xyz 674 348 3000
+  forward_label "10 play()" xyz 668 317 3000
 linkcanvas 131973
   from ref 131717 z 1999 to ref 131333
 dirscanvas 133253 z 1000 linkcanvas_ref 131973

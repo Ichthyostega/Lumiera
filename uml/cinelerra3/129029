@@ -1,6 +1,6 @@
 format 38
 "Controller" // MObject::Controller
-  revision 2
+  revision 3
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -48,6 +48,73 @@ format 38
       size A4
     end
 
+    activity 128133 "configure Render"
+      activitydiagram 129541 "the render configuration flow"
+	package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+	show_infonote default drawing_language default
+	size A4
+      end
+
+      parameter 128005 "Render Request" explicit_type ""
+	unordered 
+	in
+	flow 128901 "<flow>"
+	  on activityaction_ref 128389 // activity action determine Render Params
+	end
+      end
+
+      activityaction 128133 "setup StateProxy"
+	opaque_action
+	flow 129157 "<flow>"
+	  on activitynode_ref 128389 // decision
+	end
+      end
+
+      activitynode 128389 decision "build necessary?"
+	flow 129541 "<flow>"
+	  on activityaction_ref 128517 // activity action build Render Engine
+	    uml_guard "build necessary"
+	end
+
+	flow 129797 "<flow>"
+	  on activitynode_ref 128773 // merge
+	    uml_guard "reuse exiting Engine"
+	end
+      end
+
+      activityaction 128005 "setup Build Params"
+	opaque_action
+      end
+
+      activitynode 128773 merge ""
+	flow 130053 "<flow>"
+	  on activitynode_ref 128901 // activity_final
+	end
+      end
+
+      expansionregion 128005 "determine Render Params"
+	iterative
+      end
+
+      activityaction 128389 "determine Render Params"
+	opaque_action
+	associated_diagram activitydiagram_ref 129541 // the render configuration flow
+	flow 129029 "<flow>"
+	  on activityaction_ref 128133 // activity action setup StateProxy
+	end
+      end
+
+      activityaction 128517 "build Render Engine"
+	opaque_action
+	flow 129669 "<flow>"
+	  on activitynode_ref 128773 // merge
+	end
+      end
+
+      activitynode 128901 activity_final ""
+      end
+    end
+
     class 130309 "ControllerFacade"
       visibility public stereotype "boundary"
       cpp_decl "${comment}${template}class ${name}${inherit} {
@@ -86,7 +153,7 @@ ${inlines}
     end
 
     class 130949 "RenderState"
-      visibility package 
+      visibility protected 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
 ${inlines}

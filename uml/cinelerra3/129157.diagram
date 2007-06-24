@@ -106,7 +106,7 @@ objectlinkcanvas 133637 rel relation_ref 135429 // <unidirectional association>
   role_a_pos 348 361 3000 no_role_b
 objectlinkcanvas 133765 rel relation_ref 135429 // <unidirectional association>
   from ref 133125 z 1999 to ref 132997
-  role_a_pos 398 565 3000 no_role_b
+  role_a_pos 416 577 3000 no_role_b
 objectlinkcanvas 133893 rel relation_ref 131973 // <unidirectional association>
   from ref 133253 z 1999 stereotype "<<has_a>>" xyz 291 273 3000 to ref 133509
   role_a_pos 348 304 3000 no_role_b
@@ -115,12 +115,12 @@ objectlinkcanvas 134277 rel relation_ref 135429 // <unidirectional association>
   role_a_pos 349 473 3000 no_role_b
 objectlinkcanvas 134405 rel relation_ref 135429 // <unidirectional association>
   from ref 128645 z 1999 to ref 132997
-  role_a_pos 445 565 3000 no_role_b
+  role_a_pos 446 567 3000 no_role_b
 objectlinkcanvas 134533 rel relation_ref 131845 // <directional aggregation by value>
   geometry VH
   from ref 128005 z 1999 to point 142 205
   line 6 z 1999 to ref 133253
-  role_a_pos 160 185 3000 no_role_b
+  role_a_pos 197 183 3000 no_role_b
 line 131973 -_-_
   from ref 129797 z 1999 to point 445 243
   line 132101 z 1999 to ref 129541

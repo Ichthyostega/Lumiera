@@ -1,6 +1,6 @@
 format 38
 "Builder" // MObject::Builder
-  revision 5
+  revision 6
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -49,6 +49,133 @@ format 38
       size A4
     end
 
+    activity 128005 "building the Engine"
+      activitydiagram 129413 "build flow"
+	package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations no shadow default
+	show_infonote default drawing_language default
+	size A4
+      end
+
+      parameter 128645 "build Request" explicit_type ""
+	unordered 
+	in
+	flow 130309 "<flow>"
+	  on activityaction_ref 128645 // activity action configure Tools
+	end
+      end
+
+      activityaction 128645 "configure Tools"
+	opaque_action
+	flow 130821 "<flow>"
+	  on activitynode_ref 129029 // fork
+	end
+      end
+
+      expansionregion 128133 "establish partitioning"
+	iterative
+	activityaction 128773 "define segment"
+	  opaque_action
+	  pin 128133 "inFixture" explicit_type ""
+	    unordered 
+	    in
+	  end
+
+	  flow 130693 "<flow>"
+	    on expansionnode_ref 128133 // segments
+	  end
+	end
+
+	expansionnode 128005 "segment Tool"
+	   explicit_type ""
+	  unordered is_control
+	  flow 130565 "<flow>"
+	    on activityaction_ref 128773 // activity action define segment
+	  end
+	end
+
+	expansionnode 128133 "segments"
+	   explicit_type ""
+	  unordered is_control
+	end
+      end
+
+      activityobject 128005 "Fixture"
+	 explicit_type ""
+	unordered 
+	simplerelation 128389
+	  -_->
+	    on activity_ref 128005 // building the Engine
+	end
+
+	flow 130181 "<flow>"
+	  on pin_ref 128133 // inFixture
+	end
+
+	flow 131717 "<flow>"
+	  on pin_ref 128133 // inFixture
+	end
+      end
+
+      activitynode 129029 fork ""
+	flow 130949 "<flow>"
+	  on expansionnode_ref 128005 // segment Tool
+	end
+
+	flow 131077 "<flow>"
+	  on expansionnode_ref 128261 // build Tool
+	end
+      end
+
+      expansionregion 128261 "build Processors"
+	iterative
+	expansionnode 128261 "build Tool"
+	   explicit_type ""
+	  unordered is_control
+	  flow 131205 "<flow>"
+	    on activityaction_ref 128901 // activity action create ProcNode
+	  end
+	end
+
+	expansionnode 128389 "segments"
+	   explicit_type ""
+	  unordered is_control
+	  flow 131333 "<flow>"
+	    on activityaction_ref 128901 // activity action create ProcNode
+	  end
+	end
+
+	activityaction 128901 "create ProcNode"
+	  opaque_action
+	  flow 131461 "<flow>"
+	    on activityaction_ref 129029 // activity action connect
+	  end
+	end
+
+	activityaction 129029 "connect"
+	  opaque_action
+	  flow 131845 "<flow>"
+	    on expansionnode_ref 128517 // complete Render Engine
+	  end
+	end
+
+	expansionnode 128517 "complete Render Engine"
+	   explicit_type ""
+	  unordered is_control
+	  flow 131973 "<flow>"
+	    on activitynode_ref 129157 // activity_final
+	  end
+	end
+      end
+
+      activitynode 129157 activity_final ""
+      end
+    end
+
+    classdiagram 129285 "Builder Entities"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition yes show_members_visibility default show_members_stereotype default show_parameter_dir no show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      size A4
+    end
+
     class 130565 "BuilderFacade"
       visibility package stereotype "boundary"
       cpp_decl "${comment}${template}class ${name}${inherit} {
@@ -94,6 +221,14 @@ ${inlines}
 "
 	
 	
+      end
+
+      classrelation 137221 // <dependency>
+	relation 135685 -_->
+	  a default
+	    cpp default "Generated"
+	    classrelation_ref 137221 // <dependency>
+	  b multiplicity "" parent class_ref 134149 // Tool
       end
     end
 
@@ -164,6 +299,209 @@ ${members}};
 "
 	    classrelation_ref 135941 // currFrame (<unidirectional association>)
 	  b multiplicity "1" parent class_ref 133253 // Frame
+      end
+    end
+
+    class 134021 "Buildable"
+      abstract visibility public stereotype "interface"
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
+${members}};
+"
+      explicit_switch_type ""
+      
+      operation 129669 "apply"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "provided_tool" explicit_type "Tool"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+      end
+    end
+
+    class 134149 "Tool"
+      abstract visibility public stereotype "interface"
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
+${members}};
+"
+      explicit_switch_type ""
+      
+      operation 129797 "treat"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "mElement" type class_ref 134021 // Buildable
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+      end
+    end
+
+    class 134277 "SegmentationTool"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 137605 // <realization>
+	relation 135941 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 137605 // <realization>
+	  b multiplicity "" parent class_ref 134149 // Tool
+      end
+
+      operation 129925 "treat"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "something" type class_ref 134021 // Buildable
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 130181 "treat"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "clip" type class_ref 128901 // Clip
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 130053 "treat"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "effect" type class_ref 129029 // Effect
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+      end
+
+      attribute 129669 "segments"
+	private explicit_type ""
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+	comment "holds the segemntation to be constructed"
+      end
+    end
+
+    class 134405 "NodeCratorTool"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 137733 // <realization>
+	relation 136069 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 137733 // <realization>
+	  b multiplicity "" parent class_ref 134149 // Tool
+      end
+
+      operation 130309 "treat"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "something" type class_ref 134021 // Buildable
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 130437 "treat"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "clip" type class_ref 128901 // Clip
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 130565 "treat"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "effect" type class_ref 129029 // Effect
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+      end
+
+      operation 130693 "treat"
+	public explicit_return_type ""
+	nparams 1
+	  param inout name "auto" type class_ref 129925 // Auto
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+      end
+
+      attribute 129797 "proc"
+	protected type class_ref 131461 // Processor
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+	comment "holds the Processor (Render Engine Element) to be built by the current build step"
       end
     end
   end

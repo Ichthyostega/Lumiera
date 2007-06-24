@@ -1,6 +1,6 @@
 format 38
 "RenderEngine" // RenderEngine
-  revision 6
+  revision 7
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -86,6 +86,11 @@ format 38
     objectdiagram 129157 "Engine Example2"
        write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
       comment "Example2 (from EDL) continued: notably in this RenderEngine the Effect has been partitioned into 2 segments with constant configuration."
+      size A4
+    end
+
+    classdiagram 129669 "Automation Entities"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition yes show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
       size A4
     end
 
@@ -218,6 +223,15 @@ ${members}};
 "
 	    classrelation_ref 136965 // datasrc (<unidirectional association>)
 	  b multiplicity "1" parent class_ref 131717 // ProcNode
+      end
+
+      classrelation 137861 // <directional aggregation by value>
+	relation 136197 *-->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 137861 // <directional aggregation by value>
+	  b multiplicity "" parent class_ref 134533 // Parameter
       end
     end
 
@@ -501,6 +515,109 @@ ${inlines}
 	    classrelation_ref 136069 // <generalisation>
 	  b multiplicity "" parent class_ref 131717 // ProcNode
       end
+    end
+
+    class 134533 "Parameter"
+      visibility package 
+      nformals 1
+      formal name "VAL" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 130821 "getValue"
+	public explicit_return_type "VAL"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+      end
+
+      classrelation 138245 // <dependency>
+	relation 136581 -_->
+	  stereotype "implemented_by"
+	  a package
+	    cpp default "#include in source"
+	    classrelation_ref 138245 // <dependency>
+	  b multiplicity "" parent class_ref 134661 // ParamProvider
+      end
+
+      classrelation 138629 // provider (<association>)
+	relation_ref 136325 // <association>
+      end
+    end
+
+    class 134661 "ParamProvider"
+      abstract visibility public stereotype "interface"
+      nformals 1
+      formal name "VAL" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
+${members}};
+"
+      explicit_switch_type ""
+      
+      classrelation 137989 // param (<association>)
+	relation 136325 ----
+	  a role_name "param" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 137989 // param (<association>)
+	  b role_name "provider" multiplicity "1" protected
+	    classrelation_ref 138629 // provider (<association>)
+      end
+
+      classrelation 138373 // <unidirectional association>
+	relation 136709 --->
+	  a role_name "" multiplicity "0..1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 138373 // <unidirectional association>
+	  b multiplicity "" parent class_ref 134789 // Interpolator
+      end
+
+      operation 130949 "getValue"
+	public explicit_return_type "VAL"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+      end
+    end
+
+    class 134789 "Interpolator"
+      visibility package 
+      nformals 1
+      formal name "VAL" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
     end
   end
 end

@@ -1,0 +1,5 @@
+class Buildable
+!!!129669.cpp!!!	apply(inout provided_tool : Tool)
+{
+	tool.treat(mElement);
+}

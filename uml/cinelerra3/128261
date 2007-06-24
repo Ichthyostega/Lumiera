@@ -1,6 +1,6 @@
 format 38
 "MObject" // MObject
-  revision 8
+  revision 9
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -221,6 +221,14 @@ ${members}};
 "
 	    classrelation_ref 129157 // subject (<association>)
       end
+
+      classrelation 137093 // <generalisation>
+	relation 135557 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 137093 // <generalisation>
+	  b multiplicity "" parent class_ref 134021 // Buildable
+      end
     end
 
     class 128645 "Placement"
@@ -281,6 +289,7 @@ ${inlines}
 	java_decl ""
 	idl_decl ""
       end
+
     end
 
     class 128901 "Clip"
@@ -564,6 +573,12 @@ ${members}};
 
     class 129925 "Auto"
       visibility package 
+      nformals 1
+      formal name "VAL" type "class" explicit_default_value ""
+        explicit_extends ""
+      nactuals 1
+      actual class class_ref 134661 // ParamProvider
+        rank 0 explicit_value ""
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
 ${inlines}
@@ -578,6 +593,26 @@ ${inlines}
 	    cpp default "${type}"
 	    classrelation_ref 131973 // <generalisation>
 	  b multiplicity "" parent class_ref 129157 // Meta
+      end
+
+      classrelation 138501 // <realization>
+	relation 136837 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 138501 // <realization>
+	  b multiplicity "" parent class_ref 134661 // ParamProvider
+      end
+
+      operation 131077 "getValue"
+	public explicit_return_type "VAL"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
       end
     end
 

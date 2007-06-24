@@ -1,6 +1,6 @@
 format 38
 "cinelerra3"
-  revision 7
+  revision 8
   modified_by 5 "hiv"
   cpp_root_dir "../../src/"
 
@@ -28,10 +28,10 @@ format 38
   package_name_in_tab no show_context no auto_label_position yes write_trans_label_horizontally yes show_trans_definition no draw_all_relations yes shadow yes
   show_activities yes region_horizontally yes drawing_language uml
   //activity diagram settings
-  package_name_in_tab no show_context no show_opaque_action_definition no auto_label_position yes write_flow_label_horizontally no draw_all_relations yes shadow yes
+  package_name_in_tab yes show_context no show_opaque_action_definition yes auto_label_position yes write_flow_label_horizontally no draw_all_relations yes shadow yes
   show_infonote yes drawing_language uml
   
-  class_color yellow duration_color transparent continuation_color gray note_color blue fragment_color transparent subject_color transparent usecase_color yellow package_color transparent component_color green artifact_color green deploymentnode_color gray state_color yellow stateaction_color transparent activity_color transparent activityregion_color transparent activityaction_color transparent parameterpin_color white 
+  class_color yellow duration_color transparent continuation_color gray note_color blue fragment_color transparent subject_color transparent usecase_color yellow package_color transparent component_color green artifact_color green deploymentnode_color gray state_color yellow stateaction_color transparent activity_color lightgreen activityregion_color transparent activityaction_color mediumgreen parameterpin_color white 
   font_size 8
   diagram_format A4
 

@@ -1,39 +1,28 @@
 window_sizes 1140 830 287 843 693 58
 diagrams
-  classdiagram_ref 128389 // Render Entities
-    843 689 100 4 147 0
-  objectdiagram_ref 129029 // Engine Example1
-    674 554 100 4 0 0
   objectdiagram_ref 129157 // Engine Example2
     674 554 100 4 0 0
-  active  objectdiagram_ref 128901 // EDL Example2
+  objectdiagram_ref 128901 // EDL Example2
     843 693 100 4 0 0
-  objectdiagram_ref 128773 // EDL Example1
-    674 554 100 4 0 0
+  classdiagram_ref 128133 // Session structure
+    843 693 100 4 109 0
+  classdiagram_ref 128389 // Render Entities
+    761 558 100 4 91 0
+  active  classdiagram_ref 129669 // Automation Entities
+    768 596 100 4 0 0
 end
 show_stereotypes
-selected 
-  package_ref 129 // cinelerra3
+selected operation_ref 131077 // getValue
 open
-  class_ref 128005 // Session
-  classrelation_ref 128645 // tracks (<directional aggregation by value>)
-  class_ref 128261 // Fixture
-  class_ref 128645 // Placement
-  class_ref 128773 // AbstractMO
-  class_ref 128901 // Clip
-  class_ref 129029 // Effect
-  class_ref 133893 // RelType
-  class_ref 129541 // Allocation
-  class_ref 129797 // ExplicitePlacement
-  classrelation_ref 132357 // <generalisation>
-  class_ref 130565 // BuilderFacade
-  class_ref 130693 // ToolFactory
-  class_ref 130821 // ConManager
-  class_ref 131077 // Assembler
-  class_ref 132741 // StateProxy
+  
+  package_ref 128005 // design
+  class_ref 129925 // Auto
+  classdiagram_ref 129669 // Automation Entities
   class_ref 131589 // ExitNode
   class_ref 131717 // ProcNode
   class_ref 133253 // Frame
+  class_ref 134533 // Parameter
+  class_ref 134661 // ParamProvider
   classview_ref 128517 // Backend Components
 end
 end

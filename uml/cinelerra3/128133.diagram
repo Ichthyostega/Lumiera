@@ -70,7 +70,7 @@ classcanvas 135813 class_ref 129797 // ExplicitePlacement
   end
 classcanvas 136581 class_ref 129925 // Auto
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 382 483 2005
+  xyz 373 467 2005
   end
 note 136837 "Placement \"locates\" a Media Object"
   xyzwh 368 83 3005 207 36
@@ -109,7 +109,7 @@ relationcanvas 129157 relation_ref 128389 // <directional aggregation by value>
 relationcanvas 129797 relation_ref 128645 // <association>
   from ref 129413 z 1999 to ref 129669
   role_a_pos 513 144 3000 role_b_pos 401 144 3000
-  multiplicity_a_pos 547 177 3000 multiplicity_b_pos 405 169 3000
+  multiplicity_a_pos 547 177 3000 multiplicity_b_pos 401 177 3000
 relationcanvas 130181 relation_ref 129029 // <directional aggregation by value>
   geometry HV
   from ref 128261 z 1999 stereotype "<<list>>" xyz 314 935 3000 to point 339 931
@@ -147,7 +147,7 @@ relationcanvas 132485 relation_ref 129797 // <generalisation>
 relationcanvas 132997 relation_ref 129925 // <unidirectional association>
   from ref 132869 z 1999 to point 486 247
   line 133893 z 1999 to ref 129413
-  role_a_pos 423 192 3000 no_role_b
+  role_a_pos 401 172 3000 no_role_b
   multiplicity_a_pos 401 205 3000 multiplicity_b_pos 495 321 3000
 relationcanvas 134533 relation_ref 130309 // <generalisation>
   from ref 134405 z 1999 to ref 131973
