@@ -1,6 +1,6 @@
 format 38
 "cinelerra3"
-  revision 8
+  revision 9
   modified_by 5 "hiv"
   cpp_root_dir "../../src/"
 
@@ -41,15 +41,9 @@ format 38
   key "html dir" value "/mnt/Lager/heim/devel/cin3/doc/devel/uml/"
   package_ref 128005 // design
 
-  package_ref 128133 // AssetManager
+  package_ref 129157 // BackendLayer
 
-  package_ref 128261 // MObject
-
-  package_ref 128389 // RenderEngine
-
-  package_ref 128517 // CommonLib
-
-  package_ref 128645 // Vault
+  package_ref 129285 // ProcessingLayer
 
   package_ref 128773 // GUI
 add_operation_profile

@@ -1,6 +1,6 @@
 format 38
-"design" // design
-  revision 6
+"ProcessingLayer" // ProcessingLayer
+  revision 1
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -26,68 +26,9 @@ format 38
   package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
   show_infonote default drawing_language default
   
-  comment "All things concering the big picture.
-Not a real code package, rather a container for design drafts, specifications, decisions."
-  componentview 128005 "Architecture"
-    //component diagram settings
-    package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
-    draw_component_as_icon default show_component_req_prov default show_component_rea default
-    comment "The various Components comprising the Cinelerra3 Video editing Application"
-    componentdiagram 128005 "Overview"
-      package_name_in_tab default show_context default auto_label_position default draw_all_relations no shadow default
-      draw_component_as_icon default show_component_req_prov default show_component_rea default
-      comment "This drawing shows the top level compoents and relations"
-      size A4
-    end
+  package_ref 128133 // AssetManager
 
-    component 128005 "Builder"
-      stereotype "subsystem"
-    end
+  package_ref 128261 // MObject
 
-    component 128133 "Session"
-      component 128389 "EDL"
-	stereotype "entity"
-      end
-
-      component 128517 "Fixture"
-	stereotype "entity"
-      end
-    end
-
-    component 128261 "Controller"
-      stereotype "subsystem"
-      simplerelation 128261
-	-_->
-	  on component_ref 128005 // Builder
-      end
-    end
-
-    component 128645 "AssetManagement"
-    end
-
-    component 128773 "Dispatcher"
-    end
-
-    component 128901 "Engine"
-      simplerelation 128133
-	-_->
-	  on component_ref 129029 // Frame (Stream) Provider
-      end
-    end
-
-    component 129029 "Frame (Stream) Provider"
-      simplerelation 128005
-	-_->
-	  on component_ref 129157 // Cache
-      end
-    end
-
-    component 129157 "Cache"
-    end
-
-    component 129285 "RenderPathManager"
-    end
-  end
-
-  package_ref 128645 // codegen
+  package_ref 128389 // RenderEngine
 end
