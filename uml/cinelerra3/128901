@@ -1,6 +1,6 @@
 format 38
-"Builder" // MObject::Builder
-  revision 6
+"Builder" // ProcessingLayer::MObject::Builder
+  revision 7
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -226,7 +226,7 @@ ${inlines}
       classrelation 137221 // <dependency>
 	relation 135685 -_->
 	  a default
-	    cpp default "Generated"
+	    cpp default "#include in header"
 	    classrelation_ref 137221 // <dependency>
 	  b multiplicity "" parent class_ref 134149 // Tool
       end
@@ -425,7 +425,7 @@ ${inlines}
       end
     end
 
-    class 134405 "NodeCratorTool"
+    class 134405 "NodeCreatorTool"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
