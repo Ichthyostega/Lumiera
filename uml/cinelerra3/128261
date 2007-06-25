@@ -1,6 +1,6 @@
 format 38
-"MObject" // MObject
-  revision 9
+"MObject" // ProcessingLayer::MObject
+  revision 10
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -289,7 +289,6 @@ ${inlines}
 	java_decl ""
 	idl_decl ""
       end
-
     end
 
     class 128901 "Clip"

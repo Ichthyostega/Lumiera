@@ -1,13 +1,10 @@
 window_sizes 1140 830 287 843 693 58
 show_stereotypes
-selected deploymentview_ref 128133 // Codegen Deployment
+selected 
+  package_ref 129 // cinelerra3
 open
   
   package_ref 128645 // codegen
-  classview_ref 128645 // Service Components
-  classview_ref 128517 // Backend Components
-  
-  package_ref 128133 // AssetManager
   
   package_ref 128773 // GUI
 end

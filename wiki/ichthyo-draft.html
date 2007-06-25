@@ -750,7 +750,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 <div title="BuildProcess" modifier="Ichthyostega" modified="200706231630" created="200706190658" tags="dynamic" changecount="7">
 <pre>All decisions on //how // the RenderProcess has to be carried out are concentrated in this rather complicated Builder Subsystem. The benefit of this approach is, besides decoupling of subsystems, to keep the actuall performance-intensive video processing code as simple and transparent as possible. The price, in terms of increased complexity &amp;mdash; to pay in the Builder &amp;mdash; can be handled by making the Build Process generic to a large degree. Using a Design By Contract approach we can decompose the various decisions into small decision modules without having to trace the actual workings of the Build Process as a whole.
 
-[img[Colaborations in the Build Process|uml/fig5.png]]
+[img[Colaborations in the Build Process|uml/fig128517.png]]
 </pre>
 </div>
 <div title="Builder" modifier="Ichthyostega" created="200706220317" tags="def" changecount="2">
@@ -804,23 +804,23 @@ In this usage, the EDL is almost synonymous to the ''Session'', just the latter 
 </div>
 <div title="Example1" modifier="Ichthyostega" modified="200706220253" created="200706220239" tags="example" changecount="3">
 <pre>The &amp;raquo;Timeline&amp;laquo; is a sequence of ~MObjects -- here clips -- together with an ExplicitePlacement, locating each clip at a given time and track. (Note: I simplified the time format and wrote frame numbers to make it more clear)
-[img[Example1: Objects in the EDL/Fixture|uml/fig3.png]]
+[img[Example1: Objects in the EDL/Fixture|uml/fig128773.png]]
 
 ----
 After beeing processed by the Builder, we get the following Render Engine configuration
-[img[Example1: generated Render Engine|uml/fig9.png]]
+[img[Example1: generated Render Engine|uml/fig129029.png]]
 </pre>
 </div>
 <div title="Example2" modifier="Ichthyostega" created="200706220251" tags="example" changecount="1">
 <pre>This Example showes the //high level// EDL as well. This needs to be transformed into a Fixture by some facility still to be designed. Basically, each [[Placement]] needs to be queried for this to get the corresponding ExplicitePlacement. The difficult part is to handle possible Placement constraints, e.g. one clip can't be placed at a timespan covered by another clip on the same track. In the current Cinelerra2, all of this is done directly by the GUI actions.
 
 The &amp;raquo;Timeline&amp;laquo; is a sequence of ~MObjects -- note: using the same Object instances -- but now with the calculated ExplicitePlacement, locating the clip at a given time and track. The effect is located absolutely in time as well, but because it is the same Instance, it has the pointer to the ~RelativePlacement, wich basically attaches the effect to the clip. This structure may look complicated, but is easy to process if we go &quot;backward&quot; and just rely on the information contained in the ExplicitePlacement.
-[img[Example2: Clip with Effect and generated Fixture for this EDL|uml/fig4.png]]
+[img[Example2: Clip with Effect and generated Fixture for this EDL|uml/fig128901.png]]
 
 ----
 After beeing processed by the Builder, we get a Render Engine configuration.&lt;br&gt;
 It has to be segmented at least at every point with changes in the configuration, but some variations are possible, e.g. we could create a Render Engine for every Frame (as Cinelerra2 does) or we could optimize out some configurations (for example the effect extended beyond the end of the clip)
-[img[Example2: generated Render Engine|uml/fig10.png]]
+[img[Example2: generated Render Engine|uml/fig129157.png]]
 </pre>
 </div>
 <div title="Examples" modifier="Ichthyostega" modified="200706220253" created="200706220233" tags="example" changecount="2">
@@ -1267,7 +1267,7 @@ config.formatters.push( {
 
 This Design strives to achieve a StrongSeparation between the low-level Structures used to carry out the actual rendering and the high level Entities living in the EDL and being manipulated by the user. In this high level view, the Objects are grouped and located by [[Placements|Placement]], providing a flexible and open way to express different groupings, locations and ordering constraints between the Media Objects.
 
-[img[Classess related to the EDL|uml/fig2.png]]
+[img[Classess related to the EDL|uml/fig128133.png]]
 </pre>
 </div>
 <div title="MainMenu" modifier="CehTeh" modified="200706192236" created="200706172305" changecount="8">
@@ -1300,7 +1300,7 @@ My proposed aproach is to treat OpenGL as a separate video raw data type, requir
 </pre>
 </div>
 <div title="Overview" modifier="Ichthyostega" modified="200706220216" created="200706190300" tags="overview" changecount="3">
-<pre>[img[Block Diagram|uml/fig1.png]]
+<pre>[img[Block Diagram|uml/fig128005.png]]
 </pre>
 </div>
 <div title="OverviewRenderEngine" modifier="Ichthyostega" modified="200706220405" created="200706190647" tags="overview" changecount="16">
@@ -1311,7 +1311,7 @@ My proposed aproach is to treat OpenGL as a separate video raw data type, requir
 
 see also: RenderEntities
 
-[img[Overview: Components of the Renderengine|uml/fig7.png]]
+[img[Overview: Components of the Renderengine|uml/fig128261.png]]
 </pre>
 </div>
 <div title="PageTemplate" modifier="CehTeh" modified="200706110330" created="200701131624" tags="MPTWTheme" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110330">
@@ -2127,7 +2127,7 @@ The design of Cinelerra 2 basically follows this design, but __fails because of 
 <div title="RenderEntities" modifier="Ichthyostega" modified="200706220406" created="200706190715" changecount="6">
 <pre>The Render Engine only carries out the low-level and performance critical tasks. All configuration and decision concerns are to be handled by [[Builder]] and [[Controller]]. While the actual connection of the Render Nodes can be highly complex, basically each Segment of the Timeline with uniform characteristics is handled by one Processor, which is a graph of [[Processing Nodes|ProcNode]] discharging into a ExitNode. The Render Engine Components as such are //stateless// themselves; for the actual calculations they are combined with a StateProxy object generated by and connected internally to the [[Controller]], while at the same time holding the Data Buffers (Frames) for the actual calculations.
 
-[img[Entities comprising the Render Engine|uml/fig8.png]]
+[img[Entities comprising the Render Engine|uml/fig128389.png]]
 </pre>
 </div>
 <div title="RenderProcess" modifier="Ichthyostega" modified="200706220219" created="200706190705" tags="dynamic" changecount="4">
