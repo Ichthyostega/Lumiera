@@ -1788,10 +1788,10 @@ DAMAGE.
 &lt;html&gt;&lt;sub&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;scrollAnchorVisible('Top',null, event)&quot;&gt;[Top]&lt;/sub&gt;&lt;/a&gt;&lt;/html&gt;
 ***/</pre>
 </div>
-<div title="Prefetch" modifier="CehTeh" modified="200706220057" created="200706220043" changecount="2">
+<div title="Prefetch" modifier="MichaelPloujnikov" modified="200706220326" created="200706220043" changecount="10">
 <pre>There are 2 important points when we want to access data with low latency:
 # Since we handle much more data than it will fit into most computers RAM. The data which is backed in files has to be paged in and available when needed. The [[Prefetch]] Thread manages page hinting to the kernel (posix_madvise()..)
-# Intermediate [[Frame]]s must eventually be rendered to the cache. The Backend will send Renderjobs to the Controler.
+# Intermediate [[Frame]]s must eventually be rendered to the cache. The Backend will send Renderjobs to the Controller.
 
 Both of these actions are managed by a [[Scheduler]].
 
@@ -1800,13 +1800,15 @@ These hints contain:
 
 * Timing constraints
 ** When will the [[Frame]] be needed
-** could we drop the request when it won't be renderable in-time
+** could we drop the request if we won't be able to render it in-time
 * Priority of this job (as soon as possible, or just in time?)
 * action (Playing forward, playing backward, tweeking, playback speed, recursive rendering of dependent frames)
 
 Notes:
-* the Backend will try to render related frames as as groups
-** this means that following frames are scheduled with lower priority, whenever the program requests them really the priority will be adjusted
+* The Backend will try to render related frames in groups.
+** This means that following frames are scheduled with lower priority. Whenever the program really requests them the priority will be adjusted.
+
+//Q.by Plouj// "following frames": are these the frames in the group which is to be rendered or frames that follow the ones in the group to be rendered?
 </pre>
 </div>
 <div title="RSSReaderPlugin" modifier="BidiX" modified="200704220833" created="200704132044" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200704220833">
