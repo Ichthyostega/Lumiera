@@ -60,13 +60,13 @@ classcanvas 134405 class_ref 129669 // Label
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 439 483 2000
   end
-classcanvas 135429 class_ref 129797 // ExplicitePlacement
+classcanvas 135429 class_ref 129797 // ExplicitPlacement
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 657 233 2004
+  xyz 660 233 2004
   end
-classcanvas 135813 class_ref 129797 // ExplicitePlacement
+classcanvas 135813 class_ref 129797 // ExplicitPlacement
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 463 807 2000
+  xyz 466 807 2000
   end
 classcanvas 136581 class_ref 129925 // Auto
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -170,9 +170,9 @@ relationcanvas 135685 relation_ref 130949 // <generalisation>
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 relationcanvas 135941 relation_ref 131077 // <directional aggregation by value>
-  from ref 128261 z 1999 stereotype "<<list>>" xyz 371 890 3000 to ref 135813
-  role_a_pos 416 844 3000 no_role_b
-  multiplicity_a_pos 448 877 3000 no_multiplicity_b
+  from ref 128261 z 1999 stereotype "<<list>>" xyz 372 889 3000 to ref 135813
+  role_a_pos 419 843 3000 no_role_b
+  multiplicity_a_pos 451 876 3000 no_multiplicity_b
 relationcanvas 136069 relation_ref 131205 // <unidirectional association>
   from ref 135813 z 1999 to point 433 897
   line 136197 z 1999 to ref 129925

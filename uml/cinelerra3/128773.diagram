@@ -3,16 +3,16 @@ format 38
 classinstance 128005 class_ref 128261 // Fixture
   xyz 65 271 2000 name ""
 end
-classinstance 128133 class_ref 129797 // ExplicitePlacement
-  xyz 217 249 2000 name ""
+classinstance 128133 class_ref 129797 // ExplicitPlacement
+  xyz 221 249 2000 name ""
   values
     attribute_ref 128261 // time
     "2"
     attribute_ref 128389 // track
     "video1"
 end
-classinstance 128389 class_ref 129797 // ExplicitePlacement
-  xyz 332 249 2000 name ""
+classinstance 128389 class_ref 129797 // ExplicitPlacement
+  xyz 335 249 2000 name ""
   values
     attribute_ref 128261 // time
     "2"
@@ -60,7 +60,7 @@ objectlinkcanvas 129157 norel
   no_role_a no_role_b
 objectlinkcanvas 130565 norel
   geometry HVr
-  from ref 128133 z 1999 to point 268 167
+  from ref 128133 z 1999 to point 269 167
   line 81 z 1999 to ref 129029
   no_role_a no_role_b
 objectlinkcanvas 130693 norel

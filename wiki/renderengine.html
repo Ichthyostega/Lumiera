@@ -756,7 +756,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 <pre>All decisions on //how // the RenderProcess has to be carried out are concentrated in this rather complicated Builder Subsystem. The benefit of this approach is, besides decoupling of subsystems, to keep the actuall performance-intensive video processing code as simple and transparent as possible. The price, in terms of increased complexity &amp;mdash; to pay in the Builder &amp;mdash; can be handled by making the Build Process generic to a large degree. Using a Design By Contract approach we can decompose the various decisions into small decision modules without having to trace the actual workings of the Build Process as a whole.
 
 [&gt;img[Outline of the Build Process|uml/fig129413.png]]
-The building itself will be broken down into several small tool application steps. Each of this steps has to be mapped on the MObjects found in the [[Timeline]]. Remember: the idea is that this so called &quot;[[Fixture]]&quot; contains only [[ExplicitePlacement]]s which in turn link to MObjects like Clips, Effects and Automation. So it is sufficient to traverse this list and map the build tools on the elements. Each of this build tools has its own state, which serves to build up the resulting Render Engine. So far I see two steps to be necessary:
+The building itself will be broken down into several small tool application steps. Each of this steps has to be mapped on the MObjects found in the [[Timeline]]. Remember: the idea is that this so called &quot;[[Fixture]]&quot; contains only [[ExplicitPlacement]]s which in turn link to MObjects like Clips, Effects and Automation. So it is sufficient to traverse this list and map the build tools on the elements. Each of this build tools has its own state, which serves to build up the resulting Render Engine. So far I see two steps to be necessary:
 * find the &quot;Segments&quot;, i.e. the locations where the overall configuration changes
 * for each segment: generate a ProcNode for each found MObject and wire them accordingly
 Note, //we have still to work out how exactly building, rendering and playback work// together with the backend-design. But the build process as such doesnt't overly depend on this decisions, it is easy to reconfigure this process. For example, it would be possible as well to build for each frame separately (as Cinelerra2 does), or to build one segment covering the whole timeline (and handle everything via [[Automation]]
@@ -788,7 +788,7 @@ This programming technique is often refered to as //double dispatch// or //visit
 
 [img[Entities cooperating in the Builder|uml/fig129285.png]]</pre>
 </div>
-<div title="ColorPalette" modifier="Ichthyostega" modified="200706190041" created="200706190033" changecount="9">
+<div title="ColorPalette" modifier="Ichthyostega" modified="200706260455" created="200706190033" changecount="11">
 <pre>Background: #fefefd
 Foreground: #000
 PrimaryPale: #8fb
@@ -816,7 +816,7 @@ Error: #f88</pre>
 <div title="DesignGoals" modifier="Ichthyostega" modified="200706220452" created="200706210557" tags="design" changecount="5">
 <pre>As allways, the main goal is //to cut down complexity// by the usual aproach to separate into small manageable chunks.
 
-To achieve this, here we try to separate ''Configuration'' from ''Processing''. Further, on Configuration we try to separathe the ''high level view'' (users view when editing) from the ''low level view'' (the actual configuration effective for the calculations). And finally, we try to factor out and encapsulate ''State'' in order to make State explicite.
+To achieve this, here we try to separate ''Configuration'' from ''Processing''. Further, on Configuration we try to separathe the ''high level view'' (users view when editing) from the ''low level view'' (the actual configuration effective for the calculations). And finally, we try to factor out and encapsulate ''State'' in order to make State explicit.
 
 The main tool used to implement this separation is the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]. Here especially we move all decisions and parametrization into the BuildProcess. The Nodes in this Pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder. Make the actual processing nodes Template classes, parametrized by the color model and number of components. Make all Nodes of equal footing with each other, able to be connected freely within the limitations of the necessary input and output. Make the OpenGL rendering into alternate implementation of some operations together with an alternate signal flow (usable only if the whole Pipeline can be built up to support this changed signal flow), thus factoring out all the complexities of managing the data flow between core and hardware accelerated rendering out of the implementation of the actual processing. Introduce separate control data connections for the automation data, separating the case of true multi-channel-effects from the case where one node just gets remote controlled by another node (or two nodes using the same automation data).
 
@@ -832,7 +832,7 @@ In this usage, the EDL is almost synonymous to the ''Session'', just the latter 
 </pre>
 </div>
 <div title="Example1" modifier="Ichthyostega" modified="200706220253" created="200706220239" tags="example" changecount="3">
-<pre>The &amp;raquo;Timeline&amp;laquo; is a sequence of ~MObjects -- here clips -- together with an ExplicitePlacement, locating each clip at a given time and track. (Note: I simplified the time format and wrote frame numbers to make it more clear)
+<pre>The &amp;raquo;Timeline&amp;laquo; is a sequence of ~MObjects -- here clips -- together with an ExplicitPlacement, locating each clip at a given time and track. (Note: I simplified the time format and wrote frame numbers to make it more clear)
 [img[Example1: Objects in the EDL/Fixture|uml/fig128773.png]]
 
 ----
@@ -841,9 +841,9 @@ After beeing processed by the Builder, we get the following Render Engine config
 </pre>
 </div>
 <div title="Example2" modifier="Ichthyostega" created="200706220251" tags="example" changecount="1">
-<pre>This Example showes the //high level// EDL as well. This needs to be transformed into a Fixture by some facility still to be designed. Basically, each [[Placement]] needs to be queried for this to get the corresponding ExplicitePlacement. The difficult part is to handle possible Placement constraints, e.g. one clip can't be placed at a timespan covered by another clip on the same track. In the current Cinelerra2, all of this is done directly by the GUI actions.
+<pre>This Example showes the //high level// EDL as well. This needs to be transformed into a Fixture by some facility still to be designed. Basically, each [[Placement]] needs to be queried for this to get the corresponding ExplicitPlacement. The difficult part is to handle possible Placement constraints, e.g. one clip can't be placed at a timespan covered by another clip on the same track. In the current Cinelerra2, all of this is done directly by the GUI actions.
 
-The &amp;raquo;Timeline&amp;laquo; is a sequence of ~MObjects -- note: using the same Object instances -- but now with the calculated ExplicitePlacement, locating the clip at a given time and track. The effect is located absolutely in time as well, but because it is the same Instance, it has the pointer to the ~RelativePlacement, wich basically attaches the effect to the clip. This structure may look complicated, but is easy to process if we go &quot;backward&quot; and just rely on the information contained in the ExplicitePlacement.
+The &amp;raquo;Timeline&amp;laquo; is a sequence of ~MObjects -- note: using the same Object instances -- but now with the calculated ExplicitPlacement, locating the clip at a given time and track. The effect is located absolutely in time as well, but because it is the same Instance, it has the pointer to the ~RelativePlacement, wich basically attaches the effect to the clip. This structure may look complicated, but is easy to process if we go &quot;backward&quot; and just rely on the information contained in the ExplicitPlacement.
 [img[Example2: Clip with Effect and generated Fixture for this EDL|uml/fig128901.png]]
 
 ----
@@ -855,7 +855,7 @@ It has to be segmented at least at every point with changes in the configuration
 <div title="Examples" modifier="Ichthyostega" modified="200706220253" created="200706220233" tags="example" changecount="2">
 <pre>= MObject assembly =
 To make the intended use of the classes more clear, consider the following two example Object graphs:
-* a video clip and a audio clip placed (explicitely) on two tracks &amp;rarr;[[Example1]]
+* a video clip and a audio clip placed (explicitly) on two tracks &amp;rarr;[[Example1]]
 * a video clip placed relatively, with an attached HUE effect &amp;rarr;[[Example2]]
 </pre>
 </div>
@@ -863,15 +863,15 @@ To make the intended use of the classes more clear, consider the following two e
 <pre>a special ProcNode which is used to pull the finished output of one Render Pipeline (Tree or Graph). This term is already used in the Cinelerra2 codebase. I am unsure at the moment if it is a distinct subclass or rahter a specially configured ProcNode (a general design rule tells us to err in favour of the latter if in doubt).
 </pre>
 </div>
-<div title="ExplicitePlacement" modifier="Ichthyostega" created="200706220304" tags="def" changecount="1">
-<pre>A special kind (subclass) of [[Placement]]. As such it is allways linked to a //Subject//, i.e. a MObject. In addition to the properties of a (unspecific) Placement, the ExplicitePlacement specifies a absoloute time and track position for locating the Subject
+<div title="ExplicitPlacement" modifier="Ichthyostega" created="200706220304" tags="def" changecount="1">
+<pre>A special kind (subclass) of [[Placement]]. As such it is allways linked to a //Subject//, i.e. a MObject. In addition to the properties of a (unspecific) Placement, the ExplicitPlacement specifies a absoloute time and track position for locating the Subject
 </pre>
 </div>
 <div title="Fixture" modifier="Ichthyostega" modified="200706220325" created="200706220324" tags="def" changecount="2">
 <pre>a specially configured EDL
  * all MObjects have their position, length and configuration set up ready for rendering.
- * all MObjects are associated with a ExplicitePlacement
- * this ~ExplicitePlacements are contained in a ordered List called the Timeline
+ * all MObjects are associated with a ExplicitPlacement
+ * this ~ExplicitPlacements are contained in a ordered List called the Timeline
 
 //My intention is to create this Fixture out of the editing operations done by the user//
 </pre>
@@ -1343,7 +1343,7 @@ see also: RenderEntities
 [img[Overview: Components of the Renderengine|uml/fig128261.png]]
 </pre>
 </div>
-<div title="PageTemplate" modifier="CehTeh" modified="200706110330" created="200701131624" tags="MPTWTheme" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110330">
+<div title="PageTemplate" modifier="Ichthyostega" modified="200706260500" created="200701131624" tags="MPTWTheme excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110330" changecount="1">
 <pre>&lt;!--{{{--&gt;
 &lt;div class='header' macro='gradient vert [[ColorPalette::PrimaryLight]] [[ColorPalette::PrimaryMid]]'&gt;
 	&lt;div class='headerShadow'&gt;
@@ -1891,7 +1891,7 @@ DAMAGE.
 ***/</pre>
 </div>
 <div title="Placement" modifier="Ichthyostega" modified="200706220307" created="200706220306" tags="def" changecount="2">
-<pre>A Placement represents a //relation:// it is always linked to a //Subject// (this beeing a [[Media Object|MObject]]) and has the meaning to //place// this Subject in some manner, either relatively to other Media Objects, or by some Constraint or simply absolute at (time,track). The latter case is especially important and represented by a special [[Sub-Interface|ExplicitePlacement]]
+<pre>A Placement represents a //relation:// it is always linked to a //Subject// (this beeing a [[Media Object|MObject]]) and has the meaning to //place// this Subject in some manner, either relatively to other Media Objects, or by some Constraint or simply absolute at (time,track). The latter case is especially important and represented by a special [[Sub-Interface|ExplicitPlacement]]
 </pre>
 </div>
 <div title="Playlist" modifier="Ichthyostega" modified="200706250727" created="200706220456" tags="def" changecount="3">
@@ -2183,9 +2183,6 @@ The design of Cinelerra 2 basically follows this design, but __fails because of 
 <div title="SideBarOptions" modifier="CehTeh" created="200706200048" changecount="1">
 <pre>&lt;&lt;search&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel &quot;options »&quot; &quot;Change TiddlyWiki advanced options&quot;&gt;&gt;</pre>
 </div>
-<div title="SidebarOptions" modifier="just me" created="200706220430" changecount="1">
-<pre>{{red{killme}}}</pre>
-</div>
 <div title="SiteSubtitle" modifier="Ichthyostega" created="200706190044" changecount="1">
 <pre>some aspects of Cinelerra-3 design</pre>
 </div>
@@ -2273,7 +2270,7 @@ Instead, we should try to just connect the various subsystems via Interfaces and
 * to shield the rendering code of all complexities of Thread communication and synchronization, we use the StateProxy
 </pre>
 </div>
-<div title="StyleSheet" modifier="Ichthyostega" modified="200706210541" created="200701131624" tags="MPTWTheme" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706090017" changecount="5">
+<div title="StyleSheet" modifier="Ichthyostega" modified="200706260459" created="200701131624" tags="MPTWTheme excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706090017" changecount="6">
 <pre>/*{{{*/
 /* a contrasting background so I can see where one tiddler ends and the other begins */
 body {
@@ -3483,7 +3480,7 @@ function addKeyDownHandlers(e)
 <pre>http://tiddlywiki.com/</pre>
 </div>
 <div title="Timeline" modifier="Ichthyostega" created="200706250721" tags="def" changecount="1">
-<pre>Timeline is the name of a specific facility located in the [[Fixture]] (EDL): It is a ordered list of ExplicitePlacement.s of MObjects. By traversing the Playlist you get at all elements actually to be rendered; the [[Builder]] uses this Timeline-list to construct actual Render Engine configurations to carry out the calculations.
+<pre>Timeline is the name of a specific facility located in the [[Fixture]] (EDL): It is a ordered list of ExplicitPlacement.s of MObjects. By traversing the Playlist you get at all elements actually to be rendered; the [[Builder]] uses this Timeline-list to construct actual Render Engine configurations to carry out the calculations.
 
 </pre>
 </div>
@@ -3493,7 +3490,7 @@ function addKeyDownHandlers(e)
 !!!!Starting Point
 Design is an experiment to find out how things are related, we can't //plan// a Design top down, rather we have to start at some point with some hypothesis and look how it works out. The point of origin for Ichthyo's design is the observation that the Render Engine needs some Separation of Concerns to get the complexity down. And especially, this design ''uses three different Levels'' or Layers within the Render Engine and EDL.
 * the __high level__ within the EDL uses uniformely treated MObjects which are assembled/glued together by a network of [[Placements|Placement]].&lt;br&gt; It is supposed that the GUI will present this and //only this view //to the user, giving him the ability wo work with this objects
-* the __builder level__ works on a stripped-down subset of this ~MObject network: it uses the //same Object instances// but only assembled by [[Explicite Placements|ExplicitePlacement]] which locate the objects //on a simple (track, time) grid.// Its the job of the builder to create out of this simplified Network the Configuration of [[Render Nodes|ProcNode]] needed to do the actual rendering
+* the __builder level__ works on a stripped-down subset of this ~MObject network: it uses the //same Object instances// but only assembled by [[Explicit Placements|ExplicitPlacement]] which locate the objects //on a simple (track, time) grid.// Its the job of the builder to create out of this simplified Network the Configuration of [[Render Nodes|ProcNode]] needed to do the actual rendering
 * the __engine level__ uses solely [[Render Pipeline Nodes|ProcNode]], i.e. a Graph of interconnected processing nodes. The important constraint here is that //any decisions are ruled out//. The core Render Engine with all its nodes is lacking the ability to do any tests and checks and has no possibility to branch or reconfigure anything. (this is an especially important lession I draw from studying the current Cinelerra source code)
 
 !!!!Performance Considerations
@@ -3504,18 +3501,18 @@ Design is an experiment to find out how things are related, we can't //plan// a 
 !!!!Concepts and Interfaces
 This design strives to build each level and subsystem around some central concepts, which are direcly expressed as Interfaces. Commonly used Interfaces clamp the different layers.
 * MObject gives an uniform view on all the various entities to be arranged in the EDL.
-* all the arranging and relating of ~MObjects is abstracted as [[Placement]]. The contract of a Placement is that it always has a related Subject, that we can call some test methods on it (still to be defined), and, finally, that we can get an ExplicitePlacement from it.
-* albeit beeing a special form of a Placement, the ExplicitePlacement is treated as a separate concept. With respect to edit operations within the EDL, it can stand it for any sort of Placement. On the other hand the Builder takes a list of ~ExplicitePlacements as input for building up the Render Engine(s). This corresponds to the fact that the render process needs to organize the things to be done on a simple two dimensional grid of (output channel / time). The (extended) contract of an ~ExplicitePlacement provides us with this information (track,time).
+* all the arranging and relating of ~MObjects is abstracted as [[Placement]]. The contract of a Placement is that it always has a related Subject, that we can call some test methods on it (still to be defined), and, finally, that we can get an ExplicitPlacement from it.
+* albeit beeing a special form of a Placement, the ExplicitPlacement is treated as a separate concept. With respect to edit operations within the EDL, it can stand it for any sort of Placement. On the other hand the Builder takes a list of ~ExplicitPlacements as input for building up the Render Engine(s). This corresponds to the fact that the render process needs to organize the things to be done on a simple two dimensional grid of (output channel / time). The (extended) contract of an ~ExplicitPlacement provides us with this information (track,time).
 * on the lower end of the builder, everything is organized around the Concept of a ProcNode, which enables us to //pull// one (freely addressible) Frame of calculated data. Further, the ProcNode has the ability to be wired with other nodes and [[Parameter Providers|ParamProvider]]
 * the various types of data to be processed are abstracted away under the notion of a [[Frame]]. Basically, a Frame is an Buffer containing an Array of raw data and it can be located by some generic scheme, including (at least) the absolute starting time (and probably some type or channel id).
 * All sorts of (target domain) [[Parameters]] are treated uniformely. There is an distinction between Parameters (which //could// be variable) and Configuration (which is considered to be fixed). In this context, Automation just apeares as a special kind of ParamProvider.
 * and finally, the calculation //process// together with its current state is represented by a StateProxy. I call this a &quot;proxy&quot;, because it should encapsulate and hide all tedious details of communication, be it even asychronous communication with some Controller or Dispatcher running in another Thread. In order to maintain a view on the current state of the render process, it could eventually be necessary to register as an observer somewhere or to send notifications to other parts of the system.
 
 !!!!Handling Diversity
-An important goal of this aproach is to be able to push down the treatment of variations and special cases. We don't need to know what kind of Placement linkes one MObject to another, because it is sufficient for us to get an ExplicitePlacement. The Render Engine doesn't need to know if it is pulling audio Frames or video Frames or GOPs or OpenGL textures. It simply relies on the Builder wiring together the correct node types. And the Builder in turn does so by using some overloaded function of an iterator or visitor. There is no need for the video [[ProcNodes|ProcNode]] to test for the colormodel on every screen line, because the Data Frame can be a Template parametrized by the colormodel. All of this reduces complexity and quite some misconceptions can be detected alredy by the compiler.
+An important goal of this aproach is to be able to push down the treatment of variations and special cases. We don't need to know what kind of Placement linkes one MObject to another, because it is sufficient for us to get an ExplicitPlacement. The Render Engine doesn't need to know if it is pulling audio Frames or video Frames or GOPs or OpenGL textures. It simply relies on the Builder wiring together the correct node types. And the Builder in turn does so by using some overloaded function of an iterator or visitor. There is no need for the video [[ProcNodes|ProcNode]] to test for the colormodel on every screen line, because the Data Frame can be a Template parametrized by the colormodel. All of this reduces complexity and quite some misconceptions can be detected alredy by the compiler.
 
-!!!!Explicite structural differences
-In case it's not already clear: we don't have &quot;the&quot; Render Engine, rather we construct a Render Engine for each structurally differing part of the timeline. (please relate this to the current Cinelerra code base, which constructs and builds up the render pipeline for each frame separately). No need to call back from within the pipeline to find out if a given plugin is enabled or to see if there are any automation keyframes. So we don't need to pose any constraints on the structuring of the objects in the EDL, besides the requirement to get an ExplicitePlacement for each. We could even loosen the use of the common mataphor of placing media sequences on fixed tracks, if we want to get at a more advanced GUI at some point in the future.
+!!!!Explicit structural differences
+In case it's not already clear: we don't have &quot;the&quot; Render Engine, rather we construct a Render Engine for each structurally differing part of the timeline. (please relate this to the current Cinelerra code base, which constructs and builds up the render pipeline for each frame separately). No need to call back from within the pipeline to find out if a given plugin is enabled or to see if there are any automation keyframes. So we don't need to pose any constraints on the structuring of the objects in the EDL, besides the requirement to get an ExplicitPlacement for each. We could even loosen the use of the common mataphor of placing media sequences on fixed tracks, if we want to get at a more advanced GUI at some point in the future.
 
 !!!!Stateless Subsystems
 The &amp;raquo;current setup&amp;laquo; of the objects in the EDL is sort of a global state. Same holds true for the Controller, as the Engine can be at playback, it can run a background render or scrub single frames. But the whole complicated subsystem of the Builder and one given Render Engine configuration can be made ''stateless''. As a benifit of this we can run this subsystems multithreaded without the need of any precautions (locking, synchronizing). Because all state information is just passed in as function parameters and lives in local variables on the stack, or is contained in the StateProxy which represents the given render //process// and is passed down as function parameter as well. (note: I use this term in the usual, slightly relaxed manner; of course there are some configuration values contained in instance variables of the objects carying out the calculations, but this values are considered to be constant over the course of the object usage).

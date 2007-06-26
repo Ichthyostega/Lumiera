@@ -6,8 +6,8 @@ end
 classinstance 128133 class_ref 128389 // Track
   xyz 71 275 2000 name "audio1"
 end
-classinstance 128389 class_ref 129797 // ExplicitePlacement
-  xyz 218 423 2000 name ""
+classinstance 128389 class_ref 129797 // ExplicitPlacement
+  xyz 222 423 2000 name ""
   values
     attribute_ref 128261 // time
     "2"
@@ -87,8 +87,8 @@ classinstance 132997 class_ref 129029 // Effect
     attribute_ref 128901 // plugID
     "\"Hue\""
 end
-classinstance 133125 class_ref 129797 // ExplicitePlacement
-  xyz 342 423 2000 name ""
+classinstance 133125 class_ref 129797 // ExplicitPlacement
+  xyz 345 423 2000 name ""
   values
     attribute_ref 128261 // time
     "5"
@@ -101,7 +101,7 @@ textcanvas 136197 "Video Clip anchored at a Label, with an attached HUE effect s
   xyzwh 524 565 2000 175 87
 objectlinkcanvas 129413 norel
   geometry HVr
-  from ref 128389 z 1999 to point 269 341
+  from ref 128389 z 1999 to point 270 341
   line 129541 z 1999 to ref 128645
   no_role_a no_role_b
 objectlinkcanvas 129797 norel

@@ -1,6 +1,6 @@
 format 38
 "MObject" // ProcessingLayer::MObject
-  revision 10
+  revision 12
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -156,7 +156,7 @@ ${inlines}
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	    classrelation_ref 131717 // timeline (<directional aggregation by value>)
-	  b multiplicity "" parent class_ref 129797 // ExplicitePlacement
+	  b multiplicity "" parent class_ref 129797 // ExplicitPlacement
       end
 
       operation 128645 "getPlaylistForRender"
@@ -250,7 +250,7 @@ ${members}};
       end
 
       operation 128005 "resolve"
-	public return_type class_ref 129797 // ExplicitePlacement
+	public return_type class_ref 129797 // ExplicitPlacement
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
 "
@@ -390,7 +390,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 131461 // <realization>
-	  b multiplicity "" parent class_ref 129797 // ExplicitePlacement
+	  b multiplicity "" parent class_ref 129797 // ExplicitPlacement
       end
     end
 
@@ -521,7 +521,7 @@ ${inlines}
       end
     end
 
-    class 129797 "ExplicitePlacement"
+    class 129797 "ExplicitPlacement"
       abstract visibility public stereotype "interface"
       cpp_decl "${comment}${template}class ${name}${inherit} {
 ${members}};
