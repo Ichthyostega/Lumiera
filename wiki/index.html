@@ -611,7 +611,7 @@ Finally, the simplest way to use tasksum is to add it to your view template.  Se
 ----
 To continue, click the down-arrow and choose another section: &lt;&lt;tag TaskMacroTutorial&gt;&gt;</pre>
 </div>
-<div title="5. Task macro installation issues" modifier="LukeBlanshard" modified="200605132015" created="200604082243" tags="TaskMacroTutorial" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200605132015">
+<div title="5. Task macro installation issues" modifier="Ichthyostega" modified="200706260504" created="200604082243" tags="TaskMacroTutorial excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200605132015" changecount="1">
 <pre>The TaskMacroPlugin can be installed like any other TiddlyWiki plugin, and used without further effort.  However, there are two issues that may affect you.  (To get started with a brand new wiki that does not have these issues, consider downloading the [[empty LabWiki|empty_labwiki.html]].)
 # The task macros don't play nicely with the default TiddlyWiki display of tags.  In the default view template, a tiddler's list of tags is shown in a little box that floats in the upper right corner of the tiddler.  However, this little box may interfere with the tables used by the task macros.  In Firefox, the tables are drawn right over the top of the tag box, rendering both of them illegible.  In Internet Explorer, the tag box forces the tables to be pushed down below the box, which can waste a lot of space.&lt;&lt;br&gt;&gt;&lt;&lt;br&gt;&gt;Thus, I recommend changing your view template to eliminate the little box.  If you use Simon Baird's [[TagglyTagging|http://simonbaird.com/mptw/#TagglyTagging]] (as LabWiki does), then my TaskSummaryViewTemplate might be a good alternative.  Simply import it into your wiki and rename it to ViewTemplate.  This template also demonstrates how to incorporate the tasksum macro into every tiddler so any tiddler with tasks has a summary at the top.&lt;&lt;br&gt;&gt;&lt;&lt;br&gt;&gt;
 # Most view templates also add a minus sign (&quot;-&quot;) before the &quot;close&quot; command.  TiddlyWiki interprets this to mean that you want the close command to be executed if you hit the Escape key from within the tiddler.&lt;&lt;br&gt;&gt;&lt;&lt;br&gt;&gt;However, most tiddlers never have focus, and so never give you the opportunity to try it out.  But if you have a taskadder in your tiddler, then you suddenly enable this feature -- and you probably don't want it.  It means that if you type a nice long task description and then hit Escape, that description will be lost and the tiddler will be closed.  So I recommend that you remove the minus sign from the view template's menu altogether, as I have done in LabWiki's own ViewTemplate.
@@ -747,7 +747,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="Cinelerra3DesignProcess" modifier="CehTeh" modified="200706181203" created="200706181202" changecount="2">
+<div title="Cinelerra3DesignProcess" modifier="Ichthyostega" modified="200706260431" created="200706181202" tags="process" changecount="3">
 <pre>! Cinelerra3 design process
 A lightweight formalized process how people can add proposals for the Cinelerra3 development.
 
@@ -784,7 +784,7 @@ This distributed wiki might be used instead the pipapo.org wiki, investigate tha
 Wiki works it is simple to use and just flexible enough to handle the task. I don't go to install any other software for such tasks on my server. While the design progresses I'd propose to move our work into git repositories and eventually phase this wiki pages out anyways. I'd rather like to start out distributed/git right away .. but git gives us only a fine storage layer, for a design process we need some good presentation layer (later when using git and starting the implementation everyones favorite editor serves for that) I have no better ideas yet to solve the presentation problem other than using this wiki (or maybe bouml).
 </pre>
 </div>
-<div title="Cinelerra3Wiki" modifier="Ichthyostega" modified="200706250704" created="200706172308" changecount="9">
+<div title="Cinelerra3Wiki" modifier="Ichthyostega" modified="200706260547" created="200706172308" tags="portal" changecount="14">
 <pre>This 'index.html' becomes the entry point of some tiddlywikis managed under git. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.
 
 * I started a GitNotes where we will collect some information about git, howto and special setups
@@ -792,20 +792,34 @@ Wiki works it is simple to use and just flexible enough to handle the task. I do
 
 Please end your tiddlers in a newline, this makes merging in git easier since the /pre tag used in tiddlywiki will become on a single line.
 
+----
 !Design Draft
 to get started, we create design drafts emphasizing different aspects and regions of Cinelerra-3
 
 * Ichthyo focuses mainly on the Render Engine and its interconnection to the EDL, [[see this separate page|renderengine.html]]
 * cehteh works on the data backend draft, see [[this page|backend.html]]
+
+!Coding Structures
+next we should //start thinking// on how to organize several aspects of the practical coding...
+* what to do in BOUML?                          &amp;rarr; [[more|whatInBOUML]]
+* how to organize packages, files, includes?    &amp;rarr; [[more|SrcTreeStructure]]
+* how to organize the executable to be built?
+* what coding conventions to prefere?
+* what build system to use?
+
+Ichthyo thinks we should do some informal brainstorming, test/prototypes to see how things work out and discuss them; then we should make them into formal project proposals on pipapo.org
 </pre>
 </div>
-<div title="DefaultTiddlers" modifier="CehTeh" created="200706172308" changecount="1">
-<pre>GettingStarted
-Cinelerra3Wiki</pre>
+<div title="DefaultTiddlers" modifier="Ichthyostega" modified="200706260439" created="200706172308" changecount="2">
+<pre>ShortCuts
+Cinelerra3Wiki
+</pre>
 </div>
-<div title="DesignDocumentation" modifier="CehTeh" created="200706181207" changecount="1">
+<div title="DesignDocumentation" modifier="Ichthyostega" modified="200706260431" created="200706181207" tags="process" changecount="3">
 <pre>* There is a [[Manifest]] explaining the vision of the Cinelerra3 project
-* The foundation how we work together is defined in Cinelerra3DesignProcess</pre>
+* The foundation how we work together is defined in Cinelerra3DesignProcess
+
+</pre>
 </div>
 <div title="FullScreenPlugin" modifier="CehTeh" modified="200706110313" created="200607241016" tags="systemConfig lewcidExtension" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110313">
 <pre>/***
@@ -893,12 +907,23 @@ these two commands are used by 'admin/git-hooks/post-commit'
 
 'git publish' just sends the commit to some repository which has to be registered with 'git remote add public ...', in case you are working offline this will stuck and timeout, you may break it with ctrl-c, someone may fix it.</pre>
 </div>
-<div title="GitNotes" modifier="CehTeh" modified="200706181057" created="200706181049" changecount="2">
+<div title="GitBranches" modifier="Ichthyostega" modified="200706260545" created="200706260447" tags="overview" changecount="8">
+<pre>some ''interresting Branches''
+
+|![[pipapo.org|PipapoOrg]]                |!''mirrored''              |!|!descritption                          |
+| ct#master                               | ichthyo#master            | |Cinelerra3 main developement line      |
+| ichthyo#prototype                       |                           | |first coding attempts ;-)              |
+
+</pre>
+</div>
+<div title="GitNotes" modifier="Ichthyostega" modified="200706260431" created="200706181049" tags="note" changecount="3">
 <pre>I use some GitAliases to make signing and publishing easier.
 
 the '.git' dir itself is not versioned/distributed since it usually contains site-specific things. Despite this we might want to distribute some maintenance scripts and hooks so I put the default hooks into admin/git_hooks/ and users can symlink from .git/hooks them when needed.
 
 For now I hope this aproach suffices, maybe we need admin/git_hooks/$HOOKNAME.$USER at some point when it turns out that people want personal hooks.
+
+&amp;rarr; see [[Interesting Branches|GitBranches]]
 </pre>
 </div>
 <div title="InlineJavaScript" modifier="Jeremy" created="200603090618" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200603090618">
@@ -1250,14 +1275,14 @@ We are in need of a new development model which is acceptable by all involved pe
 # ''All for Cinelerra''&lt;&lt;br&gt;&gt;The goal is to make the best Linux video editor to date, nothing less. Everyone puts in their best abilities. This project is not the place to blame people for things where they are not profound, help each other, make things right instead of blaming someone. Everyone should rate himself at what he can do best on the project.
 </pre>
 </div>
-<div title="MarkupPreHead" modifier="CehTeh" created="200706172303">
+<div title="MarkupPreHead" modifier="Ichthyostega" modified="200706260507" created="200706172303" tags="excludeMissing" changecount="1">
 <pre>&lt;!--{{{--&gt;
 &lt;link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/&gt;
 &lt;!--}}}--&gt;
 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;&lt;b&gt;My TiddlyWiki&lt;/b&gt; is loading&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
 </div>
-<div title="PageTemplate" modifier="CehTeh" modified="200706110330" created="200701131624" tags="MPTWTheme" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110330">
+<div title="PageTemplate" modifier="Ichthyostega" modified="200706260504" created="200701131624" tags="MPTWTheme excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110330" changecount="1">
 <pre>&lt;!--{{{--&gt;
 &lt;div class='header' macro='gradient vert [[ColorPalette::PrimaryLight]] [[ColorPalette::PrimaryMid]]'&gt;
 	&lt;div class='headerShadow'&gt;
@@ -1992,7 +2017,7 @@ config.macros.rssFeedUpdate = {
 //}}}
 </pre>
 </div>
-<div title="RSSReaderPluginDoc" modifier="BidiX" modified="200704220857" created="200704132051" tags="Doc RSSReader" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200704220857">
+<div title="RSSReaderPluginDoc" modifier="Ichthyostega" modified="200706260503" created="200704132051" tags="Doc RSSReader excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200704220857" changecount="1">
 <pre>//last update: RSSReaderPlugin v 1.1.1//
 
 !Description
@@ -2057,6 +2082,13 @@ see : &lt;&lt;tag RSSFeed&gt;&gt; for the full list.
 
 
 </pre>
+</div>
+<div title="ShortCuts" modifier="Ichthyostega" modified="200706260509" created="200706260438" tags="portal" changecount="4">
+<pre>~~this small Tiddler contains usefull Shortcuts, Info, Links~~
+
+*[[Wiki-Markup|http://tiddlywiki.com/#MainFeatures]]
+*
+----</pre>
 </div>
 <div title="SideBarOptions" modifier="CehTeh" created="200706182001" changecount="1">
 <pre>&lt;&lt;search&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel &quot;options »&quot; &quot;Change TiddlyWiki advanced options&quot;&gt;&gt;</pre>
@@ -2125,7 +2157,7 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
 }
 //}}}</pre>
 </div>
-<div title="StyleSheet" modifier="CehTeh" modified="200706090017" created="200701131624" tags="MPTWTheme" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706090017">
+<div title="StyleSheet" modifier="Ichthyostega" modified="200706260503" created="200701131624" tags="MPTWTheme excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706090017" changecount="1">
 <pre>/*{{{*/
 /* a contrasting background so I can see where one tiddler ends and the other begins */
 body {
@@ -3311,6 +3343,18 @@ function addKeyDownHandlers(e)
 	}
 }
 //}}}</pre>
+</div>
+<div title="TiddlyWiki" modifier="Ichthyostega" created="200706260506" tags="excludeMissing" changecount="2">
+<pre>The Name of the Software driving this Wiki. Is is written completely in ~JavaScript and contained in one single HTML page.
+ * see GettingStarted
+ * see [[Homepage|http://tiddlywiki.com]]</pre>
+</div>
+<div title="whatInBOUML" modifier="Ichthyostega" created="200706260559" changecount="1">
+<pre>The question to find out about is: how much of the coding to do with the help of BOUML. Basically, BOUML is capable to permanently support the coding; you can define all entities, fields and methods in the UML model an just develope the method bodies //conventionally// with a text editor. 
+
+__Ichthyo__ tends to be seceptical about this aproach. While it probably will work, it is questionable if it will result in &amp;raquo;good code&amp;laquo; the fear is, that this rigid hierarchical structure distracts from the more complex semantical concerns.
+
+Another aproach could be to use BOUML just to create the basic structures and from this point on rather utilizing it for technical documentation.</pre>
 </div>
 </div>
 <!--POST-STOREAREA-->
