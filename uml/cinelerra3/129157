@@ -1,7 +1,7 @@
 format 38
 "BackendLayer" // BackendLayer
-  revision 1
-  modified_by 5 "hiv"
+  revision 4
+  modified_by 97 "ct"
   // class settings
   //class diagram settings
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -26,8 +26,6 @@ format 38
   package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
   show_infonote default drawing_language default
   
-  package_ref 128517 // CommonLib
-
   classview 128517 "Backend Components"
     //class diagram settings
     draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -80,6 +78,359 @@ ${members}};
 "
 	
 	
+      end
+    end
+
+    classdiagram 128181 "File Mapping"
+      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      size A4
+    end
+
+    classdiagram 128309 "In Memory Database"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      size A4
+    end
+
+    class 128181 "File"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 128437 // descriptor (descriptor)
+	relation 128437 o--> name "descriptor"
+	  a role_name "descriptor" multiplicity "" protected
+	    comment "type of this frame"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 128437 // descriptor (descriptor)
+	  b multiplicity "" parent class_ref 128693 // FileHandle
+      end
+
+      operation 128181 "getFrame"
+	public return_type class_ref 128821 // Frame
+	nparams 2
+	  param in name "" type class_ref 128949 // FrameDescriptor
+	  param in name "frame_address" explicit_type ""
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+      end
+
+      classrelation 128225 // handle (<directional aggregation>)
+	relation 128225 o-->
+	  a role_name "handle" multiplicity "0..1" protected
+	    comment "weak pointer"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 128225 // handle (<directional aggregation>)
+	  b multiplicity "" parent class_ref 128693 // FileHandle
+      end
+
+      classrelation 128609 // mappings (<directional aggregation>)
+	relation 128481 o-->
+	  a role_name "mappings" multiplicity "*" protected
+	    comment "weak pointers"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 128609 // mappings (<directional aggregation>)
+	  b multiplicity "" parent class_ref 128565 // FileMap
+	  association_explicit_type "index"
+      end
+    end
+
+    class 128309 "FileHandleCache"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 128737 // handles (<aggregation by value>)
+	relation 128609 *---
+	  stereotype "list"
+	  a role_name "handles" multiplicity "*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 128737 // handles (<aggregation by value>)
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 128865 // <aggregation by value>
+      end
+
+      attribute 128225 "handles_available"
+	private explicit_type "int"
+	init_value "100"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+	comment "initialized to the maximum number of filehandles the backend may use for mapped files. When no handles are available, the handle which is last in the handles list is closed and (re-)used.
+Else this number is decremented for each new filehandle used and incremented for any one explicitly freed."
+      end
+    end
+
+    class 128437 "FileMapCache"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      attribute 128481 "checked_out"
+	protected explicit_type "list"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+      end
+
+      classrelation 129505 // <association>
+	relation_ref 128993 // <association>
+      end
+
+      attribute 128609 "checked_in"
+	protected explicit_type "list"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+      end
+
+      classrelation 129633 // <directional aggregation by value>
+	relation 129121 *-->
+	  stereotype "list"
+	  a role_name "" multiplicity "" protected
+	    comment "FileMap objects are moved (spliced) between the checked_in and checked_out lists depending if they are in use or subject of cache aging"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 129633 // <directional aggregation by value>
+	  b multiplicity "" parent class_ref 128565 // FileMap
+      end
+    end
+
+    class 128565 "FileMap"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      associated_diagram classdiagram_ref 128181 // File Mapping
+    end
+
+    class 128693 "FileHandle"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 128865 // <aggregation by value>
+	relation_ref 128609 // <aggregation by value>
+      end
+    end
+
+    class 128821 "Frame"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "Frames are just a low level lump of continous memory, most parts are opaque. Frames are memory sensitive, they will be small constant sized structures which can be efficently managed in a pool."
+      classrelation 128181 // <directional aggregation>
+	relation 128181 o-->
+	  a role_name "" multiplicity "*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type} *> ${name}${value};
+"
+	    classrelation_ref 128181 // <directional aggregation>
+	  b multiplicity "" parent class_ref 128949 // FrameDescriptor
+	  association_type class_ref 128949 // FrameDescriptor
+      end
+
+      classrelation 128309 // <directional aggregation>
+	relation 128309 o-->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 128309 // <directional aggregation>
+	  b multiplicity "" parent class_ref 128949 // FrameDescriptor
+      end
+
+      classrelation 128693 // <aggregation>
+	relation 128565 o---
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 128693 // <aggregation>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 128821 // <aggregation>
+      end
+
+      classrelation 128949 // <directional aggregation>
+	relation 128693 o-->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 128949 // <directional aggregation>
+	  b multiplicity "" parent class_ref 128949 // FrameDescriptor
+      end
+
+      classrelation 129077 // <directional aggregation>
+	relation 128821 o-->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 129077 // <directional aggregation>
+	  b multiplicity "" parent class_ref 128949 // FrameDescriptor
+      end
+
+      classrelation 128481 // descriptor (<directional aggregation>)
+	relation 128353 o-->
+	  a role_name "descriptor" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 128481 // descriptor (<directional aggregation>)
+	  b multiplicity "" parent class_ref 128949 // FrameDescriptor
+      end
+
+      classrelation 129249 // mapping (<unidirectional association>)
+	relation 128865 --->
+	  a role_name "mapping" multiplicity "1" private
+	    comment "Frames are a continous sequence in a mapping"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 129249 // mapping (<unidirectional association>)
+	  b multiplicity "" parent class_ref 128565 // FileMap
+      end
+
+      classrelation 129377 // <association>
+	relation 128993 ----
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 129377 // <association>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 129505 // <association>
+      end
+
+      classrelation 129889 // <aggregation>
+	relation_ref 129249 // <aggregation>
+      end
+    end
+
+    class 128949 "FrameDescriptor"
+      visibility package stereotype "interface"
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
+${members}};
+"
+      explicit_switch_type ""
+      
+      comment "A FrameDescriptor implements the higher level interfaces for frames. Further refinements are made by subclassing and policy classes"
+      classrelation 128821 // <aggregation>
+	relation_ref 128565 // <aggregation>
+      end
+    end
+
+    class 129077 "Prefetch"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 129205 "Scheduler"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    sequencediagram 128437 "QueryFrame"
+      show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+      size A4
+    end
+
+    class 129333 "FileProvider"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "This is the Factory for Files, whenever something wants to use some file (or temporary storage), This Factory will hand out some smart/shared pointer to a File object which will be used to retrieve Frames."
+    end
+
+    class 128225 "FrameReference"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 129761 // frame (<aggregation>)
+	relation 129249 o---
+	  a role_name "frame" multiplicity "0..1" protected
+	    comment "maybe weak reference"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 129761 // frame (<aggregation>)
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 129889 // <aggregation>
       end
     end
   end

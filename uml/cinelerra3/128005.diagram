@@ -12,7 +12,7 @@ fragment 128261 "Backend Layer"
 end
 packagecanvas 128389 
   package_ref 128133 // AssetManager
-    xyzwh 561 201 2005 252 214
+    xyzwh 561 201 2005 265 214
 packagecanvas 128517 
   package_ref 128261 // MObject
     xyzwh 94 201 2006 458 335
@@ -27,13 +27,13 @@ componentcanvas 128901 component_ref 128133 // Session
   xyzwh 122 243 2011 323 156
 componentcanvas 129029 component_ref 128261 // Controller
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 372 419 2011 175 105
+  xyzwh 372 419 2011 189 105
 componentcanvas 129157 component_ref 128389 // EDL
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 288 302 2016 143 79
+  xyzwh 288 302 2016 153 79
 componentcanvas 129285 component_ref 128517 // Fixture
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 124 319 2016 143 69
+  xyzwh 124 319 2016 153 75
 note 129541 "Structures edited by the User"
   xyzwh 43 269 2016 181 41
 componentcanvas 129669 component_ref 128645 // AssetManagement
@@ -41,16 +41,16 @@ componentcanvas 129669 component_ref 128645 // AssetManagement
   xyzwh 577 241 2010 208 159
 componentcanvas 129797 component_ref 128773 // Dispatcher
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 406 31 2005 179 69
+  xyzwh 406 31 2005 193 75
 componentcanvas 129925 component_ref 128901 // Engine
   draw_component_as_icon default show_component_req_prov default show_component_rea default
   xyzwh 118 602 2010 235 176
 componentcanvas 130053 component_ref 129029 // Frame (Stream) Provider
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 121 876 2005 229 69
+  xyzwh 121 876 2005 229 75
 componentcanvas 130181 component_ref 129157 // Cache
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 391 876 2005 179 69
+  xyzwh 391 876 2005 193 75
 note 131717 "Coordinates Playback and Rendering"
   xyzwh 483 494 2016 149 63
 note 131845 "border of the low-level, performance-critical part of the system"
@@ -58,7 +58,7 @@ note 131845 "border of the low-level, performance-critical part of the system"
 note 131973 "just works, never decides"
   xyzwh 317 668 2015 110 59
 note 132101 "codecs, stream I/O here"
-  xyzwh 647 904 2005 166 39
+  xyzwh 376 592 2005 166 39
 simplerelationcanvas 131205 simplerelation_ref 128005
   from ref 130053 z 2004 to ref 130181
 simplerelationcanvas 131333 simplerelation_ref 128133

@@ -3484,14 +3484,14 @@ function addKeyDownHandlers(e)
 
 </pre>
 </div>
-<div title="WalkThrough" modifier="Ichthyostega" modified="200706220359" created="200706210625" tags="overview" changecount="28">
+<div title="WalkThrough" modifier="CehTeh" modified="200706270305" created="200706210625" tags="overview" changecount="29">
 <pre>The Intention of this text is to help you understanding the design and to show some notable details.
 
 !!!!Starting Point
 Design is an experiment to find out how things are related, we can't //plan// a Design top down, rather we have to start at some point with some hypothesis and look how it works out. The point of origin for Ichthyo's design is the observation that the Render Engine needs some Separation of Concerns to get the complexity down. And especially, this design ''uses three different Levels'' or Layers within the Render Engine and EDL.
 * the __high level__ within the EDL uses uniformely treated MObjects which are assembled/glued together by a network of [[Placements|Placement]].&lt;br&gt; It is supposed that the GUI will present this and //only this view //to the user, giving him the ability wo work with this objects
 * the __builder level__ works on a stripped-down subset of this ~MObject network: it uses the //same Object instances// but only assembled by [[Explicit Placements|ExplicitPlacement]] which locate the objects //on a simple (track, time) grid.// Its the job of the builder to create out of this simplified Network the Configuration of [[Render Nodes|ProcNode]] needed to do the actual rendering
-* the __engine level__ uses solely [[Render Pipeline Nodes|ProcNode]], i.e. a Graph of interconnected processing nodes. The important constraint here is that //any decisions are ruled out//. The core Render Engine with all its nodes is lacking the ability to do any tests and checks and has no possibility to branch or reconfigure anything. (this is an especially important lession I draw from studying the current Cinelerra source code)
+* the __engine level__ uses solely [[Render Pipeline Nodes (ProcNode)|ProcNode]], i.e. a Graph of interconnected processing nodes. The important constraint here is that //any decisions are ruled out//. The core Render Engine with all its nodes is lacking the ability to do any tests and checks and has no possibility to branch or reconfigure anything. (this is an especially important lession I draw from studying the current Cinelerra source code)
 
 !!!!Performance Considerations
 * within the Engine the Render Nodes are containing the ''inner loop'', whose contents are to be executed hundered thousends to million times per frame. Every dispensable concern, which is not strictly neccessary to get the job done, is worth the effort of facturing out here.

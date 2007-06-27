@@ -1,7 +1,7 @@
 format 38
 "cinelerra3"
-  revision 11
-  modified_by 5 "hiv"
+  revision 12
+  modified_by 77 "ct"
   cpp_root_dir "../../src/"
 
 
@@ -46,6 +46,8 @@ format 38
   package_ref 129285 // ProcessingLayer
 
   package_ref 128773 // GUI
+
+  package_ref 128517 // CommonLib
 add_operation_profile
 
 end
