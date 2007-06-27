@@ -816,10 +816,12 @@ FileMap objects are transparent to the application, it will only requests [[Fram
 Whenever a FileMap is in use, it is checked out into a in-use list where it is not subject of aging.
 </pre>
 </div>
-<div title="Frame" modifier="CehTeh" modified="200706202206" created="200706202115" changecount="4">
+<div title="Frame" modifier="CehTeh" modified="200706270152" created="200706202115" changecount="5">
 <pre>'Frames' are the smallest datablocks handled by the Backend. The application tells the Backend to make [[File]]s availabe and then only requests Frames from the Backend, all other datastructures of the backend are private.
 
-Actually Frames are blocks of continous memory, they can be anything depending on the usage of the [[File]] (Video frames, encoder frames, blocks of sound samples).
+Actually Frames are (references to) blocks of continous memory, they can be anything depending on the usage of the [[File]] (Video frames, encoder frames, blocks of sound samples).
+
+Each [[Frame]] points to a [[FrameDescriptor]] which describes the shared properties of [[Frame]]s of the same kind. For video frames this [[FrameDescriptor]] will define the policies of the used color modell, resolution, aspect ratio and so on, for example.
 
 Frames are referenced by a smart-pointer like object which manages the lifetime and caching behaviour. There are 3 states such a frame reference can be:
 # readonly: the backing FileMap is checked out from the aging list, frames can be read
