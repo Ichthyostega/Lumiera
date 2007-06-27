@@ -764,7 +764,7 @@ TertiaryMid: #999
 TertiaryDark: #666
 Error: #f88</pre>
 </div>
-<div title="DataBackend" modifier="MichaelPloujnikov" modified="200706270304" created="200706192251" changecount="5">
+<div title="DataBackend" modifier="CehTeh" modified="200706271504" created="200706192251" changecount="6">
 <pre>This just starts as braindump, I will refine it soon:
 * handle all files cinelerra uses at runtime (media, edl, temp data)
 * manage filehandles, cinelerra might use more more files than available filehandles
@@ -777,7 +777,7 @@ Error: #f88</pre>
 * translate any input into a format which the cinelerra core understands (demux, decode)
 * same for encoding to output formats
 * offer a plugin API for encoders/decoders
-* maybe network backend for serving data to distributed rendernodes
+* maybe network backend for serving data to distributed render nodes
 * can do some load control or management (trigger adaptive rendering if system is idle etc)
 * pull based arch
 * Serialize persistent data (Project / EDL's)
@@ -789,7 +789,7 @@ Look at [[Overview]] for the current design proposal
 <pre>DataBackend
 </pre>
 </div>
-<div title="File" modifier="MichaelPloujnikov" modified="200706270305" created="200706201525" changecount="4">
+<div title="File" modifier="CehTeh" modified="200706271509" created="200706201525" changecount="5">
 <pre>'File' is the superclass of all possible filetypes, it has a weak reference to a FileHandle which is managed in FileHandleCache, on creation only the existence (when reading) or access for write for new files are checked. 'File' stores some generic metadata about the underlying file and intended use. But actual opening is done on demand.
 
 Files content is memory mapped into the process address space, this is managed by FileMap objects and a FileMapCache.
@@ -799,7 +799,7 @@ Files content is memory mapped into the process address space, this is managed b
 <pre>'FileHandle's are managed by the FileHandleCache, they are just storing the underlying OS file handles and managed in a lazy/weak way, (re)opened when needed and aging in the cache when not needed, since the amount of open file handles is limited aged ones will be closed and reused when the system needs to open another file.
 </pre>
 </div>
-<div title="FileHandleCache" modifier="MichaelPloujnikov" modified="200706270305" created="200706201548" changecount="4">
+<div title="FileHandleCache" modifier="CehTeh" modified="200706271508" created="200706201548" changecount="5">
 <pre>'FileHandleCache' storing a finite maximum number of [[FileHandle]]s as a list. As long the configured maximum of open files is not reached new file handles are stored at the begin of the list. Whenever a filehandle is accessed it is moved to the begin of the list too. Unused filehandles propagate towards the end of the list. When the maximum of open filehandles is reached, aged filehandles are closed and taken from the end.
 </pre>
 </div>
@@ -816,7 +816,7 @@ FileMap objects are transparent to the application. It will only requests [[Fram
 Whenever a FileMap is in use, it is checked out into an in-use list where it is not subject to aging.
 </pre>
 </div>
-<div title="Frame" modifier="MichaelPloujnikov" modified="200706270315" created="200706202115" changecount="12">
+<div title="Frame" modifier="CehTeh" modified="200706271506" created="200706202115" changecount="13">
 <pre>'Frames' are the smallest datablocks handled by the Backend. The application tells the Backend to make [[File]]s available and then only requests Frames from the Backend. All other datastructures of the backend are private.
 
 Actually Frames are (references to) blocks of continuous memory. They can be anything depending on the usage of the [[File]] (Video frames, encoder frames, blocks of sound samples).
@@ -1254,7 +1254,7 @@ Storage and logging of EDL's, unlimited undo, database,...
 When to Cache and when not to cache, aka instant [[Frame]] reuse
 </pre>
 </div>
-<div title="Overview" modifier="MichaelPloujnikov" modified="200706270304" created="200706200040" changecount="11">
+<div title="Overview" modifier="CehTeh" modified="200706271504" created="200706200040" changecount="12">
 <pre>Whenever cinelerra needs to access data this is done through the DataBackend described here. 
 
 There are two main kinds how data is handled:
@@ -1263,7 +1263,7 @@ There are two main kinds how data is handled:
 
 The backend uses memory mapping to make data available to the program. This is little different to more common open/read/write/close file access while giving superior performance and much better memory utilization.
 
-The data backend must be capable to handle more data than will fit into the memory or even address space on 32 bit archs.  Moreover a project may access more files than the OS can handle at a time, thus the for [[File]]s used by the Backend it needs a FileHandleCache to manage filehandles dynamically.
+The data backend must be capable to handle more data than will fit into the memory or even address space on 32 bit architectures.  Moreover a project may access more files than the OS can handle at a time, thus the for [[File]]s used by the Backend it needs a FileHandleCache to manage filehandles dynamically.
 
 Which parts of a File are actually mapped to physical RAM is managed by the kernel, it keeps a FileMapCache to manage the [[FileMap]]s we've set up.
 
@@ -1798,7 +1798,7 @@ DAMAGE.
 &lt;html&gt;&lt;sub&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;scrollAnchorVisible('Top',null, event)&quot;&gt;[Top]&lt;/sub&gt;&lt;/a&gt;&lt;/html&gt;
 ***/</pre>
 </div>
-<div title="Prefetch" modifier="MichaelPloujnikov" modified="200706220320" created="200706220043" changecount="9">
+<div title="Prefetch" modifier="CehTeh" modified="200706271508" created="200706220043" changecount="11">
 <pre>There are 2 important points when we want to access data with low latency:
 # Since we handle much more data than it will fit into most computers RAM. The data which is backed in files has to be paged in and available when needed. The [[Prefetch]] Thread manages page hinting to the kernel (posix_madvise()..)
 # Intermediate [[Frame]]s must eventually be rendered to the cache. The Backend will send Renderjobs to the Controller.
@@ -1812,7 +1812,7 @@ These hints contain:
 ** When will the [[Frame]] be needed
 ** could we drop the request if it won't be available (rendered) in-time
 * Priority of this job (as soon as possible, or just in time?)
-* action (Playing forward, playing backward, tweeking, playback speed, recursive rendering of dependent frames)
+* action (Playing forward, playing backward, tweaking, playback speed, recursive rendering of dependent frames)
 
 Notes:
 * The Backend will try to render related frames in groups.
@@ -2095,10 +2095,10 @@ see : &lt;&lt;tag RSSFeed&gt;&gt; for the full list.
 
 </pre>
 </div>
-<div title="Scheduler" modifier="CehTeh" created="200706220108" changecount="1">
+<div title="Scheduler" modifier="CehTeh" modified="200706271505" created="200706220108" changecount="2">
 <pre>Scheduling is done with two priority queues, one for high priority jobs and one for low priority jobs. These priority queues are ordered by absolute time values (and a job identifier, details will be worked out at implementation time).
 
-There is also a variable defining how to handle too-late schedulings (proceed, abort) for each scheduled job. </pre>
+There is also a variable defining how to handle too-late schedules (proceed, abort) for each scheduled job. </pre>
 </div>
 <div title="SideBarOptions" modifier="CehTeh" created="200706200047" changecount="1">
 <pre>&lt;&lt;search&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel &quot;options »&quot; &quot;Change TiddlyWiki advanced options&quot;&gt;&gt;</pre>
