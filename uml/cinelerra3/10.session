@@ -1,0 +1,9 @@
+window_sizes 1274 775 300 964 533 160
+show_stereotypes
+open
+  
+  package_ref 129157 // BackendLayer
+  
+  package_ref 128517 // CommonLib
+end
+end
