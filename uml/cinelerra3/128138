@@ -1,6 +1,6 @@
 format 38
 "design" // BackendLayer::design
-  revision 1
+  revision 3
   modified_by 10 "ct"
   // class settings
   //class diagram settings
@@ -83,6 +83,7 @@ ${members}};
 
     classdiagram 128181 "File Mapping"
       draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      comment "Shows whats used to access Frames"
       size A4
     end
 
@@ -145,6 +146,14 @@ ${inlines}
 	  b multiplicity "" parent class_ref 128565 // FileMap
 	  association_explicit_type "index"
       end
+
+      classrelation 128266 // <aggregation>
+	relation_ref 128138 // <aggregation>
+      end
+
+      classrelation 129162 // <aggregation>
+	relation_ref 128778 // <aggregation>
+      end
     end
 
     class 128309 "FileHandleCache"
@@ -157,17 +166,14 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 128737 // handles (<aggregation by value>)
-	relation 128609 *---
+      classrelation 128737 // handles (<directional aggregation by value>)
+	relation 128609 *-->
 	  stereotype "list"
 	  a role_name "handles" multiplicity "*" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
 "
-	    classrelation_ref 128737 // handles (<aggregation by value>)
-	  b role_name "" multiplicity "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
-"
-	    classrelation_ref 128865 // <aggregation by value>
+	    classrelation_ref 128737 // handles (<directional aggregation by value>)
+	  b multiplicity "" parent class_ref 128693 // FileHandle
       end
 
       attribute 128225 "handles_available"
@@ -192,34 +198,29 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      attribute 128481 "checked_out"
-	protected explicit_type "list"
-	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
-"
-	java_decl ""
-	idl_decl ""
-      end
-
       classrelation 129505 // <association>
 	relation_ref 128993 // <association>
       end
 
-      attribute 128609 "checked_in"
-	protected explicit_type "list"
-	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
-"
-	java_decl ""
-	idl_decl ""
-      end
-
-      classrelation 129633 // <directional aggregation by value>
+      classrelation 129633 // checked_in (<directional aggregation by value>)
 	relation 129121 *-->
 	  stereotype "list"
-	  a role_name "" multiplicity "" protected
-	    comment "FileMap objects are moved (spliced) between the checked_in and checked_out lists depending if they are in use or subject of cache aging"
+	  a role_name "checked_in" multiplicity "*" protected
+	    comment "checked_in objects are subject of cache aging and must be not in use"
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
-	    classrelation_ref 129633 // <directional aggregation by value>
+	    classrelation_ref 129633 // checked_in (<directional aggregation by value>)
+	  b multiplicity "" parent class_ref 128565 // FileMap
+      end
+
+      classrelation 129290 // checked_out (<directional aggregation by value>)
+	relation 128906 *-->
+	  stereotype "list"
+	  a role_name "checked_out" multiplicity "*" protected
+	    comment "this list keeps all mappings which are in use, and thus prevents them from Cache aging"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 129290 // checked_out (<directional aggregation by value>)
 	  b multiplicity "" parent class_ref 128565 // FileMap
       end
     end
@@ -235,6 +236,17 @@ ${inlines}
       explicit_switch_type ""
       
       associated_diagram classdiagram_ref 128181 // File Mapping
+      classrelation 128394 // frames (<aggregation>)
+	relation 128266 o---
+	  a role_name "frames" multiplicity "*" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 128394 // frames (<aggregation>)
+	  b role_name "mapping" multiplicity "1" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 128522 // mapping (<aggregation>)
+      end
     end
 
     class 128693 "FileHandle"
@@ -247,9 +259,6 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 128865 // <aggregation by value>
-	relation_ref 128609 // <aggregation by value>
-      end
     end
 
     class 128821 "Frame"
@@ -321,16 +330,6 @@ ${inlines}
 	  b multiplicity "" parent class_ref 128949 // FrameDescriptor
       end
 
-      classrelation 129249 // mapping (<unidirectional association>)
-	relation 128865 --->
-	  a role_name "mapping" multiplicity "1" private
-	    comment "Frames are a continous sequence in a mapping"
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
-"
-	    classrelation_ref 129249 // mapping (<unidirectional association>)
-	  b multiplicity "" parent class_ref 128565 // FileMap
-      end
-
       classrelation 129377 // <association>
 	relation 128993 ----
 	  a role_name "" multiplicity "" protected
@@ -345,6 +344,10 @@ ${inlines}
 
       classrelation 129889 // <aggregation>
 	relation_ref 129249 // <aggregation>
+      end
+
+      classrelation 128522 // mapping (<aggregation>)
+	relation_ref 128266 // <aggregation>
       end
     end
 
@@ -408,6 +411,17 @@ ${inlines}
       explicit_switch_type ""
       
       comment "This is the Factory for Files, whenever something wants to use some file (or temporary storage), This Factory will hand out some smart/shared pointer to a File object which will be used to retrieve Frames."
+      classrelation 129034 // files (<aggregation>)
+	relation 128778 o---
+	  a role_name "files" multiplicity "*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 129034 // files (<aggregation>)
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 129162 // <aggregation>
+      end
     end
 
     class 128225 "FrameReference"
@@ -432,6 +446,46 @@ ${inlines}
 "
 	    classrelation_ref 129889 // <aggregation>
       end
+
+      classrelation 128906 // <realization>
+	relation 128650 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 128906 // <realization>
+	  b multiplicity "" parent class_ref 128906 // SmartPointer
+      end
     end
+
+    class 128778 "FileReference"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 128138 // <aggregation>
+	relation 128138 o---
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 128138 // <aggregation>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 128266 // <aggregation>
+      end
+
+      classrelation 128778 // <realization>
+	relation 128522 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 128778 // <realization>
+	  b multiplicity "" parent class_ref 128906 // SmartPointer
+      end
+    end
+
   end
 end
