@@ -764,7 +764,7 @@ TertiaryMid: #999
 TertiaryDark: #666
 Error: #f88</pre>
 </div>
-<div title="DataBackend" modifier="CehTeh" modified="200706192335" created="200706192251" changecount="3">
+<div title="DataBackend" modifier="CehTeh" modified="200706270132" created="200706192251" changecount="4">
 <pre>This just starts as braindump, I will refine it soon:
 * handle all files cinelerra uses at runtime (media, edl, temp data)
 * manage filehandles, cinelerra might use more more files than available filehandles
@@ -780,8 +780,10 @@ Error: #f88</pre>
 * maybe network backend for serving data to distributed rendernodes
 * can do some load control or management (trigger adaptive rendering if system is idle etc)
 * pull based arch
+* Serialize persistent data (Project / EDL's)
 
-Look at [[Overview]] for the current design proposal</pre>
+Look at [[Overview]] for the current design proposal
+</pre>
 </div>
 <div title="DefaultTiddlers" modifier="CehTeh" created="200706192002" changecount="1">
 <pre>DataBackend
@@ -1250,8 +1252,14 @@ Storage and logging of EDL's, unlimited undo, database,...
 When to Cache and when not to cache, aka instant [[Frame]] reuse
 </pre>
 </div>
-<div title="Overview" modifier="CehTeh" modified="200706202349" created="200706200040" changecount="9">
-<pre>Whenever cinelerra needs to access data this is done through the DataBackend described here. The backend uses memory mapping to make data available to the program. This is little different to more common open/read/write/close file access while giving superior performance and much better memory utilization.
+<div title="Overview" modifier="CehTeh" modified="200706270138" created="200706200040" changecount="10">
+<pre>Whenever cinelerra needs to access data this is done through the DataBackend described here. 
+
+There are two main kinds how data is handled:
+* Project Description and EDL's are handled in a InMemoryDatabase which uses a [[Serializer]] for storing and logging modifications.
+* Media (audio, video, ...) is maped as descibed below.
+
+The backend uses memory mapping to make data available to the program. This is little different to more common open/read/write/close file access while giving superior performance and much better memory utilization.
 
 The data backend must be capable to handle more data than will fit into the memory or even address space on 32 bit archs.  Moreover a project may access more files than the OS can handle at a time, thus the for [[File]]s used by the Backend it needs a FileHandleCache to manage filehandles dynamically.
 
