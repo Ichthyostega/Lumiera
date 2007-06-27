@@ -747,7 +747,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="Cinelerra3DesignProcess" modifier="Ichthyostega" modified="200706260431" created="200706181202" tags="process" changecount="3">
+<div title="Cinelerra3DesignProcess" modifier="MichaelPloujnikov" modified="200706270317" created="200706181202" tags="process" changecount="5">
 <pre>! Cinelerra3 design process
 A lightweight formalized process how people can add proposals for the Cinelerra3 development.
 
@@ -776,15 +776,15 @@ I'd like to introduce a slightly formalized process for the ongoing Cinelerra3 p
 !!! Alternatives
 We could use some forum, Trac, Mailinglist or whatever instead.
 
-Just for Design documentation I would give [[Bouml|http://bouml.free.fr/]] a try. For myself, I am not very fond of UML Design tools, while Bouml looks quite promising and we could maintain the UML model in git repositories which would be more favorable than this centralized wiki. The backside is that this needs even more agreement between the developers, everyone has to install and use bouml (and learn its usage) and design is constrained by a external tool.
+Just for Design documentation I would give [[Bouml|http://bouml.free.fr/]] a try. For myself, I am not very fond of UML Design tools, while Bouml looks quite promising and we could maintain the UML model in git repositories which would be more favorable than this centralized wiki. The backside is that this needs even more agreement between the developers, everyone has to install and use Bouml (and learn its usage) and design is constrained by a external tool.
 
 This distributed wiki might be used instead the pipapo.org wiki, investigate that for future.
 
 !! Rationale
-Wiki works it is simple to use and just flexible enough to handle the task. I don't go to install any other software for such tasks on my server. While the design progresses I'd propose to move our work into git repositories and eventually phase this wiki pages out anyways. I'd rather like to start out distributed/git right away .. but git gives us only a fine storage layer, for a design process we need some good presentation layer (later when using git and starting the implementation everyones favorite editor serves for that) I have no better ideas yet to solve the presentation problem other than using this wiki (or maybe bouml).
+Wiki works. It is simple to use and just flexible enough to handle the task. I don't go to install any other software for such tasks on my server. While the design progresses I'd propose to move our work into git repositories and eventually phase this wiki pages out anyways. I'd rather like to start out distributed/git right away .. but git gives us only a fine storage layer, for a design process we need some good presentation layer (later when using git and starting the implementation everyones favorite editor serves for that) I have no better ideas yet to solve the presentation problem other than using this wiki (or maybe Bouml).
 </pre>
 </div>
-<div title="Cinelerra3Wiki" modifier="Ichthyostega" modified="200706260547" created="200706172308" tags="portal" changecount="14">
+<div title="Cinelerra3Wiki" modifier="MichaelPloujnikov" modified="200706270306" created="200706172308" tags="portal" changecount="15">
 <pre>This 'index.html' becomes the entry point of some tiddlywikis managed under git. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.
 
 * I started a GitNotes where we will collect some information about git, howto and special setups
@@ -804,7 +804,7 @@ next we should //start thinking// on how to organize several aspects of the prac
 * what to do in BOUML?                          &amp;rarr; [[more|whatInBOUML]]
 * how to organize packages, files, includes?    &amp;rarr; [[more|SrcTreeStructure]]
 * how to organize the executable to be built?
-* what coding conventions to prefere?
+* what coding conventions to prefer?
 * what build system to use?
 
 Ichthyo thinks we should do some informal brainstorming, test/prototypes to see how things work out and discuss them; then we should make them into formal project proposals on pipapo.org
@@ -815,7 +815,7 @@ Ichthyo thinks we should do some informal brainstorming, test/prototypes to see 
 Cinelerra3Wiki
 </pre>
 </div>
-<div title="DesignDocumentation" modifier="Ichthyostega" modified="200706260431" created="200706181207" tags="process" changecount="3">
+<div title="DesignDocumentation" modifier="MichaelPloujnikov" modified="200706270306" created="200706181207" tags="process" changecount="4">
 <pre>* There is a [[Manifest]] explaining the vision of the Cinelerra3 project
 * The foundation how we work together is defined in Cinelerra3DesignProcess
 
@@ -893,7 +893,7 @@ Slider.prototype.stop = function()
 }
 //}}}</pre>
 </div>
-<div title="GitAliases" modifier="CehTeh" modified="200706181107" created="200706181050" changecount="4">
+<div title="GitAliases" modifier="MichaelPloujnikov" modified="200706270309" created="200706181050" changecount="5">
 <pre>to make the admin/git_hooks/post-commit working add following to your .gitconfig:
 {{{
 [alias]
@@ -907,21 +907,21 @@ these two commands are used by 'admin/git-hooks/post-commit'
 
 'git publish' just sends the commit to some repository which has to be registered with 'git remote add public ...', in case you are working offline this will stuck and timeout, you may break it with ctrl-c, someone may fix it.</pre>
 </div>
-<div title="GitBranches" modifier="Ichthyostega" modified="200706260545" created="200706260447" tags="overview" changecount="8">
-<pre>some ''interresting Branches''
+<div title="GitBranches" modifier="MichaelPloujnikov" modified="200706270309" created="200706260447" tags="overview" changecount="9">
+<pre>some ''interesting Branches''
 
-|![[pipapo.org|PipapoOrg]]                |!''mirrored''              |!|!descritption                          |
-| ct#master                               | ichthyo#master            | |Cinelerra3 main developement line      |
+|![[pipapo.org|PipapoOrg]]                |!''mirrored''              |!|!description                          |
+| ct#master                               | ichthyo#master            | |Cinelerra3 main development line      |
 | ichthyo#prototype                       |                           | |first coding attempts ;-)              |
 
 </pre>
 </div>
-<div title="GitNotes" modifier="Ichthyostega" modified="200706260431" created="200706181049" tags="note" changecount="3">
+<div title="GitNotes" modifier="MichaelPloujnikov" modified="200706270308" created="200706181049" tags="note" changecount="4">
 <pre>I use some GitAliases to make signing and publishing easier.
 
 the '.git' dir itself is not versioned/distributed since it usually contains site-specific things. Despite this we might want to distribute some maintenance scripts and hooks so I put the default hooks into admin/git_hooks/ and users can symlink from .git/hooks them when needed.
 
-For now I hope this aproach suffices, maybe we need admin/git_hooks/$HOOKNAME.$USER at some point when it turns out that people want personal hooks.
+For now I hope this approach suffices, maybe we need admin/git_hooks/$HOOKNAME.$USER at some point when it turns out that people want personal hooks.
 
 &amp;rarr; see [[Interesting Branches|GitBranches]]
 </pre>
@@ -1243,7 +1243,7 @@ config.formatters.push( {
 [[Admin]]
 &lt;&lt;fullscreen&gt;&gt;</pre>
 </div>
-<div title="Manifest" modifier="CehTeh" modified="200706181214" created="200706181209" changecount="7">
+<div title="Manifest" modifier="MichaelPloujnikov" modified="200706270308" created="200706181209" changecount="9">
 <pre>! Manifest
 This Proposal describe the general ideas how the community will work together to create Cinelerra3.
 
@@ -1251,9 +1251,9 @@ This Proposal describe the general ideas how the community will work together to
 I started with my personal opinions, so far people expressed their commitment with this text.
 
 !!! Background
-Cinelerra is quite an old project, there is an original version from heroinewarrior.com and a community fork at cinelerra.org. The original author claims that there was no-one producing useable input despite their proposes while cinelerra was in development, and indeed the cinelerra.org community only feeds back the source released by the original author into their SVN repository and maintains few fixes. There is not much development going on. Some people have created new functionality/features from time to time which have rarely been merged into the main repository and maintained by themselves.
+Cinelerra is quite an old project, there is an original version from heroinewarrior.com and a community fork at cinelerra.org. The original author claims that there was no-one producing usable input despite their proposes while cinelerra was in development, and indeed the cinelerra.org community only feeds back the source released by the original author into their SVN repository and maintains few fixes. There is not much development going on. Some people have created new functionality/features from time to time which have rarely been merged into the main repository and maintained by themselves.
 
-The Cinelerra community is a quite loose group of individuals, there is some fluctation on the developer base and almost all developers have day jobs which restricts their involvement time on the cinelerra project.
+The Cinelerra community is a quite loose group of individuals, there is some fluctuation on the developer base and almost all developers have day jobs which restricts their involvement time on the cinelerra project.
 
 Some of these things work quite well, there is an overall friendly relation between the involved people. People who know C++ and have the time to edit the source have satisfactory added their own features. The Mailing-list and the IRC channel is also quite helpful and even new users who ask stupid questions are welcome.
 
@@ -1263,13 +1263,13 @@ But there are some bad things too. Notably there is not much progress on the com
 Cinelerra is heroine's product, this time we should work together with him to make it pleasant and progressing for anyone.
 We are in need of a new development model which is acceptable by all involved people and benefits from the way Cinelerra development worked the years before, without maintaining the bad sides again: 
 
-# ''Make it easy to contribute''&lt;&lt;br&gt;&gt;Even if it is favorable when we have people which are continously working on Cinelerra, it's a fact that people show up, send a few patches and then disappear. The development model should be prepared for this by:
+# ''Make it easy to contribute''&lt;&lt;br&gt;&gt;Even if it is favorable when we have people which are continuously working on Cinelerra, it's a fact that people show up, send a few patches and then disappear. The development model should be prepared for this by:
 ## Good documentation
 ## Well defined design and interfaces  
 ## Establish some coding guidelines to make it easy for others maintain code written by others
-## Prefer known and simple aproaches/coding over bleeding edge and highly complex techniques 
+## Prefer known and simple approaches/coding over bleeding edge and highly complex techniques 
 # ''Simple access''&lt;&lt;br&gt;&gt;We will use a fully distributed development model using git. I'll open a anonymous pushable repository which anyone can use to publish his changes.
-# ''Freedom to do, or not to do''&lt;&lt;br&gt;&gt;The model allows everyone to do as much as he wants. In a free project there is no way to put demands on people. This is good since it's easy to join and is open for anyone. The community might expect some responsibility for people maintaining their patches, but at worst, things which don't match our expected quality and when there is noone who keeps them up, will be removed. Since we are working in a distributed way with each developer maintaining his own repository and merging from other people, there is no easy way that bad code will leap into the project.
+# ''Freedom to do, or not to do''&lt;&lt;br&gt;&gt;The model allows everyone to do as much as he wants. In a free project there is no way to put demands on people. This is good since it's easy to join and is open for anyone. The community might expect some responsibility for people maintaining their patches, but at worst, things which don't match our expected quality and when there is no one who keeps them up, will be removed. Since we are working in a distributed way with each developer maintaining his own repository and merging from other people, there is no easy way that bad code will leap into the project.
 # ''No Rule is better than a Rule which is not engaged''&lt;&lt;br&gt;&gt;We have to agree on some rules to make teamwork possible. These rules should be kept to a minimum required and accepted by all involved people. It is vital that we can trust each other on simple things, like properly formatted code or that patches one proposes to merge don't break the system etc..
 # ''Legal status must be clear''&lt;&lt;br&gt;&gt;Cinelerra is developed under the GPL, every contributor must acknowledge this. Even when we provide anonymous commits, every non trivial patch should be traceable to the person who made it, GPG signatures would be proper here - details need to be worked out.
 # ''All for Cinelerra''&lt;&lt;br&gt;&gt;The goal is to make the best Linux video editor to date, nothing less. Everyone puts in their best abilities. This project is not the place to blame people for things where they are not profound, help each other, make things right instead of blaming someone. Everyone should rate himself at what he can do best on the project.
@@ -2083,12 +2083,13 @@ see : &lt;&lt;tag RSSFeed&gt;&gt; for the full list.
 
 </pre>
 </div>
-<div title="ShortCuts" modifier="Ichthyostega" modified="200706260509" created="200706260438" tags="portal" changecount="4">
-<pre>~~this small Tiddler contains usefull Shortcuts, Info, Links~~
+<div title="ShortCuts" modifier="MichaelPloujnikov" modified="200706270305" created="200706260438" tags="portal" changecount="7">
+<pre>~~This small Tiddler contains usefull Shortcuts, Info, Links~~
 
 *[[Wiki-Markup|http://tiddlywiki.com/#MainFeatures]]
 *
-----</pre>
+----
+</pre>
 </div>
 <div title="SideBarOptions" modifier="CehTeh" created="200706182001" changecount="1">
 <pre>&lt;&lt;search&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel &quot;options »&quot; &quot;Change TiddlyWiki advanced options&quot;&gt;&gt;</pre>

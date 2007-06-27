@@ -764,14 +764,14 @@ TertiaryMid: #999
 TertiaryDark: #666
 Error: #f88</pre>
 </div>
-<div title="DataBackend" modifier="CehTeh" modified="200706270132" created="200706192251" changecount="4">
+<div title="DataBackend" modifier="MichaelPloujnikov" modified="200706270304" created="200706192251" changecount="5">
 <pre>This just starts as braindump, I will refine it soon:
 * handle all files cinelerra uses at runtime (media, edl, temp data)
 * manage filehandles, cinelerra might use more more files than available filehandles
 * manage temporary data
 * do caching
 * io will be blocked where the backend tells the core where it can expect the data (not read()/write() like)
-* kindof garbage collector
+* kind-of garbage collector
 * do prefetching
 * no/low latency for the core the prefetcher and other things ensure that data is available in time
 * translate any input into a format which the cinelerra core understands (demux, decode)
@@ -789,7 +789,7 @@ Look at [[Overview]] for the current design proposal
 <pre>DataBackend
 </pre>
 </div>
-<div title="File" modifier="CehTeh" modified="200706202209" created="200706201525" changecount="3">
+<div title="File" modifier="MichaelPloujnikov" modified="200706270305" created="200706201525" changecount="4">
 <pre>'File' is the superclass of all possible filetypes, it has a weak reference to a FileHandle which is managed in FileHandleCache, on creation only the existence (when reading) or access for write for new files are checked. 'File' stores some generic metadata about the underlying file and intended use. But actual opening is done on demand.
 
 Files content is memory mapped into the process address space, this is managed by FileMap objects and a FileMapCache.
@@ -799,36 +799,36 @@ Files content is memory mapped into the process address space, this is managed b
 <pre>'FileHandle's are managed by the FileHandleCache, they are just storing the underlying OS file handles and managed in a lazy/weak way, (re)opened when needed and aging in the cache when not needed, since the amount of open file handles is limited aged ones will be closed and reused when the system needs to open another file.
 </pre>
 </div>
-<div title="FileHandleCache" modifier="CehTeh" modified="200706202209" created="200706201548" changecount="3">
+<div title="FileHandleCache" modifier="MichaelPloujnikov" modified="200706270305" created="200706201548" changecount="4">
 <pre>'FileHandleCache' storing a finite maximum number of [[FileHandle]]s as a list. As long the configured maximum of open files is not reached new file handles are stored at the begin of the list. Whenever a filehandle is accessed it is moved to the begin of the list too. Unused filehandles propagate towards the end of the list. When the maximum of open filehandles is reached, aged filehandles are closed and taken from the end.
 </pre>
 </div>
-<div title="FileMap" modifier="CehTeh" modified="200706202350" created="200706201921" changecount="5">
-<pre>Each 'FileMap' object contains many [[Frame]]s. The actual layout depends on the type of the [[File]]. Mappings need to be page aligned while [[Frame]]s can can be anywhere within a file and dynamic sized.
+<div title="FileMap" modifier="MichaelPloujnikov" modified="200706270315" created="200706201921" changecount="11">
+<pre>Each 'FileMap' object contains many [[Frame]]s. The actual layout depends on the type of the [[File]]. Mappings need to be page aligned while [[Frame]]s can be anywhere within a file and dynamically sized.
 
-All established [[FileMap]]s are managed in a FileMapCache. This is similar to the FileHandleCache but mappings which are in use are checked out of the aging list and thus become locked from aging/purging.
+All established [[FileMap]]s are managed in a FileMapCache. This is similar to the FileHandleCache, but mappings which are in use are checked out of the aging list and thus become locked from aging/purging.
 
-FileMap objects are transparent to the application, it will only requests [[Frame]]s as in position and size (and some other parameters).
+FileMap objects are transparent to the application. It will only requests [[Frame]]s as in position and size (and some other parameters).
 </pre>
 </div>
-<div title="FileMapCache" modifier="CehTeh" created="200706202207" changecount="1">
+<div title="FileMapCache" modifier="MichaelPloujnikov" modified="200706270305" created="200706202207" changecount="4">
 <pre>The 'FileMapCache' keeps a list of FileMaps which are currently not in use and subject of aging.
-Whenever a FileMap is in use, it is checked out into a in-use list where it is not subject of aging.
+Whenever a FileMap is in use, it is checked out into an in-use list where it is not subject to aging.
 </pre>
 </div>
-<div title="Frame" modifier="CehTeh" modified="200706270152" created="200706202115" changecount="5">
-<pre>'Frames' are the smallest datablocks handled by the Backend. The application tells the Backend to make [[File]]s availabe and then only requests Frames from the Backend, all other datastructures of the backend are private.
+<div title="Frame" modifier="MichaelPloujnikov" modified="200706270315" created="200706202115" changecount="12">
+<pre>'Frames' are the smallest datablocks handled by the Backend. The application tells the Backend to make [[File]]s available and then only requests Frames from the Backend. All other datastructures of the backend are private.
 
-Actually Frames are (references to) blocks of continous memory, they can be anything depending on the usage of the [[File]] (Video frames, encoder frames, blocks of sound samples).
+Actually Frames are (references to) blocks of continuous memory. They can be anything depending on the usage of the [[File]] (Video frames, encoder frames, blocks of sound samples).
 
-Each [[Frame]] points to a [[FrameDescriptor]] which describes the shared properties of [[Frame]]s of the same kind. For video frames this [[FrameDescriptor]] will define the policies of the used color modell, resolution, aspect ratio and so on, for example.
+Each [[Frame]] points to a [[FrameDescriptor]] which describes the shared properties of [[Frame]]s of the same kind. For video frames this [[FrameDescriptor]] will define the policies of the used color model, resolution, aspect ratio and so on, for example.
 
-Frames are referenced by a smart-pointer like object which manages the lifetime and caching behaviour. There are 3 states such a frame reference can be:
+Frames are referenced by a smart-pointer like object which manages the lifetime and caching behavior. There are 3 states such a frame reference can be in:
 # readonly: the backing FileMap is checked out from the aging list, frames can be read
 # readwrite: the backing FileMap is checked out from the aging list, frames can be read and written (depends on the filemode as well)
-# weak: the FileMap object is checked back into the ageing list, the frame cant be accessed but we can try to transform a weak reference into a readonly or readwrite reference
+# weak: the FileMap object is checked back into the aging list, the frame can't be accessed but we can try to transform a weak reference into a readonly or readwrite reference
 
-Frames can be addressed uniquely (needs to be worked out) whenever a frame is not available, the backend can initiate a (probably recursive) render for it.
+Frames can be addressed uniquely (needs to be worked out) whenever a frame is not available. The backend can initiate a (probably recursive) render for it.
 
 Accessing [[Frame]]s may add further renderjobs for related frames to the [[Prefetch]] task.
 </pre>
@@ -1254,12 +1254,12 @@ Storage and logging of EDL's, unlimited undo, database,...
 When to Cache and when not to cache, aka instant [[Frame]] reuse
 </pre>
 </div>
-<div title="Overview" modifier="CehTeh" modified="200706270138" created="200706200040" changecount="10">
+<div title="Overview" modifier="MichaelPloujnikov" modified="200706270304" created="200706200040" changecount="11">
 <pre>Whenever cinelerra needs to access data this is done through the DataBackend described here. 
 
 There are two main kinds how data is handled:
 * Project Description and EDL's are handled in a InMemoryDatabase which uses a [[Serializer]] for storing and logging modifications.
-* Media (audio, video, ...) is maped as descibed below.
+* Media (audio, video, ...) is mapped as described below.
 
 The backend uses memory mapping to make data available to the program. This is little different to more common open/read/write/close file access while giving superior performance and much better memory utilization.
 
@@ -1269,7 +1269,7 @@ Which parts of a File are actually mapped to physical RAM is managed by the kern
 
 The application itself only requests [[Frame]]s from the backend.
 
-To minimize latency and optimize cpu utilization we have a [[Prefetch]] thread which operates a [[Scheduler]] to render and cache frames which are expected to be consumed soon. This prefetcher keeps [[Statistics]] for optimizing performance.
+To minimize latency and optimize CPU utilization we have a [[Prefetch]] thread which operates a [[Scheduler]] to render and cache frames which are expected to be consumed soon. This prefetcher keeps [[Statistics]] for optimizing performance.
 
 </pre>
 </div>
