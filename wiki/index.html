@@ -815,10 +815,10 @@ Ichthyo thinks we should do some informal brainstorming, test/prototypes to see 
 Cinelerra3Wiki
 </pre>
 </div>
-<div title="DesignDocumentation" modifier="MichaelPloujnikov" modified="200706270306" created="200706181207" tags="process" changecount="4">
+<div title="DesignDocumentation" modifier="CehTeh" modified="200706280013" created="200706181207" tags="process" changecount="5">
 <pre>* There is a [[Manifest]] explaining the vision of the Cinelerra3 project
 * The foundation how we work together is defined in Cinelerra3DesignProcess
-
+* There is a description how the git repository is set up in RepositorySetup
 </pre>
 </div>
 <div title="FullScreenPlugin" modifier="CehTeh" modified="200706110313" created="200607241016" tags="systemConfig lewcidExtension" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110313">
@@ -2081,6 +2081,102 @@ see : &lt;&lt;tag RSSFeed&gt;&gt; for the full list.
 ** initial release
 
 
+</pre>
+</div>
+<div title="RepositorySetup" modifier="CehTeh" modified="200706280024" created="200706280015" changecount="2">
+<pre>||'''State'''||''Final''||
+||'''Date'''||[[Date(2007-06-09T00:48:02Z)]]||
+||'''Proposed by'''||[&quot;ct&quot;]||
+
+! Repository Setup
+Here we describe the Directory hierarchy and how the git repository are set up.
+
+!! Description
+Use &quot;./admin/treeinfo.sh&quot; to produce a annotated directory tree like this:
+{{{
+.                                       : The root dir for the cinelerra3 project
+./admin                                 : administrative scripts
+./admin/git_hooks                       : git hook scripts
+./build                                 : build dir
+./doc                                   : documentation
+./doc/devel                             : developer documentation, extra sources, doxygen
+./doc/devel/uml                         : Bouml generated HTML doc
+./doc/user                              : user documentation in texinfo
+./oldsrc                                : cinelerra2 sources, added per case when needed
+./src                                   : every components source in a own subdir here
+./tests                                 : test suite
+./tests/bugs                            : tests against reported bugs
+./uml                                   : uml models, created with bouml
+./uml/cinelerra3                        : cinelerra3 UML model
+./wiki                                  : tiddlywiki for semi-persistent documentation
+}}}
+
+!! New Directories:
+
+When you need to add a new mariginally important directory please provides a file named DIR_INFO within this directory. It's first line should note the purpose of the directory in a few words (less than 40 characters). The following lines are free form description about the details. 
+
+!! Submodules:
+
+We want to use the new GIT feature of &quot;Superprojects and Submodules&quot; when it is ready for general use.
+Then we will transform several subtrees into separate GIT repos which will be linked to from the main
+Project (then called the &quot;Superproject&quot;) as submodules.
+
+!!! Pros
+* because its a text-like structure, it is partially self-documenting
+* GIT is flexible and with the planned submodules it can be separated in chunks of manageable size if necessary
+
+!!! Cons
+* can get large and confusing
+* has no real &quot;portal&quot; or entrance point for people wanting to join
+
+!!Rationale
+Every important document, draft, text and code (including) prototypes should be checked into
+one SCM (or a set of related SCMs). This repo should be &quot;almost everything&quot; you need for the
+project. Because we try to use a distributed development model, every dev can/should have 
+his own copy and fed his changes back.
+
+This ''Repository approach'' avoids the problems of a central infrastructure and helps cut down
+project management time. Basically, every dev is responsible himself for getting every important
+piece of information added into &quot;the general view of matters&quot; in a consistent way.
+
+
+! Conclusion
+## When approbate (this proposal becomes a Final) write some conclusions about its process:
+
+
+
+! Comments
+Basically the structure is just fine.
+* maybe add a &quot;pastebin&quot; somewhere in the dev-documentation area?
+* i would add the source tree roots at level 2, so we can have several submodules here:
+** oldsrc
+** cin3
+** prototype
+ -- [&quot;Ichthyostega&quot;] [[DateTime(2007-06-16T23:10:01Z)]]
+
+Draft now.
+
+Yes I left source dirs out but this sounds fine, note that with git, there is no problem to reorganize the repo (in contrast to CVS) later. We can fix things afterward when we find better ways.
+ -- [&quot;ct&quot;] [[DateTime(2007-06-17T17:36:46Z)]]
+
+Whats prototype for? won't that be better a branch?
+ -- [&quot;ct&quot;] [[DateTime(2007-06-17T22:04:39Z)]]
+
+I just wanted to show there could be additional things beside the main tree (later to be separate submodules). The example was meant as a classical
+throwaway prototype. But I agree, in our case we just start hacking at the new tree and make feature/tryout/prototype branches...
+
+The point I wanted to make is: every directory 2 levels deep in the source tree, e.g. /src/cinelerra3 or /src/oldsrource should be a completely 
+self-contained tree which can be built without needing anything of the rest of the repo. Thats an prerequisite for moving to Submodules IMHO.
+But you seem rather to put the sourcetree-roots 1 level deep. As we have just two trees at the moment (and can easily reorganize), I have no
+objections against this. The only point I really care is to try to keep the source tree self-contained without any dependencies to the rest
+of the &quot;design GIT&quot; (because of this Superprojects-Submodules thing...)
+ -- [&quot;Ichthyostega&quot;] [[DateTime(2007-06-17T23:45:06Z)]]
+
+we could make the trees deeper than one level, I didn't intended 1-level depth. but also be careful with that not to make it too complex. While I am not sure if we want a complete oldsrc, that just adds weight and confusion for now (lets see). Neither I am fully decided about the hierarchy in /src (want /libs /plugins or /src/libs /src/plugins or /src/render/plugins? name it rather 'effects' than 'plugins'?). While I am quite sure that I want to separate /oldssrc and /src quite much (in /src should only be new stuff or stuff which is carefully reviewed, with know license and author).
+ -- [&quot;ct&quot;] [[DateTime(2007-06-18T08:38:43Z)]]
+
+I made this proposal 'final' now further details are likely better worked out in the git repository (and we already started to define things there) see ./admin/treeinfo.sh 
+ -- [&quot;ct&quot;] [[DateTime(2007-06-27T16:01:52Z)]]
 </pre>
 </div>
 <div title="ShortCuts" modifier="MichaelPloujnikov" modified="200706270305" created="200706260438" tags="portal" changecount="7">
