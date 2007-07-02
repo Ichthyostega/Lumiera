@@ -2,7 +2,6 @@
 ##
 ## Buildhelper.py  -  helpers, custom builders, for SConstruct
 ##
-from fnmatch import fnmatch
 
 #  Copyright (C)         CinelerraCV
 #    2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -27,6 +26,7 @@ import sys
 import fnmatch
 import re
 import tarfile
+
 
 
 #
@@ -136,7 +136,7 @@ def getTarName(location, defaultName):
     if not os.path.isdir(head):
         print 'Target dir "%s" for Tar doesn\'t exist.' % head
         Exit(1)
-    mat = re.match(r'([\w\.\-])\.((tar)|(tar\.gz)|(tgz))', tail)
+    mat = re.match(r'([\w\.\-\+:\~]+)\.((tar)|(tar\.gz)|(tgz))', tail)
     if mat:
         name = mat.group(1)
         ext  = '.'+mat.group(2)

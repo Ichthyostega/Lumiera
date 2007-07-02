@@ -22,7 +22,6 @@
 #####################################################################
 
 import os
-
 from Buildhelper import *
 
 #-----------------------------------Configuration
@@ -30,9 +29,13 @@ OPTIONSCACHEFILE = 'optcache'
 CUSTOPTIONSFILE  = 'custom-options'
 SRCDIR           = 'src'
 BINDIR           = 'src/bin'
-VERSION          = '3.alpha.1'
+VERSION          = '3+alpha.01'
 #-----------------------------------Configuration
 
+# NOTE: scons -h for help.
+# Read more about the SCons build system at: http://www.scons.org
+# Basically, this script just /defines/ the components and how they
+# fit together. SCons will derive the necessary build steps.
 
 
 
@@ -42,6 +45,9 @@ VERSION          = '3.alpha.1'
 def setupBasicEnvironment():
     ''' define cmdline options, build type decisions
     '''
+    EnsurePythonVersion(2,3)
+    EnsureSConsVersion(0,96,90)
+    
     opts = defineCmdlineOptions() 
  
     env = Environment(options=opts) 
@@ -61,11 +67,11 @@ def setupBasicEnvironment():
 
 def appendCppDefine(env,var,cppVar):
     if env[var]:
-        env.Append(CPPDEFINES={cppVar: env[var]})
+        env.Append(CPPDEFINES = {cppVar: env[var]})
 
 def appendVal(env,var,targetVar,val=None):
     if env[var]:
-        env.Append(**{targetVar: val or env[var]})
+        env.Append( **{targetVar: val or env[var]})
 
 
 
@@ -156,7 +162,8 @@ def definePackagingTargets(env, artifacts):
 
 def defineBuildTargets(env, artifacts):
     ''' define the source file/dirs comprising each artifact to be built.
-        setup sub-environments with special build options if necessary 
+        setup sub-environments with special build options if necessary.
+        We use a custom function to declare a whole tree of srcfiles. 
     '''
     cinobj = ( srcSubtree(env,'backend') 
              + srcSubtree(env,'proc')
@@ -167,7 +174,7 @@ def defineBuildTargets(env, artifacts):
     artifacts['cinelerra'] = env.Program('$BINDIR/cinelerra', cinobj)
     artifacts['plugins']   = env.SharedLibrary('$BINDIR/cinelerra-plugin', plugobj)
     
-    # call subdir SConscript(s)
+    # call subdir SConscript(s) for independent components
     SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts')
     
 
@@ -197,8 +204,6 @@ def defineInstallTargets(env, artifacts):
 
 ### === MAIN === ####################################################
 
-# NOTE: the following code /defines/ what and how to build
-#       it doesn't "do" the build. SCons will do the "doing"
 
 env = setupBasicEnvironment()
 
