@@ -25,6 +25,9 @@ from fnmatch import fnmatch
 import os
 import sys
 import fnmatch
+import re
+import tarfile
+
 
 #
 # Common Helper Functions
@@ -69,3 +72,81 @@ def scanSrcSubtree(root):
         for p in SRCPATTERNS:
             for f in fnmatch.filter(files, p):
                 yield os.path.join(dir,f)
+
+
+
+
+def Tarball(env,location,dirs,suffix=''):
+    ''' Custom Command: create Tarball of some subdirs
+        location: where to create the tar (optionally incl. filename.tar.gz)
+        suffix: (optional) suffix to include in the tar name
+        dirs: directories to include in the tar
+        
+        This is a bit of a hack, because we want to be able to include arbitrary dirctories,
+        without creating new dependencies on those dirs. Esp. we want to tar the source tree
+        prior to compiling. Solution is 
+         - use the Command-Builder, but pass all target specifications as custom build vars
+         - create a pseudo-target located in the parent directory (not built by default)
+    '''
+    targetID    = '../extern-tar%s' % suffix
+    versionID   = env['VERSION']
+    defaultName = 'cinelerra%s_%s' % (suffix, versionID)
+    nameprefix  = 'cinelerra-%s/' %  (versionID)
+    location    = env.subst(location)
+    dirs        = env.subst(dirs)
+    return env.Command(targetID,None, createTarball, 
+                       location=location, defaultName=defaultName, dirs=dirs, nameprefix=nameprefix)
+
+
+def createTarball(target,source,env):
+    ''' helper, builds the tar using the python2.3 tarfil lib.
+        This allows us to prefix all paths, thus moving the tree
+        into a virtual subdirectory containing the Version number,
+        as needed by common packaging systems.
+    '''
+    name = getTarName( location = env['location']
+                     , defaultName = env['defaultName'])
+    targetspec = env['dirs']
+    nameprefix = env['nameprefix'] or ''
+    print 'Running: tar -czf %s %s ...' % (name,targetspec)
+    if os.path.isfile(name):
+        os.remove(name)
+    tar = tarfile.open(name,'w:gz')
+    for name in targetspec.split():
+        tar.add(name,nameprefix+name)
+    tar.close()
+#
+# old version using shell command:
+#    
+#    cmd = 'tar -czf %s %s' % (name,targetspec)
+#    print 'running ', cmd, ' ... '
+#    pipe = os.popen (cmd)
+#    return pipe.close ()
+
+
+
+
+def getTarName(location, defaultName):
+    ''' create a suitable name for the tarball.
+        - if location contains a name (*.tar.gz) then use this
+        - otherwise append the defaultName to the specified dir
+    '''  
+    spec = os.path.abspath(location)
+    (head,tail) = os.path.split(spec)
+    if not os.path.isdir(head):
+        print 'Target dir "%s" for Tar doesn\'t exist.' % head
+        Exit(1)
+    mat = re.match(r'([\w\.\-])\.((tar)|(tar\.gz)|(tgz))', tail)
+    if mat:
+        name = mat.group(1)
+        ext  = '.'+mat.group(2)
+    else:
+        ext = '.tar.gz'
+        if os.path.isdir(spec):
+            head = spec
+            name = defaultName
+        else:
+            name = tail
+    return os.path.join(head,name+ext)
+            
+

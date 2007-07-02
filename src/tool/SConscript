@@ -6,5 +6,5 @@
 Import('env','artifacts')
 
 # build the ubiquitous Hello World application (note: C source)
-artifacts['tools'] = env.Program('$BINDIR/hello-world','hello.c')
+artifacts['tools'] = env.Program('#$BINDIR/hello-world','hello.c')
 

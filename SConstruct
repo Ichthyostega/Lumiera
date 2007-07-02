@@ -22,7 +22,6 @@
 #####################################################################
 
 import os
-import re
 
 from Buildhelper import *
 
@@ -44,20 +43,30 @@ def setupBasicEnvironment():
     ''' define cmdline options, build type decisions
     '''
     opts = defineCmdlineOptions() 
-
-    env = Environment( options=opts
-                     , CPPDEFINES={'DEBUG': '${DEBUG}'
-                                  ,'USE_OPENGL': '${OPENGL}'
-                                  } 
-                     )
+ 
+    env = Environment(options=opts) 
     env.Replace( VERSION=VERSION
                , SRCDIR=SRCDIR
                , BINDIR=BINDIR
                , CPPPATH=SRCDIR   # used to find includes
                )
+    appendCppDefine(env,'DEBUG','DEBUG')
+    appendCppDefine(env,'OPENGL','USE_OPENGL')
+    appendVal(env,'ARCHFLAGS', 'CPPFLAGS')   # for both C and C++
+    appendVal(env,'OPTIMIZE', 'CPPFLAGS', val=' -O3')
+    
     prepareOptionsHelp(opts,env)
     opts.Save(OPTIONSCACHEFILE, env)
     return env
+
+def appendCppDefine(env,var,cppVar):
+    if env[var]:
+        env.Append(CPPDEFINES={cppVar: env[var]})
+
+def appendVal(env,var,targetVar,val=None):
+    if env[var]:
+        env.Append(**{targetVar: val or env[var]})
+
 
 
 def defineCmdlineOptions():
@@ -74,23 +83,32 @@ def defineCmdlineOptions():
 #       ,EnumOption('DIST_TARGET', 'Build target architecture', 'auto', 
 #                   allowed_values=('auto', 'i386', 'i686', 'x86_64' ), ignorecase=2)
         ,PathOption('DESTDIR', 'Installation dir prefix', '/usr/local')
-        ,PackageOption('TARSRC', 'Create source tarball prior to compiling', '.')
-        ,PackageOption('TARDOC', 'Create tarball with dev documentaion, wiki and uml model', '.')
+        ,PathOption('SRCTAR', 'Create source tarball prior to compiling', '..', PathOption.PathAccept)
+        ,PathOption('DOCTAR', 'Create tarball with dev documentaionl', '..', PathOption.PathAccept)
      )
 
     return opts
 
 
+
 def prepareOptionsHelp(opts,env):
     prelude = '''
-USAGE:   scons [-c] [OPTS] [TARGETS]
+USAGE:   scons [-c] [OPTS] [key=val,...] [TARGETS]
      Build and optionally install Cinelerra.
      Without specifying any target, just the (re)build target will run.
      Add -c to the commandline to clean up anything a given target would produce
 
+Special Targets:
+     build   : just compile and link
+     install : install created artifacts at PREFIX
+     src.tar : create source tarball
+     doc.tar : create developer doc tarball
+     tar     : create all tarballs
+
 Configuration Options:
 '''
     Help(prelude + opts.GenerateHelpText(env))
+
 
 
 
@@ -124,33 +142,16 @@ def definePackagingTargets(env, artifacts):
     ''' build operations and targets to be done /before/ compiling.
         things like creating a source tarball or preparing a version header.
     '''
-    env.SetDefault(TARFLAGS = '-c -z', TARSUFFIX = '')
-    if env['TARSRC']:
-        # define the Tar as a target and make it default,
-        # i.e. buid it if scons is called without targets
-        t=env.Tar(getTarName(env['TARSRC']),SRCDIR)
-        env.Default(t)
-    if env['TARDOC']:
-        t=env.Tar(getTarName(env['TARDOC']), 'admin doc wiki uml tests')
-        env.Default(t)
+    t = Tarball(env,location='$SRCTAR',dirs='$SRCDIR')
+    artifacts['src.tar'] = t
+    env.Alias('src.tar', t)
+    env.Alias('tar', t)
 
-def getTarName(spec):
-    (head,tail) = os.path.split( os.path.abspath(spec))
-    if not os.path.isdir(head):
-        print 'Target dir "%s" for Tar doesn\'t exist.' % head
-        Exit(1)
-    mat = re.match(r'([\w\.\-])\.((tar)|(tar\.gz)|(tgz))', tail)
-    if mat:
-        name = mat.group(1)
-        ext  = '.'+mat.group(2)
-    else:
-        ext = '.tar.gz'
-        if os.path.isdir(tail):
-            name = 'cinelerra$VERSION'
-        else:
-            name = tail
-    return os.path.join(head,name+ext)
-            
+    t =  Tarball(env,location='$DOCTAR',suffix='-doc',dirs='admin doc wiki uml tests')
+    artifacts['doc.tar'] = t
+    env.Alias('doc.tar', t)
+    env.Alias('tar', t)
+
 
 
 def defineBuildTargets(env, artifacts):
@@ -183,7 +184,7 @@ def defineInstallTargets(env, artifacts):
     il = env.Alias('install-lib', '$DESTDIR/lib')
     env.Alias('install', [ib, il])
     
-    env.Alias('build', '$DESTDIR')
+    env.Alias('build', '$BINDIR')
     env.Default('build')
     # additional files to be cleaned when cleaning 'build'
     env.Clean ('build', [ 'scache.conf', '.sconf_temp', '.sconsign.dblite', 'config.log'])
@@ -212,7 +213,7 @@ artifacts = {}
 # 'plugins'     : plugin shared lib
 # 'tools'       : small tool applications (e.g mpegtoc)
 # 'src,tar'     : source tree as tarball (without doc)
-# 'devdoc.tar'  : uml model, wiki, dev docu (no src)
+# 'doc.tar'     : uml model, wiki, dev docu (no src)
 
 definePackagingTargets(env, artifacts)
 defineBuildTargets(env, artifacts)
