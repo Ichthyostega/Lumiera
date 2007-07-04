@@ -1,6 +1,6 @@
 format 38
 "design" // BackendLayer::design
-  revision 3
+  revision 6
   modified_by 10 "ct"
   // class settings
   //class diagram settings
@@ -76,9 +76,10 @@ ${inlines}
 
       operation 128181 "getFrame"
 	public return_type class_ref 128821 // Frame
-	nparams 2
+	nparams 3
 	  param in name "" type class_ref 128949 // FrameDescriptor
 	  param in name "frame_address" explicit_type ""
+	  param in name "mode" explicit_type ""
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
 "
 	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
@@ -86,6 +87,7 @@ ${inlines}
 "
 	
 	
+	comment "mode = READ, WRITE, ..."
       end
 
       classrelation 128225 // handle (<directional aggregation>)
@@ -107,10 +109,6 @@ ${inlines}
 	    classrelation_ref 128609 // mappings (<directional aggregation>)
 	  b multiplicity "" parent class_ref 128565 // FileMap
 	  association_explicit_type "index"
-      end
-
-      classrelation 128266 // <aggregation>
-	relation_ref 128138 // <aggregation>
       end
 
       classrelation 129162 // <aggregation>
@@ -304,10 +302,6 @@ ${inlines}
 	    classrelation_ref 129505 // <association>
       end
 
-      classrelation 129889 // <aggregation>
-	relation_ref 129249 // <aggregation>
-      end
-
       classrelation 128522 // mapping (<aggregation>)
 	relation_ref 128266 // <aggregation>
       end
@@ -357,11 +351,6 @@ ${inlines}
       
     end
 
-    sequencediagram 128437 "QueryFrame"
-      show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
-      size A4
-    end
-
     class 129333 "FileProvider"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit} {
@@ -384,6 +373,35 @@ ${inlines}
 "
 	    classrelation_ref 129162 // <aggregation>
       end
+
+      operation 128010 "useFile"
+	public return_type class_ref 128778 // FileReference
+	nparams 2
+	  param in name "name" explicit_type "string"
+	  param in name "mode" explicit_type ""
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	comment "Announces that the application intends to use this file with mode (READ|WRITE|READWRITE)"
+      end
+
+      operation 128138 "useTemporaryStorage"
+	public return_type class_ref 128778 // FileReference
+	nparams 1
+	  param in name "type" type class_ref 128949 // FrameDescriptor
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	comment "Provides a pool for interminate frames"
+      end
     end
 
     class 128225 "FrameReference"
@@ -396,17 +414,14 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 129761 // frame (<aggregation>)
-	relation 129249 o---
+      classrelation 129761 // frame (<unidirectional association>)
+	relation 129249 --->
 	  a role_name "frame" multiplicity "0..1" protected
 	    comment "maybe weak reference"
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
-	    classrelation_ref 129761 // frame (<aggregation>)
-	  b role_name "" multiplicity "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
-"
-	    classrelation_ref 129889 // <aggregation>
+	    classrelation_ref 129761 // frame (<unidirectional association>)
+	  b multiplicity "" parent class_ref 128821 // Frame
       end
 
       classrelation 128906 // <realization>
@@ -428,16 +443,13 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 128138 // <aggregation>
-	relation 128138 o---
-	  a role_name "" multiplicity "" protected
+      classrelation 128138 // file (<unidirectional association>)
+	relation 128138 --->
+	  a role_name "file" multiplicity "0..1" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
-	    classrelation_ref 128138 // <aggregation>
-	  b role_name "" multiplicity "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
-"
-	    classrelation_ref 128266 // <aggregation>
+	    classrelation_ref 128138 // file (<unidirectional association>)
+	  b multiplicity "" parent class_ref 128181 // File
       end
 
       classrelation 128778 // <realization>
@@ -447,7 +459,10 @@ ${inlines}
 	    classrelation_ref 128778 // <realization>
 	  b multiplicity "" parent class_ref 128906 // SmartPointer
       end
+
     end
 
+    activity 128010 "get frame"
+    end
   end
 end

@@ -1,19 +1,18 @@
 window_sizes 1274 775 300 964 633 60
 diagrams
   active  classdiagram_ref 128181 // File Mapping
-    964 633 81 4 0 0
+    964 633 68 4 0 0
 end
 show_stereotypes
 open
   
+  package_ref 128645 // codegen
+  
   package_ref 129285 // ProcessingLayer
-  class_ref 128437 // FileMapCache
+  class_ref 128181 // File
   class_ref 128693 // FileHandle
+  class_ref 129333 // FileProvider
   class_ref 128225 // FrameReference
   class_ref 128778 // FileReference
-  classview_ref 128645 // Service Components
-  class_ref 128266 // Condition
-  class_ref 128394 // Mutex
-  class_ref 128906 // SmartPointer
 end
 end
