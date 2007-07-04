@@ -1,0 +1,55 @@
+format 38
+
+artifactcanvas 128005 artifact_ref 128005 // Cinelerra3
+  color midred
+  xyz 47 45 2000
+packagecanvas 128133 
+  package_ref 129413 // common
+    xyzwh 190 128 2000 366 128
+packagecanvas 128261 
+  package_ref 129541 // backend
+    xyzwh 190 946 2000 366 234
+packagecanvas 128389 
+  package_ref 129669 // proc
+    xyzwh 190 534 2005 367 405
+packagecanvas 128517 
+  package_ref 129797 // gui
+    xyzwh 190 266 2005 367 257
+packagecanvas 128645 
+  package_ref 130053 // asset
+    xyzwh 461 587 2010 88 92
+packagecanvas 128773 
+  package_ref 130181 // mobject
+    xyzwh 198 587 2010 255 217
+packagecanvas 128901 
+  package_ref 130309 // engine
+    xyzwh 198 819 2010 237 111
+packagecanvas 129029 
+  package_ref 130437 // session
+    xyzwh 205 615 2015 238 91
+packagecanvas 129157 
+  package_ref 130565 // builder
+    xyzwh 205 707 2015 101 91
+packagecanvas 129285 
+  package_ref 130693 // controller
+    xyzwh 311 707 2015 133 91
+artifactcanvas 129413 artifact_ref 128133 // main
+  color lightred
+  xyz 281 45 2020
+iconcanvas 131077 deploymentdiagram_ref 129925 // src
+  xyz 201 159 2005
+containcanvas 129797
+  from ref 128005 z 1999 to ref 129413
+simplerelationcanvas 130053 simplerelation_ref 128517 geometry VH
+  from ref 128005 z 1999 to point 118 189
+  line 130949 z 1999 to ref 128133
+simplerelationcanvas 130181 simplerelation_ref 128645 geometry VH
+  from ref 128005 z 1999 to point 118 392
+  line 130821 z 1999 to ref 128517
+simplerelationcanvas 130309 simplerelation_ref 128773 geometry VH
+  from ref 128005 z 1999 to point 118 734
+  line 130693 z 1999 to ref 128389
+simplerelationcanvas 130437 simplerelation_ref 128901 geometry VH
+  from ref 128005 z 1999 to point 118 1060
+  line 130565 z 1999 to ref 128261
+end
