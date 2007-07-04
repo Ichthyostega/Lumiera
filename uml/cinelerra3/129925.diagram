@@ -1,0 +1,5 @@
+format 38
+
+artifactcanvas 128005 artifact_ref 128261 // mobject
+  xyz 123 127 2000
+end
