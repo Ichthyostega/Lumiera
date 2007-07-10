@@ -44,7 +44,7 @@ DAMAGE.
 
 <style type="text/css">#contentWrapper {display:none;}</style><div id="SplashScreen" style="border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;"><b>My TiddlyWiki</b> is loading<blink> ...</blink><br><br><span style="font-size: 14px; color:red;">Requires Javascript.</span></div>
 <!--PRE-HEAD-END-->
-<title> Cinelerra3 - Distributed Developer Wiki </title>
+<title> Cinelerra Support Library - things we found useful </title>
 <style type="text/css">
 #saveTest {display:none;}
 #messageArea {display:none;}
@@ -611,7 +611,7 @@ Finally, the simplest way to use tasksum is to add it to your view template.  Se
 ----
 To continue, click the down-arrow and choose another section: &lt;&lt;tag TaskMacroTutorial&gt;&gt;</pre>
 </div>
-<div title="5. Task macro installation issues" modifier="Ichthyostega" modified="200706260504" created="200604082243" tags="TaskMacroTutorial excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200605132015" changecount="1">
+<div title="5. Task macro installation issues" modifier="LukeBlanshard" modified="200605132015" created="200604082243" tags="TaskMacroTutorial" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200605132015">
 <pre>The TaskMacroPlugin can be installed like any other TiddlyWiki plugin, and used without further effort.  However, there are two issues that may affect you.  (To get started with a brand new wiki that does not have these issues, consider downloading the [[empty LabWiki|empty_labwiki.html]].)
 # The task macros don't play nicely with the default TiddlyWiki display of tags.  In the default view template, a tiddler's list of tags is shown in a little box that floats in the upper right corner of the tiddler.  However, this little box may interfere with the tables used by the task macros.  In Firefox, the tables are drawn right over the top of the tag box, rendering both of them illegible.  In Internet Explorer, the tag box forces the tables to be pushed down below the box, which can waste a lot of space.&lt;&lt;br&gt;&gt;&lt;&lt;br&gt;&gt;Thus, I recommend changing your view template to eliminate the little box.  If you use Simon Baird's [[TagglyTagging|http://simonbaird.com/mptw/#TagglyTagging]] (as LabWiki does), then my TaskSummaryViewTemplate might be a good alternative.  Simply import it into your wiki and rename it to ViewTemplate.  This template also demonstrates how to incorporate the tasksum macro into every tiddler so any tiddler with tasks has a summary at the top.&lt;&lt;br&gt;&gt;&lt;&lt;br&gt;&gt;
 # Most view templates also add a minus sign (&quot;-&quot;) before the &quot;close&quot; command.  TiddlyWiki interprets this to mean that you want the close command to be executed if you hit the Escape key from within the tiddler.&lt;&lt;br&gt;&gt;&lt;&lt;br&gt;&gt;However, most tiddlers never have focus, and so never give you the opportunity to try it out.  But if you have a taskadder in your tiddler, then you suddenly enable this feature -- and you probably don't want it.  It means that if you type a nice long task description and then hit Escape, that description will be lost and the tiddler will be closed.  So I recommend that you remove the minus sign from the view template's menu altogether, as I have done in LabWiki's own ViewTemplate.
@@ -747,81 +747,25 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="Cinelerra3DesignProcess" modifier="MichaelPloujnikov" modified="200706270317" created="200706181202" tags="process" changecount="5">
-<pre>! Cinelerra3 design process
-A lightweight formalized process how people can add proposals for the Cinelerra3 development.
-
-
-!! Description
-Use the Wiki at http://www.pipapo.org/pipawiki/Cinelerra3/DesignProcess to make it easy to add proposals in a well defined manner.
-
-I'd like to introduce a slightly formalized process for the ongoing Cinelerra3 planning:
-* Every proposal is instantiated as 'Idea', the author gives other people the opportunity to review and comment on it with extreme prejudice, while still working out details.
-* When the the 'Idea' in a proper form and worked out in most details it becomes a 'Draft'. This 'Draft' need to be carefully reviewed, commented, perhaps corrected and rated by the other Developers.
-* At some point we may decide that a 'Draft' becomes a 'Final' (I leave it open how this decision shall be done for now). 'Final' Documents will be imported into the repository (this wiki, you are reading such a Document right now!).
-
-* Sometimes proposals will become dropped for some reason, this is indicated by changing their state to 'Dropped', they still stay in the system for further reference.
-
-!!! Pros
-* simple
-* flexible
-* no much rules
-* persistent and at Final stage well documented process
-
-!!! Cons
-* could be abused/vandalized (but wiki can use ACL's)
-* depends on my server, this might be unfavorable or unreliable, ymmv.
-* will only work if all or almost all involved people agree on this process
-
-!!! Alternatives
-We could use some forum, Trac, Mailinglist or whatever instead.
-
-Just for Design documentation I would give [[Bouml|http://bouml.free.fr/]] a try. For myself, I am not very fond of UML Design tools, while Bouml looks quite promising and we could maintain the UML model in git repositories which would be more favorable than this centralized wiki. The backside is that this needs even more agreement between the developers, everyone has to install and use Bouml (and learn its usage) and design is constrained by a external tool.
-
-This distributed wiki might be used instead the pipapo.org wiki, investigate that for future.
-
-!! Rationale
-Wiki works. It is simple to use and just flexible enough to handle the task. I don't go to install any other software for such tasks on my server. While the design progresses I'd propose to move our work into git repositories and eventually phase this wiki pages out anyways. I'd rather like to start out distributed/git right away .. but git gives us only a fine storage layer, for a design process we need some good presentation layer (later when using git and starting the implementation everyones favorite editor serves for that) I have no better ideas yet to solve the presentation problem other than using this wiki (or maybe Bouml).
-</pre>
+<div title="ColorPalette" modifier="CehTeh" modified="200707102306" created="200707102303" changecount="4">
+<pre>Background: #fff
+Foreground: #000
+PrimaryPale: #fd5
+PrimaryLight: #fe0
+PrimaryMid: #b30
+PrimaryDark: #310
+SecondaryPale: #ffc
+SecondaryLight: #fe8
+SecondaryMid: #db4
+SecondaryDark: #841
+TertiaryPale: #eee
+TertiaryLight: #ccc
+TertiaryMid: #999
+TertiaryDark: #666
+Error: #f88</pre>
 </div>
-<div title="Cinelerra3Wiki" modifier="CehTeh" modified="200707102257" created="200706172308" tags="portal" changecount="19">
-<pre>This 'index.html' becomes the entry point of some tiddlywikis managed under git. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.
-
-* I started a GitNotes where we will collect some information about git, howto and special setups
-* we maintain (semi-) final design docs in DesignDocumentation
-
-Please end your tiddlers in a newline, this makes merging in git easier since the /pre tag used in tiddlywiki will become on a single line.
-
-----
-!Design Draft
-to get started, we create design drafts emphasizing different aspects and regions of Cinelerra-3
-
-* Ichthyo focuses mainly on the Render Engine and its interconnection to the EDL, [[see this separate page|renderengine.html]]
-* cehteh works on the data backend draft, see [[this page|backend.html]]
-* Some tools which don't fit somewhere else and are used everywhere are put into a [[Support Library|support_library.html]]
-
-!Coding Structures
-next we should //start thinking// on how to organize several aspects of the practical coding...
-* what to do in BOUML?                          &amp;rarr; [[more|whatInBOUML]]
-* how to organize packages, files, includes?    &amp;rarr; [[more|SrcTreeStructure]]
-* how to organize the executable to be built?
-* what coding conventions to prefer?            &amp;rarr; [[GNU Style|DesignDocumentation]]
-* what build system to use?
-
-Ichthyo thinks we should do some informal brainstorming, test/prototypes to see how things work out and discuss them; then we should make them into formal project proposals on pipapo.org
-</pre>
-</div>
-<div title="DefaultTiddlers" modifier="Ichthyostega" modified="200706260439" created="200706172308" changecount="2">
-<pre>ShortCuts
-Cinelerra3Wiki
-</pre>
-</div>
-<div title="DesignDocumentation" modifier="CehTeh" modified="200707030409" created="200706181207" tags="process" changecount="6">
-<pre>* There is a [[Manifest]] explaining the vision of the Cinelerra3 project
-* The foundation how we work together is defined in Cinelerra3DesignProcess
-* There is a description how the git repository is set up in RepositorySetup
-* we decided to write code in GNU style, with no tabs (use spaces)
-</pre>
+<div title="DefaultTiddlers" modifier="CehTeh" modified="200707102306" created="200707102301" changecount="2">
+<pre>[[SupportLibrary]]</pre>
 </div>
 <div title="FullScreenPlugin" modifier="CehTeh" modified="200706110313" created="200607241016" tags="systemConfig lewcidExtension" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110313">
 <pre>/***
@@ -894,39 +838,6 @@ Slider.prototype.stop = function()
               config.commands.fullscreen.handler();
 }
 //}}}</pre>
-</div>
-<div title="GitAliases" modifier="MichaelPloujnikov" modified="200706270309" created="200706181050" changecount="5">
-<pre>to make the admin/git_hooks/post-commit working add following to your .gitconfig:
-{{{
-[alias]
-        sign = tag -s -f -m 'automatic generated on last commit'
-        publish = push --all public
-}}}
-
-these two commands are used by 'admin/git-hooks/post-commit'
-
-'git sign' creates a gpg-signed tag after each commit, named '$~BRANCH_signature' overriding an older tag of the same name. Thus the head revision is always gpg signed (it is not perfect, in some cases like some merges and other things the signature can become unsynced and needs to be fixed manually).
-
-'git publish' just sends the commit to some repository which has to be registered with 'git remote add public ...', in case you are working offline this will stuck and timeout, you may break it with ctrl-c, someone may fix it.</pre>
-</div>
-<div title="GitBranches" modifier="MichaelPloujnikov" modified="200706270309" created="200706260447" tags="overview" changecount="9">
-<pre>some ''interesting Branches''
-
-|![[pipapo.org|PipapoOrg]]                |!''mirrored''              |!|!description                          |
-| ct#master                               | ichthyo#master            | |Cinelerra3 main development line      |
-| ichthyo#prototype                       |                           | |first coding attempts ;-)              |
-
-</pre>
-</div>
-<div title="GitNotes" modifier="MichaelPloujnikov" modified="200706270308" created="200706181049" tags="note" changecount="4">
-<pre>I use some GitAliases to make signing and publishing easier.
-
-the '.git' dir itself is not versioned/distributed since it usually contains site-specific things. Despite this we might want to distribute some maintenance scripts and hooks so I put the default hooks into admin/git_hooks/ and users can symlink from .git/hooks them when needed.
-
-For now I hope this approach suffices, maybe we need admin/git_hooks/$HOOKNAME.$USER at some point when it turns out that people want personal hooks.
-
-&amp;rarr; see [[Interesting Branches|GitBranches]]
-</pre>
 </div>
 <div title="InlineJavaScript" modifier="Jeremy" created="200603090618" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200603090618">
 <pre>/***
@@ -1239,54 +1150,23 @@ config.formatters.push( {
 } )
 //}}}</pre>
 </div>
-<div title="MainMenu" modifier="Ichthyostega" modified="200707022307" created="200706172305" changecount="3">
-<pre>GettingStarted
-[[Cinelerra3Wiki]]
-[[Backend|backend.html]]
-[[Proc-Layer|renderengine.html]]
-[[Admin]]
-&lt;&lt;fullscreen&gt;&gt;</pre>
-</div>
-<div title="Manifest" modifier="MichaelPloujnikov" modified="200706270308" created="200706181209" changecount="9">
-<pre>! Manifest
-This Proposal describe the general ideas how the community will work together to create Cinelerra3.
-
-!! Description
-I started with my personal opinions, so far people expressed their commitment with this text.
-
-!!! Background
-Cinelerra is quite an old project, there is an original version from heroinewarrior.com and a community fork at cinelerra.org. The original author claims that there was no-one producing usable input despite their proposes while cinelerra was in development, and indeed the cinelerra.org community only feeds back the source released by the original author into their SVN repository and maintains few fixes. There is not much development going on. Some people have created new functionality/features from time to time which have rarely been merged into the main repository and maintained by themselves.
-
-The Cinelerra community is a quite loose group of individuals, there is some fluctuation on the developer base and almost all developers have day jobs which restricts their involvement time on the cinelerra project.
-
-Some of these things work quite well, there is an overall friendly relation between the involved people. People who know C++ and have the time to edit the source have satisfactory added their own features. The Mailing-list and the IRC channel is also quite helpful and even new users who ask stupid questions are welcome.
-
-But there are some bad things too. Notably there is not much progress on the community development. Users don't benefit from new improvements which other people have made. There is a endlessly growing list of bugs and feature requests, when someone sends a patch to the ML he has to invest quite some time to maintain it until it might be merged. Finally we don't know what heroine virtual is working on, until we see his next tarball.
-
-!! Solution for Cinelerra3
-Cinelerra is heroine's product, this time we should work together with him to make it pleasant and progressing for anyone.
-We are in need of a new development model which is acceptable by all involved people and benefits from the way Cinelerra development worked the years before, without maintaining the bad sides again: 
-
-# ''Make it easy to contribute''&lt;&lt;br&gt;&gt;Even if it is favorable when we have people which are continuously working on Cinelerra, it's a fact that people show up, send a few patches and then disappear. The development model should be prepared for this by:
-## Good documentation
-## Well defined design and interfaces  
-## Establish some coding guidelines to make it easy for others maintain code written by others
-## Prefer known and simple approaches/coding over bleeding edge and highly complex techniques 
-# ''Simple access''&lt;&lt;br&gt;&gt;We will use a fully distributed development model using git. I'll open a anonymous pushable repository which anyone can use to publish his changes.
-# ''Freedom to do, or not to do''&lt;&lt;br&gt;&gt;The model allows everyone to do as much as he wants. In a free project there is no way to put demands on people. This is good since it's easy to join and is open for anyone. The community might expect some responsibility for people maintaining their patches, but at worst, things which don't match our expected quality and when there is no one who keeps them up, will be removed. Since we are working in a distributed way with each developer maintaining his own repository and merging from other people, there is no easy way that bad code will leap into the project.
-# ''No Rule is better than a Rule which is not engaged''&lt;&lt;br&gt;&gt;We have to agree on some rules to make teamwork possible. These rules should be kept to a minimum required and accepted by all involved people. It is vital that we can trust each other on simple things, like properly formatted code or that patches one proposes to merge don't break the system etc..
-# ''Legal status must be clear''&lt;&lt;br&gt;&gt;Cinelerra is developed under the GPL, every contributor must acknowledge this. Even when we provide anonymous commits, every non trivial patch should be traceable to the person who made it, GPG signatures would be proper here - details need to be worked out.
-# ''All for Cinelerra''&lt;&lt;br&gt;&gt;The goal is to make the best Linux video editor to date, nothing less. Everyone puts in their best abilities. This project is not the place to blame people for things where they are not profound, help each other, make things right instead of blaming someone. Everyone should rate himself at what he can do best on the project.
+<div title="MainMenu" modifier="CehTeh" created="200707102300" changecount="1">
+<pre>''[[Cinelerra3|index.html]]''
+SupportLibrary
+[[Threads and Locking]]
+[[Plugins]]
+[[OS Services]]
+&lt;&lt;fullscreen&gt;&gt;
 </pre>
 </div>
-<div title="MarkupPreHead" modifier="Ichthyostega" modified="200706260507" created="200706172303" tags="excludeMissing" changecount="1">
+<div title="MarkupPreHead" modifier="CehTeh" created="200706191948">
 <pre>&lt;!--{{{--&gt;
 &lt;link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/&gt;
 &lt;!--}}}--&gt;
 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;&lt;b&gt;My TiddlyWiki&lt;/b&gt; is loading&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
 </div>
-<div title="PageTemplate" modifier="Ichthyostega" modified="200706260504" created="200701131624" tags="MPTWTheme excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110330" changecount="1">
+<div title="PageTemplate" modifier="CehTeh" modified="200706110330" created="200701131624" tags="MPTWTheme" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110330">
 <pre>&lt;!--{{{--&gt;
 &lt;div class='header' macro='gradient vert [[ColorPalette::PrimaryLight]] [[ColorPalette::PrimaryMid]]'&gt;
 	&lt;div class='headerShadow'&gt;
@@ -2021,7 +1901,7 @@ config.macros.rssFeedUpdate = {
 //}}}
 </pre>
 </div>
-<div title="RSSReaderPluginDoc" modifier="Ichthyostega" modified="200706260503" created="200704132051" tags="Doc RSSReader excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200704220857" changecount="1">
+<div title="RSSReaderPluginDoc" modifier="BidiX" modified="200704220857" created="200704132051" tags="Doc RSSReader" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200704220857">
 <pre>//last update: RSSReaderPlugin v 1.1.1//
 
 !Description
@@ -2087,118 +1967,11 @@ see : &lt;&lt;tag RSSFeed&gt;&gt; for the full list.
 
 </pre>
 </div>
-<div title="RepositorySetup" modifier="Ichthyostega" modified="200707022305" created="200706280015" tags="process excludeMissing" changecount="3">
-<pre>||'''State'''||''Final''||
-||'''Date'''||[[Date(2007-06-09T00:48:02Z)]]||
-||'''Proposed by'''||[&quot;ct&quot;]||
-
-! Repository Setup
-Here we describe the Directory hierarchy and how the git repository are set up.
-
-!! Description
-Use &quot;./admin/treeinfo.sh&quot; to produce a annotated directory tree like this:
-{{{
-.                                       : The root dir for the cinelerra3 project
-./admin                                 : administrative scripts
-./admin/git_hooks                       : git hook scripts
-./build                                 : build dir
-./doc                                   : documentation
-./doc/devel                             : developer documentation, extra sources, doxygen
-./doc/devel/uml                         : Bouml generated HTML doc
-./doc/user                              : user documentation in texinfo
-./oldsrc                                : cinelerra2 sources, added per case when needed
-./src                                   : every components source in a own subdir here
-./tests                                 : test suite
-./tests/bugs                            : tests against reported bugs
-./uml                                   : uml models, created with bouml
-./uml/cinelerra3                        : cinelerra3 UML model
-./wiki                                  : tiddlywiki for semi-persistent documentation
-}}}
-
-!! New Directories:
-
-When you need to add a new mariginally important directory please provides a file named DIR_INFO within this directory. It's first line should note the purpose of the directory in a few words (less than 40 characters). The following lines are free form description about the details. 
-
-!! Submodules:
-
-We want to use the new GIT feature of &quot;Superprojects and Submodules&quot; when it is ready for general use.
-Then we will transform several subtrees into separate GIT repos which will be linked to from the main
-Project (then called the &quot;Superproject&quot;) as submodules.
-
-!!! Pros
-* because its a text-like structure, it is partially self-documenting
-* GIT is flexible and with the planned submodules it can be separated in chunks of manageable size if necessary
-
-!!! Cons
-* can get large and confusing
-* has no real &quot;portal&quot; or entrance point for people wanting to join
-
-!!Rationale
-Every important document, draft, text and code (including) prototypes should be checked into
-one SCM (or a set of related SCMs). This repo should be &quot;almost everything&quot; you need for the
-project. Because we try to use a distributed development model, every dev can/should have 
-his own copy and fed his changes back.
-
-This ''Repository approach'' avoids the problems of a central infrastructure and helps cut down
-project management time. Basically, every dev is responsible himself for getting every important
-piece of information added into &quot;the general view of matters&quot; in a consistent way.
-
-
-! Conclusion
-## When approbate (this proposal becomes a Final) write some conclusions about its process:
-
-
-
-! Comments
-Basically the structure is just fine.
-* maybe add a &quot;pastebin&quot; somewhere in the dev-documentation area?
-* i would add the source tree roots at level 2, so we can have several submodules here:
-** oldsrc
-** cin3
-** prototype
- -- [&quot;Ichthyostega&quot;] [[DateTime(2007-06-16T23:10:01Z)]]
-
-Draft now.
-
-Yes I left source dirs out but this sounds fine, note that with git, there is no problem to reorganize the repo (in contrast to CVS) later. We can fix things afterward when we find better ways.
- -- [&quot;ct&quot;] [[DateTime(2007-06-17T17:36:46Z)]]
-
-Whats prototype for? won't that be better a branch?
- -- [&quot;ct&quot;] [[DateTime(2007-06-17T22:04:39Z)]]
-
-I just wanted to show there could be additional things beside the main tree (later to be separate submodules). The example was meant as a classical
-throwaway prototype. But I agree, in our case we just start hacking at the new tree and make feature/tryout/prototype branches...
-
-The point I wanted to make is: every directory 2 levels deep in the source tree, e.g. /src/cinelerra3 or /src/oldsrource should be a completely 
-self-contained tree which can be built without needing anything of the rest of the repo. Thats an prerequisite for moving to Submodules IMHO.
-But you seem rather to put the sourcetree-roots 1 level deep. As we have just two trees at the moment (and can easily reorganize), I have no
-objections against this. The only point I really care is to try to keep the source tree self-contained without any dependencies to the rest
-of the &quot;design GIT&quot; (because of this Superprojects-Submodules thing...)
- -- [&quot;Ichthyostega&quot;] [[DateTime(2007-06-17T23:45:06Z)]]
-
-we could make the trees deeper than one level, I didn't intended 1-level depth. but also be careful with that not to make it too complex. While I am not sure if we want a complete oldsrc, that just adds weight and confusion for now (lets see). Neither I am fully decided about the hierarchy in /src (want /libs /plugins or /src/libs /src/plugins or /src/render/plugins? name it rather 'effects' than 'plugins'?). While I am quite sure that I want to separate /oldssrc and /src quite much (in /src should only be new stuff or stuff which is carefully reviewed, with know license and author).
- -- [&quot;ct&quot;] [[DateTime(2007-06-18T08:38:43Z)]]
-
-I made this proposal 'final' now further details are likely better worked out in the git repository (and we already started to define things there) see ./admin/treeinfo.sh 
- -- [&quot;ct&quot;] [[DateTime(2007-06-27T16:01:52Z)]]
-</pre>
+<div title="SiteSubtitle" modifier="CehTeh" created="200707102305" changecount="1">
+<pre>things we found useful</pre>
 </div>
-<div title="ShortCuts" modifier="MichaelPloujnikov" modified="200706270305" created="200706260438" tags="portal" changecount="7">
-<pre>~~This small Tiddler contains usefull Shortcuts, Info, Links~~
-
-*[[Wiki-Markup|http://tiddlywiki.com/#MainFeatures]]
-*
-----
-</pre>
-</div>
-<div title="SideBarOptions" modifier="CehTeh" created="200706182001" changecount="1">
-<pre>&lt;&lt;search&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel &quot;options »&quot; &quot;Change TiddlyWiki advanced options&quot;&gt;&gt;</pre>
-</div>
-<div title="SiteSubtitle" modifier="CehTeh" created="200706181110" changecount="1">
-<pre>Distributed Developer Wiki</pre>
-</div>
-<div title="SiteTitle" modifier="CehTeh" created="200706181110" changecount="1">
-<pre>Cinelerra3</pre>
+<div title="SiteTitle" modifier="CehTeh" created="200707102305" changecount="1">
+<pre>Cinelerra Support Library</pre>
 </div>
 <div title="SplashScreenPlugin" modifier="Saq" modified="200607202048" created="200607191631" tags="lewcidExtension systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200607202048">
 <pre>/***
@@ -2258,11 +2031,7 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
 }
 //}}}</pre>
 </div>
-<div title="SrcTreeStructure" modifier="CehTeh" modified="200706270059" created="200706262157" changecount="2">
-<pre>* add a 'DIR_INFO' file to each marginally important directory. The first line should give a short abstract about this dir (40 characters, not more), following lines can give more precise information. There is a 'admin/treeinfo.sh' script which generates a texual overview of the directory tree.
-</pre>
-</div>
-<div title="StyleSheet" modifier="Ichthyostega" modified="200706260503" created="200701131624" tags="MPTWTheme excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706090017" changecount="1">
+<div title="StyleSheet" modifier="CehTeh" modified="200706090017" created="200701131624" tags="MPTWTheme" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706090017">
 <pre>/*{{{*/
 /* a contrasting background so I can see where one tiddler ends and the other begins */
 body {
@@ -2423,7 +2192,20 @@ h1,h2,h3,h4,h5,h6 {
 /*}}}*/
 </pre>
 </div>
-<div title="TabTimeline" modifier="CehTeh" created="200706182004" changecount="1">
+<div title="SupportLibrary" modifier="CehTeh" created="200707102314" changecount="2">
+<pre>The Support Library contains all tools we need at various places but by themself don't defines a subsystem on their own.
+
+These things are:
+* a Plugin loader &amp;rarr; [[Plugins]]
+* a wraper for POSIX Threads
+** Thread creation joining and canceling
+** Locking primitives like Condition variables and Mutexes
+
+ 
+(... to be continued)
+</pre>
+</div>
+<div title="TabTimeline" modifier="CehTeh" created="200706191949" changecount="1">
 <pre>&lt;&lt;timeline better:true maxDays:14 maxEntries:20&gt;&gt;</pre>
 </div>
 <div title="TaskMacroPlugin" modifier="LukeBlanshard" modified="200605131931" created="200510261917" tags="systemConfig TaskMacro" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200605131931">
@@ -3448,18 +3230,6 @@ function addKeyDownHandlers(e)
 	}
 }
 //}}}</pre>
-</div>
-<div title="TiddlyWiki" modifier="Ichthyostega" created="200706260506" tags="excludeMissing" changecount="2">
-<pre>The Name of the Software driving this Wiki. Is is written completely in ~JavaScript and contained in one single HTML page.
- * see GettingStarted
- * see [[Homepage|http://tiddlywiki.com]]</pre>
-</div>
-<div title="whatInBOUML" modifier="Ichthyostega" created="200706260559" changecount="1">
-<pre>The question to find out about is: how much of the coding to do with the help of BOUML. Basically, BOUML is capable to permanently support the coding; you can define all entities, fields and methods in the UML model an just develope the method bodies //conventionally// with a text editor. 
-
-__Ichthyo__ tends to be seceptical about this aproach. While it probably will work, it is questionable if it will result in &amp;raquo;good code&amp;laquo; the fear is, that this rigid hierarchical structure distracts from the more complex semantical concerns.
-
-Another aproach could be to use BOUML just to create the basic structures and from this point on rather utilizing it for technical documentation.</pre>
 </div>
 </div>
 <!--POST-STOREAREA-->
