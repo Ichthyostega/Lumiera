@@ -1691,6 +1691,15 @@ DAMAGE.
 &lt;html&gt;&lt;sub&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;scrollAnchorVisible('Top',null, event)&quot;&gt;[Top]&lt;/sub&gt;&lt;/a&gt;&lt;/html&gt;
 ***/</pre>
 </div>
+<div title="Plugins" modifier="CehTeh" modified="200707111101" created="200707111054" changecount="2">
+<pre>Cinelerra3 will use a very simple and language neutral plugin system. It focuses easy and independent distribution of plugins and small specific interfaces. Ultimate flexibility is of second concern.
+
+Plugin interfaces are simple C structs with some metadata at the beginning and function prototypes added at the end. Each function prototype has a version number appended. This allows to extend existing interfaces, but not alter functions which are already present. With some macros we can map simple function names to versioned function names. Thus plugins may break when using the 'generic' names while compiling, the plugin should be fixed to use the new version then, while compiled plugins will stay compatible.
+
+This fosters the idea of maintaining free plugins and fixing them when the source is available, while still having the ability to deploy packaged binary plugins which will work with newer interface versions.
+
+</pre>
+</div>
 <div title="RSSReaderPlugin" modifier="BidiX" modified="200704220833" created="200704132044" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200704220833">
 <pre>/***
 |''Name:''|RSSReaderPlugin|
