@@ -1691,16 +1691,16 @@ DAMAGE.
 &lt;html&gt;&lt;sub&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;scrollAnchorVisible('Top',null, event)&quot;&gt;[Top]&lt;/sub&gt;&lt;/a&gt;&lt;/html&gt;
 ***/</pre>
 </div>
-<div title="PluginInterfaceDefinition" modifier="CehTeh" modified="200707111532" created="200707111319" changecount="5">
+<div title="PluginInterfaceDefinition" modifier="CehTeh" modified="200707111749" created="200707111319" changecount="11">
 <pre>Interfaces are declared in headerfiles, they use some tool macros to give a convenient definition language.
 
 ! Brainstorming
 
-This is just a sketch, using template metaprogramming.
+This is just a sketch, using preprocessor metaprogramming.
 
 An interface need a name and a version, they form a block where the actual function prototypes can be added
 {{{
-CINELERRA_INTERFACE_BEGIN(foo, 1,
+CINELERRA_INTERFACE(foo, 1,
 	...
 );
 }}}
@@ -1708,16 +1708,16 @@ CINELERRA_INTERFACE_BEGIN(foo, 1,
 
 each function prototype must be given with its different parts, return type, name, arguments list, version
 {{{
-	CINELERRA_INTERFACE_PROTO(ret, name, (args), version),
+	CINELERRA_IPROTO(ret, name, (args), version),
 }}}
 
 
 ! Example
 Together this would look like
 {{{
-CINELERRA_INTERFACE_BEGIN(foo, 1,
-	CINELERRA_INTERFACE_PROTO(void, bar, (void), 1),
-	CINELERRA_INTERFACE_PROTO(int, baz, (int i), 1)
+CINELERRA_INTERFACE(foo, 1,
+	CINELERRA_IPROTO(void, bar, (void), 1),
+	CINELERRA_IPROTO(int, baz, (int i), 1)
 );
 }}}
 
@@ -1731,24 +1731,136 @@ struct cinelerra_interface_foo_1
 };
 }}}</pre>
 </div>
-<div title="PluginLibrary" modifier="CehTeh" modified="200707111532" created="200707111329" changecount="2">
-<pre>
-! Brainstorming
+<div title="PluginInterfaceImplementation" modifier="CehTeh" modified="200707111755" created="200707111749" changecount="2">
+<pre>A Plugin realizes an interface, this means actual functions are mapped to the correspondending slots in the interface structure.
 
-! TODO
-* error handling
-* exception sentry (turn exceptions into C like returns, maybe rethrow them)
+{{{
+CINELERRA_IMPLEMENT_INTERFACE(interface, version, name, /* TODO some hooks here */
+	CINELERRA_INTERFACE_FUNC(protoname, version, functionname),
+	...
+);
+}}}
 
+! Example
+{{{
+void
+my_bar_function (void)
+{
+	...
+}
 
+int
+my_baz_function (int i)
+{
+	...
+}
+
+CINELERRA_IMPLEMENT_INTERFACE(foo, 1, myfoointerface, /* TODO some hooks here */
+	CINELERRA_INTERFACE_FUNC(bar, 1, my_bar_function),
+	CINELERRA_INTERFACE_FUNC(baz, 1, my_baz_function),
+);
+}}}
+
+which expands to something like:
+{{{
+struct cinelerra_interface_foo_1 myfoointerface =
+{
+	/* TODO header initialization */
+	my_bar_function,
+	my_baz_function
+}
+}}}
+
+Note: the protoname and version args for CINELERRA_INTERFACE_FUNC will be used for placement initialization and type checking, not mentioned here. This would allow to initialize this structure out of order.
 </pre>
 </div>
-<div title="Plugins" modifier="CehTeh" modified="200707111250" created="200707111054" changecount="9">
+<div title="PluginLibrary" modifier="CehTeh" modified="200707111914" created="200707111329" changecount="10">
+<pre>! Cinelerra Plugin API
+
+There are only few functions to manage Plugins. Actually a user requests interfaces, the libraries which implement Plugins are managed transparently.
+
+!! opening an Interface
+{{{
+CinelerraInterface
+cinelerra_interface_open (const char* plugin, const char* interface, size_t min_revision);
+}}}
+
+!!! Parameters
+* ''{{{plugin}}}'' is the name of the Plugin which interface to use. Plugins are looked up in $CINELERRA_PLUGIN_PATH, which is a colon separated list of directories, and then in $plugin_install_dir which is the directory where standard plugins get installed when installing cinelerra (example: /usr/local/lib/cinelerra3/). The name itself can contain slashes, see PluginHierachy for details. It shall not include a library extension (.so). When NULL is passed, a interface from the main application is queried.
+* ''{{{interface}}}'' is the name of the queried interface.
+* ''{{{min_revision}}}'' is the expected minimal size of the interface structure, since interfaces are extended by adding new protos at the end, the size gives a unique value for each new revision.
+
+!!! Semantic
+Interfaces can opened multiple times and need to be closed for each call to open.
+
+!!! Return
+This function returns a pointer to the requested interface on success or NULL in case of an error. See {{{cinelerra_interface_error}}} about handing errors.
+
+!! closing an Interface
+{{{
+void
+cinelerra_interface_close (CinelerraInterface self);
+}}}
+
+!!! Parameters
+* ''{{{self}}}'' is the handle to the interface to be closed. It is safe to pass NULL, this call is then just a no-op.
+
+!!! Semantic
+The interface handle must not be used after this function is called.
+
+This function always succeeds (or results in undefined behavior when the user passes a illegal parameter)
+
+!! calling functions
+
+
+
+!! unload unused plugins
+Plugins which are not longer in use are not automatically unloaded. The user can use this functions to unload of Plugins.
+
+{{{
+int
+cinelerra_plugin_unload (const char* plugin);
+}}}
+
+!!! Parameters
+* ''{{{plugin}}}'' name of the plugin to be unloaded
+
+!!! Semantic
+Tries to unload the named plugin. This only works when nothing else uses the Plugin.
+
+!!! Return
+Returns 0 on success or the number of active users on failure. See {{{cinelerra_interface_error}}} about handing errors.
+
+
+!! expire unused plugins
+{{{
+void
+cinelerra_plugin_expire (time_t age);
+}}}
+
+!!! Parameters
+* ''{{{age}}}'' time in seconds when the plugin was last used
+
+!!! Semantic
+Calls {{{cinelerra_plugin_unload()}}} for each Plugin which is not used for more than {{{age}}} seconds. This function might be infrequently called by the scheduler to remove things which are not needed (example: once a hour, remove plugins which are not used for 2 hours).
+
+!!! Return
+always succeeds.
+
+!! error handling
+!! C++ exceptions
+</pre>
+</div>
+<div title="Plugins" modifier="CehTeh" modified="200707111824" created="200707111054" changecount="13">
 <pre>Cinelerra3 will use a very simple and language neutral plugin system. It focuses easy and independent distribution of plugins and small specific interfaces. Ultimate flexibility is of second concern.
 
 ! Concept
-Plugin interfaces are simple C structs with some metadata at the beginning and function prototypes added at the end. Each function prototype has a version number appended. This allows to extend existing interfaces, but not alter functions which are already present. With some macros we can map simple function names to versioned function names. Thus plugins may break when using the 'generic' names while compiling, the plugin should be fixed to use the new version then, while compiled plugins will stay compatible.
+Plugins are just shared libraries which offer well defined Interfaces. A Plugin may offer more than one interface and may in turn request/use interfaces from other Plugins or from the main application.
 
-This fosters the idea of maintaining free plugins and fixing them when the source is available, while still having the ability to deploy packaged binary plugins which will work with newer interface versions.
+! Interfaces
+Plugin interfaces are simple C structs with some metadata at the beginning and function prototypes added at the end. Each interface is versioned. This allows to extend existing interfaces, but not alter functions which are already present. With some macros we can map simple functions to versioned interfaces. Compiled plugins will stay compatible even if the interface is extended, while sourcecode need maintenance.
+
+This fosters the idea of free plugins updating them when the source is available, while still having the ability to deploy packaged binary plugins which will be compatible with newer interface versions.
 
 The Plugin System is written in C with some preprocessor macros helpers. There will be some support to handle C++ specialties.
 
@@ -1756,6 +1868,13 @@ The Plugin System is written in C with some preprocessor macros helpers. There w
 * [[An interface definition language|PluginInterfaceDefinition]]
 * [[An interface implementation language|PluginInterfaceImplementation]]
 * [[Library support to access plugins|PluginLibrary]]
+
+! Tutorial, how to use Plugins
+* [[Define an interface|HowtoDefineInterface]]
+* Implement an Plugin with an interface in
+** [[C|HowtoCPlugin]]
+** [[C++|HowtoCppPlugin]]
+* [[Use this Plugin|HowtoUsePlugin]] 
 </pre>
 </div>
 <div title="RSSReaderPlugin" modifier="BidiX" modified="200704220833" created="200704132044" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200704220833">
