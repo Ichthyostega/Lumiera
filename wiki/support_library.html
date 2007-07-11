@@ -1691,13 +1691,71 @@ DAMAGE.
 &lt;html&gt;&lt;sub&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;scrollAnchorVisible('Top',null, event)&quot;&gt;[Top]&lt;/sub&gt;&lt;/a&gt;&lt;/html&gt;
 ***/</pre>
 </div>
-<div title="Plugins" modifier="CehTeh" modified="200707111101" created="200707111054" changecount="2">
+<div title="PluginInterfaceDefinition" modifier="CehTeh" modified="200707111532" created="200707111319" changecount="5">
+<pre>Interfaces are declared in headerfiles, they use some tool macros to give a convenient definition language.
+
+! Brainstorming
+
+This is just a sketch, using template metaprogramming.
+
+An interface need a name and a version, they form a block where the actual function prototypes can be added
+{{{
+CINELERRA_INTERFACE_BEGIN(foo, 1,
+	...
+);
+}}}
+
+
+each function prototype must be given with its different parts, return type, name, arguments list, version
+{{{
+	CINELERRA_INTERFACE_PROTO(ret, name, (args), version),
+}}}
+
+
+! Example
+Together this would look like
+{{{
+CINELERRA_INTERFACE_BEGIN(foo, 1,
+	CINELERRA_INTERFACE_PROTO(void, bar, (void), 1),
+	CINELERRA_INTERFACE_PROTO(int, baz, (int i), 1)
+);
+}}}
+
+which gets expanded to
+{{{
+struct cinelerra_interface_foo_1
+{
+	struct cinelerra_interface interface_header_;
+	void (*cinelerra_proto_foo_bar_1) (void);
+	int (*cinelerra_proto_foo_baz_1) (int i);
+};
+}}}</pre>
+</div>
+<div title="PluginLibrary" modifier="CehTeh" modified="200707111532" created="200707111329" changecount="2">
+<pre>
+! Brainstorming
+
+! TODO
+* error handling
+* exception sentry (turn exceptions into C like returns, maybe rethrow them)
+
+
+</pre>
+</div>
+<div title="Plugins" modifier="CehTeh" modified="200707111250" created="200707111054" changecount="9">
 <pre>Cinelerra3 will use a very simple and language neutral plugin system. It focuses easy and independent distribution of plugins and small specific interfaces. Ultimate flexibility is of second concern.
 
+! Concept
 Plugin interfaces are simple C structs with some metadata at the beginning and function prototypes added at the end. Each function prototype has a version number appended. This allows to extend existing interfaces, but not alter functions which are already present. With some macros we can map simple function names to versioned function names. Thus plugins may break when using the 'generic' names while compiling, the plugin should be fixed to use the new version then, while compiled plugins will stay compatible.
 
 This fosters the idea of maintaining free plugins and fixing them when the source is available, while still having the ability to deploy packaged binary plugins which will work with newer interface versions.
 
+The Plugin System is written in C with some preprocessor macros helpers. There will be some support to handle C++ specialties.
+
+! Plugin Support includes
+* [[An interface definition language|PluginInterfaceDefinition]]
+* [[An interface implementation language|PluginInterfaceImplementation]]
+* [[Library support to access plugins|PluginLibrary]]
 </pre>
 </div>
 <div title="RSSReaderPlugin" modifier="BidiX" modified="200704220833" created="200704132044" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200704220833">
@@ -2201,11 +2259,11 @@ h1,h2,h3,h4,h5,h6 {
 /*}}}*/
 </pre>
 </div>
-<div title="SupportLibrary" modifier="CehTeh" created="200707102314" changecount="2">
+<div title="SupportLibrary" modifier="CehTeh" modified="200707111250" created="200707102314" changecount="3">
 <pre>The Support Library contains all tools we need at various places but by themself don't defines a subsystem on their own.
 
 These things are:
-* a Plugin loader &amp;rarr; [[Plugins]]
+* [[a Plugin loader|Plugins]]
 * a wraper for POSIX Threads
 ** Thread creation joining and canceling
 ** Locking primitives like Condition variables and Mutexes
