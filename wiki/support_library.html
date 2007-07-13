@@ -1860,12 +1860,31 @@ always succeeds.
 !! C++ exceptions
 </pre>
 </div>
-<div title="PluginVersioningCases" modifier="CehTeh" modified="200707121141" created="200707121127" changecount="20">
-<pre>
+<div title="PluginVersioningCases" modifier="CehTeh" modified="200707131207" created="200707121127" changecount="34">
+<pre>! Compatibility matrix
+
 |&gt;|&gt;|!Source compatibility|
-|!~~USES~~\^^PROVIDES^^|OLD|NEW|
-|OLD|||
-|NEW|||
+|!~~CALLER~~\^^CALLEE^^ *|OLD^^**^^|NEW^^**^^|
+|OLD|works|works&lt;&lt;br&gt;&gt;but a recent interface definition must be available|
+|NEW|caller gets 'revision not sufficient' at runtime&lt;&lt;br&gt;&gt;needs to implement fallbacks|works|
+
+|&gt;|&gt;|!Binary compatibility|
+|!~~CALLER~~\^^CALLEE^^|OLD|NEW|
+|OLD|works|works|
+|NEW|only when fallbacks to older&lt;&lt;br&gt;&gt;revisions are implemented|works|
+
+^^*^^) CALLER is the user of an interface, CALLEE is the interface proider (usually a plugin)
+^^**^^) OLD means a inital revision, NEW means some later revision of an interface
+
+! Observations
+
+Compiling a newer Plugin for some older main application release has some quirks (interface definitions are intended to be shipped with the main application).
+
+Compiling older Plugins with a new main application needs to preserve the old code paths (what was already there before) and fallback to older interface revisions when opening.
+
+Generally, sources just should be properly maintained and updated to use the most recent interfaces revision. If this is not the case, its still possible to stay compatible with little efforts.
+
+For binary compatibility everything will work well, provided that the caller kept proper fallback functionality for older interface revisions. Plugins which are independently distributed (packaged) in binary form don't need to be updated with every new main application release and just work.
 
 </pre>
 </div>
