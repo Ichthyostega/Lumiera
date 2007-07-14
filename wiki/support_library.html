@@ -1812,7 +1812,7 @@ Note: the protoname and version args for ~CINELERRA_INTERFACE_FUNC will be used 
 
 </pre>
 </div>
-<div title="PluginLibrary" modifier="CehTeh" modified="200707141807" created="200707111329" changecount="15">
+<div title="PluginLibrary" modifier="CehTeh" modified="200707142331" created="200707111329" changecount="22">
 <pre>! Cinelerra Plugin API
 
 There are only few functions to manage Plugins. Actually a user requests interfaces, the libraries which implement Plugins are managed transparently.
@@ -1822,12 +1822,14 @@ Interfaces are exported as instances and are not necessary singleton, this means
 !! opening an Interface
 {{{
 CinelerraInterface
-cinelerra_interface_open (const char* plugin, const char* interface, size_t min_revision);
+cinelerra_interface_open (const char* plugin,
+                          const char* name,
+                          size_t min_revision);
 }}}
 
 !!! Parameters
 * ''{{{plugin}}}'' is the name of the Plugin which interface to use. Plugins are looked up in $~CINELERRA_PLUGIN_PATH, which is a colon separated list of directories, and then in $plugin_install_dir which is the directory where standard plugins get installed when installing cinelerra (example: /usr/local/lib/cinelerra3/). The name itself can contain slashes, see PluginHierachy for details. It shall not include a library extension (.so). When NULL is passed, a interface from the main application is queried.
-* ''{{{interface}}}'' is the name of the queried interface.
+* ''{{{name}}}'' is the name of the queried interface.
 * ''{{{min_revision}}}'' is the expected minimal size of the interface structure, since interfaces are extended by adding new protos at the end, the size gives a unique value for each new revision.
 
 !!! Semantic
@@ -1836,15 +1838,6 @@ Interfaces can opened multiple times and need to be closed for each call to open
 !!! Return
 This function returns a pointer to the requested interface on success or NULL in case of an error. See {{{cinelerra_interface_error}}} about handing errors.
 
-{{{
-interface
-CINELERRA_INTERFACE_OPEN(plugin, interface)
-}}}
-
-This macro form does the casting of the result and uses the current size for the min_revison argument.
-
-
----
 !! closing an Interface
 {{{
 void
@@ -1897,7 +1890,18 @@ Calls {{{cinelerra_plugin_unload()}}} for each Plugin which is not used for more
 always succeeds.
 
 !! error handling
-TODO
+{{{
+const char*
+cinelerra_plugin_error ();
+}}}
+
+!!! Semantic
+Indicate last error, reset error state. Errors are thread local.
+
+!!! Return
+Returns a pointer to the most recent error occurred in the plugin loader. This pointer is guaranteed to point to a C string with a unique comparable address. NULL if no error happened.
+
+Note that the error state gets cleared by calling this function. The application may store it temporary for further handling.
 
 !! C++ exceptions
 TODO</pre>
@@ -1929,7 +1933,7 @@ For binary compatibility everything will work well, provided that the caller kep
 
 </pre>
 </div>
-<div title="Plugins" modifier="CehTeh" modified="200707141808" created="200707111054" changecount="16">
+<div title="Plugins" modifier="CehTeh" modified="200707142246" created="200707111054" changecount="17">
 <pre>Cinelerra3 will use a very simple and language neutral plugin system. It focuses easy and independent distribution of plugins and small specific interfaces. Ultimate flexibility is of second concern.
 
 ! Concept
@@ -1944,7 +1948,7 @@ The Plugin System is written in C with some preprocessor macros helpers. There w
 
 ! Versioning
 
-Each interface/prototype is versioned. How this works together is explained in PluginVersioningCases. Version identifiers will be used to form a C identifier, they need to be syntactically compatible. I suggest to use a monotonic incrementing number, starting at 1 for versioning and maybe using a special name 'dev' for interfaces which are in development. When the interface development is finished they have to be replaced by the next number. This ensures that noone accidentally uses/relies on an interface which is not yet well defined.
+Each interface/prototype is versioned. How this works together is explained in PluginVersioningCases. Version identifiers will be used to form a C identifier. I suggest to use a monotonic incrementing number, starting at 1 for versioning and maybe using a special number 0 for interfaces which are in development. When the interface development is finished the 0 has to be replaced by the next number in turn. This ensures that noone accidentally uses/relies on an interface which is not yet well defined.
 
 ! Plugin Support includes
 * [[An interface definition language|PluginInterfaceDefinition]]
