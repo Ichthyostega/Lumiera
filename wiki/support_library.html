@@ -1747,16 +1747,13 @@ struct cinelerra_interface_foo_2
 };
 }}}</pre>
 </div>
-<div title="PluginInterfaceImplementation" modifier="CehTeh" modified="200707141312" created="200707111749" changecount="5">
+<div title="PluginInterfaceImplementation" modifier="CehTeh" modified="200707141813" created="200707111749" changecount="7">
 <pre>A Plugin realizes an interface, this means actual functions are mapped to the correspondending slots in the interface structure.
 
 {{{
-CINELERRA_INTERFACE_IMPLEMENT(interface, name,
-	CINELERRA_INTERFACE_VERSION(version,
-		/* TODO some hooks here */
-		CINELERRA_INTERFACE_FUNC(protoname, functionname),
-		...
-	),
+CINELERRA_INTERFACE_IMPLEMENT(interface, version, name,
+	/* TODO some hooks here */
+	CINELERRA_INTERFACE_FUNC(protoname, functionname),
 	...
 );
 }}}
@@ -1770,28 +1767,27 @@ my_bar_function (void)
 }
 
 int
-my_old_baz_function (int i)
+my_baz_function (int i)
 {
 	...
 }
 
 int
-my_baz_function (float i)
+my_new_baz_function (float i)
 {
 	...
 }
 
-CINELERRA_INTERFACE_IMPLEMENT(foo, myfoointerface,
-	CINELERRA_INTERFACE_VERSION(1,
-		/* TODO some hooks here */
-		CINELERRA_INTERFACE_FUNC(bar, my_bar_function),
-		CINELERRA_INTERFACE_FUNC(baz, my_old_baz_function)
-	),
-	CINELERRA_INTERFACE_VERSION(2,
-		/* TODO some hooks here */
-		CINELERRA_INTERFACE_FUNC(bar, my_bar_function),
-		CINELERRA_INTERFACE_FUNC(baz, my_old_baz_function)
-	)
+CINELERRA_INTERFACE_IMPLEMENT(foo, 1, myfoointerface,
+	/* TODO some hooks here */
+	CINELERRA_INTERFACE_FUNC(bar, my_bar_function),
+	CINELERRA_INTERFACE_FUNC(baz, my_baz_function)
+);
+
+CINELERRA_INTERFACE_IMPLEMENT(foo, 2, myfoointerface,
+	/* TODO some hooks here */
+	CINELERRA_INTERFACE_FUNC(bar, my_bar_function),
+	CINELERRA_INTERFACE_FUNC(baz, my_new_baz_function)
 );
 }}}
 
@@ -1801,14 +1797,14 @@ struct cinelerra_interface_foo_1 myfoointerface_1 =
 {
 	/* TODO header initialization */
 	my_bar_function,
-	my_old_baz_function
+	my_baz_function
 }
 
 struct cinelerra_interface_foo_2 myfoointerface_2 =
 {
 	/* TODO header initialization */
 	my_bar_function,
-	my_baz_function
+	my_new_baz_function
 }
 }}}
 
@@ -1816,10 +1812,12 @@ Note: the protoname and version args for ~CINELERRA_INTERFACE_FUNC will be used 
 
 </pre>
 </div>
-<div title="PluginLibrary" modifier="CehTeh" modified="200707112130" created="200707111329" changecount="13">
+<div title="PluginLibrary" modifier="CehTeh" modified="200707141807" created="200707111329" changecount="15">
 <pre>! Cinelerra Plugin API
 
 There are only few functions to manage Plugins. Actually a user requests interfaces, the libraries which implement Plugins are managed transparently.
+
+Interfaces are exported as instances and are not necessary singleton, this means that a single Plugin can export the same interface type several times under different names. The naming rules for interfaces need to be defined elsewhere.
 
 !! opening an Interface
 {{{
@@ -1843,7 +1841,7 @@ interface
 CINELERRA_INTERFACE_OPEN(plugin, interface)
 }}}
 
-This macro form does the casting of the result and uses the current size for the min_revison argument
+This macro form does the casting of the result and uses the current size for the min_revison argument.
 
 
 ---
@@ -1863,7 +1861,7 @@ This function always succeeds (or results in undefined behavior when the user pa
 
 !! calling functions
 
-
+Calling function is simply done by dereferencing the interface slots, see HowtoUsePlugin for an example.
 
 !! unload unused plugins
 Plugins which are not longer in use are not automatically unloaded. The user can use this functions to unload of Plugins.
@@ -1899,16 +1897,18 @@ Calls {{{cinelerra_plugin_unload()}}} for each Plugin which is not used for more
 always succeeds.
 
 !! error handling
+TODO
+
 !! C++ exceptions
-</pre>
+TODO</pre>
 </div>
-<div title="PluginVersioningCases" modifier="CehTeh" modified="200707131803" created="200707121127" changecount="40">
+<div title="PluginVersioningCases" modifier="CehTeh" modified="200707141811" created="200707121127" changecount="42">
 <pre>! Compatibility matrix
 
 |&gt;|&gt;|!Source compatibility|
 |!~~CALLER~~\^^CALLEE^^ *|OLD^^**^^|NEW^^**^^|
 |OLD|works|works&lt;&lt;br&gt;&gt;but a recent interface definition must be available|
-|NEW|callee has to be updated using new interface revision|works|
+|NEW|works|works|
 |&gt;|&gt;|!Binary compatibility|
 |OLD|works|works|
 |NEW|caller gets 'revision not sufficient' at runtime&lt;&lt;br&gt;&gt;and should implement fallbacks|works|
@@ -1929,10 +1929,8 @@ For binary compatibility everything will work well, provided that the caller kep
 
 </pre>
 </div>
-<div title="Plugins" modifier="CehTeh" modified="200707121120" created="200707111054" changecount="14">
+<div title="Plugins" modifier="CehTeh" modified="200707141808" created="200707111054" changecount="16">
 <pre>Cinelerra3 will use a very simple and language neutral plugin system. It focuses easy and independent distribution of plugins and small specific interfaces. Ultimate flexibility is of second concern.
-
-''WORK IN PROGRESS, everything here is NOT final''
 
 ! Concept
 Plugins are just shared libraries which offer well defined Interfaces. A Plugin may offer more than one interface and may in turn request/use interfaces from other Plugins or from the main application.
@@ -1946,7 +1944,7 @@ The Plugin System is written in C with some preprocessor macros helpers. There w
 
 ! Versioning
 
-Each interface/prototype is versioned. How this works together is explained in PluginVersioningCases.
+Each interface/prototype is versioned. How this works together is explained in PluginVersioningCases. Version identifiers will be used to form a C identifier, they need to be syntactically compatible. I suggest to use a monotonic incrementing number, starting at 1 for versioning and maybe using a special name 'dev' for interfaces which are in development. When the interface development is finished they have to be replaced by the next number. This ensures that noone accidentally uses/relies on an interface which is not yet well defined.
 
 ! Plugin Support includes
 * [[An interface definition language|PluginInterfaceDefinition]]
