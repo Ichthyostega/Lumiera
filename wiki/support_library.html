@@ -1691,16 +1691,18 @@ DAMAGE.
 &lt;html&gt;&lt;sub&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;scrollAnchorVisible('Top',null, event)&quot;&gt;[Top]&lt;/sub&gt;&lt;/a&gt;&lt;/html&gt;
 ***/</pre>
 </div>
-<div title="PluginInterfaceDefinition" modifier="CehTeh" modified="200707111749" created="200707111319" changecount="11">
+<div title="PluginInterfaceDefinition" modifier="CehTeh" modified="200707132218" created="200707111319" changecount="13">
 <pre>Interfaces are declared in headerfiles, they use some tool macros to give a convenient definition language.
+
+! Thoughts
+
+Interfaces are are immutable with the exception that new functions may be added. versioning should stay out of the view most of the time.
 
 ! Brainstorming
 
-This is just a sketch, using preprocessor metaprogramming.
-
-An interface need a name and a version, they form a block where the actual function prototypes can be added
+An interface need a name and a version, they form a block where the actual function prototypes can be added, new prototypes have to be added at the end, existing prototypes must never be changed.
 {{{
-CINELERRA_INTERFACE(foo, 1,
+CINELERRA_INTERFACE(name, version,
 	...
 );
 }}}
@@ -1708,7 +1710,7 @@ CINELERRA_INTERFACE(foo, 1,
 
 each function prototype must be given with its different parts, return type, name, arguments list, version
 {{{
-	CINELERRA_IPROTO(ret, name, (args), version),
+	CINELERRA_IPROTO(ret, name, (args)),
 }}}
 
 
@@ -1716,27 +1718,45 @@ each function prototype must be given with its different parts, return type, nam
 Together this would look like
 {{{
 CINELERRA_INTERFACE(foo, 1,
-	CINELERRA_IPROTO(void, bar, (void), 1),
-	CINELERRA_IPROTO(int, baz, (int i), 1)
+	CINELERRA_IPROTO(void, bar, (void)),
+	CINELERRA_IPROTO(int, baz, (int i))
+);
+
+CINELERRA_INTERFACE(foo, 2,
+	CINELERRA_IPROTO(void, bar, (void)),
+	CINELERRA_IPROTO(int, baz, (float i))
 );
 }}}
+
+Note that the version 2 interface changed the parameter from int to float for the 'baz' function.
 
 which gets expanded to
 {{{
 struct cinelerra_interface_foo_1
 {
 	struct cinelerra_interface interface_header_;
-	void (*cinelerra_proto_foo_bar_1) (void);
-	int (*cinelerra_proto_foo_baz_1) (int i);
+	void (*bar) (void);
+	int (*baz) (int i);
+};
+
+struct cinelerra_interface_foo_2
+{
+	struct cinelerra_interface interface_header_;
+	void (*bar) (void);
+	int (*baz) (float i);
 };
 }}}</pre>
 </div>
-<div title="PluginInterfaceImplementation" modifier="CehTeh" modified="200707111755" created="200707111749" changecount="2">
+<div title="PluginInterfaceImplementation" modifier="CehTeh" modified="200707141312" created="200707111749" changecount="5">
 <pre>A Plugin realizes an interface, this means actual functions are mapped to the correspondending slots in the interface structure.
 
 {{{
-CINELERRA_IMPLEMENT_INTERFACE(interface, version, name, /* TODO some hooks here */
-	CINELERRA_INTERFACE_FUNC(protoname, version, functionname),
+CINELERRA_INTERFACE_IMPLEMENT(interface, name,
+	CINELERRA_INTERFACE_VERSION(version,
+		/* TODO some hooks here */
+		CINELERRA_INTERFACE_FUNC(protoname, functionname),
+		...
+	),
 	...
 );
 }}}
@@ -1750,20 +1770,41 @@ my_bar_function (void)
 }
 
 int
-my_baz_function (int i)
+my_old_baz_function (int i)
 {
 	...
 }
 
-CINELERRA_IMPLEMENT_INTERFACE(foo, 1, myfoointerface, /* TODO some hooks here */
-	CINELERRA_INTERFACE_FUNC(bar, 1, my_bar_function),
-	CINELERRA_INTERFACE_FUNC(baz, 1, my_baz_function),
+int
+my_baz_function (float i)
+{
+	...
+}
+
+CINELERRA_INTERFACE_IMPLEMENT(foo, myfoointerface,
+	CINELERRA_INTERFACE_VERSION(1,
+		/* TODO some hooks here */
+		CINELERRA_INTERFACE_FUNC(bar, my_bar_function),
+		CINELERRA_INTERFACE_FUNC(baz, my_old_baz_function)
+	),
+	CINELERRA_INTERFACE_VERSION(2,
+		/* TODO some hooks here */
+		CINELERRA_INTERFACE_FUNC(bar, my_bar_function),
+		CINELERRA_INTERFACE_FUNC(baz, my_old_baz_function)
+	)
 );
 }}}
 
-which expands to something like:
+The interface implementations expands to something like:
 {{{
-struct cinelerra_interface_foo_1 myfoointerface =
+struct cinelerra_interface_foo_1 myfoointerface_1 =
+{
+	/* TODO header initialization */
+	my_bar_function,
+	my_old_baz_function
+}
+
+struct cinelerra_interface_foo_2 myfoointerface_2 =
 {
 	/* TODO header initialization */
 	my_bar_function,
@@ -1771,7 +1812,8 @@ struct cinelerra_interface_foo_1 myfoointerface =
 }
 }}}
 
-Note: the protoname and version args for CINELERRA_INTERFACE_FUNC will be used for placement initialization and type checking, not mentioned here. This would allow to initialize this structure out of order.
+Note: the protoname and version args for ~CINELERRA_INTERFACE_FUNC will be used for placement initialization and type checking, not mentioned here. This would allow to initialize this structure out of order.
+
 </pre>
 </div>
 <div title="PluginLibrary" modifier="CehTeh" modified="200707112130" created="200707111329" changecount="13">
@@ -1860,16 +1902,16 @@ always succeeds.
 !! C++ exceptions
 </pre>
 </div>
-<div title="PluginVersioningCases" modifier="CehTeh" modified="200707131418" created="200707121127" changecount="38">
+<div title="PluginVersioningCases" modifier="CehTeh" modified="200707131803" created="200707121127" changecount="40">
 <pre>! Compatibility matrix
 
 |&gt;|&gt;|!Source compatibility|
 |!~~CALLER~~\^^CALLEE^^ *|OLD^^**^^|NEW^^**^^|
 |OLD|works|works&lt;&lt;br&gt;&gt;but a recent interface definition must be available|
-|NEW|update callee using new interface revision|works|
+|NEW|callee has to be updated using new interface revision|works|
 |&gt;|&gt;|!Binary compatibility|
 |OLD|works|works|
-|NEW|caller gets 'revision not sufficient' at runtime&lt;&lt;br&gt;&gt;and needs to implement fallbacks|works|
+|NEW|caller gets 'revision not sufficient' at runtime&lt;&lt;br&gt;&gt;and should implement fallbacks|works|
 
 ^^*^^) CALLER is the user of an interface, CALLEE is the interface provider (usually a plugin)
 ^^**^^) OLD means a initial revision, NEW means some later revision of an interface
