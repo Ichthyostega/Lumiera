@@ -767,6 +767,16 @@ Error: #f88</pre>
 <div title="DefaultTiddlers" modifier="CehTeh" modified="200707102306" created="200707102301" changecount="2">
 <pre>[[SupportLibrary]]</pre>
 </div>
+<div title="ErrorHandling" modifier="CehTeh" modified="200707152302" created="200707152252" changecount="2">
+<pre>! Proposal:
+We need some centralized way to handle errors and doing hard aborts.
+
+I started using C-string addresses as errors for now, I think that convinient and unique until we find something better. (Actually this might be even kept in a library, alternatively maybe someone wants to investigate libcomerr)
+
+The next point is allocation failures, these are possible by C/C++ standard but don't actually happen anymore in linux (except in few rare cases). Instead gracefully handling this errors i'll add a {{{CINELERRA_DIE(message)}}} macro to this library later. This macro will just do (NoBug) logging and then doing a hard abort. Macro, because we want to preserve file/line location for logging.
+
+</pre>
+</div>
 <div title="FullScreenPlugin" modifier="CehTeh" modified="200706110313" created="200607241016" tags="systemConfig lewcidExtension" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110313">
 <pre>/***
 |Name|FullScreenPlugin|
@@ -1150,11 +1160,12 @@ config.formatters.push( {
 } )
 //}}}</pre>
 </div>
-<div title="MainMenu" modifier="CehTeh" created="200707102300" changecount="1">
+<div title="MainMenu" modifier="CehTeh" modified="200707152251" created="200707102300" changecount="2">
 <pre>''[[Cinelerra3|index.html]]''
 SupportLibrary
 [[Threads and Locking]]
 [[Plugins]]
+[[ErrorHandling]]
 [[OS Services]]
 &lt;&lt;fullscreen&gt;&gt;
 </pre>
@@ -2464,11 +2475,12 @@ h1,h2,h3,h4,h5,h6 {
 /*}}}*/
 </pre>
 </div>
-<div title="SupportLibrary" modifier="CehTeh" modified="200707111250" created="200707102314" changecount="3">
+<div title="SupportLibrary" modifier="CehTeh" modified="200707152250" created="200707102314" changecount="4">
 <pre>The Support Library contains all tools we need at various places but by themself don't defines a subsystem on their own.
 
 These things are:
 * [[a Plugin loader|Plugins]]
+* [[ErrorHandling]]
 * a wraper for POSIX Threads
 ** Thread creation joining and canceling
 ** Locking primitives like Condition variables and Mutexes
