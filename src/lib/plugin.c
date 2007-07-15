@@ -90,6 +90,23 @@ cinelerra_plugin_name_cmp (const void* a, const void* b)
   return strcmp (((struct cinelerra_plugin*) a)->name, ((struct cinelerra_plugin*) b)->name);
 }
 
+
+const char*
+cinelerra_plugin_error ()
+{
+  pthread_once (&cinelerra_plugin_initialized, cinelerra_plugin_tls_init);
+
+  const char* err = pthread_getspecific (cinelerra_plugin_tls_error);
+  pthread_setspecific (cinelerra_plugin_tls_error, CINELERRA_PLUGIN_SUCCESS);
+  return err;
+}
+
+static void
+cinelerra_plugin_error_set (const char* err)
+{
+  pthread_setspecific (cinelerra_plugin_tls_error, err);
+}
+
 const char*
 cinelerra_plugin_lookup (struct cinelerra_plugin* self, const char* name, const char* path, const char* ext)
 {
@@ -105,9 +122,9 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
   REQUIRE (min_revision > sizeof(cinelerra_interface), "try to use an empty interface eh?");
   REQUIRE (interface, "interface name must be given");
 
-  pthread_mutex_lock (&cinelerra_plugin_mutex);
-
   pthread_once (&cinelerra_plugin_initialized, cinelerra_plugin_tls_init);
+
+  pthread_mutex_lock (&cinelerra_plugin_mutex);
 
   struct cinelerra_plugin plugin;
   struct cinelerra_plugin** found;
