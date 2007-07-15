@@ -119,6 +119,10 @@ cinelerra_plugin_expire (time_t age);
 const char*
 cinelerra_plugin_error ();
 
+/// success, NULL
+extern const char* CINELERRA_PLUGIN_SUCCESS;
+/// memory allocation error
+extern const char* CINELERRA_PLUGIN_EALLOC;
 /// Plugin not found
 extern const char* CINELERRA_PLUGIN_ENFOUND;
 /// no such interface
