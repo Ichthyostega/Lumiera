@@ -100,11 +100,31 @@ cinelerra_interface_close (struct cinelerra_interface* self);
 int
 cinelerra_plugin_unload (const char* plugin);
 
+/**
+ * Tries to unload plugins which are not in use.
+ * Calls cinelerra_plugin_unload() for each Plugin which is not used for more than age seconds.
+ * This function might be infrequently called by the scheduler to remove things which are not needed.
+ * @param age timeout in seconds when to unload plugins
+ */
 void
 cinelerra_plugin_expire (time_t age);
 
+/**
+ * Query and reset the error state.
+ * report last error, reset error state. Errors are thread local.
+ * Error strings are guaranteed to point to a C string with a unique comparable address.
+ * Note that the error state gets cleared by calling this function. The application may store it temporary for further handling.
+ * @return pointer to one of the error C-strings, NULL when no error happened.
+ */
 const char*
 cinelerra_plugin_error ();
+
+/// Plugin not found
+extern const char* CINELERRA_PLUGIN_ENFOUND;
+/// no such interface
+extern const char* CINELERRA_PLUGIN_ENIFACE;
+/// revision not sufficient
+extern const char* CINELERRA_PLUGIN_EREVISION;
 
 #ifdef __cplusplus
 } /* extern "C" */
