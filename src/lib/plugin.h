@@ -143,6 +143,10 @@ cinelerra_plugin_error ();
 extern const char* CINELERRA_PLUGIN_SUCCESS;
 /// memory allocation error
 extern const char* CINELERRA_PLUGIN_EALLOC;
+/// dlopen failed
+extern const char* CINELERRA_PLUGIN_EDLOPEN;
+/// dlopen failed
+extern const char* CINELERRA_PLUGIN_EHOOK;
 /// Plugin not found
 extern const char* CINELERRA_PLUGIN_ENFOUND;
 /// no such interface
