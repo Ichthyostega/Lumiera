@@ -767,12 +767,11 @@ Error: #f88</pre>
 <div title="DefaultTiddlers" modifier="CehTeh" modified="200707102306" created="200707102301" changecount="2">
 <pre>[[SupportLibrary]]</pre>
 </div>
-<div title="ErrorHandling" modifier="CehTeh" modified="200707170231" created="200707152252" changecount="7">
+<div title="ErrorHandling" modifier="MichaelPloujnikov" modified="200707160333" created="200707152252" changecount="4">
 <pre>! Proposal:
 We need some centralized way to handle errors and doing hard aborts.
 
-!! Errors
-I started using C-string addresses as errors for now, I think that convinient and unique until we find something better. (Actually this might be even kept in a library, alternatively maybe someone wants to investigate libcomerr)
+I started using C-string addresses as errors for now. I think that is convenient and unique enough until we find something better. (Actually, this might be even kept in a library. Alternatively, maybe someone wants to investigate libcomerr)
 
 Notes about libcomerr (I took a short look now):
 * needs some central error description table which has to be compiled with compile_et
@@ -820,7 +819,7 @@ thus a {{{CINELERRA_ERROR_DEFINE(NFOO, &quot;Foo not found&quot;)}}} will result
 
 
 !! Allocation
-The next point is allocation failures, these are possible by C/C++ standard but don't actually happen anymore in linux (except in few rare cases). Instead gracefully handling this errors i'll add a {{{CINELERRA_DIE(message)}}} macro to this library later. This macro will just do (NoBug) logging and then doing a hard abort. Macro, because we want to preserve file/line location for logging.
+The next point is allocation failures. These are possible by C/C++ standard but don't actually happen anymore in Linux (except in few rare cases). Instead of gracefully handling this errors I'll add a {{{CINELERRA_DIE(message)}}} macro to this library later. This macro will just do (NoBug) logging and then doing a hard abort. It should be a macro because we want to preserve file/line location for logging.
 
 </pre>
 </div>
@@ -1749,16 +1748,16 @@ DAMAGE.
 &lt;html&gt;&lt;sub&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;scrollAnchorVisible('Top',null, event)&quot;&gt;[Top]&lt;/sub&gt;&lt;/a&gt;&lt;/html&gt;
 ***/</pre>
 </div>
-<div title="PluginInterfaceDefinition" modifier="CehTeh" modified="200707132218" created="200707111319" changecount="13">
-<pre>Interfaces are declared in headerfiles, they use some tool macros to give a convenient definition language.
+<div title="PluginInterfaceDefinition" modifier="MichaelPloujnikov" modified="200707160400" created="200707111319" changecount="19">
+<pre>Interfaces are declared in header files. They use some tool macros to give a convenient definition language.
 
 ! Thoughts
 
-Interfaces are are immutable with the exception that new functions may be added. versioning should stay out of the view most of the time.
+Interfaces are immutable with the exception that new functions may be added. Versioning should stay out of the view most of the time.
 
 ! Brainstorming
 
-An interface need a name and a version, they form a block where the actual function prototypes can be added, new prototypes have to be added at the end, existing prototypes must never be changed.
+An interface needs a name and a version. They define a block where the actual function prototypes can be added. New prototypes have to be added at the end, existing prototypes must never be changed.
 {{{
 CINELERRA_INTERFACE(name, version,
 	...
@@ -1766,7 +1765,7 @@ CINELERRA_INTERFACE(name, version,
 }}}
 
 
-each function prototype must be given with its different parts, return type, name, arguments list, version
+Each function prototype must be given with its different parts: return type, name, arguments list, and version.
 {{{
 	CINELERRA_IPROTO(ret, name, (args)),
 }}}
@@ -1788,7 +1787,7 @@ CINELERRA_INTERFACE(foo, 2,
 
 Note that the version 2 interface changed the parameter from int to float for the 'baz' function.
 
-which gets expanded to
+The above gets expanded to:
 {{{
 struct cinelerra_interface_foo_1
 {
@@ -1805,8 +1804,8 @@ struct cinelerra_interface_foo_2
 };
 }}}</pre>
 </div>
-<div title="PluginInterfaceImplementation" modifier="CehTeh" modified="200707141813" created="200707111749" changecount="7">
-<pre>A Plugin realizes an interface, this means actual functions are mapped to the correspondending slots in the interface structure.
+<div title="PluginInterfaceImplementation" modifier="MichaelPloujnikov" modified="200707160355" created="200707111749" changecount="10">
+<pre>A Plugin realizes an interface. This means that actual functions are mapped to the correspondending slots in the interface structure.
 
 {{{
 CINELERRA_INTERFACE_IMPLEMENT(interface, version, name,
@@ -1866,16 +1865,16 @@ struct cinelerra_interface_foo_2 myfoointerface_2 =
 }
 }}}
 
-Note: the protoname and version args for ~CINELERRA_INTERFACE_FUNC will be used for placement initialization and type checking, not mentioned here. This would allow to initialize this structure out of order.
+Note: the protoname and version args for ~CINELERRA_INTERFACE_FUNC will be used for placement initialization and type checking (not mentioned in the above example). This would allow to initialize this structure out of order.
 
 </pre>
 </div>
-<div title="PluginLibrary" modifier="CehTeh" modified="200707142331" created="200707111329" changecount="22">
+<div title="PluginLibrary" modifier="MichaelPloujnikov" modified="200707160351" created="200707111329" changecount="33">
 <pre>! Cinelerra Plugin API
 
-There are only few functions to manage Plugins. Actually a user requests interfaces, the libraries which implement Plugins are managed transparently.
+There are only a few functions to manage Plugins. Actually a user requests interfaces. The libraries which implement Plugins are managed transparently.
 
-Interfaces are exported as instances and are not necessary singleton, this means that a single Plugin can export the same interface type several times under different names. The naming rules for interfaces need to be defined elsewhere.
+Interfaces are exported as instances and are not necessary singleton. This means that a single Plugin can export the same interface type several times under different names. The naming rules for interfaces need to be defined elsewhere.
 
 !! opening an Interface
 {{{
@@ -1886,7 +1885,7 @@ cinelerra_interface_open (const char* plugin,
 }}}
 
 !!! Parameters
-* ''{{{plugin}}}'' is the name of the Plugin which interface to use. Plugins are looked up in $~CINELERRA_PLUGIN_PATH, which is a colon separated list of directories, and then in $plugin_install_dir which is the directory where standard plugins get installed when installing cinelerra (example: /usr/local/lib/cinelerra3/). The name itself can contain slashes, see PluginHierachy for details. It shall not include a library extension (.so). When NULL is passed, a interface from the main application is queried.
+* ''{{{plugin}}}'' is the name of the Plugin whose interface to use. Plugins are looked up in $~CINELERRA_PLUGIN_PATH, which is a colon separated list of directories, and then in $plugin_install_dir which is the directory where standard plugins get installed when installing cinelerra (example: /usr/local/lib/cinelerra3/). The name itself can contain slashes, see PluginHierachy for details. It shall not include a library extension (.so). When NULL is passed, an interface from the main application is queried.
 * ''{{{name}}}'' is the name of the queried interface.
 * ''{{{min_revision}}}'' is the expected minimal size of the interface structure, since interfaces are extended by adding new protos at the end, the size gives a unique value for each new revision.
 
@@ -1903,19 +1902,19 @@ cinelerra_interface_close (CinelerraInterface self);
 }}}
 
 !!! Parameters
-* ''{{{self}}}'' is the handle to the interface to be closed. It is safe to pass NULL, this call is then just a no-op.
+* ''{{{self}}}'' is the handle to the interface to be closed. It is safe to pass NULL. This makes the call just a no-op.
 
 !!! Semantic
 The interface handle must not be used after this function is called.
 
-This function always succeeds (or results in undefined behavior when the user passes a illegal parameter)
+This function always succeeds (or results in undefined behavior when the user passes an illegal parameter)
 
 !! calling functions
 
-Calling function is simply done by dereferencing the interface slots, see HowtoUsePlugin for an example.
+Calling function is simply done by dereferencing the interface slots. See HowtoUsePlugin for an example.
 
 !! unload unused plugins
-Plugins which are not longer in use are not automatically unloaded. The user can use this functions to unload of Plugins.
+Plugins which are no longer in use are not automatically unloaded. The user can use this functions to unload the Plugins.
 
 {{{
 int
@@ -1942,7 +1941,7 @@ cinelerra_plugin_expire (time_t age);
 * ''{{{age}}}'' time in seconds when the plugin was last used
 
 !!! Semantic
-Calls {{{cinelerra_plugin_unload()}}} for each Plugin which is not used for more than {{{age}}} seconds. This function might be infrequently called by the scheduler to remove things which are not needed (example: once a hour, remove plugins which are not used for 2 hours).
+Calls {{{cinelerra_plugin_unload()}}} for each Plugin which has not been used for more than {{{age}}} seconds. This function might be infrequently called by the scheduler to remove things which are not needed (example: once a hour, remove plugins which have not been used for 2 hours).
 
 !!! Return
 always succeeds.
@@ -1962,9 +1961,10 @@ Returns a pointer to the most recent error occurred in the plugin loader. This p
 Note that the error state gets cleared by calling this function. The application may store it temporary for further handling.
 
 !! C++ exceptions
-TODO</pre>
+TODO
+</pre>
 </div>
-<div title="PluginVersioningCases" modifier="CehTeh" modified="200707141811" created="200707121127" changecount="42">
+<div title="PluginVersioningCases" modifier="MichaelPloujnikov" modified="200707160404" created="200707121127" changecount="46">
 <pre>! Compatibility matrix
 
 |&gt;|&gt;|!Source compatibility|
@@ -1976,7 +1976,7 @@ TODO</pre>
 |NEW|caller gets 'revision not sufficient' at runtime&lt;&lt;br&gt;&gt;and should implement fallbacks|works|
 
 ^^*^^) CALLER is the user of an interface, CALLEE is the interface provider (usually a plugin)
-^^**^^) OLD means a initial revision, NEW means some later revision of an interface
+^^**^^) OLD means an initial revision, NEW means some later revision of an interface
 
 ! Observations
 
@@ -1985,14 +1985,14 @@ Compiling a newer Plugin for some older main application release has some quirks
 When compiling, older Plugins should be updated to new interface revisions.
 Caller should provide a fallback to older interface revisions for binary compatibility.
 
-Generally, sources just should be properly maintained and updated to use the most recent interfaces revision.
+Generally, sources should just be properly maintained and updated to use the most recent interfaces revision.
 
 For binary compatibility everything will work well, provided that the caller kept proper fallback functionality for older interface revisions. Plugins which are independently distributed (packaged) in binary form don't need to be updated with every new main application release and just work.
 
 </pre>
 </div>
-<div title="Plugins" modifier="CehTeh" modified="200707142246" created="200707111054" changecount="17">
-<pre>Cinelerra3 will use a very simple and language neutral plugin system. It focuses easy and independent distribution of plugins and small specific interfaces. Ultimate flexibility is of second concern.
+<div title="Plugins" modifier="MichaelPloujnikov" modified="200707160346" created="200707111054" changecount="24">
+<pre>Cinelerra3 will use a very simple and language neutral plugin system. The focus is on easy and independent distribution of plugins and small specific interfaces. Ultimate flexibility is of second concern.
 
 ! Concept
 Plugins are just shared libraries which offer well defined Interfaces. A Plugin may offer more than one interface and may in turn request/use interfaces from other Plugins or from the main application.
@@ -2000,13 +2000,13 @@ Plugins are just shared libraries which offer well defined Interfaces. A Plugin 
 ! Interfaces
 Plugin interfaces are simple C structs with some metadata at the beginning and function prototypes added at the end. With some macros we can map simple functions to versioned interfaces. Compiled plugins will stay compatible even if the interface is extended, while sourcecode need maintenance.
 
-This fosters the idea of free plugins updating them when the source is available, while still having the ability to deploy packaged binary plugins which will be compatible with newer interface versions.
+This fosters the idea of updating plugins when the source is available, while still having the ability to deploy packaged binary plugins which will be compatible with newer interface versions.
 
-The Plugin System is written in C with some preprocessor macros helpers. There will be some support to handle C++ specialties.
+The Plugin System is written in C with some helper preprocessor macros. There will be some support to handle C++ specialties.
 
 ! Versioning
 
-Each interface/prototype is versioned. How this works together is explained in PluginVersioningCases. Version identifiers will be used to form a C identifier. I suggest to use a monotonic incrementing number, starting at 1 for versioning and maybe using a special number 0 for interfaces which are in development. When the interface development is finished the 0 has to be replaced by the next number in turn. This ensures that noone accidentally uses/relies on an interface which is not yet well defined.
+Each interface/prototype is versioned. How this works together is explained in PluginVersioningCases. Version identifiers will be used to form a C identifier. I suggest to use a monotonic incrementing number, starting at 1 for versioning and maybe using a special number 0 for interfaces which are in development. When the interface development is finished the 0 has to be replaced by the next number in turn. This ensures that no-one accidentally uses/relies on an interface which is not yet well defined.
 
 ! Plugin Support includes
 * [[An interface definition language|PluginInterfaceDefinition]]
@@ -2522,13 +2522,13 @@ h1,h2,h3,h4,h5,h6 {
 /*}}}*/
 </pre>
 </div>
-<div title="SupportLibrary" modifier="CehTeh" modified="200707172025" created="200707102314" changecount="5">
-<pre>The Support Library contains all tools we need at various places but by themself don't define a subsystem on their own.
+<div title="SupportLibrary" modifier="MichaelPloujnikov" modified="200707160346" created="200707102314" changecount="6">
+<pre>The Support Library contains all tools we need at various places, but by themselves don't defines a subsystem on their own.
 
 These things are:
 * [[a Plugin loader|Plugins]]
 * [[ErrorHandling]]
-* a wraper for POSIX Threads
+* a wrapper for POSIX Threads
 ** Thread creation joining and canceling
 ** Locking primitives like Condition variables and Mutexes
 
