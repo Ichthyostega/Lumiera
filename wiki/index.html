@@ -927,6 +927,44 @@ For now I hope this approach suffices, maybe we need admin/git_hooks/$HOOKNAME.$
 &amp;rarr; see [[Interesting Branches|GitBranches]]
 </pre>
 </div>
+<div title="Howto download the cinelerra3 sources and deliver changes" modifier="SimAV" modified="200707161757" created="200707152057" changecount="7">
+<pre>This part should explain what you have to do in order to download the sources of Cinelerra3 (cin3) from pipapo.org. It treats as well how to deliver improvements to cin3 using git. Git is a tool similar to cvs or svn.
+
+The cin3 sources are stored in a git repository. Maybe you have never heard of git before, but i can allay your fears: using git isn't that complicated. To download cin3 the very first time you simply have to clone a git-repo from pipapo.org. To do so just type the following in a shell:
+!!!Code
+//{{{
+git clone git://git.pipapo.org/cinelerra3/ct YOURCOPY'sNAME
+//}}}
+
+This will create a directory named YOURCOPY'sNAME which contains the whole data of the cinelerra3/ct branch of Cinelerra3. After having downloaded a cin3-git-repository you can update it by simply typing:
+!!!Code
+//{{{
+cd /your/path/YOURCOPY'sNAME
+git pull
+//}}}
+
+If everything went well your copy is now up to date. Pulling is faster than cloning it again and causes less traffic at the server. 
+
+!!!Tips: 
+* NEVER delete a git repository without a permission of a pro.
+* Check the url. Note e.g. the 3 in cinelerra3 
+* Install git before calling git
+
+Now you could compile the source code or improve Cinelerra3 or the documentation. After having done so (let's say you have written a patch) you can deliver your changes by:
+* at first setting your name and email
+* committing your changes
+* pushing your local git-repo to a public server
+
+!!!Code
+//{{{
+git config --global user.name &quot;YOUR REALNAME&quot;
+git config --global user.email YOUR-E@MAIL.ADRESS
+git commit -m 'YOUR DESCRIPTION' -- FILE/TO/COMMIT
+git push git://git.pipapo.org/cinelerra3/mob
+//}}}
+
+cinelerra3/mob is an anonymous account at pipapo.org where everyone can commit changes. </pre>
+</div>
 <div title="InlineJavaScript" modifier="Jeremy" created="200603090618" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200603090618">
 <pre>/***
 ''InlineJavascriptPlugin for ~TiddlyWiki version 1.2.x and 2.0''
