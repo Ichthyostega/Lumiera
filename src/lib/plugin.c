@@ -22,20 +22,18 @@
 #include <search.h>
 #include <string.h>
 #include <dlfcn.h>
+#include <pthread.h>
+#include <time.h>
 
 #include "plugin.h"
 
+/*
+  TODO cinelerra_xmalloc which aborts on allocation error
+   or cinelerra_die() function
+*/
+
 /* TODO should be set by the build system to the actual plugin path */
 #define CINELERRA_PLUGIN_PATH "~/.cinelerra3/plugins:/usr/local/lib/cinelerra3/plugins"
-
-/* recognized extensions */
-#define CINELERRA_PLUGIN_EXT "plugin:so"
-
-/*
-  For future:
-  #define CINELERRA_PLUGIN_EXT "plugin:so:cplugin:c"
-  imagine using C source plugins compiled with libtcc on the fly
-*/
 
 NOBUG_DEFINE_FLAG (cinelerra_plugin);
 
@@ -48,6 +46,32 @@ const char* CINELERRA_PLUGIN_ENFOUND = "No such plugin";
 const char* CINELERRA_PLUGIN_ENIFACE = "No such interface";
 const char* CINELERRA_PLUGIN_EREVISION = "Interface revision too old";
 
+/*
+  supported (planned) plugin types and their file extensions
+*/
+
+enum cinelerra_plugin_type
+  {
+    CINELERRA_PLUGIN_NULL,
+    CINELERRA_PLUGIN_DYNLIB,
+    CINELERRA_PLUGIN_CSOURCE
+  };
+
+static const struct
+{
+  const char* const ext;
+  enum cinelerra_plugin_type;
+} cinelerra_plugin_extensions [] =
+  {
+    "plugin",   CINELERRA_PLUGIN_DYNLIB,
+    "so",       CINELERRA_PLUGIN_DYNLIB,
+    "tcc",      CINELERRA_PLUGIN_CSOURCE,
+    "c",        CINELERRA_PLUGIN_CSOURCE,
+    /* extend here */
+    NULL,       CINELERRA_PLUGIN_NULL
+  };
+
+
 struct cinelerra_plugin
 {
   /* short name as queried ("effects/audio/normalize") used for sorting/finding */
@@ -56,18 +80,19 @@ struct cinelerra_plugin
   /* long names as looked up ("/usr/local/lib/cinelerra3/plugins/effects/audio/normalize.so") */
   const char* pathname;
 
-  /* pointer to the extension part of 'pathname' */
-  const char* ext;
-
   /* use count for all interfaces of this plugin */
   unsigned use_count;
 
   /* time when the last open or close action happened */
   time_t last;
 
+  /* kind of plugin */
+  enum cinelerra_plugin_type type;
+
   /* dlopen handle */
   void* handle;
 };
+
 
 /* global plugin registry */
 void* cinelerra_plugin_registry = NULL;
@@ -109,13 +134,46 @@ cinelerra_plugin_error_set (const char* err)
   pthread_setspecific (cinelerra_plugin_tls_error, err);
 }
 
-const char*
-cinelerra_plugin_lookup (struct cinelerra_plugin* self, const char* name, const char* path, const char* ext)
+int
+cinelerra_plugin_lookup (struct cinelerra_plugin* self, const char* path)
 {
-  /*for each in path*/
-  /*for each extension*/
-  /*try to find name*/
+  if (!path)
+    return -1;
 
+  if (strlen(path) > 1023)
+    return -1;        /*TODO error handling*/
+
+  char tpath[1024];
+  TODO("dunno if PATH_MAX may be undefined (in case arbitary lengths are supported), I check that later");
+  char pathname[1024] = {0};
+  char* tmp;
+
+  strcpy(tpath, path);
+
+  /*for each in path*/
+  for (char* tok = strtok(tpath, ":", &tmp); tok; tok = strtok(NULL, ":", &tmp))
+    {
+      /*for each extension*/
+      for (int i = 0; cinelerra_plugin_extensions[i].ext; ++i)
+        {
+          /* path/name.extension */
+          int r = snprintf(pathname, 1024, "%s/%s.%s", tok, self->name, cinelerra_plugin_extensions[i].ext);
+          if (r >= 1024)
+            return -1; /*TODO error handling, name too long*/
+
+          TRACE (cinelerra_plugin, "trying %s", pathname);
+
+          if (!access(pathname, R_OK))
+            {
+              /* got it */
+              self->pathname = strdup (pathname);
+              TODO ("if (!self->pathname) CINELERRA_DIE()");
+              self->type = cinelerra_plugin_extensions[i].type;
+              return 0;
+            }
+        }
+    }
+  return -1; /* plugin not found */
 }
 
 struct cinelerra_interface*
@@ -131,16 +189,7 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
   struct cinelerra_plugin plugin;
   struct cinelerra_plugin** found;
 
-  // if (name) (NULL means main app)
-
-  /*lookup for $CINELERRA_PLUGIN_PATH*/
-
-  /* else lookup for -DCINELERRA_PLUGIN_PATH */
-#ifdef CINELERRA_PLUGIN_PATH
-#endif
-  /* else fail */
-
-  plugin.name = name;
+  plugin.name = name; /* for searching */
 
   found = tsearch (&plugin, &cinelerra_plugin_registry, cinelerra_plugin_name_cmp);
   if (!found)
@@ -153,7 +202,7 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
     {
       NOTICE (cinelerra_plugin, "new plugin");
 
-      /* create new item */
+      /* now really create new item */
       *found = malloc (sizeof (struct cinelerra_plugin));
       if (!*found)
         {
@@ -161,16 +210,40 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
           goto ealloc1;
         }
 
-      (*found)->name = strdup (name);
-      if (!(*found)->name)
+      if (name) /* NULL is main app, no lookup needed */
         {
-          cinelerra_plugin_error_set (CINELERRA_PLUGIN_EALLOC);
-          goto ealloc2;
+          /*lookup for $CINELERRA_PLUGIN_PATH*/
+          (*found)->name = strdup (name);
+          if (!(*found)->name)
+            {
+              cinelerra_plugin_error_set (CINELERRA_PLUGIN_EALLOC);
+              goto ealloc2;
+            }
+
+          if (!cinelerra_plugin_lookup (*found, getenv("CINELERRA_PLUGIN_PATH"))
+#ifdef CINELERRA_PLUGIN_PATH
+              /* else lookup for -DCINELERRA_PLUGIN_PATH */
+              || !cinelerra_plugin_lookup (&plugin, CINELERRA_PLUGIN_PATH)
+#endif
+              )
+            {
+              cinelerra_plugin_error_set (CINELERRA_PLUGIN_ENFOUND);
+              goto elookup;
+            }
+        }
+      else
+        {
+          (*found)->name = NULL;
+          (*found)->pathname = NULL;
+          (*found)->ext = NULL;
         }
 
       (*found)->use_count = 0;
 
-      (*found)->handle = dlopen (name, RTLD_NOW|RTLD_LOCAL);
+      PLANNED("if .so like then dlopen; else if .c like tcc compile");
+      TODO("factor dlopen and dlsym out")
+
+      (*found)->handle = dlopen (pathname, RTLD_NOW|RTLD_LOCAL);
       if (!(*found)->handle)
         {
           ERROR (cinelerra_plugin, "dlopen failed: %s", dlerror());
@@ -218,6 +291,7 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
     }
 
   (*found)->use_count++;
+  (*found)->last = time (NULL);
   ret->use_count++;
 
   pthread_mutex_unlock (&cinelerra_plugin_mutex);
@@ -230,6 +304,7 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
  erevision:
  edlsym:
  edlopen:
+ elookup:
   free ((char*)(*found)->name);
  ealloc2:
   free (*found);
