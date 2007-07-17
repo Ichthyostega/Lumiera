@@ -21,6 +21,9 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #####################################################################
 
+import sys
+sys.path.append("./admin/scons")
+
 import os
 from Buildhelper import *
 
