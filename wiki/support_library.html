@@ -767,12 +767,59 @@ Error: #f88</pre>
 <div title="DefaultTiddlers" modifier="CehTeh" modified="200707102306" created="200707102301" changecount="2">
 <pre>[[SupportLibrary]]</pre>
 </div>
-<div title="ErrorHandling" modifier="CehTeh" modified="200707152302" created="200707152252" changecount="2">
+<div title="ErrorHandling" modifier="CehTeh" modified="200707170231" created="200707152252" changecount="7">
 <pre>! Proposal:
 We need some centralized way to handle errors and doing hard aborts.
 
+!! Errors
 I started using C-string addresses as errors for now, I think that convinient and unique until we find something better. (Actually this might be even kept in a library, alternatively maybe someone wants to investigate libcomerr)
 
+Notes about libcomerr (I took a short look now):
+* needs some central error description table which has to be compiled with compile_et
+* no homepage found, some projects use it, published in 1989, dunno about its state
+
+My following proposal defines a very simplistic way to define unique errors which can distributed throughout the application (each part can define its own errors and will never interfere with others)
+
+
+!!! detailed semantics (proposal):
+a TLS pointer is allocated to keep a thread local error state. NULL means SUCCEESS, no error pending.
+
+API:
+
+{{{
+const char*
+cinelerra_error_set (const char * err)
+}}}
+
+if there is no error pending, then store err as new error state, if there was an error pending, then the state is not altered.
+
+return the former state (NULL if err got set, some other when an error is pending)
+
+{{{
+const char*
+cinelerra_error ()
+}}}
+
+returns the error state ''and'' clears it. The user has to store it temporary when need to be used further. Rationale: less TLS access overhead, never forget to clear the state.
+
+(do we need a {{{cinelerra_error_peek()}}}?)
+
+Declaration and definition:
+{{{
+#define CINELERRA_ERROR_DECLARE(err) \
+extern const char* CINELERRA_ERROR_##err
+
+#define CINELERRA_ERROR_DEFINE(err, msg) \
+const char* CINELERRA_ERROR_##err = &quot;CINELERRA_ERROR_&quot; #err &quot;:&quot; msg
+}}}
+
+thus a {{{CINELERRA_ERROR_DEFINE(NFOO, &quot;Foo not found&quot;)}}} will result in a string:
+&quot;~CINELERRA_ERROR_NFOO:Foo not found&quot;, having the identifier itself prepended to the string will ensure uniqueness of the generated literal (and thus its pointer value), reducing error testing to address comparison {{{cinelerra_error()==CINELERRA_ERROR_NFOO}}}. The message string is easily derived by {{{strchr(CINELERRA_ERROR_NFOO, ':')+1}}}
+
+
+
+
+!! Allocation
 The next point is allocation failures, these are possible by C/C++ standard but don't actually happen anymore in linux (except in few rare cases). Instead gracefully handling this errors i'll add a {{{CINELERRA_DIE(message)}}} macro to this library later. This macro will just do (NoBug) logging and then doing a hard abort. Macro, because we want to preserve file/line location for logging.
 
 </pre>
