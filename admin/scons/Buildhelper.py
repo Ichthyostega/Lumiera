@@ -8,7 +8,7 @@
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
-#  published by the Free Software Foundation; either version 2 of 
+#  published by the Free Software Foundation; either version 2 of
 #  the License, or (at your option) any later version.
 #
 #  This program is distributed in the hope that it will be useful,
@@ -36,24 +36,24 @@ def isCleanupOperation(env):
     return env.GetOption('clean')
 
 def isHelpRequest():
-    ''' this is a hack: SCons does all configure tests even if only
+    """ this is a hack: SCons does all configure tests even if only
         the helpmessage is requested. SCons doesn't export the
         help option for retrieval by env.GetOption(), 
         so we scan the commandline directly. 
-    '''
+    """
     return '-h' in sys.argv or '--help' in sys.argv
 
 
 
 def srcSubtree(env,tree,isShared=False, **args):
-    ''' convienience wrapper: scans the given subtree, which is
+    """ convienience wrapper: scans the given subtree, which is
         to be located within $SRCDIR, find all source files and
         declare them as Static or SharedObjects for compilation
-    '''
+    """
     root = env.subst('$SRCDIR/%s' % tree)  # expand $SRCDIR
     if isShared:
         builder = lambda f: env.SharedObject(f, **args)
-    else: 
+    else:
         builder = lambda f: env.Object(f, **args)
         
     return [builder(f) for f in scanSrcSubtree(root)] 
@@ -63,9 +63,9 @@ def srcSubtree(env,tree,isShared=False, **args):
 SRCPATTERNS = ['*.c','*.Cpp','*.cc']
 
 def scanSrcSubtree(root):
-    ''' scan the given subtree for source filesnames 
+    """ scan the given subtree for source filesnames 
         (python generator function)
-    '''
+    """
     for (dir,_,files) in os.walk(root):
         if dir.startswith('./'):
             dir = dir[2:]
@@ -77,7 +77,7 @@ def scanSrcSubtree(root):
 
 
 def Tarball(env,location,dirs,suffix=''):
-    ''' Custom Command: create Tarball of some subdirs
+    """ Custom Command: create Tarball of some subdirs
         location: where to create the tar (optionally incl. filename.tar.gz)
         suffix: (optional) suffix to include in the tar name
         dirs: directories to include in the tar
@@ -87,7 +87,7 @@ def Tarball(env,location,dirs,suffix=''):
         prior to compiling. Solution is 
          - use the Command-Builder, but pass all target specifications as custom build vars
          - create a pseudo-target located in the parent directory (not built by default)
-    '''
+    """
     targetID    = '../extern-tar%s' % suffix
     versionID   = env['VERSION']
     defaultName = 'cinelerra%s_%s' % (suffix, versionID)
@@ -99,11 +99,11 @@ def Tarball(env,location,dirs,suffix=''):
 
 
 def createTarball(target,source,env):
-    ''' helper, builds the tar using the python2.3 tarfil lib.
+    """ helper, builds the tar using the python2.3 tarfil lib.
         This allows us to prefix all paths, thus moving the tree
         into a virtual subdirectory containing the Version number,
         as needed by common packaging systems.
-    '''
+    """
     name = getTarName( location = env['location']
                      , defaultName = env['defaultName'])
     targetspec = env['dirs']
@@ -117,7 +117,7 @@ def createTarball(target,source,env):
     tar.close()
 #
 # old version using shell command:
-#    
+#
 #    cmd = 'tar -czf %s %s' % (name,targetspec)
 #    print 'running ', cmd, ' ... '
 #    pipe = os.popen (cmd)
@@ -127,10 +127,10 @@ def createTarball(target,source,env):
 
 
 def getTarName(location, defaultName):
-    ''' create a suitable name for the tarball.
+    """ create a suitable name for the tarball.
         - if location contains a name (*.tar.gz) then use this
         - otherwise append the defaultName to the specified dir
-    '''  
+    """
     spec = os.path.abspath(location)
     (head,tail) = os.path.split(spec)
     if not os.path.isdir(head):
