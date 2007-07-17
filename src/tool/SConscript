@@ -1,0 +1,10 @@
+# -*- python -*-
+##
+## SConscript  -  SCons buildscript for tool subdirectory (called by SConstruct)
+##
+
+Import('env','artifacts')
+
+# build the ubiquitous Hello World application (note: C source)
+artifacts['tools'] = env.Program('#$BINDIR/hello-world','hello.c')
+
