@@ -30,7 +30,10 @@
 /*
   TODO cinelerra_xmalloc which aborts on allocation error
    or cinelerra_die() function
+
+TODO move CINELERRA_DIE elsewhere (cinlib.h?)
 */
+#define CINELERRA_DIE do{NOBUG_ERROR(NOBUG_ON, LOG_EMERG, "aborting due fatal error"); abort();}while(0)
 
 /* TODO should be set by the build system to the actual plugin path */
 #define CINELERRA_PLUGIN_PATH "~/.cinelerra3/plugins:/usr/local/lib/cinelerra3/plugins"
@@ -39,7 +42,6 @@ NOBUG_DEFINE_FLAG (cinelerra_plugin);
 
 /* errors */
 const char* CINELERRA_PLUGIN_SUCCESS = NULL;
-const char* CINELERRA_PLUGIN_EALLOC = "Memory allocation failure";
 const char* CINELERRA_PLUGIN_EDLOPEN = "Could not open plugin";
 const char* CINELERRA_PLUGIN_EDHOOK = "Hook function failed";
 const char* CINELERRA_PLUGIN_ENFOUND = "No such plugin";
@@ -167,7 +169,7 @@ cinelerra_plugin_lookup (struct cinelerra_plugin* self, const char* path)
             {
               /* got it */
               self->pathname = strdup (pathname);
-              TODO ("if (!self->pathname) CINELERRA_DIE()");
+              if (!self->pathname) CINELERRA_DIE;
               self->type = cinelerra_plugin_extensions[i].type;
               return 0;
             }
@@ -192,11 +194,7 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
   plugin.name = name; /* for searching */
 
   found = tsearch (&plugin, &cinelerra_plugin_registry, cinelerra_plugin_name_cmp);
-  if (!found)
-    {
-      cinelerra_plugin_error_set (CINELERRA_PLUGIN_EALLOC);
-      goto ealloc0;
-    }
+  if (!found) CINELERRA_DIE;
 
   if (*found == &plugin)
     {
@@ -204,21 +202,13 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
 
       /* now really create new item */
       *found = malloc (sizeof (struct cinelerra_plugin));
-      if (!*found)
-        {
-          cinelerra_plugin_error_set (CINELERRA_PLUGIN_EALLOC);
-          goto ealloc1;
-        }
+      if (!*found) CINELERRA_DIE;
 
       if (name) /* NULL is main app, no lookup needed */
         {
           /*lookup for $CINELERRA_PLUGIN_PATH*/
           (*found)->name = strdup (name);
-          if (!(*found)->name)
-            {
-              cinelerra_plugin_error_set (CINELERRA_PLUGIN_EALLOC);
-              goto ealloc2;
-            }
+          if (!(*found)->name) CINELERA_DIE;
 
           if (!cinelerra_plugin_lookup (*found, getenv("CINELERRA_PLUGIN_PATH"))
 #ifdef CINELERRA_PLUGIN_PATH
@@ -306,12 +296,9 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
  edlopen:
  elookup:
   free ((char*)(*found)->name);
- ealloc2:
   free (*found);
- ealloc1:
   *found = &plugin;
   tdelete (&plugin, &cinelerra_plugin_registry, cinelerra_plugin_name_cmp);
- ealloc0:
   pthread_mutex_lock (&cinelerra_plugin_mutex);
   return NULL;
 }
