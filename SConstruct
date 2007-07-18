@@ -8,7 +8,7 @@
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
-#  published by the Free Software Foundation; either version 2 of 
+#  published by the Free Software Foundation; either version 2 of
 #  the License, or (at your option) any later version.
 #
 #  This program is distributed in the hope that it will be useful,
@@ -46,8 +46,8 @@ VERSION          = '3+alpha.01'
 #####################################################################
 
 def setupBasicEnvironment():
-    ''' define cmdline options, build type decisions
-    '''
+    """ define cmdline options, build type decisions
+    """
     EnsurePythonVersion(2,3)
     EnsureSConsVersion(0,96,90)
     
@@ -59,11 +59,14 @@ def setupBasicEnvironment():
                , BINDIR=BINDIR
                , CPPPATH=SRCDIR   # used to find includes
                )
+    
     appendCppDefine(env,'DEBUG','DEBUG')
     appendCppDefine(env,'OPENGL','USE_OPENGL')
     appendVal(env,'ARCHFLAGS', 'CPPFLAGS')   # for both C and C++
     appendVal(env,'OPTIMIZE', 'CPPFLAGS', val=' -O3')
-    
+
+    env.Append(CPPDEFINES = 'EBUG_'+env['BUILDLEVEL'])
+
     prepareOptionsHelp(opts,env)
     opts.Save(OPTIONSCACHEFILE, env)
     return env
@@ -79,13 +82,15 @@ def appendVal(env,var,targetVar,val=None):
 
 
 def defineCmdlineOptions():
-    ''' current options will be persisted in a options cache file.
+    """ current options will be persisted in a options cache file.
         you may define custom options in a separate file. 
         Commandline will override both.
-    '''
+    """
     opts = Options([OPTIONSCACHEFILE, CUSTOPTIONSFILE])
     opts.AddOptions(
         ('ARCHFLAGS', 'Set architecture-specific compilation flags (passed literally to gcc)','')
+        ,EnumOption('BUILDLEVEL', 'NoBug build level for debugging', 'ALPHA',
+                    allowed_values=('ALPHA', 'BETA', 'RELEASE'))
         ,BoolOption('DEBUG', 'Build with debugging information and no optimizations', False)
         ,BoolOption('OPTIMIZE', 'Build with strong optimization (-O3)', False)
         ,BoolOption('OPENGL', 'Include support for OpenGL preview rendering', False)
@@ -101,7 +106,7 @@ def defineCmdlineOptions():
 
 
 def prepareOptionsHelp(opts,env):
-    prelude = '''
+    prelude = """
 USAGE:   scons [-c] [OPTS] [key=val,...] [TARGETS]
      Build and optionally install Cinelerra.
      Without specifying any target, just the (re)build target will run.
@@ -115,23 +120,27 @@ Special Targets:
      tar     : create all tarballs
 
 Configuration Options:
-'''
+"""
     Help(prelude + opts.GenerateHelpText(env))
 
 
 
 
 def configurePlatform(env):
-    ''' locate required libs.
+    """ locate required libs.
         setup platform specific options.
         Abort build in case of failure.
-    '''
+    """
     conf = Configure(env)
     # run all configuration checks in the current env
     
     # Checks for prerequisites ------------
     if not conf.CheckLibWithHeader('m', 'math.h','C'):
         print 'Did not find math.h / libm, exiting.'
+        Exit(1)
+
+    if not conf.CheckLibWithHeader('nobugmt', 'nobug.h', 'C'):
+        print 'Did not find NoBug [http://www.pipapo.org/pipawiki/NoBug], exiting.'
         Exit(1)
     
     if not conf.CheckCXXHeader('boost/config.hpp'):
@@ -148,9 +157,9 @@ def configurePlatform(env):
 
 
 def definePackagingTargets(env, artifacts):
-    ''' build operations and targets to be done /before/ compiling.
+    """ build operations and targets to be done /before/ compiling.
         things like creating a source tarball or preparing a version header.
-    '''
+    """
     t = Tarball(env,location='$SRCTAR',dirs='$SRCDIR')
     artifacts['src.tar'] = t
     env.Alias('src.tar', t)
@@ -164,10 +173,10 @@ def definePackagingTargets(env, artifacts):
 
 
 def defineBuildTargets(env, artifacts):
-    ''' define the source file/dirs comprising each artifact to be built.
+    """ define the source file/dirs comprising each artifact to be built.
         setup sub-environments with special build options if necessary.
         We use a custom function to declare a whole tree of srcfiles. 
-    '''
+    """
     cinobj = ( srcSubtree(env,'backend') 
              + srcSubtree(env,'proc')
              + env.Object('$SRCDIR/main.cpp')
@@ -183,9 +192,9 @@ def defineBuildTargets(env, artifacts):
 
 
 def defineInstallTargets(env, artifacts):
-    ''' define install locations and cleanup after the build.
+    """ define install locations and cleanup after the build.
         define alias targets to trigger the installing.
-    '''
+    """
     env.Install(dir = '$DESTDIR/bin', source=artifacts['cinelerra'])
     env.Install(dir = '$DESTDIR/lib', source=artifacts['plugins'])
     env.Install(dir = '$DESTDIR/bin', source=artifacts['tools'])
