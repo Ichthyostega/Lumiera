@@ -65,7 +65,10 @@ def setupBasicEnvironment():
     appendVal(env,'ARCHFLAGS', 'CPPFLAGS')   # for both C and C++
     appendVal(env,'OPTIMIZE', 'CPPFLAGS', val=' -O3')
 
-    env.Append(CPPDEFINES = 'EBUG_'+env['BUILDLEVEL'])
+    if env['BUILDLEVEL'] in ['ALPHA', 'BETA']:
+        env.Append(CPPFLAGS = ' -DEBUG_'+env['BUILDLEVEL'])
+    if env['BUILDLEVEL'] == 'RELEASE':
+        env.Append(CPPFLAGS = ' -DNDEBUG')
 
     prepareOptionsHelp(opts,env)
     opts.Save(OPTIONSCACHEFILE, env)
@@ -142,6 +145,12 @@ def configurePlatform(env):
     if not conf.CheckLibWithHeader('nobugmt', 'nobug.h', 'C'):
         print 'Did not find NoBug [http://www.pipapo.org/pipawiki/NoBug], exiting.'
         Exit(1)
+
+    if conf.CheckCHeader('execinfo.h'):
+       conf.env.Append(CPPFLAGS = ' -DHAS_EXECINFO_H')
+
+    if conf.CheckCHeader('valgrind/valgrind.h'):
+        conf.env.Append(CPPFLAGS = ' -DHAS_VALGRIND_VALGIND_H')
     
     if not conf.CheckCXXHeader('boost/config.hpp'):
         print 'We need the C++ boost-lib.'
@@ -188,7 +197,7 @@ def defineBuildTargets(env, artifacts):
     
     # call subdir SConscript(s) for independent components
     SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts')
-    
+
 
 
 def defineInstallTargets(env, artifacts):
