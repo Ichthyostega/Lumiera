@@ -44,7 +44,7 @@ NOBUG_DEFINE_FLAG (cinelerra_plugin);
 /* errors */
 const char* CINELERRA_PLUGIN_SUCCESS = NULL;
 const char* CINELERRA_PLUGIN_EDLOPEN = "Could not open plugin";
-const char* CINELERRA_PLUGIN_EDHOOK = "Hook function failed";
+const char* CINELERRA_PLUGIN_EHOOK = "Hook function failed";
 const char* CINELERRA_PLUGIN_ENFOUND = "No such plugin";
 const char* CINELERRA_PLUGIN_ENIFACE = "No such interface";
 const char* CINELERRA_PLUGIN_EREVISION = "Interface revision too old";
@@ -304,10 +304,12 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
 }
 
 void
-cinelerra_interface_close (struct cinelerra_interface* self)
+cinelerra_interface_close (void* ptr)
 {
-  if(!self)
+  if(!ptr)
     return;
+
+  struct cinelerra_interface* self = (struct cinelerra_interface*) ptr;
 
   pthread_mutex_lock (&cinelerra_plugin_mutex);
 

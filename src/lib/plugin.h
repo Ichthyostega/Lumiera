@@ -109,7 +109,7 @@ cinelerra_interface_open (const char* plugin, const char* name, size_t min_revis
  * @param self interface to be closed
  */
 void
-cinelerra_interface_close (struct cinelerra_interface* self);
+cinelerra_interface_close (void* self);
 
 /**
  * Tries to unload a plugin.

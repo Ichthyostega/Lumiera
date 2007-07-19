@@ -15,30 +15,12 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-bin_PROGRAMS =
-lib_LTLIBRARIES =
-noinst_PROGRAMS =
-noinst_LIBRARIES =
-noinst_LTLIBRARIES =
-noinst_HEADERS =
-BUILT_SOURCES =
-EXTRA_DIST =
-SUBDIRS =
+examples_srcdir = $(top_srcdir)/tests/examples
+noinst_PROGRAMS += plugin_example
 
-# Only use subdirs if really needed, prefer the include scheme below
-#SUBDIRS +=
+plugin_example_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
+plugin_example_CPPFLAGS = $(CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/lib/
+plugin_example_LDADD = -lnobugmt -lpthread -ldl $(builddir)/libcin3.a
 
-# core
-include $(top_srcdir)/src/lib/Makefile.am
-
-# plugins
-#include $(top_srcdir)/src...
-
-# tests
-include $(top_srcdir)/tests/examples/Makefile.am
-
-#EXTRA_DIST += admin debian doc depcomp README.BUILD LICENSE \
-#	cinelerra-cvs-current.spec
-AUTOMAKE_OPTIONS=foreign
-#ACLOCAL_AMFLAGS = -I m4
-
+plugin_example_SOURCES = $(examples_srcdir)/plugin_main.c
+noinst_HEADERS += $(examples_srcdir)/hello_interface.h
