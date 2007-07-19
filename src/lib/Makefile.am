@@ -18,7 +18,7 @@
 libcin3_a_srcdir = $(top_srcdir)/src/lib
 noinst_LIBRARIES += libcin3.a
 
-#libcin3_a_CFLAGS = $(CFLAGS)
+libcin3_a_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
 
 libcin3_a_SOURCES = $(libcin3_a_srcdir)/plugin.c
 noinst_HEADERS += $(libcin3_a_srcdir)/plugin.h

@@ -38,7 +38,7 @@ AC_STDC_HEADERS
 AC_CHECK_HEADER([pthread.h], AC_DEFINE(HAVE_PTHREAD_H))
 AC_CHECK_HEADER([nobug.h], AC_DEFINE(HAVE_NOBUG_H))
 AC_CHECK_HEADER([execinfo.h], AC_DEFINE(HAVE_EXECINFO_H))
-AC_CHECK_HEADER([valgrind/valgrind.h], AC_DEFINE(HAVE_VALGRIND_VALGRIND_H))
+# there is a warning in nobug, disabled til fixed AC_CHECK_HEADER([valgrind/valgrind.h], AC_DEFINE(HAVE_VALGRIND_VALGRIND_H))
 
 #
 # user options
