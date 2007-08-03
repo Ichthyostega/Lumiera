@@ -1,4 +1,4 @@
-format 38
+format 40
 
 componentcanvas 128133 component_ref 128005 // Builder
   draw_component_as_icon default show_component_req_prov default show_component_rea default
@@ -18,21 +18,21 @@ componentcanvas 128645 component_ref 129029 // Frame (Stream) Provider
 deploymentnodecanvas 128901 deploymentnode_ref 128005 // timeline
   xyzwh 142 3 2000 323 90
 hubcanvas 129157 xyz 192 63 2005
-hubcanvas 129285 xyz 222 62 2005
-hubcanvas 129413 xyz 255 62 2005
-hubcanvas 129541 xyz 290 62 2005
+hubcanvas 129285 xyz 222 63 2005
+hubcanvas 129413 xyz 255 63 2005
+hubcanvas 129541 xyz 290 63 2005
 deploymentnodecanvas 130053 deploymentnode_ref 128261 // playlist
   xyzwh 148 389 2005 401 80
 deploymentnodecanvas 130181 deploymentnode_ref 128389 // proc
-  xyzwh 178 435 2010 97 69
+  xyzwh 178 433 2010 97 69
 deploymentnodecanvas 130309 deploymentnode_ref 128389 // proc
-  xyzwh 424 430 2010 97 69
+  xyzwh 424 433 2010 97 69
 deploymentnodecanvas 130437 deploymentnode_ref 128517 // pnode
   xyzwh 202 507 2005 56 36
 deploymentnodecanvas 130565 deploymentnode_ref 128517 // pnode
-  xyzwh 201 546 2005 56 36
+  xyzwh 202 546 2005 56 36
 deploymentnodecanvas 130693 deploymentnode_ref 128517 // pnode
-  xyzwh 201 585 2005 56 36
+  xyzwh 202 585 2005 56 36
 deploymentnodecanvas 130821 deploymentnode_ref 128517 // pnode
   xyzwh 318 505 2005 56 36
 deploymentnodecanvas 130949 deploymentnode_ref 128389 // proc
@@ -40,7 +40,7 @@ deploymentnodecanvas 130949 deploymentnode_ref 128389 // proc
 deploymentnodecanvas 131077 deploymentnode_ref 128517 // pnode
   xyzwh 318 544 2005 56 36
 deploymentnodecanvas 131205 deploymentnode_ref 128517 // pnode
-  xyzwh 317 584 2005 56 36
+  xyzwh 318 584 2005 56 36
 deploymentnodecanvas 133125 deploymentnode_ref 128645 // Frame
   xyzwh 309 800 2010 70 36
 deploymentnodecanvas 134021 deploymentnode_ref 128517 // pnode

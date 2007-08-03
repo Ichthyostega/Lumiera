@@ -1,76 +1,61 @@
-format 38
+format 40
 
-classinstance 128005 class_ref 131333 // RenderEngine
-  xyz 102 80 2000 name ""
-end
+classinstancecanvas 128005 classinstance_ref 132485 // 
+  xyz 85 80 2000
+  end
 note 128261 "render state proxy passed on"
   xyzwh 139 319 2000 104 53
-classinstance 128389 class_ref 133765 // Source
-  xyz 610 558 2000 name "devnull"
-end
-classinstance 128517 class_ref 131589 // ExitNode
-  xyz 610 329 2000 name "video"
-end
-classinstance 128645 class_ref 132229 // Projector
-  xyz 488 497 2000 name "input"
-end
-classinstance 128773 class_ref 131461 // Processor
-  xyz 602 172 2000 name "video1"
-  values
-    attribute_ref 129541 // end
-    "8/25"
-    attribute_ref 129413 // start
-    "7/25"
-end
-classinstance 128901 class_ref 132229 // Projector
-  xyz 485 386 2000 name "ouput"
-end
+classinstancecanvas 128389 classinstance_ref 132613 // devnull
+  xyz 610 558 2000
+  end
+classinstancecanvas 128517 classinstance_ref 132741 // video
+  xyz 610 329 2000
+  end
+classinstancecanvas 128645 classinstance_ref 132869 // input
+  xyz 488 497 2000
+  end
+classinstancecanvas 128773 classinstance_ref 132997 // video1
+  xyz 602 172 2000
+  end
+classinstancecanvas 128901 classinstance_ref 133125 // ouput
+  xyz 485 386 2000
+  end
 fragment 129029 "seq"
   xyzwh 254 147 1994 477 111
 end
-classinstance 129157 class_ref 132485 // PluginAdapter
-  xyz 477 444 2000 name "HUE"
-end
-classinstance 129541 class_ref 132997 // VRender
-  xyz 409 293 2000 name "vid1"
-end
-classinstance 129669 class_ref 133509 // VFrame
-  xyz 134 497 2000 name ""
-end
-classinstance 129797 class_ref 131461 // Processor
-  xyz 478 172 2000 name "video1"
-  values
-    attribute_ref 129541 // end
-    "7/25"
-    attribute_ref 129413 // start
-    "5/25"
-end
-classinstance 129925 class_ref 131589 // ExitNode
-  xyz 485 329 2000 name "video"
-end
-classinstance 132229 class_ref 132485 // PluginAdapter
-  xyz 600 444 2000 name "HUE"
-end
-classinstance 132997 class_ref 133765 // Source
-  xyz 387 602 2000 name "vid_a"
-end
-classinstance 133125 class_ref 132229 // Projector
-  xyz 299 498 2000 name "input"
-end
-classinstance 133253 class_ref 131461 // Processor
-  xyz 289 172 2000 name "video1"
-  values
-    attribute_ref 129541 // end
-    "5/25"
-    attribute_ref 129413 // start
-    "2/25"
-end
-classinstance 133381 class_ref 132229 // Projector
-  xyz 296 386 2000 name "ouput"
-end
-classinstance 133509 class_ref 131589 // ExitNode
-  xyz 296 329 2000 name "video"
-end
+classinstancecanvas 129157 classinstance_ref 133253 // HUE
+  xyz 477 444 2000
+  end
+classinstancecanvas 129541 classinstance_ref 133381 // vid1
+  xyz 409 293 2000
+  end
+classinstancecanvas 129669 classinstance_ref 133509 // 
+  xyz 138 498 2000
+  end
+classinstancecanvas 129797 classinstance_ref 133637 // video1
+  xyz 478 172 2000
+  end
+classinstancecanvas 129925 classinstance_ref 133765 // video
+  xyz 485 329 2000
+  end
+classinstancecanvas 132229 classinstance_ref 133893 // HUE
+  xyz 600 444 2000
+  end
+classinstancecanvas 132997 classinstance_ref 134021 // vid_a
+  xyz 387 602 2000
+  end
+classinstancecanvas 133125 classinstance_ref 134149 // input
+  xyz 299 498 2000
+  end
+classinstancecanvas 133253 classinstance_ref 134277 // video1
+  xyz 289 172 2000
+  end
+classinstancecanvas 133381 classinstance_ref 134405 // ouput
+  xyz 296 386 2000
+  end
+classinstancecanvas 133509 classinstance_ref 134533 // video
+  xyz 296 329 2000
+  end
 note 134661 "Note: because the Engine Components are stateless, various calculation patterns are possible, including all sorts of parallelism "
   xyzwh 569 45 2000 240 75
 textcanvas 134789 "Video Clip from 2 to 7, with an attached HUE effect starting 3 frames after begin and overlapping by 1 frame beyond the end"
@@ -86,9 +71,9 @@ objectlinkcanvas 130565 rel relation_ref 131973 // <unidirectional association>
   role_a_pos 661 304 3000 no_role_b
 objectlinkcanvas 130693 rel relation_ref 134533 // <unidirectional association>
   geometry VHr
-  from ref 129541 z 1999 to point 159 304
+  from ref 129541 z 1999 to point 161 304
   line 130821 z 1999 to ref 129669
-  role_a_pos 171 472 3000 no_role_b
+  role_a_pos 173 473 3000 no_role_b
 objectlinkcanvas 130949 rel relation_ref 135429 // <unidirectional association>
   from ref 128901 z 1999 to ref 129157
   role_a_pos 538 419 3000 no_role_b
@@ -118,7 +103,7 @@ objectlinkcanvas 134405 rel relation_ref 135429 // <unidirectional association>
   role_a_pos 446 567 3000 no_role_b
 objectlinkcanvas 134533 rel relation_ref 131845 // <directional aggregation by value>
   geometry VH
-  from ref 128005 z 1999 to point 142 205
+  from ref 128005 z 1999 to point 123 205
   line 6 z 1999 to ref 133253
   role_a_pos 197 183 3000 no_role_b
 line 131973 -_-_

@@ -1,52 +1,32 @@
-format 38
+format 40
 
-classinstance 128005 class_ref 128261 // Fixture
-  xyz 65 271 2000 name ""
-end
-classinstance 128133 class_ref 129797 // ExplicitPlacement
-  xyz 221 249 2000 name ""
-  values
-    attribute_ref 128261 // time
-    "2"
-    attribute_ref 128389 // track
-    "video1"
-end
-classinstance 128389 class_ref 129797 // ExplicitPlacement
-  xyz 335 249 2000 name ""
-  values
-    attribute_ref 128261 // time
-    "2"
-    attribute_ref 128389 // track
-    "audio1"
-end
+classinstancecanvas 128005 classinstance_ref 128005 // 
+  xyz 65 271 2000
+  end
+classinstancecanvas 128133 classinstance_ref 128133 // 
+  xyz 221 249 2000
+  end
+classinstancecanvas 128389 classinstance_ref 128261 // 
+  xyz 332 249 2000
+  end
 fragment 128773 "seq"
   xyzwh 175 235 1994 282 93
 end
-classinstance 128901 class_ref 128389 // Track
-  xyz 70 101 2000 name "audio1"
-end
-classinstance 129029 class_ref 128389 // Track
-  xyz 71 156 2000 name "video1"
-end
+classinstancecanvas 128901 classinstance_ref 128389 // audio1
+  xyz 70 101 2000
+  end
+classinstancecanvas 129029 classinstance_ref 128517 // video1
+  xyz 71 156 2000
+  end
 fragment 129285 "seq"
   xyzwh 62 63 1994 94 155
 end
-classinstance 130821 class_ref 128901 // Clip
-  xyz 239 399 2000 name "vid_A"
-  values
-    attribute_ref 128517 // length
-    "5"
-    attribute_ref 128645 // start
-    "100"
-end
-classinstance 131077 class_ref 128901 // Clip
-  xyz 344 399 2000 name "aud_A"
-  values
-    attribute_ref 128517 // length
-    "8820"
-    attribute_ref 128645 // start
-    "176400"
-end
+classinstancecanvas 130821 classinstance_ref 128645 // vid_A
+  xyz 237 399 2000
+  end
+classinstancecanvas 131077 classinstance_ref 128773 // aud_A
+  xyz 339 399 2000
+  end
 textcanvas 131333 "Video and Audio Clip of length = 5 frames positioned at frame 2,  starting at t=4s in soucre.
 (Values for PAL and 44.1)"
   xyzwh 457 335 2000 175 87
@@ -60,12 +40,12 @@ objectlinkcanvas 129157 norel
   no_role_a no_role_b
 objectlinkcanvas 130565 norel
   geometry HVr
-  from ref 128133 z 1999 to point 269 167
+  from ref 128133 z 1999 to point 267 167
   line 81 z 1999 to ref 129029
   no_role_a no_role_b
 objectlinkcanvas 130693 norel
   geometry HVr
-  from ref 128389 z 1999 to point 383 112
+  from ref 128389 z 1999 to point 378 112
   line 81 z 1999 to ref 128901
   no_role_a no_role_b
 objectlinkcanvas 130949 norel

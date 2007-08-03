@@ -4,10 +4,12 @@ diagrams
     688 606 100 4 0 0
 end
 show_stereotypes
-selected artifact_ref 128005 // Cinelerra3
+selected 
+  package_ref 129 // cinelerra3
 open
-  artifact_ref 128005 // Cinelerra3
-  classview_ref 128645 // Service Components
+  deploymentview_ref 128133 // EXE Deployment
+  
+  package_ref 129285 // ProcessingLayer
 end
 end
 verbose

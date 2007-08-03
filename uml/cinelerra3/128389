@@ -1,6 +1,6 @@
-format 38
-"RenderEngine" // RenderEngine
-  revision 7
+format 40
+"RenderEngine" // ProcessingLayer::RenderEngine
+  revision 9
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -8,7 +8,7 @@ format 38
   //use case diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
   //collaboration diagram settings
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
   //object diagram settings
@@ -63,7 +63,7 @@ format 38
     //object diagram settings
      write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
     //sequence diagram settings
-    show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
     //state diagram settings
     package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
     show_activities default region_horizontally default drawing_language default
@@ -74,18 +74,6 @@ format 38
     
     classdiagram 128389 "Render Entities"
       draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-      size A4
-    end
-
-    objectdiagram 129029 "Engine Example1"
-       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
-      comment "Example1 (from EDL) continued: here the RenderEngine to be created by the Builder from the Input shown in Example1"
-      size A4
-    end
-
-    objectdiagram 129157 "Engine Example2"
-       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
-      comment "Example2 (from EDL) continued: notably in this RenderEngine the Effect has been partitioned into 2 segments with constant configuration."
       size A4
     end
 
@@ -551,7 +539,7 @@ ${inlines}
 	  b multiplicity "" parent class_ref 134661 // ParamProvider
       end
 
-      classrelation 138629 // provider (<association>)
+      classrelation 138629 // <association>
 	relation_ref 136325 // <association>
       end
     end
@@ -580,7 +568,7 @@ ${members}};
 "
 	    classrelation_ref 137989 // param (<association>)
 	  b role_name "provider" multiplicity "1" protected
-	    classrelation_ref 138629 // provider (<association>)
+	    classrelation_ref 138629 // <association>
       end
 
       classrelation 138373 // <unidirectional association>

@@ -1,27 +1,25 @@
-format 38
+format 40
 
 classinstance 128005 class_ref 130309 // ControllerFacade
-  xyz 494 125 2000 name ""  xyz 494 125 2000
+ name ""  xyz 494 125 2000
 classinstance 128133 class_ref 130437 // PathManager
-  xyz 472 286 2000 name ""  xyz 472 286 2000
+ name ""  xyz 472 286 2000
 classinstance 129285 class_ref 130565 // BuilderFacade
-  xyz 250 285 2000 name ""  xyz 250 285 2000
+ name ""  xyz 250 285 2000
 classinstance 129413 class_ref 128261 // Fixture
-  xyz 141 93 2000 name ""  xyz 141 93 2000
+ name ""  xyz 141 93 2000
 classinstance 129797 class_ref 130693 // ToolFactory
-  xyz 381 449 2000 name ""  xyz 381 449 2000
+ name ""  xyz 381 449 2000
 classinstance 129925 class_ref 130821 // ConManager
-  xyz 142 486 2005 name ""  xyz 142 486 2005
+ name ""  xyz 142 486 2005
 classinstance 130053 class_ref 130949 // RenderState
-  xyz 550 424 2000 name ""  xyz 550 424 2000
+ name ""  xyz 550 424 2000
 note 130565 "Note: Builder subsys is stateless"
   xyzwh 25 374 2000 128 58
 classinstance 130693 class_ref 131077 // Assembler
-  xyz 225 390 2000 name ""  xyz 225 390 2000
-classinstance 131333 class_ref 131205 // FrameProvider
-  xyz 172 613 2000 name ""  xyz 172 613 2000
+ name ""  xyz 225 390 2000
 classinstance 131717 class_ref 131333 // RenderEngine
-  xyz 721 542 2000 name ""  xyz 721 542 2000
+ name ""  xyz 721 542 2000
 note 133381 "Fixture is the only query/access point to EDL"
   xyzwh 14 17 2000 179 63
 note 133509 "Trigger: Play Request"
@@ -61,11 +59,6 @@ linkcanvas 131205
 dirscanvas 132741 z 1000 linkcanvas_ref 131205
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
   forward_label "7 getConnection()" xyz 203 469 3000
-linkcanvas 131461
-  from ref 129925 z 1999 to ref 131333
-dirscanvas 132997 z 1000 linkcanvas_ref 131461
-  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "9 prepareStream()" xyz 218 536 3000
 linkcanvas 131589
   from ref 129925 z 1999 to ref 129413
 dirscanvas 132869 z 1000 linkcanvas_ref 131589
@@ -75,12 +68,7 @@ linkcanvas 131845
   from ref 128005 z 1999 to ref 131717
 dirscanvas 133125 z 1000 linkcanvas_ref 131845
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "10 play()" xyz 668 317 3000
-linkcanvas 131973
-  from ref 131717 z 1999 to ref 131333
-dirscanvas 133253 z 1000 linkcanvas_ref 131973
-  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "11 getReady()" xyz 456 611 3000
+  forward_label "9 play()" xyz 670 317 3000
 msgs
   msg operation_ref 128261 // "buildProcessor()"
     forward ranks 1 "1" dirscanvas_ref 132101
@@ -106,19 +94,12 @@ msgs
 		  msg operation_ref 129157 // "getAutomation()"
 		    forward ranks 8 "1.2.3.1.1" dirscanvas_ref 132869
 		    no_msg
-		  msg operation_ref 129285 // "prepareStream()"
-		    forward ranks 9 "1.2.3.1.2" dirscanvas_ref 132997
-		    no_msg
 		msgsend
 	    msgsend
 	msgsend
     msgsend
   msg operation_ref 129413 // "play()"
-    forward ranks 10 "2" dirscanvas_ref 133125
-    msgs
-      msg operation_ref 129541 // "getReady()"
-	forward ranks 11 "2.1" dirscanvas_ref 133253
-	no_msg
-    msgsend
+    forward ranks 9 "2" dirscanvas_ref 133125
+    no_msg
 msgsend
 end
