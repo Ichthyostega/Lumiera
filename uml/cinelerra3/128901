@@ -177,9 +177,10 @@ format 40
     end
 
     class 130565 "BuilderFacade"
-      visibility package stereotype "boundary"
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      visibility public stereotype "boundary"
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -188,23 +189,29 @@ ${members}};
 "
       explicit_switch_type ""
       
+      comment "Provides unified access to the builder functionality. While individual components of the builder subsystem may be called if necessary or suitable, it is usually better to do all extern invocations via the high level methods of this Facade"
       operation 128517 "buildEngine"
-	public explicit_return_type ""
+	public return_type class_ref 131333 // RenderEngine
 	nparams 0
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
+	comment "Main Operation of the Builder: create a render engine for a given part of the timeline"
       end
     end
 
     class 130693 "ToolFactory"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -212,12 +219,15 @@ ${inlines}
       explicit_switch_type ""
       
       operation 128773 "configure"
-	public explicit_return_type ""
+	public return_type class_ref 134149 // Tool
 	nparams 0
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
@@ -225,8 +235,8 @@ ${inlines}
 
       classrelation 137221 // <dependency>
 	relation 135685 -_->
-	  a default
-	    cpp default "#include in header"
+	  a package
+	    cpp default "#include in source"
 	    classrelation_ref 137221 // <dependency>
 	  b multiplicity "" parent class_ref 134149 // Tool
       end
@@ -234,44 +244,55 @@ ${inlines}
 
     class 130821 "ConManager"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
       idl_decl ""
       explicit_switch_type ""
       
+      comment "Connection Manager, used to build the connections between render engine nodes, if these nodes need to cooperate besides the normal \"data pull\" operation. Esp., the Connection Manager knows how to wire up the effect's parameters with the corresponding ParamProviders (autmation) in the Session"
       operation 129029 "getConnection"
-	public explicit_return_type ""
+	public explicit_return_type "int"
 	nparams 0
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
+	comment "TODO"
       end
     end
 
     class 131077 "Assembler"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
       idl_decl ""
       explicit_switch_type ""
       
+      comment "This is the actual building facility: provided the correct tools and associations, it serves to build and connect the individual ProcNode objects"
       operation 128901 "build"
-	public explicit_return_type ""
+	public return_type class_ref 131333 // RenderEngine
 	nparams 0
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
@@ -279,9 +300,10 @@ ${inlines}
     end
 
     class 132741 "StateProxy"
-      abstract visibility package stereotype "interface"
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      abstract visibility public stereotype "interface"
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl "${comment}${@}${visibility}interface ${name}${extends} {
@@ -304,8 +326,9 @@ ${members}};
 
     class 134021 "Buildable"
       abstract visibility public stereotype "interface"
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl "${comment}${@}${visibility}interface ${name}${extends} {
@@ -317,13 +340,16 @@ ${members}};
       explicit_switch_type ""
       
       operation 129669 "apply"
-	public explicit_return_type ""
+	public explicit_return_type "void"
 	nparams 1
-	  param inout name "provided_tool" explicit_type "Tool"
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	  param in name "provided_tool" explicit_type "Tool"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
@@ -332,8 +358,9 @@ ${members}};
 
     class 134149 "Tool"
       abstract visibility public stereotype "interface"
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl "${comment}${@}${visibility}interface ${name}${extends} {
@@ -344,30 +371,37 @@ ${members}};
 "
       explicit_switch_type ""
       
+      comment "Used according to the visitor pattern: each Tool contains the concrete implementation for one task to be done to the various MObject classes"
       operation 129797 "treat"
-	public explicit_return_type ""
+	public explicit_return_type "void"
 	nparams 1
-	  param inout name "mElement" type class_ref 134021 // Buildable
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	  param in name "mElement" type class_ref 134021 // Buildable
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
+	comment "This operation is to be overloaded for the specific MObject subclasses to be treated."
       end
     end
 
     class 134277 "SegmentationTool"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
       idl_decl ""
       explicit_switch_type ""
       
+      comment "Tool implementation for deriving a partitioning of the current timeline such, that each segement has a constant configuration. \"Constant\" means here, that any remaining changes over time can be represented by automation solely, without the need to change the node connections."
       classrelation 137605 // <realization>
 	relation 135941 -_-|>
 	  a public
@@ -377,64 +411,75 @@ ${inlines}
       end
 
       operation 129925 "treat"
-	public explicit_return_type ""
+	public explicit_return_type "void"
 	nparams 1
-	  param inout name "something" type class_ref 134021 // Buildable
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	  param in name "something" type class_ref 134021 // Buildable
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
       end
 
       operation 130181 "treat"
-	public explicit_return_type ""
+	public explicit_return_type "void"
 	nparams 1
-	  param inout name "clip" type class_ref 128901 // Clip
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	  param in name "clip" type class_ref 128901 // Clip
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
       end
 
       operation 130053 "treat"
-	public explicit_return_type ""
+	public explicit_return_type "void"
 	nparams 1
-	  param inout name "effect" type class_ref 129029 // Effect
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	  param in name "effect" type class_ref 129029 // Effect
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
       end
 
       attribute 129669 "segments"
-	private explicit_type ""
+	private explicit_type "void*"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
 	idl_decl ""
-	comment "holds the segemntation to be constructed"
+	comment "holds the segemntation to be constructed. TODO: Segment type"
       end
     end
 
     class 134405 "NodeCreatorTool"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
       idl_decl ""
       explicit_switch_type ""
       
+      comment "This Tool implementation plays the central role in the buld process: given a MObject from Session, it is able to attach ProcNodes to the render engine under construction such as to reflect the properties of the MObject in the actual render."
       classrelation 137733 // <realization>
 	relation 136069 -_-|>
 	  a public
@@ -444,52 +489,64 @@ ${inlines}
       end
 
       operation 130309 "treat"
-	public explicit_return_type ""
+	public explicit_return_type "void"
 	nparams 1
-	  param inout name "something" type class_ref 134021 // Buildable
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	  param in name "something" type class_ref 134021 // Buildable
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
       end
 
       operation 130437 "treat"
-	public explicit_return_type ""
+	public explicit_return_type "void"
 	nparams 1
-	  param inout name "clip" type class_ref 128901 // Clip
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	  param in name "clip" type class_ref 128901 // Clip
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
       end
 
       operation 130565 "treat"
-	public explicit_return_type ""
+	public explicit_return_type "void"
 	nparams 1
-	  param inout name "effect" type class_ref 129029 // Effect
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	  param in name "effect" type class_ref 129029 // Effect
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
       end
 
       operation 130693 "treat"
-	public explicit_return_type ""
+	public explicit_return_type "void"
 	nparams 1
-	  param inout name "auto" type class_ref 129925 // Auto
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	  param in name "auto" type class_ref 129925 // Auto
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	

@@ -1,6 +1,6 @@
 format 38
 "proc" // design::codegen::proc
-  revision 3
+  revision 4
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -74,6 +74,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 132741 // StateProxy
       end
+      comment "Key Interface representing a render process and encapsulating state"
     end
 
     artifact 131589 "controllerfacade"
@@ -112,6 +113,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 130309 // ControllerFacade
       end
+      comment "Facade and service access point for the Proc Layer Controller"
     end
 
     artifact 133765 "frame"
@@ -150,6 +152,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 133253 // Frame
       end
+      comment "Key Abstraction: render process and buffer holding frame data."
     end
   end
 

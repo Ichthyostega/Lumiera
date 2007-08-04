@@ -1,6 +1,6 @@
 format 38
 "MObject" // ProcessingLayer::MObject
-  revision 13
+  revision 14
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -50,8 +50,9 @@ format 38
 
     class 128005 "Session"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -80,8 +81,9 @@ ${inlines}
 
     class 128133 "EDL"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -92,7 +94,7 @@ ${inlines}
 	relation 128389 *-->
 	  stereotype "list"
 	  a role_name "tracks" multiplicity "*" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
 "
 	    classrelation_ref 128645 // tracks (<directional aggregation by value>)
 	  b multiplicity "" parent class_ref 128389 // Track
@@ -102,7 +104,7 @@ ${inlines}
 	relation 128517 o-->
 	  stereotype "list"
 	  a role_name "clips" multiplicity "*" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type} *> ${name}${value};
 "
 	    classrelation_ref 128901 // clips (<directional aggregation>)
 	  b multiplicity "" parent class_ref 128517 // MObject
@@ -111,8 +113,9 @@ ${inlines}
 
     class 128261 "Fixture"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -148,24 +151,30 @@ ${inlines}
       end
 
       operation 128645 "getPlaylistForRender"
-	public explicit_return_type ""
+	public explicit_return_type "void"
 	nparams 0
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
       end
 
       operation 129157 "getAutomation"
-	public explicit_return_type ""
+	public explicit_return_type "void"
 	nparams 0
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
@@ -174,8 +183,9 @@ ${inlines}
 
     class 128389 "Track"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -186,8 +196,9 @@ ${inlines}
 
     class 128517 "MObject"
       abstract visibility public stereotype "interface"
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl "${comment}${@}${visibility}interface ${name}${extends} {
@@ -221,8 +232,9 @@ ${members}};
 
     class 128645 "Placement"
       abstract visibility public stereotype "interface"
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl "${comment}${@}${visibility}interface ${name}${extends} {
@@ -240,21 +252,75 @@ ${members}};
       operation 128005 "resolve"
 	public return_type class_ref 129797 // ExplicitPlacement
 	nparams 0
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
-	comment "create an actual (explicite) placement while trying to satisfy the network of adjacent objects and placements."
+	comment "create an actual (explicit) placement while trying to satisfy the network of adjacent objects and placements."
+      end
+    end
+
+    class 129797 "ExplicitPlacement"
+      abstract visibility public stereotype "interface"
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
+${members}};
+"
+      explicit_switch_type ""
+      
+      classrelation 131589 // <generalisation>
+	relation 130949 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 131589 // <generalisation>
+	  b multiplicity "" parent class_ref 128645 // Placement
+      end
+
+      attribute 128261 "time"
+	protected type class_ref 134917 // Time
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+      end
+
+      attribute 128389 "track"
+	protected type class_ref 128389 // Track
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+      end
+
+      classrelation 131845 // <unidirectional association>
+	relation 131205 --->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 131845 // <unidirectional association>
+	  b multiplicity "" parent class_ref 128389 // Track
+	  association_type class_ref 128389 // Track
       end
     end
 
     class 128773 "AbstractMO"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      abstract visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -276,13 +342,15 @@ ${inlines}
 "
 	java_decl ""
 	idl_decl ""
+	comment "TODO: how to represent?"
       end
     end
 
     class 128901 "Clip"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -298,8 +366,8 @@ ${inlines}
       end
 
       attribute 128645 "start"
-	protected explicit_type "long"
-	init_value "0"
+	protected type class_ref 134917 // Time
+	init_value "Time(0)"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
@@ -310,8 +378,9 @@ ${inlines}
 
     class 129029 "Effect"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -338,8 +407,9 @@ ${inlines}
 
     class 129157 "Meta"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -357,8 +427,9 @@ ${inlines}
 
     class 129285 "DirectPlacement"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -384,8 +455,9 @@ ${inlines}
 
     class 129413 "RelativePlacement"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -403,11 +475,12 @@ ${inlines}
       end
 
       attribute 128133 "relType"
-	protected explicit_type ""
+	protected type class_ref 133893 // RelType
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
 	idl_decl ""
+	comment "the kind of relation denoted by this Placement"
       end
 
       classrelation 131333 // <generalisation>
@@ -425,14 +498,15 @@ ${inlines}
 "
 	java_decl ""
 	idl_decl ""
-	comment "Offset the actual position by this (time) value relative to the anchor point"
+	comment "Offset the actual position by this (time) value relative to the anchor point. TODO: Representation?"
       end
 
       class 133893 "RelType"
-	visibility protected stereotype "enum"
-	cpp_decl "${comment}enum ${name} {
+	visibility public stereotype "enum"
+	cpp_decl "${comment}enum ${name}
+  {
 ${items}
-};
+  };
 "
 	java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
 ${items};
@@ -443,17 +517,18 @@ ${items}};
 "
 	explicit_switch_type ""
 	
+	comment "the possible kinds of RelativePlacements"
 	attribute 129157 "SAMETIME"
 	  public explicit_type ""
-	  cpp_decl "  ${name}${value},${comment}"
+	  cpp_decl "  ${name}${value},	${comment}"
 	  java_decl ""
 	  idl_decl ""
-	  comment "place subject at the sime time then the anchor"
+	  comment "place subject at the sime time as the anchor"
 	end
 
 	attribute 129285 "ATTACH"
 	  public explicit_type ""
-	  cpp_decl "  ${name}${value},${comment}"
+	  cpp_decl "  ${name}${value},	${comment}"
 	  java_decl ""
 	  idl_decl ""
 	  comment "attach subject to anchor (e.g. an effect to a clip)"
@@ -462,9 +537,10 @@ ${items}};
     end
 
     class 129541 "Allocation"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      abstract visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -486,14 +562,34 @@ ${inlines}
 "
 	java_decl ""
 	idl_decl ""
+	get_oper operation_ref 131205 // get_repr
 	comment "human readable representation of the condition characterizing this allocaton, e.g. \"t >= 10\""
+      end
+
+      operation 131205 "get_repr"
+	const cpp_inline public explicit_return_type "string"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}const ${type} ${name} ${(}${)}${const}${volatile} ${throw};"
+	cpp_def "${comment}${inline}const ${type} ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  return repr;
+}
+
+"
+	cpp_name_spec "get${Name}"
+	final 
+	java_name_spec "get${Name}"
+	
+	idl_name_spec "get_${name}"
+	get_of_attribute attribute_ref 128773 // repr
       end
     end
 
     class 129669 "Label"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -509,54 +605,6 @@ ${inlines}
       end
     end
 
-    class 129797 "ExplicitPlacement"
-      abstract visibility public stereotype "interface"
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
-${inlines}
-"
-      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
-${members}}
-"
-      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
-${members}};
-"
-      explicit_switch_type ""
-      
-      classrelation 131589 // <generalisation>
-	relation 130949 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 131589 // <generalisation>
-	  b multiplicity "" parent class_ref 128645 // Placement
-      end
-
-      attribute 128261 "time"
-	protected explicit_type "long"
-	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
-"
-	java_decl ""
-	idl_decl ""
-      end
-
-      attribute 128389 "track"
-	protected type class_ref 128389 // Track
-	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
-"
-	java_decl ""
-	idl_decl ""
-      end
-
-      classrelation 131845 // <unidirectional association>
-	relation 131205 --->
-	  a role_name "" multiplicity "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
-"
-	    classrelation_ref 131845 // <unidirectional association>
-	  b multiplicity "" parent class_ref 128389 // Track
-	  association_type class_ref 128389 // Track
-      end
-    end
 
     class 129925 "Auto"
       visibility package 
@@ -565,15 +613,17 @@ ${members}};
         explicit_extends ""
       nactuals 1
       actual class class_ref 134661 // ParamProvider
-        rank 0 explicit_value ""
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+        rank 0 explicit_value "double"
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
       idl_decl ""
       explicit_switch_type ""
       
+      comment "Automation data for some parameter (i.e. a time varying function)"
       classrelation 131973 // <generalisation>
 	relation 131333 ---|>
 	  a public
@@ -591,12 +641,15 @@ ${inlines}
       end
 
       operation 131077 "getValue"
-	public explicit_return_type "VAL"
+	const public explicit_return_type "VAL"
 	nparams 0
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
@@ -605,8 +658,9 @@ ${inlines}
 
     class 130053 "Wish"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -624,8 +678,9 @@ ${inlines}
 
     class 130181 "Constraint"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -639,6 +694,123 @@ ${inlines}
 	    classrelation_ref 132357 // <generalisation>
 	  b multiplicity "" parent class_ref 129541 // Allocation
       end
+    end
+
+    class 134533 "Parameter"
+      visibility public 
+      nformals 1
+      formal name "VAL" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "Descriptor and access object for a plugin parameter. Parameters may be provided with values from the session, and this values may be automated."
+      operation 130821 "getValue"
+	const public explicit_return_type "VAL"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+      end
+
+      classrelation 138245 // <dependency>
+	relation 136581 -_->
+	  stereotype "implemented_by"
+	  a package
+	    cpp default "#include in source"
+	    classrelation_ref 138245 // <dependency>
+	  b multiplicity "" parent class_ref 134661 // ParamProvider
+      end
+
+      classrelation 138629 // <association>
+	relation_ref 136325 // <association>
+      end
+    end
+
+    class 134661 "ParamProvider"
+      abstract visibility public stereotype "interface"
+      nformals 1
+      formal name "VAL" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
+${members}};
+"
+      explicit_switch_type ""
+      
+      comment "A facility to get the actual value of a plugin/effect parameter"
+      classrelation 137989 // param (<association>)
+	relation 136325 ----
+	  a role_name "param" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 137989 // param (<association>)
+	  b role_name "provider" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 138629 // <association>
+      end
+
+      classrelation 138373 // <unidirectional association>
+	relation 136709 --->
+	  a role_name "" multiplicity "0..1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 138373 // <unidirectional association>
+	  b multiplicity "" parent class_ref 134789 // Interpolator
+      end
+
+      operation 130949 "getValue"
+	const public explicit_return_type "VAL"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+      end
+    end
+
+    class 134789 "Interpolator"
+      visibility package 
+      nformals 1
+      formal name "VAL" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "Provides the implementation for getting the acutal value of a time varying or automated effect/plugin parameter"
     end
   end
 

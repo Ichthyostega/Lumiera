@@ -1,6 +1,6 @@
 format 38
 "controller" // design::codegen::proc::mobject::controller
-  revision 3
+  revision 4
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -75,6 +75,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 130437 // PathManager
       end
+      comment "Manager for deciding the actual render strategy"
     end
 
     artifact 131845 "renderstate"
@@ -113,6 +114,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 130949 // RenderState
       end
+      comment "renderengine state manager"
     end
   end
 end

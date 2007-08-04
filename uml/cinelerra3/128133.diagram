@@ -54,7 +54,7 @@ classcanvas 132869 class_ref 129413 // RelativePlacement
   end
 classcanvas 134149 class_ref 129541 // Allocation
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 590 366 2000
+  xyz 590 359 2000
   end
 classcanvas 134405 class_ref 129669 // Label
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default

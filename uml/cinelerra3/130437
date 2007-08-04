@@ -1,6 +1,6 @@
 format 38
 "session" // design::codegen::proc::mobject::session
-  revision 3
+  revision 4
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -74,6 +74,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 128005 // Session
       end
+      comment "holds the complete session to be edited by the user"
     end
 
     artifact 128645 "edl"
@@ -112,6 +113,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 128133 // EDL
       end
+      comment "the (high level) Edit Decision List within the current Session"
     end
 
     artifact 128773 "fixture"
@@ -150,6 +152,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 128261 // Fixture
       end
+      comment "the (low level) representation of the EDL with concrete placement data"
     end
 
     artifact 128901 "track"
@@ -188,6 +191,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 128389 // Track
       end
+      comment "descriptor for one track in the Session"
     end
 
     artifact 129285 "abstractmo"
@@ -226,6 +230,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 128773 // AbstractMO
       end
+      comment "abstract base class for all Media Objects"
     end
 
     artifact 129413 "clip"
@@ -264,6 +269,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 128901 // Clip
       end
+      comment "a Media Clip"
     end
 
     artifact 129541 "effect"
@@ -302,6 +308,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 129029 // Effect
       end
+      comment "EDL representation of a pluggable and automatable effect."
     end
 
     artifact 129669 "meta"
@@ -340,6 +347,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 129157 // Meta
       end
+      comment "abstract base class of all MObjects representing meta data or processing instructions"
     end
 
     artifact 129797 "fixedplacement"
@@ -376,7 +384,7 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 129285 // DirectPlacement
+	class_ref 129285 // FixedPlacement
       end
     end
 
@@ -416,6 +424,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 129413 // RelativePlacement
       end
+      comment "Placement implemnetaion providing various ways of attaching a MObject to another one"
     end
 
     artifact 130053 "allocation"
@@ -530,6 +539,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 129925 // Auto
       end
+      comment "Media Object holding automation data"
     end
   end
 end
