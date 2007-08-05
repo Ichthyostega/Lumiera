@@ -498,127 +498,6 @@ Also see AdvancedOptions</pre>
 </div>
 <!--POST-SHADOWAREA-->
 <div id="storeArea">
-<div title="1. The basics of the task macro" modifier="CehTeh" modified="200706100740" created="200604082224" tags="TaskMacroTutorial" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706100740">
-<pre>A task has a description, an estimate of how long it will take, and a record of how much time you have spent on it so far.  Here's an example, which shows a task estimated at 3 hours, with 1 hour spent on it, and ''2'' hours remaining:
-&lt;&lt;&lt;
-&lt;&lt;task 3 3 1&gt;&gt; Add a double-click handler to the description cell that opens the editor and selects the text
-&lt;&lt;&lt;
-If you hover the mouse over any part of the task -- the bullet, the description, or any of the numeric cells -- a tip will appear explaining it.
-
-Try modifying the time spent.  Suppose you've just spent one more hour and want to record it.  Just click on the second yellow cell, and enter &quot;+1&quot; (sans the quote marks, of course) in the popup window.  Watch the time remaining go down to 1 hour.
-
-In reality, I originally estimated this task at a half-hour, but it ended up taking 3.5 hours.  The macro also tracks your original estimate, if it is different from the current estimate, in a fourth cell like this:
-&lt;&lt;&lt;
-&lt;&lt;task 0.5 2 1&gt;&gt; Add a double-click handler to the description cell that opens the editor and selects the text
-&lt;&lt;&lt;
-You can adjust the current estimate in the same way as you adjusted the time spent.  Click on the current estimate cell (the first yellow cell), and change it to 2.5 hours by typing &quot;2.5&quot; or &quot;+.5&quot;.
-
-You can also adjust the time remaining, which will modify either the estimate (if the time remaining increases) or the time spent (if it decreases).  Click on the time remaining and add an hour by typing &quot;+1&quot;.
-
-When the time remaining goes to zero, the task is considered complete:
-&lt;&lt;&lt;
-&lt;&lt;task 0.5 3.5 3.5&gt;&gt; Add a double-click handler to the description cell that opens the editor and selects the text
-&lt;&lt;&lt;
-If you haven't already done so, try double-clicking the description.  Yes, it really does open up the editor and select just the text of the description.
-
-----
-To continue, click the down-arrow and choose another section: &lt;&lt;tag TaskMacroTutorial&gt;&gt;</pre>
-</div>
-<div title="2. More advanced use of the task macro" modifier="LukeBlanshard" modified="200604090319" created="200604082349" tags="TaskMacroTutorial" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200604090319">
-<pre>A task's description is a single wikified line, so it can contain any formatting that can be specified on one line:
-&lt;&lt;&lt;
-&lt;&lt;task 1&gt;&gt; Beef up the time click handlers to allow entry of ''two'' values each: cur&amp;spent, spent&amp;rem. Add click handler to done tasks' spent cells too, to reopen them (like with +0, 1).
-&lt;&lt;task 0.5&gt;&gt; Put tasksum on the ViewTemplate.
-&lt;&lt;&lt;
-You can specify just the description of a task, and leave it unestimated.  Click the question mark to enter the estimate:
-&lt;&lt;&lt;
-&lt;&lt;task&gt;&gt; Beef up the time click handlers to allow entry of ''two'' values each: cur&amp;spent, spent&amp;rem. Add click handler to done tasks' spent cells too, to reopen them (like with +0, 1).
-&lt;&lt;&lt;
-As this task implies, you can enter two values in the popup when you click on any of the time cells.  Separate them with spaces and/or a comma.  Experiment:
-&lt;&lt;&lt;
-&lt;&lt;task 1&gt;&gt; Beef up the time click handlers to allow entry of ''two'' values each: cur&amp;spent, spent&amp;rem. Add click handler to done tasks' spent cells too, to reopen them (like with +0, 1).
-&lt;&lt;&lt;
-Finally, if you haven't already figured this out, you can double-click on a task's bullet to mark it complete, with the current estimate entered as the time spent.
-
-----
-To continue, click the down-arrow and choose another section: &lt;&lt;tag TaskMacroTutorial&gt;&gt;</pre>
-</div>
-<div title="3. The taskadder macro: add tasks easily" modifier="LukeBlanshard" modified="200605020243" created="200604082241" tags="TaskMacroTutorial" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200605020243">
-<pre>If you've been paying attention, you've noticed that I haven't discussed the actual adding of calls to the task macro within your tiddlers -- it's all been about modifying tasks that were already there.  That's because adding tasks via the taskadder macro is much easier and more intuitive than adding them by hand.
-
-And setting up a taskadder is simplicity itself.  Just add {{{&lt;&lt;taskadder&gt;&gt;}}} to your tiddler.  You will see this:
-&lt;&lt;&lt;
-&lt;&lt;taskadder&gt;&gt;
-&lt;&lt;&lt;
-Just type a task description into the first field, and your initial estimate for how long it will take into the second field.  Click the &quot;add task&quot; button, or just hit Enter in either of the fields, to add the new task into the tiddler.  Notice that you can just start typing a new task as soon as you're done entering the first one.
-
-You can have as many taskadders as you like in any tiddler.  The last one you used will capture the keyboard focus when it is redisplayed, meaning you can type a series of tasks without using the mouse.  Try adding some tasks here and in the above adder:
-&lt;&lt;&lt;
-&lt;&lt;taskadder&gt;&gt;
-&lt;&lt;&lt;
-Notice that the one you just used takes focus when this tiddler is redisplayed.
-
-A taskadder by default adds tasks above itself.  You can make it add them below by adding a {{{below}}} argument to the macro call:
-&lt;&lt;&lt;
-&lt;&lt;taskadder below&gt;&gt;
-&lt;&lt;&lt;
-
-----
-To continue, click the down-arrow and choose another section: &lt;&lt;tag TaskMacroTutorial&gt;&gt;</pre>
-</div>
-<div title="4. The tasksum macro: summarize tasks" modifier="LukeBlanshard" modified="200605020248" created="200604082241" tags="TaskMacroTutorial" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200605020248">
-<pre>In this tutorial, we've been looking mostly at individual tasks.  In real life, though, you'll typically have a series of them, or even several series of them in the same tiddler.  In these cases you want a summary that tells you -- at a minimum -- how much time you still expect to spend on these tasks.
-
-To get such a summary, just add {{{&lt;&lt;tasksum start&gt;&gt;}}} before the tasks and {{{&lt;&lt;tasksum end&gt;&gt;}}} after them.  Here's an example:
-&lt;&lt;&lt;
-&lt;&lt;tasksum start&gt;&gt;
-&lt;&lt;task 0.25 0.25 0.25&gt;&gt; Add tooltips to the various cells
-&lt;&lt;task 1 0.75 0.75&gt;&gt; Figure out how to add auto-updating click handlers to the time cells
-&lt;&lt;task 2 2 0&gt;&gt; Add simple click handlers to cur, spent, rem: just allow direct setting of values
-&lt;&lt;task 1 3.5 2.5&gt;&gt; Add a double-click handler to the desc cell that opens the editor and selects the text
-&lt;&lt;task 1 1 0&gt;&gt; Beef up the time click handlers to allow entry of two values each: cur&amp;spent, spent&amp;rem. Add click handler to done tasks' spent cells too, to reopen them (like with +0, 1).
-&lt;&lt;task 1 1 0&gt;&gt; Beef up the time click handlers to handle leading + or -
-&lt;&lt;task 1 1 0&gt;&gt; Add a double-click handler to the status cell that functions like typing 0 into the rem cell
-&lt;&lt;tasksum end&gt;&gt;
-&lt;&lt;&lt;
-If you'd rather have the summary at the top, just add {{{here}}} to the start call, ie {{{&lt;&lt;tasksum start here&gt;&gt;}}}.
-&lt;&lt;&lt;
-&lt;&lt;tasksum start here&gt;&gt;
-&lt;&lt;task 0.25 0.25 0.25&gt;&gt; Add tooltips to the various cells
-&lt;&lt;task 1 0.75 0.75&gt;&gt; Figure out how to add auto-updating click handlers to the time cells
-&lt;&lt;task 2 2 0&gt;&gt; Add simple click handlers to cur, spent, rem: just allow direct setting of values
-&lt;&lt;tasksum end&gt;&gt;
-&lt;&lt;&lt;
-You can nest these things if you like, just be sure to match starts and ends:
-&lt;&lt;&lt;
-&lt;&lt;tasksum start here&gt;&gt;
-* Time cell manipulation:&lt;&lt;tasksum start&gt;&gt;
-&lt;&lt;task 1 0.75 0.75&gt;&gt; Figure out how to add auto-updating click handlers to the time cells
-&lt;&lt;task 2 2 0&gt;&gt; Add simple click handlers to cur, spent, rem: just allow direct setting of values
-&lt;&lt;task 1 1 0&gt;&gt; Beef up the time click handlers to allow entry of two values each: cur&amp;spent, spent&amp;rem. Add click handler to done tasks' spent cells too, to reopen them (like with +0, 1).
-&lt;&lt;task 1 1 0&gt;&gt; Beef up the time click handlers to handle leading + or -
-&lt;&lt;tasksum end &quot;Cell manipulation:&quot;&gt;&gt;
-&lt;&lt;br&gt;&gt;
-* Double-click handling:&lt;&lt;tasksum start&gt;&gt;
-&lt;&lt;task 1 3.5 2.5&gt;&gt; Add a double-click handler to the desc cell that opens the editor and selects the text
-&lt;&lt;task 1 1 0&gt;&gt; Add a double-click handler to the status cell that functions like typing 0 into the rem cell
-&lt;&lt;tasksum end &quot;Double-clicks:&quot;&gt;&gt;
-
-&lt;&lt;tasksum end&gt;&gt;
-&lt;&lt;&lt;
-Finally, the simplest way to use tasksum is to add it to your view template.  See TaskSummaryViewTemplate for an example template.  Note that if no tasks are present between the start and end, nothing is displayed.
-
-----
-To continue, click the down-arrow and choose another section: &lt;&lt;tag TaskMacroTutorial&gt;&gt;</pre>
-</div>
-<div title="5. Task macro installation issues" modifier="LukeBlanshard" modified="200605132015" created="200604082243" tags="TaskMacroTutorial" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200605132015">
-<pre>The TaskMacroPlugin can be installed like any other TiddlyWiki plugin, and used without further effort.  However, there are two issues that may affect you.  (To get started with a brand new wiki that does not have these issues, consider downloading the [[empty LabWiki|empty_labwiki.html]].)
-# The task macros don't play nicely with the default TiddlyWiki display of tags.  In the default view template, a tiddler's list of tags is shown in a little box that floats in the upper right corner of the tiddler.  However, this little box may interfere with the tables used by the task macros.  In Firefox, the tables are drawn right over the top of the tag box, rendering both of them illegible.  In Internet Explorer, the tag box forces the tables to be pushed down below the box, which can waste a lot of space.&lt;&lt;br&gt;&gt;&lt;&lt;br&gt;&gt;Thus, I recommend changing your view template to eliminate the little box.  If you use Simon Baird's [[TagglyTagging|http://simonbaird.com/mptw/#TagglyTagging]] (as LabWiki does), then my TaskSummaryViewTemplate might be a good alternative.  Simply import it into your wiki and rename it to ViewTemplate.  This template also demonstrates how to incorporate the tasksum macro into every tiddler so any tiddler with tasks has a summary at the top.&lt;&lt;br&gt;&gt;&lt;&lt;br&gt;&gt;
-# Most view templates also add a minus sign (&quot;-&quot;) before the &quot;close&quot; command.  TiddlyWiki interprets this to mean that you want the close command to be executed if you hit the Escape key from within the tiddler.&lt;&lt;br&gt;&gt;&lt;&lt;br&gt;&gt;However, most tiddlers never have focus, and so never give you the opportunity to try it out.  But if you have a taskadder in your tiddler, then you suddenly enable this feature -- and you probably don't want it.  It means that if you type a nice long task description and then hit Escape, that description will be lost and the tiddler will be closed.  So I recommend that you remove the minus sign from the view template's menu altogether, as I have done in LabWiki's own ViewTemplate.
-
-----
-This ends the tutorial.  To go back to any previous section, click the down-arrow and choose it: &lt;&lt;tag TaskMacroTutorial&gt;&gt;</pre>
-</div>
 <div title="Admin" modifier="CehTeh" modified="200706110324" created="200706080535" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110324">
 <pre>PageTemplate
 |&gt;|SiteTitle - SiteSubtitle|
@@ -747,7 +626,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="ColorPalette" modifier="CehTeh" modified="200707111058" created="200707102303" changecount="7">
+<div title="ColorPalette" modifier="CehTeh" modified="200707111058" created="200707102303" tags="excludeMissing" changecount="7">
 <pre>Background: #fff
 Foreground: #000
 PrimaryPale: #ec5
@@ -767,7 +646,7 @@ Error: #f88</pre>
 <div title="DefaultTiddlers" modifier="CehTeh" modified="200707102306" created="200707102301" changecount="2">
 <pre>[[SupportLibrary]]</pre>
 </div>
-<div title="ErrorHandling" modifier="MichaelPloujnikov" modified="200707160333" created="200707152252" changecount="4">
+<div title="ErrorHandling" modifier="MichaelPloujnikov" modified="200707160333" created="200707152252" tags="excludeMissing" changecount="4">
 <pre>! Proposal:
 We need some centralized way to handle errors and doing hard aborts.
 
@@ -1216,14 +1095,14 @@ SupportLibrary
 &lt;&lt;fullscreen&gt;&gt;
 </pre>
 </div>
-<div title="MarkupPreHead" modifier="CehTeh" created="200706191948">
+<div title="MarkupPreHead" modifier="Ichthyostega" modified="200708051444" created="200706191948" tags="excludeMissing" changecount="1">
 <pre>&lt;!--{{{--&gt;
 &lt;link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/&gt;
 &lt;!--}}}--&gt;
 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;&lt;b&gt;My TiddlyWiki&lt;/b&gt; is loading&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
 </div>
-<div title="PageTemplate" modifier="CehTeh" modified="200706110330" created="200701131624" tags="MPTWTheme" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110330">
+<div title="PageTemplate" modifier="CehTeh" modified="200706110330" created="200701131624" tags="MPTWTheme excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110330">
 <pre>&lt;!--{{{--&gt;
 &lt;div class='header' macro='gradient vert [[ColorPalette::PrimaryLight]] [[ColorPalette::PrimaryMid]]'&gt;
 	&lt;div class='headerShadow'&gt;
@@ -1748,7 +1627,7 @@ DAMAGE.
 &lt;html&gt;&lt;sub&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;scrollAnchorVisible('Top',null, event)&quot;&gt;[Top]&lt;/sub&gt;&lt;/a&gt;&lt;/html&gt;
 ***/</pre>
 </div>
-<div title="PluginInterfaceDefinition" modifier="MichaelPloujnikov" modified="200707160400" created="200707111319" changecount="19">
+<div title="PluginInterfaceDefinition" modifier="MichaelPloujnikov" modified="200707160400" created="200707111319" tags="excludeMissing" changecount="19">
 <pre>Interfaces are declared in header files. They use some tool macros to give a convenient definition language.
 
 ! Thoughts
@@ -1804,7 +1683,7 @@ struct cinelerra_interface_foo_2
 };
 }}}</pre>
 </div>
-<div title="PluginInterfaceImplementation" modifier="MichaelPloujnikov" modified="200707160355" created="200707111749" changecount="10">
+<div title="PluginInterfaceImplementation" modifier="MichaelPloujnikov" modified="200707160355" created="200707111749" tags="excludeMissing" changecount="10">
 <pre>A Plugin realizes an interface. This means that actual functions are mapped to the correspondending slots in the interface structure.
 
 {{{
@@ -1869,7 +1748,7 @@ Note: the protoname and version args for ~CINELERRA_INTERFACE_FUNC will be used 
 
 </pre>
 </div>
-<div title="PluginLibrary" modifier="MichaelPloujnikov" modified="200707160351" created="200707111329" changecount="33">
+<div title="PluginLibrary" modifier="MichaelPloujnikov" modified="200707160351" created="200707111329" tags="excludeMissing" changecount="33">
 <pre>! Cinelerra Plugin API
 
 There are only a few functions to manage Plugins. Actually a user requests interfaces. The libraries which implement Plugins are managed transparently.
@@ -2235,72 +2114,6 @@ config.macros.rssFeedUpdate = {
 //}}}
 </pre>
 </div>
-<div title="RSSReaderPluginDoc" modifier="BidiX" modified="200704220857" created="200704132051" tags="Doc RSSReader" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200704220857">
-<pre>//last update: RSSReaderPlugin v 1.1.1//
-
-!Description
-This plugin provides a RSSReader for TiddlyWiki
-* It accesses asynchronously an RSSFeed
-*Depending on the chanel item format, each item could be written as :
-**simple text wikified
-**html
-
-!Usage
-{{{
-&lt;&lt;rssReader noDesc|asHtml|asText rssUrl ['filtering string']&gt;&gt;
-	noDesc: only title of item is printed
-
-	asHtml: if you know that description contain html (links, img ...), 
-		the text is enclosed with &lt;html&gt; &lt;/html&gt; tags
-
- 	asText: if the description should not be interpreted as html the 
-		description is wikified
-
-	rssUrl: the rssFeed url that could be accessed. 
-	
-	'filtering string': if present, the rssfeed item title must contained 
-		this string to be displayed. 
-		If 'filering string' contained space characters only, the tiddler 
-		title is used for filtering.
-
-}}}
-
-For security reasons, if the TiddlyWiki is accessed from http, a ProxyService should be used to access an rssFeed from an other site.
-
-!examples
-| !reader | !RSSFeed type | !working from |
-| BidiXTWRSS | Description asHtml | file: or tiddlywiki.bidix.info |
-| [[Le Monde]] | Description asText | file: or tiddlywiki.bidix.info using proxy |
-| YahooNewsSport | Description asHtml | file: or tiddlywiki.bidix.info using proxy |
-| TiddlyWikiRSS | Description asHtml | file: or tiddlywiki.bidix.info using proxy |
-| [[Libération]] | noDesc | file: or tiddlywiki.bidix.info using proxy |
-| [[TestComment]] | asText and filters | file: or tiddlywiki.bidix.info using proxy |
-see : &lt;&lt;tag RSSFeed&gt;&gt; for the full list.
-
-!Revision history
-* V1.1.0 (2207/04/13)
-**No more import functions
-* V1.0.0 (2006/11/11)
-**refactoring using core loadRemoteFile function
-**import using new tiddlywiki:tiddler element
-**import and presentation preserved without EricShulman's NestedSliderPlugin
-**better display of items 
-* v0.3.0 (24/08/2006)
-** Filter on RSS item title
-** Place to display redefined for asynchronous processing
-* v0.2.2 (22/08/2006)
-**Haloscan feed has no pubDate.
-* v0.2.1 (08/05/2006)
-* v0.2.0 (01/05/2006)
-**Small adapations for del.icio.us feed
-* v0.1.1 (28/04/2006)
-**Bug : Channel without title 
-* v0.1.0 (24/04/2006)
-** initial release
-
-
-</pre>
-</div>
 <div title="SiteSubtitle" modifier="CehTeh" modified="200707111059" created="200707102305" changecount="2">
 <pre>things we find useful</pre>
 </div>
@@ -2365,7 +2178,7 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
 }
 //}}}</pre>
 </div>
-<div title="StyleSheet" modifier="CehTeh" modified="200706090017" created="200701131624" tags="MPTWTheme" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706090017">
+<div title="StyleSheet" modifier="CehTeh" modified="200706090017" created="200701131624" tags="MPTWTheme excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706090017">
 <pre>/*{{{*/
 /* a contrasting background so I can see where one tiddler ends and the other begins */
 body {

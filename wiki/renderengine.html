@@ -1914,6 +1914,30 @@ DAMAGE.
 <div title="PrimaryPale" modifier="just me" created="200706220427" changecount="1">
 <pre>{{red{killme}}}</pre>
 </div>
+<div title="ProblemsTodo" modifier="Ichthyostega" modified="200708050630" created="200708050524" tags="design discuss" changecount="8">
+<pre>Open issues, Things to be worked out, Problems still to be solved... 
+
+!!Parameter Handling
+The requirements are not quite clear; obviously Parameters are the foundation for getting automation right and for providing effect editing interfaces, so it seems to me we need some sort of introspection, i.e. Parameters need to be discovered,
+enumerated and described at runtime.
+
+!!Treatment of Time (points) and Intervals
+At the moment we have no clear picture what is needed and what problems we may face in that domain.
+From experience, mainly with other applications, we can draw the following conclusions
+* drift and rounding errors are dangerous, because time in our context usually is understood as a fixed grid (Frames, samples...)
+* fine grained time values easily get very large
+* Cinelerra currently uses the approach of simply counting natural values for each media type separately. In an environment mixing several different media types freely, this seems a bit too simplistic (because it actually brings in the danger of rounding errors, just think at drop frame TC)
+
+!!Organizing of Output Channels
+How to handle the simultaneous rendering of several output streams (video, audio channels). Shall we treat the EDL as one entity containing different output channels, or should it rather be seen as a composite of several sub-~EDLs, each for only one output channel? This decision will be reflected in the overall structure of the network of render nodes: We could have a list of channel-output generating pipelines in each processor (for every segment), or we could have independently segmented lists of Processors for every output channel/type. The problem is, //it is not clear what approach to prefer at the moment//  because we are just guessing.
+
+!!Tracks, Channels, Layers
+Closely related to this is the not-so-obvious problem how to understand the common global structures found in most audio and video editing applications. Mostly, they stem from imitating hardware recording and editing solutions, thus easing the transition for professionals grown up with analog hardware based media. But as digital media are the de-facto standard nowadays, we could have a look at all those accidental complexity introduced by sticking to the hardware tool metaphor.
+* is it really necessary to have fixed global tracks?
+* is it really helpful to feed &quot;source tracks&quot; into global processing busses/channels?
+Users accustomed with modern GUI applications typically expect that //everything is a object//  and can be pulled around and  manipulated individually. This seems natural at start, but raises the problem of providing a efficient workflow for handling larger projects and editing tasks. So, if we don't have a hard wired multitrack+bus architecture, we need some sort of templating to get the standard editing use case done efficiently.
+</pre>
+</div>
 <div title="ProcNode" modifier="MichaelPloujnikov" modified="200706271500" created="200706220409" tags="def" changecount="3">
 <pre>A data processing node within the Render Engine. Its key feature is the possibility to pull from it one (freely addressable) [[Frame]] of calculated data. Further, each ~ProcNode has the ability to be wired with other nodes and [[Parameter Providers|ParamProvider]]
 </pre>
@@ -2132,7 +2156,7 @@ config.macros.rssFeedUpdate = {
 //}}}
 </pre>
 </div>
-<div title="RenderEngine" modifier="MichaelPloujnikov" modified="200706271423" created="200706190056" tags="overview" changecount="38">
+<div title="RenderEngine" modifier="Ichthyostega" modified="200708050630" created="200706190056" tags="overview" changecount="40">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[this aspect|MObjects]] as well.
 
 The key idea of Ichthyo's Design-draft is to use the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]] for the Render Engine, thus separating completely the //building// of the Render Pipeline from //running,// i.e. doing the actual Render. The Nodes in this Pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder.
@@ -2155,7 +2179,8 @@ The design of Cinelerra 2 basically follows this design, but __fails because of 
 &amp;rarr; BuildProcess
 &amp;rarr; RenderProcess
 &amp;rarr; [[Two Examples|Examples]] (Object diagrams) 
-&amp;rarr; how [[Automation]] works {{red{to be defined in more detail}}}
+&amp;rarr; how [[Automation]] works  {{red{to be defined in more detail}}}
+&amp;rarr; [[Problems|ProblemsTodo]] {{red{to be solved}}}
 </pre>
 </div>
 <div title="RenderEntities" modifier="Ichthyostega" modified="200706220406" created="200706190715" changecount="6">
