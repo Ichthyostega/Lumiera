@@ -1,6 +1,6 @@
 format 40
 "RenderEngine" // ProcessingLayer::RenderEngine
-  revision 9
+  revision 10
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -111,8 +111,9 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 
       classrelation 132485 // renderSegments (<directional aggregation by value>)
 	relation 131845 *-->
+	  stereotype "list"
 	  a role_name "renderSegments" multiplicity "0..*" private
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
 "
 	    classrelation_ref 132485 // renderSegments (<directional aggregation by value>)
 	  b multiplicity "1" parent class_ref 131461 // Processor
@@ -223,12 +224,13 @@ ${members}};
 	  b multiplicity "1" parent class_ref 131717 // ProcNode
       end
 
-      classrelation 137861 // <directional aggregation by value>
+      classrelation 137861 // params (<directional aggregation by value>)
 	relation 136197 *-->
-	  a role_name "" multiplicity "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+	  stereotype "vector"
+	  a role_name "params" multiplicity "1..*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
 "
-	    classrelation_ref 137861 // <directional aggregation by value>
+	    classrelation_ref 137861 // params (<directional aggregation by value>)
 	  b multiplicity "" parent class_ref 134533 // Parameter
       end
     end
@@ -355,7 +357,27 @@ ${inlines}
       end
     end
 
-    class 132613 "OpenGLPipe"
+    class 135045 "CodecAdapter"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 138757 // <generalisation>
+	relation 136965 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 138757 // <generalisation>
+	  b multiplicity "" parent class_ref 131845 // Trafo
+      end
+    end
+
+    class 132613 "GLPipe"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -538,6 +560,5 @@ ${inlines}
 	  b multiplicity "" parent class_ref 131717 // ProcNode
       end
     end
-
   end
 end

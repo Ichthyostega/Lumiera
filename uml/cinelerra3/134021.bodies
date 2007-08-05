@@ -1,5 +1,5 @@
 class Buildable
-!!!129669.cpp!!!	apply(inout provided_tool : Tool)
+!!!129669.cpp!!!	apply(inout provided_tool : Tool) : void
 {
-	tool.treat(mElement);
+	provided_tool.treat(mElement);
 }

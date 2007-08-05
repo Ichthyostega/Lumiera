@@ -1,7 +1,9 @@
-window_sizes 1080 756 270 800 557 120
+window_sizes 1104 756 270 824 557 120
 show_stereotypes
 selected 
-package_ref 129 // cinelerra3
+  package_ref 129 // cinelerra3
 open
+  
+  package_ref 128645 // codegen
 end
 end

@@ -1,6 +1,6 @@
-format 38
+format 40
 "engine" // design::codegen::proc::engine
-  revision 4
+  revision 5
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -8,7 +8,7 @@ format 38
   //use case diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
   //collaboration diagram settings
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
   //object diagram settings
@@ -267,7 +267,7 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 131973 // Pipe
+	class_ref 131973 // Link
       end
       comment "forwarding, adapting or connecting ProcNode"
     end
@@ -428,6 +428,45 @@ ${namespace_end}"
       comment "Adapter for integrating various Effect processors in the render pipeline"
     end
 
+    artifact 134917 "codecadapter"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 135045 // CodecAdapter
+      end
+      comment "Processing Node for (de)coding media data"
+    end
+
     artifact 133253 "openglpipe"
       stereotype "source"
       cpp_h "/*
@@ -462,7 +501,7 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 132613 // OpenGLPipe
+	class_ref 132613 // GLPipe
       end
       comment "specialized connection element for handling OpenGL implementation details"
     end

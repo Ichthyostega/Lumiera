@@ -38,7 +38,7 @@ linkcanvas 129669
   from ref 129285 z 1999 to ref 129413
 dirscanvas 132357 z 1000 linkcanvas_ref 129669
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "4 getPlaylistForRender()" xyz 126 222 3000
+  forward_label "4 getPlaylistForRender()" xyz 125 222 3000
 linkcanvas 130309
   from ref 128133 z 1999 to ref 130053
 dirscanvas 132229 z 1000 linkcanvas_ref 130309
@@ -63,42 +63,42 @@ linkcanvas 131589
   from ref 129925 z 1999 to ref 129413
 dirscanvas 132869 z 1000 linkcanvas_ref 131589
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
-  forward_label "8 getAutomation()" xyz 63 297 3000
+  forward_label "8 getAutomation()" xyz 62 297 3000
 linkcanvas 131845
   from ref 128005 z 1999 to ref 131717
 dirscanvas 133125 z 1000 linkcanvas_ref 131845
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
   forward_label "9 play()" xyz 670 317 3000
 msgs
-  msg operation_ref 128261 // "buildProcessor()"
+  msg operation_ref 128261 // "buildProcessor() : Processor"
     forward ranks 1 "1" dirscanvas_ref 132101
     msgs
-      msg operation_ref 128389 // "getStateProxy()"
+      msg operation_ref 128389 // "getStateProxy() : StateProxy"
 	forward ranks 2 "1.1" dirscanvas_ref 132229
 	no_msg
-      msg operation_ref 128517 // "buildEngine()"
+      msg operation_ref 128517 // "buildEngine() : RenderEngine"
 	forward ranks 3 "1.2" dirscanvas_ref 130181
 	msgs
-	  msg operation_ref 128645 // "getPlaylistForRender()"
+	  msg operation_ref 128645 // "getPlaylistForRender() : list<ExplicitPlacement   [ProcessingLayer::MObject]>"
 	    forward ranks 4 "1.2.1" dirscanvas_ref 132357
 	    no_msg
-	  msg operation_ref 128773 // "configure()"
+	  msg operation_ref 128773 // "configure() : Tool"
 	    forward ranks 5 "1.2.2" dirscanvas_ref 132485
 	    no_msg
-	  msg operation_ref 128901 // "build()"
+	  msg operation_ref 128901 // "build() : RenderEngine"
 	    forward ranks 6 "1.2.3" dirscanvas_ref 132613
 	    msgs
-	      msg operation_ref 129029 // "getConnection()"
+	      msg operation_ref 129029 // "getConnection() : int"
 		forward ranks 7 "1.2.3.1" dirscanvas_ref 132741
 		msgs
-		  msg operation_ref 129157 // "getAutomation()"
+		  msg operation_ref 129157 // "getAutomation() : Auto   [ProcessingLayer::MObject]*"
 		    forward ranks 8 "1.2.3.1.1" dirscanvas_ref 132869
 		    no_msg
 		msgsend
 	    msgsend
 	msgsend
     msgsend
-  msg operation_ref 129413 // "play()"
+  msg operation_ref 129413 // "play() : void"
     forward ranks 9 "2" dirscanvas_ref 133125
     no_msg
 msgsend

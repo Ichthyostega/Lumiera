@@ -1,6 +1,6 @@
 format 40
 "Builder" // ProcessingLayer::MObject::Builder
-  revision 10
+  revision 11
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -342,10 +342,10 @@ ${members}};
       operation 129669 "apply"
 	public explicit_return_type "void"
 	nparams 1
-	  param in name "provided_tool" explicit_type "Tool"
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	  param inout name "provided_tool" explicit_type "Tool"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
 	cpp_def "${comment}${inline}${type}
-${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
+${class}::${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
 {
   ${body}
 }
@@ -458,13 +458,15 @@ ${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${static
 	
       end
 
-      attribute 129669 "segments"
-	private explicit_type "void*"
-	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+      classrelation 139013 // segments (<directional aggregation by value>)
+	relation 137221 *-->
+	  stereotype "list"
+	  a role_name "segments" multiplicity "*" protected
+	    comment "the partitioning of the Timeline to be created by this tool."
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
 "
-	java_decl ""
-	idl_decl ""
-	comment "holds the segemntation to be constructed. TODO: Segment type"
+	    classrelation_ref 139013 // segments (<directional aggregation by value>)
+	  b multiplicity "" parent class_ref 135173 // Segment
       end
     end
 
@@ -491,10 +493,10 @@ ${inlines}
       operation 130309 "treat"
 	public explicit_return_type "void"
 	nparams 1
-	  param in name "something" type class_ref 134021 // Buildable
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	  param inout name "something" type class_ref 134021 // Buildable
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
 	cpp_def "${comment}${inline}${type}
-${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
+${class}::${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
 {
   ${body}
 }
@@ -507,10 +509,10 @@ ${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${static
       operation 130437 "treat"
 	public explicit_return_type "void"
 	nparams 1
-	  param in name "clip" type class_ref 128901 // Clip
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	  param inout name "clip" type class_ref 128901 // Clip
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
 	cpp_def "${comment}${inline}${type}
-${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
+${class}::${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
 {
   ${body}
 }
@@ -523,10 +525,10 @@ ${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${static
       operation 130565 "treat"
 	public explicit_return_type "void"
 	nparams 1
-	  param in name "effect" type class_ref 129029 // Effect
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	  param inout name "effect" type class_ref 129029 // Effect
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
 	cpp_def "${comment}${inline}${type}
-${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
+${class}::${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
 {
   ${body}
 }
@@ -539,10 +541,10 @@ ${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${static
       operation 130693 "treat"
 	public explicit_return_type "void"
 	nparams 1
-	  param in name "auto" type class_ref 129925 // Auto
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	  param inout name "auto" type class_ref 129925 // Auto
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
 	cpp_def "${comment}${inline}${type}
-${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
+${class}::${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
 {
   ${body}
 }

@@ -1,6 +1,6 @@
 format 40
 "codegen" // design::codegen
-  revision 14
+  revision 15
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -26,6 +26,7 @@ format 40
   package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
   show_infonote default drawing_language default
   
+  cpp_namespace "cinelerra"
   comment "This package is used to organize code generation by BOUML. It is considered useless after having generated the initial code skeleton."
   deploymentview 128133 "EXE Deployment"
     //deployment diagram settings
@@ -42,58 +43,57 @@ format 40
     artifact 128005 "Cinelerra3"
       stereotype "executable"
       associated_artifacts
-	artifact_ref 129541 // effect
-	artifact_ref 130181 // label
-	artifact_ref 130053 // allocation
-	artifact_ref 131973 // renderengine
-	artifact_ref 130693 // conmanager
-	artifact_ref 128133 // main
-	artifact_ref 129029 // placement
-	artifact_ref 132485 // trafo
-	artifact_ref 130821 // assembler
-	artifact_ref 133125 // pluginadapter
-	artifact_ref 134277 // source
-	artifact_ref 129797 // fixedplacement
-	artifact_ref 134149 // glbuf
-	artifact_ref 134661 // interpolator
-	artifact_ref 132869 // projector
-	artifact_ref 129413 // clip
-	artifact_ref 128773 // fixture
-	artifact_ref 134405 // parameter
-	artifact_ref 134533 // paramprovider
-	artifact_ref 133765 // frame
-	artifact_ref 133381 // arender
-	artifact_ref 132357 // procnode
-	artifact_ref 130437 // builderfacade
-	artifact_ref 132229 // exitnode
-	artifact_ref 128901 // track
-	artifact_ref 131461 // nodecreatertool
-	artifact_ref 133893 // aframe
-	artifact_ref 130949 // stateproxy
-	artifact_ref 129669 // meta
-	artifact_ref 129925 // relativeplacement
-	artifact_ref 128517 // session
-	artifact_ref 130309 // auto
-	artifact_ref 133253 // openglpipe
-	artifact_ref 131717 // pathmanager
-	artifact_ref 132613 // pipe
-	artifact_ref 130565 // toolfactory
-	artifact_ref 131077 // buildable
-	artifact_ref 131589 // controllerfacade
-	artifact_ref 128645 // edl
 	artifact_ref 128261 // mobject
-	artifact_ref 131333 // segmentationtool
-	artifact_ref 133509 // vrender
-	artifact_ref 129157 // explicitplacement
-	artifact_ref 132997 // mask
-	artifact_ref 132101 // processor
-	artifact_ref 132741 // hub
-	artifact_ref 129285 // abstractmo
-	artifact_ref 131205 // tool
-	artifact_ref 134021 // vframe
-	artifact_ref 128389 // frameprovider
-	artifact_ref 133637 // glrender
+	artifact_ref 130437 // builderfacade
+	artifact_ref 128133 // main
 	artifact_ref 131845 // renderstate
+	artifact_ref 132613 // pipe
+	artifact_ref 134405 // parameter
+	artifact_ref 129285 // abstractmo
+	artifact_ref 129925 // relativeplacement
+	artifact_ref 134149 // glbuf
+	artifact_ref 133509 // vrender
+	artifact_ref 128901 // track
+	artifact_ref 132485 // trafo
+	artifact_ref 131077 // buildable
+	artifact_ref 133765 // frame
+	artifact_ref 130053 // allocation
+	artifact_ref 134021 // vframe
+	artifact_ref 130309 // auto
+	artifact_ref 132869 // projector
+	artifact_ref 130181 // label
+	artifact_ref 132997 // mask
+	artifact_ref 133893 // aframe
+	artifact_ref 133125 // pluginadapter
+	artifact_ref 128645 // edl
+	artifact_ref 132357 // procnode
+	artifact_ref 130693 // conmanager
+	artifact_ref 133637 // glrender
+	artifact_ref 131717 // pathmanager
+	artifact_ref 128773 // fixture
+	artifact_ref 132741 // hub
+	artifact_ref 129669 // meta
+	artifact_ref 129797 // fixedplacement
+	artifact_ref 131333 // segmentationtool
+	artifact_ref 132229 // exitnode
+	artifact_ref 129029 // placement
+	artifact_ref 130565 // toolfactory
+	artifact_ref 134533 // paramprovider
+	artifact_ref 129541 // effect
+	artifact_ref 131205 // tool
+	artifact_ref 128517 // session
+	artifact_ref 134661 // interpolator
+	artifact_ref 129157 // explicitplacement
+	artifact_ref 131461 // nodecreatertool
+	artifact_ref 130821 // assembler
+	artifact_ref 131589 // controllerfacade
+	artifact_ref 133381 // arender
+	artifact_ref 131973 // renderengine
+	artifact_ref 133253 // openglpipe
+	artifact_ref 129413 // clip
+	artifact_ref 132101 // processor
+	artifact_ref 130949 // stateproxy
+	artifact_ref 134277 // source
       end
       comment "the main executable to be built"
       simplerelation 128517

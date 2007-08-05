@@ -1,6 +1,6 @@
-format 38
+format 40
 "MObject" // ProcessingLayer::MObject
-  revision 14
+  revision 15
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -8,7 +8,7 @@ format 38
   //use case diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
   //collaboration diagram settings
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
   //object diagram settings
@@ -34,7 +34,7 @@ format 38
     //object diagram settings
      write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
     //sequence diagram settings
-    show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
     //state diagram settings
     package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
     show_activities default region_horizontally default drawing_language default
@@ -151,7 +151,7 @@ ${inlines}
       end
 
       operation 128645 "getPlaylistForRender"
-	public explicit_return_type "void"
+	public explicit_return_type "list<ExplicitPlacement   [ProcessingLayer::MObject]>"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
 	cpp_def "${comment}${inline}${type}
@@ -166,7 +166,7 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
       end
 
       operation 129157 "getAutomation"
-	public explicit_return_type "void"
+	public explicit_return_type "Auto   [ProcessingLayer::MObject]*"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
 	cpp_def "${comment}${inline}${type}
@@ -209,14 +209,25 @@ ${members}};
 "
       explicit_switch_type ""
       
+      attribute 128517 "length"
+	protected explicit_type "long"
+	init_value "0"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+	comment "TODO: how to represent?"
+      end
+
       classrelation 129029 // placement (<association>)
 	relation 128645 ----
+	  stereotype "list"
 	  a role_name "placement" multiplicity "1..*" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type} *> ${name}${value};
 "
 	    classrelation_ref 129029 // placement (<association>)
 	  b role_name "subject" multiplicity "1" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 129157 // subject (<association>)
       end
@@ -250,7 +261,7 @@ ${members}};
       end
 
       operation 128005 "resolve"
-	public return_type class_ref 129797 // ExplicitPlacement
+	public explicit_return_type "ExplicitPlacement   [ProcessingLayer::MObject]&"
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
 	cpp_def "${comment}${inline}${type}
@@ -298,7 +309,7 @@ ${members}};
       end
 
       attribute 128389 "track"
-	protected type class_ref 128389 // Track
+	protected explicit_type "Track   [ProcessingLayer::MObject] *"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
@@ -313,6 +324,46 @@ ${members}};
 	    classrelation_ref 131845 // <unidirectional association>
 	  b multiplicity "" parent class_ref 128389 // Track
 	  association_type class_ref 128389 // Track
+      end
+    end
+
+    class 135173 "Segment"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      attribute 129925 "start"
+	protected type class_ref 134917 // Time
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+      end
+
+      attribute 130053 "length"
+	protected type class_ref 134917 // Time
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+	comment "duration (span) of this timeline segment."
+      end
+
+      classrelation 138885 // elements (<directional aggregation>)
+	relation 137093 o-->
+	  stereotype "list"
+	  a role_name "elements" multiplicity "*" protected
+	    comment "relevant MObjects comprising this segment. TODO: actually necessary??"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type} *> ${name}${value};
+"
+	    classrelation_ref 138885 // elements (<directional aggregation>)
+	  b multiplicity "" parent class_ref 129797 // ExplicitPlacement
       end
     end
 
@@ -333,16 +384,6 @@ ${inlines}
 	    cpp default "${type}"
 	    classrelation_ref 129925 // <generalisation>
 	  b multiplicity "" parent class_ref 128517 // MObject
-      end
-
-      attribute 128517 "length"
-	protected explicit_type "long"
-	init_value "0"
-	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
-"
-	java_decl ""
-	idl_decl ""
-	comment "TODO: how to represent?"
       end
     end
 
@@ -467,7 +508,7 @@ ${inlines}
       classrelation 130565 // anchor (<unidirectional association>)
 	relation 129925 --->
 	  a role_name "anchor" multiplicity "1" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 130565 // anchor (<unidirectional association>)
 	  b multiplicity "1" parent class_ref 128517 // MObject
@@ -492,7 +533,7 @@ ${inlines}
       end
 
       attribute 129029 "offset"
-	protected explicit_type "long"
+	protected type class_ref 134917 // Time
 	init_value "0"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
@@ -605,7 +646,6 @@ ${inlines}
       end
     end
 
-
     class 129925 "Auto"
       visibility package 
       nformals 1
@@ -613,7 +653,7 @@ ${inlines}
         explicit_extends ""
       nactuals 1
       actual class class_ref 134661 // ParamProvider
-        rank 0 explicit_value "double"
+        rank 0 explicit_value "VAL"
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
 ${members}  };
@@ -771,12 +811,12 @@ ${members}};
 	    classrelation_ref 138629 // <association>
       end
 
-      classrelation 138373 // <unidirectional association>
+      classrelation 138373 // ipo (<unidirectional association>)
 	relation 136709 --->
-	  a role_name "" multiplicity "0..1" protected
+	  a role_name "ipo" multiplicity "0..1" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
-	    classrelation_ref 138373 // <unidirectional association>
+	    classrelation_ref 138373 // ipo (<unidirectional association>)
 	  b multiplicity "" parent class_ref 134789 // Interpolator
       end
 

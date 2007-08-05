@@ -17,9 +17,9 @@
 
 <a name="refclass131717"></a>
 <p>Declaration :</p><ul><li>C++ : class ProcNode </li><li>Java : public interface ProcNode </li></ul><p>Directly inherited by : <a href="class131589.html#refclass131589"><b>ExitNode</b></a> <a href="class132101.html#refclass132101"><b>Hub</b></a> <a href="class131973.html#refclass131973"><b>Link</b></a> <a href="class133765.html#refclass133765"><b>Source</b></a> <a href="class131845.html#refclass131845"><b>Trafo</b></a> </p>
-<p>Artifact : <a href="index.html#refartifact132357"><b>procnode</b></a></p><div class="sub">
+<p>Key abstraction of the Render Engine: A Data processing Node<br /></p><p>Artifact : <a href="index.html#refartifact132357"><b>procnode</b></a></p><div class="sub">
 <a name="refrelation136965"></a>
 <table><tr><td><div class="element">Relation <b>datasrc (&lt;unidirectional association&gt;)</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : # datasrc : <a href="class131717.html#refclass131717"><b>ProcNode</b></a></li><li>C++ : protected: <a href="class131717.html#refclass131717"><b>ProcNode</b></a> * datasrc</li></ul><p>The predecessor in a processing pipeline, i.e. a source to get data to be processed<br /></p><a name="refrelation137861"></a>
-<table><tr><td><div class="element">Relation <b>&lt;directional aggregation by value&gt;</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : #  : <a href="class134533.html#refclass134533"><b>Parameter</b></a></li><li>C++ : protected: <a href="class134533.html#refclass134533"><b>Parameter</b></a> </li></ul></div>
+<table><tr><td><div class="element">Relation <b>params (&lt;directional aggregation by value&gt;)</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : # params : <a href="class134533.html#refclass134533"><b>Parameter</b></a>, multiplicity : 1..*</li><li>C++ : protected: vector&lt;<a href="class134533.html#refclass134533"><b>Parameter</b></a>&gt; params</li></ul></div>
 </body>
 </html>
