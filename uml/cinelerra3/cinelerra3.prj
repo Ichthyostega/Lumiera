@@ -1,6 +1,6 @@
 format 40
 "cinelerra3"
-  revision 24
+  revision 25
   modified_by 5 "hiv"
   cpp_root_dir "../../src/"
 

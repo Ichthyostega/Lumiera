@@ -1,6 +1,6 @@
-format 38
+format 40
 "session" // design::codegen::proc::mobject::session
-  revision 4
+  revision 5
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -8,7 +8,7 @@ format 38
   //use case diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
   //collaboration diagram settings
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
   //object diagram settings
@@ -29,7 +29,7 @@ format 38
   stereotype "src"
   cpp_h_dir "proc/mobject/session"
   cpp_src_dir "proc/mobject/session"
-  cpp_namespace "session"
+  cpp_namespace "proc::mobject::session"
   comment "sourcecode package
 
 Everything concerning the EDL and Session, within the MObject Subsystem"
@@ -153,6 +153,50 @@ ${namespace_end}"
 	class_ref 128261 // Fixture
       end
       comment "the (low level) representation of the EDL with concrete placement data"
+    end
+
+    artifact 135045 "segment"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 135173 // Segment
+      end
+      comment "Segment of the Timeline.
+Used at the moment (7/07) for partitioning the timeline/fixture into segments
+to be rendered by a specialized render node network for each, without the need
+to change any connections within a given segment. 
+Note this concept may be superfluos alltogether; is a draft and the real
+use still needs to be worked out..."
     end
 
     artifact 128901 "track"
@@ -384,7 +428,7 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 129285 // FixedPlacement
+	class_ref 129285 // DirectPlacement
       end
     end
 

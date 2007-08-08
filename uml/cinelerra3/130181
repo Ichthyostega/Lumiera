@@ -1,6 +1,6 @@
-format 38
+format 40
 "mobject" // design::codegen::proc::mobject
-  revision 4
+  revision 5
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -8,7 +8,7 @@ format 38
   //use case diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
   //collaboration diagram settings
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
   //object diagram settings
@@ -29,7 +29,7 @@ format 38
   stereotype "src"
   cpp_h_dir "proc/mobject"
   cpp_src_dir "proc/mobject"
-  cpp_namespace "mobject"
+  cpp_namespace "proc::mobject"
   comment "sourcecode package
 
 MObject Subsystem

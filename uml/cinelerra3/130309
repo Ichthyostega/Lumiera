@@ -1,6 +1,6 @@
 format 40
 "engine" // design::codegen::proc::engine
-  revision 5
+  revision 7
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -29,7 +29,7 @@ format 40
   stereotype "src"
   cpp_h_dir "proc/engine"
   cpp_src_dir "proc/engine"
-  cpp_namespace "engine"
+  cpp_namespace "proc::engine"
   comment "sourcecode package
 
 The Core Render Engine"
@@ -177,7 +177,7 @@ ${namespace_end}
 #endif
 "
       cpp_src "/*
-  ${Name}  -  ${description}
+  ${NAME}  -  ${description}
 @{CopyrightClaim}@{GPLHeader}
 * *****************************************************/
 
@@ -233,7 +233,7 @@ ${namespace_end}"
       comment "transforming processing Node "
     end
 
-    artifact 132613 "pipe"
+    artifact 132613 "link"
       stereotype "source"
       cpp_h "/*
   ${NAME}.hpp  -  ${description}
@@ -467,7 +467,7 @@ ${namespace_end}"
       comment "Processing Node for (de)coding media data"
     end
 
-    artifact 133253 "openglpipe"
+    artifact 133253 "glpipe"
       stereotype "source"
       cpp_h "/*
   ${NAME}.hpp  -  ${description}

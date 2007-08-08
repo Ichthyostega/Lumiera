@@ -1,6 +1,6 @@
 format 40
 "MObject" // ProcessingLayer::MObject
-  revision 15
+  revision 16
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -181,6 +181,46 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
       end
     end
 
+    class 135173 "Segment"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      attribute 129925 "start"
+	protected type class_ref 134917 // Time
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+      end
+
+      attribute 130053 "length"
+	protected type class_ref 134917 // Time
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+	comment "duration (span) of this timeline segment."
+      end
+
+      classrelation 138885 // elements (<directional aggregation>)
+	relation 137093 o-->
+	  stereotype "list"
+	  a role_name "elements" multiplicity "*" protected
+	    comment "relevant MObjects comprising this segment. TODO: actually necessary??"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type} *> ${name}${value};
+"
+	    classrelation_ref 138885 // elements (<directional aggregation>)
+	  b multiplicity "" parent class_ref 129797 // ExplicitPlacement
+      end
+    end
+
     class 128389 "Track"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
@@ -210,13 +250,12 @@ ${members}};
       explicit_switch_type ""
       
       attribute 128517 "length"
-	protected explicit_type "long"
-	init_value "0"
+	protected type class_ref 134917 // Time
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
 	idl_decl ""
-	comment "TODO: how to represent?"
+	comment "TODO: how to represent time intervals?"
       end
 
       classrelation 129029 // placement (<association>)
@@ -324,46 +363,6 @@ ${members}};
 	    classrelation_ref 131845 // <unidirectional association>
 	  b multiplicity "" parent class_ref 128389 // Track
 	  association_type class_ref 128389 // Track
-      end
-    end
-
-    class 135173 "Segment"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
-      attribute 129925 "start"
-	protected type class_ref 134917 // Time
-	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
-"
-	java_decl ""
-	idl_decl ""
-      end
-
-      attribute 130053 "length"
-	protected type class_ref 134917 // Time
-	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
-"
-	java_decl ""
-	idl_decl ""
-	comment "duration (span) of this timeline segment."
-      end
-
-      classrelation 138885 // elements (<directional aggregation>)
-	relation 137093 o-->
-	  stereotype "list"
-	  a role_name "elements" multiplicity "*" protected
-	    comment "relevant MObjects comprising this segment. TODO: actually necessary??"
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type} *> ${name}${value};
-"
-	    classrelation_ref 138885 // elements (<directional aggregation>)
-	  b multiplicity "" parent class_ref 129797 // ExplicitPlacement
       end
     end
 

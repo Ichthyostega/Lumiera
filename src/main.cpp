@@ -21,11 +21,12 @@
 */
 
 
+#include <iostream>
 
-#include <stdio.h>
+using std::cout;
 
-int main(int argc, char* argv[])
+int main (int argc, char* argv[])
   {
-    printf("hello cinelerra again\n");
+    cout << "hello cinelerra again\n";
     return 0;
   }

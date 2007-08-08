@@ -1,6 +1,6 @@
 format 40
 "common" // design::codegen::common
-  revision 10
+  revision 11
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -29,7 +29,7 @@ format 40
   stereotype "src"
   cpp_h_dir "common"
   cpp_src_dir "common"
-  cpp_namespace "lib"
+  cpp_namespace "cinelerra"
   associated_diagram deploymentdiagram_ref 129797 // Source Overview
   comment "sourcecode package
 
@@ -77,6 +77,5 @@ ${namespace_end}"
       end
       comment "unified representation of a time point, including conversion functions"
     end
-
   end
 end
