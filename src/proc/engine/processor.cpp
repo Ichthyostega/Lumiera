@@ -25,16 +25,12 @@
 #include "proc/engine/exitnode.hpp"
 #include "proc/stateproxy.hpp"
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
-    
-    /** */
-    
-    
-    
-    
-  } // namespace proc::engine
 
-} // namespace proc
+  /** */
+
+
+
+
+} // namespace engine

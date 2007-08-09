@@ -21,38 +21,34 @@
 */
 
 
-#ifndef PROC_MOBJECT_SESSION_AUTO_H
-#define PROC_MOBJECT_SESSION_AUTO_H
+#ifndef MOBJECT_SESSION_AUTO_H
+#define MOBJECT_SESSION_AUTO_H
 
 #include "proc/mobject/session/meta.hpp"
 #include "proc/mobject/paramprovider.hpp"
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
+
+
+    /**
+     * Automation data for some parameter 
+     * (i.e. the parameter is a time varying function)
+     */
+    template<class VAL>
+    class Auto : public Meta, public ParamProvider<VAL>
       {
-
-
-      /**
-       * Automation data for some parameter 
-       * (i.e. the parameter is a time varying function)
-       */
-      template<class VAL>
-      class Auto : public Meta, public ParamProvider<VAL>
-        {
-        public:
-          virtual VAL getValue () ;
-        };
+      public:
+        virtual VAL getValue () ;
+      };
 
 
 
-    } // namespace proc::mobject::session
+  } // namespace mobject::session
 
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject
 #endif

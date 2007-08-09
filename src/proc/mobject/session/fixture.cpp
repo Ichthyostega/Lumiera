@@ -23,35 +23,31 @@
 
 #include "proc/mobject/session/fixture.hpp"
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
-      {
 
 
 
-      list<ExplicitPlacement*> &
-      Fixture::getPlaylistForRender ()
-      {
-        abort();/////////////////////TODO
-      }
+    list<ExplicitPlacement*> &
+    Fixture::getPlaylistForRender ()
+    {
+      abort();/////////////////////TODO
+    }
 
 
-      /** TODO: a placeholder for the Operation needed for
-       *  wiring the Automation providers in the Build process
-       */
-      Auto<double>*
-      Fixture::getAutomation ()
-      {
-        return 0;/////////////////////TODO
-      }
+    /** TODO: a placeholder for the Operation needed for
+     *  wiring the Automation providers in the Build process
+     */
+    Auto<double>*
+    Fixture::getAutomation ()
+    {
+      return 0;/////////////////////TODO
+    }
 
 
 
-    } // namespace proc::mobject::session
+  } // namespace mobject::session
 
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject

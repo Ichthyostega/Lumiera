@@ -23,11 +23,11 @@
 
 #include "proc/controllerfacade.hpp"
 
-namespace proc
+namespace proc_interface
   {
-  
+
   /** */
-  
-  
-  
-} // namespace proc
+
+
+
+} // namespace proc_interface

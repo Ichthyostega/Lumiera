@@ -1,8 +1,10 @@
 /*
-  EXPLICITPLACEMENT.hpp  -  special Placement yielding an absolute location (Time,Track)-location for a MObject
+  CINELERRA.h  -  global definitions and common types
+ 
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
+                        Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -20,32 +22,40 @@
  
 */
 
-
-#ifndef MOBJECT_EXPLICITPLACEMENT_H
-#define MOBJECT_EXPLICITPLACEMENT_H
-
-#include "proc/mobject/placement.hpp"
+#ifndef CINELERRA_H
+#define CINELERRA_H
 
 
 
-namespace mobject
+#ifdef __cplusplus
+extern "C" {
+#endif /* ========================== common C Part ============ */
+
+
+#ifdef __cplusplus
+}
+#endif /* ==================== (End) common C Part ============ */
+
+
+
+
+
+
+#ifdef __cplusplus /* ============== C++-Part ================= */
+
+
+    /* common types frequently used... */
+
+#include "common/time.hpp"
+
+
+namespace cinelerra
   {
+    /* additional global configuration goes here... */
+  
+    
+} // namespace cinelerra
 
-  namespace session{ class Track; }
+#endif /* ===================== (End) C++-Part ================= */
 
-
-  // TODO: need Garbage Collector for this class!!!!!
-
-  class ExplicitPlacement : public Placement
-    {
-    protected:
-
-      Time time;
-      Track* track;
-
-    };
-
-
-
-} // namespace mobject
-#endif
+#endif /*CINELERRA_H*/

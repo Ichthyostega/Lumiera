@@ -21,48 +21,44 @@
 */
 
 
-#ifndef PROC_MOBJECT_SESSION_CLIP_H
-#define PROC_MOBJECT_SESSION_CLIP_H
+#ifndef MOBJECT_SESSION_CLIP_H
+#define MOBJECT_SESSION_CLIP_H
 
 #include "proc/mobject/session/abstractmo.hpp"
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
+
+
+    /**
+     * A user visible/editable Clip is a reference to a contiguous
+     * sequence of media data loaded as Asset into the current Session.
+     * As such, it is a virtual (non destructive) cut or edit of the 
+     * source material and can be placed into the EDL to be rendered
+     * into the ouput. The actual media type of a clip will be derived
+     * at runtime by resolving this reference to the underlying Asset.
+     * 
+     * TODO: define how to denote Time positions /lengths. This is tricky,
+     * because it depends on the actual media type, and we wand to encapsulate
+     * all these details as much as possible. 
+     */
+    class Clip : public AbstractMO
       {
+      protected:
+        /** startpos in source */
+        Time start;
+
+        //TODO: where to put the duration ???
+
+      };
 
 
-      /** 
-       * A user visible/editable Clip is a reference to a contiguous
-       * sequence of media data loaded as Asset into the current Session.
-       * As such, it is a virtual (non destructive) cut or edit of the 
-       * source material and can be placed into the EDL to be rendered
-       * into the ouput. The actual media type of a clip will be derived
-       * at runtime by resolving this reference to the underlying Asset.
-       * 
-       * TODO: define how to denote Time positions /lengths. This is tricky,
-       * because it depends on the actual media type, and we wand to encapsulate
-       * all these details as much as possible. 
-       */
-      class Clip : public AbstractMO
-        {
-        protected:
-          /** startpos in source */
-          Time start;
-          
-          //TODO: where to put the duration ???
 
-        };
-        
-        
-        
-    } // namespace proc::mobject::session
+  } // namespace mobject::session
 
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject
 #endif

@@ -21,39 +21,35 @@
 */
 
 
-#ifndef PROC_MOBJECT_BUILDERFACADE_H
-#define PROC_MOBJECT_BUILDERFACADE_H
+#ifndef MOBJECT_BUILDERFACADE_H
+#define MOBJECT_BUILDERFACADE_H
 
 #include "proc/engine/renderengine.hpp"
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
-    {
-    
-    
-    /**
-     * Provides unified access to the builder functionality.
-     * While individual components of the builder subsystem may be called
-     * if necessary or suitable, it is usually better to do all extern invocations
-     * via the high level methods of this Facade.
-     */
-    class BuilderFacade
-      {
-      public:
-        /**
-         * Main Operation of the Builder:
-         * create a render engine for a given part of the timeline
-         */
-        proc::engine::RenderEngine & buildEngine () ;
-        // TODO: allocation, GC??????
-      };
-      
-      
-      
-  } // namespace proc::mobject
 
-} // namespace proc
+
+  /**
+   * Provides unified access to the builder functionality.
+   * While individual components of the builder subsystem may be called
+   * if necessary or suitable, it is usually better to do all extern invocations
+   * via the high level methods of this Facade.
+   */
+  class BuilderFacade
+    {
+    public:
+      /**
+       * Main Operation of the Builder:
+       * create a render engine for a given part of the timeline
+       */
+      engine::RenderEngine & buildEngine () ;
+      // TODO: allocation, GC??????
+    };
+
+
+
+} // namespace mobject
 #endif

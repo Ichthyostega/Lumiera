@@ -23,14 +23,8 @@
 
 #include "proc/engine/codecadapter.hpp"
 
-namespace proc
+namespace engine
   {
 
-  namespace engine
-    {
 
-
-
-  } // namespace proc::engine
-
-} // namespace proc
+} // namespace engine

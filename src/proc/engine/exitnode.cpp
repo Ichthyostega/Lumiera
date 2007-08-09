@@ -23,15 +23,11 @@
 
 #include "proc/engine/exitnode.hpp"
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
-    
-    /** */
-    
-    
-    
-  } // namespace proc::engine
 
-} // namespace proc
+  /** */
+
+
+
+} // namespace engine

@@ -21,39 +21,35 @@
 */
 
 
-#ifndef PROC_MOBJECT_BUILDER_CONMANAGER_H
-#define PROC_MOBJECT_BUILDER_CONMANAGER_H
+#ifndef MOBJECT_BUILDER_CONMANAGER_H
+#define MOBJECT_BUILDER_CONMANAGER_H
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace builder
     {
-    namespace builder
+
+
+    /**
+     * Connection Manager: used to build the connections between render engine nodes
+     * if these nodes need to cooperate besides the normal "data pull" operation. 
+     * Esp. the Connection Manager knows how to wire up the effect's parameters 
+     * with the corresponding ParamProviders (autmation) in the Session.
+     */
+    class ConManager
       {
+      public:
+        /**
+         * TODO just a design sketch, work out signatures etc...
+         */
+        int getConnection () ;
+      };
 
 
-      /**
-       * Connection Manager: used to build the connections between render engine nodes
-       * if these nodes need to cooperate besides the normal "data pull" operation. 
-       * Esp. the Connection Manager knows how to wire up the effect's parameters 
-       * with the corresponding ParamProviders (autmation) in the Session.
-       */
-      class ConManager
-        {
-        public:
-          /**
-           * TODO just a design sketch, work out signatures etc...
-           */
-          int getConnection () ;
-        };
-        
-        
-        
-    } // namespace proc::mobject::builder
 
-  } // namespace proc::mobject
+  } // namespace mobject::builder
 
-} // namespace proc
+} // namespace mobject
 #endif

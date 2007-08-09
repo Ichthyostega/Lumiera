@@ -21,54 +21,50 @@
 */
 
 
-#ifndef PROC_MOBJECT_SESSION_SEGMENT_H
-#define PROC_MOBJECT_SESSION_SEGMENT_H
+#ifndef MOBJECT_SESSION_SEGMENT_H
+#define MOBJECT_SESSION_SEGMENT_H
 
 #include <list>
 
-#include "common/time.hpp"
+#include "cinelerra.h"
 #include "proc/mobject/explicitplacement.hpp"
 
 
 using std::list;
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
+
+
+    /**
+     * Used at the moment (7/07) for partitioning the timeline/fixture into segments
+     * to be rendered by a specialized render node network for each, without the need
+     * to change any connections within a given segment.
+     * Note this concept may be superfluos alltogether; is a draft and the real
+     * use still needs to be worked out...
+     */
+    class Segment
       {
+      protected:
+        typedef cinelerra::Time Time;
+
+        /** begin of this timeline segment. */
+        Time start;
+        /** duration (span) of this timeline segment. */
+        Time length;
+
+        /** relevant MObjects comprising this segment. */
+        list<ExplicitPlacement *> elements;
+        // TODO: actually necessary??
+
+      };
 
 
-      /**
-       * Used at the moment (7/07) for partitioning the timeline/fixture into segments
-       * to be rendered by a specialized render node network for each, without the need
-       * to change any connections within a given segment.
-       * Note this concept may be superfluos alltogether; is a draft and the real
-       * use still needs to be worked out...
-       */
-      class Segment
-        {
-        protected:
-          typedef cinelerra::Time Time;
-          
-          /** begin of this timeline segment. */
-          Time start;
-          /** duration (span) of this timeline segment. */
-          Time length;
 
-          /** relevant MObjects comprising this segment. */
-          list<ExplicitPlacement *> elements;
-          // TODO: actually necessary??
+  } // namespace mobject::session
 
-        };
-        
-        
-        
-    } // namespace proc::mobject::session
-
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject
 #endif

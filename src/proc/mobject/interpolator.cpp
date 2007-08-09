@@ -23,15 +23,11 @@
 
 #include "proc/mobject/interpolator.hpp"
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
-    {
-    
-    /** */
-    
-    
-    
-  } // namespace proc::mobject
 
-} // namespace proc
+  /** */
+
+
+
+} // namespace mobject

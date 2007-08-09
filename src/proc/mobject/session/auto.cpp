@@ -23,26 +23,22 @@
 
 #include "proc/mobject/session/auto.hpp"
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
-      {
 
-      
-      template<class VAL>
-      VAL
-      Auto<VAL>::getValue ()
-        {
-          return 0; //////////////TODO
-        }
 
-      
-      
+    template<class VAL>
+    VAL
+    Auto<VAL>::getValue ()
+    {
+      return 0; //////////////TODO
+    }
 
-    } // namespace proc::mobject::session
 
-  } // namespace proc::mobject
 
-} // namespace proc
+
+  } // namespace mobject::session
+
+} // namespace mobject

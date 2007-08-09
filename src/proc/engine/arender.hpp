@@ -21,29 +21,24 @@
 */
 
 
-#ifndef PROC_ENGINE_ARENDER_H
-#define PROC_ENGINE_ARENDER_H
+#ifndef ENGINE_ARENDER_H
+#define ENGINE_ARENDER_H
 
 #include "proc/stateproxy.hpp"
 
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
+  
+  
+  /**
+   * Representation of a Audio render process
+   */
+  class ARender : public proc_interface::StateProxy
+    {};
     
     
-    /**
-     * Representation of a Audio render process
-     */
-    class ARender : public proc::StateProxy
-      {};
-      
-      
-      
-      
-  } // namespace proc::engine
-
-} // namespace proc
+    
+} // namespace engine
 #endif

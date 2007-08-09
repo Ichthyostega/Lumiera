@@ -21,36 +21,32 @@
 */
 
 
-#ifndef PROC_MOBJECT_SESSION_LABEL_H
-#define PROC_MOBJECT_SESSION_LABEL_H
+#ifndef MOBJECT_SESSION_LABEL_H
+#define MOBJECT_SESSION_LABEL_H
 
 #include "proc/mobject/session/meta.hpp"
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
+
+
+    /**
+     * Any sort of User visible Marker or Tag, used
+     * to mark time positions and ranges, or specific
+     * locations to attach other MObjects to.
+     */
+    class Label : public Meta
       {
+        ///////////TODO: timespan fields here or already in class Meta??
+      };
 
 
-      /**
-       * Any sort of User visible Marker or Tag, used
-       * to mark time positions and ranges, or specific
-       * locations to attach other MObjects to.
-       */
-      class Label : public Meta
-        {
-          ///////////TODO: timespan fields here or already in class Meta??
-        };
-        
-        
 
-    } // namespace proc::mobject::session
+  } // namespace mobject::session
 
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject
 #endif

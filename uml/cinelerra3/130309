@@ -1,6 +1,6 @@
 format 40
 "engine" // design::codegen::proc::engine
-  revision 7
+  revision 8
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -29,7 +29,7 @@ format 40
   stereotype "src"
   cpp_h_dir "proc/engine"
   cpp_src_dir "proc/engine"
-  cpp_namespace "proc::engine"
+  cpp_namespace "engine"
   comment "sourcecode package
 
 The Core Render Engine"

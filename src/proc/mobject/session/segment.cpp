@@ -25,24 +25,20 @@
 
 // Used at the moment (7/07) for partitioning the timeline/fixture into segments
 // to be rendered by a specialized render node network for each, without the need
-// to change any connections within a given segment. 
+// to change any connections within a given segment.
 // Note this concept may be superfluos alltogether; is a draft and the real
 // use still needs to be worked out...
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
-      {
-      
-      /** */
-      
-      
-      
-    } // namespace proc::mobject::session
 
-  } // namespace proc::mobject
+    /** */
 
-} // namespace proc
+
+
+  } // namespace mobject::session
+
+} // namespace mobject

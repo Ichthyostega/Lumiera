@@ -23,25 +23,22 @@
 
 #include "proc/mobject/controller/renderstate.hpp"
 
-namespace proc
+
+namespace mobject
   {
-  namespace mobject
+  namespace controller
     {
-    namespace controller
-      {
 
 
 
-      StateProxy&
-      RenderState::getStateProxy ()
-      {
-        //////////////TODO
-      }
-      
-      
-      
-    } // namespace proc::mobject::controller
+    StateProxy&
+    RenderState::getStateProxy ()
+    {
+      //////////////TODO
+    }
 
-  } // namespace proc::mobject
 
-} // namespace proc
+
+  } // namespace mobject::controller
+
+} // namespace mobject

@@ -21,28 +21,22 @@
 */
 
 
-#ifndef PROC_ENGINE_GLRENDER_H
-#define PROC_ENGINE_GLRENDER_H
+#ifndef ENGINE_GLRENDER_H
+#define ENGINE_GLRENDER_H
 
 #include "proc/stateproxy.hpp"
 
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
-    
-    
-    /**
-     * Representation of a OpenGL accelerated Video render process
-     */
-    class GLRender : public StateProxy
-      {};
-      
-      
-      
-  } // namespace proc::engine
 
-} // namespace proc
+
+  /**
+   * Representation of a OpenGL accelerated Video render process
+   */
+  class GLRender : public proc_interface::StateProxy
+    {};
+
+} // namespace engine
 #endif

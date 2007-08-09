@@ -21,8 +21,8 @@
 */
 
 
-#ifndef PROC_MOBJECT_BUILDER_NODECREATERTOOL_H
-#define PROC_MOBJECT_BUILDER_NODECREATERTOOL_H
+#ifndef MOBJECT_BUILDER_NODECREATERTOOL_H
+#define MOBJECT_BUILDER_NODECREATERTOOL_H
 
 #include "proc/mobject/builder/tool.hpp"
 #include "proc/mobject/buildable.hpp"
@@ -30,53 +30,47 @@
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
-      { 
-      // Forward declarations
-      class Effect;
-      class Clip;
-      template<class VAL> class Auto;
-      }
-    
-    namespace builder
+    // Forward declarations
+    class Effect;
+    class Clip;
+    template<class VAL> class Auto;
+  }
+
+  namespace builder
+    {
+
+
+
+    // TODO: define Lifecycle...
+
+    /**
+     * This Tool implementation plays the central role in the buld process:
+     * given a MObject from Session, it is able to attach ProcNodes to the 
+     * render engine under construction such as to reflect the properties 
+     * of the MObject in the actual render.
+     */
+    class NodeCreatorTool : public Tool
       {
+      public:
+        virtual void treat (mobject::session::Clip& clip) ;
+        virtual void treat (mobject::session::Effect& effect) ;
+        virtual void treat (mobject::session::Auto<double>& automation) ;  //TODO: the automation-type-problem
+        virtual void treat (mobject::Buildable& something) ;
 
-      
-      
-      // TODO: define Lifecycle...
 
-      /**
-       * This Tool implementation plays the central role in the buld process:
-       * given a MObject from Session, it is able to attach ProcNodes to the 
-       * render engine under construction such as to reflect the properties 
-       * of the MObject in the actual render.
-       */
-      class NodeCreatorTool : public Tool
-        {
-        public:
-          virtual void treat (proc::mobject::session::Clip& clip) ;
-          virtual void treat (proc::mobject::session::Effect& effect) ;
-          virtual void treat (proc::mobject::session::Auto<double>& automation) ;  //TODO: the automation-type-problem
-          virtual void treat (proc::mobject::Buildable& something) ;
+      protected:
+        /** holds the Processor (Render Engine Element)
+         *  to be built by the current build step 
+         */
+        engine::Processor* proc;
 
-          
-        protected:
-          /** holds the Processor (Render Engine Element) 
-           *  to be built by the current build step 
-           */
-          proc::engine::Processor* proc;
+      };
 
-        };
+  } // namespace mobject::builder
 
-        
-        
-    } // namespace proc::mobject::builder
-
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject
 #endif

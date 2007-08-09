@@ -21,30 +21,26 @@
 */
 
 
-#ifndef PROC_MOBJECT_INTERPOLATOR_H
-#define PROC_MOBJECT_INTERPOLATOR_H
+#ifndef MOBJECT_INTERPOLATOR_H
+#define MOBJECT_INTERPOLATOR_H
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
-    {
-    
-    
-    /**
-     * Provides the implementation for getting the acutal value 
-     * of a time varying or automated effect/plugin parameter
-     */
-    template<class VAL>
-    class Interpolator
-      {
-        ///////////////
-      };
-      
-      
-      
-  } // namespace proc::mobject
 
-} // namespace proc
+
+  /**
+   * Provides the implementation for getting the acutal value 
+   * of a time varying or automated effect/plugin parameter
+   */
+  template<class VAL>
+  class Interpolator
+    {
+      ///////////////
+    };
+
+
+
+} // namespace mobject
 #endif

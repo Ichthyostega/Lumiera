@@ -21,8 +21,8 @@
 */
 
 
-#ifndef PROC_MOBJECT_BUILDER_SEGMENTATIONTOOL_H
-#define PROC_MOBJECT_BUILDER_SEGMENTATIONTOOL_H
+#ifndef MOBJECT_BUILDER_SEGMENTATIONTOOL_H
+#define MOBJECT_BUILDER_SEGMENTATIONTOOL_H
 
 #include <list>
 
@@ -34,50 +34,46 @@ using std::list;
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
-      { 
-      // Forward declarations
-      class Clip;
-      class Effect;
-      }
-    
-    namespace builder
+    // Forward declarations
+    class Clip;
+    class Effect;
+    }
+
+  namespace builder
+    {
+
+
+    /**
+     * Tool implementation for deriving a partitioning of the current 
+     * timeline, such that each segement has a constant configuration. 
+     * "Constant" means here, that any remaining changes over time
+     * can be represented by automation solely, without the need 
+     * to change the node connections.
+     */
+    class SegmentationTool : public Tool
       {
+      public:
+        void treat (mobject::session::Clip& clip) ;
+        void treat (mobject::session::Effect& effect) ;
+
+        void treat (mobject::Buildable& something) ;
+
+      protected:
+        typedef mobject::session::Segment Segment;
+
+        /** Partitioning of the Timeline to be created by this tool. */
+        list<Segment*> segments;
+        // TODO handle alloc!!!!
+
+      };
 
 
-      /**
-       * Tool implementation for deriving a partitioning of the current 
-       * timeline, such that each segement has a constant configuration. 
-       * "Constant" means here, that any remaining changes over time
-       * can be represented by automation solely, without the need 
-       * to change the node connections.
-       */
-      class SegmentationTool : public Tool
-        {
-        public:
-          void treat (proc::mobject::session::Clip& clip) ;
-          void treat (proc::mobject::session::Effect& effect) ;
 
-          void treat (proc::mobject::Buildable& something) ;
+  } // namespace mobject::builder
 
-        protected:
-          typedef proc::mobject::session::Segment Segment;
-          
-          /** Partitioning of the Timeline to be created by this tool. */
-          list<Segment*> segments;
-          // TODO handle alloc!!!!
-
-        };
-        
-        
-
-    } // namespace proc::mobject::builder
-
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject
 #endif

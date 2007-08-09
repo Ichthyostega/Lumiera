@@ -24,17 +24,12 @@
 #include "proc/mobject/session/relativeplacement.hpp"
 #include "proc/mobject/mobject.hpp"
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
-      {
 
 
+  } // namespace mobject::session
 
-    } // namespace proc::mobject::session
-
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject

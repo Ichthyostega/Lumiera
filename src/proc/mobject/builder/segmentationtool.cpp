@@ -27,41 +27,37 @@
 #include "proc/mobject/session/effect.hpp"
 #include "proc/mobject/session/segment.hpp"
 
-using proc::mobject::Buildable;
-using proc::mobject::session::Clip;
-using proc::mobject::session::Effect;
+using mobject::Buildable;
+using mobject::session::Clip;
+using mobject::session::Effect;
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace builder
     {
-    namespace builder
-      {
 
 
 
-      void
-      SegmentationTool::treat (Buildable& something)
-      {
-      }
+    void
+    SegmentationTool::treat (Buildable& something)
+    {
+    }
 
 
-      void
-      SegmentationTool::treat (Clip& clip)
-      {
-      }
+    void
+    SegmentationTool::treat (Clip& clip)
+    {
+    }
 
 
-      void
-      SegmentationTool::treat (Effect& effect)
-      {
-      }
+    void
+    SegmentationTool::treat (Effect& effect)
+    {
+    }
 
 
 
-    } // namespace proc::mobject::builder
+  } // namespace mobject::builder
 
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject

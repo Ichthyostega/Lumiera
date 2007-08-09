@@ -21,30 +21,26 @@
 */
 
 
-#ifndef PROC_ENGINE_PROJECTOR_H
-#define PROC_ENGINE_PROJECTOR_H
+#ifndef ENGINE_PROJECTOR_H
+#define ENGINE_PROJECTOR_H
 
 #include "proc/engine/trafo.hpp"
 
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
-    
-    
-    /**
-     * Special video processing node used to scale and translate image data.
-     */
-    class Projector : public Trafo
-      {
-        ////////////
-      };
-      
-      
-      
-  } // namespace proc::engine
 
-} // namespace proc
+
+  /**
+   * Special video processing node used to scale and translate image data.
+   */
+  class Projector : public Trafo
+    {
+      ////////////
+    };
+
+
+
+} // namespace engine
 #endif

@@ -23,24 +23,20 @@
 
 #include "proc/mobject/builder/toolfactory.hpp"
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace builder
     {
-    namespace builder
-      {
-      
-      
-      
-      Tool&
-      ToolFactory::configure ()
-      {
-      }
-      
-      
-      
-    } // namespace proc::mobject::builder
 
-  } // namespace proc::mobject
 
-} // namespace proc
+
+    Tool &
+    ToolFactory::configure ()
+    {
+    }
+
+
+
+  } // namespace mobject::builder
+
+} // namespace mobject

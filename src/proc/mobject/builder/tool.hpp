@@ -21,41 +21,35 @@
 */
 
 
-#ifndef PROC_MOBJECT_BUILDER_TOOL_H
-#define PROC_MOBJECT_BUILDER_TOOL_H
+#ifndef MOBJECT_BUILDER_TOOL_H
+#define MOBJECT_BUILDER_TOOL_H
 
-#include "proc/mobject/buildable.hpp" 
+#include "proc/mobject/buildable.hpp"
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace builder
     {
-    namespace builder
+
+
+    /**
+     * Used according to the visitor pattern: each Tool contains 
+     * the concrete implementation for one task to be done to the various MObject classes
+     */
+    class Tool
       {
+      protected:
+        typedef mobject::Buildable Buildable;
 
+      public:
+        /** This operation is to be overloaded for specific MObject subclasses to be treated.
+         */
+        virtual void treat (Buildable& mElement) = 0;
+      };
 
-      /**
-       * Used according to the visitor pattern: each Tool contains 
-       * the concrete implementation for one task to be done to the various MObject classes
-       */
-      class Tool
-        {
-        protected:
-          typedef proc::mobject::Buildable Buildable;
-          
-        public:
-          /** This operation is to be overloaded for specific MObject subclasses to be treated.
-           */
-          virtual void treat (Buildable& mElement) = 0;
-        };
+  } // namespace mobject::builder
 
-        
-        
-    } // namespace proc::mobject::builder
-
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject
 #endif

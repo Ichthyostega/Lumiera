@@ -1,5 +1,5 @@
 /*
-  PIPE.hpp  -  forwarding, adapting or connecting ProcNode
+  LINK.hpp  -  forwarding, adapting or connecting ProcNode
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -21,34 +21,30 @@
 */
 
 
-#ifndef PROC_ENGINE_PIPE_H
-#define PROC_ENGINE_PIPE_H
+#ifndef ENGINE_LINK_H
+#define ENGINE_LINK_H
 
 #include "proc/engine/procnode.hpp"
 
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
-    
-    
-    /**
-     * Abstraction of all sorts of connecting Elements with
-     * special functionality. For example the coneections enabling
-     * to mix OpenGL implemented Effects/Previews with normal CPU based
-     * processing in one render pipeline.
-     */
-    class Link : public ProcNode
-      {
-        ///////TODO: flatten hierarchy if we don't have common functionallity for all Link-Subclasses
-        ///////TODO:  can be decdiede when we know more how to handle OpenGL rendering
-      };
-      
-      
-      
-  } // namespace proc::engine
 
-} // namespace proc
+
+  /**
+   * Abstraction of all sorts of connecting Elements with
+   * special functionality. For example the coneections enabling
+   * to mix OpenGL implemented Effects/Previews with normal CPU based
+   * processing in one render pipeline.
+   */
+  class Link : public ProcNode
+    {
+      ///////TODO: flatten hierarchy if we don't have common functionallity for all Link-Subclasses
+      ///////TODO:  can be decdiede when we know more how to handle OpenGL rendering
+    };
+
+
+
+} // namespace engine
 #endif

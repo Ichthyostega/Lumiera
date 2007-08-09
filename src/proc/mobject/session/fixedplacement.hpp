@@ -21,33 +21,29 @@
 */
 
 
-#ifndef PROC_MOBJECT_SESSION_FIXEDPLACEMENT_H
-#define PROC_MOBJECT_SESSION_FIXEDPLACEMENT_H
+#ifndef MOBJECT_SESSION_FIXEDPLACEMENT_H
+#define MOBJECT_SESSION_FIXEDPLACEMENT_H
 
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
+
+    // TODO: didn't we plan to rename ExplicitPlacement to DirectPlacement??
+
+    class DirectPlacement : public ExplicitPlacement
       {
+        ///////////
+      };
 
-      // TODO: didn't we plan to rename ExplicitPlacement to DirectPlacement??
 
-      class DirectPlacement : public ExplicitPlacement
-        {
-          ///////////
-        };
-        
-        
-        
-    } // namespace proc::mobject::session
 
-  } // namespace proc::mobject
+  } // namespace mobject::session
 
-} // namespace proc
+} // namespace mobject
 #endif

@@ -21,25 +21,21 @@
 */
 
 
-#ifndef PROC_ENGINE_AFRAME_H
-#define PROC_ENGINE_AFRAME_H
+#ifndef ENGINE_AFRAME_H
+#define ENGINE_AFRAME_H
 
 #include "proc/frame.hpp"
 
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
-    
-    
-    class AFrame : public proc::Frame
-      {};
-      
-      
-      
-  } // namespace proc::engine
 
-} // namespace proc
+
+  class AFrame : public proc_interface::Frame
+    {};
+
+
+
+} // namespace engine
 #endif

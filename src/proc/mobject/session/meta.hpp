@@ -21,37 +21,33 @@
 */
 
 
-#ifndef PROC_MOBJECT_SESSION_META_H
-#define PROC_MOBJECT_SESSION_META_H
+#ifndef MOBJECT_SESSION_META_H
+#define MOBJECT_SESSION_META_H
 
 #include "proc/mobject/session/abstractmo.hpp"
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
+
+
+    /**
+     * Meta-MObject doesn't represent real Media Content,
+     * but rather all sorts of Processing Instructions
+     * and other metadata, which can be placed and
+     * attached within the EDL/Session.
+     */
+    class Meta : public AbstractMO
       {
+        ///////////
+      };
 
 
-      /** 
-       * Meta-MObject doesn't represent real Media Content,
-       * but rather all sorts of Processing Instructions
-       * and other metadata, which can be placed and
-       * attached within the EDL/Session.
-       */
-      class Meta : public AbstractMO
-        {
-          ///////////
-        };
-        
-        
-        
-    } // namespace proc::mobject::session
 
-  } // namespace proc::mobject
+  } // namespace mobject::session
 
-} // namespace proc
+} // namespace mobject
 #endif

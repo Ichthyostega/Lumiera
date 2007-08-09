@@ -21,38 +21,33 @@
 */
 
 
-#ifndef PROC_ENGINE_PROCESSOR_H
-#define PROC_ENGINE_PROCESSOR_H
+#ifndef ENGINE_PROCESSOR_H
+#define ENGINE_PROCESSOR_H
 
-#include "common/time.hpp"
+#include "cinelerra.h"
 #include "proc/stateproxy.hpp"
 
 
 
-
-namespace proc
+namespace engine
   {
-  namespace engine
+
+  class ExitNode;
+
+  class Processor
     {
+    protected:
+      ExitNode * output;
 
-    class ExitNode;
+      /** begin of the timerange covered by this processor */
+      cinelerra::Time start;
 
-    class Processor
-      {
-      protected:
-        ExitNode * output;
+      /**end (exclusive) of the timerange  */
+      cinelerra::Time end;
 
-        /** begin of the timerange covered by this processor */
-        cinelerra::Time start;
+    };
 
-        /**end (exclusive) of the timerange  */
-        cinelerra::Time end;
 
-      };
-      
-      
-      
-  } // namespace proc::engine
 
-} // namespace proc
+} // namespace engine
 #endif

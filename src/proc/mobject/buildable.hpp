@@ -21,35 +21,31 @@
 */
 
 
-#ifndef PROC_MOBJECT_BUILDABLE_H
-#define PROC_MOBJECT_BUILDABLE_H
+#ifndef MOBJECT_BUILDABLE_H
+#define MOBJECT_BUILDABLE_H
 
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
-    {
-    
-    
-    namespace builder{ class Tool; }
-    
-    
-    /**
-     *  All Buidables support double-dispatch of given Tool operations.
-     *  The actual operation is thus selected at runtime based both on the 
-     *  actual type of the Tool class /and/ the actual type of the Buildabele.
-     */
-    class Buildable
-      {
-      public:
-        void apply (builder::Tool& provided_tool) ;
-      };
-      
-      
-      
-  } // namespace proc::mobject
 
-} // namespace proc
+
+  namespace builder{ class Tool; }
+
+
+  /**
+   *  All Buidables support double-dispatch of given Tool operations.
+   *  The actual operation is thus selected at runtime based both on the 
+   *  actual type of the Tool class /and/ the actual type of the Buildabele.
+   */
+  class Buildable
+    {
+    public:
+      void apply (builder::Tool& provided_tool) ;
+    };
+
+
+
+} // namespace mobject
 #endif

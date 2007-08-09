@@ -1,14 +1,14 @@
-format 38
+format 40
 "design" // design
-  revision 7
-  modified_by 61 "ct"
+  revision 9
+  modified_by 5 "hiv"
   // class settings
   //class diagram settings
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   //use case diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
   //collaboration diagram settings
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
   //object diagram settings
@@ -40,11 +40,32 @@ Not a real code package, rather a container for design drafts, specifications, d
       size A4
     end
 
+    component 129925 "CommonLib"
+      provided_classes
+	class_ref 134917 // Time
+      end
+    end
+
     component 128005 "Builder"
       stereotype "subsystem"
+      provided_classes
+	class_ref 132741 // StateProxy
+      end
+      required_classes
+	class_ref 128261 // Fixture
+	class_ref 128005 // Session
+      end
     end
 
     component 128133 "Session"
+      stereotype "subsystem"
+      provided_classes
+	class_ref 128133 // EDL
+	class_ref 128261 // Fixture
+	class_ref 128517 // MObject
+	class_ref 134661 // ParamProvider
+	class_ref 128005 // Session
+      end
       component 128389 "EDL"
 	stereotype "entity"
       end
@@ -56,10 +77,14 @@ Not a real code package, rather a container for design drafts, specifications, d
 
     component 128261 "Controller"
       stereotype "subsystem"
+      provided_classes
+	class_ref 130565 // BuilderFacade
+      end
       simplerelation 128261
 	-_->
 	  on component_ref 128005 // Builder
       end
+
     end
 
     component 128645 "AssetManagement"
@@ -69,9 +94,22 @@ Not a real code package, rather a container for design drafts, specifications, d
     end
 
     component 128901 "Engine"
+      required_classes
+	class_ref 132741 // StateProxy
+      end
       simplerelation 128133
 	-_->
 	  on component_ref 129029 // Frame (Stream) Provider
+      end
+
+      component 130053 "ProcNode"
+	stereotype "entity"
+	provided_classes
+	  class_ref 134533 // Parameter
+	end
+	required_classes
+	  class_ref 134661 // ParamProvider
+	end
       end
     end
 
@@ -86,6 +124,38 @@ Not a real code package, rather a container for design drafts, specifications, d
     end
 
     component 129285 "RenderPathManager"
+      provided_classes
+	class_ref 130437 // PathManager
+      end
+    end
+
+  end
+
+  componentview 128133 "interfaces"
+    //component diagram settings
+    package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    componentdiagram 130053 "proc-components"
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations no shadow default
+      draw_component_as_icon default show_component_req_prov default show_component_rea default
+      size A3
+    end
+
+    component 129541 "ControllerFacade"
+      provided_classes
+	class_ref 130309 // ControllerFacade
+      end
+      required_classes
+	class_ref 130565 // BuilderFacade
+	class_ref 130437 // PathManager
+      end
+    end
+
+    component 129797 "ConManager"
+      stereotype "component"
+      required_classes
+	class_ref 134661 // ParamProvider
+      end
     end
   end
 

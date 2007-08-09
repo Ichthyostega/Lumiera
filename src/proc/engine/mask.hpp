@@ -21,26 +21,22 @@
 */
 
 
-#ifndef PROC_ENGINE_MASK_H
-#define PROC_ENGINE_MASK_H
+#ifndef ENGINE_MASK_H
+#define ENGINE_MASK_H
 
 #include "proc/engine/trafo.hpp"
 
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
 
 
-    class Mask : public Trafo
-      {};
-      
-      
-      
-      
-  } // namespace proc::engine
+  class Mask : public Trafo
+    {};
 
-} // namespace proc
+
+
+
+} // namespace engine
 #endif

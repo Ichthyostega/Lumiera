@@ -21,8 +21,8 @@
 */
 
 
-#ifndef PROC_MOBJECT_SESSION_EDL_H
-#define PROC_MOBJECT_SESSION_EDL_H
+#ifndef MOBJECT_SESSION_EDL_H
+#define MOBJECT_SESSION_EDL_H
 
 #include <list>
 
@@ -32,28 +32,23 @@
 
 using std::list;
 
-
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
+
+
+    class EDL
       {
-      
-      
-      class EDL
-        {
-        protected:
-          list<Track *> tracks;
-          list<MObject *> clips;
+      protected:
+        list<Track *> tracks;
+        list<MObject *> clips;
 
-        };
-        
-        
-        
-    } // namespace proc::mobject::session
+      };
 
-  } // namespace proc::mobject
 
-} // namespace proc
+
+  } // namespace mobject::session
+
+} // namespace mobject
 #endif

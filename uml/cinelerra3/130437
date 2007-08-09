@@ -1,6 +1,6 @@
 format 40
 "session" // design::codegen::proc::mobject::session
-  revision 5
+  revision 6
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -29,7 +29,7 @@ format 40
   stereotype "src"
   cpp_h_dir "proc/mobject/session"
   cpp_src_dir "proc/mobject/session"
-  cpp_namespace "proc::mobject::session"
+  cpp_namespace "mobject::session"
   comment "sourcecode package
 
 Everything concerning the EDL and Session, within the MObject Subsystem"

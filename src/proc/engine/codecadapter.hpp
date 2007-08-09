@@ -21,33 +21,29 @@
 */
 
 
-#ifndef PROC_ENGINE_CODECADAPTER_H
-#define PROC_ENGINE_CODECADAPTER_H
+#ifndef ENGINE_CODECADAPTER_H
+#define ENGINE_CODECADAPTER_H
 
 #include "proc/engine/trafo.hpp"
 
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
-    
-    
-    /** 
-     * Adapter for wiring an externally loaded 
-     * codec into the render pipeline. The decoding
-     * process thus is integrated into the framework
-     * of the Renderengine, while the actual implementation
-     * can be delegated to an external library accessed
-     * through Cinelerra's datat backend. 
-     */
-    class CodecAdapter : public Trafo
-      {};
-      
-      
-      
-  } // namespace proc::engine
 
-} // namespace proc
+
+  /**
+   * Adapter for wiring an externally loaded 
+   * codec into the render pipeline. The decoding
+   * process thus is integrated into the framework
+   * of the Renderengine, while the actual implementation
+   * can be delegated to an external library accessed
+   * through Cinelerra's datat backend. 
+   */
+  class CodecAdapter : public Trafo
+    {};
+
+
+
+} // namespace engine
 #endif

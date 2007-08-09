@@ -24,11 +24,11 @@
 #include "proc/stateproxy.hpp"
 #include "proc/frame.hpp"
 
-namespace proc
+namespace proc_interface
   {
   
   /** */
   
   
   
-} // namespace proc
+} // namespace proc_interface

@@ -1,13 +1,9 @@
 window_sizes 1104 756 270 824 557 120
-diagrams
-  active  classdiagram_ref 128133 // Session structure
-    824 557 100 4 120 0
-end
 show_stereotypes
 selected 
-  package_ref 129 // cinelerra3
+package_ref 129 // cinelerra3
 open
   
-  package_ref 128645 // codegen
+package_ref 129669 // proc
 end
 end

@@ -21,39 +21,34 @@
 */
 
 
-#ifndef PROC_MOBJECT_SESSION_TRACK_H
-#define PROC_MOBJECT_SESSION_TRACK_H
+#ifndef MOBJECT_SESSION_TRACK_H
+#define MOBJECT_SESSION_TRACK_H
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
+
+
+    /**
+     * A Track in the EDL or Session. 
+     * But, honestly, I don't quite know what a Track stands for!
+     * Usually, this stems from the metaphor of a multitrack tape machine,
+     * but I doubt this metaphor is really helpful for editing video; mostly
+     * people stick to such metaphors out of mental laziyness...
+     * 
+     * So, let's see if the concept "Track" will get any practical functionallity
+     * or if we end up with "Track" beeing just a disguise for an int ID.... 
+     */
+    class Track
       {
+      };
 
 
-      /**
-       * A Track in the EDL or Session. 
-       * But, honestly, I don't quite know what a Track stands for!
-       * Usually, this stems from the metaphor of a multitrack tape machine,
-       * but I doubt this metaphor is really helpful for editing video; mostly
-       * people stick to such metaphors out of mental laziyness...
-       * 
-       * So, let's see if the concept "Track" will get any practical functionallity
-       * or if we end up with "Track" beeing just a disguise for an int ID.... 
-       */
-      class Track
-        {
-          
-        };
 
-        
-        
-    } // namespace proc::mobject::session
+  } // namespace mobject::session
 
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject
 #endif

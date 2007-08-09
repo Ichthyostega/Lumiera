@@ -21,8 +21,8 @@
 */
 
 
-#ifndef PROC_MOBJECT_SESSION_EFFECT_H
-#define PROC_MOBJECT_SESSION_EFFECT_H
+#ifndef MOBJECT_SESSION_EFFECT_H
+#define MOBJECT_SESSION_EFFECT_H
 
 #include <string>
 
@@ -32,27 +32,23 @@
 using std::string;
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
+
+
+    class Effect : public AbstractMO
       {
+      protected:
+        /** Identifier of the Plugin to be used */
+        string plugID;
 
+      };
+    
+    
+     
+  } // namespace mobject::session
 
-      class Effect : public AbstractMO
-        {
-        protected:
-          /** Identifier of the Plugin to be used */
-          string plugID;
-
-        };
-        
-        
-        
-    } // namespace proc::mobject::session
-
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject
 #endif

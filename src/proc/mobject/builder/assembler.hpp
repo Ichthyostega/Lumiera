@@ -21,38 +21,34 @@
 */
 
 
-#ifndef PROC_MOBJECT_BUILDER_ASSEMBLER_H
-#define PROC_MOBJECT_BUILDER_ASSEMBLER_H
+#ifndef MOBJECT_BUILDER_ASSEMBLER_H
+#define MOBJECT_BUILDER_ASSEMBLER_H
 
 #include "proc/engine/renderengine.hpp"
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace builder
     {
-    namespace builder
+
+
+    /**
+     * This is the actual building facility:
+     * provided the correct tools and associations, 
+     * it serves to build and connect the individual ProcNode objects
+     */
+    class Assembler
       {
+      public:
+        engine::RenderEngine & build () ;
+        // TODO: allocation, GC???
+      };
 
 
-      /**
-       * This is the actual building facility:
-       * provided the correct tools and associations, 
-       * it serves to build and connect the individual ProcNode objects
-       */
-      class Assembler
-        {
-        public:
-          proc::engine::RenderEngine & build () ;
-          // TODO: allocation, GC???
-        };
-        
-        
-        
-    } // namespace proc::mobject::builder
 
-  } // namespace proc::mobject
+  } // namespace mobject::builder
 
-} // namespace proc
+} // namespace mobject
 #endif

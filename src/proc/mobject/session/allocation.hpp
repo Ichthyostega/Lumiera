@@ -21,8 +21,8 @@
 */
 
 
-#ifndef PROC_MOBJECT_SESSION_ALLOCATION_H
-#define PROC_MOBJECT_SESSION_ALLOCATION_H
+#ifndef MOBJECT_SESSION_ALLOCATION_H
+#define MOBJECT_SESSION_ALLOCATION_H
 
 #include <string>
 
@@ -32,35 +32,30 @@
 using std::string;
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
+
+
+    /**
+     * a directive to place a MObject in a specific way
+     */
+    class Allocation : public Placement
       {
+      protected:
+        /** human readable representation of the condition
+         *  characterizing this allocaton, e.g. "t >= 10"
+         */
+        string repr;
+
+      public:
+        const string& getRepr () const { return repr; } 
+      };
 
 
-      /**
-       * a directive to place a MObject in a specific way
-       */
-      class Allocation : public Placement
-        {
-        protected:
-          /** human readable representation of the condition 
-           *  characterizing this allocaton, e.g. "t >= 10"
-           */
-          string repr;
-          
-        public:
-          const string& getRepr () const { return repr; } 
 
-        };
-        
-        
-        
-    } // namespace proc::mobject::session
+  } // namespace mobject::session
 
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject
 #endif

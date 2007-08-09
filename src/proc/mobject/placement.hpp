@@ -21,41 +21,37 @@
 */
 
 
-#ifndef PROC_MOBJECT_PLACEMENT_H
-#define PROC_MOBJECT_PLACEMENT_H
+#ifndef MOBJECT_PLACEMENT_H
+#define MOBJECT_PLACEMENT_H
 
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/session/track.hpp"
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+
+
+  class ExplicitPlacement;
+
+
+  class Placement
     {
-    
-    
-    class ExplicitPlacement;
-    
-    
-    class Placement
-      {
-      protected:
-        typedef cinelerra::Time Time;
-        typedef proc::mobject::session::Track Track;
+    protected:
+      typedef cinelerra::Time Time;
+      typedef session::Track Track;
 
-        MObject* subject;
+      MObject* subject;
 
 
-      public:
-        /** resolve the network of placement and 
-         *  provide the resulting (explicit) placement.
-         */
-        ExplicitPlacement& resolve () ;
-      };
-      
-      
-      
-  } // namespace proc::mobject
+    public:
+      /** resolve the network of placement and
+       *  provide the resulting (explicit) placement.
+       */
+      ExplicitPlacement& resolve () ;
+    };
 
-} // namespace proc
+
+
+} // namespace mobject
 #endif

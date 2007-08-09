@@ -1,6 +1,6 @@
 format 40
 "proc" // design::codegen::proc
-  revision 5
+  revision 6
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -29,7 +29,7 @@ format 40
   stereotype "src"
   cpp_h_dir "proc"
   cpp_src_dir "proc"
-  cpp_namespace "proc"
+  cpp_namespace "proc_interface"
   comment "sourcecode package
 
 All classes belonging to the (middle) processing layer"

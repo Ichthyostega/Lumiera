@@ -21,33 +21,29 @@
 */
 
 
-#ifndef PROC_ENGINE_SOURCE_H
-#define PROC_ENGINE_SOURCE_H
+#ifndef ENGINE_SOURCE_H
+#define ENGINE_SOURCE_H
 
 #include "proc/engine/procnode.hpp"
 
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
+
+
+  /**
+   * Source Node: represents a media source to pull data from.
+   * Source is special, because it has no predecessor nodes,
+   * but rather makes calls down to the data backend internally
+   * to get at the raw data.
+   */
+  class Source : public ProcNode
     {
+      /////////////////TODO
+    };
 
 
-    /**
-     * Source Node: represents a media source to pull data from.
-     * Source is special, because it has no predecessor nodes,
-     * but rather makes calls down to the data backend internally
-     * to get at the raw data.
-     */
-    class Source : public ProcNode
-      {
-        /////////////////TODO
-      };
-      
-      
-      
-  } // namespace proc::engine
 
-} // namespace proc
+} // namespace engine
 #endif

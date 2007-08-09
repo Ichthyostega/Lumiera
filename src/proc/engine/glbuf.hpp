@@ -21,25 +21,19 @@
 */
 
 
-#ifndef PROC_ENGINE_GLBUF_H
-#define PROC_ENGINE_GLBUF_H
+#ifndef ENGINE_GLBUF_H
+#define ENGINE_GLBUF_H
 
 #include "proc/frame.hpp"
 
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
-    
-    
-    class GLBuf : public proc::Frame
-      {};
-      
-      
-      
-  } // namespace proc::engine
 
-} // namespace proc
+
+  class GLBuf : public proc_interface::Frame
+    {};
+
+} // namespace engine
 #endif

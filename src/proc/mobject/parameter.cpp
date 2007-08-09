@@ -24,20 +24,16 @@
 #include "proc/mobject/parameter.hpp"
 #include "proc/mobject/paramprovider.hpp"
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
-    {
-    
-    template<class VAL>
-    VAL
-    Parameter<VAL>::getValue ()
-      {
-        ////////////TODO
-      }
-    
-    
-    
-  } // namespace proc::mobject
 
-} // namespace proc
+  template<class VAL>
+  VAL
+  Parameter<VAL>::getValue ()
+  {
+    ////////////TODO
+  }
+
+
+
+} // namespace mobject

@@ -21,39 +21,35 @@
 */
 
 
-#ifndef PROC_MOBJECT_PARAMETER_H
-#define PROC_MOBJECT_PARAMETER_H
+#ifndef MOBJECT_PARAMETER_H
+#define MOBJECT_PARAMETER_H
 
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+
+  template<class VAL> class ParamProvider;
+
+
+  /**
+   * Descriptor and access object for a plugin parameter.
+   * Parameters may be provided with values from the session,
+   * and this values may be automated.
+   */
+  template<class VAL>
+  class Parameter
     {
+    public:
+      VAL getValue () ;
 
-    template<class VAL> class ParamProvider;
+    protected:
+      ParamProvider<VAL>* provider;
 
-    
-    /**
-     * Descriptor and access object for a plugin parameter.
-     * Parameters may be provided with values from the session,
-     * and this values may be automated.
-     */
-    template<class VAL>
-    class Parameter
-      {
-      public:
-        VAL getValue () ;
-
-      protected:
-        ParamProvider<VAL>* provider;
-
-      };
+    };
 
 
 
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject
 #endif

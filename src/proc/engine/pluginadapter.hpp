@@ -21,32 +21,28 @@
 */
 
 
-#ifndef PROC_ENGINE_PLUGINADAPTER_H
-#define PROC_ENGINE_PLUGINADAPTER_H
+#ifndef ENGINE_PLUGINADAPTER_H
+#define ENGINE_PLUGINADAPTER_H
 
 #include "proc/engine/trafo.hpp"
 
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
-    
-    
-    /**
-     * Adapter used to integrate an effects processor in the render pipeline.
-     * Effects processors are typically defined in a separate library and
-     * will be loaded at runtime using Cinelerra's plugin interface.
-     */
-    class PluginAdapter : public Trafo
-      {
-        /////////////
-      };
-      
-      
-      
-  } // namespace proc::engine
 
-} // namespace proc
+
+  /**
+   * Adapter used to integrate an effects processor in the render pipeline.
+   * Effects processors are typically defined in a separate library and
+   * will be loaded at runtime using Cinelerra's plugin interface.
+   */
+  class PluginAdapter : public Trafo
+    {
+      /////////////
+    };
+
+
+
+} // namespace engine
 #endif

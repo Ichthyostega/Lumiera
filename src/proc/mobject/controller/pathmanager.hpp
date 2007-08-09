@@ -21,38 +21,34 @@
 */
 
 
-#ifndef PROC_MOBJECT_CONTROLLER_PATHMANAGER_H
-#define PROC_MOBJECT_CONTROLLER_PATHMANAGER_H
+#ifndef MOBJECT_CONTROLLER_PATHMANAGER_H
+#define MOBJECT_CONTROLLER_PATHMANAGER_H
 
 #include "proc/engine/processor.hpp"
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace controller
     {
-    namespace controller
+
+
+    /**
+     * While building a render engine, this Strategy class 
+     * decides on the actual render strategy in accordance
+     * to the current controller settings (system state)
+     */
+    class PathManager
       {
-      
-      
-      /**
-       * While building a render engine, this Strategy class 
-       * decides on the actual render strategy in accordance
-       * to the current controller settings (system state)
-       */
-      class PathManager
-        {
-        public:
-          proc::engine::Processor* buildProcessor () ;
-          // TODO: allocation, GC??
-        };
-        
-        
-        
-    } // namespace proc::mobject::controller
+      public:
+        engine::Processor* buildProcessor () ;
+        // TODO: allocation, GC??
+      };
 
-  } // namespace proc::mobject
 
-} // namespace proc
+
+  } // namespace mobject::controller
+
+} // namespace mobject
 #endif

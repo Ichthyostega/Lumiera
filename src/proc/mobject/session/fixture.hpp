@@ -21,8 +21,8 @@
 */
 
 
-#ifndef PROC_MOBJECT_SESSION_FIXTURE_H
-#define PROC_MOBJECT_SESSION_FIXTURE_H
+#ifndef MOBJECT_SESSION_FIXTURE_H
+#define MOBJECT_SESSION_FIXTURE_H
 
 #include <list>
 
@@ -35,32 +35,29 @@
 using std::list;
 
 
-namespace proc
+
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
+
+
+
+    class Fixture : public EDL
       {
-
-      
-
-      class Fixture : public EDL
-        {
-        protected:
-          Track tracks;
-          list<ExplicitPlacement*> timeline;
+      protected:
+        Track tracks;
+        list<ExplicitPlacement*> timeline;
 
 
-        public:
-          list<ExplicitPlacement*> & getPlaylistForRender () ;
-          Auto<double>* getAutomation () ; /////TODO: just a placeholder at the moment!!!
-        };
-        
-        
-        
-    } // namespace proc::mobject::session
+      public:
+        list<ExplicitPlacement*> & getPlaylistForRender () ;
+        Auto<double>* getAutomation () ; /////TODO: just a placeholder at the moment!!!
+      };
 
-  } // namespace proc::mobject
 
-} // namespace proc
+
+  } // namespace mobject::session
+
+} // namespace mobject
 #endif

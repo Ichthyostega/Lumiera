@@ -21,8 +21,8 @@
 */
 
 
-#ifndef PROC_ENGINE_PROCNODE_H
-#define PROC_ENGINE_PROCNODE_H
+#ifndef ENGINE_PROCNODE_H
+#define ENGINE_PROCNODE_H
 
 #include <vector>
 
@@ -33,31 +33,26 @@ using std::vector;
 
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
+
+
+  /**
+   * Key abstraction of the Render Engine: A Data processing Node
+   */
+  class ProcNode
     {
+    protected:
+      typedef mobject::Parameter<double> Param;
 
+      /** The predecessor in a processing pipeline.
+       *  I.e. a source to get data to be processed
+       */
+      ProcNode * datasrc;
 
-    /**
-     * Key abstraction of the Render Engine: A Data processing Node
-     */
-    class ProcNode
-      {
-      protected:
-        typedef proc::mobject::Parameter<double> Param;
-        
-        /** The predecessor in a processing pipeline.
-         *  I.e. a source to get data to be processed
-         */
-        ProcNode * datasrc;
+      vector<Param> params;
 
-        vector<Param> params;
+    };
 
-      };
-
-      
-  } // namespace proc::engine
-
-} // namespace proc
+} // namespace engine
 #endif

@@ -24,14 +24,10 @@
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/placement.hpp"
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
-    {
-    
-    /** */
-    
-    
-  } // namespace proc::mobject
 
-} // namespace proc
+  /** */
+
+
+} // namespace mobject

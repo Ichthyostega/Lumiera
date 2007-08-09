@@ -21,8 +21,8 @@
 */
 
 
-#ifndef PROC_ENGINE_RENDERENGINE_H
-#define PROC_ENGINE_RENDERENGINE_H
+#ifndef ENGINE_RENDERENGINE_H
+#define ENGINE_RENDERENGINE_H
 
 #include <list>
 
@@ -32,27 +32,22 @@
 using std::list;
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
+
+
+  class RenderEngine : public Processor
     {
+    public:
+      /**
+       * TODO: will probably be handled differently (see Cehteh)
+       */
+      void play () ;
 
+    private:
+      list<Processor> renderSegments;
 
-    class RenderEngine : public Processor
-      {
-      public:
-        /**
-         * TODO: will probably be handled differently (see Cehteh)
-         */
-        void play () ;
+    };
 
-      private:
-        list<Processor> renderSegments;
-
-      };
-
-      
-  } // namespace proc::engine
-
-} // namespace proc
+} // namespace engine
 #endif

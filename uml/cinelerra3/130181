@@ -1,6 +1,6 @@
 format 40
 "mobject" // design::codegen::proc::mobject
-  revision 5
+  revision 6
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -29,7 +29,7 @@ format 40
   stereotype "src"
   cpp_h_dir "proc/mobject"
   cpp_src_dir "proc/mobject"
-  cpp_namespace "proc::mobject"
+  cpp_namespace "mobject"
   comment "sourcecode package
 
 MObject Subsystem

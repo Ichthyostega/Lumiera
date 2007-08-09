@@ -24,24 +24,20 @@
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
-    {
 
 
 
-    /** create an actual (explicit) placement while trying to 
-     * satisfy the network of adjacent objects and placements.
-     * TODO: need GC!!!!!!!!!!!
-     */
-    ExplicitPlacement&
-    Placement::resolve ()
-    {
-    }
+  /** create an actual (explicit) placement while trying to
+   * satisfy the network of adjacent objects and placements.
+   * TODO: need GC!!!!!!!!!!!
+   */
+  ExplicitPlacement&
+  Placement::resolve ()
+  {
+  }
 
 
 
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject

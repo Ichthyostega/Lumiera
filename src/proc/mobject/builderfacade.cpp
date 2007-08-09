@@ -23,24 +23,20 @@
 
 #include "proc/mobject/builderfacade.hpp"
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
-    {
-    
-    
-    /**
-     * Main Operation of the Builder: 
-     * create a render engine for a given part of the timeline
-     */
-    proc::engine::RenderEngine &
-    BuilderFacade::buildEngine ()
-    {
-      //////////////////////TODO
-    }
-    
-    
-    
-  } // namespace proc::mobject
 
-} // namespace proc
+
+  /**
+   * Main Operation of the Builder: 
+   * create a render engine for a given part of the timeline
+   */
+  engine::RenderEngine &
+  BuilderFacade::buildEngine ()
+  {
+    //////////////////////TODO
+  }
+
+
+
+} // namespace mobject

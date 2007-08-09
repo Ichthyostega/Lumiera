@@ -21,27 +21,21 @@
 */
 
 
-#ifndef PROC_ENGINE_VFRAME_H
-#define PROC_ENGINE_VFRAME_H
+#ifndef ENGINE_VFRAME_H
+#define ENGINE_VFRAME_H
 
 #include "proc/frame.hpp"
 
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
-    
-    
-    class VFrame : public proc::Frame
-      {
-        ///////////////////////
-      };
-      
-      
-      
-  } // namespace proc::engine
 
-} // namespace proc
+
+  class VFrame : public proc_interface::Frame
+    {
+      ///////////////////////
+    };
+
+} // namespace engine
 #endif

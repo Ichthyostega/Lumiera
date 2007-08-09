@@ -27,10 +27,16 @@ Documentation</title>
 <a name="refcomponent diagram128005"></a>
 <p align="center"><img src="fig128005.png" alt="" /></p>
  <p align="center"><b>Overview</b></p><p><br /></p><p><br /></p>
-<p>This drawing shows the top level compoents and relations<br /></p><a name="refcomponent128005"></a>
+<p>This drawing shows the top level compoents and relations<br /></p><a name="refcomponent129925"></a>
+<table><tr><td><div class="element">Component <b>CommonLib</b></div></td></tr></table>
+<p>provided classes : <a href="class134917.html#refclass134917"><b>Time</b></a></p>
+<a name="refcomponent128005"></a>
 <table><tr><td><div class="element">Component <b>Builder</b></div></td></tr></table>
+<p>provided classes : <a href="class132741.html#refclass132741"><b>StateProxy</b></a></p>
+<p>required classes : <a href="class128261.html#refclass128261"><b>Fixture</b></a>, <a href="class128005.html#refclass128005"><b>Session</b></a></p>
 <a name="refcomponent128133"></a>
 <table><tr><td><div class="element">Component <b>Session</b></div></td></tr></table>
+<p>provided classes : <a href="class128133.html#refclass128133"><b>EDL</b></a>, <a href="class128261.html#refclass128261"><b>Fixture</b></a>, <a href="class128517.html#refclass128517"><b>MObject</b></a>, <a href="class134661.html#refclass134661"><b>ParamProvider</b></a>, <a href="class128005.html#refclass128005"><b>Session</b></a></p>
 <div class="sub">
 <a name="refcomponent128389"></a>
 <table><tr><td><div class="element">Component <b>EDL</b></div></td></tr></table>
@@ -41,7 +47,8 @@ Documentation</title>
 </div>
 <a name="refcomponent128261"></a>
 <table><tr><td><div class="element">Component <b>Controller</b></div></td></tr></table>
-<p>Depends on <a href="index.html#refcomponent128005"><b>Builder</b></a></p><div class="sub">
+<p>Depends on <a href="index.html#refcomponent128005"><b>Builder</b></a></p><p>provided classes : <a href="class130565.html#refclass130565"><b>BuilderFacade</b></a></p>
+<div class="sub">
 </div>
 <a name="refcomponent128645"></a>
 <table><tr><td><div class="element">Component <b>AssetManagement</b></div></td></tr></table>
@@ -49,7 +56,13 @@ Documentation</title>
 <table><tr><td><div class="element">Component <b>Dispatcher</b></div></td></tr></table>
 <a name="refcomponent128901"></a>
 <table><tr><td><div class="element">Component <b>Engine</b></div></td></tr></table>
-<p>Depends on <a href="index.html#refcomponent129029"><b>Frame (Stream) Provider</b></a></p><div class="sub">
+<p>Depends on <a href="index.html#refcomponent129029"><b>Frame (Stream) Provider</b></a></p><p>required classes : <a href="class132741.html#refclass132741"><b>StateProxy</b></a></p>
+<div class="sub">
+<a name="refcomponent130053"></a>
+<table><tr><td><div class="element">Component <b>ProcNode</b></div></td></tr></table>
+<p>nested in <a href="index.html#refcomponent128901"><b>Engine</b></a></p>
+<p>provided classes : <a href="class134533.html#refclass134533"><b>Parameter</b></a></p>
+<p>required classes : <a href="class134661.html#refclass134661"><b>ParamProvider</b></a></p>
 </div>
 <a name="refcomponent129029"></a>
 <table><tr><td><div class="element">Component <b>Frame (Stream) Provider</b></div></td></tr></table>
@@ -59,15 +72,27 @@ Documentation</title>
 <table><tr><td><div class="element">Component <b>Cache</b></div></td></tr></table>
 <a name="refcomponent129285"></a>
 <table><tr><td><div class="element">Component <b>RenderPathManager</b></div></td></tr></table>
+<p>provided classes : <a href="class130437.html#refclass130437"><b>PathManager</b></a></p>
+</div>
+<a name="refcomponent view128133"></a>
+<h2 class ="view">1.2 Component View interfaces</h2>
+<div class="sub">
+<a name="refcomponent diagram130053"></a>
+<p align="center"><img src="fig130053.png" alt="" /></p>
+ <p align="center"><b>proc-components</b></p><p><br /></p><p><br /></p>
+<a name="refcomponent129541"></a>
+<table><tr><td><div class="element">Component <b>ControllerFacade</b></div></td></tr></table>
+<p>provided classes : <a href="class130309.html#refclass130309"><b>ControllerFacade</b></a></p>
+<p>required classes : <a href="class130565.html#refclass130565"><b>BuilderFacade</b></a>, <a href="class130437.html#refclass130437"><b>PathManager</b></a></p>
+<a name="refcomponent129797"></a>
+<table><tr><td><div class="element">Component <b>ConManager</b></div></td></tr></table>
+<p>required classes : <a href="class134661.html#refclass134661"><b>ParamProvider</b></a></p>
 </div>
 <a name="refpackage128645"></a>
-<h2 class ="package">1.2 Package codegen</h2>
-<p></p><ul>
-<li>C++ namespace : cinelerra</li>
-</ul>
+<h2 class ="package">1.3 Package codegen</h2>
 <p>This package is used to organize code generation by BOUML. It is considered useless after having generated the initial code skeleton.<br /></p><div class="sub">
 <a name="refdeployment view128133"></a>
-<h3 class ="view">1.2.1 Deployment View EXE Deployment</h3>
+<h3 class ="view">1.3.1 Deployment View EXE Deployment</h3>
 <p>defines and lists how the Cinelerra executable has to be created<br /></p>
 <div class="sub">
 <a name="refdeployment diagram129797"></a>
@@ -76,20 +101,20 @@ Documentation</title>
 <a name="refartifact128005"></a>
 <table><tr><td><div class="element">Artifact <b>Cinelerra3</b></div></td></tr></table>
 <p>Depends on <a href="index.html#refpackage129413"><b>common</b></a></p><p>Depends on <a href="index.html#refpackage129797"><b>gui</b></a></p><p>Depends on <a href="index.html#refpackage129669"><b>proc</b></a></p><p>Depends on <a href="index.html#refpackage129541"><b>backend</b></a></p><p>the main executable to be built<br /></p>
-<p><i>executable</i> associated with : <a href="index.html#refartifact128517"><b>session</b></a>, <a href="index.html#refartifact133125"><b>pluginadapter</b></a>, <a href="index.html#refartifact132613"><b>pipe</b></a>, <a href="index.html#refartifact134277"><b>source</b></a>, <a href="index.html#refartifact129029"><b>placement</b></a>, <a href="index.html#refartifact130309"><b>auto</b></a>, <a href="index.html#refartifact130437"><b>builderfacade</b></a>, <a href="index.html#refartifact131973"><b>renderengine</b></a>, <a href="index.html#refartifact132741"><b>hub</b></a>, <a href="index.html#refartifact132485"><b>trafo</b></a>, <a href="index.html#refartifact129157"><b>explicitplacement</b></a>, <a href="index.html#refartifact132357"><b>procnode</b></a>, <a href="index.html#refartifact129285"><b>abstractmo</b></a>, <a href="index.html#refartifact134533"><b>paramprovider</b></a>, <a href="index.html#refartifact130181"><b>label</b></a>, <a href="index.html#refartifact129413"><b>clip</b></a>, <a href="index.html#refartifact129797"><b>fixedplacement</b></a>, <a href="index.html#refartifact133765"><b>frame</b></a>, <a href="index.html#refartifact130821"><b>assembler</b></a>, <a href="index.html#refartifact133637"><b>glrender</b></a>, <a href="index.html#refartifact134149"><b>glbuf</b></a>, <a href="index.html#refartifact131205"><b>tool</b></a>, <a href="index.html#refartifact133893"><b>aframe</b></a>, <a href="index.html#refartifact131845"><b>renderstate</b></a>, <a href="index.html#refartifact130949"><b>stateproxy</b></a>, <a href="index.html#refartifact132229"><b>exitnode</b></a>, <a href="index.html#refartifact134021"><b>vframe</b></a>, <a href="index.html#refartifact128261"><b>mobject</b></a>, <a href="index.html#refartifact133381"><b>arender</b></a>, <a href="index.html#refartifact128773"><b>fixture</b></a>, <a href="index.html#refartifact128901"><b>track</b></a>, <a href="index.html#refartifact134661"><b>interpolator</b></a>, <a href="index.html#refartifact128645"><b>edl</b></a>, <a href="index.html#refartifact134405"><b>parameter</b></a>, <a href="index.html#refartifact130565"><b>toolfactory</b></a>, <a href="index.html#refartifact132869"><b>projector</b></a>, <a href="index.html#refartifact133253"><b>openglpipe</b></a>, <a href="index.html#refartifact129669"><b>meta</b></a>, <a href="index.html#refartifact131077"><b>buildable</b></a>, <a href="index.html#refartifact131461"><b>nodecreatertool</b></a>, <a href="index.html#refartifact130693"><b>conmanager</b></a>, <a href="index.html#refartifact129925"><b>relativeplacement</b></a>, <a href="index.html#refartifact129541"><b>effect</b></a>, <a href="index.html#refartifact132997"><b>mask</b></a>, <a href="index.html#refartifact128133"><b>main</b></a>, <a href="index.html#refartifact132101"><b>processor</b></a>, <a href="index.html#refartifact131333"><b>segmentationtool</b></a>, <a href="index.html#refartifact130053"><b>allocation</b></a>, <a href="index.html#refartifact131589"><b>controllerfacade</b></a>, <a href="index.html#refartifact131717"><b>pathmanager</b></a>, <a href="index.html#refartifact133509"><b>vrender</b></a></p>
+<p><i>executable</i> associated with : <a href="index.html#refartifact131461"><b>nodecreatertool</b></a>, <a href="index.html#refartifact132869"><b>projector</b></a>, <a href="index.html#refartifact134661"><b>interpolator</b></a>, <a href="index.html#refartifact128645"><b>edl</b></a>, <a href="index.html#refartifact128773"><b>fixture</b></a>, <a href="index.html#refartifact133253"><b>glpipe</b></a>, <a href="index.html#refartifact133509"><b>vrender</b></a>, <a href="index.html#refartifact132229"><b>exitnode</b></a>, <a href="index.html#refartifact131717"><b>pathmanager</b></a>, <a href="index.html#refartifact128901"><b>track</b></a>, <a href="index.html#refartifact134533"><b>paramprovider</b></a>, <a href="index.html#refartifact132997"><b>mask</b></a>, <a href="index.html#refartifact128133"><b>main</b></a>, <a href="index.html#refartifact130693"><b>conmanager</b></a>, <a href="index.html#refartifact129413"><b>clip</b></a>, <a href="index.html#refartifact129669"><b>meta</b></a>, <a href="index.html#refartifact129797"><b>fixedplacement</b></a>, <a href="index.html#refartifact129925"><b>relativeplacement</b></a>, <a href="index.html#refartifact128261"><b>mobject</b></a>, <a href="index.html#refartifact134277"><b>source</b></a>, <a href="index.html#refartifact133765"><b>frame</b></a>, <a href="index.html#refartifact129029"><b>placement</b></a>, <a href="index.html#refartifact128517"><b>session</b></a>, <a href="index.html#refartifact130437"><b>builderfacade</b></a>, <a href="index.html#refartifact130565"><b>toolfactory</b></a>, <a href="index.html#refartifact131589"><b>controllerfacade</b></a>, <a href="index.html#refartifact132101"><b>processor</b></a>, <a href="index.html#refartifact133125"><b>pluginadapter</b></a>, <a href="index.html#refartifact129541"><b>effect</b></a>, <a href="index.html#refartifact131205"><b>tool</b></a>, <a href="index.html#refartifact131333"><b>segmentationtool</b></a>, <a href="index.html#refartifact133893"><b>aframe</b></a>, <a href="index.html#refartifact130821"><b>assembler</b></a>, <a href="index.html#refartifact132485"><b>trafo</b></a>, <a href="index.html#refartifact129157"><b>explicitplacement</b></a>, <a href="index.html#refartifact130309"><b>auto</b></a>, <a href="index.html#refartifact133637"><b>glrender</b></a>, <a href="index.html#refartifact132613"><b>link</b></a>, <a href="index.html#refartifact134405"><b>parameter</b></a>, <a href="index.html#refartifact131973"><b>renderengine</b></a>, <a href="index.html#refartifact130053"><b>allocation</b></a>, <a href="index.html#refartifact134021"><b>vframe</b></a>, <a href="index.html#refartifact133381"><b>arender</b></a>, <a href="index.html#refartifact131845"><b>renderstate</b></a>, <a href="index.html#refartifact130181"><b>label</b></a>, <a href="index.html#refartifact134149"><b>glbuf</b></a>, <a href="index.html#refartifact132357"><b>procnode</b></a>, <a href="index.html#refartifact130949"><b>stateproxy</b></a>, <a href="index.html#refartifact132741"><b>hub</b></a>, <a href="index.html#refartifact131077"><b>buildable</b></a>, <a href="index.html#refartifact129285"><b>abstractmo</b></a></p>
 <a name="refartifact128133"></a>
 <table><tr><td><div class="element">Artifact <b>main</b></div></td></tr></table>
 <p>Artifact <i>source</i></p>
 </div>
 <a name="refpackage129413"></a>
-<h3 class ="package">1.2.2 Package common</h3>
+<h3 class ="package">1.3.2 Package common</h3>
 <p></p><ul>
-<li>C++ namespace : lib</li>
+<li>C++ namespace : cinelerra</li>
 </ul>
 <p>sourcecode package<br /><br />Common library and helper classes<br /></p><p>Diagram : <a href="index.html#refdeployment diagram129797"><b>Source Overview</b></a></p>
 <div class="sub">
 <a name="refdeployment view128261"></a>
-<h4 class ="view">1.2.2.1 Deployment View gen</h4>
+<h4 class ="view">1.3.2.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
 <div class="sub">
 <a name="refartifact134789"></a>
@@ -99,22 +124,22 @@ Documentation</title>
 </div>
 </div>
 <a name="refpackage129541"></a>
-<h3 class ="package">1.2.3 Package backend</h3>
+<h3 class ="package">1.3.3 Package backend</h3>
 <p></p><ul>
 <li>C++ namespace : data</li>
 </ul>
 <p>sourcecode package<br /><br />Data backend classes here...<br /></p><div class="sub">
 <a name="refdeployment view128389"></a>
-<h4 class ="view">1.2.3.1 Deployment View gen</h4>
+<h4 class ="view">1.3.3.1 Deployment View gen</h4>
 </div>
 <a name="refpackage129669"></a>
-<h3 class ="package">1.2.4 Package proc</h3>
+<h3 class ="package">1.3.4 Package proc</h3>
 <p></p><ul>
-<li>C++ namespace : proc</li>
+<li>C++ namespace : proc_interface</li>
 </ul>
 <p>sourcecode package<br /><br />All classes belonging to the (middle) processing layer<br /></p><div class="sub">
 <a name="refdeployment view128517"></a>
-<h4 class ="view">1.2.4.1 Deployment View gen</h4>
+<h4 class ="view">1.3.4.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
 <div class="sub">
 <a name="refartifact130949"></a>
@@ -131,23 +156,23 @@ Documentation</title>
 <p>Artifact <i>source</i> associated with : <a href="class133253.html#refclass133253"><b>Frame</b></a></p>
 </div>
 <a name="refpackage130053"></a>
-<h4 class ="package">1.2.4.2 Package asset</h4>
+<h4 class ="package">1.3.4.2 Package asset</h4>
 <p></p><ul>
 <li>C++ namespace : asset</li>
 </ul>
 <p>sourcecode package<br /><br />Asset Management<br /></p><div class="sub">
 <a name="refdeployment view128645"></a>
-<h4 class ="view">1.2.4.2.1 Deployment View gen</h4>
+<h4 class ="view">1.3.4.2.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
 </div>
 <a name="refpackage130181"></a>
-<h4 class ="package">1.2.4.3 Package mobject</h4>
+<h4 class ="package">1.3.4.3 Package mobject</h4>
 <p></p><ul>
 <li>C++ namespace : mobject</li>
 </ul>
 <p>sourcecode package<br /><br />MObject Subsystem<br />including the Session (EDL), Builder and Processing Controller<br /></p><div class="sub">
 <a name="refdeployment view128773"></a>
-<h4 class ="view">1.2.4.3.1 Deployment View gen</h4>
+<h4 class ="view">1.3.4.3.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
 <div class="sub">
 <a name="refartifact128261"></a>
@@ -184,13 +209,13 @@ Documentation</title>
 <p>Artifact <i>source</i> associated with : <a href="class134789.html#refclass134789"><b>Interpolator</b></a></p>
 </div>
 <a name="refpackage130437"></a>
-<h4 class ="package">1.2.4.3.2 Package session</h4>
+<h4 class ="package">1.3.4.3.2 Package session</h4>
 <p></p><ul>
-<li>C++ namespace : session</li>
+<li>C++ namespace : mobject::session</li>
 </ul>
 <p>sourcecode package<br /><br />Everything concerning the EDL and Session, within the MObject Subsystem<br /></p><div class="sub">
 <a name="refdeployment view128901"></a>
-<h4 class ="view">1.2.4.3.2.1 Deployment View gen</h4>
+<h4 class ="view">1.3.4.3.2.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
 <div class="sub">
 <a name="refartifact128517"></a>
@@ -205,6 +230,10 @@ Documentation</title>
 <table><tr><td><div class="element">Artifact <b>fixture</b></div></td></tr></table>
 <p>the (low level) representation of the EDL with concrete placement data<br /></p>
 <p>Artifact <i>source</i> associated with : <a href="class128261.html#refclass128261"><b>Fixture</b></a></p>
+<a name="refartifact135045"></a>
+<table><tr><td><div class="element">Artifact <b>segment</b></div></td></tr></table>
+<p>Segment of the Timeline.<br />Used at the moment (7/07) for partitioning the timeline/fixture into segments<br />to be rendered by a specialized render node network for each, without the need<br />to change any connections within a given segment. <br />Note this concept may be superfluos alltogether; is a draft and the real<br />use still needs to be worked out...<br /></p>
+<p>Artifact <i>source</i> associated with : <a href="class135173.html#refclass135173"><b>Segment</b></a></p>
 <a name="refartifact128901"></a>
 <table><tr><td><div class="element">Artifact <b>track</b></div></td></tr></table>
 <p>descriptor for one track in the Session<br /></p>
@@ -245,13 +274,13 @@ Documentation</title>
 </div>
 </div>
 <a name="refpackage130565"></a>
-<h4 class ="package">1.2.4.3.3 Package builder</h4>
+<h4 class ="package">1.3.4.3.3 Package builder</h4>
 <p></p><ul>
-<li>C++ namespace : proc</li>
+<li>C++ namespace : mobject::builder</li>
 </ul>
 <p>sourcecode package<br /><br />The Builder creating the Render Engine,<br />located within the MObject Subsystem<br /></p><div class="sub">
 <a name="refdeployment view129029"></a>
-<h4 class ="view">1.2.4.3.3.1 Deployment View gen</h4>
+<h4 class ="view">1.3.4.3.3.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
 <div class="sub">
 <a name="refartifact130565"></a>
@@ -281,13 +310,13 @@ Documentation</title>
 </div>
 </div>
 <a name="refpackage130693"></a>
-<h4 class ="package">1.2.4.3.4 Package controller</h4>
+<h4 class ="package">1.3.4.3.4 Package controller</h4>
 <p></p><ul>
-<li>C++ namespace : proc</li>
+<li>C++ namespace : mobject::controller</li>
 </ul>
 <p>sourcecode package<br /><br />The Processing and Render Controller,<br />located within the MObject Subsystem<br /></p><div class="sub">
 <a name="refdeployment view129157"></a>
-<h4 class ="view">1.2.4.3.4.1 Deployment View gen</h4>
+<h4 class ="view">1.3.4.3.4.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
 <div class="sub">
 <a name="refartifact131717"></a>
@@ -302,13 +331,13 @@ Documentation</title>
 </div>
 </div>
 <a name="refpackage130309"></a>
-<h4 class ="package">1.2.4.4 Package engine</h4>
+<h4 class ="package">1.3.4.4 Package engine</h4>
 <p></p><ul>
 <li>C++ namespace : engine</li>
 </ul>
 <p>sourcecode package<br /><br />The Core Render Engine<br /></p><div class="sub">
 <a name="refdeployment view129285"></a>
-<h4 class ="view">1.2.4.4.1 Deployment View gen</h4>
+<h4 class ="view">1.3.4.4.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
 <div class="sub">
 <a name="refartifact131973"></a>
@@ -332,7 +361,7 @@ Documentation</title>
 <p>transforming processing Node <br /></p>
 <p>Artifact <i>source</i> associated with : <a href="class131845.html#refclass131845"><b>Trafo</b></a></p>
 <a name="refartifact132613"></a>
-<table><tr><td><div class="element">Artifact <b>pipe</b></div></td></tr></table>
+<table><tr><td><div class="element">Artifact <b>link</b></div></td></tr></table>
 <p>forwarding, adapting or connecting ProcNode<br /></p>
 <p>Artifact <i>source</i> associated with : <a href="class131973.html#refclass131973"><b>Link</b></a></p>
 <a name="refartifact132741"></a>
@@ -356,7 +385,7 @@ Documentation</title>
 <p>Processing Node for (de)coding media data<br /></p>
 <p>Artifact <i>source</i> associated with : <a href="class135045.html#refclass135045"><b>CodecAdapter</b></a></p>
 <a name="refartifact133253"></a>
-<table><tr><td><div class="element">Artifact <b>openglpipe</b></div></td></tr></table>
+<table><tr><td><div class="element">Artifact <b>glpipe</b></div></td></tr></table>
 <p>specialized connection element for handling OpenGL implementation details<br /></p>
 <p>Artifact <i>source</i> associated with : <a href="class132613.html#refclass132613"><b>GLPipe</b></a></p>
 <a name="refartifact133381"></a>
@@ -391,20 +420,20 @@ Documentation</title>
 </div>
 </div>
 <a name="refpackage129797"></a>
-<h3 class ="package">1.2.5 Package gui</h3>
+<h3 class ="package">1.3.5 Package gui</h3>
 <p></p><ul>
 <li>C++ namespace : gui</li>
 </ul>
 <p>sourcecode package<br /><br />User Interface classes go here<br /></p><div class="sub">
 <a name="refdeployment view129413"></a>
-<h4 class ="view">1.2.5.1 Deployment View gen</h4>
+<h4 class ="view">1.3.5.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
 </div>
 <a name="refpackage129925"></a>
-<h3 class ="package">1.2.6 Package tool</h3>
+<h3 class ="package">1.3.6 Package tool</h3>
 <p>sourcecode package<br /><br />Tools and Utilities <br />(separate from the main cinelrra binary)<br /></p><div class="sub">
 <a name="refdeployment view129541"></a>
-<h4 class ="view">1.2.6.1 Deployment View gen</h4>
+<h4 class ="view">1.3.6.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
 </div>
 </div>
@@ -426,11 +455,11 @@ Documentation</title>
 <table><tr><td><div class="element">Class <b><a href="class128005.html#refclass128005"><b>Session</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class128133.html#refclass128133"><b>EDL</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class128261.html#refclass128261"><b>Fixture</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class135173.html#refclass135173"><b>Segment</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class128389.html#refclass128389"><b>Track</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class128517.html#refclass128517"><b>MObject</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class128645.html#refclass128645"><b>Placement</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class129797.html#refclass129797"><b>ExplicitPlacement</b></a></b></div></td></tr></table>
-<table><tr><td><div class="element">Class <b><a href="class135173.html#refclass135173"><b>Segment</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class128773.html#refclass128773"><b>AbstractMO</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class128901.html#refclass128901"><b>Clip</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class129029.html#refclass129029"><b>Effect</b></a></b></div></td></tr></table>

@@ -23,6 +23,8 @@
 
 #include <iostream>
 
+#include "cinelerra.h"
+
 using std::cout;
 
 int main (int argc, char* argv[])

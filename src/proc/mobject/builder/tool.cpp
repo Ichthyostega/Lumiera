@@ -24,21 +24,17 @@
 #include "proc/mobject/builder/tool.hpp"
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace builder
     {
-    namespace builder
-      {
 
 
 
-      /**  */
+    /**  */
 
 
 
-    } // namespace proc::mobject::builder
+  } // namespace mobject::builder
 
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject

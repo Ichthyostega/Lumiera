@@ -24,24 +24,20 @@
 #include "proc/mobject/buildable.hpp"
 #include "proc/mobject/builder/tool.hpp"
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
-    {
 
 
-    /** typically the provided actual Tool class will 
-     *  contain overloaded fuctions for treating
-     *  different Buildable subclasses specifically
-     */ 
-    void
-    Buildable::apply (builder::Tool& provided_tool)
-    {
-        provided_tool.treat( *this); //// TODO: how to call??? (ref or pointer??)
-    }
+  /** typically the provided actual Tool class will
+   *  contain overloaded fuctions for treating
+   *  different Buildable subclasses specifically
+   */
+  void
+  Buildable::apply (builder::Tool& provided_tool)
+  {
+    provided_tool.treat( *this); //// TODO: how to call??? (ref or pointer??)
+  }
 
 
 
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject

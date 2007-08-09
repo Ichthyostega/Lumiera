@@ -21,14 +21,14 @@
 */
 
 
-#ifndef PROC_STATEPROXY_H
-#define PROC_STATEPROXY_H
+#ifndef PROC_INTERFACE_STATEPROXY_H
+#define PROC_INTERFACE_STATEPROXY_H
 
 #include "proc/frame.hpp"
 
 
 
-namespace proc
+namespace proc_interface
   {
 
 
@@ -41,5 +41,5 @@ namespace proc
     
     
     
-} // namespace proc
+} // namespace proc_interface
 #endif

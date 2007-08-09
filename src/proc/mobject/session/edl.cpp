@@ -25,19 +25,15 @@
 #include "proc/mobject/session/track.hpp"
 #include "proc/mobject/mobject.hpp"
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
-      {
-      
-      /** */
-      
-      
-      
-    } // namespace proc::mobject::session
 
-  } // namespace proc::mobject
+    /** */
 
-} // namespace proc
+
+
+  } // namespace mobject::session
+
+} // namespace mobject

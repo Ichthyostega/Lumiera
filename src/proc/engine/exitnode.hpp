@@ -21,29 +21,25 @@
 */
 
 
-#ifndef PROC_ENGINE_EXITNODE_H
-#define PROC_ENGINE_EXITNODE_H
+#ifndef ENGINE_EXITNODE_H
+#define ENGINE_EXITNODE_H
 
 #include "proc/engine/procnode.hpp"
 
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
-    
-    
-    /**
-     * The output end of each render pipeline.
-     * Pulling from such exit nodes actually ivokes the render process
-     */
-    class ExitNode : public ProcNode
-      {};
-      
-      
-      
-  } // namespace proc::engine
 
-} // namespace proc
+
+  /**
+   * The output end of each render pipeline.
+   * Pulling from such exit nodes actually ivokes the render process
+   */
+  class ExitNode : public ProcNode
+    {};
+
+
+
+} // namespace engine
 #endif

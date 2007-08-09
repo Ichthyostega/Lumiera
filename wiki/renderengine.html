@@ -846,6 +846,11 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
+<div title="ImplementationDetails" modifier="Ichthyostega" created="200708080322" tags="overview" changecount="1">
+<pre>This wiki page is the entry point to some detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Cinelerra Renderengine, the Builder and the related parts.
+
+* [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]</pre>
+</div>
 <div title="InlineJavaScript" modifier="Jeremy" created="200603090618" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200603090618">
 <pre>/***
 ''InlineJavascriptPlugin for ~TiddlyWiki version 1.2.x and 2.0''
@@ -1011,6 +1016,182 @@ config.formatters.push( {
 //}}}
 </pre>
 </div>
+<div title="InlineJavascriptPlugin" modifier="Ichthyostega" created="200708081511" tags="plugin excludeLists systemConfig" changecount="1">
+<pre>/***
+|''Name:''|InlineJavascriptPlugin|
+|''Source:''|http://www.TiddlyTools.com/#InlineJavascriptPlugin|
+|''Author:''|Eric Shulman - ELS Design Studios|
+|''License:''|[[Creative Commons Attribution-ShareAlike 2.5 License|http://creativecommons.org/licenses/by-sa/2.5/]]|
+|''~CoreVersion:''|2.0.10|
+
+Insert Javascript executable code directly into your tiddler content. Lets you ''call directly into TW core utility routines, define new functions, calculate values, add dynamically-generated TiddlyWiki-formatted output'' into tiddler content, or perform any other programmatic actions each time the tiddler is rendered.
+!!!!!Usage
+&lt;&lt;&lt;
+When installed, this plugin adds new wiki syntax for surrounding tiddler content with {{{&lt;script&gt;}}} and {{{&lt;/script&gt;}}} markers, so that it can be treated as embedded javascript and executed each time the tiddler is rendered.
+
+''Deferred execution from an 'onClick' link''
+By including a label=&quot;...&quot; parameter in the initial {{{&lt;script&gt;}}} marker, the plugin will create a link to an 'onclick' script that will only be executed when that specific link is clicked, rather than running the script each time the tiddler is rendered.
+
+''External script source files:''
+You can also load javascript from an external source URL, by including a src=&quot;...&quot; parameter in the initial {{{&lt;script&gt;}}} marker (e.g., {{{&lt;script src=&quot;demo.js&quot;&gt;&lt;/script&gt;}}}). This is particularly useful when incorporating third-party javascript libraries for use in custom extensions and plugins. The 'foreign' javascript code remains isolated in a separate file that can be easily replaced whenever an updated library file becomes available.
+
+''Display script source in tiddler output''
+By including the keyword parameter &quot;show&quot;, in the initial {{{&lt;script&gt;}}} marker, the plugin will include the script source code in the output that it displays in the tiddler.
+
+''Defining javascript functions and libraries:''
+Although the external javascript file is loaded while the tiddler content is being rendered, any functions it defines will not be available for use until //after// the rendering has been completed. Thus, you cannot load a library and //immediately// use it's functions within the same tiddler. However, once that tiddler has been loaded, the library functions can be freely used in any tiddler (even the one in which it was initially loaded).
+
+To ensure that your javascript functions are always available when needed, you should load the libraries from a tiddler that will be rendered as soon as your TiddlyWiki document is opened. For example, you could put your {{{&lt;script src=&quot;...&quot;&gt;&lt;/script&gt;}}} syntax into a tiddler called LoadScripts, and then add {{{&lt;&lt;tiddler LoadScripts&gt;&gt;}}} in your MainMenu tiddler.
+
+Since the MainMenu is always rendered immediately upon opening your document, the library will always be loaded before any other tiddlers that rely upon the functions it defines. Loading an external javascript library does not produce any direct output in the tiddler, so these definitions should have no impact on the appearance of your MainMenu.
+
+''Creating dynamic tiddler content''
+An important difference between this implementation of embedded scripting and conventional embedded javascript techniques for web pages is the method used to produce output that is dynamically inserted into the document:
+* In a typical web document, you use the document.write() function to output text sequences (often containing HTML tags) that are then rendered when the entire document is first loaded into the browser window.
+* However, in a ~TiddlyWiki document, tiddlers (and other DOM elements) are created, deleted, and rendered &quot;on-the-fly&quot;, so writing directly to the global 'document' object does not produce the results you want (i.e., replacing the embedded script within the tiddler content), and completely replaces the entire ~TiddlyWiki document in your browser window.
+* To allow these scripts to work unmodified, the plugin automatically converts all occurences of document.write() so that the output is inserted into the tiddler content instead of replacing the entire ~TiddlyWiki document.
+
+If your script does not use document.write() to create dynamically embedded content within a tiddler, your javascript can, as an alternative, explicitly return a text value that the plugin can then pass through the wikify() rendering engine to insert into the tiddler display. For example, using {{{return &quot;thistext&quot;}}} will produce the same output as {{{document.write(&quot;thistext&quot;)}}}.
+
+//Note: your script code is automatically 'wrapped' inside a function, {{{_out()}}}, so that any return value you provide can be correctly handled by the plugin and inserted into the tiddler. To avoid unpredictable results (and possibly fatal execution errors), this function should never be redefined or called from ''within'' your script code.//
+
+''Accessing the ~TiddlyWiki DOM''
+The plugin provides one pre-defined variable, 'place', that is passed in to your javascript code so that it can have direct access to the containing DOM element into which the tiddler output is currently being rendered.
+
+Access to this DOM element allows you to create scripts that can:
+* vary their actions based upon the specific location in which they are embedded
+* access 'tiddler-relative' information (use findContainingTiddler(place))
+* perform direct DOM manipulations (when returning wikified text is not enough)
+&lt;&lt;&lt;
+!!!!!Examples
+&lt;&lt;&lt;
+an &quot;alert&quot; message box:
+&gt;&lt;script show&gt;
+ alert('InlineJavascriptPlugin: this is a demonstration message');
+&lt;/script&gt;
+dynamic output:
+&gt;&lt;script show&gt;
+ return (new Date()).toString();
+&lt;/script&gt;
+wikified dynamic output:
+&gt;&lt;script show&gt;
+ return &quot;link to current user: [[&quot;+config.options.txtUserName+&quot;]]&quot;;
+&lt;/script&gt;
+dynamic output using 'place' to get size information for current tiddler:
+&gt;&lt;script show&gt;
+ if (!window.story) window.story=window;
+ var title=story.findContainingTiddler(place).id.substr(7);
+ return title+&quot; is using &quot;+store.getTiddlerText(title).length+&quot; bytes&quot;;
+&lt;/script&gt;
+creating an 'onclick' button/link that runs a script:
+&gt;&lt;script label=&quot;click here&quot; show&gt;
+ if (!window.story) window.story=window;
+ alert(&quot;Hello World!\nlinktext='&quot;+place.firstChild.data+&quot;'\ntiddler='&quot;+story.findContainingTiddler(place).id.substr(7)+&quot;'&quot;);
+&lt;/script&gt;
+loading a script from a source url:
+&gt;http://www.TiddlyTools.com/demo.js contains:
+&gt;&gt;{{{function demo() { alert('this output is from demo(), defined in demo.js') } }}}
+&gt;&gt;{{{alert('InlineJavascriptPlugin: demo.js has been loaded'); }}}
+&gt;&lt;script src=&quot;demo.js&quot; show&gt;
+ return &quot;loading demo.js...&quot;
+&lt;/script&gt;
+&gt;&lt;script label=&quot;click to execute demo() function&quot; show&gt;
+ demo()
+&lt;/script&gt;
+&lt;&lt;&lt;
+!!!!!Installation
+&lt;&lt;&lt;
+import (or copy/paste) the following tiddlers into your document:
+''InlineJavascriptPlugin'' (tagged with &lt;&lt;tag systemConfig&gt;&gt;)
+&lt;&lt;&lt;
+!!!!!Revision History
+&lt;&lt;&lt;
+''2006.06.01 [1.5.1]'' when calling wikify() on script return value, pass hightlightRegExp and tiddler params so macros that rely on these values can render properly
+''2006.04.19 [1.5.0]'' added 'show' parameter to force display of javascript source code in tiddler output
+''2006.01.05 [1.4.0]'' added support 'onclick' scripts. When label=&quot;...&quot; param is present, a button/link is created using the indicated label text, and the script is only executed when the button/link is clicked. 'place' value is set to match the clicked button/link element.
+''2005.12.13 [1.3.1]'' when catching eval error in IE, e.description contains the error text, instead of e.toString(). Fixed error reporting so IE shows the correct response text. Based on a suggestion by UdoBorkowski
+''2005.11.09 [1.3.0]'' for 'inline' scripts (i.e., not scripts loaded with src=&quot;...&quot;), automatically replace calls to 'document.write()' with 'place.innerHTML+=' so script output is directed into tiddler content. Based on a suggestion by BradleyMeck
+''2005.11.08 [1.2.0]'' handle loading of javascript from an external URL via src=&quot;...&quot; syntax
+''2005.11.08 [1.1.0]'' pass 'place' param into scripts to provide direct DOM access 
+''2005.11.08 [1.0.0]'' initial release
+&lt;&lt;&lt;
+!!!!!Credits
+&lt;&lt;&lt;
+This feature was developed by EricShulman from [[ELS Design Studios|http:/www.elsdesign.com]]
+&lt;&lt;&lt;
+!!!!!Code
+***/
+//{{{
+version.extensions.inlineJavascript= {major: 1, minor: 5, revision: 1, date: new Date(2006,6,1)};
+
+config.formatters.push( {
+ name: &quot;inlineJavascript&quot;,
+ match: &quot;\\&lt;script&quot;,
+ lookahead: &quot;\\&lt;script(?: src=\\\&quot;((?:.|\\n)*?)\\\&quot;)?(?: label=\\\&quot;((?:.|\\n)*?)\\\&quot;)?( show)?\\&gt;((?:.|\\n)*?)\\&lt;/script\\&gt;&quot;,
+
+ handler: function(w) {
+ var lookaheadRegExp = new RegExp(this.lookahead,&quot;mg&quot;);
+ lookaheadRegExp.lastIndex = w.matchStart;
+ var lookaheadMatch = lookaheadRegExp.exec(w.source)
+ if(lookaheadMatch &amp;&amp; lookaheadMatch.index == w.matchStart) {
+ if (lookaheadMatch[1]) { // load a script library
+ // make script tag, set src, add to body to execute, then remove for cleanup
+ var script = document.createElement(&quot;script&quot;); script.src = lookaheadMatch[1];
+ document.body.appendChild(script); document.body.removeChild(script);
+ }
+ if (lookaheadMatch[4]) { // there is script code
+ if (lookaheadMatch[3]) // show inline script code in tiddler output
+ wikify(&quot;{{{\n&quot;+lookaheadMatch[0]+&quot;\n}}}\n&quot;,w.output);
+ if (lookaheadMatch[2]) { // create a link to an 'onclick' script
+ // add a link, define click handler, save code in link (pass 'place'), set link attributes
+ var link=createTiddlyElement(w.output,&quot;a&quot;,null,&quot;tiddlyLinkExisting&quot;,lookaheadMatch[2]);
+ link.onclick=function(){try{return(eval(this.code))}catch(e){alert(e.description?e.description:e.toString())}}
+ link.code=&quot;function _out(place){&quot;+lookaheadMatch[4]+&quot;};_out(this);&quot;
+ link.setAttribute(&quot;href&quot;,&quot;javascript:;&quot;); link.setAttribute(&quot;title&quot;,&quot;&quot;); link.style.cursor=&quot;pointer&quot;;
+ }
+ else { // run inline script code
+ var code=&quot;function _out(place){&quot;+lookaheadMatch[4]+&quot;};_out(w.output);&quot;
+ code=code.replace(/document.write\(/gi,'place.innerHTML+=(');
+ try { var out = eval(code); } catch(e) { out = e.description?e.description:e.toString(); }
+ if (out &amp;&amp; out.length) wikify(out,w.output,w.highlightRegExp,w.tiddler);
+ }
+ }
+ w.nextMatch = lookaheadMatch.index + lookaheadMatch[0].length;
+ }
+ }
+} )
+//}}}</pre>
+</div>
+<div title="InterfaceNamespaces" modifier="Ichthyostega" modified="200708081455" created="200708080338" tags="impl decision discuss" changecount="13">
+<pre>Because we rely on strong decoupling and separation into self contained components, there is not much need for a common quasi-global namespace. Operations needing the cooperation of another subsystem will be delegated or even dispatched, consequently implementation code needs only the service acces points from &quot;direct cooperation partner&quot; subsystems. Hierarchical scopes besides classes are needed only when multiple subsystems share a set of common abstractions. Interface and Implementation use separate namespaces.
+
+!common definitions
+# surely there will be the need to use some macros (albeit code written in C++ can successfully avoid macros to some extent)
+# there will be one global ''Application State'' representation (and some application services)
+# we have some lib facilities, especially a common [[Time]] abstraction
+For these we have one special (bilingual) header file __cinelerra.h__, which places in its C++ part some declarations into __namespace cinelerra__. These declarations should be pulled into the specific namespaces or (still better) into the implementation //on demand//. There is no nesting (we deliberately don't want an symbol appearing //automatically// in every part of the system).
+
+!subsystem interface and facade
+These large scale interfaces reside in special namespaces &quot;~XXX_interface&quot; (where XXX is the subsystem). The accompanning //definitions// depend on the implementation namespace and are placed in the top-level source folder of the corresponding subsystem.
+
+ &amp;rarr; Example: [[Interfaces/Namespaces of the Session Subsystem(s)|InterfacesSession]]
+
+!contract checks and test code
+From experiences with other middle scale projects, I prefer having the test code in a separate tree (because test code easily doubles the number of source files). But of course it should be placed into the same namespace as the code being checked, or (better?) into a nested namespace &quot;test&quot;. It is esp. desirable to have good coverage on the contracts of the subsystem interfaces and mayor components (while it is not always feasible or advisable to cover every implementation detail).
+
+</pre>
+</div>
+<div title="InterfacesSession" modifier="Ichthyostega" modified="200708081535" created="200708080639" changecount="7">
+<pre>* Subdir src/proc contains Interface within namespace proc_interface
+* Subdir src/proc/mobject contains commonly used entities (namespace mobject)
+** nested namespace controller
+** nested namespace builder
+** nested namespace session
+* Subdir src/proc/engine (namespace engine) uses directly the (local) interface components StateProxy and ParamProvider; triggering of the render process is initiated by the controller and can be requested via the controller facade. Normally, the playback/render controller located in the backend will just use this interface and won't be aware of the build process at all.
+
+[img[Example: Interfaces/Namespaces of the ~Session-Subsystems|uml/fig130053.png]]
+</pre>
+</div>
 <div title="MObject" modifier="Ichthyostega" created="200706220312" tags="def classes" changecount="1">
 <pre>All sorts of &quot;things&quot; to be placed and manipulated by the user in the EDL. This interface abstracts the details and just provides
 * a duration
@@ -1031,10 +1212,11 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 [img[Classess related to the EDL|uml/fig128133.png]]
 </pre>
 </div>
-<div title="MainMenu" modifier="CehTeh" modified="200706192236" created="200706172305" changecount="8">
+<div title="MainMenu" modifier="Ichthyostega" modified="200708080314" created="200706172305" changecount="9">
 <pre>''[[Cinelerra3|index.html]]''
 [[RenderEngine]]
 [[MObjects]]
+[[Implementation|ImplementationDetails]]
 [[Admin]]
 &lt;&lt;fullscreen&gt;&gt;</pre>
 </div>
@@ -1666,6 +1848,216 @@ Users accustomed with modern GUI applications typically expect that //everything
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
+<div title="RSSReaderPlugin" modifier="Ichthyostega" created="200708081515" tags="systemConfig" changecount="1">
+<pre>/***
+|''Name:''|RSSReaderPlugin|
+|''Description:''|This plugin provides a RSSReader for TiddlyWiki|
+|''Version:''|1.1.1|
+|''Date:''|Apr 21, 2007|
+|''Source:''|http://tiddlywiki.bidix.info/#RSSReaderPlugin|
+|''Documentation:''|http://tiddlywiki.bidix.info/#RSSReaderPluginDoc|
+|''Author:''|BidiX (BidiX (at) bidix (dot) info)|
+|''Credit:''|BramChen for RssNewsMacro|
+|''License:''|[[BSD open source license|http://tiddlywiki.bidix.info/#%5B%5BBSD%20open%20source%20license%5D%5D ]]|
+|''~CoreVersion:''|2.2.0|
+|''OptionalRequires:''|http://www.tiddlytools.com/#NestedSlidersPlugin|
+***/
+//{{{
+version.extensions.RSSReaderPlugin = {
+	major: 1, minor: 1, revision: 1,
+	date: new Date(&quot;Apr 21, 2007&quot;),
+	source: &quot;http://TiddlyWiki.bidix.info/#RSSReaderPlugin&quot;,
+	author: &quot;BidiX&quot;,
+	coreVersion: '2.2.0'
+};
+
+config.macros.rssReader = {
+	dateFormat: &quot;DDD, DD MMM YYYY&quot;,
+	itemStyle: &quot;display: block;border: 1px solid black;padding: 5px;margin: 5px;&quot;, //useed  '@@'+itemStyle+itemText+'@@'
+	msg:{
+		permissionDenied: &quot;Permission to read preferences was denied.&quot;,
+		noRSSFeed: &quot;No RSS Feed at this address %0&quot;,
+		urlNotAccessible: &quot; Access to %0 is not allowed&quot;
+	},
+	cache: [], 	// url =&gt; XMLHttpRequest.responseXML
+	desc: &quot;noDesc&quot;,
+	
+	handler: function(place,macroName,params,wikifier,paramString,tiddler) {
+		var desc = params[0];
+		var feedURL = params[1];
+		var toFilter = (params[2] ? true : false);
+		var filterString = (toFilter?(params[2].substr(0,1) == ' '? tiddler.title:params[2]):'');
+		var place = createTiddlyElement(place, &quot;div&quot;, &quot;RSSReader&quot;);
+		wikify(&quot;^^&lt;&lt;rssFeedUpdate &quot;+feedURL+&quot; [[&quot; + tiddler.title + &quot;]]&gt;&gt;^^\n&quot;,place);
+		if (this.cache[feedURL]) {
+			this.displayRssFeed(this.cache[feedURL], feedURL, place, desc, toFilter, filterString);
+		}
+		else {
+			var r = loadRemoteFile(feedURL,config.macros.rssReader.processResponse, [place, desc, toFilter, filterString]);
+			if (typeof r == &quot;string&quot;)
+				displayMessage(r);
+		}
+		
+	},
+
+	// callback for loadRemoteFile 
+	// params : [place, desc, toFilter, filterString]
+	processResponse: function(status, params, responseText, url, xhr) { // feedURL, place, desc, toFilter, filterString) {	
+		if (window.netscape){
+			try {
+				if (document.location.protocol.indexOf(&quot;http&quot;) == -1) {
+					netscape.security.PrivilegeManager.enablePrivilege(&quot;UniversalBrowserRead&quot;);
+				}
+			}
+			catch (e) { displayMessage(e.description?e.description:e.toString()); }
+		}
+		if (xhr.status == httpStatus.NotFound)
+		 {
+			displayMessage(config.macros.rssReader.noRSSFeed.format([url]));
+			return;
+		}
+		if (!status)
+		 {
+			displayMessage(config.macros.rssReader.noRSSFeed.format([url]));
+			return;
+		}
+		if (xhr.responseXML) {
+			// response is interpreted as XML
+			config.macros.rssReader.cache[url] = xhr.responseXML;
+			config.macros.rssReader.displayRssFeed(xhr.responseXML, params[0], url, params[1], params[2], params[3]);
+		}
+		else {
+			if (responseText.substr(0,5) == &quot;&lt;?xml&quot;) {
+				// response exists but not return as XML -&gt; try to parse it 
+				var dom = (new DOMParser()).parseFromString(responseText, &quot;text/xml&quot;); 
+				if (dom) {
+					// parsing successful so use it
+					config.macros.rssReader.cache[url] = dom;
+					config.macros.rssReader.displayRssFeed(dom, params[0], url, params[1], params[2], params[3]);
+					return;
+				}
+			}
+			// no XML display as html 
+			wikify(&quot;&lt;html&gt;&quot; + responseText + &quot;&lt;/html&gt;&quot;, params[0]);
+			displayMessage(config.macros.rssReader.msg.noRSSFeed.format([url]));
+		}
+	},
+
+	// explore down the DOM tree
+	displayRssFeed: function(xml, place, feedURL, desc, toFilter, filterString){
+		// Channel
+		var chanelNode = xml.getElementsByTagName('channel').item(0);
+		var chanelTitleElement = (chanelNode ? chanelNode.getElementsByTagName('title').item(0) : null);
+		var chanelTitle = &quot;&quot;;
+		if ((chanelTitleElement) &amp;&amp; (chanelTitleElement.firstChild)) 
+			chanelTitle = chanelTitleElement.firstChild.nodeValue;
+		var chanelLinkElement = (chanelNode ? chanelNode.getElementsByTagName('link').item(0) : null);
+		var chanelLink = &quot;&quot;;
+		if (chanelLinkElement) 
+			chanelLink = chanelLinkElement.firstChild.nodeValue;
+		var titleTxt = &quot;!![[&quot;+chanelTitle+&quot;|&quot;+chanelLink+&quot;]]\n&quot;;
+		var title = createTiddlyElement(place,&quot;div&quot;,null,&quot;ChanelTitle&quot;,null);
+		wikify(titleTxt,title);
+		// ItemList
+		var itemList = xml.getElementsByTagName('item');
+		var article = createTiddlyElement(place,&quot;ul&quot;,null,null,null);
+		var lastDate;
+		var re;
+		if (toFilter) 
+			re = new RegExp(filterString.escapeRegExp());
+		for (var i=0; i&lt;itemList.length; i++){
+			var titleElm = itemList[i].getElementsByTagName('title').item(0);
+			var titleText = (titleElm ? titleElm.firstChild.nodeValue : '');
+			if (toFilter &amp;&amp; ! titleText.match(re)) {
+				continue;
+			}
+			var descText = '';
+			descElem = itemList[i].getElementsByTagName('description').item(0);
+			if (descElem){
+				try{
+					for (var ii=0; ii&lt;descElem.childNodes.length; ii++) {
+						descText += descElem.childNodes[ii].nodeValue;
+					}
+				}
+				catch(e){}
+				descText = descText.replace(/&lt;br \/&gt;/g,'\n');
+				if (desc == &quot;asHtml&quot;)
+					descText = &quot;&lt;html&gt;&quot;+descText+&quot;&lt;/html&gt;&quot;;
+			}
+			var linkElm = itemList[i].getElementsByTagName(&quot;link&quot;).item(0);
+			var linkURL = linkElm.firstChild.nodeValue;
+			var pubElm = itemList[i].getElementsByTagName('pubDate').item(0);
+			var pubDate;
+			if (!pubElm) {
+				pubElm = itemList[i].getElementsByTagName('date').item(0); // for del.icio.us
+				if (pubElm) {
+					pubDate = pubElm.firstChild.nodeValue;
+					pubDate = this.formatDateString(this.dateFormat, pubDate);
+					}
+					else {
+						pubDate = '0';
+					}
+				}
+			else {
+				pubDate = (pubElm ? pubElm.firstChild.nodeValue : 0);
+				pubDate = this.formatDate(this.dateFormat, pubDate);
+			}
+			titleText = titleText.replace(/\[|\]/g,'');
+			var rssText = '*'+'[[' + titleText + '|' + linkURL + ']]' + '' ;
+			if ((desc != &quot;noDesc&quot;) &amp;&amp; descText){
+				rssText = rssText.replace(/\n/g,' ');
+				descText = '@@'+this.itemStyle+descText + '@@\n';				
+				if (version.extensions.nestedSliders){
+					descText = '+++[...]' + descText + '===';
+				}
+				rssText = rssText + descText;
+			}
+			var story;
+			if ((lastDate != pubDate) &amp;&amp; ( pubDate != '0')) {
+				story = createTiddlyElement(article,&quot;li&quot;,null,&quot;RSSItem&quot;,pubDate);
+				lastDate = pubDate;
+			}
+			else {
+				lastDate = pubDate;
+			}
+			story = createTiddlyElement(article,&quot;div&quot;,null,&quot;RSSItem&quot;,null);
+			wikify(rssText,story);
+		}
+	},
+	
+	formatDate: function(template, date){
+		var dateString = new Date(date);
+		// template = template.replace(/hh|mm|ss/g,'');
+		return dateString.formatString(template);
+	},
+	
+	formatDateString: function(template, date){
+		var dateString = new Date(date.substr(0,4), date.substr(5,2) - 1, date.substr(8,2)
+			);
+		return dateString.formatString(template);
+	}
+	
+};
+
+config.macros.rssFeedUpdate = {
+	label: &quot;Update&quot;,
+	prompt: &quot;Clear the cache and redisplay this RssFeed&quot;,
+	handler: function(place,macroName,params) {
+		var feedURL = params[0];
+		var tiddlerTitle = params[1];
+		createTiddlyButton(place, this.label, this.prompt, 
+			function () {
+				if (config.macros.rssReader.cache[feedURL]) {
+					config.macros.rssReader.cache[feedURL] = null; 
+			}
+			story.refreshTiddler(tiddlerTitle,null, true);
+		return false;});
+	}
+};
+
+//}}}
+</pre>
+</div>
 <div title="RenderEngine" modifier="Ichthyostega" modified="200708050630" created="200706190056" tags="overview" changecount="40">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[this aspect|MObjects]] as well.
 
@@ -1686,11 +2078,11 @@ The design of Cinelerra 2 basically follows this design, but __fails because of 
 &amp;rarr; [[Overview]] of Subsystems and Components, and DesignGoals
 &amp;rarr; [[An Introduction|WalkThrough]] discussing the key features
 &amp;rarr; [[Overview Render Engine|OverviewRenderEngine]]
-&amp;rarr; BuildProcess
-&amp;rarr; RenderProcess
+&amp;rarr; BuildProcess and RenderProcess
 &amp;rarr; [[Two Examples|Examples]] (Object diagrams) 
 &amp;rarr; how [[Automation]] works  {{red{to be defined in more detail}}}
 &amp;rarr; [[Problems|ProblemsTodo]] {{red{to be solved}}}
+&amp;rarr; [[Implementation Details|ImplementationDetails]] {{red{WIP}}}
 </pre>
 </div>
 <div title="RenderEntities" modifier="Ichthyostega" modified="200706220406" created="200706190715" changecount="6">

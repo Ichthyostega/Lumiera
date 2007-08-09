@@ -46,7 +46,7 @@ classcanvas 130565 class_ref 134277 // SegmentationTool
   end
 classcanvas 130949 class_ref 134405 // NodeCreatorTool
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 384 469 2004
+  xyz 371 469 2004
   end
 note 134277 "{ provided_tool.treat(this); }"
   xyzwh 182 191 2000 159 39
@@ -101,7 +101,7 @@ relationcanvas 134789 relation_ref 137221 // <directional aggregation by value>
   multiplicity_a_pos 590 418 3000 no_multiplicity_b
 line 131461 -_-_
   from ref 130565 z 1999 to point 301 409
-  line 132101 z 1999 to point 260 405
+  line 132101 z 1999 to point 264 407
   line 132229 z 1999 to ref 128005
 line 131589 -_-_
   from ref 130565 z 1999 to point 301 429

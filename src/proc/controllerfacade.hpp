@@ -21,12 +21,12 @@
 */
 
 
-#ifndef PROC_CONTROLLERFACADE_H
-#define PROC_CONTROLLERFACADE_H
+#ifndef PROC_INTERFACE_CONTROLLERFACADE_H
+#define PROC_INTERFACE_CONTROLLERFACADE_H
 
 
 
-namespace proc
+namespace proc_interface
   {
 
 
@@ -42,5 +42,5 @@ namespace proc
     
     
     
-} // namespace proc
+} // namespace proc_interface
 #endif

@@ -21,39 +21,35 @@
 */
 
 
-#ifndef PROC_MOBJECT_PARAMPROVIDER_H
-#define PROC_MOBJECT_PARAMPROVIDER_H
+#ifndef MOBJECT_PARAMPROVIDER_H
+#define MOBJECT_PARAMPROVIDER_H
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+
+  template<class VAL> class Parameter;
+  template<class VAL> class Interpolator;
+
+
+
+  /**
+   * A facility to get the actual value of a plugin/effect parameter
+   */
+  template<class VAL>
+  class ParamProvider
     {
-
-    template<class VAL> class Parameter;
-    template<class VAL> class Interpolator;
-
-    
-
-    /**
-     * A facility to get the actual value of a plugin/effect parameter
-     */
-    template<class VAL>
-    class ParamProvider
-      {
-      protected:
-        Parameter<VAL>* param;
-        Interpolator<VAL>* ipo;
+    protected:
+      Parameter<VAL>* param;
+      Interpolator<VAL>* ipo;
 
 
-      public:
-        virtual VAL getValue () ;
-      };
+    public:
+      virtual VAL getValue () ;
+    };
 
 
 
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject
 #endif

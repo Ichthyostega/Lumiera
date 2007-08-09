@@ -21,28 +21,24 @@
 */
 
 
-#ifndef PROC_ENGINE_HUB_H
-#define PROC_ENGINE_HUB_H
+#ifndef ENGINE_HUB_H
+#define ENGINE_HUB_H
 
 #include "proc/engine/procnode.hpp"
 
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
 
 
-    class Hub : public ProcNode
-      {};
-      ///TODO: seems rather we don't need this one anymore??
-      //////// to be decided after the implementing the basic render engine....
-      
-      
-      
-      
-  } // namespace proc::engine
+  class Hub : public ProcNode
+    {};
+  ///TODO: seems rather we don't need this one anymore??
+  //////// to be decided after the implementing the basic render engine....
 
-} // namespace proc
+
+
+
+} // namespace engine
 #endif

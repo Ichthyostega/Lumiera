@@ -21,39 +21,37 @@
 */
 
 
-#ifndef PROC_MOBJECT_CONTROLLER_RENDERSTATE_H
-#define PROC_MOBJECT_CONTROLLER_RENDERSTATE_H
+#ifndef MOBJECT_CONTROLLER_RENDERSTATE_H
+#define MOBJECT_CONTROLLER_RENDERSTATE_H
 
 #include "proc/stateproxy.hpp"
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace controller
     {
-    namespace controller
+
+    typedef proc_interface::StateProxy StateProxy;
+
+
+    /**
+     * Encapsulates the logic used to get a "current render process"
+     * in accordance to the currently applicable controller settings.
+     * The provided StateProxy serves to hold any mutalbe state used
+     * in the render process, so the rest of the render engine 
+     * can be stateless.
+     */
+    class RenderState
       {
-      
-      
-      /**
-       * Encapsulates the logic used to get a "current render process"
-       * in accordance to the currently applicable controller settings.
-       * The provided StateProxy serves to hold any mutalbe state used
-       * in the render process, so the rest of the render engine 
-       * can be stateless.
-       */
-      class RenderState
-        {
-        public:
-          StateProxy& getStateProxy () ;
-        };
-        
-        
-        
-    } // namespace proc::mobject::controller
+      public:
+        StateProxy& getStateProxy () ;
+      };
 
-  } // namespace proc::mobject
 
-} // namespace proc
+
+  } // namespace mobject::controller
+
+} // namespace mobject
 #endif

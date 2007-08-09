@@ -23,27 +23,24 @@
 
 #include "proc/mobject/builder/conmanager.hpp"
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+
+  namespace builder
     {
-    namespace builder
-      {
 
 
 
-      /**
-       * TODO !!!!!!!!!!!!!!!!!!
-       */
-      int
-      ConManager::getConnection ()
-      {
-      }
+    /**
+     * TODO !!!!!!!!!!!!!!!!!!
+     */
+    int
+    ConManager::getConnection ()
+    {
+    }
 
 
 
-    } // namespace proc::mobject::builder
+  } // namespace mobject::builder
 
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject

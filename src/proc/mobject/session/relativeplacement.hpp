@@ -21,53 +21,48 @@
 */
 
 
-#ifndef PROC_MOBJECT_SESSION_RELATIVEPLACEMENT_H
-#define PROC_MOBJECT_SESSION_RELATIVEPLACEMENT_H
+#ifndef MOBJECT_SESSION_RELATIVEPLACEMENT_H
+#define MOBJECT_SESSION_RELATIVEPLACEMENT_H
 
 #include "proc/mobject/placement.hpp"
-#include "common/time.hpp"
 
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
+
+
+
+    class RelativePlacement : public Placement
       {
-      
-      
-      
-      class RelativePlacement : public proc::mobject::Placement
-        {
-        public:
-          
-          /**
-           * the possible kinds of RelativePlacements
-           */
-          enum RelType
-          { SAMETIME    /** place subject at the same time as the anchor  */
+      public:
+
+        /**
+         * the possible kinds of RelativePlacements
+         */
+        enum RelType
+        { SAMETIME    /** place subject at the same time as the anchor  */
           , ATTACH      /** attach subject to anchor (e.g. an effect to a clip) */
-          };
-          
-        protected:
-          MObject* anchor;
-
-          /** the kind of relation denoted by this Placement */
-          RelType relType;
-
-          /** Offset the actual position by this (time) value relative to the anchor point. */
-          cinelerra::Time offset;
-          //TODO: suitable representation?
-          
         };
-        
-        
-        
-    } // namespace proc::mobject::session
 
-  } // namespace proc::mobject
+      protected:
+        MObject* anchor;
 
-} // namespace proc
+        /** the kind of relation denoted by this Placement */
+        RelType relType;
+
+        /** Offset the actual position by this (time) value relative to the anchor point. */
+        cinelerra::Time offset;
+        //TODO: suitable representation?
+
+      };
+
+
+
+  } // namespace mobject::session
+
+} // namespace mobject
 #endif

@@ -25,20 +25,15 @@
 #include "proc/mobject/parameter.hpp"
 #include "proc/mobject/interpolator.hpp"
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
-    {
 
-    
-    template<class VAL>
-    VAL
-    ParamProvider<VAL>::getValue ()
-      {
-      }
-    
-    
-    
-  } // namespace proc::mobject
 
-} // namespace proc
+  template<class VAL>
+  VAL
+  ParamProvider<VAL>::getValue ()
+  {}
+
+
+
+} // namespace mobject

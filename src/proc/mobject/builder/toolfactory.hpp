@@ -21,32 +21,28 @@
 */
 
 
-#ifndef PROC_MOBJECT_BUILDER_TOOLFACTORY_H
-#define PROC_MOBJECT_BUILDER_TOOLFACTORY_H
+#ifndef MOBJECT_BUILDER_TOOLFACTORY_H
+#define MOBJECT_BUILDER_TOOLFACTORY_H
 
 #include "proc/mobject/builder/tool.hpp"
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace builder
     {
-    namespace builder
+
+
+    class ToolFactory
       {
+      public:
+        Tool & configure () ;
+      };
 
 
-      class ToolFactory
-        {
-        public:
-          Tool & configure () ;
-        };
-        
-        
-        
-    } // namespace proc::mobject::builder
 
-  } // namespace proc::mobject
+  } // namespace mobject::builder
 
-} // namespace proc
+} // namespace mobject
 #endif

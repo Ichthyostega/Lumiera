@@ -21,47 +21,43 @@
 */
 
 
-#ifndef PROC_MOBJECT_MOBJECT_H
-#define PROC_MOBJECT_MOBJECT_H
+#ifndef MOBJECT_MOBJECT_H
+#define MOBJECT_MOBJECT_H
 
 #include <list>
 
-#include "common/time.hpp"
+#include "cinelerra.h"
 #include "proc/mobject/buildable.hpp"
 
 
 using std::list;
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+
+  class Placement;
+
+
+  /**
+   * MObject is the interface class for all "Media Objects".
+   * All the contents and elements that can be placed and 
+   * manipulated and finally rendered within Cinelerra's EDL 
+   * are MObjects.
+   */
+  class MObject : public Buildable
     {
-    
-    class Placement;
+    protected:
+      typedef cinelerra::Time Time;
+
+      // TODO: how to represent time intervals best?
+      Time length;
+
+      list<Placement *> placement;
+
+    };
 
 
-    /** 
-     * MObject is the interface class for all "Media Objects".
-     * All the contents and elements that can be placed and 
-     * manipulated and finally rendered within Cinelerra's EDL 
-     * are MObjects.
-     */ 
-    class MObject : public Buildable
-      {
-      protected:
-        typedef cinelerra::Time Time;
-        
-        // TODO: how to represent time intervals best?
-        Time length;
 
-        list<Placement *> placement;
-
-      };
-      
-      
-      
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject
 #endif

@@ -21,31 +21,27 @@
 */
 
 
-#ifndef PROC_ENGINE_VRENDER_H
-#define PROC_ENGINE_VRENDER_H
+#ifndef ENGINE_VRENDER_H
+#define ENGINE_VRENDER_H
 
 #include "proc/stateproxy.hpp"
 
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
-    
-    
-    /**
-     * Representation of a Video render process.
-     * (Encapsulates the video buffers for the actual calculations)
-     */
-    class VRender : public proc::StateProxy
-      {
-        /////////////
-      };
-      
-      
-      
-  } // namespace proc::engine
 
-} // namespace proc
+
+  /**
+   * Representation of a Video render process.
+   * (Encapsulates the video buffers for the actual calculations)
+   */
+  class VRender : public proc_interface::StateProxy
+    {
+      /////////////
+    };
+
+
+
+} // namespace engine
 #endif

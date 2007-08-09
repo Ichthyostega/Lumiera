@@ -27,48 +27,44 @@
 #include "proc/mobject/session/effect.hpp"
 #include "proc/mobject/session/auto.hpp"
 
+using mobject::Buildable;
+using mobject::session::Clip;
+using mobject::session::Effect;
+using mobject::session::Auto;
 
-using proc::mobject::Buildable;
-using proc::mobject::session::Clip;
-using proc::mobject::session::Effect;
-using proc::mobject::session::Auto;
-
-namespace proc
+namespace mobject
   {
-  namespace mobject
+
+  namespace builder
     {
-    namespace builder
-      {
 
 
 
-      void
-      NodeCreatorTool::treat (Buildable& something)
-      {
-      }
+    void
+    NodeCreatorTool::treat (Buildable& something)
+    {
+    }
 
 
-      void
-      NodeCreatorTool::treat (Clip& clip)
-      {
-      }
+    void
+    NodeCreatorTool::treat (Clip& clip)
+    {
+    }
 
 
-      void
-      NodeCreatorTool::treat (Effect& effect)
-      {
-      }
+    void
+    NodeCreatorTool::treat (Effect& effect)
+    {
+    }
 
 
-      void
-      NodeCreatorTool::treat (Auto<double>& automation)
-      {
-      }
+    void
+    NodeCreatorTool::treat (Auto<double>& automation)
+    {
+    }
 
 
 
-    } // namespace proc::mobject::builder
+  } // namespace mobject::builder
 
-  } // namespace proc::mobject
-
-} // namespace proc
+} // namespace mobject

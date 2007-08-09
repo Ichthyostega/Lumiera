@@ -23,16 +23,12 @@
 
 #include "proc/engine/glbuf.hpp"
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
-    
-    /** */
-    
-    
-    
-    
-  } // namespace proc::engine
 
-} // namespace proc
+  /** */
+
+
+
+
+} // namespace engine

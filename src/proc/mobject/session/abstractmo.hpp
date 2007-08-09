@@ -21,31 +21,27 @@
 */
 
 
-#ifndef PROC_MOBJECT_SESSION_ABSTRACTMO_H
-#define PROC_MOBJECT_SESSION_ABSTRACTMO_H
+#ifndef MOBJECT_SESSION_ABSTRACTMO_H
+#define MOBJECT_SESSION_ABSTRACTMO_H
 
 #include "proc/mobject/mobject.hpp"
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
+
+
+    class AbstractMO : public MObject
       {
+        ////////////// TODO: work out common services to provide!!!!
+      };
 
 
-      class AbstractMO : public MObject
-        {
-          ////////////// TODO: work out common services to provide!!!!
-        };
-        
-        
-        
-    } // namespace proc::mobject::session
 
-  } // namespace proc::mobject
+  } // namespace mobject::session
 
-} // namespace proc
+} // namespace mobject
 #endif

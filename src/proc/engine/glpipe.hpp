@@ -1,5 +1,5 @@
 /*
-  OPENGLPIPE.hpp  -  specialized connection element for handling OpenGL implementation details
+  GLPIPE.hpp  -  specialized connection element for handling OpenGL implementation details
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -21,30 +21,26 @@
 */
 
 
-#ifndef PROC_ENGINE_OPENGLPIPE_H
-#define PROC_ENGINE_OPENGLPIPE_H
+#ifndef ENGINE_GLPIPE_H
+#define ENGINE_GLPIPE_H
 
 #include "proc/engine/link.hpp"
 
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
-    
-    
-    /**
-     * specialized connection node used to handle the transfer of OpenGL data
-     * from a image bitmap into texture form.
-     */
-    class GLPipe : public Link
-      {};
-      
-      
-      
-      
-  } // namespace proc::engine
 
-} // namespace proc
+
+  /**
+   * specialized connection node used to handle the transfer of OpenGL data
+   * from a image bitmap into texture form.
+   */
+  class GLPipe : public Link
+    {};
+
+
+
+
+} // namespace engine
 #endif

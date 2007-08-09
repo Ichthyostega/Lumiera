@@ -21,35 +21,31 @@
 */
 
 
-#ifndef PROC_ENGINE_TRAFO_H
-#define PROC_ENGINE_TRAFO_H
+#ifndef ENGINE_TRAFO_H
+#define ENGINE_TRAFO_H
 
 #include "proc/engine/procnode.hpp"
 
 
 
-namespace proc
+namespace engine
   {
-  namespace engine
-    {
-    
-    
-    /**
-     * abstraction of the most important kind of Processing node,
-     * which really works on the media data and transforms input
-     * into ouput. Subclasses include the (Video) Projector
-     * for scaling/translating, all sorts of effects (Plugins),
-     * as well as the low level codecs used to decode the raw
-     * media at the source end of the render pipeline(s)
-     */
-    class Trafo : public ProcNode
-      {
-        ///////////
-      };
-      
-      
-      
-  } // namespace proc::engine
 
-} // namespace proc
+
+  /**
+   * abstraction of the most important kind of Processing node,
+   * which really works on the media data and transforms input
+   * into ouput. Subclasses include the (Video) Projector
+   * for scaling/translating, all sorts of effects (Plugins),
+   * as well as the low level codecs used to decode the raw
+   * media at the source end of the render pipeline(s)
+   */
+  class Trafo : public ProcNode
+    {
+      ///////////
+    };
+
+
+
+} // namespace engine
 #endif

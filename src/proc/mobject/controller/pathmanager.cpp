@@ -23,25 +23,21 @@
 
 #include "proc/mobject/controller/pathmanager.hpp"
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace controller
     {
-    namespace controller
-      {
-      
-      
-      
-      proc::engine::Processor *
-      PathManager::buildProcessor ()
-      {
-        return 0;//////////////////TODO
-      }
-      
-      
-      
-    } // namespace proc::mobject::controller
 
-  } // namespace proc::mobject
 
-} // namespace proc
+
+    engine::Processor *
+    PathManager::buildProcessor ()
+    {
+      return 0;//////////////////TODO
+    }
+
+
+
+  } // namespace mobject::controller
+
+} // namespace mobject

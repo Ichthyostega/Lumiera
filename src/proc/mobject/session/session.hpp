@@ -21,42 +21,38 @@
 */
 
 
-#ifndef PROC_MOBJECT_SESSION_SESSION_H
-#define PROC_MOBJECT_SESSION_SESSION_H
+#ifndef MOBJECT_SESSION_SESSION_H
+#define MOBJECT_SESSION_SESSION_H
 
 
 
-namespace proc
+namespace mobject
   {
-  namespace mobject
+  namespace session
     {
-    namespace session
+
+    class EDL;
+    class Fixture;
+
+    /**
+     * The (current) Session holds all the user
+     * visible content to be edited and manipulated
+     * within the Cinelerra Application. From a users
+     * perspective, it is a collection of Media Objects
+     * (--> MObject) placed (--> Placement) onto virtual
+     * Tracks.
+     */
+    class Session
       {
-      
-      class EDL;
-      class Fixture;
-      
-      /**
-       * The (current) Session holds all the user
-       * visible content to be edited and manipulated
-       * within the Cinelerra Application. From a users
-       * perspective, it is a collection of Media Objects
-       * (--> MObject) placed (--> Placement) onto virtual
-       * Tracks.
-       */
-      class Session
-        {
-        protected:
-          EDL& edl;
-          Fixture& fixture;
+      protected:
+        EDL& edl;
+        Fixture& fixture;
 
-        };
-        
-        
-        
-    } // namespace proc::mobject::session
+      };
 
-  } // namespace proc::mobject
 
-} // namespace proc
+
+  } // namespace mobject::session
+
+} // namespace mobject
 #endif
