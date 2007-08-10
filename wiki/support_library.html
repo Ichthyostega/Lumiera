@@ -646,7 +646,7 @@ Error: #f88</pre>
 <div title="DefaultTiddlers" modifier="CehTeh" modified="200707102306" created="200707102301" changecount="2">
 <pre>[[SupportLibrary]]</pre>
 </div>
-<div title="ErrorHandling" modifier="MichaelPloujnikov" modified="200707160333" created="200707152252" tags="excludeMissing" changecount="4">
+<div title="ErrorHandling" modifier="CehTeh" modified="200708101307" created="200707152252" tags="excludeMissing" changecount="5">
 <pre>! Proposal:
 We need some centralized way to handle errors and doing hard aborts.
 
@@ -660,7 +660,7 @@ My following proposal defines a very simplistic way to define unique errors whic
 
 
 !!! detailed semantics (proposal):
-a TLS pointer is allocated to keep a thread local error state. NULL means SUCCEESS, no error pending.
+a TLS pointer is allocated to keep a thread local error state. NULL means SUCCESS, no error pending.
 
 API:
 
