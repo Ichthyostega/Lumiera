@@ -2095,10 +2095,26 @@ see : &lt;&lt;tag RSSFeed&gt;&gt; for the full list.
 
 </pre>
 </div>
-<div title="Scheduler" modifier="CehTeh" modified="200706271505" created="200706220108" changecount="2">
+<div title="Scheduler" modifier="CehTeh" modified="200708101610" created="200706220108" changecount="7">
 <pre>Scheduling is done with two priority queues, one for high priority jobs and one for low priority jobs. These priority queues are ordered by absolute time values (and a job identifier, details will be worked out at implementation time).
 
-There is also a variable defining how to handle too-late schedules (proceed, abort) for each scheduled job. </pre>
+there are following (non exhaustive) kinds of jobs:
+* start job
+* cancel job, if not finished (abort when out of time)
+* unschedule job
+
+Jobs implement a kind of future, datastructures which block a querier until data is available.
+
+The Job scheduler runs singlethreaded. Its only task is to schedule and delegate jobs to worker threads, by itself it will never do any extensive processing!
+
+Each job has an option what to do when its times expires (abort, proceed).
+
+The high priority queue is ordered by the __start__ time T, when the job has to be started (plus some hystersis H). A high priority job becomes scheduled beginning with time T but no later than T+H. 
+
+The low priority queue is ordered by __end__ time T, when the job has to be finished (minus a spawn S). Low priority jobs are started as soon as system load permits, the high priority queue is empty (for some usec in future, lets say 100) and the time is earlier than ~T-S. When a job is expired, it is removed from the queue, when it is already running it is handled as defined in its expire policy.
+
+Canceling and expireing jobs gets noted in Statistics to adjust performance and timings for optimal performance.
+</pre>
 </div>
 <div title="SideBarOptions" modifier="CehTeh" created="200706200047" changecount="1">
 <pre>&lt;&lt;search&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel &quot;options »&quot; &quot;Change TiddlyWiki advanced options&quot;&gt;&gt;</pre>
