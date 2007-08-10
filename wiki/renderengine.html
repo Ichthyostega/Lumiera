@@ -514,7 +514,16 @@ ColorPalette
 
 SiteUrl</pre>
 </div>
-<div title="Automation" modifier="MichaelPloujnikov" modified="200706271424" created="200706250751" changecount="3">
+<div title="Asset" modifier="Ichthyostega" created="200708100337" tags="def" changecount="2">
+<pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the EDL is the &quot;manipulation and process view&quot;.
+
+The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. Or, an Effect asset can hold a plugin-ID.
+
+!still to be worked out..
+is how to implement the relationship between [[MObject]]s and Assets. Do we use direct pointers, or do we prefer an ID + central registry approach? And how to handle the removal of an Asset (&amp;rarr; see also [[analysis of mem management|ManagementAssetRelation]])
+</pre>
+</div>
+<div title="Automation" modifier="Ichthyostega" modified="200708100315" created="200706250751" tags="def" changecount="5">
 <pre>Automation is treated as a function over time. It is always tied to a specific Parameter (which can thus be variable over the course of the timeline). All details //how// this function is defined are completely abstracted away. The Parameter uses a ParamProvider to get the value for a given Time (point). Typically, this will use linear or bezier interpolation over a set of keyframes internally. Parameters can be configured to have different value ranges and distribution types (on-off, stepped, continuous, bounded)
 
 [img[how to implement Automation|uml/fig129669.png]]
@@ -686,8 +695,12 @@ TertiaryMid: #99a
 TertiaryDark: #667
 Error: #f88</pre>
 </div>
-<div title="Controller" modifier="Ichthyostega" created="200706220319" tags="def" changecount="1">
+<div title="Controller" modifier="Ichthyostega" modified="200708100409" created="200706220319" tags="def" changecount="3">
 <pre>Here, in the context of the Render Engine, the Controller component is responsible for managing the global playback state, for triggering the build process and for activating the backend and the Render Engine configuration created by the Builder to carry out the actual rendering. So you can expect the Controller to encompass a State Machine.
+
+!Facade
+This is an very important external Interface, because it links together all three Layers of our current architecture. It can be used by the backend to initiate [[Render Processes (=StateProxy)|StateProxy]] and it will probably be used by the Dispatcher for GUI actions as well...
+
 </pre>
 </div>
 <div title="DefaultTiddlers" modifier="Ichthyostega" modified="200706190047" created="200706172308" changecount="2">
@@ -746,6 +759,25 @@ To make the intended use of the classes more clear, consider the following two e
 </div>
 <div title="ExplicitPlacement" modifier="MichaelPloujnikov" modified="200706271458" created="200706220304" tags="def" changecount="2">
 <pre>A special kind (subclass) of [[Placement]]. As such it is always linked to a //Subject//, i.e. a MObject. In addition to the properties of a (unspecific) Placement, the ExplicitPlacement specifies a absolute time and track position for locating the Subject
+</pre>
+</div>
+<div title="Factories" modifier="Ichthyostega" modified="200708100409" created="200708100401" tags="impl discuss" changecount="6">
+<pre>We use Factories
+* for centralizing [[memory management|MemoryManagement]]
+* to support polymorphism (of course...)
+
+!Requirements
+* request the actual placement/allocation from the backend
+* allways hand out a smart-pointer
+* encapsulate / make configurable the smart-pointer type
+* install a callback into the smart-pointer for destroying the resource.
+* redirect the destroying request to the backend
+
+!Implementation Questions
+* how much genericity? (Ichthyo is rather inclined not to overdo this one. Often it is preferable to have repeated implementations follow a well known pattern, if this leads to short and simple implementations, while the complete general solution will be much more contrived).
+* how to specify the actual type needed?
+* how to implement the cases where a subtype needs to be selected (abstract factory pattern). Embody this into the Factory, pass it in as a Strategy or treat the Factory just as a simple service taking an explicit type-ID and providing the new object?
+
 </pre>
 </div>
 <div title="Fixture" modifier="Ichthyostega" modified="200706220325" created="200706220324" tags="def" changecount="2">
@@ -846,10 +878,13 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" created="200708080322" tags="overview" changecount="1">
-<pre>This wiki page is the entry point to some detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Cinelerra Renderengine, the Builder and the related parts.
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200708100408" created="200708080322" tags="overview" changecount="4">
+<pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Cinelerra Renderengine, the Builder and the related parts.
 
-* [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]</pre>
+* [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
+* [[Memory Management Issues|MemoryManagement]]
+
+</pre>
 </div>
 <div title="InlineJavaScript" modifier="Jeremy" created="200603090618" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200603090618">
 <pre>/***
@@ -1220,12 +1255,51 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 [[Admin]]
 &lt;&lt;fullscreen&gt;&gt;</pre>
 </div>
+<div title="ManagementAssetRelation" modifier="Ichthyostega" created="200708100337" tags="impl" changecount="2">
+<pre>Problem is: when removing an Asset, all corresponding MObjects need to disappear. This means, besides the obvious Ref-Link (MObject refering to an asset) we need backlinks or a sort of registry. And still worse: we need to remove the affetcted MObject from the object network in the EDL and rebuild the Fixture...
+
+{{red{to be considered in more detail later}}}
+</pre>
+</div>
 <div title="MarkupPreHead" modifier="Ichthyostega" modified="200708080243" created="200706172303" changecount="1">
 <pre>&lt;!--{{{--&gt;
 &lt;link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/&gt;
 &lt;!--}}}--&gt;
 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;loading &lt;b&gt;Cinelerra Renderengine&lt;/b&gt; devel doku&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
+</div>
+<div title="MemoryManagement" modifier="Ichthyostega" modified="200708100408" created="200708100225" tags="impl decision discuss" changecount="8">
+<pre>Of course: Cinelerra currently leaks memory and crashes regularilly. For the newly written code, besides retaining the same performance level, a main goal is to use methods and techniques known to support the writing of quality code. So, besides the MultithreadConsiderations, a solid strategy for managing the ownership of allocated memory blocks is necessary right from start.
+
+!Problems
+# Memory management needs to work correct in a //fault tolerant environment//. That means that we need to be prepared to //handle on a non-local scale// some sorts of error conditions (without aborting the application). To be more precise: some error condition arises locally, which leads to a local abort and just the disabling/failing of some subsystem without affecting the application as a whole. This can happen on a regular base (e.g. rendering fails) and thus is __no excuse for leaking memory__
+# Some (not all) parts of the core application are non-deterministic. That means, we can't tie the memory management to any assumptions on behalf of the execution path
+
+!C++ solution
+First of all -- this doesn't concern //every// allocation. It rather means there are certain //dangerous areas// which need to be identified. And as always, instead of carrying the inherent complexities of the problem into the solution, we should rather look for a common solution pattern which helps factoring out the complexity.
+
+For the case in question this seems to be the ''resource allocation is construction'' pattern. Which boils down to basically never using bare pointers when concerned with ownership. Instead, ownership should be handled by smart-pointers.
+
+!!usage scenarios
+# __existence is being used__: Objects just live for being referred to in a object network. In this case, use refcounting smart-pointers for every ref. (note: problem with cyclic refs)
+# __entity bound ownership__: Objects can be tied to some long living entity in the program, which holds the smart-pointer
+#* if the existence of these ref-holding entity can be //guaranteed// (like a contract), then the other users can build a object network with conventional pointers
+#* otherwise, when the ref-holding entity //can disappear// in a regular program state, we need weak-refs and checking (because by our postulate the controlled resource needs to be destructed immediately, otherwise we would have the first case, existence == being used)
+
+!!!dangerous uses
+* the render nodes &amp;rarr; [[detail analysis|ManagementRenderNodes]] {{red{TODO}}}
+* the MObjects in the EDL &amp;rarr; [[detail analysis|ManagementMObjects]] {{red{TODO}}}
+* Asset - MObject relationship. &amp;rarr; [[detail analysis|ManagementAssetRelation]] {{red{TODO}}}
+
+!!!rather harmless
+* Frames (buffers), because they belong to a given [[RenderProcess (=StateProxy)|StateProxy]] and are just passed in into the individual [[ProcNode]]s. This can be handled consistently with conventional methods.
+* each StateProxy belongs to one top-level call to the [[Controller-Facade|Controller]]
+* same for the builder tools
+* the EDL and the defined [[Asset]]s belong together to one Session. If the Session is closed, this means a internal shutdown of the whole ProcLayer, i.e. closing of all GUI representations and terminating all render processes. If these calles are implemented as blocking operations, we can assert that as long as any GUI representation or any render process is running, there is a valid Session and EDL.
+
+!using Factories
+And, last but not least, doing all actual allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides that, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot;, rather it should use some central [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
+</pre>
 </div>
 <div title="OpenGL" modifier="Ichthyostega" modified="200706220359" created="200706220345" tags="def discuss" changecount="3">
 <pre>Cinelerra2 introduced OpenGL support for rendering previews. I must admit, I am very unhappy with this, because
@@ -1838,6 +1912,13 @@ Closely related to this is the not-so-obvious problem how to understand the comm
 * is it really necessary to have fixed global tracks?
 * is it really helpful to feed &quot;source tracks&quot; into global processing busses/channels?
 Users accustomed with modern GUI applications typically expect that //everything is a object//  and can be pulled around and  manipulated individually. This seems natural at start, but raises the problem of providing a efficient workflow for handling larger projects and editing tasks. So, if we don't have a hard wired multitrack+bus architecture, we need some sort of templating to get the standard editing use case done efficiently.
+</pre>
+</div>
+<div title="ProcLayer" modifier="Ichthyostega" modified="200708100338" created="200708100333" tags="def" changecount="2">
+<pre>The middle Layer of our current Architecture plan, i.e. the layer managing all processing and manipulation, while the actual data handling is done in the backend and the user interaction belongs to the GUI Layer.
+
+&amp;rarr; see the [[Overview]]
+
 </pre>
 </div>
 <div title="ProcNode" modifier="MichaelPloujnikov" modified="200706271500" created="200706220409" tags="def" changecount="3">
