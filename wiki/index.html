@@ -795,10 +795,11 @@ This distributed wiki might be used instead the pipapo.org wiki, investigate tha
 Wiki works. It is simple to use and just flexible enough to handle the task. I don't go to install any other software for such tasks on my server. While the design progresses I'd propose to move our work into git repositories and eventually phase this wiki pages out anyways. I'd rather like to start out distributed/git right away .. but git gives us only a fine storage layer, for a design process we need some good presentation layer (later when using git and starting the implementation everyones favorite editor serves for that) I have no better ideas yet to solve the presentation problem other than using this wiki (or maybe Bouml).
 </pre>
 </div>
-<div title="Cinelerra3Wiki" modifier="Ichthyostega" modified="200708051525" created="200706172308" tags="portal" changecount="21">
+<div title="Cinelerra3Wiki" modifier="CehTeh" modified="200708101843" created="200706172308" tags="portal" changecount="22">
 <pre>This 'index.html' becomes the entry point of some tiddlywikis managed under git. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.
 
 * I started a GitNotes where we will collect some information about git, howto and special setups
+* since we prefer gpg signed tags in git and not each developer knows gpg well here is a Micro-GPG-HowTo 
 * we maintain (semi-) final design docs in DesignDocumentation
 
 Please end your tiddlers in a newline, this makes merging in git easier since the /pre tag used in tiddlywiki will become on a single line.
@@ -1334,6 +1335,63 @@ We are in need of a new development model which is acceptable by all involved pe
 &lt;!--}}}--&gt;
 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;&lt;b&gt;My TiddlyWiki&lt;/b&gt; is loading&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
+</div>
+<div title="Micro-GPG-HowTo" modifier="CehTeh" modified="200708101901" created="200708101900" changecount="2">
+<pre>I (cehteh) just paste my configs and give very few hints here, refer to the gpg manpage, the gpg documentation, google or ask on IRC for details. Maybe you improve this.
+
+First of all you need to install gpg and generate your keypair if you don't have done that already. generating keys is done with {{{gpg --gen-key}}} refer to the manpage for details.
+
+Be very careful that your private key has a **GOOD** passphrase and be kept secret.
+
+Configuration files are in {{{~/.gnupg}}}
+
+Here are the things I have in my {{{~/.gnupg/gpg.conf}}} (there are a lot of comments too, which I leave out here, instead I add some notes as comments)
+{{{
+no-greeting
+
+# enter your keyid AC4F4FF4 is mine!
+default-key AC4F4FF4
+
+force-v3-sigs
+
+compress-algo 1
+
+# you can add alternative keyservers
+keyserver hkp://subkeys.pgp.net
+#keyserver blackhole.pca.dfn.de
+
+# to let gpg automatically download public keys from the net, makes usage much easier
+keyserver-options auto-key-retrieve
+
+# using a gpg agent makes usage easier too, but you should only use it on a personal computer
+use-agent
+}}}
+
+
+when you want to use the gpg agent you need to add following line to your {{{~/.bash_profile}}} to start the agent on login:
+{{{
+eval $(gpg-agent --daemon)
+}}}
+
+
+further you need to add following lines to your {{{~/.bash_logout}}} to stop the agent when logging off:
+{{{
+if test &quot;$GPG_AGENT_INFO&quot;; then
+        kill -TERM $(echo $GPG_AGENT_INFO | sed -s 's/.*:\(.*\):.*/\1/')
+fi
+}}}
+
+further the gpg agent needs some configuration in {{{~/.gnupg/gpg-agent.conf}}}:
+{{{
+pinentry-program /usr/bin/pinentry-gtk-2
+no-grab
+default-cache-ttl 1209600
+max-cache-ttl 1209600
+}}}
+
+Note that I am using very long timeouts, refer to the manual about its implications or leave the defaults.
+
+</pre>
 </div>
 <div title="PageTemplate" modifier="Ichthyostega" modified="200706260504" created="200701131624" tags="MPTWTheme excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110330" changecount="1">
 <pre>&lt;!--{{{--&gt;
