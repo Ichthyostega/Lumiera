@@ -152,6 +152,10 @@ def configurePlatform(env):
     if conf.CheckCHeader('valgrind/valgrind.h'):
         conf.env.Append(CPPFLAGS = ' -DHAS_VALGRIND_VALGIND_H')
     
+    if not conf.CheckCXXHeader('tr1/memory'):
+        print 'We rely on the std::tr1 proposed standard extension for shared_ptr.'
+        Exit(1)
+        
     if not conf.CheckCXXHeader('boost/config.hpp'):
         print 'We need the C++ boost-lib.'
         Exit(1)
@@ -188,6 +192,8 @@ def defineBuildTargets(env, artifacts):
     """
     cinobj = ( srcSubtree(env,'backend') 
              + srcSubtree(env,'proc')
+             + srcSubtree(env,'common')
+#             + srcSubtree(env,'lib')
              + env.Object('$SRCDIR/main.cpp')
              )
     plugobj = srcSubtree(env,'plugin', isShared=True)

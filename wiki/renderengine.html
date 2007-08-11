@@ -761,7 +761,7 @@ To make the intended use of the classes more clear, consider the following two e
 <pre>A special kind (subclass) of [[Placement]]. As such it is always linked to a //Subject//, i.e. a MObject. In addition to the properties of a (unspecific) Placement, the ExplicitPlacement specifies a absolute time and track position for locating the Subject
 </pre>
 </div>
-<div title="Factories" modifier="Ichthyostega" modified="200708100409" created="200708100401" tags="impl discuss" changecount="6">
+<div title="Factories" modifier="Ichthyostega" modified="200708112256" created="200708100401" tags="impl discuss" changecount="18">
 <pre>We use Factories
 * for centralizing [[memory management|MemoryManagement]]
 * to support polymorphism (of course...)
@@ -778,6 +778,41 @@ To make the intended use of the classes more clear, consider the following two e
 * how to specify the actual type needed?
 * how to implement the cases where a subtype needs to be selected (abstract factory pattern). Embody this into the Factory, pass it in as a Strategy or treat the Factory just as a simple service taking an explicit type-ID and providing the new object?
 
+!!chosen design
+My main goal is to have an easy-to-use interface for the implementer of individual classes using this factory mechanism. The intended use should mimic the standard use of operator new, and at the same time there should be a possibility to configure »real« Factory behaviour in.
+
+For this reason I make Factory a Functor, and for handling the concrete memory allocation, it inherits from an Allocator class. The users of this factory template typically either parametrize it with existing smart-pointer types and some Allocator instantiation, or they may chose to create a specialized Factory derived from this Factory template. After typically hiding this configuration behind a typedef, the user adds a static field to the class intended to use the Factory and initializes this field with the concrete Factory (this may pass internal ~IDs to the constructor of the Factory and from there on to the underlying Allocator).
+{{{
+#include &quot;common/factory.hpp&quot;
+
+  class Blubb
+    {
+      int uii ;
+
+    public:
+      typedef cinelerra::factory::RefcountPtr&lt;Blubb&gt; Factory;
+      static Factory create;
+      
+      Blubb() : uii(42) {} ;
+    };
+  
+  /** a static Factory instance 
+   *  for creating refcounting Ptrs to Blubb objects 
+   */
+  Blubb::Factory Blubb::create;  // &lt;----note this is a constructor call
+}}}
+Now, the clients of {{{class Blubb}}} can create ref-counting pointers to Blubb-objects by doing a fully qualified {{{create()}}} functor call:
+{{{
+  std::tr1::shared_ptr&lt;Blubb&gt; huii = Blubb::create ();  // &lt;----will invoke the default Blubb() ctor 
+  std::tr1::shared_ptr&lt;Blubb&gt; pfuii = huii;
+}}}
+Some further details
+* Functor inherits (protected) from Allocator, besides that there are no additional requirements.
+* typically, Allocator provides a overloaded {{{operator new(size_t)}}} etc.
+* thus, when Functor or any derived class issues a new XX(), our custom Allocator gains control
+* the Functor-behaviour relies on a custom {{{operator()}}} which can be overridden in derived classes to take various parameter lists.
+* then, such a Factory class derived from Functor can do specific magic and e.g. create some subclass
+* and, as the created smart-pointer is a template parameter, such a custom Functor can create all sorts of Proxies, wrappers and the like
 </pre>
 </div>
 <div title="Fixture" modifier="Ichthyostega" modified="200706220325" created="200706220324" tags="def" changecount="2">
