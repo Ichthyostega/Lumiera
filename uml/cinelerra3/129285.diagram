@@ -1,4 +1,4 @@
-format 38
+format 40
 
 classcanvas 128005 class_ref 134021 // Buildable
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -6,7 +6,7 @@ classcanvas 128005 class_ref 134021 // Buildable
   end
 classcanvas 128133 class_ref 128517 // MObject
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 80 235 2000
+  xyz 80 228 2000
   end
 classcanvas 128517 class_ref 134149 // Tool
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -38,18 +38,22 @@ classcanvas 129413 class_ref 129669 // Label
   end
 classcanvas 129541 class_ref 128773 // AbstractMO
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 82 319 2000
+  xyz 82 326 2000
   end
 classcanvas 130565 class_ref 134277 // SegmentationTool
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 303 355 2000
+  xyz 303 362 2000
   end
-classcanvas 130949 class_ref 134405 // NodeCratorTool
+classcanvas 130949 class_ref 134405 // NodeCreatorTool
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 384 469 2004
+  xyz 371 469 2004
   end
 note 134277 "{ provided_tool.treat(this); }"
   xyzwh 182 191 2000 159 39
+classcanvas 134661 class_ref 135173 // Segment
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 605 371 2000
+  end
 relationcanvas 128261 relation_ref 135557 // <generalisation>
   from ref 128133 z 1999 to ref 128005
   no_role_a no_role_b
@@ -91,9 +95,13 @@ relationcanvas 131077 relation_ref 136069 // <realization>
   line 131205 z 1999 to ref 128517
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
+relationcanvas 134789 relation_ref 137221 // <directional aggregation by value>
+  from ref 130565 z 1999 stereotype "<<list>>" xyz 542 409 3000 to ref 134661
+  role_a_pos 546 385 3000 no_role_b
+  multiplicity_a_pos 590 418 3000 no_multiplicity_b
 line 131461 -_-_
   from ref 130565 z 1999 to point 301 409
-  line 132101 z 1999 to point 260 405
+  line 132101 z 1999 to point 264 407
   line 132229 z 1999 to ref 128005
 line 131589 -_-_
   from ref 130565 z 1999 to point 301 429

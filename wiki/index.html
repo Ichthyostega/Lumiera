@@ -747,6 +747,17 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
+<div title="BuildSystem" modifier="Ichthyostega" modified="200708051534" created="200708051532" tags="organization buildsys" changecount="3">
+<pre>July 2007 we agreed to try out several Build Systems in real world usage, to get a better feel on the maintenance costs of each.
+* SCons
+* AutoTools
+
+!Used Functionality
+* (re)building with reliable dependency checks
+* environment checks (&quot;configure&quot;)
+* provide central interface for setting switches and configuration options
+* installing of some or all created artifacts</pre>
+</div>
 <div title="Cinelerra3DesignProcess" modifier="MichaelPloujnikov" modified="200706270317" created="200706181202" tags="process" changecount="5">
 <pre>! Cinelerra3 design process
 A lightweight formalized process how people can add proposals for the Cinelerra3 development.
@@ -784,11 +795,13 @@ This distributed wiki might be used instead the pipapo.org wiki, investigate tha
 Wiki works. It is simple to use and just flexible enough to handle the task. I don't go to install any other software for such tasks on my server. While the design progresses I'd propose to move our work into git repositories and eventually phase this wiki pages out anyways. I'd rather like to start out distributed/git right away .. but git gives us only a fine storage layer, for a design process we need some good presentation layer (later when using git and starting the implementation everyones favorite editor serves for that) I have no better ideas yet to solve the presentation problem other than using this wiki (or maybe Bouml).
 </pre>
 </div>
-<div title="Cinelerra3Wiki" modifier="CehTeh" modified="200707102257" created="200706172308" tags="portal" changecount="19">
+<div title="Cinelerra3Wiki" modifier="CehTeh" modified="200708120136" created="200706172308" tags="portal" changecount="23">
 <pre>This 'index.html' becomes the entry point of some tiddlywikis managed under git. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.
 
 * I started a GitNotes where we will collect some information about git, howto and special setups
+* since we prefer gpg signed tags in git and not each developer knows gpg well here is a Micro-GPG-HowTo 
 * we maintain (semi-) final design docs in DesignDocumentation
+* Things get often worked out on IRC, see IRC-Transcripts for decisions made there and not yet put into the proper documentation places
 
 Please end your tiddlers in a newline, this makes merging in git easier since the /pre tag used in tiddlywiki will become on a single line.
 
@@ -806,7 +819,7 @@ next we should //start thinking// on how to organize several aspects of the prac
 * how to organize packages, files, includes?    &amp;rarr; [[more|SrcTreeStructure]]
 * how to organize the executable to be built?
 * what coding conventions to prefer?            &amp;rarr; [[GNU Style|DesignDocumentation]]
-* what build system to use?
+* what [[build system|BuildSystem]] to use?
 
 Ichthyo thinks we should do some informal brainstorming, test/prototypes to see how things work out and discuss them; then we should make them into formal project proposals on pipapo.org
 </pre>
@@ -815,7 +828,7 @@ Ichthyo thinks we should do some informal brainstorming, test/prototypes to see 
 <pre>Cinelerra3Wiki
 ShortCuts</pre>
 </div>
-<div title="DesignDocumentation" modifier="CehTeh" modified="200707030409" created="200706181207" tags="process" changecount="6">
+<div title="DesignDocumentation" modifier="CehTeh" modified="200707030409" created="200706181207" tags="process policy" changecount="6">
 <pre>* There is a [[Manifest]] explaining the vision of the Cinelerra3 project
 * The foundation how we work together is defined in Cinelerra3DesignProcess
 * There is a description how the git repository is set up in RepositorySetup
@@ -894,7 +907,7 @@ Slider.prototype.stop = function()
 }
 //}}}</pre>
 </div>
-<div title="GitAliases" modifier="MichaelPloujnikov" modified="200706270309" created="200706181050" changecount="5">
+<div title="GitAliases" modifier="MichaelPloujnikov" modified="200706270309" created="200706181050" tags="git organization" changecount="5">
 <pre>to make the admin/git_hooks/post-commit working add following to your .gitconfig:
 {{{
 [alias]
@@ -908,7 +921,7 @@ these two commands are used by 'admin/git-hooks/post-commit'
 
 'git publish' just sends the commit to some repository which has to be registered with 'git remote add public ...', in case you are working offline this will stuck and timeout, you may break it with ctrl-c, someone may fix it.</pre>
 </div>
-<div title="GitBranches" modifier="MichaelPloujnikov" modified="200706270309" created="200706260447" tags="overview" changecount="9">
+<div title="GitBranches" modifier="Ichthyostega" modified="200708051534" created="200706260447" tags="overview git organization" changecount="11">
 <pre>some ''interesting Branches''
 
 |![[pipapo.org|PipapoOrg]]                |!''mirrored''              |!|!description                          |
@@ -917,7 +930,7 @@ these two commands are used by 'admin/git-hooks/post-commit'
 
 </pre>
 </div>
-<div title="GitNotes" modifier="MichaelPloujnikov" modified="200706270308" created="200706181049" tags="note" changecount="4">
+<div title="GitNotes" modifier="MichaelPloujnikov" modified="200706270308" created="200706181049" tags="note git" changecount="4">
 <pre>I use some GitAliases to make signing and publishing easier.
 
 the '.git' dir itself is not versioned/distributed since it usually contains site-specific things. Despite this we might want to distribute some maintenance scripts and hooks so I put the default hooks into admin/git_hooks/ and users can symlink from .git/hooks them when needed.
@@ -958,12 +971,36 @@ Now you could compile the source code or improve Cinelerra3 or the documentation
 !!!Code
 //{{{
 git config --global user.name &quot;YOUR REALNAME&quot;
-git config --global user.email YOUR-E@MAIL.ADRESS
+git config --global user.email ~YOUR-E@MAIL.ADRESS
 git commit -m 'YOUR DESCRIPTION' -- FILE/TO/COMMIT
 git push git://git.pipapo.org/cinelerra3/mob
 //}}}
 
 cinelerra3/mob is an anonymous account at pipapo.org where everyone can commit changes. </pre>
+</div>
+<div title="IRC-Transcripts" modifier="CehTeh" created="200708120209" changecount="1">
+<pre>!10/11 aug 2007
+* maybe let the render graph builder generate a meta language which then is jit compiled for each configuration
+* using smart pointers and factories for objects, if this wont work because of cycles, we might investigate specialized garbage collectors for specific cases.
+* format for frames would be likely ffmpeg or such first, finally we see what suits best. We have to provide coverter nodes to convert frame formats for accessing diffrent libraries anyway (ffmpeg, v4l, gstreamer, ...)
+* we need a pool of worker threads and associated api's
+* accessing frames has a time (get until..), unique frame identifier (see below), policies (what to do when out of time, quality required,..) and hints (recursive dependency, must cache, playback speed and direction, ...)
+* for each sequence (configuration) each node has a number (monotonic incrementing), a generation counter (increment on each parameter change), a propagation sum (from parent nodes) 
+* frames are identified by their time(frame number) and node number plus generation number and propagation sum. This allows easily to find out when a frame has to be rerendered
+* no difference between compositor and viewer
+** viewer is just a decoder where a display window attaches
+** one can have multiple of such display windows
+** tracks, effects, (things which are nodes in the render graph) can add gui components to the viewer, like masking tools, panning, overlay and other compositor things.
+** does such a display need to be a node in the render graph (means reconfig when changing it) or just something which peeks on top of it?
+* tracks are just containers for other nodes
+** they serve a gui representation (timeline, patchbay, viewer)
+** they do the mixing of contained things
+** can be recursive, the gui represents basically a tree
+** we need some 'wireing' abstraction for the gui to make it a real graph
+* rendering frames, context between frames
+** the proc layer only queries frames (by identifier and timeout) the backend tries to serve the best it can do (from cache or let them render)
+** each render job carries some quality limit (as S/N ratio) when previewing or scratching through the project this is used to generate reasonable quality previews
+</pre>
 </div>
 <div title="InlineJavaScript" modifier="Jeremy" created="200603090618" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200603090618">
 <pre>/***
@@ -1323,6 +1360,63 @@ We are in need of a new development model which is acceptable by all involved pe
 &lt;!--}}}--&gt;
 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;&lt;b&gt;My TiddlyWiki&lt;/b&gt; is loading&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
+</div>
+<div title="Micro-GPG-HowTo" modifier="CehTeh" modified="200708101901" created="200708101900" changecount="2">
+<pre>I (cehteh) just paste my configs and give very few hints here, refer to the gpg manpage, the gpg documentation, google or ask on IRC for details. Maybe you improve this.
+
+First of all you need to install gpg and generate your keypair if you don't have done that already. generating keys is done with {{{gpg --gen-key}}} refer to the manpage for details.
+
+Be very careful that your private key has a **GOOD** passphrase and be kept secret.
+
+Configuration files are in {{{~/.gnupg}}}
+
+Here are the things I have in my {{{~/.gnupg/gpg.conf}}} (there are a lot of comments too, which I leave out here, instead I add some notes as comments)
+{{{
+no-greeting
+
+# enter your keyid AC4F4FF4 is mine!
+default-key AC4F4FF4
+
+force-v3-sigs
+
+compress-algo 1
+
+# you can add alternative keyservers
+keyserver hkp://subkeys.pgp.net
+#keyserver blackhole.pca.dfn.de
+
+# to let gpg automatically download public keys from the net, makes usage much easier
+keyserver-options auto-key-retrieve
+
+# using a gpg agent makes usage easier too, but you should only use it on a personal computer
+use-agent
+}}}
+
+
+when you want to use the gpg agent you need to add following line to your {{{~/.bash_profile}}} to start the agent on login:
+{{{
+eval $(gpg-agent --daemon)
+}}}
+
+
+further you need to add following lines to your {{{~/.bash_logout}}} to stop the agent when logging off:
+{{{
+if test &quot;$GPG_AGENT_INFO&quot;; then
+        kill -TERM $(echo $GPG_AGENT_INFO | sed -s 's/.*:\(.*\):.*/\1/')
+fi
+}}}
+
+further the gpg agent needs some configuration in {{{~/.gnupg/gpg-agent.conf}}}:
+{{{
+pinentry-program /usr/bin/pinentry-gtk-2
+no-grab
+default-cache-ttl 1209600
+max-cache-ttl 1209600
+}}}
+
+Note that I am using very long timeouts, refer to the manual about its implications or leave the defaults.
+
+</pre>
 </div>
 <div title="PageTemplate" modifier="Ichthyostega" modified="200706260504" created="200701131624" tags="MPTWTheme excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110330" changecount="1">
 <pre>&lt;!--{{{--&gt;
@@ -2296,8 +2390,8 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
 }
 //}}}</pre>
 </div>
-<div title="SrcTreeStructure" modifier="CehTeh" modified="200706270059" created="200706262157" changecount="2">
-<pre>* add a 'DIR_INFO' file to each marginally important directory. The first line should give a short abstract about this dir (40 characters, not more), following lines can give more precise information. There is a 'admin/treeinfo.sh' script which generates a texual overview of the directory tree.
+<div title="SrcTreeStructure" modifier="CehTeh" modified="200706270059" created="200706262157" tags="organization" changecount="2">
+<pre>* add a ''~DIR_INFO'' file to each marginally important directory. The first line should give a short abstract about this dir (40 characters, not more), following lines can give more precise information. There is a 'admin/treeinfo.sh' script which generates a texual overview of the directory tree.
 </pre>
 </div>
 <div title="StyleSheet" modifier="Ichthyostega" modified="200706260503" created="200701131624" tags="MPTWTheme excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706090017" changecount="1">
@@ -3492,12 +3586,27 @@ function addKeyDownHandlers(e)
  * see GettingStarted
  * see [[Homepage|http://tiddlywiki.com]]</pre>
 </div>
-<div title="whatInBOUML" modifier="Ichthyostega" created="200706260559" changecount="1">
-<pre>The question to find out about is: how much of the coding to do with the help of BOUML. Basically, BOUML is capable to permanently support the coding; you can define all entities, fields and methods in the UML model an just develope the method bodies //conventionally// with a text editor. 
+<div title="whatInBOUML" modifier="Ichthyostega" modified="200708051535" created="200706260559" tags="discuss policy" changecount="3">
+<pre>The question to find out about is: how much of the coding to do with the help of BOUML. Basically, BOUML is capable to permanently support the coding; you can define all entities, fields and methods in the UML model an just develop the method bodies //conventionally// with a text editor. 
 
-__Ichthyo__ tends to be seceptical about this aproach. While it probably will work, it is questionable if it will result in &amp;raquo;good code&amp;laquo; the fear is, that this rigid hierarchical structure distracts from the more complex semantical concerns.
+__Ichthyo__ tends to be sceptical about this approach. While it probably will work, it is questionable if it will result in &amp;raquo;good code&amp;laquo; the fear is, that this rigid hierarchical structure distracts from the more complex semantical concerns.
 
-Another aproach could be to use BOUML just to create the basic structures and from this point on rather utilizing it for technical documentation.</pre>
+Another approach could be to use BOUML just to create the basic structures and from this point on rather utilizing it for technical documentation.
+
+!!After some use
+After having used BOUML now (August 07) to some extent, Ichthyo notes down his observation:
+# __Assessment__
+#* it is fast, rock stable and complete up to a medium requirement level.
+#* the drawing functions are just basic and insufficient for corporate level demands, just enough for creating design drafts
+#* I miss real world round trip capabilities. Basically, it works fine as long as BOUML is the primary programming environment
+# __Benefits__: setting up new Entities together with all relations and the most important operations is very fast and convienient with bouml. You can get a fairly complete and consistent skeleton of some subsystem much more rapidly than when creating classes from templates in a normal IDE
+# __Drawbacks__: For fleshing out more implementation centric parts, it is seriousely lacking expressiveness, as far as C++ is concerned. This is partially due to the nature of UML. As a warning example, look at the source code of BOUML together with it's  &quot;plugouts&quot;. It has about 250kLOC, several thousand source files, most of this caused by duplicating whole class hierarchies, set up in a classificatory manner (which is a big no-no for most modern object oriented programming styles).
+
+!!!conclusion
+I want to try out the following aproach
+*use it for reasoning about structure
+*use it for setting up all new major entities
+*don't use it for //real programming//</pre>
 </div>
 </div>
 <!--POST-STOREAREA-->

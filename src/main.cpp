@@ -21,11 +21,14 @@
 */
 
 
+#include <iostream>
 
-#include <stdio.h>
+#include "cinelerra.h"
 
-int main(int argc, char* argv[])
+using std::cout;
+
+int main (int argc, char* argv[])
   {
-    printf("hello cinelerra again\n");
+    cout << "hello cinelerra again\n";
     return 0;
   }

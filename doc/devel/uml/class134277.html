@@ -16,13 +16,12 @@
 <!-- ============================================================= -->
 
 <a name="refclass134277"></a>
-<p>Declaration :</p><ul><li>C++ : class SegmentationTool : public <a href="class134149.html#refclass134149"><b>Tool</b></a> </li></ul><div class="sub">
+<p>Declaration :</p><ul><li>C++ : class SegmentationTool : public <a href="class134149.html#refclass134149"><b>Tool</b></a> </li></ul><p>Tool implementation for deriving a partitioning of the current timeline such, that each segement has a constant configuration. "Constant" means here, that any remaining changes over time can be represented by automation solely, without the need to change the node connections.<br /></p><p>Artifact : <a href="index.html#refartifact131333"><b>segmentationtool</b></a></p><div class="sub">
 <a name="refoperation129925"></a>
-<table><tr><td><div class="element">Operation <b>treat</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + treat(inout something : <a href="class134021.html#refclass134021"><b>Buildable</b></a>) : </li><li>C++ : public:  treat()</li></ul><a name="refoperation130181"></a>
-<table><tr><td><div class="element">Operation <b>treat</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + treat(inout clip : <a href="class128901.html#refclass128901"><b>Clip</b></a>) : </li><li>C++ : public:  treat()</li></ul><a name="refoperation130053"></a>
-<table><tr><td><div class="element">Operation <b>treat</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + treat(inout effect : <a href="class129029.html#refclass129029"><b>Effect</b></a>) : </li><li>C++ : public:  treat()</li></ul><a name="refattribute129669"></a>
-<table><tr><td><div class="element">Attribut <b>segments</b></div></td></tr></table>
-<p>Declaration :</p><ul><li>Uml : - segments : </li><li>C++ : private:  segments</li></ul><p>holds the segemntation to be constructed<br /></p></div>
+<table><tr><td><div class="element">Operation <b>treat</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + treat(in something : <a href="class134021.html#refclass134021"><b>Buildable</b></a>) : void</li><li>C++ : public: void treat (const <a href="class134021.html#refclass134021"><b>Buildable</b></a>&amp; something) </li></ul><a name="refoperation130181"></a>
+<table><tr><td><div class="element">Operation <b>treat</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + treat(in clip : <a href="class128901.html#refclass128901"><b>Clip</b></a>) : void</li><li>C++ : public: void treat (const <a href="class128901.html#refclass128901"><b>Clip</b></a>&amp; clip) </li></ul><a name="refoperation130053"></a>
+<table><tr><td><div class="element">Operation <b>treat</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + treat(in effect : <a href="class129029.html#refclass129029"><b>Effect</b></a>) : void</li><li>C++ : public: void treat (const <a href="class129029.html#refclass129029"><b>Effect</b></a>&amp; effect) </li></ul><a name="refrelation139013"></a>
+<table><tr><td><div class="element">Relation <b>segments (&lt;directional aggregation by value&gt;)</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : # segments : <a href="class135173.html#refclass135173"><b>Segment</b></a>, multiplicity : *</li><li>C++ : protected: list&lt;<a href="class135173.html#refclass135173"><b>Segment</b></a>&gt; segments</li></ul><p>the partitioning of the Timeline to be created by this tool.<br /></p></div>
 <p>All public operations : <a href="class134277.html#refoperation129925"><b>treat</b></a> , <a href="class134277.html#refoperation130181"><b>treat</b></a> , <a href="class134277.html#refoperation130053"><b>treat</b></a> , <a href="class134149.html#refoperation129797"><b>treat</b></a> </p>
 </body>
 </html>

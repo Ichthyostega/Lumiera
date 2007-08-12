@@ -1,6 +1,6 @@
-format 38
+format 40
 "session" // design::codegen::proc::mobject::session
-  revision 3
+  revision 6
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -8,7 +8,7 @@ format 38
   //use case diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
   //collaboration diagram settings
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
   //object diagram settings
@@ -29,7 +29,7 @@ format 38
   stereotype "src"
   cpp_h_dir "proc/mobject/session"
   cpp_src_dir "proc/mobject/session"
-  cpp_namespace "session"
+  cpp_namespace "mobject::session"
   comment "sourcecode package
 
 Everything concerning the EDL and Session, within the MObject Subsystem"
@@ -74,6 +74,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 128005 // Session
       end
+      comment "holds the complete session to be edited by the user"
     end
 
     artifact 128645 "edl"
@@ -112,6 +113,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 128133 // EDL
       end
+      comment "the (high level) Edit Decision List within the current Session"
     end
 
     artifact 128773 "fixture"
@@ -150,6 +152,51 @@ ${namespace_end}"
       associated_classes
 	class_ref 128261 // Fixture
       end
+      comment "the (low level) representation of the EDL with concrete placement data"
+    end
+
+    artifact 135045 "segment"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 135173 // Segment
+      end
+      comment "Segment of the Timeline.
+Used at the moment (7/07) for partitioning the timeline/fixture into segments
+to be rendered by a specialized render node network for each, without the need
+to change any connections within a given segment. 
+Note this concept may be superfluos alltogether; is a draft and the real
+use still needs to be worked out..."
     end
 
     artifact 128901 "track"
@@ -188,6 +235,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 128389 // Track
       end
+      comment "descriptor for one track in the Session"
     end
 
     artifact 129285 "abstractmo"
@@ -226,6 +274,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 128773 // AbstractMO
       end
+      comment "abstract base class for all Media Objects"
     end
 
     artifact 129413 "clip"
@@ -264,6 +313,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 128901 // Clip
       end
+      comment "a Media Clip"
     end
 
     artifact 129541 "effect"
@@ -302,6 +352,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 129029 // Effect
       end
+      comment "EDL representation of a pluggable and automatable effect."
     end
 
     artifact 129669 "meta"
@@ -340,6 +391,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 129157 // Meta
       end
+      comment "abstract base class of all MObjects representing meta data or processing instructions"
     end
 
     artifact 129797 "fixedplacement"
@@ -416,6 +468,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 129413 // RelativePlacement
       end
+      comment "Placement implemnetaion providing various ways of attaching a MObject to another one"
     end
 
     artifact 130053 "allocation"
@@ -530,6 +583,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 129925 // Auto
       end
+      comment "Media Object holding automation data"
     end
   end
 end

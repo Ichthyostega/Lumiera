@@ -17,9 +17,9 @@
 
 <a name="refclass134149"></a>
 <p>Declaration :</p><ul><li>C++ : class Tool </li><li>Java : public interface Tool </li></ul><p>Directly inherited by : <a href="class134405.html#refclass134405"><b>NodeCreatorTool</b></a> <a href="class134277.html#refclass134277"><b>SegmentationTool</b></a> </p>
-<div class="sub">
+<p>Used according to the visitor pattern: each Tool contains the concrete implementation for one task to be done to the various MObject classes<br /></p><p>Artifact : <a href="index.html#refartifact131205"><b>tool</b></a></p><div class="sub">
 <a name="refoperation129797"></a>
-<table><tr><td><div class="element">Operation <b>treat</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + treat(inout mElement : <a href="class134021.html#refclass134021"><b>Buildable</b></a>) : </li><li>C++ : public:  treat()</li></ul></div>
+<table><tr><td><div class="element">Operation <b>treat</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + treat(in mElement : <a href="class134021.html#refclass134021"><b>Buildable</b></a>) : void</li><li>C++ : public: void treat (const <a href="class134021.html#refclass134021"><b>Buildable</b></a>&amp; mElement) </li></ul><p>This operation is to be overloaded for the specific MObject subclasses to be treated.<br /></p></div>
 <p>All public operations : <a href="class134149.html#refoperation129797"><b>treat</b></a> </p>
 </body>
 </html>

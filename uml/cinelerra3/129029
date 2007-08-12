@@ -1,6 +1,6 @@
 format 38
-"Controller" // MObject::Controller
-  revision 3
+"Controller" // ProcessingLayer::MObject::Controller
+  revision 5
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -117,8 +117,9 @@ format 38
 
     class 130309 "ControllerFacade"
       visibility public stereotype "boundary"
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -127,25 +128,31 @@ ${members}};
 "
       explicit_switch_type ""
       
+      comment "Provides unified access to the Proc-Subsystem Controller. Especially, this Facade class provides the functions to get a render engine to carry out actual renderings."
     end
 
     class 130437 "PathManager"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
       idl_decl ""
       explicit_switch_type ""
       
+      comment "While building a render engine, this Strategy class decides on the actual render strategy in accordance to the current controller settings (system state)"
       operation 128261 "buildProcessor"
-	public explicit_return_type ""
+	public return_type class_ref 131461 // Processor
 	nparams 0
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
@@ -154,21 +161,26 @@ ${inlines}
 
     class 130949 "RenderState"
       visibility protected 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
       idl_decl ""
       explicit_switch_type ""
       
+      comment "Encapsulates the logic used to get a \"current render process\" in accordance to the currentyl applicable controller settings. The provided StateProxy serves to hold any mutalbe state used in the render process, so the rest of the render engine can be stateless."
       operation 128389 "getStateProxy"
-	public explicit_return_type ""
+	public return_type class_ref 132741 // StateProxy
 	nparams 0
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
