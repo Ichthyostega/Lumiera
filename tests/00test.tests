@@ -1,0 +1,8 @@
+
+TESTING "test system selftest" cat
+
+TEST "test" <<END
+in: foo
+out: foo
+return: 0
+END

@@ -1,5 +1,6 @@
 #  Copyright (C)         CinelerraCV
 #    2007,               Christian Thaeter <ct@pipapo.org>
+#                        Hermann Vosseler <Ichthyostega@web.de>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -15,31 +16,8 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-bin_PROGRAMS =
-lib_LTLIBRARIES =
-noinst_PROGRAMS =
-noinst_LIBRARIES =
-noinst_LTLIBRARIES =
-noinst_HEADERS =
-BUILT_SOURCES =
-EXTRA_DIST =
-SUBDIRS =
+tests_srcdir = $(top_srcdir)/tests
 
-# Only use subdirs if really needed, prefer the include scheme below
-#SUBDIRS +=
+noinst_PROGRAMS +=
 
-# core
-include $(top_srcdir)/src/lib/Makefile.am
-
-# plugins
-#include $(top_srcdir)/src...
-
-# tests
-include $(top_srcdir)/tests/Makefile.am
-include $(top_srcdir)/tests/examples/Makefile.am
-
-#EXTRA_DIST += admin debian doc depcomp README.BUILD LICENSE \
-#	cinelerra-cvs-current.spec
-AUTOMAKE_OPTIONS=foreign
-#ACLOCAL_AMFLAGS = -I m4
-
+TESTS = $(tests_srcdir)/test.sh
