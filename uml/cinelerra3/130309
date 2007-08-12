@@ -1,6 +1,6 @@
-format 38
+format 40
 "engine" // design::codegen::proc::engine
-  revision 3
+  revision 8
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -8,7 +8,7 @@ format 38
   //use case diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
   //collaboration diagram settings
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
   //object diagram settings
@@ -74,6 +74,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 131333 // RenderEngine
       end
+      comment "a complete network of processing nodes usable for rendering"
     end
 
     artifact 132101 "processor"
@@ -112,6 +113,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 131461 // Processor
       end
+      comment "a single render pipeline for one segment of the timeline"
     end
 
     artifact 132229 "exitnode"
@@ -150,6 +152,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 131589 // ExitNode
       end
+      comment "special Processing Node providing \"pullable\" output"
     end
 
     artifact 132357 "procnode"
@@ -174,7 +177,7 @@ ${namespace_end}
 #endif
 "
       cpp_src "/*
-  ${Name}  -  ${description}
+  ${NAME}  -  ${description}
 @{CopyrightClaim}@{GPLHeader}
 * *****************************************************/
 
@@ -188,6 +191,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 131717 // ProcNode
       end
+      comment "Key abstraction of the Render Engine: a Processing Node"
     end
 
     artifact 132485 "trafo"
@@ -226,9 +230,10 @@ ${namespace_end}"
       associated_classes
 	class_ref 131845 // Trafo
       end
+      comment "transforming processing Node "
     end
 
-    artifact 132613 "pipe"
+    artifact 132613 "link"
       stereotype "source"
       cpp_h "/*
   ${NAME}.hpp  -  ${description}
@@ -264,6 +269,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 131973 // Link
       end
+      comment "forwarding, adapting or connecting ProcNode"
     end
 
     artifact 132741 "hub"
@@ -302,6 +308,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 132101 // Hub
       end
+      comment "special ProcNode used to build data distributing connections"
     end
 
     artifact 132869 "projector"
@@ -340,6 +347,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 132229 // Projector
       end
+      comment "video ProcNode for scaling and translating image data"
     end
 
     artifact 132997 "mask"
@@ -378,6 +386,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 132357 // Mask
       end
+      comment "Video ProcNode for masking regions of the image (automatable)"
     end
 
     artifact 133125 "pluginadapter"
@@ -416,9 +425,10 @@ ${namespace_end}"
       associated_classes
 	class_ref 132485 // PluginAdapter
       end
+      comment "Adapter for integrating various Effect processors in the render pipeline"
     end
 
-    artifact 133253 "openglpipe"
+    artifact 134917 "codecadapter"
       stereotype "source"
       cpp_h "/*
   ${NAME}.hpp  -  ${description}
@@ -452,8 +462,48 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 132613 // OpenGLPipe
+	class_ref 135045 // CodecAdapter
       end
+      comment "Processing Node for (de)coding media data"
+    end
+
+    artifact 133253 "glpipe"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 132613 // GLPipe
+      end
+      comment "specialized connection element for handling OpenGL implementation details"
     end
 
     artifact 133381 "arender"
@@ -492,6 +542,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 132869 // ARender
       end
+      comment "Representation of a Audio Render process"
     end
 
     artifact 133509 "vrender"
@@ -530,6 +581,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 132997 // VRender
       end
+      comment "Representation of a Video render process"
     end
 
     artifact 133637 "glrender"
@@ -568,6 +620,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 133125 // GLRender
       end
+      comment "Representation of a OpenGL accellerated Video render process"
     end
 
     artifact 133893 "aframe"
@@ -606,6 +659,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 133381 // AFrame
       end
+      comment "a buffer and render process holding a Audio frame"
     end
 
     artifact 134021 "vframe"
@@ -644,6 +698,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 133509 // VFrame
       end
+      comment "a buffer and render process holding a Video frame"
     end
 
     artifact 134149 "glbuf"
@@ -682,6 +737,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 133637 // GLBuf
       end
+      comment "a buffer and render process holding a Video frame for OpenGL rendering"
     end
 
     artifact 134277 "source"
@@ -720,6 +776,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 133765 // Source
       end
+      comment "Representation of a Media source"
     end
   end
 end

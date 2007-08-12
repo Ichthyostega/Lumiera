@@ -1,13 +1,9 @@
-window_sizes 1140 830 270 860 631 120
-diagrams
-  active  deploymentdiagram_ref 129797 // Source Overview
-    688 606 100 4 0 0
-end
+window_sizes 1104 756 270 824 557 120
 show_stereotypes
-selected artifact_ref 128005 // Cinelerra3
+selected 
+package_ref 129 // cinelerra3
 open
-  artifact_ref 128005 // Cinelerra3
-  classview_ref 128645 // Service Components
+  
+package_ref 129669 // proc
 end
 end
-verbose

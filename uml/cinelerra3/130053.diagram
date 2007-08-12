@@ -1,0 +1,135 @@
+format 40
+
+packagecanvas 128005 
+  package_ref 129413 // common
+   show_context_mode namespace color lightblue  xyzwh 689 3 1994 277 166
+note 128389 "namespace"
+  xyzwh 709 29 2010 86 36
+packagecanvas 128517 
+  package_ref 129669 // proc
+   show_context_mode namespace color lightblue  xyzwh 62 107 1994 310 200
+note 128645 "namespace"
+  xyzwh 81 141 2005 85 35
+componentcanvas 128901 component_ref 129541 // ControllerFacade
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 183 219 2005 156 63
+packagecanvas 129157 
+  package_ref 130181 // mobject
+   show_context_mode namespace  xyzwh 16 370 1965 946 835
+packagecanvas 129285 
+  package_ref 130437 // session
+   show_context_mode namespace  xyzwh 503 439 1980 440 296
+packagecanvas 129413 
+  package_ref 130693 // controller
+   show_context_mode namespace  xyzwh 41 428 1990 385 315
+componentcanvas 129541 component_ref 128261 // Controller
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 88 546 2010 151 63
+arrowjunctioncanvas 131973 class_ref 130565 // BuilderFacade
+  xyz 316 456 2000 label_xy 230 507
+arrowjunctioncanvas 132229 class_ref 130565 // BuilderFacade
+  xyz 313 344 2000 label_xy 239 327
+packagecanvas 132485 
+  package_ref 130565 // builder
+   show_context_mode namespace  xyzwh 36 770 1970 465 385
+componentcanvas 132869 component_ref 129925 // CommonLib
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 789 89 2005 156 63
+arrowjunctioncanvas 132997 class_ref 134917 // Time
+  xyz 830 211 2000 label_xy 828 233
+arrowjunctioncanvas 133253 class_ref 130309 // ControllerFacade
+  xyz 480 158 2000 label_xy 448 179
+componentcanvas 133509 component_ref 128133 // Session
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 694 526 2005 156 63
+arrowjunctioncanvas 134533 class_ref 128133 // EDL
+  xyz 591 603 2000 label_xy 590 624
+arrowjunctioncanvas 134789 class_ref 128261 // Fixture
+  xyz 596 639 2000 label_xy 589 660
+arrowjunctioncanvas 135045 class_ref 128517 // MObject
+  xyz 610 798 2000 label_xy 601 819
+arrowjunctioncanvas 135301 class_ref 134661 // ParamProvider
+  xyz 684 1094 2000 label_xy 658 1115
+componentcanvas 135685 component_ref 128005 // Builder
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 136 954 2005 151 63
+arrowjunctioncanvas 135813 class_ref 128005 // Session
+  xyz 571 765 2000 label_xy 562 787
+arrowjunctioncanvas 136197 class_ref 132741 // StateProxy
+  xyz 535 978 2000 label_xy 517 999
+arrowjunctioncanvas 136453 class_ref 128005 // Session
+  xyz 526 801 2000 label_xy 517 823
+packagecanvas 136709 
+  package_ref 130309 // engine
+   show_context_mode namespace  xyzwh 16 1309 1994 561 265
+componentcanvas 136837 component_ref 128901 // Engine
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 103 1402 2005 156 63
+arrowjunctioncanvas 136965 class_ref 132741 // StateProxy
+  xyz 535 1224 2000 label_xy 517 1245
+componentcanvas 137349 component_ref 130053 // ProcNode
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 377 1494 2000 123 63
+arrowjunctioncanvas 137477 class_ref 134533 // Parameter
+  xyz 623 1379 2000 label_xy 607 1400
+arrowjunctioncanvas 137733 class_ref 134661 // ParamProvider
+  xyz 684 1368 2000 label_xy 658 1389
+componentcanvas 138373 component_ref 129797 // ConManager
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 136 1070 2005 156 63
+arrowjunctioncanvas 138501 class_ref 134661 // ParamProvider
+  xyz 586 1094 2000 label_xy 560 1115
+componentcanvas 138757 component_ref 129285 // RenderPathManager
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 89 644 2000 156 63
+arrowjunctioncanvas 138885 class_ref 130437 // PathManager
+  xyz 350 346 2000 label_xy 368 322
+arrowjunctioncanvas 139397 class_ref 130437 // PathManager
+  xyz 350 458 2000 label_xy 328 479
+arrowjunctioncanvas 140549 class_ref 128261 // Fixture
+  xyz 494 749 2000 label_xy 487 770
+line 132101 ---O
+  from ref 129541 z 1999 to point 301 541
+  line 139269 z 1999 to ref 131973
+line 132357 ---(
+  from ref 128901 z 1999 to point 321 311
+  line 139909 z 1999 to ref 132229
+line 133125 ---O
+  from ref 132869 z 1999 to ref 132997
+line 133381 ---O
+  from ref 128901 z 1999 to ref 133253
+line 134661 ---O
+  from ref 133509 z 1999 to ref 134533
+line 134917 ---O
+  from ref 133509 z 1999 to ref 134789
+line 135173 ---O
+  from ref 133509 z 1999 to ref 135045
+line 135429 ---O
+  from ref 133509 z 1999 to point 689 914
+  line 138245 z 1999 to ref 135301
+line 135941 ---O
+  from ref 133509 z 1999 to ref 135813
+line 136325 ---O
+  from ref 135685 z 1999 to ref 136197
+line 136581 ---(
+  from ref 135685 z 1999 to ref 136453
+line 137093 ---(
+  from ref 136837 z 1999 to point 540 1302
+  line 137221 z 1999 to ref 136965
+line 137605 ---O
+  from ref 137349 z 1999 to ref 137477
+line 137861 ---(
+  from ref 137349 z 1999 to point 689 1522
+  line 137989 z 1999 to ref 137733
+line 138629 ---(
+  from ref 138373 z 1999 to ref 138501
+line 139013 ---(
+  from ref 128901 z 1999 to point 355 289
+  line 139141 z 1999 to ref 138885
+line 139525 ---O geometry HV
+  from ref 138757 z 1999 to point 355 672
+  line 139781 z 1999 to ref 139397
+line 140677 ---(
+  from ref 135685 z 1999 to ref 140549
+preferred_whz 0 0 0.8
+end

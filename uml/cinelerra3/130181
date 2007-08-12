@@ -1,6 +1,6 @@
-format 38
+format 40
 "mobject" // design::codegen::proc::mobject
-  revision 3
+  revision 6
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -8,7 +8,7 @@ format 38
   //use case diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
   //collaboration diagram settings
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
   //object diagram settings
@@ -73,9 +73,9 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 134917 // Time
 	class_ref 128517 // MObject
       end
+      comment "Key Abstraction: A Media Object in the Session"
     end
 
     artifact 129029 "placement"
@@ -114,6 +114,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 128645 // Placement
       end
+      comment "Key Abstraction: a way to place and locate a Media Object"
     end
 
     artifact 129157 "explicitplacement"
@@ -152,6 +153,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 129797 // ExplicitPlacement
       end
+      comment "special Placement yielding an absolute location (Time,Track)-location for a MObject"
     end
 
     artifact 130437 "builderfacade"
@@ -190,6 +192,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 130565 // BuilderFacade
       end
+      comment "Facade and service access point for the Builder Subsystem"
     end
 
     artifact 131077 "buildable"
@@ -228,6 +231,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 134021 // Buildable
       end
+      comment "marker interface denoting any MObject able to be treated by Tools"
     end
 
     artifact 134405 "parameter"
@@ -266,6 +270,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 134533 // Parameter
       end
+      comment "representation of an automatable effect/plugin parameter"
     end
 
     artifact 134533 "paramprovider"
@@ -304,6 +309,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 134661 // ParamProvider
       end
+      comment "interface denoting a source for actual Parameter values"
     end
 
     artifact 134661 "interpolator"
@@ -342,6 +348,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 134789 // Interpolator
       end
+      comment "denotes a facility to get (continuously interpolated) parameter values"
     end
   end
 

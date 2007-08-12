@@ -1,107 +1,63 @@
-format 38
+format 40
 
 fragment 128005 "seq"
   xyzwh 176 409 1994 282 93
 end
-classinstance 128133 class_ref 128389 // Track
-  xyz 71 275 2000 name "audio1"
-end
-classinstance 128389 class_ref 129797 // ExplicitPlacement
-  xyz 222 423 2000 name ""
-  values
-    attribute_ref 128261 // time
-    "2"
-    attribute_ref 128389 // track
-    "video1"
-end
-classinstance 128645 class_ref 128389 // Track
-  xyz 72 330 2000 name "video1"
-end
-classinstance 128773 class_ref 128261 // Fixture
-  xyz 66 445 2000 name ""
-end
-classinstance 128901 class_ref 128901 // Clip
-  xyz 240 573 2000 name "vid_A"
-  values
-    attribute_ref 128517 // length
-    "5"
-    attribute_ref 128645 // start
-    "100"
-end
+classinstancecanvas 128133 classinstance_ref 128901 // audio1
+  xyz 71 275 2000
+  end
+classinstancecanvas 128389 classinstance_ref 129029 // 
+  xyz 223 423 2000
+  end
+classinstancecanvas 128645 classinstance_ref 129157 // video1
+  xyz 72 330 2000
+  end
+classinstancecanvas 128773 classinstance_ref 129285 // 
+  xyz 66 445 2000
+  end
+classinstancecanvas 128901 classinstance_ref 129413 // vid_A
+  xyz 239 573 2000
+  end
 fragment 129029 "seq"
   xyzwh 63 237 1994 94 155
 end
-classinstance 130309 class_ref 128133 // EDL
-  xyz 69 79 2000 name ""
-end
-classinstance 131333 class_ref 129669 // Label
-  xyz 224 70 2000 name "refPoint"
-  values
-    attribute_ref 128517 // length
-    "0"
-end
-classinstance 131461 class_ref 129541 // Allocation
-  xyz 230 158 2000 name ""
-  values
-    attribute_ref 128773 // repr
-    "\"t=2\""
-end
-classinstance 131717 class_ref 128901 // Clip
-  xyz 386 71 2000 name "vid_A"
-  values
-    attribute_ref 128517 // length
-    "5"
-    attribute_ref 128645 // start
-    "100"
-end
-classinstance 131845 class_ref 129413 // RelativePlacement
-  xyz 361 195 2000 name ""
-  values
-    attribute_ref 128133 // relType
-    "SAMETIME"
-end
-classinstance 132229 class_ref 129029 // Effect
-  xyz 562 71 2000 name ""
-  values
-    attribute_ref 128517 // length
-    "3"
-    attribute_ref 128901 // plugID
-    "\"Hue\""
-end
-classinstance 132357 class_ref 129413 // RelativePlacement
-  xyz 551 197 2000 name ""
-  values
-    attribute_ref 129029 // offset
-    "+3"
-    attribute_ref 128133 // relType
-    "ATTACH"
-end
+classinstancecanvas 130309 classinstance_ref 129541 // 
+  xyz 69 79 2000
+  end
+classinstancecanvas 131333 classinstance_ref 129669 // refPoint
+  xyz 224 70 2000
+  end
+classinstancecanvas 131461 classinstance_ref 129797 // 
+  xyz 230 158 2000
+  end
+classinstancecanvas 131717 classinstance_ref 129925 // vid_A
+  xyz 386 71 2000
+  end
+classinstancecanvas 131845 classinstance_ref 130053 // 
+  xyz 361 195 2000
+  end
+classinstancecanvas 132229 classinstance_ref 130181 // 
+  xyz 562 71 2000
+  end
+classinstancecanvas 132357 classinstance_ref 130309 // 
+  xyz 551 197 2000
+  end
 fragment 132869 "seq"
   xyzwh 172 46 1994 494 102
 end
-classinstance 132997 class_ref 129029 // Effect
-  xyz 354 573 2000 name ""
-  values
-    attribute_ref 128517 // length
-    "3"
-    attribute_ref 128901 // plugID
-    "\"Hue\""
-end
-classinstance 133125 class_ref 129797 // ExplicitPlacement
-  xyz 345 423 2000 name ""
-  values
-    attribute_ref 128261 // time
-    "5"
-    attribute_ref 128389 // track
-    "video1"
-end
+classinstancecanvas 132997 classinstance_ref 130437 // 
+  xyz 352 573 2000
+  end
+classinstancecanvas 133125 classinstance_ref 130565 // 
+  xyz 345 423 2000
+  end
 note 135941 "actually the same object"
   xyzwh 635 341 2004 148 41
 textcanvas 136197 "Video Clip anchored at a Label, with an attached HUE effect starting 3 frames after begin"
   xyzwh 524 565 2000 175 87
 objectlinkcanvas 129413 norel
   geometry HVr
-  from ref 128389 z 1999 to point 270 341
+  from ref 128389 z 1999 to point 269 341
   line 129541 z 1999 to ref 128645
   no_role_a no_role_b
 objectlinkcanvas 129797 norel
@@ -142,18 +98,18 @@ objectlinkcanvas 132741 norel
   no_role_a no_role_b
 objectlinkcanvas 133253 norel
   geometry HVr
-  from ref 133125 z 1999 to point 393 341
+  from ref 133125 z 1999 to point 391 341
   line 81 z 1999 to ref 128645
   no_role_a no_role_b
 objectlinkcanvas 133381 norel
   geometry VH
-  from ref 133125 z 1999 to point 393 606
+  from ref 133125 z 1999 to point 391 606
   line 81 z 1999 to ref 132997
   no_role_a no_role_b
 objectlinkcanvas 135685 rel relation_ref 128645 // <association>
   from ref 132997 z 1999 to point 600 432
   line 135813 z 1999 to ref 132357
-  role_a_pos 612 276 3000 role_b_pos 444 540 3000
+  role_a_pos 612 276 3000 role_b_pos 443 540 3000
 line 134149 -_-_
   from ref 131717 z 1993 to ref 132869
 line 134277 -_-_

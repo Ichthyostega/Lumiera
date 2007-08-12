@@ -1,17 +1,17 @@
 // "a type" "needed cpp_includes"
 "vector" "#include <vector>
 
-using namespace std;"
+using std::vector;"
 
 "list" "#include <list>
 
-using namespace std;"
+using std::list;"
 
 "map" "#include <map>
 
-using namespace std;"
+using std::map;"
 
 "string" "#include <string>
 
-using namespace std;"
+using std::string;"
 

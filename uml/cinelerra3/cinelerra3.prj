@@ -1,6 +1,6 @@
-format 38
+format 40
 "cinelerra3"
-  revision 21
+  revision 26
   modified_by 5 "hiv"
   cpp_root_dir "../../src/"
 
@@ -13,7 +13,7 @@ format 38
   //use case diagram settings
   package_name_in_tab no show_context no auto_label_position yes draw_all_relations yes shadow yes
   //sequence diagram settings
-  show_full_operations_definition no write_horizontally yes drawing_language uml draw_all_relations yes shadow yes
+  show_full_operations_definition no write_horizontally yes class_drawing_mode natural drawing_language uml draw_all_relations yes shadow yes
   //collaboration diagram settings
   show_full_operations_definition no show_hierarchical_rank no write_horizontally yes drawing_language uml package_name_in_tab no show_context no draw_all_relations yes shadow yes
   //object diagram settings
@@ -57,7 +57,7 @@ format 38
     2007,               Christian Thaeter <ct@pipapo.org>
 
 "
-  key "html dir" value "/home/ct/src/cinelerra3/doc/devel/uml/"
+  key "html dir" value "/mnt/Lager/heim/devel/cin3/doc/devel/uml/"
   key "" value ""
   package_ref 128005 // design
 

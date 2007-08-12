@@ -1,6 +1,6 @@
-format 38
+format 40
 "ProcessingLayer" // ProcessingLayer
-  revision 1
+  revision 3
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -8,7 +8,7 @@ format 38
   //use case diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
   //collaboration diagram settings
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
   //object diagram settings
@@ -31,4 +31,582 @@ format 38
   package_ref 128261 // MObject
 
   package_ref 128389 // RenderEngine
+
+  usecaseview 128005 "Renderengine Use"
+    //use case diagram settings
+    package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    objectdiagram 128773 "EDL Example1"
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      comment "A simple example showing how the actual objects are placed in the Fixture (=definitive playlist). It shows a Video and Audio clip placed on two tracks"
+      size A4
+    end
+
+    objectdiagram 128901 "EDL Example2"
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      comment "More complex example showing the Object graph in the EDL and how it is linked into the Fixture to yield the actual locations. In this example, an HUE Effect is applied on a part of the Clip"
+      size A4
+    end
+
+    objectdiagram 129029 "Engine Example1"
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      comment "Example1 (from EDL) continued: here the RenderEngine to be created by the Builder from the Input shown in Example1"
+      size A4
+    end
+
+    objectdiagram 129157 "Engine Example2"
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      comment "Example2 (from EDL) continued: notably in this RenderEngine the Effect has been partitioned into 2 segments with constant configuration."
+      size A4
+    end
+
+    classinstance 128005 ""
+      type class_ref 128261 // Fixture
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 128133 ""
+      type class_ref 129797 // ExplicitPlacement
+      attributes
+        attribute_ref 128261 // time
+          "2"
+        attribute_ref 128389 // track
+          "video1"
+        end
+      relations
+        end
+    end
+
+    classinstance 128261 ""
+      type class_ref 129797 // ExplicitPlacement
+      attributes
+        attribute_ref 128261 // time
+          "2"
+        attribute_ref 128389 // track
+          "audio1"
+        end
+      relations
+        end
+    end
+
+    classinstance 128389 "audio1"
+      type class_ref 128389 // Track
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 128517 "video1"
+      type class_ref 128389 // Track
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 128645 "vid_A"
+      type class_ref 128901 // Clip
+      attributes
+        attribute_ref 128517 // length
+          "5"
+        attribute_ref 128645 // start
+          "100"
+        end
+      relations
+        end
+    end
+
+    classinstance 128773 "aud_A"
+      type class_ref 128901 // Clip
+      attributes
+        attribute_ref 128517 // length
+          "8820"
+        attribute_ref 128645 // start
+          "176400"
+        end
+      relations
+        end
+    end
+
+    classinstance 128901 "audio1"
+      type class_ref 128389 // Track
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 129029 ""
+      type class_ref 129797 // ExplicitPlacement
+      attributes
+        attribute_ref 128261 // time
+          "2"
+        attribute_ref 128389 // track
+          "video1"
+        end
+      relations
+        end
+    end
+
+    classinstance 129157 "video1"
+      type class_ref 128389 // Track
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 129285 ""
+      type class_ref 128261 // Fixture
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 129413 "vid_A"
+      type class_ref 128901 // Clip
+      attributes
+        attribute_ref 128517 // length
+          "5"
+        attribute_ref 128645 // start
+          "100"
+        end
+      relations
+        end
+    end
+
+    classinstance 129541 ""
+      type class_ref 128133 // EDL
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 129669 "refPoint"
+      type class_ref 129669 // Label
+      attributes
+        attribute_ref 128517 // length
+          "0"
+        end
+      relations
+        end
+    end
+
+    classinstance 129797 ""
+      type class_ref 129541 // Allocation
+      attributes
+        attribute_ref 128773 // repr
+          "\"t=2\""
+        end
+      relations
+        end
+    end
+
+    classinstance 129925 "vid_A"
+      type class_ref 128901 // Clip
+      attributes
+        attribute_ref 128517 // length
+          "5"
+        attribute_ref 128645 // start
+          "100"
+        end
+      relations
+        relation_ref 128645 // <association>
+          classinstance_ref 130053 // 
+        end
+    end
+
+    classinstance 130053 ""
+      type class_ref 129413 // RelativePlacement
+      attributes
+        attribute_ref 128133 // relType
+          "SAMETIME"
+        end
+      relations
+        relation_ref 129925 // <unidirectional association>
+          classinstance_ref 129669 // refPoint
+        end
+    end
+
+    classinstance 130181 ""
+      type class_ref 129029 // Effect
+      attributes
+        attribute_ref 128517 // length
+          "3"
+        attribute_ref 128901 // plugID
+          "\"Hue\""
+        end
+      relations
+        relation_ref 128645 // <association>
+          classinstance_ref 130309 // 
+        end
+    end
+
+    classinstance 130309 ""
+      type class_ref 129413 // RelativePlacement
+      attributes
+        attribute_ref 129029 // offset
+          "+3"
+        attribute_ref 128133 // relType
+          "ATTACH"
+        end
+      relations
+        relation_ref 129925 // <unidirectional association>
+          classinstance_ref 129925 // vid_A
+        end
+    end
+
+    classinstance 130437 ""
+      type class_ref 129029 // Effect
+      attributes
+        attribute_ref 128517 // length
+          "3"
+        attribute_ref 128901 // plugID
+          "\"Hue\""
+        end
+      relations
+        relation_ref 128645 // <association>
+          classinstance_ref 130309 // 
+        end
+    end
+
+    classinstance 130565 ""
+      type class_ref 129797 // ExplicitPlacement
+      attributes
+        attribute_ref 128261 // time
+          "5"
+        attribute_ref 128389 // track
+          "video1"
+        end
+      relations
+        end
+    end
+
+    classinstance 130693 ""
+      type class_ref 131333 // RenderEngine
+      attributes
+        end
+      relations
+        relation_ref 131845 // <directional aggregation by value>
+          classinstance_ref 130949 // video1
+        end
+    end
+
+    classinstance 130821 "audio1"
+      type class_ref 131461 // Processor
+      attributes
+        attribute_ref 129541 // end
+          "7/25"
+        attribute_ref 129413 // start
+          "2/25"
+        end
+      relations
+        relation_ref 131973 // <unidirectional association>
+          classinstance_ref 131205 // audio
+        end
+    end
+
+    classinstance 130949 "video1"
+      type class_ref 131461 // Processor
+      attributes
+        attribute_ref 129541 // end
+          "7/25"
+        attribute_ref 129413 // start
+          "2/25"
+        end
+      relations
+        relation_ref 131973 // <unidirectional association>
+          classinstance_ref 131077 // video
+        end
+    end
+
+    classinstance 131077 "video"
+      type class_ref 131589 // ExitNode
+      attributes
+        end
+      relations
+        relation_ref 135429 // <unidirectional association>
+          classinstance_ref 131333 // ouput
+        end
+    end
+
+    classinstance 131205 "audio"
+      type class_ref 131589 // ExitNode
+      attributes
+        end
+      relations
+        relation_ref 135429 // <unidirectional association>
+          classinstance_ref 131845 // aud_a
+        end
+    end
+
+    classinstance 131333 "ouput"
+      type class_ref 132229 // Projector
+      attributes
+        end
+      relations
+        relation_ref 135429 // <unidirectional association>
+          classinstance_ref 131589 // 
+        end
+    end
+
+    classinstance 131461 "input"
+      type class_ref 132229 // Projector
+      attributes
+        end
+      relations
+        relation_ref 135429 // <unidirectional association>
+          classinstance_ref 131717 // vid_a
+        end
+    end
+
+    classinstance 131589 ""
+      type class_ref 132357 // Mask
+      attributes
+        end
+      relations
+        relation_ref 135429 // <unidirectional association>
+          classinstance_ref 131461 // input
+        end
+    end
+
+    classinstance 131717 "vid_a"
+      type class_ref 133765 // Source
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 131845 "aud_a"
+      type class_ref 133765 // Source
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 131973 "vid1"
+      type class_ref 132997 // VRender
+      attributes
+        end
+      relations
+        relation_ref 134533 // <unidirectional association>
+          classinstance_ref 132229 // 
+        end
+    end
+
+    classinstance 132101 "au1"
+      type class_ref 132869 // ARender
+      attributes
+        end
+      relations
+        relation_ref 134533 // <unidirectional association>
+          classinstance_ref 132357 // 
+        end
+    end
+
+    classinstance 132229 ""
+      type class_ref 133509 // VFrame
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 132357 ""
+      type class_ref 133381 // AFrame
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 132485 ""
+      type class_ref 131333 // RenderEngine
+      attributes
+        end
+      relations
+        relation_ref 131845 // <directional aggregation by value>
+          classinstance_ref 134277 // video1
+        end
+    end
+
+    classinstance 132613 "devnull"
+      type class_ref 133765 // Source
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 132741 "video"
+      type class_ref 131589 // ExitNode
+      attributes
+        end
+      relations
+        relation_ref 135429 // <unidirectional association>
+          classinstance_ref 133893 // HUE
+        end
+    end
+
+    classinstance 132869 "input"
+      type class_ref 132229 // Projector
+      attributes
+        end
+      relations
+        relation_ref 135429 // <unidirectional association>
+          classinstance_ref 134021 // vid_a
+        end
+    end
+
+    classinstance 132997 "video1"
+      type class_ref 131461 // Processor
+      attributes
+        attribute_ref 129541 // end
+          "8/25"
+        attribute_ref 129413 // start
+          "7/25"
+        end
+      relations
+        relation_ref 131973 // <unidirectional association>
+          classinstance_ref 132741 // video
+        end
+    end
+
+    classinstance 133125 "ouput"
+      type class_ref 132229 // Projector
+      attributes
+        end
+      relations
+        relation_ref 135429 // <unidirectional association>
+          classinstance_ref 133253 // HUE
+        end
+    end
+
+    classinstance 133253 "HUE"
+      type class_ref 132485 // PluginAdapter
+      attributes
+        end
+      relations
+        relation_ref 135429 // <unidirectional association>
+          classinstance_ref 132869 // input
+        end
+    end
+
+    classinstance 133381 "vid1"
+      type class_ref 132997 // VRender
+      attributes
+        end
+      relations
+        relation_ref 134533 // <unidirectional association>
+          classinstance_ref 133509 // 
+        end
+    end
+
+    classinstance 133509 ""
+      type class_ref 133509 // VFrame
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 133637 "video1"
+      type class_ref 131461 // Processor
+      attributes
+        attribute_ref 129541 // end
+          "7/25"
+        attribute_ref 129413 // start
+          "5/25"
+        end
+      relations
+        relation_ref 131973 // <unidirectional association>
+          classinstance_ref 133765 // video
+        end
+    end
+
+    classinstance 133765 "video"
+      type class_ref 131589 // ExitNode
+      attributes
+        end
+      relations
+        relation_ref 135429 // <unidirectional association>
+          classinstance_ref 133125 // ouput
+        end
+    end
+
+    classinstance 133893 "HUE"
+      type class_ref 132485 // PluginAdapter
+      attributes
+        end
+      relations
+        relation_ref 135429 // <unidirectional association>
+          classinstance_ref 132613 // devnull
+        end
+    end
+
+    classinstance 134021 "vid_a"
+      type class_ref 133765 // Source
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 134149 "input"
+      type class_ref 132229 // Projector
+      attributes
+        end
+      relations
+        relation_ref 135429 // <unidirectional association>
+          classinstance_ref 134021 // vid_a
+        end
+    end
+
+    classinstance 134277 "video1"
+      type class_ref 131461 // Processor
+      attributes
+        attribute_ref 129541 // end
+          "5/25"
+        attribute_ref 129413 // start
+          "2/25"
+        end
+      relations
+        relation_ref 131973 // <unidirectional association>
+          classinstance_ref 134533 // video
+        end
+    end
+
+    classinstance 134405 "ouput"
+      type class_ref 132229 // Projector
+      attributes
+        end
+      relations
+        relation_ref 135429 // <unidirectional association>
+          classinstance_ref 134149 // input
+        end
+    end
+
+    classinstance 134533 "video"
+      type class_ref 131589 // ExitNode
+      attributes
+        end
+      relations
+        relation_ref 135429 // <unidirectional association>
+          classinstance_ref 134405 // ouput
+        end
+    end
+  end
 end

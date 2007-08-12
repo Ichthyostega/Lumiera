@@ -60,7 +60,7 @@ def srcSubtree(env,tree,isShared=False, **args):
 
 
 
-SRCPATTERNS = ['*.c','*.Cpp','*.cc']
+SRCPATTERNS = ['*.c','*.cpp','*.cc']
 
 def scanSrcSubtree(root):
     """ scan the given subtree for source filesnames 

@@ -1,4 +1,4 @@
-format 38
+format 40
 
 artifactcanvas 128005 artifact_ref 128005 // Cinelerra3
   color midred
@@ -36,8 +36,6 @@ packagecanvas 129285
 artifactcanvas 129413 artifact_ref 128133 // main
   color lightred
   xyz 281 45 2020
-iconcanvas 131077 deploymentdiagram_ref 129925 // src
-  xyz 201 159 2005
 containcanvas 129797
   from ref 128005 z 1999 to ref 129413
 simplerelationcanvas 130053 simplerelation_ref 128517 geometry VH

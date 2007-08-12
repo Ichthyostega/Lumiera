@@ -1,6 +1,6 @@
-format 38
-"RenderEngine" // RenderEngine
-  revision 7
+format 40
+"RenderEngine" // ProcessingLayer::RenderEngine
+  revision 10
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -8,7 +8,7 @@ format 38
   //use case diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
   //collaboration diagram settings
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
   //object diagram settings
@@ -63,7 +63,7 @@ format 38
     //object diagram settings
      write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
     //sequence diagram settings
-    show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
     //state diagram settings
     package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
     show_activities default region_horizontally default drawing_language default
@@ -77,18 +77,6 @@ format 38
       size A4
     end
 
-    objectdiagram 129029 "Engine Example1"
-       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
-      comment "Example1 (from EDL) continued: here the RenderEngine to be created by the Builder from the Input shown in Example1"
-      size A4
-    end
-
-    objectdiagram 129157 "Engine Example2"
-       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
-      comment "Example2 (from EDL) continued: notably in this RenderEngine the Effect has been partitioned into 2 segments with constant configuration."
-      size A4
-    end
-
     classdiagram 129669 "Automation Entities"
       draw_all_relations default hide_attributes default hide_operations default show_members_full_definition yes show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
       size A4
@@ -96,8 +84,9 @@ format 38
 
     class 131333 "RenderEngine"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -105,21 +94,26 @@ ${inlines}
       explicit_switch_type ""
       
       operation 129413 "play"
-	public explicit_return_type ""
+	public explicit_return_type "void"
 	nparams 0
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
 "
 	
 	
+	comment "TODO: will probably be handled differently (see Cehteh)"
       end
 
       classrelation 132485 // renderSegments (<directional aggregation by value>)
 	relation 131845 *-->
+	  stereotype "list"
 	  a role_name "renderSegments" multiplicity "0..*" private
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
 "
 	    classrelation_ref 132485 // renderSegments (<directional aggregation by value>)
 	  b multiplicity "1" parent class_ref 131461 // Processor
@@ -136,8 +130,9 @@ ${inlines}
 
     class 131461 "Processor"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -164,7 +159,7 @@ ${inlines}
       end
 
       attribute 129413 "start"
-	protected explicit_type "long"
+	protected type class_ref 134917 // Time
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
@@ -173,7 +168,7 @@ ${inlines}
       end
 
       attribute 129541 "end"
-	protected explicit_type "long"
+	protected type class_ref 134917 // Time
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
@@ -184,14 +179,16 @@ ${inlines}
 
     class 131589 "ExitNode"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
       idl_decl ""
       explicit_switch_type ""
       
+      comment "The output of the render pipeline. Pulling from such exit nodes actually ivokes the render process"
       classrelation 132869 // <generalisation>
 	relation 132101 ---|>
 	  a public
@@ -203,8 +200,9 @@ ${inlines}
 
     class 131717 "ProcNode"
       abstract visibility public stereotype "interface"
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl "${comment}${@}${visibility}interface ${name}${extends} {
@@ -215,6 +213,7 @@ ${members}};
 "
       explicit_switch_type ""
       
+      comment "Key abstraction of the Render Engine: A Data processing Node"
       classrelation 136965 // datasrc (<unidirectional association>)
 	relation 135429 --->
 	  a role_name "datasrc" multiplicity "" protected
@@ -225,20 +224,22 @@ ${members}};
 	  b multiplicity "1" parent class_ref 131717 // ProcNode
       end
 
-      classrelation 137861 // <directional aggregation by value>
+      classrelation 137861 // params (<directional aggregation by value>)
 	relation 136197 *-->
-	  a role_name "" multiplicity "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+	  stereotype "vector"
+	  a role_name "params" multiplicity "1..*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
 "
-	    classrelation_ref 137861 // <directional aggregation by value>
+	    classrelation_ref 137861 // params (<directional aggregation by value>)
 	  b multiplicity "" parent class_ref 134533 // Parameter
       end
     end
 
     class 131845 "Trafo"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -256,8 +257,9 @@ ${inlines}
 
     class 131973 "Link"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -275,8 +277,9 @@ ${inlines}
 
     class 132101 "Hub"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -294,14 +297,16 @@ ${inlines}
 
     class 132229 "Projector"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
       idl_decl ""
       explicit_switch_type ""
       
+      comment "Special video processing node used to scale and translate image data."
       classrelation 133509 // <generalisation>
 	relation 132741 ---|>
 	  a public
@@ -313,8 +318,9 @@ ${inlines}
 
     class 132357 "Mask"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -332,14 +338,16 @@ ${inlines}
 
     class 132485 "PluginAdapter"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
       idl_decl ""
       explicit_switch_type ""
       
+      comment "Adapter used to integrage an effects processor in the render pipeline"
       classrelation 133765 // <generalisation>
 	relation 132997 ---|>
 	  a public
@@ -349,16 +357,38 @@ ${inlines}
       end
     end
 
-    class 132613 "OpenGLPipe"
+    class 135045 "CodecAdapter"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
       idl_decl ""
       explicit_switch_type ""
       
+      classrelation 138757 // <generalisation>
+	relation 136965 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 138757 // <generalisation>
+	  b multiplicity "" parent class_ref 131845 // Trafo
+      end
+    end
+
+    class 132613 "GLPipe"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "specialized connection node used to handle the transfer of OpenGL data from a image bitmap into texture form"
       classrelation 133381 // <generalisation>
 	relation 132613 ---|>
 	  a public
@@ -370,14 +400,16 @@ ${inlines}
 
     class 132869 "ARender"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
       idl_decl ""
       explicit_switch_type ""
       
+      comment "Representation of a Audio render process"
       classrelation 134661 // <generalisation>
 	relation 133509 ---|>
 	  a public
@@ -389,14 +421,16 @@ ${inlines}
 
     class 132997 "VRender"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
       idl_decl ""
       explicit_switch_type ""
       
+      comment "Representation of a Video render process. (Encapsulates the video buffers for the actual calculations)"
       classrelation 134789 // <generalisation>
 	relation 133637 ---|>
 	  a public
@@ -408,14 +442,16 @@ ${inlines}
 
     class 133125 "GLRender"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
       idl_decl ""
       explicit_switch_type ""
       
+      comment "Representation of a OpenGL accelerated Video render process"
       classrelation 134917 // <generalisation>
 	relation 133765 ---|>
 	  a public
@@ -426,9 +462,10 @@ ${inlines}
     end
 
     class 133253 "Frame"
-      visibility package stereotype "interface"
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      abstract visibility public stereotype "interface"
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl "${comment}${@}${visibility}interface ${name}${extends} {
@@ -439,12 +476,15 @@ ${members}};
 "
       explicit_switch_type ""
       
+      comment "TODO: how to relate to Cehteh's Frame entity in the Backend?
+The latter is the fundamental Frame entity, wheras this Object rather represents a buffer set containing frame date"
     end
 
     class 133381 "AFrame"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -462,8 +502,9 @@ ${inlines}
 
     class 133509 "VFrame"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -481,8 +522,9 @@ ${inlines}
 
     class 133637 "GLBuf"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
@@ -500,14 +542,16 @@ ${inlines}
 
     class 133765 "Source"
       visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
 ${inlines}
 "
       java_decl ""
       idl_decl ""
       explicit_switch_type ""
       
+      comment "Source Node: represents a media source to pull data from."
       classrelation 136069 // <generalisation>
 	relation 134661 ---|>
 	  a public
@@ -515,109 +559,6 @@ ${inlines}
 	    classrelation_ref 136069 // <generalisation>
 	  b multiplicity "" parent class_ref 131717 // ProcNode
       end
-    end
-
-    class 134533 "Parameter"
-      visibility package 
-      nformals 1
-      formal name "VAL" type "class" explicit_default_value ""
-        explicit_extends ""
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
-${inlines}
-"
-      java_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
-      operation 130821 "getValue"
-	public explicit_return_type "VAL"
-	nparams 0
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
-"
-	
-	
-      end
-
-      classrelation 138245 // <dependency>
-	relation 136581 -_->
-	  stereotype "implemented_by"
-	  a package
-	    cpp default "#include in source"
-	    classrelation_ref 138245 // <dependency>
-	  b multiplicity "" parent class_ref 134661 // ParamProvider
-      end
-
-      classrelation 138629 // provider (<association>)
-	relation_ref 136325 // <association>
-      end
-    end
-
-    class 134661 "ParamProvider"
-      abstract visibility public stereotype "interface"
-      nformals 1
-      formal name "VAL" type "class" explicit_default_value ""
-        explicit_extends ""
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
-${inlines}
-"
-      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
-${members}}
-"
-      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
-${members}};
-"
-      explicit_switch_type ""
-      
-      classrelation 137989 // param (<association>)
-	relation 136325 ----
-	  a role_name "param" multiplicity "1" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
-"
-	    classrelation_ref 137989 // param (<association>)
-	  b role_name "provider" multiplicity "1" protected
-	    classrelation_ref 138629 // provider (<association>)
-      end
-
-      classrelation 138373 // <unidirectional association>
-	relation 136709 --->
-	  a role_name "" multiplicity "0..1" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
-"
-	    classrelation_ref 138373 // <unidirectional association>
-	  b multiplicity "" parent class_ref 134789 // Interpolator
-      end
-
-      operation 130949 "getValue"
-	public explicit_return_type "VAL"
-	nparams 0
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
-"
-	cpp_def "${comment}${inline}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
-  ${body}}
-"
-	
-	
-      end
-    end
-
-    class 134789 "Interpolator"
-      visibility package 
-      nformals 1
-      formal name "VAL" type "class" explicit_default_value ""
-        explicit_extends ""
-      cpp_decl "${comment}${template}class ${name}${inherit} {
-${members}};
-${inlines}
-"
-      java_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
     end
   end
 end

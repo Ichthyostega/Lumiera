@@ -1,6 +1,6 @@
-format 38
+format 40
 "builder" // design::codegen::proc::mobject::builder
-  revision 3
+  revision 6
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -8,7 +8,7 @@ format 38
   //use case diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
   //collaboration diagram settings
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
   //object diagram settings
@@ -29,7 +29,7 @@ format 38
   stereotype "src"
   cpp_h_dir "proc/mobject/builder"
   cpp_src_dir "proc/mobject/builder"
-  cpp_namespace "proc"
+  cpp_namespace "mobject::builder"
   comment "sourcecode package
 
 The Builder creating the Render Engine,
@@ -75,6 +75,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 130693 // ToolFactory
       end
+      comment "supply of Tool implementations for the Builder"
     end
 
     artifact 130693 "conmanager"
@@ -113,6 +114,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 130821 // ConManager
       end
+      comment "manages the creation of additional ProcNode connections for the Renderengine"
     end
 
     artifact 130821 "assembler"
@@ -151,6 +153,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 131077 // Assembler
       end
+      comment "building facility (implementation of the build process)"
     end
 
     artifact 131205 "tool"
@@ -189,6 +192,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 134149 // Tool
       end
+      comment "Interface, any tool for processing MObjects"
     end
 
     artifact 131333 "segmentationtool"
@@ -227,6 +231,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 134277 // SegmentationTool
       end
+      comment "Tool for creating a partitioning of the current timeline"
     end
 
     artifact 131461 "nodecreatertool"
@@ -265,6 +270,7 @@ ${namespace_end}"
       associated_classes
 	class_ref 134405 // NodeCreatorTool
       end
+      comment "central Tool implementing the Renderengine building"
     end
   end
 end
