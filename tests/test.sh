@@ -1,19 +1,22 @@
 #!/bin/bash 
-# Copyright (C) 2004, Christian Thaeter <chth@gmx.net>
+
+#  Copyright (C)         CinelerraCV
+#    2007,               Christian Thaeter <ct@pipapo.org>
+#                        Hermann Vosseler <Ichthyostega@web.de>
 #
-# This file is part of the MaLa extension Language.
+#  This program is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU General Public License as
+#  published by the Free Software Foundation; either version 2 of the
+#  License, or (at your option) any later version.
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License version 2 as
-# published by the Free Software Foundation.
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
 #
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, contact me.
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 # TESTMODE=FULL yet unimplemented
 #   run all tests, PLANNED which fail count as error
@@ -30,7 +33,7 @@ if [ "$VALGRINDFLAGS" = 'DISABLE' ]; then
     echo "valgrind explicit disabled"
 else
     if [ "$(which valgrind)" ]; then
-        valgrind="$(which valgrind) --suppressions=$srcdir/../valgrind.sup --leak-check=yes --show-reachable=yes -q $VALGRINDFLAGS"
+        valgrind="$(which valgrind) --leak-check=yes --show-reachable=yes -q $VALGRINDFLAGS"
 	ulimit -S -t 10
     else
         echo "no valgrind found, go without it"
@@ -38,7 +41,7 @@ else
 fi
 
 echo
-echo ================ $0 ================
+echo ================ ${0##*/} ================
 
 TESTCNT=0
 SKIPCNT=0
@@ -141,6 +144,3 @@ function TESTING()
 }
 
 RUNTESTS
-
-# arch-tag: f4d06a47-6e17-40de-bba8-17240ae3f435
-
