@@ -795,12 +795,13 @@ This distributed wiki might be used instead the pipapo.org wiki, investigate tha
 Wiki works. It is simple to use and just flexible enough to handle the task. I don't go to install any other software for such tasks on my server. While the design progresses I'd propose to move our work into git repositories and eventually phase this wiki pages out anyways. I'd rather like to start out distributed/git right away .. but git gives us only a fine storage layer, for a design process we need some good presentation layer (later when using git and starting the implementation everyones favorite editor serves for that) I have no better ideas yet to solve the presentation problem other than using this wiki (or maybe Bouml).
 </pre>
 </div>
-<div title="Cinelerra3Wiki" modifier="CehTeh" modified="200708101843" created="200706172308" tags="portal" changecount="22">
+<div title="Cinelerra3Wiki" modifier="CehTeh" modified="200708120136" created="200706172308" tags="portal" changecount="23">
 <pre>This 'index.html' becomes the entry point of some tiddlywikis managed under git. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.
 
 * I started a GitNotes where we will collect some information about git, howto and special setups
 * since we prefer gpg signed tags in git and not each developer knows gpg well here is a Micro-GPG-HowTo 
 * we maintain (semi-) final design docs in DesignDocumentation
+* Things get often worked out on IRC, see IRC-Transcripts for decisions made there and not yet put into the proper documentation places
 
 Please end your tiddlers in a newline, this makes merging in git easier since the /pre tag used in tiddlywiki will become on a single line.
 
@@ -976,6 +977,30 @@ git push git://git.pipapo.org/cinelerra3/mob
 //}}}
 
 cinelerra3/mob is an anonymous account at pipapo.org where everyone can commit changes. </pre>
+</div>
+<div title="IRC-Transcripts" modifier="CehTeh" created="200708120209" changecount="1">
+<pre>!10/11 aug 2007
+* maybe let the render graph builder generate a meta language which then is jit compiled for each configuration
+* using smart pointers and factories for objects, if this wont work because of cycles, we might investigate specialized garbage collectors for specific cases.
+* format for frames would be likely ffmpeg or such first, finally we see what suits best. We have to provide coverter nodes to convert frame formats for accessing diffrent libraries anyway (ffmpeg, v4l, gstreamer, ...)
+* we need a pool of worker threads and associated api's
+* accessing frames has a time (get until..), unique frame identifier (see below), policies (what to do when out of time, quality required,..) and hints (recursive dependency, must cache, playback speed and direction, ...)
+* for each sequence (configuration) each node has a number (monotonic incrementing), a generation counter (increment on each parameter change), a propagation sum (from parent nodes) 
+* frames are identified by their time(frame number) and node number plus generation number and propagation sum. This allows easily to find out when a frame has to be rerendered
+* no difference between compositor and viewer
+** viewer is just a decoder where a display window attaches
+** one can have multiple of such display windows
+** tracks, effects, (things which are nodes in the render graph) can add gui components to the viewer, like masking tools, panning, overlay and other compositor things.
+** does such a display need to be a node in the render graph (means reconfig when changing it) or just something which peeks on top of it?
+* tracks are just containers for other nodes
+** they serve a gui representation (timeline, patchbay, viewer)
+** they do the mixing of contained things
+** can be recursive, the gui represents basically a tree
+** we need some 'wireing' abstraction for the gui to make it a real graph
+* rendering frames, context between frames
+** the proc layer only queries frames (by identifier and timeout) the backend tries to serve the best it can do (from cache or let them render)
+** each render job carries some quality limit (as S/N ratio) when previewing or scratching through the project this is used to generate reasonable quality previews
+</pre>
 </div>
 <div title="InlineJavaScript" modifier="Jeremy" created="200603090618" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200603090618">
 <pre>/***

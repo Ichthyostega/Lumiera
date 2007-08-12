@@ -1870,7 +1870,7 @@ For binary compatibility everything will work well, provided that the caller kep
 
 </pre>
 </div>
-<div title="Plugins" modifier="CehTeh" modified="200707181740" created="200707111054" changecount="25">
+<div title="Plugins" modifier="CehTeh" modified="200708120129" created="200707111054" changecount="26">
 <pre>Cinelerra3 will use a very simple and language neutral plugin system. The focus is on easy and independent distribution of plugins and small specific interfaces. Ultimate flexibility is of second concern.
 
 ! Concept
@@ -1890,6 +1890,7 @@ Each interface/prototype is versioned. How this works together is explained in P
 ! Plugin Support includes
 * [[An interface definition language|PluginInterfaceDefinition]]
 * [[An interface implementation language|PluginInterfaceImplementation]]
+* [[Selecting interface based on capabilities|SelectingInterfaces]]
 * [[Library support to access plugins|PluginLibrary]]
 
 ! Tutorial, how to use Plugins
@@ -2112,6 +2113,12 @@ config.macros.rssFeedUpdate = {
 };
 
 //}}}
+</pre>
+</div>
+<div title="SelectingInterfaces" modifier="CehTeh" created="200708120132" changecount="2">
+<pre>Each Plugin can export different Interfaces, even same interfaces with different capabilities like a effect for different color models or such.
+
+Plugins announce their interfaces and capabilities and we implement a deduction system which chooses the best matching interface for the task.
 </pre>
 </div>
 <div title="SiteSubtitle" modifier="CehTeh" modified="200707111059" created="200707102305" changecount="2">
