@@ -795,7 +795,7 @@ This distributed wiki might be used instead the pipapo.org wiki, investigate tha
 Wiki works. It is simple to use and just flexible enough to handle the task. I don't go to install any other software for such tasks on my server. While the design progresses I'd propose to move our work into git repositories and eventually phase this wiki pages out anyways. I'd rather like to start out distributed/git right away .. but git gives us only a fine storage layer, for a design process we need some good presentation layer (later when using git and starting the implementation everyones favorite editor serves for that) I have no better ideas yet to solve the presentation problem other than using this wiki (or maybe Bouml).
 </pre>
 </div>
-<div title="Cinelerra3Wiki" modifier="CehTeh" modified="200708120136" created="200706172308" tags="portal" changecount="23">
+<div title="Cinelerra3Wiki" modifier="CehTeh" modified="200708131455" created="200706172308" tags="portal" changecount="24">
 <pre>This 'index.html' becomes the entry point of some tiddlywikis managed under git. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.
 
 * I started a GitNotes where we will collect some information about git, howto and special setups
@@ -812,6 +812,7 @@ to get started, we create design drafts emphasizing different aspects and region
 * Ichthyo focuses mainly on the Render Engine and its interconnection to the EDL, [[see this separate page|renderengine.html]]
 * cehteh works on the data backend draft, see [[this page|backend.html]]
 * Some tools which don't fit somewhere else and are used everywhere are put into a [[Support Library|support_library.html]]
+* [[Description of the Test System|TestSh]]
 
 !Coding Structures
 next we should //start thinking// on how to organize several aspects of the practical coding...
@@ -3452,6 +3453,41 @@ Portions written by Luke Blanshard are hereby released into the public domain.
 &lt;div macro=&quot;tasksum end&quot;&gt;&lt;/div&gt;
 &lt;div class=&quot;tagglyTagging&quot; macro=&quot;tagglyListWithSort&quot;&gt;&lt;/div&gt;
 &lt;!--}}}--&gt;
+</pre>
+</div>
+<div title="TestSh" modifier="CehTeh" modified="200708131521" created="200708131509" changecount="5">
+<pre>! The Test Script
+There is a simple test script in tests which will be used to drive various tests. All tests are run under valgrind control if available unless {{{VALGRINDFLAGS=DISABLE}}} is defined. This test script is integrated in the automake build and will be used when {{{make check}}} is called.
+
+! Options for running the Test Suite
+One may define {{{TESTMODE}}} containing any one of the following strings:
+* {{{FAST}}} only run tests which failed recently
+* {{{FIRSTFAIL}}} abort the tests at the first failure
+
+putting this together a very fast check (when using automake) while hacking on the source would look like:
+{{{
+VALGRINDFLAGS=DISABLE TESTMODE=FAST+FIRSTFAIL make check
+}}}
+This doesnt catch all errors, notably not regressions, but is useful to do coarse checks.
+
+Running the testsuite with everything enabled is just:
+{{{
+make check
+}}}
+
+! Writing Tests
+Tests are written in files named {{{NNname.tests}}} in the {{{tests}}} dir, where NN is a number defining the order of the various test files, 'name' should be a descriptive name about whats going to be tested.
+
+In a .tests file one has to define following:
+* {{{TESTING &lt;description&gt; &lt;binary&gt;}}} set the program binary to be tested to &lt;binary&gt;, &lt;description&gt; should be a string which is displayed as header before running following tests
+* {{{TEST &lt;description&gt; [optargs] &lt;&lt;END}}} run the previously set binary with [optargs], &lt;description&gt; is displayed when running this test. A detailed test spec must follow this command and be terminated with {{{END}}} on a single line. Test specs can contain following statements:
+** {{{in: &lt;line&gt;}}} send &lt;line&gt; to stdin of the test program
+** {{{out: &lt;line&gt;}}} expect &lt;line&gt; at the stdout of the test program
+** {{{err: &lt;line&gt;}}} expect &lt;line&gt; at the stderr of the test program
+** {{{return: &lt;status&gt;}}} expect &lt;status&gt; as exit status of the program
+
+If no {{{out:}}} or {{{err:}}} is given, stdout and stderr are not considered as part of the test. If no {{{return:}}} is given, then 0 is expected.
+
 </pre>
 </div>
 <div title="TextAreaPlugin" modifier="Jeremy" created="200601261745" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200601261745">

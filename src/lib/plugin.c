@@ -19,6 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include <stdio.h>
+#include <unistd.h>
 #include <search.h>
 #include <string.h>
 #include <dlfcn.h>
@@ -33,7 +34,7 @@
 
 TODO move CINELERRA_DIE elsewhere (cinlib.h?)
 */
-#define CINELERRA_DIE do{NOBUG_ERROR(NOBUG_ON, LOG_EMERG, "aborting due fatal error"); abort();}while(0)
+#define CINELERRA_DIE do{NOBUG_LOG(NOBUG_ON, LOG_EMERG, "aborting due fatal error"); abort();}while(0)
 
 /* TODO should be set by the build system to the actual plugin path */
 #define CINELERRA_PLUGIN_PATH "~/.cinelerra3/plugins:/usr/local/lib/cinelerra3/plugins"
@@ -43,7 +44,7 @@ NOBUG_DEFINE_FLAG (cinelerra_plugin);
 /* errors */
 const char* CINELERRA_PLUGIN_SUCCESS = NULL;
 const char* CINELERRA_PLUGIN_EDLOPEN = "Could not open plugin";
-const char* CINELERRA_PLUGIN_EDHOOK = "Hook function failed";
+const char* CINELERRA_PLUGIN_EHOOK = "Hook function failed";
 const char* CINELERRA_PLUGIN_ENFOUND = "No such plugin";
 const char* CINELERRA_PLUGIN_ENIFACE = "No such interface";
 const char* CINELERRA_PLUGIN_EREVISION = "Interface revision too old";
@@ -62,15 +63,15 @@ enum cinelerra_plugin_type
 static const struct
 {
   const char* const ext;
-  enum cinelerra_plugin_type;
+  enum cinelerra_plugin_type type;
 } cinelerra_plugin_extensions [] =
   {
-    "plugin",   CINELERRA_PLUGIN_DYNLIB,
-    "so",       CINELERRA_PLUGIN_DYNLIB,
-    "tcc",      CINELERRA_PLUGIN_CSOURCE,
-    "c",        CINELERRA_PLUGIN_CSOURCE,
+    {"plugin",   CINELERRA_PLUGIN_DYNLIB},
+    {"so",       CINELERRA_PLUGIN_DYNLIB},
+    {"tcc",      CINELERRA_PLUGIN_CSOURCE},
+    {"c",        CINELERRA_PLUGIN_CSOURCE},
     /* extend here */
-    NULL,       CINELERRA_PLUGIN_NULL
+    {NULL,       CINELERRA_PLUGIN_NULL}
   };
 
 
@@ -153,7 +154,7 @@ cinelerra_plugin_lookup (struct cinelerra_plugin* self, const char* path)
   strcpy(tpath, path);
 
   /*for each in path*/
-  for (char* tok = strtok(tpath, ":", &tmp); tok; tok = strtok(NULL, ":", &tmp))
+  for (char* tok = strtok_r (tpath, ":", &tmp); tok; tok = strtok_r (NULL, ":", &tmp))
     {
       /*for each extension*/
       for (int i = 0; cinelerra_plugin_extensions[i].ext; ++i)
@@ -181,7 +182,7 @@ cinelerra_plugin_lookup (struct cinelerra_plugin* self, const char* path)
 struct cinelerra_interface*
 cinelerra_interface_open (const char* name, const char* interface, size_t min_revision)
 {
-  REQUIRE (min_revision > sizeof(cinelerra_interface), "try to use an empty interface eh?");
+  //REQUIRE (min_revision > sizeof(struct cinelerra_interface), "try to use an empty interface eh?");
   REQUIRE (interface, "interface name must be given");
 
   pthread_once (&cinelerra_plugin_initialized, cinelerra_plugin_tls_init);
@@ -208,7 +209,7 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
         {
           /*lookup for $CINELERRA_PLUGIN_PATH*/
           (*found)->name = strdup (name);
-          if (!(*found)->name) CINELERA_DIE;
+          if (!(*found)->name) CINELERRA_DIE;
 
           if (!cinelerra_plugin_lookup (*found, getenv("CINELERRA_PLUGIN_PATH"))
 #ifdef CINELERRA_PLUGIN_PATH
@@ -225,15 +226,14 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
         {
           (*found)->name = NULL;
           (*found)->pathname = NULL;
-          (*found)->ext = NULL;
         }
 
       (*found)->use_count = 0;
 
       PLANNED("if .so like then dlopen; else if .c like tcc compile");
-      TODO("factor dlopen and dlsym out")
+      TODO("factor dlopen and dlsym out");
 
-      (*found)->handle = dlopen (pathname, RTLD_NOW|RTLD_LOCAL);
+      (*found)->handle = dlopen ((*found)->pathname, RTLD_NOW|RTLD_LOCAL);
       if (!(*found)->handle)
         {
           ERROR (cinelerra_plugin, "dlopen failed: %s", dlerror());
@@ -304,10 +304,12 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
 }
 
 void
-cinelerra_interface_close (struct cinelerra_interface* self)
+cinelerra_interface_close (void* ptr)
 {
-  if(!self)
+  if(!ptr)
     return;
+
+  struct cinelerra_interface* self = (struct cinelerra_interface*) ptr;
 
   pthread_mutex_lock (&cinelerra_plugin_mutex);
 

@@ -35,6 +35,7 @@ include $(top_srcdir)/src/lib/Makefile.am
 #include $(top_srcdir)/src...
 
 # tests
+include $(top_srcdir)/tests/Makefile.am
 include $(top_srcdir)/tests/examples/Makefile.am
 
 #EXTRA_DIST += admin debian doc depcomp README.BUILD LICENSE \
