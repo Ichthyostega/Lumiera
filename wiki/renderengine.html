@@ -1232,7 +1232,7 @@ config.formatters.push( {
 } )
 //}}}</pre>
 </div>
-<div title="InterfaceNamespaces" modifier="Ichthyostega" modified="200708081455" created="200708080338" tags="impl decision discuss" changecount="13">
+<div title="InterfaceNamespaces" modifier="Ichthyostega" modified="200708120302" created="200708080338" tags="impl decision discuss" changecount="15">
 <pre>Because we rely on strong decoupling and separation into self contained components, there is not much need for a common quasi-global namespace. Operations needing the cooperation of another subsystem will be delegated or even dispatched, consequently implementation code needs only the service acces points from &quot;direct cooperation partner&quot; subsystems. Hierarchical scopes besides classes are needed only when multiple subsystems share a set of common abstractions. Interface and Implementation use separate namespaces.
 
 !common definitions
@@ -1248,6 +1248,8 @@ These large scale interfaces reside in special namespaces &quot;~XXX_interface&q
 
 !contract checks and test code
 From experiences with other middle scale projects, I prefer having the test code in a separate tree (because test code easily doubles the number of source files). But of course it should be placed into the same namespace as the code being checked, or (better?) into a nested namespace &quot;test&quot;. It is esp. desirable to have good coverage on the contracts of the subsystem interfaces and mayor components (while it is not always feasible or advisable to cover every implementation detail).
+
+&amp;rarr; see also [[testsuite documentation in the main wiki|index.html#TestSuite]]
 
 </pre>
 </div>

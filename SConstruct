@@ -32,6 +32,7 @@ OPTIONSCACHEFILE = 'optcache'
 CUSTOPTIONSFILE  = 'custom-options'
 SRCDIR           = 'src'
 BINDIR           = 'src/bin'
+TESTDIR          = 'tests'
 VERSION          = '3+alpha.01'
 #-----------------------------------Configuration
 
@@ -57,7 +58,7 @@ def setupBasicEnvironment():
     env.Replace( VERSION=VERSION
                , SRCDIR=SRCDIR
                , BINDIR=BINDIR
-               , CPPPATH=SRCDIR   # used to find includes
+               , CPPPATH="#"+SRCDIR   # used to find includes, "#" means always absolute to build-root 
                )
     
     appendCppDefine(env,'DEBUG','DEBUG')
@@ -196,6 +197,7 @@ def defineBuildTargets(env, artifacts):
 #             + srcSubtree(env,'lib')
              + env.Object('$SRCDIR/main.cpp')
              )
+    testobj = srcSubtree(env,'test/*', isShared=False)
     plugobj = srcSubtree(env,'plugin', isShared=True)
     
     artifacts['cinelerra'] = env.Program('$BINDIR/cinelerra', cinobj)
@@ -203,7 +205,7 @@ def defineBuildTargets(env, artifacts):
     
     # call subdir SConscript(s) for independent components
     SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts')
-
+    SConscript(dirs=[TESTDIR], exports='env artifacts testobj')
 
 
 def defineInstallTargets(env, artifacts):

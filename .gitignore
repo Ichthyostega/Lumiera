@@ -1,4 +1,5 @@
 /wiki/backups/*
+/tests/*
 *~
 *.tar.*
 .sconf_temp

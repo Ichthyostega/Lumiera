@@ -1,0 +1,16 @@
+# -*- python -*-
+##
+## SConscript  -  SCons buildscript for the Testsuite (called by SConstruct)
+##
+
+Import('env','artifacts','testobj')
+
+# build an application running the testsuite
+artifacts['testsuite'] = env.Program('mainsuite',testobj + ['#$SRCDIR/test/mainsuite.cpp'])
+
+# TODO: we could apply much more "magic" here
+# - build /every/ $TESTDIR/*.cpp into an application
+# - link the testobj dynamically
+# - install additionally scripts into tests-dir if desired
+
+

@@ -107,6 +107,19 @@ namespace cinelerra
       };
       
       
+    /** another convienience instantiiation: auto_ptr-Factory,
+     *  actually creating a subclass of the returned type
+     */
+    template<class T, class TImpl>
+    class SubclassPtr : public Factory<T>
+      {
+        typedef std::auto_ptr<T> aP;
+        
+      public:
+        aP operator() (){ return aP (new TImpl ); };
+      };
+      
+      
       
   } // namespace factory
 

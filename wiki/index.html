@@ -42,7 +42,7 @@ DAMAGE.
 <link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/>
 <!--}}}-->
 
-<style type="text/css">#contentWrapper {display:none;}</style><div id="SplashScreen" style="border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;"><b>My TiddlyWiki</b> is loading<blink> ...</blink><br><br><span style="font-size: 14px; color:red;">Requires Javascript.</span></div>
+<style type="text/css">#contentWrapper {display:none;}</style><div id="SplashScreen" style="border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;"><b>Cinelerra TiddlyWiki</b> is loading<blink> ...</blink><br><br><span style="font-size: 14px; color:red;">Requires Javascript.</span></div>
 <!--PRE-HEAD-END-->
 <title> Cinelerra3 - Distributed Developer Wiki </title>
 <style type="text/css">
@@ -747,7 +747,18 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BuildSystem" modifier="Ichthyostega" modified="200708051534" created="200708051532" tags="organization buildsys" changecount="3">
+<div title="BuildDependenceis" modifier="Ichthyostega" modified="200708120113" created="200708120103" tags="organization buildsys" changecount="3">
+<pre>for __Building__
+* gcc (4.1), glibc6 (2.3), libstdc++6 (4.1)
+* [[build system|BuildSystem]] dependencies: SCons (0.96.90), Python (2.3)
+* NoBug for Logging, Tracing, Asserting (can be obtained from [[Pipapo.org|http://www.pipapo.org/pipawiki/NoBug]])
+* std::tr1 &amp;mdash; esp. for the former BOOST::shared_ptr (which is now proposed standard)
+* BOOST
+//usually, newer versions are OK//
+
+for __Running__</pre>
+</div>
+<div title="BuildSystem" modifier="Ichthyostega" modified="200708120101" created="200708051532" tags="organization buildsys" changecount="4">
 <pre>July 2007 we agreed to try out several Build Systems in real world usage, to get a better feel on the maintenance costs of each.
 * SCons
 * AutoTools
@@ -755,6 +766,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 !Used Functionality
 * (re)building with reliable dependency checks
 * environment checks (&quot;configure&quot;)
+* executing self-test suite
 * provide central interface for setting switches and configuration options
 * installing of some or all created artifacts</pre>
 </div>
@@ -795,10 +807,10 @@ This distributed wiki might be used instead the pipapo.org wiki, investigate tha
 Wiki works. It is simple to use and just flexible enough to handle the task. I don't go to install any other software for such tasks on my server. While the design progresses I'd propose to move our work into git repositories and eventually phase this wiki pages out anyways. I'd rather like to start out distributed/git right away .. but git gives us only a fine storage layer, for a design process we need some good presentation layer (later when using git and starting the implementation everyones favorite editor serves for that) I have no better ideas yet to solve the presentation problem other than using this wiki (or maybe Bouml).
 </pre>
 </div>
-<div title="Cinelerra3Wiki" modifier="CehTeh" modified="200708101843" created="200706172308" tags="portal" changecount="22">
-<pre>This 'index.html' becomes the entry point of some tiddlywikis managed under git. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.
+<div title="Cinelerra3Wiki" modifier="Ichthyostega" modified="200708120126" created="200706172308" tags="portal" changecount="27">
+<pre>This is the entry point to several [[TiddlyWiki]]-Pages containing the developer and design documentation for Cinelrra-3.
 
-* I started a GitNotes where we will collect some information about git, howto and special setups
+* Cehteh started GitNotes where we will collect some information about git, howto and special setups
 * since we prefer gpg signed tags in git and not each developer knows gpg well here is a Micro-GPG-HowTo 
 * we maintain (semi-) final design docs in DesignDocumentation
 
@@ -809,7 +821,7 @@ Please end your tiddlers in a newline, this makes merging in git easier since th
 to get started, we create design drafts emphasizing different aspects and regions of Cinelerra-3
 
 * Ichthyo focuses mainly on the Render Engine and its interconnection to the EDL, [[see this separate page|renderengine.html]]
-* cehteh works on the data backend draft, see [[this page|backend.html]]
+* Cehteh works on the data backend draft, see [[this page|backend.html]]
 * Some tools which don't fit somewhere else and are used everywhere are put into a [[Support Library|support_library.html]]
 
 !Coding Structures
@@ -819,9 +831,8 @@ next we should //start thinking// on how to organize several aspects of the prac
 * how to organize the executable to be built?
 * what coding conventions to prefer?            &amp;rarr; [[GNU Style|DesignDocumentation]]
 * what [[build system|BuildSystem]] to use?
-
-Ichthyo thinks we should do some informal brainstorming, test/prototypes to see how things work out and discuss them; then we should make them into formal project proposals on pipapo.org
-</pre>
+* various [[build dependencies|BuildDependenceis]]
+* TestSuite</pre>
 </div>
 <div title="DefaultTiddlers" modifier="CehTeh" modified="200707111115" created="200706172308" changecount="3">
 <pre>Cinelerra3Wiki
@@ -920,12 +931,12 @@ these two commands are used by 'admin/git-hooks/post-commit'
 
 'git publish' just sends the commit to some repository which has to be registered with 'git remote add public ...', in case you are working offline this will stuck and timeout, you may break it with ctrl-c, someone may fix it.</pre>
 </div>
-<div title="GitBranches" modifier="Ichthyostega" modified="200708051534" created="200706260447" tags="overview git organization" changecount="11">
+<div title="GitBranches" modifier="Ichthyostega" modified="200708120100" created="200706260447" tags="overview git organization" changecount="13">
 <pre>some ''interesting Branches''
 
 |![[pipapo.org|PipapoOrg]]                |!''mirrored''              |!|!description                          |
 | ct#master                               | ichthyo#master            | |Cinelerra3 main development line      |
-| ichthyo#prototype                       |                           | |first coding attempts ;-)              |
+| ichthyo#scons                           |                           | |[[SCons]]-based build system, improvements|
 
 </pre>
 </div>
@@ -1329,12 +1340,12 @@ We are in need of a new development model which is acceptable by all involved pe
 # ''All for Cinelerra''&lt;&lt;br&gt;&gt;The goal is to make the best Linux video editor to date, nothing less. Everyone puts in their best abilities. This project is not the place to blame people for things where they are not profound, help each other, make things right instead of blaming someone. Everyone should rate himself at what he can do best on the project.
 </pre>
 </div>
-<div title="MarkupPreHead" modifier="Ichthyostega" modified="200706260507" created="200706172303" tags="excludeMissing" changecount="1">
+<div title="MarkupPreHead" modifier="Ichthyostega" modified="200708120049" created="200706172303" tags="excludeMissing" changecount="2">
 <pre>&lt;!--{{{--&gt;
 &lt;link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/&gt;
 &lt;!--}}}--&gt;
 
-&lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;&lt;b&gt;My TiddlyWiki&lt;/b&gt; is loading&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
+&lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;&lt;b&gt;Cinelerra TiddlyWiki&lt;/b&gt; is loading&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
 </div>
 <div title="Micro-GPG-HowTo" modifier="CehTeh" modified="200708101901" created="200708101900" changecount="2">
 <pre>I (cehteh) just paste my configs and give very few hints here, refer to the gpg manpage, the gpg documentation, google or ask on IRC for details. Maybe you improve this.
@@ -3429,6 +3440,40 @@ Portions written by Luke Blanshard are hereby released into the public domain.
 &lt;!--}}}--&gt;
 </pre>
 </div>
+<div title="TestFacility" modifier="Ichthyostega" modified="200708120257" created="200708120134" tags="buildsys organization howto" changecount="3">
+<pre>We use a very simple test facility written by Cehteh as a bash script {{{tests/test.sh}}}
+Basically the target __tests__ of the build system uses the test code found in the tree below {{{./tests}}} to build some test binaries (btw scripts could be used too),
+and then runs {{{test.sh}}} with the testsuite definitions. 
+
+''Test definitions'' are defined in files {{{000foo.test, 010bar.test, ...}}}.
+Syntax is as following //(note that this are just bash scripts)//
+{{{
+TESTING &quot;label for sometestprogram&quot; ./sometestprogram
+
+TEST &quot;unique annotatinon&quot; --command --line --options &lt;&lt;END
+expected
+output
+here
+END
+}}}
+The {{{TESTING}}} function defines {{{$TESTBIN}}} for the subsequent tests.
+the {{{TEST}}} function will run {{{&quot;$TESTBIN --command --line --options&quot;}}} probably under Valgrind supervision and diff its output against expected output literally specified in the test definition (e.g. {{{&quot;expected\noutput\nhere&quot;}}}). Note that Valgrind (used in quiet mode) produces bug reports which will make the test fail, as any other unexpected output will do.
+
+------
+how to organize the actual Tests into various Test collections &amp;rarr; see [[TestSuite]]
+</pre>
+</div>
+<div title="TestSuite" modifier="Ichthyostega" modified="200708120257" created="200708120254" tags="buildsys organization testsuite" changecount="2">
+<pre>For running the automatic Tests, we use Cehteh's simple [[test.sh|TestFacility]].
+
+This page is a proposal (by Ichthyo) how the various tests could be organized.
+* individual Tests are classes, doing whatsoever and however they see fit.
+* it is up to the individual test classes to take care / handle / isolate themself form any dependencies (similar to the [[philosophy of TestNG|http://www.beust.com/weblog/archives/000082.html]])
+* for each Testsuite (=distinct collection of tests) we build an executable linked against the test class objects
+* when we get several Testsuites at some point in the future, we may consider building a shared lib of the test objects.
+* the Testsuite executable should provide some command line magic to select individual tests
+</pre>
+</div>
 <div title="TextAreaPlugin" modifier="Jeremy" created="200601261745" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200601261745">
 <pre>/***
 ''TextAreaPlugin for TiddlyWiki version 2.0''
@@ -3556,10 +3601,12 @@ function addKeyDownHandlers(e)
 }
 //}}}</pre>
 </div>
-<div title="TiddlyWiki" modifier="Ichthyostega" created="200706260506" tags="excludeMissing" changecount="2">
+<div title="TiddlyWiki" modifier="Ichthyostega" modified="200708120058" created="200706260506" tags="excludeMissing" changecount="4">
 <pre>The Name of the Software driving this Wiki. Is is written completely in ~JavaScript and contained in one single HTML page.
+Thus no server and no network connection is needed. Simply open the file in your browser and save changes locally. As the wiki HTML is located in the Cinelerra source tree, all changes will be managed and distributed via [[GIT|GitNotes]]. While doing so, you sometimes will have to merge conflicing changes manually in the HTML source. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.
  * see GettingStarted
- * see [[Homepage|http://tiddlywiki.com]]</pre>
+ * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.com/#MainFeatures]]
+</pre>
 </div>
 <div title="whatInBOUML" modifier="Ichthyostega" modified="200708051535" created="200706260559" tags="discuss policy" changecount="3">
 <pre>The question to find out about is: how much of the coding to do with the help of BOUML. Basically, BOUML is capable to permanently support the coding; you can define all entities, fields and methods in the UML model an just develop the method bodies //conventionally// with a text editor. 
