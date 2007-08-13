@@ -1,5 +1,4 @@
 #!/bin/bash 
-
 #  Copyright (C)         CinelerraCV
 #    2007,               Christian Thaeter <ct@pipapo.org>
 #                        Hermann Vosseler <Ichthyostega@web.de>
@@ -23,6 +22,11 @@
 #
 # TESTMODE=FAST
 #   run only tests which recently failed
+#
+# TESTMODE=FIRSTFAIL
+#   stop testing on the first failure
+
+export LC_ALL=C
 
 arg0="$0"
 srcdir=$(dirname "$arg0")
@@ -47,6 +51,7 @@ TESTCNT=0
 SKIPCNT=0
 FAILCNT=0
 
+# the old testlog if existing will be used to check for previous test states
 if test -f ,testlog; then
     mv ,testlog ,testlog.pre
 else
@@ -59,8 +64,34 @@ function TEST()
 {
         name="$1"
 	shift
-	cat >,cmp
-	echo -n "" >,out
+        rm -f ,send_stdin
+        rm -f ,expect_stdout
+        rm -f ,expect_stderr
+
+	while read -r line; do
+            cmd="${line%%:*}"
+            arg="${line#*: }"
+            expect_return=0
+
+            case $cmd in
+            'in')
+                echo "$arg" >>,send_stdin
+                ;;
+            'out')
+                echo "$arg" >>,expect_stdout
+                ;;
+            'err')
+                echo "$arg" >>,expect_stderr
+                ;;
+            'return')
+                expect_return=$arg
+                ;;
+            *)
+                echo "UNKOWN TEST COMMAND '$cmd'" 1>&2
+                exit
+                ;;
+            esac
+        done
 	echo -n "TEST $name: "
 	echo -en "\nTEST $name: $* " >>,testlog
 
@@ -87,16 +118,52 @@ function TEST()
         esac
 
         TESTCNT=$(($TESTCNT + 1))
-	if $valgrind $TESTBIN "$@" 2>&1 | tee ,tmp | grep -v ': \(TRACE\|INFO\|NOTICE\|WARNING\|ERR\):' | cmp ,cmp - &>/dev/null; then
+
+        fails=0
+
+        if test -f ,send_stdin; then
+            cat ,send_stdin | $valgrind $TESTBIN "$@" 2>,stderr >,stdout
+            return=$?
+        else
+            $valgrind $TESTBIN "$@" 2>,stderr >,stdout
+            return=$?
+        fi
+
+        echo -n >,testtmp
+
+        if test -f ,expect_stdout; then
+            if ! cmp ,expect_stdout ,stdout &>/dev/null; then
+                echo "unexpected data on stdout" >>,testtmp
+                grep -v ': \(TRACE\|INFO\|NOTICE\|WARNING\|ERR\):' <,stdout >,tmp
+                diff -ua ,expect_stdout ,tmp >>,testtmp
+                rm ,tmp
+                ((fails+=1))
+            fi
+        fi
+
+        if test -f ,expect_stderr; then
+            if ! cmp ,expect_stderr ,stderr &>/dev/null; then
+                echo "unexpected data on stderr" >>,testtmp
+                grep -v ': \(TRACE\|INFO\|NOTICE\|WARNING\|ERR\):' <,stderr >,tmp
+                diff -ua ,expect_stderr ,tmp >>,testtmp
+                rm ,tmp
+                ((fails+=1))
+            fi
+        fi
+
+        if test $expect_return != $return; then
+            echo "unexpected return value $return" >>,testtmp
+            ((fails+=1))
+        fi
+
+	if test $fails -eq 0; then
             echo ".. OK$MSGOK"
             echo ".. OK$MSGOK" >>,testlog
         else
             echo ".. FAILED$MSGFAIL";
             echo ".. FAILED$MSGFAIL" >>,testlog
-            grep -v ': \(TRACE\|INFO\|NOTICE\|WARNING\|ERR\):' <,tmp >,out
-            diff -ua ,cmp ,out >>,testlog
-            # grep 'DEBUG:\|==.*==' <,tmp >>,testlog
-            cat ,tmp >>,testlog
+            cat ,testtmp >>,testlog
+            rm ,testtmp
             echo END >>,testlog
             FAILCNT=$(($FAILCNT + 1))
 	    case $TESTMODE in
@@ -123,7 +190,6 @@ function RUNTESTS()
         source $i
     done
     echo
-    rm ,cmp ,out ,tmp
     if [ $FAILCNT = 0 ]; then
         echo " ... PASSED $(($TESTCNT - $SKIPCNT)) TESTS, $SKIPCNT SKIPPED"
         #rm ,testlog
