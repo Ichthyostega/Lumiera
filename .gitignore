@@ -6,4 +6,10 @@
 .sconsign.dblite
 Buildhelper.pyc
 optcache
-
+Makefile.in
+build/*
+autom4te.cache/*
+scripts/*
+configure
+aclocal.m4
+semantic.cache
