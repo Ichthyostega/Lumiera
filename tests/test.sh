@@ -121,13 +121,13 @@ function TEST()
 
         fails=0
 
+
         if test -f ,send_stdin; then
             cat ,send_stdin | $valgrind $TESTBIN "$@" 2>,stderr >,stdout
-            return=$?
         else
             $valgrind $TESTBIN "$@" 2>,stderr >,stdout
-            return=$?
-        fi
+        fi &>/dev/null
+        return=$?
 
         echo -n >,testtmp
 
@@ -164,6 +164,8 @@ function TEST()
             echo ".. FAILED$MSGFAIL" >>,testlog
             cat ,testtmp >>,testlog
             rm ,testtmp
+            echo "stderr was:" >>,testlog
+            cat ,stderr >>,testlog
             echo END >>,testlog
             FAILCNT=$(($FAILCNT + 1))
 	    case $TESTMODE in
