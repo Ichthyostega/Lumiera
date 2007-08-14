@@ -7,4 +7,5 @@
 .sconsign.dblite
 Buildhelper.pyc
 optcache
+.[^.]*
 

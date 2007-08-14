@@ -1,10 +1,8 @@
 /*
-  CINELERRA.h  -  global definitions and common types
- 
+  Error  -  Cinelerra Exception Interface
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
-                        Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -20,44 +18,36 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
-
-#ifndef CINELERRA_H
-#define CINELERRA_H
-
-#include <nobug.h>
+* *****************************************************/
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* ========================== common C Part ============ */
-
-
-#ifdef __cplusplus
-}
-#endif /* ==================== (End) common C Part ============ */
-
-
-
-
-
-
-#ifdef __cplusplus /* ============== C++-Part ================= */
-
-
-    /* common types frequently used... */
-
-#include "common/time.hpp"
-#include "common/appconfig.hpp"
-
+#include "common/error.hpp"
 
 namespace cinelerra
   {
-    /* additional global configuration goes here... */
   
-    
+  /** Description of the problem, including the internal char constant
+   *  in accordance to cinelerras error identification scheme.
+   *  If a ::rootCause() can be obtained, this will be included in the
+   *  generated output as well. 
+   */
+  const char*
+  Error::what () const  throw()
+    {
+    }
+  
+  
+  /** If this exception was caused by a chain of further exceptions,
+   *  return the first one registered in this throw sequence.
+   *  This works only, if every exceptions thrown as a consequence
+   *  of another exception is propperly constructed by passing
+   *  the original exception to the constructor
+   */
+  std::exception 
+  Error::rootCause() const  throw()
+    {
+    }
+  
+  
+  
 } // namespace cinelerra
-
-#endif /* ===================== (End) C++-Part ================= */
-
-#endif /*CINELERRA_H*/

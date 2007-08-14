@@ -28,7 +28,8 @@
 #include "test/helper/suite.hpp"
 #include "test/helper/run.hpp"
 
-#include <iostream>   /////////////////////////TODO: Debug
+#include <nobug.h>
+#include <iostream>
 #include <sstream>
 
 namespace test
@@ -61,7 +62,8 @@ namespace test
       void add2group (Launcher* test, string testID, string groupID);
     };
     
-  void Registry::add2group (Launcher* test, string testID, string groupID)
+  void 
+  Registry::add2group (Launcher* test, string testID, string groupID)
     {
       // TODO: ASSERT test!=null, testID.length > 0 ...
       PTestMap& group = getGroup(groupID);
@@ -81,7 +83,8 @@ namespace test
    *  #ALLGROUP
    *  @param groups List of group-IDs selected by whitespace
    */
-  void Suite::enroll (Launcher* test, string testID, string groups)
+  void 
+  Suite::enroll (Launcher* test, string testID, string groups)
     {
       // TODO learn to use NoBug for logging 
       std::cerr << "enroll( testID=" << testID << ")\n";
@@ -119,7 +122,8 @@ namespace test
    *  The first argument in the commandline, if present, will select
    *  one single testcase with a matching ID. 
    */
-  void Suite::run (int argc, char* argv[])
+  void 
+  Suite::run (int argc, char* argv[])
     {
       /////////////////////////////////////////////////////TODO:DEBUG
       std::cerr << "Suite::run( (" << argc << "[" ;

@@ -58,30 +58,45 @@ def setupBasicEnvironment():
     env.Replace( VERSION=VERSION
                , SRCDIR=SRCDIR
                , BINDIR=BINDIR
-               , CPPPATH="#"+SRCDIR   # used to find includes, "#" means always absolute to build-root 
+               , CPPPATH="#"+SRCDIR   # used to find includes, "#" means always absolute to build-root
+               , CPPDEFINES=[]        # flags will be appended to this list
                )
     
-    appendCppDefine(env,'DEBUG','DEBUG')
+    handleNoBugSwitches(env)
+    
+    appendCppDefine(env,'DEBUG','DEBUG', 'NDEBUG')
     appendCppDefine(env,'OPENGL','USE_OPENGL')
+    appendCppDefine(env,'VERSION','VERSION')
     appendVal(env,'ARCHFLAGS', 'CPPFLAGS')   # for both C and C++
     appendVal(env,'OPTIMIZE', 'CPPFLAGS', val=' -O3')
-
-    if env['BUILDLEVEL'] in ['ALPHA', 'BETA']:
-        env.Append(CPPFLAGS = ' -DEBUG_'+env['BUILDLEVEL'])
-    if env['BUILDLEVEL'] == 'RELEASE':
-        env.Append(CPPFLAGS = ' -DNDEBUG')
+    appendVal(env,'DEBUG',    'CPPFLAGS', val=' -g')
 
     prepareOptionsHelp(opts,env)
     opts.Save(OPTIONSCACHEFILE, env)
     return env
 
-def appendCppDefine(env,var,cppVar):
+def appendCppDefine(env,var,cppVar, elseVal=''):
     if env[var]:
-        env.Append(CPPDEFINES = {cppVar: env[var]})
+        env.Append(CPPDEFINES = cppVar )
+    elif elseVal:
+        env.Append(CPPDEFINES = elseVal)
 
 def appendVal(env,var,targetVar,val=None):
     if env[var]:
         env.Append( **{targetVar: val or env[var]})
+
+
+def handleNoBugSwitches(env):
+    """ set the build level for NoBug. 
+        Release builds imply no DEBUG
+    """
+    level = env['BUILDLEVEL']
+    if level in ['ALPHA', 'BETA']:
+        env.Replace( DEBUG = 1 )
+        env.Append(CPPDEFINES = 'EBUG_'+level)
+    elif level == 'RELEASE':
+        env.Replace( DEBUG = 0 )
+
 
 
 
@@ -146,6 +161,11 @@ def configurePlatform(env):
     if not conf.CheckLibWithHeader('nobugmt', 'nobug.h', 'C'):
         print 'Did not find NoBug [http://www.pipapo.org/pipawiki/NoBug], exiting.'
         Exit(1)
+
+    if not conf.CheckLibWithHeader('pthread', 'pthread.h', 'C'):
+        print 'Did not find the pthread lib or pthread.h, exiting.'
+    else:
+       conf.env.Append(CPPFLAGS = ' -DHAVE_PTHREAD_H')
 
     if conf.CheckCHeader('execinfo.h'):
        conf.env.Append(CPPFLAGS = ' -DHAS_EXECINFO_H')
