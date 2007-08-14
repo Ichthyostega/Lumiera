@@ -30,6 +30,8 @@ extern "C" {
 #include <stdlib.h>
 #include <nobug.h>
 
+#include "error.h"
+
 NOBUG_DECLARE_FLAG (cinelerra_plugin);
 
 /* tool macros*/
@@ -129,30 +131,11 @@ cinelerra_plugin_unload (const char* plugin);
 void
 cinelerra_plugin_expire (time_t age);
 
-/**
- * Query and reset the error state.
- * report last error, reset error state. Errors are thread local.
- * Error strings are guaranteed to point to a C string with a unique comparable address.
- * Note that the error state gets cleared by calling this function. The application may store it temporary for further handling.
- * @return pointer to one of the error C-strings, NULL when no error happened.
- */
-const char*
-cinelerra_plugin_error ();
-
-/// success, NULL
-extern const char* CINELERRA_PLUGIN_SUCCESS;
-/// memory allocation error
-extern const char* CINELERRA_PLUGIN_EALLOC;
-/// dlopen failed
-extern const char* CINELERRA_PLUGIN_EDLOPEN;
-/// dlopen failed
-extern const char* CINELERRA_PLUGIN_EHOOK;
-/// Plugin not found
-extern const char* CINELERRA_PLUGIN_ENFOUND;
-/// no such interface
-extern const char* CINELERRA_PLUGIN_ENIFACE;
-/// revision not sufficient
-extern const char* CINELERRA_PLUGIN_EREVISION;
+CINELERRA_ERROR_DECLARE(PLUGIN_DLOPEN);
+CINELERRA_ERROR_DECLARE(PLUGIN_HOOK);
+CINELERRA_ERROR_DECLARE(PLUGIN_NFILE);
+CINELERRA_ERROR_DECLARE(PLUGIN_NIFACE);
+CINELERRA_ERROR_DECLARE(PLUGIN_REVISION);
 
 #ifdef __cplusplus
 } /* extern "C" */
