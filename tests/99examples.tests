@@ -1,0 +1,5 @@
+TESTING "test plugin example code" ./plugin_example
+
+TEST "plugin example" <<END
+END
+
