@@ -18,6 +18,10 @@
 
 tests_srcdir = $(top_srcdir)/tests
 
-noinst_PROGRAMS +=
+check_PROGRAMS += errortest
+
+errortest_SOURCES = $(tests_srcdir)/errortest.c
+errortest_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/lib/
+errortest_LDADD = $(builddir)/libcin3.a -lnobugmt -lpthread -ldl
 
 TESTS = $(tests_srcdir)/test.sh

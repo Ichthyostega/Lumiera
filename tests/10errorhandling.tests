@@ -1,0 +1,27 @@
+
+TESTING "Error handling" ./errortest
+
+TEST "no error" <<END
+return: 0
+END
+
+TEST "set error" set <<END
+return: 0
+END
+
+TEST "query no error" get_no <<END
+out: (nil)
+return: 0
+END
+
+TEST "query error" get <<END
+out: CINELERRA_ERROR_TEST:test error
+return: 0
+END
+
+TEST "error cleared" get2 <<END
+out: CINELERRA_ERROR_TEST:test error
+out: (nil)
+return: 0
+END
+

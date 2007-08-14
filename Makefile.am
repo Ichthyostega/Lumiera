@@ -18,6 +18,7 @@
 bin_PROGRAMS =
 lib_LTLIBRARIES =
 noinst_PROGRAMS =
+check_PROGRAMS =
 noinst_LIBRARIES =
 noinst_LTLIBRARIES =
 noinst_HEADERS =

@@ -26,9 +26,17 @@
 
 #define CINELERRA_DIE(message) do { NOBUG_ERROR(NOBUG_ON, message); abort(); } while(0)
 
-#define CINELERRA_ERROR_DECLARE(err) extern const cinelerra_error err
-#define CINELERRA_ERROR_DEFINE(err, msg) const cinelerra_error err = #err ":" msg
+#define CINELERRA_ERROR_DECLARE(err) \
+extern const char* CINELERRA_ERROR_##err
 
-typedef const char* cinelerra_error;
+#define CINELERRA_ERROR_DEFINE(err, msg) \
+const char* CINELERRA_ERROR_##err = "CINELERRA_ERROR_" #err ":" msg
+
+const char*
+cinelerra_error_set (const char * err);
+
+const char*
+cinelerra_error ();
+
 
 #endif /* CINELERRA_ERROR_H */
