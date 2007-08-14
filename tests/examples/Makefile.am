@@ -25,6 +25,6 @@ plugin_example_LDADD = $(builddir)/libcin3.a -lnobugmt -lpthread -ldl
 plugin_example_SOURCES = $(examples_srcdir)/plugin_main.c
 noinst_HEADERS += $(examples_srcdir)/hello_interface.h
 
-noinst_LTLIBRARIES += example_plugin.la
-example_plugin_la_CPPFLAGS = $(CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/lib/
-example_plugin_la_SOURCES = $(examples_srcdir)/example_plugin.c
+#noinst_LTLIBRARIES += example_plugin.la
+#example_plugin_la_CPPFLAGS = $(CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/lib/
+#example_plugin_la_SOURCES = $(examples_srcdir)/example_plugin.c
