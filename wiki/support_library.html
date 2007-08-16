@@ -646,7 +646,12 @@ Error: #f88</pre>
 <div title="DefaultTiddlers" modifier="CehTeh" modified="200707102306" created="200707102301" changecount="2">
 <pre>[[SupportLibrary]]</pre>
 </div>
-<div title="ErrorHandling" modifier="CehTeh" modified="200708101307" created="200707152252" tags="excludeMissing" changecount="5">
+<div title="ErrorHandling" modifier="Ichthyostega" modified="200708140629" created="200708140628" changecount="2">
+<pre>We distinguish the way how to cope with Errors, i.e. the ErrorHandlingPolicy, and the actual implementation
+* for code with C semantics &amp;rarr; ErrorHandling-C
+* for C++ code &amp;rarr; ErrorHandling-Cpp</pre>
+</div>
+<div title="ErrorHandling-C" modifier="Ichthyostega" modified="200708140628" created="200707152252" tags="excludeMissing" changecount="1">
 <pre>! Proposal:
 We need some centralized way to handle errors and doing hard aborts.
 
@@ -700,6 +705,19 @@ thus a {{{CINELERRA_ERROR_DEFINE(NFOO, &quot;Foo not found&quot;)}}} will result
 !! Allocation
 The next point is allocation failures. These are possible by C/C++ standard but don't actually happen anymore in Linux (except in few rare cases). Instead of gracefully handling this errors I'll add a {{{CINELERRA_DIE(message)}}} macro to this library later. This macro will just do (NoBug) logging and then doing a hard abort. It should be a macro because we want to preserve file/line location for logging.
 
+</pre>
+</div>
+<div title="ErrorHandling-Cpp" modifier="Ichthyostega" created="200708140640" changecount="1">
+<pre>Basically, the C++ error handling techniques are layered on top of the [[C solution|ErrorHandling-C]].
+!Proposal:
+We use a common base class for all our application specific exceptions. These exceptions can be thought of as a classification of error situations, thus the hierarchical approach. The purpose of throwing such a //classified exception// is
+* to do a controlled partial failure
+* to trigger automatic cleanup without the need to implement the details
+
+!!Requirements for the Exception Interface
+* a means for capturing and transporting detail informations
+* the possibility to link to the ''root cause'' of an exception, even after having passed several subsystem barriers.
+* getting standardized error messages automatically
 </pre>
 </div>
 <div title="FullScreenPlugin" modifier="CehTeh" modified="200706110313" created="200607241016" tags="systemConfig lewcidExtension" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110313">

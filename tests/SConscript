@@ -3,10 +3,10 @@
 ## SConscript  -  SCons buildscript for the Testsuite (called by SConstruct)
 ##
 
-Import('env','artifacts','testobj')
+Import('env','artifacts','cinobj','testobj')
 
 # build an application running the testsuite
-artifacts['testsuite'] = env.Program('mainsuite',testobj + ['#$SRCDIR/test/mainsuite.cpp'])
+artifacts['testsuite'] = env.Program('mainsuite', cinobj + testobj + ['#$SRCDIR/test/mainsuite.cpp'])
 
 # TODO: we could apply much more "magic" here
 # - build /every/ $TESTDIR/*.cpp into an application

@@ -747,11 +747,12 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BuildDependenceis" modifier="Ichthyostega" modified="200708120113" created="200708120103" tags="organization buildsys" changecount="3">
+<div title="BuildDependenceis" modifier="Ichthyostega" modified="200708140618" created="200708120103" tags="organization buildsys" changecount="5">
 <pre>for __Building__
 * gcc (4.1), glibc6 (2.3), libstdc++6 (4.1)
 * [[build system|BuildSystem]] dependencies: SCons (0.96.90), Python (2.3)
 * NoBug for Logging, Tracing, Asserting (can be obtained from [[Pipapo.org|http://www.pipapo.org/pipawiki/NoBug]])
+* ~NoBug needs [[valgrind|Valgrind]] (3.2), execinfo.h and libpthread (&amp;rarr; glibc)
 * std::tr1 &amp;mdash; esp. for the former BOOST::shared_ptr (which is now proposed standard)
 * BOOST
 //usually, newer versions are OK//

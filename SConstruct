@@ -59,14 +59,13 @@ def setupBasicEnvironment():
                , SRCDIR=SRCDIR
                , BINDIR=BINDIR
                , CPPPATH="#"+SRCDIR   # used to find includes, "#" means always absolute to build-root
-               , CPPDEFINES=[]        # flags will be appended to this list
+               , CPPDEFINES=['-DCINELERRA_VERSION=\\"%s\\"' % VERSION ]  # note: make it a list to append further defines
                )
     
     handleNoBugSwitches(env)
     
     appendCppDefine(env,'DEBUG','DEBUG', 'NDEBUG')
     appendCppDefine(env,'OPENGL','USE_OPENGL')
-    appendCppDefine(env,'VERSION','VERSION')
     appendVal(env,'ARCHFLAGS', 'CPPFLAGS')   # for both C and C++
     appendVal(env,'OPTIMIZE', 'CPPFLAGS', val=' -O3')
     appendVal(env,'DEBUG',    'CPPFLAGS', val=' -g')
@@ -215,17 +214,17 @@ def defineBuildTargets(env, artifacts):
              + srcSubtree(env,'proc')
              + srcSubtree(env,'common')
 #             + srcSubtree(env,'lib')
-             + env.Object('$SRCDIR/main.cpp')
              )
+    applobj = cinobj + env.Object('$SRCDIR/main.cpp')
     testobj = srcSubtree(env,'test/*', isShared=False)
     plugobj = srcSubtree(env,'plugin', isShared=True)
     
-    artifacts['cinelerra'] = env.Program('$BINDIR/cinelerra', cinobj)
+    artifacts['cinelerra'] = env.Program('$BINDIR/cinelerra', applobj)
     artifacts['plugins']   = env.SharedLibrary('$BINDIR/cinelerra-plugin', plugobj)
     
     # call subdir SConscript(s) for independent components
     SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts')
-    SConscript(dirs=[TESTDIR], exports='env artifacts testobj')
+    SConscript(dirs=[TESTDIR], exports='env artifacts cinobj testobj')
 
 
 def defineInstallTargets(env, artifacts):

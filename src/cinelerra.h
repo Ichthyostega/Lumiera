@@ -25,7 +25,6 @@
 #ifndef CINELERRA_H
 #define CINELERRA_H
 
-#include <nobug.h>
 
 
 #ifdef __cplusplus
@@ -41,14 +40,18 @@ extern "C" {
 
 
 
+#ifndef __cplusplus
+#include "nobugcfg.h"
 
-#ifdef __cplusplus /* ============== C++-Part ================= */
+#else  /* ========================== C++-Part ================= */
 
 
     /* common types frequently used... */
 
+#include "common/util.hpp"
 #include "common/time.hpp"
-#include "common/appconfig.hpp"
+#include "common/appconfig.hpp" // includes NoBug via "nobugcfg.h"
+#include "common/error.hpp"
 
 
 namespace cinelerra

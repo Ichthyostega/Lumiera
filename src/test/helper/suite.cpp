@@ -25,12 +25,16 @@
 #include <vector>
 #include <memory>
 #include <tr1/memory>
-#include "test/helper/suite.hpp"
-#include "test/helper/run.hpp"
-
-#include <nobug.h>
 #include <iostream>
 #include <sstream>
+
+#include "test/helper/suite.hpp"
+#include "test/helper/run.hpp"
+#include "common/error.hpp"
+#include "common/util.hpp"
+
+#include "nobugcfg.h"  
+
 
 namespace test
   {
@@ -38,10 +42,13 @@ namespace test
   using std::vector;
   using std::auto_ptr;
   using std::tr1::shared_ptr;
+
+  using util::isnil;
   
   typedef map<string, Launcher*> TestMap;
   typedef shared_ptr<TestMap>  PTestMap;
   typedef map<string,PTestMap> GroupMap;
+
   
   
   /** helper to collect and manage the test cases.
@@ -65,7 +72,10 @@ namespace test
   void 
   Registry::add2group (Launcher* test, string testID, string groupID)
     {
-      // TODO: ASSERT test!=null, testID.length > 0 ...
+      REQUIRE( test );
+      REQUIRE( !isnil(testID) );
+      REQUIRE( !isnil(groupID) );
+      
       PTestMap& group = getGroup(groupID);
       if (!group)
         group.reset( new TestMap );
@@ -86,9 +96,8 @@ namespace test
   void 
   Suite::enroll (Launcher* test, string testID, string groups)
     {
-      // TODO learn to use NoBug for logging 
-      std::cerr << "enroll( testID=" << testID << ")\n";
-      // TODO: ASSERT test!=null, testID.length() > 0...
+      REQUIRE( test );
+      REQUIRE( !isnil(testID) );
       
       std::istringstream ss(groups);
       string group;
@@ -112,9 +121,12 @@ namespace test
   Suite::Suite(string groupID) 
     : groupID_(groupID)
     {
-      std::cerr << "Suite( groupID="<< groupID << ")\n";
+      REQUIRE( !isnil(groupID) );
+      TRACE(test, "Test-Suite( groupID=%s )\n", groupID.c_str () );
+      
       if (!testcases.getGroup(groupID))
-        throw "empty testsuite";     /////////// TODO Errorhandling!
+        throw cinelerra::error::Invalid ();
+        //throw "empty testsuite";     /////////// TODO Errorhandling!
     }
     
   
@@ -125,15 +137,10 @@ namespace test
   void 
   Suite::run (int argc, char* argv[])
     {
-      /////////////////////////////////////////////////////TODO:DEBUG
-      std::cerr << "Suite::run( (" << argc << "[" ;
-      for ( int i=0; i<argc; ++i )
-        std::cerr << argv[i] << ",";
-      std::cerr << "]\n";
-      /////////////////////////////////////////////////////TODO:DEBUG
       
       PTestMap tests = testcases.getGroup(groupID_);
-      //TODO ASSERT tests!=null
+      if (!tests)
+        throw cinelerra::error::Invalid ();
       
       if (argc >= 2)
         {

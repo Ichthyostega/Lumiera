@@ -22,20 +22,31 @@
 
 
 #include "common/appconfig.hpp"
+#include "common/error.hpp"
+#include "common/util.hpp"
+
+#define NOBUG_INIT_DEFS_
+#include "nobugcfg.h"
+#undef NOBUG_INIT_DEFS_
 
 
-NOBUG_CPP_DEFINE_FLAG(config);
-
+using util::isnil;
 
 namespace cinelerra
   {
   
-  /** holds the single instance and triggers initialization */
-  auto_ptr<Appconfig> Appconfig::theApp_ (0);
+  /** This internal pointer to the single instance is deliberately
+   *  not initialized (i.e. rely on implicit initialisation to 0),
+   *  because when static init reaches this definition, the
+   *  Appconfig::instance() probably already has been called
+   *  by another compilation unit. This is ugliy, but preferable
+   *  to beeing dependant on inclusion order of headers. */
+  Appconfig* Appconfig::theApp_ ;
 
-#ifndef VERSION
-#define VERSION 3++devel
+#ifndef CINELERRA_VERSION
+#define CINELERRA_VERSION "3++devel"
 #endif
+
 
   /** perform initialization on first access. 
    *  A call is placed in static initialization code
@@ -49,30 +60,26 @@ namespace cinelerra
       NOBUG_INIT;
       //////////
       
-      (*configParam_)["version"] = "VERSION";
+      INFO(config, "Basic application configuration triggered.");
+      (*configParam_)["version"] = CINELERRA_VERSION;
     }
   
   
-          ////////////////////////////TODO: ein richtiges utility draus machen....
-          bool isnil(string val)
-            {
-              return 0 == val.length();
-            };
-          ////////////////////////////TODO  
             
             
             
   /** access the configuation value for a given key.
    *  @return empty string for unknown keys, else the corresponding configuration value
    */
-  string
+  const string &
   Appconfig::get (const string & key)  throw()
     {
           
       try
         {
-          string& val = (*instance().configParam_)[key];
+          const string& val = (*instance().configParam_)[key];
           WARN_IF( isnil(val), config, "undefined config parameter \"%s\" requested.", key.c_str());
+          return val;
           
         }
       catch (...)

@@ -27,7 +27,7 @@
 
 #include <vector>
 #include <string>
-#include "common/factory.hpp"
+
 #include "test/helper/suite.hpp"
 
 
@@ -36,8 +36,6 @@ namespace test
 
   using std::string;
   using std::auto_ptr;
-  using cinelerra::Factory;
-  using cinelerra::factory::SubclassPtr;
 
   typedef std::vector<string> * Arg; 
   

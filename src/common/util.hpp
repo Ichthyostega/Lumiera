@@ -1,5 +1,5 @@
 /*
-  SUITE.hpp  -  helper class for running collections of tests
+  TIME.hpp  -  unified representation of a time point, including conversion functions
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -21,40 +21,33 @@
 */
 
 
-#ifndef TESTHELPER_SUITE_H
-#define TESTHELPER_SUITE_H
+#ifndef UTIL_HPP_
+#define UTIL_HPP_
 
 #include <string>
+#include <cstring>
 
 
-
-namespace test
+namespace util
   {
   using std::string;
-  
-  // Forward decls needed for run.hpp
-  class Test;
-  class Launcher;
-  
-  
-  
-  /**
-   * Helper class for running a collection of tests.
-   * 
-   */
-  class Suite
+
+
+  /** a family of util functions providing a "no value whatsoever" test */
+   inline bool isnil(const string& val)
     {
-      string groupID_;
-      
-    public:
-      Suite (string groupID);
-      void run (int argc, char* argv[]);
-      static void enroll (Launcher *test, string testID, string groups);
-      
-      static const string ALLGROUP;
-    };
-    
-    
-    
-} // namespace test
-#endif
+      return 0 == val.length();
+    }
+
+   inline bool isnil(const string* pval)
+    {
+      return !pval || 0 == pval->length();
+    }
+
+   inline bool isnil(const char* pval)
+    {
+      return !pval || 0 == std::strlen(pval);
+    }
+
+} // namespace util
+#endif /*UTIL_HPP_*/

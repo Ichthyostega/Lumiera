@@ -26,9 +26,14 @@
 #include "cinelerra.h"
 
 using std::cout;
+using std::endl;
+using cinelerra::Appconfig;
+
 
 int main (int argc, char* argv[])
   {
-    cout << "hello cinelerra again\n";
+    cout << "*** Cinelerra NLE for Linux ***" << endl
+         << "    Version: " << Appconfig::get("version") << endl;
+    assert(true);
     return 0;
   }

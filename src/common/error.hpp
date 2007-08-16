@@ -41,6 +41,8 @@ namespace cinelerra
   class Error : public std::exception
     {
     public:
+      virtual ~Error () throw() {};
+      
       /** yield a diagnostig message characterizing the problem */
       virtual const char* what () const throw();
       

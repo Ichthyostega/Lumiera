@@ -5,6 +5,13 @@
 
 Import('env','artifacts')
 
+# at the moment (8/07), Ichthyo tries to find out how to configure NoBug
+# does it help, if we set the NOBUG_LOG to the environment used for building??
+env = env.Clone()
+env['ENV']['NOBUG_LOG'] = 'ttt:WARNING'
+
 # build the ubiquitous Hello World application (note: C source)
-artifacts['tools'] = env.Program('#$BINDIR/hello-world','hello.c')
+artifacts['tools'] = [ env.Program('#$BINDIR/hello-world','hello.c')
+                     + env.Program('#$BINDIR/try', 'try.cpp')          #### to try out some feature:
+                     ]
 
