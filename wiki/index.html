@@ -808,14 +808,15 @@ This distributed wiki might be used instead the pipapo.org wiki, investigate tha
 Wiki works. It is simple to use and just flexible enough to handle the task. I don't go to install any other software for such tasks on my server. While the design progresses I'd propose to move our work into git repositories and eventually phase this wiki pages out anyways. I'd rather like to start out distributed/git right away .. but git gives us only a fine storage layer, for a design process we need some good presentation layer (later when using git and starting the implementation everyones favorite editor serves for that) I have no better ideas yet to solve the presentation problem other than using this wiki (or maybe Bouml).
 </pre>
 </div>
-<div title="Cinelerra3Wiki" modifier="Ichthyostega" modified="200708120126" created="200706172308" tags="portal" changecount="27">
+<div title="Cinelerra3Wiki" modifier="Ichthyostega" modified="200708170218" created="200706172308" tags="portal" changecount="29">
 <pre>This is the entry point to several [[TiddlyWiki]]-Pages containing the developer and design documentation for Cinelrra-3.
 
 * Cehteh started GitNotes where we will collect some information about git, howto and special setups
 * since we prefer gpg signed tags in git and not each developer knows gpg well here is a Micro-GPG-HowTo 
 * we maintain (semi-) final design docs in DesignDocumentation
+* Things get often worked out on IRC, see IRC-Transcripts for decisions made there and not yet put into the proper documentation places
 
-Please end your tiddlers in a newline, this makes merging in git easier since the /pre tag used in tiddlywiki will become on a single line.
+Please __end your tiddlers in a newline__, this makes merging in git easier since the /pre tag used in tiddlywiki will become on a single line.
 
 ----
 !Design Draft
@@ -988,6 +989,35 @@ git push git://git.pipapo.org/cinelerra3/mob
 //}}}
 
 cinelerra3/mob is an anonymous account at pipapo.org where everyone can commit changes. </pre>
+</div>
+<div title="IRC-Transcripts" modifier="Ichthyostega" modified="200708170239" created="200708120209" tags="discuss irclog" changecount="4">
+<pre>!10/11 aug 2007
+* maybe let the render graph builder generate a meta language which then is ''jit compiled'' for each configuration
+* using smart pointers and factories for objects ''and avoid unprotected use of {{{new}}} and {{{delete}}}'', if this wont work because of cycles, we might investigate specialized garbage collectors for specific cases.
+* format for frames would be likely ffmpeg or such first, finally we see what suits best. We have to provide coverter nodes to convert frame formats for accessing diffrent libraries anyway (ffmpeg, v4l, gstreamer, ...)
+* we need a pool of worker threads and associated api's
+* accessing frames has a time (get until..), ''unique frame identifier'' (see below), policies (what to do when out of time, quality required,..) and hints (recursive dependency, must cache, playback speed and direction, ...)
+* for each sequence (configuration) each node has a number (monotonic incrementing), a generation counter (increment on each parameter change), a propagation sum (from parent nodes) 
+* frames are identified by their time(frame number) and node number plus generation number and propagation sum. This allows easily to find out when a frame has to be rerendered
+* no difference between compositor and viewer
+** viewer is just a decoder where a display window attaches
+** one can have multiple of such display windows
+** tracks, effects, (things which are nodes in the render graph) can add gui components to the viewer, like masking tools, panning, overlay and other compositor things.
+** in the render graph we have ''attachement points'' i.e. ~ExitNode-instances. Display and other output can only be pulled from such ~ExitNodes. Changing just the display or attaching it to another ~ExitNode doesn't count as change of the render graph, while reordering or reconfiguring the ~ExitNodes themselfes of course //is// a reconfig.
+* tracks are just containers for other nodes
+** they serve a gui representation (timeline, patchbay, viewer)
+** they do the mixing of contained things
+** can be recursive, the gui represents basically a tree
+** we need some 'wireing' abstraction for the gui to make it a real graph
+* rendering frames, context between frames
+** the proc layer ''only queries frames'' (by identifier and timeout) the backend tries to serve the best it can do (from cache or let them render)
+** each render job carries some ''quality limit'' (as S/N ratio) when previewing or scratching through the project this is used to generate reasonable quality previews
+** individual processing nodes can use additional state for their processings...
+*** the node objects themselfs should stay stateles, i.e. they shouldn't store state internally. 
+*** they can use special ''context frames'', which are provided and managed by the backend (as opaque data blocks).
+*** they can depend on previous state, i.e request from the backend a previous context frame, the same way as they can request previous media frames from the bakend, but there is no guarantee that the backend will satisfy this request.
+* on the question who decides what to do after a cache miss, we tend to put the decision into the render node (because this seems to be the simpler aproach), but still have to work out the details.
+</pre>
 </div>
 <div title="InlineJavaScript" modifier="Jeremy" created="200603090618" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200603090618">
 <pre>/***
