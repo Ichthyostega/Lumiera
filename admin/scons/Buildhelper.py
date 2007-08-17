@@ -48,10 +48,10 @@ def isHelpRequest():
 
 def srcSubtree(env,tree,isShared=False, **args):
     """ convienience wrapper: scans the given subtree, which is
-        to be located within $SRCDIR, find all source files and
+        relative to the current SConscript, find all source files and
         declare them as Static or SharedObjects for compilation
     """
-    root = env.subst('$SRCDIR/%s' % tree)  # expand $SRCDIR
+    root = env.subst(tree)  # expand Construction Vars
     if isShared:
         builder = lambda f: env.SharedObject(f, **args)
     else:

@@ -22,7 +22,7 @@
 
 
 #include <iostream>
-#include "test/helper/run.hpp"
+#include "helper/run.hpp"
 
 
 namespace cinelerra
@@ -40,7 +40,7 @@ namespace cinelerra
         
         void greeting() 
           { 
-            std::cout << "This is how the world ends...\n\n"; 
+            std::cout << "This is how the world ends...\n"; 
           }
       };
     

@@ -28,7 +28,7 @@
 #include <vector>
 #include <string>
 
-#include "test/helper/suite.hpp"
+#include "helper/suite.hpp"
 
 
 namespace test
@@ -48,6 +48,7 @@ namespace test
   class Test
     {
     public:
+      virtual ~Test() {}
       virtual void run(Arg arg) = 0;
     };
     
@@ -57,6 +58,7 @@ namespace test
   class Launcher
     {
     public:
+      virtual ~Launcher() {}
       virtual auto_ptr<Test> operator() () = 0;
     };
     

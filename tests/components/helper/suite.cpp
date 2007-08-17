@@ -28,8 +28,8 @@
 #include <iostream>
 #include <sstream>
 
-#include "test/helper/suite.hpp"
-#include "test/helper/run.hpp"
+#include "helper/suite.hpp"
+#include "helper/run.hpp"
 #include "common/error.hpp"
 #include "common/util.hpp"
 

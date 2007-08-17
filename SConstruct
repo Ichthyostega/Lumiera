@@ -55,20 +55,23 @@ def setupBasicEnvironment():
     opts = defineCmdlineOptions() 
  
     env = Environment(options=opts) 
+
+    env.Append ( CCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honor CFLAGS, only CCFLAGS 
     env.Replace( VERSION=VERSION
                , SRCDIR=SRCDIR
                , BINDIR=BINDIR
                , CPPPATH="#"+SRCDIR   # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['-DCINELERRA_VERSION=\\"%s\\"' % VERSION ]  # note: make it a list to append further defines
+               , CCFLAGS='-Wall'
                )
     
     handleNoBugSwitches(env)
     
     appendCppDefine(env,'DEBUG','DEBUG', 'NDEBUG')
     appendCppDefine(env,'OPENGL','USE_OPENGL')
-    appendVal(env,'ARCHFLAGS', 'CPPFLAGS')   # for both C and C++
-    appendVal(env,'OPTIMIZE', 'CPPFLAGS', val=' -O3')
-    appendVal(env,'DEBUG',    'CPPFLAGS', val=' -g')
+    appendVal(env,'ARCHFLAGS', 'CCFLAGS')   # for both C and C++
+    appendVal(env,'OPTIMIZE', 'CCFLAGS', val=' -O3')
+    appendVal(env,'DEBUG',    'CCFLAGS', val=' -g')
 
     prepareOptionsHelp(opts,env)
     opts.Save(OPTIONSCACHEFILE, env)
@@ -132,6 +135,8 @@ USAGE:   scons [-c] [OPTS] [key=val,...] [TARGETS]
 
 Special Targets:
      build   : just compile and link
+     testcode: additionally compile the Testsuite
+     check   : build and run the Testsuite
      install : install created artifacts at PREFIX
      src.tar : create source tarball
      doc.tar : create developer doc tarball
@@ -155,6 +160,10 @@ def configurePlatform(env):
     # Checks for prerequisites ------------
     if not conf.CheckLibWithHeader('m', 'math.h','C'):
         print 'Did not find math.h / libm, exiting.'
+        Exit(1)
+
+    if not conf.CheckLibWithHeader('dl', 'dlfcn.h', 'C'):
+        print 'Functions for runtime dynamic loading not available, exiting.'
         Exit(1)
 
     if not conf.CheckLibWithHeader('nobugmt', 'nobug.h', 'C'):
@@ -210,21 +219,20 @@ def defineBuildTargets(env, artifacts):
         setup sub-environments with special build options if necessary.
         We use a custom function to declare a whole tree of srcfiles. 
     """
-    cinobj = ( srcSubtree(env,'backend') 
-             + srcSubtree(env,'proc')
-             + srcSubtree(env,'common')
-#             + srcSubtree(env,'lib')
+    cinobj = ( srcSubtree(env,'$SRCDIR/backend') 
+             + srcSubtree(env,'$SRCDIR/proc')
+             + srcSubtree(env,'$SRCDIR/common')
+             + srcSubtree(env,'$SRCDIR/lib')
              )
     applobj = cinobj + env.Object('$SRCDIR/main.cpp')
-    testobj = srcSubtree(env,'test/*', isShared=False)
-    plugobj = srcSubtree(env,'plugin', isShared=True)
+    plugobj = srcSubtree(env,'$SRCDIR/plugin', isShared=True)
     
     artifacts['cinelerra'] = env.Program('$BINDIR/cinelerra', applobj)
     artifacts['plugins']   = env.SharedLibrary('$BINDIR/cinelerra-plugin', plugobj)
     
     # call subdir SConscript(s) for independent components
     SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts')
-    SConscript(dirs=[TESTDIR], exports='env artifacts cinobj testobj')
+    SConscript(dirs=[TESTDIR], exports='env artifacts cinobj')
 
 
 def defineInstallTargets(env, artifacts):

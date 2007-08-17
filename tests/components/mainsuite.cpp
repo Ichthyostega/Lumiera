@@ -21,7 +21,7 @@
 */
 
 
-#include "test/helper/suite.hpp"
+#include "helper/suite.hpp"
 
 
 /** run all tests or any single test specified in the first

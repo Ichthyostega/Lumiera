@@ -3,14 +3,55 @@
 ## SConscript  -  SCons buildscript for the Testsuite (called by SConstruct)
 ##
 
-Import('env','artifacts','cinobj','testobj')
+import os
+from Buildhelper import *
 
-# build an application running the testsuite
-artifacts['testsuite'] = env.Program('mainsuite', cinobj + testobj + ['#$SRCDIR/test/mainsuite.cpp'])
+Import('env','artifacts','cinobj')
 
+
+# build objects for the testcases...
+#
+env = env.Clone()
+env.Append(CPPPATH = ['components','examples'])
+
+testobj = srcSubtree(env,'components/*', isShared=False)
+
+example = env.StaticLibrary('examples/cin3example', ['#$SRCDIR/lib/error.o','#$SRCDIR/lib/plugin.o'])
+plugin  = env.StaticLibrary('example_plugin.la',    ['examples/example_plugin.c'])
+
+
+# build test applications
+#
+envp = env.Clone()  # special Environment including libs for the plugin-test
+envp.Append(LIBS = [example,plugin])
+
+artifacts['testsuite'] = ts = ( env.Program('mainsuite', cinobj + testobj + ['components/mainsuite.cpp'])
+                              + envp.Program('errortest',      example + ['examples/errortest.c'] )
+                              + envp.Program('plugin-example', example + plugin + ['examples/plugin_main.c'])
+                              )
 # TODO: we could apply much more "magic" here
+# - organize the source of testcases more systematically
 # - build /every/ $TESTDIR/*.cpp into an application
 # - link the testobj dynamically
 # - install additionally scripts into tests-dir if desired
 
+
+
+
+#
+# actually run the Testsuite
+#
+#  - the product of running the Testsuite is the ",testlog"
+#  - it depends on all artifacts defined as "ts" above
+#
+runTs = env.Command(',testlog', ts, "./test.sh",  chdir=1)
+  
+
+#
+# define Phony targets
+#  - 'scons testcode' triggers building of the Testsuite
+#  - 'scons check' triggers building and running
+#
+env.Alias('testcode', ts )
+env.Alias('check', runTs )
 

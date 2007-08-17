@@ -1,6 +1,6 @@
 
 
-#include "plugin.h"
+#include "lib/plugin.h"
 #include "hello_interface.h"
 
 
