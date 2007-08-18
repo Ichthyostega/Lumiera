@@ -2,6 +2,7 @@
 *~
 *.tar.*
 .[^.]*
+*.os
 Buildhelper.pyc
 optcache
 Makefile.in
