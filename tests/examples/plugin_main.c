@@ -8,6 +8,9 @@ int
 main(int argc, char** argv)
 {
   NOBUG_INIT;
+
+  cinelerra_init_plugin ();
+
   /*
     we have a plugin 'hello_1' which provides us 2 hello interfaces, one for english and one for german output,
     open both try them, close them.
@@ -15,20 +18,22 @@ main(int argc, char** argv)
 
   TODO("macros, doing casting and typing");
 
-  CINELERRA_INTERFACE_TYPE(hello, 1)* hello_de = (CINELERRA_INTERFACE_TYPE(hello, 1)*)
-    cinelerra_interface_open ("hello_1", "german_1", sizeof(CINELERRA_INTERFACE_TYPE(hello, 1)));
-  TODO("new error handling, when finished  if (!hello_de) CINELERRA_DIE");
+  CINELERRA_INTERFACE_TYPE(hello, 1)* hello_de =
+    (CINELERRA_INTERFACE_TYPE(hello, 1)*) cinelerra_interface_open ("example_plugin", "german_1", sizeof(CINELERRA_INTERFACE_TYPE(hello, 1)));
+
+  if (!hello_de) CINELERRA_DIE("loading plugin failed");
 
   hello_de->hello();
 
 
-  //  struct hello_interface_1* hello_en =
-  //  cinelerra_interface_open ("hello_1", "english_1", sizeof(struct hello_interface_1));
-  // TODO if (!hello_en) CINELERRA_DIE;
+  CINELERRA_INTERFACE_TYPE(hello, 1)* hello_en =
+    (CINELERRA_INTERFACE_TYPE(hello, 1)*) cinelerra_interface_open ("example_plugin", "english_1", sizeof(CINELERRA_INTERFACE_TYPE(hello, 1)));
 
-  //hello_en->hello();
+  if (!hello_en) CINELERRA_DIE("loading plugin failed");
 
-  //cinelerra_interface_close (hello_en);
+  hello_en->hello();
+
+  cinelerra_interface_close (hello_en);
   cinelerra_interface_close (hello_de);
 
 #if 0

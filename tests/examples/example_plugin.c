@@ -35,11 +35,11 @@ void bye(const char* m)
 }
 
 CINELERRA_INTERFACE_IMPLEMENT(hello, 1, german, myopen, myclose,
-                              //CINELERRA_INTERFACE_FUNC(hello, hallo),
-                              //CINELERRA_INTERFACE_FUNC(goodbye, tschuess)
+                              hallo,
+                              tschuess
                               );
 
 CINELERRA_INTERFACE_IMPLEMENT(hello, 1, english, myopen, myclose,
-                              //CINELERRA_INTERFACE_FUNC(hello, hello),
-                              //CINELERRA_INTERFACE_FUNC(goodbye, bye)
+                              hello,
+                              bye
                               );
