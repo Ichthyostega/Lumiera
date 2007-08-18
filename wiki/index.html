@@ -3494,7 +3494,7 @@ Portions written by Luke Blanshard are hereby released into the public domain.
 &lt;!--}}}--&gt;
 </pre>
 </div>
-<div title="TestSh" modifier="Ichthyostega" modified="200708180215" created="200708131509" tags="buildsys organization testsuite" changecount="9">
+<div title="TestSh" modifier="CehTeh" modified="200708181322" created="200708131509" tags="buildsys organization testsuite" changecount="11">
 <pre>! The Test Script
 To drive the various tests, we use the script {{{tests/test.sh}}}. All tests are run under valgrind control if available unless {{{VALGRINDFLAGS=DISABLE}}} is defined. 
 * The SCons buildsystem will build and run the testcode when executing the target {{{scons tests}}}.
@@ -3528,6 +3528,21 @@ In a .tests file one has to define following:
 ** {{{return: &lt;status&gt;}}} expect &lt;status&gt; as exit status of the program
 
 If no {{{out:}}} or {{{err:}}} is given, stdout and stderr are not considered as part of the test. If no {{{return:}}} is given, then 0 is expected.
+
+!! Numbering Tests
+It needs to be ensured that simpler tests come before more complex ones and that dependant tests come after their dependencies.
+
+Here is the order suggested:
+|00|The test system itself|
+|01..|Infrastructure, package consistency etc.|
+|10..|Basic support library functionality|
+|20..|Higher level support library services|
+|40..|Backend Unit tests|
+|50..|Proc Layer Unit tests|
+|60..|User interface Unit tests (Gui, Scripting)|
+|70..|Unit interaction tests (Backend, Proc, UI, ...)|
+|80..|Functionality tests on the complete program|
+|90..|Optional tests, example code etc.|
 
 </pre>
 </div>
