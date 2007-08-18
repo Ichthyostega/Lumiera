@@ -63,8 +63,6 @@ CINELERRA_INTERFACE_TYPE(iname, version) name##_##version =                     
   __VA_ARGS__                                                                   \
 }
 
-#define CINELERRA_INTERFACE_FUNC(protoname, funcname) funcname,
-
 
 
 /* internally used */
@@ -91,6 +89,14 @@ struct cinelerra_interface
   /// called for each close of this interface
   int (*close)(void);
 };
+
+/**
+ * Initialize the plugin system.
+ * always succeeds or aborts
+ */
+void
+cinelerra_init_plugin (void);
+
 
 /**
  * Make an interface available.

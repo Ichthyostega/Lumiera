@@ -1683,14 +1683,13 @@ struct cinelerra_interface_foo_2
 };
 }}}</pre>
 </div>
-<div title="PluginInterfaceImplementation" modifier="MichaelPloujnikov" modified="200707160355" created="200707111749" tags="excludeMissing" changecount="10">
+<div title="PluginInterfaceImplementation" modifier="CehTeh" modified="200708140303" created="200707111749" tags="excludeMissing" changecount="11">
 <pre>A Plugin realizes an interface. This means that actual functions are mapped to the correspondending slots in the interface structure.
 
 {{{
 CINELERRA_INTERFACE_IMPLEMENT(interface, version, name,
 	/* TODO some hooks here */
-	CINELERRA_INTERFACE_FUNC(protoname, functionname),
-	...
+	functionnames...
 );
 }}}
 
@@ -1716,14 +1715,14 @@ my_new_baz_function (float i)
 
 CINELERRA_INTERFACE_IMPLEMENT(foo, 1, myfoointerface,
 	/* TODO some hooks here */
-	CINELERRA_INTERFACE_FUNC(bar, my_bar_function),
-	CINELERRA_INTERFACE_FUNC(baz, my_baz_function)
+	my_bar_function,
+	my_baz_function
 );
 
 CINELERRA_INTERFACE_IMPLEMENT(foo, 2, myfoointerface,
 	/* TODO some hooks here */
-	CINELERRA_INTERFACE_FUNC(bar, my_bar_function),
-	CINELERRA_INTERFACE_FUNC(baz, my_new_baz_function)
+	my_bar_function,
+	my_new_baz_function
 );
 }}}
 
@@ -1743,9 +1742,6 @@ struct cinelerra_interface_foo_2 myfoointerface_2 =
 	my_new_baz_function
 }
 }}}
-
-Note: the protoname and version args for ~CINELERRA_INTERFACE_FUNC will be used for placement initialization and type checking (not mentioned in the above example). This would allow to initialize this structure out of order.
-
 </pre>
 </div>
 <div title="PluginLibrary" modifier="MichaelPloujnikov" modified="200707160351" created="200707111329" tags="excludeMissing" changecount="33">

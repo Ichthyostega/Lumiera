@@ -29,8 +29,7 @@
 #include "plugin.h"
 
 /* TODO should be set by the build system to the actual plugin path */
-#define CINELERRA_PLUGIN_PATH "~/.cinelerra3/plugins:/usr/local/lib/cinelerra3/plugins"
-#define CINELERRA_PLUGIN_PREFIX "lib"
+#define CINELERRA_PLUGIN_PATH "~/.cinelerra3/plugins:/usr/local/lib/cinelerra3/plugins:.libs"
 
 NOBUG_DEFINE_FLAG (cinelerra_plugin);
 
@@ -58,10 +57,8 @@ static const struct
   enum cinelerra_plugin_type type;
 } cinelerra_plugin_extensions [] =
   {
-    {"plugin",   CINELERRA_PLUGIN_DYNLIB},
     {"so",       CINELERRA_PLUGIN_DYNLIB},
     {"o",        CINELERRA_PLUGIN_DYNLIB},
-    {"tcc",      CINELERRA_PLUGIN_CSOURCE},
     {"c",        CINELERRA_PLUGIN_CSOURCE},
     /* extend here */
     {NULL,       CINELERRA_PLUGIN_NULL}
@@ -103,6 +100,11 @@ cinelerra_plugin_name_cmp (const void* a, const void* b)
   return strcmp (((struct cinelerra_plugin*) a)->name, ((struct cinelerra_plugin*) b)->name);
 }
 
+void
+cinelerra_init_plugin (void)
+{
+  NOBUG_INIT_FLAG (cinelerra_plugin);
+}
 
 int
 cinelerra_plugin_lookup (struct cinelerra_plugin* self, const char* path)
@@ -127,7 +129,7 @@ cinelerra_plugin_lookup (struct cinelerra_plugin* self, const char* path)
       for (int i = 0; cinelerra_plugin_extensions[i].ext; ++i)
         {
           /* path/name.extension */
-          int r = snprintf(pathname, 1024, CINELERRA_PLUGIN_PREFIX "%s/%s.%s", tok, self->name, cinelerra_plugin_extensions[i].ext);
+          int r = snprintf(pathname, 1024, "%s/%s.%s", tok, self->name, cinelerra_plugin_extensions[i].ext);
           if (r >= 1024)
             return -1; /*TODO error handling, name too long*/
 
@@ -136,6 +138,7 @@ cinelerra_plugin_lookup (struct cinelerra_plugin* self, const char* path)
           if (!access(pathname, R_OK))
             {
               /* got it */
+              TRACE (cinelerra_plugin, "found %s", pathname);
               self->pathname = strdup (pathname);
               if (!self->pathname) CINELERRA_DIE("out of memory");
               self->type = cinelerra_plugin_extensions[i].type;
@@ -176,14 +179,14 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
           (*found)->name = strdup (name);
           if (!(*found)->name) CINELERRA_DIE("out of memory");
 
-          if (!cinelerra_plugin_lookup (*found, getenv("CINELERRA_PLUGIN_PATH"))
+          if (!!cinelerra_plugin_lookup (*found, getenv("CINELERRA_PLUGIN_PATH"))
 #ifdef CINELERRA_PLUGIN_PATH
               /* else lookup for -DCINELERRA_PLUGIN_PATH */
-              || !cinelerra_plugin_lookup (&plugin, CINELERRA_PLUGIN_PATH)
+              && !!cinelerra_plugin_lookup (*found, CINELERRA_PLUGIN_PATH)
 #endif
               )
             {
-              cinelerra_error_set (CINELERRA_ERROR_PLUGIN_NFILE);
+              CINELERRA_ERROR_SET (cinelerra_plugin, PLUGIN_NFILE);
               goto elookup;
             }
         }
@@ -198,11 +201,13 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
       PLANNED("if .so like then dlopen; else if .c like tcc compile");
       TODO("factor dlopen and dlsym out");
 
-      (*found)->handle = dlopen ((*found)->pathname, RTLD_NOW|RTLD_LOCAL);
+      TRACE(cinelerra_plugin, "trying to open %s", (*found)->pathname);
+
+      (*found)->handle = dlopen ((*found)->pathname, RTLD_LAZY|RTLD_LOCAL);
       if (!(*found)->handle)
         {
           ERROR (cinelerra_plugin, "dlopen failed: %s", dlerror());
-          cinelerra_error_set (CINELERRA_ERROR_PLUGIN_DLOPEN);
+          CINELERRA_ERROR_SET (cinelerra_plugin, PLUGIN_DLOPEN);
           goto edlopen;
         }
 
@@ -210,20 +215,24 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
       int (*init)(void) = dlsym((*found)->handle, "cinelerra_plugin_init");
       if (init && init())
         {
-          ERROR (cinelerra_plugin, "cinelerra_plugin_init failed: %s: %s", name, interface);
-          cinelerra_error_set (CINELERRA_ERROR_PLUGIN_HOOK);
+          //ERROR (cinelerra_plugin, "cinelerra_plugin_init failed: %s: %s", name, interface);
+          CINELERRA_ERROR_SET (cinelerra_plugin, PLUGIN_HOOK);
           goto einit;
         }
     }
   /* we have the plugin, now get the interface descriptor */
   struct cinelerra_interface* ret;
 
+  dlerror();
   ret = dlsym ((*found)->handle, interface);
+
+  const char *dlerr = dlerror();
+  TRACE(cinelerra_plugin, "%s", dlerr);
   TODO ("need some way to tell 'interface not provided by plugin', maybe cinelerra_plugin_error()?");
-  if (!ret)
+  if (dlerr)
     {
-      ERROR (cinelerra_plugin, "plugin %s doesnt provide interface %s", name, interface);
-      cinelerra_error_set (CINELERRA_ERROR_PLUGIN_NIFACE);
+      //ERROR (cinelerra_plugin, "plugin %s doesnt provide interface %s", name, interface);
+      CINELERRA_ERROR_SET (cinelerra_plugin, PLUGIN_NIFACE);
       goto edlsym;
     }
 
@@ -231,7 +240,7 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
   if (ret->size < min_revision)
     {
       ERROR (cinelerra_plugin, "plugin %s provides older interface %s revision than required", name, interface);
-      cinelerra_error_set (CINELERRA_ERROR_PLUGIN_REVISION);
+      CINELERRA_ERROR_SET (cinelerra_plugin, PLUGIN_REVISION);
       goto erevision;
     }
 
@@ -241,7 +250,7 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
   if (ret->open && ret->open())
     {
       ERROR (cinelerra_plugin, "open hook indicated an error");
-      cinelerra_error_set (CINELERRA_ERROR_PLUGIN_HOOK);
+      CINELERRA_ERROR_SET (cinelerra_plugin, PLUGIN_HOOK);
       goto eopen;
     }
 
@@ -264,13 +273,14 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
   free (*found);
   *found = &plugin;
   tdelete (&plugin, &cinelerra_plugin_registry, cinelerra_plugin_name_cmp);
-  pthread_mutex_lock (&cinelerra_plugin_mutex);
+  pthread_mutex_unlock (&cinelerra_plugin_mutex);
   return NULL;
 }
 
 void
 cinelerra_interface_close (void* ptr)
 {
+  TRACE (cinelerra_plugin, "%p", ptr);
   if(!ptr)
     return;
 
