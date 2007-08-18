@@ -37,7 +37,7 @@ include $(top_srcdir)/src/lib/Makefile.am
 
 # tests
 include $(top_srcdir)/tests/Makefile.am
-include $(top_srcdir)/tests/examples/Makefile.am
+include $(top_srcdir)/tests/plugin/Makefile.am
 
 #EXTRA_DIST += admin debian doc depcomp README.BUILD LICENSE \
 #	cinelerra-cvs-current.spec

@@ -1,9 +1,7 @@
 /wiki/backups/*
 *~
 *.tar.*
-.sconf_temp
-.sconf_temp/*
-.sconsign.dblite
+.[^.]*
 Buildhelper.pyc
 optcache
 Makefile.in

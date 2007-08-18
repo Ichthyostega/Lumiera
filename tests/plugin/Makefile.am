@@ -15,19 +15,18 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-examples_srcdir = $(top_srcdir)/tests/examples
-noinst_PROGRAMS += plugin_example
+examples_srcdir = $(top_srcdir)/tests/plugin
+noinst_PROGRAMS += test-plugin
 
-plugin_example_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Werror
-plugin_example_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/lib/
-plugin_example_LDADD = $(builddir)/libcin3.a -lnobugmt -lpthread -ldl
-plugin_example_SOURCES = $(examples_srcdir)/plugin_main.c
+test_plugin_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Werror
+test_plugin_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src
+test_plugin_LDADD = $(builddir)/libcin3.a -lnobugmt -lpthread -ldl
+test_plugin_SOURCES = $(examples_srcdir)/plugin_main.c
 
 noinst_HEADERS += $(examples_srcdir)/hello_interface.h
 
 check_LTLIBRARIES += example_plugin.la
-example_plugin_la_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/lib/
+example_plugin_la_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src
 example_plugin_la_SOURCES = $(examples_srcdir)/example_plugin.c
 # the -rpath option is required, prolly a automake bug?
 example_plugin_la_LDFLAGS = -avoid-version -module -rpath $(shell pwd)
-

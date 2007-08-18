@@ -23,6 +23,7 @@
 
 import os
 import sys
+import glob
 import fnmatch
 import re
 import tarfile
@@ -47,10 +48,10 @@ def isHelpRequest():
 
 def srcSubtree(env,tree,isShared=False, **args):
     """ convienience wrapper: scans the given subtree, which is
-        to be located within $SRCDIR, find all source files and
+        relative to the current SConscript, find all source files and
         declare them as Static or SharedObjects for compilation
     """
-    root = env.subst('$SRCDIR/%s' % tree)  # expand $SRCDIR
+    root = env.subst(tree)  # expand Construction Vars
     if isShared:
         builder = lambda f: env.SharedObject(f, **args)
     else:
@@ -62,16 +63,28 @@ def srcSubtree(env,tree,isShared=False, **args):
 
 SRCPATTERNS = ['*.c','*.cpp','*.cc']
 
-def scanSrcSubtree(root):
-    """ scan the given subtree for source filesnames 
+def scanSrcSubtree(roots):
+    """ first expand (possible) wildcards and filter out non-dirs. 
+        Then scan the given subtree for source filesnames 
         (python generator function)
     """
-    for (dir,_,files) in os.walk(root):
-        if dir.startswith('./'):
-            dir = dir[2:]
-        for p in SRCPATTERNS:
-            for f in fnmatch.filter(files, p):
-                yield os.path.join(dir,f)
+    for root in globRootdirs(roots):
+        for (dir,_,files) in os.walk(root):
+            if dir.startswith('./'):
+                dir = dir[2:]
+            for p in SRCPATTERNS:
+                for f in fnmatch.filter(files, p):
+                    yield os.path.join(dir,f)
+
+
+
+def globRootdirs(roots):
+    """ helper: expand shell wildcards and filter the resulting list,
+        so that it only contains existing directories
+    """
+    filter = lambda f: os.path.isdir(f) and os.path.exists(f)
+    roots = glob.glob(roots)
+    return (dir for dir in roots if filter(dir) )
 
 
 

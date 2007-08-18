@@ -1,5 +1,5 @@
 
-TESTING "Error handling" ./errortest
+TESTING "Error handling" ./test-error
 
 TEST "no error" <<END
 return: 0

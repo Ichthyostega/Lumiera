@@ -1,6 +1,6 @@
 
 
-#include "plugin.h"
+#include "lib/plugin.h"
 #include "hello_interface.h"
 
 
@@ -10,7 +10,6 @@ main(int argc, char** argv)
   NOBUG_INIT;
 
   cinelerra_init_plugin ();
-
   /*
     we have a plugin 'hello_1' which provides us 2 hello interfaces, one for english and one for german output,
     open both try them, close them.

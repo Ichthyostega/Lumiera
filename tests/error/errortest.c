@@ -19,9 +19,11 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <error.h>
 #include <stdio.h>
 #include <string.h>
+
+#include "lib/error.h"
+
 
 CINELERRA_ERROR_DEFINE(TEST, "test error");
 

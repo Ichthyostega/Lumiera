@@ -1,39 +1,53 @@
 /*
-  main.cpp  -  start the Cinelerra Application
-
+  TIME.hpp  -  unified representation of a time point, including conversion functions
+ 
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
-                        Hermann Vosseler <Ichthyostega@web.de>
-
+ 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
   License, or (at your option) any later version.
-
+ 
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-
+ 
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ 
 */
 
 
-#include <iostream>
+#ifndef UTIL_HPP_
+#define UTIL_HPP_
 
-#include "cinelerra.h"
-
-using std::cout;
-using std::endl;
-using cinelerra::Appconfig;
+#include <string>
+#include <cstring>
 
 
-int main (int argc, char* argv[])
+namespace util
   {
-    cout << "*** Cinelerra NLE for Linux ***" << endl
-         << "    Version: " << Appconfig::get("version") << endl;
-    assert(true);
-    return 0;
-  }
+  using std::string;
+
+
+  /** a family of util functions providing a "no value whatsoever" test */
+   inline bool isnil(const string& val)
+    {
+      return 0 == val.length();
+    }
+
+   inline bool isnil(const string* pval)
+    {
+      return !pval || 0 == pval->length();
+    }
+
+   inline bool isnil(const char* pval)
+    {
+      return !pval || 0 == std::strlen(pval);
+    }
+
+} // namespace util
+#endif /*UTIL_HPP_*/
