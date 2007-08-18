@@ -7,6 +7,8 @@
 int
 main(int argc, char** argv)
 {
+  NOBUG_INIT;
+  
   /*
     we have a plugin 'hello_1' which provides us 2 hello interfaces, one for english and one for german output,
     open both try them, close them.

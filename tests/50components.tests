@@ -1,5 +1,5 @@
 
-TESTING "Component Test Suite" ./mainsuite
+TESTING "Component Test Suite" ./test-components
 
 TEST "Fac test" Factory_test <<END
 return: 0

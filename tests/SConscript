@@ -3,37 +3,54 @@
 ## SConscript  -  SCons buildscript for the Testsuite (called by SConstruct)
 ##
 
-import os
-from Buildhelper import *
+from Buildhelper import srcSubtree
+from Buildhelper import globRootdirs
 
-Import('env','artifacts','cinobj')
+Import('env','artifacts','corelib')
 
 
-# build objects for the testcases...
+def SingleTestExecutableSubdir(env,tree):
+    """ declare all targets needed to create a standalone
+        Test executalbe of the given Sub-tree. Note that
+        each subdir is built in its own Environment.
+    """
+    env = env.Clone()
+    env.Append(CPPPATH=tree) # add Subdir to Includepath 
+    tree = env.subst(tree)  # expand Construction Vars
+    exeName = 'test-%s' % tree
+    objects = srcSubtree(env,tree)
+    return env.Program(exeName, objects + corelib)
+
+
+def treatPluginTestcase(env):
+    """ Special case: the test-plugin executable
+    """
+    env = env.Clone()
+    env.Append(CPPPATH='plugin') 
+    testplugin = env.SharedLibrary('hello_1', 'plugin/example_plugin.c', SHLIBPREFIX='')
+    testExe = env.Program('test-plugin', ['plugin/plugin_main.c'] + corelib)
+    env.Depends(testExe, testplugin)
+    return testExe
+        #-- it depentds (at the moment) on a specific isolated test-plugin,
+        #   which is not integrated in the "normal procedure" for building Plugins
+        #   (which is not yet implemented as of 8/07)
+        #   TODO: handle this case automatically
+
+
+# 
+# build a Test-Executable out of every subdir...
+moduledirs = globRootdirs('*')
+
 #
-env = env.Clone()
-env.Append(CPPPATH = ['components','examples'])
+# have to treat the plugin-example specially.
+isnt_plugin = lambda dir : dir!='plugin'
+moduledirs = filter(isnt_plugin, moduledirs)
+pluginExe = treatPluginTestcase(env)
+print 'moduledirs: %s' %moduledirs
 
-testobj = srcSubtree(env,'components/*', isShared=False)
+artifacts['testsuite'] = ts = [ SingleTestExecutableSubdir(env, dir) for dir in moduledirs] + pluginExe 
+                              
 
-example = env.StaticLibrary('examples/cin3example', ['#$SRCDIR/lib/error.o','#$SRCDIR/lib/plugin.o'])
-plugin  = env.StaticLibrary('example_plugin.la',    ['examples/example_plugin.c'])
-
-
-# build test applications
-#
-envp = env.Clone()  # special Environment including libs for the plugin-test
-envp.Append(LIBS = [example,plugin])
-
-artifacts['testsuite'] = ts = ( env.Program('mainsuite', cinobj + testobj + ['components/mainsuite.cpp'])
-                              + envp.Program('errortest',      example + ['examples/errortest.c'] )
-                              + envp.Program('plugin-example', example + plugin + ['examples/plugin_main.c'])
-                              )
-# TODO: we could apply much more "magic" here
-# - organize the source of testcases more systematically
-# - build /every/ $TESTDIR/*.cpp into an application
-# - link the testobj dynamically
-# - install additionally scripts into tests-dir if desired
 
 
 
@@ -46,6 +63,8 @@ artifacts['testsuite'] = ts = ( env.Program('mainsuite', cinobj + testobj + ['co
 #
 runTs = env.Command(',testlog', ts, "./test.sh",  chdir=1)
   
+env.Clean (runTs, [ ',*']) # declare tempfiles of test.sh as cleanable 
+
 
 #
 # define Phony targets

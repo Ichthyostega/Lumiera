@@ -60,7 +60,7 @@ def setupBasicEnvironment():
     env.Replace( VERSION=VERSION
                , SRCDIR=SRCDIR
                , BINDIR=BINDIR
-               , CPPPATH="#"+SRCDIR   # used to find includes, "#" means always absolute to build-root
+               , CPPPATH=["#"+SRCDIR]   # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['-DCINELERRA_VERSION=\\"%s\\"' % VERSION ]  # note: make it a list to append further defines
                , CCFLAGS='-Wall'
                )
@@ -224,15 +224,15 @@ def defineBuildTargets(env, artifacts):
              + srcSubtree(env,'$SRCDIR/common')
              + srcSubtree(env,'$SRCDIR/lib')
              )
-    applobj = cinobj + env.Object('$SRCDIR/main.cpp')
     plugobj = srcSubtree(env,'$SRCDIR/plugin', isShared=True)
+    corelib = env.StaticLibrary('$BINDIR/core.la', cinobj)
     
-    artifacts['cinelerra'] = env.Program('$BINDIR/cinelerra', applobj)
+    artifacts['cinelerra'] = env.Program('$BINDIR/cinelerra', ['$SRCDIR/main.cpp']+ corelib )
     artifacts['plugins']   = env.SharedLibrary('$BINDIR/cinelerra-plugin', plugobj)
     
     # call subdir SConscript(s) for independent components
     SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts')
-    SConscript(dirs=[TESTDIR], exports='env artifacts cinobj')
+    SConscript(dirs=[TESTDIR], exports='env artifacts corelib')
 
 
 def defineInstallTargets(env, artifacts):
