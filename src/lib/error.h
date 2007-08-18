@@ -32,6 +32,10 @@ extern const char* CINELERRA_ERROR_##err
 #define CINELERRA_ERROR_DEFINE(err, msg) \
 const char* CINELERRA_ERROR_##err = "CINELERRA_ERROR_" #err ":" msg
 
+#define CINELERRA_ERROR_SET(flag, err) \
+ERROR (flag, "%s", strchr(CINELERRA_ERROR_##err, ':')+1); \
+cinelerra_error_set(CINELERRA_ERROR_##err)
+
 const char*
 cinelerra_error_set (const char * err);
 
