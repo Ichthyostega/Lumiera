@@ -3494,7 +3494,7 @@ Portions written by Luke Blanshard are hereby released into the public domain.
 &lt;!--}}}--&gt;
 </pre>
 </div>
-<div title="TestSh" modifier="CehTeh" modified="200708181322" created="200708131509" tags="buildsys organization testsuite" changecount="11">
+<div title="TestSh" modifier="CehTeh" modified="200708182045" created="200708131509" tags="buildsys organization testsuite" changecount="12">
 <pre>! The Test Script
 To drive the various tests, we use the script {{{tests/test.sh}}}. All tests are run under valgrind control if available unless {{{VALGRINDFLAGS=DISABLE}}} is defined. 
 * The SCons buildsystem will build and run the testcode when executing the target {{{scons tests}}}.
@@ -3537,11 +3537,12 @@ Here is the order suggested:
 |01..|Infrastructure, package consistency etc.|
 |10..|Basic support library functionality|
 |20..|Higher level support library services|
-|40..|Backend Unit tests|
-|50..|Proc Layer Unit tests|
-|60..|User interface Unit tests (Gui, Scripting)|
-|70..|Unit interaction tests (Backend, Proc, UI, ...)|
-|80..|Functionality tests on the complete program|
+|30..|Backend Unit tests|
+|40..|Proc Layer Unit tests|
+|50..|User interface Unit tests (Gui, Scripting)|
+|60..|Unit interaction tests (Backend, Proc, UI, ...)|
+|70..|Functionality tests on the complete program|
+|80..|Reported bugs which can be expressed in a test case|
 |90..|Optional tests, example code etc.|
 
 </pre>
