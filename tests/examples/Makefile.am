@@ -21,11 +21,13 @@ noinst_PROGRAMS += plugin_example
 plugin_example_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Werror
 plugin_example_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/lib/
 plugin_example_LDADD = $(builddir)/libcin3.a -lnobugmt -lpthread -ldl
-
 plugin_example_SOURCES = $(examples_srcdir)/plugin_main.c
+
 noinst_HEADERS += $(examples_srcdir)/hello_interface.h
 
-check_LTLIBRARIES = example_plugin.la
+check_LTLIBRARIES += example_plugin.la
 example_plugin_la_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/lib/
 example_plugin_la_SOURCES = $(examples_srcdir)/example_plugin.c
-example_plugin_la_LDFLAGS = -module
+# the -rpath option is required, prolly a automake bug?
+example_plugin_la_LDFLAGS = -avoid-version -module -rpath $(shell pwd)
+
