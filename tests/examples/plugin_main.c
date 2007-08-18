@@ -21,7 +21,7 @@ main(int argc, char** argv)
   CINELERRA_INTERFACE_TYPE(hello, 1)* hello_de =
     (CINELERRA_INTERFACE_TYPE(hello, 1)*) cinelerra_interface_open ("example_plugin", "german_1", sizeof(CINELERRA_INTERFACE_TYPE(hello, 1)));
 
-  if (!hello_de) CINELERRA_DIE("loading plugin failed");
+  if (!hello_de) CINELERRA_DIE;
 
   hello_de->hello();
 
@@ -29,7 +29,7 @@ main(int argc, char** argv)
   CINELERRA_INTERFACE_TYPE(hello, 1)* hello_en =
     (CINELERRA_INTERFACE_TYPE(hello, 1)*) cinelerra_interface_open ("example_plugin", "english_1", sizeof(CINELERRA_INTERFACE_TYPE(hello, 1)));
 
-  if (!hello_en) CINELERRA_DIE("loading plugin failed");
+  if (!hello_en) CINELERRA_DIE;
 
   hello_en->hello();
 

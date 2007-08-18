@@ -24,7 +24,7 @@
 #include <nobug.h>
 #include <stdlib.h>
 
-#define CINELERRA_DIE(message) do { NOBUG_ERROR(NOBUG_ON, message); abort(); } while(0)
+#define CINELERRA_DIE do { NOBUG_ERROR(NOBUG_ON, "Fatal Error!"); abort(); } while(0)
 
 #define CINELERRA_ERROR_DECLARE(err) \
 extern const char* CINELERRA_ERROR_##err

@@ -140,7 +140,7 @@ cinelerra_plugin_lookup (struct cinelerra_plugin* self, const char* path)
               /* got it */
               TRACE (cinelerra_plugin, "found %s", pathname);
               self->pathname = strdup (pathname);
-              if (!self->pathname) CINELERRA_DIE("out of memory");
+              if (!self->pathname) CINELERRA_DIE;
               self->type = cinelerra_plugin_extensions[i].type;
               return 0;
             }
@@ -163,7 +163,7 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
   plugin.name = name; /* for searching */
 
   found = tsearch (&plugin, &cinelerra_plugin_registry, cinelerra_plugin_name_cmp);
-  if (!found) CINELERRA_DIE("out of memory");
+  if (!found) CINELERRA_DIE;
 
   if (*found == &plugin)
     {
@@ -171,13 +171,13 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
 
       /* now really create new item */
       *found = malloc (sizeof (struct cinelerra_plugin));
-      if (!*found) CINELERRA_DIE("out of memory");
+      if (!*found) CINELERRA_DIE;
 
       if (name) /* NULL is main app, no lookup needed */
         {
           /*lookup for $CINELERRA_PLUGIN_PATH*/
           (*found)->name = strdup (name);
-          if (!(*found)->name) CINELERRA_DIE("out of memory");
+          if (!(*found)->name) CINELERRA_DIE;
 
           if (!!cinelerra_plugin_lookup (*found, getenv("CINELERRA_PLUGIN_PATH"))
 #ifdef CINELERRA_PLUGIN_PATH
