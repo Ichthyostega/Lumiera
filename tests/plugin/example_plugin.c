@@ -21,17 +21,17 @@ void hallo(void)
 
 void tschuess(const char* m)
 {
-  printf("Tschues %s\n", m);
+  printf("Tschuess %s\n", m);
 }
 
 void hello(void)
 {
-  printf("Hello world!\n");
+  printf("Hello World!\n");
 }
 
 void bye(const char* m)
 {
-  printf("bye %s\n", m);
+  printf("Bye %s\n", m);
 }
 
 CINELERRA_INTERFACE_IMPLEMENT(hello, 1, german, myopen, myclose,
