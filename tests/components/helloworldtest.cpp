@@ -1,5 +1,5 @@
 /*
-  SUITE.hpp  -  helper class for running collections of tests
+  HelloWorld(Test)  -  how to use this test framework...
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -18,43 +18,39 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
 
 
-#ifndef TESTHELPER_SUITE_H
-#define TESTHELPER_SUITE_H
-
-#include <string>
+#include <iostream>
+#include "common/test/run.hpp"
 
 
-
-namespace test
+namespace cinelerra
   {
-  using std::string;
-  
-  // Forward decls needed for run.hpp
-  class Test;
-  class Launcher;
-  
-  
-  
-  /**
-   * Helper class for running a collection of tests.
-   * 
-   */
-  class Suite
+  namespace test
     {
-      string groupID_;
+
+    
+    class HelloWorld_test : public Test
+      {
+        virtual void run(Arg arg) 
+          {
+            greeting();
+          } 
+        
+        void greeting() 
+          { 
+            std::cout << "This is how the world ends...\n"; 
+          }
+      };
+    
       
-    public:
-      Suite (string groupID);
-      void run (int argc, char* argv[]);
-      static void enroll (Launcher *test, string testID, string groups);
-      
-      static const string ALLGROUP;
-    };
+
+    /** Register this test class to be invoked in some test groups (suites) */
+    Launch<HelloWorld_test> run_HelloWorld_test("HelloWorld_test","unit common");
     
+    // NOTE: you may use the Macro "LAUNCHER" in run.hpp to simplify this Registration
     
-    
-} // namespace test
-#endif
+  } // namespace test
+
+} // namespace cinelerra

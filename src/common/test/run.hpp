@@ -28,7 +28,7 @@
 #include <vector>
 #include <string>
 
-#include "helper/suite.hpp"
+#include "common/test/suite.hpp"
 
 
 namespace test
@@ -37,7 +37,7 @@ namespace test
   using std::string;
   using std::auto_ptr;
 
-  typedef std::vector<string> * Arg; 
+  typedef std::vector<string> & Arg; 
   
   
   
@@ -88,5 +88,13 @@ namespace test
 using ::test::Arg;
 using ::test::Test;
 using ::test::Launch;
+
+// and provide shortcut for registration
+#define LAUNCHER(_TEST_CLASS_, _GROUPS_) \
+  /** Register _TEST_CLASS_ to be invoked in some test suites (groups) _GROUPS_ */    \
+  Launch<_TEST_CLASS_> run_##_TEST_CLASS_##_(STRINGIFY(_TEST_CLASS_), _GROUPS_); 
+
+#define STRINGIFY(TOKEN) __STRINFY(TOKEN)
+#define __STRINFY(TOKEN) #TOKEN
 
 #endif

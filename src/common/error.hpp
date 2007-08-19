@@ -72,6 +72,11 @@ namespace cinelerra
       {
         
       };
+
+    class Fatal : public Logic
+      {
+        
+      };
       
     class Config : public Error
       {
@@ -93,10 +98,24 @@ namespace cinelerra
         
       };
       
-      
-      
-      
+   
+    
   } // namespace error
 
 } // namespace cinelerra
+
+#include <iostream>
+
+extern void booo();
+
+/******************************************************
+ * if NoBug is used, redefine some macros 
+ * to rather throw Cinelerra Errors instead of aborting
+ */
+#ifdef NOBUG_ABORT
+#undef NOBUG_ABORT
+#define NOBUG_ABORT throw cinelerra::error::Fatal(); ////////////////TODO
+#endif
+
+
 #endif

@@ -10,3 +10,8 @@ out: This is how the world ends...
 return: 0
 END
 
+TEST "Parseoption" TestOption_test <<END
+out: Testing invocation with cmdline: ...
+return: 0
+END
+

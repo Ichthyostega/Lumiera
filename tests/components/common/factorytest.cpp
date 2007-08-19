@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "helper/run.hpp"
+#include "common/test/run.hpp"
 
 
 namespace cinelerra

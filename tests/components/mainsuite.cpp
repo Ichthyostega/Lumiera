@@ -21,8 +21,7 @@
 */
 
 
-#include "helper/suite.hpp"
-
+#include "common/test/suite.hpp"
 
 /** run all tests or any single test specified in the first
  *  cmd line argument.

@@ -28,8 +28,8 @@
 #include <iostream>
 #include <sstream>
 
-#include "helper/suite.hpp"
-#include "helper/run.hpp"
+#include "common/test/suite.hpp"
+#include "common/test/run.hpp"
 #include "common/error.hpp"
 #include "common/util.hpp"
 
@@ -151,15 +151,18 @@ namespace test
               // go ahead and invoke just this test.
               if (argc > 2)
                 { // pass additional cmdline as vector
+                FIXME("use Optparser");
                   vector<string> arglist(argc-2);
                   for ( int i=2; i<argc; ++i )
                     arglist.push_back(string(argv[i]));
                   
                   // run single Testcase with provided arguments
-                  (*test)()->run(&arglist);
+                  (*test)()->run(arglist);
                 }
               else
-                (*test)()->run(0); // without additional argumens
+                FIXME("use Optparser");
+                vector<string> nix;
+                (*test)()->run(nix); // without additional argumens
               
               return;
             }
@@ -172,7 +175,9 @@ namespace test
           {
             std::cout << "  ----------"<< i->first<< "----------\n";
             Launcher& test = *(i->second);
-            test()->run(0); // without cmdline arguments
+            FIXME("use Optparser");
+            vector<string> nix;
+            test()->run(nix); // without cmdline arguments
           }
       
     }

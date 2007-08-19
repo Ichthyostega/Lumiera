@@ -174,6 +174,7 @@ def configurePlatform(env):
         print 'Did not find the pthread lib or pthread.h, exiting.'
     else:
        conf.env.Append(CPPFLAGS = ' -DHAVE_PTHREAD_H')
+       conf.env.Append(CCFLAGS = ' -pthread')
 
     if conf.CheckCHeader('execinfo.h'):
        conf.env.Append(CPPFLAGS = ' -DHAS_EXECINFO_H')
@@ -188,10 +189,14 @@ def configurePlatform(env):
     if not conf.CheckCXXHeader('boost/config.hpp'):
         print 'We need the C++ boost-lib.'
         Exit(1)
-    
-    if not conf.CheckCXXHeader('boost/shared_ptr.hpp'):
-        print 'We need boost::shared_ptr (shared_ptr.hpp).'
-        Exit(1)
+    else:
+        if not conf.CheckCXXHeader('boost/shared_ptr.hpp'):
+            print 'We need boost::shared_ptr (shared_ptr.hpp).'
+            Exit(1)
+        if not conf.CheckLibWithHeader('boost_program_options-mt','boost/program_options.hpp','C++'):
+            print 'We need boost::program_options (also the corresponding binary lib).'
+            Exit(1)
+            
         
     # create new env containing the finished configuration
     return conf.Finish()

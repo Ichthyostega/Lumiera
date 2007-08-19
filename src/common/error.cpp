@@ -22,9 +22,21 @@
 
 
 #include "common/error.hpp"
+#include "nobugcfg.h"
+
+///////////////////////////////////TODO
+#include <iostream>
+
+extern void booo()
+  {
+    std::cerr << "Booooo!!!" << std::endl;
+    std::cerr.flush();
+  }
+///////////////////////////////////TODO
 
 namespace cinelerra
   {
+  char* killme ="cinelerra Errrror. TODO real description needed";
   
   /** Description of the problem, including the internal char constant
    *  in accordance to cinelerras error identification scheme.
@@ -34,6 +46,8 @@ namespace cinelerra
   const char*
   Error::what () const  throw()
     {
+      TODO("really implement cinelerra::Error description");
+      return killme; 
     }
   
   
@@ -46,6 +60,7 @@ namespace cinelerra
   std::exception 
   Error::rootCause() const  throw()
     {
+      UNIMPLEMENTED("storing and managing root causes");
     }
   
   
