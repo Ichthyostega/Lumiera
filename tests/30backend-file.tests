@@ -1,0 +1,28 @@
+
+TESTING "File backend"
+
+
+PLANNED "File handle management"
+
+
+PLANNED "open nonexisting file for reading"
+
+
+PLANNED "create file"
+
+
+PLANNED "open existing file for reading"
+
+
+PLANNED "open existing file for writing"
+
+
+PLANNED "Test, access nonexistent file for reading"
+
+
+PLANNED "write frames"
+
+
+PLANNED "read frames"
+
+

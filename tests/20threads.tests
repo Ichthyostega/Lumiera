@@ -1,0 +1,5 @@
+TESTING "Threads"
+
+PLANNED "join"
+PLANNED "detached"
+PLANNED "cancel"

@@ -1,0 +1,18 @@
+
+TESTING "Time functions"
+
+PLANNED "get time"
+PLANNED "add time, normalized"
+PLANNED "substract time, normalized"
+
+
+# the next ones for different common framerates, check corner cases
+PLANNED "time to frame"
+PLANNED "frame to time"
+
+
+# how long are N frames on average (beware of precision!)
+PLANNED "frame duration"
+
+# how much frames fall in a certain timerange
+PLANNED "frames in range"
