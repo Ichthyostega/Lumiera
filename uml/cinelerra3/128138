@@ -1,6 +1,6 @@
-format 38
+format 40
 "design" // BackendLayer::design
-  revision 6
+  revision 8
   modified_by 10 "ct"
   // class settings
   //class diagram settings
@@ -8,7 +8,7 @@ format 38
   //use case diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
   //collaboration diagram settings
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
   //object diagram settings
@@ -34,7 +34,7 @@ format 38
     //object diagram settings
      write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
     //sequence diagram settings
-    show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
     //state diagram settings
     package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
     show_activities default region_horizontally default drawing_language default
@@ -305,6 +305,22 @@ ${inlines}
       classrelation 128522 // mapping (<aggregation>)
 	relation_ref 128266 // <aggregation>
       end
+
+      classrelation 129674 // <aggregation>
+	relation 129290 o---
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 129674 // <aggregation>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 129802 // <aggregation>
+      end
+
+      classrelation 130058 // write_buffer (<association>)
+	relation_ref 129418 // <association>
+      end
     end
 
     class 128949 "FrameDescriptor"
@@ -459,10 +475,65 @@ ${inlines}
 	    classrelation_ref 128778 // <realization>
 	  b multiplicity "" parent class_ref 128906 // SmartPointer
       end
-
     end
 
     activity 128010 "get frame"
+    end
+
+    class 129034 "WriteBufferPool"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130186 // <association>
+	relation 129546 ----
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 130186 // <association>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 130314 // <association>
+      end
+    end
+
+    class 129162 "WriteBuffer"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 129802 // <aggregation>
+	relation_ref 129290 // <aggregation>
+      end
+
+      classrelation 129930 // frame (<association>)
+	relation 129418 ----
+	  a role_name "frame" multiplicity "0..1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 129930 // frame (<association>)
+	  b role_name "write_buffer" multiplicity "0..1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 130058 // write_buffer (<association>)
+      end
+
+      classrelation 130314 // <association>
+	relation_ref 129546 // <association>
+      end
     end
   end
 end
