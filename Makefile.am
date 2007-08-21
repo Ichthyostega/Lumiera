@@ -18,8 +18,9 @@
 bin_PROGRAMS =
 lib_LTLIBRARIES =
 noinst_PROGRAMS =
+check_PROGRAMS =
 noinst_LIBRARIES =
-noinst_LTLIBRARIES =
+check_LTLIBRARIES =
 noinst_HEADERS =
 BUILT_SOURCES =
 EXTRA_DIST =
@@ -35,7 +36,8 @@ include $(top_srcdir)/src/lib/Makefile.am
 #include $(top_srcdir)/src...
 
 # tests
-include $(top_srcdir)/tests/examples/Makefile.am
+include $(top_srcdir)/tests/Makefile.am
+include $(top_srcdir)/tests/plugin/Makefile.am
 
 #EXTRA_DIST += admin debian doc depcomp README.BUILD LICENSE \
 #	cinelerra-cvs-current.spec

@@ -28,26 +28,17 @@
 
 #include "plugin.h"
 
-/*
-  TODO cinelerra_xmalloc which aborts on allocation error
-   or cinelerra_die() function
-
-TODO move CINELERRA_DIE elsewhere (cinlib.h?)
-*/
-#define CINELERRA_DIE do{NOBUG_LOG(NOBUG_ON, LOG_EMERG, "aborting due fatal error"); abort();}while(0)
-
 /* TODO should be set by the build system to the actual plugin path */
-#define CINELERRA_PLUGIN_PATH "~/.cinelerra3/plugins:/usr/local/lib/cinelerra3/plugins"
+#define CINELERRA_PLUGIN_PATH "~/.cinelerra3/plugins:/usr/local/lib/cinelerra3/plugins:.libs"
 
 NOBUG_DEFINE_FLAG (cinelerra_plugin);
 
 /* errors */
-const char* CINELERRA_PLUGIN_SUCCESS = NULL;
-const char* CINELERRA_PLUGIN_EDLOPEN = "Could not open plugin";
-const char* CINELERRA_PLUGIN_EHOOK = "Hook function failed";
-const char* CINELERRA_PLUGIN_ENFOUND = "No such plugin";
-const char* CINELERRA_PLUGIN_ENIFACE = "No such interface";
-const char* CINELERRA_PLUGIN_EREVISION = "Interface revision too old";
+CINELERRA_ERROR_DEFINE(PLUGIN_DLOPEN, "Could not open plugin");
+CINELERRA_ERROR_DEFINE(PLUGIN_HOOK, "Hook function failed");
+CINELERRA_ERROR_DEFINE(PLUGIN_NFILE, "No such plugin");
+CINELERRA_ERROR_DEFINE(PLUGIN_NIFACE, "No such interface");
+CINELERRA_ERROR_DEFINE(PLUGIN_REVISION, "Interface revision too old");
 
 /*
   supported (planned) plugin types and their file extensions
@@ -66,9 +57,8 @@ static const struct
   enum cinelerra_plugin_type type;
 } cinelerra_plugin_extensions [] =
   {
-    {"plugin",   CINELERRA_PLUGIN_DYNLIB},
     {"so",       CINELERRA_PLUGIN_DYNLIB},
-    {"tcc",      CINELERRA_PLUGIN_CSOURCE},
+    {"o",        CINELERRA_PLUGIN_DYNLIB},
     {"c",        CINELERRA_PLUGIN_CSOURCE},
     /* extend here */
     {NULL,       CINELERRA_PLUGIN_NULL}
@@ -103,16 +93,6 @@ void* cinelerra_plugin_registry = NULL;
 /* plugin operations are protected by one big mutex */
 pthread_mutex_t cinelerra_plugin_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-/* Thread local storage, for now only the error state */
-static pthread_key_t cinelerra_plugin_tls_error;
-static pthread_once_t cinelerra_plugin_initialized = PTHREAD_ONCE_INIT;
-
-void
-cinelerra_plugin_tls_init (void)
-{
-  pthread_key_create (&cinelerra_plugin_tls_error, NULL);
-}
-
 /* the compare function for the registry tree */
 static int
 cinelerra_plugin_name_cmp (const void* a, const void* b)
@@ -120,21 +100,10 @@ cinelerra_plugin_name_cmp (const void* a, const void* b)
   return strcmp (((struct cinelerra_plugin*) a)->name, ((struct cinelerra_plugin*) b)->name);
 }
 
-
-const char*
-cinelerra_plugin_error ()
+void
+cinelerra_init_plugin (void)
 {
-  pthread_once (&cinelerra_plugin_initialized, cinelerra_plugin_tls_init);
-
-  const char* err = pthread_getspecific (cinelerra_plugin_tls_error);
-  pthread_setspecific (cinelerra_plugin_tls_error, CINELERRA_PLUGIN_SUCCESS);
-  return err;
-}
-
-static void
-cinelerra_plugin_error_set (const char* err)
-{
-  pthread_setspecific (cinelerra_plugin_tls_error, err);
+  NOBUG_INIT_FLAG (cinelerra_plugin);
 }
 
 int
@@ -169,6 +138,7 @@ cinelerra_plugin_lookup (struct cinelerra_plugin* self, const char* path)
           if (!access(pathname, R_OK))
             {
               /* got it */
+              TRACE (cinelerra_plugin, "found %s", pathname);
               self->pathname = strdup (pathname);
               if (!self->pathname) CINELERRA_DIE;
               self->type = cinelerra_plugin_extensions[i].type;
@@ -184,8 +154,6 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
 {
   //REQUIRE (min_revision > sizeof(struct cinelerra_interface), "try to use an empty interface eh?");
   REQUIRE (interface, "interface name must be given");
-
-  pthread_once (&cinelerra_plugin_initialized, cinelerra_plugin_tls_init);
 
   pthread_mutex_lock (&cinelerra_plugin_mutex);
 
@@ -211,14 +179,14 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
           (*found)->name = strdup (name);
           if (!(*found)->name) CINELERRA_DIE;
 
-          if (!cinelerra_plugin_lookup (*found, getenv("CINELERRA_PLUGIN_PATH"))
+          if (!!cinelerra_plugin_lookup (*found, getenv("CINELERRA_PLUGIN_PATH"))
 #ifdef CINELERRA_PLUGIN_PATH
               /* else lookup for -DCINELERRA_PLUGIN_PATH */
-              || !cinelerra_plugin_lookup (&plugin, CINELERRA_PLUGIN_PATH)
+              && !!cinelerra_plugin_lookup (*found, CINELERRA_PLUGIN_PATH)
 #endif
               )
             {
-              cinelerra_plugin_error_set (CINELERRA_PLUGIN_ENFOUND);
+              CINELERRA_ERROR_SET (cinelerra_plugin, PLUGIN_NFILE);
               goto elookup;
             }
         }
@@ -233,11 +201,13 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
       PLANNED("if .so like then dlopen; else if .c like tcc compile");
       TODO("factor dlopen and dlsym out");
 
-      (*found)->handle = dlopen ((*found)->pathname, RTLD_NOW|RTLD_LOCAL);
+      TRACE(cinelerra_plugin, "trying to open %s", (*found)->pathname);
+
+      (*found)->handle = dlopen ((*found)->pathname, RTLD_LAZY|RTLD_LOCAL);
       if (!(*found)->handle)
         {
           ERROR (cinelerra_plugin, "dlopen failed: %s", dlerror());
-          cinelerra_plugin_error_set (CINELERRA_PLUGIN_EDLOPEN);
+          CINELERRA_ERROR_SET (cinelerra_plugin, PLUGIN_DLOPEN);
           goto edlopen;
         }
 
@@ -245,20 +215,24 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
       int (*init)(void) = dlsym((*found)->handle, "cinelerra_plugin_init");
       if (init && init())
         {
-          ERROR (cinelerra_plugin, "cinelerra_plugin_init failed: %s: %s", name, interface);
-          cinelerra_plugin_error_set (CINELERRA_PLUGIN_EHOOK);
+          //ERROR (cinelerra_plugin, "cinelerra_plugin_init failed: %s: %s", name, interface);
+          CINELERRA_ERROR_SET (cinelerra_plugin, PLUGIN_HOOK);
           goto einit;
         }
     }
   /* we have the plugin, now get the interface descriptor */
   struct cinelerra_interface* ret;
 
+  dlerror();
   ret = dlsym ((*found)->handle, interface);
+
+  const char *dlerr = dlerror();
+  TRACE(cinelerra_plugin, "%s", dlerr);
   TODO ("need some way to tell 'interface not provided by plugin', maybe cinelerra_plugin_error()?");
-  if (!ret)
+  if (dlerr)
     {
-      ERROR (cinelerra_plugin, "plugin %s doesnt provide interface %s", name, interface);
-      cinelerra_plugin_error_set (CINELERRA_PLUGIN_ENIFACE);
+      //ERROR (cinelerra_plugin, "plugin %s doesnt provide interface %s", name, interface);
+      CINELERRA_ERROR_SET (cinelerra_plugin, PLUGIN_NIFACE);
       goto edlsym;
     }
 
@@ -266,7 +240,7 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
   if (ret->size < min_revision)
     {
       ERROR (cinelerra_plugin, "plugin %s provides older interface %s revision than required", name, interface);
-      cinelerra_plugin_error_set (CINELERRA_PLUGIN_EREVISION);
+      CINELERRA_ERROR_SET (cinelerra_plugin, PLUGIN_REVISION);
       goto erevision;
     }
 
@@ -276,7 +250,7 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
   if (ret->open && ret->open())
     {
       ERROR (cinelerra_plugin, "open hook indicated an error");
-      cinelerra_plugin_error_set (CINELERRA_PLUGIN_EHOOK);
+      CINELERRA_ERROR_SET (cinelerra_plugin, PLUGIN_HOOK);
       goto eopen;
     }
 
@@ -299,13 +273,14 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
   free (*found);
   *found = &plugin;
   tdelete (&plugin, &cinelerra_plugin_registry, cinelerra_plugin_name_cmp);
-  pthread_mutex_lock (&cinelerra_plugin_mutex);
+  pthread_mutex_unlock (&cinelerra_plugin_mutex);
   return NULL;
 }
 
 void
 cinelerra_interface_close (void* ptr)
 {
+  TRACE (cinelerra_plugin, "%p", ptr);
   if(!ptr)
     return;
 

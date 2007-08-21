@@ -1,9 +1,24 @@
 window_sizes 1104 756 270 824 557 120
+diagrams
+  active  classdiagram_ref 130181 // Hierarchy
+    762 514 100 4 0 0
+end
 show_stereotypes
-selected 
-package_ref 129 // cinelerra3
+selected artifact_ref 135813 // error
 open
+  deploymentview_ref 128261 // gen
+  deploymentview_ref 128773 // gen
   
-package_ref 129669 // proc
+  package_ref 129797 // gui
+  
+  package_ref 129285 // ProcessingLayer
+  class_ref 135685 // Logic
+  class_ref 135813 // Config
+  class_ref 135941 // State
+  class_ref 136069 // Invalid
+  class_ref 136197 // External
+  class_ref 136325 // std::exception
+  class_ref 135429 // Appconfig
+  classview_ref 128266 // SmartPointers
 end
 end

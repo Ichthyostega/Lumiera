@@ -1,0 +1,12 @@
+
+TESTING "Component Test Suite" ./test-components
+
+TEST "Fac test" Factory_test <<END
+return: 0
+END
+
+TEST "Hello test" HelloWorld_test <<END
+out: This is how the world ends...
+return: 0
+END
+

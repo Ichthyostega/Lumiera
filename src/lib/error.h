@@ -1,9 +1,8 @@
 /*
-  main.cpp  -  start the Cinelerra Application
+  error.h  -  Cinelerra Error handling
 
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
-                        Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -19,21 +18,29 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#ifndef CINELERRA_ERROR_H
+#define CINELERRA_ERROR_H
+
+#include <nobug.h>
+#include <stdlib.h>
+
+#define CINELERRA_DIE do { NOBUG_ERROR(NOBUG_ON, "Fatal Error!"); abort(); } while(0)
+
+#define CINELERRA_ERROR_DECLARE(err) \
+extern const char* CINELERRA_ERROR_##err
+
+#define CINELERRA_ERROR_DEFINE(err, msg) \
+const char* CINELERRA_ERROR_##err = "CINELERRA_ERROR_" #err ":" msg
+
+#define CINELERRA_ERROR_SET(flag, err) \
+ERROR (flag, "%s", strchr(CINELERRA_ERROR_##err, ':')+1); \
+cinelerra_error_set(CINELERRA_ERROR_##err)
+
+const char*
+cinelerra_error_set (const char * err);
+
+const char*
+cinelerra_error ();
 
 
-#include <iostream>
-
-#include "cinelerra.h"
-
-using std::cout;
-using std::endl;
-using cinelerra::Appconfig;
-
-
-int main (int argc, char* argv[])
-  {
-    cout << "*** Cinelerra NLE for Linux ***" << endl
-         << "    Version: " << Appconfig::get("version") << endl;
-    assert(true);
-    return 0;
-  }
+#endif /* CINELERRA_ERROR_H */

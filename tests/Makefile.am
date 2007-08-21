@@ -1,5 +1,6 @@
 #  Copyright (C)         CinelerraCV
 #    2007,               Christian Thaeter <ct@pipapo.org>
+#                        Hermann Vosseler <Ichthyostega@web.de>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -15,12 +16,12 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-examples_srcdir = $(top_srcdir)/tests/examples
-noinst_PROGRAMS += plugin_example
+tests_srcdir = $(top_srcdir)/tests
 
-plugin_example_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
-plugin_example_CPPFLAGS = $(CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/lib/
-plugin_example_LDADD = -lnobugmt -lpthread -ldl $(builddir)/libcin3.a
+check_PROGRAMS += test-error
 
-plugin_example_SOURCES = $(examples_srcdir)/plugin_main.c
-noinst_HEADERS += $(examples_srcdir)/hello_interface.h
+test_error_SOURCES = $(tests_srcdir)/error/errortest.c
+test_error_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_error_LDADD = $(builddir)/libcin3.a -lnobugmt -lpthread -ldl
+
+TESTS = $(tests_srcdir)/test.sh

@@ -1,9 +1,8 @@
 /*
-  main.cpp  -  start the Cinelerra Application
+  errortest.c  -  executable for running bug regression tests
 
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
-                        Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -20,20 +19,10 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include <stdio.h>
 
-#include <iostream>
-
-#include "cinelerra.h"
-
-using std::cout;
-using std::endl;
-using cinelerra::Appconfig;
-
-
-int main (int argc, char* argv[])
+int main(int argc, char* argv[])
   {
-    cout << "*** Cinelerra NLE for Linux ***" << endl
-         << "    Version: " << Appconfig::get("version") << endl;
-    assert(true);
+    printf("hello sunshine, noBugs whatsoever\n");
     return 0;
   }

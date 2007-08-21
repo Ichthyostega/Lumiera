@@ -32,6 +32,7 @@ OPTIONSCACHEFILE = 'optcache'
 CUSTOPTIONSFILE  = 'custom-options'
 SRCDIR           = 'src'
 BINDIR           = 'src/bin'
+TESTDIR          = 'tests'
 VERSION          = '3+alpha.01'
 #-----------------------------------Configuration
 
@@ -54,33 +55,50 @@ def setupBasicEnvironment():
     opts = defineCmdlineOptions() 
  
     env = Environment(options=opts) 
+
+    env.Append ( CCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honor CFLAGS, only CCFLAGS 
     env.Replace( VERSION=VERSION
                , SRCDIR=SRCDIR
                , BINDIR=BINDIR
-               , CPPPATH=SRCDIR   # used to find includes
+               , CPPPATH=["#"+SRCDIR]   # used to find includes, "#" means always absolute to build-root
+               , CPPDEFINES=['-DCINELERRA_VERSION=\\"%s\\"' % VERSION ]  # note: make it a list to append further defines
+               , CCFLAGS='-Wall'
                )
     
-    appendCppDefine(env,'DEBUG','DEBUG')
+    handleNoBugSwitches(env)
+    
+    appendCppDefine(env,'DEBUG','DEBUG', 'NDEBUG')
     appendCppDefine(env,'OPENGL','USE_OPENGL')
-    appendVal(env,'ARCHFLAGS', 'CPPFLAGS')   # for both C and C++
-    appendVal(env,'OPTIMIZE', 'CPPFLAGS', val=' -O3')
-
-    if env['BUILDLEVEL'] in ['ALPHA', 'BETA']:
-        env.Append(CPPFLAGS = ' -DEBUG_'+env['BUILDLEVEL'])
-    if env['BUILDLEVEL'] == 'RELEASE':
-        env.Append(CPPFLAGS = ' -DNDEBUG')
+    appendVal(env,'ARCHFLAGS', 'CCFLAGS')   # for both C and C++
+    appendVal(env,'OPTIMIZE', 'CCFLAGS', val=' -O3')
+    appendVal(env,'DEBUG',    'CCFLAGS', val=' -g')
 
     prepareOptionsHelp(opts,env)
     opts.Save(OPTIONSCACHEFILE, env)
     return env
 
-def appendCppDefine(env,var,cppVar):
+def appendCppDefine(env,var,cppVar, elseVal=''):
     if env[var]:
-        env.Append(CPPDEFINES = {cppVar: env[var]})
+        env.Append(CPPDEFINES = cppVar )
+    elif elseVal:
+        env.Append(CPPDEFINES = elseVal)
 
 def appendVal(env,var,targetVar,val=None):
     if env[var]:
         env.Append( **{targetVar: val or env[var]})
+
+
+def handleNoBugSwitches(env):
+    """ set the build level for NoBug. 
+        Release builds imply no DEBUG
+    """
+    level = env['BUILDLEVEL']
+    if level in ['ALPHA', 'BETA']:
+        env.Replace( DEBUG = 1 )
+        env.Append(CPPDEFINES = 'EBUG_'+level)
+    elif level == 'RELEASE':
+        env.Replace( DEBUG = 0 )
+
 
 
 
@@ -117,6 +135,8 @@ USAGE:   scons [-c] [OPTS] [key=val,...] [TARGETS]
 
 Special Targets:
      build   : just compile and link
+     testcode: additionally compile the Testsuite
+     check   : build and run the Testsuite
      install : install created artifacts at PREFIX
      src.tar : create source tarball
      doc.tar : create developer doc tarball
@@ -142,9 +162,18 @@ def configurePlatform(env):
         print 'Did not find math.h / libm, exiting.'
         Exit(1)
 
+    if not conf.CheckLibWithHeader('dl', 'dlfcn.h', 'C'):
+        print 'Functions for runtime dynamic loading not available, exiting.'
+        Exit(1)
+
     if not conf.CheckLibWithHeader('nobugmt', 'nobug.h', 'C'):
         print 'Did not find NoBug [http://www.pipapo.org/pipawiki/NoBug], exiting.'
         Exit(1)
+
+    if not conf.CheckLibWithHeader('pthread', 'pthread.h', 'C'):
+        print 'Did not find the pthread lib or pthread.h, exiting.'
+    else:
+       conf.env.Append(CPPFLAGS = ' -DHAVE_PTHREAD_H')
 
     if conf.CheckCHeader('execinfo.h'):
        conf.env.Append(CPPFLAGS = ' -DHAS_EXECINFO_H')
@@ -152,6 +181,10 @@ def configurePlatform(env):
     if conf.CheckCHeader('valgrind/valgrind.h'):
         conf.env.Append(CPPFLAGS = ' -DHAS_VALGRIND_VALGIND_H')
     
+    if not conf.CheckCXXHeader('tr1/memory'):
+        print 'We rely on the std::tr1 proposed standard extension for shared_ptr.'
+        Exit(1)
+        
     if not conf.CheckCXXHeader('boost/config.hpp'):
         print 'We need the C++ boost-lib.'
         Exit(1)
@@ -186,18 +219,20 @@ def defineBuildTargets(env, artifacts):
         setup sub-environments with special build options if necessary.
         We use a custom function to declare a whole tree of srcfiles. 
     """
-    cinobj = ( srcSubtree(env,'backend') 
-             + srcSubtree(env,'proc')
-             + env.Object('$SRCDIR/main.cpp')
+    cinobj = ( srcSubtree(env,'$SRCDIR/backend') 
+             + srcSubtree(env,'$SRCDIR/proc')
+             + srcSubtree(env,'$SRCDIR/common')
+             + srcSubtree(env,'$SRCDIR/lib')
              )
-    plugobj = srcSubtree(env,'plugin', isShared=True)
+    plugobj = srcSubtree(env,'$SRCDIR/plugin', isShared=True)
+    corelib = env.StaticLibrary('$BINDIR/core.la', cinobj)
     
-    artifacts['cinelerra'] = env.Program('$BINDIR/cinelerra', cinobj)
+    artifacts['cinelerra'] = env.Program('$BINDIR/cinelerra', ['$SRCDIR/main.cpp']+ corelib )
     artifacts['plugins']   = env.SharedLibrary('$BINDIR/cinelerra-plugin', plugobj)
     
     # call subdir SConscript(s) for independent components
     SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts')
-
+    SConscript(dirs=[TESTDIR], exports='env artifacts corelib')
 
 
 def defineInstallTargets(env, artifacts):

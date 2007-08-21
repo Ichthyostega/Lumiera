@@ -44,8 +44,8 @@ namespace mobject
          * the possible kinds of RelativePlacements
          */
         enum RelType
-        { SAMETIME    /** place subject at the same time as the anchor  */
-          , ATTACH      /** attach subject to anchor (e.g. an effect to a clip) */
+        { SAMETIME    /**< place subject at the same time as the anchor  */
+        , ATTACH      /**< attach subject to anchor (e.g. an effect to a clip) */
         };
 
       protected:
