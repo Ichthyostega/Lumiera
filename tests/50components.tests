@@ -1,16 +1,15 @@
+TESTING "Component Test Suite: ALL" ./test-components
 
-TESTING "Component Test Suite" ./test-components
 
-TEST "Fac test" Factory_test <<END
-return: 0
-END
+
 
 TEST "Hello test" HelloWorld_test <<END
 out: This is how the world ends...
 return: 0
 END
 
-TEST "Cmdline Wrapper" CmdlineWrapper_test <<END 
+
+TEST "CmdlineWrapper_test" CmdlineWrapper_test <<END
 out: wrapping cmdline:...
 out: -->
 out: wrapping cmdline:
@@ -37,11 +36,45 @@ out: 4|€|
 out: -->oo _O()O_ ä + €
 out: wrapping cmdline:...
 out: -->
-out: Standard Cmdlineformat: one  two
+out: Standard Cmdlineformat:one  two
 END
 
-TEST "Parseoption" TestOption_test <<END
+
+TEST "TestOption_test" TestOption_test <<END
 out: Testing invocation with cmdline: ...
-return: 0
+out: --> Testgroup=ALL
+out: --> Test-ID  =--missing--
+out: --> remaining=
+out: Testing invocation with cmdline: --help...
+out: --> Testgroup=ALL
+out: --> Test-ID  =--missing--
+out: --> remaining=
+out: Testing invocation with cmdline: --group TestGroupID...
+out: --> Testgroup=TestGroupID
+out: --> Test-ID  =--missing--
+out: --> remaining=
+out: Testing invocation with cmdline:  SingleTestID...
+out: --> Testgroup=ALL
+out: --> Test-ID  =SingleTestID
+out: --> remaining=SingleTestID
+out: Testing invocation with cmdline:  SingleTestID --group TestGroupID...
+out: --> Testgroup=TestGroupID
+out: --> Test-ID  =SingleTestID
+out: --> remaining=SingleTestID
+out: Testing invocation with cmdline:  --group TestGroupID SingleTestID ...
+out: --> Testgroup=TestGroupID
+out: --> Test-ID  =SingleTestID
+out: --> remaining=SingleTestID
+out: Testing invocation with cmdline:  --group TestGroupID SingleTestID spam eggs...
+out: --> Testgroup=TestGroupID
+out: --> Test-ID  =SingleTestID
+out: --> remaining=SingleTestID spam eggs
+out: Testing invocation with cmdline: 		SingleTestID spam --group TestGroupID    	 --eggs...
+out: --> Testgroup=TestGroupID
+out: --> Test-ID  =SingleTestID
+out: --> remaining=SingleTestID spam --eggs
 END
 
+
+TEST "Factory_test" Factory_test <<END
+END
