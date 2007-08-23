@@ -1,9 +1,32 @@
 
-TESTING "Time functions"
+TESTING "Time functions" ./test_time
 
-PLANNED "get time"
-PLANNED "add time, normalized"
-PLANNED "substract time, normalized"
+TEST "time to float" tofloat 15 500000 <<END
+out: 15.5
+END
+
+PLANNED "float to time" fromfloat 33.6666666661 <<END
+out: 33 666667
+END
+
+PLANNED "from rational" fromrational 4 3 <<END
+out: 1 333333
+END
+
+PLANNED "get time" gettime <<END
+return: 0
+END
+
+PLANNED "add time, normalized" add 1234567890 123456789 <<END
+out: 13580 24679
+END
+
+PLANNED "substract time, normalized" sub 1234567890 123456789 <<END
+out: 11111 11101
+END
+
+PLANNED "overflow"
+PLANNED "underflow"
 
 
 # the next ones for different common framerates, check corner cases
