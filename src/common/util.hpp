@@ -1,5 +1,5 @@
 /*
-  TIME.hpp  -  unified representation of a time point, including conversion functions
+  UTIL.hpp  -  collection of small helper functions used "everywhere"
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -34,20 +34,54 @@ namespace util
 
 
   /** a family of util functions providing a "no value whatsoever" test */
-   inline bool isnil(const string& val)
+  inline bool isnil(const string& val)
     {
       return 0 == val.length();
     }
-
-   inline bool isnil(const string* pval)
+  
+  inline bool isnil(const string* pval)
     {
       return !pval || 0 == pval->length();
     }
-
-   inline bool isnil(const char* pval)
+  
+  inline bool isnil(const char* pval)
     {
       return !pval || 0 == std::strlen(pval);
     }
 
+  
+  /** cut a numeric value to be >=0 */
+  template <typename NUM>
+  inline NUM noneg (NUM val)
+    {
+      return (0<val? val : 0);
+    }
+  
+  /** shortcut for containment test on a map */
+  template <typename MAP>
+  inline bool contains (MAP& map, typename MAP::key_type& key)
+    {
+      return map.find(key) != map.end();
+    }
+  
+  /** shortcut for operating on all elements of a container.
+   *  Isn't this already defined somewhere? It's so obvious..
+   */
+  template <typename Container, typename Oper>
+  inline Oper
+  for_each (Container& c, Oper& doIt)
+    {
+      return std::for_each (c.begin(),c.end(), doIt);
+    }
+   
+  
 } // namespace util
+
+ /* some common macro definitions */
+
+/** this macro wraps its parameter into a cstring literal */
+#define STRINGIFY(TOKEN) __STRNGFY(TOKEN)
+#define __STRNGFY(TOKEN) #TOKEN
+
+
 #endif /*UTIL_HPP_*/

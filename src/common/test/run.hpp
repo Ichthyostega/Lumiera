@@ -29,6 +29,7 @@
 #include <string>
 
 #include "common/test/suite.hpp"
+#include "common/util.hpp"
 
 
 namespace test
@@ -94,7 +95,5 @@ using ::test::Launch;
   /** Register _TEST_CLASS_ to be invoked in some test suites (groups) _GROUPS_ */    \
   Launch<_TEST_CLASS_> run_##_TEST_CLASS_##_(STRINGIFY(_TEST_CLASS_), _GROUPS_); 
 
-#define STRINGIFY(TOKEN) __STRINFY(TOKEN)
-#define __STRINFY(TOKEN) #TOKEN
 
 #endif

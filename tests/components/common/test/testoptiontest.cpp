@@ -26,7 +26,9 @@
 #include "common/test/testoption.hpp"
 #include "common/util.hpp"
 
+using util::Cmdline;
 using util::isnil;
+using std::endl;
 
 namespace test
   {
@@ -47,13 +49,14 @@ namespace test
       
       void doIt (const string cmdline)
         {
-          std::cout << "Testing invocation with cmdline: " << cmdline << "..." << std::endl;
+          std::cout << "Testing invocation with cmdline: " << cmdline << "..." << endl;
           
-          TestOption optparser (cmdline);
+          Cmdline args(cmdline);
+          TestOption optparser (args);
           const string testID = optparser.getTestID();
-          std::cout << "--> Testgroup=" << optparser.getTestgroup() << std::endl;
-          std::cout << "--> Test-ID  =" << (isnil(testID)? testID : "--missing--") << std::endl;
-          std::cout << "--> remaining=" << string(optparser) << std::endl;
+          std::cout << "--> Testgroup=" << optparser.getTestgroup() << endl;
+          std::cout << "--> Test-ID  =" << (isnil(testID)? "--missing--" : testID ) << endl;
+          std::cout << "--> remaining=" << args << endl;
         }
       
       void noOptions()      { doIt (""); }
@@ -63,7 +66,7 @@ namespace test
       void groupFilter1()   { doIt (" SingleTestID --group TestGroupID"); }
       void groupFilter2()   { doIt (" --group TestGroupID SingleTestID "); }
       void additionalCmd()  { doIt (" --group TestGroupID SingleTestID spam eggs"); }
-      void additionalCmd2() { doIt ("\t\tSingleTestID spam --group TestGroupID    \t eggs"); }
+      void additionalCmd2() { doIt ("\t\tSingleTestID spam --group TestGroupID    \t --eggs"); }
 
     };
   

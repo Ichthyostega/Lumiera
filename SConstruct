@@ -61,7 +61,7 @@ def setupBasicEnvironment():
                , SRCDIR=SRCDIR
                , BINDIR=BINDIR
                , CPPPATH=["#"+SRCDIR]   # used to find includes, "#" means always absolute to build-root
-               , CPPDEFINES=['-DCINELERRA_VERSION=\\"%s\\"' % VERSION ]  # note: make it a list to append further defines
+               , CPPDEFINES=['-DCINELERRA_VERSION='+VERSION ]  # note: it's a list to append further defines
                , CCFLAGS='-Wall'
                )
     
@@ -184,7 +184,7 @@ def configurePlatform(env):
     
     if not conf.CheckCXXHeader('tr1/memory'):
         print 'We rely on the std::tr1 proposed standard extension for shared_ptr.'
-        Exit(1)
+        Exit(1) 
         
     if not conf.CheckCXXHeader('boost/config.hpp'):
         print 'We need the C++ boost-lib.'
@@ -194,7 +194,10 @@ def configurePlatform(env):
             print 'We need boost::shared_ptr (shared_ptr.hpp).'
             Exit(1)
         if not conf.CheckLibWithHeader('boost_program_options-mt','boost/program_options.hpp','C++'):
-            print 'We need boost::program_options (also the corresponding binary lib).'
+            print 'We need boost::program_options (including binary lib for linking).'
+            Exit(1)
+        if not conf.CheckLibWithHeader('boost_regex-mt','boost/regex.hpp','C++'):
+            print 'We need the boost regular expression lib (incl. binary lib for linking).'
             Exit(1)
             
         

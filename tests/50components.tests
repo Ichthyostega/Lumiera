@@ -10,6 +10,36 @@ out: This is how the world ends...
 return: 0
 END
 
+TEST "Cmdline Wrapper" CmdlineWrapper_test <<END 
+out: wrapping cmdline:...
+out: -->
+out: wrapping cmdline:
+out: 	 ...
+out: -->
+out: wrapping cmdline:spam...
+out: 0|spam|
+out: -->spam
+out: wrapping cmdline:
+out: spam...
+out: 0|spam|
+out: -->spam
+out: wrapping cmdline:eat more spam...
+out: 0|eat|
+out: 1|more|
+out: 2|spam|
+out: -->eat more spam
+out: wrapping cmdline: oo _O()O_  ä + €...
+out: 0|oo|
+out: 1|_O()O_|
+out: 2|ä|
+out: 3|+|
+out: 4|€|
+out: -->oo _O()O_ ä + €
+out: wrapping cmdline:...
+out: -->
+out: Standard Cmdlineformat: one  two
+END
+
 TEST "Parseoption" TestOption_test <<END
 out: Testing invocation with cmdline: ...
 return: 0

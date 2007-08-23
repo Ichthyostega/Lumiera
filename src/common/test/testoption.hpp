@@ -24,47 +24,50 @@
 #ifndef TESTHELPER_TESTOPTION_H
 #define TESTHELPER_TESTOPTION_H
 
+#include "common/cmdline.hpp"
+
 #include <string>
-#include <vector>
+#include <iostream>
 #include <boost/program_options.hpp>
+#include <boost/utility.hpp>
 
 
 
 namespace test
   {
   using std::string;
-  using std::vector;
+  using std::ostream;
   
-  typedef boost::program_options::variables_map VarMap;
 
   
   /**
    * Support for selecting and configuring testcases
    * via commandline arguments. A preconfigured wrapper
    * around boost::program_options, with the ability
-   * to tolerate unknown options and get an vector<string>
-   * of everything remaining in the commandline after
-   * parsing the known options.
+   * to tolerate unknown options. The commandline
+   * to be parsed is taken wrapped into a Cmdline
+   * instance; after parsing this commandline
+   * vector will contain only the remaining
+   * unrecognized parts.
    */
-  class TestOption
+  class TestOption : private boost::noncopyable
     {
     public:
-      TestOption (int argc, const char* argv[]);
-      explicit TestOption (string cmdline);
-      const string& getTestgroup ();
-      const string& getTestID ();
-      vector<string>& remainingCmdline ();
-      
-      operator string const ();
+      TestOption (util::Cmdline& cmdline);
+      const string getTestgroup ();
+      const string getTestID ();
+      const bool getDescribe ();
       
     private:
-      VarMap vm;
-      vector<string> cmdline;
+      boost::program_options::options_description syntax;
+      boost::program_options::variables_map parameters;
       
-      void parseOptions (int argc, const char* argv[]);
+      friend ostream& operator<< (ostream&, const TestOption&);
     };
   
-  
+  /** for outputting the help messages. */
+  ostream& operator<< (ostream& os, const TestOption& to);
+ 
   
 } // namespace test
 #endif

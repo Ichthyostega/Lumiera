@@ -24,6 +24,7 @@
 #ifndef TESTHELPER_SUITE_H
 #define TESTHELPER_SUITE_H
 
+#include <vector>
 #include <string>
 
 
@@ -35,11 +36,13 @@ namespace test
   // Forward decls needed for run.hpp
   class Test;
   class Launcher;
+
+  typedef std::vector<string> & Arg; 
   
   
   /**
    * Enables running a collection of tests.
-   * In internal registration service #enroll() is provided
+   * An internal registration service #enroll() is provided
    * for the individual Test - inscances to be recognized as 
    * testcases. The groupID passed to the constructor selects
    * all testcases declared as belonging to this Group.
@@ -50,7 +53,8 @@ namespace test
       
     public:
       Suite (string groupID);
-      void run (int argc, char* argv[]);
+      void run (Arg cmdline);
+      void describe ();
       static void enroll (Launcher *test, string testID, string groups);
       
       static const string ALLGROUP;

@@ -27,7 +27,9 @@
 #include <tr1/memory>
 #include <iostream>
 #include <sstream>
+#include <boost/algorithm/string.hpp>
 
+#include "common/cmdline.hpp"
 #include "common/test/suite.hpp"
 #include "common/test/run.hpp"
 #include "common/error.hpp"
@@ -42,8 +44,10 @@ namespace test
   using std::vector;
   using std::auto_ptr;
   using std::tr1::shared_ptr;
+  using boost::algorithm::trim;
 
   using util::isnil;
+  using util::contains;
   
   typedef map<string, Launcher*> TestMap;
   typedef shared_ptr<TestMap>  PTestMap;
@@ -129,57 +133,78 @@ namespace test
         //throw "empty testsuite";     /////////// TODO Errorhandling!
     }
     
+#define VALID(test,testID) \
+  ASSERT ((test), "NULL testcase laucher for test '%s' found in testsuite '%s'", groupID_.c_str(),testID.c_str());
+  
   
   /** run all testcases contained in this Suite.
-   *  The first argument in the commandline, if present, will select
-   *  one single testcase with a matching ID. 
+   *  The first argument in the commandline, if present, 
+   *  will select one single testcase with a matching ID.
+   *  In case of invoking a single testcase, the given cmdline
+   *  will be forwarded to the testcase, after removind the
+   *  testcaseID from cmdline[0]. Otherwise, every testcase 
+   *  in this suite is invoked with a empty cmdline vector.
+   *  @param cmdline ref to the vector of commandline tokens  
    */
   void 
-  Suite::run (int argc, char* argv[])
+  Suite::run (Arg cmdline)
     {
-      
       PTestMap tests = testcases.getGroup(groupID_);
       if (!tests)
-        throw cinelerra::error::Invalid ();
+        throw cinelerra::error::Invalid (); ///////// TODO: pass error description
       
-      if (argc >= 2)
+      if (0 < cmdline.size())
         {
-          if (Launcher* test = (*tests)[argv[1]])
+          string& testID (cmdline[0]);
+          trim(testID);
+          if ( contains (*tests, testID))
             {
-              // first cmdline argument denotes a valid
-              // testcase registered in this group: 
-              // go ahead and invoke just this test.
-              if (argc > 2)
-                { // pass additional cmdline as vector
-                FIXME("use Optparser");
-                  vector<string> arglist(argc-2);
-                  for ( int i=2; i<argc; ++i )
-                    arglist.push_back(string(argv[i]));
-                  
-                  // run single Testcase with provided arguments
-                  (*test)()->run(arglist);
-                }
-              else
-                FIXME("use Optparser");
-                vector<string> nix;
-                (*test)()->run(nix); // without additional argumens
-              
+              // first cmdline argument denotes a valid testcase registered in 
+              // this group: invoke just this test with the remaining cmdline
+              Launcher* test = (*tests)[testID];
+              cmdline.erase (cmdline.begin());
+              VALID (test,testID);
+              (*test)()->run(cmdline);
               return;
-            }
-        }
+        }   }
       
       // no test-ID was specified.
       // instantiiate all tests cases and execute them.
       for ( TestMap::iterator i=tests->begin(); i!=tests->end(); ++i )
-        if (i->second)
-          {
-            std::cout << "  ----------"<< i->first<< "----------\n";
-            Launcher& test = *(i->second);
-            FIXME("use Optparser");
-            vector<string> nix;
-            test()->run(nix); // without cmdline arguments
-          }
+        {
+          std::cout << "\n  ----------"<< i->first<< "----------\n";
+          Launcher* test = (i->second);
+          VALID (test, i->first);
+          (*test)()->run(cmdline); // actually no cmdline arguments
+        }
+    }
+  
+  
+  /** print to stdout an ennumeration of all testcases in this suite,
+   *  in a format suitable for use with Cehteh's ./test.sh 
+   */
+  void
+  Suite::describe ()
+    {
+      util::Cmdline noCmdline("");
+      PTestMap tests = testcases.getGroup(groupID_);
+      ASSERT (tests);
       
+      std::cout << "TESTING \"Component Test Suite: " << groupID_ << "\" ./test-components\n\n";
+
+      for ( TestMap::iterator i=tests->begin(); i!=tests->end(); ++i )
+        {
+          string key (i->first);
+          std::cout << "\n\n";
+          std::cout << "TEST \""<<key<<"\" "<<key<<" <<END\n";
+          Launcher* test = (i->second);
+          VALID (test, i->first);
+          (*test)()->run(noCmdline); // run it to insert test generated output
+          std::cout << "END\n";
+        }
+
+      
+
     }
 
 

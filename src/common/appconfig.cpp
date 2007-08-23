@@ -30,6 +30,7 @@
 #undef NOBUG_INIT_DEFS_
 
 
+
 using util::isnil;
 
 namespace cinelerra
@@ -41,10 +42,10 @@ namespace cinelerra
    *  Appconfig::instance() probably already has been called
    *  by another compilation unit. This is ugliy, but preferable
    *  to beeing dependant on inclusion order of headers. */
-  Appconfig* Appconfig::theApp_ ;
+//  scoped_ptr<Appconfig> Appconfig::theApp_;
 
 #ifndef CINELERRA_VERSION
-#define CINELERRA_VERSION "3++devel"
+#define CINELERRA_VERSION 3++devel
 #endif
 
 
@@ -61,32 +62,30 @@ namespace cinelerra
       //////////
       
       INFO(config, "Basic application configuration triggered.");
-      (*configParam_)["version"] = CINELERRA_VERSION;
+      (*configParam_)["version"] = STRINGIFY (CINELERRA_VERSION);
     }
   
   
-            
-            
-            
+  
+  
+  
   /** access the configuation value for a given key.
    *  @return empty string for unknown keys, else the corresponding configuration value
    */
   const string &
   Appconfig::get (const string & key)  throw()
     {
-          
       try
         {
           const string& val = (*instance().configParam_)[key];
           WARN_IF( isnil(val), config, "undefined config parameter \"%s\" requested.", key.c_str());
           return val;
-          
         }
       catch (...)
         {
           ERROR(config, "error while accessing configuration parameter \"%s\".", key.c_str());
-        }
-    }
+          throw cinelerra::error::Fatal ();
+    }   }
 
   
 

@@ -22,6 +22,7 @@
 
 
 #include "common/test/suite.hpp"
+#include "common/test/testoption.hpp"
 
 /** run all tests or any single test specified in the first
  *  cmd line argument.
@@ -29,7 +30,13 @@
  */
 int main (int argc, char* argv[])
   {
-    test::Suite suite (test::Suite::ALLGROUP);
-    suite.run(argc,argv);
+    util::Cmdline args (argc,argv);
+    test::TestOption optparser (args);
+    test::Suite suite (optparser.getTestgroup());
+    
+    if (optparser.getDescribe())
+      suite.describe();
+    else
+      suite.run (args);
     return 0;
   }

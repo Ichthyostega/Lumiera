@@ -21,28 +21,23 @@
 * *****************************************************/
 
 
-//#include <map>
-//#include <memory>
-//#include <tr1/memory>
-//#include <iostream>
-//#include <sstream>
-
 #include "common/test/testoption.hpp"
 #include "common/test/suite.hpp"
-//#include "common/util.hpp"
 
 #include "nobugcfg.h"
 #include "common/error.hpp"
 
 
+
+typedef boost::program_options::options_description Syntax;
+typedef boost::program_options::variables_map VarMap;
+
+namespace op = boost::program_options;
+
+using util::VectS;
+
 namespace test
   {
-//  using std::map;
-//  using std::auto_ptr;
-//  using std::tr1::shared_ptr;
-
-//  using util::isnil;
-  
   
   
   /** set up an options parser to use the current commandline.
@@ -52,69 +47,81 @@ namespace test
    *  --group <groupID>
    *  \endcode
    */
-  TestOption::TestOption (int argc, const char* argv[])
-    : vm(), cmdline()
+  TestOption::TestOption (util::Cmdline& cmdline)
+    : syntax("Run a collection of test cases. Supported parameters"),
+      parameters()
     {
-      cmdline.reserve (10);
-      parseOptions (argc,argv);
+      syntax.add_options()
+        ("help,h",      "produce help message")
+        ("group,g",     op::value<string>()->default_value(Suite::ALLGROUP),
+                        "the group (selection) of testcases to execute")
+        ("describe",    op::bool_switch(),
+                        "ennumerate all testcases in this Suite in a format usable with ./test.sh.")
+        ("id",          op::value<VectS>(),
+                        "an individual testcase to be called.\nIf not specified, run all.")
+        ;
+      
+      // the testcase-ID is really an positional parameter
+      op::positional_options_description posopt;
+      posopt.add("id", -1);
+      
+      op::parsed_options parsed = 
+        op::command_line_parser (cmdline)
+          .options (syntax)
+          .positional(posopt)
+          .allow_unregistered()
+          .run();  
+      
+      op::store (parsed, parameters);
+      op::notify(parameters);   
+      
+      // remove all recognized options from original cmdline vector
+      cmdline = op::collect_unrecognized(parsed.options, op::include_positional);
+      
+      if (parameters.count("help"))
+        std::cerr << *this;
     }
   
   
-  /** variant of the ctor taking a "fake" cmdline */
-  TestOption::TestOption (string line)
-    : vm(), cmdline()
-    {
-      cmdline.reserve (10);
-      const char* fakeArg[3] = {"test", line.c_str() };
-//      fakeArg[1] = line.c_str();
-      parseOptions (1,fakeArg);
-    }
-  
-  
-  /** do the comandline parsing for the ctors */
-  void TestOption::parseOptions (int argc, const char* argv[])
-    {
-      TODO("define options");
-      UNIMPLEMENTED("actual commandline parsing!!");
-    }
   
   
   /** @return the Tests-Group as given on cmdline, or Suite::ALLGROUP as default
    */
-  const string & 
+  const string 
   TestOption::getTestgroup ()
     {
-      FIXME("actual commandline parsing!!");
-      return Suite::ALLGROUP;
+      ASSERT (parameters.count ("group"));
+      return parameters["group"].as<string>();
     }
   
-  string booooh = "boooh!";
-  /** @return ID of a single test to run, empty if not specified
+  /** @return ID of a single test to run, empty string if not specified
    */
-  const string &
+  const string
   TestOption::getTestID ()
     {
-      UNIMPLEMENTED("actual commandline parsing");
-      return booooh;
+      if (parameters.count ("id") &&
+          parameters["id"].as<VectS>().size() > 0)
+        return parameters["id"].as<VectS>()[0];
+      else
+        return string ();
+    }
+  
+  /** @return \c true if --describe switch was given */
+  const bool 
+  TestOption::getDescribe ()
+    {
+      return parameters["describe"].as<bool>();
     }
   
   
-  /** gather all remaining unknown cmd line tokens into a vector.
-   *  @Note: the actual vector remains a member of this object, but isn't const 
+
+  /** forward the accummulated help messages from all
+   *  contained option defintions to the outputstream 
    */
-  vector<string>& 
-  TestOption::remainingCmdline ()
+  ostream& 
+  operator<< (ostream& os, const TestOption& to)
     {
-      UNIMPLEMENTED("get unknown remaining options");
-      return cmdline;
-    }
-  
-  
-  /** */
-  TestOption::operator string const ()
-    {
-      UNIMPLEMENTED("convert the remaining Cmndline to string");
-      return 0;
+      return os << to.syntax;
     }
 
   
