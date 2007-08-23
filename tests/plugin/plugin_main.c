@@ -22,7 +22,6 @@ main(int argc, char** argv)
 
   if( !strcmp(argv[1],"C"))
     {
-
       CINELERRA_INTERFACE_TYPE(hello, 1)* hello_de =
         (CINELERRA_INTERFACE_TYPE(hello, 1)*) cinelerra_interface_open ("example_plugin", "german_1", sizeof(CINELERRA_INTERFACE_TYPE(hello, 1)));
 
@@ -45,27 +44,25 @@ main(int argc, char** argv)
 
   if( !strcmp(argv[1],"C++"))
     {
-#if 0
-  /*
-    same again for a plugin written in C++
-  */
-  hello_de =
-    cinelerra_interface_open ("hellocpp_1", "german_1", sizeof(struct hello_interface_1));
-  if (!hello_de) CINELERRA_DIE;
+      /* same again for a plugin written in C++ */
+      CINELERRA_INTERFACE_TYPE(hello, 1)* hello_de =
+        (CINELERRA_INTERFACE_TYPE(hello, 1)*) cinelerra_interface_open ("example_plugin_cpp", "german_1", sizeof(CINELERRA_INTERFACE_TYPE(hello, 1)));
 
-  hello_de->say_hello();
-  hello_de->say_hello();
+      if (!hello_de) CINELERRA_DIE;
 
+      hello_de->hello();
+      hello_de->goodbye(argv[1]);
 
-  hello_en =
-    cinelerra_interface_open ("hellocpp_1", "english_1", sizeof(struct hello_interface_1));
-  if (!hello_en) CINELERRA_DIE;
+      CINELERRA_INTERFACE_TYPE(hello, 1)* hello_en =
+        (CINELERRA_INTERFACE_TYPE(hello, 1)*) cinelerra_interface_open ("example_plugin_cpp", "english_1", sizeof(CINELERRA_INTERFACE_TYPE(hello, 1)));
 
-  hello_en->say_hello();
+      if (!hello_en) CINELERRA_DIE;
 
-  cinelerra_interface_close (hello_en);
-  cinelerra_interface_close (hello_de);
-#endif
+      hello_en->hello();
+      hello_en->goodbye(argv[1]);
+
+      cinelerra_interface_close (hello_en);
+      cinelerra_interface_close (hello_de);
     }
 
   return 0;

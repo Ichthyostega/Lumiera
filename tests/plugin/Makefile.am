@@ -25,8 +25,13 @@ test_plugin_SOURCES = $(examples_srcdir)/plugin_main.c
 
 noinst_HEADERS += $(examples_srcdir)/hello_interface.h
 
-check_LTLIBRARIES += example_plugin.la
+check_LTLIBRARIES += example_plugin.la example_plugin_cpp.la
 example_plugin_la_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src
 example_plugin_la_SOURCES = $(examples_srcdir)/example_plugin.c
 # the -rpath option is required, prolly a automake bug?
 example_plugin_la_LDFLAGS = -avoid-version -module -rpath $(shell pwd)
+
+example_plugin_cpp_la_CPPFLAGS = $(AM_CPPFLAGS) -Wall -Werror -I$(top_srcdir)/src
+example_plugin_cpp_la_SOURCES = $(examples_srcdir)/example_plugin.cpp
+# the -rpath option is required, prolly a automake bug?
+example_plugin_cpp_la_LDFLAGS = -avoid-version -module -rpath $(shell pwd)
