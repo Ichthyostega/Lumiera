@@ -36,7 +36,9 @@
 */
 
 /* over or underflow (tried to make a movie which has negative length? or more than some hundreds days?) */
-CINELERRA_ERROR_DECLARE(TIME_RANGE);
+CINELERRA_ERROR_DECLARE(TIME_OVERFLOW);
+CINELERRA_ERROR_DECLARE(TIME_UNDERFLOW);
+CINELERRA_ERROR_DECLARE(TIME_NEGATIVE);
 
 /*
   Note: we measure time starting from zero,
@@ -47,93 +49,101 @@ typedef struct timeval cinelerra_time;
 typedef cinelerra_time* CinelerraTime;
 
 /**
- * framerates are defined as a rational number and a base time (usually 1sec (do we need this?))
- * for example NTSC with 29.97fps is {2997, 100, {1, 0}}
+ * framerates are defined as a rational number
+ * for example NTSC with 29.97fps is {2997, 100}
  */
 struct cinelerra_framerate_struct
 {
   unsigned numerator;
   unsigned denominator;
-  cinelerra_time base;
 };
 
 typedef struct cinelerra_framerate_struct cinelerra_framerate;
-typedef cinelerra_framerate CinelerraFramerate;
+typedef cinelerra_framerate* CinelerraFramerate;
 
 typedef unsigned long cinelerra_frame;
 
 
 
 
-/** set a time value to zero.
+/**
+ * set a time value to zero.
  */
 inline CinelerraTime
 cinelerra_time_clear (CinelerraTime time)
 {
-  REQUIRE (time);
-  time->tv_sec = 0;
-  time->tv_usec = 0;
+  if(time)
+    {
+      time->tv_sec = 0;
+      time->tv_usec = 0;
+    }
   return time;
 }
 
-/** get current time.
+/**
+ * get current time.
  */
 inline CinelerraTime
 cinelerra_time_current (CinelerraTime time)
 {
-  REQUIRE (time);
-  /* gettime should never ever fail in a correct program */
-  if (gettimeofday (time, 0))
-    CINELERRA_DIE;
-
+  if (time)
+    {
+      /* gettime should never ever fail in a correct program */
+      if (gettimeofday (time, NULL))
+        CINELERRA_DIE;
+    }
   return time;
 }
 
-/** init from floating point representation.
+/**
+ * init from floating point representation.
  */
 inline CinelerraTime
 cinelerra_time_set_double (CinelerraTime time, double fp)
 {
-  REQUIRE (time);
-  REQUIRE (fp >= 0.0);
-
-  time->tv_sec = fp;
-  time->tv_usec = (fp - time->tv_sec) * 1000000.0;
-  return time;
+  if (time)
+    {
+      if (fp >= 0.0)
+        {
+          time->tv_sec = fp;
+          time->tv_usec = (fp - time->tv_sec) * 1000000.0;
+          return time;
+        }
+      else
+        {
+          cinelerra_error_set(CINELERRA_ERROR_TIME_NEGATIVE);
+        }
+    }
+  return NULL;
 }
 
-/** convert to floating point repesentation.
+/**
+ * convert to floating point repesentation.
  */
 inline double
 cinelerra_time_double_get (CinelerraTime time)
 {
-  REQUIRE (time);
-  double fp;
+  if (time)
+    {
+      double fp;
 
-  fp = time->tv_sec;
-  fp += time->tv_usec / 1000000.0;
-  return fp;
+      fp = time->tv_sec;
+      fp += time->tv_usec / 1000000.0;
+      return fp;
+    }
+  return NAN;
 }
 
 
 
-/** convert from floating point repesentation.
+/**
+ * normalize time after operations.
+ * used internally
  */
-inline CinelerraTime
-cinelerra_time_set_double (CinelerraTime time, double fp)
-{
-  REQUIRE (time);
-  REQUIRE (fp >= 0.0);
-
-  time->tv_sec = fp;
-  time->tv_usec = (fp - time->tv_sec) * 1000000.0;
-  return time;
-}
-
-/* internal function */
 inline void
 cinelerra_time_normalize (CinelerraTime time)
 {
+  REQUIRE (time);
   if (time->tv_usec >= 1000000)
     {
       time->tv_sec += (time->tv_usec / 1000000);
@@ -141,49 +151,71 @@ cinelerra_time_normalize (CinelerraTime time)
     }
 }
 
-/** copy time
+/**
+ * copy time
  */
 inline CinelerraTime
 cinelerra_time_copy (CinelerraTime dest, const CinelerraTime src)
 {
-  REQUIRE (dest);
-  REQUIRE (src);
-  dest->tv_sec = src->tv_sec;
-  dest->tv_usec = src->tv_usec;
-  return time;
+  if (dest && src)
+    {
+      dest->tv_sec = src->tv_sec;
+      dest->tv_usec = src->tv_usec;
+    }
+  return test;
 }
 
-/** add time.
+/**
+ * add time.
  */
 inline CinelerraTime
-cinelerra_time_add (CinelerraTime dest, const CinelerraTime to_add)
+cinelerra_time_add (CinelerraTime dest, const CinelerraTime src)
 {
-  REQUIRE (dest);
-  REQUIRE (to_add);
-  REQUIRE (dest->tv_sec + to_add->tv_sec > dest->tv_sec, "time overflow");
-  TODO ("handling overflow as error?");
+  if (dest && src)
+    {
+      time_t t = dest->tv_sec;
 
-  dest->tv_sec += to_add->tv_sec;
-  time->tv_usec += to_add->tv_usec;
+      dest->tv_sec += src->tv_sec;
+      time->tv_usec += src->tv_usec;
 
-  cinelerra_time_normalize (dest);
+      cinelerra_time_normalize (dest);
+
+      if (dest->tv_sec < t)
+        {
+          cinelerra_error_set (CINELERRA_ERROR_TIME_OVERFLOW);
+          return NULL;
+        }
+    }
   return dest;
 }
 
-/** substact time.
+/**
+ * substact time.
  */
 inline CinelerraTime
-cinelerra_time_sub (CinelerraTime dest, const CinelerraTime to_sub)
+cinelerra_time_sub (CinelerraTime dest, const CinelerraTime src)
 {
-  REQUIRE (dest);
-  REQUIRE (to_sub);
-  REQUIRE (dest->tv_sec - to_sub->tv_sec < dest->tv_sec, "time underflow");
-  TODO ("handling underflow as error?");
+  if (dest && src)
+    {
+      time_t t = dest->tv_sec;
 
-  dest->tv_sec -= to_sub->tv_sec;
-  time->tv_usec -= to_sub->tv_usec;
+      dest->tv_sec -= src->tv_sec;
+      if (time->tv_usec >= src->tv_usec)
+        time->tv_usec -= src->tv_usec;
+      else
+        {
+          --dest->tv_sec;
+          time->tv_usec += src->tv_usec;
+        }
 
-  cinelerra_time_normalize (dest);
+      cinelerra_time_normalize (dest);
+
+      if (dest->tv_sec > t)
+        {
+          cinelerra_error_set (CINELERRA_ERROR_TIME_UNDERFLOW);
+          return NULL;
+        }
+    }
   return dest;
 }
 
