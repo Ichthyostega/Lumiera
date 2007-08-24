@@ -30,7 +30,7 @@ namespace cinelerra
   namespace test
     {
 
-    
+    ///// @test demo of using the test framework
     class HelloWorld_test : public Test
       {
         virtual void run(Arg arg) 

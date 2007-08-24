@@ -93,7 +93,7 @@ namespace cinelerra
       typedef std::map<string,string> Configmap; 
       typedef std::auto_ptr<Configmap> PConfig;
       
-      /** @TODO <b>the following is just placeholder code!</b>
+      /** @todo <b>the following is just placeholder code!</b>
        *  Appconfig <i>could</i> do such things if necessary,
        *  or provide similar "allways available" services.
        */

@@ -43,6 +43,7 @@ namespace util
     {
     
   
+    ///// @test for util::Cmndline, wrapping various example cmdlines
     class CmdlineWrapper_test : public Test
       {
         virtual void run (Arg arg)

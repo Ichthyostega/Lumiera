@@ -33,6 +33,11 @@ using std::endl;
 namespace test
   {
   
+  ///// @test for test::TestOption, parsing of commandline options
+  /////       for running collections of Tests
+  ///// @see test::Suite
+  ///// @see util::Cmdline
+  /////
   class TestOption_test : public Test
     {
       virtual void run(Arg arg)
