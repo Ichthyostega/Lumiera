@@ -1,28 +1,44 @@
 
-TESTING "Time functions" ./test_time
+TESTING "Time functions" ./test-time
 
-TEST "time to float" tofloat 15 500000 <<END
+TEST "time init" init 15 500000 <<END
+out: 15 500000
+END
+
+TEST "time normalize" init 0 1500000 <<END
+out: 1 500000
+END
+
+TEST "time to float" todouble 15 500000 <<END
 out: 15.5
 END
 
-PLANNED "float to time" fromfloat 33.6666666661 <<END
+TEST "time to float, NULL gives a NaN" todoublenull <<END
+out: nan
+END
+
+TEST "float to time" fromdouble 33.6666666661 <<END
 out: 33 666667
 END
 
-PLANNED "from rational" fromrational 4 3 <<END
-out: 1 333333
+TEST "float to time, round down" fromdouble 0.00000049 <<END
+out: 0 0
 END
 
-PLANNED "get time" gettime <<END
+TEST "float to time, round up" fromdouble 0.0000005 <<END
+out: 0 1
+END
+
+TEST "current time" currenttime <<END
 return: 0
 END
 
-PLANNED "add time, normalized" add 1234567890 123456789 <<END
-out: 13580 24679
+TEST "add time, normalized" add 1000001 2000002 <<END
+out: 3 3
 END
 
-PLANNED "substract time, normalized" sub 1234567890 123456789 <<END
-out: 11111 11101
+TEST "substract time, normalized" sub 3000003 2000002 <<END
+out: 1 1
 END
 
 PLANNED "overflow"
