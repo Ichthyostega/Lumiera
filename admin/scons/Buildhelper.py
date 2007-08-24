@@ -46,16 +46,17 @@ def isHelpRequest():
 
 
 
-def srcSubtree(env,tree,isShared=False, **args):
+def srcSubtree(env,tree,isShared=False,builder=None, **args):
     """ convienience wrapper: scans the given subtree, which is
         relative to the current SConscript, find all source files and
         declare them as Static or SharedObjects for compilation
     """
     root = env.subst(tree)  # expand Construction Vars
-    if isShared:
-        builder = lambda f: env.SharedObject(f, **args)
-    else:
-        builder = lambda f: env.Object(f, **args)
+    if not builder:
+        if isShared:
+            builder = lambda f: env.SharedObject(f, **args)
+        else:
+            builder = lambda f: env.Object(f, **args)
         
     return [builder(f) for f in scanSrcSubtree(root)] 
 

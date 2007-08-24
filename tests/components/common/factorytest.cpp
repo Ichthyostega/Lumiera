@@ -37,10 +37,11 @@ namespace cinelerra
       public:
       };
       
-    ///// @test the various object creation factories
-    ///// @see  cinelerra::Factory
-    ///// @todo still to be written...
-    /////
+    /**********************************************************
+     * @test the various object creation factories
+     * @see  cinelerra::Factory
+     * @todo still to be written...
+     */
     class Factory_test : public Test
       {
         virtual void run(Arg arg) 

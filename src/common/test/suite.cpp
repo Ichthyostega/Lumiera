@@ -95,7 +95,10 @@ namespace test
    *  either as a member of one of the specified groups, or direcly
    *  by its testID. Any test is automatically added to the groupID
    *  #ALLGROUP
+   *  @param test the Launcher object used to run this test
+   *  @param testID unique ID to refere to this test (will be used as std::map key)
    *  @param groups List of group-IDs selected by whitespace
+   * 
    */
   void 
   Suite::enroll (Launcher* test, string testID, string groups)

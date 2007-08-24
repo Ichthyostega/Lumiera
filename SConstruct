@@ -31,7 +31,7 @@ from Buildhelper import *
 OPTIONSCACHEFILE = 'optcache' 
 CUSTOPTIONSFILE  = 'custom-options'
 SRCDIR           = 'src'
-BINDIR           = 'src/bin'
+BINDIR           = 'bin'
 TESTDIR          = 'tests'
 VERSION          = '3+alpha.01'
 #-----------------------------------Configuration
@@ -137,6 +137,7 @@ Special Targets:
      build   : just compile and link
      testcode: additionally compile the Testsuite
      check   : build and run the Testsuite
+     doc     : generate documetation (Doxygen)
      install : install created artifacts at PREFIX
      src.tar : create source tarball
      doc.tar : create developer doc tarball
@@ -243,22 +244,41 @@ def defineBuildTargets(env, artifacts):
     SConscript(dirs=[TESTDIR], exports='env artifacts corelib')
 
 
-def defineInstallTargets(env, artifacts):
-    """ define install locations and cleanup after the build.
+
+def definePostBuildTargets(env, artifacts):
+    """ define further actions after the core build (e.g. Documentaion).
         define alias targets to trigger the installing.
+    """
+    ib = env.Alias('install-bin', '$DESTDIR/bin')
+    il = env.Alias('install-lib', '$DESTDIR/lib')
+    env.Alias('install', [ib, il])
+    
+    build = env.Alias('build', '$BINDIR')
+    allbu = env.Alias('allbuild', build+artifacts['testsuite'])
+    env.Default('build')
+    # additional files to be cleaned when cleaning 'build'
+    env.Clean ('build', [ 'scache.conf', '.sconf_temp', '.sconsign.dblite', 'config.log'])
+
+    # Doxygen documentation
+    # Note: at the moment we only depend on Doxyfile
+    #       obviousely, we should depend on all sourcefiles
+    #       real Doxygen builder for scons is under developement for 0.97
+    #       so for the moment I prefere not to bother
+    doxyfile = File('doc/devel/Doxyfile')
+    env.NoClean(doxyfile)
+    doxydoc = artifacts['doxydoc'] = [ Dir('doc/devel/html'), Dir('doc/devel/latex') ]
+    env.Command(doxydoc, doxyfile, "doxygen Doxyfile 2>&1 |tee ,doxylog",  chdir='doc/devel')
+    env.Clean ('doc/devel', doxydoc + ['doc/devel/,doxylog'])
+
+
+def defineInstallTargets(env, artifacts):
+    """ define some artifacts to be installed into target locations.
     """
     env.Install(dir = '$DESTDIR/bin', source=artifacts['cinelerra'])
     env.Install(dir = '$DESTDIR/lib', source=artifacts['plugins'])
     env.Install(dir = '$DESTDIR/bin', source=artifacts['tools'])
     
-    ib = env.Alias('install-bin', '$DESTDIR/bin')
-    il = env.Alias('install-lib', '$DESTDIR/lib')
-    env.Alias('install', [ib, il])
-    
-    env.Alias('build', '$BINDIR')
-    env.Default('build')
-    # additional files to be cleaned when cleaning 'build'
-    env.Clean ('build', [ 'scache.conf', '.sconf_temp', '.sconsign.dblite', 'config.log'])
+    env.Install(dir = '$DESTDIR/share/doc/cinelerra$VERSION/devel', source=artifacts['doxydoc'])
 
 #####################################################################
 
@@ -286,5 +306,6 @@ artifacts = {}
 
 definePackagingTargets(env, artifacts)
 defineBuildTargets(env, artifacts)
+definePostBuildTargets(env, artifacts)
 defineInstallTargets(env, artifacts)
 

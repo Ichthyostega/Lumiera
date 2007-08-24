@@ -43,7 +43,7 @@ namespace util
     {
     
   
-    ///// @test for util::Cmndline, wrapping various example cmdlines
+    /** @test for util::Cmdline, wrapping various example cmdlines */
     class CmdlineWrapper_test : public Test
       {
         virtual void run (Arg arg)
@@ -80,6 +80,9 @@ namespace util
               ENSURE (token == theCmdline[i++]);
           }
         
+        /** @test wrapping a (albeit faked) standard commandline 
+         *        given as (argc, argv[])
+         */
         void testStandardCmdlineformat()
           {
             char* fakeArg[3] = {"CMD", "one ", "two"};

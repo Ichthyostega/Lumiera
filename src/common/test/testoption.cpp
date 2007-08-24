@@ -115,9 +115,6 @@ namespace test
   
   
 
-  /** @intern forward the accummulated help messages from 
-   *  all contained option defintions to the outputstream 
-   */
   ostream& 
   operator<< (ostream& os, const TestOption& to)
     {

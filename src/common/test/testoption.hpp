@@ -65,7 +65,9 @@ namespace test
       friend ostream& operator<< (ostream&, const TestOption&);
     };
   
-  /** for outputting the help messages. */
+    
+  /** for outputting the help messages. Forward accummulated 
+   *  help messages from all contained option defintions */
   ostream& operator<< (ostream& os, const TestOption& to);
  
   
