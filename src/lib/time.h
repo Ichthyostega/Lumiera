@@ -24,8 +24,9 @@
 
 #include <sys/time.h>
 #include <time.h>
+#include <math.h>
 
-#include "error.h"
+#include "lib/error.h"
 
 /*
   this time functions are small macro like wrapers, they are all inlined for performance reasons
@@ -64,12 +65,26 @@ typedef cinelerra_framerate* CinelerraFramerate;
 typedef unsigned long cinelerra_frame;
 
 
+/**
+ * normalize time after operations.
+ * used internally
+ */
+static inline void
+cinelerra_time_normalize (CinelerraTime time)
+{
+  REQUIRE (time);
+  if (time->tv_usec >= 1000000)
+    {
+      time->tv_sec += (time->tv_usec / 1000000);
+      time->tv_usec = (time->tv_usec % 1000000);
+    }
+}
 
 
 /**
  * set a time value to zero.
  */
-inline CinelerraTime
+static inline CinelerraTime
 cinelerra_time_clear (CinelerraTime time)
 {
   if(time)
@@ -83,7 +98,7 @@ cinelerra_time_clear (CinelerraTime time)
 /**
  * get current time.
  */
-inline CinelerraTime
+static inline CinelerraTime
 cinelerra_time_current (CinelerraTime time)
 {
   if (time)
@@ -98,7 +113,7 @@ cinelerra_time_current (CinelerraTime time)
 /**
  * init from floating point representation.
  */
-inline CinelerraTime
+static inline CinelerraTime
 cinelerra_time_set_double (CinelerraTime time, double fp)
 {
   if (time)
@@ -106,11 +121,13 @@ cinelerra_time_set_double (CinelerraTime time, double fp)
       if (fp >= 0.0)
         {
           time->tv_sec = fp;
-          time->tv_usec = (fp - time->tv_sec) * 1000000.0;
+          time->tv_usec = round((fp - time->tv_sec) * 1000000.0);
           return time;
         }
       else
         {
+          time->tv_sec = (time_t)-1;
+          time->tv_usec = (suseconds_t)-1;
           cinelerra_error_set(CINELERRA_ERROR_TIME_NEGATIVE);
         }
     }
@@ -118,9 +135,48 @@ cinelerra_time_set_double (CinelerraTime time, double fp)
 }
 
 /**
+ * initialize with seconds and microseconds.
+ */
+static inline CinelerraTime
+cinelerra_time_init (CinelerraTime time, time_t sec, suseconds_t usec)
+{
+  if (time)
+    {
+      time->tv_sec = sec;
+      time->tv_usec = usec;
+      cinelerra_time_normalize (time);
+    }
+  return time;
+}
+
+/**
+ * get the seconds part from a time.
+ */
+static inline time_t
+cinelerra_time_sec (CinelerraTime time)
+{
+  if (time)
+    return time->tv_sec;
+  else
+    return (time_t)-1;
+}
+
+/**
+ * get the microseconds part of a time.
+ */
+static inline suseconds_t
+cinelerra_time_usec (CinelerraTime time)
+{
+  if (time)
+    return time->tv_usec;
+  else
+    return (suseconds_t)-1;
+}
+
+/**
  * convert to floating point repesentation.
  */
-inline double
+static inline double
 cinelerra_time_double_get (CinelerraTime time)
 {
   if (time)
@@ -135,26 +191,10 @@ cinelerra_time_double_get (CinelerraTime time)
 }
 
 
-
-/**
- * normalize time after operations.
- * used internally
- */
-inline void
-cinelerra_time_normalize (CinelerraTime time)
-{
-  REQUIRE (time);
-  if (time->tv_usec >= 1000000)
-    {
-      time->tv_sec += (time->tv_usec / 1000000);
-      time->tv_usec = (time->tv_usec % 1000000);
-    }
-}
-
 /**
  * copy time
  */
-inline CinelerraTime
+static inline CinelerraTime
 cinelerra_time_copy (CinelerraTime dest, const CinelerraTime src)
 {
   if (dest && src)
@@ -162,13 +202,13 @@ cinelerra_time_copy (CinelerraTime dest, const CinelerraTime src)
       dest->tv_sec = src->tv_sec;
       dest->tv_usec = src->tv_usec;
     }
-  return test;
+  return dest;
 }
 
 /**
  * add time.
  */
-inline CinelerraTime
+static inline CinelerraTime
 cinelerra_time_add (CinelerraTime dest, const CinelerraTime src)
 {
   if (dest && src)
@@ -176,7 +216,7 @@ cinelerra_time_add (CinelerraTime dest, const CinelerraTime src)
       time_t t = dest->tv_sec;
 
       dest->tv_sec += src->tv_sec;
-      time->tv_usec += src->tv_usec;
+      dest->tv_usec += src->tv_usec;
 
       cinelerra_time_normalize (dest);
 
@@ -192,7 +232,7 @@ cinelerra_time_add (CinelerraTime dest, const CinelerraTime src)
 /**
  * substact time.
  */
-inline CinelerraTime
+static inline CinelerraTime
 cinelerra_time_sub (CinelerraTime dest, const CinelerraTime src)
 {
   if (dest && src)
@@ -200,12 +240,12 @@ cinelerra_time_sub (CinelerraTime dest, const CinelerraTime src)
       time_t t = dest->tv_sec;
 
       dest->tv_sec -= src->tv_sec;
-      if (time->tv_usec >= src->tv_usec)
-        time->tv_usec -= src->tv_usec;
+      if (dest->tv_usec >= src->tv_usec)
+        dest->tv_usec -= src->tv_usec;
       else
         {
           --dest->tv_sec;
-          time->tv_usec += src->tv_usec;
+          dest->tv_usec += 1000000 - src->tv_usec;
         }
 
       cinelerra_time_normalize (dest);
