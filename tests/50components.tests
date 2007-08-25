@@ -9,6 +9,11 @@ return: 0
 END
 
 
+TEST "Appconfig_test" Appconfig_test <<END
+return: 0
+END
+
+
 TEST "CmdlineWrapper_test" CmdlineWrapper_test <<END
 out: wrapping cmdline:...
 out: -->
