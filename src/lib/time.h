@@ -1,5 +1,5 @@
 /*
-  time.h  -  Time and frame calculations
+  time.h  -  Time calculations
 
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -48,22 +48,6 @@ CINELERRA_ERROR_DECLARE(TIME_NEGATIVE);
 */
 typedef struct timeval cinelerra_time;
 typedef cinelerra_time* CinelerraTime;
-
-/**
- * framerates are defined as a rational number
- * for example NTSC with 29.97fps is {2997, 100}
- */
-struct cinelerra_framerate_struct
-{
-  unsigned numerator;
-  unsigned denominator;
-};
-
-typedef struct cinelerra_framerate_struct cinelerra_framerate;
-typedef cinelerra_framerate* CinelerraFramerate;
-
-typedef unsigned long cinelerra_frame;
-
 
 /**
  * normalize time after operations.

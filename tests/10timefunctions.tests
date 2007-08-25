@@ -44,10 +44,76 @@ END
 PLANNED "overflow"
 PLANNED "underflow"
 
+# frame 1 begins at time 0
+TEST "time to frame NTSC frame 1 begin" ntscframefromtime 0 0 <<END
+out: 1
+END
 
-# the next ones for different common framerates, check corner cases
-PLANNED "time to frame"
-PLANNED "frame to time"
+# and ends at 33365
+TEST "time to frame NTSC frame 1 end" ntscframefromtime 0 33365 <<END
+out: 1
+END
+
+# thus 33366 is start of frame 2
+TEST "time to frame NTSC frame 2 begin" ntscframefromtime 0 33366 <<END
+out: 2
+END
+
+# and 66732 is the end of frame 2
+TEST "time to frame NTSC frame 2 end" ntscframefromtime 0 66732 <<END
+out: 2
+END
+
+# this makes 66733 the start of frame 3
+TEST "time to frame NTSC frame 3 begin" ntscframefromtime 0 66733 <<END
+out: 3
+END
+
+# and 100099 the end of frame 3
+TEST "time to frame NTSC frame 3 end" ntscframefromtime 0 100099 <<END
+out: 3
+END
+
+# and 100100 the start of frame 4
+TEST "time to frame NTSC frame 4 start" ntscframefromtime 0 100100 <<END
+out: 4
+END
+
+# after 1 hour we are at frame 107893
+TEST "time to frame NTSC after 1hour" ntscframefromtime 3600 0 <<END
+out: 107893
+END
+
+# after 200 days we are at frame 517881601
+TEST "time to frame NTSC after 200 days" ntscframefromtime 17280000 0 <<END
+out: 517881601
+END
+
+
+TEST "frame to time NTSC frame 1" ntscframestart 1 <<END
+out: 0 0
+END
+
+TEST "frame to time NTSC frame 2" ntscframestart 2 <<END
+out: 0 33366
+END
+
+TEST "frame to time NTSC frame 3" ntscframestart 3 <<END
+out: 0 66733
+END
+
+TEST "frame to time NTSC frame 4" ntscframestart 4 <<END
+out: 0 100100
+END
+
+TEST "frame to time NTSC 1 hour" ntscframestart 107893 <<END
+out: 3600 0
+END
+
+TEST "frame to time NTSC 200 days" ntscframestart 517881601 <<END
+out: 17280000 0
+END
+
 
 
 # how long are N frames on average (beware of precision!)

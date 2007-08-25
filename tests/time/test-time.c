@@ -23,6 +23,7 @@
 #include <string.h>
 
 #include "lib/time.h"
+#include "lib/frames.h"
 
 
 CINELERRA_ERROR_DEFINE(TEST, "test error");
@@ -30,6 +31,8 @@ CINELERRA_ERROR_DEFINE(TEST, "test error");
 int
 main (int argc, char** argv)
 {
+  NOBUG_INIT;
+
   if (argc == 1)
     return 0;
 
@@ -94,6 +97,26 @@ main (int argc, char** argv)
       cinelerra_time_sub (&time1, &time2);
 
       printf ("%lu %lu\n", (long)cinelerra_time_sec (&time1), (long)cinelerra_time_usec (&time1));
+    }
+
+  if (!strcmp(argv[1], "ntscframefromtime"))
+    {
+      cinelerra_framerate ntsc = {2997, 100};
+      cinelerra_time time;
+
+      cinelerra_time_init (&time, atol (argv[2]), atol (argv[3]));
+
+      printf ("%lu\n", (long)cinelerra_framerate_frame_get_time (&ntsc, &time));
+    }
+
+  if (!strcmp(argv[1], "ntscframestart"))
+    {
+      cinelerra_framerate ntsc = {2997, 100};
+      cinelerra_time time;
+
+      cinelerra_framerate_time_get_time_frame (&ntsc, &time, atol (argv[2]));
+
+      printf ("%lu %lu\n", (long)cinelerra_time_sec(&time), (long)cinelerra_time_usec(&time));
     }
 
 
