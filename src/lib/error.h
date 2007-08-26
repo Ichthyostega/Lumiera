@@ -21,6 +21,12 @@
 #ifndef CINELERRA_ERROR_H
 #define CINELERRA_ERROR_H
 
+#ifdef __cplusplus
+extern "C" {
+#elif 0
+} /*eek, fixes emacs indenting for now*/
+#endif
+
 #include <nobug.h>
 #include <stdlib.h>
 
@@ -42,5 +48,7 @@ cinelerra_error_set (const char * err);
 const char*
 cinelerra_error ();
 
-
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 #endif /* CINELERRA_ERROR_H */

@@ -37,14 +37,14 @@ namespace cinelerra
     class HelloWorld_test : public Test
       {
         virtual void run(Arg arg) 
-          {
-            greeting();
-          } 
+        {
+          greeting();
+        } 
         
         void greeting() 
-          { 
-            std::cout << "This is how the world ends...\n"; 
-          }
+        { 
+          std::cout << "This is how the world ends...\n"; 
+        }
       };
     
       

@@ -49,10 +49,10 @@ namespace cinelerra
         
         /** @test accessing a value from cinelerra::Appconfig */
         void testAccess (const string& key)
-          {
-            string ver = cinelerra::Appconfig::get(key);
-            ASSERT ( !util::isnil(ver));
-          }
+        {
+          string ver = cinelerra::Appconfig::get(key);
+          ASSERT ( !util::isnil(ver));
+        }
       };
     
       LAUNCHER (Appconfig_test, "function common");

@@ -75,11 +75,11 @@ namespace cinelerra
        *  @warning don't use it in destruction code!
        */
       static Appconfig& instance()
-        {
-          static scoped_ptr<Appconfig> theApp_ (0);
-          if (!theApp_) theApp_.reset (new Appconfig ());
-          return *theApp_;
-        }
+      {
+        static scoped_ptr<Appconfig> theApp_ (0);
+        if (!theApp_) theApp_.reset (new Appconfig ());
+        return *theApp_;
+      }
       
       
       /** access the configuation value for a given key.

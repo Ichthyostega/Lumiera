@@ -29,6 +29,7 @@
 #include "nobugcfg.h"
 #undef NOBUG_INIT_DEFS_
 
+#include <exception>
 
 
 using util::isnil;
@@ -56,14 +57,18 @@ namespace cinelerra
    */
   Appconfig::Appconfig()
     : configParam_ (new Configmap)
-    {
-      ////////// 
-      NOBUG_INIT;
-      //////////
-      
-      INFO(config, "Basic application configuration triggered.");
-      (*configParam_)["version"] = STRINGIFY (CINELERRA_VERSION);
-    }
+  {
+    ////////// 
+    NOBUG_INIT;
+    //////////
+    
+    INFO(config, "Basic application configuration triggered.");
+    
+    // install our own handler for undeclared exceptions
+    std::set_unexpected (cinelerra::error::cinelerra_unexpectedException);
+    
+    (*configParam_)["version"] = STRINGIFY (CINELERRA_VERSION);
+  }
   
   
   
@@ -74,18 +79,18 @@ namespace cinelerra
    */
   const string &
   Appconfig::get (const string & key)  throw()
-    {
-      try
-        {
-          const string& val = (*instance().configParam_)[key];
-          WARN_IF( isnil(val), config, "undefined config parameter \"%s\" requested.", key.c_str());
-          return val;
-        }
-      catch (...)
-        {
-          ERROR(config, "error while accessing configuration parameter \"%s\".", key.c_str());
-          throw cinelerra::error::Fatal ();
-    }   }
+  {
+    try
+      {
+        const string& val = (*instance().configParam_)[key];
+        WARN_IF( isnil(val), config, "undefined config parameter \"%s\" requested.", key.c_str());
+        return val;
+      }
+    catch (...)
+      {
+        ERROR(config, "error while accessing configuration parameter \"%s\".", key.c_str());
+        throw cinelerra::error::Fatal ();
+  }   }
 
   
 

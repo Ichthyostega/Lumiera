@@ -29,14 +29,14 @@
  *  Note: to ease debugging, we don't catch any exceptions. 
  */
 int main (int argc, char* argv[])
-  {
-    util::Cmdline args (argc,argv);
-    test::TestOption optparser (args);
-    test::Suite suite (optparser.getTestgroup());
-    
-    if (optparser.getDescribe())
-      suite.describe();
-    else
-      suite.run (args);
-    return 0;
-  }
+{
+  util::Cmdline args (argc,argv);
+  test::TestOption optparser (args);
+  test::Suite suite (optparser.getTestgroup());
+  
+  if (optparser.getDescribe())
+    suite.describe();
+  else
+    suite.run (args);
+  return 0;
+}

@@ -21,6 +21,7 @@
 * *****************************************************/
 
 
+
 #include <map>
 #include <vector>
 #include <memory>
@@ -29,13 +30,13 @@
 #include <sstream>
 #include <boost/algorithm/string.hpp>
 
+#include "nobugcfg.h"
 #include "common/cmdline.hpp"
 #include "common/test/suite.hpp"
 #include "common/test/run.hpp"
 #include "common/error.hpp"
 #include "common/util.hpp"
 
-#include "nobugcfg.h"  
 
 
 namespace test
@@ -75,16 +76,16 @@ namespace test
     
   void 
   Registry::add2group (Launcher* test, string testID, string groupID)
-    {
-      REQUIRE( test );
-      REQUIRE( !isnil(testID) );
-      REQUIRE( !isnil(groupID) );
-      
-      PTestMap& group = getGroup(groupID);
-      if (!group)
-        group.reset( new TestMap );
-      (*group)[testID] = test;
-    }
+  {
+    REQUIRE( test );
+    REQUIRE( !isnil(testID) );
+    REQUIRE( !isnil(groupID) );
+    
+    PTestMap& group = getGroup(groupID);
+    if (!group)
+      group.reset( new TestMap );
+    (*group)[testID] = test;
+  }
   
   Registry testcases;
   
@@ -102,18 +103,18 @@ namespace test
    */
   void 
   Suite::enroll (Launcher* test, string testID, string groups)
-    {
-      REQUIRE( test );
-      REQUIRE( !isnil(testID) );
-      
-      std::istringstream ss(groups);
-      string group;
-      while (ss >> group )
-        testcases.add2group(test, testID, group);
-      
-      // Magic: allways add any testcas to groupID="ALL"
-      testcases.add2group(test,testID, ALLGROUP);
-    }
+  {
+    REQUIRE( test );
+    REQUIRE( !isnil(testID) );
+    
+    std::istringstream ss(groups);
+    string group;
+    while (ss >> group )
+      testcases.add2group(test, testID, group);
+    
+    // Magic: allways add any testcas to groupID="ALL"
+    testcases.add2group(test,testID, ALLGROUP);
+  }
   
   /** "magic" groupID containing all registered testcases */
   const string Suite::ALLGROUP = "ALL";
@@ -127,14 +128,14 @@ namespace test
    */
   Suite::Suite(string groupID) 
     : groupID_(groupID)
-    {
-      REQUIRE( !isnil(groupID) );
-      TRACE(test, "Test-Suite( groupID=%s )\n", groupID.c_str () );
-      
-      if (!testcases.getGroup(groupID))
-        throw cinelerra::error::Invalid ();
-        //throw "empty testsuite";     /////////// TODO Errorhandling!
-    }
+  {
+    REQUIRE( !isnil(groupID) );
+    TRACE(test, "Test-Suite( groupID=%s )\n", groupID.c_str () );
+    
+    if (!testcases.getGroup(groupID))
+      throw cinelerra::error::Invalid ();
+      //throw "empty testsuite";     /////////// TODO Errorhandling!
+  }
     
 #define VALID(test,testID) \
   ASSERT ((test), "NULL testcase laucher for test '%s' found in testsuite '%s'", groupID_.c_str(),testID.c_str());
@@ -151,36 +152,36 @@ namespace test
    */
   void 
   Suite::run (Arg cmdline)
-    {
-      PTestMap tests = testcases.getGroup(groupID_);
-      if (!tests)
-        throw cinelerra::error::Invalid (); ///////// TODO: pass error description
-      
-      if (0 < cmdline.size())
-        {
-          string& testID (cmdline[0]);
-          trim(testID);
-          if ( contains (*tests, testID))
-            {
-              // first cmdline argument denotes a valid testcase registered in 
-              // this group: invoke just this test with the remaining cmdline
-              Launcher* test = (*tests)[testID];
-              cmdline.erase (cmdline.begin());
-              VALID (test,testID);
-              (*test)()->run(cmdline);
-              return;
-        }   }
-      
-      // no test-ID was specified.
-      // instantiiate all tests cases and execute them.
-      for ( TestMap::iterator i=tests->begin(); i!=tests->end(); ++i )
-        {
-          std::cout << "\n  ----------"<< i->first<< "----------\n";
-          Launcher* test = (i->second);
-          VALID (test, i->first);
-          (*test)()->run(cmdline); // actually no cmdline arguments
-        }
-    }
+  {
+    PTestMap tests = testcases.getGroup(groupID_);
+    if (!tests)
+      throw cinelerra::error::Invalid (); ///////// TODO: pass error description
+    
+    if (0 < cmdline.size())
+      {
+        string& testID (cmdline[0]);
+        trim(testID);
+        if ( contains (*tests, testID))
+          {
+            // first cmdline argument denotes a valid testcase registered in 
+            // this group: invoke just this test with the remaining cmdline
+            Launcher* test = (*tests)[testID];
+            cmdline.erase (cmdline.begin());
+            VALID (test,testID);
+            (*test)()->run(cmdline);
+            return;
+      }   }
+    
+    // no test-ID was specified.
+    // instantiiate all tests cases and execute them.
+    for ( TestMap::iterator i=tests->begin(); i!=tests->end(); ++i )
+      {
+        std::cout << "\n  ----------"<< i->first<< "----------\n";
+        Launcher* test = (i->second);
+        VALID (test, i->first);
+        (*test)()->run(cmdline); // actually no cmdline arguments
+      }
+  }
   
   
   /** print to stdout an ennumeration of all testcases in this suite,
@@ -188,27 +189,24 @@ namespace test
    */
   void
   Suite::describe ()
-    {
-      util::Cmdline noCmdline("");
-      PTestMap tests = testcases.getGroup(groupID_);
-      ASSERT (tests);
-      
-      std::cout << "TESTING \"Component Test Suite: " << groupID_ << "\" ./test-components\n\n";
+  {
+    util::Cmdline noCmdline("");
+    PTestMap tests = testcases.getGroup(groupID_);
+    ASSERT (tests);
+    
+    std::cout << "TESTING \"Component Test Suite: " << groupID_ << "\" ./test-components\n\n";
 
-      for ( TestMap::iterator i=tests->begin(); i!=tests->end(); ++i )
-        {
-          string key (i->first);
-          std::cout << "\n\n";
-          std::cout << "TEST \""<<key<<"\" "<<key<<" <<END\n";
-          Launcher* test = (i->second);
-          VALID (test, i->first);
-          (*test)()->run(noCmdline); // run it to insert test generated output
-          std::cout << "END\n";
-        }
-
-      
-
-    }
+    for ( TestMap::iterator i=tests->begin(); i!=tests->end(); ++i )
+      {
+        string key (i->first);
+        std::cout << "\n\n";
+        std::cout << "TEST \""<<key<<"\" "<<key<<" <<END\n";
+        Launcher* test = (i->second);
+        VALID (test, i->first);
+        (*test)()->run(noCmdline); // run it to insert test generated output
+        std::cout << "END\n";
+      }
+  }
 
 
 

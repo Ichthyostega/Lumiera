@@ -31,9 +31,9 @@ using cinelerra::Appconfig;
 
 
 int main (int argc, char* argv[])
-  {
-    cout << "*** Cinelerra NLE for Linux ***" << endl
-         << "    Version: " << Appconfig::get("version") << endl;
-    assert(true);
-    return 0;
-  }
+{
+  cout << "*** Cinelerra NLE for Linux ***" << endl
+       << "    Version: " << Appconfig::get("version") << endl;
+  assert(true);
+  return 0;
+}
