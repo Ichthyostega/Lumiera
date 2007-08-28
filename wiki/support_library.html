@@ -720,6 +720,19 @@ We use a common base class for all our application specific exceptions. These ex
 * getting standardized error messages automatically
 </pre>
 </div>
+<div title="FrameAndTime" modifier="CehTeh" modified="200708282024" created="200708261938" changecount="2">
+<pre>! Framerates
+Framerates are stored as rational numbers eg. 30000/1001 for NTSC, this representation allows highly precise integer calculations for frames and times.
+
+! Frames
+All calculations in cinelerra are based on frames which is a signed integer type. Together with a Framerate and a starting point, every frame can be exactly located.
+
+! Time
+Time is used only internally in cinelerra, every external representation of time will be converted to frames. Time has a precision of 1 microsecond and is stored in POSIX struct timeval. Time is always handled as absolute time, thus frame addresses map to absolute times, there is at worst a 1us precision jitter but no drift.
+
+!! SMPTE and other Timecodes
+will be added on demand, but be frame based, not time based</pre>
+</div>
 <div title="FullScreenPlugin" modifier="CehTeh" modified="200706110313" created="200607241016" tags="systemConfig lewcidExtension" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110313">
 <pre>/***
 |Name|FullScreenPlugin|
@@ -2360,7 +2373,7 @@ h1,h2,h3,h4,h5,h6 {
 /*}}}*/
 </pre>
 </div>
-<div title="SupportLibrary" modifier="MichaelPloujnikov" modified="200707160346" created="200707102314" changecount="6">
+<div title="SupportLibrary" modifier="CehTeh" modified="200708261935" created="200707102314" changecount="8">
 <pre>The Support Library contains all tools we need at various places, but by themselves don't defines a subsystem on their own.
 
 These things are:
@@ -2369,7 +2382,7 @@ These things are:
 * a wrapper for POSIX Threads
 ** Thread creation joining and canceling
 ** Locking primitives like Condition variables and Mutexes
-
+* [[Frame and Time handling and calculations|FrameAndTime]]
  
 (... to be continued)
 </pre>
