@@ -27,7 +27,7 @@
 
 /**
  * framerates are defined as a rational number
- * for example NTSC with 29.97fps is {2997, 100}
+ * for example NTSC with 30000/1001fps
  */
 struct cinelerra_framerate_struct
 {
@@ -68,7 +68,7 @@ cinelerra_framerate_time_get_time_frame (const CinelerraFramerate framerate,
   REQUIRE (frame>0);
   TODO ("if(!time)..");
 
-  unsigned long long usec = (frame-1) * (framerate->d * 1000000ULL) / framerate->n;
+  unsigned long long usec = ((frame-1) * framerate->d * 1000000ULL - (/*magic*/frame>1?1:0)) / framerate->n;
 
   time->tv_sec = usec / 1000000;
   time->tv_usec = usec % 1000000;

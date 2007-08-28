@@ -23,7 +23,7 @@
 #include <string.h>
 
 #include "lib/time.h"
-#include "lib/frames.h"
+#include "lib/framerate.h"
 
 
 CINELERRA_ERROR_DEFINE(TEST, "test error");
@@ -101,7 +101,7 @@ main (int argc, char** argv)
 
   if (!strcmp(argv[1], "ntscframefromtime"))
     {
-      cinelerra_framerate ntsc = {2997, 100};
+      cinelerra_framerate ntsc = {30000, 1001};
       cinelerra_time time;
 
       cinelerra_time_init (&time, atol (argv[2]), atol (argv[3]));
@@ -111,7 +111,7 @@ main (int argc, char** argv)
 
   if (!strcmp(argv[1], "ntscframestart"))
     {
-      cinelerra_framerate ntsc = {2997, 100};
+      cinelerra_framerate ntsc = {30000, 1001};
       cinelerra_time time;
 
       cinelerra_framerate_time_get_time_frame (&ntsc, &time, atol (argv[2]));
@@ -119,6 +119,28 @@ main (int argc, char** argv)
       printf ("%lu %lu\n", (long)cinelerra_time_sec(&time), (long)cinelerra_time_usec(&time));
     }
 
+  if (!strcmp(argv[1], "ntscframecheck"))
+    {
+      cinelerra_framerate ntsc = {30000, 1001};
+      cinelerra_time time1;
+      cinelerra_time time2;
+      cinelerra_framepos frame;
+
+      cinelerra_framepos frame1;
+      cinelerra_framepos frame2;
+
+      frame = atol (argv[2]);
+
+
+      cinelerra_framerate_time_get_time_frame (&ntsc, &time1, frame);
+      printf("frame %lu ", frame1 = cinelerra_framerate_frame_get_time (&ntsc, &time1));
+
+      cinelerra_time_init (&time2, 0, 1);
+      cinelerra_time_sub (&time1, &time2);
+      printf("%lu\n", frame2 = cinelerra_framerate_frame_get_time (&ntsc, &time1));
+
+      ENSURE (frame1 == frame2+1);
+    }
 
   return 0;
 }

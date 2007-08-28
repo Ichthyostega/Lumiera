@@ -29,5 +29,6 @@ libcin3_a_SOURCES = \
 noinst_HEADERS += \
 	$(libcin3_a_srcdir)/plugin.h \
 	$(libcin3_a_srcdir)/error.h \
-	$(libcin3_a_srcdir)/time.h
+	$(libcin3_a_srcdir)/time.h \
+	$(libcin3_a_srcdir)/framerate.h
 

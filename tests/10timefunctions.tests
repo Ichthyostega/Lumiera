@@ -69,16 +69,6 @@ TEST "time to frame NTSC frame 3 begin" ntscframefromtime 0 66733 <<END
 out: 3
 END
 
-# and 100099 the end of frame 3
-TEST "time to frame NTSC frame 3 end" ntscframefromtime 0 100099 <<END
-out: 3
-END
-
-# and 100100 the start of frame 4
-TEST "time to frame NTSC frame 4 start" ntscframefromtime 0 100100 <<END
-out: 4
-END
-
 # after 1 hour we are at frame 107893
 TEST "time to frame NTSC after 1hour" ntscframefromtime 3600 0 <<END
 out: 107893
@@ -86,7 +76,7 @@ END
 
 # after 200 days we are at frame 517881601
 TEST "time to frame NTSC after 200 days" ntscframefromtime 17280000 0 <<END
-out: 517881601
+out: 517882118
 END
 
 
@@ -98,23 +88,39 @@ TEST "frame to time NTSC frame 2" ntscframestart 2 <<END
 out: 0 33366
 END
 
-TEST "frame to time NTSC frame 3" ntscframestart 3 <<END
-out: 0 66733
+TEST "frame->time->frame conversion 2" ntscframecheck 2 <<END
+out: frame 2 1
 END
 
-TEST "frame to time NTSC frame 4" ntscframestart 4 <<END
-out: 0 100100
+TEST "frame->time->frame conversion 3" ntscframecheck 3 <<END
+out: frame 3 2
+END
+TEST "frame->time->frame conversion 4" ntscframecheck 4 <<END
+out: frame 4 3
+END
+TEST "frame->time->frame conversion 5" ntscframecheck 5 <<END
+out: frame 5 4
+END
+TEST "frame->time->frame conversion 6" ntscframecheck 6 <<END
+out: frame 6 5
+END
+TEST "frame->time->frame conversion 7" ntscframecheck 7 <<END
+out: frame 7 6
+END
+TEST "frame->time->frame conversion 8" ntscframecheck 8 <<END
+out: frame 8 7
+END
+TEST "frame->time->frame conversion 9" ntscframecheck 9 <<END
+out: frame 9 8
 END
 
-TEST "frame to time NTSC 1 hour" ntscframestart 107893 <<END
-out: 3600 0
+TEST "frame->time->frame conversion 100000" ntscframecheck 100000 <<END
+out: frame 100000 99999
 END
 
-TEST "frame to time NTSC 200 days" ntscframestart 517881601 <<END
-out: 17280000 0
+TEST "frame->time->frame conversion 999999" ntscframecheck 999999 <<END
+out: frame 999999 999998
 END
-
-
 
 # how long are N frames on average (beware of precision!)
 PLANNED "frame duration"
