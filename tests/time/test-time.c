@@ -114,9 +114,8 @@ main (int argc, char** argv)
       cinelerra_framerate ntsc = {30000, 1001};
       cinelerra_time time;
 
-      cinelerra_framerate_time_get_time_frame (&ntsc, &time, atol (argv[2]));
-
-      printf ("%lu %lu\n", (long)cinelerra_time_sec(&time), (long)cinelerra_time_usec(&time));
+      if(cinelerra_framerate_time_get_time_frame (&ntsc, &time, atol (argv[2])))
+        printf ("%lu %lu\n", (long)cinelerra_time_sec(&time), (long)cinelerra_time_usec(&time));
     }
 
   if (!strcmp(argv[1], "ntscframecheck"))
@@ -132,14 +131,16 @@ main (int argc, char** argv)
       frame = atol (argv[2]);
 
 
-      cinelerra_framerate_time_get_time_frame (&ntsc, &time1, frame);
-      printf("frame %lu ", frame1 = cinelerra_framerate_frame_get_time (&ntsc, &time1));
+      if (cinelerra_framerate_time_get_time_frame (&ntsc, &time1, frame))
+        {
+          printf("frame %lu ", frame1 = cinelerra_framerate_frame_get_time (&ntsc, &time1));
 
-      cinelerra_time_init (&time2, 0, 1);
-      cinelerra_time_sub (&time1, &time2);
-      printf("%lu\n", frame2 = cinelerra_framerate_frame_get_time (&ntsc, &time1));
+          cinelerra_time_init (&time2, 0, 1);
+          cinelerra_time_sub (&time1, &time2);
+          printf("%lu\n", frame2 = cinelerra_framerate_frame_get_time (&ntsc, &time1));
+          ENSURE (frame1 == frame2+1);
+        }
 
-      ENSURE (frame1 == frame2+1);
     }
 
   return 0;

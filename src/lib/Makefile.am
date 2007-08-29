@@ -24,8 +24,9 @@ libcin3_a_CPPFLAGS = -I$(top_srcdir)/src/
 libcin3_a_SOURCES = \
 	$(libcin3_a_srcdir)/plugin.c \
 	$(libcin3_a_srcdir)/error.c \
-	$(libcin3_a_srcdir)/time.c
- 
+	$(libcin3_a_srcdir)/time.c \
+	$(libcin3_a_srcdir)/framerate.c
+
 noinst_HEADERS += \
 	$(libcin3_a_srcdir)/plugin.h \
 	$(libcin3_a_srcdir)/error.h \
