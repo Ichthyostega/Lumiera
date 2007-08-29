@@ -3455,7 +3455,7 @@ Portions written by Luke Blanshard are hereby released into the public domain.
 &lt;!--}}}--&gt;
 </pre>
 </div>
-<div title="TestSh" modifier="CehTeh" modified="200708131521" created="200708131509" changecount="5">
+<div title="TestSh" modifier="CehTeh" modified="200708292226" created="200708131509" changecount="6">
 <pre>! The Test Script
 There is a simple test script in tests which will be used to drive various tests. All tests are run under valgrind control if available unless {{{VALGRINDFLAGS=DISABLE}}} is defined. This test script is integrated in the automake build and will be used when {{{make check}}} is called.
 
@@ -3464,11 +3464,13 @@ One may define {{{TESTMODE}}} containing any one of the following strings:
 * {{{FAST}}} only run tests which failed recently
 * {{{FIRSTFAIL}}} abort the tests at the first failure
 
+The variable {{{TESTSUITES}}} may contain a list of string which are used to select which tests are run. If not given, all available tests are run.
+
 putting this together a very fast check (when using automake) while hacking on the source would look like:
 {{{
 VALGRINDFLAGS=DISABLE TESTMODE=FAST+FIRSTFAIL make check
 }}}
-This doesnt catch all errors, notably not regressions, but is useful to do coarse checks.
+This doesn't catch all errors, notably not regressions, but is useful to do coarse checks.
 
 Running the testsuite with everything enabled is just:
 {{{

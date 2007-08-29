@@ -188,20 +188,29 @@ function PLANNED()
 
 function RUNTESTS()
 {
-    for i in $srcdir/*.tests; do
-        source $i
-    done
-    echo
-    if [ $FAILCNT = 0 ]; then
-        echo " ... PASSED $(($TESTCNT - $SKIPCNT)) TESTS, $SKIPCNT SKIPPED"
-        #rm ,testlog
-    else
-        echo " ... SUCCEDED $(($TESTCNT - $FAILCNT - $SKIPCNT)) TESTS"
-        echo " ... FAILED $FAILCNT TESTS"
-        echo " ... SKIPPED $SKIPCNT TESTS"
-        echo " see ',testlog' for details"
-        exit 1
+    if test "$TESTSUITES" != ''; then
+        if test ! "${TESTSUITES/* */}"; then
+            TESTSUITES={${TESTSUITES/ /,}}
+        fi
     fi
+    for t in $(eval echo *$TESTSUITES*.tests); do
+        echo "$t"
+    done | sort | uniq | {
+        while read i; do
+            source $i
+        done
+        echo
+        if [ $FAILCNT = 0 ]; then
+            echo " ... PASSED $(($TESTCNT - $SKIPCNT)) TESTS, $SKIPCNT SKIPPED"
+            #rm ,testlog
+        else
+            echo " ... SUCCEDED $(($TESTCNT - $FAILCNT - $SKIPCNT)) TESTS"
+            echo " ... FAILED $FAILCNT TESTS"
+            echo " ... SKIPPED $SKIPCNT TESTS"
+            echo " see ',testlog' for details"
+            exit 1
+        fi
+    }
 }
 
 function TESTING()
@@ -210,5 +219,7 @@ function TESTING()
     echo "$1"
     TESTBIN=$2
 }
+
+TESTSUITES="${TESTSUITES:+$TESTSUITES }$@"
 
 RUNTESTS
