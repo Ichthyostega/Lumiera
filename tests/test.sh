@@ -188,16 +188,17 @@ function PLANNED()
 
 function RUNTESTS()
 {
-    if test "$TESTSUITES" != ''; then
-        if test ! "${TESTSUITES/* */}"; then
-            TESTSUITES={${TESTSUITES/ /,}}
-        fi
+    if test \( ! "${TESTSUITES/*,*/}" \) -a "$TESTSUITES"; then
+        TESTSUITES="{$TESTSUITES}"
     fi
-    for t in $(eval echo *$TESTSUITES*.tests); do
+    for t in $(eval echo $srcdir/*$TESTSUITES*.tests); do
         echo "$t"
     done | sort | uniq | {
         while read i; do
-            source $i
+            echo $i >&2
+            if test -f $i; then
+                source $i
+            fi
         done
         echo
         if [ $FAILCNT = 0 ]; then
@@ -220,6 +221,6 @@ function TESTING()
     TESTBIN=$2
 }
 
-TESTSUITES="${TESTSUITES:+$TESTSUITES }$@"
+TESTSUITES="${TESTSUITES}${1:+${TESTSUITES:+,}$1}"
 
 RUNTESTS
