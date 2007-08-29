@@ -24,6 +24,12 @@
 #include <iostream>
 #include "common/test/run.hpp"
 
+#include "common/util.hpp"
+using util::isnil;
+
+#include <boost/lexical_cast.hpp>
+using boost::lexical_cast;
+
 
 namespace cinelerra
   {
@@ -38,7 +44,10 @@ namespace cinelerra
       {
         virtual void run(Arg arg) 
         {
-          greeting();
+          int num= isnil(arg)?  1 : lexical_cast<int> (arg[1]);
+          
+          for ( ; 0 < num-- ; )
+            greeting();
         } 
         
         void greeting() 

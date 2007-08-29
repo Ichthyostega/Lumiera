@@ -115,7 +115,7 @@ namespace cinelerra
     CINELERRA_ERROR_DECLARE (LOGIC    );    ///< contradiction to internal logic assumptions detected  
     CINELERRA_ERROR_DECLARE (FATAL    );    ///< unable to cope with, internal logic floundered     
     CINELERRA_ERROR_DECLARE (CONFIG   );    ///< execution aborted due to misconfiguration
-    CINELERRA_ERROR_DECLARE (STATE    );    ///< unforseen internal state
+    CINELERRA_ERROR_DECLARE (STATE    );    ///< unforeseen internal state
     CINELERRA_ERROR_DECLARE (INVALID  );    ///< invalid input or parameters encountered
     CINELERRA_ERROR_DECLARE (EXTERNAL );    ///< failure in external service the application relies on
     CINELERRA_ERROR_DECLARE (ASSERTION);    ///< assertion failure

@@ -33,20 +33,24 @@ namespace util
   using std::string;
 
 
-  /** a family of util functions providing a "no value whatsoever" test */
-  inline bool isnil(const string& val)
+  /** a family of util functions providing a "no value whatsoever" test.
+      Works on strings and all STL containers, includes NULL test for pointers */
+  template <class CONT>
+  inline bool isnil(const CONT& container)
   {
-    return 0 == val.length();
+    return container.empty();
   }
   
-  inline bool isnil(const string* pval)
+  template <class CONT>
+  inline bool isnil(const CONT* pContainer)
   {
-    return !pval || 0 == pval->length();
+    return !pContainer || pContainer->empty();
   }
   
-  inline bool isnil(const char* pval)
+  template <>
+  inline bool isnil(const char* pCStr)
   {
-    return !pval || 0 == std::strlen(pval);
+    return !pCStr || 0 == std::strlen(pCStr);
   }
 
   
