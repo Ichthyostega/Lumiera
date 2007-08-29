@@ -1,4 +1,5 @@
 ,*
+test-*
 mainsuite
 errortest
 plugin-example

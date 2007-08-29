@@ -21,33 +21,174 @@
 * *****************************************************/
 
 
+
 #include "common/error.hpp"
+#include "common/util.hpp"
+
+#include <exception>
+#include <typeinfo>
+#include <iostream>
+
+using util::isnil;
+using std::exception;
+
 
 namespace cinelerra
   {
+
+  namespace error
+    {
+    
+    /** the message shown to the user per default
+     *  if an exception reaches one of the top-level
+     *  catch clauses.
+     *  @todo to be localized
+     */
+    inline const string default_usermsg (Error* exception_obj)  throw() 
+    {
+      return string("Sorry, Cinelerra encountered an internal error. (")
+           + typeid(*exception_obj).name() + ")";
+    }
+    
+    
+    /* constants to be used as error IDs */
+    CINELERRA_ERROR_DEFINE (LOGIC    , "internal logic broken");   
+    CINELERRA_ERROR_DEFINE (FATAL    , "floundered");      
+    CINELERRA_ERROR_DEFINE (CONFIG   , "misconfiguration"); 
+    CINELERRA_ERROR_DEFINE (STATE    , "unforseen state"); 
+    CINELERRA_ERROR_DEFINE (INVALID  , "invalid input or parameters"); 
+    CINELERRA_ERROR_DEFINE (EXTERNAL , "failure in external service"); 
+    CINELERRA_ERROR_DEFINE (ASSERTION, "assertion failure");
+
+  } // namespace error
+  
+  CINELERRA_ERROR_DEFINE (EXCEPTION, "generic cinelerra exception"); 
+  
+  
+  
+  
+  /** @note we set the C-style errorstate as a side effect */
+  Error::Error (string description, const char* id) throw()
+    : std::exception (),
+      id_ (id),
+      msg_ (error::default_usermsg (this)),
+      desc_ (description),
+      cause_ ("")
+  {
+    cinelerra_error_set (this->id_);
+  }
+  
+  
+  Error::Error (std::exception& cause, 
+                string description, const char* id) throw()
+    : std::exception (),
+      id_ (id),
+      msg_ (error::default_usermsg (this)),
+      desc_ (description),
+      cause_ (extractCauseMsg(cause))
+  {
+    cinelerra_error_set (this->id_);
+  }
+  
+  
+  /** @note copy ctor behaves like chaining, i.e setting the cause_. */
+  Error::Error (const Error& ref) throw()
+    : std::exception (),
+      id_ (ref.id_),
+      msg_ (ref.msg_),
+      desc_ (ref.desc_),
+      cause_ (extractCauseMsg(ref))
+  { }
+
+
   
   /** Description of the problem, including the internal char constant
-   *  in accordance to cinelerras error identification scheme.
-   *  If a ::rootCause() can be obtained, this will be included in the
+   *  in accordance to cinelerra's error identification scheme.
+   *  If a root cause can be obtained, this will be included in the
    *  generated output as well. 
    */
   const char*
-  Error::what () const  throw()
-    {
-    }
+  Error::what() const  throw()
+  {
+    if (isnil (this->what_))
+      {
+        what_ = string(id_);
+        if (!isnil (desc_))  what_ += " ("+desc_+").";
+        if (!isnil (cause_)) what_ += string(" -- caused by: ") + cause_;
+      }
+    return what_.c_str(); 
+  }
   
-  
-  /** If this exception was caused by a chain of further exceptions,
-   *  return the first one registered in this throw sequence.
-   *  This works only, if every exceptions thrown as a consequence
-   *  of another exception is propperly constructed by passing
-   *  the original exception to the constructor
+
+  /** @internal get at the description message of the 
+   *  first exception encountered in a chain of exceptions
    */
-  std::exception 
-  Error::rootCause() const  throw()
+  const string
+  Error::extractCauseMsg (const exception& cause)  throw()
+  {
+    const Error* err=dynamic_cast<const Error*> (&cause);
+    if (err)
+      if (isnil (err->cause_))
+        return cause.what(); // cause is root cause
+      else
+        return err->cause_; // cause was caused by another exception
+    
+    // unknown other exception type
+    return cause.what ();
+  }
+
+  
+/* -- originally, I wanted to chain the exception objects themselfs.
+      but this doesn't work; we'd need to clone the "cause" error object,
+      because it can be destroyed when leaving the original
+      handler by throwing a new exception.
+      Anyways, not needed at the moment; maybe later? 8/2007  
+  
+  const exception&
+  Error::rootCause () const throw()
     {
+      const exception * root(this);
+      if (this->cause)
+        if (Error* err = dynamic_cast<Error*> (this->cause))
+          root = &err->rootCause ();
+        else
+          root = this->cause;
+      
+      ENSURE (root);
+      ENSURE (root!=this || !cause); 
+      return *root;
     }
+*/  
   
   
+  
+  
+  
+  namespace error
+  {
+    
+    void cinelerra_unexpectedException ()  throw()
+    {
+      const char* is_halted 
+        = "### Cinelerra halted due to an unexpected Error ###";
+      
+      std::cerr << "\n" << is_halted << "\n\n";
+      ERROR (NOBUG_ON, "%s", is_halted);
+      
+      if (const char * errorstate = cinelerra_error ())
+        ERROR (NOBUG_ON, "last registered error was....\n%s", errorstate);
+      
+      std::terminate();
+    }
+
+    void assertion_terminate (const string& location)
+    {
+      throw Fatal (location, CINELERRA_ERROR_ASSERTION)
+                 .setUsermsg("Program terminated because of violating "
+                             "an internal consistency check.");    
+    }
+    
+    
+  } // namespace error
   
 } // namespace cinelerra

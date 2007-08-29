@@ -2,10 +2,12 @@
 *~
 *.tar.*
 .[^.]*
+*.os
 Buildhelper.pyc
 optcache
 Makefile.in
 build/*
+bin/*
 autom4te.cache/*
 scripts/*
 configure

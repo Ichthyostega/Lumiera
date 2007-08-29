@@ -21,16 +21,22 @@
 */
 
 
-#include "helper/suite.hpp"
-
+#include "common/test/suite.hpp"
+#include "common/test/testoption.hpp"
 
 /** run all tests or any single test specified in the first
  *  cmd line argument.
  *  Note: to ease debugging, we don't catch any exceptions. 
  */
 int main (int argc, char* argv[])
-  {
-    test::Suite suite (test::Suite::ALLGROUP);
-    suite.run(argc,argv);
-    return 0;
-  }
+{
+  util::Cmdline args (argc,argv);
+  test::TestOption optparser (args);
+  test::Suite suite (optparser.getTestgroup());
+  
+  if (optparser.getDescribe())
+    suite.describe();
+  else
+    suite.run (args);
+  return 0;
+}

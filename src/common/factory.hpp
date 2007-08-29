@@ -60,6 +60,8 @@ namespace cinelerra
        *  Note: non-virtual.
        */
       SMP<T> operator() (){ return SMP<T> (new T ); };
+
+      typedef SMP<T> ptype;
       
     private:
       void operator= (const Factory&); // copy prohibited
@@ -102,7 +104,7 @@ namespace cinelerra
          */
         static void destroy (T* victim) { delete victim; };
         
-    public:
+      public:
         shared_ptr<T> operator() ()     { return shared_ptr<T> (new T, &destroy ); }
       };
       

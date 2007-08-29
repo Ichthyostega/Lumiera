@@ -707,7 +707,7 @@ The next point is allocation failures. These are possible by C/C++ standard but 
 
 </pre>
 </div>
-<div title="ErrorHandling-Cpp" modifier="Ichthyostega" created="200708140640" changecount="1">
+<div title="ErrorHandling-Cpp" modifier="Ichthyostega" modified="200708290301" created="200708140640" changecount="3">
 <pre>Basically, the C++ error handling techniques are layered on top of the [[C solution|ErrorHandling-C]].
 !Proposal:
 We use a common base class for all our application specific exceptions. These exceptions can be thought of as a classification of error situations, thus the hierarchical approach. The purpose of throwing such a //classified exception// is
@@ -716,8 +716,26 @@ We use a common base class for all our application specific exceptions. These ex
 
 !!Requirements for the Exception Interface
 * a means for capturing and transporting detail informations
-* the possibility to link to the ''root cause'' of an exception, even after having passed several subsystem barriers.
+* the possibility to get at the ''root cause'' of an exception, even after having passed several subsystem barriers.
 * getting standardized error messages automatically
+
+!!provided features
+The C++ errorhandling Classes and functions can be found in {{{common/error.hpp}}} (not to be confused with the elementary C errorhandling of the cinelerra support lib {{{lib/error.h}}}. See also the &quot;exceptionerrortest.cpp&quot;
+* the constructor of the Exception base class will set the C-style error flag as well. Obviously, when an exception gets caught and handled, this error-flag should be reset (and this is the responsibility of the handler).
+* we add a __unknown()__ handler which will print additional diagnostics.
+* the Exception class has a diagnostic message intended for developers and a friendly message for the user. It is encouraged to write a detailed description of each error situation right into a string constant passed to the exception object ctor. This will serve the purpose of documenting the error situation in the source code and at the same time help diagnosis.
+* there is a variant of the constructor taking a reference to an std::exception. This is intended for //chained exceptions//. Whenever an handler catches an exception, but then decides to rethrow it with different classification, the original exception object should be passed on by using this constructor, so it's {{{what()}}} message can be preserved and will be included in the final log entry. While this may look like overkill in a small example, it is a very helpful facility in a larger layered application, where it is often difficult to spot the original cause of an exception encountered.
+* for each mayor category of Exception subclasses, we define a C-style error constant. The client code is free to define further detailed error constants and Exception subclasses.
+* to help defining Exception subclasses, a macro {{{CINELERRA_EXCEPTION_DECLARE}}} is provided.
+
+!!!basic Exception categories
+|!category|!description|
+|error::Logic| contradiction to internal logic assumptions detected|
+|error::Fatal| special subclass of Logic: situation can't be handled, internal logic floundered |
+|error::Config| execution aborted due to misconfiguration |
+|error::State| unforeseen internal state |
+|error::Invalid| invalid input or parameters encountered |
+|error::External| failure in external service the application relies on |
 </pre>
 </div>
 <div title="FrameAndTime" modifier="CehTeh" modified="200708282024" created="200708261938" changecount="2">

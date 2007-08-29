@@ -38,48 +38,50 @@
 
 #include <map>
 #include <string>
-#include <memory>
+#include <boost/scoped_ptr.hpp>
 
 #include "nobugcfg.h"
-
-
-using std::string;
-using std::auto_ptr;
-
 
 
 
 namespace cinelerra
   {
+  using std::string;
+  using boost::scoped_ptr;
 
 
   /**
    * Singleton to hold inevitable global flags and constants 
    * and for performing early (static) global initialization tasks.
+   * Appconfig services are available already from static 
+   * initialsation code.
+   * @warning don't use Appconfig in destuctors.
    */
   class Appconfig
     {
     private:
-      
-      /** holds the single instance and triggers initialization */
-      static Appconfig* theApp_;
-
-      
       /** perform initialization on first access.
-       *  A call is placed in static initialization code
-       *  included via cinelerra.h (see below), 
-       *  thus it will happen rather early.
-       */
-      Appconfig () ;
+       *  @see #instance()  for Lifecycle     */
+      Appconfig ();
+      
+      Appconfig (const Appconfig&); ///< copy prohibited, not implemented
+      ~Appconfig ()  throw()   {}; ///< deletion prohibited
+      friend void boost::checked_delete<Appconfig>(Appconfig*);
 
-
+      
     public:
+      /** get the (single) Appconfig instance. 
+       *  Implemented as Meyers singleton.
+       *  @warning don't use it in destruction code!
+       */
       static Appconfig& instance()
-        {
-          if (!theApp_) theApp_ = new Appconfig ();
-          return *theApp_;
-        }
-
+      {
+        static scoped_ptr<Appconfig> theApp_ (0);
+        if (!theApp_) theApp_.reset (new Appconfig ());
+        return *theApp_;
+      }
+      
+      
       /** access the configuation value for a given key.
        *  @return empty string for unknown keys, config value else
        *  @todo do we need such a facility?
@@ -89,23 +91,17 @@ namespace cinelerra
       
     private:
       typedef std::map<string,string> Configmap; 
-      typedef auto_ptr<Configmap> PConfig;
+      typedef std::auto_ptr<Configmap> PConfig;
       
-      /** @TODO <b>the following is just placeholder code!</b>
-       *  Appconfig <i>could</i> do such things if necessary.
+      /** @todo <b>the following is just placeholder code!</b>
+       *  Appconfig <i>could</i> do such things if necessary,
+       *  or provide similar "allways available" services.
        */
       PConfig configParam_;
       
     };
 
 
-
-
-  namespace
-    {
-    /** "magic code" to cause early static initialization */
-    Appconfig& init (Appconfig::instance ());
-    } 
 
 } // namespace cinelerra
 #endif

@@ -1,5 +1,5 @@
 /*
-  SUITE.hpp  -  helper class for running collections of tests
+  Appconfig(Test)  -  accessing the allwasy-available Appconfig singleton
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -18,43 +18,47 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
 
 
-#ifndef TESTHELPER_SUITE_H
-#define TESTHELPER_SUITE_H
+#include "nobugcfg.h"
 
-#include <string>
+#include "common/appconfig.hpp"
+
+#include "common/test/run.hpp"
+#include "common/util.hpp"
+
+
+#include <iostream>
+using std::cout;
 
 
 
-namespace test
+namespace cinelerra
   {
-  using std::string;
-  
-  // Forward decls needed for run.hpp
-  class Test;
-  class Launcher;
-  
-  
-  
-  /**
-   * Helper class for running a collection of tests.
-   * 
-   */
-  class Suite
+  namespace test
     {
-      string groupID_;
+    
+  
+    class Appconfig_test : public Test
+      {
+        virtual void run (Arg arg)
+          {
+            testAccess("version");
+          }
+        
+        /** @test accessing a value from cinelerra::Appconfig */
+        void testAccess (const string& key)
+        {
+          string ver = cinelerra::Appconfig::get(key);
+          ASSERT ( !util::isnil(ver));
+        }
+      };
+    
+      LAUNCHER (Appconfig_test, "function common");
+
       
-    public:
-      Suite (string groupID);
-      void run (int argc, char* argv[]);
-      static void enroll (Launcher *test, string testID, string groups);
-      
-      static const string ALLGROUP;
-    };
+  } // namespace test
     
-    
-    
-} // namespace test
-#endif
+} // namespace util
+

@@ -747,14 +747,19 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BuildDependenceis" modifier="Ichthyostega" modified="200708140618" created="200708120103" tags="organization buildsys" changecount="5">
+<div title="BuildDependenceis" modifier="Ichthyostega" modified="200708210341" created="200708120103" tags="organization buildsys" changecount="7">
 <pre>for __Building__
 * gcc (4.1), glibc6 (2.3), libstdc++6 (4.1)
 * [[build system|BuildSystem]] dependencies: SCons (0.96.90), Python (2.3)
 * NoBug for Logging, Tracing, Asserting (can be obtained from [[Pipapo.org|http://www.pipapo.org/pipawiki/NoBug]])
 * ~NoBug needs [[valgrind|Valgrind]] (3.2), execinfo.h and libpthread (&amp;rarr; glibc)
 * std::tr1 &amp;mdash; esp. for the former BOOST::shared_ptr (which is now proposed standard)
-* BOOST
+* BOOST ~~(below are the DEBIAN package names)~~
+** libboost-dev (=1.34.1-2)
+** libboost-program-options-dev (=1.34.1-2)
+** libboost-program-options1.34.1 (=1.34.1-2) ''NOTE: binary dependency''
+** libboost-regex-dev (=1.34.1-2)
+** libboost-regex1.34.1 (=1.34.1-2) ''binary..''
 //usually, newer versions are OK//
 
 for __Running__</pre>
@@ -3549,7 +3554,7 @@ Here is the order suggested:
 
 </pre>
 </div>
-<div title="TestSuite" modifier="Ichthyostega" modified="200708180218" created="200708120254" tags="buildsys organization testsuite" changecount="11">
+<div title="TestSuite" modifier="Ichthyostega" modified="200708231706" created="200708120254" tags="buildsys organization testsuite" changecount="16">
 <pre>For running the automatic Tests, we use Cehteh's simple [[test.sh|TestSh]].
 
 This page is a proposal (by Ichthyo) how the various tests could be organized.
@@ -3560,6 +3565,49 @@ This page is a proposal (by Ichthyo) how the various tests could be organized.
 * moreover, for ''simple Tests'', we can build separate stelf-contained executables or even use other scripts.
 * the Testsuite executable provides some command line magic to select individual tests.
 * Top-level Testsuites or ''~Test-Collections'' for [[test.sh|TestSh]] contain calls to the different (sub)-Suites, together with the expected results/output
+
+!internal Testsuite runner
+The class {{{test::Suite}}} (common/test/suite.hpp) helps building an executable which will run all //registered// test case objects, or some group of such testcases. Each test case implements a simple interface and thus provides a {{{run (args)}}} function, moreover, it registers itself immediately alongside with his definition; this works by the usual trick of defining a static class object and calling some registration function from the constructor of this static var. See the following __hello-world-Example__:
+{{{
+#include &lt;iostream&gt;
+#include &quot;common/test/run.hpp&quot;
+    
+    class HelloWorld_test : public Test
+      {
+        virtual void run(Arg arg) 
+          {
+            greeting();
+          } 
+        
+        void greeting() 
+          { 
+            std::cout &lt;&lt; &quot;This is how the world ends...\n&quot;; 
+          }
+      };
+
+    /** Register this test class to be invoked in some test groups (suites) */
+    LAUNCHER (HelloWorld_test, &quot;unit function common&quot;);    
+}}}
+Notes:
+* type Arg is {{{typedef std::vector&lt;string&gt; &amp; Arg;}}}
+* this vector may be {{{size()==0}}}, which means no comandline args available.
+* otherwise arg[0] is always the ID (normally the classname) of the test
+* the following args may contain further arguments passed from system commandline.
+* the test can/should produce output that can be checked with Cehteh's [[./test.sh|TestSh]].
+* the macro &quot;LAUNCHER&quot; expands to {{{Launch&lt;HelloWorld_test&gt; run_HelloWorld_test(&quot;HelloWorld_test&quot;,&quot;unit function common&quot;);}}}
+* note the second parameter to the macro (or the Laucher-ctor) is a space-delimited list of group names
+* thus any test can declare itself as belonging to some groups, and we can create a {{{test::Suite}}} for each group if we want.
+
+!!!invoking the testrunner
+The class {{{test::TestOption}}} predefines a boost-commandlineparser to support the following optons:
+
+|&gt;|!{{{./test-components --group &lt;groupID&gt; [testID [arguments...]]}}}|
+|{{{--help}}}| options summary|
+|{{{--group|-g &lt;groupID&gt;}}}| build a Testsuite out of all tests from this group. If missing, ALL tests will be included |
+|{{{[testID]}}}| (optional) one single testcase. If missing, all testcases of the group will be invoked |
+|{{{--describe}}}| print all registered tests to stdout in a format suited for use with test.sh |
+Further commandline arguments are deliverd to a single testcase only if you specify a {{{testID}}}. Otherwise, all commandline arguments remaining after options parsing will be discarded and all tests of the suite will be run with an commandline vector of size()==0
+
 
 !conventions for the Buildsystem
 to help with automating the build, ichthyo would appreciate to have the following conventions.

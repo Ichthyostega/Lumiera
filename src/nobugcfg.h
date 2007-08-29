@@ -75,7 +75,8 @@
   NOBUG_CPP_DEFINE_FLAG(config);
   NOBUG_CPP_DEFINE_FLAG(test);
 
-
+#include "common/error.hpp"
+  
 
 #endif /* ===================== (End) C++-Part ============= */
 

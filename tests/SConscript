@@ -26,8 +26,13 @@ def treatPluginTestcase(env):
     """ Special case: the test-plugin executable
     """
     env = env.Clone()
-    env.Append(CPPPATH='plugin') 
-    testplugin = env.SharedLibrary('hello_1', 'plugin/example_plugin.c', SHLIBPREFIX='')
+    env.Append(CPPPATH='plugin')
+    prfx = 'plugin/example_plugin'
+    oC   = env.SharedObject(prfx,        prfx+'.c')
+    oCPP = env.SharedObject(prfx+'_cpp', prfx+'.cpp')
+    testplugin = ( env.SharedLibrary('.libs/example_plugin',     oC,   SHLIBPREFIX='')
+                 + env.SharedLibrary('.libs/example_plugin_cpp', oCPP, SHLIBPREFIX='')
+                 )
     testExe = env.Program('test-plugin', ['plugin/plugin_main.c'] + corelib)
     env.Depends(testExe, testplugin)
     return testExe
@@ -46,7 +51,6 @@ moduledirs = globRootdirs('*')
 isnt_plugin = lambda dir : dir!='plugin'
 moduledirs = filter(isnt_plugin, moduledirs)
 pluginExe = treatPluginTestcase(env)
-print 'moduledirs: %s' %moduledirs
 
 artifacts['testsuite'] = ts = [ SingleTestExecutableSubdir(env, dir) for dir in moduledirs] + pluginExe 
                               
@@ -62,8 +66,7 @@ artifacts['testsuite'] = ts = [ SingleTestExecutableSubdir(env, dir) for dir in 
 #  - it depends on all artifacts defined as "ts" above
 #
 runTs = env.Command(',testlog', ts, "./test.sh",  chdir=1)
-  
-env.Clean (runTs, [ ',*']) # declare tempfiles of test.sh as cleanable 
+
 
 
 #
@@ -74,3 +77,5 @@ env.Clean (runTs, [ ',*']) # declare tempfiles of test.sh as cleanable
 env.Alias('testcode', ts )
 env.Alias('check', runTs )
 
+# declare tempfiles of test.sh as cleanable  
+env.Clean ('check', [',testlog.pre',',expect_stdout',',stdout',',stderr',',testtmp','.libs']) 
