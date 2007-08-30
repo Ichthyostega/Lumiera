@@ -84,6 +84,11 @@ cinelerra_error_set (const char * err);
 const char*
 cinelerra_error ();
 
+/*
+  predefined errors
+*/
+CINELERRA_ERROR_DECLARE (ERRNO);
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif

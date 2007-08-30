@@ -21,6 +21,14 @@
 
 #include <pthread.h>
 
+#include "lib/error.h"
+
+/*
+  predefined errors
+*/
+CINELERRA_ERROR_DEFINE (ERRNO, "errno");
+
+
 /* Thread local storage */
 static pthread_key_t cinelerra_error_tls;
 static pthread_once_t cinelerra_error_initialized = PTHREAD_ONCE_INIT;
