@@ -65,9 +65,13 @@ namespace cinelerra
         {
         protected:
           SMP wrap (T* product) { return SMP (product); }
+
           
         public:
           typedef SMP PType;
+          
+          typedef void (*DelHandler) (T* victim);  ///< custom deleter function
+          void setDelHandler (DelHandler) {};      ///< if non-standard deleting is necessary
         };
     
     
@@ -99,6 +103,12 @@ namespace cinelerra
          */
         typename WR::PType operator() () { return wrap (new T ); }
         
+      protected:        
+        /** this custom deleter function can be used if the
+         *  operator delete call needs to be in the current scope.
+         *  @see RefcountPtr
+         */
+        static void destroy (T* victim) { delete victim; };
       };
     
     
@@ -110,26 +120,34 @@ namespace cinelerra
 
     /** 
      * a frequently used instantiation of the Wrapper,
-     * utilizingthe refcounting shared_ptr from Boost.
+     * utilizing the refcounting shared_ptr from Boost.
      */
     template<class T>
     class Wrapper<T, shared_ptr<T> >
       {
-        /** let the smart-ptr use the custom operator delete, 
-         *  which may be defined in our Allocator baseclass.
-         */
-        static void destroy (T* victim) { delete victim; };
         
       protected:
-        shared_ptr<T> wrap (T* product) { return shared_ptr<T> (product, &destroy ); }
+        shared_ptr<T> wrap (T* product) { return shared_ptr<T> (product, destroy_ ); }
+
       public:
         typedef shared_ptr<T> PType;
+
+        
+        Wrapper () : destroy_(&stdDelete) { }
+        
+        typedef void (*DelHandler) (T* victim);                     ///< custom deleter function
+        void setDelHandler (DelHandler d) { this->destroy_ = d; }  ///< custom deleter used by shard_ptr
+        
+      private:
+        DelHandler destroy_;
+        static void stdDelete (T* victim) { delete victim; };   ///< by default just delete objects normally
       };
     
     
     /** 
      * Shortcut: commonly used (partial) instantiation of the Factory,
-     * generating refcounting shared_ptr wrapped Objects.
+     * generating refcounting shared_ptr wrapped Objects. Built upon
+     * the corresponding special intstantiation of the Wrapper template. 
      */
     template
       < class T,                 // the product to be created
@@ -139,6 +157,12 @@ namespace cinelerra
       {
       public:
         typedef shared_ptr<T> PType;
+        
+        /** especially the shared_ptr will use Factory::destroy,
+         *  so it is sufficient to make Factory a friend if the
+         *  Target class to be produced has private ctor/dtors
+         */ 
+        RefcountPtr() { setDelHandler(&this->destroy); }
       };
      
     

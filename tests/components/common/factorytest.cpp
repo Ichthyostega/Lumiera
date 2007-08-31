@@ -68,8 +68,6 @@ namespace cinelerra
         }
         
         
-      /// @todo: make it possible to have a private destructor
-      public:
         ~TargetObj()  throw()
         {
           delete heapData_;
@@ -117,6 +115,14 @@ namespace cinelerra
          *  custom allocator or a special deleter function. 
          */
         PType operator() (uint param) { return wrap (new TargetObj(param) ); }
+        
+        ObjFactory () { setDelHandler(&destroy); }
+
+      protected:        
+        /** define a custom deleter function, so the actual destrucor call
+         *  happenes within the scope of ObjFactory, which is friend of TargetObj
+         */
+        static void destroy (TargetObj* victim) { delete victim; };
       };
     
 
