@@ -76,6 +76,7 @@ namespace cinelerra
         }
         
         friend class ObjFactory;
+        friend class std::tr1::_Sp_deleter<TargetObj>;
         
         
       public:
@@ -116,13 +117,6 @@ namespace cinelerra
          */
         PType operator() (uint param) { return wrap (new TargetObj(param) ); }
         
-        ObjFactory () { setDelHandler(&destroy); }
-
-      protected:        
-        /** define a custom deleter function, so the actual destrucor call
-         *  happenes within the scope of ObjFactory, which is friend of TargetObj
-         */
-        static void destroy (TargetObj* victim) { delete victim; };
       };
     
 

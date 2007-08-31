@@ -33,24 +33,6 @@ namespace cinelerra
   namespace factory
     {
     /**
-     * Example NOP Allocator using just the normal C++ memory management.
-     * The intended use is for a Factory instance to iherit from this class.
-     * Specialized Allocators typically overload operator new and delete.
-     */
-    class VanillaAllocator {};
-    
-    /**
-     * Example Allocator using plain C memory management. 
-     */
-    class MallocAllocator
-      {
-        void* operator new (size_t siz) { return malloc (siz); };
-        void  operator delete (void* p) { if (p) free (p);     };
-      };
-      
-    typedef VanillaAllocator DefaultALO;   // Allocator facility to be used by default //////////////TODO    
-    
-    /**
      * Wrapping any object created by the Factory into some smart ptr class.
      * The Factory class inherits this functionallity, so it can be exchanged
      * independently from the actual object creation behaviour. For example,
@@ -66,12 +48,8 @@ namespace cinelerra
         protected:
           SMP wrap (T* product) { return SMP (product); }
 
-          
         public:
           typedef SMP PType;
-          
-          typedef void (*DelHandler) (T* victim);  ///< custom deleter function
-          void setDelHandler (DelHandler) {};      ///< if non-standard deleting is necessary
         };
     
     
@@ -82,34 +60,25 @@ namespace cinelerra
      * the clients get just a smart-pointer or similar handle to the
      * created object, which will manage the ownership.
      * 
-     * The provided default implementation uses just std::auto_ptr,
-     * but delegates the allocation to cinelerra's backend-layer.
-     * 
-     * @todo actually do the delgation of memory management instead of using VanillaAllocator! 
+     * The provided default implementation uses just std::auto_ptr.
      */
     template
-      < class T,                    // the product to be created
-        class WR = Wrapper<T>,     // used for fabricating the wrapper
-        class ALO  = DefaultALO   // Allocator facility to be used
+      < class T,                  // the product to be created
+        class WR = Wrapper<T>    // used for fabricating the wrapper
       >
-    class Factory :  public WR, protected ALO
+    class Factory :  public WR
       {
       public:
         /** Object creating facility.
          *  Intended to be over/written/ with a variant taking
-         *  the appropriate number of parameters and using the
-         *  (privately inherited) functions of the allocator.
+         *  the appropriate number of parameters and maybe
+         *  using some special custom allocator.
          *  Note: non-virtual.
          */
         typename WR::PType operator() () { return wrap (new T ); }
         
-      protected:        
-        /** this custom deleter function can be used if the
-         *  operator delete call needs to be in the current scope.
-         *  @see RefcountPtr
-         */
-        static void destroy (T* victim) { delete victim; };
       };
+    
     
     
     
@@ -125,22 +94,11 @@ namespace cinelerra
     template<class T>
     class Wrapper<T, shared_ptr<T> >
       {
-        
       protected:
-        shared_ptr<T> wrap (T* product) { return shared_ptr<T> (product, destroy_ ); }
+        shared_ptr<T> wrap (T* product) { return shared_ptr<T> (product); }
 
       public:
         typedef shared_ptr<T> PType;
-
-        
-        Wrapper () : destroy_(&stdDelete) { }
-        
-        typedef void (*DelHandler) (T* victim);                     ///< custom deleter function
-        void setDelHandler (DelHandler d) { this->destroy_ = d; }  ///< custom deleter used by shard_ptr
-        
-      private:
-        DelHandler destroy_;
-        static void stdDelete (T* victim) { delete victim; };   ///< by default just delete objects normally
       };
     
     
@@ -149,20 +107,11 @@ namespace cinelerra
      * generating refcounting shared_ptr wrapped Objects. Built upon
      * the corresponding special intstantiation of the Wrapper template. 
      */
-    template
-      < class T,                 // the product to be created
-        class ALO  = DefaultALO // Allocator facility to be used
-      >
-    class RefcountPtr : public Factory<T, Wrapper<T,shared_ptr<T> >, ALO>
+    template<class T>
+    class RefcountPtr : public Factory<T, Wrapper<T,shared_ptr<T> > >
       {
       public:
         typedef shared_ptr<T> PType;
-        
-        /** especially the shared_ptr will use Factory::destroy,
-         *  so it is sufficient to make Factory a friend if the
-         *  Target class to be produced has private ctor/dtors
-         */ 
-        RefcountPtr() { setDelHandler(&this->destroy); }
       };
      
     
@@ -171,14 +120,14 @@ namespace cinelerra
      *  Creating an implementation subclass and wraps into auto_ptr.
      */
     template
-      < class T,                  // Interface class
-        class TImpl,             // Implementation class to be created
-        class ALO  = DefaultALO // Allocator facility to be used
+      < class T,       // Interface class
+        class TImpl   // Implementation class to be created
       >
-    class PImplPtr : public Factory<T, Wrapper<T>, ALO>
+    class PImplPtr : public Factory<T, Wrapper<T> >
       {
       public:
         typedef std::auto_ptr<T> PType;
+        
         PType operator() (){ return wrap (new TImpl); };
       };
       
