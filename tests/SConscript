@@ -65,7 +65,10 @@ artifacts['testsuite'] = ts = [ SingleTestExecutableSubdir(env, dir) for dir in 
 #  - the product of running the Testsuite is the ",testlog"
 #  - it depends on all artifacts defined as "ts" above
 #
-runTs = env.Command(',testlog', ts, "./test.sh",  chdir=1)
+testEnv = env.Clone()
+testEnv.Append(ENV = {'VALGRINDFLAGS' : 'DISABLE'})
+
+runTs = testEnv.Command(',testlog', ts, "./test.sh",  chdir=1)
 
 
 

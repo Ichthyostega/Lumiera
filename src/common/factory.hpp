@@ -118,6 +118,8 @@ namespace cinelerra
     /** 
      *  another convienience instantiiation: auto_ptr-to-Impl-Factory.
      *  Creating an implementation subclass and wraps into auto_ptr.
+     *  @warning the TImpl object will typically be destoyed by the
+     *           smart ptr using an T*, so ~T() needs to be virtual.
      */
     template
       < class T,       // Interface class
@@ -128,7 +130,7 @@ namespace cinelerra
       public:
         typedef std::auto_ptr<T> PType;
         
-        PType operator() (){ return wrap (new TImpl); };
+        PType operator() (){ return wrap (static_cast<T*> (new TImpl)); };
       };
       
       

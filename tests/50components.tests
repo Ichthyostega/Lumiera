@@ -71,6 +71,34 @@ out: dtor ~TargetObj(5) successfull
 END
 
 
+TEST "Factory_special_test" Factory_special_test 5  <<END
+out: checkPlacement--------
+out: ctor TargetObj(5) successfull
+out: created 3 shared_ptrs to Object placed in static buffer.
+out: .....TargetObj(5): data="*****", array[5]={0,1,2,3,4,}
+out: dtor ~TargetObj(5) successfull
+out: ctor TargetObj(6) successfull
+out: created 4 shared_ptrs to Object placed in static buffer.
+out: dtor ~TargetObj(6) successfull
+out: checkPrivate--------
+out: ctor TargetObj(5) successfull
+out: created 3 shared_ptrs to paranoid Object.
+out: .....TargetObj(5): data="*****", array[5]={0,1,2,3,4,}
+out: dtor ~TargetObj(5) successfull
+out: checkMalloc--------
+out: ctor TargetObj(7) successfull
+out: created auto_ptr to malloc-ed Object.
+out: .....TargetObj(7): data="*******", array[7]={0,1,2,3,4,5,6,}
+out: dtor ~TargetObj(7) successfull
+out: checkPImpl--------
+out: ctor TargetObj(12) successfull
+out: created auto_ptr to Interface Object.
+out: .....ImplObj::funky() called
+out: .....TargetObj(12): data="************", array[12]={0,1,2,3,4,5,6,7,8,9,10,11,}
+out: dtor ~TargetObj(12) successfull
+END
+
+
 TEST "TestOption_test" TestOption_test <<END
 out: Testing invocation with cmdline: ...
 out: --> Testgroup=ALL

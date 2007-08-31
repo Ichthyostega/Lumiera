@@ -21,18 +21,16 @@
 * *****************************************************/
 
 
+#include "common/testtargetobj.hpp"
+
 #include "common/test/run.hpp"
 #include "common/factory.hpp"
 #include "common/util.hpp"
 
-#include <boost/algorithm/string.hpp>
 #include <boost/lexical_cast.hpp>
-#include <boost/format.hpp>
 #include <iostream>
 
-using boost::algorithm::join;
 using boost::lexical_cast;
-using boost::format;
 using util::isnil;
 using std::string;
 using std::cout;
@@ -45,66 +43,28 @@ namespace cinelerra
     
     class ObjFactory;
     
+
     /**
      * Target object to be created by the Test-Factory.
      * Allocates a variable amount of additional heap memory
-     * and prints diagnostic messages.
+     * and prints diagnostic messages. Note we provide a
+     * static member TargetObj::create  for the client 
+     * code to generate smart ptr wrapped instances.
      */
-    class TargetObj
+    class TargetObj : public TestTargetObj
       {
-        uint cnt_;
-        string* heapData_; 
-        string* heapArray_; 
-        
-        
-        TargetObj(uint num)
-          : cnt_ (num),
-            heapData_ (new string(num,'*')),
-            heapArray_ (new string[num])
-        {
-          for (uint i=0; i<cnt_; ++i)
-            heapArray_[i] = lexical_cast<string>(i);
-          cout << format("ctor TargetObj(%i) successfull\n") % cnt_;
-        }
-        
-        
-        ~TargetObj()  throw()
-        {
-          delete heapData_;
-          delete[] heapArray_;
-          cout << format("dtor ~TargetObj(%i) successfull\n") % cnt_;
-        }
-        
-        friend class ObjFactory;
-        friend class std::tr1::_Sp_deleter<TargetObj>;
-        
-        
       public:
-        static ObjFactory create;
+        TargetObj (uint cnt) : TestTargetObj(cnt) {}
         
-        operator string () const
-        {
-          string array_contents = "{";
-          for (uint i=0; i<cnt_; ++i)
-            array_contents += heapArray_[i]+",";
-          array_contents+="}";
-          
-          return str (format(".....TargetObj(%1%): data=\"%2%\", array[%1%]=%3%")
-                            % cnt_ 
-                            % *heapData_ 
-                            % array_contents
-                     );
-        }
+        static ObjFactory create;
       };
-      
-            
-      
-      
+    
+    
+    
     /** Test-Factory specialized to create TargetObj instances
      *  using the 1-argument constructor TargetObj::TargetObj(int).
      *  It will create boost::shared_ptr instances, because 
      *  factory::RefcountPtr was parametrized with this smart pointer type.
-     *  @note ObjFactory can use the private constructor because it's a friend. 
      */ 
     class ObjFactory : public factory::RefcountPtr<TargetObj>
       {
@@ -119,7 +79,7 @@ namespace cinelerra
         
       };
     
-
+    
     /** shorthand for the created smart-pointer class, 
      *  here it's a (refcounting) boost::shared_ptr
      */
