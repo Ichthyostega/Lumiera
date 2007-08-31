@@ -30,51 +30,10 @@
 
 namespace cinelerra
   {
-
-  namespace factory{ class VanillaAllocator; }//////////////////////////////////TODO
-  
-  /**
-   * Configurable template for creating Factory classes.
-   * These encapsulate the creating of new objects, indeed
-   * delegating the memory allocation to the backend layer.
-   * The clients get just a smart-pointer or similar handle
-   * to the created object, which will manage the ownership.
-   * 
-   * The provided default implementation uses just std::auto_ptr,
-   * but delegates the allocation to cinelerra's backend-layer.
-   * 
-   */
-  template
-    <
-      class T,                                    // the product to be created
-      template <class> class SMP = std::auto_ptr,// smart-pointer actually returned
-      class ALO  = factory::VanillaAllocator     // Allocator facility to be used //////////////TODO
-    >
-  class Factory : protected ALO
-    {
-    public:
-      /** Object creating facility.
-       *  Intended to be over/written/ with a variant taking
-       *  the appropriate number of parameters and using the
-       *  (privately inherited) functions of the allocator.
-       *  Note: non-virtual.
-       */
-      SMP<T> operator() (){ return SMP<T> (new T ); };
-
-      typedef SMP<T> ptype;
-      
-    private:
-      void operator= (const Factory&); // copy prohibited
-    };
-    
-    
-    
-  /* -- some example and default instantiiations -- */  
-    
   namespace factory
     {
     /**
-     * Example Allocator using just the normal C++ memory management.
+     * Example NOP Allocator using just the normal C++ memory management.
      * The intended use is for a Factory instance to iherit from this class.
      * Specialized Allocators typically overload operator new and delete.
      */
@@ -88,42 +47,124 @@ namespace cinelerra
         void* operator new (size_t siz) { return malloc (siz); };
         void  operator delete (void* p) { if (p) free (p);     };
       };
+      
+    typedef VanillaAllocator DefaultALO;   // Allocator facility to be used by default //////////////TODO    
     
+    /**
+     * Wrapping any object created by the Factory into some smart ptr class.
+     * The Factory class inherits this functionallity, so it can be exchanged
+     * independently from the actual object creation behaviour. For example,
+     * an Factory implementing some elaborate subclass creation scheme could
+     * be intantiated to either procuce auto-ptrs or shared-ptrs. 
+     */
+    template
+      < class T,                     // the product to be created
+        class SMP =std::auto_ptr<T> // smart-pointer actually returned
+      >
+    class Wrapper
+        {
+        protected:
+          SMP wrap (T* product) { return SMP (product); }
+          
+        public:
+          typedef SMP PType;
+        };
+    
+    
+    /**
+     * Basic Factory Template, for definig flexible Factory classes.
+     * These encapsulate the logic for creating of new objects, maybe
+     * delegating the memory allocation to the backend layer. Usually,
+     * the clients get just a smart-pointer or similar handle to the
+     * created object, which will manage the ownership.
+     * 
+     * The provided default implementation uses just std::auto_ptr,
+     * but delegates the allocation to cinelerra's backend-layer.
+     * 
+     * @todo actually do the delgation of memory management instead of using VanillaAllocator! 
+     */
+    template
+      < class T,                    // the product to be created
+        class WR = Wrapper<T>,     // used for fabricating the wrapper
+        class ALO  = DefaultALO   // Allocator facility to be used
+      >
+    class Factory :  public WR, protected ALO
+      {
+      public:
+        /** Object creating facility.
+         *  Intended to be over/written/ with a variant taking
+         *  the appropriate number of parameters and using the
+         *  (privately inherited) functions of the allocator.
+         *  Note: non-virtual.
+         */
+        typename WR::PType operator() () { return wrap (new T ); }
+        
+      };
+    
+    
+    
+    
+    /* -- some example and default instantiiations -- */  
     
     using std::tr1::shared_ptr;
 
-    /** a frequently used instantiation of the Factory,
-     *  using the refcounting shared_ptr from Boost
-     *  and for allocation just our default Allocator
+    /** 
+     * a frequently used instantiation of the Wrapper,
+     * utilizingthe refcounting shared_ptr from Boost.
      */
     template<class T>
-    class RefcountPtr : public Factory<T, shared_ptr>
+    class Wrapper<T, shared_ptr<T> >
       {
-        /** let the smart-Ptr use the custom operator delete, 
+        /** let the smart-ptr use the custom operator delete, 
          *  which may be defined in our Allocator baseclass.
          */
         static void destroy (T* victim) { delete victim; };
         
+      protected:
+        shared_ptr<T> wrap (T* product) { return shared_ptr<T> (product, &destroy ); }
       public:
-        shared_ptr<T> operator() ()     { return shared_ptr<T> (new T, &destroy ); }
+        typedef shared_ptr<T> PType;
       };
-      
-      
-    /** another convienience instantiiation: auto_ptr-Factory,
-     *  actually creating a subclass of the returned type
+    
+    
+    /** 
+     * Shortcut: commonly used (partial) instantiation of the Factory,
+     * generating refcounting shared_ptr wrapped Objects.
      */
-    template<class T, class TImpl>
-    class SubclassPtr : public Factory<T>
+    template
+      < class T,                 // the product to be created
+        class ALO  = DefaultALO // Allocator facility to be used
+      >
+    class RefcountPtr : public Factory<T, Wrapper<T,shared_ptr<T> >, ALO>
       {
-        typedef std::auto_ptr<T> aP;
-        
       public:
-        aP operator() (){ return aP (new TImpl ); };
+        typedef shared_ptr<T> PType;
+      };
+     
+    
+    /** 
+     *  another convienience instantiiation: auto_ptr-to-Impl-Factory.
+     *  Creating an implementation subclass and wraps into auto_ptr.
+     */
+    template
+      < class T,                  // Interface class
+        class TImpl,             // Implementation class to be created
+        class ALO  = DefaultALO // Allocator facility to be used
+      >
+    class PImplPtr : public Factory<T, Wrapper<T>, ALO>
+      {
+      public:
+        typedef std::auto_ptr<T> PType;
+        PType operator() (){ return wrap (new TImpl); };
       };
       
       
       
   } // namespace factory
 
+  /// @note Factory can be usable as-is (wraps into std::auto_ptr)
+  using factory::Factory;
+  
+  
 } // namespace cinelerra
 #endif

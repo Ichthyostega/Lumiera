@@ -68,6 +68,8 @@ namespace cinelerra
         }
         
         
+      /// @todo: make it possible to have a private destructor
+      public:
         ~TargetObj()  throw()
         {
           delete heapData_;
@@ -107,7 +109,6 @@ namespace cinelerra
      */ 
     class ObjFactory : public factory::RefcountPtr<TargetObj>
       {
-        static void destroy (TargetObj* victim) { delete victim; };
       public:
         /** specialized Factory method for creating TargetObj instances.
          *  Here, we invoke a special constructor, but basically we could
@@ -115,14 +116,14 @@ namespace cinelerra
          *  registering objects etc. Further, we could have used a
          *  custom allocator or a special deleter function. 
          */
-        ptype operator() (uint param){ return ptype (new TargetObj (param), &destroy); };
+        PType operator() (uint param) { return wrap (new TargetObj(param) ); }
       };
     
 
     /** shorthand for the created smart-pointer class, 
      *  here it's a (refcounting) boost::shared_ptr
      */
-    typedef ObjFactory::ptype pTarget;
+    typedef ObjFactory::PType pTarget;
 
     ObjFactory TargetObj::create;
     
