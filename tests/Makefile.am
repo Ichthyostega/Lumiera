@@ -18,7 +18,7 @@
 
 tests_srcdir = $(top_srcdir)/tests
 
-check_PROGRAMS += test-error test-time
+check_PROGRAMS += test-error test-time test-locking
 
 test_error_SOURCES = $(tests_srcdir)/error/errortest.c
 test_error_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
@@ -27,5 +27,9 @@ test_error_LDADD = $(builddir)/libcin3.a -lnobugmt -lpthread -ldl
 test_time_SOURCES = $(tests_srcdir)/time/test-time.c
 test_time_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
 test_time_LDADD = $(builddir)/libcin3.a -lnobugmt -lpthread -ldl -lm
+
+test_locking_SOURCES = $(tests_srcdir)/locking/test-locking.c
+test_locking_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_locking_LDADD = $(builddir)/libcin3.a -lnobugmt -lpthread -ldl -lm
 
 TESTS = $(tests_srcdir)/test.sh
