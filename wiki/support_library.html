@@ -1134,6 +1134,34 @@ config.formatters.push( {
 } )
 //}}}</pre>
 </div>
+<div title="LockingPrimitives" modifier="CehTeh" modified="200709021253" created="200709021250" changecount="3">
+<pre>! Provided Locking Primitives
+The support library provides wrappers around some pthread locking primitives to make their usage more robust and easier.
+
+The basic concept is that each locking primitive is an object as well as each locker is implemented as object too, this adds a small convenience layer for robustness. We use ~NoBug to assert that locks are properly unlocked.
+
+!! Mutex
+We only support fast (non recursive, non errorcheck) mutexes for now. Debugging deadlock detection will be done in ~NoBug. If we need dynamic deadlock detection we will have to support errorcheck mutexes at demand. Same for recursive mutexes.
+
+!! Condition Variables
+Condition variables are simple synchronization devices, refer to the doxygen docs about using them. One needs to lock them when preparing to wait on them and finally unlock them. While signaling can optionally be done without a locker object (locking is implicit then).
+
+!! Read/Write Locks
+Similar to mutexes we support multiple-reader/one-writer locks, they can be used whenever many concurrent read accesses and rare write accesses are expected to some datastructure (profile this later). When congestion rather unexpected then prefer a mutex.
+
+! No Semaphores Rationale
+Semaphores have quite ugly semantics and are very hard to debug. For now (and likely forever) we will not to use them.
+
+! ~ToDo
+!! trylock and timedlock
+.. is not yet implemented but will be added in request.
+
+!! Barriers
+... will be added on request too.
+
+!! Thread Cancellation
+Thread cancellation policies are not yet finally decided, for now we consider threads uncancelable!</pre>
+</div>
 <div title="MainMenu" modifier="CehTeh" modified="200707152251" created="200707102300" changecount="2">
 <pre>''[[Cinelerra3|index.html]]''
 SupportLibrary
@@ -2391,7 +2419,7 @@ h1,h2,h3,h4,h5,h6 {
 /*}}}*/
 </pre>
 </div>
-<div title="SupportLibrary" modifier="CehTeh" modified="200708261935" created="200707102314" changecount="8">
+<div title="SupportLibrary" modifier="CehTeh" modified="200709021227" created="200707102314" changecount="9">
 <pre>The Support Library contains all tools we need at various places, but by themselves don't defines a subsystem on their own.
 
 These things are:
@@ -2399,7 +2427,7 @@ These things are:
 * [[ErrorHandling]]
 * a wrapper for POSIX Threads
 ** Thread creation joining and canceling
-** Locking primitives like Condition variables and Mutexes
+** [[Locking primitives like Condition variables and Mutexes|LockingPrimitives]]
 * [[Frame and Time handling and calculations|FrameAndTime]]
  
 (... to be continued)

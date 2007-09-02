@@ -1,0 +1,8 @@
+
+TESTING "Locking" ./test-locking
+
+TEST "condition not unlocked asserts" conditionforgotunlock <<END
+return: 134
+END
+
+
