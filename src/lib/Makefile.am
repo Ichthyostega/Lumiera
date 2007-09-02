@@ -34,5 +34,6 @@ noinst_HEADERS += \
 	$(libcin3_a_srcdir)/error.h \
 	$(libcin3_a_srcdir)/time.h \
 	$(libcin3_a_srcdir)/framerate.h \
+	$(libcin3_a_srcdir)/locking.h \
 	$(libcin3_a_srcdir)/condition.h
 

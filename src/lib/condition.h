@@ -22,21 +22,7 @@
 #ifndef CINELERRA_CONDITION_H
 #define CINELERRA_CONDITION_H
 
-#include <pthread.h>
-#include <nobug.h>
-
-#include "lib/error.h"
-
-/**
- * used to store the current lock state.
- *
- *
- */
-enum cinelerra_conditionstate
-  {
-    CINELERRA_UNLOCKED,
-    CINELERRA_LOCKED
-  };
+#include "lib/locking.h"
 
 
 /**
@@ -110,7 +96,7 @@ cinelerra_condition_broadcast (CinelerraCondition self)
 struct cinelerra_conditionlock_struct
 {
   CinelerraCondition cond;
-  enum cinelerra_conditionstate  state;
+  enum cinelerra_lockstate  state;
 };
 typedef struct cinelerra_conditionlock_struct cinelerra_conditionlock;
 typedef struct cinelerra_conditionlock_struct* CinelerraConditionlock;
@@ -136,7 +122,7 @@ cinelerra_conditionlock NOBUG_CLEANUP(cinelerra_conditionlock_ensureunlocked)
  * errors are fatal
  */
 static inline CinelerraConditionlock
-cinelerra_conditionlock_init (CinelerraConditionlock self, CinelerraCondition cond, enum cinelerra_conditionstate state)
+cinelerra_conditionlock_init (CinelerraConditionlock self, CinelerraCondition cond, enum cinelerra_lockstate state)
 {
   REQUIRE (self);
   REQUIRE (cond);
