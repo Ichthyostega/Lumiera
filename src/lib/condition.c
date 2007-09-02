@@ -41,10 +41,8 @@ cinelerra_condition_destroy (CinelerraCondition self)
         CINELERRA_DIE;
       else if (pthread_cond_destroy (&self->cond))
         CINELERRA_DIE;
-      else
-        return self;
     }
-  return NULL;
+  return self;
 }
 
 

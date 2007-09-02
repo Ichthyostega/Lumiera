@@ -48,9 +48,9 @@ cinelerra_condition_init (CinelerraCondition self);
 
 
 /**
- * destroy a condition variable
- * @param self is a pointer to the condition variable to be initialized
- * @return self on success or NULL at error
+ * Destroy a condition variable
+ * @param self is a pointer to the condition variable to be destroyed
+ * @return self as given
  */
 CinelerraCondition
 cinelerra_condition_destroy (CinelerraCondition self);
