@@ -1,5 +1,5 @@
 /*
-  locking.h  -  locking primitives
+  condition.h  -  condition variables
 
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -19,8 +19,8 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef CINELERRA_LOCKING_H
-#define CINELERRA_LOCKING_H
+#ifndef CINELERRA_CONDITION_H
+#define CINELERRA_CONDITION_H
 
 #include <pthread.h>
 #include <nobug.h>
@@ -32,7 +32,7 @@
  *
  *
  */
-enum cinelerra_lockstate
+enum cinelerra_conditionstate
   {
     CINELERRA_UNLOCKED,
     CINELERRA_LOCKED
@@ -110,7 +110,7 @@ cinelerra_condition_broadcast (CinelerraCondition self)
 struct cinelerra_conditionlock_struct
 {
   CinelerraCondition cond;
-  enum cinelerra_lockstate  state;
+  enum cinelerra_conditionstate  state;
 };
 typedef struct cinelerra_conditionlock_struct cinelerra_conditionlock;
 typedef struct cinelerra_conditionlock_struct* CinelerraConditionlock;
@@ -136,7 +136,7 @@ cinelerra_conditionlock NOBUG_CLEANUP(cinelerra_conditionlock_ensureunlocked)
  * errors are fatal
  */
 static inline CinelerraConditionlock
-cinelerra_conditionlock_init (CinelerraConditionlock self, CinelerraCondition cond, enum cinelerra_lockstate state)
+cinelerra_conditionlock_init (CinelerraConditionlock self, CinelerraCondition cond, enum cinelerra_conditionstate state)
 {
   REQUIRE (self);
   REQUIRE (cond);

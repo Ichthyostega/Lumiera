@@ -1,5 +1,5 @@
 /*
-  locking.c  -  locking primitives
+  test-locking.c  -  test locking functions
 
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -19,34 +19,47 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "lib/locking.h"
+#include <stdio.h>
+#include <string.h>
 
-CinelerraCondition
-cinelerra_condition_init (CinelerraCondition self)
-{
-  if (self)
-    {
-      pthread_cond_init (&self->cond, NULL);
-      pthread_mutex_init (&self->mutex, NULL);
-    }
-  return self;
-}
+#include "lib/condition.h"
 
-CinelerraCondition
-cinelerra_condition_destroy (CinelerraCondition self)
+CINELERRA_ERROR_DEFINE(TEST, "test error");
+
+#if 0
+waiting_thread()
 {
-  if (self)
-    {
-      if (pthread_mutex_destroy (&self->mutex))
-        CINELERRA_DIE;
-      else if (pthread_cond_destroy (&self->cond))
-        CINELERRA_DIE;
-      else
-        return self;
-    }
-  return NULL;
+  lock;
+  wait;
+  unlock;
 }
 
 
+signaling_thread()
+{
+  signal();
+}
+#endif
 
 
+int
+main (int argc, char** argv)
+{
+  NOBUG_INIT;
+
+  if (argc == 1)
+    return 0;
+
+  if (!strcmp(argv[1], "conditionforgotunlock"))
+    {
+      cinelerra_condition c;
+      cinelerra_condition_init (&c);
+
+      cinelerra_conditionlock NOBUG_CLEANUP(cinelerra_conditionlock_ensureunlocked) l;
+      cinelerra_conditionlock_init (&l, &c, CINELERRA_LOCKED);
+    }
+  else
+    return 1;
+
+  return 0;
+}
