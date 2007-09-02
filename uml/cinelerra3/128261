@@ -1,6 +1,6 @@
 format 40
 "MObject" // ProcessingLayer::MObject
-  revision 16
+  revision 17
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -413,6 +413,17 @@ ${inlines}
 	java_decl ""
 	idl_decl ""
 	comment "startpos in source"
+      end
+
+      classrelation 141829 // source (<unidirectional association>)
+	relation 140037 --->
+	  a role_name "source" multiplicity "1" const_relation protected
+	    comment "the media source this clip referes to"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 141829 // source (<unidirectional association>)
+	  b multiplicity "*" parent class_ref 137349 // Clip
+	  association_type class_ref 128901 // Clip
       end
     end
 

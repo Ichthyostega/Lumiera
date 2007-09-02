@@ -1,6 +1,6 @@
 format 40
 "RenderEngine" // ProcessingLayer::RenderEngine
-  revision 10
+  revision 11
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -558,6 +558,14 @@ ${inlines}
 	    cpp default "${type}"
 	    classrelation_ref 136069 // <generalisation>
 	  b multiplicity "" parent class_ref 131717 // ProcNode
+      end
+
+      classrelation 141701 // <dependency>
+	relation 139909 -_->
+	  a default
+	    cpp default "Generated"
+	    classrelation_ref 141701 // <dependency>
+	  b multiplicity "" parent class_ref 136709 // Media
       end
     end
   end

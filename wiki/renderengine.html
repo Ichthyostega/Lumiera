@@ -514,12 +514,39 @@ ColorPalette
 
 SiteUrl</pre>
 </div>
-<div title="Asset" modifier="Ichthyostega" created="200708100337" tags="def" changecount="2">
-<pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the EDL is the &quot;manipulation and process view&quot;.
+<div title="Asset" modifier="Ichthyostega" modified="200709021530" created="200708100337" tags="def classes" changecount="9">
+<pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the EDL is the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with eatch Session. Besides, there is a collection of basic Assets allways available by default.
 
-The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. Or, an Effect asset can hold a plugin-ID.
+The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situatin is similar. Assets thus serve two quite distinct purposes. One is to load, list, group serarch and browse them, and to provide an entry point to create new or get at existing MObjects in the EDL, while the other purpose is to provide attribute and property informations to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
 
-!still to be worked out..
+We can distinguish several different Kinds of Assets, each one with specific properties. While all these Kinds of Assets implement the basic Asset interface, they themselfs are the __key abstractions__ of the asset management view. Mostly, their interfaces will be used directly, because they are quite different in behaviour. Thus it is common to see asset related operations being templated on the Asset Kind. 
+[img[Asset Classess|uml/fig130309.png]]
+
+!Media Asset
+Some piece of Media Data accessible at some external Location an able to be processed by Cinelerra. A Media File on Harddisk can be considered as the most basic form of Media Asset, with some important derived Flavours, like a Placeholder for a currently unavailable Source, or Media available in different Resolutions or Formats.
+* __outward interface operations__ include querying properties, creating an Clip MObject, controlling processing policy (low res proxy placeholders, interlacing and other generic pre- and postprocessing)
+* __inward interface operations__ include querying filename, codec, offset and any other informations necessary for creating a source render node, getting additional processing policy decisions (handling of interlacing, aspect ratio).
+&amp;rarr; MediaAsset
+
+!Processing Asset
+Some software component able to work on media data in the Cinelerra Render engine Framework. This includes all sorts of loadable effects, as well as some of the standard, internal facilities (Mask, Projector). Note that Processing Assets typically provide some attachment Point or means of communication with GUI facilities.
+* __outward interface operations__ include...
+* __inward interface operations__ include...
+&amp;rarr; ProcAsset {{red{to be defined}}}
+
+!Structural Asset
+Some of the building blocks providing the framework for the objects placed into the current Session. Notable examples are Input/Output channels (Ports), Viewer attachment points, Tracks, etc.
+* __outward interface operations__ include...
+* __inward interface operations__ include...
+&amp;rarr; StructAsset {{red{to be defined}}}
+
+!Meta Asset
+Some additional, virtual facilities created in the course of the editing process. Examples are Automation data sets, Lables and reference points, Meta Clips (nested sub-~EDLs)
+* __outward interface operations__ include...
+* __inward interface operations__ include...
+&amp;rarr; MetaAsset {{red{to be defined}}}
+
+!!!!still to be worked out..
 is how to implement the relationship between [[MObject]]s and Assets. Do we use direct pointers, or do we prefer an ID + central registry approach? And how to handle the removal of an Asset (&amp;rarr; see also [[analysis of mem management|ManagementAssetRelation]])
 </pre>
 </div>
@@ -1292,8 +1319,16 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 [[Admin]]
 &lt;&lt;fullscreen&gt;&gt;</pre>
 </div>
-<div title="ManagementAssetRelation" modifier="Ichthyostega" created="200708100337" tags="impl" changecount="2">
-<pre>Problem is: when removing an Asset, all corresponding MObjects need to disappear. This means, besides the obvious Ref-Link (MObject refering to an asset) we need backlinks or a sort of registry. And still worse: we need to remove the affetcted MObject from the object network in the EDL and rebuild the Fixture...
+<div title="ManagementAssetRelation" modifier="Ichthyostega" modified="200709021538" created="200708100337" tags="impl" changecount="3">
+<pre>Problem is: when removing an Asset, all corresponding MObjects need to disappear. This means, besides the obvious ~Ref-Link (MObject refering to an asset) we need backlinks or a sort of registry. And still worse: we need to remove the affetcted MObject from the object network in the EDL and rebuild the Fixture...
+
+As a //first shot// Ichthyo considers the following approach:
+* all references between MObjects and Assets are implemented as refcounting boost::shared_ptr
+* MObjects and Assets implement an {{{unlink()}}} function releasing the internal links to other entities.
+* Instead of a delete, we call this unlink() function and let the shared_ptr handle the actual deletion.
+* we don't use a registry, rather we model the real dependencies by individual dependency links. So a MediaAsset gets links to all Clips created from this Asset and by traversing this tree, we can handle the deletion
+* after the deletion, the Fixture needs to be rebuilt.
+* but any render processes still can have pointers to the Asset to be removed, and the shared_ptr will ensure, that the refered objects stay alive as long as needed.
 
 {{red{to be considered in more detail later}}}
 </pre>
@@ -1304,6 +1339,10 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 &lt;!--}}}--&gt;
 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;loading &lt;b&gt;Cinelerra Renderengine&lt;/b&gt; devel doku&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
+</div>
+<div title="MediaAsset" modifier="Ichthyostega" created="200709021530" tags="def classes" changecount="1">
+<pre>The Interface asset::Media is a //key abstraction// It ties together several concepts and enables to deal with them on the interfaces in a uniform manner. Besides, as every Asset kind it belongs rather to the bookkeeping view: it holds the specific properties and parametrisation of the media source it stands for. Regarding the __inward interface__ &amp;mdash; as used from within the [[EDL]] or the [[Render Nodes|ProcNode]], it is irrelevant if a given asset::Media object stands for a complete media source, just a clip taken from this source or if a placeholder version of the real media source is used instead.
+[img[Asset Classess|uml/fig130437.png]]</pre>
 </div>
 <div title="MemoryManagement" modifier="Ichthyostega" modified="200708100408" created="200708100225" tags="impl decision discuss" changecount="8">
 <pre>Of course: Cinelerra currently leaks memory and crashes regularilly. For the newly written code, besides retaining the same performance level, a main goal is to use methods and techniques known to support the writing of quality code. So, besides the MultithreadConsiderations, a solid strategy for managing the ownership of allocated memory blocks is necessary right from start.

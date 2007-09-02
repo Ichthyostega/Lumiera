@@ -1,17 +1,33 @@
-window_sizes 1104 756 270 824 557 120
+window_sizes 1140 783 270 860 584 120
 diagrams
-  active  classdiagram_ref 130181 // Hierarchy
-    762 514 100 4 0 0
+  active  classdiagram_ref 130309 // Asset Kinds
+    853 560 100 4 0 2
 end
 show_stereotypes
-selected artifact_ref 135813 // error
+selected 
+  package_ref 129 // cinelerra3
 open
-  deploymentview_ref 128261 // gen
+  
+  package_ref 129413 // common
+  deploymentview_ref 128517 // gen
+  artifact_ref 135941 // category
+  artifact_ref 136453 // media
+  artifact_ref 136581 // proc
+  artifact_ref 136709 // struct
+  artifact_ref 136965 // preview
+  artifact_ref 137093 // unknown
+  artifact_ref 137221 // effect
+  artifact_ref 137605 // outport
+  artifact_ref 137477 // track
   deploymentview_ref 128773 // gen
   
   package_ref 129797 // gui
-  
-  package_ref 129285 // ProcessingLayer
+  class_ref 136453 // Asset
+  class_ref 136581 // AssetManager
+  class_ref 136709 // Media
+  class_ref 137349 // Clip
+  classview_ref 128005 // Session
+  classview_ref 128133 // Engine Workings
   class_ref 135685 // Logic
   class_ref 135813 // Config
   class_ref 135941 // State

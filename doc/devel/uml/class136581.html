@@ -1,0 +1,27 @@
+<!-- Documentation produced by the Html generator of Bouml (http://bouml.free.fr) -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>Class AssetManager</title>
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body bgcolor="#ffffff">
+
+<div class = "title">Class AssetManager</div>
+<p></p>
+
+<!-- ============================================================= -->
+
+<a name="refclass136581"></a>
+<p>Declaration :</p><ul><li>C++ : class AssetManager </li></ul><p>Facade for the Asset subsystem<br /></p><p>Artifact : <a href="index.html#refartifact136197"><b>assetmanager</b></a></p><div class="sub">
+<a name="refoperation132357"></a>
+<table><tr><td><div class="element">Operation <b>register</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : static, + register(inout name : string, inout category : string, inout org : string, inout uint : version) : long,  exceptions : Invalid</li><li>C++ : public: static long register (string &amp; name, string &amp; category, string &amp; org, version&amp; uint)  throw (Invalid)</li></ul><p>registers an asset object in the internal DB, providing its unique key<br /></p><a name="refoperation132485"></a>
+<table><tr><td><div class="element">Operation <b>getAsset</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + getAsset(in id : long) : KIND,  exceptions : <a href="class136069.html#refclass136069"><b>Invalid</b></a></li><li>C++ : public: template&lt;class KIND&gt; KIND getAsset (long &amp; id)  throw (<a href="class136069.html#refclass136069"><b>Invalid</b></a>)</li></ul><p>find and return corresponging object<br /></p><a name="refoperation132613"></a>
+<table><tr><td><div class="element">Operation <b>known</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + known(in id : long) : bool</li><li>C++ : public: bool known (long id) </li></ul><p>@return true if the given id is registered in the internal asset DB<br /></p><a name="refoperation132741"></a>
+<table><tr><td><div class="element">Operation <b>remove</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + remove(in id : long) : void,  exceptions : <a href="class136069.html#refclass136069"><b>Invalid</b></a>, <a href="class135941.html#refclass135941"><b>State</b></a></li><li>C++ : public: void remove (long id)  throw (<a href="class136069.html#refclass136069"><b>Invalid</b></a>, <a href="class135941.html#refclass135941"><b>State</b></a>)</li></ul><p>remove the given asset &lt;i&gt;together with all its dependants&lt;/i&gt; from the internal DB<br /></p></div>
+<p>All public operations : <a href="class136581.html#refoperation132485"><b>getAsset</b></a> , <a href="class136581.html#refoperation132613"><b>known</b></a> , <a href="class136581.html#refoperation132357"><b>register</b></a> , <a href="class136581.html#refoperation132741"><b>remove</b></a> </p>
+</body>
+</html>
