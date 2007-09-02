@@ -6,3 +6,11 @@ return: 134
 END
 
 
+
+
+
+TEST "mutex not unlocked asserts" mutexforgotunlock <<END
+return: 134
+END
+
+
