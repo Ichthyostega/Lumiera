@@ -36,8 +36,8 @@ enum cinelerra_lockstate
   {
     CINELERRA_UNLOCKED,
     CINELERRA_LOCKED,
-    CINELERRA_RLOCKED,
-    CINELERRA_WLOCKED
+    CINELERRA_RDLOCKED,
+    CINELERRA_WRLOCKED
   };
 
 #endif
