@@ -1,0 +1,14 @@
+TESTING "Component Test Suite: MObjects and Session/EDL" ./test-components --group=session
+
+
+
+PLANNED "AddClip_test" AddClip_test <<END
+END
+
+
+PLANNED "DeleteClip_test" DeleteClip_test <<END
+END
+
+
+PLANNED "RebuildFixture_test" RebuildFixture_test <<END
+END

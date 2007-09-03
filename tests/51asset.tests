@@ -1,0 +1,14 @@
+TESTING "Component Test Suite: Asset Manager" ./test-components --group=asset
+
+
+
+PLANNED "CreateAsset_test" CreateAsset_test <<END
+END
+
+
+PLANNED "DeleteAsset_test" DeleteAsset_test <<END
+END
+
+
+PLANNED "DependantAssets_test" DependantAssets_test <<END
+END
