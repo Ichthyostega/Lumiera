@@ -26,6 +26,8 @@ libcin3_a_SOURCES = \
 	$(libcin3_a_srcdir)/error.c \
 	$(libcin3_a_srcdir)/time.c \
 	$(libcin3_a_srcdir)/framerate.c \
+	$(libcin3_a_srcdir)/mutex.c \
+	$(libcin3_a_srcdir)/rwlock.c \
 	$(libcin3_a_srcdir)/condition.c
 
 
@@ -35,5 +37,7 @@ noinst_HEADERS += \
 	$(libcin3_a_srcdir)/time.h \
 	$(libcin3_a_srcdir)/framerate.h \
 	$(libcin3_a_srcdir)/locking.h \
+	$(libcin3_a_srcdir)/mutex.h \
+	$(libcin3_a_srcdir)/rwlock.h \
 	$(libcin3_a_srcdir)/condition.h
 

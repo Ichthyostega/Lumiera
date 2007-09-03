@@ -1,5 +1,5 @@
 /*
-  locking.h  -  shared declarations for all locking primitives
+  test mutex functions
 
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -19,25 +19,14 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef CINELERRA_LOCKING_H
-#define CINELERRA_LOCKING_H
+#include "lib/mutex.h"
 
-#include <pthread.h>
-#include <nobug.h>
+int mutexforgotunlock()
+{
+  cinelerra_mutex m;
+  cinelerra_mutex_init (&m);
 
-#include "lib/error.h"
-
-/**
- * used to store the current lock state.
- *
- *
- */
-enum cinelerra_lockstate
-  {
-    CINELERRA_UNLOCKED,
-    CINELERRA_LOCKED,
-    CINELERRA_RDLOCKED,
-    CINELERRA_WRLOCKED
-  };
-
-#endif
+  cinelerra_mutexacquirer l;
+  cinelerra_mutexacquirer_init (&l, &m, CINELERRA_LOCKED);
+  return 0;
+}
