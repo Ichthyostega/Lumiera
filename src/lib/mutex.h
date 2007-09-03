@@ -56,38 +56,38 @@ cinelerra_mutex_destroy (CinelerraMutex self);
 
 
 /**
- * mutexlock used to manage the state of a mutex variable.
+ * mutexacquirer used to manage the state of a mutex variable.
  */
-struct cinelerra_mutexlock_struct
+struct cinelerra_mutexacquirer_struct
 {
   CinelerraMutex mutex;
   enum cinelerra_lockstate  state;
 };
-typedef struct cinelerra_mutexlock_struct cinelerra_mutexlock;
-typedef struct cinelerra_mutexlock_struct* CinelerraMutexlock;
+typedef struct cinelerra_mutexacquirer_struct cinelerra_mutexacquirer;
+typedef struct cinelerra_mutexacquirer_struct* CinelerraMutexacquirer;
 
 /* helper function for nobug */
 static inline void
-cinelerra_mutexlock_ensureunlocked (CinelerraMutexlock self)
+cinelerra_mutexacquirer_ensureunlocked (CinelerraMutexacquirer self)
 {
   ENSURE (self->state == CINELERRA_UNLOCKED, "forgot to unlock mutex");
 }
 
 /* override with a macro to use the cleanup checker */
-#define cinelerra_mutexlock \
-cinelerra_mutexlock NOBUG_CLEANUP(cinelerra_mutexlock_ensureunlocked)
+#define cinelerra_mutexacquirer \
+cinelerra_mutexacquirer NOBUG_CLEANUP(cinelerra_mutexacquirer_ensureunlocked)
 
 
 /**
- * initialize a mutexlock state
- * @param self mutexlock to be initialized, must be an automatic variable
+ * initialize a mutexacquirer state
+ * @param self mutexacquirer to be initialized, must be an automatic variable
  * @param mutex associated mutex
  * @param state initial state of the mutex, either CINELERRA_LOCKED or CINELERRA_UNLOCKED
  * @return self as given
  * errors are fatal
  */
-static inline CinelerraMutexlock
-cinelerra_mutexlock_init (CinelerraMutexlock self, CinelerraMutex mutex, enum cinelerra_lockstate state)
+static inline CinelerraMutexacquirer
+cinelerra_mutexacquirer_init (CinelerraMutexacquirer self, CinelerraMutex mutex, enum cinelerra_lockstate state)
 {
   REQUIRE (self);
   REQUIRE (mutex);
@@ -103,10 +103,10 @@ cinelerra_mutexlock_init (CinelerraMutexlock self, CinelerraMutex mutex, enum ci
 /**
  * lock the mutex.
  * must not already be locked
- * @param self mutexlock associated with a mutex variable
+ * @param self mutexacquirer associated with a mutex variable
  */
 static inline void
-cinelerra_mutexlock_lock (CinelerraMutexlock self)
+cinelerra_mutexacquirer_lock (CinelerraMutexacquirer self)
 {
   REQUIRE (self);
   REQUIRE (self->state == CINELERRA_UNLOCKED, "mutex already locked");
@@ -120,11 +120,11 @@ cinelerra_mutexlock_lock (CinelerraMutexlock self)
 
 /**
  * release mutex.
- * a mutexlock must be unlocked before leaving scope
- * @param self mutexlock associated with a mutex variable
+ * a mutexacquirer must be unlocked before leaving scope
+ * @param self mutexacquirer associated with a mutex variable
  */
 static inline int
-cinelerra_mutexlock_unlock (CinelerraMutexlock self)
+cinelerra_mutexacquirer_unlock (CinelerraMutexacquirer self)
 {
   REQUIRE (self);
   REQUIRE (self->state == CINELERRA_LOCKED, "mutex was not locked");

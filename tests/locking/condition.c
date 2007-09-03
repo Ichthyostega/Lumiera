@@ -43,7 +43,7 @@ conditionforgotunlock ()
   cinelerra_condition c;
   cinelerra_condition_init (&c);
 
-  cinelerra_conditionlock l;
-  cinelerra_conditionlock_init (&l, &c, CINELERRA_LOCKED);
+  cinelerra_conditionacquirer l;
+  cinelerra_conditionacquirer_init (&l, &c, CINELERRA_LOCKED);
   return 0;
 }

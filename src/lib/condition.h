@@ -91,38 +91,38 @@ cinelerra_condition_broadcast (CinelerraCondition self)
 
 
 /**
- * conditionlock used to manage the state of a condition variable.
+ * conditionacquirer used to manage the state of a condition variable.
  */
-struct cinelerra_conditionlock_struct
+struct cinelerra_conditionacquirer_struct
 {
   CinelerraCondition cond;
   enum cinelerra_lockstate  state;
 };
-typedef struct cinelerra_conditionlock_struct cinelerra_conditionlock;
-typedef struct cinelerra_conditionlock_struct* CinelerraConditionlock;
+typedef struct cinelerra_conditionacquirer_struct cinelerra_conditionacquirer;
+typedef struct cinelerra_conditionacquirer_struct* CinelerraConditionacquirer;
 
 /* helper function for nobug */
 static inline void
-cinelerra_conditionlock_ensureunlocked (CinelerraConditionlock self)
+cinelerra_conditionacquirer_ensureunlocked (CinelerraConditionacquirer self)
 {
   ENSURE (self->state == CINELERRA_UNLOCKED, "forgot to unlock the condition mutex");
 }
 
 /* override with a macro to use the cleanup checker */
-#define cinelerra_conditionlock \
-cinelerra_conditionlock NOBUG_CLEANUP(cinelerra_conditionlock_ensureunlocked)
+#define cinelerra_conditionacquirer \
+cinelerra_conditionacquirer NOBUG_CLEANUP(cinelerra_conditionacquirer_ensureunlocked)
 
 
 /**
- * initialize a conditionlock state
- * @param self conditionlock to be initialized, must be an automatic variable
+ * initialize a conditionacquirer state
+ * @param self conditionacquirer to be initialized, must be an automatic variable
  * @param cond associated condition variable
  * @param state initial state of the mutex, either CINELERRA_LOCKED or CINELERRA_UNLOCKED
  * @return self as given
  * errors are fatal
  */
-static inline CinelerraConditionlock
-cinelerra_conditionlock_init (CinelerraConditionlock self, CinelerraCondition cond, enum cinelerra_lockstate state)
+static inline CinelerraConditionacquirer
+cinelerra_conditionacquirer_init (CinelerraConditionacquirer self, CinelerraCondition cond, enum cinelerra_lockstate state)
 {
   REQUIRE (self);
   REQUIRE (cond);
@@ -138,10 +138,10 @@ cinelerra_conditionlock_init (CinelerraConditionlock self, CinelerraCondition co
 /**
  * lock the mutex.
  * must not already be locked
- * @param self conditionlock associated with a condition variable
+ * @param self conditionacquirer associated with a condition variable
  */
 static inline void
-cinelerra_conditionlock_lock (CinelerraConditionlock self)
+cinelerra_conditionacquirer_lock (CinelerraConditionacquirer self)
 {
   REQUIRE (self);
   REQUIRE (self->state == CINELERRA_UNLOCKED, "mutex already locked");
@@ -156,10 +156,10 @@ cinelerra_conditionlock_lock (CinelerraConditionlock self)
 /**
  * wait on a locked condition.
  * Waits until the condition variable gets signaled from another thread. Must already be locked.
- * @param self conditionlock associated with a condition variable
+ * @param self conditionacquirer associated with a condition variable
  */
 static inline void
-cinelerra_conditionlock_wait (CinelerraConditionlock self)
+cinelerra_conditionacquirer_wait (CinelerraConditionacquirer self)
 {
   REQUIRE (self);
   REQUIRE (self->state == CINELERRA_LOCKED, "mutex must be locked");
@@ -169,11 +169,11 @@ cinelerra_conditionlock_wait (CinelerraConditionlock self)
 
 /**
  * release mutex.
- * a conditionlock must be unlocked before leaving scope
- * @param self conditionlock associated with a condition variable
+ * a conditionacquirer must be unlocked before leaving scope
+ * @param self conditionacquirer associated with a condition variable
  */
 static inline int
-cinelerra_conditionlock_unlock (CinelerraConditionlock self)
+cinelerra_conditionacquirer_unlock (CinelerraConditionacquirer self)
 {
   REQUIRE (self);
   REQUIRE (self->state == CINELERRA_LOCKED, "mutex was not locked");
@@ -185,10 +185,10 @@ cinelerra_conditionlock_unlock (CinelerraConditionlock self)
 
 /**
  * signal a single waiting thread
- * @param self conditionlock associated with the condition variable to be signaled
+ * @param self conditionacquirer associated with the condition variable to be signaled
  */
 static inline void
-cinelerra_conditionlock_signal (CinelerraConditionlock self)
+cinelerra_conditionacquirer_signal (CinelerraConditionacquirer self)
 {
   REQUIRE (self);
   REQUIRE (self->state == CINELERRA_LOCKED, "mutex was not locked");
@@ -198,10 +198,10 @@ cinelerra_conditionlock_signal (CinelerraConditionlock self)
 
 /**
  * signal all waiting threads
- * @param self conditionlock associated with the condition variable to be signaled
+ * @param self conditionacquirer associated with the condition variable to be signaled
  */
 static inline int
-cinelerra_conditionlock_broadcast (CinelerraConditionlock self)
+cinelerra_conditionacquirer_broadcast (CinelerraConditionacquirer self)
 {
   REQUIRE (self);
   REQUIRE (self->state == CINELERRA_LOCKED, "mutex was not locked");
