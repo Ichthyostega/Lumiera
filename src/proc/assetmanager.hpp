@@ -40,7 +40,6 @@ namespace proc_interface
    */
   class AssetManager
     {
-      int bla;
     public:
       /** registers an asset object in the internal DB, providing its unique key
        */

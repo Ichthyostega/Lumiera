@@ -514,12 +514,13 @@ ColorPalette
 
 SiteUrl</pre>
 </div>
-<div title="Asset" modifier="Ichthyostega" modified="200709021530" created="200708100337" tags="def classes" changecount="9">
+<div title="Asset" modifier="Ichthyostega" modified="200709040256" created="200708100337" tags="def classes" changecount="11">
 <pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the EDL is the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with eatch Session. Besides, there is a collection of basic Assets allways available by default.
 
-The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situatin is similar. Assets thus serve two quite distinct purposes. One is to load, list, group serarch and browse them, and to provide an entry point to create new or get at existing MObjects in the EDL, while the other purpose is to provide attribute and property informations to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
+The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situation is similar. Assets thus serve two quite distinct purposes. One is to load, list, group search and browse them, and to provide an entry point to create new or get at existing MObjects in the EDL, while the other purpose is to provide attribute and property informations to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
 
 We can distinguish several different Kinds of Assets, each one with specific properties. While all these Kinds of Assets implement the basic Asset interface, they themselfs are the __key abstractions__ of the asset management view. Mostly, their interfaces will be used directly, because they are quite different in behaviour. Thus it is common to see asset related operations being templated on the Asset Kind. 
+&amp;rarr; see also [[Creating and registering Assets|AssetCreation]]
 [img[Asset Classess|uml/fig130309.png]]
 
 !Media Asset
@@ -547,8 +548,15 @@ Some additional, virtual facilities created in the course of the editing process
 &amp;rarr; MetaAsset {{red{to be defined}}}
 
 !!!!still to be worked out..
-is how to implement the relationship between [[MObject]]s and Assets. Do we use direct pointers, or do we prefer an ID + central registry approach? And how to handle the removal of an Asset (&amp;rarr; see also [[analysis of mem management|ManagementAssetRelation]])
+is how to implement the relationship between [[MObject]]s and Assets. Do we use direct pointers, or do we prefer an ID + central registry approach? And how to handle the removal of an Asset 
+&amp;rarr; see also [[analysis of mem management|ManagementAssetRelation]]
+&amp;rarr; see also [[Creating Objects|ObjectCreation]], especially [[Assets|AssetCreation]]
 </pre>
+</div>
+<div title="AssetCreation" modifier="Ichthyostega" created="200709040307" changecount="1">
+<pre>Assets are created by a Factories returning smart pointers; the Asset creation is bound to specific use cases and //only available// for these specific situations. There is no generic Asset Factory.
+
+For every Asset we generate a __Ident tuple__ and a long ID (hash) derived from this Ident tuple. The constructor of the abstract base class {{{Asset}}} takes care of this step and automatically registeres the new Asset object with the AssetManager. Typically, the factory methods for concrete Asset classes provide some shortcuts providing sensible default values for some of the Ident tuple data fields. They may take additional parameters &amp;mdash; for example the factory method for creating {{{asset::Media}}} takes a filename (and may at some point in the future aply &quot;magic&quot; based on examination of the file)</pre>
 </div>
 <div title="Automation" modifier="Ichthyostega" modified="200708100315" created="200706250751" tags="def" changecount="5">
 <pre>Automation is treated as a function over time. It is always tied to a specific Parameter (which can thus be variable over the course of the timeline). All details //how// this function is defined are completely abstracted away. The Parameter uses a ParamProvider to get the value for a given Time (point). Typically, this will use linear or bezier interpolation over a set of keyframes internally. Parameters can be configured to have different value ranges and distribution types (on-off, stepped, continuous, bounded)
@@ -940,11 +948,13 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200708100408" created="200708080322" tags="overview" changecount="4">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200709040256" created="200708080322" tags="overview" changecount="6">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Cinelerra Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
 * [[Memory Management Issues|MemoryManagement]]
+* [[Creating and registering Assets|AssetCreation]]
+* [[Creating new Objects|ObjectCreation]]
 
 </pre>
 </div>
@@ -1298,8 +1308,8 @@ From experiences with other middle scale projects, I prefer having the test code
 * {{red{and what else?}}}
 </pre>
 </div>
-<div title="MObjects" modifier="MichaelPloujnikov" modified="200706271500" created="200706190636" tags="overview" changecount="7">
-<pre>The MObjects Subsystem contains everything related to the [[EDL]] and the various Media Objects placed within it. Examples for [[MObjects|MObject]] being:
+<div title="MObjects" modifier="Ichthyostega" modified="200709030128" created="200706190636" tags="overview" changecount="8">
+<pre>The ~MObjects Subsystem contains everything related to the [[EDL]] and the various Media Objects placed within. It is complemented by the Asset Management (see &amp;rarr; [[Asset]]). Examples for [[MObjects|MObject]] being:
 * audio/video clips
 * effects and plugins
 * special facilities like mask and projector
@@ -1377,6 +1387,27 @@ For the case in question this seems to be the ''resource allocation is construct
 And, last but not least, doing all actual allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides that, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot;, rather it should use some central [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
+<div title="ObjectCreation" modifier="Ichthyostega" modified="200709040257" created="200709030139" tags="impl design" changecount="10">
+<pre>We have to consider carefully how to handle the Creation of new class instances. Because, when done naively, it can defeat all efforts of separating subsystems, or &amp;mdash; the other extreme &amp;mdash; lead to a //switch-on-typeID//  programming style. We strive at a solution somewhere in the middle by utilizing __Abstract Factories__ on Interface or key abstraction classes, but providing specialized overloads for the different use cases. So in each use case we have to decide if we want to create a representant of some general concept (Interface), or if we have a direct colaboration and thus need the Factory to provide
+a more specific sub-Interface or even a concrete type.
+
+!Object creation use cases
+!![[Assets|Asset]]
+|!Action|&gt;|!creates |
+|loading a media file|asset::Media, asset::Codec| |
+|viewing media|asset::Clip| for the whole Media, if not already existant|
+|mark selection as clip|asset::Clip| doesn't add to EDL|
+|loading Plugin|asset::Effect| usually at program startup|
+|create Session|asset::Track, asset::OutPort| |
+&amp;rarr; [[Creating and registering Assets|AssetCreation]]
+
+!![[MObjects|MObject]]
+|add media to EDL|asset::Clip, session::Clip, FixedPlacement| creating whole-media clip on-the-fly |
+|add Clip|session::Clip, FixedPlacement| |
+|attach Effect|session::Effect, RelativePlacement| |
+|start using Automation|session::Auto, asset::Dataset, RelativePlacement| |
+</pre>
+</div>
 <div title="OpenGL" modifier="Ichthyostega" modified="200706220359" created="200706220345" tags="def discuss" changecount="3">
 <pre>Cinelerra2 introduced OpenGL support for rendering previews. I must admit, I am very unhappy with this, because
 * it just supports some hardware
@@ -1392,8 +1423,9 @@ But because I know the opinions on this topc are varying (users tend to be delig
 My proposed aproach is to treat OpenGL as a separate video raw data type, requiring separete and specialized [[Processing Nodes|ProcNode]] for all calculations. Thus the Builder could connect OpenGL nodes if it is possible to cover the whole render path for preview and fall back to the normal ~ProcNodes for all relevant renders
 </pre>
 </div>
-<div title="Overview" modifier="Ichthyostega" modified="200706220216" created="200706190300" tags="overview" changecount="3">
-<pre>[img[Block Diagram|uml/fig128005.png]]
+<div title="Overview" modifier="Ichthyostega" modified="200709030125" created="200706190300" tags="overview" changecount="4">
+<pre>The Cinelerra-3 Processing Layer is comprised of various subsystems and can be separated into a low-level and a high-level part. At the low-level end is the [[Render Engine|OverviewRenderEngine]] which basically is a network of render nodes cooperating closely with the Backend Layer in order to carry out the actual playback and media transforming calculations. Whereas on the high-level side we find several different [[Media Objects|MObjects]] that can be placed into the [[EDL]], edited and manipulated. This is complemented by the [[Asset Management|Asset]], which is the &quot;bookkeeping view&quot; of all the different &quot;things&quot; within each Session.
+[img[Block Diagram|uml/fig128005.png]]
 </pre>
 </div>
 <div title="OverviewRenderEngine" modifier="MichaelPloujnikov" modified="200706271432" created="200706190647" tags="overview" changecount="17">
@@ -2344,7 +2376,7 @@ Instead, we should try to just connect the various subsystems via Interfaces and
 * to shield the rendering code of all complexities of thread communication and synchronization, we use the StateProxy
 </pre>
 </div>
-<div title="StyleSheet" modifier="Ichthyostega" modified="200706260459" created="200701131624" tags="MPTWTheme excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706090017" changecount="6">
+<div title="StyleSheet" modifier="Ichthyostega" modified="200709040043" created="200701131624" tags="MPTWTheme excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706090017" changecount="14">
 <pre>/*{{{*/
 /* a contrasting background so I can see where one tiddler ends and the other begins */
 body {
@@ -2508,6 +2540,10 @@ h1,h2,h3,h4,h5,h6 {
 	background: #ffcc99;
 	color: #ff2210;
 	padding: 0px 0.8ex;
+}
+
+.viewer th {
+        background: #91a6af;
 }
 /*}}}*/
 </pre>
