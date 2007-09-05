@@ -88,6 +88,12 @@ typedef llist * LList;
 typedef const llist * const_LList;
 typedef llist ** LList_ref;
 
+/**
+ * Macro to instantiate a local llist.
+ * @param name of the llist node
+ */
+#define LLIST_AUTO(name) llist name = {&name,&name}
+
 
 /**
  * cast back from a member of a structure to a pointer of the structure
@@ -110,7 +116,7 @@ typedef llist ** LList_ref;
  */
 #define LLIST_FOREACH(list, node)               \
   if (!list); else                              \
-    for (LList node = llist_get_head (list);    \
+    for (LList node = llist_head (list);        \
          ! llist_is_end (node, list);           \
          llist_forward (&node))
 
@@ -121,7 +127,7 @@ typedef llist ** LList_ref;
  */
 #define LLIST_FOREACH_REV(list, node)           \
   if (!list); else                              \
-    for (LList node = llist_get_tail (list);    \
+    for (LList node = llist_tail (list);        \
          ! llist_is_end (node, list);           \
          llist_backward (&node))
 
@@ -133,9 +139,9 @@ typedef llist ** LList_ref;
  */
 #define LLIST_WHILE_HEAD(list, head)            \
   if (!list); else                              \
-    for (LList head = llist_get_head (list);    \
+    for (LList head = llist_head (list);        \
          !llist_is_empty (list);                \
-         head = llist_get_head (list))
+         head = llist_head (list))
 
 /**
  * Consume a list from tail.
@@ -145,22 +151,9 @@ typedef llist ** LList_ref;
  */
 #define LLIST_WHILE_TAIL(list, tail)            \
   if (!list); else                              \
-    for (LList tail = llist_get_tail (list);    \
+    for (LList tail = llist_tail (list);        \
          !llist_is_empty (list);                \
-         tail = llist_get_tail (list))
-
-
-/**
- * Macro to instantiate a local llist.
- * @param name becomes a LList handle
- * the underlying instance is hidden as name_llist_, this list is statically initialized
- */
-#define LLIST_AUTO(name) \
-llist name##_llist_ = LLIST_STATIC_INITIALIZER(name##_llist_);\
-LList name = &name##_llist_
-#define LLIST_STATIC_INITIALIZER(name) {&name,&name}
-
-
+         tail = llist_tail (list))
 
 /**
  * Initialize a new llist.
@@ -474,10 +467,10 @@ LLIST_FUNC (void llist_backward (LList_ref self),
 LLIST_FUNC (LList llist_nth (LList self, int n),
             if (n>0)
               while (n--)
-                self = llist_get_next (self);
+                self = llist_next (self);
             else
               while (n++)
-                self = llist_get_prev (self);
+                self = llist_prev (self);
             return self;
 );
 
@@ -491,14 +484,14 @@ LLIST_FUNC (LList llist_get_nth_stop (LList self, int n, const_LList stop),
             if (n>0)
               while (n--)
                 {
-                  self = llist_get_next (self);
+                  self = llist_next (self);
                   if (self == stop)
                     return NULL;
                 }
             else
               while (n++)
                 {
-                  self = llist_get_prev (self);
+                  self = llist_prev (self);
                   if (self == stop)
                     return NULL;
                 }
