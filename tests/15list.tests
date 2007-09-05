@@ -3,7 +3,6 @@ TESTING "Linked Lists" ./test-llist
 TEST "init nodes" basic <<END
 out: 1
 out: 1
-return: 0
 END
 
 TEST "insert nodes" nodeinsert <<END
@@ -15,41 +14,46 @@ out: 1
 out: 1
 out: 1
 out: 1
-return: 0
+out: 3
+END
+
+TEST "remaining predicates" predicates <<END
+out: 1
+out: 1
+out: 0
+out: 0
+out: 1
+out: 1
+out: 0
+out: 1
+out: 0
+out: 0
+END
+
+TEST "unlink" unlink <<END
+out: node4 node3 node2 node1 .
+out: node1 node4 .
+out: 1
+out: 1
+out: 1
+END
+
+TEST "whiles" whiles <<END
+out: node4 node3 node2 node1 .
+out: .
+out: .
 END
 
 
-
-echo TODO; cat <<END
-#define LLIST_FOREACH(list, node)               \
-#define LLIST_FOREACH_REV(list, node)           \
-#define LLIST_WHILE_HEAD(list, head)            \
-#define LLIST_WHILE_TAIL(list, tail)            \
-LLIST_FUNC (int llist_is_head (const_LList self, const_LList head),
-LLIST_FUNC (int llist_is_tail (const_LList self, const_LList tail),
-LLIST_FUNC (int llist_is_end (const_LList self, const_LList end),
-LLIST_FUNC (int llist_is_member (const_LList self, const_LList member),
-LLIST_FUNC (int llist_is_before_after (const_LList self, const_LList before, const_LList after),
-LLIST_FUNC (unsigned llist_count (const_LList self),
-LLIST_FUNC (void llist_unlink_fast_ (LList self),
-LLIST_FUNC (LList llist_unlink (LList self),
-LLIST_FUNC (LList llist_relocate (LList self),
-LLIST_FUNC (LList llist_insertlist_next (LList self, LList next),
-LLIST_FUNC (LList llist_insertlist_prev (LList self, LList prev),
-PLANNED LLIST_FUNC (LList llist_insertafter_range (LList self, LList start, LList end),
-PLANNED LLIST_FUNC (LList llist_inserbefore_range (LList self, LList start, LList end),
-LLIST_FUNC (LList llist_advance (LList self),
-LLIST_FUNC (LList llist_retreat (LList self),
-LLIST_FUNC (void llist_forward (LList_ref self),
-LLIST_FUNC (void llist_backward (LList_ref self),
-LLIST_FUNC (LList llist_nth (LList self, int n),
-LLIST_FUNC (LList llist_get_nth_stop (LList self, int n, const_LList stop),
-#define llist_insert_head(list, element) llist_insert_next (list, element)
-#define llist_insert_tail(list, element) llist_insert_prev (list, element)
-#define llist_head llist_next
-#define llist_tail llist_prev
-END
-
-
+# not yet tested functions, write tests when needed
+PLANNED "llist_relocate"
+PLANNED "llist_insertlist_next"
+PLANNED "llist_insertlist_prev"
+PLANNED "llist_insertafter_range"
+PLANNED "llist_inserbefore_range"
+PLANNED "llist_advance"
+PLANNED "llist_retreat"
+PLANNED "list_nth"
+PLANNED "llist_get_nth_stop"
 
 
