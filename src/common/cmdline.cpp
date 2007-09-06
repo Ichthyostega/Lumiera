@@ -82,4 +82,4 @@ namespace util
   
   
   
-} // namespace cinelerra
+} // namespace util

@@ -27,6 +27,8 @@
 #include <string>
 #include <cstring>
 
+#include "nobugcfg.h"      ///////////////////TODO: just temporarily!!!!
+
 
 namespace util
   {
@@ -79,6 +81,18 @@ namespace util
     return std::for_each (c.begin(),c.end(), doIt);
   }
    
+  
+  
+  /** produce an identifier based on the given string.
+   *  remove non-standard-chars, reduce punctuation to underscores
+   */
+  string
+  sanitize (const string& org)
+  {
+    UNIMPLEMENTED ("sanitize String");
+    return org; ///////////////////////////TODO
+  }
+  
   
 } // namespace util
 
