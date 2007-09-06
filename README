@@ -1,0 +1,37 @@
+======================================
+Cinelerra -- the video NLE for Linux
+======================================
+
+ Cinelerra is a nonlinear video editing and compositing tool. 
+ It understands some of the common multimedia formats
+ (quicktime, avi, ogg) and audio/video compression
+ codecs (divx, xvid, mpeg1/2/4, ...)
+ .
+ It features non-destructive editing, compositing tools,
+ a selection of effects plugins, processing in RGB, YUV
+ and RGB-float colormodels and the ability to mix media
+ with differing sizes and framerates.
+
+For more information about Cinelerra visit http://cinelerra.org/
+
+
+------------------------------
+"Cinelerra-3" prototype code
+------------------------------
+
+**This source tree doesn't contain a working video editing application**
+Rather, it contains some design studies and prototype code for improving
+some aspects of the Cinelerra Application. This work may eventually 
+evolve into a new major release of Cinelerra.
+
+As of 7/2007, we start here with some backend and render engine modules
+together with some unit tests. You should find a wiki with detailed
+design considerations and developer documentation and a UML model
+(usable with BOUML 2.29) in the sibling directories.
+
+
+Build Requirements
+------------------
+
+*to be written*
+
