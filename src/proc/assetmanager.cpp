@@ -22,28 +22,57 @@
 
 
 #include "proc/assetmanager.hpp"
+#include "proc/asset/db.hpp"
+#include "common/singleton.hpp"
 
-namespace proc_interface
+//#include <boost/functional/hash.hpp>
+
+using cinelerra::Singleton;
+
+namespace asset
   {
+  
+  /** get at the system-wide asset manager instance.
+   *  Implemented as singleton.
+   */
+  AssetManager& 
+  AssetManager::instance ()
+  {
+    return Singleton<AssetManager>::instance();
+  }
+  
+  AssetManager::AssetManager ()
+    : registry (Singleton<asset::DB>::instance())
+  { }
 
 
-
+  
+  /** provide the unique ID for given Asset::Ident tuple */
+  ID<Asset> 
+  AssetManager::getID (const Asset::Ident& idi)
+  {
+    return asset::hash_value (idi);
+  }
+  
+  
+  
   /**
    * registers an asset object in the internal DB, providing its unique key
    */
-  long
-  AssetManager::reg (string& name, string& category, string& org, uint version)  
+  template<class KIND>
+  ID<KIND>  
+  AssetManager::reg (KIND& obj, const Asset::Ident& idi)
     //throw(cinelerra::error::Invalid)
   {
   }
-
-
+  
+  
   /**
    * find and return corresponging object
    */
-  template<class KIND>         ////TODO: does this work????
-  KIND
-  AssetManager::getAsset (long id)  ////throw(cinelerra::Invalid)
+  template<class KIND>
+  shared_ptr<KIND>
+  AssetManager::getAsset (const ID<KIND>& id)  ////throw(cinelerra::Invalid)
   {
   }
 
@@ -52,7 +81,7 @@ namespace proc_interface
    * @return true if the given id is registered in the internal asset DB
    */
   bool
-  AssetManager::known (long id)
+  AssetManager::known (IDA id)
   {
   }
 
@@ -61,10 +90,10 @@ namespace proc_interface
    * remove the given asset <i>together with all its dependants</i> from the internal DB
    */
   void
-  AssetManager::remove (long id)  /////throw(cinelerra::Invalid, cinelerra::State)
-    {
-    }
+  AssetManager::remove (IDA id)  /////throw(cinelerra::Invalid, cinelerra::State)
+  {
+  }
 
 
 
-} // namespace proc_interface
+} // namespace asset

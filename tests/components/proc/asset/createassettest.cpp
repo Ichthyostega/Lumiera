@@ -41,6 +41,7 @@ namespace asset
   namespace test
     {
     
+//    typedef Category::Kind Kind;
     
     
     
@@ -57,11 +58,12 @@ namespace asset
         
         void createMedia()
           { 
+            typedef shared_ptr<asset::Media> PM;
             Category cat(VIDEO,"bin1");
             Asset::Ident key("Name-1", cat, "ichthyo", 5);
-            P<asset::Media> mm1 = asset::Media::create(key,"testfile.mov");
-            P<asset::Media> mm2 = asset::Media::create(key);
-            P<asset::Media> mm3 = asset::Media::create("testfile2.mov",Category::VIDEO);
+            PM mm1 = asset::Media::create(key,"testfile.mov");
+            PM mm2 = asset::Media::create(key);
+            PM mm3 = asset::Media::create("testfile2.mov",Category::VIDEO);
             
             // Assets have been registered and can be retrieved by ID
             ASSERT (AssetManager::getAsset (mm1.id) == mm1);
@@ -72,7 +74,7 @@ namespace asset
             
             PAsset aa1 = AssetManager::getAsset (mm1.id);
             ASSERT (aa1 == mm1);
-            P<asset::Media> mX1 = AssetManager::getAsset (mm1.id, Category::VIDEO);
+            PM mX1 = AssetManager::getAsset (mm1.id, Category::VIDEO);
             ASSERT (mX1 == mm1);
             ASSERT (mX1 == aa1);
             try 
@@ -102,7 +104,7 @@ namespace asset
             ASSERT (mm3->ident.version == 1);
 
             ASSERT (mm1->getFilename() == "testfile.mov");
-            ASSERT (isnil (mm2.getFilename());
+            ASSERT (isnil (mm2.getFilename()));
             ASSERT (mm3->getFilename() == "testfile2.mov");
 
           }

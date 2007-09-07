@@ -38,19 +38,22 @@ namespace util
   /** a family of util functions providing a "no value whatsoever" test.
       Works on strings and all STL containers, includes NULL test for pointers */
   template <class CONT>
-  inline bool isnil(const CONT& container)
+  inline bool
+  isnil(const CONT& container)
   {
     return container.empty();
   }
   
   template <class CONT>
-  inline bool isnil(const CONT* pContainer)
+  inline bool
+  isnil(const CONT* pContainer)
   {
     return !pContainer || pContainer->empty();
   }
   
   template <>
-  inline bool isnil(const char* pCStr)
+  inline bool
+  isnil(const char* pCStr)
   {
     return !pCStr || 0 == std::strlen(pCStr);
   }
@@ -58,14 +61,16 @@ namespace util
   
   /** cut a numeric value to be >=0 */
   template <typename NUM>
-  inline NUM noneg (NUM val)
+  inline NUM 
+  noneg (NUM val)
   {
     return (0<val? val : 0);
   }
   
   /** shortcut for containment test on a map */
   template <typename MAP>
-  inline bool contains (MAP& map, typename MAP::key_type& key)
+  inline bool 
+  contains (MAP& map, typename MAP::key_type& key)
   {
     return map.find(key) != map.end();
   }
@@ -86,13 +91,23 @@ namespace util
   /** produce an identifier based on the given string.
    *  remove non-standard-chars, reduce punctuation to underscores
    */
-  string
+  inline string
   sanitize (const string& org)
   {
     UNIMPLEMENTED ("sanitize String");
     return org; ///////////////////////////TODO
   }
   
+  
+  /** convienience shortcut: conversion to c-String via string.
+   *  usable for printf with objects providing to-string conversion.
+   */
+  inline const char* 
+  cStr (const string& org)
+  {
+    return org.c_str();
+  }
+
   
 } // namespace util
 

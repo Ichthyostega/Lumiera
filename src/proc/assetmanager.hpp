@@ -20,47 +20,88 @@
  
 */
 
+/** @file assetmanager.hpp
+ ** Proc-Layer Interface: Asset Lookup and Organization.
+ ** Declares the AssetManager interface used to access individual 
+ ** Asset instances.
+ ** 
+ ** These classes are placed into namespace asset and proc_interface. 
+ **
+ ** @see asset.hpp
+ ** @see mobject.hpp
+ */
+
 
 #ifndef PROC_INTERFACE_ASSETMANAGER_H
 #define PROC_INTERFACE_ASSETMANAGER_H
 
-#include <string>
 
+#include "proc/asset.hpp"
 #include "common/error.hpp"
 
+#include <cstddef>
+#include <string>
+#include <boost/utility.hpp>
 
 using std::string;
 
 
-namespace proc_interface
-  {
 
+namespace asset
+  {
+  
+  class DB;
+  
+  
   /**
    * Facade for the Asset subsystem
    */
-  class AssetManager
+  class AssetManager : private boost::noncopyable
     {
+      asset::DB & registry;
+    
+    
     public:
-      /** registers an asset object in the internal DB, providing its unique key
-       */
-      static long reg (string& name, string& category, string& org, uint version)
-      ;
-  //      throw(cinelerra::error::Invalid);
+      static AssetManager& instance();
+      
+      /** provide the unique ID for given Asset::Ident tuple */
+      static ID<Asset> getID (const Asset::Ident&);
+      
       
       /** find and return corresponging object */
       template<class KIND>
-//      void*  /////////////////TODO
-      KIND
-      getAsset (long id)  ;///throw(cinelerra::error::Invalid);
+      shared_ptr<KIND>  getAsset (const ID<KIND>& id)  ;///throw(cinelerra::error::Invalid);
+      
       
       /** @return true if the given id is registered in the internal asset DB  */
-      bool known (long id) ;
+      bool known (IDA id) ;
       
       /**remove the given asset from the internal DB.
-       * <i>together with all its dependants</i> 
+       * <i>together with all its dependants</i> */
+      void remove (IDA id)  ;///throw(cinelerra::error::Invalid, cinelerra::error::State);
+      
+      
+    protected:
+      /** registers an asset object in the internal DB, providing its unique key.
+       *  @internal used by the Asset base class ctor to create Asset::id.
        */
-      void remove (long id)  ;///throw(cinelerra::error::Invalid, cinelerra::error::State);
+      template<class KIND>
+      static ID<KIND>  reg (KIND& obj, const Asset::Ident& idi)
+      ;
+  //      throw(cinelerra::error::Invalid);
+      friend Asset::Asset (Asset::Ident& idi);
+      
+      AssetManager ();
+    
     };
 
-} // namespace proc_interface
+} // namespace asset
+
+
+
+namespace proc_interface
+  {
+  using asset::AssetManager;
+}
+
 #endif

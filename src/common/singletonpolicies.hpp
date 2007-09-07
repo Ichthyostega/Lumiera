@@ -31,8 +31,8 @@ This code is heavily inspired by
 
 
 
-#ifndef CINELERRA_SINGLETON_H
-#define CINELERRA_SINGLETON_H
+#ifndef CINELERRA_SINGLETONPOLICIES_H
+#define CINELERRA_SINGLETONPOLICIES_H
 
 #include "common/error.hpp"
 
@@ -59,9 +59,9 @@ namespace cinelerra
               static S _theSingle_;
               return &_theSingle_;
             }
-          static void destroy (S*)
+          static void destroy (S* pSi)
             {
-              S->~S();
+              pSi-> ~S();
             }
         };
       
@@ -83,19 +83,23 @@ namespace cinelerra
       template<class S>
       struct Automatic
         {
+          typedef void (*DeleterFunc) (void);
           /** implements the Singleton removal by calling
            *  the provided deleter function at application shutdown,
            *  relying on the runtime system calling destructors of
            *  static objects
            */ 
-          static void scheduleDelete (void (*deleter) (void)) 
+          static void scheduleDelete (DeleterFunc kill_the_singleton) 
             {
                  struct DeleteTrigger
                         {
-                          ~DeleteTrigger() { *deleter (); }
+                         ~DeleteTrigger()              { *del_ (); }
+                          DeleteTrigger(DeleterFunc d) : del_(d)  {}
+                          DeleterFunc del_;
                         };
-              static DeleteTrigger trigger;
-              REQUIRE (deleter);
+              static DeleteTrigger finally(kill_the_singleton);
+              
+              REQUIRE (kill_the_singleton);
             }
           
           static void onDeadReference ()

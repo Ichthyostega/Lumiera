@@ -24,16 +24,72 @@
 #ifndef ASSET_CATEGORY_H
 #define ASSET_CATEGORY_H
 
+#include <string>
+#include <iostream>
+#include <boost/functional/hash.hpp>
+
 
 
 namespace asset
   {
+  using std::string;
+  using std::ostream;
+
+      /** top-level distinction of different Kinds of Assets.
+       *  For convienience, this classification is slightly denormalized,
+       *  as AUDIO, and VIDEO are both asset::Media objects, EFFECT and CODEC
+       *  are asset::Proc objects, while STRUCT and META refer directly to 
+       *  the corresponding Interfaces asset::Struct and asset::Meta.
+       */
+      enum Kind
+      {
+        AUDIO,
+        VIDEO,
+        EFFECT,
+        CODEC,
+        STRUCT,
+        META
+      };
+  
   /**
-   * tree like classification of Assets
+   * Tree like classification of Assets.
+   * By virtue of the Category, Assets can be organized in nested bins (folders).
+   * This includes the distinction of different kinds of Assets, like Audio, Video, Effects...
+   * 
+   * @todo could be far more elaborate. could be a singleton like centralized tree, while
+   *       just holding references to Catetory nodes in the individual Asset. At the moment,
+   *       we use just the most simplistic implementation and handle Category objects 
+   *       using value semantics.
    */
   class Category
-    {};
+    {
+    public:
+      
+    private:
+      Kind kind_;
+      string path_;
+      
+    public:
+      Category (const Kind root, string subfolder ="") 
+        : kind_(root), path_(subfolder) {};
+      
+      bool operator== (const Category& other) const { return kind_== other.kind_ && path_== other.path_; }
+      bool operator!= (const Category& other) const { return kind_!= other.kind_ || path_!= other.path_; }
+      
+      operator string ()  const;
+
+        
+      friend size_t hash_value (const Category& cat)
+        {
+          size_t hash = 0;
+          boost::hash_combine(hash, cat.kind_);
+          boost::hash_combine(hash, cat.path_);
+          return hash;
+        }  
+
+    };
     
+   inline ostream& operator<< (ostream& os, const Category& cago) { return os << string(cago); }
     
     
 } // namespace asset

@@ -53,12 +53,13 @@ namespace cinelerra
     class TargetObj : public TestTargetObj
       {
       public:
-        static int cnt = 0;
+        static int cnt;
         static void setCountParam (uint c) { TargetObj::cnt = c; }
       protected:
         TargetObj () : TestTargetObj(cnt) {}
       };
     
+    int TargetObj::cnt = 0;
     
     
     

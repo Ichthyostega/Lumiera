@@ -57,8 +57,8 @@ namespace cinelerra
       static S& instance();
       
     private:
-      typedef Threading<S>::VolatileType SType;
-      typedef Threading<S>::Lock ThreadLock;
+      typedef typename Threading<S>::VolatileType SType;
+      typedef typename Threading<S>::Lock ThreadLock;
       static SType* pInstance_;
       static bool isDead_;
       
