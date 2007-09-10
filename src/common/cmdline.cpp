@@ -33,6 +33,13 @@ using boost::algorithm::split;
 using boost::algorithm::join;
 using boost::algorithm::is_any_of;
 using boost::algorithm::token_compress_on;
+using boost::regex;
+using boost::smatch;
+using boost::regex_search;
+
+using boost::regex;
+using boost::smatch;
+using boost::regex_search;
 
 
 
@@ -59,12 +66,12 @@ namespace util
    */ 
   Cmdline::Cmdline (const string cmdline)
     {
-      boost::regex tokendef("[^ \r\n\t]+");
-      boost::smatch match;
+      regex tokendef("[^ \r\n\t]+");
+      smatch match;
       string::const_iterator it = cmdline.begin();
       string::const_iterator end = cmdline.end();
       
-      while (boost::regex_search(it, end, match, tokendef))
+      while (regex_search(it, end, match, tokendef))
         {
           string ss(match[0]);
           this->push_back(ss);

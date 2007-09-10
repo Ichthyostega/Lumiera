@@ -38,11 +38,11 @@ namespace asset
   AssetManager& 
   AssetManager::instance ()
   {
-    return Singleton<AssetManager>::instance();
+    return *(new AssetManager); //////////////////////////////TODO Singleton<AssetManager>::instance();
   }
   
   AssetManager::AssetManager ()
-    : registry (Singleton<asset::DB>::instance())
+    : registry (*(new DB)) //(Singleton<asset::DB>::instance())
   { }
 
 
@@ -62,8 +62,9 @@ namespace asset
   template<class KIND>
   ID<KIND>  
   AssetManager::reg (KIND& obj, const Asset::Ident& idi)
-    //throw(cinelerra::error::Invalid)
+      throw(cinelerra::error::Invalid)
   {
+    UNIMPLEMENTED ("AssetManager::reg");
   }
   
   
@@ -72,8 +73,10 @@ namespace asset
    */
   template<class KIND>
   shared_ptr<KIND>
-  AssetManager::getAsset (const ID<KIND>& id)  ////throw(cinelerra::Invalid)
+  AssetManager::getAsset (const ID<KIND>& id)  
+      throw(cinelerra::error::Invalid)
   {
+    UNIMPLEMENTED ("AssetManager::getAsset");
   }
 
 
@@ -83,6 +86,17 @@ namespace asset
   bool
   AssetManager::known (IDA id)
   {
+    UNIMPLEMENTED ("asset search");
+  }
+
+
+  /**
+   * @return true if the given id is registered with the given Category  
+   */
+  bool
+  AssetManager::known (IDA id, const Category& cat)
+  {
+    UNIMPLEMENTED ("asset search");
   }
 
 
@@ -90,7 +104,9 @@ namespace asset
    * remove the given asset <i>together with all its dependants</i> from the internal DB
    */
   void
-  AssetManager::remove (IDA id)  /////throw(cinelerra::Invalid, cinelerra::State)
+  AssetManager::remove (IDA id)  
+      throw(cinelerra::error::Invalid, 
+            cinelerra::error::State)
   {
   }
 

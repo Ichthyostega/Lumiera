@@ -37,40 +37,120 @@ This code is heavily inspired by
 
 #include "common/singletonpolicies.hpp"  ///< several Policies usable together with singleton
 
+#include "common/util.hpp"
+#include "nobugcfg.h"
+
+#include <boost/bind.hpp>
 
 
 namespace cinelerra
   {
   
   /**
-   * A configurable Template for implementing Singletons
+   * A configurable Template for implementing Singletons. 
+   * Actually this is a Functor object, which could be placed into a static field
+   * of the Singleton (target) class or used directly. 
+   * @note internally uses static fields, so all functor instances share pInstance_
    */
   template
-    < class S,  // the class to make Singleton
+    < class SI,  // the class to make Singleton
       template <class> class Create    = singleton::Static,     // how to create/destroy the instance
       template <class> class Life      = singleton::Automatic,  // how to manage Singleton Lifecycle
       template <class> class Threading = singleton::IgnoreThreadsafety  //TODO use Multithreaded!!!
     >
   class Singleton
     {
-    public:
-      static S& instance();
-      
-    private:
-      typedef typename Threading<S>::VolatileType SType;
-      typedef typename Threading<S>::Lock ThreadLock;
+      typedef typename Threading<SI>::VolatileType SType;
+      typedef typename Threading<SI>::Lock ThreadLock;
       static SType* pInstance_;
       static bool isDead_;
       
-    protected:
-      Singleton () { }
-      Singleton (const Singleton&) { }
-      Singleton& operator= (const Singleton&) { return *this; }
+    public:
+      /** Interface to be used by Singleton's clients.
+       *  Manages internally the instance creation, lifecycle 
+       *  and access handling in a multithreaded context.
+       *  @return "the" single instance of class S 
+       */
+      SI& operator() ()
+        {
+          if (!pInstance_)
+            {
+              ThreadLock guard;
+              if (!pInstance_)
+                {
+                  if (isDead_)
+                    {
+                      Life<SI>::onDeadReference();
+                      isDead_ = false;
+                    }
+                  pInstance_ = Create<SI>::create();
+                  Life<SI>::scheduleDelete (&destroy);
+            }   }
+          ENSURE (pInstance_);
+          ENSURE (!isDead_);
+          return *pInstance_;
+        }
       
     private:
-      static void destroy();
+      /** @internal helper used to delegate destroying the single instance
+       *  to the Create policy, at the same time allowing the Life policy
+       *  to control the point in the Application lifecycle when the 
+       *  destruction of this instance occures.
+       */
+      static void destroy()
+        {
+          REQUIRE (!isDead_);
+          Create<SI>::destroy (pInstance_);
+          pInstance_ = 0;
+          isDead_ = true;
+        }
     };
+    
   
+  // Storage for Singleton's static fields...  
+  template
+    < class SI,
+      template <class> class C,
+      template <class> class L,
+      template <class> class T
+    >
+    typename Singleton<SI,C,L,T>::SType* 
+    Singleton<SI,C,L,T>::pInstance_;
   
+  template
+    < class SI,
+      template <class> class C,
+      template <class> class L,
+      template <class> class T
+    >
+    bool Singleton<SI,C,L,T>::isDead_;
+
+
+  
+///// TODO: get rid of the static fields?
+/////       is tricky because of invoking the destructors. If we rely on instance vars,
+/////       the object may already have been released when the runtime system calls the
+/////       destructors of static objects at shutdown.
+  
+      /** @internal used to link together the Create policy and Life policy.
+       *  @return a functor object for invoking this->destroy() */
+/*      singleton::DelFunc getDeleter() 
+        {
+          return boost::bind (&Singleton<SI,Create,Life,Threading>::destroy,
+                              this);
+        }
+*/
+  
+/*      template<class T>
+      class DelFunc
+        {
+          typedef void (T::*Fp)(void);
+          T* t_;
+          Fp fun_;
+        public:
+          DelFunc (T* t, Fp f) : t_(t), fun_(f) {}
+          void operator() () { (t_->*fun_)(); }
+        };
+*/    
 } // namespace cinelerra
 #endif

@@ -75,6 +75,9 @@ namespace asset
       
       bool operator== (const Category& other) const { return kind_== other.kind_ && path_== other.path_; }
       bool operator!= (const Category& other) const { return kind_!= other.kind_ || path_!= other.path_; }
+        
+      bool hasKind (Kind refKind)  const            { return kind_ == refKind; }
+      
       
       operator string ()  const;
 

@@ -44,11 +44,11 @@ namespace asset
   /** Asset is a Interface class; usually, objects of 
    *  concrete subclasses are created via specialized Factories
    */
-  Asset::Asset (Ident& idi) 
+  Asset::Asset (const Ident& idi) 
     : ident(idi), id(AssetManager::reg (this, idi)) 
   { }
   
-  Asset::~Asset ()  throw()
+  Asset::~Asset ()
   { 
     TRACE (assetmem, "dtor Asset(id=%d) : %s", size_t(id), cStr(this->ident) );
   }

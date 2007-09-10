@@ -1,26 +1,34 @@
-window_sizes 1140 783 270 860 584 120
+window_sizes 1140 783 270 860 633 71
 diagrams
-  active  classdiagram_ref 130309 // Asset Kinds
-    860 584 100 4 0 0
+  classdiagram_ref 130309 // Asset Kinds
+    860 607 100 4 0 0
+  classdiagram_ref 130437 // Media-Asset Relations
+    688 506 100 4 0 0
+  classdiagram_ref 128133 // Session structure
+    688 506 100 4 60 0
+  classdiagram_ref 128389 // Render Entities
+    688 506 100 4 120 0
+  objectdiagram_ref 128901 // EDL Example2
+    688 506 100 4 132 0
+  objectdiagram_ref 128773 // EDL Example1
+    688 506 100 4 0 0
+  active  objectdiagram_ref 129029 // Engine Example1
+    860 633 100 4 28 0
 end
 show_stereotypes
-selected 
-  package_ref 129 // cinelerra3
+selected objectdiagram_ref 129029 // Engine Example1
 open
-  deploymentview_ref 128517 // gen
-  deploymentview_ref 128645 // gen
-  deploymentview_ref 128773 // gen
-  deploymentview_ref 128901 // gen
-  deploymentview_ref 129029 // gen
   
-  package_ref 130309 // engine
+package_ref 128005 // design
   class_ref 136453 // Asset
   operation_ref 133125 // getID
   operation_ref 132357 // reg
   class_ref 136709 // Media
   class_ref 137349 // Clip
-  classview_ref 128005 // Session
-  classview_ref 128133 // Engine Workings
+  class_ref 138501 // SpecialWish
+  
+package_ref 128389 // RenderEngine
+  usecaseview_ref 128005 // Renderengine Use
   class_ref 135685 // Logic
   class_ref 135813 // Config
   class_ref 135941 // State

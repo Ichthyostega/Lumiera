@@ -23,14 +23,16 @@
 
 #include "common/test/run.hpp"
 //#include "common/factory.hpp"
-//#include "common/util.hpp"
+#include "common/util.hpp"
 
 #include "proc/assetmanager.hpp"
 #include "proc/asset/media.hpp"
+#include "proc/asset/proc.hpp"
 
 //#include <boost/format.hpp>
 #include <iostream>
 
+using util::isnil;
 //using boost::format;
 using std::string;
 using std::cout;
@@ -58,28 +60,36 @@ namespace asset
         
         void createMedia()
           { 
-            typedef shared_ptr<asset::Media> PM;
+/*            typedef shared_ptr<asset::Media> PM;
             Category cat(VIDEO,"bin1");
             Asset::Ident key("Name-1", cat, "ichthyo", 5);
             PM mm1 = asset::Media::create(key,"testfile.mov");
             PM mm2 = asset::Media::create(key);
-            PM mm3 = asset::Media::create("testfile2.mov",Category::VIDEO);
+            Category vid(VIDEO);////////////////////////////////////////////////FIXME
+            PM mm3 = asset::Media::create("testfile2.mov", vid);
             
             // Assets have been registered and can be retrieved by ID
-            ASSERT (AssetManager::getAsset (mm1.id) == mm1);
-            ASSERT (AssetManager::getAsset (mm2.id) == mm2);
-            ASSERT (AssetManager::getAsset (mm3.id) == mm3);
+            AssetManager& aMang = AssetManager::instance();
+            ASSERT (aMang.getAsset (mm1->getID()) == mm1);
+            ASSERT (aMang.getAsset (mm2->getID()) == mm2);
+            ASSERT (aMang.getAsset (mm3->getID()) == mm3);
             
-            ASSERT (AssetManager::getAsset (mm1.id) != mm2);
+            ASSERT (aMang.getAsset (mm1->getID()) != mm2);
             
-            PAsset aa1 = AssetManager::getAsset (mm1.id);
-            ASSERT (aa1 == mm1);
-            PM mX1 = AssetManager::getAsset (mm1.id, Category::VIDEO);
+//            PAsset aa1 = aMang.getAsset (ID<Asset>(mm1->getID()));   // note we get an Asset ref
+//            ASSERT (aa1 == mm1);
+            PM mX1 = aMang.getAsset (mm1->getID());                // ..and now we get a Media ref
             ASSERT (mX1 == mm1);
-            ASSERT (mX1 == aa1);
+//            ASSERT (mX1 == aa1);
+            
+            ASSERT (aMang.known (mm1->getID()));
+            ASSERT (aMang.known (mm2->getID()));
+            ASSERT (aMang.known (mm3->getID()));
+            
+            ASSERT ( !aMang.known (mm3->getID(), Category(AUDIO))); // not found within AUDIO-Category
             try 
-              { // can't be found if the Category is wrong.... 
-                AssetManager::getAsset (mm1.id, Category::AUDIO);
+              { // can't be found if specifying wrong Asset kind.... 
+//                aMang.getAsset (ID<asset::Proc>(mm1->getID()));
                 NOTREACHED;
               }
             catch (cinelerra::error::Invalid) { }
@@ -93,7 +103,7 @@ namespace asset
             ASSERT (cat == Category (VIDEO,"bin1"));
             ASSERT (mm1->ident.category == Category (VIDEO,"bin1"));
             ASSERT (mm2->ident.category == Category (VIDEO,"bin1"));
-            ASSERT (mm3->ident.category == Category (VIDEO,""));
+            ASSERT (mm3->ident.category == Category (VIDEO       ));
 
             ASSERT (mm1->ident.org == "ichthyo");
             ASSERT (mm2->ident.org == "ichthyo");
@@ -104,9 +114,9 @@ namespace asset
             ASSERT (mm3->ident.version == 1);
 
             ASSERT (mm1->getFilename() == "testfile.mov");
-            ASSERT (isnil (mm2.getFilename()));
+            ASSERT (isnil (mm2->getFilename()));
             ASSERT (mm3->getFilename() == "testfile2.mov");
-
+*/
           }
       };
     

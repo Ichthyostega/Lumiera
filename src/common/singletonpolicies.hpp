@@ -36,6 +36,7 @@ This code is heavily inspired by
 
 #include "common/error.hpp"
 
+#include <vector>
 
 
 namespace cinelerra
@@ -56,8 +57,8 @@ namespace cinelerra
               static uint callCount (0);
               ASSERT ( 0 == callCount++ );
 #endif              
-              static S _theSingle_;
-              return &_theSingle_;
+              static char buff[sizeof(S)];
+              return new(buff) S();
             }
           static void destroy (S* pSi)
             {
@@ -76,30 +77,46 @@ namespace cinelerra
           static void destroy (S* pS) { delete pS;    }
         };
       
-      
+
+        
+      typedef void (*DelFunc)(void);
+      using std::vector;
+        
       /**
        * Policy relying on the compiler/runtime system for Singleton Lifecycle
        */
       template<class S>
       struct Automatic
         {
-          typedef void (*DeleterFunc) (void);
           /** implements the Singleton removal by calling
-           *  the provided deleter function at application shutdown,
-           *  relying on the runtime system calling destructors of
-           *  static objects
+           *  the provided deleter function(s) at application shutdown,
+           *  relying on the runtime system calling destructors of static
+           *  objects. Because this Policy class can be shared between 
+           *  several Singletons, we need to memoize all registered
+           *  deleter functions for calling them at shutdown.
            */ 
-          static void scheduleDelete (DeleterFunc kill_the_singleton) 
+          static void scheduleDelete (DelFunc kill_the_singleton) 
             {
-                 struct DeleteTrigger
+                 class DeleteTrigger
                         {
-                         ~DeleteTrigger()              { *del_ (); }
-                          DeleteTrigger(DeleterFunc d) : del_(d)  {}
-                          DeleterFunc del_;
+                          vector<DelFunc> dels_;
+                          
+                        public:
+                          void schedule (DelFunc del) 
+                            { 
+                              dels_.push_back(del); 
+                            }
+                         ~DeleteTrigger()        
+                            { 
+                              vector<DelFunc>::iterator i = dels_.begin();
+                              for ( ; i != dels_.end(); ++i )
+                                (*i)(); // invoke deleter func 
+                            }
                         };
-              static DeleteTrigger finally(kill_the_singleton);
-              
+                        
               REQUIRE (kill_the_singleton);
+              static DeleteTrigger finally;
+              finally.schedule (kill_the_singleton);
             }
           
           static void onDeadReference ()

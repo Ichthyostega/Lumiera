@@ -76,15 +76,25 @@ namespace asset
     {
     public:
       const size_t hash;
-      ID (size_t id)         : hash(id)       {}
-      ID (const KIND& asset) : hash(asset.id) {}
+      ID (size_t id)         : hash(id)         {}
+      ID (const KIND& asset) : hash(asset.getID()) {}
       operator size_t() const  { return hash; }
     };
     
   class Asset;
   class AssetManager;
   typedef const ID<Asset>& IDA;
+
+  class Media;
   
+  
+  template<>
+  class ID<Media> : public ID<Asset>
+    {
+    public:
+      ID (size_t id);
+      ID (const Media&);
+    };
   
   /**
    * Superinterface describing especially bookeeping properties.
@@ -156,7 +166,9 @@ namespace asset
           operator string ()  const;
         };
         
-      const Ident ident;     ///<  Asset identification tuple 
+      const Ident ident;     ///<  Asset identification tuple
+      virtual const ID<Asset>& getID()  const { return id; }
+    private:
       const ID<Asset> id;   ///<   Asset primary key.
 
       
@@ -180,8 +192,8 @@ namespace asset
        *  concrete subclasses are created via specialized Factories.
        *  Calling this base ctor causes registration with AssetManager.
        */
-      Asset (Ident& idi);
-      virtual ~Asset()  throw() = 0;
+      Asset (const Ident& idi);
+      virtual ~Asset()           = 0;
       
       /** release all links to other Asset objects held internally.
        *  The lifecycle of Asset objects is managed by smart pointers
@@ -244,8 +256,8 @@ namespace proc_interface
   {
   using asset::Asset;
   using asset::Category;
-  using asset::ID;
-  using asset::IDA;
+//  using asset::ID;
+//  using asset::IDA;
   using asset::PAsset;
 }
 

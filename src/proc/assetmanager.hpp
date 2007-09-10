@@ -70,15 +70,19 @@ namespace asset
       
       /** find and return corresponging object */
       template<class KIND>
-      shared_ptr<KIND>  getAsset (const ID<KIND>& id)  ;///throw(cinelerra::error::Invalid);
+      shared_ptr<KIND>  getAsset (const ID<KIND>& id)  throw(cinelerra::error::Invalid);
       
       
       /** @return true if the given id is registered in the internal asset DB  */
       bool known (IDA id) ;
       
+      /** @return true if the given id is registered with the given Category  */
+      bool known (IDA id, const Category& cat) ;
+      
       /**remove the given asset from the internal DB.
        * <i>together with all its dependants</i> */
-      void remove (IDA id)  ;///throw(cinelerra::error::Invalid, cinelerra::error::State);
+      void remove (IDA id)  throw(cinelerra::error::Invalid, 
+                                  cinelerra::error::State);
       
       
     protected:
@@ -87,9 +91,9 @@ namespace asset
        */
       template<class KIND>
       static ID<KIND>  reg (KIND& obj, const Asset::Ident& idi)
-      ;
-  //      throw(cinelerra::error::Invalid);
-      friend Asset::Asset (Asset::Ident& idi);
+          throw(cinelerra::error::Invalid);
+      
+      friend Asset::Asset (const Asset::Ident& idi);
       
       AssetManager ();
     

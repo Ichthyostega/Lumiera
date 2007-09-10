@@ -21,13 +21,104 @@
 * *****************************************************/
 
 
+#include "proc/assetmanager.hpp"
 #include "proc/asset/media.hpp"
+#include "proc/asset/clip.hpp"
+#include "proc/asset/unknown.hpp"
+#include "common/util.hpp"
+#include "nobugcfg.h"
+
+#include <boost/regex.hpp>
+
+using util::isnil;
+
+using boost::regex;
+using boost::smatch;
+using boost::regex_search;
+
 
 namespace asset
   {
   
-  /** */
+  namespace // Implementation details
+  {
+    /** helper: extract a name token out of a given path/filename
+     *  @return sanitized token based on the name (minus extension),
+     *          empty string if not the common filename pattern.
+     */
+    string extractName (const string& path)
+    {
+      regex pathname_pattern("([^/\\.]+)(\\.\\w+)?$");
+      smatch match;
+      
+      if (regex_search (path, match, pathname_pattern))
+        return util::sanitize (string (match[1]));
+      else
+        return "";
+    }
+  } 
+  
+  MediaFactory Media::create;
+  
+  
+  /** Factory method for Media Asset instances. Depending on the filename given,
+   *  either a asset::Media object or an "Unknown" placeholder will be provided. If
+   *  the given Category already contains an "Unkown", we just get the
+   *  corresponding smart-ptr. Otherwise a new asset::Unknown is created. */
+  MediaFactory::PType 
+  MediaFactory::operator() (Asset::Ident& key, const string& file)
+  { 
+    asset::Media* pM (0);
+    AssetManager& aMang = AssetManager::instance();
+    TODO ("check and fix Category if necessary");
+    if (isnil (file))
+      {
+        if (isnil (key.name)) key.name="nil";
+        ID<Asset> id = aMang.getID (key);
+        if (aMang.known (id))
+          return aMang.getAsset(ID<Media>(id));
+        else
+          pM = new Unknown(key);
+      }
+    else
+      {
+        if (isnil (key.name)) key.name=extractName(file);
+        TODO ("file exists?");
+        pM = new Media (key,file); 
+      }
+    ENSURE (key.category.hasKind (VIDEO) || key.category.hasKind(AUDIO));
+    ENSURE (isnil (key.name));
+    ENSURE (dynamic_cast<Media*>(pM) || (isnil (file) && dynamic_cast<Unknown*>(pM)));
+    
+    return PType (pM, &destroy);
+  }
 
+  
+  /** Variant of the Factory method for Media Assets, automatically 
+   *  providing most of the Asset key fields based on the filename given
+   */
+  MediaFactory::PType 
+  MediaFactory::operator() (const string& file, Category& cat)
+  { 
+    Asset::Ident key(extractName(file), cat, "cin3", 1);
+    return MediaFactory::operator() (key, file);
+  }
 
+  
+  MediaFactory::PType 
+  MediaFactory::operator() (const char* file, Category& cat)
+  { 
+    if (!file) file = "";
+    return operator() (file,cat);
+  }
+  
+  MediaFactory::PType 
+  MediaFactory::operator() (Asset::Ident& key, const char* file)
+  {
+    if (!file) file = "";
+    return operator() (key,file);
+  }
+
+  
 
 } // namespace asset

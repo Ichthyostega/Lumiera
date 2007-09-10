@@ -29,9 +29,11 @@
 #include "nobugcfg.h"
 
 #include <boost/lexical_cast.hpp>
+#include <boost/format.hpp>
 #include <iostream>
 
 using boost::lexical_cast;
+using boost::format;
 using util::isnil;
 using std::string;
 using std::cout;
@@ -41,8 +43,6 @@ namespace cinelerra
   {
   namespace test
     {
-    
-    class ObjFactory;
     
 
     /**
@@ -57,6 +57,9 @@ namespace cinelerra
         static void setCountParam (uint c) { TargetObj::cnt = c; }
       protected:
         TargetObj () : TestTargetObj(cnt) {}
+        
+        friend class singleton::Static<TargetObj>;
+        friend class singleton::Heap<TargetObj>;
       };
     
     int TargetObj::cnt = 0;
@@ -76,42 +79,45 @@ namespace cinelerra
      */
     class Singleton_test : public Test
       {
-        typedef TargetObj& (*InstanceAccessFunc) (void);
+        typedef boost::function<TargetObj& ()> InstanceAccessFunc;
         InstanceAccessFunc instance;
         
         virtual void run(Arg arg) 
           {
             uint num= isnil(arg)? 1 : lexical_cast<uint>(arg[1]);
-            TargetObj::setCountParam(num);
             
-            testStaticallyAllocatedSingleton ();
-            testHeapAllocatedSingleton ();
+            testStaticallyAllocatedSingleton (num++);
+            testHeapAllocatedSingleton (num++);
           }
 
         
         /** @test parametrize the Singleton creation such as to create 
          *        the single TargetObj instance as a static variable. 
          */
-        void testStaticallyAllocatedSingleton ()
+        void testStaticallyAllocatedSingleton (uint num)
           {
-            instance = &Singleton<TargetObj>::instance;
-            useInstance ();
+            Singleton<TargetObj> single;
+            instance = single;
+            useInstance (num, "statically allocated");
           }
         
         /** @test parametrize the Singleton creation such as to create 
          *        the single TargetObj instance allocated on the Heap
          *        and deleted automatically at application shutdown.
          */
-        void testHeapAllocatedSingleton ()
+        void testHeapAllocatedSingleton (uint num)
           {
-            instance = &Singleton<TargetObj,singleton::Heap>::instance;
-            useInstance ();
+            Singleton<TargetObj,singleton::Heap> single;
+            instance = single;
+            useInstance (num, "heap allocated");
           }
         
         
         
-        void useInstance ()
+        void useInstance (uint num, string kind)
           {
+            cout << format("testing TargetObj(%d) as Singleton(%s)\n") % num % kind;
+            TargetObj::setCountParam(num);
             TargetObj& t1 = instance();
             TargetObj& t2 = instance();
             

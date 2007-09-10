@@ -50,7 +50,7 @@ namespace asset
   size_t 
   hash_value (const Asset& asset)
   {
-    return asset.id;
+    return asset.getID();
   }
 
   
