@@ -57,20 +57,28 @@ namespace asset
         return "";
     }
   } 
+
+
   
-  MediaFactory Media::create;
+  MediaFactory Media::create;  ///< storage for the static MediaFactory instance
+  
   
   
   /** Factory method for Media Asset instances. Depending on the filename given,
    *  either a asset::Media object or an "Unknown" placeholder will be provided. If
    *  the given Category already contains an "Unkown", we just get the
-   *  corresponding smart-ptr. Otherwise a new asset::Unknown is created. */
+   *  corresponding smart-ptr. Otherwise a new asset::Unknown is created.
+   *  @return an Media smart ptr linked to the internally registered smart ptr
+   *          created as a side effect of calling the concrete Media subclass ctor.
+   */
   MediaFactory::PType 
   MediaFactory::operator() (Asset::Ident& key, const string& file)
   { 
     asset::Media* pM (0);
     AssetManager& aMang = AssetManager::instance();
+    
     TODO ("check and fix Category if necessary");
+    
     if (isnil (file))
       {
         if (isnil (key.name)) key.name="nil";
@@ -86,11 +94,13 @@ namespace asset
         TODO ("file exists?");
         pM = new Media (key,file); 
       }
+    ASSERT (pM);
     ENSURE (key.category.hasKind (VIDEO) || key.category.hasKind(AUDIO));
     ENSURE (isnil (key.name));
     ENSURE (dynamic_cast<Media*>(pM) || (isnil (file) && dynamic_cast<Unknown*>(pM)));
     
-    return PType (pM, &destroy);
+    return aMang.getAsset (pM->getID());  // note: because we query with an ID<Media>, 
+                                         //        we get a Media smart ptr.    
   }
 
   
@@ -101,7 +111,14 @@ namespace asset
   MediaFactory::operator() (const string& file, Category& cat)
   { 
     Asset::Ident key(extractName(file), cat, "cin3", 1);
-    return MediaFactory::operator() (key, file);
+    return operator() (key, file);
+  }
+  
+  MediaFactory::PType 
+  MediaFactory::operator() (const string& file, asset::Kind kind)
+  { 
+    Category cat(kind);
+    return operator() (file, cat);
   }
 
   
@@ -109,16 +126,22 @@ namespace asset
   MediaFactory::operator() (const char* file, Category& cat)
   { 
     if (!file) file = "";
-    return operator() (file,cat);
+    return operator() (string(file),cat);
+  }
+  
+  MediaFactory::PType 
+  MediaFactory::operator() (const char* file, asset::Kind kind)
+  { 
+    if (!file) file = "";
+    return operator() (string(file),kind);
   }
   
   MediaFactory::PType 
   MediaFactory::operator() (Asset::Ident& key, const char* file)
   {
     if (!file) file = "";
-    return operator() (key,file);
+    return operator() (key, string(file));
   }
 
-  
 
 } // namespace asset

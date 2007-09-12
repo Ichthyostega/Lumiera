@@ -60,13 +60,12 @@ namespace asset
         
         void createMedia()
           { 
-/*            typedef shared_ptr<asset::Media> PM;
+            typedef shared_ptr<asset::Media> PM;
             Category cat(VIDEO,"bin1");
             Asset::Ident key("Name-1", cat, "ichthyo", 5);
             PM mm1 = asset::Media::create(key,"testfile.mov");
             PM mm2 = asset::Media::create(key);
-            Category vid(VIDEO);////////////////////////////////////////////////FIXME
-            PM mm3 = asset::Media::create("testfile2.mov", vid);
+            PM mm3 = asset::Media::create("testfile2.mov", VIDEO);
             
             // Assets have been registered and can be retrieved by ID
             AssetManager& aMang = AssetManager::instance();
@@ -76,11 +75,11 @@ namespace asset
             
             ASSERT (aMang.getAsset (mm1->getID()) != mm2);
             
-//            PAsset aa1 = aMang.getAsset (ID<Asset>(mm1->getID()));   // note we get an Asset ref
-//            ASSERT (aa1 == mm1);
+            PAsset aa1 = aMang.getAsset (ID<Asset>(mm1->getID()));   // note we get an Asset ref
+            ASSERT (aa1 == mm1);
             PM mX1 = aMang.getAsset (mm1->getID());                // ..and now we get a Media ref
             ASSERT (mX1 == mm1);
-//            ASSERT (mX1 == aa1);
+            ASSERT (mX1 == aa1);
             
             ASSERT (aMang.known (mm1->getID()));
             ASSERT (aMang.known (mm2->getID()));
@@ -89,7 +88,7 @@ namespace asset
             ASSERT ( !aMang.known (mm3->getID(), Category(AUDIO))); // not found within AUDIO-Category
             try 
               { // can't be found if specifying wrong Asset kind.... 
-//                aMang.getAsset (ID<asset::Proc>(mm1->getID()));
+                aMang.getAsset (ID<asset::Proc>(mm1->getID()));
                 NOTREACHED;
               }
             catch (cinelerra::error::Invalid) { }
@@ -116,6 +115,8 @@ namespace asset
             ASSERT (mm1->getFilename() == "testfile.mov");
             ASSERT (isnil (mm2->getFilename()));
             ASSERT (mm3->getFilename() == "testfile2.mov");
+/*
+////////////////////////////////////////////////////////////////////////////////TODO fuck the compiler!!!             
 */
           }
       };

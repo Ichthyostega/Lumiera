@@ -81,11 +81,10 @@ namespace asset
     {
       IdHashtable table;
       
-      friend class AssetManager;
-
       DB () : table() {}
       ~DB ()          {}
       
+      friend class cinelerra::singleton::Static<DB>;
     };
   
     

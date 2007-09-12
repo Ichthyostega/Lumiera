@@ -23,7 +23,6 @@
 
 #include "proc/assetmanager.hpp"
 #include "proc/asset/db.hpp"
-#include "common/singleton.hpp"
 
 //#include <boost/functional/hash.hpp>
 
@@ -35,14 +34,10 @@ namespace asset
   /** get at the system-wide asset manager instance.
    *  Implemented as singleton.
    */
-  AssetManager& 
-  AssetManager::instance ()
-  {
-    return *(new AssetManager); //////////////////////////////TODO Singleton<AssetManager>::instance();
-  }
+  Singleton<AssetManager> AssetManager::instance;
   
   AssetManager::AssetManager ()
-    : registry (*(new DB)) //(Singleton<asset::DB>::instance())
+    : registry (Singleton<asset::DB>() ())
   { }
 
 
@@ -61,7 +56,7 @@ namespace asset
    */
   template<class KIND>
   ID<KIND>  
-  AssetManager::reg (KIND& obj, const Asset::Ident& idi)
+  AssetManager::reg (KIND* obj, const Asset::Ident& idi)
       throw(cinelerra::error::Invalid)
   {
     UNIMPLEMENTED ("AssetManager::reg");
@@ -110,6 +105,32 @@ namespace asset
   {
   }
 
+  
+} // namespace asset
 
 
+
+
+   /************************************************************/
+   /* explicit template instantiations for various Asset Kinds */
+   /************************************************************/
+
+#include "proc/asset/media.hpp"  
+#include "proc/asset/proc.hpp"  
+#include "proc/asset/struct.hpp"  
+#include "proc/asset/meta.hpp"  
+
+
+namespace asset
+  {
+  
+  template ID<Asset> AssetManager::reg (Asset* obj, const Asset::Ident& idi);
+  
+  
+  template shared_ptr<Asset>  AssetManager::getAsset (const ID<Asset>&  id)  throw(cinelerra::error::Invalid);
+  template shared_ptr<Media>  AssetManager::getAsset (const ID<Media>&  id)  throw(cinelerra::error::Invalid);
+  template shared_ptr<Proc>   AssetManager::getAsset (const ID<Proc>&   id)  throw(cinelerra::error::Invalid);
+  template shared_ptr<Struct> AssetManager::getAsset (const ID<Struct>& id)  throw(cinelerra::error::Invalid);
+  template shared_ptr<Meta>   AssetManager::getAsset (const ID<Meta>&   id)  throw(cinelerra::error::Invalid);
+  
 } // namespace asset

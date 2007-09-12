@@ -21,6 +21,17 @@
 */
 
 
+/** @file media.hpp
+ ** Media data is a specific Kind of Asset.
+ ** For the different <i>Kinds</i> of Assets, we use sub-intefaces inheriting
+ ** from the general Asset interface. To be able to get asset::Media instances
+ ** directly from the AssetManager, we define a specialization of the Asset ID.
+ **
+ ** @see asset.hpp for explanation
+ ** @see MediaFactory creating concrete asset::Media instances
+ **
+ */
+
 #ifndef ASSET_MEDIA_H
 #define ASSET_MEDIA_H
 
@@ -36,7 +47,15 @@ namespace asset
   class MediaFactory;
   
   
+  template<>
+  class ID<Media> : public ID<Asset>
+    {
+    public:
+      ID (size_t id);
+      ID (const Media&);
+    };
 
+    
     
   /**
    * key abstraction: media-like assets
@@ -46,27 +65,29 @@ namespace asset
       string filename_;
       
     public:
-      virtual const ID<Media>& getID()  const { return getID(); }
       static MediaFactory create;
-      const string& getFilename () { return filename_; }
+      const string& getFilename ()  const { return filename_; }
+      
+      virtual const ID<Media>& getID()  const    ///< @return ID of kind Media 
+        { 
+          return static_cast<const ID<Media>& > (Asset::getID()); 
+        }
       
     protected:
       Media (const Asset::Ident& idi, const string& file) : Asset(idi), filename_(file) {}
       friend class MediaFactory;
     };
     
-
+    
     // definition of ID<Media> ctors is possible now,
    //  after providing full definition of class Media
-/*    
-  ID<Media>::ID(size_t id)
-    : ID<Asset> (id)       {};
-    
-  ID<Media>::ID(const Media& media)
-    : ID<Asset> (media.getID()) {};
 
-*/    
-    
+  inline ID<Media>::ID(size_t id)          : ID<Asset> (id)            {};
+  inline ID<Media>::ID(const Media& media) : ID<Asset> (media.getID()) {};
+  
+  
+  
+  
   /** 
    * Factory specialized for createing Media Asset objects.
    */ 
@@ -77,9 +98,11 @@ namespace asset
       
       PType operator() (Asset::Ident& key, const string& file="");
       PType operator() (const string& file, Category& cat);
+      PType operator() (const string& file, asset::Kind);
       
-      PType operator() (Asset::Ident& key, const char* file);  ///< convienience overload using cString
+      PType operator() (Asset::Ident& key, const char* file);  ///< convienience overload using C-String
       PType operator() (const char* file, Category& cat);
+      PType operator() (const char* file, asset::Kind);
       
     protected:
       static void destroy (Media* m) { delete m; }

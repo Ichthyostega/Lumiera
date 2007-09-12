@@ -26,9 +26,28 @@
  ** and the asset::ID primary key wrapper. Normally, Assets should be handled
  ** using asset::PAsset, a ref counting smart pointer.
  ** 
- ** These classes are placed into namespace asset and proc_interface. 
+ ** These classes are placed into namespace asset and proc_interface.
+ **
+ ** Assets are handled by a hierarchy of interfaces. Below the top level Asset interface
+ ** there are interfaces for various different <i>Kinds</i> of Assets, like asset::Media,
+ ** asset::Proc, etc. Code utilizing the specific properties of e.g. Media assets, will
+ ** be implemented directly against the asset::Media interface. To make this feasible 
+ ** while at the same time being able to handle all asset Kinds in a uniform manner, 
+ ** we use a hierarchy of ID classes. These IDs are actually just thin wrappers around 
+ ** a hash value, but they carry a template parameter specifying the Asset Kind and the
+ ** Asset Kind subinterfaces provide a overloaded getID method with a covariant return
+ ** value. For example the asset::Media#getID returns an ID<Media>. By using the
+ ** templated query function AssetManager#getAsset, we can get at references to the more 
+ ** specific subinterface asset::media just by using the ID value in a typesafe manner.
+ ** This helps avoiding dynamic typing and switch-on-type, leading to much more robust,
+ ** extensible and clear code.
+ **
+ ** (Implementation detail: as g++ is not able to handle member function template
+ ** instantiations completely automatic, we need to trigger some template instantiations
+ ** at the end of assetmanager.cpp )
  **
  ** @see assetmanager.hpp
+ ** @see media.hpp
  */
 
 
@@ -70,6 +89,7 @@ namespace asset
    * @see Asset
    * @see AssetManager#getID generating ID values
    * @see asset::Media
+   * @see ID<asset::Media>
    */
   template<class KIND>
   class ID
@@ -85,16 +105,9 @@ namespace asset
   class AssetManager;
   typedef const ID<Asset>& IDA;
 
-  class Media;
   
   
-  template<>
-  class ID<Media> : public ID<Asset>
-    {
-    public:
-      ID (size_t id);
-      ID (const Media&);
-    };
+  
   
   /**
    * Superinterface describing especially bookeeping properties.
@@ -105,7 +118,7 @@ namespace asset
    *     <li>asset::Struct representing structural components used in the sesion (e.g. Tracks)</li>
    *     <li>asset::Meta representing meta objects created while editing (e.g. Automation)</li>
    * </ul> 
-   * And of course, there  are various concret Asset subclasses, like asset::Clip,
+   * And of course there are various concret Asset subclasses, like asset::Clip,
    * asset::Effect, asset::Codec, asset::Track, asset::Dataset.
    * @note Assets objects have a strict unique identity and because of this are non-copyable.
    *       You can not create an Asset derived object without registering it with the AssetManager
@@ -168,7 +181,7 @@ namespace asset
         
       const Ident ident;     ///<  Asset identification tuple
       virtual const ID<Asset>& getID()  const { return id; }
-    private:
+    protected:
       const ID<Asset> id;   ///<   Asset primary key.
 
       
@@ -256,8 +269,8 @@ namespace proc_interface
   {
   using asset::Asset;
   using asset::Category;
-//  using asset::ID;
-//  using asset::IDA;
+  using asset::ID;
+  using asset::IDA;
   using asset::PAsset;
 }
 

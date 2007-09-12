@@ -38,6 +38,7 @@
 
 #include "proc/asset.hpp"
 #include "common/error.hpp"
+#include "common/singleton.hpp"
 
 #include <cstddef>
 #include <string>
@@ -62,7 +63,7 @@ namespace asset
     
     
     public:
-      static AssetManager& instance();
+      static cinelerra::Singleton<AssetManager> instance;
       
       /** provide the unique ID for given Asset::Ident tuple */
       static ID<Asset> getID (const Asset::Ident&);
@@ -90,12 +91,14 @@ namespace asset
        *  @internal used by the Asset base class ctor to create Asset::id.
        */
       template<class KIND>
-      static ID<KIND>  reg (KIND& obj, const Asset::Ident& idi)
+      static ID<KIND>  reg (KIND* obj, const Asset::Ident& idi)
           throw(cinelerra::error::Invalid);
       
       friend Asset::Asset (const Asset::Ident& idi);
       
       AssetManager ();
+      
+      friend class cinelerra::singleton::Static<AssetManager>;
     
     };
 
