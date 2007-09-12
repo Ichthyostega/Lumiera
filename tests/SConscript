@@ -48,7 +48,7 @@ moduledirs = globRootdirs('*')
 
 #
 # have to treat the plugin-example specially.
-isnt_plugin = lambda dir : dir!='plugin'
+isnt_plugin = lambda dir : not (dir=='plugin' or dir=='locking') 
 moduledirs = filter(isnt_plugin, moduledirs)
 pluginExe = treatPluginTestcase(env)
 
