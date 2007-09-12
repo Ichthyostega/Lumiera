@@ -1,0 +1,59 @@
+TESTING "Linked Lists" ./test-llist
+
+TEST "init nodes" basic <<END
+out: 1
+out: 1
+END
+
+TEST "insert nodes" nodeinsert <<END
+out: 0
+out: 0
+out: 1
+out: 0
+out: 1
+out: 1
+out: 1
+out: 1
+out: 3
+END
+
+TEST "remaining predicates" predicates <<END
+out: 1
+out: 1
+out: 0
+out: 0
+out: 1
+out: 1
+out: 0
+out: 1
+out: 0
+out: 0
+END
+
+TEST "unlink" unlink <<END
+out: node4 node3 node2 node1 .
+out: node1 node4 .
+out: 1
+out: 1
+out: 1
+END
+
+TEST "whiles" whiles <<END
+out: node4 node3 node2 node1 .
+out: .
+out: .
+END
+
+
+# not yet tested functions, write tests when needed
+PLANNED "llist_relocate"
+PLANNED "llist_insertlist_next"
+PLANNED "llist_insertlist_prev"
+PLANNED "llist_insertafter_range"
+PLANNED "llist_inserbefore_range"
+PLANNED "llist_advance"
+PLANNED "llist_retreat"
+PLANNED "list_nth"
+PLANNED "llist_get_nth_stop"
+
+

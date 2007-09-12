@@ -1,5 +1,5 @@
 /*
-  locking.h  -  shared declarations for all locking primitives
+  test condition functions
 
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -19,25 +19,31 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef CINELERRA_LOCKING_H
-#define CINELERRA_LOCKING_H
+#include "lib/condition.h"
 
-#include <pthread.h>
-#include <nobug.h>
+#if 0
+waiting_thread()
+{
+  lock;
+  wait;
+  unlock;
+}
 
-#include "lib/error.h"
 
-/**
- * used to store the current lock state.
- *
- *
- */
-enum cinelerra_lockstate
-  {
-    CINELERRA_UNLOCKED,
-    CINELERRA_LOCKED,
-    CINELERRA_RDLOCKED,
-    CINELERRA_WRLOCKED
-  };
-
+signaling_thread()
+{
+  signal();
+}
 #endif
+
+
+int
+conditionforgotunlock ()
+{
+  cinelerra_condition c;
+  cinelerra_condition_init (&c);
+
+  cinelerra_conditionacquirer l;
+  cinelerra_conditionacquirer_init (&l, &c, CINELERRA_LOCKED);
+  return 0;
+}
