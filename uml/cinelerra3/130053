@@ -1,6 +1,6 @@
 format 40
 "asset" // design::codegen::proc::asset
-  revision 4
+  revision 5
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -543,6 +543,45 @@ ${namespace_end}"
 	class_ref 137989 // Track
       end
       comment "structural asset holding the configuration of a track in the EDL"
+    end
+
+    artifact 137861 "db"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 138373 // DB
+      end
+      comment "registry holding known Asset instances."
     end
   end
 end

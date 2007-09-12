@@ -22,10 +22,32 @@
 
 
 #include "proc/asset/category.hpp"
+#include "common/util.hpp"
+#include "nobugcfg.h"
+
+using util::isnil;
 
 namespace asset
   {
-
+  
+  /** human readable representation of the asset::Category.
+   *  @todo to be localized.
+   */
+  Category::operator string ()  const
+  {
+    char *kinds[6] = { "AUDIO"
+                     , "VIDEO"
+                     , "EFFECT"
+                     , "CODEC"
+                     , "STRUCT"
+                     , "META"
+                     };
+    REQUIRE ( 0<=kind_ && kind_< 6 );
+    string str (kinds[kind_]);
+    if (!isnil (path_))
+      str += "/"+path_;
+    return str;
+  }
 
 
 } // namespace asset

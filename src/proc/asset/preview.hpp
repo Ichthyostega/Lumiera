@@ -36,7 +36,9 @@ namespace asset
    */
   class Preview : public Media
     {
-      
+    protected:
+      Preview (const Asset::Ident& idi) : Media(idi,"") {}
+      friend class MediaFactory;
     };
     
     
