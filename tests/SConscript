@@ -19,7 +19,7 @@ def SingleTestExecutableSubdir(env,tree):
     tree = env.subst(tree)  # expand Construction Vars
     exeName = 'test-%s' % tree
     objects = srcSubtree(env,tree)
-    return env.Program(exeName, objects + corelib)
+    return env.Program('#$BINDIR/'+exeName, objects + corelib)
 
 
 def treatPluginTestcase(env):
@@ -30,10 +30,10 @@ def treatPluginTestcase(env):
     prfx = 'plugin/example_plugin'
     oC   = env.SharedObject(prfx,        prfx+'.c')
     oCPP = env.SharedObject(prfx+'_cpp', prfx+'.cpp')
-    testplugin = ( env.SharedLibrary('.libs/example_plugin',     oC,   SHLIBPREFIX='')
-                 + env.SharedLibrary('.libs/example_plugin_cpp', oCPP, SHLIBPREFIX='')
+    testplugin = ( env.SharedLibrary('#$BINDIR/.libs/example_plugin',     oC,   SHLIBPREFIX='')
+                 + env.SharedLibrary('#$BINDIR/.libs/example_plugin_cpp', oCPP, SHLIBPREFIX='')
                  )
-    testExe = env.Program('test-plugin', ['plugin/plugin_main.c'] + corelib)
+    testExe = env.Program('#$BINDIR/test-plugin', ['plugin/plugin_main.c'] + corelib)
     env.Depends(testExe, testplugin)
     return testExe
         #-- it depentds (at the moment) on a specific isolated test-plugin,
@@ -65,7 +65,12 @@ artifacts['testsuite'] = ts = [ SingleTestExecutableSubdir(env, dir) for dir in 
 #  - the product of running the Testsuite is the ",testlog"
 #  - it depends on all artifacts defined as "ts" above
 #
-runTs = env.Command(',testlog', ts, "./test.sh",  chdir=1)
+testEnv = env.Clone()
+testEnv.Append(ENV = {'VALGRINDFLAGS' : 'DISABLE'})
+testDir = env.Dir('#$BINDIR')
+runTest = env.File("test.sh").abspath
+
+runTs = testEnv.Command(',testlog', ts, runTest,  chdir=testDir)
 
 
 

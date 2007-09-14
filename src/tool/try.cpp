@@ -4,24 +4,21 @@
  */ 
 
 // 8/07  - how to control NOBUG??
+//         execute with   NOBUG_LOG='ttt:TRACE' bin/try
 
 
 #include <syslog.h>
 
-#define NOBUG_LOG_LIMIT LOG_ERR
 
 #include <nobug.h>
 
-NOBUG_DECLARE_FLAG(ttt);
-
-NOBUG_DEFINE_FLAG(ttt);
+//NOBUG_CPP_DEFINE_FLAG(ttt);
+NOBUG_CPP_DEFINE_FLAG_LIMIT(ttt, LOG_WARNING);
 
 int main (int argc, char* argv[])
   {
     
     NOBUG_INIT;
-    
-    NOBUG_INIT_FLAG_LIMIT(ttt, LOG_WARNING);
     
     TRACE(ttt,"trace");
     INFO(ttt,"info");
