@@ -54,7 +54,7 @@ namespace util
             testLine("\nspam");
             testLine("eat more spam");
             testLine(" oo _O()O_  ä + €");
-            testLine("\0\too\0\to\0o\t\0oo");
+            testLine("Ω\tooΩ\toΩo\tΩoo");
             
             testStandardCmdlineformat();
           }

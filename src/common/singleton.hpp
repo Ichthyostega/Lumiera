@@ -75,7 +75,7 @@ namespace cinelerra
         {
           if (!pInstance_)
             {
-              ThreadLock guard;
+              ThreadLock guard  SIDEEFFECT;
               if (!pInstance_)
                 {
                   if (isDead_)

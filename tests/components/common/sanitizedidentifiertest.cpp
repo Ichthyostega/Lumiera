@@ -44,13 +44,17 @@ namespace util
           {
             print_clean ("Word");
             print_clean ("a Sentence");
-            print_clean ("with    a   lot  \nof Whitespace");
-            print_clean ("with\"much (punctuation)!");
+            print_clean ("trailing Withespace\n       \t");
+            print_clean ("with    a  \t lot\n  of Whitespace");
+            print_clean ("with\"much (punctuation)[]!");
+            print_clean ("§&Ω%€  leading garbarge");
+            print_clean ("mixed    Ω   garbarge");
             print_clean ("Bääääh!!");
+            print_clean ("§&Ω%€");
           }
         
         /** @test print the original and the sanitized string */
-        void print_clean (const string& org)
+        void print_clean (const string org)
         {
           cout << "'" << org << "' --> '" << sanitize(org) << "'\n";
         }

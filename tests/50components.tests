@@ -41,8 +41,12 @@ out: 2|ä|
 out: 3|+|
 out: 4|€|
 out: -->oo _O()O_ ä + €
-out: wrapping cmdline:...
-out: -->
+out: wrapping cmdline:Ω	ooΩ	oΩo	Ωoo...
+out: 0|Ω|
+out: 1|ooΩ|
+out: 2|oΩo|
+out: 3|Ωoo|
+out: -->Ω ooΩ oΩo Ωoo
 out: Standard Cmdlineformat:one  two
 END
 
@@ -135,7 +139,18 @@ out: --> remaining=SingleTestID spam --eggs
 END
 
 
-PLANNED "SanitizedIdentifier_test" SanitizedIdentifier_test <<END
+TEST "SanitizedIdentifier_test" SanitizedIdentifier_test <<END
+out: 'Word' --> 'Word'
+out: 'a Sentence' --> 'a_Sentence'
+out: 'trailing Withespace
+out:        	' --> 'trailing_Withespace'
+out: 'with    a  	 lot
+out:   of Whitespace' --> 'with_a_lot_of_Whitespace'
+out: 'with"much (punctuation)[]!' --> 'withmuch_(punctuation)'
+out: '§&Ω%€  leading garbarge' --> 'leading_garbarge'
+out: 'mixed    Ω   garbarge' --> 'mixed_garbarge'
+out: 'Bääääh!!' --> 'Bh'
+out: '§&Ω%€' --> ''
 END
 
 
