@@ -181,6 +181,7 @@ namespace asset
         
       const Ident ident;     ///<  Asset identification tuple
       virtual const ID<Asset>& getID()  const { return id; }
+      virtual operator string ()  const;
       
     protected:
       const ID<Asset> id;   ///<   Asset primary key.
@@ -259,6 +260,15 @@ namespace asset
     
     /** shorthand for refcounting Asset pointers */
     typedef shared_ptr<Asset> PAsset;
+    
+    /** convienient for debugging */
+    inline string str (const PAsset& a) 
+      {
+        if (a)
+          return string (*a.get());
+        else
+          return "Asset(NULL)";
+      }
     
     
 

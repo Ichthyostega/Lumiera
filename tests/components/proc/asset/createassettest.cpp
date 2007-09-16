@@ -22,18 +22,17 @@
 
 
 #include "common/test/run.hpp"
-//#include "common/factory.hpp"
 #include "common/util.hpp"
 
 #include "proc/assetmanager.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/proc.hpp"
 
-//#include <boost/format.hpp>
+#include <boost/format.hpp>
 #include <iostream>
 
+using boost::format;
 using util::isnil;
-//using boost::format;
 using std::string;
 using std::cout;
 
@@ -43,7 +42,6 @@ namespace asset
   namespace test
     {
     
-//    typedef Category::Kind Kind;
     
     
     
@@ -56,15 +54,23 @@ namespace asset
         virtual void run(Arg arg) 
           {
             createMedia();
-          } 
+            factoryVariants();
+          }
         
+        typedef shared_ptr<asset::Media> PM;
+        
+        /** @test Creating and automatically registering Asset instances.
+         *        Re-Retrieving the newly created objects from AssetManager.
+         *        Checking AssetManager access functions, esp. getting 
+         *        different kinds of Assets by ID, querying with the
+         *        wrong Category and querying unknown IDs. 
+         */
         void createMedia()
           { 
-            typedef shared_ptr<asset::Media> PM;
             Category cat(VIDEO,"bin1");
             Asset::Ident key("Name-1", cat, "ichthyo", 5);
             PM mm1 = asset::Media::create(key,"testfile.mov");
-            PM mm2 = asset::Media::create(key);
+            PM mm2 = asset::Media::create("testfile1.mov", cat);
             PM mm3 = asset::Media::create("testfile2.mov", VIDEO);
             
             // Assets have been registered and can be retrieved by ID
@@ -91,12 +97,18 @@ namespace asset
                 aMang.getAsset (ID<asset::Proc>(mm1->getID()));
                 NOTREACHED;
               }
-            catch (cinelerra::error::Invalid) { }
+            catch (cinelerra::error::Invalid& exe) {ASSERT (exe.getID()==CINELERRA_ERROR_WRONG_ASSET_KIND);}
+            try 
+              { // try accessing nonexistant ID 
+                aMang.getAsset (ID<Asset> (1234567890));
+                NOTREACHED;
+              }
+            catch (cinelerra::error::Invalid& exe) {ASSERT (exe.getID()==CINELERRA_ERROR_UNKNOWN_ASSET_ID);}
             
             
             // checking the Ident-Fields
             ASSERT (mm1->ident.name == "Name-1");
-            ASSERT (mm2->ident.name == "Name-1");
+            ASSERT (mm2->ident.name == "testfile1");
             ASSERT (mm3->ident.name == "testfile2");
 
             ASSERT (cat == Category (VIDEO,"bin1"));
@@ -105,19 +117,72 @@ namespace asset
             ASSERT (mm3->ident.category == Category (VIDEO       ));
 
             ASSERT (mm1->ident.org == "ichthyo");
-            ASSERT (mm2->ident.org == "ichthyo");
+            ASSERT (mm2->ident.org == "cin3");
             ASSERT (mm3->ident.org == "cin3");
 
             ASSERT (mm1->ident.version == 5);
-            ASSERT (mm2->ident.version == 5);
+            ASSERT (mm2->ident.version == 1);
             ASSERT (mm3->ident.version == 1);
 
             ASSERT (mm1->getFilename() == "testfile.mov");
-            ASSERT (isnil (mm2->getFilename()));
+            ASSERT (mm2->getFilename() == "testfile1.mov");
             ASSERT (mm3->getFilename() == "testfile2.mov");
-/*
-////////////////////////////////////////////////////////////////////////////////TODO fuck the compiler!!!             
-*/
+            
+            showPtr (mm1);
+            showPtr (mm2);
+            showPtr (mm3);
+            showPtr (mX1);
+          }
+        
+        
+        /** @test different variants of calling the MediaFactory,
+         *        with focus on the behaviour of the basic Asset 
+         *        creation machinery. Covers filling out Asset's 
+         *        datafields, amending missing pieces of information.
+         */
+        void factoryVariants()
+          { 
+            PM candi;
+            
+            Asset::Ident key1("Au-1", Category(AUDIO), "ichthyo", 5);
+            candi = asset::Media::create(key1);
+            ASSERT ( checkProperties (candi, key1, ""));
+
+            candi = asset::Media::create(key1, string("testfile.wav"));
+            ASSERT ( checkProperties (candi, key1, "testfile.wav"));
+
+            Asset::Ident key2("", Category(AUDIO), "ichthyo", 5);
+            candi = asset::Media::create(key2, string("testfile2.wav"));
+            ASSERT ( checkProperties (candi, key2, "testfile2.wav"));
+            ASSERT (key2.name == "testfile2"); // name filled in automatically 
+
+            candi = asset::Media::create(string("testfile3.wav"), Category(AUDIO));
+            ASSERT ( checkProperties (candi, Asset::Ident("testfile3", Category(AUDIO), "cin3", 1)
+                                           , "testfile3.wav"));
+
+            candi = asset::Media::create("some/path/testfile4.wav", Category(AUDIO));
+            ASSERT ( checkProperties (candi, Asset::Ident("testfile4", Category(AUDIO), "cin3", 1)
+                                           , "some/path/testfile4.wav"));
+
+            candi = asset::Media::create("", Category(AUDIO,"sub/bin"));
+            ASSERT ( checkProperties (candi, Asset::Ident("nil", Category(AUDIO,"sub/bin"), "cin3", 1)
+                                           , ""));
+
+            candi = asset::Media::create("", AUDIO);
+            ASSERT ( checkProperties (candi, Asset::Ident("nil", Category(AUDIO), "cin3", 1)
+                                           , ""));
+          }
+        
+        bool checkProperties (PM object, Asset::Ident identity, string filename)
+          {
+            return identity == object->ident   
+                && filename == object->getFilename();
+          }
+        
+        void showPtr (PM m)
+          {
+            static format fmt("Asset(%s) .... ptr=%d use-count=%d");
+            cout << fmt % str(m) % &m % m.use_count() << "\n";           
           }
       };
     

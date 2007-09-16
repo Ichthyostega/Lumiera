@@ -103,7 +103,8 @@ namespace asset
       AssetManager ();
       
       friend class cinelerra::singleton::Static<AssetManager>;
-    
+      
+      
     private:
       static void detach_child (PAsset&, IDA);
     };

@@ -97,11 +97,11 @@ namespace asset
       typedef shared_ptr<asset::Media> PType;
       
       PType operator() (Asset::Ident& key, const string& file="");
-      PType operator() (const string& file, Category& cat);
+      PType operator() (const string& file, const Category& cat);
       PType operator() (const string& file, asset::Kind);
       
       PType operator() (Asset::Ident& key, const char* file);  ///< convienience overload using C-String
-      PType operator() (const char* file, Category& cat);
+      PType operator() (const char* file, const Category& cat);
       PType operator() (const char* file, asset::Kind);
 
     };

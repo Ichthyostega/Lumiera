@@ -59,6 +59,13 @@ namespace asset
     static format id_tuple("(%2%:%3%.%1% v%4%)");  // ignoring threadsafety
     return str (id_tuple % name % category % org % version);
   }
+  
+
+  Asset::operator string ()  const
+  {
+    static format id_tuple("Asset(%2%:%3%.%1% v%4%)");  // ignoring threadsafety
+    return str (id_tuple % ident.name % ident.category % ident.org % ident.version);
+  }
 
   
   /** List of entities this asset depends on or requires to be functional. 
