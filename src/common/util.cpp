@@ -39,9 +39,9 @@ namespace util
   typedef boost::function<bool(string::value_type)> ChPredicate;
   ChPredicate operator! (ChPredicate p) { return ! boost::bind(p,_1); }
 
-  // character classes used for sanitizing strings
-  ChPredicate isValid (is_alnum() || is_any_of("-_.:+$'()@"));
-  ChPredicate isPunct (is_space() || is_any_of(",;#*~´`?\\=/&%![]{}"));
+  // character classes used for sanitizing a string
+  ChPredicate isValid (is_alnum() || is_any_of("-_.:+$'()@"));           ///< characters to be retained
+  ChPredicate isPunct (is_space() || is_any_of(",;#*~´`?\\=/&%![]{}")); ///<  punctuation to be replaced by '_'
 
   
   string

@@ -103,9 +103,6 @@ namespace asset
       PType operator() (Asset::Ident& key, const char* file);  ///< convienience overload using C-String
       PType operator() (const char* file, Category& cat);
       PType operator() (const char* file, asset::Kind);
-      
-    protected:
-      static void destroy (Media* m) { delete m; }
 
     };
 

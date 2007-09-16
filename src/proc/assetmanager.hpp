@@ -40,6 +40,7 @@
 #include "common/error.hpp"
 #include "common/singleton.hpp"
 
+
 #include <cstddef>
 #include <string>
 #include <boost/utility.hpp>
@@ -94,13 +95,22 @@ namespace asset
       static ID<KIND>  reg (KIND* obj, const Asset::Ident& idi)
           throw(cinelerra::error::Invalid);
       
+      /** deleter function used by the Asset smart pointers to delet Asset objects */
+      static void destroy (Asset* m) { delete m; }
+      
       friend Asset::Asset (const Asset::Ident& idi);
       
       AssetManager ();
       
       friend class cinelerra::singleton::Static<AssetManager>;
     
+    private:
+      static void detach_child (PAsset&, IDA);
     };
+    
+    
+    CINELERRA_ERROR_DECLARE (UNKNOWN_ASSET_ID);  ///< use of a non-registered Asset ID.
+    CINELERRA_ERROR_DECLARE (WRONG_ASSET_KIND);  ///< Asset ID of wrong Asset kind, unable to cast.
 
 } // namespace asset
 

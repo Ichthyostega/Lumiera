@@ -21,24 +21,84 @@
 */
 
 
+/** @file meta.hpp
+ ** Some Metatdata elements (e.g. Automation Datasets) can be treated as 
+ ** specific Kind of Asset.
+ ** For the different <i>Kinds</i> of Assets, we use sub-intefaces inheriting
+ ** from the general Asset interface. To be able to get asset::Meta instances
+ ** directly from the AssetManager, we define a specialization of the Asset ID.
+ **
+ ** @see asset.hpp for explanation
+ ** @see MetaFactory creating concrete asset::Meta instances
+ **
+ */
+
 #ifndef ASSET_META_H
 #define ASSET_META_H
 
 #include "proc/asset.hpp"
+#include "common/factory.hpp"
 
 
 
 namespace asset
   {
+  
+  class Meta;
+  class MetaFactory;
+  
+  
+  template<>
+  class ID<Meta> : public ID<Asset>
+    {
+    public:
+      ID (size_t id);
+      ID (const Meta&);
+    };
 
-
+    
+    
   /**
    * key abstraction: metadata and organisational asset
+   * @todo just a stub, have to figure out what a asset::Proc is
    */
-  class Meta : public proc_interface::Asset
+  class Meta : public Asset
     {
+    public:
+      static MetaFactory create;
       
+      virtual const ID<Meta>& getID()  const    ///< @return ID of kind Meta 
+        { 
+          return static_cast<const ID<Meta>& > (Asset::getID()); 
+        }
+      
+    protected:
+      Meta (const Asset::Ident& idi) : Asset(idi) {}  //////////////TODO
+      friend class MetaFactory;
     };
+    
+    
+    // definition of ID<Meta> ctors is possible now,
+   //  after providing full definition of class Proc
+
+  inline ID<Meta>::ID(size_t id)        : ID<Asset> (id)           {};
+  inline ID<Meta>::ID(const Meta& meta) : ID<Asset> (meta.getID()) {};
+  
+  
+  
+  
+  /** 
+   * Factory specialized for createing Metadata Asset objects.
+   */ 
+  class MetaFactory : public cinelerra::Factory<asset::Meta>
+    {
+    public:
+      typedef shared_ptr<asset::Meta> PType;
+       
+      PType operator() (Asset::Ident& key);      ////////////TODO define actual operation 
+
+    };
+
     
     
     

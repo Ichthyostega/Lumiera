@@ -33,7 +33,9 @@
 
 namespace asset
   {
-
+  using std::tr1::static_pointer_cast;
+  using std::tr1::dynamic_pointer_cast;
+  
     
   /* ===== hash implementations ===== */
   
@@ -45,14 +47,14 @@ namespace asset
     boost::hash_combine(hash, idi.name);
     boost::hash_combine(hash, idi.category);
     return hash;
-  }  
+  }
   
-  size_t 
+  size_t
   hash_value (const Asset& asset)
   {
     return asset.getID();
   }
-
+  
   
   /** 
    * trivial hash functor.
@@ -66,12 +68,12 @@ namespace asset
       size_t 
       operator() (size_t val) const   { return val; }
     };
-    
+  
   typedef std::tr1::unordered_map<size_t, PAsset, IdentityHash> IdHashtable;
-
-    
-    
-    
+  
+  
+  
+  
   /**
    * Implementation of the registry holding all Asset 
    * instances known to the Asset Manager subsystem. 
@@ -85,6 +87,18 @@ namespace asset
       ~DB ()          {}
       
       friend class cinelerra::singleton::Static<DB>;
+      
+    public:
+      template<class KIND>
+      void  put (ID<KIND> hash, shared_ptr<KIND>& ptr) { table[hash] = static_pointer_cast (ptr);  }
+      void  put (ID<Asset> hash, PAsset& ptr)          { table[hash] = ptr;   }
+      
+      template<class KIND>
+      shared_ptr<KIND> 
+      get (ID<KIND> hash)
+        {
+          return dynamic_pointer_cast<KIND,Asset> (table[hash]);
+        }
     };
   
     

@@ -21,13 +21,37 @@
 * *****************************************************/
 
 
+#include "proc/assetmanager.hpp"
 #include "proc/asset/proc.hpp"
+#include "common/util.hpp"
+#include "nobugcfg.h"
+
 
 namespace asset
   {
   
-  /** */
+  namespace // Implementation details
+  {
+    /** helper: .....*/
+  } 
 
 
-
+  
+  ProcFactory Proc::create;  ///< storage for the static ProcFactory instance
+  
+  
+  
+  /** Factory method for Processor Asset instances. ....
+   *  @todo actually define
+   *  @return an Proc smart ptr linked to the internally registered smart ptr
+   *          created as a side effect of calling the concrete Proc subclass ctor.
+   */
+  ProcFactory::PType 
+  ProcFactory::operator() (Asset::Ident& key) ////TODO
+  {
+    UNIMPLEMENTED ("Proc-Factory");
+  }
+  
+  
+  
 } // namespace asset

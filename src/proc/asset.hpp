@@ -181,6 +181,7 @@ namespace asset
         
       const Ident ident;     ///<  Asset identification tuple
       virtual const ID<Asset>& getID()  const { return id; }
+      
     protected:
       const ID<Asset> id;   ///<   Asset primary key.
 
