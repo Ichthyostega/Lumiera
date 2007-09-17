@@ -28,13 +28,10 @@
 #include "proc/asset/media.hpp"
 #include "proc/asset/proc.hpp"
 
-#include <boost/format.hpp>
-#include <iostream>
+#include "proc/asset/assetdiagnostics.hpp"
 
-using boost::format;
 using util::isnil;
 using std::string;
-using std::cout;
 
 
 namespace asset
@@ -55,6 +52,7 @@ namespace asset
           {
             createMedia();
             factoryVariants();
+            dumpAssetManager();
           }
         
         typedef shared_ptr<asset::Media> PM;
@@ -81,6 +79,9 @@ namespace asset
             
             ASSERT (aMang.getAsset (mm1->getID()) != mm2);
             
+            cout << "== 1 ==\n";
+            dumpAssetManager();
+            
             PAsset aa1 = aMang.getAsset (ID<Asset>(mm1->getID()));   // note we get an Asset ref
             ASSERT (aa1 == mm1);
             PM mX1 = aMang.getAsset (mm1->getID());                // ..and now we get a Media ref
@@ -90,6 +91,9 @@ namespace asset
             ASSERT (aMang.known (mm1->getID()));
             ASSERT (aMang.known (mm2->getID()));
             ASSERT (aMang.known (mm3->getID()));
+            
+            cout << "== 2 ==\n";
+            dumpAssetManager();
             
             ASSERT ( !aMang.known (mm3->getID(), Category(AUDIO))); // not found within AUDIO-Category
             try 
@@ -128,10 +132,12 @@ namespace asset
             ASSERT (mm2->getFilename() == "testfile1.mov");
             ASSERT (mm3->getFilename() == "testfile2.mov");
             
-            showPtr (mm1);
-            showPtr (mm2);
-            showPtr (mm3);
-            showPtr (mX1);
+            dump (mm1);
+            dump (mm2);
+            dump (mm3);
+            dump (mX1);
+            cout << "== 3 ==\n";
+            dumpAssetManager();
           }
         
         
@@ -177,12 +183,6 @@ namespace asset
           {
             return identity == object->ident   
                 && filename == object->getFilename();
-          }
-        
-        void showPtr (PM m)
-          {
-            static format fmt("Asset(%s) .... ptr=%d use-count=%d");
-            cout << fmt % str(m) % &m % m.use_count() << "\n";           
           }
       };
     

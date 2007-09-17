@@ -43,9 +43,11 @@
 
 #include <cstddef>
 #include <string>
+#include <list>
 #include <boost/utility.hpp>
 
 using std::string;
+using std::list;
 
 
 
@@ -86,6 +88,10 @@ namespace asset
       void remove (IDA id)  throw(cinelerra::error::Invalid, 
                                   cinelerra::error::State);
       
+      /** extract a sorted list of all registered Assets */
+      list<PAsset> listContent() const;
+      
+      
       
     protected:
       /** registers an asset object in the internal DB, providing its unique key.
@@ -96,7 +102,8 @@ namespace asset
           throw(cinelerra::error::Invalid);
       
       /** deleter function used by the Asset smart pointers to delet Asset objects */
-      static void destroy (Asset* m) { delete m; }
+      static void destroy (Asset* m) { TRACE (assetmem, "call destroy (Asset(id=%d)) p=%x", m? size_t(m->getID()):0, m ); 
+ delete m; }
       
       friend Asset::Asset (const Asset::Ident& idi);
       

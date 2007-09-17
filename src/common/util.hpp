@@ -81,7 +81,7 @@ namespace util
    */
   template <typename Container, typename Oper>
   inline Oper
-  for_each (Container& c, Oper& doIt)
+  for_each (Container& c, Oper doIt)
   {
     return std::for_each (c.begin(),c.end(), doIt);
   }

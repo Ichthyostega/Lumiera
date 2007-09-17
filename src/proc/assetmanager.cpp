@@ -27,7 +27,7 @@
 #include "common/multithread.hpp"
 #include "common/util.hpp"
 
-#include <boost/lambda/lambda.hpp>
+//#include <boost/lambda/lambda.hpp>
 #include <boost/function.hpp>
 
 #include <boost/format.hpp>
@@ -188,6 +188,17 @@ namespace asset
     vector<PAsset> par = pA->getParents();
     boost::function<void(PAsset&)> func = bind(&detach_child, _1,id ); 
     for_each (par, func); //   ,boost::lambda::var(id)));
+  }
+
+  
+  
+  list<PAsset> 
+  AssetManager::listContent() const
+  {
+    list<PAsset> res;
+    registry.asList (res);
+    res.sort();
+    return res;
   }
 
   

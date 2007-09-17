@@ -99,6 +99,16 @@ namespace asset
         {
           return dynamic_pointer_cast<KIND,Asset> (table[hash]);
         }
+      
+      /** intended for diagnostics */
+      void 
+      asList (list<PAsset>& output) const  
+        { 
+          IdHashtable::const_iterator i = table.begin(); 
+          IdHashtable::const_iterator e = table.end(); 
+          for ( ; i!=e ; ++i )  
+            output.push_back (i->second);
+        }
     };
   
     

@@ -28,13 +28,10 @@
 #include "proc/asset/media.hpp"
 #include "proc/asset/proc.hpp"
 
-#include <boost/format.hpp>
-#include <iostream>
+#include "proc/asset/assetdiagnostics.hpp"
 
-using boost::format;
 using util::isnil;
 using std::string;
-using std::cout;
 
 
 namespace asset
@@ -56,6 +53,7 @@ namespace asset
         virtual void run(Arg arg) 
           {
             createDuplicate();
+            cout << "ausis\n";
           } 
         
         typedef shared_ptr<asset::Media> PM;
@@ -72,8 +70,9 @@ namespace asset
             Asset::Ident idi (mm1->ident);         // duplicate Ident record
             PM mm1X = asset::Media::create (idi); //  note: we actually don't call any ctor
             ASSERT (mm1 == mm1X);                //         instead, we got mm1 back.
-            
+            cout << "usi-v " << mm1.use_count() <<"\n";
             PM mm2 = asset::Media::create (idi,"testfile2.mov");
+            cout << "usi-n " << mm1.use_count() <<"\n";
             ASSERT (mm1->getID() == mm2->getID()); // different object, same hash
 
             AssetManager& aMang = AssetManager::instance();
@@ -87,16 +86,13 @@ namespace asset
             ASSERT (mm1->getFilename() == "testfile1.mov");
             ASSERT (mm2->getFilename() == "testfile2.mov");
             
-            showPtr (mm1);
-            showPtr (mm1X);
-            showPtr (mm2);
+            cout << "use-cnt at end " << mm1.use_count() <<"\n";
+            dump (mm1);
+            dump (mm1X);
+            dump (mm2);
+            dumpAssetManager();
           }
         
-        void showPtr (PM m)
-          {
-            static format fmt("Asset(%s) .... ptr=%d use-count=%d");
-            cout << fmt % str(m) % &m % m.use_count() << "\n";           
-          }
       };
     
     

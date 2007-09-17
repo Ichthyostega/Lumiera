@@ -89,12 +89,22 @@ namespace asset
           boost::hash_combine(hash, cat.kind_);
           boost::hash_combine(hash, cat.path_);
           return hash;
-        }  
+        }
+      
+      int compare (const Category& co)  const
+        {
+          int res = int(kind_) - int(co.kind_);
+          if (1 != res) 
+            return res;
+          else
+            return path_.compare (co.path_);
+        }
 
     };
     
    inline ostream& operator<< (ostream& os, const Category& cago) { return os << string(cago); }
-    
+
+   
     
 } // namespace asset
 #endif
