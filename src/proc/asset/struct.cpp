@@ -21,10 +21,38 @@
 * *****************************************************/
 
 
+#include "proc/assetmanager.hpp"
 #include "proc/asset/struct.hpp"
+#include "common/util.hpp"
+#include "nobugcfg.h"
 
 namespace asset
   {
+  
+  namespace // Implementation details
+  {
+    /** helper: .....*/
+  } 
+
+
+  
+  StructFactory Struct::create;  ///< storage for the static StructFactory instance
+  
+  
+  
+  /** Factory method for Structural Asset instances. ....
+   *  @todo actually define
+   *  @return an Struct smart ptr linked to the internally registered smart ptr
+   *          created as a side effect of calling the concrete Struct subclass ctor.
+   */
+  StructFactory::PType 
+  StructFactory::operator() (Asset::Ident& key) ////TODO
+  {
+    UNIMPLEMENTED ("Struct-Factory");
+  }
+  
+  
+  
 
 
 

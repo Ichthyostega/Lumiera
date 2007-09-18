@@ -25,6 +25,9 @@
 #include "common/util.hpp"
 #include "nobugcfg.h"
 
+#include <boost/algorithm/string.hpp>
+
+using boost::algorithm::starts_with;
 using util::isnil;
 
 namespace asset
@@ -47,6 +50,20 @@ namespace asset
     if (!isnil (path_))
       str += "/"+path_;
     return str;
+  }
+  
+  
+  
+  /** hierarchical inclusion test. 
+   *  @return true if \c this can be considered 
+   *          a subcategory of the given reference
+   */
+  bool 
+  Category::isWithin (const Category& ref) const
+  {
+    return ( ref.hasKind (kind_)
+          && starts_with (path_, ref.path_) 
+           );
   }
 
 

@@ -34,6 +34,7 @@ This code is heavily inspired by
 #ifndef CINELERRA_SINGLETONPOLICIES_H
 #define CINELERRA_SINGLETONPOLICIES_H
 
+#include "common/multithread.hpp"
 #include "common/error.hpp"
 
 #include <vector>
@@ -136,12 +137,7 @@ namespace cinelerra
       struct Multithreaded
         {
           typedef volatile S* VolatileType;
-          class Lock
-            {
-            public:
-              Lock()  { UNIMPLEMENTED ("aquire Thread Lock"); }
-              ~Lock() { UNIMPLEMENTED ("release Thread Lock"); }
-            };
+          typedef cinelerra::Thread::Lock<S> Lock;
         };
       
       

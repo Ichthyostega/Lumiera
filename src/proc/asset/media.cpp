@@ -96,7 +96,7 @@ namespace asset
       }
     ASSERT (pM);
     ENSURE (key.category.hasKind (VIDEO) || key.category.hasKind(AUDIO));
-    ENSURE (isnil (key.name));
+    ENSURE (!isnil (key.name));
     ENSURE (dynamic_cast<Media*>(pM) || (isnil (file) && dynamic_cast<Unknown*>(pM)));
     
     return aMang.getAsset (pM->getID());  // note: because we query with an ID<Media>, 
@@ -108,7 +108,7 @@ namespace asset
    *  providing most of the Asset key fields based on the filename given
    */
   MediaFactory::PType 
-  MediaFactory::operator() (const string& file, Category& cat)
+  MediaFactory::operator() (const string& file, const Category& cat)
   { 
     Asset::Ident key(extractName(file), cat, "cin3", 1);
     return operator() (key, file);
@@ -123,7 +123,7 @@ namespace asset
 
   
   MediaFactory::PType 
-  MediaFactory::operator() (const char* file, Category& cat)
+  MediaFactory::operator() (const char* file, const Category& cat)
   { 
     if (!file) file = "";
     return operator() (string(file),cat);

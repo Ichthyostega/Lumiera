@@ -21,13 +21,37 @@
 * *****************************************************/
 
 
+#include "proc/assetmanager.hpp"
 #include "proc/asset/meta.hpp"
+#include "common/util.hpp"
+#include "nobugcfg.h"
+
 
 namespace asset
   {
   
-  /** */
+  namespace // Implementation details
+  {
+    /** helper: .....*/
+  } 
 
 
-
+  
+  MetaFactory Meta::create;  ///< storage for the static MetaFactory instance
+  
+  
+  
+  /** Factory method for Metadata Asset instances. ....
+   *  @todo actually define
+   *  @return an Meta smart ptr linked to the internally registered smart ptr
+   *          created as a side effect of calling the concrete Meta subclass ctor.
+   */
+  MetaFactory::PType 
+  MetaFactory::operator() (Asset::Ident& key) ////TODO
+  {
+    UNIMPLEMENTED ("Meta-Factory");
+  }
+  
+  
+  
 } // namespace asset

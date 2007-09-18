@@ -81,7 +81,7 @@ namespace util
    */
   template <typename Container, typename Oper>
   inline Oper
-  for_each (Container& c, Oper& doIt)
+  for_each (Container& c, Oper doIt)
   {
     return std::for_each (c.begin(),c.end(), doIt);
   }
@@ -89,14 +89,25 @@ namespace util
   
   
   /** produce an identifier based on the given string.
-   *  remove non-standard-chars, reduce punctuation to underscores
+   *  remove non-standard-chars, reduce sequences of punctuation 
+   *  and whitespace to single underscores. The sanitized string
+   *  will start with an alphanumeric character.
+   * 
+   * @par Example Conversions
+\verbatim 
+   "Word"                             --> 'Word'
+   "a Sentence"                       --> 'a_Sentence'
+   "trailing Withespace  \t \n"       --> 'trailing_Withespace'
+   "with    a   lot  \nof Whitespace" --> 'with_a_lot_of_Whitespace'
+   "with\"much (punctuation)[]!"      --> 'withmuch_(punctuation)'
+   "§&Ω%€  leading garbarge"          --> 'leading_garbarge'
+   "mixed    Ω   garbarge"            --> 'mixed_garbarge'
+   "Bääääh!!"                         --> 'Bh'
+\endverbatim
    */
-  inline string
-  sanitize (const string& org)
-  {
-    UNIMPLEMENTED ("sanitize String");
-    return org; ///////////////////////////TODO
-  }
+  string sanitize (const string& org);
+  
+  
   
   
   /** convienience shortcut: conversion to c-String via string.
@@ -112,6 +123,11 @@ namespace util
 } // namespace util
 
  /* some common macro definitions */
+
+/** supress "warning: unused variable" on vars, which
+ *  are introduced into a scope because of some sideeffect, i.e. Locking
+ */
+#define SIDEEFFECT __attribute__ ((unused));
 
 /** this macro wraps its parameter into a cstring literal */
 #define STRINGIFY(TOKEN) __STRNGFY(TOKEN)

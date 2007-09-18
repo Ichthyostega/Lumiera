@@ -175,17 +175,30 @@ namespace asset
                   && name == other.name 
                   && category == other.category;
             }
+          bool operator!= (const Ident& other)  const
+            {
+              return !operator==(other);
+            }
+          
+          int compare (const Ident& other)  const;
           
           operator string ()  const;
         };
+      
+         
+      /* ===== Asset ID and Datafields ===== */
         
+    public:    
       const Ident ident;     ///<  Asset identification tuple
+
       virtual const ID<Asset>& getID()  const { return id; }
+
+      virtual operator string ()  const;
+      
+      
     protected:
       const ID<Asset> id;   ///<   Asset primary key.
 
-      
-    protected:
       /** additional classification, selections or departments this asset belongs to.
        *  Groups are optional, non-exclusive and may be overlapping.
        */
@@ -206,7 +219,7 @@ namespace asset
        *  Calling this base ctor causes registration with AssetManager.
        */
       Asset (const Ident& idi);
-      virtual ~Asset()           = 0;
+      virtual ~Asset()           = 0;    ///< @note Asset is abstract
       
       /** release all links to other Asset objects held internally.
        *  The lifecycle of Asset objects is managed by smart pointers
@@ -227,6 +240,7 @@ namespace asset
       friend class AssetManager;
 
 
+    
     public:
       /** List of entities this asset depends on or requires to be functional. 
        *  May be empty. The head of this list can be considered the primary prerequisite
@@ -258,6 +272,32 @@ namespace asset
     
     /** shorthand for refcounting Asset pointers */
     typedef shared_ptr<Asset> PAsset;
+    
+    /** ordering of Assets based on Ident tuple */
+    inline bool operator<  (const PAsset& a1, const PAsset& a2) { return a1 && a2 && (-1==a1->ident.compare(a2->ident));}
+    inline bool operator>  (const PAsset& a1, const PAsset& a2) { return   a2 < a1;  }
+    inline bool operator>= (const PAsset& a1, const PAsset& a2) { return !(a1 < a2); }
+    inline bool operator<= (const PAsset& a1, const PAsset& a2) { return !(a1 > a2); }
+
+    /** ordering of Asset Ident tuples.
+     *  @note version is irrelevant */
+    inline int Asset::Ident::compare (const Asset::Ident& oi)  const
+    { 
+      int res;
+      if (1 != (res=category.compare (oi.category)))  return res;
+      if (1 != (res=org.compare (oi.org)))            return res;
+      return name.compare (oi.name);
+    }
+
+    
+    /** convienient for debugging */
+    inline string str (const PAsset& a) 
+    {
+      if (a)
+        return string (*a.get());
+      else
+        return "Asset(NULL)";
+    }
     
     
 
