@@ -2,7 +2,8 @@ TESTING "Component Test Suite: Asset Manager" ./test-components --group=asset
 
 
 
-PLANNED "CreateAsset_test" CreateAsset_test <<END
+TEST "CreateAsset_test" CreateAsset_test <<END
+return: 0
 END
 
 
@@ -11,4 +12,13 @@ END
 
 
 PLANNED "DependantAssets_test" DependantAssets_test <<END
+END
+
+
+TEST "IdentityOfAssets_test" IdentityOfAssets_test <<END
+return: 0
+END
+
+
+PLANNED "OrderingOfAssets_test" OrderingOfAssets_test <<END
 END

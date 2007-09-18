@@ -175,20 +175,30 @@ namespace asset
                   && name == other.name 
                   && category == other.category;
             }
+          bool operator!= (const Ident& other)  const
+            {
+              return !operator==(other);
+            }
+          
           int compare (const Ident& other)  const;
           
           operator string ()  const;
         };
+      
+         
+      /* ===== Asset ID and Datafields ===== */
         
+    public:    
       const Ident ident;     ///<  Asset identification tuple
+
       virtual const ID<Asset>& getID()  const { return id; }
+
       virtual operator string ()  const;
+      
       
     protected:
       const ID<Asset> id;   ///<   Asset primary key.
 
-      
-    protected:
       /** additional classification, selections or departments this asset belongs to.
        *  Groups are optional, non-exclusive and may be overlapping.
        */
@@ -209,7 +219,7 @@ namespace asset
        *  Calling this base ctor causes registration with AssetManager.
        */
       Asset (const Ident& idi);
-      virtual ~Asset()           = 0;
+      virtual ~Asset()           = 0;    ///< @note Asset is abstract
       
       /** release all links to other Asset objects held internally.
        *  The lifecycle of Asset objects is managed by smart pointers
@@ -230,6 +240,7 @@ namespace asset
       friend class AssetManager;
 
 
+    
     public:
       /** List of entities this asset depends on or requires to be functional. 
        *  May be empty. The head of this list can be considered the primary prerequisite

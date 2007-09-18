@@ -56,8 +56,8 @@ namespace asset
         cout << "Asset(NULL)\n";
       else
         {
-          format fmt("%s %|50T.| id=%d sP=%x ptr=%x use-count=%d");
-          cout << fmt % str(aa) % aa->getID() % &aa % aa.get() % aa.use_count() << "\n";           
+          format fmt("%s %|50T.| id=%s  adr=%x smart-ptr=%x use-count=%d");
+          cout << fmt % str(aa) % aa->getID() % aa.get() % &aa % (aa.use_count() - 1) << "\n";
     }   }
  
   inline void dumpAssetManager ()

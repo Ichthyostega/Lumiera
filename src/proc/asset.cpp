@@ -27,6 +27,8 @@
 
 #include <boost/format.hpp>
 
+#include <iostream>
+#include <string>
 
 using boost::format;
 using util::cStr;
@@ -46,12 +48,12 @@ namespace asset
    */
   Asset::Asset (const Ident& idi) 
     : ident(idi), id(AssetManager::reg (this, idi)) 
-  {     TRACE (assetmem, "ctor Asset(id=%d) : %s p=%x", size_t(id), cStr(this->ident), this );
+  {     TRACE (assetmem, "ctor Asset(id=%lu) :  adr=%x %s", size_t(id), this, cStr(this->ident) );
 }
   
   Asset::~Asset ()
   { 
-    TRACE (assetmem, "dtor Asset(id=%d) : %s p=%x", size_t(id), cStr(this->ident), this );
+    TRACE (assetmem, "dtor Asset(id=%lu) :  adr=%x", size_t(id), this );
   }
   
 

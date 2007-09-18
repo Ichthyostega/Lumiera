@@ -53,8 +53,13 @@ namespace asset
         virtual void run(Arg arg) 
           {
             createDuplicate();
-            cout << "ausis\n";
+            
+            if (!isnil (arg))
+              dumpAssetManager();
+            TRACE (assetmem, "leaving IdentityOfAssets_test::run()");
           } 
+        
+        
         
         typedef shared_ptr<asset::Media> PM;
         
@@ -70,9 +75,9 @@ namespace asset
             Asset::Ident idi (mm1->ident);         // duplicate Ident record
             PM mm1X = asset::Media::create (idi); //  note: we actually don't call any ctor
             ASSERT (mm1 == mm1X);                //         instead, we got mm1 back.
-            cout << "usi-v " << mm1.use_count() <<"\n";
+            
             PM mm2 = asset::Media::create (idi,"testfile2.mov");
-            cout << "usi-n " << mm1.use_count() <<"\n";
+            
             ASSERT (mm1->getID() == mm2->getID()); // different object, same hash
 
             AssetManager& aMang = AssetManager::instance();
@@ -86,11 +91,8 @@ namespace asset
             ASSERT (mm1->getFilename() == "testfile1.mov");
             ASSERT (mm2->getFilename() == "testfile2.mov");
             
-            cout << "use-cnt at end " << mm1.use_count() <<"\n";
-            dump (mm1);
-            dump (mm1X);
-            dump (mm2);
-            dumpAssetManager();
+            
+            TRACE (assetmem, "leaving test method scope");
           }
         
       };

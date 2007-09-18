@@ -88,6 +88,7 @@ namespace asset
       
       friend class cinelerra::singleton::Static<DB>;
       
+      
     public:
       template<class KIND>
       void  put (ID<KIND> hash, shared_ptr<KIND>& ptr) { table[hash] = static_pointer_cast (ptr);  }
@@ -95,19 +96,32 @@ namespace asset
       
       template<class KIND>
       shared_ptr<KIND> 
-      get (ID<KIND> hash)
+      get (ID<KIND> hash)  const
         {
-          return dynamic_pointer_cast<KIND,Asset> (table[hash]);
+          return dynamic_pointer_cast<KIND,Asset> (find (hash));
         }
+      
       
       /** intended for diagnostics */
       void 
-      asList (list<PAsset>& output) const  
+      asList (list<PAsset>& output)  const  
         { 
           IdHashtable::const_iterator i = table.begin(); 
           IdHashtable::const_iterator e = table.end(); 
           for ( ; i!=e ; ++i )  
             output.push_back (i->second);
+        }
+      
+    private:
+      const PAsset &
+      find (size_t hash)  const
+        {
+          static const PAsset NULLP;
+          IdHashtable::const_iterator i = table.find (hash);
+          if (i == table.end())
+            return NULLP;  // empty ptr signaling "not found"
+          else
+            return i->second;
         }
     };
   

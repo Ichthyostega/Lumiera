@@ -52,8 +52,13 @@ namespace asset
           {
             createMedia();
             factoryVariants();
-            dumpAssetManager();
+            
+            if (!isnil (arg))
+              dumpAssetManager();
+            TRACE (assetmem, "leaving CreateAsset_test::run()");
           }
+        
+        
         
         typedef shared_ptr<asset::Media> PM;
         
@@ -79,9 +84,6 @@ namespace asset
             
             ASSERT (aMang.getAsset (mm1->getID()) != mm2);
             
-            cout << "== 1 ==\n";
-            dumpAssetManager();
-            
             PAsset aa1 = aMang.getAsset (ID<Asset>(mm1->getID()));   // note we get an Asset ref
             ASSERT (aa1 == mm1);
             PM mX1 = aMang.getAsset (mm1->getID());                // ..and now we get a Media ref
@@ -92,22 +94,19 @@ namespace asset
             ASSERT (aMang.known (mm2->getID()));
             ASSERT (aMang.known (mm3->getID()));
             
-            cout << "== 2 ==\n";
-            dumpAssetManager();
-            
             ASSERT ( !aMang.known (mm3->getID(), Category(AUDIO))); // not found within AUDIO-Category
             try 
               { // can't be found if specifying wrong Asset kind.... 
                 aMang.getAsset (ID<asset::Proc>(mm1->getID()));
                 NOTREACHED;
               }
-            catch (cinelerra::error::Invalid& exe) {ASSERT (exe.getID()==CINELERRA_ERROR_WRONG_ASSET_KIND);}
+            catch (cinelerra::error::Invalid& xxx) {ASSERT (xxx.getID()==CINELERRA_ERROR_WRONG_ASSET_KIND);}
             try 
               { // try accessing nonexistant ID 
                 aMang.getAsset (ID<Asset> (1234567890));
                 NOTREACHED;
               }
-            catch (cinelerra::error::Invalid& exe) {ASSERT (exe.getID()==CINELERRA_ERROR_UNKNOWN_ASSET_ID);}
+            catch (cinelerra::error::Invalid& xxx) {ASSERT (xxx.getID()==CINELERRA_ERROR_UNKNOWN_ASSET_ID);}
             
             
             // checking the Ident-Fields
@@ -132,12 +131,8 @@ namespace asset
             ASSERT (mm2->getFilename() == "testfile1.mov");
             ASSERT (mm3->getFilename() == "testfile2.mov");
             
-            dump (mm1);
-            dump (mm2);
-            dump (mm3);
-            dump (mX1);
-            cout << "== 3 ==\n";
-            dumpAssetManager();
+            
+            TRACE (assetmem, "leaving test method scope");
           }
         
         
