@@ -6,11 +6,11 @@ classcanvas 128005 class_ref 136453 // Asset
   end
 classcanvas 128133 class_ref 136581 // AssetManager
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode class drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 289 26 2000
+  xyz 290 16 2005
   end
 packagecanvas 128517 
-  package_ref 128133 // AssetManager
-    xyzwh 217 182 1994 575 534
+  package_ref 128133 // Asset
+   show_context_mode namespace  xyzwh 217 182 1994 575 534
 classcanvas 128645 class_ref 136709 // Media
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 273 347 2005
@@ -62,6 +62,10 @@ classcanvas 132613 class_ref 138117 // OutPort
 classcanvas 132997 class_ref 138245 // Dataset
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 719 445 2000
+  end
+classcanvas 133253 class_ref 138373 // DB
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 486 233 2000
   end
 relationcanvas 129157 relation_ref 138117 // <realization>
   geometry VHV
@@ -127,7 +131,13 @@ relationcanvas 133125 relation_ref 139781 // <generalisation>
   from ref 132997 z 1999 to ref 129029
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
+relationcanvas 133381 relation_ref 140293 // <unidirectional association>
+  geometry HV
+  from ref 128133 z 1999 to point 506 93
+  line 133637 z 1999 to ref 133253
+  role_a_pos 518 208 3000 no_role_b
+  multiplicity_a_pos 492 208 3000 multiplicity_b_pos 386 104 3000
 line 128261 -_-_ geometry HV
-  from ref 128005 z 1999 to point 330 150
+  from ref 128005 z 1999 to point 331 150
   line 128389 z 1999 to ref 128133
 end

@@ -20,48 +20,112 @@
  
 */
 
+/** @file assetmanager.hpp
+ ** Proc-Layer Interface: Asset Lookup and Organization.
+ ** Declares the AssetManager interface used to access individual 
+ ** Asset instances.
+ ** 
+ ** These classes are placed into namespace asset and proc_interface. 
+ **
+ ** @see asset.hpp
+ ** @see mobject.hpp
+ */
+
 
 #ifndef PROC_INTERFACE_ASSETMANAGER_H
 #define PROC_INTERFACE_ASSETMANAGER_H
 
-#include <string>
 
+#include "proc/asset.hpp"
 #include "common/error.hpp"
+#include "common/singleton.hpp"
 
+
+#include <cstddef>
+#include <string>
+#include <list>
+#include <boost/utility.hpp>
 
 using std::string;
+using std::list;
+
+
+
+namespace asset
+  {
+  
+  class DB;
+  
+  
+  /**
+   * Facade for the Asset subsystem
+   */
+  class AssetManager : private boost::noncopyable
+    {
+      asset::DB & registry;
+    
+    
+    public:
+      static cinelerra::Singleton<AssetManager> instance;
+      
+      /** provide the unique ID for given Asset::Ident tuple */
+      static ID<Asset> getID (const Asset::Ident&);
+      
+      
+      /** find and return corresponging object */
+      template<class KIND>
+      shared_ptr<KIND>  getAsset (const ID<KIND>& id)  throw(cinelerra::error::Invalid);
+      
+      
+      /** @return true if the given id is registered in the internal asset DB  */
+      bool known (IDA id) ;
+      
+      /** @return true if the given id is registered with the given Category  */
+      bool known (IDA id, const Category& cat) ;
+      
+      /**remove the given asset from the internal DB.
+       * <i>together with all its dependants</i> */
+      void remove (IDA id)  throw(cinelerra::error::Invalid, 
+                                  cinelerra::error::State);
+      
+      /** extract a sorted list of all registered Assets */
+      list<PAsset> listContent() const;
+      
+      
+      
+    protected:
+      /** registers an asset object in the internal DB, providing its unique key.
+       *  @internal used by the Asset base class ctor to create Asset::id.
+       */
+      template<class KIND>
+      static ID<KIND>  reg (KIND* obj, const Asset::Ident& idi)
+          throw(cinelerra::error::Invalid);
+      
+      /** deleter function used by the Asset smart pointers to delet Asset objects */
+      static void destroy (Asset* m) { delete m; }
+      
+      friend Asset::Asset (const Asset::Ident& idi);
+      
+      AssetManager ();
+      
+      friend class cinelerra::singleton::Static<AssetManager>;
+      
+      
+    private:
+      static void detach_child (PAsset&, IDA);
+    };
+    
+    
+    CINELERRA_ERROR_DECLARE (UNKNOWN_ASSET_ID);  ///< use of a non-registered Asset ID.
+    CINELERRA_ERROR_DECLARE (WRONG_ASSET_KIND);  ///< Asset ID of wrong Asset kind, unable to cast.
+
+} // namespace asset
+
 
 
 namespace proc_interface
   {
+  using asset::AssetManager;
+}
 
-  /**
-   * Facade for the Asset subsystem
-   */
-  class AssetManager
-    {
-      int bla;
-    public:
-      /** registers an asset object in the internal DB, providing its unique key
-       */
-      static long reg (string& name, string& category, string& org, uint version)
-      ;
-  //      throw(cinelerra::error::Invalid);
-      
-      /** find and return corresponging object */
-      template<class KIND>
-//      void*  /////////////////TODO
-      KIND
-      getAsset (long id)  ;///throw(cinelerra::error::Invalid);
-      
-      /** @return true if the given id is registered in the internal asset DB  */
-      bool known (long id) ;
-      
-      /**remove the given asset from the internal DB.
-       * <i>together with all its dependants</i> 
-       */
-      void remove (long id)  ;///throw(cinelerra::error::Invalid, cinelerra::error::State);
-    };
-
-} // namespace proc_interface
 #endif

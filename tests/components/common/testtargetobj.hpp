@@ -46,7 +46,7 @@ namespace cinelerra
   namespace test
     {
     /**
-     * Target object to be created by the Test-Factory.
+     * Target object to be created by Test-Factories or as Singleton.
      * Allocates a variable amount of additional heap memory
      * and prints diagnostic messages.
      */

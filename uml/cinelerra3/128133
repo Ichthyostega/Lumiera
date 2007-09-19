@@ -1,6 +1,6 @@
 format 40
-"AssetManager" // ProcessingLayer::AssetManager
-  revision 4
+"Asset" // ProcessingLayer::Asset
+  revision 6
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -228,18 +228,13 @@ ${members}};
       explicit_switch_type ""
       
       comment "Facade for the Asset subsystem"
-      operation 132357 "register"
-	class_operation public explicit_return_type "long"
-	nparams 4
-	  param inout name "name" explicit_type "string"
-	  param inout name "category" explicit_type "string"
-	  param inout name "org" explicit_type "string"
-	  param inout name "uint" explicit_type "version"
-	nexceptions 1
-	  explicit_exception "Invalid"
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${t0} & ${p0}, ${t1} & ${p1}, ${t2} & ${p2}, ${t3}& ${p3}${)}${const}${volatile} ${throw}${abstract};"
+      operation 133125 "getID"
+	class_operation public explicit_return_type ""
+	nparams 1
+	  param in name "idi" type class_ref 136453 // Asset
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
 	cpp_def "${comment}${inline}${type}
-${class}::${name} ${(}${t0} & ${p0}, ${t1} & ${p1}, ${t2} & ${p2}, ${t3}& ${p3}${)}${const}${volatile} ${throw}${staticnl}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 {
   ${body}
 }
@@ -247,7 +242,6 @@ ${class}::${name} ${(}${t0} & ${p0}, ${t1} & ${p1}, ${t2} & ${p2}, ${t3}& ${p3}$
 "
 	
 	
-	comment "registers an asset object in the internal DB, providing its unique key"
       end
 
       operation 132485 "getAsset"
@@ -306,6 +300,38 @@ ${class}::${name} ${(}${t0} ${p0}${)}${const}${volatile} ${throw}${staticnl}
 	
 	
 	comment "remove the given asset <i>together with all its dependants</i> from the internal DB"
+      end
+
+      operation 132357 "reg"
+	class_operation protected explicit_return_type "long"
+	nparams 4
+	  param inout name "name" explicit_type "string"
+	  param inout name "category" explicit_type "string"
+	  param inout name "org" explicit_type "string"
+	  param inout name "uint" explicit_type "version"
+	nexceptions 1
+	  explicit_exception "Invalid"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${t0} & ${p0}, ${t1} & ${p1}, ${t2} & ${p2}, ${t3}& ${p3}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${t0} & ${p0}, ${t1} & ${p1}, ${t2} & ${p2}, ${t3}& ${p3}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	comment "registers an asset object in the internal DB, providing its unique key"
+      end
+
+      classrelation 142085 // registry (<unidirectional association>)
+	relation 140293 --->
+	  a role_name "registry" multiplicity "1" protected
+	    comment "@internal Table or DB holding all registered asset instances."
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 142085 // registry (<unidirectional association>)
+	  b multiplicity "1" parent class_ref 138373 // DB
       end
     end
 
@@ -584,6 +610,20 @@ ${inlines}
 	    classrelation_ref 141573 // <generalisation>
 	  b multiplicity "" parent class_ref 137093 // Meta
       end
+    end
+
+    class 138373 "DB"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "Implementation of the registry holding all Asset instances known to the Asset Manager subsystem. As of 8/2007 implemented by a hashtable."
     end
   end
 end

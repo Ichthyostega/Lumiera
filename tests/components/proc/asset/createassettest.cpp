@@ -22,15 +22,16 @@
 
 
 #include "common/test/run.hpp"
-//#include "common/factory.hpp"
-//#include "common/util.hpp"
+#include "common/util.hpp"
 
-//#include <boost/format.hpp>
-#include <iostream>
+#include "proc/assetmanager.hpp"
+#include "proc/asset/media.hpp"
+#include "proc/asset/proc.hpp"
 
-//using boost::format;
+#include "proc/asset/assetdiagnostics.hpp"
+
+using util::isnil;
 using std::string;
-using std::cout;
 
 
 namespace asset
@@ -49,7 +50,135 @@ namespace asset
       {
         virtual void run(Arg arg) 
           {
-          } 
+            createMedia();
+            factoryVariants();
+            
+            if (!isnil (arg))
+              dumpAssetManager();
+            TRACE (assetmem, "leaving CreateAsset_test::run()");
+          }
+        
+        
+        
+        typedef shared_ptr<asset::Media> PM;
+        
+        /** @test Creating and automatically registering Asset instances.
+         *        Re-Retrieving the newly created objects from AssetManager.
+         *        Checking AssetManager access functions, esp. getting 
+         *        different kinds of Assets by ID, querying with the
+         *        wrong Category and querying unknown IDs. 
+         */
+        void createMedia()
+          { 
+            Category cat(VIDEO,"bin1");
+            Asset::Ident key("Name-1", cat, "ichthyo", 5);
+            PM mm1 = asset::Media::create(key,"testfile.mov");
+            PM mm2 = asset::Media::create("testfile1.mov", cat);
+            PM mm3 = asset::Media::create("testfile2.mov", VIDEO);
+            
+            // Assets have been registered and can be retrieved by ID
+            AssetManager& aMang = AssetManager::instance();
+            ASSERT (aMang.getAsset (mm1->getID()) == mm1);
+            ASSERT (aMang.getAsset (mm2->getID()) == mm2);
+            ASSERT (aMang.getAsset (mm3->getID()) == mm3);
+            
+            ASSERT (aMang.getAsset (mm1->getID()) != mm2);
+            
+            PAsset aa1 = aMang.getAsset (ID<Asset>(mm1->getID()));   // note we get an Asset ref
+            ASSERT (aa1 == mm1);
+            PM mX1 = aMang.getAsset (mm1->getID());                // ..and now we get a Media ref
+            ASSERT (mX1 == mm1);
+            ASSERT (mX1 == aa1);
+            
+            ASSERT (aMang.known (mm1->getID()));
+            ASSERT (aMang.known (mm2->getID()));
+            ASSERT (aMang.known (mm3->getID()));
+            
+            ASSERT ( !aMang.known (mm3->getID(), Category(AUDIO))); // not found within AUDIO-Category
+            try 
+              { // can't be found if specifying wrong Asset kind.... 
+                aMang.getAsset (ID<asset::Proc>(mm1->getID()));
+                NOTREACHED;
+              }
+            catch (cinelerra::error::Invalid& xxx) {ASSERT (xxx.getID()==CINELERRA_ERROR_WRONG_ASSET_KIND);}
+            try 
+              { // try accessing nonexistant ID 
+                aMang.getAsset (ID<Asset> (1234567890));
+                NOTREACHED;
+              }
+            catch (cinelerra::error::Invalid& xxx) {ASSERT (xxx.getID()==CINELERRA_ERROR_UNKNOWN_ASSET_ID);}
+            
+            
+            // checking the Ident-Fields
+            ASSERT (mm1->ident.name == "Name-1");
+            ASSERT (mm2->ident.name == "testfile1");
+            ASSERT (mm3->ident.name == "testfile2");
+
+            ASSERT (cat == Category (VIDEO,"bin1"));
+            ASSERT (mm1->ident.category == Category (VIDEO,"bin1"));
+            ASSERT (mm2->ident.category == Category (VIDEO,"bin1"));
+            ASSERT (mm3->ident.category == Category (VIDEO       ));
+
+            ASSERT (mm1->ident.org == "ichthyo");
+            ASSERT (mm2->ident.org == "cin3");
+            ASSERT (mm3->ident.org == "cin3");
+
+            ASSERT (mm1->ident.version == 5);
+            ASSERT (mm2->ident.version == 1);
+            ASSERT (mm3->ident.version == 1);
+
+            ASSERT (mm1->getFilename() == "testfile.mov");
+            ASSERT (mm2->getFilename() == "testfile1.mov");
+            ASSERT (mm3->getFilename() == "testfile2.mov");
+            
+            
+            TRACE (assetmem, "leaving test method scope");
+          }
+        
+        
+        /** @test different variants of calling the MediaFactory,
+         *        with focus on the behaviour of the basic Asset 
+         *        creation machinery. Covers filling out Asset's 
+         *        datafields, amending missing pieces of information.
+         */
+        void factoryVariants()
+          { 
+            PM candi;
+            
+            Asset::Ident key1("Au-1", Category(AUDIO), "ichthyo", 5);
+            candi = asset::Media::create(key1);
+            ASSERT ( checkProperties (candi, key1, ""));
+
+            candi = asset::Media::create(key1, string("testfile.wav"));
+            ASSERT ( checkProperties (candi, key1, "testfile.wav"));
+
+            Asset::Ident key2("", Category(AUDIO), "ichthyo", 5);
+            candi = asset::Media::create(key2, string("testfile2.wav"));
+            ASSERT ( checkProperties (candi, key2, "testfile2.wav"));
+            ASSERT (key2.name == "testfile2"); // name filled in automatically 
+
+            candi = asset::Media::create(string("testfile3.wav"), Category(AUDIO));
+            ASSERT ( checkProperties (candi, Asset::Ident("testfile3", Category(AUDIO), "cin3", 1)
+                                           , "testfile3.wav"));
+
+            candi = asset::Media::create("some/path/testfile4.wav", Category(AUDIO));
+            ASSERT ( checkProperties (candi, Asset::Ident("testfile4", Category(AUDIO), "cin3", 1)
+                                           , "some/path/testfile4.wav"));
+
+            candi = asset::Media::create("", Category(AUDIO,"sub/bin"));
+            ASSERT ( checkProperties (candi, Asset::Ident("nil", Category(AUDIO,"sub/bin"), "cin3", 1)
+                                           , ""));
+
+            candi = asset::Media::create("", AUDIO);
+            ASSERT ( checkProperties (candi, Asset::Ident("nil", Category(AUDIO), "cin3", 1)
+                                           , ""));
+          }
+        
+        bool checkProperties (PM object, Asset::Ident identity, string filename)
+          {
+            return identity == object->ident   
+                && filename == object->getFilename();
+          }
       };
     
     

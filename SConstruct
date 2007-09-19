@@ -62,7 +62,7 @@ def setupBasicEnvironment():
                , BINDIR=BINDIR
                , CPPPATH=["#"+SRCDIR]   # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['-DCINELERRA_VERSION='+VERSION ]  # note: it's a list to append further defines
-               , CCFLAGS='-Wall'
+               , CCFLAGS='-Wall '                                       # -fdiagnostics-show-option 
                )
     
     handleNoBugSwitches(env)

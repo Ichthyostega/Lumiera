@@ -22,48 +22,112 @@
 
 
 #include "proc/asset.hpp"
-#include "proc/asset/category.hpp"
+#include "proc/assetmanager.hpp"
+#include "common/util.hpp"
 
-namespace proc_interface
+#include <boost/format.hpp>
+
+#include <iostream>
+#include <string>
+
+using boost::format;
+using util::cStr;
+
+
+namespace asset
   {
 
+  Asset::Ident::Ident(const string& n, const Category& cat, const string& o, const uint ver) 
+    :   name(util::sanitize (n)), 
+        category(cat), org(o), version(ver)
+  { }
 
+  
+  /** Asset is a Interface class; usually, objects of 
+   *  concrete subclasses are created via specialized Factories
+   */
+  Asset::Asset (const Ident& idi) 
+    : ident(idi), id(AssetManager::reg (this, idi)) 
+  {     TRACE (assetmem, "ctor Asset(id=%lu) :  adr=%x %s", size_t(id), this, cStr(this->ident) );
+}
+  
+  Asset::~Asset ()
+  { 
+    TRACE (assetmem, "dtor Asset(id=%lu) :  adr=%x", size_t(id), this );
+  }
+  
 
-  /**
-   * List of entities this asset depends on or requires to be functional. May be empty. The head of this list can be considered the primary prerequisite
+  Asset::Ident::operator string ()  const
+  {
+    format id_tuple("(%2%:%3%.%1% v%4%)");
+    return str (id_tuple % name % category % org % version);
+  }
+  
+
+  Asset::operator string ()  const
+  {
+    format id_tuple("Asset(%2%:%3%.%1% v%4%)");
+    return str (id_tuple % ident.name % ident.category % ident.org % ident.version);
+  }
+
+  
+  /** List of entities this asset depends on or requires to be functional. 
+   *  May be empty. The head of this list can be considered the primary prerequisite
    */
   vector<PAsset>
-  Asset::getParents ()
+  Asset::getParents ()  const
   {
+    UNIMPLEMENTED ("Asset dependencies.");
+  }
+
+
+  /** All the other assets requiring this asset to be functional. 
+   *  For example, all the clips depending on a given media file.
+   *  May be empty. The dependency relation is transitive.
+   */
+  vector<PAsset>
+  Asset::getDependant ()  const
+  {
+    UNIMPLEMENTED ("Asset dependencies.");
   }
 
 
   /**
-   * All the other assets requiring this asset to be functional. For example, all the clips depending on a given media file. May be empty. The dependency relation is transitive.
-   */
-  vector<PAsset>
-  Asset::getDependant ()
-  {
-  }
-
-
-  /**
-   * weather this asset is swithced on and consequently included in the fixture and participates in rendering
+   * weather this asset is swithced on and consequently included
+   * in the fixture and participates in rendering.
    */
   bool
-  Asset::isActive ()
+  Asset::isActive ()  const
   {
+    UNIMPLEMENTED ("enable/disable Assets.");
   }
 
 
   /**
-   * change the enabled status of this asset. Note the corresponding #isActive predicate may depend on the enablement status of parent assets as well
+   * change the enablement status of this asset. 
+   * @note the corresponding #isActive predicate may depend 
+   *       on the enablement status of parent assets as well.
    */
   void
   Asset::enable ()  throw(cinelerra::error::State)
   {
+    UNIMPLEMENTED ("enable/disable Assets.");
+  }
+  
+  
+  /** release all links to other Asset objects held internally. */
+  void 
+  Asset::unlink ()
+  {
+    UNIMPLEMENTED ("deleting Assets.");
+  }
+      
+  /** variant dropping only the links to the given Asset */
+  void 
+  Asset::unlink (IDA target)
+  {
+    UNIMPLEMENTED ("deleting Assets.");
   }
 
-
-
-} // namespace proc_interface
+  
+} // namespace asset
