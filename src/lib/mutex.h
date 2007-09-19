@@ -79,6 +79,22 @@ cinelerra_mutexacquirer NOBUG_CLEANUP(cinelerra_mutexacquirer_ensureunlocked)
 
 
 /**
+ * initialize a mutexacquirer state without mutex.
+ * @param self mutexacquirer to be initialized, must be an automatic variable
+ * @return self as given
+ * This initialization is used when cinelerra_mutexacquirer_try_mutex shall be used later
+ */
+static inline CinelerraMutexacquirer
+cinelerra_mutexacquirer_init (CinelerraMutexacquirer self)
+{
+  REQUIRE (self);
+  self->mutex = NULL;
+  self->state = CINELERRA_UNLOCKED;
+
+  return self;
+}
+
+/**
  * initialize a mutexacquirer state
  * @param self mutexacquirer to be initialized, must be an automatic variable
  * @param mutex associated mutex
@@ -87,7 +103,7 @@ cinelerra_mutexacquirer NOBUG_CLEANUP(cinelerra_mutexacquirer_ensureunlocked)
  * errors are fatal
  */
 static inline CinelerraMutexacquirer
-cinelerra_mutexacquirer_init (CinelerraMutexacquirer self, CinelerraMutex mutex, enum cinelerra_lockstate state)
+cinelerra_mutexacquirer_init_mutex (CinelerraMutexacquirer self, CinelerraMutex mutex, enum cinelerra_lockstate state)
 {
   REQUIRE (self);
   REQUIRE (mutex);
@@ -99,6 +115,7 @@ cinelerra_mutexacquirer_init (CinelerraMutexacquirer self, CinelerraMutex mutex,
 
   return self;
 }
+
 
 /**
  * lock the mutex.
@@ -119,11 +136,50 @@ cinelerra_mutexacquirer_lock (CinelerraMutexacquirer self)
 
 
 /**
+ * get the state of a lock.
+ * @param self mutexacquirer associated with a mutex variable
+ * @return CINELERRA_LOCKED when the mutex is locked by this thead
+ */
+static inline enum cinelerra_lockstate
+cinelerra_mutexacquirer_state (CinelerraMutexacquirer self)
+{
+  REQUIRE (self);
+  return self->state;
+}
+
+
+/**
+ * try to lock a mutex.
+ * must not already be locked
+ * @param self mutexacquirer associated with a mutex variable
+ * @param mutex pointer to a mutex which should be tried
+ * @return CINELERRA_LOCKED when the mutex got locked
+ */
+static inline enum cinelerra_lockstate
+cinelerra_mutexacquirer_try_mutex (CinelerraMutexacquirer self, CinelerraMutex mutex)
+{
+  REQUIRE (self);
+  REQUIRE (self->state == CINELERRA_UNLOCKED, "mutex already locked");
+
+  self->mutex=mutex;
+  switch (pthread_mutex_trylock (&self->mutex->mutex))
+    {
+    case 0:
+      return self->state = CINELERRA_LOCKED;
+    case EBUSY:
+      return CINELERRA_UNLOCKED;
+    default:
+      CINELERRA_DIE;
+    }
+}
+
+
+/**
  * release mutex.
  * a mutexacquirer must be unlocked before leaving scope
  * @param self mutexacquirer associated with a mutex variable
  */
-static inline int
+static inline void
 cinelerra_mutexacquirer_unlock (CinelerraMutexacquirer self)
 {
   REQUIRE (self);

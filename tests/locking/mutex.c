@@ -27,6 +27,6 @@ int mutexforgotunlock()
   cinelerra_mutex_init (&m);
 
   cinelerra_mutexacquirer l;
-  cinelerra_mutexacquirer_init (&l, &m, CINELERRA_LOCKED);
+  cinelerra_mutexacquirer_init_mutex (&l, &m, CINELERRA_LOCKED);
   return 0;
 }

@@ -23,6 +23,7 @@
 #define CINELERRA_LOCKING_H
 
 #include <pthread.h>
+#include <errno.h>
 #include <nobug.h>
 
 #include "lib/error.h"
