@@ -1,0 +1,8 @@
+TESTING "Strong and Weak references" ./test-references
+
+TEST "references basic functionality" basic <<END
+out: got: 123
+out: destruct: 123
+return: 0
+END
+
