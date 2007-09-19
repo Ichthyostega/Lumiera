@@ -34,26 +34,34 @@ namespace util
   {
   using std::string;
 
+  
+  template <class NUM>
+  inline int
+  sgn (NUM n)
+  {
+    return (n==0)? 0 :((n<0)? -1:+1 );
+  }
+  
 
   /** a family of util functions providing a "no value whatsoever" test.
       Works on strings and all STL containers, includes NULL test for pointers */
   template <class CONT>
   inline bool
-  isnil(const CONT& container)
+  isnil (const CONT& container)
   {
     return container.empty();
   }
   
   template <class CONT>
   inline bool
-  isnil(const CONT* pContainer)
+  isnil (const CONT* pContainer)
   {
     return !pContainer || pContainer->empty();
   }
   
   template <>
   inline bool
-  isnil(const char* pCStr)
+  isnil (const char* pCStr)
   {
     return !pCStr || 0 == std::strlen(pCStr);
   }

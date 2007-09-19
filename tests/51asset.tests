@@ -2,6 +2,15 @@ TESTING "Component Test Suite: Asset Manager" ./test-components --group=asset
 
 
 
+TEST "AssetCategory_test" AssetCategory_test <<END
+out: Category: AUDIO
+out: Category: VIDEO/bin1
+out: Category: VIDEO/bin1/subbin
+out: Category: EFFECT/some_kind
+return: 0
+END
+
+
 TEST "CreateAsset_test" CreateAsset_test <<END
 return: 0
 END

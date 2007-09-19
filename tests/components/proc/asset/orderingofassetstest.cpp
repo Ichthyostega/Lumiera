@@ -84,17 +84,17 @@ namespace asset
             ASSERT (key4 != key5);
             ASSERT (key1 != key5);
 
-            ASSERT (-1 == key2.compare(key3));
-            ASSERT (+1 == key3.compare(key2));
+            ASSERT ( 0 > key2.compare(key3));
+            ASSERT ( 0 < key3.compare(key2));
 
-            ASSERT (-1 == key3.compare(key4));
-            ASSERT (-1 == key4.compare(key5));
-            ASSERT (-1 == key1.compare(key5));
-            ASSERT (-1 == key2.compare(key5));
-            ASSERT (-1 == key3.compare(key5));
-            ASSERT (-1 == key1.compare(key3));
-            ASSERT (-1 == key1.compare(key4));
-            ASSERT (-1 == key2.compare(key4));
+            ASSERT ( 0 > key3.compare(key4));
+            ASSERT ( 0 > key4.compare(key5));
+            ASSERT ( 0 > key1.compare(key5));
+            ASSERT ( 0 > key2.compare(key5));
+            ASSERT ( 0 > key3.compare(key5));
+            ASSERT ( 0 > key1.compare(key3));
+            ASSERT ( 0 > key1.compare(key4));
+            ASSERT ( 0 > key2.compare(key4));
             
             
             // ordering of Asset smart ptrs
