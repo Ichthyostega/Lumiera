@@ -27,8 +27,6 @@
 
 #include <boost/format.hpp>
 
-#include <iostream>
-#include <string>
 
 using boost::format;
 using util::cStr;

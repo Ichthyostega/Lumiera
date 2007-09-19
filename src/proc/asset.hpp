@@ -273,19 +273,22 @@ namespace asset
     /** shorthand for refcounting Asset pointers */
     typedef shared_ptr<Asset> PAsset;
     
-    /** ordering of Assets based on Ident tuple */
+    /** ordering of Asset smart ptrs based on Ident tuple.
+     *  @todo currently supporting only smart_ptr<Asset>. */
+    inline bool operator== (const PAsset& a1, const PAsset& a2) { return a1 && a2 && ( 0==a1->ident.compare(a2->ident));}
     inline bool operator<  (const PAsset& a1, const PAsset& a2) { return a1 && a2 && (-1==a1->ident.compare(a2->ident));}
     inline bool operator>  (const PAsset& a1, const PAsset& a2) { return   a2 < a1;  }
     inline bool operator>= (const PAsset& a1, const PAsset& a2) { return !(a1 < a2); }
     inline bool operator<= (const PAsset& a1, const PAsset& a2) { return !(a1 > a2); }
+    inline bool operator!= (const PAsset& a1, const PAsset& a2) { return !(a1== a2); }
 
     /** ordering of Asset Ident tuples.
      *  @note version is irrelevant */
     inline int Asset::Ident::compare (const Asset::Ident& oi)  const
     { 
       int res;
-      if (1 != (res=category.compare (oi.category)))  return res;
-      if (1 != (res=org.compare (oi.org)))            return res;
+      if (0 != (res=category.compare (oi.category)))  return res;
+      if (0 != (res=org.compare (oi.org)))            return res;
       return name.compare (oi.name);
     }
 
