@@ -90,6 +90,10 @@ classcanvas 138629 class_ref 135173 // Segment
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 417 678 2000
   end
+classcanvas 139013 class_ref 138629 // CompoundClip
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 266 466 2000
+  end
 relationcanvas 128389 relation_ref 128005 // <directional aggregation>
   from ref 128005 z 1999 stereotype "<<list>>" xyz 139 626 3000 to ref 128133
   role_a_pos 201 603 3000 no_role_b
@@ -202,4 +206,8 @@ relationcanvas 138757 relation_ref 137093 // <directional aggregation>
   line 138885 z 1999 to ref 135813
   role_a_pos 524 717 3000 no_role_b
   multiplicity_a_pos 505 783 3000 no_multiplicity_b
+relationcanvas 139141 relation_ref 140805 // <generalisation>
+  from ref 139013 z 1999 to ref 131461
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
 end

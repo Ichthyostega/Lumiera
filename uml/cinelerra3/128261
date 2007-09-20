@@ -1,6 +1,6 @@
 format 40
 "MObject" // ProcessingLayer::MObject
-  revision 17
+  revision 18
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -415,16 +415,37 @@ ${inlines}
 	comment "startpos in source"
       end
 
-      classrelation 141829 // source (<unidirectional association>)
-	relation 140037 --->
-	  a role_name "source" multiplicity "1" const_relation protected
+      classrelation 142469 // source (<unidirectional association>)
+	relation 140677 --->
+	  a role_name "source" multiplicity "1" protected
 	    comment "the media source this clip referes to"
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
-	    classrelation_ref 141829 // source (<unidirectional association>)
-	  b multiplicity "*" parent class_ref 137349 // Clip
-	  association_type class_ref 128901 // Clip
+	    classrelation_ref 142469 // source (<unidirectional association>)
+	  b multiplicity "*" parent class_ref 136709 // Media
       end
+    end
+
+    class 138629 "CompoundClip"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      associated_diagram classdiagram_ref 128133 // Session structure
+      classrelation 142597 // <generalisation>
+	relation 140805 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 142597 // <generalisation>
+	  b multiplicity "" parent class_ref 128901 // Clip
+      end
+
     end
 
     class 129029 "Effect"

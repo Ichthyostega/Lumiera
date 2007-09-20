@@ -3,14 +3,12 @@ diagrams
   classdiagram_ref 130309 // Asset Kinds
     860 607 100 4 120 0
   active  classdiagram_ref 130437 // Media-Asset Relations
-    817 506 100 4 0 0
+    817 506 100 4 0 38
   classdiagram_ref 128133 // Session structure
-    688 506 100 4 60 0
-  classdiagram_ref 128389 // Render Entities
-    688 506 100 4 120 0
+    688 506 100 4 180 80
 end
 show_stereotypes
-selected classdiagram_ref 130437 // Media-Asset Relations
+selected classrelation_ref 143237 // <dependency>
 open
   
   package_ref 128005 // design
@@ -20,7 +18,9 @@ open
   class_ref 136709 // Media
   class_ref 138501 // CompoundMedia
   class_ref 137349 // Clip
-  classview_ref 128005 // Session
+  class_ref 138757 // ProcPatt
+  class_ref 128901 // Clip
+  class_ref 138629 // CompoundClip
   
   package_ref 128389 // RenderEngine
   class_ref 135685 // Logic

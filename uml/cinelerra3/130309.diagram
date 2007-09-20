@@ -13,7 +13,7 @@ packagecanvas 128517
    show_context_mode namespace  xyzwh 217 182 1994 608 534
 classcanvas 128645 class_ref 136709 // Media
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 273 347 2005
+  xyz 259 330 2005
   end
 classcanvas 128773 class_ref 136837 // Proc
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -71,10 +71,14 @@ classcanvas 133765 class_ref 138501 // CompoundMedia
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 245 529 2005
   end
+classcanvas 135813 class_ref 138757 // ProcPatt
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 638 506 2000
+  end
 relationcanvas 129157 relation_ref 138117 // <realization>
   geometry VHV
-  from ref 128645 z 1999 to point 293 315
-  line 129797 z 1999 to point 138 315
+  from ref 128645 z 1999 to point 293 307
+  line 129797 z 1999 to point 138 307
   line 129925 z 1999 to ref 128005
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
@@ -105,15 +109,15 @@ relationcanvas 130949 relation_ref 138629 // <unidirectional association>
   multiplicity_a_pos 260 250 3000 multiplicity_b_pos 194 194 3000
 relationcanvas 131205 relation_ref 138757 // <generalisation>
   geometry VHV
-  from ref 131077 z 1999 to point 339 415
-  line 134277 z 1999 to point 293 415
+  from ref 131077 z 1999 to point 339 423
+  line 134277 z 1999 to point 293 423
   line 134405 z 1999 to ref 128645
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 relationcanvas 131717 relation_ref 139013 // <generalisation>
   geometry VHV
-  from ref 131461 z 2004 to point 411 415
-  line 134021 z 2004 to point 293 415
+  from ref 131461 z 2004 to point 411 423
+  line 134021 z 2004 to point 293 423
   line 134149 z 2004 to ref 128645
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
@@ -155,8 +159,19 @@ relationcanvas 134917 relation_ref 140549 // <directional aggregation>
   from ref 133765 z 2004 stereotype "<<vector>>" xyz 229 493 3000 to point 225 545
   line 135301 z 2004 to point 225 365
   line 135173 z 2004 to ref 128645
-  role_a_pos 230 378 3000 no_role_b
-  multiplicity_a_pos 231 348 3000 multiplicity_b_pos 230 556 3000
+  role_a_pos 217 343 3000 no_role_b
+  multiplicity_a_pos 232 376 3000 multiplicity_b_pos 230 556 3000
+relationcanvas 136069 relation_ref 141189 // <generalisation>
+  from ref 135813 z 1999 to ref 128901
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 136197 relation_ref 141317 // <dependency>
+  from ref 128645 z 1999 to point 324 392
+  line 136581 z 1999 to point 447 392
+  line 136453 z 1999 to point 471 525
+  line 136325 z 1999 to ref 135813
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
 line 128261 -_-_ geometry HV
   from ref 128005 z 1999 to point 331 150
   line 128389 z 1999 to ref 128133

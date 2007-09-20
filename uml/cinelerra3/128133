@@ -1,6 +1,6 @@
 format 40
 "Asset" // ProcessingLayer::Asset
-  revision 7
+  revision 8
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -354,6 +354,46 @@ ${inlines}
 	    classrelation_ref 139909 // <realization>
 	  b multiplicity "" parent class_ref 136453 // Asset
       end
+
+      operation 133253 "createClip"
+	public return_type class_ref 128901 // Clip
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	comment "create a (possibly compound) Clip refering to this media, ready to be added to the EDL."
+      end
+
+      operation 133381 "howtoProc"
+	public return_type class_ref 138757 // ProcPatt
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	comment "@return descriptor how to build a render pipeline corresponding to this media"
+      end
+
+      classrelation 143237 // <dependency>
+	relation 141317 -_->
+	  a default
+	    cpp default "Generated"
+	    classrelation_ref 143237 // <dependency>
+	  b multiplicity "" parent class_ref 138757 // ProcPatt
+      end
     end
 
     class 138501 "CompoundMedia"
@@ -496,6 +536,7 @@ ${inlines}
 	  b multiplicity "*" parent class_ref 136709 // Media
 	  association_type class_ref 136709 // Media
       end
+
     end
 
     class 137477 "Unknown"
@@ -620,6 +661,26 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 141445 // <generalisation>
+	  b multiplicity "" parent class_ref 136965 // Struct
+      end
+    end
+
+    class 138757 "ProcPatt"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 143109 // <generalisation>
+	relation 141189 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 143109 // <generalisation>
 	  b multiplicity "" parent class_ref 136965 // Struct
       end
     end

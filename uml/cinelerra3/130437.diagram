@@ -6,7 +6,7 @@ classcanvas 128005 class_ref 137349 // Clip
   end
 classcanvas 128133 class_ref 136709 // Media
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 545 50 2005
+  xyz 533 42 2005
   end
 classcanvas 128261 class_ref 137477 // Unknown
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -58,15 +58,27 @@ classcanvas 134661 class_ref 133253 // Frame
   end
 packagecanvas 135685 
   package_ref 128261 // MObject
-    xyzwh 24 10 1994 185 313
+    xyzwh 24 10 1994 187 356
 packagecanvas 135813 
   package_ref 128133 // Asset
-    xyzwh 454 10 1994 276 313
+    xyzwh 454 10 1994 367 311
 note 136837 "the Builder implements each Clip by a source node and maybe some codec"
   xyzwh 53 376 2000 219 61
 classcanvas 137221 class_ref 138501 // CompoundMedia
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 606 148 3005
+  end
+classcanvas 138373 class_ref 138629 // CompoundClip
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 72 301 2000
+  end
+classcanvas 138885 class_ref 136965 // Struct
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 758 51 2005
+  end
+classcanvas 139013 class_ref 138757 // ProcPatt
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 751 115 2000
   end
 relationcanvas 128517 relation_ref 139141 // <generalisation>
   from ref 128261 z 1999 to ref 128389
@@ -130,31 +142,44 @@ relationcanvas 135301 relation_ref 134021 // <generalisation>
   no_multiplicity_a no_multiplicity_b
 relationcanvas 135941 relation_ref 139909 // <dependency>
   from ref 130821 z 1999 to point 433 383
-  line 136069 z 1999 to point 433 68
+  line 136069 z 1999 to point 433 25
   line 136197 z 1999 to ref 128133
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
-relationcanvas 136325 relation_ref 140037 // <unidirectional association>
-  from ref 128901 z 1999 to point 224 231
-  line 136709 z 1999 to point 370 166
-  line 136581 z 1999 to ref 128005
-  role_a_pos 382 147 3000 no_role_b
-  multiplicity_a_pos 452 177 3000 multiplicity_b_pos 150 242 3000
 relationcanvas 136965 relation_ref 140165 // <unidirectional association>
   geometry VH
-  from ref 128005 z 1999 to point 489 69
+  from ref 128005 z 1999 to point 489 78
   line 137093 z 1999 to ref 128133
-  role_a_pos 491 49 3000 no_role_b
-  multiplicity_a_pos 524 72 3000 multiplicity_b_pos 477 123 3000
+  role_a_pos 488 56 3000 no_role_b
+  multiplicity_a_pos 516 89 3000 multiplicity_b_pos 477 123 3000
 relationcanvas 137349 relation_ref 140421 // <generalisation>
   from ref 137221 z 1999 to ref 128133
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 relationcanvas 137477 relation_ref 140549 // <directional aggregation>
-  from ref 137221 z 1999 to point 654 68
-  line 137733 z 1999 stereotype "<<vector>>" xyz 662 113 3000 to ref 128133
-  role_a_pos 602 48 3000 no_role_b
-  multiplicity_a_pos 605 72 3000 multiplicity_b_pos 642 123 3000
-line 136453 -_-_
-  from ref 136325 z 1998 to ref 128901
+  from ref 137221 z 1999 to point 654 77
+  line 137733 z 1999 stereotype "<<vector>>" xyz 670 122 3000 to ref 128133
+  role_a_pos 615 55 3000 no_role_b
+  multiplicity_a_pos 590 122 3000 multiplicity_b_pos 642 123 3000
+relationcanvas 137861 relation_ref 140677 // <unidirectional association>
+  from ref 128901 z 1999 to point 218 232
+  line 138245 z 1999 to point 383 49
+  line 137989 z 1999 to point 492 49
+  line 138117 z 1999 to ref 128133
+  role_a_pos 488 44 3000 no_role_b
+  multiplicity_a_pos 516 77 3000 multiplicity_b_pos 149 235 3000
+relationcanvas 138501 relation_ref 140805 // <generalisation>
+  from ref 138373 z 1999 to ref 128901
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 139141 relation_ref 141189 // <generalisation>
+  from ref 139013 z 1999 to ref 138885
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 139397 relation_ref 141317 // <dependency>
+  from ref 128133 z 1999 to point 599 104
+  line 140165 z 1999 to point 697 104
+  line 139781 z 1999 to ref 139013
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
 end
