@@ -3,13 +3,14 @@
 ## SConscript  -  SCons buildscript for the Testsuite (called by SConstruct)
 ##
 
+from os import path
 from Buildhelper import srcSubtree
 from Buildhelper import globRootdirs
 
 Import('env','artifacts','corelib')
 
 
-def SingleTestExecutableSubdir(env,tree):
+def testExecutable(env,tree, exeName=None, obj=None):
     """ declare all targets needed to create a standalone
         Test executalbe of the given Sub-tree. Note that
         each subdir is built in its own Environment.
@@ -17,9 +18,13 @@ def SingleTestExecutableSubdir(env,tree):
     env = env.Clone()
     env.Append(CPPPATH=tree) # add Subdir to Includepath 
     tree = env.subst(tree)  # expand Construction Vars
-    exeName = 'test-%s' % tree
-    objects = srcSubtree(env,tree)
-    return env.Program('#$BINDIR/'+exeName, objects + corelib)
+    if obj:
+        obj = [path.join(tree,name) for name in obj]
+    else:
+        obj = srcSubtree(env,tree) # use all sourcefiles found in subtree
+    if not exeName:
+        exeName = 'test-%s' % tree
+    return env.Program('#$BINDIR/'+exeName, obj + corelib)
 
 
 def treatPluginTestcase(env):
@@ -46,13 +51,16 @@ def treatPluginTestcase(env):
 # build a Test-Executable out of every subdir...
 moduledirs = globRootdirs('*')
 
-#
-# have to treat the plugin-example specially.
-isnt_plugin = lambda dir : not (dir=='plugin' or dir=='locking') 
-moduledirs = filter(isnt_plugin, moduledirs)
-pluginExe = treatPluginTestcase(env)
+# but have to treat some subdirs individually.
+specials = ['plugin','locking','library']
 
-artifacts['testsuite'] = ts = [ SingleTestExecutableSubdir(env, dir) for dir in moduledirs] + pluginExe 
+
+
+artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in moduledirs if not dir in specials] 
+                              + treatPluginTestcase(env)
+                              + testExecutable(env, 'library', exeName='test-llist', obj=['test-llist.c'])
+                              + testExecutable(env, 'library', exeName='test-references', obj=['test-references.c'])
+                              ) 
                               
 
 
