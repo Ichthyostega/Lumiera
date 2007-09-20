@@ -94,7 +94,7 @@ namespace asset
       int compare (const Category& co)  const
         {
           int res = int(kind_) - int(co.kind_);
-          if (1 != res) 
+          if (0 != res) 
             return res;
           else
             return path_.compare (co.path_);

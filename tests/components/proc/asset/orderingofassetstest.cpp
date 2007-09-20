@@ -45,28 +45,36 @@ namespace asset
     /******************************************************
      * @test validate the equality and order relations of 
      *       Asset::Ident and Asset objects.
+     * @note a known problem is that only Asset smart ptrs
+     *       are supported for comparison, not smartptrs
+     *       of Asset subclasses. To solve this, we would
+     *       either have to repeat the operator definitions,
+     *       or resort to template metaprogramming tricks.
+     *       Just providing templated comparison operators
+     *       would generally override the behaviour of 
+     *       boost::shared_ptr, which is not desirable. 
      * @see  Asset::Ident#compare
      */
     class OrderingOfAssets_test : public Test
       {
         virtual void run(Arg arg) 
           {
-            typedef shared_ptr<asset::Media> PM;
+            typedef shared_ptr<Asset> PA;
             
             Asset::Ident key1("Au-1", Category(AUDIO), "ichthyo", 5);
-            PM mm1 = asset::Media::create(key1, "Name-1");
+            PA mm1 = asset::Media::create(key1, "Name-1");
             
             Asset::Ident key2("Au-1", Category(AUDIO), "ichthyo", 7);
-            PM mm2 = asset::Media::create(key2, "Name-2");
+            PA mm2 = asset::Media::create(key2, "Name-2");
             
             Asset::Ident key3("Au-2", Category(AUDIO), "ichthyo", 5);
-            PM mm3 = asset::Media::create(key3, "Name-3");
+            PA mm3 = asset::Media::create(key3, "Name-3");
             
             Asset::Ident key4("Au-2", Category(AUDIO), "stega", 5);
-            PM mm4 = asset::Media::create(key4, "Name-4");
+            PA mm4 = asset::Media::create(key4, "Name-4");
             
             Asset::Ident key5("Au-1", Category(VIDEO), "ichthyo", 5);
-            PM mm5 = asset::Media::create(key5, "Name-5");
+            PA mm5 = asset::Media::create(key5, "Name-5");
             
             
             // ordering of keys
@@ -76,17 +84,17 @@ namespace asset
             ASSERT (key4 != key5);
             ASSERT (key1 != key5);
 
-            ASSERT (-1 == key2.compare(key3));
-            ASSERT (+1 == key3.compare(key2));
+            ASSERT ( 0 > key2.compare(key3));
+            ASSERT ( 0 < key3.compare(key2));
 
-            ASSERT (-1 == key3.compare(key4));
-            ASSERT (-1 == key4.compare(key5));
-            ASSERT (-1 == key1.compare(key5));
-            ASSERT (-1 == key2.compare(key5));
-            ASSERT (-1 == key3.compare(key5));
-            ASSERT (-1 == key1.compare(key3));
-            ASSERT (-1 == key1.compare(key4));
-            ASSERT (-1 == key2.compare(key4));
+            ASSERT ( 0 > key3.compare(key4));
+            ASSERT ( 0 > key4.compare(key5));
+            ASSERT ( 0 > key1.compare(key5));
+            ASSERT ( 0 > key2.compare(key5));
+            ASSERT ( 0 > key3.compare(key5));
+            ASSERT ( 0 > key1.compare(key3));
+            ASSERT ( 0 > key1.compare(key4));
+            ASSERT ( 0 > key2.compare(key4));
             
             
             // ordering of Asset smart ptrs
@@ -111,7 +119,6 @@ namespace asset
             ASSERT (mm2 < mm4);
 
           }
-        
       };
     
     
