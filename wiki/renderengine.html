@@ -558,6 +558,9 @@ is how to implement the relationship between [[MObject]]s and Assets. Do we use 
 
 For every Asset we generate a __Ident tuple__ and a long ID (hash) derived from this Ident tuple. The constructor of the abstract base class {{{Asset}}} takes care of this step and automatically registeres the new Asset object with the AssetManager. Typically, the factory methods for concrete Asset classes provide some shortcuts providing sensible default values for some of the Ident tuple data fields. They may take additional parameters &amp;mdash; for example the factory method for creating {{{asset::Media}}} takes a filename (and may at some point in the future aply &quot;magic&quot; based on examination of the file)</pre>
 </div>
+<div title="AssetManager" modifier="Ichthyostega" created="200709200300" changecount="1">
+<pre>The Asset Manager provides an Interface to some internal Database holding all Assets in the current Session and System state. It may be a real Database at some point (and for the moment it's a Hashtable). Each [[Asset]] is registered automatically with the Asset Manager; it can be queried either by it's //identification tuple// or by it's unique ID.</pre>
+</div>
 <div title="Automation" modifier="Ichthyostega" modified="200708100315" created="200706250751" tags="def" changecount="5">
 <pre>Automation is treated as a function over time. It is always tied to a specific Parameter (which can thus be variable over the course of the timeline). All details //how// this function is defined are completely abstracted away. The Parameter uses a ParamProvider to get the value for a given Time (point). Typically, this will use linear or bezier interpolation over a set of keyframes internally. Parameters can be configured to have different value ranges and distribution types (on-off, stepped, continuous, bounded)
 
@@ -948,13 +951,14 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200709040256" created="200708080322" tags="overview" changecount="6">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200709200223" created="200708080322" tags="overview" changecount="7">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Cinelerra Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
 * [[Memory Management Issues|MemoryManagement]]
 * [[Creating and registering Assets|AssetCreation]]
 * [[Creating new Objects|ObjectCreation]]
+* [[Multichannel Media|MultichannelMedia]]
 
 </pre>
 </div>
@@ -1386,6 +1390,18 @@ For the case in question this seems to be the ''resource allocation is construct
 !using Factories
 And, last but not least, doing all actual allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides that, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot;, rather it should use some central [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
+</div>
+<div title="MultichannelMedia" modifier="Ichthyostega" created="200709200255" tags="design" changecount="2">
+<pre>Based on practical experiences, Ichthyo tends to consider Multichannel Media as the base case, while counting media files providing just one single media stream as exotic corner cases. This may seem counter intuitive at first sight; you should think of  it as an attempt to avoid right from start some of the common shortcomings found in many video editors, especially
+* having to deal with keeping a &quot;link&quot; between audio and video clips
+* silly limitations on the supported audio setups (e.g. mono, stereo and 5.1)
+* unnecessary complexity when dealing with more realistic setups, esp. when dealing with dialogue scenes
+* inability to edit stereoscopic (3D) video in a natural fashion
+
+!Compound Media
+Basically, each [[media asset|MediaAsset]] is considered to be a compound of several elementary media (tracks), possibly of various different media kinds. Adding support for placeholders (''proxy clips'') at some point in future will add still more complexity (because then there will be even dependencies between some of these elementary media). We try to keep the structural limitations necessary to be able to handle, edit and render compound media to the bare minimum. This is only possible, if we try to configure as much as possible already at the &quot;asset level&quot; and make the rest of the proc layer behave just according to the configuration given with each asset.
+
+So, when creating a clip out of such a compound media asset, the clip has to be a compound of elementary clips mirroring the given media asset's structure. Besides, it should be possible to //detach// and //attach// elementary clips from a compound clip. On the other hand, the [[Fixture]] created from the current state of the [[EDL]] is explicit to a great extent. So, in the Fixture we deal only with elementary clips placed to absolute positions, and thus the builder will see only simple non-compound clips and translate them into the corresponding source reading nodes.</pre>
 </div>
 <div title="ObjectCreation" modifier="Ichthyostega" modified="200709040257" created="200709030139" tags="impl design" changecount="10">
 <pre>We have to consider carefully how to handle the Creation of new class instances. Because, when done naively, it can defeat all efforts of separating subsystems, or &amp;mdash; the other extreme &amp;mdash; lead to a //switch-on-typeID//  programming style. We strive at a solution somewhere in the middle by utilizing __Abstract Factories__ on Interface or key abstraction classes, but providing specialized overloads for the different use cases. So in each use case we have to decide if we want to create a representant of some general concept (Interface), or if we have a direct colaboration and thus need the Factory to provide

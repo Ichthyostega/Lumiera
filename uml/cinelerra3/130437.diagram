@@ -60,10 +60,14 @@ packagecanvas 135685
   package_ref 128261 // MObject
     xyzwh 24 10 1994 185 313
 packagecanvas 135813 
-  package_ref 128133 // AssetManager
-    xyzwh 454 10 1994 198 292
+  package_ref 128133 // Asset
+    xyzwh 454 10 1994 276 313
 note 136837 "the Builder implements each Clip by a source node and maybe some codec"
   xyzwh 53 376 2000 219 61
+classcanvas 137221 class_ref 138501 // CompoundMedia
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 606 148 3005
+  end
 relationcanvas 128517 relation_ref 139141 // <generalisation>
   from ref 128261 z 1999 to ref 128389
   no_role_a no_role_b
@@ -142,6 +146,15 @@ relationcanvas 136965 relation_ref 140165 // <unidirectional association>
   line 137093 z 1999 to ref 128133
   role_a_pos 491 49 3000 no_role_b
   multiplicity_a_pos 524 72 3000 multiplicity_b_pos 477 123 3000
+relationcanvas 137349 relation_ref 140421 // <generalisation>
+  from ref 137221 z 1999 to ref 128133
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 137477 relation_ref 140549 // <directional aggregation>
+  from ref 137221 z 1999 to point 654 68
+  line 137733 z 1999 stereotype "<<vector>>" xyz 662 113 3000 to ref 128133
+  role_a_pos 602 48 3000 no_role_b
+  multiplicity_a_pos 605 72 3000 multiplicity_b_pos 642 123 3000
 line 136453 -_-_
   from ref 136325 z 1998 to ref 128901
 end

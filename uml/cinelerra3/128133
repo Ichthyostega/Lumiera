@@ -1,6 +1,6 @@
 format 40
 "Asset" // ProcessingLayer::Asset
-  revision 6
+  revision 7
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -353,6 +353,39 @@ ${inlines}
 	    cpp default "${type}"
 	    classrelation_ref 139909 // <realization>
 	  b multiplicity "" parent class_ref 136453 // Asset
+      end
+    end
+
+    class 138501 "CompoundMedia"
+      visibility public 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "compound of several elementary media tracks,
+e.g. the individual media streams found in one media file"
+      classrelation 142213 // <generalisation>
+	relation 140421 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 142213 // <generalisation>
+	  b multiplicity "" parent class_ref 136709 // Media
+      end
+
+      classrelation 142341 // tracks (<directional aggregation>)
+	relation 140549 o-->
+	  stereotype "vector"
+	  a role_name "tracks" multiplicity "1..*" protected
+	    comment "elementary media assets comprising this compound"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type} *> ${name}${value};
+"
+	    classrelation_ref 142341 // tracks (<directional aggregation>)
+	  b multiplicity "*" parent class_ref 136709 // Media
       end
     end
 

@@ -16,6 +16,10 @@ return: 0
 END
 
 
+PLANNED "CompoundMedia_test" CompoundMedia_test <<END
+END
+
+
 PLANNED "DeleteAsset_test" DeleteAsset_test <<END
 END
 
@@ -26,6 +30,10 @@ END
 
 TEST "IdentityOfAssets_test" IdentityOfAssets_test <<END
 return: 0
+END
+
+
+PLANNED "MediaStructureQuery_test" MediaStructureQuery_test <<END
 END
 
 
