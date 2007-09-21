@@ -1,6 +1,6 @@
 format 40
 "Asset" // ProcessingLayer::Asset
-  revision 8
+  revision 10
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -390,7 +390,7 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
       classrelation 143237 // <dependency>
 	relation 141317 -_->
 	  a default
-	    cpp default "Generated"
+	    cpp default "#include in header"
 	    classrelation_ref 143237 // <dependency>
 	  b multiplicity "" parent class_ref 138757 // ProcPatt
       end
@@ -536,7 +536,6 @@ ${inlines}
 	  b multiplicity "*" parent class_ref 136709 // Media
 	  association_type class_ref 136709 // Media
       end
-
     end
 
     class 137477 "Unknown"
@@ -718,6 +717,26 @@ ${inlines}
       explicit_switch_type ""
       
       comment "Implementation of the registry holding all Asset instances known to the Asset Manager subsystem. As of 8/2007 implemented by a hashtable."
+    end
+
+    class 138885 "SimpleClip"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 143365 // <generalisation>
+	relation 141445 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 143365 // <generalisation>
+	  b multiplicity "" parent class_ref 128901 // Clip
+      end
     end
   end
 end

@@ -70,7 +70,7 @@ classcanvas 137221 class_ref 138501 // CompoundMedia
   end
 classcanvas 138373 class_ref 138629 // CompoundClip
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 72 301 2000
+  xyz 110 293 2000
   end
 classcanvas 138885 class_ref 136965 // Struct
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -79,6 +79,10 @@ classcanvas 138885 class_ref 136965 // Struct
 classcanvas 139013 class_ref 138757 // ProcPatt
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 751 115 2000
+  end
+classcanvas 140293 class_ref 138885 // SimpleClip
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 32 293 3005
   end
 relationcanvas 128517 relation_ref 139141 // <generalisation>
   from ref 128261 z 1999 to ref 128389
@@ -150,7 +154,7 @@ relationcanvas 136965 relation_ref 140165 // <unidirectional association>
   geometry VH
   from ref 128005 z 1999 to point 489 78
   line 137093 z 1999 to ref 128133
-  role_a_pos 488 56 3000 no_role_b
+  role_a_pos 475 61 3000 no_role_b
   multiplicity_a_pos 516 89 3000 multiplicity_b_pos 477 123 3000
 relationcanvas 137349 relation_ref 140421 // <generalisation>
   from ref 137221 z 1999 to ref 128133
@@ -158,7 +162,7 @@ relationcanvas 137349 relation_ref 140421 // <generalisation>
   no_multiplicity_a no_multiplicity_b
 relationcanvas 137477 relation_ref 140549 // <directional aggregation>
   from ref 137221 z 1999 to point 654 77
-  line 137733 z 1999 stereotype "<<vector>>" xyz 670 122 3000 to ref 128133
+  line 137733 z 1999 stereotype "<<vector>>" xyz 658 123 3000 to ref 128133
   role_a_pos 615 55 3000 no_role_b
   multiplicity_a_pos 590 122 3000 multiplicity_b_pos 642 123 3000
 relationcanvas 137861 relation_ref 140677 // <unidirectional association>
@@ -166,7 +170,7 @@ relationcanvas 137861 relation_ref 140677 // <unidirectional association>
   line 138245 z 1999 to point 383 49
   line 137989 z 1999 to point 492 49
   line 138117 z 1999 to ref 128133
-  role_a_pos 488 44 3000 no_role_b
+  role_a_pos 392 51 3000 no_role_b
   multiplicity_a_pos 516 77 3000 multiplicity_b_pos 149 235 3000
 relationcanvas 138501 relation_ref 140805 // <generalisation>
   from ref 138373 z 1999 to ref 128901
@@ -182,4 +186,13 @@ relationcanvas 139397 relation_ref 141317 // <dependency>
   line 139781 z 1999 to ref 139013
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
+relationcanvas 140421 relation_ref 141445 // <generalisation>
+  from ref 140293 z 1999 to ref 128901
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 140549 relation_ref 141573 // <directional aggregation>
+  from ref 138373 z 1999 to point 154 263
+  line 140677 z 1999 to ref 128901
+  role_a_pos 149 247 3000 no_role_b
+  multiplicity_a_pos 160 260 3000 multiplicity_b_pos 142 268 3000
 end

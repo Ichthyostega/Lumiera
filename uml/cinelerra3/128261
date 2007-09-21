@@ -1,6 +1,6 @@
 format 40
 "MObject" // ProcessingLayer::MObject
-  revision 18
+  revision 19
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -446,6 +446,14 @@ ${inlines}
 	  b multiplicity "" parent class_ref 128901 // Clip
       end
 
+      classrelation 143493 // components (<directional aggregation>)
+	relation 141573 o-->
+	  a role_name "components" multiplicity "1..*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 143493 // components (<directional aggregation>)
+	  b multiplicity "*" parent class_ref 128901 // Clip
+      end
     end
 
     class 129029 "Effect"
