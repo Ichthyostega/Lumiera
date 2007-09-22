@@ -16,8 +16,7 @@ open
   
   package_ref 128005 // design
   classview_ref 128901 // Assets
-  classview_ref 128133 // Engine Workings
+  classview_ref 128005 // Session
   classview_ref 129029 // Interface
-  componentview_ref 128266 // FileMapping
 end
 end

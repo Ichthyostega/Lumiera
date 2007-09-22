@@ -1,6 +1,6 @@
 format 40
 "Asset" // ProcessingLayer::Asset
-  revision 12
+  revision 13
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -433,7 +433,7 @@ ${inlines}
       classrelation 144261 // <dependency>
 	relation 142341 -_->
 	  a default
-	    cpp default "Generated"
+	    cpp default "#include in header"
 	    classrelation_ref 144261 // <dependency>
 	  b multiplicity "" parent class_ref 139525 // MediaAccessFacade
       end
@@ -727,6 +727,7 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
+      comment "special type of structural Asset representing information how to build some part of the render engine's processing nodes network."
       classrelation 143109 // <generalisation>
 	relation 141189 ---|>
 	  a public
@@ -781,26 +782,6 @@ ${inlines}
       comment "Implementation of the registry holding all Asset instances known to the Asset Manager subsystem. As of 8/2007 implemented by a hashtable."
     end
 
-    class 138885 "SimpleClip"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
-      classrelation 143365 // <generalisation>
-	relation 141445 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 143365 // <generalisation>
-	  b multiplicity "" parent class_ref 128901 // Clip
-      end
-    end
-
     class 139013 "BuildInstruct"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
@@ -812,6 +793,7 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
+      comment "(Interface) building instructions to be executed by the Builder on the render node network under construction."
     end
 
     class 139141 "DoAttach"

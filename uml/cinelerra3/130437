@@ -1,6 +1,6 @@
 format 40
 "session" // design::codegen::proc::mobject::session
-  revision 6
+  revision 7
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -314,6 +314,84 @@ ${namespace_end}"
 	class_ref 128901 // Clip
       end
       comment "a Media Clip"
+    end
+
+    artifact 138373 "simpleclip"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 138885 // SimpleClip
+      end
+      comment "Elementary clip (single media stream only)"
+    end
+
+    artifact 138501 "compoundclip"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 138629 // CompoundClip
+      end
+      comment "compound of several clips (multichannel)"
     end
 
     artifact 129541 "effect"

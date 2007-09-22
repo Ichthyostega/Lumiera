@@ -1,6 +1,6 @@
 format 40
 "asset" // design::codegen::proc::asset
-  revision 6
+  revision 7
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -312,6 +312,46 @@ ${namespace_end}"
       comment "bookkeeping (asset) view of a media clip."
     end
 
+    artifact 138245 "compoundmedia"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 138501 // CompoundMedia
+      end
+      comment "a special clip as a compound of several elementary media tracks,
+e.g. the individual media streams found in one media file"
+    end
+
     artifact 136965 "preview"
       stereotype "source"
       cpp_h "/*
@@ -544,6 +584,86 @@ ${namespace_end}"
 	class_ref 137989 // Track
       end
       comment "structural asset holding the configuration of a track in the EDL"
+    end
+
+    artifact 137989 "procpatt"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 138757 // ProcPatt
+      end
+      comment "template for building some render processing network"
+    end
+
+    artifact 138117 "buildinstruct"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 139013 // BuildInstruct
+	class_ref 139269 // DoRecurse
+	class_ref 139141 // DoAttach
+      end
+      comment "Instructions for building some configuration of render nodes."
     end
 
     artifact 137861 "db"

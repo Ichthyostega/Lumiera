@@ -1,6 +1,6 @@
 format 40
 "backend" // design::codegen::backend
-  revision 5
+  revision 6
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -29,7 +29,7 @@ format 40
   stereotype "src"
   cpp_h_dir "backend"
   cpp_src_dir "backend"
-  cpp_namespace "data"
+  cpp_namespace "backend_interface"
   comment "sourcecode package
 
 Data backend classes here..."
@@ -37,5 +37,43 @@ Data backend classes here..."
     //deployment diagram settings
     package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
     draw_component_as_icon default show_component_req_prov default show_component_rea default
+    artifact 138629 "mediaaccessfacade"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 139525 // MediaAccessFacade
+      end
+      comment "functions for querying media file and channels."
+    end
   end
 end

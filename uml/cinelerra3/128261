@@ -1,6 +1,6 @@
 format 40
 "MObject" // ProcessingLayer::MObject
-  revision 19
+  revision 20
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -426,6 +426,27 @@ ${inlines}
       end
     end
 
+    class 138885 "SimpleClip"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "Elementary clip consisting of only one media stream"
+      classrelation 143365 // <generalisation>
+	relation 141445 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 143365 // <generalisation>
+	  b multiplicity "" parent class_ref 128901 // Clip
+      end
+    end
+
     class 138629 "CompoundClip"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
@@ -438,6 +459,8 @@ ${inlines}
       explicit_switch_type ""
       
       associated_diagram classdiagram_ref 128133 // Session structure
+      comment "Clip MObject which is actually a compound of several elementary clips,
+e.g. the several streams found within multichannels media."
       classrelation 142597 // <generalisation>
 	relation 140805 ---|>
 	  a public

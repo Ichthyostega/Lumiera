@@ -221,7 +221,7 @@ relationcanvas 140549 relation_ref 141573 // <directional aggregation>
   multiplicity_a_pos 160 260 3000 multiplicity_b_pos 142 268 3000
 relationcanvas 140933 relation_ref 141701 // <directional aggregation by value>
   from ref 139013 z 1999 stereotype "<<vector>>" xyz 713 174 3000 to ref 140805
-  role_a_pos 745 206 3000 no_role_b
+  role_a_pos 748 206 3000 no_role_b
   multiplicity_a_pos 712 206 3000 multiplicity_b_pos 733 164 3000
 relationcanvas 141445 relation_ref 141829 // <generalisation>
   geometry VHV
@@ -241,11 +241,11 @@ relationcanvas 142213 relation_ref 142085 // <unidirectional association>
   from ref 141317 z 1999 to point 812 270
   line 142341 z 1999 to point 812 131
   line 142469 z 1999 to ref 139013
-  role_a_pos 780 159 3000 no_role_b
+  role_a_pos 794 109 3000 no_role_b
   multiplicity_a_pos 794 142 3000 multiplicity_b_pos 794 299 3000
 relationcanvas 142597 relation_ref 142213 // <directional aggregation>
   from ref 141189 z 1999 stereotype "<<vector>>" xyz 656 360 3000 to ref 141061
-  role_a_pos 643 374 3000 no_role_b
+  role_a_pos 650 367 3000 no_role_b
   multiplicity_a_pos 614 367 3000 no_multiplicity_b
 relationcanvas 142853 relation_ref 139269 // <generalisation>
   from ref 142725 z 1999 to ref 141061
