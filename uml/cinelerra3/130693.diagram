@@ -1,0 +1,23 @@
+format 40
+
+packagecanvas 128005 
+  package_ref 129541 // backend
+    xyzwh 59 425 1994 717 262
+packagecanvas 128133 
+  package_ref 130053 // asset
+   color lightblue  xyzwh 437 34 1994 342 257
+componentcanvas 128261 component_ref 130181 // MediaFactory
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 536 127 2005 155 63
+componentcanvas 128389 component_ref 130437 // Media Access
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 550 504 2005 155 63
+arrowjunctioncanvas 128517 class_ref 139525 // MediaAccessFacade
+  xyz 617 395 2000 label_xy 575 414
+arrowjunctioncanvas 128773 class_ref 139525 // MediaAccessFacade
+  xyz 616 349 2000 label_xy 574 368
+line 128645 ---O
+  from ref 128389 z 1999 to ref 128517
+line 128901 ---(
+  from ref 128261 z 1999 to ref 128773
+end

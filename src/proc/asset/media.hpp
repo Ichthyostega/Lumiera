@@ -22,8 +22,8 @@
 
 
 /** @file media.hpp
- ** Media data is a specific Kind of Asset.
- ** For the different <i>Kinds</i> of Assets, we use sub-intefaces inheriting
+ ** Media data is a specific kind of Asset.
+ ** For the different <i>kinds</i> of Assets, we use sub-intefaces inheriting
  ** from the general Asset interface. To be able to get asset::Media instances
  ** directly from the AssetManager, we define a specialization of the Asset ID.
  **
@@ -89,7 +89,7 @@ namespace asset
   
   
   /** 
-   * Factory specialized for createing Media Asset objects.
+   * Factory specialized for creating Media Asset objects.
    */ 
   class MediaFactory : public cinelerra::Factory<asset::Media>
     {

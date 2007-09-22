@@ -88,6 +88,8 @@ arrowjunctioncanvas 139397 class_ref 130437 // PathManager
   xyz 350 458 2000 label_xy 328 479
 arrowjunctioncanvas 140549 class_ref 128261 // Fixture
   xyz 494 749 2000 label_xy 487 770
+arrowjunctioncanvas 140805 class_ref 135557 // Error
+  xyz 790 194 2000 label_xy 787 215
 line 132101 ---O
   from ref 129541 z 1999 to point 301 541
   line 139269 z 1999 to ref 131973
@@ -131,5 +133,7 @@ line 139525 ---O geometry HV
   line 139781 z 1999 to ref 139397
 line 140677 ---(
   from ref 135685 z 1999 to ref 140549
+line 140933 ---O
+  from ref 132869 z 1999 to ref 140805
 preferred_whz 0 0 0.8
 end

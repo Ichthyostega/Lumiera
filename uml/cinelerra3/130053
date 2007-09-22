@@ -1,6 +1,6 @@
 format 40
 "asset" // design::codegen::proc::asset
-  revision 5
+  revision 6
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -151,6 +151,7 @@ ${members}
 ${namespace_end}"
       associated_classes
 	class_ref 136709 // Media
+	class_ref 139397 // MediaFactory
       end
       comment "key abstraction: media-like assets"
     end

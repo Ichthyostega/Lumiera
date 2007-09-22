@@ -1367,9 +1367,10 @@ As a //first shot// Ichthyo considers the following approach:
 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;loading &lt;b&gt;Cinelerra Renderengine&lt;/b&gt; devel doku&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
 </div>
-<div title="MediaAsset" modifier="Ichthyostega" created="200709021530" tags="def classes" changecount="1">
+<div title="MediaAsset" modifier="Ichthyostega" modified="200709221337" created="200709021530" tags="def classes" changecount="2">
 <pre>The Interface asset::Media is a //key abstraction// It ties together several concepts and enables to deal with them on the interfaces in a uniform manner. Besides, as every Asset kind it belongs rather to the bookkeeping view: it holds the specific properties and parametrisation of the media source it stands for. Regarding the __inward interface__ &amp;mdash; as used from within the [[EDL]] or the [[Render Nodes|ProcNode]], it is irrelevant if a given asset::Media object stands for a complete media source, just a clip taken from this source or if a placeholder version of the real media source is used instead.
-[img[Asset Classess|uml/fig130437.png]]</pre>
+[img[Asset Classess|uml/fig130437.png]]
+</pre>
 </div>
 <div title="MemoryManagement" modifier="Ichthyostega" modified="200708100408" created="200708100225" tags="impl decision discuss" changecount="8">
 <pre>Of course: Cinelerra currently leaks memory and crashes regularilly. For the newly written code, besides retaining the same performance level, a main goal is to use methods and techniques known to support the writing of quality code. So, besides the MultithreadConsiderations, a solid strategy for managing the ownership of allocated memory blocks is necessary right from start.
@@ -2063,6 +2064,16 @@ Simple relations can be hard wired. But, on the contrary, it would be as naive t
 
 One example of this problem is the [[handling of multichannel media|MultichannelMedia]]. Following the above reasoning, we end with having a [[&quot;structural processing pattern&quot;|ProcPatt]], typically one video stream with MPEG decoder and a pair of audio streams which need either to be routed to some &quot;left&quot; and &quot;right&quot; output ports, or have to be passed through a panning filter accordingly. Now the problem is: //create a new instance of this structure for each new media, or detect which media to subsume under a existing pattern instance.//</pre>
 </div>
+<div title="ProcAsset" modifier="Ichthyostega" created="200709221343" tags="def classes" changecount="1">
+<pre>All Assets of kind asset::Proc represent //processing algorithms// in the bookkeeping view. They enable loading, browsing and maybe even parametrizing all the Effects, Plugins and Codecs available for use within the Cinelerra Session.
+
+Besides, they provide an important __inward interface__ for the [[ProcNode]]s, which will use these asset entries to dispatch the actual processing call when rendering. 
+
+{{red{todo: the naming scheme??}}}
+
+[img[Asset Classess|uml/fig131077.png]]
+</pre>
+</div>
 <div title="ProcLayer" modifier="Ichthyostega" modified="200708100338" created="200708100333" tags="def" changecount="2">
 <pre>The middle Layer of our current Architecture plan, i.e. the layer managing all processing and manipulation, while the actual data handling is done in the backend and the user interaction belongs to the GUI Layer.
 
@@ -2428,6 +2439,17 @@ Instead, we should try to just connect the various subsystems via Interfaces and
 * the Builder itself is a separation layer. Neither do the Objects in the EDL access directly [[Render Nodes|ProcNode]], nor do the latter call back into the EDL. Both connections seem to be necessary at first sight, but both can be avoided by using the Builder Pattern
 * another separation exists between the Render Engine and the individual Nodes: The Render Engine doesn't need to know the details of the data types processed by the Nodes. It relies on the Builder having done the correct connections and just pulls out the calculated results. If there needs to be additional control information to be passed, then I would prefer to do a direct wiring of separate control connections to specialized components, which in turn could instruct the controller to change the rendering process.
 * to shield the rendering code of all complexities of thread communication and synchronization, we use the StateProxy
+</pre>
+</div>
+<div title="StructAsset" modifier="Ichthyostega" created="200709221353" tags="def classes" changecount="1">
+<pre>Structural Assets are intended mainly for internal use, but the user should be able to see and query them. By changing the parametrisation of some structural Asset, we can customize the default behaviour of Cinelerra to some extent.
+* [[Processing Patterns|ProcPatt]] encode the information, how to get at the actual media data when rendering a clip.
+* Tracks are one of the dimensions used for organizing the EDL. Besides, they carry parametrisation of output port, overlay mode etc.
+* Output Ports {{red{still need to be defined...}}}
+
+The Asset name field of structural Assets utilizes a special naming scheme, which allows to derive the name based on the capabilities of the structural asset. For example, by default all media clips with a given media stream type (e.g. H264) will use the same [[processing Pattern|ProcPatt]] for rendering. {{red{todo: work out the details of this naming scheme??}}}
+
+[img[Asset Classess|uml/fig131205.png]]
 </pre>
 </div>
 <div title="StyleSheet" modifier="Ichthyostega" modified="200709040043" created="200701131624" tags="MPTWTheme excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706090017" changecount="14">

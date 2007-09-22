@@ -1,7 +1,7 @@
 format 40
 "design" // BackendLayer::design
-  revision 8
-  modified_by 10 "ct"
+  revision 9
+  modified_by 5 "hiv"
   // class settings
   //class diagram settings
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -318,7 +318,7 @@ ${inlines}
 	    classrelation_ref 129802 // <aggregation>
       end
 
-      classrelation 130058 // write_buffer (<association>)
+      classrelation 130058 // <association>
 	relation_ref 129418 // <association>
       end
     end
@@ -528,7 +528,7 @@ ${inlines}
 	  b role_name "write_buffer" multiplicity "0..1" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
-	    classrelation_ref 130058 // write_buffer (<association>)
+	    classrelation_ref 130058 // <association>
       end
 
       classrelation 130314 // <association>

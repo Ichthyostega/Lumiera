@@ -1,38 +1,23 @@
 window_sizes 1140 783 270 860 633 71
 diagrams
-  active  classdiagram_ref 130309 // Asset Kinds
+  classdiagram_ref 130309 // Asset Kinds
     860 633 100 4 180 0
   classdiagram_ref 128133 // Session structure
     688 506 100 4 120 0
-  classdiagram_ref 130437 // Media-Asset Relations
+  active  classdiagram_ref 130437 // Media-Asset Relations
     860 633 100 4 0 0
+  classdiagram_ref 128389 // Render Entities
+    688 506 100 4 120 0
 end
 show_stereotypes
-selected objectdiagram_ref 128773 // EDL Example1
+selected 
+  package_ref 129 // cinelerra3
 open
   
   package_ref 128005 // design
-  class_ref 136453 // Asset
-  operation_ref 133125 // getID
-  operation_ref 132357 // reg
-  class_ref 136709 // Media
-  class_ref 138501 // CompoundMedia
-  class_ref 137349 // Clip
-  class_ref 138757 // ProcPatt
-  class_ref 139141 // DoAttach
-  class_ref 139269 // DoRecurse
-  class_ref 128901 // Clip
-  class_ref 138629 // CompoundClip
-  
-  package_ref 128389 // RenderEngine
-  usecaseview_ref 128005 // Renderengine Use
-  class_ref 135685 // Logic
-  class_ref 135813 // Config
-  class_ref 135941 // State
-  class_ref 136069 // Invalid
-  class_ref 136197 // External
-  class_ref 136325 // std::exception
-  class_ref 135429 // Appconfig
-  classview_ref 128266 // SmartPointers
+  classview_ref 128901 // Assets
+  classview_ref 128133 // Engine Workings
+  classview_ref 129029 // Interface
+  componentview_ref 128266 // FileMapping
 end
 end

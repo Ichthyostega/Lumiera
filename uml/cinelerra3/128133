@@ -1,6 +1,6 @@
 format 40
 "Asset" // ProcessingLayer::Asset
-  revision 11
+  revision 12
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -49,6 +49,16 @@ format 40
     end
 
     classdiagram 130437 "Media-Asset Relations"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      size A4
+    end
+
+    classdiagram 131077 "Proc-Asset Relations"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      size A4
+    end
+
+    classdiagram 131205 "Struct-Asset Relations"
       draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
       size A4
     end
@@ -396,6 +406,39 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
       end
     end
 
+    class 139397 "MediaFactory"
+      visibility public 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "specialized Asset Factory for configuring (new) media asset instances based on existing media files on disk; can create placeholder assets as well"
+      simplerelation 129285
+	-_->
+	  on 
+	  package_ref 129157 // BackendLayer
+      end
+
+      simplerelation 129413
+	-_->
+	  on 
+	  package_ref 129157 // BackendLayer
+      end
+
+      classrelation 144261 // <dependency>
+	relation 142341 -_->
+	  a default
+	    cpp default "Generated"
+	    classrelation_ref 144261 // <dependency>
+	  b multiplicity "" parent class_ref 139525 // MediaAccessFacade
+      end
+    end
+
     class 138501 "CompoundMedia"
       visibility public 
       cpp_decl "${comment}${template}class ${name}${inherit}
@@ -640,6 +683,15 @@ ${inlines}
 	    cpp default "${type}"
 	    classrelation_ref 141317 // <generalisation>
 	  b multiplicity "" parent class_ref 136965 // Struct
+      end
+
+      classrelation 144389 // wiringTemplate (<unidirectional association>)
+	relation 142469 --->
+	  a role_name "wiringTemplate" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 144389 // wiringTemplate (<unidirectional association>)
+	  b multiplicity "" parent class_ref 138757 // ProcPatt
       end
     end
 

@@ -29,7 +29,7 @@ Documentation</title>
  <p align="center"><b>Overview</b></p><p><br /></p><p><br /></p>
 <p>This drawing shows the top level compoents and relations<br /></p><a name="refcomponent129925"></a>
 <table><tr><td><div class="element">Component <b>CommonLib</b></div></td></tr></table>
-<p>provided classes : <a href="class134917.html#refclass134917"><b>Time</b></a></p>
+<p>provided classes : <a href="class135557.html#refclass135557"><b>Error</b></a>, <a href="class134917.html#refclass134917"><b>Time</b></a></p>
 <a name="refcomponent128005"></a>
 <table><tr><td><div class="element">Component <b>Builder</b></div></td></tr></table>
 <p>provided classes : <a href="class132741.html#refclass132741"><b>StateProxy</b></a></p>
@@ -73,6 +73,11 @@ Documentation</title>
 <a name="refcomponent129285"></a>
 <table><tr><td><div class="element">Component <b>RenderPathManager</b></div></td></tr></table>
 <p>provided classes : <a href="class130437.html#refclass130437"><b>PathManager</b></a></p>
+<a name="refcomponent130181"></a>
+<table><tr><td><div class="element">Component <b>MediaFactory</b></div></td></tr></table>
+<p>required classes : <a href="class139525.html#refclass139525"><b>MediaAccessFacade</b></a></p>
+<a name="refcomponent130309"></a>
+<table><tr><td><div class="element">Component <b>AssetDB</b></div></td></tr></table>
 </div>
 <a name="refcomponent view128133"></a>
 <h2 class ="view">1.2 Component View interfaces</h2>
@@ -87,6 +92,12 @@ Documentation</title>
 <a name="refcomponent129797"></a>
 <table><tr><td><div class="element">Component <b>ConManager</b></div></td></tr></table>
 <p>required classes : <a href="class134661.html#refclass134661"><b>ParamProvider</b></a></p>
+<a name="refcomponent diagram130693"></a>
+<p align="center"><img src="fig130693.png" alt="" /></p>
+ <p align="center"><b>backend-components</b></p><p><br /></p><p><br /></p>
+<a name="refcomponent130437"></a>
+<table><tr><td><div class="element">Component <b>Media Access</b></div></td></tr></table>
+<p>provided classes : <a href="class139525.html#refclass139525"><b>MediaAccessFacade</b></a></p>
 </div>
 <a name="refpackage128645"></a>
 <h2 class ="package">1.3 Package codegen</h2>
@@ -101,7 +112,7 @@ Documentation</title>
 <a name="refartifact128005"></a>
 <table><tr><td><div class="element">Artifact <b>Cinelerra3</b></div></td></tr></table>
 <p>Depends on <a href="index.html#refpackage129413"><b>common</b></a></p><p>Depends on <a href="index.html#refpackage129797"><b>gui</b></a></p><p>Depends on <a href="index.html#refpackage129669"><b>proc</b></a></p><p>Depends on <a href="index.html#refpackage129541"><b>backend</b></a></p><p>the main executable to be built<br /></p>
-<p><i>executable</i> associated with : <a href="index.html#refartifact130053"><b>allocation</b></a>, <a href="index.html#refartifact134021"><b>vframe</b></a>, <a href="index.html#refartifact133381"><b>arender</b></a>, <a href="index.html#refartifact131845"><b>renderstate</b></a>, <a href="index.html#refartifact130181"><b>label</b></a>, <a href="index.html#refartifact134149"><b>glbuf</b></a>, <a href="index.html#refartifact132357"><b>procnode</b></a>, <a href="index.html#refartifact130949"><b>stateproxy</b></a>, <a href="index.html#refartifact132741"><b>hub</b></a>, <a href="index.html#refartifact131077"><b>buildable</b></a>, <a href="index.html#refartifact129285"><b>abstractmo</b></a>, <a href="index.html#refartifact131461"><b>nodecreatertool</b></a>, <a href="index.html#refartifact132869"><b>projector</b></a>, <a href="index.html#refartifact134661"><b>interpolator</b></a>, <a href="index.html#refartifact128645"><b>edl</b></a>, <a href="index.html#refartifact128773"><b>fixture</b></a>, <a href="index.html#refartifact133253"><b>glpipe</b></a>, <a href="index.html#refartifact133509"><b>vrender</b></a>, <a href="index.html#refartifact132229"><b>exitnode</b></a>, <a href="index.html#refartifact131717"><b>pathmanager</b></a>, <a href="index.html#refartifact128901"><b>track</b></a>, <a href="index.html#refartifact134533"><b>paramprovider</b></a>, <a href="index.html#refartifact132997"><b>mask</b></a>, <a href="index.html#refartifact128133"><b>main</b></a>, <a href="index.html#refartifact130693"><b>conmanager</b></a>, <a href="index.html#refartifact129413"><b>clip</b></a>, <a href="index.html#refartifact129669"><b>meta</b></a>, <a href="index.html#refartifact129797"><b>fixedplacement</b></a>, <a href="index.html#refartifact129925"><b>relativeplacement</b></a>, <a href="index.html#refartifact128261"><b>mobject</b></a>, <a href="index.html#refartifact134277"><b>source</b></a>, <a href="index.html#refartifact133765"><b>frame</b></a>, <a href="index.html#refartifact129029"><b>placement</b></a>, <a href="index.html#refartifact128517"><b>session</b></a>, <a href="index.html#refartifact130437"><b>builderfacade</b></a>, <a href="index.html#refartifact130565"><b>toolfactory</b></a>, <a href="index.html#refartifact131589"><b>controllerfacade</b></a>, <a href="index.html#refartifact132101"><b>processor</b></a>, <a href="index.html#refartifact133125"><b>pluginadapter</b></a>, <a href="index.html#refartifact129541"><b>effect</b></a>, <a href="index.html#refartifact131205"><b>tool</b></a>, <a href="index.html#refartifact131333"><b>segmentationtool</b></a>, <a href="index.html#refartifact133893"><b>aframe</b></a>, <a href="index.html#refartifact130821"><b>assembler</b></a>, <a href="index.html#refartifact132485"><b>trafo</b></a>, <a href="index.html#refartifact129157"><b>explicitplacement</b></a>, <a href="index.html#refartifact130309"><b>auto</b></a>, <a href="index.html#refartifact133637"><b>glrender</b></a>, <a href="index.html#refartifact132613"><b>link</b></a>, <a href="index.html#refartifact134405"><b>parameter</b></a>, <a href="index.html#refartifact131973"><b>renderengine</b></a></p>
+<p><i>executable</i> associated with : <a href="index.html#refartifact133381"><b>arender</b></a>, <a href="index.html#refartifact131845"><b>renderstate</b></a>, <a href="index.html#refartifact130181"><b>label</b></a>, <a href="index.html#refartifact134149"><b>glbuf</b></a>, <a href="index.html#refartifact132357"><b>procnode</b></a>, <a href="index.html#refartifact130949"><b>stateproxy</b></a>, <a href="index.html#refartifact132741"><b>hub</b></a>, <a href="index.html#refartifact131077"><b>buildable</b></a>, <a href="index.html#refartifact129285"><b>abstractmo</b></a>, <a href="index.html#refartifact131461"><b>nodecreatertool</b></a>, <a href="index.html#refartifact132869"><b>projector</b></a>, <a href="index.html#refartifact134661"><b>interpolator</b></a>, <a href="index.html#refartifact128645"><b>edl</b></a>, <a href="index.html#refartifact128773"><b>fixture</b></a>, <a href="index.html#refartifact133253"><b>glpipe</b></a>, <a href="index.html#refartifact133509"><b>vrender</b></a>, <a href="index.html#refartifact132229"><b>exitnode</b></a>, <a href="index.html#refartifact131717"><b>pathmanager</b></a>, <a href="index.html#refartifact128901"><b>track</b></a>, <a href="index.html#refartifact134533"><b>paramprovider</b></a>, <a href="index.html#refartifact132997"><b>mask</b></a>, <a href="index.html#refartifact128133"><b>main</b></a>, <a href="index.html#refartifact130693"><b>conmanager</b></a>, <a href="index.html#refartifact129413"><b>clip</b></a>, <a href="index.html#refartifact129669"><b>meta</b></a>, <a href="index.html#refartifact129797"><b>fixedplacement</b></a>, <a href="index.html#refartifact129925"><b>relativeplacement</b></a>, <a href="index.html#refartifact128261"><b>mobject</b></a>, <a href="index.html#refartifact134277"><b>source</b></a>, <a href="index.html#refartifact133765"><b>frame</b></a>, <a href="index.html#refartifact129029"><b>placement</b></a>, <a href="index.html#refartifact128517"><b>session</b></a>, <a href="index.html#refartifact130437"><b>builderfacade</b></a>, <a href="index.html#refartifact130565"><b>toolfactory</b></a>, <a href="index.html#refartifact131589"><b>controllerfacade</b></a>, <a href="index.html#refartifact132101"><b>processor</b></a>, <a href="index.html#refartifact133125"><b>pluginadapter</b></a>, <a href="index.html#refartifact129541"><b>effect</b></a>, <a href="index.html#refartifact131205"><b>tool</b></a>, <a href="index.html#refartifact131333"><b>segmentationtool</b></a>, <a href="index.html#refartifact133893"><b>aframe</b></a>, <a href="index.html#refartifact130821"><b>assembler</b></a>, <a href="index.html#refartifact132485"><b>trafo</b></a>, <a href="index.html#refartifact129157"><b>explicitplacement</b></a>, <a href="index.html#refartifact130309"><b>auto</b></a>, <a href="index.html#refartifact133637"><b>glrender</b></a>, <a href="index.html#refartifact132613"><b>link</b></a>, <a href="index.html#refartifact134405"><b>parameter</b></a>, <a href="index.html#refartifact131973"><b>renderengine</b></a>, <a href="index.html#refartifact130053"><b>allocation</b></a>, <a href="index.html#refartifact134021"><b>vframe</b></a></p>
 <a name="refartifact128133"></a>
 <table><tr><td><div class="element">Artifact <b>main</b></div></td></tr></table>
 <p>Artifact <i>source</i></p>
@@ -197,7 +208,7 @@ Documentation</title>
 <a name="refartifact136453"></a>
 <table><tr><td><div class="element">Artifact <b>media</b></div></td></tr></table>
 <p>key abstraction: media-like assets<br /></p>
-<p>Artifact <i>source</i> associated with : <a href="class136709.html#refclass136709"><b>Media</b></a></p>
+<p>Artifact <i>source</i> associated with : <a href="class136709.html#refclass136709"><b>Media</b></a>, <a href="class139397.html#refclass139397"><b>MediaFactory</b></a></p>
 <a name="refartifact136581"></a>
 <table><tr><td><div class="element">Artifact <b>proc</b></div></td></tr></table>
 <p>key abstraction: media-like assets<br /></p>
@@ -532,9 +543,16 @@ Documentation</title>
 <a name="refclass diagram130437"></a>
 <p align="center"><img src="fig130437.png" alt="" /></p>
  <p align="center"><b>Media-Asset Relations</b></p><p><br /></p><p><br /></p>
+<a name="refclass diagram131077"></a>
+<p align="center"><img src="fig131077.png" alt="" /></p>
+ <p align="center"><b>Proc-Asset Relations</b></p><p><br /></p><p><br /></p>
+<a name="refclass diagram131205"></a>
+<p align="center"><img src="fig131205.png" alt="" /></p>
+ <p align="center"><b>Struct-Asset Relations</b></p><p><br /></p><p><br /></p>
 <table><tr><td><div class="element">Class <b><a href="class136453.html#refclass136453"><b>Asset</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class136581.html#refclass136581"><b>AssetManager</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class136709.html#refclass136709"><b>Media</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class139397.html#refclass139397"><b>MediaFactory</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class138501.html#refclass138501"><b>CompoundMedia</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class136837.html#refclass136837"><b>Proc</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class136965.html#refclass136965"><b>Struct</b></a></b></div></td></tr></table>
@@ -982,11 +1000,36 @@ reuse exiting Engine</pre></li></ul><p>Selection :</p><ul></ul><p>Transformation
 <a name="refpackage129157"></a>
 <h1 class ="package">3 Package BackendLayer</h1>
 <div class="sub">
+<a name="refclass view129029"></a>
+<h2 class ="view">3.1 Class View Interface</h2>
+<div class="sub">
+<a name="refclass diagram130949"></a>
+<p align="center"><img src="fig130949.png" alt="" /></p>
+ <p align="center"><b>interface components</b></p><p><br /></p><p><br /></p>
+<table><tr><td><div class="element">Class <b><a href="class139525.html#refclass139525"><b>MediaAccessFacade</b></a></b></div></td></tr></table>
+</div>
+<a name="refuse case view128133"></a>
+<h2 class ="view">3.2 Use Case View usage</h2>
+<div class="sub">
+<a name="refuse case diagram130821"></a>
+<p align="center"><img src="fig130821.png" alt="" /></p>
+ <p align="center"><b>backend use cases</b></p><p><br /></p><p><br /></p>
+<a name="refuse case128005"></a>
+<h3 class ="usecase">3.2.1 Use Case load Media</h3>
+<div class="sub">
+</div>
+<a name="refuse case128133"></a>
+<h3 class ="usecase">3.2.2 Use Case access File</h3>
+<a name="refuse case128261"></a>
+<h3 class ="usecase">3.2.3 Use Case detect Channels</h3>
+<a name="refuse case128389"></a>
+<h3 class ="usecase">3.2.4 Use Case access Channel</h3>
+</div>
 <a name="refpackage128138"></a>
-<h2 class ="package">3.1 Package design</h2>
+<h2 class ="package">3.3 Package design</h2>
 <div class="sub">
 <a name="refclass view128517"></a>
-<h3 class ="view">3.1.1 Class View Backend Components</h3>
+<h3 class ="view">3.3.1 Class View Backend Components</h3>
 <div class="sub">
 <a name="refclass diagram128181"></a>
 <p align="center"><img src="fig128181.png" alt="" /></p>
@@ -1007,15 +1050,15 @@ reuse exiting Engine</pre></li></ul><p>Selection :</p><ul></ul><p>Transformation
 <table><tr><td><div class="element">Class <b><a href="class128225.html#refclass128225"><b>FrameReference</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class128778.html#refclass128778"><b>FileReference</b></a></b></div></td></tr></table>
 <a name="refactivity128010"></a>
-<h4 class ="activity">3.1.1.1 Activity get frame</h4>
+<h4 class ="activity">3.3.1.1 Activity get frame</h4>
 <p>Pre Condition :</p><ul></ul><p>Post Condition :</p><ul></ul><table><tr><td><div class="element">Class <b><a href="class129034.html#refclass129034"><b>WriteBufferPool</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class129162.html#refclass129162"><b>WriteBuffer</b></a></b></div></td></tr></table>
 </div>
 </div>
 <a name="refcomponent view128138"></a>
-<h2 class ="view">3.2 Component View Cache</h2>
+<h2 class ="view">3.4 Component View Cache</h2>
 <a name="refcomponent view128266"></a>
-<h2 class ="view">3.3 Component View FileMapping</h2>
+<h2 class ="view">3.5 Component View FileMapping</h2>
 </div>
 <a name="refpackage128773"></a>
 <h1 class ="package">4 Package GUI</h1>
