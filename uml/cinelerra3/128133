@@ -1,6 +1,6 @@
 format 40
 "Asset" // ProcessingLayer::Asset
-  revision 10
+  revision 11
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -682,6 +682,16 @@ ${inlines}
 	    classrelation_ref 143109 // <generalisation>
 	  b multiplicity "" parent class_ref 136965 // Struct
       end
+
+      classrelation 143621 // instructions (<directional aggregation by value>)
+	relation 141701 *-->
+	  stereotype "vector"
+	  a role_name "instructions" multiplicity "1..*" const_relation protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 143621 // instructions (<directional aggregation by value>)
+	  b multiplicity "1" parent class_ref 139013 // BuildInstruct
+      end
     end
 
     class 138245 "Dataset"
@@ -736,6 +746,87 @@ ${inlines}
 	    cpp default "${type}"
 	    classrelation_ref 143365 // <generalisation>
 	  b multiplicity "" parent class_ref 128901 // Clip
+      end
+    end
+
+    class 139013 "BuildInstruct"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 139141 "DoAttach"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 143749 // <generalisation>
+	relation 141829 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 143749 // <generalisation>
+	  b multiplicity "" parent class_ref 139013 // BuildInstruct
+      end
+
+      classrelation 144133 // nodes (<directional aggregation>)
+	relation 142213 o-->
+	  stereotype "vector"
+	  a role_name "nodes" multiplicity "1..*" const_relation public
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 144133 // nodes (<directional aggregation>)
+	  b multiplicity "" parent class_ref 136837 // Proc
+      end
+
+      attribute 131461 "point"
+	const_attribute public explicit_type "string"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+	comment "identifying the point where the nodes should be attached"
+      end
+    end
+
+    class 139269 "DoRecurse"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 143877 // <generalisation>
+	relation 141957 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 143877 // <generalisation>
+	  b multiplicity "" parent class_ref 139013 // BuildInstruct
+      end
+
+      classrelation 144005 // subPattern (<unidirectional association>)
+	relation 142085 --->
+	  a role_name "subPattern" multiplicity "1" const_relation protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 144005 // subPattern (<unidirectional association>)
+	  b multiplicity "*" parent class_ref 138757 // ProcPatt
       end
     end
   end

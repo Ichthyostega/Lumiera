@@ -10,7 +10,7 @@ classcanvas 128133 class_ref 136581 // AssetManager
   end
 packagecanvas 128517 
   package_ref 128133 // Asset
-   show_context_mode namespace  xyzwh 217 182 1994 608 534
+   show_context_mode namespace  xyzwh 215 182 1994 610 571
 classcanvas 128645 class_ref 136709 // Media
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 259 330 2005
@@ -74,6 +74,18 @@ classcanvas 133765 class_ref 138501 // CompoundMedia
 classcanvas 135813 class_ref 138757 // ProcPatt
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 638 506 2000
+  end
+classcanvas 136709 class_ref 139141 // DoAttach
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 567 688 2000
+  end
+classcanvas 136837 class_ref 139013 // BuildInstruct
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 605 620 2000
+  end
+classcanvas 136965 class_ref 139269 // DoRecurse
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 639 688 2000
   end
 relationcanvas 129157 relation_ref 138117 // <realization>
   geometry VHV
@@ -172,6 +184,29 @@ relationcanvas 136197 relation_ref 141317 // <dependency>
   line 136325 z 1999 to ref 135813
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
+relationcanvas 137093 relation_ref 141701 // <directional aggregation by value>
+  from ref 135813 z 1999 stereotype "<<vector>>" xyz 632 569 3000 to ref 136837
+  role_a_pos 655 600 3000 no_role_b
+  multiplicity_a_pos 622 599 3000 multiplicity_b_pos 643 557 3000
+relationcanvas 137221 relation_ref 141829 // <generalisation>
+  from ref 136709 z 1999 to ref 136837
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 137349 relation_ref 141957 // <generalisation>
+  from ref 136965 z 1999 to ref 136837
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 137477 relation_ref 142085 // <unidirectional association>
+  from ref 136965 z 1999 to point 728 656
+  line 137605 z 1999 to point 728 562
+  line 137733 z 1999 to ref 135813
+  role_a_pos 704 524 3000 no_role_b
+  multiplicity_a_pos 736 560 3000 multiplicity_b_pos 705 688 3000
+relationcanvas 137861 relation_ref 142213 // <directional aggregation>
+  from ref 136709 z 1999 stereotype "<<vector>>" xyz 538 659 3000 to point 595 388
+  line 137989 z 1999 to ref 128773
+  role_a_pos 559 553 3000 no_role_b
+  multiplicity_a_pos 571 541 3000 no_multiplicity_b
 line 128261 -_-_ geometry HV
   from ref 128005 z 1999 to point 331 150
   line 128389 z 1999 to ref 128133

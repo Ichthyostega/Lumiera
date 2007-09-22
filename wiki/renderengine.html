@@ -1305,6 +1305,19 @@ From experiences with other middle scale projects, I prefer having the test code
 [img[Example: Interfaces/Namespaces of the ~Session-Subsystems|uml/fig130053.png]]
 </pre>
 </div>
+<div title="Loading Media" modifier="Ichthyostega" created="200709220005" tags="design spec" changecount="1">
+<pre>Opening and accessing media files on disk poses several problems, most of which belong to the domain of cinelerra's data backend. Here, we focus on the questions related to making media data available to the EDL and the render engine. Each media will be represented by an MediaAsset object, which indeed could be a compound object (in case of MultichannelMedia). Building this asset object thus includes getting informations from the real file on disk. For delegating this to the backend, we use the following query interface:
+* {{{openFile(char* name)}}} requests accessing the file and yields some (opaque) handle when successful.
+* {{{getChannel(int)}}} will then be issued in sequence with ascending index numbers, until it returns {{{NULL}}}.
+* the returned struct (pointer) will provide the following information:
+** some identifier which can be used to create a name for the corresponding media (channel) asset
+** some identifier characterizing the access method (codec) needed to get at the media data. This should be rather a high level description of the media stream type, e.g. &quot;H264&quot;
+** some (opaque) handle usable for accessing this specific stream. When the render engine later on pulls data for this channel, it will pass this handle down to the backend.
+
+{{red{to be defined in more detail later...}}}
+
+{{red{how to create a test stub for this interface...?}}}</pre>
+</div>
 <div title="MObject" modifier="Ichthyostega" created="200706220312" tags="def classes" changecount="1">
 <pre>All sorts of &quot;things&quot; to be placed and manipulated by the user in the EDL. This interface abstracts the details and just provides
 * a duration
@@ -1391,7 +1404,7 @@ For the case in question this seems to be the ''resource allocation is construct
 And, last but not least, doing all actual allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides that, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot;, rather it should use some central [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
-<div title="MultichannelMedia" modifier="Ichthyostega" modified="200709201341" created="200709200255" tags="design" changecount="3">
+<div title="MultichannelMedia" modifier="Ichthyostega" modified="200709220010" created="200709200255" tags="design" changecount="4">
 <pre>Based on practical experiences, Ichthyo tends to consider Multichannel Media as the base case, while counting media files providing just one single media stream as exotic corner cases. This may seem counter intuitive at first sight; you should think of  it as an attempt to avoid right from start some of the common shortcomings found in many video editors, especially
 * having to deal with keeping a &quot;link&quot; between audio and video clips
 * silly limitations on the supported audio setups (e.g. mono, stereo and 5.1)
@@ -1408,7 +1421,7 @@ So, when creating a clip out of such a compound media asset, the clip has to be 
 * we can create a Clip (MObject) from each Media, which will be linked back to the media asset internally.
 * moreover, creating a Clip will create and register a Clip asset as well, and this Clip asset will be tied to the original Clip and will show up in some special Category
 * media can be compound and the created Clips will mirror this compound structure
-* {{red{to be defined}}} a way to distinguish Elementay Clips (non-compound) and to express that only such can be passed to the Builder
+* we distinguish elementay (non-compound) Clips from compound clips by concrete subtype. The builder can only handle elementary clips, because he needs to build a separate pipeline for every output channel. So the work of splitting common effect stacks for clips with several channels needs to be done when calculating the Fixture for the current EDL. The Builder expects to be able to build the render nodes corresponding to each entity found in the Fixture one by one.
 * the Builder gets at the ProcPatt (descriptor) of the underlying media for each clip and uses this description as a template to build the render pipeline. That is, the ProcPatt specifies the codec asset and maybe some additional effect assets (deinterlace, scale) necessary for feeding media data corresponding to this clip/media into the render nodes network.</pre>
 </div>
 <div title="ObjectCreation" modifier="Ichthyostega" modified="200709040257" created="200709030139" tags="impl design" changecount="10">
@@ -2021,7 +2034,7 @@ DAMAGE.
 //Note, we have yet to specify how exactly the building and rendering will work together with the backend. There are several possibilities how to structure the Playlist//
 </pre>
 </div>
-<div title="ProblemsTodo" modifier="Ichthyostega" modified="200709210136" created="200708050524" tags="design discuss" changecount="13">
+<div title="ProblemsTodo" modifier="Ichthyostega" modified="200709212330" created="200708050524" tags="design discuss" changecount="14">
 <pre>Open issues, Things to be worked out, Problems still to be solved... 
 
 !!Parameter Handling
@@ -2048,7 +2061,7 @@ Users accustomed with modern GUI applications typically expect that //everything
 !!Compound and Multiplicity
 Simple relations can be hard wired. But, on the contrary, it would be as naive to define a Clip as having a Video track and two audio tracks, as it would be naive to overlook the problem of holding video and corresponding audio together. And, moreover, the default case has to be processed in a //straight forward// fashion, with as few tests and decisions as possible. So, basically each component participating in getting the core processing done has to mirror the structure pattern of the other parts, so that  processing can be done without testing and forking. But this leaves us with the problem where to put the initial knowledge about the structural pattern used for building up the compound structures and &amp;mdash; especially &amp;mdash; the problem how to treat different kinds of structural patterns, how to detect the pattern to be applied and how to treat multiple instances of the same structural pattern.
 
-One example of this problem is the [[handling of multichannel media|MultichannelMedia]]. Following the above reasoning, we end with having a [[&quot;structural pattern&quot;|StructPatt]], typically one video stream with MPEG decoder and a pair of audio streams which need either to be routed to some &quot;left&quot; and &quot;right&quot; output ports, or have to be passed through a panning filter accordingly. Now the problem is: //create a new instance of this structure for each new media, or detect which media to subsume under a existing pattern instance.//</pre>
+One example of this problem is the [[handling of multichannel media|MultichannelMedia]]. Following the above reasoning, we end with having a [[&quot;structural processing pattern&quot;|ProcPatt]], typically one video stream with MPEG decoder and a pair of audio streams which need either to be routed to some &quot;left&quot; and &quot;right&quot; output ports, or have to be passed through a panning filter accordingly. Now the problem is: //create a new instance of this structure for each new media, or detect which media to subsume under a existing pattern instance.//</pre>
 </div>
 <div title="ProcLayer" modifier="Ichthyostega" modified="200708100338" created="200708100333" tags="def" changecount="2">
 <pre>The middle Layer of our current Architecture plan, i.e. the layer managing all processing and manipulation, while the actual data handling is done in the backend and the user interaction belongs to the GUI Layer.
@@ -2059,6 +2072,19 @@ One example of this problem is the [[handling of multichannel media|Multichannel
 </div>
 <div title="ProcNode" modifier="MichaelPloujnikov" modified="200706271500" created="200706220409" tags="def" changecount="3">
 <pre>A data processing node within the Render Engine. Its key feature is the possibility to pull from it one (freely addressable) [[Frame]] of calculated data. Further, each ~ProcNode has the ability to be wired with other nodes and [[Parameter Providers|ParamProvider]]
+</pre>
+</div>
+<div title="ProcPatt" modifier="Ichthyostega" modified="200709212329" created="200709212315" tags="def design" changecount="4">
+<pre>This special type of [[structural Asset|StructAsset]] represents information how to build some part of the render engine's processing nodes network. It can be thought of as a template or blueprint for construction. Most notably, it is used for creating nodes reading, decoding and delivering source media material to the render network. Each [[media Asset|MediaAsset]] has associated processing patterns describing the codecs and other transformations needed to get at the media data of this asset. (and because media assets are typically compound objects, the referred ~ProcPatt will be compound too). Obviously, the possibilities opened by using processing patterns go far beyond.
+
+Technically, a processing pattern is a list of building instructions, which will be //executed// by the [[Builder]] on the render node network under construction. This implies the possibility to define further instruction kinds when needed in future; at the moment the relevant sorts of instructions are
+* attach the given sequence of nodes to the specified point
+* recursively execute a nested ~ProcPatt
+More specifically, a sequence of nodes is given by a sequence of prototypical effect and codec assets (and from each of them we can create the corresponding render node). And the point to attach these nodes is given by an identifier &amp;mdash; in most cases just &quot;{{current}}&quot;, denoting the point the builder was just working at, when he treated some MObject which in turn yielded this processing pattern in question.
+
+Like all [[structural assets|StructAsset]], ~ProcPatt employs a special naming scheme within the asset name field, which directly mirrors its purpose and allows to bind to existing processing pattern instances when needed. The idea is letting all assets in need of a similar processing pattern refer to one shared ~ProcPatt instance. For example, within a MPEG video media asset, at some point there will be a ~ProcPatt labeled &quot;{{{stream(mpeg)}}}&quot;. In consequence, all MPEG video will use the same pattern of node wiring. And, of course, this pattern could be changed, either globally, or by binding a single clip to some other processing pattern (for making a punctual exception from the general rule)
+
+//Note,// nothing has been said about how processing patterns are defined. One can expect for some //default patterns// beeing defined somewhere in the application, any session could overrule these defaults, and when there is no default, we can expect some mechanism deriving sensible fallback patterns //for every specific use case// of processing patterns. See the problem of [[Loading Media]] as an example.
 </pre>
 </div>
 <div title="Processors" modifier="Ichthyostega" created="200706220412" tags="def" changecount="1">
