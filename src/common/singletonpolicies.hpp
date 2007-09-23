@@ -50,7 +50,7 @@ namespace cinelerra
        * Policy for creating the Singleton instance statically
        */
       template<class S>
-      struct Static
+      struct StaticCreate
         {
           static S* create ()
             {
@@ -72,29 +72,13 @@ namespace cinelerra
        * Policy for creating the Singleton instance heap allocated
        */
       template<class S>
-      struct Heap
+      struct HeapCreate
         {
           static S* create ()         { return new S; }
           static void destroy (S* pS) { delete pS;    }
         };
         
         
-      /** 
-       *  Policy for creating dynamic Singleton instance, with 
-       *  additional facility to support Mock testing. When injecting
-       *  a Mock instance (typically a subclass of the product), the
-       *  main Singleton instance is temporarily shaddowed.
-       */
-      template<class S>
-      struct DynamicMockTestable
-        {
-          static S* create ()         { return new S; }
-          static void destroy (S* pS) { delete pS;    }
-        };
-      void injectSubclass (SI* mock)
-        {
-          
-        }
       
 
         
@@ -105,7 +89,7 @@ namespace cinelerra
        * Policy relying on the compiler/runtime system for Singleton Lifecycle
        */
       template<class S>
-      struct Automatic
+      struct AutoDestroy
         {
           /** implements the Singleton removal by calling
            *  the provided deleter function(s) at application shutdown,

@@ -54,8 +54,8 @@ namespace cinelerra
    */
   template
     < class SI,  // the class to make Singleton
-      template <class> class Create    = singleton::Static,     // how to create/destroy the instance
-      template <class> class Life      = singleton::Automatic,  // how to manage Singleton Lifecycle
+      template <class> class Create    = singleton::StaticCreate,  // how to create/destroy the instance
+      template <class> class Life      = singleton::AutoDestroy,  // how to manage Singleton Lifecycle
       template <class> class Threading = singleton::IgnoreThreadsafety  //TODO use Multithreaded!!!
     >
   class SingletonFactory
@@ -99,6 +99,8 @@ namespace cinelerra
        */
       static void destroy()
         {
+          TRACE (singleton, "Singleton: triggering destruction");
+          
           REQUIRE (!isDead_);
           Create<SI>::destroy (pInstance_);
           pInstance_ = 0;
@@ -131,7 +133,9 @@ namespace cinelerra
 /////       is tricky because of invoking the destructors. If we rely on instance vars,
 /////       the object may already have been released when the runtime system calls the
 /////       destructors of static objects at shutdown.
-  
+/////       It seems this would either cost us much of the flexibility or get complicated
+/////       to a point where we could as well implement our own Depenency Injection Manager.
+
       /** @internal used to link together the Create policy and Life policy.
        *  @return a functor object for invoking this->destroy() */
 /*      SingletonFactory::DelFunc getDeleter() 

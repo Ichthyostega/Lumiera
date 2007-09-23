@@ -26,7 +26,9 @@
 namespace backend_interface
   {
   
-  /** */
+  /** storage for the SingletonFactory 
+   *  (actually a cinelerra::test::MockInjector) */
+  Singleton<MediaAccessFacade> MediaAccessFacade::instance;
 
 
 

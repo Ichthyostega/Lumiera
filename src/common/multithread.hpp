@@ -25,6 +25,7 @@
 #ifndef CINELERRA_MULTITHREAD_H
 #define CINELERRA_MULTITHREAD_H
 
+#include "nobugcfg.h"
 
 
 namespace cinelerra
