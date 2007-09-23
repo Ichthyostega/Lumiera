@@ -1,5 +1,5 @@
 /*
-  SINGLETON.hpp  -  template for implementing the singleton pattern
+  SINGLETONFACTORY.hpp  -  template for implementing the singleton pattern
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -31,16 +31,16 @@ This code is heavily inspired by
 
 
 
-#ifndef CINELERRA_SINGLETON_H
-#define CINELERRA_SINGLETON_H
+#ifndef CINELERRA_SINGLETONFACTORY_H
+#define CINELERRA_SINGLETONFACTORY_H
 
 
-#include "common/singletonpolicies.hpp"  ///< several Policies usable together with singleton
+#include "common/singletonpolicies.hpp"  ///< several Policies usable together with SingletonFactory
 
 #include "common/util.hpp"
 #include "nobugcfg.h"
 
-#include <boost/bind.hpp>
+//#include <boost/bind.hpp>
 
 
 namespace cinelerra
@@ -58,7 +58,7 @@ namespace cinelerra
       template <class> class Life      = singleton::Automatic,  // how to manage Singleton Lifecycle
       template <class> class Threading = singleton::IgnoreThreadsafety  //TODO use Multithreaded!!!
     >
-  class Singleton
+  class SingletonFactory
     {
       typedef typename Threading<SI>::VolatileType SType;
       typedef typename Threading<SI>::Lock ThreadLock;
@@ -66,7 +66,7 @@ namespace cinelerra
       static bool isDead_;
       
     public:
-      /** Interface to be used by Singleton's clients.
+      /** Interface to be used by SingletonFactory's clients.
        *  Manages internally the instance creation, lifecycle 
        *  and access handling in a multithreaded context.
        *  @return "the" single instance of class S 
@@ -107,15 +107,15 @@ namespace cinelerra
     };
     
   
-  // Storage for Singleton's static fields...  
+  // Storage for SingletonFactory's static fields...  
   template
     < class SI,
       template <class> class C,
       template <class> class L,
       template <class> class T
     >
-    typename Singleton<SI,C,L,T>::SType* 
-    Singleton<SI,C,L,T>::pInstance_;
+    typename SingletonFactory<SI,C,L,T>::SType* 
+    SingletonFactory<SI,C,L,T>::pInstance_;
   
   template
     < class SI,
@@ -123,7 +123,7 @@ namespace cinelerra
       template <class> class L,
       template <class> class T
     >
-    bool Singleton<SI,C,L,T>::isDead_;
+    bool SingletonFactory<SI,C,L,T>::isDead_;
 
 
   
@@ -134,9 +134,9 @@ namespace cinelerra
   
       /** @internal used to link together the Create policy and Life policy.
        *  @return a functor object for invoking this->destroy() */
-/*      singleton::DelFunc getDeleter() 
+/*      SingletonFactory::DelFunc getDeleter() 
         {
-          return boost::bind (&Singleton<SI,Create,Life,Threading>::destroy,
+          return boost::bind (&SingletonFactory<SI,Create,Life,Threading>::destroy,
                               this);
         }
 */

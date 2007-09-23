@@ -25,18 +25,26 @@
 #define BACKEND_INTERFACE_MEDIAACCESSFACADE_H
 
 
+#include "common/singleton.hpp"
+
+
 
 namespace backend_interface
   {
 
 
   /**
+   * Interface to the backend layer:
    * provides functions for querying (opening) a media file,
    * detecting the channels or streams found within this file etc. 
-   * Delegating to the actual backend functions
+   * Implemention delegating to the actual backend functions.
    */
   class MediaAccessFacade
     {
+    public:
+      static Singleton<MediaAccessFacade> instance;
+      
+      
     };
   
   

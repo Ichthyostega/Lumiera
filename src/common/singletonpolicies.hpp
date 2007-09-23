@@ -55,7 +55,7 @@ namespace cinelerra
           static S* create ()
             {
 #ifdef DEBUG
-              static uint callCount (0);
+              static uint callCount = 0;
               ASSERT ( 0 == callCount++ );
 #endif              
               static char buff[sizeof(S)];
@@ -77,6 +77,24 @@ namespace cinelerra
           static S* create ()         { return new S; }
           static void destroy (S* pS) { delete pS;    }
         };
+        
+        
+      /** 
+       *  Policy for creating dynamic Singleton instance, with 
+       *  additional facility to support Mock testing. When injecting
+       *  a Mock instance (typically a subclass of the product), the
+       *  main Singleton instance is temporarily shaddowed.
+       */
+      template<class S>
+      struct DynamicMockTestable
+        {
+          static S* create ()         { return new S; }
+          static void destroy (S* pS) { delete pS;    }
+        };
+      void injectSubclass (SI* mock)
+        {
+          
+        }
       
 
         
