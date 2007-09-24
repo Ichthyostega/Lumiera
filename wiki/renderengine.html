@@ -1305,10 +1305,10 @@ From experiences with other middle scale projects, I prefer having the test code
 [img[Example: Interfaces/Namespaces of the ~Session-Subsystems|uml/fig130053.png]]
 </pre>
 </div>
-<div title="Loading Media" modifier="Ichthyostega" created="200709220005" tags="design spec" changecount="1">
+<div title="Loading Media" modifier="Ichthyostega" modified="200709240049" created="200709220005" tags="design spec" changecount="2">
 <pre>Opening and accessing media files on disk poses several problems, most of which belong to the domain of cinelerra's data backend. Here, we focus on the questions related to making media data available to the EDL and the render engine. Each media will be represented by an MediaAsset object, which indeed could be a compound object (in case of MultichannelMedia). Building this asset object thus includes getting informations from the real file on disk. For delegating this to the backend, we use the following query interface:
-* {{{openFile(char* name)}}} requests accessing the file and yields some (opaque) handle when successful.
-* {{{getChannel(int)}}} will then be issued in sequence with ascending index numbers, until it returns {{{NULL}}}.
+* {{{queryFile(char* name)}}} requests accessing the file and yields some (opaque) handle when successful.
+* {{{queryChannel(FHandle, int)}}} will then be issued in sequence with ascending index numbers, until it returns {{{NULL}}}.
 * the returned struct (pointer) will provide the following information:
 ** some identifier which can be used to create a name for the corresponding media (channel) asset
 ** some identifier characterizing the access method (codec) needed to get at the media data. This should be rather a high level description of the media stream type, e.g. &quot;H264&quot;

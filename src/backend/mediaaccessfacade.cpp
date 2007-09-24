@@ -23,12 +23,40 @@
 
 #include "backend/mediaaccessfacade.hpp"
 
+#include "common/util.hpp"
+
+using util::isnil;
+using cinelerra::error::Invalid;
+
 namespace backend_interface
   {
   
   /** storage for the SingletonFactory 
    *  (actually a cinelerra::test::MockInjector) */
   Singleton<MediaAccessFacade> MediaAccessFacade::instance;
+
+  
+  typedef MediaAccessFacade::FileHandle FileHandle;
+  typedef MediaAccessFacade::ChanHandle ChanHandle;
+  
+  FileHandle 
+  MediaAccessFacade::queryFile (const char* name)  throw(Invalid)
+  {
+    if (isnil (name))
+      throw Invalid ("empty filename passed to MediaAccessFacade.");
+    
+    UNIMPLEMENTED ("delegate to backend: query accessability of file");
+    return 0;
+  }
+  
+  
+  ChanDesc 
+  MediaAccessFacade::queryChannel (FileHandle fhandle, uint chanNo)  throw()
+  {
+    UNIMPLEMENTED ("delegate to backend: query channel information");
+    ChanDesc nix;
+    return nix;
+  }
 
 
 

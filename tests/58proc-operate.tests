@@ -2,5 +2,11 @@ TESTING "Proc Layer combined operations Test Suite" ./test-components --group=op
 
 
 
+TEST "MediaAccessMock_test" MediaAccessMock_test <<END
+out: accessing "test-1" ...
+out:  Channel-0: nameID=video codecID=ID
+END
+
+
 PLANNED "RenderSegment_test" RenderSegment_test <<END
 END

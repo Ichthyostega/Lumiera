@@ -42,7 +42,7 @@ namespace cinelerra
   {
   namespace test
     {
-    
+
 
     /**
      * Client Class normally to be instantiated as Singleton.
@@ -53,53 +53,58 @@ namespace cinelerra
         int callCnt;
         char* typid;
         format msg;
-        
+
       public:
-        TestSingletonO(char* ty="TestSingletonO") 
-          : callCnt (0), typid(ty), msg ("%s::doIt() call=%d\n")
-          {
-            TRACE (singleton, "ctor %s", typid);
-          }
+        TestSingletonO(char* ty="TestSingletonO")
+            : callCnt (0), typid(ty), msg ("%s::doIt() call=%d\n")
+        {
+          TRACE (singleton, "ctor %s", typid);
+        }
         virtual ~TestSingletonO()
-          {
-            TRACE (singleton, "dtor %s", typid);
-          }
-        
+        {
+          TRACE (singleton, "dtor %s", typid);
+        }
+
         void doIt ()
-          {
-            ++callCnt;
-            cout << msg % typid % callCnt;
-          }
-        int getCnt () {return callCnt; }
-        
+        {
+          ++callCnt;
+          cout << msg % typid % callCnt;
+        }
+        int getCnt ()
+        {
+          return callCnt;
+        }
+
       };
-      
-      
+
+
     /**
      * Mock-1 to replace the Client Class...
      */
     struct Mock_1 : TestSingletonO
       {
-        Mock_1() : TestSingletonO("Mock_1") {};
+        Mock_1() : TestSingletonO("Mock_1")
+        {};
       };
-      
+
     /**
      * Mock-2 to replace the Client Class...
      */
     struct Mock_2 : TestSingletonO
       {
-        Mock_2() : TestSingletonO("Mock_2") {};
+        Mock_2() : TestSingletonO("Mock_2")
+        {};
       };
-      
-      
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
     /*******************************************************************
      * @test inject a Mock object into the Singleton Factory, 
      *       to be returned and used in place of the original object.
@@ -110,104 +115,104 @@ namespace cinelerra
     class SingletonTestMock_test : public Test
       {
         Singleton<TestSingletonO> instance;
-        
-        virtual void run(Arg arg) 
-          {
-            string scenario = isnil(arg)? "default" : arg[1];
-            
-            if (scenario == "default")
-              injectBoth();
-            else 
+
+        virtual void run(Arg arg)
+        {
+          string scenario = isnil(arg)? "default" : arg[1];
+
+          if (scenario == "default")
+            injectBoth();
+          else
             if (scenario == "noMock")
               noMock();
-            else 
-            if (scenario == "onlyMock")
-              onlyMock();
-            else 
-            if (scenario == "firstMock")
-              firstMock();
-          }
+            else
+              if (scenario == "onlyMock")
+                onlyMock();
+              else
+                if (scenario == "firstMock")
+                  firstMock();
+        }
 
-        
-        /** @test complete use sequence: first access the Client Object, 
+
+        /** @test complete use sequence: first access the Client Object,
          *        then replace it by two different mocks, and finally
          *        restore the original Client Object 
          */
         void injectBoth ()
-          {
-            TestSingletonO* sing = &instance();
-            sing->doIt();
-            sing->doIt();
-            ASSERT (sing->getCnt() == 2);
-            
-            instance.injectSubclass (new Mock_1);
-            sing = &instance();
-            sing->doIt();
-            sing->doIt();
-            sing->doIt();
-            sing->doIt();
-            sing->doIt();
-            ASSERT (sing->getCnt() == 5);
-            
-            instance.injectSubclass (new Mock_2);
-            sing = &instance();
-            sing->doIt();
-            ASSERT (sing->getCnt() == 1);
-            
-            instance.injectSubclass (0); // unshaddowing original instance
-            sing = &instance();
-            ASSERT (sing->getCnt() == 2);
-            sing->doIt();
-            ASSERT (sing->getCnt() == 3);
-          }
+        {
+          TestSingletonO* sing = &instance();
+          sing->doIt();
+          sing->doIt();
+          ASSERT (sing->getCnt() == 2);
 
-        
+          instance.injectSubclass (new Mock_1);
+          sing = &instance();
+          sing->doIt();
+          sing->doIt();
+          sing->doIt();
+          sing->doIt();
+          sing->doIt();
+          ASSERT (sing->getCnt() == 5);
+
+          instance.injectSubclass (new Mock_2);
+          sing = &instance();
+          sing->doIt();
+          ASSERT (sing->getCnt() == 1);
+
+          instance.injectSubclass (0); // unshaddowing original instance
+          sing = &instance();
+          ASSERT (sing->getCnt() == 2);
+          sing->doIt();
+          ASSERT (sing->getCnt() == 3);
+        }
+
+
         /** @test just use Singleton Factory normally without any Mock.
          */
         void noMock ()
-          {
-            TestSingletonO& sing = instance();
-            sing.doIt();
-          }
+        {
+          TestSingletonO& sing = instance();
+          sing.doIt();
+        }
 
-        
+
         /** @test inject the Mock prior to using the Singleton Factory,
          *        thus the original Client Object shouldn't be created. 
          */
         void onlyMock ()
-          {
-            instance.injectSubclass (new Mock_1);
-            TestSingletonO& sing = instance();
-            sing.doIt();
-          }
+        {
+          instance.injectSubclass (new Mock_1);
+          TestSingletonO& sing = instance();
+          sing.doIt();
+        }
 
-        
+
         /** @test inject the Mock prior to using the Singleton Factory,
          *        but then reset the Mock, so following calls should
          *        create the original Client Object. 
          */
         void firstMock ()
-          {
-            instance.injectSubclass (new Mock_1);
-            TestSingletonO* sing = &instance();
-            sing->doIt();
-            sing->doIt();
-            ASSERT (sing->getCnt() == 2);
-            
-            instance.injectSubclass (0);
-            sing = &instance();
-            sing->doIt();
-            ASSERT (sing->getCnt() == 1);
-          }
+        {
+          instance.injectSubclass (new Mock_1);
+          TestSingletonO* sing = &instance();
+          sing->doIt();
+          sing->doIt();
+          ASSERT (sing->getCnt() == 2);
+
+          instance.injectSubclass (0);
+          sing = &instance();
+          sing->doIt();
+          ASSERT (sing->getCnt() == 1);
+        }
       };
-    
-      
-    
+
+
+
     /** Register this test class... */
     LAUNCHER (SingletonTestMock_test, "unit common");
-    
-    
-    
+
+
+
   } // namespace test
 
 } // namespace cinelerra
