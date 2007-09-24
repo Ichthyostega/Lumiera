@@ -66,7 +66,7 @@ namespace cinelerra
     
   namespace test
     {
-    class TargetObj;
+    class TestSingletonO;
     using cinelerra::Singleton;
     
   } // namespace test
@@ -94,8 +94,8 @@ namespace cinelerra
   
     
   template<>
-  class Singleton<test::TargetObj>
-    : public MockInjector<test::TargetObj>
+  class Singleton<test::TestSingletonO>
+    : public MockInjector<test::TestSingletonO>
     { };
 
     

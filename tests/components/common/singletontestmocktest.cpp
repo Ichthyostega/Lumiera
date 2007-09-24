@@ -48,19 +48,19 @@ namespace cinelerra
      * Client Class normally to be instantiated as Singleton.
      * But for tests, this class should be replaced by a Mock....
      */
-    class TargetObj
+    class TestSingletonO
       {
         int callCnt;
         char* typid;
         format msg;
         
       public:
-        TargetObj(char* ty="TargetObj") 
+        TestSingletonO(char* ty="TestSingletonO") 
           : callCnt (0), typid(ty), msg ("%s::doIt() call=%d\n")
           {
             TRACE (singleton, "ctor %s", typid);
           }
-        virtual ~TargetObj()
+        virtual ~TestSingletonO()
           {
             TRACE (singleton, "dtor %s", typid);
           }
@@ -78,17 +78,17 @@ namespace cinelerra
     /**
      * Mock-1 to replace the Client Class...
      */
-    struct Mock_1 : TargetObj
+    struct Mock_1 : TestSingletonO
       {
-        Mock_1() : TargetObj("Mock_1") {};
+        Mock_1() : TestSingletonO("Mock_1") {};
       };
       
     /**
      * Mock-2 to replace the Client Class...
      */
-    struct Mock_2 : TargetObj
+    struct Mock_2 : TestSingletonO
       {
-        Mock_2() : TargetObj("Mock_2") {};
+        Mock_2() : TestSingletonO("Mock_2") {};
       };
       
       
@@ -109,7 +109,7 @@ namespace cinelerra
      */
     class SingletonTestMock_test : public Test
       {
-        Singleton<TargetObj> instance;
+        Singleton<TestSingletonO> instance;
         
         virtual void run(Arg arg) 
           {
@@ -135,30 +135,30 @@ namespace cinelerra
          */
         void injectBoth ()
           {
-            TargetObj* tartar = &instance();
-            tartar->doIt();
-            tartar->doIt();
-            ASSERT (tartar->getCnt() == 2);
+            TestSingletonO* sing = &instance();
+            sing->doIt();
+            sing->doIt();
+            ASSERT (sing->getCnt() == 2);
             
             instance.injectSubclass (new Mock_1);
-            tartar = &instance();
-            tartar->doIt();
-            tartar->doIt();
-            tartar->doIt();
-            tartar->doIt();
-            tartar->doIt();
-            ASSERT (tartar->getCnt() == 5);
+            sing = &instance();
+            sing->doIt();
+            sing->doIt();
+            sing->doIt();
+            sing->doIt();
+            sing->doIt();
+            ASSERT (sing->getCnt() == 5);
             
             instance.injectSubclass (new Mock_2);
-            tartar = &instance();
-            tartar->doIt();
-            ASSERT (tartar->getCnt() == 1);
+            sing = &instance();
+            sing->doIt();
+            ASSERT (sing->getCnt() == 1);
             
             instance.injectSubclass (0); // unshaddowing original instance
-            tartar = &instance();
-            ASSERT (tartar->getCnt() == 2);
-            tartar->doIt();
-            ASSERT (tartar->getCnt() == 3);
+            sing = &instance();
+            ASSERT (sing->getCnt() == 2);
+            sing->doIt();
+            ASSERT (sing->getCnt() == 3);
           }
 
         
@@ -166,8 +166,8 @@ namespace cinelerra
          */
         void noMock ()
           {
-            TargetObj& tartar = instance();
-            tartar.doIt();
+            TestSingletonO& sing = instance();
+            sing.doIt();
           }
 
         
@@ -177,8 +177,8 @@ namespace cinelerra
         void onlyMock ()
           {
             instance.injectSubclass (new Mock_1);
-            TargetObj& tartar = instance();
-            tartar.doIt();
+            TestSingletonO& sing = instance();
+            sing.doIt();
           }
 
         
@@ -189,15 +189,15 @@ namespace cinelerra
         void firstMock ()
           {
             instance.injectSubclass (new Mock_1);
-            TargetObj* tartar = &instance();
-            tartar->doIt();
-            tartar->doIt();
-            ASSERT (tartar->getCnt() == 2);
+            TestSingletonO* sing = &instance();
+            sing->doIt();
+            sing->doIt();
+            ASSERT (sing->getCnt() == 2);
             
             instance.injectSubclass (0);
-            tartar = &instance();
-            tartar->doIt();
-            ASSERT (tartar->getCnt() == 1);
+            sing = &instance();
+            sing->doIt();
+            ASSERT (sing->getCnt() == 1);
           }
       };
     
