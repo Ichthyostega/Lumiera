@@ -1,5 +1,5 @@
 /*
-  TESTSESSION1.hpp  -  complete session configuration use for various tests
+  TESTSESSION1.hpp  -  complete session configuration used for various tests
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -21,8 +21,8 @@
 */
 
 
-#ifndef MOBJECT_SESSION_TESTCLIP_H
-#define MOBJECT_SESSION_TESTCLIP_H
+#ifndef MOBJECT_SESSION_TESTSESSION_H
+#define MOBJECT_SESSION_TESTSESSION_H
 
 
 #include "proc/mobject/session/session.hpp"
@@ -42,16 +42,27 @@ namespace mobject
   {
   namespace session
     {
-    typedef std::auto_ptr<Session> PSession;  /////TODO
     
     /**
      * Create a Test Session configuration usable for various Tests.
      * This Session holds two Clips and corresponds to "Example1"
-     * in the UML design.
+     * in the UML design. All changes are done to the (global)
+     * current session.
      */
-    PSession Testsession1 ()
+    void buildTestseesion1 ()
       {
         UNIMPLEMENTED ("Test-Session 1");
+      };
+    
+      
+    /**
+     * Analyze the current (gloal) Session to verify the
+     * configuration of "Test-Session 1"
+     */
+    bool checkTestseesion1 ()
+      {
+        UNIMPLEMENTED ("Test-Session 1");
+        return false;
       };
     
     

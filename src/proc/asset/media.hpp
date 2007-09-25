@@ -40,9 +40,12 @@
 
 
 
+class mobject::session::Clip;
+
 namespace asset
   {
   
+  class Clip;
   class Media;
   class MediaFactory;
   
@@ -72,6 +75,9 @@ namespace asset
         { 
           return static_cast<const ID<Media>& > (Asset::getID()); 
         }
+      
+      shared_ptr<mobject::session::Clip> createClip ();
+      shared_ptr<asset::ProcPatt> howtoProc ();
       
     protected:
       Media (const Asset::Ident& idi, const string& file) : Asset(idi), filename_(file) {}

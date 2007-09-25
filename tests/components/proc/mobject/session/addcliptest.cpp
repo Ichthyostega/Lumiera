@@ -22,13 +22,15 @@
 
 
 #include "common/test/run.hpp"
-//#include "common/factory.hpp"
-//#include "common/util.hpp"
+#include "proc/mobject/session/session.hpp"
+#include "proc/mobject/session/testclip.hpp"
+#include "common/util.hpp"
 
 //#include <boost/format.hpp>
 #include <iostream>
 
 //using boost::format;
+using util::contains;
 using std::string;
 using std::cout;
 
@@ -52,6 +54,13 @@ namespace mobject
         {
           virtual void run(Arg arg) 
             {
+              Session& sess = Session::getCurrent();
+              PMO clip = TestClip::create();
+              PPla pla = Placement::create(FIXED, Time(1), clip);
+              sess.add (pla);
+              
+              ASSERT (contains (sess.getEDL(), pla));
+              // TODO: Clip-Asset and Placement magic??
             } 
         };
       

@@ -763,6 +763,34 @@ Cinelerra uses this term in a related manner but with a somewhat shifted focus (
 In this usage, the EDL is almost synonymous to the ''Session'', just the latter emphasizes more the state aspect, as it can be thought as a current state of the EDL contained in a file or data structure together with additional Option values and settings for the GUI. The Session is what you save and load, while the EDL rather denotes a structure of Objects placed in time.
 </pre>
 </div>
+<div title="EditingOperations" modifier="Ichthyostega" modified="200709251706" created="200709251610" tags="design decision" changecount="2">
+<pre>These are the tools provided to any client of the Proc layer for handling and manipulating the entities in the EDL. When defining such operations, //the goal should be to arrive at some uniformity in the way things are done.// Ideally, when writing client code, one should be able to guess how to achieve some desired result.
+
+!guiding principle
+The approach taken to define any operation is based primarily on the ''~OO-way of doing things'': entities operate themselfs. You don't advise some manager, session or other &amp;raquo;god class&amp;laquo; to manipulate them. And, secondly, the scope of each operation will be as large as possible, but not larger. This often means performing quite some elementary operations &amp;mdash; sometimes a convenience shortcut provided by the higher levels of the application may come in handy &amp;mdash; and basically this gives rise to several different paths of doing the same thing, all of which need to be equivalent.
+
+!main tasks
+* you ''create a clip'' either from a source media or from another clip (copy, maybe clone?). The new clip always reflects the full size (and other properties) of the source used for creating.
+* you can request a clip to ''resize'', which always relates to its current dimensions.
+* you can ''place or attach'' the clip to some point or other entity by creating a [[Placement]] from the clip.
+* you can ''adjust'' a placement relative to some other placement, meta object (i.e. selection), label or media, and this may cause the placement to resize or even delete the clip as necessary
+* you can perform ''adjustments'' on the whole EDL.
+All these operations propagate to directly dependant objects and may schedule global reconfigurations.
+
+!state, locking, policies
+While performing any manipulative task, the state of the object is considered inconsistent, but it is guaranteed to be consistent after any such operation, irrespective of the result. There is no automatic atomicity and, consequently each propagation is considered a separate operation.
+
+!!parallelism
+At the level of fine grained operations on individual entities, there is ''no support for parallelism''. Individual entities don't lock themselves. Tasks perform locking and are to be scheduled. Thus, we need an isolation layer towards all inherently multithreaded parts of the system, like the GUI or the renderengine.
+
+This has some obvious and some subtle consequences. Of course, manipulating //tasks// will be queued and scheduled somewhere. But as we rely on object identity and reference semantics for the entities in the EDL, some value changes are visible to  operations going on in parallel threads (e.g. rendering) and each operation on the EDL entities //has to be aware of this.//
+Consequently, sometimes there needs to be done a ''self-replacement by copy'' followed by manipulation of the new copy, while ongoing processes use the unaltered original object until they receive some sort of reset.
+
+!!undo
+Basically, each elementary operation has to record the informations necessary to be undone. It does so by registering a Memento with some central UndoManager facility. This Memento object contains a functor pre-bound with the needed parameter values. (Besides, the UndoManager is free to implement a second level of security by taking independent state snapshots). 
+{{red{to be defined in more detail later...}}}
+</pre>
+</div>
 <div title="Example1" modifier="Ichthyostega" modified="200706220253" created="200706220239" tags="example" changecount="3">
 <pre>The &amp;raquo;Timeline&amp;laquo; is a sequence of ~MObjects -- here clips -- together with an ExplicitPlacement, locating each clip at a given time and track. (Note: I simplified the time format and wrote frame numbers to make it more clear)
 [img[Example1: Objects in the EDL/Fixture|uml/fig128773.png]]
@@ -951,7 +979,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200709200223" created="200708080322" tags="overview" changecount="7">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200709251549" created="200708080322" tags="overview" changecount="8">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Cinelerra Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -959,6 +987,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 * [[Creating and registering Assets|AssetCreation]]
 * [[Creating new Objects|ObjectCreation]]
 * [[Multichannel Media|MultichannelMedia]]
+* [[Editing Operations|EditingOperations]]
 
 </pre>
 </div>
@@ -2035,7 +2064,7 @@ DAMAGE.
 //Note, we have yet to specify how exactly the building and rendering will work together with the backend. There are several possibilities how to structure the Playlist//
 </pre>
 </div>
-<div title="ProblemsTodo" modifier="Ichthyostega" modified="200709212330" created="200708050524" tags="design discuss" changecount="14">
+<div title="ProblemsTodo" modifier="Ichthyostega" modified="200709251721" created="200708050524" tags="design discuss" changecount="15">
 <pre>Open issues, Things to be worked out, Problems still to be solved... 
 
 !!Parameter Handling
@@ -2062,7 +2091,14 @@ Users accustomed with modern GUI applications typically expect that //everything
 !!Compound and Multiplicity
 Simple relations can be hard wired. But, on the contrary, it would be as naive to define a Clip as having a Video track and two audio tracks, as it would be naive to overlook the problem of holding video and corresponding audio together. And, moreover, the default case has to be processed in a //straight forward// fashion, with as few tests and decisions as possible. So, basically each component participating in getting the core processing done has to mirror the structure pattern of the other parts, so that  processing can be done without testing and forking. But this leaves us with the problem where to put the initial knowledge about the structural pattern used for building up the compound structures and &amp;mdash; especially &amp;mdash; the problem how to treat different kinds of structural patterns, how to detect the pattern to be applied and how to treat multiple instances of the same structural pattern.
 
-One example of this problem is the [[handling of multichannel media|MultichannelMedia]]. Following the above reasoning, we end with having a [[&quot;structural processing pattern&quot;|ProcPatt]], typically one video stream with MPEG decoder and a pair of audio streams which need either to be routed to some &quot;left&quot; and &quot;right&quot; output ports, or have to be passed through a panning filter accordingly. Now the problem is: //create a new instance of this structure for each new media, or detect which media to subsume under a existing pattern instance.//</pre>
+One example of this problem is the [[handling of multichannel media|MultichannelMedia]]. Following the above reasoning, we end with having a [[&quot;structural processing pattern&quot;|ProcPatt]], typically one video stream with MPEG decoder and a pair of audio streams which need either to be routed to some &quot;left&quot; and &quot;right&quot; output ports, or have to be passed through a panning filter accordingly. Now the problem is: //create a new instance of this structure for each new media, or detect which media to subsume under a existing pattern instance.//
+
+!!Parallelism
+We need to work out guidelines for dealing with operations going on simultaneously. Certainly, this will divide the application in several different regions. As always, the primary goal is to avoid multithread problems altogether. Typically, this can be achieved by making matters explicit: externalizing state, make the processing subsystems stateless, queue and schedule tasks, use isolation layers.
+* the StateProxy is a key for the individual render processes state, which is managed in separate [[StateFrame]]s in the backend. The [[processing network|ProcNode]] is stateless.
+* the [[Fixture]] provides an isolation layer between the renderengine and the Session/EDL
+* all EditingOperations are not threadsafe intentionally, because they are [[scheduled|ProcLayerScheduler]]
+</pre>
 </div>
 <div title="ProcAsset" modifier="Ichthyostega" created="200709221343" tags="def classes" changecount="1">
 <pre>All Assets of kind asset::Proc represent //processing algorithms// in the bookkeeping view. They enable loading, browsing and maybe even parametrizing all the Effects, Plugins and Codecs available for use within the Cinelerra Session.

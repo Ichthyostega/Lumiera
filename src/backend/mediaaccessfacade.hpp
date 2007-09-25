@@ -65,6 +65,7 @@ namespace backend_interface
        *  of the file refered by FileHandle.
        *  @return ChanDesc which may contain \c NULL values if
        *          the file doesn't contain this much channels.
+       *  @todo   throw or return NULL-ChanDesc if Filehandle is invalid?
        */  
       virtual ChanDesc queryChannel (FileHandle, uint chanNo)  throw(); 
       

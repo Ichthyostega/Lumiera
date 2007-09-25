@@ -203,7 +203,14 @@ namespace test
         std::cout << "TEST \""<<key<<"\" "<<key<<" <<END\n";
         Launcher* test = (i->second);
         VALID (test, i->first);
-        (*test)()->run(noCmdline); // run it to insert test generated output
+        try
+          {
+            (*test)()->run(noCmdline); // run it to insert test generated output
+          }
+        catch (...) 
+          {
+            std::cout << "PLANNED ============= " << cinelerra_error() << "\n";
+          }
         std::cout << "END\n";
       }
   }

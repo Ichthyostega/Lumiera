@@ -25,6 +25,7 @@
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
 #include "proc/asset/unknown.hpp"
+#include "proc/mobject/session/clip.hpp"
 #include "common/util.hpp"
 #include "nobugcfg.h"
 
@@ -58,7 +59,34 @@ namespace asset
     }
   } 
 
-
+  
+  
+  
+  typedef shared_ptr<mobject::session::Clip> PClip;
+  typedef shared_ptr<asset::ProcPatt> PProcPatt;
+  
+  
+  PClip 
+  Media::createClip ()
+  {
+    UNIMPLEMENTED ("create clip from media asset");
+    PClip clip; //TODO:null
+    
+    ENSURE (clip);
+    return clip;
+  }
+  
+  PProcPatt
+  Media::howtoProc ()
+  {
+    UNIMPLEMENTED ("calculate and return processing pattern for media asset");
+    PProcPatt ppatt; //TODO:null
+    
+    ENSURE (ppatt);
+    return ppatt;
+  }
+  
+  
   
   MediaFactory Media::create;  ///< storage for the static MediaFactory instance
   

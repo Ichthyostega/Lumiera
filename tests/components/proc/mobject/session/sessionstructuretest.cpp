@@ -1,5 +1,5 @@
 /*
-  DeleteClip(Test)  -  removing an Clip-MObject from the Session
+  SessionStructure(Test)  -  verifying basic Session/EDL structure
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -22,11 +22,9 @@
 
 
 #include "common/test/run.hpp"
-#include "proc/assetmanager.hpp"
 #include "proc/mobject/session/session.hpp"
-#include "proc/mobject/session/testsession1.hpp"
+#include "proc/assetmanager.hpp"
 //#include "common/util.hpp"
-
 //#include <boost/format.hpp>
 #include <iostream>
 
@@ -41,39 +39,36 @@ namespace mobject
     {
     namespace test
       {
+      using proc_interface::AssetManager;
+      using proc_interface::PAsset;
       
       
-      
-      
-      /*******************************************************************
-       * @test removing a test clip from the EDL.
-       * @see  mobject::session::Clip
-       * @see  mobject::session::EDL
+      /*******************************************************************************
+       * @test access the current session and verify the correct
+       *       structure of the most important components: The session
+       *       contains an EDL, we can get at the Fixture, we have at least
+       *       one Track and the corresponding Track asset is available.
+       * @todo define further criteria to be checked 
+       * @todo implement EDL, Fixture, Session#rebuildFixture, asset::Track
        */
-      class DeleteClip_test : public Test
+      class SessionStructure_test : public Test
         {
           virtual void run(Arg arg) 
             {
-              buildTestseesion1();
               Session& sess = Session::getCurrent();
+              ASSERT (0 <= sess.getEDL().size());       // TODO implement
+              ASSERT (0 <= sess.getFixture().size());   // TODO implement
+              ASSERT (0 <  sess.getTracks().size());    // TODO implement
+              
+              PAsset track = sess.getTracks()[0];
               AssetManager& aMang = AssetManager::instance();
-              
-              PPla clipPlacement = sess.getEDL().find(SESSION1_CLIP); // global Var asigned in buildTestsession1()
-              PAsset clipAsset = aMang.getAsset(clipPlacement->subject->getMedia());
-              IDA clipAID = clipAsset->getID();
-              ASSERT (clipPlacement);
-              
-              sess.remove (clipPlacement);
-              
-              ASSERT (!sess.getEDL().find(SESSION1_CLIP));                      // EDL forgot the Clip/Placement
-              ASSERT (!aMang.known (clipAID));                                  // corresponding Clip Asset has disappeared 
-              ASSERT (!aMang.getAsset(clipPlacement->subject->getMedia()));     // internal cross-links removed
+              ASSERT (track == aMang.getAsset (track->getID()));
             } 
         };
       
       
       /** Register this test class... */
-      LAUNCHER (DeleteClip_test, "function session");
+      LAUNCHER (SessionStructure_test, "unit session");
       
       
       
