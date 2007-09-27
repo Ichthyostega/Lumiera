@@ -1,6 +1,6 @@
 format 40
 "session" // design::codegen::proc::mobject::session
-  revision 8
+  revision 9
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -75,6 +75,45 @@ ${namespace_end}"
 	class_ref 128005 // SessionImpl
       end
       comment "holds the complete session data to be edited by the user"
+    end
+
+    artifact 138885 "sessmanager"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 139781 // SessManager
+      end
+      comment "global session access and lifecycle"
     end
 
     artifact 128645 "edl"
@@ -506,7 +545,7 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 129285 // DirectPlacement
+	class_ref 129285 // FixedPlacement
       end
     end
 

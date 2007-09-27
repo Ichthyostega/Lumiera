@@ -3,7 +3,7 @@ diagrams
   classdiagram_ref 130309 // Asset Kinds
     860 633 100 4 0 0
   active  classdiagram_ref 128133 // Session structure
-    860 633 100 4 581 0
+    860 633 100 4 120 0
   classdiagram_ref 130437 // Media-Asset Relations
     860 633 100 4 0 0
   classdiagram_ref 128389 // Render Entities
@@ -16,7 +16,7 @@ open
   
   package_ref 128005 // design
   classview_ref 128901 // Assets
-  classview_ref 128005 // Session
+  class_ref 139781 // SessManager
   classview_ref 129029 // Interface
 end
 end

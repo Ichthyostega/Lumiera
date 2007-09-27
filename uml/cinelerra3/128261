@@ -1,6 +1,6 @@
 format 40
 "MObject" // ProcessingLayer::MObject
-  revision 21
+  revision 22
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -94,6 +94,16 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 there is only one Fixture, which represents the actual
 configuration of all Objects to be rendered"
       end
+
+      classrelation 144773 // current (<unidirectional association>)
+	relation 142853 --->
+	  a role_name "current" multiplicity "1" class_relation public
+	    comment "Standard access path to get at the current session via the Session Manager, which acts as a \"PImpl\" smart pointer"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}& ${name}${value};
+"
+	    classrelation_ref 144773 // current (<unidirectional association>)
+	  b multiplicity "" parent class_ref 139781 // SessManager
+      end
     end
 
     class 128005 "SessionImpl"
@@ -133,6 +143,90 @@ ${inlines}
 	    cpp default "${type}"
 	    classrelation_ref 144645 // <realization>
 	  b multiplicity "" parent class_ref 139653 // Session
+      end
+    end
+
+    class 139781 "SessManager"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 133765 "clear"
+	public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	comment "clear current session contents 
+without resetting overall session config.
+Afterwards, the session will contain only one 
+empty EDL, while all Assets are retained.
+"
+      end
+
+      operation 133893 "reset"
+	public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	comment "reset all session config and 
+start with a pristine default session."
+      end
+
+      operation 134021 "load"
+	public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	comment "replace the current session by a new
+session loaded from serialized state."
+      end
+
+      operation 134149 "save"
+	public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	comment "create a complete, serialized representation
+of the current session config and contents.
+@todo how to serialize, prameters, return value?"
       end
     end
 
@@ -585,7 +679,7 @@ ${inlines}
       end
     end
 
-    class 129285 "DirectPlacement"
+    class 129285 "FixedPlacement"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
