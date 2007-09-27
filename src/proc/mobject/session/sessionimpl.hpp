@@ -1,5 +1,5 @@
 /*
-  MOBJECT.hpp  -  Key Abstraction: A Media Object in the Session
+  SESSIONIMPL.hpp  -  holds the complete session data to be edited by the user
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -21,48 +21,45 @@
 */
 
 
-#ifndef MOBJECT_MOBJECT_H
-#define MOBJECT_MOBJECT_H
+#ifndef MOBJECT_SESSION_SESSIONIMPL_H
+#define MOBJECT_SESSION_SESSIONIMPL_H
 
-#include <list>
-#include <tr1/memory>
+#include "proc/mobject/session/session.hpp"
+#include "proc/mobject/session/edl.hpp"
+#include "proc/mobject/session/fixture.hpp"
 
-#include "cinelerra.h"
-#include "proc/mobject/buildable.hpp"
+#include <vector>
 
+using std::vector;
 
-using std::list;
-using std::tr1::shared_ptr;
 
 
 namespace mobject
   {
-
-  class Placement;
-
-
-  /**
-   * MObject is the interface class for all "Media Objects".
-   * All the contents and elements that can be placed and 
-   * manipulated and finally rendered within Cinelerra's EDL 
-   * are MObjects.
-   */
-  class MObject : public Buildable
+  namespace session
     {
-    protected:
-      typedef cinelerra::Time Time;
-
-      // TODO: how to represent time intervals best?
-      Time length;
-
-      list<Placement *> placement;
-
-    };
-  
-  
-  typedef shared_ptr<MObject> PMO;
 
 
+    /**
+     * Implementation class for the Session interface
+     */
+    class SessionImpl : public mobject::Session
+      {
+      protected:
+        vector<EDL> edls;
+        Fixture fixture;
+        
+        SessionImpl ();
+        friend class cinelerra::singleton::StaticCreate<SessionImpl>;
+        
+        void add (PPla placement);
+        
+        EDL& currEDL () { return edl; }
+        Fixture& getFixture () { return fixture; }
+
+      };
+
+  } // namespace mobject::session
 
 } // namespace mobject
 #endif

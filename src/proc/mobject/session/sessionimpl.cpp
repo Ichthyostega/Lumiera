@@ -1,5 +1,5 @@
 /*
-  MOBJECT.hpp  -  Key Abstraction: A Media Object in the Session
+  SessionImpl  -  holds the complete session data to be edited by the user
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -18,51 +18,23 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
 
 
-#ifndef MOBJECT_MOBJECT_H
-#define MOBJECT_MOBJECT_H
-
-#include <list>
-#include <tr1/memory>
-
-#include "cinelerra.h"
-#include "proc/mobject/buildable.hpp"
-
-
-using std::list;
-using std::tr1::shared_ptr;
-
+#include "proc/mobject/session/sessionimpl.hpp"
+#include "proc/mobject/session/edl.hpp"
+#include "proc/mobject/session/fixture.hpp"
 
 namespace mobject
   {
 
-  class Placement;
-
-
-  /**
-   * MObject is the interface class for all "Media Objects".
-   * All the contents and elements that can be placed and 
-   * manipulated and finally rendered within Cinelerra's EDL 
-   * are MObjects.
-   */
-  class MObject : public Buildable
+  namespace session
     {
-    protected:
-      typedef cinelerra::Time Time;
-
-      // TODO: how to represent time intervals best?
-      Time length;
-
-      list<Placement *> placement;
-
-    };
-  
-  
-  typedef shared_ptr<MObject> PMO;
+    
+    /** */
 
 
+
+  } // namespace mobject::session
 
 } // namespace mobject
-#endif

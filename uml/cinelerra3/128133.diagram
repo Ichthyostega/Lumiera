@@ -1,8 +1,8 @@
 format 40
 
-classcanvas 128005 class_ref 128005 // Session
+classcanvas 128005 class_ref 128005 // SessionImpl
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 30 608 2000
+  xyz 19 606 2000
   end
 classcanvas 128133 class_ref 128133 // EDL
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -38,7 +38,7 @@ classcanvas 131461 class_ref 128901 // Clip
   end
 classcanvas 131717 class_ref 129029 // Effect
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 336 361 2000
+  xyz 332 361 2000
   end
 classcanvas 131973 class_ref 129157 // Meta
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -92,10 +92,14 @@ classcanvas 138629 class_ref 135173 // Segment
   end
 classcanvas 139013 class_ref 138629 // CompoundClip
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 266 466 2000
+  xyz 272 466 2000
   end
-relationcanvas 128389 relation_ref 128005 // <directional aggregation>
-  from ref 128005 z 1999 stereotype "<<list>>" xyz 139 626 3000 to ref 128133
+classcanvas 139269 class_ref 139653 // Session
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 23 458 2000
+  end
+relationcanvas 128389 relation_ref 128005 // <directional aggregation by value>
+  from ref 128005 z 1999 to ref 128133
   role_a_pos 201 603 3000 no_role_b
   multiplicity_a_pos 205 636 3000 no_multiplicity_b
 relationcanvas 128517 relation_ref 128133 // <unidirectional association>
@@ -208,6 +212,10 @@ relationcanvas 138757 relation_ref 137093 // <directional aggregation>
   multiplicity_a_pos 505 783 3000 no_multiplicity_b
 relationcanvas 139141 relation_ref 140805 // <generalisation>
   from ref 139013 z 1999 to ref 131461
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 139525 relation_ref 142725 // <realization>
+  from ref 128005 z 1999 stereotype "<<PImpl>>" xyz 57 558 3000 to ref 139269
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end

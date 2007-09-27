@@ -40,7 +40,7 @@
 
 
 
-class mobject::session::Clip;
+namespace mobject { namespace session { class Clip; }}
 
 namespace asset
   {
@@ -48,6 +48,7 @@ namespace asset
   class Clip;
   class Media;
   class MediaFactory;
+  class ProcPatt;
   
   
   template<>

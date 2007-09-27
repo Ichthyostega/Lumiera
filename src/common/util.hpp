@@ -98,7 +98,7 @@ namespace util
   inline bool 
   contains (SEQ& cont, typename SEQ::value_type& val)
   {
-    SEQ::iterator end = cont.end();
+    typename SEQ::iterator end = cont.end();
     return end != std::find(cont.begin(),end, val);
   }
   

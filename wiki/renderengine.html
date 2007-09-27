@@ -755,12 +755,18 @@ The main tool used to implement this separation is the [[Builder Pattern|http://
 Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the EDL in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
 </pre>
 </div>
-<div title="EDL" modifier="MichaelPloujnikov" modified="200706271459" created="200706210610" changecount="4">
+<div title="EDL" modifier="Ichthyostega" modified="200709270230" created="200706210610" tags="def" changecount="5">
 <pre>''EDL'' is a short-hand for __E__dit __D__ecision __L__ist. The use of this term can be confusing; for the usual meaning see the definition in [[Wikipedia|http://en.wikipedia.org/wiki/Edit_decision_list]]
 
 Cinelerra uses this term in a related manner but with a somewhat shifted focus (and we just stick to this usage here): In Cinelerra the EDL is comprised of the whole set of clips and other media objects parametrized and placed onto the tracks by the user. It is the result of the user's //editing efforts.//
 
-In this usage, the EDL is almost synonymous to the ''Session'', just the latter emphasizes more the state aspect, as it can be thought as a current state of the EDL contained in a file or data structure together with additional Option values and settings for the GUI. The Session is what you save and load, while the EDL rather denotes a structure of Objects placed in time.
+In this usage, the EDL in most cases will be almost synonymous to the ''Session'', just the latter emphasizes more the state aspect, as it can be thought as the current EDL contents contained in a file or data structure together with additional Option values and settings for the GUI. The Session is what you save and load, while the EDL rather denotes a structured collection of Objects placed in time.
+
+!!!larger projects
+For larger editing projects the simple structure of a session containing &quot;the&quot; timeline is not sufficient. Rather, we have several timelines, e.g. one for each scene. Or we could have several layered or nested timelines (compositional work, multimedia productions). To support these cases without making the default case more complicated, Cinelerra-3 introduces a //focus// for selecting the //current EDL,// which will receive all editing operations.
+
+!!!the definitive state
+With all the structural complexities possible within such a session, we need an isolation layer to provide __one__ definitive state where all configuration has been made explicit. Thus the session manages one special object list, the [[Fixture]], which can be seen as all currently active object placed onto a single timeline.
 </pre>
 </div>
 <div title="EditingOperations" modifier="Ichthyostega" modified="200709251706" created="200709251610" tags="design decision" changecount="2">
@@ -881,13 +887,14 @@ Some further details
 * and, as the created smart-pointer is a template parameter, such a custom Functor can create all sorts of Proxies, wrappers and the like
 </pre>
 </div>
-<div title="Fixture" modifier="Ichthyostega" modified="200706220325" created="200706220324" tags="def" changecount="2">
+<div title="Fixture" modifier="Ichthyostega" modified="200709270236" created="200706220324" tags="def" changecount="3">
 <pre>a specially configured EDL
  * all MObjects have their position, length and configuration set up ready for rendering.
- * all MObjects are associated with a ExplicitPlacement
+ * compound objects (e.g. multichannel clips) have been resolved to single non-compound basic objects.
+ * every MObject is associated with an ExplicitPlacement, which declares a fixed position (Time, Track)
  * this ~ExplicitPlacements are contained in a ordered List called the Timeline
 
-//My intention is to create this Fixture out of the editing operations done by the user//
+As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Proc layer (editing, object manipulation) and the render engine
 </pre>
 </div>
 <div title="Frame" modifier="Ichthyostega" modified="200706220333" created="200706220332" tags="def" changecount="2">

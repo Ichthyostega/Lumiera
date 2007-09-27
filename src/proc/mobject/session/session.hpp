@@ -24,6 +24,11 @@
 #ifndef MOBJECT_SESSION_SESSION_H
 #define MOBJECT_SESSION_SESSION_H
 
+#include "common/singleton.hpp"
+#include "proc/mobject/placement.hpp"
+
+#include <boost/utility.hpp>
+
 
 
 namespace mobject
@@ -41,12 +46,30 @@ namespace mobject
      * perspective, it is a collection of Media Objects
      * (--> MObject) placed (--> Placement) onto virtual
      * Tracks.
+     * 
+     * Opening a Session has effectively global consequences, 
+     * because the Session defines the available Assets, and some 
+     * kinds of Assets define default behaviour. Thus, access to 
+     * the Session is similar to a Singleton instance.
+     *  
      */
-    class Session
+    class Session : private boost::noncopyable
       {
       protected:
-        EDL& edl;
-        Fixture& fixture;
+        vector<EDL> edls;
+        Fixture fixture;
+        
+        Session ();
+        friend class cinelerra::singleton::StaticCreate<SessionImpl>; //TODO use PImpl or just covariance??
+
+      public:
+        static cinelerra::Singleton<Session> getCurrent;
+        
+        void add (PPla placement);
+        
+        
+        EDL& currEDL () { return edl; }
+        Fixture& getFixture () { return fixture; }
 
       };
 

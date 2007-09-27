@@ -24,12 +24,14 @@
 #include "common/test/run.hpp"
 #include "proc/mobject/session/session.hpp"
 #include "proc/mobject/session/testclip.hpp"
+#include "proc/mobject/placement.hpp"
 #include "common/util.hpp"
 
 //#include <boost/format.hpp>
 #include <iostream>
 
 //using boost::format;
+using cinelerra::Time;
 using util::contains;
 using std::string;
 using std::cout;
@@ -56,7 +58,7 @@ namespace mobject
             {
               Session& sess = Session::getCurrent();
               PMO clip = TestClip::create();
-              PPla pla = Placement::create(FIXED, Time(1), clip);
+              PPla pla = Placement::create(Placement::FIXED, Time(1), clip);
               sess.add (pla);
               
               ASSERT (contains (sess.getEDL(), pla));

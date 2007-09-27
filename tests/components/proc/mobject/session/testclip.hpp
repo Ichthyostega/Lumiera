@@ -26,12 +26,13 @@
 
 
 #include "common/test/run.hpp"
-//#include "common/factory.hpp"
+#include "common/factory.hpp"
 //#include "common/util.hpp"
 
 //#include <boost/format.hpp>
 #include <iostream>
 
+using std::tr1::shared_ptr;
 //using boost::format;
 using std::string;
 using std::cout;

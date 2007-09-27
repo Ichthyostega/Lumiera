@@ -27,13 +27,13 @@
 <tr bgcolor=#f0f0f0><td><a href="class129925.html#refclass129925" target = "projectFrame"><b>Auto</b></a></td><td></td><td>Automation data for some parameter (i.e. a time varying function)</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class134021.html#refclass134021" target = "projectFrame"><b>Buildable</b></a></td><td>interface</td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class130565.html#refclass130565" target = "projectFrame"><b>BuilderFacade</b></a></td><td>boundary</td><td>Provides unified access to the builder functionality. While individual components of the builder subsystem may be called if necessary or suitable, it is usually better to do all extern invocations via the high level methods of this Facade</td></tr>
-<tr bgcolor=#f0f0f0><td><a href="class139013.html#refclass139013" target = "projectFrame"><b>BuildInstruct</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class139013.html#refclass139013" target = "projectFrame"><b>BuildInstruct</b></a></td><td></td><td>(Interface) building instructions to be executed by the Builder on the render node network under construction.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class137221.html#refclass137221" target = "projectFrame"><b>Category</b></a></td><td></td><td>tree like classification of Assets</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class137349.html#refclass137349" target = "projectFrame"><b>Clip</b></a></td><td></td><td>bookkeeping (asset) view of a media clip.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class128901.html#refclass128901" target = "projectFrame"><b>Clip</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class137861.html#refclass137861" target = "projectFrame"><b>Codec</b></a></td><td></td><td>description of some media data decoder or encoder facility</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class135045.html#refclass135045" target = "projectFrame"><b>CodecAdapter</b></a></td><td></td><td></td></tr>
-<tr bgcolor=#f0f0f0><td><a href="class138629.html#refclass138629" target = "projectFrame"><b>CompoundClip</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class138629.html#refclass138629" target = "projectFrame"><b>CompoundClip</b></a></td><td></td><td>Clip MObject which is actually a compound of several elementary clips,<br />e.g. the several streams found within multichannels media.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class138501.html#refclass138501" target = "projectFrame"><b>CompoundMedia</b></a></td><td></td><td>compound of several elementary media tracks,<br />e.g. the individual media streams found in one media file</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class128266.html#refclass128266" target = "projectFrame"><b>Condition</b></a></td><td></td><td>I provided a reworked Condition class in my cinelerra2 repository</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class135813.html#refclass135813" target = "projectFrame"><b>Config</b></a></td><td></td><td></td></tr>
@@ -96,7 +96,7 @@
 <tr bgcolor=#f0f0f0><td><a href="class136837.html#refclass136837" target = "projectFrame"><b>Proc</b></a></td><td></td><td>key abstraction: data processing asset</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class131461.html#refclass131461" target = "projectFrame"><b>Processor</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class131717.html#refclass131717" target = "projectFrame"><b>ProcNode</b></a></td><td>interface</td><td>Key abstraction of the Render Engine: A Data processing Node</td></tr>
-<tr bgcolor=#f0f0f0><td><a href="class138757.html#refclass138757" target = "projectFrame"><b>ProcPatt</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class138757.html#refclass138757" target = "projectFrame"><b>ProcPatt</b></a></td><td></td><td>special type of structural Asset representing information how to build some part of the render engine's processing nodes network.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class132229.html#refclass132229" target = "projectFrame"><b>Projector</b></a></td><td></td><td>Special video processing node used to scale and translate image data.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class129413.html#refclass129413" target = "projectFrame"><b>RelativePlacement</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class133893.html#refclass133893" target = "projectFrame"><b>RelType</b></a></td><td>enum</td><td>the possible kinds of RelativePlacements</td></tr>
@@ -105,8 +105,9 @@
 <tr bgcolor=#f0f0f0><td><a href="class129205.html#refclass129205" target = "projectFrame"><b>Scheduler</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class135173.html#refclass135173" target = "projectFrame"><b>Segment</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class134277.html#refclass134277" target = "projectFrame"><b>SegmentationTool</b></a></td><td></td><td>Tool implementation for deriving a partitioning of the current timeline such, that each segement has a constant configuration. "Constant" means here, that any remaining changes over time can be represented by automation solely, without the need to change the node connections.</td></tr>
-<tr bgcolor=#f0f0f0><td><a href="class128005.html#refclass128005" target = "projectFrame"><b>Session</b></a></td><td></td><td></td></tr>
-<tr bgcolor=#f0f0f0><td><a href="class138885.html#refclass138885" target = "projectFrame"><b>SimpleClip</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class139653.html#refclass139653" target = "projectFrame"><b>Session</b></a></td><td></td><td>Primary Interface for all editing tasks.<br />The session contains defaults, all the assets being edited, and a set of EDL with the individual MObjects to be manipulated and rendered.</td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class128005.html#refclass128005" target = "projectFrame"><b>SessionImpl</b></a></td><td></td><td>Implementation class for the Session interface</td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class138885.html#refclass138885" target = "projectFrame"><b>SimpleClip</b></a></td><td></td><td>Elementary clip consisting of only one media stream</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class128906.html#refclass128906" target = "projectFrame"><b>SmartPointer</b></a></td><td>auxiliary</td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class133765.html#refclass133765" target = "projectFrame"><b>Source</b></a></td><td></td><td>Source Node: represents a media source to pull data from.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class135941.html#refclass135941" target = "projectFrame"><b>State</b></a></td><td></td><td></td></tr>

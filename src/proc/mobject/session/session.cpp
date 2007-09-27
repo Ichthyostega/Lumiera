@@ -25,12 +25,29 @@
 #include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/fixture.hpp"
 
+
+using cinelerra::Singleton;
+
 namespace mobject
   {
   namespace session
     {
 
-    /** */
+    /** @return the system-wide current session.
+     *  Implemented as singleton.
+     */
+    Singleton<Session> Session::getCurrent;
+    
+    
+    
+    /** create a new empty session with default values.
+     */
+    Session::Session ()
+      : edl(), 
+        fixture() 
+      {
+        
+      }
 
 
 
