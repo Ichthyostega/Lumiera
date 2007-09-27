@@ -21,13 +21,21 @@
 */
 
 
+/** @file sessionimpl.hpp
+ ** Session and SessionManager Implemention classes.
+ ** These are primary Interfaces and we hide all implementaion complexities,
+ **
+ */
+
+
 #ifndef MOBJECT_SESSION_SESSIONIMPL_H
 #define MOBJECT_SESSION_SESSIONIMPL_H
 
-#include "proc/mobject/session/session.hpp"
+#include "proc/mobject/session.hpp"
 #include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/fixture.hpp"
 
+#include <boost/scoped_ptr.hpp>
 #include <vector>
 
 using std::vector;
@@ -46,18 +54,48 @@ namespace mobject
     class SessionImpl : public mobject::Session
       {
       protected:
+        uint focusEDL_;
         vector<EDL> edls;
-        Fixture fixture;
+        PFix fixture;
         
-        SessionImpl ();
-        friend class cinelerra::singleton::StaticCreate<SessionImpl>;
+        SessionImpl ()  throw();
+        friend class SessManagerImpl;
         
-        void add (PPla placement);
+        void clear ();
         
-        EDL& currEDL () { return edl; }
-        Fixture& getFixture () { return fixture; }
+      public:
+        virtual bool isValid ();
+        virtual void add (PPla& placement);
+        virtual bool remove (PPla& placement);
+        
+        virtual EDL&  currEDL ();
+        
+        virtual PFix& getFixture ();
+        virtual void rebuildFixture ();
 
       };
+      
+      
+    /**
+     * Session manager implementation class holding the
+     * actual smart pointer to the current Session impl.
+     */
+    class SessManagerImpl : public SessManager
+      {
+        boost::scoped_ptr<SessionImpl> pImpl_;
+        
+        SessManagerImpl()  throw();
+        friend class cinelerra::singleton::StaticCreate<SessManagerImpl>;
+        
+      public:
+        virtual void clear () ;
+        virtual void reset () ;
+        virtual void load ()  ;
+        virtual void save ()  ;
+        virtual Session* operator-> ()  throw() { return pImpl_.get(); }
+      };
+
+      
 
   } // namespace mobject::session
 

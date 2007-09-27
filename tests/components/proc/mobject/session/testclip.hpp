@@ -27,7 +27,10 @@
 
 #include "common/test/run.hpp"
 #include "common/factory.hpp"
+
+#include "proc/mobject/session/clip.hpp"
 //#include "common/util.hpp"
+
 
 //#include <boost/format.hpp>
 #include <iostream>
@@ -51,7 +54,7 @@ namespace mobject
        * Can be used as Mock object to record invoked operations.
        * 
        */
-      class TestClip   ////TODO inherit from mobject::session::Clip
+      class TestClip   : public mobject::session::Clip   /////////////TODO how this????
         {
           
           /** smart ptr factory allowed to invoke TestClip's ctor */

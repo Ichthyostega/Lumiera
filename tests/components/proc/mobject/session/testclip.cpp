@@ -22,6 +22,8 @@
 
 
 #include "proc/mobject/session/testclip.hpp"
+#include "backend/mediaaccessfacade.hpp"
+#include "backend/mediaaccessmock.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
 
@@ -33,7 +35,9 @@ namespace mobject
       {
       typedef shared_ptr<mobject::session::Clip> PC;
       typedef shared_ptr<asset::Media> PM;
-      typedef MediaAccessFacade MAF;
+      typedef backend_interface::MediaAccessFacade MAF;
+      using backend_interface::test::MediaAccessMock;
+      using asset::VIDEO;
         
 
       /** @todo find a way to link to an existing clip object.

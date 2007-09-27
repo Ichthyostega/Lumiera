@@ -22,7 +22,9 @@
 
 
 #include "common/test/run.hpp"
-#include "proc/mobject/session/session.hpp"
+#include "proc/mobject/session.hpp"
+#include "proc/mobject/session/edl.hpp"             // TODO only temporarily needed
+#include "proc/mobject/session/fixture.hpp"             // TODO only temporarily needed
 #include "proc/assetmanager.hpp"
 //#include "common/util.hpp"
 //#include <boost/format.hpp>
@@ -55,12 +57,12 @@ namespace mobject
         {
           virtual void run(Arg arg) 
             {
-              Session& sess = Session::getCurrent();
-              ASSERT (0 <= sess.getEDL().size());       // TODO implement
-              ASSERT (0 <= sess.getFixture().size());   // TODO implement
-              ASSERT (0 <  sess.getTracks().size());    // TODO implement
+              PSess sess = Session::current;
+              ASSERT (0 <= sess->currEDL().size());                // TODO implement
+              ASSERT (0 <= sess->getFixture()->size());             // TODO implement
+              ASSERT (0 <  sess->currEDL().getTracks().size());    // TODO implement
               
-              PAsset track = sess.getTracks()[0];
+              PAsset track = sess->currEDL().getTracks()[0];
               AssetManager& aMang = AssetManager::instance();
               ASSERT (track == aMang.getAsset (track->getID()));
             } 

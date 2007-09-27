@@ -22,16 +22,92 @@
 
 
 #include "proc/mobject/session/sessionimpl.hpp"
-#include "proc/mobject/session/edl.hpp"
-#include "proc/mobject/session/fixture.hpp"
+#include "proc/mobject/placement.hpp"
+#include "common/error.hpp"
 
 namespace mobject
   {
-
   namespace session
     {
     
-    /** */
+    /** create a new empty session with default values.
+     *  @note any exception arising while creating this
+     *        default session will inevitably halt the
+     *        system (and this is desirable)
+     */
+    SessionImpl::SessionImpl ()  throw()
+      : Session(),
+        focusEDL_(0),
+        edls(1), 
+        fixture(new Fixture) 
+      {
+      }
+    
+    
+    /** @internal used by SessionManager#clear
+     *            discard all EDL content, without
+     *            touching global configuration.
+     */
+    void 
+    SessionImpl::clear ()
+    {
+      try
+        {
+          edls.clear();
+          edls.resize(1);
+          focusEDL_ = 0;
+        }
+      catch (...)
+        {
+          focusEDL_ = 0;
+          throw cinelerra::error::Fatal ("unexpected exception while clearing EDLs");
+        }
+    }
+    
+    
+    bool 
+    SessionImpl::isValid ()
+    {
+      UNIMPLEMENTED ("session self test");
+      return false; // TODO
+    }
+    
+    
+    void 
+    SessionImpl::add (PPla& placement)
+    {
+      UNIMPLEMENTED ("add Placement to the current EDL");
+    }
+    
+    
+    bool 
+    SessionImpl::remove (PPla& placement)
+    {
+      UNIMPLEMENTED ("search and remove a given Placement from current EDL");
+      return false; // TODO
+    }
+
+    /// @deprecated should not grant direct access to EDL objects
+    EDL& 
+    SessionImpl::currEDL () 
+    { 
+      ASSERT (focusEDL_ < edls.size());
+      return  edls[focusEDL_];
+    }
+    
+    
+    PFix& 
+    SessionImpl::getFixture () 
+    { 
+      return fixture; 
+    }
+    
+    
+    void 
+    SessionImpl::rebuildFixture () 
+    { 
+      UNIMPLEMENTED ("rebuild Fixture"); 
+    }
 
 
 

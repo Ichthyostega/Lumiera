@@ -22,7 +22,8 @@
 
 
 #include "common/test/run.hpp"
-#include "proc/mobject/session/session.hpp"
+#include "proc/mobject/session.hpp"
+#include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/placement.hpp"
 #include "common/util.hpp"
@@ -56,12 +57,12 @@ namespace mobject
         {
           virtual void run(Arg arg) 
             {
-              Session& sess = Session::getCurrent();
+              PSess sess = Session::current;
               PMO clip = TestClip::create();
               PPla pla = Placement::create(Placement::FIXED, Time(1), clip);
-              sess.add (pla);
+              sess->add (pla);
               
-              ASSERT (contains (sess.getEDL(), pla));
+              ASSERT (sess->currEDL().contains (pla));
               // TODO: Clip-Asset and Placement magic??
             } 
         };

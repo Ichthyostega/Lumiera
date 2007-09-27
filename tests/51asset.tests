@@ -11,12 +11,12 @@ return: 0
 END
 
 
-TEST "CreateAsset_test" CreateAsset_test <<END
-return: 0
+PLANNED "CompoundMedia_test" CompoundMedia_test <<END
 END
 
 
-PLANNED "CompoundMedia_test" CompoundMedia_test <<END
+TEST "CreateAsset_test" CreateAsset_test <<END
+return: 0
 END
 
 
@@ -30,6 +30,10 @@ END
 
 TEST "IdentityOfAssets_test" IdentityOfAssets_test <<END
 return: 0
+END
+
+
+PLANNED "MakeClip_test" MakeClip_test <<END
 END
 
 

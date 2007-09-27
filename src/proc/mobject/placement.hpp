@@ -45,10 +45,10 @@ namespace mobject
       typedef cinelerra::Time Time;
       typedef session::Track Track;
 
-      MObject* subject;
-
 
     public:
+      MObject* subject;
+
       /** 
        * styles of placement.
        */

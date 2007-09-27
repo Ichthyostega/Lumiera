@@ -51,6 +51,7 @@ namespace asset
       {
         virtual void run(Arg arg) 
           {
+            UNIMPLEMENTED ("handling of Asset dependencies");
           } 
       };
     

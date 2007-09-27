@@ -67,13 +67,15 @@ namespace asset
          *        factory, normally intended for loading existing sessions.
          */
         void buildCompound()
-          { 
+          {
+            UNIMPLEMENTED ("create new compound media");
           }
         
         /** @test adding and removing elementary media.
          */
         void modifyCompound()
           { 
+            UNIMPLEMENTED ("add and remove elementary media to compound media asset");
           }
         
         
@@ -82,6 +84,7 @@ namespace asset
          */
         void verifyClipStructure()
           { 
+            UNIMPLEMENTED ("create compound clip from compound media and verify structure");
           }
         
         

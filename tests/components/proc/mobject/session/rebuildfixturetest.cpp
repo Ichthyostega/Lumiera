@@ -22,7 +22,8 @@
 
 
 #include "common/test/run.hpp"
-#include "proc/mobject/session/session.hpp"
+#include "proc/mobject/session.hpp"
+#include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/testsession1.hpp"
 #include "common/util.hpp"
 
@@ -58,16 +59,18 @@ namespace mobject
         {
           virtual void run(Arg arg) 
             {
-              clearSession();
+              PSess sess = Session::current;
+              sess.clear();
               buildTestseesion1();
-              Session& sess = Session::getCurrent();
-              ASSERT (sess.isValid());
-              sess.rebuildFixture();
+              ASSERT (sess->isValid());
+              sess->rebuildFixture();
               TODO ("check the fixture has been touched. e.g. by hash.");
               TODO ("query all Placements of all Clips (via AssetManager). Verify explicit plac contained in Fixture.");
-              
-              for_each (sess.getFixture(), 
-                        bind (&check_is_from_EDL, _1, sess.getEDL()));
+
+              UNIMPLEMENTED ("iterate over fixture");
+// TODO              
+//            for_each (sess->getFixture(), 
+//                      bind (&check_is_from_EDL, _1, sess.getEDL()));
               
               TODO ("can we check the other direction, from EDL to Fixture??");
             } 
@@ -75,8 +78,8 @@ namespace mobject
           static void 
           check_is_from_EDL (PPla explicitPlacement, EDL& edl)
             {
-              PPla originalPlacement = explicitPlacement->subject->placement;
-              ASSERT (contains(edl, originalPlacement));
+              PPla originalPlacement = explicitPlacement->subject->getPlacement();
+              ASSERT (edl.contains(originalPlacement));
             }
         };
       

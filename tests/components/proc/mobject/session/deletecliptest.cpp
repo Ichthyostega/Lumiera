@@ -23,7 +23,8 @@
 
 #include "common/test/run.hpp"
 #include "proc/assetmanager.hpp"
-#include "proc/mobject/session/session.hpp"
+#include "proc/mobject/session.hpp"
+#include "proc/mobject/session/edl.hpp"               // TODO: really neded?
 #include "proc/mobject/session/testsession1.hpp"
 //#include "common/util.hpp"
 
@@ -34,6 +35,9 @@
 using std::string;
 using std::cout;
 
+using proc_interface::AssetManager;
+using proc_interface::PAsset;
+using proc_interface::IDA;
 
 namespace mobject
   {
@@ -55,19 +59,19 @@ namespace mobject
           virtual void run(Arg arg) 
             {
               buildTestseesion1();
-              Session& sess = Session::getCurrent();
+              PSess sess = Session::current;
               AssetManager& aMang = AssetManager::instance();
               
-              PPla clipPlacement = sess.getEDL().find(SESSION1_CLIP); // global Var asigned in buildTestsession1()
-              PAsset clipAsset = aMang.getAsset(clipPlacement->subject->getMedia());
+              PPla clipPlacement = sess->currEDL().find(SESSION1_CLIP); // global Var asigned in buildTestsession1()
+              PAsset clipAsset = clipPlacement->subject->getMedia();
               IDA clipAID = clipAsset->getID();
               ASSERT (clipPlacement);
               
-              sess.remove (clipPlacement);
+              sess->remove (clipPlacement);
               
-              ASSERT (!sess.getEDL().find(SESSION1_CLIP));                      // EDL forgot the Clip/Placement
-              ASSERT (!aMang.known (clipAID));                                  // corresponding Clip Asset has disappeared 
-              ASSERT (!aMang.getAsset(clipPlacement->subject->getMedia()));     // internal cross-links removed
+              ASSERT (!sess->currEDL().find(SESSION1_CLIP));            // EDL forgot the Clip/Placement
+              ASSERT (!aMang.known (clipAID));                          // corresponding Clip Asset has disappeared 
+              ASSERT (!clipPlacement->subject->getMedia());             // internal cross-links removed
             } 
         };
       

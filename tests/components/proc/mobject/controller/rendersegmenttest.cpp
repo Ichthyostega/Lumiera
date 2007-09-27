@@ -57,6 +57,7 @@ namespace mobject
         {
           virtual void run(Arg arg) 
             {
+              UNIMPLEMENTED ("complete render process for a given test segment of the EDL");
             } 
         };
       

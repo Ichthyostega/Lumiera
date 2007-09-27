@@ -24,26 +24,39 @@
 #ifndef MOBJECT_SESSION_EDL_H
 #define MOBJECT_SESSION_EDL_H
 
-#include <list>
+#include <vector>
+#include <string>
 
 #include "proc/mobject/mobject.hpp"
-#include "proc/mobject/session/track.hpp"
+#include "proc/mobject/placement.hpp"
+#include "proc/asset/track.hpp"
 
+using proc_interface::PAsset;  // TODO better methot to refer to a track?
 
-using std::list;
+using std::vector;
+using std::string;
 
 namespace mobject
   {
   namespace session
     {
 
-
     class EDL
       {
       protected:
-        list<Track *> tracks;
-        list<MObject *> clips;
+        vector<PAsset> tracks;
+        vector<MObject *> clips;
 
+      public:
+        bool contains (const PPla& placement);
+        PPla& find (const string& id); ///< @todo how to refer to clips? using asset IDs??
+        
+        vector<PAsset>& getTracks () { return tracks; } ///< @todo use track assets correct, make const!
+        size_t size ()
+          {
+            UNIMPLEMENTED ("what ist the 'size' of an EDL?");
+            return 0;
+          }
       };
 
 

@@ -22,7 +22,7 @@
 
 
 #include "common/test/run.hpp"
-#include "proc/mobject/session/session.hpp"
+#include "proc/mobject/session.hpp"
 #include "proc/mobject/session/testsession1.hpp"
 //#include "common/util.hpp"
 //#include <boost/format.hpp>
@@ -68,8 +68,8 @@ namespace mobject
            */
           void getCurrentSession ()
             {
-              Session& sess = Session::getCurrent();
-              ASSERT (sess.isValid());
+              PSess sess = Session::current;
+              ASSERT (sess->isValid());
             }
           
           /** @test clear current session contents 
@@ -80,6 +80,7 @@ namespace mobject
           void clearSession ()
             {
               UNIMPLEMENTED ("clear objects in current session");
+              Session::current.clear();
             }
           
           /** @test reset global session config and start with
@@ -89,6 +90,7 @@ namespace mobject
           void resetSession ()
             {
               UNIMPLEMENTED ("construct a pristine session");
+              Session::current.reset();
             }
           
           /** @test use a mock session serializer to load 

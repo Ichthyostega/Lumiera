@@ -25,7 +25,7 @@
 #define MOBJECT_SESSION_TESTSESSION_H
 
 
-#include "proc/mobject/session/session.hpp"
+#include "proc/mobject/session.hpp"
 #include "common/error.hpp"
 //#include "common/factory.hpp"
 //#include "common/util.hpp"
@@ -49,7 +49,8 @@ namespace mobject
      * in the UML design. All changes are done to the (global)
      * current session.
      */
-    void buildTestseesion1 ()
+    inline void 
+    buildTestseesion1 ()
       {
         UNIMPLEMENTED ("Test-Session 1");
       };
@@ -59,13 +60,15 @@ namespace mobject
      * Analyze the current (gloal) Session to verify the
      * configuration of "Test-Session 1"
      */
-    bool checkTestseesion1 ()
+    inline bool 
+    checkTestsession1 ()
       {
         UNIMPLEMENTED ("Test-Session 1");
         return false;
       };
     
-    
+
+    const string SESSION1_CLIP("TODO: some sensible way to refer to a clip");
     
     
   } // namespace session

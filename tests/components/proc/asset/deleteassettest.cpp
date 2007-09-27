@@ -53,6 +53,7 @@ namespace asset
       {
         virtual void run(Arg arg) 
           {
+            UNIMPLEMENTED ("delete asset and update all dependencies");
           } 
       };
     

@@ -1,5 +1,5 @@
 /*
-  FIXTURE.hpp  -  the (low level) representation of the EDL with concrete placement data
+  FIXTURE.hpp  -  the (low level) representation of the EDL with explicit placement data
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -25,6 +25,7 @@
 #define MOBJECT_SESSION_FIXTURE_H
 
 #include <list>
+#include <tr1/memory>
 
 #include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/track.hpp"
@@ -33,6 +34,7 @@
 
 
 using std::list;
+using std::tr1::shared_ptr;
 
 
 
@@ -52,8 +54,12 @@ namespace mobject
 
       public:
         list<ExplicitPlacement*> & getPlaylistForRender () ;
-        Auto<double>* getAutomation () ; /////TODO: just a placeholder at the moment!!!
+        Auto<double>* getAutomation () ; ///< @todo: just a placeholder at the moment!!!
       };
+    
+    
+    
+    typedef shared_ptr<Fixture> PFix;
 
 
 
