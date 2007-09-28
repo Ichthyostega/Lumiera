@@ -21,19 +21,46 @@
 * *****************************************************/
 
 
-#include "proc/mobject/session/session.hpp"
-#include "proc/mobject/session/edl.hpp"
-#include "proc/mobject/session/fixture.hpp"
+/** @file session.cpp
+ ** Actual connection between the Session interface and its Implementation.
+ ** Holds the storage for the SessionManager implementation (singleton)
+ ** 
+ ** @see session::SessionImpl
+ ** @see session::SessionManagerImpl
+ **
+ */
+
+
+#include "proc/mobject/session.hpp"
+#include "proc/mobject/session/sessionimpl.hpp"
+
+#include "common/singleton.hpp"
+
+
+using cinelerra::Singleton;
+using mobject::session::SessManager;
+using mobject::session::SessManagerImpl;
 
 namespace mobject
   {
-  namespace session
-    {
 
-    /** */
+  /** the sole acces point for all client code to the system-wide
+   *  "current session". Implemented as smart pointer to singleton
+   *  implementation object, where the smart pointer is actually
+   *  the SessionManager (which is singleton as well...).
+   * 
+   *  Consequently, if you want to talk to the <i>session manager,</i>
+   *  you use dot-notation, while you access the <i>session object</i>
+   *  via arrow notaion (e.g. \code Session::current->getFixture() )
+   */
+  SessManager& Session::current = Singleton<SessManagerImpl>()();
+
+    
+    
+    
+  Session::Session ()  throw() { }
+  Session::~Session ()         { }
 
 
-
-  } // namespace mobject::session
 
 } // namespace mobject

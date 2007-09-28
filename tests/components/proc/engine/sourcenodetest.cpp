@@ -48,6 +48,7 @@ namespace engine
       {
         virtual void run(Arg arg) 
           {
+            UNIMPLEMENTED ("render node pulling source data from backend");
           } 
       };
     

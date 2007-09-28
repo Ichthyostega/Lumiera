@@ -58,8 +58,8 @@ namespace cinelerra
       protected:
         TargetObj () : TestTargetObj(cnt) {}
         
-        friend class singleton::Static<TargetObj>;
-        friend class singleton::Heap<TargetObj>;
+        friend class singleton::StaticCreate<TargetObj>;
+        friend class singleton::HeapCreate<TargetObj>;
       };
     
     int TargetObj::cnt = 0;
@@ -74,8 +74,8 @@ namespace cinelerra
      * @test implement a Singleton class using our Singleton Template.
      * Expected results: no memory leaks.
      * @see  cinelerra::Singleton
-     * @see  cinelerra::singleton::Static
-     * @see  cinelerra::singleton::Heap
+     * @see  cinelerra::singleton::StaticCreate
+     * @see  cinelerra::singleton::HeapCreate
      */
     class Singleton_test : public Test
       {
@@ -96,7 +96,7 @@ namespace cinelerra
          */
         void testStaticallyAllocatedSingleton (uint num)
           {
-            Singleton<TargetObj> single;
+            SingletonFactory<TargetObj> single;
             instance = single;
             useInstance (num, "statically allocated");
           }
@@ -107,7 +107,7 @@ namespace cinelerra
          */
         void testHeapAllocatedSingleton (uint num)
           {
-            Singleton<TargetObj,singleton::Heap> single;
+            SingletonFactory<TargetObj,singleton::HeapCreate> single;
             instance = single;
             useInstance (num, "heap allocated");
           }

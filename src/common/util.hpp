@@ -24,8 +24,10 @@
 #ifndef UTIL_HPP_
 #define UTIL_HPP_
 
+#include <set>
 #include <string>
 #include <cstring>
+#include <algorithm>
 
 #include "nobugcfg.h"      ///////////////////TODO: just temporarily!!!!
 
@@ -59,7 +61,6 @@ namespace util
     return !pContainer || pContainer->empty();
   }
   
-  template <>
   inline bool
   isnil (const char* pCStr)
   {
@@ -81,6 +82,24 @@ namespace util
   contains (MAP& map, typename MAP::key_type& key)
   {
     return map.find(key) != map.end();
+  }
+  
+  /** shortcut for set value containment test */
+  template <typename T>
+  inline bool 
+  contains (std::set<T>& set, const T& val)
+  {
+    return set.end() != set.find (val);
+  }
+  
+  /** shortcut for brute-force containment test
+   *  in any sequencial container */
+  template <typename SEQ>
+  inline bool 
+  contains (SEQ& cont, typename SEQ::value_type& val)
+  {
+    typename SEQ::iterator end = cont.end();
+    return end != std::find(cont.begin(),end, val);
   }
   
   

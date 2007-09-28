@@ -22,8 +22,8 @@
 
 
 /** @file media.hpp
- ** Media data is a specific Kind of Asset.
- ** For the different <i>Kinds</i> of Assets, we use sub-intefaces inheriting
+ ** Media data is a specific kind of Asset.
+ ** For the different <i>kinds</i> of Assets, we use sub-intefaces inheriting
  ** from the general Asset interface. To be able to get asset::Media instances
  ** directly from the AssetManager, we define a specialization of the Asset ID.
  **
@@ -40,11 +40,15 @@
 
 
 
+namespace mobject { namespace session { class Clip; }}
+
 namespace asset
   {
   
+  class Clip;
   class Media;
   class MediaFactory;
+  class ProcPatt;
   
   
   template<>
@@ -73,6 +77,9 @@ namespace asset
           return static_cast<const ID<Media>& > (Asset::getID()); 
         }
       
+      shared_ptr<mobject::session::Clip> createClip ();
+      shared_ptr<asset::ProcPatt> howtoProc ();
+      
     protected:
       Media (const Asset::Ident& idi, const string& file) : Asset(idi), filename_(file) {}
       friend class MediaFactory;
@@ -89,7 +96,7 @@ namespace asset
   
   
   /** 
-   * Factory specialized for createing Media Asset objects.
+   * Factory specialized for creating Media Asset objects.
    */ 
   class MediaFactory : public cinelerra::Factory<asset::Media>
     {

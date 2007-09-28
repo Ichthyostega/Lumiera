@@ -26,12 +26,16 @@
 
 
 #include "common/test/run.hpp"
-//#include "common/factory.hpp"
+#include "common/factory.hpp"
+
+#include "proc/mobject/session/clip.hpp"
 //#include "common/util.hpp"
+
 
 //#include <boost/format.hpp>
 #include <iostream>
 
+using std::tr1::shared_ptr;
 //using boost::format;
 using std::string;
 using std::cout;
@@ -41,19 +45,40 @@ namespace mobject
   {
   namespace session
     {
-    /**
-     * Sample or Test Clip for checking
-     * various EDL, session and builder operations.
-     * 
-     */
-    class TestClip
+    namespace test
       {
-      public:
-      };
+        
+      /**
+       * Sample or Test Clip for checking
+       * various EDL, session and builder operations.
+       * Can be used as Mock object to record invoked operations.
+       * 
+       */
+      class TestClip   : public mobject::session::Clip   /////////////TODO how this????
+        {
+          
+          /** smart ptr factory allowed to invoke TestClip's ctor */
+          struct Factory : cinelerra::Factory<TestClip>
+            {
+              typedef shared_ptr<TestClip> PType;
+              PType operator() () { return PType (new TestClip, &destroy); }
+            protected:
+              static void destroy (TestClip* tc) { delete tc; }
+            };
+          
+          
+          TestClip ();  
+          friend class Factory;  
+          
+        public:
+          static Factory create;
+        };
+        
     
     
     
-    
+    } // namespace test
+  
   } // namespace session
 
 } // namespace mobject

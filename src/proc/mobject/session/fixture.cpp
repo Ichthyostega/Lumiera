@@ -1,5 +1,5 @@
 /*
-  Fixture  -  the (low level) representation of the EDL with concrete placement data
+  Fixture  -  the (low level) representation of the EDL with explicit placement data
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -22,6 +22,7 @@
 
 
 #include "proc/mobject/session/fixture.hpp"
+#include "nobugcfg.h"
 
 namespace mobject
   {
@@ -33,7 +34,7 @@ namespace mobject
     list<ExplicitPlacement*> &
     Fixture::getPlaylistForRender ()
     {
-      abort();/////////////////////TODO
+      UNIMPLEMENTED ("get Playlist For Render");
     }
 
 
@@ -43,7 +44,8 @@ namespace mobject
     Auto<double>*
     Fixture::getAutomation ()
     {
-      return 0;/////////////////////TODO
+      UNIMPLEMENTED ("getAutomation from Fixture");
+      return 0;
     }
 
 

@@ -1,5 +1,5 @@
 /*
-  SINGLETON.hpp  -  template for implementing the singleton pattern
+  SINGLETON.hpp  -  configuration header for singleton factory
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -17,140 +17,36 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-====================================================================
-This code is heavily inspired by  
- The Loki Library (loki-lib/trunk/include/loki/Singleton.h)
-    Copyright (c) 2001 by Andrei Alexandrescu
-    This Loki code accompanies the book:
-    Alexandrescu, Andrei. "Modern C++ Design: Generic Programming
-        and Design Patterns Applied". 
-        Copyright (c) 2001. Addison-Wesley. ISBN 0201704315
  
 */
 
+/** @file singleton.hpp
+ ** Factory for creating Singleton instances.
+ ** This configuration header just pulls in some other implementation headers in 
+ ** the right order. The basic class template for creating singletons resides in
+ ** singletonfactory.hpp, besides we need policy classes defining how to create
+ ** the singleton objects, how to manage lifecycle and multithreading. Finally,
+ ** we want to preconfigure singleton factories for some important facilities;
+ ** e.g. sometimes we want to include a hook for injecting Test Mock instances.
+ **
+ ** You'll find the default Policies in singletonfactory.hpp and the default
+ ** definition of type cinelerra::singleton in singletonpreconfigure.hpp
+ ** 
+ ** @see SingletonFactory
+ ** @see singleton::StaticCreate
+ ** @see singleton::AutoDestroy 
+ ** @see singletontest.hpp
+ ** @see singletontestmocktest.hpp
+ */
 
 
 #ifndef CINELERRA_SINGLETON_H
 #define CINELERRA_SINGLETON_H
 
 
-#include "common/singletonpolicies.hpp"  ///< several Policies usable together with singleton
-
-#include "common/util.hpp"
-#include "nobugcfg.h"
-
-#include <boost/bind.hpp>
+#include "common/singletonpolicies.hpp"
+#include "common/singletonfactory.hpp"
+#include "common/singletonpreconfigure.hpp"
 
 
-namespace cinelerra
-  {
-  
-  /**
-   * A configurable Template for implementing Singletons. 
-   * Actually this is a Functor object, which could be placed into a static field
-   * of the Singleton (target) class or used directly. 
-   * @note internally uses static fields, so all functor instances share pInstance_
-   */
-  template
-    < class SI,  // the class to make Singleton
-      template <class> class Create    = singleton::Static,     // how to create/destroy the instance
-      template <class> class Life      = singleton::Automatic,  // how to manage Singleton Lifecycle
-      template <class> class Threading = singleton::IgnoreThreadsafety  //TODO use Multithreaded!!!
-    >
-  class Singleton
-    {
-      typedef typename Threading<SI>::VolatileType SType;
-      typedef typename Threading<SI>::Lock ThreadLock;
-      static SType* pInstance_;
-      static bool isDead_;
-      
-    public:
-      /** Interface to be used by Singleton's clients.
-       *  Manages internally the instance creation, lifecycle 
-       *  and access handling in a multithreaded context.
-       *  @return "the" single instance of class S 
-       */
-      SI& operator() ()
-        {
-          if (!pInstance_)
-            {
-              ThreadLock guard  SIDEEFFECT;
-              if (!pInstance_)
-                {
-                  if (isDead_)
-                    {
-                      Life<SI>::onDeadReference();
-                      isDead_ = false;
-                    }
-                  pInstance_ = Create<SI>::create();
-                  Life<SI>::scheduleDelete (&destroy);
-            }   }
-          ENSURE (pInstance_);
-          ENSURE (!isDead_);
-          return *pInstance_;
-        }
-      
-    private:
-      /** @internal helper used to delegate destroying the single instance
-       *  to the Create policy, at the same time allowing the Life policy
-       *  to control the point in the Application lifecycle when the 
-       *  destruction of this instance occures.
-       */
-      static void destroy()
-        {
-          REQUIRE (!isDead_);
-          Create<SI>::destroy (pInstance_);
-          pInstance_ = 0;
-          isDead_ = true;
-        }
-    };
-    
-  
-  // Storage for Singleton's static fields...  
-  template
-    < class SI,
-      template <class> class C,
-      template <class> class L,
-      template <class> class T
-    >
-    typename Singleton<SI,C,L,T>::SType* 
-    Singleton<SI,C,L,T>::pInstance_;
-  
-  template
-    < class SI,
-      template <class> class C,
-      template <class> class L,
-      template <class> class T
-    >
-    bool Singleton<SI,C,L,T>::isDead_;
-
-
-  
-///// TODO: get rid of the static fields?
-/////       is tricky because of invoking the destructors. If we rely on instance vars,
-/////       the object may already have been released when the runtime system calls the
-/////       destructors of static objects at shutdown.
-  
-      /** @internal used to link together the Create policy and Life policy.
-       *  @return a functor object for invoking this->destroy() */
-/*      singleton::DelFunc getDeleter() 
-        {
-          return boost::bind (&Singleton<SI,Create,Life,Threading>::destroy,
-                              this);
-        }
-*/
-  
-/*      template<class T>
-      class DelFunc
-        {
-          typedef void (T::*Fp)(void);
-          T* t_;
-          Fp fun_;
-        public:
-          DelFunc (T* t, Fp f) : t_(t), fun_(f) {}
-          void operator() () { (t_->*fun_)(); }
-        };
-*/    
-} // namespace cinelerra
 #endif

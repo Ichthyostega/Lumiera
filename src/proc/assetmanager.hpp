@@ -108,7 +108,7 @@ namespace asset
       
       AssetManager ();
       
-      friend class cinelerra::singleton::Static<AssetManager>;
+      friend class cinelerra::singleton::StaticCreate<AssetManager>;
       
       
     private:

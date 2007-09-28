@@ -86,7 +86,7 @@ namespace asset
       DB () : table() {}
       ~DB ()          {}
       
-      friend class cinelerra::singleton::Static<DB>;
+      friend class cinelerra::singleton::StaticCreate<DB>;
       
       
     public:

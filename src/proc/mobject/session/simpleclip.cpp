@@ -1,5 +1,5 @@
 /*
-  SESSION.hpp  -  holds the complete session to be edited by the user
+  SimpleClip  -  Elementary clip (single media stream only)
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -18,41 +18,21 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
 
 
-#ifndef MOBJECT_SESSION_SESSION_H
-#define MOBJECT_SESSION_SESSION_H
-
-
+#include "proc/mobject/session/simpleclip.hpp"
 
 namespace mobject
   {
+
   namespace session
     {
-
-    class EDL;
-    class Fixture;
-
-    /**
-     * The (current) Session holds all the user
-     * visible content to be edited and manipulated
-     * within the Cinelerra Application. From a users
-     * perspective, it is a collection of Media Objects
-     * (--> MObject) placed (--> Placement) onto virtual
-     * Tracks.
-     */
-    class Session
-      {
-      protected:
-        EDL& edl;
-        Fixture& fixture;
-
-      };
+    
+    /** */
 
 
 
   } // namespace mobject::session
 
 } // namespace mobject
-#endif

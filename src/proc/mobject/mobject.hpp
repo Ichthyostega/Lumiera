@@ -25,13 +25,20 @@
 #define MOBJECT_MOBJECT_H
 
 #include <list>
+#include <tr1/memory>
 
 #include "cinelerra.h"
 #include "proc/mobject/buildable.hpp"
+#include "proc/asset.hpp"                 // TODO finally not needed?
 
 
 using std::list;
+using std::tr1::shared_ptr;
 
+#include "proc/assetmanager.hpp"                
+using proc_interface::IDA;                // TODO finally not needed?
+using proc_interface::PAsset;              //TODO: only temporarily
+using proc_interface::AssetManager;
 
 namespace mobject
   {
@@ -52,10 +59,18 @@ namespace mobject
 
       // TODO: how to represent time intervals best?
       Time length;
-
-      list<Placement *> placement;
+      
+      virtual ~MObject() {};
+      
+    public:
+      virtual shared_ptr<Placement>& getPlacement () =0;
+      virtual PAsset getMedia () =0; ///< @todo solve the reference/Interface problem concerning Placements, then push down
+      virtual Time& getLength() =0; ///< @todo how to deal with the time/length field??
 
     };
+  
+  
+  typedef shared_ptr<MObject> PMO;
 
 
 

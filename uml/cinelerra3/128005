@@ -1,6 +1,6 @@
 format 40
 "design" // design
-  revision 9
+  revision 10
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -42,6 +42,7 @@ Not a real code package, rather a container for design drafts, specifications, d
 
     component 129925 "CommonLib"
       provided_classes
+	class_ref 135557 // Error
 	class_ref 134917 // Time
       end
     end
@@ -84,10 +85,10 @@ Not a real code package, rather a container for design drafts, specifications, d
 	-_->
 	  on component_ref 128005 // Builder
       end
-
     end
 
     component 128645 "AssetManagement"
+      stereotype "subsystem"
     end
 
     component 128773 "Dispatcher"
@@ -129,6 +130,16 @@ Not a real code package, rather a container for design drafts, specifications, d
       end
     end
 
+    component 130181 "MediaFactory"
+      stereotype "component"
+      required_classes
+	class_ref 139525 // MediaAccessFacade
+      end
+    end
+
+    component 130309 "AssetDB"
+      stereotype "service"
+    end
   end
 
   componentview 128133 "interfaces"
@@ -155,6 +166,19 @@ Not a real code package, rather a container for design drafts, specifications, d
       stereotype "component"
       required_classes
 	class_ref 134661 // ParamProvider
+      end
+    end
+
+    componentdiagram 130693 "backend-components"
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      draw_component_as_icon default show_component_req_prov default show_component_rea default
+      size A4
+    end
+
+    component 130437 "Media Access"
+      stereotype "service"
+      provided_classes
+	class_ref 139525 // MediaAccessFacade
       end
     end
   end

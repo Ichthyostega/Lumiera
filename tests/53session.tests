@@ -12,3 +12,11 @@ END
 
 PLANNED "RebuildFixture_test" RebuildFixture_test <<END
 END
+
+
+PLANNED "SessionManager_test" SessionManager_test <<END
+END
+
+
+PLANNED "SessionStructure_test" SessionStructure_test <<END
+END

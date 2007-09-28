@@ -558,6 +558,9 @@ is how to implement the relationship between [[MObject]]s and Assets. Do we use 
 
 For every Asset we generate a __Ident tuple__ and a long ID (hash) derived from this Ident tuple. The constructor of the abstract base class {{{Asset}}} takes care of this step and automatically registeres the new Asset object with the AssetManager. Typically, the factory methods for concrete Asset classes provide some shortcuts providing sensible default values for some of the Ident tuple data fields. They may take additional parameters &amp;mdash; for example the factory method for creating {{{asset::Media}}} takes a filename (and may at some point in the future aply &quot;magic&quot; based on examination of the file)</pre>
 </div>
+<div title="AssetManager" modifier="Ichthyostega" created="200709200300" changecount="1">
+<pre>The Asset Manager provides an Interface to some internal Database holding all Assets in the current Session and System state. It may be a real Database at some point (and for the moment it's a Hashtable). Each [[Asset]] is registered automatically with the Asset Manager; it can be queried either by it's //identification tuple// or by it's unique ID.</pre>
+</div>
 <div title="Automation" modifier="Ichthyostega" modified="200708100315" created="200706250751" tags="def" changecount="5">
 <pre>Automation is treated as a function over time. It is always tied to a specific Parameter (which can thus be variable over the course of the timeline). All details //how// this function is defined are completely abstracted away. The Parameter uses a ParamProvider to get the value for a given Time (point). Typically, this will use linear or bezier interpolation over a set of keyframes internally. Parameters can be configured to have different value ranges and distribution types (on-off, stepped, continuous, bounded)
 
@@ -738,6 +741,13 @@ This is an very important external Interface, because it links together all thre
 
 </pre>
 </div>
+<div title="CurrentSession" modifier="Ichthyostega" modified="200709272058" created="200709272057" tags="decision design" changecount="2">
+<pre>The question is where to put all the state-like information [[associated with the current session|SessionOverview]]. Because this is certainly &quot;global&quot;, but may depend on the session or need to be configured differently when loading another session. At the moment (9/07) Ichthyo considers the following solution:
+* represent all configuration as [[Asset]]s
+* find a way {{red{TODO}}} how to reload the contents of the [[AssetManager]].
+* completely hide the Session object behind a ''~PImpl'' smart pointer, so the session object can be switched when reloading.
+* the [[Fixture]] acts as isolation layer, and all objects refered from the Fixture are refcounting smart pointers. So, even when the session gets switched, the old objects remain valid as long as needed.</pre>
+</div>
 <div title="DefaultTiddlers" modifier="Ichthyostega" modified="200706190047" created="200706172308" changecount="2">
 <pre>RenderEngine
 </pre>
@@ -752,12 +762,40 @@ The main tool used to implement this separation is the [[Builder Pattern|http://
 Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the EDL in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
 </pre>
 </div>
-<div title="EDL" modifier="MichaelPloujnikov" modified="200706271459" created="200706210610" changecount="4">
+<div title="EDL" modifier="Ichthyostega" modified="200709272059" created="200706210610" tags="def" changecount="6">
 <pre>''EDL'' is a short-hand for __E__dit __D__ecision __L__ist. The use of this term can be confusing; for the usual meaning see the definition in [[Wikipedia|http://en.wikipedia.org/wiki/Edit_decision_list]]
 
 Cinelerra uses this term in a related manner but with a somewhat shifted focus (and we just stick to this usage here): In Cinelerra the EDL is comprised of the whole set of clips and other media objects parametrized and placed onto the tracks by the user. It is the result of the user's //editing efforts.//
 
-In this usage, the EDL is almost synonymous to the ''Session'', just the latter emphasizes more the state aspect, as it can be thought as a current state of the EDL contained in a file or data structure together with additional Option values and settings for the GUI. The Session is what you save and load, while the EDL rather denotes a structure of Objects placed in time.
+In this usage, the EDL in most cases will be almost synonymous to the [[Session|SessionOverview]], just the latter emphasizes more the state aspect, as it can be thought as the current EDL contents contained in a file or data structure together with additional Option values and settings for the GUI. The Session is what you save and load, while the EDL rather denotes a structured collection of Objects placed in time.
+</pre>
+</div>
+<div title="EditingOperations" modifier="Ichthyostega" modified="200709251706" created="200709251610" tags="design decision" changecount="2">
+<pre>These are the tools provided to any client of the Proc layer for handling and manipulating the entities in the EDL. When defining such operations, //the goal should be to arrive at some uniformity in the way things are done.// Ideally, when writing client code, one should be able to guess how to achieve some desired result.
+
+!guiding principle
+The approach taken to define any operation is based primarily on the ''~OO-way of doing things'': entities operate themselfs. You don't advise some manager, session or other &amp;raquo;god class&amp;laquo; to manipulate them. And, secondly, the scope of each operation will be as large as possible, but not larger. This often means performing quite some elementary operations &amp;mdash; sometimes a convenience shortcut provided by the higher levels of the application may come in handy &amp;mdash; and basically this gives rise to several different paths of doing the same thing, all of which need to be equivalent.
+
+!main tasks
+* you ''create a clip'' either from a source media or from another clip (copy, maybe clone?). The new clip always reflects the full size (and other properties) of the source used for creating.
+* you can request a clip to ''resize'', which always relates to its current dimensions.
+* you can ''place or attach'' the clip to some point or other entity by creating a [[Placement]] from the clip.
+* you can ''adjust'' a placement relative to some other placement, meta object (i.e. selection), label or media, and this may cause the placement to resize or even delete the clip as necessary
+* you can perform ''adjustments'' on the whole EDL.
+All these operations propagate to directly dependant objects and may schedule global reconfigurations.
+
+!state, locking, policies
+While performing any manipulative task, the state of the object is considered inconsistent, but it is guaranteed to be consistent after any such operation, irrespective of the result. There is no automatic atomicity and, consequently each propagation is considered a separate operation.
+
+!!parallelism
+At the level of fine grained operations on individual entities, there is ''no support for parallelism''. Individual entities don't lock themselves. Tasks perform locking and are to be scheduled. Thus, we need an isolation layer towards all inherently multithreaded parts of the system, like the GUI or the renderengine.
+
+This has some obvious and some subtle consequences. Of course, manipulating //tasks// will be queued and scheduled somewhere. But as we rely on object identity and reference semantics for the entities in the EDL, some value changes are visible to  operations going on in parallel threads (e.g. rendering) and each operation on the EDL entities //has to be aware of this.//
+Consequently, sometimes there needs to be done a ''self-replacement by copy'' followed by manipulation of the new copy, while ongoing processes use the unaltered original object until they receive some sort of reset.
+
+!!undo
+Basically, each elementary operation has to record the informations necessary to be undone. It does so by registering a Memento with some central UndoManager facility. This Memento object contains a functor pre-bound with the needed parameter values. (Besides, the UndoManager is free to implement a second level of security by taking independent state snapshots). 
+{{red{to be defined in more detail later...}}}
 </pre>
 </div>
 <div title="Example1" modifier="Ichthyostega" modified="200706220253" created="200706220239" tags="example" changecount="3">
@@ -850,13 +888,14 @@ Some further details
 * and, as the created smart-pointer is a template parameter, such a custom Functor can create all sorts of Proxies, wrappers and the like
 </pre>
 </div>
-<div title="Fixture" modifier="Ichthyostega" modified="200706220325" created="200706220324" tags="def" changecount="2">
+<div title="Fixture" modifier="Ichthyostega" modified="200709270236" created="200706220324" tags="def" changecount="3">
 <pre>a specially configured EDL
  * all MObjects have their position, length and configuration set up ready for rendering.
- * all MObjects are associated with a ExplicitPlacement
+ * compound objects (e.g. multichannel clips) have been resolved to single non-compound basic objects.
+ * every MObject is associated with an ExplicitPlacement, which declares a fixed position (Time, Track)
  * this ~ExplicitPlacements are contained in a ordered List called the Timeline
 
-//My intention is to create this Fixture out of the editing operations done by the user//
+As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Proc layer (editing, object manipulation) and the render engine
 </pre>
 </div>
 <div title="Frame" modifier="Ichthyostega" modified="200706220333" created="200706220332" tags="def" changecount="2">
@@ -948,13 +987,16 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200709040256" created="200708080322" tags="overview" changecount="6">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200709272050" created="200708080322" tags="overview" changecount="9">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Cinelerra Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
 * [[Memory Management Issues|MemoryManagement]]
 * [[Creating and registering Assets|AssetCreation]]
 * [[Creating new Objects|ObjectCreation]]
+* [[Multichannel Media|MultichannelMedia]]
+* [[Editing Operations|EditingOperations]]
+* [[Handling of the current Session|CurrentSession]]
 
 </pre>
 </div>
@@ -1301,6 +1343,19 @@ From experiences with other middle scale projects, I prefer having the test code
 [img[Example: Interfaces/Namespaces of the ~Session-Subsystems|uml/fig130053.png]]
 </pre>
 </div>
+<div title="Loading Media" modifier="Ichthyostega" modified="200709240049" created="200709220005" tags="design spec" changecount="2">
+<pre>Opening and accessing media files on disk poses several problems, most of which belong to the domain of cinelerra's data backend. Here, we focus on the questions related to making media data available to the EDL and the render engine. Each media will be represented by an MediaAsset object, which indeed could be a compound object (in case of MultichannelMedia). Building this asset object thus includes getting informations from the real file on disk. For delegating this to the backend, we use the following query interface:
+* {{{queryFile(char* name)}}} requests accessing the file and yields some (opaque) handle when successful.
+* {{{queryChannel(FHandle, int)}}} will then be issued in sequence with ascending index numbers, until it returns {{{NULL}}}.
+* the returned struct (pointer) will provide the following information:
+** some identifier which can be used to create a name for the corresponding media (channel) asset
+** some identifier characterizing the access method (codec) needed to get at the media data. This should be rather a high level description of the media stream type, e.g. &quot;H264&quot;
+** some (opaque) handle usable for accessing this specific stream. When the render engine later on pulls data for this channel, it will pass this handle down to the backend.
+
+{{red{to be defined in more detail later...}}}
+
+{{red{how to create a test stub for this interface...?}}}</pre>
+</div>
 <div title="MObject" modifier="Ichthyostega" created="200706220312" tags="def classes" changecount="1">
 <pre>All sorts of &quot;things&quot; to be placed and manipulated by the user in the EDL. This interface abstracts the details and just provides
 * a duration
@@ -1350,9 +1405,10 @@ As a //first shot// Ichthyo considers the following approach:
 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;loading &lt;b&gt;Cinelerra Renderengine&lt;/b&gt; devel doku&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
 </div>
-<div title="MediaAsset" modifier="Ichthyostega" created="200709021530" tags="def classes" changecount="1">
+<div title="MediaAsset" modifier="Ichthyostega" modified="200709221337" created="200709021530" tags="def classes" changecount="2">
 <pre>The Interface asset::Media is a //key abstraction// It ties together several concepts and enables to deal with them on the interfaces in a uniform manner. Besides, as every Asset kind it belongs rather to the bookkeeping view: it holds the specific properties and parametrisation of the media source it stands for. Regarding the __inward interface__ &amp;mdash; as used from within the [[EDL]] or the [[Render Nodes|ProcNode]], it is irrelevant if a given asset::Media object stands for a complete media source, just a clip taken from this source or if a placeholder version of the real media source is used instead.
-[img[Asset Classess|uml/fig130437.png]]</pre>
+[img[Asset Classess|uml/fig130437.png]]
+</pre>
 </div>
 <div title="MemoryManagement" modifier="Ichthyostega" modified="200708100408" created="200708100225" tags="impl decision discuss" changecount="8">
 <pre>Of course: Cinelerra currently leaks memory and crashes regularilly. For the newly written code, besides retaining the same performance level, a main goal is to use methods and techniques known to support the writing of quality code. So, besides the MultithreadConsiderations, a solid strategy for managing the ownership of allocated memory blocks is necessary right from start.
@@ -1386,6 +1442,26 @@ For the case in question this seems to be the ''resource allocation is construct
 !using Factories
 And, last but not least, doing all actual allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides that, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot;, rather it should use some central [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
+</div>
+<div title="MultichannelMedia" modifier="Ichthyostega" modified="200709220010" created="200709200255" tags="design" changecount="4">
+<pre>Based on practical experiences, Ichthyo tends to consider Multichannel Media as the base case, while counting media files providing just one single media stream as exotic corner cases. This may seem counter intuitive at first sight; you should think of  it as an attempt to avoid right from start some of the common shortcomings found in many video editors, especially
+* having to deal with keeping a &quot;link&quot; between audio and video clips
+* silly limitations on the supported audio setups (e.g. mono, stereo and 5.1)
+* unnecessary complexity when dealing with more realistic setups, esp. when dealing with dialogue scenes
+* inability to edit stereoscopic (3D) video in a natural fashion
+
+!Compound Media
+Basically, each [[media asset|MediaAsset]] is considered to be a compound of several elementary media (tracks), possibly of various different media kinds. Adding support for placeholders (''proxy clips'') at some point in future will add still more complexity (because then there will be even dependencies between some of these elementary media). To handle, edit and render compound media, we need to impose some structural limitations. But anyhow, we try to configure as much as possible already at the &quot;asset level&quot; and make the rest of the proc layer behave just according to the configuration given with each asset.
+
+So, when creating a clip out of such a compound media asset, the clip has to be a compound of elementary clips mirroring the given media asset's structure. Besides, it should be possible to //detach// and //attach// elementary clips from a compound clip. On the other hand, the [[Fixture]] created from the current state of the [[EDL]] is explicit to a great extent. So, in the Fixture we deal only with elementary clips placed to absolute positions, and thus the builder will see only simple non-compound clips and translate them into the corresponding source reading nodes.
+
+!Handling
+* from a Media asset, we can get a [[Processing Pattern|ProcPatt]] describing how to build a render pipeline for this media
+* we can create a Clip (MObject) from each Media, which will be linked back to the media asset internally.
+* moreover, creating a Clip will create and register a Clip asset as well, and this Clip asset will be tied to the original Clip and will show up in some special Category
+* media can be compound and the created Clips will mirror this compound structure
+* we distinguish elementay (non-compound) Clips from compound clips by concrete subtype. The builder can only handle elementary clips, because he needs to build a separate pipeline for every output channel. So the work of splitting common effect stacks for clips with several channels needs to be done when calculating the Fixture for the current EDL. The Builder expects to be able to build the render nodes corresponding to each entity found in the Fixture one by one.
+* the Builder gets at the ProcPatt (descriptor) of the underlying media for each clip and uses this description as a template to build the render pipeline. That is, the ProcPatt specifies the codec asset and maybe some additional effect assets (deinterlace, scale) necessary for feeding media data corresponding to this clip/media into the render nodes network.</pre>
 </div>
 <div title="ObjectCreation" modifier="Ichthyostega" modified="200709040257" created="200709030139" tags="impl design" changecount="10">
 <pre>We have to consider carefully how to handle the Creation of new class instances. Because, when done naively, it can defeat all efforts of separating subsystems, or &amp;mdash; the other extreme &amp;mdash; lead to a //switch-on-typeID//  programming style. We strive at a solution somewhere in the middle by utilizing __Abstract Factories__ on Interface or key abstraction classes, but providing specialized overloads for the different use cases. So in each use case we have to decide if we want to create a representant of some general concept (Interface), or if we have a direct colaboration and thus need the Factory to provide
@@ -1997,7 +2073,7 @@ DAMAGE.
 //Note, we have yet to specify how exactly the building and rendering will work together with the backend. There are several possibilities how to structure the Playlist//
 </pre>
 </div>
-<div title="ProblemsTodo" modifier="Ichthyostega" modified="200708080104" created="200708050524" tags="design discuss" changecount="12">
+<div title="ProblemsTodo" modifier="Ichthyostega" modified="200709251721" created="200708050524" tags="design discuss" changecount="15">
 <pre>Open issues, Things to be worked out, Problems still to be solved... 
 
 !!Parameter Handling
@@ -2016,10 +2092,31 @@ From experience, mainly with other applications, we can draw the following concl
 How to handle the simultaneous rendering of several output streams (video, audio channels). Shall we treat the EDL as one entity containing different output channels, or should it rather be seen as a composite of several sub-~EDLs, each for only one output channel? This decision will be reflected in the overall structure of the network of render nodes: We could have a list of channel-output generating pipelines in each processor (for every segment), or we could have independently segmented lists of Processors for every output channel/type. The problem is, //it is not clear what approach to prefer at the moment//  because we are just guessing.
 
 !!Tracks, Channels, Layers
-Closely related to this is the not-so-obvious problem how to understand the common global structures found in most audio and video editing applications. Mostly, they stem from imitating hardware recording and editing solutions, thus easing the transition for professionals grown up with analog hardware based media. But as digital media are the de-facto standard nowadays, we could have a look at all those accidental complexity introduced by sticking to the hardware tool metaphor.
+Closely related to this is the not-so-obvious problem how to understand the common global structures found in most audio and video editing applications. Mostly, they stem from imitating hardware recording and editing solutions, thus easing the transition for professionals grown up with analogue hardware based media. But as digital media are the de-facto standard nowadays, we could rethink some of this accidental complexity introduced by sticking to the hardware tool metaphor.
 * is it really necessary to have fixed global tracks?
 * is it really helpful to feed &quot;source tracks&quot; into global processing busses/channels?
 Users accustomed with modern GUI applications typically expect that //everything is a object//  and can be pulled around and  manipulated individually. This seems natural at start, but raises the problem of providing a efficient workflow for handling larger projects and editing tasks. So, if we don't have a hard wired multitrack+bus architecture, we need some sort of templating to get the standard editing use case done efficiently.
+
+!!Compound and Multiplicity
+Simple relations can be hard wired. But, on the contrary, it would be as naive to define a Clip as having a Video track and two audio tracks, as it would be naive to overlook the problem of holding video and corresponding audio together. And, moreover, the default case has to be processed in a //straight forward// fashion, with as few tests and decisions as possible. So, basically each component participating in getting the core processing done has to mirror the structure pattern of the other parts, so that  processing can be done without testing and forking. But this leaves us with the problem where to put the initial knowledge about the structural pattern used for building up the compound structures and &amp;mdash; especially &amp;mdash; the problem how to treat different kinds of structural patterns, how to detect the pattern to be applied and how to treat multiple instances of the same structural pattern.
+
+One example of this problem is the [[handling of multichannel media|MultichannelMedia]]. Following the above reasoning, we end with having a [[&quot;structural processing pattern&quot;|ProcPatt]], typically one video stream with MPEG decoder and a pair of audio streams which need either to be routed to some &quot;left&quot; and &quot;right&quot; output ports, or have to be passed through a panning filter accordingly. Now the problem is: //create a new instance of this structure for each new media, or detect which media to subsume under a existing pattern instance.//
+
+!!Parallelism
+We need to work out guidelines for dealing with operations going on simultaneously. Certainly, this will divide the application in several different regions. As always, the primary goal is to avoid multithread problems altogether. Typically, this can be achieved by making matters explicit: externalizing state, make the processing subsystems stateless, queue and schedule tasks, use isolation layers.
+* the StateProxy is a key for the individual render processes state, which is managed in separate [[StateFrame]]s in the backend. The [[processing network|ProcNode]] is stateless.
+* the [[Fixture]] provides an isolation layer between the renderengine and the Session/EDL
+* all EditingOperations are not threadsafe intentionally, because they are [[scheduled|ProcLayerScheduler]]
+</pre>
+</div>
+<div title="ProcAsset" modifier="Ichthyostega" created="200709221343" tags="def classes" changecount="1">
+<pre>All Assets of kind asset::Proc represent //processing algorithms// in the bookkeeping view. They enable loading, browsing and maybe even parametrizing all the Effects, Plugins and Codecs available for use within the Cinelerra Session.
+
+Besides, they provide an important __inward interface__ for the [[ProcNode]]s, which will use these asset entries to dispatch the actual processing call when rendering. 
+
+{{red{todo: the naming scheme??}}}
+
+[img[Asset Classess|uml/fig131077.png]]
 </pre>
 </div>
 <div title="ProcLayer" modifier="Ichthyostega" modified="200708100338" created="200708100333" tags="def" changecount="2">
@@ -2031,6 +2128,19 @@ Users accustomed with modern GUI applications typically expect that //everything
 </div>
 <div title="ProcNode" modifier="MichaelPloujnikov" modified="200706271500" created="200706220409" tags="def" changecount="3">
 <pre>A data processing node within the Render Engine. Its key feature is the possibility to pull from it one (freely addressable) [[Frame]] of calculated data. Further, each ~ProcNode has the ability to be wired with other nodes and [[Parameter Providers|ParamProvider]]
+</pre>
+</div>
+<div title="ProcPatt" modifier="Ichthyostega" modified="200709212329" created="200709212315" tags="def design" changecount="4">
+<pre>This special type of [[structural Asset|StructAsset]] represents information how to build some part of the render engine's processing nodes network. It can be thought of as a template or blueprint for construction. Most notably, it is used for creating nodes reading, decoding and delivering source media material to the render network. Each [[media Asset|MediaAsset]] has associated processing patterns describing the codecs and other transformations needed to get at the media data of this asset. (and because media assets are typically compound objects, the referred ~ProcPatt will be compound too). Obviously, the possibilities opened by using processing patterns go far beyond.
+
+Technically, a processing pattern is a list of building instructions, which will be //executed// by the [[Builder]] on the render node network under construction. This implies the possibility to define further instruction kinds when needed in future; at the moment the relevant sorts of instructions are
+* attach the given sequence of nodes to the specified point
+* recursively execute a nested ~ProcPatt
+More specifically, a sequence of nodes is given by a sequence of prototypical effect and codec assets (and from each of them we can create the corresponding render node). And the point to attach these nodes is given by an identifier &amp;mdash; in most cases just &quot;{{current}}&quot;, denoting the point the builder was just working at, when he treated some MObject which in turn yielded this processing pattern in question.
+
+Like all [[structural assets|StructAsset]], ~ProcPatt employs a special naming scheme within the asset name field, which directly mirrors its purpose and allows to bind to existing processing pattern instances when needed. The idea is letting all assets in need of a similar processing pattern refer to one shared ~ProcPatt instance. For example, within a MPEG video media asset, at some point there will be a ~ProcPatt labeled &quot;{{{stream(mpeg)}}}&quot;. In consequence, all MPEG video will use the same pattern of node wiring. And, of course, this pattern could be changed, either globally, or by binding a single clip to some other processing pattern (for making a punctual exception from the general rule)
+
+//Note,// nothing has been said about how processing patterns are defined. One can expect for some //default patterns// beeing defined somewhere in the application, any session could overrule these defaults, and when there is no default, we can expect some mechanism deriving sensible fallback patterns //for every specific use case// of processing patterns. See the problem of [[Loading Media]] as an example.
 </pre>
 </div>
 <div title="Processors" modifier="Ichthyostega" created="200706220412" tags="def" changecount="1">
@@ -2286,6 +2396,16 @@ The design of Cinelerra 2 basically follows this design, but __fails because of 
  * see also the [[Entities involved in Rendering|RenderEntities]]
 </pre>
 </div>
+<div title="SessionOverview" modifier="Ichthyostega" created="200709272105" changecount="1">
+<pre>The Session (sometimes also called //Project//) contains all informations and objects to be edited by the User. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration. At any given time, there is //only one current session// opened within the application.
+
+!!!larger projects
+For larger editing projects the simple structure of a session containing &quot;the&quot; timeline is not sufficient. Rather, we have several timelines, e.g. one for each scene. Or we could have several layered or nested timelines (compositional work, multimedia productions). To support these cases without making the default case more complicated, Cinelerra-3 introduces a //focus// for selecting the //current EDL,// which will receive all editing operations.
+
+!!!the definitive state
+With all the structural complexities possible within such a session, we need an isolation layer to provide __one__ definitive state where all configuration has been made explicit. Thus the session manages one special object list, the [[Fixture]], which can be seen as all currently active object placed onto a single timeline.
+</pre>
+</div>
 <div title="SideBarOptions" modifier="CehTeh" created="200706200048" changecount="1">
 <pre>&lt;&lt;search&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel &quot;options »&quot; &quot;Change TiddlyWiki advanced options&quot;&gt;&gt;</pre>
 </div>
@@ -2374,6 +2494,17 @@ Instead, we should try to just connect the various subsystems via Interfaces and
 * the Builder itself is a separation layer. Neither do the Objects in the EDL access directly [[Render Nodes|ProcNode]], nor do the latter call back into the EDL. Both connections seem to be necessary at first sight, but both can be avoided by using the Builder Pattern
 * another separation exists between the Render Engine and the individual Nodes: The Render Engine doesn't need to know the details of the data types processed by the Nodes. It relies on the Builder having done the correct connections and just pulls out the calculated results. If there needs to be additional control information to be passed, then I would prefer to do a direct wiring of separate control connections to specialized components, which in turn could instruct the controller to change the rendering process.
 * to shield the rendering code of all complexities of thread communication and synchronization, we use the StateProxy
+</pre>
+</div>
+<div title="StructAsset" modifier="Ichthyostega" created="200709221353" tags="def classes" changecount="1">
+<pre>Structural Assets are intended mainly for internal use, but the user should be able to see and query them. By changing the parametrisation of some structural Asset, we can customize the default behaviour of Cinelerra to some extent.
+* [[Processing Patterns|ProcPatt]] encode the information, how to get at the actual media data when rendering a clip.
+* Tracks are one of the dimensions used for organizing the EDL. Besides, they carry parametrisation of output port, overlay mode etc.
+* Output Ports {{red{still need to be defined...}}}
+
+The Asset name field of structural Assets utilizes a special naming scheme, which allows to derive the name based on the capabilities of the structural asset. For example, by default all media clips with a given media stream type (e.g. H264) will use the same [[processing Pattern|ProcPatt]] for rendering. {{red{todo: work out the details of this naming scheme??}}}
+
+[img[Asset Classess|uml/fig131205.png]]
 </pre>
 </div>
 <div title="StyleSheet" modifier="Ichthyostega" modified="200709040043" created="200701131624" tags="MPTWTheme excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706090017" changecount="14">

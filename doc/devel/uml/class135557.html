@@ -17,7 +17,7 @@
 
 <a name="refclass135557"></a>
 <p>Declaration :</p><ul><li>C++ : class Error : public <a href="class136325.html#refclass136325"><b>std::exception</b></a> </li></ul><p>Directly inherited by : <a href="class135813.html#refclass135813"><b>Config</b></a> <a href="class136197.html#refclass136197"><b>External</b></a> <a href="class136069.html#refclass136069"><b>Invalid</b></a> <a href="class135685.html#refclass135685"><b>Logic</b></a> <a href="class135941.html#refclass135941"><b>State</b></a> </p>
-<p>Artifact : <a href="index.html#refartifact135813"><b>error</b></a></p><div class="sub">
+<p>Artifact : <a href="index.html#refartifact135813"><b>error</b></a>, Component(s) : <a href="index.html#refcomponent129925"><b>CommonLib</b></a></p><div class="sub">
 <a name="refoperation131845"></a>
 <table><tr><td><div class="element">Operation <b>what</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + what() : const char*</li><li>C++ : public: virtual const char* what () const </li></ul><a name="refoperation131973"></a>
 <table><tr><td><div class="element">Operation <b>rootCause</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + rootCause() : std::exception</li><li>C++ : public: std::exception rootCause () </li></ul><p>If this exception was caused by a chain of further exceptions,<br />return the first one registered in this throw sequence.<br />This works only, if every exceptions thrown as a consequence<br />of another exception is propperly constructed by passing<br />the original exception to the constructor<br /></p><a name="refattribute130309"></a>

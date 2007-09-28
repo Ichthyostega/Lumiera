@@ -33,10 +33,18 @@ namespace cinelerra
   /**
    * denotes a temporal position (time point), based on timeline start.
    * 
-   * investigate posix.4 realtime timers, wrap these here
+   * @todo currently (9/07) this is a dummy implementation to find out
+   *       what interface the Proc layer needs. Cehteh has already written
+   *       elaborate timehandling functions in the backend and the goal
+   *       is for class Time to be just a thin wrapper!
    */
   class Time
-    {};
+    {
+      int dummy;
+    public:
+      Time(int dum=0) : dummy(dum) {}
+      operator int () { return dummy; }
+    };
 
 } // namespace cinelerra
 #endif

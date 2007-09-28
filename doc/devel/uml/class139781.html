@@ -1,0 +1,27 @@
+<!-- Documentation produced by the Html generator of Bouml (http://bouml.free.fr) -->
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>Class SessManager</title>
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body bgcolor="#ffffff">
+
+<div class = "title">Class SessManager</div>
+<p></p>
+
+<!-- ============================================================= -->
+
+<a name="refclass139781"></a>
+<p>Declaration :</p><ul><li>C++ : class SessManager </li></ul><p>Artifact : <a href="index.html#refartifact138885"><b>sessmanager</b></a></p><div class="sub">
+<a name="refoperation133765"></a>
+<table><tr><td><div class="element">Operation <b>clear</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + clear() : void</li><li>C++ : public: void clear () </li></ul><p>clear current session contents <br />without resetting overall session config.<br />Afterwards, the session will contain only one <br />empty EDL, while all Assets are retained.<br /><br /></p><a name="refoperation133893"></a>
+<table><tr><td><div class="element">Operation <b>reset</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + reset() : void</li><li>C++ : public: void reset () </li></ul><p>reset all session config and <br />start with a pristine default session.<br /></p><a name="refoperation134021"></a>
+<table><tr><td><div class="element">Operation <b>load</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + load() : void</li><li>C++ : public: void load () </li></ul><p>replace the current session by a new<br />session loaded from serialized state.<br /></p><a name="refoperation134149"></a>
+<table><tr><td><div class="element">Operation <b>save</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + save() : void</li><li>C++ : public: void save () </li></ul><p>create a complete, serialized representation<br />of the current session config and contents.<br />@todo how to serialize, prameters, return value?<br /></p></div>
+<p>All public operations : <a href="class139781.html#refoperation133765"><b>clear</b></a> , <a href="class139781.html#refoperation134021"><b>load</b></a> , <a href="class139781.html#refoperation133893"><b>reset</b></a> , <a href="class139781.html#refoperation134149"><b>save</b></a> </p>
+</body>
+</html>

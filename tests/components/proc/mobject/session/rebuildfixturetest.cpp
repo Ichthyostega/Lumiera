@@ -22,13 +22,19 @@
 
 
 #include "common/test/run.hpp"
-//#include "common/factory.hpp"
-//#include "common/util.hpp"
+#include "proc/mobject/session.hpp"
+#include "proc/mobject/session/edl.hpp"
+#include "proc/mobject/session/testsession1.hpp"
+#include "common/util.hpp"
 
 //#include <boost/format.hpp>
+#include <boost/bind.hpp>
 #include <iostream>
 
 //using boost::format;
+using boost::bind;
+using util::contains; 
+using util::for_each; 
 using std::string;
 using std::cout;
 
@@ -53,7 +59,28 @@ namespace mobject
         {
           virtual void run(Arg arg) 
             {
+              PSess sess = Session::current;
+              sess.clear();
+              buildTestseesion1();
+              ASSERT (sess->isValid());
+              sess->rebuildFixture();
+              TODO ("check the fixture has been touched. e.g. by hash.");
+              TODO ("query all Placements of all Clips (via AssetManager). Verify explicit plac contained in Fixture.");
+
+              UNIMPLEMENTED ("iterate over fixture");
+// TODO              
+//            for_each (sess->getFixture(), 
+//                      bind (&check_is_from_EDL, _1, sess.getEDL()));
+              
+              TODO ("can we check the other direction, from EDL to Fixture??");
             } 
+          
+          static void 
+          check_is_from_EDL (PPla explicitPlacement, EDL& edl)
+            {
+              PPla originalPlacement = explicitPlacement->subject->getPlacement();
+              ASSERT (edl.contains(originalPlacement));
+            }
         };
       
       

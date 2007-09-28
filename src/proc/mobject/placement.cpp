@@ -28,6 +28,9 @@ namespace mobject
   {
 
 
+  /** factory for creating the corretct Placement subclass */
+  PlacementFactory Placement::create;
+
 
   /** create an actual (explicit) placement while trying to
    * satisfy the network of adjacent objects and placements.
@@ -36,6 +39,18 @@ namespace mobject
   ExplicitPlacement&
   Placement::resolve ()
   {
+  }
+  
+  
+  
+  /** implements the logic for selecting the correct 
+   *  Placement subclass.
+   *  @return smart ptr owning the created placement object
+   */
+  PlacementFactory::PType 
+  PlacementFactory::operator() (Placement::Style, Time, PMO subject)
+  {
+    UNIMPLEMENTED ("create correct Placement subclass");
   }
 
 

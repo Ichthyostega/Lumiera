@@ -23,6 +23,7 @@
 
 #include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/track.hpp"
+#include "proc/mobject/placement.hpp"
 #include "proc/mobject/mobject.hpp"
 
 namespace mobject
@@ -30,7 +31,22 @@ namespace mobject
   namespace session
     {
 
-    /** */
+    /** @deprecated not sure if it is a good idea 
+     *              to have this on the interface
+     */
+    bool 
+    EDL::contains (const PPla& placement)
+    {
+      UNIMPLEMENTED ("test if a given placement is contained within this EDL");
+    }
+    
+    
+    PPla& 
+    EDL::find (const string& id)
+    {
+      UNIMPLEMENTED ("serch for a given 'thing' within the EDL");
+    }
+
 
 
 

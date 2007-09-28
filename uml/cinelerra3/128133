@@ -1,6 +1,6 @@
 format 40
 "Asset" // ProcessingLayer::Asset
-  revision 6
+  revision 13
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -49,6 +49,16 @@ format 40
     end
 
     classdiagram 130437 "Media-Asset Relations"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      size A4
+    end
+
+    classdiagram 131077 "Proc-Asset Relations"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      size A4
+    end
+
+    classdiagram 131205 "Struct-Asset Relations"
       draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
       size A4
     end
@@ -354,6 +364,112 @@ ${inlines}
 	    classrelation_ref 139909 // <realization>
 	  b multiplicity "" parent class_ref 136453 // Asset
       end
+
+      operation 133253 "createClip"
+	public return_type class_ref 128901 // Clip
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	comment "create a (possibly compound) Clip refering to this media, ready to be added to the EDL."
+      end
+
+      operation 133381 "howtoProc"
+	public return_type class_ref 138757 // ProcPatt
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	comment "@return descriptor how to build a render pipeline corresponding to this media"
+      end
+
+      classrelation 143237 // <dependency>
+	relation 141317 -_->
+	  a default
+	    cpp default "#include in header"
+	    classrelation_ref 143237 // <dependency>
+	  b multiplicity "" parent class_ref 138757 // ProcPatt
+      end
+    end
+
+    class 139397 "MediaFactory"
+      visibility public 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "specialized Asset Factory for configuring (new) media asset instances based on existing media files on disk; can create placeholder assets as well"
+      simplerelation 129285
+	-_->
+	  on 
+	  package_ref 129157 // BackendLayer
+      end
+
+      simplerelation 129413
+	-_->
+	  on 
+	  package_ref 129157 // BackendLayer
+      end
+
+      classrelation 144261 // <dependency>
+	relation 142341 -_->
+	  a default
+	    cpp default "#include in header"
+	    classrelation_ref 144261 // <dependency>
+	  b multiplicity "" parent class_ref 139525 // MediaAccessFacade
+      end
+    end
+
+    class 138501 "CompoundMedia"
+      visibility public 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "compound of several elementary media tracks,
+e.g. the individual media streams found in one media file"
+      classrelation 142213 // <generalisation>
+	relation 140421 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 142213 // <generalisation>
+	  b multiplicity "" parent class_ref 136709 // Media
+      end
+
+      classrelation 142341 // tracks (<directional aggregation>)
+	relation 140549 o-->
+	  stereotype "vector"
+	  a role_name "tracks" multiplicity "1..*" protected
+	    comment "elementary media assets comprising this compound"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type} *> ${name}${value};
+"
+	    classrelation_ref 142341 // tracks (<directional aggregation>)
+	  b multiplicity "*" parent class_ref 136709 // Media
+      end
     end
 
     class 136837 "Proc"
@@ -568,6 +684,15 @@ ${inlines}
 	    classrelation_ref 141317 // <generalisation>
 	  b multiplicity "" parent class_ref 136965 // Struct
       end
+
+      classrelation 144389 // wiringTemplate (<unidirectional association>)
+	relation 142469 --->
+	  a role_name "wiringTemplate" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 144389 // wiringTemplate (<unidirectional association>)
+	  b multiplicity "" parent class_ref 138757 // ProcPatt
+      end
     end
 
     class 138117 "OutPort"
@@ -588,6 +713,37 @@ ${inlines}
 	    cpp default "${type}"
 	    classrelation_ref 141445 // <generalisation>
 	  b multiplicity "" parent class_ref 136965 // Struct
+      end
+    end
+
+    class 138757 "ProcPatt"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "special type of structural Asset representing information how to build some part of the render engine's processing nodes network."
+      classrelation 143109 // <generalisation>
+	relation 141189 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 143109 // <generalisation>
+	  b multiplicity "" parent class_ref 136965 // Struct
+      end
+
+      classrelation 143621 // instructions (<directional aggregation by value>)
+	relation 141701 *-->
+	  stereotype "vector"
+	  a role_name "instructions" multiplicity "1..*" const_relation protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 143621 // instructions (<directional aggregation by value>)
+	  b multiplicity "1" parent class_ref 139013 // BuildInstruct
       end
     end
 
@@ -624,6 +780,88 @@ ${inlines}
       explicit_switch_type ""
       
       comment "Implementation of the registry holding all Asset instances known to the Asset Manager subsystem. As of 8/2007 implemented by a hashtable."
+    end
+
+    class 139013 "BuildInstruct"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "(Interface) building instructions to be executed by the Builder on the render node network under construction."
+    end
+
+    class 139141 "DoAttach"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 143749 // <generalisation>
+	relation 141829 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 143749 // <generalisation>
+	  b multiplicity "" parent class_ref 139013 // BuildInstruct
+      end
+
+      classrelation 144133 // nodes (<directional aggregation>)
+	relation 142213 o-->
+	  stereotype "vector"
+	  a role_name "nodes" multiplicity "1..*" const_relation public
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 144133 // nodes (<directional aggregation>)
+	  b multiplicity "" parent class_ref 136837 // Proc
+      end
+
+      attribute 131461 "point"
+	const_attribute public explicit_type "string"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	idl_decl ""
+	comment "identifying the point where the nodes should be attached"
+      end
+    end
+
+    class 139269 "DoRecurse"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 143877 // <generalisation>
+	relation 141957 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 143877 // <generalisation>
+	  b multiplicity "" parent class_ref 139013 // BuildInstruct
+      end
+
+      classrelation 144005 // subPattern (<unidirectional association>)
+	relation 142085 --->
+	  a role_name "subPattern" multiplicity "1" const_relation protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 144005 // subPattern (<unidirectional association>)
+	  b multiplicity "*" parent class_ref 138757 // ProcPatt
+      end
     end
   end
 end

@@ -1,6 +1,6 @@
 format 40
 "MObject" // ProcessingLayer::MObject
-  revision 17
+  revision 22
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -48,7 +48,65 @@ format 40
       size A4
     end
 
-    class 128005 "Session"
+    class 139653 "Session"
+      abstract visibility public 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "Primary Interface for all editing tasks.
+The session contains defaults, all the assets being edited, and a set of EDL with the individual MObjects to be manipulated and rendered."
+      operation 133509 "currEDL"
+	public return_type class_ref 128133 // EDL
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	comment "The EDL currently in focus. In most cases, Session and EDL are almost the same, just EDL emphasizes the collection aspect. But generally (for larger editing projects) one Session can contain several EDLs, which may even be nested. At any given time, only one of these EDLs has focus and recieves the editing commands."
+      end
+
+      operation 133637 "getFixture"
+	public explicit_return_type "Fixture&"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	comment "While the session can be comprised of several EDLs, 
+there is only one Fixture, which represents the actual
+configuration of all Objects to be rendered"
+      end
+
+      classrelation 144773 // current (<unidirectional association>)
+	relation 142853 --->
+	  a role_name "current" multiplicity "1" class_relation public
+	    comment "Standard access path to get at the current session via the Session Manager, which acts as a \"PImpl\" smart pointer"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}& ${name}${value};
+"
+	    classrelation_ref 144773 // current (<unidirectional association>)
+	  b multiplicity "" parent class_ref 139781 // SessManager
+      end
+    end
+
+    class 128005 "SessionImpl"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -59,13 +117,13 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 128005 // edls (<directional aggregation>)
-	relation 128005 o-->
-	  stereotype "list"
+      comment "Implementation class for the Session interface"
+      classrelation 128005 // edls (<directional aggregation by value>)
+	relation 128005 *-->
 	  a role_name "edls" multiplicity "1..*" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
 "
-	    classrelation_ref 128005 // edls (<directional aggregation>)
+	    classrelation_ref 128005 // edls (<directional aggregation by value>)
 	  b multiplicity "" parent class_ref 128133 // EDL
       end
 
@@ -76,6 +134,99 @@ ${inlines}
 "
 	    classrelation_ref 128261 // fixture (<unidirectional association>)
 	  b multiplicity "" parent class_ref 128261 // Fixture
+      end
+
+      classrelation 144645 // <realization>
+	relation 142725 -_-|>
+	  stereotype "PImpl"
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 144645 // <realization>
+	  b multiplicity "" parent class_ref 139653 // Session
+      end
+    end
+
+    class 139781 "SessManager"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 133765 "clear"
+	public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	comment "clear current session contents 
+without resetting overall session config.
+Afterwards, the session will contain only one 
+empty EDL, while all Assets are retained.
+"
+      end
+
+      operation 133893 "reset"
+	public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	comment "reset all session config and 
+start with a pristine default session."
+      end
+
+      operation 134021 "load"
+	public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	comment "replace the current session by a new
+session loaded from serialized state."
+      end
+
+      operation 134149 "save"
+	public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	comment "create a complete, serialized representation
+of the current session config and contents.
+@todo how to serialize, prameters, return value?"
       end
     end
 
@@ -415,15 +566,67 @@ ${inlines}
 	comment "startpos in source"
       end
 
-      classrelation 141829 // source (<unidirectional association>)
-	relation 140037 --->
-	  a role_name "source" multiplicity "1" const_relation protected
+      classrelation 142469 // source (<unidirectional association>)
+	relation 140677 --->
+	  a role_name "source" multiplicity "1" protected
 	    comment "the media source this clip referes to"
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
-	    classrelation_ref 141829 // source (<unidirectional association>)
-	  b multiplicity "*" parent class_ref 137349 // Clip
-	  association_type class_ref 128901 // Clip
+	    classrelation_ref 142469 // source (<unidirectional association>)
+	  b multiplicity "*" parent class_ref 136709 // Media
+      end
+    end
+
+    class 138885 "SimpleClip"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "Elementary clip consisting of only one media stream"
+      classrelation 143365 // <generalisation>
+	relation 141445 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 143365 // <generalisation>
+	  b multiplicity "" parent class_ref 128901 // Clip
+      end
+    end
+
+    class 138629 "CompoundClip"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      associated_diagram classdiagram_ref 128133 // Session structure
+      comment "Clip MObject which is actually a compound of several elementary clips,
+e.g. the several streams found within multichannels media."
+      classrelation 142597 // <generalisation>
+	relation 140805 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 142597 // <generalisation>
+	  b multiplicity "" parent class_ref 128901 // Clip
+      end
+
+      classrelation 143493 // components (<directional aggregation>)
+	relation 141573 o-->
+	  a role_name "components" multiplicity "1..*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 143493 // components (<directional aggregation>)
+	  b multiplicity "*" parent class_ref 128901 // Clip
       end
     end
 
@@ -476,7 +679,7 @@ ${inlines}
       end
     end
 
-    class 129285 "DirectPlacement"
+    class 129285 "FixedPlacement"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {

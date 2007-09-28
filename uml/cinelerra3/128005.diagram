@@ -1,4 +1,4 @@
-format 38
+format 40
 
 fragment 128005 "UI Layer"
   xyzwh 321 22 2000 829 100
@@ -11,8 +11,8 @@ fragment 128261 "Backend Layer"
   xyzwh 64 848 2000 1089 105
 end
 packagecanvas 128389 
-  package_ref 128133 // AssetManager
-    xyzwh 561 201 2005 265 214
+  package_ref 128133 // Asset
+    xyzwh 561 201 2005 265 241
 packagecanvas 128517 
   package_ref 128261 // MObject
     xyzwh 94 201 2006 458 335
@@ -38,7 +38,7 @@ note 129541 "Structures edited by the User"
   xyzwh 43 269 2016 181 41
 componentcanvas 129669 component_ref 128645 // AssetManagement
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 577 241 2010 208 159
+  xyzwh 577 232 2010 217 201
 componentcanvas 129797 component_ref 128773 // Dispatcher
   draw_component_as_icon default show_component_req_prov default show_component_rea default
   xyzwh 406 31 2005 193 75
@@ -59,6 +59,12 @@ note 131973 "just works, never decides"
   xyzwh 317 668 2015 110 59
 note 132101 "codecs, stream I/O here"
   xyzwh 376 592 2005 166 39
+componentcanvas 132229 component_ref 130181 // MediaFactory
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 593 354 2015 158 67
+componentcanvas 132357 component_ref 130309 // AssetDB
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 629 289 2020 155 63
 simplerelationcanvas 131205 simplerelation_ref 128005
   from ref 130053 z 2004 to ref 130181
 simplerelationcanvas 131333 simplerelation_ref 128133

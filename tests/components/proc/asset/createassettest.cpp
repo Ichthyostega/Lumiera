@@ -107,6 +107,7 @@ namespace asset
                 NOTREACHED;
               }
             catch (cinelerra::error::Invalid& xxx) {ASSERT (xxx.getID()==CINELERRA_ERROR_UNKNOWN_ASSET_ID);}
+            cinelerra_error (); // reset errorflag
             
             
             // checking the Ident-Fields
