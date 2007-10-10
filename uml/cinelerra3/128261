@@ -1,6 +1,6 @@
 format 40
 "MObject" // ProcessingLayer::MObject
-  revision 22
+  revision 23
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -409,19 +409,6 @@ ${members}};
 	comment "TODO: how to represent time intervals?"
       end
 
-      classrelation 129029 // placement (<association>)
-	relation 128645 ----
-	  stereotype "list"
-	  a role_name "placement" multiplicity "1..*" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type} *> ${name}${value};
-"
-	    classrelation_ref 129029 // placement (<association>)
-	  b role_name "subject" multiplicity "1" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 129157 // subject (<association>)
-      end
-
       classrelation 137093 // <generalisation>
 	relation 135557 ---|>
 	  a public
@@ -446,10 +433,6 @@ ${members}};
 "
       explicit_switch_type ""
       
-      classrelation 129157 // subject (<association>)
-	relation_ref 128645 // <association>
-      end
-
       operation 128005 "resolve"
 	public explicit_return_type "ExplicitPlacement   [ProcessingLayer::MObject]&"
 	nparams 0
@@ -464,6 +447,16 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 	
 	
 	comment "create an actual (explicit) placement while trying to satisfy the network of adjacent objects and placements."
+      end
+
+      classrelation 144901 // subject (<unidirectional association>)
+	relation 142981 --->
+	  a role_name "subject" multiplicity "1" protected
+	    comment "Placement acts as smart pointer"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 144901 // subject (<unidirectional association>)
+	  b multiplicity "1..*" parent class_ref 128517 // MObject
       end
     end
 

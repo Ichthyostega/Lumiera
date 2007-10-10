@@ -514,7 +514,7 @@ ColorPalette
 
 SiteUrl</pre>
 </div>
-<div title="Asset" modifier="Ichthyostega" modified="200709040256" created="200708100337" tags="def classes" changecount="11">
+<div title="Asset" modifier="Ichthyostega" modified="200710092321" created="200708100337" tags="def classes" changecount="14">
 <pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the EDL is the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with eatch Session. Besides, there is a collection of basic Assets allways available by default.
 
 The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situation is similar. Assets thus serve two quite distinct purposes. One is to load, list, group search and browse them, and to provide an entry point to create new or get at existing MObjects in the EDL, while the other purpose is to provide attribute and property informations to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
@@ -524,7 +524,7 @@ We can distinguish several different Kinds of Assets, each one with specific pro
 [img[Asset Classess|uml/fig130309.png]]
 
 !Media Asset
-Some piece of Media Data accessible at some external Location an able to be processed by Cinelerra. A Media File on Harddisk can be considered as the most basic form of Media Asset, with some important derived Flavours, like a Placeholder for a currently unavailable Source, or Media available in different Resolutions or Formats.
+Some piece of Media Data accessible at some external Location and able to be processed by Cinelerra. A Media File on Harddisk can be considered as the most basic form of Media Asset, with some important derived flavours, like a Placeholder for a currently unavailable Source, or Media available in different Resolutions or Formats.
 * __outward interface operations__ include querying properties, creating an Clip MObject, controlling processing policy (low res proxy placeholders, interlacing and other generic pre- and postprocessing)
 * __inward interface operations__ include querying filename, codec, offset and any other informations necessary for creating a source render node, getting additional processing policy decisions (handling of interlacing, aspect ratio).
 &amp;rarr; MediaAsset
@@ -548,9 +548,12 @@ Some additional, virtual facilities created in the course of the editing process
 &amp;rarr; MetaAsset {{red{to be defined}}}
 
 !!!!still to be worked out..
-is how to implement the relationship between [[MObject]]s and Assets. Do we use direct pointers, or do we prefer an ID + central registry approach? And how to handle the removal of an Asset 
+is how to implement the relationship between [[MObject]]s and Assets. Do we use direct pointers, or do we prefer an ID + central registry approach? And how to handle the removal of an Asset.
 &amp;rarr; see also [[analysis of mem management|ManagementAssetRelation]]
 &amp;rarr; see also [[Creating Objects|ObjectCreation]], especially [[Assets|AssetCreation]]
+
+  //9/07: currently implementing it as follows: use a refcounting-ptr from Clip-~MObject to asset::Media while maintaining a dependency network between Asset objects. We'll see if this approach is viable//
+
 </pre>
 </div>
 <div title="AssetCreation" modifier="Ichthyostega" created="200709040307" changecount="1">
@@ -770,7 +773,7 @@ Cinelerra uses this term in a related manner but with a somewhat shifted focus (
 In this usage, the EDL in most cases will be almost synonymous to the [[Session|SessionOverview]], just the latter emphasizes more the state aspect, as it can be thought as the current EDL contents contained in a file or data structure together with additional Option values and settings for the GUI. The Session is what you save and load, while the EDL rather denotes a structured collection of Objects placed in time.
 </pre>
 </div>
-<div title="EditingOperations" modifier="Ichthyostega" modified="200709251706" created="200709251610" tags="design decision" changecount="2">
+<div title="EditingOperations" modifier="Ichthyostega" modified="200710100119" created="200709251610" tags="design decision" changecount="4">
 <pre>These are the tools provided to any client of the Proc layer for handling and manipulating the entities in the EDL. When defining such operations, //the goal should be to arrive at some uniformity in the way things are done.// Ideally, when writing client code, one should be able to guess how to achieve some desired result.
 
 !guiding principle
@@ -779,7 +782,7 @@ The approach taken to define any operation is based primarily on the ''~OO-way o
 !main tasks
 * you ''create a clip'' either from a source media or from another clip (copy, maybe clone?). The new clip always reflects the full size (and other properties) of the source used for creating.
 * you can request a clip to ''resize'', which always relates to its current dimensions.
-* you can ''place or attach'' the clip to some point or other entity by creating a [[Placement]] from the clip.
+* you can ''place or attach'' the clip to some point or other entity by creating a [[Placement]] from the clip. (&amp;rarr; [[handling of Placements|PlacementHandling]])
 * you can ''adjust'' a placement relative to some other placement, meta object (i.e. selection), label or media, and this may cause the placement to resize or even delete the clip as necessary
 * you can perform ''adjustments'' on the whole EDL.
 All these operations propagate to directly dependant objects and may schedule global reconfigurations.
@@ -1356,14 +1359,14 @@ From experiences with other middle scale projects, I prefer having the test code
 
 {{red{how to create a test stub for this interface...?}}}</pre>
 </div>
-<div title="MObject" modifier="Ichthyostega" created="200706220312" tags="def classes" changecount="1">
-<pre>All sorts of &quot;things&quot; to be placed and manipulated by the user in the EDL. This interface abstracts the details and just provides
-* a duration
-* a [[Placement]]
+<div title="MObject" modifier="Ichthyostega" modified="200710092343" created="200706220312" tags="def classes" changecount="2">
+<pre>All sorts of &quot;things&quot; to be placed and manipulated by the user in the EDL. This interface abstracts the details and just supposes
+* the media object has a duration
+* it is allways //placed// in some manner, i.e. it is allways accessed via a [[Placement]]
 * {{red{and what else?}}}
 </pre>
 </div>
-<div title="MObjects" modifier="Ichthyostega" modified="200709030128" created="200706190636" tags="overview" changecount="8">
+<div title="MObjects" modifier="Ichthyostega" modified="200710100118" created="200706190636" tags="overview" changecount="9">
 <pre>The ~MObjects Subsystem contains everything related to the [[EDL]] and the various Media Objects placed within. It is complemented by the Asset Management (see &amp;rarr; [[Asset]]). Examples for [[MObjects|MObject]] being:
 * audio/video clips
 * effects and plugins
@@ -1372,6 +1375,10 @@ From experiences with other middle scale projects, I prefer having the test code
 * labels and other (maybe functional) markup
 
 This Design strives to achieve a StrongSeparation between the low-level Structures used to carry out the actual rendering and the high level Entities living in the EDL and being manipulated by the user. In this high level view, the Objects are grouped and located by [[Placements|Placement]], providing a flexible and open way to express different groupings, locations and ordering constraints between the Media Objects.
+&amp;rarr; EditingOperations
+&amp;rarr; PlacementHandling
+&amp;rarr; SessionOverview
+
 
 [img[Classess related to the EDL|uml/fig128133.png]]
 </pre>
@@ -1443,11 +1450,11 @@ For the case in question this seems to be the ''resource allocation is construct
 And, last but not least, doing all actual allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides that, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot;, rather it should use some central [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
-<div title="MultichannelMedia" modifier="Ichthyostega" modified="200709220010" created="200709200255" tags="design" changecount="4">
+<div title="MultichannelMedia" modifier="Ichthyostega" modified="200710090015" created="200709200255" tags="design" changecount="5">
 <pre>Based on practical experiences, Ichthyo tends to consider Multichannel Media as the base case, while counting media files providing just one single media stream as exotic corner cases. This may seem counter intuitive at first sight; you should think of  it as an attempt to avoid right from start some of the common shortcomings found in many video editors, especially
 * having to deal with keeping a &quot;link&quot; between audio and video clips
-* silly limitations on the supported audio setups (e.g. mono, stereo and 5.1)
-* unnecessary complexity when dealing with more realistic setups, esp. when dealing with dialogue scenes
+* silly limitations on the supported audio setups (e.g. &quot;sound is mono, stereo or Dolby-5.1&quot;)
+* unnecessary complexity when dealing with more realistic setups, esp. when working on dialogue scenes
 * inability to edit stereoscopic (3D) video in a natural fashion
 
 !Compound Media
@@ -1456,22 +1463,21 @@ Basically, each [[media asset|MediaAsset]] is considered to be a compound of sev
 So, when creating a clip out of such a compound media asset, the clip has to be a compound of elementary clips mirroring the given media asset's structure. Besides, it should be possible to //detach// and //attach// elementary clips from a compound clip. On the other hand, the [[Fixture]] created from the current state of the [[EDL]] is explicit to a great extent. So, in the Fixture we deal only with elementary clips placed to absolute positions, and thus the builder will see only simple non-compound clips and translate them into the corresponding source reading nodes.
 
 !Handling
-* from a Media asset, we can get a [[Processing Pattern|ProcPatt]] describing how to build a render pipeline for this media
+* from a Media asset, we can get a [[Processing Pattern (ProcPatt)|ProcPatt]] describing how to build a render pipeline for this media
 * we can create a Clip (MObject) from each Media, which will be linked back to the media asset internally.
 * moreover, creating a Clip will create and register a Clip asset as well, and this Clip asset will be tied to the original Clip and will show up in some special Category
 * media can be compound and the created Clips will mirror this compound structure
 * we distinguish elementay (non-compound) Clips from compound clips by concrete subtype. The builder can only handle elementary clips, because he needs to build a separate pipeline for every output channel. So the work of splitting common effect stacks for clips with several channels needs to be done when calculating the Fixture for the current EDL. The Builder expects to be able to build the render nodes corresponding to each entity found in the Fixture one by one.
 * the Builder gets at the ProcPatt (descriptor) of the underlying media for each clip and uses this description as a template to build the render pipeline. That is, the ProcPatt specifies the codec asset and maybe some additional effect assets (deinterlace, scale) necessary for feeding media data corresponding to this clip/media into the render nodes network.</pre>
 </div>
-<div title="ObjectCreation" modifier="Ichthyostega" modified="200709040257" created="200709030139" tags="impl design" changecount="10">
-<pre>We have to consider carefully how to handle the Creation of new class instances. Because, when done naively, it can defeat all efforts of separating subsystems, or &amp;mdash; the other extreme &amp;mdash; lead to a //switch-on-typeID//  programming style. We strive at a solution somewhere in the middle by utilizing __Abstract Factories__ on Interface or key abstraction classes, but providing specialized overloads for the different use cases. So in each use case we have to decide if we want to create a representant of some general concept (Interface), or if we have a direct colaboration and thus need the Factory to provide
-a more specific sub-Interface or even a concrete type.
+<div title="ObjectCreation" modifier="Ichthyostega" modified="200710090219" created="200709030139" tags="impl design" changecount="15">
+<pre>We have to consider carefully how to handle the Creation of new class instances. Because, when done naively, it can defeat all efforts of separating subsystems, or &amp;mdash; the other extreme &amp;mdash; lead to a //switch-on-typeID//  programming style. We strive at a solution somewhere in the middle by utilizing __Abstract Factories__ on Interface or key abstraction classes, but providing specialized overloads for the different use cases. So in each use case we have to decide if we want to create a instance of some general concept (Interface), or if we have a direct collaboration and thus need the Factory to provide a more specific sub-Interface or even a concrete type.
 
 !Object creation use cases
 !![[Assets|Asset]]
 |!Action|&gt;|!creates |
 |loading a media file|asset::Media, asset::Codec| |
-|viewing media|asset::Clip| for the whole Media, if not already existant|
+|viewing media|asset::Clip| for the whole Media, if not already existent|
 |mark selection as clip|asset::Clip| doesn't add to EDL|
 |loading Plugin|asset::Effect| usually at program startup|
 |create Session|asset::Track, asset::OutPort| |
@@ -1482,7 +1488,12 @@ a more specific sub-Interface or even a concrete type.
 |add Clip|session::Clip, FixedPlacement| |
 |attach Effect|session::Effect, RelativePlacement| |
 |start using Automation|session::Auto, asset::Dataset, RelativePlacement| |
-</pre>
+
+!Invariants
+when creating Objects, certain invariants have to be maintained. Because creating an Object can be considered an atomic operation and must not leave any related objects in an inconsistent state. Each of our interfaces implies some invariants:
+* every Placement has a Subject it places
+* MObjects are always created to be placed in some way or the other
+* [[Assets|Asset]] manage a dependency graph. Creating a derived Object (e.g. a Clip from a Media) implies a new dependency. (&amp;rarr; [[memory management|ManagementAssetRelation]] relies on this)</pre>
 </div>
 <div title="OpenGL" modifier="Ichthyostega" modified="200706220359" created="200706220345" tags="def discuss" changecount="3">
 <pre>Cinelerra2 introduced OpenGL support for rendering previews. I must admit, I am very unhappy with this, because
@@ -2063,8 +2074,19 @@ DAMAGE.
 &lt;html&gt;&lt;sub&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;scrollAnchorVisible('Top',null, event)&quot;&gt;[Top]&lt;/sub&gt;&lt;/a&gt;&lt;/html&gt;
 ***/</pre>
 </div>
-<div title="Placement" modifier="MichaelPloujnikov" modified="200706271459" created="200706220306" tags="def" changecount="3">
+<div title="Placement" modifier="Ichthyostega" modified="200710100120" created="200706220306" tags="def" changecount="6">
 <pre>A Placement represents a //relation:// it is always linked to a //Subject// (this being a [[Media Object|MObject]]) and has the meaning to //place// this Subject in some manner, either relatively to other Media Objects, or by some Constraint or simply absolute at (time,track). The latter case is especially important and represented by a special [[Sub-Interface|ExplicitPlacement]]
+
+The fact of being placed in the [[Session|SessionOverview]]/[[EDL]]is constitutive for all sorts of [[MObject]]s, without Placement they make no sense. Thus &amp;mdash; technically &amp;mdash; Placements act as ''smart pointers''. Of course, there are several kinds of Placements and they are templated on the type of MObject they are refering to. Placements can be //aggregated// to increasingly constrain the resulting &quot;location&quot; of the refered ~MObject. See &amp;rarr; [[handling of Placements|PlacementHandling]] for more details</pre>
+</div>
+<div title="PlacementHandling" modifier="Ichthyostega" modified="200710100148" created="200710100124" tags="design" changecount="3">
+<pre>[[Placement]]s are at the very core of all [[editing operations|EditingOperations]], because they act as handles (smart pointers) to access the [[media objects|MObject]] to be manipulated. Moreover, Placements are the actual content of the EDL(s) and Fixture and thus are small objects with //value semantics//. Many editing tasks include finding some Placement in the EDL or directly take a ref to some Placement. By acting on the Placement object, we can in some cases change parameters of the way the media object is placed (e.g. adjust an offset), while by dereferencing the Placement object, we access the &quot;real&quot; media object (e.g. for trimming its length).
+
+Placements are ''templated'' on the type of the actual ~MObject they refer to, thus defining the interface/methods usable on this object. Each Placement has a ''kind'', which determines its actual placing and locating behaviour, but besides that, we don't stress the identity of a placement object (~MObjects on the other hand //do have// a distinguishable identity): initially, you create a Placement of some specific kind (fixed, relative,...), but later on, you treat the placement polymorphically and don't care about its kind. The sole purpose of the placement's kind is to select some virtual function implementing the desired behaviour.
+
+There is no limitation to one single Placement per ~MObject, indeed we can ''aggregate'' several Placements, resulting in their properties and constraints being combined to yield the actual position of the ~MObject refered by those Placements. 
+
+* {{red{to be worked out...}}} how to implement this, esp. the aggregation. Use a special &quot;placement aggregation&quot; subtype, or rather chain aggregated placements directly in the way a decorator works? And how to handle the case of a //over constrained// Placement?
 </pre>
 </div>
 <div title="Playlist" modifier="Ichthyostega" modified="200706250727" created="200706220456" tags="def" changecount="3">
