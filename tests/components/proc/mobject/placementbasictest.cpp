@@ -1,5 +1,5 @@
 /*
-  AddClip(Test)  -  adding an Clip-MObject to the EDL/Session
+  PlacementBasic(Test)  -  basic Placement and MObject handling
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -49,28 +49,47 @@ namespace mobject
       
       
       /*******************************************************************
-       * @test adding an test clip to the EDL/Session.
-       * @see  mobject::session::Clip
-       * @see  mobject::session::EDL
+       * @test basic behaviour of Placements and access to MObjects.
+       * @see  mobject::Placement
+       * @see  mobject::MObject#create
+       * @see  mobject::Placement#addPlacement
+       * @see  mobject::Placement#resolve
        */
-      class AddClip_test : public Test
+      class PlacementBasic_test : public Test
         {
+          typedef shared_ptr<asset::Media> PM;
+          
           virtual void
           run (Arg arg) 
             {
-              PSess sess = Session::current;
-              PMO clip = TestClip::create();
-              PPla pla = Placement::create(Placement::FIXED, Time(1), clip);
-              sess->add (pla);
+              // create Clip-MObject, which is wrapped into a placement (smart ptr)
+              PM media = asset::Media::create("test-1", VIDEO);
+              Placement<Clip> pc = MObject::create(media);
+
+              // can use the Clip-MObject interface by dereferencing the placement
+              PM clip_media = pc->getMedia();
+              ASSERT (clip_media->ident.category.hasKind (VIDEO));
               
-              ASSERT (sess->currEDL().contains (pla));
-              // TODO: Clip-Asset and Placement magic??
+              // using the Placement interface
+              // TODO: how to handle unterdetermined Placement? Throw?
+              FixedPlacement & fixpla = pc.addPlacement(Placement::FIXED, Time(1)); // TODO: the track??
+              ExplicitPlacement expla = pc.resolve();
+              ASSERT (expla.time == 1);
+              ASSERT (!expla.isOverdetermined());
+              ASSERT (*expla == *pc);
+              ASSERT (*fixpla == *pc);
+              
+              // now overconstraining with another Placement
+              pc.addPlacement(Placement::FIXED, Time(2));
+              expla = pc.resolve();
+              ASSERT (expla.time == 2); // the latest addition wins
+              ASSERT (expla.isOverdetermined()); 
             } 
         };
       
       
       /** Register this test class... */
-      LAUNCHER (AddClip_test, "unit session");
+      LAUNCHER (PlacementBasic_test, "unit session");
       
       
       

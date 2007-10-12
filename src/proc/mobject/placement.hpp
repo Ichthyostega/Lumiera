@@ -63,7 +63,7 @@ namespace mobject
       /** resolve the network of placement and
        *  provide the resulting (explicit) placement.
        */
-      ExplicitPlacement& resolve () ;
+      ExplicitPlacement resolve () ;
       
     protected:
       Placement ();
@@ -77,7 +77,7 @@ namespace mobject
   
   
   /** 
-   * Factory specialized for creating Media Asset objects.
+   * Factory specialized for creating Placement objects.
    */ 
   class PlacementFactory : public cinelerra::Factory<Placement>
     {

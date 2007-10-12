@@ -773,7 +773,7 @@ Cinelerra uses this term in a related manner but with a somewhat shifted focus (
 In this usage, the EDL in most cases will be almost synonymous to the [[Session|SessionOverview]], just the latter emphasizes more the state aspect, as it can be thought as the current EDL contents contained in a file or data structure together with additional Option values and settings for the GUI. The Session is what you save and load, while the EDL rather denotes a structured collection of Objects placed in time.
 </pre>
 </div>
-<div title="EditingOperations" modifier="Ichthyostega" modified="200710100119" created="200709251610" tags="design decision" changecount="4">
+<div title="EditingOperations" modifier="Ichthyostega" modified="200710111508" created="200709251610" tags="design decision" changecount="5">
 <pre>These are the tools provided to any client of the Proc layer for handling and manipulating the entities in the EDL. When defining such operations, //the goal should be to arrive at some uniformity in the way things are done.// Ideally, when writing client code, one should be able to guess how to achieve some desired result.
 
 !guiding principle
@@ -794,7 +794,7 @@ While performing any manipulative task, the state of the object is considered in
 At the level of fine grained operations on individual entities, there is ''no support for parallelism''. Individual entities don't lock themselves. Tasks perform locking and are to be scheduled. Thus, we need an isolation layer towards all inherently multithreaded parts of the system, like the GUI or the renderengine.
 
 This has some obvious and some subtle consequences. Of course, manipulating //tasks// will be queued and scheduled somewhere. But as we rely on object identity and reference semantics for the entities in the EDL, some value changes are visible to  operations going on in parallel threads (e.g. rendering) and each operation on the EDL entities //has to be aware of this.//
-Consequently, sometimes there needs to be done a ''self-replacement by copy'' followed by manipulation of the new copy, while ongoing processes use the unaltered original object until they receive some sort of reset.
+Consequently, sometimes there needs to be done sort of a ''read-copy-update'', i.e. self-replacement by copy followed by manipulation of the new copy, while ongoing processes use the unaltered original object until they receive some sort of reset.
 
 !!undo
 Basically, each elementary operation has to record the informations necessary to be undone. It does so by registering a Memento with some central UndoManager facility. This Memento object contains a functor pre-bound with the needed parameter values. (Besides, the UndoManager is free to implement a second level of security by taking independent state snapshots). 

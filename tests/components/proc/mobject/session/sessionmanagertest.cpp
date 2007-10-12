@@ -50,7 +50,8 @@ namespace mobject
        */
       class SessionManager_test : public Test
         {
-          virtual void run(Arg arg) 
+          virtual void
+          run (Arg arg) 
             {
               getCurrentSession ();
               clearSession();
@@ -66,7 +67,8 @@ namespace mobject
           
           /** @test accessing the current (global) session 
            */
-          void getCurrentSession ()
+          void
+          getCurrentSession ()
             {
               PSess sess = Session::current;
               ASSERT (sess->isValid());
@@ -77,7 +79,8 @@ namespace mobject
            * @todo  implement all session content, implement 
            *        mobject and asset deletion operations.
            */
-          void clearSession ()
+          void
+          clearSession ()
             {
               UNIMPLEMENTED ("clear objects in current session");
               Session::current.clear();
@@ -87,7 +90,8 @@ namespace mobject
            *        a pristine default session. 
            * @todo  define the "global session config", implement session default ctor
            */
-          void resetSession ()
+          void
+          resetSession ()
             {
               UNIMPLEMENTED ("construct a pristine session");
               Session::current.reset();
@@ -98,7 +102,8 @@ namespace mobject
            *        objects are wired correctly.
            *  @todo implement rebuilding session, implement mock session serializer 
            */
-          void loadMockSession ()
+          void
+          loadMockSession ()
             {
               UNIMPLEMENTED ("rebuild session using a mock serializer");
             }
@@ -108,7 +113,8 @@ namespace mobject
            * @param src string with serialized session data
            * @todo  implement real session serializer 
            */
-          void loadSession (const string& src)
+          void
+          loadSession (const string& src)
             {
               UNIMPLEMENTED ("loding real sesion");
             }
@@ -117,7 +123,8 @@ namespace mobject
            * @param dest string recieving the generated serialized stream
            * @todo  implement real session serializer
            */
-          void saveSession (string& dest)
+          void
+          saveSession (string& dest)
             {
               UNIMPLEMENTED ("serialize current session");
             }

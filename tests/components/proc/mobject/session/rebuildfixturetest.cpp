@@ -57,7 +57,8 @@ namespace mobject
        */
       class RebuildFixture_test : public Test
         {
-          virtual void run(Arg arg) 
+          virtual void
+          run (Arg arg) 
             {
               PSess sess = Session::current;
               sess.clear();

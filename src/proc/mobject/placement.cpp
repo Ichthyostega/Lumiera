@@ -34,9 +34,8 @@ namespace mobject
 
   /** create an actual (explicit) placement while trying to
    * satisfy the network of adjacent objects and placements.
-   * TODO: need GC!!!!!!!!!!!
    */
-  ExplicitPlacement&
+  ExplicitPlacement
   Placement::resolve ()
   {
   }

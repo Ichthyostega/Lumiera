@@ -55,7 +55,8 @@ namespace mobject
        */
       class SessionStructure_test : public Test
         {
-          virtual void run(Arg arg) 
+          virtual void
+          run (Arg arg) 
             {
               PSess sess = Session::current;
               ASSERT (0 <= sess->currEDL().size());                // TODO implement
