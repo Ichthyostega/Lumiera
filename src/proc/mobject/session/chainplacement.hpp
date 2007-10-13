@@ -1,5 +1,5 @@
 /*
-  PLACEMENT.hpp  -  Key Abstraction: a way to place and locate a Media Object
+  CHAINPLACEMENT.hpp  -  Chaining and additionally constraining Placements
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -21,47 +21,35 @@
 */
 
 
-#ifndef MOBJECT_PLACEMENT_H
-#define MOBJECT_PLACEMENT_H
+#ifndef MOBJECT_SESSION_CHAINPLACEMENT_H
+#define MOBJECT_SESSION_CHAINPLACEMENT_H
 
-#include "common/time.hpp"
-#include "common/factory.hpp"
-#include "proc/mobject/mobject.hpp"
-#include "proc/mobject/session/chainplacement.hpp"
-#include "proc/mobject/session/track.hpp"
+
 
 
 namespace mobject
   {
+  class Placement;
 
-
-  class ExplicitPlacement;
-
-
-  template<class OBJ>                        /////TODO: unsolved design problem here!
-  class Placement : public shared_ptr<OBJ>
+  namespace session
     {
-    protected:
-      typedef cinelerra::Time Time;
-      typedef session::Track Track;
-
-
-    public:
-      ChainPlacement chain;
+      class FixedPlacement;
+      class RelativePlacement;
       
-      /** resolve the network of placement and
-       *  provide the resulting (explicit) placement.
-       */
-      ExplicitPlacement resolve () ;
-      
-    protected:
-      Placement ();
-    };
-  
-  
-  
-  
 
+    template<class MO>
+    struct ChainPlacement
+      {
+      protected:
+        /** next additional Placement, if any */
+        Placement<MO> * next;
+      public:
+        
+        FixedPlacement& operator() (Time);
+
+      };
+
+  } // namespace mobject::session
 
 } // namespace mobject
 #endif

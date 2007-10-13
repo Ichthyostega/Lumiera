@@ -2079,14 +2079,23 @@ DAMAGE.
 
 The fact of being placed in the [[Session|SessionOverview]]/[[EDL]]is constitutive for all sorts of [[MObject]]s, without Placement they make no sense. Thus &amp;mdash; technically &amp;mdash; Placements act as ''smart pointers''. Of course, there are several kinds of Placements and they are templated on the type of MObject they are refering to. Placements can be //aggregated// to increasingly constrain the resulting &quot;location&quot; of the refered ~MObject. See &amp;rarr; [[handling of Placements|PlacementHandling]] for more details</pre>
 </div>
-<div title="PlacementHandling" modifier="Ichthyostega" modified="200710100148" created="200710100124" tags="design" changecount="3">
+<div title="PlacementHandling" modifier="Ichthyostega" modified="200710130309" created="200710100124" tags="design" changecount="4">
 <pre>[[Placement]]s are at the very core of all [[editing operations|EditingOperations]], because they act as handles (smart pointers) to access the [[media objects|MObject]] to be manipulated. Moreover, Placements are the actual content of the EDL(s) and Fixture and thus are small objects with //value semantics//. Many editing tasks include finding some Placement in the EDL or directly take a ref to some Placement. By acting on the Placement object, we can in some cases change parameters of the way the media object is placed (e.g. adjust an offset), while by dereferencing the Placement object, we access the &quot;real&quot; media object (e.g. for trimming its length).
 
 Placements are ''templated'' on the type of the actual ~MObject they refer to, thus defining the interface/methods usable on this object. Each Placement has a ''kind'', which determines its actual placing and locating behaviour, but besides that, we don't stress the identity of a placement object (~MObjects on the other hand //do have// a distinguishable identity): initially, you create a Placement of some specific kind (fixed, relative,...), but later on, you treat the placement polymorphically and don't care about its kind. The sole purpose of the placement's kind is to select some virtual function implementing the desired behaviour.
 
 There is no limitation to one single Placement per ~MObject, indeed we can ''aggregate'' several Placements, resulting in their properties and constraints being combined to yield the actual position of the ~MObject refered by those Placements. 
 
-* {{red{to be worked out...}}} how to implement this, esp. the aggregation. Use a special &quot;placement aggregation&quot; subtype, or rather chain aggregated placements directly in the way a decorator works? And how to handle the case of a //over constrained// Placement?
+!design decisions
+* Placements can be aggregated in a sort of chain.
+* resolving into an ExplicitPlacement traverses this chain
+* //overconstraining// a placement is not an error, we just stop traversing the chain (ignoring the remaining additionla Placements) at the moment the position is completely defined. 
+* {{red{question...}}} how to implement this? externally, decorator-style or using the State pattern?
+* {{red{problem...}}} how to get at the individual MObject sub-Interfaces. Why is this a Problem?
+*# we want the EDL/Fixture to be a collection of Placements. This means, either we store pointers, or Placement needs to be //one// unique type!
+*# but if Placement is //a single type//, then we can get only MObjects from a Placement.
+*# then either we had to do everything by a visitor (which gets the concrete subtype dynamically), or we'd end up switching on type.
+
 </pre>
 </div>
 <div title="Playlist" modifier="Ichthyostega" modified="200706250727" created="200706220456" tags="def" changecount="3">

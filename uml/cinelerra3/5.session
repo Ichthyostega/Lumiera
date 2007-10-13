@@ -3,16 +3,18 @@ diagrams
   classdiagram_ref 130309 // Asset Kinds
     860 633 100 4 0 0
   active  classdiagram_ref 128133 // Session structure
-    860 633 100 4 89 0
+    860 633 100 4 0 0
   classdiagram_ref 130437 // Media-Asset Relations
     860 633 100 4 0 0
   classdiagram_ref 128389 // Render Entities
     688 506 100 4 120 0
 end
 show_stereotypes
-selected attribute_ref 128133 // relType
+selected class_ref 129285 // FixedPlacement
 open
+  deploymentview_ref 128133 // EXE Deployment
   deploymentview_ref 128773 // gen
+  deploymentview_ref 128901 // gen
   classview_ref 128901 // Assets
   class_ref 128517 // MObject
   class_ref 128645 // Placement

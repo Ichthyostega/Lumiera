@@ -72,7 +72,7 @@ namespace mobject
               
               // using the Placement interface
               // TODO: how to handle unterdetermined Placement? Throw?
-              FixedPlacement & fixpla = pc.addPlacement(Placement::FIXED, Time(1)); // TODO: the track??
+              FixedPlacement & fixpla = pc.chain(Placement::FIXED, Time(1)); // TODO: the track??
               ExplicitPlacement expla = pc.resolve();
               ASSERT (expla.time == 1);
               ASSERT (!expla.isOverdetermined());
@@ -80,7 +80,7 @@ namespace mobject
               ASSERT (*fixpla == *pc);
               
               // now overconstraining with another Placement
-              pc.addPlacement(Placement::FIXED, Time(2));
+              pc.chain(Placement::FIXED, Time(2));
               expla = pc.resolve();
               ASSERT (expla.time == 2); // the latest addition wins
               ASSERT (expla.isOverdetermined()); 
