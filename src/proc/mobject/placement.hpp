@@ -21,13 +21,36 @@
 */
 
 
+/** @file placement.hpp 
+ ** Placements are at the very core of all editing operations,
+ ** because they act as handles (smart pointers) to access the media objects
+ ** to be manipulated. Moreover, Placements are the actual content of the EDL(s)
+ ** and Fixture and thus are small objects with value semantics. Many editing tasks
+ ** include finding some Placement in the EDL or directly take a ref to some Placement.
+ ** 
+ ** Placements are <b>smart pointers</b>: By acting on the Placement object, we can change
+ ** parameters of the way the media object is placed (e.g. adjust an offset), while by 
+ ** dereferencing the Placement object, we access the "real" media object (e.g. for trimming).
+ ** 
+ ** Placements are templated on the type of the actual MObject they refer to, so, sometimes
+ ** we rather use a Placement<Clip> to be able to use the more specific methods of the
+ ** session::Clip interface. But <i>please note the following detail:</i> this type
+ ** labeling is the <i>only</i> difference between this subclasses, besides that,
+ ** they can be replaced by one another (no slicing).
+ **
+ ** @see ExplicitPlacement
+ **
+ */
+
+
+
 #ifndef MOBJECT_PLACEMENT_H
 #define MOBJECT_PLACEMENT_H
 
 #include "common/time.hpp"
 #include "common/factory.hpp"
 #include "proc/mobject/mobject.hpp"
-#include "proc/mobject/session/chainplacement.hpp"
+#include "proc/mobject/session/locatingpin.hpp"
 #include "proc/mobject/session/track.hpp"
 
 
@@ -38,8 +61,8 @@ namespace mobject
   class ExplicitPlacement;
 
 
-  template<class OBJ>                        /////TODO: unsolved design problem here!
-  class Placement : public shared_ptr<OBJ>
+  template<class MO>
+  class Placement : public shared_ptr<MO>
     {
     protected:
       typedef cinelerra::Time Time;
@@ -47,18 +70,41 @@ namespace mobject
 
 
     public:
-      ChainPlacement chain;
+      LocatingPin chain;
       
       /** resolve the network of placement and
        *  provide the resulting (explicit) placement.
        */
-      ExplicitPlacement resolve () ;
+      virtual ExplicitPlacement resolve () ;
       
     protected:
       Placement ();
+      virtual ~Placement() {};
     };
   
+
+  /* === defining specialisations to be subclasses === */  
+    
+  namespace session
+    {
+    class Clip;
+    class Effect;
+    class Meta;
+    }
   
+  template<>
+  class Placement<session::Clip> : public Placement<MObject>
+    { 
+      //TODO: overwirte shared_ptr's operator-> to return the correct subtype of MObject...
+    };
+  
+  template<>
+  class Placement<session::Effect> : public Placement<MObject>
+    { };
+  
+  template<>
+  class Placement<session::Meta> : public Placement<MObject>
+    { };
   
   
 

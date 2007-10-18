@@ -1,5 +1,5 @@
 /*
-  ChainPlacement  -  Chaining and additionally constraining Placements
+  RELATIVELOCATION.hpp  -  Placement implementation attaching MObjects relative to another one
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -18,21 +18,51 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
 
 
-#include "proc/mobject/session/chainplacement.hpp"
-#include "proc/mobject/placement.hpp"
+#ifndef MOBJECT_SESSION_RELATIVELOCATION_H
+#define MOBJECT_SESSION_RELATIVELOCATION_H
+
+#include "proc/mobject/session/locatingpin.hpp"
+
+
+
 
 namespace mobject
   {
   namespace session
     {
-    
-    /** */
-    
-    
-    
+
+
+
+    class RelativeLocation : public LocatingPin
+      {
+      public:
+
+        /**
+         * the possible kinds of RelativePlacements
+         */
+        enum RelType
+        { SAMETIME    /**< place subject at the same time as the anchor  */
+        , ATTACH      /**< attach subject to anchor (e.g. an effect to a clip) */
+        };
+
+      protected:
+        MObject* anchor;
+
+        /** the kind of relation denoted by this Placement */
+        RelType relType;
+
+        /** Offset the actual position by this (time) value relative to the anchor point. */
+        cinelerra::Time offset;
+        //TODO: suitable representation?
+
+      };
+
+
+
   } // namespace mobject::session
 
 } // namespace mobject
+#endif

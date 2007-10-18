@@ -1,5 +1,5 @@
 /*
-  CHAINPLACEMENT.hpp  -  Chaining and additionally constraining Placements
+  FIXEDLOCATION.hpp  -  directly positioning a MObject to a fixed location   
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -21,33 +21,28 @@
 */
 
 
-#ifndef MOBJECT_SESSION_CHAINPLACEMENT_H
-#define MOBJECT_SESSION_CHAINPLACEMENT_H
+#ifndef MOBJECT_SESSION_FIXEDLOCATION_H
+#define MOBJECT_SESSION_FIXEDLOCATION_H
 
+#include "proc/mobject/session/locatingpin.hpp"
 
 
 
 namespace mobject
   {
-  class Placement;
-
   namespace session
     {
-      class FixedPlacement;
-      class RelativePlacement;
-      
 
-    template<class MO>
-    struct ChainPlacement
+    /** 
+     * The most common case of positioning a MObject
+     * in the EDL: directly specifying a constant position. 
+     */
+    class FixedLocation : public LocatingPing
       {
-      protected:
-        /** next additional Placement, if any */
-        Placement<MO> * next;
-      public:
-        
-        FixedPlacement& operator() (Time);
-
+        ///////////
       };
+
+
 
   } // namespace mobject::session
 

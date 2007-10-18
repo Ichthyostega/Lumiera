@@ -25,6 +25,7 @@
 #define MOBJECT_SESSION_CLIP_H
 
 #include "proc/mobject/session/abstractmo.hpp"
+#include "proc/mobject/placement.hpp"
 
 
 
@@ -55,6 +56,8 @@ namespace mobject
         //TODO: where to put the duration ???
 
       };
+      
+
 
 
 

@@ -29,7 +29,6 @@
 <tr bgcolor=#f0f0f0><td><a href="class130565.html#refclass130565" target = "projectFrame"><b>BuilderFacade</b></a></td><td>boundary</td><td>Provides unified access to the builder functionality. While individual components of the builder subsystem may be called if necessary or suitable, it is usually better to do all extern invocations via the high level methods of this Facade</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class139013.html#refclass139013" target = "projectFrame"><b>BuildInstruct</b></a></td><td></td><td>(Interface) building instructions to be executed by the Builder on the render node network under construction.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class137221.html#refclass137221" target = "projectFrame"><b>Category</b></a></td><td></td><td>tree like classification of Assets</td></tr>
-<tr bgcolor=#f0f0f0><td><a href="class139909.html#refclass139909" target = "projectFrame"><b>ChainPlacement</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class137349.html#refclass137349" target = "projectFrame"><b>Clip</b></a></td><td></td><td>bookkeeping (asset) view of a media clip.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class128901.html#refclass128901" target = "projectFrame"><b>Clip</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class137861.html#refclass137861" target = "projectFrame"><b>Codec</b></a></td><td></td><td>description of some media data decoder or encoder facility</td></tr>
@@ -60,7 +59,7 @@
 <tr bgcolor=#f0f0f0><td><a href="class128437.html#refclass128437" target = "projectFrame"><b>FileMapCache</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class129333.html#refclass129333" target = "projectFrame"><b>FileProvider</b></a></td><td></td><td>This is the Factory for Files, whenever something wants to use some file (or temporary storage), This Factory will hand out some smart/shared pointer to a File object which will be used to retrieve Frames.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class128778.html#refclass128778" target = "projectFrame"><b>FileReference</b></a></td><td></td><td></td></tr>
-<tr bgcolor=#f0f0f0><td><a href="class129285.html#refclass129285" target = "projectFrame"><b>FixedPlacement</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class129285.html#refclass129285" target = "projectFrame"><b>FixedLocation</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class128261.html#refclass128261" target = "projectFrame"><b>Fixture</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class128821.html#refclass128821" target = "projectFrame"><b>Frame</b></a></td><td></td><td>Frames are just a low level lump of continous memory, most parts are opaque. Frames are memory sensitive, they will be small constant sized structures which can be efficently managed in a pool.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class133253.html#refclass133253" target = "projectFrame"><b>Frame</b></a></td><td>interface</td><td>TODO: how to relate to Cehteh's Frame entity in the Backend?<br />The latter is the fundamental Frame entity, wheras this Object rather represents a buffer set containing frame date</td></tr>
@@ -74,6 +73,7 @@
 <tr bgcolor=#f0f0f0><td><a href="class136069.html#refclass136069" target = "projectFrame"><b>Invalid</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class129669.html#refclass129669" target = "projectFrame"><b>Label</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class131973.html#refclass131973" target = "projectFrame"><b>Link</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class139909.html#refclass139909" target = "projectFrame"><b>LocatingPin</b></a></td><td></td><td>An element with value semantics, which actually implements the placement of some MObject by positioning it in some way.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class128522.html#refclass128522" target = "projectFrame"><b>Lock</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class128650.html#refclass128650" target = "projectFrame"><b>Lock</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class135685.html#refclass135685" target = "projectFrame"><b>Logic</b></a></td><td></td><td></td></tr>
@@ -99,7 +99,7 @@
 <tr bgcolor=#f0f0f0><td><a href="class131717.html#refclass131717" target = "projectFrame"><b>ProcNode</b></a></td><td>interface</td><td>Key abstraction of the Render Engine: A Data processing Node</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class138757.html#refclass138757" target = "projectFrame"><b>ProcPatt</b></a></td><td></td><td>special type of structural Asset representing information how to build some part of the render engine's processing nodes network.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class132229.html#refclass132229" target = "projectFrame"><b>Projector</b></a></td><td></td><td>Special video processing node used to scale and translate image data.</td></tr>
-<tr bgcolor=#f0f0f0><td><a href="class129413.html#refclass129413" target = "projectFrame"><b>RelativePlacement</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class129413.html#refclass129413" target = "projectFrame"><b>RelativeLocation</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class133893.html#refclass133893" target = "projectFrame"><b>RelType</b></a></td><td>enum</td><td>the possible kinds of RelativePlacements</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class131333.html#refclass131333" target = "projectFrame"><b>RenderEngine</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class130949.html#refclass130949" target = "projectFrame"><b>RenderState</b></a></td><td></td><td>Encapsulates the logic used to get a "current render process" in accordance to the currentyl applicable controller settings. The provided StateProxy serves to hold any mutalbe state used in the render process, so the rest of the render engine can be stateless.</td></tr>

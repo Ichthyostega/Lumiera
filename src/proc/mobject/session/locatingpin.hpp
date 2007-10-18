@@ -1,5 +1,5 @@
 /*
-  ${Name}  - ???????????? needed any longer?  
+  LOCATINGPIN.hpp  -  Chaining and constraining the Placement of a Media Object
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -18,20 +18,37 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
 
 
-#include "proc/mobject/session/fixedplacement.hpp"
+#ifndef MOBJECT_SESSION_LOCATINGPIN_H
+#define MOBJECT_SESSION_LOCATINGPIN_H
+
+
+
 
 namespace mobject
   {
+  class Placement;
+
   namespace session
     {
+      class FixedPlacement;
+      class RelativePlacement;
+      
 
-    /** */
+    struct LocatingPin
+      {
+      protected:
+        /** next additional Pin, if any */
+        LocatingPin * next;
+      public:
+        
+        FixedPlacement& operator() (Time);
 
-
+      };
 
   } // namespace mobject::session
 
 } // namespace mobject
+#endif

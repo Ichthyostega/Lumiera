@@ -1,5 +1,5 @@
 /*
-  Allocation  -  directive to place a MObject in a specific way  
+  Allocation  -  objective to place a MObject in a specific way  
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>

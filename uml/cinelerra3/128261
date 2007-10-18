@@ -1,6 +1,6 @@
 format 40
 "MObject" // ProcessingLayer::MObject
-  revision 24
+  revision 26
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -485,7 +485,7 @@ ${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${static
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 145413 // chain (<unidirectional association>)
-	  b multiplicity "" parent class_ref 139909 // ChainPlacement
+	  b multiplicity "" parent class_ref 139909 // LocatingPin
       end
     end
 
@@ -701,7 +701,7 @@ ${inlines}
       end
     end
 
-    class 129285 "FixedPlacement"
+    class 129285 "FixedLocation"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -712,16 +712,16 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 145285 // <generalisation>
-	relation 143109 ---|>
+      classrelation 145797 // <generalisation>
+	relation 143621 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 145285 // <generalisation>
-	  b multiplicity "" parent class_ref 129797 // ExplicitPlacement
+	    classrelation_ref 145797 // <generalisation>
+	  b multiplicity "" parent class_ref 139909 // LocatingPin
       end
     end
 
-    class 129413 "RelativePlacement"
+    class 129413 "RelativeLocation"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -749,14 +749,6 @@ ${inlines}
 	java_decl ""
 	idl_decl ""
 	comment "the kind of relation denoted by this Placement"
-      end
-
-      classrelation 131333 // <generalisation>
-	relation 130693 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 131333 // <generalisation>
-	  b multiplicity "" parent class_ref 128645 // Placement
       end
 
       attribute 129029 "offset"
@@ -802,6 +794,14 @@ ${items}};
 	  comment "attach subject to anchor (e.g. an effect to a clip)"
 	end
       end
+
+      classrelation 145669 // <generalisation>
+	relation 143493 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 145669 // <generalisation>
+	  b multiplicity "" parent class_ref 139909 // LocatingPin
+      end
     end
 
     class 129541 "Allocation"
@@ -816,14 +816,6 @@ ${inlines}
       explicit_switch_type ""
       
       comment "a directive to place a MObject in a specific way"
-      classrelation 131205 // <generalisation>
-	relation 130565 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 131205 // <generalisation>
-	  b multiplicity "" parent class_ref 128645 // Placement
-      end
-
       attribute 128773 "repr"
 	protected explicit_type "string"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
@@ -850,6 +842,14 @@ ${inlines}
 	
 	idl_name_spec "get_${name}"
 	get_of_attribute attribute_ref 128773 // repr
+      end
+
+      classrelation 145925 // <generalisation>
+	relation 143749 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 145925 // <generalisation>
+	  b multiplicity "" parent class_ref 139909 // LocatingPin
       end
     end
 
@@ -1080,7 +1080,7 @@ ${inlines}
       comment "Provides the implementation for getting the acutal value of a time varying or automated effect/plugin parameter"
     end
 
-    class 139909 "ChainPlacement"
+    class 139909 "LocatingPin"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -1091,14 +1091,15 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 145541 // next (<unidirectional association>)
-	relation 143365 --->
+      comment "An element with value semantics, which actually implements the placement of some MObject by positioning it in some way."
+      classrelation 146053 // next (<unidirectional association>)
+	relation 143877 --->
 	  a role_name "next" multiplicity "" protected
-	    comment "next additional Placement, if any"
+	    comment "next additional LocatingPin, if any"
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
-	    classrelation_ref 145541 // next (<unidirectional association>)
-	  b multiplicity "" parent class_ref 128645 // Placement
+	    classrelation_ref 146053 // next (<unidirectional association>)
+	  b multiplicity "" parent class_ref 139909 // LocatingPin
       end
     end
   end

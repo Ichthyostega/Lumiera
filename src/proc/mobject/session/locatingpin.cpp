@@ -1,5 +1,5 @@
 /*
-  FIXEDPLACEMENT.hpp  -  TODO: didn't we plan to rename ExplicitPlacement to DirectPlacement??  
+  LocatingPin  -  Chaining and constraining the Placement of a Media Object
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -18,32 +18,21 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
 
 
-#ifndef MOBJECT_SESSION_FIXEDPLACEMENT_H
-#define MOBJECT_SESSION_FIXEDPLACEMENT_H
-
+#include "proc/mobject/session/locatingpin.hpp"
 #include "proc/mobject/placement.hpp"
-#include "proc/mobject/explicitplacement.hpp"
-
-
 
 namespace mobject
   {
   namespace session
     {
-
-    // TODO: didn't we plan to rename ExplicitPlacement to DirectPlacement??
-
-    class DirectPlacement : public ExplicitPlacement
-      {
-        ///////////
-      };
-
-
-
+    
+    /** */
+    
+    
+    
   } // namespace mobject::session
 
 } // namespace mobject
-#endif

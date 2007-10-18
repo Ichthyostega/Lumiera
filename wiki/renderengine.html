@@ -1359,6 +1359,12 @@ From experiences with other middle scale projects, I prefer having the test code
 
 {{red{how to create a test stub for this interface...?}}}</pre>
 </div>
+<div title="LocationPin" modifier="Ichthyostega" created="200710181527" changecount="1">
+<pre>Used to actually implement the various kinds of [[Placement]] of ~MObjects. ~LocationPin is the root of a hierarchy of different kinds of placing, constraining and locating a Media Object. Basically, this is an instance of the ''state pattern'': The user sees one Placement object with value semantics, but when the properties of the Placement are changed, actually a ~LocationPin object (or rather a chain of ~LocationPins) is changed within the Placement. Subclasses of ~LocationPin implement different placing/constraining behaviour:
+* {{{FixedLocation}}} places a MObject to a fixed temporal position and track
+* {{{RelativeLocation}}} is used to atach the MObject to some other anchor MObject
+* //additional constraints, placement objectives, range restrictions, pattern rules will follow...//</pre>
+</div>
 <div title="MObject" modifier="Ichthyostega" modified="200710092343" created="200706220312" tags="def classes" changecount="2">
 <pre>All sorts of &quot;things&quot; to be placed and manipulated by the user in the EDL. This interface abstracts the details and just supposes
 * the media object has a duration
@@ -2079,19 +2085,20 @@ DAMAGE.
 
 The fact of being placed in the [[Session|SessionOverview]]/[[EDL]]is constitutive for all sorts of [[MObject]]s, without Placement they make no sense. Thus &amp;mdash; technically &amp;mdash; Placements act as ''smart pointers''. Of course, there are several kinds of Placements and they are templated on the type of MObject they are refering to. Placements can be //aggregated// to increasingly constrain the resulting &quot;location&quot; of the refered ~MObject. See &amp;rarr; [[handling of Placements|PlacementHandling]] for more details</pre>
 </div>
-<div title="PlacementHandling" modifier="Ichthyostega" modified="200710130309" created="200710100124" tags="design" changecount="4">
-<pre>[[Placement]]s are at the very core of all [[editing operations|EditingOperations]], because they act as handles (smart pointers) to access the [[media objects|MObject]] to be manipulated. Moreover, Placements are the actual content of the EDL(s) and Fixture and thus are small objects with //value semantics//. Many editing tasks include finding some Placement in the EDL or directly take a ref to some Placement. By acting on the Placement object, we can in some cases change parameters of the way the media object is placed (e.g. adjust an offset), while by dereferencing the Placement object, we access the &quot;real&quot; media object (e.g. for trimming its length).
+<div title="PlacementHandling" modifier="Ichthyostega" modified="200710181509" created="200710100124" tags="design" changecount="9">
+<pre>[[Placement]]s are at the very core of all [[editing operations|EditingOperations]], because they act as handles (smart pointers) to access the [[media objects|MObject]] to be manipulated. Moreover, Placements are the actual content of the EDL(s) and Fixture and thus are small objects with //value semantics//. Many editing tasks include finding some Placement in the EDL or directly take a ref to some Placement. By acting on the Placement object, we can in some cases change parameters of the way the media object is placed (e.g. adjust an offset), while by dereferencing the Placement object, we access the &quot;real&quot; media object (e.g. for trimming its length). Placements are ''templated'' on the type of the actual ~MObject they refer to, thus defining the interface/methods usable on this object.
 
-Placements are ''templated'' on the type of the actual ~MObject they refer to, thus defining the interface/methods usable on this object. Each Placement has a ''kind'', which determines its actual placing and locating behaviour, but besides that, we don't stress the identity of a placement object (~MObjects on the other hand //do have// a distinguishable identity): initially, you create a Placement of some specific kind (fixed, relative,...), but later on, you treat the placement polymorphically and don't care about its kind. The sole purpose of the placement's kind is to select some virtual function implementing the desired behaviour.
+Actually, the way each Placement locates its subject is implemented by one or several small LocationPin objects, where subclasses of LocationPin implement the various differend methods of placing and resolving the final location. Notably, we can give a ~FixedLocation or we can atach to another ~MObject to get a ~RelativeLocation, etc.
 
-There is no limitation to one single Placement per ~MObject, indeed we can ''aggregate'' several Placements, resulting in their properties and constraints being combined to yield the actual position of the ~MObject refered by those Placements. 
+Placements have //value semantics,// i.e. we don't stress the identity of a placement object (~MObjects on the other hand //do have// a distinguishable identity): initially, you create a Placement parametrized to some specific kind (fixed, relative,...), but later on, you treat the placement polymorphically and don't care about its kind. The sole purpose of the placement's kind is to select some virtual function implementing the desired behaviour. There is no limitation to one single Placement per ~MObject, indeed we have several different Placements of the same MObject (from a users point of view, this behaves like having clones). Besides, we can ''aggregate'' additional [[LocationPin]]a to one Placements, resulting in their properties and constraints being combined to yield the actual position of the referred ~MObject.
 
 !design decisions
-* Placements can be aggregated in a sort of chain.
+* the actual way of placing is implemented similar to the ''State Pattern'' by small embedded LoctionPin objects.
+* these LocationPin objects form a ''decorator'' like chain
 * resolving into an ExplicitPlacement traverses this chain
-* //overconstraining// a placement is not an error, we just stop traversing the chain (ignoring the remaining additionla Placements) at the moment the position is completely defined. 
-* {{red{question...}}} how to implement this? externally, decorator-style or using the State pattern?
-* {{red{problem...}}} how to get at the individual MObject sub-Interfaces. Why is this a Problem?
+* //overconstraining// a placement is not an error, we just stop traversing the chain (ignoring the remaining additional Placements) at the moment the position is completely defined. 
+* we provide subclasses to be able to form collections of e.g. {{{Placement&lt;Effect&gt;}}}, but we don't stress polymorphism here. Instead we stick to value semantics and explicitly ''allow slicing'' (all subclasses have the same size and layout and differ only in their vtable contents). This is justified, because for the polymorphical treating of ~MObjects the visitor mechanism used by the builder and the EDL is sufficiant, and I don't want to add another layer of complexity by making Placement something like {{{boost::variant}}}.
+* Why is the question how to access a ~MObject subinterface a Problem?
 *# we want the EDL/Fixture to be a collection of Placements. This means, either we store pointers, or Placement needs to be //one// unique type!
 *# but if Placement is //a single type//, then we can get only MObjects from a Placement.
 *# then either we had to do everything by a visitor (which gets the concrete subtype dynamically), or we'd end up switching on type.

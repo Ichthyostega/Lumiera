@@ -1,6 +1,6 @@
 format 40
 "ProcessingLayer" // ProcessingLayer
-  revision 4
+  revision 5
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -226,7 +226,7 @@ format 40
     end
 
     classinstance 130053 ""
-      type class_ref 129413 // RelativePlacement
+      type class_ref 129413 // RelativeLocation
       attributes
         attribute_ref 128133 // relType
           "SAMETIME"
@@ -250,7 +250,7 @@ format 40
     end
 
     classinstance 130309 ""
-      type class_ref 129413 // RelativePlacement
+      type class_ref 129413 // RelativeLocation
       attributes
         attribute_ref 129029 // offset
           "+3"
