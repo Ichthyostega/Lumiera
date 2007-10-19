@@ -40,9 +40,9 @@ namespace mobject
         shared_ptr<Placement> placement_;
         
       public:
+        
         /* some dummy implementations used to make the code compile... */
         
-        virtual shared_ptr<Placement>& getPlacement () { return placement_; }
         virtual Time& getLength()                      { return length; }
         virtual PAsset getMedia ()                        
           { 

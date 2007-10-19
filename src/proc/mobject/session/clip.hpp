@@ -54,7 +54,15 @@ namespace mobject
         Time start;
 
         //TODO: where to put the duration ???
+        
+        PClipAsset mediaDef_;
 
+        Clip (PClipAsset& mediaDef);
+        friend class MObjectFactory;
+        
+        
+        virtual void setupLength();
+        
       };
       
 

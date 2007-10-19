@@ -32,6 +32,7 @@ namespace asset
   {
   class Clip;
   class Effect;
+  
   }
 
 namespace mobject
@@ -41,13 +42,14 @@ namespace mobject
     class Clip;
     class Effect;
 
+    typedef shared_ptr<const asset::Clip> PClipAsset;
 
     class MObjectFactory
       {
       public:
         typedef Placement PType;
         
-        PType<Clip>   operator() (const asset::Clip);
+        PType<Clip>   operator() (PClipAsset&);
         PType<Effect> operator() (const asset::Effect);
         
       };

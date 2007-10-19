@@ -26,7 +26,44 @@
 namespace asset
   {
   
-  /** */
+  /** Directly object creating specialisation of the 
+   *  asset::Media interface method: immediately starting
+   *  out from this asset::Clip and doing the actual 
+   *  MObject-creation in case there isn't already 
+   *  a clip-MO linked with this Clip Asset. 
+   */
+  Media::PClipMO 
+  Clip::createClip ()
+  {
+    if (!this.clipMO_)
+      this.clipMO_ = MObject::create(
+                       AssetManager::instance()
+                          .getAsset (this.getID()));
+    
+    return this.clipMO_;
+  }
+  
+  
+  /** return this wrapped into a shared ptr,
+   *   because it's already the desired asset::Clip
+   */
+  Media::PClip
+  Clip::getClipAsset ()
+  {
+    return PClip (AssetManager::instance()
+                    .getAsset (this.getID()));
+  }
+  
+  
+  /** specialisation delegating the decision to
+   *  the media asset referred by this clip
+   */ 
+  Media::PMedia
+  Clip::checkCompound ()
+  {
+    return this.source_.checkCompound();
+  }
+
 
 
 

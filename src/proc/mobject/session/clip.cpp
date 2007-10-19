@@ -28,7 +28,26 @@ namespace mobject
   namespace session
     {
 
-    /** */
+    /** new clip-MO linked with the given asset::Clip.
+     *  Initially, this clip will cover the whole source media length. 
+     */
+    Clip::Clip (PClipAsset& mediaDef)
+      : start_(0),
+        mediaDef_(mediaDef)
+    {
+      this.setupLength();
+    }
+    
+    
+    
+    void 
+    Clip::setupLength()
+    {
+      UNIMPLEMENTED ("calculate the length of a clip and set length field");
+      // will use mediaDef to query media parameters....
+    }
+
+
 
 
 

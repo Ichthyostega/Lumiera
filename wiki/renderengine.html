@@ -1397,16 +1397,19 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 [[Admin]]
 &lt;&lt;fullscreen&gt;&gt;</pre>
 </div>
-<div title="ManagementAssetRelation" modifier="Ichthyostega" modified="200709021538" created="200708100337" tags="impl" changecount="3">
-<pre>Problem is: when removing an Asset, all corresponding MObjects need to disappear. This means, besides the obvious ~Ref-Link (MObject refering to an asset) we need backlinks or a sort of registry. And still worse: we need to remove the affetcted MObject from the object network in the EDL and rebuild the Fixture...
+<div title="ManagementAssetRelation" modifier="Ichthyostega" modified="200710191600" created="200708100337" tags="impl" changecount="6">
+<pre>Problem is: when removing an Asset, all corresponding MObjects need to disappear. This means, besides the obvious ~Ref-Link (MObject referring to an asset) we need backlinks or a sort of registry. And still worse: we need to remove the affected MObject from the object network in the EDL and rebuild the Fixture...
+
+&amp;rarr; for a general design discussion see [[Relation of Clip and Asset|RelationClipAsset]]
 
 As a //first shot// Ichthyo considers the following approach:
-* all references between MObjects and Assets are implemented as refcounting boost::shared_ptr
+* all references between MObjects and Assets are implemented as __refcounting__ boost::shared_ptr
+* the opposite direction is also a __strong references__, effectively keeping the clip-MO alive even if it is no longer in use in the session (note this is a cyclic dependency that needs to be actively broken on deletion). This design decision is based on  logical considerations (&amp;rarr; see &quot;deletions, Model-2&quot; [[here|RelationClipAsset]]). The back-link is needed only for clean deletion of Assets and for GUI search functions.
 * MObjects and Assets implement an {{{unlink()}}} function releasing the internal links to other entities.
 * Instead of a delete, we call this unlink() function and let the shared_ptr handle the actual deletion.
 * we don't use a registry, rather we model the real dependencies by individual dependency links. So a MediaAsset gets links to all Clips created from this Asset and by traversing this tree, we can handle the deletion
 * after the deletion, the Fixture needs to be rebuilt.
-* but any render processes still can have pointers to the Asset to be removed, and the shared_ptr will ensure, that the refered objects stay alive as long as needed.
+* but any render processes still can have pointers to the Asset to be removed, and the shared_ptr will ensure, that the referred objects stay alive as long as needed.
 
 {{red{to be considered in more detail later}}}
 </pre>
@@ -2085,7 +2088,7 @@ DAMAGE.
 
 The fact of being placed in the [[Session|SessionOverview]]/[[EDL]]is constitutive for all sorts of [[MObject]]s, without Placement they make no sense. Thus &amp;mdash; technically &amp;mdash; Placements act as ''smart pointers''. Of course, there are several kinds of Placements and they are templated on the type of MObject they are refering to. Placements can be //aggregated// to increasingly constrain the resulting &quot;location&quot; of the refered ~MObject. See &amp;rarr; [[handling of Placements|PlacementHandling]] for more details</pre>
 </div>
-<div title="PlacementHandling" modifier="Ichthyostega" modified="200710181534" created="200710100124" tags="design" changecount="10">
+<div title="PlacementHandling" modifier="Ichthyostega" modified="200710191414" created="200710100124" tags="design impl" changecount="11">
 <pre>[[Placement]]s are at the very core of all [[editing operations|EditingOperations]], because they act as handles (smart pointers) to access the [[media objects|MObject]] to be manipulated. Moreover, Placements are the actual content of the EDL(s) and Fixture and thus are small objects with //value semantics//. Many editing tasks include finding some Placement in the EDL or directly take a ref to some Placement. By acting on the Placement object, we can in some cases change parameters of the way the media object is placed (e.g. adjust an offset), while by dereferencing the Placement object, we access the &quot;real&quot; media object (e.g. for trimming its length). Placements are ''templated'' on the type of the actual ~MObject they refer to, thus defining the interface/methods usable on this object.
 
 Actually, the way each Placement locates its subject is implemented by one or several small LocatingPin objects, where subclasses of LocatingPin implement the various differend methods of placing and resolving the final location. Notably, we can give a ~FixedLocation or we can atach to another ~MObject to get a ~RelativeLocation, etc.
@@ -2394,6 +2397,26 @@ config.macros.rssFeedUpdate = {
 
 //}}}
 </pre>
+</div>
+<div title="RelationClipAsset" modifier="Ichthyostega" modified="200710191558" created="200710191541" tags="design decision" changecount="3">
+<pre>What is the Role of the asset::Clip and how exactly are Assets and (Clip)-MObjects related?
+
+First of all: ~MObjects are the dynamic/editing/manipulation view, while Assets are the static/bookkeeping/searching/information view of the same entities. Thus, the asset::Clip contains the general configuration, the ref to the media and descriptive properties, while all parameters being &quot;manipulated&quot; belong to the session::Clip (MObject). Besides that, the practical purpose of asset::Clip is that you can save and remember some selection as a Clip (Asset), maybe even attach some informations or markup to it, and later be able to (re)create a editable representation in the Session (the GUI could implement this by allowing to drag from the asset::Clip GUI representation to the timeline window)
+
+!!dependencies
+The session::Clip (frequently called &quot;clip-MO&quot;, i.e. the MObject) //depends on the Asset.// It can't exist without the Asset, because the Asset is needed for rendering. The other direction is different: the asset::Clip knows that there is a dependant clip-MO, there could be //at most one// such clip-MO depending on the Asset, but the Asset can exist without the clip-MO (it gives the possibility to re-create the clip-MO).
+
+!!deletions
+When the Asset or the corresponding asset::Media is deleted, the dependant clip-MO has to disappear. And the opposite direction?
+* Model-1: asset::Clip has a weak ref to the clip-MO. Consequently, the clip-MO can go out of scope and disappear, so the asset::Clip has to maintain the information of the clip's dimensions (source position and length) somewhere. Because of MultichannelMedia, this is not so simple as it may look at first sight.
+* Model-2: asset::Clip holds a smart ptr to the clip-MO, thus effectively keeping it alive. __obviously the better choice__
+In either case, we have to solve the ''problem of clip asset proliferation''
+
+!!multiplicity and const-ness
+The link between ~MObject and Asset should be {{{const}}} in both directions (to enforce the separation of concerns). So the Asset can't //edit// the clip and the clip can't change the media parameters.
+
+The relation logical relation, but it is not strictly 1:1 because typical media are [[multichannel|MultichannelMedia]]. Even if the media is compound, there is //only one asset::Clip//, because in the logical view we have only one &quot;clip-thing&quot;. On the other hand, in the Session/EDL, we have a compound clip ~MObject comprised of several elementary clip objects, each of which will refer to its own sub-media (channel) within the compound media (and don't forget, this structure can be tree-like)
+{{red{open question:}}} do the clip-MO's of the individual channels refer directly to asset::Media? does this mean the relation is different from the top level, where we have a relation to a asset::Clip??</pre>
 </div>
 <div title="RenderEngine" modifier="Ichthyostega" modified="200708050630" created="200706190056" tags="overview" changecount="40">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[this aspect|MObjects]] as well.

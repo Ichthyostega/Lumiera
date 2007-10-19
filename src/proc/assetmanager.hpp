@@ -102,7 +102,7 @@ namespace asset
           throw(cinelerra::error::Invalid);
       
       /** deleter function used by the Asset smart pointers to delet Asset objects */
-      static void destroy (Asset* m) { delete m; }
+      static void destroy (Asset* aa) { delete aa; }
       
       friend Asset::Asset (const Asset::Ident& idi);
       

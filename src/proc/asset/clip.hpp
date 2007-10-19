@@ -35,9 +35,21 @@ namespace asset
    */
   class Clip : public Media
     {
-    protected:
-      /**media source of this clip  */
-      const Media* source;
+      /** media source of this clip  */
+      const Media& source_;
+      
+      /** the corresponding (dependant) clip-MO */
+      PClipMO clipMO_;
+      
+    public:
+      virtual PClipMO createClip ();
+      virtual PMedia checkCompound ();
+      
+    private:
+      Clip (const Media& mediaref) : source_(mediaref) {};
+      friend class MediaFactory;
+      
+      virtual PClip getClipAsset ();
 
     };
     

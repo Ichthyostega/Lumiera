@@ -90,8 +90,10 @@ namespace mobject
       virtual MO * 
       operator-> ()  const 
         { 
+          ENSURE (this.get()); 
           return shared_ptr::operator-> (); 
         }      
+      
       
       /** interface for defining the kind of placement
        *  to employ, and for controling any additional

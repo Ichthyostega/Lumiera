@@ -69,6 +69,9 @@ namespace mobject
     public:
       static session::MObjectFactory create;
       
+      /** MObject self-test (usable for asserting) */
+      virtual bool isValid() =0;
+      
       virtual PAsset getMedia () =0; ///< @todo solve the reference/Interface problem concerning Placements, then push down
       virtual Time& getLength() =0; ///< @todo how to deal with the time/length field??
 

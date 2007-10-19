@@ -37,10 +37,10 @@
 
 #include "proc/asset.hpp"
 #include "common/factory.hpp"
+#include "proc/mobject/mobject.hpp"
 
 
 
-namespace mobject { namespace session { class Clip; }}
 
 namespace asset
   {
@@ -69,6 +69,12 @@ namespace asset
       string filename_;
       
     public:
+      typedef shared_ptr<Media> PMedia;
+      typedef shared_ptr<const asset::Clip> PClip;
+      typedef shared_ptr<asset::ProcPatt> PProcPatt;
+      typedef mobject::Placement<mobject::session::Clip> PClipMO;
+     
+      
       static MediaFactory create;
       const string& getFilename ()  const { return filename_; }
       
@@ -77,12 +83,36 @@ namespace asset
           return static_cast<const ID<Media>& > (Asset::getID()); 
         }
       
-      shared_ptr<mobject::session::Clip> createClip ();
-      shared_ptr<asset::ProcPatt> howtoProc ();
+      /** Service Access Point for creating a Clip entity usable within 
+       *  the EDL/Session from a given Media or Clip Asset. As a sideeffect,
+       *  a corresponding asset::Clip is created as well if necessary. 
+       *  It is OK to use and throw away the returned Clip-MO, because
+       *  it can be regenerated from the corresponding asset::Clip
+       *  @return a Placement smart ptr owning the new Clip MObject 
+       */
+      PClipMO createClip ();
+      
+      /** Service Access Point for getting a processing template
+       *  describing how to build the render nodes network 
+       *  necessary for this Media or Clip. This includes
+       *  Codecs and postprocessing (stretching, deinterlacing...)
+       */
+      PProcPatt howtoProc ();
       
     protected:
       Media (const Asset::Ident& idi, const string& file) : Asset(idi), filename_(file) {}
       friend class MediaFactory;
+      
+      /** get or create the correct asset::Clip 
+       *  corresponding to this media */
+      virtual PClip getClipAsset ();
+      
+      /** predicate to decide if this asset::Media
+       *  is part of a compound (multichannel) media.
+       *  @return pointer to parent, or \code null
+       */
+      virtual PMedia checkCompound ();
+
     };
     
     
@@ -110,9 +140,14 @@ namespace asset
       PType operator() (Asset::Ident& key, const char* file);  ///< convienience overload using C-String
       PType operator() (const char* file, const Category& cat);
       PType operator() (const char* file, asset::Kind);
+      
+      shared_ptr<asset::Clip>&
+      operator() (const asset::Media& mediaref)  throw(cinelerra::error::Invalid);
 
     };
 
+  CINELERRA_ERROR_DECLARE (PART_OF_COMPOUND);
+    
     
     
     

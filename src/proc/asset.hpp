@@ -246,7 +246,7 @@ namespace asset
        *  May be empty. The head of this list can be considered the primary prerequisite
        */
       vector<shared_ptr<Asset> >  
-      getParents ()  const;
+      getParents ()  const;                 ////////////////TODO: better const vector, and return a ref!
       
       /** All the other assets requiring this asset to be functional. 
        *  For example, all the clips depending on a given media file. 

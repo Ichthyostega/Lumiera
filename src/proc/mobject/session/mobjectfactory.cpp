@@ -43,7 +43,7 @@ namespace mobject
      *  asset.
      */
     Placement<Clip>   
-    MObjectFactory::operator() (shared_ptr<asset::Clip>& mediaDef)
+    MObjectFactory::operator() (PClipAsset& mediaDef)
     {
       //TODO sholdin't we rather store a ref to the underlying media assset??
       return Placement<Clip> (new Clip (mediaDef));

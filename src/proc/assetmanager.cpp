@@ -46,7 +46,7 @@ namespace asset
   {
   
   /** 
-   * AssetManager error responses, cause by querying
+   * AssetManager error responses, caused by querying
    * invalid Asset IDs from the internal DB.
    */ 
   class IDErr : public cinelerra::error::Invalid 

@@ -27,7 +27,10 @@
 namespace mobject
   {
 
-  /** */
+  /** Storage for the (single, static) MObject factory object.
+   */
+  session::MObjectFactory MObject::create;
+
 
 
 } // namespace mobject

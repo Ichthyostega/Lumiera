@@ -46,8 +46,9 @@ namespace asset
    */
   Asset::Asset (const Ident& idi) 
     : ident(idi), id(AssetManager::reg (this, idi)) 
-  {     TRACE (assetmem, "ctor Asset(id=%lu) :  adr=%x %s", size_t(id), this, cStr(this->ident) );
-}
+  {
+    TRACE (assetmem, "ctor Asset(id=%lu) :  adr=%x %s", size_t(id), this, cStr(this->ident) );
+  }
   
   Asset::~Asset ()
   { 
