@@ -25,6 +25,11 @@
 #define MOBJECT_SESSION_LOCATINGPIN_H
 
 
+#include "cinelerra.h"
+
+#include <boost/scoped_ptr.hpp>
+using boost::scoped_ptr;
+
 
 
 namespace mobject
@@ -33,18 +38,24 @@ namespace mobject
 
   namespace session
     {
-      class FixedPlacement;
-      class RelativePlacement;
-      
-
+    class FixedLocation;
+    class RelativeLocation;
+    
+    
     struct LocatingPin
       {
       protected:
+      typedef cinelerra::Time Time;
+      typedef session::Track* Track;
+      
         /** next additional Pin, if any */
-        LocatingPin * next;
+        scoped_ptr<LocatingPin> next;
       public:
         
-        FixedPlacement& operator() (Time);
+        /* Factory functions for adding LocationPins */
+        
+        FixedLocation&    operator() (Time, Track);
+        RelativeLocation& operator() (PMO refObj, Time offset=0);
 
       };
 

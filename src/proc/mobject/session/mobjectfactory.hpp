@@ -1,5 +1,5 @@
 /*
-  Placement  -  Key Abstraction: a way to place and locate a Media Object
+  MOBJECTFACTORY.hpp  -  creating concrete MObject subclass instances
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -18,40 +18,43 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
 
 
-#include "proc/mobject/placement.hpp"
-#include "proc/mobject/explicitplacement.hpp"
+#ifndef MOBJECT_SESSION_MOBJECTFACTORY_H
+#define MOBJECT_SESSION_MOBJECTFACTORY_H
+
+#include "proc/mobject/mobject.hpp"
+
+
+
+namespace asset
+  {
+  class Clip;
+  class Effect;
+  }
 
 namespace mobject
   {
+  namespace session
+    {
+    class Clip;
+    class Effect;
 
 
-  /** factory for creating the corretct Placement subclass */
-  PlacementFactory Placement::create;
+    class MObjectFactory
+      {
+      public:
+        typedef Placement PType;
+        
+        PType<Clip>   operator() (const asset::Clip);
+        PType<Effect> operator() (const asset::Effect);
+        
+      };
 
 
-  /** create an actual (explicit) placement while trying to
-   * satisfy the network of adjacent objects and placements.
-   */
-  ExplicitPlacement
-  Placement::resolve ()
-  {
-  }
-  
-  
-  
-  /** implements the logic for selecting the correct 
-   *  Placement subclass.
-   *  @return smart ptr owning the created placement object
-   */
-  PlacementFactory::PType 
-  PlacementFactory::operator() (Placement::Style, Time, PMO subject)
-  {
-    UNIMPLEMENTED ("create correct Placement subclass");
-  }
 
-
+  } // namespace mobject::session
 
 } // namespace mobject
+#endif

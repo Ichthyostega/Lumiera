@@ -48,7 +48,15 @@ namespace mobject
           { 
             UNIMPLEMENTED ("how to relate MObjects and media assets...");
             return AssetManager::instance().getAsset(IDA(0)); // KABOOM! (just to make it compile)
-          }  
+          }
+      protected:
+        /** custom deleter func allowing class Placement 
+          *  to take ownership of MObjct instances
+          */
+        static void destroy (MObject* o) { delete o; }
+        
+        friend class Placement;
+
      };
 
 

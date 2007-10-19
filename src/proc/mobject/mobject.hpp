@@ -29,6 +29,7 @@
 
 #include "cinelerra.h"
 #include "proc/mobject/buildable.hpp"
+#include "proc/mobject/placement.hpp"
 #include "proc/asset.hpp"                 // TODO finally not needed?
 
 
@@ -43,7 +44,10 @@ using proc_interface::AssetManager;
 namespace mobject
   {
 
-  class Placement;
+  namespace session
+    {
+    class MObjectFactory;
+    }
 
 
   /**
@@ -63,14 +67,16 @@ namespace mobject
       virtual ~MObject() {};
       
     public:
-      virtual shared_ptr<Placement>& getPlacement () =0;
+      static session::MObjectFactory create;
+      
       virtual PAsset getMedia () =0; ///< @todo solve the reference/Interface problem concerning Placements, then push down
       virtual Time& getLength() =0; ///< @todo how to deal with the time/length field??
 
     };
   
   
-  typedef shared_ptr<MObject> PMO;
+  typedef Placement<MObject> PMO;
+  
 
 
 

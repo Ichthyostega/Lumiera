@@ -149,7 +149,9 @@ namespace util
   
 } // namespace util
 
- /* some common macro definitions */
+
+
+ /* === some common macro definitions === */
 
 /** supress "warning: unused variable" on vars, which
  *  are introduced into a scope because of some sideeffect, i.e. Locking
@@ -160,5 +162,7 @@ namespace util
 #define STRINGIFY(TOKEN) __STRNGFY(TOKEN)
 #define __STRNGFY(TOKEN) #TOKEN
 
+/** shortcut for subclass test, intended for assertions */
+#define INSTANCEOF(CLASS, EXPR) (dynamic_cast<CLASS*> (EXPR)) 
 
 #endif /*UTIL_HPP_*/

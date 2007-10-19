@@ -1,5 +1,5 @@
 /*
-  EXPLICITPLACEMENT.hpp  -  special Placement yielding an absolute location (Time,Track)-location for a MObject
+  EXPLICITPLACEMENT.hpp  -  special Placement yielding an absolute location (Time,Track) for a MObject
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -31,18 +31,41 @@
 namespace mobject
   {
 
-  namespace session{ class Track; }
 
 
-  // TODO: need Garbage Collector for this class!!!!!
-
-  class ExplicitPlacement : public Placement
+  /**
+   * Special kind of Placement, where the location of the
+   * MObject has been nailed down to a fixed position.
+   * The Session allways contains one special EDL, which
+   * actually is a snapshot of all EDLs contents fixed
+   * and reduced to simple positions. This so called Fixture
+   * contains only ExplicitPlacement objects and is processed
+   * by the Builder to create the render engine  node network.
+   *
+   * @see Placement#resolve factory method for deriving an ExplicitPlacement 
+   */
+  class ExplicitPlacement : public Placement<MObject>
     {
-    protected:
+    public:
+      const Time time;
+      const Track track;
 
-      Time time;
-      Track* track;
+      /** no need to resolve any further, as this ExplicitPlacement
+       *  already \i is the result of a resolve()-call.
+       */
+      virtual const 
+      ExplicitPlacement resolve ()  const 
+        { 
+          return *this; 
+        }
 
+    private:
+      ExplicitPlacement (Placement<MObject>& base, Time ti, Track tra)
+        : Placement(base),
+          time(ti), track(tra)
+        { };
+        
+      friend class session::LocatingPin;
     };
 
 
