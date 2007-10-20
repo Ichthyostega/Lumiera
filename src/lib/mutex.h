@@ -36,20 +36,10 @@ typedef struct cinelerra_mutex_struct cinelerra_mutex;
 typedef cinelerra_mutex* CinelerraMutex;
 
 
-/**
- * Initialize a mutex variable
- * @param self is a pointer to the mutex to be initialized
- * @return self as given
- */
 CinelerraMutex
 cinelerra_mutex_init (CinelerraMutex self);
 
 
-/**
- * Destroy a mutex variable
- * @param self is a pointer to the mutex to be destroyed
- * @return self as given
- */
 CinelerraMutex
 cinelerra_mutex_destroy (CinelerraMutex self);
 
