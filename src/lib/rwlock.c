@@ -68,7 +68,7 @@ cinelerra_rwlock_destroy (CinelerraRWLock self)
 /**
  * initialize a rwlockacquirer state
  * @param self rwlockacquirer to be initialized, must be an automatic variable
- * @param cond associated rwlock
+ * @param rwlock associated rwlock
  * @param state initial state of the mutex, either CINELERRA_RDLOCKED, CINELERRA_WRLOCKED or CINELERRA_UNLOCKED
  * @return self as given or NULL on error
  */
