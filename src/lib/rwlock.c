@@ -26,7 +26,16 @@
 CINELERRA_ERROR_DEFINE(RWLOCK_AGAIN, "maximum number of readlocks exceed");
 CINELERRA_ERROR_DEFINE(RWLOCK_DEADLOCK, "deadlock detected");
 
+/**
+ * @file Read/write locks.
+ */
 
+
+/**
+ * Initialize a rwlock
+ * @param self is a pointer to the rwlock to be initialized
+ * @return self as given
+ */
 CinelerraRWLock
 cinelerra_rwlock_init (CinelerraRWLock self)
 {
@@ -37,6 +46,11 @@ cinelerra_rwlock_init (CinelerraRWLock self)
   return self;
 }
 
+/**
+ * destroy a rwlock
+ * @param self is a pointer to the rwlock to be initialized
+ * @return self on success or NULL at error
+ */
 CinelerraRWLock
 cinelerra_rwlock_destroy (CinelerraRWLock self)
 {
@@ -51,6 +65,13 @@ cinelerra_rwlock_destroy (CinelerraRWLock self)
 
 
 
+/**
+ * initialize a rwlockacquirer state
+ * @param self rwlockacquirer to be initialized, must be an automatic variable
+ * @param rwlock associated rwlock
+ * @param state initial state of the mutex, either CINELERRA_RDLOCKED, CINELERRA_WRLOCKED or CINELERRA_UNLOCKED
+ * @return self as given or NULL on error
+ */
 CinelerraRWLockacquirer
 cinelerra_rwlockacquirer_init (CinelerraRWLockacquirer self, CinelerraRWLock rwlock, enum cinelerra_lockstate state)
 {
@@ -94,6 +115,12 @@ cinelerra_rwlockacquirer_init (CinelerraRWLockacquirer self, CinelerraRWLock rwl
 }
 
 
+/**
+ * readlock the rwlock.
+ * must not already be locked
+ * @param self rwlockacquirer associated with a rwlock
+ * @return self as given or NULL on error
+ */
 CinelerraRWLockacquirer
 cinelerra_rwlockacquirer_rdlock (CinelerraRWLockacquirer self)
 {
@@ -119,6 +146,12 @@ cinelerra_rwlockacquirer_rdlock (CinelerraRWLockacquirer self)
 }
 
 
+/**
+ * writelock the rwlock.
+ * must not already be locked
+ * @param self rwlockacquirer associated with a rwlock
+ * @return self as given or NULL on error
+ */
 CinelerraRWLockacquirer
 cinelerra_rwlockacquirer_wrlock (CinelerraRWLockacquirer self)
 {

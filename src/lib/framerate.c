@@ -21,5 +21,10 @@
 
 #include "lib/error.h"
 
+/**
+ * @file Framerate calculations.
+ */
+
+
 CINELERRA_ERROR_DEFINE(FRAMERATE_ILLEGAL_TIME, "invalid time given");
 CINELERRA_ERROR_DEFINE(FRAMERATE_ILLEGAL_FRAME, "invalid frame given");

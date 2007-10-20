@@ -29,10 +29,15 @@
 #include "lib/error.h"
 
 /*
+ * @file Time calculations.
   this time functions are small macro like wrapers, they are all inlined for performance reasons
-  time is passed around as pointers, this pointer must never be NULL
+  time is passed around as pointers, this pointer must never be NULL.
 
-  timehandling is a delicate business, be careful of precision errors accumulating, TODO explain how to use time
+  timehandling is a delicate business, be careful of precision errors accumulating
+
+  cinelerra_time is starting from zero, never becomes negative.
+  
+  TODO explain how to use time
 
 */
 
@@ -67,6 +72,8 @@ cinelerra_time_normalize (CinelerraTime time)
 
 /**
  * set a time value to zero.
+ * @param time Time to clear
+ * @return time as given
  */
 static inline CinelerraTime
 cinelerra_time_clear (CinelerraTime time)
@@ -81,6 +88,8 @@ cinelerra_time_clear (CinelerraTime time)
 
 /**
  * get current time.
+ * @param time Time to put current time into.
+ * @return time as given
  */
 static inline CinelerraTime
 cinelerra_time_current (CinelerraTime time)
@@ -96,6 +105,10 @@ cinelerra_time_current (CinelerraTime time)
 
 /**
  * init from floating point representation.
+ * @param time The time to be set
+ * @param fp Time in double
+ * @return time as given upon success, NULL if double time given was negative or given time didn't point
+ * anywhere
  */
 static inline CinelerraTime
 cinelerra_time_set_double (CinelerraTime time, double fp)
@@ -120,6 +133,10 @@ cinelerra_time_set_double (CinelerraTime time, double fp)
 
 /**
  * initialize with seconds and microseconds.
+ * @param time Time to set
+ * @param sec Seconds to set
+ * @param usec Microseconds to set
+ * @param Time as given
  */
 static inline CinelerraTime
 cinelerra_time_init (CinelerraTime time, time_t sec, suseconds_t usec)
@@ -135,6 +152,8 @@ cinelerra_time_init (CinelerraTime time, time_t sec, suseconds_t usec)
 
 /**
  * get the seconds part from a time.
+ * @param time Time to get seconds from
+ * @return Seconds elapsed, -1 on error
  */
 static inline time_t
 cinelerra_time_sec (CinelerraTime time)
@@ -147,6 +166,8 @@ cinelerra_time_sec (CinelerraTime time)
 
 /**
  * get the microseconds part of a time.
+ * @param time Time to get microseconds from
+ * @return Microseconds elapsed, -1 on error
  */
 static inline suseconds_t
 cinelerra_time_usec (CinelerraTime time)
@@ -159,6 +180,8 @@ cinelerra_time_usec (CinelerraTime time)
 
 /**
  * convert to floating point repesentation.
+ * @param time Time to get floating point representation from
+ * @return Floating point representation of time. NAN on error.
  */
 static inline double
 cinelerra_time_double_get (CinelerraTime time)
@@ -177,6 +200,9 @@ cinelerra_time_double_get (CinelerraTime time)
 
 /**
  * copy time
+ * @param dest Time-pointer to copy to
+ * @param src Time-source to copy from
+ * @return dest as given
  */
 static inline CinelerraTime
 cinelerra_time_copy (CinelerraTime dest, const CinelerraTime src)
@@ -191,6 +217,9 @@ cinelerra_time_copy (CinelerraTime dest, const CinelerraTime src)
 
 /**
  * add time.
+ * @param dest The result of the add
+ * @param src Time to add to dest
+ * @return dest as given, or NULL on overflow.
  */
 static inline CinelerraTime
 cinelerra_time_add (CinelerraTime dest, const CinelerraTime src)
@@ -215,6 +244,9 @@ cinelerra_time_add (CinelerraTime dest, const CinelerraTime src)
 
 /**
  * substact time.
+ * @param dest The result of subtract
+ * @param src Time to subtract from dest
+ * @return dest as given, or NULL on underflow.
  */
 static inline CinelerraTime
 cinelerra_time_sub (CinelerraTime dest, const CinelerraTime src)
