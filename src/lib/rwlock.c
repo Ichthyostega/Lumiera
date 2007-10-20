@@ -26,6 +26,10 @@
 CINELERRA_ERROR_DEFINE(RWLOCK_AGAIN, "maximum number of readlocks exceed");
 CINELERRA_ERROR_DEFINE(RWLOCK_DEADLOCK, "deadlock detected");
 
+/**
+ * @file Read/write locks.
+ */
+
 
 /**
  * Initialize a rwlock

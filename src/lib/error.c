@@ -23,6 +23,11 @@
 
 #include "lib/error.h"
 
+/**
+ * @file C Error handling in Cinelerra.
+ */
+
+
 /*
   predefined errors
 */

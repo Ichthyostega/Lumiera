@@ -34,6 +34,10 @@
 CINELERRA_ERROR_DECLARE(RWLOCK_AGAIN);
 CINELERRA_ERROR_DECLARE(RWLOCK_DEADLOCK);
 
+/**
+ * @file Read/write locks, header.
+ */
+
 
 /**
  * RWLock.

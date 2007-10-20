@@ -25,6 +25,11 @@
 #include "lib/locking.h"
 
 /**
+ * @file Mutual exclusion locking, header.
+ */
+
+
+/**
  * Mutex.
  *
  */

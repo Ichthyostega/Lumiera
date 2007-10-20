@@ -28,6 +28,11 @@
 #include "lib/time.h"
 
 /**
+ * @file Framerate calculations, header.
+ */
+
+
+/**
  * framerates are defined as a rational number
  * for example NTSC with 30000/1001fps
  */

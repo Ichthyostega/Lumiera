@@ -31,7 +31,7 @@ extern "C" {
 #include <stdlib.h>
 
 /**
- * C Error handling in Cinelerra.
+ * @file C Error handling in Cinelerra, header.
  */
 
 

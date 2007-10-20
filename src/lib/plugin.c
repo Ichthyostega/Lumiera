@@ -28,6 +28,11 @@
 
 #include "plugin.h"
 
+/**
+ * @file Plugin loader.
+ */
+
+
 /* TODO should be set by the build system to the actual plugin path */
 #define CINELERRA_PLUGIN_PATH "~/.cinelerra3/plugins:/usr/local/lib/cinelerra3/plugins:.libs"
 

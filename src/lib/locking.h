@@ -29,6 +29,10 @@
 #include "lib/error.h"
 
 /**
+ * @file Shared declarations for all locking primitives.
+ */
+
+/**
  * used to store the current lock state.
  *
  *

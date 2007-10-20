@@ -21,6 +21,9 @@
 
 #include "lib/condition.h"
 
+/**
+ * @file Condition variables
+ */
 
 /**
  * Initialize a condition variable

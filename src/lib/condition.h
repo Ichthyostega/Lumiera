@@ -24,6 +24,10 @@
 
 #include "lib/locking.h"
 
+/**
+ * @file Condition variables, header
+ */
+
 
 /**
  * Condition variables.

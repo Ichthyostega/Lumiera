@@ -22,6 +22,11 @@
 #include "lib/mutex.h"
 
 /**
+ * @file Mutual exclusion locking.
+ */
+
+
+/**
  * Initialize a mutex variable
  * @param self is a pointer to the mutex to be initialized
  * @return self as given

@@ -32,6 +32,11 @@ extern "C" {
 
 #include "error.h"
 
+/**
+ * @file Plugin loader, header.
+ */
+
+
 NOBUG_DECLARE_FLAG (cinelerra_plugin);
 
 /* tool macros*/

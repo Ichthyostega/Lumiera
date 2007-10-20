@@ -29,6 +29,7 @@
 #include "lib/error.h"
 
 /*
+ * @file Time calculations.
   this time functions are small macro like wrapers, they are all inlined for performance reasons
   time is passed around as pointers, this pointer must never be NULL
 
