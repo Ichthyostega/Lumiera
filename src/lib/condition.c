@@ -21,6 +21,12 @@
 
 #include "lib/condition.h"
 
+
+/**
+ * Initialize a condition variable
+ * @param self is a pointer to the condition variable to be initialized
+ * @return self as given
+ */
 CinelerraCondition
 cinelerra_condition_init (CinelerraCondition self)
 {
@@ -32,6 +38,12 @@ cinelerra_condition_init (CinelerraCondition self)
   return self;
 }
 
+
+/**
+ * Destroy a condition variable
+ * @param self is a pointer to the condition variable to be destroyed
+ * @return self as given
+ */
 CinelerraCondition
 cinelerra_condition_destroy (CinelerraCondition self)
 {

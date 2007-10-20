@@ -38,20 +38,10 @@ typedef struct cinelerra_condition_struct cinelerra_condition;
 typedef cinelerra_condition* CinelerraCondition;
 
 
-/**
- * Initialize a condition variable
- * @param self is a pointer to the condition variable to be initialized
- * @return self as given
- */
 CinelerraCondition
 cinelerra_condition_init (CinelerraCondition self);
 
 
-/**
- * Destroy a condition variable
- * @param self is a pointer to the condition variable to be destroyed
- * @return self as given
- */
 CinelerraCondition
 cinelerra_condition_destroy (CinelerraCondition self);
 
