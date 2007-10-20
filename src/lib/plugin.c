@@ -98,7 +98,10 @@ void* cinelerra_plugin_registry = NULL;
 /* plugin operations are protected by one big mutex */
 pthread_mutex_t cinelerra_plugin_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-/* the compare function for the registry tree */
+/**
+ * the compare function for the registry tree.
+ * Compares the names of two struct cinelerra_plugin.
+ * @return 0 if a and b are equal, just like strcmp. */
 static int
 cinelerra_plugin_name_cmp (const void* a, const void* b)
 {
@@ -169,12 +172,14 @@ cinelerra_plugin_lookup (struct cinelerra_plugin* self, const char* path)
 
 /**
  * Make an interface available.
- * To use an interface provided by a plugin it must be opened first. It is allowed to open an interface more than once.
- * Each open must be paired with a close.
- * @param plugin name of the plugin to use.
- * @param name name of the interface to open.
- * @param min_revision the size of the interface structure is used as measure of a minimal required revision (new functions are appended at the end)
- * @return handle to the interface or NULL in case of a error. The application shall cast this handle to the actual interface type.
+ * To use an interface provided by a plugin it must be opened first. It is allowed to open an interface 
+ * more than once. Each open must be paired with a close.
+ * @param name name of the plugin to use.
+ * @param interface name of the interface to open.
+ * @param min_revision the size of the interface structure is used as measure of a minimal required 
+ * revision (new functions are appended at the end)
+ * @return handle to the interface or NULL in case of a error. The application shall cast this handle to
+ * the actual interface type.
  */
 struct cinelerra_interface*
 cinelerra_interface_open (const char* name, const char* interface, size_t min_revision)
@@ -307,7 +312,7 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
 /**
  * Close an interface. Does not free associated resources
  * Calling this function with self==NULL is legal. Every interface handle must be closed only once.
- * @param self interface to be closed
+ * @param ptr interface to be closed
  */
 void
 cinelerra_interface_close (void* ptr)

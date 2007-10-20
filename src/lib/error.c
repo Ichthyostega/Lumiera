@@ -47,8 +47,9 @@ cinelerra_error_tls_init (void)
 /**
  * Set error state for the current thread.
  * If the error state of the current thread was cleared, then set it, else preserve the old state.
- * @param err name of the error with 'CINELERRA_ERROR_' prefix (example: CINELERRA_ERROR_NO_MEMORY)
- * @return old state, that is NULL for success, when the state was cleared and a pointer to a pending error when the error state was already set
+ * @param nerr name of the error with 'CINELERRA_ERROR_' prefix (example: CINELERRA_ERROR_NO_MEMORY)
+ * @return old state, that is NULL for success, when the state was cleared and a pointer to a pending 
+ * error when the error state was already set
  */
 const char*
 cinelerra_error_set (const char * nerr)
@@ -65,7 +66,8 @@ cinelerra_error_set (const char * nerr)
 
 /**
  * Get and clear current error state.
- * This function clears the error state, if it needs to be reused, one has to store it in a temporary variable.
+ * This function clears the error state, if it needs to be reused, one has to store it in a temporary
+ * variable.
  * @return pointer to any pending error of this thread, NULL if no error is pending
  */
 const char*
