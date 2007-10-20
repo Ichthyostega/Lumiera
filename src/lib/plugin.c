@@ -115,6 +115,14 @@ cinelerra_init_plugin (void)
   NOBUG_INIT_FLAG (cinelerra_plugin);
 }
 
+/**
+ * Find and set pathname for the plugin.
+ * Searches through given path for given plugin, trying to find the file's location in the filesystem.
+ * If found, self->pathname will be set to the found plugin file.
+ * @param self The cinelerra_plugin to open look for.
+ * @param path The path to search trough (paths seperated by ":")
+ * @return 0 on success. -1 on error, or if plugin not found in path.
+ */
 int
 cinelerra_plugin_lookup (struct cinelerra_plugin* self, const char* path)
 {
