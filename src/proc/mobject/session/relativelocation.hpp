@@ -49,14 +49,17 @@ namespace mobject
         };
 
       protected:
-        MObject* anchor;
+        Placement anchor;  ////////////TODO: ooooops, this is a nasty design problem!!!
 
         /** the kind of relation denoted by this Placement */
         RelType relType;
 
         /** Offset the actual position by this (time) value relative to the anchor point. */
-        cinelerra::Time offset;
+        Time offset;
         //TODO: suitable representation?
+        
+        
+        virtual void intersect (LocatingSolution&)  const;
 
       };
 

@@ -29,6 +29,22 @@ namespace mobject
     {
 
     /** */
+    
+    void 
+    FixedLocation::intersect (LocatingSolution& solution)  const
+    {
+      REQUIRE (!solution.is_definite() && !solution.is_overconstrained());
+      
+      TODO ("either set position or make overconstrained");
+      if (solution.minTime <= this.time_)
+        solution.minTime = this.time_;
+      else
+        solution.impo = true;
+      if (solution.maxTime >= this.time_)
+        solution.maxTime = this.time_;
+      else
+        solution.impo = true;
+    }
 
 
 

@@ -40,10 +40,10 @@ namespace cinelerra
    */
   class Time
     {
-      int dummy;
+      long dummy;
     public:
-      Time(int dum=0) : dummy(dum) {}
-      operator int () { return dummy; }
+      Time(long dum=0) : dummy(dum) {}
+      operator long () { return dummy; }
     };
 
 } // namespace cinelerra

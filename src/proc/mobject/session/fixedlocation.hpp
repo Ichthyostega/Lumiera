@@ -37,9 +37,15 @@ namespace mobject
      * The most common case of positioning a MObject
      * in the EDL: directly specifying a constant position. 
      */
-    class FixedLocation : public LocatingPing
+    class FixedLocation : public LocatingPin
       {
-        ///////////
+        Time time_;
+        Track track_;
+        
+      protected:
+        FixedLocation (Time ti, Track tra) : time_(ti), track_(tra) {};
+        
+        virtual void intersect (LocatingSolution&)  const;
       };
 
 

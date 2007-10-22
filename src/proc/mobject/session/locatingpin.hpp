@@ -21,6 +21,23 @@
 */
 
 
+/** @file locatingpin.hpp 
+ ** Implementing the Placement mechanics. The various specifications how
+ ** some MObject is to be placed (logically) within the EDL are given by small
+ ** LocatingPin objects forming a chain. For resolving the actual position, at the 
+ ** moment (10/07) we use a preliminary implementation to support the most common
+ ** Placement types (fixed and relative). It is comprised of the nested LocatingSolution
+ ** and the functions FixedLocation#resolve(LocatingSolution&) and
+ ** RelativeLocation#resolve(LocatingSolution&) etc. If this is to be extended,
+ ** we'll need a real spacial discrete constraint solver (and it probably should be
+ ** a library implementation, because the problem is everything but trivial).
+ **
+ */
+
+
+
+
+
 #ifndef MOBJECT_SESSION_LOCATINGPIN_H
 #define MOBJECT_SESSION_LOCATINGPIN_H
 
@@ -42,22 +59,78 @@ namespace mobject
     class RelativeLocation;
     
     
-    struct LocatingPin
+    /**
+     * Positioning specification, possibliy chained
+     * to further specifications. The base class LocatingPin
+     * is a "no-op" specification which doesn't constrain the
+     * possible locations and thus can be embedded into pristine
+     * Placement by default. The Functor operators provide a
+     * way to add concrete positioning specifications, thereby
+     * defining the position of the MObject to be placed. 
+     */
+    class LocatingPin
       {
       protected:
-      typedef cinelerra::Time Time;
-      typedef session::Track* Track;
+        typedef cinelerra::Time Time;
+        typedef session::Track* Track;
       
         /** next additional Pin, if any */
-        scoped_ptr<LocatingPin> next;
-      public:
+        scoped_ptr<LocatingPin> next_;
         
-        /* Factory functions for adding LocationPins */
+        /** order to consider when resolving. 0=highest */
+        virtual int getPrioLevel ()  const { return 0; }
+        
+        LocatingPin& addChain (LocatingPin);
+        void resolve (LocatingSolution&)  const;
+        virtual void intersect (LocatingSolution&)  const;
+        
+      public:
+        const FixedLocation resolve ()  const;
+        
+        /* Factory functions for adding LocatingPins */
         
         FixedLocation&    operator() (Time, Track);
         RelativeLocation& operator() (PMO refObj, Time offset=0);
-
+        
+        LocatingPin (const LocatingPin&);
+        LocatingPin& operator= (const LocatingPin&);
+        virtual ~LocatingPin() {};
+        
+      protected:
+        LocatingPin () {};
+        
+        /** 
+         * @internal helper for the (preliminary)
+         * position resolve() implementation.
+         * @todo we can't sensibly reason about tracks, 
+         * because at the moment (10/07) we lack a track implementation...
+         */  
+        struct LocatingSolution
+          {
+            Time minTime;
+            Time maxTime;
+            Track minTrack;
+            Track maxTrack;
+            bool impo;
+            
+            LocatingSolution () 
+              : minTime(-1e15),  // TODO: better implementation of "unspecified..."
+                maxTime(+1e15),
+                minTrack(0),     // TODO
+                maxTrack(0),
+                impo(false)
+              { }
+            
+            Time getTime();
+            Track getTrack();
+            
+            bool is_definite();
+            bool is_impossible();
+          };
       };
+      
+      
+      
 
   } // namespace mobject::session
 

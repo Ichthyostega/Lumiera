@@ -73,7 +73,12 @@ namespace mobject
   class ExplicitPlacement;
 
   
-
+  /**
+   * A refcounting Handle to an MObject of type MO,
+   * used to constrain or explicitly specify the
+   * location where the MObject is supposed to
+   * be within the Session/EDL
+   */
   template<class MO>
   class Placement : protected shared_ptr<MO>
     {

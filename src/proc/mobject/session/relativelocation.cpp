@@ -1,5 +1,5 @@
 /*
-  RelativePlacement  -  Placement implemnetaion providing various ways of attaching a MObject to another one
+  RelativeLocation  -  Placement implementation attaching MObjects relative to another one
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "proc/mobject/session/relativeplacement.hpp"
+#include "proc/mobject/session/relativelocation.hpp"
 #include "proc/mobject/mobject.hpp"
 
 namespace mobject
@@ -29,7 +29,15 @@ namespace mobject
   namespace session
     {
 
+    void 
+    RelativeLocation::intersect (LocatingSolution& solution)  const
+    {
+      REQUIRE (!solution.is_definite() && !solution.is_overconstrained());
+      
+      TODO ("either set position or make overconstrained");
+    }
 
+    
   } // namespace mobject::session
 
 } // namespace mobject

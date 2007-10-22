@@ -1,6 +1,6 @@
 format 40
 "MObject" // ProcessingLayer::MObject
-  revision 26
+  revision 27
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -1107,4 +1107,99 @@ ${inlines}
   package_ref 128901 // Builder
 
   package_ref 129029 // Controller
+
+  usecaseview 128261 "config examples"
+    //use case diagram settings
+    package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    objectdiagram 131333 "multichannel clip"
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      size A4
+    end
+
+    classinstance 134661 ""
+      type class_ref 137349 // Clip
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 134789 ""
+      type class_ref 138501 // CompoundMedia
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 134917 ""
+      type class_ref 136709 // Media
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 135045 ""
+      type class_ref 136709 // Media
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 135173 ""
+      type class_ref 136709 // Media
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 135301 ""
+      type class_ref 138629 // CompoundClip
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 135429 ""
+      type class_ref 138885 // SimpleClip
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 135557 ""
+      type class_ref 138885 // SimpleClip
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 135685 ""
+      type class_ref 138885 // SimpleClip
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 135813 ""
+      type class_ref 128645 // Placement
+      attributes
+        end
+      relations
+        end
+    end
+  end
 end
