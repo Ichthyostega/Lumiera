@@ -38,7 +38,7 @@ using std::tr1::shared_ptr;
 
 #include "proc/assetmanager.hpp"                
 using proc_interface::IDA;                // TODO finally not needed?
-using proc_interface::PAsset;              //TODO: only temporarily
+//using proc_interface::PAsset;              //TODO: only temporarily
 using proc_interface::AssetManager;
 
 namespace mobject
@@ -70,9 +70,8 @@ namespace mobject
       static session::MObjectFactory create;
       
       /** MObject self-test (usable for asserting) */
-      virtual bool isValid() =0;
+      virtual bool isValid()  const =0;
       
-      virtual PAsset getMedia () =0; ///< @todo solve the reference/Interface problem concerning Placements, then push down
       virtual Time& getLength() =0; ///< @todo how to deal with the time/length field??
 
     };

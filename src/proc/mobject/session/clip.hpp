@@ -33,6 +33,7 @@ namespace mobject
   {
   namespace session
     {
+    using asset::Media;
 
 
     /**
@@ -62,6 +63,16 @@ namespace mobject
         
         
         virtual void setupLength();
+        
+      public:
+        virtual bool isValid()  const;
+        
+        /** access the underlying media asset */
+        virtual Media::PMedia getMedia ()                        
+          { 
+            UNIMPLEMENTED ("how to relate MObjects and media assets...");
+            return AssetManager::instance().getAsset(IDA(0)); // KABOOM! (just to make it compile)
+          }
         
       };
       

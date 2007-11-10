@@ -51,7 +51,7 @@ using boost::scoped_ptr;
 
 namespace mobject
   {
-  class Placement;
+  template<class MO> class Placement;
 
   namespace session
     {
@@ -89,10 +89,11 @@ namespace mobject
         
       public:
         const FixedLocation resolve ()  const;
+        bool isOverdetermined () const;
         
         /* Factory functions for adding LocatingPins */
         
-        FixedLocation&    operator() (Time, Track);
+        FixedLocation&    operator() (Time, Track=0);
         RelativeLocation& operator() (PMO refObj, Time offset=0);
         
         LocatingPin (const LocatingPin&);

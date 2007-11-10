@@ -101,6 +101,14 @@ namespace mobject
       return FixedLocation (solution.getTime(), solution.getTrack());
     }
     
+    bool 
+    LocatingPin::isOverdetermined () const
+    {
+      LocatingSolution solution;
+      resolve (solution);
+      return solution.is_impossible(); 
+    }
+
     
     inline bool
     still_to_solve (LocatingPin::LocatingSolution& solution) 

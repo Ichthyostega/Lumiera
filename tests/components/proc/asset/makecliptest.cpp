@@ -52,14 +52,14 @@ namespace asset
     class MakeClip_test : public Test
       {
         typedef shared_ptr<asset::Media> PM;
-        typedef shared_ptr<mobject::session::Clip> PC;
+        typedef asset::Media::PClipMO PC;
             
         virtual void run (Arg arg) 
           {
             
             PM mm = asset::Media::create("test-1", VIDEO);
             PC cc = mm->createClip();
-            PM cm = static_pointer_cast<Media,Asset> (cc->getMedia());   //TODO: solve the reference/interface Problem on MObject, push down to Clip...
+            PM cm = cc->getMedia();
             
             ASSERT (cm);
             ASSERT (0 < cc->getLength());

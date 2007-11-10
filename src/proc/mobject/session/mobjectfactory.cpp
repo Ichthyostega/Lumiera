@@ -40,12 +40,14 @@ namespace mobject
      *  into a Placement, which takes ownership. So, when the
      *  render engine gets across this Clip-MO, it is able to
      *  obtain the media information contained in the corresponding
-     *  asset.
+     *  media asset. Depending on the mediaDef passed in, the 
+     *  created Clip could be a compound (multichannel) clip 
+     *  comprised of several SimpleClip subobjects.
+     *  @todo implement creation of multichannel CompoundClip
      */
     Placement<Clip>   
     MObjectFactory::operator() (PClipAsset& mediaDef)
     {
-      //TODO sholdin't we rather store a ref to the underlying media assset??
       return Placement<Clip> (new Clip (mediaDef));
     }
     

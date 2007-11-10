@@ -43,12 +43,8 @@ namespace mobject
         
         /* some dummy implementations used to make the code compile... */
         
-        virtual Time& getLength()                      { return length; }
-        virtual PAsset getMedia ()                        
-          { 
-            UNIMPLEMENTED ("how to relate MObjects and media assets...");
-            return AssetManager::instance().getAsset(IDA(0)); // KABOOM! (just to make it compile)
-          }
+        virtual Time& getLength() { return length; }
+        
       protected:
         /** custom deleter func allowing class Placement 
           *  to take ownership of MObjct instances

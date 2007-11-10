@@ -66,24 +66,23 @@ namespace mobject
               PM media = asset::Media::create("test-1", VIDEO);
               Placement<Clip> pc = MObject::create(media);
 
-              // can use the Clip-MObject interface by dereferencing the placement
+              // use of the Clip-MObject interface by dereferencing the placement
               PM clip_media = pc->getMedia();
               ASSERT (clip_media->ident.category.hasKind (VIDEO));
               
               // using the Placement interface
               // TODO: how to handle unterdetermined Placement? Throw?
-              FixedPlacement & fixpla = pc.chain(Placement::FIXED, Time(1)); // TODO: the track??
+              FixedLocation & fixloc = pc.chain(Placement::FIXED, Time(1)); // TODO: the track??
               ExplicitPlacement expla = pc.resolve();
               ASSERT (expla.time == 1);
-              ASSERT (!expla.isOverdetermined());
+              ASSERT (!expla.chain.isOverdetermined());
               ASSERT (*expla == *pc);
-              ASSERT (*fixpla == *pc);
               
               // now overconstraining with another Placement
               pc.chain(Placement::FIXED, Time(2));
               expla = pc.resolve();
               ASSERT (expla.time == 2); // the latest addition wins
-              ASSERT (expla.isOverdetermined()); 
+              ASSERT (expla.chain.isOverdetermined()); 
             } 
         };
       

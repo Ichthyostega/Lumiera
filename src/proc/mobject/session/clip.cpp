@@ -40,6 +40,16 @@ namespace mobject
     
     
     
+    /** implementing the common MObject self test.
+     *  Length definition is consitent, underlying 
+     *  media def is accessible etc. */
+    bool
+    Clip::isValid ()  const
+    {
+      UNIMPLEMENTED ("check consistency of clip length def, implies accessing the underlying media def");
+    }
+    
+    
     void 
     Clip::setupLength()
     {
