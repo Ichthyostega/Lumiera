@@ -110,10 +110,10 @@ namespace mobject
        *  by the various LocatingPin (\see #chain) and
        *  provide the resulting (explicit) placement.
        */
-      virtual const ExplicitPlacement 
+      virtual ExplicitPlacement
       resolve ()  const 
         { 
-          return chain.resolve(); 
+          return ExplicitPlacement (*this, chain.resolve()); 
         }
       
       

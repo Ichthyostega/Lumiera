@@ -53,19 +53,25 @@ namespace mobject
       /** no need to resolve any further, as this ExplicitPlacement
        *  already \i is the result of a resolve()-call.
        */
-      virtual const 
+      virtual
       ExplicitPlacement resolve ()  const 
         { 
           return *this; 
         }
 
-    private:
-      ExplicitPlacement (Placement<MObject>& base, Time ti, Track tra)
+    protected:
+      /*  @todo ichthyo considers a much more elegant implementation utilizing a subclass 
+       *        of FixedLocation, which would serve as Placement::LocatingSolution, and
+       *        would be used as LocatingPin::chain subobject as well, so that it could
+       *        be initialized directly here in the ExplicitPlacement ctor. 
+       *        (ichthyo: siehe Trac #100)
+       */
+      ExplicitPlacement (Placement<MObject>& base, const session::FixedLocation found)
         : Placement(base),
-          time(ti), track(tra)
+          time(found.time_), track(found.track_)
         { };
         
-      friend class session::LocatingPin;
+      friend ExplicitPlacement::resolve () const;
     };
 
 

@@ -108,6 +108,8 @@ namespace mobject
          * position resolve() implementation.
          * @todo we can't sensibly reason about tracks, 
          * because at the moment (10/07) we lack a track implementation...
+         * @todo shouldn't we use a range-restriction LocatingPin (subclass)
+         * to represent the to-be-found solution? (ichthyo: siehe Trac #100)
          */  
         struct LocatingSolution
           {

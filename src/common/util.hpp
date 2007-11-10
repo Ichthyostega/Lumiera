@@ -112,7 +112,7 @@ namespace util
   {
     return std::for_each (c.begin(),c.end(), doIt);
   }
-   
+  
   
   
   /** produce an identifier based on the given string.
@@ -153,8 +153,8 @@ namespace util
 
  /* === some common macro definitions === */
 
-/** supress "warning: unused variable" on vars, which
- *  are introduced into a scope because of some sideeffect, i.e. Locking
+/** supress "warning: unused variable" on vars, which are
+ *  introduced into a scope because of some sideeffect, i.e. Locking
  */
 #define SIDEEFFECT __attribute__ ((unused));
 
@@ -162,7 +162,9 @@ namespace util
 #define STRINGIFY(TOKEN) __STRNGFY(TOKEN)
 #define __STRNGFY(TOKEN) #TOKEN
 
-/** shortcut for subclass test, intended for assertions */
+/** shortcut for subclass test, intended for assertions only.
+ *  @note it is considered bad style to use such in non-assertion code,
+ *        and we probably will enforce this design rule in future. */
 #define INSTANCEOF(CLASS, EXPR) (dynamic_cast<CLASS*> (EXPR)) 
 
 #endif /*UTIL_HPP_*/

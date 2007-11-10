@@ -90,6 +90,8 @@ namespace mobject
      *  Placement object).
      *  @todo this could/should be replaced by a full-blown
      *        constraint solver at some point in the future
+     *  @todo we are packing and unpacking the information (time,track)
+     *        several times. Ichthyo considers a more elegant solution.
      */
     const FixedLocation
     LocatingPin::resolve ()  const

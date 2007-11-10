@@ -39,8 +39,8 @@ namespace mobject
 
 
     /**
-     * Interface: any objective, constraint or wish of
-     * placeing a MObject in a specific way.
+     * Interface (abstract): any objective, constraint or wish
+     * of placing a MObject in a specific way.
      */
     class Allocation : public LocatingPin
       {
@@ -49,9 +49,13 @@ namespace mobject
          *  characterizing this allocaton, e.g. "t >= 10"
          */
         string repr;
-
+        
+        virtual void intersect (LocatingSolution&)  const;
+        
       public:
-        const string& getRepr () const { return repr; } 
+        const string& getRepr () const { return repr; }
+        
+        virtual LocatingPin* clone ()  const = 0;
       };
 
 

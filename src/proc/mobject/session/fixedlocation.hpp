@@ -30,17 +30,24 @@
 
 namespace mobject
   {
+    class ExplicitPlacement; //TODO trac #100
+    
   namespace session
     {
 
     /** 
      * The most common case of positioning a MObject
-     * in the EDL: directly specifying a constant position. 
+     * in the EDL: directly specifying a constant position.
+     * @todo use a subclass to represent the LocatingSolution?
+     *       would solve the construction of a ExplicitPlacement
+     *       much more natural. (ichthyo: siehe trac #100) 
      */
     class FixedLocation : public LocatingPin
       {
         Time time_;
         Track track_;
+        
+        friend class ExplicitPlacement; //TODO trac #100
         
       protected:
         FixedLocation (Time ti, Track tra) : time_(ti), track_(tra) {};
