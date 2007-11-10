@@ -29,6 +29,13 @@ namespace mobject
   namespace session
     {
 
+    LocatingPin* 
+    LocatingPin::clone ()
+    { 
+      return new RelativeLocation (*this); 
+    }
+    
+    
     void 
     RelativeLocation::intersect (LocatingSolution& solution)  const
     {

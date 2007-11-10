@@ -60,6 +60,10 @@ namespace mobject
         
         
         virtual void intersect (LocatingSolution&)  const;
+        
+        
+      public:
+        virtual LocatingPin* clone ()  const;
 
       };
 

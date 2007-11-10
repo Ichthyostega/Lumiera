@@ -30,12 +30,21 @@ namespace mobject
   {
   namespace session
     {
+    inline LocatingPin*
+    cloneChain (scoped_ptr<LocatingPin>& chain)
+    {
+      if (!chain) 
+        return 0;
+      else        
+        return chain->clone(); 
+    }
+    
     
     /** it's OK to copy a LocainngPin,
      *  causing duplication of any chained lPins
      */
     LocatingPin::LocatingPin (const LocatingPin& other)
-      : next_(other.next_)
+      : next_(cloneChain (other.next_))
     { }
     
     
@@ -43,13 +52,21 @@ namespace mobject
     LocatingPin::operator= (const LocatingPin& other)
     {
       if (this!=other) 
-        this.next_.reset (other.next_);
+        this.next_.reset (cloneChain (other.next_));
       return *this;
     }
     
     
+    LocatingPin* 
+    LocatingPin::clone ()
+    {
+      return new LocatingPin(*this);
+    }
+    
+    
+    
     LocatingPin&
-    LocatingPin::addChain (LocatingPin newLp)
+    LocatingPin::addChain (LocatingPin* newLp)  ///< @note we take ownership of newLp
     {
       REQUIRE (newLp);
       REQUIRE (!newLp->next_, "can insert only single LocatingPins");
@@ -59,7 +76,7 @@ namespace mobject
       else
         {
           scoped_ptr<LocatingPin> tmp_next (newLp);
-          tmp_next->next_.reset(this.next_);
+          tmp_next->next_.swap(this.next_);
           this.next_.swap(tmp_next);
           return *newLp;
         }
@@ -83,15 +100,21 @@ namespace mobject
     }
     
     
+    inline bool
+    still_to_solve (LocatingPin::LocatingSolution& solution) 
+    { 
+      return !(solution.is_definite() || solution.is_impossible()); 
+    }
+    
+    
     void 
     LocatingPin::resolve (LocatingSolution& solution)  const
     {
-      if (solution.is_definite() || solution.is_impossible()) 
+      if (!still_to_solve(solution)) 
         return;
       this.intersect (solution);
       if (this.next_ && 
-          !(solution.is_definite() || solution.is_impossible())
-         )
+          still_to_solve (solution))
         next_->resolve(solution);
     }
     
@@ -99,7 +122,7 @@ namespace mobject
     void 
     LocatingPin::intersect (LocatingSolution& solution)  const
     {
-      REQUIRE (!solution.is_definite() && !solution.is_impossible());
+      REQUIRE (still_to_solve (solution));
       // base class Implementation is NOP...
     }
     
@@ -148,7 +171,7 @@ namespace mobject
     LocatingPin::operator() (Time, Track)
     {
       return static_cast<FixedLocation&> 
-                (this.addChain (*new FixedLocation (Time, Track)));
+                (this.addChain (new FixedLocation (Time, Track)));
     }
     
     
@@ -156,7 +179,7 @@ namespace mobject
     LocatingPin::operator() (PMO refObj, Time offset=0)
     {
       return static_cast<RelativeLocation&> 
-                (this.addChain (*new RelativeLocation (Time, Track)));
+                (this.addChain (new RelativeLocation (Time, Track)));
     }
     
     

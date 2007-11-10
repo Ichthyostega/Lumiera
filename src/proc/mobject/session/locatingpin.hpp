@@ -29,8 +29,8 @@
  ** Placement types (fixed and relative). It is comprised of the nested LocatingSolution
  ** and the functions FixedLocation#resolve(LocatingSolution&) and
  ** RelativeLocation#resolve(LocatingSolution&) etc. If this is to be extended,
- ** we'll need a real spacial discrete constraint solver (and it probably should be
- ** a library implementation, because the problem is everything but trivial).
+ ** we'll need a real spatial discrete constraint solver (and this probably will be
+ ** some library implementation, because the problem is anything but trivial).
  **
  */
 
@@ -66,7 +66,10 @@ namespace mobject
      * possible locations and thus can be embedded into pristine
      * Placement by default. The Functor operators provide a
      * way to add concrete positioning specifications, thereby
-     * defining the position of the MObject to be placed. 
+     * defining the position of the MObject to be placed.
+     * 
+     * @note to the implementer of subclasses: LocatingPins are
+     *       copyable and need to handle cloning (incl the chain)
      */
     class LocatingPin
       {
@@ -80,7 +83,7 @@ namespace mobject
         /** order to consider when resolving. 0=highest */
         virtual int getPrioLevel ()  const { return 0; }
         
-        LocatingPin& addChain (LocatingPin);
+        LocatingPin& addChain (LocatingPin*);
         void resolve (LocatingSolution&)  const;
         virtual void intersect (LocatingSolution&)  const;
         
@@ -94,6 +97,7 @@ namespace mobject
         
         LocatingPin (const LocatingPin&);
         LocatingPin& operator= (const LocatingPin&);
+        virtual LocatingPin* clone ()  const;
         virtual ~LocatingPin() {};
         
       protected:

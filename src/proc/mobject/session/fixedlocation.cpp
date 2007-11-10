@@ -28,8 +28,14 @@ namespace mobject
   namespace session
     {
 
-    /** */
+    LocatingPin* 
+    LocatingPin::clone ()
+    { 
+      return new FixedLocation (*this); 
+    }
     
+    
+    /** */
     void 
     FixedLocation::intersect (LocatingSolution& solution)  const
     {

@@ -46,6 +46,10 @@ namespace mobject
         FixedLocation (Time ti, Track tra) : time_(ti), track_(tra) {};
         
         virtual void intersect (LocatingSolution&)  const;
+        
+      public:
+        virtual LocatingPin* clone ()  const;
+        
       };
 
 
