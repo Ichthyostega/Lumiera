@@ -28,8 +28,8 @@ namespace mobject
   namespace session
     {
 
-    LocatingPin* 
-    LocatingPin::clone ()
+    FixedLocation* 
+    FixedLocation::clone ()  const
     { 
       return new FixedLocation (*this); 
     }
@@ -42,12 +42,12 @@ namespace mobject
       LocatingPin::intersect (solution);
       
       TODO ("either set position or make overconstrained");
-      if (solution.minTime <= this.time_)
-        solution.minTime = this.time_;
+      if (solution.minTime <= this->time_)
+        solution.minTime = this->time_;
       else
         solution.impo = true;
-      if (solution.maxTime >= this.time_)
-        solution.maxTime = this.time_;
+      if (solution.maxTime >= this->time_)
+        solution.maxTime = this->time_;
       else
         solution.impo = true;
     }

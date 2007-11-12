@@ -38,7 +38,7 @@
 #include "proc/asset.hpp"
 #include "common/factory.hpp"
 #include "proc/mobject/mobject.hpp"
-
+#include "proc/mobject/session/clip.hpp"
 
 
 
@@ -72,7 +72,7 @@ namespace asset
       typedef shared_ptr<Media> PMedia;
       typedef shared_ptr<const asset::Clip> PClip;
       typedef shared_ptr<asset::ProcPatt> PProcPatt;
-      typedef mobject::Placement<mobject::session::Clip> PClipMO;
+      typedef mobject::session::PClipMO PClipMO;
      
       
       static MediaFactory create;
@@ -111,7 +111,7 @@ namespace asset
        *  is part of a compound (multichannel) media.
        *  @return pointer to parent, or \code null
        */
-      virtual PMedia checkCompound ();
+      virtual PMedia checkCompound ()  const;
 
     };
     

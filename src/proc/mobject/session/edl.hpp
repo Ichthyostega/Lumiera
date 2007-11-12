@@ -48,8 +48,8 @@ namespace mobject
         vector<MObject *> clips;
 
       public:
-        bool contains (const PPla& placement);
-        PPla& find (const string& id); ///< @todo how to refer to clips? using asset IDs??
+        bool contains (const PMO& placement);
+        PMO& find (const string& id); ///< @todo how to refer to clips? using asset IDs??
         
         vector<PAsset>& getTracks () { return tracks; } ///< @todo use track assets correct, make const!
         size_t size ()

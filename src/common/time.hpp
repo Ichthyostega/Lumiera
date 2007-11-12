@@ -24,6 +24,7 @@
 #ifndef CINELERRA_TIME_H
 #define CINELERRA_TIME_H
 
+#include <boost/operators.hpp>
 
 
 namespace cinelerra
@@ -38,13 +39,22 @@ namespace cinelerra
    *       elaborate timehandling functions in the backend and the goal
    *       is for class Time to be just a thin wrapper!
    */
-  class Time
+  class Time : boost::totally_ordered<Time>
     {
       long dummy;
     public:
       Time(long dum=0) : dummy(dum) {}
       operator long () { return dummy; }
+      
+      bool operator<  (const Time& ot)  const { return dummy <  ot.dummy; }
+      bool operator== (const Time& ot)  const { return dummy == ot.dummy; }
+      
+      static const Time MAX ; 
+      static const Time MIN ;
     };
+    
+  
 
+   
 } // namespace cinelerra
 #endif

@@ -49,6 +49,8 @@ namespace mobject
     public:
       const Time time;
       const Track track;
+      
+      typedef std::pair<Time,Track> SolutionData;  //TODO (ichthyo consideres better passing of solution by subclass)
 
       /** no need to resolve any further, as this ExplicitPlacement
        *  already \i is the result of a resolve()-call.
@@ -66,12 +68,12 @@ namespace mobject
        *        be initialized directly here in the ExplicitPlacement ctor. 
        *        (ichthyo: siehe Trac #100)
        */
-      ExplicitPlacement (Placement<MObject>& base, const session::FixedLocation found)
-        : Placement(base),
-          time(found.time_), track(found.track_)
+      ExplicitPlacement (const Placement<MObject>& base, const SolutionData found)
+        : Placement<MObject>(base),
+          time(found.first), track(found.second)
         { };
         
-      friend ExplicitPlacement::resolve () const;
+      friend ExplicitPlacement Placement<MObject>::resolve () const;
     };
 
 

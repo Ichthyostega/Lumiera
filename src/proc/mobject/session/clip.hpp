@@ -25,15 +25,22 @@
 #define MOBJECT_SESSION_CLIP_H
 
 #include "proc/mobject/session/abstractmo.hpp"
-#include "proc/mobject/placement.hpp"
 
 
+namespace asset
+  {
+    class Media;
+    class Clip;
+    typedef shared_ptr<const asset::Clip> PClipAsset;
+  }
 
 namespace mobject
   {
   namespace session
     {
     using asset::Media;
+    using asset::PClipAsset;
+    typedef shared_ptr<Media> PMedia;
 
 
     /**
@@ -52,7 +59,7 @@ namespace mobject
       {
       protected:
         /** startpos in source */
-        Time start;
+        Time start_;
 
         //TODO: where to put the duration ???
         
@@ -68,19 +75,40 @@ namespace mobject
         virtual bool isValid()  const;
         
         /** access the underlying media asset */
-        virtual Media::PMedia getMedia ()                        
+        virtual PMedia getMedia ()                        
           { 
             UNIMPLEMENTED ("how to relate MObjects and media assets...");
-            return AssetManager::instance().getAsset(IDA(0)); // KABOOM! (just to make it compile)
+            //return AssetManager::instance().getAsset(IDA(0)); // KABOOM! (just to make it compile)
           }
         
       };
       
-
+    typedef Placement<Clip> PClipMO;
 
 
 
   } // namespace mobject::session
+  
+  
+  ///////////////////////////TODO use macro for specialsation...
+  template<>
+  class Placement<session::Clip> : public Placement<MObject>
+    { 
+    protected:
+      Placement (session::Clip & m, void (*moKiller)(MObject*)) 
+        : Placement<MObject>::Placement (m, moKiller) 
+        { };
+      friend class session::MObjectFactory;
+        
+    public:
+      virtual session::Clip*
+      operator-> ()  const 
+        { 
+          ENSURE (INSTANCEOF(session::Clip, &(*this)));
+          return static_cast<session::Clip*> (shared_ptr<MObject>::operator-> ()); 
+        }      
+    };
+    
 
 } // namespace mobject
 #endif

@@ -55,7 +55,7 @@ namespace mobject
       public:
         const string& getRepr () const { return repr; }
         
-        virtual LocatingPin* clone ()  const = 0;
+        virtual Allocation* clone ()  const = 0;
       };
 
 

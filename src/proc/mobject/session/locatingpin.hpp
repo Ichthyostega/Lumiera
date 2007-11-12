@@ -44,6 +44,7 @@
 
 #include "cinelerra.h"
 
+#include <utility>
 #include <boost/scoped_ptr.hpp>
 using boost::scoped_ptr;
 
@@ -51,12 +52,16 @@ using boost::scoped_ptr;
 
 namespace mobject
   {
+  class MObject;
   template<class MO> class Placement;
+  typedef Placement<MObject> PMO;
 
   namespace session
     {
     class FixedLocation;
     class RelativeLocation;
+    
+    class Track; //TODO
     
     
     /**
@@ -76,6 +81,8 @@ namespace mobject
       protected:
         typedef cinelerra::Time Time;
         typedef session::Track* Track;
+        typedef std::pair<Time,Track> SolutionData;  //TODO (ichthyo consideres better passing of solution by subclass)
+        struct LocatingSolution;
       
         /** next additional Pin, if any */
         scoped_ptr<LocatingPin> next_;
@@ -88,12 +95,12 @@ namespace mobject
         virtual void intersect (LocatingSolution&)  const;
         
       public:
-        const FixedLocation resolve ()  const;
+        const SolutionData resolve ()  const;
         bool isOverdetermined () const;
         
         /* Factory functions for adding LocatingPins */
         
-        FixedLocation&    operator() (Time, Track=0);
+        FixedLocation&    operator() (Time start, Track track=0);
         RelativeLocation& operator() (PMO refObj, Time offset=0);
         
         LocatingPin (const LocatingPin&);
@@ -103,6 +110,8 @@ namespace mobject
         
       protected:
         LocatingPin () {};
+        
+        friend class Placement<MObject>;
         
         /** 
          * @internal helper for the (preliminary)
@@ -121,18 +130,20 @@ namespace mobject
             bool impo;
             
             LocatingSolution () 
-              : minTime(-1e15),  // TODO: better implementation of "unspecified..."
-                maxTime(+1e15),
+              : minTime(Time::MAX),  // TODO: better implementation of "unspecified..."
+                maxTime(Time::MIN),
                 minTrack(0),     // TODO
                 maxTrack(0),
                 impo(false)
               { }
             
-            Time getTime();
-            Track getTrack();
+            Time getTime ();
+            Track getTrack ();
             
-            bool is_definite();
-            bool is_impossible();
+            bool is_definite ();
+            bool is_impossible ();
+            bool still_to_solve (); 
+            
           };
       };
       

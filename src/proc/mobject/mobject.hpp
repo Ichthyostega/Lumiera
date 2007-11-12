@@ -64,7 +64,10 @@ namespace mobject
       // TODO: how to represent time intervals best?
       Time length;
       
+      MObject() {}
       virtual ~MObject() {};
+      
+      friend class session::MObjectFactory;
       
     public:
       static session::MObjectFactory create;
@@ -77,7 +80,6 @@ namespace mobject
     };
   
   
-  typedef Placement<MObject> PMO;
   
 
 

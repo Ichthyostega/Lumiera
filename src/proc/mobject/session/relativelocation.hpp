@@ -38,6 +38,8 @@ namespace mobject
 
     class RelativeLocation : public LocatingPin
       {
+        const PMO & anchor_;  ////////////TODO: ooooops, this is a nasty design problem!!!
+        
       public:
 
         /**
@@ -49,13 +51,14 @@ namespace mobject
         };
 
       protected:
-        Placement anchor;  ////////////TODO: ooooops, this is a nasty design problem!!!
+        RelativeLocation (const PMO& a, Time ofs) : anchor_(a), offset_(ofs) { }
+        friend class LocatingPin;
 
         /** the kind of relation denoted by this Placement */
         RelType relType;
 
         /** Offset the actual position by this (time) value relative to the anchor point. */
-        Time offset;
+        Time offset_;
         //TODO: suitable representation?
         
         
@@ -63,7 +66,7 @@ namespace mobject
         
         
       public:
-        virtual LocatingPin* clone ()  const;
+        virtual RelativeLocation* clone ()  const;
 
       };
 

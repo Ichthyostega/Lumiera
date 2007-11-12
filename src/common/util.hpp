@@ -165,6 +165,6 @@ namespace util
 /** shortcut for subclass test, intended for assertions only.
  *  @note it is considered bad style to use such in non-assertion code,
  *        and we probably will enforce this design rule in future. */
-#define INSTANCEOF(CLASS, EXPR) (dynamic_cast<CLASS*> (EXPR)) 
+#define INSTANCEOF(CLASS, EXPR) (dynamic_cast<const CLASS*> (EXPR)) 
 
 #endif /*UTIL_HPP_*/

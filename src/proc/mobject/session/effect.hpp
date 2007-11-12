@@ -50,5 +50,22 @@ namespace mobject
      
   } // namespace mobject::session
 
+  ///////////////////////////TODO use macro for specialsation...
+  template<>
+  class Placement<session::Effect> : public Placement<MObject>
+    { 
+      Placement (session::Effect & m, void (*moKiller)(MObject*)) 
+        : Placement<MObject>::Placement (m, moKiller) 
+        { };
+        
+    public:
+      virtual session::Effect*
+      operator-> ()  const 
+        { 
+          ENSURE (INSTANCEOF(session::Effect, &(*this)));
+          return static_cast<session::Effect*> (shared_ptr<MObject>::operator-> ()); 
+        }      
+    };
+    
 } // namespace mobject
 #endif

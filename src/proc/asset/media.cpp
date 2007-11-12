@@ -90,7 +90,7 @@ namespace asset
   
   
   Media::PMedia
-  Media::checkCompound()
+  Media::checkCompound()  const
   {
     PAsset parents = this.getParents();
     PMedia parent(0);

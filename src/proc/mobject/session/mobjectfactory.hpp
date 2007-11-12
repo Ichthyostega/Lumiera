@@ -46,11 +46,15 @@ namespace mobject
 
     class MObjectFactory
       {
-      public:
-        typedef Placement PType;
+        /** custom deleter func allowing class Placement 
+          *  to take ownership of MObjct instances
+          */
+        static void deleterFunc (MObject* o) { delete o; }
         
-        PType<Clip>   operator() (PClipAsset&);
-        PType<Effect> operator() (const asset::Effect);
+      public:
+        
+        Placement<Clip>   operator() (PClipAsset&);
+        Placement<Effect> operator() (const asset::Effect);
         
       };
 

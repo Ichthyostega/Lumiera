@@ -35,7 +35,7 @@ namespace mobject
       : start_(0),
         mediaDef_(mediaDef)
     {
-      this.setupLength();
+      setupLength();
     }
     
     

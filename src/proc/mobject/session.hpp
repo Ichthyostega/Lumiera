@@ -84,9 +84,9 @@ namespace mobject
     public:
       static session::SessManager& current;
       
-      virtual bool isValid ()               = 0;
-      virtual void add (PPla& placement)    = 0;
-      virtual bool remove (PPla& placement) = 0;
+      virtual bool isValid ()              = 0;
+      virtual void add (PMO& placement)    = 0;
+      virtual bool remove (PMO& placement) = 0;
       
       /// @deprecated Ichthyo doubts it is good design to hand out the EDL??
       virtual session::EDL& currEDL ()     = 0;

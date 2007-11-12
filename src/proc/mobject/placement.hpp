@@ -58,7 +58,7 @@
 #define MOBJECT_PLACEMENT_H
 
 #include "cinelerra.h"
-#include "proc/mobject/session/abstractmo.hpp"
+#include "proc/mobject/mobject.hpp"
 #include "proc/mobject/session/locatingpin.hpp"
 #include "proc/mobject/session/track.hpp"
 
@@ -68,10 +68,12 @@ using std::tr1::shared_ptr;
 
 namespace mobject
   {
+  namespace session{ class MObjectFactory; }
 
-  class MObject;
   class ExplicitPlacement;
+  
 
+  
   
   /**
    * A refcounting Handle to an MObject of type MO,
@@ -95,8 +97,8 @@ namespace mobject
       virtual MO * 
       operator-> ()  const 
         { 
-          ENSURE (this.get()); 
-          return shared_ptr::operator-> (); 
+          ENSURE (*this); 
+          return shared_ptr<MO>::operator-> (); 
         }      
       
       
@@ -110,79 +112,29 @@ namespace mobject
        *  by the various LocatingPin (\see #chain) and
        *  provide the resulting (explicit) placement.
        */
-      virtual ExplicitPlacement
-      resolve ()  const 
-        { 
-          return ExplicitPlacement (*this, chain.resolve()); 
-        }
+      virtual ExplicitPlacement resolve ()  const; 
       
       
     protected:
       virtual ~Placement() {};
-      Placement (MO & subject) 
-        : shared_ptr (&subject, &session::AbstractMO::destroy) {};
+      Placement (MO & subject, void (*moKiller)(MO*)) 
+        : shared_ptr<MO> (&subject, moKiller) {};
+        
+      friend class session::MObjectFactory;
     };
   
-
-  /* === defining specialisations to be subclasses === */  
+  typedef Placement<MObject> PMO;
+  
+  
+  
+  
+  /* === defining specialisations to be subclasses === */
+  
     
-  namespace session
-    {
-    class Clip;
-    class Effect;
-    class Meta;
-    }
   
   
-  template<>
-  class Placement<session::Clip> : public Placement<MObject>
-    { 
-      Placement (session::Clip & c) 
-        : Placement<MObject>::Placement (c) 
-        { };
-        
-    public:
-      virtual session::Clip*
-      operator-> ()  const 
-        { 
-          ENSURE (INSTANCEOF(session::Clip, this.get()));
-          return static_cast<session::Clip*> (shared_ptr::operator-> ()); 
-        }      
-    };
+  /////TODO: define Macro for specialisations here
   
-  
-  template<>
-  class Placement<session::Effect> : public Placement<MObject>
-    { 
-      Placement (session::Effect & e) 
-        : Placement<MObject>::Placement (e) 
-        { };
-        
-    public:
-      virtual session::Effect*
-      operator-> ()  const 
-        { 
-          ENSURE (INSTANCEOF(session::Effect, this.get()));
-          return static_cast<session::Effect*> (shared_ptr::operator-> ()); 
-        }      
-    };
-  
-  
-  template<>
-  class Placement<session::Meta> : public Placement<MObject>
-    { 
-      Placement (session::Meta & m) 
-        : Placement<MObject>::Placement (m) 
-        { };
-        
-    public:
-      virtual session::Meta*
-      operator-> ()  const 
-        { 
-          ENSURE (INSTANCEOF(session::Meta, this.get()));
-          return static_cast<session::Meta*> (shared_ptr::operator-> ()); 
-        }      
-    };
   
   /* a note to the maintainer: please don't add any fields or methods to
    * these subclasses which aren't also present in Placement<MObject>!

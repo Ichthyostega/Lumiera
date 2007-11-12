@@ -65,8 +65,8 @@ namespace mobject
         
       public:
         virtual bool isValid ();
-        virtual void add (PPla& placement);
-        virtual bool remove (PPla& placement);
+        virtual void add (PMO& placement);
+        virtual bool remove (PMO& placement);
         
         virtual EDL&  currEDL ();
         

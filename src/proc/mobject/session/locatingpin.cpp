@@ -31,7 +31,7 @@ namespace mobject
   namespace session
     {
     inline LocatingPin*
-    cloneChain (scoped_ptr<LocatingPin>& chain)
+    cloneChain (const scoped_ptr<LocatingPin>& chain)
     {
       if (!chain) 
         return 0;
@@ -51,14 +51,14 @@ namespace mobject
     LocatingPin& 
     LocatingPin::operator= (const LocatingPin& other)
     {
-      if (this!=other) 
-        this.next_.reset (cloneChain (other.next_));
+      if (this != &other) 
+        this->next_.reset (cloneChain (other.next_));
       return *this;
     }
     
     
     LocatingPin* 
-    LocatingPin::clone ()
+    LocatingPin::clone ()  const
     {
       return new LocatingPin(*this);
     }
@@ -76,8 +76,8 @@ namespace mobject
       else
         {
           scoped_ptr<LocatingPin> tmp_next (newLp);
-          tmp_next->next_.swap(this.next_);
-          this.next_.swap(tmp_next);
+          tmp_next->next_.swap(next_);
+          next_.swap(tmp_next);
           return *newLp;
         }
     }
@@ -93,12 +93,12 @@ namespace mobject
      *  @todo we are packing and unpacking the information (time,track)
      *        several times. Ichthyo considers a more elegant solution.
      */
-    const FixedLocation
+    const LocatingPin::SolutionData
     LocatingPin::resolve ()  const
     {
       LocatingSolution solution;
       resolve (solution);
-      return FixedLocation (solution.getTime(), solution.getTrack());
+      return SolutionData (solution.getTime(), solution.getTrack());
     }
     
     bool 
@@ -109,22 +109,15 @@ namespace mobject
       return solution.is_impossible(); 
     }
 
-    
-    inline bool
-    still_to_solve (LocatingPin::LocatingSolution& solution) 
-    { 
-      return !(solution.is_definite() || solution.is_impossible()); 
-    }
-    
+
     
     void 
     LocatingPin::resolve (LocatingSolution& solution)  const
     {
-      if (!still_to_solve(solution)) 
+      if (!solution.still_to_solve()) 
         return;
-      this.intersect (solution);
-      if (this.next_ && 
-          still_to_solve (solution))
+      this->intersect (solution);
+      if (next_ && solution.still_to_solve())
         next_->resolve(solution);
     }
     
@@ -132,7 +125,7 @@ namespace mobject
     void 
     LocatingPin::intersect (LocatingSolution& solution)  const
     {
-      REQUIRE (still_to_solve (solution));
+      REQUIRE (solution.still_to_solve());
       // base class Implementation is NOP...
     }
     
@@ -170,6 +163,14 @@ namespace mobject
       return impo;
     }
     
+    bool
+    LocatingPin::LocatingSolution::still_to_solve () 
+    { 
+      return !(is_definite() || is_impossible()); 
+    }
+    
+    
+    
     
     
 
@@ -178,18 +179,18 @@ namespace mobject
     /* === Factory functions for adding LocatingPins === */
     
     FixedLocation&    
-    LocatingPin::operator() (Time, Track)
+    LocatingPin::operator() (Time start, Track track)
     {
       return static_cast<FixedLocation&> 
-                (this.addChain (new FixedLocation (Time, Track)));
+                (addChain (new FixedLocation (start, track)));
     }
     
     
     RelativeLocation& 
-    LocatingPin::operator() (PMO refObj, Time offset=0)
+    LocatingPin::operator() (PMO refObj, Time offset)
     {
       return static_cast<RelativeLocation&> 
-                (this.addChain (new RelativeLocation (Time, Track)));
+                (addChain (new RelativeLocation (refObj, offset)));
     }
     
     

@@ -26,6 +26,47 @@
 namespace asset
   {
   
+  namespace
+    {
+      /** @internal derive a sensible asset ident tuple
+       *  when creating a asset::Clip based on some asset::Media
+       *  @todo getting this one is important for handling creation
+       *        of multiple clip instances from one media. Means we
+       *        have still to figure out a sensible concept...
+       */
+      const Asset::Ident
+      createClipIdent (const Media& mediaref)
+        {
+          string name (mediaref.ident.name + "-clip");  // TODO something sensible here; append number, sanitize etc.
+          Category category (mediaref.ident.category);
+          category.setPath(CLIP_SUBFOLDER);
+          return Asset::Ident (name, category, 
+                               mediaref.ident.org, 
+                               mediaref.ident.version );
+          
+        }
+      
+      Media::PClipMO
+      createClipMO (const ID<Media>& mediaID)
+        {
+          return mobject::MObject::create(
+                     AssetManager::instance()
+                               .getAsset (mediaID));
+        }
+    }
+  
+  
+  
+  Clip::Clip (const Media& mediaref)
+    : Media (createClipIdent (mediaref),
+             mediaref.getFilename())
+    , source_ (mediaref) 
+    , clipMO_ (createClipMO (this->getID()))
+  {
+    
+  }
+  
+  
   /** Directly object creating specialisation of the 
    *  asset::Media interface method: immediately starting
    *  out from this asset::Clip and doing the actual 
@@ -35,12 +76,12 @@ namespace asset
   Media::PClipMO 
   Clip::createClip ()
   {
-    if (!this.clipMO_)
-      this.clipMO_ = MObject::create(
-                       AssetManager::instance()
-                          .getAsset (this.getID()));
+    if (!clipMO_)
+      clipMO_ = mobject::MObject::create(
+                  AssetManager::instance()
+                     .getAsset (this->getID()));
     
-    return this.clipMO_;
+    return clipMO_;
   }
   
   
@@ -51,7 +92,7 @@ namespace asset
   Clip::getClipAsset ()
   {
     return PClip (AssetManager::instance()
-                    .getAsset (this.getID()));
+                    .getAsset (this->getID()));
   }
   
   
@@ -61,7 +102,7 @@ namespace asset
   Media::PMedia
   Clip::checkCompound ()
   {
-    return this.source_.checkCompound();
+    return source_.checkCompound();
   }
 
 

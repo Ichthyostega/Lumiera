@@ -38,20 +38,25 @@ namespace asset
       /** media source of this clip  */
       const Media& source_;
       
-      /** the corresponding (dependant) clip-MO */
+      /** the corresponding (dependant) clip-MO 
+       *  @todo seems to be obsolete by the reworked design of multichannel media 11/07 */
       PClipMO clipMO_;
       
     public:
       virtual PClipMO createClip ();
       virtual PMedia checkCompound ();
       
-    private:
-      Clip (const Media& mediaref) : source_(mediaref) {};
+    protected:
+      Clip (const Media& mediaref);
       friend class MediaFactory;
       
       virtual PClip getClipAsset ();
 
     };
+    
+    typedef shared_ptr<const asset::Clip> PClipAsset;
+    
+    const string CLIP_SUBFOLDER = "clips";      // TODO: handling of hard-wired constants....
     
     
     

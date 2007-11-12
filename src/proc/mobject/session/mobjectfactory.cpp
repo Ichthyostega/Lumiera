@@ -48,7 +48,7 @@ namespace mobject
     Placement<Clip>   
     MObjectFactory::operator() (PClipAsset& mediaDef)
     {
-      return Placement<Clip> (new Clip (mediaDef));
+      return Placement<Clip> (*new Clip (mediaDef), &deleterFunc);
     }
     
     

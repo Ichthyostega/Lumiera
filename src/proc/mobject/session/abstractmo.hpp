@@ -34,10 +34,12 @@ namespace mobject
     {
 
 
+    /**
+     *  abstract base class of all MObjects for providing common services.
+     *  @todo seems that we don't need this intermediate class...
+     */
     class AbstractMO : public MObject
       {
-        ////////////// TODO: work out common services to provide!!!!
-        shared_ptr<Placement> placement_;
         
       public:
         
@@ -45,13 +47,6 @@ namespace mobject
         
         virtual Time& getLength() { return length; }
         
-      protected:
-        /** custom deleter func allowing class Placement 
-          *  to take ownership of MObjct instances
-          */
-        static void destroy (MObject* o) { delete o; }
-        
-        friend class Placement;
 
      };
 

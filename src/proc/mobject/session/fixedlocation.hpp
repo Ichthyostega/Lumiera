@@ -51,11 +51,12 @@ namespace mobject
         
       protected:
         FixedLocation (Time ti, Track tra) : time_(ti), track_(tra) {};
+        friend class LocatingPin;
         
         virtual void intersect (LocatingSolution&)  const;
         
       public:
-        virtual LocatingPin* clone ()  const;
+        virtual FixedLocation* clone ()  const;
         
       };
 

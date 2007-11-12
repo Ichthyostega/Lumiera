@@ -29,8 +29,8 @@ namespace mobject
   namespace session
     {
 
-    LocatingPin* 
-    LocatingPin::clone ()
+    RelativeLocation* 
+    RelativeLocation::clone ()  const
     { 
       return new RelativeLocation (*this); 
     }
