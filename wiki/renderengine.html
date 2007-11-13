@@ -1411,14 +1411,14 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 [[Admin]]
 &lt;&lt;fullscreen&gt;&gt;</pre>
 </div>
-<div title="ManagementAssetRelation" modifier="Ichthyostega" modified="200710191600" created="200708100337" tags="impl" changecount="6">
+<div title="ManagementAssetRelation" modifier="Ichthyostega" modified="200711130118" created="200708100337" tags="impl" changecount="8">
 <pre>Problem is: when removing an Asset, all corresponding MObjects need to disappear. This means, besides the obvious ~Ref-Link (MObject referring to an asset) we need backlinks or a sort of registry. And still worse: we need to remove the affected MObject from the object network in the EDL and rebuild the Fixture...
 
 &amp;rarr; for a general design discussion see [[Relation of Clip and Asset|RelationClipAsset]]
 
 As a //first shot// Ichthyo considers the following approach:
 * all references between MObjects and Assets are implemented as __refcounting__ boost::shared_ptr
-* the opposite direction is also a __strong references__, effectively keeping the clip-MO alive even if it is no longer in use in the session (note this is a cyclic dependency that needs to be actively broken on deletion). This design decision is based on  logical considerations (&amp;rarr; see &quot;deletions, Model-2&quot; [[here|RelationClipAsset]]). The back-link is needed only for clean deletion of Assets and for GUI search functions.
+* the opposite direction is also a __strong reference__, effectively keeping the clip-MO alive even if it is no longer in use in the session (note this is a cyclic dependency that needs to be actively broken on deletion). This design decision is based on  logical considerations (&amp;rarr; see &quot;deletions, Model-2&quot; [[here|RelationClipAsset]]). This back-link is implemented by a Placement which is stored internally within the asset::Clip, it is needed for clean deletion of Assets, for GUI search functions and for adding the Clip to the EDL (again after been removed, or multiple times as if cloned).
 * MObjects and Assets implement an {{{unlink()}}} function releasing the internal links to other entities.
 * Instead of a delete, we call this unlink() function and let the shared_ptr handle the actual deletion.
 * we don't use a registry, rather we model the real dependencies by individual dependency links. So a MediaAsset gets links to all Clips created from this Asset and by traversing this tree, we can handle the deletion
@@ -1494,24 +1494,24 @@ So, when creating a clip out of such a compound media asset, the clip has to be 
 * we distinguish elementay (non-compound) Clips from compound clips by concrete subtype. The builder can only handle elementary clips, because he needs to build a separate pipeline for every output channel. So the work of splitting common effect stacks for clips with several channels needs to be done when calculating the Fixture for the current EDL. The Builder expects to be able to build the render nodes corresponding to each entity found in the Fixture one by one.
 * the Builder gets at the ProcPatt (descriptor) of the underlying media for each clip and uses this description as a template to build the render pipeline. That is, the ProcPatt specifies the codec asset and maybe some additional effect assets (deinterlace, scale) necessary for feeding media data corresponding to this clip/media into the render nodes network.</pre>
 </div>
-<div title="ObjectCreation" modifier="Ichthyostega" modified="200710090219" created="200709030139" tags="impl design" changecount="15">
+<div title="ObjectCreation" modifier="Ichthyostega" modified="200711130113" created="200709030139" tags="impl design" changecount="17">
 <pre>We have to consider carefully how to handle the Creation of new class instances. Because, when done naively, it can defeat all efforts of separating subsystems, or &amp;mdash; the other extreme &amp;mdash; lead to a //switch-on-typeID//  programming style. We strive at a solution somewhere in the middle by utilizing __Abstract Factories__ on Interface or key abstraction classes, but providing specialized overloads for the different use cases. So in each use case we have to decide if we want to create a instance of some general concept (Interface), or if we have a direct collaboration and thus need the Factory to provide a more specific sub-Interface or even a concrete type.
 
 !Object creation use cases
 !![[Assets|Asset]]
 |!Action|&gt;|!creates |
 |loading a media file|asset::Media, asset::Codec| |
-|viewing media|asset::Clip| for the whole Media, if not already existent|
-|mark selection as clip|asset::Clip| doesn't add to EDL|
+|viewing media|asset::Clip, session::Clip and Placement (on hold)| for the whole Media, if not already existent|
+|mark selection as clip|asset::Clip, session::Clip, Placement with unspec. LocatingPin| doesn't add to EDL|
 |loading Plugin|asset::Effect| usually at program startup|
 |create Session|asset::Track, asset::OutPort| |
 &amp;rarr; [[Creating and registering Assets|AssetCreation]]
 
 !![[MObjects|MObject]]
-|add media to EDL|asset::Clip, session::Clip, FixedPlacement| creating whole-media clip on-the-fly |
-|add Clip|session::Clip, FixedPlacement| |
-|attach Effect|session::Effect, RelativePlacement| |
-|start using Automation|session::Auto, asset::Dataset, RelativePlacement| |
+|add media to EDL|asset::Clip, session::Clip, Placement with unspecified LocatingPin| creating whole-media clip on-the-fly |
+|add Clip to EDL|copy of Placement| creates intependent Placement of existing ~Clip-MO|
+|attach Effect|session::Effect, Placement with RelativeLocation| |
+|start using Automation|session::Auto, asset::Dataset, RelativeLocation Placement| |
 
 !Invariants
 when creating Objects, certain invariants have to be maintained. Because creating an Object can be considered an atomic operation and must not leave any related objects in an inconsistent state. Each of our interfaces implies some invariants:

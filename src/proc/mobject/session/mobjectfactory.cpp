@@ -46,9 +46,9 @@ namespace mobject
      *  @todo implement creation of multichannel CompoundClip
      */
     Placement<Clip>   
-    MObjectFactory::operator() (PClipAsset& mediaDef)
+    MObjectFactory::operator() (PMedia& mediaDef, PClipAsset& clipRef)
     {
-      return Placement<Clip> (*new Clip (mediaDef), &deleterFunc);
+      return Placement<Clip> (*new Clip (mediaDef,clipRef), &deleterFunc);
     }
     
     
@@ -56,7 +56,7 @@ namespace mobject
     Placement<Effect>
     MObjectFactory::operator() (asset::Effect processorDef)
     {
-      
+      UNDEFINED ("fabricate effect-MO");
     }
 
 

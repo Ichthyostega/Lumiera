@@ -63,9 +63,10 @@ namespace mobject
 
         //TODO: where to put the duration ???
         
-        PClipAsset mediaDef_;
+        PMedia mediaDef_;
+        PClipAsset clipRef_;
 
-        Clip (PClipAsset& mediaDef);
+        Clip (PMedia& mediaDef, PClipAsset& clipRef);
         friend class MObjectFactory;
         
         
@@ -75,11 +76,7 @@ namespace mobject
         virtual bool isValid()  const;
         
         /** access the underlying media asset */
-        virtual PMedia getMedia ()                        
-          { 
-            UNIMPLEMENTED ("how to relate MObjects and media assets...");
-            //return AssetManager::instance().getAsset(IDA(0)); // KABOOM! (just to make it compile)
-          }
+        virtual PMedia getMedia ()  const;
         
       };
       

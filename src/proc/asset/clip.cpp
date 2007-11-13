@@ -51,7 +51,7 @@ namespace asset
         {
           return mobject::MObject::create(
                      AssetManager::instance()
-                               .getAsset (mediaID));
+                               .getAsset (mediaID));  //////TODO: to service the new session::Clip ctor, somehow have to solve the "shared ptr from this" problem
         }
     }
   
@@ -77,9 +77,7 @@ namespace asset
   Clip::createClip ()
   {
     if (!clipMO_)
-      clipMO_ = mobject::MObject::create(
-                  AssetManager::instance()
-                     .getAsset (this->getID()));
+      clipMO_ = createClipMO (this->getID());
     
     return clipMO_;
   }
