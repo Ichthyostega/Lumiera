@@ -755,12 +755,26 @@ This is an very important external Interface, because it links together all thre
 <pre>RenderEngine
 </pre>
 </div>
-<div title="DesignGoals" modifier="MichaelPloujnikov" modified="200706271507" created="200706210557" tags="design" changecount="9">
-<pre>As always, the main goal is //to cut down complexity// by the usual approach to separate into small manageable chunks.
+<div title="DesignGoals" modifier="Ichthyostega" modified="200711122343" created="200706210557" tags="design" changecount="13">
+<pre>This __proc-Layer__ and ~Render-Engine implementation started out as a design-draft by [[Ichthyo|mailto:Ichthyostega@web.de]] in summer 2007. The key idea of this design-draft is to use the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]] for the Render Engine, thus separating completely the //building// of the Render Pipeline from //running,// i.e. doing the actual Render. The Nodes in this Pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder.
+
+!Why doesn't the current Cinelerra-2 Design succeed?
+The design of Cinelerra-2 basically follows a similar design, but __fails because of two reasons__
+# too much differentiation is put into the class hierarchy instead of configuring Instances differently.&lt;br&gt;This causes overly heavy use of virtual functions and -- in order to ameliorate this -- falling back to hard wired branching
+# far too much coupling and back-coupling to the internals of the EDL, forcing a overly rigid structure on the latter
+
+!Try to learn from this
+* build up an [[Node Abstraction|ProcNode]] powerful enough to express //all necessary Operations// without the need to recure on the actual object type
+* need to redesign the internals of the EDL in a far more open manner. See MObjects
+* strive at a StrongSeparation between EDL and Render Engine
+
+
+!Design Goals
+As always, the main goal is //to cut down complexity// by the usual approach to separate into small manageable chunks.
 
 To achieve this, here we try to separate ''Configuration'' from ''Processing''. Further, in Configuration we try to separate the ''high level view'' (users view when editing) from the ''low level view'' (the actual configuration effective for the calculations). Finally, we try to factor out and encapsulate ''State'' in order to make State explicit.
 
-The main tool used to implement this separation is the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]. Here especially we move all decisions and parametrization into the BuildProcess. The Nodes in this Pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder. Make the actual processing nodes Template classes, parametrized by the color model and number of components. Make all Nodes of equal footing with each other, able to be connected freely within the limitations of the necessary input and output. Make the OpenGL rendering into alternate implementation of some operations together with an alternate signal flow (usable only if the whole Pipeline can be built up to support this changed signal flow), thus factoring out all the complexities of managing the data flow between core and hardware accelerated rendering out of the implementation of the actual processing. Introduce separate control data connections for the automation data, separating the case of true multi-channel-effects from the case where one node just gets remote controlled by another node (or two nodes using the same automation data).
+The main tool used to implement this separation is the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]. Here especially we move all decisions and parametrization into the BuildProcess. The Nodes in the render pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder. Make the actual processing nodes Template classes, parametrized by the color model and number of components. Make all Nodes of equal footing with each other, able to be connected freely within the limitations of the necessary input and output. Make the OpenGL rendering into alternate implementation of some operations together with an alternate signal flow (usable only if the whole Pipeline can be built up to support this changed signal flow), thus factoring out all the complexities of managing the data flow between core and hardware accelerated rendering out of the implementation of the actual processing. Introduce separate control data connections for the automation data, separating the case of true multi-channel-effects from the case where one node just gets remote controlled by another node (or two nodes using the same automation data).
 
 Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the EDL in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
 </pre>
@@ -1520,18 +1534,18 @@ But because I know the opinions on this topc are varying (users tend to be delig
 My proposed aproach is to treat OpenGL as a separate video raw data type, requiring separete and specialized [[Processing Nodes|ProcNode]] for all calculations. Thus the Builder could connect OpenGL nodes if it is possible to cover the whole render path for preview and fall back to the normal ~ProcNodes for all relevant renders
 </pre>
 </div>
-<div title="Overview" modifier="Ichthyostega" modified="200709030125" created="200706190300" tags="overview" changecount="4">
-<pre>The Cinelerra-3 Processing Layer is comprised of various subsystems and can be separated into a low-level and a high-level part. At the low-level end is the [[Render Engine|OverviewRenderEngine]] which basically is a network of render nodes cooperating closely with the Backend Layer in order to carry out the actual playback and media transforming calculations. Whereas on the high-level side we find several different [[Media Objects|MObjects]] that can be placed into the [[EDL]], edited and manipulated. This is complemented by the [[Asset Management|Asset]], which is the &quot;bookkeeping view&quot; of all the different &quot;things&quot; within each Session.
+<div title="Overview" modifier="Ichthyostega" modified="200711122342" created="200706190300" tags="overview" changecount="6">
+<pre>The Cinelerra-3 Processing Layer is comprised of various subsystems and can be separated into a low-level and a high-level part. At the low-level end is the [[Render Engine|OverviewRenderEngine]] which basically is a network of render nodes cooperating closely with the Backend Layer in order to carry out the actual playback and media transforming calculations. Whereas on the high-level side we find several different [[Media Objects|MObjects]] that can be placed into the [[EDL]], edited and manipulated. This is complemented by the [[Asset Management|Asset]], which is the &quot;bookkeeping view&quot; of all the different &quot;things&quot; within each [[Session|SessionOverview]].
 [img[Block Diagram|uml/fig128005.png]]
 </pre>
 </div>
-<div title="OverviewRenderEngine" modifier="MichaelPloujnikov" modified="200706271432" created="200706190647" tags="overview" changecount="17">
+<div title="OverviewRenderEngine" modifier="Ichthyostega" modified="200711130002" created="200706190647" tags="overview" changecount="18">
 <pre>Render Engine, [[Builder]] and [[Controller]] are closely related Subsystems. Actually, the [[Builder]] //creates// a newly configured Render Engine //for every// RenderProcess. Before doing so, it queries from the Session (or, to be more precise, from the [[Fixture]] within the current Session) all necessary Media Object Placement information. The [[Builder]] then derives from this information the actual assembly of [[Processing Nodes|ProcNode]] comprising the Render Engine. Thus:
  * the source of the build process is a sequence of absolute (explicit) [[Placements|Placement]] called the [[Playlist]]
  * the [[build process|BuildProcess]] is driven, configured and controlled by the [[Controller]] subsystem component. It encompasses the actual playback configuration and State of the System.
  * the resulting Render Engine is a list of [[Processors]], each configured to calculate a segment of the timeline with uniform properties. Each of these Processors in turn is a graph of interconnected ProcNode.s.
 
-see also: RenderEntities
+see also: RenderEntities, [[two Examples (Object diagrams)|Examples]] 
 
 [img[Overview: Components of the Renderengine|uml/fig128261.png]]
 </pre>
@@ -2419,21 +2433,18 @@ The link between ~MObject and Asset should be {{{const}}}, so the clip can't cha
 At first sight the link between asset and clip-MO is a simple logical relation between entities, but it is not strictly 1:1 because typical media are [[multichannel|MultichannelMedia]]. Even if the media is compound, there is //only one asset::Clip//, because in the logical view we have only one &quot;clip-thing&quot;. On the other hand, in the Session/EDL, we have a compound clip ~MObject comprised of several elementary clip objects, each of which will refer to its own sub-media (channel) within the compound media (and don't forget, this structure can be tree-like)
 {{red{open question:}}} do the clip-MO's of the individual channels refer directly to asset::Media? does this mean the relation is different from the top level, where we have a relation to a asset::Clip??</pre>
 </div>
-<div title="RenderEngine" modifier="Ichthyostega" modified="200708050630" created="200706190056" tags="overview" changecount="40">
-<pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[this aspect|MObjects]] as well.
+<div title="RenderEngine" modifier="Ichthyostega" modified="200711122340" created="200706190056" tags="overview" changecount="44">
+<pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
+&lt;&lt;&lt;
+''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a //first, draft, prototypical// implementation in C++
+&lt;&lt;&lt;
 
-The key idea of Ichthyo's Design-draft is to use the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]] for the Render Engine, thus separating completely the //building// of the Render Pipeline from //running,// i.e. doing the actual Render. The Nodes in this Pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder.
-([[more on the Design Goals|DesignGoals]])
+!Summary
+We have several kinds of &quot;things&quot; organized as [[assets|Asset]] in the AssetManager, like media, clips, effects, codecs, configuration templates. Within the context of the [[EDL]], we can use these as [[&quot;Media Objects&quot;|MObjects]] &amp;mdash; especially, we can [[place|Placement]] them in various kinds within the EDL and relative to one another. Basically, this is the [[editing work|EditingOperations]] done by the user.
 
-!Why doesn't the current Design succeed with this?
-The design of Cinelerra 2 basically follows this design, but __fails because of two reasons__
-# too much differentiation is put into the class hierarchy instead of configuring Instances differently.&lt;br&gt;This causes overly heavy use of virtual functions and -- in order to ameliorate this -- falling back to hard wired branching
-# far too much back-coupling to the internals of the [[EDL]], forcing a overly rigid structure on the latter
+Now, from any given configuration within the EDL, we create sort or a frozen- and tied-down snapshot, here called [[&quot;Fixture&quot;|Fixture]], containing all currently active ~MObjects, broken down to elementary parts and made explicit if necessary. This Fixture acts as a isolation layer towards the Render Engine. We will hand it over to the  [[Builder]], which in turn will transform it into a network of connected [[render nodes|ProcNode]]. This network //is// the [[Render Engine|OverviewRenderEngine]].
 
-!Try to learn from this
-* build up an [[Node Abstraction|ProcNode]] powerful enough to express //all necessary Operations// without the need to recure on the actual object type
-* need to redesign the internals of the EDL in a far more open manner. See MObjects
-* strive at a StrongSeparation between EDL and Render Engine
+The system is ''open'' inasmuch every part mirrors the structure of corresponding parts in adjacent subsystems, and the transformation of any given structure from one subsystem (e.g. Asset) to another (e.g. Render Engine) is done with minimal &quot;magic&quot;. So the whole system should be able to handle completely new structures mostly by adding new configurations and components, without much need of rewriting basic workings.
 
 !!see also
 &amp;rarr; [[Overview]] of Subsystems and Components, and DesignGoals
@@ -2879,7 +2890,7 @@ function addKeyDownHandlers(e)
 
 </pre>
 </div>
-<div title="WalkThrough" modifier="MichaelPloujnikov" modified="200706271449" created="200706210625" tags="overview" changecount="34">
+<div title="WalkThrough" modifier="Ichthyostega" modified="200711122353" created="200706210625" tags="overview" changecount="35">
 <pre>The Intention of this text is to help you understanding the design and to show some notable details.
 
 !!!!Starting Point
@@ -2910,7 +2921,7 @@ An important goal of this approach is to be able to push down the treatment of v
 In case it's not already clear: we don't have &quot;the&quot; Render Engine, rather we construct a Render Engine for each structurally differing part of the timeline. (please relate this to the current Cinelerra code base, which constructs and builds up the render pipeline for each frame separately). No need to call back from within the pipeline to find out if a given plugin is enabled or to see if there are any automation keyframes. We don't need to pose any constraints on the structuring of the objects in the EDL, besides the requirement to get an ExplicitPlacement for each. We could even loosen the use of the common metaphor of placing media sequences on fixed tracks, if we want to get at a more advanced GUI at some point in the future.
 
 !!!!Stateless Subsystems
-The &amp;raquo;current setup&amp;laquo; of the objects in the EDL is sort of a global state. Same holds true for the Controller, as the Engine can be at playback, it can run a background render or scrub single frames. But the whole complicated subsystem of the Builder and one given Render Engine configuration can be made ''stateless''. As a benefit of this we can run this subsystems multi-threaded without the need of any precautions (locking, synchronizing). Because all state information is just passed in as function parameters and lives in local variables on the stack, or is contained in the StateProxy which represents the given render //process// and is passed down as function parameter as well. (note: I use this term in the usual, slightly relaxed manner; of course there are some configuration values contained in instance variables of the objects carrying out the calculations, but this values are considered to be constant over the course of the object usage).
+The &amp;raquo;current setup&amp;laquo; of the objects in the EDL is sort of a global state. Same holds true for the Controller, as the Engine can be at playback, it can run a background render or scrub single frames. But the whole complicated subsystem of the Builder and one given Render Engine configuration can be made ''stateless''. As a benefit of this we can run this subsystems multi-threaded without the need of any precautions (locking, synchronizing). Because all state information is just passed in as function parameters and lives in local variables on the stack, or is contained in the StateProxy which represents the given render //process// and is passed down as function parameter as well. (note: I use the term &quot;stateless&quot; in the usual, slightly relaxed manner; of course there are some configuration values contained in instance variables of the objects carrying out the calculations, but this values are considered to be constant over the course of the object usage).
 </pre>
 </div>
 </div>
