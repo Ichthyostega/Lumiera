@@ -44,7 +44,7 @@ namespace asset
     {
     protected:
       /** elementary media assets comprising this compound */
-      vector<Media *> tracks;
+      vector<Media *> tracks;  // TODO: shouldn't we use shared_ptr here???
 
     };
     

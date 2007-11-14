@@ -28,10 +28,16 @@ namespace mobject
   {
 
 
-  /** */
-  template<class MO>
+  /** @note we know we need only this single
+   *        specialisation, because we define 
+   *        the Placements of more specific 
+   *        MObject kinds to be subclasses
+   *        of Placement<MObject>, so they
+   *        will inherit this function.
+   */
+  template<>
   ExplicitPlacement
-  Placement<MO>::resolve ()  const 
+  Placement<MObject>::resolve ()  const 
     { 
       return ExplicitPlacement (*this, chain.resolve()); 
     }

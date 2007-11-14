@@ -47,33 +47,42 @@ namespace mobject
     {
     namespace test
       {
-        
+      class TestPlacement;
+       
       /**
        * Sample or Test Clip for checking
        * various EDL, session and builder operations.
-       * Can be used as Mock object to record invoked operations.
+       * @todo make this usable as Mock object to record invoked operations.
        * 
        */
       class TestClip   : public mobject::session::Clip   /////////////TODO how this????
         {
           
-          /** smart ptr factory allowed to invoke TestClip's ctor */
-          struct Factory : cinelerra::Factory<TestClip>
-            {
-              typedef shared_ptr<TestClip> PType;
-              PType operator() () { return PType (new TestClip, &destroy); }
-            protected:
-              static void destroy (TestClip* tc) { delete tc; }
-            };
-          
-          
-          TestClip ();  
-          friend class Factory;  
+          TestClip ();
+          static void deleter (MObject* mo) { delete (TestClip*)mo; }
+
+          friend class TestPlacement;  
           
         public:
-          static Factory create;
+          static Placement<Clip> create () ;
         };
+
         
+      class TestPlacement : public Placement<Clip>
+        {
+          
+        public:
+          TestPlacement (TestClip & subject)
+            : Placement<Clip> (subject, &TestClip::deleter)
+            { }
+        };
+
+        
+      inline Placement<Clip>
+      TestClip::create()
+      { 
+        return TestPlacement (*new TestClip); 
+      }
     
     
     

@@ -112,6 +112,7 @@ namespace asset
        *  @return pointer to parent, or \code null
        */
       virtual PMedia checkCompound ()  const;
+      friend class asset::Clip;    ////////////////////////TODO better interface!!!
 
     };
     
@@ -141,7 +142,7 @@ namespace asset
       PType operator() (const char* file, const Category& cat);
       PType operator() (const char* file, asset::Kind);
       
-      shared_ptr<asset::Clip>&
+      shared_ptr<asset::Clip>
       operator() (const asset::Media& mediaref)  throw(cinelerra::error::Invalid);
 
     };

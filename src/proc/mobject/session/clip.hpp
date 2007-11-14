@@ -31,7 +31,6 @@ namespace asset
   {
     class Media;
     class Clip;
-    typedef shared_ptr<const asset::Clip> PClipAsset;
   }
 
 namespace mobject
@@ -39,7 +38,6 @@ namespace mobject
   namespace session
     {
     using asset::Media;
-    using asset::PClipAsset;
     typedef shared_ptr<Media> PMedia;
 
 
@@ -51,8 +49,8 @@ namespace mobject
      * into the ouput. The actual media type of a clip will be derived
      * at runtime by resolving this reference to the underlying Asset.
      * 
-     * TODO: define how to denote Time positions /lengths. This is tricky,
-     * because it depends on the actual media type, and we wand to encapsulate
+     * @todo define how to denote Time positions /lengths. This is tricky,
+     * because it depends on the actual media type, and we want to encapsulate
      * all these details as much as possible. 
      */
     class Clip : public AbstractMO
@@ -63,10 +61,10 @@ namespace mobject
 
         //TODO: where to put the duration ???
         
-        PMedia mediaDef_;
-        PClipAsset clipRef_;
+        const Media & mediaDef_;
+        const asset::Clip & clipDef_;
 
-        Clip (PMedia& mediaDef, PClipAsset& clipRef);
+        Clip (const asset::Clip&, const Media&);
         friend class MObjectFactory;
         
         
@@ -76,7 +74,7 @@ namespace mobject
         virtual bool isValid()  const;
         
         /** access the underlying media asset */
-        virtual PMedia getMedia ()  const;
+        PMedia getMedia ()  const;
         
       };
       

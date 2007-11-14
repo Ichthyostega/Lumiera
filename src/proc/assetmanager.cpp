@@ -33,6 +33,7 @@
 #include <boost/format.hpp>
 #include <boost/bind.hpp>
 
+using std::tr1::static_pointer_cast;
 using boost::format;
 using boost::bind;
 //using boost::lambda::_1;
@@ -126,10 +127,9 @@ namespace asset
   }
   
   
-  /**
-   * find and return the object registered with the given ID.
-   * @throws Invalid if nothing is found or if the actual KIND
-   *         of the stored object differs and can't be casted.  
+  /** find and return the object registered with the given ID.
+   *  @throws Invalid if nothing is found or if the actual KIND
+   *          of the stored object differs and can't be casted.  
    */
   template<class KIND>
   shared_ptr<KIND>
@@ -144,6 +144,23 @@ namespace asset
       else
         throw UnknownID (id);
   }
+  
+  /** convienience shortcut for fetching the registered shared_ptr
+   *  which is in charge of the given asset instance. By querying
+   *  directly asset.id (of type ID<Asset>), the call to registry.get()
+   *  can bypass the dynamic cast, because the type of the asset 
+   *  is explicitely given by type KIND. 
+   */
+  template<class KIND>
+  shared_ptr<KIND>
+  AssetManager::getPtr (const KIND& asset)
+  {
+    ENSURE (instance().known(asset.id), 
+            "unregistered asset instance encountered.");
+    return static_pointer_cast<KIND,Asset>
+            (instance().registry.get (asset.id));
+  }
+
 
 
   /**
@@ -228,5 +245,8 @@ namespace asset
   template shared_ptr<Proc>   AssetManager::getAsset (const ID<Proc>&   id)  throw(cinelerra::error::Invalid);
   template shared_ptr<Struct> AssetManager::getAsset (const ID<Struct>& id)  throw(cinelerra::error::Invalid);
   template shared_ptr<Meta>   AssetManager::getAsset (const ID<Meta>&   id)  throw(cinelerra::error::Invalid);
+  
+  template shared_ptr<Media>  AssetManager::getPtr (const Media& asset);
+
   
 } // namespace asset

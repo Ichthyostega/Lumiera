@@ -26,6 +26,7 @@
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/edl.hpp"               // TODO: really neded?
 #include "proc/mobject/session/testsession1.hpp"
+#include "proc/mobject/session/clip.hpp"              // TODO: really neded?
 //#include "common/util.hpp"
 
 //#include <boost/format.hpp>
@@ -38,6 +39,9 @@ using std::cout;
 using proc_interface::AssetManager;
 using proc_interface::PAsset;
 using proc_interface::IDA;
+
+using std::tr1::dynamic_pointer_cast;        /// TODO only temp
+
 
 namespace mobject
   {
@@ -63,16 +67,21 @@ namespace mobject
               PSess sess = Session::current;
               AssetManager& aMang = AssetManager::instance();
               
-              PPla clipPlacement = sess->currEDL().find(SESSION1_CLIP); // global Var asigned in buildTestsession1()
-              PAsset clipAsset = clipPlacement->subject->getMedia();
-              IDA clipAID = clipAsset->getID();
-              ASSERT (clipPlacement);
-              
-              sess->remove (clipPlacement);
-              
-              ASSERT (!sess->currEDL().find(SESSION1_CLIP));            // EDL forgot the Clip/Placement
-              ASSERT (!aMang.known (clipAID));                          // corresponding Clip Asset has disappeared 
-              ASSERT (!clipPlacement->subject->getMedia());             // internal cross-links removed
+              UNIMPLEMENTED("typesafe searching for MObjects in the EDL");
+  
+///////TODO: work out how to search within EDL!!
+//              
+//              PClipMO clipPlacement = sess->currEDL().find(SESSION1_CLIP); 
+//                                                              // global Var asigned in buildTestsession1()
+//              PMedia media = clipPlacement->getMedia();
+//              IDA clipAID = media->getID();
+//              ASSERT (clipPlacement);
+//              
+//              sess->remove (clipPlacement);
+//              
+//              ASSERT (!sess->currEDL().find(SESSION1_CLIP));            // EDL forgot the Clip/Placement
+//              ASSERT (!aMang.known (clipAID));                          // corresponding Clip Asset has disappeared 
+//              ASSERT (!clipPlacement->getMedia());                      // internal cross-links removed
             } 
         };
       

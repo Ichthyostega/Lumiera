@@ -74,6 +74,10 @@ namespace mobject
         { };
         
       friend ExplicitPlacement Placement<MObject>::resolve () const;
+      
+    private:
+      /** copying prohibited, ExplicitPlacement is effectively const! */
+      ExplicitPlacement& operator= (const ExplicitPlacement&);
     };
 
 

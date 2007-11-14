@@ -101,6 +101,8 @@ namespace mobject
           return shared_ptr<MO>::operator-> (); 
         }      
       
+      virtual ~Placement() {};
+
       
       /** interface for defining the kind of placement
        *  to employ, and for controling any additional
@@ -116,7 +118,6 @@ namespace mobject
       
       
     protected:
-      virtual ~Placement() {};
       Placement (MO & subject, void (*moKiller)(MO*)) 
         : shared_ptr<MO> (&subject, moKiller) {};
         

@@ -22,6 +22,10 @@
 
 
 #include "proc/asset/clip.hpp"
+#include "proc/mobject/session/mobjectfactory.hpp"   ////TODO: avoidable?
+
+using std::tr1::static_pointer_cast;
+
 
 namespace asset
   {
@@ -47,11 +51,9 @@ namespace asset
         }
       
       Media::PClipMO
-      createClipMO (const ID<Media>& mediaID)
+      createClipMO (const Clip& thisClipAsset, const Media& mediaChannel)
         {
-          return mobject::MObject::create(
-                     AssetManager::instance()
-                               .getAsset (mediaID));  //////TODO: to service the new session::Clip ctor, somehow have to solve the "shared ptr from this" problem
+          return mobject::MObject::create (thisClipAsset,mediaChannel);
         }
     }
   
@@ -61,27 +63,42 @@ namespace asset
     : Media (createClipIdent (mediaref),
              mediaref.getFilename())
     , source_ (mediaref) 
-    , clipMO_ (createClipMO (this->getID()))
+    , clipMO_ (createClipMO (*this, source_))
   {
     
   }
   
   
-  /** Directly object creating specialisation of the 
-   *  asset::Media interface method: immediately starting
-   *  out from this asset::Clip and doing the actual 
-   *  MObject-creation in case there isn't already 
-   *  a clip-MO linked with this Clip Asset. 
+  /** Specialisation of the asset::Media interface method,
+   *  just returning the already existing Clip-MO. Every
+   *  asset::Clip internally holds a Clip-MO, which has 
+   *  been created alongside. This Clip-MO may have several
+   *  Placements or no placement at all (meaning it need not
+   *  be placed within the EDL) 
    */
   Media::PClipMO 
-  Clip::createClip ()
+  Clip::createClip ()  const
   {
-    if (!clipMO_)
-      clipMO_ = createClipMO (this->getID());
-    
     return clipMO_;
   }
   
+
+
+  /** in spite of asset::Clip being a concrete subclass (and not an asset subinterface),
+   *  we need to create the following explicit specialisation for asset::Clip#getClipAsset.
+   *  Basically, it's a "shared-ptr-from-this"-function.
+   */
+  template<>
+  shared_ptr<Clip>
+  AssetManager::getPtr (const Clip& asset)
+  {
+    ENSURE (instance().known(asset.id), 
+            "unregistered asset instance encountered.");
+    return static_pointer_cast<Clip,Asset>
+            (instance().getAsset (asset.id));
+    
+  }
+
   
   /** return this wrapped into a shared ptr,
    *   because it's already the desired asset::Clip
@@ -89,10 +106,10 @@ namespace asset
   Media::PClip
   Clip::getClipAsset ()
   {
-    return PClip (AssetManager::instance()
-                    .getAsset (this->getID()));
+    return AssetManager::getPtr(*this);
   }
   
+
   
   /** specialisation delegating the decision to
    *  the media asset referred by this clip
@@ -100,9 +117,8 @@ namespace asset
   Media::PMedia
   Clip::checkCompound ()
   {
-    return source_.checkCompound();
+    return source_.checkCompound();       ////////////////////////TODO better interface!!!
   }
-
 
 
 

@@ -30,8 +30,8 @@ namespace cinelerra
 
    // TODO: dummy values; should be adjusted when switching to the real time implementation provided by the backend
   
-   const Time Time::MAX = std::numeric_limits<long>::max();
-   const Time Time::MIN = -MAX;
+   const Time Time::MAX = +std::numeric_limits<long>::max();
+   const Time Time::MIN = -std::numeric_limits<long>::max();
 
 
 } // namespace cinelerra

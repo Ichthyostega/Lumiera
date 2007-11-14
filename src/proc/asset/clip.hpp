@@ -43,14 +43,14 @@ namespace asset
       PClipMO clipMO_;
       
     public:
-      virtual PClipMO createClip ();
-      virtual PMedia checkCompound ();
+      virtual PClipMO createClip ()  const;
       
     protected:
       Clip (const Media& mediaref);
       friend class MediaFactory;
       
       virtual PClip getClipAsset ();
+      virtual PMedia checkCompound ();
 
     };
     

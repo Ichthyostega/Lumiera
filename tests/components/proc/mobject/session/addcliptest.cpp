@@ -60,10 +60,9 @@ namespace mobject
             {
               PSess sess = Session::current;
               PMO clip = TestClip::create();
-              PPla pla = Placement::create(Placement::FIXED, Time(1), clip);
-              sess->add (pla);
+              sess->add (clip);
               
-              ASSERT (sess->currEDL().contains (pla));
+              ASSERT (sess->currEDL().contains (clip));
               // TODO: Clip-Asset and Placement magic??
             } 
         };

@@ -22,6 +22,7 @@
 
 
 #include "proc/mobject/session/clip.hpp"
+#include "proc/assetmanager.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
 
@@ -33,13 +34,11 @@ namespace mobject
     /** new clip-MO linked with the given asset::Clip.
      *  Initially, this clip will cover the whole source media length. 
      */
-    Clip::Clip (PMedia& mediaDef, PClipAsset& clipRef)
+    Clip::Clip (const asset::Clip& clipDef, const Media& mediaDef)
       : start_(0),
         mediaDef_(mediaDef),
-        clipRef_(clipRef)
+        clipDef_(clipDef)
     {
-      REQUIRE (mediaDef_);
-      REQUIRE (clipRef_);
       setupLength();
     }
     
@@ -66,8 +65,7 @@ namespace mobject
     PMedia 
     Clip::getMedia ()  const                        
     { 
-      UNIMPLEMENTED ("how to relate MObjects and media assets...");
-      return mediaDef_->getMedia();
+      return asset::AssetManager::getPtr (mediaDef_);
     }
 
 

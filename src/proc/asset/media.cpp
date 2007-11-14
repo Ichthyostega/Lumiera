@@ -31,12 +31,16 @@
 #include "nobugcfg.h"
 
 #include <boost/regex.hpp>
+#include <boost/format.hpp>
+
 
 using util::isnil;
 
+using boost::format;
 using boost::regex;
 using boost::smatch;
 using boost::regex_search;
+using std::tr1::dynamic_pointer_cast;
 
 
 namespace asset
@@ -71,7 +75,7 @@ namespace asset
     PClipMO clipMO = clipAsset->createClip();
     
     ENSURE (clipMO->isValid());
-    return clip;
+    return clipMO;
   }
   
   
@@ -82,7 +86,7 @@ namespace asset
   Media::PClip
   Media::getClipAsset ()
   {
-    if (PMedia parent = this.checkCompound())
+    if (PMedia parent = this->checkCompound())
       return parent->getClipAsset();
     else
       return Media::create(*this);
@@ -92,10 +96,10 @@ namespace asset
   Media::PMedia
   Media::checkCompound()  const
   {
-    PAsset parents = this.getParents();
-    PMedia parent(0);
+    vector<PAsset> parents = this->getParents();
+    PMedia parent;
     if ( !isnil (parents))  // primary parent is a media asset?
-       parent = dynamic_pointer_cast (parents[0]);
+       parent = dynamic_pointer_cast<Media,Asset> (parents[0]);
     return parent;
   }
   
@@ -204,18 +208,19 @@ namespace asset
    *  @throw Invalid if the given media asset is not top-level,
    *         but rather part or a multichannel (compound) media
    */
-  shared_ptr<asset::Clip>&
+  shared_ptr<asset::Clip>
   MediaFactory::operator() (const asset::Media& mediaref)  throw(cinelerra::error::Invalid)
   {
     if (mediaref.checkCompound())
-      throw cinelerra::error::Invalid (CINELERRA_ERROR_PART_OF_COMPOUND, 
-                                         format("Attempt to create a asset::Clip from the media %s, "
-                                                "which is not toplevel but rather part or a compound "
-                                                "(multichannel) media. Found parent Media %s.") 
-                                                % mediaref 
-                                                % string(mediaref.checkCompound()));
+      throw cinelerra::error::Invalid (str(format("Attempt to create a asset::Clip from the media %s, "
+                                                  "which is not toplevel but rather part or a compound "
+                                                  "(multichannel) media. Found parent Media %s.") 
+                                                  % string(mediaref) 
+                                                  % string(*mediaref.checkCompound()))
+                                      ,CINELERRA_ERROR_PART_OF_COMPOUND
+                                      );
     asset::Clip* pC = new asset::Clip (mediaref);
-    return AssetManager::instance().getAsset (pC->getID());
+    return AssetManager::instance().getPtr (*pC);
   }
   
   CINELERRA_ERROR_DEFINE (PART_OF_COMPOUND, "part of compound used as toplevel element");

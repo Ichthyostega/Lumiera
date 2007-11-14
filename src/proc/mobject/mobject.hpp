@@ -69,6 +69,7 @@ namespace mobject
       
       friend class session::MObjectFactory;
       
+      
     public:
       static session::MObjectFactory create;
       

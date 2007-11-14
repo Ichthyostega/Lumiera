@@ -71,6 +71,9 @@ namespace asset
       /** provide the unique ID for given Asset::Ident tuple */
       static ID<Asset> getID (const Asset::Ident&);
       
+      /** retrieve the registerd shared_ptr for any asset */
+      template<class KIND>
+      static shared_ptr<KIND> getPtr (const KIND& asset);
       
       /** find and return corresponging object */
       template<class KIND>

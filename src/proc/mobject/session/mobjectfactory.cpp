@@ -40,23 +40,32 @@ namespace mobject
      *  into a Placement, which takes ownership. So, when the
      *  render engine gets across this Clip-MO, it is able to
      *  obtain the media information contained in the corresponding
-     *  media asset. Depending on the mediaDef passed in, the 
+     *  media asset. Note this will create a single track clip. 
+     *  @param mediaDef the actual asset::Media to be used 
      *  created Clip could be a compound (multichannel) clip 
      *  comprised of several SimpleClip subobjects.
-     *  @todo implement creation of multichannel CompoundClip
      */
     Placement<Clip>   
-    MObjectFactory::operator() (PMedia& mediaDef, PClipAsset& clipRef)
+    MObjectFactory::operator() (const asset::Clip& clipRef, const asset::Media& mediaDef)
     {
-      return Placement<Clip> (*new Clip (mediaDef,clipRef), &deleterFunc);
+      return Placement<Clip> (*new Clip (clipRef,mediaDef), &deleterFunc);
     }
     
+    /** variant of the Clip-MO factory function, creating
+     *  a multichannel (compound) clip.
+     *  @todo work out the details of multichannel handling
+     */
+    Placement<Clip>
+    MObjectFactory::operator() (const asset::Clip& clipRef, vector<const Media*> mediaTracks)
+    {
+      UNIMPLEMENTED ("build multichannel compound clip-MO");
+    }
     
-    /** */
+    /** */ 
     Placement<Effect>
     MObjectFactory::operator() (asset::Effect processorDef)
     {
-      UNDEFINED ("fabricate effect-MO");
+      UNIMPLEMENTED ("fabricate effect-MO");
     }
 
 

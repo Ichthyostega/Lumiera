@@ -77,10 +77,13 @@ namespace mobject
             } 
           
           static void 
-          check_is_from_EDL (PPla explicitPlacement, EDL& edl)
+          check_is_from_EDL (PMO explicitPlacement, EDL& edl)
             {
-              PPla originalPlacement = explicitPlacement->subject->getPlacement();
-              ASSERT (edl.contains(originalPlacement));
+              
+////TODO do we still support this? can it be replaced by a directly checking predicate on ExplicitPlacement??
+              
+//              PMO originalPlacement = explicitPlacement->subject->getPlacement();
+//              ASSERT (edl.contains(originalPlacement));
             }
         };
       

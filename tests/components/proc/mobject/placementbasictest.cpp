@@ -22,11 +22,14 @@
 
 
 #include "common/test/run.hpp"
+#include "proc/asset/media.hpp"
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/placement.hpp"
+#include "proc/mobject/explicitplacement.hpp"
 #include "common/util.hpp"
+#include "proc/mobject/session/mobjectfactory.hpp"   ////TODO: avoidable?
 
 //#include <boost/format.hpp>
 #include <iostream>
@@ -45,6 +48,7 @@ namespace mobject
     namespace test
       {
       
+      using asset::VIDEO;
       
       
       
@@ -58,13 +62,15 @@ namespace mobject
       class PlacementBasic_test : public Test
         {
           typedef shared_ptr<asset::Media> PM;
+          typedef shared_ptr<asset::Clip> PCA;
           
           virtual void
           run (Arg arg) 
             {
               // create Clip-MObject, which is wrapped into a placement (smart ptr)
               PM media = asset::Media::create("test-1", VIDEO);
-              Placement<Clip> pc = MObject::create(media);
+              PCA clipAsset = Media::create(*media);
+              Placement<Clip> pc = MObject::create (*clipAsset, *media);
 
               // use of the Clip-MObject interface by dereferencing the placement
               PM clip_media = pc->getMedia();
@@ -72,17 +78,17 @@ namespace mobject
               
               // using the Placement interface
               // TODO: how to handle unterdetermined Placement? Throw?
-              FixedLocation & fixloc = pc.chain(Placement::FIXED, Time(1)); // TODO: the track??
+              FixedLocation & fixloc = pc.chain(Time(1)); // TODO: the track??
               ExplicitPlacement expla = pc.resolve();
               ASSERT (expla.time == 1);
               ASSERT (!expla.chain.isOverdetermined());
-              ASSERT (*expla == *pc);
+              //ASSERT (*expla == *pc);  ////////////////////////TODO: definie equality on placements
               
               // now overconstraining with another Placement
-              pc.chain(Placement::FIXED, Time(2));
-              expla = pc.resolve();
-              ASSERT (expla.time == 2); // the latest addition wins
-              ASSERT (expla.chain.isOverdetermined()); 
+              pc.chain(Time(2));
+              ExplicitPlacement expla2 = pc.resolve();
+              ASSERT (expla2.time == 2); // the latest addition wins
+              ASSERT (expla2.chain.isOverdetermined()); 
             } 
         };
       
