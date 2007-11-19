@@ -25,10 +25,17 @@
 #include "proc/assetmanager.hpp"
 #include "common/util.hpp"
 
+#include <boost/function.hpp>
 #include <boost/format.hpp>
+#include <boost/bind.hpp>
 
 
+using boost::bind;
 using boost::format;
+using boost::function;
+using util::contains;
+using util::removeall;
+using util::for_each;
 using util::cStr;
 
 
@@ -70,29 +77,8 @@ namespace asset
   }
 
   
-  /** List of entities this asset depends on or requires to be functional. 
-   *  May be empty. The head of this list can be considered the primary prerequisite
-   */
-  vector<PAsset>
-  Asset::getParents ()  const
-  {
-    UNIMPLEMENTED ("Asset dependencies.");
-  }
-
-
-  /** All the other assets requiring this asset to be functional. 
-   *  For example, all the clips depending on a given media file.
-   *  May be empty. The dependency relation is transitive.
-   */
-  vector<PAsset>
-  Asset::getDependant ()  const
-  {
-    UNIMPLEMENTED ("Asset dependencies.");
-  }
-
-
   /**
-   * weather this asset is swithced on and consequently included
+   * whether this asset is swithced on and consequently included
    * in the fixture and participates in rendering.
    */
   bool
@@ -114,18 +100,44 @@ namespace asset
   }
   
   
+  
+  
+  void
+  Asset::unregister (PAsset& other)  ///< @internal
+  {
+    other->unlink (this->id);  
+  }
+    
   /** release all links to other Asset objects held internally. */
   void 
   Asset::unlink ()
   {
-    UNIMPLEMENTED ("deleting Assets.");
+    function<void(PAsset&)> unregister_me = bind(&Asset::unregister, this,_1);
+    
+    for_each (parents, unregister_me);
+    for_each (dependants, unregister_me);
+    dependants.clear();
+    parents.clear();
   }
       
   /** variant dropping only the links to the given Asset */
   void 
   Asset::unlink (IDA target)
   {
-    UNIMPLEMENTED ("deleting Assets.");
+    PAsset asset (AssetManager::instance().getAsset (target));
+    removeall (dependants,asset);
+    removeall (parents,asset);
+  }
+  
+  
+  void 
+  Asset::defineDependency (PAsset parent)
+  {
+    PAsset p_this (AssetManager::getPtr(*this));
+    REQUIRE (!contains (parent->dependants, p_this));
+    REQUIRE (!contains (this->parents, parent));
+    parents.push_back (parent);
+    parent->dependants.push_back(p_this);
   }
 
   

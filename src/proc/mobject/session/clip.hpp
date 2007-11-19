@@ -59,8 +59,6 @@ namespace mobject
         /** startpos in source */
         Time start_;
 
-        //TODO: where to put the duration ???
-        
         const Media & mediaDef_;
         const asset::Clip & clipDef_;
 

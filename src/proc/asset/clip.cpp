@@ -34,7 +34,7 @@ namespace asset
     {
       /** @internal derive a sensible asset ident tuple
        *  when creating a asset::Clip based on some asset::Media
-       *  @todo getting this one is important for handling creation
+       *  @todo getting this one correct is important for handling creation
        *        of multiple clip instances from one media. Means we
        *        have still to figure out a sensible concept...
        */
@@ -61,7 +61,8 @@ namespace asset
   
   Clip::Clip (const Media& mediaref)
     : Media (createClipIdent (mediaref),
-             mediaref.getFilename())
+             mediaref.getFilename(),
+             mediaref.getLength())
     , source_ (mediaref) 
     , clipMO_ (createClipMO (*this, source_))
   {

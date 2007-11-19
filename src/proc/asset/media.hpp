@@ -50,6 +50,8 @@ namespace asset
   class MediaFactory;
   class ProcPatt;
   
+  using cinelerra::Time;
+  
   
   template<>
   class ID<Media> : public ID<Asset>
@@ -67,6 +69,7 @@ namespace asset
   class Media : public Asset
     {
       string filename_;
+      const Time len_;
       
     public:
       typedef shared_ptr<Media> PMedia;
@@ -97,10 +100,15 @@ namespace asset
        *  necessary for this Media or Clip. This includes
        *  Codecs and postprocessing (stretching, deinterlacing...)
        */
-      PProcPatt howtoProc ();
+      PProcPatt howtoProc ()  const;
+      
+      /** @return the overall length of the media represented by this asset */ 
+      virtual Time getLength ()  const;
+      
       
     protected:
-      Media (const Asset::Ident& idi, const string& file) : Asset(idi), filename_(file) {}
+      Media (const Asset::Ident& idi, const string& file, Time length) 
+        : Asset(idi), filename_(file), len_(length) {}
       friend class MediaFactory;
       
       /** get or create the correct asset::Clip 

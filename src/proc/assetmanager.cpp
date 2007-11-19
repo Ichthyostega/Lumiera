@@ -246,6 +246,7 @@ namespace asset
   template shared_ptr<Struct> AssetManager::getAsset (const ID<Struct>& id)  throw(cinelerra::error::Invalid);
   template shared_ptr<Meta>   AssetManager::getAsset (const ID<Meta>&   id)  throw(cinelerra::error::Invalid);
   
+  template shared_ptr<Asset>  AssetManager::getPtr (const Asset& asset);
   template shared_ptr<Media>  AssetManager::getPtr (const Media& asset);
 
   

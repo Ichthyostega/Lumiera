@@ -102,6 +102,18 @@ namespace util
     return end != std::find(cont.begin(),end, val);
   }
   
+  /** shortcut for removing all copies of an Element
+   *  in any sequencial collection */
+  template <typename SEQ>
+  inline typename SEQ::iterator 
+  removeall (SEQ& coll, typename SEQ::value_type& val)
+  {
+    typename SEQ::iterator collEnd = coll.end();
+    return coll.erase (std::remove (coll.begin(), collEnd, val),
+                       collEnd
+                      );
+  }
+  
   
   /** shortcut for operating on all elements of a container.
    *  Isn't this already defined somewhere? It's so obvious..

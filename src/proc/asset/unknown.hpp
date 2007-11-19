@@ -38,7 +38,7 @@ namespace asset
   class Unknown : public Preview
     {
     protected:
-      Unknown (const Asset::Ident& idi) : Preview(idi) {}
+      Unknown (const Asset::Ident& idi);
       friend class MediaFactory;
     };
     

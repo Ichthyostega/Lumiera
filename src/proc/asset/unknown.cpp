@@ -26,8 +26,15 @@
 namespace asset
   {
   
-  /** */
   
+  const cinelerra::Time DUMMY_TIME (25);
+  
+  /** */
+  Unknown::Unknown (const Asset::Ident& idi)
+    : Preview (idi, "", DUMMY_TIME)
+  {
+    TODO ("do something sensible with the »unknown media« placeholder...");
+  }  
   
   
 } // namespace asset

@@ -57,8 +57,8 @@ namespace mobject
     void 
     Clip::setupLength()
     {
-      UNIMPLEMENTED ("calculate the length of a clip and set length field");
-      // will use mediaDef to query media parameters....
+      TODO ("really calculate the length of a clip and set length field");
+      this->length = mediaDef_.getLength();
     }
     
     

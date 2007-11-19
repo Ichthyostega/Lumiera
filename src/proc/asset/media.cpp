@@ -105,13 +105,20 @@ namespace asset
   
   
   Media::PProcPatt
-  Media::howtoProc ()
+  Media::howtoProc ()  const
   {
     UNIMPLEMENTED ("calculate and return processing pattern for media asset");
     PProcPatt ppatt; //TODO:null
     
     ENSURE (ppatt);
     return ppatt;
+  }
+  
+  
+  cinelerra::Time
+  Media::getLength()  const
+  {
+     return len_;
   }
   
   
@@ -148,8 +155,10 @@ namespace asset
       {
         if (isnil (key.name)) key.name=extractName(file);
         TODO ("file exists?");
+        TODO ("extract media file properties");
+        Time length(25);
         TODO ("detecting and wiring multichannel compound media!");
-        pM = new Media (key,file); 
+        pM = new Media (key,file,length); 
       }
     ASSERT (pM);
     ENSURE (key.category.hasKind (VIDEO) || key.category.hasKind(AUDIO));

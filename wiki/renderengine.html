@@ -1440,7 +1440,7 @@ As a //first shot// Ichthyo considers the following approach:
 [img[Asset Classess|uml/fig130437.png]]
 </pre>
 </div>
-<div title="MemoryManagement" modifier="Ichthyostega" modified="200708100408" created="200708100225" tags="impl decision discuss" changecount="8">
+<div title="MemoryManagement" modifier="Ichthyostega" modified="200711180014" created="200708100225" tags="impl decision discuss" changecount="12">
 <pre>Of course: Cinelerra currently leaks memory and crashes regularilly. For the newly written code, besides retaining the same performance level, a main goal is to use methods and techniques known to support the writing of quality code. So, besides the MultithreadConsiderations, a solid strategy for managing the ownership of allocated memory blocks is necessary right from start.
 
 !Problems
@@ -1448,14 +1448,14 @@ As a //first shot// Ichthyo considers the following approach:
 # Some (not all) parts of the core application are non-deterministic. That means, we can't tie the memory management to any assumptions on behalf of the execution path
 
 !C++ solution
-First of all -- this doesn't concern //every// allocation. It rather means there are certain //dangerous areas// which need to be identified. And as always, instead of carrying the inherent complexities of the problem into the solution, we should rather look for a common solution pattern which helps factoring out the complexity.
+First of all -- this doesn't concern //every// allocation. It rather means there are certain //dangerous areas// which need to be identified. Anyhow, instead of carrying inherent complexities of the problem into the solution, we should rather look for  common solution pattern(s) which help factoring out complexity.
 
-For the case in question this seems to be the ''resource allocation is construction'' pattern. Which boils down to basically never using bare pointers when concerned with ownership. Instead, ownership should be handled by smart-pointers.
+For the case here in question this seems to be the ''resource allocation is construction'' pattern. Which boils down to basically never using bare pointers when concerned with ownership. Instead, ownership should be handled by smart-pointers.
 
 !!usage scenarios
 # __existence is being used__: Objects just live for being referred to in a object network. In this case, use refcounting smart-pointers for every ref. (note: problem with cyclic refs)
 # __entity bound ownership__: Objects can be tied to some long living entity in the program, which holds the smart-pointer
-#* if the existence of these ref-holding entity can be //guaranteed// (like a contract), then the other users can build a object network with conventional pointers
+#* if the existence of these ref-holding entity can be //guaranteed// (as if by contract), then the other users can build a object network with conventional pointers
 #* otherwise, when the ref-holding entity //can disappear// in a regular program state, we need weak-refs and checking (because by our postulate the controlled resource needs to be destructed immediately, otherwise we would have the first case, existence == being used)
 
 !!!dangerous uses
@@ -1470,7 +1470,7 @@ For the case in question this seems to be the ''resource allocation is construct
 * the EDL and the defined [[Asset]]s belong together to one Session. If the Session is closed, this means a internal shutdown of the whole ProcLayer, i.e. closing of all GUI representations and terminating all render processes. If these calles are implemented as blocking operations, we can assert that as long as any GUI representation or any render process is running, there is a valid Session and EDL.
 
 !using Factories
-And, last but not least, doing all actual allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides that, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot;, rather it should use some central [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
+And, last but not least, doing all actual allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
 <div title="MultichannelMedia" modifier="Ichthyostega" modified="200710212326" created="200709200255" tags="design" changecount="6">
