@@ -24,7 +24,7 @@
 #ifndef ASSET_PREVIEW_H
 #define ASSET_PREVIEW_H
 
-#include "proc/asset/media.hpp"
+#include "proc/asset/unknown.hpp"
 
 
 
@@ -32,13 +32,13 @@ namespace asset
   {
 
   /**
-   * alternative version of the media data, probably with lower resolution
+   * special placeholder denoting an alternative version of the media data,
+   * typically with lower resolution ("proxy media")
    */
-  class Preview : public Media
+  class Preview : public Unknown
     {
     protected:
       Preview (const Media& mediaref);
-      Preview (const Asset::Ident& idi, string name, Time length);
       friend class MediaFactory;
     };
     

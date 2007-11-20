@@ -1,6 +1,6 @@
 format 40
 "Asset" // ProcessingLayer::Asset
-  revision 14
+  revision 15
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -593,12 +593,12 @@ ${inlines}
       explicit_switch_type ""
       
       comment "placeholder for unknown or unavailable media source"
-      classrelation 140933 // <generalisation>
-	relation 139141 ---|>
+      classrelation 146181 // <generalisation>
+	relation 144005 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 140933 // <generalisation>
-	  b multiplicity "" parent class_ref 137605 // Preview
+	    classrelation_ref 146181 // <generalisation>
+	  b multiplicity "" parent class_ref 136709 // Media
       end
     end
 
@@ -614,12 +614,12 @@ ${inlines}
       explicit_switch_type ""
       
       comment "alternative version of the media data, probably with lower resolution"
-      classrelation 140805 // <generalisation>
-	relation 139013 ---|>
+      classrelation 146309 // <generalisation>
+	relation 144133 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 140805 // <generalisation>
-	  b multiplicity "" parent class_ref 136709 // Media
+	    classrelation_ref 146309 // <generalisation>
+	  b multiplicity "" parent class_ref 137477 // Unknown
       end
     end
 

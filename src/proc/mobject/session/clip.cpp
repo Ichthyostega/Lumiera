@@ -50,7 +50,8 @@ namespace mobject
     bool
     Clip::isValid ()  const
     {
-      UNIMPLEMENTED ("check consistency of clip length def, implies accessing the underlying media def");
+      TODO ("check consistency of clip length def, implies accessing the underlying media def");
+      return length > 0;
     }
     
     

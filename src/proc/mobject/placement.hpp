@@ -130,12 +130,26 @@ namespace mobject
   
   
   /* === defining specialisations to be subclasses === */
-  
-    
-  
-  
-  /////TODO: define Macro for specialisations here
-  
+
+#define DEFINE_SPECIALIZED_PLACEMENT(SUBCLASS)        \
+  template<>                                           \
+  class Placement<SUBCLASS> : public Placement<MObject> \
+    {                                                    \
+    protected:                                            \
+      Placement (SUBCLASS & m, void (*moKiller)(MObject*)) \
+        : Placement<MObject>::Placement (m, moKiller)      \
+        { };                                               \
+      friend class session::MObjectFactory;                \
+                                                           \
+    public:                                                \
+      virtual SUBCLASS*                                    \
+      operator-> ()  const                                 \
+        {                                                  \
+          ENSURE (INSTANCEOF (SUBCLASS, this->get()));     \
+          return static_cast<SUBCLASS*>                    \
+            (shared_ptr<MObject>::operator-> ());          \
+        }                                                  \
+    };
   
   /* a note to the maintainer: please don't add any fields or methods to
    * these subclasses which aren't also present in Placement<MObject>!

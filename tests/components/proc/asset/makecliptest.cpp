@@ -65,7 +65,8 @@ namespace asset
             ASSERT (0 < cc->getLength());
             ASSERT (cm->ident.category.hasKind (VIDEO));
             ASSERT (cm->getFilename() == mm->getFilename());
-            ASSERT (cm->howtoProc() == mm->howtoProc());
+TODO ("implement Processing Pattern!!!");   
+//            ASSERT (cm->howtoProc() == mm->howtoProc());
             ASSERT (cm->ident.org == mm->ident.org);
             ASSERT (dependencyCheck (mm,cm));
 

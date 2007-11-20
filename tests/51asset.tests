@@ -33,7 +33,8 @@ return: 0
 END
 
 
-PLANNED "MakeClip_test" MakeClip_test <<END
+TEST "MakeClip_test" MakeClip_test <<END
+return: 0
 END
 
 

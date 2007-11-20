@@ -24,23 +24,34 @@
 #ifndef ASSET_UNKNOWN_H
 #define ASSET_UNKNOWN_H
 
-#include "proc/asset/preview.hpp"
+#include "proc/asset/media.hpp"
 
 
 
 namespace asset
   {
+  
 
+  const cinelerra::Time DUMMY_TIME (25); ///< @todo solve konfig management
 
   /**
    * Placeholder Asset for unknown or unavailable media source.
+   * @todo maybe do special handling of the media length, allowing
+   *       it to support existing clips even if the media length 
+   *       is not known? 
    */
-  class Unknown : public Preview
+  class Unknown : public Media
     {
     protected:
-      Unknown (const Asset::Ident& idi);
+      Unknown (const Asset::Ident& idi, string name="", Time length=DUMMY_TIME);
       friend class MediaFactory;
+      
+    public:
+      virtual Media::PMedia getOrg()  throw(cinelerra::error::Invalid);
+      
     };
+    
+  CINELERRA_ERROR_DECLARE (ORIG_NOT_FOUND);
     
     
     

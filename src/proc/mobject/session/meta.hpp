@@ -49,22 +49,8 @@ namespace mobject
 
   } // namespace mobject::session
   
-  //////////////////////////////////TODO
-  template<>
-  class Placement<session::Meta> : public Placement<MObject>
-    { 
-      Placement (session::Meta & m, void (*moKiller)(MObject*)) 
-        : Placement<MObject>::Placement (m, moKiller) 
-        { };
-        
-    public:
-      virtual session::Meta*
-      operator-> ()  const 
-        { 
-          ENSURE (INSTANCEOF(session::Meta, &(*this)));
-          return static_cast<session::Meta*> (shared_ptr<MObject>::operator-> ()); 
-        }      
-    };
+  /** Placement<Meta> defined to be subclass of Placement<MObject> */
+  DEFINE_SPECIALIZED_PLACEMENT (session::Meta);
 
 } // namespace mobject
 #endif

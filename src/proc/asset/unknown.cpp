@@ -22,19 +22,44 @@
 
 
 #include "proc/asset/unknown.hpp"
+#include <boost/format.hpp>
+
+
+using boost::format;
 
 namespace asset
   {
   
   
-  const cinelerra::Time DUMMY_TIME (25);
   
-  /** */
-  Unknown::Unknown (const Asset::Ident& idi)
-    : Preview (idi, "", DUMMY_TIME)
+  /** create a placeholder for a media with the given identity.
+   *  the denoted original media (identity) can be accessed later
+   *  on using the Unknown::getOrg() function */
+  Unknown::Unknown (const Asset::Ident& idi, string name, Time length)
+    : Media (idi, name, length)
   {
-    TODO ("do something sensible with the »unknown media« placeholder...");
+    TODO ("implement some sensible behaviour for the »unknown media« placeholder...");
   }  
+  
+  
+  /** using the information stored in this placeholder asset, 
+   *  try to access the "real" media it stands for.
+   */
+  Media::PMedia 
+  Unknown::getOrg()  throw(cinelerra::error::Invalid)
+  {
+    UNIMPLEMENTED ("how to get at the original media from a »Unknown« placeholder");
+    if (1==0)
+      throw cinelerra::error::Invalid (str(format("Unable to locate original media "
+                                                  "for ID=%s, filename=\"%s\".") 
+                                                  % string(this->ident) 
+                                                  % string(this->getFilename()))
+                                      ,CINELERRA_ERROR_ORIG_NOT_FOUND
+                                      );
+  }
+  
+  CINELERRA_ERROR_DEFINE (ORIG_NOT_FOUND, "Media refered by placeholder not found");
+
   
   
 } // namespace asset

@@ -82,25 +82,8 @@ namespace mobject
 
   } // namespace mobject::session
   
-  
-  ///////////////////////////TODO use macro for specialsation...
-  template<>
-  class Placement<session::Clip> : public Placement<MObject>
-    { 
-    protected:
-      Placement (session::Clip & m, void (*moKiller)(MObject*)) 
-        : Placement<MObject>::Placement (m, moKiller) 
-        { };
-      friend class session::MObjectFactory;
-        
-    public:
-      virtual session::Clip*
-      operator-> ()  const 
-        { 
-          ENSURE (INSTANCEOF(session::Clip, &(*this)));
-          return static_cast<session::Clip*> (shared_ptr<MObject>::operator-> ()); 
-        }      
-    };
+  /** Placement<Clip> defined to be subclass of Placement<MObject> */
+  DEFINE_SPECIALIZED_PLACEMENT (session::Clip);
     
 
 } // namespace mobject

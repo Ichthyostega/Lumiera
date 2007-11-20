@@ -50,27 +50,15 @@ namespace asset
   
   
   /** create a preview placeholder ("proxy media") for the given
-   *  media asset 
+   *  media asset. The name of the created media asset is derived
+   *  by decorating the original media's name.
    */
   Preview::Preview (const Media& mediaref)
-    : Media (createProxyIdent (mediaref.ident),
-             mediaref.getFilename(),
-             mediaref.getLength())
+    : Unknown (createProxyIdent (mediaref.ident),
+               mediaref.getFilename(),
+               mediaref.getLength())
   {
     UNIMPLEMENTED ("do something to setup proxy media");
-  }
-  
-  
-  
-  /** create a dummy placeholder
-   *  @internal for use by asset::Unknown
-   *  @todo better design!
-   */
-  Preview::Preview (const Asset::Ident& idi, string name, Time length)
-    : Media (createProxyIdent (idi),
-             name, length)
-  {
-    TODO ("work out how to handle unknown media placheholder");
   }
 
 
