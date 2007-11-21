@@ -98,8 +98,10 @@ namespace util
   inline bool 
   contains (SEQ& cont, typename SEQ::value_type& val)
   {
-    typename SEQ::iterator end = cont.end();
-    return end != std::find(cont.begin(),end, val);
+    typename SEQ::const_iterator begin = cont.begin();
+    typename SEQ::const_iterator end   = cont.end();
+    
+    return end != std::find(begin,end, val);
   }
   
   /** shortcut for removing all copies of an Element

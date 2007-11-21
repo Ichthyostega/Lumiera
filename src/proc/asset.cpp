@@ -94,7 +94,7 @@ namespace asset
    *       on the enablement status of parent assets as well.
    */
   void
-  Asset::enable ()  throw(cinelerra::error::State)
+  Asset::enable (bool on)  throw(cinelerra::error::State)
   {
     UNIMPLEMENTED ("enable/disable Assets.");
   }

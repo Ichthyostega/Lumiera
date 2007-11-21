@@ -25,20 +25,15 @@
 #define MOBJECT_SESSION_TESTCLIP_H
 
 
-#include "common/test/run.hpp"
-#include "common/factory.hpp"
-
 #include "proc/mobject/session/clip.hpp"
 //#include "common/util.hpp"
 
 
 //#include <boost/format.hpp>
-#include <iostream>
 
 using std::tr1::shared_ptr;
 //using boost::format;
 using std::string;
-using std::cout;
 
 
 namespace mobject
@@ -55,7 +50,7 @@ namespace mobject
        * @todo make this usable as Mock object to record invoked operations.
        * 
        */
-      class TestClip   : public mobject::session::Clip   /////////////TODO how this????
+      class TestClip   : public mobject::session::Clip
         {
           
           TestClip ();

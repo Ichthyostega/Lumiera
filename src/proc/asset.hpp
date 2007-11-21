@@ -98,7 +98,7 @@ namespace asset
       const size_t hash;
       ID (size_t id)         : hash(id)         {}
       ID (const KIND& asset) : hash(asset.getID()) {}
-      operator size_t() const  { return hash; }
+      operator size_t()  const { return hash; }
     };
     
   class Asset;
@@ -248,7 +248,7 @@ namespace asset
       friend class AssetManager;
       
     private:
-        void unregister (PAsset& other);
+      void unregister (PAsset& other);
 
 
 
@@ -274,7 +274,7 @@ namespace asset
        *  Note the corresponding #isActive predicate may 
        *  depend on the enablement status of parent assets as well
        */
-      void enable ()  throw(cinelerra::error::State);
+      void enable (bool on=true)  throw(cinelerra::error::State);
       
       
     };

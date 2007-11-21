@@ -1,5 +1,5 @@
 /*
-  TestClip  -  bookkeeping (asset) view of a media clip.
+  TestClip  -  test clip (stub) for checking EDL/Session functionality
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -70,7 +70,7 @@ namespace mobject
             { }
         };
           
-      cinelerra::Singleton<Testbed> testbed_1;
+      cinelerra::Singleton<Testbed> testbed_1; // invoke ctor when creating first TestClip... 
 
       
       

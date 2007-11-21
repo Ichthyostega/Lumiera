@@ -22,15 +22,16 @@
 
 
 #include "common/test/run.hpp"
-//#include "common/factory.hpp"
-//#include "common/util.hpp"
+#include "proc/asset/testasset.hpp"
+#include "common/util.hpp"
 
 //#include <boost/format.hpp>
 #include <iostream>
 
+using util::isnil;
+using util::contains;
 //using boost::format;
 using std::string;
-using std::cout;
 
 
 namespace asset
@@ -49,10 +50,127 @@ namespace asset
      */
     class DependantAssets_test : public Test
       {
-        virtual void run(Arg arg) 
+        virtual void run (Arg arg) 
+          {
+             checkDependencyMechanics ();
+             checkUnlinking ();
+             TODO ("activate missing testcases");
+/////TODO             checkEnablementPropagation ();
+/////TODO             checkRealAssetDependencyRegistration ();
+          }
+        
+        typedef TestAsset<Asset> TA;
+        typedef TA::PA PTestA;
+        
+        /** @test check operation of basic asset dependency support
+         */
+        void checkDependencyMechanics ()
+          {
+            PAsset a1 = TA::create();
+            ASSERT (isnil (a1->getParents()));
+            ASSERT (isnil (a1->getDependant()));
+            
+            PTestA a2 = TA::create(a1);
+            ASSERT (a1 == a2->getParents()[0]);  // TestAsset registered a1 as parent
+            ASSERT (a2 == a1->getDependant()[0]);
+            
+            TRACE(test, "a1.cnt=%i",a1.use_count());
+            TRACE(test, "a2.cnt=%i",a2.use_count());
+            PAsset a3 = TA::create();
+            a2->set_depend(a3);
+            ASSERT (a3 == a2->getParents()[1]);
+            ASSERT (a2 == a3->getDependant()[0]);
+            ASSERT (!contains (a1->getDependant(), a3));
+          }
+        
+        
+        /** @test unlink operation removing inter asset links
+         */
+        void checkUnlinking ()
+          {
+            PTestA a1_ = TA::create();
+            PAsset a1 (a1_);
+            PTestA a2_ = TA::create(a1);                   
+            PAsset a2 (a2_);                   
+            ASSERT (a1 == a2->getParents()[0]);
+            ASSERT (a2 == a1->getDependant()[0]);
+            
+            a2_->call_unlink();
+            ASSERT (isnil (a2->getParents()));
+            ASSERT (isnil (a2->getDependant()));
+            ASSERT (!contains (a1->getDependant(), a2));  // has been propagated
+            
+            a2_->set_depend(a1);
+            PAsset a3 = TA::create(a1);
+            ASSERT (a1 == a2->getParents()[0]);
+            ASSERT (a1 == a3->getParents()[0]);
+            ASSERT (a2 == a1->getDependant()[0]);
+            ASSERT (a3 == a1->getDependant()[1]);
+            
+            a1_->call_unlink(a3->getID());
+            ASSERT (!contains (a1->getDependant(), a3));  // selectively removed
+            ASSERT ( contains (a1->getDependant(), a2));
+            ASSERT (a1 == a3->getParents()[0]);           // no propagation
+          }
+        
+        
+        /** @test enabling and disabling an asset should 
+         *        propagate to dependant assets
+         */
+        void checkEnablementPropagation ()
+          {
+            PAsset a1 = TA::create();
+            PAsset a2 = TA::create(a1);                   
+            PAsset a3 = TA::create();   // not dependant
+            
+            ASSERT (a1->isActive());
+            ASSERT (a2->isActive());
+            ASSERT (a3->isActive());
+            
+            a1->enable(false);
+            ASSERT (!a1->isActive());
+            ASSERT (!a2->isActive());
+            ASSERT (a3->isActive());
+            
+            a2->enable(true);
+            ASSERT (!a1->isActive());
+            ASSERT (!a2->isActive());  // ignored because parent is disabled
+            
+            a1->enable(true);
+            ASSERT (a1->isActive());
+            ASSERT (a2->isActive());
+            
+            a2->enable(false);
+            ASSERT (a1->isActive());
+            ASSERT (!a2->isActive());  // disabling not propagated to parent
+            a2->enable(true);
+            ASSERT (a1->isActive());
+            ASSERT (a2->isActive());
+
+            a3->enable(false);
+            ASSERT (a1->isActive());
+            ASSERT (a2->isActive());
+            ASSERT (!a3->isActive());  // no dependency...
+
+            a1->enable(false);
+            a3->enable();
+            ASSERT (!a1->isActive());
+            ASSERT (!a2->isActive());
+            ASSERT (a3->isActive());
+          }
+        
+        
+        /** @test each real world asset subclass has to care
+         *        for registering and deregistering any additional
+         *        dependencies. Here we collect some more prominent
+         *        examples (and hopfully don't fail to cover any
+         *        important special cases...)
+         */
+        void checkRealAssetDependencyRegistration ()
           {
             UNIMPLEMENTED ("handling of Asset dependencies");
-          } 
+          }
+        
       };
     
     
