@@ -101,6 +101,7 @@ namespace asset
       operator size_t()  const { return hash; }
     };
     
+  class DB;
   class Asset;
   class AssetManager;
   typedef const ID<Asset>& IDA;
@@ -246,6 +247,7 @@ namespace asset
       virtual void defineDependency (PAsset parent);
       
       friend class AssetManager;
+      friend class DB;
       
     private:
       void unregister (PAsset& other);

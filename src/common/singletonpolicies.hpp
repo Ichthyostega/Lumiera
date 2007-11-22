@@ -47,7 +47,7 @@ namespace cinelerra
       /* == several Policies usable in conjunction with cinelerra::Singleton == */
       
       /** 
-       * Policy for creating the Singleton instance statically
+       * Policy placing the Singleton instance into a statically allocated buffer
        */
       template<class S>
       struct StaticCreate

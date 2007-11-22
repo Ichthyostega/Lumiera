@@ -1004,7 +1004,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200709272050" created="200708080322" tags="overview" changecount="9">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200711210512" created="200708080322" tags="overview" changecount="10">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Cinelerra Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1014,7 +1014,19 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 * [[Multichannel Media|MultichannelMedia]]
 * [[Editing Operations|EditingOperations]]
 * [[Handling of the current Session|CurrentSession]]
+* [[collecting Ideas for Implementation Guidelines|ImplementationGuidelines]]
 
+</pre>
+</div>
+<div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200711210542" created="200711210531" tags="discuss draft" changecount="7">
+<pre>!Observations, Ideas, Proposals
+''this page is a scrapbook for collecting ideas'' &amp;mdash; please don't take anything noted here too literal. While writing code, I observe that I (ichthyo) follow certain informal guidelines, some of which I'd like to note down because they could evolve into general style guidelines for the proc layer code.
+* avoid doing anything non-local during the startup phase or shutdown phase of the application. consequently, allways prefer using an explicit cinelerra::Singleton&lt;T&gt; over using an static instance directly, thus yielding better control when the ctor and dtor will be invoked.
+* write error handling code only if the error situation can be actually //handled// at this place. Otherwise, be prepared for exceptions just passing by and thus handle any resources by &quot;resource acquisition is initialisation&quot;. Remember: error handling defeats decoupling and encapsulation
+* (almost) never {{{delete}}} an object directly, use {{{new}}} only when some smart pointer is at hand.
+* when user/client code is inteded to create objects, make the ctor protected and provide a factory member called {{{create}}} instead, returning a smart pointer
+* avoid asuming anything that can't be enforced by types, interfaces or signatures; this means: be prepared for open possibilities
+* prefer {{{const}}} and initialisation code over assignment and active changes (inspired by functional programming)
 </pre>
 </div>
 <div title="InlineJavaScript" modifier="Jeremy" created="200603090618" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200603090618">
@@ -1411,21 +1423,23 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 [[Admin]]
 &lt;&lt;fullscreen&gt;&gt;</pre>
 </div>
-<div title="ManagementAssetRelation" modifier="Ichthyostega" modified="200711130118" created="200708100337" tags="impl" changecount="8">
+<div title="ManagementAssetRelation" modifier="Ichthyostega" modified="200711220525" created="200708100337" tags="impl decision" changecount="12">
 <pre>Problem is: when removing an Asset, all corresponding MObjects need to disappear. This means, besides the obvious ~Ref-Link (MObject referring to an asset) we need backlinks or a sort of registry. And still worse: we need to remove the affected MObject from the object network in the EDL and rebuild the Fixture...
 
 &amp;rarr; for a general design discussion see [[Relation of Clip and Asset|RelationClipAsset]]
 
-As a //first shot// Ichthyo considers the following approach:
+//Currently// Ichthyo considers the following approach:
 * all references between MObjects and Assets are implemented as __refcounting__ boost::shared_ptr
 * the opposite direction is also a __strong reference__, effectively keeping the clip-MO alive even if it is no longer in use in the session (note this is a cyclic dependency that needs to be actively broken on deletion). This design decision is based on  logical considerations (&amp;rarr; see &quot;deletions, Model-2&quot; [[here|RelationClipAsset]]). This back-link is implemented by a Placement which is stored internally within the asset::Clip, it is needed for clean deletion of Assets, for GUI search functions and for adding the Clip to the EDL (again after been removed, or multiple times as if cloned).
-* MObjects and Assets implement an {{{unlink()}}} function releasing the internal links to other entities.
-* Instead of a delete, we call this unlink() function and let the shared_ptr handle the actual deletion.
+* MObjects and Assets implement an {{{unlink()}}} function releasing any internal links causing circular dependencies. It is always implemented such as to drop //optional// associations while retaining those associations mandatory for fulfilling the objects contract.
+* Instead of a delete, we call this unlink() function and let the shared_ptr handle the actual deletion. Thus, even if the object is already unlinked, it is still valid and usable as long as some other entity holds a smart-ptr. An ongoing render process for example can still use a clip asset and the corresponding media asset linked as parent, but this media asset's link to the dependant clip has already been cleared (and the media is no longer registered with the AssetManager of course).
+* so the back-link from dependant asset up to the parent asset is mandatory for the child asset to be functional, but preferably it should be {{{const}}} (only used for information retrieval)
+* the whole hierarchy has to be crafted accordingly, but this isn't much of a limitation
 * we don't use a registry, rather we model the real dependencies by individual dependency links. So a MediaAsset gets links to all Clips created from this Asset and by traversing this tree, we can handle the deletion
 * after the deletion, the Fixture needs to be rebuilt.
 * but any render processes still can have pointers to the Asset to be removed, and the shared_ptr will ensure, that the referred objects stay alive as long as needed.
 
-{{red{to be considered in more detail later}}}
+{{red{let's see if this approach works...}}}
 </pre>
 </div>
 <div title="MarkupPreHead" modifier="Ichthyostega" modified="200708080243" created="200706172303" changecount="1">

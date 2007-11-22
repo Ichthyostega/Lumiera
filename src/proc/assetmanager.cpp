@@ -34,6 +34,7 @@
 #include <boost/bind.hpp>
 
 using std::tr1::static_pointer_cast;
+using boost::function;
 using boost::format;
 using boost::bind;
 //using boost::lambda::_1;
@@ -186,25 +187,28 @@ namespace asset
 
   
   void 
-  AssetManager::detach_child (PAsset& pA, IDA id)
+  recursive_call (AssetManager* instance, PAsset& pA)
+  { 
+    instance->remove (pA->getID());
+  }
+
+  function<void(PAsset&)> 
+  detach_child_recursively ()  ///< @return a functor recursively invoking remove(child)  
   {
-    pA->unlink(id);
+    return bind( &recursive_call, &AssetManager::instance(), _1 );
   }
 
   /**
-   * remove the given asset <i>together with all its dependants</i> from the internal DB
+   * remove the given asset from the internal DB
+   * <i>together with all its dependants</i> 
    */
   void
   AssetManager::remove (IDA id)  
-      throw(cinelerra::error::Invalid, 
-            cinelerra::error::State)
   {
-    UNIMPLEMENTED ("remove Asset with all dependecies");
-    
-    PAsset pA = getAsset (id);
-    vector<PAsset> par = pA->getParents();
-    boost::function<void(PAsset&)> func = bind(&detach_child, _1,id ); 
-    for_each (par, func); //   ,boost::lambda::var(id)));
+    PAsset asset = getAsset (id);
+    for_each (asset->dependants, detach_child_recursively());
+    asset->unlink();
+    registry.del(id);
   }
 
   

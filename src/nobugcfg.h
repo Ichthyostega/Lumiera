@@ -49,6 +49,7 @@
 
   /* declare flags used throughout the code base... */
   NOBUG_DECLARE_FLAG(config);
+  NOBUG_DECLARE_FLAG(oper);
   NOBUG_DECLARE_FLAG(test);
   NOBUG_DECLARE_FLAG(singleton);
   NOBUG_DECLARE_FLAG(assetmem);
@@ -76,6 +77,7 @@
 
   /* flags used throughout the code base... */
   NOBUG_CPP_DEFINE_FLAG(config);
+  NOBUG_CPP_DEFINE_FLAG(oper);
   NOBUG_CPP_DEFINE_FLAG(test);
   NOBUG_CPP_DEFINE_FLAG_LIMIT(singleton, LOG_WARNING);
   NOBUG_CPP_DEFINE_FLAG_LIMIT(assetmem,  LOG_WARNING);

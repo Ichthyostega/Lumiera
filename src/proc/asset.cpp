@@ -108,16 +108,21 @@ namespace asset
     other->unlink (this->id);  
   }
     
-  /** release all links to other Asset objects held internally. */
+  /** release all links to other <i>dependant</i> 
+   *  asset objects held internally and advise all parent
+   *  assets to do so with the link to this asset. 
+   *  @note we don't release upward links to parent assets,
+   *        thus effectively keeping the parents alive, because
+   *        frequently these accessible parent assets are part
+   *        of our own contract. (e.g. media for clip assets) 
+   */
   void 
   Asset::unlink ()
   {
-    function<void(PAsset&)> unregister_me = bind(&Asset::unregister, this,_1);
+    function<void(PAsset&)> forget_me = bind(&Asset::unregister, this,_1);
     
-    for_each (parents, unregister_me);
-    for_each (dependants, unregister_me);
+    for_each (parents, forget_me);
     dependants.clear();
-    parents.clear();
   }
       
   /** variant dropping only the links to the given Asset */

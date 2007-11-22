@@ -88,8 +88,7 @@ namespace asset
       
       /**remove the given asset from the internal DB.
        * <i>together with all its dependants</i> */
-      void remove (IDA id)  throw(cinelerra::error::Invalid, 
-                                  cinelerra::error::State);
+      void remove (IDA id) ;
       
       /** extract a sorted list of all registered Assets */
       list<PAsset> listContent() const;
@@ -104,7 +103,7 @@ namespace asset
       static ID<KIND>  reg (KIND* obj, const Asset::Ident& idi)
           throw(cinelerra::error::Invalid);
       
-      /** deleter function used by the Asset smart pointers to delet Asset objects */
+      /** deleter function used by the Asset smart pointers to delete Asset objects */
       static void destroy (Asset* aa) { delete aa; }
       
       friend Asset::Asset (const Asset::Ident& idi);
@@ -113,9 +112,6 @@ namespace asset
       
       friend class cinelerra::singleton::StaticCreate<AssetManager>;
       
-      
-    private:
-      static void detach_child (PAsset&, IDA);
     };
     
     

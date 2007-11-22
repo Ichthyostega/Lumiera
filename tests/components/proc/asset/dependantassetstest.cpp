@@ -92,25 +92,29 @@ namespace asset
             PAsset a1 (a1_);
             PTestA a2_ = TA::create(a1);                   
             PAsset a2 (a2_);                   
+            PAsset a3  = TA::create(a2);                   
             ASSERT (a1 == a2->getParents()[0]);
             ASSERT (a2 == a1->getDependant()[0]);
+            ASSERT (a2 == a3->getParents()[0]);
+            ASSERT (a3 == a2->getDependant()[0]);
             
             a2_->call_unlink();
-            ASSERT (isnil (a2->getParents()));
             ASSERT (isnil (a2->getDependant()));
-            ASSERT (!contains (a1->getDependant(), a2));  // has been propagated
+            ASSERT (!contains (a1->getDependant(), a2));  // has been propagated up
+            ASSERT (!isnil (a2->getParents()));
+            ASSERT (contains (a3->getParents(), a2));   // but up-links remain intact
             
             a2_->set_depend(a1);
-            PAsset a3 = TA::create(a1);
+            PAsset a4 = TA::create(a1);
             ASSERT (a1 == a2->getParents()[0]);
-            ASSERT (a1 == a3->getParents()[0]);
+            ASSERT (a1 == a4->getParents()[0]);
             ASSERT (a2 == a1->getDependant()[0]);
-            ASSERT (a3 == a1->getDependant()[1]);
+            ASSERT (a4 == a1->getDependant()[1]);
             
-            a1_->call_unlink(a3->getID());
-            ASSERT (!contains (a1->getDependant(), a3));  // selectively removed
+            a1_->call_unlink(a4->getID());
+            ASSERT (!contains (a1->getDependant(), a4));  // selectively removed
             ASSERT ( contains (a1->getDependant(), a2));
-            ASSERT (a1 == a3->getParents()[0]);           // no propagation
+            ASSERT (a1 == a4->getParents()[0]);           // no propagation
           }
         
         
