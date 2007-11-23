@@ -104,6 +104,7 @@ namespace asset
             ASSERT (!isnil (a2->getParents()));
             ASSERT (contains (a3->getParents(), a2));   // but up-links remain intact
             
+            a2_->call_unlink(a1->getID());
             a2_->set_depend(a1);
             PAsset a4 = TA::create(a1);
             ASSERT (a1 == a2->getParents()[0]);

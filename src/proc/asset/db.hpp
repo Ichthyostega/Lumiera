@@ -103,8 +103,15 @@ namespace asset
           return dynamic_pointer_cast<KIND,Asset> (find (hash));
         }
       
-      /** removes all registered assets and invokes
-       *  Asset::unlink() on each to break cyclic dependencies
+      /** removes all registered assets and does something similar 
+       *  to Asset::unlink() on each to break cyclic dependencies
+       *  (we can't use the real unlink()-function, because this 
+       *  will propagate, including calls to the AssetManager.
+       *  As the destructor of DB needs to call clear(), this
+       *  could result in segfaults. This doesn't seem to be
+       *  a problem, though, because we register and process
+       *  \i all assets and the net effect is just breaking
+       *  any cyclic dependencies) 
        */ 
       void
       clear () throw()
@@ -113,8 +120,8 @@ namespace asset
             {
               IdHashtable::const_iterator i = table.begin(); 
               IdHashtable::const_iterator e = table.end(); 
-              for ( ; i!=e ; ++i )  
-                i->second->unlink();
+              for ( ; i!=e ; ++i )
+                i->second->dependants.clear();
               
               table.clear();
             }

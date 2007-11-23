@@ -24,7 +24,8 @@ PLANNED "DeleteAsset_test" DeleteAsset_test <<END
 END
 
 
-PLANNED "DependantAssets_test" DependantAssets_test <<END
+TEST "DependantAssets_test" DependantAssets_test <<END
+return: 0
 END
 
 

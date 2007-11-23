@@ -41,35 +41,6 @@ namespace asset
   namespace test
     {
     
-    namespace 
-      {
-      uint counter (0);
-      
-      /** @internal helper generating continuosely
-       *            different new asset identities 
-       */
-      Asset::Ident
-      make_ident ()  
-      {
-        return Asset::Ident ( str(format("TestAsset.%i") % counter)
-                            , Category (META)
-                            , "test"
-                            , counter++
-                            );
-      }
-      Asset::Ident
-      make_ident (PAsset& ref)
-      {
-        return Asset::Ident ( str(format("%s-TestAsset.%i") % ref->ident.name 
-                                                            % counter)
-                            , ref->ident.category
-                            , "test"
-                            , counter++
-                            );
-      }
-    }
-    
-    
     
     /**
      * Test(mock) asset subclass usable for hijacking a given
@@ -81,22 +52,24 @@ namespace asset
     template<class A>
     class TestAsset : public A
       {
-        TestAsset ()             : A(make_ident ())     { };
-        TestAsset (PAsset& pRef) : A(make_ident (pRef)) { this->defineDependency(pRef); };
+        TestAsset () ;
+        TestAsset (PAsset&);  ///< declared dependant on the given Asset
         
         static void deleter (TestAsset<A>* aa) { delete aa; }
         
       public:
         typedef shared_ptr<TestAsset<A> > PA;
         
-        static PA create ()             { return PA (new TestAsset<A>,        &deleter); }
-        static PA create (PAsset& pRef) { return PA (new TestAsset<A> (pRef), &deleter); }
+        static PA create ()             { return (new TestAsset<A>       )->ptrFromThis(); }
+        static PA create (PAsset& pRef) { return (new TestAsset<A> (pRef))->ptrFromThis(); }
         
         /* === interesting asset features we want to access for tests === */
         void call_unlink ()             { this->unlink (); }
         void call_unlink (IDA target)   { this->unlink (target); }
         void set_depend (PAsset parent) { this->defineDependency (parent); }
         
+      private:
+        PA ptrFromThis ();
       };
   
   
