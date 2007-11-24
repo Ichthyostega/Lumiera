@@ -52,7 +52,7 @@ namespace asset
    *  concrete subclasses are created via specialized Factories
    */
   Asset::Asset (const Ident& idi) 
-    : ident(idi), id(AssetManager::reg (this, idi)) 
+    : ident(idi), id(AssetManager::reg (this, idi)), disabled(false)
   {
     TRACE (assetmem, "ctor Asset(id=%lu) :  adr=%x %s", size_t(id), this, cStr(this->ident) );
   }
@@ -77,6 +77,36 @@ namespace asset
   }
 
   
+  //////////////////////////////////////////////////////////TODO: factor this out as library function
+
+  template <typename SEQ, typename Oper>
+  inline bool
+  and_all (SEQ& coll, Oper predicate)
+  {
+    typename SEQ::const_iterator e = coll.end();
+    typename SEQ::const_iterator i = coll.begin();
+    
+    while (i!=e && predicate(*i))  ++i;
+    return i==e;
+  }
+  
+  template<class V>
+  inline const V*
+  deref (const shared_ptr<V>& ptr)
+  {
+    return ptr.get();
+  }
+  
+  //////////////////////////////////////////////////////////TODO: factor this out as library function
+  
+  
+  bool
+  all_parents_enabled (const vector<PAsset>& parents)
+  {
+    return and_all (parents, bind (&Asset::isActive, 
+                                   bind (&deref<Asset>,_1) ));   //////////TODO: possibly define an operator->
+  }
+  
   /**
    * whether this asset is swithced on and consequently included
    * in the fixture and participates in rendering.
@@ -84,19 +114,29 @@ namespace asset
   bool
   Asset::isActive ()  const
   {
-    UNIMPLEMENTED ("enable/disable Assets.");
+    return !this->disabled
+        && all_parents_enabled (parents);
   }
 
-
-  /**
-   * change the enablement status of this asset. 
-   * @note the corresponding #isActive predicate may depend 
-   *       on the enablement status of parent assets as well.
-   */
+  
   void
+  propagate_down (PAsset child, bool on)
+  {
+    child->enable(on);
+  }
+  
+
+  /**change the enablement status of this asset. */
+  bool
   Asset::enable (bool on)  throw(cinelerra::error::State)
   {
-    UNIMPLEMENTED ("enable/disable Assets.");
+    if (on != this->disabled)
+      return true;
+    if (on && !all_parents_enabled (parents))
+      return false;
+    disabled = !on;
+    for_each (dependants, bind (&propagate_down, _1 ,on));
+    return true; ////////TODO??
   }
   
   

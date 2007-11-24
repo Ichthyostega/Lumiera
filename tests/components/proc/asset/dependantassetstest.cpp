@@ -55,7 +55,7 @@ namespace asset
              checkDependencyMechanics ();
              checkUnlinking ();
              TODO ("activate missing testcases");
-/////TODO             checkEnablementPropagation ();
+             checkEnablementPropagation ();
 /////TODO             checkRealAssetDependencyRegistration ();
           }
         
@@ -125,7 +125,8 @@ namespace asset
         void checkEnablementPropagation ()
           {
             PAsset a1 = TA::create();
-            PAsset a2 = TA::create(a1);                   
+            PTestA a2_= TA::create(a1);                
+            PAsset a2 (a2_);
             PAsset a3 = TA::create();   // not dependant
             
             ASSERT (a1->isActive());
@@ -161,6 +162,28 @@ namespace asset
             a3->enable();
             ASSERT (!a1->isActive());
             ASSERT (!a2->isActive());
+            ASSERT (a3->isActive());
+            
+            a1->enable();
+            a2_->set_depend(a3); // now add a new parent dependency
+            a3->enable(false);
+            ASSERT (a1->isActive());
+            ASSERT (!a2->isActive()); // has been propagated via the new dependency
+            ASSERT (!a3->isActive());
+            
+            a2->enable(true);
+            ASSERT (a1->isActive());  // no change because one of the parents is disbled
+            ASSERT (!a2->isActive()); 
+            ASSERT (!a3->isActive());
+            a1->enable(false);
+            ASSERT (!a1->isActive());
+            a3->enable(true);
+            ASSERT (!a1->isActive());  // no propagation because the disabled other parent (a1)
+            ASSERT (!a2->isActive()); 
+            ASSERT (a3->isActive());
+            a1->enable(true);
+            ASSERT (a1->isActive());  // but now propagation is possible
+            ASSERT (a2->isActive()); 
             ASSERT (a3->isActive());
           }
         

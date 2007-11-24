@@ -215,6 +215,8 @@ namespace asset
       
       vector<PAsset> parents;
       vector<PAsset> dependants;
+      
+      bool disabled;
 
       
       
@@ -275,8 +277,10 @@ namespace asset
       /** change the enabled status of this asset.
        *  Note the corresponding #isActive predicate may 
        *  depend on the enablement status of parent assets as well
+       *  @return \c false if the state could not be changed
+       *          due to parent objects being disabled
        */
-      void enable (bool on=true)  throw(cinelerra::error::State);
+      bool enable (bool on=true)  throw(cinelerra::error::State);
       
       
     };
