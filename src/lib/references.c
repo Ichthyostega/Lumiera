@@ -91,7 +91,7 @@ cinelerra_reference_destroy (CinelerraReference self)
               /* no weak refs either, destroy it */
               cinelerra_mutexacquirer_unlock (&lock);
               cinelerra_mutex_destroy (&target->lock);
-              free (&target);
+              free (target);
               return self;
             }
         }
@@ -104,7 +104,7 @@ cinelerra_reference_destroy (CinelerraReference self)
           /* was last weak reference, and no strong refs left */
           cinelerra_mutexacquirer_unlock (&lock);
           cinelerra_mutex_destroy (&target->lock);
-          free (&target);
+          free (target);
           return self;
         }
     }

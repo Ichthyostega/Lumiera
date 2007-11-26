@@ -31,7 +31,6 @@ CINELERRA_ERROR_DEFINE(TEST, "test error");
 struct example
 {
   int foo;
-  cinelerra_reftarget target;
 };
 
 void
