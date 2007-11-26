@@ -34,7 +34,9 @@ namespace asset
   
   /** create a placeholder for a media with the given identity.
    *  the denoted original media (identity) can be accessed later
-   *  on using the Unknown::getOrg() function */
+   *  on using the Unknown::getOrg() function.
+   *  @note we don't depend on the refered media...
+   */
   Unknown::Unknown (const Asset::Ident& idi, string name, Time length)
     : Media (idi, name, length)
   {

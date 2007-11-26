@@ -213,10 +213,10 @@ namespace asset
 
   
   
-  list<PAsset> 
+  list<PcAsset> 
   AssetManager::listContent() const
   {
-    list<PAsset> res;
+    list<PcAsset> res;
     registry.asList (res);
     res.sort();
     return res;
@@ -233,6 +233,7 @@ namespace asset
    /************************************************************/
 
 #include "proc/asset/media.hpp"  
+#include "proc/asset/clip.hpp"  
 #include "proc/asset/proc.hpp"  
 #include "proc/asset/struct.hpp"  
 #include "proc/asset/meta.hpp"  
@@ -252,6 +253,7 @@ namespace asset
   
   template shared_ptr<Asset>  AssetManager::getPtr (const Asset& asset);
   template shared_ptr<Media>  AssetManager::getPtr (const Media& asset);
+  template shared_ptr<Clip>   AssetManager::getPtr (const Clip&  asset);
 
   
 } // namespace asset

@@ -27,8 +27,7 @@
 #include "proc/assetmanager.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/mobject/session/clip.hpp"
-
-//#include "proc/asset/assetdiagnostics.hpp"
+#include "proc/asset/assetdiagnostics.hpp"
 
 using util::contains;
 using util::isnil;
@@ -68,22 +67,12 @@ namespace asset
 TODO ("implement Processing Pattern!!!");   
 //            ASSERT (cm->howtoProc() == mm->howtoProc());
             ASSERT (cm->ident.org == mm->ident.org);
-            ASSERT (dependencyCheck (mm,cm));
+            ASSERT (dependencyCheck (cm,mm));
 
             TRACE (assetmem,   "leaving MakeClip_test::run()");
             TRACE (mobjectmem, "leaving MakeClip_test::run()");
           }
         
-        bool dependencyCheck (PM media, PM clip)
-        {
-          TODO ("check asset dependencies, when this feature is implemented");
-          return true; //TODO
-          
-          return (0 < clip->getParents().size())
-              && (media == clip->getParents()[0])
-//              && (contains (media->getDependant(), clip));            //TODO implement Asset dependecies
-              ;
-        }
         
       };
     

@@ -96,7 +96,7 @@ namespace util
    *  in any sequencial container */
   template <typename SEQ>
   inline bool 
-  contains (SEQ& cont, typename SEQ::value_type& val)
+  contains (SEQ& cont, typename SEQ::const_reference val)
   {
     typename SEQ::const_iterator begin = cont.begin();
     typename SEQ::const_iterator end   = cont.end();
@@ -126,6 +126,22 @@ namespace util
   {
     return std::for_each (c.begin(),c.end(), doIt);
   }
+  
+  
+  /** shortcut for testing all elements of a collection
+   *  with the given predicate.
+   */
+  template <typename SEQ, typename Oper>
+  inline bool
+  and_all (SEQ& coll, Oper predicate)
+  {
+    typename SEQ::const_iterator e = coll.end();
+    typename SEQ::const_iterator i = coll.begin();
+    
+    while (i!=e && predicate(*i))  ++i;
+    return i==e;
+  }
+  
   
   
   

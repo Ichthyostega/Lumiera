@@ -68,6 +68,14 @@ namespace mobject
     { 
       return asset::AssetManager::getPtr (mediaDef_);
     }
+    
+    
+    PClipAsset
+    Clip::findClipAsset ()  const
+    {
+      return asset::AssetManager::getPtr (clipDef_);
+    }
+
 
 
 

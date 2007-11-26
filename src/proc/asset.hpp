@@ -106,6 +106,7 @@ namespace asset
   class AssetManager;
   typedef const ID<Asset>& IDA;
   typedef shared_ptr<Asset> PAsset;
+  typedef shared_ptr<const Asset> PcAsset;
 
   
   
@@ -216,7 +217,7 @@ namespace asset
       vector<PAsset> parents;
       vector<PAsset> dependants;
       
-      bool disabled;
+      bool enabled;
 
       
       
@@ -246,7 +247,8 @@ namespace asset
       
       /** establish a connection between this and the given parent asset,
        *  denoting we are in some way dependant on the parent. */
-      virtual void defineDependency (PAsset parent);
+      void defineDependency (PAsset parent);
+      void defineDependency (Asset& parent); 
       
       friend class AssetManager;
       friend class DB;
@@ -307,7 +309,7 @@ namespace asset
 
     
     /** convienient for debugging */
-    inline string str (const PAsset& a) 
+    inline string str (PcAsset& a) 
     {
       if (a)
         return string (*a.get());

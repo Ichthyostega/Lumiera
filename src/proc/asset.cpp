@@ -36,6 +36,7 @@ using boost::function;
 using util::contains;
 using util::removeall;
 using util::for_each;
+using util::and_all;
 using util::cStr;
 
 
@@ -52,7 +53,7 @@ namespace asset
    *  concrete subclasses are created via specialized Factories
    */
   Asset::Asset (const Ident& idi) 
-    : ident(idi), id(AssetManager::reg (this, idi)), disabled(false)
+    : ident(idi), id(AssetManager::reg (this, idi)), enabled(true)
   {
     TRACE (assetmem, "ctor Asset(id=%lu) :  adr=%x %s", size_t(id), this, cStr(this->ident) );
   }
@@ -76,35 +77,18 @@ namespace asset
     return str (id_tuple % ident.name % ident.category % ident.org % ident.version);
   }
 
-  
-  //////////////////////////////////////////////////////////TODO: factor this out as library function
 
-  template <typename SEQ, typename Oper>
-  inline bool
-  and_all (SEQ& coll, Oper predicate)
-  {
-    typename SEQ::const_iterator e = coll.end();
-    typename SEQ::const_iterator i = coll.begin();
-    
-    while (i!=e && predicate(*i))  ++i;
-    return i==e;
-  }
   
-  template<class V>
-  inline const V*
-  deref (const shared_ptr<V>& ptr)
-  {
-    return ptr.get();
-  }
   
-  //////////////////////////////////////////////////////////TODO: factor this out as library function
-  
+  function<bool(const PAsset&)> check_isActive
+    = bind ( &Asset::isActive
+           , bind (&PAsset::get, _1 )
+           );
   
   bool
   all_parents_enabled (const vector<PAsset>& parents)
   {
-    return and_all (parents, bind (&Asset::isActive, 
-                                   bind (&deref<Asset>,_1) ));   //////////TODO: possibly define an operator->
+    return and_all (parents, check_isActive);
   }
   
   /**
@@ -114,29 +98,30 @@ namespace asset
   bool
   Asset::isActive ()  const
   {
-    return !this->disabled
+    return this->enabled
         && all_parents_enabled (parents);
   }
-
+  
   
   void
   propagate_down (PAsset child, bool on)
   {
     child->enable(on);
   }
-  
 
   /**change the enablement status of this asset. */
   bool
   Asset::enable (bool on)  throw(cinelerra::error::State)
   {
-    if (on != this->disabled)
+    if (on == this->enabled)
       return true;
     if (on && !all_parents_enabled (parents))
       return false;
-    disabled = !on;
+    
+    // can indeed to do the toggle...
+    this->enabled = on;
     for_each (dependants, bind (&propagate_down, _1 ,on));
-    return true; ////////TODO??
+    return true;
   }
   
   
@@ -183,6 +168,14 @@ namespace asset
     REQUIRE (!contains (this->parents, parent));
     parents.push_back (parent);
     parent->dependants.push_back(p_this);
+  }
+  
+  void 
+  Asset::defineDependency (Asset& parent)
+  {
+    PAsset p_parent (AssetManager::getPtr(parent));
+    ASSERT (p_parent);
+    defineDependency (p_parent);
   }
 
   

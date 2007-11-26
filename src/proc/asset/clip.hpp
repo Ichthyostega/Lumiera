@@ -38,15 +38,14 @@ namespace asset
       /** media source of this clip  */
       const Media& source_;
       
-      /** the corresponding (dependant) clip-MO 
-       *  @todo seems to be obsolete by the reworked design of multichannel media 11/07 */
+      /** the corresponding (dependant) clip-MO */
       PClipMO clipMO_;
       
     public:
       virtual PClipMO createClip ()  const;
       
     protected:
-      Clip (const Media& mediaref);
+      Clip (Media& mediaref);
       friend class MediaFactory;
       
       virtual PClip getClipAsset ();

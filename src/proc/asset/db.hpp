@@ -137,7 +137,7 @@ namespace asset
       
       /** intended for diagnostics */
       void 
-      asList (list<PAsset>& output)  const  
+      asList (list<PcAsset>& output)  const  
         { 
           IdHashtable::const_iterator i = table.begin(); 
           IdHashtable::const_iterator e = table.end(); 

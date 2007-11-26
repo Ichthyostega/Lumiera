@@ -39,6 +39,7 @@ namespace mobject
     {
     using asset::Media;
     typedef shared_ptr<Media> PMedia;
+    typedef shared_ptr<asset::Clip> PClipAsset;
 
 
     /**
@@ -73,6 +74,12 @@ namespace mobject
         
         /** access the underlying media asset */
         PMedia getMedia ()  const;
+        
+        /** locate the corresponding asset
+         *  representing this clip or the whole
+         *  compound in case of a multichannel clip
+         */ 
+        PClipAsset findClipAsset ()  const;
         
       };
       

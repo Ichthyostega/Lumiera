@@ -43,7 +43,6 @@ namespace mobject
     class Clip;
     class Effect;
 
-    typedef shared_ptr<const asset::Clip> PClipAsset;
 
     class MObjectFactory
       {

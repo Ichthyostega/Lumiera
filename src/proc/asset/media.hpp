@@ -73,7 +73,7 @@ namespace asset
       
     public:
       typedef shared_ptr<Media> PMedia;
-      typedef shared_ptr<const asset::Clip> PClip;
+      typedef shared_ptr<asset::Clip> PClip;
       typedef shared_ptr<asset::ProcPatt> PProcPatt;
       typedef mobject::session::PClipMO PClipMO;
      
@@ -86,6 +86,13 @@ namespace asset
           return static_cast<const ID<Media>& > (Asset::getID()); 
         }
       
+      /** Service Access Point for getting a processing template
+       *  describing how to build the render nodes network 
+       *  necessary for this Media or Clip. This includes
+       *  Codecs and postprocessing (stretching, deinterlacing...)
+       */
+      PProcPatt howtoProc ()  const;
+      
       /** Service Access Point for creating a Clip entity usable within 
        *  the EDL/Session from a given Media or Clip Asset. As a sideeffect,
        *  a corresponding asset::Clip is created as well if necessary. 
@@ -94,13 +101,6 @@ namespace asset
        *  @return a Placement smart ptr owning the new Clip MObject 
        */
       PClipMO createClip ();
-      
-      /** Service Access Point for getting a processing template
-       *  describing how to build the render nodes network 
-       *  necessary for this Media or Clip. This includes
-       *  Codecs and postprocessing (stretching, deinterlacing...)
-       */
-      PProcPatt howtoProc ()  const;
       
       /** @return the overall length of the media represented by this asset */ 
       virtual Time getLength ()  const;
@@ -151,7 +151,7 @@ namespace asset
       PType operator() (const char* file, asset::Kind);
       
       shared_ptr<asset::Clip>
-      operator() (const asset::Media& mediaref)  throw(cinelerra::error::Invalid);
+      operator() (asset::Media& mediaref)  throw(cinelerra::error::Invalid);
 
     };
 

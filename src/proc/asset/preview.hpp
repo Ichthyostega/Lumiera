@@ -38,7 +38,7 @@ namespace asset
   class Preview : public Unknown
     {
     protected:
-      Preview (const Media& mediaref);
+      Preview (Media& mediaref);
       friend class MediaFactory;
     };
     

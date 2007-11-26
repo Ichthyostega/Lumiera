@@ -52,12 +52,14 @@ namespace asset
   /** create a preview placeholder ("proxy media") for the given
    *  media asset. The name of the created media asset is derived
    *  by decorating the original media's name.
+   *  @note creates a dependency between the media and this proxy
    */
-  Preview::Preview (const Media& mediaref)
+  Preview::Preview (Media& mediaref)
     : Unknown (createProxyIdent (mediaref.ident),
                mediaref.getFilename(),
                mediaref.getLength())
   {
+    this->defineDependency (mediaref);
     UNIMPLEMENTED ("do something to setup proxy media");
   }
 

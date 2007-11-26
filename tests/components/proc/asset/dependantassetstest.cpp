@@ -23,15 +23,14 @@
 
 #include "common/test/run.hpp"
 #include "proc/asset/testasset.hpp"
+#include "proc/asset/assetdiagnostics.hpp"
+#include "proc/asset/media.hpp"
+#include "proc/asset/clip.hpp"
 #include "common/util.hpp"
 
-//#include <boost/format.hpp>
-#include <iostream>
-
-using util::isnil;
 using util::contains;
-//using boost::format;
-using std::string;
+using util::isnil;
+
 
 
 namespace asset
@@ -54,13 +53,13 @@ namespace asset
           {
              checkDependencyMechanics ();
              checkUnlinking ();
-             TODO ("activate missing testcases");
              checkEnablementPropagation ();
-/////TODO             checkRealAssetDependencyRegistration ();
+             checkRealAssetDependencyRegistration ();
           }
         
         typedef TestAsset<Asset> TA;
         typedef TA::PA PTestA;
+
         
         /** @test check operation of basic asset dependency support
          */
@@ -74,8 +73,6 @@ namespace asset
             ASSERT (a1 == a2->getParents()[0]);  // TestAsset registered a1 as parent
             ASSERT (a2 == a1->getDependant()[0]);
             
-            TRACE(test, "a1.cnt=%i",a1.use_count());
-            TRACE(test, "a2.cnt=%i",a2.use_count());
             PAsset a3 = TA::create();
             a2->set_depend(a3);
             ASSERT (a3 == a2->getParents()[1]);
@@ -196,7 +193,13 @@ namespace asset
          */
         void checkRealAssetDependencyRegistration ()
           {
-            UNIMPLEMENTED ("handling of Asset dependencies");
+            // -----Media and Clip--------------------------------
+            typedef Media::PMedia PM;
+            typedef Media::PClip  PC;
+            PM mm = asset::Media::create("test-1", VIDEO);
+            PC cc = mm->createClip()->findClipAsset();
+            ASSERT (dependencyCheck (cc,mm));
+            
           }
         
       };

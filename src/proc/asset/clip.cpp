@@ -59,14 +59,14 @@ namespace asset
   
   
   
-  Clip::Clip (const Media& mediaref)
+  Clip::Clip (Media& mediaref)
     : Media (createClipIdent (mediaref),
              mediaref.getFilename(),
              mediaref.getLength())
     , source_ (mediaref) 
     , clipMO_ (createClipMO (*this, source_))
   {
-    
+    this->defineDependency (mediaref);
   }
   
   

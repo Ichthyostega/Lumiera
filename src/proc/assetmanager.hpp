@@ -91,7 +91,7 @@ namespace asset
       void remove (IDA id) ;
       
       /** extract a sorted list of all registered Assets */
-      list<PAsset> listContent() const;
+      list<PcAsset> listContent() const;
       
       
       
