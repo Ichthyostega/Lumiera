@@ -28,6 +28,11 @@
 
 #include "plugin.h"
 
+/**
+ * @file Plugin loader.
+ */
+
+
 /* TODO should be set by the build system to the actual plugin path */
 #define CINELERRA_PLUGIN_PATH "~/.cinelerra3/plugins:/usr/local/lib/cinelerra3/plugins:.libs"
 
@@ -93,19 +98,34 @@ void* cinelerra_plugin_registry = NULL;
 /* plugin operations are protected by one big mutex */
 pthread_mutex_t cinelerra_plugin_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-/* the compare function for the registry tree */
+/**
+ * the compare function for the registry tree.
+ * Compares the names of two struct cinelerra_plugin.
+ * @return 0 if a and b are equal, just like strcmp. */
 static int
 cinelerra_plugin_name_cmp (const void* a, const void* b)
 {
   return strcmp (((struct cinelerra_plugin*) a)->name, ((struct cinelerra_plugin*) b)->name);
 }
 
+/**
+ * Initialize the plugin system.
+ * always succeeds or aborts
+ */
 void
 cinelerra_init_plugin (void)
 {
   NOBUG_INIT_FLAG (cinelerra_plugin);
 }
 
+/**
+ * Find and set pathname for the plugin.
+ * Searches through given path for given plugin, trying to find the file's location in the filesystem.
+ * If found, self->pathname will be set to the found plugin file.
+ * @param self The cinelerra_plugin to open look for.
+ * @param path The path to search trough (paths seperated by ":")
+ * @return 0 on success. -1 on error, or if plugin not found in path.
+ */
 int
 cinelerra_plugin_lookup (struct cinelerra_plugin* self, const char* path)
 {
@@ -149,6 +169,18 @@ cinelerra_plugin_lookup (struct cinelerra_plugin* self, const char* path)
   return -1; /* plugin not found */
 }
 
+
+/**
+ * Make an interface available.
+ * To use an interface provided by a plugin it must be opened first. It is allowed to open an interface 
+ * more than once. Each open must be paired with a close.
+ * @param name name of the plugin to use.
+ * @param interface name of the interface to open.
+ * @param min_revision the size of the interface structure is used as measure of a minimal required 
+ * revision (new functions are appended at the end)
+ * @return handle to the interface or NULL in case of a error. The application shall cast this handle to
+ * the actual interface type.
+ */
 struct cinelerra_interface*
 cinelerra_interface_open (const char* name, const char* interface, size_t min_revision)
 {
@@ -277,6 +309,11 @@ cinelerra_interface_open (const char* name, const char* interface, size_t min_re
   return NULL;
 }
 
+/**
+ * Close an interface. Does not free associated resources
+ * Calling this function with self==NULL is legal. Every interface handle must be closed only once.
+ * @param ptr interface to be closed
+ */
 void
 cinelerra_interface_close (void* ptr)
 {

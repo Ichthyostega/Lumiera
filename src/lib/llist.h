@@ -115,7 +115,6 @@ typedef llist ** LList_ref;
  * @param node pointer to the iterated node
  */
 #define LLIST_FOREACH(list, node)               \
-  if (!list); else                              \
     for (LList node = llist_head (list);        \
          ! llist_is_end (node, list);           \
          llist_forward (&node))
@@ -126,7 +125,6 @@ typedef llist ** LList_ref;
  * @param node pointer to the iterated node
  */
 #define LLIST_FOREACH_REV(list, node)           \
-  if (!list); else                              \
     for (LList node = llist_tail (list);        \
          ! llist_is_end (node, list);           \
          llist_backward (&node))
@@ -138,7 +136,6 @@ typedef llist ** LList_ref;
  * @param head pointer to the head node
  */
 #define LLIST_WHILE_HEAD(list, head)            \
-  if (!list); else                              \
     for (LList head = llist_head (list);        \
          !llist_is_empty (list);                \
          head = llist_head (list))
@@ -150,7 +147,6 @@ typedef llist ** LList_ref;
  * @param tail pointer to the tail node
  */
 #define LLIST_WHILE_TAIL(list, tail)            \
-  if (!list); else                              \
     for (LList tail = llist_tail (list);        \
          !llist_is_empty (list);                \
          tail = llist_tail (list))

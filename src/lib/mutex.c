@@ -21,6 +21,16 @@
 
 #include "lib/mutex.h"
 
+/**
+ * @file Mutual exclusion locking.
+ */
+
+
+/**
+ * Initialize a mutex variable
+ * @param self is a pointer to the mutex to be initialized
+ * @return self as given
+ */
 CinelerraMutex
 cinelerra_mutex_init (CinelerraMutex self)
 {
@@ -31,6 +41,11 @@ cinelerra_mutex_init (CinelerraMutex self)
   return self;
 }
 
+/**
+ * Destroy a mutex variable
+ * @param self is a pointer to the mutex to be destroyed
+ * @return self as given
+ */
 CinelerraMutex
 cinelerra_mutex_destroy (CinelerraMutex self)
 {

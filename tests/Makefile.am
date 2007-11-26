@@ -21,12 +21,12 @@ tests_srcdir = $(top_srcdir)/tests
 check_PROGRAMS += test-error
 test_error_SOURCES = $(tests_srcdir)/error/errortest.c
 test_error_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
-test_error_LDADD = $(builddir)/libcin3.a -lnobugmt -lpthread -ldl
+test_error_LDADD = libcin3.a -lnobugmt -lpthread -ldl
 
 check_PROGRAMS += test-time
 test_time_SOURCES = $(tests_srcdir)/time/test-time.c
 test_time_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
-test_time_LDADD = $(builddir)/libcin3.a -lnobugmt -lpthread -ldl -lm
+test_time_LDADD = libcin3.a -lnobugmt -lpthread -ldl -lm
 
 check_PROGRAMS += test-locking
 test_locking_SOURCES = \
@@ -34,21 +34,21 @@ test_locking_SOURCES = \
 	$(tests_srcdir)/locking/mutex.c \
 	$(tests_srcdir)/locking/condition.c
 test_locking_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
-test_locking_LDADD = $(builddir)/libcin3.a -lnobugmt -lpthread -ldl -lm
+test_locking_LDADD = libcin3.a -lnobugmt -lpthread -ldl -lm
 
 check_PROGRAMS += test-llist
 test_llist_SOURCES = $(tests_srcdir)/library/test-llist.c
 test_llist_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
-test_llist_LDADD = $(builddir)/libcin3.a -lnobugmt -lpthread -ldl -lm
+test_llist_LDADD = libcin3.a -lnobugmt -lpthread -ldl -lm
 
 check_PROGRAMS += test-references
 test_references_SOURCES = $(tests_srcdir)/library/test-references.c
 test_references_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
-test_references_LDADD = $(builddir)/libcin3.a -lnobugmt -lpthread -ldl -lm -lrt
+test_references_LDADD = libcin3.a -lnobugmt -lpthread -ldl -lm -lrt
 
 #check_PROGRAMS += test-filehandles
 #test_filehandles_SOURCES = $(tests_srcdir)/backend/test-filehandles.c
 #test_filehandles_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
-#test_filehandles_LDADD = $(builddir)/libcin3backend.a $(builddir)/libcin3.a -lnobugmt -lpthread -ldl -lm
+#test_filehandles_LDADD = libcin3backend.a libcin3.a -lnobugmt -lpthread -ldl -lm
 
 TESTS = $(tests_srcdir)/test.sh

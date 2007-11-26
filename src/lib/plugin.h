@@ -32,6 +32,11 @@ extern "C" {
 
 #include "error.h"
 
+/**
+ * @file Plugin loader, header.
+ */
+
+
 NOBUG_DECLARE_FLAG (cinelerra_plugin);
 
 /* tool macros*/
@@ -90,32 +95,14 @@ struct cinelerra_interface
   int (*close)(void);
 };
 
-/**
- * Initialize the plugin system.
- * always succeeds or aborts
- */
 void
 cinelerra_init_plugin (void);
 
 
-/**
- * Make an interface available.
- * To use an interface provided by a plugin it must be opened first. It is allowed to open an interface more than once.
- * Each open must be paired with a close.
- * @param plugin name of the plugin to use.
- * @param name name of the interface to open.
- * @param min_revision the size of the interface structure is used as measure of a minimal required revision (new functions are appended at the end)
- * @return handle to the interface or NULL in case of a error. The application shall cast this handle to the actual interface type.
- */
 struct cinelerra_interface*
 cinelerra_interface_open (const char* plugin, const char* name, size_t min_revision);
 
 
-/**
- * Close an interface. Does not free associated resources
- * Calling this function with self==NULL is legal. Every interface handle must be closed only once.
- * @param self interface to be closed
- */
 void
 cinelerra_interface_close (void* self);
 

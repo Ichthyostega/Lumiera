@@ -24,6 +24,11 @@
 
 #include <nobug.h>
 
+/**
+ * @file Strong and Weak references, header.
+ */
+
+
 typedef struct cinelerra_reference_struct cinelerra_reference;
 typedef cinelerra_reference* CinelerraReference;
 
