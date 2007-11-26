@@ -27,11 +27,19 @@
 #include "proc/mobject/session/abstractmo.hpp"
 
 
+namespace asset
+  {
+    class Media;
+    class Clip;
+  }
 
 namespace mobject
   {
   namespace session
     {
+    using asset::Media;
+    typedef shared_ptr<Media> PMedia;
+    typedef shared_ptr<asset::Clip> PClipAsset;
 
 
     /**
@@ -42,23 +50,48 @@ namespace mobject
      * into the ouput. The actual media type of a clip will be derived
      * at runtime by resolving this reference to the underlying Asset.
      * 
-     * TODO: define how to denote Time positions /lengths. This is tricky,
-     * because it depends on the actual media type, and we wand to encapsulate
+     * @todo define how to denote Time positions /lengths. This is tricky,
+     * because it depends on the actual media type, and we want to encapsulate
      * all these details as much as possible. 
      */
     class Clip : public AbstractMO
       {
       protected:
         /** startpos in source */
-        Time start;
+        Time start_;
 
-        //TODO: where to put the duration ???
+        const Media & mediaDef_;
+        const asset::Clip & clipDef_;
 
+        Clip (const asset::Clip&, const Media&);
+        friend class MObjectFactory;
+        
+        
+        virtual void setupLength();
+        
+      public:
+        virtual bool isValid()  const;
+        
+        /** access the underlying media asset */
+        PMedia getMedia ()  const;
+        
+        /** locate the corresponding asset
+         *  representing this clip or the whole
+         *  compound in case of a multichannel clip
+         */ 
+        PClipAsset findClipAsset ()  const;
+        
       };
+      
+    typedef Placement<Clip> PClipMO;
 
 
 
   } // namespace mobject::session
+  
+  /** Placement<Clip> defined to be subclass of Placement<MObject> */
+  DEFINE_SPECIALIZED_PLACEMENT (session::Clip);
+    
 
 } // namespace mobject
 #endif

@@ -74,14 +74,14 @@ namespace mobject
     
     
     void 
-    SessionImpl::add (PPla& placement)
+    SessionImpl::add (PMO& placement)
     {
       UNIMPLEMENTED ("add Placement to the current EDL");
     }
     
     
     bool 
-    SessionImpl::remove (PPla& placement)
+    SessionImpl::remove (PMO& placement)
     {
       UNIMPLEMENTED ("search and remove a given Placement from current EDL");
       return false; // TODO

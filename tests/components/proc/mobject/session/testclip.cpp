@@ -1,5 +1,5 @@
 /*
-  TestClip  -  bookkeeping (asset) view of a media clip.
+  TestClip  -  test clip (stub) for checking EDL/Session functionality
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -26,6 +26,7 @@
 #include "backend/mediaaccessmock.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
+#include "common/singleton.hpp"
 
 namespace mobject
   {
@@ -33,31 +34,55 @@ namespace mobject
     {
     namespace test
       {
-      typedef shared_ptr<mobject::session::Clip> PC;
       typedef shared_ptr<asset::Media> PM;
       typedef backend_interface::MediaAccessFacade MAF;
       using backend_interface::test::MediaAccessMock;
       using asset::VIDEO;
-        
 
-      /** @todo find a way to link to an existing clip object.
-       *        Idea: use the clip's copy operation, i.e. feed it
-       *        to mobject::session::clip copy ctor
-       */
-      TestClip::TestClip ()
+      
+      
+      asset::Media & 
+      createTestMedia ()
       {
         // install Mock-Interface to cinelerra backend
         MAF::instance.injectSubclass (new MediaAccessMock);
-        
         PM media = asset::Media::create("test-2", VIDEO); // query magic filename
-        PC clip = media->createClip();
-        //TODO how to link to *this ???
-        
         MAF::instance.injectSubclass (0); // remove Mock-Interface
+        
+        return *media;
       }
       
-      /** storage for the TestClip-Factory */
-      TestClip::Factory TestClip::create;
+      asset::Clip & 
+      createTestClipAsset (asset::Media& media)
+      {
+        return *(asset::Media::create(media)); 
+      }
+      
+    
+      struct Testbed
+        {
+          asset::Media & media_;
+          asset::Clip & clipA_;
+          
+          Testbed() 
+            : media_ (createTestMedia()),
+              clipA_ (createTestClipAsset(media_))
+            { }
+        };
+          
+      cinelerra::Singleton<Testbed> testbed_1; // invoke ctor when creating first TestClip... 
+
+      
+      
+      
+
+      TestClip::TestClip ()
+        : Clip(testbed_1().clipA_,
+               testbed_1().media_)
+      {
+        ASSERT (isValid());
+      }
+      
 
 
     } // namespace test

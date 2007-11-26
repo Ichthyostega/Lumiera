@@ -1,5 +1,5 @@
 /*
-  FIXEDPLACEMENT.hpp  -  TODO: didn't we plan to rename ExplicitPlacement to DirectPlacement??  
+  MOBJECTFACTORY.hpp  -  creating concrete MObject subclass instances
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -21,24 +21,42 @@
 */
 
 
-#ifndef MOBJECT_SESSION_FIXEDPLACEMENT_H
-#define MOBJECT_SESSION_FIXEDPLACEMENT_H
+#ifndef MOBJECT_SESSION_MOBJECTFACTORY_H
+#define MOBJECT_SESSION_MOBJECTFACTORY_H
 
-#include "proc/mobject/placement.hpp"
-#include "proc/mobject/explicitplacement.hpp"
+#include "proc/mobject/mobject.hpp"
 
 
+
+namespace asset
+  {
+  class Clip;
+  class Media;
+  class Effect;
+  
+  }
 
 namespace mobject
   {
   namespace session
     {
+    class Clip;
+    class Effect;
 
-    // TODO: didn't we plan to rename ExplicitPlacement to DirectPlacement??
 
-    class DirectPlacement : public ExplicitPlacement
+    class MObjectFactory
       {
-        ///////////
+        /** custom deleter func allowing class Placement    
+          *  to take ownership of MObjct instances
+          */
+        static void deleterFunc (MObject* o) { delete o; }
+        
+      public:
+        
+        Placement<Clip>   operator() (const asset::Clip&, const asset::Media&);
+        Placement<Clip>   operator() (const asset::Clip&, vector<const asset::Media*>);
+        Placement<Effect> operator() (const asset::Effect);
+        
       };
 
 

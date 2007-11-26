@@ -514,7 +514,7 @@ ColorPalette
 
 SiteUrl</pre>
 </div>
-<div title="Asset" modifier="Ichthyostega" modified="200709040256" created="200708100337" tags="def classes" changecount="11">
+<div title="Asset" modifier="Ichthyostega" modified="200710092321" created="200708100337" tags="def classes" changecount="14">
 <pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the EDL is the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with eatch Session. Besides, there is a collection of basic Assets allways available by default.
 
 The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situation is similar. Assets thus serve two quite distinct purposes. One is to load, list, group search and browse them, and to provide an entry point to create new or get at existing MObjects in the EDL, while the other purpose is to provide attribute and property informations to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
@@ -524,7 +524,7 @@ We can distinguish several different Kinds of Assets, each one with specific pro
 [img[Asset Classess|uml/fig130309.png]]
 
 !Media Asset
-Some piece of Media Data accessible at some external Location an able to be processed by Cinelerra. A Media File on Harddisk can be considered as the most basic form of Media Asset, with some important derived Flavours, like a Placeholder for a currently unavailable Source, or Media available in different Resolutions or Formats.
+Some piece of Media Data accessible at some external Location and able to be processed by Cinelerra. A Media File on Harddisk can be considered as the most basic form of Media Asset, with some important derived flavours, like a Placeholder for a currently unavailable Source, or Media available in different Resolutions or Formats.
 * __outward interface operations__ include querying properties, creating an Clip MObject, controlling processing policy (low res proxy placeholders, interlacing and other generic pre- and postprocessing)
 * __inward interface operations__ include querying filename, codec, offset and any other informations necessary for creating a source render node, getting additional processing policy decisions (handling of interlacing, aspect ratio).
 &amp;rarr; MediaAsset
@@ -548,9 +548,12 @@ Some additional, virtual facilities created in the course of the editing process
 &amp;rarr; MetaAsset {{red{to be defined}}}
 
 !!!!still to be worked out..
-is how to implement the relationship between [[MObject]]s and Assets. Do we use direct pointers, or do we prefer an ID + central registry approach? And how to handle the removal of an Asset 
+is how to implement the relationship between [[MObject]]s and Assets. Do we use direct pointers, or do we prefer an ID + central registry approach? And how to handle the removal of an Asset.
 &amp;rarr; see also [[analysis of mem management|ManagementAssetRelation]]
 &amp;rarr; see also [[Creating Objects|ObjectCreation]], especially [[Assets|AssetCreation]]
+
+  //9/07: currently implementing it as follows: use a refcounting-ptr from Clip-~MObject to asset::Media while maintaining a dependency network between Asset objects. We'll see if this approach is viable//
+
 </pre>
 </div>
 <div title="AssetCreation" modifier="Ichthyostega" created="200709040307" changecount="1">
@@ -752,12 +755,26 @@ This is an very important external Interface, because it links together all thre
 <pre>RenderEngine
 </pre>
 </div>
-<div title="DesignGoals" modifier="MichaelPloujnikov" modified="200706271507" created="200706210557" tags="design" changecount="9">
-<pre>As always, the main goal is //to cut down complexity// by the usual approach to separate into small manageable chunks.
+<div title="DesignGoals" modifier="Ichthyostega" modified="200711122343" created="200706210557" tags="design" changecount="13">
+<pre>This __proc-Layer__ and ~Render-Engine implementation started out as a design-draft by [[Ichthyo|mailto:Ichthyostega@web.de]] in summer 2007. The key idea of this design-draft is to use the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]] for the Render Engine, thus separating completely the //building// of the Render Pipeline from //running,// i.e. doing the actual Render. The Nodes in this Pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder.
+
+!Why doesn't the current Cinelerra-2 Design succeed?
+The design of Cinelerra-2 basically follows a similar design, but __fails because of two reasons__
+# too much differentiation is put into the class hierarchy instead of configuring Instances differently.&lt;br&gt;This causes overly heavy use of virtual functions and -- in order to ameliorate this -- falling back to hard wired branching
+# far too much coupling and back-coupling to the internals of the EDL, forcing a overly rigid structure on the latter
+
+!Try to learn from this
+* build up an [[Node Abstraction|ProcNode]] powerful enough to express //all necessary Operations// without the need to recure on the actual object type
+* need to redesign the internals of the EDL in a far more open manner. See MObjects
+* strive at a StrongSeparation between EDL and Render Engine
+
+
+!Design Goals
+As always, the main goal is //to cut down complexity// by the usual approach to separate into small manageable chunks.
 
 To achieve this, here we try to separate ''Configuration'' from ''Processing''. Further, in Configuration we try to separate the ''high level view'' (users view when editing) from the ''low level view'' (the actual configuration effective for the calculations). Finally, we try to factor out and encapsulate ''State'' in order to make State explicit.
 
-The main tool used to implement this separation is the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]. Here especially we move all decisions and parametrization into the BuildProcess. The Nodes in this Pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder. Make the actual processing nodes Template classes, parametrized by the color model and number of components. Make all Nodes of equal footing with each other, able to be connected freely within the limitations of the necessary input and output. Make the OpenGL rendering into alternate implementation of some operations together with an alternate signal flow (usable only if the whole Pipeline can be built up to support this changed signal flow), thus factoring out all the complexities of managing the data flow between core and hardware accelerated rendering out of the implementation of the actual processing. Introduce separate control data connections for the automation data, separating the case of true multi-channel-effects from the case where one node just gets remote controlled by another node (or two nodes using the same automation data).
+The main tool used to implement this separation is the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]. Here especially we move all decisions and parametrization into the BuildProcess. The Nodes in the render pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder. Make the actual processing nodes Template classes, parametrized by the color model and number of components. Make all Nodes of equal footing with each other, able to be connected freely within the limitations of the necessary input and output. Make the OpenGL rendering into alternate implementation of some operations together with an alternate signal flow (usable only if the whole Pipeline can be built up to support this changed signal flow), thus factoring out all the complexities of managing the data flow between core and hardware accelerated rendering out of the implementation of the actual processing. Introduce separate control data connections for the automation data, separating the case of true multi-channel-effects from the case where one node just gets remote controlled by another node (or two nodes using the same automation data).
 
 Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the EDL in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
 </pre>
@@ -770,7 +787,7 @@ Cinelerra uses this term in a related manner but with a somewhat shifted focus (
 In this usage, the EDL in most cases will be almost synonymous to the [[Session|SessionOverview]], just the latter emphasizes more the state aspect, as it can be thought as the current EDL contents contained in a file or data structure together with additional Option values and settings for the GUI. The Session is what you save and load, while the EDL rather denotes a structured collection of Objects placed in time.
 </pre>
 </div>
-<div title="EditingOperations" modifier="Ichthyostega" modified="200709251706" created="200709251610" tags="design decision" changecount="2">
+<div title="EditingOperations" modifier="Ichthyostega" modified="200710111508" created="200709251610" tags="design decision" changecount="5">
 <pre>These are the tools provided to any client of the Proc layer for handling and manipulating the entities in the EDL. When defining such operations, //the goal should be to arrive at some uniformity in the way things are done.// Ideally, when writing client code, one should be able to guess how to achieve some desired result.
 
 !guiding principle
@@ -779,7 +796,7 @@ The approach taken to define any operation is based primarily on the ''~OO-way o
 !main tasks
 * you ''create a clip'' either from a source media or from another clip (copy, maybe clone?). The new clip always reflects the full size (and other properties) of the source used for creating.
 * you can request a clip to ''resize'', which always relates to its current dimensions.
-* you can ''place or attach'' the clip to some point or other entity by creating a [[Placement]] from the clip.
+* you can ''place or attach'' the clip to some point or other entity by creating a [[Placement]] from the clip. (&amp;rarr; [[handling of Placements|PlacementHandling]])
 * you can ''adjust'' a placement relative to some other placement, meta object (i.e. selection), label or media, and this may cause the placement to resize or even delete the clip as necessary
 * you can perform ''adjustments'' on the whole EDL.
 All these operations propagate to directly dependant objects and may schedule global reconfigurations.
@@ -791,7 +808,7 @@ While performing any manipulative task, the state of the object is considered in
 At the level of fine grained operations on individual entities, there is ''no support for parallelism''. Individual entities don't lock themselves. Tasks perform locking and are to be scheduled. Thus, we need an isolation layer towards all inherently multithreaded parts of the system, like the GUI or the renderengine.
 
 This has some obvious and some subtle consequences. Of course, manipulating //tasks// will be queued and scheduled somewhere. But as we rely on object identity and reference semantics for the entities in the EDL, some value changes are visible to  operations going on in parallel threads (e.g. rendering) and each operation on the EDL entities //has to be aware of this.//
-Consequently, sometimes there needs to be done a ''self-replacement by copy'' followed by manipulation of the new copy, while ongoing processes use the unaltered original object until they receive some sort of reset.
+Consequently, sometimes there needs to be done sort of a ''read-copy-update'', i.e. self-replacement by copy followed by manipulation of the new copy, while ongoing processes use the unaltered original object until they receive some sort of reset.
 
 !!undo
 Basically, each elementary operation has to record the informations necessary to be undone. It does so by registering a Memento with some central UndoManager facility. This Memento object contains a functor pre-bound with the needed parameter values. (Besides, the UndoManager is free to implement a second level of security by taking independent state snapshots). 
@@ -987,7 +1004,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200709272050" created="200708080322" tags="overview" changecount="9">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200711210512" created="200708080322" tags="overview" changecount="10">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Cinelerra Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -997,7 +1014,19 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 * [[Multichannel Media|MultichannelMedia]]
 * [[Editing Operations|EditingOperations]]
 * [[Handling of the current Session|CurrentSession]]
+* [[collecting Ideas for Implementation Guidelines|ImplementationGuidelines]]
 
+</pre>
+</div>
+<div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200711210542" created="200711210531" tags="discuss draft" changecount="7">
+<pre>!Observations, Ideas, Proposals
+''this page is a scrapbook for collecting ideas'' &amp;mdash; please don't take anything noted here too literal. While writing code, I observe that I (ichthyo) follow certain informal guidelines, some of which I'd like to note down because they could evolve into general style guidelines for the proc layer code.
+* avoid doing anything non-local during the startup phase or shutdown phase of the application. consequently, allways prefer using an explicit cinelerra::Singleton&lt;T&gt; over using an static instance directly, thus yielding better control when the ctor and dtor will be invoked.
+* write error handling code only if the error situation can be actually //handled// at this place. Otherwise, be prepared for exceptions just passing by and thus handle any resources by &quot;resource acquisition is initialisation&quot;. Remember: error handling defeats decoupling and encapsulation
+* (almost) never {{{delete}}} an object directly, use {{{new}}} only when some smart pointer is at hand.
+* when user/client code is inteded to create objects, make the ctor protected and provide a factory member called {{{create}}} instead, returning a smart pointer
+* avoid asuming anything that can't be enforced by types, interfaces or signatures; this means: be prepared for open possibilities
+* prefer {{{const}}} and initialisation code over assignment and active changes (inspired by functional programming)
 </pre>
 </div>
 <div title="InlineJavaScript" modifier="Jeremy" created="200603090618" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200603090618">
@@ -1356,14 +1385,20 @@ From experiences with other middle scale projects, I prefer having the test code
 
 {{red{how to create a test stub for this interface...?}}}</pre>
 </div>
-<div title="MObject" modifier="Ichthyostega" created="200706220312" tags="def classes" changecount="1">
-<pre>All sorts of &quot;things&quot; to be placed and manipulated by the user in the EDL. This interface abstracts the details and just provides
-* a duration
-* a [[Placement]]
+<div title="LocatingPin" modifier="Ichthyostega" created="200710181527" changecount="1">
+<pre>Used to actually implement the various kinds of [[Placement]] of ~MObjects. ~LocatingPin is the root of a hierarchy of different kinds of placing, constraining and locating a Media Object. Basically, this is an instance of the ''state pattern'': The user sees one Placement object with value semantics, but when the properties of the Placement are changed, actually a ~LocatingPin object (or rather a chain of ~LocatingPins) is changed within the Placement. Subclasses of ~LocatingPin implement different placing/constraining behaviour:
+* {{{FixedLocation}}} places a MObject to a fixed temporal position and track
+* {{{RelativeLocation}}} is used to atach the MObject to some other anchor MObject
+* //additional constraints, placement objectives, range restrictions, pattern rules will follow...//</pre>
+</div>
+<div title="MObject" modifier="Ichthyostega" modified="200710092343" created="200706220312" tags="def classes" changecount="2">
+<pre>All sorts of &quot;things&quot; to be placed and manipulated by the user in the EDL. This interface abstracts the details and just supposes
+* the media object has a duration
+* it is allways //placed// in some manner, i.e. it is allways accessed via a [[Placement]]
 * {{red{and what else?}}}
 </pre>
 </div>
-<div title="MObjects" modifier="Ichthyostega" modified="200709030128" created="200706190636" tags="overview" changecount="8">
+<div title="MObjects" modifier="Ichthyostega" modified="200710100118" created="200706190636" tags="overview" changecount="9">
 <pre>The ~MObjects Subsystem contains everything related to the [[EDL]] and the various Media Objects placed within. It is complemented by the Asset Management (see &amp;rarr; [[Asset]]). Examples for [[MObjects|MObject]] being:
 * audio/video clips
 * effects and plugins
@@ -1372,6 +1407,10 @@ From experiences with other middle scale projects, I prefer having the test code
 * labels and other (maybe functional) markup
 
 This Design strives to achieve a StrongSeparation between the low-level Structures used to carry out the actual rendering and the high level Entities living in the EDL and being manipulated by the user. In this high level view, the Objects are grouped and located by [[Placements|Placement]], providing a flexible and open way to express different groupings, locations and ordering constraints between the Media Objects.
+&amp;rarr; EditingOperations
+&amp;rarr; PlacementHandling
+&amp;rarr; SessionOverview
+
 
 [img[Classess related to the EDL|uml/fig128133.png]]
 </pre>
@@ -1384,18 +1423,23 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 [[Admin]]
 &lt;&lt;fullscreen&gt;&gt;</pre>
 </div>
-<div title="ManagementAssetRelation" modifier="Ichthyostega" modified="200709021538" created="200708100337" tags="impl" changecount="3">
-<pre>Problem is: when removing an Asset, all corresponding MObjects need to disappear. This means, besides the obvious ~Ref-Link (MObject refering to an asset) we need backlinks or a sort of registry. And still worse: we need to remove the affetcted MObject from the object network in the EDL and rebuild the Fixture...
+<div title="ManagementAssetRelation" modifier="Ichthyostega" modified="200711220525" created="200708100337" tags="impl decision" changecount="12">
+<pre>Problem is: when removing an Asset, all corresponding MObjects need to disappear. This means, besides the obvious ~Ref-Link (MObject referring to an asset) we need backlinks or a sort of registry. And still worse: we need to remove the affected MObject from the object network in the EDL and rebuild the Fixture...
 
-As a //first shot// Ichthyo considers the following approach:
-* all references between MObjects and Assets are implemented as refcounting boost::shared_ptr
-* MObjects and Assets implement an {{{unlink()}}} function releasing the internal links to other entities.
-* Instead of a delete, we call this unlink() function and let the shared_ptr handle the actual deletion.
+&amp;rarr; for a general design discussion see [[Relation of Clip and Asset|RelationClipAsset]]
+
+//Currently// Ichthyo considers the following approach:
+* all references between MObjects and Assets are implemented as __refcounting__ boost::shared_ptr
+* the opposite direction is also a __strong reference__, effectively keeping the clip-MO alive even if it is no longer in use in the session (note this is a cyclic dependency that needs to be actively broken on deletion). This design decision is based on  logical considerations (&amp;rarr; see &quot;deletions, Model-2&quot; [[here|RelationClipAsset]]). This back-link is implemented by a Placement which is stored internally within the asset::Clip, it is needed for clean deletion of Assets, for GUI search functions and for adding the Clip to the EDL (again after been removed, or multiple times as if cloned).
+* MObjects and Assets implement an {{{unlink()}}} function releasing any internal links causing circular dependencies. It is always implemented such as to drop //optional// associations while retaining those associations mandatory for fulfilling the objects contract.
+* Instead of a delete, we call this unlink() function and let the shared_ptr handle the actual deletion. Thus, even if the object is already unlinked, it is still valid and usable as long as some other entity holds a smart-ptr. An ongoing render process for example can still use a clip asset and the corresponding media asset linked as parent, but this media asset's link to the dependant clip has already been cleared (and the media is no longer registered with the AssetManager of course).
+* so the back-link from dependant asset up to the parent asset is mandatory for the child asset to be functional, but preferably it should be {{{const}}} (only used for information retrieval)
+* the whole hierarchy has to be crafted accordingly, but this isn't much of a limitation
 * we don't use a registry, rather we model the real dependencies by individual dependency links. So a MediaAsset gets links to all Clips created from this Asset and by traversing this tree, we can handle the deletion
 * after the deletion, the Fixture needs to be rebuilt.
-* but any render processes still can have pointers to the Asset to be removed, and the shared_ptr will ensure, that the refered objects stay alive as long as needed.
+* but any render processes still can have pointers to the Asset to be removed, and the shared_ptr will ensure, that the referred objects stay alive as long as needed.
 
-{{red{to be considered in more detail later}}}
+{{red{let's see if this approach works...}}}
 </pre>
 </div>
 <div title="MarkupPreHead" modifier="Ichthyostega" modified="200708080243" created="200706172303" changecount="1">
@@ -1410,7 +1454,7 @@ As a //first shot// Ichthyo considers the following approach:
 [img[Asset Classess|uml/fig130437.png]]
 </pre>
 </div>
-<div title="MemoryManagement" modifier="Ichthyostega" modified="200708100408" created="200708100225" tags="impl decision discuss" changecount="8">
+<div title="MemoryManagement" modifier="Ichthyostega" modified="200711180014" created="200708100225" tags="impl decision discuss" changecount="12">
 <pre>Of course: Cinelerra currently leaks memory and crashes regularilly. For the newly written code, besides retaining the same performance level, a main goal is to use methods and techniques known to support the writing of quality code. So, besides the MultithreadConsiderations, a solid strategy for managing the ownership of allocated memory blocks is necessary right from start.
 
 !Problems
@@ -1418,14 +1462,14 @@ As a //first shot// Ichthyo considers the following approach:
 # Some (not all) parts of the core application are non-deterministic. That means, we can't tie the memory management to any assumptions on behalf of the execution path
 
 !C++ solution
-First of all -- this doesn't concern //every// allocation. It rather means there are certain //dangerous areas// which need to be identified. And as always, instead of carrying the inherent complexities of the problem into the solution, we should rather look for a common solution pattern which helps factoring out the complexity.
+First of all -- this doesn't concern //every// allocation. It rather means there are certain //dangerous areas// which need to be identified. Anyhow, instead of carrying inherent complexities of the problem into the solution, we should rather look for  common solution pattern(s) which help factoring out complexity.
 
-For the case in question this seems to be the ''resource allocation is construction'' pattern. Which boils down to basically never using bare pointers when concerned with ownership. Instead, ownership should be handled by smart-pointers.
+For the case here in question this seems to be the ''resource allocation is construction'' pattern. Which boils down to basically never using bare pointers when concerned with ownership. Instead, ownership should be handled by smart-pointers.
 
 !!usage scenarios
 # __existence is being used__: Objects just live for being referred to in a object network. In this case, use refcounting smart-pointers for every ref. (note: problem with cyclic refs)
 # __entity bound ownership__: Objects can be tied to some long living entity in the program, which holds the smart-pointer
-#* if the existence of these ref-holding entity can be //guaranteed// (like a contract), then the other users can build a object network with conventional pointers
+#* if the existence of these ref-holding entity can be //guaranteed// (as if by contract), then the other users can build a object network with conventional pointers
 #* otherwise, when the ref-holding entity //can disappear// in a regular program state, we need weak-refs and checking (because by our postulate the controlled resource needs to be destructed immediately, otherwise we would have the first case, existence == being used)
 
 !!!dangerous uses
@@ -1440,49 +1484,54 @@ For the case in question this seems to be the ''resource allocation is construct
 * the EDL and the defined [[Asset]]s belong together to one Session. If the Session is closed, this means a internal shutdown of the whole ProcLayer, i.e. closing of all GUI representations and terminating all render processes. If these calles are implemented as blocking operations, we can assert that as long as any GUI representation or any render process is running, there is a valid Session and EDL.
 
 !using Factories
-And, last but not least, doing all actual allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides that, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot;, rather it should use some central [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
+And, last but not least, doing all actual allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
-<div title="MultichannelMedia" modifier="Ichthyostega" modified="200709220010" created="200709200255" tags="design" changecount="4">
+<div title="MultichannelMedia" modifier="Ichthyostega" modified="200710212326" created="200709200255" tags="design" changecount="6">
 <pre>Based on practical experiences, Ichthyo tends to consider Multichannel Media as the base case, while counting media files providing just one single media stream as exotic corner cases. This may seem counter intuitive at first sight; you should think of  it as an attempt to avoid right from start some of the common shortcomings found in many video editors, especially
 * having to deal with keeping a &quot;link&quot; between audio and video clips
-* silly limitations on the supported audio setups (e.g. mono, stereo and 5.1)
-* unnecessary complexity when dealing with more realistic setups, esp. when dealing with dialogue scenes
+* silly limitations on the supported audio setups (e.g. &quot;sound is mono, stereo or Dolby-5.1&quot;)
+* unnecessary complexity when dealing with more realistic setups, esp. when working on dialogue scenes
 * inability to edit stereoscopic (3D) video in a natural fashion
 
 !Compound Media
+[&gt;img[Outline of the Build Process|uml/fig131333.png]]
 Basically, each [[media asset|MediaAsset]] is considered to be a compound of several elementary media (tracks), possibly of various different media kinds. Adding support for placeholders (''proxy clips'') at some point in future will add still more complexity (because then there will be even dependencies between some of these elementary media). To handle, edit and render compound media, we need to impose some structural limitations. But anyhow, we try to configure as much as possible already at the &quot;asset level&quot; and make the rest of the proc layer behave just according to the configuration given with each asset.
 
 So, when creating a clip out of such a compound media asset, the clip has to be a compound of elementary clips mirroring the given media asset's structure. Besides, it should be possible to //detach// and //attach// elementary clips from a compound clip. On the other hand, the [[Fixture]] created from the current state of the [[EDL]] is explicit to a great extent. So, in the Fixture we deal only with elementary clips placed to absolute positions, and thus the builder will see only simple non-compound clips and translate them into the corresponding source reading nodes.
 
 !Handling
-* from a Media asset, we can get a [[Processing Pattern|ProcPatt]] describing how to build a render pipeline for this media
+* from a Media asset, we can get a [[Processing Pattern (ProcPatt)|ProcPatt]] describing how to build a render pipeline for this media
 * we can create a Clip (MObject) from each Media, which will be linked back to the media asset internally.
 * moreover, creating a Clip will create and register a Clip asset as well, and this Clip asset will be tied to the original Clip and will show up in some special Category
 * media can be compound and the created Clips will mirror this compound structure
 * we distinguish elementay (non-compound) Clips from compound clips by concrete subtype. The builder can only handle elementary clips, because he needs to build a separate pipeline for every output channel. So the work of splitting common effect stacks for clips with several channels needs to be done when calculating the Fixture for the current EDL. The Builder expects to be able to build the render nodes corresponding to each entity found in the Fixture one by one.
 * the Builder gets at the ProcPatt (descriptor) of the underlying media for each clip and uses this description as a template to build the render pipeline. That is, the ProcPatt specifies the codec asset and maybe some additional effect assets (deinterlace, scale) necessary for feeding media data corresponding to this clip/media into the render nodes network.</pre>
 </div>
-<div title="ObjectCreation" modifier="Ichthyostega" modified="200709040257" created="200709030139" tags="impl design" changecount="10">
-<pre>We have to consider carefully how to handle the Creation of new class instances. Because, when done naively, it can defeat all efforts of separating subsystems, or &amp;mdash; the other extreme &amp;mdash; lead to a //switch-on-typeID//  programming style. We strive at a solution somewhere in the middle by utilizing __Abstract Factories__ on Interface or key abstraction classes, but providing specialized overloads for the different use cases. So in each use case we have to decide if we want to create a representant of some general concept (Interface), or if we have a direct colaboration and thus need the Factory to provide
-a more specific sub-Interface or even a concrete type.
+<div title="ObjectCreation" modifier="Ichthyostega" modified="200711130113" created="200709030139" tags="impl design" changecount="17">
+<pre>We have to consider carefully how to handle the Creation of new class instances. Because, when done naively, it can defeat all efforts of separating subsystems, or &amp;mdash; the other extreme &amp;mdash; lead to a //switch-on-typeID//  programming style. We strive at a solution somewhere in the middle by utilizing __Abstract Factories__ on Interface or key abstraction classes, but providing specialized overloads for the different use cases. So in each use case we have to decide if we want to create a instance of some general concept (Interface), or if we have a direct collaboration and thus need the Factory to provide a more specific sub-Interface or even a concrete type.
 
 !Object creation use cases
 !![[Assets|Asset]]
 |!Action|&gt;|!creates |
 |loading a media file|asset::Media, asset::Codec| |
-|viewing media|asset::Clip| for the whole Media, if not already existant|
-|mark selection as clip|asset::Clip| doesn't add to EDL|
+|viewing media|asset::Clip, session::Clip and Placement (on hold)| for the whole Media, if not already existent|
+|mark selection as clip|asset::Clip, session::Clip, Placement with unspec. LocatingPin| doesn't add to EDL|
 |loading Plugin|asset::Effect| usually at program startup|
 |create Session|asset::Track, asset::OutPort| |
 &amp;rarr; [[Creating and registering Assets|AssetCreation]]
 
 !![[MObjects|MObject]]
-|add media to EDL|asset::Clip, session::Clip, FixedPlacement| creating whole-media clip on-the-fly |
-|add Clip|session::Clip, FixedPlacement| |
-|attach Effect|session::Effect, RelativePlacement| |
-|start using Automation|session::Auto, asset::Dataset, RelativePlacement| |
-</pre>
+|add media to EDL|asset::Clip, session::Clip, Placement with unspecified LocatingPin| creating whole-media clip on-the-fly |
+|add Clip to EDL|copy of Placement| creates intependent Placement of existing ~Clip-MO|
+|attach Effect|session::Effect, Placement with RelativeLocation| |
+|start using Automation|session::Auto, asset::Dataset, RelativeLocation Placement| |
+
+!Invariants
+when creating Objects, certain invariants have to be maintained. Because creating an Object can be considered an atomic operation and must not leave any related objects in an inconsistent state. Each of our interfaces implies some invariants:
+* every Placement has a Subject it places
+* MObjects are always created to be placed in some way or the other
+* [[Assets|Asset]] manage a dependency graph. Creating a derived Object (e.g. a Clip from a Media) implies a new dependency. (&amp;rarr; [[memory management|ManagementAssetRelation]] relies on this)</pre>
 </div>
 <div title="OpenGL" modifier="Ichthyostega" modified="200706220359" created="200706220345" tags="def discuss" changecount="3">
 <pre>Cinelerra2 introduced OpenGL support for rendering previews. I must admit, I am very unhappy with this, because
@@ -1499,18 +1548,18 @@ But because I know the opinions on this topc are varying (users tend to be delig
 My proposed aproach is to treat OpenGL as a separate video raw data type, requiring separete and specialized [[Processing Nodes|ProcNode]] for all calculations. Thus the Builder could connect OpenGL nodes if it is possible to cover the whole render path for preview and fall back to the normal ~ProcNodes for all relevant renders
 </pre>
 </div>
-<div title="Overview" modifier="Ichthyostega" modified="200709030125" created="200706190300" tags="overview" changecount="4">
-<pre>The Cinelerra-3 Processing Layer is comprised of various subsystems and can be separated into a low-level and a high-level part. At the low-level end is the [[Render Engine|OverviewRenderEngine]] which basically is a network of render nodes cooperating closely with the Backend Layer in order to carry out the actual playback and media transforming calculations. Whereas on the high-level side we find several different [[Media Objects|MObjects]] that can be placed into the [[EDL]], edited and manipulated. This is complemented by the [[Asset Management|Asset]], which is the &quot;bookkeeping view&quot; of all the different &quot;things&quot; within each Session.
+<div title="Overview" modifier="Ichthyostega" modified="200711122342" created="200706190300" tags="overview" changecount="6">
+<pre>The Cinelerra-3 Processing Layer is comprised of various subsystems and can be separated into a low-level and a high-level part. At the low-level end is the [[Render Engine|OverviewRenderEngine]] which basically is a network of render nodes cooperating closely with the Backend Layer in order to carry out the actual playback and media transforming calculations. Whereas on the high-level side we find several different [[Media Objects|MObjects]] that can be placed into the [[EDL]], edited and manipulated. This is complemented by the [[Asset Management|Asset]], which is the &quot;bookkeeping view&quot; of all the different &quot;things&quot; within each [[Session|SessionOverview]].
 [img[Block Diagram|uml/fig128005.png]]
 </pre>
 </div>
-<div title="OverviewRenderEngine" modifier="MichaelPloujnikov" modified="200706271432" created="200706190647" tags="overview" changecount="17">
+<div title="OverviewRenderEngine" modifier="Ichthyostega" modified="200711130002" created="200706190647" tags="overview" changecount="18">
 <pre>Render Engine, [[Builder]] and [[Controller]] are closely related Subsystems. Actually, the [[Builder]] //creates// a newly configured Render Engine //for every// RenderProcess. Before doing so, it queries from the Session (or, to be more precise, from the [[Fixture]] within the current Session) all necessary Media Object Placement information. The [[Builder]] then derives from this information the actual assembly of [[Processing Nodes|ProcNode]] comprising the Render Engine. Thus:
  * the source of the build process is a sequence of absolute (explicit) [[Placements|Placement]] called the [[Playlist]]
  * the [[build process|BuildProcess]] is driven, configured and controlled by the [[Controller]] subsystem component. It encompasses the actual playback configuration and State of the System.
  * the resulting Render Engine is a list of [[Processors]], each configured to calculate a segment of the timeline with uniform properties. Each of these Processors in turn is a graph of interconnected ProcNode.s.
 
-see also: RenderEntities
+see also: RenderEntities, [[two Examples (Object diagrams)|Examples]] 
 
 [img[Overview: Components of the Renderengine|uml/fig128261.png]]
 </pre>
@@ -2063,8 +2112,29 @@ DAMAGE.
 &lt;html&gt;&lt;sub&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;scrollAnchorVisible('Top',null, event)&quot;&gt;[Top]&lt;/sub&gt;&lt;/a&gt;&lt;/html&gt;
 ***/</pre>
 </div>
-<div title="Placement" modifier="MichaelPloujnikov" modified="200706271459" created="200706220306" tags="def" changecount="3">
+<div title="Placement" modifier="Ichthyostega" modified="200710100120" created="200706220306" tags="def" changecount="6">
 <pre>A Placement represents a //relation:// it is always linked to a //Subject// (this being a [[Media Object|MObject]]) and has the meaning to //place// this Subject in some manner, either relatively to other Media Objects, or by some Constraint or simply absolute at (time,track). The latter case is especially important and represented by a special [[Sub-Interface|ExplicitPlacement]]
+
+The fact of being placed in the [[Session|SessionOverview]]/[[EDL]]is constitutive for all sorts of [[MObject]]s, without Placement they make no sense. Thus &amp;mdash; technically &amp;mdash; Placements act as ''smart pointers''. Of course, there are several kinds of Placements and they are templated on the type of MObject they are refering to. Placements can be //aggregated// to increasingly constrain the resulting &quot;location&quot; of the refered ~MObject. See &amp;rarr; [[handling of Placements|PlacementHandling]] for more details</pre>
+</div>
+<div title="PlacementHandling" modifier="Ichthyostega" modified="200710191414" created="200710100124" tags="design impl" changecount="11">
+<pre>[[Placement]]s are at the very core of all [[editing operations|EditingOperations]], because they act as handles (smart pointers) to access the [[media objects|MObject]] to be manipulated. Moreover, Placements are the actual content of the EDL(s) and Fixture and thus are small objects with //value semantics//. Many editing tasks include finding some Placement in the EDL or directly take a ref to some Placement. By acting on the Placement object, we can in some cases change parameters of the way the media object is placed (e.g. adjust an offset), while by dereferencing the Placement object, we access the &quot;real&quot; media object (e.g. for trimming its length). Placements are ''templated'' on the type of the actual ~MObject they refer to, thus defining the interface/methods usable on this object.
+
+Actually, the way each Placement locates its subject is implemented by one or several small LocatingPin objects, where subclasses of LocatingPin implement the various differend methods of placing and resolving the final location. Notably, we can give a ~FixedLocation or we can atach to another ~MObject to get a ~RelativeLocation, etc.
+
+Placements have //value semantics,// i.e. we don't stress the identity of a placement object (~MObjects on the other hand //do have// a distinguishable identity): initially, you create a Placement parametrized to some specific kind (fixed, relative,...), but later on, you treat the placement polymorphically and don't care about its kind. The sole purpose of the placement's kind is to select some virtual function implementing the desired behaviour. There is no limitation to one single Placement per ~MObject, indeed we have several different Placements of the same MObject (from a users point of view, this behaves like having clones). Besides, we can ''aggregate'' additional [[LocatingPin]]a to one Placements, resulting in their properties and constraints being combined to yield the actual position of the referred ~MObject.
+
+!design decisions
+* the actual way of placing is implemented similar to the ''State Pattern'' by small embedded LocatingPin objects.
+* these LocatingPin objects form a ''decorator'' like chain
+* resolving into an ExplicitPlacement traverses this chain
+* //overconstraining// a placement is not an error, we just stop traversing the chain (ignoring the remaining additional Placements) at the moment the position is completely defined. 
+* we provide subclasses to be able to form collections of e.g. {{{Placement&lt;Effect&gt;}}}, but we don't stress polymorphism here. Instead we stick to value semantics and explicitly ''allow slicing'' (all subclasses have the same size and layout and differ only in their vtable contents). This is justified, because for the polymorphical treating of ~MObjects the visitor mechanism used by the builder and the EDL is sufficiant, and I don't want to add another layer of complexity by making Placement something like {{{boost::variant}}}.
+* Why is the question how to access a ~MObject subinterface a Problem?
+*# we want the EDL/Fixture to be a collection of Placements. This means, either we store pointers, or Placement needs to be //one// unique type!
+*# but if Placement is //a single type//, then we can get only MObjects from a Placement.
+*# then either we had to do everything by a visitor (which gets the concrete subtype dynamically), or we'd end up switching on type.
+
 </pre>
 </div>
 <div title="Playlist" modifier="Ichthyostega" modified="200706250727" created="200706220456" tags="def" changecount="3">
@@ -2357,21 +2427,38 @@ config.macros.rssFeedUpdate = {
 //}}}
 </pre>
 </div>
-<div title="RenderEngine" modifier="Ichthyostega" modified="200708050630" created="200706190056" tags="overview" changecount="40">
-<pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[this aspect|MObjects]] as well.
+<div title="RelationClipAsset" modifier="Ichthyostega" modified="200710212327" created="200710191541" tags="design decision" changecount="7">
+<pre>What is the Role of the asset::Clip and how exactly are Assets and (Clip)-MObjects related?
 
-The key idea of Ichthyo's Design-draft is to use the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]] for the Render Engine, thus separating completely the //building// of the Render Pipeline from //running,// i.e. doing the actual Render. The Nodes in this Pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder.
-([[more on the Design Goals|DesignGoals]])
+First of all: ~MObjects are the dynamic/editing/manipulation view, while Assets are the static/bookkeeping/searching/information view of the same entities. Thus, the asset::Clip contains the general configuration, the ref to the media and descriptive properties, while all parameters being &quot;manipulated&quot; belong to the session::Clip (MObject). Besides that, the practical purpose of asset::Clip is that you can save and remember some selection as a Clip (Asset), maybe even attach some informations or markup to it, and later be able to (re)create a editable representation in the Session (the GUI could implement this by allowing to drag from the asset::Clip GUI representation to the timeline window)
 
-!Why doesn't the current Design succeed with this?
-The design of Cinelerra 2 basically follows this design, but __fails because of two reasons__
-# too much differentiation is put into the class hierarchy instead of configuring Instances differently.&lt;br&gt;This causes overly heavy use of virtual functions and -- in order to ameliorate this -- falling back to hard wired branching
-# far too much back-coupling to the internals of the [[EDL]], forcing a overly rigid structure on the latter
+!!dependencies
+The session::Clip (frequently called &quot;clip-MO&quot;, i.e. the MObject) //depends on the Asset.// It can't exist without the Asset, because the Asset is needed for rendering. The other direction is different: the asset::Clip knows that there is a dependant clip-MO, there could be //at most one// such clip-MO depending on the Asset, but the Asset can exist without the clip-MO (it gives the possibility to re-create the clip-MO).
 
-!Try to learn from this
-* build up an [[Node Abstraction|ProcNode]] powerful enough to express //all necessary Operations// without the need to recure on the actual object type
-* need to redesign the internals of the EDL in a far more open manner. See MObjects
-* strive at a StrongSeparation between EDL and Render Engine
+!!deletions
+When the Asset or the corresponding asset::Media is deleted, the dependant clip-MO has to disappear. And the opposite direction?
+* Model-1: asset::Clip has a weak ref to the clip-MO. Consequently, the clip-MO can go out of scope and disappear, so the asset::Clip has to maintain the information of the clip's dimensions (source position and length) somewhere. Because of MultichannelMedia, this is not so simple as it may look at first sight.
+* Model-2: asset::Clip holds a smart ptr to the clip-MO, thus effectively keeping it alive. __obviously the better choice__
+In either case, we have to solve the ''problem of clip asset proliferation''
+
+!!multiplicity and const-ness
+The link between ~MObject and Asset should be {{{const}}}, so the clip can't change the media parameters. Because of separation of concerns, it would be desirable that the Asset can't //edit// the clip either (meaning {{{const}}} in the opposite direction as well). But unfortunately the asset::Clip is in power to delete the clip-MO and, moreover, handles out a smart ptr ([[Placement]]) referring to the clip-MO, which can (and should) be used to place the clip-MO within the EDL and to manipulate it consequently...
+[&gt;img[Outline of the Build Process|uml/fig131333.png]]
+At first sight the link between asset and clip-MO is a simple logical relation between entities, but it is not strictly 1:1 because typical media are [[multichannel|MultichannelMedia]]. Even if the media is compound, there is //only one asset::Clip//, because in the logical view we have only one &quot;clip-thing&quot;. On the other hand, in the Session/EDL, we have a compound clip ~MObject comprised of several elementary clip objects, each of which will refer to its own sub-media (channel) within the compound media (and don't forget, this structure can be tree-like)
+{{red{open question:}}} do the clip-MO's of the individual channels refer directly to asset::Media? does this mean the relation is different from the top level, where we have a relation to a asset::Clip??</pre>
+</div>
+<div title="RenderEngine" modifier="Ichthyostega" modified="200711122340" created="200706190056" tags="overview" changecount="44">
+<pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
+&lt;&lt;&lt;
+''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a //first, draft, prototypical// implementation in C++
+&lt;&lt;&lt;
+
+!Summary
+We have several kinds of &quot;things&quot; organized as [[assets|Asset]] in the AssetManager, like media, clips, effects, codecs, configuration templates. Within the context of the [[EDL]], we can use these as [[&quot;Media Objects&quot;|MObjects]] &amp;mdash; especially, we can [[place|Placement]] them in various kinds within the EDL and relative to one another. Basically, this is the [[editing work|EditingOperations]] done by the user.
+
+Now, from any given configuration within the EDL, we create sort or a frozen- and tied-down snapshot, here called [[&quot;Fixture&quot;|Fixture]], containing all currently active ~MObjects, broken down to elementary parts and made explicit if necessary. This Fixture acts as a isolation layer towards the Render Engine. We will hand it over to the  [[Builder]], which in turn will transform it into a network of connected [[render nodes|ProcNode]]. This network //is// the [[Render Engine|OverviewRenderEngine]].
+
+The system is ''open'' inasmuch every part mirrors the structure of corresponding parts in adjacent subsystems, and the transformation of any given structure from one subsystem (e.g. Asset) to another (e.g. Render Engine) is done with minimal &quot;magic&quot;. So the whole system should be able to handle completely new structures mostly by adding new configurations and components, without much need of rewriting basic workings.
 
 !!see also
 &amp;rarr; [[Overview]] of Subsystems and Components, and DesignGoals
@@ -2679,8 +2766,8 @@ h1,h2,h3,h4,h5,h6 {
 /*}}}*/
 </pre>
 </div>
-<div title="TabTimeline" modifier="Ichthyostega" modified="200708080211" created="200706191949" changecount="2">
-<pre>&lt;&lt;timeline better:true maxDays:28 maxEntries:20&gt;&gt;</pre>
+<div title="TabTimeline" modifier="Ichthyostega" modified="200711082358" created="200706191949" changecount="3">
+<pre>&lt;&lt;timeline better:true maxDays:55 maxEntries:30&gt;&gt;</pre>
 </div>
 <div title="TextAreaPlugin" modifier="Jeremy" created="200601261745" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200601261745">
 <pre>/***
@@ -2817,7 +2904,7 @@ function addKeyDownHandlers(e)
 
 </pre>
 </div>
-<div title="WalkThrough" modifier="MichaelPloujnikov" modified="200706271449" created="200706210625" tags="overview" changecount="34">
+<div title="WalkThrough" modifier="Ichthyostega" modified="200711122353" created="200706210625" tags="overview" changecount="35">
 <pre>The Intention of this text is to help you understanding the design and to show some notable details.
 
 !!!!Starting Point
@@ -2848,7 +2935,7 @@ An important goal of this approach is to be able to push down the treatment of v
 In case it's not already clear: we don't have &quot;the&quot; Render Engine, rather we construct a Render Engine for each structurally differing part of the timeline. (please relate this to the current Cinelerra code base, which constructs and builds up the render pipeline for each frame separately). No need to call back from within the pipeline to find out if a given plugin is enabled or to see if there are any automation keyframes. We don't need to pose any constraints on the structuring of the objects in the EDL, besides the requirement to get an ExplicitPlacement for each. We could even loosen the use of the common metaphor of placing media sequences on fixed tracks, if we want to get at a more advanced GUI at some point in the future.
 
 !!!!Stateless Subsystems
-The &amp;raquo;current setup&amp;laquo; of the objects in the EDL is sort of a global state. Same holds true for the Controller, as the Engine can be at playback, it can run a background render or scrub single frames. But the whole complicated subsystem of the Builder and one given Render Engine configuration can be made ''stateless''. As a benefit of this we can run this subsystems multi-threaded without the need of any precautions (locking, synchronizing). Because all state information is just passed in as function parameters and lives in local variables on the stack, or is contained in the StateProxy which represents the given render //process// and is passed down as function parameter as well. (note: I use this term in the usual, slightly relaxed manner; of course there are some configuration values contained in instance variables of the objects carrying out the calculations, but this values are considered to be constant over the course of the object usage).
+The &amp;raquo;current setup&amp;laquo; of the objects in the EDL is sort of a global state. Same holds true for the Controller, as the Engine can be at playback, it can run a background render or scrub single frames. But the whole complicated subsystem of the Builder and one given Render Engine configuration can be made ''stateless''. As a benefit of this we can run this subsystems multi-threaded without the need of any precautions (locking, synchronizing). Because all state information is just passed in as function parameters and lives in local variables on the stack, or is contained in the StateProxy which represents the given render //process// and is passed down as function parameter as well. (note: I use the term &quot;stateless&quot; in the usual, slightly relaxed manner; of course there are some configuration values contained in instance variables of the objects carrying out the calculations, but this values are considered to be constant over the course of the object usage).
 </pre>
 </div>
 </div>

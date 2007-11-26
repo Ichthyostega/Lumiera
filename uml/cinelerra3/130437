@@ -1,6 +1,6 @@
 format 40
 "session" // design::codegen::proc::mobject::session
-  revision 9
+  revision 11
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -511,7 +511,7 @@ ${namespace_end}"
       comment "abstract base class of all MObjects representing meta data or processing instructions"
     end
 
-    artifact 129797 "fixedplacement"
+    artifact 139013 "locatingpin"
       stereotype "source"
       cpp_h "/*
   ${NAME}.hpp  -  ${description}
@@ -545,11 +545,12 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 129285 // FixedPlacement
+	class_ref 139909 // LocatingPin
       end
+      comment "Chaining and constraining the Placement of a Media Object"
     end
 
-    artifact 129925 "relativeplacement"
+    artifact 129797 "fixedlocation"
       stereotype "source"
       cpp_h "/*
   ${NAME}.hpp  -  ${description}
@@ -583,7 +584,46 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 129413 // RelativePlacement
+	class_ref 129285 // FixedLocation
+      end
+      comment "implements fixed placement of a MObject"
+    end
+
+    artifact 129925 "relativelocation"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 129413 // RelativeLocation
       end
       comment "Placement implemnetaion providing various ways of attaching a MObject to another one"
     end

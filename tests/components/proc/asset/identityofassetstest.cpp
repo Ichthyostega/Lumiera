@@ -46,7 +46,6 @@ namespace asset
      * @test creating several Assets and checking object identity,
      *       detection of duplicates and version handling.
      * @see  proc_interface::AssetManager#reg
-     * @todo to be written; features are missing as of 9/07
      */
     class IdentityOfAssets_test : public Test
       {

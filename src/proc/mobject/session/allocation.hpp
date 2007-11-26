@@ -1,5 +1,5 @@
 /*
-  ALLOCATION.hpp  -  directive to place a MObject in a specific way
+  ALLOCATION.hpp  -  objective to place a MObject in a specific way
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -26,7 +26,7 @@
 
 #include <string>
 
-#include "proc/mobject/placement.hpp"
+#include "proc/mobject/session/locatingpin.hpp"
 
 
 using std::string;
@@ -39,18 +39,23 @@ namespace mobject
 
 
     /**
-     * a directive to place a MObject in a specific way
+     * Interface (abstract): any objective, constraint or wish
+     * of placing a MObject in a specific way.
      */
-    class Allocation : public Placement
+    class Allocation : public LocatingPin
       {
       protected:
         /** human readable representation of the condition
          *  characterizing this allocaton, e.g. "t >= 10"
          */
         string repr;
-
+        
+        virtual void intersect (LocatingSolution&)  const;
+        
       public:
-        const string& getRepr () const { return repr; } 
+        const string& getRepr () const { return repr; }
+        
+        virtual Allocation* clone ()  const = 0;
       };
 
 

@@ -50,5 +50,8 @@ namespace mobject
      
   } // namespace mobject::session
 
+  /** Placement<Effect> defined to be subclass of Placement<MObject> */
+  DEFINE_SPECIALIZED_PLACEMENT (session::Effect);
+    
 } // namespace mobject
 #endif

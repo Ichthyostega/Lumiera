@@ -26,16 +26,21 @@
 #include "proc/asset/clip.hpp"
 #include "proc/asset/unknown.hpp"
 #include "proc/mobject/session/clip.hpp"
+#include "proc/mobject/session/mobjectfactory.hpp"
 #include "common/util.hpp"
 #include "nobugcfg.h"
 
 #include <boost/regex.hpp>
+#include <boost/format.hpp>
+
 
 using util::isnil;
 
+using boost::format;
 using boost::regex;
 using boost::smatch;
 using boost::regex_search;
+using std::tr1::dynamic_pointer_cast;
 
 
 namespace asset
@@ -62,28 +67,58 @@ namespace asset
   
   
   
-  typedef shared_ptr<mobject::session::Clip> PClip;
-  typedef shared_ptr<asset::ProcPatt> PProcPatt;
   
-  
-  PClip 
+  Media::PClipMO
   Media::createClip ()
   {
-    UNIMPLEMENTED ("create clip from media asset");
-    PClip clip; //TODO:null
+    PClip clipAsset (getClipAsset()); 
+    PClipMO clipMO = clipAsset->createClip();
     
-    ENSURE (clip);
-    return clip;
+    ENSURE (clipMO->isValid());
+    return clipMO;
   }
   
-  PProcPatt
-  Media::howtoProc ()
+  
+  /** @internal used to either create an asset::Clip denoting the whole media,
+   *            or to get the right reference to some already existing asset::Clip,
+   *            especially when this media is part of a compound (multichannel) media.
+   */
+  Media::PClip
+  Media::getClipAsset ()
+  {
+    if (PMedia parent = this->checkCompound())
+      return parent->getClipAsset();
+    else
+      return Media::create(*this);
+  }
+  
+  
+  Media::PMedia
+  Media::checkCompound()  const
+  {
+    vector<PAsset> parents = this->getParents();
+    PMedia parent;
+    if ( !isnil (parents))  // primary parent is a media asset?
+       parent = dynamic_pointer_cast<Media,Asset> (parents[0]);
+    return parent;
+  }
+  
+  
+  Media::PProcPatt
+  Media::howtoProc ()  const
   {
     UNIMPLEMENTED ("calculate and return processing pattern for media asset");
     PProcPatt ppatt; //TODO:null
     
     ENSURE (ppatt);
     return ppatt;
+  }
+  
+  
+  cinelerra::Time
+  Media::getLength()  const
+  {
+     return len_;
   }
   
   
@@ -120,7 +155,10 @@ namespace asset
       {
         if (isnil (key.name)) key.name=extractName(file);
         TODO ("file exists?");
-        pM = new Media (key,file); 
+        TODO ("extract media file properties");
+        Time length(25);
+        TODO ("detecting and wiring multichannel compound media!");
+        pM = new Media (key,file,length); 
       }
     ASSERT (pM);
     ENSURE (key.category.hasKind (VIDEO) || key.category.hasKind(AUDIO));
@@ -170,6 +208,34 @@ namespace asset
     if (!file) file = "";
     return operator() (key, string(file));
   }
+  
+  
+  /** Factory method for creating a Clip asset based
+   *  on the given Media asset. This asset::Clip can be used
+   *  to create clip in the EDL covering the whole length of
+   *  this media.
+   *  @note  creates a dependency between media and new clip 
+   *  @throw Invalid if the given media asset is not top-level,
+   *         but rather part or a multichannel (compound) media
+   */
+  shared_ptr<asset::Clip>
+  MediaFactory::operator() (asset::Media& mediaref)  throw(cinelerra::error::Invalid)
+  {
+    if (mediaref.checkCompound())
+      throw cinelerra::error::Invalid (str(format("Attempt to create a asset::Clip from the media %s, "
+                                                  "which is not toplevel but rather part or a compound "
+                                                  "(multichannel) media. Found parent Media %s.") 
+                                                  % string(mediaref) 
+                                                  % string(*mediaref.checkCompound()))
+                                      ,CINELERRA_ERROR_PART_OF_COMPOUND
+                                      );
+    asset::Clip* pC = new asset::Clip (mediaref);
+    return AssetManager::instance().getPtr (*pC);
+  }
+  
+  CINELERRA_ERROR_DEFINE (PART_OF_COMPOUND, "part of compound used as toplevel element");
+  
+
 
 
 } // namespace asset

@@ -28,30 +28,19 @@ namespace mobject
   {
 
 
-  /** factory for creating the corretct Placement subclass */
-  PlacementFactory Placement::create;
-
-
-  /** create an actual (explicit) placement while trying to
-   * satisfy the network of adjacent objects and placements.
-   * TODO: need GC!!!!!!!!!!!
+  /** @note we know we need only this single
+   *        specialisation, because we define 
+   *        the Placements of more specific 
+   *        MObject kinds to be subclasses
+   *        of Placement<MObject>, so they
+   *        will inherit this function.
    */
-  ExplicitPlacement&
-  Placement::resolve ()
-  {
-  }
-  
-  
-  
-  /** implements the logic for selecting the correct 
-   *  Placement subclass.
-   *  @return smart ptr owning the created placement object
-   */
-  PlacementFactory::PType 
-  PlacementFactory::operator() (Placement::Style, Time, PMO subject)
-  {
-    UNIMPLEMENTED ("create correct Placement subclass");
-  }
+  template<>
+  ExplicitPlacement
+  Placement<MObject>::resolve ()  const 
+    { 
+      return ExplicitPlacement (*this, chain.resolve()); 
+    }
 
 
 

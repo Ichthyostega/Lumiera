@@ -33,6 +33,8 @@
 #include <boost/format.hpp>
 #include <boost/bind.hpp>
 
+using std::tr1::static_pointer_cast;
+using boost::function;
 using boost::format;
 using boost::bind;
 //using boost::lambda::_1;
@@ -46,7 +48,7 @@ namespace asset
   {
   
   /** 
-   * AssetManager error responses, cause by querying
+   * AssetManager error responses, caused by querying
    * invalid Asset IDs from the internal DB.
    */ 
   class IDErr : public cinelerra::error::Invalid 
@@ -126,10 +128,9 @@ namespace asset
   }
   
   
-  /**
-   * find and return the object registered with the given ID.
-   * @throws Invalid if nothing is found or if the actual KIND
-   *         of the stored object differs and can't be casted.  
+  /** find and return the object registered with the given ID.
+   *  @throws Invalid if nothing is found or if the actual KIND
+   *          of the stored object differs and can't be casted.  
    */
   template<class KIND>
   shared_ptr<KIND>
@@ -144,6 +145,23 @@ namespace asset
       else
         throw UnknownID (id);
   }
+  
+  /** convienience shortcut for fetching the registered shared_ptr
+   *  which is in charge of the given asset instance. By querying
+   *  directly asset.id (of type ID<Asset>), the call to registry.get()
+   *  can bypass the dynamic cast, because the type of the asset 
+   *  is explicitely given by type KIND. 
+   */
+  template<class KIND>
+  shared_ptr<KIND>
+  AssetManager::getPtr (const KIND& asset)
+  {
+    ENSURE (instance().known(asset.id), 
+            "unregistered asset instance encountered.");
+    return static_pointer_cast<KIND,Asset>
+            (instance().registry.get (asset.id));
+  }
+
 
 
   /**
@@ -169,33 +187,36 @@ namespace asset
 
   
   void 
-  AssetManager::detach_child (PAsset& pA, IDA id)
+  recursive_call (AssetManager* instance, PAsset& pA)
+  { 
+    instance->remove (pA->getID());
+  }
+
+  function<void(PAsset&)> 
+  detach_child_recursively ()  ///< @return a functor recursively invoking remove(child)  
   {
-    pA->unlink(id);
+    return bind( &recursive_call, &AssetManager::instance(), _1 );
   }
 
   /**
-   * remove the given asset <i>together with all its dependants</i> from the internal DB
+   * remove the given asset from the internal DB
+   * <i>together with all its dependants</i> 
    */
   void
   AssetManager::remove (IDA id)  
-      throw(cinelerra::error::Invalid, 
-            cinelerra::error::State)
   {
-    UNIMPLEMENTED ("remove Asset with all dependecies");
-    
-    PAsset pA = getAsset (id);
-    vector<PAsset> par = pA->getParents();
-    boost::function<void(PAsset&)> func = bind(&detach_child, _1,id ); 
-    for_each (par, func); //   ,boost::lambda::var(id)));
+    PAsset asset = getAsset (id);
+    for_each (asset->dependants, detach_child_recursively());
+    asset->unlink();
+    registry.del(id);
   }
 
   
   
-  list<PAsset> 
+  list<PcAsset> 
   AssetManager::listContent() const
   {
-    list<PAsset> res;
+    list<PcAsset> res;
     registry.asList (res);
     res.sort();
     return res;
@@ -212,6 +233,7 @@ namespace asset
    /************************************************************/
 
 #include "proc/asset/media.hpp"  
+#include "proc/asset/clip.hpp"  
 #include "proc/asset/proc.hpp"  
 #include "proc/asset/struct.hpp"  
 #include "proc/asset/meta.hpp"  
@@ -228,5 +250,10 @@ namespace asset
   template shared_ptr<Proc>   AssetManager::getAsset (const ID<Proc>&   id)  throw(cinelerra::error::Invalid);
   template shared_ptr<Struct> AssetManager::getAsset (const ID<Struct>& id)  throw(cinelerra::error::Invalid);
   template shared_ptr<Meta>   AssetManager::getAsset (const ID<Meta>&   id)  throw(cinelerra::error::Invalid);
+  
+  template shared_ptr<Asset>  AssetManager::getPtr (const Asset& asset);
+  template shared_ptr<Media>  AssetManager::getPtr (const Media& asset);
+  template shared_ptr<Clip>   AssetManager::getPtr (const Clip&  asset);
+
   
 } // namespace asset

@@ -1,5 +1,5 @@
 /*
-  RELATIVEPLACEMENT.hpp  -  Placement implemnetaion providing various ways of attaching a MObject to another one
+  RELATIVELOCATION.hpp  -  Placement implementation attaching MObjects relative to another one
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -21,10 +21,10 @@
 */
 
 
-#ifndef MOBJECT_SESSION_RELATIVEPLACEMENT_H
-#define MOBJECT_SESSION_RELATIVEPLACEMENT_H
+#ifndef MOBJECT_SESSION_RELATIVELOCATION_H
+#define MOBJECT_SESSION_RELATIVELOCATION_H
 
-#include "proc/mobject/placement.hpp"
+#include "proc/mobject/session/locatingpin.hpp"
 
 
 
@@ -36,8 +36,10 @@ namespace mobject
 
 
 
-    class RelativePlacement : public Placement
+    class RelativeLocation : public LocatingPin
       {
+        const PMO & anchor_;  ////////////TODO: ooooops, this is a nasty design problem!!!
+        
       public:
 
         /**
@@ -49,14 +51,22 @@ namespace mobject
         };
 
       protected:
-        MObject* anchor;
+        RelativeLocation (const PMO& a, Time ofs) : anchor_(a), offset_(ofs) { }
+        friend class LocatingPin;
 
         /** the kind of relation denoted by this Placement */
         RelType relType;
 
         /** Offset the actual position by this (time) value relative to the anchor point. */
-        cinelerra::Time offset;
+        Time offset_;
         //TODO: suitable representation?
+        
+        
+        virtual void intersect (LocatingSolution&)  const;
+        
+        
+      public:
+        virtual RelativeLocation* clone ()  const;
 
       };
 

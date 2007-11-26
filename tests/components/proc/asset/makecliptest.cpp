@@ -27,8 +27,7 @@
 #include "proc/assetmanager.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/mobject/session/clip.hpp"
-
-//#include "proc/asset/assetdiagnostics.hpp"
+#include "proc/asset/assetdiagnostics.hpp"
 
 using util::contains;
 using util::isnil;
@@ -52,37 +51,28 @@ namespace asset
     class MakeClip_test : public Test
       {
         typedef shared_ptr<asset::Media> PM;
-        typedef shared_ptr<mobject::session::Clip> PC;
+        typedef asset::Media::PClipMO PC;
             
         virtual void run (Arg arg) 
           {
             
             PM mm = asset::Media::create("test-1", VIDEO);
             PC cc = mm->createClip();
-            PM cm = static_pointer_cast<Media,Asset> (cc->getMedia());   //TODO: solve the reference/interface Problem on MObject, push down to Clip...
+            PM cm = cc->getMedia();
             
             ASSERT (cm);
             ASSERT (0 < cc->getLength());
             ASSERT (cm->ident.category.hasKind (VIDEO));
             ASSERT (cm->getFilename() == mm->getFilename());
-            ASSERT (cm->howtoProc() == mm->howtoProc());
+TODO ("implement Processing Pattern!!!");   
+//            ASSERT (cm->howtoProc() == mm->howtoProc());
             ASSERT (cm->ident.org == mm->ident.org);
-            ASSERT (dependencyCheck (mm,cm));
+            ASSERT (dependencyCheck (cm,mm));
 
             TRACE (assetmem,   "leaving MakeClip_test::run()");
             TRACE (mobjectmem, "leaving MakeClip_test::run()");
           }
         
-        bool dependencyCheck (PM media, PM clip)
-        {
-          TODO ("check asset dependencies, when this feature is implemented");
-          return true; //TODO
-          
-          return (0 < clip->getParents().size())
-              && (media == clip->getParents()[0])
-//              && (contains (media->getDependant(), clip));            //TODO implement Asset dependecies
-              ;
-        }
         
       };
     

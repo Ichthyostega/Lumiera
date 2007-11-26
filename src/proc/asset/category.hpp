@@ -78,6 +78,7 @@ namespace asset
         
       bool hasKind (Kind refKind)     const         { return kind_ == refKind; }
       bool isWithin (const Category&) const;
+      void setPath (const string & newpath)         { this->path_ = newpath; }
       
       
       operator string ()  const;

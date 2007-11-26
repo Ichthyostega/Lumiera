@@ -34,21 +34,20 @@ namespace mobject
     {
 
 
+    /**
+     *  abstract base class of all MObjects for providing common services.
+     *  @todo seems that we don't need this intermediate class...
+     */
     class AbstractMO : public MObject
       {
-        ////////////// TODO: work out common services to provide!!!!
-        shared_ptr<Placement> placement_;
         
       public:
+        
         /* some dummy implementations used to make the code compile... */
         
-        virtual shared_ptr<Placement>& getPlacement () { return placement_; }
-        virtual Time& getLength()                      { return length; }
-        virtual PAsset getMedia ()                        
-          { 
-            UNIMPLEMENTED ("how to relate MObjects and media assets...");
-            return AssetManager::instance().getAsset(IDA(0)); // KABOOM! (just to make it compile)
-          }  
+        virtual Time& getLength() { return length; }
+        
+
      };
 
 

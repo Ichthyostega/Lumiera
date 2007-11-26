@@ -1,22 +1,25 @@
 window_sizes 1140 783 270 860 633 71
 diagrams
   classdiagram_ref 130309 // Asset Kinds
-    860 633 100 4 0 0
-  active  classdiagram_ref 128133 // Session structure
     860 633 100 4 120 0
-  classdiagram_ref 130437 // Media-Asset Relations
+  classdiagram_ref 128133 // Session structure
     860 633 100 4 0 0
   classdiagram_ref 128389 // Render Entities
     688 506 100 4 120 0
+  active  classdiagram_ref 130437 // Media-Asset Relations
+    859 616 100 4 0 0
 end
 show_stereotypes
 selected 
   package_ref 129 // cinelerra3
 open
-  
-  package_ref 128005 // design
-  classview_ref 128901 // Assets
-  class_ref 139781 // SessManager
+  class_ref 137477 // Unknown
+  class_ref 137605 // Preview
+  class_ref 128645 // Placement
+  class_ref 129413 // RelativeLocation
+  class_ref 129541 // Allocation
+  class_ref 139909 // LocatingPin
   classview_ref 129029 // Interface
+  usecaseview_ref 128133 // usage
 end
 end

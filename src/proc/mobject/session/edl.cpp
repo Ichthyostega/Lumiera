@@ -35,13 +35,13 @@ namespace mobject
      *              to have this on the interface
      */
     bool 
-    EDL::contains (const PPla& placement)
+    EDL::contains (const PMO& placement)
     {
       UNIMPLEMENTED ("test if a given placement is contained within this EDL");
     }
     
     
-    PPla& 
+    PMO& 
     EDL::find (const string& id)
     {
       UNIMPLEMENTED ("serch for a given 'thing' within the EDL");

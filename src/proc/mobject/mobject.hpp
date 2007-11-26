@@ -29,6 +29,7 @@
 
 #include "cinelerra.h"
 #include "proc/mobject/buildable.hpp"
+#include "proc/mobject/placement.hpp"
 #include "proc/asset.hpp"                 // TODO finally not needed?
 
 
@@ -37,13 +38,16 @@ using std::tr1::shared_ptr;
 
 #include "proc/assetmanager.hpp"                
 using proc_interface::IDA;                // TODO finally not needed?
-using proc_interface::PAsset;              //TODO: only temporarily
+//using proc_interface::PAsset;              //TODO: only temporarily
 using proc_interface::AssetManager;
 
 namespace mobject
   {
 
-  class Placement;
+  namespace session
+    {
+    class MObjectFactory;
+    }
 
 
   /**
@@ -60,17 +64,24 @@ namespace mobject
       // TODO: how to represent time intervals best?
       Time length;
       
+      MObject() {}
       virtual ~MObject() {};
       
+      friend class session::MObjectFactory;
+      
+      
     public:
-      virtual shared_ptr<Placement>& getPlacement () =0;
-      virtual PAsset getMedia () =0; ///< @todo solve the reference/Interface problem concerning Placements, then push down
+      static session::MObjectFactory create;
+      
+      /** MObject self-test (usable for asserting) */
+      virtual bool isValid()  const =0;
+      
       virtual Time& getLength() =0; ///< @todo how to deal with the time/length field??
 
     };
   
   
-  typedef shared_ptr<MObject> PMO;
+  
 
 
 

@@ -35,11 +35,27 @@ namespace asset
    */
   class Clip : public Media
     {
+      /** media source of this clip  */
+      const Media& source_;
+      
+      /** the corresponding (dependant) clip-MO */
+      PClipMO clipMO_;
+      
+    public:
+      virtual PClipMO createClip ()  const;
+      
     protected:
-      /**media source of this clip  */
-      const Media* source;
+      Clip (Media& mediaref);
+      friend class MediaFactory;
+      
+      virtual PClip getClipAsset ();
+      virtual PMedia checkCompound ();
 
     };
+    
+    typedef shared_ptr<const asset::Clip> PClipAsset;
+    
+    const string CLIP_SUBFOLDER = "clips";      // TODO: handling of hard-wired constants....
     
     
     

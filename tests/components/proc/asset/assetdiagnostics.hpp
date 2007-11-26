@@ -40,6 +40,7 @@
 #include <boost/bind.hpp>
 #include <iostream>
 
+using util::contains;
 using util::for_each;
 using boost::format;
 using boost::bind;
@@ -50,7 +51,8 @@ using std::cout;
 namespace asset
   {
  
-  inline void dump (const PAsset& aa)
+  inline void
+  dump (PcAsset& aa)
     {
       if (!aa)
         cout << "Asset(NULL)\n";
@@ -60,12 +62,26 @@ namespace asset
           cout << fmt % str(aa) % aa->getID() % aa.get() % &aa % (aa.use_count() - 1) << "\n";
     }   }
  
-  inline void dumpAssetManager ()
+  inline void
+  dumpAssetManager ()
     {
-      list<PAsset> assets (AssetManager::instance().listContent());
+      list<PcAsset> assets (AssetManager::instance().listContent());
       cout << "----all-registered-Assets----\n";
       for_each (assets, bind (&dump, _1));
     }
+  
+  
+  template<class C, class P>
+  inline bool
+  dependencyCheck (C child, P parent)
+    {
+      return (child == parent)
+          || (0 < child->getParents().size()
+             && (parent == child->getParents()[0])
+             && (contains (parent->getDependant(), child)));
+          ;
+    }
+
     
     
 

@@ -21,74 +21,142 @@
 */
 
 
+/** @file placement.hpp 
+ ** Placements are at the very core of all editing operations,
+ ** because they act as handles to access the media objects to be manipulated. 
+ ** Moreover, Placements are the actual content of the EDL(s) and Fixture and thus
+ ** are small objects with value semantics. Many editing tasks include locating some
+ ** Placement in the EDL or directly take a ref to a Placement.
+ ** 
+ ** Placements are <b>refcounting smart pointers</b>: By acting on the Placement object,
+ ** we can change parameters of the way the media object is placed (e.g. adjust an offset), 
+ ** while by dereferencing the Placement object, we access the "real" media object.
+ ** Usually, any MObject is created by a factory and immediately wrapped into a Placement,
+ ** which takes ownership of the MObject.
+ **
+ ** Besides being a handle, Placements define the logical position where some MObject is
+ ** supposed to be located within the EDL or Fixture. The way in which this placing happens
+ ** is controlled and parametrized by a collection (chain) of LocatingPin objects. By adding
+ ** to this chain, the position of the MObject is increasingly constrained. The simplest
+ ** case of such constraining is to add a FixedLocation, thus placing the MObject at one
+ ** absolute position (time, track).
+ ** 
+ ** Placements are templated on the type of the actual MObject they refer to, so, sometimes
+ ** we rather use a Placement<Clip> to be able to use the more specific methods of the
+ ** session::Clip interface. But <i>please note the following detail:</i> this type
+ ** labeling and downcasting is the <i>only</i> difference between these subclasses, 
+ ** besides that, they can be replaced literally by one another (slicing is accepted).
+ **
+ ** @see ExplicitPlacement
+ ** @see LocatingPin interface for controlling the positioning parameters
+ **
+ */
+
+
+
 #ifndef MOBJECT_PLACEMENT_H
 #define MOBJECT_PLACEMENT_H
 
-#include "common/time.hpp"
-#include "common/factory.hpp"
+#include "cinelerra.h"
 #include "proc/mobject/mobject.hpp"
+#include "proc/mobject/session/locatingpin.hpp"
 #include "proc/mobject/session/track.hpp"
+
+#include <tr1/memory>
+using std::tr1::shared_ptr;
 
 
 namespace mobject
   {
+  namespace session{ class MObjectFactory; }
 
-
-  class Placement;
   class ExplicitPlacement;
-  class PlacementFactory;
+  
 
-
-  class Placement
+  
+  
+  /**
+   * A refcounting Handle to an MObject of type MO,
+   * used to constrain or explicitly specify the
+   * location where the MObject is supposed to
+   * be within the Session/EDL
+   */
+  template<class MO>
+  class Placement : protected shared_ptr<MO>
     {
     protected:
       typedef cinelerra::Time Time;
-      typedef session::Track Track;
+      typedef session::Track* Track;
 
 
     public:
-      MObject* subject;
-
-      /** 
-       * styles of placement.
+      /** smart pointer: accessing the MObject, 
+       *  which is subject to placement.
+       *  @note we don't provide operator*
        */
-      enum Style
-      {
-        FIXED,
-        RELATIVE
-      };
+      virtual MO * 
+      operator-> ()  const 
+        { 
+          ENSURE (*this); 
+          return shared_ptr<MO>::operator-> (); 
+        }      
       
-      static PlacementFactory create;
+      virtual ~Placement() {};
+
       
-      /** resolve the network of placement and
+      /** interface for defining the kind of placement
+       *  to employ, and for controling any additional
+       *  constraints and properties. 
+       */
+      session::LocatingPin chain;
+      
+      /** combine and resolve all constraints defined
+       *  by the various LocatingPin (\see #chain) and
        *  provide the resulting (explicit) placement.
        */
-      ExplicitPlacement& resolve () ;
+      virtual ExplicitPlacement resolve ()  const; 
+      
       
     protected:
-      Placement ();
-      friend class PlacementFactory;
+      Placement (MO & subject, void (*moKiller)(MO*)) 
+        : shared_ptr<MO> (&subject, moKiller) {};
+        
+      friend class session::MObjectFactory;
     };
   
-  
-  typedef shared_ptr<Placement> PPla;
-  
+  typedef Placement<MObject> PMO;
   
   
   
-  /** 
-   * Factory specialized for creating Media Asset objects.
-   */ 
-  class PlacementFactory : public cinelerra::Factory<Placement>
-    {
-    public:
-      typedef shared_ptr<Placement> PType;
-      typedef cinelerra::Time Time;
-      
-      PType operator() (Placement::Style, Time, PMO subject);
+  
+  /* === defining specialisations to be subclasses === */
 
+#define DEFINE_SPECIALIZED_PLACEMENT(SUBCLASS)        \
+  template<>                                           \
+  class Placement<SUBCLASS> : public Placement<MObject> \
+    {                                                    \
+    protected:                                            \
+      Placement (SUBCLASS & m, void (*moKiller)(MObject*)) \
+        : Placement<MObject>::Placement (m, moKiller)      \
+        { };                                               \
+      friend class session::MObjectFactory;                \
+                                                           \
+    public:                                                \
+      virtual SUBCLASS*                                    \
+      operator-> ()  const                                 \
+        {                                                  \
+          ENSURE (INSTANCEOF (SUBCLASS, this->get()));     \
+          return static_cast<SUBCLASS*>                    \
+            (shared_ptr<MObject>::operator-> ());          \
+        }                                                  \
     };
-
+  
+  /* a note to the maintainer: please don't add any fields or methods to
+   * these subclasses which aren't also present in Placement<MObject>!
+   * Placements are frequently treated like values and thus slicing
+   * will happen, which in this special case is acceptable.
+   */
+  
 
 
 } // namespace mobject

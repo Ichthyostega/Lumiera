@@ -1,6 +1,6 @@
 format 40
 "MObject" // ProcessingLayer::MObject
-  revision 22
+  revision 27
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -409,19 +409,6 @@ ${members}};
 	comment "TODO: how to represent time intervals?"
       end
 
-      classrelation 129029 // placement (<association>)
-	relation 128645 ----
-	  stereotype "list"
-	  a role_name "placement" multiplicity "1..*" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type} *> ${name}${value};
-"
-	    classrelation_ref 129029 // placement (<association>)
-	  b role_name "subject" multiplicity "1" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 129157 // subject (<association>)
-      end
-
       classrelation 137093 // <generalisation>
 	relation 135557 ---|>
 	  a public
@@ -446,10 +433,8 @@ ${members}};
 "
       explicit_switch_type ""
       
-      classrelation 129157 // subject (<association>)
-	relation_ref 128645 // <association>
-      end
-
+      comment "used to specify the position of a MObject in the EDL. This can be done in various ways (absolute, relative). 
+Placement at the same time acts as (refcounting) smart pointer for accessing the MObject."
       operation 128005 "resolve"
 	public explicit_return_type "ExplicitPlacement   [ProcessingLayer::MObject]&"
 	nparams 0
@@ -464,6 +449,43 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 	
 	
 	comment "create an actual (explicit) placement while trying to satisfy the network of adjacent objects and placements."
+      end
+
+      classrelation 144901 // subject (<unidirectional association>)
+	relation 142981 --->
+	  a role_name "subject" multiplicity "1" protected
+	    comment "Placement acts as smart pointer"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 144901 // subject (<unidirectional association>)
+	  b multiplicity "1..*" parent class_ref 128517 // MObject
+      end
+
+      operation 134277 "chain"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "style" explicit_type ""
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	comment "create and add another Placement for this media object, thus increasingly constraining the (possible) position of this object."
+      end
+
+      classrelation 145413 // chain (<unidirectional association>)
+	relation 143237 --->
+	  a role_name "chain" multiplicity "1" protected
+	    comment "Chain of additional Placements further constraining the position of this MObject"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 145413 // chain (<unidirectional association>)
+	  b multiplicity "" parent class_ref 139909 // LocatingPin
       end
     end
 
@@ -679,7 +701,7 @@ ${inlines}
       end
     end
 
-    class 129285 "FixedPlacement"
+    class 129285 "FixedLocation"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -690,24 +712,16 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 130437 // <generalisation>
-	relation 129797 ---|>
+      classrelation 145797 // <generalisation>
+	relation 143621 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 130437 // <generalisation>
-	  b multiplicity "" parent class_ref 128645 // Placement
-      end
-
-      classrelation 131461 // <realization>
-	relation 130821 -_-|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 131461 // <realization>
-	  b multiplicity "" parent class_ref 129797 // ExplicitPlacement
+	    classrelation_ref 145797 // <generalisation>
+	  b multiplicity "" parent class_ref 139909 // LocatingPin
       end
     end
 
-    class 129413 "RelativePlacement"
+    class 129413 "RelativeLocation"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -735,14 +749,6 @@ ${inlines}
 	java_decl ""
 	idl_decl ""
 	comment "the kind of relation denoted by this Placement"
-      end
-
-      classrelation 131333 // <generalisation>
-	relation 130693 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 131333 // <generalisation>
-	  b multiplicity "" parent class_ref 128645 // Placement
       end
 
       attribute 129029 "offset"
@@ -788,6 +794,14 @@ ${items}};
 	  comment "attach subject to anchor (e.g. an effect to a clip)"
 	end
       end
+
+      classrelation 145669 // <generalisation>
+	relation 143493 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 145669 // <generalisation>
+	  b multiplicity "" parent class_ref 139909 // LocatingPin
+      end
     end
 
     class 129541 "Allocation"
@@ -802,14 +816,6 @@ ${inlines}
       explicit_switch_type ""
       
       comment "a directive to place a MObject in a specific way"
-      classrelation 131205 // <generalisation>
-	relation 130565 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 131205 // <generalisation>
-	  b multiplicity "" parent class_ref 128645 // Placement
-      end
-
       attribute 128773 "repr"
 	protected explicit_type "string"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
@@ -836,6 +842,14 @@ ${inlines}
 	
 	idl_name_spec "get_${name}"
 	get_of_attribute attribute_ref 128773 // repr
+      end
+
+      classrelation 145925 // <generalisation>
+	relation 143749 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 145925 // <generalisation>
+	  b multiplicity "" parent class_ref 139909 // LocatingPin
       end
     end
 
@@ -1065,9 +1079,127 @@ ${inlines}
       
       comment "Provides the implementation for getting the acutal value of a time varying or automated effect/plugin parameter"
     end
+
+    class 139909 "LocatingPin"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "An element with value semantics, which actually implements the placement of some MObject by positioning it in some way."
+      classrelation 146053 // next (<unidirectional association>)
+	relation 143877 --->
+	  a role_name "next" multiplicity "" protected
+	    comment "next additional LocatingPin, if any"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 146053 // next (<unidirectional association>)
+	  b multiplicity "" parent class_ref 139909 // LocatingPin
+      end
+    end
   end
 
   package_ref 128901 // Builder
 
   package_ref 129029 // Controller
+
+  usecaseview 128261 "config examples"
+    //use case diagram settings
+    package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    objectdiagram 131333 "multichannel clip"
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      size A4
+    end
+
+    classinstance 134661 ""
+      type class_ref 137349 // Clip
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 134789 ""
+      type class_ref 138501 // CompoundMedia
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 134917 ""
+      type class_ref 136709 // Media
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 135045 ""
+      type class_ref 136709 // Media
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 135173 ""
+      type class_ref 136709 // Media
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 135301 ""
+      type class_ref 138629 // CompoundClip
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 135429 ""
+      type class_ref 138885 // SimpleClip
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 135557 ""
+      type class_ref 138885 // SimpleClip
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 135685 ""
+      type class_ref 138885 // SimpleClip
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 135813 ""
+      type class_ref 128645 // Placement
+      attributes
+        end
+      relations
+        end
+    end
+  end
 end

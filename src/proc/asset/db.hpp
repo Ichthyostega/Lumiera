@@ -26,6 +26,7 @@
 
 
 #include "proc/asset.hpp"
+#include "common/error.hpp"
 
 #include <tr1/unordered_map>
 #include <boost/utility.hpp>
@@ -83,8 +84,8 @@ namespace asset
     {
       IdHashtable table;
       
-      DB () : table() {}
-      ~DB ()          {}
+      DB () : table() { }
+      ~DB ()          {clear();}
       
       friend class cinelerra::singleton::StaticCreate<DB>;
       
@@ -92,7 +93,8 @@ namespace asset
     public:
       template<class KIND>
       void  put (ID<KIND> hash, shared_ptr<KIND>& ptr) { table[hash] = static_pointer_cast (ptr);  }
-      void  put (ID<Asset> hash, PAsset& ptr)          { table[hash] = ptr;   }
+      void  put (ID<Asset> hash, PAsset& ptr)          { table[hash] = ptr; }
+      bool  del (ID<Asset> hash)                       { return table.erase (hash); }
       
       template<class KIND>
       shared_ptr<KIND> 
@@ -101,10 +103,41 @@ namespace asset
           return dynamic_pointer_cast<KIND,Asset> (find (hash));
         }
       
+      /** removes all registered assets and does something similar 
+       *  to Asset::unlink() on each to break cyclic dependencies
+       *  (we can't use the real unlink()-function, because this 
+       *  will propagate, including calls to the AssetManager.
+       *  As the destructor of DB needs to call clear(), this
+       *  could result in segfaults. This doesn't seem to be
+       *  a problem, though, because we register and process
+       *  \i all assets and the net effect is just breaking
+       *  any cyclic dependencies) 
+       */ 
+      void
+      clear () throw()
+        {
+          try
+            {
+              IdHashtable::const_iterator i = table.begin(); 
+              IdHashtable::const_iterator e = table.end(); 
+              for ( ; i!=e ; ++i )
+                i->second->dependants.clear();
+              
+              table.clear();
+            }
+          catch (cinelerra::Error& EX)
+            {
+              WARN (oper, "Problems while clearing Asset registry: %s", EX.what());
+            }
+          catch (...)
+            {
+              ERROR (oper, "Serious trouble while clearing Asset registry.");
+        }   }
+      
       
       /** intended for diagnostics */
       void 
-      asList (list<PAsset>& output)  const  
+      asList (list<PcAsset>& output)  const  
         { 
           IdHashtable::const_iterator i = table.begin(); 
           IdHashtable::const_iterator e = table.end(); 

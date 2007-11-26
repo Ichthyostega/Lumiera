@@ -10,11 +10,11 @@ classcanvas 128133 class_ref 136709 // Media
   end
 classcanvas 128261 class_ref 137477 // Unknown
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 530 231 2000
+  xyz 530 147 2000
   end
 classcanvas 128389 class_ref 137605 // Preview
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 535 147 2005
+  xyz 535 215 2005
   end
 classcanvas 128901 class_ref 128901 // Clip
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -108,16 +108,8 @@ classcanvas 142981 class_ref 137861 // Codec
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 618 480 2004
   end
-relationcanvas 128517 relation_ref 139141 // <generalisation>
-  from ref 128261 z 1999 to ref 128389
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
 relationcanvas 128645 relation_ref 138757 // <generalisation>
   from ref 128005 z 1999 to ref 128133
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
-relationcanvas 128773 relation_ref 139013 // <generalisation>
-  from ref 128389 z 2004 to ref 128133
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 relationcanvas 129541 relation_ref 129413 // <generalisation>
@@ -186,9 +178,9 @@ relationcanvas 137349 relation_ref 140421 // <generalisation>
   no_multiplicity_a no_multiplicity_b
 relationcanvas 137477 relation_ref 140549 // <directional aggregation>
   from ref 137221 z 1999 to point 648 76
-  line 137733 z 1999 stereotype "<<vector>>" xyz 652 122 3000 to ref 128133
-  role_a_pos 609 54 3000 no_role_b
-  multiplicity_a_pos 584 121 3000 multiplicity_b_pos 636 122 3000
+  line 137733 z 1999 stereotype "<<vector>>" xyz 634 112 3000 to ref 128133
+  role_a_pos 634 60 3000 no_role_b
+  multiplicity_a_pos 611 60 3000 multiplicity_b_pos 636 122 3000
 relationcanvas 137861 relation_ref 140677 // <unidirectional association>
   from ref 128901 z 1999 to point 218 232
   line 138245 z 1999 to point 377 48
@@ -241,11 +233,11 @@ relationcanvas 142213 relation_ref 142085 // <unidirectional association>
   from ref 141317 z 1999 to point 812 270
   line 142341 z 1999 to point 812 131
   line 142469 z 1999 to ref 139013
-  role_a_pos 794 109 3000 no_role_b
+  role_a_pos 776 272 3000 no_role_b
   multiplicity_a_pos 794 142 3000 multiplicity_b_pos 794 299 3000
 relationcanvas 142597 relation_ref 142213 // <directional aggregation>
-  from ref 141189 z 1999 stereotype "<<vector>>" xyz 656 360 3000 to ref 141061
-  role_a_pos 650 367 3000 no_role_b
+  from ref 141189 z 1999 stereotype "<<vector>>" xyz 660 352 3000 to ref 141061
+  role_a_pos 645 374 3000 no_role_b
   multiplicity_a_pos 614 367 3000 no_multiplicity_b
 relationcanvas 142853 relation_ref 139269 // <generalisation>
   from ref 142725 z 1999 to ref 141061
@@ -253,6 +245,14 @@ relationcanvas 142853 relation_ref 139269 // <generalisation>
   no_multiplicity_a no_multiplicity_b
 relationcanvas 143109 relation_ref 139397 // <generalisation>
   from ref 142981 z 1999 to ref 141061
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 143237 relation_ref 144133 // <generalisation>
+  from ref 128389 z 1999 to ref 128261
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 143365 relation_ref 144005 // <generalisation>
+  from ref 128261 z 1999 to ref 128133
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end

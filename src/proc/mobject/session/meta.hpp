@@ -48,6 +48,9 @@ namespace mobject
 
 
   } // namespace mobject::session
+  
+  /** Placement<Meta> defined to be subclass of Placement<MObject> */
+  DEFINE_SPECIALIZED_PLACEMENT (session::Meta);
 
 } // namespace mobject
 #endif

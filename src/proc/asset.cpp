@@ -25,10 +25,18 @@
 #include "proc/assetmanager.hpp"
 #include "common/util.hpp"
 
+#include <boost/function.hpp>
 #include <boost/format.hpp>
+#include <boost/bind.hpp>
 
 
+using boost::bind;
 using boost::format;
+using boost::function;
+using util::contains;
+using util::removeall;
+using util::for_each;
+using util::and_all;
 using util::cStr;
 
 
@@ -45,9 +53,10 @@ namespace asset
    *  concrete subclasses are created via specialized Factories
    */
   Asset::Asset (const Ident& idi) 
-    : ident(idi), id(AssetManager::reg (this, idi)) 
-  {     TRACE (assetmem, "ctor Asset(id=%lu) :  adr=%x %s", size_t(id), this, cStr(this->ident) );
-}
+    : ident(idi), id(AssetManager::reg (this, idi)), enabled(true)
+  {
+    TRACE (assetmem, "ctor Asset(id=%lu) :  adr=%x %s", size_t(id), this, cStr(this->ident) );
+  }
   
   Asset::~Asset ()
   { 
@@ -68,63 +77,105 @@ namespace asset
     return str (id_tuple % ident.name % ident.category % ident.org % ident.version);
   }
 
+
   
-  /** List of entities this asset depends on or requires to be functional. 
-   *  May be empty. The head of this list can be considered the primary prerequisite
-   */
-  vector<PAsset>
-  Asset::getParents ()  const
+  
+  function<bool(const PAsset&)> check_isActive
+    = bind ( &Asset::isActive
+           , bind (&PAsset::get, _1 )
+           );
+  
+  bool
+  all_parents_enabled (const vector<PAsset>& parents)
   {
-    UNIMPLEMENTED ("Asset dependencies.");
+    return and_all (parents, check_isActive);
   }
-
-
-  /** All the other assets requiring this asset to be functional. 
-   *  For example, all the clips depending on a given media file.
-   *  May be empty. The dependency relation is transitive.
-   */
-  vector<PAsset>
-  Asset::getDependant ()  const
-  {
-    UNIMPLEMENTED ("Asset dependencies.");
-  }
-
-
+  
   /**
-   * weather this asset is swithced on and consequently included
+   * whether this asset is swithced on and consequently included
    * in the fixture and participates in rendering.
    */
   bool
   Asset::isActive ()  const
   {
-    UNIMPLEMENTED ("enable/disable Assets.");
+    return this->enabled
+        && all_parents_enabled (parents);
   }
-
-
-  /**
-   * change the enablement status of this asset. 
-   * @note the corresponding #isActive predicate may depend 
-   *       on the enablement status of parent assets as well.
-   */
+  
+  
   void
-  Asset::enable ()  throw(cinelerra::error::State)
+  propagate_down (PAsset child, bool on)
   {
-    UNIMPLEMENTED ("enable/disable Assets.");
+    child->enable(on);
+  }
+
+  /**change the enablement status of this asset. */
+  bool
+  Asset::enable (bool on)  throw(cinelerra::error::State)
+  {
+    if (on == this->enabled)
+      return true;
+    if (on && !all_parents_enabled (parents))
+      return false;
+    
+    // can indeed to do the toggle...
+    this->enabled = on;
+    for_each (dependants, bind (&propagate_down, _1 ,on));
+    return true;
   }
   
   
-  /** release all links to other Asset objects held internally. */
+  
+  
+  void
+  Asset::unregister (PAsset& other)  ///< @internal
+  {
+    other->unlink (this->id);  
+  }
+    
+  /** release all links to other <i>dependant</i> 
+   *  asset objects held internally and advise all parent
+   *  assets to do so with the link to this asset. 
+   *  @note we don't release upward links to parent assets,
+   *        thus effectively keeping the parents alive, because
+   *        frequently these accessible parent assets are part
+   *        of our own contract. (e.g. media for clip assets) 
+   */
   void 
   Asset::unlink ()
   {
-    UNIMPLEMENTED ("deleting Assets.");
+    function<void(PAsset&)> forget_me = bind(&Asset::unregister, this,_1);
+    
+    for_each (parents, forget_me);
+    dependants.clear();
   }
       
   /** variant dropping only the links to the given Asset */
   void 
   Asset::unlink (IDA target)
   {
-    UNIMPLEMENTED ("deleting Assets.");
+    PAsset asset (AssetManager::instance().getAsset (target));
+    removeall (dependants,asset);
+    removeall (parents,asset);
+  }
+  
+  
+  void 
+  Asset::defineDependency (PAsset parent)
+  {
+    PAsset p_this (AssetManager::getPtr(*this));
+    REQUIRE (!contains (parent->dependants, p_this));
+    REQUIRE (!contains (this->parents, parent));
+    parents.push_back (parent);
+    parent->dependants.push_back(p_this);
+  }
+  
+  void 
+  Asset::defineDependency (Asset& parent)
+  {
+    PAsset p_parent (AssetManager::getPtr(parent));
+    ASSERT (p_parent);
+    defineDependency (p_parent);
   }
 
   

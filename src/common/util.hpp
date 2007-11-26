@@ -96,10 +96,24 @@ namespace util
    *  in any sequencial container */
   template <typename SEQ>
   inline bool 
-  contains (SEQ& cont, typename SEQ::value_type& val)
+  contains (SEQ& cont, typename SEQ::const_reference val)
   {
-    typename SEQ::iterator end = cont.end();
-    return end != std::find(cont.begin(),end, val);
+    typename SEQ::const_iterator begin = cont.begin();
+    typename SEQ::const_iterator end   = cont.end();
+    
+    return end != std::find(begin,end, val);
+  }
+  
+  /** shortcut for removing all copies of an Element
+   *  in any sequencial collection */
+  template <typename SEQ>
+  inline typename SEQ::iterator 
+  removeall (SEQ& coll, typename SEQ::value_type& val)
+  {
+    typename SEQ::iterator collEnd = coll.end();
+    return coll.erase (std::remove (coll.begin(), collEnd, val),
+                       collEnd
+                      );
   }
   
   
@@ -112,7 +126,23 @@ namespace util
   {
     return std::for_each (c.begin(),c.end(), doIt);
   }
-   
+  
+  
+  /** shortcut for testing all elements of a collection
+   *  with the given predicate.
+   */
+  template <typename SEQ, typename Oper>
+  inline bool
+  and_all (SEQ& coll, Oper predicate)
+  {
+    typename SEQ::const_iterator e = coll.end();
+    typename SEQ::const_iterator i = coll.begin();
+    
+    while (i!=e && predicate(*i))  ++i;
+    return i==e;
+  }
+  
+  
   
   
   /** produce an identifier based on the given string.
@@ -149,10 +179,12 @@ namespace util
   
 } // namespace util
 
- /* some common macro definitions */
 
-/** supress "warning: unused variable" on vars, which
- *  are introduced into a scope because of some sideeffect, i.e. Locking
+
+ /* === some common macro definitions === */
+
+/** supress "warning: unused variable" on vars, which are
+ *  introduced into a scope because of some sideeffect, i.e. Locking
  */
 #define SIDEEFFECT __attribute__ ((unused));
 
@@ -160,5 +192,9 @@ namespace util
 #define STRINGIFY(TOKEN) __STRNGFY(TOKEN)
 #define __STRNGFY(TOKEN) #TOKEN
 
+/** shortcut for subclass test, intended for assertions only.
+ *  @note it is considered bad style to use such in non-assertion code,
+ *        and we probably will enforce this design rule in future. */
+#define INSTANCEOF(CLASS, EXPR) (dynamic_cast<const CLASS*> (EXPR))
 
 #endif /*UTIL_HPP_*/

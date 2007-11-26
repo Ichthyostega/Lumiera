@@ -1,6 +1,6 @@
 format 40
 "ProcessingLayer" // ProcessingLayer
-  revision 3
+  revision 7
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -26,7 +26,7 @@ format 40
   package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
   show_infonote default drawing_language default
   
-  package_ref 128133 // AssetManager
+  package_ref 128133 // Asset
 
   package_ref 128261 // MObject
 
@@ -222,13 +222,11 @@ format 40
           "100"
         end
       relations
-        relation_ref 128645 // <association>
-          classinstance_ref 130053 // 
         end
     end
 
     classinstance 130053 ""
-      type class_ref 129413 // RelativePlacement
+      type class_ref 129413 // RelativeLocation
       attributes
         attribute_ref 128133 // relType
           "SAMETIME"
@@ -248,13 +246,11 @@ format 40
           "\"Hue\""
         end
       relations
-        relation_ref 128645 // <association>
-          classinstance_ref 130309 // 
         end
     end
 
     classinstance 130309 ""
-      type class_ref 129413 // RelativePlacement
+      type class_ref 129413 // RelativeLocation
       attributes
         attribute_ref 129029 // offset
           "+3"
@@ -276,8 +272,6 @@ format 40
           "\"Hue\""
         end
       relations
-        relation_ref 128645 // <association>
-          classinstance_ref 130309 // 
         end
     end
 

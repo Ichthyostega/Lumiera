@@ -25,6 +25,44 @@
 
 namespace asset
   {
+  
+  
+  namespace
+    {
+      /** @internal derive a sensible asset ident tuple when creating 
+       *  a proxy placeholder media based on some existing asset::Media
+       *  @todo getting this one right is important for the handling
+       *        of "proxy editing"....
+       */
+      const Asset::Ident
+      createProxyIdent (const Asset::Ident& mediaref)
+        {
+          string name (mediaref.name + "-proxy");  // TODO something sensible here; append number, sanitize etc.
+          Category category (mediaref.category);
+          TODO ("put it in another subfolder within the same category??");
+          return Asset::Ident (name, category, 
+                               mediaref.org, 
+                               mediaref.version );
+          
+        }
+    }
+  
+  
+  
+  /** create a preview placeholder ("proxy media") for the given
+   *  media asset. The name of the created media asset is derived
+   *  by decorating the original media's name.
+   *  @note creates a dependency between the media and this proxy
+   */
+  Preview::Preview (Media& mediaref)
+    : Unknown (createProxyIdent (mediaref.ident),
+               mediaref.getFilename(),
+               mediaref.getLength())
+  {
+    this->defineDependency (mediaref);
+    UNIMPLEMENTED ("do something to setup proxy media");
+  }
+
 
 
 

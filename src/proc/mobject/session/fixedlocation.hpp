@@ -1,5 +1,5 @@
 /*
-  EDL.hpp  -  the (high level) Edit Decision List within the current Session
+  FIXEDLOCATION.hpp  -  directly positioning a MObject to a fixed location   
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -21,42 +21,43 @@
 */
 
 
-#ifndef MOBJECT_SESSION_EDL_H
-#define MOBJECT_SESSION_EDL_H
+#ifndef MOBJECT_SESSION_FIXEDLOCATION_H
+#define MOBJECT_SESSION_FIXEDLOCATION_H
 
-#include <vector>
-#include <string>
+#include "proc/mobject/session/locatingpin.hpp"
 
-#include "proc/mobject/mobject.hpp"
-#include "proc/mobject/placement.hpp"
-#include "proc/asset/track.hpp"
 
-using proc_interface::PAsset;  // TODO better methot to refer to a track?
-
-using std::vector;
-using std::string;
 
 namespace mobject
   {
+    class ExplicitPlacement; //TODO trac #100
+    
   namespace session
     {
 
-    class EDL
+    /** 
+     * The most common case of positioning a MObject
+     * in the EDL: directly specifying a constant position.
+     * @todo use a subclass to represent the LocatingSolution?
+     *       would solve the construction of a ExplicitPlacement
+     *       much more natural. (ichthyo: siehe trac #100) 
+     */
+    class FixedLocation : public LocatingPin
       {
-      protected:
-        vector<PAsset> tracks;
-        vector<MObject *> clips;
-
-      public:
-        bool contains (const PMO& placement);
-        PMO& find (const string& id); ///< @todo how to refer to clips? using asset IDs??
+        Time time_;
+        Track track_;
         
-        vector<PAsset>& getTracks () { return tracks; } ///< @todo use track assets correct, make const!
-        size_t size ()
-          {
-            UNIMPLEMENTED ("what ist the 'size' of an EDL?");
-            return 0;
-          }
+        friend class ExplicitPlacement; //TODO trac #100
+        
+      protected:
+        FixedLocation (Time ti, Track tra) : time_(ti), track_(tra) {};
+        friend class LocatingPin;
+        
+        virtual void intersect (LocatingSolution&)  const;
+        
+      public:
+        virtual FixedLocation* clone ()  const;
+        
       };
 
 

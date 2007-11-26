@@ -1,5 +1,5 @@
 /*
-  ExplicitPlacement  -  special Placement yielding an absolute location (Time,Track)-location for a MObject
+  FixedLocation  - directly positioning a MObject to a fixed location  
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -21,13 +21,39 @@
 * *****************************************************/
 
 
-#include "proc/mobject/explicitplacement.hpp"
+#include "proc/mobject/session/fixedlocation.hpp"
 
 namespace mobject
   {
+  namespace session
+    {
 
-  /** */
+    FixedLocation* 
+    FixedLocation::clone ()  const
+    { 
+      return new FixedLocation (*this); 
+    }
+    
+    
+    /** */
+    void 
+    FixedLocation::intersect (LocatingSolution& solution)  const
+    {
+      LocatingPin::intersect (solution);
+      
+      TODO ("either set position or make overconstrained");
+      if (solution.minTime <= this->time_)
+        solution.minTime = this->time_;
+      else
+        solution.impo = true;
+      if (solution.maxTime >= this->time_)
+        solution.maxTime = this->time_;
+      else
+        solution.impo = true;
+    }
 
 
+
+  } // namespace mobject::session
 
 } // namespace mobject

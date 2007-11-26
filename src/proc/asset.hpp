@@ -98,12 +98,15 @@ namespace asset
       const size_t hash;
       ID (size_t id)         : hash(id)         {}
       ID (const KIND& asset) : hash(asset.getID()) {}
-      operator size_t() const  { return hash; }
+      operator size_t()  const { return hash; }
     };
     
+  class DB;
   class Asset;
   class AssetManager;
   typedef const ID<Asset>& IDA;
+  typedef shared_ptr<Asset> PAsset;
+  typedef shared_ptr<const Asset> PcAsset;
 
   
   
@@ -210,6 +213,11 @@ namespace asset
       /** user visible qualification of the thing, unit or concept represented by this asset.
        *  perferably "in one line". To be localized.  */
       const string longDesc;
+      
+      vector<PAsset> parents;
+      vector<PAsset> dependants;
+      
+      bool enabled;
 
       
       
@@ -237,7 +245,17 @@ namespace asset
        *  Asset, leaving all other links intact. Usable for propagating  */
       virtual void unlink (IDA target);
       
+      /** establish a connection between this and the given parent asset,
+       *  denoting we are in some way dependant on the parent. */
+      void defineDependency (PAsset parent);
+      void defineDependency (Asset& parent); 
+      
       friend class AssetManager;
+      friend class DB;
+      
+    private:
+      void unregister (PAsset& other);
+
 
 
     
@@ -245,15 +263,13 @@ namespace asset
       /** List of entities this asset depends on or requires to be functional. 
        *  May be empty. The head of this list can be considered the primary prerequisite
        */
-      vector<shared_ptr<Asset> >  
-      getParents ()  const;
+      const vector<PAsset>& getParents ()  const { return parents; }
       
       /** All the other assets requiring this asset to be functional. 
        *  For example, all the clips depending on a given media file. 
        *  May be empty. The dependency relation is transitive.
        */
-      vector<shared_ptr<Asset> >
-      getDependant ()  const;
+      const vector<PAsset>& getDependant ()  const { return dependants; }
       
       /** weather this asset is swithced on and consequently 
        *  included in the fixture and participates in rendering
@@ -263,15 +279,14 @@ namespace asset
       /** change the enabled status of this asset.
        *  Note the corresponding #isActive predicate may 
        *  depend on the enablement status of parent assets as well
+       *  @return \c false if the state could not be changed
+       *          due to parent objects being disabled
        */
-      void enable ()  throw(cinelerra::error::State);
+      bool enable (bool on=true)  throw(cinelerra::error::State);
       
       
     };
     
-    
-    /** shorthand for refcounting Asset pointers */
-    typedef shared_ptr<Asset> PAsset;
     
     /** ordering of Asset smart ptrs based on Ident tuple.
      *  @todo currently supporting only smart_ptr<Asset>. */
@@ -294,7 +309,7 @@ namespace asset
 
     
     /** convienient for debugging */
-    inline string str (const PAsset& a) 
+    inline string str (PcAsset& a) 
     {
       if (a)
         return string (*a.get());

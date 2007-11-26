@@ -1,5 +1,5 @@
 /*
-  EXPLICITPLACEMENT.hpp  -  special Placement yielding an absolute location (Time,Track)-location for a MObject
+  EXPLICITPLACEMENT.hpp  -  special Placement yielding an absolute location (Time,Track) for a MObject
  
   Copyright (C)         CinelerraCV
     2007,               Christian Thaeter <ct@pipapo.org>
@@ -31,18 +31,53 @@
 namespace mobject
   {
 
-  namespace session{ class Track; }
 
 
-  // TODO: need Garbage Collector for this class!!!!!
-
-  class ExplicitPlacement : public Placement
+  /**
+   * Special kind of Placement, where the location of the
+   * MObject has been nailed down to a fixed position.
+   * The Session allways contains one special EDL, which
+   * actually is a snapshot of all EDLs contents fixed
+   * and reduced to simple positions. This so called Fixture
+   * contains only ExplicitPlacement objects and is processed
+   * by the Builder to create the render engine  node network.
+   *
+   * @see Placement#resolve factory method for deriving an ExplicitPlacement 
+   */
+  class ExplicitPlacement : public Placement<MObject>
     {
+    public:
+      const Time time;
+      const Track track;
+      
+      typedef std::pair<Time,Track> SolutionData;  //TODO (ichthyo consideres better passing of solution by subclass)
+
+      /** no need to resolve any further, as this ExplicitPlacement
+       *  already \i is the result of a resolve()-call.
+       */
+      virtual
+      ExplicitPlacement resolve ()  const 
+        { 
+          return *this; 
+        }
+
     protected:
-
-      Time time;
-      Track* track;
-
+      /*  @todo ichthyo considers a much more elegant implementation utilizing a subclass 
+       *        of FixedLocation, which would serve as Placement::LocatingSolution, and
+       *        would be used as LocatingPin::chain subobject as well, so that it could
+       *        be initialized directly here in the ExplicitPlacement ctor. 
+       *        (ichthyo: siehe Trac #100)
+       */
+      ExplicitPlacement (const Placement<MObject>& base, const SolutionData found)
+        : Placement<MObject>(base),
+          time(found.first), track(found.second)
+        { };
+        
+      friend ExplicitPlacement Placement<MObject>::resolve () const;
+      
+    private:
+      /** copying prohibited, ExplicitPlacement is effectively const! */
+      ExplicitPlacement& operator= (const ExplicitPlacement&);
     };
 
 
