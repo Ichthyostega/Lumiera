@@ -25,24 +25,34 @@
 #define MOBJECT_BUILDABLE_H
 
 
+#include "common/visitor.hpp"
+
 
 
 namespace mobject
   {
 
 
-  namespace builder{ class Tool; }
+  namespace builder{ class BuilderTool; }
 
+  using cinelerra::visitor::Visitable;
+  
 
   /**
    *  All Buidables support double-dispatch of given Tool operations.
    *  The actual operation is thus selected at runtime based both on the 
    *  actual type of the Tool class /and/ the actual type of the Buildabele.
    */
-  class Buildable
+  class Buildable : public Visitable<>
     {
     public:
-      void apply (builder::Tool& provided_tool) ;
+      /** Catch-all implementation for applying any builder tool
+       *  to some (uspecified) buildable object. Typically the provided
+       *  actual Tool class will contain overloaded fuctions for treating
+       *  different Buildable subclasses specifically and the concrete Buildables
+       *  will define explicitly to be specifically visitable. 
+       */
+      virtual ReturnType apply (builder::BuilderTool&);
     };
 
 

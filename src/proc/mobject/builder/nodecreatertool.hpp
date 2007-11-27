@@ -24,7 +24,7 @@
 #ifndef MOBJECT_BUILDER_NODECREATERTOOL_H
 #define MOBJECT_BUILDER_NODECREATERTOOL_H
 
-#include "proc/mobject/builder/tool.hpp"
+#include "proc/mobject/builder/buildertool.hpp"
 #include "proc/mobject/buildable.hpp"
 #include "proc/engine/processor.hpp"
 
@@ -53,8 +53,11 @@ namespace mobject
      * render engine under construction such as to reflect the properties 
      * of the MObject in the actual render.
      */
-    class NodeCreatorTool : public Tool
+    class NodeCreatorTool : public BuilderTool
       {
+        
+        //////////////////////////////////////////////TODO: switch to acyclic visitior!!!!!!!!!!!!!
+        
       public:
         virtual void treat (mobject::session::Clip& clip) ;
         virtual void treat (mobject::session::Effect& effect) ;

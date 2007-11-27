@@ -1,6 +1,6 @@
 format 40
 "Builder" // ProcessingLayer::MObject::Builder
-  revision 12
+  revision 14
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -219,7 +219,7 @@ ${inlines}
       explicit_switch_type ""
       
       operation 128773 "configure"
-	public return_type class_ref 134149 // Tool
+	public return_type class_ref 134149 // BuilderTool
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
 	cpp_def "${comment}${inline}${type}
@@ -238,7 +238,7 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 	  a package
 	    cpp default "#include in source"
 	    classrelation_ref 137221 // <dependency>
-	  b multiplicity "" parent class_ref 134149 // Tool
+	  b multiplicity "" parent class_ref 134149 // BuilderTool
       end
     end
 
@@ -340,24 +340,28 @@ ${members}};
       explicit_switch_type ""
       
       operation 129669 "apply"
-	public explicit_return_type "void"
+	abstract cpp_virtual public explicit_return_type "void"
 	nparams 1
-	  param inout name "provided_tool" explicit_type "Tool"
+	  param inout name "providedTool" type class_ref 134149 // BuilderTool
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
-	cpp_def "${comment}${inline}${type}
-${class}::${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
-{
-  ${body}
-}
-
-"
 	
 	
       end
+
+      classrelation 146437 // <generalisation>
+	relation 144261 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 146437 // <generalisation>
+	  b multiplicity "" parent class_ref 140165 // Visitable
+      end
     end
 
-    class 134149 "Tool"
+    class 134149 "BuilderTool"
       abstract visibility public stereotype "interface"
+      nactuals 1
+      actual class class_ref 140293 // Applicable
+        rank 0 explicit_value ""
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
 ${members}  };
@@ -373,25 +377,37 @@ ${members}};
       
       comment "Used according to the visitor pattern: each Tool contains the concrete implementation for one task to be done to the various MObject classes"
       operation 129797 "treat"
-	public explicit_return_type "void"
+	abstract cpp_virtual public explicit_return_type "void"
 	nparams 1
 	  param in name "mElement" type class_ref 134021 // Buildable
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
-	cpp_def "${comment}${inline}${type}
-${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
-{
-  ${body}
-}
-
-"
 	
 	
 	comment "This operation is to be overloaded for the specific MObject subclasses to be treated."
+      end
+
+      classrelation 146565 // <generalisation>
+	relation 144389 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 146565 // <generalisation>
+	  b multiplicity "" parent class_ref 140037 // Tool
+      end
+
+      classrelation 146693 // <generalisation>
+	relation 144517 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 146693 // <generalisation>
+	  b multiplicity "" parent class_ref 140293 // Applicable
       end
     end
 
     class 134277 "SegmentationTool"
       visibility package 
+      nactuals 1
+      actual class class_ref 140293 // Applicable
+        rank 0 explicit_value ""
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
 ${members}  };
@@ -407,7 +423,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 137605 // <realization>
-	  b multiplicity "" parent class_ref 134149 // Tool
+	  b multiplicity "" parent class_ref 134149 // BuilderTool
       end
 
       operation 129925 "treat"
@@ -468,10 +484,21 @@ ${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${static
 	    classrelation_ref 139013 // segments (<directional aggregation by value>)
 	  b multiplicity "" parent class_ref 135173 // Segment
       end
+
+      classrelation 146821 // <generalisation>
+	relation 144645 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 146821 // <generalisation>
+	  b multiplicity "" parent class_ref 140293 // Applicable
+      end
     end
 
     class 134405 "NodeCreatorTool"
       visibility package 
+      nactuals 1
+      actual class class_ref 140293 // Applicable
+        rank 0 explicit_value ""
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
 ${members}  };
@@ -487,7 +514,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 137733 // <realization>
-	  b multiplicity "" parent class_ref 134149 // Tool
+	  b multiplicity "" parent class_ref 134149 // BuilderTool
       end
 
       operation 130309 "treat"
@@ -561,6 +588,14 @@ ${class}::${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
 	java_decl ""
 	idl_decl ""
 	comment "holds the Processor (Render Engine Element) to be built by the current build step"
+      end
+
+      classrelation 146949 // <generalisation>
+	relation 144773 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 146949 // <generalisation>
+	  b multiplicity "" parent class_ref 140293 // Applicable
       end
     end
   end

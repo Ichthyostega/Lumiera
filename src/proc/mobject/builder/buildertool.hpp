@@ -1,5 +1,5 @@
 /*
-  TOOL.hpp  -  Interface, any tool for processing MObjects
+  BUILDERTOOL.hpp  -  Interface, (visiting) tool for processing MObjects
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -24,6 +24,7 @@
 #ifndef MOBJECT_BUILDER_TOOL_H
 #define MOBJECT_BUILDER_TOOL_H
 
+#include "common/visitor.hpp"
 #include "proc/mobject/buildable.hpp"
 
 
@@ -32,13 +33,15 @@ namespace mobject
   {
   namespace builder
     {
+    
+    using cinelerra::visitor::Tool;
 
 
     /**
      * Used according to the visitor pattern: each Tool contains 
      * the concrete implementation for one task to be done to the various MObject classes
      */
-    class Tool
+    class BuilderTool : public Tool
       {
       protected:
         typedef mobject::Buildable Buildable;

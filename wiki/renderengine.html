@@ -703,7 +703,7 @@ Note, //we still have to work out how exactly building, rendering and playback w
 The Builder is part of the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]
 </pre>
 </div>
-<div title="BuilderStructures" modifier="Ichthyostega" modified="200706250743" created="200706250734" changecount="5">
+<div title="BuilderStructures" modifier="Ichthyostega" modified="200711270354" created="200706250734" tags="overview design" changecount="13">
 <pre>* the MObjects implement //Buildable//
 * each Buildable can &quot;recieve&quot; a Tool object and aply it
 * the different Tool objects are iterated/mapped onto the list of MObjects in the [[Timeline]]
@@ -712,7 +712,7 @@ The Builder is part of the [[Builder Pattern|http://en.wikipedia.org/wiki/Builde
   * so this design makes it easy to add new Tool subclasses, and within each Tool subclass, all operations on the different MObject classes are grouped together, so it is easy to see what is going on.
   * a given Tool instance can carry state while beeing iterated, so we don't need any global (or object-global) variables to hold the result of the build process
 
-This programming technique is often refered to as //double dispatch// or //visitor//
+This programming technique is often refered to as //double dispatch// or //visitor//. We use a special implementation variant of this pattern, known as &quot;acyclic visitor&quot;. This technique was first invented by Robert Martin (1996) &amp;mdash; our code is heavily inspired by the [[Loki library|http://loki-lib.sourceforge.net/]]. We use this approach not only for the builder, but also for carrying out operations on the objects in the EDL in a typesafe manner.
 {{red{TODO:flesh out the actual Operations needed}}}
     
 

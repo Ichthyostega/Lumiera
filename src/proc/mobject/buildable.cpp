@@ -22,7 +22,7 @@
 
 
 #include "proc/mobject/buildable.hpp"
-#include "proc/mobject/builder/tool.hpp"
+#include "proc/mobject/builder/buildertool.hpp"
 
 namespace mobject
   {
@@ -32,10 +32,10 @@ namespace mobject
    *  contain overloaded fuctions for treating
    *  different Buildable subclasses specifically
    */
-  void
-  Buildable::apply (builder::Tool& provided_tool)
+  Buildable::ReturnType 
+  Buildable::apply (builder::BuilderTool& tool)
   {
-    provided_tool.treat( *this); //// TODO: how to call??? (ref or pointer??)
+    return dispatchOp (*this, tool);
   }
 
 

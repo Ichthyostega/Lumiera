@@ -1,5 +1,5 @@
 /*
-  Tool  -  Interface, any tool for processing MObjects
+  Vistitable,Tool,Applicable  -  Acyclic Visitor library
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,20 +21,15 @@
 * *****************************************************/
 
 
-#include "proc/mobject/builder/tool.hpp"
+#include "common/visitor.hpp"
 
-
-namespace mobject
+namespace cinelerra
   {
-  namespace builder
+  namespace visitor
     {
 
 
+  
+  } // namespace visitor
 
-    /**  */
-
-
-
-  } // namespace mobject::builder
-
-} // namespace mobject
+} // namespace cinelerra

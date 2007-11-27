@@ -1,6 +1,6 @@
 format 40
 "CommonLib" // CommonLib
-  revision 9
+  revision 11
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -253,6 +253,89 @@ ${inlines}
     package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
     show_infonote default drawing_language default
     
+    class 140293 "Applicable"
+      abstract visibility package 
+      nformals 1
+      formal name "TAR" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 134405 "treat"
+	abstract cpp_virtual public explicit_return_type ""
+	nparams 1
+	  param inout name "visitable" explicit_type "TAR"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	
+	
+      end
+    end
+
+    class 140037 "Tool"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 134533 "~Tool"
+	cpp_virtual public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${virtual}${name} ${(}${)}${volatile} ${throw} { };"
+	
+	
+      end
+    end
+
+    class 140165 "Visitable"
+      abstract visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 134661 "~Visitable"
+	cpp_virtual protected explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${virtual}${name} ${(}${)}${volatile} ${throw}{};"
+	
+	
+      end
+
+      operation 134789 "apply"
+	abstract cpp_virtual public explicit_return_type "void"
+	nparams 1
+	  param inout name "providedTool" type class_ref 140037 // Tool
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	
+	
+      end
+
+      operation 134917 "dispatchOp"
+	class_operation public explicit_return_type "void"
+	nparams 2
+	  param inout name "target" explicit_type "TAR"
+	  param inout name "t" type class_ref 140037 // Tool
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${t0}& ${p0}, ${t1}& ${p1}${)}${const}${volatile} ${throw}${abstract};"
+	
+	
+      end
+    end
+
     class 134917 "Time"
       visibility public 
       cpp_decl "${comment}${template}class ${name}${inherit}

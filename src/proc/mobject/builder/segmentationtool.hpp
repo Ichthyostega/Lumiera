@@ -27,7 +27,7 @@
 #include <list>
 
 #include "proc/mobject/buildable.hpp"
-#include "proc/mobject/builder/tool.hpp"
+#include "proc/mobject/builder/buildertool.hpp"
 #include "proc/mobject/session/segment.hpp"
 
 using std::list;
@@ -54,8 +54,11 @@ namespace mobject
      * can be represented by automation solely, without the need 
      * to change the node connections.
      */
-    class SegmentationTool : public Tool
+    class SegmentationTool : public BuilderTool
       {
+        
+        //////////////////////////////////////////////TODO: switch to acyclic visitior!!!!!!!!!!!!!
+        
       public:
         void treat (mobject::session::Clip& clip) ;
         void treat (mobject::session::Effect& effect) ;

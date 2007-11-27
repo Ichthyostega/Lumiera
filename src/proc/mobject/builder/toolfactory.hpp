@@ -24,7 +24,7 @@
 #ifndef MOBJECT_BUILDER_TOOLFACTORY_H
 #define MOBJECT_BUILDER_TOOLFACTORY_H
 
-#include "proc/mobject/builder/tool.hpp"
+#include "proc/mobject/builder/buildertool.hpp"
 
 
 
@@ -37,7 +37,7 @@ namespace mobject
     class ToolFactory
       {
       public:
-        Tool & configure () ;
+        BuilderTool & configure () ;
       };
 
 

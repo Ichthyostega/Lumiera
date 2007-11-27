@@ -1,5 +1,5 @@
 /*
-  ToolFactory  -  supply of Tool implementations for the Builder
+  BuilderTool  -  Interface, (visiting) tool for processing MObjects
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,8 @@
 * *****************************************************/
 
 
-#include "proc/mobject/builder/toolfactory.hpp"
+#include "proc/mobject/builder/buildertool.hpp"
+
 
 namespace mobject
   {
@@ -30,10 +31,7 @@ namespace mobject
 
 
 
-    BuilderTool &
-    ToolFactory::configure ()
-    {
-    }
+    /**  */
 
 
 

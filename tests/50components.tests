@@ -182,3 +182,7 @@ out: --> remaining=SingleTestID spam --eggs
 END
 
 
+PLANNED "VisitingTool_test" VisitingTool_test <<END
+END
+
+

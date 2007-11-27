@@ -1,6 +1,6 @@
 format 40
 "builder" // design::codegen::proc::mobject::builder
-  revision 6
+  revision 7
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -156,7 +156,7 @@ ${namespace_end}"
       comment "building facility (implementation of the build process)"
     end
 
-    artifact 131205 "tool"
+    artifact 131205 "buildertool"
       stereotype "source"
       cpp_h "/*
   ${NAME}.hpp  -  ${description}
@@ -190,7 +190,7 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 134149 // Tool
+	class_ref 134149 // BuilderTool
       end
       comment "Interface, any tool for processing MObjects"
     end
