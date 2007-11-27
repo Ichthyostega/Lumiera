@@ -2,7 +2,7 @@
   SINGLETONPRECONFIGURE  -  declare the configuration of some Singleton types in advance
  
   Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+    2007,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -28,10 +28,10 @@
  ** Dependency Manager, but for the moment using just some specialized Singleton
  ** type for some instances seems sufficient.
  **
- ** One Reason why one wants special Singleton behaviour is Testing: Without
- ** altering the executable, for running some Tests we need to inject a Test Mock
- ** in place of some Service Object, so we can verify the behaviour of the code
- ** <i>using</i> this Service. For this, we mix cinelerra::test::MockInjector
+ ** One reason why one wants special Singleton behaviour is testing: Without
+ ** altering the executable, for running some tests we need to inject a Test Mock
+ ** in place of some service object, so we can verify the behaviour of the code
+ ** <i>using</i> this service. For this, we mix cinelerra::test::MockInjector
  ** into the actual Singleton type.
  **
  ** @note we declare the specialisations into the target namespace

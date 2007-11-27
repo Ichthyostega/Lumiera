@@ -2,7 +2,7 @@
   MediaAccessFacade  -  functions for querying media file and channels.
  
   Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+    2007,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
