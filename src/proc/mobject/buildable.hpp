@@ -36,6 +36,7 @@ namespace mobject
   namespace builder{ class BuilderTool; }
 
   using cinelerra::visitor::Visitable;
+  using cinelerra::visitor::InvokeCatchAllFunction;
   
 
   /**
@@ -43,7 +44,11 @@ namespace mobject
    *  The actual operation is thus selected at runtime based both on the 
    *  actual type of the Tool class /and/ the actual type of the Buildabele.
    */
-  class Buildable : public Visitable<>
+  class Buildable : public Visitable
+                            < void,                   // return type of apply 
+                              builder::BuilderTool,   // visiting tool base class 
+                              InvokeCatchAllFunction  // how to handle unknown
+                            >                        
     {
     public:
       /** Catch-all implementation for applying any builder tool
@@ -52,7 +57,7 @@ namespace mobject
        *  different Buildable subclasses specifically and the concrete Buildables
        *  will define explicitly to be specifically visitable. 
        */
-      virtual ReturnType apply (builder::BuilderTool&);
+      virtual void apply (builder::BuilderTool&);
     };
 
 

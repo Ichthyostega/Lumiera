@@ -26,21 +26,59 @@
 //#include "common/factory.hpp"
 //#include "common/util.hpp"
 
-//#include <boost/format.hpp>
+#include <boost/format.hpp>
 #include <iostream>
 
-//using boost::format;
+using boost::format;
 using std::string;
 using std::cout;
 
 
-namespace mobject
+namespace cinelerra
   {
-  namespace builder
+  namespace visitor
     {
     namespace test
       {
       
+      
+      class HomoSapiens : public Visitable<>
+        {
+        public:
+          DEFINE_PROCESSABLE_BY (Tool);
+        };
+      
+      class Boss : public HomoSapiens
+        {
+        public:
+          DEFINE_PROCESSABLE_BY (Tool);
+        };
+      
+      class BigBoss : public Boss
+        {
+        public:
+          DEFINE_PROCESSABLE_BY (Tool);
+        };
+      
+      class Leader : public Boss
+        {
+        };
+      
+        
+      class VerboseVisitor
+        : public Tool,
+          public Applicable<Boss>,
+          public Applicable<BigBoss>
+        {
+          void talk_to (string guy)
+            {
+              cout << format ("Hello %s, nice to meet you...\n") % guy;
+            }
+        public:
+          void treat (Boss&)    { talk_to("Boss"); }
+          void treat (BigBoss&) { talk_to("big Boss"); }
+        };
+        
       
       
       
@@ -58,15 +96,25 @@ namespace mobject
         {
           virtual void run(Arg arg) 
             {
-              UNIMPLEMENTED ("testing the generic visitor pattern");
               known_visitor_known_class();
-              visitor_not_visiting_some_class();
-              visitor_treating_new_subclass();
+              TODO ("implement the more complicated visitor test cases");
+              //visitor_not_visiting_some_class();
+              //visitor_treating_new_subclass();
             } 
           
           void known_visitor_known_class()
             {
-              UNIMPLEMENTED ("testing the generic visitor pattern");
+              HomoSapiens x1;
+              Boss x2;
+              BigBoss x3;
+              
+              HomoSapiens& xx2 (x2);
+              HomoSapiens& xx3 (x3);
+              
+              VerboseVisitor wizzy;
+              x1.apply (wizzy);
+              xx2.apply (wizzy);
+              xx3.apply (wizzy);
             }
           
           void visitor_not_visiting_some_class()
@@ -88,6 +136,6 @@ namespace mobject
       
     } // namespace test
     
-  } // namespace builder
+  } // namespace visitor
 
-} // namespace mobject
+} // namespace cinelerra

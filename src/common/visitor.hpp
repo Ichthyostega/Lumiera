@@ -34,6 +34,7 @@ This code is heavily inspired by
 #ifndef CINELERRA_VISITOR_H
 #define CINELERRA_VISITOR_H
 
+#include "common/visitorpolicies.hpp"
 
 
 namespace cinelerra
@@ -66,22 +67,29 @@ namespace cinelerra
     class Applicable
       {
       public:
-        typedef RET ReturnType;
+        virtual ~Applicable ()  { };
         
         /** to be implemented by concrete tools
          *  wanting to visit type TAR */
         virtual RET  treat (TAR& visitable)  = 0;
       };
     
-
+    
       
     /** Marker interface / base class for all types
      *  to be treated by a "visiting tool" or visitor.
      */
-    template <typename RET = void>
+    template 
+      < typename RET = void,
+        class TOOL = Tool,
+        template<typename,class> class ERR = UseDefault 
+      >
     class Visitable
       {
       public:
+        /** to be defined by the DEFINE_PROCESSABLE_BY macro
+         *  in all classes wanting to be treated by some tool */
+        virtual RET apply (TOOL&) = 0;
         typedef RET ReturnType;
         
       protected:
@@ -92,7 +100,7 @@ namespace cinelerra
          *            "visiting tool" (acyclic visitor implementation)
          */
         template <class TAR>
-        static RET dispatchOp(TAR& target, Tool& tool)
+        static RET dispatchOp(TAR& target, TOOL& tool)
           {
             if (Applicable<TAR,RET>* concreteTool
                   = dynamic_cast<Applicable<TAR,RET>*> (&tool))
@@ -100,7 +108,7 @@ namespace cinelerra
               return concreteTool->treat (target);
             
             else
-              return ReturnType();
+              return ERR<RET,TOOL>::onUnknown (target,tool);
           }
       };
       
@@ -109,8 +117,8 @@ namespace cinelerra
  *  by some "visiting tool". Defines the apply-function,
  *  which is the actual access point to invoke the visiting
  */
-#define DEFINE_VISITABLE() \
-        virtual ReturnType  apply (Tool& tool) \
+#define DEFINE_PROCESSABLE_BY(TOOL) \
+        virtual ReturnType  apply (TOOL& tool) \
         { return dispatchOp (*this, tool); }
     
     

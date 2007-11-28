@@ -182,7 +182,10 @@ out: --> remaining=SingleTestID spam --eggs
 END
 
 
-PLANNED "VisitingTool_test" VisitingTool_test <<END
+TEST "VisitingTool_test" VisitingTool_test <<END
+out: Hello Boss, nice to meet you...
+out: Hello big Boss, nice to meet you...
+return: 0
 END
 
 
