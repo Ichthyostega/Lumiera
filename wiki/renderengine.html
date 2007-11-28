@@ -703,16 +703,16 @@ Note, //we still have to work out how exactly building, rendering and playback w
 The Builder is part of the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]
 </pre>
 </div>
-<div title="BuilderStructures" modifier="Ichthyostega" modified="200711270354" created="200706250734" tags="overview design" changecount="13">
+<div title="BuilderStructures" modifier="Ichthyostega" modified="200711280236" created="200706250734" tags="overview design" changecount="15">
 <pre>* the MObjects implement //Buildable//
 * each Buildable can &quot;recieve&quot; a Tool object and aply it
 * the different Tool objects are iterated/mapped onto the list of MObjects in the [[Timeline]]
 * __Rationale__
-  * the MObject class hierarchy is rather fixed (it is unlikely the we will be adding much new MObject subclasses)
-  * so this design makes it easy to add new Tool subclasses, and within each Tool subclass, all operations on the different MObject classes are grouped together, so it is easy to see what is going on.
-  * a given Tool instance can carry state while beeing iterated, so we don't need any global (or object-global) variables to hold the result of the build process
+** the MObject class hierarchy is rather fixed (it is unlikely the we will be adding much new MObject subclasses)
+** so this design makes it easy to add new Tool subclasses, and within each Tool subclass, all operations on the different MObject classes are grouped together, so it is easy to see what is going on.
+** a given Tool instance can carry state while beeing iterated, so we don't need any global (or object-global) variables to hold the result of the build process
 
-This programming technique is often refered to as //double dispatch// or //visitor//. We use a special implementation variant of this pattern, known as &quot;acyclic visitor&quot;. This technique was first invented by Robert Martin (1996) &amp;mdash; our code is heavily inspired by the [[Loki library|http://loki-lib.sourceforge.net/]]. We use this approach not only for the builder, but also for carrying out operations on the objects in the EDL in a typesafe manner.
+This programming technique is often refered to as [[&quot;double dispatch&quot; or &quot;visitor&quot;|VisitorUse]]. We use a special implementation variant of this pattern, known as &quot;acyclic visitor&quot;. This technique was first invented by Robert Martin (1996) &amp;mdash; our code is heavily inspired by the [[Loki library|http://loki-lib.sourceforge.net/]]. We use this approach not only for the builder, but also for carrying out operations on the objects in the EDL in a typesafe manner.
 {{red{TODO:flesh out the actual Operations needed}}}
     
 
@@ -1004,7 +1004,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200711210512" created="200708080322" tags="overview" changecount="10">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200711280302" created="200708080322" tags="overview" changecount="11">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Cinelerra Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1015,7 +1015,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 * [[Editing Operations|EditingOperations]]
 * [[Handling of the current Session|CurrentSession]]
 * [[collecting Ideas for Implementation Guidelines|ImplementationGuidelines]]
-
+* [[using the Visitor pattern?|VisitorUse]]
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200711210542" created="200711210531" tags="discuss draft" changecount="7">
@@ -2902,6 +2902,21 @@ function addKeyDownHandlers(e)
 <div title="Timeline" modifier="Ichthyostega" created="200706250721" tags="def" changecount="1">
 <pre>Timeline is the name of a specific facility located in the [[Fixture]] (EDL): It is a ordered list of ExplicitPlacement.s of MObjects. By traversing the Playlist you get at all elements actually to be rendered; the [[Builder]] uses this Timeline-list to construct actual Render Engine configurations to carry out the calculations.
 
+</pre>
+</div>
+<div title="VisitorUse" modifier="Ichthyostega" modified="200711280312" created="200711280302" tags="impl discuss" changecount="11">
+<pre>Using the ''Visitor Design Pattern'' is somewhat controversial, mainly because this pattern is rather complicated, requires certain circumstances to be usefull, and &amp;mdash; especially when used in the original form described by Gamma et al &amp;mdash; puts quite some burden on the implementor. This problems can be ameliorated by using library implementation techniques described by Robert Martin and implemented e.g. by Alexandrescu in the Loki library.
+
+!why bothering with visitor?
+In the Cinelerra-3 Proc layer, ichthyo uses the visitor pattern to overcome another notorious problem when dealing with more complex class hierarchies: either, the //interface// (root class) is so unspecific to be almost useless, or, in spite of having a useful contract, this contract will be broken by some subclasses. Initially, when designing the classes, the problems aren't there (obviously, because they could be taken as design flaws). But than, under the pressure of real features, new types are added which //need to be in this hierarchy// and at the same time //need to have this and that special behaviour// and here we go ...
+Visitor helps us to circumvent this catch: the basic operations can be written against the top level interface, such, that they include visiting some object collection internally. Now, on a case-by-case base, local operations can utilize some sub interface or the given concrete type's public interface.
+
+!!well suited for using visitors
+generally speaking, visitors are preferable when the underlying element type hierarchy is rather stable, but new operations are to be added frequently.
+* Implementation of the builder. All sorts of special treatments of some MObject kinds can be added later
+* Operating on the Object collection within the EDL. Effectively, this decouples the invoking interface on the EDL completely from the special operations to be carried out on individual objects.
+
+To see an simple example of our &quot;visiting tool&quot;, have a look at {{{tests/components/common/visitingtooltest.cpp}}}
 </pre>
 </div>
 <div title="WalkThrough" modifier="Ichthyostega" modified="200711122353" created="200706210625" tags="overview" changecount="35">
