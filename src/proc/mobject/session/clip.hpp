@@ -81,6 +81,8 @@ namespace mobject
          */ 
         PClipAsset findClipAsset ()  const;
         
+        DEFINE_PROCESSABLE_BY (builder::BuilderTool);
+        
       };
       
     typedef Placement<Clip> PClipMO;

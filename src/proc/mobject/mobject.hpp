@@ -29,6 +29,7 @@
 
 #include "cinelerra.h"
 #include "proc/mobject/buildable.hpp"
+#include "proc/mobject/builder/buildertool.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/asset.hpp"                 // TODO finally not needed?
 

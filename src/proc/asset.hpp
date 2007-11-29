@@ -309,7 +309,7 @@ namespace asset
 
     
     /** convienient for debugging */
-    inline string str (PcAsset& a) 
+    inline string str (const PcAsset& a) 
     {
       if (a)
         return string (*a.get());

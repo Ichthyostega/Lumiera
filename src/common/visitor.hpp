@@ -82,7 +82,7 @@ namespace cinelerra
     template 
       < typename RET = void,
         class TOOL = Tool,
-        template<typename,class> class ERR = UseDefault 
+        template<typename,class,class> class ERR = UseDefault 
       >
     class Visitable
       {
@@ -108,7 +108,7 @@ namespace cinelerra
               return concreteTool->treat (target);
             
             else
-              return ERR<RET,TOOL>::onUnknown (target,tool);
+              return ERR<RET,TAR,TOOL>::onUnknown (target,tool);
           }
       };
       

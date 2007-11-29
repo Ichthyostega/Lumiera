@@ -183,8 +183,17 @@ END
 
 
 TEST "VisitingTool_test" VisitingTool_test <<END
+out: === Babbler meets Boss and BigBoss ===
 out: Hello Boss, nice to meet you...
 out: Hello big Boss, nice to meet you...
+out: === Babbler meets HomoSapiens and Leader ===
+out: Hello Boss, nice to meet you...
+out: === Blatherer meets Leader, Visionary and HomoSapiens masqueraded as HomoSapiens ===
+out: === Blatherer meets Leader and Visionary masqueraded as Chief ===
+out: Hello we-do-everything-for-YOU, nice to meet you...
+out: Hello we-do-everything-for-YOU, nice to meet you...
+out: === VerboseVistr masqueraded as Tool meets Leader and Visionary masqueraded as HomoSapiens ===
+out: === Blatherer masqueraded as Tool meets Leader and Visionary masqueraded as Leader ===
 return: 0
 END
 

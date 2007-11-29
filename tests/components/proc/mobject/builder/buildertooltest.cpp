@@ -23,13 +23,11 @@
 
 #include "common/test/run.hpp"
 #include "proc/mobject/builder/buildertool.hpp"
-//#include "common/factory.hpp"
-//#include "common/util.hpp"
+#include "proc/asset/category.hpp"
+#include "proc/asset/media.hpp"
+#include "proc/mobject/session/clip.hpp"
 
-//#include <boost/format.hpp>
 #include <iostream>
-
-//using boost::format;
 using std::string;
 using std::cout;
 
@@ -41,6 +39,11 @@ namespace mobject
     namespace test
       {
       
+      using session::Clip;
+      using session::AbstractMO;
+      using cinelerra::visitor::Applicable;
+      
+      
       
       
       
@@ -49,14 +52,44 @@ namespace mobject
        *       MObjects in the builder. Because the generic visitor 
        *       implementation is already covered by
        *       \link VisitingTool_test, it is sufficient to test
-       *       the specialisation to the builder
-       * @todo work out what this means haha.... 
+       *       the specialisation to the builder.
+       * \par
+       * Besides using existing MObject types (at the moment session::Clip),
+       * we create inline a yet-unknown new MObject subclass. When passing
+       * such to any BuilderTool subclass, the compiler enforces the definition
+       * of a catch-all function, which is called, when there is no other
+       * applicable \c treat(MO&) function. Note further, whithin the specific
+       * treat-functions we get direct references, whithout interfering with
+       * Placements and memory management. (Is this a good idea? it allows
+       * client code to bypass the Placement (Handle). At least, I think
+       * it is not really a problem...) 
        */
       class BuilderTool_test : public Test
         {
           virtual void run(Arg arg) 
             {
-              UNIMPLEMENTED ("testing the visitor pattern for the builder");
+                        class DummyMO : public AbstractMO
+                          {
+                          public:
+                            DummyMO() { };
+                            virtual bool isValid()  const { return true;}
+                          };
+              
+                        class TestTool : public BuilderTool,
+                                         public Applicable<Clip>
+                          {
+                            void treat (Clip& c)   { cout << "media is: "<< str(c.getMedia()) <<"\n"; }
+                            void treat (Buildable&){ cout << "catch-all-function called.\n"; }
+                          };
+                          
+              TestTool t1;
+              BuilderTool& tool (t1);
+                                
+              DummyMO dumm;
+              PMO clip = asset::Media::create("test-1", asset::VIDEO)->createClip();
+
+              clip->apply (tool);
+              dumm.apply (tool);
             } 
         };
       

@@ -3,7 +3,9 @@ TESTING "Component Test Suite: Builder" ./test-components --group=builder
 
 
 
-PLANNED "BuilderTool_test" BuilderTool_test <<END
+TEST "BuilderTool_test" BuilderTool_test <<END
+out: media is: Asset(VIDEO:cin3.test-1 v1)
+out: catch-all-function called.
 END
 
 

@@ -59,25 +59,61 @@ namespace cinelerra
         public:
           DEFINE_PROCESSABLE_BY (Tool);
         };
-      
-      class Leader : public Boss
-        {
-        };
-      
+
         
       class VerboseVisitor
-        : public Tool,
-          public Applicable<Boss>,
-          public Applicable<BigBoss>
+        : public Tool
         {
+        protected:
           void talk_to (string guy)
             {
               cout << format ("Hello %s, nice to meet you...\n") % guy;
             }
+        };
+        
+      class Babbler
+        : public VerboseVisitor,
+          public Applicable<Boss>,
+          public Applicable<BigBoss>
+        {
         public:
           void treat (Boss&)    { talk_to("Boss"); }
           void treat (BigBoss&) { talk_to("big Boss"); }
         };
+
+      // the classes above comprise the standard use case,
+      // what follows are rather exotic corner cases 
+        
+      class Blatherer
+        : public VerboseVisitor,
+          public Applicable<BigBoss>
+        {
+        public:
+          void treat (BigBoss&)     { talk_to("big Boss"); }
+          void treat (HomoSapiens&) { talk_to("we-do-everything-for-YOU"); } ///< catch-all function
+        };
+        
+      
+      typedef Visitable<void,Blatherer,InvokeCatchAllFunction> Vista2;
+      
+      class Chief : public Vista2 ///< abstract intermeidary node 
+        {
+        };
+      
+      class Leader : public Chief,
+                     public Boss  ///< can act as HomoSapiens or as Chief
+        {
+        public:
+          using HomoSapiens::apply;
+          virtual void apply (Blatherer& tool)  { return Vista2::dispatchOp (*this, tool); }
+        };
+        
+      class Visionary : public Leader
+        {
+        };
+      
+        
+        
         
       
       
@@ -97,34 +133,83 @@ namespace cinelerra
           virtual void run(Arg arg) 
             {
               known_visitor_known_class();
-              TODO ("implement the more complicated visitor test cases");
-              //visitor_not_visiting_some_class();
-              //visitor_treating_new_subclass();
+              visitor_not_visiting_some_class();
+              visitor_treating_new_subclass();
             } 
           
           void known_visitor_known_class()
             {
-              HomoSapiens x1;
-              Boss x2;
-              BigBoss x3;
+              Boss x1;
+              BigBoss x2;
               
-              HomoSapiens& xx2 (x2);
-              HomoSapiens& xx3 (x3);
+              // masquerade as HomoSapiens...
+              HomoSapiens& homo1 (x1);
+              HomoSapiens& homo2 (x2);
               
-              VerboseVisitor wizzy;
-              x1.apply (wizzy);
-              xx2.apply (wizzy);
-              xx3.apply (wizzy);
+              cout << "=== Babbler meets Boss and BigBoss ===\n";
+              Babbler bab;
+              homo1.apply (bab);
+              homo2.apply (bab);
             }
           
           void visitor_not_visiting_some_class()
             {
-              UNIMPLEMENTED ("testing the generic visitor pattern");
+              HomoSapiens x1;
+              Leader x2;
+              
+              HomoSapiens& homo1 (x1);
+              HomoSapiens& homo2 (x2);
+              
+              cout << "=== Babbler meets HomoSapiens and Leader ===\n";
+              Babbler bab;
+              homo1.apply (bab);  // doesn't visit HomoSapiens
+              homo2.apply (bab); //  treats Leader as Boss
             }
             
           void visitor_treating_new_subclass()
             {
-              UNIMPLEMENTED ("testing the generic visitor pattern");
+              Leader x1;
+              Visionary x2;
+              HomoSapiens x3;
+              
+              HomoSapiens& homo1 (x1);
+              HomoSapiens& homo2 (x2);
+              HomoSapiens& homo3 (x3);
+              Chief& chief1 (x1);
+              Chief& chief2 (x2);
+              Leader& lead1 (x1);
+              Leader& lead2 (x2);
+              
+              Blatherer bla;
+              VerboseVisitor vista;
+              Tool& tool1 (vista);
+              Tool& tool2 (bla);
+              cout << "=== Blatherer meets Leader, Visionary and HomoSapiens masqueraded as HomoSapiens ===\n";
+              homo1.apply (bla);  // nothing happens, because Blatherer doesn't declare to do anything as Tool 
+              homo2.apply (bla);
+              homo3.apply (bla);
+              cout << "=== Blatherer meets Leader and Visionary masqueraded as Chief ===\n";
+              chief1.apply (bla);  // but now, acting in the Chief hierarchy, the catch-all is called
+              chief2.apply (bla);
+              cout << "=== VerboseVistr masqueraded as Tool meets Leader and Visionary masqueraded as HomoSapiens ===\n";
+              homo1.apply (tool1); // because acting in the HomoSapiens hierarch, no visiting happens and no catch-all 
+              homo2.apply (tool1);
+              cout << "=== Blatherer masqueraded as Tool meets Leader and Visionary masqueraded as Leader ===\n";
+              lead1.apply (tool2); // nothing happens, because Leader here is treated by his HomoSapiens base
+              lead2.apply (tool2);
+
+              // note: the following doesn't compile (an this is a feature, not a bug):
+              
+              // "chief1.apply (tool2)"  : because the "Chief"-hierarchy enforces the catch-all function
+              //                           and the compiler doesn't know Blatherer actually implements this 
+              //                           catch-all-function, because of the masqueradeing as Tool. Note 
+              //                           further: the catch-all function can have a more general type
+              //                           (in this case HomoSapiens instead of Chief)
+              
+              // "Chief chief"           : is abstract, because the Visitable-Template enforces implementing 
+              //                           the "apply(TOOL&)" function, either directly or via the 
+              //                           DEFINE_PROCESSABLE_BY macro
+
             }
         };
       
