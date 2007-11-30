@@ -1004,7 +1004,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200711280302" created="200708080322" tags="overview" changecount="11">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200711300349" created="200708080322" tags="overview" changecount="12">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Cinelerra Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1016,6 +1016,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 * [[Handling of the current Session|CurrentSession]]
 * [[collecting Ideas for Implementation Guidelines|ImplementationGuidelines]]
 * [[using the Visitor pattern?|VisitorUse]]
+* [[Handling of Tracks and Ports in the EDL|TrackPortEDL]]
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200711210542" created="200711210531" tags="discuss draft" changecount="7">
@@ -2903,6 +2904,12 @@ function addKeyDownHandlers(e)
 <pre>Timeline is the name of a specific facility located in the [[Fixture]] (EDL): It is a ordered list of ExplicitPlacement.s of MObjects. By traversing the Playlist you get at all elements actually to be rendered; the [[Builder]] uses this Timeline-list to construct actual Render Engine configurations to carry out the calculations.
 
 </pre>
+</div>
+<div title="TrackPortEDL" modifier="Ichthyostega" created="200711300405" tags="design discuss def decision" changecount="1">
+<pre>''towards a definition of »Track«''. We don't want to tie ourself to some naive and overly simplistic definition, just because it is convenient. For classical (analogue) media, tracks are physical entities dictated by the nature of the process by which the media works. Especially, Tape machines have reading/writing heads, which creates fixed tracks to which to route the signals. This is a practical geometric necessity. For digital media, there is no such necessity. We are only bound by the editor's habits of working.
+
+!Assessment of Properties
+Media are used as Clips (contiguous chunks), they are a compound of several elementary streams, and they have a temporal extension (length). Indeed, the temporal dimension is the only fundamental property that can't be changed. Orthogonally to this dimension, we add one or more organisational dimensions forming a grid. This means, while the time is quasi-contiguos, the organisational grid is discrete in structure. And we assume that we can //locate or place// some media clip at one distinctive point in this organisational grid. Combined with the temporal dimension, this grid is thus extruded to form something like Tracks.</pre>
 </div>
 <div title="VisitorUse" modifier="Ichthyostega" modified="200711280312" created="200711280302" tags="impl discuss" changecount="11">
 <pre>Using the ''Visitor Design Pattern'' is somewhat controversial, mainly because this pattern is rather complicated, requires certain circumstances to be usefull, and &amp;mdash; especially when used in the original form described by Gamma et al &amp;mdash; puts quite some burden on the implementor. This problems can be ameliorated by using library implementation techniques described by Robert Martin and implemented e.g. by Alexandrescu in the Loki library.

@@ -31,7 +31,7 @@
 #include "proc/mobject/placement.hpp"
 #include "proc/asset/track.hpp"
 
-using proc_interface::PAsset;  // TODO better methot to refer to a track?
+using proc_interface::PAsset;  // TODO better way to refer to a track?
 
 using std::vector;
 using std::string;

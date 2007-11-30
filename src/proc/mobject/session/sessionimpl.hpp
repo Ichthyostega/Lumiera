@@ -23,7 +23,12 @@
 
 /** @file sessionimpl.hpp
  ** Session and SessionManager Implemention classes.
- ** These are primary Interfaces and we hide all implementaion complexities,
+ ** Session and the corresponding Manager are primary Interfaces
+ ** to control the behaviour of the editing part of the application.
+ ** All all implementaion complexities are hidden behind a "PImpl".
+ **
+ ** This file contains the implementation classes, it should never
+ ** be included by client code.
  **
  */
 
