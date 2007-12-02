@@ -2,16 +2,14 @@ window_sizes 1140 830 270 860 680 71
 diagrams
   classdiagram_ref 130309 // Asset Kinds
     860 633 100 4 0 0
-  classdiagram_ref 128133 // Session structure
-    860 633 100 4 0 0
+  active  classdiagram_ref 128133 // Session structure
+    860 633 100 4 401 0
   classdiagram_ref 128389 // Render Entities
     688 506 100 4 120 0
-  active  classdiagram_ref 129285 // Builder Entities
-    860 680 100 4 0 0
 end
 show_stereotypes
 selected 
-  package_ref 129 // cinelerra3
+package_ref 129 // cinelerra3
 open
   deploymentview_ref 128261 // gen
   deploymentview_ref 129029 // gen
