@@ -570,7 +570,7 @@ For every Asset we generate a __Ident tuple__ and a long ID (hash) derived from 
 [img[how to implement Automation|uml/fig129669.png]]
 </pre>
 </div>
-<div title="BasicBuildingOperations" modifier="Ichthyostega" modified="200712080348" created="200712040334" tags="design dynamic def" changecount="14">
+<div title="BasicBuildingOperations" modifier="Ichthyostega" modified="200712090611" created="200712040334" tags="design dynamic def Builder" changecount="15">
 <pre>Starting out from the concepts of Objects, Placement to Tracks, Ports and connection properties (&amp;rarr; see [[here|TrackPortEDL]]) within the EDL, we can identify the elementary operations occuring within the Builder. Overall, the Builder is organized as application of //visiting tools// to a collection of objects, so finally we have to consider some object kind appearing in the working function of the given builder tool, which holds at this moment some //context//. The job now is to organize this context such as to create a predictable build process from this //event driven// approach.
 
 !Builder working Situations
@@ -720,7 +720,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BuildProcess" modifier="Ichthyostega" modified="200712040318" created="200706190658" tags="dynamic" changecount="22">
+<div title="BuildProcess" modifier="Ichthyostega" modified="200712090625" created="200706190658" tags="dynamic Builder" changecount="26">
 <pre>All decisions on //how // the RenderProcess has to be carried out are concentrated in this rather complicated Builder Subsystem. The benefit of this approach is, besides decoupling of subsystems, to keep the actual performance-intensive video processing code as simple and transparent as possible. The price, in terms of increased complexity &amp;mdash; to pay in the Builder &amp;mdash; can be handled by making the Build Process generic to a large degree. Using a Design By Contract approach we can decompose the various decisions into small decision modules without having to trace the actual workings of the Build Process as a whole.
 
 [&gt;img[Outline of the Build Process|uml/fig129413.png]]
@@ -731,18 +731,26 @@ Note, //we still have to work out how exactly building, rendering and playback w
 
 &amp;rarr;see also: BasicBuildingOperations
 &amp;rarr;see also: BuilderStructures
+&amp;rarr;see also: PlanningSegementationTool
+&amp;rarr;see also: PlanningNodeCreatorTool
 
 [img[Colaborations in the Build Process|uml/fig128517.png]]
-
 </pre>
 </div>
-<div title="Builder" modifier="Ichthyostega" created="200706220317" tags="def" changecount="2">
+<div title="Builder" modifier="Ichthyostega" modified="200712090634" created="200706220317" tags="def overview" changecount="23">
 <pre>The Builder takes some MObject/[[Placement]] information (called Timeline) and generates out of this a Render Engine configuration able to render this Objects. It does all decisions and retrieves the current configuration of all objects and plugins, so the Render Engine can just process them stright forward.
 
-The Builder is part of the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]
+The Builder is the central part of the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]
+&lt;br/&gt;
+As the builder has to create a render node network implementing most of the features and wiring possible with the various MObject kinds and placement types, it is a rather complicated piece of software. In order to keep it manageable, it is broken down into several specialized sub components:
+* clients access builder functionality via the BuilderFacade
+* the [[Proc-Layer-Controller|Controller]] initiates the BuildProcess and does the overall coordination of scheduling edit operations, rebuilding the fixture and triggering the Builder
+* to carry out the building, we use several tools (SegementationTool, NodeCreaterTool,...), which are supplied by the [[tool factory|BuilderToolFactory]]
+* the actual building (i.e. the application of those tools to the timeline) is done by the [[Assembler|BuilderAssembler]], which is basically a collection of functions (but has a small amount of global configuration state)
+* any non-trivial wiring of render nodes, tracks, ports and automation is done by the services of the [[connection manager|ConManager]]
 </pre>
 </div>
-<div title="BuilderStructures" modifier="Ichthyostega" modified="200711280236" created="200706250734" tags="overview design" changecount="15">
+<div title="BuilderStructures" modifier="Ichthyostega" modified="200712090636" created="200706250734" tags="overview design Builder" changecount="17">
 <pre>* the MObjects implement //Buildable//
 * each Buildable can &quot;recieve&quot; a Tool object and aply it
 * the different Tool objects are iterated/mapped onto the list of MObjects in the [[Timeline]]
@@ -751,8 +759,8 @@ The Builder is part of the [[Builder Pattern|http://en.wikipedia.org/wiki/Builde
 ** so this design makes it easy to add new Tool subclasses, and within each Tool subclass, all operations on the different MObject classes are grouped together, so it is easy to see what is going on.
 ** a given Tool instance can carry state while beeing iterated, so we don't need any global (or object-global) variables to hold the result of the build process
 
-This programming technique is often refered to as [[&quot;double dispatch&quot; or &quot;visitor&quot;|VisitorUse]]. We use a special implementation variant of this pattern, known as &quot;acyclic visitor&quot;. This technique was first invented by Robert Martin (1996) &amp;mdash; our code is heavily inspired by the [[Loki library|http://loki-lib.sourceforge.net/]]. We use this approach not only for the builder, but also for carrying out operations on the objects in the EDL in a typesafe manner.
-{{red{TODO:flesh out the actual Operations needed}}}
+This programming technique is often refered to as [[&quot;double dispatch&quot; or &quot;visitor&quot;|VisitorUse]]. We use a special implementation variant of this pattern, known as &quot;acyclic visitor&quot;. This technique was first invented by Robert Martin (1996) &amp;mdash; our code is heavily inspired by the [[Loki library|http://loki-lib.sourceforge.net/]]. We use this approach not only for the builder, but also for carrying out operations on the objects in the EDL in a typesafe manner. 
+For the actual building operations see BasicBuildingOperations {{red{TODO:flesh out the actual Operations}}}
     
 
 [img[Entities cooperating in the Builder|uml/fig129285.png]]
@@ -775,8 +783,8 @@ TertiaryMid: #99a
 TertiaryDark: #667
 Error: #f88</pre>
 </div>
-<div title="Controller" modifier="Ichthyostega" modified="200708100409" created="200706220319" tags="def" changecount="3">
-<pre>Here, in the context of the Render Engine, the Controller component is responsible for managing the global playback state, for triggering the build process and for activating the backend and the Render Engine configuration created by the Builder to carry out the actual rendering. So you can expect the Controller to encompass a State Machine.
+<div title="Controller" modifier="Ichthyostega" modified="200712090624" created="200706220319" tags="def" changecount="4">
+<pre>Here, in the context of the Render Engine, the Controller component is responsible for triggering and coordinating the build process and for activating the backend and the Render Engine configuration created by the Builder to carry out the actual rendering. There is another Controller in the backend, the ~PlaybackController, which is in charge of the playback/rendering/display state of the application, and consequently will call this (Proc-Layer) Controller to get the necessary Render Engine.
 
 !Facade
 This is an very important external Interface, because it links together all three Layers of our current architecture. It can be used by the backend to initiate [[Render Processes (=StateProxy)|StateProxy]] and it will probably be used by the Dispatcher for GUI actions as well...
@@ -1043,7 +1051,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200712040320" created="200708080322" tags="overview" changecount="13">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200712090637" created="200708080322" tags="overview" changecount="14">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Cinelerra Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1056,7 +1064,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 * [[collecting Ideas for Implementation Guidelines|ImplementationGuidelines]]
 * [[using the Visitor pattern?|VisitorUse]]
 * [[Handling of Tracks and Ports in the EDL|TrackPortEDL]]
-* [[identifying the basic Builder operations|BasicBuildingOperations]]
+* [[identifying the basic Builder operations|BasicBuildingOperations]] and [[planning the Implementation|PlanningNodeCreaterTool]]
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200711210542" created="200711210531" tags="discuss draft" changecount="7">
@@ -2178,6 +2186,51 @@ Placements have //value semantics,// i.e. we don't stress the identity of a plac
 
 </pre>
 </div>
+<div title="PlanningNodeCreaterTool" modifier="Ichthyostega" modified="200712100258" created="200712090659" tags="impl Builder" changecount="5">
+<pre>//This page is a scrapbook for working out the implementation of the builder//
+
+* NodeCraterTool is a [[visiting tool|VisitorUse]]
+* the render engine to be built is contained as state within this tool object while it is passed around
+!!!prerequisites
+* Session and ~EDLs exist.
+* Ports exist and are configured
+* Fixture contains ExplicitPlacement for every MObject to be rendered, and nothing else
+
+&lt;&lt;tasksum start&gt;&gt;
+&lt;&lt;taskadder&gt;&gt;
+
+!!preparing
+We need a way of addressing existing [[ports|Port]]. Besides, as the Ports and Tracks are referred by the Placements we are processing, they are guaranteed to exist.
+
+!!treating a Port
+&lt;&lt;task&gt;&gt;get the [[processing pattern|ProcPatt]] of the port by accessing the underlying port asset.
+&lt;&lt;task&gt;&gt;process this ProcPatt recursively
+
+!!treating a processing pattern
+&lt;&lt;task&gt;&gt;{{red{finally go ahead and define what a ProcPatt need to be...}}}
+
+!!treating a {{{Placement&lt;Clip&gt;}}}
+&lt;&lt;task&gt;&gt;get the ProcPatt of the underlying media (asset)
+&lt;&lt;task&gt;&gt;process the ProcPatt recursively
+&lt;&lt;task&gt;&gt;create or access? {{red{TODO: decide this}}} the ClipSourcePort
+&lt;&lt;task&gt;&gt;enqueue an WiringRequest for connecting the source pipeline to the source port
+&lt;&lt;task&gt;&gt;process the source port recursively (thus adding the camera etc.)
+&lt;&lt;task&gt;&gt;enqueue an WiringRequest for any placement to some port for this clip.
+* __note__: we suppose
+** all wiring requests will be done after the processing of entities
+** all effects placed to this clip will be processed after this clip (but before the wiring requests)
+
+!!treating an {{{Placement&lt;Effect&gt;}}}
+&lt;&lt;task&gt;&gt;{{red{how to assure that effecs are processed after clips/ports??}}}
+&lt;&lt;task&gt;&gt;find out the application point
+&lt;&lt;task&gt;&gt;build a transforming node for the effect and insert it there
+
+!!postprocessing
+&lt;&lt;task&gt;&gt;sort and group the assembled list of [[wiring requests|WiringRequest]] by ports
+
+&lt;&lt;tasksum end&gt;&gt;
+</pre>
+</div>
 <div title="Playlist" modifier="Ichthyostega" modified="200706250727" created="200706220456" tags="def" changecount="3">
 <pre>Playlist is a sequence of individual Render Engine Processors able to render a segment of the timeline. So, together these Processors are able to render the whole timeline (or part of the timeline if only a part has to be rendered).
 
@@ -2810,6 +2863,864 @@ h1,h2,h3,h4,h5,h6 {
 <div title="TabTimeline" modifier="Ichthyostega" modified="200711082358" created="200706191949" changecount="3">
 <pre>&lt;&lt;timeline better:true maxDays:55 maxEntries:30&gt;&gt;</pre>
 </div>
+<div title="TaskMacroPlugin" modifier="Ichthyostega" created="200712100248" tags="systemConfig excludeMissing" changecount="2">
+<pre>/***
+|Name|TaskMacroPlugin|
+|Author|&lt;&lt;extension TaskMacroPlugin author&gt;&gt;|
+|Location|&lt;&lt;extension TaskMacroPlugin source&gt;&gt;|
+|License|&lt;&lt;extension TaskMacroPlugin license&gt;&gt;|
+|Version|&lt;&lt;extension TaskMacroPlugin versionAndDate&gt;&gt;|
+!Description
+A set of macros to help you keep track of time estimates for tasks.
+
+Macros defined:
+* {{{task}}}: Displays a task description and makes it easy to estimate and track the time spent on the task.
+* {{{taskadder}}}: Displays text entry field to simplify the adding of tasks.
+* {{{tasksum}}}: Displays a summary of tasks sandwiched between two calls to this macro.
+* {{{extension}}}: A simple little macro that displays information about a TiddlyWiki plugin, and that will hopefully someday migrate to the TW core in some form.
+Core overrides:
+* {{{wikify}}}: when wikifying a tiddler's complete text, adds refresh information so the tiddler will be refreshed when it changes
+* {{{config.refreshers}}}: have the built-in refreshers return true; also, add a new refresher (&quot;fullContent&quot;) that redisplays a full tiddler whenever it or any nested tiddlers it shows are changed
+* {{{refreshElements}}}: now checks the return value from the refresher and only short-circuits the recursion if the refresher returns true
+!Plugin Information
+***/
+//{{{
+version.extensions.TaskMacroPlugin = {
+	major: 1, minor: 1, revision: 0,
+	date: new Date(2006,5-1,13),
+	author: &quot;LukeBlanshard&quot;,
+	source: &quot;http://labwiki.sourceforge.net/#TaskMacroPlugin&quot;,
+	license: &quot;http://labwiki.sourceforge.net/#CopyrightAndLicense&quot;
+}
+//}}}
+/***
+A little macro for pulling out extension info.  Use like {{{&lt;&lt;extension PluginName datum&gt;&gt;}}}, where {{{PluginName}}} is the name you used for {{{version.extensions}}} and {{{datum}}} is either {{{versionAndDate}}} or a property of the extension description object, such as {{{source}}}.
+***/
+//{{{
+config.macros.extension = {
+	handler: function( place, macroName, params, wikifier, paramString, tiddler ) {
+		var info  = version.extensions[params[0]]
+		var datum = params[1]
+		switch (params[1]) {
+		case 'versionAndDate':
+			createTiddlyElement( place, &quot;span&quot;, null, null,
+				info.major+'.'+info.minor+'.'+info.revision+', '+info.date.formatString('DD MMM YYYY') )
+			break;
+		default:
+			wikify( info[datum], place )
+			break;
+		}
+	}
+}
+//}}}
+/***
+!Core Overrides
+***/
+//{{{
+window.wikify_orig_TaskMacroPlugin = window.wikify
+window.wikify = function(source,output,highlightRegExp,tiddler)
+{
+	if ( tiddler &amp;&amp; tiddler.text === source )
+		addDisplayDependency( output, tiddler.title )
+	wikify_orig_TaskMacroPlugin.apply( this, arguments )
+}
+config.refreshers_orig_TaskMacroPlugin = config.refreshers
+config.refreshers = {
+	link: function() {
+		config.refreshers_orig_TaskMacroPlugin.link.apply( this, arguments )
+		return true
+	},
+	content: function() {
+		config.refreshers_orig_TaskMacroPlugin.content.apply( this, arguments )
+		return true
+	},
+	fullContent: function( e, changeList ) {
+		var tiddlers = e.refreshTiddlers
+		if ( changeList == null || tiddlers == null )
+			return false
+		for ( var i=0; i &lt; tiddlers.length; ++i )
+			if ( changeList.find(tiddlers[i]) != null ) {
+				var title = tiddlers[0]
+				story.refreshTiddler( title, null, true )
+				return true
+			}
+		return false
+	}
+}
+function refreshElements(root,changeList)
+{
+	var nodes = root.childNodes;
+	for(var c=0; c&lt;nodes.length; c++)
+		{
+		var e = nodes[c],type;
+		if(e.getAttribute)
+			type = e.getAttribute(&quot;refresh&quot;);
+		else
+			type = null;
+		var refresher = config.refreshers[type];
+		if ( ! refresher || ! refresher(e, changeList) )
+			{
+			if(e.hasChildNodes())
+				refreshElements(e,changeList);
+			}
+		}
+}
+//}}}
+/***
+!Global Functions
+***/
+//{{{
+// Add the tiddler whose title is given to the list of tiddlers whose
+// changing will cause a refresh of the tiddler containing the given element.
+function addDisplayDependency( element, title ) {
+	while ( element &amp;&amp; element.getAttribute ) {
+		var idAttr = element.getAttribute(&quot;id&quot;), tiddlerAttr = element.getAttribute(&quot;tiddler&quot;)
+		if ( idAttr &amp;&amp; tiddlerAttr &amp;&amp; idAttr == story.idPrefix+tiddlerAttr ) {
+			var list = element.refreshTiddlers
+			if ( list == null ) {
+				list = [tiddlerAttr]
+				element.refreshTiddlers = list
+				element.setAttribute( &quot;refresh&quot;, &quot;fullContent&quot; )
+			}
+			list.pushUnique( title )
+			return
+		}
+		element = element.parentNode
+	}
+}
+
+// Lifted from Story.prototype.focusTiddler: just return the field instead of focusing it.
+Story.prototype.findEditField = function( title, field )
+{
+	var tiddler = document.getElementById(this.idPrefix + title);
+	if(tiddler != null)
+		{
+		var children = tiddler.getElementsByTagName(&quot;*&quot;)
+		var e = null;
+		for (var t=0; t&lt;children.length; t++)
+			{
+			var c = children[t];
+			if(c.tagName.toLowerCase() == &quot;input&quot; || c.tagName.toLowerCase() == &quot;textarea&quot;)
+				{
+				if(!e)
+					e = c;
+				if(c.getAttribute(&quot;edit&quot;) == field)
+					e = c;
+				}
+			}
+		return e
+		}
+}
+
+// Wraps the given event function in another function that handles the
+// event in a standard way.
+function wrapEventHandler( otherHandler ) {
+	return function(e) {
+		if (!e) var e = window.event
+		e.cancelBubble = true
+		if (e.stopPropagation) e.stopPropagation()
+		return otherHandler( e )
+	}
+}
+//}}}
+/***
+!Task Macro
+Usage:
+&gt; {{{&lt;&lt;task orig cur spent&gt;&gt;description}}}
+All of orig, cur, and spent are optional numbers of hours.  The description goes through the end of the line, and is wikified.
+***/
+//{{{
+config.macros.task = {
+	NASCENT:	0, // Task not yet estimated
+	LIVE:		1, // Estimated but with time remaining
+	DONE:		2, // Completed: no time remaining
+	bullets:	[&quot;\u25cb&quot;, // nascent (open circle)
+			 &quot;\u25ba&quot;, // live (right arrow)
+			 &quot;\u25a0&quot;],// done (black square)
+	styles:		[&quot;nascent&quot;, &quot;live&quot;, &quot;done&quot;],
+
+	// Translatable text:
+	lingo: {
+		spentTooBig:	&quot;Spent time %0 can't exceed current estimate %1&quot;,
+		noNegative:	&quot;Times may not be negative numbers&quot;,
+		statusTips:	[&quot;Not yet estimated&quot;, &quot;To do&quot;, &quot;Done&quot;], // Array indexed by state (NASCENT/LIVE/DONE)
+		descClickTip:	&quot; -- Double-click to edit task description&quot;,
+		statusClickTip:	&quot; -- Double-click to mark task complete&quot;,
+		statusDoneTip:	&quot; -- Double-click to adjust the time spent, to revive the task&quot;,
+		origTip:	&quot;Original estimate in hours&quot;,
+		curTip:		&quot;Current estimate in hours&quot;,
+		curTip2:	&quot;Estimate in hours&quot;, // For when orig == cur
+		clickTip:	&quot; -- Click to adjust&quot;,
+		spentTip:	&quot;Hours spent on this task&quot;,
+		remTip:		&quot;Hours remaining&quot;,
+		curPrompt:	&quot;Estimate this task in hours, or adjust the current estimate by starting with + or -.\n\nYou may optionally also set or adjust the time spent by putting a second number after the first.&quot;,
+		spentPrompt:	&quot;Enter the number of hours you've spent on this task, or adjust the current number by starting with + or -.\n\nYou may optionally also set or adjust the time remaining by putting a second number after the first.&quot;,
+		remPrompt:	&quot;Enter the number of hours it will take to finish this task, or adjust the current estimate by starting with + or -.\n\nYou may optionally also set or adjust the time spent by putting a second number after the first.&quot;,
+		numbersOnly:	&quot;Enter numbers only, please&quot;,
+		notCurrent:	&quot;The tiddler has been modified since it was displayed, please redisplay it before doing this.&quot;
+	},
+
+	// The macro handler
+	handler: function( place, macroName, params, wikifier, paramString, tiddler )
+	{
+		var start = wikifier.matchStart, end = wikifier.nextMatch
+
+		var origStr	= params.length &gt; 0? params.shift() : &quot;?&quot;
+		var orig	= +origStr // as a number
+		var cur		= params.length &gt; 1? +params.shift() : orig
+		var spent	= params.length &gt; 0? +params.shift() : 0
+		if ( spent &gt; cur )
+			throw Error( this.lingo.spentTooBig.format([spent, cur]) )
+		if ( orig &lt; 0 || cur &lt; 0 || spent &lt; 0 )
+			throw Error( this.lingo.noNegative )
+		var rem		= cur - spent
+		var state	= isNaN(orig+rem)? this.NASCENT : rem &gt; 0? this.LIVE : this.DONE
+		var table	= createTiddlyElement( place, &quot;table&quot;, null, &quot;task &quot;+this.styles[state] )
+		var tbody	= createTiddlyElement( table, &quot;tbody&quot; )
+		var row		= createTiddlyElement( tbody, &quot;tr&quot; )
+		var statusCell	= createTiddlyElement( row,   &quot;td&quot;, null, &quot;status&quot;, this.bullets[state] )
+		var descCell	= createTiddlyElement( row,   &quot;td&quot;, null, &quot;description&quot; )
+
+		var origCell	= state==this.NASCENT || orig==cur? null
+				: createTiddlyElement( row, &quot;td&quot;, null, &quot;numeric original&quot; )
+		var curCell	= createTiddlyElement( row, &quot;td&quot;, null, &quot;numeric current&quot; )
+		var spentCell	= createTiddlyElement( row, &quot;td&quot;, null, &quot;numeric spent&quot; )
+		var remCell	= createTiddlyElement( row, &quot;td&quot;, null, &quot;numeric remaining&quot; )
+
+		var sums = config.macros.tasksum.tasksums
+		if ( sums &amp;&amp; sums.length ) {
+			var summary = [(state == this.NASCENT? NaN : orig), cur, spent]
+			summary.owner = tiddler
+			sums[0].push( summary )
+		}
+
+		// The description goes to the end of the line
+		wikifier.subWikify( descCell, &quot;$\\n?&quot; )
+		var descEnd = wikifier.nextMatch
+
+		statusCell.setAttribute( &quot;title&quot;, this.lingo.statusTips[state] )
+		descCell.setAttribute(   &quot;title&quot;, this.lingo.statusTips[state]+this.lingo.descClickTip )
+		if (origCell) {
+			createTiddlyElement( origCell, &quot;div&quot;, null, null, orig )
+			origCell.setAttribute( &quot;title&quot;, this.lingo.origTip )
+			curCell.setAttribute( &quot;title&quot;, this.lingo.curTip )
+		}
+		else {
+			curCell.setAttribute( &quot;title&quot;, this.lingo.curTip2 )
+		}
+		var curDivContents = (state==this.NASCENT)? &quot;?&quot; : cur
+		var curDiv = createTiddlyElement( curCell, &quot;div&quot;, null, null, curDivContents )
+		spentCell.setAttribute( &quot;title&quot;, this.lingo.spentTip )
+		var spentDiv = createTiddlyElement( spentCell, &quot;div&quot;, null, null, spent )
+		remCell.setAttribute( &quot;title&quot;, this.lingo.remTip )
+		var remDiv = createTiddlyElement( remCell, &quot;div&quot;, null, null, rem )
+
+		// Handle double-click on the description by going
+		// into edit mode and selecting the description
+		descCell.ondblclick = this.editDescription( tiddler, end, descEnd )
+
+		function appTitle( el, suffix ) {
+			el.setAttribute( &quot;title&quot;, el.getAttribute(&quot;title&quot;)+suffix )
+		}
+
+		// For incomplete tasks, handle double-click on the bullet by marking the task complete
+		if ( state != this.DONE ) {
+			appTitle( statusCell, this.lingo.statusClickTip )
+			statusCell.ondblclick = this.markTaskComplete( tiddler, start, end, macroName, orig, cur, state )
+		}
+		// For complete ones, handle double-click on the bullet by letting you adjust the time spent
+		else {
+			appTitle( statusCell, this.lingo.statusDoneTip )
+			statusCell.ondblclick = this.adjustTimeSpent( tiddler, start, end, macroName, orig, cur, spent )
+		}
+
+		// Add click handlers for the numeric cells.
+		if ( state != this.DONE ) {
+			appTitle( curCell, this.lingo.clickTip )
+			curDiv.className = &quot;adjustable&quot;
+			curDiv.onclick = this.adjustCurrentEstimate( tiddler, start, end, macroName,
+				orig, cur, spent, curDivContents )
+		}
+		appTitle( spentCell, this.lingo.clickTip )
+		spentDiv.className = &quot;adjustable&quot;
+		spentDiv.onclick = this.adjustTimeSpent( tiddler, start, end, macroName, orig, cur, spent )
+		if ( state == this.LIVE ) {
+			appTitle( remCell, this.lingo.clickTip )
+			remDiv.className = &quot;adjustable&quot;
+			remDiv.onclick = this.adjustTimeRemaining( tiddler, start, end, macroName, orig, cur, spent )
+		}
+	},
+
+	// Puts the tiddler into edit mode, and selects the range of characters
+	// defined by start and end.  Separated for leak prevention in IE.
+	editDescription: function( tiddler, start, end ) {
+		return wrapEventHandler( function(e) {
+			story.displayTiddler( null, tiddler.title, DEFAULT_EDIT_TEMPLATE )
+			var tiddlerElement = document.getElementById( story.idPrefix + tiddler.title )
+			window.scrollTo( 0, ensureVisible(tiddlerElement) )
+			var element = story.findEditField( tiddler.title, &quot;text&quot; )
+			if ( element &amp;&amp; element.tagName.toLowerCase() == &quot;textarea&quot; ) {
+				// Back up one char if the last char's a newline
+				if ( tiddler.text[end-1] == '\n' )
+					--end
+				element.focus()
+				if ( element.setSelectionRange != undefined ) { // Mozilla
+					element.setSelectionRange( start, end )
+					// Damn mozilla doesn't scroll to visible.  Approximate.
+					var max = 0.0 + element.scrollHeight
+					var len = element.textLength
+					var top = max*start/len, bot = max*end/len
+					element.scrollTop = Math.min( top, (bot+top-element.clientHeight)/2 )
+				}
+				else if ( element.createTextRange != undefined ) { // IE
+					var range = element.createTextRange()
+					range.collapse()
+					range.moveEnd(&quot;character&quot;, end)
+					range.moveStart(&quot;character&quot;, start)
+					range.select()
+				}
+				else // Other? Too bad, just select the whole thing.
+					element.select()
+				return false
+			}
+			else
+				return true
+		} )
+	},
+
+	// Modifies a task macro call such that the task appears complete.
+	markTaskComplete: function( tiddler, start, end, macroName, orig, cur, state ) {
+		var macro = this, text = tiddler.text
+		return wrapEventHandler( function(e) {
+			if ( text !== tiddler.text ) {
+				alert( macro.lingo.notCurrent )
+				return false
+			}
+			if ( state == macro.NASCENT )
+				orig = cur = 0
+			// The second &quot;cur&quot; in the call below bumps up the time spent
+			// to match the current estimate.
+			macro.replaceMacroCall( tiddler, start, end, macroName, orig, cur, cur )
+			return false
+		} )
+	},
+
+	// Asks the user for an adjustment to the current estimate, modifies the macro call accordingly.
+	adjustCurrentEstimate: function( tiddler, start, end, macroName, orig, cur, spent, curDivContents ) {
+		var macro = this, text = tiddler.text
+		return wrapEventHandler( function(e) {
+			if ( text !== tiddler.text ) {
+				alert( macro.lingo.notCurrent )
+				return false
+			}
+			var txt = prompt( macro.lingo.curPrompt, curDivContents )
+			if ( txt != null ) {
+				var a = macro.breakInput( txt )
+				cur = macro.offset( cur, a[0] )
+				if ( a.length &gt; 1 )
+					spent = macro.offset( spent, a[1] )
+				macro.replaceMacroCall( tiddler, start, end, macroName, orig, cur, spent )
+			}
+			return false
+		} )
+	},
+
+	// Asks the user for an adjustment to the time spent, modifies the macro call accordingly.
+	adjustTimeSpent: function( tiddler, start, end, macroName, orig, cur, spent ) {
+		var macro = this, text = tiddler.text
+		return wrapEventHandler( function(e) {
+			if ( text !== tiddler.text ) {
+				alert( macro.lingo.notCurrent )
+				return false
+			}
+			var txt = prompt( macro.lingo.spentPrompt, spent )
+			if ( txt != null ) {
+				var a = macro.breakInput( txt )
+				spent = macro.offset( spent, a[0] )
+				var rem = cur - spent
+				if ( a.length &gt; 1 ) {
+					rem = macro.offset( rem, a[1] )
+					cur = spent + rem
+				}
+				macro.replaceMacroCall( tiddler, start, end, macroName, orig, cur, spent )
+			}
+			return false
+		} )
+	},
+
+	// Asks the user for an adjustment to the time remaining, modifies the macro call accordingly.
+	adjustTimeRemaining: function( tiddler, start, end, macroName, orig, cur, spent ) {
+		var macro = this
+		var text  = tiddler.text
+		var rem   = cur - spent
+		return wrapEventHandler( function(e) {
+			if ( text !== tiddler.text ) {
+				alert( macro.lingo.notCurrent )
+				return false
+			}
+			var txt = prompt( macro.lingo.remPrompt, rem )
+			if ( txt != null ) {
+				var a = macro.breakInput( txt )
+				var newRem = macro.offset( rem, a[0] )
+				if ( newRem &gt; rem || a.length &gt; 1 )
+					cur += (newRem - rem)
+				else
+					spent += (rem - newRem)
+				if ( a.length &gt; 1 )
+					spent = macro.offset( spent, a[1] )
+				macro.replaceMacroCall( tiddler, start, end, macroName, orig, cur, spent )
+			}
+			return false
+		} )
+	},
+
+	// Breaks input at spaces &amp; commas, returns array
+	breakInput: function( txt ) {
+		var a = txt.trim().split( /[\s,]+/ )
+		if ( a.length == 0 )
+			a = [NaN]
+		return a
+	},
+
+	// Adds to, subtracts from, or replaces a numeric value
+	offset: function( num, txt ) {
+		if ( txt == &quot;&quot; || typeof(txt) != &quot;string&quot; )
+			return NaN
+		if ( txt.match(/^[+-]/) )
+			return num + (+txt)
+		return +txt
+	},
+
+	// Does some error checking, then replaces the indicated macro
+	// call within the text of the given tiddler.
+	replaceMacroCall: function( tiddler, start, end, macroName, orig, cur, spent )
+	{
+		if ( isNaN(cur+spent) ) {
+			alert( this.lingo.numbersOnly )
+			return
+		}
+		if ( spent &lt; 0 || cur &lt; 0 ) {
+			alert( this.lingo.noNegative )
+			return
+		}
+		if ( isNaN(orig) )
+			orig = cur
+		if ( spent &gt; cur )
+			cur = spent
+		var text = tiddler.text.substring(0,start) + &quot;&lt;&lt;&quot; + macroName + &quot; &quot; +
+			orig + &quot; &quot; + cur + &quot; &quot; + spent + &quot;&gt;&gt;&quot; + tiddler.text.substring(end)
+		var title = tiddler.title
+		store.saveTiddler( title, title, text, config.options.txtUserName, new Date(), undefined )
+		//story.refreshTiddler( title, null, true )
+		if ( config.options.chkAutoSave )
+			saveChanges()
+	}
+}
+//}}}
+/***
+!Tasksum Macro
+Usage:
+&gt; {{{&lt;&lt;tasksum &quot;start&quot; [&quot;here&quot; [intro]]&gt;&gt;}}}
+or:
+&gt; {{{&lt;&lt;tasksum &quot;end&quot; [intro]&gt;&gt;}}}
+Put one of the {{{&lt;&lt;tasksum start&gt;&gt;}}} lines before the tasks you want to summarize, and an {{{end}}} line after them.  By default, the summary goes at the end; if you include {{{here}}} in the start line, the summary will go at the top.  The intro argument, if supplied, replaces the default text introducing the summary.
+***/
+//{{{
+config.macros.tasksum = {
+
+	// Translatable text:
+	lingo: {
+		unrecVerb:	&quot;&lt;&lt;%0&gt;&gt; requires 'start' or 'end' as its first argument&quot;,
+		mustMatch:	&quot;&lt;&lt;%0 end&gt;&gt; must match a preceding &lt;&lt;%0 start&gt;&gt;&quot;,
+		defIntro:	&quot;Task summary:&quot;,
+		nascentSum:	&quot;''%0 not estimated''&quot;,
+		doneSum:	&quot;%0 complete (in %1 hours)&quot;,
+		liveSum:	&quot;%0 ongoing (%1 hours so far, ''%2 hours remaining'')&quot;,
+		overSum:	&quot;Total overestimate: %0%.&quot;,
+		underSum:	&quot;Total underestimate: %0%.&quot;,
+		descPattern:	&quot;%0 %1. %2&quot;,
+                origTip:	&quot;Total original estimates in hours&quot;,
+		curTip:		&quot;Total current estimates in hours&quot;,
+		spentTip:	&quot;Total hours spent on tasks&quot;,
+		remTip:		&quot;Total hours remaining&quot;
+	},
+
+	// The macro handler
+	handler: function( place, macroName, params, wikifier, paramString, tiddler )
+	{
+		var sums = this.tasksums
+		if ( params[0] == &quot;start&quot; ) {
+			sums.unshift([])
+			if ( params[1] == &quot;here&quot; ) {
+				sums[0].intro = params[2] || this.lingo.defIntro
+				sums[0].place = place
+				sums[0].placement = place.childNodes.length
+			}
+		}
+		else if ( params[0] == &quot;end&quot; ) {
+			if ( ! sums.length )
+				throw Error( this.lingo.mustMatch.format([macroName]) )
+			var list = sums.shift()
+			var intro = list.intro || params[1] || this.lingo.defIntro
+			var nNascent=0, nLive=0, nDone=0, nMine=0
+			var totLiveSpent=0, totDoneSpent=0
+			var totOrig=0, totCur=0, totSpent=0
+			for ( var i=0; i &lt; list.length; ++i ) {
+				var a = list[i]
+				if ( a.length &gt; 3 ) {
+					nNascent 	+= a[0]
+					nLive 		+= a[1]
+					nDone 		+= a[2]
+					totLiveSpent 	+= a[3]
+					totDoneSpent 	+= a[4]
+					totOrig 	+= a[5]
+					totCur 		+= a[6]
+					totSpent 	+= a[7]
+					if ( a.owner == tiddler )
+						nMine	+= a[8]
+				}
+				else {
+					if ( a.owner == tiddler )
+						++nMine
+					if ( isNaN(a[0]) ) {
+						++nNascent
+					}
+					else {
+						if ( a[1] &gt; a[2] ) {
+							++nLive
+							totLiveSpent += a[2]
+						}
+						else {
+							++nDone
+							totDoneSpent += a[2]
+						}
+						totOrig  += a[0]
+						totCur   += a[1]
+						totSpent += a[2]
+					}
+				}
+			}
+
+			// If we're nested, push a summary outward
+                        if ( sums.length ) {
+				var summary = [nNascent, nLive, nDone, totLiveSpent, totDoneSpent,
+						totOrig, totCur, totSpent, nMine]
+				summary.owner = tiddler
+				sums[0].push( summary )
+			}
+
+			var descs = [], styles = []
+			if ( nNascent &gt; 0 ) {
+				descs.push( this.lingo.nascentSum.format([nNascent]) )
+				styles.push( &quot;nascent&quot; )
+			}
+			if ( nDone &gt; 0 )
+				descs.push( this.lingo.doneSum.format([nDone, totDoneSpent]) )
+			if ( nLive &gt; 0 ) {
+				descs.push( this.lingo.liveSum.format([nLive, totLiveSpent, totCur-totSpent]) )
+				styles.push( &quot;live&quot; )
+			}
+			else
+				styles.push( &quot;done&quot; )
+			var off = &quot;&quot;
+			if ( totOrig &gt; totCur )
+				off = this.lingo.overSum.format( [Math.round(100.0*(totOrig-totCur)/totCur)] )
+			else if ( totCur &gt; totOrig )
+				off = this.lingo.underSum.format( [Math.round(100.0*(totCur-totOrig)/totOrig)] )
+
+			var top		= (list.intro != undefined)
+			var table	= createTiddlyElement( null, &quot;table&quot;, null, &quot;tasksum &quot;+(top?&quot;top&quot;:&quot;bottom&quot;) )
+			var tbody	= createTiddlyElement( table, &quot;tbody&quot; )
+			var row		= createTiddlyElement( tbody, &quot;tr&quot;, null, styles.join(&quot; &quot;) )
+			var descCell	= createTiddlyElement( row,   &quot;td&quot;, null, &quot;description&quot; )
+
+			var description = this.lingo.descPattern.format( [intro, descs.join(&quot;, &quot;), off] )
+			wikify( description, descCell, null, tiddler )
+
+			var origCell	= totOrig == totCur? null
+					: createTiddlyElement( row, &quot;td&quot;, null, &quot;numeric original&quot;, totOrig )
+			var curCell	= createTiddlyElement( row, &quot;td&quot;, null, &quot;numeric current&quot;, totCur )
+			var spentCell	= createTiddlyElement( row, &quot;td&quot;, null, &quot;numeric spent&quot;, totSpent )
+			var remCell	= createTiddlyElement( row, &quot;td&quot;, null, &quot;numeric remaining&quot;, totCur-totSpent )
+
+			if ( origCell )
+				origCell.setAttribute( &quot;title&quot;, this.lingo.origTip )
+			curCell  .setAttribute( &quot;title&quot;, this.lingo.curTip )
+			spentCell.setAttribute( &quot;title&quot;, this.lingo.spentTip )
+			remCell  .setAttribute( &quot;title&quot;, this.lingo.remTip )
+
+			// Discard the table if there are no tasks
+			if ( list.length &gt; 0 ) {
+				var place = top? list.place : place
+				var placement = top? list.placement : place.childNodes.length
+				if ( placement &gt;= place.childNodes.length )
+					place.appendChild( table )
+				else
+					place.insertBefore( table, place.childNodes[placement] )
+			}
+		}
+		else
+			throw Error( this.lingo.unrecVerb.format([macroName]) )
+
+		// If we're wikifying, and are followed by end-of-line, swallow the newline.
+		if ( wikifier &amp;&amp; wikifier.source.charAt(wikifier.nextMatch) == &quot;\n&quot; )
+			++wikifier.nextMatch
+	},
+
+	// This is the stack of pending summaries
+	tasksums: []
+}
+//}}}
+/***
+!Taskadder Macro
+Usage:
+&gt; {{{&lt;&lt;taskadder [&quot;above&quot;|&quot;below&quot;|&quot;focus&quot;|&quot;nofocus&quot;]...&gt;&gt;}}}
+Creates a line with text entry fields for a description and an estimate.  By default, puts focus in the description field and adds tasks above the entry fields.  Use {{{nofocus}}} to not put focus in the description field.  Use {{{below}}} to add tasks below the entry fields.
+***/
+//{{{
+config.macros.taskadder = {
+
+	// Translatable text:
+	lingo: {
+		unrecParam:	&quot;&lt;&lt;%0&gt;&gt; doesn't recognize '%1' as a parameter&quot;,
+		descTip:	&quot;Describe a new task&quot;,
+		curTip:		&quot;Estimate how long in hours the task will take&quot;,
+		buttonText:	&quot;add task&quot;,
+		buttonTip:	&quot;Add a new task with the description and estimate as entered&quot;,
+		notCurrent:	&quot;The tiddler has been modified since it was displayed, please redisplay it before adding a task this way.&quot;,
+
+		eol:		&quot;eol&quot;
+	},
+
+	// The macro handler
+	handler: function( place, macroName, params, wikifier, paramString, tiddler )
+	{
+		var above = true
+		var focus = false
+
+		while ( params.length &gt; 0 ) {
+			var p = params.shift()
+			switch (p) {
+			case &quot;above&quot;: 	above = true;  break
+			case &quot;below&quot;: 	above = false; break
+			case &quot;focus&quot;: 	focus = true;  break
+			case &quot;nofocus&quot;:	focus = false; break
+			default:	throw Error( this.lingo.unrecParam.format([macroName, p]) )
+			}
+		}
+
+		// If we're followed by end-of-line, swallow the newline.
+		if ( wikifier.source.charAt(wikifier.nextMatch) == &quot;\n&quot; )
+			++wikifier.nextMatch
+
+		var where	= above? wikifier.matchStart : wikifier.nextMatch
+
+		var table	= createTiddlyElement( place, &quot;table&quot;, null, &quot;task&quot; )
+		var tbody	= createTiddlyElement( table, &quot;tbody&quot; )
+		var row		= createTiddlyElement( tbody, &quot;tr&quot; )
+		var statusCell	= createTiddlyElement( row,   &quot;td&quot;, null, &quot;status&quot; )
+		var descCell	= createTiddlyElement( row,   &quot;td&quot;, null, &quot;description&quot; )
+		var curCell	= createTiddlyElement( row,   &quot;td&quot;, null, &quot;numeric&quot; )
+		var addCell	= createTiddlyElement( row,   &quot;td&quot;, null, &quot;addtask&quot; )
+
+		var descId	= this.generateId()
+		var curId	= this.generateId()
+		var descInput	= createTiddlyElement( descCell, &quot;input&quot;, descId )
+		var curInput	= createTiddlyElement( curCell,  &quot;input&quot;, curId  )
+
+		descInput.setAttribute( &quot;type&quot;, &quot;text&quot; )
+		curInput .setAttribute( &quot;type&quot;, &quot;text&quot; )
+		descInput.setAttribute( &quot;size&quot;, &quot;40&quot;)
+		curInput .setAttribute( &quot;size&quot;, &quot;6&quot; )
+		descInput.setAttribute( &quot;autocomplete&quot;, &quot;off&quot; );
+		curInput .setAttribute( &quot;autocomplete&quot;, &quot;off&quot; );
+		descInput.setAttribute( &quot;title&quot;, this.lingo.descTip );
+		curInput .setAttribute( &quot;title&quot;, this.lingo.curTip  );
+
+		var addAction	= this.addTask( tiddler, where, descId, curId, above )
+		var addButton	= createTiddlyButton( addCell, this.lingo.buttonText, this.lingo.buttonTip, addAction )
+
+		descInput.onkeypress = this.handleEnter(addAction)
+		curInput .onkeypress = descInput.onkeypress
+		addButton.onkeypress = this.handleSpace(addAction)
+		if ( focus || tiddler.taskadderLocation == where ) {
+			descInput.focus()
+			descInput.select()
+		}
+	},
+
+	// Returns a function that inserts a new task macro into the tiddler.
+	addTask: function( tiddler, where, descId, curId, above ) {
+		var macro = this, oldText = tiddler.text
+		return wrapEventHandler( function(e) {
+			if ( oldText !== tiddler.text ) {
+				alert( macro.lingo.notCurrent )
+				return false
+			}
+			var desc	= document.getElementById(descId).value
+			var cur		= document.getElementById(curId) .value
+			var init	= tiddler.text.substring(0,where) + &quot;&lt;&lt;task &quot; + cur + &quot;&gt;&gt; &quot; + desc + &quot;\n&quot;
+			var text	= init + tiddler.text.substring(where)
+			var title	= tiddler.title
+			tiddler.taskadderLocation = (above? init.length : where)
+			try {
+				store.saveTiddler( title, title, text, config.options.txtUserName, new Date(), undefined )
+				//story.refreshTiddler( title, null, true )
+			}
+			finally {
+				delete tiddler.taskadderLocation
+			}
+			if ( config.options.chkAutoSave )
+				saveChanges()
+		} )
+	},
+
+	// Returns an event handler that delegates to two other functions: &quot;matches&quot; to decide
+	// whether to consume the event, and &quot;addTask&quot; to actually perform the work.
+	handleGeneric: function( addTask, matches ) {
+		return function(e) {
+			if (!e) var e = window.event
+			var consume = false
+			if ( matches(e) ) {
+				consume = true
+				addTask( e )
+			}
+			e.cancelBubble = consume;
+			if ( consume &amp;&amp; e.stopPropagation ) e.stopPropagation();
+			return !consume;
+		}
+	},
+
+	// Returns an event handler that handles enter keys by calling another event handler
+	handleEnter: function( addTask ) {
+		return this.handleGeneric( addTask, function(e){return e.keyCode == 13 || e.keyCode == 10} ) // Different codes for Enter
+	},
+
+	// Returns an event handler that handles the space key by calling another event handler
+	handleSpace: function( addTask ) {
+		return this.handleGeneric( addTask, function(e){return (e.charCode||e.keyCode) == 32} )
+	},
+
+	counter: 0,
+	generateId: function() {
+		return &quot;taskadder:&quot; + String(this.counter++)
+	}
+}
+//}}}
+/***
+!Stylesheet
+***/
+//{{{
+var stylesheet = '\
+.viewer table.task, table.tasksum {\
+	width: 100%;\
+	padding: 0;\
+	border-collapse: collapse;\
+}\
+.viewer table.task {\
+	border: none;\
+	margin: 0;\
+}\
+table.tasksum, .viewer table.tasksum {\
+	border: solid 2px #999;\
+	margin: 3px 0;\
+}\
+table.tasksum td {\
+	text-align: center;\
+	border: 1px solid #ddd;\
+	background-color: #ffc;\
+	vertical-align: middle;\
+	margin: 0;\
+	padding: 0;\
+}\
+.viewer table.task tr {\
+	border: none;\
+}\
+.viewer table.task td {\
+	text-align: center;\
+	vertical-align: baseline;\
+	border: 1px solid #fff;\
+	background-color: inherit;\
+	margin: 0;\
+	padding: 0;\
+}\
+td.numeric {\
+	width: 3em;\
+}\
+table.task td.numeric div {\
+	border: 1px solid #ddd;\
+	background-color: #ffc;\
+	margin: 1px 0;\
+	padding: 0;\
+}\
+table.task td.original div {\
+	background-color: #fdd;\
+}\
+table.tasksum td.original {\
+	background-color: #fdd;\
+}\
+table.tasksum td.description {\
+	background-color: #e8e8e8;\
+}\
+table.task td.status {\
+	width: 1.5em;\
+	cursor: default;\
+}\
+table.task td.description, table.tasksum td.description {\
+	width: auto;\
+	text-align: left;\
+	padding: 0 3px;\
+}\
+table.task.done td.status,table.task.done td.description {\
+	color: #ccc;\
+}\
+table.task.done td.current, table.task.done td.remaining {\
+	visibility: hidden;\
+}\
+table.task.done td.spent div, table.tasksum tr.done td.current,\
+table.tasksum tr.done td.spent, table.tasksum tr.done td.remaining {\
+	background-color: #eee;\
+	color: #aaa;\
+}\
+table.task.nascent td.description {\
+	color: #844;\
+}\
+table.task.nascent td.current div, table.tasksum tr.nascent td.numeric.current {\
+	font-weight: bold;\
+	color: #c00;\
+	background-color: #def;\
+}\
+table.task.nascent td.spent, table.task.nascent td.remaining {\
+	visibility: hidden;\
+}\
+td.remaining {\
+	font-weight: bold;\
+}\
+.adjustable {\
+	cursor: pointer; \
+}\
+table.task input {\
+	display: block;\
+	width: 100%;\
+	font: inherit;\
+	margin: 2px 0;\
+	padding: 0;\
+	border: 1px inset #999;\
+}\
+table.task td.numeric input {\
+	background-color: #ffc;\
+	text-align: center;\
+}\
+table.task td.addtask {\
+	width: 6em;\
+	border-left: 2px solid white;\
+	vertical-align: middle;\
+}\
+'
+setStylesheet( stylesheet, &quot;TaskMacroPluginStylesheet&quot; )
+//}}}
+</pre>
+</div>
 <div title="TextAreaPlugin" modifier="Jeremy" created="200601261745" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200601261745">
 <pre>/***
 ''TextAreaPlugin for TiddlyWiki version 2.0''
@@ -2945,7 +3856,7 @@ function addKeyDownHandlers(e)
 
 </pre>
 </div>
-<div title="TrackPortEDL" modifier="Ichthyostega" modified="200712080322" created="200711300405" tags="design discuss def decision" changecount="11">
+<div title="TrackPortEDL" modifier="Ichthyostega" modified="200712090611" created="200711300405" tags="design discuss def decision Builder" changecount="12">
 <pre>''towards a definition of »Track«''. We don't want to tie ourself to some naive and overly simplistic definition, just because it is convenient. For classical (analogue) media, tracks are physical entities dictated by the nature of the process by which the media works. Especially, Tape machines have read/writing heads, which creates fixed tracks to which to route the signals. This is a practical geometric necessity. For digital media, there is no such necessity. We are bound primarily by the editor's habits of working.
 
 !!!Assessment of Properties
