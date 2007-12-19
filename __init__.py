@@ -138,7 +138,6 @@ def DoxySourceScan(node, env, path):
    sources = map( lambda path: env.File(path), sources )
    return sources
 
-
 def DoxySourceScanCheck(node, env):
    """Check if we should scan this file"""
    return os.path.isfile(node.path)
@@ -158,6 +157,9 @@ def DoxyEmitter(source, target, env):
 
    targets = []
    out_dir = data.get("OUTPUT_DIRECTORY", ".")
+
+   # generate a fake target file in the output directory
+   targets.append(env.File( os.path.join(out_dir, 'foobar')))
 
    # add our output locations
    for (k, v) in output_formats.items():
@@ -185,13 +187,12 @@ def generate(env):
       scan_check = DoxySourceScanCheck,
    )
 
-   doxyfile_builder = env.Builder(
-      action = env.Action("cd ${SOURCE.dir}  &&  ${DOXYGEN} ${SOURCE.file}"),
+   import SCons.Builder
+   doxyfile_builder = SCons.Builder.Builder(
+      action = "cd ${SOURCE.dir}  &&  ${DOXYGEN} ${SOURCE.file} && touch ${TARGET}",
       emitter = DoxyEmitter,
       target_factory = env.fs.Entry,
       single_source = True,
-
-
       source_scanner =  doxyfile_scanner,
    )
 
