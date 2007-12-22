@@ -80,7 +80,8 @@ namespace cinelerra
       {
         static RET onUnknown (TAR& target,TOOL& tool)
           {
-            tool.treat (target);
+            //tool.treat (target);
+            tool.catchy (target);
           }
       };
     

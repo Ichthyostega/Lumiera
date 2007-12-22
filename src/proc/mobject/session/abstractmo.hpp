@@ -47,7 +47,9 @@ namespace mobject
         
         virtual Time& getLength() { return length; }
         
-        DEFINE_PROCESSABLE_BY (builder::BuilderTool);
+//        DEFINE_PROCESSABLE_BY (builder::BuilderTool);
+        DEFINE_BUILDABLE;
+        DEFINE_FALLBACK;
 
      };
 

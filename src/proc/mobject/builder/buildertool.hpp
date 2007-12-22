@@ -41,7 +41,7 @@ namespace mobject
      * Used according to the visitor pattern: each Tool contains 
      * the concrete implementation for one task to be done to the various MObject classes
      */
-    class BuilderTool : public Tool
+    class BuilderTool : public Tool //////////////////////////auf die Zielklasse templaten und Placement festmachen???
       {
       protected:
         typedef mobject::Buildable Buildable;
@@ -49,8 +49,16 @@ namespace mobject
       public:
         /** This operation is to be overloaded for specific MObject subclasses to be treated.
          */
-        virtual void treat (Buildable& mElement) = 0;
+        //virtual void treat (Buildable& mElement) = 0;
+        template<class BB>
+        void catchy (BB& elem) {elem.fallback(*this); }
       };
+      
+    template<class TO, class BO>
+    void zoing(TO& ttt,BO& bot)
+      {
+        ttt->treat(bot);
+      }
 
   } // namespace mobject::builder
 

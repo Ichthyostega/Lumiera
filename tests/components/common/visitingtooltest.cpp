@@ -91,6 +91,7 @@ namespace cinelerra
         public:
           void treat (BigBoss&)     { talk_to("big Boss"); }
           void treat (HomoSapiens&) { talk_to("we-do-everything-for-YOU"); } ///< catch-all function
+          void catchy(HomoSapiens&) {}
         };
         
       

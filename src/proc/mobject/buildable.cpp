@@ -32,12 +32,12 @@ namespace mobject
    *  contain overloaded fuctions for treating
    *  different Buildable subclasses specifically
    */
-  Buildable::ReturnType 
+/*  Buildable::ReturnType 
   Buildable::apply (builder::BuilderTool& tool)
   {
     return dispatchOp (*this, tool);
   }
-
+*/
 
 
 } // namespace mobject

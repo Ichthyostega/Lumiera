@@ -76,10 +76,12 @@ namespace mobject
                           };
               
                         class TestTool : public BuilderTool,
-                                         public Applicable<Clip>
+                                         public Applicable<Clip>,
+                                         public Applicable<AbstractMO>
                           {
                             void treat (Clip& c)   { cout << "media is: "<< str(c.getMedia()) <<"\n"; }
                             void treat (Buildable&){ cout << "catch-all-function called.\n"; }
+                            void treat (AbstractMO&){ cout << "catch-all-MO.\n"; }
                           };
                           
               TestTool t1;

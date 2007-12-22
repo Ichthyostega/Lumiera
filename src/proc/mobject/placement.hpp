@@ -102,6 +102,9 @@ namespace mobject
         }      
       
       virtual ~Placement() {};
+      
+      /** */ /////////////////////////////////////////////////////////////TODO: totmachen? 
+     // DEFINE_PROCESSABLE_BY (builder::BuilderTool);
 
       
       /** interface for defining the kind of placement
@@ -150,6 +153,7 @@ namespace mobject
             (shared_ptr<MObject>::operator-> ());          \
         }                                                  \
     };
+     // DEFINE_PROCESSABLE_BY (builder::BuilderTool);        
   
   /* a note to the maintainer: please don't add any fields or methods to
    * these subclasses which aren't also present in Placement<MObject>!
