@@ -33,10 +33,10 @@
  **         to some library related place</li>
  **     <li>Visitor is about <i>double dispatch</i>, thus we can't avoid
  **         using some table lookup implementation, and we can't avoid using
- **         some of the cooperating classes vtables. Besides that, the 
+ **         some of the cooperating classe's vtables. Besides that, the 
  **         implementation should not be too wastefull</li>
  **     <li>individual Visiting Tool implementation classes should be able
- **         to opt in or opt out on implementing function treating some of
+ **         to opt in or opt out on implementing functions treating some of
  **         the visitable subclasses.</li>
  **     <li>there should be a safe fallback mechanism backed by the
  **         visitable object's hierarchy relations. If some new class declares
@@ -58,6 +58,7 @@
 
 #include <boost/format.hpp>
 #include <iostream>
+#include <vector>
 
 using boost::format;
 using std::string;
@@ -70,6 +71,42 @@ namespace cinelerra
     {
     // ================================================================== Library ====
   
+    template<class TOOL>
+    class Tag
+    {
+      size_t tagID;
+      
+      template<class TOOLImpl>
+      struct TagTypeRef { static Tag tag; };
+      
+      static size_t lastRegisteredID;
+      
+    public:
+      operator size_t()  const { return tagID; }
+      
+      template<class TOOLImpl>
+      static Tag
+      get(TOOLImpl* concreteTool=0)
+        {
+          Tag& t = TagTypeRef<const TOOLImpl>::tag;
+          TODO ("concurrent access");
+          if (!t)
+            t = ++lastRegisteredID;
+          return t;
+        }
+    };
+    
+    
+    /** storage for the Tag registry for each concrete tool */
+    template<class TOOL, class TOOLImpl>
+    Tag<TOOL> Tag<TOOL>::TagTypeRef<TOOLImpl>::tag;
+    
+    template<class TOOL>
+    size_t Tag<TOOL>::lastRegisteredID (0);
+
+
+
+    
     /** Marker interface "visiting tool".
      */
     template<typename RET>
@@ -77,60 +114,123 @@ namespace cinelerra
       {
       public:
         typedef RET ReturnType;
+        typedef Tool<RET> ToolBase;
         
-        virtual ~Tool ()  { };  ///< use RTTI for all visiting tools
-      };
-    
-      
-    template<class TOOL>
-    class ToolRegistry
-      {
+        virtual ~Tool ()  { };   ///< use RTTI for all visiting tools
         
-      };
-    
-    
-    template<class TOOLTYPE>
-    class ToolReg
-      {
-        //getTag()
-        void regCombination(Invoker ii)
-          {
-            ////OOOOhhh, da hab ich wiiiieder das gleiche Problem: wie krieg ich die Typinfo TAR????
+        /** allows discovery of the concrete Tool type
+         *  when dispatching a visitor call */
+        virtual Tag<ToolBase> 
+        getTag() 
+          { 
+            return Tag<ToolBase>::get(this); 
           }
       };
+    
       
-    // alternativ ("halb-zyklisch")
-    // 
-    template<class TAR, class TOOLTYPE>
-    class ReToo
-      {
-        ReToo()
-          {
-            //expliziten Eintrag machen für TAR und TOOLTYPE
-          }
-      };
-      
-    template<class TAR>
-    class DisTab : ReToo<TAR, ToolTyp1>,
-                   ReToo<TAR, ToolTyp2>
-      {
-      };
 
-    // der konkrete Dispatch instantiiert diese Klasse
-    // Voraussetzung: alle Tools hängen nur per Name von ihren Targets ab
 
-      
+    /**
+     * For each posible call entry point via some subclass of the visitable hierarchy,
+     * we maintain a dispatcher table to keep track of all concrete tool implementations
+     * able to recieve and process calls on objects of this subclass.
+     */
     template<class TAR, class TOOL>
     class Dispatcher
       {
-        // Ctor: for_each(ToolRegistry, call regCombination() )
-      public:
-        static TOOL::ReturnType call (TOOL& tool, TAR& target)
+        typedef TOOL::ReturnType ReturnType;
+        
+        /** generator for Trampoline functions,
+         *  used to dispatch calls down to the 
+         *  right "treat"-Function on the correct
+         *  concrete tool implementation class
+         */
+        template<class TOOLImpl>
+        ReturnType 
+        static callTrampoline (TAR& obj, TOOL tool)
           {
+            // cast down to real implementation type
+            REQUIRE (INSTANCEOF (TOOLImpl, &tool));  
+            TOOLImpl& toolObj = static_cast<TOOLImpl&> (tool);
             
+            // trigger (compile time) overload resolution
+            // based on concrete type, and dispatch call.
+            // Note this may cause obj to be upcasted.
+            return toolObj.treat (obj);
+          }
+        
+        typedef ReturnType (*Trampoline) (TAR&, TOOL& );
+
+        
+        /** VTable for storing the Trampoline pointers */
+        std::vector<Trampoline> table_;
+
+
+      public:
+        ReturnType 
+        forwardCall (TAR& target, TOOL& tool)
+          {
+            // get concrete type via tool's VTable 
+            Tag<TOOL> index = tool.getTag();
+            Trampoline func = this->table_[index];
+            TODO ("Errorhandling");
+            return (*func) (target, tool);
+          }
+        
+        template<class TOOLImpl>
+        static inline void 
+        enroll()
+          {
+            TODO ("skip if already registered");
+            TODO ("concurrency handling");
+            Tag<TOOL> index = Tag<TOOL>::get<TOOLImpl>();
+            Trampoline func = callTrampoline<TOOLImpl>;
+            this->table_[index] = func;
           }
       };
+      
+      
+    /** 
+     * concrete visiting tool implementation has to inherit from this
+     * class for each kind of calls it wants to get dispatched, 
+     * Allowing us to record the type information.
+     */
+    template<class TAR, class TOOLImpl>
+    class Applicable
+      {
+        typedef TOOLImpl::ToolBase Base;
+        typedef TOOLImpl::ToolBase::ReturnType Ret;
+        
+        Applicable ()
+          {
+            Dispatcher<TAR,Base>::enroll<TOOLImpl>();
+          }
+        
+      public:
+        virtual Ret treat (TAR& target) = 0;
+        
+      };
+      
     
+    
+    // entweder die "halb-zyklische" Lösung, wo sich das einzelne
+    // Tool noch über den Dispatcher (als Vaterklasse) einklinken muß
+    // - vorteil: kann volle Auflösung (Konstruktoren-Trick mit rückgeführtem Typparameter
+    // - Nachteil: einzelnes visitable hängt von allen tools ab
+    //
+    // oder die TMP-Lösung, die auf der Applicable<TOOLTYPE, TAR> beruht und via Tabelle arbeitet.
+    // - Vorteil: der notwendige Kontext ist auf natürliche Weise da
+    // - Nachteil: kann die fehlenden Kombinationen nicht auflösen
+    // Variante: generiert die Applicable's über Typlisten
+    // Abhilfe: auch die anderen Fälle verlangen zu deklarieren!
+    // zu untersuchen: könnte ich einen fallback-Dispatcher generieren?
+    // klar ist: alle Versuche, die beiden konkreten Typkontexte zusammenzutransportieren,
+    //           sind zum Scheitern verurteilt, weil der Definitions-Kontext hierfür nicht gegeben ist.
+    //           Wäre er gegeben, dann würde das voll-zyklische Abhängigkeiten bedeuten!
+    // Frage ist also: wie könnte ich die Generierung des fehlenden Kontextes für die fehlenden Kombinationen
+    // antreiben? Einsprung natürlich über Interface/virt.Funktionen.
+    // Idee: der Benutzer deklariert Fallback<Types<A,B,C>, ToolType >
+      
       
     /** Marker interface "visitable object".
      */
@@ -168,11 +268,12 @@ namespace cinelerra
         virtual ReturnType  apply (TOOL& tool) \
         { return dispatchOp (*this, tool); }
     
-    
-    
 
     
     // ================================================================== Library ====
+
+    
+    
     
     namespace test
       {
