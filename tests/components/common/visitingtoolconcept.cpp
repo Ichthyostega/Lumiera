@@ -30,11 +30,12 @@
  **
  ** Basic considerations
  ** <ul><li>cyclic dependencies should be avoided or at least restricted
- **         to some library related place</li>
+ **         to some library related place. The responsibilities for
+ **         user code should be as small as possible.</li>
  **     <li>Visitor is about <i>double dispatch</i>, thus we can't avoid
  **         using some table lookup implementation, and we can't avoid using
- **         some of the cooperating classe's vtables. Besides that, the 
- **         implementation should not be too wastefull</li>
+ **         some of the cooperating classes vtables. Besides that, the 
+ **         implementation should not be too wastefull...</li>
  **     <li>individual Visiting Tool implementation classes should be able
  **         to opt in or opt out on implementing functions treating some of
  **         the visitable subclasses.</li>
@@ -53,13 +54,13 @@
 
 
 #include "common/test/run.hpp"
-//#include "common/factory.hpp"
-//#include "common/util.hpp"
+#include "common/singleton.hpp"
 
 #include <boost/format.hpp>
 #include <iostream>
 #include <vector>
 
+using cinelerra::Singleton;
 using boost::format;
 using std::string;
 using std::cout;
@@ -70,60 +71,84 @@ namespace cinelerra
   namespace visitor
     {
     // ================================================================== Library ====
-  
+    
+    
+
+    template<class TOOL> class Tag;
+    
+    
+    template<class TOOL, class TOOLImpl>
+    struct TagTypeRegistry 
+      {
+        static Tag<TOOL> tag;
+      };
+      
+      
     template<class TOOL>
     class Tag
     {
       size_t tagID;
-      
-      template<class TOOLImpl>
-      struct TagTypeRef { static Tag tag; };
-      
       static size_t lastRegisteredID;
       
     public:
+      Tag() : tagID(0) { }
       operator size_t()  const { return tagID; }
       
+      
       template<class TOOLImpl>
-      static Tag
-      get(TOOLImpl* concreteTool=0)
+      static Tag&
+      get (TOOLImpl* const concreteTool=0)
         {
-          Tag& t = TagTypeRef<const TOOLImpl>::tag;
-          TODO ("concurrent access");
+          TODO ("race condition");
+          Tag& t = TagTypeRegistry<TOOL,TOOLImpl>::tag;
           if (!t)
-            t = ++lastRegisteredID;
+            t.tagID = ++lastRegisteredID;
           return t;
         }
+    
     };
+    
     
     
     /** storage for the Tag registry for each concrete tool */
     template<class TOOL, class TOOLImpl>
-    Tag<TOOL> Tag<TOOL>::TagTypeRef<TOOLImpl>::tag;
-    
+    Tag<TOOL> TagTypeRegistry<TOOL,TOOLImpl>::tag; 
+
     template<class TOOL>
     size_t Tag<TOOL>::lastRegisteredID (0);
 
-
-
     
-    /** Marker interface "visiting tool".
-     */
+    
+    
+    
+    
+    /** Marker interface "visiting tool" */
     template<typename RET>
     class Tool
       {
       public:
         typedef RET ReturnType;
-        typedef Tool<RET> ToolBase;
+        typedef Tool<RET> ToolBase; ///< for templating the Tag and Dispatcher
         
         virtual ~Tool ()  { };   ///< use RTTI for all visiting tools
         
-        /** allows discovery of the concrete Tool type
-         *  when dispatching a visitor call */
-        virtual Tag<ToolBase> 
-        getTag() 
-          { 
-            return Tag<ToolBase>::get(this); 
+        /** allows discovery of the concrete Tool type when dispatching a
+         *  visitor call. Can be implemented by inheriting from ToolType */
+        virtual Tag<ToolBase> getTag() = 0; 
+      };
+    
+    
+    /** Mixin for attaching a type tag to the concrete tool implementation */
+    template<class TOOLImpl, class BASE=Tool<void> >
+    class ToolType : public BASE
+      {
+        typedef typename BASE::ToolBase ToolBase;
+        
+      public:
+        virtual Tag<ToolBase> getTag()
+          {
+            TOOLImpl* typeref = 0;
+            return Tag<ToolBase>::get (typeref); 
           }
       };
     
@@ -138,7 +163,7 @@ namespace cinelerra
     template<class TAR, class TOOL>
     class Dispatcher
       {
-        typedef TOOL::ReturnType ReturnType;
+        typedef typename TOOL::ReturnType ReturnType;
         
         /** generator for Trampoline functions,
          *  used to dispatch calls down to the 
@@ -146,15 +171,15 @@ namespace cinelerra
          *  concrete tool implementation class
          */
         template<class TOOLImpl>
-        ReturnType 
-        static callTrampoline (TAR& obj, TOOL tool)
+        static ReturnType 
+        callTrampoline (TAR& obj, TOOL& tool)
           {
             // cast down to real implementation type
             REQUIRE (INSTANCEOF (TOOLImpl, &tool));  
             TOOLImpl& toolObj = static_cast<TOOLImpl&> (tool);
             
             // trigger (compile time) overload resolution
-            // based on concrete type, and dispatch call.
+            // based on concrete type, then dispatch the call.
             // Note this may cause obj to be upcasted.
             return toolObj.treat (obj);
           }
@@ -164,50 +189,99 @@ namespace cinelerra
         
         /** VTable for storing the Trampoline pointers */
         std::vector<Trampoline> table_;
+        
+        
+        inline bool
+        is_known (size_t id)
+          { 
+            return id<=table_.size() && table_[id-1]; 
+          }
+        
+        inline void 
+        storePtr (size_t id, Trampoline func)
+          {
+            TODO ("error- and concurrency handling");
+            if (id>table_.size())
+              table_.resize (id);       // performance bottleneck?? TODO: measure the impact!
+            
+            table_[id-1] = func;
+          }
+        
+        inline Trampoline 
+        storedTrampoline (size_t id)
+          {
+            if (id<=table_.size() && table_[id-1])
+              return table_[id-1];
+            else
+              return &errorHandler;
+          }
+        
+        static ReturnType
+        errorHandler (TAR&, TOOL&)
+          {
+            cout << "unregistered combination of (Tool, Targetobject) invoked!\n";
+          }
 
-
+        
       public:
-        ReturnType 
+        static Singleton<Dispatcher<TAR,TOOL> > instance;
+        
+        inline ReturnType 
         forwardCall (TAR& target, TOOL& tool)
           {
             // get concrete type via tool's VTable 
             Tag<TOOL> index = tool.getTag();
-            Trampoline func = this->table_[index];
-            TODO ("Errorhandling");
-            return (*func) (target, tool);
+            return (*storedTrampoline(index)) (target, tool);
           }
         
         template<class TOOLImpl>
-        static inline void 
-        enroll()
+        inline void 
+        enroll(TOOLImpl* typeref)
           {
-            TODO ("skip if already registered");
-            TODO ("concurrency handling");
-            Tag<TOOL> index = Tag<TOOL>::get<TOOLImpl>();
-            Trampoline func = callTrampoline<TOOLImpl>;
-            this->table_[index] = func;
+            Tag<TOOL>& index = Tag<TOOL>::get (typeref);
+            if (is_known (index))
+              return;
+            else
+              {
+                Trampoline func = &callTrampoline<TOOLImpl>;
+                storePtr (index, func);
+              }
+              
           }
       };
-      
-      
+
+    /** storage for the dispatcher table(s) */
+    template<class TAR, class TOOL>
+    Singleton<Dispatcher<TAR,TOOL> > Dispatcher<TAR,TOOL>::instance;
+
+    
+    
+    
+    
     /** 
      * concrete visiting tool implementation has to inherit from this
      * class for each kind of calls it wants to get dispatched, 
      * Allowing us to record the type information.
      */
-    template<class TAR, class TOOLImpl>
+    template<class TAR, class TOOLImpl, class BASE=Tool<void> >
     class Applicable
       {
-        typedef TOOLImpl::ToolBase Base;
-        typedef TOOLImpl::ToolBase::ReturnType Ret;
+        typedef typename BASE::ReturnType Ret;
+        typedef typename BASE::ToolBase ToolBase;
         
+      protected:
         Applicable ()
           {
-            Dispatcher<TAR,Base>::enroll<TOOLImpl>();
+            TOOLImpl* typeref = 0;
+            Dispatcher<TAR,ToolBase>::instance().enroll (typeref);
           }
         
+        virtual ~Applicable () {}
+        
       public:
-        virtual Ret treat (TAR& target) = 0;
+        // we could enforce the definition of treat()-functions by:
+        //
+        // virtual Ret treat (TAR& target) = 0;
         
       };
       
@@ -215,8 +289,8 @@ namespace cinelerra
     
     // entweder die "halb-zyklische" Lösung, wo sich das einzelne
     // Tool noch über den Dispatcher (als Vaterklasse) einklinken muß
-    // - vorteil: kann volle Auflösung (Konstruktoren-Trick mit rückgeführtem Typparameter
-    // - Nachteil: einzelnes visitable hängt von allen tools ab
+    // - Vorteil: kann volle Auflösung (Konstruktoren-Trick mit rückgeführtem Typparameter
+    // - Nachteil: einzelnes Visitable hängt von allen tools ab
     //
     // oder die TMP-Lösung, die auf der Applicable<TOOLTYPE, TAR> beruht und via Tabelle arbeitet.
     // - Vorteil: der notwendige Kontext ist auf natürliche Weise da
@@ -230,6 +304,8 @@ namespace cinelerra
     // Frage ist also: wie könnte ich die Generierung des fehlenden Kontextes für die fehlenden Kombinationen
     // antreiben? Einsprung natürlich über Interface/virt.Funktionen.
     // Idee: der Benutzer deklariert Fallback<Types<A,B,C>, ToolType >
+    // bessere Idee: beides zusammen über die geniale "Applicable"-Basisklasse (wie in Loki)
+    //               vom User-Code definieren lassen!
       
       
     /** Marker interface "visitable object".
@@ -239,27 +315,32 @@ namespace cinelerra
       >
     class Visitable
       {
-      public:
-        /** to be defined by the DEFINE_PROCESSABLE_BY macro
-         *  in all classes wanting to be treated by some tool */
-        typedef TOOL::ReturnType ReturnType;
-        virtual ReturnType apply (TOOL&) = 0;
-        
       protected:
         virtual ~Visitable () { };
         
-        /** @internal used by the DEFINE_VISITABLE macro.
+        /// @note may differ from TOOL
+        typedef typename TOOL::ToolBase ToolBase;
+        typedef typename TOOL::ReturnType ReturnType;
+
+        /** @internal used by the DEFINE_PROCESSABLE_BY macro.
          *            Dispatches to the actual operation on the 
-         *            "visiting tool" (acyclic visitor implementation)
+         *            "visiting tool" (visitor implementation)
+         *            Note: creates a context templated on concrete TAR.
          */
         template <class TAR>
-        static ReturnType dispatchOp(TAR& target, TOOL& tool)
+        static inline ReturnType
+        dispatchOp (TAR& target, TOOL& tool)
           {
-            return Dispatcher<TAR,TOOL>::call (tool, target);
+            return Dispatcher<TAR,ToolBase>::instance().forwardCall (target,tool);
           }
+        
+      public:
+        /** to be defined by the DEFINE_PROCESSABLE_BY macro
+         *  in all classes wanting to be treated by some tool */
+        virtual ReturnType apply (TOOL&) = 0;
       };
       
-
+      
 /** mark a Visitable subclass as actually treatable
  *  by some "visiting tool". Defines the apply-function,
  *  which is the actual access point to invoke the visiting
@@ -268,33 +349,34 @@ namespace cinelerra
         virtual ReturnType  apply (TOOL& tool) \
         { return dispatchOp (*this, tool); }
     
+    
+    // =============================================================(End) Library ====
 
     
-    // ================================================================== Library ====
-
     
     
     
     namespace test
       {
-      
-      
+        
+      typedef Tool<void> VisitingTool;
+
       class HomoSapiens : public Visitable<>
         {
         public:
-          DEFINE_PROCESSABLE_BY (Tool);
+          DEFINE_PROCESSABLE_BY (VisitingTool);
         };
       
       class Boss : public HomoSapiens
         {
         public:
-          DEFINE_PROCESSABLE_BY (Tool);
+          DEFINE_PROCESSABLE_BY (VisitingTool);
         };
       
       class BigBoss : public Boss
         {
         public:
-          DEFINE_PROCESSABLE_BY (Tool);
+          DEFINE_PROCESSABLE_BY (VisitingTool);
         };
         
       class Leader : public Boss
@@ -305,9 +387,9 @@ namespace cinelerra
         {
         };
 
-        
+      
       class VerboseVisitor
-        : public Tool
+        : public VisitingTool
         {
         protected:
           void talk_to (string guy)
@@ -315,15 +397,18 @@ namespace cinelerra
               cout << format ("Hello %s, nice to meet you...\n") % guy;
             }
         };
+       
         
       class Babbler
-        : public VerboseVisitor,
-          public Applicable<Boss>,
-          public Applicable<BigBoss>
+        : public Applicable<Boss,Babbler>,
+          public Applicable<BigBoss,Babbler>,
+          public Applicable<Visionary,Babbler>,
+          public ToolType<Babbler, VerboseVisitor>
         {
         public:
           void treat (Boss&)    { talk_to("Boss"); }
-          void treat (BigBoss&) { talk_to("big Boss"); }
+          void treat (BigBoss&) { talk_to("Big Boss"); }
+          
         };
 
         
@@ -362,7 +447,7 @@ namespace cinelerra
               
               cout << "=== Babbler meets Boss and BigBoss ===\n";
               Babbler bab;
-              Visitor& vista (bab);
+              VisitingTool& vista (bab);
               homo1.apply (vista);
               homo2.apply (vista);
             }
@@ -377,8 +462,8 @@ namespace cinelerra
               
               cout << "=== Babbler meets HomoSapiens and Visionary ===\n";
               Babbler bab;
-              Visitor& vista (bab);
-              homo1.apply (vista);  // doesn't visit HomoSapiens
+              VisitingTool& vista (bab);
+              homo1.apply (vista);  // error handler (not Applicable to HomoSapiens)
               homo2.apply (vista); //  treats Visionary as Boss
             }
             
