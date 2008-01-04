@@ -48,22 +48,28 @@ namespace cinelerra
      * of encountering an unknown Visitor (typically caused by
      * adding a new class to the visitable hierarchy)
      */
-    template<typename RET,class TAR,class TOOL>
+    template<class TOOL>
     struct UseDefault
       {
-        static RET onUnknown (TAR&, TOOL&)
+        typedef TOOL::ReturnType Ret;
+        
+        template<class TAR>
+        static Ret onUnknown (TAR&, TOOL&)
           {
-            return RET();
+            return Ret();
           }
       };
       
     /** 
      * Policy to throw when encountering an unknown visiting tool
      */
-    template<typename RET,class TAR,class TOOL>
+    template<class TOOL>
     struct ThrowException
       {
-        static RET onUnknown (TAR&, TOOL&)
+        typedef TOOL::ReturnType Ret;
+        
+        template<class TAR>
+        static Ret onUnknown (TAR&, TOOL&)
           {
             throw cinelerra::error::Config("unable to decide what tool operation to call");
           }
@@ -75,13 +81,15 @@ namespace cinelerra
      * @note using this policy effectively enforces 
      *       implementing a catch-all function \c treat(TAR&)
      */
-    template<typename RET,class TAR,class TOOL>
+    template<class TOOL>
     struct InvokeCatchAllFunction
       {
-        static RET onUnknown (TAR& target,TOOL& tool)
+        typedef TOOL::ReturnType Ret;
+        
+        template<class TAR>
+        static Ret onUnknown (TAR& target,TOOL& tool)
           {
-            //tool.treat (target);
-            tool.catchy (target);
+            return tool.catchAll (target);
           }
       };
     

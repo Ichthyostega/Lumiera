@@ -136,25 +136,5 @@ namespace cinelerra
 /////       It seems this would either cost us much of the flexibility or get complicated
 /////       to a point where we could as well implement our own Depenency Injection Manager.
 
-      /** @internal used to link together the Create policy and Life policy.
-       *  @return a functor object for invoking this->destroy() */
-/*      SingletonFactory::DelFunc getDeleter() 
-        {
-          return boost::bind (&SingletonFactory<SI,Create,Life,Threading>::destroy,
-                              this);
-        }
-*/
-  
-/*      template<class T>
-      class DelFunc
-        {
-          typedef void (T::*Fp)(void);
-          T* t_;
-          Fp fun_;
-        public:
-          DelFunc (T* t, Fp f) : t_(t), fun_(f) {}
-          void operator() () { (t_->*fun_)(); }
-        };
-*/    
 } // namespace cinelerra
 #endif

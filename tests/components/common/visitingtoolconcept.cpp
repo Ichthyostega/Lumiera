@@ -99,7 +99,7 @@ namespace cinelerra
       static Tag&
       get (TOOLImpl* const concreteTool=0)
         {
-          TODO ("race condition");
+          // we have a race condition here...
           Tag& t = TagTypeRegistry<TOOL,TOOLImpl>::tag;
           if (!t)
             t.tagID = ++lastRegisteredID;
@@ -200,10 +200,9 @@ namespace cinelerra
         inline void 
         storePtr (size_t id, Trampoline func)
           {
-            TODO ("error- and concurrency handling");
+            // lacks error- and concurrency handling....
             if (id>table_.size())
-              table_.resize (id);       // performance bottleneck?? TODO: measure the impact!
-            
+              table_.resize (id);
             table_[id-1] = func;
           }
         
@@ -219,7 +218,7 @@ namespace cinelerra
         static ReturnType
         errorHandler (TAR&, TOOL&)
           {
-            cout << "unregistered combination of (Tool, Targetobject) invoked!\n";
+            cout << "Error Handler: unregistered combination of (Tool, TargetObject) invoked!\n";
           }
 
         
@@ -284,30 +283,11 @@ namespace cinelerra
         // virtual Ret treat (TAR& target) = 0;
         
       };
-      
     
     
-    // entweder die "halb-zyklische" Lösung, wo sich das einzelne
-    // Tool noch über den Dispatcher (als Vaterklasse) einklinken muß
-    // - Vorteil: kann volle Auflösung (Konstruktoren-Trick mit rückgeführtem Typparameter
-    // - Nachteil: einzelnes Visitable hängt von allen tools ab
-    //
-    // oder die TMP-Lösung, die auf der Applicable<TOOLTYPE, TAR> beruht und via Tabelle arbeitet.
-    // - Vorteil: der notwendige Kontext ist auf natürliche Weise da
-    // - Nachteil: kann die fehlenden Kombinationen nicht auflösen
-    // Variante: generiert die Applicable's über Typlisten
-    // Abhilfe: auch die anderen Fälle verlangen zu deklarieren!
-    // zu untersuchen: könnte ich einen fallback-Dispatcher generieren?
-    // klar ist: alle Versuche, die beiden konkreten Typkontexte zusammenzutransportieren,
-    //           sind zum Scheitern verurteilt, weil der Definitions-Kontext hierfür nicht gegeben ist.
-    //           Wäre er gegeben, dann würde das voll-zyklische Abhängigkeiten bedeuten!
-    // Frage ist also: wie könnte ich die Generierung des fehlenden Kontextes für die fehlenden Kombinationen
-    // antreiben? Einsprung natürlich über Interface/virt.Funktionen.
-    // Idee: der Benutzer deklariert Fallback<Types<A,B,C>, ToolType >
-    // bessere Idee: beides zusammen über die geniale "Applicable"-Basisklasse (wie in Loki)
-    //               vom User-Code definieren lassen!
-      
-      
+    
+    
+    
     /** Marker interface "visitable object".
      */
     template 
@@ -424,8 +404,8 @@ namespace cinelerra
        *       <ul><li>calling the correct visiting tool specialized function
        *               for given concrete hierarchy classes</li>
        *           <li>visiting tool not declaring to visit some class</li>
-       *           <li>newly added class causes the catch-all to be invoked
-       *               when visited by known visitor</li>
+       *           <li>newly added and not properly declared Visitable class
+       *               causes the dispatcher to invoke an error handler</li>
        *       </ul>
        */
       class VisitingTool_concept : public Test

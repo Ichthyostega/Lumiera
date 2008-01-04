@@ -138,7 +138,7 @@ namespace cinelerra
       template<class S>
       struct Multithreaded
         {
-          typedef volatile S* VolatileType;
+          typedef volatile S VolatileType;
           typedef cinelerra::Thread::Lock<S> Lock;
         };
       
