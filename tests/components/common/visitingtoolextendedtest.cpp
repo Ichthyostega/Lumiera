@@ -23,7 +23,6 @@
 
 #include "common/test/run.hpp"
 #include "common/visitor.hpp"
-//#include "common/util.hpp"
 
 #include <boost/format.hpp>
 #include <iostream>
@@ -37,7 +36,7 @@ namespace cinelerra
   {
   namespace visitor
     {
-    namespace test
+    namespace test2
       {
       typedef visitor::Tool<> Tool;
       
@@ -74,7 +73,7 @@ namespace cinelerra
       class Babbler
         : public Applicable<Boss,Babbler>,
           public Applicable<BigBoss,Babbler>,
-          public ToolType<Babbler, VerboseVisitor<Tool> >
+          public ToolTag<Babbler, VerboseVisitor<Tool> >
         {
         public:
           void treat (Boss&)    { talk_to("Boss"); }
@@ -82,53 +81,63 @@ namespace cinelerra
         };
 
       // the classes above comprise the standard use case,
-      // what follows are rather exotic corner cases 
-
+      // what follows covers rather exotic corner cases 
       
+      
+      
+      /** defines an catch-all-function instead of the silent default error handler */
       template<class RET>
       struct Catched
         {
-          RET onUnknown (HomoSapiens&) { cout << "we-do-everything-for-YOU!\n"; } ///< catch-all function
+          RET onUnknown (HomoSapiens&) { cout << "we-do-everything-for-YOU!\n"; }
         };
         
+      /** defines another different visiting tool base */  
       typedef visitor::Tool<void, Catched> Hastalavista;
       typedef Visitable<Hastalavista> Chief;  ///< another special kind of visitables
+
+#define DEFINE_HASTALAVISTA_PROCESSABLE         \
+        virtual void  apply (Hastalavista& tool) \
+        { return Chief::dispatchOp (*this, tool); }
       
       
+      /** now mixing the two hierarchies... */
       class Leader : public Chief,
                      public Boss  ///< can act as HomoSapiens or as Chief
         {
         public:
           using HomoSapiens::apply;
-          virtual void apply (Hastalavista& tool)  { return Chief::dispatchOp (*this, tool); }
-        };
-        
-      class Visionary : public Leader
-        {
+          DEFINE_HASTALAVISTA_PROCESSABLE;
         };
       
+      class Visionary : public Leader
+        {
+          DEFINE_HASTALAVISTA_PROCESSABLE;
+        };
+      
+      /** Hastalavista-Visiting-Tool
+       *  tailored for the Chief hierarchy
+       */  
       class Blatherer
         : public Applicable<Visionary,Blatherer,Hastalavista>,
-          public ToolType<Blatherer, VerboseVisitor<Hastalavista> >
+          public ToolTag<Blatherer, VerboseVisitor<Hastalavista> >
         {
         public:
           void treat (Leader&)  { talk_to("Mr.Future"); }
         };
-        
-        
-        
+      
+      
+            
+
       
       
       
       /*************************************************************************
-       * @test our lib implementation of the acyclic visitor pattern.
-       *       Defines a hierarchy of test classes to check the following cases
-       *       <ul><li>calling the correct visiting tool specialized function
-       *               for given concrete hierarchy classes</li>
-       *           <li>visiting tool not declaring to visit some class</li>
-       *           <li>newly added class causes the catch-all to be invoked
-       *               when visited by known visitor</li>
-       *       </ul>
+       * @test more esoteric corner cases of our visitor lib implementation.
+       *       Defines a hierarchy of test classes, which mix two different
+       *       kinds of "visitable" by two disjoint tool base classes. One
+       *       of these base classes uses an explicit error handling
+       *       catch-all-function.
        */
       class VisitingToolExtended_test : public Test
         {
@@ -136,7 +145,7 @@ namespace cinelerra
             {
               known_visitor_known_class();
               visitor_not_visiting_some_class();
-              visitor_treating_new_subclass();
+              visiting_mixed_hierarchy();
             } 
           
           void known_visitor_known_class()
@@ -168,11 +177,10 @@ namespace cinelerra
               homo2.apply (bab); //  treats Leader as Boss
             }
             
-          void visitor_treating_new_subclass()
+          void visiting_mixed_hierarchy()
             {
               Leader x1;
               Visionary x2;
-              HomoSapiens x3;
               
               HomoSapiens& homo1 (x1);
               HomoSapiens& homo2 (x2);
@@ -182,26 +190,21 @@ namespace cinelerra
               Leader& lead2 (x2);
               
               Blatherer bla;
+              cout << "=== Blatherer meets Leader and Visionary masqueraded as Chief ===\n";
+              chief1.apply (bla);  // catch-all, because Blatherer doesn't declare to be applicalbe to Leader
+              chief2.apply (bla);  // treat(Visionary&) resolved to treat(Leader&) as expected
+              
               Babbler bab;
               Tool& tool1 (bab);
-              Hastalavista& tool2 (bla);
-              cout << "=== Blatherer meets Leader and Visionary masqueraded as Chief ===\n";
-              chief1.apply (bla);  // but now, acting in the Chief hierarchy, the catch-all is called
-              chief2.apply (bla);
               cout << "=== Babbler masqueraded as Tool meets Leader and Visionary masqueraded as HomoSapiens ===\n";
-              homo1.apply (tool1); // because acting in the HomoSapiens hierarchy, no visiting happens and no catch-all 
-              homo2.apply (tool1);
-              cout << "=== Blatherer masqueraded as Hastalavista meets Leader and Visionary masqueraded as Leader ===\n";
-              lead1.apply (tool2); // nothing happens, because Leader here is treated by his HomoSapiens base
-              lead2.apply (tool2);
-
-              // note: the following doesn't compile (an this is a feature, not a bug):
+              homo1.apply (tool1); // because just going through the VTable, the dispatch works as expected 
+              homo2.apply (tool1); // same here (in both cases, the call is resolved to treat(Boss&) as expected)
               
-              // "chief1.apply (tool2)"  : because the "Chief"-hierarchy enforces the catch-all function
-              //                           and the compiler doesn't know Blatherer actually implements this 
-              //                           catch-all-function, because of the masqueradeing as Tool. Note 
-              //                           further: the catch-all function can have a more general type
-              //                           (in this case HomoSapiens instead of Chief)
+              cout << "=== Babbler masqueraded as Tool meets Leader and Visionary masqueraded as Leader ===\n";
+              lead1.apply (tool1); // nothing happens, because Leader here is treated by his HomoSapiens base
+              lead2.apply (tool1); // surprisingly the VTable mechanism is choosen here, resulting in an correct dispatch
+              
+              // note: the following doesn't compile (an this is a feature, not a bug):
               
               // "Chief chief"           : is abstract, because the Visitable-Template enforces implementing 
               //                           the "apply(TOOL&)" function, either directly or via the 

@@ -23,7 +23,6 @@
 
 #include "common/test/run.hpp"
 #include "common/visitor.hpp"
-//#include "common/util.hpp"
 
 #include <boost/format.hpp>
 #include <iostream>
@@ -37,21 +36,10 @@ namespace cinelerra
   {
   namespace visitor
     {
-    namespace test
+    namespace test1
       {
       typedef visitor::Tool<> VisitingTool;
       
-      class VerboseVisitor
-        : public VisitingTool
-        {
-        protected:
-          void talk_to (string guy)
-            {
-              cout << format ("Hello %s, nice to meet you...\n") % guy;
-            }
-        };
-
-        
       class HomoSapiens : public Visitable<>
         {
         public:
@@ -64,40 +52,47 @@ namespace cinelerra
           DEFINE_PROCESSABLE_BY (VisitingTool);
         };
         
-      // the classes above comprise the standard visitor use case,
-      // now we'll extend the hierarchy a bit...
-      
-
       class BigBoss : public Boss
         {
         public:
-          DEFINE_PROCESSABLE_BY (VerboseVisitor);
+          DEFINE_PROCESSABLE_BY (VisitingTool);
+        };
+        
+      class Visionary : public Boss
+        {
+          DEFINE_PROCESSABLE_BY (VisitingTool);
+        };
+      
+      class Leader : public Visionary
+        {
         };
 
+
+        
+      class VerboseVisitor
+        : public VisitingTool
+        {
+        protected:
+          void talk_to (string guy)
+            {
+              cout << format ("Hello %s, nice to meet you...\n") % guy;
+            }
+        };
         
       class Babbler
         : public Applicable<Boss,Babbler>,
           public Applicable<BigBoss,Babbler>,
-          public ToolType<Babbler, VerboseVisitor>
+          public Applicable<Visionary,Babbler>,
+          public ToolTag<Babbler, VerboseVisitor>
         {
         public:
           void treat (Boss&)    { talk_to("Boss"); }
           void treat (BigBoss&) { talk_to("Big Boss"); }
         };
-
-      
-      class Leader : public Boss
-        {
-        };
-        
-      class Visionary : public Leader
-        {
-        };
         
       // note the following details:
       // - Babbler "forgot" to declare being applicable to HomoSapiens
-      // - BigBoss accepts only the subclass (VerboseVisitor)
-      // - we have new derived classes without separate "apply()"-implementation 
+      // - we have new derived class Leader without separate "apply()"-implementation 
         
       
       
@@ -140,16 +135,16 @@ namespace cinelerra
           void visiting_extended_hierarchy()
             {
               HomoSapiens x1;
-              Visionary x2;
+              Leader x2;
               
               HomoSapiens& homo1 (x1);
               HomoSapiens& homo2 (x2);
               
-              cout << "=== Babbler meets HomoSapiens and Visionary ===\n";
+              cout << "=== Babbler meets HomoSapiens and Leader ===\n";
               Babbler bab;
               VisitingTool& vista (bab);
-              homo1.apply (vista);  // error handler (not Applicable to HomoSapiens)
-              homo2.apply (vista); //  treats Visionary as Boss
+              homo1.apply (vista);  // silent error handler (not Applicable to HomoSapiens)
+              homo2.apply (vista); //  Leader handeld as Visionary and treated as Boss
             }
             
         };

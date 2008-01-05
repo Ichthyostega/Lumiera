@@ -101,7 +101,7 @@ namespace cinelerra
         virtual ~Tool ()  { };   ///< use RTTI for all visiting tools
         
         /** allows discovery of the concrete Tool type when dispatching a
-         *  visitor call. Can be implemented by inheriting from ToolType */
+         *  visitor call. Can be implemented by inheriting from ToolTag */
         virtual Tag<ToolBase> getTag() = 0; 
       };
     
@@ -110,7 +110,7 @@ namespace cinelerra
      * Mixin for attaching a type tag to the concrete tool implementation 
      */
     template<class TOOLImpl, class BASE=Tool<> >
-    class ToolType : public BASE
+    class ToolTag : public BASE
       {
         typedef typename BASE::ToolBase ToolBase;
         

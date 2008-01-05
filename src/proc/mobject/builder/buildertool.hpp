@@ -56,7 +56,7 @@ namespace mobject
      * each Tool contains the concrete implementation for one task to be done
      * to the various MObject classes. The concrete builder tool implementation
      * should not diretcly inherit from this base interface, but rather through
-     * an instantiation of the BuilderToolType template. Additionally, it should
+     * an instantiation of the BuilderToolTag template. Additionally, it should
      * inherit from the Applicable template parametrized with all conctrete 
      * Buildable classes, for which it wants calls to be dispatched. 
      */
@@ -64,8 +64,8 @@ namespace mobject
     
     
     template<class TOOLImpl>
-    class BuilderToolType 
-      : public cinelerra::visitor::ToolType<TOOLImpl, BuilderTool>
+    class BuilderToolTag 
+      : public cinelerra::visitor::ToolTag<TOOLImpl, BuilderTool>
       { }
       ;
     

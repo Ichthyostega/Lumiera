@@ -48,15 +48,16 @@ namespace mobject
         public:
           DummyMO() { };
           virtual bool isValid()  const { return true;}
+          DEFINE_PROCESSABLE_BY (BuilderTool);
         };
 
-      class TestTool : public BuilderToolType<TestTool>,
+      class TestTool : public BuilderToolTag<TestTool>,
                        public Applicable<Clip,TestTool>,
                        public Applicable<AbstractMO,TestTool>
         {
         public:
           void treat (Clip& c)   { cout << "media is: "<< str(c.getMedia()) <<"\n"; }
-          void treat (AbstractMO&){ cout << "catch-all-MO.\n"; }
+          void treat (AbstractMO&){ cout << "unspecific MO.\n"; }
           void onUnknown (Buildable&){ cout << "catch-all-function called.\n"; }
         };
 
