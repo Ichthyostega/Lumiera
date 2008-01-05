@@ -59,9 +59,10 @@ namespace cinelerra
           DEFINE_PROCESSABLE_BY (Tool);
         };
 
-        
+      
+      template<class BASE>
       class VerboseVisitor
-        : public Tool
+        : public BASE
         {
         protected:
           void talk_to (string guy)
@@ -73,7 +74,7 @@ namespace cinelerra
       class Babbler
         : public Applicable<Boss,Babbler>,
           public Applicable<BigBoss,Babbler>,
-          public ToolType<Babbler, VerboseVisitor>
+          public ToolType<Babbler, VerboseVisitor<Tool> >
         {
         public:
           void treat (Boss&)    { talk_to("Boss"); }
@@ -82,36 +83,37 @@ namespace cinelerra
 
       // the classes above comprise the standard use case,
       // what follows are rather exotic corner cases 
-        
-      class Blatherer
-        : public Applicable<BigBoss,Blatherer>,
-          public ToolType<Blatherer, VerboseVisitor>
+
+      
+      template<class RET>
+      struct Catched
         {
-        public:
-          void treat (BigBoss&)     { talk_to("big Boss"); }
-          void treat (HomoSapiens&) { talk_to("we-do-everything-for-YOU"); } ///< catch-all function
-          void catchy(HomoSapiens&) {}
+          RET onUnknown (HomoSapiens&) { cout << "we-do-everything-for-YOU!\n"; } ///< catch-all function
         };
         
+      typedef visitor::Tool<void, Catched> Hastalavista;
+      typedef Visitable<Hastalavista> Chief;  ///< another special kind of visitables
       
-      typedef Visitable<void,Blatherer,InvokeCatchAllFunction> Vista2;
-      
-      class Chief : public Vista2 ///< abstract intermeidary node 
-        {
-        };
       
       class Leader : public Chief,
                      public Boss  ///< can act as HomoSapiens or as Chief
         {
         public:
           using HomoSapiens::apply;
-          virtual void apply (Blatherer& tool)  { return Vista2::dispatchOp (*this, tool); }
+          virtual void apply (Hastalavista& tool)  { return Chief::dispatchOp (*this, tool); }
         };
         
       class Visionary : public Leader
         {
         };
       
+      class Blatherer
+        : public Applicable<Visionary,Blatherer,Hastalavista>,
+          public ToolType<Blatherer, VerboseVisitor<Hastalavista> >
+        {
+        public:
+          void treat (Leader&)  { talk_to("Mr.Future"); }
+        };
         
         
         
@@ -132,9 +134,9 @@ namespace cinelerra
         {
           virtual void run(Arg arg) 
             {
-              //known_visitor_known_class();
-              //visitor_not_visiting_some_class();
-              //visitor_treating_new_subclass();
+              known_visitor_known_class();
+              visitor_not_visiting_some_class();
+              visitor_treating_new_subclass();
             } 
           
           void known_visitor_known_class()
@@ -174,27 +176,22 @@ namespace cinelerra
               
               HomoSapiens& homo1 (x1);
               HomoSapiens& homo2 (x2);
-              HomoSapiens& homo3 (x3);
               Chief& chief1 (x1);
               Chief& chief2 (x2);
               Leader& lead1 (x1);
               Leader& lead2 (x2);
               
               Blatherer bla;
-              VerboseVisitor vista;
-              Tool& tool1 (vista);
-              Tool& tool2 (bla);
-              cout << "=== Blatherer meets Leader, Visionary and HomoSapiens masqueraded as HomoSapiens ===\n";
-              homo1.apply (bla);  // nothing happens, because Blatherer doesn't declare to do anything as Tool 
-              homo2.apply (bla);
-              homo3.apply (bla);
+              Babbler bab;
+              Tool& tool1 (bab);
+              Hastalavista& tool2 (bla);
               cout << "=== Blatherer meets Leader and Visionary masqueraded as Chief ===\n";
               chief1.apply (bla);  // but now, acting in the Chief hierarchy, the catch-all is called
               chief2.apply (bla);
-              cout << "=== VerboseVistr masqueraded as Tool meets Leader and Visionary masqueraded as HomoSapiens ===\n";
-              homo1.apply (tool1); // because acting in the HomoSapiens hierarch, no visiting happens and no catch-all 
+              cout << "=== Babbler masqueraded as Tool meets Leader and Visionary masqueraded as HomoSapiens ===\n";
+              homo1.apply (tool1); // because acting in the HomoSapiens hierarchy, no visiting happens and no catch-all 
               homo2.apply (tool1);
-              cout << "=== Blatherer masqueraded as Tool meets Leader and Visionary masqueraded as Leader ===\n";
+              cout << "=== Blatherer masqueraded as Hastalavista meets Leader and Visionary masqueraded as Leader ===\n";
               lead1.apply (tool2); // nothing happens, because Leader here is treated by his HomoSapiens base
               lead2.apply (tool2);
 
@@ -215,7 +212,7 @@ namespace cinelerra
       
       
       /** Register this test class... */
-//      LAUNCHER (VisitingToolExtended_test, "unit common");
+      LAUNCHER (VisitingToolExtended_test, "unit common");
       
       
       

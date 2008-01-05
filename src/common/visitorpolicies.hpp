@@ -17,17 +17,15 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-====================================================================
-This code is heavily inspired by  
- The Loki Library (loki-lib/trunk/include/loki/Visitor.h)
-    Copyright (c) 2001 by Andrei Alexandrescu
-    This Loki code accompanies the book:
-    Alexandrescu, Andrei. "Modern C++ Design: Generic Programming
-        and Design Patterns Applied". 
-        Copyright (c) 2001. Addison-Wesley. ISBN 0201704315
  
 */
+
+
+/** @file visitorpolicies.hpp
+ ** Policies usable for configuring the cinelerra::visitor::Tool for different kinds of error handling. 
+ ** @see buildertool.hpp for another flavor (calling and catch-all-function)
+ **
+ */
 
 
 
@@ -41,58 +39,37 @@ namespace cinelerra
   {
   namespace visitor
     {
-    /* == several Policies usable in conjunction with cinelerra::visitor::Visitable == */
-
     /** 
      * Policy returning just the default return value in case
      * of encountering an unknown Visitor (typically caused by
      * adding a new class to the visitable hierarchy)
      */
-    template<class TOOL>
+    template<class RET>
     struct UseDefault
       {
-        typedef TOOL::ReturnType Ret;
-        
         template<class TAR>
-        static Ret onUnknown (TAR&, TOOL&)
+        RET 
+        onUnknown (TAR&)
           {
-            return Ret();
+            return RET();
           }
       };
       
     /** 
      * Policy to throw when encountering an unknown visiting tool
      */
-    template<class TOOL>
+    template<class RET>
     struct ThrowException
       {
-        typedef TOOL::ReturnType Ret;
-        
         template<class TAR>
-        static Ret onUnknown (TAR&, TOOL&)
+        RET 
+        onUnknown (TAR&)
           {
             throw cinelerra::error::Config("unable to decide what tool operation to call");
           }
       };
       
-    /** 
-     * Policy invoking an catch-all function for processing
-     * an unknown tool / target pair
-     * @note using this policy effectively enforces 
-     *       implementing a catch-all function \c treat(TAR&)
-     */
-    template<class TOOL>
-    struct InvokeCatchAllFunction
-      {
-        typedef TOOL::ReturnType Ret;
-        
-        template<class TAR>
-        static Ret onUnknown (TAR& target,TOOL& tool)
-          {
-            return tool.catchAll (target);
-          }
-      };
-    
+      
     
   } // namespace visitor
 

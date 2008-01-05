@@ -27,6 +27,7 @@
 
 #include "common/error.hpp"
 #include "common/util.hpp"
+#include "common/singleton.hpp"
 
 #include <vector>
 
@@ -153,7 +154,7 @@ namespace cinelerra
         static ReturnType
         errorHandler (TAR& target, TOOL& tool)
           {
-            return TOOL::ErrorPolicy::onUnknown (target, tool);
+            return tool.onUnknown (target);
           }
 
         

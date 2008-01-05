@@ -41,6 +41,17 @@ namespace cinelerra
       {
       typedef visitor::Tool<> VisitingTool;
       
+      class VerboseVisitor
+        : public VisitingTool
+        {
+        protected:
+          void talk_to (string guy)
+            {
+              cout << format ("Hello %s, nice to meet you...\n") % guy;
+            }
+        };
+
+        
       class HomoSapiens : public Visitable<>
         {
         public:
@@ -52,17 +63,17 @@ namespace cinelerra
         public:
           DEFINE_PROCESSABLE_BY (VisitingTool);
         };
-
         
-      class VerboseVisitor
-        : public VisitingTool
+      // the classes above comprise the standard visitor use case,
+      // now we'll extend the hierarchy a bit...
+      
+
+      class BigBoss : public Boss
         {
-        protected:
-          void talk_to (string guy)
-            {
-              cout << format ("Hello %s, nice to meet you...\n") % guy;
-            }
+        public:
+          DEFINE_PROCESSABLE_BY (VerboseVisitor);
         };
+
         
       class Babbler
         : public Applicable<Boss,Babbler>,
@@ -74,17 +85,7 @@ namespace cinelerra
           void treat (BigBoss&) { talk_to("Big Boss"); }
         };
 
-        
-      // the classes above comprise the standard visitor use case,
-      // now we'll extend the hierarchy a bit...
       
-      
-      class BigBoss : public Boss
-        {
-        public:
-          DEFINE_PROCESSABLE_BY (VerboseVisitor);
-        };
-        
       class Leader : public Boss
         {
         };

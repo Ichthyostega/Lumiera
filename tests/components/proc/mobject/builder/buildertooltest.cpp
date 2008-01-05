@@ -41,10 +41,26 @@ namespace mobject
       
       using session::Clip;
       using session::AbstractMO;
-      using cinelerra::visitor::Applicable;
+
       
-      
-      
+      class DummyMO : public AbstractMO
+        {
+        public:
+          DummyMO() { };
+          virtual bool isValid()  const { return true;}
+        };
+
+      class TestTool : public BuilderToolType<TestTool>,
+                       public Applicable<Clip,TestTool>,
+                       public Applicable<AbstractMO,TestTool>
+        {
+        public:
+          void treat (Clip& c)   { cout << "media is: "<< str(c.getMedia()) <<"\n"; }
+          void treat (AbstractMO&){ cout << "catch-all-MO.\n"; }
+          void onUnknown (Buildable&){ cout << "catch-all-function called.\n"; }
+        };
+
+
       
       
       /*******************************************************************
@@ -68,21 +84,6 @@ namespace mobject
         {
           virtual void run(Arg arg) 
             {
-                        class DummyMO : public AbstractMO
-                          {
-                          public:
-                            DummyMO() { };
-                            virtual bool isValid()  const { return true;}
-                          };
-              
-                        class TestTool : public BuilderTool,
-                                         public Applicable<Clip>,
-                                         public Applicable<AbstractMO>
-                          {
-                            void treat (Clip& c)   { cout << "media is: "<< str(c.getMedia()) <<"\n"; }
-                            void treat (Buildable&){ cout << "catch-all-function called.\n"; }
-                            void treat (AbstractMO&){ cout << "catch-all-MO.\n"; }
-                          };
                           
               TestTool t1;
               BuilderTool& tool (t1);
