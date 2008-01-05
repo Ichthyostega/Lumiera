@@ -27,7 +27,6 @@
 #include "common/multithread.hpp"
 #include "common/util.hpp"
 
-//#include <boost/lambda/lambda.hpp>
 #include <boost/function.hpp>
 
 #include <boost/format.hpp>
@@ -37,7 +36,6 @@ using std::tr1::static_pointer_cast;
 using boost::function;
 using boost::format;
 using boost::bind;
-//using boost::lambda::_1;
 using util::for_each;
 
 using cinelerra::Singleton;

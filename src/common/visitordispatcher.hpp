@@ -28,6 +28,7 @@
 #include "common/error.hpp"
 #include "common/util.hpp"
 #include "common/singleton.hpp"
+#include "common/multithread.hpp"
 
 #include <vector>
 
@@ -57,6 +58,15 @@ namespace cinelerra
       size_t tagID; ///< tag value
       static size_t lastRegisteredID;
       
+    private:
+      static void
+      generateID (size_t& id)
+        {
+          Thread::Lock<Tag> guard   SIDEEFFECT;
+          if (!id)
+            id = ++lastRegisteredID;
+        }
+      
     public:
       Tag() : tagID(0) { }
       operator size_t()  const { return tagID; }
@@ -66,10 +76,8 @@ namespace cinelerra
       static Tag&
       get (TOOLImpl* const concreteTool=0)
         {
-          TODO ("race condition");
           Tag& t = TagTypeRegistry<TOOL,TOOLImpl>::tag;
-          if (!t)
-            t.tagID = ++lastRegisteredID;
+          if (!t) generateID (t.tagID);
           return t;
         }
     
@@ -127,6 +135,14 @@ namespace cinelerra
         std::vector<Trampoline> table_;
         
         
+        void
+        accomodate (size_t index)
+          {
+            Thread::Lock<Dispatcher> guard   SIDEEFFECT;
+            if (index > table_.size())
+              table_.resize (index);      // performance bottleneck?? TODO: measure the real impact!
+          }
+        
         inline bool
         is_known (size_t id)
           { 
@@ -136,9 +152,10 @@ namespace cinelerra
         inline void 
         storePtr (size_t id, Trampoline func)
           {
-            TODO ("error- and concurrency handling");
+            REQUIRE (func);
+            REQUIRE (0 < id);
             if (id>table_.size())
-              table_.resize (id);       // performance bottleneck?? TODO: measure the real impact!
+              accomodate (id);
             table_[id-1] = func;
           }
         
