@@ -71,9 +71,10 @@ namespace cinelerra
         };
         
       class Babbler
-        : public Applicable<Boss,Babbler>,
-          public Applicable<BigBoss,Babbler>,
-          public ToolTag<Babbler, VerboseVisitor<Tool> >
+        : public Applicable< Babbler, 
+                             Types<Boss,BigBoss>::List,    // treat this types
+                             VerboseVisitor<Tool>         //  intermediary base class
+                           >
         {
         public:
           void treat (Boss&)    { talk_to("Boss"); }
@@ -119,8 +120,10 @@ namespace cinelerra
        *  tailored for the Chief hierarchy
        */  
       class Blatherer
-        : public Applicable<Visionary,Blatherer,Hastalavista>,
-          public ToolTag<Blatherer, VerboseVisitor<Hastalavista> >
+        : public Applicable< Blatherer, 
+                             Types<Visionary>::List,         // get calls to Visionary dispatched 
+                             VerboseVisitor<Hastalavista>   // note: different tool base class 
+                           >
         {
         public:
           void treat (Leader&)  { talk_to("Mr.Future"); }

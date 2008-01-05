@@ -80,10 +80,10 @@ namespace cinelerra
         };
         
       class Babbler
-        : public Applicable<Boss,Babbler>,
-          public Applicable<BigBoss,Babbler>,
-          public Applicable<Visionary,Babbler>,
-          public ToolTag<Babbler, VerboseVisitor>
+        : public Applicable< Babbler
+                           , Types<Boss,BigBoss,Visionary>::List   // dispatch calls to this types
+                           , VerboseVisitor
+                           >
         {
         public:
           void treat (Boss&)    { talk_to("Boss"); }
@@ -155,7 +155,7 @@ namespace cinelerra
       
       
       
-    } // namespace test
+    } // namespace test1
     
   } // namespace visitor
 

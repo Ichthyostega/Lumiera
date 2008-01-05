@@ -20,7 +20,7 @@
 
 ====================================================================
 This code is heavily inspired by  
- The Loki Library (loki-lib/trunk/include/loki/Singleton.h)
+ The Loki Library (loki-lib/trunk/include/loki/Sequence.h)
     Copyright (c) 2001 by Andrei Alexandrescu
     Copyright (c) 2005 by Peter Kümmel
     This Loki code accompanies the book:

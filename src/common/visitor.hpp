@@ -29,8 +29,7 @@ This code is heavily inspired by
  
 Credits for many further implementation ideas go to
  Cooperative Visitor: A Template Technique for Visitor Creation
-    by Anand Shankar Krishnamoorthi
-    July 11, 2007
+    by Anand Shankar Krishnamoorthi   (July 2007)
     http://www.artima.com/cppsource/cooperative_visitor.html
 
 */
@@ -52,10 +51,16 @@ Credits for many further implementation ideas go to
  **     <li>uses Typelists and Template metaprogramming to generate 
  **         Dispatcher tables for the concrete types.</li>
  **     <li>individual Visiting Tool implementation classes need to derive
- **         from some Applicable<TARGET, TOOLImpl> instantiation and thus
- **         define which calls they get dispatched. They are free to implement
- **         corresponding "treat(ConcreteVisitable&) functions or fall back
+ **         from some Applicable<TOOLImpl, Types<Type1,Type2,...> > instantiation
+ **         and thus define which calls they get dispatched. This is \b crucial.
+ **         A concrete type not declared in this way will never be dispatched to this
+ **         concrete visiting tool implementation class. Of course, the latter is free
+ **         to implement corresponding "treat(ConcreteVisitable&) functions or fall back
  **         on some treat(VisitableInterface&) function.</li>
+ **     <li>any concrete Visitable subclass wanting to be treated by some concrete tool
+ **         needs to use the DECLARE_PROCESSABLE_BY(TOOLBASE) macro. By this, it gets an
+ **         virtual \code apply(TOOLBASE&) function. Otherwise, it will be treated by the
+ **         interface of the next base clas using this macro.</li>
  ** </ul>
  ** For design questions and more detailed implementation notes, see the Proc Layer Tiddly Wiki.  
  **
@@ -73,6 +78,8 @@ Credits for many further implementation ideas go to
 
 #include "common/visitorpolicies.hpp"
 #include "common/visitordispatcher.hpp"
+
+#include "common/typelist.hpp"
 
 
 namespace cinelerra
@@ -106,53 +113,69 @@ namespace cinelerra
       };
     
     
-    /** 
-     * Mixin for attaching a type tag to the concrete tool implementation 
-     */
-    template<class TOOLImpl, class BASE=Tool<> >
-    class ToolTag : public BASE
-      {
-        typedef typename BASE::ToolBase ToolBase;
-        
-      public:
-        virtual Tag<ToolBase> getTag()
-          {
-            TOOLImpl* typeref = 0;
-            return Tag<ToolBase>::get (typeref); 
-          }
-      };
-    
     
     
     /** 
-     * Mixin template to declare that some "visiting tool" 
-     * wants to treat a concrete subclass of Visitable.
+     * Marker template to declare that some "visiting tool" 
+     * wants to treat a set of concrete Visitable classes.
      * 
-     * Concrete visiting tool implementation has to inherit from 
-     * an instance of this template class for each kind of calls 
-     * it wants to get dispatched, allowing us to record the type
-     * information and register the dispatcher entry via the 
-     * automatic base ctor call.
+     * Each "first class" concrete visiting tool implementation has
+     * to inherit from an instance of this template parametrized with
+     * the desired types; for each of the mentioned types, calls will 
+     * be dispatched to the tool implementation. (To make it clear:
+     * Calls to all other types not marked by such an "Applicable"
+     * won't ever be dispatched to this tool class.).
+     * A Sideeffect of inheriting from such an "Applicable" is that 
+     * the tool gets an unique Tag entry, which is used internally
+     * as index in the dispatcher tables. And the automatic ctor call
+     * allows us to record the type information and preregister the
+     * dispatcher entry.
      */
     template
-      < class TAR,            // concrete Visitable to be treated
-        class TOOLImpl,      // concrete tool implementation type
-        class BASE=Tool<>   // "visiting tool" base class 
+      < class TOOLImpl,      // concrete tool implementation type
+        class TYPES,        // List of applicable Types goes here...
+        class BASE=Tool<>  // "visiting tool" base class 
       >
-    class Applicable
+    class Applicable;
+    
+    template           // recursion end: inherit from BASE
+      < class TOOLImpl,
+        class BASE 
+      >
+    class Applicable<TOOLImpl, typelist::NullType, BASE> 
+      : public BASE
+    { }
+    ;
+    
+    template
+      < class TOOLImpl,
+        class TAR, class TYPES,
+        class BASE 
+      >
+    class Applicable<TOOLImpl, typelist::Node<TAR, TYPES>, BASE>
+      : public Applicable<TOOLImpl, TYPES, BASE>
       {
-        typedef typename BASE::ReturnType Ret;
+        
         typedef typename BASE::ToolBase ToolBase;
         
       protected:
+        virtual ~Applicable () {}
         Applicable ()
           {
             TOOLImpl* typeref = 0;
             Dispatcher<TAR,ToolBase>::instance().enroll (typeref);
           }
         
-        virtual ~Applicable () {}
+      public:
+        virtual Tag<ToolBase> 
+        getTag ()
+          {
+            TOOLImpl* typeref = 0;
+            return Tag<ToolBase>::get (typeref); 
+          }
       };
+    
+    using typelist::Types;  // convienience for the user of "Applicable"
     
     
       

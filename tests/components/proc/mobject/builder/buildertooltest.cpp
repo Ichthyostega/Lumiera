@@ -51,9 +51,8 @@ namespace mobject
           DEFINE_PROCESSABLE_BY (BuilderTool);
         };
 
-      class TestTool : public BuilderToolTag<TestTool>,
-                       public Applicable<Clip,TestTool>,
-                       public Applicable<AbstractMO,TestTool>
+      class TestTool 
+        : public Applicable<TestTool, Types<Clip,AbstractMO>::List>
         {
         public:
           void treat (Clip& c)   { cout << "media is: "<< str(c.getMedia()) <<"\n"; }
