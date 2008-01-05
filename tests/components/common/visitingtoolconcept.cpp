@@ -68,7 +68,7 @@ using std::cout;
 
 namespace cinelerra
   {
-  namespace visitor
+  namespace visitor_concept_draft
     {
     // ================================================================== Library ====
     
@@ -228,7 +228,7 @@ namespace cinelerra
         inline ReturnType 
         forwardCall (TAR& target, TOOL& tool)
           {
-            // get concrete type via tool's VTable 
+            // get concrete type via tool's VTable
             Tag<TOOL> index = tool.getTag();
             return (*storedTrampoline(index)) (target, tool);
           }
@@ -457,6 +457,6 @@ namespace cinelerra
       
     } // namespace test
     
-  } // namespace visitor
+  } // namespace visitor_concept_draft
 
 } // namespace cinelerra
