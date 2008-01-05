@@ -182,6 +182,13 @@ out: --> remaining=SingleTestID spam --eggs
 END
 
 
+TEST "TypeList_test" TypeList_test <<END
+out: - 1 -- 2 -- 3 -- 5 -- 8 -- 13 -- The End -
+out: ..Size of = 1
+return: 0
+END
+
+
 TEST "VisitingTool_test" VisitingTool_test <<END
 out: === Babbler meets Boss and BigBoss ===
 out: Hello Boss, nice to meet you...
