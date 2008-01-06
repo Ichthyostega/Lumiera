@@ -514,12 +514,12 @@ ColorPalette
 
 SiteUrl</pre>
 </div>
-<div title="Asset" modifier="Ichthyostega" modified="200710092321" created="200708100337" tags="def classes" changecount="14">
-<pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the EDL is the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with eatch Session. Besides, there is a collection of basic Assets allways available by default.
+<div title="Asset" modifier="Ichthyostega" modified="200801061942" created="200708100337" tags="def classes" changecount="15">
+<pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the EDL is the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with each Session. Besides, there is a collection of basic Assets always available by default.
 
 The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situation is similar. Assets thus serve two quite distinct purposes. One is to load, list, group search and browse them, and to provide an entry point to create new or get at existing MObjects in the EDL, while the other purpose is to provide attribute and property informations to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
 
-We can distinguish several different Kinds of Assets, each one with specific properties. While all these Kinds of Assets implement the basic Asset interface, they themselfs are the __key abstractions__ of the asset management view. Mostly, their interfaces will be used directly, because they are quite different in behaviour. Thus it is common to see asset related operations being templated on the Asset Kind. 
+We can distinguish several different Kinds of Assets, each one with specific properties. While all these Kinds of Assets implement the basic Asset interface, they in turn are the __key abstractions__ of the asset management view. Mostly, their interfaces will be used directly, because they are quite different in behaviour. Thus it is common to see asset related operations being templated on the Asset Kind. 
 &amp;rarr; see also [[Creating and registering Assets|AssetCreation]]
 [img[Asset Classess|uml/fig130309.png]]
 
@@ -542,7 +542,7 @@ Some of the building blocks providing the framework for the objects placed into 
 &amp;rarr; StructAsset {{red{to be defined}}}
 
 !Meta Asset
-Some additional, virtual facilities created in the course of the editing process. Examples are Automation data sets, Lables and reference points, Meta Clips (nested sub-~EDLs)
+Some additional, virtual facilities created in the course of the editing process. Examples are Automation data sets, Labels and reference points, Meta Clips (nested sub-~EDLs)
 * __outward interface operations__ include...
 * __inward interface operations__ include...
 &amp;rarr; MetaAsset {{red{to be defined}}}
@@ -570,7 +570,7 @@ For every Asset we generate a __Ident tuple__ and a long ID (hash) derived from 
 [img[how to implement Automation|uml/fig129669.png]]
 </pre>
 </div>
-<div title="BasicBuildingOperations" modifier="Ichthyostega" modified="200712100627" created="200712040334" tags="design dynamic def Builder" changecount="20">
+<div title="BasicBuildingOperations" modifier="Ichthyostega" modified="200801061234" created="200712040334" tags="design dynamic def Builder" changecount="21">
 <pre>Starting out from the concepts of Objects, Placement to Tracks, Ports and connection properties (&amp;rarr; see [[here|TrackPortEDL]]) within the EDL, we can identify the elementary operations occuring within the Builder. Overall, the Builder is organized as application of //visiting tools// to a collection of objects, so finally we have to consider some object kind appearing in the working function of the given builder tool, which holds at this moment some //context//. The job now is to organize this context such as to create a predictable build process from this //event driven// approach.
 
 !Builder working Situations
@@ -602,7 +602,7 @@ After consuming all input objects and satisfying all wiring requests, the result
 !!!dependencies
 Ports need to be there first, as everything else will be placed to a port at some point. The same holds true for tracks. But, on the other hand, both are optional. We can have ~EDLs with ~MObjects without configuring ports (but won't be able to build any render processor of course). And we could have an EDL without any track, if we place every ~MObject within this EDL directly to some port.
 
-Effects can be attached only to already existing pipelines, starting out at some port or clip. Besides that, all further parts can be built in any order and independent of each other. This is made possible by using [[wiring requests|WiringRequest]], which can be resolved later on. So, as long as we start out with the tracks (to resolve any port they are placed to), and further, if we manage to get any effect placed to some clip-MO //after// treating the clip, we are fine and can do the building quasi event driven.
+Effects can be attached only to already existing pipelines, starting out at some port or clip. Besides that, all further parts can be built in any order and independent of each other. This is made possible by using [[wiring requests|WiringRequest]], which can be resolved later on. So, as long as we start out with the tracks (to resolve any port they are placed to), and further, if we manage to get any effect placed to some clip-MO //after// setting up and treating the clip, we are fine and can do the building quasi event driven.
 
 !!!building and resolving
 Building the network for the individual objects thus creates a queue of wiring requests. Some of them may be immediately resolvable, but detecting this correctly can be nontrivial, and so it seems better to group all wiring requests based on the port and treat them groupwise. Because &amp;mdash; in the most general case &amp;mdash; connecting includes the use of transforming and joining nodes, which can create additional wiring requests (e.g. for automation parameter data connections). Finally, if the network is complete, we could perform [[optimisations|RenderNetworkOptimisation]]
@@ -803,7 +803,23 @@ This is an very important external Interface, because it links together all thre
 <pre>RenderEngine
 </pre>
 </div>
-<div title="DesignGoals" modifier="Ichthyostega" modified="200711122343" created="200706210557" tags="design" changecount="13">
+<div title="DesignDecisions" modifier="Ichthyostega" modified="200801062304" created="200801062209" tags="decision design discuss" changecount="17">
+<pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
+
+''Everything is an object'' &amp;mdash; of course, that's a //no-brainer // todays. Rather, important is what is not &quot;an object&quot;, meaning it can't be arranged arbitrarily
+* we have one and only one global [[Session]] which directly contains a collection of multiple [[EDLs|EDL]] and is associated with a globally managed collection of [[assets|Asset]] (no, we don't have scoped variables here; if e.g. a media has been &quot;opened&quot;, it is just plain globally known as asset.)
+* we have some global [[ports|Port]], which are treated in a unique manner and don't behave like other objects (e.g. effects)
+* we have a [[Fixture]] which acts as isolation layer towards the render engine and is (re)built automatically.
+
+We ''separate'' processing (rendering) and configuration (building). We have a [[Builder]] which creates a network of [[render nodes|ProcNode]], to be processed by //pulling data // from some [[Port]]
+
+''Objects are [[placed|Placement]] rather'' than assembled, connected, wired, attached. This is more of a rule-based approach and gives us one central metaphor and abstraction, allowing us to treat everything in an uniform manner. You can place it as you like, and the builder tries to make sense out of it, silently disabling what doesn't make sense.
+An [[EDL]] is just a collection of configured and placed objects (and has no additional, fixed structure). [[Tracks|Track]] form a mere organisational grid, they are grouping devices not first-class entities (a track doesn't &quot;have&quot; a port or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements though). [[Ports|Port]] are hooks for making connections and are the only facility to build processing chains. We have global ports, and each clip is built around a lokal [[source port|ClipSourcePort]] &amp;mdash; and that's all. No special &quot;media viewer&quot; and &quot;arranger&quot;, no special role for media sources, no commitment to some fixed media stream types (video and audio). All of this is sort of pushed down to be configuration, represented as asset of some kind. For example, we have [[processing pattern|ProcPatt]] assets to represent the way of building the source network for reading from some media file (including codecs treated like effect plugin nodes)
+
+''State'' is rigorously ''externalized'' and operations are to be ''scheduled'', to simplify locking and error handling. State is either treated similar to media stream data (as addressable and cacheable data frame), or is represented as &quot;parameter&quot; to be served by some [[parameter provider|ParamProvider]]. Automation is just another kind of parameter, i.e. a function, and how this function is calculated is an encapsulated implementation detail (we don't have &quot;bezier automation&quot;, and then maybe a &quot;linear automation&quot;, a &quot;mask automation&quot; and yet another way to handle transitions)
+</pre>
+</div>
+<div title="DesignGoals" modifier="Ichthyostega" modified="200801062154" created="200706210557" tags="design" changecount="16">
 <pre>This __proc-Layer__ and ~Render-Engine implementation started out as a design-draft by [[Ichthyo|mailto:Ichthyostega@web.de]] in summer 2007. The key idea of this design-draft is to use the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]] for the Render Engine, thus separating completely the //building// of the Render Pipeline from //running,// i.e. doing the actual Render. The Nodes in this Pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder.
 
 !Why doesn't the current Cinelerra-2 Design succeed?
@@ -811,10 +827,10 @@ The design of Cinelerra-2 basically follows a similar design, but __fails becaus
 # too much differentiation is put into the class hierarchy instead of configuring Instances differently.&lt;br&gt;This causes overly heavy use of virtual functions and -- in order to ameliorate this -- falling back to hard wired branching
 # far too much coupling and back-coupling to the internals of the EDL, forcing a overly rigid structure on the latter
 
-!Try to learn from this
+!Try to learn from the Problems of the current Cinelerra-2 codebase
 * build up an [[Node Abstraction|ProcNode]] powerful enough to express //all necessary Operations// without the need to recure on the actual object type
-* need to redesign the internals of the EDL in a far more open manner. See MObjects
-* strive at a StrongSeparation between EDL and Render Engine
+* need to redesign the internals of the EDL in a far more open manner. Everything is an [[M-Object|MObjects]] which is [[placed|Placement]] in some manner
+* strive at a StrongSeparation between EDL and Render Engine, encapsulate and allways implement against interfaces
 
 
 !Design Goals
@@ -1055,7 +1071,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200801041015" created="200708080322" tags="overview" changecount="15">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200801062306" created="200708080322" tags="overview" changecount="16">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Cinelerra Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1067,7 +1083,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 * [[Handling of the current Session|CurrentSession]]
 * [[collecting Ideas for Implementation Guidelines|ImplementationGuidelines]]
 * [[using the Visitor pattern?|VisitorUse]] &amp;mdash; resulting in [[»Visiting-Tool« library implementation|VisitingToolImpl]]
-* [[Handling of Tracks and Ports in the EDL|TrackPortEDL]]
+* [[Handling of Tracks and Ports in the EDL|TrackPortEDL]]. [[Handling of Tracks|TrackHandling]] and [[Ports|PortHandling]]
 * [[identifying the basic Builder operations|BasicBuildingOperations]] and [[planning the Implementation|PlanningNodeCreaterTool]]
 </pre>
 </div>
@@ -2193,7 +2209,7 @@ Placements have //value semantics,// i.e. we don't stress the identity of a plac
 
 </pre>
 </div>
-<div title="PlanningBuildFixture" modifier="Ichthyostega" modified="200712100633" created="200712100445" tags="impl Builder" changecount="10">
+<div title="PlanningBuildFixture" modifier="Ichthyostega" modified="200801061937" created="200712100445" tags="impl Builder draft" changecount="11">
 <pre>//This page is a scrapbook for working out the implementation of how to (re)build the [[Fixture]]//
 Structurally, (re)building the Fixture rather belongs to [[Session]]/[[EDLs|EDL]], but it is implemented very similar to the render engine build process: by treating all ~MObjects found in the various ~EDLs with a common [[visiting tool|VisitorUse]], this tool collects a simplified view with everyting made explicit, which can be pulled of as Fixture, i.e. (special kind of) EDL
 afterwards.
@@ -2242,7 +2258,7 @@ afterwards.
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlanningNodeCreaterTool" modifier="Ichthyostega" modified="200712100626" created="200712090659" tags="impl Builder" changecount="6">
+<div title="PlanningNodeCreaterTool" modifier="Ichthyostega" modified="200801061936" created="200712090659" tags="impl Builder draft" changecount="7">
 <pre>//This page is a scrapbook for working out the implementation of the builder//
 
 * NodeCreaterTool is a [[visiting tool|VisitorUse]]
@@ -2291,6 +2307,18 @@ We need a way of addressing existing [[ports|Port]]. Besides, as the Ports and T
 <pre>Playlist is a sequence of individual Render Engine Processors able to render a segment of the timeline. So, together these Processors are able to render the whole timeline (or part of the timeline if only a part has to be rendered).
 
 //Note, we have yet to specify how exactly the building and rendering will work together with the backend. There are several possibilities how to structure the Playlist//
+</pre>
+</div>
+<div title="Port" modifier="Ichthyostega" modified="200801062330" created="200801062110" tags="def decision" changecount="4">
+<pre>Ports play an central role within the Proc Layer, because for everything placed and handled within the EDL, the final goal is to get it transformed into data which can be retrieved at some port. Ports are special facilities, rather like inventory, separate and not treated like all the other objects.
+We don't distinguish between &quot;input&quot; and &quot;output&quot; ports &amp;mdash; rather, ports are thought to be ''hooks for making connections to''. By following this line of thought, each port has an input side and an output side and is in itself something like a ''Bus'' or the starting point for building a ''processing chain''. Other processing entities like effects and transitions can be placed (attached) at the port, resulting them to be appended to form this chain. Likewise, we can place [[wiring requests|WiringRequest]] to the port, meaning we want it connected to another destination port. The [[Builder]] may generate further wiring requests to fulfil the placement of other entities.
+Thus Ports are the basic building blocks of the whole render network. We distinguish ''global available'' Ports, which are like the sum groups of a mixing console, and the ''lokal port'' or [[source port|ClipSourcePort]] of the individual clips, which exist only within the duration of the corresponding clip. The design //limits the possible kinds of ports // to these two types &amp;mdash; thus we can build local processing chains at clips and global processing chains at the global ports of the session and that's all we can do. (because of the flexibility which comes with the concept of [[placements|Placement]], this is no real limitation)
+
+The GUI can connect the viewer(s) to some port (and moreover can use [[probe points|ProbePoint]] placed like effects and connected to some port), and likewise, when starting a ''render'', we get the opportunity to specify the ports to pull the data from. Pulling data from some port is the (only) way to activate the render nodes network reachable from this port.
+
+&amp;rarr; [[Handling of Tracks|TrackHandling]]
+&amp;rarr; [[Handling of Ports|PortHandling]]
+
 </pre>
 </div>
 <div title="ProblemsTodo" modifier="Ichthyostega" modified="200709251721" created="200708050524" tags="design discuss" changecount="15">
@@ -2597,7 +2625,7 @@ The link between ~MObject and Asset should be {{{const}}}, so the clip can't cha
 At first sight the link between asset and clip-MO is a simple logical relation between entities, but it is not strictly 1:1 because typical media are [[multichannel|MultichannelMedia]]. Even if the media is compound, there is //only one asset::Clip//, because in the logical view we have only one &quot;clip-thing&quot;. On the other hand, in the Session/EDL, we have a compound clip ~MObject comprised of several elementary clip objects, each of which will refer to its own sub-media (channel) within the compound media (and don't forget, this structure can be tree-like)
 {{red{open question:}}} do the clip-MO's of the individual channels refer directly to asset::Media? does this mean the relation is different from the top level, where we have a relation to a asset::Clip??</pre>
 </div>
-<div title="RenderEngine" modifier="Ichthyostega" modified="200711122340" created="200706190056" tags="overview" changecount="44">
+<div title="RenderEngine" modifier="Ichthyostega" modified="200801062200" created="200706190056" tags="overview" changecount="45">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
 &lt;&lt;&lt;
 ''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a //first, draft, prototypical// implementation in C++
@@ -2617,7 +2645,7 @@ The system is ''open'' inasmuch every part mirrors the structure of correspondin
 &amp;rarr; BuildProcess and RenderProcess
 &amp;rarr; [[Two Examples|Examples]] (Object diagrams) 
 &amp;rarr; how [[Automation]] works  {{red{to be defined in more detail}}}
-&amp;rarr; [[Problems|ProblemsTodo]] {{red{to be solved}}}
+&amp;rarr; [[Problems|ProblemsTodo]] to be solved and notable [[design decisions|DesignDecisions]]
 &amp;rarr; [[Implementation Details|ImplementationDetails]] {{red{WIP}}}
 </pre>
 </div>
@@ -2643,14 +2671,14 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 * a collection of ''global Ports''
 * the ''Fixture'' with a possibility to [[(re)build it|PlanningBuildFixture]]</pre>
 </div>
-<div title="SessionOverview" modifier="Ichthyostega" modified="200712100615" created="200709272105" tags="design" changecount="13">
-<pre>The [[Session]] (sometimes also called //Project//) contains all informations and objects to be edited by the User. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration. At any given time, there is //only one current session// opened within the application.
+<div title="SessionOverview" modifier="Ichthyostega" modified="200801061947" created="200709272105" tags="design" changecount="15">
+<pre>The [[Session]] (sometimes also called //Project//) contains all informations and objects to be edited by the User. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration, all being represented as [[Asset]]. At any given time, there is //only one current session// opened within the application.
 
 !!!larger projects
 For larger editing projects the simple structure of a session containing &quot;the&quot; timeline is not sufficient. Rather, we have several timelines, e.g. one for each scene. Or we could have several layered or nested timelines (compositional work, multimedia productions). To support these cases without making the default case more complicated, Cinelerra-3 introduces a //focus// for selecting the //current EDL,// which will receive all editing operations.
 
 !!!the definitive state
-With all the structural complexities possible within such a session, we need an isolation layer to provide __one__ definitive state where all configuration has been made explicit. Thus the session manages one special object list, the [[Fixture]], which can be seen as all currently active object placed onto a single timeline.
+With all the structural complexities possible within such a session, we need an isolation layer to provide __one__ definitive state where all configuration has been made explicit. Thus the session manages one special object list, the [[Fixture]], which can be seen as all currently active objects placed onto a single timeline.
 
 !!!organisational devices
 The possibility of having multiple ~EDLs helps organizing larger projects. Each [[EDL]] is just a logical grouping; because all effective properties of any MObject within this EDL are defined by the ~MObject itself and the [[Placement]], by which the object is anchored to some time point, some track, can be connected to some port, or linked to another object. In a similar manner, Tracks are just another organisational aid for grouping objects, disabling them and defining common output ports.
@@ -3931,7 +3959,18 @@ function addKeyDownHandlers(e)
 
 </pre>
 </div>
-<div title="TrackPortEDL" modifier="Ichthyostega" modified="200712100628" created="200711300405" tags="design discuss def decision Builder" changecount="21">
+<div title="Track" modifier="Ichthyostega" modified="200801062330" created="200801062320" tags="def design decision" changecount="3">
+<pre>Tracks are just a structure used to organize the Media Objects within the EDL. They form a grid, and besides that, they have no special meaning. They are grouping devices, not first-class entities. A track doesn't &quot;have&quot; a port or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements.
+
+Tracks are assets on their own, but they can be found within a given EDL. So, several ~EDLs can share a single track or each EDL can have its own, separate tracks. 
+* Like most ~MObjects, tracks have a asset view: you can find a track asset in the asset manager.
+* and they have an object view: there is an track MObject which can be [[placed|Placement]], thus defining properties of this track within one EDL
+Of course, we can place other ~MObjects relative to some track (that's the main reason why we want to have tracks). In this sense, the [[handling of Tracks|TrackHandling]] is somewhat special: the placement of some track can be found directly within the EDL (and not within the general collection of placed objects which form the contents of any EDL). This placement defines properties of the track, which will be inherited if necessary by all ~MObjects placed to this track. For example, if placing a track to some global [[Port]], and if placing a clip to this track, without placing the clip directly to another port, the port information of the track will be fetched by the builder when needed to make the output connection of the clip.
+&amp;rarr; [[Handling of Tracks|TrackHandling]]
+&amp;rarr; [[Handling of Ports|PortHandling]]
+</pre>
+</div>
+<div title="TrackPortEDL" modifier="Ichthyostega" modified="200801062328" created="200711300405" tags="design discuss def decision Builder" changecount="26">
 <pre>''towards a definition of »Track«''. We don't want to tie ourself to some naive and overly simplistic definition, just because it is convenient. For classical (analogue) media, tracks are physical entities dictated by the nature of the process by which the media works. Especially, Tape machines have read/writing heads, which creates fixed tracks to which to route the signals. This is a practical geometric necessity. For digital media, there is no such necessity. We are bound primarily by the editor's habits of working.
 
 !!!Assessment of Properties
@@ -3946,17 +3985,20 @@ Starting with the assumption &quot;everything is just connected processing nodes
 
 !!!the constant part
 there seems to be some non time-varying part in each EDL, that doesn't fit well with the simple model &quot;objects on a timeline&quot;. Tracks seen as an organisational grid fall into this category: they are a global property of the given EDL. They could be associated to the Session as a whole, but effectively this would subvert the concept of having [[several EDLs|SessionOverview]]. On the other hand, 
-[[ports|Port]] for Video and Sound output are obviously a global property of the Session. There can be several global ports forming a matrix of subgroup busses. We could add ports to tracks as well, but we don't do this, because, again, this would run counter to our attempt of treating tracks as merely organisational entities. We have special [[source ports|ClipSourcePort]] on individual clips though, and we will have ports on meta-clips too.
+[[ports|Port]] for Video and Sound output are obviously a global property of the Session. There can be several global ports forming a matrix of subgroup busses. We could add ports to tracks by default as well, but we don't do this, because, again, this would run counter to our attempt of treating tracks as merely organisational entities. We have special [[source ports|ClipSourcePort]] on individual clips though, and we will have ports on meta-clips too.
 
 !Design
-__Tracks__ are just a structure used to organize the Media Objects within the EDL. They form a grid, and besides that, they have no special meaning. It seems convenient to make the tracks not just a list, but allow grouping (tree structure) right from start. __~MObjects__ are placed rather than wired. The wiring is derived from the __Placement__. Placing can happen in several dimensions:
+[[Tracks|Track]] are just a structure used to organize the Media Objects within the EDL. They form a grid, and besides that, they have no special meaning. It seems convenient to make the tracks not just a list, but allow grouping (tree structure) right from start. __~MObjects__ are ''placed'' rather than wired. The wiring is derived from the __Placement__. Placing can happen in several dimensions:
 * placing in time will define when to activate and show the object.
 * placing onto a track associates the ~MObject with this track; the GUI will show it on this track and the track may be used to resolve other properties of the object.
-* placing to a __Port__ brings the object in conjunction with this Port for the build process. It will be considered when building the render network for this port. Source-like objects (clips and exit nodes of effect chains) will be connected to the port, while transforming objects (effects) are inserted at the port.
+* placing to a __Port__ brings the object in conjunction with this Port for the build process. It will be considered when building the render network for this port. Source-like objects (clips and exit nodes of effect chains) will be connected to the port, while transforming objects (effects) are inserted at the port. (you may read &quot;placed to port X&quot; as &quot;plug into port X&quot;)
 * depending on the nature of the port and the source, placing to some port may create additional degrees of freedom, demanding the object to be placed in this new, additional dimensions: Connecting to video out e.g. creates an overlay mode and a layer position which need to be specified, while connecting to a spatial sound system creates the necessity of a pan position. On the other hand, placing a mono clip onto a mono Port creates no additional degrees of freedom.
-Placements are __resolved__ resulting in an ExplicitPlacement. In most cases this is just a gathering of properties, but as Placements can be incomplete and relative, there is room for real solving. The resolving mechanism tries to __derive missing properties__ from the __context__: When a clip isn't placed to some port but to a Track, than the Track and its parents will be inspected. If some of them has been placed to a port, the object will be connected to this port. Similar for layers and pan position. This is done by [[Placement]] and LocatingPin; as the [[Builder]] uses ~ExplicitPlacements, he isn't concerned with this resolving and uses just the data they deliver to drive the [[basic building operations|BasicBuildingOperations]]</pre>
+Placements are __resolved__ resulting in an ExplicitPlacement. In most cases this is just a gathering of properties, but as Placements can be incomplete and relative, there is room for real solving. The resolving mechanism tries to __derive missing properties__ from the __context__: When a clip isn't placed to some port but to a Track, than the Track and its parents will be inspected. If some of them has been placed to a port, the object will be connected to this port. Similar for layers and pan position. This is done by [[Placement]] and LocatingPin; as the [[Builder]] uses ~ExplicitPlacements, he isn't concerned with this resolving and uses just the data they deliver to drive the [[basic building operations|BasicBuildingOperations]]
+&amp;rarr; [[Definition|Track]] and [[handling of Tracks|TrackHandling]]
+&amp;rarr; [[Definition|Port]] and [[handling of Ports|PortHandling]]
+</pre>
 </div>
-<div title="TransitionsHandling" modifier="Ichthyostega" created="200712080417" tags="def design" changecount="1">
+<div title="TransitionsHandling" modifier="Ichthyostega" modified="200801061213" created="200712080417" tags="def design" changecount="2">
 <pre>Transitions combine the data from at least two processing chains and do this combining in a time varying fashion. So, any transition has
 * N input connections
 * either one or N output connections
@@ -3964,7 +4006,7 @@ Placements are __resolved__ resulting in an ExplicitPlacement. In most cases thi
 * some control data connection to a ParamProvider, because in the most general case the controling curves are treated like automation
 
 !!!how much output ports?
-The standard case of a transition is sort of mixing together two input streams, like e.g. a simple dissolve. For this to be of any use, this input streams need to be connected to the same ouput port before and after the transition, i.e. the inputs and the transition share placement to the same output destination. In this case, when the transition starts, the direct connections can be suspended and the transition will switch in seamlessly.
+The standard case of a transition is sort of mixing together two input streams, like e.g. a simple dissolve. For this to be of any use, this input streams need to be connected to the same ouput port before and after the transition (with regards to the timeline), i.e. the inputs and the transition share placement to the same output destination. In this case, when the transition starts, the direct connections can be suspended and the transition will switch in seamlessly.
 
 Using transitions is a very basic task and thus needs viable support by the GUI. Handling of transitions need to be very convienient, because it is so important. Because of this, it is compelling to subsume a more complicated situation and treat this more complicated case similar. This is the case, when two (or N) elements have to be combined in the way of a transition, but their further processing in the processing chain //after// the transition needs to be different, maybe they belong to differnent subgroups, have to appear on different layers or with different pan positions. Of courese, the workaround is simple, at least &quot;simple&quot; from the programmers point of view. It is //not// simple from the editor's point of view the moment the editor has to do this simple thing (changing the wiring and add manualy synced fade curves to the individual parts) a dozend or even a hundred times in some larger project.
 
