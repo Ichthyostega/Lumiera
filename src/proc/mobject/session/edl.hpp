@@ -29,7 +29,7 @@
 
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/placement.hpp"
-#include "proc/asset/track.hpp"
+#include "proc/mobject/session/track.hpp"
 
 using proc_interface::PAsset;  // TODO better way to refer to a track?
 
@@ -44,14 +44,16 @@ namespace mobject
     class EDL
       {
       protected:
-        vector<PAsset> tracks;
+        Placement<Track>  track;
         vector<MObject *> clips;
 
       public:
+        EDL();
+        
         bool contains (const PMO& placement);
         PMO& find (const string& id); ///< @todo how to refer to clips? using asset IDs??
         
-        vector<PAsset>& getTracks () { return tracks; } ///< @todo use track assets correct, make const!
+        Placement<Track>& getTracks () { return track; } ///< @todo work out the correct use of tracks! make const correct!
         size_t size ()
           {
             UNIMPLEMENTED ("what ist the 'size' of an EDL?");

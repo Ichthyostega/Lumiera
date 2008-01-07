@@ -1,5 +1,5 @@
 /*
-  OutPort  -  structural asset corresponding to some port generating media output
+  Port  -  structural asset corresponding to some port generating media output
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "proc/asset/outport.hpp"
+#include "proc/asset/port.hpp"
 
 namespace asset
   {

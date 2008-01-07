@@ -60,7 +60,7 @@
 #include "cinelerra.h"
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/session/locatingpin.hpp"
-#include "proc/mobject/session/track.hpp"
+#include "proc/asset/port.hpp"
 
 #include <tr1/memory>
 using std::tr1::shared_ptr;
@@ -86,7 +86,8 @@ namespace mobject
     {
     protected:
       typedef cinelerra::Time Time;
-      typedef session::Track* Track;
+      typedef asset::shared_ptr<asset::Port> Port;
+      
 
 
     public:

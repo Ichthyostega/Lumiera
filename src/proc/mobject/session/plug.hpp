@@ -1,5 +1,5 @@
 /*
-  OUTPORT.hpp  -  structural asset corresponding to some port generating media output
+  PLUG.hpp  -  LocatingPin for requesting connection to some Port
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,26 +21,32 @@
 */
 
 
-#ifndef ASSET_OUTPORT_H
-#define ASSET_OUTPORT_H
+#ifndef MOBJECT_SESSION_PLUG_H
+#define MOBJECT_SESSION_PLUG_H
 
-#include "proc/asset/struct.hpp"
+#include "proc/mobject/session/wish.hpp"
 
 
 
-namespace asset
+namespace asset { class Port; }
+
+namespace mobject
   {
-
-
-  /**
-   * structural asset corresponding to some port generating media output
-   */
-  class OutPort : public Struct
+  namespace session
     {
-      
-    };
-    
-    
-    
-} // namespace asset
+
+    /**
+     * LocatingPin for requesting connection to some Port
+     */
+    class Plug : public Wish
+      {
+      protected:
+        /** the Port this MObject wants to be conected to */
+        asset::Port* outPort;   ////////////////////////////////TODO: shared_ptr
+
+      };
+
+  } // namespace mobject::session
+
+} // namespace mobject
 #endif

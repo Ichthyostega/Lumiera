@@ -1,6 +1,6 @@
 format 40
 "session" // design::codegen::proc::mobject::session
-  revision 11
+  revision 12
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -274,7 +274,14 @@ ${namespace_end}"
       associated_classes
 	class_ref 128389 // Track
       end
-      comment "descriptor for one track in the Session"
+      comment "A grouping device within the EDL. The corresponding Placement
+by which this Track object is refered defines fallback placing
+properties to be used by all objects placed on this track in
+case they don't specify more concrete placements.
+Typically, tracks are used do make default Port connections,
+define a layer or pan for sound and for for disabling groups
+of clips. Note tracks are grouped in a tree like fashion.
+"
     end
 
     artifact 129285 "abstractmo"
@@ -664,6 +671,126 @@ ${namespace_end}"
       associated_classes
 	class_ref 129541 // Allocation
       end
+    end
+
+    artifact 139397 "constraint"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 130181 // Constraint
+      end
+      comment "LocatingPin representing an directive by the user that
+must not be violated"
+    end
+
+    artifact 139269 "wish"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 130053 // Wish
+      end
+      comment "LocatingPin representing a low-priority directive by the user,
+to be fulfilled only if possible (and after satisfying the
+more important LocatingPins)"
+    end
+
+    artifact 139525 "plug"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 140421 // Plug
+      end
+      comment "LocatingPin for requesting connection to some Port"
     end
 
     artifact 130181 "label"

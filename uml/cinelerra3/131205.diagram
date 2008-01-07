@@ -15,9 +15,9 @@ classcanvas 128389 class_ref 138757 // ProcPatt
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 684 277 2000
   end
-classcanvas 128517 class_ref 138117 // OutPort
+classcanvas 128517 class_ref 138117 // Port
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 510 196 2000
+  xyz 516 196 2000
   end
 classcanvas 128645 class_ref 139141 // DoAttach
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -37,7 +37,7 @@ classcanvas 129029 class_ref 136965 // Struct
   end
 relationcanvas 129157 relation_ref 139653 // <generalisation>
   geometry VHV
-  from ref 128517 z 1999 to point 535 167
+  from ref 128517 z 1999 to point 536 167
   line 130437 z 1999 to point 721 167
   line 130565 z 1999 to ref 129029
   no_role_a no_role_b
@@ -55,9 +55,9 @@ relationcanvas 129413 relation_ref 139525 // <generalisation>
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 relationcanvas 129541 relation_ref 141701 // <directional aggregation by value>
-  from ref 128389 z 1999 stereotype "<<vector>>" xyz 678 340 3000 to ref 128133
-  role_a_pos 704 366 3000 no_role_b
-  multiplicity_a_pos 668 366 3000 multiplicity_b_pos 689 328 3000
+  from ref 128389 z 1999 stereotype "<<vector>>" xyz 637 314 3000 to ref 128133
+  role_a_pos 640 329 3000 no_role_b
+  multiplicity_a_pos 668 366 3000 multiplicity_b_pos 743 320 3000
 relationcanvas 129669 relation_ref 141829 // <generalisation>
   from ref 128645 z 1999 to ref 128133
   no_role_a no_role_b
@@ -70,10 +70,15 @@ relationcanvas 130053 relation_ref 141957 // <generalisation>
   from ref 128901 z 1999 to ref 128133
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
-relationcanvas 130821 relation_ref 142469 // <unidirectional association>
-  geometry VH
-  from ref 128773 z 1999 to point 624 296
-  line 131205 z 1999 to ref 128389
-  role_a_pos 587 295 3000 no_role_b
-  multiplicity_a_pos 667 307 3000 no_multiplicity_b
+relationcanvas 131461 relation_ref 142085 // <unidirectional association>
+  from ref 128901 z 1999 to point 747 424
+  line 131845 z 1999 to point 747 348
+  line 131973 z 1999 to ref 128389
+  role_a_pos 719 362 3000 no_role_b
+  multiplicity_a_pos 707 329 3000 multiplicity_b_pos 727 436 3000
+relationcanvas 131589 relation_ref 146053 // <unidirectional association>
+  from ref 128517 z 1999 to point 536 295
+  line 131717 z 1999 to ref 128389
+  role_a_pos 569 280 3000 no_role_b
+  multiplicity_a_pos 576 296 3000 no_multiplicity_b
 end

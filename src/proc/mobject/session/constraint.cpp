@@ -1,5 +1,5 @@
 /*
-  ABSTRACTMO.hpp  -  abstract base class for all Media Objects
+  Constraint  -  LocatingPin representing an mandatory directive
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,41 +18,20 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
 
 
-#ifndef MOBJECT_SESSION_ABSTRACTMO_H
-#define MOBJECT_SESSION_ABSTRACTMO_H
-
-#include "proc/mobject/mobject.hpp"
-
+#include "proc/mobject/session/constraint.hpp"
 
 namespace mobject
   {
   namespace session
     {
-
-
-    /**
-     *  abstract base class of all MObjects for providing common services.
-     *  @todo seems that we don't need this intermediate class...
-     */
-    class AbstractMO : public MObject
-      {
-        
-      public:
-        
-        /* some dummy implementations used to make the code compile... */
-        
-        virtual Time& getLength() { return length; }
-        
-        DEFINE_PROCESSABLE_BY (builder::BuilderTool);
-
-     };
+    
+    /** */
 
 
 
   } // namespace mobject::session
 
 } // namespace mobject
-#endif

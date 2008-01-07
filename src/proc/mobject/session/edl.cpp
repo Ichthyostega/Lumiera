@@ -24,12 +24,39 @@
 #include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/track.hpp"
 #include "proc/mobject/placement.hpp"
-#include "proc/mobject/mobject.hpp"
+#include "proc/mobject/session/mobjectfactory.hpp"
+#include "proc/asset/track.hpp"
 
 namespace mobject
   {
   namespace session
     {
+  
+    namespace // Implementation details
+    {   
+      using asset::Query;
+    
+      /** helper: create a default configured track asset */
+      const Placement<Track>
+      makeDefaultTrack ()
+      {
+        PTrackAsset tA = asset::Struct::create (Query<asset::Track> ("dummy()"));
+        return MObject::create (tA);
+      }
+
+    } 
+    
+    
+    
+    
+    /** create an empty default configured EDL */
+    EDL::EDL ()
+      : track (makeDefaultTrack ()),
+        clips (0)
+    {
+      
+    }
+    
 
     /** @deprecated not sure if it is a good idea 
      *              to have this on the interface

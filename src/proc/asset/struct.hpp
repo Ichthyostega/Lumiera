@@ -40,6 +40,9 @@
 #include "proc/asset.hpp"
 #include "common/factory.hpp"
 
+#include<string>
+
+using std::string;
 
 
 namespace asset
@@ -86,6 +89,15 @@ namespace asset
   inline ID<Struct>::ID(const Struct& stru) : ID<Asset> (stru.getID()) {};
   
   
+  /** 
+   * Query for a special kind of structural Asset
+   */
+  template<class STRU>
+  class Query : public std::string
+    {
+    public:
+      Query (string predicate) : string(predicate) {}
+    };
   
   
   /** 
@@ -95,8 +107,9 @@ namespace asset
     {
     public:
       typedef shared_ptr<asset::Struct> PType;
-       
-      PType operator() (Asset::Ident& key);      ////////////TODO define actual operation 
+      
+      template<class STRU>
+      shared_ptr<STRU> operator() (Query<STRU> query);      ////////////TODO define actual operation 
 
     };
     

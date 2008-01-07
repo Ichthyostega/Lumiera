@@ -1,5 +1,5 @@
 /*
-  ABSTRACTMO.hpp  -  abstract base class for all Media Objects
+  WISH.hpp  -  LocatingPin representing a low-priority directive
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,10 +21,11 @@
 */
 
 
-#ifndef MOBJECT_SESSION_ABSTRACTMO_H
-#define MOBJECT_SESSION_ABSTRACTMO_H
+#ifndef MOBJECT_SESSION_WISH_H
+#define MOBJECT_SESSION_WISH_H
 
-#include "proc/mobject/mobject.hpp"
+#include "proc/mobject/session/allocation.hpp"
+
 
 
 namespace mobject
@@ -34,24 +35,17 @@ namespace mobject
 
 
     /**
-     *  abstract base class of all MObjects for providing common services.
-     *  @todo seems that we don't need this intermediate class...
+     * LocatingPin representing a low-priority directive by the user,
+     * to be fulfilled only if possible (and after satisfying the
+     * more important LocatingPins)
      */
-    class AbstractMO : public MObject
+    class Wish : public Allocation
       {
         
-      public:
-        
-        /* some dummy implementations used to make the code compile... */
-        
-        virtual Time& getLength() { return length; }
-        
-        DEFINE_PROCESSABLE_BY (builder::BuilderTool);
-
-     };
-
-
-
+      };
+    
+    
+    
   } // namespace mobject::session
 
 } // namespace mobject

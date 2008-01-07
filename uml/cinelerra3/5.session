@@ -1,23 +1,32 @@
 window_sizes 1140 830 270 860 680 71
 diagrams
   classdiagram_ref 130309 // Asset Kinds
-    860 633 100 4 0 0
-  active  classdiagram_ref 128133 // Session structure
-    860 633 100 4 401 0
+    860 633 100 4 158 0
+  classdiagram_ref 128133 // Session structure
+    860 633 100 4 462 0
   classdiagram_ref 128389 // Render Entities
-    688 506 100 4 120 0
+    743 538 100 4 0 0
+  active  classdiagram_ref 131205 // Struct-Asset Relations
+    741 555 100 4 0 114
 end
 show_stereotypes
 selected 
-package_ref 129 // cinelerra3
+  package_ref 129 // cinelerra3
 open
-  deploymentview_ref 128261 // gen
-  deploymentview_ref 129029 // gen
+  
+  package_ref 128005 // design
   class_ref 137477 // Unknown
   class_ref 137605 // Preview
+  class_ref 137989 // Track
+  class_ref 138117 // Port
+  class_ref 128005 // SessionImpl
+  class_ref 128133 // EDL
+  class_ref 128261 // Fixture
+  class_ref 128389 // Track
   class_ref 128645 // Placement
   class_ref 129413 // RelativeLocation
   class_ref 129541 // Allocation
+  class_ref 140421 // Plug
   class_ref 139909 // LocatingPin
   class_ref 134021 // Buildable
   class_ref 134149 // BuilderTool

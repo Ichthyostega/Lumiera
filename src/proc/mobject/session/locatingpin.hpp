@@ -45,10 +45,13 @@
 #include "cinelerra.h"
 
 #include <utility>
+#include <tr1/memory>
 #include <boost/scoped_ptr.hpp>
 using boost::scoped_ptr;
 
 
+
+namespace asset { class Port; }
 
 namespace mobject
   {
@@ -61,7 +64,6 @@ namespace mobject
     class FixedLocation;
     class RelativeLocation;
     
-    class Track; //TODO
     
     
     /**
@@ -80,8 +82,9 @@ namespace mobject
       {
       protected:
         typedef cinelerra::Time Time;
-        typedef session::Track* Track;
-        typedef std::pair<Time,Track> SolutionData;  //TODO (ichthyo consideres better passing of solution by subclass)
+        typedef Time* Track; //TODO dummy declaration; we don't use Tracks as first-class entity any longer
+        typedef std::tr1::shared_ptr<asset::Port> Port;
+        typedef std::pair<Time,Port> SolutionData;  //TODO (ichthyo consideres better passing of solution by subclass)
         struct LocatingSolution;
       
         /** next additional Pin, if any */
@@ -125,7 +128,7 @@ namespace mobject
           {
             Time minTime;
             Time maxTime;
-            Track minTrack;
+            Track minTrack; // TODO don't use Tracks
             Track maxTrack;
             bool impo;
             
@@ -138,7 +141,7 @@ namespace mobject
               { }
             
             Time getTime ();
-            Track getTrack ();
+            Port getPort ();
             
             bool is_definite ();
             bool is_impossible ();

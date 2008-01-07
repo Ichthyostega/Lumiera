@@ -1,5 +1,5 @@
 /*
-  ABSTRACTMO.hpp  -  abstract base class for all Media Objects
+  PORT.hpp  -  structural asset corresponding to some port generating media output
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,38 +21,31 @@
 */
 
 
-#ifndef MOBJECT_SESSION_ABSTRACTMO_H
-#define MOBJECT_SESSION_ABSTRACTMO_H
+#ifndef ASSET_OUTPORT_H
+#define ASSET_OUTPORT_H
 
-#include "proc/mobject/mobject.hpp"
+#include "proc/asset/struct.hpp"
+#include "proc/asset/procpatt.hpp"
 
 
-namespace mobject
+
+namespace asset
   {
-  namespace session
+
+
+  /**
+   * structural asset corresponding to some port 
+   * for building a processing chain and 
+   * generating media output
+   */
+  class Port : public Struct
     {
+    protected:
+      ProcPatt* wiringTemplate;
 
-
-    /**
-     *  abstract base class of all MObjects for providing common services.
-     *  @todo seems that we don't need this intermediate class...
-     */
-    class AbstractMO : public MObject
-      {
-        
-      public:
-        
-        /* some dummy implementations used to make the code compile... */
-        
-        virtual Time& getLength() { return length; }
-        
-        DEFINE_PROCESSABLE_BY (builder::BuilderTool);
-
-     };
-
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
+    };
+    
+    
+    
+} // namespace asset
 #endif

@@ -37,8 +37,13 @@ namespace asset
    */
   class Track : public Struct
     {
-      
+    protected:
+      Track (const Asset::Ident& idi);
+      friend class StructFactory;
     };
+    
+  
+  typedef shared_ptr<const Track> PTrack;
     
     
     

@@ -168,8 +168,8 @@ namespace asset
           
           Ident (const string& n, 
                  const Category& cat, 
-                 const string& o, 
-                 const uint ver);
+                 const string& o = "cin3", 
+                 const uint ver=1);
           
           /** @note equality ignores version differences */
           bool operator== (const Ident& other)  const

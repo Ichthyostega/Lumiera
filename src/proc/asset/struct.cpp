@@ -23,6 +23,8 @@
 
 #include "proc/assetmanager.hpp"
 #include "proc/asset/struct.hpp"
+#include "proc/asset/track.hpp"  
+
 #include "common/util.hpp"
 #include "nobugcfg.h"
 
@@ -31,7 +33,18 @@ namespace asset
   
   namespace // Implementation details
   {
-    /** helper: .....*/
+    /** @internal derive a sensible asset ident tuple when creating 
+     *  a track asset based on a query
+     *  @todo define the actual naming scheme of struct assets
+     */
+    const Asset::Ident
+    createTrackIdent (Query<Track>& query)
+      {
+        string name ("track-" + query);  // TODO something sensible here; append number, sanitize etc.
+        TODO ("track naming scheme??");
+        Category category (STRUCT,"tracks");
+        return Asset::Ident (name, category );
+      }
   } 
 
 
@@ -41,19 +54,18 @@ namespace asset
   
   
   /** Factory method for Structural Asset instances. ....
-   *  @todo actually define
+   *  @todo work out the struct asset naming scheme!
    *  @return an Struct smart ptr linked to the internally registered smart ptr
    *          created as a side effect of calling the concrete Struct subclass ctor.
    */
-  StructFactory::PType 
-  StructFactory::operator() (Asset::Ident& key) ////TODO
+  template<>
+  shared_ptr<Track> 
+  StructFactory::operator() (Query<Track> query)
   {
-    UNIMPLEMENTED ("Struct-Factory");
+    TODO ("actually evaluate the query...");
+    Track* pT = new Track (createTrackIdent (query));
+    return AssetManager::instance().getPtr (*pT);
   }
-  
-  
-  
-
 
 
 } // namespace asset
