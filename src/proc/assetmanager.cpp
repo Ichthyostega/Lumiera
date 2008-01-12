@@ -235,6 +235,7 @@ namespace asset
 #include "proc/asset/proc.hpp"  
 #include "proc/asset/struct.hpp"  
 #include "proc/asset/track.hpp"  
+#include "proc/asset/port.hpp"  
 #include "proc/asset/meta.hpp"  
 
 
@@ -254,6 +255,7 @@ namespace asset
   template shared_ptr<Media>  AssetManager::getPtr (const Media& asset);
   template shared_ptr<Clip>   AssetManager::getPtr (const Clip&  asset);
   template shared_ptr<Track>  AssetManager::getPtr (const Track& asset);
+  template shared_ptr<Port>   AssetManager::getPtr (const Port&  asset);
 
   
 } // namespace asset

@@ -1,6 +1,6 @@
 format 40
 "Asset" // ProcessingLayer::Asset
-  revision 16
+  revision 17
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -684,7 +684,6 @@ ${inlines}
 	    classrelation_ref 141317 // <generalisation>
 	  b multiplicity "" parent class_ref 136965 // Struct
       end
-
     end
 
     class 138117 "Port"
@@ -710,7 +709,7 @@ ${inlines}
       classrelation 148101 // <dependency>
 	relation 145925 -_->
 	  a default
-	    cpp default "Generated"
+	    cpp default "#include in header"
 	    classrelation_ref 148101 // <dependency>
 	  b multiplicity "" parent class_ref 138757 // ProcPatt
       end

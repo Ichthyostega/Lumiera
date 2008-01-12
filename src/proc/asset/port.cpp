@@ -25,6 +25,33 @@
 
 namespace asset
   {
+  
+  namespace // Port Asset implementation details
+    {
+      /** @internal derive a sensible asset ident tuple when creating 
+       *  a track asset based on a query
+       *  @todo define the actual naming scheme of struct assets
+       */
+      const Asset::Ident
+      createPortIdent (PProcPatt& wiring, string& id, wstring& shortD, wstring& longD)
+        {
+          string name ("port-" + id);  // TODO something sensible here; append number, sanitize etc.
+          TODO ("Implement port name scheme!!");
+          Category category (STRUCT,"ports");
+          return Asset::Ident (name, category );
+        }
+    } 
+  
+  /** */
+  Port::Port (PProcPatt& wiring, string portID="", wstring shortDesc="", wstring longDesc="") 
+    : Struct (createPortIdent (wiring,portID,shortDesc,longDesc)),
+      portID_ (portID),
+      shortDesc_ (shortDesc),
+      longDesc_ (longDesc)
+  {
+    
+  }
+
 
 
 

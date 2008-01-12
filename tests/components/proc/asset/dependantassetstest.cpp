@@ -1,5 +1,5 @@
 /*
-  DependantAssets(Test)  -  unittest for the object creating factory
+  DependantAssets(Test)  -  check the asset dependency handling
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>

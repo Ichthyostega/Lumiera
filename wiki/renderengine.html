@@ -564,13 +564,21 @@ For every Asset we generate a __Ident tuple__ and a long ID (hash) derived from 
 <div title="AssetManager" modifier="Ichthyostega" created="200709200300" changecount="1">
 <pre>The Asset Manager provides an Interface to some internal Database holding all Assets in the current Session and System state. It may be a real Database at some point (and for the moment it's a Hashtable). Each [[Asset]] is registered automatically with the Asset Manager; it can be queried either by it's //identification tuple// or by it's unique ID.</pre>
 </div>
+<div title="AttachedPlacementProblem" modifier="Ichthyostega" modified="200801121214" created="200801111305" tags="impl draft dynamic" changecount="2">
+<pre>Placing an MObject relatively to another object such that it should be handled as //attached // to the latter results in several implementation problems. The typical use case is that of an effect attached to a clip or port.
+* this attachment is not a globally fixed relation, rather, it typically exists only for some limited time span (e.g. the duration of the basic clip the effect is attached to)
+* the order of attachment is important and the attached placement may create a fork in the signal flow, so we need a way for specifying reproducibly how the resulting wiring should be
+* when building, we access the information in reversed direction: we have the target object and need to query for all attachements
+
+The first step towards an solution is to isolate the problem; obviously we //need the information about attached objects // only for two isolated tasks, namely when building and for creating a GUI representation. So using a query (function call) interface, the rest of the problem is turned into an implementation detail.</pre>
+</div>
 <div title="Automation" modifier="Ichthyostega" modified="200708100315" created="200706250751" tags="def" changecount="5">
 <pre>Automation is treated as a function over time. It is always tied to a specific Parameter (which can thus be variable over the course of the timeline). All details //how// this function is defined are completely abstracted away. The Parameter uses a ParamProvider to get the value for a given Time (point). Typically, this will use linear or bezier interpolation over a set of keyframes internally. Parameters can be configured to have different value ranges and distribution types (on-off, stepped, continuous, bounded)
 
 [img[how to implement Automation|uml/fig129669.png]]
 </pre>
 </div>
-<div title="BasicBuildingOperations" modifier="Ichthyostega" modified="200801061234" created="200712040334" tags="design dynamic def Builder" changecount="21">
+<div title="BasicBuildingOperations" modifier="Ichthyostega" modified="200801111146" created="200712040334" tags="design dynamic Builder" changecount="22">
 <pre>Starting out from the concepts of Objects, Placement to Tracks, Ports and connection properties (&amp;rarr; see [[here|TrackPortEDL]]) within the EDL, we can identify the elementary operations occuring within the Builder. Overall, the Builder is organized as application of //visiting tools// to a collection of objects, so finally we have to consider some object kind appearing in the working function of the given builder tool, which holds at this moment some //context//. The job now is to organize this context such as to create a predictable build process from this //event driven// approach.
 
 !Builder working Situations
@@ -802,6 +810,9 @@ This is an very important external Interface, because it links together all thre
 <div title="DefaultTiddlers" modifier="Ichthyostega" modified="200706190047" created="200706172308" changecount="2">
 <pre>RenderEngine
 </pre>
+</div>
+<div title="DefaultsManagement" modifier="Ichthyostega" created="200801121708" tags="def spec" changecount="1">
+<pre>For several components and properties there is an implicit default value or configuration; it is stored alongside with the session. The intention is that defaults never create an error, instead, they are to be extended silently on demand. Objects configured according to this defaults can be retrieved at the [[Session]] interface by a set of overloaded functions {{{Session::current-&gt;getDefault&lt;TYPE&gt;(&quot;query string&quot;)}}}, where the //query string // defines a capability query similar to what is employed for ports, stream types, codecs etc.</pre>
 </div>
 <div title="DesignDecisions" modifier="Ichthyostega" modified="200801062304" created="200801062209" tags="decision design discuss" changecount="17">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
@@ -1071,7 +1082,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200801062306" created="200708080322" tags="overview" changecount="16">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200801111251" created="200708080322" tags="overview" changecount="18">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Cinelerra Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1085,6 +1096,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 * [[using the Visitor pattern?|VisitorUse]] &amp;mdash; resulting in [[»Visiting-Tool« library implementation|VisitingToolImpl]]
 * [[Handling of Tracks and Ports in the EDL|TrackPortEDL]]. [[Handling of Tracks|TrackHandling]] and [[Ports|PortHandling]]
 * [[identifying the basic Builder operations|BasicBuildingOperations]] and [[planning the Implementation|PlanningNodeCreaterTool]]
+* [[how to handle »attached placement«|AttachedPlacementProblem]]
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200711210542" created="200711210531" tags="discuss draft" changecount="7">
@@ -1518,8 +1530,8 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;loading &lt;b&gt;Cinelerra Renderengine&lt;/b&gt; devel doku&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
 </div>
-<div title="MediaAsset" modifier="Ichthyostega" modified="200709221337" created="200709021530" tags="def classes" changecount="2">
-<pre>The Interface asset::Media is a //key abstraction// It ties together several concepts and enables to deal with them on the interfaces in a uniform manner. Besides, as every Asset kind it belongs rather to the bookkeeping view: it holds the specific properties and parametrisation of the media source it stands for. Regarding the __inward interface__ &amp;mdash; as used from within the [[EDL]] or the [[Render Nodes|ProcNode]], it is irrelevant if a given asset::Media object stands for a complete media source, just a clip taken from this source or if a placeholder version of the real media source is used instead.
+<div title="MediaAsset" modifier="Ichthyostega" modified="200801101307" created="200709021530" tags="def classes" changecount="5">
+<pre>The Interface asset::Media is a //key abstraction// It ties together several concepts and enables to deal with them on the interfaces in a uniform manner. Besides, as every Asset kind it belongs rather to the bookkeeping view: an asset::Media holds the specific properties and parametrisation of the media source it stands for. Regarding the __inward interface__ &amp;mdash; as used from within the [[EDL]] or the [[Render Nodes|ProcNode]], it is irrelevant if any given asset::Media object stands for a complete media source, just a clip taken from this source or if a placeholder version of the real media source is used instead.
 [img[Asset Classess|uml/fig130437.png]]
 </pre>
 </div>
@@ -2258,7 +2270,7 @@ afterwards.
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlanningNodeCreaterTool" modifier="Ichthyostega" modified="200801061936" created="200712090659" tags="impl Builder draft" changecount="7">
+<div title="PlanningNodeCreaterTool" modifier="Ichthyostega" modified="200801111250" created="200712090659" tags="impl Builder draft" changecount="8">
 <pre>//This page is a scrapbook for working out the implementation of the builder//
 
 * NodeCreaterTool is a [[visiting tool|VisitorUse]]
@@ -2284,7 +2296,7 @@ We need a way of addressing existing [[ports|Port]]. Besides, as the Ports and T
 !!treating a {{{Placement&lt;Clip&gt;}}}
 &lt;&lt;task&gt;&gt;get the ProcPatt of the underlying media (asset)
 &lt;&lt;task&gt;&gt;process the ProcPatt recursively
-&lt;&lt;task&gt;&gt;create or access? {{red{TODO: decide this}}} the ClipSourcePort
+&lt;&lt;task&gt;&gt;access the ClipSourcePort (which may be created on-the-fly)
 &lt;&lt;task&gt;&gt;enqueue an WiringRequest for connecting the source pipeline to the source port
 &lt;&lt;task&gt;&gt;process the source port recursively (thus adding the camera etc.)
 &lt;&lt;task&gt;&gt;enqueue an WiringRequest for any placement to some port for this clip.
@@ -2319,6 +2331,21 @@ The GUI can connect the viewer(s) to some port (and moreover can use [[probe poi
 &amp;rarr; [[Handling of Tracks|TrackHandling]]
 &amp;rarr; [[Handling of Ports|PortHandling]]
 
+</pre>
+</div>
+<div title="PortHandling" modifier="Ichthyostega" modified="200801121656" created="200801101352" tags="spec" changecount="9">
+<pre>!Identification
+Ports are distinct objects and can be identified by their asset ~IDs. Besides, as for all [[structural assets|StructAsset]] there are extended query capabilities, including a symbolic port-id and a media (stream) type id. Any port can accept and deliver exactly one media stream kind (which may be inherently structured though, e.g. spatial sound systems or stereoscopic video)
+
+!creating ports
+Port assets are created automatically by being used and referred. The [[Session]] holds a collection of global ports, and further ports can be created by using an new port reference in some placement. Moreover, every clip has an (implicit) [[source port|ClipSourcePort]], which will appear as port asset when first used (referred) while [[building|BuildProcess]].
+
+!removal
+Deleting a Port is an advanced operation, because it includes finding and &quot;detaching&quot; all references, otherwise the port will leap back into existence immediately. Thus, global port entries in the Session and port references in [[locating pins|LocatingPin]] within any placement have to be removed, while clips using a given source port will be disabled. {{red{todo: implementation deferred}}}
+
+!using Ports
+there is not much you can do directly with a port asset. It is an point of reference, after all. Any connection to some port is only temporarily done by a placement in some part of the timeline, so it isn't stored with the port. You can edit the (user visible) description an you can globally disable a port asset. The port's ID and media stream type of course are fixed, because any connection and referral (via the asset ID) is based on them. Later on, we should provide a {{{rewire(oldPort, newPort)}}} to search any ref to the {{{oldPort}}} and try to rewrite it to use the {{{newPort}}}, possibly with a new media stream type.
+Ports are integrated with the [[management of defaults|DefaultsManagement]]. For example, any port uses implicitly some [[processing pattern|ProcPatt]] &amp;mdash; it may default to the empty pattern. This feature enables to apply some standard wiring to the ports (e.g a fader for audio, similar to the classic mixing consoles). This //is // a global property of the port, but &amp;mdash; contrary to the stream type &amp;mdash; this pattern may be switched
 </pre>
 </div>
 <div title="ProblemsTodo" modifier="Ichthyostega" modified="200709251721" created="200708050524" tags="design discuss" changecount="15">
@@ -2780,16 +2807,17 @@ Instead, we should try to just connect the various subsystems via Interfaces and
 * to shield the rendering code of all complexities of thread communication and synchronization, we use the StateProxy
 </pre>
 </div>
-<div title="StructAsset" modifier="Ichthyostega" created="200709221353" tags="def classes" changecount="1">
-<pre>Structural Assets are intended mainly for internal use, but the user should be able to see and query them. By changing the parametrisation of some structural Asset, we can customize the default behaviour of Cinelerra to some extent.
-* [[Processing Patterns|ProcPatt]] encode the information, how to get at the actual media data when rendering a clip.
-* Tracks are one of the dimensions used for organizing the EDL. Besides, they carry parametrisation of output port, overlay mode etc.
-* Output Ports {{red{still need to be defined...}}}
-
+<div title="StructAsset" modifier="Ichthyostega" modified="200801101402" created="200709221353" tags="def classes" changecount="8">
+<pre>Structural Assets are intended mainly for internal use, but the user should be able to see and query them. They are not &quot;loaded&quot; or &quot;created&quot; direcly, rather they //leap into existance // by creating or extending some other structures in the EDL/Session, hence the name. Some of the structural Asset parametrisation can be modified to control of some aspects of the Proc Layer's (default) behaviour.
+* [[Processing Patterns|ProcPatt]] encode information how to set up some parts of the render network to be created automatically: for example, when building a clip, we use the processing pattern how to decode and preprocess the actual media data.
+* [[Tracks|Track]] are one of the dimensions used for organizing the EDL. They serve as an Anchor to attach parametrisation of output port, overlay mode etc. By [[placing|Placement]] to a track, some media object inherits placement properties from this track.
+* [[Ports|Port]] form &amp;mdash; at least as visible to the user &amp;mdash; the basic building block of the render network, because the latter appears to be a collection of processing pipelines rooted on Ports and interconnected. (this is the //outward view; // in fact the render network consists of [[nodes|ProcNode]] and is [[built|Builder]] from the Ports, clips, effects...)
+[&gt;img[Asset Classess|uml/fig131205.png]]
+!naming scheme
 The Asset name field of structural Assets utilizes a special naming scheme, which allows to derive the name based on the capabilities of the structural asset. For example, by default all media clips with a given media stream type (e.g. H264) will use the same [[processing Pattern|ProcPatt]] for rendering. {{red{todo: work out the details of this naming scheme??}}}
 
-[img[Asset Classess|uml/fig131205.png]]
-</pre>
+!querying
+Structural assets can be queried by specifying the specific type (Port, Track, ProcPatt) and a query goal, which means in the current implementation just querying for some predicate defined with the structural asset. For example, you can {{{Query&lt;Port&gt; (&quot;stream(mpeg)&quot;)}}}, yieliding the first port found which declares to have stream type &quot;mpeg&quot;</pre>
 </div>
 <div title="StyleSheet" modifier="Ichthyostega" modified="200709040043" created="200701131624" tags="MPTWTheme excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706090017" changecount="14">
 <pre>/*{{{*/

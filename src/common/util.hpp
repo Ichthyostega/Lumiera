@@ -92,6 +92,14 @@ namespace util
     return set.end() != set.find (val);
   }
   
+  /** shortcut for string value containment test */
+  template <typename T>
+  inline bool 
+  contains (std::string& str, const T& val)
+  {
+    return str.find (val) != std::string::npos;
+  }
+  
   /** shortcut for brute-force containment test
    *  in any sequencial container */
   template <typename SEQ>

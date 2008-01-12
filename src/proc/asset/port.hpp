@@ -31,8 +31,20 @@
 
 namespace asset
   {
+  
+  class Port;
+  
+  
+  template<>
+  class ID<Port> : public ID<Struct>
+    {
+    public:
+      ID (size_t id);
+      ID (const Port&);
+    };
 
-
+    
+    
   /**
    * structural asset corresponding to some port 
    * for building a processing chain and 
@@ -40,11 +52,26 @@ namespace asset
    */
   class Port : public Struct
     {
+      PProcPatt wiringTemplate;
+      string portID_;
+      wstring shortDesc_;
+      wstring longDesc_;
+      
     protected:
-      ProcPatt* wiringTemplate;
+      Port (PProcPatt& wiring, string portID="", wstring shortDesc="", wstring longDesc="") ;
+      friend class StructFactory;
 
     };
     
+    
+   // catch up with postponed definition of ID<Struct> ctors...
+  //
+  inline ID<Port>::ID(size_t id)        : ID<Struct> (id)           {};
+  inline ID<Port>::ID(const Port& port) : ID<Struct> (port.getID()) {};
+
+      
+  typedef shared_ptr<asset::Port> PPort;
+
     
     
 } // namespace asset

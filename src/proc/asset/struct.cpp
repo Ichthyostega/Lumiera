@@ -31,21 +31,21 @@
 namespace asset
   {
   
-  namespace // Implementation details
-  {
-    /** @internal derive a sensible asset ident tuple when creating 
-     *  a track asset based on a query
-     *  @todo define the actual naming scheme of struct assets
-     */
-    const Asset::Ident
-    createTrackIdent (Query<Track>& query)
-      {
-        string name ("track-" + query);  // TODO something sensible here; append number, sanitize etc.
-        TODO ("track naming scheme??");
-        Category category (STRUCT,"tracks");
-        return Asset::Ident (name, category );
-      }
-  } 
+  namespace // common Struct Asset implementation details
+    {
+      /** @internal derive a sensible asset ident tuple when creating 
+       *  a track asset based on a query
+       *  @todo define the actual naming scheme of struct assets
+       */
+      const Asset::Ident
+      createTrackIdent (Query<Track>& query)
+        {
+          string name ("track-" + query);  // TODO something sensible here; append number, sanitize etc.
+          TODO ("track naming scheme??");
+          Category category (STRUCT,"tracks");
+          return Asset::Ident (name, category );
+        }
+    } 
 
 
   

@@ -43,6 +43,7 @@
 #include<string>
 
 using std::string;
+using std::wstring;
 
 
 namespace asset
@@ -77,7 +78,7 @@ namespace asset
         }
       
     protected:
-      Struct (const Asset::Ident& idi) : Asset(idi) {}  //////////////TODO
+      Struct (const Asset::Ident& idi) : Asset(idi) {}
       friend class StructFactory;
     };
     

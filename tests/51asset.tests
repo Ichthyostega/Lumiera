@@ -34,6 +34,14 @@ return: 0
 END
 
 
+PLANNED "BasicPort_test" BasicPort_test <<END
+END
+
+
+PLANNED "BasicTrack_test" BasicTrack_test <<END
+END
+
+
 TEST "MakeClip_test" MakeClip_test <<END
 return: 0
 END

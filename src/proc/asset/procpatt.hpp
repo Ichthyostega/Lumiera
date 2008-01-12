@@ -50,6 +50,8 @@ namespace asset
 
     };
     
+  typedef shared_ptr<const asset::ProcPatt> PProcPatt;
+    
     
     
 } // namespace asset

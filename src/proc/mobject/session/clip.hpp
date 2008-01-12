@@ -60,6 +60,12 @@ namespace mobject
         /** startpos in source */
         Time start_;
 
+        /** @todo using a mere ref here is against the scheme and only 
+            done as temporal solution, until we work out how to handle
+            multichannel clips. It should be a smart pointer of some kind
+            and the unlink() function of the asset should take it into
+            account when breaking circular references.
+         */             
         const Media & mediaDef_;
         const asset::Clip & clipDef_;
 
