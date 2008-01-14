@@ -33,6 +33,7 @@
 
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/sessionimpl.hpp"
+#include "proc/mobject/session/defsmanager.hpp"
 
 #include "common/singleton.hpp"
 
@@ -58,8 +59,12 @@ namespace mobject
     
     
     
-  Session::Session ()  throw() { }
-  Session::~Session ()         { }
+  Session::~Session () 
+  { }
+
+  Session::Session (session::DefsManager& def)  throw()
+    : defaults(def)
+  { }
 
 
 

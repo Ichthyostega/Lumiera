@@ -33,6 +33,7 @@ namespace asset
   {
   
   class Port;
+  typedef shared_ptr<Port> PPort;
   
   
   template<>
@@ -54,13 +55,30 @@ namespace asset
     {
       PProcPatt wiringTemplate;
       string portID_;
-      wstring shortDesc_;
-      wstring longDesc_;
+      
+    public:
+      wstring shortDesc;
+      wstring longDesc;
+      
+      virtual const ID<Port>& getID()  const    ///< @return ID typed to asset::Port 
+        { 
+          return static_cast<const ID<Port>& > (Asset::getID()); 
+        }
+
       
     protected:
-      Port (PProcPatt& wiring, string portID="", wstring shortDesc="", wstring longDesc="") ;
+      Port (PProcPatt& wiring, string portID="", wstring shortDesc =wstring(), wstring longDesc =wstring()) ;
       friend class StructFactory;
 
+    public:
+      const string& getPortID()       const { return portID_; }
+      const PProcPatt& getProcPatt()  const { return wiringTemplate; }
+      
+      /** use another wiring template. Triggers complete rebuild of the render engine. */
+      void switchProcPatt (PProcPatt& another);
+      
+      /** convienience shortcut for retrieving default configured ports */
+      static PPort query (string properties)  { return Struct::create (Query<Port> (properties)); }
     };
     
     
@@ -70,7 +88,6 @@ namespace asset
   inline ID<Port>::ID(const Port& port) : ID<Struct> (port.getID()) {};
 
       
-  typedef shared_ptr<asset::Port> PPort;
 
     
     

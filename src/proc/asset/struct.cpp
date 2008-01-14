@@ -23,10 +23,14 @@
 
 #include "proc/assetmanager.hpp"
 #include "proc/asset/struct.hpp"
-#include "proc/asset/track.hpp"  
+#include "proc/asset/procpatt.hpp"
+#include "proc/asset/track.hpp"
+#include "proc/mobject/session.hpp"
 
 #include "common/util.hpp"
 #include "nobugcfg.h"
+
+using mobject::Session;
 
 namespace asset
   {
@@ -38,7 +42,7 @@ namespace asset
        *  @todo define the actual naming scheme of struct assets
        */
       const Asset::Ident
-      createTrackIdent (Query<Track>& query)
+      createTrackIdent (const Query<Track>& query)
         {
           string name ("track-" + query);  // TODO something sensible here; append number, sanitize etc.
           TODO ("track naming scheme??");
@@ -60,12 +64,33 @@ namespace asset
    */
   template<>
   shared_ptr<Track> 
-  StructFactory::operator() (Query<Track> query)
+  StructFactory::operator() (const Query<Track>& query)
   {
     TODO ("actually evaluate the query...");
     Track* pT = new Track (createTrackIdent (query));
-    return AssetManager::instance().getPtr (*pT);
+    return AssetManager::instance().wrap (*pT);
   }
+  
+  
+  /** Factory method for creating Ports explicitly.
+   *  Normalizes port- and streamID, then retrieves the
+   *  default processing pattern (ProcPatt) for this streamID.
+   *  The Port ctor will fill out the shortDesc and longDesc
+   *  automatically, based on portID and streamID (and they
+   *  are editable anyways)
+   * @see ProcPatt
+   * @see DefaultsManager 
+   */ 
+  shared_ptr<Port> 
+  StructFactory::operator() (string portID, string streamID)
+  {
+    query::normalizeID (portID);
+    query::normalizeID (streamID);
+    PProcPatt processingPattern = Session::current->defaults (Query<ProcPatt>("stream("+streamID+")"));
+    Port* pP = new Port (processingPattern, portID);
+    return AssetManager::instance().wrap (*pP);
+  }
+
 
 
 } // namespace asset

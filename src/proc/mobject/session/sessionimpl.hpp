@@ -63,7 +63,7 @@ namespace mobject
         vector<EDL> edls;
         PFix fixture;
         
-        SessionImpl ()  throw();
+        SessionImpl (DefsManager&)  throw();
         friend class SessManagerImpl;
         
         void clear ();
@@ -87,6 +87,7 @@ namespace mobject
      */
     class SessManagerImpl : public SessManager
       {
+        boost::scoped_ptr<DefsManager> pDefs_;
         boost::scoped_ptr<SessionImpl> pImpl_;
         
         SessManagerImpl()  throw();

@@ -152,7 +152,7 @@ namespace asset
    */
   template<class KIND>
   shared_ptr<KIND>
-  AssetManager::getPtr (const KIND& asset)
+  AssetManager::wrap (const KIND& asset)
   {
     ENSURE (instance().known(asset.id), 
             "unregistered asset instance encountered.");
@@ -251,11 +251,11 @@ namespace asset
   template shared_ptr<Struct> AssetManager::getAsset (const ID<Struct>& id)  throw(cinelerra::error::Invalid);
   template shared_ptr<Meta>   AssetManager::getAsset (const ID<Meta>&   id)  throw(cinelerra::error::Invalid);
   
-  template shared_ptr<Asset>  AssetManager::getPtr (const Asset& asset);
-  template shared_ptr<Media>  AssetManager::getPtr (const Media& asset);
-  template shared_ptr<Clip>   AssetManager::getPtr (const Clip&  asset);
-  template shared_ptr<Track>  AssetManager::getPtr (const Track& asset);
-  template shared_ptr<Port>   AssetManager::getPtr (const Port&  asset);
+  template shared_ptr<Asset>  AssetManager::wrap (const Asset& asset);
+  template shared_ptr<Media>  AssetManager::wrap (const Media& asset);
+  template shared_ptr<Clip>   AssetManager::wrap (const Clip&  asset);
+  template shared_ptr<Track>  AssetManager::wrap (const Track& asset);
+  template shared_ptr<Port>   AssetManager::wrap (const Port&  asset);
 
   
 } // namespace asset

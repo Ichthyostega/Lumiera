@@ -34,6 +34,7 @@
 #define MOBJECT_SESSION_H
 
 #include "proc/mobject/placement.hpp"
+#include "proc/mobject/session/defsmanager.hpp"
 #include "common/singleton.hpp"
 
 #include <boost/utility.hpp>
@@ -78,11 +79,12 @@ namespace mobject
   class Session : private boost::noncopyable
     {
     protected:
-      Session ()  throw();
+      Session (session::DefsManager&)  throw();
       virtual ~Session () = 0;
 
     public:
       static session::SessManager& current;
+      session::DefsManager& defaults;
       
       virtual bool isValid ()              = 0;
       virtual void add (PMO& placement)    = 0;

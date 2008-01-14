@@ -38,6 +38,7 @@
 #define ASSET_STRUCT_H
 
 #include "proc/asset.hpp"
+#include "proc/asset/query.hpp"
 #include "common/factory.hpp"
 
 #include<string>
@@ -51,6 +52,7 @@ namespace asset
   
   class Struct;
   class StructFactory;
+  class Port;
   
   
   template<>
@@ -90,15 +92,8 @@ namespace asset
   inline ID<Struct>::ID(const Struct& stru) : ID<Asset> (stru.getID()) {};
   
   
-  /** 
-   * Query for a special kind of structural Asset
-   */
-  template<class STRU>
-  class Query : public std::string
-    {
-    public:
-      Query (string predicate) : string(predicate) {}
-    };
+  
+  
   
   
   /** 
@@ -110,7 +105,9 @@ namespace asset
       typedef shared_ptr<asset::Struct> PType;
       
       template<class STRU>
-      shared_ptr<STRU> operator() (Query<STRU> query);      ////////////TODO define actual operation 
+      shared_ptr<STRU> operator() (const Query<STRU>& query);      ////////////TODO define actual operation 
+      
+      shared_ptr<Port> operator() (string portID, string streamID);
 
     };
     

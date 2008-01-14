@@ -1,5 +1,5 @@
 /*
-  PROCPATT.hpp  -  template for building some render processing network
+  Query  -  interface for capability queries
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,48 +18,41 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
 
 
-#ifndef ASSET_PROCPATT_H
-#define ASSET_PROCPATT_H
+#include "proc/asset/query.hpp"
+#include "common/util.hpp"
+#include "nobugcfg.h"
 
-#include "proc/asset/struct.hpp"
+#include <boost/algorithm/string.hpp>
 
-#include <vector>
-
-using std::vector;
-
+using boost::algorithm::is_upper;
+using boost::algorithm::is_alpha;
 
 
 namespace asset
   {
   
-  class BuildInstruct;
-
-
-  /**
-   * special type of structural Asset 
-   * representing information how to build some part 
-   * of the render engine's processing nodes network.
-   */
-  class ProcPatt : public Struct
+  namespace query
     {
-      string propDescriptor_;
-      vector<BuildInstruct> instructions;
+    
+    void
+    normalizeID (string& id)
+    {
+      id = util::sanitize(id);
+      REQUIRE (!util::isnil(id));
+      REQUIRE (is_alpha() (id[0]));
       
-    protected:
-      ProcPatt (const string& properties, const vector<BuildInstruct>& instr);
-      
-    public:
-      const string& queryStreamID()  const;
-      shared_ptr<ProcPatt> newCopy (string newID) const;
+      char first = id[0];
+      if (is_upper() (first))
+        id[0] = std::tolower (first);
+    }
+  
+  } // namespace query
+    
+  
+  /** */
 
-    };
-    
-  typedef shared_ptr<const asset::ProcPatt> PProcPatt;
-    
-    
-    
+
 } // namespace asset
-#endif

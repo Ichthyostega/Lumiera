@@ -163,7 +163,7 @@ namespace asset
   void 
   Asset::defineDependency (PAsset parent)
   {
-    PAsset p_this (AssetManager::getPtr(*this));
+    PAsset p_this (AssetManager::wrap(*this));
     REQUIRE (!contains (parent->dependants, p_this));
     REQUIRE (!contains (this->parents, parent));
     parents.push_back (parent);
@@ -173,7 +173,7 @@ namespace asset
   void 
   Asset::defineDependency (Asset& parent)
   {
-    PAsset p_parent (AssetManager::getPtr(parent));
+    PAsset p_parent (AssetManager::wrap(parent));
     ASSERT (p_parent);
     defineDependency (p_parent);
   }

@@ -26,6 +26,7 @@
 
 #include "proc/asset/category.hpp"
 #include "proc/asset/port.hpp"
+#include "proc/asset/query.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
 #include "proc/asset/assetdiagnostics.hpp"
@@ -37,6 +38,7 @@ using boost::format;
 using util::contains;
 using util::isnil;
 using std::string;
+using std::wstring;
 using std::cout;
 
 
@@ -44,7 +46,7 @@ namespace asset
   {
   namespace test
     {
-    
+    using mobject::Session;
     
     
     
@@ -74,20 +76,23 @@ namespace asset
         
         void createExplicit (string pID, string sID)
           { 
+            string pID_sane (pID);
+            query::normalizeID (pID_sane);
+            
             PPort thePort = asset::Struct::create (pID,sID);
             
             ASSERT (thePort);
             ASSERT (thePort->getProcPatt());
-            ASSERT (thePort->getPortID() == util::sanitize(pID));
-            ASSERT (thePort->getProcPatt()->getStreamID() == sID);
-            ASSERT (thePort->getShortDesc() == thePort->getPortID());
+            ASSERT (thePort->getPortID() == pID_sane);
+            ASSERT (thePort->getProcPatt()->queryStreamID() == sID);
+            ASSERT (thePort->shortDesc == wstring (pID_sane.begin(), pID_sane.end()));
             
-            ID<Port> assetID = thePort->getID();
-            ASSERT (assetID.org = "cin3");
-            ASSERT (contains (assetID.name, thePort->getPortID()));
-            ASSERT (contains (assetID.name, thePort->getProcPatt()->getStreamID()));
+            Asset::Ident idi = thePort->ident;
+            ASSERT (idi.org == "cin3");
+            ASSERT (contains (idi.name, thePort->getPortID()));
+            ASSERT (contains (idi.name, thePort->getProcPatt()->queryStreamID()));
 
-            Category cat (assetID.category);
+            Category cat (idi.category);
             Category refcat (STRUCT,"ports");
             ASSERT ( cat.hasKind(STRUCT) );
             ASSERT ( cat.isWithin(refcat) );
@@ -96,48 +101,55 @@ namespace asset
         
         void create_or_ref(string pID)
           { 
-            pID = util::sanitize (pID);
-            PPort port1 = asset::Struct::query<Port> ("port("+pID+")");
+            query::normalizeID (pID);
+            
+            PPort port1 = Port::query ("port("+pID+")");
             ASSERT (port1);
             ASSERT (port1->getPortID() == pID);
             
             string pID2 = "another-" + pID;
-            PPort port2 = asset::Struct::query<Port> ("port("+pID2+")");
+            PPort port2 = Port::query ("port("+pID2+")");
             ASSERT (port2);
             ASSERT (port2 != port1);
-            Category c1 = port1->getID().category;
-            Category c2 = port2->getID().category;
+            Category c1 = port1->ident.category;
+            Category c2 = port2->ident.category;
             ASSERT (c1 == c2);
             
-            PPort port3 = asset::Struct::query<Port> ("port("+pID2+")");
+            PPort port3 = Port::query ("port("+pID2+")");
             ASSERT (port3 == port2);
           }
         
         
         void create_using_default()
           { 
-            PPort port1 = asset::Struct::query<Port> ("");
+            PPort port1 = Port::query (""); // "the default port"
+            PPort port2;
             ASSERT (port1);
-            ASSERT (port1 == mobject::Session::current->getDefault<Port>());
-            ASSERT (port1->getID().category.hasKind(VIDEO));
+            ASSERT (port1 == Session::current->defaults (Query<Port>()));
+            ASSERT (port1->ident.category.hasKind(VIDEO));
             ASSERT (port1->getProcPatt());
-            PProcPatt popa = mobject::Session::current->getDefault<ProcPatt>("port()");
+            PProcPatt popa = Session::current->defaults (Query<ProcPatt>("port()"));
             ASSERT (popa == port1->getProcPatt());
             
-            PPort port2 = asset::Struct::query<Port> ("port()");
+            // several variants to query for "the default port"
+            port2 = Session::current->defaults(Query<Port> ());
+            ASSERT (port2 == port1);
+            port2 = asset::Struct::create (Query<Port> ());
+            ASSERT (port2 == port1);
+            port2 = asset::Struct::create (Query<Port> ("port()"));
             ASSERT (port2 == port1);
             
-            string sID = popa->getStreamID(); // sort of a "default stream type"
-            PPort port3 = asset::Struct::query<Port> ("stream("+sID+")");
+            string sID = popa->queryStreamID(); // sort of a "default stream type"
+            PPort port3 = Port::query ("stream("+sID+")");
             ASSERT (port3);
-            ASSERT (port3->getProcPatt()->getStreamID() == sID);
-            ASSERT (port3->getProcPatt() == mobject::Session::current->getDefault<ProcPatt>("stream("+sID+")");
+            ASSERT (port3->getProcPatt()->queryStreamID() == sID);
+            ASSERT (port3->getProcPatt() == Session::current->defaults (Query<ProcPatt>("stream("+sID+")")));
           }
         
         
         void dependProcPatt(string pID)
           {
-            PPort thePort = asset::Struct::query<Port> ("port("+pID+")");
+            PPort thePort = Port::query ("port("+pID+")");
             ASSERT (thePort);
             PProcPatt thePatt = thePort->getProcPatt();
             ASSERT (thePatt);
@@ -151,9 +163,9 @@ namespace asset
               // now querying for a port using this pattern (created on-the-fly)
              //  note: because the pattern is new, this new port will be used as
             //         default port for this pattern automatically
-            PPort port2x = asset::Struct::query<Port> ("pattern(another)");
+            PPort port2x = Port::query ("pattern(another)");
             ASSERT (pattern2 == port2x->getProcPatt());
-            ASSERT (port2x == mobject::Session::current->getDefault<Port>("pattern(another)"));
+            ASSERT (port2x == Session::current->defaults (Query<Port>("pattern(another)")));
             
             thePort->switchProcPatt(pattern2);
             ASSERT ( dependencyCheck (thePort, pattern2));
@@ -172,9 +184,9 @@ namespace asset
             ASSERT (thePort->getProcPatt());
             ASSERT (thePort->getProcPatt() == pattern2); // but is still valid, as long as the ref is alive....
             
-            PPort port3x = asset::Struct::query<Port> ("pattern(another)");
+            PPort port3x = Port::query ("pattern(another)");
             ASSERT (port3x->getProcPatt() != pattern2);  // because pattern2 is already unlinked...
-            ASSERT (port3x == mobject::Session::current->getDefault<Port>("pattern(another)"));
+            ASSERT (port3x == Session::current->defaults (Query<Port>("pattern(another)")));
             ASSERT (port3x != port2x);                 // ..we got a new default port for "pattern(another)" too!
             
             

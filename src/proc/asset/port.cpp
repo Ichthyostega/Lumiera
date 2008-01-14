@@ -29,7 +29,7 @@ namespace asset
   namespace // Port Asset implementation details
     {
       /** @internal derive a sensible asset ident tuple when creating 
-       *  a track asset based on a query
+       *  a port asset based on a query
        *  @todo define the actual naming scheme of struct assets
        */
       const Asset::Ident
@@ -43,13 +43,22 @@ namespace asset
     } 
   
   /** */
-  Port::Port (PProcPatt& wiring, string portID="", wstring shortDesc="", wstring longDesc="") 
+  Port::Port (PProcPatt& wiring, string portID, wstring shortDesc, wstring longDesc) 
     : Struct (createPortIdent (wiring,portID,shortDesc,longDesc)),
       portID_ (portID),
-      shortDesc_ (shortDesc),
-      longDesc_ (longDesc)
+      shortDesc (shortDesc),
+      longDesc (longDesc)
   {
     
+  }
+
+  
+  
+  void 
+  Port::switchProcPatt (PProcPatt& another)
+  {
+    wiringTemplate = another;
+    TODO ("trigger rebuild fixture");
   }
 
 

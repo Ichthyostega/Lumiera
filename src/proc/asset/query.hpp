@@ -1,5 +1,5 @@
 /*
-  PROCPATT.hpp  -  template for building some render processing network
+  QUERY.hpp  -  interface for capability queries
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,45 +21,42 @@
 */
 
 
-#ifndef ASSET_PROCPATT_H
-#define ASSET_PROCPATT_H
+#ifndef ASSET_QUERY_H
+#define ASSET_QUERY_H
 
-#include "proc/asset/struct.hpp"
+#include "common/util.hpp"
 
-#include <vector>
-
-using std::vector;
+#include <string>
 
 
 
 namespace asset
   {
+  using std::string;
   
-  class BuildInstruct;
-
-
-  /**
-   * special type of structural Asset 
-   * representing information how to build some part 
-   * of the render engine's processing nodes network.
+  /** 
+   * Generic query interface for retrieving objects matching
+   * some capability query
    */
-  class ProcPatt : public Struct
+  template<class STRU>
+  class Query : public std::string
     {
-      string propDescriptor_;
-      vector<BuildInstruct> instructions;
-      
-    protected:
-      ProcPatt (const string& properties, const vector<BuildInstruct>& instr);
-      
     public:
-      const string& queryStreamID()  const;
-      shared_ptr<ProcPatt> newCopy (string newID) const;
-
+      Query (string predicate="") : string(predicate) {}
     };
+
     
-  typedef shared_ptr<const asset::ProcPatt> PProcPatt;
+  namespace query
+    {
     
+    /** ensure standard format for a given id string.
+     *  Trim, sanitize and ensure the first letter is lower case.
+     *  @note modifies the given string ref in place
+     */
+    void normalizeID (string& id);
     
+  
+  } // namespace query
     
 } // namespace asset
 #endif

@@ -38,6 +38,7 @@
 
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/sessionimpl.hpp"
+#include "proc/mobject/session/defsmanager.hpp"
 
 using boost::scoped_ptr;
 
@@ -54,7 +55,8 @@ namespace mobject
      *        the system (and this behaviour is desirable).
      */
     SessManagerImpl::SessManagerImpl ()  throw()
-      : pImpl_ (new SessionImpl)
+      : pDefs_ (new DefsManager),
+        pImpl_ (new SessionImpl (*pDefs_))
     {
     }
 
@@ -77,12 +79,15 @@ namespace mobject
     void
     SessManagerImpl::reset ()
     {
-      scoped_ptr<SessionImpl> tmp (new SessionImpl);
+      scoped_ptr<DefsManager> tmpD (new DefsManager);
+      scoped_ptr<SessionImpl> tmpS (new SessionImpl (*tmpD));
       
       TODO ("reset the assets registered with AssetManager");
       // Ichthyo-intern: ticket #95
       
-      pImpl_.swap (tmp);
+      TODO ("thread lock");
+      pDefs_.swap (tmpD);
+      pImpl_.swap (tmpS);
     }
 
 
