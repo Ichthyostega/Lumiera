@@ -792,6 +792,26 @@ TertiaryMid: #99a
 TertiaryDark: #667
 Error: #f88</pre>
 </div>
+<div title="ConfigRules" modifier="Ichthyostega" modified="200801171439" created="200801171352" tags="overview spec" changecount="4">
+<pre>Many features can be implemented by specifically configuring and wiring some unspecific components. Rather than tie the client code in need of some given feature to these configuration internals, in Cinelerra-3 the client can //query // for some kind of object providing the //needed capabilities. // Right from start (summer 2007), Ichthyo had the intention to implement such a feature using sort of a ''declarative database'', e.g. by embedding a Prolog system. By adding rules to the basic session configuration, users should be able to customize the semi-automatic part of Cinelerra's behaviour to great extent.
+
+[[Configuration Queries|ConfigQuery]] are used at various places, when creating and adding new objects, as well when building or optimizing the render engine node network.
+* Creating a [[port|PortHandling]] queries for a default port or a port with a certain stream type
+* Adding a new [[track|TrackHandling]] queries for some default placement configuration, e.g. the port.
+* when processing a [[wiring request|WiringRequest]], connection possibilities have to be evaluated.
+* actually building such a connection may create additional degrees of freedom, like panning for sound or layering for video.
+
+!anatomy of a Configuration Query
+The query is given as a number of logic predicates, which are required to be true. Syntactically, it is a string in prolog syntax, e.g. {{{stream(mpeg).}}}, where &quot;stream&quot; is the //predicate, // meaning here &quot;the stream type is...?&quot; and &quot;mpeg&quot; is a //term // denoting an actual property, object, thing, number etc &amp;mdash; the actual kind of stream in the given example. Multible comma separated predicates are combined with logical &quot;and&quot;. Terms may be //variable // at start, which is denoted syntactically by starting them with a uppercase letter. But any variable term need to be //bound // to some constant while computing the solution to the query, otherwise the query fails. A failed query is treated as a local failure, which may cause some operation being aborted or just some other possibility being chosen.
+Queries are represented by instantiations of the {{{Query&lt;TYPE&gt;}}} template, because their actual meaning is &quot;retrieve or create an object of TYPE, configured such that...!&quot;. At the C++ side, this ensures type safety and fosters programming against interfaces, while being implemented rule-wise by silently prepending the query with the predicate &quot;{{{object(tYPE)}}}&quot;
+
+!executing a Configuration Query
+Actually posing such an configuration query, for example to the [[Defaults Manager in the Sessison|DefaultsManagement]], may trigger several actions: First it is checked against internal object registries (depending on the target object type), which may cause the delivery of an already existing object (as reference, clone, or smart pointer). Otherwise, the system tries to figure out an viable configuration for a newly created object instance, possibly by issuing recursive queries. In the most general case this may silently impose additional decisions onto the //execution context // of the query &amp;mdash; by default the session.
+
+!Implementation
+At start and for debugging/testing, there is an ''dummy'' implementation using a map with predefined queries and answers. But for the real system, the idea is to embed a ''YAP Prolog'' engine to run the queries. This includes the task of defining and loading a set of custom predicates, so the rule system can interact with the object oriented execution environment, for example by transforming some capability predicate into virtual calls to a corresponding object interface. We need a way for objects to declare some capability predicates, together with a functor that can be executed on an object instance (and further parameters) in the cause of the evaluation of some configuration query. Type safety and diagnostics play an important role here, because effectively the rule base is a pool of code open for arbitray additions from the user session.
+</pre>
+</div>
 <div title="Controller" modifier="Ichthyostega" modified="200712090624" created="200706220319" tags="def" changecount="4">
 <pre>Here, in the context of the Render Engine, the Controller component is responsible for triggering and coordinating the build process and for activating the backend and the Render Engine configuration created by the Builder to carry out the actual rendering. There is another Controller in the backend, the ~PlaybackController, which is in charge of the playback/rendering/display state of the application, and consequently will call this (Proc-Layer) Controller to get the necessary Render Engine.
 
@@ -811,8 +831,9 @@ This is an very important external Interface, because it links together all thre
 <pre>RenderEngine
 </pre>
 </div>
-<div title="DefaultsManagement" modifier="Ichthyostega" created="200801121708" tags="def spec" changecount="1">
-<pre>For several components and properties there is an implicit default value or configuration; it is stored alongside with the session. The intention is that defaults never create an error, instead, they are to be extended silently on demand. Objects configured according to this defaults can be retrieved at the [[Session]] interface by a set of overloaded functions {{{Session::current-&gt;getDefault&lt;TYPE&gt;(&quot;query string&quot;)}}}, where the //query string // defines a capability query similar to what is employed for ports, stream types, codecs etc.</pre>
+<div title="DefaultsManagement" modifier="Ichthyostega" modified="200801171440" created="200801121708" tags="def spec" changecount="5">
+<pre>For several components and properties there is an implicit default value or configuration; it is stored alongside with the session. The intention is that defaults never create an error, instead, they are to be extended silently on demand. Objects configured according to this defaults can be retrieved at the [[Session]] interface by a set of overloaded functions {{{Session::current-&gt;default(Query&lt;TYPE&gt; (&quot;query string&quot;))}}}, where the //query string // defines a capability query similar to what is employed for ports, stream types, codecs etc. The Queries are implemented by [[configuration rules|ConfigRules]]
+</pre>
 </div>
 <div title="DesignDecisions" modifier="Ichthyostega" modified="200801062304" created="200801062209" tags="decision design discuss" changecount="17">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
@@ -1082,7 +1103,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200801111251" created="200708080322" tags="overview" changecount="18">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200801171322" created="200708080322" tags="overview" changecount="20">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Cinelerra Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1095,6 +1116,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 * [[collecting Ideas for Implementation Guidelines|ImplementationGuidelines]]
 * [[using the Visitor pattern?|VisitorUse]] &amp;mdash; resulting in [[»Visiting-Tool« library implementation|VisitingToolImpl]]
 * [[Handling of Tracks and Ports in the EDL|TrackPortEDL]]. [[Handling of Tracks|TrackHandling]] and [[Ports|PortHandling]]
+* [[getting default configured|DefaultsManagement]] Objects relying on [[rule-based Configuration Queries|ConfigRules]]
 * [[identifying the basic Builder operations|BasicBuildingOperations]] and [[planning the Implementation|PlanningNodeCreaterTool]]
 * [[how to handle »attached placement«|AttachedPlacementProblem]]
 </pre>
