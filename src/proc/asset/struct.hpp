@@ -38,7 +38,7 @@
 #define ASSET_STRUCT_H
 
 #include "proc/asset.hpp"
-#include "proc/asset/query.hpp"
+#include "common/query.hpp"
 #include "common/factory.hpp"
 
 #include<string>
@@ -49,6 +49,7 @@ using std::wstring;
 
 namespace asset
   {
+  using cinelerra::Query;
   
   class Struct;
   class StructFactory;

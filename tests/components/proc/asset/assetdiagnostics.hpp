@@ -75,7 +75,7 @@ namespace asset
   inline bool
   dependencyCheck (C child, P parent)
     {
-      return (child == parent)
+      return (pAsset(child) == pAsset(parent))
           || (0 < child->getParents().size()
              && (parent == child->getParents()[0])
              && (contains (parent->getDependant(), child)));

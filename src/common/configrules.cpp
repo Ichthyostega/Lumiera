@@ -1,5 +1,5 @@
 /*
-  QUERY.hpp  -  interface for capability queries
+  ConfigRules  -  interface for rule based configuration
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,45 +18,27 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
 
 
-#ifndef ASSET_QUERY_H
-#define ASSET_QUERY_H
-
-#include "common/util.hpp"
-
-#include <string>
+#include "common/configrules.hpp"
+//#include "common/util.hpp"
+#include "nobugcfg.h"
 
 
 
-namespace asset
+namespace cinelerra
   {
-  using std::string;
   
-  /** 
-   * Generic query interface for retrieving objects matching
-   * some capability query
-   */
-  template<class STRU>
-  class Query : public std::string
-    {
-    public:
-      Query (string predicate="") : string(predicate) {}
-    };
-
-    
   namespace query
     {
-    
-    /** ensure standard format for a given id string.
-     *  Trim, sanitize and ensure the first letter is lower case.
-     *  @note modifies the given string ref in place
-     */
-    void normalizeID (string& id);
     
   
   } // namespace query
     
-} // namespace asset
-#endif
+  
+  /** storage for the Singleton instance factory */
+  Singleton<ConfigRules> ConfigRules::instance; 
+
+
+} // namespace cinelerra

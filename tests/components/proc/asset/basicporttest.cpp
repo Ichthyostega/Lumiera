@@ -26,7 +26,7 @@
 
 #include "proc/asset/category.hpp"
 #include "proc/asset/port.hpp"
-#include "proc/asset/query.hpp"
+#include "common/query.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
 #include "proc/asset/assetdiagnostics.hpp"
@@ -47,6 +47,8 @@ namespace asset
   namespace test
     {
     using mobject::Session;
+    using cinelerra::Query;
+    using cinelerra::query::normalizeID;
     
     
     
@@ -77,7 +79,7 @@ namespace asset
         void createExplicit (string pID, string sID)
           { 
             string pID_sane (pID);
-            query::normalizeID (pID_sane);
+            normalizeID (pID_sane);
             
             PPort thePort = asset::Struct::create (pID,sID);
             
@@ -101,7 +103,7 @@ namespace asset
         
         void create_or_ref(string pID)
           { 
-            query::normalizeID (pID);
+            normalizeID (pID);
             
             PPort port1 = Port::query ("port("+pID+")");
             ASSERT (port1);

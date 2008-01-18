@@ -25,7 +25,7 @@
 #define MOBJECT_SESSION_DEFSMANAGER_H
 
 
-#include "proc/asset/query.hpp"
+#include "common/query.hpp"
 
 //#include <boost/scoped_ptr.hpp>
 //#include <vector>
@@ -61,7 +61,7 @@ namespace mobject
         
       public:
         template<class TAR>
-        shared_ptr<const TAR> operator() (const asset::Query<TAR>&);
+        shared_ptr<TAR> operator() (const cinelerra::Query<TAR>&);
         
       };
 

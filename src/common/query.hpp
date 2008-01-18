@@ -1,5 +1,5 @@
 /*
-  DefsManager  -  access to preconfigured default objects and definitions
+  QUERY.hpp  -  interface for capability queries
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,38 +18,44 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
 
 
-#include "proc/mobject/session/defsmanager.hpp"
-#include "proc/asset/port.hpp"
+#ifndef CINELERRA_QUERY_H
+#define CINELERRA_QUERY_H
 
-using asset::Query;
-using asset::Port;
 
-namespace mobject
+#include <string>
+
+
+
+namespace cinelerra
   {
-  namespace session
+  using std::string;
+  
+  /** 
+   * Generic query interface for retrieving objects matching
+   * some capability query
+   */
+  template<class STRU>
+  class Query : public std::string
+    {
+    public:
+      Query (string predicate="") : string(predicate) {}
+    };
+
+    
+  namespace query
     {
     
-    /** initialize the most basic internal defaults. */
-    DefsManager::DefsManager ()  throw()
-    {
-      
-    }
-
-
-    /** create or retrieve a default-configured port asset.
-     *  @param 
+    /** ensure standard format for a given id string.
+     *  Trim, sanitize and ensure the first letter is lower case.
+     *  @note modifies the given string ref in place
      */
-    template<>
-    shared_ptr<Port> 
-    DefsManager::operator() (const Query<Port>& properties)
-    {
-      
-    }
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
+    void normalizeID (string& id);
+    
+  
+  } // namespace query
+    
+} // namespace cinelerra
+#endif

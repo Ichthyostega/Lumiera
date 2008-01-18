@@ -27,10 +27,12 @@
 #include "proc/asset/track.hpp"
 #include "proc/mobject/session.hpp"
 
+#include "common/query.hpp"
 #include "common/util.hpp"
 #include "nobugcfg.h"
 
 using mobject::Session;
+using cinelerra::query::normalizeID;
 
 namespace asset
   {
@@ -84,8 +86,8 @@ namespace asset
   shared_ptr<Port> 
   StructFactory::operator() (string portID, string streamID)
   {
-    query::normalizeID (portID);
-    query::normalizeID (streamID);
+    normalizeID (portID);
+    normalizeID (streamID);
     PProcPatt processingPattern = Session::current->defaults (Query<ProcPatt>("stream("+streamID+")"));
     Port* pP = new Port (processingPattern, portID);
     return AssetManager::instance().wrap (*pP);

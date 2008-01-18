@@ -1,5 +1,5 @@
 /*
-  DefsManager  -  access to preconfigured default objects and definitions
+  Query  -  interface for capability queries
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,35 +21,38 @@
 * *****************************************************/
 
 
-#include "proc/mobject/session/defsmanager.hpp"
-#include "proc/asset/port.hpp"
+#include "common/query.hpp"
+#include "common/util.hpp"
+#include "nobugcfg.h"
 
-using asset::Query;
-using asset::Port;
+#include <boost/algorithm/string.hpp>
 
-namespace mobject
+using boost::algorithm::is_upper;
+using boost::algorithm::is_alpha;
+
+
+namespace cinelerra
   {
-  namespace session
+  
+  namespace query
     {
     
-    /** initialize the most basic internal defaults. */
-    DefsManager::DefsManager ()  throw()
+    void
+    normalizeID (string& id)
     {
+      id = util::sanitize(id);
+      REQUIRE (!util::isnil(id));
+      REQUIRE (is_alpha() (id[0]));
       
+      char first = id[0];
+      if (is_upper() (first))
+        id[0] = std::tolower (first);
     }
+  
+  } // namespace query
+    
+  
+  /** */
 
 
-    /** create or retrieve a default-configured port asset.
-     *  @param 
-     */
-    template<>
-    shared_ptr<Port> 
-    DefsManager::operator() (const Query<Port>& properties)
-    {
-      
-    }
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
+} // namespace cinelerra

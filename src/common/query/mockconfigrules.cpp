@@ -1,5 +1,5 @@
 /*
-  Query  -  interface for capability queries
+  MockConfigRules  -  mock implementation of the config rules system
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,33 +21,18 @@
 * *****************************************************/
 
 
-#include "proc/asset/query.hpp"
-#include "common/util.hpp"
+#include "common/query/mockconfigrules.hpp"
+//#include "common/util.hpp"
 #include "nobugcfg.h"
 
-#include <boost/algorithm/string.hpp>
-
-using boost::algorithm::is_upper;
-using boost::algorithm::is_alpha;
 
 
-namespace asset
+namespace cinelerra
   {
   
   namespace query
     {
     
-    void
-    normalizeID (string& id)
-    {
-      id = util::sanitize(id);
-      REQUIRE (!util::isnil(id));
-      REQUIRE (is_alpha() (id[0]));
-      
-      char first = id[0];
-      if (is_upper() (first))
-        id[0] = std::tolower (first);
-    }
   
   } // namespace query
     
@@ -55,4 +40,4 @@ namespace asset
   /** */
 
 
-} // namespace asset
+} // namespace cinelerra

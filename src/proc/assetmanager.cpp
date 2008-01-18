@@ -237,6 +237,7 @@ namespace asset
 #include "proc/asset/track.hpp"  
 #include "proc/asset/port.hpp"  
 #include "proc/asset/meta.hpp"  
+#include "proc/asset/procpatt.hpp"  
 
 
 namespace asset
@@ -251,11 +252,12 @@ namespace asset
   template shared_ptr<Struct> AssetManager::getAsset (const ID<Struct>& id)  throw(cinelerra::error::Invalid);
   template shared_ptr<Meta>   AssetManager::getAsset (const ID<Meta>&   id)  throw(cinelerra::error::Invalid);
   
-  template shared_ptr<Asset>  AssetManager::wrap (const Asset& asset);
-  template shared_ptr<Media>  AssetManager::wrap (const Media& asset);
-  template shared_ptr<Clip>   AssetManager::wrap (const Clip&  asset);
-  template shared_ptr<Track>  AssetManager::wrap (const Track& asset);
-  template shared_ptr<Port>   AssetManager::wrap (const Port&  asset);
+  template shared_ptr<Asset>    AssetManager::wrap (const Asset& asset);
+  template shared_ptr<Media>    AssetManager::wrap (const Media& asset);
+  template shared_ptr<Clip>     AssetManager::wrap (const Clip&  asset);
+  template shared_ptr<Track>    AssetManager::wrap (const Track& asset);
+  template shared_ptr<Port>     AssetManager::wrap (const Port&  asset);
+  template shared_ptr<ProcPatt> AssetManager::wrap (const ProcPatt& asset);
 
   
 } // namespace asset
