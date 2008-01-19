@@ -22,6 +22,7 @@
 
 
 #include "common/configrules.hpp"
+#include "common/query/mockconfigrules.hpp"
 //#include "common/util.hpp"
 #include "nobugcfg.h"
 
@@ -38,7 +39,7 @@ namespace cinelerra
     
   
   /** storage for the Singleton instance factory */
-  Singleton<ConfigRules> ConfigRules::instance; 
+  Singleton<query::MockConfigRules> ConfigRules::instance; 
 
 
 } // namespace cinelerra

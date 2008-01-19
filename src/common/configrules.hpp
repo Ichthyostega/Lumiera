@@ -54,6 +54,8 @@
 namespace cinelerra
   {
   using std::string;
+  namespace query { class MockConfigRules; }
+  
   
   /** 
    * Generic query interface for retrieving objects matching
@@ -62,16 +64,62 @@ namespace cinelerra
   class ConfigRules
     {
     protected:
-      ConfigRules ();
-      friend class cinelerra::singleton::StaticCreate<ConfigRules>;
+      ConfigRules ()         {}
+      virtual ~ConfigRules() {} 
 
     public:
-      static Singleton<ConfigRules> instance;
+      static Singleton<query::MockConfigRules> instance;
+      
+      // TODO: find out what operations we need to support here for the »real solution« (using Prolog)
     };
 
     
   namespace query
     {
+    // The intention is to support the following style of Prolog code
+    //
+    // retrieve(T) :- type(T, track), find(T), capabilities(T).
+    // retrieve(T) :- type(T, track), make(T), capabilities(T).
+    //
+    // capabilities(T) :- stream(T,mpeg).
+    // stream(T, mpeg) :- type(T, track), type(P, port), retrieve(P), place_to(P, T).
+    //
+    // The type guard is inserted auomatically, while the predicate implementations for
+    // find/1, make/1, stream/2, and place_to/2 are to be provided by the target types.
+    
+    class Resolver
+      {
+        
+      };
+      
+    typedef const char * const Symbol;  
+      
+    template
+      < const Symbol SYM,            // Predicate symbol
+        typename SIG = bool(string) //  Signature
+      >
+    class Pred
+      {
+        
+      };
+      
+    template<class TY>
+    class TypeHandler
+      {
+        static const TY NIL;
+        
+        template<Symbol SYM, typename SIG>
+        TY find (Pred<SYM,SIG> capability);
+        
+        template<Symbol SYM, typename SIG>
+        TY make (Pred<SYM,SIG> capability, TY& refObj =NIL);
+      };
+      
+    template<class TY>
+    class QueryHandler
+      {
+        TY resolve (Query<TY> q);
+      };
     
     
   

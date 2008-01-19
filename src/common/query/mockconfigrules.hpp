@@ -48,22 +48,22 @@ namespace cinelerra
   {
   using std::string;
   
-  /** 
-   * Generic query interface for retrieving objects matching
-   * some capability query
-   */
-  class MockConfigRules
-    {
-    protected:
-      MockConfigRules ();
-      friend class cinelerra::singleton::StaticCreate<MockConfigRules>;
-      
-    public:
-    };
-
-    
+  
   namespace query
     {
+    
+    /** 
+     * Generic query interface for retrieving objects matching
+     * some capability query
+     */
+    class MockConfigRules : public ConfigRules
+      {
+      protected:
+        MockConfigRules ();
+        friend class cinelerra::singleton::StaticCreate<MockConfigRules>;
+        
+      public:
+      };
     
     
   
