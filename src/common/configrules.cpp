@@ -34,12 +34,11 @@ namespace cinelerra
   namespace query
     {
     
+    
   
   } // namespace query
     
   
-  /** storage for the Singleton instance factory */
-  Singleton<query::MockConfigRules> ConfigRules::instance; 
 
 
 } // namespace cinelerra

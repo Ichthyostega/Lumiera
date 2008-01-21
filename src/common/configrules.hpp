@@ -46,6 +46,11 @@
 
 #include "common/query.hpp"
 #include "common/singleton.hpp"
+#include "common/typelist.hpp"
+
+#include "proc/mobject/session/track.hpp"
+#include "proc/asset/port.hpp"
+
 
 #include <string>
 
@@ -57,35 +62,23 @@ namespace cinelerra
   namespace query { class MockConfigRules; }
   
   
-  /** 
-   * Generic query interface for retrieving objects matching
-   * some capability query
-   */
-  class ConfigRules
-    {
-    protected:
-      ConfigRules ()         {}
-      virtual ~ConfigRules() {} 
-
-    public:
-      static Singleton<query::MockConfigRules> instance;
-      
-      // TODO: find out what operations we need to support here for the »real solution« (using Prolog)
-    };
-
     
   namespace query
     {
     // The intention is to support the following style of Prolog code
     //
-    // retrieve(T) :- type(T, track), find(T), capabilities(T).
-    // retrieve(T) :- type(T, track), make(T), capabilities(T).
+    // retrieve(O, Cap) :- find(T), capabilities(Cap).
+    // retrieve(O, Cap) :- make(T), capabilities(Cap).
+    // capabilities(Q) :- call(Q).
     //
-    // capabilities(T) :- stream(T,mpeg).
-    // stream(T, mpeg) :- type(T, track), type(P, port), retrieve(P), place_to(P, T).
+    // stream(T, mpeg) :- type(T, track), type(P, port), retrieve(P, stream(P,mpeg)), place_to(P, T).
     //
     // The type guard is inserted auomatically, while the predicate implementations for
     // find/1, make/1, stream/2, and place_to/2 are to be provided by the target types.
+    //
+    // As a example, the goal ":-retrieve(T, stream(T,mpeg))." would search a Track object, try to
+    // retrieve a port object with stream-type=mpeg and associate the track with this Port. The
+    // predicate "stream(P,mpeg)" needs to be implemented (natively) for the port object.
     
     class Resolver
       {
@@ -118,12 +111,97 @@ namespace cinelerra
     template<class TY>
     class QueryHandler
       {
-        TY resolve (Query<TY> q);
+      protected:
+        virtual ~QueryHandler();
+      public:
+        virtual TY resolve (Query<TY> q);
       };
+
+    // TODO: the Idea is to provide specialisations for the concrete types
+    //       we want to participate in the ConfigRules system....
+    //       Thus we get the possibility to create a specific return type,
+    //       e.g. return a shared_ptr<Port> but a Placement<Track>, using the appropriate factory.
+    //       Of course then the definitions need to be split up in separate headers.
+      
+      
+      
+      
+    using cinelerra::typelist::Node;
+    using cinelerra::typelist::NullType;
+      
+    /** 
+     * Generic query interface for retrieving objects matching
+     * some capability query. To be instantiated using a typelist,
+     * thus inheriting from the Handler classes for each type. In
+     * the (future) version using YAP Prolog, this will drive the
+     * generation and registration of the necessary predicate 
+     * implementations for each concrete type, using the speicalisations
+     * given alongside with the types. For now it just serves to generate
+     * the necessary resolve(Query<TY>) virtual functions (implemented
+     * by MockConfigRules) 
+     */
+    template<class TYPES>
+    class ConfigRulesInterface;
+      
+    template<>
+    class ConfigRulesInterface<NullType> 
+      {
+      protected:
+        virtual ~ConfigRulesInterface();
+      };
+      
+    template<class TY, typename TYPES>
+    class ConfigRulesInterface<Node<TY, TYPES> > 
+      : public QueryHandler<TY>,
+        public ConfigRulesInterface<TYPES>
+      { };
+      
     
+    template
+      < typename TYPES,
+        class IMPL
+      >
+    class ConfigRules
+      : public ConfigRulesInterface<typename TYPES::List> 
+      {
+      protected:
+        ConfigRules ()         {}
+        virtual ~ConfigRules() {} 
+  
+      public:
+        static cinelerra::Singleton<IMPL> instance;
+        
+        // TODO: find out what operations we need to support here for the »real solution« (using Prolog)
+      };
+      
+    /** storage for the Singleton instance factory */
+    template<typename TYPES, class IMPL>
+    cinelerra::Singleton<IMPL> ConfigRules<TYPES,IMPL>::instance; 
+
     
   
   } // namespace query
-    
+  
+  
+  
+  
+  
+  /* ============= global configuration ==================== */
+  
+  /** 
+   *  the list of all concrete types participating in the
+   *  rule based config query system
+   */
+  typedef cinelerra::typelist::Types < mobject::session::Track
+                                     , asset::Port
+                                     >
+                                       InterfaceTypes;
+  
+  typedef query::ConfigRules< InterfaceTypes,          // List of Types to generate interface functions
+                              query::MockConfigRules  //  actual Implementation to use
+                            > 
+                              ConfigRules;          //    user-visible Interface to the ConfigRules subsystem.
+  
+  
 } // namespace cinelerra
 #endif

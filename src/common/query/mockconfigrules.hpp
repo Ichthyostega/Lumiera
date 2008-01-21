@@ -51,18 +51,24 @@ namespace cinelerra
   
   namespace query
     {
+    using mobject::session::Track;
+    using asset::Port;
     
     /** 
-     * Generic query interface for retrieving objects matching
-     * some capability query
+     * Dummy Implementation of the query interface.
+     * Provides an explicit implementation using hard wired
+     * values for some types of interest for testing and debugging.
      */
-    class MockConfigRules : public ConfigRules
+    class MockConfigRules : public cinelerra::ConfigRules
       {
       protected:
         MockConfigRules ();
         friend class cinelerra::singleton::StaticCreate<MockConfigRules>;
         
       public:
+        
+        virtual Track resolve (Query<Track> q);
+        virtual Port  resolve (Query<Port> q);
       };
     
     
