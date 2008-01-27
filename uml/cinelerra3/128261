@@ -1,6 +1,6 @@
 format 40
 "MObject" // ProcessingLayer::MObject
-  revision 27
+  revision 28
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -127,12 +127,12 @@ ${inlines}
 	  b multiplicity "" parent class_ref 128133 // EDL
       end
 
-      classrelation 128261 // fixture (<unidirectional association>)
+      classrelation 128261 // theFixture (<unidirectional association>)
 	relation 128133 --->
-	  a role_name "fixture" multiplicity "1" protected
+	  a role_name "theFixture" multiplicity "1" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
-	    classrelation_ref 128261 // fixture (<unidirectional association>)
+	    classrelation_ref 128261 // theFixture (<unidirectional association>)
 	  b multiplicity "" parent class_ref 128261 // Fixture
       end
 
@@ -143,6 +143,17 @@ ${inlines}
 	    cpp default "${type}"
 	    classrelation_ref 144645 // <realization>
 	  b multiplicity "" parent class_ref 139653 // Session
+      end
+
+      classrelation 147717 // ports (<directional aggregation>)
+	relation 145541 o-->
+	  stereotype "vector"
+	  a role_name "ports" multiplicity "*" protected
+	    comment "the global ports (busses) of the session"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 147717 // ports (<directional aggregation>)
+	  b multiplicity "" parent class_ref 138117 // Port
       end
     end
 
@@ -241,16 +252,6 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 128645 // tracks (<directional aggregation by value>)
-	relation 128389 *-->
-	  stereotype "list"
-	  a role_name "tracks" multiplicity "*" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
-"
-	    classrelation_ref 128645 // tracks (<directional aggregation by value>)
-	  b multiplicity "" parent class_ref 128389 // Track
-      end
-
       classrelation 128901 // clips (<directional aggregation>)
 	relation 128517 o-->
 	  stereotype "list"
@@ -259,6 +260,16 @@ ${inlines}
 "
 	    classrelation_ref 128901 // clips (<directional aggregation>)
 	  b multiplicity "" parent class_ref 128517 // MObject
+      end
+
+      classrelation 147333 // track (<unidirectional association>)
+	relation 145157 --->
+	  a role_name "track" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 147333 // track (<unidirectional association>)
+	  b multiplicity "" parent class_ref 128389 // Track
+	  association_type class_ref 128645 // Placement
       end
     end
 
@@ -281,23 +292,13 @@ ${inlines}
 	  b multiplicity "" parent class_ref 128133 // EDL
       end
 
-      classrelation 129541 // tracks (<directional aggregation by value>)
-	relation 129029 *-->
-	  stereotype "list"
-	  a role_name "tracks" multiplicity "1..*" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
-"
-	    classrelation_ref 129541 // tracks (<directional aggregation by value>)
-	  b multiplicity "" parent class_ref 128389 // Track
-      end
-
-      classrelation 131717 // timeline (<directional aggregation by value>)
+      classrelation 131717 // theTimeline (<directional aggregation by value>)
 	relation 131077 *-->
 	  stereotype "list"
-	  a role_name "timeline" multiplicity "*" protected
+	  a role_name "theTimeline" multiplicity "*" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
-	    classrelation_ref 131717 // timeline (<directional aggregation by value>)
+	    classrelation_ref 131717 // theTimeline (<directional aggregation by value>)
 	  b multiplicity "" parent class_ref 129797 // ExplicitPlacement
       end
 
@@ -329,6 +330,16 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 "
 	
 	
+      end
+
+      classrelation 147589 // track (<unidirectional association>)
+	relation 145413 --->
+	  a role_name "track" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 147589 // track (<unidirectional association>)
+	  b multiplicity "" parent class_ref 128389 // Track
+	  association_type class_ref 128645 // Placement
       end
     end
 
@@ -383,6 +394,26 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
+      associated_diagram classdiagram_ref 128133 // Session structure
+      classrelation 147077 // <generalisation>
+	relation 144901 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 147077 // <generalisation>
+	  b multiplicity "" parent class_ref 129157 // Meta
+      end
+
+      classrelation 147205 // subTracks (<directional aggregation by value>)
+	relation 145029 *-->
+	  stereotype "vector"
+	  a role_name "subTracks" multiplicity "*" public
+	    comment "Child tracks in a tree structure"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 147205 // subTracks (<directional aggregation by value>)
+	  b multiplicity "" parent class_ref 128389 // Track
+	  association_type class_ref 128645 // Placement
+      end
     end
 
     class 128517 "MObject"
@@ -960,6 +991,36 @@ ${inlines}
 	    cpp default "${type}"
 	    classrelation_ref 132357 // <generalisation>
 	  b multiplicity "" parent class_ref 129541 // Allocation
+      end
+    end
+
+    class 140421 "Plug"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 147845 // <generalisation>
+	relation 145669 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 147845 // <generalisation>
+	  b multiplicity "" parent class_ref 130053 // Wish
+      end
+
+      classrelation 147973 // outPort (<unidirectional association>)
+	relation 145797 --->
+	  a role_name "outPort" multiplicity "" protected
+	    comment "the Port this MObject wants to be conected to"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 147973 // outPort (<unidirectional association>)
+	  b multiplicity "" parent class_ref 138117 // Port
       end
     end
 

@@ -55,9 +55,9 @@ classcanvas 132485 class_ref 137989 // Track
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 614 445 2000
   end
-classcanvas 132613 class_ref 138117 // OutPort
+classcanvas 132613 class_ref 138117 // Port
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 677 445 2000
+  xyz 682 445 2000
   end
 classcanvas 132997 class_ref 138245 // Dataset
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -205,6 +205,11 @@ relationcanvas 138117 relation_ref 144005 // <generalisation>
   no_multiplicity_a no_multiplicity_b
 relationcanvas 138501 relation_ref 144133 // <generalisation>
   from ref 131461 z 1999 to ref 131333
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+relationcanvas 138629 relation_ref 145925 // <dependency>
+  from ref 132613 z 1999 to point 714 509
+  line 138757 z 1999 to ref 135813
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 line 128261 -_-_ geometry HV

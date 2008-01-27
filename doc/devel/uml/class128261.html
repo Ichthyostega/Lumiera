@@ -17,11 +17,11 @@
 
 <a name="refclass128261"></a>
 <p>Declaration :</p><ul><li>C++ : class Fixture : public <a href="class128133.html#refclass128133"><b>EDL</b></a> </li></ul><p>Artifact : <a href="index.html#refartifact128773"><b>fixture</b></a>, Component(s) : <a href="index.html#refcomponent128133"><b>Session</b></a></p><div class="sub">
-<a name="refrelation129541"></a>
-<table><tr><td><div class="element">Relation <b>tracks (&lt;directional aggregation by value&gt;)</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : # tracks : <a href="class128389.html#refclass128389"><b>Track</b></a>, multiplicity : 1..*</li><li>C++ : protected: <a href="class128389.html#refclass128389"><b>Track</b></a> tracks</li></ul><a name="refrelation131717"></a>
-<table><tr><td><div class="element">Relation <b>timeline (&lt;directional aggregation by value&gt;)</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : # timeline : <a href="class129797.html#refclass129797"><b>ExplicitPlacement</b></a>, multiplicity : *</li><li>C++ : protected: <a href="class129797.html#refclass129797"><b>ExplicitPlacement</b></a> timeline</li></ul><a name="refoperation128645"></a>
+<a name="refrelation131717"></a>
+<table><tr><td><div class="element">Relation <b>theTimeline (&lt;directional aggregation by value&gt;)</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : # theTimeline : <a href="class129797.html#refclass129797"><b>ExplicitPlacement</b></a>, multiplicity : *</li><li>C++ : protected: <a href="class129797.html#refclass129797"><b>ExplicitPlacement</b></a> theTimeline</li></ul><a name="refoperation128645"></a>
 <table><tr><td><div class="element">Operation <b>getPlaylistForRender</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + getPlaylistForRender() : list&lt;ExplicitPlacement   [ProcessingLayer::MObject]&gt;</li><li>C++ : public: list&lt;ExplicitPlacement   [ProcessingLayer::MObject]&gt; getPlaylistForRender () </li></ul><a name="refoperation129157"></a>
-<table><tr><td><div class="element">Operation <b>getAutomation</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + getAutomation() : Auto   [ProcessingLayer::MObject]*</li><li>C++ : public: Auto   [ProcessingLayer::MObject]* getAutomation () </li></ul></div>
+<table><tr><td><div class="element">Operation <b>getAutomation</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + getAutomation() : Auto   [ProcessingLayer::MObject]*</li><li>C++ : public: Auto   [ProcessingLayer::MObject]* getAutomation () </li></ul><a name="refrelation147589"></a>
+<table><tr><td><div class="element">Relation <b>track (&lt;unidirectional association&gt;)</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : # track : <a href="class128389.html#refclass128389"><b>Track</b></a></li><li>C++ : protected: <a href="class128389.html#refclass128389"><b>Track</b></a>* track</li></ul></div>
 <p>All public operations : <a href="class128261.html#refoperation129157"><b>getAutomation</b></a> , <a href="class128261.html#refoperation128645"><b>getPlaylistForRender</b></a> </p>
 </body>
 </html>
