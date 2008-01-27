@@ -90,6 +90,35 @@ def globRootdirs(roots):
 
 
 
+def RegisterPrecompiledHeader_Builder(env):
+    """ Registeres an Custom Builder for generating a precompiled Header 
+    """
+    def genCmdline(source, target, env, for_signature):
+#        mat = re.match(r'(.+)\.gch', target[0])
+#        if mat:
+#            src = mat.group(1)+'.hpp'
+#        return '%s -x c++-header %s' % (env['CXXCOM'],source[0])
+        return '$CXXCOM -x c++-header %s' % source[0]
+#        return '$CXX $CXXFLAGS $CPPFLAGS -x c++-header %s' % (source[0])
+#        else:
+#            print 'Illegal Precompiled Header name "%s", exiting.' % target[0]
+#            Exit(1)
+    def fixSourceDependency(target, source, env):
+        """ reverse dependency: the source (Header) depends 
+            on the precompiled header binary """
+        env.Depends(source[0], target[0])
+        print "precompiled header: %s --> %s" % (source[0],target[0])
+        return (target, source)
+    
+    gchBuilder = env.Builder( generator = genCmdline
+                            , emitter = fixSourceDependency
+                            , suffix = '.gch'
+                            , src_suffix = '.hpp'
+                            )
+    env.Append(BUILDERS = {'PrecompiledHeader' : gchBuilder})    
+
+
+
 def Tarball(env,location,dirs,suffix=''):
     """ Custom Command: create Tarball of some subdirs
         location: where to create the tar (optionally incl. filename.tar.gz)
