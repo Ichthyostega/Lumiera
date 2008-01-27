@@ -189,6 +189,27 @@ return: 0
 END
 
 
+TEST "TypeListUtil_test" TypeListUtil_test <<END
+out: ctor DoIt<Block<13> >
+out: ctor DoIt<Block< 8> >
+out: ctor DoIt<Block< 5> >
+out: ctor DoIt<Block< 3> >
+out: ctor DoIt<Block< 2> >
+out: ctor DoIt<Block< 1> >
+out: Block< 2>::eat(..)
+out: Block< 5>::eat(..)
+out: Block<13>::eat(..)
+out: gulp!
+out: dtor DoIt<Block< 1> >
+out: dtor DoIt<Block< 2> >
+out: dtor DoIt<Block< 3> >
+out: dtor DoIt<Block< 5> >
+out: dtor DoIt<Block< 8> >
+out: dtor DoIt<Block<13> >
+return: 0
+END
+
+
 TEST "VisitingTool_test" VisitingTool_test <<END
 out: === Babbler meets Boss and BigBoss ===
 out: Hello Boss, nice to meet you...

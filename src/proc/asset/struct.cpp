@@ -25,6 +25,7 @@
 #include "proc/asset/struct.hpp"
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/track.hpp"
+#include "proc/asset/port.hpp"
 #include "proc/mobject/session.hpp"
 
 #include "common/query.hpp"
@@ -36,6 +37,9 @@ using cinelerra::query::normalizeID;
 
 namespace asset
   {
+  
+  /****** NOTE: not implemented yet. What follows is a hack to build simple tests *******/
+  
   
   namespace // common Struct Asset implementation details
     {
@@ -50,6 +54,16 @@ namespace asset
           TODO ("track naming scheme??");
           Category category (STRUCT,"tracks");
           return Asset::Ident (name, category );
+        }
+      
+      typedef std::pair<string,string> PortIDs;
+      
+      PortIDs
+      createPortIdent (const Query<Port>& query)
+        {
+          string name ("port-" + query);   // TODO get some more sensible dummy values
+          TODO ("port naming scheme??");
+          return PortIDs (name, "mpeg"); // dummy stream type
         }
     } 
 
@@ -71,6 +85,19 @@ namespace asset
     TODO ("actually evaluate the query...");
     Track* pT = new Track (createTrackIdent (query));
     return AssetManager::instance().wrap (*pT);
+  }
+  
+  
+  /** Similar instance for Port Query....
+   *  @todo better a generic implementation utilizing ConfigQuery....
+   */
+  template<>
+  shared_ptr<Port> 
+  StructFactory::operator() (const Query<Port>& query)
+  {
+    TODO ("actually evaluate the query...");
+    PortIDs ids (createPortIdent (query));
+    return operator() (ids.first, ids.second);
   }
   
   

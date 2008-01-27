@@ -54,6 +54,12 @@ namespace asset
 
   
   
+  PPort 
+  Port::query (string properties)
+    { 
+      return Struct::create (Query<Port> (properties)); 
+    }
+  
   void 
   Port::switchProcPatt (PProcPatt& another)
   {

@@ -22,10 +22,12 @@
 
 
 #include "proc/mobject/session/defsmanager.hpp"
+#include "proc/asset/procpatt.hpp"
 #include "proc/asset/port.hpp"
 
 using asset::Query;
 using asset::Port;
+using asset::ProcPatt;
 
 namespace mobject
   {
@@ -40,13 +42,22 @@ namespace mobject
 
 
     /** create or retrieve a default-configured port asset.
-     *  @param 
      */
     template<>
     shared_ptr<Port> 
-    DefsManager::operator() (const Query<Port>& properties)
+    DefsManager::operator() (const Query<Port>& capabilities)
     {
-      
+      UNIMPLEMENTED ("query for default port with capabilities");
+    }
+
+
+    /** create or retrieve a default-configured processing pattern.
+     */
+    template<>
+    shared_ptr<ProcPatt> 
+    DefsManager::operator() (const Query<ProcPatt>& capabilities)
+    {
+      UNIMPLEMENTED ("query for default processing pattern with capabilities");
     }
 
 

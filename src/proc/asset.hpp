@@ -291,14 +291,32 @@ namespace asset
     };
     
     
+    
+    
+    /** promote subtype-ptr to PAsset, e.g. for comparing */
+    template<class A>
+    inline const PcAsset
+    pAsset (const shared_ptr<A>& subPtr)
+    {
+      return static_pointer_cast<const Asset,A> (subPtr);
+    }
+
     /** ordering of Asset smart ptrs based on Ident tuple.
-     *  @todo currently supporting only smart_ptr<Asset>. */
+     *  @todo currently supporting only smart_ptr<Asset>.
+     *  @todo should better be done using boost::operator */
     inline bool operator== (const PcAsset& a1, const PcAsset& a2) { return a1 && a2 && ( 0==a1->ident.compare(a2->ident));}
     inline bool operator<  (const PcAsset& a1, const PcAsset& a2) { return a1 && a2 && (-1==a1->ident.compare(a2->ident));}
     inline bool operator>  (const PcAsset& a1, const PcAsset& a2) { return   a2 < a1;  }
     inline bool operator>= (const PcAsset& a1, const PcAsset& a2) { return !(a1 < a2); }
     inline bool operator<= (const PcAsset& a1, const PcAsset& a2) { return !(a1 > a2); }
     inline bool operator!= (const PcAsset& a1, const PcAsset& a2) { return !(a1== a2); }
+
+    inline bool operator== (const PAsset& a1,  const PAsset& a2)  { return pAsset(a1) == pAsset(a2); }
+    inline bool operator<  (const PAsset& a1,  const PAsset& a2)  { return pAsset(a1) <  pAsset(a2); }
+    inline bool operator>  (const PAsset& a1,  const PAsset& a2)  { return pAsset(a1) >  pAsset(a2); }
+    inline bool operator>= (const PAsset& a1,  const PAsset& a2)  { return pAsset(a1) >= pAsset(a2); }
+    inline bool operator<= (const PAsset& a1,  const PAsset& a2)  { return pAsset(a1) <= pAsset(a2); }
+    inline bool operator!= (const PAsset& a1,  const PAsset& a2)  { return pAsset(a1) != pAsset(a2); }
 
     /** ordering of Asset Ident tuples.
      *  @note version is irrelevant */
@@ -311,14 +329,6 @@ namespace asset
       return name.compare (oi.name);
     }
     
-    /** promote to PAsset, e.g. for comparing */
-    template<class A>
-    inline PcAsset
-    pAsset (shared_ptr<A>& subPtr)
-    {
-      return static_pointer_cast<const Asset,A> (subPtr);
-    }
-
     
     /** convienient for debugging */
     inline string str (const PcAsset& a) 

@@ -78,7 +78,7 @@ namespace asset
       void switchProcPatt (PProcPatt& another);
       
       /** convienience shortcut for retrieving default configured ports */
-      static PPort query (string properties)  { return Struct::create (Query<Port> (properties)); }
+      static PPort query (string properties)  ;
     };
     
     
