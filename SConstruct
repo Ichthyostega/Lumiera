@@ -72,7 +72,7 @@ def setupBasicEnvironment():
     appendCppDefine(env,'OPENGL','USE_OPENGL')
     appendVal(env,'ARCHFLAGS', 'CCFLAGS')   # for both C and C++
     appendVal(env,'OPTIMIZE', 'CCFLAGS', val=' -O3')
-    appendVal(env,'DEBUG',    'CCFLAGS', val=' -g')
+    appendVal(env,'DEBUG',    'CCFLAGS', val=' -ggdb')
 
     prepareOptionsHelp(opts,env)
     opts.Save(OPTIONSCACHEFILE, env)
@@ -233,7 +233,6 @@ def defineBuildTargets(env, artifacts):
         setup sub-environments with special build options if necessary.
         We use a custom function to declare a whole tree of srcfiles. 
     """
-    env.PrecompiledHeader('$SRCDIR/pre')
     
     cinobj = ( srcSubtree(env,'$SRCDIR/backend') 
              + srcSubtree(env,'$SRCDIR/proc')
@@ -242,7 +241,11 @@ def defineBuildTargets(env, artifacts):
              )
     plugobj = srcSubtree(env,'$SRCDIR/plugin', isShared=True)
     core  = env.StaticLibrary('$BINDIR/core.la', cinobj)
-    #core = cinobj
+    #core = cinobj # use this for linking directly
+    
+    # use PCH to speed up building
+    precomp = env.PrecompiledHeader('$SRCDIR/pre')
+    env.Depends(cinobj, precomp)
     
     artifacts['cinelerra'] = env.Program('$BINDIR/cinelerra', ['$SRCDIR/main.cpp']+ core )
     artifacts['plugins']   = env.SharedLibrary('$BINDIR/cinelerra-plugin', plugobj)
