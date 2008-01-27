@@ -65,13 +65,14 @@ def setupBasicEnvironment():
                , CCFLAGS='-Wall '                                       # -fdiagnostics-show-option 
                )
     
+    RegisterPrecompiledHeader_Builder(env)
     handleNoBugSwitches(env)
     
     appendCppDefine(env,'DEBUG','DEBUG', 'NDEBUG')
     appendCppDefine(env,'OPENGL','USE_OPENGL')
     appendVal(env,'ARCHFLAGS', 'CCFLAGS')   # for both C and C++
     appendVal(env,'OPTIMIZE', 'CCFLAGS', val=' -O3')
-    appendVal(env,'DEBUG',    'CCFLAGS', val=' -g')
+    appendVal(env,'DEBUG',    'CCFLAGS', val=' -ggdb')
 
     prepareOptionsHelp(opts,env)
     opts.Save(OPTIONSCACHEFILE, env)
@@ -91,9 +92,13 @@ def appendVal(env,var,targetVar,val=None):
 def handleNoBugSwitches(env):
     """ set the build level for NoBug. 
         Release builds imply no DEBUG
+        wheras ALPHA and BETA require DEBUG
     """
     level = env['BUILDLEVEL']
     if level in ['ALPHA', 'BETA']:
+        if not env['DEBUG']:
+            print 'NoBug: ALPHA or BETA builds without DEBUG not possible, exiting.'
+            Exit(1)
         env.Replace( DEBUG = 1 )
         env.Append(CPPDEFINES = 'EBUG_'+level)
     elif level == 'RELEASE':
@@ -128,7 +133,7 @@ def defineCmdlineOptions():
 
 def prepareOptionsHelp(opts,env):
     prelude = """
-USAGE:   scons [-c] [OPTS] [key=val,...] [TARGETS]
+USAGE:   scons [-c] [OPTS] [key=val [key=val...]] [TARGETS]
      Build and optionally install Cinelerra.
      Without specifying any target, just the (re)build target will run.
      Add -c to the commandline to clean up anything a given target would produce
@@ -228,20 +233,26 @@ def defineBuildTargets(env, artifacts):
         setup sub-environments with special build options if necessary.
         We use a custom function to declare a whole tree of srcfiles. 
     """
+    
     cinobj = ( srcSubtree(env,'$SRCDIR/backend') 
              + srcSubtree(env,'$SRCDIR/proc')
              + srcSubtree(env,'$SRCDIR/common')
              + srcSubtree(env,'$SRCDIR/lib')
              )
     plugobj = srcSubtree(env,'$SRCDIR/plugin', isShared=True)
-    corelib = env.StaticLibrary('$BINDIR/core.la', cinobj)
+    core  = env.StaticLibrary('$BINDIR/core.la', cinobj)
+    #core = cinobj # use this for linking directly
     
-    artifacts['cinelerra'] = env.Program('$BINDIR/cinelerra', ['$SRCDIR/main.cpp']+ corelib )
+    # use PCH to speed up building
+    precomp = env.PrecompiledHeader('$SRCDIR/pre')
+    env.Depends(cinobj, precomp)
+    
+    artifacts['cinelerra'] = env.Program('$BINDIR/cinelerra', ['$SRCDIR/main.cpp']+ core )
     artifacts['plugins']   = env.SharedLibrary('$BINDIR/cinelerra-plugin', plugobj)
     
     # call subdir SConscript(s) for independent components
     SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts')
-    SConscript(dirs=[TESTDIR], exports='env artifacts corelib')
+    SConscript(dirs=[TESTDIR], exports='env artifacts core')
 
 
 
@@ -257,7 +268,8 @@ def definePostBuildTargets(env, artifacts):
     allbu = env.Alias('allbuild', build+artifacts['testsuite'])
     env.Default('build')
     # additional files to be cleaned when cleaning 'build'
-    env.Clean ('build', [ 'scache.conf', '.sconf_temp', '.sconsign.dblite', 'config.log'])
+    env.Clean ('build', [ 'scache.conf', '.sconf_temp', '.sconsign.dblite', 'config.log' ])
+    env.Clean ('build', [ '$SRCDIR/pre.gch' ])
 
     # Doxygen documentation
     # Note: at the moment we only depend on Doxyfile

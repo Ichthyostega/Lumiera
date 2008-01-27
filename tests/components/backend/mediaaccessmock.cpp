@@ -36,7 +36,6 @@
 #include "backend/mediaaccessmock.hpp"
 
 #include "common/util.hpp"
-#include "nobugcfg.h"
 
 #include <iostream>
 #include <vector>

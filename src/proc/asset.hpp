@@ -55,6 +55,8 @@
 #define PROC_INTERFACE_ASSET_H
 
 
+#include "pre.hpp"
+
 #include "proc/asset/category.hpp"
 #include "common/error.hpp"
 

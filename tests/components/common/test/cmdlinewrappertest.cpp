@@ -21,8 +21,6 @@
 * *****************************************************/
 
 
-#include "nobugcfg.h"
-
 #include "common/test/run.hpp"
 #include "common/cmdline.hpp"
 #include "common/util.hpp"
@@ -32,7 +30,6 @@
 
 #include <boost/lambda/lambda.hpp>
 
-using namespace boost::lambda;
 using std::cout;
 
 
@@ -41,6 +38,9 @@ namespace util
   {
   namespace test
     {
+    using boost::lambda::_1;
+    using boost::lambda::var;
+
     
   
     /** @test for util::Cmdline, wrapping various example cmdlines */

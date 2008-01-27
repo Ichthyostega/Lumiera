@@ -7,7 +7,7 @@ from os import path
 from Buildhelper import srcSubtree
 from Buildhelper import globRootdirs
 
-Import('env','artifacts','corelib')
+Import('env','artifacts','core')
 
 
 def testExecutable(env,tree, exeName=None, obj=None):
@@ -24,7 +24,7 @@ def testExecutable(env,tree, exeName=None, obj=None):
         obj = srcSubtree(env,tree) # use all sourcefiles found in subtree
     if not exeName:
         exeName = 'test-%s' % tree
-    return env.Program('#$BINDIR/'+exeName, obj + corelib)
+    return env.Program('#$BINDIR/'+exeName, obj + core)
 
 
 def treatPluginTestcase(env):
@@ -38,7 +38,7 @@ def treatPluginTestcase(env):
     testplugin = ( env.SharedLibrary('#$BINDIR/.libs/example_plugin',     oC,   SHLIBPREFIX='')
                  + env.SharedLibrary('#$BINDIR/.libs/example_plugin_cpp', oCPP, SHLIBPREFIX='')
                  )
-    testExe = env.Program('#$BINDIR/test-plugin', ['plugin/plugin_main.c'] + corelib)
+    testExe = env.Program('#$BINDIR/test-plugin', ['plugin/plugin_main.c'] + core)
     env.Depends(testExe, testplugin)
     return testExe
         #-- it depentds (at the moment) on a specific isolated test-plugin,

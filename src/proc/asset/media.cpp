@@ -21,6 +21,7 @@
 * *****************************************************/
 
 
+#include "pre.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"

@@ -25,11 +25,16 @@
 #ifndef TESTHELPER_RUN_H
 #define TESTHELPER_RUN_H
 
-#include <vector>
-#include <string>
+#include "pre.hpp"
+
+
+#include "nobugcfg.h"
 
 #include "common/test/suite.hpp"
 #include "common/util.hpp"
+
+#include <vector>
+#include <string>
 
 
 namespace test

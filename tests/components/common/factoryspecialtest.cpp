@@ -26,7 +26,6 @@
 
 #include "common/test/run.hpp"
 #include "common/util.hpp"
-#include "nobugcfg.h"
 
 #include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>

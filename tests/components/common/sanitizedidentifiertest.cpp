@@ -21,8 +21,6 @@
 * *****************************************************/
 
 
-#include "nobugcfg.h"
-
 #include "common/test/run.hpp"
 #include "common/util.hpp"
 

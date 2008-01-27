@@ -24,6 +24,8 @@
 #ifndef MOBJECT_MOBJECT_H
 #define MOBJECT_MOBJECT_H
 
+#include "pre.hpp"
+
 #include <list>
 #include <tr1/memory>
 

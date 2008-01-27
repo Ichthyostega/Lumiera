@@ -26,7 +26,6 @@
 
 #include "common/test/run.hpp"
 //#include "common/util.hpp"
-#include "nobugcfg.h"
 
 //#include <boost/format.hpp>
 #include <iostream>

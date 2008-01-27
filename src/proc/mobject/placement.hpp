@@ -57,7 +57,7 @@
 #ifndef MOBJECT_PLACEMENT_H
 #define MOBJECT_PLACEMENT_H
 
-#include "cinelerra.h"
+#include "pre.hpp"
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/session/locatingpin.hpp"
 #include "proc/asset/port.hpp"
