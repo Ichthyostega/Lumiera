@@ -115,7 +115,7 @@ namespace asset
   {
     normalizeID (portID);
     normalizeID (streamID);
-    PProcPatt processingPattern = Session::current->defaults (Query<ProcPatt>("stream("+streamID+")"));
+    PProcPatt processingPattern = Session::current->defaults (Query<const ProcPatt>("stream("+streamID+")"));
     Port* pP = new Port (processingPattern, portID);
     return AssetManager::instance().wrap (*pP);
   }

@@ -34,7 +34,8 @@ namespace cinelerra
   namespace query
     {
     
-    
+    CINELERRA_ERROR_DEFINE (CAPABILITY_QUERY, "unresolvable capability query");
+
   
   } // namespace query
     

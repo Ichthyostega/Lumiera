@@ -33,6 +33,11 @@ namespace cinelerra
   namespace query
     {
     
+    MockConfigRules::MockConfigRules () 
+    {
+      
+    }
+
   
   } // namespace query
     

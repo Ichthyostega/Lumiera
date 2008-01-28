@@ -24,10 +24,21 @@
 #include "proc/mobject/session/defsmanager.hpp"
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/port.hpp"
+#include "common/configrules.hpp"
+#include "common/query/mockconfigrules.hpp"  // TODO: better way to handle the includes (rework singleton template?)
+#include "common/error.hpp"
+
+#include <boost/format.hpp>
+
+using boost::format;
 
 using asset::Query;
 using asset::Port;
 using asset::ProcPatt;
+using asset::PProcPatt;
+
+using cinelerra::ConfigRules;
+using cinelerra::query::CINELERRA_ERROR_CAPABILITY_QUERY;
 
 namespace mobject
   {
@@ -40,27 +51,31 @@ namespace mobject
       
     }
 
-
-    /** create or retrieve a default-configured port asset.
-     */
-    template<>
-    shared_ptr<Port> 
-    DefsManager::operator() (const Query<Port>& capabilities)
+    
+    template<class TAR>
+    shared_ptr<TAR> 
+    DefsManager::operator() (const Query<TAR>& capabilities)
     {
-      UNIMPLEMENTED ("query for default port with capabilities");
+      shared_ptr<TAR> res = cinelerra::ConfigRules::instance().resolve (capabilities);
+      
+      if (!res)
+        throw cinelerra::error::Config ( str(format("The following Query could not be resolved: %s.") 
+                                                   % capabilities)
+                                       , CINELERRA_ERROR_CAPABILITY_QUERY );
+      else
+        return res;
     }
 
+    
+    
+   /***************************************************************/
+   /* explicit template instantiations for querying various Types */
+   /***************************************************************/
 
-    /** create or retrieve a default-configured processing pattern.
-     */
-    template<>
-    shared_ptr<ProcPatt> 
-    DefsManager::operator() (const Query<ProcPatt>& capabilities)
-    {
-      UNIMPLEMENTED ("query for default processing pattern with capabilities");
-    }
-
+    template shared_ptr<Port> DefsManager::operator ()(const Query<Port>&); 
+    template PProcPatt        DefsManager::operator ()(const Query<const ProcPatt>&); 
 
   } // namespace mobject::session
 
 } // namespace mobject
+

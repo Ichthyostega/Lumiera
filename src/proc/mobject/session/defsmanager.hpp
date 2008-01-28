@@ -27,10 +27,6 @@
 
 #include "common/query.hpp"
 
-//#include <boost/scoped_ptr.hpp>
-//#include <vector>
-
-//using std::vector;
 #include <tr1/memory>
 
 
@@ -62,6 +58,12 @@ namespace mobject
       public:
         template<class TAR>
         shared_ptr<TAR> operator() (const cinelerra::Query<TAR>&);
+        
+//        template
+//          < class TAR,                   ///< the target to query for 
+//            template <class> class SMP  ///<  smart pointer class to wrap the result
+//          >
+//        SMP<TAR> operator() (const cinelerra::Query<TAR>&);
         
       };
 

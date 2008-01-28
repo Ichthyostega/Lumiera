@@ -53,6 +53,8 @@ namespace cinelerra
     {
     using mobject::session::Track;
     using asset::Port;
+    using asset::ProcPatt;
+    using asset::PProcPatt;
     
     /** 
      * Dummy Implementation of the query interface.
@@ -67,8 +69,9 @@ namespace cinelerra
         
       public:
         
-        virtual Track resolve (Query<Track> q);
-        virtual Port  resolve (Query<Port> q);
+        virtual shared_ptr<Track> resolve (Query<Track> q);
+        virtual shared_ptr<Port>  resolve (Query<Port> q);
+        virtual PProcPatt         resolve (Query<const ProcPatt> q);
       };
     
     

@@ -34,6 +34,8 @@
  ** they want to provide, together with functors carrying out the neccessary configuration steps.
  ** All details and consequences of this approach still have to be worked out...
  **
+ ** @note this is rather a scrapbook and in flux... don't take this code too literal!
+ **
  ** @see cinelerra::Query
  ** @see mobject::session::DefsManager
  ** @see asset::StructFactory 
@@ -49,17 +51,21 @@
 #include "common/typelist.hpp"
 
 #include "proc/mobject/session/track.hpp"
+#include "proc/asset/procpatt.hpp"
 #include "proc/asset/port.hpp"
 
 
 #include <string>
+#include <tr1/memory>
 
 
 
 namespace cinelerra
   {
   using std::string;
-  namespace query { class MockConfigRules; }
+  using std::tr1::shared_ptr;
+
+  namespace query { class MockConfigRules; }   // TODO: need a better way to return a sub-type from a singleton
   
   
     
@@ -114,7 +120,7 @@ namespace cinelerra
       protected:
         virtual ~QueryHandler();
       public:
-        virtual TY resolve (Query<TY> q);
+        virtual shared_ptr<TY> resolve (Query<TY> q);
       };
 
     // TODO: the Idea is to provide specialisations for the concrete types
@@ -179,6 +185,8 @@ namespace cinelerra
     cinelerra::Singleton<IMPL> ConfigRules<TYPES,IMPL>::instance; 
 
     
+    
+    CINELERRA_ERROR_DECLARE (CAPABILITY_QUERY);  ///< unresolvable capability query.
   
   } // namespace query
   
@@ -194,6 +202,7 @@ namespace cinelerra
    */
   typedef cinelerra::typelist::Types < mobject::session::Track
                                      , asset::Port
+                                     , const asset::ProcPatt
                                      >
                                        InterfaceTypes;
   
