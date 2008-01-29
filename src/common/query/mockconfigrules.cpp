@@ -22,6 +22,12 @@
 
 
 #include "common/query/mockconfigrules.hpp"
+
+#include "proc/mobject/session/track.hpp"
+#include "proc/asset/procpatt.hpp"
+#include "proc/asset/port.hpp"
+
+
 //#include "common/util.hpp"
 #include "nobugcfg.h"
 
@@ -36,6 +42,24 @@ namespace cinelerra
     MockConfigRules::MockConfigRules () 
     {
       
+    }
+    
+    shared_ptr<Track> 
+    MockConfigRules::resolve (Query<Track> q)
+    {
+      UNIMPLEMENTED ("solve for Track");
+    }
+    
+    shared_ptr<Port>  
+    MockConfigRules::resolve (Query<Port> q)
+    {
+      UNIMPLEMENTED ("solve for Port");
+    }
+    
+    PProcPatt
+    MockConfigRules::resolve (Query<const ProcPatt> q)
+    {
+      UNIMPLEMENTED ("solve for ProcPatt");
     }
 
   

@@ -66,6 +66,8 @@ namespace cinelerra
       protected:
         MockConfigRules ();
         friend class cinelerra::singleton::StaticCreate<MockConfigRules>;
+
+        virtual ~MockConfigRules() {}
         
       public:
         

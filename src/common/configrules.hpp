@@ -118,9 +118,9 @@ namespace cinelerra
     class QueryHandler
       {
       protected:
-        virtual ~QueryHandler();
+        virtual ~QueryHandler()  { }
       public:
-        virtual shared_ptr<TY> resolve (Query<TY> q);
+        virtual shared_ptr<TY> resolve (Query<TY> q) = 0;
       };
 
     // TODO: the Idea is to provide specialisations for the concrete types
