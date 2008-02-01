@@ -47,8 +47,8 @@
 #define CINELERRA_CONFIGRULES_H
 
 #include "common/query.hpp"
-#include "common/singleton.hpp"
 #include "common/typelist.hpp"
+#include "common/singletonsubclass.hpp"
 
 #include "proc/mobject/session/track.hpp"
 #include "proc/asset/procpatt.hpp"
@@ -65,7 +65,6 @@ namespace cinelerra
   using std::string;
   using std::tr1::shared_ptr;
 
-  namespace query { class MockConfigRules; }   // TODO: need a better way to return a sub-type from a singleton
   
   
     
@@ -163,26 +162,18 @@ namespace cinelerra
       { };
       
     
-    template
-      < typename TYPES,
-        class IMPL
-      >
+    template<typename TYPES>
     class ConfigRules
       : public ConfigRulesInterface<typename TYPES::List> 
       {
       protected:
         ConfigRules ()         {}
         virtual ~ConfigRules() {} 
-  
-      public:
-        static cinelerra::Singleton<IMPL> instance;
         
+      public:
         // TODO: find out what operations we need to support here for the »real solution« (using Prolog)
       };
       
-    /** storage for the Singleton instance factory */
-    template<typename TYPES, class IMPL>
-    cinelerra::Singleton<IMPL> ConfigRules<TYPES,IMPL>::instance; 
 
     
     
@@ -206,10 +197,18 @@ namespace cinelerra
                                      >
                                        InterfaceTypes;
   
-  typedef query::ConfigRules< InterfaceTypes,          // List of Types to generate interface functions
-                              query::MockConfigRules  //  actual Implementation to use
-                            > 
-                              ConfigRules;          //    user-visible Interface to the ConfigRules subsystem.
+  /** 
+   * user-visible Interface to the ConfigRules subsystem.
+   * Configured as Singleton (with hidden Implementation class)
+   */
+  class ConfigRules
+    : public query::ConfigRules<InterfaceTypes>
+    {
+  
+    public:
+      static SingletonSub<ConfigRules> instance;
+      
+    };
   
   
 } // namespace cinelerra

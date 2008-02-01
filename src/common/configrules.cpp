@@ -40,9 +40,18 @@ namespace cinelerra
     ConfigRulesInterface<NullType>::~ConfigRulesInterface()
       { };
   
+      
   } // namespace query
-    
+
+  namespace
+    {
+    /** type of the actual ConfigRules implementation to use */
+    singleton::UseSubclass<query::MockConfigRules> typeinfo;
+  }
   
+      
+  /** Singleton factory instance, parametrized to actual impl. type. */
+  SingletonSub<ConfigRules> ConfigRules::instance (typeinfo); 
 
 
 } // namespace cinelerra

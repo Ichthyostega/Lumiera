@@ -135,7 +135,7 @@ namespace cinelerra
        *  needs to know the actual class, because it allocates storage)
        */
       template<class SU>
-      SingletonSubclassFactory (singleton::UseSubclass<SU>)
+      SingletonSubclassFactory (singleton::UseSubclass<SU>&)
         {
           typedef typename singleton::Adapter<Create,SI>   Adapter;
           typedef typename Adapter::template TypedLink<SU> TypedLink;
@@ -154,7 +154,18 @@ namespace cinelerra
     };
     
     
-    
+  /**
+   * Default Singleton configuration (subclass creating factory)
+   * @note all Policy template parameters taking default values
+   */
+  template <class SI>
+  struct SingletonSub 
+    : public SingletonSubclassFactory<SI>
+    { 
+      template<typename TY>
+      SingletonSub (TY ref) : SingletonSubclassFactory<SI>(ref) {}
+    };
+
 
 } // namespace cinelerra
 

@@ -25,7 +25,6 @@
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/port.hpp"
 #include "common/configrules.hpp"
-#include "common/query/mockconfigrules.hpp"  // TODO: better way to handle the includes (rework singleton template?)
 #include "common/error.hpp"
 
 #include <boost/format.hpp>
@@ -38,6 +37,7 @@ using asset::ProcPatt;
 using asset::PProcPatt;
 
 using cinelerra::ConfigRules;
+using cinelerra::query::QueryHandler;
 using cinelerra::query::CINELERRA_ERROR_CAPABILITY_QUERY;
 
 namespace mobject
@@ -56,7 +56,8 @@ namespace mobject
     shared_ptr<TAR> 
     DefsManager::operator() (const Query<TAR>& capabilities)
     {
-      shared_ptr<TAR> res = cinelerra::ConfigRules::instance().resolve (capabilities);
+      QueryHandler<TAR>& typeHandler = ConfigRules::instance();  
+      shared_ptr<TAR> res = typeHandler.resolve (capabilities);
       
       if (!res)
         throw cinelerra::error::Config ( str(format("The following Query could not be resolved: %s.") 
