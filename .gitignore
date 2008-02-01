@@ -4,6 +4,7 @@
 .[^.]*
 *.os
 *.gch
+,valgrind.log*
 Buildhelper.pyc
 optcache
 Makefile.in

@@ -118,6 +118,15 @@ out: '§&Ω%€' --> ''
 END
 
 
+TEST "SingletonSubclass_test" SingletonSubclass_test 13 <<END
+out: using the Singleton should create TargetObj(13)...
+out: ctor TargetObj(13) successfull
+out: calling a non-static method on the Singleton-Implementation
+out: .....TargetObj(13): data="*************", array[13]={0,1,2,3,4,5,6,7,8,9,10,11,12,}
+out: dtor ~TargetObj(13) successfull
+END
+
+
 TEST "SingletonTestMock_test" SingletonTestMock_test <<END
 out: TestSingletonO::doIt() call=1
 out: TestSingletonO::doIt() call=2
@@ -129,7 +138,6 @@ out: Mock_1::doIt() call=5
 out: Mock_2::doIt() call=1
 out: TestSingletonO::doIt() call=3
 END
-
 
 
 TEST "Singleton_test" Singleton_test 23 <<END

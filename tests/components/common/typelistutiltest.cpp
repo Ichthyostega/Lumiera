@@ -26,7 +26,6 @@
 
 #include <boost/format.hpp>
 #include <iostream>
-#include <typeinfo>
 
 using std::string;
 using std::cout;
