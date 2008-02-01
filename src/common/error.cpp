@@ -183,9 +183,10 @@ namespace cinelerra
 
     void assertion_terminate (const string& location)
     {
-      throw Fatal (location, CINELERRA_ERROR_ASSERTION)
-                 .setUsermsg("Program terminated because of violating "
-                             "an internal consistency check.");    
+      Fatal exception (location, CINELERRA_ERROR_ASSERTION);
+            exception.setUsermsg("Program terminated because of violating "
+                                 "an internal consistency check.");
+      throw exception;
     }
     
     

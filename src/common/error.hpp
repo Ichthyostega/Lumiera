@@ -122,7 +122,7 @@ namespace cinelerra
     
 /** Macro for creating derived exception classes properly 
  *  integrated into cinelerra's exception hierarchy. Using
- *  this macro asures that the new class will get the full
+ *  this macro ensures that the new class will get the full
  *  set of constructors and behaviour common to all exception
  *  classes, so it should be used when creating an derived
  *  exception type for more then stricly local purposes
