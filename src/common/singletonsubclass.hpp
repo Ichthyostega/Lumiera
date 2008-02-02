@@ -73,13 +73,20 @@ namespace cinelerra
               virtual S* create ()           { return POL<S>::create (); }                 // covariance checked!
               virtual void destroy (I* pSi)  { POL<S>::destroy (static_cast<S*> (pSi)); }
             };
-          
+
+            
+          struct My_scoped_ptr : scoped_ptr<Link> ///< implementation detail: defeat static initialisation
+            {
+              using scoped_ptr<Link>::get;
+              My_scoped_ptr() : scoped_ptr<Link> (get()? get() : 0) {}   ///< bypass if already configured
+            };
+            
           /** we configure this link \i later, when the singleton factory
            *  is actually created, to point at the desired implementation subclass.
            */
-          static scoped_ptr<Link> link;
+          static My_scoped_ptr link;
           
-          /** Forwarding Template to configure the basic SingletonFactory */
+          /** Forwarding Template used to configure the basic SingletonFactory */
           template<class II>
           struct Adapted
             {
@@ -89,7 +96,7 @@ namespace cinelerra
         };
         
       template<template<class> class A, class I>
-      scoped_ptr<typename Adapter<A,I>::Link> Adapter<A,I>::link (0);
+      typename Adapter<A,I>::My_scoped_ptr Adapter<A,I>::link;    // note: use special ctor (due to stati init order!)
       
       
       /** type-information used to configure the factory instance
