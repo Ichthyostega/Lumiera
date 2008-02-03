@@ -833,8 +833,8 @@ This is an very important external Interface, because it links together all thre
 * completely hide the Session object behind a ''~PImpl'' smart pointer, so the session object can be switched when reloading.
 * the [[Fixture]] acts as isolation layer, and all objects refered from the Fixture are refcounting smart pointers. So, even when the session gets switched, the old objects remain valid as long as needed.</pre>
 </div>
-<div title="DefaultTiddlers" modifier="Ichthyostega" modified="200706190047" created="200706172308" changecount="2">
-<pre>RenderEngine
+<div title="DefaultTiddlers" modifier="Ichthyostega" modified="200802031805" created="200706172308" changecount="6">
+<pre>[[ProcLayer and Engine]]
 </pre>
 </div>
 <div title="DefaultsManagement" modifier="Ichthyostega" modified="200801171440" created="200801121708" tags="def spec" changecount="5">
@@ -957,7 +957,7 @@ To make the intended use of the classes more clear, consider the following two e
 <pre>A special kind (subclass) of [[Placement]]. As such it is always linked to a //Subject//, i.e. a MObject. In addition to the properties of a (unspecific) Placement, the ExplicitPlacement specifies a absolute time and track position for locating the Subject
 </pre>
 </div>
-<div title="Factories" modifier="Ichthyostega" modified="200708112256" created="200708100401" tags="impl discuss" changecount="18">
+<div title="Factories" modifier="Ichthyostega" modified="200802031822" created="200708100401" tags="impl discuss excludeMissing" changecount="19">
 <pre>We use Factories
 * for centralizing [[memory management|MemoryManagement]]
 * to support polymorphism (of course...)
@@ -1109,7 +1109,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200801171322" created="200708080322" tags="overview" changecount="20">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200802031829" created="200708080322" tags="overview" changecount="21">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Cinelerra Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1123,7 +1123,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 * [[using the Visitor pattern?|VisitorUse]] &amp;mdash; resulting in [[»Visiting-Tool« library implementation|VisitingToolImpl]]
 * [[Handling of Tracks and Ports in the EDL|TrackPortEDL]]. [[Handling of Tracks|TrackHandling]] and [[Ports|PortHandling]]
 * [[getting default configured|DefaultsManagement]] Objects relying on [[rule-based Configuration Queries|ConfigRules]]
-* [[identifying the basic Builder operations|BasicBuildingOperations]] and [[planning the Implementation|PlanningNodeCreaterTool]]
+* [[identifying the basic Builder operations|BasicBuildingOperations]] and [[planning the Implementation|PlanningNodeCreatorTool]]
 * [[how to handle »attached placement«|AttachedPlacementProblem]]
 </pre>
 </div>
@@ -1524,9 +1524,9 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 [img[Classess related to the EDL|uml/fig128133.png]]
 </pre>
 </div>
-<div title="MainMenu" modifier="Ichthyostega" modified="200708080314" created="200706172305" changecount="9">
+<div title="MainMenu" modifier="Ichthyostega" modified="200802031758" created="200706172305" changecount="10">
 <pre>''[[Cinelerra3|index.html]]''
-[[RenderEngine]]
+[[Proc-Layer|ProcLayer and Engine]]
 [[MObjects]]
 [[Implementation|ImplementationDetails]]
 [[Admin]]
@@ -2298,7 +2298,7 @@ afterwards.
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlanningNodeCreaterTool" modifier="Ichthyostega" modified="200801111250" created="200712090659" tags="impl Builder draft" changecount="8">
+<div title="PlanningNodeCreatorTool" modifier="Ichthyostega" modified="200802031829" created="200712090659" tags="impl Builder draft" changecount="1">
 <pre>//This page is a scrapbook for working out the implementation of the builder//
 
 * NodeCreaterTool is a [[visiting tool|VisitorUse]]
@@ -2412,10 +2412,34 @@ We need to work out guidelines for dealing with operations going on simultaneous
 * all EditingOperations are not threadsafe intentionally, because they are [[scheduled|ProcLayerScheduler]]
 </pre>
 </div>
-<div title="Proc-Layer and RenderEngine" modifier="Ichthyostega" modified="200802030402" created="200706190056" tags="overview" changecount="1">
+<div title="Proc-Layer" modifier="Ichthyostega" created="200802031814" tags="def" changecount="1">
+<pre>The current Cinelerra-3 architecture separates functionality into three Layers: __GUI__, __Proc__ and __Backend__.
+
+While the Backend is responsible for Data access and management and for carrying out the computation intensive media opteratons, the middle Layer or ~Proc-Layer contains [[assets|Asset]] and [[Session]], i.e. the user-visible data model and provides configuration and behaviour for these entities. Besides, he is responsible for [[building and configuring|Builder]] the [[render engine|RenderEngine]] based on the current Session state.</pre>
+</div>
+<div title="ProcAsset" modifier="Ichthyostega" created="200709221343" tags="def classes" changecount="1">
+<pre>All Assets of kind asset::Proc represent //processing algorithms// in the bookkeeping view. They enable loading, browsing and maybe even parametrizing all the Effects, Plugins and Codecs available for use within the Cinelerra Session.
+
+Besides, they provide an important __inward interface__ for the [[ProcNode]]s, which will use these asset entries to dispatch the actual processing call when rendering. 
+
+{{red{todo: the naming scheme??}}}
+
+[img[Asset Classess|uml/fig131077.png]]
+</pre>
+</div>
+<div title="ProcLayer" modifier="Ichthyostega" modified="200708100338" created="200708100333" tags="def" changecount="2">
+<pre>The middle Layer of our current Architecture plan, i.e. the layer managing all processing and manipulation, while the actual data handling is done in the backend and the user interaction belongs to the GUI Layer.
+
+&amp;rarr; see the [[Overview]]
+
+</pre>
+</div>
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200802031830" created="200706190056" tags="overview" changecount="4">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
 &lt;&lt;&lt;
-''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a //first, draft, prototypical// implementation in C++
+''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the foundations and main structures in C++
+* basic AssetManager working
+* currently impmenenting the Builder (&amp;rarr;[[more|PlanningNodeCreatorTool]])
 &lt;&lt;&lt;
 
 !Summary
@@ -2434,23 +2458,6 @@ The system is ''open'' inasmuch every part mirrors the structure of correspondin
 &amp;rarr; how [[Automation]] works  {{red{to be defined in more detail}}}
 &amp;rarr; [[Problems|ProblemsTodo]] to be solved and notable [[design decisions|DesignDecisions]]
 &amp;rarr; [[Implementation Details|ImplementationDetails]] {{red{WIP}}}
-</pre>
-</div>
-<div title="ProcAsset" modifier="Ichthyostega" created="200709221343" tags="def classes" changecount="1">
-<pre>All Assets of kind asset::Proc represent //processing algorithms// in the bookkeeping view. They enable loading, browsing and maybe even parametrizing all the Effects, Plugins and Codecs available for use within the Cinelerra Session.
-
-Besides, they provide an important __inward interface__ for the [[ProcNode]]s, which will use these asset entries to dispatch the actual processing call when rendering. 
-
-{{red{todo: the naming scheme??}}}
-
-[img[Asset Classess|uml/fig131077.png]]
-</pre>
-</div>
-<div title="ProcLayer" modifier="Ichthyostega" modified="200708100338" created="200708100333" tags="def" changecount="2">
-<pre>The middle Layer of our current Architecture plan, i.e. the layer managing all processing and manipulation, while the actual data handling is done in the backend and the user interaction belongs to the GUI Layer.
-
-&amp;rarr; see the [[Overview]]
-
 </pre>
 </div>
 <div title="ProcNode" modifier="MichaelPloujnikov" modified="200706271500" created="200706220409" tags="def" changecount="3">
@@ -2725,6 +2732,11 @@ The link between ~MObject and Asset should be {{{const}}}, so the clip can't cha
 [&gt;img[Outline of the Build Process|uml/fig131333.png]]
 At first sight the link between asset and clip-MO is a simple logical relation between entities, but it is not strictly 1:1 because typical media are [[multichannel|MultichannelMedia]]. Even if the media is compound, there is //only one asset::Clip//, because in the logical view we have only one &quot;clip-thing&quot;. On the other hand, in the Session/EDL, we have a compound clip ~MObject comprised of several elementary clip objects, each of which will refer to its own sub-media (channel) within the compound media (and don't forget, this structure can be tree-like)
 {{red{open question:}}} do the clip-MO's of the individual channels refer directly to asset::Media? does this mean the relation is different from the top level, where we have a relation to a asset::Clip??</pre>
+</div>
+<div title="RenderEngine" modifier="Ichthyostega" modified="200802031835" created="200802031820" tags="def" changecount="2">
+<pre>Conceptually, the Render Engine is the core of the application. But &amp;mdash; surprisingly &amp;mdash; we don't even have a distinct »~RenderEngine« component in our design. Rather, the engine is formed by the cooperation of several components spread over two layers (Backend and Proc-Layer): The [[Builder]] creates a network of [[render nodes|ProcNode]], which is used by the Backend to pull individual Frames.
+&amp;rarr; OverviewRenderEngine
+</pre>
 </div>
 <div title="RenderEntities" modifier="Ichthyostega" modified="200706220406" created="200706190715" changecount="6">
 <pre>The Render Engine only carries out the low-level and performance critical tasks. All configuration and decision concerns are to be handled by [[Builder]] and [[Controller]]. While the actual connection of the Render Nodes can be highly complex, basically each Segment of the Timeline with uniform characteristics is handled by one Processor, which is a graph of [[Processing Nodes|ProcNode]] discharging into a ExitNode. The Render Engine Components as such are //stateless// themselves; for the actual calculations they are combined with a StateProxy object generated by and connected internally to the [[Controller]], while at the same time holding the Data Buffers (Frames) for the actual calculations.
@@ -4091,7 +4103,7 @@ Using transitions is a very basic task and thus needs viable support by the GUI.
 Because of this experience, ichthyo wants to support a more general case of transitions, which have N output connections, behave similar to their &quot;simple&quot; counterpart, but leave out the mixing step. As a plus, such transitions can be inserted at the source ports of N clips or between any intermediary or final output ports as well. Any transition processor capable of handling this situation should provide some flag, in order to decide if he can be placed in such a manner. (wichin the builder, encountering a  inconsistently placed transition is just an [[building error|BuildingError]])
 </pre>
 </div>
-<div title="VisitingToolImpl" modifier="Ichthyostega" modified="200801051747" created="200801032003" tags="impl" changecount="20">
+<div title="VisitingToolImpl" modifier="Ichthyostega" modified="200802031822" created="200801032003" tags="impl excludeMissing" changecount="21">
 <pre>The ''Visitor Pattern'' is a special form of //double dispatch// &amp;mdash; selecting the function actually to be executed at runtime based both on the concrete type of some tool object //and // the target this tool is applied to. The rationale is to separate some specific implementation details from the basic infrastructure and the global interfaces, which can be limited to describe the fundamental properties and operations, while all details relevant only for some specific sub-problem can be kept together encapsulated in a tool implementation class. Typically, there is some iteration mechanism, allowing to apply these tools to all objects in a given container, a collection or object graph, without knowing the exact type of the target and tool objects. See the [[Visitor Pattern design discussion|VisitorUse]]
 
 !Problems with Visitor
