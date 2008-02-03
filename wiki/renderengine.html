@@ -42,9 +42,9 @@ DAMAGE.
 <link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/>
 <!--}}}-->
 
-<style type="text/css">#contentWrapper {display:none;}</style><div id="SplashScreen" style="border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;">loading <b>Cinelerra Renderengine</b> devel doku<blink> ...</blink><br><br><span style="font-size: 14px; color:red;">Requires Javascript.</span></div>
+<style type="text/css">#contentWrapper {display:none;}</style><div id="SplashScreen" style="border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;">loading <b>Proc-Layer</b> devel doku<blink> ...</blink><br><br><span style="font-size: 14px; color:red;">Requires Javascript.</span></div>
 <!--PRE-HEAD-END-->
-<title> Engine - some aspects of Cinelerra-3 design </title>
+<title> Engine - Building a Render Nodes Network from Objects in the EDL </title>
 <style type="text/css">
 #saveTest {display:none;}
 #messageArea {display:none;}
@@ -1551,12 +1551,12 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 {{red{let's see if this approach works...}}}
 </pre>
 </div>
-<div title="MarkupPreHead" modifier="Ichthyostega" modified="200708080243" created="200706172303" changecount="1">
+<div title="MarkupPreHead" modifier="Ichthyostega" modified="200802030405" created="200706172303" changecount="2">
 <pre>&lt;!--{{{--&gt;
 &lt;link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/&gt;
 &lt;!--}}}--&gt;
 
-&lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;loading &lt;b&gt;Cinelerra Renderengine&lt;/b&gt; devel doku&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
+&lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;loading &lt;b&gt;Proc-Layer&lt;/b&gt; devel doku&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
 </div>
 <div title="MediaAsset" modifier="Ichthyostega" modified="200801101307" created="200709021530" tags="def classes" changecount="5">
 <pre>The Interface asset::Media is a //key abstraction// It ties together several concepts and enables to deal with them on the interfaces in a uniform manner. Besides, as every Asset kind it belongs rather to the bookkeeping view: an asset::Media holds the specific properties and parametrisation of the media source it stands for. Regarding the __inward interface__ &amp;mdash; as used from within the [[EDL]] or the [[Render Nodes|ProcNode]], it is irrelevant if any given asset::Media object stands for a complete media source, just a clip taken from this source or if a placeholder version of the real media source is used instead.
@@ -2412,6 +2412,30 @@ We need to work out guidelines for dealing with operations going on simultaneous
 * all EditingOperations are not threadsafe intentionally, because they are [[scheduled|ProcLayerScheduler]]
 </pre>
 </div>
+<div title="Proc-Layer and RenderEngine" modifier="Ichthyostega" modified="200802030402" created="200706190056" tags="overview" changecount="1">
+<pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
+&lt;&lt;&lt;
+''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a //first, draft, prototypical// implementation in C++
+&lt;&lt;&lt;
+
+!Summary
+We have several kinds of &quot;things&quot; organized as [[assets|Asset]] in the AssetManager, like media, clips, effects, codecs, configuration templates. Within the context of the [[EDL]], we can use these as [[&quot;Media Objects&quot;|MObjects]] &amp;mdash; especially, we can [[place|Placement]] them in various kinds within the EDL and relative to one another. Basically, this is the [[editing work|EditingOperations]] done by the user.
+
+Now, from any given configuration within the EDL, we create sort or a frozen- and tied-down snapshot, here called [[&quot;Fixture&quot;|Fixture]], containing all currently active ~MObjects, broken down to elementary parts and made explicit if necessary. This Fixture acts as a isolation layer towards the Render Engine. We will hand it over to the  [[Builder]], which in turn will transform it into a network of connected [[render nodes|ProcNode]]. This network //is// the [[Render Engine|OverviewRenderEngine]].
+
+The system is ''open'' inasmuch every part mirrors the structure of corresponding parts in adjacent subsystems, and the transformation of any given structure from one subsystem (e.g. Asset) to another (e.g. Render Engine) is done with minimal &quot;magic&quot;. So the whole system should be able to handle completely new structures mostly by adding new configurations and components, without much need of rewriting basic workings.
+
+!!see also
+&amp;rarr; [[Overview]] of Subsystems and Components, and DesignGoals
+&amp;rarr; [[An Introduction|WalkThrough]] discussing the key features
+&amp;rarr; [[Overview Render Engine|OverviewRenderEngine]]
+&amp;rarr; BuildProcess and RenderProcess
+&amp;rarr; [[Two Examples|Examples]] (Object diagrams) 
+&amp;rarr; how [[Automation]] works  {{red{to be defined in more detail}}}
+&amp;rarr; [[Problems|ProblemsTodo]] to be solved and notable [[design decisions|DesignDecisions]]
+&amp;rarr; [[Implementation Details|ImplementationDetails]] {{red{WIP}}}
+</pre>
+</div>
 <div title="ProcAsset" modifier="Ichthyostega" created="200709221343" tags="def classes" changecount="1">
 <pre>All Assets of kind asset::Proc represent //processing algorithms// in the bookkeeping view. They enable loading, browsing and maybe even parametrizing all the Effects, Plugins and Codecs available for use within the Cinelerra Session.
 
@@ -2702,30 +2726,6 @@ The link between ~MObject and Asset should be {{{const}}}, so the clip can't cha
 At first sight the link between asset and clip-MO is a simple logical relation between entities, but it is not strictly 1:1 because typical media are [[multichannel|MultichannelMedia]]. Even if the media is compound, there is //only one asset::Clip//, because in the logical view we have only one &quot;clip-thing&quot;. On the other hand, in the Session/EDL, we have a compound clip ~MObject comprised of several elementary clip objects, each of which will refer to its own sub-media (channel) within the compound media (and don't forget, this structure can be tree-like)
 {{red{open question:}}} do the clip-MO's of the individual channels refer directly to asset::Media? does this mean the relation is different from the top level, where we have a relation to a asset::Clip??</pre>
 </div>
-<div title="RenderEngine" modifier="Ichthyostega" modified="200801062200" created="200706190056" tags="overview" changecount="45">
-<pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
-&lt;&lt;&lt;
-''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a //first, draft, prototypical// implementation in C++
-&lt;&lt;&lt;
-
-!Summary
-We have several kinds of &quot;things&quot; organized as [[assets|Asset]] in the AssetManager, like media, clips, effects, codecs, configuration templates. Within the context of the [[EDL]], we can use these as [[&quot;Media Objects&quot;|MObjects]] &amp;mdash; especially, we can [[place|Placement]] them in various kinds within the EDL and relative to one another. Basically, this is the [[editing work|EditingOperations]] done by the user.
-
-Now, from any given configuration within the EDL, we create sort or a frozen- and tied-down snapshot, here called [[&quot;Fixture&quot;|Fixture]], containing all currently active ~MObjects, broken down to elementary parts and made explicit if necessary. This Fixture acts as a isolation layer towards the Render Engine. We will hand it over to the  [[Builder]], which in turn will transform it into a network of connected [[render nodes|ProcNode]]. This network //is// the [[Render Engine|OverviewRenderEngine]].
-
-The system is ''open'' inasmuch every part mirrors the structure of corresponding parts in adjacent subsystems, and the transformation of any given structure from one subsystem (e.g. Asset) to another (e.g. Render Engine) is done with minimal &quot;magic&quot;. So the whole system should be able to handle completely new structures mostly by adding new configurations and components, without much need of rewriting basic workings.
-
-!!see also
-&amp;rarr; [[Overview]] of Subsystems and Components, and DesignGoals
-&amp;rarr; [[An Introduction|WalkThrough]] discussing the key features
-&amp;rarr; [[Overview Render Engine|OverviewRenderEngine]]
-&amp;rarr; BuildProcess and RenderProcess
-&amp;rarr; [[Two Examples|Examples]] (Object diagrams) 
-&amp;rarr; how [[Automation]] works  {{red{to be defined in more detail}}}
-&amp;rarr; [[Problems|ProblemsTodo]] to be solved and notable [[design decisions|DesignDecisions]]
-&amp;rarr; [[Implementation Details|ImplementationDetails]] {{red{WIP}}}
-</pre>
-</div>
 <div title="RenderEntities" modifier="Ichthyostega" modified="200706220406" created="200706190715" changecount="6">
 <pre>The Render Engine only carries out the low-level and performance critical tasks. All configuration and decision concerns are to be handled by [[Builder]] and [[Controller]]. While the actual connection of the Render Nodes can be highly complex, basically each Segment of the Timeline with uniform characteristics is handled by one Processor, which is a graph of [[Processing Nodes|ProcNode]] discharging into a ExitNode. The Render Engine Components as such are //stateless// themselves; for the actual calculations they are combined with a StateProxy object generated by and connected internally to the [[Controller]], while at the same time holding the Data Buffers (Frames) for the actual calculations.
 
@@ -2770,8 +2770,8 @@ It will contain a global video and audio outport, just one EDL with one track; t
 <div title="SideBarOptions" modifier="CehTeh" created="200706200048" changecount="1">
 <pre>&lt;&lt;search&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel &quot;options »&quot; &quot;Change TiddlyWiki advanced options&quot;&gt;&gt;</pre>
 </div>
-<div title="SiteSubtitle" modifier="Ichthyostega" created="200706190044" changecount="1">
-<pre>some aspects of Cinelerra-3 design</pre>
+<div title="SiteSubtitle" modifier="Ichthyostega" modified="200802030406" created="200706190044" changecount="2">
+<pre>Building a Render Nodes Network from Objects in the EDL</pre>
 </div>
 <div title="SiteTitle" modifier="Ichthyostega" modified="200708080212" created="200706190042" changecount="2">
 <pre>Engine</pre>
