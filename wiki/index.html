@@ -996,7 +996,14 @@ git push git://git.pipapo.org/cinelerra3/mob
 
 cinelerra3/mob is an anonymous account at pipapo.org where everyone can commit changes. </pre>
 </div>
-<div title="IRC-Transcripts" modifier="Ichthyostega" modified="200708170239" created="200708120209" tags="discuss irclog" changecount="4">
+<div title="IRC-Transcripts" modifier="Ichthyostega" modified="200802021818" created="200708120209" tags="discuss irclog" changecount="7">
+<pre>We keep a protocol or short summary of each important discussion. The summaries of the monthly developer meetings are posted to the Mailinglist and can be found on pipapo.org too
+
+* [[1.official developer meeting 1.Feb.2008|IRC_2008-02-01]]
+* [[informal developer meeting 10.Aug.2007|IRC_2007-08-10]]
+</pre>
+</div>
+<div title="IRC_2007-08-10" modifier="Ichthyostega" created="200802021815" tags="irclog" changecount="1">
 <pre>!10/11 aug 2007
 * maybe let the render graph builder generate a meta language which then is ''jit compiled'' for each configuration
 * using smart pointers and factories for objects ''and avoid unprotected use of {{{new}}} and {{{delete}}}'', if this wont work because of cycles, we might investigate specialized garbage collectors for specific cases.
@@ -1023,6 +1030,66 @@ cinelerra3/mob is an anonymous account at pipapo.org where everyone can commit c
 *** they can use special ''context frames'', which are provided and managed by the backend (as opaque data blocks).
 *** they can depend on previous state, i.e request from the backend a previous context frame, the same way as they can request previous media frames from the bakend, but there is no guarantee that the backend will satisfy this request.
 * on the question who decides what to do after a cache miss, we tend to put the decision into the render node (because this seems to be the simpler aproach), but still have to work out the details.
+</pre>
+</div>
+<div title="IRC_2008-02-01" modifier="Ichthyostega" modified="200802030342" created="200802021821" tags="irclog" changecount="20">
+<pre>! 1. feb.2008 on #openvideo
+21:00 -23:30 GMT. __Participants__:
+* hermanr
+* cehteh
+* ichthyo
+* Dasypus
+* gmerlin
+* ~SimAV
+* pippin
+* Plough
+* Plouj
+* Velmont
+
+!! Discuss the open points in http://www.pipapo.org/pipawiki/Cinelerra3/DesignProcess &amp;mdash; do we need this formalism?
+At start of the project last summer, Cehteh made a [[design process proposal|http://www.pipapo.org/pipawiki/Cinelerra3/DesignProcess]]. We will keeping this up, not for every implementation detail, but for mayor plans, wishes and design decisions. One point in the agenda of future meetings will be to work through proposals in the queue
+* proposals in the &quot;idea&quot; state are not complete, can be just brainstorming or need further discussion. Comments please to the proposal page.
+* proposals in the &quot;draft&quot; state are ready for conclusive discussion and will be treated in one of the next meetings
+* &quot;final&quot; proposals are either &quot;accepted&quot; or &quot;dropped&quot;. We don't differentiate the latter, but should write a short note why it was dropped.
+
+!! The development model
+We employ a distributed model based on GIT. We want this repository to be as complete as possible, including documentation in embedded ~TiddlyWikis and Bug reports. Each dev has its own GIT repo, devs are pulling from each other, they are free to cherry pick and try to make the combined version work. Point is that everyone can clone the git, negotiate with the others what s(he) wants to do, and hack on. Every dev signs off his branch with an standardized signature. For small changes we provide a &quot;Mob GIT&quot;, i.e. anonymously pushable git (which is untrusted of course). Cehteh is currently working on a git web frontend which makes the codebase in the mob-repo web-editable like a wiki.
+Will we need a stable version or an official branch?  not yet &amp;mdash; as long as the team is small it will work more painless without. At some point, when the project is more mature, we will define an official branch. Later on we will have automated builds and regression test runs. As we do test-driven development anyways, it's just a question of someone setting up all the infrastructure, then we'll do it.
+Ichthyo proposes a new requirement: All devs should ensure the &quot;master&quot; branch of their respective repositories always passes the compiler and the test suite. ~Work-In-Progress should be done on branches. Rationale: it is sufficient to pull from the master branches, and you can be sure the version you pulled worked for the originator.
+A note on dependencies: it will be hard to target minimal dependencies for such a project, but we shall try not bloat it unnecessarily. Sometimes it can be sensible to rather re-invent a feature &amp;mdash; esp. when it fits into the core focus of the project &amp;mdash; instead of depending on difficult to build and not sufficiently maintained external project. But we should avoid reinventing things like GUI toolkits.
+And, pretty much obvious, we try to stick to modern programming standards. That means, modules have interfaces, interfaces need some (minimal) documentation, and it is not allowed to bypass the interfaces and tangle everything in a wild fashion.
+Currently, the project can be separated into three layers, which could evolve into sub-projects: Backend, ~Proc-Layer, GUI. For each part, the dev most deeply involved and most knowledgeable will take on the sometimes necessary leadership and have the last word in case of quarrels. Currently, Cehteh cares for the Backend and Ichthyo headed for the ~Proc-Layer. We have postponed any work on the GUI for now and don't participate in GUI toolkit discussions. If there is a dev willing to care for the GUI, collect proposals, care for usability and the users needs and finally code it up, then he will the one to decide what toolkit to use.
+We plan to make the discussion about GPL v3 a point on the agenda of the next meeting.
+
+!! Monthly meetings
+* make it thursday, not friday
+* time for now 21:00 GMT &amp;mdash; if some (potential) participants have problems with this time, please speak up (maybe alternating times?)
+* write a short status report for each mayor part //prior// to the meeting (saves us time). Maybe add an TODO list there
+* go through the open issues for the design process drafts
+* publish a protocol of each meeting on the (~Cinelerra-CV, ~LibOpenvideo) Mailinglists, in the TiddlyWiki and on pipapo.org
+* next meeting on first Thursday in March (6.3.2008)
+
+!! Who works on what, what are the short term goals, what tasks are open?
+''Ichthyo'' works on the processing layer. Current goal is to get the core of the builder fleshed out. Next goal is to create a clip object (dummy), add it to the EDL, hand the EDL over to the builder and let the builder make the first (preliminary) render nodes. (note: left many details for later).
+Ichthyo started coding his design draft and things seem to work out as intended. Some Keywords: Have a high-level model and a low level model. The former are the objects in the Session edited by the user, the latter is a network of completely configured render nodes, employing the same pull model as in Cinelerra-2. In between sits the Builder, translating high-level into low-level. This translation is done on demand (not for every frame).
+Current state in this part is: basic asset manager is done, asset objects (forming a hierarchy) can be created and will be registered automatically, it is possible to create a clip-&quot;~MediaObject&quot; from a media asset (without caring for any details regarding multichannel clips). Some support lib components are written, Session and data holders start up on demand and shutdown cleanly. The test suite is the only interesting executable, and this will remain so for quite some time. Currently writing the first parts of the Builder.
+Further plans/ideas: Ichthyo is rather determined to embed a Prolog interpreter (YAP Prolog) to handle all sorts of configuration queries in a rule-driven fashion. Things Ichthyo can't do in the near future: caring for session loading/saving serialisation plus storage backends, caring for a DB based implementation of the asset manager and integration with production support software, target the scheduler which will receive any edit operations initiated from the GUI.
+
+''Cehteh'' is currently working on webgit, which is somewhat related inasmuch it will make small contributions to the mob repository much simpler. Previously he started with some foundation and support facilities. He plans to come back to the Backend implementation in about two weeks. The Backend is intended to handle all media (and even meta-)data as generalized frames. The render nodes network created by the ~Proc-Layer is completely stateless and all data is served from below. While it will be possible to address and access individual data within a frame (e.g. audio samples), frames are the smallest unit for memory and cache management. No plans to use a tiled memory model or to support frames larger than aprox. 20-40% of the available RAM.
+Cehteh's design plan includes a scheduler to organize the access to the raw data, monitor the timings and prefetch data as needed. This scheduler will be configurable via quality preferences (&quot;need realtime&quot;, &quot;need perfect quality&quot;). Further, there will be an elaborate caching scheme trying hard to avoid re-rendering any frames already calculated previously. Temporary data will be backed by files and thus swapped out &amp;mdash; this swapout and size of temporary data is to be monitored and adjusted on load &amp;mdash; and all temporary data is kept as most-recent-used cache discipline. Incoming and outgoing footage shall mostly be handled by using mmaped buffers. The rationale is to avoid unnecessary copy from kernel to user space and wasting memory for an additional in-kernel buffer. Writing via a mmapped buffer is little more tricky; there will be a in-place writing which is used for indices and other precalculated data which needs updates, and the processing layer can query write buffers which are actually a small cache/ring and then comited to the file. Basically, mmapping is a clean solution if you can design for it, and it's portable (posix)
+Things to do: object serialisation backend is sometime on Cehteh's schedule, but that's ahead and if someone else helps or takes over it would be OK. Even more true for a DB based backend for the asset manager.
+
+__about multithreading__: since the render nodes are stateless they can be driven in multiple threads (but inter frame dependencies need to be resolved/serialized). Mostly the backend manages threads and does that quite conservatively (compared to Cinelerra-2 which massively creates separate threads for small tasks). Any edit operations initiated from GUI go to a scheduler in the middle layer, which enqueues and effectively serializes operations done to the &quot;media objects&quot; in the high-level model. The editing operations themselves are //not threadsafe // by design, they rely on being scheduled correctly. The builder is triggered from this ~Proc-Layer scheduler and starts in one separate thread, and when done, we swap whole parts of the render nodes network and then the backend can re(start) rendering as needed.
+
+!!The naming discussion
+The discussion looks healthy so far... People can add new proposals on the [[pipawiki|http://www.pipapo.org/pipawiki/Cinelerra3/Names]]. intersting names are still coming in, so we should just let the name-choosing game go on for a while. And, btw, we //can// depart from beeing similar to &quot;Cinelerra&quot; ;-) 
+Let's say, we need a person volonteering to guide/moderate the selection, going over the list and scratching inammprobiate ones. Criteria for good names being:
+* should not be an existing project
+* should be &quot;googeable&quot;
+* should not be offensive
+* should have one of the free top level domains (.net, .org)
+* should be compatible with educational institutions (sorry, no pr0nedit :)
+* should not obviously collide with trade marks
 </pre>
 </div>
 <div title="InlineJavaScript" modifier="Jeremy" created="200603090618" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200603090618">
