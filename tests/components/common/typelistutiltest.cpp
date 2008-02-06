@@ -21,6 +21,22 @@
 * *****************************************************/
 
 
+/** @file typelistutiltest.cpp
+ ** \par what are we doing here??
+ **
+ ** the following test composes both an interface and the corresponding implementation
+ ** by instantiating "building block" templates over a collection of types. The resulting
+ ** class ends up inheriting a \i virtual function instantiated for each of the types 
+ ** in the list. (remember: normally the number and signature of all virtual functions
+ ** need to be absolutely fixed in the class definition)
+ **
+ ** @see typelisttest.cpp
+ ** @see typelistutil.hpp
+ ** @see cinelerra::query::ConfigRules  a real world usage example
+ **
+ */
+
+
 #include "common/test/run.hpp"
 #include "common/typelistutil.hpp"
 

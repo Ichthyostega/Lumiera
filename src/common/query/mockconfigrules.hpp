@@ -40,6 +40,7 @@
 
 #include "common/configrules.hpp"
 
+#include <boost/any.hpp>
 #include <string>
 
 
@@ -51,30 +52,75 @@ namespace cinelerra
   
   namespace query
     {
-    using mobject::session::Track;
-    using asset::Port;
     using asset::ProcPatt;
     using asset::PProcPatt;
+    
+    using boost::any;
+    using boost::any_cast;
+    
+    
+    /** a traits-class to define the smart-ptr to wrap the result */
+    template<class TY>
+    struct WrapReturn                   { typedef shared_ptr<TY> Wrapper;  };
+    
+    template<>
+    struct WrapReturn<const ProcPatt>   { typedef PProcPatt Wrapper;  };
+    
+    
+    /** 
+     * the actual table holding preconfigured answers
+     * packaged as boost::any objects. 
+     */
+    class MockTable : public cinelerra::ConfigRules
+      {
+      protected:
+        MockTable ();
+        const any& fetch_from_table_for (const string& queryStr);
+      };
+    
+    
+    /** 
+     * building block defining how to do 
+     * the mock implementation for \i one type.
+     * We simply access a table holding pre-created objects.
+     */
+    template<class TY, class BASE>
+    class LookupPreconfigured : public BASE
+      {
+        typedef typename WrapReturn<TY>::Wrapper Ret;
+        
+      public:
+        virtual Ret 
+        resolve (const Query<TY>& q)
+          {
+            TODO ("handle mismatch and not-found case");
+            return any_cast<Ret> (fetch_from_table_for (q));
+          }
+      };
+    
     
     /** 
      * Dummy Implementation of the query interface.
      * Provides an explicit implementation using hard wired
      * values for some types of interest for testing and debugging.
      */
-    class MockConfigRules : public cinelerra::ConfigRules
+    class MockConfigRules 
+      : public typelist::InstantiateChained < InterfaceTypes           
+                                            , LookupPreconfigured  // building block used for each of the types
+                                            , MockTable           //  for implementing the base class (interface) 
+                                            >
       {
       protected:
-        MockConfigRules ();
+        MockConfigRules ();                                   ///< to be used only by the singleton factory
         friend class cinelerra::singleton::StaticCreate<MockConfigRules>;
 
         virtual ~MockConfigRules() {}
         
       public:
         
-        virtual shared_ptr<Track> resolve (Query<Track> q);
-        virtual shared_ptr<Port>  resolve (Query<Port> q);
-        virtual PProcPatt         resolve (Query<const ProcPatt> q);
+        // TODO: implementation of any additional functions on the ConfigRules inteface goes here
       };
+      
     
     
   

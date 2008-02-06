@@ -62,7 +62,8 @@ namespace cinelerra
     /** 
      * Apply a template to a collection of types. 
      * The resulting class ends up inheriting from an instantiation
-     * of the templace for each of the types in the list.
+     * of the template for each of the types in the list. The iheritance
+     * graph is built in a "mixin" (multiple inheritance) style. 
      */
     template
       < class TYPES                  // List of Types 

@@ -47,7 +47,7 @@
 #define CINELERRA_CONFIGRULES_H
 
 #include "common/query.hpp"
-#include "common/typelist.hpp"
+#include "common/typelistutil.hpp"
 #include "common/singletonsubclass.hpp"
 
 #include "proc/mobject/session/track.hpp"
@@ -119,7 +119,7 @@ namespace cinelerra
       protected:
         virtual ~QueryHandler()  { }
       public:
-        virtual shared_ptr<TY> resolve (Query<TY> q) = 0;
+        virtual shared_ptr<TY> resolve (const Query<TY>& q) = 0;
       };
 
     // TODO: the Idea is to provide specialisations for the concrete types
@@ -131,8 +131,6 @@ namespace cinelerra
       
       
       
-    using cinelerra::typelist::Node;
-    using cinelerra::typelist::NullType;
       
     /** 
      * Generic query interface for retrieving objects matching
@@ -145,26 +143,9 @@ namespace cinelerra
      * the necessary resolve(Query<TY>) virtual functions (implemented
      * by MockConfigRules) 
      */
-    template<class TYPES>
-    class ConfigRulesInterface;
-      
-    template<>
-    class ConfigRulesInterface<NullType> 
-      {
-      protected:
-        virtual ~ConfigRulesInterface();
-      };
-      
-    template<class TY, typename TYPES>
-    class ConfigRulesInterface<Node<TY, TYPES> > 
-      : public QueryHandler<TY>,
-        public ConfigRulesInterface<TYPES>
-      { };
-      
-    
     template<typename TYPES>
     class ConfigRules
-      : public ConfigRulesInterface<typename TYPES::List> 
+      : public typelist::InstantiateForEach<TYPES, QueryHandler>
       {
       protected:
         ConfigRules ()         {}
@@ -194,7 +175,7 @@ namespace cinelerra
   typedef cinelerra::typelist::Types < mobject::session::Track
                                      , asset::Port
                                      , const asset::ProcPatt
-                                     >
+                                     > ::List
                                        InterfaceTypes;
   
   /** 

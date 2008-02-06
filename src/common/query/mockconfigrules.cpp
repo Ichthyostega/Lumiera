@@ -44,23 +44,18 @@ namespace cinelerra
       
     }
     
-    shared_ptr<Track> 
-    MockConfigRules::resolve (Query<Track> q)
+    MockTable::MockTable () 
     {
-      UNIMPLEMENTED ("solve for Track");
+      TODO ("build the preconfigured table");
     }
     
-    shared_ptr<Port>  
-    MockConfigRules::resolve (Query<Port> q)
+    
+    const any& 
+    MockTable::fetch_from_table_for (const string& queryStr)
     {
-      UNIMPLEMENTED ("solve for Port");
+      UNIMPLEMENTED ("fetch a preconfigured object from the table");
     }
     
-    PProcPatt
-    MockConfigRules::resolve (Query<const ProcPatt> q)
-    {
-      UNIMPLEMENTED ("solve for ProcPatt");
-    }
 
   
   } // namespace query
