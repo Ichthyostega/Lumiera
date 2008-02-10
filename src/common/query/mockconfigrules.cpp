@@ -38,22 +38,83 @@ namespace cinelerra
   
   namespace query
     {
+    using asset::Struct;
+    using asset::Port;
+    using asset::PPort;
+    
+    using asset::ProcPatt;
+    using asset::PProcPatt;
+    
+    namespace
+      {
+      typedef std::pair<const string, any> AnyPair;
+      
+      /** helper to simplify creating mock table entries, wrapped correctly */
+      template<class TY>
+      AnyPair entry (const string& query, typename WrapReturn<TY>::Wrapper& obj)
+      {
+        return AnyPair ( Query<TY> (query).asKey()
+                       , any(obj)); 
+      }
+      
+      /** helper especially for creating structural assets from a capability query */
+      template<class STRU>
+      AnyPair entry_Struct(Symbol caps)
+      {
+        typedef typename WrapReturn<STRU>::Wrapper Ptr;
+        
+        Query<STRU> query(caps); 
+        Ptr obj = Struct::create (query);
+        return AnyPair(query, obj);
+      }
+    
+    }
+    
+    
+    /** hard coded answers to configuration queries */
+    void
+    MockTable::fill_mock_table ()
+    {
+      // for baiscporttest.cpp ---------
+      answer_->insert (entry_Struct<const ProcPatt> ("stream(teststream)"));
+    }
+
+    
     
     MockConfigRules::MockConfigRules () 
     {
-      
+      WARN (config, "using a mock implementation of the ConfigQuery interface");
     }
     
-    MockTable::MockTable () 
+    MockTable::MockTable ()
+      : answer_(new Tab())
     {
-      TODO ("build the preconfigured table");
+      fill_mock_table ();
     }
+
     
+
     
+    /** this is the (preliminary/mock) implementation
+     *  handling queries for objects of a specific type
+     *  and with capabilities or properties defined by
+     *  the query. The real implementation would require
+     *  a rule based system (Ichthyo plans to use YAP Prolog),
+     *  while this dummy implementation simply relies on a
+     *  table of pre-fabricated objects. Never fails.
+     *  @return smart ptr (or similar) holding the object,
+     *          maybe an empty smart ptr if not found
+     */
     const any& 
     MockTable::fetch_from_table_for (const string& queryStr)
     {
-      UNIMPLEMENTED ("fetch a preconfigured object from the table");
+      static const any NOTFOUND;
+      
+      Tab::iterator i = answer_->find (queryStr);
+      if (i == answer_->end())
+        return NOTFOUND;
+      else
+        return i->second;
     }
     
 

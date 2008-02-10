@@ -39,7 +39,7 @@ namespace asset
     {
     protected:
       Track (const Asset::Ident& idi);
-      friend class StructFactory;
+      friend class StructFactoryImpl;
     };
     
   

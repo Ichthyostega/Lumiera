@@ -40,11 +40,14 @@
 #include "proc/asset.hpp"
 #include "common/query.hpp"
 #include "common/factory.hpp"
+#include "common/singleton.hpp"
 
-#include<string>
+#include <boost/scoped_ptr.hpp>
+#include <string>
 
 using std::string;
 using std::wstring;
+using boost::scoped_ptr;
 
 
 namespace asset
@@ -53,6 +56,7 @@ namespace asset
   
   class Struct;
   class StructFactory;
+  class StructFactoryImpl;
   class Port;
   
   
@@ -102,14 +106,21 @@ namespace asset
    */ 
   class StructFactory : public cinelerra::Factory<asset::Struct>
     {
+      scoped_ptr<StructFactoryImpl> impl_;
+
+    protected:
+      StructFactory ();
+      friend class Struct;
+
+      
     public:
       typedef shared_ptr<asset::Struct> PType;
       
       template<class STRU>
-      shared_ptr<STRU> operator() (const Query<STRU>& query);      ////////////TODO define actual operation 
+      shared_ptr<STRU> operator() (const Query<STRU>& query);      ////////////TODO actually do something sensible here 
       
       shared_ptr<Port> operator() (string portID, string streamID);
-
+      
     };
     
     

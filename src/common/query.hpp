@@ -26,22 +26,33 @@
 
 
 #include <string>
+#include <typeinfo>
 
 
 
 namespace cinelerra
   {
   using std::string;
+
+  /* ==== comon definitions for rule based queries ==== */
   
+  typedef const char * const Symbol;  
+      
+
   /** 
    * Generic query interface for retrieving objects matching
    * some capability query
    */
-  template<class STRU>
+  template<class OBJ>
   class Query : public std::string
     {
     public:
-      Query (string predicate="") : string(predicate) {}
+      Query (const string& predicate="") : string(predicate) {}
+      
+      const string asKey()  const
+        {
+          return string(typeid(OBJ).name())+": "+*this;
+        }
     };
 
     

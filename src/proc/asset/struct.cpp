@@ -27,78 +27,64 @@
 #include "proc/asset/track.hpp"
 #include "proc/asset/port.hpp"
 #include "proc/mobject/session.hpp"
+#include "common/configrules.hpp"
 
-#include "common/query.hpp"
+#include "proc/asset/structfactoryimpl.hpp"
+
 #include "common/util.hpp"
 #include "nobugcfg.h"
 
 using mobject::Session;
 using cinelerra::query::normalizeID;
 
+using cinelerra::ConfigRules;
+using cinelerra::query::QueryHandler;
+
+
+
 namespace asset
   {
   
-  /****** NOTE: not implemented yet. What follows is a hack to build simple tests *******/
-  
-  
-  namespace // common Struct Asset implementation details
-    {
-      /** @internal derive a sensible asset ident tuple when creating 
-       *  a track asset based on a query
-       *  @todo define the actual naming scheme of struct assets
-       */
-      const Asset::Ident
-      createTrackIdent (const Query<Track>& query)
-        {
-          string name ("track-" + query);  // TODO something sensible here; append number, sanitize etc.
-          TODO ("track naming scheme??");
-          Category category (STRUCT,"tracks");
-          return Asset::Ident (name, category );
-        }
-      
-      typedef std::pair<string,string> PortIDs;
-      
-      PortIDs
-      createPortIdent (const Query<Port>& query)
-        {
-          string name ("port-" + query);   // TODO get some more sensible dummy values
-          TODO ("port naming scheme??");
-          return PortIDs (name, "mpeg"); // dummy stream type
-        }
-    } 
+  /****** NOTE: not really implemented yet. What follows is partially a hack to build simple tests *******/
 
 
   
-  StructFactory Struct::create;  ///< storage for the static StructFactory instance
+  
+  /** storage for the static StructFactory instance */
+  StructFactory Struct::create;
+  
+  
+  /** using private implementation detail class */
+  StructFactory::StructFactory ()
+    : impl_(new StructFactoryImpl(*this)) 
+  { }
   
   
   
-  /** Factory method for Structural Asset instances. ....
+  /** Factory method for Structural Asset instances.
+   *  First tries to relove the asset by issuing an capability query.
+   *  If unsuccessfull, use some internally specialized ctor call.
    *  @todo work out the struct asset naming scheme!
    *  @return an Struct smart ptr linked to the internally registered smart ptr
    *          created as a side effect of calling the concrete Struct subclass ctor.
    */
-  template<>
-  shared_ptr<Track> 
-  StructFactory::operator() (const Query<Track>& query)
+  template<class STRU>
+  shared_ptr<STRU> 
+  StructFactory::operator() (const Query<STRU>& capabilities)
   {
-    TODO ("actually evaluate the query...");
-    Track* pT = new Track (createTrackIdent (query));
-    return AssetManager::instance().wrap (*pT);
+    QueryHandler<STRU>& typeHandler = ConfigRules::instance();  
+    shared_ptr<STRU> res = typeHandler.resolve (capabilities);
+    
+    if (res)
+      return res;
+    
+    // create new one, since the 
+    // ConfigQuery didn't yield any result
+    STRU* pS = impl_->fabricate(capabilities);
+    return AssetManager::instance().wrap (*pS);
   }
   
   
-  /** Similar instance for Port Query....
-   *  @todo better a generic implementation utilizing ConfigQuery....
-   */
-  template<>
-  shared_ptr<Port> 
-  StructFactory::operator() (const Query<Port>& query)
-  {
-    TODO ("actually evaluate the query...");
-    PortIDs ids (createPortIdent (query));
-    return operator() (ids.first, ids.second);
-  }
   
   
   /** Factory method for creating Ports explicitly.
@@ -122,4 +108,27 @@ namespace asset
 
 
 
+} // namespace asset
+
+
+
+
+   /**************************************************/
+   /* explicit instantiations of the factory methods */
+   /**************************************************/
+
+#include "proc/asset/struct.hpp"
+#include "proc/asset/procpatt.hpp"
+#include "proc/asset/track.hpp"
+#include "proc/asset/port.hpp"
+
+
+namespace asset
+  {
+  
+  template shared_ptr<Port>     StructFactory::operator() (const Query<Port>& query);
+  template shared_ptr<Track>    StructFactory::operator() (const Query<Track>& query);
+  template PProcPatt            StructFactory::operator() (const Query<const ProcPatt>& query);
+
+  
 } // namespace asset

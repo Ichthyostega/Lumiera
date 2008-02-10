@@ -50,10 +50,11 @@
 #include "common/typelistutil.hpp"
 #include "common/singletonsubclass.hpp"
 
+//TODO: is it sensible to bring in the types explicitly here? (it's not necessary, but may be convienient...)
 #include "proc/mobject/session/track.hpp"
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/port.hpp"
-
+#include "proc/asset/track.hpp"
 
 #include <string>
 #include <tr1/memory>
@@ -89,9 +90,8 @@ namespace cinelerra
       {
         
       };
-      
-    typedef const char * const Symbol;  
-      
+    
+    
     template
       < const Symbol SYM,            // Predicate symbol
         typename SIG = bool(string) //  Signature
@@ -101,6 +101,17 @@ namespace cinelerra
         
       };
       
+    /**
+     * the "backside" interface towards the classes participating
+     * in the configuration system (the config system will be
+     * delivering instances of these classes for a given query). 
+     * This one currently is just brainstorming. The idea is that
+     * a participating class would provide such  and TypeHandler
+     * implementing the predicates which make sense for this special
+     * type of object. Registering  such a TypeHandler should create
+     * the necessary handler functions to be installed into 
+     * the Prolog system.
+     */  
     template<class TY>
     class TypeHandler
       {
@@ -112,13 +123,25 @@ namespace cinelerra
         template<Symbol SYM, typename SIG>
         TY make (Pred<SYM,SIG> capability, TY& refObj =NIL);
       };
-      
+    
+    /** 
+     * the "frontside" interface: the Proc-Layer code can
+     * use this QueryHandler to retrieve instances of the
+     * type TY fulfilling the given Query. To start with,
+     * we use a mock implementation-
+     * @see cinelerra::query::LookupPreconfigured
+     * @see cinelerra::query::MockTable
+     */
     template<class TY>
     class QueryHandler
       {
       protected:
         virtual ~QueryHandler()  { }
       public:
+        /** try to find or create an object of type TY 
+         *  fulfilling the given query.
+         *  @return empty shared-ptr if not found,
+         */
         virtual shared_ptr<TY> resolve (const Query<TY>& q) = 0;
       };
 
@@ -173,6 +196,7 @@ namespace cinelerra
    *  rule based config query system
    */
   typedef cinelerra::typelist::Types < mobject::session::Track
+                                     , asset::Track
                                      , asset::Port
                                      , const asset::ProcPatt
                                      > ::List

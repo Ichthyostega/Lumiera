@@ -69,6 +69,7 @@ namespace asset
     protected:
       Port (PProcPatt& wiring, string portID="", wstring shortDesc =wstring(), wstring longDesc =wstring()) ;
       friend class StructFactory;
+      friend class StructFactoryImpl;
 
     public:
       const string& getPortID()       const { return portID_; }

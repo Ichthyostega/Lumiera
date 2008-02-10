@@ -118,8 +118,8 @@ namespace asset
         {
           try
             {
-              IdHashtable::const_iterator i = table.begin(); 
-              IdHashtable::const_iterator e = table.end(); 
+              IdHashtable::iterator i = table.begin(); 
+              IdHashtable::iterator e = table.end(); 
               for ( ; i!=e ; ++i )
                 i->second->dependants.clear();
               

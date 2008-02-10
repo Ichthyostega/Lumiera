@@ -48,7 +48,7 @@ namespace mobject
     /** initialize the most basic internal defaults. */
     DefsManager::DefsManager ()  throw()
     {
-      
+      TODO ("setup basic defaults of the session");
     }
 
     

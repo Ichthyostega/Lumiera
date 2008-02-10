@@ -24,6 +24,7 @@
 #ifndef ASSET_PROCPATT_H
 #define ASSET_PROCPATT_H
 
+#include "common/query.hpp"
 #include "proc/asset/struct.hpp"
 
 #include <vector>
@@ -34,26 +35,38 @@ using std::vector;
 
 namespace asset
   {
-  
-  class BuildInstruct;
+  using cinelerra::Symbol;
 
+  class Proc;
+  class ProcPatt;
+  class BuildInstruct; 
+  typedef shared_ptr<const asset::Proc> PProc;
+  typedef shared_ptr<const asset::ProcPatt> PProcPatt;
+  
+  typedef vector<BuildInstruct> InstructionSequence;    
 
   /**
-   * special type of structural Asset 
+   * "Processing Pattern" is a structural Asset 
    * representing information how to build some part 
    * of the render engine's processing nodes network.
    */
   class ProcPatt : public Struct
     {
       string propDescriptor_;
-      vector<BuildInstruct> instructions;
+      InstructionSequence instructions_;
+      
+      ProcPatt (const string& props, const InstructionSequence& instructs);
       
     protected:
-      ProcPatt (const string& properties, const vector<BuildInstruct>& instr);
+      explicit ProcPatt (const string& propDescriptor);
+      friend class StructFactoryImpl;
       
     public:
       const string& queryStreamID()  const;
       shared_ptr<ProcPatt> newCopy (string newID) const;
+      
+      ProcPatt& attach (Symbol where, PProc& node);
+      ProcPatt& operator+= (PProcPatt& toReuse);
 
     };
     

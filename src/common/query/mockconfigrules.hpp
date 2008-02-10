@@ -39,15 +39,18 @@
 #define CINELERRA_MOCKCONFIGRULES_H
 
 #include "common/configrules.hpp"
+#include "common/util.hpp"
 
+#include <boost/scoped_ptr.hpp>
 #include <boost/any.hpp>
 #include <string>
+#include <map>
 
 
 
 namespace cinelerra
   {
-  using std::string;
+  //using std::string;
   
   
   namespace query
@@ -55,8 +58,11 @@ namespace cinelerra
     using asset::ProcPatt;
     using asset::PProcPatt;
     
+    using util::isnil;
+    
     using boost::any;
     using boost::any_cast;
+    
     
     
     /** a traits-class to define the smart-ptr to wrap the result */
@@ -73,9 +79,17 @@ namespace cinelerra
      */
     class MockTable : public cinelerra::ConfigRules
       {
+        typedef std::map<string,any> Tab;
+        typedef boost::scoped_ptr<Tab> PTab;
+        
+        PTab answer_;
+        
       protected:
         MockTable ();
         const any& fetch_from_table_for (const string& queryStr);
+        
+      private:
+        void fill_mock_table ();
       };
     
     
@@ -93,8 +107,11 @@ namespace cinelerra
         virtual Ret 
         resolve (const Query<TY>& q)
           {
-            TODO ("handle mismatch and not-found case");
-            return any_cast<Ret> (fetch_from_table_for (q));
+            const any& entry = fetch_from_table_for (q.asKey());
+            if (!isnil (entry))
+              return any_cast<Ret> (entry);
+            else
+              return Ret(); // default-constructed empty smart ptr
           }
       };
     
