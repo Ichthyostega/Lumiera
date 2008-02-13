@@ -61,7 +61,7 @@ namespace mobject
       
       if (!res)
         throw cinelerra::error::Config ( str(format("The following Query could not be resolved: %s.") 
-                                                   % capabilities)
+                                                   % capabilities.asKey())
                                        , CINELERRA_ERROR_CAPABILITY_QUERY );
       else
         return res;

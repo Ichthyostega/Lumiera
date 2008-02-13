@@ -62,8 +62,8 @@ namespace asset
   template<> Symbol Traits<Port>::namePrefix = "port-";
   template<> Symbol Traits<Port>::catFolder  = "ports";
   
-  template<> Symbol Traits<ProcPatt>::namePrefix = "patt-";
-  template<> Symbol Traits<ProcPatt>::catFolder  = "build-templates";
+  template<> Symbol Traits<const ProcPatt>::namePrefix = "patt-";
+  template<> Symbol Traits<const ProcPatt>::catFolder  = "build-templates";
   
   
   
@@ -121,7 +121,7 @@ namespace asset
       template<class STRU>
       STRU* fabricate (const Query<STRU>& caps)
         {
-        throw cinelerra::error::Config ( str(format("The following Query could not be resolved: %s.") % caps)
+        throw cinelerra::error::Config ( str(format("The following Query could not be resolved: %s.") % caps.asKey())
                                        , CINELERRA_ERROR_CAPABILITY_QUERY );
         }
       
@@ -135,12 +135,13 @@ namespace asset
     StructFactoryImpl::fabricate (const Query<Track>& caps)
       {
         TODO ("actually extract properties/capabilities from the query...");
+        TODO ("make sure AssetManager detects dublicates (it doesn't currently)");
         return new Track (createIdent (caps));
       }
     
     template<>
-    ProcPatt* 
-    StructFactoryImpl::fabricate (const Query<ProcPatt>& caps)
+    const ProcPatt* 
+    StructFactoryImpl::fabricate (const Query<const ProcPatt>& caps)
       {
         TODO ("actually extract properties/capabilities from the query...");
         return new ProcPatt (createIdent (caps));

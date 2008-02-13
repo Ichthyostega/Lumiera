@@ -53,8 +53,8 @@ namespace asset
    */
   class Port : public Struct
     {
-      PProcPatt wiringTemplate;
       string portID_;
+      PProcPatt wiringTemplate;
       
     public:
       wstring shortDesc;

@@ -46,6 +46,7 @@ namespace asset
   Port::Port (PProcPatt& wiring, string portID, wstring shortDesc, wstring longDesc) 
     : Struct (createPortIdent (wiring,portID,shortDesc,longDesc)),
       portID_ (portID),
+      wiringTemplate(wiring),
       shortDesc (shortDesc),
       longDesc (longDesc)
   {

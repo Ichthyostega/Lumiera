@@ -65,16 +65,23 @@ namespace cinelerra
         
         Query<STRU> query(caps); 
         Ptr obj = Struct::create (query);
-        return AnyPair(query, obj);
+        return AnyPair(query.asKey(), obj);
       }
     
     }
     
     
-    /** hard coded answers to configuration queries */
+    /** hard coded answers to configuration queries.
+     *  @note while filling the table re-entrace
+     *        will be quite common, so the order of
+     *        creating the objects is important.
+     */
     void
     MockTable::fill_mock_table ()
     {
+      INFO (config, "creating mock answers for some config queries...");
+      isInit_ = true; // allow re-entrance
+      
       // for baiscporttest.cpp ---------
       answer_->insert (entry_Struct<const ProcPatt> ("stream(teststream)"));
     }
@@ -86,11 +93,11 @@ namespace cinelerra
       WARN (config, "using a mock implementation of the ConfigQuery interface");
     }
     
+    
     MockTable::MockTable ()
-      : answer_(new Tab())
-    {
-      fill_mock_table ();
-    }
+      : answer_(new Tab()),
+        isInit_(false)
+    { }
 
     
 
@@ -109,6 +116,7 @@ namespace cinelerra
     MockTable::fetch_from_table_for (const string& queryStr)
     {
       static const any NOTFOUND;
+      if (!isInit_) fill_mock_table();
       
       Tab::iterator i = answer_->find (queryStr);
       if (i == answer_->end())

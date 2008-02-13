@@ -67,10 +67,10 @@ namespace cinelerra
     
     /** a traits-class to define the smart-ptr to wrap the result */
     template<class TY>
-    struct WrapReturn                   { typedef shared_ptr<TY> Wrapper;  };
+    struct WrapReturn             { typedef shared_ptr<TY> Wrapper;  };
     
     template<>
-    struct WrapReturn<const ProcPatt>   { typedef PProcPatt Wrapper;  };
+    struct WrapReturn<ProcPatt>   { typedef PProcPatt Wrapper;  };
     
     
     /** 
@@ -83,6 +83,7 @@ namespace cinelerra
         typedef boost::scoped_ptr<Tab> PTab;
         
         PTab answer_;
+        bool isInit_;
         
       protected:
         MockTable ();

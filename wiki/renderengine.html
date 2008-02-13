@@ -797,7 +797,7 @@ Error: #f88</pre>
 &amp;rarr; [[Configuration Rules system|ConfigRules]]
 </pre>
 </div>
-<div title="ConfigRules" modifier="Ichthyostega" modified="200801202311" created="200801171352" tags="overview spec" changecount="7">
+<div title="ConfigRules" modifier="Ichthyostega" modified="200802130339" created="200801171352" tags="overview spec" changecount="8">
 <pre>Many features can be implemented by specifically configuring and wiring some unspecific components. Rather than tie the client code in need of some given feature to these configuration internals, in Cinelerra-3 the client can //query // for some kind of object providing the //needed capabilities. // Right from start (summer 2007), Ichthyo had the intention to implement such a feature using sort of a ''declarative database'', e.g. by embedding a Prolog system. By adding rules to the basic session configuration, users should be able to customize the semi-automatic part of Cinelerra's behaviour to great extent.
 
 [[Configuration Queries|ConfigQuery]] are used at various places, when creating and adding new objects, as well when building or optimizing the render engine node network.
@@ -816,6 +816,8 @@ Actually posing such an configuration query, for example to the [[Defaults Manag
 !Implementation
 At start and for debugging/testing, there is an ''dummy'' implementation using a map with predefined queries and answers. But for the real system, the idea is to embed a ''YAP Prolog'' engine to run the queries. This includes the task of defining and loading a set of custom predicates, so the rule system can interact with the object oriented execution environment, for example by transforming some capability predicate into virtual calls to a corresponding object interface. We need a way for objects to declare some capability predicates, together with a functor that can be executed on an object instance (and further parameters) in the cause of the evaluation of some configuration query. Type safety and diagnostics play an important role here, because effectively the rule base is a pool of code open for arbitray additions from the user session.
 &amp;rarr; [[considerations for a Prolog based implementation|QueryImplProlog]]
+&amp;rarr; see {{{src/common/query/mockconfigrules.cpp}}} for the table with the hard wired (mock) answers
+
 </pre>
 </div>
 <div title="Controller" modifier="Ichthyostega" modified="200712090624" created="200706220319" tags="def" changecount="4">
