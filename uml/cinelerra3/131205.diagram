@@ -15,7 +15,7 @@ classcanvas 128389 class_ref 138757 // ProcPatt
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 408 249 2000
   end
-classcanvas 128517 class_ref 138117 // Port
+classcanvas 128517 class_ref 138117 // Pipe
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 240 168 2000
   end
