@@ -106,7 +106,7 @@ classcanvas 141317 class_ref 139909 // LocatingPin
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 518 239 2000
   end
-classcanvas 146053 class_ref 138117 // Port
+classcanvas 146053 class_ref 138117 // Pipe
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 344 597 2004
   end
@@ -114,8 +114,8 @@ classcanvas 146437 class_ref 140421 // Plug
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 560 597 2000
   end
-textcanvas 146821 "global Port Asset"
-  xyzwh 299 569 2000 90 23
+textcanvas 146821 "global processing Pipe Asset"
+  xyzwh 271 568 2000 149 24
 relationcanvas 128389 relation_ref 128005 // <directional aggregation by value>
   from ref 128005 z 1999 to ref 128133
   role_a_pos 200 676 3000 no_role_b
@@ -271,7 +271,7 @@ relationcanvas 145925 relation_ref 145413 // <unidirectional association>
 relationcanvas 146181 relation_ref 145541 // <directional aggregation>
   from ref 128005 z 1999 to point 311 616
   line 146309 z 1999 stereotype "<<vector>>" xyz 103 649 3000 to ref 146053
-  role_a_pos 308 594 3000 no_role_b
+  role_a_pos 307 594 3000 no_role_b
   multiplicity_a_pos 329 627 3000 no_multiplicity_b
 relationcanvas 146565 relation_ref 145669 // <generalisation>
   from ref 146437 z 1999 to ref 137221

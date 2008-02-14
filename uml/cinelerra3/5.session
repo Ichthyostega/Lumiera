@@ -3,9 +3,9 @@ diagrams
   classdiagram_ref 130309 // Asset Kinds
     860 633 100 4 158 0
   classdiagram_ref 128133 // Session structure
-    860 633 100 4 462 0
+    860 633 100 4 289 0
   classdiagram_ref 128389 // Render Entities
-    743 538 100 4 0 0
+    743 538 100 4 184 0
   active  classdiagram_ref 131205 // Struct-Asset Relations
     555 620 100 4 0 0
 end
@@ -13,12 +13,10 @@ show_stereotypes
 selected 
   package_ref 129 // cinelerra3
 open
-  
-  package_ref 128005 // design
+  deploymentview_ref 128645 // gen
   class_ref 137477 // Unknown
   class_ref 137605 // Preview
   class_ref 137989 // Track
-  class_ref 138117 // Port
   class_ref 128005 // SessionImpl
   class_ref 128133 // EDL
   class_ref 128261 // Fixture

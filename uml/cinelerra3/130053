@@ -1,6 +1,6 @@
 format 40
 "asset" // design::codegen::proc::asset
-  revision 7
+  revision 8
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -508,7 +508,7 @@ ${namespace_end}"
       comment "description of some media data decoder or encoder facility"
     end
 
-    artifact 137605 "outport"
+    artifact 137605 "pipe"
       stereotype "source"
       cpp_h "/*
   ${NAME}.hpp  -  ${description}
@@ -542,7 +542,7 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 138117 // OutPort
+	class_ref 138117 // Pipe
       end
       comment "structural asset corresponding to some port generating media output"
     end

@@ -1,6 +1,6 @@
 format 40
 "Asset" // ProcessingLayer::Asset
-  revision 17
+  revision 18
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -686,7 +686,7 @@ ${inlines}
       end
     end
 
-    class 138117 "Port"
+    class 138117 "Pipe"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -697,7 +697,7 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      comment "structural asset corresponding to some port for building a processing chain and generating media output"
+      comment "structural asset representing a basic building block within the high level model: a port for building a processing chain and generating media output"
       classrelation 141445 // <generalisation>
 	relation 139653 ---|>
 	  a public

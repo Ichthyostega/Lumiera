@@ -84,6 +84,8 @@ classcanvas 139781 class_ref 135045 // CodecAdapter
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 599 621 2000
   end
+textcanvas 140037 "the »low level model«"
+  xyzwh 600 318 2000 105 18
 relationcanvas 128261 relation_ref 131845 // <directional aggregation by value>
   from ref 128005 z 1999 stereotype "<<list>>" xyz 178 278 3000 to point 216 200
   line 137733 z 1999 to ref 128133

@@ -1,6 +1,6 @@
 format 40
 "MObject" // ProcessingLayer::MObject
-  revision 28
+  revision 29
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -145,15 +145,15 @@ ${inlines}
 	  b multiplicity "" parent class_ref 139653 // Session
       end
 
-      classrelation 147717 // ports (<directional aggregation>)
+      classrelation 147717 // pipes (<directional aggregation>)
 	relation 145541 o-->
 	  stereotype "vector"
-	  a role_name "ports" multiplicity "*" protected
+	  a role_name "pipes" multiplicity "*" protected
 	    comment "the global ports (busses) of the session"
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
-	    classrelation_ref 147717 // ports (<directional aggregation>)
-	  b multiplicity "" parent class_ref 138117 // Port
+	    classrelation_ref 147717 // pipes (<directional aggregation>)
+	  b multiplicity "" parent class_ref 138117 // Pipe
       end
     end
 
@@ -1020,7 +1020,7 @@ ${inlines}
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 147973 // outPort (<unidirectional association>)
-	  b multiplicity "" parent class_ref 138117 // Port
+	  b multiplicity "" parent class_ref 138117 // Pipe
       end
     end
 
