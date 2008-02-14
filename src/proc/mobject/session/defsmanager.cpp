@@ -23,7 +23,7 @@
 
 #include "proc/mobject/session/defsmanager.hpp"
 #include "proc/asset/procpatt.hpp"
-#include "proc/asset/port.hpp"
+#include "proc/asset/pipe.hpp"
 #include "common/configrules.hpp"
 #include "common/error.hpp"
 
@@ -32,7 +32,7 @@
 using boost::format;
 
 using asset::Query;
-using asset::Port;
+using asset::Pipe;
 using asset::ProcPatt;
 using asset::PProcPatt;
 
@@ -73,7 +73,7 @@ namespace mobject
    /* explicit template instantiations for querying various Types */
    /***************************************************************/
 
-    template shared_ptr<Port> DefsManager::operator ()(const Query<Port>&); 
+    template shared_ptr<Pipe> DefsManager::operator ()(const Query<Pipe>&); 
     template PProcPatt        DefsManager::operator ()(const Query<const ProcPatt>&); 
 
   } // namespace mobject::session

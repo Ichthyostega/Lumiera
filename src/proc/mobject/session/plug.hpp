@@ -1,5 +1,5 @@
 /*
-  PLUG.hpp  -  LocatingPin for requesting connection to some Port
+  PLUG.hpp  -  LocatingPin for requesting connection to some Pipe
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -28,7 +28,7 @@
 
 
 
-namespace asset { class Port; }
+namespace asset { class Pipe; }
 
 namespace mobject
   {
@@ -36,13 +36,13 @@ namespace mobject
     {
 
     /**
-     * LocatingPin for requesting connection to some Port
+     * LocatingPin for requesting connection to some Pipe
      */
     class Plug : public Wish
       {
       protected:
-        /** the Port this MObject wants to be conected to */
-        asset::Port* outPort;   ////////////////////////////////TODO: shared_ptr
+        /** the Pipe this MObject wants to be conected to */
+        asset::Pipe* outPipe;   ////////////////////////////////TODO: shared_ptr
 
       };
 

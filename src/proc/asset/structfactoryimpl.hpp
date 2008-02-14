@@ -59,8 +59,8 @@ namespace asset
   template<> Symbol Traits<Track>::namePrefix = "track-";
   template<> Symbol Traits<Track>::catFolder  = "tracks";
   
-  template<> Symbol Traits<Port>::namePrefix = "port-";
-  template<> Symbol Traits<Port>::catFolder  = "ports";
+  template<> Symbol Traits<Pipe>::namePrefix = "pipe-";
+  template<> Symbol Traits<Pipe>::catFolder  = "pipes";
   
   template<> Symbol Traits<const ProcPatt>::namePrefix = "patt-";
   template<> Symbol Traits<const ProcPatt>::catFolder  = "build-templates";
@@ -90,15 +90,15 @@ namespace asset
           return Asset::Ident (name, cat );
         }
       
-      typedef std::pair<string,string> PortIDs;
+      typedef std::pair<string,string> PipeIDs;
     
-      PortIDs
-      createPortIdent (const Query<Port>& query)
+      PipeIDs
+      createPipeIdent (const Query<Pipe>& query)
         {
-          string name (Traits<Port>::namePrefix + query);  // TODO get some more sensible dummy values
-          TODO ("port naming scheme??");
-          TODO ("actually extract the port stream type from the query...");
-          return PortIDs (name, "data");                // dummy stream type
+          string name (Traits<Pipe>::namePrefix + query);  // TODO get some more sensible dummy values
+          TODO ("pipe naming scheme??");
+          TODO ("actually extract the pipe stream type from the query...");
+          return PipeIDs (name, "data");                // dummy stream type
         }
   
     
@@ -148,10 +148,10 @@ namespace asset
       }
     
     template<>
-    Port* 
-    StructFactoryImpl::fabricate (const Query<Port>& caps)
+    Pipe* 
+    StructFactoryImpl::fabricate (const Query<Pipe>& caps)
       {
-        PortIDs ids (createPortIdent (caps));
+        PipeIDs ids (createPipeIdent (caps));
         return recursive_create_ (ids.first, ids.second).get();
       }
     

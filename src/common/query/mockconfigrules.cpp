@@ -25,7 +25,7 @@
 
 #include "proc/mobject/session/track.hpp"
 #include "proc/asset/procpatt.hpp"
-#include "proc/asset/port.hpp"
+#include "proc/asset/pipe.hpp"
 
 
 //#include "common/util.hpp"
@@ -39,8 +39,8 @@ namespace cinelerra
   namespace query
     {
     using asset::Struct;
-    using asset::Port;
-    using asset::PPort;
+    using asset::Pipe;
+    using asset::PPipe;
     
     using asset::ProcPatt;
     using asset::PProcPatt;
@@ -82,7 +82,7 @@ namespace cinelerra
       INFO (config, "creating mock answers for some config queries...");
       isInit_ = true; // allow re-entrance
       
-      // for baiscporttest.cpp ---------
+      // for baiscpipetest.cpp ---------
       answer_->insert (entry_Struct<const ProcPatt> ("stream(teststream)"));
     }
 

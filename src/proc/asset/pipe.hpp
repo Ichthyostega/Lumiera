@@ -1,5 +1,5 @@
 /*
-  PORT.hpp  -  structural asset corresponding to some port generating media output
+  PIPE.hpp  -  structural asset denoting a processing pipe generating media output
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,8 @@
 */
 
 
-#ifndef ASSET_OUTPORT_H
-#define ASSET_OUTPORT_H
+#ifndef ASSET_PIPE_H
+#define ASSET_PIPE_H
 
 #include "proc/asset/struct.hpp"
 #include "proc/asset/procpatt.hpp"
@@ -32,61 +32,60 @@
 namespace asset
   {
   
-  class Port;
-  typedef shared_ptr<Port> PPort;
+  class Pipe;
+  typedef shared_ptr<Pipe> PPipe;
   
   
   template<>
-  class ID<Port> : public ID<Struct>
+  class ID<Pipe> : public ID<Struct>
     {
     public:
       ID (size_t id);
-      ID (const Port&);
+      ID (const Pipe&);
     };
 
     
     
   /**
-   * structural asset corresponding to some port 
-   * for building a processing chain and 
-   * generating media output
+   * structural asset corresponding to some 
+   * processing pipe for generating media output
    */
-  class Port : public Struct
+  class Pipe : public Struct
     {
-      string portID_;
+      string pipeID_;
       PProcPatt wiringTemplate;
       
     public:
       wstring shortDesc;
       wstring longDesc;
       
-      virtual const ID<Port>& getID()  const    ///< @return ID typed to asset::Port 
+      virtual const ID<Pipe>& getID()  const    ///< @return ID typed to asset::Pipe 
         { 
-          return static_cast<const ID<Port>& > (Asset::getID()); 
+          return static_cast<const ID<Pipe>& > (Asset::getID()); 
         }
 
       
     protected:
-      Port (PProcPatt& wiring, string portID="", wstring shortDesc =wstring(), wstring longDesc =wstring()) ;
+      Pipe (PProcPatt& wiring, string pipeID="", wstring shortDesc =wstring(), wstring longDesc =wstring()) ;
       friend class StructFactory;
       friend class StructFactoryImpl;
 
     public:
-      const string& getPortID()       const { return portID_; }
+      const string& getPipeID()       const { return pipeID_; }
       const PProcPatt& getProcPatt()  const { return wiringTemplate; }
       
       /** use another wiring template. Triggers complete rebuild of the render engine. */
       void switchProcPatt (PProcPatt& another);
       
-      /** convienience shortcut for retrieving default configured ports */
-      static PPort query (string properties)  ;
+      /** convienience shortcut for retrieving default configured pipes */
+      static PPipe query (string properties)  ;
     };
     
     
    // catch up with postponed definition of ID<Struct> ctors...
   //
-  inline ID<Port>::ID(size_t id)        : ID<Struct> (id)           {};
-  inline ID<Port>::ID(const Port& port) : ID<Struct> (port.getID()) {};
+  inline ID<Pipe>::ID(size_t id)        : ID<Struct> (id)           {};
+  inline ID<Pipe>::ID(const Pipe& pipe) : ID<Struct> (pipe.getID()) {};
 
       
 

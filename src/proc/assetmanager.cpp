@@ -235,7 +235,7 @@ namespace asset
 #include "proc/asset/proc.hpp"  
 #include "proc/asset/struct.hpp"  
 #include "proc/asset/track.hpp"  
-#include "proc/asset/port.hpp"  
+#include "proc/asset/pipe.hpp"  
 #include "proc/asset/meta.hpp"  
 #include "proc/asset/procpatt.hpp"  
 
@@ -256,7 +256,7 @@ namespace asset
   template shared_ptr<Media>    AssetManager::wrap (const Media& asset);
   template shared_ptr<Clip>     AssetManager::wrap (const Clip&  asset);
   template shared_ptr<Track>    AssetManager::wrap (const Track& asset);
-  template shared_ptr<Port>     AssetManager::wrap (const Port&  asset);
+  template shared_ptr<Pipe>     AssetManager::wrap (const Pipe&  asset);
   template shared_ptr<ProcPatt> AssetManager::wrap (const ProcPatt& asset);
 
   

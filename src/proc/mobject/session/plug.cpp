@@ -1,5 +1,5 @@
 /*
-  Plug  -  LocatingPin for requesting connection to some Port
+  Plug  -  LocatingPin for requesting connection to some Pipe
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,7 +22,7 @@
 
 
 #include "proc/mobject/session/plug.hpp"
-#include "proc/asset/port.hpp"
+#include "proc/asset/pipe.hpp"
 
 namespace mobject
   {

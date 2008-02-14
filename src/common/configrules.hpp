@@ -53,7 +53,7 @@
 //TODO: is it sensible to bring in the types explicitly here? (it's not necessary, but may be convienient...)
 #include "proc/mobject/session/track.hpp"
 #include "proc/asset/procpatt.hpp"
-#include "proc/asset/port.hpp"
+#include "proc/asset/pipe.hpp"
 #include "proc/asset/track.hpp"
 
 #include <string>
@@ -77,14 +77,14 @@ namespace cinelerra
     // retrieve(O, Cap) :- make(T), capabilities(Cap).
     // capabilities(Q) :- call(Q).
     //
-    // stream(T, mpeg) :- type(T, track), type(P, port), retrieve(P, stream(P,mpeg)), place_to(P, T).
+    // stream(T, mpeg) :- type(T, track), type(P, pipe), retrieve(P, stream(P,mpeg)), place_to(P, T).
     //
     // The type guard is inserted auomatically, while the predicate implementations for
     // find/1, make/1, stream/2, and place_to/2 are to be provided by the target types.
     //
     // As a example, the goal ":-retrieve(T, stream(T,mpeg))." would search a Track object, try to
-    // retrieve a port object with stream-type=mpeg and associate the track with this Port. The
-    // predicate "stream(P,mpeg)" needs to be implemented (natively) for the port object.
+    // retrieve a pipe object with stream-type=mpeg and associate the track with this Pipe. The
+    // predicate "stream(P,mpeg)" needs to be implemented (natively) for the pipe object.
     
     class Resolver
       {
@@ -148,7 +148,7 @@ namespace cinelerra
     // TODO: the Idea is to provide specialisations for the concrete types
     //       we want to participate in the ConfigRules system....
     //       Thus we get the possibility to create a specific return type,
-    //       e.g. return a shared_ptr<Port> but a Placement<Track>, using the appropriate factory.
+    //       e.g. return a shared_ptr<Pipe> but a Placement<Track>, using the appropriate factory.
     //       Of course then the definitions need to be split up in separate headers.
       
       
@@ -197,7 +197,7 @@ namespace cinelerra
    */
   typedef cinelerra::typelist::Types < mobject::session::Track
                                      , asset::Track
-                                     , asset::Port
+                                     , asset::Pipe
                                      , const asset::ProcPatt
                                      > ::List
                                        InterfaceTypes;

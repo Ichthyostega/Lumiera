@@ -51,7 +51,7 @@ using boost::scoped_ptr;
 
 
 
-namespace asset { class Port; }
+namespace asset { class Pipe; }
 
 namespace mobject
   {
@@ -83,8 +83,8 @@ namespace mobject
       protected:
         typedef cinelerra::Time Time;
         typedef Time* Track; //TODO dummy declaration; we don't use Tracks as first-class entity any longer
-        typedef std::tr1::shared_ptr<asset::Port> Port;
-        typedef std::pair<Time,Port> SolutionData;  //TODO (ichthyo consideres better passing of solution by subclass)
+        typedef std::tr1::shared_ptr<asset::Pipe> Pipe;
+        typedef std::pair<Time,Pipe> SolutionData;  //TODO (ichthyo consideres better passing of solution by subclass)
         struct LocatingSolution;
       
         /** next additional Pin, if any */
@@ -141,7 +141,7 @@ namespace mobject
               { }
             
             Time getTime ();
-            Port getPort ();
+            Pipe getPipe ();
             
             bool is_definite ();
             bool is_impossible ();

@@ -25,7 +25,7 @@
 #include "proc/asset/struct.hpp"
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/track.hpp"
-#include "proc/asset/port.hpp"
+#include "proc/asset/pipe.hpp"
 #include "proc/mobject/session.hpp"
 #include "common/configrules.hpp"
 
@@ -87,22 +87,22 @@ namespace asset
   
   
   
-  /** Factory method for creating Ports explicitly.
-   *  Normalizes port- and streamID, then retrieves the
+  /** Factory method for creating Pipes explicitly.
+   *  Normalizes pipe- and streamID, then retrieves the
    *  default processing pattern (ProcPatt) for this streamID.
-   *  The Port ctor will fill out the shortDesc and longDesc
-   *  automatically, based on portID and streamID (and they
+   *  The Pipe ctor will fill out the shortDesc and longDesc
+   *  automatically, based on pipeID and streamID (and they
    *  are editable anyways)
    * @see ProcPatt
    * @see DefaultsManager 
    */ 
-  shared_ptr<Port> 
-  StructFactory::operator() (string portID, string streamID)
+  shared_ptr<Pipe> 
+  StructFactory::operator() (string pipeID, string streamID)
   {
-    normalizeID (portID);
+    normalizeID (pipeID);
     normalizeID (streamID);
     PProcPatt processingPattern = Session::current->defaults (Query<const ProcPatt>("stream("+streamID+")"));
-    Port* pP = new Port (processingPattern, portID);
+    Pipe* pP = new Pipe (processingPattern, pipeID);
     return AssetManager::instance().wrap (*pP);
   }
 
@@ -120,13 +120,13 @@ namespace asset
 #include "proc/asset/struct.hpp"
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/track.hpp"
-#include "proc/asset/port.hpp"
+#include "proc/asset/pipe.hpp"
 
 
 namespace asset
   {
   
-  template shared_ptr<Port>     StructFactory::operator() (const Query<Port>& query);
+  template shared_ptr<Pipe>     StructFactory::operator() (const Query<Pipe>& query);
   template shared_ptr<Track>    StructFactory::operator() (const Query<Track>& query);
   template PProcPatt            StructFactory::operator() (const Query<const ProcPatt>& query);
 

@@ -57,7 +57,7 @@ namespace asset
   class Struct;
   class StructFactory;
   class StructFactoryImpl;
-  class Port;
+  class Pipe;
   
   
   template<>
@@ -119,7 +119,7 @@ namespace asset
       template<class STRU>
       shared_ptr<STRU> operator() (const Query<STRU>& query);      ////////////TODO actually do something sensible here 
       
-      shared_ptr<Port> operator() (string portID, string streamID);
+      shared_ptr<Pipe> operator() (string pipeID, string streamID);
       
     };
     

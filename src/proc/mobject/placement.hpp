@@ -60,7 +60,7 @@
 #include "pre.hpp"
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/session/locatingpin.hpp"
-#include "proc/asset/port.hpp"
+#include "proc/asset/pipe.hpp"
 
 #include <tr1/memory>
 using std::tr1::shared_ptr;
@@ -86,7 +86,7 @@ namespace mobject
     {
     protected:
       typedef cinelerra::Time Time;
-      typedef asset::shared_ptr<asset::Port> Port;
+      typedef asset::shared_ptr<asset::Pipe> Pipe;
       
 
 

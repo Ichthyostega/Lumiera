@@ -1,5 +1,5 @@
 /*
-  Port  -  structural asset corresponding to some port generating media output
+  Pipe  -  structural asset denoting a processing pipe generating media output
  
   Copyright (C)         CinelerraCV
     2007,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,31 +21,31 @@
 * *****************************************************/
 
 
-#include "proc/asset/port.hpp"
+#include "proc/asset/pipe.hpp"
 
 namespace asset
   {
   
-  namespace // Port Asset implementation details
+  namespace // Pipe Asset implementation details
     {
       /** @internal derive a sensible asset ident tuple when creating 
-       *  a port asset based on a query
+       *  a pipe asset based on a query
        *  @todo define the actual naming scheme of struct assets
        */
       const Asset::Ident
-      createPortIdent (PProcPatt& wiring, string& id, wstring& shortD, wstring& longD)
+      createPipeIdent (PProcPatt& wiring, string& id, wstring& shortD, wstring& longD)
         {
-          string name ("port-" + id);  // TODO something sensible here; append number, sanitize etc.
-          TODO ("Implement port name scheme!!");
-          Category category (STRUCT,"ports");
+          string name ("pipe-" + id);  // TODO something sensible here; append number, sanitize etc.
+          TODO ("Implement pipe name scheme!!");
+          Category category (STRUCT,"pipes");
           return Asset::Ident (name, category );
         }
     } 
   
   /** */
-  Port::Port (PProcPatt& wiring, string portID, wstring shortDesc, wstring longDesc) 
-    : Struct (createPortIdent (wiring,portID,shortDesc,longDesc)),
-      portID_ (portID),
+  Pipe::Pipe (PProcPatt& wiring, string pipeID, wstring shortDesc, wstring longDesc) 
+    : Struct (createPipeIdent (wiring,pipeID,shortDesc,longDesc)),
+      pipeID_ (pipeID),
       wiringTemplate(wiring),
       shortDesc (shortDesc),
       longDesc (longDesc)
@@ -55,14 +55,14 @@ namespace asset
 
   
   
-  PPort 
-  Port::query (string properties)
+  PPipe 
+  Pipe::query (string properties)
     { 
-      return Struct::create (Query<Port> (properties)); 
+      return Struct::create (Query<Pipe> (properties)); 
     }
   
   void 
-  Port::switchProcPatt (PProcPatt& another)
+  Pipe::switchProcPatt (PProcPatt& another)
   {
     wiringTemplate = another;
     TODO ("trigger rebuild fixture");
