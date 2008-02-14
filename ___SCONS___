@@ -1,0 +1,2 @@
+This branch contains *only* the SCONS based build system, but *no* real source code
+(it will be updated by partial merges from time to time for documentation purposes)

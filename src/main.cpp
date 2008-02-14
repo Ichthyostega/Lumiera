@@ -26,6 +26,6 @@
 
 int main(int argc, char* argv[])
   {
-    printf("hello cinelerra again\n");
+    printf("hello SCONS build system\n");
     return 0;
   }
