@@ -8,7 +8,7 @@
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
-#  published by the Free Software Foundation; either version 2 of 
+#  published by the Free Software Foundation; either version 2 of
 #  the License, or (at your option) any later version.
 #
 #  This program is distributed in the hope that it will be useful,
@@ -23,6 +23,7 @@
 
 import os
 import sys
+import glob
 import fnmatch
 import re
 import tarfile
@@ -36,48 +37,80 @@ def isCleanupOperation(env):
     return env.GetOption('clean')
 
 def isHelpRequest():
-    ''' this is a hack: SCons does all configure tests even if only
+    """ this is a hack: SCons does all configure tests even if only
         the helpmessage is requested. SCons doesn't export the
         help option for retrieval by env.GetOption(), 
         so we scan the commandline directly. 
-    '''
+    """
     return '-h' in sys.argv or '--help' in sys.argv
 
 
 
-def srcSubtree(env,tree,isShared=False, **args):
-    ''' convienience wrapper: scans the given subtree, which is
-        to be located within $SRCDIR, find all source files and
+def srcSubtree(env,tree,isShared=False,builder=None, **args):
+    """ convienience wrapper: scans the given subtree, which is
+        relative to the current SConscript, find all source files and
         declare them as Static or SharedObjects for compilation
-    '''
-    root = env.subst('$SRCDIR/%s' % tree)  # expand $SRCDIR
-    if isShared:
-        builder = lambda f: env.SharedObject(f, **args)
-    else: 
-        builder = lambda f: env.Object(f, **args)
+    """
+    root = env.subst(tree)  # expand Construction Vars
+    if not builder:
+        if isShared:
+            builder = lambda f: env.SharedObject(f, **args)
+        else:
+            builder = lambda f: env.Object(f, **args)
         
     return [builder(f) for f in scanSrcSubtree(root)] 
 
 
 
-SRCPATTERNS = ['*.c','*.Cpp','*.cc']
+SRCPATTERNS = ['*.c','*.cpp','*.cc']
 
-def scanSrcSubtree(root):
-    ''' scan the given subtree for source filesnames 
+def scanSrcSubtree(roots):
+    """ first expand (possible) wildcards and filter out non-dirs. 
+        Then scan the given subtree for source filesnames 
         (python generator function)
-    '''
-    for (dir,_,files) in os.walk(root):
-        if dir.startswith('./'):
-            dir = dir[2:]
-        for p in SRCPATTERNS:
-            for f in fnmatch.filter(files, p):
-                yield os.path.join(dir,f)
+    """
+    for root in globRootdirs(roots):
+        for (dir,_,files) in os.walk(root):
+            if dir.startswith('./'):
+                dir = dir[2:]
+            for p in SRCPATTERNS:
+                for f in fnmatch.filter(files, p):
+                    yield os.path.join(dir,f)
 
+
+
+def globRootdirs(roots):
+    """ helper: expand shell wildcards and filter the resulting list,
+        so that it only contains existing directories
+    """
+    filter = lambda f: os.path.isdir(f) and os.path.exists(f)
+    roots = glob.glob(roots)
+    return (dir for dir in roots if filter(dir) )
+
+
+
+
+def RegisterPrecompiledHeader_Builder(env):
+    """ Registeres an Custom Builder for generating a precompiled Header.
+        Note you should define a dependency to the PCH file
+    """
+    def genCmdline(source, target, env, for_signature):
+        return '$CXXCOM -x c++-header %s' % source[0]
+    def fixSourceDependency(target, source, env):
+        print "precompiled header: %s --> %s" % (source[0],target[0])
+        return (target, source)
+    
+    gchBuilder = env.Builder( generator = genCmdline
+                            , emitter = fixSourceDependency
+                            , suffix = '.gch'
+                            , src_suffix = '.hpp'
+                            )
+    env.Append(BUILDERS = {'PrecompiledHeader' : gchBuilder})    
 
 
 
 def Tarball(env,location,dirs,suffix=''):
-    ''' Custom Command: create Tarball of some subdirs
+    """ Custom Command: create Tarball of some subdirs
         location: where to create the tar (optionally incl. filename.tar.gz)
         suffix: (optional) suffix to include in the tar name
         dirs: directories to include in the tar
@@ -87,7 +120,7 @@ def Tarball(env,location,dirs,suffix=''):
         prior to compiling. Solution is 
          - use the Command-Builder, but pass all target specifications as custom build vars
          - create a pseudo-target located in the parent directory (not built by default)
-    '''
+    """
     targetID    = '../extern-tar%s' % suffix
     versionID   = env['VERSION']
     defaultName = 'cinelerra%s_%s' % (suffix, versionID)
@@ -99,11 +132,11 @@ def Tarball(env,location,dirs,suffix=''):
 
 
 def createTarball(target,source,env):
-    ''' helper, builds the tar using the python2.3 tarfil lib.
+    """ helper, builds the tar using the python2.3 tarfil lib.
         This allows us to prefix all paths, thus moving the tree
         into a virtual subdirectory containing the Version number,
         as needed by common packaging systems.
-    '''
+    """
     name = getTarName( location = env['location']
                      , defaultName = env['defaultName'])
     targetspec = env['dirs']
@@ -117,7 +150,7 @@ def createTarball(target,source,env):
     tar.close()
 #
 # old version using shell command:
-#    
+#
 #    cmd = 'tar -czf %s %s' % (name,targetspec)
 #    print 'running ', cmd, ' ... '
 #    pipe = os.popen (cmd)
@@ -127,10 +160,10 @@ def createTarball(target,source,env):
 
 
 def getTarName(location, defaultName):
-    ''' create a suitable name for the tarball.
+    """ create a suitable name for the tarball.
         - if location contains a name (*.tar.gz) then use this
         - otherwise append the defaultName to the specified dir
-    '''  
+    """
     spec = os.path.abspath(location)
     (head,tail) = os.path.split(spec)
     if not os.path.isdir(head):

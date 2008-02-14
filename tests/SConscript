@@ -1,0 +1,95 @@
+# -*- python -*-
+##
+## SConscript  -  SCons buildscript for the Testsuite (called by SConstruct)
+##
+
+from os import path
+from Buildhelper import srcSubtree
+from Buildhelper import globRootdirs
+
+Import('env','artifacts','core')
+
+
+def testExecutable(env,tree, exeName=None, obj=None):
+    """ declare all targets needed to create a standalone
+        Test executalbe of the given Sub-tree. Note that
+        each subdir is built in its own Environment.
+    """
+    env = env.Clone()
+    env.Append(CPPPATH=tree) # add Subdir to Includepath 
+    tree = env.subst(tree)  # expand Construction Vars
+    if obj:
+        obj = [path.join(tree,name) for name in obj]
+    else:
+        obj = srcSubtree(env,tree) # use all sourcefiles found in subtree
+    if not exeName:
+        exeName = 'test-%s' % tree
+    return env.Program('#$BINDIR/'+exeName, obj + core)
+
+
+def treatPluginTestcase(env):
+    """ Special case: the test-plugin executable
+    """
+    env = env.Clone()
+    env.Append(CPPPATH='plugin')
+    prfx = 'plugin/example_plugin'
+    oC   = env.SharedObject(prfx,        prfx+'.c')
+    oCPP = env.SharedObject(prfx+'_cpp', prfx+'.cpp')
+    testplugin = ( env.SharedLibrary('#$BINDIR/.libs/example_plugin',     oC,   SHLIBPREFIX='')
+                 + env.SharedLibrary('#$BINDIR/.libs/example_plugin_cpp', oCPP, SHLIBPREFIX='')
+                 )
+    testExe = env.Program('#$BINDIR/test-plugin', ['plugin/plugin_main.c'] + core)
+    env.Depends(testExe, testplugin)
+    return testExe
+        #-- it depentds (at the moment) on a specific isolated test-plugin,
+        #   which is not integrated in the "normal procedure" for building Plugins
+        #   (which is not yet implemented as of 8/07)
+        #   TODO: handle this case automatically
+
+
+# 
+# build a Test-Executable out of every subdir...
+moduledirs = globRootdirs('*')
+
+# but have to treat some subdirs individually.
+specials = ['plugin','locking','library']
+
+
+
+artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in moduledirs if not dir in specials] 
+                              + treatPluginTestcase(env)
+                              + testExecutable(env, 'locking', obj=['test-locking.c','mutex.c','condition.c'])
+                              + testExecutable(env, 'library', exeName='test-llist', obj=['test-llist.c'])
+                              + testExecutable(env, 'library', exeName='test-references', obj=['test-references.c'])
+                              ) 
+                              
+
+
+
+
+
+#
+# actually run the Testsuite
+#
+#  - the product of running the Testsuite is the ",testlog"
+#  - it depends on all artifacts defined as "ts" above
+#
+testEnv = env.Clone()
+testEnv.Append(ENV = {'VALGRINDFLAGS' : 'DISABLE'})
+testDir = env.Dir('#$BINDIR')
+runTest = env.File("test.sh").abspath
+
+runTs = testEnv.Command(',testlog', ts, runTest,  chdir=testDir)
+
+
+
+#
+# define Phony targets
+#  - 'scons testcode' triggers building of the Testsuite
+#  - 'scons check' triggers building and running
+#
+env.Alias('testcode', ts )
+env.Alias('check', runTs )
+
+# declare tempfiles of test.sh as cleanable  
+env.Clean ('check', [',testlog.pre',',expect_stdout',',stdout',',stderr',',testtmp','.libs']) 

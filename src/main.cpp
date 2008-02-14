@@ -21,11 +21,17 @@
 */
 
 
+#include <iostream>
 
-#include <stdio.h>
+using std::cout;
+using std::endl;
 
-int main(int argc, char* argv[])
-  {
-    printf("hello SCONS build system\n");
-    return 0;
-  }
+
+int main (int argc, char* argv[])
+{
+  cout << "*** Cinelerra NLE for Linux ***" << endl
+       << "    hello SCONS build system" << endl;
+  assert(true);
+  return 0;
+}
+
