@@ -31,7 +31,6 @@ int main (int argc, char* argv[])
 {
   cout << "*** Cinelerra NLE for Linux ***" << endl
        << "    hello SCONS build system" << endl;
-  assert(true);
   return 0;
 }
 
