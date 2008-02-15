@@ -52,17 +52,15 @@ namespace asset
    */
   class ProcPatt : public Struct
     {
-      string propDescriptor_;
       InstructionSequence instructions_;
       
-      ProcPatt (const string& props, const InstructionSequence& instructs);
+      ProcPatt (const Asset::Ident&, const InstructionSequence&);      
       
     protected:
-      explicit ProcPatt (const string& propDescriptor);
+      explicit ProcPatt (const Asset::Ident& idi);
       friend class StructFactoryImpl;
       
     public:
-      const string& queryStreamID()  const;
       shared_ptr<ProcPatt> newCopy (string newID) const;
       
       ProcPatt& attach (Symbol where, PProc& node);

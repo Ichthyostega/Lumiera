@@ -34,6 +34,12 @@
 #include "common/util.hpp"
 #include "nobugcfg.h"
 
+#include <boost/regex.hpp>
+
+using boost::regex;
+using boost::smatch;
+using boost::regex_search;
+
 using mobject::Session;
 using cinelerra::query::normalizeID;
 
@@ -47,6 +53,25 @@ namespace asset
   
   /****** NOTE: not really implemented yet. What follows is partially a hack to build simple tests *******/
 
+  namespace // Implementation details
+    {
+    regex streamID_pattern("stream\\(\\s*(\\w+)\\s*\\)");
+  } 
+  
+  
+  
+  /** query the currently defined properties of this
+      structural asset for a stream-ID predicate */
+  const string
+  Struct::queryStreamID()  const
+  {
+    smatch match;
+    
+    if (regex_search (this->ident.name, match, streamID_pattern))
+      return string (match[1]);
+    else
+      return "";
+  }
 
   
   

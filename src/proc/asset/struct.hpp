@@ -84,6 +84,9 @@ namespace asset
           return static_cast<const ID<Struct>& > (Asset::getID()); 
         }
       
+      const string queryStreamID()  const;
+      
+      
     protected:
       Struct (const Asset::Ident& idi) : Asset(idi) {}
       friend class StructFactory;

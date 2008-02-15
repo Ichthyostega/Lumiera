@@ -32,46 +32,26 @@ using util::isnil;
 namespace asset
   {
   
-  namespace // ProcPattern implementation details
-    {
-      /** @internal derive a sensible asset ident tuple when creating 
-       *  a processing pattern asset based on a query
-       *  @todo define the actual naming scheme of struct assets
-       */
-      const Asset::Ident
-      createPatternIdent (const string& properties)
-        {
-          string name ("pattern-" + properties);  // TODO something sensible here; append number, sanitize etc.
-          TODO ("Implement ProcPatt name scheme!!");
-          Category category (STRUCT,"patterns");
-          return Asset::Ident (name, category );
-        }
-    } 
   
-  /** */
-  ProcPatt::ProcPatt (const string& properties)
-    : Struct (createPatternIdent (properties)),
-      propDescriptor_ (properties)
+  /** new processing pattern with empty instruction list.
+   *  @todo preliminary implementation, storing the capabilities
+   *        in the asset name field. We can do better, when
+   *        it's clear what capabilities we need
+   */
+  ProcPatt::ProcPatt (const Asset::Ident& idi)
+    : Struct (idi),
+      instructions_()
+  { }
+  
+  
+  /** @internal used for creating a clone copy */
+  ProcPatt::ProcPatt (const Asset::Ident& idi, const InstructionSequence& instru)
+    : Struct (idi),
+      instructions_(instru)
   {
     TODO ("verify building instructions, maybe preprocess...");
   }
-
-  /** @internal used for creating a clone */
-  ProcPatt::ProcPatt (const string& props, const InstructionSequence& instructs)
-    : Struct (createPatternIdent (props)),
-      propDescriptor_ (props),
-      instructions_ (instructs)
-  { }
-
   
-  /** query the currently defined properties of this
-      processing pattern for a stream-ID predicate */
-  const string& 
-  ProcPatt::queryStreamID()  const
-  {
-    TODO ("really implement querying the properties");
-    return propDescriptor_; /////////////////////////////TODO grober Unfug
-  }
   
   
   /** create a new ProcPatt asset as a literal copy
@@ -84,7 +64,11 @@ namespace asset
   ProcPatt::newCopy (string newID)  const
   {
     TODO ("implement the Pattern-ID within the propDescriptor!");
-    ProcPatt* pP = new ProcPatt (this->propDescriptor_, this->instructions_);
+    TODO ("implement a consitent struct asset naming scheme at one central location!!!!!");
+    const Asset::Ident newIdi ( this->ident.name+".X"
+                              , this->ident.category
+                              );
+    ProcPatt* pP = new ProcPatt (newIdi, this->instructions_);
     return AssetManager::instance().wrap (*pP);
   }
   

@@ -84,7 +84,9 @@ namespace asset
       const Asset::Ident
       createIdent (const Query<STRU>& query)
         {
-          string name (Traits<STRU>::namePrefix + query);  // TODO something sensible here; append number, sanitize etc.
+          static int i=0;
+          static format namePattern ("%s%d-%s"); // TODO finally just use the capability string as name??
+          string name = str(namePattern % Traits<STRU>::namePrefix % (++i) %  query);
           TODO ("struct asset naming scheme??");
           Category cat (STRUCT, Traits<STRU>::catFolder);
           return Asset::Ident (name, cat );
