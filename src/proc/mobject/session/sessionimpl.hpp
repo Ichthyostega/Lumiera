@@ -98,7 +98,7 @@ namespace mobject
         virtual void reset () ;
         virtual void load ()  ;
         virtual void save ()  ;
-        virtual Session* operator-> ()  throw() { return pImpl_.get(); }
+        virtual SessionImpl* operator-> ()  throw() ;
       };
 
       

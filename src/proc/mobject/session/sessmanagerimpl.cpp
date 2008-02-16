@@ -39,6 +39,7 @@
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/sessionimpl.hpp"
 #include "proc/mobject/session/defsmanager.hpp"
+#include "common/error.hpp"
 
 using boost::scoped_ptr;
 
@@ -48,17 +49,49 @@ namespace mobject
   {
   namespace session
     {
+    
+    CINELERRA_ERROR_DEFINE (CREATE_SESSION, "unable to create basic session");
+    
+    /** Access to the "current session", which actually is
+     *  an SessionImpl instance. This session object is created 
+     *  either by loading an existing session, or on demand by
+     *  this accessor function here (when no session was loaded
+     *  or created)
+     *  @note any exceptions arising while building the basic
+     *        session object(s) will halt the system.
+     */
+    SessionImpl* 
+    SessManagerImpl::operator-> ()  throw() 
+    { 
+      if (!pImpl_)
+        try
+          { // create empty default configured session
+            this->reset();
+          }
+        catch (...)
+          {
+            ERROR (oper, "Unrecoverable Failure while creating the empty default session.");
+            throw cinelerra::error::Fatal ( "Failure while creating the basic session object. Sysstem halted." 
+                                          , CINELERRA_ERROR_CREATE_SESSION );
+          }
 
-    /** Besides creating the single system-wide Session manger instance,
-     *  creates an empty default Session as well.
-     *  @note any exceptions arising in the course of this will halt
-     *        the system (and this behaviour is desirable).
+          
+      return pImpl_.get();
+    }
+
+    
+    
+    /** Initially (at static init time), only the single system-wide 
+     *  Session manger instance is created. It can be used to load an
+     *  existing session; otherwise an empty default Session an a
+     *  Defaults manager (Config Query system) is created at first
+     *  \link #operator-> access \endlink to the sesion object.
      */
     SessManagerImpl::SessManagerImpl ()  throw()
-      : pDefs_ (new DefsManager),
-        pImpl_ (new SessionImpl (*pDefs_))
-    {
-    }
+      : pDefs_ (0),
+        pImpl_ (0)
+    { }
+    
 
     /** @note no transactional behaviour. 
      *        may succeed partial.

@@ -141,6 +141,10 @@ namespace mobject
         virtual ~SessManager() {};
       };
 
+      
+      CINELERRA_ERROR_DECLARE (CREATE_SESSION);  ///< unable to create basic session.
+
+
   } // namespace mobject::session
 
 } // namespace mobject
