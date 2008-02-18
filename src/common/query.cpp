@@ -26,9 +26,17 @@
 #include "nobugcfg.h"
 
 #include <boost/algorithm/string.hpp>
+#include <boost/regex.hpp>
+#include <map>
 
+using std::map;
+using boost::regex;
+using boost::smatch;
+using boost::regex_search;
 using boost::algorithm::is_upper;
 using boost::algorithm::is_alpha;
+
+using util::contains;
 
 
 namespace cinelerra
@@ -48,6 +56,35 @@ namespace cinelerra
       if (is_upper() (first))
         id[0] = std::tolower (first);
     }
+
+    
+    
+    
+    namespace // Implementation details
+      {
+      map<Symbol, regex> regexTable;
+    }
+    
+    /** (preliminary) helper: instead of really parsing and evaluating the terms,
+     *  just do a regular expression match to extract the literal argument 
+     *  behind the given predicate symbol. e.g calling
+     *  queryID ("stream", "id(abc), stream(mpeg)") 
+     *  yields "mpeg"
+     */
+    const string
+    extractID (Symbol sym, const string& termString)
+    {
+      
+      if (!contains (regexTable, sym))
+        regexTable[sym] = regex (string(sym)+="\\(\\s*([\\w_\\.\\-]+)\\s*\\)"); 
+      
+      smatch match;
+      if (regex_search (termString, match, regexTable[sym]))
+        return string (match[1]);
+      else
+        return "";
+    
+  } 
   
   } // namespace query
     

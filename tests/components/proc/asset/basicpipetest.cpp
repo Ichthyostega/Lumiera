@@ -65,11 +65,12 @@ namespace asset
       {
         virtual void run(Arg arg) 
           {
-            string pipeID   = isnil(arg)?  "blackHole" : arg[1];
+            string pipeID   = isnil(arg)?  "Black Hole" : arg[1];
             string streamID = 2>arg.size()? "teststream" : arg[2] ;
             
             createExplicit (pipeID,streamID);
             create_or_ref (pipeID);
+            create_using_default ();
             dependProcPatt (pipeID);
           }
         
@@ -80,6 +81,7 @@ namespace asset
           { 
             string pID_sane (pID);
             normalizeID (pID_sane);
+            ASSERT (pID_sane != pID);
             
             PPipe thePipe = asset::Struct::create (pID,sID);
             
@@ -118,6 +120,7 @@ namespace asset
             ASSERT (c1 == c2);
             
             PPipe pipe3 = Pipe::query ("pipe("+pID2+")");
+//////////////////////////////////////////////////////////////TODO: er macht eine Neue, anstatt die Bestehende zu finden            
             ASSERT (pipe3 == pipe2);
           }
         
@@ -130,7 +133,7 @@ namespace asset
             ASSERT (pipe1 == Session::current->defaults (Query<Pipe>()));
             ASSERT (pipe1->ident.category.hasKind(VIDEO));
             ASSERT (pipe1->getProcPatt());
-            PProcPatt popa = Session::current->defaults (Query<ProcPatt>("pipe()"));
+            PProcPatt popa = Session::current->defaults (Query<const ProcPatt>("pipe(default)"));
             ASSERT (popa == pipe1->getProcPatt());
             
             // several variants to query for "the default pipe"
@@ -138,14 +141,14 @@ namespace asset
             ASSERT (pipe2 == pipe1);
             pipe2 = asset::Struct::create (Query<Pipe> ());
             ASSERT (pipe2 == pipe1);
-            pipe2 = asset::Struct::create (Query<Pipe> ("pipe()"));
+            pipe2 = asset::Struct::create (Query<Pipe> ("pipe(default)"));
             ASSERT (pipe2 == pipe1);
             
             string sID = popa->queryStreamID(); // sort of a "default stream type"
             PPipe pipe3 = Pipe::query ("stream("+sID+")");
             ASSERT (pipe3);
             ASSERT (pipe3->getProcPatt()->queryStreamID() == sID);
-            ASSERT (pipe3->getProcPatt() == Session::current->defaults (Query<ProcPatt>("stream("+sID+")")));
+            ASSERT (pipe3->getProcPatt() == Session::current->defaults (Query<const ProcPatt>("stream("+sID+")")));
           }
         
         

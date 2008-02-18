@@ -52,7 +52,7 @@ namespace asset
    */
   class Pipe : public Struct
     {
-      string pipeID_;
+      const string pipeID_;
       PProcPatt wiringTemplate;
       
     public:
@@ -66,7 +66,7 @@ namespace asset
 
       
     protected:
-      Pipe (PProcPatt& wiring, string pipeID="", wstring shortDesc =wstring(), wstring longDesc =wstring()) ;
+      Pipe (const Asset::Ident&, PProcPatt& wiring, const string& pipeID, wstring shortName =wstring(), wstring longName =wstring()) ;
       friend class StructFactory;
       friend class StructFactoryImpl;
 

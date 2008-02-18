@@ -67,6 +67,14 @@ namespace cinelerra
         Ptr obj = Struct::create (query);
         return AnyPair(query.asKey(), obj);
       }
+      
+      /** shortcut for simply accessing a table entry */ 
+      template<class STRU, class PTAB>
+      any&
+      item (PTAB& table, const string& query)
+      {
+        return (*table)[Query<STRU>(query).asKey()];
+      }
     
     }
     
@@ -82,8 +90,16 @@ namespace cinelerra
       INFO (config, "creating mock answers for some config queries...");
       isInit_ = true; // allow re-entrance
       
+      typedef const ProcPatt cPP;
+      
       // for baiscpipetest.cpp ---------
-      answer_->insert (entry_Struct<const ProcPatt> ("stream(teststream)"));
+      answer_->insert (entry_Struct<cPP> ("stream(video)"));
+      answer_->insert (entry_Struct<cPP> ("stream(teststream)"));
+      item<cPP> (answer_, "stream(default)")  = item<cPP> (answer_,"stream(video)"); //TODO killme
+      
+      answer_->insert (entry_Struct<Pipe> ("pipe(master), stream(video)"));
+      item<Pipe> (answer_, "pipe(default)")   = item<Pipe>(answer_,"pipe(master), stream(video)"); //TODO killme
+      TODO ("remove the default entries!!!  DefaultsManager should find them automatically");
     }
 
     

@@ -34,16 +34,22 @@
 #define ASSET_STRUCTFACTORYIMPL_H
 
 
+#include "proc/mobject/session.hpp"
 #include "common/configrules.hpp"
 #include "common/error.hpp"
+#include "common/util.hpp"
 
 #include <boost/format.hpp>
 
 using boost::format;
 
+using mobject::Session;
+
+using util::isnil;
+using util::contains;
 using asset::Query;
 using cinelerra::query::CINELERRA_ERROR_CAPABILITY_QUERY;
-
+using cinelerra::query::extractID;
 
 namespace asset
   {
@@ -54,16 +60,20 @@ namespace asset
     {
       static Symbol namePrefix;
       static Symbol catFolder;
+      static Symbol idSymbol;
     };
   
-  template<> Symbol Traits<Track>::namePrefix = "track-";
+  template<> Symbol Traits<Track>::namePrefix = "track";
   template<> Symbol Traits<Track>::catFolder  = "tracks";
+  template<> Symbol Traits<Track>::idSymbol   = "track";
   
-  template<> Symbol Traits<Pipe>::namePrefix = "pipe-";
+  template<> Symbol Traits<Pipe>::namePrefix = "pipe";
   template<> Symbol Traits<Pipe>::catFolder  = "pipes";
+  template<> Symbol Traits<Pipe>::idSymbol   = "pipe";
   
-  template<> Symbol Traits<const ProcPatt>::namePrefix = "patt-";
+  template<> Symbol Traits<const ProcPatt>::namePrefix = "patt";
   template<> Symbol Traits<const ProcPatt>::catFolder  = "build-templates";
+  template<> Symbol Traits<const ProcPatt>::idSymbol   = "procPatt";
   
   
   
@@ -78,30 +88,32 @@ namespace asset
 
       /** @internal derive a sensible asset ident tuple when creating 
        *  structural asset instances  based on a capability query
-       *  @todo define the actual naming scheme of struct assets
        */
       template<class STRU>
       const Asset::Ident
       createIdent (const Query<STRU>& query)
         {
-          static int i=0;
-          static format namePattern ("%s%d-%s"); // TODO finally just use the capability string as name??
-          string name = str(namePattern % Traits<STRU>::namePrefix % (++i) %  query);
-          TODO ("struct asset naming scheme??");
+          string name (query); 
+          string nameID = extractID (Traits<STRU>::idSymbol, query);
+          if (isnil (nameID))
+            {
+               // no name-ID contained in the query...
+              //  so we'll create a new one
+              static int i=0;
+              static format namePattern ("%s.%d");
+              static format predPattern ("%s(%s), ");
+              nameID = str(namePattern % Traits<STRU>::namePrefix % (++i) );
+              name.insert(0, 
+                       str(predPattern % Traits<STRU>::idSymbol % nameID ));
+            }
+          ENSURE (!isnil (name));
+          ENSURE (!isnil (nameID));
+          ENSURE (contains (name, nameID));
+          
           Category cat (STRUCT, Traits<STRU>::catFolder);
           return Asset::Ident (name, cat );
         }
       
-      typedef std::pair<string,string> PipeIDs;
-    
-      PipeIDs
-      createPipeIdent (const Query<Pipe>& query)
-        {
-          string name (Traits<Pipe>::namePrefix + query);  // TODO get some more sensible dummy values
-          TODO ("pipe naming scheme??");
-          TODO ("actually extract the pipe stream type from the query...");
-          return PipeIDs (name, "data");                // dummy stream type
-        }
   
     
       
@@ -153,8 +165,15 @@ namespace asset
     Pipe* 
     StructFactoryImpl::fabricate (const Query<Pipe>& caps)
       {
-        PipeIDs ids (createPipeIdent (caps));
-        return recursive_create_ (ids.first, ids.second).get();
+        const Asset::Ident idi (createIdent (caps));
+        string pipeID = extractID ("pipe", idi.name);
+        string streamID = extractID ("stream", caps);
+        if (isnil (streamID)) streamID = "default"; 
+        PProcPatt processingPattern = Session::current->defaults (Query<const ProcPatt>("stream("+streamID+")"));
+        return new Pipe( idi
+                       , processingPattern
+                       , pipeID
+                       );
       }
     
     

@@ -22,35 +22,30 @@
 
 
 #include "proc/asset/pipe.hpp"
+#include "common/util.hpp"
+
+using util::isnil;
 
 namespace asset
   {
   
-  namespace // Pipe Asset implementation details
-    {
-      /** @internal derive a sensible asset ident tuple when creating 
-       *  a pipe asset based on a query
-       *  @todo define the actual naming scheme of struct assets
-       */
-      const Asset::Ident
-      createPipeIdent (PProcPatt& wiring, string& id, wstring& shortD, wstring& longD)
-        {
-          string name ("pipe-" + id);  // TODO something sensible here; append number, sanitize etc.
-          TODO ("Implement pipe name scheme!!");
-          Category category (STRUCT,"pipes");
-          return Asset::Ident (name, category );
-        }
-    } 
   
   /** */
-  Pipe::Pipe (PProcPatt& wiring, string pipeID, wstring shortDesc, wstring longDesc) 
-    : Struct (createPipeIdent (wiring,pipeID,shortDesc,longDesc)),
+  Pipe::Pipe ( const Asset::Ident& idi
+             , PProcPatt& wiring
+             , const string& pipeID
+             , wstring shortName
+             , wstring longName
+             ) 
+    : Struct (idi),
       pipeID_ (pipeID),
       wiringTemplate(wiring),
-      shortDesc (shortDesc),
-      longDesc (longDesc)
+      shortDesc (shortName),
+      longDesc (longName)
   {
-    
+    REQUIRE (!isnil (pipeID));
+    if (isnil (shortDesc))
+      shortDesc = wstring (pipeID.begin(), pipeID.end());
   }
 
   

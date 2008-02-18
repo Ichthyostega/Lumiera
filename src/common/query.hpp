@@ -28,11 +28,13 @@
 #include <string>
 #include <typeinfo>
 
+#include <boost/format.hpp>
 
 
 namespace cinelerra
   {
   using std::string;
+  using boost::format;
 
   /* ==== comon definitions for rule based queries ==== */
   
@@ -47,7 +49,9 @@ namespace cinelerra
   class Query : public std::string
     {
     public:
-      Query (const string& predicate="") : string(predicate) {}
+      explicit Query (const string& predicate="") : string(predicate) {}
+      explicit Query (format& pattern)            : string(str(pattern)) {}
+      
       
       const string asKey()  const
         {
@@ -64,6 +68,9 @@ namespace cinelerra
      *  @note modifies the given string ref in place
      */
     void normalizeID (string& id);
+    
+    const string extractID (Symbol, const string& termString);
+
     
   
   } // namespace query

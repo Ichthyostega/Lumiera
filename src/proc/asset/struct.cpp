@@ -26,7 +26,6 @@
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/track.hpp"
 #include "proc/asset/pipe.hpp"
-#include "proc/mobject/session.hpp"
 #include "common/configrules.hpp"
 
 #include "proc/asset/structfactoryimpl.hpp"
@@ -34,18 +33,16 @@
 #include "common/util.hpp"
 #include "nobugcfg.h"
 
-#include <boost/regex.hpp>
+#include <boost/format.hpp>
 
-using boost::regex;
-using boost::smatch;
-using boost::regex_search;
+using boost::format;
 
-using mobject::Session;
+using cinelerra::Symbol;
 using cinelerra::query::normalizeID;
-
-using cinelerra::ConfigRules;
 using cinelerra::query::QueryHandler;
+using cinelerra::ConfigRules;
 
+using util::contains;
 
 
 namespace asset
@@ -53,11 +50,6 @@ namespace asset
   
   /****** NOTE: not really implemented yet. What follows is partially a hack to build simple tests *******/
 
-  namespace // Implementation details
-    {
-    regex streamID_pattern("stream\\(\\s*(\\w+)\\s*\\)");
-  } 
-  
   
   
   /** query the currently defined properties of this
@@ -65,12 +57,15 @@ namespace asset
   const string
   Struct::queryStreamID()  const
   {
-    smatch match;
-    
-    if (regex_search (this->ident.name, match, streamID_pattern))
-      return string (match[1]);
-    else
-      return "";
+    return cinelerra::query::extractID ("stream", this->ident.name);
+  }
+  
+  /** query the currently defined properties of this
+      structural asset for a stream-ID predicate */
+  const string
+  Struct::queryPipeID()  const
+  {
+    return cinelerra::query::extractID ("pipe", this->ident.name);
   }
 
   
@@ -126,8 +121,8 @@ namespace asset
   {
     normalizeID (pipeID);
     normalizeID (streamID);
-    PProcPatt processingPattern = Session::current->defaults (Query<const ProcPatt>("stream("+streamID+")"));
-    Pipe* pP = new Pipe (processingPattern, pipeID);
+    static format descriptor("pipe(%s), stream(%s).");
+    Pipe* pP = impl_->fabricate (Query<Pipe> (descriptor % pipeID % streamID));
     return AssetManager::instance().wrap (*pP);
   }
 

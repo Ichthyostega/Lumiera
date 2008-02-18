@@ -85,6 +85,7 @@ namespace asset
         }
       
       const string queryStreamID()  const;
+      const string queryPipeID()    const;
       
       
     protected:
