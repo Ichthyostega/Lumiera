@@ -10,6 +10,10 @@ PLANNED "DeleteClip_test" DeleteClip_test <<END
 END
 
 
+PLANNED "DefsManager_test" DefsManager_test <<END
+END
+
+
 PLANNED "RebuildFixture_test" RebuildFixture_test <<END
 END
 

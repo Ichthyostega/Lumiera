@@ -34,7 +34,7 @@ return: 0
 END
 
 
-PLANNED "BasicPort_test" BasicPort_test <<END
+PLANNED "BasicPipe_test" BasicPort_test <<END
 END
 
 

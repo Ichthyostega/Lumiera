@@ -797,7 +797,7 @@ Error: #f88</pre>
 &amp;rarr; [[Configuration Rules system|ConfigRules]]
 </pre>
 </div>
-<div title="ConfigRules" modifier="Ichthyostega" modified="200802130339" created="200801171352" tags="overview spec" changecount="8">
+<div title="ConfigRules" modifier="Ichthyostega" modified="200802200145" created="200801171352" tags="overview spec" changecount="11">
 <pre>Many features can be implemented by specifically configuring and wiring some unspecific components. Rather than tie the client code in need of some given feature to these configuration internals, in Cinelerra-3 the client can //query // for some kind of object providing the //needed capabilities. // Right from start (summer 2007), Ichthyo had the intention to implement such a feature using sort of a ''declarative database'', e.g. by embedding a Prolog system. By adding rules to the basic session configuration, users should be able to customize the semi-automatic part of Cinelerra's behaviour to great extent.
 
 [[Configuration Queries|ConfigQuery]] are used at various places, when creating and adding new objects, as well when building or optimizing the render engine node network.
@@ -808,7 +808,7 @@ Error: #f88</pre>
 
 !anatomy of a Configuration Query
 The query is given as a number of logic predicates, which are required to be true. Syntactically, it is a string in prolog syntax, e.g. {{{stream(mpeg)}}}, where &quot;stream&quot; is the //predicate, // meaning here &quot;the stream type is...?&quot; and &quot;mpeg&quot; is a //term // denoting an actual property, object, thing, number etc &amp;mdash; the actual kind of stream in the given example. Multible comma separated predicates are combined with logical &quot;and&quot;. Terms may be //variable // at start, which is denoted syntactically by starting them with a uppercase letter. But any variable term need to be //bound //  to some known value while computing the solution to the query, otherwise the query fails. A failed query is treated as a local failure, which may cause some operation being aborted or just some other possibility being chosen.
-Queries are represented by instantiations of the {{{Query&lt;TYPE&gt;}}} template, because their actual meaning is &quot;retrieve or create an object of TYPE, configured such that...!&quot;. At the C++ side, this ensures type safety and fosters programming against interfaces, while being implemented rule-wise by silently prepending the query with the predicate &quot;{{{object(tYPE)}}}&quot;
+Queries are represented by instantiations of the {{{Query&lt;TYPE&gt;}}} template, because their actual meaning is &quot;retrieve or create an object of TYPE, configured such that...!&quot;. At the C++ side, this ensures type safety and fosters programming against interfaces, while being implemented rule-wise by silently prepending the query with the predicate &quot;{{{object(TYPE)}}}&quot;
 
 !executing a Configuration Query
 Actually posing such an configuration query, for example to the [[Defaults Manager in the Sessison|DefaultsManagement]], may trigger several actions: First it is checked against internal object registries (depending on the target object type), which may cause the delivery of an already existing object (as reference, clone, or smart pointer). Otherwise, the system tries to figure out an viable configuration for a newly created object instance, possibly by issuing recursive queries. In the most general case this may silently impose additional decisions onto the //execution context // of the query &amp;mdash; by default the session.
@@ -817,6 +817,9 @@ Actually posing such an configuration query, for example to the [[Defaults Manag
 At start and for debugging/testing, there is an ''dummy'' implementation using a map with predefined queries and answers. But for the real system, the idea is to embed a ''YAP Prolog'' engine to run the queries. This includes the task of defining and loading a set of custom predicates, so the rule system can interact with the object oriented execution environment, for example by transforming some capability predicate into virtual calls to a corresponding object interface. We need a way for objects to declare some capability predicates, together with a functor that can be executed on an object instance (and further parameters) in the cause of the evaluation of some configuration query. Type safety and diagnostics play an important role here, because effectively the rule base is a pool of code open for arbitray additions from the user session.
 &amp;rarr; [[considerations for a Prolog based implementation|QueryImplProlog]]
 &amp;rarr; see {{{src/common/query/mockconfigrules.cpp}}} for the table with the hard wired (mock) answers
+
+
+{{red{WARN}}} there is an interference with the (planned) Undo function: a totally correct implementation of &quot;Undo&quot; would need to remember and restore the internal state of the query system (similar to backtracking). But, more generally, such an correct implementation is not achievable, because we are never able to capture and control the whole state of a real world system doing such advanced things like video and sound processing. Seemingly we have to accept that after undoing an action, there is no guarantee we can re-do it the same way as it was first time.
 
 </pre>
 </div>
@@ -839,9 +842,35 @@ This is an very important external Interface, because it links together all thre
 <pre>[[ProcLayer and Engine]]
 </pre>
 </div>
-<div title="DefaultsManagement" modifier="Ichthyostega" modified="200801171440" created="200801121708" tags="def spec" changecount="5">
-<pre>For several components and properties there is an implicit default value or configuration; it is stored alongside with the session. The intention is that defaults never create an error, instead, they are to be extended silently on demand. Objects configured according to this defaults can be retrieved at the [[Session]] interface by a set of overloaded functions {{{Session::current-&gt;default(Query&lt;TYPE&gt; (&quot;query string&quot;))}}}, where the //query string // defines a capability query similar to what is employed for pipes, stream types, codecs etc. The Queries are implemented by [[configuration rules|ConfigRules]]
+<div title="DefaultsImplementation" modifier="Ichthyostega" modified="200802200145" created="200802200043" tags="spec impl draft" changecount="6">
+<pre>As detailed in the [[definition|DefaultsManagement]], {{{default(Obj)}}} is sort of a Joker along the lines &quot;give me a suitable Object and I don't care for further details&quot;. Actually, default objects are implemented by the {{{mobject::session::DefsManager}}}, which remembers and keeps track of anything labeled as &quot;default&quot;. This defaults manager is a singleton and can be accessed via the [[Session]] interface, meaning that the memory regarding defaults is part of the session state. Accessing an object via the query for an default actually //tagges// this object (stores a weak ref in the ~DefsManager). Alongside with each object successfully queried via &quot;default&quot;, the degree of constriction is remembered, i.e. the number of additional conditions contained in the query. This enables us to search for default objects starting with the most unspecific.
+
+!Skeleton
+# ''search'': using the predicate {{{default(X)}}} enumerates existing objects of suitable type
+#* candidates are delivered starting with the least constrained default
+#* the argument is unified
+#** if the rest of the query succeeds we've found our //default object// and are happy.
+#** otherwise, if all enumerated solutions are exhausted without success, we enter
+# ''default creation'': try to get an object fulfilling the conditions and remember this situation
+#* we issue an ConfigQuery with the query terms //minus// the {{{default(X)}}} predicate
+#* it depends on the circumstances how this query is handled. Typically the query resolution first searches existing objects and then creates a new instance to match the required capabilities. Usually, this process succeeds, but there can be configurations leading to failure.
+#** failing the ~ConfigQuery is considered an (non-critical) exception (throws), as defaults queries are supposed to succeed
+#** otherwise, the newly created object is remembered (tagged) as new default, together with the degree of constriction
+
+!!!Implementation details
+Taken precisely, the &quot;degree of constriction&quot; yields only a partial ordering &amp;mdash; but as the &quot;default&quot;-predicate is sort of a existential quantification anyways, its sole purpose is to avoid polluting the session with unnecessary default objects, and we don't need to care for absolute precision. A suitable approximation is to count the number of predicates terms in the query and use a pqueue (separate for each Type) to store weak refs to the the objects tagged as &quot;default&quot;
+{{red{WARN}}} there is an interference with the (planned) Undo function. This is a general problem of the config queries; it seems reasonable we can ignore this issue.
+
+!!!Problems with the (preliminary) mock implementation
+As we don't have a Prolog interpreter on board yet, we utilize a mock store with preconfigured answers. (see {{{MockConfigQuery}}}). As this preliminary solution is lacking the ability to create new objects, we need to resort to some trickery here (please look away). The overall logic is quite broken, because the system isn't capable to do any real resolution &amp;mdash; if we ignore this fact, the rest of the algorithm can be implemented, tested and used right now.
 </pre>
+</div>
+<div title="DefaultsManagement" modifier="Ichthyostega" modified="200802200023" created="200801121708" tags="def spec" changecount="11">
+<pre>For several components and properties there is an implicit default value or configuration; it is stored alongside with the session. The intention is that defaults never create an error, instead, they are to be extended silently on demand. Objects configured according to this defaults can be retrieved at the [[Session]] interface by a set of overloaded functions {{{Session::current-&gt;default(Query&lt;TYPE&gt; (&quot;query string&quot;))}}}, where the //query string // defines a capability query similar to what is employed for pipes, stream types, codecs etc. The Queries are implemented by [[configuration rules|ConfigRules]]
+
+!!!!what is denoted by {{{default}}}?
+{{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding a exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one soltution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
+&amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
 <div title="DesignDecisions" modifier="Ichthyostega" modified="200801062304" created="200801062209" tags="decision design discuss" changecount="17">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
@@ -2226,6 +2255,33 @@ DAMAGE.
 &lt;html&gt;&lt;sub&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;scrollAnchorVisible('Top',null, event)&quot;&gt;[Top]&lt;/sub&gt;&lt;/a&gt;&lt;/html&gt;
 ***/</pre>
 </div>
+<div title="Pipe" modifier="Ichthyostega" modified="200802101340" created="200801062110" tags="def decision" changecount="5">
+<pre>Pipes play an central role within the Proc Layer, because for everything placed and handled within the EDL, the final goal is to get it transformed into data which can be retrieved at some pipe's exit port. Pipes are special facilities, rather like inventory, separate and not treated like all the other objects.
+We don't distinguish between &quot;input&quot; and &quot;output&quot; ports &amp;mdash; rather, pipes are thought to be ''hooks for making connections to''. By following this line of thought, each pipe has an input side and an output side and is in itself something like a ''Bus'' or ''processing chain''. Other processing entities like effects and transitions can be placed (attached) at the pipe, resulting them to be appended to form this chain. Likewise, we can place [[wiring requests|WiringRequest]] to the pipe, meaning we want it connected so to send it's output to another destination pipe. The [[Builder]] may generate further wiring requests to fulfil the placement of other entities.
+Thus //Pipes are the basic building blocks// of the whole render network. We distinguish ''global available'' Pipes, which are like the sum groups of a mixing console, and the ''lokal pipe'' or [[source port|ClipSourcePort]] of the individual clips, which exist only within the duration of the corresponding clip. The design //limits the possible kinds of pipes // to these two types &amp;mdash; thus we can build local processing chains at clips and global processing chains at the global pipes of the session and that's all we can do. (because of the flexibility which comes with the concept of [[placements|Placement]], this is no real limitation)
+
+The GUI can connect the viewer(s) to some pipe (and moreover can use [[probe points|ProbePoint]] placed like effects and connected to some pipe), and likewise, when starting a ''render'', we get the opportunity to specify the pipes to pull the data from. Pulling data from some pipe is the (only) way to activate the render nodes network reachable from this pipe.
+
+&amp;rarr; [[Handling of Tracks|TrackHandling]]
+&amp;rarr; [[Handling of Pipes|PipeHandling]]
+
+</pre>
+</div>
+<div title="PipeHandling" modifier="Ichthyostega" modified="200801121656" created="200801101352" tags="spec" changecount="9">
+<pre>!Identification
+Pipes are distinct objects and can be identified by their asset ~IDs. Besides, as for all [[structural assets|StructAsset]] there are extended query capabilities, including a symbolic pipe-id and a media (stream) type id. Any pipe can accept and deliver exactly one media stream kind (which may be inherently structured though, e.g. spatial sound systems or stereoscopic video)
+
+!creating pipes
+Pipe assets are created automatically by being used and referred. The [[Session]] holds a collection of global pipes, and further pipes can be created by using an new pipe reference in some placement. Moreover, every clip has an (implicit) [[source port|ClipSourcePort]], which will appear as pipe asset when first used (referred) while [[building|BuildProcess]].
+
+!removal
+Deleting a Pipe is an advanced operation, because it includes finding and &quot;detaching&quot; all references, otherwise the pipe will leap back into existence immediately. Thus, global pipe entries in the Session and pipe references in [[locating pins|LocatingPin]] within any placement have to be removed, while clips using a given source port will be disabled. {{red{todo: implementation deferred}}}
+
+!using Pipes
+there is not much you can do directly with a pipe asset. It is an point of reference, after all. Any connection to some pipe is only temporarily done by a placement in some part of the timeline, so it isn't stored with the pipe. You can edit the (user visible) description an you can globally disable a pipe asset. The pipe's ID and media stream type of course are fixed, because any connection and referral (via the asset ID) is based on them. Later on, we should provide a {{{rewire(oldPipe, newPipe)}}} to search any ref to the {{{oldPipe}}} and try to rewrite it to use the {{{newPipe}}}, possibly with a new media stream type.
+Pipes are integrated with the [[management of defaults|DefaultsManagement]]. For example, any pipe uses implicitly some [[processing pattern|ProcPatt]] &amp;mdash; it may default to the empty pattern. This feature enables to apply some standard wiring to the pipes (e.g a fader for audio, similar to the classic mixing consoles). This //is // a global property of the pipe, but &amp;mdash; contrary to the stream type &amp;mdash; this pattern may be switched
+</pre>
+</div>
 <div title="Placement" modifier="Ichthyostega" modified="200710100120" created="200706220306" tags="def" changecount="6">
 <pre>A Placement represents a //relation:// it is always linked to a //Subject// (this being a [[Media Object|MObject]]) and has the meaning to //place// this Subject in some manner, either relatively to other Media Objects, or by some Constraint or simply absolute at (time,track). The latter case is especially important and represented by a special [[Sub-Interface|ExplicitPlacement]]
 
@@ -2351,34 +2407,6 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 //Note, we have yet to specify how exactly the building and rendering will work together with the backend. There are several possibilities how to structure the Playlist//
 </pre>
 </div>
-<div title="Pipe" modifier="Ichthyostega" modified="200802101340" created="200801062110" tags="def decision" changecount="5">
-<pre>
-Pipes play an central role within the Proc Layer, because for everything placed and handled within the EDL, the final goal is to get it transformed into data which can be retrieved at some pipe's exit port. Pipes are special facilities, rather like inventory, separate and not treated like all the other objects.
-We don't distinguish between &quot;input&quot; and &quot;output&quot; ports &amp;mdash; rather, pipes are thought to be ''hooks for making connections to''. By following this line of thought, each pipe has an input side and an output side and is in itself something like a ''Bus'' or ''processing chain''. Other processing entities like effects and transitions can be placed (attached) at the pipe, resulting them to be appended to form this chain. Likewise, we can place [[wiring requests|WiringRequest]] to the pipe, meaning we want it connected so to send it's output to another destination pipe. The [[Builder]] may generate further wiring requests to fulfil the placement of other entities.
-Thus //Pipes are the basic building blocks// of the whole render network. We distinguish ''global available'' Pipes, which are like the sum groups of a mixing console, and the ''lokal pipe'' or [[source port|ClipSourcePort]] of the individual clips, which exist only within the duration of the corresponding clip. The design //limits the possible kinds of pipes // to these two types &amp;mdash; thus we can build local processing chains at clips and global processing chains at the global pipes of the session and that's all we can do. (because of the flexibility which comes with the concept of [[placements|Placement]], this is no real limitation)
-
-The GUI can connect the viewer(s) to some pipe (and moreover can use [[probe points|ProbePoint]] placed like effects and connected to some pipe), and likewise, when starting a ''render'', we get the opportunity to specify the pipes to pull the data from. Pulling data from some pipe is the (only) way to activate the render nodes network reachable from this pipe.
-
-&amp;rarr; [[Handling of Tracks|TrackHandling]]
-&amp;rarr; [[Handling of Pipes|PipeHandling]]
-
-</pre>
-</div>
-<div title="PipeHandling" modifier="Ichthyostega" modified="200801121656" created="200801101352" tags="spec" changecount="9">
-<pre>!Identification
-Pipes are distinct objects and can be identified by their asset ~IDs. Besides, as for all [[structural assets|StructAsset]] there are extended query capabilities, including a symbolic pipe-id and a media (stream) type id. Any pipe can accept and deliver exactly one media stream kind (which may be inherently structured though, e.g. spatial sound systems or stereoscopic video)
-
-!creating pipes
-Pipe assets are created automatically by being used and referred. The [[Session]] holds a collection of global pipes, and further pipes can be created by using an new pipe reference in some placement. Moreover, every clip has an (implicit) [[source port|ClipSourcePort]], which will appear as pipe asset when first used (referred) while [[building|BuildProcess]].
-
-!removal
-Deleting a Pipe is an advanced operation, because it includes finding and &quot;detaching&quot; all references, otherwise the pipe will leap back into existence immediately. Thus, global pipe entries in the Session and pipe references in [[locating pins|LocatingPin]] within any placement have to be removed, while clips using a given source port will be disabled. {{red{todo: implementation deferred}}}
-
-!using Pipes
-there is not much you can do directly with a pipe asset. It is an point of reference, after all. Any connection to some pipe is only temporarily done by a placement in some part of the timeline, so it isn't stored with the pipe. You can edit the (user visible) description an you can globally disable a pipe asset. The pipe's ID and media stream type of course are fixed, because any connection and referral (via the asset ID) is based on them. Later on, we should provide a {{{rewire(oldPipe, newPipe)}}} to search any ref to the {{{oldPipe}}} and try to rewrite it to use the {{{newPipe}}}, possibly with a new media stream type.
-Pipes are integrated with the [[management of defaults|DefaultsManagement]]. For example, any pipe uses implicitly some [[processing pattern|ProcPatt]] &amp;mdash; it may default to the empty pattern. This feature enables to apply some standard wiring to the pipes (e.g a fader for audio, similar to the classic mixing consoles). This //is // a global property of the pipe, but &amp;mdash; contrary to the stream type &amp;mdash; this pattern may be switched
-</pre>
-</div>
 <div title="ProblemsTodo" modifier="Ichthyostega" modified="200709251721" created="200708050524" tags="design discuss" changecount="15">
 <pre>Open issues, Things to be worked out, Problems still to be solved... 
 
@@ -2484,9 +2512,9 @@ Like all [[structural assets|StructAsset]], ~ProcPatt employs a special naming s
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
-<div title="QueryImplProlog" modifier="Ichthyostega" modified="200801270339" created="200801202321" tags="draft design" changecount="14">
+<div title="QueryImplProlog" modifier="Ichthyostega" modified="200802192354" created="200801202321" tags="draft design" changecount="15">
 <pre>//obviously, getting this one to work requires quite a lot of technical details to be planned and implemented.// This said...
-The intention is to get much more readable (&quot;declarative&quot;) and changeable configuration as by programming it directly within the implementation of some object.
+The intention is to get much more readable (&quot;declarative&quot;) and changeable configuration as by programming the decision logic literately within the implementation of some object.
 
 !Draft
 As an example, specifying how a Track can be configured for connecting automatically to some &quot;mpeg&quot; bus (=pipe)
