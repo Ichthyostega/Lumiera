@@ -53,7 +53,7 @@ namespace mobject
       typedef std::pair<Time,Pipe> SolutionData;  //TODO (ichthyo consideres better passing of solution by subclass)
 
       /** no need to resolve any further, as this ExplicitPlacement
-       *  already \i is the result of a resolve()-call.
+       *  already \e is the result of a resolve()-call.
        */
       virtual
       ExplicitPlacement resolve ()  const 

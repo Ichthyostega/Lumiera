@@ -26,7 +26,7 @@
  **
  ** the following test composes both an interface and the corresponding implementation
  ** by instantiating "building block" templates over a collection of types. The resulting
- ** class ends up inheriting a \i virtual function instantiated for each of the types 
+ ** class ends up inheriting a \e virtual function instantiated for each of the types 
  ** in the list. (remember: normally the number and signature of all virtual functions
  ** need to be absolutely fixed in the class definition)
  **

@@ -96,7 +96,7 @@ namespace cinelerra
     
     /** 
      * building block defining how to do 
-     * the mock implementation for \i one type.
+     * the mock implementation for \e one type.
      * We simply access a table holding pre-created objects.
      */
     template<class TY, class BASE>

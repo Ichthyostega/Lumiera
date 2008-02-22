@@ -26,7 +26,7 @@
  ** By using the Query template, you can pose a query in prolog syntax and get some
  ** existing or newly created object fulfilling the requested predicates. The actual 
  ** implementation is hidden behind the #instance (Singleton factory). As of 1/2008, 
- ** it is \i planned to use an embedded YAP Prolog system at some point in the future,
+ ** it is \e planned to use an embedded YAP Prolog system at some point in the future,
  ** for now we use a \link MockConfigRules mock implementation \endlink employing a
  ** preconfigured Map.
  **

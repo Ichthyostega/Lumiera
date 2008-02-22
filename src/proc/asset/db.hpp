@@ -110,7 +110,7 @@ namespace asset
        *  As the destructor of DB needs to call clear(), this
        *  could result in segfaults. This doesn't seem to be
        *  a problem, though, because we register and process
-       *  \i all assets and the net effect is just breaking
+       *  \e all assets and the net effect is just breaking
        *  any cyclic dependencies) 
        */ 
       void

@@ -81,7 +81,7 @@ namespace cinelerra
               My_scoped_ptr() : scoped_ptr<Link> (get()? get() : 0) {}   ///< bypass if already configured
             };
             
-          /** we configure this link \i later, when the singleton factory
+          /** we configure this link \e later, when the singleton factory
            *  is actually created, to point at the desired implementation subclass.
            */
           static My_scoped_ptr link;
