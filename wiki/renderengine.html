@@ -2512,21 +2512,21 @@ Like all [[structural assets|StructAsset]], ~ProcPatt employs a special naming s
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
-<div title="QueryImplProlog" modifier="Ichthyostega" modified="200802192354" created="200801202321" tags="draft design" changecount="15">
+<div title="QueryImplProlog" modifier="Ichthyostega" modified="200802291526" created="200801202321" tags="draft design" changecount="17">
 <pre>//obviously, getting this one to work requires quite a lot of technical details to be planned and implemented.// This said...
 The intention is to get much more readable (&quot;declarative&quot;) and changeable configuration as by programming the decision logic literately within the implementation of some object.
 
 !Draft
 As an example, specifying how a Track can be configured for connecting automatically to some &quot;mpeg&quot; bus (=pipe)
 {{{
-retrieve(O, Cap) :- find(O), capabilities(Cap).
-retrieve(O, Cap) :- make(O), capabilities(Cap).
+resolve(O, Cap) :- find(O), capabilities(Cap).
+resolve(O, Cap) :- make(O), capabilities(Cap).
 capabilities(Q) :- call(Q).
 
-stream(T, mpeg) :- type(T, track), type(P, pipe), retrieve(P, stream(P,mpeg)), place_to(P, T).
+stream(T, mpeg) :- type(T, track), type(P, pipe), resolve(P, stream(P,mpeg)), place_to(P, T).
 }}}
 
-Then, running the goal {{{:-retrieve(T, stream(T,mpeg)).}}} would search a Track object, try to retrieve a pipe object with stream-type=mpeg and associate the track with this pipe. This relies on a predicate &quot;stream(P,mpeg)&quot; implemented (natively) for the pipe object. So, &quot;Cap&quot; is the query issued from calling code &amp;mdash; here {{{stream(T,mpeg)}}}, the type guard {{{type(T, track)}}} will probably be handled or inserted automatically, while the predicate implementations for find/1, make/1, stream/2, and place_to/2 are to be provided by the target types.
+Then, running the goal {{{:-resolve(T, stream(T,mpeg)).}}} would search a Track object, try to retrieve a pipe object with stream-type=mpeg and associate the track with this pipe. This relies on a predicate &quot;stream(P,mpeg)&quot; implemented (natively) for the pipe object. So, &quot;Cap&quot; is the query issued from calling code &amp;mdash; here {{{stream(T,mpeg)}}}, the type guard {{{type(T, track)}}} will probably be handled or inserted automatically, while the predicate implementations for find/1, make/1, stream/2, and place_to/2 are to be provided by the target types.
 * __The supporting system__ had to combine several code snippets into one rule system to be used for running queries, with some global base rules, rules injected by each individual participating object kind and finally user provided rules added by the current session. The actual query is bound to &quot;Cap&quot; (and consequently run as a goal by {{{call(Q)}}}). The implementation needs to provide a symbol table associating variable terms (like &quot;T&quot; or &quot;P&quot;) to C/C++ object types, enabling the participating object kinds to register their specific predicate implementations. This is crucial, because there can be no general scheme of object-provided predicates (for each object kind different predicates make sense, e.g. [[pipes|PipeHandling]] have other possibilities than [[wiring requests|WiringRequest]]). Basically, a query issues a Prolog goal, which in turn evaluates domain specific predicates provided by the participating objects and thus calls back into C/C++ code. The supporting system maintains the internal connection (via the &quot;type&quot; predicate) such that from Prolog viewpoint it looks as if we were binding Variables directly to object instances. (there are some nasty technical details because of the backtracking nature of Prolog evaluations which need to be hidden away)
 * Any __participating object kind__ needs a way to declare domain specific predicates, thus triggering the registration of the necessary hooks within the supporting system. Moreover, it should be able to inject further prolog code (as shown in the example above with the {{{strem(T, mpeg)}}} predicate. For each of these new domain specific predicates, there needs to be a functor which can be invoked when the C implementation of the predicate is called from Prolog (in some cases even later, when the final solution is &quot;executed&quot;, e.g. a new instance has been created and now some properties need to be set).
 

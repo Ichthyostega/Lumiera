@@ -105,14 +105,18 @@ namespace cinelerra
         typedef typename WrapReturn<TY>::Wrapper Ret;
         
       public:
-        virtual Ret 
-        resolve (const Query<TY>& q)
+        /** (dummy) implementation of the QueryHandler interface */
+        virtual bool 
+        resolve (Ret& solution, const Query<TY>& q)
           {
             const any& entry = fetch_from_table_for (q.asKey());
             if (!isnil (entry))
-              return any_cast<Ret> (entry);
-            else
-              return Ret(); // default-constructed empty smart ptr
+              if (! solution
+                 ||(solution && *solution == *candidate)    // simulates a real unification
+                 )
+                return solution = candidate;
+            
+            return solution = Ret();    // fail: return default-constructed empty smart ptr
           }
       };
     

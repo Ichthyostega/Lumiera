@@ -50,7 +50,7 @@
 #include "common/typelistutil.hpp"
 #include "common/singletonsubclass.hpp"
 
-//TODO: is it sensible to bring in the types explicitly here? (it's not necessary, but may be convienient...)
+//TODO: is it sensible to bring in the types explicitly here? (it's not necessary, but may be convenient...)
 #include "proc/mobject/session/track.hpp"
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/pipe.hpp"
@@ -73,11 +73,11 @@ namespace cinelerra
     {
     // The intention is to support the following style of Prolog code
     //
-    // retrieve(O, Cap) :- find(T), capabilities(Cap).
-    // retrieve(O, Cap) :- make(T), capabilities(Cap).
-    // capabilities(Q) :- call(Q).
-    //
-    // stream(T, mpeg) :- type(T, track), type(P, pipe), retrieve(P, stream(P,mpeg)), place_to(P, T).
+    //  resolve(O, Cap) :- find(O), capabilities(Cap).
+    //  resolve(O, Cap) :- make(O), capabilities(Cap).
+    //  capabilities(Q) :- call(Q).
+    //  
+    //  stream(T, mpeg) :- type(T, track), type(P, pipe), resolve(P, stream(P,mpeg)), place_to(P, T).
     //
     // The type guard is inserted auomatically, while the predicate implementations for
     // find/1, make/1, stream/2, and place_to/2 are to be provided by the target types.
@@ -111,6 +111,8 @@ namespace cinelerra
      * type of object. Registering  such a TypeHandler should create
      * the necessary handler functions to be installed into 
      * the Prolog system.
+     * @todo it can't be done exactly this way, but I leave it in
+     *       as a reminder for later, to show the intention
      */  
     template<class TY>
     class TypeHandler
@@ -128,7 +130,8 @@ namespace cinelerra
      * the "frontside" interface: the Proc-Layer code can
      * use this QueryHandler to retrieve instances of the
      * type TY fulfilling the given Query. To start with,
-     * we use a mock implementation-
+     * we use a mock implementation. 
+     * (this code works and is already used 2/2008)
      * @see cinelerra::query::LookupPreconfigured
      * @see cinelerra::query::MockTable
      */
@@ -140,9 +143,12 @@ namespace cinelerra
       public:
         /** try to find or create an object of type TY 
          *  fulfilling the given query.
-         *  @return empty shared-ptr if not found,
+         *  @param solution object fulfilling the query. Will be bound or
+         *         unified (in case it's already bound) with the first solution.
+         *  @query any goals to be fulfilled by the solution.
+         *  @return false if resolution failed. In this case, solution ptr is empty.
          */
-        virtual shared_ptr<TY> resolve (const Query<TY>& q) = 0;
+        virtual bool resolve (shared_ptr<TY> solution, const Query<TY>& q) = 0;
       };
 
     // TODO: the Idea is to provide specialisations for the concrete types

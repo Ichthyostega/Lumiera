@@ -51,12 +51,6 @@ namespace asset
     using cinelerra::query::QueryHandler;
     
     
-    /** shortcut: query without creating new instances */
-    bool 
-    find (Query<Pipe>& q) 
-    { 
-      return Session::current->defaults.search (q); 
-    }
     
     /** shortcut: query for given Pipe-ID */
     bool 

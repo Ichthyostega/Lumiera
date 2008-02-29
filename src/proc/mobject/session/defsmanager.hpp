@@ -85,13 +85,13 @@ namespace mobject
          *  @note only a weak ref to the object is stored
          */ 
         template<class TAR>
-        bool define  (shared_ptr<TAR>&, const cinelerra::Query<TAR>&);
+        bool define  (const shared_ptr<TAR>&, const cinelerra::Query<TAR>&);
         
         /** remove the defaults registration of the given object, if there was such
          *  @return false if nothing has been changed because the object wasn't registered
          */
         template<class TAR>
-        bool forget  (shared_ptr<TAR>&);
+        bool forget  (const shared_ptr<TAR>&);
         
         
 // Q: can we have something along the line of...?

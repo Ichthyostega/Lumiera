@@ -22,8 +22,7 @@
 
 
 #include "proc/mobject/session/defsmanager.hpp"
-#include "proc/asset/procpatt.hpp"
-#include "proc/asset/pipe.hpp"
+#include "proc/mobject/session/defsregistry.hpp"
 #include "common/configrules.hpp"
 #include "common/error.hpp"
 
@@ -32,13 +31,10 @@
 using boost::format;
 
 using asset::Query;
-using asset::Pipe;
-using asset::ProcPatt;
-using asset::PProcPatt;
-
 using cinelerra::ConfigRules;
 using cinelerra::query::QueryHandler;
 using cinelerra::query::CINELERRA_ERROR_CAPABILITY_QUERY;
+
 
 namespace mobject
   {
@@ -46,38 +42,59 @@ namespace mobject
     {
     using std::tr1::shared_ptr;
     
+    
+    namespace // Implementation details
+      {
+      DefsRegistry& defaultsRegistry; //////////////////TODO
+    }
+    
     /** initialize the most basic internal defaults. */
     DefsManager::DefsManager ()  throw()
     {
       TODO ("setup basic defaults of the session");
     }
-
+    
+    
     template<class TAR>
-    shared_ptr<TAR> 
+    shared_ptr<TAR>
     DefsManager::search  (const Query<TAR>& capabilities)
     {
-      UNIMPLEMENTED ("search for default registered object, dont create");
+      defaultsRegistry.get (capabilities);
     }
+    
     
     template<class TAR>
     shared_ptr<TAR> 
     DefsManager::create  (const Query<TAR>& capabilities)
     {
-      UNIMPLEMENTED ("retrieve object and register as default");
+      shared_ptr<TAR> res;
+      QueryHandler<TAR>& typeHandler = ConfigRules::instance();  
+      typeHandler.resolve (res, capabilities);
+      if (res)
+        defaultsRegistry.put (res, capabilities);
+      return res;
     }
+    
     
     template<class TAR>
     bool 
-    DefsManager::define  (shared_ptr<TAR>& defaultObj, const Query<TAR>& capabilities)
+    DefsManager::define  (const shared_ptr<TAR>& defaultObj, const Query<TAR>& capabilities)
     {
-      UNIMPLEMENTED ("just do the defaults registration");
+      shared_ptr<TAR> candidate (defaultObj);
+      QueryHandler<TAR>& typeHandler = ConfigRules::instance();  
+      typeHandler.resolve (candidate, capabilities);
+      if (!candidate)
+        return false;
+      else
+        return defaultsRegistry.put (candidate, capabilities);
     }
-
+    
+    
     template<class TAR>
     bool 
-    DefsManager::forget  (shared_ptr<TAR>& defaultObj)
+    DefsManager::forget  (const shared_ptr<TAR>& defaultObj)
     {
-      UNIMPLEMENTED ("purge defaults registration");
+      defaultsRegistry.forget (defaultObj);
     }
 
     
@@ -85,9 +102,11 @@ namespace mobject
     shared_ptr<TAR> 
     DefsManager::operator() (const Query<TAR>& capabilities)
     {
-      TODO ("move this code to create()");
-      QueryHandler<TAR>& typeHandler = ConfigRules::instance();  
-      shared_ptr<TAR> res = typeHandler.resolve (capabilities);
+      shared_ptr<TAR> res (search (capabilities));
+      if (res) 
+        return res;
+      else
+        res = create (capabilities); // not yet known as default, create new
       
       if (!res)
         throw cinelerra::error::Config ( str(format("The following Query could not be resolved: %s.") 
@@ -97,14 +116,34 @@ namespace mobject
         return res;
     }
 
+  } // namespace mobject::session
+
+} // namespace mobject
     
     
    /***************************************************************/
    /* explicit template instantiations for querying various Types */
    /***************************************************************/
 
-    template shared_ptr<Pipe> DefsManager::operator ()(const Query<Pipe>&); 
-    template PProcPatt        DefsManager::operator ()(const Query<const ProcPatt>&); 
+#include "proc/asset/procpatt.hpp"
+#include "proc/asset/pipe.hpp"
+
+namespace mobject
+  {
+  namespace session
+    {
+
+    using asset::Pipe;
+    using asset::PPipe;
+    using asset::ProcPatt;
+    using asset::PProcPatt;
+    
+    
+    template PPipe     DefsManager::operator() (const Query<Pipe>&); 
+    template PProcPatt DefsManager::operator() (const Query<const ProcPatt>&); 
+    
+    template bool DefsManager::define (const PPipe&, const Query<Pipe>&);
+    template bool DefsManager::forget (const PPipe&);
 
   } // namespace mobject::session
 
