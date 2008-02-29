@@ -842,8 +842,8 @@ This is an very important external Interface, because it links together all thre
 <pre>[[ProcLayer and Engine]]
 </pre>
 </div>
-<div title="DefaultsImplementation" modifier="Ichthyostega" modified="200802200145" created="200802200043" tags="spec impl draft" changecount="6">
-<pre>As detailed in the [[definition|DefaultsManagement]], {{{default(Obj)}}} is sort of a Joker along the lines &quot;give me a suitable Object and I don't care for further details&quot;. Actually, default objects are implemented by the {{{mobject::session::DefsManager}}}, which remembers and keeps track of anything labeled as &quot;default&quot;. This defaults manager is a singleton and can be accessed via the [[Session]] interface, meaning that the memory regarding defaults is part of the session state. Accessing an object via the query for an default actually //tagges// this object (stores a weak ref in the ~DefsManager). Alongside with each object successfully queried via &quot;default&quot;, the degree of constriction is remembered, i.e. the number of additional conditions contained in the query. This enables us to search for default objects starting with the most unspecific.
+<div title="DefaultsImplementation" modifier="Ichthyostega" modified="200802290000" created="200802200043" tags="spec impl draft" changecount="10">
+<pre>As detailed in the [[definition|DefaultsManagement]], {{{default(Obj)}}} is sort of a Joker along the lines &quot;give me a suitable Object and I don't care for further details&quot;. Actually, default objects are implemented by the {{{mobject::session::DefsManager}}}, which remembers and keeps track of anything labeled as &quot;default&quot;. This defaults manager is a singleton and can be accessed via the [[Session]] interface, meaning that the memory track regarding defaults is part of the session state. Accessing an object via the query for an default actually //tagges// this object (storing a weak ref in the ~DefsManager). Alongside with each object successfully queried via &quot;default&quot;, the degree of constriction is remembered, i.e. the number of additional conditions contained in the query. This enables us to search for default objects starting with the most unspecific.
 
 !Skeleton
 # ''search'': using the predicate {{{default(X)}}} enumerates existing objects of suitable type
@@ -859,7 +859,7 @@ This is an very important external Interface, because it links together all thre
 
 !!!Implementation details
 Taken precisely, the &quot;degree of constriction&quot; yields only a partial ordering &amp;mdash; but as the &quot;default&quot;-predicate is sort of a existential quantification anyways, its sole purpose is to avoid polluting the session with unnecessary default objects, and we don't need to care for absolute precision. A suitable approximation is to count the number of predicates terms in the query and use a pqueue (separate for each Type) to store weak refs to the the objects tagged as &quot;default&quot;
-{{red{WARN}}} there is an interference with the (planned) Undo function. This is a general problem of the config queries; it seems reasonable we can ignore this issue.
+{{red{WARN}}} there is an interference with the (planned) Undo function. This is a general problem of the config queries; just ignoring this issue seems reasonable.
 
 !!!Problems with the (preliminary) mock implementation
 As we don't have a Prolog interpreter on board yet, we utilize a mock store with preconfigured answers. (see {{{MockConfigQuery}}}). As this preliminary solution is lacking the ability to create new objects, we need to resort to some trickery here (please look away). The overall logic is quite broken, because the system isn't capable to do any real resolution &amp;mdash; if we ignore this fact, the rest of the algorithm can be implemented, tested and used right now.

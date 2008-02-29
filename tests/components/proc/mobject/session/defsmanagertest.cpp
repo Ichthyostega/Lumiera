@@ -47,6 +47,17 @@ namespace asset
     using cinelerra::query::normalizeID;
     
     
+    /** shortcut: run just a query
+     *  without creating new instances
+     */
+    bool 
+    find (Query<Pipe>& q) 
+    { 
+      return Session::current->defaults.search (q); 
+    }
+    
+    
+    
     
     /***********************************************************************
      * @test basic behaviour of the defaults manager.
@@ -76,7 +87,7 @@ namespace asset
         
         
         
-        void retrieveSimpleDefault(string pID)
+        void retrieveSimpleDefault (string pID)
           { 
             PPipe pipe1 = Pipe::query (""); // "the default pipe"
             PPipe pipe2;
@@ -95,7 +106,7 @@ namespace asset
           }
         
         
-        void retrieveConstrainedDefault(string pID, string sID)
+        void retrieveConstrainedDefault (string pID, string sID)
           { 
             PPipe pipe1 = Pipe::query (""); // "the default pipe"
             ASSERT (sID != pipe1->getProcPatt()->queryStreamID(),
@@ -121,23 +132,24 @@ namespace asset
                                  % pipe1->getPipeID()
                                  % std::rand()
                                 ));     // make random new pipeID  
-            string query_for_new ("pipe("+new_pID+")");
-            PPipe pipe2 = Session::current->defaults(Query<Pipe> (query_for_new));
+            Query<Pipe> query_for_new ("pipe("+new_pID+")");
             
-            TODO ("a way to do only a query, without creating. Use this to check it is really added as default");
+            ASSERT (!find (query_for_new));                             // check it doesn't exist 
+            PPipe pipe2 = Session::current->defaults (query_for_new);   // triggers creation
+            ASSERT ( find (query_for_new));                             // check it exists now
             
             ASSERT (pipe1 != pipe2);
-            ASSERT (pipe2 == Pipe::query (query_for_new));
+            ASSERT (pipe2 == Session::current->defaults (query_for_new));
             return new_pID;
           }
         
         
-        void verifyRemoval(string pID)
+        void verifyRemoval (string pID)
           { 
-            string query_for_pID ("pipe("+pID+")");
+            Query<Pipe> query_for_pID ("pipe("+pID+")");
             size_t hash;
               {
-                PPipe pipe1 = Pipe::query (query_for_pID);
+                PPipe pipe1 = Session::current->defaults (query_for_pID);
                 hash = pipe1->getID();
               }
              // now AssetManager should have the only ref
@@ -148,9 +160,10 @@ namespace asset
             aMang.remove (assetID);
             ASSERT (!aMang.known (assetID));
             
-            TODO ("assure the bare default-query now fails...");
-            PPipe pipe2 = Session::current->defaults(Query<Pipe> (query_for_pID));
-            TODO ("assure the bare default-query now succeeds...");
+            
+            ASSERT (!find(query_for_pID));                              // bare default-query should fail...
+            PPipe pipe2 = Session::current->defaults (query_for_pID);   // triggers re-creation
+            ASSERT ( find(query_for_pID));                              // should succeed again
           }
       };
     

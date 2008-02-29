@@ -56,9 +56,46 @@ namespace mobject
         friend class SessManagerImpl;
         
       public:
+        /** common access point: retrieve the default object fulfilling
+         *  some given conditions. May silently trigger object creation.
+         *  @throw error::Config in case no solution is possible, which
+         *         is considered \e misconfiguration. 
+         */
         template<class TAR>
         shared_ptr<TAR> operator() (const cinelerra::Query<TAR>&);
         
+        /** search through the registered defaults, never create anything.
+         *  @return object fulfilling the query, \c empty ptr if not found. 
+         */
+        template<class TAR>
+        shared_ptr<TAR> search  (const cinelerra::Query<TAR>&);
+        
+        /** retrieve an object fulfilling the query and register it as default.
+         *  The resolution is delegated to the ConfigQuery system (which may cause
+         *  creation of new object instances) 
+         *  @return object fulfilling the query, \c empty ptr if no solution.
+         */ 
+        template<class TAR>
+        shared_ptr<TAR> create  (const cinelerra::Query<TAR>&);
+        
+        /** register the given object as default, after ensuring it fulfills the
+         *  query. The latter may cause some properties of the object to be set,
+         *  trigger creation of additional objects, and may fail altogether.
+         *  @return true if query was successfull and object is registered as default
+         *  @note only a weak ref to the object is stored
+         */ 
+        template<class TAR>
+        bool define  (shared_ptr<TAR>&, const cinelerra::Query<TAR>&);
+        
+        /** remove the defaults registration of the given object, if there was such
+         *  @return false if nothing has been changed because the object wasn't registered
+         */
+        template<class TAR>
+        bool forget  (shared_ptr<TAR>&);
+        
+        
+// Q: can we have something along the line of...?
+//
 //        template
 //          < class TAR,                   ///< the target to query for 
 //            template <class> class SMP  ///<  smart pointer class to wrap the result

@@ -44,6 +44,7 @@ namespace mobject
   {
   namespace session
     {
+    using std::tr1::shared_ptr;
     
     /** initialize the most basic internal defaults. */
     DefsManager::DefsManager ()  throw()
@@ -51,11 +52,40 @@ namespace mobject
       TODO ("setup basic defaults of the session");
     }
 
+    template<class TAR>
+    shared_ptr<TAR> 
+    DefsManager::search  (const Query<TAR>& capabilities)
+    {
+      UNIMPLEMENTED ("search for default registered object, dont create");
+    }
+    
+    template<class TAR>
+    shared_ptr<TAR> 
+    DefsManager::create  (const Query<TAR>& capabilities)
+    {
+      UNIMPLEMENTED ("retrieve object and register as default");
+    }
+    
+    template<class TAR>
+    bool 
+    DefsManager::define  (shared_ptr<TAR>& defaultObj, const Query<TAR>& capabilities)
+    {
+      UNIMPLEMENTED ("just do the defaults registration");
+    }
+
+    template<class TAR>
+    bool 
+    DefsManager::forget  (shared_ptr<TAR>& defaultObj)
+    {
+      UNIMPLEMENTED ("purge defaults registration");
+    }
+
     
     template<class TAR>
     shared_ptr<TAR> 
     DefsManager::operator() (const Query<TAR>& capabilities)
     {
+      TODO ("move this code to create()");
       QueryHandler<TAR>& typeHandler = ConfigRules::instance();  
       shared_ptr<TAR> res = typeHandler.resolve (capabilities);
       
