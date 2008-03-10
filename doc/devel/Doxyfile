@@ -3,7 +3,7 @@
 #---------------------------------------------------------------------------
 # Project related configuration options
 #---------------------------------------------------------------------------
-PROJECT_NAME           = Cinelerra3
+PROJECT_NAME           = Lumiera
 PROJECT_NUMBER         = 3.0+alpha
 OUTPUT_DIRECTORY       = 
 CREATE_SUBDIRS         = YES
@@ -153,9 +153,10 @@ VERBATIM_HEADERS       = YES
 #---------------------------------------------------------------------------
 ALPHABETICAL_INDEX     = YES
 COLS_IN_ALPHA_INDEX    = 5
-IGNORE_PREFIX          = cinelerra:: \
-                         cinelerra_ \
-                         CINELERRA_
+IGNORE_PREFIX          = lumiera:: \
+                         lumiera_ \
+                         lumi_ \
+                         LUMIERA_
 #---------------------------------------------------------------------------
 # configuration options related to the HTML output
 #---------------------------------------------------------------------------

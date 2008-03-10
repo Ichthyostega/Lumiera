@@ -1,6 +1,6 @@
 format 40
 
-artifactcanvas 128005 artifact_ref 128005 // Cinelerra3
+artifactcanvas 128005 artifact_ref 128005 // Lumiera
   color midred
   xyz 47 45 2000
 packagecanvas 128133 

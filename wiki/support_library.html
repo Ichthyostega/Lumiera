@@ -671,7 +671,7 @@ API:
 
 {{{
 const char*
-cinelerra_error_set (const char * err)
+lumiera_error_set (const char * err)
 }}}
 
 if there is no error pending, then store err as new error state, if there was an error pending, then the state is not altered.
@@ -680,30 +680,30 @@ return the former state (NULL if err got set, some other when an error is pendin
 
 {{{
 const char*
-cinelerra_error ()
+lumiera_error ()
 }}}
 
 returns the error state ''and'' clears it. The user has to store it temporary when need to be used further. Rationale: less TLS access overhead, never forget to clear the state.
 
-(do we need a {{{cinelerra_error_peek()}}}?)
+(do we need a {{{lumiera_error_peek()}}}?)
 
 Declaration and definition:
 {{{
-#define CINELERRA_ERROR_DECLARE(err) \
-extern const char* CINELERRA_ERROR_##err
+#define LUMIERA_ERROR_DECLARE(err) \
+extern const char* LUMIERA_ERROR_##err
 
-#define CINELERRA_ERROR_DEFINE(err, msg) \
-const char* CINELERRA_ERROR_##err = &quot;CINELERRA_ERROR_&quot; #err &quot;:&quot; msg
+#define LUMIERA_ERROR_DEFINE(err, msg) \
+const char* LUMIERA_ERROR_##err = &quot;LUMIERA_ERROR_&quot; #err &quot;:&quot; msg
 }}}
 
-thus a {{{CINELERRA_ERROR_DEFINE(NFOO, &quot;Foo not found&quot;)}}} will result in a string:
-&quot;~CINELERRA_ERROR_NFOO:Foo not found&quot;, having the identifier itself prepended to the string will ensure uniqueness of the generated literal (and thus its pointer value), reducing error testing to address comparison {{{cinelerra_error()==CINELERRA_ERROR_NFOO}}}. The message string is easily derived by {{{strchr(CINELERRA_ERROR_NFOO, ':')+1}}}
+thus a {{{LUMIERA_ERROR_DEFINE(NFOO, &quot;Foo not found&quot;)}}} will result in a string:
+&quot;~LUMIERA_ERROR_NFOO:Foo not found&quot;, having the identifier itself prepended to the string will ensure uniqueness of the generated literal (and thus its pointer value), reducing error testing to address comparison {{{lumiera_error()==LUMIERA_ERROR_NFOO}}}. The message string is easily derived by {{{strchr(LUMIERA_ERROR_NFOO, ':')+1}}}
 
 
 
 
 !! Allocation
-The next point is allocation failures. These are possible by C/C++ standard but don't actually happen anymore in Linux (except in few rare cases). Instead of gracefully handling this errors I'll add a {{{CINELERRA_DIE(message)}}} macro to this library later. This macro will just do (NoBug) logging and then doing a hard abort. It should be a macro because we want to preserve file/line location for logging.
+The next point is allocation failures. These are possible by C/C++ standard but don't actually happen anymore in Linux (except in few rare cases). Instead of gracefully handling this errors I'll add a {{{LUMIERA_DIE(message)}}} macro to this library later. This macro will just do (NoBug) logging and then doing a hard abort. It should be a macro because we want to preserve file/line location for logging.
 
 </pre>
 </div>
@@ -720,13 +720,13 @@ We use a common base class for all our application specific exceptions. These ex
 * getting standardized error messages automatically
 
 !!provided features
-The C++ errorhandling Classes and functions can be found in {{{common/error.hpp}}} (not to be confused with the elementary C errorhandling of the cinelerra support lib {{{lib/error.h}}}. See also the &quot;exceptionerrortest.cpp&quot;
+The C++ errorhandling Classes and functions can be found in {{{common/error.hpp}}} (not to be confused with the elementary C errorhandling of the Lumiera support lib {{{lib/error.h}}}. See also the &quot;exceptionerrortest.cpp&quot;
 * the constructor of the Exception base class will set the C-style error flag as well. Obviously, when an exception gets caught and handled, this error-flag should be reset (and this is the responsibility of the handler).
 * we add a __unknown()__ handler which will print additional diagnostics.
 * the Exception class has a diagnostic message intended for developers and a friendly message for the user. It is encouraged to write a detailed description of each error situation right into a string constant passed to the exception object ctor. This will serve the purpose of documenting the error situation in the source code and at the same time help diagnosis.
 * there is a variant of the constructor taking a reference to an std::exception. This is intended for //chained exceptions//. Whenever an handler catches an exception, but then decides to rethrow it with different classification, the original exception object should be passed on by using this constructor, so it's {{{what()}}} message can be preserved and will be included in the final log entry. While this may look like overkill in a small example, it is a very helpful facility in a larger layered application, where it is often difficult to spot the original cause of an exception encountered.
 * for each mayor category of Exception subclasses, we define a C-style error constant. The client code is free to define further detailed error constants and Exception subclasses.
-* to help defining Exception subclasses, a macro {{{CINELERRA_EXCEPTION_DECLARE}}} is provided.
+* to help defining Exception subclasses, a macro {{{LUMIERA_EXCEPTION_DECLARE}}} is provided.
 
 !!!basic Exception categories
 |!category|!description|
@@ -743,10 +743,10 @@ The C++ errorhandling Classes and functions can be found in {{{common/error.hpp}
 Framerates are stored as rational numbers eg. 30000/1001 for NTSC, this representation allows highly precise integer calculations for frames and times.
 
 ! Frames
-All calculations in cinelerra are based on frames which is a signed integer type. Together with a Framerate and a starting point, every frame can be exactly located.
+All calculations in Lumiera are based on frames which is a signed integer type. Together with a Framerate and a starting point, every frame can be exactly located.
 
 ! Time
-Time is used only internally in cinelerra, every external representation of time will be converted to frames. Time has a precision of 1 microsecond and is stored in POSIX struct timeval. Time is always handled as absolute time, thus frame addresses map to absolute times, there is at worst a 1us precision jitter but no drift.
+Time is used only internally in Lumiera, every external representation of time will be converted to frames. Time has a precision of 1 microsecond and is stored in POSIX struct timeval. Time is always handled as absolute time, thus frame addresses map to absolute times, there is at worst a 1us precision jitter but no drift.
 
 !! SMPTE and other Timecodes
 will be added on demand, but be frame based, not time based</pre>
@@ -1163,7 +1163,7 @@ Semaphores have quite ugly semantics and are very hard to debug. For now (and li
 Thread cancellation policies are not yet finally decided, for now we consider threads uncancelable!</pre>
 </div>
 <div title="MainMenu" modifier="CehTeh" modified="200707152251" created="200707102300" changecount="2">
-<pre>''[[Cinelerra3|index.html]]''
+<pre>''[[Lumiera|index.html]]''
 SupportLibrary
 [[Threads and Locking]]
 [[Plugins]]
@@ -1715,7 +1715,7 @@ Interfaces are immutable with the exception that new functions may be added. Ver
 
 An interface needs a name and a version. They define a block where the actual function prototypes can be added. New prototypes have to be added at the end, existing prototypes must never be changed.
 {{{
-CINELERRA_INTERFACE(name, version,
+LUMIERA_INTERFACE(name, version,
 	...
 );
 }}}
@@ -1723,21 +1723,21 @@ CINELERRA_INTERFACE(name, version,
 
 Each function prototype must be given with its different parts: return type, name, arguments list, and version.
 {{{
-	CINELERRA_IPROTO(ret, name, (args)),
+	LUMIERA_IPROTO(ret, name, (args)),
 }}}
 
 
 ! Example
 Together this would look like
 {{{
-CINELERRA_INTERFACE(foo, 1,
-	CINELERRA_IPROTO(void, bar, (void)),
-	CINELERRA_IPROTO(int, baz, (int i))
+LUMIERA_INTERFACE(foo, 1,
+	LUMIERA_IPROTO(void, bar, (void)),
+	LUMIERA_IPROTO(int, baz, (int i))
 );
 
-CINELERRA_INTERFACE(foo, 2,
-	CINELERRA_IPROTO(void, bar, (void)),
-	CINELERRA_IPROTO(int, baz, (float i))
+LUMIERA_INTERFACE(foo, 2,
+	LUMIERA_IPROTO(void, bar, (void)),
+	LUMIERA_IPROTO(int, baz, (float i))
 );
 }}}
 
@@ -1745,16 +1745,16 @@ Note that the version 2 interface changed the parameter from int to float for th
 
 The above gets expanded to:
 {{{
-struct cinelerra_interface_foo_1
+struct lumiera_interface_foo_1
 {
-	struct cinelerra_interface interface_header_;
+	struct lumiera_interface interface_header_;
 	void (*bar) (void);
 	int (*baz) (int i);
 };
 
-struct cinelerra_interface_foo_2
+struct lumiera_interface_foo_2
 {
-	struct cinelerra_interface interface_header_;
+	struct lumiera_interface interface_header_;
 	void (*bar) (void);
 	int (*baz) (float i);
 };
@@ -1764,7 +1764,7 @@ struct cinelerra_interface_foo_2
 <pre>A Plugin realizes an interface. This means that actual functions are mapped to the correspondending slots in the interface structure.
 
 {{{
-CINELERRA_INTERFACE_IMPLEMENT(interface, version, name,
+LUMIERA_INTERFACE_IMPLEMENT(interface, version, name,
 	/* TODO some hooks here */
 	functionnames...
 );
@@ -1790,13 +1790,13 @@ my_new_baz_function (float i)
 	...
 }
 
-CINELERRA_INTERFACE_IMPLEMENT(foo, 1, myfoointerface,
+LUMIERA_INTERFACE_IMPLEMENT(foo, 1, myfoointerface,
 	/* TODO some hooks here */
 	my_bar_function,
 	my_baz_function
 );
 
-CINELERRA_INTERFACE_IMPLEMENT(foo, 2, myfoointerface,
+LUMIERA_INTERFACE_IMPLEMENT(foo, 2, myfoointerface,
 	/* TODO some hooks here */
 	my_bar_function,
 	my_new_baz_function
@@ -1805,14 +1805,14 @@ CINELERRA_INTERFACE_IMPLEMENT(foo, 2, myfoointerface,
 
 The interface implementations expands to something like:
 {{{
-struct cinelerra_interface_foo_1 myfoointerface_1 =
+struct lumiera_interface_foo_1 myfoointerface_1 =
 {
 	/* TODO header initialization */
 	my_bar_function,
 	my_baz_function
 }
 
-struct cinelerra_interface_foo_2 myfoointerface_2 =
+struct lumiera_interface_foo_2 myfoointerface_2 =
 {
 	/* TODO header initialization */
 	my_bar_function,
@@ -1822,7 +1822,7 @@ struct cinelerra_interface_foo_2 myfoointerface_2 =
 </pre>
 </div>
 <div title="PluginLibrary" modifier="MichaelPloujnikov" modified="200707160351" created="200707111329" tags="excludeMissing" changecount="33">
-<pre>! Cinelerra Plugin API
+<pre>! Lumiera Plugin API
 
 There are only a few functions to manage Plugins. Actually a user requests interfaces. The libraries which implement Plugins are managed transparently.
 
@@ -1830,14 +1830,14 @@ Interfaces are exported as instances and are not necessary singleton. This means
 
 !! opening an Interface
 {{{
-CinelerraInterface
-cinelerra_interface_open (const char* plugin,
+LumieraInterface
+lumiera_interface_open (const char* plugin,
                           const char* name,
                           size_t min_revision);
 }}}
 
 !!! Parameters
-* ''{{{plugin}}}'' is the name of the Plugin whose interface to use. Plugins are looked up in $~CINELERRA_PLUGIN_PATH, which is a colon separated list of directories, and then in $plugin_install_dir which is the directory where standard plugins get installed when installing cinelerra (example: /usr/local/lib/cinelerra3/). The name itself can contain slashes, see PluginHierachy for details. It shall not include a library extension (.so). When NULL is passed, an interface from the main application is queried.
+* ''{{{plugin}}}'' is the name of the Plugin whose interface to use. Plugins are looked up in $~LUMIERA_PLUGIN_PATH, which is a colon separated list of directories, and then in $plugin_install_dir which is the directory where standard plugins get installed when installing Lumiera (example: /usr/local/lib/lumiera/). The name itself can contain slashes, see PluginHierachy for details. It shall not include a library extension (.so). When NULL is passed, an interface from the main application is queried.
 * ''{{{name}}}'' is the name of the queried interface.
 * ''{{{min_revision}}}'' is the expected minimal size of the interface structure, since interfaces are extended by adding new protos at the end, the size gives a unique value for each new revision.
 
@@ -1845,12 +1845,12 @@ cinelerra_interface_open (const char* plugin,
 Interfaces can opened multiple times and need to be closed for each call to open.
 
 !!! Return
-This function returns a pointer to the requested interface on success or NULL in case of an error. See {{{cinelerra_interface_error}}} about handing errors.
+This function returns a pointer to the requested interface on success or NULL in case of an error. See {{{lumiera_interface_error}}} about handing errors.
 
 !! closing an Interface
 {{{
 void
-cinelerra_interface_close (CinelerraInterface self);
+lumiera_interface_close (LumieraInterface self);
 }}}
 
 !!! Parameters
@@ -1870,7 +1870,7 @@ Plugins which are no longer in use are not automatically unloaded. The user can 
 
 {{{
 int
-cinelerra_plugin_unload (const char* plugin);
+lumiera_plugin_unload (const char* plugin);
 }}}
 
 !!! Parameters
@@ -1880,20 +1880,20 @@ cinelerra_plugin_unload (const char* plugin);
 Tries to unload the named plugin. This only works when nothing else uses the Plugin.
 
 !!! Return
-Returns 0 on success or the number of active users on failure. See {{{cinelerra_interface_error}}} about handing errors.
+Returns 0 on success or the number of active users on failure. See {{{lumiera_interface_error}}} about handing errors.
 
 
 !! expire unused plugins
 {{{
 void
-cinelerra_plugin_expire (time_t age);
+lumiera_plugin_expire (time_t age);
 }}}
 
 !!! Parameters
 * ''{{{age}}}'' time in seconds when the plugin was last used
 
 !!! Semantic
-Calls {{{cinelerra_plugin_unload()}}} for each Plugin which has not been used for more than {{{age}}} seconds. This function might be infrequently called by the scheduler to remove things which are not needed (example: once a hour, remove plugins which have not been used for 2 hours).
+Calls {{{lumiera_plugin_unload()}}} for each Plugin which has not been used for more than {{{age}}} seconds. This function might be infrequently called by the scheduler to remove things which are not needed (example: once a hour, remove plugins which have not been used for 2 hours).
 
 !!! Return
 always succeeds.
@@ -1901,7 +1901,7 @@ always succeeds.
 !! error handling
 {{{
 const char*
-cinelerra_plugin_error ();
+lumiera_plugin_error ();
 }}}
 
 !!! Semantic
@@ -1944,7 +1944,7 @@ For binary compatibility everything will work well, provided that the caller kep
 </pre>
 </div>
 <div title="Plugins" modifier="CehTeh" modified="200708120129" created="200707111054" changecount="26">
-<pre>Cinelerra3 will use a very simple and language neutral plugin system. The focus is on easy and independent distribution of plugins and small specific interfaces. Ultimate flexibility is of second concern.
+<pre>Lumiera will use a very simple and language neutral plugin system. The focus is on easy and independent distribution of plugins and small specific interfaces. Ultimate flexibility is of second concern.
 
 ! Concept
 Plugins are just shared libraries which offer well defined Interfaces. A Plugin may offer more than one interface and may in turn request/use interfaces from other Plugins or from the main application.

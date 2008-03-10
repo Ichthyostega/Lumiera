@@ -45,7 +45,7 @@ format 40
     
     classdiagram 130181 "Hierarchy"
       draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-      comment "Cinelerra Exception hierarchy"
+      comment "Lumiera Exception hierarchy"
       size A4
     end
 
@@ -406,7 +406,7 @@ ${class}::${name} ${(}${)}${volatile} ${throw}
 	
 	comment "perform initialization on first access. 
 A call is placed in static initialization code
-included in cinelerra.h; thus it will happen
+included in lumiera.h; thus it will happen
 ubiquitous very early."
       end
 
@@ -466,7 +466,7 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      comment "We can basically reuse the Thread class design from cinelerra2, Thread becomes a baseclass for all Threads "
+      comment "We can basically reuse the Thread class design from Cinelerra2, Thread becomes a baseclass for all Threads "
     end
 
     class 128266 "Condition"
@@ -479,7 +479,7 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      comment "I provided a reworked Condition class in my cinelerra2 repository"
+      comment "I provided a reworked Condition class in my Cinelerra2 repository"
       class 128522 "Lock"
 	visibility package 
 	cpp_decl "${comment}${template}class ${name}${inherit} {
@@ -503,7 +503,7 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      comment "I provided a reworked Mutex class in my cinelerra2 repository"
+      comment "I provided a reworked Mutex class in my Cinelerra2 repository"
       class 128650 "Lock"
 	visibility package 
 	cpp_decl "${comment}${template}class ${name}${inherit} {

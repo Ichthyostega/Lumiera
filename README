@@ -1,8 +1,8 @@
-======================================
-Cinelerra -- the video NLE for Linux
-======================================
+====================================
+Lumiera -- the video NLE for Linux
+====================================
 
- Cinelerra is a nonlinear video editing and compositing tool. 
+ Lumiera is a nonlinear video editing and compositing tool. 
  It understands some of the common multimedia formats
  (quicktime, avi, ogg) and audio/video compression
  codecs (divx, xvid, mpeg1/2/4, ...)
@@ -12,22 +12,29 @@ Cinelerra -- the video NLE for Linux
  and RGB-float colormodels and the ability to mix media
  with differing sizes and framerates.
 
+For more information about Lumiera visit http://lumiera.org/
 For more information about Cinelerra visit http://cinelerra.org/
 
 
-------------------------------
-"Cinelerra-3" prototype code
-------------------------------
+----------------------------
+"Lumiera" prototype code
+----------------------------
 
-**This source tree doesn't contain a working video editing application**
-Rather, it contains some design studies and prototype code for improving
-some aspects of the Cinelerra Application. This work may eventually 
-evolve into a new major release of Cinelerra.
+**This source tree doesn't yet contain a working video editing application**
+Rather, it contains the initial framework and core modules of the lower and
+middle layer of the envisioned new Application "Lumiera".
 
 As of 7/2007, we start here with some backend and render engine modules
 together with some unit tests. You should find a wiki with detailed
 design considerations and developer documentation and a UML model
 (usable with BOUML 2.29) in the sibling directories.
+
+As of 2/2008 the project has been separated completely from his ancestor "Cinelerra"
+The Community, which is largely identical to the Cinelerra-CV community, choose the
+new project name "Lumiera". The basic project infrastructure is up and running,
+and work on the new codebase is going on continuosely. We can show nothing but
+a running test suite for now. 
+
 
 
 Build Requirements

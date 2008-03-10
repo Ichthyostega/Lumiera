@@ -28,6 +28,6 @@ format 40
   
   cpp_h_dir "common"
   cpp_src_dir "common"
-  cpp_namespace "cinelerra::visitor"
+  cpp_namespace "lumiera::visitor"
   comment "sub-namespace for visitor library implementation"
 end

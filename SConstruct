@@ -3,8 +3,8 @@
 ## SConstruct  -  SCons based build-sytem for Cinelerra
 ##
 
-#  Copyright (C)         CinelerraCV
-#    2007,               Hermann Vosseler <Ichthyostega@web.de>
+#  Copyright (C)         Lumiera.org
+#    2008,               Hermann Vosseler <Ichthyostega@web.de>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -134,7 +134,7 @@ def defineCmdlineOptions():
 def prepareOptionsHelp(opts,env):
     prelude = """
 USAGE:   scons [-c] [OPTS] [key=val [key=val...]] [TARGETS]
-     Build and optionally install Cinelerra.
+     Build and optionally install Lumiera.
      Without specifying any target, just the (re)build target will run.
      Add -c to the commandline to clean up anything a given target would produce
 

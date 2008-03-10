@@ -1,12 +1,12 @@
-AC_INIT(cinelerra, 3.0pre)
+AC_INIT(lumiera, 0.1pre)
 AC_CONFIG_SRCDIR(src/lib/plugin.c)
 AC_CONFIG_AUX_DIR(scripts)
 AM_INIT_AUTOMAKE
 AC_PREREQ(2.59)
 
 AC_COPYRIGHT([
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as

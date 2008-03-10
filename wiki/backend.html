@@ -766,15 +766,15 @@ Error: #f88</pre>
 </div>
 <div title="DataBackend" modifier="CehTeh" modified="200706271504" created="200706192251" changecount="6">
 <pre>This just starts as braindump, I will refine it soon:
-* handle all files cinelerra uses at runtime (media, edl, temp data)
-* manage filehandles, cinelerra might use more more files than available filehandles
+* handle all files Lumiera uses at runtime (media, edl, temp data)
+* manage filehandles, Lumiera might use more more files than available filehandles
 * manage temporary data
 * do caching
 * io will be blocked where the backend tells the core where it can expect the data (not read()/write() like)
 * kind-of garbage collector
 * do prefetching
 * no/low latency for the core the prefetcher and other things ensure that data is available in time
-* translate any input into a format which the cinelerra core understands (demux, decode)
+* translate any input into a format which the Lumiera core understands (demux, decode)
 * same for encoding to output formats
 * offer a plugin API for encoders/decoders
 * maybe network backend for serving data to distributed render nodes
@@ -1217,7 +1217,7 @@ config.formatters.push( {
 //}}}</pre>
 </div>
 <div title="MainMenu" modifier="CehTeh" modified="200706220110" created="200706192002" changecount="5">
-<pre>''[[Cinelerra3|index.html]]''
+<pre>''[[Lumiera|index.html]]''
 DataBackend
 [[Overview]]
 &lt;&lt;fullscreen&gt;&gt;
@@ -1255,7 +1255,7 @@ When to Cache and when not to cache, aka instant [[Frame]] reuse
 </pre>
 </div>
 <div title="Overview" modifier="CehTeh" modified="200706271504" created="200706200040" changecount="12">
-<pre>Whenever cinelerra needs to access data this is done through the DataBackend described here. 
+<pre>Whenever Lumiera needs to access data this is done through the DataBackend described here. 
 
 There are two main kinds how data is handled:
 * Project Description and EDL's are handled in a InMemoryDatabase which uses a [[Serializer]] for storing and logging modifications.

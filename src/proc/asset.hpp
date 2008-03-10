@@ -1,8 +1,8 @@
 /*
   ASSET.hpp  -  Superinterface: bookeeping view of "things" present in the session
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -116,7 +116,7 @@ namespace asset
   
   /**
    * Superinterface describing especially bookeeping properties.
-   * As of 09/2007, there are four  <b>Kinds</b> of Assets, each
+   * As of 09/2008, there are four  <b>Kinds</b> of Assets, each
    * comprising a sub-Interface of the Asset Interface:
    * <ul><li>asset::Media representing mediafiles</li>
    *     <li>asset::Proc representing media data processing components (e.g. Effects)</li>

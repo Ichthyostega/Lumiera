@@ -1,4 +1,4 @@
-#  Copyright (C)         CinelerraCV
+#  Copyright (C)         Lumiera.org
 #    2007,               Christian Thaeter <ct@pipapo.org>
 #                        Hermann Vosseler <Ichthyostega@web.de>
 #
