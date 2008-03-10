@@ -1,8 +1,8 @@
 /*
   QUERY.hpp  -  interface for capability queries
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,8 +21,8 @@
 */
 
 
-#ifndef CINELERRA_QUERY_H
-#define CINELERRA_QUERY_H
+#ifndef LUMIERA_QUERY_H
+#define LUMIERA_QUERY_H
 
 
 #include <string>
@@ -31,7 +31,7 @@
 #include <boost/format.hpp>
 
 
-namespace cinelerra
+namespace lumiera
   {
   using std::string;
   using boost::format;
@@ -75,5 +75,5 @@ namespace cinelerra
   
   } // namespace query
     
-} // namespace cinelerra
+} // namespace lumiera
 #endif

@@ -1,8 +1,8 @@
 /*
   MOCKINJECTOR.hpp  -  replacement singleton factory for injecting Test-Mock objects
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -22,8 +22,8 @@
 
 
 
-#ifndef CINELERRA_TEST_MOCKINJECTOR_H
-#define CINELERRA_TEST_MOCKINJECTOR_H
+#ifndef LUMIERA_TEST_MOCKINJECTOR_H
+#define LUMIERA_TEST_MOCKINJECTOR_H
 
 
 #include "common/singletonfactory.hpp"
@@ -31,7 +31,7 @@
 #include <boost/scoped_ptr.hpp>
 
 
-namespace cinelerra
+namespace lumiera
   {
   namespace test
     {
@@ -90,5 +90,5 @@ namespace cinelerra
       
   } // namespace test
 
-} // namespace cinelerra
+} // namespace lumiera
 #endif

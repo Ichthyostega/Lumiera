@@ -1,8 +1,8 @@
 /*
   framerate.c  -  framerate calculations
 
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -26,5 +26,5 @@
  */
 
 
-CINELERRA_ERROR_DEFINE(FRAMERATE_ILLEGAL_TIME, "invalid time given");
-CINELERRA_ERROR_DEFINE(FRAMERATE_ILLEGAL_FRAME, "invalid frame given");
+LUMIERA_ERROR_DEFINE(FRAMERATE_ILLEGAL_TIME, "invalid time given");
+LUMIERA_ERROR_DEFINE(FRAMERATE_ILLEGAL_FRAME, "invalid frame given");

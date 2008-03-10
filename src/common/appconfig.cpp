@@ -1,8 +1,8 @@
 /*
   Appconfig  -  for global initialization and configuration 
  
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -34,7 +34,7 @@
 
 using util::isnil;
 
-namespace cinelerra
+namespace lumiera
   {
   
   /** This internal pointer to the single instance is deliberately
@@ -45,14 +45,14 @@ namespace cinelerra
    *  to beeing dependant on inclusion order of headers. */
 //  scoped_ptr<Appconfig> Appconfig::theApp_;
 
-#ifndef CINELERRA_VERSION
-#define CINELERRA_VERSION 3++devel
+#ifndef LUMIERA_VERSION
+#define LUMIERA_VERSION 3++devel
 #endif
 
 
   /** perform initialization on first access. 
    *  A call is placed in static initialization code
-   *  included in cinelerra.h; thus it will happen
+   *  included in lumiera.h; thus it will happen
    *  probably very early.
    */
   Appconfig::Appconfig()
@@ -65,9 +65,9 @@ namespace cinelerra
     INFO(config, "Basic application configuration triggered.");
     
     // install our own handler for undeclared exceptions
-    std::set_unexpected (cinelerra::error::cinelerra_unexpectedException);
+    std::set_unexpected (lumiera::error::lumiera_unexpectedException);
     
-    (*configParam_)["version"] = STRINGIFY (CINELERRA_VERSION);
+    (*configParam_)["version"] = STRINGIFY (LUMIERA_VERSION);
   }
   
   
@@ -89,10 +89,10 @@ namespace cinelerra
     catch (...)
       {
         ERROR(config, "error while accessing configuration parameter \"%s\".", key.c_str());
-        throw cinelerra::error::Fatal ();
+        throw lumiera::error::Fatal ();
   }   }
 
   
 
 
-} // namespace cinelerra
+} // namespace lumiera

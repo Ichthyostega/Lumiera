@@ -1,8 +1,8 @@
 /*
   references.h  -  strong and weak references
 
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -19,8 +19,8 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef CINELERRA_REFERENCES_H
-#define CINELERRA_REFERENCES_H
+#ifndef LUMIERA_REFERENCES_H
+#define LUMIERA_REFERENCES_H
 
 #include <nobug.h>
 
@@ -29,77 +29,77 @@
  */
 
 
-typedef struct cinelerra_reference_struct cinelerra_reference;
-typedef cinelerra_reference* CinelerraReference;
+typedef struct lumiera_reference_struct lumiera_reference;
+typedef lumiera_reference* LumieraReference;
 
 #include "lib/error.h"
 #include "lib/mutex.h"
 
 /* Implementation detail */
-struct cinelerra_reftarget_struct
+struct lumiera_reftarget_struct
 {
   void* object;
   void (*dtor)(void*);
   unsigned strong_cnt;          /*when strong becomes 0 obj is destroyed, if weak is 0 destroy target too*/
   unsigned weak_cnt;            /*when weak becomes 0 and !obj  and lock strong is 0, destroy target */
-  cinelerra_mutex lock;
+  lumiera_mutex lock;
 };
-typedef struct cinelerra_reftarget_struct cinelerra_reftarget;
-typedef cinelerra_reftarget* CinelerraReftarget;
+typedef struct lumiera_reftarget_struct lumiera_reftarget;
+typedef lumiera_reftarget* LumieraReftarget;
 
 
 /**
  * A reference pointing to some other object
  */
-struct cinelerra_reference_struct
+struct lumiera_reference_struct
 {
   void* object;    /*set for strong, NULL for weak*/
-  CinelerraReftarget target;
+  LumieraReftarget target;
 };
 
-#define cinelerra_reference \
-cinelerra_reference NOBUG_CLEANUP(cinelerra_reference_ensuredestroyed)
+#define lumiera_reference \
+lumiera_reference NOBUG_CLEANUP(lumiera_reference_ensuredestroyed)
 
 /* helper function for nobug */
 static inline void
-cinelerra_reference_ensuredestroyed (CinelerraReference self)
+lumiera_reference_ensuredestroyed (LumieraReference self)
 {
   ENSURE (!self->target, "forgot to destroy reference");
 }
 
 
-CinelerraReference
-cinelerra_reference_strong_init_once (CinelerraReference self, void* obj, void (*dtor)(void*));
+LumieraReference
+lumiera_reference_strong_init_once (LumieraReference self, void* obj, void (*dtor)(void*));
 
 
-CinelerraReference
-cinelerra_reference_destroy (CinelerraReference self);
+LumieraReference
+lumiera_reference_destroy (LumieraReference self);
 
 /**
  * Get object from a strong reference.
  * @return pointer to object, NULL if applied to a weak reference
  */
 static inline void*
-cinelerra_reference_get (CinelerraReference self)
+lumiera_reference_get (LumieraReference self)
 {
   ENSURE (self->target, "illegal reference (not initialized or already destroyed?)");
   return self->object;
 }
 
 
-CinelerraReference
-cinelerra_reference_strong_init (CinelerraReference self, CinelerraReference source);
+LumieraReference
+lumiera_reference_strong_init (LumieraReference self, LumieraReference source);
 
 
-CinelerraReference
-cinelerra_reference_weak_init (CinelerraReference self, CinelerraReference source);
+LumieraReference
+lumiera_reference_weak_init (LumieraReference self, LumieraReference source);
 
 
-CinelerraReference
-cinelerra_reference_weaken (restrict CinelerraReference self);
+LumieraReference
+lumiera_reference_weaken (restrict LumieraReference self);
 
 
-CinelerraReference
-cinelerra_reference_strengthen (CinelerraReference self);
+LumieraReference
+lumiera_reference_strengthen (LumieraReference self);
 
 #endif

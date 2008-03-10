@@ -1,8 +1,8 @@
 /*
   MediaAccessFacade  -  functions for querying media file and channels.
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -26,13 +26,13 @@
 #include "common/util.hpp"
 
 using util::isnil;
-using cinelerra::error::Invalid;
+using lumiera::error::Invalid;
 
 namespace backend_interface
   {
   
   /** storage for the SingletonFactory 
-   *  (actually a cinelerra::test::MockInjector) */
+   *  (actually a lumiera::test::MockInjector) */
   Singleton<MediaAccessFacade> MediaAccessFacade::instance;
 
   

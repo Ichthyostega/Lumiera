@@ -1,8 +1,8 @@
 /*
   test-llist.c  -  test the linked lis lib
 
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -26,7 +26,7 @@
 #include "lib/framerate.h"
 
 
-CINELERRA_ERROR_DEFINE(TEST, "test error");
+LUMIERA_ERROR_DEFINE(TEST, "test error");
 
 int
 main (int argc, char** argv)

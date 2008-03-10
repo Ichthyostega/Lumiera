@@ -52,18 +52,18 @@ END
 
 
 TEST "ExceptionError_test" ExceptionError_test <<END
-out: caught: CINELERRA_ERROR_LIFE_AND_UNIVERSE:and everything? (don't panic)...the answer is: 42
-out: caught cinelerra::Error: CINELERRA_ERROR_DERIVED:convoluted exception
-out: caught error::Logic: CINELERRA_ERROR_FATAL:floundered (test-2).
-out: caught error::Invalid: CINELERRA_ERROR_INVALID:invalid input or parameters (test-3).
-out: caught cinelerra::Error: CINELERRA_ERROR_EXTERNAL:failure in external service (test-4).
+out: caught: LUMIERA_ERROR_LIFE_AND_UNIVERSE:and everything? (don't panic)...the answer is: 42
+out: caught lumiera::Error: LUMIERA_ERROR_DERIVED:convoluted exception
+out: caught error::Logic: LUMIERA_ERROR_FATAL:floundered (test-2).
+out: caught error::Invalid: LUMIERA_ERROR_INVALID:invalid input or parameters (test-3).
+out: caught lumiera::Error: LUMIERA_ERROR_EXTERNAL:failure in external service (test-4).
 out: caught std::runtime_error: test-5
 out: caught std::exception: St9exception
-out: intermediate handler caught: CINELERRA_ERROR_EXTERNAL:failure in external service (test-7).....will rethrow as error::State
-out: caught cinelerra::Error: CINELERRA_ERROR_STATE:unforseen state -- caused by: CINELERRA_ERROR_EXTERNAL:failure in external service (test-7).
-out: intermediate handler caught: CINELERRA_ERROR_EXTERNAL:failure in external service (test-8).....will rethrow as error::State
-out: 2nd intermediate handler caught: CINELERRA_ERROR_STATE:unforseen state -- caused by: CINELERRA_ERROR_EXTERNAL:failure in external service (test-8).....will rethrow as error::Config
-out: caught cinelerra::Error: CINELERRA_ERROR_CONFIG:misconfiguration -- caused by: CINELERRA_ERROR_EXTERNAL:failure in external service (test-8).
+out: intermediate handler caught: LUMIERA_ERROR_EXTERNAL:failure in external service (test-7).....will rethrow as error::State
+out: caught lumiera::Error: LUMIERA_ERROR_STATE:unforseen state -- caused by: LUMIERA_ERROR_EXTERNAL:failure in external service (test-7).
+out: intermediate handler caught: LUMIERA_ERROR_EXTERNAL:failure in external service (test-8).....will rethrow as error::State
+out: 2nd intermediate handler caught: LUMIERA_ERROR_STATE:unforseen state -- caused by: LUMIERA_ERROR_EXTERNAL:failure in external service (test-8).....will rethrow as error::Config
+out: caught lumiera::Error: LUMIERA_ERROR_CONFIG:misconfiguration -- caused by: LUMIERA_ERROR_EXTERNAL:failure in external service (test-8).
 END
 
 

@@ -1,8 +1,8 @@
 /*
   test-locking.c  -  test locking functions
 
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -24,7 +24,7 @@
 
 #include "lib/condition.h"
 
-CINELERRA_ERROR_DEFINE(TEST, "test error");
+LUMIERA_ERROR_DEFINE(TEST, "test error");
 
 #if 0
 waiting_thread()
@@ -52,11 +52,11 @@ main (int argc, char** argv)
 
   if (!strcmp(argv[1], "conditionforgotunlock"))
     {
-      cinelerra_condition c;
-      cinelerra_condition_init (&c);
+      lumiera_condition c;
+      lumiera_condition_init (&c);
 
-      cinelerra_conditionlock NOBUG_CLEANUP(cinelerra_conditionlock_ensureunlocked) l;
-      cinelerra_conditionlock_init (&l, &c, CINELERRA_LOCKED);
+      lumiera_conditionlock NOBUG_CLEANUP(lumiera_conditionlock_ensureunlocked) l;
+      lumiera_conditionlock_init (&l, &c, LUMIERA_LOCKED);
     }
   else
     return 1;

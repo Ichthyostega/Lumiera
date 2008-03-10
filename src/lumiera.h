@@ -1,9 +1,9 @@
 /*
-  CINELERRA.h  -  global definitions and common types
+  LUMIERA.h  -  global definitions and common types
  
  
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
                         Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
@@ -22,8 +22,8 @@
  
 */
 
-#ifndef CINELERRA_H
-#define CINELERRA_H
+#ifndef LUMIERA_H
+#define LUMIERA_H
 
 
 
@@ -54,13 +54,13 @@ extern "C" {
 #include "common/error.hpp"
 
 
-namespace cinelerra
+namespace lumiera
   {
     /* additional global configuration goes here... */
   
     
-} // namespace cinelerra
+} // namespace lumiera
 
 #endif /* ===================== (End) C++-Part ================= */
 
-#endif /*CINELERRA_H*/
+#endif /*LUMIERA_H*/

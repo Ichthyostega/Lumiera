@@ -29,7 +29,7 @@ format 40
   stereotype "src"
   cpp_h_dir "common"
   cpp_src_dir "common"
-  cpp_namespace "cinelerra"
+  cpp_namespace "lumiera"
   associated_diagram deploymentdiagram_ref 129797 // Source Overview
   comment "sourcecode package
 
@@ -121,7 +121,7 @@ ${namespace_end}"
 	class_ref 136069 // Invalid
 	class_ref 136197 // External
       end
-      comment "Cinelerra Exception Interface"
+      comment "Lumiera Exception Interface"
     end
 
     artifact 135173 "appconfig"

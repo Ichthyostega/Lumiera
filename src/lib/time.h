@@ -1,8 +1,8 @@
 /*
   time.h  -  Time calculations
 
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -19,8 +19,8 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef CINELERRA_TIME_H
-#define CINELERRA_TIME_H
+#ifndef LUMIERA_TIME_H
+#define LUMIERA_TIME_H
 
 #include <sys/time.h>
 #include <time.h>
@@ -35,31 +35,31 @@
 
   timehandling is a delicate business, be careful of precision errors accumulating
 
-  cinelerra_time is starting from zero, never becomes negative.
+  lumiera_time is starting from zero, never becomes negative.
   
   TODO explain how to use time
 
 */
 
 /* over or underflow (tried to make a movie which has negative length? or more than some hundreds days?) */
-CINELERRA_ERROR_DECLARE(TIME_OVERFLOW);
-CINELERRA_ERROR_DECLARE(TIME_UNDERFLOW);
-CINELERRA_ERROR_DECLARE(TIME_NEGATIVE);
+LUMIERA_ERROR_DECLARE(TIME_OVERFLOW);
+LUMIERA_ERROR_DECLARE(TIME_UNDERFLOW);
+LUMIERA_ERROR_DECLARE(TIME_NEGATIVE);
 
 /*
   Note: we measure time starting from zero,
   time never becomes negative
   (I didnt checked if the time types are signed)
 */
-typedef struct timeval cinelerra_time;
-typedef cinelerra_time* CinelerraTime;
+typedef struct timeval lumiera_time;
+typedef lumiera_time* LumieraTime;
 
 /**
  * normalize time after operations.
  * used internally
  */
 static inline void
-cinelerra_time_normalize (CinelerraTime time)
+lumiera_time_normalize (LumieraTime time)
 {
   REQUIRE (time);
   if (time->tv_usec >= 1000000)
@@ -75,8 +75,8 @@ cinelerra_time_normalize (CinelerraTime time)
  * @param time Time to clear
  * @return time as given
  */
-static inline CinelerraTime
-cinelerra_time_clear (CinelerraTime time)
+static inline LumieraTime
+lumiera_time_clear (LumieraTime time)
 {
   if(time)
     {
@@ -91,14 +91,14 @@ cinelerra_time_clear (CinelerraTime time)
  * @param time Time to put current time into.
  * @return time as given
  */
-static inline CinelerraTime
-cinelerra_time_current (CinelerraTime time)
+static inline LumieraTime
+lumiera_time_current (LumieraTime time)
 {
   if (time)
     {
       /* gettime should never ever fail in a correct program */
       if (gettimeofday (time, NULL))
-        CINELERRA_DIE;
+        LUMIERA_DIE;
     }
   return time;
 }
@@ -110,8 +110,8 @@ cinelerra_time_current (CinelerraTime time)
  * @return time as given upon success, NULL if double time given was negative or given time didn't point
  * anywhere
  */
-static inline CinelerraTime
-cinelerra_time_set_double (CinelerraTime time, double fp)
+static inline LumieraTime
+lumiera_time_set_double (LumieraTime time, double fp)
 {
   if (time)
     {
@@ -125,7 +125,7 @@ cinelerra_time_set_double (CinelerraTime time, double fp)
         {
           time->tv_sec = (time_t)-1;
           time->tv_usec = (suseconds_t)-1;
-          cinelerra_error_set(CINELERRA_ERROR_TIME_NEGATIVE);
+          lumiera_error_set(LUMIERA_ERROR_TIME_NEGATIVE);
         }
     }
   return NULL;
@@ -138,14 +138,14 @@ cinelerra_time_set_double (CinelerraTime time, double fp)
  * @param usec Microseconds to set
  * @param Time as given
  */
-static inline CinelerraTime
-cinelerra_time_init (CinelerraTime time, time_t sec, suseconds_t usec)
+static inline LumieraTime
+lumiera_time_init (LumieraTime time, time_t sec, suseconds_t usec)
 {
   if (time)
     {
       time->tv_sec = sec;
       time->tv_usec = usec;
-      cinelerra_time_normalize (time);
+      lumiera_time_normalize (time);
     }
   return time;
 }
@@ -156,7 +156,7 @@ cinelerra_time_init (CinelerraTime time, time_t sec, suseconds_t usec)
  * @return Seconds elapsed, -1 on error
  */
 static inline time_t
-cinelerra_time_sec (CinelerraTime time)
+lumiera_time_sec (LumieraTime time)
 {
   if (time)
     return time->tv_sec;
@@ -170,7 +170,7 @@ cinelerra_time_sec (CinelerraTime time)
  * @return Microseconds elapsed, -1 on error
  */
 static inline suseconds_t
-cinelerra_time_usec (CinelerraTime time)
+lumiera_time_usec (LumieraTime time)
 {
   if (time)
     return time->tv_usec;
@@ -184,7 +184,7 @@ cinelerra_time_usec (CinelerraTime time)
  * @return Floating point representation of time. NAN on error.
  */
 static inline double
-cinelerra_time_double_get (CinelerraTime time)
+lumiera_time_double_get (LumieraTime time)
 {
   if (time)
     {
@@ -204,8 +204,8 @@ cinelerra_time_double_get (CinelerraTime time)
  * @param src Time-source to copy from
  * @return dest as given
  */
-static inline CinelerraTime
-cinelerra_time_copy (CinelerraTime dest, const CinelerraTime src)
+static inline LumieraTime
+lumiera_time_copy (LumieraTime dest, const LumieraTime src)
 {
   if (dest && src)
     {
@@ -221,8 +221,8 @@ cinelerra_time_copy (CinelerraTime dest, const CinelerraTime src)
  * @param src Time to add to dest
  * @return dest as given, or NULL on overflow.
  */
-static inline CinelerraTime
-cinelerra_time_add (CinelerraTime dest, const CinelerraTime src)
+static inline LumieraTime
+lumiera_time_add (LumieraTime dest, const LumieraTime src)
 {
   if (dest && src)
     {
@@ -231,11 +231,11 @@ cinelerra_time_add (CinelerraTime dest, const CinelerraTime src)
       dest->tv_sec += src->tv_sec;
       dest->tv_usec += src->tv_usec;
 
-      cinelerra_time_normalize (dest);
+      lumiera_time_normalize (dest);
 
       if (dest->tv_sec < t)
         {
-          cinelerra_error_set (CINELERRA_ERROR_TIME_OVERFLOW);
+          lumiera_error_set (LUMIERA_ERROR_TIME_OVERFLOW);
           return NULL;
         }
     }
@@ -248,8 +248,8 @@ cinelerra_time_add (CinelerraTime dest, const CinelerraTime src)
  * @param src Time to subtract from dest
  * @return dest as given, or NULL on underflow.
  */
-static inline CinelerraTime
-cinelerra_time_sub (CinelerraTime dest, const CinelerraTime src)
+static inline LumieraTime
+lumiera_time_sub (LumieraTime dest, const LumieraTime src)
 {
   if (dest && src)
     {
@@ -264,11 +264,11 @@ cinelerra_time_sub (CinelerraTime dest, const CinelerraTime src)
           dest->tv_usec += 1000000 - src->tv_usec;
         }
 
-      cinelerra_time_normalize (dest);
+      lumiera_time_normalize (dest);
 
       if (dest->tv_sec > t)
         {
-          cinelerra_error_set (CINELERRA_ERROR_TIME_UNDERFLOW);
+          lumiera_error_set (LUMIERA_ERROR_TIME_UNDERFLOW);
           return NULL;
         }
     }

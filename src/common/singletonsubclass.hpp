@@ -1,8 +1,8 @@
 /*
   SINGLETONSUBCLASS.hpp  -  variant of the singleton (factory) creating a subclass
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -35,8 +35,8 @@
  */
 
 
-#ifndef CINELERRA_SINGLETONSUBCLASS_H
-#define CINELERRA_SINGLETONSUBCLASS_H
+#ifndef LUMIERA_SINGLETONSUBCLASS_H
+#define LUMIERA_SINGLETONSUBCLASS_H
 
 
 #include "common/singleton.hpp"
@@ -45,7 +45,7 @@
 #include <typeinfo>
 
 
-namespace cinelerra
+namespace lumiera
   {
   using boost::scoped_ptr;
   
@@ -53,7 +53,7 @@ namespace cinelerra
   namespace singleton
     {
       /** 
-       * Helper template to use the general policy classes of the cinelerra::Singleton,
+       * Helper template to use the general policy classes of the lumiera::Singleton,
        * but change the way they are parametrized on-the-fly. 
        */
       template<template<class> class POL, class I>
@@ -174,6 +174,6 @@ namespace cinelerra
     };
 
 
-} // namespace cinelerra
+} // namespace lumiera
 
 #endif

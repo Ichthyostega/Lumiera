@@ -1,8 +1,8 @@
 /*
   MEDIAACCESSFACADE.hpp  -  functions for querying media file and channels.
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -59,7 +59,7 @@ namespace backend_interface
        *          information from this file, NULL if the
        *          file is not acessible.
        */
-      virtual FileHandle queryFile (const char* name)  throw(cinelerra::error::Invalid);
+      virtual FileHandle queryFile (const char* name)  throw(lumiera::error::Invalid);
       
       /** request for information about the n-th channel 
        *  of the file refered by FileHandle.

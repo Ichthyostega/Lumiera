@@ -50,12 +50,12 @@ public:
 };
 
 
-CINELERRA_INTERFACE_IMPLEMENT(hello, 1, german, example_plugin_de::myopen, example_plugin_de::myclose,
-                              example_plugin_de::hello,
-                              example_plugin_de::bye
-                              );
+LUMIERA_INTERFACE_IMPLEMENT(hello, 1, german, example_plugin_de::myopen, example_plugin_de::myclose,
+                            example_plugin_de::hello,
+                            example_plugin_de::bye
+                           );
 
-CINELERRA_INTERFACE_IMPLEMENT(hello, 1, english, example_plugin_en::myopen, example_plugin_en::myclose,
-                              example_plugin_en::hello,
-                              example_plugin_en::bye
-                              );
+LUMIERA_INTERFACE_IMPLEMENT(hello, 1, english, example_plugin_en::myopen, example_plugin_en::myclose,
+                            example_plugin_en::hello,
+                            example_plugin_en::bye
+                           );

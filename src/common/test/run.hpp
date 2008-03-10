@@ -1,8 +1,8 @@
 /*
   RUN.hpp  -  helper class for grouping, registering and invoking testcases
  
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
                         Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or

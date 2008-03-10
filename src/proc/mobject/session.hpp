@@ -1,8 +1,8 @@
 /*
   SESSION.hpp  -  holds the complete session to be edited by the user
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -58,7 +58,7 @@ namespace mobject
   /**
    * The (current) Session holds all the user
    * visible content to be edited and manipulated
-   * within the Cinelerra Application. From a users
+   * within the Lumiera Application. From a users
    * perspective, it is a collection of Media Objects
    * (--> MObject) placed (--> Placement) onto virtual
    * Tracks.
@@ -142,7 +142,7 @@ namespace mobject
       };
 
       
-      CINELERRA_ERROR_DECLARE (CREATE_SESSION);  ///< unable to create basic session.
+      LUMIERA_ERROR_DECLARE (CREATE_SESSION);  ///< unable to create basic session.
 
 
   } // namespace mobject::session

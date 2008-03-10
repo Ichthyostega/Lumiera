@@ -1,8 +1,8 @@
 /*
   condition.c  -  condition variable
 
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -30,8 +30,8 @@
  * @param self is a pointer to the condition variable to be initialized
  * @return self as given
  */
-CinelerraCondition
-cinelerra_condition_init (CinelerraCondition self)
+LumieraCondition
+lumiera_condition_init (LumieraCondition self)
 {
   if (self)
     {
@@ -47,15 +47,15 @@ cinelerra_condition_init (CinelerraCondition self)
  * @param self is a pointer to the condition variable to be destroyed
  * @return self as given
  */
-CinelerraCondition
-cinelerra_condition_destroy (CinelerraCondition self)
+LumieraCondition
+lumiera_condition_destroy (LumieraCondition self)
 {
   if (self)
     {
       if (pthread_mutex_destroy (&self->mutex))
-        CINELERRA_DIE;
+        LUMIERA_DIE;
       else if (pthread_cond_destroy (&self->cond))
-        CINELERRA_DIE;
+        LUMIERA_DIE;
     }
   return self;
 }

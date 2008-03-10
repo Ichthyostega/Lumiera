@@ -1,8 +1,8 @@
 /*
   RenderSegment(Test)  -  Proc-Layer Integrationtest
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -46,7 +46,7 @@ namespace mobject
       /*******************************************************************
        * @test create a render process from a given segment of the EDL.
        *       Basically this includes cooperation of all parts of the
-       *       Cinelerra Proc Layer. For a prepared test-EDL we invoke the
+       *       Lumiera Proc Layer. For a prepared test-EDL we invoke the
        *       controller to create a render process. This includes building
        *       the render pipeline. Finally, we analyze all the created 
        *       Structures. 

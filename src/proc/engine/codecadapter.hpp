@@ -1,8 +1,8 @@
 /*
   CODECADAPTER.hpp  -  Processing Node for (de)coding media data
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -38,7 +38,7 @@ namespace engine
    * process thus is integrated into the framework
    * of the Renderengine, while the actual implementation
    * can be delegated to an external library accessed
-   * through Cinelerra's datat backend. 
+   * through Lumiera's data backend. 
    */
   class CodecAdapter : public Trafo
     {};

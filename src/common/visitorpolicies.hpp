@@ -1,8 +1,8 @@
 /*
   VISITOR.hpp  -  Acyclic Visitor library
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -22,20 +22,20 @@
 
 
 /** @file visitorpolicies.hpp
- ** Policies usable for configuring the cinelerra::visitor::Tool for different kinds of error handling. 
+ ** Policies usable for configuring the lumiera::visitor::Tool for different kinds of error handling. 
  ** @see buildertool.hpp for another flavor (calling and catch-all-function)
  **
  */
 
 
 
-#ifndef CINELERRA_VISITORPOLICIES_H
-#define CINELERRA_VISITORPOLICIES_H
+#ifndef LUMIERA_VISITORPOLICIES_H
+#define LUMIERA_VISITORPOLICIES_H
 
 #include "common/error.hpp"
 
 
-namespace cinelerra
+namespace lumiera
   {
   namespace visitor
     {
@@ -65,7 +65,7 @@ namespace cinelerra
         RET 
         onUnknown (TAR&)
           {
-            throw cinelerra::error::Config("unable to decide what tool operation to call");
+            throw lumiera::error::Config("unable to decide what tool operation to call");
           }
       };
       
@@ -73,5 +73,5 @@ namespace cinelerra
     
   } // namespace visitor
 
-} // namespace cinelerra
+} // namespace lumiera
 #endif

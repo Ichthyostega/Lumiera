@@ -1,8 +1,8 @@
 /*
   MEDIA.hpp  -  key abstraction: media-like assets
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -50,7 +50,7 @@ namespace asset
   class MediaFactory;
   class ProcPatt;
   
-  using cinelerra::Time;
+  using lumiera::Time;
   
   
   template<>
@@ -137,7 +137,7 @@ namespace asset
   /** 
    * Factory specialized for creating Media Asset objects.
    */ 
-  class MediaFactory : public cinelerra::Factory<asset::Media>
+  class MediaFactory : public lumiera::Factory<asset::Media>
     {
     public:
       typedef shared_ptr<asset::Media> PType;
@@ -151,11 +151,11 @@ namespace asset
       PType operator() (const char* file, asset::Kind);
       
       shared_ptr<asset::Clip>
-      operator() (asset::Media& mediaref)  throw(cinelerra::error::Invalid);
+      operator() (asset::Media& mediaref)  throw(lumiera::error::Invalid);
 
     };
 
-  CINELERRA_ERROR_DECLARE (PART_OF_COMPOUND);
+  LUMIERA_ERROR_DECLARE (PART_OF_COMPOUND);
     
     
     

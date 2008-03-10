@@ -116,7 +116,7 @@ ${members}};
 "
 	java_decl ""
 	idl_decl ""
-	comment "origin or authorship id. Can be a project abbreviation, a package id or just the authors nickname or UID. This allows for the compnent name to be more generic (e.g. \"blur\"). Default for all assets provided by the core cinelerra-3 codebase is \"cin3\"."
+	comment "origin or authorship id. Can be a project abbreviation, a package id or just the authors nickname or UID. This allows for the compnent name to be more generic (e.g. \"blur\"). Default for all assets provided by the core Lumiera codebase is \"lumi\"."
       end
 
       attribute 130949 "version"

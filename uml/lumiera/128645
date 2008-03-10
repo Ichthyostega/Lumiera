@@ -32,14 +32,14 @@ format 40
     package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
     draw_component_as_icon default show_component_req_prov default show_component_rea default
     component_color lightred 
-    comment "defines and lists how the Cinelerra executable has to be created"
+    comment "defines and lists how the Lumiera executable has to be created"
     deploymentdiagram 129797 "Source Overview"
       package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
       draw_component_as_icon default show_component_req_prov default show_component_rea default
       size A4
     end
 
-    artifact 128005 "Cinelerra3"
+    artifact 128005 "Lumiera"
       stereotype "executable"
       associated_artifacts
 	artifact_ref 133509 // vrender

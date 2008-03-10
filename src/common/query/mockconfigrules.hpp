@@ -1,8 +1,8 @@
 /*
   MOCKCONFIGRULES.hpp  -  mock implementation of the config rules system
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -29,14 +29,14 @@
  ** -- later on, when we use a real Prolog interpreter, it still may be useful for
  ** testing and debugging.
  **
- ** @see cinelerra::Query
- ** @see cinelerra::ConfigRules
+ ** @see lumiera::Query
+ ** @see lumiera::ConfigRules
  **
  */
 
 
-#ifndef CINELERRA_MOCKCONFIGRULES_H
-#define CINELERRA_MOCKCONFIGRULES_H
+#ifndef LUMIERA_MOCKCONFIGRULES_H
+#define LUMIERA_MOCKCONFIGRULES_H
 
 #include "common/configrules.hpp"
 #include "common/util.hpp"
@@ -48,7 +48,7 @@
 
 
 
-namespace cinelerra
+namespace lumiera
   {
   //using std::string;
   
@@ -77,7 +77,7 @@ namespace cinelerra
      * the actual table holding preconfigured answers
      * packaged as boost::any objects. 
      */
-    class MockTable : public cinelerra::ConfigRules
+    class MockTable : public lumiera::ConfigRules
       {
         typedef std::map<string,any> Tab;
         typedef boost::scoped_ptr<Tab> PTab;
@@ -134,7 +134,7 @@ namespace cinelerra
       {
       protected:
         MockConfigRules ();                                   ///< to be used only by the singleton factory
-        friend class cinelerra::singleton::StaticCreate<MockConfigRules>;
+        friend class lumiera::singleton::StaticCreate<MockConfigRules>;
 
         virtual ~MockConfigRules() {}
         
@@ -148,5 +148,5 @@ namespace cinelerra
   
   } // namespace query
     
-} // namespace cinelerra
+} // namespace lumiera
 #endif

@@ -15,12 +15,12 @@ return: 0
 END
 
 TEST "query error" get <<END
-out: CINELERRA_ERROR_TEST:test error
+out: LUMIERA_ERROR_TEST:test error
 return: 0
 END
 
 TEST "error cleared" get2 <<END
-out: CINELERRA_ERROR_TEST:test error
+out: LUMIERA_ERROR_TEST:test error
 out: (nil)
 return: 0
 END

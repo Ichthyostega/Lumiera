@@ -1,8 +1,8 @@
 /*
   UNKNOWN.hpp  -  placeholder for unknown or unavailable media source
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -32,7 +32,7 @@ namespace asset
   {
   
 
-  const cinelerra::Time DUMMY_TIME (25); ///< @todo solve konfig management
+  const lumiera::Time DUMMY_TIME (25); ///< @todo solve config management
 
   /**
    * Placeholder Asset for unknown or unavailable media source.
@@ -47,11 +47,11 @@ namespace asset
       friend class MediaFactory;
       
     public:
-      virtual Media::PMedia getOrg()  throw(cinelerra::error::Invalid);
+      virtual Media::PMedia getOrg()  throw(lumiera::error::Invalid);
       
     };
     
-  CINELERRA_ERROR_DECLARE (ORIG_NOT_FOUND);
+  LUMIERA_ERROR_DECLARE (ORIG_NOT_FOUND);
     
     
     

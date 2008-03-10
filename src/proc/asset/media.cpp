@@ -1,8 +1,8 @@
 /*
   Media(Asset)  -  key abstraction: media-like assets
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -116,7 +116,7 @@ namespace asset
   }
   
   
-  cinelerra::Time
+  lumiera::Time
   Media::getLength()  const
   {
      return len_;
@@ -177,7 +177,7 @@ namespace asset
   MediaFactory::PType 
   MediaFactory::operator() (const string& file, const Category& cat)
   { 
-    Asset::Ident key(extractName(file), cat, "cin3", 1);
+    Asset::Ident key(extractName(file), cat, "lumi", 1);
     return operator() (key, file);
   }
   
@@ -220,21 +220,21 @@ namespace asset
    *         but rather part or a multichannel (compound) media
    */
   shared_ptr<asset::Clip>
-  MediaFactory::operator() (asset::Media& mediaref)  throw(cinelerra::error::Invalid)
+  MediaFactory::operator() (asset::Media& mediaref)  throw(lumiera::error::Invalid)
   {
     if (mediaref.checkCompound())
-      throw cinelerra::error::Invalid (str(format("Attempt to create a asset::Clip from the media %s, "
-                                                  "which is not toplevel but rather part or a compound "
-                                                  "(multichannel) media. Found parent Media %s.") 
-                                                  % string(mediaref) 
-                                                  % string(*mediaref.checkCompound()))
-                                      ,CINELERRA_ERROR_PART_OF_COMPOUND
-                                      );
+      throw lumiera::error::Invalid (str(format("Attempt to create a asset::Clip from the media %s, "
+                                                "which is not toplevel but rather part or a compound "
+                                                "(multichannel) media. Found parent Media %s.") 
+                                                % string(mediaref) 
+                                                % string(*mediaref.checkCompound()))
+                                    ,LUMIERA_ERROR_PART_OF_COMPOUND
+                                    );
     asset::Clip* pC = new asset::Clip (mediaref);
     return AssetManager::instance().wrap (*pC);
   }
   
-  CINELERRA_ERROR_DEFINE (PART_OF_COMPOUND, "part of compound used as toplevel element");
+  LUMIERA_ERROR_DEFINE (PART_OF_COMPOUND, "part of compound used as toplevel element");
   
 
 

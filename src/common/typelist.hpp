@@ -1,8 +1,8 @@
 /*
   TYPELIST.hpp  -  typelist meta programming facilities
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -47,19 +47,19 @@ This code is heavily inspired by
  **
  ** Interface for using this facility is the template Types(.....) for up to 20 Type parameters
  **
- ** @see cinelerra::visitor::Applicable usage example
+ ** @see lumiera::visitor::Applicable usage example
  ** @see typelisttest.cpp
  ** 
  */
 
 
-#ifndef CINELERRA_TYPELIST_H
-#define CINELERRA_TYPELIST_H
+#ifndef LUMIERA_TYPELIST_H
+#define LUMIERA_TYPELIST_H
 
 
 
 
-namespace cinelerra
+namespace lumiera
   {
   namespace typelist
     {
@@ -116,5 +116,5 @@ namespace cinelerra
     
   } // namespace typelist
 
-} // namespace cinelerra
+} // namespace lumiera
 #endif

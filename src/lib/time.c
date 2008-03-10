@@ -1,8 +1,8 @@
 /*
   time.h  -  Time and frame calculations
 
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,6 +21,6 @@
 
 #include "lib/error.h"
 
-CINELERRA_ERROR_DEFINE(TIME_OVERFLOW, "Time overflow");
-CINELERRA_ERROR_DEFINE(TIME_UNDERFLOW, "Time underflow");
-CINELERRA_ERROR_DEFINE(TIME_NEGATIVE, "Time negative");
+LUMIERA_ERROR_DEFINE(TIME_OVERFLOW, "Time overflow");
+LUMIERA_ERROR_DEFINE(TIME_UNDERFLOW, "Time underflow");
+LUMIERA_ERROR_DEFINE(TIME_NEGATIVE, "Time negative");

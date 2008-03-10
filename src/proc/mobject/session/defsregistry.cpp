@@ -1,7 +1,7 @@
 /*
   DefsManager  -  implementation of the default object store
  
-  Copyright (C)         CinelerraCV
+  Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@ namespace mobject
     {
     
     /** @todo */
-    DefsRegistry::DefsRegistry ()  throw()
+    DefsRegistry::DefsRegistry ()
     {
       UNIMPLEMENTED ("initialize store for default objects");
     }

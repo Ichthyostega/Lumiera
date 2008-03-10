@@ -1,8 +1,8 @@
 /*
   STRUCTFACTORYIMPL.hpp  -  crating structural assets (impl details)
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -48,8 +48,8 @@ using mobject::Session;
 using util::isnil;
 using util::contains;
 using asset::Query;
-using cinelerra::query::CINELERRA_ERROR_CAPABILITY_QUERY;
-using cinelerra::query::extractID;
+using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
+using lumiera::query::extractID;
 
 namespace asset
   {
@@ -135,8 +135,8 @@ namespace asset
       template<class STRU>
       STRU* fabricate (const Query<STRU>& caps)
         {
-        throw cinelerra::error::Config ( str(format("The following Query could not be resolved: %s.") % caps.asKey())
-                                       , CINELERRA_ERROR_CAPABILITY_QUERY );
+        throw lumiera::error::Config ( str(format("The following Query could not be resolved: %s.") % caps.asKey())
+                                     , LUMIERA_ERROR_CAPABILITY_QUERY );
         }
       
     };

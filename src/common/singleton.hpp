@@ -1,8 +1,8 @@
 /*
   SINGLETON.hpp  -  configuration header for singleton factory
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -30,7 +30,7 @@
  ** e.g. sometimes we want to include a hook for injecting Test Mock instances.
  **
  ** You'll find the default Policies in singletonfactory.hpp and the default
- ** definition of type cinelerra::singleton in singletonpreconfigure.hpp
+ ** definition of type lumiera::singleton in singletonpreconfigure.hpp
  ** 
  ** @see SingletonFactory
  ** @see singleton::StaticCreate
@@ -40,8 +40,8 @@
  */
 
 
-#ifndef CINELERRA_SINGLETON_H
-#define CINELERRA_SINGLETON_H
+#ifndef LUMIERA_SINGLETON_H
+#define LUMIERA_SINGLETON_H
 
 
 #include "common/singletonpolicies.hpp"

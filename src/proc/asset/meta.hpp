@@ -1,8 +1,8 @@
 /*
   META.hpp  -  key abstraction: metadata and organisational asset
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -90,7 +90,7 @@ namespace asset
   /** 
    * Factory specialized for createing Metadata Asset objects.
    */ 
-  class MetaFactory : public cinelerra::Factory<asset::Meta>
+  class MetaFactory : public lumiera::Factory<asset::Meta>
     {
     public:
       typedef shared_ptr<asset::Meta> PType;

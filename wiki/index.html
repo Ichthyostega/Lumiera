@@ -42,9 +42,9 @@ DAMAGE.
 <link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/>
 <!--}}}-->
 
-<style type="text/css">#contentWrapper {display:none;}</style><div id="SplashScreen" style="border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;"><b>Cinelerra TiddlyWiki</b> is loading<blink> ...</blink><br><br><span style="font-size: 14px; color:red;">Requires Javascript.</span></div>
+<style type="text/css">#contentWrapper {display:none;}</style><div id="SplashScreen" style="border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;"><b>Lumiera TiddlyWiki</b> is loading<blink> ...</blink><br><br><span style="font-size: 14px; color:red;">Requires Javascript.</span></div>
 <!--PRE-HEAD-END-->
-<title> Cinelerra3 - Distributed Developer Wiki </title>
+<title> Lumiera - Distributed Developer Wiki </title>
 <style type="text/css">
 #saveTest {display:none;}
 #messageArea {display:none;}
@@ -776,15 +776,15 @@ for __Running__</pre>
 * provide central interface for setting switches and configuration options
 * installing of some or all created artifacts</pre>
 </div>
-<div title="Cinelerra3DesignProcess" modifier="MichaelPloujnikov" modified="200706270317" created="200706181202" tags="process" changecount="5">
-<pre>! Cinelerra3 design process
-A lightweight formalized process how people can add proposals for the Cinelerra3 development.
+<div title="LumieraDesignProcess" modifier="MichaelPloujnikov" modified="200706270317" created="200706181202" tags="process" changecount="5">
+<pre>! Lumiera design process
+A lightweight formalized process how people can add proposals for the Lumiera development.
 
 
 !! Description
-Use the Wiki at http://www.pipapo.org/pipawiki/Cinelerra3/DesignProcess to make it easy to add proposals in a well defined manner.
+Use the Wiki at http://www.pipapo.org/pipawiki/Lumiera/DesignProcess to make it easy to add proposals in a well defined manner.
 
-I'd like to introduce a slightly formalized process for the ongoing Cinelerra3 planning:
+I'd like to introduce a slightly formalized process for the ongoing Lumiera planning:
 * Every proposal is instantiated as 'Idea', the author gives other people the opportunity to review and comment on it with extreme prejudice, while still working out details.
 * When the the 'Idea' in a proper form and worked out in most details it becomes a 'Draft'. This 'Draft' need to be carefully reviewed, commented, perhaps corrected and rated by the other Developers.
 * At some point we may decide that a 'Draft' becomes a 'Final' (I leave it open how this decision shall be done for now). 'Final' Documents will be imported into the repository (this wiki, you are reading such a Document right now!).
@@ -813,8 +813,8 @@ This distributed wiki might be used instead the pipapo.org wiki, investigate tha
 Wiki works. It is simple to use and just flexible enough to handle the task. I don't go to install any other software for such tasks on my server. While the design progresses I'd propose to move our work into git repositories and eventually phase this wiki pages out anyways. I'd rather like to start out distributed/git right away .. but git gives us only a fine storage layer, for a design process we need some good presentation layer (later when using git and starting the implementation everyones favorite editor serves for that) I have no better ideas yet to solve the presentation problem other than using this wiki (or maybe Bouml).
 </pre>
 </div>
-<div title="Cinelerra3Wiki" modifier="Ichthyostega" modified="200708170218" created="200706172308" tags="portal" changecount="29">
-<pre>This is the entry point to several [[TiddlyWiki]]-Pages containing the developer and design documentation for Cinelrra-3.
+<div title="LumieraWiki" modifier="Ichthyostega" modified="200708170218" created="200706172308" tags="portal" changecount="29">
+<pre>This is the entry point to several [[TiddlyWiki]]-Pages containing the developer and design documentation for Lumiera.
 
 * Cehteh started GitNotes where we will collect some information about git, howto and special setups
 * since we prefer gpg signed tags in git and not each developer knows gpg well here is a Micro-GPG-HowTo 
@@ -825,7 +825,7 @@ Please __end your tiddlers in a newline__, this makes merging in git easier sinc
 
 ----
 !Design Draft
-to get started, we create design drafts emphasizing different aspects and regions of Cinelerra-3
+to get started, we create design drafts emphasizing different aspects and regions of Lumiera
 
 * Ichthyo focuses mainly on the Render Engine and its interconnection to the EDL, [[see this separate page|renderengine.html]]
 * Cehteh works on the data backend draft, see [[this page|backend.html]]
@@ -843,12 +843,12 @@ next we should //start thinking// on how to organize several aspects of the prac
 * TestSuite</pre>
 </div>
 <div title="DefaultTiddlers" modifier="CehTeh" modified="200707111115" created="200706172308" changecount="3">
-<pre>Cinelerra3Wiki
+<pre>LumieraWiki
 ShortCuts</pre>
 </div>
 <div title="DesignDocumentation" modifier="CehTeh" modified="200707030409" created="200706181207" tags="process policy" changecount="6">
-<pre>* There is a [[Manifest]] explaining the vision of the Cinelerra3 project
-* The foundation how we work together is defined in Cinelerra3DesignProcess
+<pre>* There is a [[Manifest]] explaining the vision of the Lumiera project
+* The foundation how we work together is defined in LumieraDesignProcess
 * There is a description how the git repository is set up in RepositorySetup
 * we decided to write code in GNU style, with no tabs (use spaces)
 </pre>
@@ -943,7 +943,7 @@ these two commands are used by 'admin/git-hooks/post-commit'
 <pre>some ''interesting Branches''
 
 |![[pipapo.org|PipapoOrg]]                |!''mirrored''              |!|!description                          |
-| ct#master                               | ichthyo#master            | |Cinelerra3 main development line      |
+| ct#master                               | ichthyo#master            | |Lumiera main development line         |
 | ichthyo#scons                           |                           | |[[SCons]]-based build system, improvements|
 
 </pre>
@@ -958,16 +958,16 @@ For now I hope this approach suffices, maybe we need admin/git_hooks/$HOOKNAME.$
 &amp;rarr; see [[Interesting Branches|GitBranches]]
 </pre>
 </div>
-<div title="Howto download the cinelerra3 sources and deliver changes" modifier="SimAV" modified="200707161757" created="200707152057" changecount="7">
-<pre>This part should explain what you have to do in order to download the sources of Cinelerra3 (cin3) from pipapo.org. It treats as well how to deliver improvements to cin3 using git. Git is a tool similar to cvs or svn.
+<div title="Howto download the Lumiera sources and deliver changes" modifier="SimAV" modified="200707161757" created="200707152057" changecount="7">
+<pre>This part should explain what you have to do in order to download the sources of Lumiera from pipapo.org. It treats as well how to deliver improvements to cin3 using git. Git is a tool similar to cvs or svn.
 
 The cin3 sources are stored in a git repository. Maybe you have never heard of git before, but i can allay your fears: using git isn't that complicated. To download cin3 the very first time you simply have to clone a git-repo from pipapo.org. To do so just type the following in a shell:
 !!!Code
 //{{{
-git clone git://git.pipapo.org/cinelerra3/ct YOURCOPY'sNAME
+git clone git://git.pipapo.org/lumiera/ct YOURCOPY'sNAME
 //}}}
 
-This will create a directory named YOURCOPY'sNAME which contains the whole data of the cinelerra3/ct branch of Cinelerra3. After having downloaded a cin3-git-repository you can update it by simply typing:
+This will create a directory named YOURCOPY'sNAME which contains the whole data of the lumiera/ct branch of Lumiera. After having downloaded a cin3-git-repository you can update it by simply typing:
 !!!Code
 //{{{
 cd /your/path/YOURCOPY'sNAME
@@ -978,10 +978,10 @@ If everything went well your copy is now up to date. Pulling is faster than clon
 
 !!!Tips: 
 * NEVER delete a git repository without a permission of a pro.
-* Check the url. Note e.g. the 3 in cinelerra3 
+* Check the url.
 * Install git before calling git
 
-Now you could compile the source code or improve Cinelerra3 or the documentation. After having done so (let's say you have written a patch) you can deliver your changes by:
+Now you could compile the source code or improve Lumiera or the documentation. After having done so (let's say you have written a patch) you can deliver your changes by:
 * at first setting your name and email
 * committing your changes
 * pushing your local git-repo to a public server
@@ -991,10 +991,10 @@ Now you could compile the source code or improve Cinelerra3 or the documentation
 git config --global user.name &quot;YOUR REALNAME&quot;
 git config --global user.email ~YOUR-E@MAIL.ADRESS
 git commit -m 'YOUR DESCRIPTION' -- FILE/TO/COMMIT
-git push git://git.pipapo.org/cinelerra3/mob
+git push git://git.pipapo.org/lumiera/mob
 //}}}
 
-cinelerra3/mob is an anonymous account at pipapo.org where everyone can commit changes. </pre>
+lumiera/mob is an anonymous account at pipapo.org where everyone can commit changes. </pre>
 </div>
 <div title="IRC-Transcripts" modifier="Ichthyostega" modified="200802021818" created="200708120209" tags="discuss irclog" changecount="7">
 <pre>We keep a protocol or short summary of each important discussion. The summaries of the monthly developer meetings are posted to the Mailinglist and can be found on pipapo.org too
@@ -1046,8 +1046,8 @@ cinelerra3/mob is an anonymous account at pipapo.org where everyone can commit c
 * Plouj
 * Velmont
 
-!! Discuss the open points in http://www.pipapo.org/pipawiki/Cinelerra3/DesignProcess &amp;mdash; do we need this formalism?
-At start of the project last summer, Cehteh made a [[design process proposal|http://www.pipapo.org/pipawiki/Cinelerra3/DesignProcess]]. We will keeping this up, not for every implementation detail, but for major plans, wishes and design decisions. One point in the agenda of future meetings will be to work through proposals in the queue
+!! Discuss the open points in http://www.pipapo.org/pipawiki/Lumiera/DesignProcess &amp;mdash; do we need this formalism?
+At start of the project last summer, Cehteh made a [[design process proposal|http://www.pipapo.org/pipawiki/Lumiera/DesignProcess]]. We will keeping this up, not for every implementation detail, but for major plans, wishes and design decisions. One point in the agenda of future meetings will be to work through proposals in the queue
 * proposals in the &quot;idea&quot; state are not complete, can be just brainstorming or need further discussion. Comments please to the proposal page.
 * proposals in the &quot;draft&quot; state are ready for conclusive discussion and will be treated in one of the next meetings
 * &quot;final&quot; proposals are either &quot;accepted&quot; or &quot;dropped&quot;. We don't differentiate the latter, but should write a short note why it was dropped.
@@ -1068,7 +1068,7 @@ We plan to make the discussion about GPL v3 a point on the agenda of the next me
 * write a short status report for each mayor part //prior// to the meeting (saves us time). Maybe add an TODO list there
 * go through the open issues for the design process drafts
 * publish a protocol of each meeting on the (~Cinelerra-CV, ~LibOpenvideo) Mailinglists, in the TiddlyWiki and on pipapo.org
-* News, Protocols and the agenda of the next meeting can be found at the [[pipawiki-page|http://www.pipapo.org/pipawiki/Cinelerra3/MonthlyMeetings]]
+* News, Protocols and the agenda of the next meeting can be found at the [[pipawiki-page|http://www.pipapo.org/pipawiki/Lumiera/MonthlyMeetings]]
 * next meeting on first Thursday in March (6.3.2008)
 
 !! Who works on what, what are the short term goals, what tasks are open?
@@ -1086,7 +1086,7 @@ Things to do: object serialisation backend is sometime on Cehteh's schedule, but
 __about multithreading__: since the render nodes are stateless they can be driven in multiple threads (but inter frame dependencies need to be resolved/serialized). Mostly the backend manages threads and does that quite conservatively (compared to Cinelerra-2 which massively creates separate threads for small tasks). Any edit operations initiated from GUI go to a scheduler in the middle layer, which enqueues and effectively serializes operations done to the &quot;media objects&quot; in the high-level model. The editing operations themselves are //not threadsafe // by design, they rely on being scheduled correctly. The builder is triggered from this ~Proc-Layer scheduler and starts in one separate thread, and when done, we swap whole parts of the render nodes network and then the backend can re(start) rendering as needed.
 
 !!The naming discussion
-The discussion looks healthy so far... People can add new proposals on the [[pipawiki|http://www.pipapo.org/pipawiki/Cinelerra3/Names]]. intersting names are still coming in, so we should just let the name-choosing game go on for a while. And, btw, we //can// depart from beeing similar to &quot;Cinelerra&quot; ;-) 
+The discussion looks healthy so far... People can add new proposals on the [[pipawiki|http://www.pipapo.org/pipawiki/Lumiera/Names]]. intersting names are still coming in, so we should just let the name-choosing game go on for a while. And, btw, we //can// depart from beeing similar to &quot;Cinelerra&quot; ;-) 
 Let's say, we need a person volonteering to guide/moderate the selection, going over the list and scratching inammprobiate ones. Criteria for good names being:
 * should not be an existing project
 * should be &quot;googleable&quot;
@@ -1409,7 +1409,7 @@ config.formatters.push( {
 </div>
 <div title="MainMenu" modifier="CehTeh" modified="200707111114" created="200706172305" changecount="4">
 <pre>GettingStarted
-[[Cinelerra3Wiki]]
+[[LumieraWiki]]
 [[Backend|backend.html]]
 [[Proc-Layer|renderengine.html]]
 [[Support-Library|support_library.html]]
@@ -1418,7 +1418,7 @@ config.formatters.push( {
 </div>
 <div title="Manifest" modifier="MichaelPloujnikov" modified="200706270308" created="200706181209" changecount="9">
 <pre>! Manifest
-This Proposal describe the general ideas how the community will work together to create Cinelerra3.
+This Proposal describe the general ideas how the community will work together to create Lumiera.
 
 !! Description
 I started with my personal opinions, so far people expressed their commitment with this text.
@@ -1432,11 +1432,11 @@ Some of these things work quite well, there is an overall friendly relation betw
 
 But there are some bad things too. Notably there is not much progress on the community development. Users don't benefit from new improvements which other people have made. There is a endlessly growing list of bugs and feature requests, when someone sends a patch to the ML he has to invest quite some time to maintain it until it might be merged. Finally we don't know what heroine virtual is working on, until we see his next tarball.
 
-!! Solution for Cinelerra3
+!! Solution for "Cinelerra3" / Lumiera
 Cinelerra is heroine's product, this time we should work together with him to make it pleasant and progressing for anyone.
 We are in need of a new development model which is acceptable by all involved people and benefits from the way Cinelerra development worked the years before, without maintaining the bad sides again: 
 
-# ''Make it easy to contribute''&lt;&lt;br&gt;&gt;Even if it is favorable when we have people which are continuously working on Cinelerra, it's a fact that people show up, send a few patches and then disappear. The development model should be prepared for this by:
+# ''Make it easy to contribute''&lt;&lt;br&gt;&gt;Even if it is favorable when we have people which are continuously working on Lumiera / Cinelerra, it's a fact that people show up, send a few patches and then disappear. The development model should be prepared for this by:
 ## Good documentation
 ## Well defined design and interfaces  
 ## Establish some coding guidelines to make it easy for others maintain code written by others
@@ -1444,8 +1444,8 @@ We are in need of a new development model which is acceptable by all involved pe
 # ''Simple access''&lt;&lt;br&gt;&gt;We will use a fully distributed development model using git. I'll open a anonymous pushable repository which anyone can use to publish his changes.
 # ''Freedom to do, or not to do''&lt;&lt;br&gt;&gt;The model allows everyone to do as much as he wants. In a free project there is no way to put demands on people. This is good since it's easy to join and is open for anyone. The community might expect some responsibility for people maintaining their patches, but at worst, things which don't match our expected quality and when there is no one who keeps them up, will be removed. Since we are working in a distributed way with each developer maintaining his own repository and merging from other people, there is no easy way that bad code will leap into the project.
 # ''No Rule is better than a Rule which is not engaged''&lt;&lt;br&gt;&gt;We have to agree on some rules to make teamwork possible. These rules should be kept to a minimum required and accepted by all involved people. It is vital that we can trust each other on simple things, like properly formatted code or that patches one proposes to merge don't break the system etc..
-# ''Legal status must be clear''&lt;&lt;br&gt;&gt;Cinelerra is developed under the GPL, every contributor must acknowledge this. Even when we provide anonymous commits, every non trivial patch should be traceable to the person who made it, GPG signatures would be proper here - details need to be worked out.
-# ''All for Cinelerra''&lt;&lt;br&gt;&gt;The goal is to make the best Linux video editor to date, nothing less. Everyone puts in their best abilities. This project is not the place to blame people for things where they are not profound, help each other, make things right instead of blaming someone. Everyone should rate himself at what he can do best on the project.
+# ''Legal status must be clear''&lt;&lt;br&gt;&gt;Lumiera is developed under the GPL, every contributor must acknowledge this. Even when we provide anonymous commits, every non trivial patch should be traceable to the person who made it, GPG signatures would be proper here - details need to be worked out.
+# ''All for Lumiera''&lt;&lt;br&gt;&gt;The goal is to make the best Linux video editor to date, nothing less. Everyone puts in their best abilities. This project is not the place to blame people for things where they are not profound, help each other, make things right instead of blaming someone. Everyone should rate himself at what he can do best on the project.
 </pre>
 </div>
 <div title="MarkupPreHead" modifier="Ichthyostega" modified="200708120049" created="200706172303" tags="excludeMissing" changecount="2">
@@ -1453,7 +1453,7 @@ We are in need of a new development model which is acceptable by all involved pe
 &lt;link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/&gt;
 &lt;!--}}}--&gt;
 
-&lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;&lt;b&gt;Cinelerra TiddlyWiki&lt;/b&gt; is loading&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
+&lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;&lt;b&gt;Lumiera TiddlyWiki&lt;/b&gt; is loading&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
 </div>
 <div title="Micro-GPG-HowTo" modifier="CehTeh" modified="200708101901" created="200708101900" changecount="2">
 <pre>I (cehteh) just paste my configs and give very few hints here, refer to the gpg manpage, the gpg documentation, google or ask on IRC for details. Maybe you improve this.
@@ -2324,7 +2324,7 @@ Here we describe the Directory hierarchy and how the git repository are set up.
 !! Description
 Use &quot;./admin/treeinfo.sh&quot; to produce a annotated directory tree like this:
 {{{
-.                                       : The root dir for the cinelerra3 project
+.                                       : The root dir for the Lumiera project
 ./admin                                 : administrative scripts
 ./admin/git_hooks                       : git hook scripts
 ./build                                 : build dir
@@ -2332,12 +2332,12 @@ Use &quot;./admin/treeinfo.sh&quot; to produce a annotated directory tree like t
 ./doc/devel                             : developer documentation, extra sources, doxygen
 ./doc/devel/uml                         : Bouml generated HTML doc
 ./doc/user                              : user documentation in texinfo
-./oldsrc                                : cinelerra2 sources, added per case when needed
+./oldsrc                                : Cinelerra2 sources, added per case when needed
 ./src                                   : every components source in a own subdir here
 ./tests                                 : test suite
 ./tests/bugs                            : tests against reported bugs
 ./uml                                   : uml models, created with bouml
-./uml/cinelerra3                        : cinelerra3 UML model
+./uml/lumiera                           : Lumiera UML model
 ./wiki                                  : tiddlywiki for semi-persistent documentation
 }}}
 
@@ -2412,7 +2412,7 @@ I made this proposal 'final' now further details are likely better worked out in
 <div title="SCons" modifier="Ichthyostega" modified="200708180224" created="200708180211" tags="organization buildsys" changecount="3">
 <pre>[SCons|http://www.scons.org/] is an //alternate build system// written in Python and using specific python-scripts for defining the buildprocess. These build scripts, called {{{SConstruct}}} and {{{SConsscript}}} are indeed //definitions//, not scripts for //doing// the build. If you are new to SCons (and familiar with make), you should really read the [Introduction of the users guide|http://www.scons.org/doc/0.97/HTML/scons-user/book1.html], because SCons is quite a different beast then make and the autotools.
 
-To learn how to use SCons and to get a better feeling of its strenghtes and weaknesses, Ichthyo started a SCons based build system for cinelerra in July 2007 and will maintain it for some time parallel to the automake system (maintained by Cehteh). Every build system looks good in theory and has some big advantages, but only in real use one can see how much effort is needed to keep up with the demands of a given project.
+To learn how to use SCons and to get a better feeling of its strenghtes and weaknesses, Ichthyo started a SCons based build system for Lumiera in July 2007 and will maintain it for some time parallel to the automake system (maintained by Cehteh). Every build system looks good in theory and has some big advantages, but only in real use one can see how much effort is needed to keep up with the demands of a given project.
 
 !some Notes
 * we build always in the top level directory
@@ -2426,7 +2426,7 @@ To learn how to use SCons and to get a better feeling of its strenghtes and weak
 ** check == directory {{{tests}}} and runs the testsuite
 * run scons -h to get additional explanations.
 
-Typically, one would just write the necessary definitions as they come into one global scope. But because the buildscripts are actually Python scripts, ichthyo found it preferable to use some more structuring and break down the code into several python functions and pass all necessary variables as parameters. This may seem overkill at first look, but the cinelerra project is expected to become a large project.
+Typically, one would just write the necessary definitions as they come into one global scope. But because the buildscripts are actually Python scripts, ichthyo found it preferable to use some more structuring and break down the code into several python functions and pass all necessary variables as parameters. This may seem overkill at first look, but the Lumiera project is expected to become a large project.
 
 Moreover, one could simply list all needed files or break everything down into a hierarchical build. But instead, we use for most objects a helper function (located in {{{admin/scons/Buildhelper.py}}}) called {{{srcSubtree()}}}, which will scan a directory tree and add all {{{'*.c','*.cpp','*.cc'}}} - files as Object nodes to the build process. Besides that, we use the //hierarchical aproach rather reluctant//: at the moment, only the subtree for separate tools and the tests-directory have a separate buildscript. Probably, the subtree for plugins will get one as well at some point in the future.
 </pre>
@@ -2446,7 +2446,7 @@ Moreover, one could simply list all needed files or break everything down into a
 <pre>Distributed Developer Wiki</pre>
 </div>
 <div title="SiteTitle" modifier="CehTeh" created="200706181110" changecount="1">
-<pre>Cinelerra3</pre>
+<pre>Lumiera</pre>
 </div>
 <div title="SplashScreenPlugin" modifier="Saq" modified="200607202048" created="200607191631" tags="lewcidExtension systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200607202048">
 <pre>/***
@@ -3686,7 +3686,7 @@ to help with automating the build, ichthyo would appreciate to have the followin
 ** the testdefinitions together with {{{test.sh}}}
 ** the test-executables, which should named according to the pattern {{{test-XXX}}}
 * below are the source directories for each of the aforementioned test-executables. When such a source directory is named &quot;XXX&quot;, the corresponding executable is &quot;test-XXX&quot;
-* each of the source directories, which actually could be source trees, will be compiled and linked together with the cinelerra core classes and files. Thus, it needs to contain exactly //one// main(), but by using commandline parameters, one executable can drive a lot of different tests.
+* each of the source directories, which actually could be source trees, will be compiled and linked together with the Lumiera core classes and files. Thus, it needs to contain exactly //one// main(), but by using commandline parameters, one executable can drive a lot of different tests.
 
 -------
 //as of 18.8.2007, ichthyo has implemented this scheme for the SCons build//
@@ -3821,7 +3821,7 @@ function addKeyDownHandlers(e)
 </div>
 <div title="TiddlyWiki" modifier="Ichthyostega" modified="200708120058" created="200706260506" tags="excludeMissing" changecount="4">
 <pre>The Name of the Software driving this Wiki. Is is written completely in ~JavaScript and contained in one single HTML page.
-Thus no server and no network connection is needed. Simply open the file in your browser and save changes locally. As the wiki HTML is located in the Cinelerra source tree, all changes will be managed and distributed via [[GIT|GitNotes]]. While doing so, you sometimes will have to merge conflicing changes manually in the HTML source. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.
+Thus no server and no network connection is needed. Simply open the file in your browser and save changes locally. As the wiki HTML is located in the Lumiera source tree, all changes will be managed and distributed via [[GIT|GitNotes]]. While doing so, you sometimes will have to merge conflicing changes manually in the HTML source. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.
  * see GettingStarted
  * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.com/#MainFeatures]]
 </pre>

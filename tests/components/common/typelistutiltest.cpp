@@ -1,8 +1,8 @@
 /*
   TypeListUtil(Test)  -  check the typelist helpers
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -32,7 +32,7 @@
  **
  ** @see typelisttest.cpp
  ** @see typelistutil.hpp
- ** @see cinelerra::query::ConfigRules  a real world usage example
+ ** @see lumiera::query::ConfigRules  a real world usage example
  **
  */
 
@@ -47,7 +47,7 @@ using std::string;
 using std::cout;
 
 
-namespace cinelerra
+namespace lumiera
   {
   namespace typelist
     {
@@ -152,4 +152,4 @@ namespace cinelerra
     
   } // namespace typelist
 
-} // namespace cinelerra
+} // namespace lumiera

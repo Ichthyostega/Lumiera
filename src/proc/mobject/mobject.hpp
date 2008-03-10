@@ -1,8 +1,8 @@
 /*
   MOBJECT.hpp  -  Key Abstraction: A Media Object in the Session
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -29,7 +29,7 @@
 #include <list>
 #include <tr1/memory>
 
-#include "cinelerra.h"
+#include "lumiera.h"
 #include "proc/mobject/builder/buildertool.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/asset.hpp"                 // TODO finally not needed?
@@ -55,13 +55,13 @@ namespace mobject
   /**
    * MObject is the interface class for all "Media Objects".
    * All the contents and elements that can be placed and 
-   * manipulated and finally rendered within Cinelerra's EDL 
+   * manipulated and finally rendered within Lumiera's EDL 
    * are MObjects.
    */
   class MObject : public Buildable
     {
     protected:
-      typedef cinelerra::Time Time;
+      typedef lumiera::Time Time;
 
       // TODO: how to represent time intervals best?
       Time length;

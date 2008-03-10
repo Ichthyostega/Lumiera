@@ -1,8 +1,8 @@
 /*
   DB.hpp  -  registry holding known Asset instances.
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -87,7 +87,7 @@ namespace asset
       DB () : table() { }
       ~DB ()          {clear();}
       
-      friend class cinelerra::singleton::StaticCreate<DB>;
+      friend class lumiera::singleton::StaticCreate<DB>;
       
       
     public:
@@ -125,7 +125,7 @@ namespace asset
               
               table.clear();
             }
-          catch (cinelerra::Error& EX)
+          catch (lumiera::Error& EX)
             {
               WARN (oper, "Problems while clearing Asset registry: %s", EX.what());
             }

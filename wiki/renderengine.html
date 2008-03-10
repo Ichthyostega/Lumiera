@@ -524,13 +524,13 @@ We can distinguish several different Kinds of Assets, each one with specific pro
 [img[Asset Classess|uml/fig130309.png]]
 
 !Media Asset
-Some piece of Media Data accessible at some external Location and able to be processed by Cinelerra. A Media File on Harddisk can be considered as the most basic form of Media Asset, with some important derived flavours, like a Placeholder for a currently unavailable Source, or Media available in different Resolutions or Formats.
+Some piece of Media Data accessible at some external Location and able to be processed by Lumiera. A Media File on Harddisk can be considered as the most basic form of Media Asset, with some important derived flavours, like a Placeholder for a currently unavailable Source, or Media available in different Resolutions or Formats.
 * __outward interface operations__ include querying properties, creating an Clip MObject, controlling processing policy (low res proxy placeholders, interlacing and other generic pre- and postprocessing)
 * __inward interface operations__ include querying filename, codec, offset and any other informations necessary for creating a source render node, getting additional processing policy decisions (handling of interlacing, aspect ratio).
 &amp;rarr; MediaAsset
 
 !Processing Asset
-Some software component able to work on media data in the Cinelerra Render engine Framework. This includes all sorts of loadable effects, as well as some of the standard, internal facilities (Mask, Projector). Note that Processing Assets typically provide some attachment Point or means of communication with GUI facilities.
+Some software component able to work on media data in the Lumiera Render engine Framework. This includes all sorts of loadable effects, as well as some of the standard, internal facilities (Mask, Projector). Note that Processing Assets typically provide some attachment Point or means of communication with GUI facilities.
 * __outward interface operations__ include...
 * __inward interface operations__ include...
 &amp;rarr; ProcAsset {{red{to be defined}}}
@@ -798,7 +798,7 @@ Error: #f88</pre>
 </pre>
 </div>
 <div title="ConfigRules" modifier="Ichthyostega" modified="200802200145" created="200801171352" tags="overview spec" changecount="11">
-<pre>Many features can be implemented by specifically configuring and wiring some unspecific components. Rather than tie the client code in need of some given feature to these configuration internals, in Cinelerra-3 the client can //query // for some kind of object providing the //needed capabilities. // Right from start (summer 2007), Ichthyo had the intention to implement such a feature using sort of a ''declarative database'', e.g. by embedding a Prolog system. By adding rules to the basic session configuration, users should be able to customize the semi-automatic part of Cinelerra's behaviour to great extent.
+<pre>Many features can be implemented by specifically configuring and wiring some unspecific components. Rather than tie the client code in need of some given feature to these configuration internals, in Lumiera the client can //query // for some kind of object providing the //needed capabilities. // Right from start (summer 2007), Ichthyo had the intention to implement such a feature using sort of a ''declarative database'', e.g. by embedding a Prolog system. By adding rules to the basic session configuration, users should be able to customize the semi-automatic part of Lumiera's behaviour to great extent.
 
 [[Configuration Queries|ConfigQuery]] are used at various places, when creating and adding new objects, as well when building or optimizing the render engine node network.
 * Creating a [[pipe|PipeHandling]] queries for a default pipe or a pipe with a certain stream type
@@ -915,7 +915,7 @@ Another pertinent theme is to make the basic building blocks simpler, while on t
 <div title="EDL" modifier="Ichthyostega" modified="200712100537" created="200706210610" tags="def" changecount="8">
 <pre>''EDL'' is a short-hand for __E__dit __D__ecision __L__ist. The use of this term can be confusing; for the usual meaning see the definition in [[Wikipedia|http://en.wikipedia.org/wiki/Edit_decision_list]]
 
-Cinelerra uses this term in a related manner but with a somewhat shifted focus (and we just stick to this usage here): In Cinelerra the EDL is comprised of the whole set of clips and other media objects parametrized and placed onto the tracks by the user. It is the result of the user's //editing efforts.//
+Cinelerra uses this term in a related manner but with a somewhat shifted focus (and we just stick to this usage here): In Lumiera the EDL is comprised of the whole set of clips and other media objects parametrized and placed onto the tracks by the user. It is the result of the user's //editing efforts.//
 
 In this usage, the EDL in most cases will be almost synonymous to the [[Session|SessionOverview]], just the latter emphasizes more the state aspect, as it can be thought as the current EDL contents contained in a file or data structure together with additional Option values and settings for the GUI. The Session is what you save and load, while the EDL rather denotes a structured collection of Objects placed in time.
 
@@ -1017,7 +1017,7 @@ For this reason I make Factory a Functor, and for handling the concrete memory a
       int uii ;
 
     public:
-      typedef cinelerra::factory::RefcountPtr&lt;Blubb&gt; Factory;
+      typedef lumiera::factory::RefcountPtr&lt;Blubb&gt; Factory;
       static Factory create;
       
       Blubb() : uii(42) {} ;
@@ -1135,13 +1135,13 @@ Slider.prototype.stop = function()
 <div title="GOPs" modifier="Ichthyostega" modified="200706220333" created="200706220301" tags="def" changecount="2">
 <pre>__G__roup __of__ __P__ictures: several compressed video formats don't encode single frames. Normally, such formats are considered mere //delivery formates// but it was one of the key strenghts of Cinelrra from start to be able to do real non linear editing on such formats (like the ~MPEG2-ts unsed in HDV video). The problem of course is that the data backend needs to decode the whole GOP to be serve  single raw video frames.
 
-For this Cinelerra3 design, we could consider making GOP just another raw media data frame type and integrate this decoding into the render pipeline, similar to an effect based on several source frames for every calculated output frame.
+For this Lumiera design, we could consider making GOP just another raw media data frame type and integrate this decoding into the render pipeline, similar to an effect based on several source frames for every calculated output frame.
 
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
 <div title="ImplementationDetails" modifier="Ichthyostega" modified="200802031829" created="200708080322" tags="overview" changecount="21">
-<pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Cinelerra Renderengine, the Builder and the related parts.
+<pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
 * [[Memory Management Issues|MemoryManagement]]
@@ -1161,7 +1161,7 @@ For this Cinelerra3 design, we could consider making GOP just another raw media 
 <div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200711210542" created="200711210531" tags="discuss draft" changecount="7">
 <pre>!Observations, Ideas, Proposals
 ''this page is a scrapbook for collecting ideas'' &amp;mdash; please don't take anything noted here too literal. While writing code, I observe that I (ichthyo) follow certain informal guidelines, some of which I'd like to note down because they could evolve into general style guidelines for the proc layer code.
-* avoid doing anything non-local during the startup phase or shutdown phase of the application. consequently, allways prefer using an explicit cinelerra::Singleton&lt;T&gt; over using an static instance directly, thus yielding better control when the ctor and dtor will be invoked.
+* avoid doing anything non-local during the startup phase or shutdown phase of the application. consequently, allways prefer using an explicit lumiera::Singleton&lt;T&gt; over using an static instance directly, thus yielding better control when the ctor and dtor will be invoked.
 * write error handling code only if the error situation can be actually //handled// at this place. Otherwise, be prepared for exceptions just passing by and thus handle any resources by &quot;resource acquisition is initialisation&quot;. Remember: error handling defeats decoupling and encapsulation
 * (almost) never {{{delete}}} an object directly, use {{{new}}} only when some smart pointer is at hand.
 * when user/client code is inteded to create objects, make the ctor protected and provide a factory member called {{{create}}} instead, returning a smart pointer
@@ -1487,7 +1487,7 @@ config.formatters.push( {
 # surely there will be the need to use some macros (albeit code written in C++ can successfully avoid macros to some extent)
 # there will be one global ''Application State'' representation (and some application services)
 # we have some lib facilities, especially a common [[Time]] abstraction
-For these we have one special (bilingual) header file __cinelerra.h__, which places in its C++ part some declarations into __namespace cinelerra__. These declarations should be pulled into the specific namespaces or (still better) into the implementation //on demand//. There is no nesting (we deliberately don't want an symbol appearing //automatically// in every part of the system).
+For these we have one special (bilingual) header file __lumiera.h__, which places in its C++ part some declarations into __namespace lumiera__. These declarations should be pulled into the specific namespaces or (still better) into the implementation //on demand//. There is no nesting (we deliberately don't want an symbol appearing //automatically// in every part of the system).
 
 !subsystem interface and facade
 These large scale interfaces reside in special namespaces &quot;~XXX_interface&quot; (where XXX is the subsystem). The accompanning //definitions// depend on the implementation namespace and are placed in the top-level source folder of the corresponding subsystem.
@@ -1513,7 +1513,7 @@ From experiences with other middle scale projects, I prefer having the test code
 </pre>
 </div>
 <div title="Loading Media" modifier="Ichthyostega" modified="200712100630" created="200709220005" tags="design spec" changecount="4">
-<pre>Opening and accessing media files on disk poses several problems, most of which belong to the domain of cinelerra's data backend. Here, we focus on the questions related to making media data available to the EDL and the render engine. Each media will be represented by an MediaAsset object, which indeed could be a compound object (in case of MultichannelMedia). Building this asset object thus includes getting informations from the real file on disk. For delegating this to the backend, we use the following query interface:
+<pre>Opening and accessing media files on disk poses several problems, most of which belong to the domain of Lumiera's data backend. Here, we focus on the questions related to making media data available to the EDL and the render engine. Each media will be represented by an MediaAsset object, which indeed could be a compound object (in case of MultichannelMedia). Building this asset object thus includes getting informations from the real file on disk. For delegating this to the backend, we use the following query interface:
 * {{{queryFile(char* name)}}} requests accessing the file and yields some (opaque) handle when successful.
 * {{{queryChannel(fHandle, int)}}} will then be issued in sequence with ascending index numbers, until it returns {{{NULL}}}.
 * the returned struct (pointer) will provide the following information:
@@ -1556,7 +1556,7 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 </pre>
 </div>
 <div title="MainMenu" modifier="Ichthyostega" modified="200802031758" created="200706172305" changecount="10">
-<pre>''[[Cinelerra3|index.html]]''
+<pre>''[[Lumiera|index.html]]''
 [[Proc-Layer|ProcLayer and Engine]]
 [[MObjects]]
 [[Implementation|ImplementationDetails]]
@@ -1595,7 +1595,7 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 </pre>
 </div>
 <div title="MemoryManagement" modifier="Ichthyostega" modified="200711180014" created="200708100225" tags="impl decision discuss" changecount="12">
-<pre>Of course: Cinelerra currently leaks memory and crashes regularilly. For the newly written code, besides retaining the same performance level, a main goal is to use methods and techniques known to support the writing of quality code. So, besides the MultithreadConsiderations, a solid strategy for managing the ownership of allocated memory blocks is necessary right from start.
+<pre>Of course: Cinelerra currently leaks memory and crashes regularilly. For the newly written code, besides retaining the same level of performance, a main goal is to use methods and techniques known to support the writing of quality code. So, besides the MultithreadConsiderations, a solid strategy for managing the ownership of allocated memory blocks is necessary right from start.
 
 !Problems
 # Memory management needs to work correct in a //fault tolerant environment//. That means that we need to be prepared to //handle on a non-local scale// some sorts of error conditions (without aborting the application). To be more precise: some error condition arises locally, which leads to a local abort and just the disabling/failing of some subsystem without affecting the application as a whole. This can happen on a regular base (e.g. rendering fails) and thus is __no excuse for leaking memory__
@@ -1692,7 +1692,7 @@ My proposed aproach is to treat OpenGL as a separate video raw data type, requir
 </pre>
 </div>
 <div title="Overview" modifier="Ichthyostega" modified="200711122342" created="200706190300" tags="overview" changecount="6">
-<pre>The Cinelerra-3 Processing Layer is comprised of various subsystems and can be separated into a low-level and a high-level part. At the low-level end is the [[Render Engine|OverviewRenderEngine]] which basically is a network of render nodes cooperating closely with the Backend Layer in order to carry out the actual playback and media transforming calculations. Whereas on the high-level side we find several different [[Media Objects|MObjects]] that can be placed into the [[EDL]], edited and manipulated. This is complemented by the [[Asset Management|Asset]], which is the &quot;bookkeeping view&quot; of all the different &quot;things&quot; within each [[Session|SessionOverview]].
+<pre>The Lumiera Processing Layer is comprised of various subsystems and can be separated into a low-level and a high-level part. At the low-level end is the [[Render Engine|OverviewRenderEngine]] which basically is a network of render nodes cooperating closely with the Backend Layer in order to carry out the actual playback and media transforming calculations. Whereas on the high-level side we find several different [[Media Objects|MObjects]] that can be placed into the [[EDL]], edited and manipulated. This is complemented by the [[Asset Management|Asset]], which is the &quot;bookkeeping view&quot; of all the different &quot;things&quot; within each [[Session|SessionOverview]].
 [img[Block Diagram|uml/fig128005.png]]
 </pre>
 </div>
@@ -2444,12 +2444,12 @@ We need to work out guidelines for dealing with operations going on simultaneous
 </pre>
 </div>
 <div title="Proc-Layer" modifier="Ichthyostega" created="200802031814" tags="def" changecount="1">
-<pre>The current Cinelerra-3 architecture separates functionality into three Layers: __GUI__, __Proc__ and __Backend__.
+<pre>The current Lumiera architecture separates functionality into three Layers: __GUI__, __Proc__ and __Backend__.
 
 While the Backend is responsible for Data access and management and for carrying out the computation intensive media opteratons, the middle Layer or ~Proc-Layer contains [[assets|Asset]] and [[Session]], i.e. the user-visible data model and provides configuration and behaviour for these entities. Besides, he is responsible for [[building and configuring|Builder]] the [[render engine|RenderEngine]] based on the current Session state.</pre>
 </div>
 <div title="ProcAsset" modifier="Ichthyostega" created="200709221343" tags="def classes" changecount="1">
-<pre>All Assets of kind asset::Proc represent //processing algorithms// in the bookkeeping view. They enable loading, browsing and maybe even parametrizing all the Effects, Plugins and Codecs available for use within the Cinelerra Session.
+<pre>All Assets of kind asset::Proc represent //processing algorithms// in the bookkeeping view. They enable loading, browsing and maybe even parametrizing all the Effects, Plugins and Codecs available for use within the Lumiera Session.
 
 Besides, they provide an important __inward interface__ for the [[ProcNode]]s, which will use these asset entries to dispatch the actual processing call when rendering. 
 
@@ -2531,7 +2531,7 @@ Then, running the goal {{{:-resolve(T, stream(T,mpeg)).}}} would search a Track 
 * Any __participating object kind__ needs a way to declare domain specific predicates, thus triggering the registration of the necessary hooks within the supporting system. Moreover, it should be able to inject further prolog code (as shown in the example above with the {{{strem(T, mpeg)}}} predicate. For each of these new domain specific predicates, there needs to be a functor which can be invoked when the C implementation of the predicate is called from Prolog (in some cases even later, when the final solution is &quot;executed&quot;, e.g. a new instance has been created and now some properties need to be set).
 
 !!a note on Plugins
-In the design of the Cinelerra-3 Proc Layer done thus far, we provide //no possibility to introduce a new object kind// into the system via plugin interface. The system uses a fixed collection of classes intended to cover all needs (Clip, Effect, Track, Pipe, Label, Automation, ~Macro-Clips). Thus, plugins will only be able to provide new parametrisations of existing classes. This should not be any real limitation, because the whole system is designed to achieve most of its functionality by freely combining rather basic object kinds. As a plus, it plays nicely with any plain-C based plugin interface. For example, we will have C++ adapter classes for the most common sorts of effect plugin (pull system and synchronous frame-by-frame push with buffering) with a thin C adaptation layer for the specific external plugin systems used. Everything beyond this point can be considered &quot;condiguration data&quot; (including the actual plugin implementation to be loaded)
+In the design of the Lumiera Proc Layer done thus far, we provide //no possibility to introduce a new object kind// into the system via plugin interface. The system uses a fixed collection of classes intended to cover all needs (Clip, Effect, Track, Pipe, Label, Automation, ~Macro-Clips). Thus, plugins will only be able to provide new parametrisations of existing classes. This should not be any real limitation, because the whole system is designed to achieve most of its functionality by freely combining rather basic object kinds. As a plus, it plays nicely with any plain-C based plugin interface. For example, we will have C++ adapter classes for the most common sorts of effect plugin (pull system and synchronous frame-by-frame push with buffering) with a thin C adaptation layer for the specific external plugin systems used. Everything beyond this point can be considered &quot;condiguration data&quot; (including the actual plugin implementation to be loaded)
 </pre>
 </div>
 <div title="RSSReaderPlugin" modifier="Ichthyostega" created="200708081515" tags="systemConfig" changecount="1">
@@ -2795,7 +2795,7 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 <pre>The [[Session]] (sometimes also called //Project//) contains all informations and objects to be edited by the User. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration, all being represented as [[Asset]]. At any given time, there is //only one current session// opened within the application.
 
 !!!larger projects
-For larger editing projects the simple structure of a session containing &quot;the&quot; timeline is not sufficient. Rather, we have several timelines, e.g. one for each scene. Or we could have several layered or nested timelines (compositional work, multimedia productions). To support these cases without making the default case more complicated, Cinelerra-3 introduces a //focus// for selecting the //current EDL,// which will receive all editing operations.
+For larger editing projects the simple structure of a session containing &quot;the&quot; timeline is not sufficient. Rather, we have several timelines, e.g. one for each scene. Or we could have several layered or nested timelines (compositional work, multimedia productions). To support these cases without making the default case more complicated, Lumiera introduces a //focus// for selecting the //current EDL,// which will receive all editing operations.
 
 !!!the definitive state
 With all the structural complexities possible within such a session, we need an isolation layer to provide __one__ definitive state where all configuration has been made explicit. Thus the session manages one special object list, the [[Fixture]], which can be seen as all currently active objects placed onto a single timeline.
@@ -4170,7 +4170,7 @@ A good starting point for understanding our library implementation of the visito
 &amp;rarr; [[implementation deatails|VisitingToolImpl]]
 
 !why bothering with visitor?
-In the Cinelerra-3 Proc layer, Ichthyo uses the visitor pattern to overcome another notorious problem when dealing with more complex class hierarchies: either, the //interface// (root class) is so unspecific to be almost useless, or, in spite of having a useful contract, this contract will effectively be broken by some subclasses (&quot;problem of elliptical circles&quot;). Initially, when designing the classes, the problems aren't there (obviously, because they could be taken as design flaws). But then, under the pressure of real features, new types are added later on, which //need to be in this hierarchy// and at the same time //need to have this and that special behaviour// and here we go ...
+In the Lumiera Proc layer, Ichthyo uses the visitor pattern to overcome another notorious problem when dealing with more complex class hierarchies: either, the //interface// (root class) is so unspecific to be almost useless, or, in spite of having a useful contract, this contract will effectively be broken by some subclasses (&quot;problem of elliptical circles&quot;). Initially, when designing the classes, the problems aren't there (obviously, because they could be taken as design flaws). But then, under the pressure of real features, new types are added later on, which //need to be in this hierarchy// and at the same time //need to have this and that special behaviour// and here we go ...
 Visitor helps us to circumvent this trap: the basic operations can be written against the top level interface, such, that they include visiting some object collection internally. Now, on a case-by-case base, local operations can utilize some sub interface or the given concrete type's public interface. So visitor helps to encapsulate cooperating specific technical details within some concrete visiting tool implementation, while forcing them to be implemented against some interface or sub-interface of the target objects.
 
 !!well suited for using visitors

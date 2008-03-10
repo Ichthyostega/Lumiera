@@ -1,8 +1,8 @@
 /*
   FACTORY.hpp  -  template for object/smart-pointer factories
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,14 +21,14 @@
 */
 
 
-#ifndef CINELERRA_FACTORY_H
-#define CINELERRA_FACTORY_H
+#ifndef LUMIERA_FACTORY_H
+#define LUMIERA_FACTORY_H
 
 #include <tr1/memory>
 
 
 
-namespace cinelerra
+namespace lumiera
   {
   namespace factory
     {
@@ -141,5 +141,5 @@ namespace cinelerra
   using factory::Factory;
   
   
-} // namespace cinelerra
+} // namespace lumiera
 #endif

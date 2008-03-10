@@ -1,8 +1,8 @@
 /*
   DefsManager  -  access to preconfigured default objects and definitions
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -31,9 +31,9 @@
 using boost::format;
 
 using asset::Query;
-using cinelerra::ConfigRules;
-using cinelerra::query::QueryHandler;
-using cinelerra::query::CINELERRA_ERROR_CAPABILITY_QUERY;
+using lumiera::ConfigRules;
+using lumiera::query::QueryHandler;
+using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
 
 
 namespace mobject
@@ -109,9 +109,9 @@ namespace mobject
         res = create (capabilities); // not yet known as default, create new
       
       if (!res)
-        throw cinelerra::error::Config ( str(format("The following Query could not be resolved: %s.") 
-                                                   % capabilities.asKey())
-                                       , CINELERRA_ERROR_CAPABILITY_QUERY );
+        throw lumiera::error::Config ( str(format("The following Query could not be resolved: %s.") 
+                                                 % capabilities.asKey())
+                                     , LUMIERA_ERROR_CAPABILITY_QUERY );
       else
         return res;
     }

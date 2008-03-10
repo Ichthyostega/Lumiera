@@ -1,10 +1,10 @@
 # -*- python -*-
 ##
-## SConstruct  -  SCons based build-sytem for Cinelerra
+## SConstruct  -  SCons based build-sytem for Lumiera
 ##
 
-#  Copyright (C)         CinelerraCV
-#    2007,               Hermann Vosseler <Ichthyostega@web.de>
+#  Copyright (C)         Lumiera.org
+#    2008,               Hermann Vosseler <Ichthyostega@web.de>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -61,7 +61,7 @@ def setupBasicEnvironment():
                , SRCDIR=SRCDIR
                , BINDIR=BINDIR
                , CPPPATH=["#"+SRCDIR]   # used to find includes, "#" means always absolute to build-root
-               , CPPDEFINES=['-DCINELERRA_VERSION='+VERSION ]  # note: it's a list to append further defines
+               , CPPDEFINES=['-DLUMIERA_VERSION='+VERSION ]     # note: it's a list to append further defines
                , CCFLAGS='-Wall '                                       # -fdiagnostics-show-option 
                )
     
@@ -134,7 +134,7 @@ def defineCmdlineOptions():
 def prepareOptionsHelp(opts,env):
     prelude = """
 USAGE:   scons [-c] [OPTS] [key=val [key=val...]] [TARGETS]
-     Build and optionally install Cinelerra.
+     Build and optionally install Lumiera.
      Without specifying any target, just the (re)build target will run.
      Add -c to the commandline to clean up anything a given target would produce
 
@@ -234,21 +234,21 @@ def defineBuildTargets(env, artifacts):
         We use a custom function to declare a whole tree of srcfiles. 
     """
     
-    cinobj = ( srcSubtree(env,'$SRCDIR/backend') 
+    lumobj = ( srcSubtree(env,'$SRCDIR/backend') 
              + srcSubtree(env,'$SRCDIR/proc')
              + srcSubtree(env,'$SRCDIR/common')
              + srcSubtree(env,'$SRCDIR/lib')
              )
     plugobj = srcSubtree(env,'$SRCDIR/plugin', isShared=True)
-    core  = env.StaticLibrary('$BINDIR/core.la', cinobj)
-    #core = cinobj # use this for linking directly
+    core  = env.StaticLibrary('$BINDIR/core.la', lumobj)
+    #core = lumobj # use this for linking directly
     
     # use PCH to speed up building
     precomp = env.PrecompiledHeader('$SRCDIR/pre')
-    env.Depends(cinobj, precomp)
+    env.Depends(lumobj, precomp)
     
-    artifacts['cinelerra'] = env.Program('$BINDIR/cinelerra', ['$SRCDIR/main.cpp']+ core )
-    artifacts['plugins']   = env.SharedLibrary('$BINDIR/cinelerra-plugin', plugobj)
+    artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/main.cpp']+ core )
+    artifacts['plugins'] = env.SharedLibrary('$BINDIR/lumiera-plugin', plugobj)
     
     # call subdir SConscript(s) for independent components
     SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts')
@@ -264,7 +264,7 @@ def definePostBuildTargets(env, artifacts):
     il = env.Alias('install-lib', '$DESTDIR/lib')
     env.Alias('install', [ib, il])
     
-    build = env.Alias('build', '$BINDIR')
+    build = env.Alias('build', artifacts['lumiera']+artifacts['plugins'])
     allbu = env.Alias('allbuild', build+artifacts['testsuite'])
     env.Default('build')
     # additional files to be cleaned when cleaning 'build'
@@ -286,11 +286,11 @@ def definePostBuildTargets(env, artifacts):
 def defineInstallTargets(env, artifacts):
     """ define some artifacts to be installed into target locations.
     """
-    env.Install(dir = '$DESTDIR/bin', source=artifacts['cinelerra'])
+    env.Install(dir = '$DESTDIR/bin', source=artifacts['lumiera'])
     env.Install(dir = '$DESTDIR/lib', source=artifacts['plugins'])
     env.Install(dir = '$DESTDIR/bin', source=artifacts['tools'])
     
-    env.Install(dir = '$DESTDIR/share/doc/cinelerra$VERSION/devel', source=artifacts['doxydoc'])
+    env.Install(dir = '$DESTDIR/share/doc/lumiera$VERSION/devel', source=artifacts['doxydoc'])
 
 #####################################################################
 
@@ -310,7 +310,7 @@ artifacts = {}
 # the various things we build. 
 # Each entry actually is a SCons-Node list.
 # Passing these entries to other builders defines dependencies.
-# 'cinelerra'   : the App
+# 'lumiera'     : the App
 # 'plugins'     : plugin shared lib
 # 'tools'       : small tool applications (e.g mpegtoc)
 # 'src,tar'     : source tree as tarball (without doc)

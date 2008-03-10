@@ -1,8 +1,8 @@
 /*
   Struct(Asset)  -  key abstraction: structural asset
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -37,10 +37,10 @@
 
 using boost::format;
 
-using cinelerra::Symbol;
-using cinelerra::query::normalizeID;
-using cinelerra::query::QueryHandler;
-using cinelerra::ConfigRules;
+using lumiera::Symbol;
+using lumiera::query::normalizeID;
+using lumiera::query::QueryHandler;
+using lumiera::ConfigRules;
 
 using util::contains;
 
@@ -57,7 +57,7 @@ namespace asset
   const string
   Struct::queryStreamID()  const
   {
-    return cinelerra::query::extractID ("stream", this->ident.name);
+    return lumiera::query::extractID ("stream", this->ident.name);
   }
   
   /** query the currently defined properties of this
@@ -65,7 +65,7 @@ namespace asset
   const string
   Struct::queryPipeID()  const
   {
-    return cinelerra::query::extractID ("pipe", this->ident.name);
+    return lumiera::query::extractID ("pipe", this->ident.name);
   }
 
   
@@ -92,8 +92,9 @@ namespace asset
   shared_ptr<STRU> 
   StructFactory::operator() (const Query<STRU>& capabilities)
   {
+    shared_ptr<STRU> res;
     QueryHandler<STRU>& typeHandler = ConfigRules::instance();  
-    shared_ptr<STRU> res = typeHandler.resolve (capabilities);
+    typeHandler.resolve (res, capabilities);
     
     if (res)
       return res;

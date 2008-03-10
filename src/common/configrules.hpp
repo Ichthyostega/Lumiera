@@ -1,8 +1,8 @@
 /*
   CONFIGRULES.hpp  -  interface for rule based configuration
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -36,15 +36,15 @@
  **
  ** @note this is rather a scrapbook and in flux... don't take this code too literal!
  **
- ** @see cinelerra::Query
+ ** @see lumiera::Query
  ** @see mobject::session::DefsManager
  ** @see asset::StructFactory 
  **
  */
 
 
-#ifndef CINELERRA_CONFIGRULES_H
-#define CINELERRA_CONFIGRULES_H
+#ifndef LUMIERA_CONFIGRULES_H
+#define LUMIERA_CONFIGRULES_H
 
 #include "common/query.hpp"
 #include "common/typelistutil.hpp"
@@ -61,7 +61,7 @@
 
 
 
-namespace cinelerra
+namespace lumiera
   {
   using std::string;
   using std::tr1::shared_ptr;
@@ -132,8 +132,8 @@ namespace cinelerra
      * type TY fulfilling the given Query. To start with,
      * we use a mock implementation. 
      * (this code works and is already used 2/2008)
-     * @see cinelerra::query::LookupPreconfigured
-     * @see cinelerra::query::MockTable
+     * @see lumiera::query::LookupPreconfigured
+     * @see lumiera::query::MockTable
      */
     template<class TY>
     class QueryHandler
@@ -187,7 +187,7 @@ namespace cinelerra
 
     
     
-    CINELERRA_ERROR_DECLARE (CAPABILITY_QUERY);  ///< unresolvable capability query.
+    LUMIERA_ERROR_DECLARE (CAPABILITY_QUERY);  ///< unresolvable capability query.
   
   } // namespace query
   
@@ -201,12 +201,12 @@ namespace cinelerra
    *  the list of all concrete types participating in the
    *  rule based config query system
    */
-  typedef cinelerra::typelist::Types < mobject::session::Track
-                                     , asset::Track
-                                     , asset::Pipe
-                                     , const asset::ProcPatt
-                                     > ::List
-                                       InterfaceTypes;
+  typedef lumiera::typelist::Types < mobject::session::Track
+                                   , asset::Track
+                                   , asset::Pipe
+                                   , const asset::ProcPatt
+                                   > ::List
+                                     InterfaceTypes;
   
   /** 
    * user-visible Interface to the ConfigRules subsystem.
@@ -222,5 +222,5 @@ namespace cinelerra
     };
   
   
-} // namespace cinelerra
+} // namespace lumiera
 #endif

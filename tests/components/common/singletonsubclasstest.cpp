@@ -1,8 +1,8 @@
 /*
   SingletonSubclass(Test)  -  actually creating a subclass of the Singleton Type
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -38,7 +38,7 @@ using std::string;
 using std::cout;
 
 
-namespace cinelerra
+namespace lumiera
   {
   namespace test
     {
@@ -87,9 +87,9 @@ namespace cinelerra
      *       subclasses (implementation classes) without coupling the 
      *       caller to the concrete class type.
      * Expected results: an instance of the subclass is created.
-     * @see  cinelerra::Singleton
-     * @see  cinelerra::SingletonSubclassFactory
-     * @see  cinelerra::singleton::Adapter
+     * @see  lumiera::Singleton
+     * @see  lumiera::SingletonSubclassFactory
+     * @see  lumiera::singleton::Adapter
      */
     class SingletonSubclass_test : public Test
       {
@@ -140,7 +140,7 @@ namespace cinelerra
               }
             catch (...)
               {
-                ASSERT (cinelerra_error () == error::CINELERRA_ERROR_ASSERTION);
+                ASSERT (lumiera_error () == error::LUMIERA_ERROR_ASSERTION);
               }
 
             
@@ -160,4 +160,4 @@ namespace cinelerra
     
   } // namespace test
 
-} // namespace cinelerra
+} // namespace lumiera

@@ -1,8 +1,8 @@
 /*
-  mainsuite.cpp  -  "the" cinelerra3 self test suite
+  mainsuite.cpp  -  "the" Lumiera self test suite
 
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
                         Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or

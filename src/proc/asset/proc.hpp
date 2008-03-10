@@ -1,8 +1,8 @@
 /*
   PROC.hpp  -  key abstraction: media-like assets
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -92,7 +92,7 @@ namespace asset
   /** 
    * Factory specialized for createing Processor Asset objects.
    */ 
-  class ProcFactory : public cinelerra::Factory<asset::Proc>
+  class ProcFactory : public lumiera::Factory<asset::Proc>
     {
     public:
       typedef shared_ptr<asset::Proc> PType;

@@ -1,8 +1,8 @@
 /*
   APPCONFIG.hpp  -  for global initialization and configuration 
  
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
                         Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
@@ -34,8 +34,8 @@
  */
 
 
-#ifndef CINELERRA_APPCONFIG_H
-#define CINELERRA_APPCONFIG_H
+#ifndef LUMIERA_APPCONFIG_H
+#define LUMIERA_APPCONFIG_H
 
 #include <map>
 #include <string>
@@ -45,7 +45,7 @@
 
 
 
-namespace cinelerra
+namespace lumiera
   {
   using std::string;
   using boost::scoped_ptr;
@@ -104,5 +104,5 @@ namespace cinelerra
 
 
 
-} // namespace cinelerra
+} // namespace lumiera
 #endif

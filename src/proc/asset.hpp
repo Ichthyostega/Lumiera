@@ -1,8 +1,8 @@
 /*
   ASSET.hpp  -  Superinterface: bookeeping view of "things" present in the session
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -156,7 +156,7 @@ namespace asset
           /** origin or authorship id. 
            *  Can be a project abbreviation, a package id or just the authors nickname or UID.
            *  This allows for the compnent name to be more generic (e.g. "blur"). 
-           *  Default for all assets provided by the core cinelerra-3 codebase is "cin3".
+           *  Default for all assets provided by the core Lumiera codebase is "lumi".
            */
           const string org;
     
@@ -171,7 +171,7 @@ namespace asset
           
           Ident (const string& n, 
                  const Category& cat, 
-                 const string& o = "cin3", 
+                 const string& o = "lumi", 
                  const uint ver=1);
           
           /** @note equality ignores version differences */
@@ -285,7 +285,7 @@ namespace asset
        *  @return \c false if the state could not be changed
        *          due to parent objects being disabled
        */
-      bool enable (bool on=true)  throw(cinelerra::error::State);
+      bool enable (bool on=true)  throw(lumiera::error::State);
       
       
     };

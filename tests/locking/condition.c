@@ -1,8 +1,8 @@
 /*
   test condition functions
 
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -40,10 +40,10 @@ signaling_thread()
 int
 conditionforgotunlock ()
 {
-  cinelerra_condition c;
-  cinelerra_condition_init (&c);
+  lumiera_condition c;
+  lumiera_condition_init (&c);
 
-  cinelerra_conditionacquirer l;
-  cinelerra_conditionacquirer_init (&l, &c, CINELERRA_LOCKED);
+  lumiera_conditionacquirer l;
+  lumiera_conditionacquirer_init (&l, &c, LUMIERA_LOCKED);
   return 0;
 }

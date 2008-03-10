@@ -1,8 +1,8 @@
 /*
   DEFSMANAGER.hpp  -  access to preconfigured default objects and definitions
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -62,13 +62,13 @@ namespace mobject
          *         is considered \e misconfiguration. 
          */
         template<class TAR>
-        shared_ptr<TAR> operator() (const cinelerra::Query<TAR>&);
+        shared_ptr<TAR> operator() (const lumiera::Query<TAR>&);
         
         /** search through the registered defaults, never create anything.
          *  @return object fulfilling the query, \c empty ptr if not found. 
          */
         template<class TAR>
-        shared_ptr<TAR> search  (const cinelerra::Query<TAR>&);
+        shared_ptr<TAR> search  (const lumiera::Query<TAR>&);
         
         /** retrieve an object fulfilling the query and register it as default.
          *  The resolution is delegated to the ConfigQuery system (which may cause
@@ -76,7 +76,7 @@ namespace mobject
          *  @return object fulfilling the query, \c empty ptr if no solution.
          */ 
         template<class TAR>
-        shared_ptr<TAR> create  (const cinelerra::Query<TAR>&);
+        shared_ptr<TAR> create  (const lumiera::Query<TAR>&);
         
         /** register the given object as default, after ensuring it fulfills the
          *  query. The latter may cause some properties of the object to be set,
@@ -85,7 +85,7 @@ namespace mobject
          *  @note only a weak ref to the object is stored
          */ 
         template<class TAR>
-        bool define  (const shared_ptr<TAR>&, const cinelerra::Query<TAR>&);
+        bool define  (const shared_ptr<TAR>&, const lumiera::Query<TAR>&);
         
         /** remove the defaults registration of the given object, if there was such
          *  @return false if nothing has been changed because the object wasn't registered
@@ -100,7 +100,7 @@ namespace mobject
 //          < class TAR,                   ///< the target to query for 
 //            template <class> class SMP  ///<  smart pointer class to wrap the result
 //          >
-//        SMP<TAR> operator() (const cinelerra::Query<TAR>&);
+//        SMP<TAR> operator() (const lumiera::Query<TAR>&);
         
       };
 

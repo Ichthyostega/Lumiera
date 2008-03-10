@@ -1,8 +1,8 @@
 /*
   LOCATINGPIN.hpp  -  Chaining and constraining the Placement of a Media Object
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -42,7 +42,7 @@
 #define MOBJECT_SESSION_LOCATINGPIN_H
 
 
-#include "cinelerra.h"
+#include "lumiera.h"
 
 #include <utility>
 #include <tr1/memory>
@@ -81,7 +81,7 @@ namespace mobject
     class LocatingPin
       {
       protected:
-        typedef cinelerra::Time Time;
+        typedef lumiera::Time Time;
         typedef Time* Track; //TODO dummy declaration; we don't use Tracks as first-class entity any longer
         typedef std::tr1::shared_ptr<asset::Pipe> Pipe;
         typedef std::pair<Time,Pipe> SolutionData;  //TODO (ichthyo consideres better passing of solution by subclass)

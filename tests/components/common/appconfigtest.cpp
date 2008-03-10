@@ -1,8 +1,8 @@
 /*
   Appconfig(Test)  -  accessing the allwasy-available Appconfig singleton
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -33,7 +33,7 @@ using std::cout;
 
 
 
-namespace cinelerra
+namespace lumiera
   {
   namespace test
     {
@@ -46,10 +46,10 @@ namespace cinelerra
             testAccess("version");
           }
         
-        /** @test accessing a value from cinelerra::Appconfig */
+        /** @test accessing a value from lumiera::Appconfig */
         void testAccess (const string& key)
         {
-          string ver = cinelerra::Appconfig::get(key);
+          string ver = lumiera::Appconfig::get(key);
           ASSERT ( !util::isnil(ver));
         }
       };

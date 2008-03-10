@@ -1,8 +1,8 @@
 /*
   TYPELISTUTIL.hpp  -  metaprogramming utilities for lists-of-types
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -39,22 +39,22 @@ This code is heavily inspired by
 
 
 /** @file typelistutil.hpp
- ** Helpers for working with cinelerra::typelist::Types (i.e. lists-of-types). 
+ ** Helpers for working with lumiera::typelist::Types (i.e. lists-of-types). 
  **
- ** @see cinelerra::query::ConfigRules usage example
+ ** @see lumiera::query::ConfigRules usage example
  ** @see typelist.hpp
  ** 
  */
 
 
-#ifndef CINELERRA_TYPELISTUTIL_H
-#define CINELERRA_TYPELISTUTIL_H
+#ifndef LUMIERA_TYPELISTUTIL_H
+#define LUMIERA_TYPELISTUTIL_H
 
 #include "common/typelist.hpp"
 
 
 
-namespace cinelerra
+namespace lumiera
   {
   namespace typelist
     {
@@ -143,5 +143,5 @@ namespace cinelerra
     
   } // namespace typelist
 
-} // namespace cinelerra
+} // namespace lumiera
 #endif

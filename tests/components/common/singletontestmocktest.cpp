@@ -1,8 +1,8 @@
 /*
   SingletonTestMock(Test)  -  using Singleton for injecting Test-Mocks
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -37,7 +37,7 @@ using std::string;
 using std::cout;
 
 
-namespace cinelerra
+namespace lumiera
   {
   namespace test
     {
@@ -108,8 +108,8 @@ namespace cinelerra
      * @test inject a Mock object into the Singleton Factory, 
      *       to be returned and used in place of the original object.
      * Expected results: Mock(s) called, no memory leaks.
-     * @see  cinelerra::Singleton
-     * @see  cinelerra::singleton::Static
+     * @see  lumiera::Singleton
+     * @see  lumiera::singleton::Static
      */
     class SingletonTestMock_test : public Test
       {
@@ -214,4 +214,4 @@ namespace cinelerra
 
   } // namespace test
 
-} // namespace cinelerra
+} // namespace lumiera

@@ -1,8 +1,8 @@
 /*
   SINGLETONFACTORY.hpp  -  template for implementing the singleton pattern
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -31,8 +31,8 @@ This code is heavily inspired by
 
 
 
-#ifndef CINELERRA_SINGLETONFACTORY_H
-#define CINELERRA_SINGLETONFACTORY_H
+#ifndef LUMIERA_SINGLETONFACTORY_H
+#define LUMIERA_SINGLETONFACTORY_H
 
 
 #include "common/singletonpolicies.hpp"  ///< several Policies usable together with SingletonFactory
@@ -42,7 +42,7 @@ This code is heavily inspired by
 
 
 
-namespace cinelerra
+namespace lumiera
   {
   
   /**
@@ -135,5 +135,5 @@ namespace cinelerra
 /////       It seems this would either cost us much of the flexibility or get complicated
 /////       to a point where we could as well implement our own Depenency Injection Manager.
 
-} // namespace cinelerra
+} // namespace lumiera
 #endif

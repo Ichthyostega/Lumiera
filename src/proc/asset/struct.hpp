@@ -1,8 +1,8 @@
 /*
   STRUCT.hpp  -  key abstraction: structural asset
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -52,7 +52,7 @@ using boost::scoped_ptr;
 
 namespace asset
   {
-  using cinelerra::Query;
+  using lumiera::Query;
   
   class Struct;
   class StructFactory;
@@ -108,7 +108,7 @@ namespace asset
   /** 
    * Factory specialized for createing Structural Asset objects.
    */ 
-  class StructFactory : public cinelerra::Factory<asset::Struct>
+  class StructFactory : public lumiera::Factory<asset::Struct>
     {
       scoped_ptr<StructFactoryImpl> impl_;
 

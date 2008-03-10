@@ -1,8 +1,8 @@
 /*
   DefsManagerImpl(Test)  -  checking implementation details of the defaults manager
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -43,12 +43,12 @@ namespace asset
   namespace test
     {
     using mobject::Session;
-    using cinelerra::Symbol;
-    using cinelerra::Query;
-    using cinelerra::query::normalizeID;
+    using lumiera::Symbol;
+    using lumiera::Query;
+    using lumiera::query::normalizeID;
     
-    using cinelerra::ConfigRules;
-    using cinelerra::query::QueryHandler;
+    using lumiera::ConfigRules;
+    using lumiera::query::QueryHandler;
     
     
     

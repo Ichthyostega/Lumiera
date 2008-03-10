@@ -1,17 +1,10 @@
-The Cinelerra source code is (C) by the original authors (see AUTHORS)
+The Lumiera source code is (C) by the original authors (see AUTHORS)
 
 =======================================================================
-Cinelerra is free software -- you may use and redistribute it under the
+Lumiera is free software -- you may use and redistribute it under the
 Terms and conditions of the GNU GENERAL PUBLIC LICENSE (GPL); 
 either version 2 of the License, or (at your option) any later version.
 =======================================================================
 For a copy of the GPL Version 2 see the file "COPYING"
       
-
-In addition to the GPL's warranty stipulation, Cinelerra is distributed WITHOUT
-GUARANTEED SUPPORT; without even the guarantee of ADDITIONAL LABOR. Support
-that is not guaranteed includes technical support, compiler troubleshooting,
-debugging, version matching, updating, among other additional labor which
-may or may not be required to meet a user's requirements.
-
 

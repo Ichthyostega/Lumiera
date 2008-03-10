@@ -1,8 +1,8 @@
 /*
   BasicPipe(Test)  -  checking the basic properties of Pipe Assets
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -47,8 +47,8 @@ namespace asset
   namespace test
     {
     using mobject::Session;
-    using cinelerra::Query;
-    using cinelerra::query::normalizeID;
+    using lumiera::Query;
+    using lumiera::query::normalizeID;
     
     
     
@@ -92,7 +92,7 @@ namespace asset
             ASSERT (thePipe->shortDesc == wstring (pID_sane.begin(), pID_sane.end()));
             
             Asset::Ident idi = thePipe->ident;
-            ASSERT (idi.org == "cin3");
+            ASSERT (idi.org == "lumi");
             ASSERT (contains (idi.name, thePipe->getPipeID()));
             ASSERT (contains (idi.name, thePipe->getProcPatt()->queryStreamID()));
 

@@ -1,4 +1,4 @@
-#  Copyright (C)         CinelerraCV
+#  Copyright (C)         Lumiera.org
 #    2007,               Christian Thaeter <ct@pipapo.org>
 #
 #  This program is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@ noinst_PROGRAMS += test-plugin
 
 test_plugin_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Werror
 test_plugin_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src
-test_plugin_LDADD = libcin3.a -lnobugmt -lpthread -ldl
+test_plugin_LDADD = liblumi.a -lnobugmt -lpthread -ldl
 test_plugin_SOURCES = $(examples_srcdir)/plugin_main.c
 
 noinst_HEADERS += $(examples_srcdir)/hello_interface.h

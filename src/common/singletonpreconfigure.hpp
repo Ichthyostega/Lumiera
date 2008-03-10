@@ -1,8 +1,8 @@
 /*
   SINGLETONPRECONFIGURE  -  declare the configuration of some Singleton types in advance
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -31,7 +31,7 @@
  ** One reason why one wants special Singleton behaviour is testing: Without
  ** altering the executable, for running some tests we need to inject a Test Mock
  ** in place of some service object, so we can verify the behaviour of the code
- ** <i>using</i> this service. For this, we mix cinelerra::test::MockInjector
+ ** <i>using</i> this service. For this, we mix lumiera::test::MockInjector
  ** into the actual Singleton type.
  **
  ** @note we declare the specialisations into the target namespace
@@ -41,13 +41,13 @@
  */
 
 
-#ifndef CINELERRA_SINGLETONPRECONFIGURE_H
-#define CINELERRA_SINGLETONPRECONFIGURE_H
+#ifndef LUMIERA_SINGLETONPRECONFIGURE_H
+#define LUMIERA_SINGLETONPRECONFIGURE_H
 
 #include "common/test/mockinjector.hpp"
 
 
-namespace cinelerra
+namespace lumiera
   {
   /**
    * Default Singleton configuration
@@ -67,15 +67,15 @@ namespace cinelerra
   namespace test
     {
     class TestSingletonO;
-    using cinelerra::Singleton;
+    using lumiera::Singleton;
     
   } // namespace test
-}  // namespace cinelerra
+}  // namespace lumiera
 
 namespace backend_interface
   {
   class MediaAccessFacade;
-  using cinelerra::Singleton;
+  using lumiera::Singleton;
     
 } // namespace backend_interface
 
@@ -87,7 +87,7 @@ namespace backend_interface
   /* Specialisation Definitions */
   /* ************************** */
 
-namespace cinelerra
+namespace lumiera
   {
   
   using test::MockInjector;
@@ -104,7 +104,7 @@ namespace cinelerra
     : public MockInjector<backend_interface::MediaAccessFacade>
     { };
 
-} // namespace cinelerra
+} // namespace lumiera
 
 
 

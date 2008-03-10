@@ -1,8 +1,8 @@
 /*
   test mutex functions
 
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -23,10 +23,10 @@
 
 int mutexforgotunlock()
 {
-  cinelerra_mutex m;
-  cinelerra_mutex_init (&m);
+  lumiera_mutex m;
+  lumiera_mutex_init (&m);
 
-  cinelerra_mutexacquirer l;
-  cinelerra_mutexacquirer_init_mutex (&l, &m, CINELERRA_LOCKED);
+  lumiera_mutexacquirer l;
+  lumiera_mutexacquirer_init_mutex (&l, &m, LUMIERA_LOCKED);
   return 0;
 }

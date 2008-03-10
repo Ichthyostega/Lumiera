@@ -1,8 +1,8 @@
 /*
   TestClip  -  test clip (stub) for checking EDL/Session functionality
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -44,7 +44,7 @@ namespace mobject
       asset::Media & 
       createTestMedia ()
       {
-        // install Mock-Interface to cinelerra backend
+        // install Mock-Interface to Lumiera backend
         MAF::instance.injectSubclass (new MediaAccessMock);
         PM media = asset::Media::create("test-2", VIDEO); // query magic filename
         MAF::instance.injectSubclass (0); // remove Mock-Interface
@@ -70,7 +70,7 @@ namespace mobject
             { }
         };
           
-      cinelerra::Singleton<Testbed> testbed_1; // invoke ctor when creating first TestClip... 
+      lumiera::Singleton<Testbed> testbed_1; // invoke ctor when creating first TestClip... 
 
       
       

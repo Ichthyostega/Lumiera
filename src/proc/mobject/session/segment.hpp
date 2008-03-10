@@ -1,8 +1,8 @@
 /*
   SEGMENT.hpp  -  Segment of the Timeline.
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -26,7 +26,7 @@
 
 #include <list>
 
-#include "cinelerra.h"
+#include "lumiera.h"
 #include "proc/mobject/explicitplacement.hpp"
 
 
@@ -49,7 +49,7 @@ namespace mobject
     class Segment
       {
       protected:
-        typedef cinelerra::Time Time;
+        typedef lumiera::Time Time;
 
         /** begin of this timeline segment. */
         Time start;

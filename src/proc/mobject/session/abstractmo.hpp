@@ -1,8 +1,8 @@
 /*
   ABSTRACTMO.hpp  -  abstract base class for all Media Objects
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -25,6 +25,7 @@
 #define MOBJECT_SESSION_ABSTRACTMO_H
 
 #include "proc/mobject/mobject.hpp"
+
 
 
 namespace mobject

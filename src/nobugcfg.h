@@ -2,8 +2,8 @@
   NOBUGCFG.h  -  global configuration and definitions for NoBug
  
  
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
                         Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
  ** The idea is that configuration and some globally used flag 
  ** declarations are to be kept in one central location. Normally,
  ** this header will be included by appconfig.hpp, which in turn gets
- ** included by cinelerra.h
+ ** included by lumiera.h
  ** @par Besides the usual guarded declarations, this header contains
  ** one section with the corresponding <b>definitions</b>. This section
  ** is to be called by appconfig.cpp only, which deals with application

@@ -1,8 +1,8 @@
 /*
   Time  -  unified representation of a time point, including conversion functions
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -25,7 +25,7 @@
 #include <limits>
 
 
-namespace cinelerra
+namespace lumiera
   {
 
    // TODO: dummy values; should be adjusted when switching to the real time implementation provided by the backend
@@ -34,4 +34,4 @@ namespace cinelerra
    const Time Time::MIN = -std::numeric_limits<long>::max();
 
 
-} // namespace cinelerra
+} // namespace lumiera

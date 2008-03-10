@@ -1,8 +1,8 @@
 /*
   SessManagerImpl  -  global session access and lifecycle
  
-  Copyright (C)         CinelerraCV
-    2007,               Hermann Vosseler <Ichthyostega@web.de>
+  Copyright (C)         Lumiera.org
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -50,7 +50,7 @@ namespace mobject
   namespace session
     {
     
-    CINELERRA_ERROR_DEFINE (CREATE_SESSION, "unable to create basic session");
+    LUMIERA_ERROR_DEFINE (CREATE_SESSION, "unable to create basic session");
     
     /** Access to the "current session", which actually is
      *  an SessionImpl instance. This session object is created 
@@ -71,8 +71,8 @@ namespace mobject
         catch (...)
           {
             ERROR (oper, "Unrecoverable Failure while creating the empty default session.");
-            throw cinelerra::error::Fatal ( "Failure while creating the basic session object. Sysstem halted." 
-                                          , CINELERRA_ERROR_CREATE_SESSION );
+            throw lumiera::error::Fatal ( "Failure while creating the basic session object. Sysstem halted." 
+                                        , LUMIERA_ERROR_CREATE_SESSION );
           }
 
           

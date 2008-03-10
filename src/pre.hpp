@@ -2,8 +2,8 @@
   PRE.hpp  -  precompiled header collection
  
  
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
                         Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
@@ -33,8 +33,8 @@
  ** @see mobject.hpp usage example
  */
 
-#ifndef CINELERRA_PRE_HPP
-#define CINELERRA_PRE_HPP
+#ifndef LUMIERA_PRE_HPP
+#define LUMIERA_PRE_HPP
 
 #include <string>
 #include <vector>
@@ -44,8 +44,8 @@
 #include <boost/format.hpp>
 #include <boost/bind.hpp>
 
-#include "cinelerra.h"
+#include "lumiera.h"
 
 
 
-#endif /*CINELERRA_PRE_HPP*/
+#endif /*LUMIERA_PRE_HPP*/

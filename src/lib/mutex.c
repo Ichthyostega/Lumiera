@@ -1,8 +1,8 @@
 /*
   mutex.c  -  mutex
 
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -31,8 +31,8 @@
  * @param self is a pointer to the mutex to be initialized
  * @return self as given
  */
-CinelerraMutex
-cinelerra_mutex_init (CinelerraMutex self)
+LumieraMutex
+lumiera_mutex_init (LumieraMutex self)
 {
   if (self)
     {
@@ -46,13 +46,13 @@ cinelerra_mutex_init (CinelerraMutex self)
  * @param self is a pointer to the mutex to be destroyed
  * @return self as given
  */
-CinelerraMutex
-cinelerra_mutex_destroy (CinelerraMutex self)
+LumieraMutex
+lumiera_mutex_destroy (LumieraMutex self)
 {
   if (self)
     {
       if (pthread_mutex_destroy (&self->mutex))
-        CINELERRA_DIE;
+        LUMIERA_DIE;
     }
   return self;
 }
