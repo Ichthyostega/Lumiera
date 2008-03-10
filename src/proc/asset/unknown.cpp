@@ -48,19 +48,19 @@ namespace asset
    *  try to access the "real" media it stands for.
    */
   Media::PMedia 
-  Unknown::getOrg()  throw(cinelerra::error::Invalid)
+  Unknown::getOrg()  throw(lumiera::error::Invalid)
   {
     UNIMPLEMENTED ("how to get at the original media from a »Unknown« placeholder");
     if (1==0)
-      throw cinelerra::error::Invalid (str(format("Unable to locate original media "
-                                                  "for ID=%s, filename=\"%s\".") 
-                                                  % string(this->ident) 
-                                                  % string(this->getFilename()))
-                                      ,CINELERRA_ERROR_ORIG_NOT_FOUND
-                                      );
+      throw lumiera::error::Invalid (str(format("Unable to locate original media "
+                                                "for ID=%s, filename=\"%s\".") 
+                                                % string(this->ident) 
+                                                % string(this->getFilename()))
+                                    ,LUMIERA_ERROR_ORIG_NOT_FOUND
+                                    );
   }
   
-  CINELERRA_ERROR_DEFINE (ORIG_NOT_FOUND, "Media refered by placeholder not found");
+  LUMIERA_ERROR_DEFINE (ORIG_NOT_FOUND, "Media refered by placeholder not found");
 
   
   

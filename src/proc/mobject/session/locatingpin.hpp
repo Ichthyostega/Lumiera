@@ -42,7 +42,7 @@
 #define MOBJECT_SESSION_LOCATINGPIN_H
 
 
-#include "cinelerra.h"
+#include "lumiera.h"
 
 #include <utility>
 #include <boost/scoped_ptr.hpp>
@@ -79,7 +79,7 @@ namespace mobject
     class LocatingPin
       {
       protected:
-        typedef cinelerra::Time Time;
+        typedef lumiera::Time Time;
         typedef session::Track* Track;
         typedef std::pair<Time,Track> SolutionData;  //TODO (ichthyo consideres better passing of solution by subclass)
         struct LocatingSolution;

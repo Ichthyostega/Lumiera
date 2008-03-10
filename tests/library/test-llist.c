@@ -26,7 +26,7 @@
 #include "lib/framerate.h"
 
 
-CINELERRA_ERROR_DEFINE(TEST, "test error");
+LUMIERA_ERROR_DEFINE(TEST, "test error");
 
 int
 main (int argc, char** argv)

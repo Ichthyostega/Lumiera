@@ -46,7 +46,7 @@ namespace mobject
       /*******************************************************************
        * @test create a render process from a given segment of the EDL.
        *       Basically this includes cooperation of all parts of the
-       *       Cinelerra Proc Layer. For a prepared test-EDL we invoke the
+       *       Lumiera Proc Layer. For a prepared test-EDL we invoke the
        *       controller to create a render process. This includes building
        *       the render pipeline. Finally, we analyze all the created 
        *       Structures. 

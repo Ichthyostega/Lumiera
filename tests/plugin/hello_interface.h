@@ -1,6 +1,6 @@
 #include "lib/plugin.h"
 
-CINELERRA_INTERFACE(hello, 1,
-                    CINELERRA_INTERFACE_PROTO(void, hello, (void))
-                    CINELERRA_INTERFACE_PROTO(void, goodbye, (const char*))
-                    );
+LUMIERA_INTERFACE(hello, 1,
+                  LUMIERA_INTERFACE_PROTO(void, hello, (void))
+                  LUMIERA_INTERFACE_PROTO(void, goodbye, (const char*))
+                  );

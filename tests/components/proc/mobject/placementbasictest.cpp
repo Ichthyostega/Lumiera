@@ -35,7 +35,7 @@
 #include <iostream>
 
 //using boost::format;
-using cinelerra::Time;
+using lumiera::Time;
 using util::contains;
 using std::string;
 using std::cout;

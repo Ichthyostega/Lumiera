@@ -21,14 +21,14 @@
 */
 
 
-#ifndef CINELERRA_FACTORY_H
-#define CINELERRA_FACTORY_H
+#ifndef LUMIERA_FACTORY_H
+#define LUMIERA_FACTORY_H
 
 #include <tr1/memory>
 
 
 
-namespace cinelerra
+namespace lumiera
   {
   namespace factory
     {
@@ -141,5 +141,5 @@ namespace cinelerra
   using factory::Factory;
   
   
-} // namespace cinelerra
+} // namespace lumiera
 #endif

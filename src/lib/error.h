@@ -1,5 +1,5 @@
 /*
-  error.h  -  Cinelerra Error handling
+  error.h  -  Lumiera Error handling
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -18,8 +18,8 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef CINELERRA_ERROR_H
-#define CINELERRA_ERROR_H
+#ifndef LUMIERA_ERROR_H
+#define LUMIERA_ERROR_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,7 +31,7 @@ extern "C" {
 #include <stdlib.h>
 
 /**
- * @file C Error handling in Cinelerra, header.
+ * @file C Error handling in Lumiera, header.
  */
 
 
@@ -39,46 +39,46 @@ extern "C" {
  * Abort unconditionally with a 'Fatal Error!' message.
  * This macro is used whenever the program end up in a invalid state from which no runtime recovery is possible
  */
-#define CINELERRA_DIE do { NOBUG_ERROR(NOBUG_ON, "Fatal Error!"); abort(); } while(0)
+#define LUMIERA_DIE do { NOBUG_ERROR(NOBUG_ON, "Fatal Error!"); abort(); } while(0)
 
 /**
  * Forward declare an error constant.
  * This macro eases the error declaration in header files
- * @param err name of the error without the 'CINELERRA_ERROR_' prefix (example: NO_MEMORY)
+ * @param err name of the error without the 'LUMIERA_ERROR_' prefix (example: NO_MEMORY)
  */
-#define CINELERRA_ERROR_DECLARE(err) \
-extern const char* CINELERRA_ERROR_##err
+#define LUMIERA_ERROR_DECLARE(err) \
+extern const char* LUMIERA_ERROR_##err
 
 /**
  * Definition and initialization of an error constant.
  * This macro eases the error definition in implementation files
- * @param err name of the error without the 'CINELERRA_ERROR_' prefix (example: NO_MEMORY)
+ * @param err name of the error without the 'LUMIERA_ERROR_' prefix (example: NO_MEMORY)
  * @param msg message describing the error in plain english (example: "memory allocation failed")
  */
-#define CINELERRA_ERROR_DEFINE(err, msg) \
-const char* CINELERRA_ERROR_##err = "CINELERRA_ERROR_" #err ":" msg
+#define LUMIERA_ERROR_DEFINE(err, msg) \
+const char* LUMIERA_ERROR_##err = "LUMIERA_ERROR_" #err ":" msg
 
 /** Helper macro to raise an error for the current thread.
  * This macro eases setting an error. It adds NoBug logging support to the low level error handling.
  * @param flag NoBug flag describing the subsystem where the error was raised
- * @param err name of the error without the 'CINELERRA_ERROR_' prefix (example: NO_MEMORY)
+ * @param err name of the error without the 'LUMIERA_ERROR_' prefix (example: NO_MEMORY)
  */
-#define CINELERRA_ERROR_SET(flag, err)                          \
-(({ERROR (flag, "%s", strchr(CINELERRA_ERROR_##err, ':')+1);}), \
-cinelerra_error_set(CINELERRA_ERROR_##err))
+#define LUMIERA_ERROR_SET(flag, err)                          \
+(({ERROR (flag, "%s", strchr(LUMIERA_ERROR_##err, ':')+1);}), \
+lumiera_error_set(LUMIERA_ERROR_##err))
 
 const char*
-cinelerra_error_set (const char * err);
+lumiera_error_set (const char * err);
 
 const char*
-cinelerra_error ();
+lumiera_error ();
 
 /*
   predefined errors
 */
-CINELERRA_ERROR_DECLARE (ERRNO);
+LUMIERA_ERROR_DECLARE (ERRNO);
 
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
-#endif /* CINELERRA_ERROR_H */
+#endif /* LUMIERA_ERROR_H */

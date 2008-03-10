@@ -27,7 +27,7 @@
  ** The idea is that configuration and some globally used flag 
  ** declarations are to be kept in one central location. Normally,
  ** this header will be included by appconfig.hpp, which in turn gets
- ** included by cinelerra.h
+ ** included by lumiera.h
  ** @par Besides the usual guarded declarations, this header contains
  ** one section with the corresponding <b>definitions</b>. This section
  ** is to be called by appconfig.cpp only, which deals with application

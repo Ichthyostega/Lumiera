@@ -90,7 +90,7 @@ namespace asset
   /** 
    * Factory specialized for createing Metadata Asset objects.
    */ 
-  class MetaFactory : public cinelerra::Factory<asset::Meta>
+  class MetaFactory : public lumiera::Factory<asset::Meta>
     {
     public:
       typedef shared_ptr<asset::Meta> PType;

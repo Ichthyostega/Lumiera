@@ -86,7 +86,7 @@ namespace mobject
   class Placement : protected shared_ptr<MO>
     {
     protected:
-      typedef cinelerra::Time Time;
+      typedef lumiera::Time Time;
       typedef session::Track* Track;
 
 

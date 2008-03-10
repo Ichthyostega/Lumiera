@@ -41,7 +41,7 @@ namespace backend_interface
     class MediaAccessMock : public MediaAccessFacade
       {
       public:
-        FileHandle queryFile (const char* name)  throw(cinelerra::error::Invalid);
+        FileHandle queryFile (const char* name)  throw(lumiera::error::Invalid);
         ChanDesc queryChannel (FileHandle, uint chanNo)  throw();
       };
 

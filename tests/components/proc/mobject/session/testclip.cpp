@@ -44,7 +44,7 @@ namespace mobject
       asset::Media & 
       createTestMedia ()
       {
-        // install Mock-Interface to cinelerra backend
+        // install Mock-Interface to Lumiera backend
         MAF::instance.injectSubclass (new MediaAccessMock);
         PM media = asset::Media::create("test-2", VIDEO); // query magic filename
         MAF::instance.injectSubclass (0); // remove Mock-Interface
@@ -70,7 +70,7 @@ namespace mobject
             { }
         };
           
-      cinelerra::Singleton<Testbed> testbed_1; // invoke ctor when creating first TestClip... 
+      lumiera::Singleton<Testbed> testbed_1; // invoke ctor when creating first TestClip... 
 
       
       

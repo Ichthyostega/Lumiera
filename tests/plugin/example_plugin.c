@@ -34,12 +34,12 @@ void bye(const char* m)
   printf("Bye %s\n", m);
 }
 
-CINELERRA_INTERFACE_IMPLEMENT(hello, 1, german, myopen, myclose,
-                              hallo,
-                              tschuess
-                              );
+LUMIERA_INTERFACE_IMPLEMENT(hello, 1, german, myopen, myclose,
+                            hallo,
+                            tschuess
+                            );
 
-CINELERRA_INTERFACE_IMPLEMENT(hello, 1, english, myopen, myclose,
-                              hello,
-                              bye
-                              );
+LUMIERA_INTERFACE_IMPLEMENT(hello, 1, english, myopen, myclose,
+                            hello,
+                            bye
+                            );

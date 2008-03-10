@@ -33,7 +33,7 @@ using std::cout;
 
 
 
-namespace cinelerra
+namespace lumiera
   {
   namespace test
     {
@@ -46,10 +46,10 @@ namespace cinelerra
             testAccess("version");
           }
         
-        /** @test accessing a value from cinelerra::Appconfig */
+        /** @test accessing a value from lumiera::Appconfig */
         void testAccess (const string& key)
         {
-          string ver = cinelerra::Appconfig::get(key);
+          string ver = lumiera::Appconfig::get(key);
           ASSERT ( !util::isnil(ver));
         }
       };

@@ -23,7 +23,7 @@
 
 #include "common/visitor.hpp"
 
-namespace cinelerra
+namespace lumiera
   {
   namespace visitor
     {
@@ -32,4 +32,4 @@ namespace cinelerra
   
   } // namespace visitor
 
-} // namespace cinelerra
+} // namespace lumiera
