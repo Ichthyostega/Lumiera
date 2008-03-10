@@ -15,31 +15,31 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-libcin3_a_srcdir = $(top_srcdir)/src/lib
-noinst_LIBRARIES += libcin3.a
+liblumi_a_srcdir = $(top_srcdir)/src/lib
+noinst_LIBRARIES += liblumi.a
 
-libcin3_a_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
-libcin3_a_CPPFLAGS = -I$(top_srcdir)/src/
+liblumi_a_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
+liblumi_a_CPPFLAGS = -I$(top_srcdir)/src/
 
-libcin3_a_SOURCES = \
-	$(libcin3_a_srcdir)/plugin.c \
-	$(libcin3_a_srcdir)/error.c \
-	$(libcin3_a_srcdir)/time.c \
-	$(libcin3_a_srcdir)/framerate.c \
-	$(libcin3_a_srcdir)/mutex.c \
-	$(libcin3_a_srcdir)/rwlock.c \
-	$(libcin3_a_srcdir)/condition.c \
-	$(libcin3_a_srcdir)/references.c
+liblumi_a_SOURCES = \
+	$(liblumi_a_srcdir)/plugin.c \
+	$(liblumi_a_srcdir)/error.c \
+	$(liblumi_a_srcdir)/time.c \
+	$(liblumi_a_srcdir)/framerate.c \
+	$(liblumi_a_srcdir)/mutex.c \
+	$(liblumi_a_srcdir)/rwlock.c \
+	$(liblumi_a_srcdir)/condition.c \
+	$(liblumi_a_srcdir)/references.c
 
 
 noinst_HEADERS += \
-	$(libcin3_a_srcdir)/plugin.h \
-	$(libcin3_a_srcdir)/error.h \
-	$(libcin3_a_srcdir)/time.h \
-	$(libcin3_a_srcdir)/framerate.h \
-	$(libcin3_a_srcdir)/locking.h \
-	$(libcin3_a_srcdir)/mutex.h \
-	$(libcin3_a_srcdir)/rwlock.h \
-	$(libcin3_a_srcdir)/condition.h \
-	$(libcin3_a_srcdir)/references.h
+	$(liblumi_a_srcdir)/plugin.h \
+	$(liblumi_a_srcdir)/error.h \
+	$(liblumi_a_srcdir)/time.h \
+	$(liblumi_a_srcdir)/framerate.h \
+	$(liblumi_a_srcdir)/locking.h \
+	$(liblumi_a_srcdir)/mutex.h \
+	$(liblumi_a_srcdir)/rwlock.h \
+	$(liblumi_a_srcdir)/condition.h \
+	$(liblumi_a_srcdir)/references.h
 

@@ -123,8 +123,8 @@ def Tarball(env,location,dirs,suffix=''):
     """
     targetID    = '../extern-tar%s' % suffix
     versionID   = env['VERSION']
-    defaultName = 'cinelerra%s_%s' % (suffix, versionID)
-    nameprefix  = 'cinelerra-%s/' %  (versionID)
+    defaultName = 'lumiera%s_%s' % (suffix, versionID)
+    nameprefix  = 'lumiera-%s/' %  (versionID)
     location    = env.subst(location)
     dirs        = env.subst(dirs)
     return env.Command(targetID,None, createTarball, 

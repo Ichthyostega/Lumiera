@@ -45,8 +45,8 @@ namespace cinelerra
    *  to beeing dependant on inclusion order of headers. */
 //  scoped_ptr<Appconfig> Appconfig::theApp_;
 
-#ifndef CINELERRA_VERSION
-#define CINELERRA_VERSION 3++devel
+#ifndef LUMIERA_VERSION
+#define LUMIERA_VERSION 3++devel
 #endif
 
 
@@ -67,7 +67,7 @@ namespace cinelerra
     // install our own handler for undeclared exceptions
     std::set_unexpected (cinelerra::error::cinelerra_unexpectedException);
     
-    (*configParam_)["version"] = STRINGIFY (CINELERRA_VERSION);
+    (*configParam_)["version"] = STRINGIFY (LUMIERA_VERSION);
   }
   
   
