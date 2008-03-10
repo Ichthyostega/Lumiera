@@ -1,8 +1,8 @@
 /*
-  main.cpp  -  start the Cinelerra Application
+  main.cpp  -  start the Lumiera Application
 
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
                         Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
@@ -23,14 +23,16 @@
 
 #include <iostream>
 
+#include "lumiera.h"
+
 using std::cout;
 using std::endl;
+using lumiera::Appconfig;
 
 
 int main (int argc, char* argv[])
 {
-  cout << "*** Cinelerra NLE for Linux ***" << endl
-       << "    hello SCONS build system" << endl;
+  cout << "*** Lumiera NLE for Linux ***" << endl
+       << "    Version: " << Appconfig::get("version") << endl;
   return 0;
 }
-
