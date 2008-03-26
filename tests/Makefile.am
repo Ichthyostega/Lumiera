@@ -36,6 +36,11 @@ test_llist_SOURCES = $(tests_srcdir)/library/test-llist.c
 test_llist_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
 test_llist_LDADD = liblumi.a -lnobugmt -lpthread -ldl -lm
 
+check_PROGRAMS += test-uuid
+test_uuid_SOURCES = $(tests_srcdir)/library/test-uuid.c
+test_uuid_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_uuid_LDADD = $(builddir)/liblumi.a -lnobugmt -lpthread -ldl -lm
+
 check_PROGRAMS += test-references
 test_references_SOURCES = $(tests_srcdir)/library/test-references.c
 test_references_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/

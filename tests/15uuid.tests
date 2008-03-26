@@ -1,0 +1,15 @@
+TESTING "UUID's" ./test-uuid
+
+TEST "uuid generate" uuidgen_2 <<END
+out: 0
+END
+
+TEST "uuid copy" uuidgen_copy <<END
+out: 1
+END
+
+TEST "storing pointers" ptrs <<END
+out: 1
+END
+
+

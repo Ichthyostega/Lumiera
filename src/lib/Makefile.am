@@ -29,6 +29,7 @@ liblumi_a_SOURCES = \
 	$(liblumi_a_srcdir)/rwlock.c \
 	$(liblumi_a_srcdir)/condition.c \
 	$(liblumi_a_srcdir)/references.c \
+	$(liblumi_a_srcdir)/uuid.c \
 	$(liblumi_a_srcdir)/safeclib.c
 
 
@@ -42,5 +43,6 @@ noinst_HEADERS += \
 	$(liblumi_a_srcdir)/rwlock.h \
 	$(liblumi_a_srcdir)/condition.h \
 	$(liblumi_a_srcdir)/references.h \
+	$(liblumi_a_srcdir)/uuid.h \
 	$(liblumi_a_srcdir)/safeclib.h
 
