@@ -88,12 +88,21 @@ typedef llist * LList;
 typedef const llist * const_LList;
 typedef llist ** LList_ref;
 
+
 /**
  * Macro to instantiate a local llist.
  * @param name of the llist node
  */
 #define LLIST_AUTO(name) llist name = {&name,&name}
 
+
+/*
+  some macros for convenience
+*/
+#define llist_insert_head(list, element) llist_insert_next (list, element)
+#define llist_insert_tail(list, element) llist_insert_prev (list, element)
+#define llist_head llist_next
+#define llist_tail llist_prev
 
 /**
  * cast back from a member of a structure to a pointer of the structure
@@ -128,6 +137,30 @@ typedef llist ** LList_ref;
     for (LList node = llist_tail (list);        \
          ! llist_is_end (node, list);           \
          llist_backward (&node))
+
+
+/**
+ * Iterate forward over a range.
+ * @param start first node to be interated
+ * @param end node after the last node be iterated
+ * @param node pointer to the iterated node
+ */
+#define LLIST_FORRANGE(start, end, node)        \
+    for (LList node = start;                    \
+         node != end;                           \
+         llist_forward (&node))
+
+/**
+ * Iterate backward over a range.
+ * @param rstart first node to be interated
+ * @param rend node before the last node be iterated
+ * @param node pointer to the iterated node
+ */
+#define LLIST_FORRANGE_REV(rstart, rend, node)  \
+    for (LList node = rstart;                   \
+         node != rend;                          \
+         llist_backward (&node))
+
 
 /**
  * Consume a list from head.
@@ -290,7 +323,7 @@ LLIST_FUNC (LList llist_insert_next (LList self, LList next),
 /**
  * Insert a node before another.
  * @param self node before which we want to insert
- * @param prev node which shall be inserted nefore self. Could already linked to a list from where it will be removed.
+ * @param prev node which shall be inserted before self. Could already linked to a list from where it will be removed.
  * @return self
  */
 LLIST_FUNC (LList llist_insert_prev (LList self, LList prev),
@@ -314,10 +347,9 @@ LLIST_FUNC (LList llist_insertlist_next (LList self, LList next),
             if (!llist_is_empty (next))
               {
                 self->next->prev = next->prev;
-                self->next = next->next;
-
-                next->next->prev = self; 
                 next->prev->next = self->next;
+                self->next = next->next;
+                next->next->prev = self;
 
                 next->prev = next->next = next;
               }
@@ -335,10 +367,9 @@ LLIST_FUNC (LList llist_insertlist_prev (LList self, LList prev),
             if (!llist_is_empty (prev))
               {
                 self->prev->next = prev->next;
-                self->prev = prev->prev;
-
-                prev->prev->next = self; 
                 prev->next->prev = self->prev;
+                self->prev = prev->prev;
+                prev->prev->next = self;
 
                 prev->prev = prev->next = prev;
               }
@@ -494,20 +525,45 @@ LLIST_FUNC (LList llist_get_nth_stop (LList self, int n, const_LList stop),
             return self;
 );
 
-/*
-  some macros for convenience
-*/
-#define llist_insert_head(list, element) llist_insert_next (list, element)
-#define llist_insert_tail(list, element) llist_insert_prev (list, element)
-#define llist_head llist_next
-#define llist_tail llist_prev
+
+/**
+ * Sort a list.
+ * @param self list to be sorted
+ * @param cmp function takeing 2 LLists
+ * simple recursive mergesort
+ */
+typedef int (*llist_cmpfn)(LList a, LList b);
+
+LLIST_FUNC (LList llist_sort (LList self, llist_cmpfn cmp),
+            llist left;
+            llist right;
+            llist_init (&left);
+            llist_init (&right);
+            unsigned n = 0;
+            if (!llist_is_single (self))
+              {
+                LLIST_WHILE_HEAD (self, head)
+                  llist_insert_prev (++n & 1 ? &left : &right, head);
+
+                llist_sort (&left, cmp);
+                llist_sort (&right, cmp);
+
+                while (!llist_is_empty (&left) && !llist_is_empty (&right))
+                  llist_insert_prev (self, cmp (left.next, right.next) < 0 ? left.next : right.next);
+
+                if (!llist_is_empty (&left))
+                  llist_insertlist_prev (self, &left);
+                if (!llist_is_empty (&right))
+                  llist_insertlist_prev (self, &right);
+              }
+            return self;
+)
 
 #endif /* LLIST_H */
 /*
-// Local Variables:
-// mode: C
-// c-file-style: "gnu"
-// End:
-// arch-tag: e8fe4a59-fd55-4c45-b860-5cd1e0771213
-// end_of_file
+//      Local Variables:
+//      mode: C
+//      c-file-style: "gnu"
+//      indent-tabs-mode: nil
+//      End:
 */
