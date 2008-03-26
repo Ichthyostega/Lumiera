@@ -84,14 +84,14 @@ lumiera_streq (const char* a, const char* b);
  * This function is called automatically, usually one doesnt need to call it.
  */
 void
-lumiera_buffer_freeall (void);
+lumiera_tmpbuf_freeall (void);
 
 
 /**
- * Query a thread local buffer.
- * @param size minimal needed size for the buffer
- * @return the buffer
+ * Query a thread local tmpbuf.
+ * @param size minimal needed size for the tmpbuf
+ * @return the tmpbuf
  */
 void*
-lumiera_buffer_provide (size_t size);
+lumiera_tmpbuf_provide (size_t size);
 

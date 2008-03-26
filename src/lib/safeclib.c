@@ -42,7 +42,7 @@ LUMIERA_ERROR_DEFINE (NO_MEMORY, "Out of Memory!");
 void*
 lumiera_malloc (size_t sz)
 {
-  void* o = malloc (sz);
+  void* o = sz? malloc (sz) : NULL;
   if (!o)
     LUMIERA_DIE (NO_MEMORY);
   return o;
@@ -104,30 +104,30 @@ lumiera_streq (const char* a, const char* b)
  * This provides 64 buffers per thread which are recycled with each use.
  * The idea here is to have fast buffers for temporal data without need for explicit heap management.
  */
-struct lumiera_buffer_struct
+struct lumiera_tmpbuf_struct
 {
   void* buffers[64];
   size_t sizes[64];
   unsigned idx;
 };
 
-static pthread_once_t lumiera_buffer_tls_once = PTHREAD_ONCE_INIT;
-static pthread_key_t lumiera_buffer_tls_key;
+static pthread_once_t lumiera_tmpbuf_tls_once = PTHREAD_ONCE_INIT;
+static pthread_key_t lumiera_tmpbuf_tls_key;
 
 void
-lumiera_buffer_freeall (void);
+lumiera_tmpbuf_freeall (void);
 
 static void
-lumiera_buffer_destroy (void* buf)
+lumiera_tmpbuf_destroy (void* buf)
 {
-  lumiera_buffer_freeall ();
+  lumiera_tmpbuf_freeall ();
   free (buf);
 }
 
 static void
-lumiera_buffer_init (void)
+lumiera_tmpbuf_init (void)
 {
-  pthread_key_create (&lumiera_buffer_tls_key, lumiera_buffer_destroy);
+  pthread_key_create (&lumiera_tmpbuf_tls_key, lumiera_tmpbuf_destroy);
 }
 
 
@@ -136,13 +136,13 @@ lumiera_buffer_init (void)
  * This function is called automatically, usually one doesnt need to call it.
  */
 void
-lumiera_buffer_freeall (void)
+lumiera_tmpbuf_freeall (void)
 {
-  pthread_once (&lumiera_buffer_tls_once, lumiera_buffer_init);
-  struct lumiera_buffer_struct* buf = pthread_getspecific (lumiera_buffer_tls_key);
+  pthread_once (&lumiera_tmpbuf_tls_once, lumiera_tmpbuf_init);
+  struct lumiera_tmpbuf_struct* buf = pthread_getspecific (lumiera_tmpbuf_tls_key);
   if (!buf)
-    pthread_setspecific (lumiera_buffer_tls_key,
-                         buf = lumiera_malloc (sizeof (struct lumiera_buffer_struct)));
+    pthread_setspecific (lumiera_tmpbuf_tls_key,
+                         buf = lumiera_malloc (sizeof (struct lumiera_tmpbuf_struct)));
 
   for (buf->idx = 0; buf->idx < 64; ++buf->idx)
     {
@@ -160,13 +160,13 @@ lumiera_buffer_freeall (void)
  * @return the buffer
  */
 void*
-lumiera_buffer_provide (size_t size)
+lumiera_tmpbuf_provide (size_t size)
 {
-  pthread_once (&lumiera_buffer_tls_once, lumiera_buffer_init);
-  struct lumiera_buffer_struct* buf = pthread_getspecific (lumiera_buffer_tls_key);
+  pthread_once (&lumiera_tmpbuf_tls_once, lumiera_tmpbuf_init);
+  struct lumiera_tmpbuf_struct* buf = pthread_getspecific (lumiera_tmpbuf_tls_key);
   if (!buf)
-    pthread_setspecific (lumiera_buffer_tls_key,
-                         buf = lumiera_malloc (sizeof (struct lumiera_buffer_struct)));
+    pthread_setspecific (lumiera_tmpbuf_tls_key,
+                         buf = lumiera_malloc (sizeof (struct lumiera_tmpbuf_struct)));
 
   buf->idx = (buf->idx + 1) & 0x3f;
 
