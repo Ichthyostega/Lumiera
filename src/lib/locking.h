@@ -28,6 +28,11 @@
 
 #include "lib/error.h"
 
+
+LUMIERA_ERROR_DECLARE (MUTEX_LOCK);
+LUMIERA_ERROR_DECLARE (MUTEX_UNLOCK);
+LUMIERA_ERROR_DECLARE (MUTEX_DESTROY);
+
 /**
  * @file Shared declarations for all locking primitives.
  */

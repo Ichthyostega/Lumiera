@@ -25,6 +25,10 @@
 
 LUMIERA_ERROR_DEFINE(RWLOCK_AGAIN, "maximum number of readlocks exceed");
 LUMIERA_ERROR_DEFINE(RWLOCK_DEADLOCK, "deadlock detected");
+LUMIERA_ERROR_DEFINE(RWLOCK_DESTROY, "destroy rwlock");
+LUMIERA_ERROR_DEFINE(RWLOCK_UNLOCK, "unlock");
+LUMIERA_ERROR_DEFINE(RWLOCK_RLOCK, "rlock");
+LUMIERA_ERROR_DEFINE(RWLOCK_WLOCK, "wlock");
 
 /**
  * @file Read/write locks.
@@ -57,7 +61,7 @@ lumiera_rwlock_destroy (LumieraRWLock self)
   if (self)
     {
       if (pthread_rwlock_destroy (&self->rwlock))
-        LUMIERA_DIE;
+        LUMIERA_DIE (RWLOCK_DESTROY);
     }
   return self;
 }
@@ -95,7 +99,7 @@ lumiera_rwlockacquirer_init (LumieraRWLockacquirer self, LumieraRWLock rwlock, e
           lumiera_error_set (LUMIERA_ERROR_RWLOCK_DEADLOCK);
           return NULL;
         default:
-          LUMIERA_DIE;
+          LUMIERA_DIE (RWLOCK_RLOCK);
         }
     case LUMIERA_WRLOCKED:
       switch (pthread_rwlock_wrlock (&rwlock->rwlock))
@@ -106,7 +110,7 @@ lumiera_rwlockacquirer_init (LumieraRWLockacquirer self, LumieraRWLock rwlock, e
           lumiera_error_set (LUMIERA_ERROR_RWLOCK_DEADLOCK);
           return NULL;
         default:
-          LUMIERA_DIE;
+          LUMIERA_DIE (RWLOCK_WLOCK);
         }
     default:
       break;
@@ -138,7 +142,7 @@ lumiera_rwlockacquirer_rdlock (LumieraRWLockacquirer self)
       lumiera_error_set (LUMIERA_ERROR_RWLOCK_DEADLOCK);
       return NULL;
     default:
-      LUMIERA_DIE;
+      LUMIERA_DIE (RWLOCK_RLOCK);
     }
 
   self->state = LUMIERA_RDLOCKED;
@@ -166,7 +170,7 @@ lumiera_rwlockacquirer_wrlock (LumieraRWLockacquirer self)
       lumiera_error_set (LUMIERA_ERROR_RWLOCK_DEADLOCK);
       return NULL;
     default:
-      LUMIERA_DIE;
+      LUMIERA_DIE (RWLOCK_WLOCK);
     }
 
   self->state = LUMIERA_WRLOCKED;

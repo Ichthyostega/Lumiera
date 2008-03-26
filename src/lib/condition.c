@@ -25,6 +25,8 @@
  * @file Condition variables
  */
 
+LUMIERA_ERROR_DEFINE (CONDITION_DESTROY, "condition destroy failed");
+
 /**
  * Initialize a condition variable
  * @param self is a pointer to the condition variable to be initialized
@@ -53,9 +55,9 @@ lumiera_condition_destroy (LumieraCondition self)
   if (self)
     {
       if (pthread_mutex_destroy (&self->mutex))
-        LUMIERA_DIE;
+        LUMIERA_DIE (MUTEX_DESTROY);
       else if (pthread_cond_destroy (&self->cond))
-        LUMIERA_DIE;
+        LUMIERA_DIE (CONDITION_DESTROY);
     }
   return self;
 }

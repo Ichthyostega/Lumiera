@@ -28,7 +28,6 @@
  * @file Mutual exclusion locking, header.
  */
 
-
 /**
  * Mutex.
  *
@@ -106,7 +105,7 @@ lumiera_mutexacquirer_init_mutex (LumieraMutexacquirer self, LumieraMutex mutex,
   self->state = state;
   if (state == LUMIERA_LOCKED)
     if (pthread_mutex_lock (&mutex->mutex))
-      LUMIERA_DIE;
+      LUMIERA_DIE (MUTEX_LOCK);
 
   return self;
 }
@@ -124,7 +123,7 @@ lumiera_mutexacquirer_lock (LumieraMutexacquirer self)
   REQUIRE (self->state == LUMIERA_UNLOCKED, "mutex already locked");
 
   if (pthread_mutex_lock (&self->mutex->mutex))
-    LUMIERA_DIE;
+    LUMIERA_DIE (MUTEX_LOCK);
 
   self->state = LUMIERA_LOCKED;
 }
@@ -164,7 +163,7 @@ lumiera_mutexacquirer_try_mutex (LumieraMutexacquirer self, LumieraMutex mutex)
     case EBUSY:
       return LUMIERA_UNLOCKED;
     default:
-      LUMIERA_DIE;
+      LUMIERA_DIE (MUTEX_LOCK);
     }
 }
 
@@ -180,7 +179,7 @@ lumiera_mutexacquirer_unlock (LumieraMutexacquirer self)
   REQUIRE (self);
   REQUIRE (self->state == LUMIERA_LOCKED, "mutex was not locked");
   if (pthread_mutex_unlock (&self->mutex->mutex))
-    LUMIERA_DIE;
+    LUMIERA_DIE (MUTEX_UNLOCK);
   self->state = LUMIERA_UNLOCKED;
 }
 
