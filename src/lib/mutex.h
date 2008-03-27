@@ -28,6 +28,13 @@
  * @file Mutual exclusion locking, header.
  */
 
+#define LUMIERA_MUTEX_SECTION(mutex)                                                    \
+lumiera_mutexacquirer lock_##__LINE__##_;                                               \
+for (lumiera_mutexacquirer_init_mutex (&lock_##__LINE__##_, mutex, LUMIERA_LOCKED);     \
+     lock_##__LINE__##_.state == LUMIERA_LOCKED;                                        \
+     lumiera_mutexacquirer_unlock (&lock_##__LINE__##_))
+
+
 /**
  * Mutex.
  *
