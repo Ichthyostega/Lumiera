@@ -56,10 +56,12 @@ lumiera_mrucache_destroy (LumieraMruCache self)
 /**
  * destroy and free the nelem oldest elements
  */
-void
-lumiera_mrucache_age (LumieraMruCache self, size_t nelem)
+int
+lumiera_mrucache_age (LumieraMruCache self, size_t int)
 {
   REQUIRE (self);
   while (self->cached && nelem--)
     free (lumiera_mrucache_pop (self));
+
+  return nelem;
 }

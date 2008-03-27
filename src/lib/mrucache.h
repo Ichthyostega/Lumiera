@@ -36,7 +36,7 @@
  * Callback function used to destruct/cleanup aged elements.
  * shall clean the element sufficiently up to be ready for being freed or reused
  * @param node the llist node used to link cache elements (will be empty at call)
- * @return pointer to the begin of the element
+ * @return pointer to the begin of the element.
  */
 typedef void* (*lumiera_cache_destructor_fn)(LList node);
 
@@ -112,8 +112,8 @@ lumiera_mrucache_pop (LumieraMruCache self)
 /**
  * destroy and free the nelem oldest elements
  */
-void
-lumiera_mrucache_age (LumieraMruCache self, size_t nelem);
+int
+lumiera_mrucache_age (LumieraMruCache self, int nelem);
 
 
 #endif
