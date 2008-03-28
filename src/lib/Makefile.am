@@ -31,6 +31,7 @@ liblumi_a_SOURCES = \
 	$(liblumi_a_srcdir)/references.c \
 	$(liblumi_a_srcdir)/uuid.c \
 	$(liblumi_a_srcdir)/safeclib.c \
+	$(liblumi_a_srcdir)/cuckoo.c \
 	$(liblumi_a_srcdir)/mrucache.c
 
 
@@ -45,4 +46,5 @@ noinst_HEADERS += \
 	$(liblumi_a_srcdir)/references.h \
 	$(liblumi_a_srcdir)/uuid.h \
 	$(liblumi_a_srcdir)/safeclib.h \
+	$(liblumi_a_srcdir)/cuckoo.h \
 	$(liblumi_a_srcdir)/mrucache.h
