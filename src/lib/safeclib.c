@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <stdint.h>
+#include <stdarg.h>
 
 /**
  * @file Portable and safe wrapers around some clib functions and some tools
@@ -179,3 +180,35 @@ lumiera_tmpbuf_provide (size_t size)
   return buf->buffers[buf->idx];
 }
 
+
+char*
+lumiera_tmpbuf_strndup (const char* src, size_t size)
+{
+  size_t len = strlen (src);
+  len = len > size ? size : len;
+
+  char* buf = lumiera_tmpbuf_provide (len + 1);
+  strncpy (buf, src, len);
+  buf[len] = '\0';
+
+  return buf;
+}
+
+
+char*
+lumiera_tmpbuf_sprintf (size_t size, const char* fmt, ...)
+{
+  va_list args;
+
+  va_start (args, fmt);
+  size_t len = vsnprintf (NULL, 0, fmt, args);
+  va_end (args);
+
+  len = len > size ? size : len;
+  char* buf = lumiera_tmpbuf_provide (len);
+  va_start (args, fmt);
+  vsnprintf (buf, len, fmt, args);
+  va_end (args);
+
+  return buf;
+}

@@ -21,9 +21,7 @@
 
 #include "error.h"
 
-//#include <string.h>
-//#include <stdlib.h>
-//#include <pthread.h>
+#include <stdlib.h>
 
 /**
  * @file Portable and safe wrapers around some clib functions and some tools
@@ -94,4 +92,23 @@ lumiera_tmpbuf_freeall (void);
  */
 void*
 lumiera_tmpbuf_provide (size_t size);
+
+/**
+ * Duplicate string to a tmpbuf.
+ * @param src string to be duplicated
+ * @param size maximal length to be copied
+ * @return temporary buffer containing a copy of the string
+ */
+char*
+lumiera_tmpbuf_strndup (const char* src, size_t size);
+
+/**
+ * Construct a string in a tmpbuf.
+ * @param size maximal length for the string
+ * @param fmt printf like formatstring
+ * @param ... parameters
+ * @return temporary buffer containing the constructed of the string
+ */
+char*
+lumiera_tmpbuf_sprintf (size_t size, const char* fmt, ...);
 
