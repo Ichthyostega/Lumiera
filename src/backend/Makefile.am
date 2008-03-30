@@ -31,12 +31,11 @@ liblumibackend_a_SOURCES = \
 #	$(liblumibackend_a_srcdir)/filehandlecache.c
 
 
-noinst_HEADERS += \
-	$(liblumibackend_a_srcdir)/mediaaccessfacade.cpp
-
-#	$(liblumibackend_a_srcdir)/backend.h \
-#	$(liblumibackend_a_srcdir)/file.h \
-#	$(liblumibackend_a_srcdir)/filehandle.h \
-#	$(liblumibackend_a_srcdir)/filedescriptor.h \
-#	$(liblumibackend_a_srcdir)/filehandlecache.h
+noinst_HEADERS +=						\
+	$(liblumibackend_a_srcdir)/mediaaccessfacade.cpp	\
+	$(liblumibackend_a_srcdir)/backend.h			\
+	$(liblumibackend_a_srcdir)/file.h			\
+	$(liblumibackend_a_srcdir)/filehandle.h			\
+	$(liblumibackend_a_srcdir)/filedescriptor.h		\
+	$(liblumibackend_a_srcdir)/filehandlecache.h
 
