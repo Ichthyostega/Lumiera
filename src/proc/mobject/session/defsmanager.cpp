@@ -30,7 +30,6 @@
 
 using boost::format;
 
-using asset::Query;
 using lumiera::ConfigRules;
 using lumiera::query::QueryHandler;
 using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
@@ -43,13 +42,10 @@ namespace mobject
     using std::tr1::shared_ptr;
     
     
-    namespace // Implementation details
-      {
-      DefsRegistry& defaultsRegistry; //////////////////TODO
-    }
     
     /** initialize the most basic internal defaults. */
     DefsManager::DefsManager ()  throw()
+      : defsRegistry(new DefsRegistry)
     {
       TODO ("setup basic defaults of the session");
     }
@@ -59,7 +55,17 @@ namespace mobject
     shared_ptr<TAR>
     DefsManager::search  (const Query<TAR>& capabilities)
     {
-      defaultsRegistry.get (capabilities);
+      shared_ptr<TAR> res;
+      QueryHandler<TAR>& typeHandler = ConfigRules::instance();  
+      for (DefsRegistry::Iter<TAR> i = defsRegistry->candidates(capabilities); 
+           i.hasNext(); ++i )
+        {
+          shared_ptr<TAR> res (*i);
+          typeHandler.resolve (res, capabilities);
+          if (res)
+            return res;
+        }
+      return res; // "no solution found"
     }
     
     
@@ -71,7 +77,7 @@ namespace mobject
       QueryHandler<TAR>& typeHandler = ConfigRules::instance();  
       typeHandler.resolve (res, capabilities);
       if (res)
-        defaultsRegistry.put (res, capabilities);
+        defsRegistry->put (res, capabilities);
       return res;
     }
     
@@ -86,7 +92,7 @@ namespace mobject
       if (!candidate)
         return false;
       else
-        return defaultsRegistry.put (candidate, capabilities);
+        return defsRegistry->put (candidate, capabilities);
     }
     
     
@@ -94,7 +100,7 @@ namespace mobject
     bool 
     DefsManager::forget  (const shared_ptr<TAR>& defaultObj)
     {
-      defaultsRegistry.forget (defaultObj);
+      return defsRegistry->forget (defaultObj);
     }
 
     
@@ -119,8 +125,9 @@ namespace mobject
   } // namespace mobject::session
 
 } // namespace mobject
-    
-    
+
+
+
    /***************************************************************/
    /* explicit template instantiations for querying various Types */
    /***************************************************************/

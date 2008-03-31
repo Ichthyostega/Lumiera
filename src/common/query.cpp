@@ -33,6 +33,7 @@ using std::map;
 using boost::regex;
 using boost::smatch;
 using boost::regex_search;
+using boost::sregex_iterator;
 using boost::algorithm::is_upper;
 using boost::algorithm::is_alpha;
 
@@ -63,6 +64,9 @@ namespace lumiera
     namespace // Implementation details
       {
       map<Symbol, regex> regexTable;
+      
+      Symbol matchArgument = "\\(\\s*([\\w_\\.\\-]+)\\s*\\)"; 
+      regex findPredicate (string("(\\w+)")+matchArgument);
     }
     
     /** (preliminary) helper: instead of really parsing and evaluating the terms,
@@ -76,7 +80,7 @@ namespace lumiera
     {
       
       if (!contains (regexTable, sym))
-        regexTable[sym] = regex (string(sym)+="\\(\\s*([\\w_\\.\\-]+)\\s*\\)"); 
+        regexTable[sym] = regex (string(sym)+=matchArgument); 
       
       smatch match;
       if (regex_search (termString, match, regexTable[sym]))
@@ -86,6 +90,23 @@ namespace lumiera
     
   } 
   
+    
+    /** @note this is a very hackish preliminary implementation. 
+     *  The regex used will flounder when applied to nested terms. 
+     *  We need a real parser for predicate logic terms (which we
+     *  probably get for free when we embed a prolog system)...
+     */
+    uint 
+    countPraed (const string& q)
+    {
+      uint cnt (0);
+      sregex_iterator end;
+      for (sregex_iterator i (q.begin(),q.end(), findPredicate); 
+           i != end; ++i)
+        ++cnt;
+      return cnt;
+    }
+    
   } // namespace query
     
   

@@ -124,6 +124,39 @@ namespace util
   }
   
   
+  /** remove all elements fulfilling a given predicate
+   *  from a (sorted) set.
+   *  @return true if anything has been removed. */
+  template<class SET, typename PRD>
+  bool remove_if (SET& set, PRD test)
+    {
+      typedef typename SET::iterator Itor;
+      bool found = false;
+      Itor   end = set.end();
+      Itor begin = set.begin();
+      Itor   pos = begin;
+      while (pos!=end)
+        {
+          if (!test (*pos)) ++pos;
+          else
+            {
+              found = true;
+              if (pos==begin) 
+                {
+                  set.erase(pos);
+                  pos = begin = set.begin();
+                }
+              else
+                {
+                  set.erase(pos--);
+                  ++pos;
+                }
+              end = set.end();
+        }   }
+      return found;
+    }
+  
+  
   /** shortcut for operating on all elements of a container.
    *  Isn't this already defined somewhere? It's so obvious..
    */

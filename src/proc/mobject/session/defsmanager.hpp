@@ -27,6 +27,8 @@
 
 #include "common/query.hpp"
 
+#include <boost/scoped_ptr.hpp>
+#include <boost/utility.hpp>
 #include <tr1/memory>
 
 
@@ -36,6 +38,9 @@ namespace mobject
   namespace session
     {
     using std::tr1::shared_ptr;
+    using boost::scoped_ptr;
+    
+    class DefsRegistry;
 
 
     /**
@@ -48,8 +53,10 @@ namespace mobject
      * will be created on demand, and any default configuration, once
      * found, will be remembered and stored with the current session.
      */
-    class DefsManager
+    class DefsManager : private boost::noncopyable
       {
+        scoped_ptr<DefsRegistry> defsRegistry;
+        
       protected:
         
         DefsManager ()  throw();
@@ -63,6 +70,7 @@ namespace mobject
          */
         template<class TAR>
         shared_ptr<TAR> operator() (const lumiera::Query<TAR>&);
+        
         
         /** search through the registered defaults, never create anything.
          *  @return object fulfilling the query, \c empty ptr if not found. 

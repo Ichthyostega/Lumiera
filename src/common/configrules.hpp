@@ -148,7 +148,7 @@ namespace lumiera
          *  @query any goals to be fulfilled by the solution.
          *  @return false if resolution failed. In this case, solution ptr is empty.
          */
-        virtual bool resolve (shared_ptr<TY> solution, const Query<TY>& q) = 0;
+        virtual bool resolve (shared_ptr<TY>& solution, const Query<TY>& q) = 0;
       };
 
     // TODO: the Idea is to provide specialisations for the concrete types

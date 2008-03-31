@@ -120,7 +120,8 @@ namespace asset
             
             // issue a ConfigQuery directly, without involving the DefaultsManager
             QueryHandler<Pipe>& typeHandler = ConfigRules::instance();  
-            PPipe pipe1 = typeHandler.resolve (query_for_streamID);
+            PPipe pipe1;
+            typeHandler.resolve (pipe1, query_for_streamID);
             ASSERT (pipe1);
             
             ASSERT (!find (pipe1->getPipeID()));

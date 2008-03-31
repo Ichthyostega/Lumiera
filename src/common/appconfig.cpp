@@ -37,13 +37,6 @@ using util::isnil;
 namespace lumiera
   {
   
-  /** This internal pointer to the single instance is deliberately
-   *  not initialized (i.e. rely on implicit initialisation to 0),
-   *  because when static init reaches this definition, the
-   *  Appconfig::instance() probably already has been called
-   *  by another compilation unit. This is ugliy, but preferable
-   *  to beeing dependant on inclusion order of headers. */
-//  scoped_ptr<Appconfig> Appconfig::theApp_;
 
 #ifndef LUMIERA_VERSION
 #define LUMIERA_VERSION 3++devel

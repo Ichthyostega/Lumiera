@@ -71,6 +71,11 @@ namespace lumiera
     
     const string extractID (Symbol, const string& termString);
 
+    /** count the top-level predicates in the query string.
+     *  usable for ordering queries, as more predicates usually
+     *  mean more conditions, i.e. more constriction
+     */
+    uint countPraed (const string&);
     
   
   } // namespace query

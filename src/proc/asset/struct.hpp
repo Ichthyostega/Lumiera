@@ -45,13 +45,13 @@
 #include <boost/scoped_ptr.hpp>
 #include <string>
 
-using std::string;
-using std::wstring;
-using boost::scoped_ptr;
 
 
 namespace asset
   {
+  using std::string;
+  using std::wstring;
+  using boost::scoped_ptr;
   using lumiera::Query;
   
   class Struct;

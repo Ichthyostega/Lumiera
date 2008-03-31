@@ -111,10 +111,14 @@ namespace lumiera
           {
             const any& entry = fetch_from_table_for (q.asKey());
             if (!isnil (entry))
-              if (! solution
-                 ||(solution && *solution == *candidate)    // simulates a real unification
-                 )
-                return solution = candidate;
+              {
+                const Ret& candidate (any_cast<const Ret&> (entry));
+                if (! solution
+//                   ||(solution && *solution == *candidate)    // simulates a real unification
+//////////////TODO: not only Assets (i.e. define comparison Operators on Assets!)
+                   )
+                  return solution = candidate;
+              }
             
             return solution = Ret();    // fail: return default-constructed empty smart ptr
           }
