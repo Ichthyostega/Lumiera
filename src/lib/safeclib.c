@@ -1,7 +1,7 @@
 /*
   safe_clib.c  -  Portable and safe wrapers around some clib functions and some tools
 
-  Copyright (C)         CinelerraCV
+  Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
@@ -39,9 +39,26 @@ LUMIERA_ERROR_DEFINE (NO_MEMORY, "Out of Memory!");
  * @return pointer to the allocated memory
  */
 void*
-lumiera_malloc (size_t sz)
+lumiera_malloc (size_t size)
 {
-  void* o = sz? malloc (sz) : NULL;
+  void* o = size ? malloc (size) : NULL;
+  if (!o)
+    LUMIERA_DIE (NO_MEMORY);
+  return o;
+}
+
+
+/**
+ * Allocate cleared memory for an array.
+ * always succeeds or dies
+ * @param n number of elements
+ * @param size memory to be allocated
+ * @return pointer to the allocated memory
+ */
+void*
+lumiera_calloc (size_t n, size_t size)
+{
+  void* o = (n&&size)? calloc (n, size) : NULL;
   if (!o)
     LUMIERA_DIE (NO_MEMORY);
   return o;
@@ -120,7 +137,6 @@ static void
 lumiera_tmpbuf_destroy (void* buf)
 {
   lumiera_tmpbuf_freeall ();
-  free (buf);
 }
 
 static void
@@ -139,17 +155,13 @@ lumiera_tmpbuf_freeall (void)
 {
   pthread_once (&lumiera_tmpbuf_tls_once, lumiera_tmpbuf_init);
   struct lumiera_tmpbuf_struct* buf = pthread_getspecific (lumiera_tmpbuf_tls_key);
-  if (!buf)
-    pthread_setspecific (lumiera_tmpbuf_tls_key,
-                         buf = lumiera_malloc (sizeof (struct lumiera_tmpbuf_struct)));
-
-  for (buf->idx = 0; buf->idx < 64; ++buf->idx)
+  if (buf)
     {
-      free (buf->buffers[buf->idx]);
-      buf->buffers[buf->idx] = NULL;
-      buf->sizes[buf->idx] = 0;
+      pthread_setspecific (lumiera_tmpbuf_tls_key, NULL);
+      for (int idx = 0; idx < 64; ++idx)
+        free (buf->buffers[idx]);
+      free (buf);
     }
-  buf->idx = 0;
 }
 
 
@@ -165,7 +177,7 @@ lumiera_tmpbuf_provide (size_t size)
   struct lumiera_tmpbuf_struct* buf = pthread_getspecific (lumiera_tmpbuf_tls_key);
   if (!buf)
     pthread_setspecific (lumiera_tmpbuf_tls_key,
-                         buf = lumiera_malloc (sizeof (struct lumiera_tmpbuf_struct)));
+                         buf = lumiera_calloc (1, sizeof (struct lumiera_tmpbuf_struct)));
 
   buf->idx = (buf->idx + 1) & 0x3f;
 

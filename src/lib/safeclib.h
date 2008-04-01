@@ -84,7 +84,6 @@ lumiera_streq (const char* a, const char* b);
 void
 lumiera_tmpbuf_freeall (void);
 
-
 /**
  * Query a thread local tmpbuf.
  * @param size minimal needed size for the tmpbuf
