@@ -106,10 +106,14 @@ namespace asset
             
             // now declare that these objects should be considered "default"
             ASSERT (Session::current->defaults.define (pipe1, Query<Pipe> (""))); // unrestricted default
-            ASSERT (Session::current->defaults.define (pipe1, Query<Pipe> ("stream("+sID+")")));
+            ASSERT (Session::current->defaults.define (pipe2, Query<Pipe> ("stream("+sID+")")));
             
             ASSERT ( find (pipe1->getPipeID()), "failure declaring object as default");
             ASSERT ( find (pipe2->getPipeID()), "failure declaring object as default");
+            
+            ASSERT (sID != pipe1->getProcPatt()->queryStreamID(), "accidental clash");
+            ASSERT (!Session::current->defaults.define (pipe1, Query<Pipe> ("stream("+sID+")")));
+                    // can't be registered with this query, due to failure caused by wrong stream-ID
           }
         
         
@@ -143,7 +147,7 @@ namespace asset
             // now de-register the pipe as "default Pipe"
             ASSERT (Session::current->defaults.forget (pipe));
             ASSERT (!find (pipe->getPipeID()));
-            ASSERT (cnt == pipe.use_count());   // indicates that DefaultsManager only holds a weak ref.
+            ASSERT (cnt == pipe.use_count());   // indicates DefaultsManager holding only a weak ref.
           }
       };
     

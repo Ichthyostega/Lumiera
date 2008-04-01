@@ -152,7 +152,7 @@ namespace asset
                 PPipe pipe1 = Session::current->defaults (query_for_pID);
                 hash = pipe1->getID();
               }
-             // now AssetManager should have the only ref
+             // now AssetManager should hold the only ref
             ID<Asset> assetID (hash);
               
             AssetManager& aMang (AssetManager::instance());

@@ -56,8 +56,8 @@ namespace lumiera
       
       /** template for generating lots of different test types */
       template<int I>
-      struct Block    
-        { 
+      struct Block
+        {
           static string name;
           string talk()   { return name+"::eat(..)"; }  
         };
