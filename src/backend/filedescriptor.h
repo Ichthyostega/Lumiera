@@ -24,7 +24,10 @@
 
 #include "lib/mutex.h"
 
+
+#include <sys/types.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 
 typedef struct lumiera_filedescriptor_struct lumiera_filedescriptor;
 typedef lumiera_filedescriptor* LumieraFiledescriptor;
@@ -39,14 +42,19 @@ struct lumiera_filedescriptor_struct
   struct stat stat;                     /* create after first open, maintained metadata, MUST BE FIRST! */
   int flags;                            /* open flags, must be masked for reopen */
   lumiera_mutex lock;                   /* locks operations on this file descriptor */
-  unsigned reopened;                    /* count for reopens 0=not yet opened, 1=first, 2..=reopened*/
+  unsigned reopened;                    /* count for reopens 0=not yet opened, 1=first, 2..=reopened */
+  unsigned refcount;                    /* reference counter, all users sans registry */
+
   //LumieraFileMap mappings;
   //LumieraWriteBuffer writebuffer;
 };
 
 
-LumieraReference
-lumiera_filedescriptor_acquire (LumieraReference descriptor, const char* name, int flags);
+LumieraFiledescriptor
+lumiera_filedescriptor_acquire (const char* name, int flags);
+
+void
+lumiera_filedescriptor_release (LumieraFiledescriptor self);
 
 LumieraFiledescriptor
 lumiera_filedescriptor_new (LumieraFiledescriptor template);

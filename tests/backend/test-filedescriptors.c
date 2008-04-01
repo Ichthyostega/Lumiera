@@ -20,7 +20,6 @@
 */
 #define _GNU_SOURCE
 
-#include "lib/references.h"
 #include "lib/safeclib.h"
 
 #include "backend/filedescriptor.h"
@@ -32,10 +31,24 @@ TESTS_BEGIN
 
 TEST ("acquire_existing")
 {
-  lumiera_reference descriptor;
-  if (lumiera_filedescriptor_acquire (&descriptor, ",tmp_testfile", LUMIERA_FILE_READONLY))
+  LumieraFiledescriptor descriptor = lumiera_filedescriptor_acquire (",tmp_testfile", LUMIERA_FILE_READONLY);
+  if (descriptor)
     {
-      lumiera_reference_destroy (&descriptor);
+      lumiera_filedescriptor_release (descriptor);
+      return 0;
+    }
+  else
+    return 1;
+}
+
+TEST ("acquire_existing_again")
+{
+  LumieraFiledescriptor descriptor = lumiera_filedescriptor_acquire (",tmp_testfile", LUMIERA_FILE_READONLY);
+  if (descriptor)
+    {
+      LumieraFiledescriptor descriptor2 = lumiera_filedescriptor_acquire (",tmp_testfile", LUMIERA_FILE_READONLY);
+      lumiera_filedescriptor_release (descriptor2);
+      lumiera_filedescriptor_release (descriptor);
       return 0;
     }
   else
@@ -44,10 +57,10 @@ TEST ("acquire_existing")
 
 TEST ("acquire_create")
 {
-  lumiera_reference descriptor;
-  if (lumiera_filedescriptor_acquire (&descriptor, ",tmp_testfile", LUMIERA_FILE_CREATE))
+  LumieraFiledescriptor descriptor = lumiera_filedescriptor_acquire (",tmp_testfile", LUMIERA_FILE_CREATE);
+  if (descriptor)
     {
-      lumiera_reference_destroy (&descriptor);
+      lumiera_filedescriptor_release (descriptor);
       return 0;
     }
   else
@@ -56,15 +69,15 @@ TEST ("acquire_create")
 
 TEST ("acquire_create_dir")
 {
-  lumiera_reference descriptor;
-  if (lumiera_filedescriptor_acquire (&descriptor, ",tmp_testdir/,tmp_testfile", LUMIERA_FILE_CREATE))
+  LumieraFiledescriptor descriptor =
+    lumiera_filedescriptor_acquire (",tmp_testdir/nested/,tmp_testfile", LUMIERA_FILE_CREATE);
+  if (descriptor)
     {
-      lumiera_reference_destroy (&descriptor);
+      lumiera_filedescriptor_release (descriptor);
       return 0;
     }
   else
     return 1;
 }
-
 
 TESTS_END
