@@ -34,14 +34,15 @@
 #include <map>
 
 using lumiera::Query;
+using util::isnil;
 
 using std::tr1::shared_ptr;
 using boost::scoped_ptr;
 using boost::format;
-using util::isnil;
 using std::string;
 using std::rand;
 using std::map;
+
 
 
 namespace mobject
@@ -62,7 +63,7 @@ namespace mobject
       
       /** create a random new ID */
       string 
-      newID (Symbol prefix)
+      newID (string prefix)
       {
         return str (instancePatt % prefix % rand());
       }
@@ -83,9 +84,19 @@ namespace mobject
       
       
       
-      /** fabricating (random) query strings */
       string
-      q_str (int degree=0)
+      garbage_term ()         ///< yields a random string of 3 letters
+      {
+        return str (predicatePatt 
+                   % char ('a'+ rand() % 26)
+                   % rand() % 100
+                   % garbage.substr(rand() % 17 , 3)
+                   );
+      }
+      
+      string
+      q_str (int degree=0)    ///< fabricating (random) query strings
+
       {
         string fake;
         if (!degree) 
@@ -96,15 +107,6 @@ namespace mobject
         return fake;
       }
       
-      string
-      garbage_term ()
-      {
-        return (predicatePatt 
-               % char ('a'+ rand() % 26)
-               % rand() % 100
-               % garbage.substr(rand() % 17 , 3)
-               );
-      }
       
       
       /************************************************************************
@@ -123,15 +125,20 @@ namespace mobject
           
           typedef Query<Dummy<13> > Q13;
           typedef Query<Dummy<23> > Q23;
-
+          
+          typedef DefsRegistry::Iter<Dummy<13> > Iter13;
+          typedef DefsRegistry::Iter<Dummy<23> > Iter23;
+          
+          
           // fabricating Objects wrapped into smart-ptrs
-          lumiera::factory::RefcountPtr<O> oFac;
-          lumiera::factory::RefcountPtr<P> pFac;
+          lumiera::factory::RefcountPtr<Dummy<13> > oFac;
+          lumiera::factory::RefcountPtr<Dummy<23> > pFac;
           
           O o1, o2, o3;
           Q13 q1, q2, q3, q4, q5;
           map<Q23, P> ps;
           
+        public:
           DefsRegistryImpl_test ()
             : o1 (oFac()), o2 (oFac()), o3 (oFac()), 
               q1 (q_str (1)),
@@ -165,7 +172,7 @@ namespace mobject
               reg_->put (o3, q3);
               reg_->put (o3, q2);
               reg_->put (o2, q1);
-              reg_->put (o1, Q13); // the empty query
+              reg_->put (o1, Q13()); // the empty query
              
               ps.clear();
               for (int i=0; i<100; ++i)
@@ -174,15 +181,14 @@ namespace mobject
                   Q23 qx (q_str());
                   ps[qx] = px;
                   reg_->put (px, qx);
-                  px.instanceID = qx;
+                  px->instanceID = qx;
                 }
             }
           
           
           void check_query ()
             {
-              DefsRegistry::Iter<Dummy<13> > i;
-              i = reg_->candidates(Q13 ("irrelevant query"));
+              Iter13 i (reg_->candidates(Q13 ("irrelevant query")));
               ASSERT ( i.hasNext());
               ASSERT ( *i++ == o1);  // ordered according to the degree of the queries
               ASSERT ( *i++ == o2);
@@ -202,7 +208,7 @@ namespace mobject
               ASSERT ( *i++ == o1);
               ASSERT (!i.hasNext());
               
-              i = reg_->candidates(Q13);
+              i = reg_->candidates(Q13());
               ASSERT ( *i++ == o1);  // found by direct match to the empty query
               ASSERT ( *i++ == o1);
               ASSERT ( *i++ == o2);
@@ -214,22 +220,22 @@ namespace mobject
               
               uint d=0;
               uint d_prev=0;
-              for (i = reg_->candidates(Q23 ("some crap")); 
-                   i.hasNext(); ++i )
+              Iter23 j = reg_->candidates(Q23 ("some crap"));
+              for ( ; j.hasNext(); ++j )
                 {
-                  ASSERT ( *i );
-                  Q23 qx = (*i)->instanceID;
-                  ASSERT ( ps[qx] == (*i));
+                  ASSERT ( *j );
+                  Q23 qx ((*j)->instanceID);
+                  ASSERT ( ps[qx] == (*j));
                   d = lumiera::query::countPraed (qx);
                   ASSERT ( d_prev <= d );
                   d_prev = d;
                 }
-              ASSERT (!i.hasNext());
+              ASSERT (!j.hasNext());
               
               // calling with an arbitrary (registered) query
               // yields the corresponding object at start of the ennumeration
-              i = reg_->candidates(ps.begin()->first);
-              ASSERT ( *i == ps.begin()->second);
+              j = reg_->candidates(ps.begin()->first);
+              ASSERT ( *j == ps.begin()->second);
               
             }
           
@@ -238,8 +244,7 @@ namespace mobject
             {
               reg_->forget (o2);
               
-              DefsRegistry::Iter<Dummy<13> > i;
-              i = reg_->candidates(q4);
+              Iter13 i (reg_->candidates(q4));
               ASSERT ( i.hasNext());
               ASSERT ( *i++ == o1);  // ordered according to the degree of the queries
                                      // but the o2 entries are missing
@@ -287,7 +292,7 @@ namespace mobject
               ASSERT ( reg_->forget (o1)); // failure, because it's already removed
               ASSERT (!reg_->forget (o2)); 
 
-              o3.reset (oFac());  // another object is another object (it's irrelevant...) 
+              o3 = oFac();        // another object is another object (it's irrelevant...) 
               
               i = reg_->candidates(q2);
               ASSERT (! (*i)); // empty

@@ -165,11 +165,6 @@ namespace mobject
       {
         Table table_;
         
-      protected:
-        
-        DefsRegistry () {};
-        friend class DefsManager;
-        
       public:
         /** used for enumerating solutions */
         template<class TAR>
@@ -208,6 +203,7 @@ namespace mobject
           public:
             shared_ptr<TAR> operator* () { return ptr; }
             bool hasNext ()              { return next || findNext(); }
+            Iter  operator++ (int)       { Iter tmp=*this; operator++(); return tmp; }            
             Iter& operator++ ()           
               { 
                 ptr=findNext();
