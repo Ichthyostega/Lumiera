@@ -26,8 +26,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/lambda/lambda.hpp>
-//#include <boost/function.hpp>
-#include <boost/bind.hpp>
+#include <boost/lambda/bind.hpp>
 #include <iostream>
 #include <string>
 #include <set>
@@ -43,9 +42,9 @@ namespace util
     {
     using util::for_each;
     using boost::lambda::_1;
-//    using boost::function;
+    using boost::lambda::bind;
     using boost::lexical_cast;
-    using boost::bind;
+    
     
   
     template<class COLL>
@@ -57,7 +56,6 @@ namespace util
       cout << "]\n";
     }
     
-    
     bool
     killerselector (string description, uint candidate)
     {
@@ -68,31 +66,35 @@ namespace util
     
     class RemoveFromSet_test : public Test
       {
-        virtual void run (Arg arg)
+        virtual void
+        run (Arg arg)
           {
             test_remove (" nothing ");
             test_remove ("0");
             test_remove ("9");
             test_remove ("5");
-            test_remove ("0 2 4 6 8");
-            test_remove ("1 3 5 7 9");
+            test_remove ("0   2   4   6   8  ");
+            test_remove ("  1   3   5   7   9");
             test_remove ("0 1 2 3 4 5 6 7 8 9");
             test_remove ("0 1 2 3 4 5 6 7 8  ");
             test_remove ("  1 2 3 4 5 6 7 8 9");
             test_remove ("0 1 2 3 4   6 7 8 9");
           }
         
-        /** @test populate a test set, remove the denoted elements
-         *        and print the result
-         */
+        
+        /** @test populate a test set,
+         *        remove the denoted elements
+         *        and print the result...  */
+        void
         test_remove (string elems_to_remove)
           {
             std::set<uint> theSet;
             for (int i=0; i<10; ++i)
-              theSet.push_back (i);
+              theSet.insert (i);
             
             util::remove_if (theSet, bind( killerselector, elems_to_remove, _1));
             
+            cout << "removed " << elems_to_remove << " ---> ";
             show (theSet);
           }
         
