@@ -214,6 +214,9 @@ lumiera_filedescriptor_new (LumieraFiledescriptor template)
   lumiera_mutex_init (&self->lock);
   self->reopened = 0;
   self->refcount = 1;
+  self->handle = 0;
+
+  RESOURCE_ANNOUNCE (filedescriptor, "mutex", "filedescriptor", self, self->rh);
 
   return self;
 }
@@ -231,9 +234,14 @@ lumiera_filedescriptor_delete (LumieraFiledescriptor self)
 
   REQUIRE (self->refcount == 0);
 
+  RESOURCE_FORGET (filedescriptor, self->rh);
+
   cuckoo_remove (registry, cuckoo_find (registry, &self));
 
   TODO ("destruct other members (WIP)");
+
+
+  TODO ("release filehandle");
 
   lumiera_mutex_destroy (&self->lock);
   free (self);

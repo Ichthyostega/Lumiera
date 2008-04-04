@@ -45,8 +45,11 @@ struct lumiera_filedescriptor_struct
   unsigned reopened;                    /* count for reopens 0=not yet opened, 1=first, 2..=reopened */
   unsigned refcount;                    /* reference counter, all users sans registry */
 
+  LumieraFilehandle handle;
   //LumieraFileMap mappings;
   //LumieraWriteBuffer writebuffer;
+
+  RESOURCE_HANDLE (rh);
 };
 
 
