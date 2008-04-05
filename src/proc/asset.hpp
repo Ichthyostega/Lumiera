@@ -59,14 +59,16 @@
 
 #include "proc/asset/category.hpp"
 #include "common/error.hpp"
+#include "common/p.hpp"
+
+#include <boost/type_traits/is_base_of.hpp>
+#include <boost/operators.hpp>
+#include <boost/utility.hpp>
 
 #include <cstddef>
 #include <string>
 #include <vector>
 #include <set>
-#include <tr1/memory>
-#include <boost/operators.hpp>
-#include <boost/utility.hpp>
 
 
 using std::string;
@@ -81,6 +83,8 @@ namespace asset
   using std::size_t;
   using std::tr1::shared_ptr;
   using std::tr1::static_pointer_cast;
+
+  using lumiera::P;
   
   
   /** 
@@ -109,8 +113,8 @@ namespace asset
   class Asset;
   class AssetManager;
   typedef const ID<Asset>& IDA;
-  typedef shared_ptr<Asset> PAsset;
-  typedef shared_ptr<const Asset> PcAsset;
+  typedef P<Asset>       PAsset;
+  typedef P<const Asset> PcAsset;
 
   
   
@@ -135,7 +139,7 @@ namespace asset
    * @author Ichthyo
    */
   class Asset 
-    : boost::totally_ordered< Asset,
+    : boost::totally_ordered1< Asset,
         boost::noncopyable>
     {
     public:
@@ -299,6 +303,9 @@ namespace asset
     
     /** ordering of Assets is based on the ordering
      *  of Ident tuples, which are supposed to be unique.
+     *  By using our customized lumiera::P as smart ptr,
+     *  comparison on P<Asset> ptrs will be automatically
+     *  forwarded to the Asset comparison operators.
      *  @note version info is irrelevant */
     inline int 
     Asset::Ident::compare (const Asset::Ident& oi)  const
@@ -309,6 +316,7 @@ namespace asset
       return name.compare (oi.name);
     }
     
+    
     /** promote subtype-ptr to PAsset, e.g. for comparing */
     template<class A>
     inline const PcAsset
@@ -316,31 +324,15 @@ namespace asset
     {
       return static_pointer_cast<const Asset,A> (subPtr);
     }
-
-    /** ordering of Asset smart ptrs based on Ident tuple.
-     *  @todo currently supporting only smart_ptr<Asset>.
-     *  @todo should better be done using boost::operator */
-    inline bool operator== (PcAsset const& a1, PcAsset const& a2) { return a1 && a2 && ( (*a1) == (*a2));}
-    inline bool operator<  (PcAsset const& a1, PcAsset const& a2) { return a1 && a2 && ( (*a1) <  (*a2));}
-
-    template<class PA1, class PA2>
-    inline bool operator== (PA1 const& a1, PA2 const& a2)  { return pAsset(a1) == pAsset(a2); }
-    
-    template<class PA1, class PA2>
-    inline bool operator<  (PA1 const& a1, PA2 const& a2)  { return pAsset(a1) <  pAsset(a2); }
     
     
-    /** build ordering of Asset shared pointers on the ordering of the pointed to assets.
-     *  Because we can't define member operators for shared-ptrs, we explicitly instantiate
-     *  the boost ordering concept template for all Asset kinds we want to use...
-     */
-    template<class PTR>
-    struct asset_total_ordering : public boost::totally_ordered<PTR> 
-    { };
+    /** type trait for detecting a shared-ptr-to-asset */
+    template <class X>
+    struct is_pAsset : boost::false_type {};
     
-    template struct asset_total_ordering<PAsset>;
-    template struct asset_total_ordering<PcAsset>;
-    
+    template <class A>
+    struct is_pAsset<shared_ptr<A> >
+      : boost::is_base_of<Asset, A>      {}; 
     
     
     /** convienient for debugging */

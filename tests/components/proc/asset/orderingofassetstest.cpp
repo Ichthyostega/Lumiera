@@ -59,22 +59,20 @@ namespace asset
       {
         virtual void run(Arg arg) 
           {
-            typedef shared_ptr<Asset> PA;
-            
             Asset::Ident key1("Au-1", Category(AUDIO), "ichthyo", 5);
-            PA mm1 = asset::Media::create(key1, "Name-1");
+            PAsset mm1 = asset::Media::create(key1, "Name-1");
             
             Asset::Ident key2("Au-1", Category(AUDIO), "ichthyo", 7);
-            PA mm2 = asset::Media::create(key2, "Name-2");
+            PAsset mm2 = asset::Media::create(key2, "Name-2");
             
             Asset::Ident key3("Au-2", Category(AUDIO), "ichthyo", 5);
-            PA mm3 = asset::Media::create(key3, "Name-3");
+            PAsset mm3 = asset::Media::create(key3, "Name-3");
             
             Asset::Ident key4("Au-2", Category(AUDIO), "stega", 5);
-            PA mm4 = asset::Media::create(key4, "Name-4");
+            PAsset mm4 = asset::Media::create(key4, "Name-4");
             
             Asset::Ident key5("Au-1", Category(VIDEO), "ichthyo", 5);
-            PA mm5 = asset::Media::create(key5, "Name-5");
+            PAsset mm5 = asset::Media::create(key5, "Name-5");
             
             
             // ordering of keys

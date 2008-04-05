@@ -28,6 +28,7 @@
 #include "proc/asset.hpp"
 #include "common/error.hpp"
 
+#include <tr1/memory>
 #include <tr1/unordered_map>
 #include <boost/utility.hpp>
 
@@ -92,9 +93,9 @@ namespace asset
       
     public:
       template<class KIND>
-      void  put (ID<KIND> hash, shared_ptr<KIND>& ptr) { table[hash] = static_pointer_cast (ptr);  }
-      void  put (ID<Asset> hash, PAsset& ptr)          { table[hash] = ptr; }
-      bool  del (ID<Asset> hash)                       { return table.erase (hash); }
+      void  put (ID<KIND> hash, P<KIND>& ptr) { table[hash] = static_pointer_cast (ptr);  }
+      void  put (ID<Asset> hash, PAsset& ptr) { table[hash] = ptr; }
+      bool  del (ID<Asset> hash)              { return table.erase (hash); }
       
       template<class KIND>
       shared_ptr<KIND> 

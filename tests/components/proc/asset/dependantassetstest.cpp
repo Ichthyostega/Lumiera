@@ -194,8 +194,8 @@ namespace asset
         void checkRealAssetDependencyRegistration ()
           {
             // -----Media and Clip--------------------------------
-            typedef Media::PMedia PM;
-            typedef Media::PClip  PC;
+            typedef P<Media> PM;
+            typedef P<Clip>  PC;
             PM mm = asset::Media::create("test-1", VIDEO);
             PC cc = mm->createClip()->findClipAsset();
             ASSERT (dependencyCheck (cc,mm));

@@ -85,7 +85,7 @@ namespace mobject
               operator() (const Record& rec)
               {
                 shared_ptr<TAR> storedObj (rec.objRef.lock());
-                return storedObj && pAsset(storedObj)==pAsset(obj_);               //////////////TODO: not only Assets (i.e. define comparison Operators on Assets!)
+                return storedObj && (storedObj == obj_);
               }
             };
           
@@ -261,7 +261,7 @@ namespace mobject
               {
                 shared_ptr<TAR> storedObj (pos->objRef.lock());
                 if (storedObj)
-                  return (pAsset(storedObj) == pAsset(obj));               //////////////TODO: not only Assets (i.e. define comparison Operators on Assets!)
+                  return (storedObj == obj);
                 else
                   // use the opportunity and purge the expired entry
                   registry.erase(pos);

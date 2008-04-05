@@ -154,6 +154,9 @@ namespace asset
         
         void dependProcPatt(string pID)
           {
+            typedef P<Pipe> PPipe;                                                         /////TODO: transition to P<>
+            typedef P<const ProcPatt> PProcPatt;
+            
             PPipe thePipe = Pipe::query ("pipe("+pID+")");
             ASSERT (thePipe);
             PProcPatt thePatt = thePipe->getProcPatt();
@@ -186,11 +189,13 @@ namespace asset
             ASSERT (!aMang.known (thePipe->getID()));  // has been unlinked too, because dependant on pattern2
             
             ASSERT (thePipe);
+            PProcPatt pattern3 = thePipe->getProcPatt();                                   /////TODO: transition to P<>
             ASSERT (thePipe->getProcPatt());
-            ASSERT (thePipe->getProcPatt() == pattern2); // but is still valid, as long as the ref is alive....
+            ASSERT (              pattern3 == pattern2); // but is still valid, as long as the ref is alive....
             
             PPipe pipe3x = Pipe::query ("pattern(another)");
-            ASSERT (pipe3x->getProcPatt() != pattern2);  // because pattern2 is already unlinked...
+            pattern3 = pipe3x->getProcPatt();                                              /////TODO: transition to P<>
+            ASSERT (pattern3 != pattern2);  // because pattern2 is already unlinked...
             ASSERT (pipe3x == Session::current->defaults (Query<Pipe>("pattern(another)")));
             ASSERT (pipe3x != pipe2x);                 // ..we got a new default pipe for "pattern(another)" too!
             

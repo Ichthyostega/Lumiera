@@ -112,14 +112,13 @@ namespace asset
   AssetManager::reg (KIND* obj, const Asset::Ident& idi)
       throw(lumiera::error::Invalid)
   {
-    typedef shared_ptr<KIND> PType;
     AssetManager& _aMang (AssetManager::instance());
     TODO ("check validity of Ident Category");
     ID<KIND> asset_id (getID (idi));
     
     Thread::Lock<DB> guard   SIDEEFFECT;
     TODO ("handle duplicate Registrations");
-    PType smart_ptr (obj, &destroy);
+    P<KIND> smart_ptr (obj, &destroy);
 
     _aMang.registry.put (asset_id, smart_ptr);
     return asset_id;

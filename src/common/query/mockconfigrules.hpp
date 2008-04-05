@@ -50,7 +50,6 @@
 
 namespace lumiera
   {
-  //using std::string;
   
   
   namespace query
@@ -114,8 +113,7 @@ namespace lumiera
               {
                 const Ret& candidate (any_cast<const Ret&> (entry));
                 if (! solution
-//                   ||(solution && *solution == *candidate)    // simulates a real unification
-//////////////TODO: not only Assets (i.e. define comparison Operators on Assets!)
+                   ||(solution &&  solution == candidate)    // simulates a real unification
                    )
                   return solution = candidate;
               }
