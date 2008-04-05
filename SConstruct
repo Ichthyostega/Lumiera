@@ -251,7 +251,7 @@ def defineBuildTargets(env, artifacts):
     artifacts['plugins'] = env.SharedLibrary('$BINDIR/lumiera-plugin', plugobj)
     
     # call subdir SConscript(s) for independent components
-    SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts')
+    SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts core')
     SConscript(dirs=[TESTDIR], exports='env artifacts core')
 
 
@@ -264,7 +264,7 @@ def definePostBuildTargets(env, artifacts):
     il = env.Alias('install-lib', '$DESTDIR/lib')
     env.Alias('install', [ib, il])
     
-    build = env.Alias('build', artifacts['lumiera']+artifacts['plugins'])
+    build = env.Alias('build', artifacts['lumiera']+artifacts['plugins']+artifacts['tools'])
     allbu = env.Alias('allbuild', build+artifacts['testsuite'])
     env.Default('build')
     # additional files to be cleaned when cleaning 'build'
