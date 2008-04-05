@@ -6,11 +6,24 @@ PLANNED "AddClip_test" AddClip_test <<END
 END
 
 
-PLANNED "DeleteClip_test" DeleteClip_test <<END
+PLANNED "DefsManagerImpl_test" DefsManagerImpl_test <<END
 END
 
 
 PLANNED "DefsManager_test" DefsManager_test <<END
+END
+
+
+TEST "DefsRegistryImpl_test" DefsRegistryImpl_test <<END
+return: 0
+END
+
+
+PLANNED "DeleteClip_test" DeleteClip_test <<END
+END
+
+
+PLANNED "PlacementBasic_test" PlacementBasic_test <<END
 END
 
 

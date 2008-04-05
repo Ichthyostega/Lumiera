@@ -11,6 +11,14 @@ return: 0
 END
 
 
+PLANNED "BasicPipe_test" BasicPort_test <<END
+END
+
+
+PLANNED "BasicTrack_test" BasicTrack_test <<END
+END
+
+
 PLANNED "CompoundMedia_test" CompoundMedia_test <<END
 END
 
@@ -31,14 +39,6 @@ END
 
 TEST "IdentityOfAssets_test" IdentityOfAssets_test <<END
 return: 0
-END
-
-
-PLANNED "BasicPipe_test" BasicPort_test <<END
-END
-
-
-PLANNED "BasicTrack_test" BasicTrack_test <<END
 END
 
 

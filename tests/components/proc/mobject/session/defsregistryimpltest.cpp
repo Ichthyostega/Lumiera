@@ -75,6 +75,7 @@ namespace mobject
         {
           static string name;
           string instanceID;
+          operator string () const { return instanceID; }
           
           Dummy () : instanceID (newID (name)) {}
         };
@@ -89,14 +90,13 @@ namespace mobject
       {
         return str (predicatePatt 
                    % char ('a'+ rand() % 26)
-                   % rand() % 100
+                   % (rand() % 100)
                    % garbage.substr(rand() % 17 , 3)
                    );
       }
       
       string
       q_str (int degree=0)    ///< fabricating (random) query strings
-
       {
         string fake;
         if (!degree) 
@@ -197,6 +197,7 @@ namespace mobject
               ASSERT ( *i++ == o2);
               ASSERT ( *i   == o1);
               ASSERT (!i.hasNext());
+              ASSERT (! *++i ); // null after end
               
               i = reg_->candidates(q3);
               ASSERT ( *i++ == o3);  // found by direct match
@@ -272,7 +273,7 @@ namespace mobject
               ASSERT ( *i++ == o1);
               ASSERT (!i.hasNext());
               
-              ASSERT ( reg_->put (o2, q5));  // trying to (re)register o2 with a existing query
+              ASSERT (!reg_->put (o2, q5));  // trying to (re)register o2 with a existing query
                                              // counts as failure (nothing chages)
               i = reg_->candidates(q5);
               ASSERT ( *i++ == o1); // direct match
@@ -289,8 +290,8 @@ namespace mobject
               ASSERT (!i.hasNext());
               
               ASSERT ( reg_->forget (o1));
-              ASSERT ( reg_->forget (o1)); // failure, because it's already removed
-              ASSERT (!reg_->forget (o2)); 
+              ASSERT (!reg_->forget (o1)); // failure, because it's already removed
+              ASSERT ( reg_->forget (o2)); 
 
               o3 = oFac();        // another object is another object (it's irrelevant...) 
               

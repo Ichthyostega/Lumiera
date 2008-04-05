@@ -32,7 +32,9 @@
 #include <set>
 #include <vector>
 #include <tr1/memory>
+#include <boost/format.hpp>
 #include <boost/utility.hpp>
+#include <boost/lambda/lambda.hpp>
 
 
 namespace mobject
@@ -44,6 +46,10 @@ namespace mobject
     using lumiera::Thread;
     using lumiera::Query;
     
+    using std::string;
+    using boost::format;
+    using boost::lambda::_1;
+    using boost::lambda::var;  
     
     namespace // Implementation details
       {
@@ -58,8 +64,11 @@ namespace mobject
       
       uint maxSlots (0); ///< number of different registered Types
       
+      format dumpRecord ("%2i| %64s --> %s\n");
       
-      /** holding a single "default object" entry */
+      /** 
+       * holding a single "default object" entry 
+       */
       template<class TAR>
       struct Record
         {
@@ -90,15 +99,18 @@ namespace mobject
             };
           
           struct OrderRelation
-          {
-            inline bool
-            operator() (Record one, Record two) ///< @note doesn't touch the objRef
-              {
-                return (  one.degree < two.degree
-                       ||(one.degree == two.degree && one.query < two.query)
-                       );
-              }
-          };
+            {
+              inline bool
+              operator() (Record one, Record two) ///< @note doesn't touch the objRef
+                {
+                  return (  one.degree < two.degree
+                         ||(one.degree == two.degree && one.query < two.query)
+                         );
+                }
+            };
+            
+          operator string ()  const { return str (dumpRecord % degree % query % dumpObj()); }
+          string  dumpObj ()  const { shared_ptr<TAR> o (objRef.lock()); return o? string(*o):"dead"; }
         };
         
       /** every new kind of object (Type) creates a new
@@ -180,13 +192,14 @@ namespace mobject
               : p(from), i(from), e(to)
               {
                 if (i!=e) ++i;  // p is next to be tested, i always one ahead
-                ptr = findNext();
+                operator++ ();
               }
             
             Iter (II match, II from, II to) ///< returns direct match first, then ennumerates 
-              : p(match), i(from), e(to),
-                next(), ptr(findNext())
-              { }
+              : p(match), i(from), e(to)
+              { 
+                operator++ ();  // init to first element (or to null if emty)
+              }
             
             shared_ptr<TAR> findNext ()  throw()
               {
@@ -264,10 +277,11 @@ namespace mobject
                   return (storedObj == obj);
                 else
                   // use the opportunity and purge the expired entry
-                  registry.erase(pos);
+                  registry.erase(pos++);
               }
             // no existing entry....
             registry.insert(pos, entry);
+            ENSURE (registry.find (entry) != registry.end());
             return true;
           }
         
@@ -283,6 +297,20 @@ namespace mobject
             
             Registry& registry = Slot<TAR>::access(table_);
             return util::remove_if(registry, SearchFunc (obj));
+          }
+        
+        
+        /** helper for diagnostics.
+         *  @note to use it, your objects need an operator string()
+         */
+        template<class TAR>
+        string dump()
+          {
+            string res;
+            util::for_each ( Slot<TAR>::access(table_)
+                           , var(res) += _1
+                           );
+            return res;
           }
       };
 

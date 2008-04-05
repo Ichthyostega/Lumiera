@@ -174,7 +174,7 @@ namespace asset
             P<XX> pX1;                  // Base: shared_ptr<XX>
             P<XX,P<X> > pX2;            // Base: P<X>
             P<XX,shared_ptr<X> > pX3;   // Base: shared_ptr<X>
-            P<XX,shared_ptr<long> > pLo;// Base: shared_ptr<long>
+            P<XX,shared_ptr<long> > pLo;// Base: shared_ptr<long>       (quite a nonsene, but well...)
             P<X,string> pLoL;           // Base: std::string
             P<string> pLoLoL;           // Base: shared_ptr<string>
             
@@ -182,7 +182,7 @@ namespace asset
             ASSERT (INSTANCEOF (shared_ptr<X>, &pX));
             
             ASSERT ( INSTANCEOF (shared_ptr<XX>, &pX1));
-//          ASSERT (!INSTANCEOF (shared_ptr<X>,  &pX1));     // doesn't compile (no RTTI) -- that's OK
+//          ASSERT (!INSTANCEOF (shared_ptr<X>,  &pX1));     // doesn't compile (no RTTI) -- that's correct
 //          ASSERT (!INSTANCEOF (P<X>,           &pX1));
             
             ASSERT ( INSTANCEOF (shared_ptr<X>,  &pX2));
@@ -212,8 +212,8 @@ namespace asset
 //          pX = pLo;   // similar, but long*   not asignable to X*
 //          pX = pLoL;  // similar, but string* not asignable to X*
 //          pX = pLoLoL;   // same...
-                          //  you can't do much with the "LoLo"-Types, 
-                         //   their types and pointee types's relations don't match
+                          //  you won't be able to do much with the "LoLo"-Types, 
+                         //   as their types and pointee types's relations don't match
             
             pX.reset (new XX(5));
             ASSERT (5 == *pX);      // implicit conversion from X to long
