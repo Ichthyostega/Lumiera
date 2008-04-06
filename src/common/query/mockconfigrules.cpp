@@ -28,9 +28,10 @@
 #include "proc/asset/pipe.hpp"
 
 
-//#include "common/util.hpp"
+#include "common/util.hpp"
 #include "nobugcfg.h"
 
+using util::isnil;
 
 
 namespace lumiera
@@ -101,7 +102,31 @@ namespace lumiera
       item<Pipe> (answer_, "pipe(default)")   = item<Pipe>(answer_,"pipe(master), stream(video)"); //TODO killme
       TODO ("remove the default entries!!!  DefaultsManager should find them automatically");
     }
+    
+    
+    /* under some circumstances we need to emulate the behaviour *
+     * of a real resolution engine in a more detailed manner.    *
+     * These case are hard wired in code below                   */
+    
+    /** special case: create a new pipe with matching pipe and stream IDs on the fly when referred... */
+    bool 
+    MockTable::fabricate_matching_new_Pipe (Query<Pipe>& q, string const& pipeID, string const& streamID)
+    {
+      answer_->insert (entry<Pipe> (q, Struct::create (pipeID, streamID)));
+    }
+    /** special case: create/retrieve new rocessing pattern for given stream ID... */
+    bool 
+    MockTable::fabricate_ProcPatt_on_demand (Query<const ProcPatt>& q, string const& streamID)
+    {
+      typedef const ProcPatt cPP;
+      typedef typename WrapReturn<cPP>::Wrapper Ptr;
+      
+      Ptr newPP (Struct::create (Query<cPP> ("make(PP), "+q)));
+      answer_->insert (entry<cPP> (q, newPP));
+    }
+    
 
+    
     
     
     MockConfigRules::MockConfigRules () 
@@ -123,8 +148,8 @@ namespace lumiera
      *  and with capabilities or properties defined by
      *  the query. The real implementation would require
      *  a rule based system (Ichthyo plans to use YAP Prolog),
-     *  while this dummy implementation simply relies on a
-     *  table of pre-fabricated objects. Never fails.
+     *  while this dummy implementation simply relpies based
+     *  on a table of pre-fabricated objects. Never fails.
      *  @return smart ptr (or similar) holding the object,
      *          maybe an empty smart ptr if not found
      */
@@ -144,9 +169,5 @@ namespace lumiera
 
   
   } // namespace query
-    
-  
-  /** */
-
 
 } // namespace lumiera

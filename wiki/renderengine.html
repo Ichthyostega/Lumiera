@@ -2267,12 +2267,12 @@ The GUI can connect the viewer(s) to some pipe (and moreover can use [[probe poi
 
 </pre>
 </div>
-<div title="PipeHandling" modifier="Ichthyostega" modified="200801121656" created="200801101352" tags="spec" changecount="9">
+<div title="PipeHandling" modifier="Ichthyostega" modified="200804061705" created="200801101352" tags="spec" changecount="10">
 <pre>!Identification
 Pipes are distinct objects and can be identified by their asset ~IDs. Besides, as for all [[structural assets|StructAsset]] there are extended query capabilities, including a symbolic pipe-id and a media (stream) type id. Any pipe can accept and deliver exactly one media stream kind (which may be inherently structured though, e.g. spatial sound systems or stereoscopic video)
 
 !creating pipes
-Pipe assets are created automatically by being used and referred. The [[Session]] holds a collection of global pipes, and further pipes can be created by using an new pipe reference in some placement. Moreover, every clip has an (implicit) [[source port|ClipSourcePort]], which will appear as pipe asset when first used (referred) while [[building|BuildProcess]].
+Pipe assets are created automatically by being used and referred. The [[Session]] holds a collection of global pipes, and further pipes can be created by using a new pipe reference in some placement. Moreover, every clip has an (implicit) [[source port|ClipSourcePort]], which will appear as pipe asset when first used (referred) while [[building|BuildProcess]]. Note that creating a new pipe implies using a [[processing pattern|ProcPatt]], which will be queried from the [[Defaults Manager|DefaultsManagement]] (resulting in the use of some preconfigured pattern or maybe the creation of a new ProcPatt object if necessary)
 
 !removal
 Deleting a Pipe is an advanced operation, because it includes finding and &quot;detaching&quot; all references, otherwise the pipe will leap back into existence immediately. Thus, global pipe entries in the Session and pipe references in [[locating pins|LocatingPin]] within any placement have to be removed, while clips using a given source port will be disabled. {{red{todo: implementation deferred}}}

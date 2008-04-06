@@ -38,6 +38,7 @@
 #ifndef LUMIERA_MOCKCONFIGRULES_H
 #define LUMIERA_MOCKCONFIGRULES_H
 
+#include "proc/mobject/session.hpp"
 #include "common/configrules.hpp"
 #include "common/util.hpp"
 
@@ -54,8 +55,10 @@ namespace lumiera
   
   namespace query
     {
+    using asset::Pipe;
     using asset::ProcPatt;
     using asset::PProcPatt;
+    using mobject::Session;
     
     using util::isnil;
     
@@ -88,6 +91,11 @@ namespace lumiera
         MockTable ();
         const any& fetch_from_table_for (const string& queryStr);
         
+        // special cases....
+        bool fabricate_matching_new_Pipe (Query<Pipe>& q, string const& pipeID, string const& streamID);
+        bool fabricate_ProcPatt_on_demand (Query<const ProcPatt>& q, string const& streamID);
+
+        
       private:
         void fill_mock_table ();
       };
@@ -117,14 +125,73 @@ namespace lumiera
                    )
                   return solution = candidate;
               }
-            
-            return solution = Ret();    // fail: return default-constructed empty smart ptr
+            return try_special_case(solution, q);
           }
+      
+      private:
+        bool
+        try_special_case (Ret& solution, const Query<TY>& q)
+          {
+            Query<TY> newQuery = q;
+            if (is_defaults_query (q))  // modified query..
+              return solution = Session::current->defaults (newQuery);
+                                      //   may cause recursion
+            if (detect_case (newQuery))
+              return resolve (solution, newQuery);
+            
+            return solution = Ret();  
+                                // fail: return default-constructed empty smart ptr
+          }
+        
+        bool
+        detect_case (Query<TY>& q);
       };
     
     
+    /** Hook for treating very special cases for individual types only */
+    template<class TY, class BASE>
+    inline bool 
+    LookupPreconfigured<TY,BASE>::detect_case (Query<TY>& q)
+    {
+      q.clear(); // end recursion
+      return false;
+    }
+    template<class BASE>
+    inline bool 
+    LookupPreconfigured<Pipe,BASE>::detect_case (Query<Pipe>& q)
+    {
+      const string pipeID   = extractID("pipe", q);
+      const string streamID = extractID("stream", q);
+      if (!isnil(pipeID) && !isnil(streamID))
+          return fabricate_matching_new_Pipe (q, pipeID, streamID);
+      
+      q.clear();
+      return false;
+    }
+    template<>
+    inline bool 
+    LookupPreconfigured<const ProcPatt>::detect_case (Query<const ProcPatt>& q)
+    {
+      const string streamID = extractID("stream", q);
+      if (!isnil(streamID))
+          return fabricate_ProcPatt_on_demand (q, streamID);
+      
+      // note: we don't handle the case of "make(PP), capabilities....." specially
+      // because either someone puts a special object into the mock table, or the
+      // recursive query done by the StructFactory simply fails, resulting in
+      // the StructFactory issuing a ProcPatt ctor call.
+      
+      q.clear();
+      return false;
+    }
+    
+    
+    
+    
+    
+    
     /** 
-     * Dummy Implementation of the query interface.
+     * Facade: Dummy Implementation of the query interface.
      * Provides an explicit implementation using hard wired
      * values for some types of interest for testing and debugging.
      */

@@ -149,7 +149,7 @@ namespace asset
     StructFactoryImpl::fabricate (const Query<Track>& caps)
       {
         TODO ("actually extract properties/capabilities from the query...");
-        TODO ("make sure AssetManager detects dublicates (it doesn't currently)");
+        TODO ("make sure AssetManager detects dublicates (currently 4/08 it doesn't)");
         return new Track (createIdent (caps));
       }
     
