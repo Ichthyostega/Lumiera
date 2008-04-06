@@ -69,7 +69,6 @@ namespace lumiera
      */
     void normalizeID (string& id);
     
-    const string extractID (Symbol, const string& termString);
 
     /** count the top-level predicates in the query string.
      *  usable for ordering queries, as more predicates usually
@@ -77,7 +76,12 @@ namespace lumiera
      */
     uint countPraed (const string&);
     
-  
+    
+    const string extractID (Symbol, const string& termString);
+    
+    const string removeTerm (Symbol, string& termString);
+
+    
   } // namespace query
     
 } // namespace lumiera

@@ -18,6 +18,11 @@ return: 0
 END
 
 
+TEST "QueryUtils_test" QueryUtils_test  removeTerm  <<END
+return: 0
+END
+
+
 TEST "QueryUtils_test" QueryUtils_test  countPraed  <<END
 return: 0
 END

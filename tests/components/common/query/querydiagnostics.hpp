@@ -1,5 +1,5 @@
 /*
-  QUERYDIAGNOSTICS.hpp  -  herlpers for writing tests covering config queries
+  QUERYDIAGNOSTICS.hpp  -  helpers for writing tests covering config queries
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -25,20 +25,11 @@
 #define LUMIERA_TEST_QUERY_QUERYDIAGNOSTICS_H
 
 
-//#include "common/factory.hpp"
-//#include "common/util.hpp"
-
-//#include <boost/algorithm/string.hpp>
-//#include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>
-//#include <iostream>
 #include <cstdlib>
 
-//using boost::algorithm::join;
-//using boost::lexical_cast;
 using boost::format;
 using std::string;
-//using std::cout;
 using std::rand;
 
 

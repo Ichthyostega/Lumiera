@@ -77,8 +77,16 @@ namespace lumiera
       {
       map<Symbol, regex> regexTable;
       
-      Symbol matchArgument = "\\(\\s*([\\w_\\.\\-]+)\\s*\\)"; 
+      Symbol matchArgument = "\\(\\s*([\\w_\\.\\-]+)\\s*\\),?\\s*"; 
       regex findPredicate (string("(\\w+)")+matchArgument);
+      
+      inline regex&
+      getTermRegex (Symbol sym)
+      {
+        if (!contains (regexTable, sym))
+          regexTable[sym] = regex (string(sym)+=matchArgument);
+        return regexTable[sym];
+      }
     }
     
     /** (preliminary) helper: instead of really parsing and evaluating the terms,
@@ -90,17 +98,31 @@ namespace lumiera
     const string
     extractID (Symbol sym, const string& termString)
     {
-      
-      if (!contains (regexTable, sym))
-        regexTable[sym] = regex (string(sym)+=matchArgument); 
-      
       smatch match;
-      if (regex_search (termString, match, regexTable[sym]))
-        return string (match[1]);
+      if (regex_search (termString, match, getTermRegex (sym)))
+        return (match[1]);
       else
         return "";
+    } 
     
-  } 
+    
+    /** (preliminary) helper: cut a term with the given symbol. 
+     *  The term is matched, removed from the original string and returned
+     *  @note parameter termString will be modified!
+     */
+    const string
+    removeTerm (Symbol sym, string& termString)
+    {
+      smatch match;
+      if (regex_search (termString, match, getTermRegex (sym)))
+        {
+          string res (sym); res += "("+match[1]+")";
+          termString.erase (match.position(), match[0].length());
+          return res;
+        }
+      else
+        return "";
+    } 
   
     
     /** @note this is a very hackish preliminary implementation. 

@@ -68,11 +68,12 @@ namespace lumiera
           virtual void
           run (Arg arg) 
             {
-              if (isnil(arg))  arg = Cmdline ("Query normalizeID extractID countPraed");
+              if (isnil(arg))  arg = Cmdline ("Query normalizeID extractID removeTerm countPraed");
               
               if (contains (arg, "Query"      ))   check_Query ();
               if (contains (arg, "normalizeID"))   check_normalizeID ();
               if (contains (arg, "extractID"  ))   check_extractID ();
+              if (contains (arg, "removeTerm" ))   check_removeTerm ();
               if (contains (arg, "countPraed" ))   check_countPraed ();
             }
           
@@ -118,6 +119,32 @@ namespace lumiera
               ASSERT (isnil (extractID ("pred", "pred (tok)")));
               ASSERT (isnil (extractID ("pred", "pred tok)" )));
               ASSERT (isnil (extractID ("pred", "pred(tok " )));
+            }
+          
+          
+          
+          /** @test the regexp based cutting of a term with given symbol */
+          void
+          check_removeTerm ()
+            {
+              // successfull-----Symbol---input-string----------------------extracted------remaining-------------
+              ASSERT_removeTerm ("pred", "pred(tok).",                     "pred(tok)",   "."                    );
+              ASSERT_removeTerm ("pred", "    pred( tok )",                "pred(tok)",   "    "                 );
+              ASSERT_removeTerm ("pred", "pred(tok), pred(tux).",          "pred(tok)",   "pred(tux)."           );
+              ASSERT_removeTerm ("pred", "other(xyz) pred(tok) pred(tux)", "pred(tok)",   "other(xyz) pred(tux)" );
+              ASSERT_removeTerm ("pred", "some( pred(tok)",                "pred(tok)",   "some( "               );
+              
+              // not successfull
+              ASSERT_removeTerm ("pred", "pred (tok",                      "",            "pred (tok" );
+              ASSERT_removeTerm ("pred", "pred tok)",                      "",            "pred tok)" );
+              ASSERT_removeTerm ("pred", "pred(tok",                       "",            "pred(tok"  );
+            }
+          
+          void
+          ASSERT_removeTerm (Symbol sym, string input, Symbol extracted, Symbol modified)
+            {
+              ASSERT (extracted == removeTerm (sym, input));
+              ASSERT (modified  == input);
             }
           
           
