@@ -28,12 +28,15 @@
 #include "common/factory.hpp"
 #include "common/query.hpp"
 
+#include "common/query/querydiagnostics.hpp"
+
 #include <boost/scoped_ptr.hpp>
 #include <boost/format.hpp>
 #include <cstdlib>
 #include <map>
 
 using lumiera::Query;
+using lumiera::query::test::garbage_query;
 using util::isnil;
 
 using std::tr1::shared_ptr;
@@ -52,13 +55,10 @@ namespace mobject
     namespace test
       {
       
-      const uint MAX_DEGREE_RAND = 9;
-      
       format typePatt ("Dummy<%2i>");
       format instancePatt ("obj_%s_%i");
       format predicatePatt ("%s_%2i( %s )");
       
-      const string garbage ("asdfghjklqwertzuiop");
       
       
       /** create a random new ID */
@@ -85,27 +85,6 @@ namespace mobject
       
       
       
-      string
-      garbage_term ()         ///< yields a random string of 3 letters
-      {
-        return str (predicatePatt 
-                   % char ('a'+ rand() % 26)
-                   % (rand() % 100)
-                   % garbage.substr(rand() % 17 , 3)
-                   );
-      }
-      
-      string
-      q_str (int degree=0)    ///< fabricating (random) query strings
-      {
-        string fake;
-        if (!degree) 
-          degree = 1 + rand() % MAX_DEGREE_RAND;
-        while (0 < --degree)
-          fake += garbage_term() + ", ";
-        fake += garbage_term() + ".";
-        return fake;
-      }
       
       
       
@@ -141,11 +120,11 @@ namespace mobject
         public:
           DefsRegistryImpl_test ()
             : o1 (oFac()), o2 (oFac()), o3 (oFac()), 
-              q1 (q_str (1)),
-              q2 (q_str (2)),
-              q3 (q_str (3)),
-              q4 (q_str (4)),
-              q5 (q_str (5))
+              q1 (garbage_query (1)),
+              q2 (garbage_query (2)),
+              q3 (garbage_query (3)),
+              q4 (garbage_query (4)),
+              q5 (garbage_query (5))
             { }
           
           
@@ -178,7 +157,7 @@ namespace mobject
               for (int i=0; i<100; ++i)
                 {
                   P px (pFac());
-                  Q23 qx (q_str());
+                  Q23 qx (garbage_query());
                   ps[qx] = px;
                   reg_->put (px, qx);
                   px->instanceID = qx;

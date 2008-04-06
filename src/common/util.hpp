@@ -197,8 +197,8 @@ namespace util
    "trailing Withespace  \t \n"       --> 'trailing_Withespace'
    "with    a   lot  \nof Whitespace" --> 'with_a_lot_of_Whitespace'
    "with\"much (punctuation)[]!"      --> 'withmuch_(punctuation)'
-   "§&Ω%€  leading garbarge"          --> 'leading_garbarge'
-   "mixed    Ω   garbarge"            --> 'mixed_garbarge'
+   "§&Ω%€  leading garbage"           --> 'leading_garbage'
+   "mixed    Ω   garbage"             --> 'mixed_garbage'
    "Bääääh!!"                         --> 'Bh'
 \endverbatim
    */

@@ -129,8 +129,8 @@ out:        	' --> 'trailing_Withespace'
 out: 'with    a  	 lot
 out:   of Whitespace' --> 'with_a_lot_of_Whitespace'
 out: 'with"much (punctuation)[]!' --> 'withmuch_(punctuation)'
-out: '§&Ω%€  leading garbarge' --> 'leading_garbarge'
-out: 'mixed    Ω   garbarge' --> 'mixed_garbarge'
+out: '§&Ω%€  leading garbage' --> 'leading_garbage'
+out: 'mixed    Ω   garbage' --> 'mixed_garbage'
 out: 'Bääääh!!' --> 'Bh'
 out: '§&Ω%€' --> ''
 END

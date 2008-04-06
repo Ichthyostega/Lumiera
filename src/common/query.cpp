@@ -34,10 +34,9 @@ using boost::regex;
 using boost::smatch;
 using boost::regex_search;
 using boost::sregex_iterator;
-using boost::algorithm::is_upper;
-using boost::algorithm::is_alpha;
 
 using util::contains;
+using util::isnil;
 
 
 namespace lumiera
@@ -45,16 +44,29 @@ namespace lumiera
   
   namespace query
     {
+
+    namespace // local definitions
+      {
+      typedef boost::function<bool(string::value_type)> ChPredicate;
+      
+      ChPredicate is_alpha = boost::algorithm::is_alpha();    
+      ChPredicate is_upper = boost::algorithm::is_upper();    
+    } // local defs
+    
     
     void
     normalizeID (string& id)
     {
       id = util::sanitize(id);
-      REQUIRE (!util::isnil(id));
-      REQUIRE (is_alpha() (id[0]));
+      if (isnil(id) || !is_alpha (id[0]))
+        id.insert(0, "o");
+      
+      
+      REQUIRE (!isnil(id));
+      REQUIRE (is_alpha (id[0]));
       
       char first = id[0];
-      if (is_upper() (first))
+      if (is_upper (first))
         id[0] = std::tolower (first);
     }
 

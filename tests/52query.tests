@@ -2,3 +2,22 @@ TESTING "Proc Layer config rules Test Suite" ./test-components --group=query
 
 
 
+TEST "QueryUtils_test" QueryUtils_test  Query  <<END
+out: N7lumiera5query4test5ThingE: I am writing a test sentence.
+END
+
+
+TEST "QueryUtils_test" QueryUtils_test  normalizeID  <<END
+out: ..original : a A AA dufte 1a _1 A_A BÄH    White  space  §&Ω%€GΩ%€ar  Ω  baäääääge!!!!!  : 
+out: normalized : a a aA dufte o1a o_1 a_A bH o white_space gar_bage :
+END
+
+
+TEST "QueryUtils_test" QueryUtils_test  extractID  <<END
+return: 0
+END
+
+
+TEST "QueryUtils_test" QueryUtils_test  countPraed  <<END
+return: 0
+END
