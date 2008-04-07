@@ -222,5 +222,19 @@ namespace lumiera
     };
   
   
+  
+    
+  namespace query
+    {
+    
+    /** backdoor for tests: the next config query with this query string
+     *  will magically suceed with every candidate object provided. This
+     *  is currently necessary to get objects into the defaults manager,
+     *  as the query system is not able to do real query resolution */
+    void setFakeBypass(string const& q);
+    bool isFakeBypass (string const& q);
+    
+  } // namespace query
+  
 } // namespace lumiera
 #endif

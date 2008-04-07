@@ -58,9 +58,8 @@ namespace mobject
       shared_ptr<TAR> res;
       QueryHandler<TAR>& typeHandler = ConfigRules::instance();  
       for (DefsRegistry::Iter<TAR> i = defsRegistry->candidates(capabilities); 
-           i.hasNext(); ++i )
+           res = *i ; ++i )
         {
-          shared_ptr<TAR> res (*i);
           typeHandler.resolve (res, capabilities);
           if (res)
             return res;

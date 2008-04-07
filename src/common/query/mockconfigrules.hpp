@@ -109,9 +109,12 @@ namespace lumiera
         
         // special cases....
         template<class TY> 
-        bool detect_case (Query<TY>& q);
+        bool detect_case (typename WrapReturn<TY>::Wrapper&, Query<TY>& q);
         bool fabricate_matching_new_Pipe (Query<Pipe>& q, string const& pipeID, string const& streamID);
         bool fabricate_ProcPatt_on_demand (Query<const ProcPatt>& q, string const& streamID);
+        
+        template<class TY>
+        bool set_new_mock_solution (Query<TY>& q, typename WrapReturn<TY>::Wrapper& candidate);
 
         
       private:
@@ -150,11 +153,14 @@ namespace lumiera
         bool
         try_special_case (Ret& solution, const Query<TY>& q)
           {
+            if (solution && isFakeBypass(q))       // backdoor for tests
+              return solution;
+            
             Query<TY> newQuery = q;
             if (is_defaults_query (newQuery))  // modified query..
               return solution = Session::current->defaults (newQuery);
                                              //   may cause recursion
-            if (detect_case (newQuery))
+            if (detect_case (solution, newQuery))
               return resolve (solution, newQuery);
             
             return solution = Ret();     // fail: return default-constructed empty smart ptr
@@ -165,35 +171,39 @@ namespace lumiera
     /** Hook for treating very special cases for individual types only */
     template<class TY>
     inline bool 
-    MockTable::detect_case (Query<TY>& q)
+    MockTable::detect_case (typename WrapReturn<TY>::Wrapper&, Query<TY>& q)
     {
       q.clear(); // end recursion
       return false;
     }
     template<>
     inline bool 
-    MockTable::detect_case (Query<Pipe>& q)
+    MockTable::detect_case (WrapReturn<Pipe>::Wrapper& candidate, Query<Pipe>& q)
     {
       const string pipeID   = extractID("pipe", q);
       const string streamID = extractID("stream", q);
+      
+      if (candidate && pipeID == candidate->getPipeID())
+        return set_new_mock_solution (q, candidate); // "learn" this solution to be "valid"
+      
       if (!isnil(pipeID) && !isnil(streamID))
-          return fabricate_matching_new_Pipe (q, pipeID, streamID);
+        return fabricate_matching_new_Pipe (q, pipeID, streamID);
       
       q.clear();
       return false;
     }
     template<>
     inline bool 
-    MockTable::detect_case (Query<const ProcPatt>& q)
+    MockTable::detect_case (WrapReturn<const ProcPatt>::Wrapper& candidate, Query<const ProcPatt>& q)
     {
-      const string streamID = extractID("stream", q);
-      if (!isnil(streamID))
-          return fabricate_ProcPatt_on_demand (q, streamID);
+      if (!isnil (extractID("make", q)))
+        return false; // let the query fail here,
+                     //  so the invoking factory will go ahead
+                    //   and create a new object.
       
-      // note: we don't handle the case of "make(PP), capabilities....." specially
-      // because either someone puts a special object into the mock table, or the
-      // recursive query done by the StructFactory simply fails, resulting in
-      // the StructFactory issuing a ProcPatt ctor call.
+      const string streamID = extractID("stream", q);
+      if (!candidate && !isnil(streamID))
+          return fabricate_ProcPatt_on_demand (q, streamID);
       
       q.clear();
       return false;

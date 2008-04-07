@@ -105,7 +105,10 @@ namespace asset
             ASSERT (!find (pipe2->getPipeID()), "accidental clash of random test-IDs");
             
             // now declare that these objects should be considered "default"
+lumiera::query::setFakeBypass("");  /////////////////////////////////////////////////TODO mock resolution            
             ASSERT (Session::current->defaults.define (pipe1, Query<Pipe> (""))); // unrestricted default
+
+lumiera::query::setFakeBypass("stream("+sID+")"); ///////////////////////////////////TODO mock resolution            
             ASSERT (Session::current->defaults.define (pipe2, Query<Pipe> ("stream("+sID+")")));
             
             ASSERT ( find (pipe1->getPipeID()), "failure declaring object as default");

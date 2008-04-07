@@ -201,7 +201,7 @@ namespace mobject
               uint d=0;
               uint d_prev=0;
               Iter23 j = reg_->candidates(Q23 ("some crap"));
-              for ( ; j.hasNext(); ++j )
+              for ( ; *j ; ++j )
                 {
                   ASSERT ( *j );
                   Q23 qx ((*j)->instanceID);

@@ -51,4 +51,21 @@ namespace lumiera
   SingletonSub<ConfigRules> ConfigRules::instance (typeinfo); 
 
 
+  
+  
+    
+  namespace query
+    {
+    namespace // local definitions: implementing a backdoor for tests
+      {
+        string fakeBypass; 
+      } 
+    
+    void setFakeBypass(string const& q)  { fakeBypass = q; }
+    bool isFakeBypass (string const& q)  { return q == fakeBypass; }
+    
+  } // namespace query
+
+    
+  
 } // namespace lumiera

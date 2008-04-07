@@ -133,6 +133,17 @@ namespace lumiera
       return true;
     }
     
+    /** for entering "valid" solutions on-the-fly from tests */
+    template<class TY>
+    bool 
+    MockTable::set_new_mock_solution (Query<TY>& q, typename WrapReturn<TY>::Wrapper& obj)
+    {
+      answer_->insert (entry<TY> (q, obj));
+      return true;
+    }
+    // generate the necessary specialisations-----------------------------
+    template bool MockTable::set_new_mock_solution (Query<Pipe>&, PPipe&);
+    
 
     
     
