@@ -24,7 +24,6 @@ liblumi_a_CPPFLAGS = -I$(top_srcdir)/src/
 liblumi_a_SOURCES = \
 	$(liblumi_a_srcdir)/plugin.c \
 	$(liblumi_a_srcdir)/error.c \
-	$(liblumi_a_srcdir)/framerate.c \
 	$(liblumi_a_srcdir)/mutex.c \
 	$(liblumi_a_srcdir)/rwlock.c \
 	$(liblumi_a_srcdir)/condition.c \
@@ -38,7 +37,6 @@ liblumi_a_SOURCES = \
 noinst_HEADERS += \
 	$(liblumi_a_srcdir)/plugin.h \
 	$(liblumi_a_srcdir)/error.h \
-	$(liblumi_a_srcdir)/framerate.h \
 	$(liblumi_a_srcdir)/locking.h \
 	$(liblumi_a_srcdir)/mutex.h \
 	$(liblumi_a_srcdir)/rwlock.h \
