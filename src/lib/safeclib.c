@@ -215,9 +215,9 @@ lumiera_tmpbuf_snprintf (size_t size, const char* fmt, ...)
   va_end (args);
 
   len = len > size ? size : len;
-  char* buf = lumiera_tmpbuf_provide (len);
+  char* buf = lumiera_tmpbuf_provide (len+1);
   va_start (args, fmt);
-  vsnprintf (buf, len, fmt, args);
+  vsnprintf (buf, len+1, fmt, args);
   va_end (args);
 
   return buf;
