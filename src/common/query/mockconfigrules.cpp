@@ -93,6 +93,7 @@ namespace lumiera
       
       typedef const ProcPatt cPP;
       
+      
       // for baiscpipetest.cpp ---------
       answer_->insert (entry_Struct<cPP> ("stream(video)"));
       answer_->insert (entry_Struct<cPP> ("stream(teststream)"));
@@ -104,6 +105,8 @@ namespace lumiera
     }
     
     
+    
+    
     /* under some circumstances we need to emulate the behaviour *
      * of a real resolution engine in a more detailed manner.    *
      * These case are hard wired in code below                   */
@@ -112,17 +115,22 @@ namespace lumiera
     bool 
     MockTable::fabricate_matching_new_Pipe (Query<Pipe>& q, string const& pipeID, string const& streamID)
     {
-      answer_->insert (entry<Pipe> (q, Struct::create (pipeID, streamID)));
+      typedef WrapReturn<Pipe>::Wrapper Ptr;
+      
+      Ptr newPipe (Struct::create (pipeID, streamID));
+      answer_->insert (entry<Pipe> (q, newPipe));
+      return true; // denotes query will now succeed...
     }
     /** special case: create/retrieve new rocessing pattern for given stream ID... */
     bool 
     MockTable::fabricate_ProcPatt_on_demand (Query<const ProcPatt>& q, string const& streamID)
     {
       typedef const ProcPatt cPP;
-      typedef typename WrapReturn<cPP>::Wrapper Ptr;
+      typedef WrapReturn<cPP>::Wrapper Ptr;
       
       Ptr newPP (Struct::create (Query<cPP> ("make(PP), "+q)));
       answer_->insert (entry<cPP> (q, newPP));
+      return true;
     }
     
 

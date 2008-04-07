@@ -52,12 +52,13 @@ namespace lumiera
       explicit Query (const string& predicate="") : string(predicate) {}
       explicit Query (format& pattern)            : string(str(pattern)) {}
       
-      
       const string asKey()  const
         {
           return string(typeid(OBJ).name())+": "+*this;
         }
-    };
+      
+      operator string& () { return *this; }      // TODO: needed temporarily by mockconfigrules
+    };                                          //        for calling removeTerm on the string-ref....
 
     
   namespace query

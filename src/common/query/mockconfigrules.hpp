@@ -67,12 +67,28 @@ namespace lumiera
     
     
     
-    /** a traits-class to define the smart-ptr to wrap the result */
-    template<class TY>
-    struct WrapReturn             { typedef shared_ptr<TY> Wrapper;  };
     
-    template<>
-    struct WrapReturn<ProcPatt>   { typedef PProcPatt Wrapper;  };
+    
+    namespace // internal details
+      {
+      
+      /** a traits-class to define the smart-ptr to wrap the result */
+      template<class TY>
+      struct WrapReturn             { typedef shared_ptr<TY> Wrapper;  };
+      
+      template<>
+      struct WrapReturn<ProcPatt>   { typedef PProcPatt Wrapper;  };
+      
+      
+      /** helper detecting if a query actually intended to retrieve a "default" object.
+       *  This implementation is quite crude, of cours it would be necessary to actually
+       *  parse and evaluate the query. @note query is modified if "default" ... */
+      inline bool
+      is_defaults_query (string& query)
+      {
+        return !isnil (removeTerm ("default", query));
+      }
+    } // details (end)
     
     
     /** 
@@ -92,6 +108,8 @@ namespace lumiera
         const any& fetch_from_table_for (const string& queryStr);
         
         // special cases....
+        template<class TY> 
+        bool detect_case (Query<TY>& q);
         bool fabricate_matching_new_Pipe (Query<Pipe>& q, string const& pipeID, string const& streamID);
         bool fabricate_ProcPatt_on_demand (Query<const ProcPatt>& q, string const& streamID);
 
@@ -133,32 +151,28 @@ namespace lumiera
         try_special_case (Ret& solution, const Query<TY>& q)
           {
             Query<TY> newQuery = q;
-            if (is_defaults_query (q))  // modified query..
+            if (is_defaults_query (newQuery))  // modified query..
               return solution = Session::current->defaults (newQuery);
-                                      //   may cause recursion
+                                             //   may cause recursion
             if (detect_case (newQuery))
               return resolve (solution, newQuery);
             
-            return solution = Ret();  
-                                // fail: return default-constructed empty smart ptr
+            return solution = Ret();     // fail: return default-constructed empty smart ptr
           }
-        
-        bool
-        detect_case (Query<TY>& q);
       };
     
     
     /** Hook for treating very special cases for individual types only */
-    template<class TY, class BASE>
+    template<class TY>
     inline bool 
-    LookupPreconfigured<TY,BASE>::detect_case (Query<TY>& q)
+    MockTable::detect_case (Query<TY>& q)
     {
       q.clear(); // end recursion
       return false;
     }
-    template<class BASE>
+    template<>
     inline bool 
-    LookupPreconfigured<Pipe,BASE>::detect_case (Query<Pipe>& q)
+    MockTable::detect_case (Query<Pipe>& q)
     {
       const string pipeID   = extractID("pipe", q);
       const string streamID = extractID("stream", q);
@@ -170,7 +184,7 @@ namespace lumiera
     }
     template<>
     inline bool 
-    LookupPreconfigured<const ProcPatt>::detect_case (Query<const ProcPatt>& q)
+    MockTable::detect_case (Query<const ProcPatt>& q)
     {
       const string streamID = extractID("stream", q);
       if (!isnil(streamID))

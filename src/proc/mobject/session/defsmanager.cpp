@@ -134,6 +134,8 @@ namespace mobject
 
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/pipe.hpp"
+#include "proc/asset/track.hpp"
+#include "proc/mobject/session/track.hpp"
 
 namespace mobject
   {
@@ -145,9 +147,15 @@ namespace mobject
     using asset::ProcPatt;
     using asset::PProcPatt;
     
+    using mobject::session::Track;
+    using mobject::session::TrackAsset;
+    using mobject::session::PTrack;
+    using mobject::session::PTrackAsset;
     
-    template PPipe     DefsManager::operator() (const Query<Pipe>&); 
-    template PProcPatt DefsManager::operator() (const Query<const ProcPatt>&); 
+    template PPipe       DefsManager::operator() (const Query<Pipe>&); 
+    template PProcPatt   DefsManager::operator() (const Query<const ProcPatt>&); 
+    template PTrack      DefsManager::operator() (const Query<Track>&); 
+    template PTrackAsset DefsManager::operator() (const Query<TrackAsset>&); 
     
     template bool DefsManager::define (const PPipe&, const Query<Pipe>&);
     template bool DefsManager::forget (const PPipe&);

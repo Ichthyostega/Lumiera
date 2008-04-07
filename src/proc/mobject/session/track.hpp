@@ -34,7 +34,11 @@ namespace mobject
   {
   namespace session
     {
-    typedef shared_ptr<const asset::Track> PTrackAsset;
+    class Track;
+    typedef asset::Track TrackAsset;
+    
+    typedef shared_ptr<Track> PTrack;
+    typedef shared_ptr<TrackAsset> PTrackAsset;
 
 
     /**
@@ -57,7 +61,7 @@ namespace mobject
 
       public:
         /** Child tracks in a tree structure */
-        vector<Placement<Track> > subTracks;  // TODO: Placement!!!!!!!
+        vector<Placement<Track> > subTracks;  ////TODO: it should really work with Placements! this here is just a decoy!!!!!!!
         
         virtual bool isValid()  const;
       };
