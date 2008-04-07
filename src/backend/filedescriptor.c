@@ -31,7 +31,7 @@
 #include <unistd.h>
 
 
-NOBUG_DEFINE_FLAG (filedescriptor);
+NOBUG_DEFINE_FLAG_PARENT (filedescriptor, file_all);
 
 /*
   Filedescriptor registry
@@ -74,25 +74,27 @@ cmp (const void* keya, const void* keyb)
   return a->stat.st_dev == b->stat.st_dev && a->stat.st_ino == b->stat.st_ino && a->flags == b->flags;
 }
 
-static Cuckoo
-lumiera_filedescriptor_registry_new (void)
+void
+lumiera_filedescriptor_registry_init (void)
 {
   NOBUG_INIT_FLAG (filedescriptor);
+  TRACE (filedescriptor);
 
-  Cuckoo registry = cuckoo_new (h1, h2, h3, cmp,
-                                sizeof (LumieraFiledescriptor),
-                                3);
+  registry = cuckoo_new (h1, h2, h3, cmp,
+                         sizeof (LumieraFiledescriptor),
+                         3);
   if (!registry)
     LUMIERA_DIE (NO_MEMORY);
-
-  return registry;
 }
 
-static void
-lumiera_filedescriptor_registry_delete (void)
+void
+lumiera_filedescriptor_registry_destroy (void)
 {
+  TRACE (filedescriptor);
+  REQUIRE (!cuckoo_nelements (registry));
   cuckoo_free (registry);
 }
+
 
 /**
  * Find existing filedescriptor or create one
@@ -106,18 +108,13 @@ LumieraFiledescriptor
 lumiera_filedescriptor_acquire (const char* name, int flags)
 {
   TRACE (filedescriptor);
+  REQUIRE (registry, "not initialized");
   UNCHECKED;
   lumiera_mutexacquirer registry_lock;
   lumiera_mutexacquirer_init_mutex (&registry_lock, &registry_mutex, LUMIERA_LOCKED);
 
-  if (!registry)
-    {
-      registry = lumiera_filedescriptor_registry_new ();
-      atexit (lumiera_filedescriptor_registry_delete);
-    }
-
   lumiera_filedescriptor fdesc;
-  fdesc.flags = flags;
+  fdesc.flags = flags&LUMIERA_FILE_MASK;
 
   for (int retry = 0; !retry; ++retry)
     {
@@ -216,7 +213,10 @@ lumiera_filedescriptor_new (LumieraFiledescriptor template)
   self->refcount = 1;
   self->handle = 0;
 
-  RESOURCE_ANNOUNCE (filedescriptor, "mutex", "filedescriptor", self, self->rh);
+  const char* type = "mutex";
+  const char* name = "filedescriptor";
+
+  RESOURCE_ANNOUNCE (filedescriptor, type, name, self, self->rh);
 
   return self;
 }

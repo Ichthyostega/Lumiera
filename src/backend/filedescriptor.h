@@ -52,6 +52,11 @@ struct lumiera_filedescriptor_struct
   RESOURCE_HANDLE (rh);
 };
 
+void
+lumiera_filedescriptor_registry_init (void);
+
+void
+lumiera_filedescriptor_registry_destroy (void);
 
 LumieraFiledescriptor
 lumiera_filedescriptor_acquire (const char* name, int flags);
@@ -64,6 +69,5 @@ lumiera_filedescriptor_new (LumieraFiledescriptor template);
 
 void
 lumiera_filedescriptor_delete (LumieraFiledescriptor self);
-
 
 #endif
