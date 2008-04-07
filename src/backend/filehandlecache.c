@@ -19,41 +19,60 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "lib/safeclib.h"
+
+#include "backend/file.h"
 #include "backend/filehandlecache.h"
 
-NOBUG_DEFINE_FLAG (lumiera_filehandlecache);
+NOBUG_DEFINE_FLAG_PARENT (filehandlecache, file_all);
 
 /* errors */
 
 LUMIERA_ERROR_DEFINE (FILEHANDLECACHE_NOHANDLE, "No filehandle available");
 
 
-/**/
+LumieraFilehandlecache fhcache = NULL;
 
-LumieraFilehandlecache
-lumiera_filehandlecache_init (LumieraFilehandlecache self, int max_entries)
+
+void
+lumiera_filehandlecache_new (int max_entries)
 {
-  lumiera_mrucache_init (&self->cache, lumiera_filehandle_destroy_node);
-  self->available =max_entries;
-  lumiera_mutex_init (&self->lock);
-  return self;
+  if (!fhcache)
+    {
+      NOBUG_INIT_FLAG (filehandlecache);
+      fhcache = lumiera_malloc (sizeof (lumiera_filehandlecache));
+      lumiera_mrucache_init (&fhcache->cache, lumiera_filehandle_destroy_node);
+      fhcache->available = max_entries;
+      fhcache->checked_out = 0;
+      lumiera_mutex_init (&fhcache->lock);
+      RESOURCE_ANNOUNCE (filehandlecache, "mutex", "filehandlecache", fhcache, fhcache->rh);
+    }
+  else
+    NOTREACHED;
 }
 
-LumieraFilehandlecache
-lumiera_filehandlecache_destroy (LumieraFilehandlecache self)
+
+void
+lumiera_filehandlecache_delete (void)
 {
-  self->available += self->cache.cached;
-  lumiera_mrucache_destroy (&self->cache);
-  lumiera_mutex_destroy (&self->lock);
-  return self;
+  if (fhcache)
+    {
+      REQUIRE (!fhcache->checked_out, "Filehandles in use at shutdown");
+      RESOURCE_FORGET (filehandlecache, fhcache->rh);
+      lumiera_mrucache_destroy (&fhcache->cache);
+      lumiera_mutex_destroy (&fhcache->lock);
+      free (fhcache);
+      fhcache = NULL;
+    }
 }
 
 
 LumieraFilehandle
-lumiera_filehandlecache_filehandle_acquire (LumieraFilehandlecache self)
+lumiera_filehandlecache_handle_acquire (LumieraFilehandlecache self, LumieraFiledescriptor desc)
 {
-  LumieraFilehandle ret;
-  LUMIERA_MUTEX_SECTION (&self->lock)
+  TRACE (filehandlecache);
+  LumieraFilehandle ret = NULL;
+  LUMIERA_MUTEX_SECTION (filehandlecache, self->rh, &self->lock)
   {
     if (self->available <= 0 && self->cache.cached)
       {
@@ -65,19 +84,58 @@ lumiera_filehandlecache_filehandle_acquire (LumieraFilehandlecache self)
       }
     else
       {
-        /* allocate new filehandle if we are below the limit or no cached handles where available (overallocating) */
+        /* allocate new filehandle if we are below the limit or no cached handles are available (overallocating) */
         ret = lumiera_filehandle_new ();
         if (!ret)
-          LUMIERA_ERROR_SET (lumiera_filehandlecache, FILEHANDLECACHE_NOHANDLE);
+          LUMIERA_ERROR_SET (filehandlecache, FILEHANDLECACHE_NOHANDLE);
         else
           --self->available;
       }
+    ret->use_cnt = 1;
+    ret->descriptor = desc;
+    desc->handle = ret;
+    ++self->checked_out;
   }
   return ret;
 }
 
-void
-lumiera_filehandlecache_add (LumieraFilehandlecache self, LumieraFilehandle handle)
+
+LumieraFilehandle
+lumiera_filehandlecache_checkout (LumieraFilehandlecache self, LumieraFilehandle handle)
 {
-  UNIMPLEMENTED ("");
+  REQUIRE (self);
+  REQUIRE (handle);
+  /* This function is called with the associated descriptor locked, nothing can modify 'handle' */
+  if (!handle->use_cnt)
+    {
+      /* lock cache and checkout */
+      LUMIERA_MUTEX_SECTION (filehandlecache, self->rh, &self->lock)
+        {
+          lumiera_mrucache_checkout (&self->cache, &handle->cachenode);
+        }
+    }
+  ++handle->use_cnt;
+  ++self->checked_out;
+
+  return handle;
 }
+
+void
+lumiera_filehandlecache_checkin (LumieraFilehandlecache self, LumieraFilehandle handle)
+{
+  REQUIRE (self);
+  REQUIRE (handle);
+  REQUIRE (handle->use_cnt);
+
+  /* This function is called with the associated descriptor locked, nothing can modify 'self' */
+  if (!--handle->use_cnt)
+    {
+      /* lock cache and checin */
+      LUMIERA_MUTEX_SECTION (filehandlecache, self->rh, &self->lock)
+        {
+          --self->checked_out;
+          lumiera_mrucache_checkin (&self->cache, &handle->cachenode);
+        }
+    }
+}
+

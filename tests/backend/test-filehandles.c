@@ -1,5 +1,5 @@
 /*
-  filehandle  -  filehandle management and caching
+  test-filehandles.c  -  test filehandle management
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -18,40 +18,41 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef LUMIERA_FILEHANDLE_H
-#define LUMIERA_FILEHANDLE_H
+#define _GNU_SOURCE
 
-#include "lib/error.h"
 #include "lib/llist.h"
 
-typedef struct lumiera_filehandle_struct lumiera_filehandle;
-typedef lumiera_filehandle* LumieraFilehandle;
+#include "backend/backend.h"
+#include "backend/filehandlecache.h"
 
-#include "backend/filedescriptor.h"
+#include "tests/test.h"
 
-/**
- * @file Filehandles
- */
+TESTS_BEGIN
 
-
-/**
- * File handles
- */
-struct lumiera_filehandle_struct
+TEST ("basic")
 {
-  llist cachenode;
-  int fd;
-  unsigned use_cnt;
-  LumieraFiledescriptor descriptor;
-};
+  lumiera_backend_init ();
+  LumieraFile file = lumiera_file_new (",tmp_testfile", LUMIERA_FILE_CREATE);
 
-LumieraFilehandle
-lumiera_filehandle_new ();
+  /* get the filehandle */
+  int fd = lumiera_file_handle_acquire (file);
 
-int
-lumiera_filehandle_get (LumieraFilehandle self);
+  /* we now 'own'it and can use it */
+  ENSURE (fd > -1);
+  printf ("got filehandle #%d\n", fd);
 
-void*
-lumiera_filehandle_destroy_node (LList node);
+  /* put it into aging, can't use anymore */
+  lumiera_file_handle_release (file);
 
-#endif
+  lumiera_file_delete (file);
+  lumiera_backend_destroy ();
+}
+
+
+TEST ("more")
+{
+  lumiera_backend_init ();
+  lumiera_backend_destroy ();
+}
+
+TESTS_END

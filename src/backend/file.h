@@ -26,7 +26,8 @@
 #include "lib/mutex.h"
 #include "lib/llist.h"
 #include "lib/error.h"
-#include "lib/references.h"
+
+NOBUG_DECLARE_FLAG (file);
 
 /**
  * @file File management
@@ -47,18 +48,18 @@ typedef lumiera_file* LumieraFile;
 #include "backend/filedescriptor.h"
 
 
-
-NOBUG_DECLARE_FLAG (lumiera_file);
-
 #define LUMIERA_FILE_READONLY (O_RDONLY | O_LARGEFILE | O_NOATIME)
 #define LUMIERA_FILE_READWRITE (O_RDWR | O_LARGEFILE | O_NOATIME)
 #define LUMIERA_FILE_CREATE (O_RDWR | O_LARGEFILE | O_NOATIME | O_CREAT | O_EXCL)
 #define LUMIERA_FILE_RECREATE (O_RDWR | O_LARGEFILE | O_NOATIME | O_CREAT | O_TRUNC)
 
+/* creat and excl flags will be masked out for descriptor lookup */
+#define LUMIERA_FILE_MASK ~(O_CREAT | O_EXCL)
+
 struct lumiera_file_struct
 {
   const char* name;
-  struct lumiera_reference_struct descriptor;
+  LumieraFiledescriptor descriptor;
 };
 
 /**
@@ -85,6 +86,12 @@ lumiera_file_new (const char* name, int flags);
 void
 lumiera_file_delete (LumieraFile self);
 
+
+int
+lumiera_file_handle_acquire (LumieraFile self);
+
+void
+lumiera_file_handle_release (LumieraFile self);
 
 #endif
 

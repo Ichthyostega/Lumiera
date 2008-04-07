@@ -56,9 +56,9 @@ test_filedescriptors_SOURCES = $(tests_srcdir)/backend/test-filedescriptors.c
 test_filedescriptors_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
 test_filedescriptors_LDADD = liblumibackend.a liblumi.a -lnobugmt -lpthread -ldl -lm
 
-#check_PROGRAMS += test-filehandles
-#test_filehandles_SOURCES = $(tests_srcdir)/backend/test-filehandles.c
-#test_filehandles_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
-#test_filehandles_LDADD = liblumibackend.a liblumi.a -lnobugmt -lpthread -ldl -lm
+check_PROGRAMS += test-filehandles
+test_filehandles_SOURCES = $(tests_srcdir)/backend/test-filehandles.c
+test_filehandles_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_filehandles_LDADD = liblumibackend.a liblumi.a -lnobugmt -lpthread -ldl -lm
 
 TESTS = $(tests_srcdir)/test.sh

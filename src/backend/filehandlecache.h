@@ -25,6 +25,9 @@
 #include "lib/mrucache.h"
 #include "lib/mutex.h"
 
+typedef struct lumiera_filehandlecache_struct lumiera_filehandlecache;
+typedef lumiera_filehandlecache* LumieraFilehandlecache;
+
 #include "backend/filehandle.h"
 
 /**
@@ -43,55 +46,55 @@ struct lumiera_filehandlecache_struct
 {
   lumiera_mrucache cache;
   int available;
+  int checked_out;
   lumiera_mutex lock;
+  RESOURCE_HANDLE (rh);
 };
-typedef struct lumiera_filehandlecache_struct lumiera_filehandlecache;
-typedef lumiera_filehandlecache* LumieraFilehandlecache;
 
+extern LumieraFilehandlecache fhcache;
 
 /**
- * Initializes a filehandle cache.
- * @param self pointer to the cache to be initialized
+ * Initializes the filehandle cache.
  * @param max_entries number how much filehandles shall be managed
- * @return self as given
  * The number of elements the cache can hold is static and should be
- * determined by sysconf (_SC_OPEN_MAX) minus some safety margin.
+ * determined by sysconf (_SC_OPEN_MAX) minus some (big) safety margin.
  */
-LumieraFilehandlecache
-lumiera_filehandlecache_init (LumieraFilehandlecache self, int max_entries);
+void
+lumiera_filehandlecache_new (int max_entries);
 
 /**
- * Destroy a filehandle cache.
- * @param self the cache to be destroyed
- * @return self as given to the now uninitialized! cache
+ * Delete the filehandle cache.
  * No filehandles in the cache must be locked, this would be a fatal error.
  * The handles are closed automatically.
  */
-LumieraFilehandlecache
-lumiera_filehandlecache_destroy (LumieraFilehandlecache self);
+void
+lumiera_filehandlecache_delete (void);
 
 /**
  * Get a fresh filehandle.
  * @param self pointer to the cache
  * @return the new filehandle
- * one must call lumiera_mutexacquirer_unlock (&lock) to free the lock on the handle when done
  */
 LumieraFilehandle
-lumiera_filehandlecache_filehandle_acquire (LumieraFilehandlecache self);
+lumiera_filehandlecache_handle_acquire (LumieraFilehandlecache self, LumieraFiledescriptor desc);
 
 /**
- * Add filehande back to cache.
+ * Add filehande back to cache, the filehandle becomes subject of aging.
  * @param self pointer to the cache
  * @param handle filehandle to be put back
  */
 void
-lumiera_filehandlecache_add (LumieraFilehandlecache self, LumieraFilehandle handle);
+lumiera_filehandlecache_add_filehandle (LumieraFilehandlecache self, LumieraFilehandle handle);
 
 /**
- * 
+ * Remove a filehandle from cache aging
+ * Filehandles which are subject of cache aging must be checked out before they can be used
+ *
  */
 LumieraFilehandle
-lumiera_filehandlecache_remove (LumieraFilehandlecache self, int fd);
+lumiera_filehandlecache_checkout (LumieraFilehandlecache self, LumieraFilehandle handle);
 
+void
+lumiera_filehandlecache_checkin (LumieraFilehandlecache self, LumieraFilehandle handle);
 
 #endif

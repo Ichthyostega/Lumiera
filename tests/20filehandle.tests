@@ -1,0 +1,7 @@
+
+TESTING "Filehandle management" ./test-filehandles
+
+
+TEST "basic filehandle usage" basic <<END
+return: 0
+END

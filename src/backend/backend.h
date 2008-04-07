@@ -1,5 +1,5 @@
 /*
-  filehandle  -  filehandle management and caching
+  backend  -  common lumiera backend things
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -18,40 +18,19 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef LUMIERA_FILEHANDLE_H
-#define LUMIERA_FILEHANDLE_H
+#ifndef LUMIERA_BACKEND_H
+#define LUMIERA_BACKEND_H
 
-#include "lib/error.h"
-#include "lib/llist.h"
+#include <nobug.h>
 
-typedef struct lumiera_filehandle_struct lumiera_filehandle;
-typedef lumiera_filehandle* LumieraFilehandle;
-
-#include "backend/filedescriptor.h"
-
-/**
- * @file Filehandles
- */
-
-
-/**
- * File handles
- */
-struct lumiera_filehandle_struct
-{
-  llist cachenode;
-  int fd;
-  unsigned use_cnt;
-  LumieraFiledescriptor descriptor;
-};
-
-LumieraFilehandle
-lumiera_filehandle_new ();
+NOBUG_DECLARE_FLAG (backend);
+NOBUG_DECLARE_FLAG (file_all);
+NOBUG_DECLARE_FLAG (file);
 
 int
-lumiera_filehandle_get (LumieraFilehandle self);
+lumiera_backend_init (void);
 
-void*
-lumiera_filehandle_destroy_node (LList node);
+void
+lumiera_backend_destroy (void);
 
 #endif

@@ -1,5 +1,5 @@
 /*
-  filehandle  -  filehandle management and caching
+  backend  -  common lumiera backend things
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -18,40 +18,36 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef LUMIERA_FILEHANDLE_H
-#define LUMIERA_FILEHANDLE_H
 
-#include "lib/error.h"
-#include "lib/llist.h"
-
-typedef struct lumiera_filehandle_struct lumiera_filehandle;
-typedef lumiera_filehandle* LumieraFilehandle;
-
+#include "backend/backend.h"
+#include "backend/filehandlecache.h"
 #include "backend/filedescriptor.h"
 
-/**
- * @file Filehandles
- */
-
-
-/**
- * File handles
- */
-struct lumiera_filehandle_struct
-{
-  llist cachenode;
-  int fd;
-  unsigned use_cnt;
-  LumieraFiledescriptor descriptor;
-};
-
-LumieraFilehandle
-lumiera_filehandle_new ();
+//NOBUG_DEFINE_FLAG_PARENT (backend, lumiera); TODO
+NOBUG_DEFINE_FLAG (backend);
+NOBUG_DEFINE_FLAG_PARENT (file_all, backend);
 
 int
-lumiera_filehandle_get (LumieraFilehandle self);
+lumiera_backend_init (void)
+{
+  NOBUG_INIT_FLAG (backend);
+  NOBUG_INIT_FLAG (file_all);
+  NOBUG_INIT_FLAG (file);
+  TRACE (backend);
+  lumiera_filedescriptor_registry_init ();
 
-void*
-lumiera_filehandle_destroy_node (LList node);
+  int max_entries = 10;         TODO("determine by sysconf (_SC_OPEN_MAX) minus some (big) safety margin "
+                                     "add some override to run tests with few filehandles");
 
-#endif
+  lumiera_filehandlecache_new (max_entries);
+
+  return 0;
+}
+
+void
+lumiera_backend_destroy (void)
+{
+  TRACE (backend);
+  lumiera_filedescriptor_registry_destroy ();
+  lumiera_filehandlecache_delete ();
+}

@@ -18,40 +18,53 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#ifndef LUMIERA_FILEHANDLE_H
-#define LUMIERA_FILEHANDLE_H
 
-#include "lib/error.h"
 #include "lib/llist.h"
+#include "lib/safeclib.h"
 
-typedef struct lumiera_filehandle_struct lumiera_filehandle;
-typedef lumiera_filehandle* LumieraFilehandle;
-
+#include "backend/file.h"
+#include "backend/filehandle.h"
 #include "backend/filedescriptor.h"
 
-/**
- * @file Filehandles
- */
+#include <unistd.h>
 
-
-/**
- * File handles
- */
-struct lumiera_filehandle_struct
-{
-  llist cachenode;
-  int fd;
-  unsigned use_cnt;
-  LumieraFiledescriptor descriptor;
-};
+NOBUG_DEFINE_FLAG_PARENT (filehandle, file_all);
 
 LumieraFilehandle
-lumiera_filehandle_new ();
+lumiera_filehandle_new ()
+{
+  LumieraFilehandle self = lumiera_malloc (sizeof (lumiera_filehandle));
+  TRACE (filehandle, "%p", self);
 
-int
-lumiera_filehandle_get (LumieraFilehandle self);
+  llist_init (&self->cachenode);
+  self->fd = -1;
+  self->use_cnt = 1;
+  self->descriptor = NULL;
+
+  return self;
+}
+
 
 void*
-lumiera_filehandle_destroy_node (LList node);
+lumiera_filehandle_destroy_node (LList node)
+{
+  TRACE (filehandle);
+  REQUIRE (llist_is_empty (node));
+  LumieraFilehandle self = (LumieraFilehandle)node;
+  REQUIRE (self->use_cnt == 0);
 
-#endif
+  if (self->fd >= 0)
+    close (self->fd);
+  self->fd = -1;
+  self->descriptor = NULL;
+  return self;
+}
+
+
+int
+lumiera_filehandle_get (LumieraFilehandle self)
+{
+  REQUIRE (self->descriptor);
+  return -1;
+}
+

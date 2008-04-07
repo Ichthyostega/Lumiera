@@ -23,7 +23,10 @@
 #include "lib/safeclib.h"
 #include "lib/cuckoo.h"
 
+#include "backend/file.h"
 #include "backend/filedescriptor.h"
+#include "backend/filehandle.h"
+#include "backend/filehandlecache.h"
 
 #include <sys/types.h>
 #include <fcntl.h>
@@ -141,6 +144,7 @@ lumiera_filedescriptor_acquire (const char* name, int flags)
                 }
 
               int fd;
+              INFO (filedescriptor, "try creating file: %s", name);
               fd = creat (name, 0777);
               if (fd == -1)
                 {
