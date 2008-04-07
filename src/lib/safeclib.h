@@ -109,5 +109,5 @@ lumiera_tmpbuf_strndup (const char* src, size_t size);
  * @return temporary buffer containing the constructed of the string
  */
 char*
-lumiera_tmpbuf_sprintf (size_t size, const char* fmt, ...);
+lumiera_tmpbuf_snprintf (size_t size, const char* fmt, ...);
 
