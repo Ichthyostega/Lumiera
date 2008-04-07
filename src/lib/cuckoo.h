@@ -106,6 +106,13 @@ void
 cuckoo_free (Cuckoo self);
 
 /**
+ * Get the number of elements stored in a hash.
+ * @return number of elements, 0 when empty
+ */
+size_t
+cuckoo_nelements (Cuckoo self);
+
+/**
  * Insert an element into a hash.
  * amortized O(1) complexity because it may rarely rehash the tables or even grow them.
  * see cuckoo_reserve() about how to preallocate entries to prevent the growing costs.
