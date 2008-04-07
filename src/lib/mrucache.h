@@ -67,7 +67,7 @@ lumiera_mrucache_destroy (LumieraMruCache self);
  * add an element to a mrucache
  */
 static inline void
-lumiera_mrucache_add (LumieraMruCache self, LList node)
+lumiera_mrucache_checkin (LumieraMruCache self, LList node)
 {
   REQUIRE (self);
   REQUIRE (node && llist_is_empty (node));
@@ -77,16 +77,40 @@ lumiera_mrucache_add (LumieraMruCache self, LList node)
 
 
 /**
+ * place an element at the tail of a mrucache, to be reused as first
+ */
+static inline void
+lumiera_mrucache_drop (LumieraMruCache self, LList node)
+{
+  REQUIRE (self);
+  REQUIRE (node);
+
+  if (llist_is_empty (node))
+    {
+      /* was not in list, we need to count it */
+      ++self->cached;
+    }
+  else
+    {
+      /* speedup loop warning :P, this check is costly */
+      REQUIRE (llist_is_member (&self->cache_list, node), "node must be empty or member of cache");
+    }
+  llist_insert_tail (&self->cache_list, node);
+}
+
+
+/**
  * Remove an element from a mrucache.
  */
 static inline void
-lumiera_mrucache_remove (LumieraMruCache self, LList node)
+lumiera_mrucache_checkout (LumieraMruCache self, LList node)
 {
   REQUIRE (self);
   REQUIRE (node && llist_is_member (&self->cache_list, node));   /* speedup loop warning :P, this check is costly */
   llist_unlink (node);
   --self->cached;
 }
+
 
 /**
  * destroy the oldest element and return a pointer to it for reuse.
@@ -98,7 +122,7 @@ lumiera_mrucache_pop (LumieraMruCache self)
   if (llist_is_empty (&self->cache_list))
     return NULL;
 
-  LList node =  llist_tail (&self->cache_list);
+  LList node = llist_tail (&self->cache_list);
   llist_unlink (node);
   --self->cached;
 

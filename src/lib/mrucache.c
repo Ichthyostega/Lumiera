@@ -43,6 +43,7 @@ lumiera_mrucache_destroy (LumieraMruCache self)
 {
   LLIST_WHILE_TAIL (&self->cache_list, node)
     {
+      llist_unlink (node);
       if (self->destructor_cb)
         free (self->destructor_cb (node));
       else
