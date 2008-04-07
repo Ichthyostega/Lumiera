@@ -797,6 +797,33 @@ Error: #f88</pre>
 &amp;rarr; [[Configuration Rules system|ConfigRules]]
 </pre>
 </div>
+<div title="ConfigQueryIntegration" modifier="Ichthyostega" modified="200804070308" created="200804070247" tags="overview draft impl" changecount="8">
+<pre>* planning to embed a YAP Prolog engine
+* currently just integrated by a table driven mock
+* the baseline is a bit more clear by now (4/08)
+
+&amp;rarr; see also ConfigRules
+&amp;rarr; see also DefaultsManagement
+
+!Use cases
+[&lt;img[when to run config queries|uml/fig131717.png]]
+
+The key idea is that there is a Rule Base &amp;mdash; partly contained in the session (building on a stock of standard rules supplied with the application). Now, whenever there is the need to get a new object, for adding it to the session or for using associated with another object &amp;mdash; then instead of creating it by a direct hard wired ctor call, we issue a ConfigQuery requesting an object of the given type with some //capabilities// defined by predicates. The same holds true when loading an existing session: some objects won't be loaded back blindly, rather they will be re-created by issuing the config queries again. Especially important is the case of (re)creating a [[processing pattern|ProcPatt]] guiding how to wire up the processing pipeline for some given media.
+
+At various places, instead of requiring a fixed set of capabilities, it is possible to request a &quot;default configured&quot; object instead, specifying just those capabilities we really need to be configured in a specific way. This is done by using the [Defaults Manager|DefaultsManagement] accessible on the [[Session]] interface. Such a default object query may either retrieve an already existing object instance, run further config queries, and finally result in the invocation of a factory for creating new objects &amp;mdash; just as necessary and guarded by the rules.
+
+@@clear(left):display(block):@@
+
+!Components and Relations
+[&gt;img[participating classes|uml/fig131461.png]]
+
+@@clear(right):display(block):@@
+
+!when querying for a [[&quot;default&quot;|DefaultsManagement]] object
+[&lt;img[colaboration when issuing a defaults query|uml/fig131845.png]]
+
+@@clear(left):display(block):@@</pre>
+</div>
 <div title="ConfigRules" modifier="Ichthyostega" modified="200802200145" created="200801171352" tags="overview spec" changecount="11">
 <pre>Many features can be implemented by specifically configuring and wiring some unspecific components. Rather than tie the client code in need of some given feature to these configuration internals, in Lumiera the client can //query // for some kind of object providing the //needed capabilities. // Right from start (summer 2007), Ichthyo had the intention to implement such a feature using sort of a ''declarative database'', e.g. by embedding a Prolog system. By adding rules to the basic session configuration, users should be able to customize the semi-automatic part of Lumiera's behaviour to great extent.
 
@@ -1140,7 +1167,7 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200802031829" created="200708080322" tags="overview" changecount="21">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200804070244" created="200708080322" tags="overview" changecount="22">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1154,6 +1181,7 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 * [[using the Visitor pattern?|VisitorUse]] &amp;mdash; resulting in [[»Visiting-Tool« library implementation|VisitingToolImpl]]
 * [[Handling of Tracks and render Pipes in the EDL|TrackPipeEDL]]. [[Handling of Tracks|TrackHandling]] and [[Pipes|PipeHandling]]
 * [[getting default configured|DefaultsManagement]] Objects relying on [[rule-based Configuration Queries|ConfigRules]]
+* [[integrating the Config Query system|ConfigQueryIntegration]]
 * [[identifying the basic Builder operations|BasicBuildingOperations]] and [[planning the Implementation|PlanningNodeCreatorTool]]
 * [[how to handle »attached placement«|AttachedPlacementProblem]]
 </pre>
@@ -2465,12 +2493,13 @@ Besides, they provide an important __inward interface__ for the [[ProcNode]]s, w
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200802031830" created="200706190056" tags="overview" changecount="4">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200804070258" created="200706190056" tags="overview" changecount="7">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
 &lt;&lt;&lt;
 ''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the foundations and main structures in C++
 * basic AssetManager working
 * currently impmenenting the Builder (&amp;rarr;[[more|PlanningNodeCreatorTool]])
+* intermittently working out how to deal with &amp;rarr; [[ConfigQueries / default objects|ConfigQueryIntegration]])
 &lt;&lt;&lt;
 
 !Summary
@@ -2486,7 +2515,7 @@ The system is ''open'' inasmuch every part mirrors the structure of correspondin
 &amp;rarr; [[Overview Render Engine|OverviewRenderEngine]]
 &amp;rarr; BuildProcess and RenderProcess
 &amp;rarr; [[Two Examples|Examples]] (Object diagrams) 
-&amp;rarr; how [[Automation]] works  {{red{to be defined in more detail}}}
+&amp;rarr; how [[Automation]] works
 &amp;rarr; [[Problems|ProblemsTodo]] to be solved and notable [[design decisions|DesignDecisions]]
 &amp;rarr; [[Implementation Details|ImplementationDetails]] {{red{WIP}}}
 </pre>

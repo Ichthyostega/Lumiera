@@ -3,34 +3,34 @@ diagrams
   classdiagram_ref 130309 // Asset Kinds
     860 633 100 4 158 0
   classdiagram_ref 128133 // Session structure
-    860 633 100 4 289 0
+    860 633 100 4 349 0
   classdiagram_ref 128389 // Render Entities
     743 538 100 4 184 0
-  active  classdiagram_ref 131205 // Struct-Asset Relations
-    555 620 100 4 0 0
+  classdiagram_ref 131205 // Struct-Asset Relations
+    555 620 100 4 60 0
+  classdiagram_ref 131461 // Rules access
+    688 627 100 4 0 0
+  componentdiagram_ref 131589 // components
+    688 544 100 4 0 0
+  active  usecasediagram_ref 131717 // when to query
+    624 495 100 4 0 0
+  collaborationdiagram_ref 131845 // "default" object
+    626 551 100 4 0 0
 end
 show_stereotypes
 selected 
-package_ref 129 // lumiera
+  package_ref 129 // lumiera
 open
-  componentview_ref 128133 // interfaces
-  deploymentview_ref 128133 // EXE Deployment
-  deploymentview_ref 128645 // gen
-  class_ref 137477 // Unknown
-  class_ref 137605 // Preview
-  class_ref 137989 // Track
-  class_ref 128005 // SessionImpl
-  class_ref 128133 // EDL
-  class_ref 128261 // Fixture
-  class_ref 128389 // Track
-  class_ref 128645 // Placement
-  class_ref 129413 // RelativeLocation
-  class_ref 129541 // Allocation
-  class_ref 140421 // Plug
-  class_ref 139909 // LocatingPin
-  class_ref 134021 // Buildable
-  class_ref 134149 // BuilderTool
-  class_ref 134405 // NodeCreatorTool
+  
+  package_ref 128005 // design
+  
+  package_ref 129285 // ProcessingLayer
+  componentview_ref 128261 // Query System overview
+  class_ref 140677 // QueryHandler
+  class_ref 140805 // TypeHandler
+  class_ref 140933 // ResolverBase
+  class_ref 141189 // QueryHandlerImpl
+  usecaseview_ref 128389 // query use
   classview_ref 128773 // error
   class_ref 140165 // Visitable
 end

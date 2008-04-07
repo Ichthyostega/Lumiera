@@ -1,0 +1,21 @@
+format 40
+
+componentcanvas 128005 component_ref 130565 // ConfigRules
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 207 133 2000 259 219
+componentcanvas 128133 component_ref 130693 // Resolver
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 416 17 2005 155 63
+componentcanvas 128261 component_ref 130821 // Rule Base
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 227 15 2000 156 82
+componentcanvas 128389 component_ref 128645 // AssetManagement
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 461 366 2000 187 120
+componentcanvas 128517 component_ref 128133 // Session
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 23 15 2000 190 108
+componentcanvas 128645 component_ref 130949 // DefaultsManager
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 23 146 2005 155 63
+end
