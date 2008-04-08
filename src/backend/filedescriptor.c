@@ -110,54 +110,48 @@ lumiera_filedescriptor_registry_destroy (void)
 LumieraFiledescriptor
 lumiera_filedescriptor_acquire (const char* name, int flags)
 {
-  TRACE (filedescriptor);
+  TRACE (filedescriptor, "%s", name);
   REQUIRE (registry, "not initialized");
-  UNCHECKED;
+
   lumiera_mutexacquirer registry_lock;
   lumiera_mutexacquirer_init_mutex (&registry_lock, &registry_mutex, LUMIERA_LOCKED);
 
   lumiera_filedescriptor fdesc;
   fdesc.flags = flags&LUMIERA_FILE_MASK;
 
-  for (int retry = 0; !retry; ++retry)
+  if (stat (name, &fdesc.stat) != 0)
     {
-      if (stat (name, &fdesc.stat) == 0)
-        break;
-      else
+      if (errno == ENOENT && flags&O_CREAT)
         {
-          if (errno == ENOENT && flags&O_CREAT)
+          char* dir = lumiera_tmpbuf_strndup (name, PATH_MAX);
+          char* slash = dir;
+          while ((slash = strchr (slash+1, '/')))
             {
-              INFO (filedescriptor, "try creating file: %s %d", name, PATH_MAX);
-              char* dir = lumiera_tmpbuf_strndup (name, PATH_MAX);
-              char* slash = dir;
-
-              while ((slash = strchr (slash+1, '/')))
-                {
-                  *slash = '\0';
-                  INFO (filedescriptor, "try creating dir: %s", dir);
-                  if (mkdir (dir, 0777) == -1)
-                    {
-                      LUMIERA_ERROR_SET (filedescriptor, ERRNO);
-                      goto efile;
-                    }
-                  *slash = '/';
-                }
-
-              int fd;
-              INFO (filedescriptor, "try creating file: %s", name);
-              fd = creat (name, 0777);
-              if (fd == -1)
+              *slash = '\0';
+              INFO (filedescriptor, "try creating dir: %s", dir);
+              if (mkdir (dir, 0777) == -1 && errno != EEXIST)
                 {
                   LUMIERA_ERROR_SET (filedescriptor, ERRNO);
                   goto efile;
                 }
-              close (fd);
-              continue; /* will now retry the fstat once */
+              *slash = '/';
+            }
+          int fd;
+          INFO (filedescriptor, "try creating file: %s", name);
+          fd = creat (name, 0777);
+          if (fd == -1)
+            {
+              LUMIERA_ERROR_SET (filedescriptor, ERRNO);
+              goto efile;
+            }
+          close (fd);
+          if (stat (name, &fdesc.stat) != 0)
+            {
+              /* finally, no luck */
+              LUMIERA_ERROR_SET (filedescriptor, ERRNO);
+              goto efile;
             }
         }
-      /* finally, no luck */
-      LUMIERA_ERROR_SET (filedescriptor, ERRNO);
-      goto efile;
     }
 
   /* lookup/create descriptor */

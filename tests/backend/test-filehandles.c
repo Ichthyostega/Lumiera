@@ -21,6 +21,7 @@
 #define _GNU_SOURCE
 
 #include "lib/llist.h"
+#include "lib/safeclib.h"
 
 #include "backend/backend.h"
 #include "backend/filehandlecache.h"
@@ -52,6 +53,36 @@ TEST ("basic")
 TEST ("more")
 {
   lumiera_backend_init ();
+
+  LumieraFile files[100];
+  int fds[100];
+
+  /*create 100 files*/
+  for (int i=0; i<100; ++i)
+    {
+      files[i]= lumiera_file_new (lumiera_tmpbuf_snprintf (256, ",tmpdir/testfile%d", i), LUMIERA_FILE_CREATE);
+    }
+
+  /* get the filehandles, this gross overallocates filehandles */
+  for (int i=0; i<100; ++i)
+    {
+      fds[i] = lumiera_file_handle_acquire (files[i]);
+      ENSURE (fds[i] > -1);
+      printf ("got filehandle #%d\n", fds[i]);
+    }
+
+  /* put them into aging, can't use anymore */
+  for (int i=0; i<100; ++i)
+    {
+      lumiera_file_handle_release (files[i]);
+    }
+
+  /* cleanup */
+  for (int i=0; i<100; ++i)
+    {
+      lumiera_file_delete (files[i]);
+    }
+
   lumiera_backend_destroy ();
 }
 
