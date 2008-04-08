@@ -27,6 +27,7 @@
 #include "proc/asset.hpp"
 #include "proc/asset/pipe.hpp"
 #include "common/query.hpp"
+#include "common/configrules.hpp"   ///////TODO just temp
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
 
@@ -46,6 +47,9 @@ namespace asset
     using lumiera::Query;
     using lumiera::query::normalizeID;
     
+    using lumiera::ConfigRules;               ////TODO just temp
+    using lumiera::query::QueryHandler;      ////TODO just temp
+    
     
     /** shortcut: run just a query
      *  without creating new instances
@@ -60,7 +64,7 @@ namespace asset
     
     
     /***********************************************************************
-     * @test basic behaviour of the defaults manager.
+     * @test basic behaviour of the defaults manager ("the big picture")
      *       <ol><li>retrieving a "default" object repeatedly</li>
      *           <li>retrieving a more constrained "default" object</li>
      *           <li>failure registers a new "default"</li>
@@ -101,7 +105,7 @@ namespace asset
             ASSERT (pipe2 == pipe1);
             pipe2 = asset::Struct::create (Query<Pipe> ());
             ASSERT (pipe2 == pipe1);
-            pipe2 = asset::Struct::create (Query<Pipe> ("default(X)"));
+            pipe2 = asset::Struct::create (Query<Pipe> ("default(P)"));
             ASSERT (pipe2 == pipe1);
           }
         
@@ -144,12 +148,30 @@ namespace asset
           }
         
         
+        /** verify the defaults manager holds only weak refs,
+         *  so if an object goes out of scope, any defaults entries
+         *  are purged silently
+         */
         void verifyRemoval (string pID)
           { 
             Query<Pipe> query_for_pID ("pipe("+pID+")");
             size_t hash;
               {
                 PPipe pipe1 = Session::current->defaults (query_for_pID);
+//
+// this is fine but doesn't work as long as there is another entry in the mock table...
+// ...for now we use hack to overwrite the reference in the mock table                
+//
+                ASSERT (3 == pipe1.use_count());  // that's the problem; it should be 2
+                
+                QueryHandler<Pipe>& typeHandler = ConfigRules::instance();  
+                PPipe pipe2 = asset::Struct::create (pID, "quatsch");
+
+                typeHandler.resolve (pipe2, query_for_pID); // in the mock impl this has the side effect
+                ASSERT (pipe2);                            //  of replacing the mock entry
+                ////////////////////////////////////////////   so from now on the test works as intended....                
+                
+                ASSERT (2 == pipe1.use_count());          
                 hash = pipe1->getID();
               }
              // now AssetManager should hold the only ref

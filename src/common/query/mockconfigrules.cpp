@@ -100,7 +100,7 @@ namespace lumiera
       item<cPP> (answer_, "stream(default)")  = item<cPP> (answer_,"stream(video)"); // set up a default stream
       
       answer_->insert (entry_Struct<Pipe> ("pipe(master), stream(video)"));
-      item<Pipe> (answer_, "default(P)") = item<Pipe>(answer_,"pipe(master), stream(video)");
+      item<Pipe> (answer_, "") = item<Pipe>(answer_,"pipe(master), stream(video)");//   use as default
     }
     
     
@@ -122,7 +122,7 @@ namespace lumiera
     }
     /** special case: create a new pipe for a specific stream ID */
     bool 
-    MockTable::fabricate_new_Pipe_for_stream (Query<Pipe>& q, string const& streamID)
+    MockTable::fabricate_just_new_Pipe (Query<Pipe>& q )
     {
       typedef WrapReturn<Pipe>::Wrapper Ptr;
       
@@ -147,6 +147,7 @@ namespace lumiera
     bool 
     MockTable::set_new_mock_solution (Query<TY>& q, typename WrapReturn<TY>::Wrapper& obj)
     {
+      answer_->erase (q.asKey());
       answer_->insert (entry<TY> (q, obj));
       return true;
     }

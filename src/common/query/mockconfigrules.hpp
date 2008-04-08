@@ -111,7 +111,7 @@ namespace lumiera
         template<class TY> 
         bool detect_case (typename WrapReturn<TY>::Wrapper&, Query<TY>& q);
         bool fabricate_matching_new_Pipe (Query<Pipe>& q, string const& pipeID, string const& streamID);
-        bool fabricate_new_Pipe_for_stream (Query<Pipe>& q, string const& streamID);
+        bool fabricate_just_new_Pipe (Query<Pipe>& q);
         bool fabricate_ProcPatt_on_demand (Query<const ProcPatt>& q, string const& streamID);
         
         template<class TY>
@@ -195,8 +195,8 @@ namespace lumiera
       if (!isnil(pipeID) && !isnil(streamID))
         return fabricate_matching_new_Pipe (q, pipeID, streamID);
 
-      if (!candidate && !isnil(streamID))
-        return fabricate_new_Pipe_for_stream (q, streamID);
+      if (!candidate && (!isnil(streamID) || !isnil(pipeID)))
+        return fabricate_just_new_Pipe (q);
       
       q.clear();
       return false;
