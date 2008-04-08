@@ -6,11 +6,12 @@ PLANNED "AddClip_test" AddClip_test <<END
 END
 
 
-PLANNED "DefsManagerImpl_test" DefsManagerImpl_test <<END
+PLANNED "DefsManager_test" DefsManager_test <<END
 END
 
 
-PLANNED "DefsManager_test" DefsManager_test <<END
+TEST "DefsManagerImpl_test" DefsManagerImpl_test <<END
+return: 0
 END
 
 

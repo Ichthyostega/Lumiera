@@ -97,11 +97,10 @@ namespace lumiera
       // for baiscpipetest.cpp ---------
       answer_->insert (entry_Struct<cPP> ("stream(video)"));
       answer_->insert (entry_Struct<cPP> ("stream(teststream)"));
-      item<cPP> (answer_, "stream(default)")  = item<cPP> (answer_,"stream(video)"); //TODO killme
+      item<cPP> (answer_, "stream(default)")  = item<cPP> (answer_,"stream(video)"); // set up a default stream
       
       answer_->insert (entry_Struct<Pipe> ("pipe(master), stream(video)"));
-      item<Pipe> (answer_, "pipe(default)")   = item<Pipe>(answer_,"pipe(master), stream(video)"); //TODO killme
-      TODO ("remove the default entries!!!  DefaultsManager should find them automatically");
+      item<Pipe> (answer_, "default(P)") = item<Pipe>(answer_,"pipe(master), stream(video)");
     }
     
     
@@ -120,6 +119,16 @@ namespace lumiera
       Ptr newPipe (Struct::create (pipeID, streamID));
       answer_->insert (entry<Pipe> (q, newPipe));
       return true; // denotes query will now succeed...
+    }
+    /** special case: create a new pipe for a specific stream ID */
+    bool 
+    MockTable::fabricate_new_Pipe_for_stream (Query<Pipe>& q, string const& streamID)
+    {
+      typedef WrapReturn<Pipe>::Wrapper Ptr;
+      
+      Ptr newPipe (Struct::create (Query<Pipe> ("make(PP), "+q)));
+      answer_->insert (entry<Pipe> (q, newPipe));
+      return true;
     }
     /** special case: create/retrieve new rocessing pattern for given stream ID... */
     bool 

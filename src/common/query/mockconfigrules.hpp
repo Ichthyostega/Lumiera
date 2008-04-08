@@ -111,6 +111,7 @@ namespace lumiera
         template<class TY> 
         bool detect_case (typename WrapReturn<TY>::Wrapper&, Query<TY>& q);
         bool fabricate_matching_new_Pipe (Query<Pipe>& q, string const& pipeID, string const& streamID);
+        bool fabricate_new_Pipe_for_stream (Query<Pipe>& q, string const& streamID);
         bool fabricate_ProcPatt_on_demand (Query<const ProcPatt>& q, string const& streamID);
         
         template<class TY>
@@ -180,6 +181,11 @@ namespace lumiera
     inline bool 
     MockTable::detect_case (WrapReturn<Pipe>::Wrapper& candidate, Query<Pipe>& q)
     {
+      if (!isnil (extractID("make", q)))
+        return false; // let the query fail here,
+                     //  so the invoking factory will go ahead
+                    //   and create a new object.
+      
       const string pipeID   = extractID("pipe", q);
       const string streamID = extractID("stream", q);
       
@@ -188,6 +194,9 @@ namespace lumiera
       
       if (!isnil(pipeID) && !isnil(streamID))
         return fabricate_matching_new_Pipe (q, pipeID, streamID);
+
+      if (!candidate && !isnil(streamID))
+        return fabricate_new_Pipe_for_stream (q, streamID);
       
       q.clear();
       return false;
@@ -197,9 +206,7 @@ namespace lumiera
     MockTable::detect_case (WrapReturn<const ProcPatt>::Wrapper& candidate, Query<const ProcPatt>& q)
     {
       if (!isnil (extractID("make", q)))
-        return false; // let the query fail here,
-                     //  so the invoking factory will go ahead
-                    //   and create a new object.
+        return false; // failure triggers creation...
       
       const string streamID = extractID("stream", q);
       if (!candidate && !isnil(streamID))
