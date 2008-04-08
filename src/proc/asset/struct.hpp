@@ -91,7 +91,7 @@ namespace asset
   /** 
    * Factory specialized for createing Structural Asset objects.
    */ 
-  class StructFactory : public cinelerra::Factory<asset::Struct>
+  class StructFactory : public lumiera::Factory<asset::Struct>
     {
     public:
       typedef shared_ptr<asset::Struct> PType;

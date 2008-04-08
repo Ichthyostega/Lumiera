@@ -90,7 +90,7 @@ namespace mobject
         boost::scoped_ptr<SessionImpl> pImpl_;
         
         SessManagerImpl()  throw();
-        friend class cinelerra::singleton::StaticCreate<SessManagerImpl>;
+        friend class lumiera::singleton::StaticCreate<SessManagerImpl>;
         
       public:
         virtual void clear () ;

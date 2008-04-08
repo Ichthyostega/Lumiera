@@ -21,13 +21,13 @@
 */
 
 
-#ifndef CINELERRA_TIME_H
-#define CINELERRA_TIME_H
+#ifndef LUMIERA_TIME_H
+#define LUMIERA_TIME_H
 
 #include <boost/operators.hpp>
 
 
-namespace cinelerra
+namespace lumiera
   {
 
 
@@ -56,5 +56,5 @@ namespace cinelerra
   
 
    
-} // namespace cinelerra
+} // namespace lumiera
 #endif

@@ -100,14 +100,14 @@ namespace asset
                 aMang.getAsset (ID<asset::Proc>(mm1->getID()));
                 NOTREACHED;
               }
-            catch (cinelerra::error::Invalid& xxx) {ASSERT (xxx.getID()==CINELERRA_ERROR_WRONG_ASSET_KIND);}
+            catch (lumiera::error::Invalid& xxx) {ASSERT (xxx.getID()==LUMIERA_ERROR_WRONG_ASSET_KIND);}
             try 
               { // try accessing nonexistant ID 
                 aMang.getAsset (ID<Asset> (1234567890));
                 NOTREACHED;
               }
-            catch (cinelerra::error::Invalid& xxx) {ASSERT (xxx.getID()==CINELERRA_ERROR_UNKNOWN_ASSET_ID);}
-            cinelerra_error (); // reset errorflag
+            catch (lumiera::error::Invalid& xxx) {ASSERT (xxx.getID()==LUMIERA_ERROR_UNKNOWN_ASSET_ID);}
+            lumiera_error (); // reset errorflag
             
             
             // checking the Ident-Fields
@@ -121,8 +121,8 @@ namespace asset
             ASSERT (mm3->ident.category == Category (VIDEO       ));
 
             ASSERT (mm1->ident.org == "ichthyo");
-            ASSERT (mm2->ident.org == "cin3");
-            ASSERT (mm3->ident.org == "cin3");
+            ASSERT (mm2->ident.org == "lumi");
+            ASSERT (mm3->ident.org == "lumi");
 
             ASSERT (mm1->ident.version == 5);
             ASSERT (mm2->ident.version == 1);
@@ -159,19 +159,19 @@ namespace asset
             ASSERT (key2.name == "testfile2"); // name filled in automatically 
 
             candi = asset::Media::create(string("testfile3.wav"), Category(AUDIO));
-            ASSERT ( checkProperties (candi, Asset::Ident("testfile3", Category(AUDIO), "cin3", 1)
+            ASSERT ( checkProperties (candi, Asset::Ident("testfile3", Category(AUDIO), "lumi", 1)
                                            , "testfile3.wav"));
 
             candi = asset::Media::create("some/path/testfile4.wav", Category(AUDIO));
-            ASSERT ( checkProperties (candi, Asset::Ident("testfile4", Category(AUDIO), "cin3", 1)
+            ASSERT ( checkProperties (candi, Asset::Ident("testfile4", Category(AUDIO), "lumi", 1)
                                            , "some/path/testfile4.wav"));
 
             candi = asset::Media::create("", Category(AUDIO,"sub/bin"));
-            ASSERT ( checkProperties (candi, Asset::Ident("nil", Category(AUDIO,"sub/bin"), "cin3", 1)
+            ASSERT ( checkProperties (candi, Asset::Ident("nil", Category(AUDIO,"sub/bin"), "lumi", 1)
                                            , ""));
 
             candi = asset::Media::create("", AUDIO);
-            ASSERT ( checkProperties (candi, Asset::Ident("nil", Category(AUDIO), "cin3", 1)
+            ASSERT ( checkProperties (candi, Asset::Ident("nil", Category(AUDIO), "lumi", 1)
                                            , ""));
           }
         

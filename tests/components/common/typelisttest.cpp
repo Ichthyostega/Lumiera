@@ -30,7 +30,7 @@ using std::string;
 using std::cout;
 
 
-namespace cinelerra
+namespace lumiera
   {
   namespace typelist
     {
@@ -97,4 +97,4 @@ namespace cinelerra
     
   } // namespace typelist
 
-} // namespace cinelerra
+} // namespace lumiera

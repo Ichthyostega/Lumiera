@@ -41,7 +41,7 @@
 #include <vector>
 #include <map>
 
-using cinelerra::error::Invalid;
+using lumiera::error::Invalid;
 using util::for_each;
 using util::isnil;
 using std::cout;

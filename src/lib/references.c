@@ -40,17 +40,17 @@
  * @param dtor destructor function which will be called on obj when the last strong reference gets deleted
  * @return self as given
  */
-CinelerraReference
-cinelerra_reference_strong_init_once (CinelerraReference self, void* obj, void (*dtor)(void*))
+LumieraReference
+lumiera_reference_strong_init_once (LumieraReference self, void* obj, void (*dtor)(void*))
 {
-  CinelerraReftarget target = malloc (sizeof(cinelerra_reftarget));
-  if (!target) CINELERRA_DIE;
+  LumieraReftarget target = malloc (sizeof(lumiera_reftarget));
+  if (!target) LUMIERA_DIE;
 
   target->object = obj;
   target->dtor = dtor;
   target->strong_cnt = 1;
   target->weak_cnt = 0;
-  cinelerra_mutex_init (&target->lock);
+  lumiera_mutex_init (&target->lock);
 
   self->object = obj;
   self->target = target;
@@ -66,16 +66,16 @@ cinelerra_reference_strong_init_once (CinelerraReference self, void* obj, void (
  * @return self as given
  * destroying a reference is not thread safe as far as 2 threads try to concurrently destroy it!
  */
-CinelerraReference
-cinelerra_reference_destroy (CinelerraReference self)
+LumieraReference
+lumiera_reference_destroy (LumieraReference self)
 {
-  CinelerraReftarget target = self->target;
+  LumieraReftarget target = self->target;
 
   /* defensive, lets detect errors if anything still tries to use this reference */
   self->target = NULL;
 
-  cinelerra_mutexacquirer lock;
-  cinelerra_mutexacquirer_init_mutex (&lock, &target->lock, CINELERRA_LOCKED);
+  lumiera_mutexacquirer lock;
+  lumiera_mutexacquirer_init_mutex (&lock, &target->lock, LUMIERA_LOCKED);
 
   if (self->object)
     {
@@ -89,8 +89,8 @@ cinelerra_reference_destroy (CinelerraReference self)
           if (!target->weak_cnt)
             {
               /* no weak refs either, destroy it */
-              cinelerra_mutexacquirer_unlock (&lock);
-              cinelerra_mutex_destroy (&target->lock);
+              lumiera_mutexacquirer_unlock (&lock);
+              lumiera_mutex_destroy (&target->lock);
               free (target);
               return self;
             }
@@ -102,13 +102,13 @@ cinelerra_reference_destroy (CinelerraReference self)
       if (!--target->weak_cnt && !target->strong_cnt)
         {
           /* was last weak reference, and no strong refs left */
-          cinelerra_mutexacquirer_unlock (&lock);
-          cinelerra_mutex_destroy (&target->lock);
+          lumiera_mutexacquirer_unlock (&lock);
+          lumiera_mutex_destroy (&target->lock);
           free (target);
           return self;
         }
     }
-  cinelerra_mutexacquirer_unlock (&lock);
+  lumiera_mutexacquirer_unlock (&lock);
   return self;
 }
 
@@ -118,11 +118,11 @@ cinelerra_reference_destroy (CinelerraReference self)
  * @return self as strong reference (always for strong references) or NULL if source is an invalidated weak reference,
  * in the later case the reference is constructed as weak reference barely to allow it be destroyed
  */
-CinelerraReference
-cinelerra_reference_strong_init (CinelerraReference self, CinelerraReference source)
+LumieraReference
+lumiera_reference_strong_init (LumieraReference self, LumieraReference source)
 {
-  cinelerra_mutexacquirer lock;
-  cinelerra_mutexacquirer_init_mutex (&lock, &source->target->lock, CINELERRA_LOCKED);
+  lumiera_mutexacquirer lock;
+  lumiera_mutexacquirer_init_mutex (&lock, &source->target->lock, LUMIERA_LOCKED);
 
   self->object = source->target->object;
   self->target = source->target;
@@ -136,7 +136,7 @@ cinelerra_reference_strong_init (CinelerraReference self, CinelerraReference sou
       ++self->target->weak_cnt;
       self = NULL;
     }
-  cinelerra_mutexacquirer_unlock (&lock);
+  lumiera_mutexacquirer_unlock (&lock);
   return self;
 }
 
@@ -145,11 +145,11 @@ cinelerra_reference_strong_init (CinelerraReference self, CinelerraReference sou
  * @param source reference to copy
  * @return self (always for strong references) or NULL if self is an invalidated weak reference
  */
-CinelerraReference
-cinelerra_reference_weak_init (CinelerraReference self, CinelerraReference source)
+LumieraReference
+lumiera_reference_weak_init (LumieraReference self, LumieraReference source)
 {
-  cinelerra_mutexacquirer lock;
-  cinelerra_mutexacquirer_init_mutex (&lock, &source->target->lock, CINELERRA_LOCKED);
+  lumiera_mutexacquirer lock;
+  lumiera_mutexacquirer_init_mutex (&lock, &source->target->lock, LUMIERA_LOCKED);
 
   self->object = NULL;
   self->target = source->target;
@@ -159,7 +159,7 @@ cinelerra_reference_weak_init (CinelerraReference self, CinelerraReference sourc
     /* already invalidated */
     self = NULL;
 
-  cinelerra_mutexacquirer_unlock (&lock);
+  lumiera_mutexacquirer_unlock (&lock);
   return self;
 }
 
@@ -169,14 +169,14 @@ cinelerra_reference_weak_init (CinelerraReference self, CinelerraReference sourc
  * do nothing if the referene is already weak
  * @return self or NULL if the final strong reference got removed,
  */
-CinelerraReference
-cinelerra_reference_weaken (restrict CinelerraReference self)
+LumieraReference
+lumiera_reference_weaken (restrict LumieraReference self)
 {
   /* is this a strong reference? */
   if (self->object)
     {
-      cinelerra_mutexacquirer lock;
-      cinelerra_mutexacquirer_init_mutex (&lock, &self->target->lock, CINELERRA_LOCKED);
+      lumiera_mutexacquirer lock;
+      lumiera_mutexacquirer_init_mutex (&lock, &self->target->lock, LUMIERA_LOCKED);
 
       self->object = NULL;
       ++self->target->weak_cnt;
@@ -187,7 +187,7 @@ cinelerra_reference_weaken (restrict CinelerraReference self)
           self->target->object = NULL;
           self = NULL;
         }
-      cinelerra_mutexacquirer_unlock (&lock);
+      lumiera_mutexacquirer_unlock (&lock);
     }
   return self;
 }
@@ -198,14 +198,14 @@ cinelerra_reference_weaken (restrict CinelerraReference self)
  * only references of object which are not already destroyed can be strengthened
  * @return self when successful, NULL when the object was already destroyed, 'self' stays a dead weak reference in that case
  */
-CinelerraReference
-cinelerra_reference_strengthen (CinelerraReference self)
+LumieraReference
+lumiera_reference_strengthen (LumieraReference self)
 {
   /* is this a weak reference? */
   if (!self->object)
     {
-      cinelerra_mutexacquirer lock;
-      cinelerra_mutexacquirer_init_mutex (&lock, &self->target->lock, CINELERRA_LOCKED);
+      lumiera_mutexacquirer lock;
+      lumiera_mutexacquirer_init_mutex (&lock, &self->target->lock, LUMIERA_LOCKED);
 
       if (self->target->object)
         {
@@ -215,7 +215,7 @@ cinelerra_reference_strengthen (CinelerraReference self)
         }
       else
         self = NULL;
-      cinelerra_mutexacquirer_unlock (&lock);
+      lumiera_mutexacquirer_unlock (&lock);
     }
   return self;
 }

@@ -57,7 +57,7 @@ namespace mobject
   /**
    * The (current) Session holds all the user
    * visible content to be edited and manipulated
-   * within the Cinelerra Application. From a users
+   * within the Lumiera Application. From a users
    * perspective, it is a collection of Media Objects
    * (--> MObject) placed (--> Placement) onto virtual
    * Tracks.

@@ -19,8 +19,8 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef CINELERRA_CONDITION_H
-#define CINELERRA_CONDITION_H
+#ifndef LUMIERA_CONDITION_H
+#define LUMIERA_CONDITION_H
 
 #include "lib/locking.h"
 
@@ -33,21 +33,21 @@
  * Condition variables.
  *
  */
-struct cinelerra_condition_struct
+struct lumiera_condition_struct
 {
   pthread_cond_t cond;
   pthread_mutex_t mutex;
 };
-typedef struct cinelerra_condition_struct cinelerra_condition;
-typedef cinelerra_condition* CinelerraCondition;
+typedef struct lumiera_condition_struct lumiera_condition;
+typedef lumiera_condition* LumieraCondition;
 
 
-CinelerraCondition
-cinelerra_condition_init (CinelerraCondition self);
+LumieraCondition
+lumiera_condition_init (LumieraCondition self);
 
 
-CinelerraCondition
-cinelerra_condition_destroy (CinelerraCondition self);
+LumieraCondition
+lumiera_condition_destroy (LumieraCondition self);
 
 
 /**
@@ -55,14 +55,14 @@ cinelerra_condition_destroy (CinelerraCondition self);
  * @param self condition variable to be signaled, must be given, all errors are fatal
  */
 static inline void
-cinelerra_condition_signal (CinelerraCondition self)
+lumiera_condition_signal (LumieraCondition self)
 {
   REQUIRE (self);
   if (pthread_mutex_lock (&self->mutex))
-    CINELERRA_DIE;
+    LUMIERA_DIE;
   pthread_cond_signal (&self->cond);
   if (pthread_mutex_unlock (&self->mutex))
-    CINELERRA_DIE;
+    LUMIERA_DIE;
 }
 
 /**
@@ -70,14 +70,14 @@ cinelerra_condition_signal (CinelerraCondition self)
  * @param self condition variable to be signaled, must be given, all errors are fatal
  */
 static inline void
-cinelerra_condition_broadcast (CinelerraCondition self)
+lumiera_condition_broadcast (LumieraCondition self)
 {
   REQUIRE (self);
   if (pthread_mutex_lock (&self->mutex))
-    CINELERRA_DIE;
+    LUMIERA_DIE;
   pthread_cond_broadcast (&self->cond);
   if (pthread_mutex_unlock (&self->mutex))
-    CINELERRA_DIE;
+    LUMIERA_DIE;
 }
 
 
@@ -87,44 +87,44 @@ cinelerra_condition_broadcast (CinelerraCondition self)
 /**
  * conditionacquirer used to manage the state of a condition variable.
  */
-struct cinelerra_conditionacquirer_struct
+struct lumiera_conditionacquirer_struct
 {
-  CinelerraCondition cond;
-  enum cinelerra_lockstate  state;
+  LumieraCondition cond;
+  enum lumiera_lockstate  state;
 };
-typedef struct cinelerra_conditionacquirer_struct cinelerra_conditionacquirer;
-typedef struct cinelerra_conditionacquirer_struct* CinelerraConditionacquirer;
+typedef struct lumiera_conditionacquirer_struct lumiera_conditionacquirer;
+typedef struct lumiera_conditionacquirer_struct* LumieraConditionacquirer;
 
 /* helper function for nobug */
 static inline void
-cinelerra_conditionacquirer_ensureunlocked (CinelerraConditionacquirer self)
+lumiera_conditionacquirer_ensureunlocked (LumieraConditionacquirer self)
 {
-  ENSURE (self->state == CINELERRA_UNLOCKED, "forgot to unlock the condition mutex");
+  ENSURE (self->state == LUMIERA_UNLOCKED, "forgot to unlock the condition mutex");
 }
 
 /* override with a macro to use the cleanup checker */
-#define cinelerra_conditionacquirer \
-cinelerra_conditionacquirer NOBUG_CLEANUP(cinelerra_conditionacquirer_ensureunlocked)
+#define lumiera_conditionacquirer \
+lumiera_conditionacquirer NOBUG_CLEANUP(lumiera_conditionacquirer_ensureunlocked)
 
 
 /**
  * initialize a conditionacquirer state
  * @param self conditionacquirer to be initialized, must be an automatic variable
  * @param cond associated condition variable
- * @param state initial state of the mutex, either CINELERRA_LOCKED or CINELERRA_UNLOCKED
+ * @param state initial state of the mutex, either LUMIERA_LOCKED or LUMIERA_UNLOCKED
  * @return self as given
  * errors are fatal
  */
-static inline CinelerraConditionacquirer
-cinelerra_conditionacquirer_init (CinelerraConditionacquirer self, CinelerraCondition cond, enum cinelerra_lockstate state)
+static inline LumieraConditionacquirer
+lumiera_conditionacquirer_init (LumieraConditionacquirer self, LumieraCondition cond, enum lumiera_lockstate state)
 {
   REQUIRE (self);
   REQUIRE (cond);
   self->cond = cond;
   self->state = state;
-  if (state == CINELERRA_LOCKED)
+  if (state == LUMIERA_LOCKED)
     if (pthread_mutex_lock (&cond->mutex))
-      CINELERRA_DIE;
+      LUMIERA_DIE;
 
   return self;
 }
@@ -135,15 +135,15 @@ cinelerra_conditionacquirer_init (CinelerraConditionacquirer self, CinelerraCond
  * @param self conditionacquirer associated with a condition variable
  */
 static inline void
-cinelerra_conditionacquirer_lock (CinelerraConditionacquirer self)
+lumiera_conditionacquirer_lock (LumieraConditionacquirer self)
 {
   REQUIRE (self);
-  REQUIRE (self->state == CINELERRA_UNLOCKED, "mutex already locked");
+  REQUIRE (self->state == LUMIERA_UNLOCKED, "mutex already locked");
 
   if (pthread_mutex_lock (&self->cond->mutex))
-    CINELERRA_DIE;
+    LUMIERA_DIE;
 
-  self->state = CINELERRA_LOCKED;
+  self->state = LUMIERA_LOCKED;
 }
 
 
@@ -153,10 +153,10 @@ cinelerra_conditionacquirer_lock (CinelerraConditionacquirer self)
  * @param self conditionacquirer associated with a condition variable
  */
 static inline void
-cinelerra_conditionacquirer_wait (CinelerraConditionacquirer self)
+lumiera_conditionacquirer_wait (LumieraConditionacquirer self)
 {
   REQUIRE (self);
-  REQUIRE (self->state == CINELERRA_LOCKED, "mutex must be locked");
+  REQUIRE (self->state == LUMIERA_LOCKED, "mutex must be locked");
   pthread_cond_wait (&self->cond->cond, &self->cond->mutex);
 }
 
@@ -167,13 +167,13 @@ cinelerra_conditionacquirer_wait (CinelerraConditionacquirer self)
  * @param self conditionacquirer associated with a condition variable
  */
 static inline int
-cinelerra_conditionacquirer_unlock (CinelerraConditionacquirer self)
+lumiera_conditionacquirer_unlock (LumieraConditionacquirer self)
 {
   REQUIRE (self);
-  REQUIRE (self->state == CINELERRA_LOCKED, "mutex was not locked");
+  REQUIRE (self->state == LUMIERA_LOCKED, "mutex was not locked");
   if (pthread_mutex_unlock (&self->cond->mutex))
-    CINELERRA_DIE;
-  self->state = CINELERRA_UNLOCKED;
+    LUMIERA_DIE;
+  self->state = LUMIERA_UNLOCKED;
 }
 
 
@@ -182,10 +182,10 @@ cinelerra_conditionacquirer_unlock (CinelerraConditionacquirer self)
  * @param self conditionacquirer associated with the condition variable to be signaled
  */
 static inline void
-cinelerra_conditionacquirer_signal (CinelerraConditionacquirer self)
+lumiera_conditionacquirer_signal (LumieraConditionacquirer self)
 {
   REQUIRE (self);
-  REQUIRE (self->state == CINELERRA_LOCKED, "mutex was not locked");
+  REQUIRE (self->state == LUMIERA_LOCKED, "mutex was not locked");
   pthread_cond_signal (&self->cond->cond);
 }
 
@@ -195,10 +195,10 @@ cinelerra_conditionacquirer_signal (CinelerraConditionacquirer self)
  * @param self conditionacquirer associated with the condition variable to be signaled
  */
 static inline int
-cinelerra_conditionacquirer_broadcast (CinelerraConditionacquirer self)
+lumiera_conditionacquirer_broadcast (LumieraConditionacquirer self)
 {
   REQUIRE (self);
-  REQUIRE (self->state == CINELERRA_LOCKED, "mutex was not locked");
+  REQUIRE (self->state == LUMIERA_LOCKED, "mutex was not locked");
   pthread_cond_broadcast (&self->cond->cond);
 }
 

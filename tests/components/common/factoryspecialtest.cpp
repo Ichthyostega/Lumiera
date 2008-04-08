@@ -38,7 +38,7 @@ using std::string;
 using std::cout;
 
 
-namespace cinelerra
+namespace lumiera
   {
   namespace test
     {
@@ -323,4 +323,4 @@ namespace cinelerra
     
   } // namespace test
 
-} // namespace cinelerra
+} // namespace lumiera

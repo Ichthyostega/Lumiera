@@ -1,5 +1,5 @@
 /*
-  error.c  -  Cinelerra Error handling
+  error.c  -  Lumiera Error handling
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -24,41 +24,41 @@
 #include "lib/error.h"
 
 /**
- * @file C Error handling in Cinelerra.
+ * @file C Error handling in Lumiera.
  */
 
 
 /*
   predefined errors
 */
-CINELERRA_ERROR_DEFINE (ERRNO, "errno");
+LUMIERA_ERROR_DEFINE (ERRNO, "errno");
 
 
 /* Thread local storage */
-static pthread_key_t cinelerra_error_tls;
-static pthread_once_t cinelerra_error_initialized = PTHREAD_ONCE_INIT;
+static pthread_key_t lumiera_error_tls;
+static pthread_once_t lumiera_error_initialized = PTHREAD_ONCE_INIT;
 
 static void
-cinelerra_error_tls_init (void)
+lumiera_error_tls_init (void)
 {
-  pthread_key_create (&cinelerra_error_tls, NULL);
+  pthread_key_create (&lumiera_error_tls, NULL);
 }
 
 /**
  * Set error state for the current thread.
  * If the error state of the current thread was cleared, then set it, else preserve the old state.
- * @param nerr name of the error with 'CINELERRA_ERROR_' prefix (example: CINELERRA_ERROR_NO_MEMORY)
+ * @param nerr name of the error with 'LUMIERA_ERROR_' prefix (example: LUMIERA_ERROR_NO_MEMORY)
  * @return old state, that is NULL for success, when the state was cleared and a pointer to a pending 
  * error when the error state was already set
  */
 const char*
-cinelerra_error_set (const char * nerr)
+lumiera_error_set (const char * nerr)
 {
-  pthread_once (&cinelerra_error_initialized, cinelerra_error_tls_init);
+  pthread_once (&lumiera_error_initialized, lumiera_error_tls_init);
 
-  const char* err = pthread_getspecific (cinelerra_error_tls);
+  const char* err = pthread_getspecific (lumiera_error_tls);
   if (!err)
-    pthread_setspecific (cinelerra_error_tls, nerr);
+    pthread_setspecific (lumiera_error_tls, nerr);
 
   return err;
 }
@@ -71,12 +71,12 @@ cinelerra_error_set (const char * nerr)
  * @return pointer to any pending error of this thread, NULL if no error is pending
  */
 const char*
-cinelerra_error ()
+lumiera_error ()
 {
-  pthread_once (&cinelerra_error_initialized, cinelerra_error_tls_init);
+  pthread_once (&lumiera_error_initialized, lumiera_error_tls_init);
 
-  const char* err = pthread_getspecific (cinelerra_error_tls);
+  const char* err = pthread_getspecific (lumiera_error_tls);
   if (err)
-    pthread_setspecific (cinelerra_error_tls, NULL);
+    pthread_setspecific (lumiera_error_tls, NULL);
   return err;
 }

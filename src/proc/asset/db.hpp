@@ -87,7 +87,7 @@ namespace asset
       DB () : table() { }
       ~DB ()          {clear();}
       
-      friend class cinelerra::singleton::StaticCreate<DB>;
+      friend class lumiera::singleton::StaticCreate<DB>;
       
       
     public:
@@ -125,7 +125,7 @@ namespace asset
               
               table.clear();
             }
-          catch (cinelerra::Error& EX)
+          catch (lumiera::Error& EX)
             {
               WARN (oper, "Problems while clearing Asset registry: %s", EX.what());
             }

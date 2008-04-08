@@ -32,7 +32,7 @@ namespace asset
   {
   
 
-  const cinelerra::Time DUMMY_TIME (25); ///< @todo solve konfig management
+  const lumiera::Time DUMMY_TIME (25); ///< @todo solve konfig management
 
   /**
    * Placeholder Asset for unknown or unavailable media source.
@@ -47,11 +47,11 @@ namespace asset
       friend class MediaFactory;
       
     public:
-      virtual Media::PMedia getOrg()  throw(cinelerra::error::Invalid);
+      virtual Media::PMedia getOrg()  throw(lumiera::error::Invalid);
       
     };
     
-  CINELERRA_ERROR_DECLARE (ORIG_NOT_FOUND);
+  LUMIERA_ERROR_DECLARE (ORIG_NOT_FOUND);
     
     
     

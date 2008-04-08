@@ -37,7 +37,7 @@
 #include "common/singleton.hpp"
 
 
-using cinelerra::Singleton;
+using lumiera::Singleton;
 using mobject::session::SessManager;
 using mobject::session::SessManagerImpl;
 

@@ -155,7 +155,7 @@ namespace asset
           /** origin or authorship id. 
            *  Can be a project abbreviation, a package id or just the authors nickname or UID.
            *  This allows for the compnent name to be more generic (e.g. "blur"). 
-           *  Default for all assets provided by the core cinelerra-3 codebase is "cin3".
+           *  Default for all assets provided by the core Lumiera codebase is "lumi".
            */
           const string org;
     
@@ -284,7 +284,7 @@ namespace asset
        *  @return \c false if the state could not be changed
        *          due to parent objects being disabled
        */
-      bool enable (bool on=true)  throw(cinelerra::error::State);
+      bool enable (bool on=true)  throw(lumiera::error::State);
       
       
     };

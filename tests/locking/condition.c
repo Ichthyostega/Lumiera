@@ -40,10 +40,10 @@ signaling_thread()
 int
 conditionforgotunlock ()
 {
-  cinelerra_condition c;
-  cinelerra_condition_init (&c);
+  lumiera_condition c;
+  lumiera_condition_init (&c);
 
-  cinelerra_conditionacquirer l;
-  cinelerra_conditionacquirer_init (&l, &c, CINELERRA_LOCKED);
+  lumiera_conditionacquirer l;
+  lumiera_conditionacquirer_init (&l, &c, LUMIERA_LOCKED);
   return 0;
 }

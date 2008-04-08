@@ -59,7 +59,7 @@ namespace mobject
      * an instantiation of the "Applicable" template parametrized with all 
      * concrete Buildable classes, for which it wants calls to be dispatched. 
      */
-    typedef cinelerra::visitor::Tool<void, InvokeCatchAllFunction> BuilderTool;
+    typedef lumiera::visitor::Tool<void, InvokeCatchAllFunction> BuilderTool;
     
     
     template
@@ -67,11 +67,11 @@ namespace mobject
         class TYPELIST  //  list of all concrete Buildables to be treated
       >
     class Applicable
-      : public cinelerra::visitor::Applicable<TOOLImpl, TYPELIST, BuilderTool>
+      : public lumiera::visitor::Applicable<TOOLImpl, TYPELIST, BuilderTool>
       { }
       ;
       
-    using cinelerra::typelist::Types;   // convienience for the users of "Applicable"
+    using lumiera::typelist::Types;   // convienience for the users of "Applicable"
 
   } // namespace mobject::builder
   
@@ -80,7 +80,7 @@ namespace mobject
   /**
    *  Marker Interface for classes Visitable by Builder tools. 
    */
-  class Buildable : public cinelerra::visitor::Visitable<builder::BuilderTool>
+  class Buildable : public lumiera::visitor::Visitable<builder::BuilderTool>
     { };
 
 } // namespace mobject

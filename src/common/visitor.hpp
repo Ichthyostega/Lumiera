@@ -37,7 +37,7 @@ Credits for many further implementation ideas go to
 
 /** @file visitor.hpp
  ** A library implementation of the <b>Visitor Pattern</b> taylored specifically
- ** to cinelerra's needs within the Proc Layer. Visitor enables <b>double dispatch</b>
+ ** to Lumiera's needs within the Proc Layer. Visitor enables <b>double dispatch</b>
  ** calls, based both on the concrete type of some target object and the concrete type of
  ** a tool object being applied to this target. The code carrying out this tool application
  ** (and thus triggering the double dispatch) need not know any of these concret types and is
@@ -73,8 +73,8 @@ Credits for many further implementation ideas go to
 
 
 
-#ifndef CINELERRA_VISITOR_H
-#define CINELERRA_VISITOR_H
+#ifndef LUMIERA_VISITOR_H
+#define LUMIERA_VISITOR_H
 
 #include "common/visitorpolicies.hpp"
 #include "common/visitordispatcher.hpp"
@@ -82,7 +82,7 @@ Credits for many further implementation ideas go to
 #include "common/typelist.hpp"
 
 
-namespace cinelerra
+namespace lumiera
   {
   namespace visitor
     {
@@ -229,5 +229,5 @@ namespace cinelerra
     
   } // namespace visitor
 
-} // namespace cinelerra
+} // namespace lumiera
 #endif

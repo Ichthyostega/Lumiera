@@ -25,7 +25,7 @@
 #include "lib/references.h"
 
 
-CINELERRA_ERROR_DEFINE(TEST, "test error");
+LUMIERA_ERROR_DEFINE(TEST, "test error");
 
 
 struct example
@@ -55,16 +55,16 @@ main (int argc, char** argv)
       struct example test;
       test.foo = 123;
 
-      cinelerra_reference hold;
+      lumiera_reference hold;
 
-      cinelerra_reference_strong_init_once (&hold, &test, example_dtor);
+      lumiera_reference_strong_init_once (&hold, &test, example_dtor);
 
 
-      struct example* r = cinelerra_reference_get (&hold);
+      struct example* r = lumiera_reference_get (&hold);
 
       printf ("got: %d\n", r->foo);
 
-      cinelerra_reference_destroy (&hold);
+      lumiera_reference_destroy (&hold);
     }
   else if (!strcmp(argv[1], "nodeinsert"))
     {

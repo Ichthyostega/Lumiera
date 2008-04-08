@@ -34,8 +34,8 @@
  */
 
 
-#ifndef CINELERRA_APPCONFIG_H
-#define CINELERRA_APPCONFIG_H
+#ifndef LUMIERA_APPCONFIG_H
+#define LUMIERA_APPCONFIG_H
 
 #include <map>
 #include <string>
@@ -45,7 +45,7 @@
 
 
 
-namespace cinelerra
+namespace lumiera
   {
   using std::string;
   using boost::scoped_ptr;
@@ -104,5 +104,5 @@ namespace cinelerra
 
 
 
-} // namespace cinelerra
+} // namespace lumiera
 #endif

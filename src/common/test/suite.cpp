@@ -133,7 +133,7 @@ namespace test
     TRACE(test, "Test-Suite( groupID=%s )\n", groupID.c_str () );
     
     if (!testcases.getGroup(groupID))
-      throw cinelerra::error::Invalid ();
+      throw lumiera::error::Invalid ();
       //throw "empty testsuite";     /////////// TODO Errorhandling!
   }
     
@@ -155,7 +155,7 @@ namespace test
   {
     PTestMap tests = testcases.getGroup(groupID_);
     if (!tests)
-      throw cinelerra::error::Invalid (); ///////// TODO: pass error description
+      throw lumiera::error::Invalid (); ///////// TODO: pass error description
     
     if (0 < cmdline.size())
       {
@@ -209,7 +209,7 @@ namespace test
           }
         catch (...) 
           {
-            std::cout << "PLANNED ============= " << cinelerra_error() << "\n";
+            std::cout << "PLANNED ============= " << lumiera_error() << "\n";
           }
         std::cout << "END\n";
       }

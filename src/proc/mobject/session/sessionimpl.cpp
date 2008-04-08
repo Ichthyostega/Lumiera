@@ -60,7 +60,7 @@ namespace mobject
       catch (...)
         {
           focusEDL_ = 0;
-          throw cinelerra::error::Fatal ("unexpected exception while clearing EDLs");
+          throw lumiera::error::Fatal ("unexpected exception while clearing EDLs");
         }
     }
     
