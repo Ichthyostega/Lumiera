@@ -22,20 +22,20 @@
 
 
 /** @file visitorpolicies.hpp
- ** Policies usable for configuring the lumiera::visitor::Tool for different kinds of error handling. 
+ ** Policies usable for configuring the cinelerra::visitor::Tool for different kinds of error handling. 
  ** @see buildertool.hpp for another flavor (calling and catch-all-function)
  **
  */
 
 
 
-#ifndef LUMIERA_VISITORPOLICIES_H
-#define LUMIERA_VISITORPOLICIES_H
+#ifndef CINELERRA_VISITORPOLICIES_H
+#define CINELERRA_VISITORPOLICIES_H
 
 #include "common/error.hpp"
 
 
-namespace lumiera
+namespace cinelerra
   {
   namespace visitor
     {
@@ -65,7 +65,7 @@ namespace lumiera
         RET 
         onUnknown (TAR&)
           {
-            throw lumiera::error::Config("unable to decide what tool operation to call");
+            throw cinelerra::error::Config("unable to decide what tool operation to call");
           }
       };
       
@@ -73,5 +73,5 @@ namespace lumiera
     
   } // namespace visitor
 
-} // namespace lumiera
+} // namespace cinelerra
 #endif

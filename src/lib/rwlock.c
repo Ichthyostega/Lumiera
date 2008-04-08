@@ -23,8 +23,8 @@
 #include <errno.h>
 #include "lib/rwlock.h"
 
-LUMIERA_ERROR_DEFINE(RWLOCK_AGAIN, "maximum number of readlocks exceed");
-LUMIERA_ERROR_DEFINE(RWLOCK_DEADLOCK, "deadlock detected");
+CINELERRA_ERROR_DEFINE(RWLOCK_AGAIN, "maximum number of readlocks exceed");
+CINELERRA_ERROR_DEFINE(RWLOCK_DEADLOCK, "deadlock detected");
 
 /**
  * @file Read/write locks.
@@ -36,8 +36,8 @@ LUMIERA_ERROR_DEFINE(RWLOCK_DEADLOCK, "deadlock detected");
  * @param self is a pointer to the rwlock to be initialized
  * @return self as given
  */
-LumieraRWLock
-lumiera_rwlock_init (LumieraRWLock self)
+CinelerraRWLock
+cinelerra_rwlock_init (CinelerraRWLock self)
 {
   if (self)
     {
@@ -51,13 +51,13 @@ lumiera_rwlock_init (LumieraRWLock self)
  * @param self is a pointer to the rwlock to be initialized
  * @return self on success or NULL at error
  */
-LumieraRWLock
-lumiera_rwlock_destroy (LumieraRWLock self)
+CinelerraRWLock
+cinelerra_rwlock_destroy (CinelerraRWLock self)
 {
   if (self)
     {
       if (pthread_rwlock_destroy (&self->rwlock))
-        LUMIERA_DIE;
+        CINELERRA_DIE;
     }
   return self;
 }
@@ -69,44 +69,44 @@ lumiera_rwlock_destroy (LumieraRWLock self)
  * initialize a rwlockacquirer state
  * @param self rwlockacquirer to be initialized, must be an automatic variable
  * @param rwlock associated rwlock
- * @param state initial state of the mutex, either LUMIERA_RDLOCKED, LUMIERA_WRLOCKED or LUMIERA_UNLOCKED
+ * @param state initial state of the mutex, either CINELERRA_RDLOCKED, CINELERRA_WRLOCKED or CINELERRA_UNLOCKED
  * @return self as given or NULL on error
  */
-LumieraRWLockacquirer
-lumiera_rwlockacquirer_init (LumieraRWLockacquirer self, LumieraRWLock rwlock, enum lumiera_lockstate state)
+CinelerraRWLockacquirer
+cinelerra_rwlockacquirer_init (CinelerraRWLockacquirer self, CinelerraRWLock rwlock, enum cinelerra_lockstate state)
 {
   REQUIRE (self);
   REQUIRE (rwlock);
-  REQUIRE (state != LUMIERA_LOCKED, "illegal state for rwlock");
+  REQUIRE (state != CINELERRA_LOCKED, "illegal state for rwlock");
   self->rwlock = rwlock;
   self->state = state;
 
   switch (state)
     {
-    case LUMIERA_RDLOCKED:
+    case CINELERRA_RDLOCKED:
       switch (pthread_rwlock_rdlock (&rwlock->rwlock))
         {
         case 0:
           break;
         case EAGAIN:
-          lumiera_error_set (LUMIERA_ERROR_RWLOCK_AGAIN);
+          cinelerra_error_set (CINELERRA_ERROR_RWLOCK_AGAIN);
           return NULL;
         case EDEADLK:
-          lumiera_error_set (LUMIERA_ERROR_RWLOCK_DEADLOCK);
+          cinelerra_error_set (CINELERRA_ERROR_RWLOCK_DEADLOCK);
           return NULL;
         default:
-          LUMIERA_DIE;
+          CINELERRA_DIE;
         }
-    case LUMIERA_WRLOCKED:
+    case CINELERRA_WRLOCKED:
       switch (pthread_rwlock_wrlock (&rwlock->rwlock))
         {
         case 0:
           break;
         case EDEADLK:
-          lumiera_error_set (LUMIERA_ERROR_RWLOCK_DEADLOCK);
+          cinelerra_error_set (CINELERRA_ERROR_RWLOCK_DEADLOCK);
           return NULL;
         default:
-          LUMIERA_DIE;
+          CINELERRA_DIE;
         }
     default:
       break;
@@ -121,27 +121,27 @@ lumiera_rwlockacquirer_init (LumieraRWLockacquirer self, LumieraRWLock rwlock, e
  * @param self rwlockacquirer associated with a rwlock
  * @return self as given or NULL on error
  */
-LumieraRWLockacquirer
-lumiera_rwlockacquirer_rdlock (LumieraRWLockacquirer self)
+CinelerraRWLockacquirer
+cinelerra_rwlockacquirer_rdlock (CinelerraRWLockacquirer self)
 {
   REQUIRE (self);
-  REQUIRE (self->state == LUMIERA_UNLOCKED, "rwlock already locked");
+  REQUIRE (self->state == CINELERRA_UNLOCKED, "rwlock already locked");
 
   switch (pthread_rwlock_rdlock (&self->rwlock->rwlock))
     {
     case 0:
       break;
     case EAGAIN:
-      lumiera_error_set (LUMIERA_ERROR_RWLOCK_AGAIN);
+      cinelerra_error_set (CINELERRA_ERROR_RWLOCK_AGAIN);
       return NULL;
     case EDEADLK:
-      lumiera_error_set (LUMIERA_ERROR_RWLOCK_DEADLOCK);
+      cinelerra_error_set (CINELERRA_ERROR_RWLOCK_DEADLOCK);
       return NULL;
     default:
-      LUMIERA_DIE;
+      CINELERRA_DIE;
     }
 
-  self->state = LUMIERA_RDLOCKED;
+  self->state = CINELERRA_RDLOCKED;
   return self;
 }
 
@@ -152,24 +152,24 @@ lumiera_rwlockacquirer_rdlock (LumieraRWLockacquirer self)
  * @param self rwlockacquirer associated with a rwlock
  * @return self as given or NULL on error
  */
-LumieraRWLockacquirer
-lumiera_rwlockacquirer_wrlock (LumieraRWLockacquirer self)
+CinelerraRWLockacquirer
+cinelerra_rwlockacquirer_wrlock (CinelerraRWLockacquirer self)
 {
   REQUIRE (self);
-  REQUIRE (self->state == LUMIERA_UNLOCKED, "rwlock already locked");
+  REQUIRE (self->state == CINELERRA_UNLOCKED, "rwlock already locked");
 
   switch (pthread_rwlock_wrlock (&self->rwlock->rwlock))
     {
     case 0:
       break;
     case EDEADLK:
-      lumiera_error_set (LUMIERA_ERROR_RWLOCK_DEADLOCK);
+      cinelerra_error_set (CINELERRA_ERROR_RWLOCK_DEADLOCK);
       return NULL;
     default:
-      LUMIERA_DIE;
+      CINELERRA_DIE;
     }
 
-  self->state = LUMIERA_WRLOCKED;
+  self->state = CINELERRA_WRLOCKED;
   return self;
 }
 

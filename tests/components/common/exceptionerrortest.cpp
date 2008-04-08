@@ -42,7 +42,7 @@ using std::cout;
 
 
 
-namespace lumiera
+namespace cinelerra
   {
   namespace test
     {
@@ -50,11 +50,11 @@ namespace lumiera
     /** local specific error-constant for use in the 
      *  construcor of the nested SpecificError class.
      */
-    LUMIERA_ERROR_DEFINE(LIFE_AND_UNIVERSE, "and everything?");
-    LUMIERA_ERROR_DEFINE(DERIVED, "convoluted exception");
+    CINELERRA_ERROR_DEFINE(LIFE_AND_UNIVERSE, "and everything?");
+    CINELERRA_ERROR_DEFINE(DERIVED, "convoluted exception");
     
     /** declare a specific Error class with parent class error::external */
-    LUMIERA_EXCEPTION_DECLARE (DerivedError, error::External,  LUMIERA_ERROR_DERIVED);
+    CINELERRA_EXCEPTION_DECLARE (DerivedError, error::External,  CINELERRA_ERROR_DERIVED);
     
     
     /**********************************************************
@@ -134,29 +134,29 @@ namespace lumiera
         }
         
         
-        /** @test by constructing an lumiera::Error object,
-         *  the corresponding lumiera_error state is set automatically
+        /** @test by constructing an cinelerra::Error object,
+         *  the corresponding cinelerra_error state is set automatically
          */
         void checkErrorIntegration()
         {
-          lumiera_error ();
-          ASSERT (!lumiera_error ());
+          cinelerra_error ();
+          ASSERT (!cinelerra_error ());
           
           Error err1;
-          Error err2("boo",LUMIERA_ERROR_DERIVED);
-          ASSERT (err1.getID () == lumiera_error ()); // (we didn't clear the first one!)
+          Error err2("boo",CINELERRA_ERROR_DERIVED);
+          ASSERT (err1.getID () == cinelerra_error ()); // (we didn't clear the first one!)
           
-          Error err3("boooo",LUMIERA_ERROR_DERIVED);
-          ASSERT (err3.getID () == lumiera_error ());
+          Error err3("boooo",CINELERRA_ERROR_DERIVED);
+          ASSERT (err3.getID () == cinelerra_error ());
           
           SpecificError err4;
-          ASSERT (err4.getID () == LUMIERA_ERROR_LIFE_AND_UNIVERSE);
-          ASSERT (err4.getID () == lumiera_error ());
+          ASSERT (err4.getID () == CINELERRA_ERROR_LIFE_AND_UNIVERSE);
+          ASSERT (err4.getID () == cinelerra_error ());
           
-          ASSERT (!lumiera_error ());
+          ASSERT (!cinelerra_error ());
         }
         
-        /** @test the chaining of lumiera::Exception objects
+        /** @test the chaining of cinelerra::Exception objects
          *  and the retrieval of the original root cause.
          */
         void checkRootCauseChaining()
@@ -186,7 +186,7 @@ namespace lumiera
          *        gets installed and invoked, which gives additional diagnostics.*/
         void terminateUnknown ()  throw() 
         {
-          lumiera::Appconfig::instance();
+          cinelerra::Appconfig::instance();
           // will cause initialisation of Appconfig,
           
           throw Error("You'll never get me, won't you?");
@@ -201,7 +201,7 @@ namespace lumiera
           {
             int value;
           public:
-            SpecificError () : Invalid("don't panic",LUMIERA_ERROR_LIFE_AND_UNIVERSE), value(42) {}
+            SpecificError () : Invalid("don't panic",CINELERRA_ERROR_LIFE_AND_UNIVERSE), value(42) {}
             int revealIt ()   { return value; }
           };
         
@@ -220,7 +220,7 @@ namespace lumiera
           catch (SpecificError& e) { cout << "caught: " << e.what() << "..the answer is: " << e.revealIt() << "\n"; }                
           catch (error::Logic&  e) { cout << "caught error::Logic: " << e.what() << "\n"; }                
           catch (error::Invalid&e) { cout << "caught error::Invalid: " << e.what() << "\n"; }                
-          catch (Error&         e) { cout << "caught lumiera::Error: " << e.what() << "\n"; }                
+          catch (Error&         e) { cout << "caught cinelerra::Error: " << e.what() << "\n"; }                
           catch (runtime_error& e) { cout << "caught std::runtime_error: " << e.what() << "\n"; }                
           catch (exception&     e) { cout << "caught std::exception: " << e.what() << "\n"; }
           catch (...)              { cout << "caught an unknown exception\n"; }

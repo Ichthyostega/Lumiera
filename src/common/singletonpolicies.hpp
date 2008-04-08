@@ -31,8 +31,8 @@ This code is heavily inspired by
 
 
 
-#ifndef LUMIERA_SINGLETONPOLICIES_H
-#define LUMIERA_SINGLETONPOLICIES_H
+#ifndef CINELERRA_SINGLETONPOLICIES_H
+#define CINELERRA_SINGLETONPOLICIES_H
 
 #include "common/multithread.hpp"
 #include "common/error.hpp"
@@ -40,11 +40,11 @@ This code is heavily inspired by
 #include <vector>
 
 
-namespace lumiera
+namespace cinelerra
   {
   namespace singleton
     {
-      /* === several Policies usable in conjunction with lumiera::Singleton === */
+      /* == several Policies usable in conjunction with cinelerra::Singleton == */
       
       /** 
        * Policy placing the Singleton instance into a statically allocated buffer
@@ -133,13 +133,13 @@ namespace lumiera
       
       /**
        * Policy for handling multithreaded access to the singleton instance
-       * @todo actually implement this policy using the Lumiera databackend.
+       * @todo actually implement this policy using the cinelerra databackend.
        */
       template<class S>
       struct Multithreaded
         {
           typedef volatile S VolatileType;
-          typedef lumiera::Thread::Lock<S> Lock;
+          typedef cinelerra::Thread::Lock<S> Lock;
         };
       
       
@@ -156,5 +156,5 @@ namespace lumiera
     
   } // namespace singleton
   
-} // namespace lumiera
+} // namespace cinelerra
 #endif

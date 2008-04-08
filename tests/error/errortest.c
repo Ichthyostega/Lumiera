@@ -25,7 +25,7 @@
 #include "lib/error.h"
 
 
-LUMIERA_ERROR_DEFINE(TEST, "test error");
+CINELERRA_ERROR_DEFINE(TEST, "test error");
 
 int
 main (int argc, char** argv)
@@ -35,31 +35,31 @@ main (int argc, char** argv)
 
   if (!strcmp(argv[1], "set"))
     {
-      lumiera_error_set (LUMIERA_ERROR_TEST);
+      cinelerra_error_set (CINELERRA_ERROR_TEST);
     }
 
   if (!strcmp(argv[1], "get_no"))
     {
       const char* err;
-      err = lumiera_error ();
+      err = cinelerra_error ();
       printf ("%p\n", err);
     }
 
   if (!strcmp(argv[1], "get"))
     {
-      lumiera_error_set (LUMIERA_ERROR_TEST);
+      cinelerra_error_set (CINELERRA_ERROR_TEST);
       const char* err;
-      err = lumiera_error ();
+      err = cinelerra_error ();
       printf ("%s\n", err);
     }
 
   if (!strcmp(argv[1], "get2"))
     {
-      lumiera_error_set (LUMIERA_ERROR_TEST);
+      cinelerra_error_set (CINELERRA_ERROR_TEST);
       const char* err;
-      err = lumiera_error ();
+      err = cinelerra_error ();
       printf ("%s\n", err);
-      err = lumiera_error ();
+      err = cinelerra_error ();
       printf ("%p\n", err);
     }
 

@@ -19,8 +19,8 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef LUMIERA_MUTEX_H
-#define LUMIERA_MUTEX_H
+#ifndef CINELERRA_MUTEX_H
+#define CINELERRA_MUTEX_H
 
 #include "lib/locking.h"
 
@@ -33,58 +33,58 @@
  * Mutex.
  *
  */
-struct lumiera_mutex_struct
+struct cinelerra_mutex_struct
 {
   pthread_mutex_t mutex;
 };
-typedef struct lumiera_mutex_struct lumiera_mutex;
-typedef lumiera_mutex* LumieraMutex;
+typedef struct cinelerra_mutex_struct cinelerra_mutex;
+typedef cinelerra_mutex* CinelerraMutex;
 
 
-LumieraMutex
-lumiera_mutex_init (LumieraMutex self);
+CinelerraMutex
+cinelerra_mutex_init (CinelerraMutex self);
 
 
-LumieraMutex
-lumiera_mutex_destroy (LumieraMutex self);
+CinelerraMutex
+cinelerra_mutex_destroy (CinelerraMutex self);
 
 
 
 /**
  * mutexacquirer used to manage the state of a mutex variable.
  */
-struct lumiera_mutexacquirer_struct
+struct cinelerra_mutexacquirer_struct
 {
-  LumieraMutex mutex;
-  enum lumiera_lockstate  state;
+  CinelerraMutex mutex;
+  enum cinelerra_lockstate  state;
 };
-typedef struct lumiera_mutexacquirer_struct lumiera_mutexacquirer;
-typedef struct lumiera_mutexacquirer_struct* LumieraMutexacquirer;
+typedef struct cinelerra_mutexacquirer_struct cinelerra_mutexacquirer;
+typedef struct cinelerra_mutexacquirer_struct* CinelerraMutexacquirer;
 
 /* helper function for nobug */
 static inline void
-lumiera_mutexacquirer_ensureunlocked (LumieraMutexacquirer self)
+cinelerra_mutexacquirer_ensureunlocked (CinelerraMutexacquirer self)
 {
-  ENSURE (self->state == LUMIERA_UNLOCKED, "forgot to unlock mutex");
+  ENSURE (self->state == CINELERRA_UNLOCKED, "forgot to unlock mutex");
 }
 
 /* override with a macro to use the cleanup checker */
-#define lumiera_mutexacquirer \
-lumiera_mutexacquirer NOBUG_CLEANUP(lumiera_mutexacquirer_ensureunlocked)
+#define cinelerra_mutexacquirer \
+cinelerra_mutexacquirer NOBUG_CLEANUP(cinelerra_mutexacquirer_ensureunlocked)
 
 
 /**
  * initialize a mutexacquirer state without mutex.
  * @param self mutexacquirer to be initialized, must be an automatic variable
  * @return self as given
- * This initialization is used when lumiera_mutexacquirer_try_mutex shall be used later
+ * This initialization is used when cinelerra_mutexacquirer_try_mutex shall be used later
  */
-static inline LumieraMutexacquirer
-lumiera_mutexacquirer_init (LumieraMutexacquirer self)
+static inline CinelerraMutexacquirer
+cinelerra_mutexacquirer_init (CinelerraMutexacquirer self)
 {
   REQUIRE (self);
   self->mutex = NULL;
-  self->state = LUMIERA_UNLOCKED;
+  self->state = CINELERRA_UNLOCKED;
 
   return self;
 }
@@ -93,20 +93,20 @@ lumiera_mutexacquirer_init (LumieraMutexacquirer self)
  * initialize a mutexacquirer state
  * @param self mutexacquirer to be initialized, must be an automatic variable
  * @param mutex associated mutex
- * @param state initial state of the mutex, either LUMIERA_LOCKED or LUMIERA_UNLOCKED
+ * @param state initial state of the mutex, either CINELERRA_LOCKED or CINELERRA_UNLOCKED
  * @return self as given
  * errors are fatal
  */
-static inline LumieraMutexacquirer
-lumiera_mutexacquirer_init_mutex (LumieraMutexacquirer self, LumieraMutex mutex, enum lumiera_lockstate state)
+static inline CinelerraMutexacquirer
+cinelerra_mutexacquirer_init_mutex (CinelerraMutexacquirer self, CinelerraMutex mutex, enum cinelerra_lockstate state)
 {
   REQUIRE (self);
   REQUIRE (mutex);
   self->mutex = mutex;
   self->state = state;
-  if (state == LUMIERA_LOCKED)
+  if (state == CINELERRA_LOCKED)
     if (pthread_mutex_lock (&mutex->mutex))
-      LUMIERA_DIE;
+      CINELERRA_DIE;
 
   return self;
 }
@@ -118,25 +118,25 @@ lumiera_mutexacquirer_init_mutex (LumieraMutexacquirer self, LumieraMutex mutex,
  * @param self mutexacquirer associated with a mutex variable
  */
 static inline void
-lumiera_mutexacquirer_lock (LumieraMutexacquirer self)
+cinelerra_mutexacquirer_lock (CinelerraMutexacquirer self)
 {
   REQUIRE (self);
-  REQUIRE (self->state == LUMIERA_UNLOCKED, "mutex already locked");
+  REQUIRE (self->state == CINELERRA_UNLOCKED, "mutex already locked");
 
   if (pthread_mutex_lock (&self->mutex->mutex))
-    LUMIERA_DIE;
+    CINELERRA_DIE;
 
-  self->state = LUMIERA_LOCKED;
+  self->state = CINELERRA_LOCKED;
 }
 
 
 /**
  * get the state of a lock.
  * @param self mutexacquirer associated with a mutex variable
- * @return LUMIERA_LOCKED when the mutex is locked by this thead
+ * @return CINELERRA_LOCKED when the mutex is locked by this thead
  */
-static inline enum lumiera_lockstate
-lumiera_mutexacquirer_state (LumieraMutexacquirer self)
+static inline enum cinelerra_lockstate
+cinelerra_mutexacquirer_state (CinelerraMutexacquirer self)
 {
   REQUIRE (self);
   return self->state;
@@ -148,23 +148,23 @@ lumiera_mutexacquirer_state (LumieraMutexacquirer self)
  * must not already be locked
  * @param self mutexacquirer associated with a mutex variable
  * @param mutex pointer to a mutex which should be tried
- * @return LUMIERA_LOCKED when the mutex got locked
+ * @return CINELERRA_LOCKED when the mutex got locked
  */
-static inline enum lumiera_lockstate
-lumiera_mutexacquirer_try_mutex (LumieraMutexacquirer self, LumieraMutex mutex)
+static inline enum cinelerra_lockstate
+cinelerra_mutexacquirer_try_mutex (CinelerraMutexacquirer self, CinelerraMutex mutex)
 {
   REQUIRE (self);
-  REQUIRE (self->state == LUMIERA_UNLOCKED, "mutex already locked");
+  REQUIRE (self->state == CINELERRA_UNLOCKED, "mutex already locked");
 
   self->mutex=mutex;
   switch (pthread_mutex_trylock (&self->mutex->mutex))
     {
     case 0:
-      return self->state = LUMIERA_LOCKED;
+      return self->state = CINELERRA_LOCKED;
     case EBUSY:
-      return LUMIERA_UNLOCKED;
+      return CINELERRA_UNLOCKED;
     default:
-      LUMIERA_DIE;
+      CINELERRA_DIE;
     }
 }
 
@@ -175,13 +175,13 @@ lumiera_mutexacquirer_try_mutex (LumieraMutexacquirer self, LumieraMutex mutex)
  * @param self mutexacquirer associated with a mutex variable
  */
 static inline void
-lumiera_mutexacquirer_unlock (LumieraMutexacquirer self)
+cinelerra_mutexacquirer_unlock (CinelerraMutexacquirer self)
 {
   REQUIRE (self);
-  REQUIRE (self->state == LUMIERA_LOCKED, "mutex was not locked");
+  REQUIRE (self->state == CINELERRA_LOCKED, "mutex was not locked");
   if (pthread_mutex_unlock (&self->mutex->mutex))
-    LUMIERA_DIE;
-  self->state = LUMIERA_UNLOCKED;
+    CINELERRA_DIE;
+  self->state = CINELERRA_UNLOCKED;
 }
 
 #endif

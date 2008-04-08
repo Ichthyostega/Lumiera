@@ -19,8 +19,8 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef LUMIERA_RWLOCK_H
-#define LUMIERA_RWLOCK_H
+#ifndef CINELERRA_RWLOCK_H
+#define CINELERRA_RWLOCK_H
 
 #ifndef _GNU_SOURCE
 #error "This header must be included with _GNU_SOURCE or _POSIX_C_SOURCE >= 200112L defined"
@@ -31,8 +31,8 @@
 
 #include "lib/locking.h"
 
-LUMIERA_ERROR_DECLARE(RWLOCK_AGAIN);
-LUMIERA_ERROR_DECLARE(RWLOCK_DEADLOCK);
+CINELERRA_ERROR_DECLARE(RWLOCK_AGAIN);
+CINELERRA_ERROR_DECLARE(RWLOCK_DEADLOCK);
 
 /**
  * @file Read/write locks, header.
@@ -43,20 +43,20 @@ LUMIERA_ERROR_DECLARE(RWLOCK_DEADLOCK);
  * RWLock.
  *
  */
-struct lumiera_rwlock_struct
+struct cinelerra_rwlock_struct
 {
   pthread_rwlock_t rwlock;
 };
-typedef struct lumiera_rwlock_struct lumiera_rwlock;
-typedef lumiera_rwlock* LumieraRWLock;
+typedef struct cinelerra_rwlock_struct cinelerra_rwlock;
+typedef cinelerra_rwlock* CinelerraRWLock;
 
 
-LumieraRWLock
-lumiera_rwlock_init (LumieraRWLock self);
+CinelerraRWLock
+cinelerra_rwlock_init (CinelerraRWLock self);
 
 
-LumieraRWLock
-lumiera_rwlock_destroy (LumieraRWLock self);
+CinelerraRWLock
+cinelerra_rwlock_destroy (CinelerraRWLock self);
 
 
 
@@ -64,35 +64,35 @@ lumiera_rwlock_destroy (LumieraRWLock self);
 /**
  * rwlockacquirer used to manage the state of a rwlock variable.
  */
-struct lumiera_rwlockacquirer_struct
+struct cinelerra_rwlockacquirer_struct
 {
-  LumieraRWLock rwlock;
-  enum lumiera_lockstate  state;
+  CinelerraRWLock rwlock;
+  enum cinelerra_lockstate  state;
 };
-typedef struct lumiera_rwlockacquirer_struct lumiera_rwlockacquirer;
-typedef struct lumiera_rwlockacquirer_struct* LumieraRWLockacquirer;
+typedef struct cinelerra_rwlockacquirer_struct cinelerra_rwlockacquirer;
+typedef struct cinelerra_rwlockacquirer_struct* CinelerraRWLockacquirer;
 
 /* helper function for nobug */
 static inline void
-lumiera_rwlockacquirer_ensureunlocked (LumieraRWLockacquirer self)
+cinelerra_rwlockacquirer_ensureunlocked (CinelerraRWLockacquirer self)
 {
-  ENSURE (self->state == LUMIERA_UNLOCKED, "forgot to unlock the rwlock mutex");
+  ENSURE (self->state == CINELERRA_UNLOCKED, "forgot to unlock the rwlock mutex");
 }
 
 /* override with a macro to use the cleanup checker */
-#define lumiera_rwlockacquirer \
-lumiera_rwlockacquirer NOBUG_CLEANUP(lumiera_rwlockacquirer_ensureunlocked)
+#define cinelerra_rwlockacquirer \
+cinelerra_rwlockacquirer NOBUG_CLEANUP(cinelerra_rwlockacquirer_ensureunlocked)
 
 
-LumieraRWLockacquirer
-lumiera_rwlockacquirer_init (LumieraRWLockacquirer self, LumieraRWLock rwlock, enum lumiera_lockstate state);
+CinelerraRWLockacquirer
+cinelerra_rwlockacquirer_init (CinelerraRWLockacquirer self, CinelerraRWLock rwlock, enum cinelerra_lockstate state);
 
-LumieraRWLockacquirer
-lumiera_rwlockacquirer_rdlock (LumieraRWLockacquirer self);
+CinelerraRWLockacquirer
+cinelerra_rwlockacquirer_rdlock (CinelerraRWLockacquirer self);
 
 
-LumieraRWLockacquirer
-lumiera_rwlockacquirer_wrlock (LumieraRWLockacquirer self);
+CinelerraRWLockacquirer
+cinelerra_rwlockacquirer_wrlock (CinelerraRWLockacquirer self);
 
 
 /**
@@ -101,13 +101,13 @@ lumiera_rwlockacquirer_wrlock (LumieraRWLockacquirer self);
  * @param self rwlockacquirer associated with a rwlock variable
  */
 static inline void
-lumiera_rwlockacquirer_unlock (LumieraRWLockacquirer self)
+cinelerra_rwlockacquirer_unlock (CinelerraRWLockacquirer self)
 {
   REQUIRE (self);
-  REQUIRE (self->state != LUMIERA_UNLOCKED, "rwlock was not locked");
+  REQUIRE (self->state != CINELERRA_UNLOCKED, "rwlock was not locked");
   if (pthread_rwlock_unlock (&self->rwlock->rwlock))
-    LUMIERA_DIE;
-  self->state = LUMIERA_UNLOCKED;
+    CINELERRA_DIE;
+  self->state = CINELERRA_UNLOCKED;
 }
 
 

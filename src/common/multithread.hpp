@@ -23,21 +23,21 @@
 
 
 
-#ifndef LUMIERA_MULTITHREAD_H
-#define LUMIERA_MULTITHREAD_H
+#ifndef CINELERRA_MULTITHREAD_H
+#define CINELERRA_MULTITHREAD_H
 
 #include "nobugcfg.h"
 
 
-namespace lumiera
+namespace cinelerra
   {
       
     /**
      * Interface/Policy for managing parallelism issues.
      * Basically everything is forwarded to the corresponding backend functions,
-     * because managing threads and locking belongs to the Lumiera backend layer.
+     * because managing threads and locking belongs to the cinelerra backend layer.
      * 
-     * @todo actually implement this policy using the Lumiera databackend.
+     * @todo actually implement this policy using the cinelerra databackend.
      */
     struct Thread
       {
@@ -52,5 +52,5 @@ namespace lumiera
       };
     
   
-} // namespace lumiera
+} // namespace cinelerra
 #endif

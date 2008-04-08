@@ -47,19 +47,19 @@ This code is heavily inspired by
  **
  ** Interface for using this facility is the template Types(.....) for up to 20 Type parameters
  **
- ** @see lumiera::visitor::Applicable usage example
+ ** @see cinelerra::visitor::Applicable usage example
  ** @see typelisttest.cpp
  ** 
  */
 
 
-#ifndef LUMIERA_TYPELIST_H
-#define LUMIERA_TYPELIST_H
+#ifndef CINELERRA_TYPELIST_H
+#define CINELERRA_TYPELIST_H
 
 
 
 
-namespace lumiera
+namespace cinelerra
   {
   namespace typelist
     {
@@ -116,5 +116,5 @@ namespace lumiera
     
   } // namespace typelist
 
-} // namespace lumiera
+} // namespace cinelerra
 #endif

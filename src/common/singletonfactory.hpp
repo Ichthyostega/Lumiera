@@ -31,8 +31,8 @@ This code is heavily inspired by
 
 
 
-#ifndef LUMIERA_SINGLETONFACTORY_H
-#define LUMIERA_SINGLETONFACTORY_H
+#ifndef CINELERRA_SINGLETONFACTORY_H
+#define CINELERRA_SINGLETONFACTORY_H
 
 
 #include "common/singletonpolicies.hpp"  ///< several Policies usable together with SingletonFactory
@@ -43,7 +43,7 @@ This code is heavily inspired by
 //#include <boost/bind.hpp>
 
 
-namespace lumiera
+namespace cinelerra
   {
   
   /**
@@ -136,5 +136,5 @@ namespace lumiera
 /////       It seems this would either cost us much of the flexibility or get complicated
 /////       to a point where we could as well implement our own Depenency Injection Manager.
 
-} // namespace lumiera
+} // namespace cinelerra
 #endif

@@ -31,8 +31,8 @@
  * @param self is a pointer to the mutex to be initialized
  * @return self as given
  */
-LumieraMutex
-lumiera_mutex_init (LumieraMutex self)
+CinelerraMutex
+cinelerra_mutex_init (CinelerraMutex self)
 {
   if (self)
     {
@@ -46,13 +46,13 @@ lumiera_mutex_init (LumieraMutex self)
  * @param self is a pointer to the mutex to be destroyed
  * @return self as given
  */
-LumieraMutex
-lumiera_mutex_destroy (LumieraMutex self)
+CinelerraMutex
+cinelerra_mutex_destroy (CinelerraMutex self)
 {
   if (self)
     {
       if (pthread_mutex_destroy (&self->mutex))
-        LUMIERA_DIE;
+        CINELERRA_DIE;
     }
   return self;
 }

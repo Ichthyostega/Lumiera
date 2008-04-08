@@ -26,7 +26,7 @@
 
 #include <list>
 
-#include "lumiera.h"
+#include "cinelerra.h"
 #include "proc/mobject/explicitplacement.hpp"
 
 
@@ -49,7 +49,7 @@ namespace mobject
     class Segment
       {
       protected:
-        typedef lumiera::Time Time;
+        typedef cinelerra::Time Time;
 
         /** begin of this timeline segment. */
         Time start;

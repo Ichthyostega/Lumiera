@@ -37,7 +37,7 @@ using std::string;
 using std::cout;
 
 
-namespace lumiera
+namespace cinelerra
   {
   namespace test
     {
@@ -108,8 +108,8 @@ namespace lumiera
      * @test inject a Mock object into the Singleton Factory, 
      *       to be returned and used in place of the original object.
      * Expected results: Mock(s) called, no memory leaks.
-     * @see  lumiera::Singleton
-     * @see  lumiera::singleton::Static
+     * @see  cinelerra::Singleton
+     * @see  cinelerra::singleton::Static
      */
     class SingletonTestMock_test : public Test
       {
@@ -214,4 +214,4 @@ namespace lumiera
 
   } // namespace test
 
-} // namespace lumiera
+} // namespace cinelerra

@@ -33,8 +33,8 @@
  ** @see mobject.hpp usage example
  */
 
-#ifndef LUMIERA_PRE_HPP
-#define LUMIERA_PRE_HPP
+#ifndef CINELERRA_PRE_HPP
+#define CINELERRA_PRE_HPP
 
 #include <string>
 #include <vector>
@@ -44,8 +44,8 @@
 #include <boost/format.hpp>
 #include <boost/bind.hpp>
 
-#include "lumiera.h"
+#include "cinelerra.h"
 
 
 
-#endif /*LUMIERA_PRE_HPP*/
+#endif /*CINELERRA_PRE_HPP*/

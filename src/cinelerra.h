@@ -1,5 +1,5 @@
 /*
-  LUMIERA.h  -  global definitions and common types
+  CINELERRA.h  -  global definitions and common types
  
  
   Copyright (C)         Lumiera.org
@@ -22,8 +22,8 @@
  
 */
 
-#ifndef LUMIERA_H
-#define LUMIERA_H
+#ifndef CINELERRA_H
+#define CINELERRA_H
 
 
 
@@ -54,13 +54,13 @@ extern "C" {
 #include "common/error.hpp"
 
 
-namespace lumiera
+namespace cinelerra
   {
     /* additional global configuration goes here... */
   
     
-} // namespace lumiera
+} // namespace cinelerra
 
 #endif /* ===================== (End) C++-Part ================= */
 
-#endif /*LUMIERA_H*/
+#endif /*CINELERRA_H*/

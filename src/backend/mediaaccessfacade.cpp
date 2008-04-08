@@ -26,13 +26,13 @@
 #include "common/util.hpp"
 
 using util::isnil;
-using lumiera::error::Invalid;
+using cinelerra::error::Invalid;
 
 namespace backend_interface
   {
   
   /** storage for the SingletonFactory 
-   *  (actually a lumiera::test::MockInjector) */
+   *  (actually a cinelerra::test::MockInjector) */
   Singleton<MediaAccessFacade> MediaAccessFacade::instance;
 
   

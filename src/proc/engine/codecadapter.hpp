@@ -38,7 +38,7 @@ namespace engine
    * process thus is integrated into the framework
    * of the Renderengine, while the actual implementation
    * can be delegated to an external library accessed
-   * through Lumiera's data backend. 
+   * through Cinelerra's datat backend. 
    */
   class CodecAdapter : public Trafo
     {};

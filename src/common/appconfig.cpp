@@ -34,7 +34,7 @@
 
 using util::isnil;
 
-namespace lumiera
+namespace cinelerra
   {
   
   /** This internal pointer to the single instance is deliberately
@@ -52,7 +52,7 @@ namespace lumiera
 
   /** perform initialization on first access. 
    *  A call is placed in static initialization code
-   *  included in lumiera.h; thus it will happen
+   *  included in cinelerra.h; thus it will happen
    *  probably very early.
    */
   Appconfig::Appconfig()
@@ -65,7 +65,7 @@ namespace lumiera
     INFO(config, "Basic application configuration triggered.");
     
     // install our own handler for undeclared exceptions
-    std::set_unexpected (lumiera::error::lumiera_unexpectedException);
+    std::set_unexpected (cinelerra::error::cinelerra_unexpectedException);
     
     (*configParam_)["version"] = STRINGIFY (LUMIERA_VERSION);
   }
@@ -89,10 +89,10 @@ namespace lumiera
     catch (...)
       {
         ERROR(config, "error while accessing configuration parameter \"%s\".", key.c_str());
-        throw lumiera::error::Fatal ();
+        throw cinelerra::error::Fatal ();
   }   }
 
   
 
 
-} // namespace lumiera
+} // namespace cinelerra

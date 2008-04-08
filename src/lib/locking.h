@@ -19,8 +19,8 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef LUMIERA_LOCKING_H
-#define LUMIERA_LOCKING_H
+#ifndef CINELERRA_LOCKING_H
+#define CINELERRA_LOCKING_H
 
 #include <pthread.h>
 #include <errno.h>
@@ -37,12 +37,12 @@
  *
  *
  */
-enum lumiera_lockstate
+enum cinelerra_lockstate
   {
-    LUMIERA_UNLOCKED,
-    LUMIERA_LOCKED,
-    LUMIERA_RDLOCKED,
-    LUMIERA_WRLOCKED
+    CINELERRA_UNLOCKED,
+    CINELERRA_LOCKED,
+    CINELERRA_RDLOCKED,
+    CINELERRA_WRLOCKED
   };
 
 #endif

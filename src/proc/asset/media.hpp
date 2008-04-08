@@ -50,7 +50,7 @@ namespace asset
   class MediaFactory;
   class ProcPatt;
   
-  using lumiera::Time;
+  using cinelerra::Time;
   
   
   template<>
@@ -137,7 +137,7 @@ namespace asset
   /** 
    * Factory specialized for creating Media Asset objects.
    */ 
-  class MediaFactory : public lumiera::Factory<asset::Media>
+  class MediaFactory : public cinelerra::Factory<asset::Media>
     {
     public:
       typedef shared_ptr<asset::Media> PType;
@@ -151,11 +151,11 @@ namespace asset
       PType operator() (const char* file, asset::Kind);
       
       shared_ptr<asset::Clip>
-      operator() (asset::Media& mediaref)  throw(lumiera::error::Invalid);
+      operator() (asset::Media& mediaref)  throw(cinelerra::error::Invalid);
 
     };
 
-  LUMIERA_ERROR_DECLARE (PART_OF_COMPOUND);
+  CINELERRA_ERROR_DECLARE (PART_OF_COMPOUND);
     
     
     

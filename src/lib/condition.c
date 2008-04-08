@@ -30,8 +30,8 @@
  * @param self is a pointer to the condition variable to be initialized
  * @return self as given
  */
-LumieraCondition
-lumiera_condition_init (LumieraCondition self)
+CinelerraCondition
+cinelerra_condition_init (CinelerraCondition self)
 {
   if (self)
     {
@@ -47,15 +47,15 @@ lumiera_condition_init (LumieraCondition self)
  * @param self is a pointer to the condition variable to be destroyed
  * @return self as given
  */
-LumieraCondition
-lumiera_condition_destroy (LumieraCondition self)
+CinelerraCondition
+cinelerra_condition_destroy (CinelerraCondition self)
 {
   if (self)
     {
       if (pthread_mutex_destroy (&self->mutex))
-        LUMIERA_DIE;
+        CINELERRA_DIE;
       else if (pthread_cond_destroy (&self->cond))
-        LUMIERA_DIE;
+        CINELERRA_DIE;
     }
   return self;
 }

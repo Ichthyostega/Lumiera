@@ -24,7 +24,7 @@
 /** @file visitingtoolconept.cpp
  ** While laying the foundations for EDL and Builder, Ichthyo came accross 
  ** the necessity to create a custom implementation of the Visitor Pattern
- ** optimally suited for Lumiera's needs. This implementation file was 
+ ** optimally suited for Cinelerra's needs. This implementation file was 
  ** used for the draft and is self-contained. The final solution was then
  ** extracted as library implementation to visitor.hpp 
  **
@@ -60,13 +60,13 @@
 #include <iostream>
 #include <vector>
 
-using lumiera::Singleton;
+using cinelerra::Singleton;
 using boost::format;
 using std::string;
 using std::cout;
 
 
-namespace lumiera
+namespace cinelerra
   {
   namespace visitor_concept_draft
     {
@@ -459,4 +459,4 @@ namespace lumiera
     
   } // namespace visitor_concept_draft
 
-} // namespace lumiera
+} // namespace cinelerra

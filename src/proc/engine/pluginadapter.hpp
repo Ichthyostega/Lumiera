@@ -35,7 +35,7 @@ namespace engine
   /**
    * Adapter used to integrate an effects processor in the render pipeline.
    * Effects processors are typically defined in a separate library and
-   * will be loaded at runtime using Lumiera's plugin interface.
+   * will be loaded at runtime using Cinelerra's plugin interface.
    */
   class PluginAdapter : public Trafo
     {

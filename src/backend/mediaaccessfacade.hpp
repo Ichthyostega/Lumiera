@@ -59,7 +59,7 @@ namespace backend_interface
        *          information from this file, NULL if the
        *          file is not acessible.
        */
-      virtual FileHandle queryFile (const char* name)  throw(lumiera::error::Invalid);
+      virtual FileHandle queryFile (const char* name)  throw(cinelerra::error::Invalid);
       
       /** request for information about the n-th channel 
        *  of the file refered by FileHandle.

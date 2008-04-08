@@ -38,8 +38,8 @@ using boost::format;
 using boost::bind;
 using util::for_each;
 
-using lumiera::Singleton;
-using lumiera::Thread;
+using cinelerra::Singleton;
+using cinelerra::Thread;
 
 
 namespace asset
@@ -49,23 +49,23 @@ namespace asset
    * AssetManager error responses, caused by querying
    * invalid Asset IDs from the internal DB.
    */ 
-  class IDErr : public lumiera::error::Invalid 
+  class IDErr : public cinelerra::error::Invalid 
     {
     public:
       IDErr (const char* eID, format fmt) 
-        : lumiera::error::Invalid(fmt.str(),eID) {}
+        : cinelerra::error::Invalid(fmt.str(),eID) {}
     };
 
   
    // ------pre-defined-common-error-cases---------------
   //
-  LUMIERA_ERROR_DEFINE (UNKNOWN_ASSET_ID, "non-registered Asset ID");
-  LUMIERA_ERROR_DEFINE (WRONG_ASSET_KIND, "wrong Asset kind, unable to cast");
+  CINELERRA_ERROR_DEFINE (UNKNOWN_ASSET_ID, "non-registered Asset ID");
+  CINELERRA_ERROR_DEFINE (WRONG_ASSET_KIND, "wrong Asset kind, unable to cast");
   
   class UnknownID : public IDErr
     {
     public:
-      UnknownID (ID<Asset> aID) : IDErr (LUMIERA_ERROR_UNKNOWN_ASSET_ID, 
+      UnknownID (ID<Asset> aID) : IDErr (CINELERRA_ERROR_UNKNOWN_ASSET_ID, 
                                          format("Query for Asset with ID=%d, which up to now "
                                                 "hasn't been created or encountered.") % aID) {}
     };
@@ -73,7 +73,7 @@ namespace asset
   class WrongKind : public IDErr
     {
     public:
-      WrongKind (Asset::Ident idi) : IDErr (LUMIERA_ERROR_WRONG_ASSET_KIND,
+      WrongKind (Asset::Ident idi) : IDErr (CINELERRA_ERROR_WRONG_ASSET_KIND,
                                             format("Request for Asset(%s), specifying an Asset kind, "
                                                    "that doesn't match the actual type (and can't be "
                                                    "casted either).") % string(idi)) {}
@@ -110,7 +110,7 @@ namespace asset
   template<class KIND>
   ID<KIND>  
   AssetManager::reg (KIND* obj, const Asset::Ident& idi)
-      throw(lumiera::error::Invalid)
+      throw(cinelerra::error::Invalid)
   {
     typedef shared_ptr<KIND> PType;
     AssetManager& _aMang (AssetManager::instance());
@@ -133,7 +133,7 @@ namespace asset
   template<class KIND>
   shared_ptr<KIND>
   AssetManager::getAsset (const ID<KIND>& id)  
-      throw(lumiera::error::Invalid)
+      throw(cinelerra::error::Invalid)
   {
     if (shared_ptr<KIND> obj = registry.get (id))
       return obj;
@@ -243,11 +243,11 @@ namespace asset
   template ID<Asset> AssetManager::reg (Asset* obj, const Asset::Ident& idi);
   
   
-  template shared_ptr<Asset>  AssetManager::getAsset (const ID<Asset>&  id)  throw(lumiera::error::Invalid);
-  template shared_ptr<Media>  AssetManager::getAsset (const ID<Media>&  id)  throw(lumiera::error::Invalid);
-  template shared_ptr<Proc>   AssetManager::getAsset (const ID<Proc>&   id)  throw(lumiera::error::Invalid);
-  template shared_ptr<Struct> AssetManager::getAsset (const ID<Struct>& id)  throw(lumiera::error::Invalid);
-  template shared_ptr<Meta>   AssetManager::getAsset (const ID<Meta>&   id)  throw(lumiera::error::Invalid);
+  template shared_ptr<Asset>  AssetManager::getAsset (const ID<Asset>&  id)  throw(cinelerra::error::Invalid);
+  template shared_ptr<Media>  AssetManager::getAsset (const ID<Media>&  id)  throw(cinelerra::error::Invalid);
+  template shared_ptr<Proc>   AssetManager::getAsset (const ID<Proc>&   id)  throw(cinelerra::error::Invalid);
+  template shared_ptr<Struct> AssetManager::getAsset (const ID<Struct>& id)  throw(cinelerra::error::Invalid);
+  template shared_ptr<Meta>   AssetManager::getAsset (const ID<Meta>&   id)  throw(cinelerra::error::Invalid);
   
   template shared_ptr<Asset>  AssetManager::getPtr (const Asset& asset);
   template shared_ptr<Media>  AssetManager::getPtr (const Media& asset);

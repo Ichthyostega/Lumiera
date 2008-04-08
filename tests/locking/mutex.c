@@ -23,10 +23,10 @@
 
 int mutexforgotunlock()
 {
-  lumiera_mutex m;
-  lumiera_mutex_init (&m);
+  cinelerra_mutex m;
+  cinelerra_mutex_init (&m);
 
-  lumiera_mutexacquirer l;
-  lumiera_mutexacquirer_init_mutex (&l, &m, LUMIERA_LOCKED);
+  cinelerra_mutexacquirer l;
+  cinelerra_mutexacquirer_init_mutex (&l, &m, CINELERRA_LOCKED);
   return 0;
 }

@@ -32,7 +32,7 @@
 #include <iostream>
 
 //using boost::format;
-using lumiera::Time;
+using cinelerra::Time;
 using util::contains;
 using std::string;
 using std::cout;

@@ -31,7 +31,7 @@ using util::isnil;
 using boost::lexical_cast;
 
 
-namespace lumiera
+namespace cinelerra
   {
   namespace test
     {
@@ -65,4 +65,4 @@ namespace lumiera
     
   } // namespace test
 
-} // namespace lumiera
+} // namespace cinelerra

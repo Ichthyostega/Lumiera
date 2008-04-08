@@ -23,11 +23,11 @@
 
 #include <iostream>
 
-#include "lumiera.h"
+#include "cinelerra.h"
 
 using std::cout;
 using std::endl;
-using lumiera::Appconfig;
+using cinelerra::Appconfig;
 
 
 int main (int argc, char* argv[])

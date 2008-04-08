@@ -38,7 +38,7 @@ using std::string;
 using std::cout;
 
 
-namespace lumiera
+namespace cinelerra
   {
   namespace test
     {
@@ -72,9 +72,9 @@ namespace lumiera
     /*******************************************************************
      * @test implement a Singleton class using our Singleton Template.
      * Expected results: no memory leaks.
-     * @see  lumiera::Singleton
-     * @see  lumiera::singleton::StaticCreate
-     * @see  lumiera::singleton::HeapCreate
+     * @see  cinelerra::Singleton
+     * @see  cinelerra::singleton::StaticCreate
+     * @see  cinelerra::singleton::HeapCreate
      */
     class Singleton_test : public Test
       {
@@ -136,4 +136,4 @@ namespace lumiera
     
   } // namespace test
 
-} // namespace lumiera
+} // namespace cinelerra

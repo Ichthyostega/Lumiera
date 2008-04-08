@@ -22,8 +22,8 @@
 
 
 
-#ifndef LUMIERA_VISITORDISPATCHER_H
-#define LUMIERA_VISITORDISPATCHER_H
+#ifndef CINELERRA_VISITORDISPATCHER_H
+#define CINELERRA_VISITORDISPATCHER_H
 
 #include "common/error.hpp"
 #include "common/util.hpp"
@@ -33,7 +33,7 @@
 #include <vector>
 
 
-namespace lumiera
+namespace cinelerra
   {
   namespace visitor
     {
@@ -211,5 +211,5 @@ namespace lumiera
     
   } // namespace visitor
 
-} // namespace lumiera
+} // namespace cinelerra
 #endif

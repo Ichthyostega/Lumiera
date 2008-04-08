@@ -24,7 +24,7 @@
 
 #include "lib/condition.h"
 
-LUMIERA_ERROR_DEFINE(TEST, "test error");
+CINELERRA_ERROR_DEFINE(TEST, "test error");
 
 #if 0
 waiting_thread()
@@ -52,11 +52,11 @@ main (int argc, char** argv)
 
   if (!strcmp(argv[1], "conditionforgotunlock"))
     {
-      lumiera_condition c;
-      lumiera_condition_init (&c);
+      cinelerra_condition c;
+      cinelerra_condition_init (&c);
 
-      lumiera_conditionlock NOBUG_CLEANUP(lumiera_conditionlock_ensureunlocked) l;
-      lumiera_conditionlock_init (&l, &c, LUMIERA_LOCKED);
+      cinelerra_conditionlock NOBUG_CLEANUP(cinelerra_conditionlock_ensureunlocked) l;
+      cinelerra_conditionlock_init (&l, &c, CINELERRA_LOCKED);
     }
   else
     return 1;

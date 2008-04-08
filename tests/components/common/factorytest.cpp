@@ -36,7 +36,7 @@ using std::string;
 using std::cout;
 
 
-namespace lumiera
+namespace cinelerra
   {
   namespace test
     {
@@ -100,7 +100,7 @@ namespace lumiera
      *       further shared-ptrs, invoke a member function and
      *       finally, when leaving the scope, our TargetObj
      *       will be destroyed automatically.
-     * @see  lumiera::Factory
+     * @see  cinelerra::Factory
      */
     class Factory_test : public Test
       {
@@ -125,4 +125,4 @@ namespace lumiera
     
   } // namespace test
 
-} // namespace lumiera
+} // namespace cinelerra

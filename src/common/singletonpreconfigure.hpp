@@ -31,7 +31,7 @@
  ** One reason why one wants special Singleton behaviour is testing: Without
  ** altering the executable, for running some tests we need to inject a Test Mock
  ** in place of some service object, so we can verify the behaviour of the code
- ** <i>using</i> this service. For this, we mix lumiera::test::MockInjector
+ ** <i>using</i> this service. For this, we mix cinelerra::test::MockInjector
  ** into the actual Singleton type.
  **
  ** @note we declare the specialisations into the target namespace
@@ -41,13 +41,13 @@
  */
 
 
-#ifndef LUMIERA_SINGLETONPRECONFIGURE_H
-#define LUMIERA_SINGLETONPRECONFIGURE_H
+#ifndef CINELERRA_SINGLETONPRECONFIGURE_H
+#define CINELERRA_SINGLETONPRECONFIGURE_H
 
 #include "common/test/mockinjector.hpp"
 
 
-namespace lumiera
+namespace cinelerra
   {
   /**
    * Default Singleton configuration
@@ -67,15 +67,15 @@ namespace lumiera
   namespace test
     {
     class TestSingletonO;
-    using lumiera::Singleton;
+    using cinelerra::Singleton;
     
   } // namespace test
-}  // namespace lumiera
+}  // namespace cinelerra
 
 namespace backend_interface
   {
   class MediaAccessFacade;
-  using lumiera::Singleton;
+  using cinelerra::Singleton;
     
 } // namespace backend_interface
 
@@ -87,7 +87,7 @@ namespace backend_interface
   /* Specialisation Definitions */
   /* ************************** */
 
-namespace lumiera
+namespace cinelerra
   {
   
   using test::MockInjector;
@@ -104,7 +104,7 @@ namespace lumiera
     : public MockInjector<backend_interface::MediaAccessFacade>
     { };
 
-} // namespace lumiera
+} // namespace cinelerra
 
 
 

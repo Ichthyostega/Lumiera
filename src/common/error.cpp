@@ -1,5 +1,5 @@
 /*
-  Error  -  Lumiera Exception Interface
+  Error  -  Cinelerra Exception Interface
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -33,7 +33,7 @@ using util::isnil;
 using std::exception;
 
 
-namespace lumiera
+namespace cinelerra
   {
 
   namespace error
@@ -46,23 +46,23 @@ namespace lumiera
      */
     inline const string default_usermsg (Error* exception_obj)  throw() 
     {
-      return string("Sorry, Lumiera encountered an internal error. (")
+      return string("Sorry, Cinelerra encountered an internal error. (")
            + typeid(*exception_obj).name() + ")";
     }
     
     
     /* constants to be used as error IDs */
-    LUMIERA_ERROR_DEFINE (LOGIC    , "internal logic broken");   
-    LUMIERA_ERROR_DEFINE (FATAL    , "floundered");      
-    LUMIERA_ERROR_DEFINE (CONFIG   , "misconfiguration"); 
-    LUMIERA_ERROR_DEFINE (STATE    , "unforseen state"); 
-    LUMIERA_ERROR_DEFINE (INVALID  , "invalid input or parameters"); 
-    LUMIERA_ERROR_DEFINE (EXTERNAL , "failure in external service"); 
-    LUMIERA_ERROR_DEFINE (ASSERTION, "assertion failure");
+    CINELERRA_ERROR_DEFINE (LOGIC    , "internal logic broken");   
+    CINELERRA_ERROR_DEFINE (FATAL    , "floundered");      
+    CINELERRA_ERROR_DEFINE (CONFIG   , "misconfiguration"); 
+    CINELERRA_ERROR_DEFINE (STATE    , "unforseen state"); 
+    CINELERRA_ERROR_DEFINE (INVALID  , "invalid input or parameters"); 
+    CINELERRA_ERROR_DEFINE (EXTERNAL , "failure in external service"); 
+    CINELERRA_ERROR_DEFINE (ASSERTION, "assertion failure");
 
   } // namespace error
   
-  LUMIERA_ERROR_DEFINE (EXCEPTION, "generic Lumiera exception"); 
+  CINELERRA_ERROR_DEFINE (EXCEPTION, "generic cinelerra exception"); 
   
   
   
@@ -75,7 +75,7 @@ namespace lumiera
       desc_ (description),
       cause_ ("")
   {
-    lumiera_error_set (this->id_);
+    cinelerra_error_set (this->id_);
   }
   
   
@@ -87,7 +87,7 @@ namespace lumiera
       desc_ (description),
       cause_ (extractCauseMsg(cause))
   {
-    lumiera_error_set (this->id_);
+    cinelerra_error_set (this->id_);
   }
   
   
@@ -103,7 +103,7 @@ namespace lumiera
 
   
   /** Description of the problem, including the internal char constant
-   *  in accordance to Lumiera's error identification scheme.
+   *  in accordance to cinelerra's error identification scheme.
    *  If a root cause can be obtained, this will be included in the
    *  generated output as well. 
    */
@@ -167,15 +167,15 @@ namespace lumiera
   namespace error
   {
     
-    void lumiera_unexpectedException ()  throw()
+    void cinelerra_unexpectedException ()  throw()
     {
       const char* is_halted 
-        = "### Lumiera halted due to an unexpected Error ###";
+        = "### Cinelerra halted due to an unexpected Error ###";
       
       std::cerr << "\n" << is_halted << "\n\n";
       ERROR (NOBUG_ON, "%s", is_halted);
       
-      if (const char * errorstate = lumiera_error ())
+      if (const char * errorstate = cinelerra_error ())
         ERROR (NOBUG_ON, "last registered error was....\n%s", errorstate);
       
       std::terminate();
@@ -183,7 +183,7 @@ namespace lumiera
 
     void assertion_terminate (const string& location)
     {
-      throw Fatal (location, LUMIERA_ERROR_ASSERTION)
+      throw Fatal (location, CINELERRA_ERROR_ASSERTION)
                  .setUsermsg("Program terminated because of violating "
                              "an internal consistency check.");    
     }
@@ -191,4 +191,4 @@ namespace lumiera
     
   } // namespace error
   
-} // namespace lumiera
+} // namespace cinelerra

@@ -26,7 +26,7 @@
 #include "lib/framerate.h"
 
 
-LUMIERA_ERROR_DEFINE(TEST, "test error");
+CINELERRA_ERROR_DEFINE(TEST, "test error");
 
 int
 main (int argc, char** argv)
@@ -38,106 +38,106 @@ main (int argc, char** argv)
 
   if (!strcmp(argv[1], "init"))
     {
-      lumiera_time time;
+      cinelerra_time time;
 
-      lumiera_time_init (&time, atol (argv[2]), atol(argv[3]));
+      cinelerra_time_init (&time, atol (argv[2]), atol(argv[3]));
 
-      printf ("%lu %lu\n", (long)lumiera_time_sec (&time), (long)lumiera_time_usec (&time));
+      printf ("%lu %lu\n", (long)cinelerra_time_sec (&time), (long)cinelerra_time_usec (&time));
     }
 
   if (!strcmp(argv[1], "todouble"))
     {
-      lumiera_time time;
+      cinelerra_time time;
 
-      lumiera_time_init (&time, atol (argv[2]), atol(argv[3]));
+      cinelerra_time_init (&time, atol (argv[2]), atol(argv[3]));
 
-      printf ("%g\n", lumiera_time_double_get (&time));
+      printf ("%g\n", cinelerra_time_double_get (&time));
     }
 
   if (!strcmp(argv[1], "todoublenull"))
     {
-      printf ("%g\n", lumiera_time_double_get (NULL));
+      printf ("%g\n", cinelerra_time_double_get (NULL));
     }
 
   if (!strcmp(argv[1], "fromdouble"))
     {
-      lumiera_time time;
+      cinelerra_time time;
 
-      lumiera_time_set_double (&time, atof (argv[2]));
+      cinelerra_time_set_double (&time, atof (argv[2]));
 
-      printf ("%lu %lu\n", (long)lumiera_time_sec (&time), (long)lumiera_time_usec (&time));
+      printf ("%lu %lu\n", (long)cinelerra_time_sec (&time), (long)cinelerra_time_usec (&time));
     }
 
   if (!strcmp(argv[1], "currenttime"))
     {
-      lumiera_time time;
+      cinelerra_time time;
 
-      lumiera_time_current (&time);
+      cinelerra_time_current (&time);
 
-      printf ("%lu %lu\n", (long)lumiera_time_sec (&time), (long)lumiera_time_usec (&time));
+      printf ("%lu %lu\n", (long)cinelerra_time_sec (&time), (long)cinelerra_time_usec (&time));
     }
 
   if (!strcmp(argv[1], "add"))
     {
-      lumiera_time time1, time2;
+      cinelerra_time time1, time2;
 
-      lumiera_time_init (&time1, 0, atol (argv[2]));
-      lumiera_time_init (&time2, 0, atol (argv[3]));
-      lumiera_time_add (&time1, &time2);
+      cinelerra_time_init (&time1, 0, atol (argv[2]));
+      cinelerra_time_init (&time2, 0, atol (argv[3]));
+      cinelerra_time_add (&time1, &time2);
 
-      printf ("%lu %lu\n", (long)lumiera_time_sec (&time1), (long)lumiera_time_usec (&time1));
+      printf ("%lu %lu\n", (long)cinelerra_time_sec (&time1), (long)cinelerra_time_usec (&time1));
     }
 
   if (!strcmp(argv[1], "sub"))
     {
-      lumiera_time time1, time2;
+      cinelerra_time time1, time2;
 
-      lumiera_time_init (&time1, 0, atol (argv[2]));
-      lumiera_time_init (&time2, 0, atol (argv[3]));
-      lumiera_time_sub (&time1, &time2);
+      cinelerra_time_init (&time1, 0, atol (argv[2]));
+      cinelerra_time_init (&time2, 0, atol (argv[3]));
+      cinelerra_time_sub (&time1, &time2);
 
-      printf ("%lu %lu\n", (long)lumiera_time_sec (&time1), (long)lumiera_time_usec (&time1));
+      printf ("%lu %lu\n", (long)cinelerra_time_sec (&time1), (long)cinelerra_time_usec (&time1));
     }
 
   if (!strcmp(argv[1], "ntscframefromtime"))
     {
-      lumiera_framerate ntsc = {30000, 1001};
-      lumiera_time time;
+      cinelerra_framerate ntsc = {30000, 1001};
+      cinelerra_time time;
 
-      lumiera_time_init (&time, atol (argv[2]), atol (argv[3]));
+      cinelerra_time_init (&time, atol (argv[2]), atol (argv[3]));
 
-      printf ("%lu\n", (long)lumiera_framerate_frame_get_time (&ntsc, &time));
+      printf ("%lu\n", (long)cinelerra_framerate_frame_get_time (&ntsc, &time));
     }
 
   if (!strcmp(argv[1], "ntscframestart"))
     {
-      lumiera_framerate ntsc = {30000, 1001};
-      lumiera_time time;
+      cinelerra_framerate ntsc = {30000, 1001};
+      cinelerra_time time;
 
-      if(lumiera_framerate_time_get_time_frame (&ntsc, &time, atol (argv[2])))
-        printf ("%lu %lu\n", (long)lumiera_time_sec(&time), (long)lumiera_time_usec(&time));
+      if(cinelerra_framerate_time_get_time_frame (&ntsc, &time, atol (argv[2])))
+        printf ("%lu %lu\n", (long)cinelerra_time_sec(&time), (long)cinelerra_time_usec(&time));
     }
 
   if (!strcmp(argv[1], "ntscframecheck"))
     {
-      lumiera_framerate ntsc = {30000, 1001};
-      lumiera_time time1;
-      lumiera_time time2;
-      lumiera_framepos frame;
+      cinelerra_framerate ntsc = {30000, 1001};
+      cinelerra_time time1;
+      cinelerra_time time2;
+      cinelerra_framepos frame;
 
-      lumiera_framepos frame1;
-      lumiera_framepos frame2;
+      cinelerra_framepos frame1;
+      cinelerra_framepos frame2;
 
       frame = atol (argv[2]);
 
 
-      if (lumiera_framerate_time_get_time_frame (&ntsc, &time1, frame))
+      if (cinelerra_framerate_time_get_time_frame (&ntsc, &time1, frame))
         {
-          printf("frame %lu ", frame1 = lumiera_framerate_frame_get_time (&ntsc, &time1));
+          printf("frame %lu ", frame1 = cinelerra_framerate_frame_get_time (&ntsc, &time1));
 
-          lumiera_time_init (&time2, 0, 1);
-          lumiera_time_sub (&time1, &time2);
-          printf("%lu\n", frame2 = lumiera_framerate_frame_get_time (&ntsc, &time1));
+          cinelerra_time_init (&time2, 0, 1);
+          cinelerra_time_sub (&time1, &time2);
+          printf("%lu\n", frame2 = cinelerra_framerate_frame_get_time (&ntsc, &time1));
           ENSURE (frame1 == frame2+1);
         }
 

@@ -25,7 +25,7 @@
 #include <limits>
 
 
-namespace lumiera
+namespace cinelerra
   {
 
    // TODO: dummy values; should be adjusted when switching to the real time implementation provided by the backend
@@ -34,4 +34,4 @@ namespace lumiera
    const Time Time::MIN = -std::numeric_limits<long>::max();
 
 
-} // namespace lumiera
+} // namespace cinelerra

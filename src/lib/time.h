@@ -19,8 +19,8 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef LUMIERA_TIME_H
-#define LUMIERA_TIME_H
+#ifndef CINELERRA_TIME_H
+#define CINELERRA_TIME_H
 
 #include <sys/time.h>
 #include <time.h>
@@ -35,31 +35,31 @@
 
   timehandling is a delicate business, be careful of precision errors accumulating
 
-  lumiera_time is starting from zero, never becomes negative.
+  cinelerra_time is starting from zero, never becomes negative.
   
   TODO explain how to use time
 
 */
 
 /* over or underflow (tried to make a movie which has negative length? or more than some hundreds days?) */
-LUMIERA_ERROR_DECLARE(TIME_OVERFLOW);
-LUMIERA_ERROR_DECLARE(TIME_UNDERFLOW);
-LUMIERA_ERROR_DECLARE(TIME_NEGATIVE);
+CINELERRA_ERROR_DECLARE(TIME_OVERFLOW);
+CINELERRA_ERROR_DECLARE(TIME_UNDERFLOW);
+CINELERRA_ERROR_DECLARE(TIME_NEGATIVE);
 
 /*
   Note: we measure time starting from zero,
   time never becomes negative
   (I didnt checked if the time types are signed)
 */
-typedef struct timeval lumiera_time;
-typedef lumiera_time* LumieraTime;
+typedef struct timeval cinelerra_time;
+typedef cinelerra_time* CinelerraTime;
 
 /**
  * normalize time after operations.
  * used internally
  */
 static inline void
-lumiera_time_normalize (LumieraTime time)
+cinelerra_time_normalize (CinelerraTime time)
 {
   REQUIRE (time);
   if (time->tv_usec >= 1000000)
@@ -75,8 +75,8 @@ lumiera_time_normalize (LumieraTime time)
  * @param time Time to clear
  * @return time as given
  */
-static inline LumieraTime
-lumiera_time_clear (LumieraTime time)
+static inline CinelerraTime
+cinelerra_time_clear (CinelerraTime time)
 {
   if(time)
     {
@@ -91,14 +91,14 @@ lumiera_time_clear (LumieraTime time)
  * @param time Time to put current time into.
  * @return time as given
  */
-static inline LumieraTime
-lumiera_time_current (LumieraTime time)
+static inline CinelerraTime
+cinelerra_time_current (CinelerraTime time)
 {
   if (time)
     {
       /* gettime should never ever fail in a correct program */
       if (gettimeofday (time, NULL))
-        LUMIERA_DIE;
+        CINELERRA_DIE;
     }
   return time;
 }
@@ -110,8 +110,8 @@ lumiera_time_current (LumieraTime time)
  * @return time as given upon success, NULL if double time given was negative or given time didn't point
  * anywhere
  */
-static inline LumieraTime
-lumiera_time_set_double (LumieraTime time, double fp)
+static inline CinelerraTime
+cinelerra_time_set_double (CinelerraTime time, double fp)
 {
   if (time)
     {
@@ -125,7 +125,7 @@ lumiera_time_set_double (LumieraTime time, double fp)
         {
           time->tv_sec = (time_t)-1;
           time->tv_usec = (suseconds_t)-1;
-          lumiera_error_set(LUMIERA_ERROR_TIME_NEGATIVE);
+          cinelerra_error_set(CINELERRA_ERROR_TIME_NEGATIVE);
         }
     }
   return NULL;
@@ -138,14 +138,14 @@ lumiera_time_set_double (LumieraTime time, double fp)
  * @param usec Microseconds to set
  * @param Time as given
  */
-static inline LumieraTime
-lumiera_time_init (LumieraTime time, time_t sec, suseconds_t usec)
+static inline CinelerraTime
+cinelerra_time_init (CinelerraTime time, time_t sec, suseconds_t usec)
 {
   if (time)
     {
       time->tv_sec = sec;
       time->tv_usec = usec;
-      lumiera_time_normalize (time);
+      cinelerra_time_normalize (time);
     }
   return time;
 }
@@ -156,7 +156,7 @@ lumiera_time_init (LumieraTime time, time_t sec, suseconds_t usec)
  * @return Seconds elapsed, -1 on error
  */
 static inline time_t
-lumiera_time_sec (LumieraTime time)
+cinelerra_time_sec (CinelerraTime time)
 {
   if (time)
     return time->tv_sec;
@@ -170,7 +170,7 @@ lumiera_time_sec (LumieraTime time)
  * @return Microseconds elapsed, -1 on error
  */
 static inline suseconds_t
-lumiera_time_usec (LumieraTime time)
+cinelerra_time_usec (CinelerraTime time)
 {
   if (time)
     return time->tv_usec;
@@ -184,7 +184,7 @@ lumiera_time_usec (LumieraTime time)
  * @return Floating point representation of time. NAN on error.
  */
 static inline double
-lumiera_time_double_get (LumieraTime time)
+cinelerra_time_double_get (CinelerraTime time)
 {
   if (time)
     {
@@ -204,8 +204,8 @@ lumiera_time_double_get (LumieraTime time)
  * @param src Time-source to copy from
  * @return dest as given
  */
-static inline LumieraTime
-lumiera_time_copy (LumieraTime dest, const LumieraTime src)
+static inline CinelerraTime
+cinelerra_time_copy (CinelerraTime dest, const CinelerraTime src)
 {
   if (dest && src)
     {
@@ -221,8 +221,8 @@ lumiera_time_copy (LumieraTime dest, const LumieraTime src)
  * @param src Time to add to dest
  * @return dest as given, or NULL on overflow.
  */
-static inline LumieraTime
-lumiera_time_add (LumieraTime dest, const LumieraTime src)
+static inline CinelerraTime
+cinelerra_time_add (CinelerraTime dest, const CinelerraTime src)
 {
   if (dest && src)
     {
@@ -231,11 +231,11 @@ lumiera_time_add (LumieraTime dest, const LumieraTime src)
       dest->tv_sec += src->tv_sec;
       dest->tv_usec += src->tv_usec;
 
-      lumiera_time_normalize (dest);
+      cinelerra_time_normalize (dest);
 
       if (dest->tv_sec < t)
         {
-          lumiera_error_set (LUMIERA_ERROR_TIME_OVERFLOW);
+          cinelerra_error_set (CINELERRA_ERROR_TIME_OVERFLOW);
           return NULL;
         }
     }
@@ -248,8 +248,8 @@ lumiera_time_add (LumieraTime dest, const LumieraTime src)
  * @param src Time to subtract from dest
  * @return dest as given, or NULL on underflow.
  */
-static inline LumieraTime
-lumiera_time_sub (LumieraTime dest, const LumieraTime src)
+static inline CinelerraTime
+cinelerra_time_sub (CinelerraTime dest, const CinelerraTime src)
 {
   if (dest && src)
     {
@@ -264,11 +264,11 @@ lumiera_time_sub (LumieraTime dest, const LumieraTime src)
           dest->tv_usec += 1000000 - src->tv_usec;
         }
 
-      lumiera_time_normalize (dest);
+      cinelerra_time_normalize (dest);
 
       if (dest->tv_sec > t)
         {
-          lumiera_error_set (LUMIERA_ERROR_TIME_UNDERFLOW);
+          cinelerra_error_set (CINELERRA_ERROR_TIME_UNDERFLOW);
           return NULL;
         }
     }

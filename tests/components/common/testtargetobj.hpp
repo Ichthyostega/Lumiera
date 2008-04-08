@@ -21,8 +21,8 @@
 */
 
 
-#ifndef LUMIERA_TEST_TESTTARGETOBJ_H
-#define LUMIERA_TEST_TESTTARGETOBJ_H
+#ifndef CINELERRA_TEST_TESTTARGETOBJ_H
+#define CINELERRA_TEST_TESTTARGETOBJ_H
 
 
 #include "common/test/run.hpp"
@@ -41,7 +41,7 @@ using std::string;
 using std::cout;
 
 
-namespace lumiera
+namespace cinelerra
   {
   namespace test
     {
@@ -107,5 +107,5 @@ namespace lumiera
     
   } // namespace test
 
-} // namespace lumiera
+} // namespace cinelerra
 #endif

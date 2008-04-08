@@ -24,7 +24,7 @@
 
 #include "lib/error.h"
 
-LUMIERA_ERROR_DEFINE(TEST, "test error");
+CINELERRA_ERROR_DEFINE(TEST, "test error");
 
 int conditionforgotunlock ();
 int mutexforgotunlock ();

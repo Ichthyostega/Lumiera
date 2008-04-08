@@ -24,7 +24,7 @@
 #ifndef ENGINE_PROCESSOR_H
 #define ENGINE_PROCESSOR_H
 
-#include "lumiera.h"
+#include "cinelerra.h"
 #include "proc/stateproxy.hpp"
 
 
@@ -40,10 +40,10 @@ namespace engine
       ExitNode * output;
 
       /** begin of the timerange covered by this processor */
-      lumiera::Time start;
+      cinelerra::Time start;
 
       /**end (exclusive) of the timerange  */
-      lumiera::Time end;
+      cinelerra::Time end;
 
     };
 

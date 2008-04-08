@@ -66,7 +66,7 @@ namespace asset
     
     
     public:
-      static lumiera::Singleton<AssetManager> instance;
+      static cinelerra::Singleton<AssetManager> instance;
       
       /** provide the unique ID for given Asset::Ident tuple */
       static ID<Asset> getID (const Asset::Ident&);
@@ -77,7 +77,7 @@ namespace asset
       
       /** find and return corresponging object */
       template<class KIND>
-      shared_ptr<KIND>  getAsset (const ID<KIND>& id)  throw(lumiera::error::Invalid);
+      shared_ptr<KIND>  getAsset (const ID<KIND>& id)  throw(cinelerra::error::Invalid);
       
       
       /** @return true if the given id is registered in the internal asset DB  */
@@ -101,7 +101,7 @@ namespace asset
        */
       template<class KIND>
       static ID<KIND>  reg (KIND* obj, const Asset::Ident& idi)
-          throw(lumiera::error::Invalid);
+          throw(cinelerra::error::Invalid);
       
       /** deleter function used by the Asset smart pointers to delete Asset objects */
       static void destroy (Asset* aa) { delete aa; }
@@ -110,13 +110,13 @@ namespace asset
       
       AssetManager ();
       
-      friend class lumiera::singleton::StaticCreate<AssetManager>;
+      friend class cinelerra::singleton::StaticCreate<AssetManager>;
       
     };
     
     
-    LUMIERA_ERROR_DECLARE (UNKNOWN_ASSET_ID);  ///< use of a non-registered Asset ID.
-    LUMIERA_ERROR_DECLARE (WRONG_ASSET_KIND);  ///< Asset ID of wrong Asset kind, unable to cast.
+    CINELERRA_ERROR_DECLARE (UNKNOWN_ASSET_ID);  ///< use of a non-registered Asset ID.
+    CINELERRA_ERROR_DECLARE (WRONG_ASSET_KIND);  ///< Asset ID of wrong Asset kind, unable to cast.
 
 } // namespace asset
 

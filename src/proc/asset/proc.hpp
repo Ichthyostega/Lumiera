@@ -89,7 +89,7 @@ namespace asset
   /** 
    * Factory specialized for createing Processor Asset objects.
    */ 
-  class ProcFactory : public lumiera::Factory<asset::Proc>
+  class ProcFactory : public cinelerra::Factory<asset::Proc>
     {
     public:
       typedef shared_ptr<asset::Proc> PType;

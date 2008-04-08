@@ -22,8 +22,8 @@
 
 
 
-#ifndef LUMIERA_TEST_MOCKINJECTOR_H
-#define LUMIERA_TEST_MOCKINJECTOR_H
+#ifndef CINELERRA_TEST_MOCKINJECTOR_H
+#define CINELERRA_TEST_MOCKINJECTOR_H
 
 
 #include "common/singletonfactory.hpp"
@@ -31,7 +31,7 @@
 #include <boost/scoped_ptr.hpp>
 
 
-namespace lumiera
+namespace cinelerra
   {
   namespace test
     {
@@ -90,5 +90,5 @@ namespace lumiera
       
   } // namespace test
 
-} // namespace lumiera
+} // namespace cinelerra
 #endif
