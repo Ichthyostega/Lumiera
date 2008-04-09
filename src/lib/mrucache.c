@@ -21,12 +21,6 @@
 
 #include "lib/mrucache.h"
 
-/**
- * @file Most recent used cache
- * Elements (addressed by a LList node) are either in the cache and thereby subject of aging
- * or checked out under control of the user.
- */
-
 
 LumieraMruCache
 lumiera_mrucache_init (LumieraMruCache self, lumiera_cache_destructor_fn destructor_cb)
@@ -53,10 +47,6 @@ lumiera_mrucache_destroy (LumieraMruCache self)
   return self;
 }
 
-
-/**
- * destroy and free the nelem oldest elements
- */
 int
 lumiera_mrucache_age (LumieraMruCache self, int nelem)
 {
