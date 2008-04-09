@@ -82,6 +82,7 @@ lumiera_filedescriptor_registry_init (void)
 {
   NOBUG_INIT_FLAG (filedescriptor);
   TRACE (filedescriptor);
+  REQUIRE (!registry);
 
   registry = cuckoo_new (h1, h2, h3, cmp,
                          sizeof (LumieraFiledescriptor),
@@ -95,18 +96,12 @@ lumiera_filedescriptor_registry_destroy (void)
 {
   TRACE (filedescriptor);
   REQUIRE (!cuckoo_nelements (registry));
-  cuckoo_free (registry);
+  if (registry)
+    cuckoo_free (registry);
+  registry = NULL;
 }
 
 
-/**
- * Find existing filedescriptor or create one
- * @param descriptor strong reference to be initialized with the filedescriptor,
- *        a filedescriptor will be deleted when its last string reference gets deleted.
- * @param name name of the file
- * @param flags opening flags for the filedescriptor
- * @return descriptor on success or NULL on error
- */
 LumieraFiledescriptor
 lumiera_filedescriptor_acquire (const char* name, int flags)
 {
@@ -184,6 +179,7 @@ lumiera_filedescriptor_acquire (const char* name, int flags)
   return NULL;
 }
 
+
 void
 lumiera_filedescriptor_release (LumieraFiledescriptor self)
 {
@@ -192,11 +188,7 @@ lumiera_filedescriptor_release (LumieraFiledescriptor self)
     lumiera_filedescriptor_delete (self);
 }
 
-/**
- * Allocate a new filedescriptor cloned from a template
- * @param template the source filedescriptor
- * @return the constrccted filedescriptor
- */
+
 LumieraFiledescriptor
 lumiera_filedescriptor_new (LumieraFiledescriptor template)
 {
@@ -219,10 +211,7 @@ lumiera_filedescriptor_new (LumieraFiledescriptor template)
   return self;
 }
 
-/**
- * delete a filedescriptor and free its resources
- * @param descriptor filedescriptor to be freed
- */
+
 void
 lumiera_filedescriptor_delete (LumieraFiledescriptor self)
 {

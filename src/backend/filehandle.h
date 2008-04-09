@@ -31,6 +31,9 @@ typedef lumiera_filehandle* LumieraFilehandle;
 
 /**
  * @file Filehandles
+ * Filehandles manage the underlying POSIX filehandle for a filedescriptor.
+ * Since we want to support handling of more files than POSIX filehandles are available on a common system
+ * the filehandles are opened, cached and closed on demand, see 'filehandlecache'.
  */
 
 
@@ -45,12 +48,20 @@ struct lumiera_filehandle_struct
   LumieraFiledescriptor descriptor;
 };
 
+/**
+ * Allocate a new filehandle structure.
+ * @return new filehandle structure
+ */
 LumieraFilehandle
 lumiera_filehandle_new ();
 
-int
-lumiera_filehandle_get (LumieraFilehandle self);
 
+/**
+ * destroy the resources associated eith a filehandle structure.
+ * This function is used by the filehandlecache to recycle filehandle structs.
+ * @param node pointer to the cachenode member of a struct filehandle
+ * @return pointer to the start of the memory of the destroyed filehandle
+ */
 void*
 lumiera_filehandle_destroy_node (LList node);
 

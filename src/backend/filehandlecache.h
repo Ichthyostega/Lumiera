@@ -35,8 +35,8 @@ typedef lumiera_filehandlecache* LumieraFilehandlecache;
  * The number of filehandles a program can held open is usually limited, since we want to support
  * using a less limited number of files and closing/opening for each operation is expensive, we
  * provide a cache to keep the most frequent used files open and gracefully close/recycle unused filehandles.
+ * The filehandlecache defined here protects all operations on the cache with a mutex.
  */
-
 
 
 /*
@@ -88,12 +88,19 @@ lumiera_filehandlecache_add_filehandle (LumieraFilehandlecache self, LumieraFile
 
 /**
  * Remove a filehandle from cache aging
- * Filehandles which are subject of cache aging must be checked out before they can be used
- *
+ * Filehandles which are subject of cache aging must be checked out before they can be used.
+ * @param self the filehandlecache
+ * @param handle the filehandle to be checked out
  */
 LumieraFilehandle
 lumiera_filehandlecache_checkout (LumieraFilehandlecache self, LumieraFilehandle handle);
 
+/**
+ * Put a filehandle into the cache
+ * Filehandles which are checked in are subject of cache aging and might get destroyed and reused.
+ * @param self the filehandlecache
+ * @param handle the filehandle to be checked in
+ */
 void
 lumiera_filehandlecache_checkin (LumieraFilehandlecache self, LumieraFilehandle handle);
 

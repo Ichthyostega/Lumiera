@@ -63,33 +63,57 @@ struct lumiera_file_struct
 };
 
 /**
- * 
+ * Initialize a file structure.
+ * @param self pointer to the file structure
+ * @param name filename
+ * @param flags open flags
+ * @return self
  */
 LumieraFile
 lumiera_file_init (LumieraFile self, const char* name, int flags);
 
 /**
- * 
+ * Destroy a file structure.
+ * frees all associated resources, releases the filedescriptor etc.
+ * @param self file structure to be destroyed
+ * @return self
  */
 LumieraFile
 lumiera_file_destroy (LumieraFile self);
 
 /**
- * 
+ * Allocate a new file structure.
+ * @param name filename
+ * @param flags open flags
+ * @return new file structure
  */
 LumieraFile
 lumiera_file_new (const char* name, int flags);
 
 /**
- * 
+ * Frees a file structure.
+ * @param self file structure to be freed
  */
 void
 lumiera_file_delete (LumieraFile self);
 
-
+/**
+ * Get a POSIX filehandle for a file.
+ * Filehandles are opened on demand and must be acquired for use.
+ * Using filehandles is refcounted and might be nested.
+ * After using them they must be released which puts them back into filehandlecache aging.
+ * @param self file structure
+ * @return POSIX filehandle or -1 on error, check lumiera_error() to retrieve the errorcode
+ * Currently only LUMIERA_ERROR_ERRNO will be raised but this might change in future.
+ * Opening files can fail for many reasons and at any time!
+ */
 int
 lumiera_file_handle_acquire (LumieraFile self);
 
+/**
+ * Put filehandle back into cache aging.
+ * @param self file which handle to be released
+ */
 void
 lumiera_file_handle_release (LumieraFile self);
 

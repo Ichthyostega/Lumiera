@@ -36,6 +36,12 @@ typedef lumiera_filedescriptor* LumieraFiledescriptor;
 #include "backend/filehandle.h"
 #include "backend/file.h"
 
+/**
+ * @file Filedescriptors
+ * Filedescriptors are the underlying working horse in accessing files.
+ */
+
+
 
 struct lumiera_filedescriptor_struct
 {
@@ -52,21 +58,54 @@ struct lumiera_filedescriptor_struct
   RESOURCE_HANDLE (rh);
 };
 
+/**
+ * Initialize the global filedescriptor registry.
+ * All filedescriptors are looked up by dev/ino/open-flags in a hashtable. Opening hardlinked
+ * files will be targeted to the same filedescriptor.
+ * This function never fails but dies on error.
+ */
 void
 lumiera_filedescriptor_registry_init (void);
 
+/**
+ * Destroy and free the global filedescriptor registry.
+ * Never fails.
+ */
 void
 lumiera_filedescriptor_registry_destroy (void);
 
+
+/**
+ * Find existing filedescriptor or create one
+ * @param name name of the file
+ * @param flags opening flags for the filedescriptor
+ * @return descriptor on success or NULL on error
+ */
 LumieraFiledescriptor
 lumiera_filedescriptor_acquire (const char* name, int flags);
 
+
+/**
+ * Release a filedescriptor.
+ * @param self filedescriptor to be released
+ */
 void
 lumiera_filedescriptor_release (LumieraFiledescriptor self);
 
+
+/**
+ * Allocate a new filedescriptor cloned from a template
+ * @param template the source filedescriptor
+ * @return the constrccted filedescriptor
+ */
 LumieraFiledescriptor
 lumiera_filedescriptor_new (LumieraFiledescriptor template);
 
+/**
+ * Delete a filedescriptor
+ * Called whenever its reference count drops to zero.
+ * @param self the filedescriptor to be deleted
+ */
 void
 lumiera_filedescriptor_delete (LumieraFiledescriptor self);
 
