@@ -27,7 +27,8 @@
 #include <nobug.h>
 
 /**
- * @file Most recent used cache
+ * @file
+ * Most recent used cache
  * Elements (addressed by a LList node) are either checked in the cache and thereby subject of aging
  * or checked out under control of the user. Most operations require that the chache is locked. This locking
  * must be done from elsewhere.

@@ -30,7 +30,8 @@ typedef lumiera_filehandle* LumieraFilehandle;
 #include "backend/filedescriptor.h"
 
 /**
- * @file Filehandles
+ * @file
+ * Filehandles.
  * Filehandles manage the underlying POSIX filehandle for a filedescriptor.
  * Since we want to support handling of more files than POSIX filehandles are available on a common system
  * the filehandles are opened, cached and closed on demand, see 'filehandlecache'.

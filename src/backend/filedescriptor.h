@@ -37,8 +37,10 @@ typedef lumiera_filedescriptor* LumieraFiledescriptor;
 #include "backend/file.h"
 
 /**
- * @file Filedescriptors
+ * @file
+ * Filedescriptors.
  * Filedescriptors are the underlying working horse in accessing files.
+ * All information associated with managing a file is kept here.
  */
 
 

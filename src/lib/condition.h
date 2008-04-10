@@ -25,7 +25,8 @@
 #include "lib/locking.h"
 
 /**
- * @file Condition variables, header
+ * @file
+ * Condition variables, header
  */
 
 LUMIERA_ERROR_DECLARE (CONDITION_DESTROY);

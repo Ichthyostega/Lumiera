@@ -25,7 +25,8 @@
 #include "lib/locking.h"
 
 /**
- * @file Mutual exclusion locking, header.
+ * @file
+ * Mutual exclusion locking, header.
  */
 #define LUMIERA_MUTEX_SECTION(flag, handle, mutex)                                      \
 RESOURCE_HANDLE (rh_##__LINE__##_);                                                     \

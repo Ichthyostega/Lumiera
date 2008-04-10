@@ -30,7 +30,8 @@
 NOBUG_DECLARE_FLAG (file);
 
 /**
- * @file File management
+ * @file
+ * File management
  * Handling Files is splitted into different classes:
  * 1. The 'lumiera_file' class which acts as interface to the outside for managing files.
  *    'lumiera_file' is addressed by the name of the file. Since files can have more than one name (hardlinks)

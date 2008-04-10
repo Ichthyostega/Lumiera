@@ -25,7 +25,8 @@
 #include <nobug.h>
 
 /**
- * @file Strong and Weak references, header.
+ * @file
+ * Strong and Weak references, header.
  */
 
 

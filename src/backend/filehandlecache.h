@@ -31,7 +31,8 @@ typedef lumiera_filehandlecache* LumieraFilehandlecache;
 #include "backend/filehandle.h"
 
 /**
- * @file Filehandle management and caching
+ * @file
+ * Filehandle management and caching
  * The number of filehandles a program can held open is usually limited, since we want to support
  * using a less limited number of files and closing/opening for each operation is expensive, we
  * provide a cache to keep the most frequent used files open and gracefully close/recycle unused filehandles.

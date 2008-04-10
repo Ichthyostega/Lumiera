@@ -33,7 +33,8 @@ extern "C" {
 #include "error.h"
 
 /**
- * @file Plugin loader, header.
+ * @file
+ * Plugin loader, header.
  */
 
 

@@ -24,7 +24,8 @@
 #include <stdlib.h>
 
 /**
- * @file Portable and safe wrapers around some clib functions and some tools
+ * @file
+ * Portable and safe wrapers around some clib functions and some tools
  */
 LUMIERA_ERROR_DECLARE(NO_MEMORY);
 

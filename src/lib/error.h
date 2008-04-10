@@ -31,7 +31,8 @@ extern "C" {
 #include <stdlib.h>
 
 /**
- * @file C Error handling in Lumiera, header.
+ * @file
+ * C Error handling in Lumiera, header.
  */
 
 

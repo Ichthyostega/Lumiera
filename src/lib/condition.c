@@ -22,7 +22,8 @@
 #include "lib/condition.h"
 
 /**
- * @file Condition variables
+ * @file
+ * Condition variables
  */
 
 LUMIERA_ERROR_DEFINE (CONDITION_DESTROY, "condition destroy failed");

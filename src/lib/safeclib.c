@@ -27,7 +27,8 @@
 #include <stdarg.h>
 
 /**
- * @file Portable and safe wrapers around some clib functions and some tools
+ * @file
+ * Portable and safe wrapers around some clib functions and some tools
  */
 
 LUMIERA_ERROR_DEFINE (NO_MEMORY, "Out of Memory!");
