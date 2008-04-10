@@ -27,8 +27,12 @@
 #include "backend/filedescriptor.h"
 
 #include <limits.h>
+#include <unistd.h>
 
 NOBUG_DEFINE_FLAG_PARENT (file, file_all);
+
+LUMIERA_ERROR_DEFINE(FILE_CHANGED, "File changed unexpected");
+
 
 LumieraFile
 lumiera_file_init (LumieraFile self, const char* name, int flags)
@@ -85,12 +89,31 @@ lumiera_file_handle_acquire (LumieraFile self)
 
       if (self->descriptor->handle->fd == -1)
         {
-          TODO ("stat handling/update");
-          self->descriptor->handle->fd = open (self->name, self->descriptor->flags);
-          if (self->descriptor->handle->fd == -1)
+          int fd;
+          fd = open (self->name, self->descriptor->flags & ~(O_EXCL|O_TRUNC|O_CREAT));
+          if (fd == -1)
             {
               LUMIERA_ERROR_SET (file, ERRNO);
+              return -1;
             }
+          else
+            {
+              struct stat st;
+              if (fstat (fd, &st) == -1)
+                {
+                  close (fd);
+                  LUMIERA_ERROR_SET (file, ERRNO);
+                  return -1;
+                }
+              else if (self->descriptor->stat.st_dev != st.st_dev || self->descriptor->stat.st_ino != st.st_ino)
+                {
+                  close (fd);
+                  /* Woops this is not the file we expected to use */
+                  LUMIERA_ERROR_SET (file, FILE_CHANGED);
+                  return -1;
+                }
+            }
+          self->descriptor->handle->fd = fd;
         }
     }
 

@@ -29,6 +29,8 @@
 
 NOBUG_DECLARE_FLAG (file);
 
+LUMIERA_ERROR_DECLARE(FILE_CHANGED);
+
 /**
  * @file
  * File management
@@ -47,7 +49,6 @@ typedef lumiera_file* LumieraFile;
 
 #include "backend/filehandle.h"
 #include "backend/filedescriptor.h"
-
 
 #define LUMIERA_FILE_READONLY (O_RDONLY | O_LARGEFILE | O_NOATIME)
 #define LUMIERA_FILE_READWRITE (O_RDWR | O_LARGEFILE | O_NOATIME)
