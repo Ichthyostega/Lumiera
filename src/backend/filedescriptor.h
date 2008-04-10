@@ -50,7 +50,6 @@ struct lumiera_filedescriptor_struct
   struct stat stat;                     /* create after first open, maintained metadata, MUST BE FIRST! */
   int flags;                            /* open flags, must be masked for reopen */
   lumiera_mutex lock;                   /* locks operations on this file descriptor */
-  unsigned reopened;                    /* count for reopens 0=not yet opened, 1=first, 2..=reopened */
   unsigned refcount;                    /* reference counter, all users sans registry */
 
   LumieraFilehandle handle;

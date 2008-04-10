@@ -56,7 +56,7 @@ typedef lumiera_file* LumieraFile;
 #define LUMIERA_FILE_RECREATE (O_RDWR | O_LARGEFILE | O_NOATIME | O_CREAT | O_TRUNC)
 
 /* creat and excl flags will be masked out for descriptor lookup */
-#define LUMIERA_FILE_MASK ~(O_CREAT | O_EXCL)
+#define LUMIERA_FILE_MASK ~(O_CREAT | O_EXCL | O_TRUNC)
 
 struct lumiera_file_struct
 {

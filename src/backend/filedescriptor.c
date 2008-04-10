@@ -51,21 +51,24 @@ static size_t
 h1 (const void* item, const uint32_t r)
 {
   const LumieraFiledescriptor i = *(const LumieraFiledescriptor*)item;
-  return i->stat.st_dev^i->stat.st_ino^i->flags^((i->stat.st_dev^i->stat.st_ino^i->flags)>>7)^r;
+  return i->stat.st_dev^i->stat.st_ino^(i->flags&LUMIERA_FILE_MASK)
+    ^((i->stat.st_dev^i->stat.st_ino^(i->flags&LUMIERA_FILE_MASK))>>7)^r;
 }
 
 static size_t
 h2 (const void* item, const uint32_t r)
 {
   const LumieraFiledescriptor i = *(const LumieraFiledescriptor*)item;
-  return i->stat.st_dev^i->stat.st_ino^i->flags^((i->stat.st_dev^i->stat.st_ino^i->flags)>>5)^r;
+  return i->stat.st_dev^i->stat.st_ino^(i->flags&LUMIERA_FILE_MASK)
+    ^((i->stat.st_dev^i->stat.st_ino^(i->flags&LUMIERA_FILE_MASK))>>5)^r;
 }
 
 static size_t
 h3 (const void* item, const uint32_t r)
 {
   const LumieraFiledescriptor i = *(const LumieraFiledescriptor*)item;
-  return i->stat.st_dev^i->stat.st_ino^i->flags^((i->stat.st_dev^i->stat.st_ino^i->flags)>>3)^r;
+  return i->stat.st_dev^i->stat.st_ino^(i->flags&LUMIERA_FILE_MASK)
+    ^((i->stat.st_dev^i->stat.st_ino^(i->flags&LUMIERA_FILE_MASK))>>3)^r;
 }
 
 
@@ -74,7 +77,8 @@ cmp (const void* keya, const void* keyb)
 {
   const LumieraFiledescriptor a = *(const LumieraFiledescriptor*)keya;
   const LumieraFiledescriptor b = *(const LumieraFiledescriptor*)keyb;
-  return a->stat.st_dev == b->stat.st_dev && a->stat.st_ino == b->stat.st_ino && a->flags == b->flags;
+  return a->stat.st_dev == b->stat.st_dev && a->stat.st_ino == b->stat.st_ino
+    && (a->flags&LUMIERA_FILE_MASK) == (b->flags&LUMIERA_FILE_MASK);
 }
 
 void
@@ -112,7 +116,7 @@ lumiera_filedescriptor_acquire (const char* name, int flags)
   lumiera_mutexacquirer_init_mutex (&registry_lock, &registry_mutex, LUMIERA_LOCKED);
 
   lumiera_filedescriptor fdesc;
-  fdesc.flags = flags&LUMIERA_FILE_MASK;
+  fdesc.flags = flags;
 
   if (stat (name, &fdesc.stat) != 0)
     {
@@ -199,7 +203,6 @@ lumiera_filedescriptor_new (LumieraFiledescriptor template)
 
   self->flags = template->flags;
   lumiera_mutex_init (&self->lock);
-  self->reopened = 0;
   self->refcount = 1;
   self->handle = 0;
 

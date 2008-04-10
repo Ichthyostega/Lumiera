@@ -90,7 +90,7 @@ lumiera_file_handle_acquire (LumieraFile self)
       if (self->descriptor->handle->fd == -1)
         {
           int fd;
-          fd = open (self->name, self->descriptor->flags & ~(O_EXCL|O_TRUNC|O_CREAT));
+          fd = open (self->name, self->descriptor->flags & LUMIERA_FILE_MASK);
           if (fd == -1)
             {
               LUMIERA_ERROR_SET (file, ERRNO);
