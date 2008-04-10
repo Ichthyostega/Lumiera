@@ -18,7 +18,10 @@ AM_CFLAGS =\
 bin_PROGRAMS = gtk-lumiera
 
 gtk_lumiera_SOURCES = \
-	main.cpp
+	main.cpp     \
+	main-window.cpp     \
+	main-window.h     \
+	gtk-lumiera.h
 
 gtk_lumiera_LDFLAGS = 
 
