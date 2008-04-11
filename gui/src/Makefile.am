@@ -1,7 +1,5 @@
 ## Process this file with automake to produce Makefile.in
 
-## Created by Anjuta
-
 gladedir = $(datadir)/gtk-lumiera/glade
 glade_DATA = gtk-lumiera.glade
 
@@ -17,14 +15,18 @@ AM_CFLAGS =\
 
 bin_PROGRAMS = gtk-lumiera
 
-gtk_lumiera_SOURCES = \
-	main.cpp     \
-	main-window.cpp     \
-	main-window.h     \
-	gtk-lumiera.h
+gtk_lumiera_SOURCES =                 \
+	main.cpp                          \
+    gtk-lumiera.hpp                   \
+    workspace/actions.cpp             \
+    workspace/actions.hpp             \
+    workspace/mainwindow.cpp         \
+    workspace/mainwindow.hpp
 
 gtk_lumiera_LDFLAGS = 
 
 gtk_lumiera_LDADD = $(GTK_LUMIERA_LIBS)
 
 EXTRA_DIST = $(glade_DATA)
+
+

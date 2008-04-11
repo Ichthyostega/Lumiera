@@ -29,13 +29,16 @@
 #  include <libintl.h>
 #endif
 
-#include "main-window.h"
+#include "workspace/mainwindow.hpp"
 
-using namespace Lumiera::UI;
+using namespace Lumiera::Workspace;
+using namespace Gtk;
 
 int main (int argc, char *argv[])
 {
-	Gtk::Main kit(argc, argv);
+	Main kit(argc, argv);
+		
+	Glib::set_application_name("UIManager example");
 	
 	MainWindow main_window;
 	
