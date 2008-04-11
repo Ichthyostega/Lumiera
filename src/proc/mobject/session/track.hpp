@@ -49,6 +49,16 @@ namespace mobject
      * Typically, tracks are used do make default processing pipe connections,
      * define a layer or pan for sound and for for disabling groups
      * of clips. Note tracks are grouped in a tree like fashion.
+     * \par
+     * This Media Object (often refered to as "track-MO") is allways dealt with
+     * locally within one EDL. Client code normally doesn't have to care for creating
+     * or retrieving track-MO. Rather, it referes to the global track-asset-ID. The same
+     * holds true when placing some other Media Object onto a track: the corresponding
+     * placement just refers the global trackID, while the builder automatically retrieves
+     * the matching track-MO for the EDL in question. If some EDL contains several instances
+     * (track-MO) refering to the same trackID (asset), then this causes all objects placed
+     * onto this track to be included several times in the resulting render nodes network
+     * (possibliy with varying placement properties) 
      */
     class Track : public Meta
       {
