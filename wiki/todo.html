@@ -1979,12 +1979,20 @@ see : &lt;&lt;tag RSSFeed&gt;&gt; for the full list.
 
 </pre>
 </div>
-<div title="RoadMap" modifier="CehTeh" modified="200804090217" created="200804011655" changecount="7">
+<div title="RoadMap" modifier="Ichthyostega" modified="200804120415" created="200804011655" changecount="12">
 <pre>! Foundations, not really a milestone yet
 
 We need following in a basically working / mockup state:
 
-* Proc layer, basic rendering, partly mockups
+* GUI
+** define a outline (most important views and modes)
+** define the foundations for communicating with the lower layers
+* Proc layer
+** basic assets, create a clip object //(done)//
+** interface/stub for ~ConfigQuery subsystem //(done)//
+** add simple clip to EDL/Session, invoke builder
+** build render nodes for very simple session (partly mockups)
+** preliminary support for composite clips (video+audio)
 * Backend
 ** File backend, caching
 ** Serializer
@@ -1996,9 +2004,19 @@ We need following in a basically working / mockup state:
 ** Testsuite
 ** Website
 
-!! Next Goals
+!!! Next Goals
 
-# Make a [[video player mockup]]</pre>
+# Make a [[video player mockup]]
+
+! Second round
+//all rather brainstorming for now, feel free to modify...//
+
+* save and load session
+* integrate YAP Prolog instead of the mock impl
+* load and wire some plugins
+* send output to a window in GUI
+
+</pre>
 </div>
 <div title="SiteSubtitle" modifier="CehTeh" created="200803281323" changecount="1">
 <pre>Roadmap and tasks</pre>
@@ -3261,9 +3279,32 @@ function addKeyDownHandlers(e)
 }
 //}}}</pre>
 </div>
-<div title="ToDo" modifier="CehTeh" modified="200804090212" created="200803281330" changecount="4">
+<div title="ToDo" modifier="Ichthyostega" modified="200804120414" created="200803281330" changecount="5">
 <pre>! Proc layer
  by ichtho
+!! Asset Manager, Asset and ~MObject
+Design roughly finished, mem management with smart-ptrs and object dependencies working, Asset Manager (automatic registry) working. Relation of Assets and MObjects needs some clarification. Object creation could use some refactoring (work in progress)
+!! Support for Media Bins, high-level Resource manager
+not even concrete plans yet. Needing a volounteer to take this subsystem
+!! Session, EDL, edit operations
+Session Manager (access point/interface) done. Basic operations (how to address objects in the EDL, how to add objects...) only drafted, need detailed design (but is difficult before the builder is more clear, so I'll probably work bottom up here)
+!! Framework for storing/loading objects
+Just a draft in a separate branch, nothing finished.
+!! Defaults Manager ~ConfigQuery subsystem
+Defaults Manager done, using a mock implementation of for config queries. Need to understand better what queries we need to support, what predicates to define, how to describe capabilities. Basically it's too early to nail down a design
+!! integrating YAP Prolog or another resolution system
+blocked because of the preceeding. But it would be possible to implement the basics (i.e. calling in, passing rule code....)
+!! create Fixture from all ~EDLs
+Design partially done, nothing implemented yet.
+!! create Partitioning of Fixture
+Some ideas; blocked because of incomplete design of the EDL
+!! Builder core
+support framework done. Design/planning of node creater tool partially done, implementation just started
+!! Render nodes
+nothing but a preliminary object hierarchy. Need to work out the interface.
+!! Automation handling
+just a draft. Need to work out interface for describing automatable &quot;parameters&quot;
+
 
 ! Backend
  by cehteh
@@ -3300,8 +3341,8 @@ will be done on the 'devel' vserver. nothing done yet.
 Someone might pickup a Doxygen-Maintainer. This is not writing actual documentation but bringing the Documentation comments in the source to a good shape, add formatting tags, ensureing that all docs are properly generated, maintaining a glossary and index, define the order etc.
 </pre>
 </div>
-<div title="video player mockup" modifier="CehTeh" modified="200804090218" created="200804090216" changecount="3">
-<pre>Use the backend, gmerlin/avdecoder and a Player widget to playback videos. This should be a small application which can open and playback many videos from on instance in parallel. Later on scrubbing for this videos might be supported.
+<div title="video player mockup" modifier="Ichthyostega" modified="200804120416" created="200804090216" changecount="4">
+<pre>Use the backend, gmerlin/avdecoder and a Player widget to playback videos. This should be a small application which can open and playback many videos from one instance in parallel. Later on scrubbing for this videos might be supported.
 
 The idea here is to show and measure backend and scheduler performance and beeing a proof of concept for the design. It will run independent of the Proc layer but needs quite some work on the backend to be done.</pre>
 </div>

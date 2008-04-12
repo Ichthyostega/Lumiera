@@ -930,9 +930,11 @@ git push git://git.pipapo.org/lumiera/mob
 
 lumiera/mob is an anonymous account at pipapo.org where everyone can commit changes. </pre>
 </div>
-<div title="IRC-Transcripts" modifier="Ichthyostega" modified="200802021818" created="200708120209" tags="discuss irclog" changecount="7">
+<div title="IRC-Transcripts" modifier="Ichthyostega" modified="200804120322" created="200708120209" tags="discuss irclog" changecount="8">
 <pre>We keep a protocol or short summary of each important discussion. The summaries of the monthly developer meetings are posted to the Mailinglist and can be found on pipapo.org too
 
+* [[04-08 developer meeting 3.Apr.2008|IRC_2008-04-03]]
+* [[03-08 developer meeting 6.Mar.2008|IRC_2008-03-06]]
 * [[1.official developer meeting 1.Feb.2008|IRC_2008-02-01]]
 * [[informal developer meeting 10.Aug.2007|IRC_2007-08-10]]
 </pre>
@@ -1028,6 +1030,422 @@ Let's say, we need a person volonteering to guide/moderate the selection, going 
 * should have one of the free top level domains (.net, .org)
 * should be compatible with educational institutions (sorry, no pr0nedit :)
 * should not obviously collide with trade marks
+</pre>
+</div>
+<div title="IRC_2008-03-06" modifier="Ichthyostega" modified="200804120331" created="200804120326" tags="irclog excludeMissing" changecount="3">
+<pre>! 6. mar.2008 on #openvideo
+21:00 - 23:30 GMT, __Participants__:
+* hermanr
+* cehteh
+* ichthyo
+* Plouj
+* SimAV
+* akirad
+* _MMA_
+* rgareus
+* ddennedy
+* edrz
+* anewcomb
+* gmerlin
+* oracle2025
+* gisle
+
+! Boilerplate
+!! Organization of this meeting
+* cehteh writes the protocol
+* hermanr does chairman
+
+!! Leftovers from last meeting
+We concluded there are no leftovers
+
+! Go through Ideas and Drafts in design process
+
+!! Idea: time_handling
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/time_handling
+
+Point 1 is superseded by using gavl.
+
+Points 2 and 3 are still valid.
+
+''Ichthyo'' asked gmerlin if there are any problems according gavl for the points 2 (position of frames) and 3 (position for keyframes and automation). Gmerlin acknowledges that he doesnt see any problems.
+
+''Oracle2025'' brings interlacing on topic &quot;are you aware that automations and keyframes could/should also apply to fields?&quot;. We agree that this must be handled &quot;in interlacing, a frame is a pair of 2 subsequent fields&quot;.
+
+__Conclusion__:
+ Refactor the proposal according to the discussion and work it out, make it draft then. Discuss about it on the next meeting
+
+!! Idea: Unit tests in Python
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/UnitTests_Python
+
+We have a testsuite based on cehtehs 'test.sh' which superseedes this proposal.
+
+__Conclusion__:
+ Drop it.
+
+!! Idea: Todo Lists
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/TodoLists
+
+This Idea is in a very early state an not yet mature.&lt;br/&gt;
+''Cehteh'' explains: &quot;I want something which doesn't need much human care and i want one big 'milestones' thing and a small 'mini-task' thing&quot;. Ichthyo refines this as &quot;Roadmap&quot; and &quot;Near time task list&quot;. We agree that this shall not be too strict. There are some ideas floating, like adding this things to the testsuite or use the wiki. Ichthyo shows how he uses the tiddlywiki's task macro ([[renderengine.html#PlanningNodeCreatorTool]]). He likes it but doubts its usefulness when it is used without guessing the hours/days of work.
+
+__Conclusion__:
+ We use the Tiddlywiki task macro thing for now.
+
+!! Draft: CCodingStyleGuide
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/CCodingStyleGuide
+
+Ichthyo tells that the discussion on the wiki page made this clear now. Cehteh explains that he uses this style with success for diffrent projects. We make clear that this is meant for C, in C++ we use namespaces. Overall we agree that code shall be self-documenting.
+
+__Conclusion__:
+ Make it final.
+
+!! Draft: DevelopmentFramework
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/DevelopmentFramework
+
+Cehteh explains that he will transfer this propoal to a tiddlywiki covering compatibility guides and dependencies. We conclude that this wiki must reflect the actual practice (NoBug, Doxygen, test.sh) despite the proposal is not concrete yet.
+
+A short discussion about build systems came up, we still use autotools and scons in parallel, delaying the decision later. oracle2025 mentioned that scons could be used for development and autotools for release. No decision about that everyone has different opinions. But we agree that it works as is.
+
+__Conclusion__:
+ Cehteh will make the proposed wiki which shall be maintained to reflect the state and this topic will be finalized by that.
+
+!! Draft: Skills Collection
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/SkillsCollection
+
+This might be only useful if there are more developers working on the project.
+
+__Conclusion__:
+ Leave in draft state for now.
+
+!! Draft: Architecture Overview
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/ArchitectureOverview
+
+Ichthyo drawn a diagram showing the planned architecture. Cehteh raises concerns about codecs/plugins/effects in backend. After that there was some discussion about details. Cehteh suggests to place plugins in a extra box, gmerlin suggests that 'plugins' don't fit into the diagram, there should be &quot;filters&quot;, &quot;sources&quot;,..; Followed by some more discussion, showing that we basically agree and understand the design but the drawing needs some refinements.
+
+__Conclusion__:
+ Good idea, needs some refinements, work in progress.
+
+
+! Call for Design
+
+Ichthyo explains that he wants the overall design a bit more formalized. He put this topic on the agenda to remind that we have to work it out in DesignProcess and already started to make some design proposals.
+
+__Conclusion__:
+ Things need to be worked out in DesignProcess, take a look and review it.
+
+! Naming
+
+Raffa, Velmont, goibhniu and others collected and managed proposed names past weeks which finally ended in a community voting. Results are at http://www.cs.cornell.edu/w8/~andru/cgi-perl/civs/results.pl?id=E_9fad0d1d10c23d38
+''Lumiera'' won, Lumiera.org is free and no one of in this meeting has objections against this name. Velmont offers to register and pay for the lumiera.org domain which will be hosted on our own server (see topic below). Hermanr raises concerns if it is ok when the name is registered on another site and by another person than the server, cehteh explains that he like this distribution where doable and no one other objects. Ichthyo asks about a short name for Lumiera which will be used for C++ namespaces and such kinds. After a short discussion we agree that we use the full name and no abbreviation. We now have to rename the source and the wiki. Anyone renames the sourcecode where he is responsible for. Cehteh will go over the pipapo.org wiki and rename things.
+
+Finally we express our great thanks to the people who put the efforts into the name selection, thanks raffa, Velmont, goibhniu &amp; co.
+
+__Conclusion__:
+ ''Projectname is Lumiera'', we have a lot things to rename.
+
+! Project Server, setup, organization, administration
+Some people gathered together and rented a server at 'hetzner.de' which will host some free project pages and personal sites. Cehteh is the one who signed for the server and officially respobsible for it.
+
+The server is split into isolated 'vservers' which are created as needed. Idea is to work cooperatively to get the best out of its resources.
+
+For our projects (cinelerra.org and lumiera.org) we now need volunteers who help setting it up and administrating things. Velmont offered to help with lumiera.org, hermanr takes care of cinelerra.org, raffa will help with maintaining the webpages. oracle2025 will care for developer chroots, build and test environments. cehteh will make a page on pipapo.org which reflects the current server setup http://www.pipapo.org/pipawiki/RootServerSetup . There are still a lot jobs to do!
+
+Cehteh asked about how to manage emergency root access on the host/root server when he is unreachable. There where several suggestions between one root key for all who pay for the server to shared key schemes. We finally agreed that anyone who payed for the server can send a ssh key to ssh to be registered for emergency access.
+
+The concrete server setup will be worked out next days. Ideas are one frontend proxy and a shared nameserver. A shared nameserver, A developer vserver shared between all developers. Maybe a shared mail server.
+
+Hermanr asked about how to handle distribution of large media files. There was some discussion about bittorrent vs http. We concluded to work that out as needed.
+
+In the forthcoming discussion about cehteh stresses that &quot;it is a public server, if you place confidential information unencrypted on it, its you fault&quot;. Ssh keys shall be kept secret by the users but we can't enforce policies on those.
+
+Ichthyo asks about how to setup lumiera.org (wiki?), oracle2025 suggests webgit, cehteh explains that webgit isn't ready yet but should be useable in a few days (pipapo.org will use that too). Velmont suggest a 'real' website for the time when non-developers want to use it. Git will be set up on lumiera.org the same way as it is currently set up on pipapo.org.
+
+Hermanr asked Velmont about some help moving the bugs.cinelerra.org over, this might be little challenging since it needs an MTA and other things.
+
+Ichthyo asks about keeping the Lumiera project pages on pipapo.org until the server is ready, this is ok.
+
+__Conclusions__:
+ We have our own server which now needs volunteers for maintenance. The projects will slowly move there, until ready Lumiera stays on pipapo.org.
+
+
+! GPL3 pros cons, license rationale
+
+Ichthyo and cehteh would like to investigate a license change to GPLv3, neither of us has experience with problems this
+might raise. Questions are if we lock us out from potential libraries which are GPLv2 only or lock out possible contributors because of unforeseen patent clauses. The others here thinking that &quot;GPLv2 or later&quot; would be most-compatible. Gmerlin tells that he uses some &quot;GPLv2 only&quot; mplayer code in gavl which is itself &quot;GPLv2 or later&quot;. Cehteh explains that &quot;GPLv2 only&quot; code is a problem, where &quot;GPLv2 or later&quot; is not. Ichthyo raises concerns that the Support library may need to be LGPL, cehteh mentions that it would likely be enough if we only apply that to the plugin-loader. After all it turns out that there is a lot of confusion, misunderstanding and interpretation used with licenses and no one of us knows for sure. Finally we conclude that the interpretation and license enforcement is ruled by the copyright owner.
+
+__Conclusion__:
+ Learn more about GPLv3, use GPLv2 or later and propose to switch to GPLv3 when we are ready to do public beta releases when possible.
+
+
+! Next meeting
+
+The next meeting will be at thuesday 3rd april 21:00GMT (if not rescheduled see below).
+
+Ichthyo tells that Martin Ellison wrote he couldn't attend because of the time. So again we made a short discussion about changing/alternating timings to allow people in downunder/japan to attend. They have to speak up an make time suggestions.
+
+Conclusion:
+ Next meeting 3rd april 21:00GMT. But Aussies, please speak up if you want the time changed!
+</pre>
+</div>
+<div title="IRC_2008-04-03" modifier="Ichthyostega" created="200804120337" tags="irclog excludeMissing" changecount="1">
+<pre>! 3. apr.2008 on #lumiera
+21:00 - 23:30 GMT. __Participants__:
+ * cehteh
+ * gmerlin
+ * hermanr
+ * ichthyo
+ * joelholdsworth
+ * johncoswell
+ * rgareus
+ * sakalli
+
+! Boilerplate
+!! Organization of this meeting
+ * sakalli writes the protocol, ichthyo will help reviewing it
+
+!! Recurring Topics
+We concluded there are no leftovers and currently no Drafts from the design process to discuss
+
+! Call for volunteers
+(which tasks are to do, how can we interest people...?)
+
+There was a sense that there are people willing to help but they might need direction or cannot do actual coding. But there is also a lot of tasks that could be done by beginners and non-programmers. These tasks are important and if someone who is not a programmer is willing to take them on that leaves more time for the programmers. Examples of such tasks:
+* Protocol writing
+* maintaining to do lists and isolating tasks
+* constant code and documentation review
+* unit/functional testing
+* header file &quot;task force&quot; - some fundamentals discussed by the developers on libopenvideo should find their way into basic .h files
+* installing and maintaining project tracking and automated builds/tests on the server
+
+See http://www.lumiera.org/wiki/todo.html#Tasks
+
+It was also noted that at current phase some basic development is still needed before we can accommodate a large number of coders doing small tasks and for now we need some subsystem owners. For GUI for example.
+
+To make it easier for &quot;beginners&quot; to get aquainted with the program it was decided that one ''official Lumiera GIT repository'' should be established.
+
+
+! Project announcements/registration
+(freshmeat, gnu, etc...) any takers?
+
+The discussion was about advertising the project on various sites. There were some concerns raised that it is too early to do too much publicity at the moment. That the right time should be shortly before the first public release. But there is also some value in registering to the project in planning/alpha stage to interest people such as prospective coders. It was noted that the [http://www.linux.com/feature/126441 article on linux.com] resulted in a lot of people contacting ichthyo and cehteh. [http://plot.bek.no/pipermail/piksel/2008-January/003328.html &quot;I believe in Cinelerra&quot;] by Leo Germani also generated a lot of traffic by developers. Some level of presence on mailing lists would be good although not too much just enough to indicate the project is going on.
+
+__Conclusion__: volunteer needed to coordinate publicity (not overly urgent, but helpful)
+
+
+! Informal talk about the GUI
+
+Firstly, as SimAV was not able to be present during the meeting a proposal by him was relayed by Ichthyo: GUI and backend should be completely separated and communicate via pipes. It was agreed that the GUI should be detached but some higher level message protocol rather than bare pipes should be used. Some comments:
+* cehteh standalone gui is a nice to have, but implementation details have to be worked out
+* gmerlin Video playback can be separated in a separate X connection
+* cehteh suggests to start with an conventional, attached gui and just keep it in mind to make it detachable later
+* rgareus IMHO you want to share memory for the video-frame buffer beween the player and backend - with pipes you'll go the video-jack way.
+
+''joelholdsworth'' is a new developer in the group and had showed interest in developing the GUI. he stated that he is interested in seeing a GUI that uses popular toolkits and that plays by the standards to create a consistent UI with the rest of the free desktop. For this reason he was advocating using  GTKmm. There was no direct objections to GTKmm. Generally, there seems some preference for GTK. (Note this doesn't mean GNOME). Cehteh advocates the idea to use Lua-gtk, i.e. writing the GUI in a clean and lightweight scripting language.
+
+Cario was suggested to be used for implementing the canvas in the timeline view. 
+
+
+
+The gui should provide a skeleton. Timeline and canvas should be controllable and extensible by plugins. Tracks can be nested. Use tiling windows and dockeable views and tools palettes. For example some configuration within session/renderpipeline may cause some pluggable elements to be added to the gui. A fader or a toggle/icon and so forth. Some plugins might render additional output (e.g. in previews). A video track renders thumbnails, automation curves on top.
+
+Workflow is another important aspect to take into account in the design. A lot of information needs to come from editors and users in the design process. Different thoughts about the workflow:
+* Should not make a predefined workflow. Just produce a tool that can be adapted to different workflows. It can be predefined, but should not be fixed.
+* We dont have the resources to develop a &quot;workflow&quot; in the formal manner, we will go the &quot;propose and comment&quot; route.
+* We should take the best ideas from popular competing products such as Final Cut Pro, AVID, Premiere plus After Effects.
+
+Customisation is deemed important. Some points brought up in the discussion:
+* sakalli: would be great if we could provide a fcp configuration and a avid configuration besides the default configuration as well. That could lure a lot of users quickly. On the other side, too much flexibility can be be a problem as well. 
+* cehteh: yes .. but such things are prolly costly to setup .. we need volunteers for anything optional
+* Customization should be possible without recompile, but not too cheap.
+* There should be a working skeleton or some fixed anchor but gui operations should be bound to a scripting language to achieve customization.
+* The whole gui in a script with some performance critical widgets coded in C/C++
+* Some parts should just be customizable, other parts should be kept fixed.
+* cehteh suggested to start out by making a 'high level' description with no language/toolkit in mind .. what widgets do we need etc and after that to work on the skeleton mockup.
+* cehteh / hermanr: Lumiera should allow to choose theme independently from desktop .. because what you have as your desktop-theme doesn't suit for video editing in many cases ... see ardour
+
+ichthyo brings up the role of customization for the middle layer and gives an overview of his plans for the new participants. :
+He had good experiences with a rule based aproach in various projects. He wants to embed a Prolog interpreter that can answer to &quot;configuration queries&quot;.  There is a &quot;builder&quot; component in the middle layer to derive the render nodes graph based on a &quot;high level model&quot;, which is visible to the user (in the GUI) and based on these configuration queries.
+
+Rationale for using prolog is: The rules are very readable because they rather represent facts and relations, not the way &quot;how dings are done&quot; but the way &quot;how things are related&quot;. Example: how to configure some effects when the footage is interlaced. Additionally, we want to have some global swithces, which could control these rules, like &quot;I want maximum quality&quot;, or &quot;I want as much as possible set up automatically&quot;. The prolog rules are stored in the session and can be editd by advanced users. Of course, there is a set of basic rules. This aspect of customisation isn't exactly a GUI issue but it would have consequences for the GUI.
+
+some discussion:
+* joelholdsworth: so we just need a way of exposing properties. This is reasonably straightforward when all you want is value, colour, string etc.
+* rules within the middle layer/session could bind to some properties exposed in the GUI
+* gmerlin joelholdsworth: Agree, but point out that this can become difficult
+* cehteh joelholdsworth: skeleton and plugins who attach into some gui areas, so you can add custom widgets
+* ichthyo: also the ability to attach &quot;tags&quot; to various objects, so the rules can bind on those tags
+* cehteh: maybe a standard set of widgets, not really completely custom ones (gmerlin agrees)
+* joelholdsworth: probably you need to be able to do both well
+* joelholdsworth in many apps the value/colour/string set works perfectly well, but in luminierra the controls will likely need to be much richer
+
+Some brainstorming points about usability:
+* We need a realy good bezier widget for all sorts of curves.
+* Faders that can be grabbed everywhere are nice like  like ardours and Blender faders. Or others which have no big knob 
+* The controls in blender's node view would be a good modal to copy (not advocating GL UI, just using widgets and concepts).
+
+One extra point:
+* we have agreed to make all of the big interfaces between the layers as plain C interfaces, because this is the most widely supported common denominator.
+
+!!!! GUI CONCLUSION
+* ''joelholdsworth'' is now the official GUI maintainer for Lumiera!
+* sakalli, hermanr, ichthyo announced interest in contributing to discussions about GUI, workflows and usability. gmerlin noted that he knows some gtk secrets and is willing to help out here too.
+
+
+! Froscon application
+[http://www.froscon.org/ Froscon] is a small nice german open source exhibition that is very very technical oriented. Cehteh will be there as well as Ichthyo. Question is wether we should have a booth, perhaps together with some other interested media projects. Could ask Richard and the ffmpeg/mplayer people. End of call for papers is in june.
+
+We made no decision about official presence but most likely there will be a developer meeting if nothing else.
+
+
+! Timecode metadata discussion
+This Discussion started out on the libopenvideo list: The question was wether we agree on one uniform format solution from decoder up to app level regarding timecode. And what this format would be: arithmetic or struct type. Regarding metadata (including type of timecode) the question is if we should work out a rather fixed data format, or go the route towards rather open description records.
+
+__Conclusion__: Gmerlin does it the way it fits best for within the decoder, and Lumiera uses a more uniform time format for representing timecode in the higher app layers. Conversion functions will be concentrated in a library. Regarding metadata we will investigate further.
+
+//A (shortended) digest of the timecode and metadata discussion is attached below//
+
+! Next meeting
+
+The next meeting will be at thuesday 8th may 21:00GMT
+
+-----------------------------
+
+!!!! Timecode discussion
+{{{
+12:51 cehteh gmerlin: did you read my last mail about generalization of metadata?
+12:51 cehteh key/value pairs
+12:51 gmerlin not sure about that
+12:51 cehteh i am pretty sure that i want that in lumiera
+12:52 cehteh if gavl does that for us it would be even better
+12:52 gmerlin first of all 2 different things:
+12:52 gmerlin 1. arithmetic &lt;-&gt; struct
+12:53 gmerlin 2. Generic &lt;-&gt; format specific
+12:53 cehteh arithmetic for sure
+12:53 gmerlin On the decoder API side, I want to export ideally only one type 
+12:54 gmerlin No no SMPTEXXX and ISO999908098
+12:54 cehteh will that be attached to the frames in a intrusive way?
+12:54 cehteh i rather leave the attaching up to the application
+12:54 gmerlin intrusive?
+12:55 cehteh struct frame { uint64_t timecode; }   vs...
+12:55 cehteh struct frame { struct metadata* something; }
+12:55 cehteh or even vs something done at a api level 
+12:56 gmerlin struct lumiera_video_frame { gavl_video_frame_t * f; uint64_t timecode};
+12:56 gmerlin Or add timecodes to gavl_video_frame_t
+12:57 cehteh struct lumiera_video_frame { gavl_video_frame_t * f; struct metadata* timecode_n_stuff; }
+12:57 ichthyo so I support a  struct metadata*
+12:58 cehteh ichthyo: timecodes might not be regular .. they should be optional, but anyways they dont cost when using an arithmetic type
+12:58 cehteh i mean thats the purpose of timecodes .. to tag every frame and dont make assumptions that your footage is perfect
+12:58 ichthyo but a struct metadata* would rather mean to keep it out of basic GAVL and have a libmetadata -- which may be integrated with GAVL -- right?
+12:59 cehteh someome may have stolen a frame :P
+12:59 cehteh thats gmerlins decision ... 
+12:59 gmerlin I'm against gavl integration of metadata
+12:59 gmerlin gavl has a clear scope: Number crunching
+01:00 cehteh gmerlin: you somehow have to pass it from the decoder to the application
+01:01 cehteh i would prefer to introduce some sidechannel 
+01:01 gmerlin Yes, gmerlin_avdecoder will provide a separate function for getting the next timecode
+01:01 gmerlin bgav_get_next_timecode()
+01:01 cehteh gavl_get_frame (gavl_frame* place the frame here, metadata* place metadata there)
+01:01 gmerlin or: bgav_timecode_from_pts()
+01:03 gmerlin Some higher MXF profiles allow changing timecode parameneters in one stream
+01:06 gmerlin It's sometimes impossible to separate demuxers and codecs
+01:06 gmerlin better have them together in one lib
+01:06 cehteh actually i would like to cache gavls internal states into the backend
+01:08 gmerlin Ok, so timecodes are YYYYMMDDHHMMSSFF as int64_t
+01:08 cehteh the indexing is something i prolly have some words about 
+01:09 cehteh timecodes are uint64_t as microseconds
+01:09 cehteh well for lumiera :-P
+01:10 cehteh YYYYMMDDHHMMSSFF as int64_t   isnt that much better than a struct :P
+01:11 ichthyo now, IMHO its mostly up to gmerlin to decide how it fits into GAVL
+01:11 cehteh ack
+01:11 gmerlin Not gavl
+01:11 ichthyo gmerlin?
+01:11 gmerlin gmerlin avdecoder yes.
+01:11 cehteh in lumiera we will use usecs
+01:11 ichthyo yes
+01:12 ichthyo we will have a conversion function somewhere
+01:12 gmerlin And will it include a calendar date?
+01:12 cehteh doing it only once (avdecoder-&gt;usec) makes some sense
+01:12 gmerlin usecs since when?
+01:12 ichthyo either, we get directly usecs from avdecoder, if this fits in for gmerlin,
+01:12 ichthyo or we'll get the format which works best for him and we do the conversion ourselves
+01:12 cehteh defined elsewhere
+01:12 cehteh reel-start or absolute time or whatever
+01:13 ichthyo also, what sort of timecode this was based on (drop frame or not)
+01:13 cehteh gmerlin: thats a important point .. just uint64_t does not suffice
+01:13 cehteh it needs a tag describing what kind of timecode was used
+01:14 cehteh no matter how you encode it 
+01:14 cehteh and iirc there are quite some timecodes
+01:14 ichthyo because in this respect richard was right: we need to be able to reprocuce any value 1:1 
+01:14 cehteh yep
+01:15 cehteh further i want to be able to convert between any kind of timecode in a fingersnip
+01:15 gmerlin ichthyo: and that's impossible with usecs
+01:15 cehteh gmerlin: its not
+01:15 ichthyo with usecs alone: agreed
+01:16 ichthyo with usecs + metadata it should be possible
+01:16 ichthyo modulo some extreme cases (high speed cams, weeks of footage....)
+01:16 cehteh yes .. you need framerate and other infos depending on the metadata
+01:17 cehteh you need to be careful to do the math right so that inverse functions dont drift
+01:17 gmerlin I'll export something lossless, which repduces MXF, DV and Quicktime timecodes losslessly
+01:17 gmerlin You can then do what you want with them :)
+01:17 cehteh thats why i would like to do it at only *one* place/library .. because its delicate and bugs are easier to spot/fix there
+01:18 ichthyo and then there is some api to get at the additional metadata
+01:18 cehteh yeah
+01:18 ichthyo and beyond that: lets devise a libmetadata
+01:18 cehteh just shove the data over .. YYYYMMDDHHMMSSFF as int64_t would be ok
+01:18 gmerlin Ok.
+01:18 cehteh we make a libmetadata (as part of our support lib)
+01:19 cehteh somewhat independent so that it can be spun out
+}}}
+
+!!!! about Metadata
+{{{
+01:19 cehteh gmerlin: well .. how bout other metadata
+01:19 cehteh your decoder needs to pass that too 
+01:20 gmerlin like?
+01:20 gmerlin Author, Artist title...
+01:20 cehteh some cameras encode shutter speed, focus, gain control, colour balance
+01:20 cehteh and other things
+01:20 gmerlin Hmmm
+01:20 gmerlin I think MXF exports some of these
+01:21 ichthyo wav files can have additional chunks; whats with flac?
+01:21 gmerlin flac has vorbis metadata
+01:21 ichthyo important for the more modern sound formats
+01:21 cehteh dunno .. just thinkin about pro codecs and raw film metadata
+01:21 ichthyo just wanting to point out: things to come here, 
+01:22 ichthyo e.g for sound: what stream is what channel
+01:22 gmerlin Channel locations are handles by gavl
+01:22 gmerlin If you have a multichannel stream
+01:22 cehteh well .. note that there is per-asset metadata you want to pass .. and per frame metadata
+01:22 cehteh maybe even some more undiscovered cases :)
+01:23 cehteh did someone say this is easy??
+01:23 sakalli did any of you watch the video regarding red workflow that i sent to the mailing list? redcode raw holds everyting, asa, wb, etc...  hope lumiera will be able to facilitate that as well.
+01:23 ichthyo at some point I want to be able to support ambisonics
+01:24 ichthyo and maybe some day there will be wave field sysnthesis in more broad use
+01:24 cehteh the codec in the back needs to pass us these things else we cantb handle it
+01:24 gmerlin well, the easiest would be to extend bgav_metadata_t
+01:24 ichthyo rationale is: just be open
+01:24 cehteh gmerlin: maybe we need to investigate this things more, nothing needs to be decided now
+01:24 ichthyo ack
+01:25 cehteh see my key/value metadata proposal .. at some point maybe you make a complete sidechannel just for metadata
+01:25 cehteh decoder stuffs that in on demand and it is passed along with its own api like the bgav_timecode_from_pts()
+01:26 cehteh that way you dont need to touch it more than necessary
+01:26 gmerlin shouldn't that key/value stuff be unified with plugin parameters?
+01:27 cehteh for lumiera, maybe, maybe not
+01:27 ichthyo you mean: you have a common api for describing &quot;values&quot; ?
+01:27 cehteh some plugin parameters are determined by math functions
+01:27 gmerlin You have a key, a type and a value
+01:27 cehteh maybe for caching them
+01:27 cehteh the api might be unified .. but the storage not
+01:28 gmerlin why?
+01:28 ichthyo because any block of data could be in the metadata
+01:28 cehteh metadata which belongs to the frame coming from the decoder is const
+01:28 cehteh plugin parameters are volatile
+
+01:33 gmerlin One other point (but too late for it now) are audio timecodes. I'll adress that on libopenvideo
+01:33 cehteh we will write a little more sophisticated timecode library 
+01:34 cehteh gmerlin: that should be unified :)
+}}}
+
 </pre>
 </div>
 <div title="InlineJavaScript" modifier="Jeremy" created="200603090618" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200603090618">
@@ -1378,7 +1796,7 @@ This distributed wiki might be used instead the pipapo.org wiki, investigate tha
 Wiki works. It is simple to use and just flexible enough to handle the task. I don't go to install any other software for such tasks on my server. While the design progresses I'd propose to move our work into git repositories and eventually phase this wiki pages out anyways. I'd rather like to start out distributed/git right away .. but git gives us only a fine storage layer, for a design process we need some good presentation layer (later when using git and starting the implementation everyones favorite editor serves for that) I have no better ideas yet to solve the presentation problem other than using this wiki (or maybe Bouml).
 </pre>
 </div>
-<div title="LumieraWiki" modifier="Ichthyostega" modified="200708170218" created="200706172308" tags="portal" changecount="29">
+<div title="LumieraWiki" modifier="Ichthyostega" modified="200804120319" created="200706172308" tags="portal" changecount="32">
 <pre>This is the entry point to several [[TiddlyWiki]]-Pages containing the developer and design documentation for Lumiera.
 
 * Cehteh started GitNotes where we will collect some information about git, howto and special setups
@@ -1389,23 +1807,25 @@ Wiki works. It is simple to use and just flexible enough to handle the task. I d
 Please __end your tiddlers in a newline__, this makes merging in git easier since the /pre tag used in tiddlywiki will become on a single line.
 
 ----
-!Design Draft
+!Architecture and Subsystems
 to get started, we create design drafts emphasizing different aspects and regions of Lumiera
 
-* Ichthyo focuses mainly on the Render Engine and its interconnection to the EDL, [[see this separate page|renderengine.html]]
-* Cehteh works on the data backend draft, see [[this page|backend.html]]
+* Cehteh works on the data backend, see [[this page|backend.html]]
+* Ichthyo focuses mainly on Edit operations and Builder, [[see this separate page|renderengine.html]]
+* Gmerlin is in charge of [[GAVL|http://gmerlin.sourceforge.net/gavl.html]] for processing of video data
+* as of 4/08 a GuiWorkingGroup is emerging...
 * Some tools which don't fit somewhere else and are used everywhere are put into a [[Support Library|support_library.html]]
-* [[Description of the Test System|TestSh]]
 
-!Coding Structures
-next we should //start thinking// on how to organize several aspects of the practical coding...
+!Coding &amp;mdash; Building &amp;mdash; Testing
+how to organize several aspects of the practical coding...
 * what to do in BOUML?                          &amp;rarr; [[more|whatInBOUML]]
 * how to organize packages, files, includes?    &amp;rarr; [[more|SrcTreeStructure]]
 * how to organize the executable to be built?
 * what coding conventions to prefer?            &amp;rarr; [[GNU Style|DesignDocumentation]]
 * what [[build system|BuildSystem]] to use?
 * various [[build dependencies|BuildDependenceis]]
-* TestSuite</pre>
+* we embrace __Test Driven Development__.       &amp;rarr; Description of [[Test System|TestSh]] and TestSuite
+</pre>
 </div>
 <div title="MainMenu" modifier="CehTeh" modified="200803281345" created="200706172305" changecount="6">
 <pre>GettingStarted

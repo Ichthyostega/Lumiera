@@ -747,29 +747,40 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BuildDependencies" modifier="CehTeh" modified="200804011825" created="200803261326" changecount="3">
+<div title="BuildDependencies" modifier="Ichthyostega" modified="200804120311" created="200803261326" changecount="7">
 <pre>! Programming Languages
- * C
-  a C99 compatible compiler, some GCC extensions are used, most are optional.
- * C++
-  C++98 with some boost and tr1 additions
- * bash
+* C
+** a C99 compatible compiler, some GCC extensions are used, most are optional.
+* C++
+** C++98
+** std::tr1 (for &lt;std::tr1::memory&gt;)
+** BOOST ~~(below are the DEBIAN package names)~~
+*** libboost-dev (=1.34.1-2)
+*** libboost-program-options-dev (=1.34.1-2)
+*** libboost-program-options1.34.1 (=1.34.1-2) ''NOTE: binary lib dependency''
+*** libboost-regex-dev (=1.34.1-2)
+*** libboost-regex1.34.1 (=1.34.1-2) ''binary lib depenency''
+** //usually, newer versions are OK//
+
+* bash
   some build scripts (test.sh, ..) use bash specific extensions
 
 ! Build Tools
- * scons
- * autotools
- * Doxygen
- * test.sh (included)
+* autotools
+* SCons
+** //need either autotools or scons//
+** SCons (0.96.90), Python (2.3)
+* Doxygen
+* test.sh (included)
 
 ! Extra tools
- * git
- * bouml
+* git
+* bouml
 
 ! Libraries
- * boost
- * NoBug
- * gavl
+* boost (see above)
+* NoBug
+* gavl
 </pre>
 </div>
 <div title="ColorPalette" modifier="CehTeh" modified="200803261254" created="200803261252" changecount="5">
