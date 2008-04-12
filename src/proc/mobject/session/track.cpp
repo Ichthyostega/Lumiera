@@ -1,5 +1,5 @@
 /*
-  Track  -  descriptor for one track in the Session
+  Track  -  A grouping device within the EDL.
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,15 +22,29 @@
 
 
 #include "proc/mobject/session/track.hpp"
+#include "proc/asset/track.hpp"
 
 namespace mobject
   {
   namespace session
     {
 
-    /** */
+    /** new track-MO linked with the given asset::Track.
+     *  Initially, the reference (zero-point) time of this track
+     *  will be set to 0 
+     */
+    Track::Track (PTrackAsset& trackDef)
+      : start_(0),
+        trackDef_(trackDef)
+    { }
 
 
+    bool 
+    Track::isValid()  const
+    {
+      TODO ("sensible Track-MO self-check");
+      return true;
+    }
 
   } // namespace mobject::session
 

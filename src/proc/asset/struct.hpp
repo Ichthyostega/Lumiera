@@ -38,15 +38,26 @@
 #define ASSET_STRUCT_H
 
 #include "proc/asset.hpp"
+#include "common/query.hpp"
 #include "common/factory.hpp"
+#include "common/singleton.hpp"
+
+#include <boost/scoped_ptr.hpp>
+#include <string>
 
 
 
 namespace asset
   {
+  using std::string;
+  using std::wstring;
+  using boost::scoped_ptr;
+  using lumiera::Query;
   
   class Struct;
   class StructFactory;
+  class StructFactoryImpl;
+  class Pipe;
   
   
   template<>
@@ -73,8 +84,12 @@ namespace asset
           return static_cast<const ID<Struct>& > (Asset::getID()); 
         }
       
+      const string queryStreamID()  const;
+      const string queryPipeID()    const;
+      
+      
     protected:
-      Struct (const Asset::Ident& idi) : Asset(idi) {}  //////////////TODO
+      Struct (const Asset::Ident& idi) : Asset(idi) {}
       friend class StructFactory;
     };
     
@@ -88,16 +103,28 @@ namespace asset
   
   
   
+  
+  
   /** 
    * Factory specialized for createing Structural Asset objects.
    */ 
   class StructFactory : public lumiera::Factory<asset::Struct>
     {
+      scoped_ptr<StructFactoryImpl> impl_;
+
+    protected:
+      StructFactory ();
+      friend class Struct;
+
+      
     public:
       typedef shared_ptr<asset::Struct> PType;
-       
-      PType operator() (Asset::Ident& key);      ////////////TODO define actual operation 
-
+      
+      template<class STRU>
+      shared_ptr<STRU> operator() (const Query<STRU>& query);      ////////////TODO actually do something sensible here 
+      
+      shared_ptr<Pipe> operator() (string pipeID, string streamID);
+      
     };
     
     

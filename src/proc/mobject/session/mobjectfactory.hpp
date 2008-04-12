@@ -32,6 +32,7 @@ namespace asset
   {
   class Clip;
   class Media;
+  class Track;
   class Effect;
   
   }
@@ -41,7 +42,10 @@ namespace mobject
   namespace session
     {
     class Clip;
+    class Track;
     class Effect;
+    
+    typedef shared_ptr<asset::Track> PTrackAsset;
 
 
     class MObjectFactory
@@ -55,7 +59,8 @@ namespace mobject
         
         Placement<Clip>   operator() (const asset::Clip&, const asset::Media&);
         Placement<Clip>   operator() (const asset::Clip&, vector<const asset::Media*>);
-        Placement<Effect> operator() (const asset::Effect);
+        Placement<Track>  operator() (PTrackAsset&);
+        Placement<Effect> operator() (const asset::Effect&);
         
       };
 

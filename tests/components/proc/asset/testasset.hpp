@@ -58,7 +58,7 @@ namespace asset
         static void deleter (TestAsset<A>* aa) { delete aa; }
         
       public:
-        typedef shared_ptr<TestAsset<A> > PA;
+        typedef P<TestAsset<A> > PA;
         
         static PA create ()             { return (new TestAsset<A>       )->ptrFromThis(); }
         static PA create (PAsset& pRef) { return (new TestAsset<A> (pRef))->ptrFromThis(); }

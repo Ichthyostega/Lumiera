@@ -1,5 +1,5 @@
 /*
-  TRACK.hpp  -  structural asset holding the configuration of a track in the EDL
+  TRACK.hpp  -  structural asset used as global track identifier
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -33,12 +33,22 @@ namespace asset
 
 
   /**
-   * Structural Asset holding the configuration of a track in the EDL
+   * Structural Asset using as a global identifier for placing
+   * some object onto a given track. Not to be confused with the "track-MO":
+   * To actually use a track  within an EDL, we need to attach a 
+   * Placement<mobject::session::Track> to the tree-of-tracks of this EDL.
+   * Thus, we have one global track-identifier (this class here), but
+   * maybe several instances (track-MO) within various EDLs
    */
   class Track : public Struct
     {
-      
+    protected:
+      Track (const Asset::Ident& idi);
+      friend class StructFactoryImpl;
     };
+    
+  
+  typedef shared_ptr<const Track> PTrack;
     
     
     

@@ -1,0 +1,551 @@
+format 40
+"ConfigQuery" // CommonLib::ConfigQuery
+  revision 1
+  modified_by 5 "hiv"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default
+  
+  componentview 128261 "Query System overview"
+    //component diagram settings
+    package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    componentdiagram 131589 "components"
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      draw_component_as_icon default show_component_req_prov default show_component_rea default
+      size A4
+    end
+
+    component 130565 "ConfigRules"
+      comment "A system for accessing various kinds of preconfigured objects by querying for capabilities."
+    end
+
+    component 130693 "Resolver"
+    end
+
+    component 130821 "Rule Base"
+    end
+
+    component 130949 "DefaultsManager"
+    end
+  end
+
+  classview 129157 "query"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    
+    classdiagram 131461 "Rules access"
+      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      size A4
+    end
+
+    class 140549 "ConfigRules"
+      abstract visibility public stereotype "interface"
+      nactuals 1
+      actual class class_ref 140677 // QueryHandler
+        rank 0 explicit_value ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
+${members}};
+"
+      explicit_switch_type ""
+      
+      comment "public acces point for running Config Queries"
+      classrelation 148357 // <generalisation>
+	relation 146181 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 148357 // <generalisation>
+	  b multiplicity "" parent class_ref 140677 // QueryHandler
+      end
+
+      classrelation 148485 // <association>
+	relation 146309 ----
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 148485 // <association>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 148613 // <association>
+      end
+
+      classrelation 148741 // <association>
+	relation 146437 ----
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 148741 // <association>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 148869 // <association>
+      end
+    end
+
+    class 140677 "QueryHandler"
+      abstract visibility public stereotype "interface"
+      nformals 1
+      formal name "TY" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
+${members}};
+"
+      explicit_switch_type ""
+      
+      classrelation 148613 // <association>
+	relation_ref 146309 // <association>
+      end
+
+      classrelation 148869 // <association>
+	relation_ref 146437 // <association>
+      end
+
+      operation 135301 "resolve"
+	public explicit_return_type "bool"
+	nparams 2
+	  param inout name "solution" explicit_type "P<TY>"
+	  param in name "query" explicit_type "Query<TY>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+      end
+    end
+
+    class 140805 "TypeHandler"
+      abstract visibility public stereotype "interface"
+      nformals 1
+      formal name "TY" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
+${members}};
+"
+      explicit_switch_type ""
+      
+      operation 135045 "find"
+	abstract cpp_virtual public explicit_return_type "TY"
+	nparams 1
+	  param in name "capabilities" explicit_type "Pred"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	
+	
+      end
+
+      operation 135173 "make"
+	abstract cpp_virtual public explicit_return_type "TY"
+	nparams 1
+	  param in name "capabilities" explicit_type "Pred"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	
+	
+      end
+    end
+
+    class 140933 "ResolverBase"
+      abstract visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 148997 // <realization>
+	relation 146565 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 148997 // <realization>
+	  b multiplicity "" parent class_ref 140549 // ConfigRules
+      end
+    end
+
+    class 141061 "YAP_Prolog"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 150405 // <dependency>
+	relation 147717 -_->
+	  a default
+	    cpp default "Generated"
+	    classrelation_ref 150405 // <dependency>
+	  b multiplicity "" parent class_ref 140805 // TypeHandler
+      end
+    end
+
+    class 141189 "QueryHandlerImpl"
+      visibility package 
+      nformals 1
+      formal name "TY" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 149125 // <generalisation>
+	relation 146693 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 149125 // <generalisation>
+	  b multiplicity "" parent class_ref 140933 // ResolverBase
+      end
+
+      classrelation 149253 // <association>
+	relation 146821 ----
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 149253 // <association>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 149381 // <association>
+      end
+
+      classrelation 149381 // <association>
+	relation_ref 146821 // <association>
+      end
+
+      classrelation 149509 // <association>
+	relation 146949 ----
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 149509 // <association>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 149637 // <association>
+      end
+
+      classrelation 149637 // <association>
+	relation_ref 146949 // <association>
+      end
+
+      operation 135429 "resolve"
+	public explicit_return_type "bool"
+	nparams 2
+	  param inout name "solution" explicit_type "P<TY>"
+	  param in name "query" explicit_type "Query<TY>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+      end
+
+      classrelation 149765 // <unidirectional association>
+	relation 147077 --->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 149765 // <unidirectional association>
+	  b multiplicity "" parent class_ref 141061 // YAP_Prolog
+      end
+
+      classrelation 150149 // <unidirectional association>
+	relation 147461 --->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 150149 // <unidirectional association>
+	  b multiplicity "" parent class_ref 141061 // YAP_Prolog
+      end
+
+      classrelation 150277 // <unidirectional association>
+	relation 147589 --->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 150277 // <unidirectional association>
+	  b multiplicity "" parent class_ref 141061 // YAP_Prolog
+      end
+    end
+
+    class 141317 "TypeHandler<Pipe>"
+      visibility package 
+      nactuals 1
+      actual class class_ref 140805 // TypeHandler
+        rank 0 explicit_value ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 149893 // <unidirectional association>
+	relation 147205 --->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 149893 // <unidirectional association>
+	  b multiplicity "" parent class_ref 138117 // Pipe
+      end
+
+      classrelation 150021 // <realization>
+	relation 147333 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 150021 // <realization>
+	  b multiplicity "" parent class_ref 140805 // TypeHandler
+      end
+    end
+
+    class 141445 "DefaultsManager"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 150533 // <dependency>
+	relation 147845 -_->
+	  a default
+	    cpp default "Generated"
+	    classrelation_ref 150533 // <dependency>
+	  b multiplicity "" parent class_ref 140549 // ConfigRules
+      end
+
+      classrelation 150661 // <association>
+	relation 147973 ----
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 150661 // <association>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 150789 // <association>
+      end
+    end
+
+    class 141573 "DefaultsRegistry"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 150789 // <association>
+	relation_ref 147973 // <association>
+      end
+    end
+  end
+
+  usecaseview 128389 "query use"
+    //use case diagram settings
+    package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    usecasediagram 131717 "when to query"
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      size A4
+    end
+
+    usecase 128517 "create specific object"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    end
+
+    usecase 128645 "use \"default\" object"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      simplerelation 129541
+	---|>
+	  on usecase_ref 128517 // create specific object
+      end
+    end
+
+    usecase 128773 "load object from session"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    end
+
+    usecase 128901 "add new object to session"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    end
+
+    class 141701 "User"
+      visibility package stereotype "actor"
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 141829 "Serializer"
+      visibility package stereotype "actor"
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    usecase 129029 "ConfigQuery"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    end
+
+    usecase 129157 "need sub object"
+      //use case diagram settings
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      //sequence diagram settings
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+      //collaboration diagram settings
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+      //object diagram settings
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    end
+
+    collaborationdiagram 131845 "\"default\" object"
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+      size A4
+    end
+
+    classinstance 135941 "predicate impl"
+      type class_ref 140805 // TypeHandler
+      attributes
+        end
+      relations
+        end
+    end
+  end
+end

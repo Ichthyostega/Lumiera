@@ -162,10 +162,10 @@ namespace lumiera
  */
 #ifdef NOBUG_ABORT
 #undef NOBUG_ABORT
-#define CIN_NOBUG_LOCATION \
+#define LUMIERA_NOBUG_LOCATION \
   std::string (NOBUG_BASENAME(__FILE__)) +":"+ NOBUG_STRINGIZE(__LINE__) + ", function " + __func__
 #define NOBUG_ABORT \
-  lumiera::error::assertion_terminate (CIN_NOBUG_LOCATION);
+  lumiera::error::assertion_terminate (LUMIERA_NOBUG_LOCATION);
 #endif
 
 

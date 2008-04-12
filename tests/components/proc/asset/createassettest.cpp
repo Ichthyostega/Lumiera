@@ -60,7 +60,7 @@ namespace asset
         
         
         
-        typedef shared_ptr<asset::Media> PM;
+        typedef P<Media> PM;                                                         /////TODO: transition to P<>
         
         /** @test Creating and automatically registering Asset instances.
          *        Re-Retrieving the newly created objects from AssetManager.
@@ -78,12 +78,26 @@ namespace asset
             
             // Assets have been registered and can be retrieved by ID
             AssetManager& aMang = AssetManager::instance();
+            PM registered;                                                         /////TODO: transition to P<>
+            registered = aMang.getAsset (mm1->getID());
+            ASSERT (registered == mm1);
+            registered = aMang.getAsset (mm2->getID());
+            ASSERT (registered == mm2);
+            registered = aMang.getAsset (mm3->getID());
+            ASSERT (registered == mm3);
+            
+            registered = aMang.getAsset (mm1->getID());
+            ASSERT (registered != mm2);
+/* 
+ * TODO: switch back to original version
+ *       once the transition to P<XX> ist done...
+ * 
             ASSERT (aMang.getAsset (mm1->getID()) == mm1);
             ASSERT (aMang.getAsset (mm2->getID()) == mm2);
             ASSERT (aMang.getAsset (mm3->getID()) == mm3);
             
             ASSERT (aMang.getAsset (mm1->getID()) != mm2);
-            
+*/            
             PAsset aa1 = aMang.getAsset (ID<Asset>(mm1->getID()));   // note we get an Asset ref
             ASSERT (aa1 == mm1);
             PM mX1 = aMang.getAsset (mm1->getID());                // ..and now we get a Media ref

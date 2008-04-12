@@ -26,8 +26,12 @@
 namespace asset
   {
   
-  /** */
-
+  /** @todo work out the details of track assets */
+  Track::Track (const Asset::Ident& idi)
+    : Struct (idi)
+  {
+    
+  }
 
 
 } // namespace asset

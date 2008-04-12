@@ -46,6 +46,9 @@ namespace asset
   class Proc;
   class ProcFactory;
   
+  typedef shared_ptr<const Proc> PProc;
+  
+  
   
   template<>
   class ID<Proc> : public ID<Asset>

@@ -48,7 +48,6 @@ namespace mobject
     class Fixture : public EDL
       {
       protected:
-        Track tracks;
         list<ExplicitPlacement*> timeline;
 
 

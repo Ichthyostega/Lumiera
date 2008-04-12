@@ -39,7 +39,7 @@
  ** value. For example the asset::Media#getID returns an ID<Media>. By using the
  ** templated query function AssetManager#getAsset, we can get at references to the more 
  ** specific subinterface asset::media just by using the ID value in a typesafe manner.
- ** This helps avoiding dynamic typing and switch-on-type, leading to much more robust,
+ ** This helps avoiding dynamic typing and switch-on-type, leading to more robust,
  ** extensible and clear code.
  **
  ** (Implementation detail: as g++ is not able to handle member function template
@@ -59,13 +59,16 @@
 
 #include "proc/asset/category.hpp"
 #include "common/error.hpp"
+#include "common/p.hpp"
+
+#include <boost/type_traits/is_base_of.hpp>
+#include <boost/operators.hpp>
+#include <boost/utility.hpp>
 
 #include <cstddef>
 #include <string>
 #include <vector>
 #include <set>
-#include <tr1/memory>
-#include <boost/utility.hpp>
 
 
 using std::string;
@@ -79,6 +82,9 @@ namespace asset
   
   using std::size_t;
   using std::tr1::shared_ptr;
+  using std::tr1::static_pointer_cast;
+
+  using lumiera::P;
   
   
   /** 
@@ -107,8 +113,8 @@ namespace asset
   class Asset;
   class AssetManager;
   typedef const ID<Asset>& IDA;
-  typedef shared_ptr<Asset> PAsset;
-  typedef shared_ptr<const Asset> PcAsset;
+  typedef P<Asset>       PAsset;
+  typedef P<const Asset> PcAsset;
 
   
   
@@ -116,7 +122,7 @@ namespace asset
   
   /**
    * Superinterface describing especially bookeeping properties.
-   * As of 09/2008, there are four  <b>Kinds</b> of Assets, each
+   * As of 09/2007, there are four  <b>Kinds</b> of Assets, each
    * comprising a sub-Interface of the Asset Interface:
    * <ul><li>asset::Media representing mediafiles</li>
    *     <li>asset::Proc representing media data processing components (e.g. Effects)</li>
@@ -127,12 +133,14 @@ namespace asset
    * asset::Effect, asset::Codec, asset::Track, asset::Dataset.
    * @note Assets objects have a strict unique identity and because of this are non-copyable.
    *       You can not create an Asset derived object without registering it with the AssetManager
-   *       automatically. I is possible to copy the PAsset (smart pointer) though. 
+   *       automatically. It is possible to copy the PAsset (smart pointer) though. 
    * 
    * @since 09/2007
    * @author Ichthyo
    */
-  class Asset : private boost::noncopyable
+  class Asset 
+    : boost::totally_ordered1< Asset,
+        boost::noncopyable>
     {
     public:
 
@@ -141,6 +149,7 @@ namespace asset
        *  sufficiently identifying any given Asset. 
        */
       struct Ident
+        : boost::totally_ordered<Ident>
         {
           /** element ID, comprehensible but sanitized.
            *  The tuple (category, name, org) is unique.
@@ -170,23 +179,16 @@ namespace asset
           
           Ident (const string& n, 
                  const Category& cat, 
-                 const string& o, 
-                 const uint ver);
+                 const string& o = "lumi", 
+                 const uint ver=1);
           
+          
+          int compare (const Ident& other)   const;
+
           /** @note equality ignores version differences */
-          bool operator== (const Ident& other)  const
-            {
-              return org == other.org
-                  && name == other.name 
-                  && category == other.category;
-            }
-          bool operator!= (const Ident& other)  const
-            {
-              return !operator==(other);
-            }
-          
-          int compare (const Ident& other)  const;
-          
+          bool operator== (const Ident& oi)  const { return compare (oi) ==0; }
+          bool operator<  (const Ident& oi)  const { return compare (oi) < 0; }
+    
           operator string ()  const;
         };
       
@@ -196,9 +198,14 @@ namespace asset
     public:    
       const Ident ident;     ///<  Asset identification tuple
 
-      virtual const ID<Asset>& getID()  const { return id; }
-
+      virtual const ID<Asset>& getID()   const { return id; }
+      
+      
+      bool operator== (const Asset& oa)  const { return ident == oa.ident; }
+      bool operator<  (const Asset& oa)  const { return ident <  oa.ident; }
+          
       virtual operator string ()  const;
+      
       
       
     protected:
@@ -290,25 +297,43 @@ namespace asset
     };
     
     
-    /** ordering of Asset smart ptrs based on Ident tuple.
-     *  @todo currently supporting only smart_ptr<Asset>. */
-    inline bool operator== (const PAsset& a1, const PAsset& a2) { return a1 && a2 && ( 0==a1->ident.compare(a2->ident));}
-    inline bool operator<  (const PAsset& a1, const PAsset& a2) { return a1 && a2 && (-1==a1->ident.compare(a2->ident));}
-    inline bool operator>  (const PAsset& a1, const PAsset& a2) { return   a2 < a1;  }
-    inline bool operator>= (const PAsset& a1, const PAsset& a2) { return !(a1 < a2); }
-    inline bool operator<= (const PAsset& a1, const PAsset& a2) { return !(a1 > a2); }
-    inline bool operator!= (const PAsset& a1, const PAsset& a2) { return !(a1== a2); }
-
-    /** ordering of Asset Ident tuples.
-     *  @note version is irrelevant */
-    inline int Asset::Ident::compare (const Asset::Ident& oi)  const
+    
+    
+    /* ====== ordering of Assets and Asset-Pointers ====== */
+    
+    /** ordering of Assets is based on the ordering
+     *  of Ident tuples, which are supposed to be unique.
+     *  By using our customized lumiera::P as smart ptr,
+     *  comparison on P<Asset> ptrs will be automatically
+     *  forwarded to the Asset comparison operators.
+     *  @note version info is irrelevant */
+    inline int 
+    Asset::Ident::compare (const Asset::Ident& oi)  const
     { 
       int res;
       if (0 != (res=category.compare (oi.category)))  return res;
       if (0 != (res=org.compare (oi.org)))            return res;
       return name.compare (oi.name);
     }
-
+    
+    
+    /** promote subtype-ptr to PAsset, e.g. for comparing */
+    template<class A>
+    inline const PcAsset
+    pAsset (const shared_ptr<A>& subPtr)
+    {
+      return static_pointer_cast<const Asset,A> (subPtr);
+    }
+    
+    
+    /** type trait for detecting a shared-ptr-to-asset */
+    template <class X>
+    struct is_pAsset : boost::false_type {};
+    
+    template <class A>
+    struct is_pAsset<shared_ptr<A> >
+      : boost::is_base_of<Asset, A>      {}; 
+    
     
     /** convienient for debugging */
     inline string str (const PcAsset& a) 

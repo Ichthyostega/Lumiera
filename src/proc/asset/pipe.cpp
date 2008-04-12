@@ -1,5 +1,5 @@
 /*
-  OutPort  -  structural asset corresponding to some port generating media output
+  Pipe  -  structural asset denoting a processing pipe generating media output
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,10 +21,48 @@
 * *****************************************************/
 
 
-#include "proc/asset/outport.hpp"
+#include "proc/asset/pipe.hpp"
+#include "common/util.hpp"
+
+using util::isnil;
 
 namespace asset
   {
+  
+  
+  /** */
+  Pipe::Pipe ( const Asset::Ident& idi
+             , PProcPatt& wiring
+             , const string& pipeID
+             , wstring shortName
+             , wstring longName
+             ) 
+    : Struct (idi),
+      pipeID_ (pipeID),
+      wiringTemplate(wiring),
+      shortDesc (shortName),
+      longDesc (longName)
+  {
+    REQUIRE (!isnil (pipeID));
+    if (isnil (shortDesc))
+      shortDesc = wstring (pipeID.begin(), pipeID.end());
+  }
+
+  
+  
+  PPipe 
+  Pipe::query (string properties)
+    { 
+      return Struct::create (Query<Pipe> (properties)); 
+    }
+  
+  void 
+  Pipe::switchProcPatt (PProcPatt& another)
+  {
+    wiringTemplate = another;
+    TODO ("trigger rebuild fixture");
+  }
+
 
 
 

@@ -1,5 +1,5 @@
 /*
-  BuildInstruct  -  Instructions for building some configuration of render nodes.
+  CONSTRAINT.hpp  -  LocatingPin representing an mandatory directive
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,18 +18,30 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
 
 
-#include "proc/asset/buildinstruct.hpp"
-#include "proc/asset/procpatt.hpp"
-#include "proc/asset/proc.hpp"
+#ifndef MOBJECT_SESSION_CONSTRAINT_H
+#define MOBJECT_SESSION_CONSTRAINT_H
 
-namespace asset
+#include "proc/mobject/session/allocation.hpp"
+
+
+
+namespace mobject
   {
-  
-  /** */
+  namespace session
+    {
 
 
+    /**
+     * LocatingPin representing an directive by the user 
+     * that must not be violated
+     */
+    class Constraint : public Allocation
+      {};
 
-} // namespace asset
+  } // namespace mobject::session
+
+} // namespace mobject
+#endif

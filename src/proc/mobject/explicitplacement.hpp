@@ -48,12 +48,12 @@ namespace mobject
     {
     public:
       const Time time;
-      const Track track;
+      const Pipe pipe;
       
-      typedef std::pair<Time,Track> SolutionData;  //TODO (ichthyo consideres better passing of solution by subclass)
+      typedef std::pair<Time,Pipe> SolutionData;  //TODO (ichthyo consideres better passing of solution by subclass)
 
       /** no need to resolve any further, as this ExplicitPlacement
-       *  already \i is the result of a resolve()-call.
+       *  already \e is the result of a resolve()-call.
        */
       virtual
       ExplicitPlacement resolve ()  const 
@@ -70,7 +70,7 @@ namespace mobject
        */
       ExplicitPlacement (const Placement<MObject>& base, const SolutionData found)
         : Placement<MObject>(base),
-          time(found.first), track(found.second)
+          time(found.first), pipe(found.second)
         { };
         
       friend ExplicitPlacement Placement<MObject>::resolve () const;

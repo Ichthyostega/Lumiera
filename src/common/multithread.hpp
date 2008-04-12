@@ -27,6 +27,7 @@
 #define LUMIERA_MULTITHREAD_H
 
 #include "nobugcfg.h"
+#include "common/util.hpp"
 
 
 namespace lumiera

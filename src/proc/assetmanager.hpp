@@ -73,7 +73,7 @@ namespace asset
       
       /** retrieve the registerd shared_ptr for any asset */
       template<class KIND>
-      static shared_ptr<KIND> getPtr (const KIND& asset);
+      static shared_ptr<KIND> wrap (const KIND& asset);
       
       /** find and return corresponging object */
       template<class KIND>

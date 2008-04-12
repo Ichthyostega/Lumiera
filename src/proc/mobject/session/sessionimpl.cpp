@@ -35,8 +35,8 @@ namespace mobject
      *        default session will inevitably halt the
      *        system (and this is desirable)
      */
-    SessionImpl::SessionImpl ()  throw()
-      : Session(),
+    SessionImpl::SessionImpl (DefsManager& defs)  throw()
+      : Session(defs),
         focusEDL_(0),
         edls(1), 
         fixture(new Fixture) 

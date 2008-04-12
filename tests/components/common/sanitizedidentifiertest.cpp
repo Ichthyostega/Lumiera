@@ -45,8 +45,8 @@ namespace util
             print_clean ("trailing Withespace\n       \t");
             print_clean ("with    a  \t lot\n  of Whitespace");
             print_clean ("with\"much (punctuation)[]!");
-            print_clean ("§&Ω%€  leading garbarge");
-            print_clean ("mixed    Ω   garbarge");
+            print_clean ("§&Ω%€  leading garbage");
+            print_clean ("mixed    Ω   garbage");
             print_clean ("Bääääh!!");
             print_clean ("§&Ω%€");
           }

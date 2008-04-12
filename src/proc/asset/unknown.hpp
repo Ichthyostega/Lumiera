@@ -32,7 +32,7 @@ namespace asset
   {
   
 
-  const lumiera::Time DUMMY_TIME (25); ///< @todo solve konfig management
+  const lumiera::Time DUMMY_TIME (25); ///< @todo solve config management
 
   /**
    * Placeholder Asset for unknown or unavailable media source.

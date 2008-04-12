@@ -51,6 +51,7 @@ namespace mobject
         {
           virtual void run(Arg arg) 
             {
+              UNIMPLEMENTED ("oh my");
             } 
         };
       

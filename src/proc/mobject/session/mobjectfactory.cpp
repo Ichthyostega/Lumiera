@@ -23,8 +23,10 @@
 
 #include "proc/mobject/session/mobjectfactory.hpp"
 #include "proc/mobject/session/clip.hpp"
+#include "proc/mobject/session/track.hpp"
 #include "proc/mobject/session/effect.hpp"
 #include "proc/asset/clip.hpp"
+#include "proc/asset/track.hpp"
 #include "proc/asset/effect.hpp"
 
 namespace mobject
@@ -62,8 +64,16 @@ namespace mobject
     }
     
     /** */ 
+    Placement<Track>
+    MObjectFactory::operator() (PTrackAsset& trackDef)
+    {
+      TODO ("what needs to be registered when creating an Track-MO?");
+      return Placement<Track> (*new Track (trackDef), &deleterFunc);
+    }
+    
+    /** */ 
     Placement<Effect>
-    MObjectFactory::operator() (asset::Effect processorDef)
+    MObjectFactory::operator() (const asset::Effect& processorDef)
     {
       UNIMPLEMENTED ("fabricate effect-MO");
     }

@@ -79,7 +79,7 @@ namespace asset
      *  within AssetManager by the Asset base class ctor
      */
     template<class A>
-    shared_ptr<TestAsset<A> >
+    P<TestAsset<A> >
     TestAsset<A>::ptrFromThis ()
     {
       return static_pointer_cast<TestAsset<A>,Asset>
@@ -113,8 +113,8 @@ namespace asset
     template TestAsset<Asset>::TestAsset (PAsset& pRef);
     template TestAsset<Unknown>::TestAsset (PAsset& pRef);
     
-    template shared_ptr<TestAsset<Asset> >   TestAsset<Asset>::ptrFromThis ();
-    template shared_ptr<TestAsset<Unknown> > TestAsset<Unknown>::ptrFromThis ();
+    template P<TestAsset<Asset> >   TestAsset<Asset>::ptrFromThis ();
+    template P<TestAsset<Unknown> > TestAsset<Unknown>::ptrFromThis ();
     
   
   

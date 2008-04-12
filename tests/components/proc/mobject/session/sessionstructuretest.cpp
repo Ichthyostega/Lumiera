@@ -61,11 +61,12 @@ namespace mobject
               PSess sess = Session::current;
               ASSERT (0 <= sess->currEDL().size());                // TODO implement
               ASSERT (0 <= sess->getFixture()->size());             // TODO implement
-              ASSERT (0 <  sess->currEDL().getTracks().size());    // TODO implement
+              ASSERT (sess->currEDL().getTracks()->isValid());
               
-              PAsset track = sess->currEDL().getTracks()[0];
-              AssetManager& aMang = AssetManager::instance();
-              ASSERT (track == aMang.getAsset (track->getID()));
+//              PAsset track = sess->currEDL().getTracks()[0];
+//              AssetManager& aMang = AssetManager::instance();
+//              ASSERT (track == aMang.getAsset (track->getID()));
+              UNIMPLEMENTED ("how to refer to tracks...");
             } 
         };
       
