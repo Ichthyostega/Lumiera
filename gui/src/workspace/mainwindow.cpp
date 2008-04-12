@@ -30,6 +30,7 @@
 #include "mainwindow.hpp"
 
 namespace lumiera {
+namespace gui {
 namespace workspace {
 	
   MainWindow::MainWindow()
@@ -67,6 +68,8 @@ namespace workspace {
         "        <menuitem action='FileNewFoo'/>"
         "        <menuitem action='FileNewGoo'/>"
         "      </menu>"
+        "      <separator/>"
+        "      <menuitem action='FileRender'/>"
         "      <separator/>"
         "      <menuitem action='FileQuit'/>"
         "    </menu>"
@@ -119,5 +122,6 @@ namespace workspace {
   }
 
 }   // namespace workspace
+}   // namespace gui
 }   // namespace lumiera
 

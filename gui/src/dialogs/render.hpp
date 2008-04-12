@@ -1,5 +1,5 @@
 /*
-  mainwindow.hpp  -  Definition of the main workspace window object
+  render.hpp  -  Definition of the render output dialog
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,50 +19,33 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file mainwindow.hpp
- ** This file contains the definition of the main workspace window
- ** parent, which is the toplevel parent of the whole workspace.
+/** @file render.hpp
+ ** This file contains the definition of the render output dialog
  **
- ** @see actions.hpp
  */
 
-#ifndef MAIN_WINDOW_H
-#define MAIN_WINDOW_H
+#ifndef RENDER_H
+#define RENDER_H
 
 #include <gtkmm.h>
-#include "actions.hpp"
 
 namespace lumiera {
 namespace gui {
-namespace workspace {
+namespace dialogs {
 
   /** 
-   * The main lumiera workspace window
+   * The defintion of render output dialog class
    */
-  class MainWindow : public Gtk::Window
-    {
-    public:
-	  MainWindow();
-	  virtual ~MainWindow();
-	
-    protected:
-      void create_ui();
+  class Render : public Gtk::Dialog
+  {
+  public:
+    Render(BaseObjectType* cobject, const Glib::RefPtr<Gnome::Glade::Xml>& xml);
 
-      /* ===== UI ===== */
-    protected:
-      Gtk::VBox box;
-      Glib::RefPtr<Gtk::UIManager> uiManager;
-      
-      /* ===== Helpers ===== */
-    protected:
-      /**
-       * The instantiation of the actions helper class, which
-       * registers and handles user action events */
-      Actions actions;
-    };
+    static void init(const Glib::RefPtr<Gnome::Glade::Xml>& glade_xml, Render*& dialog);
+  };
 
-}   // namespace workspace
+}   // namespace dialogs
 }   // namespace gui
 }   // namespace lumiera
 
-#endif // MAIN_WINDOW_H
+#endif // RENDER_H

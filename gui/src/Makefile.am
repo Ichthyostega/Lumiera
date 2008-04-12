@@ -16,12 +16,14 @@ AM_CFLAGS =\
 bin_PROGRAMS = gtk-lumiera
 
 gtk_lumiera_SOURCES =                 \
-	main.cpp                          \
+	gtk-lumiera.cpp                   \
     gtk-lumiera.hpp                   \
     workspace/actions.cpp             \
     workspace/actions.hpp             \
-    workspace/mainwindow.cpp         \
-    workspace/mainwindow.hpp
+    workspace/mainwindow.cpp          \
+    workspace/mainwindow.hpp          \
+    dialogs/render.cpp                \
+    dialogs/render.hpp                 
 
 gtk_lumiera_LDFLAGS = 
 

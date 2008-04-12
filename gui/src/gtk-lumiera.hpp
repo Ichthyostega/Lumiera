@@ -27,6 +27,9 @@
 
 #ifndef GTK_LUMIERA_HPP
 #define GTK_LUMIERA_HPO
+
+#include <libglademm.h>
+#include "dialogs/render.hpp"
  
 #ifdef ENABLE_NLS
 #  include <libintl.h>
@@ -40,10 +43,38 @@
 #  define bindtextdomain(Package, Directory)
 #endif
 
-/**
- *  The name of the Lumiera application 
- */
-static const gchar* AppTitle = N_("Lumiera");
+namespace lumiera {
+namespace gui {
+
+  /**
+   *  The name of the Lumiera application 
+   */
+  static const gchar* AppTitle = N_("Lumiera");
+
+  class GtkLumiera
+    {
+    public:
+      int main(int argc, char *argv[]);
+
+    public:
+      dialogs::Render* get_render_dialog() const;
+
+    private:
+      void init_ui();
+    
+    private:
+      Glib::RefPtr<Gnome::Glade::Xml> gladeXml;
+
+      dialogs::Render *renderDialog;
+    };
+
+  /**
+   *  Returns a reference to the global application object
+   */
+  GtkLumiera& application();
+
+}   // namespace gui
+}   // namespace lumiera
 
 #endif
 

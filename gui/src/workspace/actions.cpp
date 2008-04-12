@@ -20,13 +20,13 @@
  
 * *****************************************************/
 
+#include "../gtk-lumiera.hpp"
 #include "actions.hpp"
 #include "mainwindow.hpp"
 
-namespace lumiera
-  {
-namespace workspace
-  {
+namespace lumiera {
+namespace gui {
+namespace workspace {
 
   Actions::Actions(MainWindow &main_window) :
 	mainWindow(main_window)
@@ -50,8 +50,11 @@ namespace workspace
 	actionGroup->add(Gtk::Action::create("FileMenu", "File"));
 	// Sub-menu.
 	actionGroup->add(Gtk::Action::create("FileNew", Gtk::Stock::NEW));
+  actionGroup->add(Gtk::Action::create("FileRender", _("Render...")),
+    Gtk::AccelKey("<shift>R"),
+	  sigc::mem_fun(*this, &Actions::on_menu_file_render));
 	actionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT),
-	sigc::mem_fun(*this, &Actions::on_menu_file_quit));
+	  sigc::mem_fun(*this, &Actions::on_menu_file_quit));
 
 	// Edit menu:
 	actionGroup->add(Gtk::Action::create("EditMenu", "Edit"));
@@ -60,8 +63,8 @@ namespace workspace
 	actionGroup->add(Gtk::Action::create("EditPaste", Gtk::Stock::PASTE),
 	sigc::mem_fun(*this, &Actions::on_menu_others));
 	actionGroup->add(Gtk::Action::create("EditSomething", "Something"),
-	Gtk::AccelKey("<control><alt>S"),
-	sigc::mem_fun(*this, &Actions::on_menu_others));
+	  Gtk::AccelKey("<control><alt>S"),
+	  sigc::mem_fun(*this, &Actions::on_menu_others));
 
 	// Choices menu, to demonstrate Radio items
 	actionGroup->add( Gtk::Action::create("ChoicesMenu", "Choices") );
@@ -77,6 +80,12 @@ namespace workspace
 	actionGroup->add( Gtk::Action::create("HelpMenu", "Help") );
 	actionGroup->add( Gtk::Action::create("HelpAbout", Gtk::Stock::HELP),
 	sigc::mem_fun(*this, &Actions::on_menu_others) );
+  }
+
+  void
+  Actions::on_menu_file_render()
+  {
+    application().get_render_dialog()->run();
   }
 
   void
@@ -122,5 +131,6 @@ namespace workspace
   }
 
 }   // namespace workspace
+}   // namespace gui
 }   // namespace lumiera
 

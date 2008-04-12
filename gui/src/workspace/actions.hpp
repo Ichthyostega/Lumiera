@@ -32,6 +32,7 @@
 #include <gtkmm.h>
 
 namespace lumiera {
+namespace gui {
 namespace workspace {
 
 class MainWindow;
@@ -51,12 +52,13 @@ class MainWindow;
 	  MainWindow &mainWindow;
 
 	  /* ===== Event Handlers ===== */
-      void on_menu_file_new_generic();
-      void on_menu_file_quit();
-      void on_menu_others();
+    void on_menu_file_new_generic();
+    void on_menu_file_render();
+    void on_menu_file_quit();
+    void on_menu_others();
 
-      void on_menu_choices_one();
-      void on_menu_choices_two();
+    void on_menu_choices_one();
+    void on_menu_choices_two();
 
 	  /* ===== Actions ===== */
 	  Glib::RefPtr<Gtk::ActionGroup> actionGroup;
@@ -66,6 +68,7 @@ class MainWindow;
   };
 
 }   // namespace workspace
+}   // namespace gui
 }   // namespace lumiera
 
 #endif // ACTIONS_H

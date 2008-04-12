@@ -1,5 +1,5 @@
 /*
-  Main.cpp  -  The entry point for the GTK GUI application
+  gtk-lumiera.cpp  -  The entry point for the GTK GUI application
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -30,24 +30,68 @@
 #include "gtk-lumiera.hpp"
 #include "workspace/mainwindow.hpp"
 
-
-//const gchar* AppTitle 
-//const gchar AppTitle[] = N_("Lumiera");
-
-using namespace lumiera::workspace;
+using namespace lumiera::gui;
+using namespace lumiera::gui::workspace;
 using namespace Gtk;
+
+GtkLumiera the_application;
 
   int
   main (int argc, char *argv[])
   {
-	Main kit(argc, argv);
-		
-	Glib::set_application_name(AppTitle);
-	
-	MainWindow main_window;
-	
-	kit.run(main_window);
-
-	return 0;
+    
+    return the_application.main(argc, argv);
   }
+
+
+
+namespace lumiera {
+namespace gui {
+
+  int
+  GtkLumiera::main(int argc, char *argv[])
+  {
+	  Main kit(argc, argv);
+		
+	  Glib::set_application_name(AppTitle);
+	
+    init_ui();
+
+	  MainWindow main_window;
+	
+	  kit.run(main_window); 
+  }
+
+  dialogs::Render*
+  GtkLumiera::get_render_dialog() const
+  {
+    g_assert(renderDialog != NULL);
+    return renderDialog;
+  }
+
+  void
+  GtkLumiera::init_ui()
+  {
+    try
+    {
+      gladeXml = Gnome::Glade::Xml::create("gtk-lumiera.glade");
+    }
+    catch(const Gnome::Glade::XmlError& ex)
+    {
+      g_message(ex.what().data());
+      return;
+    }
+
+    dialogs::Render::init(gladeXml, renderDialog);
+  }
+
+  GtkLumiera&
+  application()
+  {
+    return the_application;  
+  }
+
+}   // namespace gui
+}   // namespace lumiera
+
 
