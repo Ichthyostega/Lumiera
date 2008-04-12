@@ -1,4 +1,4 @@
-TESTING "Proc Layer config rules Test Suite" ./test-components --group=query
+TESTING "Proc Layer config rules Test Suite" ./test-common --group=query
 
 
 

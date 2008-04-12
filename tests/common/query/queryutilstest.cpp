@@ -26,7 +26,7 @@
 
 #include "common/cmdline.hpp"
 #include "common/query.hpp"
-#include "common/query/querydiagnostics.hpp"
+#include "query/querydiagnostics.hpp"
 
 #include <boost/bind.hpp>
 #include <iostream>

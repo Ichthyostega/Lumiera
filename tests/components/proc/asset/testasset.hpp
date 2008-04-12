@@ -25,6 +25,8 @@
 #define ASSET_TESTASSET_H
 
 
+#include "pre_a.hpp"
+
 #include "proc/asset.hpp"
 //#include "common/util.hpp"
 

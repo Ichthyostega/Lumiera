@@ -21,11 +21,11 @@
 * *****************************************************/
 
 
-#include "common/testtargetobj.hpp"
-#include "common/singletonsubclass.hpp"
-
 #include "common/test/run.hpp"
 #include "common/util.hpp"
+
+#include "testtargetobj.hpp"
+#include "common/singletonsubclass.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>

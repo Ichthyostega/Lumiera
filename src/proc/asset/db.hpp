@@ -25,6 +25,8 @@
 #define ASSET_DB_H
 
 
+#include "pre_a.hpp"
+
 #include "proc/asset.hpp"
 #include "common/error.hpp"
 

@@ -35,6 +35,8 @@
 #ifndef ASSET_MEDIA_H
 #define ASSET_MEDIA_H
 
+#include "pre_a.hpp"
+
 #include "proc/asset.hpp"
 #include "common/factory.hpp"
 #include "proc/mobject/mobject.hpp"

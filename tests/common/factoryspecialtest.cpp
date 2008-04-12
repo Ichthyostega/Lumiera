@@ -21,11 +21,11 @@
 * *****************************************************/
 
 
-#include "common/testtargetobj.hpp"
-#include "common/factory.hpp"
-
 #include "common/test/run.hpp"
 #include "common/util.hpp"
+
+#include "testtargetobj.hpp"
+#include "common/factory.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>

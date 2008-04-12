@@ -21,6 +21,8 @@
 * *****************************************************/
 
 
+#include "pre_a.hpp"
+
 #include "common/test/run.hpp"
 #include "common/util.hpp"
 

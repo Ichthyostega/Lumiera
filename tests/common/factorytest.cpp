@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "common/testtargetobj.hpp"
+#include "testtargetobj.hpp"
 
 #include "common/test/run.hpp"
 #include "common/factory.hpp"

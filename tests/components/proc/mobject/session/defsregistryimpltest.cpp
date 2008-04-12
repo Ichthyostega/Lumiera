@@ -28,7 +28,7 @@
 #include "common/factory.hpp"
 #include "common/query.hpp"
 
-#include "common/query/querydiagnostics.hpp"
+#include "../common/query/querydiagnostics.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/format.hpp>

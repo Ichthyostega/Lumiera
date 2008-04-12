@@ -1,5 +1,5 @@
 /*
-  PRE.hpp  -  precompiled header collection
+  PRE_A.hpp  -  precompiled header (including assets)
  
  
   Copyright (C)         Lumiera.org
@@ -23,19 +23,16 @@
 */
 
 /** @file pre.hpp
- ** Precompiled Header Collection.
+ ** Precompiled Header including Asset subsystem.
  ** Assortment of standard util, error handling and basic lib-boost components,
- ** frequently used in conjunction. Precompiling these can speedup building
- ** significantly. When used, this header should be included prior to any other
- ** headers (and it needs to be compiled by gcc into a "pre.gch" file prior to
- ** building the object files including this header).
+ ** together with the basic asset.hpp.
  **
- ** @see mobject.hpp usage example
- ** @see pre_a.hpp precompiled header including Asset subsystem
+ ** @see pre.hpp
  */
 
-#ifndef LUMIERA_PRE_HPP
-#define LUMIERA_PRE_HPP
+#ifndef LUMIERA_PRE_A_HPP
+#define LUMIERA_PRE_A_HPP
+
 
 #include <string>
 #include <vector>
@@ -46,7 +43,7 @@
 #include <boost/bind.hpp>
 
 #include "lumiera.h"
+#include "proc/asset.hpp"
 
 
-
-#endif /*LUMIERA_PRE_HPP*/
+#endif /*LUMIERA_PRE_A_HPP*/

@@ -37,6 +37,8 @@
 #ifndef ASSET_STRUCT_H
 #define ASSET_STRUCT_H
 
+#include "pre_a.hpp"
+
 #include "proc/asset.hpp"
 #include "common/query.hpp"
 #include "common/factory.hpp"
