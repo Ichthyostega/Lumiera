@@ -23,7 +23,6 @@ test_error_SOURCES = $(tests_srcdir)/error/errortest.c
 test_error_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
 test_error_LDADD = liblumi.a -lnobugmt -lpthread -ldl
 
-
 check_PROGRAMS += test-locking
 test_locking_SOURCES = \
 	$(tests_srcdir)/locking/test-locking.c \

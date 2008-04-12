@@ -179,7 +179,7 @@ def configurePlatform(env):
     if not conf.CheckLibWithHeader('pthread', 'pthread.h', 'C'):
         print 'Did not find the pthread lib or pthread.h, exiting.'
     else:
-       conf.env.Append(CPPFLAGS = ' -DHAVE_PTHREAD_H')
+       conf.env.Append(CPPFLAGS = ' -DHAVE_PTHREAD')
        conf.env.Append(CCFLAGS = ' -pthread')
 
     if conf.CheckCHeader('execinfo.h'):

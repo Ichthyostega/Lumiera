@@ -643,6 +643,11 @@ TertiaryMid: #999
 TertiaryDark: #666
 Error: #f88</pre>
 </div>
+<div title="Cuckoo" modifier="CehTeh" modified="200803281418" created="200803281417" changecount="2">
+<pre>This hashing gives guaranteed O(1) lookup complexity and amortized O(1) insert and remove complexity. Hash tables by default grow and shrink automatically. It is posible to preallocate entries and turn automatic shrinking off taking out the memory management factors for insert and remove operations. This implementation uses 3 Tables which exponential growing sizes.
+
+Hash table utilization is commonly between 40-80% which gives better memory usage and far better locality than trees.</pre>
+</div>
 <div title="DefaultTiddlers" modifier="CehTeh" modified="200707102306" created="200707102301" changecount="2">
 <pre>[[SupportLibrary]]</pre>
 </div>
@@ -2188,6 +2193,31 @@ config.macros.rssFeedUpdate = {
 //}}}
 </pre>
 </div>
+<div title="SafeCLib" modifier="CehTeh" modified="200803281413" created="200803281406" changecount="4">
+<pre>! Memory allocation
+* lumiera_malloc()
+  Succceeds or dies, no need for error handling.
+
+! String functions
+Small wrapers and extensions to the string.h functions, handle NULL pointers gracefully.
+* lumiera_strndup()
+  Succceeds or dies, no need for error handling.
+* lumiera_strncmp() lumiera_streq()
+  Optimized comparing same addresses.
+
+! Round robin temporary buffers
+Provides 64 buffers per thread which are recycled with each use, the idea here is to have fast buffers for temporal data without need for explicit heap management or stack waste.
+
+* lumiera_tmpbuf_provide ()
+ Acquire a temporary buffer. doesn't need to be freed. Stays valid for the next 63 tmpbuf calls.
+
+* lumiera_tmpbuf_strndup ()
+ Duplicate string to a tmpbuf.
+
+* lumiera_tmpbuf_sprintf ()
+ Construct a string in a tmpbuf.
+</pre>
+</div>
 <div title="SelectingInterfaces" modifier="CehTeh" created="200708120132" changecount="2">
 <pre>Each Plugin can export different Interfaces, even same interfaces with different capabilities like a effect for different color models or such.
 
@@ -2419,7 +2449,7 @@ h1,h2,h3,h4,h5,h6 {
 /*}}}*/
 </pre>
 </div>
-<div title="SupportLibrary" modifier="CehTeh" modified="200709021227" created="200707102314" changecount="9">
+<div title="SupportLibrary" modifier="CehTeh" modified="200803281414" created="200707102314" changecount="11">
 <pre>The Support Library contains all tools we need at various places, but by themselves don't defines a subsystem on their own.
 
 These things are:
@@ -2428,8 +2458,9 @@ These things are:
 * a wrapper for POSIX Threads
 ** Thread creation joining and canceling
 ** [[Locking primitives like Condition variables and Mutexes|LockingPrimitives]]
-* [[Frame and Time handling and calculations|FrameAndTime]]
- 
+* [[Some tools and wrapers around the C library|SafeCLib]]
+* [[O(1) hashtable using Cuckoo hashing|Cuckoo]]
+
 (... to be continued)
 </pre>
 </div>

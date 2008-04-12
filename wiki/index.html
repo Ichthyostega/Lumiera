@@ -776,72 +776,6 @@ for __Running__</pre>
 * provide central interface for setting switches and configuration options
 * installing of some or all created artifacts</pre>
 </div>
-<div title="LumieraDesignProcess" modifier="MichaelPloujnikov" modified="200706270317" created="200706181202" tags="process" changecount="5">
-<pre>! Lumiera design process
-A lightweight formalized process how people can add proposals for the Lumiera development.
-
-
-!! Description
-Use the Wiki at http://www.pipapo.org/pipawiki/Lumiera/DesignProcess to make it easy to add proposals in a well defined manner.
-
-I'd like to introduce a slightly formalized process for the ongoing Lumiera planning:
-* Every proposal is instantiated as 'Idea', the author gives other people the opportunity to review and comment on it with extreme prejudice, while still working out details.
-* When the the 'Idea' in a proper form and worked out in most details it becomes a 'Draft'. This 'Draft' need to be carefully reviewed, commented, perhaps corrected and rated by the other Developers.
-* At some point we may decide that a 'Draft' becomes a 'Final' (I leave it open how this decision shall be done for now). 'Final' Documents will be imported into the repository (this wiki, you are reading such a Document right now!).
-
-* Sometimes proposals will become dropped for some reason, this is indicated by changing their state to 'Dropped', they still stay in the system for further reference.
-
-!!! Pros
-* simple
-* flexible
-* no much rules
-* persistent and at Final stage well documented process
-
-!!! Cons
-* could be abused/vandalized (but wiki can use ACL's)
-* depends on my server, this might be unfavorable or unreliable, ymmv.
-* will only work if all or almost all involved people agree on this process
-
-!!! Alternatives
-We could use some forum, Trac, Mailinglist or whatever instead.
-
-Just for Design documentation I would give [[Bouml|http://bouml.free.fr/]] a try. For myself, I am not very fond of UML Design tools, while Bouml looks quite promising and we could maintain the UML model in git repositories which would be more favorable than this centralized wiki. The backside is that this needs even more agreement between the developers, everyone has to install and use Bouml (and learn its usage) and design is constrained by a external tool.
-
-This distributed wiki might be used instead the pipapo.org wiki, investigate that for future.
-
-!! Rationale
-Wiki works. It is simple to use and just flexible enough to handle the task. I don't go to install any other software for such tasks on my server. While the design progresses I'd propose to move our work into git repositories and eventually phase this wiki pages out anyways. I'd rather like to start out distributed/git right away .. but git gives us only a fine storage layer, for a design process we need some good presentation layer (later when using git and starting the implementation everyones favorite editor serves for that) I have no better ideas yet to solve the presentation problem other than using this wiki (or maybe Bouml).
-</pre>
-</div>
-<div title="LumieraWiki" modifier="Ichthyostega" modified="200708170218" created="200706172308" tags="portal" changecount="29">
-<pre>This is the entry point to several [[TiddlyWiki]]-Pages containing the developer and design documentation for Lumiera.
-
-* Cehteh started GitNotes where we will collect some information about git, howto and special setups
-* since we prefer gpg signed tags in git and not each developer knows gpg well here is a Micro-GPG-HowTo 
-* we maintain (semi-) final design docs in DesignDocumentation
-* Things get often worked out on IRC, see IRC-Transcripts for decisions made there and not yet put into the proper documentation places
-
-Please __end your tiddlers in a newline__, this makes merging in git easier since the /pre tag used in tiddlywiki will become on a single line.
-
-----
-!Design Draft
-to get started, we create design drafts emphasizing different aspects and regions of Lumiera
-
-* Ichthyo focuses mainly on the Render Engine and its interconnection to the EDL, [[see this separate page|renderengine.html]]
-* Cehteh works on the data backend draft, see [[this page|backend.html]]
-* Some tools which don't fit somewhere else and are used everywhere are put into a [[Support Library|support_library.html]]
-* [[Description of the Test System|TestSh]]
-
-!Coding Structures
-next we should //start thinking// on how to organize several aspects of the practical coding...
-* what to do in BOUML?                          &amp;rarr; [[more|whatInBOUML]]
-* how to organize packages, files, includes?    &amp;rarr; [[more|SrcTreeStructure]]
-* how to organize the executable to be built?
-* what coding conventions to prefer?            &amp;rarr; [[GNU Style|DesignDocumentation]]
-* what [[build system|BuildSystem]] to use?
-* various [[build dependencies|BuildDependenceis]]
-* TestSuite</pre>
-</div>
 <div title="DefaultTiddlers" modifier="CehTeh" modified="200707111115" created="200706172308" changecount="3">
 <pre>LumieraWiki
 ShortCuts</pre>
@@ -1407,9 +1341,77 @@ config.formatters.push( {
 } )
 //}}}</pre>
 </div>
-<div title="MainMenu" modifier="CehTeh" modified="200707111114" created="200706172305" changecount="4">
+<div title="LumieraDesignProcess" modifier="MichaelPloujnikov" modified="200706270317" created="200706181202" tags="process" changecount="5">
+<pre>! Lumiera design process
+A lightweight formalized process how people can add proposals for the Lumiera development.
+
+
+!! Description
+Use the Wiki at http://www.pipapo.org/pipawiki/Lumiera/DesignProcess to make it easy to add proposals in a well defined manner.
+
+I'd like to introduce a slightly formalized process for the ongoing Lumiera planning:
+* Every proposal is instantiated as 'Idea', the author gives other people the opportunity to review and comment on it with extreme prejudice, while still working out details.
+* When the the 'Idea' in a proper form and worked out in most details it becomes a 'Draft'. This 'Draft' need to be carefully reviewed, commented, perhaps corrected and rated by the other Developers.
+* At some point we may decide that a 'Draft' becomes a 'Final' (I leave it open how this decision shall be done for now). 'Final' Documents will be imported into the repository (this wiki, you are reading such a Document right now!).
+
+* Sometimes proposals will become dropped for some reason, this is indicated by changing their state to 'Dropped', they still stay in the system for further reference.
+
+!!! Pros
+* simple
+* flexible
+* no much rules
+* persistent and at Final stage well documented process
+
+!!! Cons
+* could be abused/vandalized (but wiki can use ACL's)
+* depends on my server, this might be unfavorable or unreliable, ymmv.
+* will only work if all or almost all involved people agree on this process
+
+!!! Alternatives
+We could use some forum, Trac, Mailinglist or whatever instead.
+
+Just for Design documentation I would give [[Bouml|http://bouml.free.fr/]] a try. For myself, I am not very fond of UML Design tools, while Bouml looks quite promising and we could maintain the UML model in git repositories which would be more favorable than this centralized wiki. The backside is that this needs even more agreement between the developers, everyone has to install and use Bouml (and learn its usage) and design is constrained by a external tool.
+
+This distributed wiki might be used instead the pipapo.org wiki, investigate that for future.
+
+!! Rationale
+Wiki works. It is simple to use and just flexible enough to handle the task. I don't go to install any other software for such tasks on my server. While the design progresses I'd propose to move our work into git repositories and eventually phase this wiki pages out anyways. I'd rather like to start out distributed/git right away .. but git gives us only a fine storage layer, for a design process we need some good presentation layer (later when using git and starting the implementation everyones favorite editor serves for that) I have no better ideas yet to solve the presentation problem other than using this wiki (or maybe Bouml).
+</pre>
+</div>
+<div title="LumieraWiki" modifier="Ichthyostega" modified="200708170218" created="200706172308" tags="portal" changecount="29">
+<pre>This is the entry point to several [[TiddlyWiki]]-Pages containing the developer and design documentation for Lumiera.
+
+* Cehteh started GitNotes where we will collect some information about git, howto and special setups
+* since we prefer gpg signed tags in git and not each developer knows gpg well here is a Micro-GPG-HowTo 
+* we maintain (semi-) final design docs in DesignDocumentation
+* Things get often worked out on IRC, see IRC-Transcripts for decisions made there and not yet put into the proper documentation places
+
+Please __end your tiddlers in a newline__, this makes merging in git easier since the /pre tag used in tiddlywiki will become on a single line.
+
+----
+!Design Draft
+to get started, we create design drafts emphasizing different aspects and regions of Lumiera
+
+* Ichthyo focuses mainly on the Render Engine and its interconnection to the EDL, [[see this separate page|renderengine.html]]
+* Cehteh works on the data backend draft, see [[this page|backend.html]]
+* Some tools which don't fit somewhere else and are used everywhere are put into a [[Support Library|support_library.html]]
+* [[Description of the Test System|TestSh]]
+
+!Coding Structures
+next we should //start thinking// on how to organize several aspects of the practical coding...
+* what to do in BOUML?                          &amp;rarr; [[more|whatInBOUML]]
+* how to organize packages, files, includes?    &amp;rarr; [[more|SrcTreeStructure]]
+* how to organize the executable to be built?
+* what coding conventions to prefer?            &amp;rarr; [[GNU Style|DesignDocumentation]]
+* what [[build system|BuildSystem]] to use?
+* various [[build dependencies|BuildDependenceis]]
+* TestSuite</pre>
+</div>
+<div title="MainMenu" modifier="CehTeh" modified="200803281345" created="200706172305" changecount="6">
 <pre>GettingStarted
 [[LumieraWiki]]
+[[Compatibility|compatibility.html]]
+[[ToDo|todo.html]]
 [[Backend|backend.html]]
 [[Proc-Layer|renderengine.html]]
 [[Support-Library|support_library.html]]
@@ -1432,7 +1434,7 @@ Some of these things work quite well, there is an overall friendly relation betw
 
 But there are some bad things too. Notably there is not much progress on the community development. Users don't benefit from new improvements which other people have made. There is a endlessly growing list of bugs and feature requests, when someone sends a patch to the ML he has to invest quite some time to maintain it until it might be merged. Finally we don't know what heroine virtual is working on, until we see his next tarball.
 
-!! Solution for "Cinelerra3" / Lumiera
+!! Solution for &quot;Cinelerra3&quot; / Lumiera
 Cinelerra is heroine's product, this time we should work together with him to make it pleasant and progressing for anyone.
 We are in need of a new development model which is acceptable by all involved people and benefits from the way Cinelerra development worked the years before, without maintaining the bad sides again: 
 

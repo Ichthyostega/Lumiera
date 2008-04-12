@@ -1,5 +1,5 @@
 /*
-  test-locking.c  -  test locking functions
+  vgsuppression.c  -  Helper program to generate valgrind suppression files
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -18,48 +18,21 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#define _GNU_SOURCE
 
-#include <stdio.h>
-#include <string.h>
+/*
+  just place any problematic calls where valgrind whines about in main (with comments please)
+*/
 
-#include "lib/condition.h"
-
-LUMIERA_ERROR_DEFINE(TEST, "test error");
-
-#if 0
-waiting_thread()
-{
-  lock;
-  wait;
-  unlock;
-}
-
-
-signaling_thread()
-{
-  signal();
-}
-#endif
+#include "lib/safeclib.h"
 
 
 int
-main (int argc, char** argv)
+main ()
 {
-  NOBUG_INIT;
-
-  if (argc == 1)
-    return 0;
-
-  if (!strcmp(argv[1], "conditionforgotunlock"))
-    {
-      lumiera_condition c;
-      lumiera_condition_init (&c);
-
-      lumiera_conditionlock NOBUG_CLEANUP(lumiera_conditionlock_ensureunlocked) l;
-      lumiera_conditionlock_init (&l, &c, LUMIERA_LOCKED);
-    }
-  else
-    return 1;
+  /* debian etch glibc is lazy about cleaning up TLS */
+  lumiera_tmpbuf_provide (100);
+  lumiera_tmpbuf_freeall ();
 
   return 0;
 }

@@ -44,7 +44,7 @@ DAMAGE.
 
 <style type="text/css">#contentWrapper {display:none;}</style><div id="SplashScreen" style="border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;"><b>My TiddlyWiki</b> is loading<blink> ...</blink><br><br><span style="font-size: 14px; color:red;">Requires Javascript.</span></div>
 <!--PRE-HEAD-END-->
-<title> Data Backend - design draft </title>
+<title> Compatibility - Dependencies and Style </title>
 <style type="text/css">
 #saveTest {display:none;}
 #messageArea {display:none;}
@@ -747,13 +747,38 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="ColorPalette" modifier="CehTeh" modified="200706192000" created="200706191957" changecount="7">
+<div title="BuildDependencies" modifier="CehTeh" modified="200804011825" created="200803261326" changecount="3">
+<pre>! Programming Languages
+ * C
+  a C99 compatible compiler, some GCC extensions are used, most are optional.
+ * C++
+  C++98 with some boost and tr1 additions
+ * bash
+  some build scripts (test.sh, ..) use bash specific extensions
+
+! Build Tools
+ * scons
+ * autotools
+ * Doxygen
+ * test.sh (included)
+
+! Extra tools
+ * git
+ * bouml
+
+! Libraries
+ * boost
+ * NoBug
+ * gavl
+</pre>
+</div>
+<div title="ColorPalette" modifier="CehTeh" modified="200803261254" created="200803261252" changecount="5">
 <pre>Background: #fff
 Foreground: #000
-PrimaryPale: #f8a
-PrimaryLight: #f48
-PrimaryMid: #824
-PrimaryDark: #412
+PrimaryPale: #aaf
+PrimaryLight: #88f
+PrimaryMid: #00d
+PrimaryDark: #004
 SecondaryPale: #ffc
 SecondaryLight: #fe8
 SecondaryMid: #db4
@@ -764,77 +789,8 @@ TertiaryMid: #999
 TertiaryDark: #666
 Error: #f88</pre>
 </div>
-<div title="DataBackend" modifier="CehTeh" modified="200706271504" created="200706192251" changecount="6">
-<pre>This just starts as braindump, I will refine it soon:
-* handle all files Lumiera uses at runtime (media, edl, temp data)
-* manage filehandles, Lumiera might use more more files than available filehandles
-* manage temporary data
-* do caching
-* io will be blocked where the backend tells the core where it can expect the data (not read()/write() like)
-* kind-of garbage collector
-* do prefetching
-* no/low latency for the core the prefetcher and other things ensure that data is available in time
-* translate any input into a format which the Lumiera core understands (demux, decode)
-* same for encoding to output formats
-* offer a plugin API for encoders/decoders
-* maybe network backend for serving data to distributed render nodes
-* can do some load control or management (trigger adaptive rendering if system is idle etc)
-* pull based arch
-* Serialize persistent data (Project / EDL's)
-
-Look at [[Overview]] for the current design proposal
-</pre>
-</div>
-<div title="DefaultTiddlers" modifier="CehTeh" created="200706192002" changecount="1">
-<pre>DataBackend
-</pre>
-</div>
-<div title="File" modifier="CehTeh" modified="200803271341" created="200803271035" changecount="2">
-<pre>[[File]] associates a filename with the underlying FileDescriptor. This allows [[File]]s which have serveral names (hardlinks) to share a underlying backend.</pre>
-</div>
-<div title="FileDescriptor" modifier="CehTeh" modified="200803271036" created="200706201525" changecount="2">
-<pre>'FileDescriptor' is the superclass of all possible filetypes, it has a weak reference to a FileHandle which is managed in FilehandleCache, on creation only the existence (when reading) or access for write for new files are checked. 'FileDescriptor' stores some generic metadata about the underlying file and intended use. But actual opening is done on demand.
-
-The content is memory mapped into the process address space, this is managed by FileMap objects and a FileMapCache.
-</pre>
-</div>
-<div title="FileHandle" modifier="CehTeh" modified="200706202208" created="200706201535" changecount="2">
-<pre>'FileHandle's are managed by the FileHandleCache, they are just storing the underlying OS file handles and managed in a lazy/weak way, (re)opened when needed and aging in the cache when not needed, since the amount of open file handles is limited aged ones will be closed and reused when the system needs to open another file.
-</pre>
-</div>
-<div title="FileMap" modifier="MichaelPloujnikov" modified="200706270315" created="200706201921" changecount="11">
-<pre>Each 'FileMap' object contains many [[Frame]]s. The actual layout depends on the type of the [[File]]. Mappings need to be page aligned while [[Frame]]s can be anywhere within a file and dynamically sized.
-
-All established [[FileMap]]s are managed in a FileMapCache. This is similar to the FileHandleCache, but mappings which are in use are checked out of the aging list and thus become locked from aging/purging.
-
-FileMap objects are transparent to the application. It will only requests [[Frame]]s as in position and size (and some other parameters).
-</pre>
-</div>
-<div title="FileMapCache" modifier="MichaelPloujnikov" modified="200706270305" created="200706202207" changecount="4">
-<pre>The 'FileMapCache' keeps a list of FileMaps which are currently not in use and subject of aging.
-Whenever a FileMap is in use, it is checked out into an in-use list where it is not subject to aging.
-</pre>
-</div>
-<div title="FilehandleCache" modifier="CehTeh" modified="200803271025" created="200706201548" changecount="2">
-<pre>'FilehandleCache' storing a finite maximum number of [[FileHandle]]s as a list. As long the configured maximum of open files is not reached new file handles are stored at the begin of the list. Whenever a filehandle is accessed it is moved to the begin of the list too. Unused filehandles propagate towards the end of the list. When the maximum of open filehandles is reached, aged filehandles are closed and taken from the end.
-</pre>
-</div>
-<div title="Frame" modifier="CehTeh" modified="200706271506" created="200706202115" changecount="13">
-<pre>'Frames' are the smallest datablocks handled by the Backend. The application tells the Backend to make [[File]]s available and then only requests Frames from the Backend. All other datastructures of the backend are private.
-
-Actually Frames are (references to) blocks of continuous memory. They can be anything depending on the usage of the [[File]] (Video frames, encoder frames, blocks of sound samples).
-
-Each [[Frame]] points to a [[FrameDescriptor]] which describes the shared properties of [[Frame]]s of the same kind. For video frames this [[FrameDescriptor]] will define the policies of the used color model, resolution, aspect ratio and so on, for example.
-
-Frames are referenced by a smart-pointer like object which manages the lifetime and caching behavior. There are 3 states such a frame reference can be in:
-# readonly: the backing FileMap is checked out from the aging list, frames can be read
-# readwrite: the backing FileMap is checked out from the aging list, frames can be read and written (depends on the filemode as well)
-# weak: the FileMap object is checked back into the aging list, the frame can't be accessed but we can try to transform a weak reference into a readonly or readwrite reference
-
-Frames can be addressed uniquely (needs to be worked out) whenever a frame is not available. The backend can initiate a (probably recursive) render for it.
-
-Accessing [[Frame]]s may add further renderjobs for related frames to the [[Prefetch]] task.
-</pre>
+<div title="DefaultTiddlers" modifier="CehTeh" modified="200803261335" created="200803261244" changecount="3">
+<pre>Overview</pre>
 </div>
 <div title="FullScreenPlugin" modifier="CehTeh" modified="200706110313" created="200607241016" tags="systemConfig lewcidExtension" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110313">
 <pre>/***
@@ -907,6 +863,20 @@ Slider.prototype.stop = function()
               config.commands.fullscreen.handler();
 }
 //}}}</pre>
+</div>
+<div title="Hardware" modifier="CehTeh" created="200803261321" changecount="1">
+<pre>! Platform
+We work and test on PC hardware, 32 and 64 bit. It is intended that Lumiera runs on other platforms which run GNU/Linux.
+
+! Graphics
+There are no special requirements for the graphic system, using of OpenGL will likely be defined by the single plugins. Anyways it will be strictly optional.
+
+! Disks
+Video editing requires decent disk speed, it is suggested to use a fast/big array of disks configured as raid.
+
+! Special Hardware
+There are currently no plans to add support for propietary hardware accelerator boards. We don't have such hardware and we don't want to tie a free software program to closed hardware. This might change if the benefits are worth it, someone dontates such hardware to the developers, the specs of the hardware and the programming API are open.
+</pre>
 </div>
 <div title="InlineJavaScript" modifier="Jeremy" created="200603090618" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200603090618">
 <pre>/***
@@ -1219,12 +1189,16 @@ config.formatters.push( {
 } )
 //}}}</pre>
 </div>
-<div title="MainMenu" modifier="CehTeh" modified="200706220110" created="200706192002" changecount="5">
+<div title="MainMenu" modifier="CehTeh" modified="200803261324" created="200803261246" changecount="8">
 <pre>''[[Lumiera|index.html]]''
-DataBackend
-[[Overview]]
-&lt;&lt;fullscreen&gt;&gt;
-</pre>
+OperatingSystem
+[[Hardware]]
+[[Software]]
+BuildDependencies
+RuntimeDependencies
+StyleGuide
+[[Admin]]
+&lt;&lt;fullscreen&gt;&gt;</pre>
 </div>
 <div title="MarkupPreHead" modifier="CehTeh" created="200706191948">
 <pre>&lt;!--{{{--&gt;
@@ -1233,47 +1207,21 @@ DataBackend
 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;&lt;b&gt;My TiddlyWiki&lt;/b&gt; is loading&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
 </div>
-<div title="Notes" modifier="CehTeh" modified="200706231907" created="200706200107" changecount="3">
-<pre>how is FileMetadata kept
+<div title="OperatingSystem" modifier="CehTeh" modified="200803261323" created="200803261309" changecount="3">
+<pre>Lumiera is written for GNU/Linux. We try to make the best out of modern system programming techniques to reach the best possible performance. It is suggested to use a 64bit OS. Lumiera shall scale with the provided Hardware, the more RAM and the more/faster CPU's you have the better. Nevertheless lower end 32bit machines are supported too.
 
-copying semantics of smart pointers
+Secondary targets will be other free operating systems which offer a decent Posix API. By coincidence it will be possible to port Lumiera to Mac OSX if anyone helps with that.
 
-explain opening/closing files (use() forget()?)
-
-difference between actual files and temporary. does it make sense to have temporary storage on diffent speed disks?
-
-statistics hit/fail max/min/avg timings, hard / soft fails, timing constraints, when is rerendering cheaper than caching?..
-
-adaptive rendering
-
-background rendering
-
-renderfarm
-
-[[FrameDescriptor]]s and [[Frame]] details, Policies composing frames
-
-Storage and logging of EDL's, unlimited undo, database,...
-
-When to Cache and when not to cache, aka instant [[Frame]] reuse
+Windows platforms are not on our target list, if someone wants to do port it, we will merge his efforts but unless that happens we will not care for windows compatibility.
 </pre>
 </div>
-<div title="Overview" modifier="CehTeh" modified="200803271022" created="200706200040" changecount="13">
-<pre>Whenever Lumiera needs to access data this is done through the DataBackend described here. 
-
-There are two main kinds how data is handled:
-* Project Description and EDL's are handled in a InMemoryDatabase which uses a [[Serializer]] for storing and logging modifications.
-* Media (audio, video, ...) is mapped as described below.
-
-The backend uses memory mapping to make data available to the program. This is little different to more common open/read/write/close file access while giving superior performance and much better memory utilization.
-
-The data backend must be capable to handle more data than will fit into the memory or even address space on 32 bit architectures.  Moreover a project may access more files than the OS can handle at a time, thus the for [[File]]s used by the Backend it needs a FilehandleCache to manage filehandles dynamically.
-
-Which parts of a File are actually mapped to physical RAM is managed by the kernel, it keeps a FileMapCache to manage the [[FileMap]]s we've set up.
-
-The application itself only requests [[Frame]]s from the backend.
-
-To minimize latency and optimize CPU utilization we have a [[Prefetch]] thread which operates a [[Scheduler]] to render and cache frames which are expected to be consumed soon. This prefetcher keeps [[Statistics]] for optimizing performance.
-
+<div title="Overview" modifier="CehTeh" created="200803261334" changecount="1">
+<pre> * OperatingSystem
+ * [[Hardware]]
+ * [[Software]]
+ * BuildDependencies
+ * RuntimeDependencies
+ * StyleGuide
 </pre>
 </div>
 <div title="PageTemplate" modifier="CehTeh" modified="200706110330" created="200701131624" tags="MPTWTheme" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110330">
@@ -1801,27 +1749,6 @@ DAMAGE.
 &lt;html&gt;&lt;sub&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;scrollAnchorVisible('Top',null, event)&quot;&gt;[Top]&lt;/sub&gt;&lt;/a&gt;&lt;/html&gt;
 ***/</pre>
 </div>
-<div title="Prefetch" modifier="CehTeh" modified="200706271508" created="200706220043" changecount="11">
-<pre>There are 2 important points when we want to access data with low latency:
-# Since we handle much more data than it will fit into most computers RAM. The data which is backed in files has to be paged in and available when needed. The [[Prefetch]] Thread manages page hinting to the kernel (posix_madvise()..)
-# Intermediate [[Frame]]s must eventually be rendered to the cache. The Backend will send Renderjobs to the Controller.
-
-Both of these actions are managed by a [[Scheduler]].
-
-Whenever something queries a [[Frame]] from the backend it provides hints about what it is doing.
-These hints contain:
-
-* Timing constraints
-** When will the [[Frame]] be needed
-** could we drop the request if it won't be available (rendered) in-time
-* Priority of this job (as soon as possible, or just in time?)
-* action (Playing forward, playing backward, tweaking, playback speed, recursive rendering of dependent frames)
-
-Notes:
-* The Backend will try to render related frames in groups.
-** This means that following frames are scheduled with lower priority. Whenever the program really requests them the priority will be adjusted.
-</pre>
-</div>
 <div title="RSSReaderPlugin" modifier="BidiX" modified="200704220833" created="200704132044" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200704220833">
 <pre>/***
 |''Name:''|RSSReaderPlugin|
@@ -2098,36 +2025,15 @@ see : &lt;&lt;tag RSSFeed&gt;&gt; for the full list.
 
 </pre>
 </div>
-<div title="Scheduler" modifier="CehTeh" modified="200708101610" created="200706220108" changecount="7">
-<pre>Scheduling is done with two priority queues, one for high priority jobs and one for low priority jobs. These priority queues are ordered by absolute time values (and a job identifier, details will be worked out at implementation time).
-
-there are following (non exhaustive) kinds of jobs:
-* start job
-* cancel job, if not finished (abort when out of time)
-* unschedule job
-
-Jobs implement a kind of future, datastructures which block a querier until data is available.
-
-The Job scheduler runs singlethreaded. Its only task is to schedule and delegate jobs to worker threads, by itself it will never do any extensive processing!
-
-Each job has an option what to do when its times expires (abort, proceed).
-
-The high priority queue is ordered by the __start__ time T, when the job has to be started (plus some hystersis H). A high priority job becomes scheduled beginning with time T but no later than T+H. 
-
-The low priority queue is ordered by __end__ time T, when the job has to be finished (minus a spawn S). Low priority jobs are started as soon as system load permits, the high priority queue is empty (for some usec in future, lets say 100) and the time is earlier than ~T-S. When a job is expired, it is removed from the queue, when it is already running it is handled as defined in its expire policy.
-
-Canceling and expireing jobs gets noted in Statistics to adjust performance and timings for optimal performance.
+<div title="SiteSubtitle" modifier="CehTeh" modified="200803261251" created="200803261246" changecount="2">
+<pre>Dependencies and Style</pre>
+</div>
+<div title="SiteTitle" modifier="CehTeh" modified="200803261251" created="200803261248" changecount="2">
+<pre>Compatibility</pre>
+</div>
+<div title="Software" modifier="CehTeh" created="200803261323" changecount="2">
+<pre>Lumiera expects a 'standard' desktop installation running a Xserver.
 </pre>
-</div>
-<div title="SideBarOptions" modifier="CehTeh" created="200706200047" changecount="1">
-<pre>&lt;&lt;search&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel &quot;options »&quot; &quot;Change TiddlyWiki advanced options&quot;&gt;&gt;</pre>
-</div>
-<div title="SiteSubtitle" modifier="CehTeh" modified="200706192003" created="200706192002" changecount="2">
-<pre>design draft
-</pre>
-</div>
-<div title="SiteTitle" modifier="CehTeh" modified="200706192245" created="200706192003" changecount="2">
-<pre>Data Backend</pre>
 </div>
 <div title="SplashScreenPlugin" modifier="Saq" modified="200607202048" created="200607191631" tags="lewcidExtension systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200607202048">
 <pre>/***
@@ -2186,6 +2092,15 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
       var splashScreenInstall = true;
 }
 //}}}</pre>
+</div>
+<div title="StyleGuide" modifier="CehTeh" modified="200803261336" created="200803261258" changecount="4">
+<pre>! Source code formatting
+http://www.gnu.org/prep/standards/html_node/Formatting.html#Formatting
+
+! Contibuting
+
+! Tests
+</pre>
 </div>
 <div title="StyleSheet" modifier="CehTeh" modified="200706090017" created="200701131624" tags="MPTWTheme" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706090017">
 <pre>/*{{{*/

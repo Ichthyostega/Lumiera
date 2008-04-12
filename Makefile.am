@@ -29,8 +29,12 @@ SUBDIRS =
 # Only use subdirs if really needed, prefer the include scheme below
 #SUBDIRS +=
 
+# administrative tools
+include $(top_srcdir)/admin/Makefile.am
+
 # core
 include $(top_srcdir)/src/lib/Makefile.am
+include $(top_srcdir)/src/backend/Makefile.am
 
 # plugins
 #include $(top_srcdir)/src...
