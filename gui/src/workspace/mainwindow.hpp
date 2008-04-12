@@ -26,11 +26,19 @@
  ** @see actions.hpp
  */
 
-#ifndef MAIN_WINDOW_H
-#define MAIN_WINDOW_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
 #include <gtkmm.h>
+#include <libgdl-1.0/gdl/gdl-dock-layout.h>
+
 #include "actions.hpp"
+
+#include "../panels/assets.hpp"
+#include "../panels/viewer.hpp"
+#include "../panels/timeline.hpp"
+
+using namespace lumiera::gui::panels;
 
 namespace lumiera {
 namespace gui {
@@ -42,17 +50,28 @@ namespace workspace {
   class MainWindow : public Gtk::Window
     {
     public:
-	  MainWindow();
-	  virtual ~MainWindow();
+	    MainWindow();
+	    virtual ~MainWindow();
 	
     protected:
       void create_ui();
 
       /* ===== UI ===== */
     protected:
-      Gtk::VBox box;
       Glib::RefPtr<Gtk::UIManager> uiManager;
+      Gtk::VBox base_container;
+      Gtk::HBox dock_container;
       
+      Gtk::Widget *dock;
+      Gtk::Widget *dockbar;
+      GdlDockLayout *layout;
+
+      /* ===== Panels ===== */
+    protected:  
+      Assets assets;
+      Viewer viewer;      
+      Timeline timeline;
+            
       /* ===== Helpers ===== */
     protected:
       /**
