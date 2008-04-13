@@ -61,7 +61,7 @@
 
 #include <boost/type_traits/is_base_of.hpp>
 #include <boost/operators.hpp>
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <cstddef>
 #include <string>

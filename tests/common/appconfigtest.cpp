@@ -1,5 +1,5 @@
 /*
-  Appconfig(Test)  -  accessing the allwasy-available Appconfig singleton
+  Appconfig(Test)  -  accessing the allways-available Appconfig singleton
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -27,9 +27,6 @@
 #include "common/test/run.hpp"
 #include "common/util.hpp"
 
-
-#include <iostream>
-using std::cout;
 
 
 

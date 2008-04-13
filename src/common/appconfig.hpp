@@ -22,15 +22,18 @@
 */
 
 /** @file appconfig.hpp
- ** This header is special, as it causes global system initialisation
- ** to happen. On inclusion, it places static initialisation code,
- ** which on first run will create the Appconfig singleton instance.
- ** Additionally, the inclusion, configuration and initialisation
- ** of the NoBug library is handled here. Global <i>definitions</i>
- ** for NoBug are placed into the corresponding translation unit 
- ** appconfig.cpp"
+ ** Registering and managing some application-global services.
+ ** Besides \link Appconfig::get querying \endlink for some 
+ ** "Application property" constants, there is a mechanism for
+ ** registering and firing off application lifecycle event hooks.
+ ** The implementation of some subsystem can define a static instance
+ ** variable of class LifecycleHook, which will place the provided
+ ** callback function into a central registry accessable through
+ ** the Appconfig singleton instance.
  **
- ** @see nobugcfg.h
+ ** @see lumiera.cpp
+ ** @see nobugcfg.cpp
+ ** @see sessmanagerimpl.cpp
  */
 
 
@@ -40,6 +43,8 @@
 #include <map>
 #include <string>
 #include <boost/scoped_ptr.hpp>
+#include <boost/noncopyable.hpp>
+#include "common/lifecycleregistry.hpp"
 
 #include "nobugcfg.h"
 
@@ -49,6 +54,7 @@ namespace lumiera
   {
   using std::string;
   using boost::scoped_ptr;
+  using boost::noncopyable;
 
 
   /**
@@ -59,14 +65,14 @@ namespace lumiera
    * @warning don't use Appconfig in destuctors.
    */
   class Appconfig
+    : private noncopyable
     {
     private:
       /** perform initialization on first access.
-       *  @see #instance()  for Lifecycle     */
+       *  @see #instance()              */
       Appconfig ();
       
-      Appconfig (const Appconfig&); ///< copy prohibited, not implemented
-      ~Appconfig ()  throw()   {}; ///< deletion prohibited
+      ~Appconfig ()  throw()   {};  ///< deletion prohibited
       friend void boost::checked_delete<Appconfig>(Appconfig*);
 
       
@@ -85,24 +91,70 @@ namespace lumiera
       
       /** access the configuation value for a given key.
        *  @return empty string for unknown keys, config value else
-       *  @todo do we need such a facility?
        */
-      static const string & get (const string& key)  throw();
+      static const string & get (const string& key);  // never throws
       
+      /** fire off all lifecycle callbacks
+       *  registered under the given label */
+      static void lifecycle (Symbol eventLabel);
+      
+      // note: if necessary, we can add support 
+      // for querying the current lifecycle phase...
       
     private:
       typedef std::map<string,string> Configmap; 
-      typedef std::auto_ptr<Configmap> PConfig;
+      typedef scoped_ptr<Configmap> PConfig;
+      typedef scoped_ptr<LifecycleRegistry> PLife;
       
-      /** @todo <b>the following is just placeholder code!</b>
-       *  Appconfig <i>could</i> do such things if necessary,
-       *  or provide similar "allways available" services.
-       */
       PConfig configParam_;
+      PLife lifecycleHooks_;
       
+      friend class LifecycleHook;
+      
+    };
+    
+  
+  Symbol ON_BASIC_INIT      ("ON_BASIC_INIT");         ///< automatic static init. treated specially
+  Symbol ON_GLOBAL_INIT     ("ON_GLOBAL_INIT");        ///< to be triggered in main()             @note no magic!
+  Symbol ON_GLOBAL_SHUTDOWN ("ON_GLOBAL_SHUTDOWN");    ///< to be triggered at the end of main()  @note no magic!
+  
+  // client code is free to register and use additional lifecycle events
+  
+  
+  /**
+   *  define and register a callback for some lifecycle event.
+   *  The purpose of this class is to be defined as a static variable
+   *  in the implementation of some subsystem (i.e. in the cpp file),
+   *  providing the ctor with the pointer to a callback function.
+   *  Thus the callback gets enrolled when the corresponding object
+   *  file is loaded. The event ON_BASIC_INIT is handled specifically,
+   *  firing off the referred callback function as soon as possible.
+   *  All other lables are just arbitrary (string) constants and it
+   *  is necessary that "someone" cares to fire off the lifcycle events
+   *  at the right place. For example, lumiera-main (and the test runner)
+   *  calls \c Appconfig::instance().execute(ON_GLOBAL_INIT) (and..SHUTDOWN) 
+   */
+  class LifecycleHook
+    : private noncopyable
+    {
+    public:
+      LifecycleHook (Symbol eventLabel, LifecycleRegistry::Hook callbackFun);
+      
+      LifecycleHook& add (Symbol eventLabel, LifecycleRegistry::Hook callbackFun); ///< for chained calls (add multiple callbacks)
     };
 
 
 
 } // namespace lumiera
+
+
+extern "C" {  //TODO provide a separate header if some C code happens to need this...
+
+  void lumiera_LifecycleHook_add (const char* eventLabel, void callbackFun(void));
+  void lumiera_Lifecycle_execute (const char* eventLabel);
+  const char* lumiera_Appconfig_get (const char* key);
+  
+}
+
+
 #endif

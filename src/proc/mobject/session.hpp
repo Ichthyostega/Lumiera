@@ -37,7 +37,7 @@
 #include "proc/mobject/session/defsmanager.hpp"
 #include "common/singleton.hpp"
 
-#include <boost/utility.hpp>
+#include <boost/noncopyable.hpp>
 #include <tr1/memory>
 
 

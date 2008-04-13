@@ -33,29 +33,37 @@
 
 
 using util::isnil;
+using util::cStr;
 
 namespace lumiera
   {
   
 
 #ifndef LUMIERA_VERSION
-#define LUMIERA_VERSION 3++devel
+#define LUMIERA_VERSION 0++devel
 #endif
 
 
-  /** perform initialization on first access. 
-   *  A call is placed in static initialization code
-   *  included in lumiera.h; thus it will happen
-   *  probably very early.
+  /** perform initialization triggered on first access. 
+   *  Will execute the ON_BASIC_INIT hook, but under typical
+   *  circumstances this is a NOP, because when callbacks are
+   *  added to this hook, the Appconfig singleton instance has
+   *  already been created. For this reason, there is special
+   *  treatment for the ON_BASIC_INIT in LifecycleHook::add,
+   *  causing the provided callbacks being fired immediately.
+   *  (btw, this is nothing to be worried of, for the client
+   *  code it just behaves like intended). 
    */
   Appconfig::Appconfig()
-    : configParam_ (new Configmap)
+    : configParam_  (new Configmap),
+      lifecycleHooks_(new LifecycleRegistry)
   {
     ////////// 
     NOBUG_INIT;
     //////////
     
     INFO(config, "Basic application configuration triggered.");
+    lifecycleHooks_->execute (ON_BASIC_INIT);   // note in most cases a NOP
     
     // install our own handler for undeclared exceptions
     std::set_unexpected (lumiera::error::lumiera_unexpectedException);
@@ -67,11 +75,8 @@ namespace lumiera
   
   
   
-  /** access the configuation value for a given key.
-   *  @return empty string for unknown keys, else the corresponding configuration value
-   */
   const string &
-  Appconfig::get (const string & key)  throw()
+  Appconfig::get (const string & key)
   {
     try
       {
@@ -82,10 +87,64 @@ namespace lumiera
     catch (...)
       {
         ERROR(config, "error while accessing configuration parameter \"%s\".", key.c_str());
-        throw lumiera::error::Fatal ();
+        static string NOTFOUND ("");
+        return NOTFOUND;
   }   }
 
   
+  void
+  Appconfig::lifecycle (Symbol event_label)
+  {
+    instance().lifecycleHooks_->execute(event_label);
+  }
 
 
+
+  
+  // ==== implementation LifecycleHook class =======
+  
+  typedef LifecycleRegistry::Hook Callback;
+  
+  
+  LifecycleHook::LifecycleHook (Symbol eventLabel, Callback callbackFun)
+  {
+    this->add (eventLabel,callbackFun);
+  }
+  
+  LifecycleHook&
+  LifecycleHook::add (Symbol eventLabel, Callback callbackFun)
+  {
+    Appconfig::instance().lifecycleHooks_->enroll (eventLabel,callbackFun);
+    
+    if (!strcmp(ON_BASIC_INIT, eventLabel))
+      callbackFun();  // when this code executes,
+                     //  then per definition we are already post "basic init"
+                    //   (which happens in the Appconfig ctor); thus fire it immediately
+    return *this;
+  }
+  
+  
+  
 } // namespace lumiera
+
+// ==== implementation C interface =======
+
+void 
+lumiera_LifecycleHook_add (const char* eventLabel, void callbackFun(void))
+{
+  lumiera::LifecycleHook (eventLabel, callbackFun);
+}
+
+
+void
+lumiera_Lifecycle_execute (const char* eventLabel)
+{
+  lumiera::Appconfig::lifecycle (eventLabel);
+}
+
+
+const char*
+lumiera_Appconfig_get (const char* key)
+{
+  return cStr (lumiera::Appconfig::get(key));
+}
