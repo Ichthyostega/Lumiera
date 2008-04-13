@@ -1,6 +1,6 @@
 format 40
 "design" // design
-  revision 10
+  revision 11
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -54,7 +54,7 @@ Not a real code package, rather a container for design drafts, specifications, d
       end
       required_classes
 	class_ref 128261 // Fixture
-	class_ref 128005 // Session
+	class_ref 128005 // SessionImpl
       end
     end
 
@@ -65,7 +65,7 @@ Not a real code package, rather a container for design drafts, specifications, d
 	class_ref 128261 // Fixture
 	class_ref 128517 // MObject
 	class_ref 134661 // ParamProvider
-	class_ref 128005 // Session
+	class_ref 128005 // SessionImpl
       end
       component 128389 "EDL"
 	stereotype "entity"
@@ -92,6 +92,9 @@ Not a real code package, rather a container for design drafts, specifications, d
     end
 
     component 128773 "Dispatcher"
+      provided_classes
+	class_ref 141957 // ProcDispatcher
+      end
     end
 
     component 128901 "Engine"
@@ -139,6 +142,12 @@ Not a real code package, rather a container for design drafts, specifications, d
 
     component 130309 "AssetDB"
       stereotype "service"
+    end
+
+    component 131077 "client code"
+      required_classes
+	class_ref 141957 // ProcDispatcher
+      end
     end
   end
 

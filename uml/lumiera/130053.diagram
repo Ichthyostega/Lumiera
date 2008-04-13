@@ -24,7 +24,7 @@ packagecanvas 129413
    show_context_mode namespace  xyzwh 41 428 1990 385 315
 componentcanvas 129541 component_ref 128261 // Controller
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 88 546 2010 151 63
+  xyzwh 87 546 2010 151 63
 arrowjunctioncanvas 131973 class_ref 130565 // BuilderFacade
   xyz 316 456 2000 label_xy 230 507
 arrowjunctioncanvas 132229 class_ref 130565 // BuilderFacade
@@ -38,10 +38,10 @@ componentcanvas 132869 component_ref 129925 // CommonLib
 arrowjunctioncanvas 132997 class_ref 134917 // Time
   xyz 830 211 2000 label_xy 828 233
 arrowjunctioncanvas 133253 class_ref 130309 // ControllerFacade
-  xyz 480 158 2000 label_xy 448 179
+  xyz 481 157 2000 label_xy 449 178
 componentcanvas 133509 component_ref 128133 // Session
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 694 526 2005 156 63
+  xyzwh 694 526 2005 155 63
 arrowjunctioncanvas 134533 class_ref 128133 // EDL
   xyz 591 603 2000 label_xy 590 624
 arrowjunctioncanvas 134789 class_ref 128261 // Fixture
@@ -53,30 +53,30 @@ arrowjunctioncanvas 135301 class_ref 134661 // ParamProvider
 componentcanvas 135685 component_ref 128005 // Builder
   draw_component_as_icon default show_component_req_prov default show_component_rea default
   xyzwh 136 954 2005 151 63
-arrowjunctioncanvas 135813 class_ref 128005 // Session
+arrowjunctioncanvas 135813 class_ref 128005 // SessionImpl
   xyz 571 765 2000 label_xy 562 787
 arrowjunctioncanvas 136197 class_ref 132741 // StateProxy
   xyz 535 978 2000 label_xy 517 999
-arrowjunctioncanvas 136453 class_ref 128005 // Session
+arrowjunctioncanvas 136453 class_ref 128005 // SessionImpl
   xyz 526 801 2000 label_xy 517 823
 packagecanvas 136709 
   package_ref 130309 // engine
    show_context_mode namespace  xyzwh 16 1309 1994 561 265
 componentcanvas 136837 component_ref 128901 // Engine
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 103 1402 2005 156 63
+  xyzwh 103 1401 2005 156 63
 arrowjunctioncanvas 136965 class_ref 132741 // StateProxy
   xyz 535 1224 2000 label_xy 517 1245
 componentcanvas 137349 component_ref 130053 // ProcNode
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 377 1494 2000 123 63
+  xyzwh 376 1494 2000 123 63
 arrowjunctioncanvas 137477 class_ref 134533 // Parameter
   xyz 623 1379 2000 label_xy 607 1400
 arrowjunctioncanvas 137733 class_ref 134661 // ParamProvider
   xyz 684 1368 2000 label_xy 658 1389
 componentcanvas 138373 component_ref 129797 // ConManager
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 136 1070 2005 156 63
+  xyzwh 135 1070 2005 156 63
 arrowjunctioncanvas 138501 class_ref 134661 // ParamProvider
   xyz 586 1094 2000 label_xy 560 1115
 componentcanvas 138757 component_ref 129285 // RenderPathManager

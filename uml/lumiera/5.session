@@ -1,31 +1,14 @@
 window_sizes 1140 830 270 860 680 71
 diagrams
-  classdiagram_ref 130309 // Asset Kinds
-    860 633 100 4 158 0
-  classdiagram_ref 128133 // Session structure
-    860 633 100 4 349 0
-  classdiagram_ref 128389 // Render Entities
-    743 538 100 4 184 0
-  classdiagram_ref 131205 // Struct-Asset Relations
-    555 620 100 4 60 0
-  classdiagram_ref 131461 // Rules access
-    688 627 100 4 0 0
-  componentdiagram_ref 131589 // components
-    688 544 100 4 0 0
-  active  usecasediagram_ref 131717 // when to query
-    624 495 100 4 0 0
-  collaborationdiagram_ref 131845 // "default" object
-    626 551 100 4 0 0
+  active  componentdiagram_ref 128005 // Overview
+    702 640 80 4 2 0
 end
 show_stereotypes
 selected 
   package_ref 129 // lumiera
 open
-  
-  package_ref 128005 // design
-  
-  package_ref 129285 // ProcessingLayer
-  componentview_ref 128261 // Query System overview
+  componentview_ref 128133 // interfaces
+  classview_ref 128005 // Session
   class_ref 140677 // QueryHandler
   class_ref 140805 // TypeHandler
   class_ref 140933 // ResolverBase
