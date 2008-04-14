@@ -61,6 +61,7 @@ namespace workspace {
     set_title(AppTitle);
     set_default_size(1024, 768);
 
+    //----- Set up the UI Manager -----//
     // The UI will be nested within a VBOX
     add(base_container);
 
@@ -112,13 +113,15 @@ namespace workspace {
       return;
     }
 
-    // Get the menubar and toolbar widgets, and add them to a container widget:
+    //----- Set up the Menu Bar -----//
     Gtk::Widget* menu_bar = uiManager->get_widget("/MenuBar");
-    g_assert(menu_bar);
+    g_assert(menu_bar != NULL);
     base_container.pack_start(*menu_bar, Gtk::PACK_SHRINK);
     
-    Gtk::Widget* toolbar = uiManager->get_widget("/ToolBar") ;
-    g_assert(toolbar);
+    //----- Set up the Tool Bar -----//
+    Gtk::Toolbar* toolbar = dynamic_cast<Gtk::Toolbar*>(uiManager->get_widget("/ToolBar"));
+    g_assert(toolbar != NULL);
+    toolbar->set_toolbar_style(TOOLBAR_ICONS);
     base_container.pack_start(*toolbar, Gtk::PACK_SHRINK);
 
     //----- Create the dock -----//
