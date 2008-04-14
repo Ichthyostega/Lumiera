@@ -27,7 +27,6 @@
 #endif
 
 #include <libgdl-1.0/gdl/gdl-tools.h>
-
 #include <libgdl-1.0/gdl/gdl-dock.h>
 #include <libgdl-1.0/gdl/gdl-dock-item.h>
 #include <libgdl-1.0/gdl/gdl-dock-notebook.h>
@@ -109,7 +108,7 @@ namespace workspace {
     }
     catch(const Glib::Error& ex)
     {
-      g_error("building menus failed: %s", ex.what().data());
+      g_error("Building menus failed: %s", ex.what().data());
       return;
     }
 

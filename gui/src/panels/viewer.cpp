@@ -23,15 +23,34 @@
 #include "viewer.hpp"
 
 using namespace lumiera::gui::widgets;
+using namespace Gtk;
 
 namespace lumiera {
 namespace gui {
 namespace panels {
 
 Viewer::Viewer() :
-  Panel("viewer", "Viewer")
+  Panel("viewer", "Viewer"),
+  previousButton(Stock::MEDIA_PREVIOUS),
+  rewindButton(Stock::MEDIA_REWIND),
+  playPauseButton(Stock::MEDIA_PLAY),
+  forwardButton(Stock::MEDIA_FORWARD),
+  nextButton(Stock::MEDIA_NEXT)
   {
-    pack_start(display);
+    //----- Set up the Tool Bar -----//
+    // Add the commands
+    toolBar.append(previousButton);
+    toolBar.append(rewindButton);
+    toolBar.append(playPauseButton);
+    toolBar.append(forwardButton);
+    toolBar.append(nextButton);
+    
+    // Configure the toolbar
+    toolBar.set_toolbar_style(TOOLBAR_ICONS);
+    
+    //----- Pack in the Widgets -----//
+    pack_start(display, PACK_EXPAND_WIDGET);
+    pack_start(toolBar, PACK_SHRINK);
   }
 
 }   // namespace panels

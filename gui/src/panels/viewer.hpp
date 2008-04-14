@@ -26,10 +26,13 @@
 #ifndef VIEWER_H
 #define VIEWER_H
 
+#include <gtkmm.h>
+
 #include "panel.hpp"
 #include "../widgets/video-display.hpp"
 
 using namespace lumiera::gui::widgets;
+using namespace Gtk;
 
 namespace lumiera {
 namespace gui {
@@ -41,7 +44,15 @@ namespace panels {
       Viewer();
 
     protected:
+
+      ToolButton previousButton;
+      ToolButton rewindButton;
+      ToolButton playPauseButton;
+      ToolButton forwardButton;
+      ToolButton nextButton;
+
       VideoDisplay display;
+      Toolbar toolBar;
     };
 
 }   // namespace panels
