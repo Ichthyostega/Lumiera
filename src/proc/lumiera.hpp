@@ -1,5 +1,5 @@
 /*
-  LUMIERA.h  -  global definitions and common types
+  LUMIERA.hpp  -  global definitions and common types for the Proc-Layer
  
  
   Copyright (C)         Lumiera.org
@@ -27,31 +27,13 @@
 
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* ========================== common C Part ============ */
-
-
-#ifdef __cplusplus
-}
-#endif /* ==================== (End) common C Part ============ */
-
-
-
-
-
-#ifndef __cplusplus
-#include "nobugcfg.h"
-
-#else  /* ========================== C++-Part ================= */
-
 
     /* common types frequently used... */
 
 #include "common/util.hpp"
 #include "common/time.hpp"
-#include "common/appconfig.hpp" // includes NoBug via "nobugcfg.h"
-#include "common/error.hpp"
+#include "common/error.hpp"   ///< pulls in NoBug via nobugcfg.hpp
+#include "lib/appconfig.hpp"
 
 
 namespace lumiera
@@ -60,7 +42,5 @@ namespace lumiera
   
     
 } // namespace lumiera
-
-#endif /* ===================== (End) C++-Part ================= */
 
 #endif /*LUMIERA_H*/

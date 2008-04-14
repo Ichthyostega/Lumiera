@@ -28,7 +28,7 @@
 #include "pre.hpp"
 
 
-#include "nobugcfg.h"
+#include "proc/nobugcfg.hpp"
 
 #include "common/test/suite.hpp"
 #include "common/util.hpp"

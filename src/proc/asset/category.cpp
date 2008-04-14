@@ -23,7 +23,7 @@
 
 #include "proc/asset/category.hpp"
 #include "common/util.hpp"
-#include "nobugcfg.h"
+#include "proc/nobugcfg.hpp"
 
 #include <boost/algorithm/string.hpp>
 

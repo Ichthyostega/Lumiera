@@ -39,22 +39,23 @@
 #define LUMIERA_LIFECYCLE_H
 
 #include <map>
-#include <vector>
-//#include <string>
-//#include <boost/scoped_ptr.hpp>
+#include <set>
+#include <string>
 #include <boost/function.hpp>
 #include <boost/noncopyable.hpp>
 
+#include "common/util.hpp"
 
 
 namespace lumiera
   {
-//  using std::string;
-//  using boost::scoped_ptr;
   using boost::noncopyable;
   using boost::function;
+  using util::contains;
+  using std::string;
 
-  typedef const char * const Symbol;  
+  typedef const char * const Symbol;  //TODO define a real Symbol class, i.e. same literal string==same pointer,
+                                      //     so we don't have to store string keys in the map...
 
   
   /**
@@ -67,17 +68,19 @@ namespace lumiera
     : private noncopyable
     {
     public:
-      typedef boost::function<void(void)> Hook;
-      typedef std::vector<Hook> Callbacks;
+      typedef void (*Hook)(void);
+      typedef std::set<Hook> Callbacks;
       typedef Callbacks::iterator Iter;
       
       
-      void enroll (Symbol label, Hook& toCall)
+      bool enroll (const string label, Hook toCall)
         {
-          table_[label].push_back(toCall);
+          return table_[label]
+                        .insert(toCall)
+                        .second;  // true if actually stored 
         }
       
-      void execute (Symbol label)
+      void execute (const string label)
         {
           Callbacks& cbs (table_[label]);
           Iter e = cbs.end();
@@ -88,7 +91,7 @@ namespace lumiera
       
       
     private:
-      std::map<Symbol, Callbacks> table_;
+      std::map<const string, Callbacks> table_;
       
       LifecycleRegistry ()  {}
       friend class Appconfig;

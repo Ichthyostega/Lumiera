@@ -24,7 +24,6 @@
 
 #include "lib/error.h"
 #include "common/error.hpp"
-#include "common/appconfig.hpp"
 
 #include "common/test/run.hpp"
 #include "common/util.hpp"
@@ -182,13 +181,11 @@ namespace lumiera
         /** @test terminate the Application by throwing an undclared exception.
          *        this should result in the global unknown() handler to be called,
          *        so usually it will terminate the testrun. 
-         *  @note because we call Appconfig::instance(), our own unknown() handler
-         *        gets installed and invoked, which gives additional diagnostics.*/
+         *  @note inside error.hpp, an initialisation hook has been installed into
+         *        Appconfig, causing our own unknown() handler to be installed and
+         *        invoked, which gives additional diagnostics.*/
         void terminateUnknown ()  throw() 
         {
-          lumiera::Appconfig::instance();
-          // will cause initialisation of Appconfig,
-          
           throw Error("You'll never get me, won't you?");
         }
         

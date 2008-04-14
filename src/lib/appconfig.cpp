@@ -2,7 +2,7 @@
   Appconfig  -  for global initialization and configuration 
  
   Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,15 +21,9 @@
 * *****************************************************/
 
 
-#include "common/appconfig.hpp"
+#include "lib/appconfig.hpp"
 #include "common/error.hpp"
 #include "common/util.hpp"
-
-#define NOBUG_INIT_DEFS_
-#include "nobugcfg.h"
-#undef NOBUG_INIT_DEFS_
-
-#include <exception>
 
 
 using util::isnil;
@@ -43,6 +37,10 @@ namespace lumiera
 #define LUMIERA_VERSION 0++devel
 #endif
 
+  Symbol ON_BASIC_INIT      ("ON_BASIC_INIT");
+  Symbol ON_GLOBAL_INIT     ("ON_GLOBAL_INIT");
+  Symbol ON_GLOBAL_SHUTDOWN ("ON_GLOBAL_SHUTDOWN");
+  
 
   /** perform initialization triggered on first access. 
    *  Will execute the ON_BASIC_INIT hook, but under typical
@@ -50,23 +48,15 @@ namespace lumiera
    *  added to this hook, the Appconfig singleton instance has
    *  already been created. For this reason, there is special
    *  treatment for the ON_BASIC_INIT in LifecycleHook::add,
-   *  causing the provided callbacks being fired immediately.
-   *  (btw, this is nothing to be worried of, for the client
-   *  code it just behaves like intended). 
+   *  causing the provided callbacks to be fired immediately.
+   *  (btw, this is nothing to be worried of, because from
+   *  client codes POV it just behaves like intended). 
    */
   Appconfig::Appconfig()
     : configParam_  (new Configmap),
       lifecycleHooks_(new LifecycleRegistry)
   {
-    ////////// 
-    NOBUG_INIT;
-    //////////
-    
-    INFO(config, "Basic application configuration triggered.");
     lifecycleHooks_->execute (ON_BASIC_INIT);   // note in most cases a NOP
-    
-    // install our own handler for undeclared exceptions
-    std::set_unexpected (lumiera::error::lumiera_unexpectedException);
     
     (*configParam_)["version"] = STRINGIFY (LUMIERA_VERSION);
   }
@@ -81,12 +71,12 @@ namespace lumiera
     try
       {
         const string& val = (*instance().configParam_)[key];
-        WARN_IF( isnil(val), config, "undefined config parameter \"%s\" requested.", key.c_str());
+        WARN_IF ( isnil(val), config, "undefined config parameter \"%s\" requested.", key.c_str());
         return val;
       }
     catch (...)
       {
-        ERROR(config, "error while accessing configuration parameter \"%s\".", key.c_str());
+        ERROR (config, "error while accessing configuration parameter \"%s\".", key.c_str());
         static string NOTFOUND ("");
         return NOTFOUND;
   }   }
@@ -114,9 +104,9 @@ namespace lumiera
   LifecycleHook&
   LifecycleHook::add (Symbol eventLabel, Callback callbackFun)
   {
-    Appconfig::instance().lifecycleHooks_->enroll (eventLabel,callbackFun);
+    bool isNew = Appconfig::instance().lifecycleHooks_->enroll (eventLabel,callbackFun);
     
-    if (!strcmp(ON_BASIC_INIT, eventLabel))
+    if (isNew && !strcmp(ON_BASIC_INIT, eventLabel))
       callbackFun();  // when this code executes,
                      //  then per definition we are already post "basic init"
                     //   (which happens in the Appconfig ctor); thus fire it immediately

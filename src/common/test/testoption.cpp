@@ -24,7 +24,6 @@
 #include "common/test/testoption.hpp"
 #include "common/test/suite.hpp"
 
-#include "nobugcfg.h"
 #include "common/error.hpp"
 
 

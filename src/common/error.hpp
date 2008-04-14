@@ -25,7 +25,7 @@
 #define LUMIERA_ERROR_HPP_
 
 #include <string>
-#include "nobugcfg.h"
+#include "proc/nobugcfg.hpp"
 #include "lib/error.h"
 
 
@@ -149,6 +149,14 @@ namespace lumiera
     LUMIERA_EXCEPTION_DECLARE (Invalid,  Error,  LUMIERA_ERROR_INVALID);
     LUMIERA_EXCEPTION_DECLARE (External, Error,  LUMIERA_ERROR_EXTERNAL);
     
+    
+    /** install our own handler for undeclared exceptions. Will be
+     *  called automatically ON_BASIC_INIT when including errror.hpp
+     *  @see appconfig.hpp  */
+    void install_unexpectedException_handler ();
+    namespace {
+      LifecycleHook schedule_ (ON_BASIC_INIT, &install_unexpectedException_handler);         
+    }
     
   } // namespace error
 

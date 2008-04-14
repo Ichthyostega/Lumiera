@@ -42,7 +42,7 @@
 #define MOBJECT_SESSION_LOCATINGPIN_H
 
 
-#include "lumiera.h"
+#include "proc/lumiera.hpp"
 
 #include <utility>
 #include <tr1/memory>

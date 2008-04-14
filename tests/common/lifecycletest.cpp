@@ -22,10 +22,10 @@
 
 
 
-#include "common/appconfig.hpp"
-
 #include "common/test/run.hpp"
 #include "common/util.hpp"
+
+#include "lib/appconfig.hpp"
 
 
 
@@ -35,11 +35,11 @@ namespace lumiera
   namespace test
     {
     
-    bool basicInit (false);
-    bool customCallback (false);
+    uint basicInit (0);
+    uint customCallback (0);
     
-    void basicInitHook () { basicInit = true; }
-    void myCallback() { customCallback = true; }
+    void basicInitHook () { ++basicInit; }
+    void myCallback() { ++customCallback; }
 
     Symbol MY_MAGIC_MEGA_EVENT = "dial M for murder";
     
@@ -61,10 +61,11 @@ namespace lumiera
         run (Arg arg)
           {
             ASSERT (basicInit, "the basic-init callback hasn't been invoked automatically");
+            ASSERT (1 == basicInit, "the basic-init callback has been invoked more than once");
             
             ASSERT (!customCallback);
             Appconfig::lifecycle (MY_MAGIC_MEGA_EVENT);
-            ASSERT ( customCallback);
+            ASSERT ( 1 == customCallback);
           }
         
       };

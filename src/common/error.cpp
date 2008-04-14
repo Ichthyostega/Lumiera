@@ -189,6 +189,11 @@ namespace lumiera
     }
     
     
+    void install_unexpectedException_handler ()
+    {
+      std::set_unexpected (lumiera_unexpectedException);      
+    }
+    
   } // namespace error
   
 } // namespace lumiera

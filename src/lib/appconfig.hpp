@@ -2,8 +2,7 @@
   APPCONFIG.hpp  -  for global initialization and configuration 
  
   Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
-                        Hermann Vosseler <Ichthyostega@web.de>
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -44,9 +43,7 @@
 #include <string>
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
-#include "common/lifecycleregistry.hpp"
-
-#include "nobugcfg.h"
+#include "lib/lifecycleregistry.hpp"
 
 
 
@@ -69,7 +66,8 @@ namespace lumiera
     {
     private:
       /** perform initialization on first access.
-       *  @see #instance()              */
+       *  @see #instance()
+       */
       Appconfig ();
       
       ~Appconfig ()  throw()   {};  ///< deletion prohibited
@@ -79,7 +77,7 @@ namespace lumiera
     public:
       /** get the (single) Appconfig instance. 
        *  Implemented as Meyers singleton.
-       *  @warning don't use it in destruction code!
+       *  @warning don't use it after the end of main()!
        */
       static Appconfig& instance()
       {
@@ -90,12 +88,11 @@ namespace lumiera
       
       
       /** access the configuation value for a given key.
-       *  @return empty string for unknown keys, config value else
-       */
+       *  @return empty string for unknown keys, config value else */
       static const string & get (const string& key);  // never throws
       
       /** fire off all lifecycle callbacks
-       *  registered under the given label */
+       *  registered under the given label  */
       static void lifecycle (Symbol eventLabel);
       
       // note: if necessary, we can add support 
@@ -114,9 +111,9 @@ namespace lumiera
     };
     
   
-  Symbol ON_BASIC_INIT      ("ON_BASIC_INIT");         ///< automatic static init. treated specially
-  Symbol ON_GLOBAL_INIT     ("ON_GLOBAL_INIT");        ///< to be triggered in main()             @note no magic!
-  Symbol ON_GLOBAL_SHUTDOWN ("ON_GLOBAL_SHUTDOWN");    ///< to be triggered at the end of main()  @note no magic!
+  extern Symbol ON_BASIC_INIT;      ///< automatic static init. treated specially
+  extern Symbol ON_GLOBAL_INIT;     ///< to be triggered in main()             @note no magic!
+  extern Symbol ON_GLOBAL_SHUTDOWN; ///< to be triggered at the end of main()  @note no magic!
   
   // client code is free to register and use additional lifecycle events
   

@@ -23,6 +23,12 @@
 
 #include "common/test/suite.hpp"
 #include "common/test/testoption.hpp"
+#include "lib/appconfig.hpp"
+
+using lumiera::Appconfig;
+using lumiera::ON_GLOBAL_INIT;
+using lumiera::ON_GLOBAL_SHUTDOWN;
+
 
 /** run all tests or any single test specified in the first
  *  cmd line argument.
@@ -33,10 +39,13 @@ int main (int argc, char* argv[])
   util::Cmdline args (argc,argv);
   test::TestOption optparser (args);
   test::Suite suite (optparser.getTestgroup());
+  Appconfig::lifecycle(ON_GLOBAL_INIT);
   
   if (optparser.getDescribe())
     suite.describe();
   else
     suite.run (args);
+
+  Appconfig::lifecycle(ON_GLOBAL_SHUTDOWN);
   return 0;
 }

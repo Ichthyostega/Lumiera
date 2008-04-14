@@ -1,5 +1,5 @@
 /*
-  NOBUGCFG.h  -  global configuration and definitions for NoBug
+  NOBUGCFG.hpp  -  NoBug definitions and initialisation for the Proc-Layer
  
  
   Copyright (C)         Lumiera.org
@@ -22,17 +22,20 @@
  
 */
 
-/** @file nobugcfg.h
+/** @file nobugcfg.hpp
  ** This header is for including and configuring NoBug.
  ** The idea is that configuration and some globally used flag 
  ** declarations are to be kept in one central location. Normally,
- ** this header will be included by appconfig.hpp, which in turn gets
- ** included by lumiera.h
+ ** this header will be included via some of the basic headers like
+ ** error.hpp, which in turn gets included by proc/lumiera.hpp
+ **
  ** @par Besides the usual guarded declarations, this header contains
  ** one section with the corresponding <b>definitions</b>. This section
- ** is to be called by appconfig.cpp only, which deals with application
- ** wide configuration values contained in the Singleton class Appconfig.
- ** Incidentally, the constructor of Appconfig issues the NOBUG_INIT call
+ ** is to be included once by some translation unit (currently this is
+ ** nobugcfg.cpp) in order to generate the necessary definitions.
+ **
+ ** @note this header assures automatic initialisation of NoBug
+ **       by placing a static ctor call.
  **
  */
 
@@ -41,10 +44,9 @@
 #define NOBUGCFG_H
 
 #include <syslog.h>
-
-  /* configuration of NoBug goes here... */
-
 #include <nobug.h>
+#include "lib/appconfig.hpp"
+#include "common/error.hpp"  ///< make assertions throw instead of abort()
 
 
   /* declare flags used throughout the code base... */
@@ -54,8 +56,13 @@
   NOBUG_DECLARE_FLAG(singleton);
   NOBUG_DECLARE_FLAG(assetmem);
   NOBUG_DECLARE_FLAG(mobjectmem);
-
-
+  
+  
+namespace lumiera { 
+  void initialize_NoBug ();
+  namespace {
+    LifecycleHook schedule_ (ON_BASIC_INIT, &initialize_NoBug);         
+} }  
 #endif /*NOBUGCFG_H    ======= (End) Part 1: DECLARATIONS ======== */
 
 
@@ -64,15 +71,6 @@
 
 
 #ifdef NOBUG_INIT_DEFS_ /*========== Part 2: DEFINITIONS ========= */
-
-/* ================================= common C Part ========= */
-
-
-
-
-
-
-#ifdef __cplusplus /* ============== C++-Part ============== */
 
 
   /* flags used throughout the code base... */
@@ -83,11 +81,7 @@
   NOBUG_CPP_DEFINE_FLAG_LIMIT(assetmem,  LOG_WARNING);
   NOBUG_CPP_DEFINE_FLAG_LIMIT(mobjectmem, LOG_WARNING);
 
-#include "common/error.hpp"
   
-
-#endif /* ===================== (End) C++-Part ============= */
-
 
 
 #endif /*NOBUG_INIT_DEFS_ ==== (End) Part 2: DEFINITIONS ========= */
