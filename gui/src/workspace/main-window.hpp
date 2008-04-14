@@ -1,5 +1,5 @@
 /*
-  mainwindow.hpp  -  Definition of the main workspace window object
+  main-window.hpp  -  Definition of the main workspace window object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -26,8 +26,8 @@
  ** @see actions.hpp
  */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAIN_WINDOW_HPP
+#define MAIN_WINDOW_HPP
 
 #include <gtkmm.h>
 #include <libgdl-1.0/gdl/gdl-dock-layout.h>
@@ -84,4 +84,4 @@ namespace workspace {
 }   // namespace gui
 }   // namespace lumiera
 
-#endif // MAIN_WINDOW_H
+#endif // MAIN_WINDOW_HPP

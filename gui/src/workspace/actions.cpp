@@ -22,7 +22,7 @@
 
 #include "../gtk-lumiera.hpp"
 #include "actions.hpp"
-#include "mainwindow.hpp"
+#include "main-window.hpp"
 
 namespace lumiera {
 namespace gui {

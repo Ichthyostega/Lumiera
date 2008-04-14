@@ -23,8 +23,8 @@
  ** This file contains the definition of the timeline panel
  */
 
-#ifndef TIMELINE_H
-#define TIMELINE_H
+#ifndef TIMELINE_HPP
+#define TIMELINE_HPP
 
 #include "panel.hpp"
 

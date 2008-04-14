@@ -22,15 +22,16 @@
 
 #include "viewer.hpp"
 
+using namespace lumiera::gui::widgets;
+
 namespace lumiera {
 namespace gui {
 namespace panels {
 
 Viewer::Viewer() :
-  Panel("viewer", "Viewer"),
-  placeholder("Placeholder: XVideo in here!!!")
+  Panel("viewer", "Viewer")
   {
-    pack_start(placeholder);
+    pack_start(display);
   }
 
 }   // namespace panels

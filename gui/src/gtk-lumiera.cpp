@@ -28,7 +28,7 @@
 #endif
 
 #include "gtk-lumiera.hpp"
-#include "workspace/mainwindow.hpp"
+#include "workspace/main-window.hpp"
 
 using namespace lumiera::gui;
 using namespace lumiera::gui::workspace;

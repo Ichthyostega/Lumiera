@@ -1,5 +1,5 @@
 /*
-  MainWindow.cpp  -  Definition of the main workspace window object
+  main-window.cpp  -  Definition of the main workspace window object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -36,7 +36,7 @@
 #include <libgdl-1.0/gdl/gdl-switcher.h>
 
 #include "gtk-lumiera.hpp"
-#include "mainwindow.hpp"
+#include "main-window.hpp"
 
 using namespace Gtk;
 

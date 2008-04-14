@@ -1,5 +1,5 @@
 /*
-  viewer.hpp  -  Definition of the viewer panel            
+  video-display.hpp  -  Declaration of the video viewer widget
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,32 +20,31 @@
  
 */
 /** @file viewer.hpp
- ** This file contains the definition of the viewer panel
+ ** This file contains the definition of video viewer widget
  */
 
-#ifndef VIEWER_H
-#define VIEWER_H
+#ifndef VIDEO_DISPLAY_HPP
+#define VIDEO_DISPLAY_HPP
 
-#include "panel.hpp"
-#include "../widgets/video-display.hpp"
-
-using namespace lumiera::gui::widgets;
+#include <gtkmm.h>
 
 namespace lumiera {
 namespace gui {
-namespace panels {
+namespace widgets {
 
-  class Viewer : public Panel
+  class VideoDisplay : public Gtk::Widget
     {
     public:
-      Viewer();
+      VideoDisplay();
 
+      /* ===== Overrides ===== */
     protected:
-      VideoDisplay display;
+      virtual void on_realize();
+      virtual bool on_expose_event(GdkEventExpose* event);
     };
 
-}   // namespace panels
+}   // namespace widgets
 }   // namespace gui
 }   // namespace lumiera
 
-#endif // VIEWER_H
+#endif // VIDEO_DISPLAY_H
