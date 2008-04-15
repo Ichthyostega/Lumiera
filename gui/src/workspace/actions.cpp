@@ -85,7 +85,7 @@ namespace workspace {
   void
   Actions::on_menu_file_render()
   {
-    application().get_render_dialog()->run();
+    mainWindow.renderDialog->run();
   }
 
   void

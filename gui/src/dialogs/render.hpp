@@ -28,6 +28,7 @@
 #define RENDER_H
 
 #include <gtkmm.h>
+#include <libglademm.h>
 
 namespace lumiera {
 namespace gui {
@@ -41,7 +42,8 @@ namespace dialogs {
   public:
     Render(BaseObjectType* cobject, const Glib::RefPtr<Gnome::Glade::Xml>& xml);
 
-    static void init(const Glib::RefPtr<Gnome::Glade::Xml>& glade_xml, Render*& dialog);
+    static void init(Gtk::Window &parent,
+      const Glib::RefPtr<Gnome::Glade::Xml>& glade_xml, Render*& dialog);
   };
 
 }   // namespace dialogs

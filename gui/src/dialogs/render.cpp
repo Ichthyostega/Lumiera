@@ -20,12 +20,11 @@
  
 * *****************************************************/
 
-#include "../gtk-lumiera.hpp"
+#include "render.hpp"
 
 namespace lumiera {
 namespace gui {
 namespace dialogs {
-
 
   Render::Render(BaseObjectType* cobject, const Glib::RefPtr<Gnome::Glade::Xml>& xml) :
   Gtk::Dialog(cobject)
@@ -34,9 +33,11 @@ namespace dialogs {
   }
 
   void
-  Render::init(const Glib::RefPtr<Gnome::Glade::Xml>& glade_xml, Render*& dialog)
+  Render::init(Gtk::Window &parent,
+    const Glib::RefPtr<Gnome::Glade::Xml>& glade_xml, Render*& dialog)
   {
     glade_xml->get_widget_derived("Render", dialog);
+    if(dialog != NULL) dialog->set_transient_for(parent);
   }
 
 }   // namespace dialogs

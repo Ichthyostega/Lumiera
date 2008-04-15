@@ -47,6 +47,7 @@ namespace workspace {
     : actions(*this)
   {
     create_ui();
+    create_dialogs();
   }
 
   MainWindow::~MainWindow()
@@ -150,6 +151,22 @@ namespace workspace {
 	  gdl_dock_placeholder_new ("ph2", (GdlDockObject*)dock->gobj(), GDL_DOCK_BOTTOM, FALSE);
 	  gdl_dock_placeholder_new ("ph3", (GdlDockObject*)dock->gobj(), GDL_DOCK_LEFT, FALSE);
 	  gdl_dock_placeholder_new ("ph4", (GdlDockObject*)dock->gobj(), GDL_DOCK_RIGHT, FALSE);
+  }
+
+  void
+  MainWindow::create_dialogs()
+  {
+    try
+    {
+      gladeXml = Gnome::Glade::Xml::create("gtk-lumiera.glade");
+    }
+    catch(const Gnome::Glade::XmlError& ex)
+    {
+      g_message(ex.what().data());
+      return;
+    }
+
+    dialogs::Render::init(*this, gladeXml, renderDialog);
   }
 
 }   // namespace workspace

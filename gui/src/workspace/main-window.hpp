@@ -31,12 +31,15 @@
 
 #include <gtkmm.h>
 #include <libgdl-1.0/gdl/gdl-dock-layout.h>
+#include <libglademm.h>
 
 #include "actions.hpp"
 
 #include "../panels/assets.hpp"
 #include "../panels/viewer.hpp"
 #include "../panels/timeline.hpp"
+
+#include "../dialogs/render.hpp"
 
 using namespace lumiera::gui::panels;
 
@@ -55,6 +58,7 @@ namespace workspace {
 	
     protected:
       void create_ui();
+      void create_dialogs();
 
       /* ===== UI ===== */
     protected:
@@ -71,6 +75,12 @@ namespace workspace {
       Assets assets;
       Viewer viewer;      
       Timeline timeline;
+
+      /* ===== Dialogs ===== */
+    protected:
+      Glib::RefPtr<Gnome::Glade::Xml> gladeXml;
+
+      dialogs::Render *renderDialog;
             
       /* ===== Helpers ===== */
     protected:
@@ -78,6 +88,8 @@ namespace workspace {
        * The instantiation of the actions helper class, which
        * registers and handles user action events */
       Actions actions;
+
+      friend class Actions;
     };
 
 }   // namespace workspace
