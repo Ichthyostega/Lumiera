@@ -39,7 +39,6 @@ GtkLumiera the_application;
   int
   main (int argc, char *argv[])
   {
-    
     return the_application.main(argc, argv);
   }
 
@@ -54,35 +53,10 @@ namespace gui {
 	  Main kit(argc, argv);
 		
 	  Glib::set_application_name(AppTitle);
-	
-    init_ui();
 
 	  MainWindow main_window;
 	
 	  kit.run(main_window); 
-  }
-
-  dialogs::Render*
-  GtkLumiera::get_render_dialog() const
-  {
-    g_assert(renderDialog != NULL);
-    return renderDialog;
-  }
-
-  void
-  GtkLumiera::init_ui()
-  {
-    try
-    {
-      gladeXml = Gnome::Glade::Xml::create("gtk-lumiera.glade");
-    }
-    catch(const Gnome::Glade::XmlError& ex)
-    {
-      g_message(ex.what().data());
-      return;
-    }
-
-    dialogs::Render::init(gladeXml, renderDialog);
   }
 
   GtkLumiera&

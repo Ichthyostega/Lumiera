@@ -28,9 +28,8 @@
 #ifndef GTK_LUMIERA_HPP
 #define GTK_LUMIERA_HPO
 
-#include <libglademm.h>
-#include "dialogs/render.hpp"
- 
+#include <gtkmm.h>
+
 #ifdef ENABLE_NLS
 #  include <libintl.h>
 #  define _(String) gettext (String)
@@ -47,25 +46,42 @@ namespace lumiera {
 namespace gui {
 
   /**
-   *  The name of the Lumiera application 
+   *  The name of the application 
    */
-  static const gchar* AppTitle = N_("Lumiera");
+  static const gchar* AppTitle = "Lumiera";
 
+  /**
+   *  The version number of the application 
+   */
+  static const gchar* AppVersion = N_("0.1-dev");
+
+  /**
+   *  The copyright of the application
+   */
+  static const gchar* AppCopyright = N_("© 2008 The Lumiera Team");
+
+  /**
+   *  The website of the application
+   */
+  static const gchar* AppWebsite = "www.lumiera.org";
+
+  /**
+   *  An alphabetical list of the application's authors
+   */
+  static const gchar* AppAuthors[] = {
+    "Joel Holdsworth",
+    "Christian Thaeter",
+    "Hermann Vosseler",
+    "<Other Authors Here>"};
+
+  /**
+   *  The main application class.
+   */
   class GtkLumiera
     {
     public:
       int main(int argc, char *argv[]);
 
-    public:
-      dialogs::Render* get_render_dialog() const;
-
-    private:
-      void init_ui();
-    
-    private:
-      Glib::RefPtr<Gnome::Glade::Xml> gladeXml;
-
-      dialogs::Render *renderDialog;
     };
 
   /**

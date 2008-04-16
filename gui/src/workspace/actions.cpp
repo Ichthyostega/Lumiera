@@ -24,6 +24,9 @@
 #include "actions.hpp"
 #include "main-window.hpp"
 
+using namespace Gtk;
+using namespace Glib;
+
 namespace lumiera {
 namespace gui {
 namespace workspace {
@@ -31,55 +34,55 @@ namespace workspace {
   Actions::Actions(MainWindow &main_window) :
 	mainWindow(main_window)
   {
-	actionGroup = Gtk::ActionGroup::create();
+	  actionGroup = Gtk::ActionGroup::create();
 
-	// File|New sub menu:
-	actionGroup->add(Gtk::Action::create("FileNewStandard",
-		  Gtk::Stock::NEW, "_New", "Create a new file"),
-	  sigc::mem_fun(*this, &Actions::on_menu_file_new_generic));
+	  // File|New sub menu:
+	  actionGroup->add(Gtk::Action::create("FileNewStandard",
+		    Gtk::Stock::NEW, "_New", "Create a new file"),
+	    sigc::mem_fun(*this, &Actions::on_menu_file_new_generic));
 
-	actionGroup->add(Gtk::Action::create("FileNewFoo",
-		  Gtk::Stock::NEW, "New Foo", "Create a new foo"),
-	  sigc::mem_fun(*this, &Actions::on_menu_file_new_generic));
+	  actionGroup->add(Gtk::Action::create("FileNewFoo",
+		    Gtk::Stock::NEW, "New Foo", "Create a new foo"),
+	    sigc::mem_fun(*this, &Actions::on_menu_file_new_generic));
 
-	actionGroup->add(Gtk::Action::create("FileNewGoo",
-		  Gtk::Stock::NEW, "_New Goo", "Create a new goo"),
-	  sigc::mem_fun(*this, &Actions::on_menu_file_new_generic));
+	  actionGroup->add(Gtk::Action::create("FileNewGoo",
+		    Gtk::Stock::NEW, "_New Goo", "Create a new goo"),
+	    sigc::mem_fun(*this, &Actions::on_menu_file_new_generic));
 
-	// File menu:
-	actionGroup->add(Gtk::Action::create("FileMenu", "File"));
-	// Sub-menu.
-	actionGroup->add(Gtk::Action::create("FileNew", Gtk::Stock::NEW));
-  actionGroup->add(Gtk::Action::create("FileRender", _("Render...")),
-    Gtk::AccelKey("<shift>R"),
-	  sigc::mem_fun(*this, &Actions::on_menu_file_render));
-	actionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT),
-	  sigc::mem_fun(*this, &Actions::on_menu_file_quit));
+	  // File menu:
+	  actionGroup->add(Gtk::Action::create("FileMenu", "File"));
+	  // Sub-menu.
+	  actionGroup->add(Gtk::Action::create("FileNew", Gtk::Stock::NEW));
+    actionGroup->add(Gtk::Action::create("FileRender", _("Render...")),
+      Gtk::AccelKey("<shift>R"),
+	    sigc::mem_fun(*this, &Actions::on_menu_file_render));
+	  actionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT),
+	    sigc::mem_fun(*this, &Actions::on_menu_file_quit));
 
-	// Edit menu:
-	actionGroup->add(Gtk::Action::create("EditMenu", "Edit"));
-	actionGroup->add(Gtk::Action::create("EditCopy", Gtk::Stock::COPY),
-	sigc::mem_fun(*this, &Actions::on_menu_others));
-	actionGroup->add(Gtk::Action::create("EditPaste", Gtk::Stock::PASTE),
-	sigc::mem_fun(*this, &Actions::on_menu_others));
-	actionGroup->add(Gtk::Action::create("EditSomething", "Something"),
-	  Gtk::AccelKey("<control><alt>S"),
+	  // Edit menu:
+	  actionGroup->add(Gtk::Action::create("EditMenu", "Edit"));
+	  actionGroup->add(Gtk::Action::create("EditCopy", Gtk::Stock::COPY),
 	  sigc::mem_fun(*this, &Actions::on_menu_others));
+	  actionGroup->add(Gtk::Action::create("EditPaste", Gtk::Stock::PASTE),
+	  sigc::mem_fun(*this, &Actions::on_menu_others));
+	  actionGroup->add(Gtk::Action::create("EditSomething", "Something"),
+	    Gtk::AccelKey("<control><alt>S"),
+	    sigc::mem_fun(*this, &Actions::on_menu_others));
 
-	// Choices menu, to demonstrate Radio items
-	actionGroup->add( Gtk::Action::create("ChoicesMenu", "Choices") );
-	Gtk::RadioAction::Group group_userlevel;
-	m_refChoiceOne = Gtk::RadioAction::create(group_userlevel, "ChoiceOne", "One");
-	actionGroup->add(m_refChoiceOne,
-	sigc::mem_fun(*this, &Actions::on_menu_choices_one) );
-	m_refChoiceTwo = Gtk::RadioAction::create(group_userlevel, "ChoiceTwo", "Two");
-	actionGroup->add(m_refChoiceTwo,
-	sigc::mem_fun(*this, &Actions::on_menu_choices_two) );
+	  // Choices menu, to demonstrate Radio items
+	  actionGroup->add( Gtk::Action::create("ChoicesMenu", "Choices") );
+	  Gtk::RadioAction::Group group_userlevel;
+	  m_refChoiceOne = Gtk::RadioAction::create(group_userlevel, "ChoiceOne", "One");
+	  actionGroup->add(m_refChoiceOne,
+	  sigc::mem_fun(*this, &Actions::on_menu_choices_one) );
+	  m_refChoiceTwo = Gtk::RadioAction::create(group_userlevel, "ChoiceTwo", "Two");
+	  actionGroup->add(m_refChoiceTwo,
+	  sigc::mem_fun(*this, &Actions::on_menu_choices_two) );
 
-	// Help menu:
-	actionGroup->add( Gtk::Action::create("HelpMenu", "Help") );
-	actionGroup->add( Gtk::Action::create("HelpAbout", Gtk::Stock::HELP),
-	sigc::mem_fun(*this, &Actions::on_menu_others) );
+	  // Help menu:
+	  actionGroup->add( Gtk::Action::create("HelpMenu", "Help") );
+	  actionGroup->add( Gtk::Action::create("HelpAbout", Gtk::Stock::ABOUT),
+	  sigc::mem_fun(*this, &Actions::on_menu_help_about) );
   }
 
   void
@@ -93,6 +96,31 @@ namespace workspace {
   {
     mainWindow.hide(); // Closes the main window to stop the Gtk::Main::run().
   }
+
+  void
+  Actions::on_menu_help_about()
+  {
+    // Configure the about dialog
+    AboutDialog dialog;
+    
+    dialog.set_program_name(AppTitle);
+    dialog.set_version(AppVersion);
+    //dialog.set_version(Appconfig::get("version"));
+    dialog.set_copyright(AppCopyright);
+    dialog.set_website(AppWebsite);
+    dialog.set_authors(StringArrayHandle(AppAuthors,
+      sizeof(AppAuthors) / sizeof(gchar*),
+      OWNERSHIP_NONE));
+
+    dialog.set_transient_for(mainWindow);
+    
+    // Show the about dialog
+    dialog.run();
+  }
+
+
+
+  //----- Temporary junk
 
   void
   Actions::on_menu_file_new_generic()
