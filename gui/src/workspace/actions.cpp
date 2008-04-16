@@ -36,53 +36,41 @@ namespace workspace {
   {
 	  actionGroup = Gtk::ActionGroup::create();
 
-	  // File|New sub menu:
-	  actionGroup->add(Gtk::Action::create("FileNewStandard",
-		    Gtk::Stock::NEW, "_New", "Create a new file"),
-	    sigc::mem_fun(*this, &Actions::on_menu_file_new_generic));
-
-	  actionGroup->add(Gtk::Action::create("FileNewFoo",
-		    Gtk::Stock::NEW, "New Foo", "Create a new foo"),
-	    sigc::mem_fun(*this, &Actions::on_menu_file_new_generic));
-
-	  actionGroup->add(Gtk::Action::create("FileNewGoo",
-		    Gtk::Stock::NEW, "_New Goo", "Create a new goo"),
-	    sigc::mem_fun(*this, &Actions::on_menu_file_new_generic));
-
 	  // File menu:
-	  actionGroup->add(Gtk::Action::create("FileMenu", "File"));
-	  // Sub-menu.
-	  actionGroup->add(Gtk::Action::create("FileNew", Gtk::Stock::NEW));
-    actionGroup->add(Gtk::Action::create("FileRender", _("Render...")),
+	  actionGroup->add(Gtk::Action::create("FileMenu", _("File")));
+	  actionGroup->add(Gtk::Action::create("FileNewProject", Gtk::Stock::NEW, _("_New Project...")),
+      sigc::mem_fun(*this, &Actions::on_menu_file_new_project));
+	  actionGroup->add(Gtk::Action::create("FileOpenProject", Gtk::Stock::OPEN, _("_Open Project...")),
+      sigc::mem_fun(*this, &Actions::on_menu_file_new_project));
+    actionGroup->add(Gtk::Action::create("FileRender", _("_Render...")),
       Gtk::AccelKey("<shift>R"),
 	    sigc::mem_fun(*this, &Actions::on_menu_file_render));
 	  actionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT),
 	    sigc::mem_fun(*this, &Actions::on_menu_file_quit));
 
 	  // Edit menu:
-	  actionGroup->add(Gtk::Action::create("EditMenu", "Edit"));
+	  actionGroup->add(Gtk::Action::create("EditMenu", _("Edit")));
 	  actionGroup->add(Gtk::Action::create("EditCopy", Gtk::Stock::COPY),
-	  sigc::mem_fun(*this, &Actions::on_menu_others));
-	  actionGroup->add(Gtk::Action::create("EditPaste", Gtk::Stock::PASTE),
-	  sigc::mem_fun(*this, &Actions::on_menu_others));
-	  actionGroup->add(Gtk::Action::create("EditSomething", "Something"),
-	    Gtk::AccelKey("<control><alt>S"),
 	    sigc::mem_fun(*this, &Actions::on_menu_others));
-
-	  // Choices menu, to demonstrate Radio items
-	  actionGroup->add( Gtk::Action::create("ChoicesMenu", "Choices") );
-	  Gtk::RadioAction::Group group_userlevel;
-	  m_refChoiceOne = Gtk::RadioAction::create(group_userlevel, "ChoiceOne", "One");
-	  actionGroup->add(m_refChoiceOne,
-	  sigc::mem_fun(*this, &Actions::on_menu_choices_one) );
-	  m_refChoiceTwo = Gtk::RadioAction::create(group_userlevel, "ChoiceTwo", "Two");
-	  actionGroup->add(m_refChoiceTwo,
-	  sigc::mem_fun(*this, &Actions::on_menu_choices_two) );
+	  actionGroup->add(Gtk::Action::create("EditPaste", Gtk::Stock::PASTE),
+	    sigc::mem_fun(*this, &Actions::on_menu_others));
 
 	  // Help menu:
 	  actionGroup->add( Gtk::Action::create("HelpMenu", "Help") );
 	  actionGroup->add( Gtk::Action::create("HelpAbout", Gtk::Stock::ABOUT),
 	  sigc::mem_fun(*this, &Actions::on_menu_help_about) );
+  }
+
+  void
+  Actions::on_menu_file_new_project()
+  {
+    g_message("A File|New menu item was selecteda.");
+  }
+
+  void
+  Actions::on_menu_file_open_project()
+  {
+    g_message("A File|Open menu item was selecteda.");
   }
 
   void
@@ -121,41 +109,10 @@ namespace workspace {
 
 
   //----- Temporary junk
-
-  void
-  Actions::on_menu_file_new_generic()
-  {
-    g_message("A File|New menu item was selecteda.");
-  }
-
   void
   Actions::on_menu_others()
   {
     g_message("A menu item was selected.");
-  }
-
-  void
-  Actions::on_menu_choices_one()
-  {
-    Glib::ustring message;
-    //if(m_refChoiceOne->get_active())
-    //    message = "Choice 1 was selected.";
-    //else
-        message = "Choice 1 was deselected";
-
-    g_message(message.c_str());
-  }
-
-  void
-  Actions::on_menu_choices_two()
-  {
-    Glib::ustring message;
-    //if(_main_window.m_refChoiceTwo->get_active())
-    //    message = "Choice 2 was selected.";
-    //else
-        message = "Choice 2 was deselected";
-
-    g_message(message.c_str());
   }
 
 }   // namespace workspace
