@@ -62,6 +62,10 @@ namespace dialogs {
     Label containerFormatLabel;
     ComboBox containerFormat;
 
+    Frame audioFrame;
+
+    Frame videoFrame;
+
     Button cancelButton;
 
     HBox renderButtonHBox;

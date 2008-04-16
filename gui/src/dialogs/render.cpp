@@ -38,7 +38,9 @@ namespace dialogs {
     containerFormatLabel(_("Container Format:")),
     cancelButton(Stock::CANCEL),
     renderButtonImage(StockID(Stock::APPLY), ICON_SIZE_BUTTON),
-    renderButtonLabel(_("_Render"), true)
+    renderButtonLabel(_("_Render"), true),
+    audioFrame(_("Audio")),
+    videoFrame(_("Video"))
   {
     VBox *v_box = get_vbox();
     g_assert(v_box != NULL);
@@ -60,6 +62,9 @@ namespace dialogs {
     containerFormatHBox.pack_start(containerFormat);
     containerFormatHBox.set_spacing(4);
     v_box->pack_start(containerFormatHBox, PACK_SHRINK);
+
+    v_box->pack_start(audioFrame);
+    v_box->pack_start(videoFrame);
 
     // Configure the dialog
     v_box->set_spacing(4);
