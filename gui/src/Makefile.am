@@ -1,8 +1,5 @@
 ## Process this file with automake to produce Makefile.in
 
-gladedir = $(datadir)/gtk-lumiera/glade
-glade_DATA = gtk-lumiera.glade
-
 INCLUDES = \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
@@ -39,6 +36,6 @@ gtk_lumiera_LDFLAGS =
 
 gtk_lumiera_LDADD = $(GTK_LUMIERA_LIBS)
 
-EXTRA_DIST = $(glade_DATA)
+EXTRA_DIST = 
 
 

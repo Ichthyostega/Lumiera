@@ -28,7 +28,8 @@
 #define RENDER_H
 
 #include <gtkmm.h>
-#include <libglademm.h>
+
+using namespace Gtk;
 
 namespace lumiera {
 namespace gui {
@@ -37,13 +38,36 @@ namespace dialogs {
   /** 
    * The defintion of render output dialog class
    */
-  class Render : public Gtk::Dialog
+  class Render : public Dialog
   {
   public:
-    Render(BaseObjectType* cobject, const Glib::RefPtr<Gnome::Glade::Xml>& xml);
+    Render(Window &parent);
 
-    static void init(Gtk::Window &parent,
-      const Glib::RefPtr<Gnome::Glade::Xml>& glade_xml, Render*& dialog);
+  protected:
+    void on_button_render();
+
+    void on_button_cancel();
+
+  protected:
+    HBox outputFileHBox;
+    Label outputFileLabel;
+    Entry outputFilePathEntry;
+
+    HBox browseButtonHBox;
+    Image browseButtonImage;
+    Label browseButtonLabel;
+    Button outputFileBrowseButton;
+
+    HBox containerFormatHBox;
+    Label containerFormatLabel;
+    ComboBox containerFormat;
+
+    Button cancelButton;
+
+    HBox renderButtonHBox;
+    Image renderButtonImage;
+    Label renderButtonLabel;
+    Button renderButton;
   };
 
 }   // namespace dialogs

@@ -24,8 +24,11 @@
 #include "actions.hpp"
 #include "main-window.hpp"
 
+#include "../dialogs/render.hpp"
+
 using namespace Gtk;
 using namespace Glib;
+using namespace lumiera::gui;
 
 namespace lumiera {
 namespace gui {
@@ -34,32 +37,34 @@ namespace workspace {
   Actions::Actions(MainWindow &main_window) :
 	mainWindow(main_window)
   {
-	  actionGroup = Gtk::ActionGroup::create();
+	  actionGroup = ActionGroup::create();
 
 	  // File menu:
-	  actionGroup->add(Gtk::Action::create("FileMenu", _("File")));
-	  actionGroup->add(Gtk::Action::create("FileNewProject", Gtk::Stock::NEW, _("_New Project...")),
+	  actionGroup->add(Action::create("FileMenu", _("_File")));
+	  actionGroup->add(Action::create("FileNewProject", Stock::NEW, _("_New Project...")),
       sigc::mem_fun(*this, &Actions::on_menu_file_new_project));
-	  actionGroup->add(Gtk::Action::create("FileOpenProject", Gtk::Stock::OPEN, _("_Open Project...")),
-      sigc::mem_fun(*this, &Actions::on_menu_file_new_project));
-    actionGroup->add(Gtk::Action::create("FileRender", _("_Render...")),
+	  actionGroup->add(Action::create("FileOpenProject", Stock::OPEN, _("_Open Project...")),
+      sigc::mem_fun(*this, &Actions::on_menu_file_open_project));
+    actionGroup->add(Action::create("FileRender", _("_Render...")),
       Gtk::AccelKey("<shift>R"),
 	    sigc::mem_fun(*this, &Actions::on_menu_file_render));
-	  actionGroup->add(Gtk::Action::create("FileQuit", Gtk::Stock::QUIT),
+	  actionGroup->add(Action::create("FileQuit", Stock::QUIT),
 	    sigc::mem_fun(*this, &Actions::on_menu_file_quit));
 
 	  // Edit menu:
-	  actionGroup->add(Gtk::Action::create("EditMenu", _("Edit")));
-	  actionGroup->add(Gtk::Action::create("EditCopy", Gtk::Stock::COPY),
+	  actionGroup->add(Action::create("EditMenu", _("_Edit")));
+	  actionGroup->add(Action::create("EditCopy", Stock::COPY),
 	    sigc::mem_fun(*this, &Actions::on_menu_others));
-	  actionGroup->add(Gtk::Action::create("EditPaste", Gtk::Stock::PASTE),
+	  actionGroup->add(Action::create("EditPaste", Stock::PASTE),
 	    sigc::mem_fun(*this, &Actions::on_menu_others));
 
 	  // Help menu:
-	  actionGroup->add( Gtk::Action::create("HelpMenu", "Help") );
-	  actionGroup->add( Gtk::Action::create("HelpAbout", Gtk::Stock::ABOUT),
+	  actionGroup->add(Action::create("HelpMenu", _("_Help")) );
+	  actionGroup->add(Action::create("HelpAbout", Stock::ABOUT),
 	  sigc::mem_fun(*this, &Actions::on_menu_help_about) );
   }
+
+  /* ===== File Menu Event Handlers ===== */
 
   void
   Actions::on_menu_file_new_project()
@@ -76,7 +81,8 @@ namespace workspace {
   void
   Actions::on_menu_file_render()
   {
-    mainWindow.renderDialog->run();
+    dialogs::Render dialog(mainWindow);
+    dialog.run();
   }
 
   void

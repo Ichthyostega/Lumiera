@@ -47,7 +47,6 @@ namespace workspace {
     : actions(*this)
   {
     create_ui();
-    create_dialogs();
   }
 
   MainWindow::~MainWindow()
@@ -62,7 +61,7 @@ namespace workspace {
     set_default_size(1024, 768);
 
     //----- Set up the UI Manager -----//
-    // The UI will be nested within a VBOX
+    // The UI will be nested within a VBox
     add(base_container);
 
     uiManager = Gtk::UIManager::create();
@@ -92,6 +91,7 @@ namespace workspace {
         "  </menubar>"
         "  <toolbar  name='ToolBar'>"
         "    <toolitem action='FileNewProject'/>"
+        "    <toolitem action='FileOpenProject'/>"
         "  </toolbar>"
         "</ui>";
 
@@ -143,22 +143,6 @@ namespace workspace {
 	  gdl_dock_placeholder_new ("ph2", (GdlDockObject*)dock->gobj(), GDL_DOCK_BOTTOM, FALSE);
 	  gdl_dock_placeholder_new ("ph3", (GdlDockObject*)dock->gobj(), GDL_DOCK_LEFT, FALSE);
 	  gdl_dock_placeholder_new ("ph4", (GdlDockObject*)dock->gobj(), GDL_DOCK_RIGHT, FALSE);
-  }
-
-  void
-  MainWindow::create_dialogs()
-  {
-    try
-    {
-      gladeXml = Gnome::Glade::Xml::create("gtk-lumiera.glade");
-    }
-    catch(const Gnome::Glade::XmlError& ex)
-    {
-      g_message(ex.what().data());
-      return;
-    }
-
-    dialogs::Render::init(*this, gladeXml, renderDialog);
   }
 
 }   // namespace workspace
