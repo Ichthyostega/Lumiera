@@ -34,11 +34,9 @@ namespace dialogs {
     Dialog(_("Render"), parent, true),
     outputFileLabel(_("Output File:")),
     browseButtonImage(StockID(Stock::INDEX), ICON_SIZE_BUTTON),
-    browseButtonLabel(_("_Browse..."), true),
+    outputFileBrowseButton(_("_Browse...")),
     containerFormatLabel(_("Container Format:")),
-    cancelButton(Stock::CANCEL),
-    renderButtonImage(StockID(Stock::APPLY), ICON_SIZE_BUTTON),
-    renderButtonLabel(_("_Render"), true),
+    renderButtonImage(StockID(Stock::OK), ICON_SIZE_BUTTON),
     audioFrame(_("Audio")),
     videoFrame(_("Video"))
   {
@@ -49,15 +47,15 @@ namespace dialogs {
     outputFileHBox.pack_start(outputFileLabel, PACK_SHRINK);
     outputFileHBox.pack_start(outputFilePathEntry);
 
-    browseButtonHBox.pack_start(browseButtonImage);
-    browseButtonHBox.pack_start(browseButtonLabel);
-    outputFileBrowseButton.add(browseButtonHBox);
+    outputFileBrowseButton.set_image(browseButtonImage);
+    outputFileBrowseButton.signal_clicked().connect(
+      sigc::mem_fun(*this, &Render::on_button_browse));  
 
     outputFileHBox.pack_start(outputFileBrowseButton, PACK_SHRINK);
     outputFileHBox.set_spacing(4);
     v_box->pack_start(outputFileHBox, PACK_SHRINK);
 
-    // The Containter Format Row
+    // The Container Format Row
     containerFormatHBox.pack_start(containerFormatLabel, PACK_SHRINK);
     containerFormatHBox.pack_start(containerFormat);
     containerFormatHBox.set_spacing(4);
@@ -71,39 +69,32 @@ namespace dialogs {
     set_border_width(5);
     set_resizable(false);
 
-    // Configure the Cancel and Render buttons
-    Gtk::Box* action_area = get_action_area();
-    g_assert(action_area != NULL);
-    
-    cancelButton.signal_clicked().connect(
-              sigc::mem_fun(*this, &Render::on_button_cancel));  
-    action_area->pack_start(cancelButton);
+    // Configure the Cancel and Render buttons    
+    add_button(Stock::CANCEL, RESPONSE_CANCEL);
 
-    renderButtonHBox.pack_start(renderButtonImage);
-    renderButtonHBox.pack_start(renderButtonLabel);
-    renderButton.add(renderButtonHBox);
-    renderButton.signal_clicked().connect(
-              sigc::mem_fun(*this, &Render::on_button_render));
-    renderButton.set_flags(Gtk::CAN_DEFAULT);
-    action_area->pack_start(renderButton);
-    renderButton.grab_default();
+    Button *render_button = add_button(Stock::OK, RESPONSE_OK);
+    render_button->set_label(_("_Render"));
+    render_button->set_image(renderButtonImage);
+    render_button->set_flags(Gtk::CAN_DEFAULT);
+    render_button->grab_default();
 
     show_all_children();
   }
 
-  void Render::on_button_render()
+  void Render::on_button_browse()
   {
-    g_message("render");
-    hide();
+    FileChooserDialog dialog(*this, _("Select a File Name for Rendering"),
+      FILE_CHOOSER_ACTION_SAVE);
+    
+    // Add response buttons the the dialog:
+    dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
+    dialog.add_button(/*Gtk::Stock::SAVE*/"Save", Gtk::RESPONSE_OK);
+
+    int result = dialog.run();
+    g_message("%d", result);
+    if(result == RESPONSE_OK)
+      g_message("RESPONSE_OK");
   }
-
-  void Render::on_button_cancel()
-  {
-    g_message("cancel");
-    hide();
-  }
-
-
 
 }   // namespace dialogs
 }   // namespace gui

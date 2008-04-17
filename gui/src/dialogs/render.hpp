@@ -44,18 +44,14 @@ namespace dialogs {
     Render(Window &parent);
 
   protected:
-    void on_button_render();
-
-    void on_button_cancel();
+    void on_button_browse();
 
   protected:
     HBox outputFileHBox;
     Label outputFileLabel;
     Entry outputFilePathEntry;
 
-    HBox browseButtonHBox;
     Image browseButtonImage;
-    Label browseButtonLabel;
     Button outputFileBrowseButton;
 
     HBox containerFormatHBox;
@@ -66,12 +62,7 @@ namespace dialogs {
 
     Frame videoFrame;
 
-    Button cancelButton;
-
-    HBox renderButtonHBox;
     Image renderButtonImage;
-    Label renderButtonLabel;
-    Button renderButton;
   };
 
 }   // namespace dialogs
