@@ -29,10 +29,8 @@
 #include <libgdl-1.0/gdl/gdl-tools.h>
 #include <libgdl-1.0/gdl/gdl-dock.h>
 #include <libgdl-1.0/gdl/gdl-dock-item.h>
-#include <libgdl-1.0/gdl/gdl-dock-notebook.h>
 #include <libgdl-1.0/gdl/gdl-dock-placeholder.h>
 #include <libgdl-1.0/gdl/gdl-dock-bar.h>
-#include <libgdl-1.0/gdl/gdl-switcher.h>
 
 #include "gtk-lumiera.hpp"
 #include "main-window.hpp"
