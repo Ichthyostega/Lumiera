@@ -22,6 +22,7 @@
 
 #include <gdkmm/drawable.h>
 #include <gdkmm/general.h>
+#include <cairomm-1.0/cairomm/cairomm.h>
 
 #include "video-display.hpp"
 
@@ -49,9 +50,6 @@ VideoDisplay::on_expose_event(GdkEventExpose* event)
     Glib::RefPtr<Gdk::Window> window = get_window();
     if(window)
     {
-      double scale_x = 1;
-      double scale_y = 1;
-
       Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
       if(event)
       {

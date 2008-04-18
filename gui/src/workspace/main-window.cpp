@@ -120,7 +120,6 @@ namespace workspace {
     layout = gdl_dock_layout_new((GdlDock*)dock->gobj());
 	  
     dockbar = Glib::wrap(gdl_dock_bar_new ((GdlDock*)dock->gobj()));
-    gdl_dock_bar_set_style((GdlDockBar*)dockbar->gobj(), GDL_DOCK_BAR_TEXT);
 
     dock_container.pack_start(*dockbar, PACK_SHRINK);
     dock_container.pack_end(*dock, PACK_EXPAND_WIDGET);

@@ -97,7 +97,7 @@ namespace workspace {
     // Configure the about dialog
     AboutDialog dialog;
     
-    dialog.set_program_name(AppTitle);
+    //dialog.set_program_name(AppTitle);
     dialog.set_version(AppVersion);
     //dialog.set_version(Appconfig::get("version"));
     dialog.set_copyright(AppCopyright);
