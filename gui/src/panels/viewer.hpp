@@ -23,8 +23,8 @@
  ** This file contains the definition of the viewer panel
  */
 
-#ifndef VIEWER_H
-#define VIEWER_H
+#ifndef VIEWER_HPP
+#define VIEWER_HPP
 
 #include <gtkmm.h>
 
@@ -59,4 +59,4 @@ namespace panels {
 }   // namespace gui
 }   // namespace lumiera
 
-#endif // VIEWER_H
+#endif // VIEWER_HPP

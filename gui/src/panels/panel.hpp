@@ -24,8 +24,8 @@
  ** for all docking panels
  */
 
-#ifndef PANEL_H
-#define PANEL_H
+#ifndef PANEL_HPP
+#define PANEL_HPP
 
 #include <gtkmm.h>
 #include <libgdl-1.0/gdl/gdl-dock-item.h>
@@ -56,4 +56,4 @@ namespace panels {
 }   // namespace gui
 }   // namespace lumiera
 
-#endif // PANEL_H
+#endif // PANEL_HPP

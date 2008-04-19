@@ -23,8 +23,8 @@
  ** This file contains the definition of the assets panel
  */
 
-#ifndef ASSETS_H
-#define ASSETS_H
+#ifndef ASSETS_HPP
+#define ASSETS_HPP
 
 #include "panel.hpp"
 
@@ -45,4 +45,4 @@ namespace panels {
 }   // namespace gui
 }   // namespace lumiera
 
-#endif // ASSETS_H
+#endif // ASSETS_HPP
