@@ -1,5 +1,5 @@
 /*
-  gtk-lumiera.cpp  -  The entry point for the GTK GUI application
+  panel.cpp  -  Implementation of the Project class
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,54 +20,18 @@
  
 * *****************************************************/
 
-#include <gtkmm.h>
-#include <iostream>
-
-#ifdef ENABLE_NLS
-#  include <libintl.h>
-#endif
-
-#include "gtk-lumiera.hpp"
-#include "workspace/workspace-window.hpp"
-#include "model/project.hpp"
-
-using namespace Gtk;
-using namespace lumiera::gui;
-using namespace lumiera::gui::workspace;
-using namespace lumiera::gui::model;
-
-GtkLumiera the_application;
-
-  int
-  main (int argc, char *argv[])
-  {
-    return the_application.main(argc, argv);
-  }
-
-
+#include "project.hpp"
 
 namespace lumiera {
 namespace gui {
+namespace model {
 
-  int
-  GtkLumiera::main(int argc, char *argv[])
-  {
-	  Main kit(argc, argv);
-		
-	  Glib::set_application_name(AppTitle);
+Project::Project()
+{
+  
+}
 
-    Project project;
-	  WorkspaceWindow main_window(&project);
-	
-	  kit.run(main_window); 
-  }
-
-  GtkLumiera&
-  application()
-  {
-    return the_application;  
-  }
-
+}   // namespace model
 }   // namespace gui
 }   // namespace lumiera
 

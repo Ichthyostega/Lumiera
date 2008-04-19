@@ -17,8 +17,8 @@ gtk_lumiera_SOURCES =                 \
     gtk-lumiera.hpp                   \
     workspace/actions.cpp             \
     workspace/actions.hpp             \
-    workspace/main-window.cpp         \
-    workspace/main-window.hpp         \
+    workspace/workspace-window.cpp    \
+    workspace/workspace-window.hpp    \
     dialogs/render.cpp                \
     dialogs/render.hpp                \
     panels/panel.cpp                  \
@@ -30,7 +30,9 @@ gtk_lumiera_SOURCES =                 \
     panels/assets.cpp                 \
     panels/assets.hpp                 \
     widgets/video-display.cpp         \
-    widgets/video-display.hpp
+    widgets/video-display.hpp         \
+    model/project.cpp                 \
+    model/project.hpp
 
 gtk_lumiera_LDFLAGS = 
 

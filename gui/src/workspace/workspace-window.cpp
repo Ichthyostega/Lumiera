@@ -1,5 +1,5 @@
 /*
-  main-window.cpp  -  Definition of the main workspace window object
+  workspace-window.cpp  -  Definition of the main workspace window object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -33,26 +33,31 @@
 #include <libgdl-1.0/gdl/gdl-dock-bar.h>
 
 #include "gtk-lumiera.hpp"
-#include "main-window.hpp"
+#include "workspace-window.hpp"
 
 using namespace Gtk;
+using namespace lumiera::gui::model;
 
 namespace lumiera {
 namespace gui {
 namespace workspace {
 	
-  MainWindow::MainWindow()
-    : actions(*this)
+  WorkspaceWindow::WorkspaceWindow(Project *source_project) :
+    project(source_project),
+    actions(*this)
   {
+    layout = NULL;
+
     create_ui();
   }
 
-  MainWindow::~MainWindow()
+  WorkspaceWindow::~WorkspaceWindow()
   {
+    if(layout != NULL) g_object_unref(layout);
   }
 
   void
-  MainWindow::create_ui()
+  WorkspaceWindow::create_ui()
   {
     //----- Configure the Window -----//
     set_title(AppTitle);

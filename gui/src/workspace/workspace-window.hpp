@@ -1,5 +1,5 @@
 /*
-  main-window.hpp  -  Definition of the main workspace window object
+  workspace-window.hpp  -  Definition of the main workspace window object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,15 +19,15 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file mainwindow.hpp
+/** @file workspace-window.hpp
  ** This file contains the definition of the main workspace window
  ** parent, which is the toplevel parent of the whole workspace.
  **
  ** @see actions.hpp
  */
 
-#ifndef MAIN_WINDOW_HPP
-#define MAIN_WINDOW_HPP
+#ifndef WORKSPACE_WINDOW_HPP
+#define WORKSPACE_WINDOW_HPP
 
 #include <gtkmm.h>
 #include <libgdl-1.0/gdl/gdl-dock-layout.h>
@@ -42,22 +42,31 @@ using namespace lumiera::gui::panels;
 
 namespace lumiera {
 namespace gui {
+
+namespace model {
+  class Project;
+} // model
+
 namespace workspace {
 
   /** 
    * The main lumiera workspace window
    */
-  class MainWindow : public Gtk::Window
+  class WorkspaceWindow : public Gtk::Window
     {
     public:
-	    MainWindow();
-	    virtual ~MainWindow();
+	    WorkspaceWindow(lumiera::gui::model::Project *source_project);
+	    virtual ~WorkspaceWindow();
 	
-    protected:
+    private:
       void create_ui();
 
+      /* ===== Model ===== */
+    private:
+      lumiera::gui::model::Project *project;
+
       /* ===== UI ===== */
-    protected:
+    private:
       Glib::RefPtr<Gtk::UIManager> uiManager;
       Gtk::VBox base_container;
       Gtk::HBox dock_container;
@@ -67,13 +76,13 @@ namespace workspace {
       GdlDockLayout *layout;
 
       /* ===== Panels ===== */
-    protected:  
+    private:  
       Assets assets;
       Viewer viewer;      
       Timeline timeline;
            
       /* ===== Helpers ===== */
-    protected:
+    private:
       /**
        * The instantiation of the actions helper class, which
        * registers and handles user action events */
@@ -86,4 +95,4 @@ namespace workspace {
 }   // namespace gui
 }   // namespace lumiera
 
-#endif // MAIN_WINDOW_HPP
+#endif // WORKSPACE_WINDOW_HPP

@@ -22,7 +22,7 @@
 
 #include "../gtk-lumiera.hpp"
 #include "actions.hpp"
-#include "main-window.hpp"
+#include "workspace-window.hpp"
 
 #include "../dialogs/render.hpp"
 
@@ -34,8 +34,8 @@ namespace lumiera {
 namespace gui {
 namespace workspace {
 
-  Actions::Actions(MainWindow &main_window) :
-	mainWindow(main_window)
+  Actions::Actions(WorkspaceWindow &workspace_window) :
+	  workspaceWindow(workspace_window)
   {
 	  actionGroup = ActionGroup::create();
 
@@ -81,14 +81,14 @@ namespace workspace {
   void
   Actions::on_menu_file_render()
   {
-    dialogs::Render dialog(mainWindow);
+    dialogs::Render dialog(workspaceWindow);
     dialog.run();
   }
 
   void
   Actions::on_menu_file_quit()
   {
-    mainWindow.hide(); // Closes the main window to stop the Gtk::Main::run().
+    workspaceWindow.hide(); // Closes the main window to stop the Gtk::Main::run().
   }
 
   void
@@ -106,7 +106,7 @@ namespace workspace {
       sizeof(AppAuthors) / sizeof(gchar*),
       OWNERSHIP_NONE));
 
-    dialog.set_transient_for(mainWindow);
+    dialog.set_transient_for(workspaceWindow);
     
     // Show the about dialog
     dialog.run();

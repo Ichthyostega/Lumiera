@@ -35,7 +35,7 @@ namespace lumiera {
 namespace gui {
 namespace workspace {
 
-class MainWindow;
+class WorkspaceWindow;
 
   /**
    * A helper class which registers and handles
@@ -44,12 +44,12 @@ class MainWindow;
   class Actions
     {
     private:	
-	  Actions(MainWindow &main_window);
+	  Actions(WorkspaceWindow &workspace_window);
 
 	  /**
        * A reference to the MainWindow which owns
        * this helper */
-	  MainWindow &mainWindow;
+	  WorkspaceWindow &workspaceWindow;
 
 	  /* ===== Event Handlers ===== */
     void on_menu_file_new_project();
@@ -66,7 +66,7 @@ class MainWindow;
 	  Glib::RefPtr<Gtk::ActionGroup> actionGroup;
 	  Glib::RefPtr<Gtk::RadioAction> m_refChoiceOne, m_refChoiceTwo;
 
-	  friend class MainWindow;
+	  friend class WorkspaceWindow;
   };
 
 }   // namespace workspace
