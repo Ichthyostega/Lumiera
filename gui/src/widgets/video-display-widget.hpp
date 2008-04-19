@@ -1,5 +1,5 @@
 /*
-  assets.hpp  -  Definition of the assets panel            
+  video-display-widget.hpp  -  Declaration of the video viewer widget
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,30 +19,32 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file timeline.hpp
- ** This file contains the definition of the assets panel
+/** @file viewer-display-widget.hpp
+ ** This file contains the definition of video viewer widget
  */
 
-#ifndef ASSETS_HPP
-#define ASSETS_HPP
+#ifndef VIDEO_DISPLAY_WIDGET_HPP
+#define VIDEO_DISPLAY_WIDGET_HPP
 
-#include "panel.hpp"
+#include <gtkmm.h>
 
 namespace lumiera {
 namespace gui {
-namespace panels {
+namespace widgets {
 
-  class Assets : public Panel
+  class VideoDisplayWidget : public Gtk::Widget
     {
     public:
-      Assets();
+      VideoDisplayWidget();
 
+      /* ===== Overrides ===== */
     protected:
-      Gtk::Label placeholder;
+      virtual void on_realize();
+      virtual bool on_expose_event(GdkEventExpose* event);
     };
 
-}   // namespace panels
+}   // namespace widgets
 }   // namespace gui
 }   // namespace lumiera
 
-#endif // ASSETS_HPP
+#endif // VIDEO_DISPLAY_WIDGET_HPP

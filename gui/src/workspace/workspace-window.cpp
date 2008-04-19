@@ -130,14 +130,14 @@ namespace workspace {
     dock_container.pack_end(*dock, PACK_EXPAND_WIDGET);
     base_container.pack_start(dock_container, PACK_EXPAND_WIDGET);
 
-	  gdl_dock_add_item ((GdlDock*)dock->gobj(), assets.get_dock_item(), GDL_DOCK_LEFT);
-    gdl_dock_add_item ((GdlDock*)dock->gobj(), viewer.get_dock_item(), GDL_DOCK_RIGHT);
-    gdl_dock_add_item ((GdlDock*)dock->gobj(), timeline.get_dock_item(), GDL_DOCK_BOTTOM);
+	  gdl_dock_add_item ((GdlDock*)dock->gobj(), assets_panel.get_dock_item(), GDL_DOCK_LEFT);
+    gdl_dock_add_item ((GdlDock*)dock->gobj(), viewer_panel.get_dock_item(), GDL_DOCK_RIGHT);
+    gdl_dock_add_item ((GdlDock*)dock->gobj(), timeline_panel.get_dock_item(), GDL_DOCK_BOTTOM);
 
     // Manually dock and move around some of the items
-	  gdl_dock_item_dock_to (timeline.get_dock_item(), assets.get_dock_item(),
+	  gdl_dock_item_dock_to (timeline_panel.get_dock_item(), assets_panel.get_dock_item(),
 			       GDL_DOCK_BOTTOM, -1);
-	  gdl_dock_item_dock_to (viewer.get_dock_item(), assets.get_dock_item(),
+	  gdl_dock_item_dock_to (viewer_panel.get_dock_item(), assets_panel.get_dock_item(),
 			       GDL_DOCK_RIGHT, -1);
     show_all_children();
 

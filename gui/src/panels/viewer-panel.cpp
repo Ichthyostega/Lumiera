@@ -1,5 +1,5 @@
 /*
-  viewer.hpp  -  Definition of the viewer panel            
+  viewer-panel.cpp  -  Implementation of the viewer panel
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -18,18 +18,9 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
-/** @file viewer.hpp
- ** This file contains the definition of the viewer panel
- */
+* *****************************************************/
 
-#ifndef VIEWER_HPP
-#define VIEWER_HPP
-
-#include <gtkmm.h>
-
-#include "panel.hpp"
-#include "../widgets/video-display.hpp"
+#include "viewer-panel.hpp"
 
 using namespace lumiera::gui::widgets;
 using namespace Gtk;
@@ -38,25 +29,30 @@ namespace lumiera {
 namespace gui {
 namespace panels {
 
-  class Viewer : public Panel
-    {
-    public:
-      Viewer();
-
-    protected:
-
-      ToolButton previousButton;
-      ToolButton rewindButton;
-      ToolButton playPauseButton;
-      ToolButton forwardButton;
-      ToolButton nextButton;
-
-      VideoDisplay display;
-      Toolbar toolBar;
-    };
+ViewerPanel::ViewerPanel() :
+  Panel("viewer", "Viewer"),
+  previousButton(Stock::MEDIA_PREVIOUS),
+  rewindButton(Stock::MEDIA_REWIND),
+  playPauseButton(Stock::MEDIA_PLAY),
+  forwardButton(Stock::MEDIA_FORWARD),
+  nextButton(Stock::MEDIA_NEXT)
+  {
+    //----- Set up the Tool Bar -----//
+    // Add the commands
+    toolBar.append(previousButton);
+    toolBar.append(rewindButton);
+    toolBar.append(playPauseButton);
+    toolBar.append(forwardButton);
+    toolBar.append(nextButton);
+    
+    // Configure the toolbar
+    toolBar.set_toolbar_style(TOOLBAR_ICONS);
+    
+    //----- Pack in the Widgets -----//
+    pack_start(display, PACK_EXPAND_WIDGET);
+    pack_start(toolBar, PACK_SHRINK);
+  }
 
 }   // namespace panels
 }   // namespace gui
 }   // namespace lumiera
-
-#endif // VIEWER_HPP

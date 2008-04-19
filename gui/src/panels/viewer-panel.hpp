@@ -1,5 +1,5 @@
 /*
-  assets.cpp  -  Implementation of the assets panel
+  viewer-panel.hpp  -  Definition of the viewer panel            
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -18,21 +18,45 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
+/** @file viewer-panel.hpp
+ ** This file contains the definition of the viewer panel
+ */
 
-#include "assets.hpp"
+#ifndef VIEWER_PANEL_HPP
+#define VIEWER_PANEL_HPP
+
+#include <gtkmm.h>
+
+#include "panel.hpp"
+#include "../widgets/video-display-widget.hpp"
+
+using namespace lumiera::gui::widgets;
+using namespace Gtk;
 
 namespace lumiera {
 namespace gui {
 namespace panels {
 
-Assets::Assets() :
-  Panel("assets", "Assets"),
-  placeholder("Placeholder label. Is this supposed to be titled assets\nas in the proc layer? or resources\nas in cinelerra?")
-  {
-    pack_start(placeholder);
-  }
+  class ViewerPanel : public Panel
+    {
+    public:
+      ViewerPanel();
+
+    protected:
+
+      ToolButton previousButton;
+      ToolButton rewindButton;
+      ToolButton playPauseButton;
+      ToolButton forwardButton;
+      ToolButton nextButton;
+
+      VideoDisplayWidget display;
+      Toolbar toolBar;
+    };
 
 }   // namespace panels
 }   // namespace gui
 }   // namespace lumiera
+
+#endif // VIEWER_PANEL_HPP

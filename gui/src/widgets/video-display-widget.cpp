@@ -1,5 +1,5 @@
 /*
-  video-display.cpp  -  Implementation of the video viewer widget
+  video-display-widget.cpp  -  Implementation of the video viewer widget
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -24,19 +24,19 @@
 #include <gdkmm/general.h>
 #include <cairomm-1.0/cairomm/cairomm.h>
 
-#include "video-display.hpp"
+#include "video-display-widget.hpp"
 
 namespace lumiera {
 namespace gui {
 namespace widgets {
 
-VideoDisplay::VideoDisplay()
+VideoDisplayWidget::VideoDisplayWidget()
   {
     set_flags(Gtk::NO_WINDOW);
   }
 
 void
-VideoDisplay::on_realize()
+VideoDisplayWidget::on_realize()
   {
     //Call base class:
     Gtk::Widget::on_realize();
@@ -44,7 +44,7 @@ VideoDisplay::on_realize()
   }
 
 bool
-VideoDisplay::on_expose_event(GdkEventExpose* event)
+VideoDisplayWidget::on_expose_event(GdkEventExpose* event)
   {
     // This is where we draw on the window
     Glib::RefPtr<Gdk::Window> window = get_window();
@@ -66,8 +66,6 @@ VideoDisplay::on_expose_event(GdkEventExpose* event)
     }
     return true;
   }
-
-
 
 }   // namespace widgets
 }   // namespace gui

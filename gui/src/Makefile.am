@@ -25,12 +25,12 @@ gtk_lumiera_SOURCES =                 \
     panels/panel.hpp                  \
     panels/timeline-panel.cpp         \
     panels/timeline-panel.hpp         \
-    panels/viewer.cpp                 \
-    panels/viewer.hpp                 \
-    panels/assets.cpp                 \
-    panels/assets.hpp                 \
-    widgets/video-display.cpp         \
-    widgets/video-display.hpp         \
+    panels/viewer-panel.cpp           \
+    panels/viewer-panel.hpp           \
+    panels/assets-panel.cpp           \
+    panels/asset-panels.hpp           \
+    widgets/video-display-widget.cpp  \
+    widgets/video-display-widget.hpp  \
     widgets/timeline-widget.cpp       \
     widgets/timeline-widget.hpp       \
     model/project.cpp                 \
