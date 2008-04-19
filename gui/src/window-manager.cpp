@@ -1,5 +1,5 @@
 /*
-  gtk-lumiera.cpp  -  The entry point for the GTK GUI application
+  window-manager.cpp  -  Defines the global UI Manager class
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,59 +20,29 @@
  
 * *****************************************************/
 
-#include <gtkmm.h>
-
-#ifdef ENABLE_NLS
-#  include <libintl.h>
-#endif
-
-#include "gtk-lumiera.hpp"
 #include "window-manager.hpp"
-#include "workspace/workspace-window.hpp"
-#include "model/project.hpp"
-
-using namespace Gtk;
-using namespace lumiera::gui;
-using namespace lumiera::gui::workspace;
-using namespace lumiera::gui::model;
-
-GtkLumiera the_application;
-
-  int
-  main (int argc, char *argv[])
-  {
-    return the_application.main(argc, argv);
-  }
-
-
 
 namespace lumiera {
 namespace gui {
 
-  int
-  GtkLumiera::main(int argc, char *argv[])
-  {
-	  Main kit(argc, argv);
-		
-	  Glib::set_application_name(AppTitle);
+  WindowManager::WindowManager()
+    {
+    
+    }
 
-    Project project;
-    WindowManager window_manager;
+  bool WindowManager::set_theme(Glib::ustring path)
+    {
+      if(access(path.c_str(), R_OK))
+        {
+          g_error("WindowManger: Unable to load rc file \"%s\"", path.c_str());
+          return false;        
+        }
+      
+      Gtk::RC rc(path);
+      gtk_rc_reset_styles (gtk_settings_get_default());
 
-    window_manager.set_theme("lumiera_ui.rc");
-
-	  WorkspaceWindow main_window(&project);
-	
-	  kit.run(main_window); 
-  }
-
-  GtkLumiera&
-  application()
-  {
-    return the_application;  
-  }
+      return true;
+    }
 
 }   // namespace gui
 }   // namespace lumiera
-
-

@@ -15,6 +15,8 @@ bin_PROGRAMS = gtk-lumiera
 gtk_lumiera_SOURCES =                 \
 	  gtk-lumiera.cpp                   \
     gtk-lumiera.hpp                   \
+	  window-manager.cpp                \
+    window-manager.hpp                \
     workspace/actions.cpp             \
     workspace/actions.hpp             \
     workspace/workspace-window.cpp    \

@@ -88,7 +88,7 @@ namespace dialogs {
     
     // Add response buttons the the dialog:
     dialog.add_button(Gtk::Stock::CANCEL, Gtk::RESPONSE_CANCEL);
-    dialog.add_button(/*Gtk::Stock::SAVE*/"Save", Gtk::RESPONSE_OK);
+    dialog.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_OK);
 
     int result = dialog.run();
     g_message("%d", result);

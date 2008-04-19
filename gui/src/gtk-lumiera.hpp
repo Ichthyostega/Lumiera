@@ -22,11 +22,11 @@
 /** @file gtk-lumiera.hpp
  ** This file contains application wide global definitions
  ** user actions.
- ** @see main.cpp
+ ** @see gtk-lumiera.cpp
  */
 
 #ifndef GTK_LUMIERA_HPP
-#define GTK_LUMIERA_HPO
+#define GTK_LUMIERA_HPP
 
 #include <gtkmm.h>
 
@@ -92,6 +92,6 @@ namespace gui {
 }   // namespace gui
 }   // namespace lumiera
 
-#endif
+#endif // GTK_LUMIERA_HPP
 
 
