@@ -1,5 +1,5 @@
 /*
-  timeline.hpp  -  Definition of the timeline panel            
+  timeline.hpp  -  Declaration of the timeline widget
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,29 +20,31 @@
  
 */
 /** @file timeline.hpp
- ** This file contains the definition of the timeline panel
+ ** This file contains the definition of timeline widget
  */
 
-#ifndef TIMELINE_HPP
-#define TIMELINE_HPP
+#ifndef TIMELINE_WIDGET_HPP
+#define TIMELINE_WIDGET_HPP
 
-#include "panel.hpp"
+#include <gtkmm.h>
 
 namespace lumiera {
 namespace gui {
-namespace panels {
+namespace widgets {
 
-  class Timeline : public Panel
+  class TimelineWidget : public Gtk::Widget
     {
     public:
-      Timeline();
+      TimelineWidget();
 
+      /* ===== Overrides ===== */
     protected:
-      Gtk::Label placeholder;
+      virtual void on_realize();
+      virtual bool on_expose_event(GdkEventExpose* event);
     };
 
-}   // namespace panels
+}   // namespace widgets
 }   // namespace gui
 }   // namespace lumiera
 
-#endif // TIMELINE_H
+#endif // TIMELINE_WIDGET_HPP

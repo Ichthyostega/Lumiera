@@ -1,5 +1,5 @@
 /*
-  timeline.cpp  -  Implementation of the timeline panel
+  timeline-panel.cpp  -  Implementation of the timeline panel
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,17 +20,16 @@
  
 * *****************************************************/
 
-#include "timeline.hpp"
+#include "timeline-panel.hpp"
 
 namespace lumiera {
 namespace gui {
 namespace panels {
 
-Timeline::Timeline() :
-  Panel("timeline", "Timeline"),
-  placeholder("Placeholder label. Is Timeline the correct title for this panel?")
+TimelinePanel::TimelinePanel() :
+  Panel("timeline", "Timeline")
   {
-    pack_start(placeholder);
+    pack_start(timeline_widget);
   }
 
 }   // namespace panels

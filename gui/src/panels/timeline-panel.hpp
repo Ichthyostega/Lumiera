@@ -1,5 +1,5 @@
 /*
-  video-display.hpp  -  Declaration of the video viewer widget
+  timeline-panel.hpp  -  Definition of the timeline panel            
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,32 +19,33 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file viewer.hpp
- ** This file contains the definition of video viewer widget
+/** @file timeline-panel.hpp
+ ** This file contains the definition of the timeline panel
  */
 
-#ifndef VIDEO_DISPLAY_HPP
-#define VIDEO_DISPLAY_HPP
+#ifndef TIMELINE_PANEL_HPP
+#define TIMELINE_PANEL_HPP
 
-#include <gtkmm.h>
+#include "panel.hpp"
+#include "../widgets/timeline-widget.hpp"
+
+using namespace lumiera::gui::widgets;
 
 namespace lumiera {
 namespace gui {
-namespace widgets {
+namespace panels {
 
-  class VideoDisplay : public Gtk::Widget
+  class TimelinePanel : public Panel
     {
     public:
-      VideoDisplay();
+      TimelinePanel();
 
-      /* ===== Overrides ===== */
     protected:
-      virtual void on_realize();
-      virtual bool on_expose_event(GdkEventExpose* event);
+      TimelineWidget timeline_widget;
     };
 
-}   // namespace widgets
+}   // namespace panels
 }   // namespace gui
 }   // namespace lumiera
 
-#endif // VIDEO_DISPLAY_HPP
+#endif // TIMELINE_PANEL_H

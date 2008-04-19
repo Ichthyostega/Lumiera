@@ -36,7 +36,7 @@
 
 #include "../panels/assets.hpp"
 #include "../panels/viewer.hpp"
-#include "../panels/timeline.hpp"
+#include "../panels/timeline-panel.hpp"
 
 using namespace lumiera::gui::panels;
 
@@ -79,7 +79,7 @@ namespace workspace {
     private:  
       Assets assets;
       Viewer viewer;      
-      Timeline timeline;
+      TimelinePanel timeline;
            
       /* ===== Helpers ===== */
     private:
