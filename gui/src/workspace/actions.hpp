@@ -44,29 +44,32 @@ class WorkspaceWindow;
   class Actions
     {
     private:	
-	  Actions(WorkspaceWindow &workspace_window);
+	    Actions(WorkspaceWindow &workspace_window);
 
-	  /**
-       * A reference to the MainWindow which owns
-       * this helper */
-	  WorkspaceWindow &workspaceWindow;
+	    /**
+         * A reference to the MainWindow which owns
+         * this helper */
+	    WorkspaceWindow &workspaceWindow;
 
-	  /* ===== Event Handlers ===== */
-    void on_menu_file_new_project();
-    void on_menu_file_open_project();
-    void on_menu_file_render();
-    void on_menu_file_quit();
+	    /* ===== Event Handlers ===== */
+      void on_menu_file_new_project();
+      void on_menu_file_open_project();
+      void on_menu_file_render();
+      void on_menu_file_quit();
 
-    void on_menu_help_about();
-    
-    // Temporary Junk
-    void on_menu_others();
+      void on_menu_view_viewer();
+      void on_menu_view_timeline();
 
-	  /* ===== Actions ===== */
-	  Glib::RefPtr<Gtk::ActionGroup> actionGroup;
-	  Glib::RefPtr<Gtk::RadioAction> m_refChoiceOne, m_refChoiceTwo;
+      void on_menu_help_about();
+      
+      // Temporary Junk
+      void on_menu_others();
 
-	  friend class WorkspaceWindow;
+	    /* ===== Actions ===== */
+	    Glib::RefPtr<Gtk::ActionGroup> actionGroup;
+	    Glib::RefPtr<Gtk::RadioAction> m_refChoiceOne, m_refChoiceTwo;
+
+	    friend class WorkspaceWindow;
   };
 
 }   // namespace workspace

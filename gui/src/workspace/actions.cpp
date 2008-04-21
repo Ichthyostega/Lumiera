@@ -39,7 +39,7 @@ namespace workspace {
   {
 	  actionGroup = ActionGroup::create();
 
-	  // File menu:
+	  // File menu
 	  actionGroup->add(Action::create("FileMenu", _("_File")));
 	  actionGroup->add(Action::create("FileNewProject", Stock::NEW, _("_New Project...")),
       sigc::mem_fun(*this, &Actions::on_menu_file_new_project));
@@ -51,14 +51,21 @@ namespace workspace {
 	  actionGroup->add(Action::create("FileQuit", Stock::QUIT),
 	    sigc::mem_fun(*this, &Actions::on_menu_file_quit));
 
-	  // Edit menu:
+	  // Edit menu
 	  actionGroup->add(Action::create("EditMenu", _("_Edit")));
 	  actionGroup->add(Action::create("EditCopy", Stock::COPY),
 	    sigc::mem_fun(*this, &Actions::on_menu_others));
 	  actionGroup->add(Action::create("EditPaste", Stock::PASTE),
 	    sigc::mem_fun(*this, &Actions::on_menu_others));
 
-	  // Help menu:
+    // View Menu
+    actionGroup->add(Action::create("ViewMenu", _("_View")));
+	  actionGroup->add(Action::create("ViewViewer", _("_Viewer")),
+	    sigc::mem_fun(*this, &Actions::on_menu_view_viewer));
+	  actionGroup->add(Action::create("ViewTimeline", _("_Timeline")),
+	    sigc::mem_fun(*this, &Actions::on_menu_view_timeline));
+
+	  // Help Menu
 	  actionGroup->add(Action::create("HelpMenu", _("_Help")) );
 	  actionGroup->add(Action::create("HelpAbout", Stock::ABOUT),
 	  sigc::mem_fun(*this, &Actions::on_menu_help_about) );
@@ -89,6 +96,18 @@ namespace workspace {
   Actions::on_menu_file_quit()
   {
     workspaceWindow.hide(); // Closes the main window to stop the Gtk::Main::run().
+  }
+
+  void
+  Actions::on_menu_view_viewer()
+  {
+    //workspaceWindow.viewer_panel.show();
+  }
+
+  void
+  Actions::on_menu_view_timeline()
+  {
+    //workspaceWindow.timeline_panel.show();
   }
 
   void
