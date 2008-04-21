@@ -87,6 +87,8 @@ namespace workspace {
         "    <menu action='EditMenu'>"
         "      <menuitem action='EditCopy'/>"
         "      <menuitem action='EditPaste'/>"
+        "      <separator/>"
+        "      <menuitem action='EditPreferences'/>"
         "    </menu>"
         "    <menu action='ViewMenu'>"
         "      <menuitem action='ViewViewer'/>"

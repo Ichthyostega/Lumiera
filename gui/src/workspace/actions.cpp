@@ -25,6 +25,7 @@
 #include "workspace-window.hpp"
 
 #include "../dialogs/render.hpp"
+#include "../dialogs/preferences-dialog.hpp"
 
 using namespace Gtk;
 using namespace Glib;
@@ -57,6 +58,8 @@ namespace workspace {
 	    sigc::mem_fun(*this, &Actions::on_menu_others));
 	  actionGroup->add(Action::create("EditPaste", Stock::PASTE),
 	    sigc::mem_fun(*this, &Actions::on_menu_others));
+	  actionGroup->add(Action::create("EditPreferences", Stock::PREFERENCES),
+	    sigc::mem_fun(*this, &Actions::on_menu_edit_preferences));
 
     // View Menu
     actionGroup->add(Action::create("ViewMenu", _("_View")));
@@ -96,6 +99,13 @@ namespace workspace {
   Actions::on_menu_file_quit()
   {
     workspaceWindow.hide(); // Closes the main window to stop the Gtk::Main::run().
+  }
+
+  void
+  Actions::on_menu_edit_preferences()
+  {
+    dialogs::PreferencesDialog dialog(workspaceWindow);
+    dialog.run();
   }
 
   void

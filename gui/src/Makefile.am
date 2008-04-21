@@ -23,6 +23,8 @@ gtk_lumiera_SOURCES =                 \
     workspace/workspace-window.hpp    \
     dialogs/render.cpp                \
     dialogs/render.hpp                \
+    dialogs/preferences-dialog.cpp    \
+    dialogs/preferences-dialog.hpp    \
     panels/panel.cpp                  \
     panels/panel.hpp                  \
     panels/timeline-panel.cpp         \
