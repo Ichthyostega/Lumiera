@@ -60,7 +60,7 @@ namespace asset
    *  some ProcPatt as a template for creating more
    *  spezialized patterns. 
    */
-  shared_ptr<ProcPatt> 
+  P<ProcPatt> 
   ProcPatt::newCopy (string newID)  const
   {
     TODO ("implement the Pattern-ID within the propDescriptor!");

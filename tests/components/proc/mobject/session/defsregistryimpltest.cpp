@@ -27,6 +27,7 @@
 #include "proc/mobject/session/defsregistry.hpp"
 #include "common/factory.hpp"
 #include "common/query.hpp"
+#include "common/p.hpp"
 
 #include "../common/query/querydiagnostics.hpp"
 
@@ -35,11 +36,11 @@
 #include <cstdlib>
 #include <map>
 
+using lumiera::P;
 using lumiera::Query;
 using lumiera::query::test::garbage_query;
 using util::isnil;
 
-using std::tr1::shared_ptr;
 using boost::scoped_ptr;
 using boost::format;
 using std::string;
@@ -75,7 +76,9 @@ namespace mobject
         {
           static string name;
           string instanceID;
-          operator string () const { return instanceID; }
+          operator string ()                  const { return instanceID; }
+          bool operator== (const Dummy& odu)  const { return this == &odu; }
+          
           
           Dummy () : instanceID (newID (name)) {}
         };
@@ -99,8 +102,8 @@ namespace mobject
         {
           scoped_ptr<DefsRegistry> reg_;
           
-          typedef shared_ptr<Dummy<13> > O;
-          typedef shared_ptr<Dummy<23> > P;
+          typedef P<Dummy<13> > O;
+          typedef P<Dummy<23> > P;
           
           typedef Query<Dummy<13> > Q13;
           typedef Query<Dummy<23> > Q23;

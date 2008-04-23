@@ -120,12 +120,12 @@ namespace asset
 
       
     public:
-      typedef shared_ptr<asset::Struct> PType;
+      typedef P<asset::Struct> PType;
       
       template<class STRU>
-      shared_ptr<STRU> operator() (const Query<STRU>& query);      ////////////TODO actually do something sensible here 
+      P<STRU> operator() (const Query<STRU>& query);      ////////////TODO actually do something sensible here 
       
-      shared_ptr<Pipe> operator() (string pipeID, string streamID);
+      P<Pipe> operator() (string pipeID, string streamID);
       
     };
     

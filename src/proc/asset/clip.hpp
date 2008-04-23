@@ -53,7 +53,7 @@ namespace asset
 
     };
     
-    typedef shared_ptr<const asset::Clip> PClipAsset;
+    typedef P<const asset::Clip> PClipAsset;
     
     const string CLIP_SUBFOLDER = "clips";      // TODO: handling of hard-wired constants....
     

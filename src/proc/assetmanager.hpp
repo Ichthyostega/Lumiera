@@ -73,13 +73,13 @@ namespace asset
       /** provide the unique ID for given Asset::Ident tuple */
       static ID<Asset> getID (const Asset::Ident&);
       
-      /** retrieve the registerd shared_ptr for any asset */
+      /** retrieve the registerd smart-ptr for any asset */
       template<class KIND>
-      static shared_ptr<KIND> wrap (const KIND& asset);
+      static P<KIND> wrap (const KIND& asset);
       
       /** find and return corresponging object */
       template<class KIND>
-      shared_ptr<KIND>  getAsset (const ID<KIND>& id)  throw(lumiera::error::Invalid);
+      P<KIND>  getAsset (const ID<KIND>& id)  throw(lumiera::error::Invalid);
       
       
       /** @return true if the given id is registered in the internal asset DB  */

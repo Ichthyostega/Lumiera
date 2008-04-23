@@ -38,8 +38,8 @@ namespace mobject
   namespace session
     {
     using asset::Media;
-    typedef shared_ptr<Media> PMedia;
-    typedef shared_ptr<asset::Clip> PClipAsset;
+    typedef P<Media> PMedia;
+    typedef P<asset::Clip> PClipAsset;
 
 
     /**

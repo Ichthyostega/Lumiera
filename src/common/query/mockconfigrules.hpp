@@ -74,7 +74,7 @@ namespace lumiera
       
       /** a traits-class to define the smart-ptr to wrap the result */
       template<class TY>
-      struct WrapReturn             { typedef shared_ptr<TY> Wrapper;  };
+      struct WrapReturn             { typedef P<TY> Wrapper;  };
       
       template<>
       struct WrapReturn<ProcPatt>   { typedef PProcPatt Wrapper;  };

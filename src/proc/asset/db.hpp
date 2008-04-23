@@ -100,7 +100,7 @@ namespace asset
       bool  del (ID<Asset> hash)              { return table.erase (hash); }
       
       template<class KIND>
-      shared_ptr<KIND> 
+      P<KIND> 
       get (ID<KIND> hash)  const
         {
           return dynamic_pointer_cast<KIND,Asset> (find (hash));

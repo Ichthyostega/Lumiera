@@ -39,7 +39,7 @@ namespace mobject
   {
   namespace session
     {
-    using std::tr1::shared_ptr;
+    using lumiera::P;
     
     
     
@@ -52,10 +52,10 @@ namespace mobject
     
     
     template<class TAR>
-    shared_ptr<TAR>
+    P<TAR>
     DefsManager::search  (const Query<TAR>& capabilities)
     {
-      shared_ptr<TAR> res;
+      P<TAR> res;
       QueryHandler<TAR>& typeHandler = ConfigRules::instance();  
       for (DefsRegistry::Iter<TAR> i = defsRegistry->candidates(capabilities); 
            res = *i ; ++i )
@@ -69,10 +69,10 @@ namespace mobject
     
     
     template<class TAR>
-    shared_ptr<TAR> 
+    P<TAR> 
     DefsManager::create  (const Query<TAR>& capabilities)
     {
-      shared_ptr<TAR> res;
+      P<TAR> res;
       QueryHandler<TAR>& typeHandler = ConfigRules::instance();  
       typeHandler.resolve (res, capabilities);
       if (res)
@@ -83,9 +83,9 @@ namespace mobject
     
     template<class TAR>
     bool 
-    DefsManager::define  (const shared_ptr<TAR>& defaultObj, const Query<TAR>& capabilities)
+    DefsManager::define  (const P<TAR>& defaultObj, const Query<TAR>& capabilities)
     {
-      shared_ptr<TAR> candidate (defaultObj);
+      P<TAR> candidate (defaultObj);
       QueryHandler<TAR>& typeHandler = ConfigRules::instance();  
       typeHandler.resolve (candidate, capabilities);
       if (!candidate)
@@ -97,17 +97,17 @@ namespace mobject
     
     template<class TAR>
     bool 
-    DefsManager::forget  (const shared_ptr<TAR>& defaultObj)
+    DefsManager::forget  (const P<TAR>& defaultObj)
     {
       return defsRegistry->forget (defaultObj);
     }
 
     
     template<class TAR>
-    shared_ptr<TAR> 
+    P<TAR> 
     DefsManager::operator() (const Query<TAR>& capabilities)
     {
-      shared_ptr<TAR> res (search (capabilities));
+      P<TAR> res (search (capabilities));
       if (res) 
         return res;
       else

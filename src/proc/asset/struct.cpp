@@ -89,10 +89,10 @@ namespace asset
    *          created as a side effect of calling the concrete Struct subclass ctor.
    */
   template<class STRU>
-  shared_ptr<STRU> 
+  P<STRU> 
   StructFactory::operator() (const Query<STRU>& capabilities)
   {
-    shared_ptr<STRU> res;
+    P<STRU> res;
     QueryHandler<STRU>& typeHandler = ConfigRules::instance();  
     typeHandler.resolve (res, capabilities);
     
@@ -117,7 +117,7 @@ namespace asset
    * @see ProcPatt
    * @see DefaultsManager 
    */ 
-  shared_ptr<Pipe> 
+  P<Pipe> 
   StructFactory::operator() (string pipeID, string streamID)
   {
     normalizeID (pipeID);
@@ -147,9 +147,9 @@ namespace asset
 namespace asset
   {
   
-  template shared_ptr<Pipe>     StructFactory::operator() (const Query<Pipe>& query);
-  template shared_ptr<Track>    StructFactory::operator() (const Query<Track>& query);
-  template PProcPatt            StructFactory::operator() (const Query<const ProcPatt>& query);
+  template P<Pipe>     StructFactory::operator() (const Query<Pipe>& query);
+  template P<Track>    StructFactory::operator() (const Query<Track>& query);
+  template PProcPatt   StructFactory::operator() (const Query<const ProcPatt>& query);
 
   
 } // namespace asset

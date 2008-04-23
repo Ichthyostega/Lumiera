@@ -46,6 +46,7 @@
 #ifndef LUMIERA_CONFIGRULES_H
 #define LUMIERA_CONFIGRULES_H
 
+#include "common/p.hpp"
 #include "common/query.hpp"
 #include "common/typelistutil.hpp"
 #include "common/singletonsubclass.hpp"
@@ -57,14 +58,13 @@
 #include "proc/asset/track.hpp"
 
 #include <string>
-#include <tr1/memory>
 
 
 
 namespace lumiera
   {
   using std::string;
-  using std::tr1::shared_ptr;
+  using lumiera::P;
 
   
   
@@ -148,13 +148,13 @@ namespace lumiera
          *  @query any goals to be fulfilled by the solution.
          *  @return false if resolution failed. In this case, solution ptr is empty.
          */
-        virtual bool resolve (shared_ptr<TY>& solution, const Query<TY>& q) = 0;
+        virtual bool resolve (P<TY>& solution, const Query<TY>& q) = 0;
       };
 
     // TODO: the Idea is to provide specialisations for the concrete types
     //       we want to participate in the ConfigRules system....
     //       Thus we get the possibility to create a specific return type,
-    //       e.g. return a shared_ptr<Pipe> but a Placement<Track>, using the appropriate factory.
+    //       e.g. return a P<Pipe> but a Placement<Track>, using the appropriate factory.
     //       Of course then the definitions need to be split up in separate headers.
       
       
