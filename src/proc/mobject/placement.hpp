@@ -82,7 +82,7 @@ namespace mobject
    * be within the Session/EDL
    */
   template<class MO>
-  class Placement : protected shared_ptr<MO>
+  class Placement : public Buildable, protected shared_ptr<MO>
     {
     protected:
       typedef lumiera::Time Time;
@@ -105,7 +105,7 @@ namespace mobject
       virtual ~Placement() {};
       
       /** */ /////////////////////////////////////////////////////////////TODO: totmachen? 
-     // DEFINE_PROCESSABLE_BY (builder::BuilderTool);
+      DEFINE_PROCESSABLE_BY (builder::BuilderTool);
 
       
       /** interface for defining the kind of placement

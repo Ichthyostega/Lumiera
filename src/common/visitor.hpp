@@ -105,7 +105,7 @@ namespace lumiera
         typedef RET ReturnType;      ///< Tool function invocation return type
         typedef Tool ToolBase;      ///<  for templating the Tag and Dispatcher
         
-        virtual ~Tool ()  { };   ///< use RTTI for all visiting tools
+        virtual ~Tool ()  { };    ///< use RTTI for all visiting tools
         
         /** allows discovery of the concrete Tool type when dispatching a
          *  visitor call. Can be implemented by inheriting from ToolTag */

@@ -60,6 +60,9 @@ namespace mobject
         { 
           return *this; 
         }
+      
+      /** */ /////////////////////////////////////////////////////////////TODO: wip-wip... 
+      DEFINE_PROCESSABLE_BY (builder::BuilderTool);
 
     protected:
       /*  @todo ichthyo considers a much more elegant implementation utilizing a subclass 

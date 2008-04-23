@@ -1,5 +1,5 @@
 /*
-  BuilderTool(Test)  -  specialized form of the acyclic visitor
+  BuilderTool(Test)  -  specialized visitor used within the builder for processing Placements
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -27,6 +27,9 @@
 #include "proc/asset/media.hpp"
 #include "proc/mobject/session/clip.hpp"
 
+#include "proc/mobject/explicitplacement.hpp"   //////////TODO
+
+
 #include <iostream>
 using std::string;
 using std::cout;
@@ -48,15 +51,31 @@ namespace mobject
         public:
           DummyMO() { };
           virtual bool isValid()  const { return true;}
-          DEFINE_PROCESSABLE_BY (BuilderTool);
+//          DEFINE_PROCESSABLE_BY (BuilderTool);
+          
+          static void killDummy (AbstractMO* dum) { delete (DummyMO*)dum; }
         };
-
-      class TestTool 
-        : public Applicable<TestTool, Types<Clip,AbstractMO>::List>
+      
+      
+  //////////////////////////////////////////////////////TODO: wip-wip
+      
+      class DummyPlacement : public Placement<AbstractMO>
         {
         public:
-          void treat (Clip& c)   { cout << "media is: "<< str(c.getMedia()) <<"\n"; }
-          void treat (AbstractMO&){ cout << "unspecific MO.\n"; }
+          DummyPlacement() 
+            : Placement<AbstractMO>::Placement(*new DummyMO, &DummyMO::killDummy)
+            { }
+        };
+  //////////////////////////////////////////////////////TODO: wip-wip
+      
+      
+
+      class TestTool 
+        : public Applicable<TestTool, Types<Placement<Clip>, Placement<AbstractMO> >::List>
+        {
+        public:
+          void treat (Placement<Clip>& pC)   { cout << "media is: "<< str(pC->getMedia()) <<"\n"; }
+          void treat (Placement<AbstractMO>&){ cout << "unspecific MO.\n"; }
           void onUnknown (Buildable&){ cout << "catch-all-function called.\n"; }
         };
 
@@ -88,10 +107,10 @@ namespace mobject
               TestTool t1;
               BuilderTool& tool (t1);
                                 
-              DummyMO dumm;
+              DummyPlacement dumm;
               PMO clip = asset::Media::create("test-1", asset::VIDEO)->createClip();
 
-              clip->apply (tool);
+              clip.apply (tool);
               dumm.apply (tool);
             } 
         };
@@ -105,5 +124,15 @@ namespace mobject
     } // namespace test
     
   } // namespace builder
+  
+  //////////////////////////////////////////////////////TODO: wip-wip
+  template<>
+  ExplicitPlacement
+  Placement<session::AbstractMO>::resolve ()  const 
+    { 
+      UNIMPLEMENTED ("just a test");
+    }
+  //////////////////////////////////////////////////////TODO: wip-wip
+
 
 } // namespace mobject
