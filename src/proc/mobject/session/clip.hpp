@@ -66,6 +66,7 @@ namespace mobject
             and the unlink() function of the asset should take it into
             account when breaking circular references.
          */             
+public:   ////////////////////////////////////TODO: temporarily for buildertooltest        
         const Media & mediaDef_;
         const asset::Clip & clipDef_;
 

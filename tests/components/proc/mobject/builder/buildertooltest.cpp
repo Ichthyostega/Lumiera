@@ -29,7 +29,7 @@
 
 #include "proc/mobject/explicitplacement.hpp"   //////////TODO
 
-
+#include <boost/any.hpp>
 #include <iostream>
 using std::string;
 using std::cout;
@@ -45,8 +45,62 @@ namespace mobject
       using session::Clip;
       using session::AbstractMO;
 
+/////////////////////////////////////////////////////TODO: move to buildertool.hpp
+      using boost::any;
+      using boost::any_cast;
+
+// Problem
+/*
+      - brauche Laufzeittyp des Zielobjektes
+      - an wen wird die Dispatcher-Tabelle gebunden?
+        - falls an den Wrapper: Gefahr, zur Laufzeit nicht die Tabelle zu bekommen, in die das Trampolin registriert wurde
+        - falls an das Zielobjekt: wie gebe ich Referenz und konkreten Typ des Wrappers an den Funktionsaufruf im Tool?
+      - vieleicht einen allgemeinen Argument-Adapter nutzen?
+      - Zielobjekt oder Wrapper<Zielobjekt> als Argumenttyp? 
+*/
       
-      class DummyMO : public AbstractMO
+    class BuTuul
+      : public lumiera::visitor::Tool<void, InvokeCatchAllFunction> 
+      {
+        any currentArgument_;
+        
+      public:
+        
+      void rememberWrapper (any argument)
+        {
+          currentArgument_ = argument;
+        }
+      
+      template<typename WRA>
+      WRA& getCurrentArgumentWrapper ()
+        {
+          WRA* argument = any_cast<WRA*> (currentArgument_);
+          ASSERT (argument);
+          return *argument;
+        }
+      };
+      
+
+    
+    
+    template
+      < class TOOLImpl,  // concrete BuilderTool implementation
+        class TYPELIST  //  list of all concrete Buildables to be treated
+      >
+    class Appli
+      : public lumiera::visitor::Applicable<TOOLImpl, TYPELIST, BuTuul>
+      { }
+      ;
+      
+    using lumiera::typelist::Types;   // convienience for the users of "Applicable"
+
+    class BDable : public lumiera::visitor::Visitable<BuTuul>
+      {
+        
+      };
+/////////////////////////////////////////////////////TODO: move to buildertool.hpp
+      
+      class DummyMO : public AbstractMO, public BDable
         {
         public:
           DummyMO() { };
@@ -54,8 +108,34 @@ namespace mobject
 //          DEFINE_PROCESSABLE_BY (BuilderTool);
           
           static void killDummy (AbstractMO* dum) { delete (DummyMO*)dum; }
+          
+          virtual void
+          apply (BuTuul& tool) 
+            { 
+              return BDable::dispatchOp (*this, tool); 
+            }
+          
         };
       
+      class Clop : public Clip, public BDable
+        {
+          Clop (Clip& base) : Clip (base.clipDef_, base.mediaDef_) {}
+          
+          virtual void
+          apply (BuTuul& tool) 
+            { 
+              return BDable::dispatchOp (*this, tool); 
+            }
+        };
+      
+      
+      template<typename TAR>
+      inline BDable::ReturnType
+      apply (BuTuul& tool, TAR& wrappedTargetObj)
+      {
+        tool.rememberWrapper(any (&wrappedTargetObj));
+        wrappedTargetObj->apply (tool);
+      }
       
   //////////////////////////////////////////////////////TODO: wip-wip
       
@@ -71,12 +151,23 @@ namespace mobject
       
 
       class TestTool 
-        : public Applicable<TestTool, Types<Placement<Clip>, Placement<AbstractMO> >::List>
+        : public Appli<TestTool, Types<Clip, AbstractMO>::List>
         {
         public:
-          void treat (Placement<Clip>& pC)   { cout << "media is: "<< str(pC->getMedia()) <<"\n"; }
-          void treat (Placement<AbstractMO>&){ cout << "unspecific MO.\n"; }
-          void onUnknown (Buildable&){ cout << "catch-all-function called.\n"; }
+          void treat (Clip& c)    
+            { 
+              Placement<Clip>& pC = getCurrentArgumentWrapper<Placement<Clip> >();
+              cout << "media is: "<< str(pC->getMedia()) <<"\n"; 
+            }
+          void treat (AbstractMO&)
+            {
+              Placement<AbstractMO>& placement = getCurrentArgumentWrapper<DummyPlacement>();
+              cout << "unspecific MO; Placement(adr) " << &placement <<"\n"; 
+            }
+          void onUnknown (Buildable&)
+            { 
+              cout << "catch-all-function called.\n"; 
+            }
         };
 
 
@@ -105,13 +196,14 @@ namespace mobject
             {
                           
               TestTool t1;
-              BuilderTool& tool (t1);
+              BuTuul& tool (t1);
                                 
               DummyPlacement dumm;
-              PMO clip = asset::Media::create("test-1", asset::VIDEO)->createClip();
+              Placement<Clip> clip = asset::Media::create("test-1", asset::VIDEO)->createClip();
 
-              clip.apply (tool);
-              dumm.apply (tool);
+              apply (tool, clip);
+              cout << "Placement(adr) " << &dumm <<"\n"; 
+              apply (tool, dumm);
             } 
         };
       
