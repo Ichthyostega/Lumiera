@@ -29,7 +29,7 @@
 #include <list>
 #include <tr1/memory>
 
-#include "lumiera.h"
+#include "proc/lumiera.hpp"
 #include "proc/mobject/builder/buildertool.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/asset.hpp"                 // TODO finally not needed?

@@ -36,6 +36,8 @@
 #ifndef ASSET_META_H
 #define ASSET_META_H
 
+#include "pre_a.hpp"
+
 #include "proc/asset.hpp"
 #include "common/factory.hpp"
 

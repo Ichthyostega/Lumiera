@@ -1,6 +1,6 @@
 format 40
 "MObject" // ProcessingLayer::MObject
-  revision 29
+  revision 31
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -103,6 +103,15 @@ configuration of all Objects to be rendered"
 "
 	    classrelation_ref 144773 // current (<unidirectional association>)
 	  b multiplicity "" parent class_ref 139781 // SessManager
+      end
+
+      classrelation 150917 // defaults (<unidirectional association>)
+	relation 148101 --->
+	  a role_name "defaults" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 150917 // defaults (<unidirectional association>)
+	  b multiplicity "" parent class_ref 141445 // DefaultsManager
       end
     end
 
@@ -1162,6 +1171,19 @@ ${inlines}
 	    classrelation_ref 146053 // next (<unidirectional association>)
 	  b multiplicity "" parent class_ref 139909 // LocatingPin
       end
+    end
+
+    class 141957 "ProcDispatcher"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
     end
   end
 

@@ -1,5 +1,5 @@
 /*
-  Suite  -  helper class for running collections of tests
+  Suite  -  handle cmdline for invoking Testsuite
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -24,7 +24,6 @@
 #include "common/test/testoption.hpp"
 #include "common/test/suite.hpp"
 
-#include "nobugcfg.h"
 #include "common/error.hpp"
 
 
@@ -45,6 +44,7 @@ namespace test
    *  \code
    *  --help
    *  --group <groupID>
+   *  --describe
    *  \endcode
    */
   TestOption::TestOption (util::Cmdline& cmdline)

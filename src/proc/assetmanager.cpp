@@ -112,14 +112,13 @@ namespace asset
   AssetManager::reg (KIND* obj, const Asset::Ident& idi)
       throw(lumiera::error::Invalid)
   {
-    typedef shared_ptr<KIND> PType;
     AssetManager& _aMang (AssetManager::instance());
     TODO ("check validity of Ident Category");
     ID<KIND> asset_id (getID (idi));
     
     Thread::Lock<DB> guard   SIDEEFFECT;
     TODO ("handle duplicate Registrations");
-    PType smart_ptr (obj, &destroy);
+    P<KIND> smart_ptr (obj, &destroy);
 
     _aMang.registry.put (asset_id, smart_ptr);
     return asset_id;
@@ -152,7 +151,7 @@ namespace asset
    */
   template<class KIND>
   shared_ptr<KIND>
-  AssetManager::getPtr (const KIND& asset)
+  AssetManager::wrap (const KIND& asset)
   {
     ENSURE (instance().known(asset.id), 
             "unregistered asset instance encountered.");
@@ -234,7 +233,10 @@ namespace asset
 #include "proc/asset/clip.hpp"  
 #include "proc/asset/proc.hpp"  
 #include "proc/asset/struct.hpp"  
+#include "proc/asset/track.hpp"  
+#include "proc/asset/pipe.hpp"  
 #include "proc/asset/meta.hpp"  
+#include "proc/asset/procpatt.hpp"  
 
 
 namespace asset
@@ -249,9 +251,12 @@ namespace asset
   template shared_ptr<Struct> AssetManager::getAsset (const ID<Struct>& id)  throw(lumiera::error::Invalid);
   template shared_ptr<Meta>   AssetManager::getAsset (const ID<Meta>&   id)  throw(lumiera::error::Invalid);
   
-  template shared_ptr<Asset>  AssetManager::getPtr (const Asset& asset);
-  template shared_ptr<Media>  AssetManager::getPtr (const Media& asset);
-  template shared_ptr<Clip>   AssetManager::getPtr (const Clip&  asset);
+  template shared_ptr<Asset>    AssetManager::wrap (const Asset& asset);
+  template shared_ptr<Media>    AssetManager::wrap (const Media& asset);
+  template shared_ptr<Clip>     AssetManager::wrap (const Clip&  asset);
+  template shared_ptr<Track>    AssetManager::wrap (const Track& asset);
+  template shared_ptr<Pipe>     AssetManager::wrap (const Pipe&  asset);
+  template shared_ptr<ProcPatt> AssetManager::wrap (const ProcPatt& asset);
 
   
 } // namespace asset

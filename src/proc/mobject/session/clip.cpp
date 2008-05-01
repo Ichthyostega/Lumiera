@@ -66,14 +66,14 @@ namespace mobject
     PMedia 
     Clip::getMedia ()  const                        
     { 
-      return asset::AssetManager::getPtr (mediaDef_);
+      return asset::AssetManager::wrap (mediaDef_);
     }
     
     
     PClipAsset
     Clip::findClipAsset ()  const
     {
-      return asset::AssetManager::getPtr (clipDef_);
+      return asset::AssetManager::wrap (clipDef_);
     }
 
 

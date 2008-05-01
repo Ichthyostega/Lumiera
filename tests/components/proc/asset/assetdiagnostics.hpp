@@ -71,14 +71,14 @@ namespace asset
     }
   
   
-  template<class C, class P>
+  template<class CHI, class PAR>
   inline bool
-  dependencyCheck (C child, P parent)
+  dependencyCheck (P<CHI> child, P<PAR> parent)
     {
       return (child == parent)
           || (0 < child->getParents().size()
              && (parent == child->getParents()[0])
-             && (contains (parent->getDependant(), child)));
+             && (contains (parent->getDependant(), child)))
           ;
     }
 

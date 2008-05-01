@@ -1,6 +1,6 @@
 format 40
 "lumiera"
-  revision 42
+  revision 44
   modified_by 5 "hiv"
   cpp_root_dir "../../src/"
 
@@ -57,7 +57,7 @@ format 40
     2008,               Christian Thaeter <ct@pipapo.org>
 
 "
-  key "html dir" value "/mnt/Lager/heim/devel/cin3/doc/devel/uml/"
+  key "html dir" value "/mnt/Lager/heim/devel/lumi/doc/devel/uml/"
   key "" value ""
   package_ref 128005 // design
 

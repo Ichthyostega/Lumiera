@@ -91,6 +91,14 @@ namespace util
     return set.end() != set.find (val);
   }
   
+  /** shortcut for string value containment test */
+  template <typename T>
+  inline bool 
+  contains (std::string& str, const T& val)
+  {
+    return str.find (val) != std::string::npos;
+  }
+  
   /** shortcut for brute-force containment test
    *  in any sequencial container */
   template <typename SEQ>
@@ -114,6 +122,39 @@ namespace util
                        collEnd
                       );
   }
+  
+  
+  /** remove all elements fulfilling a given predicate
+   *  from a (sorted) set.
+   *  @return true if anything has been removed. */
+  template<class SET, typename PRD>
+  bool remove_if (SET& set, PRD test)
+    {
+      typedef typename SET::iterator Itor;
+      bool found = false;
+      Itor   end = set.end();
+      Itor begin = set.begin();
+      Itor   pos = begin;
+      while (pos!=end)
+        {
+          if (!test (*pos)) ++pos;
+          else
+            {
+              found = true;
+              if (pos==begin) 
+                {
+                  set.erase(pos);
+                  pos = begin = set.begin();
+                }
+              else
+                {
+                  set.erase(pos--);
+                  ++pos;
+                }
+              end = set.end();
+        }   }
+      return found;
+    }
   
   
   /** shortcut for operating on all elements of a container.
@@ -156,8 +197,8 @@ namespace util
    "trailing Withespace  \t \n"       --> 'trailing_Withespace'
    "with    a   lot  \nof Whitespace" --> 'with_a_lot_of_Whitespace'
    "with\"much (punctuation)[]!"      --> 'withmuch_(punctuation)'
-   "§&Ω%€  leading garbarge"          --> 'leading_garbarge'
-   "mixed    Ω   garbarge"            --> 'mixed_garbarge'
+   "§&Ω%€  leading garbage"           --> 'leading_garbage'
+   "mixed    Ω   garbage"             --> 'mixed_garbage'
    "Bääääh!!"                         --> 'Bh'
 \endverbatim
    */

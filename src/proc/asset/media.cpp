@@ -29,7 +29,7 @@
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"
 #include "common/util.hpp"
-#include "nobugcfg.h"
+#include "proc/nobugcfg.hpp"
 
 #include <boost/regex.hpp>
 #include <boost/format.hpp>
@@ -231,7 +231,7 @@ namespace asset
                                     ,LUMIERA_ERROR_PART_OF_COMPOUND
                                     );
     asset::Clip* pC = new asset::Clip (mediaref);
-    return AssetManager::instance().getPtr (*pC);
+    return AssetManager::instance().wrap (*pC);
   }
   
   LUMIERA_ERROR_DEFINE (PART_OF_COMPOUND, "part of compound used as toplevel element");

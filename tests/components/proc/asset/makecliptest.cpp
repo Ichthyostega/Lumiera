@@ -50,7 +50,7 @@ namespace asset
      */
     class MakeClip_test : public Test
       {
-        typedef shared_ptr<asset::Media> PM;
+        typedef P<asset::Media> PM;
         typedef asset::Media::PClipMO PC;
             
         virtual void run (Arg arg) 

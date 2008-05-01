@@ -25,7 +25,7 @@
 #define LUMIERA_ERROR_HPP_
 
 #include <string>
-#include "nobugcfg.h"
+#include "proc/nobugcfg.hpp"
 #include "lib/error.h"
 
 
@@ -150,6 +150,14 @@ namespace lumiera
     LUMIERA_EXCEPTION_DECLARE (External, Error,  LUMIERA_ERROR_EXTERNAL);
     
     
+    /** install our own handler for undeclared exceptions. Will be
+     *  called automatically ON_BASIC_INIT when including errror.hpp
+     *  @see appconfig.hpp  */
+    void install_unexpectedException_handler ();
+    namespace {
+      LifecycleHook schedule_ (ON_BASIC_INIT, &install_unexpectedException_handler);         
+    }
+    
   } // namespace error
 
 } // namespace lumiera
@@ -162,10 +170,10 @@ namespace lumiera
  */
 #ifdef NOBUG_ABORT
 #undef NOBUG_ABORT
-#define CIN_NOBUG_LOCATION \
+#define LUMIERA_NOBUG_LOCATION \
   std::string (NOBUG_BASENAME(__FILE__)) +":"+ NOBUG_STRINGIZE(__LINE__) + ", function " + __func__
 #define NOBUG_ABORT \
-  lumiera::error::assertion_terminate (CIN_NOBUG_LOCATION);
+  lumiera::error::assertion_terminate (LUMIERA_NOBUG_LOCATION);
 #endif
 
 

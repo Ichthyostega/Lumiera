@@ -29,7 +29,7 @@
 export LC_ALL=C
 
 arg0="$0"
-srcdir=$(dirname "$arg0")
+srcdir="$(dirname "$arg0")"
 
 ulimit -S -t 1 -v 524288
 valgrind=""
@@ -45,7 +45,7 @@ else
 fi
 
 echo
-echo ================ ${0##*/} ================
+echo "================ ${0##*/} ================"
 
 TESTCNT=0
 SKIPCNT=0
@@ -84,7 +84,7 @@ function TEST()
                 echo "$arg" >>,expect_stderr
                 ;;
             'return')
-                expect_return=$arg
+                expect_return="$arg"
                 ;;
             *)
                 echo "UNKOWN TEST COMMAND '$cmd'" 1>&2
@@ -95,7 +95,7 @@ function TEST()
 	echo -n "TEST $name: "
 	echo -en "\nTEST $name: $* " >>,testlog
 
-        case $TESTMODE in
+        case "$TESTMODE" in
         *FAST*)
             if grep "^TEST $name: .* FAILED" ,testlog.pre >&/dev/null; then
                 MSGOK=" (fixed)"
@@ -121,39 +121,45 @@ function TEST()
 
         fails=0
 
-
-        if test -f ,send_stdin; then
-            cat ,send_stdin | $valgrind $TESTBIN "$@" 2>,stderr >,stdout
-        else
-            $valgrind $TESTBIN "$@" 2>,stderr >,stdout
-        fi &>/dev/null
-        return=$?
-
         echo -n >,testtmp
 
-        if test -f ,expect_stdout; then
-            if ! cmp ,expect_stdout ,stdout &>/dev/null; then
-                echo "unexpected data on stdout" >>,testtmp
-                grep -v ': \(TRACE\|INFO\|NOTICE\|WARNING\|ERR\):' <,stdout >,tmp
-                diff -ua ,expect_stdout ,tmp >>,testtmp
-                rm ,tmp
-                ((fails+=1))
-            fi
-        fi
-
-        if test -f ,expect_stderr; then
-            if ! cmp ,expect_stderr ,stderr &>/dev/null; then
-                echo "unexpected data on stderr" >>,testtmp
-                grep -v ': \(TRACE\|INFO\|NOTICE\|WARNING\|ERR\):' <,stderr >,tmp
-                diff -ua ,expect_stderr ,tmp >>,testtmp
-                rm ,tmp
-                ((fails+=1))
-            fi
-        fi
-
-        if test $expect_return != $return; then
-            echo "unexpected return value $return" >>,testtmp
+        if ! test -x $TESTBIN; then
+            echo -n >,stdout
+            echo "test binary '$TESTBIN' not found" >,stderr
             ((fails+=1))
+
+        else
+            if test -f ,send_stdin; then
+                cat ,send_stdin | $valgrind $TESTBIN "$@" 2>,stderr >,stdout
+            else
+                $valgrind $TESTBIN "$@" 2>,stderr >,stdout
+            fi &>/dev/null
+            return=$?
+
+            if test -f ,expect_stdout; then
+                if ! cmp ,expect_stdout ,stdout &>/dev/null; then
+                    echo "unexpected data on stdout" >>,testtmp
+                    grep -v ': \(TRACE\|INFO\|NOTICE\|WARNING\|ERR\):' <,stdout >,tmp
+                    diff -ua ,expect_stdout ,tmp >>,testtmp
+                    rm ,tmp
+                    ((fails+=1))
+                fi
+            fi
+
+            if test -f ,expect_stderr; then
+                if ! cmp ,expect_stderr ,stderr &>/dev/null; then
+                    echo "unexpected data on stderr" >>,testtmp
+                    grep -v ': \(TRACE\|INFO\|NOTICE\|WARNING\|ERR\):' <,stderr >,tmp
+                    diff -ua ,expect_stderr ,tmp >>,testtmp
+                    rm ,tmp
+                    ((fails+=1))
+                fi
+            fi
+
+            if test "$expect_return" != "$return"; then
+                echo "unexpected return value $return" >>,testtmp
+                ((fails+=1))
+            fi
         fi
 
 	if test $fails -eq 0; then
@@ -191,7 +197,7 @@ function RUNTESTS()
     if test \( ! "${TESTSUITES/*,*/}" \) -a "$TESTSUITES"; then
         TESTSUITES="{$TESTSUITES}"
     fi
-    for t in $(eval echo $srcdir/*$TESTSUITES*.tests); do
+    for t in $(eval echo "$srcdir/*$TESTSUITES*.tests"); do
         echo "$t"
     done | sort | uniq | {
         while read i; do

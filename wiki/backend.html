@@ -789,18 +789,17 @@ Look at [[Overview]] for the current design proposal
 <pre>DataBackend
 </pre>
 </div>
-<div title="File" modifier="CehTeh" modified="200706271509" created="200706201525" changecount="5">
-<pre>'File' is the superclass of all possible filetypes, it has a weak reference to a FileHandle which is managed in FileHandleCache, on creation only the existence (when reading) or access for write for new files are checked. 'File' stores some generic metadata about the underlying file and intended use. But actual opening is done on demand.
+<div title="File" modifier="CehTeh" modified="200803271341" created="200803271035" changecount="2">
+<pre>[[File]] associates a filename with the underlying FileDescriptor. This allows [[File]]s which have serveral names (hardlinks) to share a underlying backend.</pre>
+</div>
+<div title="FileDescriptor" modifier="CehTeh" modified="200803271036" created="200706201525" changecount="2">
+<pre>'FileDescriptor' is the superclass of all possible filetypes, it has a weak reference to a FileHandle which is managed in FilehandleCache, on creation only the existence (when reading) or access for write for new files are checked. 'FileDescriptor' stores some generic metadata about the underlying file and intended use. But actual opening is done on demand.
 
-Files content is memory mapped into the process address space, this is managed by FileMap objects and a FileMapCache.
+The content is memory mapped into the process address space, this is managed by FileMap objects and a FileMapCache.
 </pre>
 </div>
 <div title="FileHandle" modifier="CehTeh" modified="200706202208" created="200706201535" changecount="2">
 <pre>'FileHandle's are managed by the FileHandleCache, they are just storing the underlying OS file handles and managed in a lazy/weak way, (re)opened when needed and aging in the cache when not needed, since the amount of open file handles is limited aged ones will be closed and reused when the system needs to open another file.
-</pre>
-</div>
-<div title="FileHandleCache" modifier="CehTeh" modified="200706271508" created="200706201548" changecount="5">
-<pre>'FileHandleCache' storing a finite maximum number of [[FileHandle]]s as a list. As long the configured maximum of open files is not reached new file handles are stored at the begin of the list. Whenever a filehandle is accessed it is moved to the begin of the list too. Unused filehandles propagate towards the end of the list. When the maximum of open filehandles is reached, aged filehandles are closed and taken from the end.
 </pre>
 </div>
 <div title="FileMap" modifier="MichaelPloujnikov" modified="200706270315" created="200706201921" changecount="11">
@@ -814,6 +813,10 @@ FileMap objects are transparent to the application. It will only requests [[Fram
 <div title="FileMapCache" modifier="MichaelPloujnikov" modified="200706270305" created="200706202207" changecount="4">
 <pre>The 'FileMapCache' keeps a list of FileMaps which are currently not in use and subject of aging.
 Whenever a FileMap is in use, it is checked out into an in-use list where it is not subject to aging.
+</pre>
+</div>
+<div title="FilehandleCache" modifier="CehTeh" modified="200803271025" created="200706201548" changecount="2">
+<pre>'FilehandleCache' storing a finite maximum number of [[FileHandle]]s as a list. As long the configured maximum of open files is not reached new file handles are stored at the begin of the list. Whenever a filehandle is accessed it is moved to the begin of the list too. Unused filehandles propagate towards the end of the list. When the maximum of open filehandles is reached, aged filehandles are closed and taken from the end.
 </pre>
 </div>
 <div title="Frame" modifier="CehTeh" modified="200706271506" created="200706202115" changecount="13">
@@ -1254,7 +1257,7 @@ Storage and logging of EDL's, unlimited undo, database,...
 When to Cache and when not to cache, aka instant [[Frame]] reuse
 </pre>
 </div>
-<div title="Overview" modifier="CehTeh" modified="200706271504" created="200706200040" changecount="12">
+<div title="Overview" modifier="CehTeh" modified="200803271022" created="200706200040" changecount="13">
 <pre>Whenever Lumiera needs to access data this is done through the DataBackend described here. 
 
 There are two main kinds how data is handled:
@@ -1263,7 +1266,7 @@ There are two main kinds how data is handled:
 
 The backend uses memory mapping to make data available to the program. This is little different to more common open/read/write/close file access while giving superior performance and much better memory utilization.
 
-The data backend must be capable to handle more data than will fit into the memory or even address space on 32 bit architectures.  Moreover a project may access more files than the OS can handle at a time, thus the for [[File]]s used by the Backend it needs a FileHandleCache to manage filehandles dynamically.
+The data backend must be capable to handle more data than will fit into the memory or even address space on 32 bit architectures.  Moreover a project may access more files than the OS can handle at a time, thus the for [[File]]s used by the Backend it needs a FilehandleCache to manage filehandles dynamically.
 
 Which parts of a File are actually mapped to physical RAM is managed by the kernel, it keeps a FileMapCache to manage the [[FileMap]]s we've set up.
 

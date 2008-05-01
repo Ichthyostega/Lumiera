@@ -22,13 +22,98 @@
 
 
 #include "proc/asset/procpatt.hpp"
+#include "proc/asset/proc.hpp"
+#include "proc/assetmanager.hpp"
 #include "proc/asset/buildinstruct.hpp"
+#include "common/util.hpp"
+
+using util::isnil;
 
 namespace asset
   {
   
-  /** */
-
+  
+  /** new processing pattern with empty instruction list.
+   *  @todo preliminary implementation, storing the capabilities
+   *        in the asset name field. We can do better, when
+   *        it's clear what capabilities we need
+   */
+  ProcPatt::ProcPatt (const Asset::Ident& idi)
+    : Struct (idi),
+      instructions_()
+  { }
+  
+  
+  /** @internal used for creating a clone copy */
+  ProcPatt::ProcPatt (const Asset::Ident& idi, const InstructionSequence& instru)
+    : Struct (idi),
+      instructions_(instru)
+  {
+    TODO ("verify building instructions, maybe preprocess...");
+  }
+  
+  
+  
+  /** create a new ProcPatt asset as a literal copy
+   *  of this one. The new ProcPatt can then be customized
+   *  independently of the original one. This allows using
+   *  some ProcPatt as a template for creating more
+   *  spezialized patterns. 
+   */
+  shared_ptr<ProcPatt> 
+  ProcPatt::newCopy (string newID)  const
+  {
+    TODO ("implement the Pattern-ID within the propDescriptor!");
+    TODO ("implement a consitent struct asset naming scheme at one central location!!!!!");
+    const Asset::Ident newIdi ( this->ident.name+".X"
+                              , this->ident.category
+                              );
+    ProcPatt* pP = new ProcPatt (newIdi, this->instructions_);
+    return AssetManager::instance().wrap (*pP);
+  }
+  
+  
+  /** extend the processing instructions to add some Effect
+   *  @param where denotes the insertion point where to attach the Effect
+   *  @param node  prototype of the Effect to be inserted when building.
+   */
+  ProcPatt& 
+  ProcPatt::attach(Symbol where, PProc& node)
+  {
+    DoAttach *last (0);
+    if ( !isnil (instructions_) 
+       && (last = boost::get<DoAttach> (&(instructions_.back())))
+       && last->point==where
+       )
+       // instead of adding a new build instruct entry, 
+      //  we can extend the list in the last "DoAttach" entry.
+      last->nodes.push_back(node);
+    else
+      {
+        DoAttach entry(node, where);
+        instructions_.push_back(BuildInstruct(entry));
+      }
+    TODO ("declare dependency??");
+    return *this;
+  }
+  
+  
+  /** extend the processing instructions by reference to another
+   *  ProcPatt, which will be "executed" at this point while building.
+   *  This allowes for using simple PorcPatt instances as building blocks
+   *  to define more complicated patterns.
+   */
+  ProcPatt& 
+  ProcPatt::operator+= (PProcPatt& toReuse)
+  {
+    DoRecurse entry(toReuse);
+    instructions_.push_back(BuildInstruct (entry));
+    TODO ("declare dependency??");
+    
+    return *this;
+  }
+  
+  
 
 
 } // namespace asset

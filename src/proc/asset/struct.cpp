@@ -23,37 +23,133 @@
 
 #include "proc/assetmanager.hpp"
 #include "proc/asset/struct.hpp"
+#include "proc/asset/procpatt.hpp"
+#include "proc/asset/track.hpp"
+#include "proc/asset/pipe.hpp"
+#include "common/configrules.hpp"
+
+#include "proc/asset/structfactoryimpl.hpp"
+
 #include "common/util.hpp"
-#include "nobugcfg.h"
+#include "proc/nobugcfg.hpp"
+
+#include <boost/format.hpp>
+
+using boost::format;
+
+using lumiera::Symbol;
+using lumiera::query::normalizeID;
+using lumiera::query::QueryHandler;
+using lumiera::ConfigRules;
+
+using util::contains;
+
 
 namespace asset
   {
   
-  namespace // Implementation details
+  /****** NOTE: not really implemented yet. What follows is partially a hack to build simple tests *******/
+
+  
+  
+  /** query the currently defined properties of this
+      structural asset for a stream-ID predicate */
+  const string
+  Struct::queryStreamID()  const
   {
-    /** helper: .....*/
-  } 
+    return lumiera::query::extractID ("stream", this->ident.name);
+  }
+  
+  /** query the currently defined properties of this
+      structural asset for a stream-ID predicate */
+  const string
+  Struct::queryPipeID()  const
+  {
+    return lumiera::query::extractID ("pipe", this->ident.name);
+  }
 
-
-  
-  StructFactory Struct::create;  ///< storage for the static StructFactory instance
   
   
+  /** storage for the static StructFactory instance */
+  StructFactory Struct::create;
   
-  /** Factory method for Structural Asset instances. ....
-   *  @todo actually define
+  
+  /** using private implementation detail class */
+  StructFactory::StructFactory ()
+    : impl_(new StructFactoryImpl(*this)) 
+  { }
+  
+  
+  
+  /** Factory method for Structural Asset instances.
+   *  First tries to relove the asset by issuing an capability query.
+   *  If unsuccessfull, use some internally specialized ctor call.
+   *  @todo work out the struct asset naming scheme!
    *  @return an Struct smart ptr linked to the internally registered smart ptr
    *          created as a side effect of calling the concrete Struct subclass ctor.
    */
-  StructFactory::PType 
-  StructFactory::operator() (Asset::Ident& key) ////TODO
+  template<class STRU>
+  shared_ptr<STRU> 
+  StructFactory::operator() (const Query<STRU>& capabilities)
   {
-    UNIMPLEMENTED ("Struct-Factory");
+    shared_ptr<STRU> res;
+    QueryHandler<STRU>& typeHandler = ConfigRules::instance();  
+    typeHandler.resolve (res, capabilities);
+    
+    if (res)
+      return res;
+    
+    // create new one, since the 
+    // ConfigQuery didn't yield any result
+    STRU* pS = impl_->fabricate(capabilities);
+    return AssetManager::instance().wrap (*pS);
   }
   
   
   
+  
+  /** Factory method for creating Pipes explicitly.
+   *  Normalizes pipe- and streamID, then retrieves the
+   *  default processing pattern (ProcPatt) for this streamID.
+   *  The Pipe ctor will fill out the shortDesc and longDesc
+   *  automatically, based on pipeID and streamID (and they
+   *  are editable anyways)
+   * @see ProcPatt
+   * @see DefaultsManager 
+   */ 
+  shared_ptr<Pipe> 
+  StructFactory::operator() (string pipeID, string streamID)
+  {
+    normalizeID (pipeID);
+    normalizeID (streamID);
+    static format descriptor("pipe(%s), stream(%s).");
+    Pipe* pP = impl_->fabricate (Query<Pipe> (descriptor % pipeID % streamID));
+    return AssetManager::instance().wrap (*pP);
+  }
 
 
 
+} // namespace asset
+
+
+
+
+   /**************************************************/
+   /* explicit instantiations of the factory methods */
+   /**************************************************/
+
+#include "proc/asset/struct.hpp"
+#include "proc/asset/procpatt.hpp"
+#include "proc/asset/track.hpp"
+#include "proc/asset/pipe.hpp"
+
+
+namespace asset
+  {
+  
+  template shared_ptr<Pipe>     StructFactory::operator() (const Query<Pipe>& query);
+  template shared_ptr<Track>    StructFactory::operator() (const Query<Track>& query);
+  template PProcPatt            StructFactory::operator() (const Query<const ProcPatt>& query);
+
+  
 } // namespace asset

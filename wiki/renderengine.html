@@ -564,8 +564,8 @@ For every Asset we generate a __Ident tuple__ and a long ID (hash) derived from 
 <div title="AssetManager" modifier="Ichthyostega" created="200709200300" changecount="1">
 <pre>The Asset Manager provides an Interface to some internal Database holding all Assets in the current Session and System state. It may be a real Database at some point (and for the moment it's a Hashtable). Each [[Asset]] is registered automatically with the Asset Manager; it can be queried either by it's //identification tuple// or by it's unique ID.</pre>
 </div>
-<div title="AttachedPlacementProblem" modifier="Ichthyostega" modified="200801121214" created="200801111305" tags="impl draft dynamic" changecount="2">
-<pre>Placing an MObject relatively to another object such that it should be handled as //attached // to the latter results in several implementation problems. The typical use case is that of an effect attached to a clip or processing pipe.
+<div title="AttachedPlacementProblem" modifier="Ichthyostega" modified="200804121736" created="200801111305" tags="impl draft dynamic" changecount="3">
+<pre>Placing an MObject relatively to another object such that it should be handled as //attached&amp;nbsp;// to the latter results in several implementation problems. The typical use case is that of an effect attached to a clip or processing pipe.
 * this attachment is not a globally fixed relation, rather, it typically exists only for some limited time span (e.g. the duration of the basic clip the effect is attached to)
 * the order of attachment is important and the attached placement may create a fork in the signal flow, so we need a way for specifying reproducibly how the resulting wiring should be
 * when building, we access the information in reversed direction: we have the target object and need to query for all attachements
@@ -578,7 +578,7 @@ The first step towards an solution is to isolate the problem; obviously we //nee
 [img[how to implement Automation|uml/fig129669.png]]
 </pre>
 </div>
-<div title="BasicBuildingOperations" modifier="Ichthyostega" modified="200801111146" created="200712040334" tags="design dynamic Builder" changecount="22">
+<div title="BasicBuildingOperations" modifier="Ichthyostega" modified="200804121734" created="200712040334" tags="design dynamic Builder" changecount="23">
 <pre>Starting out from the concepts of Objects, Placement to Tracks, render Pipes and connection properties (&amp;rarr; see [[here|TrackPipeEDL]]) within the EDL, we can identify the elementary operations occuring within the Builder. Overall, the Builder is organized as application of //visiting tools// to a collection of objects, so finally we have to consider some object kind appearing in the working function of the given builder tool, which holds at this moment some //context//. The job now is to organize this context such as to create a predictable build process from this //event driven// approach.
 
 !Builder working Situations
@@ -589,7 +589,7 @@ The first step towards an solution is to isolate the problem; obviously we //nee
 ##* effectively this is an application of effects
 ## at this point we have to process (and maybe generate on-the-fly) the [[source port of this clip|ClipSourcePort]]
 ##* the output of the source reading and preprocessing defined thus far is delivered as input to this port, which is done by a ~WiringRequest (see below)
-##* as every port, it is the entry point to a [[processing pipe|Pipe], thus the source port has a processing pattern, typically inserting the camera (transformation effect) at this point
+##* as every port, it is the entry point to a [[processing pipe|Pipe]], thus the source port has a processing pattern, typically inserting the camera (transformation effect) at this point
 ## followed by the application of effects
 ##* separately for every effect chain rooted (placed) directly onto the clip
 ##* and regarding the chaining order
@@ -792,12 +792,52 @@ TertiaryMid: #99a
 TertiaryDark: #667
 Error: #f88</pre>
 </div>
-<div title="ConfigQuery" modifier="Ichthyostega" modified="200801181309" created="200801181308" tags="def" changecount="4">
+<div title="ConfigQuery" modifier="Ichthyostega" modified="200804110335" created="200801181308" tags="def" changecount="5">
 <pre>Configuration Queries are requests to the system to &quot;create or retrieve an object with //this and that // capabilities&quot;. They are resolved by a rule based system ({{red{planned feature}}}) and the user can extend the used rules for each Session. Syntactically, they are stated in ''prolog'' syntax as a conjunction (=logical and) of ''predicates'', for example {{{stream(mpeg), pipe(myPipe)}}}. Queries are typed to the kind of expected result object: {{{Query&lt;Pipe&gt; (&quot;stream(mpeg)&quot;)}}} requests a pipe excepting/delivering mpeg stream data &amp;mdash; and it depends on the current configuration what &quot;mpeg&quot; means. If there is any stream data producing component in the system, which advertises to deliver {{{stream(mpeg)}}}, and a pipe can be configured or connected with this component, then the [[defaults manager|DefaultsManagement]] will create/deliver a [[Pipe|PipeHandling]] object configured accordingly.
 &amp;rarr; [[Configuration Rules system|ConfigRules]]
+&amp;rarr; [[accessing and integrating configuration queries|ConfigQueryIntegration]]
 </pre>
 </div>
-<div title="ConfigRules" modifier="Ichthyostega" modified="200802130339" created="200801171352" tags="overview spec" changecount="8">
+<div title="ConfigQueryIntegration" modifier="Ichthyostega" modified="200804110350" created="200804070247" tags="overview draft impl" changecount="17">
+<pre>* planning to embed a YAP Prolog engine
+* currently just integrated by a table driven mock
+* the baseline is a bit more clear by now (4/08)
+
+&amp;rarr; see also ConfigRules
+&amp;rarr; see also DefaultsManagement
+
+!Use cases
+[&lt;img[when to run config queries|uml/fig131717.png]]
+
+The key idea is that there is a Rule Base &amp;mdash; partly contained in the session (building on a stock of standard rules supplied with the application). Now, whenever there is the need to get a new object, for adding it to the session or for using associated with another object &amp;mdash; then instead of creating it by a direct hard wired ctor call, we issue a ConfigQuery requesting an object of the given type with some //capabilities// defined by predicates. The same holds true when loading an existing session: some objects won't be loaded back blindly, rather they will be re-created by issuing the config queries again. Especially important is the case of (re)creating a [[processing pattern|ProcPatt]] guiding how to wire up the processing pipeline for some given media.
+
+At various places, instead of requiring a fixed set of capabilities, it is possible to request a &quot;default configured&quot; object instead, specifying just those capabilities we really need to be configured in a specific way. This is done by using the [[Defaults Manager|DefaultsManagement]] accessible on the [[Session]] interface. Such a default object query may either retrieve an already existing object instance, run further config queries, and finally result in the invocation of a factory for creating new objects &amp;mdash; just as necessary and guarded by the rules.
+
+@@clear(left):display(block):@@
+
+!Components and Relations
+[&gt;img[participating classes|uml/fig131461.png]]
+
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+&lt;br/&gt;
+
+Access point is the interface {{{ConfigRules}}}, which allowes to resolve a ConfigQuery resulting in an object with properties condigured such as to fulfill the query. This whole subsystem employes quite some generic programming, because actually we don't deal with &quot;objects&quot;, but rather with similar instantiations of the same functionality for a collection of different object types. For the purpose of resolving these queries, the actual kind of object is not so much of importance, but on the caller sinde, of course we want to deal with the result of the queries in a typesafe manner.
+Examples for //participating object kinds// are [[pipes|Pipe]], [[processing patterns|ProcPatt]], effect instances, [[tags|Tag]], [[labels|Label]], [[automation data sets|AutomationData]],...
+@@clear(right):display(block):@@
+For this to work, we need each of the //participating object types// to implement a generic interface {{{TypeHandler}}}, which will provide actual C/C++ implementations for the predicates usable on objects of this type within the Prolog rules. The implementation has to make sure that alongside with each config query, there are additional //type constraints// to be regarded. For example, if the client code runs a {{{Query&lt;Pipe&gt;}}}, an additional //type guard// (implemented by a predicate {{{type(pipe)}}} has to be inserted, so only rules and facts in accordance with this type will be used for resolution.
+
+
+!when querying for a [[&quot;default&quot;|DefaultsManagement]] object
+[&lt;img[colaboration when issuing a defaults query|uml/fig131845.png]]
+
+@@clear(left):display(block):@@</pre>
+</div>
+<div title="ConfigRules" modifier="Ichthyostega" modified="200804110334" created="200801171352" tags="overview spec" changecount="13">
 <pre>Many features can be implemented by specifically configuring and wiring some unspecific components. Rather than tie the client code in need of some given feature to these configuration internals, in Lumiera the client can //query // for some kind of object providing the //needed capabilities. // Right from start (summer 2007), Ichthyo had the intention to implement such a feature using sort of a ''declarative database'', e.g. by embedding a Prolog system. By adding rules to the basic session configuration, users should be able to customize the semi-automatic part of Lumiera's behaviour to great extent.
 
 [[Configuration Queries|ConfigQuery]] are used at various places, when creating and adding new objects, as well when building or optimizing the render engine node network.
@@ -808,7 +848,7 @@ Error: #f88</pre>
 
 !anatomy of a Configuration Query
 The query is given as a number of logic predicates, which are required to be true. Syntactically, it is a string in prolog syntax, e.g. {{{stream(mpeg)}}}, where &quot;stream&quot; is the //predicate, // meaning here &quot;the stream type is...?&quot; and &quot;mpeg&quot; is a //term // denoting an actual property, object, thing, number etc &amp;mdash; the actual kind of stream in the given example. Multible comma separated predicates are combined with logical &quot;and&quot;. Terms may be //variable // at start, which is denoted syntactically by starting them with a uppercase letter. But any variable term need to be //bound //  to some known value while computing the solution to the query, otherwise the query fails. A failed query is treated as a local failure, which may cause some operation being aborted or just some other possibility being chosen.
-Queries are represented by instantiations of the {{{Query&lt;TYPE&gt;}}} template, because their actual meaning is &quot;retrieve or create an object of TYPE, configured such that...!&quot;. At the C++ side, this ensures type safety and fosters programming against interfaces, while being implemented rule-wise by silently prepending the query with the predicate &quot;{{{object(tYPE)}}}&quot;
+Queries are represented by instantiations of the {{{Query&lt;TYPE&gt;}}} template, because their actual meaning is &quot;retrieve or create an object of TYPE, configured such that...!&quot;. At the C++ side, this ensures type safety and fosters programming against interfaces, while being implemented rule-wise by silently prepending the query with the predicate &quot;{{{object(TYPE)}}}&quot;
 
 !executing a Configuration Query
 Actually posing such an configuration query, for example to the [[Defaults Manager in the Sessison|DefaultsManagement]], may trigger several actions: First it is checked against internal object registries (depending on the target object type), which may cause the delivery of an already existing object (as reference, clone, or smart pointer). Otherwise, the system tries to figure out an viable configuration for a newly created object instance, possibly by issuing recursive queries. In the most general case this may silently impose additional decisions onto the //execution context // of the query &amp;mdash; by default the session.
@@ -816,7 +856,11 @@ Actually posing such an configuration query, for example to the [[Defaults Manag
 !Implementation
 At start and for debugging/testing, there is an ''dummy'' implementation using a map with predefined queries and answers. But for the real system, the idea is to embed a ''YAP Prolog'' engine to run the queries. This includes the task of defining and loading a set of custom predicates, so the rule system can interact with the object oriented execution environment, for example by transforming some capability predicate into virtual calls to a corresponding object interface. We need a way for objects to declare some capability predicates, together with a functor that can be executed on an object instance (and further parameters) in the cause of the evaluation of some configuration query. Type safety and diagnostics play an important role here, because effectively the rule base is a pool of code open for arbitray additions from the user session.
 &amp;rarr; [[considerations for a Prolog based implementation|QueryImplProlog]]
+&amp;rarr; [[accessing and integrating configuration queries|ConfigQueryIntegration]]
 &amp;rarr; see {{{src/common/query/mockconfigrules.cpp}}} for the table with the hard wired (mock) answers
+
+
+{{red{WARN}}} there is an interference with the (planned) Undo function: a totally correct implementation of &quot;Undo&quot; would need to remember and restore the internal state of the query system (similar to backtracking). But, more generally, such an correct implementation is not achievable, because we are never able to capture and control the whole state of a real world system doing such advanced things like video and sound processing. Seemingly we have to accept that after undoing an action, there is no guarantee we can re-do it the same way as it was first time.
 
 </pre>
 </div>
@@ -839,9 +883,35 @@ This is an very important external Interface, because it links together all thre
 <pre>[[ProcLayer and Engine]]
 </pre>
 </div>
-<div title="DefaultsManagement" modifier="Ichthyostega" modified="200801171440" created="200801121708" tags="def spec" changecount="5">
-<pre>For several components and properties there is an implicit default value or configuration; it is stored alongside with the session. The intention is that defaults never create an error, instead, they are to be extended silently on demand. Objects configured according to this defaults can be retrieved at the [[Session]] interface by a set of overloaded functions {{{Session::current-&gt;default(Query&lt;TYPE&gt; (&quot;query string&quot;))}}}, where the //query string // defines a capability query similar to what is employed for pipes, stream types, codecs etc. The Queries are implemented by [[configuration rules|ConfigRules]]
+<div title="DefaultsImplementation" modifier="Ichthyostega" modified="200804010137" created="200802200043" tags="spec impl draft" changecount="11">
+<pre>As detailed in the [[definition|DefaultsManagement]], {{{default(Obj)}}} is sort of a Joker along the lines &quot;give me a suitable Object and I don't care for further details&quot;. Actually, default objects are implemented by the {{{mobject::session::DefsManager}}}, which remembers and keeps track of anything labeled as &quot;default&quot;. This defaults manager is a singleton and can be accessed via the [[Session]] interface, meaning that the memory track regarding defaults is part of the session state. Accessing an object via the query for an default actually //tagges// this object (storing a weak ref in the ~DefsManager). Alongside with each object successfully queried via &quot;default&quot;, the degree of constriction is remembered, i.e. the number of additional conditions contained in the query. This enables us to search for default objects starting with the most unspecific.
+
+!Skeleton
+# ''search'': using the predicate {{{default(X)}}} enumerates existing objects of suitable type
+#* candidates are delivered starting with the least constrained default
+#* the argument is unified
+#** if the rest of the query succeeds we've found our //default object// and are happy.
+#** otherwise, if all enumerated solutions are exhausted without success, we enter
+# ''default creation'': try to get an object fulfilling the conditions and remember this situation
+#* we issue an ConfigQuery with the query terms //minus// the {{{default(X)}}} predicate
+#* it depends on the circumstances how this query is handled. Typically the query resolution first searches existing objects and then creates a new instance to match the required capabilities. Usually, this process succeeds, but there can be configurations leading to failure.
+#** failing the ~ConfigQuery is considered an (non-critical) exception (throws), as defaults queries are supposed to succeed
+#** otherwise, the newly created object is remembered (tagged) as new default, together with the degree of constriction
+
+!!!Implementation details
+Taken precisely, the &quot;degree of constriction&quot; yields only a partial ordering &amp;mdash; but as the &quot;default&quot;-predicate is sort of a existential quantification anyways, its sole purpose is to avoid polluting the session with unnecessary default objects, and we don't need to care for absolute precision. A suitable approximation is to count the number of predicates terms in the query and use a (sorted) set (separate for each Type) to store weak refs to the the objects tagged as &quot;default&quot;
+{{red{WARN}}} there is an interference with the (planned) Undo function. This is a general problem of the config queries; just ignoring this issue seems reasonable.
+
+!!!Problems with the (preliminary) mock implementation
+As we don't have a Prolog interpreter on board yet, we utilize a mock store with preconfigured answers. (see {{{MockConfigQuery}}}). As this preliminary solution is lacking the ability to create new objects, we need to resort to some trickery here (please look away). The overall logic is quite broken, because the system isn't capable to do any real resolution &amp;mdash; if we ignore this fact, the rest of the algorithm can be implemented, tested and used right now.
 </pre>
+</div>
+<div title="DefaultsManagement" modifier="Ichthyostega" modified="200803212244" created="200801121708" tags="def spec" changecount="12">
+<pre>For several components and properties there is an implicit default value or configuration; it is stored alongside with the session. The intention is that defaults never create an error, instead, they are to be extended silently on demand. Objects configured according to this defaults can be retrieved at the [[Session]] interface by a set of overloaded functions {{{Session::current-&gt;default(Query&lt;TYPE&gt; (&quot;query string&quot;))}}}, where the //query string // defines a capability query similar to what is employed for pipes, stream types, codecs etc. This query mechanism is implemented by [[configuration rules|ConfigRules]]
+
+!!!!what is denoted by {{{default}}}?
+{{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding a exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one soltution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
+&amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
 <div title="DesignDecisions" modifier="Ichthyostega" modified="200801062304" created="200801062209" tags="decision design discuss" changecount="17">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
@@ -932,8 +1002,9 @@ After beeing processed by the Builder, we get the following Render Engine config
 [img[Example1: generated Render Engine|uml/fig129029.png]]
 </pre>
 </div>
-<div title="Example2" modifier="Ichthyostega" created="200706220251" tags="example" changecount="1">
-<pre>This Example showes the //high level// EDL as well. This needs to be transformed into a Fixture by some facility still to be designed. Basically, each [[Placement]] needs to be queried for this to get the corresponding ExplicitPlacement. The difficult part is to handle possible Placement constraints, e.g. one clip can't be placed at a timespan covered by another clip on the same track. In the current Cinelerra2, all of this is done directly by the GUI actions.
+<div title="Example2" modifier="Ichthyostega" modified="200804100035" created="200706220251" tags="example" changecount="2">
+<pre>{{red{TODO: seemingly this example is slightly outdated, as the implementation of placements is now indirect via LocatingPin objects}}}
+This Example showes the //high level// EDL as well. This needs to be transformed into a Fixture by some facility still to be designed. Basically, each [[Placement]] needs to be queried for this to get the corresponding ExplicitPlacement. The difficult part is to handle possible Placement constraints, e.g. one clip can't be placed at a timespan covered by another clip on the same track. In the current Cinelerra2, all of this is done directly by the GUI actions.
 
 The &amp;raquo;Timeline&amp;laquo; is a sequence of ~MObjects -- note: using the same Object instances -- but now with the calculated ExplicitPlacement, locating the clip at a given time and track. The effect is located absolutely in time as well, but because it is the same Instance, it has the pointer to the ~RelativePlacement, wich basically attaches the effect to the clip. This structure may look complicated, but is easy to process if we go &quot;backward&quot; and just rely on the information contained in the ExplicitPlacement.
 [img[Example2: Clip with Effect and generated Fixture for this EDL|uml/fig128901.png]]
@@ -1111,7 +1182,7 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200802031829" created="200708080322" tags="overview" changecount="21">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200804070244" created="200708080322" tags="overview" changecount="22">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1125,6 +1196,7 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 * [[using the Visitor pattern?|VisitorUse]] &amp;mdash; resulting in [[»Visiting-Tool« library implementation|VisitingToolImpl]]
 * [[Handling of Tracks and render Pipes in the EDL|TrackPipeEDL]]. [[Handling of Tracks|TrackHandling]] and [[Pipes|PipeHandling]]
 * [[getting default configured|DefaultsManagement]] Objects relying on [[rule-based Configuration Queries|ConfigRules]]
+* [[integrating the Config Query system|ConfigQueryIntegration]]
 * [[identifying the basic Builder operations|BasicBuildingOperations]] and [[planning the Implementation|PlanningNodeCreatorTool]]
 * [[how to handle »attached placement«|AttachedPlacementProblem]]
 </pre>
@@ -1662,8 +1734,13 @@ But because I know the opinions on this topc are varying (users tend to be delig
 My proposed aproach is to treat OpenGL as a separate video raw data type, requiring separete and specialized [[Processing Nodes|ProcNode]] for all calculations. Thus the Builder could connect OpenGL nodes if it is possible to cover the whole render path for preview and fall back to the normal ~ProcNodes for all relevant renders
 </pre>
 </div>
-<div title="Overview" modifier="Ichthyostega" modified="200711122342" created="200706190300" tags="overview" changecount="6">
+<div title="Overview" modifier="Ichthyostega" modified="200804130018" created="200706190300" tags="overview" changecount="12">
 <pre>The Lumiera Processing Layer is comprised of various subsystems and can be separated into a low-level and a high-level part. At the low-level end is the [[Render Engine|OverviewRenderEngine]] which basically is a network of render nodes cooperating closely with the Backend Layer in order to carry out the actual playback and media transforming calculations. Whereas on the high-level side we find several different [[Media Objects|MObjects]] that can be placed into the [[EDL]], edited and manipulated. This is complemented by the [[Asset Management|Asset]], which is the &quot;bookkeeping view&quot; of all the different &quot;things&quot; within each [[Session|SessionOverview]].
+
+There is rather strong separation between these two levels, and &amp;mdash; &lt;br/&gt;correspondingly you'll encounter the data held within the Processing Layer organized in two different views, the ''high-level-model'' and the ''low-level-model''
+* from users (and GUI) perspective, you'll see a [[Session|SessionOverview]] with a timeline-like structure, where various [[Media Objects|MObjects]] are arranged and [[placed|Placement]]. By looking closer, you'll find that there are data connections and all processing is organized around processing chains or [[pipes|Pipe]], which can be either global (in the Session) or local (in real or [[virtual|VirtualClip]] clips)
+* when dealing with the actual calculations in the Engine (&amp;rarr; see OverviewRenderEngine), you won't find any Tracks, Media Objects or Pipes &amp;mdash; rather you'll find a network of interconnected [[render nodes|ProcNode]] forming the low level model. Each structurally constant segment of the timeline corresponds to a separate node network providing an ExitNode corresponding to each of the global pipes; pulling frames from them means running the engine.
+* it is the job of the [[Builder]] create and wire up this render nodes network when provided with a given hig-level-model. So, actually the builder (together with the so called [[Fixture]]) form an isolation layer in the middle, separating the //editing part&amp;nbsp;// from the //processing part.//
 [img[Block Diagram|uml/fig128005.png]]
 </pre>
 </div>
@@ -2226,6 +2303,33 @@ DAMAGE.
 &lt;html&gt;&lt;sub&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;scrollAnchorVisible('Top',null, event)&quot;&gt;[Top]&lt;/sub&gt;&lt;/a&gt;&lt;/html&gt;
 ***/</pre>
 </div>
+<div title="Pipe" modifier="Ichthyostega" modified="200804110301" created="200801062110" tags="def decision" changecount="6">
+<pre>Pipes play an central role within the Proc Layer, because for everything placed and handled within the EDL, the final goal is to get it transformed into data which can be retrieved at some pipe's exit port. Pipes are special facilities, rather like inventory, separate and not treated like all the other objects.
+We don't distinguish between &quot;input&quot; and &quot;output&quot; ports &amp;mdash; rather, pipes are thought to be ''hooks for making connections to''. By following this line of thought, each pipe has an input side and an output side and is in itself something like a ''Bus'' or ''processing chain''. Other processing entities like effects and transitions can be placed (attached) at the pipe, resulting them to be appended to form this chain. Likewise, we can place [[wiring requests|WiringRequest]] to the pipe, meaning we want it connected so to send it's output to another destination pipe. The [[Builder]] may generate further wiring requests to fulfil the placement of other entities.
+Thus //Pipes are the basic building blocks// of the whole render network. We distinguish ''global available'' Pipes, which are like the sum groups of a mixing console, and the ''lokal pipe'' or [[source ports|ClipSourcePort]] of the individual clips, which exist only within the duration of the corresponding clip. The design //limits the possible kinds of pipes // to these two types &amp;mdash; thus we can build local processing chains at clips and global processing chains at the global pipes of the session and that's all we can do. (because of the flexibility which comes with the concept of [[placements|Placement]], this is no real limitation)
+
+The GUI can connect the viewer(s) to some pipe (and moreover can use [[probe points|ProbePoint]] placed like effects and connected to some pipe), and likewise, when starting a ''render'', we get the opportunity to specify the pipes to pull the data from. Pulling data from some pipe is the (only) way to activate the render nodes network reachable from this pipe.
+
+&amp;rarr; [[Handling of Tracks|TrackHandling]]
+&amp;rarr; [[Handling of Pipes|PipeHandling]]
+
+</pre>
+</div>
+<div title="PipeHandling" modifier="Ichthyostega" modified="200804061705" created="200801101352" tags="spec" changecount="10">
+<pre>!Identification
+Pipes are distinct objects and can be identified by their asset ~IDs. Besides, as for all [[structural assets|StructAsset]] there are extended query capabilities, including a symbolic pipe-id and a media (stream) type id. Any pipe can accept and deliver exactly one media stream kind (which may be inherently structured though, e.g. spatial sound systems or stereoscopic video)
+
+!creating pipes
+Pipe assets are created automatically by being used and referred. The [[Session]] holds a collection of global pipes, and further pipes can be created by using a new pipe reference in some placement. Moreover, every clip has an (implicit) [[source port|ClipSourcePort]], which will appear as pipe asset when first used (referred) while [[building|BuildProcess]]. Note that creating a new pipe implies using a [[processing pattern|ProcPatt]], which will be queried from the [[Defaults Manager|DefaultsManagement]] (resulting in the use of some preconfigured pattern or maybe the creation of a new ProcPatt object if necessary)
+
+!removal
+Deleting a Pipe is an advanced operation, because it includes finding and &quot;detaching&quot; all references, otherwise the pipe will leap back into existence immediately. Thus, global pipe entries in the Session and pipe references in [[locating pins|LocatingPin]] within any placement have to be removed, while clips using a given source port will be disabled. {{red{todo: implementation deferred}}}
+
+!using Pipes
+there is not much you can do directly with a pipe asset. It is an point of reference, after all. Any connection to some pipe is only temporarily done by a placement in some part of the timeline, so it isn't stored with the pipe. You can edit the (user visible) description an you can globally disable a pipe asset. The pipe's ID and media stream type of course are fixed, because any connection and referral (via the asset ID) is based on them. Later on, we should provide a {{{rewire(oldPipe, newPipe)}}} to search any ref to the {{{oldPipe}}} and try to rewrite it to use the {{{newPipe}}}, possibly with a new media stream type.
+Pipes are integrated with the [[management of defaults|DefaultsManagement]]. For example, any pipe uses implicitly some [[processing pattern|ProcPatt]] &amp;mdash; it may default to the empty pattern. This feature enables to apply some standard wiring to the pipes (e.g a fader for audio, similar to the classic mixing consoles). This //is // a global property of the pipe, but &amp;mdash; contrary to the stream type &amp;mdash; this pattern may be switched
+</pre>
+</div>
 <div title="Placement" modifier="Ichthyostega" modified="200710100120" created="200706220306" tags="def" changecount="6">
 <pre>A Placement represents a //relation:// it is always linked to a //Subject// (this being a [[Media Object|MObject]]) and has the meaning to //place// this Subject in some manner, either relatively to other Media Objects, or by some Constraint or simply absolute at (time,track). The latter case is especially important and represented by a special [[Sub-Interface|ExplicitPlacement]]
 
@@ -2351,34 +2455,6 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 //Note, we have yet to specify how exactly the building and rendering will work together with the backend. There are several possibilities how to structure the Playlist//
 </pre>
 </div>
-<div title="Pipe" modifier="Ichthyostega" modified="200802101340" created="200801062110" tags="def decision" changecount="5">
-<pre>
-Pipes play an central role within the Proc Layer, because for everything placed and handled within the EDL, the final goal is to get it transformed into data which can be retrieved at some pipe's exit port. Pipes are special facilities, rather like inventory, separate and not treated like all the other objects.
-We don't distinguish between &quot;input&quot; and &quot;output&quot; ports &amp;mdash; rather, pipes are thought to be ''hooks for making connections to''. By following this line of thought, each pipe has an input side and an output side and is in itself something like a ''Bus'' or ''processing chain''. Other processing entities like effects and transitions can be placed (attached) at the pipe, resulting them to be appended to form this chain. Likewise, we can place [[wiring requests|WiringRequest]] to the pipe, meaning we want it connected so to send it's output to another destination pipe. The [[Builder]] may generate further wiring requests to fulfil the placement of other entities.
-Thus //Pipes are the basic building blocks// of the whole render network. We distinguish ''global available'' Pipes, which are like the sum groups of a mixing console, and the ''lokal pipe'' or [[source port|ClipSourcePort]] of the individual clips, which exist only within the duration of the corresponding clip. The design //limits the possible kinds of pipes // to these two types &amp;mdash; thus we can build local processing chains at clips and global processing chains at the global pipes of the session and that's all we can do. (because of the flexibility which comes with the concept of [[placements|Placement]], this is no real limitation)
-
-The GUI can connect the viewer(s) to some pipe (and moreover can use [[probe points|ProbePoint]] placed like effects and connected to some pipe), and likewise, when starting a ''render'', we get the opportunity to specify the pipes to pull the data from. Pulling data from some pipe is the (only) way to activate the render nodes network reachable from this pipe.
-
-&amp;rarr; [[Handling of Tracks|TrackHandling]]
-&amp;rarr; [[Handling of Pipes|PipeHandling]]
-
-</pre>
-</div>
-<div title="PipeHandling" modifier="Ichthyostega" modified="200801121656" created="200801101352" tags="spec" changecount="9">
-<pre>!Identification
-Pipes are distinct objects and can be identified by their asset ~IDs. Besides, as for all [[structural assets|StructAsset]] there are extended query capabilities, including a symbolic pipe-id and a media (stream) type id. Any pipe can accept and deliver exactly one media stream kind (which may be inherently structured though, e.g. spatial sound systems or stereoscopic video)
-
-!creating pipes
-Pipe assets are created automatically by being used and referred. The [[Session]] holds a collection of global pipes, and further pipes can be created by using an new pipe reference in some placement. Moreover, every clip has an (implicit) [[source port|ClipSourcePort]], which will appear as pipe asset when first used (referred) while [[building|BuildProcess]].
-
-!removal
-Deleting a Pipe is an advanced operation, because it includes finding and &quot;detaching&quot; all references, otherwise the pipe will leap back into existence immediately. Thus, global pipe entries in the Session and pipe references in [[locating pins|LocatingPin]] within any placement have to be removed, while clips using a given source port will be disabled. {{red{todo: implementation deferred}}}
-
-!using Pipes
-there is not much you can do directly with a pipe asset. It is an point of reference, after all. Any connection to some pipe is only temporarily done by a placement in some part of the timeline, so it isn't stored with the pipe. You can edit the (user visible) description an you can globally disable a pipe asset. The pipe's ID and media stream type of course are fixed, because any connection and referral (via the asset ID) is based on them. Later on, we should provide a {{{rewire(oldPipe, newPipe)}}} to search any ref to the {{{oldPipe}}} and try to rewrite it to use the {{{newPipe}}}, possibly with a new media stream type.
-Pipes are integrated with the [[management of defaults|DefaultsManagement]]. For example, any pipe uses implicitly some [[processing pattern|ProcPatt]] &amp;mdash; it may default to the empty pattern. This feature enables to apply some standard wiring to the pipes (e.g a fader for audio, similar to the classic mixing consoles). This //is // a global property of the pipe, but &amp;mdash; contrary to the stream type &amp;mdash; this pattern may be switched
-</pre>
-</div>
 <div title="ProblemsTodo" modifier="Ichthyostega" modified="200709251721" created="200708050524" tags="design discuss" changecount="15">
 <pre>Open issues, Things to be worked out, Problems still to be solved... 
 
@@ -2437,12 +2513,13 @@ Besides, they provide an important __inward interface__ for the [[ProcNode]]s, w
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200802031830" created="200706190056" tags="overview" changecount="4">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200804122354" created="200706190056" tags="overview" changecount="9">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
 &lt;&lt;&lt;
 ''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the foundations and main structures in C++
 * basic AssetManager working
 * currently impmenenting the Builder (&amp;rarr;[[more|PlanningNodeCreatorTool]])
+* intermittently working out how to deal with &amp;rarr; [[ConfigQueries / default objects|ConfigQueryIntegration]])
 &lt;&lt;&lt;
 
 !Summary
@@ -2454,11 +2531,12 @@ The system is ''open'' inasmuch every part mirrors the structure of correspondin
 
 !!see also
 &amp;rarr; [[Overview]] of Subsystems and Components, and DesignGoals
-&amp;rarr; [[An Introduction|WalkThrough]] discussing the key features
-&amp;rarr; [[Overview Render Engine|OverviewRenderEngine]]
+&amp;rarr; [[An Introduction|WalkThrough]] discussing the central points of this design
+&amp;rarr; [[Overview Session (high level model)|SessionOverview]]
+&amp;rarr; [[Overview Render Engine (low level model)|OverviewRenderEngine]]
 &amp;rarr; BuildProcess and RenderProcess
 &amp;rarr; [[Two Examples|Examples]] (Object diagrams) 
-&amp;rarr; how [[Automation]] works  {{red{to be defined in more detail}}}
+&amp;rarr; how [[Automation]] works
 &amp;rarr; [[Problems|ProblemsTodo]] to be solved and notable [[design decisions|DesignDecisions]]
 &amp;rarr; [[Implementation Details|ImplementationDetails]] {{red{WIP}}}
 </pre>
@@ -2467,13 +2545,13 @@ The system is ''open'' inasmuch every part mirrors the structure of correspondin
 <pre>A data processing node within the Render Engine. Its key feature is the possibility to pull from it one (freely addressable) [[Frame]] of calculated data. Further, each ~ProcNode has the ability to be wired with other nodes and [[Parameter Providers|ParamProvider]]
 </pre>
 </div>
-<div title="ProcPatt" modifier="Ichthyostega" modified="200709212329" created="200709212315" tags="def design" changecount="4">
+<div title="ProcPatt" modifier="Ichthyostega" modified="200804102256" created="200709212315" tags="def design" changecount="5">
 <pre>This special type of [[structural Asset|StructAsset]] represents information how to build some part of the render engine's processing nodes network. It can be thought of as a template or blueprint for construction. Most notably, it is used for creating nodes reading, decoding and delivering source media material to the render network. Each [[media Asset|MediaAsset]] has associated processing patterns describing the codecs and other transformations needed to get at the media data of this asset. (and because media assets are typically compound objects, the referred ~ProcPatt will be compound too). Obviously, the possibilities opened by using processing patterns go far beyond.
 
 Technically, a processing pattern is a list of building instructions, which will be //executed// by the [[Builder]] on the render node network under construction. This implies the possibility to define further instruction kinds when needed in future; at the moment the relevant sorts of instructions are
 * attach the given sequence of nodes to the specified point
 * recursively execute a nested ~ProcPatt
-More specifically, a sequence of nodes is given by a sequence of prototypical effect and codec assets (and from each of them we can create the corresponding render node). And the point to attach these nodes is given by an identifier &amp;mdash; in most cases just &quot;{{current}}&quot;, denoting the point the builder was just working at, when he treated some MObject which in turn yielded this processing pattern in question.
+More specifically, a sequence of nodes is given by a sequence of prototypical effect and codec assets (and from each of them we can create the corresponding render node). And the point to attach these nodes is given by an identifier &amp;mdash; in most cases just &quot;{{{current}}}&quot;, denoting the point the builder was just working at, when he treated some MObject which in turn yielded this processing pattern in question.
 
 Like all [[structural assets|StructAsset]], ~ProcPatt employs a special naming scheme within the asset name field, which directly mirrors its purpose and allows to bind to existing processing pattern instances when needed. The idea is letting all assets in need of a similar processing pattern refer to one shared ~ProcPatt instance. For example, within a MPEG video media asset, at some point there will be a ~ProcPatt labeled &quot;{{{stream(mpeg)}}}&quot;. In consequence, all MPEG video will use the same pattern of node wiring. And, of course, this pattern could be changed, either globally, or by binding a single clip to some other processing pattern (for making a punctual exception from the general rule)
 
@@ -2484,21 +2562,21 @@ Like all [[structural assets|StructAsset]], ~ProcPatt employs a special naming s
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
-<div title="QueryImplProlog" modifier="Ichthyostega" modified="200801270339" created="200801202321" tags="draft design" changecount="14">
+<div title="QueryImplProlog" modifier="Ichthyostega" modified="200802291526" created="200801202321" tags="draft design" changecount="17">
 <pre>//obviously, getting this one to work requires quite a lot of technical details to be planned and implemented.// This said...
-The intention is to get much more readable (&quot;declarative&quot;) and changeable configuration as by programming it directly within the implementation of some object.
+The intention is to get much more readable (&quot;declarative&quot;) and changeable configuration as by programming the decision logic literately within the implementation of some object.
 
 !Draft
 As an example, specifying how a Track can be configured for connecting automatically to some &quot;mpeg&quot; bus (=pipe)
 {{{
-retrieve(O, Cap) :- find(O), capabilities(Cap).
-retrieve(O, Cap) :- make(O), capabilities(Cap).
+resolve(O, Cap) :- find(O), capabilities(Cap).
+resolve(O, Cap) :- make(O), capabilities(Cap).
 capabilities(Q) :- call(Q).
 
-stream(T, mpeg) :- type(T, track), type(P, pipe), retrieve(P, stream(P,mpeg)), place_to(P, T).
+stream(T, mpeg) :- type(T, track), type(P, pipe), resolve(P, stream(P,mpeg)), place_to(P, T).
 }}}
 
-Then, running the goal {{{:-retrieve(T, stream(T,mpeg)).}}} would search a Track object, try to retrieve a pipe object with stream-type=mpeg and associate the track with this pipe. This relies on a predicate &quot;stream(P,mpeg)&quot; implemented (natively) for the pipe object. So, &quot;Cap&quot; is the query issued from calling code &amp;mdash; here {{{stream(T,mpeg)}}}, the type guard {{{type(T, track)}}} will probably be handled or inserted automatically, while the predicate implementations for find/1, make/1, stream/2, and place_to/2 are to be provided by the target types.
+Then, running the goal {{{:-resolve(T, stream(T,mpeg)).}}} would search a Track object, try to retrieve a pipe object with stream-type=mpeg and associate the track with this pipe. This relies on a predicate &quot;stream(P,mpeg)&quot; implemented (natively) for the pipe object. So, &quot;Cap&quot; is the query issued from calling code &amp;mdash; here {{{stream(T,mpeg)}}}, the type guard {{{type(T, track)}}} will probably be handled or inserted automatically, while the predicate implementations for find/1, make/1, stream/2, and place_to/2 are to be provided by the target types.
 * __The supporting system__ had to combine several code snippets into one rule system to be used for running queries, with some global base rules, rules injected by each individual participating object kind and finally user provided rules added by the current session. The actual query is bound to &quot;Cap&quot; (and consequently run as a goal by {{{call(Q)}}}). The implementation needs to provide a symbol table associating variable terms (like &quot;T&quot; or &quot;P&quot;) to C/C++ object types, enabling the participating object kinds to register their specific predicate implementations. This is crucial, because there can be no general scheme of object-provided predicates (for each object kind different predicates make sense, e.g. [[pipes|PipeHandling]] have other possibilities than [[wiring requests|WiringRequest]]). Basically, a query issues a Prolog goal, which in turn evaluates domain specific predicates provided by the participating objects and thus calls back into C/C++ code. The supporting system maintains the internal connection (via the &quot;type&quot; predicate) such that from Prolog viewpoint it looks as if we were binding Variables directly to object instances. (there are some nasty technical details because of the backtracking nature of Prolog evaluations which need to be hidden away)
 * Any __participating object kind__ needs a way to declare domain specific predicates, thus triggering the registration of the necessary hooks within the supporting system. Moreover, it should be able to inject further prolog code (as shown in the example above with the {{{strem(T, mpeg)}}} predicate. For each of these new domain specific predicates, there needs to be a functor which can be invoked when the C implementation of the predicate is called from Prolog (in some cases even later, when the final solution is &quot;executed&quot;, e.g. a new instance has been created and now some properties need to be set).
 
@@ -2763,7 +2841,7 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 * a collection of ''global Pipes''
 * the ''Fixture'' with a possibility to [[(re)build it|PlanningBuildFixture]]</pre>
 </div>
-<div title="SessionOverview" modifier="Ichthyostega" modified="200801061947" created="200709272105" tags="design" changecount="15">
+<div title="SessionOverview" modifier="Ichthyostega" modified="200804122351" created="200709272105" tags="design" changecount="21">
 <pre>The [[Session]] (sometimes also called //Project//) contains all informations and objects to be edited by the User. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration, all being represented as [[Asset]]. At any given time, there is //only one current session// opened within the application.
 
 !!!larger projects
@@ -2773,14 +2851,14 @@ For larger editing projects the simple structure of a session containing &quot;t
 With all the structural complexities possible within such a session, we need an isolation layer to provide __one__ definitive state where all configuration has been made explicit. Thus the session manages one special object list, the [[Fixture]], which can be seen as all currently active objects placed onto a single timeline.
 
 !!!organisational devices
-The possibility of having multiple ~EDLs helps organizing larger projects. Each [[EDL]] is just a logical grouping; because all effective properties of any MObject within this EDL are defined by the ~MObject itself and the [[Placement]], by which the object is anchored to some time point, some track, can be connected to some pipe, or linked to another object. In a similar manner, Tracks are just another organisational aid for grouping objects, disabling them and defining common output pipes.
+The possibility of having multiple ~EDLs helps organizing larger projects. Each [[EDL]] is just a logical grouping; because all effective properties of any MObject within this EDL are defined by the ~MObject itself and the [[Placement]], by which the object is anchored to some time point, some track, can be connected to some pipe, or linked to another object. In a similar manner, [[Tracks|Track]] are just another organisational aid for grouping objects, disabling them and defining common output pipes.
 
 !!!global pipes
-Any session should contain a number of global [[(destination) pipes|Pipe]], typically video out and audio out. The goal is, to get any content producing or transforming object in some way connected to one of these outputs, either //by [[placing|Placement]] it directly// to some pipe, or by //placing it to a track// and having the track refer to some pipe. Besides the global destination pipes, we can use internal pipes to form busses or subgroups, either on a global (session) level, or by using the processing pipe within a [[virtual clip|VirtualClip]], which can be placed freely within the ~EDLs. Normally, pipes just gather and mix data, but of course any pipe can have an attached effect chain. (&amp;rarr; see [[more on Tracks and Pipes within the EDL|TrackPipeEDL]])
+[&gt;img[draw/Proc.builder1.png]] Any session should contain a number of global [[(destination) pipes|Pipe]], typically video out and audio out. The goal is, to get any content producing or transforming object in some way connected to one of these outputs, either //by [[placing|Placement]] it directly// to some pipe, or by //placing it to a track// and having the track refer to some pipe. Besides the global destination pipes, we can use internal pipes to form busses or subgroups, either on a global (session) level, or by using the processing pipe within a [[virtual clip|VirtualClip]], which can be placed freely within the EDL(s). Normally, pipes just gather and mix data, but of course any pipe can have an attached effect chain. (&amp;rarr; see [[more on Tracks and Pipes within the EDL|TrackPipeEDL]])
 
 !!!default configuration
-[&gt;img[draw/Proc.builder1.png]]While all these possibilities may seem daunting, there is a simple default configuration loaded into any pristine new session:
-It will contain a global video and audio out pipe, just one EDL with one track; this track will have a internal video and audio pipe (bus) configured with one fading device sending to the global output ports. So, by adding some clip with a simple absolute placement to this track and some time position, the clip gets connected and rendered, after [[(re)building|PlanningBuildFixture]] the [[Fixture]] and passing the result to the [[Builder]] &amp;mdash; and using the resulting render nodes network (Render Engine).
+While all these possibilities may seem daunting, there is a simple default configuration loaded into any pristine new session:
+It will contain a global video and audio out pipe, just one EDL with a single track; this track will have a internal video and audio pipe (bus) configured with one fading device sending to the global output ports. So, by adding some clip with a simple absolute placement to this track and some time position, the clip gets connected and rendered, after [[(re)building|PlanningBuildFixture]] the [[Fixture]] and passing the result to the [[Builder]] &amp;mdash; and using the resulting render nodes network (Render Engine).
 </pre>
 </div>
 <div title="SideBarOptions" modifier="CehTeh" created="200706200048" changecount="1">
@@ -4064,6 +4142,38 @@ Of course, we can place other ~MObjects relative to some track (that's the main 
 &amp;rarr; [[Handling of Pipes|PipeHandling]]
 </pre>
 </div>
+<div title="TrackHandling" modifier="Ichthyostega" modified="200804110259" created="200804110013" tags="spec" changecount="23">
+<pre>What //exactly&amp;nbsp;// is denoted by &amp;raquo;Track&amp;laquo; &amp;mdash; //basically&amp;nbsp;// a working area to group media objects placed at this track at various time positions &amp;mdash; varies depending on context:
+* viewed as [[structural asset|StructAsset]], tracks are nothing but global identifiers (possibly with attached tags and description)
+* regarding the structure //within each [[EDL]],// tracks form a tree-like grid, the individual track being attached to this tree by a [[Placement]], thus setting up properties of placement (time reference origin, output connection, layer, pan) which will be inherited down to any objects located on this track and on child tracks, if not overridden more locally.
+* with respect to //object identity,// a given track-ID can have an incarnation or manifestation as real track-object within several [[EDLs|EDL]] (meaning you could select, disable or choose for rendering all objects in any EDL placed onto this track). Moreover, the track-//object// and the //placement&amp;nbsp;// of this track within the tree of tracks of a given EDL are two distinguishable entities (meaning a given track &amp;mdash; with a couple of objects located on it &amp;mdash; could be placed differently several times within the same EDL, for example with different start offset or with different layering, output mode or pan position)
+
+!Identification
+Tracks thus represent a blend of several concepts, but depending on the context it is allways clear which aspect is meant. Seen as [[assets|Asset]], tracks are known by a unique track-ID, which can be either [[queried|ConfigQuery]], or directly refered to by use of the asset-ID (which is a globally known hash). Usually, all referrals are via track-ID, including when you [[place|Placement]] an object onto a track. 
+Under some cincumstances though, especially from within the [[Builder]], we refer to a {{{Placement&lt;Track&gt;}}} rather, denoting a specific instantiation located at a distinct node within the tree of tracks of a given EDL. These latter referrals are always done by direct object reference, e.g. while traversing the track tree (generally there is no way to refer to a placement by name).
+
+!creating tracks
+Similar to [[pipes|Pipe]] and [[processing patterns|ProcPatt]], track-assets need not be created, but rather leap into existence on first referral. On the contrary, you need to explicitly create the {{{Placement&lt;Track&gt;}}} for attaching it to some node within the tree of tracks of an EDL. The public access point for creating such a placement is {{{asset::Struct::create(trackID}}} (i.e. the {{{asset::StructFactory}}}), which, as a convenience shortcut, can also be accessed from the interface of the track-objects within the EDL for adding new child tracks to a given track.
+
+!removal
+Deleting a Track is an operation with drastic consequences, as it will cause the removal of all child tracks and the deletion of //all object placements to this track,// which could cause the resepctive objects to go out of scope (being deleted automatically by the placements or other smart pointer classes in charge of them). On the contrary, removing a {{{Placement&lt;Track&gt;}}} from the tree of tracks of an EDL will just cause all objects placed onto this track to disappear (because they are no longer reachable for the build process). On re-adding it, they will show up again. (This is how things behave based on how we defined the relations of the entities to be. Another question is if we want to make this functionality available to the user. Judging from the use of Ardour's &amp;laquo;Playlists&amp;raquo;, such a feature may be quite helpful).
+
+!using Tracks
+The '''Track Asset''' is a rather static object with limited capabilities. It's main purpose is to be a point of referral. Track assets have a description field and you may assign a list of [[tags|Tag]] to them (which could be used for binding ConfigRules).  Note that track assets are globally known within the session, they can't be limited to just one EDL (but you are allways free not to refer to some track from a given EDL). By virtue of this global nature, you can utilize the track assets to enable/disable a bunch of objects irrespective of what EDL they are located in, and probably it's a good idea to allow the selection of specific tracks for rendering.
+Matters are quite different for the placement of a Track within the tree of tracks of a given EDL, and for placing some media object onto a given track. The track placement defines properties which will be inherited to all objects on this track and on all child tracks and thus plays a key role for wiring the objects up to some output pipe. Typically, the top level track of each EDL has a placement-to &quot;the&quot; video and &quot;the&quot; audio master pipe.
+
+!!!!details to note
+* Tracks are global, but the placement of a track is local within one EDL
+* when objects are placed onto a track, this is done by referal to the global track asset ID. But because this placement of some media object is allways inherently contained within one EDL, the //meaning&amp;nbsp;// of such a placement is to connect to the properties of any track-placement of this given track //within this EDL.//
+* thus tracks-as-ID appear as something global, but tracks-as-propperty-carrier appear to the user as something local and object-like.
+* in an extreme case, you'll add two different placements of a track at different points within the track tree of an EDL. And because the objects placed onto a track refer to the global track-ID, every object &quot;on&quot; this track //within this EDL&amp;nbsp;// will show up two times independently and possibly with different inherited properties (output pipe, layering mode, pan, temporal position)
+* an interesting configuration results from the fact that you can use an EDL as a [[&quot;meta clip&quot; or &quot;virtual clip&quot;|VirtualClip]] within another EDL. In this case, you'll probably configure the tracks of the &quot;inner&quot; EDL such as to send their output not to a global pipe but rather to the [[source ports|ClipSourcePort]] of the virtual clip (which are effectively local pipes). Thus, within the &quot;outer&quot; EDL, you could attach effects to the virutal clip, combine it with transitions and place it onto another track, and any missing properties of this latter placement are to be resolved within the &quot;outer&quot; EDL &lt;br/&gt;(it would be perfectly legal to construct a contrieved example when using the same track-ID within &quot;inner&quot; and the &quot;outer&quot; EDL. Because the Placement of this track will probably be different in the both ~EDLs, the behaviour of this placement could be quite different in the &quot;inner&quot; and the &quot;outer&quot; EDL. All of this may seem weird when discussed here in a textual and logical manner, but when viewed within the context and meaning of the various entities of the application, it's rather the way you'd expect it to be: you work locally and things behave as defined locally)
+* note further, the root of the tree of tracks within each EDL //is itself again a //{{{Placement&lt;Track&gt;}}}. There is no necessitiy for doing it this way, but it seemed more stright forward and logical to Ichthyo, as it allowes for an easy way of configuring some things (like ouput connections) as a default within one EDL. As every track can have a list of child tracks, you'll get the &quot;list of tracks&quot; you'd expect.
+* a nice consequence of the latter is: if you create a new EDL, it automatically gets one top-level track to start with, and this track will get a default configured placement (according to what is defined as [[default|DefaultsManagement]] within the current ConfigRules) &amp;mdash; typically starting at t=0 and being plugged into the master video and master audio pipe
+* nothing prevents us from putting several objects at the same temporal location within one track. If the builder can't derive any additional layering information (which could be provided by some other configuration rules), then //there is no layering precedence// &amp;mdash; simply the object encountered first (or last) wins.
+* obviously, one wants the __edit function__ used to create such an overlapping placement&amp;nbsp; also to create an [[transition|TransitionsHandling]] between the overlapping objects. Meaning this edit function will automatically create an transition processor object and provide it with a placement such as to attach it to the region of overlap.
+</pre>
+</div>
 <div title="TrackPipeEDL" modifier="Ichthyostega" modified="200801062328" created="200711300405" tags="design discuss def decision Builder" changecount="26">
 <pre>''towards a definition of »Track«''. We don't want to tie ourself to some naive and overly simplistic definition, just because it is convenient. For classical (analogue) media, tracks are physical entities dictated by the nature of the process by which the media works. Especially, Tape machines have read/writing heads, which creates fixed tracks to which to route the signals. This is a practical geometric necessity. For digital media, there is no such necessity. We are bound primarily by the editor's habits of working.
 
@@ -4105,6 +4215,14 @@ The standard case of a transition is sort of mixing together two input streams, 
 Using transitions is a very basic task and thus needs viable support by the GUI. Handling of transitions need to be very convienient, because it is so important. Because of this, it is compelling to subsume a more complicated situation and treat this more complicated case similar. This is the case, when two (or N) elements have to be combined in the way of a transition, but their further processing in the processing chain //after// the transition needs to be different, maybe they belong to differnent subgroups, have to appear on different layers or with different pan positions. Of courese, the workaround is simple, at least &quot;simple&quot; from the programmers point of view. It is //not// simple from the editor's point of view the moment the editor has to do this simple thing (changing the wiring and add manualy synced fade curves to the individual parts) a dozend or even a hundred times in some larger project.
 
 Because of this experience, ichthyo wants to support a more general case of transitions, which have N output connections, behave similar to their &quot;simple&quot; counterpart, but leave out the mixing step. As a plus, such transitions can be inserted at the source ports of N clips or between any intermediary or final output pipes as well. Any transition processor capable of handling this situation should provide some flag, in order to decide if he can be placed in such a manner. (wichin the builder, encountering a  inconsistently placed transition is just an [[building error|BuildingError]])
+</pre>
+</div>
+<div title="VirtualClip" modifier="Ichthyostega" modified="200804110329" created="200804110321" tags="def" changecount="7">
+<pre>A ''~Meta-Clip'' or ''Virtual Clip'' (both are synonymous) denotes a clip which doesn't just pull media streams out of a source media asset, but rather provides the results of rendering a complete sub-network. In all other respects it behaves exactly like a &quot;real&quot; clip, i.e. it has [[source ports|ClipSourcePort]], can have attached effects (thus forming a local render pipe) and can be placed and combined with other clips. Depending on what is wired to the source ports, we get two flavours:
+* a __placeholder clip__ has no &quot;embedded&quot; content. Rather, by virtue of placements and wiring requests, the output of some other pipe somewhere in the session will be wired to the clip's source ports. Thus, pulling data from this clip will effectively pull from these source pipes wired to it.
+* a __nested EDL__ is like the other ~EDLs in the Session, just that any missing placement properties will be derived from the Virtual Clip, which is thought as to &quot;contain&quot; the objects of the nested EDL. Typically, you'd also [[configure the tracks|TrackHandling]] of the &quot;inner&quot; EDL such as to connect any output to the source ports of the Virtual Clip.
+
+Like any &quot;real&quot; clip, Virtual Clips have a start offset and a length, which will simply translate into an offset of the frame number pulled from the Virtual Clip's source connection or embedded EDL, making it possible to cut, splice, trim and roll them as usual. This of course implies we can have several instances of the same virtual clip with different start offset and length placed differently. The only limitation is that we can't handle cyclic dependencies for pulling data (which has to be detected and flagged as an error by the builder)
 </pre>
 </div>
 <div title="VisitingToolImpl" modifier="Ichthyostega" modified="200802031822" created="200801032003" tags="impl excludeMissing" changecount="21">
@@ -4153,7 +4271,7 @@ generally speaking, visitors are preferable when the underlying element type hie
 To see an simple example of our &quot;visiting tool&quot;, have a look at {{{tests/components/common/visitingtooltest.cpp}}}
 </pre>
 </div>
-<div title="WalkThrough" modifier="Ichthyostega" modified="200711122353" created="200706210625" tags="overview" changecount="35">
+<div title="WalkThrough" modifier="Ichthyostega" modified="200804130047" created="200706210625" tags="overview" changecount="39">
 <pre>The Intention of this text is to help you understanding the design and to show some notable details.
 
 !!!!Starting Point
@@ -4170,15 +4288,15 @@ Design is an experiment to find out how things are related. We can't //plan// a 
 !!!!Concepts and Interfaces
 This design strives to build each level and subsystem around some central concepts, which are directly expressed as Interfaces. Commonly used Interfaces clamp the different layers.
 * MObject gives an uniform view on all the various entities to be arranged in the EDL.
-* all the arranging and relating of ~MObjects is abstracted as [[Placement]]. The contract of a Placement is that it always has a related Subject, that we can call some test methods on it (still to be defined), and, finally, that we can get an ExplicitPlacement from it.
-* albeit being a special form of a Placement, the ExplicitPlacement is treated as a separate concept. With respect to edit operations within the EDL, it can stand for any sort of Placement. On the other hand the Builder takes a list of ~ExplicitPlacements as input for building up the Render Engine(s). This corresponds to the fact that the render process needs to organize the things to be done on a simple two dimensional grid of (output channel / time). The (extended) contract of an ~ExplicitPlacement provides us with this information (track,time).
+* all the arranging and relating of ~MObjects is abstracted as [[Placement]]. The contract of a Placement is that it always has a related Subject, that we can change the //way of placement&amp;nbsp;// by adding and removing [[&quot;locating pins&quot;|LocatingPin]], call some test methods on it (still to be defined), and, finally, that we can get an ExplicitPlacement from it.
+* albeit being a special form of a Placement, the ExplicitPlacement is treated as a separate concept. With respect to edit operations within the EDL, it can stand for any sort of Placement. On the other hand the Builder takes a list of ~ExplicitPlacements as input for building up the Render Engine(s). This corresponds to the fact that the render process needs to organize the things to be done on a simple two dimensional grid of (output channel / time). The (extended) contract of an ~ExplicitPlacement provides us with this (output,time).
 * on the lower end of the builder, everything is organized around the Concept of a ProcNode, which enables us to //pull// one (freely addressable) Frame of calculated data. Further, the ProcNode has the ability to be wired with other nodes and [[Parameter Providers|ParamProvider]]
 * the various types of data to be processed are abstracted away under the notion of a [[Frame]]. Basically, a Frame is an Buffer containing an Array of raw data and it can be located by some generic scheme, including (at least) the absolute starting time (and probably some type or channel id).
 * All sorts of (target domain) [[Parameters]] are treated uniformly. There is a distinction between Parameters (which //could// be variable) and Configuration (which is considered to be fixed). In this context, Automation just appears as a special kind of ParamProvider.
 * and finally, the calculation //process// together with its current state is represented by a StateProxy. I call this a &quot;proxy&quot;, because it should encapsulate and hide all tedious details of communication, be it even asynchronous communication with some Controller or Dispatcher running in another Thread. In order to maintain a view on the current state of the render process, it could eventually be necessary to register as an observer somewhere or to send notifications to other parts of the system.
 
 !!!!Handling Diversity
-An important goal of this approach is to be able to push down the treatment of variations and special cases. We don't need to know what kind of Placement links one MObject to another, because it is sufficient for us to get an ExplicitPlacement. The Render Engine doesn't need to know if it is pulling audio Frames or video Frames or GOPs or OpenGL textures. It simply relies on the Builder wiring together the correct node types. And the Builder in turn does so by using some overloaded function of an iterator or visitor. There is no need for the video [[ProcNodes|ProcNode]] to test for the colormodel on every screen line, because the Data Frame can be a Template parametrized by the colormodel. All of this reduces complexity and quite some misconceptions can be detected already by the compiler.
+An important goal of this approach is to be able to push down the treatment of variations and special cases. We don't need to know what kind of Placement links one MObject to another, because it is sufficient for us to get an ExplicitPlacement. The Render Engine doesn't need to know if it is pulling audio Frames or video Frames or GOPs or OpenGL textures. It simply relies on the Builder wiring together the correct node types. And the Builder in turn does so by using some overloaded function of an iterator or visitor. At many instances, instead of doing decisions in-code or using hard wired defaults, a system of [[configuration rules|ConfigRules]] is invoked to get a suitable default as a solution (and, as a plus, this provides points of customisation for advanced users). At engine level, there is no need for the video processing node to test for the colormodel on every screen line, because the Builder has already wired up the fitting implementation routine. All of this helps reducing complexity and quite some misconceptions can be detected already by the compiler.
 
 !!!!Explicit structural differences
 In case it's not already clear: we don't have &quot;the&quot; Render Engine, rather we construct a Render Engine for each structurally differing part of the timeline. (please relate this to the current Cinelerra code base, which constructs and builds up the render pipeline for each frame separately). No need to call back from within the pipeline to find out if a given plugin is enabled or to see if there are any automation keyframes. We don't need to pose any constraints on the structuring of the objects in the EDL, besides the requirement to get an ExplicitPlacement for each. We could even loosen the use of the common metaphor of placing media sequences on fixed tracks, if we want to get at a more advanced GUI at some point in the future.

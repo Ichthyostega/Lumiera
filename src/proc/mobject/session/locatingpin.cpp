@@ -98,7 +98,7 @@ namespace mobject
     {
       LocatingSolution solution;
       resolve (solution);
-      return SolutionData (solution.getTime(), solution.getTrack());
+      return SolutionData (solution.getTime(), solution.getPipe());
     }
     
     bool 
@@ -142,10 +142,11 @@ namespace mobject
       return minTime;   
     }
     
-    LocatingPin::Track
-    LocatingPin::LocatingSolution::getTrack()
+    LocatingPin::Pipe
+    LocatingPin::LocatingSolution::getPipe()
     {
-      UNIMPLEMENTED ("get effective Track number of Solution");
+      UNIMPLEMENTED ("get effective Pipe of Solution");
+      return Pipe (); 
     }
     
     

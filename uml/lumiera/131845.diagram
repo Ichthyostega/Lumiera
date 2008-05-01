@@ -1,0 +1,68 @@
+format 40
+
+classinstance 128005 class_ref 140549 // ConfigRules
+ name ""  xyz 245 192 2000
+classinstance 128133 class_ref 141445 // DefaultsManager
+ name ""  xyz 51 83 2000
+classinstance 128261 class_ref 141573 // DefaultsRegistry
+ name ""  xyz 244 58 2000
+classinstancecanvas 128517 classinstance_ref 135941 // predicate impl
+  xyz 344 347 2000
+  end
+classinstance 128901 class_ref 135301 // Factory
+ name ""  xyz 439 206 2000
+classinstance 129797 class_ref 136581 // AssetManager
+ name ""  xyz 376 447 2000
+textcanvas 130437 "recursive invocation of sub queries"
+  xyzwh 332 185 2004 172 18
+linkcanvas 128389
+  from ref 128133 z 1999 to ref 128261
+dirscanvas 129413 z 1000 linkcanvas_ref 128389
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  forward_label "1 get registered default object
+6 store new default object" xyz 92 30 3000
+linkcanvas 128645
+  from ref 128133 z 1999 to ref 128005
+dirscanvas 129541 z 1000 linkcanvas_ref 128645
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  forward_label "2 resolve(inout solution : Query<TY>) : bool" xyz 94 157 3000
+linkcanvas 128773
+  from ref 128005 z 1999 to ref 128517
+dirscanvas 129669 z 1000 linkcanvas_ref 128773
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  forward_label "3 run prolog code" xyz 335 248 3000
+linkcanvas 129029
+  from ref 128517 z 1999 to ref 128901
+dirscanvas 130181 z 1000 linkcanvas_ref 129029
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  forward_label "5 create new instances" xyz 448 275 3000
+linkcanvas 129925
+  from ref 128517 z 1999 to ref 129797
+dirscanvas 130053 z 1000 linkcanvas_ref 129925
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  forward_label "4 retrieve existing object" xyz 436 403 3000
+linkcanvas 130309
+  from ref 128901 z 1999 to ref 128005
+msgs
+  explicitmsg "get registered default object"
+    forward ranks 1 "1" dirscanvas_ref 129413
+    no_msg
+  explicitmsg "resolve(inout solution : Query<TY>) : bool"
+    forward ranks 2 "2" dirscanvas_ref 129541
+    msgs
+      explicitmsg "run prolog code"
+	forward ranks 3 "2.1" dirscanvas_ref 129669
+	msgs
+	  explicitmsg "retrieve existing object"
+	    forward ranks 4 "2.1.1" dirscanvas_ref 130053
+	    no_msg
+	  explicitmsg "create new instances"
+	    forward ranks 5 "2.1.2" dirscanvas_ref 130181
+	    no_msg
+	msgsend
+    msgsend
+  explicitmsg "store new default object"
+    forward ranks 6 "3" dirscanvas_ref 129413
+    no_msg
+msgsend
+end

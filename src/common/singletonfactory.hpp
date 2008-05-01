@@ -38,9 +38,8 @@ This code is heavily inspired by
 #include "common/singletonpolicies.hpp"  ///< several Policies usable together with SingletonFactory
 
 #include "common/util.hpp"
-#include "nobugcfg.h"
+#include "proc/nobugcfg.hpp"
 
-//#include <boost/bind.hpp>
 
 
 namespace lumiera
@@ -53,10 +52,10 @@ namespace lumiera
    * @note internally uses static fields, so all functor instances share pInstance_
    */
   template
-    < class SI,  // the class to make Singleton
-      template <class> class Create    = singleton::StaticCreate,  // how to create/destroy the instance
-      template <class> class Life      = singleton::AutoDestroy,  // how to manage Singleton Lifecycle
-      template <class> class Threading = singleton::IgnoreThreadsafety  //TODO use Multithreaded!!!
+    < class SI  // the class of the Singleton instance
+    , template <class> class Create    = singleton::StaticCreate   // how to create/destroy the instance
+    , template <class> class Life      = singleton::AutoDestroy   // how to manage Singleton Lifecycle
+    , template <class> class Threading = singleton::IgnoreThreadsafety  //TODO use Multithreaded!!!
     >
   class SingletonFactory
     {

@@ -1,5 +1,4 @@
-TESTING "Component Test Suite: common and basic components" ./test-components --group=common
-
+TESTING "Component Test Suite: common and basic components" ./test-common --group=common
 
 
 
@@ -48,6 +47,11 @@ out: 2|oΩo|
 out: 3|Ωoo|
 out: -->Ω ooΩ oΩo Ωoo
 out: Standard Cmdlineformat:one  two
+END
+
+
+TEST "CustomSharedPtr_test" CustomSharedPtr_test <<END
+return: 0
 END
 
 
@@ -103,6 +107,25 @@ out: dtor ~TargetObj(12) successfull
 END
 
 
+TEST "LifeCycle_test" LifeCycle_test  <<END
+return: 0
+END
+
+
+TEST "RemoveFromSet_test" RemoveFromSet_test <<END
+out: removed  nothing  ---> [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
+out: removed 0 ---> [ 1, 2, 3, 4, 5, 6, 7, 8, 9, ]
+out: removed 9 ---> [ 0, 1, 2, 3, 4, 5, 6, 7, 8, ]
+out: removed 5 ---> [ 0, 1, 2, 3, 4, 6, 7, 8, 9, ]
+out: removed 0   2   4   6   8   ---> [ 1, 3, 5, 7, 9, ]
+out: removed   1   3   5   7   9 ---> [ 0, 2, 4, 6, 8, ]
+out: removed 0 1 2 3 4 5 6 7 8 9 ---> [ ]
+out: removed 0 1 2 3 4 5 6 7 8   ---> [ 9, ]
+out: removed   1 2 3 4 5 6 7 8 9 ---> [ 0, ]
+out: removed 0 1 2 3 4   6 7 8 9 ---> [ 5, ]
+END
+
+
 TEST "SanitizedIdentifier_test" SanitizedIdentifier_test <<END
 out: 'Word' --> 'Word'
 out: 'a Sentence' --> 'a_Sentence'
@@ -111,10 +134,19 @@ out:        	' --> 'trailing_Withespace'
 out: 'with    a  	 lot
 out:   of Whitespace' --> 'with_a_lot_of_Whitespace'
 out: 'with"much (punctuation)[]!' --> 'withmuch_(punctuation)'
-out: '§&Ω%€  leading garbarge' --> 'leading_garbarge'
-out: 'mixed    Ω   garbarge' --> 'mixed_garbarge'
+out: '§&Ω%€  leading garbage' --> 'leading_garbage'
+out: 'mixed    Ω   garbage' --> 'mixed_garbage'
 out: 'Bääääh!!' --> 'Bh'
 out: '§&Ω%€' --> ''
+END
+
+
+TEST "SingletonSubclass_test" SingletonSubclass_test 13 <<END
+out: using the Singleton should create TargetObj(13)...
+out: ctor TargetObj(13) successfull
+out: calling a non-static method on the Singleton-Implementation
+out: .....TargetObj(13): data="*************", array[13]={0,1,2,3,4,5,6,7,8,9,10,11,12,}
+out: dtor ~TargetObj(13) successfull
 END
 
 
@@ -129,7 +161,6 @@ out: Mock_1::doIt() call=5
 out: Mock_2::doIt() call=1
 out: TestSingletonO::doIt() call=3
 END
-
 
 
 TEST "Singleton_test" Singleton_test 23 <<END
@@ -185,6 +216,27 @@ END
 TEST "TypeList_test" TypeList_test <<END
 out: - 1 -- 2 -- 3 -- 5 -- 8 -- 13 -- The End -
 out: ..Size of = 1
+return: 0
+END
+
+
+TEST "TypeListUtil_test" TypeListUtil_test <<END
+out: ctor DoIt<Block<13> >
+out: ctor DoIt<Block< 8> >
+out: ctor DoIt<Block< 5> >
+out: ctor DoIt<Block< 3> >
+out: ctor DoIt<Block< 2> >
+out: ctor DoIt<Block< 1> >
+out: Block< 2>::eat(..)
+out: Block< 5>::eat(..)
+out: Block<13>::eat(..)
+out: gulp!
+out: dtor DoIt<Block< 1> >
+out: dtor DoIt<Block< 2> >
+out: dtor DoIt<Block< 3> >
+out: dtor DoIt<Block< 5> >
+out: dtor DoIt<Block< 8> >
+out: dtor DoIt<Block<13> >
 return: 0
 END
 

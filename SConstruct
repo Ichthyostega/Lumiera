@@ -179,7 +179,7 @@ def configurePlatform(env):
     if not conf.CheckLibWithHeader('pthread', 'pthread.h', 'C'):
         print 'Did not find the pthread lib or pthread.h, exiting.'
     else:
-       conf.env.Append(CPPFLAGS = ' -DHAVE_PTHREAD_H')
+       conf.env.Append(CPPFLAGS = ' -DHAVE_PTHREAD')
        conf.env.Append(CCFLAGS = ' -pthread')
 
     if conf.CheckCHeader('execinfo.h'):
@@ -234,24 +234,29 @@ def defineBuildTargets(env, artifacts):
         We use a custom function to declare a whole tree of srcfiles. 
     """
     
-    lumobj = ( srcSubtree(env,'$SRCDIR/backend') 
-             + srcSubtree(env,'$SRCDIR/proc')
-             + srcSubtree(env,'$SRCDIR/common')
-             + srcSubtree(env,'$SRCDIR/lib')
-             )
+    objback =   srcSubtree(env,'$SRCDIR/backend') 
+    objproc =   srcSubtree(env,'$SRCDIR/proc')
+    objlib  = ( srcSubtree(env,'$SRCDIR/common')
+              + srcSubtree(env,'$SRCDIR/lib')
+              )
     plugobj = srcSubtree(env,'$SRCDIR/plugin', isShared=True)
-    core  = env.StaticLibrary('$BINDIR/core.la', lumobj)
-    #core = lumobj # use this for linking directly
+    core  = ( env.StaticLibrary('$BINDIR/lumiback.la', objback)
+            + env.StaticLibrary('$BINDIR/lumiproc.la', objproc)
+            + env.StaticLibrary('$BINDIR/lumi.la',     objlib)
+            )
     
     # use PCH to speed up building
-    precomp = env.PrecompiledHeader('$SRCDIR/pre')
-    env.Depends(lumobj, precomp)
+    precomp = ( env.PrecompiledHeader('$SRCDIR/pre')
+              + env.PrecompiledHeader('$SRCDIR/pre_a')
+              )
+    env.Depends(objproc, precomp)
+    env.Depends(objlib, precomp)
     
     artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/main.cpp']+ core )
     artifacts['plugins'] = env.SharedLibrary('$BINDIR/lumiera-plugin', plugobj)
     
     # call subdir SConscript(s) for independent components
-    SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts')
+    SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts core')
     SConscript(dirs=[TESTDIR], exports='env artifacts core')
 
 
@@ -264,7 +269,7 @@ def definePostBuildTargets(env, artifacts):
     il = env.Alias('install-lib', '$DESTDIR/lib')
     env.Alias('install', [ib, il])
     
-    build = env.Alias('build', artifacts['lumiera']+artifacts['plugins'])
+    build = env.Alias('build', artifacts['lumiera']+artifacts['plugins']+artifacts['tools'])
     allbu = env.Alias('allbuild', build+artifacts['testsuite'])
     env.Default('build')
     # additional files to be cleaned when cleaning 'build'

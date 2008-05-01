@@ -28,7 +28,7 @@
 #include "pre.hpp"
 
 
-#include "nobugcfg.h"
+#include "proc/nobugcfg.hpp"
 
 #include "common/test/suite.hpp"
 #include "common/util.hpp"
@@ -85,7 +85,7 @@ namespace test
     {
     public:
       Launch (string testID, string groups)  { Suite::enroll (this,testID,groups); };
-      virtual auto_ptr<Test> operator() ()  { return auto_ptr<Test> (new TEST ); };
+      virtual auto_ptr<Test> operator() ()   { return auto_ptr<Test> (new TEST ); };
     };   
     
 } // namespace test

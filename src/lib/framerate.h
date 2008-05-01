@@ -25,7 +25,6 @@
 #include <limits.h>
 
 #include "lib/error.h"
-#include "lib/time.h"
 
 /**
  * @file Framerate calculations, header.

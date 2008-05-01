@@ -1,7 +1,7 @@
 format 40
 
 fragment 128005 "UI Layer"
-  xyzwh 321 22 2000 829 100
+  xyzwh 322 22 1994 828 100
 end
 fragment 128133 "Processing Layer"
   xyzwh 64 156 2000 1089 655
@@ -21,59 +21,72 @@ packagecanvas 128645
     xyzwh 94 551 2005 458 235
 componentcanvas 128773 component_ref 128005 // Builder
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 121 419 2015 229 105
+  xyzwh 122 419 2015 228 105
 componentcanvas 128901 component_ref 128133 // Session
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 122 243 2011 323 156
+  xyzwh 122 243 2011 322 155
 componentcanvas 129029 component_ref 128261 // Controller
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 372 419 2011 189 105
+  xyzwh 373 419 2011 188 105
 componentcanvas 129157 component_ref 128389 // EDL
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 288 302 2016 153 79
+  xyzwh 288 303 2016 152 78
 componentcanvas 129285 component_ref 128517 // Fixture
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 124 319 2016 153 75
+  xyzwh 125 319 2016 152 75
 note 129541 "Structures edited by the User"
   xyzwh 43 269 2016 181 41
 componentcanvas 129669 component_ref 128645 // AssetManagement
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 577 232 2010 217 201
+  xyzwh 578 233 2010 216 200
 componentcanvas 129797 component_ref 128773 // Dispatcher
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 406 31 2005 193 75
+  xyzwh 357 133 2005 192 75
 componentcanvas 129925 component_ref 128901 // Engine
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 118 602 2010 235 176
+  xyzwh 118 601 2010 235 175
 componentcanvas 130053 component_ref 129029 // Frame (Stream) Provider
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 121 876 2005 229 75
+  xyzwh 122 875 2005 228 75
 componentcanvas 130181 component_ref 129157 // Cache
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 391 876 2005 193 75
-note 131717 "Coordinates Playback and Rendering"
+  xyzwh 392 875 2005 192 75
+note 131717 "Coordinates Building and Rendering"
   xyzwh 483 494 2016 149 63
 note 131845 "border of the low-level, performance-critical part of the system"
   xyzwh 666 450 2006 167 84
 note 131973 "just works, never decides"
   xyzwh 317 668 2015 110 59
-note 132101 "codecs, stream I/O here"
-  xyzwh 376 592 2005 166 39
+note 132101 "codecs, effects, stream I/O here"
+  xyzwh 618 876 2005 200 36
 componentcanvas 132229 component_ref 130181 // MediaFactory
   draw_component_as_icon default show_component_req_prov default show_component_rea default
-  xyzwh 593 354 2015 158 67
+  xyzwh 593 355 2015 157 66
 componentcanvas 132357 component_ref 130309 // AssetDB
   draw_component_as_icon default show_component_req_prov default show_component_rea default
   xyzwh 629 289 2020 155 63
+componentcanvas 132485 component_ref 131077 // client code
+  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  xyzwh 600 27 2005 156 63
+arrowjunctioncanvas 132997 class_ref 141957 // ProcDispatcher
+  xyz 473 83 2000 label_xy 441 100
+arrowjunctioncanvas 133253 class_ref 141957 // ProcDispatcher
+  xyz 475 71 2000 label_xy 863 37
 simplerelationcanvas 131205 simplerelation_ref 128005
   from ref 130053 z 2004 to ref 130181
 simplerelationcanvas 131333 simplerelation_ref 128133
   from ref 129925 z 2004 to ref 130053
+line 133125 ---O
+  from ref 129797 z 1999 to ref 132997
+line 133381 ---( geometry VHr
+  from ref 132485 z 1999 to point 480 56
+  line 133509 z 1999 to ref 133253
 line 130309 -_-_
   from ref 129797 z 2004 to ref 128901
 line 130821 -_-_ geometry HVr
-  from ref 129797 z 2004 to point 493 469
+  from ref 129797 z 2004 to point 450 469
   line 130949 z 2004 to ref 129029
 line 131077 -_-_
   from ref 129797 z 2004 to ref 129669
+preferred_whz 852 640 0.8
 end

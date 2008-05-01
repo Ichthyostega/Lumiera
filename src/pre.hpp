@@ -31,6 +31,7 @@
  ** building the object files including this header).
  **
  ** @see mobject.hpp usage example
+ ** @see pre_a.hpp precompiled header including Asset subsystem
  */
 
 #ifndef LUMIERA_PRE_HPP
@@ -44,7 +45,7 @@
 #include <boost/format.hpp>
 #include <boost/bind.hpp>
 
-#include "lumiera.h"
+#include "proc/lumiera.hpp"
 
 
 

@@ -23,7 +23,7 @@
 //#include <string.h>
 
 #include "lib/llist.h"
-#include "lib/framerate.h"
+#include "lib/error.h"
 
 
 LUMIERA_ERROR_DEFINE(TEST, "test error");

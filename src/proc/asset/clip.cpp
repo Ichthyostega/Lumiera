@@ -85,29 +85,13 @@ namespace asset
   
 
 
-  /** in spite of asset::Clip being a concrete subclass (and not an asset subinterface),
-   *  we need to create the following explicit specialisation for asset::Clip#getClipAsset.
-   *  Basically, it's a "shared-ptr-from-this"-function.
-   */
-  template<>
-  shared_ptr<Clip>
-  AssetManager::getPtr (const Clip& asset)
-  {
-    ENSURE (instance().known(asset.id), 
-            "unregistered asset instance encountered.");
-    return static_pointer_cast<Clip,Asset>
-            (instance().getAsset (asset.id));
-    
-  }
-
-  
   /** return this wrapped into a shared ptr,
    *   because it's already the desired asset::Clip
    */
   Media::PClip
   Clip::getClipAsset ()
   {
-    return AssetManager::getPtr(*this);
+    return AssetManager::wrap (*this);
   }
   
 
