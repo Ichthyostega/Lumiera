@@ -94,7 +94,6 @@ lumiera_file_handle_acquire (LumieraFile self)
           if (fd == -1)
             {
               LUMIERA_ERROR_SET (file, ERRNO);
-              return -1;
             }
           else
             {
@@ -103,14 +102,12 @@ lumiera_file_handle_acquire (LumieraFile self)
                 {
                   close (fd);
                   LUMIERA_ERROR_SET (file, ERRNO);
-                  return -1;
                 }
               else if (self->descriptor->stat.st_dev != st.st_dev || self->descriptor->stat.st_ino != st.st_ino)
                 {
                   close (fd);
                   /* Woops this is not the file we expected to use */
                   LUMIERA_ERROR_SET (file, FILE_CHANGED);
-                  return -1;
                 }
             }
           self->descriptor->handle->fd = fd;
