@@ -35,7 +35,8 @@
 
 /**
  * Callback function used to destruct/cleanup aged elements.
- * shall clean the element sufficiently up to be ready for being freed or reused
+ * shall clean the element sufficiently up to be ready for being freed or reused,
+ * this callback function must be reentrant and prepared to be called twice.
  * @param node the llist node used to link cache elements (will be empty at call)
  * @return pointer to the begin of the element.
  */
@@ -113,6 +114,9 @@ lumiera_mrucache_drop (LumieraMruCache self, LList node)
       REQUIRE (llist_is_member (&self->cache_list, node), "node must be empty or member of cache");
     }
   llist_insert_tail (&self->cache_list, node);
+
+  if (self->destructor_cb)
+    self->destructor_cb (node);
 }
 
 
