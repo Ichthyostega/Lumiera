@@ -38,7 +38,7 @@ namespace gui {
           return false;        
         }
       
-      Gtk::RC rc(path);
+      gtk_rc_parse(path.c_str());
       gtk_rc_reset_styles (gtk_settings_get_default());
 
       return true;
