@@ -77,15 +77,15 @@ lumiera_file_handle_acquire (LumieraFile self)
   TRACE (file);
   REQUIRE (self);
   REQUIRE (self->descriptor);
-  REQUIRE (fhcache);
+  REQUIRE (lumiera_fhcache);
 
   LUMIERA_MUTEX_SECTION (file, self->descriptor->rh, &self->descriptor->lock)
     {
       if (!self->descriptor->handle)
         /* no handle yet, get a new one */
-        lumiera_filehandlecache_handle_acquire (fhcache, self->descriptor);
+        lumiera_filehandlecache_handle_acquire (lumiera_fhcache, self->descriptor);
       else
-        lumiera_filehandlecache_checkout (fhcache, self->descriptor->handle);
+        lumiera_filehandlecache_checkout (lumiera_fhcache, self->descriptor->handle);
 
       if (self->descriptor->handle->fd == -1)
         {
@@ -120,6 +120,7 @@ lumiera_file_handle_acquire (LumieraFile self)
   return self->descriptor->handle->fd;
 }
 
+
 void
 lumiera_file_handle_release (LumieraFile self)
 {
@@ -127,6 +128,6 @@ lumiera_file_handle_release (LumieraFile self)
 
   LUMIERA_MUTEX_SECTION (file, self->descriptor->rh, &self->descriptor->lock)
     {
-      lumiera_filehandlecache_checkin (fhcache, self->descriptor->handle);
+      lumiera_filehandlecache_checkin (lumiera_fhcache, self->descriptor->handle);
     }
 }

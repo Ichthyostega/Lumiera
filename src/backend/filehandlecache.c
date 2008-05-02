@@ -31,38 +31,35 @@ NOBUG_DEFINE_FLAG_PARENT (filehandlecache, file_all);
 LUMIERA_ERROR_DEFINE (FILEHANDLECACHE_NOHANDLE, "No filehandle available");
 
 
-LumieraFilehandlecache fhcache = NULL;
+LumieraFilehandlecache lumiera_fhcache = NULL;
 
 
 void
 lumiera_filehandlecache_new (int max_entries)
 {
-  if (!fhcache)
-    {
-      NOBUG_INIT_FLAG (filehandlecache);
-      fhcache = lumiera_malloc (sizeof (lumiera_filehandlecache));
-      lumiera_mrucache_init (&fhcache->cache, lumiera_filehandle_destroy_node);
-      fhcache->available = max_entries;
-      fhcache->checked_out = 0;
-      lumiera_mutex_init (&fhcache->lock);
-      RESOURCE_ANNOUNCE (filehandlecache, "mutex", "filehandlecache", fhcache, fhcache->rh);
-    }
-  else
-    NOTREACHED;
+  REQUIRE (!lumiera_fhcache, "Filehandlecache already initialized");
+
+  NOBUG_INIT_FLAG (filehandlecache);
+  lumiera_fhcache = lumiera_malloc (sizeof (lumiera_filehandlecache));
+  lumiera_mrucache_init (&lumiera_fhcache->cache, lumiera_filehandle_destroy_node);
+  lumiera_fhcache->available = max_entries;
+  lumiera_fhcache->checked_out = 0;
+  lumiera_mutex_init (&lumiera_fhcache->lock);
+  RESOURCE_ANNOUNCE (filehandlecache, "mutex", "filehandlecache", lumiera_fhcache, lumiera_fhcache->rh);
 }
 
 
 void
 lumiera_filehandlecache_delete (void)
 {
-  if (fhcache)
+  if (lumiera_fhcache)
     {
-      REQUIRE (!fhcache->checked_out, "Filehandles in use at shutdown");
-      RESOURCE_FORGET (filehandlecache, fhcache->rh);
-      lumiera_mrucache_destroy (&fhcache->cache);
-      lumiera_mutex_destroy (&fhcache->lock);
-      free (fhcache);
-      fhcache = NULL;
+      REQUIRE (!lumiera_fhcache->checked_out, "Filehandles in use at shutdown");
+      RESOURCE_FORGET (filehandlecache, lumiera_fhcache->rh);
+      lumiera_mrucache_destroy (&lumiera_fhcache->cache);
+      lumiera_mutex_destroy (&lumiera_fhcache->lock);
+      free (lumiera_fhcache);
+      lumiera_fhcache = NULL;
     }
 }
 

@@ -52,7 +52,7 @@ struct lumiera_filehandlecache_struct
   RESOURCE_HANDLE (rh);
 };
 
-extern LumieraFilehandlecache fhcache;
+extern LumieraFilehandlecache lumiera_fhcache;
 
 /**
  * Initializes the filehandle cache.
