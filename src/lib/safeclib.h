@@ -39,6 +39,17 @@ lumiera_malloc (size_t sz);
 
 
 /**
+ * Allocate cleared memory for an array.
+ * always succeeds or dies
+ * @param n number of elements
+ * @param size memory to be allocated
+ * @return pointer to the allocated memory
+ */
+void*
+lumiera_calloc (size_t n, size_t size);
+
+
+/**
  * Duplicate a C string.
  * always succeeds or dies
  * @param str string to be copied
