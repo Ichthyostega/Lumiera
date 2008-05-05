@@ -140,8 +140,8 @@ do
 	echo "Running autoheader..."
 	autoheader
       fi
-      echo "Running automake --gnu $am_opt ..."
-      automake --add-missing --gnu $am_opt
+      echo "Running automake --foreign $am_opt ..."
+      automake --add-missing --foreign $am_opt
       echo "Running autoconf ..."
       autoconf
     )

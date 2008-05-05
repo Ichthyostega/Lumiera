@@ -1,7 +1,9 @@
 /*
-  video-display-widget.hpp  -  Declaration of the video viewer widget
+  xcdisplayer.hpp  -  Defines the base class for XVideo display
  
   Copyright (C)         Lumiera.org
+    2000,               Arne Schirmacher <arne@schirmacher.de>
+    2001-2007,          Dan Dennedy <dan@dennedy.org>
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
  
   This program is free software; you can redistribute it and/or
@@ -19,36 +21,48 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file viewer-display-widget.hpp
- ** This file contains the definition of video viewer widget
+/** @file xvdisplayer.hpp
+ ** This file contains the definition of XvDisplayer, the XVideo
+ ** video output implementation
+ ** @see xvdisplayer.cpp
  */
 
-#ifndef VIDEO_DISPLAY_WIDGET_HPP
-#define VIDEO_DISPLAY_WIDGET_HPP
+#include "displayer.hpp"
 
-#include <gtkmm.h>
+#include <X11/extensions/XShm.h>
+#include <X11/extensions/Xvlib.h>
+#include <X11/Xlib.h>
+
+#ifndef XVDISPLAYER_HPP
+#define XVDISPLAYER_HPP
 
 namespace lumiera {
 namespace gui {
-namespace widgets {
+namespace output {
 
-  class VideoDisplayWidget : public Gtk::Widget
-    {
-    public:
-      VideoDisplayWidget();
+  class XvDisplayer
+  {
+  public:
+    XvDisplayer();
+    ~XvDisplayer();
+  
+  protected:
+	  void put( void *image );
 
-      /* ===== Overrides ===== */
-    private:
-      virtual void on_realize();
-      virtual bool on_expose_event(GdkEventExpose* event);
+  private:
+	  bool canuse;
+	  int depth;
+	  GtkWidget *drawingarea;
+	  Display *display;
+	  Window window;
+	  GC gc;
+	  XImage *xImage;
+	  XGCValues values;
+	  XShmSegmentInfo shmInfo;
+  };
 
-      /* ===== Internals ===== */
-    private:
-
-    };
-
-}   // namespace widgets
+}   // namespace output
 }   // namespace gui
 }   // namespace lumiera
 
-#endif // VIDEO_DISPLAY_WIDGET_HPP
+#endif // XVDISPLAYER_HPP

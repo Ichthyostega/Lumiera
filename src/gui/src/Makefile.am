@@ -38,7 +38,11 @@ gtk_lumiera_SOURCES =                 \
     widgets/timeline-widget.cpp       \
     widgets/timeline-widget.hpp       \
     model/project.cpp                 \
-    model/project.hpp
+    model/project.hpp                 \
+    output/displayer.cpp              \
+    output/displayer.hpp              \
+    output/xvdisplayer.cpp            \
+    output/xvdisplayer.hpp            
 
 gtk_lumiera_LDFLAGS = 
 

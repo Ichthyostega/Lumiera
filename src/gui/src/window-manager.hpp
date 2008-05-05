@@ -20,7 +20,7 @@
  
 */
 /** @file window-manager.hpp
- ** This file contains the of global UI Manager class
+ ** This file contains the defintion of global UI Manager class
  ** user actions.
  ** @see window-manager.cpp
  ** @see gtk-lumiera.hpp

@@ -1,16 +1,9 @@
 ## Process this file with automake to produce Makefile.in
-## Created by Anjuta
 
 SUBDIRS = src po
 
 gtk_lumieradocdir = ${prefix}/doc/gtk-lumiera
-gtk_lumieradoc_DATA = \
-	README\
-	COPYING\
-	AUTHORS\
-	ChangeLog\
-	INSTALL\
-	NEWS
+gtk_lumieradoc_DATA = 
 
 EXTRA_DIST = $(gtk_lumieradoc_DATA)
 

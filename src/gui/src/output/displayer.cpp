@@ -1,7 +1,9 @@
 /*
-  video-display-widget.hpp  -  Declaration of the video viewer widget
+  displayer.cpp  -  Implements the base class for displaying video
  
   Copyright (C)         Lumiera.org
+    2000,               Arne Schirmacher <arne@schirmacher.de>
+    2001-2007,          Dan Dennedy <dan@dennedy.org>
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
  
   This program is free software; you can redistribute it and/or
@@ -18,37 +20,46 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
-/** @file viewer-display-widget.hpp
- ** This file contains the definition of video viewer widget
- */
+* *****************************************************/
 
-#ifndef VIDEO_DISPLAY_WIDGET_HPP
-#define VIDEO_DISPLAY_WIDGET_HPP
-
-#include <gtkmm.h>
+#include "displayer.hpp"
 
 namespace lumiera {
 namespace gui {
-namespace widgets {
+namespace output {
 
-  class VideoDisplayWidget : public Gtk::Widget
-    {
-    public:
-      VideoDisplayWidget();
 
-      /* ===== Overrides ===== */
-    private:
-      virtual void on_realize();
-      virtual bool on_expose_event(GdkEventExpose* event);
 
-      /* ===== Internals ===== */
-    private:
+  DisplayerInput Displayer::format()
+  {
+	  return DISPLAY_NONE;
+  }
 
-    };
+  int Displayer::preferredWidth()
+  {
+	  return imageWidth;
+  }
 
-}   // namespace widgets
+  int Displayer::preferredHeight()
+  {
+	  return imageHeight;
+  }
+
+  void Displayer::put( void *image, int width, int height )
+  {
+	  if ( width == preferredWidth() && height == preferredHeight() )
+	  {
+		  put( image );
+	  }
+	  else
+	  {
+		  reformat( format(), format(), image, width, height );
+		  put( pixels );
+	  }
+  }
+
+
+
+}   // namespace output
 }   // namespace gui
 }   // namespace lumiera
-
-#endif // VIDEO_DISPLAY_WIDGET_HPP
