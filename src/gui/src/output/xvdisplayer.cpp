@@ -38,19 +38,19 @@ namespace lumiera {
 namespace gui {
 namespace output {
 
-XvDisplayer::XvDisplayer( Gtk::Widget *drawingarea, int width, int height ) :
+XvDisplayer::XvDisplayer( Gtk::Widget *drawing_area, int width, int height ) :
     xvImage( NULL )
 {
   cerr << ">> Trying XVideo at " << width << "x" << height << endl;
 
-  this->drawingarea = drawingarea;
+  this->drawingArea = drawing_area;
   imageWidth = width;
   imageHeight = height;
 
   shmInfo.shmaddr = NULL;
   gotPort = false;
 
-  Glib::RefPtr<Gdk::Window> area_window = drawingarea->get_window();
+  Glib::RefPtr<Gdk::Window> area_window = drawing_area->get_window();
 
   window = gdk_x11_drawable_get_xid( area_window->gobj() );
   display = gdk_x11_drawable_get_xdisplay( area_window->gobj() );
@@ -209,14 +209,14 @@ XvDisplayer::usable()
 void
 XvDisplayer::put( void *image )
 {
-  g_assert(drawingarea != NULL);
+  g_assert(drawingArea != NULL);
 
   if(xvImage != NULL)
   {
     int video_x = 0, video_y = 0, video_width = 0, video_height = 0;
     CalculateVideoLayout(
-      drawingarea->get_width(),
-      drawingarea->get_height(),
+      drawingArea->get_width(),
+      drawingArea->get_height(),
       preferredWidth(), preferredHeight(),
       video_x, video_y, video_width, video_height );
 

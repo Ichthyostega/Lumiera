@@ -49,7 +49,7 @@ namespace output {
   class XvDisplayer : public Displayer
   {
   public:
-    XvDisplayer( Gtk::Widget *drawingarea, int width, int height );
+    XvDisplayer( Gtk::Widget *drawing_area, int width, int height );
     ~XvDisplayer();
 
     void put( void *image );
@@ -60,7 +60,7 @@ namespace output {
   private:
 	  bool gotPort;
 	  int grabbedPort;
-	  Gtk::Widget *drawingarea;
+	  Gtk::Widget *drawingArea;
 	  Display *display;
 	  Window window;
 	  GC gc;
