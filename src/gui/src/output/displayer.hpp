@@ -34,6 +34,9 @@ namespace lumiera {
 namespace gui {
 namespace output {
 
+#define MAX_WIDTH		720
+#define MAX_HEIGHT		576
+
   /** Supported Displayer formats
   */
 
@@ -70,6 +73,11 @@ namespace output {
   {
   public:
 
+    /** Indicates if an object can be used to render images on the running
+	    system.
+    */
+    virtual bool usable();
+
     /** Indicates the format required by the abstract put method.
     */
     virtual DisplayerInput format();
@@ -86,18 +94,19 @@ namespace output {
 	    format (as indicated by the format method).
      
 	    \param image	image of correct format and specified width/height
-	    \param width	width of image
-	    \param height	height of image
     */
-	  virtual void put( void *image, int width, int height );
+	  virtual void put( void * ) = 0;
 
-    virtual bool usable();
+  protected:
+    
+    static void CalculateVideoLayout(
+        int widget_width, int widget_height,
+        int image_width, int image_height,
+        int &video_x, int &video_y, int &video_width, int &video_height );
   
   protected:
 	  int imageWidth;
 	  int imageHeight;
-
-	  virtual void put( void * ) = 0;
   };
 
 }   // namespace output

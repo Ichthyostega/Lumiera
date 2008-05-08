@@ -27,38 +27,48 @@
  ** @see xvdisplayer.cpp
  */
 
-#include "displayer.hpp"
-
+#include <X11/Xlib.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 #include <X11/extensions/XShm.h>
 #include <X11/extensions/Xvlib.h>
-#include <X11/Xlib.h>
+
+#include "displayer.hpp"
 
 #ifndef XVDISPLAYER_HPP
 #define XVDISPLAYER_HPP
+
+namespace Gtk {
+  class Widget;
+}
 
 namespace lumiera {
 namespace gui {
 namespace output {
 
-  class XvDisplayer
+  class XvDisplayer : public Displayer
   {
   public:
-    XvDisplayer();
+    XvDisplayer( Gtk::Widget *drawingarea, int width, int height );
     ~XvDisplayer();
+
+    void put( void *image );
   
   protected:
-	  void put( void *image );
+    bool usable();
 
   private:
-	  bool canuse;
-	  int depth;
-	  GtkWidget *drawingarea;
+	  bool gotPort;
+	  int grabbedPort;
+	  Gtk::Widget *drawingarea;
 	  Display *display;
 	  Window window;
 	  GC gc;
-	  XImage *xImage;
 	  XGCValues values;
+	  XvImage *xvImage;
+	  unsigned int port;
 	  XShmSegmentInfo shmInfo;
+	  char pix[ MAX_WIDTH * MAX_HEIGHT * 4 ];
   };
 
 }   // namespace output

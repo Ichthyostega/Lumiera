@@ -39,6 +39,8 @@ gtk_lumiera_SOURCES =                 \
     widgets/timeline-widget.hpp       \
     model/project.cpp                 \
     model/project.hpp                 \
+    output/aspectratiocalculator.cpp  \
+    output/aspectratiocalculator.hpp  \
     output/displayer.cpp              \
     output/displayer.hpp              \
     output/xvdisplayer.cpp            \

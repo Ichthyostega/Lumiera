@@ -30,42 +30,106 @@ namespace lumiera {
 namespace gui {
 namespace widgets {
 
-VideoDisplayWidget::VideoDisplayWidget()
-  {
-    set_flags(Gtk::NO_WINDOW);
-  }
+VideoDisplayWidget::VideoDisplayWidget() :
+  gdkWindow(NULL),
+  xvDisplayer(NULL)
+{
+  set_flags(Gtk::NO_WINDOW);
+}
+
+VideoDisplayWidget::~VideoDisplayWidget()
+{
+  if(xvDisplayer != NULL)
+    delete xvDisplayer;
+}
 
 void
 VideoDisplayWidget::on_realize()
-  {
-    //Call base class:
-    Gtk::Widget::on_realize();
+{
+  //Call base class:
+  Gtk::Widget::on_realize();
 
+  if(!gdkWindow)
+  {
+    //Create the GdkWindow:
+
+    GdkWindowAttr attributes;
+    memset(&attributes, 0, sizeof(attributes));
+
+    Gtk::Allocation allocation = get_allocation();
+
+    //Set initial position and size of the Gdk::Window:
+    attributes.x = allocation.get_x();
+    attributes.y = allocation.get_y();
+    attributes.width = allocation.get_width();
+    attributes.height = allocation.get_height();
+
+    attributes.event_mask = get_events () | Gdk::EXPOSURE_MASK; 
+    attributes.window_type = GDK_WINDOW_CHILD;
+    attributes.wclass = GDK_INPUT_OUTPUT;
+
+    gdkWindow = Gdk::Window::create(get_window() /* parent */, &attributes,
+            GDK_WA_X | GDK_WA_Y);
+    unset_flags(Gtk::NO_WINDOW);
+    set_window(gdkWindow);
+
+    //set colors
+    modify_bg(Gtk::STATE_NORMAL , Gdk::Color("black"));
+
+    //make the widget receive expose events
+    gdkWindow->set_user_data(gobj());
   }
+
+  xvDisplayer = new XvDisplayer(this, 320, 240 );
+
+  add_events(Gdk::ALL_EVENTS_MASK);
+}
+
+void
+VideoDisplayWidget::on_unrealize()
+{
+  gdkWindow.clear();
+
+  //Call base class:
+  Gtk::Widget::on_unrealize();
+}
+
+bool 
+VideoDisplayWidget::on_button_press_event (GdkEventButton* event)
+{
+  unsigned char buffer[320 * 240 * 4];
+
+  for(int i = 0; i < 320*240*4; i++)
+    buffer[i] = rand();
+
+  xvDisplayer->put((void*)buffer);
+
+  return true;
+}
 
 bool
 VideoDisplayWidget::on_expose_event(GdkEventExpose* event)
+{
+  // This is where we draw on the window
+  /*Glib::RefPtr<Gdk::Window> window = get_window();
+  if(window)
   {
-    // This is where we draw on the window
-    Glib::RefPtr<Gdk::Window> window = get_window();
-    if(window)
+    Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
+    if(event)
     {
-      Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
-      if(event)
-      {
-        // clip to the area that needs to be re-exposed so we don't draw any
-        // more than we need to.
-        cr->rectangle(event->area.x, event->area.y,
-                event->area.width, event->area.height);
-        cr->clip();
-      }
-
-      // Paint the background
-      cr->set_source_rgb(0.0, 0.0, 0.0);
-      cr->paint();
+      // clip to the area that needs to be re-exposed so we don't draw any
+      // more than we need to.
+      cr->rectangle(event->area.x, event->area.y,
+              event->area.width, event->area.height);
+      cr->clip();
     }
-    return true;
-  }
+
+    // Paint the background
+    cr->set_source_rgb(0.0, 0.0, 0.0);
+    cr->paint();
+  }*/
+  return true;
+}
 
 }   // namespace widgets
 }   // namespace gui

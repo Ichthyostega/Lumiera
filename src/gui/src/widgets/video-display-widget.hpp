@@ -28,6 +28,10 @@
 
 #include <gtkmm.h>
 
+#include "../output/xvdisplayer.hpp"
+
+using namespace lumiera::gui::output;
+
 namespace lumiera {
 namespace gui {
 namespace widgets {
@@ -37,14 +41,23 @@ namespace widgets {
     public:
       VideoDisplayWidget();
 
+      ~VideoDisplayWidget();
+
       /* ===== Overrides ===== */
     private:
       virtual void on_realize();
+  
+      virtual void on_unrealize();
+      
       virtual bool on_expose_event(GdkEventExpose* event);
+
+virtual bool on_button_press_event (GdkEventButton* event);
 
       /* ===== Internals ===== */
     private:
+      Glib::RefPtr<Gdk::Window> gdkWindow;
 
+      XvDisplayer *xvDisplayer;
     };
 
 }   // namespace widgets
