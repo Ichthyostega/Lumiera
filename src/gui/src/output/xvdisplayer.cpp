@@ -187,8 +187,8 @@ XvDisplayer::~XvDisplayer()
     XvUngrabPort( display, grabbedPort, CurrentTime );
   }
 
-  if ( xvImage != NULL )
-    XvStopVideo( display, port, window );
+  //if ( xvImage != NULL )
+  //  XvStopVideo( display, port, window );
 
   if ( shmInfo.shmaddr != NULL )
   {
@@ -196,6 +196,7 @@ XvDisplayer::~XvDisplayer()
     shmctl( shmInfo.shmid, IPC_RMID, 0 );
     shmdt( shmInfo.shmaddr );
   }
+  
   if ( xvImage != NULL )
     XFree( xvImage );
 }

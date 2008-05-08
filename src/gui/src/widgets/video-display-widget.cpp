@@ -46,40 +46,40 @@ VideoDisplayWidget::~VideoDisplayWidget()
 void
 VideoDisplayWidget::on_realize()
 {
+  set_flags(Gtk::NO_WINDOW);
+
   //Call base class:
   Gtk::Widget::on_realize();
 
-  if(!gdkWindow)
-  {
-    //Create the GdkWindow:
+  //Create the GdkWindow:
+  GdkWindowAttr attributes;
+  memset(&attributes, 0, sizeof(attributes));
 
-    GdkWindowAttr attributes;
-    memset(&attributes, 0, sizeof(attributes));
+  Gtk::Allocation allocation = get_allocation();
 
-    Gtk::Allocation allocation = get_allocation();
+  //Set initial position and size of the Gdk::Window:
+  attributes.x = allocation.get_x();
+  attributes.y = allocation.get_y();
+  attributes.width = allocation.get_width();
+  attributes.height = allocation.get_height();
 
-    //Set initial position and size of the Gdk::Window:
-    attributes.x = allocation.get_x();
-    attributes.y = allocation.get_y();
-    attributes.width = allocation.get_width();
-    attributes.height = allocation.get_height();
+  attributes.event_mask = get_events () | Gdk::EXPOSURE_MASK; 
+  attributes.window_type = GDK_WINDOW_CHILD;
+  attributes.wclass = GDK_INPUT_OUTPUT;
 
-    attributes.event_mask = get_events () | Gdk::EXPOSURE_MASK; 
-    attributes.window_type = GDK_WINDOW_CHILD;
-    attributes.wclass = GDK_INPUT_OUTPUT;
+  gdkWindow = Gdk::Window::create(get_window() /* parent */, &attributes,
+          GDK_WA_X | GDK_WA_Y);
+  unset_flags(Gtk::NO_WINDOW);
+  set_window(gdkWindow);
 
-    gdkWindow = Gdk::Window::create(get_window() /* parent */, &attributes,
-            GDK_WA_X | GDK_WA_Y);
-    unset_flags(Gtk::NO_WINDOW);
-    set_window(gdkWindow);
+  //set colors
+  modify_bg(Gtk::STATE_NORMAL , Gdk::Color("black"));
 
-    //set colors
-    modify_bg(Gtk::STATE_NORMAL , Gdk::Color("black"));
+  //make the widget receive expose events
+  gdkWindow->set_user_data(gobj());
 
-    //make the widget receive expose events
-    gdkWindow->set_user_data(gobj());
-  }
-
+  if(xvDisplayer != NULL)
+    delete xvDisplayer;
   xvDisplayer = new XvDisplayer(this, 320, 240 );
 
   add_events(Gdk::ALL_EVENTS_MASK);
