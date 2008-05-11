@@ -27,9 +27,12 @@
 #include "proc/asset/media.hpp"
 #include "proc/mobject/session/clip.hpp"
 
+#include "proc/asset.hpp"
+#include "common/p.hpp"
+#include "proc/mobject/placement.hpp"
 #include "proc/mobject/explicitplacement.hpp"   //////////TODO
 
-#include <boost/any.hpp>
+#include <boost/variant.hpp>
 #include <iostream>
 using std::string;
 using std::cout;
@@ -37,6 +40,10 @@ using std::cout;
 
 namespace mobject
   {
+  
+  DEFINE_SPECIALIZED_PLACEMENT (session::AbstractMO);
+  
+  
   namespace builder
     {
     namespace test
@@ -46,8 +53,8 @@ namespace mobject
       using session::AbstractMO;
 
 /////////////////////////////////////////////////////TODO: move to buildertool.hpp
-      using boost::any;
-      using boost::any_cast;
+
+      using lumiera::P;
 
 // Problem
 /*
@@ -58,29 +65,106 @@ namespace mobject
       - vieleicht einen allgemeinen Argument-Adapter nutzen?
       - Zielobjekt oder Wrapper<Zielobjekt> als Argumenttyp? 
 */
+    struct Nothing {};
       
+    /** 
+     * helper to treat various sorts of smart-ptrs uniformly.
+     * Implemented as a variant-type value object, it is preconfigured
+     * with the possible hierarchy-base classes used within this application.
+     * Thus, when passing in an arbitrary smart-ptr, the best fitting smart-ptr
+     * type pointing to the corresponding base class is selected for internal storage.
+     * Later on, stored values can be retrieved either utilitzing static or dynamic casts;
+     * error reporting is similar to the bahaviour of dynamic_cast<T>: when retrieving
+     * a pointer, in case of mismatch NULL is returned.
+     */
+    class WrapperPtr         // NONCOPYABLE!!
+      {
+        
+        template<typename X>
+        struct accessor;
+        
+        template<template<class> class WRA, class TAR>
+        struct accessor< WRA<TAR> > 
+          : public boost::static_visitor<WRA<TAR>*>
+          {
+            template<typename X>    WRA<TAR>* operator() (X&)                { return 0; }
+            template<typename BASE> WRA<TAR>* operator() (WRA<BASE>& stored) { return static_cast<WRA<TAR>*> (stored); }
+          };
+
+      
+      private:
+        /** storage: buffer holding either and "empty" marker,
+         *  or one of the configured pointer to wrapper types */ 
+        boost::variant<Nothing, Placement<MObject>*, P<asset::Asset>*> holder_;
+        
+      public:
+        void reset () { holder_ = Nothing(); }
+        
+        template<typename WRA>
+        WrapperPtr&
+        operator= (WRA* src)      ///< store a ptr to the given wrapper, after casting to base
+          {
+            if (src) holder_ = src;
+            else     holder_ = Nothing();
+            return *this;
+          }
+        
+        template<typename WRA>
+        WRA*
+        get ()                    ///< retrieve ptr and try to downcast to type WRA   
+          {
+            accessor<WRA> acc;
+            WRA* res = boost::apply_visitor(acc, this->holder_);
+            return res;
+          }
+      };
+    
+    
     class BuTuul
       : public lumiera::visitor::Tool<void, InvokeCatchAllFunction> 
       {
-        any currentArgument_;
+        WrapperPtr currentWrapper_;
         
       public:
         
-      void rememberWrapper (any argument)
+      template<template<class> class WRA, class TAR>
+      void rememberWrapper (WRA<TAR>* argument)
         {
-          currentArgument_ = argument;
+          currentWrapper_ = argument;
         }
       
-      template<typename WRA>
-      WRA& getCurrentArgumentWrapper ()
+      void forgetWrapper ()
         {
-          WRA* argument = any_cast<WRA*> (currentArgument_);
-          ASSERT (argument);
-          return *argument;
+          currentWrapper_.reset();
+        }
+      
+      
+      template<class TAR>
+      Placement<TAR>&
+      getPlacement ()
+        {
+          Placement<TAR>* pPlacement = currentWrapper_.get<Placement<TAR> >(); 
+          return *pPlacement;
+        }
+      ExplicitPlacement
+      getExplicitPlacement ()
+        {
+          return getPlacement<MObject>().resolve();
+        }
+      template<class TAR>
+      P<TAR>
+      getPtr ()
+        {
+          P<TAR>* pP = currentWrapper_.get<P<TAR> >(); 
+          return *pP;
         }
       };
       
+        
+        
 
+      
+      
     
     
     template
@@ -107,7 +191,7 @@ namespace mobject
           virtual bool isValid()  const { return true;}
 //          DEFINE_PROCESSABLE_BY (BuilderTool);
           
-          static void killDummy (AbstractMO* dum) { delete (DummyMO*)dum; }
+          static void killDummy (MObject* dum) { delete (DummyMO*)dum; }
           
           virtual void
           apply (BuTuul& tool) 
@@ -129,12 +213,15 @@ namespace mobject
         };
       
       
-      template<typename TAR>
+      template<typename WRA>
       inline BDable::ReturnType
-      apply (BuTuul& tool, TAR& wrappedTargetObj)
+      apply (BuTuul& tool, WRA& wrappedTargetObj)
       {
-        tool.rememberWrapper(any (&wrappedTargetObj));
+        WRA* ptr = &wrappedTargetObj;
+        (*ptr)->isValid();
+        tool.rememberWrapper(ptr);
         wrappedTargetObj->apply (tool);
+        tool.forgetWrapper();
       }
       
   //////////////////////////////////////////////////////TODO: wip-wip
@@ -156,12 +243,12 @@ namespace mobject
         public:
           void treat (Clip& c)    
             { 
-              Placement<Clip>& pC = getCurrentArgumentWrapper<Placement<Clip> >();
+              Placement<Clip>& pC = getPlacement<Clip>();
               cout << "media is: "<< str(pC->getMedia()) <<"\n"; 
             }
           void treat (AbstractMO&)
             {
-              Placement<AbstractMO>& placement = getCurrentArgumentWrapper<DummyPlacement>();
+              Placement<AbstractMO>& placement = getPlacement<AbstractMO>();
               cout << "unspecific MO; Placement(adr) " << &placement <<"\n"; 
             }
           void onUnknown (Buildable&)
@@ -199,11 +286,14 @@ namespace mobject
               BuTuul& tool (t1);
                                 
               DummyPlacement dumm;
+              Placement<AbstractMO>& dummy(dumm);
+              
               Placement<Clip> clip = asset::Media::create("test-1", asset::VIDEO)->createClip();
+              
 
               apply (tool, clip);
               cout << "Placement(adr) " << &dumm <<"\n"; 
-              apply (tool, dumm);
+              apply (tool, dummy);
             } 
         };
       
@@ -218,13 +308,13 @@ namespace mobject
   } // namespace builder
   
   //////////////////////////////////////////////////////TODO: wip-wip
-  template<>
+/*  template<>
   ExplicitPlacement
   Placement<session::AbstractMO>::resolve ()  const 
     { 
       UNIMPLEMENTED ("just a test");
     }
-  //////////////////////////////////////////////////////TODO: wip-wip
+*/  //////////////////////////////////////////////////////TODO: wip-wip
 
 
 } // namespace mobject
