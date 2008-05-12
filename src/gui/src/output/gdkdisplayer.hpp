@@ -1,5 +1,5 @@
 /*
-  xvdisplayer.hpp  -  Defines the base class for XVideo display
+  gdkdisplayer.hpp  -  Defines the class for displaying video via GDK
  
   Copyright (C)         Lumiera.org
     2000,               Arne Schirmacher <arne@schirmacher.de>
@@ -21,23 +21,17 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file xvdisplayer.hpp
+/** @file gdkdisplayer.hpp
  ** This file contains the definition of XvDisplayer, the XVideo
  ** video output implementation
- ** @see xvdisplayer.cpp
+ ** @see gdkdisplayer.cpp
  ** @see displayer.hpp
  */
 
-#include <X11/Xlib.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-#include <X11/extensions/XShm.h>
-#include <X11/extensions/Xvlib.h>
-
 #include "displayer.hpp"
 
-#ifndef XVDISPLAYER_HPP
-#define XVDISPLAYER_HPP
+#ifndef GDKDISPLAYER_HPP
+#define GDKDISPLAYER_HPP
 
 namespace Gtk {
   class Widget;
@@ -47,11 +41,10 @@ namespace lumiera {
 namespace gui {
 namespace output {
 
-  class XvDisplayer : public Displayer
+  class GdkDisplayer : public Displayer
   {
   public:
-    XvDisplayer( Gtk::Widget *drawing_area, int width, int height );
-    ~XvDisplayer();
+    GdkDisplayer( Gtk::Widget *drawing_area, int width, int height );
 
     void put( void *image );
   
@@ -59,21 +52,11 @@ namespace output {
     bool usable();
 
   private:
-	  bool gotPort;
-	  int grabbedPort;
-	  Gtk::Widget *drawingArea;
-	  Display *display;
-	  Window window;
-	  GC gc;
-	  XGCValues values;
-	  XvImage *xvImage;
-	  unsigned int port;
-	  XShmSegmentInfo shmInfo;
-	  char pix[ MAX_WIDTH * MAX_HEIGHT * 4 ];
+    Gtk::Widget *drawingArea;
   };
 
 }   // namespace output
 }   // namespace gui
 }   // namespace lumiera
 
-#endif // XVDISPLAYER_HPP
+#endif // GDKDISPLAYER_HPP

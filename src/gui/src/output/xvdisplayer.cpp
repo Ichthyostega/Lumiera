@@ -1,5 +1,5 @@
 /*
-  displayer.cpp  -  Implements the base class for displaying video
+  xvdisplayer.cpp  -  Implements the base class for XVideo display
  
   Copyright (C)         Lumiera.org
     2000,               Arne Schirmacher <arne@schirmacher.de>
@@ -39,16 +39,15 @@ namespace gui {
 namespace output {
 
 XvDisplayer::XvDisplayer( Gtk::Widget *drawing_area, int width, int height ) :
-    xvImage( NULL )
+    xvImage( NULL ),
+    drawingArea( drawing_area ),
+    gotPort( false )
 {
   cerr << ">> Trying XVideo at " << width << "x" << height << endl;
 
-  this->drawingArea = drawing_area;
-  imageWidth = width;
-  imageHeight = height;
+	imageWidth = width, imageHeight = height;
 
   shmInfo.shmaddr = NULL;
-  gotPort = false;
 
   Glib::RefPtr<Gdk::Window> area_window = drawing_area->get_window();
 
@@ -215,7 +214,7 @@ XvDisplayer::put( void *image )
   if(xvImage != NULL)
   {
     int video_x = 0, video_y = 0, video_width = 0, video_height = 0;
-    CalculateVideoLayout(
+    calculateVideoLayout(
       drawingArea->get_width(),
       drawingArea->get_height(),
       preferredWidth(), preferredHeight(),

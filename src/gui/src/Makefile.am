@@ -41,6 +41,8 @@ gtk_lumiera_SOURCES =                 \
     model/project.hpp                 \
     output/displayer.cpp              \
     output/displayer.hpp              \
+    output/gdkdisplayer.cpp           \
+    output/gdkdisplayer.hpp           \
     output/xvdisplayer.cpp            \
     output/xvdisplayer.hpp            
 

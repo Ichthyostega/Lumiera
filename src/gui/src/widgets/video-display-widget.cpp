@@ -24,6 +24,9 @@
 #include <gdkmm/general.h>
 #include <cairomm-1.0/cairomm/cairomm.h>
 
+#include "../output/xvdisplayer.hpp"
+#include "../output/gdkdisplayer.hpp"
+
 #include "video-display-widget.hpp"
 
 namespace lumiera {
@@ -32,15 +35,15 @@ namespace widgets {
 
 VideoDisplayWidget::VideoDisplayWidget() :
   gdkWindow(NULL),
-  xvDisplayer(NULL)
+  displayer(NULL)
 {
   set_flags(Gtk::NO_WINDOW);
 }
 
 VideoDisplayWidget::~VideoDisplayWidget()
 {
-  if(xvDisplayer != NULL)
-    delete xvDisplayer;
+  if(displayer != NULL)
+    delete displayer;
 }
 
 void
@@ -78,9 +81,9 @@ VideoDisplayWidget::on_realize()
   //make the widget receive expose events
   gdkWindow->set_user_data(gobj());
 
-  if(xvDisplayer != NULL)
-    delete xvDisplayer;
-  xvDisplayer = new XvDisplayer(this, 320, 240 );
+  if(displayer != NULL)
+    delete displayer;
+  displayer = createDisplayer(this, 320, 240);
 
   add_events(Gdk::ALL_EVENTS_MASK);
 }
@@ -102,7 +105,7 @@ VideoDisplayWidget::on_button_press_event (GdkEventButton* event)
   for(int i = 0; i < 320*240*4; i++)
     buffer[i] = rand();
 
-  xvDisplayer->put((void*)buffer);
+  displayer->put((void*)buffer);
 
   return true;
 }
@@ -129,6 +132,26 @@ VideoDisplayWidget::on_expose_event(GdkEventExpose* event)
     cr->paint();
   }*/
   return true;
+}
+
+Displayer*
+VideoDisplayWidget::createDisplayer( Gtk::Widget *drawingArea, int width, int height )
+{
+  Displayer *displayer = NULL;
+
+  displayer = new XvDisplayer( drawingArea, width, height );
+  if ( !displayer->usable() )
+  {
+    delete displayer;
+    displayer = NULL;
+  }
+
+  if ( displayer == NULL )
+  {
+    displayer = new GdkDisplayer( drawingArea, width, height );
+  }
+
+  return displayer;
 }
 
 }   // namespace widgets

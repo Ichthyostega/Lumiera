@@ -23,6 +23,8 @@
 * *****************************************************/
 
 #include "displayer.hpp"
+#include "xvdisplayer.hpp"
+#include "gdkdisplayer.hpp"
 
 namespace lumiera {
 namespace gui {
@@ -31,7 +33,7 @@ namespace output {
 bool
 Displayer::usable()
 {
-	return false;
+  return false;
 }
 
 DisplayerInput
@@ -53,19 +55,19 @@ Displayer::preferredHeight()
 }
 
 void
-Displayer::CalculateVideoLayout(
+Displayer::calculateVideoLayout(
         int widget_width, int widget_height,
         int image_width, int image_height,
         int &video_x, int &video_y, int &video_width, int &video_height )
 {
-	double ratio_width = ( double ) widget_width / ( double ) image_width;
-	double ratio_height = ( double ) widget_height / ( double ) image_height;
-	double ratio_constant = ratio_height < ratio_width ?
-	                       ratio_height : ratio_width;
-	video_width = ( int ) ( image_width * ratio_constant + 0.5 );
-	video_height = ( int ) ( image_height * ratio_constant + 0.5 );
-	video_x = ( widget_width - video_width ) / 2;
-	video_y = ( widget_height - video_height ) / 2;
+  double ratio_width = ( double ) widget_width / ( double ) image_width;
+  double ratio_height = ( double ) widget_height / ( double ) image_height;
+  double ratio_constant = ratio_height < ratio_width ?
+                         ratio_height : ratio_width;
+  video_width = ( int ) ( image_width * ratio_constant + 0.5 );
+  video_height = ( int ) ( image_height * ratio_constant + 0.5 );
+  video_x = ( widget_width - video_width ) / 2;
+  video_y = ( widget_height - video_height ) / 2;
 }
 
 }   // namespace output

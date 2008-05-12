@@ -99,7 +99,7 @@ namespace output {
 
   protected:
     
-    static void CalculateVideoLayout(
+    static void calculateVideoLayout(
         int widget_width, int widget_height,
         int image_width, int image_height,
         int &video_x, int &video_y, int &video_width, int &video_height );

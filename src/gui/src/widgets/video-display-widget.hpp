@@ -28,7 +28,7 @@
 
 #include <gtkmm.h>
 
-#include "../output/xvdisplayer.hpp"
+#include "../output/displayer.hpp"
 
 using namespace lumiera::gui::output;
 
@@ -51,13 +51,17 @@ namespace widgets {
       
       virtual bool on_expose_event(GdkEventExpose* event);
 
-virtual bool on_button_press_event (GdkEventButton* event);
+      virtual bool on_button_press_event (GdkEventButton* event);
 
       /* ===== Internals ===== */
     private:
+      static Displayer*
+        createDisplayer( Gtk::Widget *drawingArea, int width, int height );
+
+    private:
       Glib::RefPtr<Gdk::Window> gdkWindow;
 
-      XvDisplayer *xvDisplayer;
+      Displayer *displayer;
     };
 
 }   // namespace widgets
