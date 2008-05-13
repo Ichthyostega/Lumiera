@@ -76,7 +76,7 @@ VideoDisplayWidget::on_realize()
   set_window(gdkWindow);
 
   //set colors
-  modify_bg(Gtk::STATE_NORMAL , Gdk::Color("black"));
+  modify_bg(Gtk::STATE_NORMAL, Gdk::Color("black"));
 
   //make the widget receive expose events
   gdkWindow->set_user_data(gobj());
