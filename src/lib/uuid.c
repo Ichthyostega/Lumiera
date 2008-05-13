@@ -19,13 +19,14 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "uuid.h"
+#include "lib/uuid.h"
 
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <time.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
 
 void
 lumiera_uuid_set_ptr (lumiera_uuid* uuid, void* ptr)

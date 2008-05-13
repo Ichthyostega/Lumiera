@@ -21,9 +21,11 @@
 //#include "cinelerra-config.h"
 
 //#include <stdio.h>
-//#include <string.h>
+
 
 #include "lib/uuid.h"
+
+#include <nobug.h>
 
 //CINELERRA_ERROR_DEFINE(TEST, "test error");
 

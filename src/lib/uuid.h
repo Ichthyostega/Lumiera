@@ -20,7 +20,8 @@
 */
 #ifndef LUMIERA_UUID_H
 #define LUMIERA_UUID_H
-#include "lumiera.h"
+
+#include <stdlib.h>
 
 typedef unsigned char lumiera_uuid[16];
 
