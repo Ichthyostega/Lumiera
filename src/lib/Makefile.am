@@ -24,20 +24,25 @@ liblumi_a_CPPFLAGS = -I$(top_srcdir)/src/
 liblumi_a_SOURCES = \
 	$(liblumi_a_srcdir)/plugin.c \
 	$(liblumi_a_srcdir)/error.c \
-	$(liblumi_a_srcdir)/framerate.c \
 	$(liblumi_a_srcdir)/mutex.c \
 	$(liblumi_a_srcdir)/rwlock.c \
 	$(liblumi_a_srcdir)/condition.c \
-	$(liblumi_a_srcdir)/references.c
+	$(liblumi_a_srcdir)/references.c \
+	$(liblumi_a_srcdir)/uuid.c \
+	$(liblumi_a_srcdir)/safeclib.c \
+	$(liblumi_a_srcdir)/cuckoo.c \
+	$(liblumi_a_srcdir)/mrucache.c
 
 
 noinst_HEADERS += \
 	$(liblumi_a_srcdir)/plugin.h \
 	$(liblumi_a_srcdir)/error.h \
-	$(liblumi_a_srcdir)/framerate.h \
 	$(liblumi_a_srcdir)/locking.h \
 	$(liblumi_a_srcdir)/mutex.h \
 	$(liblumi_a_srcdir)/rwlock.h \
 	$(liblumi_a_srcdir)/condition.h \
-	$(liblumi_a_srcdir)/references.h
-
+	$(liblumi_a_srcdir)/references.h \
+	$(liblumi_a_srcdir)/uuid.h \
+	$(liblumi_a_srcdir)/safeclib.h \
+	$(liblumi_a_srcdir)/cuckoo.h \
+	$(liblumi_a_srcdir)/mrucache.h

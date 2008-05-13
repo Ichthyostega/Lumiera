@@ -21,33 +21,21 @@
 
 #include <stdio.h>
 #include <string.h>
-
-#include "lib/error.h"
-
-LUMIERA_ERROR_DEFINE(TEST, "test error");
+#include "tests/test.h"
 
 int conditionforgotunlock ();
 int mutexforgotunlock ();
 
+TESTS_BEGIN
 
-int
-main (int argc, char** argv)
+TEST ("conditionforgotunlock")
 {
-  NOBUG_INIT;
-
-  if (argc == 1)
-    return 0;
-
-  if (!strcmp(argv[1], "conditionforgotunlock"))
-    {
-      return conditionforgotunlock ();
-    }
-  if (!strcmp(argv[1], "mutexforgotunlock"))
-    {
-      return mutexforgotunlock ();
-    }
-  else
-    return 1;
-
-  return 0;
+  return conditionforgotunlock ();
 }
+
+TEST ("mutexforgotunlock")
+{
+  return mutexforgotunlock ();
+}
+
+TESTS_END

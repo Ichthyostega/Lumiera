@@ -25,8 +25,10 @@
 #include <dlfcn.h>
 #include <pthread.h>
 #include <time.h>
+#include <limits.h>
 
 #include "plugin.h"
+#include "safeclib.h"
 
 /**
  * @file Plugin loader.
@@ -159,8 +161,8 @@ lumiera_plugin_lookup (struct lumiera_plugin* self, const char* path)
             {
               /* got it */
               TRACE (lumiera_plugin, "found %s", pathname);
-              self->pathname = strdup (pathname);
-              if (!self->pathname) LUMIERA_DIE;
+              self->pathname = lumiera_strndup (pathname, PATH_MAX);
+
               self->type = lumiera_plugin_extensions[i].type;
               return 0;
             }
@@ -195,21 +197,20 @@ lumiera_interface_open (const char* name, const char* interface, size_t min_revi
   plugin.name = name; /* for searching */
 
   found = tsearch (&plugin, &lumiera_plugin_registry, lumiera_plugin_name_cmp);
-  if (!found) LUMIERA_DIE;
+  if (!found)
+    LUMIERA_DIE (NO_MEMORY);
 
   if (*found == &plugin)
     {
       NOTICE (lumiera_plugin, "new plugin");
 
       /* now really create new item */
-      *found = malloc (sizeof (struct lumiera_plugin));
-      if (!*found) LUMIERA_DIE;
+      *found = lumiera_malloc (sizeof (struct lumiera_plugin));
 
       if (name) /* NULL is main app, no lookup needed */
         {
           /*lookup for $LUMIERA_PLUGIN_PATH*/
-          (*found)->name = strdup (name);
-          if (!(*found)->name) LUMIERA_DIE;
+          (*found)->name = lumiera_strndup (name, PATH_MAX);
 
           if (!!lumiera_plugin_lookup (*found, getenv("LUMIERA_PLUGIN_PATH"))
 #ifdef LUMIERA_PLUGIN_PATH

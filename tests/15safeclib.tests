@@ -1,0 +1,28 @@
+
+TESTING "Safe clib and tools" ./test-safeclib
+
+TEST "Allocating 0 bytes" allocation0 <<END
+return: 134
+END
+
+TEST "Allocating some memory" allocation1024 <<END
+return: 0
+END
+
+
+TEST "Allocation error" allocationtoobig <<END
+return: 134
+END
+
+
+TEST "string equal check" streq <<END
+return: 0
+END
+
+TEST "temporary buffers" tmpbuf <<END
+return: 0
+END
+
+
+
+

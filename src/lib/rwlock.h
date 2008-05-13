@@ -33,6 +33,10 @@
 
 LUMIERA_ERROR_DECLARE(RWLOCK_AGAIN);
 LUMIERA_ERROR_DECLARE(RWLOCK_DEADLOCK);
+LUMIERA_ERROR_DECLARE(RWLOCK_DESTROY);
+LUMIERA_ERROR_DECLARE(RWLOCK_UNLOCK);
+LUMIERA_ERROR_DECLARE(RWLOCK_RLOCK);
+LUMIERA_ERROR_DECLARE(RWLOCK_WLOCK);
 
 /**
  * @file Read/write locks, header.
@@ -106,7 +110,7 @@ lumiera_rwlockacquirer_unlock (LumieraRWLockacquirer self)
   REQUIRE (self);
   REQUIRE (self->state != LUMIERA_UNLOCKED, "rwlock was not locked");
   if (pthread_rwlock_unlock (&self->rwlock->rwlock))
-    LUMIERA_DIE;
+    LUMIERA_DIE (RWLOCK_UNLOCK);
   self->state = LUMIERA_UNLOCKED;
 }
 

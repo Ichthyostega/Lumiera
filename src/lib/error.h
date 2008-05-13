@@ -39,7 +39,8 @@ extern "C" {
  * Abort unconditionally with a 'Fatal Error!' message.
  * This macro is used whenever the program end up in a invalid state from which no runtime recovery is possible
  */
-#define LUMIERA_DIE do { NOBUG_ERROR(NOBUG_ON, "Fatal Error!"); abort(); } while(0)
+#define LUMIERA_DIE(err) \
+  do { NOBUG_ERROR(NOBUG_ON, "Fatal Error: %s ", strchr(LUMIERA_ERROR_##err, ':')); abort(); } while(0)
 
 /**
  * Forward declare an error constant.
@@ -58,7 +59,8 @@ extern const char* LUMIERA_ERROR_##err
 #define LUMIERA_ERROR_DEFINE(err, msg) \
 const char* LUMIERA_ERROR_##err = "LUMIERA_ERROR_" #err ":" msg
 
-/** Helper macro to raise an error for the current thread.
+/**
+ * Helper macro to raise an error for the current thread.
  * This macro eases setting an error. It adds NoBug logging support to the low level error handling.
  * @param flag NoBug flag describing the subsystem where the error was raised
  * @param err name of the error without the 'LUMIERA_ERROR_' prefix (example: NO_MEMORY)
