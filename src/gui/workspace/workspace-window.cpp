@@ -32,7 +32,7 @@
 #include <libgdl-1.0/gdl/gdl-dock-placeholder.h>
 #include <libgdl-1.0/gdl/gdl-dock-bar.h>
 
-#include "gtk-lumiera.hpp"
+#include "../gtk-lumiera.hpp"
 #include "workspace-window.hpp"
 
 using namespace Gtk;
