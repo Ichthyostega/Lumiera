@@ -1807,17 +1807,16 @@ Wiki works. It is simple to use and just flexible enough to handle the task. I d
 Please __end your tiddlers in a newline__, this makes merging in git easier since the /pre tag used in tiddlywiki will become on a single line.
 
 ----
-!Architecture and Subsystems
+!Design Draft
 to get started, we create design drafts emphasizing different aspects and regions of Lumiera
 
-* Cehteh works on the data backend, see [[this page|backend.html]]
-* Ichthyo focuses mainly on Edit operations and Builder, [[see this separate page|renderengine.html]]
-* Gmerlin is in charge of [[GAVL|http://gmerlin.sourceforge.net/gavl.html]] for processing of video data
-* as of 4/08 a GuiWorkingGroup is emerging...
+* Ichthyo focuses mainly on the Render Engine and its interconnection to the EDL, [[see this separate page|renderengine.html]]
+* Cehteh works on the data backend draft, see [[this page|backend.html]]
 * Some tools which don't fit somewhere else and are used everywhere are put into a [[Support Library|support_library.html]]
+* [[Description of the Test System|TestSh]]
 
-!Coding &amp;mdash; Building &amp;mdash; Testing
-how to organize several aspects of the practical coding...
+!Coding Structures
+next we should //start thinking// on how to organize several aspects of the practical coding...
 * what to do in BOUML?                          &amp;rarr; [[more|whatInBOUML]]
 * how to organize packages, files, includes?    &amp;rarr; [[more|SrcTreeStructure]]
 * how to organize the executable to be built?
