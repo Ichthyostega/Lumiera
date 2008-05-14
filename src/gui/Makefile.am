@@ -70,7 +70,9 @@ lumigui_SOURCES =                                            \
 lumigui_LDFLAGS = 
 lumigui_LDADD = $(GTK_LUMIERA_LIBS) 
 
-themesdir = $(datadir)/themes
-themes_DATA = $(lumigui_srcdir)/lumiera_ui.rc
+$(top_builddir)/lumiera_ui.rc:
+	echo TEST TEST
+	exit 1
 
-EXTRA_DIST += $(themes_DATA)
+#cp $(lumigui_srcdir)/lumiera_ui.rc $(top_builddir)
+
