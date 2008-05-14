@@ -29,8 +29,14 @@ namespace panels {
 Panel::Panel(const gchar *name, const gchar *long_name, GdlDockItemBehavior behavior)
 {
   dock_item = (GdlDockItem*)gdl_dock_item_new (name, long_name, behavior);
-  gtk_container_add ((GtkContainer*)dock_item, (GtkWidget*)gobj());
-  gtk_widget_show ((GtkWidget*)dock_item);
+  internal_setup();
+}
+
+Panel::Panel(const gchar *name, const gchar *long_name, const gchar *stock_id,
+  GdlDockItemBehavior behavior)
+{
+  dock_item = (GdlDockItem*)gdl_dock_item_new_with_stock (name, long_name, stock_id, behavior);
+  internal_setup();
 }
 
 Panel::~Panel()
@@ -41,6 +47,12 @@ Panel::~Panel()
 GdlDockItem* Panel::get_dock_item() const
 {
   return dock_item;
+}
+
+void Panel::internal_setup()
+{
+  gtk_container_add ((GtkContainer*)dock_item, (GtkWidget*)gobj());  
+  gtk_widget_show ((GtkWidget*)dock_item);
 }
 
 }   // namespace panels

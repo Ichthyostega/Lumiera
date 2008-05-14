@@ -38,6 +38,8 @@ namespace workspace {
   Actions::Actions(WorkspaceWindow &workspace_window) :
 	  workspaceWindow(workspace_window)
   {
+    register_stock_items();
+
 	  actionGroup = ActionGroup::create();
 
 	  // File menu
@@ -63,7 +65,7 @@ namespace workspace {
 
     // View Menu
     actionGroup->add(Action::create("ViewMenu", _("_View")));
-	  actionGroup->add(Action::create("ViewViewer", _("_Viewer")),
+	  actionGroup->add(Action::create("ViewViewer", Gtk::StockID("viewer_panel")),
 	    sigc::mem_fun(*this, &Actions::on_menu_view_viewer));
 	  actionGroup->add(Action::create("ViewTimeline", _("_Timeline")),
 	    sigc::mem_fun(*this, &Actions::on_menu_view_timeline));
@@ -72,6 +74,41 @@ namespace workspace {
 	  actionGroup->add(Action::create("HelpMenu", _("_Help")) );
 	  actionGroup->add(Action::create("HelpAbout", Stock::ABOUT),
 	  sigc::mem_fun(*this, &Actions::on_menu_help_about) );
+  }
+
+  void
+  Actions::register_stock_items()
+  {
+    RefPtr<IconFactory> factory = IconFactory::create();
+    add_stock_item(factory, "viewer-panel.png", "viewer_panel", _("_Viewer"));
+    factory->add_default(); //Add factory to list of factories.
+  }
+
+  void
+  Actions::add_stock_item(const Glib::RefPtr<IconFactory>& factory,
+                          const Glib::ustring& filepath,
+                          const Glib::ustring& id, const Glib::ustring& label)
+  {
+    Gtk::IconSource source;
+    try
+    {
+      //This throws an exception if the file is not found:
+      source.set_pixbuf( Gdk::Pixbuf::create_from_file(filepath) );
+    }
+    catch(const Glib::Exception& ex)
+    {
+      g_message(ex.what().c_str());
+    }
+
+    source.set_size(Gtk::ICON_SIZE_SMALL_TOOLBAR);
+    source.set_size_wildcarded(); //Icon may be scaled.
+
+    Gtk::IconSet icon_set;
+    icon_set.add_source(source); //More than one source per set is allowed.
+
+    const Gtk::StockID stock_id(id);
+    factory->add(stock_id, icon_set);
+    Gtk::Stock::add(Gtk::StockItem(stock_id, label));
   }
 
   /* ===== File Menu Event Handlers ===== */

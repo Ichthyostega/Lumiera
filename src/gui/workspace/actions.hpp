@@ -46,12 +46,19 @@ class WorkspaceWindow;
     private:	
 	    Actions(WorkspaceWindow &workspace_window);
 
+			void register_stock_items();
+
+      void add_stock_item(const Glib::RefPtr<Gtk::IconFactory>& factory,
+                          const Glib::ustring& filepath,
+                          const Glib::ustring& id, const Glib::ustring& label);
+
 	    /**
-         * A reference to the MainWindow which owns
-         * this helper */
+       * A reference to the MainWindow which owns
+       * this helper */
 	    WorkspaceWindow &workspaceWindow;
 
 	    /* ===== Event Handlers ===== */
+    private:
       void on_menu_file_new_project();
       void on_menu_file_open_project();
       void on_menu_file_render();

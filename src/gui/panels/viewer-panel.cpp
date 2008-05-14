@@ -30,7 +30,7 @@ namespace gui {
 namespace panels {
 
 ViewerPanel::ViewerPanel() :
-  Panel("viewer", "Viewer"),
+  Panel("viewer", "Viewer", "viewer_panel"),
   previousButton(Stock::MEDIA_PREVIOUS),
   rewindButton(Stock::MEDIA_REWIND),
   playPauseButton(Stock::MEDIA_PLAY),

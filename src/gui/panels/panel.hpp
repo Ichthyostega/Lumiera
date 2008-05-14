@@ -40,13 +40,22 @@ namespace panels {
   class Panel : public Gtk::VBox
     {
     protected:
+
       Panel(const gchar *name, const gchar *long_name,
+        GdlDockItemBehavior behavior = GDL_DOCK_ITEM_BEH_NORMAL);
+      Panel(const gchar *name, const gchar *long_name, const gchar *stock_id,
         GdlDockItemBehavior behavior = GDL_DOCK_ITEM_BEH_NORMAL);
       ~Panel();
 
     public:
       GdlDockItem* get_dock_item() const;
 
+    private:
+      /**
+       *  The internal constructor for this class, whose purpose
+       *  is to set up the internal container widgets.
+       */
+      void internal_setup();
 
     protected:
       GdlDockItem* dock_item;
