@@ -37,9 +37,6 @@ AC_PROG_LIBTOOL
 # test for headers
 #
 AC_STDC_HEADERS
-AC_CHECK_HEADER([nobug.h], AC_DEFINE(HAVE_NOBUG_H))
-AC_CHECK_HEADER([execinfo.h], AC_DEFINE(HAVE_EXECINFO_H))
-# there is a warning in nobug, disabled til fixed AC_CHECK_HEADER([valgrind/valgrind.h], AC_DEFINE(HAVE_VALGRIND_VALGRIND_H))
 
 ACX_PTHREAD
 ##AM_CONDITIONAL([HAVE_THREADING], [test x"$acx_pthread_ok" = xyes])
@@ -71,6 +68,12 @@ AC_ARG_ENABLE(release, AC_HELP_STRING([--enable-release], [select NoBug RELEASE 
               nobug_level=alpha
               AC_DEFINE(EBUG_ALPHA)
 )])])
+
+AC_CHECK_HEADER([nobug.h], AC_DEFINE(HAVE_NOBUG_H))
+AC_CHECK_HEADER([execinfo.h], AC_DEFINE(HAVE_EXECINFO_H))
+# there is a warning in nobug, disabled til fixed AC_CHECK_HEADER([valgrind/valgrind.h], AC_DEFINE(HAVE_VALGRIND_VALGRIND_H))
+
+
 AC_MSG_RESULT([NoBug build level: $nobug_level])
 # END NoBug
 
