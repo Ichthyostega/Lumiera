@@ -67,7 +67,7 @@ namespace workspace {
     actionGroup->add(Action::create("ViewMenu", _("_View")));
 	  actionGroup->add(Action::create("ViewViewer", Gtk::StockID("viewer_panel")),
 	    sigc::mem_fun(*this, &Actions::on_menu_view_viewer));
-	  actionGroup->add(Action::create("ViewTimeline", _("_Timeline")),
+	  actionGroup->add(Action::create("ViewTimeline", Gtk::StockID("timeline_panel")),
 	    sigc::mem_fun(*this, &Actions::on_menu_view_timeline));
 
 	  // Help Menu
@@ -81,6 +81,7 @@ namespace workspace {
   {
     RefPtr<IconFactory> factory = IconFactory::create();
     add_stock_item(factory, "viewer-panel.png", "viewer_panel", _("_Viewer"));
+    add_stock_item(factory, "timeline-panel.png", "timeline_panel", _("_Timeline"));
     factory->add_default(); //Add factory to list of factories.
   }
 

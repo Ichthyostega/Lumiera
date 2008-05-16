@@ -72,11 +72,15 @@ lumigui_LDADD = $(GTK_LUMIERA_LIBS)
 
 lumigui_DEPENDENCIES =                                  \
     $(top_builddir)/lumiera_ui.rc                       \
-    $(top_builddir)/viewer-panel.png
+    $(top_builddir)/viewer-panel.png                    \
+    $(top_builddir)/timeline.png                        
 
 $(top_builddir)/lumiera_ui.rc:
 	cp $(lumigui_srcdir)/lumiera_ui.rc $(top_builddir)
 
 $(top_builddir)/viewer-panel.png:
 	cp $(top_srcdir)/icons/viewer-panel.png $(top_builddir)
+
+$(top_builddir)/timeline.png:
+	cp $(top_srcdir)/icons/timeline.png $(top_builddir)
 

@@ -27,7 +27,7 @@ namespace gui {
 namespace panels {
 
 TimelinePanel::TimelinePanel() :
-  Panel("timeline", "Timeline")
+  Panel("timeline", "Timeline", "timeline_panel")
   {
     pack_start(timeline_widget);
   }
