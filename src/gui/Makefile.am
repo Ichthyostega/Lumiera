@@ -81,6 +81,6 @@ $(top_builddir)/lumiera_ui.rc:
 $(top_builddir)/viewer-panel.png:
 	cp $(top_srcdir)/icons/viewer-panel.png $(top_builddir)
 
-$(top_builddir)/timeline.png:
-	cp $(top_srcdir)/icons/timeline.png $(top_builddir)
+$(top_builddir)/timeline-panel.png:
+	cp $(top_srcdir)/icons/timeline-panel.png $(top_builddir)
 
