@@ -66,8 +66,9 @@ class WorkspaceWindow;
 
       void on_menu_edit_preferences();
 
-      void on_menu_view_viewer();
+      void on_menu_view_assets();
       void on_menu_view_timeline();
+      void on_menu_view_viewer();
 
       void on_menu_help_about();
       

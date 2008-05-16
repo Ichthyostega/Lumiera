@@ -14,7 +14,7 @@
    id="svg2677"
    sodipodi:version="0.32"
    inkscape:version="0.46"
-   sodipodi:docname="timeline.svg"
+   sodipodi:docname="timeline-panel.svg"
    version="1.0"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    inkscape:export-filename="/home/joel/workspace/lumiera/lumiera/icons/timeline.png"
@@ -331,16 +331,84 @@
        y1="9"
        x2="16"
        y2="9" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5654"
+       id="linearGradient2427"
+       gradientUnits="userSpaceOnUse"
+       x1="0"
+       y1="9"
+       x2="16"
+       y2="9" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5580"
+       id="linearGradient2430"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(-5,1)"
+       x1="5"
+       y1="5"
+       x2="11"
+       y2="9.5" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5580"
+       id="linearGradient2433"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(1,1)"
+       x1="5"
+       y1="5"
+       x2="11"
+       y2="9.5" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5633"
+       id="linearGradient2436"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(0,1)"
+       x1="16"
+       y1="2.5"
+       x2="0"
+       y2="2.5" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5580"
+       id="linearGradient2439"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="translate(7,1)"
+       x1="5"
+       y1="5"
+       x2="11"
+       y2="9.5" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5572"
+       id="linearGradient2444"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1,0,0,0.8888889,0,1.3333333)"
+       x1="0"
+       y1="4.5"
+       x2="16"
+       y2="4.5" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5654"
+       id="linearGradient2467"
+       gradientUnits="userSpaceOnUse"
+       x1="0"
+       y1="9"
+       x2="16"
+       y2="9" />
     <mask
        maskUnits="userSpaceOnUse"
-       id="mask5749">
+       id="mask2463">
       <rect
-         y="0"
-         x="0"
-         height="16"
+         style="fill:url(#linearGradient2467);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0"
+         id="rect2465"
          width="16"
-         id="rect5751"
-         style="fill:url(#linearGradient5753);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0" />
+         height="16"
+         x="0"
+         y="0" />
     </mask>
   </defs>
   <metadata
@@ -359,30 +427,14 @@
      inkscape:groupmode="layer"
      inkscape:label="Layer 1">
     <g
-       id="g5740"
-       mask="url(#mask5749)">
-      <rect
-         ry="0"
-         y="4"
-         x="0"
-         height="8"
-         width="16"
+       id="g2456"
+       mask="url(#mask2463)">
+      <path
          id="rect3249"
-         style="fill:url(#linearGradient5707);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none" />
-      <path
-         sodipodi:nodetypes="cc"
-         id="path4035"
-         d="M -1,5.5 L 16,5.5"
-         style="fill:none;fill-rule:evenodd;stroke:#eeeeec;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1" />
-      <path
-         inkscape:export-ydpi="90"
-         inkscape:export-xdpi="90"
-         sodipodi:nodetypes="cc"
-         style="fill:none;fill-rule:evenodd;stroke:#eeeeec;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;marker-start:none;marker-mid:none;stroke-miterlimit:4;stroke-dasharray:1, 1;stroke-dashoffset:0;stroke-opacity:1"
-         d="M -1,10.5 L 16,10.5"
-         id="path5564" />
+         d="M 0 4 L 0 5 L 0 6 L 0 10 L 0 11 L 0 12 L 16 12 L 16 11 L 15 11 L 15 10 L 16 10 L 16 6 L 15 6 L 15 5 L 16 5 L 16 4 L 0 4 z M 1 5 L 2 5 L 2 6 L 1 6 L 1 5 z M 3 5 L 4 5 L 4 6 L 3 6 L 3 5 z M 5 5 L 6 5 L 6 6 L 5 6 L 5 5 z M 7 5 L 8 5 L 8 6 L 7 6 L 7 5 z M 9 5 L 10 5 L 10 6 L 9 6 L 9 5 z M 11 5 L 12 5 L 12 6 L 11 6 L 11 5 z M 13 5 L 14 5 L 14 6 L 13 6 L 13 5 z M 1 10 L 2 10 L 2 11 L 1 11 L 1 10 z M 3 10 L 4 10 L 4 11 L 3 11 L 3 10 z M 5 10 L 6 10 L 6 11 L 5 11 L 5 10 z M 7 10 L 8 10 L 8 11 L 7 11 L 7 10 z M 9 10 L 10 10 L 10 11 L 9 11 L 9 10 z M 11 10 L 12 10 L 12 11 L 11 11 L 11 10 z M 13 10 L 14 10 L 14 11 L 13 11 L 13 10 z "
+         style="fill:url(#linearGradient2444);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none" />
       <rect
-         style="fill:url(#linearGradient5702);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:url(#linearGradient2439);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none"
          id="rect5588"
          width="5"
          height="4"
@@ -392,7 +444,7 @@
       <path
          sodipodi:nodetypes="cccccccccc"
          d="M 0,3 L 0,4 L 16,4 L 16,3 L 0,3 z M 0,12 L 0,13 L 16,13 L 16,12 L 0,12 z"
-         style="fill:url(#linearGradient5696);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         style="fill:url(#linearGradient2436);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          id="path5616" />
       <rect
          ry="0"
@@ -401,9 +453,9 @@
          height="4"
          width="5"
          id="rect5732"
-         style="fill:url(#linearGradient5734);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none" />
+         style="fill:url(#linearGradient2433);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none" />
       <rect
-         style="fill:url(#linearGradient5738);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none"
+         style="fill:url(#linearGradient2430);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none"
          id="rect5736"
          width="5"
          height="4"

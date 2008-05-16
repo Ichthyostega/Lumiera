@@ -65,10 +65,13 @@ namespace workspace {
 
     // View Menu
     actionGroup->add(Action::create("ViewMenu", _("_View")));
-	  actionGroup->add(Action::create("ViewViewer", Gtk::StockID("viewer_panel")),
-	    sigc::mem_fun(*this, &Actions::on_menu_view_viewer));
+	  actionGroup->add(Action::create("ViewAssets", Gtk::StockID("assets_panel")),
+	    sigc::mem_fun(*this, &Actions::on_menu_view_assets));
 	  actionGroup->add(Action::create("ViewTimeline", Gtk::StockID("timeline_panel")),
 	    sigc::mem_fun(*this, &Actions::on_menu_view_timeline));
+	  actionGroup->add(Action::create("ViewViewer", Gtk::StockID("viewer_panel")),
+	    sigc::mem_fun(*this, &Actions::on_menu_view_viewer));
+
 
 	  // Help Menu
 	  actionGroup->add(Action::create("HelpMenu", _("_Help")) );
@@ -80,8 +83,9 @@ namespace workspace {
   Actions::register_stock_items()
   {
     RefPtr<IconFactory> factory = IconFactory::create();
-    add_stock_item(factory, "viewer-panel.png", "viewer_panel", _("_Viewer"));
+    add_stock_item(factory, "assets-panel.png", "assets_panel", _("_Assets"));
     add_stock_item(factory, "timeline-panel.png", "timeline_panel", _("_Timeline"));
+    add_stock_item(factory, "viewer-panel.png", "viewer_panel", _("_Viewer"));
     factory->add_default(); //Add factory to list of factories.
   }
 
@@ -147,15 +151,21 @@ namespace workspace {
   }
 
   void
-  Actions::on_menu_view_viewer()
+  Actions::on_menu_view_assets()
   {
-    //workspaceWindow.viewer_panel.show();
+    //workspaceWindow.timeline_panel.show();
   }
 
   void
   Actions::on_menu_view_timeline()
   {
     //workspaceWindow.timeline_panel.show();
+  }
+
+  void
+  Actions::on_menu_view_viewer()
+  {
+    //workspaceWindow.viewer_panel.show();
   }
 
   void
