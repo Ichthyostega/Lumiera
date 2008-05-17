@@ -32,7 +32,15 @@
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/explicitplacement.hpp"   //////////TODO
 
-#include <boost/variant.hpp>
+#include "common/typelistutil.hpp"
+
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/remove_pointer.hpp>
+#include <boost/type_traits/is_convertible.hpp>
+#include <boost/type_traits/is_polymorphic.hpp>
+#include <boost/type_traits/is_base_of.hpp>
+
+//#include <boost/variant.hpp>
 #include <iostream>
 using std::string;
 using std::cout;
@@ -65,8 +73,359 @@ namespace mobject
       - vieleicht einen allgemeinen Argument-Adapter nutzen?
       - Zielobjekt oder Wrapper<Zielobjekt> als Argumenttyp? 
 */
-    struct Nothing {};
+
+    using boost::enable_if;
+    using boost::is_convertible;
+    
+    using lumiera::typelist::Types;
+    using lumiera::typelist::Node;
+    using lumiera::typelist::NullType;
+//    using lumiera::typelist::count;
+//    using lumiera::typelist::maxSize;
+    using lumiera::typelist::InstantiateChained;
+    
+    template
+      < class TYPES                           // List of Types
+      , template<class,class,uint> class _X_ //  your-template-goes-here
+      , class BASE = NullType               //   Base class at end of chain
+      , uint i = 0                         //    incremented on each instantiaton
+      >
+    class InstantiateWithIndex;
+    
+    
+    template< template<class,class,uint> class _X_
+            , class BASE
+            , uint i
+            >
+    class InstantiateWithIndex<NullType, _X_, BASE, i>
+      : public BASE
+      { 
+      public:
+        typedef BASE     Unit;
+        typedef NullType Next;
+        enum{ COUNT = i };
+      };
+    
       
+    template
+      < class TY, typename TYPES
+      , template<class,class,uint> class _X_
+      , class BASE
+      , uint i
+      >
+    class InstantiateWithIndex<Node<TY, TYPES>, _X_, BASE, i> 
+      : public _X_< TY
+                  , InstantiateWithIndex<TYPES, _X_, BASE, i+1 >
+                  , i
+                  >
+      { 
+      public:
+        typedef InstantiateWithIndex<TYPES,_X_,BASE,i+1> Next;
+        typedef _X_<TY,Next,i> Unit;
+        enum{ COUNT = Next::COUNT };
+      };
+
+    template<class TYPES>
+    struct count;
+    template<>
+    struct count<NullType>
+      {
+        enum{ value = 0 };
+      };
+    template<class TY, class TYPES>
+    struct count<Node<TY,TYPES> >
+      {
+        enum{ value = 1 + count<TYPES>::value };
+      };
+                  
+    template<class TYPES>
+    struct maxSize;
+    template<>
+    struct maxSize<NullType>
+      {
+        enum{ value = 0 };
+      };
+    template<class TY, class TYPES>
+    struct maxSize<Node<TY,TYPES> >
+      {
+        enum{ nextval = maxSize<TYPES>::value
+            , thisval = sizeof(TY)
+            , value   = nextval > thisval?  nextval:thisval
+            };
+      };
+
+    
+    
+    template<class T>
+    struct Holder
+      {
+        T content;
+        
+        Holder (T const& src) : T(src) {}
+        
+        template<typename TAR>
+        TAR get () { return static_cast<TAR> (content); }
+      };
+
+    typedef Types < Placement<MObject>*
+                  , P<asset::Asset>*
+                  > ::List
+                    WrapperTypes;
+    
+    template<typename X>
+    struct EmptyVal
+      {
+        static X create() 
+          {
+            return X(); 
+          }
+      };
+    template<typename X>
+    struct EmptyVal<X*&>
+      {
+        static X*& create() 
+          {
+            static X* null(0);
+            return null; 
+          }
+      };
+                  
+    
+    const uint TYPECNT = count<WrapperTypes>::value;
+    const size_t SIZE  = maxSize<WrapperTypes>::value;
+    
+    struct Buffer
+      {
+        char buffer_[SIZE];
+        uint which;
+        
+        Buffer() : which(TYPECNT) {}
+        
+        void* 
+        put (void)
+          {
+            deleteCurrent();
+            return 0;
+          }
+        
+        void
+        deleteCurrent ();  // depends on the Deleter, see below
+      };
+    
+    template<typename T, class BASE, uint idx>
+    struct Storage : BASE
+      {
+        T& 
+        put (T const& toStore)
+          {
+            BASE::deleteCurrent();  // remove old content, if any
+            
+            T& storedObj = *new(BASE::buffer_) T (toStore);
+            this->which = idx;   //    remember the actual type selected
+            return storedObj;
+          }
+        
+        using BASE::put;
+      };
+    
+    
+    
+    template<class FUNCTOR>
+    struct CaseSelect
+      {
+        typedef typename FUNCTOR::Ret Ret;
+        typedef Ret (*Func)(Buffer&);
+        
+        Func table_[TYPECNT];
+        
+        CaseSelect ()
+          {
+            for (uint i=0; i<TYPECNT; ++i)
+              table_[i] = 0;
+          }
+        
+        template<typename T>
+        static Ret
+        trampoline (Buffer& storage)
+          {
+            T& content = reinterpret_cast<T&> (storage.buffer_);
+            return FUNCTOR::access (content);
+          }
+        
+        template<typename T>
+        void
+        create_thunk (uint idx)
+          {
+            Func  thunk = &trampoline<T>;
+            table_[idx] = thunk;
+          }
+        
+        Ret
+        invoke (Buffer& storage)
+          {
+            if (TYPECNT <= storage.which)
+              return FUNCTOR::ifEmpty ();
+            else
+              return (*table_[storage.which]) (storage);
+          }
+      };
+    
+    
+    template< class T, class BASE, uint i >
+    struct CasePrepare
+      : BASE
+      {
+        CasePrepare () : BASE()
+          {
+//            BASE::table_[i] = &(BASE::template trampoline<T>);
+            BASE::template create_thunk<T>(i);
+          }
+      };
+    
+      
+    template<class FUNCTOR>
+    typename FUNCTOR::Ret
+    access (Buffer& buf)
+    {
+      typedef InstantiateWithIndex< WrapperTypes
+                                  , CasePrepare
+                                  , CaseSelect<FUNCTOR>
+                                  > 
+                                  Accessor;
+      static Accessor select_case;
+      return select_case.invoke(buf);
+    }
+    
+    
+    struct Deleter
+      {
+        typedef void Ret;
+        
+        template<typename T>
+        static void access (T& elem) { elem.~T(); }
+        
+        static void ifEmpty () { }
+      };
+
+    
+    void
+    Buffer::deleteCurrent ()
+    {
+      access<Deleter>(*this); // remove old content, if any
+      which = TYPECNT;       //  mark as empty
+    }
+    
+        
+    
+
+    
+   
+    using boost::remove_pointer;
+    using boost::remove_reference;
+    using boost::is_convertible;
+    using boost::is_polymorphic;
+    using boost::is_base_of;
+    using boost::enable_if;
+    
+    template <typename SRC, typename TAR>
+    struct can_cast : boost::false_type {};
+
+    template <typename SRC, typename TAR>
+    struct can_cast<SRC*,TAR*>          { enum { value = is_base_of<SRC,TAR>::value };};
+
+    template <typename SRC, typename TAR>
+    struct can_cast<SRC*&,TAR*>         { enum { value = is_base_of<SRC,TAR>::value };};
+
+    template <typename SRC, typename TAR>
+    struct can_cast<SRC&,TAR&>          { enum { value = is_base_of<SRC,TAR>::value };};
+    
+    
+    template <typename T>
+    struct has_RTTI
+      {
+        typedef typename remove_pointer<
+                typename remove_reference<T>::type>::type TPlain;
+      
+        enum { value = is_polymorphic<TPlain>::value };
+      };
+    
+    template <typename SRC, typename TAR>
+    struct use_dynamic_downcast
+      {
+        enum { value = can_cast<SRC,TAR>::value
+                       &&  has_RTTI<SRC>::value
+                       &&  has_RTTI<TAR>::value
+             };
+      };
+    
+    template <typename SRC, typename TAR>
+    struct use_static_downcast
+      {
+        enum { value = can_cast<SRC,TAR>::value
+                    && (  !has_RTTI<SRC>::value
+                       || !has_RTTI<TAR>::value
+                       )
+             };
+      };
+    
+    template <typename SRC, typename TAR>
+    struct use_conversion
+      {
+        enum { value = is_convertible<SRC,TAR>::value
+                    && !( use_static_downcast<SRC,TAR>::value
+                        ||use_dynamic_downcast<SRC,TAR>::value
+                        )
+             };
+      };
+    
+    
+
+    
+    
+    template<typename RET>
+    struct NullAccessor
+      {
+        typedef RET Ret;
+        
+        static RET access  (...) { return ifEmpty(); }
+        static RET ifEmpty ()    { return EmptyVal<RET>::create(); }
+      };
+    
+    template<typename TAR>
+    struct AccessCasted : NullAccessor<TAR>
+      {
+        using NullAccessor<TAR>::access;
+        
+        template<typename ELM>
+        static  typename enable_if< use_dynamic_downcast<ELM&,TAR>, TAR>::type
+        access (ELM& elem) 
+          { 
+            return dynamic_cast<TAR> (elem); 
+          }
+        
+        template<typename ELM>
+        static  typename enable_if< use_static_downcast<ELM&,TAR>, TAR>::type
+        access (ELM& elem) 
+          { 
+            return static_cast<TAR> (elem); 
+          }
+        
+        template<typename ELM>
+        static  typename enable_if< use_conversion<ELM&,TAR>, TAR>::type
+        access (ELM& elem) 
+          { 
+            return elem; 
+          }
+            
+      };
+        
+        
+    
+    
+    
+    
+    
+    
     /** 
      * helper to treat various sorts of smart-ptrs uniformly.
      * Implemented as a variant-type value object, it is preconfigured
@@ -80,32 +439,33 @@ namespace mobject
     class WrapperPtr         // NONCOPYABLE!!
       {
         
-        template<typename X>
-        struct accessor;
-        
-        template<template<class> class WRA, class TAR>
-        struct accessor< WRA<TAR> > 
-          : public boost::static_visitor<WRA<TAR>*>
-          {
-            template<typename X>    WRA<TAR>* operator() (X&)                { return 0; }
-            template<typename BASE> WRA<TAR>* operator() (WRA<BASE>& stored) { return static_cast<WRA<TAR>*> (stored); }
-          };
 
       
       private:
+        typedef InstantiateWithIndex< WrapperTypes
+                                    , Storage
+                                    , Buffer
+                                    > 
+                                    VariantHolder;
+        
         /** storage: buffer holding either and "empty" marker,
          *  or one of the configured pointer to wrapper types */ 
-        boost::variant<Nothing, Placement<MObject>*, P<asset::Asset>*> holder_;
+        VariantHolder holder_;
         
       public:
-        void reset () { holder_ = Nothing(); }
+        void 
+        reset () 
+          { 
+            access<Deleter> (holder_);
+            holder_.which = TYPECNT;
+          }
         
         template<typename WRA>
         WrapperPtr&
         operator= (WRA* src)      ///< store a ptr to the given wrapper, after casting to base
           {
-            if (src) holder_ = src;
-            else     holder_ = Nothing();
+            if (src) holder_.put (src);
+            else     reset();
             return *this;
           }
         
@@ -113,8 +473,8 @@ namespace mobject
         WRA*
         get ()                    ///< retrieve ptr and try to downcast to type WRA   
           {
-            accessor<WRA> acc;
-            WRA* res = boost::apply_visitor(acc, this->holder_);
+            typedef AccessCasted<WRA*> AccessWraP;
+            WRA* res = access<AccessWraP>(this->holder_);
             return res;
           }
       };
@@ -244,7 +604,8 @@ namespace mobject
           void treat (Clip& c)    
             { 
               Placement<Clip>& pC = getPlacement<Clip>();
-              cout << "media is: "<< str(pC->getMedia()) <<"\n"; 
+              cout << "media is: "<< str(pC->getMedia()) <<"\n" 
+                   << "Placement(adr) " << &pC <<"\n"; 
             }
           void treat (AbstractMO&)
             {
@@ -291,6 +652,7 @@ namespace mobject
               Placement<Clip> clip = asset::Media::create("test-1", asset::VIDEO)->createClip();
               
 
+              cout << "Placement(adr) " << &clip <<"\n"; 
               apply (tool, clip);
               cout << "Placement(adr) " << &dumm <<"\n"; 
               apply (tool, dummy);

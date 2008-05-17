@@ -136,7 +136,7 @@ namespace lumiera
                   >
       { 
       public:
-        typedef InstantiateChained<TYPES,_X_> Next;
+        typedef InstantiateChained<TYPES,_X_,BASE> Next;
         typedef _X_<TY,Next> Unit;
       };
     
