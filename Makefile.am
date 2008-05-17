@@ -33,6 +33,7 @@ SUBDIRS =
 include $(top_srcdir)/admin/Makefile.am
 
 # core
+include $(top_srcdir)/src/proc/Makefile.am
 include $(top_srcdir)/src/lib/Makefile.am
 #include $(top_srcdir)/src/backend/Makefile.am
 
