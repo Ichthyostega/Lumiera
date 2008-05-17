@@ -65,18 +65,29 @@ namespace workspace {
 
     // View Menu
     actionGroup->add(Action::create("ViewMenu", _("_View")));
-	  actionGroup->add(Action::create("ViewAssets", Gtk::StockID("assets_panel")),
-	    sigc::mem_fun(*this, &Actions::on_menu_view_assets));
-	  actionGroup->add(Action::create("ViewTimeline", Gtk::StockID("timeline_panel")),
-	    sigc::mem_fun(*this, &Actions::on_menu_view_timeline));
-	  actionGroup->add(Action::create("ViewViewer", Gtk::StockID("viewer_panel")),
-	    sigc::mem_fun(*this, &Actions::on_menu_view_viewer));
+    
+    assetsPanelAction = ToggleAction::create("ViewAssets", Gtk::StockID("assets_panel"));
+    assetsPanelAction->signal_toggled().connect(
+      sigc::mem_fun(*this, &Actions::on_menu_view_assets));
+	  actionGroup->add(assetsPanelAction);
+    
+    timelinePanelAction = ToggleAction::create("ViewTimeline", Gtk::StockID("timeline_panel"));
+    timelinePanelAction->signal_toggled().connect(
+      sigc::mem_fun(*this, &Actions::on_menu_view_timeline));
+	  actionGroup->add(timelinePanelAction);
 
+    viewerPanelAction = ToggleAction::create("ViewViewer", Gtk::StockID("viewer_panel"));
+    viewerPanelAction->signal_toggled().connect(
+      sigc::mem_fun(*this, &Actions::on_menu_view_viewer));
+	  actionGroup->add(viewerPanelAction);
 
 	  // Help Menu
 	  actionGroup->add(Action::create("HelpMenu", _("_Help")) );
 	  actionGroup->add(Action::create("HelpAbout", Stock::ABOUT),
 	  sigc::mem_fun(*this, &Actions::on_menu_help_about) );
+
+    // Refresh the UI state
+    update_action_state();
   }
 
   void
@@ -116,6 +127,14 @@ namespace workspace {
     Gtk::Stock::add(Gtk::StockItem(stock_id, label));
   }
 
+  void
+  Actions::update_action_state()
+  {
+    assetsPanelAction->set_active(workspaceWindow.assets_panel.is_shown());
+    timelinePanelAction->set_active(workspaceWindow.timeline_panel.is_shown());
+    viewerPanelAction->set_active(workspaceWindow.viewer_panel.is_shown());
+  }
+
   /* ===== File Menu Event Handlers ===== */
 
   void
@@ -143,6 +162,8 @@ namespace workspace {
     workspaceWindow.hide(); // Closes the main window to stop the Gtk::Main::run().
   }
 
+  /* ===== Edit Menu Event Handlers ===== */
+
   void
   Actions::on_menu_edit_preferences()
   {
@@ -150,22 +171,27 @@ namespace workspace {
     dialog.run();
   }
 
+  /* ===== View Menu Event Handlers ===== */
+
   void
   Actions::on_menu_view_assets()
   {
-    //workspaceWindow.timeline_panel.show();
+    workspaceWindow.assets_panel.show(!workspaceWindow.assets_panel.is_shown());
+    update_action_state();
   }
 
   void
   Actions::on_menu_view_timeline()
   {
-    //workspaceWindow.timeline_panel.show();
+    workspaceWindow.timeline_panel.show(!workspaceWindow.timeline_panel.is_shown());
+    update_action_state();
   }
 
   void
   Actions::on_menu_view_viewer()
   {
-    //workspaceWindow.viewer_panel.show();
+    workspaceWindow.viewer_panel.show(!workspaceWindow.viewer_panel.is_shown());
+    update_action_state();
   }
 
   void

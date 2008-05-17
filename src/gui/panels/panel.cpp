@@ -41,15 +41,30 @@ Panel::Panel(const gchar *name, const gchar *long_name, const gchar *stock_id,
 
 Panel::~Panel()
 {
-
+  #warning Im not sure that dock_item is freed - is it self deleting?
 }
 
-GdlDockItem* Panel::get_dock_item() const
+GdlDockItem*
+Panel::get_dock_item() const
 {
   return dock_item;
 }
 
-void Panel::internal_setup()
+void
+Panel::show(bool show)
+{
+  if(show) gdl_dock_item_show_item (dock_item);
+  else gdl_dock_item_hide_item (dock_item);
+}
+
+bool
+Panel::is_shown() const
+{
+  return GTK_WIDGET_VISIBLE((GtkWidget*)dock_item);
+}
+
+void
+Panel::internal_setup()
 {
   gtk_container_add ((GtkContainer*)dock_item, (GtkWidget*)gobj());  
   gtk_widget_show ((GtkWidget*)dock_item);

@@ -46,11 +46,21 @@ class WorkspaceWindow;
     private:	
 	    Actions(WorkspaceWindow &workspace_window);
 
-			void register_stock_items();
+	    /* ===== Internals ===== */
+    private:
+	    /**
+       * Registers application stock items: icons and
+       * labels associated with IDs */
+			static void register_stock_items();
 
-      void add_stock_item(const Glib::RefPtr<Gtk::IconFactory>& factory,
+      static void add_stock_item(const Glib::RefPtr<Gtk::IconFactory>& factory,
                           const Glib::ustring& filepath,
                           const Glib::ustring& id, const Glib::ustring& label);
+
+	    /**
+       * Updates the state of the menu/toolbar actions
+       * to reflect the current state of the workspace */
+      void update_action_state();
 
 	    /**
        * A reference to the MainWindow which owns
@@ -75,9 +85,14 @@ class WorkspaceWindow;
       // Temporary Junk
       void on_menu_others();
 
+
 	    /* ===== Actions ===== */
+    private:
 	    Glib::RefPtr<Gtk::ActionGroup> actionGroup;
-	    Glib::RefPtr<Gtk::RadioAction> m_refChoiceOne, m_refChoiceTwo;
+
+      Glib::RefPtr<Gtk::ToggleAction> assetsPanelAction;
+      Glib::RefPtr<Gtk::ToggleAction> timelinePanelAction;
+      Glib::RefPtr<Gtk::ToggleAction> viewerPanelAction;
 
 	    friend class WorkspaceWindow;
   };

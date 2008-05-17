@@ -40,18 +40,47 @@ namespace panels {
   class Panel : public Gtk::VBox
     {
     protected:
-
+      /**
+       *  Constructs a panel object
+       *  @param name The internal name of this panel
+       *  @param long_name The name to display on the caption
+       *  @param behavior The GDL behaviour of this item
+       */
       Panel(const gchar *name, const gchar *long_name,
         GdlDockItemBehavior behavior = GDL_DOCK_ITEM_BEH_NORMAL);
+
+      /**
+       *  Constructs a panel object with a stock item for a caption
+       *  @param name The internal name of this panel
+       *  @param long_name The name to display on the caption
+       *  @param stock_id The id of the stock item to display on the caption
+       *  @param behavior The GDL behaviour of this item
+       */
       Panel(const gchar *name, const gchar *long_name, const gchar *stock_id,
         GdlDockItemBehavior behavior = GDL_DOCK_ITEM_BEH_NORMAL);
+
       ~Panel();
 
     public:
+      /**
+       *  Returns a pointer to the underlying GdlDockItem structure
+       */
       GdlDockItem* get_dock_item() const;
+
+      /**
+       *  Shows or hides the panel.
+       *  @param show A value of true will show the panel,
+       *    false will hide it. */
+      void show(bool show = true);
+      
+      /**
+       *  Returns true if the panel is currently visible.
+       */
+      bool is_shown() const;
 
     private:
       /**
+       *  @internal Used by both constructors
        *  The internal constructor for this class, whose purpose
        *  is to set up the internal container widgets.
        */
