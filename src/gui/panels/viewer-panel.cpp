@@ -20,6 +20,7 @@
  
 * *****************************************************/
 
+#include "../gtk-lumiera.hpp"
 #include "viewer-panel.hpp"
 
 using namespace lumiera::gui::widgets;

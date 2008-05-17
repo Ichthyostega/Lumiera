@@ -20,6 +20,7 @@
  
 * *****************************************************/
 
+#include "../gtk-lumiera.hpp"
 #include "assets-panel.hpp"
 
 namespace lumiera {

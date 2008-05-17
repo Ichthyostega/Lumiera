@@ -20,6 +20,7 @@
  
 * *****************************************************/
 
+#include "../gtk-lumiera.hpp"
 #include "timeline-panel.hpp"
 
 namespace lumiera {
