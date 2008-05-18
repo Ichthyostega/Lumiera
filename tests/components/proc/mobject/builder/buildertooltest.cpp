@@ -34,55 +34,137 @@
 
 #include "common/typelistutil.hpp"
 
+#include <boost/noncopyable.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_polymorphic.hpp>
 #include <boost/type_traits/is_base_of.hpp>
 
-//#include <boost/variant.hpp>
 #include <iostream>
 using std::string;
 using std::cout;
 
 
-namespace mobject
-  {
+namespace util {
+  using boost::remove_pointer;
+  using boost::remove_reference;
+  using boost::is_convertible;
+  using boost::is_polymorphic;
+  using boost::is_base_of;
+  using boost::enable_if;
   
-  DEFINE_SPECIALIZED_PLACEMENT (session::AbstractMO);
+  template <typename SRC, typename TAR>
+  struct can_cast : boost::false_type {};
+
+  template <typename SRC, typename TAR>
+  struct can_cast<SRC*,TAR*>          { enum { value = is_base_of<SRC,TAR>::value };};
+
+  template <typename SRC, typename TAR>
+  struct can_cast<SRC*&,TAR*>         { enum { value = is_base_of<SRC,TAR>::value };};
+
+  template <typename SRC, typename TAR>
+  struct can_cast<SRC&,TAR&>          { enum { value = is_base_of<SRC,TAR>::value };};
   
   
-  namespace builder
+  template <typename T>
+  struct has_RTTI
     {
-    namespace test
-      {
-      
-      using session::Clip;
-      using session::AbstractMO;
-
-/////////////////////////////////////////////////////TODO: move to buildertool.hpp
-
-      using lumiera::P;
-
-// Problem
-/*
-      - brauche Laufzeittyp des Zielobjektes
-      - an wen wird die Dispatcher-Tabelle gebunden?
-        - falls an den Wrapper: Gefahr, zur Laufzeit nicht die Tabelle zu bekommen, in die das Trampolin registriert wurde
-        - falls an das Zielobjekt: wie gebe ich Referenz und konkreten Typ des Wrappers an den Funktionsaufruf im Tool?
-      - vieleicht einen allgemeinen Argument-Adapter nutzen?
-      - Zielobjekt oder Wrapper<Zielobjekt> als Argumenttyp? 
-*/
-
-    using boost::enable_if;
-    using boost::is_convertible;
+      typedef typename remove_pointer<
+              typename remove_reference<T>::type>::type TPlain;
     
-    using lumiera::typelist::Types;
-    using lumiera::typelist::Node;
-    using lumiera::typelist::NullType;
-//    using lumiera::typelist::count;
-//    using lumiera::typelist::maxSize;
-    using lumiera::typelist::InstantiateChained;
+      enum { value = is_polymorphic<TPlain>::value };
+    };
+  
+  template <typename SRC, typename TAR>
+  struct use_dynamic_downcast
+    {
+      enum { value = can_cast<SRC,TAR>::value
+                     &&  has_RTTI<SRC>::value
+                     &&  has_RTTI<TAR>::value
+           };
+    };
+  
+  template <typename SRC, typename TAR>
+  struct use_static_downcast
+    {
+      enum { value = can_cast<SRC,TAR>::value
+                  && (  !has_RTTI<SRC>::value
+                     || !has_RTTI<TAR>::value
+                     )
+           };
+    };
+  
+  template <typename SRC, typename TAR>
+  struct use_conversion
+    {
+      enum { value = is_convertible<SRC,TAR>::value
+                  && !( use_static_downcast<SRC,TAR>::value
+                      ||use_dynamic_downcast<SRC,TAR>::value
+                      )
+           };
+    };
+  
+
+  
+  template<typename X>
+  struct EmptyVal
+    {
+      static X create()    { return X(); }
+    };
+  template<typename X>
+  struct EmptyVal<X*&>
+    {
+      static X*& create()  { static X* nullP(0); return nullP; }
+    };
+  
+  
+  
+  
+  
+  template<typename RET>
+  struct NullAccessor
+    {
+      typedef RET Ret;
+      
+      static RET access  (...) { return ifEmpty(); }
+      static RET ifEmpty ()    { return EmptyVal<RET>::create(); }
+    };
+  
+  template<typename TAR>
+  struct AccessCasted : NullAccessor<TAR>
+    {
+      using NullAccessor<TAR>::access;
+      
+      template<typename ELM>
+      static  typename enable_if< use_dynamic_downcast<ELM&,TAR>, TAR>::type
+      access (ELM& elem) 
+        { 
+          return dynamic_cast<TAR> (elem); 
+        }
+      
+      template<typename ELM>
+      static  typename enable_if< use_static_downcast<ELM&,TAR>, TAR>::type
+      access (ELM& elem) 
+        { 
+          return static_cast<TAR> (elem); 
+        }
+      
+      template<typename ELM>
+      static  typename enable_if< use_conversion<ELM&,TAR>, TAR>::type
+      access (ELM& elem) 
+        { 
+          return elem; 
+        }
+    };
+  
+
+}
+
+namespace lumiera {
+
+  namespace typelist {
+  
     
     template
       < class TYPES                           // List of Types
@@ -124,7 +206,7 @@ namespace mobject
         typedef _X_<TY,Next,i> Unit;
         enum{ COUNT = Next::COUNT };
       };
-
+  
     template<class TYPES>
     struct count;
     template<>
@@ -153,279 +235,270 @@ namespace mobject
             , value   = nextval > thisval?  nextval:thisval
             };
       };
+  
+  } // namespace typelist
 
-    
-    
-    template<class T>
+  
+  
+
+  
+  namespace variant {
+
+    using lumiera::typelist::count;
+    using lumiera::typelist::maxSize;
+    using lumiera::typelist::InstantiateWithIndex;
+  
+    /** 
+     * internal helper used to build a variant storage wrapper.
+     * Parametrized with a collection of types, it provides functionality
+     * to copy a value of one of these types into an internal buffer, while
+     * remembering which of these types was used to place this copy.
+     * The value can be later on extracted using a visitation like mechanism,
+     * which takes a functor object and invokes a function \c access(T&) with
+     * the type matching the current value in storage
+     */ 
+    template<typename TYPES>
     struct Holder
       {
-        T content;
         
-        Holder (T const& src) : T(src) {}
+        enum { TYPECNT = count<TYPES>::value
+             , SIZE  = maxSize<TYPES>::value
+             };
         
-        template<typename TAR>
-        TAR get () { return static_cast<TAR> (content); }
+  
+        /** Storage to hold the actual value */
+        struct Buffer
+          {
+            char buffer_[SIZE];
+            uint which;
+            
+            Buffer() : which(TYPECNT) {}
+            
+            void* 
+            put (void)
+              {
+                deleteCurrent();
+                return 0;
+              }
+            
+            void
+            deleteCurrent ();  // depends on the Deleter, see below
+          };
+        
+        template<typename T, class BASE, uint idx>
+        struct PlacementAdapter : BASE
+          {
+            T& 
+            put (T const& toStore)
+              {
+                BASE::deleteCurrent();  // remove old content, if any
+                
+                T& storedObj = *new(BASE::buffer_) T (toStore);
+                this->which = idx;   //    remember the actual type selected
+                return storedObj;
+              }
+            
+            using BASE::put;
+          };
+        
+        typedef InstantiateWithIndex< TYPES
+                                    , PlacementAdapter
+                                    , Buffer
+                                    > 
+                                    Storage;
+        
+        
+        
+        /** provide a dispatcher table based visitation mechanism */
+        template<class FUNCTOR>
+        struct CaseSelect
+          {
+            typedef typename FUNCTOR::Ret Ret;
+            typedef Ret (*Func)(Buffer&);
+            
+            Func table_[TYPECNT];
+            
+            CaseSelect ()
+              {
+                for (uint i=0; i<TYPECNT; ++i)
+                  table_[i] = 0;
+              }
+            
+            template<typename T>
+            static Ret
+            trampoline (Buffer& storage)
+              {
+                T& content = reinterpret_cast<T&> (storage.buffer_);
+                return FUNCTOR::access (content);
+              }
+            
+            Ret
+            invoke (Buffer& storage)
+              {
+                if (TYPECNT <= storage.which)
+                  return FUNCTOR::ifEmpty ();
+                else
+                  return (*table_[storage.which]) (storage);
+              }
+          };
+        
+        
+        template< class T, class BASE, uint i >
+        struct CasePrepare
+          : BASE
+          {
+            CasePrepare () : BASE()
+              {
+                BASE::table_[i] = &BASE::template trampoline<T>;
+              }
+          };
+        
+          
+        template<class FUNCTOR>
+        static typename FUNCTOR::Ret
+        access (Buffer& buf)
+        {
+          typedef InstantiateWithIndex< TYPES
+                                      , CasePrepare
+                                      , CaseSelect<FUNCTOR>
+                                      > 
+                                      Accessor;
+          static Accessor select_case;
+          return select_case.invoke(buf);
+        }
+        
+        
+        struct Deleter
+          {
+            typedef void Ret;
+            
+            template<typename T>
+            static void access (T& elem) { elem.~T(); }
+            
+            static void ifEmpty () { }
+          };
       };
+    
+    
+      template<typename TYPES>
+      void
+      Holder<TYPES>::Buffer::deleteCurrent ()
+      {
+        access<Deleter>(*this); // remove old content, if any
+        which = TYPECNT;       //  mark as empty
+      }
+  
+  } // namespace variant
+  
 
+  
+ 
+      
+      
+  
+  
+  
+  
+  
+  
+  /** 
+   * A variant wrapper (typesafe union) capable of holding a value of any
+   * of a bounded collection of types. The value is stored in a local buffer
+   * directly within the object and may be accessed by a typesafe visitation.
+   * 
+   * \par
+   * This utility class is similar to boost::variant and indeed was implemented
+   * (5/08) in an effort to replace the latter in a draft solution for the problem
+   * of typesafe access to the correct wrapper class from within some builder tool.
+   * Well -- after finisihng this "exercise" I must admit that it is not really
+   * much more simple than what boost::variant does internally. At least we are
+   * pulling in fewer headers and the actual code path is shorter compared with
+   * boost::variant, at the price of beeing not so generic, not caring for
+   * alignment issues within the buffer and being <b>not threadsafe</b>
+   * 
+   * @param TYPES   collection of possible types to be stored in this variant object
+   * @param Access  policy how to access the stored value
+   */
+  template< typename TYPES
+          , template<typename> class Access = util::AccessCasted  
+          >                      
+  class Variant 
+    : boost::noncopyable
+    {
+      
+      typedef variant::Holder<TYPES> Holder;
+      typedef typename Holder::Deleter Deleter;
+      
+      
+      /** storage: buffer holding either and "empty" marker,
+       *  or one of the configured pointer to wrapper types */ 
+      typename Holder::Storage holder_;
+      
+      
+    public:
+      void reset () { holder_.deleteCurrent();}
+      
+      /** store a copy of the given argument within the
+       *  variant holder buffer, thereby typically casting 
+       *  or converting the given source type to the best 
+       *  suited (base) type (out of the collection of possible
+       *  types for this Variant instance)
+       */ 
+      template<typename SRC>
+      Variant&
+      operator= (SRC src)
+        {
+          if (src) holder_.put (src);  // see Holder::PlacementAdaptor::put
+          else     reset();
+          return *this;
+        }
+      
+      /** retrieve current content of the variant,
+       *  trying to cast or convert it to the given type.
+       *  Actually, the function \c access(T&) on the 
+       *  Access-policy (template param) is invoked with the
+       *  type currently stored in the holder buffer.
+       *  May return NULL if conversion fails.
+       */
+      template<typename TAR>
+      TAR
+      get ()   
+        {
+          typedef Access<TAR> Extractor;
+          return Holder::template access<Extractor> (this->holder_);
+        }
+    };
+  
+} // namespace lumiera 
+
+
+
+namespace mobject
+  {
+  
+  DEFINE_SPECIALIZED_PLACEMENT (session::AbstractMO);
+  
+  
+  namespace builder
+    {
+    namespace test
+      {
+      
+      using session::Clip;
+      using session::AbstractMO;
+
+/////////////////////////////////////////////////////TODO: move to buildertool.hpp
+
+      using lumiera::P;
+      using lumiera::typelist::Types;
+
+
+    
     typedef Types < Placement<MObject>*
                   , P<asset::Asset>*
                   > ::List
                     WrapperTypes;
-    
-    template<typename X>
-    struct EmptyVal
-      {
-        static X create() 
-          {
-            return X(); 
-          }
-      };
-    template<typename X>
-    struct EmptyVal<X*&>
-      {
-        static X*& create() 
-          {
-            static X* null(0);
-            return null; 
-          }
-      };
                   
-    
-    const uint TYPECNT = count<WrapperTypes>::value;
-    const size_t SIZE  = maxSize<WrapperTypes>::value;
-    
-    struct Buffer
-      {
-        char buffer_[SIZE];
-        uint which;
-        
-        Buffer() : which(TYPECNT) {}
-        
-        void* 
-        put (void)
-          {
-            deleteCurrent();
-            return 0;
-          }
-        
-        void
-        deleteCurrent ();  // depends on the Deleter, see below
-      };
-    
-    template<typename T, class BASE, uint idx>
-    struct Storage : BASE
-      {
-        T& 
-        put (T const& toStore)
-          {
-            BASE::deleteCurrent();  // remove old content, if any
-            
-            T& storedObj = *new(BASE::buffer_) T (toStore);
-            this->which = idx;   //    remember the actual type selected
-            return storedObj;
-          }
-        
-        using BASE::put;
-      };
-    
-    
-    
-    template<class FUNCTOR>
-    struct CaseSelect
-      {
-        typedef typename FUNCTOR::Ret Ret;
-        typedef Ret (*Func)(Buffer&);
-        
-        Func table_[TYPECNT];
-        
-        CaseSelect ()
-          {
-            for (uint i=0; i<TYPECNT; ++i)
-              table_[i] = 0;
-          }
-        
-        template<typename T>
-        static Ret
-        trampoline (Buffer& storage)
-          {
-            T& content = reinterpret_cast<T&> (storage.buffer_);
-            return FUNCTOR::access (content);
-          }
-        
-        template<typename T>
-        void
-        create_thunk (uint idx)
-          {
-            Func  thunk = &trampoline<T>;
-            table_[idx] = thunk;
-          }
-        
-        Ret
-        invoke (Buffer& storage)
-          {
-            if (TYPECNT <= storage.which)
-              return FUNCTOR::ifEmpty ();
-            else
-              return (*table_[storage.which]) (storage);
-          }
-      };
-    
-    
-    template< class T, class BASE, uint i >
-    struct CasePrepare
-      : BASE
-      {
-        CasePrepare () : BASE()
-          {
-//            BASE::table_[i] = &(BASE::template trampoline<T>);
-            BASE::template create_thunk<T>(i);
-          }
-      };
-    
-      
-    template<class FUNCTOR>
-    typename FUNCTOR::Ret
-    access (Buffer& buf)
-    {
-      typedef InstantiateWithIndex< WrapperTypes
-                                  , CasePrepare
-                                  , CaseSelect<FUNCTOR>
-                                  > 
-                                  Accessor;
-      static Accessor select_case;
-      return select_case.invoke(buf);
-    }
-    
-    
-    struct Deleter
-      {
-        typedef void Ret;
-        
-        template<typename T>
-        static void access (T& elem) { elem.~T(); }
-        
-        static void ifEmpty () { }
-      };
-
-    
-    void
-    Buffer::deleteCurrent ()
-    {
-      access<Deleter>(*this); // remove old content, if any
-      which = TYPECNT;       //  mark as empty
-    }
-    
-        
-    
-
-    
-   
-    using boost::remove_pointer;
-    using boost::remove_reference;
-    using boost::is_convertible;
-    using boost::is_polymorphic;
-    using boost::is_base_of;
-    using boost::enable_if;
-    
-    template <typename SRC, typename TAR>
-    struct can_cast : boost::false_type {};
-
-    template <typename SRC, typename TAR>
-    struct can_cast<SRC*,TAR*>          { enum { value = is_base_of<SRC,TAR>::value };};
-
-    template <typename SRC, typename TAR>
-    struct can_cast<SRC*&,TAR*>         { enum { value = is_base_of<SRC,TAR>::value };};
-
-    template <typename SRC, typename TAR>
-    struct can_cast<SRC&,TAR&>          { enum { value = is_base_of<SRC,TAR>::value };};
-    
-    
-    template <typename T>
-    struct has_RTTI
-      {
-        typedef typename remove_pointer<
-                typename remove_reference<T>::type>::type TPlain;
-      
-        enum { value = is_polymorphic<TPlain>::value };
-      };
-    
-    template <typename SRC, typename TAR>
-    struct use_dynamic_downcast
-      {
-        enum { value = can_cast<SRC,TAR>::value
-                       &&  has_RTTI<SRC>::value
-                       &&  has_RTTI<TAR>::value
-             };
-      };
-    
-    template <typename SRC, typename TAR>
-    struct use_static_downcast
-      {
-        enum { value = can_cast<SRC,TAR>::value
-                    && (  !has_RTTI<SRC>::value
-                       || !has_RTTI<TAR>::value
-                       )
-             };
-      };
-    
-    template <typename SRC, typename TAR>
-    struct use_conversion
-      {
-        enum { value = is_convertible<SRC,TAR>::value
-                    && !( use_static_downcast<SRC,TAR>::value
-                        ||use_dynamic_downcast<SRC,TAR>::value
-                        )
-             };
-      };
-    
-    
-
-    
-    
-    template<typename RET>
-    struct NullAccessor
-      {
-        typedef RET Ret;
-        
-        static RET access  (...) { return ifEmpty(); }
-        static RET ifEmpty ()    { return EmptyVal<RET>::create(); }
-      };
-    
-    template<typename TAR>
-    struct AccessCasted : NullAccessor<TAR>
-      {
-        using NullAccessor<TAR>::access;
-        
-        template<typename ELM>
-        static  typename enable_if< use_dynamic_downcast<ELM&,TAR>, TAR>::type
-        access (ELM& elem) 
-          { 
-            return dynamic_cast<TAR> (elem); 
-          }
-        
-        template<typename ELM>
-        static  typename enable_if< use_static_downcast<ELM&,TAR>, TAR>::type
-        access (ELM& elem) 
-          { 
-            return static_cast<TAR> (elem); 
-          }
-        
-        template<typename ELM>
-        static  typename enable_if< use_conversion<ELM&,TAR>, TAR>::type
-        access (ELM& elem) 
-          { 
-            return elem; 
-          }
-            
-      };
-        
-        
-    
-    
-    
-    
-    
-    
     /** 
      * helper to treat various sorts of smart-ptrs uniformly.
      * Implemented as a variant-type value object, it is preconfigured
@@ -436,48 +509,8 @@ namespace mobject
      * error reporting is similar to the bahaviour of dynamic_cast<T>: when retrieving
      * a pointer, in case of mismatch NULL is returned.
      */
-    class WrapperPtr         // NONCOPYABLE!!
-      {
-        
-
-      
-      private:
-        typedef InstantiateWithIndex< WrapperTypes
-                                    , Storage
-                                    , Buffer
-                                    > 
-                                    VariantHolder;
-        
-        /** storage: buffer holding either and "empty" marker,
-         *  or one of the configured pointer to wrapper types */ 
-        VariantHolder holder_;
-        
-      public:
-        void 
-        reset () 
-          { 
-            access<Deleter> (holder_);
-            holder_.which = TYPECNT;
-          }
-        
-        template<typename WRA>
-        WrapperPtr&
-        operator= (WRA* src)      ///< store a ptr to the given wrapper, after casting to base
-          {
-            if (src) holder_.put (src);
-            else     reset();
-            return *this;
-          }
-        
-        template<typename WRA>
-        WRA*
-        get ()                    ///< retrieve ptr and try to downcast to type WRA   
-          {
-            typedef AccessCasted<WRA*> AccessWraP;
-            WRA* res = access<AccessWraP>(this->holder_);
-            return res;
-          }
-      };
+    typedef lumiera::Variant<WrapperTypes> WrapperPtr;
+    
     
     
     class BuTuul
@@ -503,7 +536,7 @@ namespace mobject
       Placement<TAR>&
       getPlacement ()
         {
-          Placement<TAR>* pPlacement = currentWrapper_.get<Placement<TAR> >(); 
+          Placement<TAR>* pPlacement = currentWrapper_.get<Placement<TAR>*>(); 
           return *pPlacement;
         }
       ExplicitPlacement
@@ -515,7 +548,7 @@ namespace mobject
       P<TAR>
       getPtr ()
         {
-          P<TAR>* pP = currentWrapper_.get<P<TAR> >(); 
+          P<TAR>* pP = currentWrapper_.get<P<TAR>*>(); 
           return *pP;
         }
       };
