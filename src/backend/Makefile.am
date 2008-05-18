@@ -32,7 +32,7 @@ liblumibackend_a_SOURCES = \
 
 
 noinst_HEADERS += \
-	$(liblumibackend_a_srcdir)mediaaccessfacade.cpp
+	$(liblumibackend_a_srcdir)/mediaaccessfacade.cpp
 
 #	$(liblumibackend_a_srcdir)/backend.h \
 #	$(liblumibackend_a_srcdir)/file.h \
