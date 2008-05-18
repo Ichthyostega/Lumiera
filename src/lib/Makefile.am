@@ -21,28 +21,30 @@ noinst_LIBRARIES += liblumi.a
 liblumi_a_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
 liblumi_a_CPPFLAGS = -I$(top_srcdir)/src/
 
-liblumi_a_SOURCES = \
-	$(liblumi_a_srcdir)/plugin.c \
-	$(liblumi_a_srcdir)/error.c \
-	$(liblumi_a_srcdir)/mutex.c \
-	$(liblumi_a_srcdir)/rwlock.c \
-	$(liblumi_a_srcdir)/condition.c \
-	$(liblumi_a_srcdir)/references.c \
-	$(liblumi_a_srcdir)/uuid.c \
-	$(liblumi_a_srcdir)/safeclib.c \
-	$(liblumi_a_srcdir)/cuckoo.c \
-	$(liblumi_a_srcdir)/mrucache.c
+liblumi_a_SOURCES =				\
+	$(liblumi_a_srcdir)/plugin.c		\
+	$(liblumi_a_srcdir)/error.c		\
+	$(liblumi_a_srcdir)/mutex.c		\
+	$(liblumi_a_srcdir)/rwlock.c		\
+	$(liblumi_a_srcdir)/condition.c		\
+	$(liblumi_a_srcdir)/references.c	\
+	$(liblumi_a_srcdir)/uuid.c		\
+	$(liblumi_a_srcdir)/safeclib.c		\
+	$(liblumi_a_srcdir)/cuckoo.c		\
+	$(liblumi_a_srcdir)/mrucache.c		\
+	$(liblumi_a_srcdir)/appconfig.cpp
 
-
-noinst_HEADERS += \
-	$(liblumi_a_srcdir)/plugin.h \
-	$(liblumi_a_srcdir)/error.h \
-	$(liblumi_a_srcdir)/locking.h \
-	$(liblumi_a_srcdir)/mutex.h \
-	$(liblumi_a_srcdir)/rwlock.h \
-	$(liblumi_a_srcdir)/condition.h \
-	$(liblumi_a_srcdir)/references.h \
-	$(liblumi_a_srcdir)/uuid.h \
-	$(liblumi_a_srcdir)/safeclib.h \
-	$(liblumi_a_srcdir)/cuckoo.h \
-	$(liblumi_a_srcdir)/mrucache.h
+noinst_HEADERS +=						\
+	$(liblumi_a_srcdir)/plugin.h				\
+	$(liblumi_a_srcdir)/error.h				\
+	$(liblumi_a_srcdir)/locking.h				\
+	$(liblumi_a_srcdir)/mutex.h				\
+	$(liblumi_a_srcdir)/rwlock.h				\
+	$(liblumi_a_srcdir)/condition.h				\
+	$(liblumi_a_srcdir)/references.h			\
+	$(liblumi_a_srcdir)/uuid.h				\
+	$(liblumi_a_srcdir)/safeclib.h				\
+	$(liblumi_a_srcdir)/cuckoo.h				\
+	$(liblumi_a_srcdir)/mrucache.h				\
+	$(liblumi_a_srcdir)/appconfig.hpp			\
+	$(liblumi_a_srcdir)/lifecycleregistry.hpp
