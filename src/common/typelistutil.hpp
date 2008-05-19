@@ -40,7 +40,10 @@ This code is heavily inspired by
 
 /** @file typelistutil.hpp
  ** Helpers for working with lumiera::typelist::Types (i.e. lists-of-types). 
- **
+ ** The main purpose is to build interfaces and polymorphic implementations
+ ** (using virtual functions) based on templated Types or Collections of types,
+ ** which is not possible without Template Metaprogrmming.
+ ** 
  ** @see lumiera::query::ConfigRules usage example
  ** @see typelist.hpp
  ** 
@@ -138,6 +141,94 @@ namespace lumiera
       public:
         typedef InstantiateChained<TYPES,_X_,BASE> Next;
         typedef _X_<TY,Next> Unit;
+      };
+    
+    
+    
+    /** 
+     * A Variation of InstantiateChained providing an incremented
+     * Index value template parameter. This index can e.g. be used
+     * to store pointers in a dispatcher table in the Base class.
+     * Similar to InstantiateChained, this template builds a linear
+     * chain of inheritance. The user-provided template, which is
+     * to be instantiated for all types in the Typelist, now has to
+     * accept an additional third parameter (uint i).
+     */
+    template
+      < class TYPES                           // List of Types
+      , template<class,class,uint> class _X_ //  your-template-goes-here
+      , class BASE = NullType               //   Base class at end of chain
+      , uint i = 0                         //    incremented on each instantiaton
+      >
+    class InstantiateWithIndex;
+    
+    
+    template< template<class,class,uint> class _X_
+            , class BASE
+            , uint i
+            >
+    class InstantiateWithIndex<NullType, _X_, BASE, i>
+      : public BASE
+      { 
+      public:
+        typedef BASE     Unit;
+        typedef NullType Next;
+        enum{ COUNT = i };
+      };
+    
+    
+    template
+      < class TY, typename TYPES
+      , template<class,class,uint> class _X_
+      , class BASE
+      , uint i
+      >
+    class InstantiateWithIndex<Node<TY, TYPES>, _X_, BASE, i> 
+      : public _X_< TY
+                  , InstantiateWithIndex<TYPES, _X_, BASE, i+1 >
+                  , i
+                  >
+      { 
+      public:
+        typedef InstantiateWithIndex<TYPES,_X_,BASE,i+1> Next;
+        typedef _X_<TY,Next,i> Unit;
+        enum{ COUNT = Next::COUNT };
+      };
+    
+    
+    /**
+     * Metafunction counting the number of Types in the collection
+     */
+    template<class TYPES>
+    struct count;
+    template<>
+    struct count<NullType>
+      {
+        enum{ value = 0 };
+      };
+    template<class TY, class TYPES>
+    struct count<Node<TY,TYPES> >
+      {
+        enum{ value = 1 + count<TYPES>::value };
+      };
+    
+    /**
+     * Metafunction " max( sizeof(T) ) for T in TYPES "
+     */
+    template<class TYPES>
+    struct maxSize;
+    template<>
+    struct maxSize<NullType>
+      {
+        enum{ value = 0 };
+      };
+    template<class TY, class TYPES>
+    struct maxSize<Node<TY,TYPES> >
+      {
+        enum{ thisval = sizeof(TY)
+            , nextval = maxSize<TYPES>::value
+            , value   = nextval > thisval?  nextval:thisval
+            };
       };
     
     

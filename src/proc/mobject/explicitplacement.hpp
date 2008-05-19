@@ -30,9 +30,9 @@
 
 namespace mobject
   {
-
-
-
+  
+  
+  
   /**
    * Special kind of Placement, where the location of the
    * MObject has been nailed down to a fixed position.
@@ -51,7 +51,7 @@ namespace mobject
       const Pipe pipe;
       
       typedef std::pair<Time,Pipe> SolutionData;  //TODO (ichthyo consideres better passing of solution by subclass)
-
+      
       /** no need to resolve any further, as this ExplicitPlacement
        *  already \e is the result of a resolve()-call.
        */
@@ -61,9 +61,7 @@ namespace mobject
           return *this; 
         }
       
-      /** */ /////////////////////////////////////////////////////////////TODO: wip-wip... 
-      DEFINE_PROCESSABLE_BY (builder::BuilderTool);
-
+      
     protected:
       /*  @todo ichthyo considers a much more elegant implementation utilizing a subclass 
        *        of FixedLocation, which would serve as Placement::LocatingSolution, and
@@ -82,8 +80,8 @@ namespace mobject
       /** copying prohibited, ExplicitPlacement is effectively const! */
       ExplicitPlacement& operator= (const ExplicitPlacement&);
     };
-
-
-
+  
+  
+  
 } // namespace mobject
 #endif

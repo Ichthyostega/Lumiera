@@ -83,7 +83,7 @@ namespace mobject
   } // namespace mobject::session
   
   /** Placement<Track> defined to be subclass of Placement<MObject> */
-  DEFINE_SPECIALIZED_PLACEMENT (session::Track);
+  DEFINE_SPECIALIZED_PLACEMENT (session::Track, session::Meta);
 
 } // namespace mobject
 #endif

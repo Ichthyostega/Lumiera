@@ -88,9 +88,10 @@ namespace mobject
       virtual bool operator== (const MObject& oo)  const =0;
 
     };
+
   
-  
-  
+    
+  typedef Placement<MObject> PMO;
 
 
 
