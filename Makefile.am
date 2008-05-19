@@ -42,6 +42,7 @@ include $(top_srcdir)/src/backend/Makefile.am
 #include $(top_srcdir)/src...
 
 # tests
+include $(top_srcdir)/tests/common/Makefile.am
 include $(top_srcdir)/tests/components/Makefile.am
 include $(top_srcdir)/tests/Makefile.am
 include $(top_srcdir)/tests/plugin/Makefile.am
