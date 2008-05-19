@@ -30,6 +30,7 @@
 
     /* common types frequently used... */
 
+#include "common/p.hpp"
 #include "common/util.hpp"
 #include "common/time.hpp"
 #include "common/error.hpp"   ///< pulls in NoBug via nobugcfg.hpp

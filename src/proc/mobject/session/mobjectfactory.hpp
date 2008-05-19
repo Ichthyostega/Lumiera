@@ -45,7 +45,7 @@ namespace mobject
     class Track;
     class Effect;
     
-    typedef shared_ptr<asset::Track> PTrackAsset;
+    typedef P<asset::Track> PTrackAsset;
 
 
     class MObjectFactory

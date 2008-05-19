@@ -23,25 +23,39 @@
 
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/explicitplacement.hpp"
+#include "proc/mobject/mobject.hpp"
+
+#include <boost/format.hpp>
+using boost::str;
 
 namespace mobject
   {
 
 
-  /** @note we know we need only this single
-   *        specialisation, because we define 
-   *        the Placements of more specific 
-   *        MObject kinds to be subclasses
-   *        of Placement<MObject>, so they
-   *        will inherit this function.
-   */
-  template<>
+  template<class MO>
   ExplicitPlacement
-  Placement<MObject>::resolve ()  const 
+  Placement<MO>::resolve ()  const 
     { 
       return ExplicitPlacement (*this, chain.resolve()); 
     }
+  
+  /** @note we know we need only this single specialisation,
+   *        because we define the Placements of more specific 
+   *        MObject kinds to be subclasses of Placement<MObject>,
+   *        so they will inherit this function.
+   */
+  template ExplicitPlacement Placement<MObject>::resolve()  const;
 
+
+  
+  template<>
+  Placement<MObject>::operator string ()  const 
+    {
+      static boost::format fmt("Placement<%s> %|50T.| use-cnt=%x adr=%x pointee=%x");
+      return str(fmt % typeid(*get()).name() % use_count() % this % get() ); 
+    }
+  
+  
 
 
 } // namespace mobject

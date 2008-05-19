@@ -23,7 +23,7 @@
 
 /** @file visitorpolicies.hpp
  ** Policies usable for configuring the lumiera::visitor::Tool for different kinds of error handling. 
- ** @see buildertool.hpp for another flavor (calling and catch-all-function)
+ ** @see buildertool.hpp for another flavour (calling an catch-all-function there)
  **
  */
 

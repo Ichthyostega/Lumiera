@@ -111,9 +111,12 @@ namespace mobject
         virtual LocatingPin* clone ()  const;
         virtual ~LocatingPin() {};
         
-      protected:
+//      protected:
         LocatingPin () {};
         
+//TODO (for working out the buildable interface; ctor should be protected)
+protected:
+  
         friend class Placement<MObject>;
         
         /** 

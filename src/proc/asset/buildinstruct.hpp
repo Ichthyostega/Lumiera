@@ -41,12 +41,13 @@ using std::string;
 
 namespace asset
   {
+  using lumiera::P;
   
   class Proc;
   class ProcPatt;
 
-  typedef shared_ptr<const asset::Proc> PProc;
-  typedef shared_ptr<const asset::ProcPatt> PProcPatt;
+  typedef P<const asset::Proc> PProc;
+  typedef P<const asset::ProcPatt> PProcPatt;
 
   
   static Symbol CURRENT = "current";

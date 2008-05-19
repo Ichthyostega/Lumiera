@@ -26,17 +26,18 @@
 
 #include "pre.hpp"
 
-#include <list>
-#include <tr1/memory>
 
 #include "proc/lumiera.hpp"
 #include "proc/mobject/builder/buildertool.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/asset.hpp"                 // TODO finally not needed?
 
+#include <boost/noncopyable.hpp>
+#include <boost/operators.hpp>
+#include <list>
+
 
 using std::list;
-using std::tr1::shared_ptr;
 
 #include "proc/assetmanager.hpp"                
 using proc_interface::IDA;                // TODO finally not needed?
@@ -45,6 +46,7 @@ using proc_interface::AssetManager;
 
 namespace mobject
   {
+  using lumiera::P;
 
   namespace session
     {
@@ -58,7 +60,10 @@ namespace mobject
    * manipulated and finally rendered within Lumiera's EDL 
    * are MObjects.
    */
-  class MObject : public Buildable
+  class MObject 
+    : public Buildable,
+      boost::noncopyable,
+      boost::equality_comparable< MObject >
     {
     protected:
       typedef lumiera::Time Time;
@@ -79,11 +84,14 @@ namespace mobject
       virtual bool isValid()  const =0;
       
       virtual Time& getLength() =0; ///< @todo how to deal with the time/length field??
+      
+      virtual bool operator== (const MObject& oo)  const =0;
 
     };
+
   
-  
-  
+    
+  typedef Placement<MObject> PMO;
 
 
 

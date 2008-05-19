@@ -48,7 +48,7 @@ namespace asset
   class Proc;
   class ProcFactory;
   
-  typedef shared_ptr<const Proc> PProc;
+  typedef P<const Proc> PProc;
   
   
   
@@ -97,7 +97,7 @@ namespace asset
   class ProcFactory : public lumiera::Factory<asset::Proc>
     {
     public:
-      typedef shared_ptr<asset::Proc> PType;
+      typedef P<asset::Proc> PType;
        
       PType operator() (Asset::Ident& key);      ////////////TODO define actual operation 
 

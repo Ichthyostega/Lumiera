@@ -49,6 +49,8 @@ namespace mobject
         
         DEFINE_PROCESSABLE_BY (builder::BuilderTool);
 
+        virtual bool operator== (const MObject& oo)  const;
+
      };
 
 

@@ -219,7 +219,7 @@ namespace asset
    *  @throw Invalid if the given media asset is not top-level,
    *         but rather part or a multichannel (compound) media
    */
-  shared_ptr<asset::Clip>
+  P<asset::Clip>
   MediaFactory::operator() (asset::Media& mediaref)  throw(lumiera::error::Invalid)
   {
     if (mediaref.checkCompound())

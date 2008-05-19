@@ -130,11 +130,11 @@ namespace asset
    *          of the stored object differs and can't be casted.  
    */
   template<class KIND>
-  shared_ptr<KIND>
+  P<KIND>
   AssetManager::getAsset (const ID<KIND>& id)  
       throw(lumiera::error::Invalid)
   {
-    if (shared_ptr<KIND> obj = registry.get (id))
+    if (P<KIND> obj = registry.get (id))
       return obj;
     else
       if (known (id))    // provide Ident tuple of existing Asset 
@@ -143,14 +143,14 @@ namespace asset
         throw UnknownID (id);
   }
   
-  /** convienience shortcut for fetching the registered shared_ptr
+  /** convienience shortcut for fetching the registered smart-ptr
    *  which is in charge of the given asset instance. By querying
    *  directly asset.id (of type ID<Asset>), the call to registry.get()
    *  can bypass the dynamic cast, because the type of the asset 
    *  is explicitely given by type KIND. 
    */
   template<class KIND>
-  shared_ptr<KIND>
+  P<KIND>
   AssetManager::wrap (const KIND& asset)
   {
     ENSURE (instance().known(asset.id), 
@@ -169,7 +169,7 @@ namespace asset
   {
     return ( registry.get (ID<Asset>(id)) );
   }       // query most general Asset ID-kind and use implicit 
-         //  conversion from shared_ptr to bool (test if empty)
+         //  conversion from smart-ptr to bool (test if empty)
 
 
   /**
@@ -245,18 +245,18 @@ namespace asset
   template ID<Asset> AssetManager::reg (Asset* obj, const Asset::Ident& idi);
   
   
-  template shared_ptr<Asset>  AssetManager::getAsset (const ID<Asset>&  id)  throw(lumiera::error::Invalid);
-  template shared_ptr<Media>  AssetManager::getAsset (const ID<Media>&  id)  throw(lumiera::error::Invalid);
-  template shared_ptr<Proc>   AssetManager::getAsset (const ID<Proc>&   id)  throw(lumiera::error::Invalid);
-  template shared_ptr<Struct> AssetManager::getAsset (const ID<Struct>& id)  throw(lumiera::error::Invalid);
-  template shared_ptr<Meta>   AssetManager::getAsset (const ID<Meta>&   id)  throw(lumiera::error::Invalid);
+  template P<Asset>  AssetManager::getAsset (const ID<Asset>&  id)  throw(lumiera::error::Invalid);
+  template P<Media>  AssetManager::getAsset (const ID<Media>&  id)  throw(lumiera::error::Invalid);
+  template P<Proc>   AssetManager::getAsset (const ID<Proc>&   id)  throw(lumiera::error::Invalid);
+  template P<Struct> AssetManager::getAsset (const ID<Struct>& id)  throw(lumiera::error::Invalid);
+  template P<Meta>   AssetManager::getAsset (const ID<Meta>&   id)  throw(lumiera::error::Invalid);
   
-  template shared_ptr<Asset>    AssetManager::wrap (const Asset& asset);
-  template shared_ptr<Media>    AssetManager::wrap (const Media& asset);
-  template shared_ptr<Clip>     AssetManager::wrap (const Clip&  asset);
-  template shared_ptr<Track>    AssetManager::wrap (const Track& asset);
-  template shared_ptr<Pipe>     AssetManager::wrap (const Pipe&  asset);
-  template shared_ptr<ProcPatt> AssetManager::wrap (const ProcPatt& asset);
+  template P<Asset>    AssetManager::wrap (const Asset& asset);
+  template P<Media>    AssetManager::wrap (const Media& asset);
+  template P<Clip>     AssetManager::wrap (const Clip&  asset);
+  template P<Track>    AssetManager::wrap (const Track& asset);
+  template P<Pipe>     AssetManager::wrap (const Pipe&  asset);
+  template P<ProcPatt> AssetManager::wrap (const ProcPatt& asset);
 
   
 } // namespace asset

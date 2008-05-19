@@ -24,26 +24,18 @@
 #ifndef MOBJECT_BUILDER_SEGMENTATIONTOOL_H
 #define MOBJECT_BUILDER_SEGMENTATIONTOOL_H
 
-#include <list>
 
-#include "proc/mobject/builder/buildertool.hpp"
+#include "proc/mobject/builder/applicablebuildertargettypes.hpp"
+
 #include "proc/mobject/session/segment.hpp"
 
+#include <list>
 using std::list;
 
 
 
-namespace mobject
-  {
-  namespace session
-    {
-    // Forward declarations
-    class Clip;
-    class Effect;
-    }
-
-  namespace builder
-    {
+namespace mobject {
+  namespace builder {
 
 
     /**
@@ -53,10 +45,10 @@ namespace mobject
      * can be represented by automation solely, without the need 
      * to change the node connections.
      */
-    class SegmentationTool : public BuilderTool
+    class SegmentationTool 
+      : public ApplicableBuilderTargetTypes<SegmentationTool>
       {
         
-        //////////////////////////////////////////////TODO: switch to acyclic visitior!!!!!!!!!!!!!
         
       public:
         void treat (mobject::session::Clip& clip) ;
