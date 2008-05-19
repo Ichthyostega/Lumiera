@@ -1,5 +1,5 @@
 #  Copyright (C)         Lumiera.org
-#    2007,               Christian Thaeter <ct@pipapo.org>
+#    2008,               Christian Thaeter <ct@pipapo.org>
 #                        Hermann Vosseler <Ichthyostega@web.de>
 #
 #  This program is free software; you can redistribute it and/or
