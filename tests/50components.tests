@@ -62,7 +62,7 @@ out: caught error::Logic: LUMIERA_ERROR_FATAL:floundered (test-2).
 out: caught error::Invalid: LUMIERA_ERROR_INVALID:invalid input or parameters (test-3).
 out: caught lumiera::Error: LUMIERA_ERROR_EXTERNAL:failure in external service (test-4).
 out: caught std::runtime_error: test-5
-out: caught std::exception: std::exception
+out: caught std::exception. (unspecific)
 out: intermediate handler caught: LUMIERA_ERROR_EXTERNAL:failure in external service (test-7).....will rethrow as error::State
 out: caught lumiera::Error: LUMIERA_ERROR_STATE:unforseen state -- caused by: LUMIERA_ERROR_EXTERNAL:failure in external service (test-7).
 out: intermediate handler caught: LUMIERA_ERROR_EXTERNAL:failure in external service (test-8).....will rethrow as error::State
