@@ -25,9 +25,11 @@
 #include "lib/locking.h"
 
 /**
- * @file Condition variables, header
+ * @file
+ * Condition variables, header
  */
 
+LUMIERA_ERROR_DECLARE (CONDITION_DESTROY);
 
 /**
  * Condition variables.
@@ -59,10 +61,10 @@ lumiera_condition_signal (LumieraCondition self)
 {
   REQUIRE (self);
   if (pthread_mutex_lock (&self->mutex))
-    LUMIERA_DIE;
+    LUMIERA_DIE (MUTEX_LOCK);
   pthread_cond_signal (&self->cond);
   if (pthread_mutex_unlock (&self->mutex))
-    LUMIERA_DIE;
+    LUMIERA_DIE (MUTEX_UNLOCK);
 }
 
 /**
@@ -74,10 +76,10 @@ lumiera_condition_broadcast (LumieraCondition self)
 {
   REQUIRE (self);
   if (pthread_mutex_lock (&self->mutex))
-    LUMIERA_DIE;
+    LUMIERA_DIE (MUTEX_LOCK);
   pthread_cond_broadcast (&self->cond);
   if (pthread_mutex_unlock (&self->mutex))
-    LUMIERA_DIE;
+    LUMIERA_DIE (MUTEX_UNLOCK);
 }
 
 
@@ -124,7 +126,7 @@ lumiera_conditionacquirer_init (LumieraConditionacquirer self, LumieraCondition 
   self->state = state;
   if (state == LUMIERA_LOCKED)
     if (pthread_mutex_lock (&cond->mutex))
-      LUMIERA_DIE;
+      LUMIERA_DIE (MUTEX_LOCK);
 
   return self;
 }
@@ -141,7 +143,7 @@ lumiera_conditionacquirer_lock (LumieraConditionacquirer self)
   REQUIRE (self->state == LUMIERA_UNLOCKED, "mutex already locked");
 
   if (pthread_mutex_lock (&self->cond->mutex))
-    LUMIERA_DIE;
+    LUMIERA_DIE (MUTEX_LOCK);
 
   self->state = LUMIERA_LOCKED;
 }
@@ -166,13 +168,13 @@ lumiera_conditionacquirer_wait (LumieraConditionacquirer self)
  * a conditionacquirer must be unlocked before leaving scope
  * @param self conditionacquirer associated with a condition variable
  */
-static inline int
+static inline void
 lumiera_conditionacquirer_unlock (LumieraConditionacquirer self)
 {
   REQUIRE (self);
   REQUIRE (self->state == LUMIERA_LOCKED, "mutex was not locked");
   if (pthread_mutex_unlock (&self->cond->mutex))
-    LUMIERA_DIE;
+    LUMIERA_DIE (MUTEX_UNLOCK);
   self->state = LUMIERA_UNLOCKED;
 }
 
@@ -194,7 +196,7 @@ lumiera_conditionacquirer_signal (LumieraConditionacquirer self)
  * signal all waiting threads
  * @param self conditionacquirer associated with the condition variable to be signaled
  */
-static inline int
+static inline void
 lumiera_conditionacquirer_broadcast (LumieraConditionacquirer self)
 {
   REQUIRE (self);

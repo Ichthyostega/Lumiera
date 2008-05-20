@@ -1,5 +1,5 @@
 #  Copyright (C)         Lumiera.org
-#    2007,               Christian Thaeter <ct@pipapo.org>
+#    2007-2008,          Christian Thaeter <ct@pipapo.org>
 #                        Hermann Vosseler <Ichthyostega@web.de>
 #
 #  This program is free software; you can redistribute it and/or
@@ -36,14 +36,29 @@ test_llist_SOURCES = $(tests_srcdir)/library/test-llist.c
 test_llist_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
 test_llist_LDADD = liblumi.a -lnobugmt -lpthread -ldl -lm
 
+check_PROGRAMS += test-safeclib
+test_safeclib_SOURCES = $(tests_srcdir)/library/test-safeclib.c
+test_safeclib_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_safeclib_LDADD = $(builddir)/liblumi.a -lnobugmt -lpthread -ldl -lm
+
+check_PROGRAMS += test-uuid
+test_uuid_SOURCES = $(tests_srcdir)/library/test-uuid.c
+test_uuid_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_uuid_LDADD = $(builddir)/liblumi.a -lnobugmt -lpthread -ldl -lm
+
 check_PROGRAMS += test-references
 test_references_SOURCES = $(tests_srcdir)/library/test-references.c
 test_references_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
 test_references_LDADD = liblumi.a -lnobugmt -lpthread -ldl -lm -lrt
 
-#check_PROGRAMS += test-filehandles
-#test_filehandles_SOURCES = $(tests_srcdir)/backend/test-filehandles.c
-#test_filehandles_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
-#test_filehandles_LDADD = liblumibackend.a liblumi.a -lnobugmt -lpthread -ldl -lm
+check_PROGRAMS += test-filedescriptors
+test_filedescriptors_SOURCES = $(tests_srcdir)/backend/test-filedescriptors.c
+test_filedescriptors_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_filedescriptors_LDADD = liblumibackend.a liblumi.a -lnobugmt -lpthread -ldl -lm
+
+check_PROGRAMS += test-filehandles
+test_filehandles_SOURCES = $(tests_srcdir)/backend/test-filehandles.c
+test_filehandles_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_filehandles_LDADD = liblumibackend.a liblumi.a -lnobugmt -lpthread -ldl -lm
 
 TESTS = $(tests_srcdir)/test.sh

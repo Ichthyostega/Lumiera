@@ -1,0 +1,26 @@
+
+TESTING "Filedescriptor management" ./test-filedescriptors
+
+echo testdata > ,tmp_testfile
+
+TEST "acquire existing file" acquire_existing <<END
+return: 0
+END
+
+TEST "acquire existing file twice" acquire_existing_again <<END
+return: 0
+END
+
+rm ,tmp_testfile
+
+TEST "acquire file, creating it" acquire_create <<END
+return: 0
+END
+
+rm ,tmp_testfile
+
+TEST "acquire file, creating it, nested dir" acquire_create_dir <<END
+return: 0
+END
+
+rm ,tmp_testdir -r

@@ -19,9 +19,11 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "lib/references.h"
+#include "lib/safeclib.h"
 
 /**
- * @file Strong and Weak references
+ * @file
+ * Strong and Weak references
  * Strong references keep some object alive while they existing
  * Weak references become invalidated when the referenced object gets destroyed
  *
@@ -43,8 +45,7 @@
 LumieraReference
 lumiera_reference_strong_init_once (LumieraReference self, void* obj, void (*dtor)(void*))
 {
-  LumieraReftarget target = malloc (sizeof(lumiera_reftarget));
-  if (!target) LUMIERA_DIE;
+  LumieraReftarget target = lumiera_malloc (sizeof(lumiera_reftarget));
 
   target->object = obj;
   target->dtor = dtor;

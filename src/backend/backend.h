@@ -1,5 +1,5 @@
 /*
-  locking.h  -  shared declarations for all locking primitives
+  backend  -  common lumiera backend things
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -18,37 +18,19 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#ifndef LUMIERA_BACKEND_H
+#define LUMIERA_BACKEND_H
 
-#ifndef LUMIERA_LOCKING_H
-#define LUMIERA_LOCKING_H
-
-#include <pthread.h>
-#include <errno.h>
 #include <nobug.h>
 
-#include "lib/error.h"
+NOBUG_DECLARE_FLAG (backend);
+NOBUG_DECLARE_FLAG (file_all);
+NOBUG_DECLARE_FLAG (file);
 
+int
+lumiera_backend_init (void);
 
-LUMIERA_ERROR_DECLARE (MUTEX_LOCK);
-LUMIERA_ERROR_DECLARE (MUTEX_UNLOCK);
-LUMIERA_ERROR_DECLARE (MUTEX_DESTROY);
-
-/**
- * @file
- * Shared declarations for all locking primitives.
- */
-
-/**
- * used to store the current lock state.
- *
- *
- */
-enum lumiera_lockstate
-  {
-    LUMIERA_UNLOCKED,
-    LUMIERA_LOCKED,
-    LUMIERA_RDLOCKED,
-    LUMIERA_WRLOCKED
-  };
+void
+lumiera_backend_destroy (void);
 
 #endif

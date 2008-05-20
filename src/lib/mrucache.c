@@ -1,5 +1,5 @@
 /*
-  locking.h  -  shared declarations for all locking primitives
+  mrucache.h  -  most recent used cache
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -19,36 +19,40 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef LUMIERA_LOCKING_H
-#define LUMIERA_LOCKING_H
-
-#include <pthread.h>
-#include <errno.h>
-#include <nobug.h>
-
-#include "lib/error.h"
+#include "lib/mrucache.h"
 
 
-LUMIERA_ERROR_DECLARE (MUTEX_LOCK);
-LUMIERA_ERROR_DECLARE (MUTEX_UNLOCK);
-LUMIERA_ERROR_DECLARE (MUTEX_DESTROY);
+LumieraMruCache
+lumiera_mrucache_init (LumieraMruCache self, lumiera_cache_destructor_fn destructor_cb)
+{
+  REQUIRE (self);
+  llist_init (&self->cache_list);
+  self->cached = 0;
+  self->destructor_cb = destructor_cb;
+  return self;
+}
 
-/**
- * @file
- * Shared declarations for all locking primitives.
- */
+LumieraMruCache
+lumiera_mrucache_destroy (LumieraMruCache self)
+{
+  LLIST_WHILE_TAIL (&self->cache_list, node)
+    {
+      llist_unlink (node);
+      if (self->destructor_cb)
+        free (self->destructor_cb (node));
+      else
+        free (node);
+    }
+  self->cached = 0;
+  return self;
+}
 
-/**
- * used to store the current lock state.
- *
- *
- */
-enum lumiera_lockstate
-  {
-    LUMIERA_UNLOCKED,
-    LUMIERA_LOCKED,
-    LUMIERA_RDLOCKED,
-    LUMIERA_WRLOCKED
-  };
+int
+lumiera_mrucache_age (LumieraMruCache self, int nelem)
+{
+  REQUIRE (self);
+  while (self->cached && nelem--)
+    free (lumiera_mrucache_pop (self));
 
-#endif
+  return nelem;
+}

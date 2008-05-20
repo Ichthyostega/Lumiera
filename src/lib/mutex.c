@@ -22,8 +22,13 @@
 #include "lib/mutex.h"
 
 /**
- * @file Mutual exclusion locking.
+ * @file
+ * Mutual exclusion locking.
  */
+
+LUMIERA_ERROR_DEFINE (MUTEX_LOCK, "Mutex locking failed");
+LUMIERA_ERROR_DEFINE (MUTEX_UNLOCK, "Mutex unlocking failed");
+LUMIERA_ERROR_DEFINE (MUTEX_DESTROY, "Mutex destroy failed");
 
 
 /**
@@ -52,7 +57,7 @@ lumiera_mutex_destroy (LumieraMutex self)
   if (self)
     {
       if (pthread_mutex_destroy (&self->mutex))
-        LUMIERA_DIE;
+        LUMIERA_DIE (MUTEX_DESTROY);
     }
   return self;
 }
