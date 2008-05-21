@@ -578,8 +578,9 @@ The first step towards an solution is to isolate the problem; obviously we //nee
 [img[how to implement Automation|uml/fig129669.png]]
 </pre>
 </div>
-<div title="BasicBuildingOperations" modifier="Ichthyostega" modified="200804121734" created="200712040334" tags="design dynamic Builder" changecount="23">
+<div title="BasicBuildingOperations" modifier="Ichthyostega" modified="200805210230" created="200712040334" tags="design dynamic Builder" changecount="24">
 <pre>Starting out from the concepts of Objects, Placement to Tracks, render Pipes and connection properties (&amp;rarr; see [[here|TrackPipeEDL]]) within the EDL, we can identify the elementary operations occuring within the Builder. Overall, the Builder is organized as application of //visiting tools// to a collection of objects, so finally we have to consider some object kind appearing in the working function of the given builder tool, which holds at this moment some //context//. The job now is to organize this context such as to create a predictable build process from this //event driven// approach.
+&amp;rarr;see also: BuilderPrimitives for the elementary situations used to cary out the building operations
 
 !Builder working Situations
 # any ''Clip'' (which at this point has been reduced already to a part of a simple elementary media stream &amp;rarr; see [[Fixture]])
@@ -728,7 +729,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BuildProcess" modifier="Ichthyostega" modified="200712100440" created="200706190658" tags="dynamic Builder" changecount="27">
+<div title="BuildProcess" modifier="Ichthyostega" modified="200805210213" created="200706190658" tags="dynamic Builder" changecount="28">
 <pre>All decisions on //how // the RenderProcess has to be carried out are concentrated in this rather complicated Builder Subsystem. The benefit of this approach is, besides decoupling of subsystems, to keep the actual performance-intensive video processing code as simple and transparent as possible. The price, in terms of increased complexity &amp;mdash; to pay in the Builder &amp;mdash; can be handled by making the Build Process generic to a large degree. Using a Design By Contract approach we can decompose the various decisions into small decision modules without having to trace the actual workings of the Build Process as a whole.
 
 [&gt;img[Outline of the Build Process|uml/fig129413.png]]
@@ -737,8 +738,10 @@ The building itself will be broken down into several small tool application step
 * for each segment: generate a ProcNode for each found MObject and wire them accordingly
 Note, //we still have to work out how exactly building, rendering and playback work// together with the backend-design. The build process as such doesn't overly depend on these decisions. It is easy to reconfigure this process. For example, it would be possible as well to build for each frame separately (as Cinelerra2 does), or to build one segment covering the whole timeline (and handle everything via [[Automation]]
 
+&amp;rarr;see also: [[Builder Overview|Builder]]
 &amp;rarr;see also: BasicBuildingOperations
 &amp;rarr;see also: BuilderStructures
+&amp;rarr;see also: BuilderMechanics
 &amp;rarr;see also: PlanningBuildFixture
 &amp;rarr;see also: PlanningSegementationTool
 &amp;rarr;see also: PlanningNodeCreatorTool
@@ -746,7 +749,7 @@ Note, //we still have to work out how exactly building, rendering and playback w
 [img[Colaborations in the Build Process|uml/fig128517.png]]
 </pre>
 </div>
-<div title="Builder" modifier="Ichthyostega" modified="200712100631" created="200706220317" tags="def overview" changecount="24">
+<div title="Builder" modifier="Ichthyostega" modified="200805210209" created="200706220317" tags="def overview" changecount="26">
 <pre>The Builder takes some MObject/[[Placement]] information (called Timeline) and generates out of this a Render Engine configuration able to render this Objects. It does all decisions and retrieves the current configuration of all objects and plugins, so the Render Engine can just process them stright forward.
 
 The Builder is the central part of the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]
@@ -754,12 +757,44 @@ The Builder is the central part of the [[Builder Pattern|http://en.wikipedia.org
 As the builder has to create a render node network implementing most of the features and wiring possible with the various MObject kinds and placement types, it is a rather complicated piece of software. In order to keep it manageable, it is broken down into several specialized sub components:
 * clients access builder functionality via the BuilderFacade
 * the [[Proc-Layer-Controller|Controller]] initiates the BuildProcess and does the overall coordination of scheduling edit operations, rebuilding the fixture and triggering the Builder
-* to carry out the building, we use several tools (SegmentationTool, NodeCreaterTool,...), which are supplied by the [[tool factory|BuilderToolFactory]]
-* the actual building (i.e. the application of those tools to the timeline) is done by the [[Assembler|BuilderAssembler]], which is basically a collection of functions (but has a small amount of global configuration state)
+* to carry out the building, we use several primary tools (SegmentationTool, NodeCreaterTool,...),  together with a BuilderToolKit to be supplied by the [[tool factory|BuilderToolFactory]]
+* //operating the Builder// can be viewed at from two different angles, either emphasizing the [[basic building operations|BasicBuildingOperations]] employed to assemble the render node network, or focussing rather at the [[mechanics|BuilderMechanics]] of cooperating parts while processing.
+* besides, we can identify a small set of elementary situations we call [[builder primitives|BuilderPrimitives]], to be covered by the mentioned BuilderToolKit; by virtue of [[processing patterns|ProcPatt]] they form an [[interface to the rule based configuration|BuilderRulesInterface]].
+* the actual building (i.e. the application of tools to the timeline) is done by the [[Assembler|BuilderAssembler]], which is basically a collection of functions (but has a small amount of global configuration state)
 * any non-trivial wiring of render nodes, tracks, pipes and automation is done by the services of the [[connection manager|ConManager]]
 </pre>
 </div>
-<div title="BuilderStructures" modifier="Ichthyostega" modified="200801031929" created="200706250734" tags="overview design Builder" changecount="18">
+<div title="BuilderMechanics" modifier="Ichthyostega" created="200805210256" tags="design dynamic Builder" changecount="1">
+<pre>The cooperation of several components creates a context of operation for the primary builder working tool, the [[node creator|PlanningNodeCreatorTool]]:
+* the BuilderToolFactory acts as the &quot;builder for the builder tools&quot;, i.e. we can assume to be able to retrive all needed primary tools and elementary tools from this factory, completely configured and ready to use.
+* the [[Assembler|BuilderAssembler]] has the ability to consume objects from the high level model and feed them to the node creator (which translates into a dispatch of individual operations suited to the objects to be treated). This involves some sort of scheduling or ordering of the operaions, which is the only means to direct the overall process such as to create a sensible and usable result. //This is an fundamental design decision:// the actual working tools have no hard wired knowledge of the &quot;right process&quot;, which makes the whole Builder highly configurable (&quot;open&quot;).
+* the [[connection manager|ConManager]] on the contrary is a passive service provider. Fed with [[wiring requests|WiringRequest]], he can determine if a desired connection is possible, and what steps to take to implement it; the latter recursively creates further building requests to satisfy by the assembler, and possibly new wiring requests.
+
+!!pattern of operation
+The working pattern of this builder mechanics can be described as triggering, enqueuing, priorizing, recursing and exhausting. Without the priorizing part, it would be a depth-first call graph without any context state, forcing us to have all cross reference information available at every node or element to be treated. We prefer to avoid this overhead by ordering the operations into several phases and within these phases into correlated entities with the help of a ''weighting function'' and scheduling with a ''priority queue''</pre>
+</div>
+<div title="BuilderPrimitives" modifier="Ichthyostega" modified="200805210328" created="200805210327" tags="impl spec Builder" changecount="3">
+<pre>While assembling and building up the render engines node network, a small number of primitive building situations is encountered repeatedly. The BuilderToolKit provides a &quot;fitting tool&quot; for each of these situations, typically involving parametrisation and the application of a [[processing pattern|ProcPatt]].
+
+!List of elementary building situations
+!!!inserting an Effect or Plugin
+* participating: a Pipe and an Effect
+* result: Effect appended at the pipe's exit node
+
+!!!building a source connection
+* participating: source port of a clip, media access point, processing pattern
+* result: processing pattern has been //executed//, resulting in a chain of nodes from the source reader to the clip source port
+
+!!!wiring a general connection
+* participating: already verified connection request, providing a Pipe and an exit node; a processing pattern and a Placement
+* result: summation node prepended to the port of the pipe, processing pattern has been //executed// for building the connection from the exit node to the pipe's port, ParamProvider has been setup in accordance to the Placement.
+
+!!!attaching a transition 
+* participating: N pipe's exit nodes, transition
+* result: transition has been attached with the pipe's exit nodes, new wiring requests created attached to the transition's exit node(s)
+</pre>
+</div>
+<div title="BuilderStructures" modifier="Ichthyostega" modified="200805210227" created="200706250734" tags="overview design Builder" changecount="21">
 <pre>* the MObjects implement //Buildable//
 * each Buildable can &quot;receive&quot; a Tool object and apply it
 * the different Tool objects are iterated/mapped onto the list of MObjects in the [[Timeline]]
@@ -769,10 +804,26 @@ As the builder has to create a render node network implementing most of the feat
 ** a given Tool instance can carry state while being iterated, so we don't need any global (or object-global) variables to hold the result of the build process
 
 This programming technique is often referred to as [[&quot;double dispatch&quot; or &quot;visitor&quot;|VisitorUse]]. We use a specialized library implementation of this pattern &amp;mdash; heavily inspired by the [[Loki library|http://loki-lib.sourceforge.net/]]. We use this approach not only for the builder, but also for carrying out operations on the objects in the EDL in a typesafe manner. 
-For the actual building operations see BasicBuildingOperations {{red{TODO:flesh out the actual Operations}}}
-    
-
+It is the low level foundation of the actual [[building operations|BasicBuildingOperations]] necessary to create render nodes starting from the given high level model. 
 [img[Entities cooperating in the Builder|uml/fig129285.png]]
+
+!Colaborations
+
+While building, the application of such a visiting tool (especially the [[NodeCreatorTool|PlanningNodeCreatorTool]]) is embedded into an execution context formed by the BuilderToolFactory providing our BuilderToolKit, the [[Assembler|BuilderAssembler]] and [[connection manager|ConManager]]. The colaboration of these parts can be seen as the [[mechanics of the builder|BuilderMechanics]] &amp;mdash; sort of the //outward view//, contrary to the //invard aspects// visible when focussing on how the nodes are put together.
+    
+[img[Colaborations in the Build Process|uml/fig128517.png]]
+
+</pre>
+</div>
+<div title="BuilderToolKit" modifier="Ichthyostega" modified="200805210310" created="200805210308" tags="impl Builder" changecount="2">
+<pre>Besides the primary working tool within the builder (namely the [[Node Creator Tool|PlanningNodeCreatorTool]]), on a lower level, we encounder several [[elementary building situations|BuilderPrimitives]] &amp;mdash; and for each of these elementary situations we can retrieve a suitable &quot;fitting tool&quot;. The palette of these fitting tools is called the ''tool kit'' of the builder. It is subject to configuration by rules.
+
+!! {{red{open questions}}}
+* how to address these fitting tools
+* how to type them
+* how to parametrize them
+
+&amp;rarr;see also: BuilderPrimitives for the elementary corresponding to these fitting tools
 </pre>
 </div>
 <div title="ColorPalette" modifier="Ichthyostega" modified="200706260455" created="200706190033" tags="excludeMissing" changecount="11">
