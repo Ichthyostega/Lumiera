@@ -25,7 +25,8 @@
 #include "lib/locking.h"
 
 /**
- * @file Condition variables, header
+ * @file
+ * Condition variables, header
  */
 
 LUMIERA_ERROR_DECLARE (CONDITION_DESTROY);
@@ -167,7 +168,7 @@ lumiera_conditionacquirer_wait (LumieraConditionacquirer self)
  * a conditionacquirer must be unlocked before leaving scope
  * @param self conditionacquirer associated with a condition variable
  */
-static inline int
+static inline void
 lumiera_conditionacquirer_unlock (LumieraConditionacquirer self)
 {
   REQUIRE (self);
@@ -195,7 +196,7 @@ lumiera_conditionacquirer_signal (LumieraConditionacquirer self)
  * signal all waiting threads
  * @param self conditionacquirer associated with the condition variable to be signaled
  */
-static inline int
+static inline void
 lumiera_conditionacquirer_broadcast (LumieraConditionacquirer self)
 {
   REQUIRE (self);

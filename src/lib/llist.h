@@ -27,7 +27,8 @@
 #include <stddef.h>
 
 /**
- * @file Intrusive cyclic double linked list
+ * @file
+ * Intrusive cyclic double linked list
  * There is only one node type which contains a forward and a backward pointer. In a empty initialized node,
  * this pointers point to the node itself. Note that these pointers can never ever become NULL.
  * This lists are used by using one node as 'root' node where its both pointers are the head/tail pointer to the actual list.

@@ -24,7 +24,8 @@
 #include <stdlib.h>
 
 /**
- * @file Portable and safe wrapers around some clib functions and some tools
+ * @file
+ * Portable and safe wrapers around some clib functions and some tools
  */
 LUMIERA_ERROR_DECLARE(NO_MEMORY);
 
@@ -36,6 +37,17 @@ LUMIERA_ERROR_DECLARE(NO_MEMORY);
  */
 void*
 lumiera_malloc (size_t sz);
+
+
+/**
+ * Allocate cleared memory for an array.
+ * always succeeds or dies
+ * @param n number of elements
+ * @param size memory to be allocated
+ * @return pointer to the allocated memory
+ */
+void*
+lumiera_calloc (size_t n, size_t size);
 
 
 /**
@@ -84,7 +96,6 @@ lumiera_streq (const char* a, const char* b);
 void
 lumiera_tmpbuf_freeall (void);
 
-
 /**
  * Query a thread local tmpbuf.
  * @param size minimal needed size for the tmpbuf
@@ -110,5 +121,5 @@ lumiera_tmpbuf_strndup (const char* src, size_t size);
  * @return temporary buffer containing the constructed of the string
  */
 char*
-lumiera_tmpbuf_sprintf (size_t size, const char* fmt, ...);
+lumiera_tmpbuf_snprintf (size_t size, const char* fmt, ...);
 

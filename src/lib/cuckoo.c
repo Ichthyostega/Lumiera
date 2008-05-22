@@ -208,6 +208,13 @@ cuckoo_insert_internal_ (Cuckoo self, void* item)
 }
 
 
+size_t
+cuckoo_nelements (Cuckoo self)
+{
+  return self->elements;
+}
+
+
 static void
 cuckoo_rehash (Cuckoo self)
 {

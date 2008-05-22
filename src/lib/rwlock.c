@@ -18,8 +18,6 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#define _GNU_SOURCE
-
 #include <errno.h>
 #include "lib/rwlock.h"
 
@@ -31,7 +29,8 @@ LUMIERA_ERROR_DEFINE(RWLOCK_RLOCK, "rlock");
 LUMIERA_ERROR_DEFINE(RWLOCK_WLOCK, "wlock");
 
 /**
- * @file Read/write locks.
+ * @file
+ * Read/write locks.
  */
 
 

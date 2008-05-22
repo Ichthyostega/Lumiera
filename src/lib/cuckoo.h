@@ -22,7 +22,8 @@
 #define CUCKOO_H
 
 /**
- * @file Cuckoo hashing
+ * @file
+ * Cuckoo hashing
  * This hashing gives guaranteed O(1) lookup complexity and amortized O(1) insert and remove complexity.
  * Hash tables by default grow and shrink automatically. It is posible to preallocate entries and turn
  * automatic shrinking off taking out the memory management factors for insert and remove operations.
@@ -104,6 +105,13 @@ cuckoo_destroy (Cuckoo self);
  */
 void
 cuckoo_free (Cuckoo self);
+
+/**
+ * Get the number of elements stored in a hash.
+ * @return number of elements, 0 when empty
+ */
+size_t
+cuckoo_nelements (Cuckoo self);
 
 /**
  * Insert an element into a hash.

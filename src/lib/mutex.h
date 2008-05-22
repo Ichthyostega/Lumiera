@@ -25,14 +25,18 @@
 #include "lib/locking.h"
 
 /**
- * @file Mutual exclusion locking, header.
+ * @file
+ * Mutual exclusion locking, header.
  */
-
-#define LUMIERA_MUTEX_SECTION(mutex)                                                    \
+#define LUMIERA_MUTEX_SECTION(flag, handle, mutex)                                      \
+RESOURCE_HANDLE (rh_##__LINE__##_);                                                     \
 lumiera_mutexacquirer lock_##__LINE__##_;                                               \
+RESOURCE_ENTER (flag, handle, "acquire mutex", &lock_##__LINE__##_,                     \
+                NOBUG_RESOURCE_EXCLUSIVE, rh_##__LINE__##_);                            \
 for (lumiera_mutexacquirer_init_mutex (&lock_##__LINE__##_, mutex, LUMIERA_LOCKED);     \
      lock_##__LINE__##_.state == LUMIERA_LOCKED;                                        \
-     lumiera_mutexacquirer_unlock (&lock_##__LINE__##_))
+     lumiera_mutexacquirer_unlock (&lock_##__LINE__##_),                                \
+       ({RESOURCE_LEAVE(flag, rh_##__LINE__##_);}))
 
 
 /**

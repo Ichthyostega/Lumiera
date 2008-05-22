@@ -22,7 +22,8 @@
 #include "lib/safeclib.h"
 
 /**
- * @file Strong and Weak references
+ * @file
+ * Strong and Weak references
  * Strong references keep some object alive while they existing
  * Weak references become invalidated when the referenced object gets destroyed
  *

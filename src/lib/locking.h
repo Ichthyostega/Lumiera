@@ -34,7 +34,8 @@ LUMIERA_ERROR_DECLARE (MUTEX_UNLOCK);
 LUMIERA_ERROR_DECLARE (MUTEX_DESTROY);
 
 /**
- * @file Shared declarations for all locking primitives.
+ * @file
+ * Shared declarations for all locking primitives.
  */
 
 /**

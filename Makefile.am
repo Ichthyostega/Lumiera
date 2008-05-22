@@ -33,8 +33,10 @@ SUBDIRS =
 include $(top_srcdir)/admin/Makefile.am
 
 # core
+include $(top_srcdir)/src/proc/Makefile.am
+include $(top_srcdir)/src/common/Makefile.am
 include $(top_srcdir)/src/lib/Makefile.am
-#include $(top_srcdir)/src/backend/Makefile.am
+include $(top_srcdir)/src/backend/Makefile.am
 
 # gui
 include $(top_srcdir)/src/gui/Makefile.am
@@ -43,6 +45,8 @@ include $(top_srcdir)/src/gui/Makefile.am
 #include $(top_srcdir)/src...
 
 # tests
+include $(top_srcdir)/tests/common/Makefile.am
+include $(top_srcdir)/tests/components/Makefile.am
 include $(top_srcdir)/tests/Makefile.am
 include $(top_srcdir)/tests/plugin/Makefile.am
 

@@ -31,7 +31,8 @@
 #include "safeclib.h"
 
 /**
- * @file Plugin loader.
+ * @file
+ * Plugin loader.
  */
 
 

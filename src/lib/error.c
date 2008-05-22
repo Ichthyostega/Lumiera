@@ -24,7 +24,8 @@
 #include "lib/error.h"
 
 /**
- * @file C Error handling in Lumiera.
+ * @file
+ * C Error handling in Lumiera.
  */
 
 

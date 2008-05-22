@@ -23,6 +23,8 @@ AC_COPYRIGHT([
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 ])
 
+AC_GNU_SOURCE
+
 #
 # Required programs
 #
@@ -37,11 +39,12 @@ AC_PROG_LIBTOOL
 # test for headers
 #
 AC_STDC_HEADERS
-AC_CHECK_HEADER([nobug.h], AC_DEFINE(HAVE_NOBUG_H))
-AC_CHECK_HEADER([execinfo.h], AC_DEFINE(HAVE_EXECINFO_H))
-# there is a warning in nobug, disabled til fixed AC_CHECK_HEADER([valgrind/valgrind.h], AC_DEFINE(HAVE_VALGRIND_VALGRIND_H))
 
 ACX_PTHREAD
+LIBS="$PTHREAD_LIBS $LIBS"
+CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
+CC="$PTHREAD_CC"
+
 ##AM_CONDITIONAL([HAVE_THREADING], [test x"$acx_pthread_ok" = xyes])
 
 
@@ -71,9 +74,62 @@ AC_ARG_ENABLE(release, AC_HELP_STRING([--enable-release], [select NoBug RELEASE 
               nobug_level=alpha
               AC_DEFINE(EBUG_ALPHA)
 )])])
-AC_MSG_RESULT([NoBug build level: $nobug_level])
 # END NoBug
 
+# C headers and libraries
+AC_LANG_PUSH([C])
+
+AC_CHECK_HEADER([nobug.h],
+        AC_DEFINE(HAVE_NOBUG_H),
+        AC_MSG_ERROR([NoBug header missing                      (http://www.pipapo.org/pipawiki/NoBug)])
+        )
+AC_CHECK_LIB([nobugmt],  nobug_thread_id_get,
+        ,
+        AC_MSG_ERROR([NoBug multithreading library missing      (http://www.pipapo.org/pipawiki/NoBug)])
+        )
+
+AC_CHECK_HEADER([execinfo.h], AC_DEFINE(HAVE_EXECINFO_H))
+# there is a warning in nobug, disabled til fixed AC_CHECK_HEADER([valgrind/valgrind.h], AC_DEFINE(HAVE_VALGRIND_VALGRIND_H))
+
+AC_LANG_POP([C])
+
+
+# C++ headers and libraries
+AC_LANG_PUSH([C++])
+
+AC_CHECK_HEADER([tr1/memory],
+        ,
+        AC_MSG_ERROR([std::tr1 proposed standard extension for shared_ptr missing])
+        )
+
+AC_CHECK_HEADER([boost/shared_ptr.hpp],
+        ,
+        AC_MSG_ERROR([boost::shared_ptr missing                 (http://www.boost.org/)])
+        )
+
+AC_CHECK_HEADER([boost/program_options.hpp],
+        ,
+        AC_MSG_ERROR([boost::program_options missing            (http://www.boost.org/)])
+        )
+# checking for library left out, name contains compiler version here  (libboost_program_options-gcc42-mt-1_34_1.so.1.34.1) any ides how to use that?
+
+AC_CHECK_HEADER([boost/regex.hpp],
+        ,
+        AC_MSG_ERROR([boost::regex missing                      (http://www.boost.org/)])
+        )
+
+AC_LANG_POP([C++])
+
+
+# Print a summary
+AC_MSG_RESULT([
+Configuration Summary:])
+AC_MSG_RESULT([        NoBug build level:               $nobug_level])
+# Add more summary results here
+
+AC_MSG_RESULT([
+Configuration complete, you can now build Lumiera with 'make'
+])
 
 ############## Internatinalization
 #GETTEXT_PACKAGE=gtk-lumiera

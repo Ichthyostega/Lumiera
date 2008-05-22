@@ -39,7 +39,8 @@ LUMIERA_ERROR_DECLARE(RWLOCK_RLOCK);
 LUMIERA_ERROR_DECLARE(RWLOCK_WLOCK);
 
 /**
- * @file Read/write locks, header.
+ * @file
+ * Read/write locks, header.
  */
 
 

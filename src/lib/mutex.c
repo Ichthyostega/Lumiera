@@ -22,7 +22,8 @@
 #include "lib/mutex.h"
 
 /**
- * @file Mutual exclusion locking.
+ * @file
+ * Mutual exclusion locking.
  */
 
 LUMIERA_ERROR_DEFINE (MUTEX_LOCK, "Mutex locking failed");
