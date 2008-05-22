@@ -26,45 +26,43 @@
 
 #include "timeline-widget.hpp"
 
+using namespace Gtk;
+
 namespace lumiera {
 namespace gui {
 namespace widgets {
 
-TimelineWidget::TimelineWidget()
+TimelineWidget::TimelineWidget() :
+  Table(2, 2),
+  horizontalAdjustment(0, 200, 400),
+  verticalAdjustment(0, 200, 400),
+  horizontalScroll(horizontalAdjustment),
+  verticalScroll(verticalAdjustment),
+  rowHeaderViewport(),
+  label1("label1"), label2("label2"), label3("label3"), label4("label4"),
+  label5("label5"), label6("label6"), label7("label7"), label8("label8"),
+  label9("label1"), label10("label10"), label11("label11"), ruler("ruler")
   {
-    set_flags(Gtk::NO_WINDOW);
-  }
+    rowHeaderBox.pack_start(label1);
+    rowHeaderBox.pack_start(label2);
+    rowHeaderBox.pack_start(label3);
+    rowHeaderBox.pack_start(label4);
+    rowHeaderBox.pack_start(label5);
+    rowHeaderBox.pack_start(label6);
+    rowHeaderBox.pack_start(label7);
+    rowHeaderBox.pack_start(label8);
+    rowHeaderBox.pack_start(label9);
+    rowHeaderBox.pack_start(label10);
+    rowHeaderBox.pack_start(label11);
+    rowHeaderViewport.add(rowHeaderBox);
 
-void
-TimelineWidget::on_realize()
-  {
-    //Call base class:
-    Gtk::Widget::on_realize();
+    rowHeaderViewport.set_hadjustment(horizontalAdjustment);
+    rowHeaderViewport.set_vadjustment(verticalAdjustment);
 
-  }
-
-bool
-TimelineWidget::on_expose_event(GdkEventExpose* event)
-  {
-    // This is where we draw on the window
-    Glib::RefPtr<Gdk::Window> window = get_window();
-    if(window)
-    {
-      /*Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
-      if(event)
-      {
-        // clip to the area that needs to be re-exposed so we don't draw any
-        // more than we need to.
-        cr->rectangle(event->area.x, event->area.y,
-                event->area.width, event->area.height);
-        cr->clip();
-      }
-
-      // Paint the background
-      cr->set_source_rgb(0.0, 0.0, 0.0);
-      cr->paint();*/
-    }
-    return true;
+    attach(ruler, 1, 2, 0, 1, FILL|EXPAND, SHRINK);
+    attach(rowHeaderViewport, 0, 1, 1, 2, SHRINK, FILL|EXPAND);
+    attach(horizontalScroll, 1, 2, 2, 3, FILL|EXPAND, SHRINK);
+    attach(verticalScroll, 2, 3, 1, 2, SHRINK, FILL|EXPAND);
   }
 
 

@@ -23,6 +23,8 @@
 #include "../gtk-lumiera.hpp"
 #include "timeline-panel.hpp"
 
+using namespace Gtk;
+
 namespace lumiera {
 namespace gui {
 namespace panels {
@@ -30,7 +32,7 @@ namespace panels {
 TimelinePanel::TimelinePanel() :
   Panel("timeline", _("Timeline"), "timeline_panel")
   {
-    pack_start(timeline_widget);
+    pack_start(timeline_widget, PACK_EXPAND_WIDGET);
   }
 
 }   // namespace panels

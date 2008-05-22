@@ -32,15 +32,23 @@ namespace lumiera {
 namespace gui {
 namespace widgets {
 
-  class TimelineWidget : public Gtk::Widget
+  class TimelineWidget : public Gtk::Table
     {
     public:
       TimelineWidget();
 
       /* ===== Overrides ===== */
     protected:
-      virtual void on_realize();
-      virtual bool on_expose_event(GdkEventExpose* event);
+      Gtk::Adjustment horizontalAdjustment, verticalAdjustment;
+      Gtk::HScrollbar horizontalScroll;
+      Gtk::VScrollbar verticalScroll;
+
+      Gtk::Viewport rowHeaderViewport;
+      Gtk::VBox rowHeaderBox;
+      Gtk::Label label1, label2, label3, label4;
+      Gtk::Label label5, label6, label7, label8;
+      Gtk::Label label9, label10, label11, label12;
+      Gtk::Label ruler;
     };
 
 }   // namespace widgets
