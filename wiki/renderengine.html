@@ -773,25 +773,38 @@ As the builder has to create a render node network implementing most of the feat
 !!pattern of operation
 The working pattern of this builder mechanics can be described as triggering, enqueuing, priorizing, recursing and exhausting. Without the priorizing part, it would be a depth-first call graph without any context state, forcing us to have all cross reference information available at every node or element to be treated. We prefer to avoid this overhead by ordering the operations into several phases and within these phases into correlated entities with the help of a ''weighting function'' and scheduling with a ''priority queue''</pre>
 </div>
-<div title="BuilderPrimitives" modifier="Ichthyostega" modified="200805210328" created="200805210327" tags="impl spec Builder" changecount="3">
-<pre>While assembling and building up the render engines node network, a small number of primitive building situations is encountered repeatedly. The BuilderToolKit provides a &quot;fitting tool&quot; for each of these situations, typically involving parametrisation and the application of a [[processing pattern|ProcPatt]].
+<div title="BuilderPrimitives" modifier="Ichthyostega" modified="200805230502" created="200805210327" tags="impl spec Builder" changecount="10">
+<pre>While assembling and building up the render engines node network, a small number of primitive building situations is encountered repeatedly. The BuilderToolKit provides a &quot;[[mould|BuilderMould]]&quot; for each of these situations, typically involving parametrisation and the application of a [[processing pattern|ProcPatt]].
 
 !List of elementary building situations
 !!!inserting an Effect or Plugin
+[&gt;img[draw/builder-primitives1.png]]
 * participating: a Pipe and an Effect
 * result: Effect appended at the pipe's exit node
 
+@@clear(right):display(block):@@
+
+
+!!!attaching a transition 
+[&gt;img[draw/builder-primitives2.png]]
+* participating: N pipe's exit nodes, transition
+* result: transition has been attached with the pipe's exit nodes, new wiring requests created attached to the transition's exit node(s)
+
+@@clear(right):display(block):@@
+
 !!!building a source connection
+[&gt;img[draw/builder-primitives3.png]]
 * participating: source port of a clip, media access point, processing pattern
 * result: processing pattern has been //executed//, resulting in a chain of nodes from the source reader to the clip source port
+
+@@clear(right):display(block):@@
 
 !!!wiring a general connection
 * participating: already verified connection request, providing a Pipe and an exit node; a processing pattern and a Placement
 * result: summation node prepended to the port of the pipe, processing pattern has been //executed// for building the connection from the exit node to the pipe's port, ParamProvider has been setup in accordance to the Placement.
+[&gt;img[draw/builder-primitives4.png]]
 
-!!!attaching a transition 
-* participating: N pipe's exit nodes, transition
-* result: transition has been attached with the pipe's exit nodes, new wiring requests created attached to the transition's exit node(s)
+@@clear(right):display(block):@@
 </pre>
 </div>
 <div title="BuilderStructures" modifier="Ichthyostega" modified="200805210227" created="200706250734" tags="overview design Builder" changecount="21">
@@ -815,11 +828,11 @@ While building, the application of such a visiting tool (especially the [[NodeCr
 
 </pre>
 </div>
-<div title="BuilderToolKit" modifier="Ichthyostega" modified="200805210310" created="200805210308" tags="impl Builder" changecount="2">
-<pre>Besides the primary working tool within the builder (namely the [[Node Creator Tool|PlanningNodeCreatorTool]]), on a lower level, we encounder several [[elementary building situations|BuilderPrimitives]] &amp;mdash; and for each of these elementary situations we can retrieve a suitable &quot;fitting tool&quot;. The palette of these fitting tools is called the ''tool kit'' of the builder. It is subject to configuration by rules.
+<div title="BuilderToolKit" modifier="Ichthyostega" modified="200805220053" created="200805210308" tags="impl Builder" changecount="3">
+<pre>Besides the primary working tool within the builder (namely the [[Node Creator Tool|PlanningNodeCreatorTool]]), on a lower level, we encounder several [[elementary building situations|BuilderPrimitives]] &amp;mdash; and for each of these elementary situations we can retrieve a suitable &quot;fitting tool&quot; or [[mould|BuilderMould]]. The palette of these moulds is called the ''tool kit'' of the builder. It is subject to configuration by rules.
 
 !! {{red{open questions}}}
-* how to address these fitting tools
+* how to address these moulds
 * how to type them
 * how to parametrize them
 
