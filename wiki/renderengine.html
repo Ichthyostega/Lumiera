@@ -773,35 +773,51 @@ As the builder has to create a render node network implementing most of the feat
 !!pattern of operation
 The working pattern of this builder mechanics can be described as triggering, enqueuing, priorizing, recursing and exhausting. Without the priorizing part, it would be a depth-first call graph without any context state, forcing us to have all cross reference information available at every node or element to be treated. We prefer to avoid this overhead by ordering the operations into several phases and within these phases into correlated entities with the help of a ''weighting function'' and scheduling with a ''priority queue''</pre>
 </div>
-<div title="BuilderPrimitives" modifier="Ichthyostega" modified="200805230502" created="200805210327" tags="impl spec Builder" changecount="10">
+<div title="BuilderPrimitives" modifier="Ichthyostega" modified="200805250417" created="200805210327" tags="impl spec Builder" changecount="18">
 <pre>While assembling and building up the render engines node network, a small number of primitive building situations is encountered repeatedly. The BuilderToolKit provides a &quot;[[mould|BuilderMould]]&quot; for each of these situations, typically involving parametrisation and the application of a [[processing pattern|ProcPatt]].
+
+The ''Lifecycle'' of such a mould starts out by arming it with the object references involved into the next building step. After conducting this building step, the resulting render nodes can be found &amp;mdash; depending on the situation &amp;mdash; attached either to the same mould, or to another kind of mould, but in any case ready to included in the next building step. Thus, //effectively//&amp;nbsp; the moulds are //used to handle the nodes being built,// due to the fact that the low-level model (nodes to be built) and the high-level model (objects directing what is to be built) are //never connected directly.//
 
 !List of elementary building situations
 !!!inserting an Effect or Plugin
 [&gt;img[draw/builder-primitives1.png]]
+The __~PipeMould__ is used to chain up the effects attached to a clip (=local pipe) or global pipe (=bus)
 * participating: a Pipe and an Effect
+* point of reference: current exit node of the pipe
 * result: Effect appended at the pipe's exit node
+* returns: ~PipeMould holding onto the new exit node
 
 @@clear(right):display(block):@@
 
 
 !!!attaching a transition 
 [&gt;img[draw/builder-primitives2.png]]
+After having completed N pipe's node chains, a __~CombiningMould__ can be used to join them into a [transition|TransitionsHandling]
 * participating: N pipe's exit nodes, transition
+* point of reference: N exit nodes corresponding to (completed) pipes
 * result: transition has been attached with the pipe's exit nodes, new wiring requests created attached to the transition's exit node(s)
+* returns: ~WiringMould, connected with the created wiring request
+Using this mould implicitly &quot;closes&quot; the involved pipes, which means that we give up any reference to the exit node and can't build any further effect attached to this pipes. Generally speaking, &quot;exit node&quot; isn't a special kind of node, rather it's a node we are currently holding on. Similarly, there is nothing directly correlated to a pipe within the render nodes network after we are done with building the part of the network corresponding to the pipe, which is used as a blueprint for building, but isn't an entity in the resulting low-level model.
+Actually, there is {{red{planned}}} a more general (and complicated) kind of transition, which can be inserted into N data connections without joining them together into one single output, as the standard transitions do. The ~CombiningMould can handle this case too by just returning N wiring moulds as a result.
 
 @@clear(right):display(block):@@
 
 !!!building a source connection
 [&gt;img[draw/builder-primitives3.png]]
+The __~SourceChainMould__ is used as a starting point for any further building, as it results in a local pipe (=clip) rooted at the clip source port. This reflects the fact that the source readers (media access points) are the leaf nodes in the graph
 * participating: source port of a clip, media access point, processing pattern
+* point of reference: //none//
 * result: processing pattern has been //executed//, resulting in a chain of nodes from the source reader to the clip source port
+* returns: ~PipeMould holding onto the new exit node (of a yet-empty pipe)
 
 @@clear(right):display(block):@@
 
 !!!wiring a general connection
+Any wiring (outside the chain of effects within a pipe) is always done from exit nodes to the port of another pipe, requiring an [[wiring request|WiringRequest]] already checked and deemed resolvable. Within the __~WiringMould__ the actual wiring is conducted, possibly adding a summation node (called &quot;overlayer&quot; in case of video) and typically a fader element (the specific setup to be used is subject to configuration by processing patterns)
 * participating: already verified connection request, providing a Pipe and an exit node; a processing pattern and a Placement
+* points of reference: exit node and (optionally) starting point of a pipe's chain (in case there are already other connections)
 * result: summation node prepended to the port of the pipe, processing pattern has been //executed// for building the connection from the exit node to the pipe's port, ParamProvider has been setup in accordance to the Placement.
+* returns: ~PipeMould holding onto the destination pipe's exit node, ~WiringMould holding onto the port side of the same pipe, i.e. the destination where further connections will insert summation nodes. {{red{TODO how to handle the //empty//-case?}}}
 [&gt;img[draw/builder-primitives4.png]]
 
 @@clear(right):display(block):@@
@@ -828,7 +844,7 @@ While building, the application of such a visiting tool (especially the [[NodeCr
 
 </pre>
 </div>
-<div title="BuilderToolKit" modifier="Ichthyostega" modified="200805220053" created="200805210308" tags="impl Builder" changecount="3">
+<div title="BuilderToolKit" modifier="Ichthyostega" modified="200805250236" created="200805210308" tags="impl Builder" changecount="4">
 <pre>Besides the primary working tool within the builder (namely the [[Node Creator Tool|PlanningNodeCreatorTool]]), on a lower level, we encounder several [[elementary building situations|BuilderPrimitives]] &amp;mdash; and for each of these elementary situations we can retrieve a suitable &quot;fitting tool&quot; or [[mould|BuilderMould]]. The palette of these moulds is called the ''tool kit'' of the builder. It is subject to configuration by rules.
 
 !! {{red{open questions}}}
@@ -836,7 +852,7 @@ While building, the application of such a visiting tool (especially the [[NodeCr
 * how to type them
 * how to parametrize them
 
-&amp;rarr;see also: BuilderPrimitives for the elementary corresponding to these fitting tools
+&amp;rarr;see also: BuilderPrimitives for the elementary working situations corresponding to these fitting tools
 </pre>
 </div>
 <div title="ColorPalette" modifier="Ichthyostega" modified="200706260455" created="200706190033" tags="excludeMissing" changecount="11">
@@ -2379,12 +2395,12 @@ The GUI can connect the viewer(s) to some pipe (and moreover can use [[probe poi
 
 </pre>
 </div>
-<div title="PipeHandling" modifier="Ichthyostega" modified="200804061705" created="200801101352" tags="spec" changecount="10">
+<div title="PipeHandling" modifier="Ichthyostega" modified="200805250303" created="200801101352" tags="spec" changecount="11">
 <pre>!Identification
 Pipes are distinct objects and can be identified by their asset ~IDs. Besides, as for all [[structural assets|StructAsset]] there are extended query capabilities, including a symbolic pipe-id and a media (stream) type id. Any pipe can accept and deliver exactly one media stream kind (which may be inherently structured though, e.g. spatial sound systems or stereoscopic video)
 
 !creating pipes
-Pipe assets are created automatically by being used and referred. The [[Session]] holds a collection of global pipes, and further pipes can be created by using a new pipe reference in some placement. Moreover, every clip has an (implicit) [[source port|ClipSourcePort]], which will appear as pipe asset when first used (referred) while [[building|BuildProcess]]. Note that creating a new pipe implies using a [[processing pattern|ProcPatt]], which will be queried from the [[Defaults Manager|DefaultsManagement]] (resulting in the use of some preconfigured pattern or maybe the creation of a new ProcPatt object if necessary)
+Pipe assets are created automatically by being used and referred. The [[Session]] holds a collection of global pipes ({{red{todo: implementation missing as of 5/08}}}), and further pipes can be created by using a new pipe reference in some placement. Moreover, every clip has an (implicit) [[source port|ClipSourcePort]], which will appear as pipe asset when first used (referred) while [[building|BuildProcess]]. Note that creating a new pipe implies using a [[processing pattern|ProcPatt]], which will be queried from the [[Defaults Manager|DefaultsManagement]] (resulting in the use of some preconfigured pattern or maybe the creation of a new ProcPatt object if necessary)
 
 !removal
 Deleting a Pipe is an advanced operation, because it includes finding and &quot;detaching&quot; all references, otherwise the pipe will leap back into existence immediately. Thus, global pipe entries in the Session and pipe references in [[locating pins|LocatingPin]] within any placement have to be removed, while clips using a given source port will be disabled. {{red{todo: implementation deferred}}}
@@ -2577,13 +2593,12 @@ Besides, they provide an important __inward interface__ for the [[ProcNode]]s, w
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200804122354" created="200706190056" tags="overview" changecount="9">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200805250304" created="200706190056" tags="overview" changecount="10">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
 &lt;&lt;&lt;
 ''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the foundations and main structures in C++
 * basic AssetManager working
 * currently impmenenting the Builder (&amp;rarr;[[more|PlanningNodeCreatorTool]])
-* intermittently working out how to deal with &amp;rarr; [[ConfigQueries / default objects|ConfigQueryIntegration]])
 &lt;&lt;&lt;
 
 !Summary
