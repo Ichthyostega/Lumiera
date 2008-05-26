@@ -1,5 +1,5 @@
 /*
-  NODECREATERTOOL.hpp  -  central Tool implementing the Renderengine building
+  NODECREATORTOOL.hpp  -  central Tool implementing the Renderengine building
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,8 @@
 */
 
 
-#ifndef MOBJECT_BUILDER_NODECREATERTOOL_H
-#define MOBJECT_BUILDER_NODECREATERTOOL_H
+#ifndef MOBJECT_BUILDER_NODECREATORTOOL_H
+#define MOBJECT_BUILDER_NODECREATORTOOL_H
 
 
 #include "proc/mobject/builder/applicablebuildertargettypes.hpp"

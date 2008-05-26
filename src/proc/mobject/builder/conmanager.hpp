@@ -26,10 +26,8 @@
 
 
 
-namespace mobject
-  {
-  namespace builder
-    {
+namespace mobject {
+  namespace builder {
 
 
     /**

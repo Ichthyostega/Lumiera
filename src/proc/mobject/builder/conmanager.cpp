@@ -23,11 +23,8 @@
 
 #include "proc/mobject/builder/conmanager.hpp"
 
-namespace mobject
-  {
-
-  namespace builder
-    {
+namespace mobject {
+  namespace builder {
 
 
 

@@ -1,5 +1,5 @@
 /*
-  ToolFactory  -  supply of Tool implementations for the Builder
+  NodeCreatorTool  -  central Tool implementing the Renderengine building
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,14 +21,43 @@
 * *****************************************************/
 
 
-#include "proc/mobject/builder/toolfactory.hpp"
+#include "proc/mobject/builder/nodecreatortool.hpp"
+#include "proc/mobject/session/clip.hpp"
+#include "proc/mobject/session/effect.hpp"
+#include "proc/mobject/session/auto.hpp"
+
+using mobject::Buildable;
+using mobject::session::Clip;
+using mobject::session::Effect;
+using mobject::session::Auto;
 
 namespace mobject {
   namespace builder {
 
 
 
-    /** */
+    void
+    NodeCreatorTool::treat (Buildable& something)
+    {
+    }
+
+
+    void
+    NodeCreatorTool::treat (Clip& clip)
+    {
+    }
+
+
+    void
+    NodeCreatorTool::treat (Effect& effect)
+    {
+    }
+
+
+    void
+    NodeCreatorTool::treat (Auto<double>& automation)
+    {
+    }
 
 
 

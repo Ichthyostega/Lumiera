@@ -23,10 +23,8 @@
 
 #include "proc/mobject/builder/assembler.hpp"
 
-namespace mobject
-  {
-  namespace builder
-    {
+namespace mobject {
+  namespace builder {
 
 
 

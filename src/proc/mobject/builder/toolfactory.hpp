@@ -25,19 +25,28 @@
 #define MOBJECT_BUILDER_TOOLFACTORY_H
 
 #include "proc/mobject/builder/buildertool.hpp"
+#include "proc/asset/pipe.hpp"
+#include "proc/mobject/session/clip.hpp"
+#include "proc/mobject/builder/wiringrequest.hpp"
+
+#include <vector>
 
 
+namespace mobject {
+  namespace builder {
 
-namespace mobject
-  {
-  namespace builder
-    {
-
+    using std::vector;
+    using asset::PPipe;
+    using session::PClipMO;
 
     class ToolFactory
       {
       public:
-        BuilderTool & configure () ;
+        PipeMould&        provideMould(PPipe const&);
+        CombiningMould&   provideMould(vector<PPipe const>&);
+        SourceChainMould& provideMould(PClipMO const&);
+        WiringMould&      provideMould(WiringRequest const&);
+        
       };
 
 

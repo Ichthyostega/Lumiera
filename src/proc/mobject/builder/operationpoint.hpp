@@ -1,5 +1,5 @@
 /*
-  ToolFactory  -  supply of Tool implementations for the Builder
+  OPERATIONPOINT.hpp  -  abstraction representing the point where to apply a build instruction
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,20 +18,35 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
 
 
-#include "proc/mobject/builder/toolfactory.hpp"
+#ifndef MOBJECT_BUILDER_OPERATIONPOINT_H
+#define MOBJECT_BUILDER_OPERATIONPOINT_H
+
+
+
 
 namespace mobject {
   namespace builder {
 
 
-
-    /** */
+    /**
+     * A point in the render node network under construction.
+     * By means of this unspecific reference, a ProcPatt is able
+     * to deal with this location and to execute a single elementary
+     * building operation denoted by a BuildInstruct at this point.
+     * Usually, the actual point is retrieved from a Mould
+     */
+    class OperationPoint
+      {
+      public:
+        
+      };
 
 
 
   } // namespace mobject::builder
 
 } // namespace mobject
+#endif

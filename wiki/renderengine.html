@@ -773,10 +773,18 @@ As the builder has to create a render node network implementing most of the feat
 !!pattern of operation
 The working pattern of this builder mechanics can be described as triggering, enqueuing, priorizing, recursing and exhausting. Without the priorizing part, it would be a depth-first call graph without any context state, forcing us to have all cross reference information available at every node or element to be treated. We prefer to avoid this overhead by ordering the operations into several phases and within these phases into correlated entities with the help of a ''weighting function'' and scheduling with a ''priority queue''</pre>
 </div>
-<div title="BuilderPrimitives" modifier="Ichthyostega" modified="200805250417" created="200805210327" tags="impl spec Builder" changecount="18">
+<div title="BuilderMould" modifier="Ichthyostega" created="200805260248" tags="def" changecount="1">
+<pre>The [[Builder]] uses different kinds of tools for creating a network of render nodes from a given high-level model. When breaking down this (necessarily complex) process into small manageable chunks, we arrive at [[elementary building situations|BuilderPrimitives]]. For each of these there is a specialized tool. We denote these tools as &quot;moulds&quot; because they are a rather passive holder for the objects to be attached and wired up. They are shaped according to the basic form the connections have to follow for each of these basic situations:
+* attaching an effect to a pipe
+* combining pipes via a transition
+* starting out a pipe from a source reader
+* general connections from the exit node of a pipe to the port of another pipe
+In all those cases, the active part is provided by [[processing patterns|ProcPatt]] &amp;mdash; sort of micro programs executed within the context of a given mould: the processing pattern defines the steps to take (in the standard/basic case this is just &quot;attach&quot;), while the mould holds and provides the location where these steps will operate.</pre>
+</div>
+<div title="BuilderPrimitives" modifier="Ichthyostega" modified="200805260332" created="200805210327" tags="impl spec Builder" changecount="25">
 <pre>While assembling and building up the render engines node network, a small number of primitive building situations is encountered repeatedly. The BuilderToolKit provides a &quot;[[mould|BuilderMould]]&quot; for each of these situations, typically involving parametrisation and the application of a [[processing pattern|ProcPatt]].
 
-The ''Lifecycle'' of such a mould starts out by arming it with the object references involved into the next building step. After conducting this building step, the resulting render nodes can be found &amp;mdash; depending on the situation &amp;mdash; attached either to the same mould, or to another kind of mould, but in any case ready to included in the next building step. Thus, //effectively//&amp;nbsp; the moulds are //used to handle the nodes being built,// due to the fact that the low-level model (nodes to be built) and the high-level model (objects directing what is to be built) are //never connected directly.//
+The ''Lifecycle'' of such a mould starts out by arming it with the object references involved into the next building step. After conducting this building step, the resulting render nodes can be found &amp;mdash; depending on the situation &amp;mdash; attached either to the same mould, or to another kind of mould, but in any case ready to be included in the next building step. Thus, //effectively//&amp;nbsp; the moulds are //used to handle the nodes being built,// due to the fact that the low-level model (nodes to be built) and the high-level model (objects directing what is to be built) are //never connected directly.//
 
 !List of elementary building situations
 !!!inserting an Effect or Plugin
@@ -792,20 +800,20 @@ The __~PipeMould__ is used to chain up the effects attached to a clip (=local pi
 
 !!!attaching a transition 
 [&gt;img[draw/builder-primitives2.png]]
-After having completed N pipe's node chains, a __~CombiningMould__ can be used to join them into a [transition|TransitionsHandling]
+After having completed N pipe's node chains, a __~CombiningMould__ can be used to join them into a [[transition|TransitionsHandling]]
 * participating: N pipe's exit nodes, transition
 * point of reference: N exit nodes corresponding to (completed) pipes
 * result: transition has been attached with the pipe's exit nodes, new wiring requests created attached to the transition's exit node(s)
 * returns: ~WiringMould, connected with the created wiring request
-Using this mould implicitly &quot;closes&quot; the involved pipes, which means that we give up any reference to the exit node and can't build any further effect attached to this pipes. Generally speaking, &quot;exit node&quot; isn't a special kind of node, rather it's a node we are currently holding on. Similarly, there is nothing directly correlated to a pipe within the render nodes network after we are done with building the part of the network corresponding to the pipe, which is used as a blueprint for building, but isn't an entity in the resulting low-level model.
+Using this mould implicitly &quot;closes&quot; the involved pipes, which means that we give up any reference to the exit node and can't build any further effect attached to this pipes. Generally speaking, &quot;exit node&quot; isn't a special kind of node, rather it's a node we are currently holding on. Similarly, there is nothing directly correlated to a pipe within the render nodes network after we are done with building the part of the network corresponding to the pipe; the latter serves rather as a blueprint for building, but isn't an entity in the resulting low-level model.
 Actually, there is {{red{planned}}} a more general (and complicated) kind of transition, which can be inserted into N data connections without joining them together into one single output, as the standard transitions do. The ~CombiningMould can handle this case too by just returning N wiring moulds as a result.
 
 @@clear(right):display(block):@@
 
 !!!building a source connection
 [&gt;img[draw/builder-primitives3.png]]
-The __~SourceChainMould__ is used as a starting point for any further building, as it results in a local pipe (=clip) rooted at the clip source port. This reflects the fact that the source readers (media access points) are the leaf nodes in the graph
-* participating: source port of a clip, media access point, processing pattern
+The __~SourceChainMould__ is used as a starting point for any further building, as it results in a local pipe (=clip) rooted at the clip source port. This reflects the fact that the source readers (=media access points) are the //leaf nodes// in the node graph we are about to build.
+* participating: source port of a clip, media access point, [[processing pattern|ProcPatt]]
 * point of reference: //none//
 * result: processing pattern has been //executed//, resulting in a chain of nodes from the source reader to the clip source port
 * returns: ~PipeMould holding onto the new exit node (of a yet-empty pipe)
@@ -816,7 +824,7 @@ The __~SourceChainMould__ is used as a starting point for any further building, 
 Any wiring (outside the chain of effects within a pipe) is always done from exit nodes to the port of another pipe, requiring an [[wiring request|WiringRequest]] already checked and deemed resolvable. Within the __~WiringMould__ the actual wiring is conducted, possibly adding a summation node (called &quot;overlayer&quot; in case of video) and typically a fader element (the specific setup to be used is subject to configuration by processing patterns)
 * participating: already verified connection request, providing a Pipe and an exit node; a processing pattern and a Placement
 * points of reference: exit node and (optionally) starting point of a pipe's chain (in case there are already other connections)
-* result: summation node prepended to the port of the pipe, processing pattern has been //executed// for building the connection from the exit node to the pipe's port, ParamProvider has been setup in accordance to the Placement.
+* result: summation node prepended to the port of the pipe, processing pattern has been //executed// for building the connection from the exit node to the pipe's port, ParamProvider has been setup in [[accordance|PlacementDerivedDimension]] to the Placement.
 * returns: ~PipeMould holding onto the destination pipe's exit node, ~WiringMould holding onto the port side of the same pipe, i.e. the destination where further connections will insert summation nodes. {{red{TODO how to handle the //empty//-case?}}}
 [&gt;img[draw/builder-primitives4.png]]
 
@@ -844,13 +852,22 @@ While building, the application of such a visiting tool (especially the [[NodeCr
 
 </pre>
 </div>
-<div title="BuilderToolKit" modifier="Ichthyostega" modified="200805250236" created="200805210308" tags="impl Builder" changecount="4">
-<pre>Besides the primary working tool within the builder (namely the [[Node Creator Tool|PlanningNodeCreatorTool]]), on a lower level, we encounder several [[elementary building situations|BuilderPrimitives]] &amp;mdash; and for each of these elementary situations we can retrieve a suitable &quot;fitting tool&quot; or [[mould|BuilderMould]]. The palette of these moulds is called the ''tool kit'' of the builder. It is subject to configuration by rules.
+<div title="BuilderToolKit" modifier="Ichthyostega" modified="200805260414" created="200805210308" tags="impl Builder" changecount="5">
+<pre>Besides the primary working tool within the builder (namely the [[Node Creator Tool|PlanningNodeCreatorTool]]), on a lower level, we encounter several [[elementary building situations|BuilderPrimitives]] &amp;mdash; and for each of these elementary situations we can retrieve a suitable &quot;fitting tool&quot; or [[mould|BuilderMould]]. The palette of these moulds is called the ''tool kit'' of the builder. It is subject to configuration by rules.
 
 !! {{red{open questions}}}
 * how to address these moulds
 * how to type them
 * how to parametrize them
+
+!!addressing a mould
+All mould instances are owned and managed by the [[tool factory|BuilderToolFactory]], and can be referred to by their type ({{{PipeMould}}}, {{{CombiningMould}}}, {{{SourceChainMould}}}, {{{WiringMould}}}) and a concrete object instance (of suitable type). The returned mould (instance) acts as a handle to stick together the given object instance (from the high-level model) with the corresponding point in the low-level node network under construction. As consequence of this approach, the tool factory instance holds a snapshot of the current building state, including all the active spots in the build process. As the latter is driven by objects from the high-level model appearing (in a sensible order &amp;rarr; see BuilderMechanics) within the NodeCreatorTool, new moulds will be created and fitted as necessary, and existing moulds will be exhausted when finished, until the render node network is complete.
+
+!!configuring a mould
+As each mould kind is different, it has a {{{prepare(...)}}} function with suitably typed parameters. The rest is intended to be  self-configuring (for example, a ~CombiningMould will detect the actual kind of Transition and select the internal mode of operation), so that it's sufficient to just call {{{operate()}}}
+
+!!sequence of operations
+When {{{operate()}}} doesn't throw, the result is a list of //successor moulds// &amp;mdash; you shouldn't use the original mould after triggering its operation, because it may have been retracted as a result and reused for another purpose by the tool factory. It is not necessary to store these resulting moulds either (as they can be retrieved as described above), but they can be used right away for the next building step if applicable. In the state they are returned from a successful building step (mould operation = execution of a contained [[processing pattern|ProcPatt]]), they are usually already holding a reference to the part of the network just created and need to be configured only with the next high-level object (effect, placement, pipe, processing pattern or similar, depending on the concrete situation) in order to carry out the next step.
 
 &amp;rarr;see also: BuilderPrimitives for the elementary working situations corresponding to these fitting tools
 </pre>
@@ -2410,17 +2427,37 @@ there is not much you can do directly with a pipe asset. It is an point of refer
 Pipes are integrated with the [[management of defaults|DefaultsManagement]]. For example, any pipe uses implicitly some [[processing pattern|ProcPatt]] &amp;mdash; it may default to the empty pattern. This feature enables to apply some standard wiring to the pipes (e.g a fader for audio, similar to the classic mixing consoles). This //is // a global property of the pipe, but &amp;mdash; contrary to the stream type &amp;mdash; this pattern may be switched
 </pre>
 </div>
-<div title="Placement" modifier="Ichthyostega" modified="200710100120" created="200706220306" tags="def" changecount="6">
-<pre>A Placement represents a //relation:// it is always linked to a //Subject// (this being a [[Media Object|MObject]]) and has the meaning to //place// this Subject in some manner, either relatively to other Media Objects, or by some Constraint or simply absolute at (time,track). The latter case is especially important and represented by a special [[Sub-Interface|ExplicitPlacement]]
+<div title="Placement" modifier="Ichthyostega" modified="200805260156" created="200706220306" tags="def" changecount="8">
+<pre>A Placement represents a //relation:// it is always linked to a //Subject// (this being a [[Media Object|MObject]]) and has the meaning to //place// this Subject in some manner, either relatively to other Media Objects, or by some Constraint or simply absolute at (time, output). The latter case is especially important for the build process and thus represented by a special [[Sub-Interface ExplicitPlacement|ExplicitPlacement]]. Besides this simple cases, Placements can also express more specific kinds of &quot;locating&quot; an object, like placing a sound source at a pan position or placing a video clip at a given layer (above or below another video clip)
+
+So basically placements represent a query interface: you can allways ask the placement to find out about the position of the related object in terms of (time, output), and &amp;mdash; depending on the specific object and situation &amp;mdash; also about these additional [[placement derived dimensions|PlacementDerivedDimension]] like sound pan or layer order or similar things which also fit into the general concept of &quot;placing&quot; an object.
 
 The fact of being placed in the [[Session|SessionOverview]]/[[EDL]]is constitutive for all sorts of [[MObject]]s, without Placement they make no sense. Thus &amp;mdash; technically &amp;mdash; Placements act as ''smart pointers''. Of course, there are several kinds of Placements and they are templated on the type of MObject they are refering to. Placements can be //aggregated// to increasingly constrain the resulting &quot;location&quot; of the refered ~MObject. See &amp;rarr; [[handling of Placements|PlacementHandling]] for more details</pre>
 </div>
-<div title="PlacementHandling" modifier="Ichthyostega" modified="200710191414" created="200710100124" tags="design impl" changecount="11">
+<div title="PlacementDerivedDimension" modifier="Ichthyostega" modified="200805260223" created="200805260219" tags="def spec" changecount="3">
+<pre>For any [[media object|MObject]] within the session, we can allways at least query the time (reference/start) point and the output destination from the [[Placement]], by which the object is being handled. But the simple act of placing an object in some way, can &amp;mdash; depending on the context &amp;mdash; create additional degrees of freedom. To list some important examples:
+* placing a video clip overlapping with other clips on other tracks creates the possibility for the clip to be above another clip or to be combined in various other ways with the other clips at the same time position
+* placing a mono sound object plugged to a stereophoic output destination creates the freedom to define the pan position
+The Placement interface allows to query for these additional //parameter values derived from the fact of being placed.//
+
+!defining additional dimensions
+probably a LocatingPin but... {{red{TODO any details are yet unknown as of 5/08}}}
+!querying additional dimensions
+basically you resolve the Placement, yielding an ExplicitPlacement... {{red{TODO but any details of how additional dimensions are resolved is still undefined as of 5/08}}}</pre>
+</div>
+<div title="PlacementHandling" modifier="Ichthyostega" modified="200805260212" created="200710100124" tags="design impl" changecount="13">
 <pre>[[Placement]]s are at the very core of all [[editing operations|EditingOperations]], because they act as handles (smart pointers) to access the [[media objects|MObject]] to be manipulated. Moreover, Placements are the actual content of the EDL(s) and Fixture and thus are small objects with //value semantics//. Many editing tasks include finding some Placement in the EDL or directly take a ref to some Placement. By acting on the Placement object, we can in some cases change parameters of the way the media object is placed (e.g. adjust an offset), while by dereferencing the Placement object, we access the &quot;real&quot; media object (e.g. for trimming its length). Placements are ''templated'' on the type of the actual ~MObject they refer to, thus defining the interface/methods usable on this object.
 
-Actually, the way each Placement locates its subject is implemented by one or several small LocatingPin objects, where subclasses of LocatingPin implement the various differend methods of placing and resolving the final location. Notably, we can give a ~FixedLocation or we can atach to another ~MObject to get a ~RelativeLocation, etc.
+Actually, the way each Placement locates its subject is implemented by one or several small LocatingPin objects, where subclasses of LocatingPin implement the various different methods of placing and resolving the final location. Notably, we can give a ~FixedLocation or we can atach to another ~MObject to get a ~RelativeLocation, etc. In the typical use case, these ~LocatingPins are added to the Placement, but never retrieved directly. Rather the Placement acts as a ''query interface'' for determining the location of the related object. Here, &quot;location&quot; can be thought of as encompassing multiple dimenstions at the same time. An object can be
+* located at a specific point in time
+* related to and plugged into a specific output or global bus
+* defined to have a position within some [[context-dependant additional dimensions|PlacementDerivedDimension]] like
+** the pan position, either on the stereophoic base, or within a fully periphoic (spatial) sound system
+** the layer order and overlay mode for video (normal, additive, subtractive, masking)
+** the stereoscopic window position (depth parameter) for 3D video
+** channel and parameter selection for MIDI data
 
-Placements have //value semantics,// i.e. we don't stress the identity of a placement object (~MObjects on the other hand //do have// a distinguishable identity): initially, you create a Placement parametrized to some specific kind (fixed, relative,...), but later on, you treat the placement polymorphically and don't care about its kind. The sole purpose of the placement's kind is to select some virtual function implementing the desired behaviour. There is no limitation to one single Placement per ~MObject, indeed we have several different Placements of the same MObject (from a users point of view, this behaves like having clones). Besides, we can ''aggregate'' additional [[LocatingPin]]a to one Placements, resulting in their properties and constraints being combined to yield the actual position of the referred ~MObject.
+Placements have //value semantics,// i.e. we don't stress the identity of a placement object (~MObjects on the other hand //do have// a distinguishable identity): initially, you create a Placement parametrized to some specific kind by adding [[LocatingPin]]s (fixed, relative,...) and possibliy you use a subclass of {{{Placement&lt;MObject&gt;}}} to encode additional type information, say {{{Placement&lt;Clip&gt;}}}, but later on, you treat the placement polymorphically and don't care about its kind. The sole purpose of the placement's kind is to select some virtual function implementing the desired behaviour. There is no limitation to one single Placement per ~MObject, indeed we can have several different Placements of the same MObject (from a users point of view, these behave like being clones). Besides, we can ''aggregate'' additional [[LocatingPin]]s to one Placements, resulting in their properties and constraints being combined to yield the actual position of the referred ~MObject.
 
 !design decisions
 * the actual way of placing is implemented similar to the ''State Pattern'' by small embedded LocatingPin objects.
@@ -2624,17 +2661,29 @@ The system is ''open'' inasmuch every part mirrors the structure of correspondin
 <pre>A data processing node within the Render Engine. Its key feature is the possibility to pull from it one (freely addressable) [[Frame]] of calculated data. Further, each ~ProcNode has the ability to be wired with other nodes and [[Parameter Providers|ParamProvider]]
 </pre>
 </div>
-<div title="ProcPatt" modifier="Ichthyostega" modified="200804102256" created="200709212315" tags="def design" changecount="5">
-<pre>This special type of [[structural Asset|StructAsset]] represents information how to build some part of the render engine's processing nodes network. It can be thought of as a template or blueprint for construction. Most notably, it is used for creating nodes reading, decoding and delivering source media material to the render network. Each [[media Asset|MediaAsset]] has associated processing patterns describing the codecs and other transformations needed to get at the media data of this asset. (and because media assets are typically compound objects, the referred ~ProcPatt will be compound too). Obviously, the possibilities opened by using processing patterns go far beyond.
+<div title="ProcPatt" modifier="Ichthyostega" modified="200805260329" created="200709212315" tags="def design" changecount="9">
+<pre>This special type of [[structural Asset|StructAsset]] represents information how to build some part of the render engine's processing nodes network. Processing patterns can be thought of as a blueprint or micro program for construction. Most notably, they are used for creating nodes reading, decoding and delivering source media material to the render network, and they are used for building the output connection via faders, summation or overlay nodes to the global pipes (busses). Each [[media Asset|MediaAsset]] has associated processing patterns describing the codecs and other transformations needed to get at the media data of this asset. (and because media assets are typically compound objects, the referred ~ProcPatt will be compound too). Similarily, for each stream kind, we can retrieve a processing pattern for making output connections. Obviously, the possibilities opened by using processing patterns go far beyond.
 
 Technically, a processing pattern is a list of building instructions, which will be //executed// by the [[Builder]] on the render node network under construction. This implies the possibility to define further instruction kinds when needed in future; at the moment the relevant sorts of instructions are
 * attach the given sequence of nodes to the specified point
 * recursively execute a nested ~ProcPatt
-More specifically, a sequence of nodes is given by a sequence of prototypical effect and codec assets (and from each of them we can create the corresponding render node). And the point to attach these nodes is given by an identifier &amp;mdash; in most cases just &quot;{{{current}}}&quot;, denoting the point the builder was just working at, when he treated some MObject which in turn yielded this processing pattern in question.
+More specifically, a sequence of nodes is given by a sequence of prototypical effect and codec assets (and from each of them we can create the corresponding render node). And the point to attach these nodes is given by an identifier &amp;mdash; in most cases just &quot;{{{current}}}&quot;, denoting the point the builder is currently working at, when treating some placed ~MObject which in turn yielded this processing pattern in question.
 
-Like all [[structural assets|StructAsset]], ~ProcPatt employs a special naming scheme within the asset name field, which directly mirrors its purpose and allows to bind to existing processing pattern instances when needed. The idea is letting all assets in need of a similar processing pattern refer to one shared ~ProcPatt instance. For example, within a MPEG video media asset, at some point there will be a ~ProcPatt labeled &quot;{{{stream(mpeg)}}}&quot;. In consequence, all MPEG video will use the same pattern of node wiring. And, of course, this pattern could be changed, either globally, or by binding a single clip to some other processing pattern (for making a punctual exception from the general rule)
+Like all [[structural assets|StructAsset]], ~ProcPatt employs a special naming scheme within the asset name field, which directly mirrors its purpose and allows to bind to existing processing pattern instances when needed. {{red{TODO: that's just the general idea, but really it will rather use some sort of tags. Yet undefined as of 5/08}}} The idea is letting all assets in need of a similar processing pattern refer to one shared ~ProcPatt instance. For example, within a MPEG video media asset, at some point there will be a ~ProcPatt labeled &quot;{{{stream(mpeg)}}}&quot;. In consequence, all MPEG video will use the same pattern of node wiring. And, of course, this pattern could be changed, either globally, or by binding a single clip to some other processing pattern (for making a punctual exception from the general rule) 
 
-//Note,// nothing has been said about how processing patterns are defined. One can expect for some //default patterns// beeing defined somewhere in the application, any session could overrule these defaults, and when there is no default, we can expect some mechanism deriving sensible fallback patterns //for every specific use case// of processing patterns. See the problem of [[Loading Media]] as an example.
+!!defining Processing Patterns
+The basic working set of processing patterns can be expected to be just there (hard wired or default configuration, mechanism for creating an sensible fallback). Besides, the idea is that new processing patterns can be added via rules in the session and then referred to by other rules controlling the build process. Any processing pattern is assembled by adding individual build instructions, or by including another (nested) processing pattern.
+
+!!retrieving a suitable Processing Pattern
+For a given situation, the necessary ProcPatt can be retrieved by issuing a [[configuration query|ConfigQuery]]. This query should include the needed capabilities in predicate form (technically this query is a Prolog goal), but it can leave out informations by just requesting &quot;the default&quot; &amp;rarr; see DefaultsManagement
+
+!!how does this actually work?
+Any processing pattern needs the help of a passive holder tool suited for a specific [[building situation|BuilderPrimitives]]; we call these holder tools [[building moulds|BuilderMould]]. Depending on the situation, the mould has been armed up by the builder with the involved objects to be connected and extended. So, just by issuing the //location ID// defined within the individual build instruction (in most cases simply {{{&quot;current&quot;}}}), the processing pattern can retrieve the actual render object to use for building from the mould it is executed in.
+
+!!errors and misconfiguration
+Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash; thus providing the necessary flexibility within an otherwise strong typed system. Consequently, the builder assumes they are configured //the right way// &amp;mdash; and will just bail out when this isn't the case, marking the related part of the high-level model as erroneous.
+&amp;rarr; see BuilderErrorHandling for details
+
 </pre>
 </div>
 <div title="Processors" modifier="Ichthyostega" created="200706220412" tags="def" changecount="1">
