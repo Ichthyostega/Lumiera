@@ -1,5 +1,5 @@
 /*
-  MOBJECTFACTORY.hpp  -  creating concrete MObject subclass instances
+  NODEFACTORY.hpp  -  Interface for creating processing nodes of variouos kinds
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,51 +21,50 @@
 */
 
 
-#ifndef MOBJECT_SESSION_MOBJECTFACTORY_H
-#define MOBJECT_SESSION_MOBJECTFACTORY_H
+#ifndef ENGINE_NODEFACTORY_H
+#define ENGINE_NODEFACTORY_H
 
-#include "proc/mobject/mobject.hpp"
+#include "proc/engine/procnode.hpp"
+#include "proc/mobject/placement.hpp"
 
 
-
-namespace asset {
-
-  class Clip;
-  class Media;
-  class Track;
-  class Effect;
-  
-  }
 
 namespace mobject {
   namespace session {
   
     class Clip;
-    class Track;
     class Effect;
-    
-    typedef P<asset::Track> PTrackAsset;
-
-
-    class MObjectFactory
-      {
-        /** custom deleter func allowing class Placement    
-          *  to take ownership of MObjct instances
-          */
-        static void deleterFunc (MObject* o) { delete o; }
-        
-      public:
-        
-        Placement<Clip>   operator() (asset::Clip const&, asset::Media const&);
-        Placement<Clip>   operator() (asset::Clip const&, vector<asset::Media const*>);
-        Placement<Track>  operator() (PTrackAsset&);
-        Placement<Effect> operator() (asset::Effect const&);
-        
-      };
-
-
+    typedef Placement<Effect> PEffect;
+    // TODO: class Transition;
 
   } // namespace mobject::session
 
 } // namespace mobject
+
+
+namespace engine {
+
+  using std::vector;
+  
+  class Trafo;
+  typedef Trafo* PTrafo;    ///< @todo handle ProcNode by pointer or by shared-ptr?? 
+
+
+  /**
+   * Create processing nodes based on given objects of the high-level model.
+   */
+  class NodeFactory
+    {
+        /** custom deleter func allowing a smart-ptr    
+          *  to take ownership of processing nodes
+          */
+        static void deleterFunc (ProcNode* pno) { delete pno; }
+      
+      public:
+        
+        PTrafo  operator() (mobject::session::PEffect const&);
+        
+    };
+
+} // namespace engine
 #endif

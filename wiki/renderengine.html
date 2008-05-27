@@ -773,13 +773,14 @@ As the builder has to create a render node network implementing most of the feat
 !!pattern of operation
 The working pattern of this builder mechanics can be described as triggering, enqueuing, priorizing, recursing and exhausting. Without the priorizing part, it would be a depth-first call graph without any context state, forcing us to have all cross reference information available at every node or element to be treated. We prefer to avoid this overhead by ordering the operations into several phases and within these phases into correlated entities with the help of a ''weighting function'' and scheduling with a ''priority queue''</pre>
 </div>
-<div title="BuilderMould" modifier="Ichthyostega" created="200805260248" tags="def" changecount="1">
+<div title="BuilderMould" modifier="Ichthyostega" modified="200805270325" created="200805260248" tags="def" changecount="2">
 <pre>The [[Builder]] uses different kinds of tools for creating a network of render nodes from a given high-level model. When breaking down this (necessarily complex) process into small manageable chunks, we arrive at [[elementary building situations|BuilderPrimitives]]. For each of these there is a specialized tool. We denote these tools as &quot;moulds&quot; because they are a rather passive holder for the objects to be attached and wired up. They are shaped according to the basic form the connections have to follow for each of these basic situations:
 * attaching an effect to a pipe
 * combining pipes via a transition
 * starting out a pipe from a source reader
 * general connections from the exit node of a pipe to the port of another pipe
-In all those cases, the active part is provided by [[processing patterns|ProcPatt]] &amp;mdash; sort of micro programs executed within the context of a given mould: the processing pattern defines the steps to take (in the standard/basic case this is just &quot;attach&quot;), while the mould holds and provides the location where these steps will operate.</pre>
+In all those cases, the active part is provided by [[processing patterns|ProcPatt]] &amp;mdash; sort of micro programs executed within the context of a given mould: the processing pattern defines the steps to take (in the standard/basic case this is just &quot;attach&quot;), while the mould holds and provides the location where these steps will operate. Actually, this location is represented as a OperationPoint, provided by the mould and abstracting the details of making multi-channel connections.
+</pre>
 </div>
 <div title="BuilderPrimitives" modifier="Ichthyostega" modified="200805260332" created="200805210327" tags="impl spec Builder" changecount="25">
 <pre>While assembling and building up the render engines node network, a small number of primitive building situations is encountered repeatedly. The BuilderToolKit provides a &quot;[[mould|BuilderMould]]&quot; for each of these situations, typically involving parametrisation and the application of a [[processing pattern|ProcPatt]].
@@ -852,13 +853,9 @@ While building, the application of such a visiting tool (especially the [[NodeCr
 
 </pre>
 </div>
-<div title="BuilderToolKit" modifier="Ichthyostega" modified="200805260414" created="200805210308" tags="impl Builder" changecount="5">
+<div title="BuilderToolKit" modifier="Ichthyostega" modified="200805270340" created="200805210308" tags="impl Builder" changecount="8">
 <pre>Besides the primary working tool within the builder (namely the [[Node Creator Tool|PlanningNodeCreatorTool]]), on a lower level, we encounter several [[elementary building situations|BuilderPrimitives]] &amp;mdash; and for each of these elementary situations we can retrieve a suitable &quot;fitting tool&quot; or [[mould|BuilderMould]]. The palette of these moulds is called the ''tool kit'' of the builder. It is subject to configuration by rules.
 
-!! {{red{open questions}}}
-* how to address these moulds
-* how to type them
-* how to parametrize them
 
 !!addressing a mould
 All mould instances are owned and managed by the [[tool factory|BuilderToolFactory]], and can be referred to by their type ({{{PipeMould}}}, {{{CombiningMould}}}, {{{SourceChainMould}}}, {{{WiringMould}}}) and a concrete object instance (of suitable type). The returned mould (instance) acts as a handle to stick together the given object instance (from the high-level model) with the corresponding point in the low-level node network under construction. As consequence of this approach, the tool factory instance holds a snapshot of the current building state, including all the active spots in the build process. As the latter is driven by objects from the high-level model appearing (in a sensible order &amp;rarr; see BuilderMechanics) within the NodeCreatorTool, new moulds will be created and fitted as necessary, and existing moulds will be exhausted when finished, until the render node network is complete.
@@ -869,7 +866,10 @@ As each mould kind is different, it has a {{{prepare(...)}}} function with suita
 !!sequence of operations
 When {{{operate()}}} doesn't throw, the result is a list of //successor moulds// &amp;mdash; you shouldn't use the original mould after triggering its operation, because it may have been retracted as a result and reused for another purpose by the tool factory. It is not necessary to store these resulting moulds either (as they can be retrieved as described above), but they can be used right away for the next building step if applicable. In the state they are returned from a successful building step (mould operation = execution of a contained [[processing pattern|ProcPatt]]), they are usually already holding a reference to the part of the network just created and need to be configured only with the next high-level object (effect, placement, pipe, processing pattern or similar, depending on the concrete situation) in order to carry out the next step.
 
-&amp;rarr;see also: BuilderPrimitives for the elementary working situations corresponding to these fitting tools
+!!single connection step
+at the lowest level within the builder there is the step of building a //connection.// This step is executed by the processing pattern with the help of the mould. Actually, making such a connection is more complicated, because in the standard case it will connect N media streams simultaneously (N=2 for stereo sound or 3D video, N=6 for 5.1 Surround, N=9 for 2nd order Ambisonics). These details are encapsulated within the OperationPoint, which is provides by the mould and exhibits a common interface for the processing pattern to express the connecting operation.
+
+&amp;rarr;see also: BuilderPrimitives for the elementary working situations corresponding to each of these [[builder moulds|BuilderMould]]
 </pre>
 </div>
 <div title="ColorPalette" modifier="Ichthyostega" modified="200706260455" created="200706190033" tags="excludeMissing" changecount="11">
@@ -1831,6 +1831,14 @@ But because I know the opinions on this topc are varying (users tend to be delig
 My proposed aproach is to treat OpenGL as a separate video raw data type, requiring separete and specialized [[Processing Nodes|ProcNode]] for all calculations. Thus the Builder could connect OpenGL nodes if it is possible to cover the whole render path for preview and fall back to the normal ~ProcNodes for all relevant renders
 </pre>
 </div>
+<div title="OperationPoint" modifier="Ichthyostega" modified="200805270339" created="200805270334" tags="def impl" changecount="3">
+<pre>A low-level abstraction within the [[Builder]] &amp;mdash; it serves to encapsulate the details of making multi-channel connections between the render nodes: In some cases, a node can handle N channels internally, while in other cases we need to replicate the node N times and wire each channel individually.
+
+The operation point is provided by the current BuilderMould and used by the [[processing pattern|ProcPatt]] executing within this mould and conducting the current build step. The operation point's interface allows //to abstract//&amp;nbsp; these details, as well as to //gain additional control//&amp;nbsp; if necessary (e.g. addressing only one of the channels). The most prominent build instruction used within the processing patterns (which is the instruction {{{&quot;attach&quot;}}}) relies on the aforementioned //approach of abstracted handling,// letting the operation point determine automatically how to make the connection.
+
+This is possible because the operation point has been provided (by the mould) with informations about the media stream type to be wired, while at the same time relying on the [[render node interface|ProcNode]] for finding out whats possible and making the desired connections.
+</pre>
+</div>
 <div title="Overview" modifier="Ichthyostega" modified="200804130018" created="200706190300" tags="overview" changecount="12">
 <pre>The Lumiera Processing Layer is comprised of various subsystems and can be separated into a low-level and a high-level part. At the low-level end is the [[Render Engine|OverviewRenderEngine]] which basically is a network of render nodes cooperating closely with the Backend Layer in order to carry out the actual playback and media transforming calculations. Whereas on the high-level side we find several different [[Media Objects|MObjects]] that can be placed into the [[EDL]], edited and manipulated. This is complemented by the [[Asset Management|Asset]], which is the &quot;bookkeeping view&quot; of all the different &quot;things&quot; within each [[Session|SessionOverview]].
 
@@ -2657,8 +2665,17 @@ The system is ''open'' inasmuch every part mirrors the structure of correspondin
 &amp;rarr; [[Implementation Details|ImplementationDetails]] {{red{WIP}}}
 </pre>
 </div>
-<div title="ProcNode" modifier="MichaelPloujnikov" modified="200706271500" created="200706220409" tags="def" changecount="3">
+<div title="ProcNode" modifier="Ichthyostega" modified="200805270344" created="200706220409" tags="def spec" changecount="4">
 <pre>A data processing node within the Render Engine. Its key feature is the possibility to pull from it one (freely addressable) [[Frame]] of calculated data. Further, each ~ProcNode has the ability to be wired with other nodes and [[Parameter Providers|ParamProvider]]
+
+!! {{red{open questions}}}
+* how to address a node
+* how to type them
+* how to discover the number and type of the ports
+* how to discover the possible parameter ports
+* how to define and query for additional capabilities
+
+&amp;rarr; see also the [[open design process draft|http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/DesignRenderNodesInterface]]
 </pre>
 </div>
 <div title="ProcPatt" modifier="Ichthyostega" modified="200805260329" created="200709212315" tags="def design" changecount="9">

@@ -29,12 +29,16 @@
 #include "proc/mobject/parameter.hpp"
 
 
-using std::vector;
 
 
+namespace engine {
 
-namespace engine
-  {
+  using std::vector;
+  
+  class ProcNode;
+  class NodeFactory;
+  
+  typedef ProcNode* PNode;    ///< @todo handle ProcNode by pointer or by shared-ptr??
 
 
   /**
@@ -42,15 +46,36 @@ namespace engine
    */
   class ProcNode
     {
-    protected:
       typedef mobject::Parameter<double> Param;
 
       /** The predecessor in a processing pipeline.
        *  I.e. a source to get data to be processed
        */
-      ProcNode * datasrc;
+      PNode datasrc;
 
       vector<Param> params;
+
+    protected:
+      ProcNode();
+      virtual ~ProcNode() {};
+      
+      friend class NodeFactory;
+      
+      
+      /** do the actual calculations.
+       *  @internal dispatch to implementation. 
+       *            Client code should use #render()
+       *  @todo obviously we need a parameter!!!
+       */
+      virtual void process() = 0;
+
+    public:
+      static NodeFactory create;
+      
+      /** render and pull output from this node.
+       *  @todo define the parameter!!!
+       */
+      void render() { this->process(); }
 
     };
 

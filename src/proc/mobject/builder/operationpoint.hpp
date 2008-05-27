@@ -24,12 +24,18 @@
 #ifndef MOBJECT_BUILDER_OPERATIONPOINT_H
 #define MOBJECT_BUILDER_OPERATIONPOINT_H
 
+#include "proc/engine/procnode.hpp"
+#include "common/query.hpp"
 
+#include <vector>
+#include <string>
 
 
 namespace mobject {
   namespace builder {
 
+    using std::vector;
+    using std::string;
 
     /**
      * A point in the render node network under construction.
@@ -40,8 +46,23 @@ namespace mobject {
      */
     class OperationPoint
       {
-      public:
+        typedef engine::PNode PNode;
         
+        vector<PNode> refPoint_;
+        const string streamID_;
+        
+      public:
+        /** create node(s) corresponding to the given Processor-Asset
+         *  and wire them as a successor to this OperationPoint; then
+         *  move this point to point at the resulting new exit node(s)
+         */
+        void attach (asset::PProc const&);
+        
+        /** connect the output this OperationPoint referes such as to
+         *  connect or combine with the input of the already existing
+         *  nodes accessible via the target OperationPoint. 
+         */
+        void join (OperationPoint& target);
       };
 
 

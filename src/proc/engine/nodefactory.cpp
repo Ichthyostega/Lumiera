@@ -1,5 +1,5 @@
 /*
-  ProcNode  -  Key abstraction of the Render Engine: a Processing Node
+  NodeFactory  -  Interface for creating processing nodes of variouos kinds
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,15 +21,21 @@
 * *****************************************************/
 
 
-#include "proc/engine/procnode.hpp"
 #include "proc/engine/nodefactory.hpp"
+#include "proc/mobject/session/effect.hpp"
 
 namespace engine {
 
+  using mobject::Placement;
+  using mobject::session::Effect;
+  
 
-  /** Storage for the (single, static) ProcNode factory object.
-   */
-  NodeFactory ProcNode::create;
+  /** create a processing node able to render an effect */
+  PTrafo
+  NodeFactory::operator() (Placement<Effect> const&)
+  {
+    UNIMPLEMENTED ("create proc node for Effect/Plugin");
+  }
 
 
 } // namespace engine

@@ -25,6 +25,7 @@
 #define MOBJECT_BUILDER_TOOLFACTORY_H
 
 #include "proc/mobject/builder/buildertool.hpp"
+#include "proc/mobject/builder/mould.hpp"
 #include "proc/asset/pipe.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/builder/wiringrequest.hpp"
