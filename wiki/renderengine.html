@@ -578,6 +578,9 @@ The first step towards an solution is to isolate the problem; obviously we //nee
 [img[how to implement Automation|uml/fig129669.png]]
 </pre>
 </div>
+<div title="AutomationData" modifier="Ichthyostega" created="200805300105" tags="def automation" changecount="2">
+<pre>While generally automation is treated as a function over time, defining and providing such a function requires some //Automation Data.// The actual layout and meaning of this data is deemed an implementation detail of the [[parameter provider|ParamProvider]] used, but nevertheless an automation data set has object characteristics within the [[EDL (high-level-model)|EDL]], allowing it to be attached, moved and [[placed|Placement]] by the user.</pre>
+</div>
 <div title="BasicBuildingOperations" modifier="Ichthyostega" modified="200805210230" created="200712040334" tags="design dynamic Builder" changecount="24">
 <pre>Starting out from the concepts of Objects, Placement to Tracks, render Pipes and connection properties (&amp;rarr; see [[here|TrackPipeEDL]]) within the EDL, we can identify the elementary operations occuring within the Builder. Overall, the Builder is organized as application of //visiting tools// to a collection of objects, so finally we have to consider some object kind appearing in the working function of the given builder tool, which holds at this moment some //context//. The job now is to organize this context such as to create a predictable build process from this //event driven// approach.
 &amp;rarr;see also: BuilderPrimitives for the elementary situations used to cary out the building operations
@@ -729,11 +732,11 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BuildProcess" modifier="Ichthyostega" modified="200805210213" created="200706190658" tags="dynamic Builder" changecount="28">
+<div title="BuildProcess" modifier="Ichthyostega" modified="200805300042" created="200706190658" tags="dynamic Builder" changecount="29">
 <pre>All decisions on //how // the RenderProcess has to be carried out are concentrated in this rather complicated Builder Subsystem. The benefit of this approach is, besides decoupling of subsystems, to keep the actual performance-intensive video processing code as simple and transparent as possible. The price, in terms of increased complexity &amp;mdash; to pay in the Builder &amp;mdash; can be handled by making the Build Process generic to a large degree. Using a Design By Contract approach we can decompose the various decisions into small decision modules without having to trace the actual workings of the Build Process as a whole.
 
 [&gt;img[Outline of the Build Process|uml/fig129413.png]]
-The building itself will be broken down into several small tool application steps. Each of these steps has to be mapped to the MObjects found on the [[Timeline]]. Remember: the idea is that the so called &quot;[[Fixture]]&quot; contains only [[ExplicitPlacement]]s which in turn link to MObjects like Clips, Effects and Automation. So it is sufficient to traverse this list and map the build tools to the elements. Each of these build tools has its own state, which serves to build up the resulting Render Engine. So far I see two steps to be necessary:
+The building itself will be broken down into several small tool application steps. Each of these steps has to be mapped to the MObjects found on the [[Timeline]]. Remember: the idea is that the so called &quot;[[Fixture]]&quot; contains only [[ExplicitPlacement]]s which in turn link to MObjects like Clips, Effects and [[Automation]]. So it is sufficient to traverse this list and map the build tools to the elements. Each of these build tools has its own state, which serves to build up the resulting Render Engine. So far I see two steps to be necessary:
 * find the &quot;Segments&quot;, i.e. the locations where the overall configuration changes
 * for each segment: generate a ProcNode for each found MObject and wire them accordingly
 Note, //we still have to work out how exactly building, rendering and playback work// together with the backend-design. The build process as such doesn't overly depend on these decisions. It is easy to reconfigure this process. For example, it would be possible as well to build for each frame separately (as Cinelerra2 does), or to build one segment covering the whole timeline (and handle everything via [[Automation]]
@@ -749,7 +752,30 @@ Note, //we still have to work out how exactly building, rendering and playback w
 [img[Colaborations in the Build Process|uml/fig128517.png]]
 </pre>
 </div>
-<div title="Builder" modifier="Ichthyostega" modified="200805210209" created="200706220317" tags="def overview" changecount="26">
+<div title="BuildRenderNode" modifier="Ichthyostega" modified="200805300421" created="200805300137" tags="Builder impl" changecount="7">
+<pre>Actually setting up and wiring a [[processing node|ProcNode]] involves several issues and is carried out at the lowest level of the build process. 
+
+!!!object creation
+The Nodes are small polymorphic objects, carrying configuration data, but no state. They are [[specially allocated|ManagementRenderNodes]], and the object creation is accessible solely by the NodeFactory. They //must not be deallocated manually.// The decision of what concrete node type to create depends on the actual build situation and is worked out by the combination of [[mould|BuilderMould]] and [[processing pattern|ProcPatt]] at the current OperationPoint, issuing a call to one of NodeFactory's {{{operator()}}}
+
+!!!node, plugin and processing function
+Its a good idea to distinguish clearly between those concepts. A plugin is a piece of (possibly external) code we use to carry out operations. We have to //discover its properties and capabilities.// We don't have to discover anything regarding nodes, because we (Lumiera builder and renderengine) are creating, configuring and wiring them to fit the specific purpose. Both are to be distinguished from processing functions, which do the actual calculations on the media data. Every node typically encompasses at least one processing function, which may be an internal function in the node object, a library function from Lumiera or GAVL, or external code loaded from a plugin.
+
+!!!node interfaces
+As a consequence of this distinctions, in conjunction with a processing node, we have to deal with three different interfaces
+* the __build interface__ is used by the builder to set up and wire the nodes. It can be full blown C++ (including templates)
+* the __operation interface__ is used to run the calculations, which happens in cooperation of Proc-Layer and Backend. So a function-style interface is preferable.
+* the __inward interface__ is accessed by the processing function in the course of the calculations to get at the necessary context, including in/out buffers and param values.
+
+!!!wiring data connections
+A node //knows its predecessors, but not its successors.// When being //pulled//&amp;nbsp; in operation, it can expect to get a frame provider for accessing the in/out buffer locations (some processing functions may be &quot;in-place capable&quot;, but that's only a special case of the former). At this point, the ''pull principle'' comes into play: the node may request input frames from the frame provider, passing its predecessors as a ''continuation''.
+With regard to the build process, the wiring of data connections translates into providing the node with its predecessors and preconfiguring the possible continuations. While in the common case, a node has just one input/output and pulls from its predecessor a frame for the same timeline position, the general case can be more contrived. A node may process N buffers in parallel and may require several different time positions for it's input, even at a differing framerate. So the actual source specification is (predNode,time,frameType). The objective of the wiring done in the build process is to factor out the parts known in advance, while in the render process only the variable part need to be filled in. Or to put it differently: wiring builds a higher order function (time)-&gt;(continuation), where continuation can be invoked to get the desired input frame.
+
+!!!wiring control conections
+In many cases, the parameter values provided by these connections aren't frame based data, rather, the processing function needs a call interface to get the current value (value for a given time), which is provided by the parameter object. Here, the wiring needs to link to the suitable parameter instance, which is located within the high-level model (!). As an additional complication, calculating the actual parameter value may require a context data frame (typically for caching purposes to speed up the interpolation). While these parameter context data frames are completely opaque for the render node, they have to be passed in and out similar to the state needed by the node itself, and the wiring has to prepare for accessing these frames too.
+</pre>
+</div>
+<div title="Builder" modifier="Ichthyostega" modified="200805300043" created="200706220317" tags="def overview" changecount="27">
 <pre>The Builder takes some MObject/[[Placement]] information (called Timeline) and generates out of this a Render Engine configuration able to render this Objects. It does all decisions and retrieves the current configuration of all objects and plugins, so the Render Engine can just process them stright forward.
 
 The Builder is the central part of the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]
@@ -761,7 +787,7 @@ As the builder has to create a render node network implementing most of the feat
 * //operating the Builder// can be viewed at from two different angles, either emphasizing the [[basic building operations|BasicBuildingOperations]] employed to assemble the render node network, or focussing rather at the [[mechanics|BuilderMechanics]] of cooperating parts while processing.
 * besides, we can identify a small set of elementary situations we call [[builder primitives|BuilderPrimitives]], to be covered by the mentioned BuilderToolKit; by virtue of [[processing patterns|ProcPatt]] they form an [[interface to the rule based configuration|BuilderRulesInterface]].
 * the actual building (i.e. the application of tools to the timeline) is done by the [[Assembler|BuilderAssembler]], which is basically a collection of functions (but has a small amount of global configuration state)
-* any non-trivial wiring of render nodes, tracks, pipes and automation is done by the services of the [[connection manager|ConManager]]
+* any non-trivial wiring of render nodes, tracks, pipes and [[automation|Automation]] is done by the services of the [[connection manager|ConManager]]
 </pre>
 </div>
 <div title="BuilderMechanics" modifier="Ichthyostega" created="200805210256" tags="design dynamic Builder" changecount="1">
@@ -1010,7 +1036,7 @@ As we don't have a Prolog interpreter on board yet, we utilize a mock store with
 {{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding a exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one soltution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
 &amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
-<div title="DesignDecisions" modifier="Ichthyostega" modified="200801062304" created="200801062209" tags="decision design discuss" changecount="17">
+<div title="DesignDecisions" modifier="Ichthyostega" modified="200805300045" created="200801062209" tags="decision design discuss" changecount="18">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
 
 ''Everything is an object'' &amp;mdash; of course, that's a //no-brainer // todays. Rather, important is what is not &quot;an object&quot;, meaning it can't be arranged arbitrarily
@@ -1023,10 +1049,10 @@ We ''separate'' processing (rendering) and configuration (building). We have a [
 ''Objects are [[placed|Placement]] rather'' than assembled, connected, wired, attached. This is more of a rule-based approach and gives us one central metaphor and abstraction, allowing us to treat everything in an uniform manner. You can place it as you like, and the builder tries to make sense out of it, silently disabling what doesn't make sense.
 An [[EDL]] is just a collection of configured and placed objects (and has no additional, fixed structure). [[Tracks|Track]] form a mere organisational grid, they are grouping devices not first-class entities (a track doesn't &quot;have&quot; a pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements though). [[Pipes|Pipe]] are hooks for making connections and are the only facility to build processing chains. We have global pipes, and each clip is built around a lokal [[source port|ClipSourcePort]] &amp;mdash; and that's all. No special &quot;media viewer&quot; and &quot;arranger&quot;, no special role for media sources, no commitment to some fixed media stream types (video and audio). All of this is sort of pushed down to be configuration, represented as asset of some kind. For example, we have [[processing pattern|ProcPatt]] assets to represent the way of building the source network for reading from some media file (including codecs treated like effect plugin nodes)
 
-''State'' is rigorously ''externalized'' and operations are to be ''scheduled'', to simplify locking and error handling. State is either treated similar to media stream data (as addressable and cacheable data frame), or is represented as &quot;parameter&quot; to be served by some [[parameter provider|ParamProvider]]. Automation is just another kind of parameter, i.e. a function, and how this function is calculated is an encapsulated implementation detail (we don't have &quot;bezier automation&quot;, and then maybe a &quot;linear automation&quot;, a &quot;mask automation&quot; and yet another way to handle transitions)
+''State'' is rigorously ''externalized'' and operations are to be ''scheduled'', to simplify locking and error handling. State is either treated similar to media stream data (as addressable and cacheable data frame), or is represented as &quot;parameter&quot; to be served by some [[parameter provider|ParamProvider]]. Consequently, [[Automation]] is just another kind of parameter, i.e. a function &amp;mdash; how this function is calculated is an encapsulated implementation detail (we don't have &quot;bezier automation&quot;, and then maybe a &quot;linear automation&quot;, a &quot;mask automation&quot; and yet another way to handle transitions)
 </pre>
 </div>
-<div title="DesignGoals" modifier="Ichthyostega" modified="200801062154" created="200706210557" tags="design" changecount="16">
+<div title="DesignGoals" modifier="Ichthyostega" modified="200805300046" created="200706210557" tags="design" changecount="20">
 <pre>This __proc-Layer__ and ~Render-Engine implementation started out as a design-draft by [[Ichthyo|mailto:Ichthyostega@web.de]] in summer 2007. The key idea of this design-draft is to use the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]] for the Render Engine, thus separating completely the //building// of the Render Pipeline from //running,// i.e. doing the actual Render. The Nodes in this Pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder.
 
 !Why doesn't the current Cinelerra-2 Design succeed?
@@ -1045,7 +1071,7 @@ As always, the main goal is //to cut down complexity// by the usual approach to 
 
 To achieve this, here we try to separate ''Configuration'' from ''Processing''. Further, in Configuration we try to separate the ''high level view'' (users view when editing) from the ''low level view'' (the actual configuration effective for the calculations). Finally, we try to factor out and encapsulate ''State'' in order to make State explicit.
 
-The main tool used to implement this separation is the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]. Here especially we move all decisions and parametrization into the BuildProcess. The Nodes in the render pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder. Make the actual processing nodes Template classes, parametrized by the color model and number of components. Make all Nodes of equal footing with each other, able to be connected freely within the limitations of the necessary input and output. Make the OpenGL rendering into alternate implementation of some operations together with an alternate signal flow (usable only if the whole Pipeline can be built up to support this changed signal flow), thus factoring out all the complexities of managing the data flow between core and hardware accelerated rendering out of the implementation of the actual processing. Introduce separate control data connections for the automation data, separating the case of true multi-channel-effects from the case where one node just gets remote controlled by another node (or two nodes using the same automation data).
+The main tool used to implement this separation is the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]. Here especially we move all decisions and parametrization into the BuildProcess. The Nodes in the render pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder. Make the actual processing nodes Template classes, parametrized by the color model and number of components. Make all Nodes of equal footing with each other, able to be connected freely within the limitations of the necessary input and output. Make the OpenGL rendering into alternate implementation of some operations together with an alternate signal flow (usable only if the whole Pipeline can be built up to support this changed signal flow), thus factoring out all the complexities of managing the data flow between core and hardware accelerated rendering out of the implementation of the actual processing. Introduce separate control data connections for the [[automation data|Automation]], separating the case of true multi-channel-effects from the case where one node just gets remote controlled by another node (or two nodes are utilizing the same automation data).
 
 Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the EDL in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
 </pre>
@@ -1722,6 +1748,12 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 {{red{let's see if this approach works...}}}
 </pre>
 </div>
+<div title="ManagementRenderNodes" modifier="Ichthyostega" modified="200805280201" created="200805280200" tags="impl decision" changecount="4">
+<pre>Contrary to the &amp;rarr;[[Assets and MObjects|ManagementAssetRelation]], the usage pattern for [[render nodes|ProcNode]] is quite simple: All nodes are created together every time a new segment of the network is being build and are all needed together until this segment is re-built, at which point they can be thrown away altogether. While it would be easy to handle the nodes automatically by smart-ptr (the creation is accessible only by use of the {{{NodeFactory}}} anyways), it //seems advisable to care for a bulk allocation/deallocation here.// The reason being not so much the amount of memory (which is expected to be moderate), but the fact, that the build process can be triggered repeatedly several times a second when tweaking the EDL, which could lead to fragmentation and memory pressure.
+
+__5/2008__: the allocation mechanism can surely be improved later, but for now I am going for a simple implementation based on keeping all nodes of one kind together in a vector. The list of possible node kinds is hard wired, allowing to generate the object holding a chunk of nodes for one segment, mostly relying on the runtime system for the management.
+</pre>
+</div>
 <div title="MarkupPreHead" modifier="Ichthyostega" modified="200802030405" created="200706172303" changecount="2">
 <pre>&lt;!--{{{--&gt;
 &lt;link rel='alternate' type='application/rss+xml' title='RSS' href='index.xml'/&gt;
@@ -1887,8 +1919,8 @@ see also: RenderEntities, [[two Examples (Object diagrams)|Examples]]
 &lt;!--}}}--&gt;
 </pre>
 </div>
-<div title="ParamProvider" modifier="MichaelPloujnikov" modified="200706271458" created="200706220517" tags="def" changecount="7">
-<pre>A ParamProvider is the counterpart for (one or many) Parameter instances. It implements the value access function made available by the Parameter object to its clients.
+<div title="ParamProvider" modifier="Ichthyostega" modified="200805300124" created="200706220517" tags="def automation" changecount="9">
+<pre>A ParamProvider is the counterpart for (one or many) [[Parameter]] instances. It implements the value access function made available by the Parameter object to its clients.
 
 To give a concrete example: 
 * a Fade Plugin needs the actual fade value for Frame t=xxx
@@ -1900,8 +1932,8 @@ To give a concrete example:
 &amp;rarr; see the class diagram for [[Automation]]
 </pre>
 </div>
-<div title="Parameters" modifier="MichaelPloujnikov" modified="200706271456" created="200706220505" tags="def" changecount="3">
-<pre>Parameters are all probably variable control values used within the Render Engine. Contrast this with configuration values, which are considered to be fixed and need an internal reset of the application state to take effect.
+<div title="Parameter" modifier="Ichthyostega" modified="200805300124" created="200706220505" tags="def automation" changecount="1">
+<pre>Parameters are all possibly variable control values used within the Render Engine. Contrast this with configuration values, which are considered to be fixed and need an internal reset of the application (or session) state to take effect.
 
 A ''Parameter Object'' provides a descriptor of the kind of parameter, together with a function used to pull the //actual value// of this parameter. Here, //actual// has a two-fold meaning:
 * if called without a time specification, it is either a global (but variable) system or session parameter or a default value for automated Parameters. (the intention is to treat this cases uniformly)
@@ -2665,7 +2697,7 @@ The system is ''open'' inasmuch every part mirrors the structure of correspondin
 &amp;rarr; [[Implementation Details|ImplementationDetails]] {{red{WIP}}}
 </pre>
 </div>
-<div title="ProcNode" modifier="Ichthyostega" modified="200805270344" created="200706220409" tags="def spec" changecount="4">
+<div title="ProcNode" modifier="Ichthyostega" modified="200805280214" created="200706220409" tags="def spec" changecount="5">
 <pre>A data processing node within the Render Engine. Its key feature is the possibility to pull from it one (freely addressable) [[Frame]] of calculated data. Further, each ~ProcNode has the ability to be wired with other nodes and [[Parameter Providers|ParamProvider]]
 
 !! {{red{open questions}}}
@@ -2676,6 +2708,7 @@ The system is ''open'' inasmuch every part mirrors the structure of correspondin
 * how to define and query for additional capabilities
 
 &amp;rarr; see also the [[open design process draft|http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/DesignRenderNodesInterface]]
+&amp;rarr; see RenderProcess
 </pre>
 </div>
 <div title="ProcPatt" modifier="Ichthyostega" modified="200805260329" created="200709212315" tags="def design" changecount="9">
@@ -4347,12 +4380,12 @@ Placements are __resolved__ resulting in an ExplicitPlacement. In most cases thi
 &amp;rarr; [[Definition|Pipe]] and [[handling of Pipes|PipeHandling]]
 </pre>
 </div>
-<div title="TransitionsHandling" modifier="Ichthyostega" modified="200801061213" created="200712080417" tags="def design" changecount="2">
+<div title="TransitionsHandling" modifier="Ichthyostega" modified="200805300100" created="200712080417" tags="def design" changecount="3">
 <pre>Transitions combine the data from at least two processing chains and do this combining in a time varying fashion. So, any transition has
 * N input connections
 * either one or N output connections
 * temporal coordinates (time, length)
-* some control data connection to a ParamProvider, because in the most general case the controling curves are treated like automation
+* some control data connection to a ParamProvider, because in the most general case the controling curves are treated similar to  [[automation data|AutomationData]]
 
 !!!how much output ports?
 The standard case of a transition is sort of mixing together two input streams, like e.g. a simple dissolve. For this to be of any use, this input streams need to be connected to the same ouput destination before and after the transition (with regards to the timeline), i.e. the inputs and the transition share placement to the same output pipe. In this case, when the transition starts, the direct connections can be suspended and the transition will switch in seamlessly.
@@ -4416,7 +4449,7 @@ generally speaking, visitors are preferable when the underlying element type hie
 To see an simple example of our &quot;visiting tool&quot;, have a look at {{{tests/components/common/visitingtooltest.cpp}}}
 </pre>
 </div>
-<div title="WalkThrough" modifier="Ichthyostega" modified="200804130047" created="200706210625" tags="overview" changecount="39">
+<div title="WalkThrough" modifier="Ichthyostega" modified="200805300124" created="200706210625" tags="overview" changecount="41">
 <pre>The Intention of this text is to help you understanding the design and to show some notable details.
 
 !!!!Starting Point
@@ -4437,7 +4470,7 @@ This design strives to build each level and subsystem around some central concep
 * albeit being a special form of a Placement, the ExplicitPlacement is treated as a separate concept. With respect to edit operations within the EDL, it can stand for any sort of Placement. On the other hand the Builder takes a list of ~ExplicitPlacements as input for building up the Render Engine(s). This corresponds to the fact that the render process needs to organize the things to be done on a simple two dimensional grid of (output channel / time). The (extended) contract of an ~ExplicitPlacement provides us with this (output,time).
 * on the lower end of the builder, everything is organized around the Concept of a ProcNode, which enables us to //pull// one (freely addressable) Frame of calculated data. Further, the ProcNode has the ability to be wired with other nodes and [[Parameter Providers|ParamProvider]]
 * the various types of data to be processed are abstracted away under the notion of a [[Frame]]. Basically, a Frame is an Buffer containing an Array of raw data and it can be located by some generic scheme, including (at least) the absolute starting time (and probably some type or channel id).
-* All sorts of (target domain) [[Parameters]] are treated uniformly. There is a distinction between Parameters (which //could// be variable) and Configuration (which is considered to be fixed). In this context, Automation just appears as a special kind of ParamProvider.
+* All sorts of (target domain) [[parameters|Parameter]] are treated uniformly. There is a distinction between Parameters (which //could// be variable) and Configuration (which is considered to be fixed). In this context, [[Automation]] just appears as a special kind of ParamProvider.
 * and finally, the calculation //process// together with its current state is represented by a StateProxy. I call this a &quot;proxy&quot;, because it should encapsulate and hide all tedious details of communication, be it even asynchronous communication with some Controller or Dispatcher running in another Thread. In order to maintain a view on the current state of the render process, it could eventually be necessary to register as an observer somewhere or to send notifications to other parts of the system.
 
 !!!!Handling Diversity
@@ -4449,6 +4482,14 @@ In case it's not already clear: we don't have &quot;the&quot; Render Engine, rat
 !!!!Stateless Subsystems
 The &amp;raquo;current setup&amp;laquo; of the objects in the EDL is sort of a global state. Same holds true for the Controller, as the Engine can be at playback, it can run a background render or scrub single frames. But the whole complicated subsystem of the Builder and one given Render Engine configuration can be made ''stateless''. As a benefit of this we can run this subsystems multi-threaded without the need of any precautions (locking, synchronizing). Because all state information is just passed in as function parameters and lives in local variables on the stack, or is contained in the StateProxy which represents the given render //process// and is passed down as function parameter as well. (note: I use the term &quot;stateless&quot; in the usual, slightly relaxed manner; of course there are some configuration values contained in instance variables of the objects carrying out the calculations, but this values are considered to be constant over the course of the object usage).
 </pre>
+</div>
+<div title="automation" modifier="Ichthyostega" modified="200805300125" created="200805300057" tags="overview" changecount="8">
+<pre>The purpose of automation is to vary a parameter of some data processing instance in the course of time while rendering. Thus, automation encompasses all the variability within the render network //which is not a structural change.//
+
+
+!Parameters and Automation
+
+[[Automation]] is treated as a function over time. Everything beyond this definition is considered an implementation detail of the [[parameter provider|ParamProvider]] used to yield the value. Thus automation is closely tied to the concept of a [[Parameter]], which also plays an important role in the communication with the GUI and while [[setting up and wiring the render nodes|BuildRenderNode]] in the course of the build process (&amp;rarr; see [[tag:Builder|Builder]])</pre>
 </div>
 </div>
 <!--POST-STOREAREA-->

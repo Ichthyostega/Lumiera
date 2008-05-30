@@ -40,6 +40,12 @@ namespace mobject {
     using asset::PPipe;
     using session::PClipMO;
 
+    /**
+     * provides the builder with the necessary, preconfigured tools.
+     * Dedicated to a single build process, it holds the internal state
+     * of this process and thus serves to coordinate and link together all
+     * the individual parts fabricated by using the various tools. 
+     */
     class ToolFactory
       {
       public:
