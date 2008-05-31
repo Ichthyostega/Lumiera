@@ -1,5 +1,5 @@
 /*
-  timeline.cpp  -  Implementation of the timeline widget
+  timeline-widget.cpp  -  Implementation of the timeline widget
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,13 +20,11 @@
  
 * *****************************************************/
 
-#include <gdkmm/drawable.h>
-#include <gdkmm/general.h>
-#include <cairomm-1.0/cairomm/cairomm.h>
-
 #include "timeline-widget.hpp"
 
 using namespace Gtk;
+using namespace std;
+using namespace lumiera::gui::widgets::timeline;
 
 namespace lumiera {
 namespace gui {
@@ -34,38 +32,76 @@ namespace widgets {
 
 TimelineWidget::TimelineWidget() :
   Table(2, 2),
-  horizontalAdjustment(0, 200, 400),
-  verticalAdjustment(0, 200, 400),
+  totalHeight(0),
+  horizontalAdjustment(0, 0, 0),
+  verticalAdjustment(0, 0, 0),
   horizontalScroll(horizontalAdjustment),
   verticalScroll(verticalAdjustment),
-  rowHeaderViewport(),
-  label1("label1"), label2("label2"), label3("label3"), label4("label4"),
-  label5("label5"), label6("label6"), label7("label7"), label8("label8"),
-  label9("label1"), label10("label10"), label11("label11"), ruler("ruler")
+  ruler("ruler")
   {
-    rowHeaderBox.pack_start(label1);
-    rowHeaderBox.pack_start(label2);
-    rowHeaderBox.pack_start(label3);
-    rowHeaderBox.pack_start(label4);
-    rowHeaderBox.pack_start(label5);
-    rowHeaderBox.pack_start(label6);
-    rowHeaderBox.pack_start(label7);
-    rowHeaderBox.pack_start(label8);
-    rowHeaderBox.pack_start(label9);
-    rowHeaderBox.pack_start(label10);
-    rowHeaderBox.pack_start(label11);
-    rowHeaderViewport.add(rowHeaderBox);
+    rowHeaderLayout.set_size_request(100, 100);
 
-    rowHeaderViewport.set_hadjustment(horizontalAdjustment);
-    rowHeaderViewport.set_vadjustment(verticalAdjustment);
+    body = new TimelineBody(horizontalAdjustment, verticalAdjustment);
+ 
+    verticalAdjustment.signal_value_changed().connect(
+      sigc::mem_fun(this, &TimelineWidget::on_scroll) );
 
+    attach(*body, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
     attach(ruler, 1, 2, 0, 1, FILL|EXPAND, SHRINK);
-    attach(rowHeaderViewport, 0, 1, 1, 2, SHRINK, FILL|EXPAND);
+    attach(rowHeaderLayout, 0, 1, 1, 2, SHRINK, FILL|EXPAND);
     attach(horizontalScroll, 1, 2, 2, 3, FILL|EXPAND, SHRINK);
     attach(verticalScroll, 2, 3, 1, 2, SHRINK, FILL|EXPAND);
+
+    tracks.push_back(&video1);
+    tracks.push_back(&video2);
+
+    layout_tracks();
   }
 
+TimelineWidget::~TimelineWidget()
+  {
+    delete body;
+  }
 
+void
+TimelineWidget::on_scroll()
+  {
+    move_headers();
+  }
+
+void
+TimelineWidget::layout_tracks()
+  {
+    vector<timeline::Track*>::iterator i;
+    for(i = tracks.begin(); i != tracks.end(); i++)
+    {
+      timeline::Track *track = *i;
+      g_assert(track != NULL);    
+      rowHeaderLayout.put(track->get_header_widget(), 0, 0);
+    }
+
+    move_headers();
+  }
+
+void
+TimelineWidget::move_headers()
+  {
+    int offset = 0;
+    const int y_scroll_offset = (int)verticalAdjustment.get_value();
+
+    vector<Track*>::iterator i;
+    for(i = tracks.begin(); i != tracks.end(); i++)
+    {
+      timeline::Track *track = *i;
+      g_assert(track != NULL);
+
+      const int height = track->get_track_height();
+      rowHeaderLayout.move(track->get_header_widget(), 0, offset - y_scroll_offset);
+      offset += height;
+    }
+    totalHeight = offset;
+    verticalAdjustment.set_upper(totalHeight);
+  }
 
 }   // namespace widgets
 }   // namespace gui

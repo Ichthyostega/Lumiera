@@ -1,5 +1,5 @@
 /*
-  timeline-widget.hpp  -  Declaration of the timeline widget
+  timeline-body.hpp  -  Declaration of the timeline body widget
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,63 +19,38 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file timeline-widget.hpp
- ** This file contains the definition of timeline widget
+/** @file timeline-body.hpp
+ ** This file contains the definition of timeline body widget
  */
 
-#ifndef TIMELINE_WIDGET_HPP
-#define TIMELINE_WIDGET_HPP
-
-#include "timeline/timeline-body.hpp"
-#include "timeline/track.hpp"
-#include "timeline/video-track.hpp"
+#ifndef TIMELINE_BODY_HPP
+#define TIMELINE_BODY_HPP
 
 #include <gtkmm.h>
-#include <vector>
 
 namespace lumiera {
 namespace gui {
 namespace widgets {
+namespace timeline {
 
-class TimelineWidget : public Gtk::Table
+class TimelineBody : public Gtk::DrawingArea
   {
   public:
-    TimelineWidget();
+    TimelineBody(lumiera::gui::widgets::TimelineWidget &timeline_widget);
 
-    ~TimelineWidget();
+  protected:
+    lumiera::gui::widgets::TimelineWidget &timelineWidget;
 
     /* ===== Events ===== */
   protected:
     void on_scroll();
 
-    /* ===== Internals ===== */
-  protected:
-    void layout_tracks();
-
-    void move_headers();
-
-  protected:
-    int totalHeight;
-
-    timeline::VideoTrack video1;
-    timeline::VideoTrack video2;
-    std::vector<timeline::Track*> tracks;
-
-    Gtk::Layout rowHeaderLayout;
-    Gtk::Label ruler;
-
-    timeline::TimelineBody *body;
-
-    Gtk::Adjustment horizontalAdjustment, verticalAdjustment;
-    Gtk::HScrollbar horizontalScroll;
-    Gtk::VScrollbar verticalScroll;
-
-    friend class timeline::TimelineBody;
+    virtual bool on_expose_event(GdkEventExpose* event);
   };
 
+}   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
 }   // namespace lumiera
 
-#endif // TIMELINE_WIDGET_HPP
-
+#endif // TIMELINE_BODY_HPP
