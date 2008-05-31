@@ -41,7 +41,7 @@ TimelineWidget::TimelineWidget() :
   {
     rowHeaderLayout.set_size_request(100, 100);
 
-    body = new TimelineBody(horizontalAdjustment, verticalAdjustment);
+    body = new TimelineBody(this);
  
     verticalAdjustment.signal_value_changed().connect(
       sigc::mem_fun(this, &TimelineWidget::on_scroll) );

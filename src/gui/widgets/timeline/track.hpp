@@ -44,7 +44,7 @@ class Track
 
     virtual int get_track_height() = 0;
 
-    virtual void draw_track();
+    virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo);
 
   protected:
     

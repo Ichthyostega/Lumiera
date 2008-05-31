@@ -45,7 +45,7 @@ int VideoTrack::get_track_height()
     return 100;
   }
 
-void VideoTrack::draw_track()
+void VideoTrack::draw_track(Cairo::RefPtr<Cairo::Context> cairo)
   {
     
   }

@@ -42,7 +42,7 @@ class VideoTrack : public Track
 
     virtual int get_track_height();
 
-    virtual void draw_track();
+    virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo);
 
   protected:
     Gtk::Label headerWidget;

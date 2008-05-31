@@ -39,7 +39,7 @@ Track::get_title()
   }
 
 void
-Track::draw_track()
+Track::draw_track(Cairo::RefPtr<Cairo::Context> cairo)
   {
     
   }

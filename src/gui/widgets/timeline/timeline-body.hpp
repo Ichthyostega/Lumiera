@@ -31,21 +31,31 @@
 namespace lumiera {
 namespace gui {
 namespace widgets {
+
+class TimelineWidget;
+
 namespace timeline {
 
 class TimelineBody : public Gtk::DrawingArea
   {
   public:
-    TimelineBody(lumiera::gui::widgets::TimelineWidget &timeline_widget);
+    TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widget);
 
   protected:
-    lumiera::gui::widgets::TimelineWidget &timelineWidget;
+    lumiera::gui::widgets::TimelineWidget *timelineWidget;
 
     /* ===== Events ===== */
   protected:
     void on_scroll();
 
     virtual bool on_expose_event(GdkEventExpose* event);
+    
+    /* ===== Internals ===== */
+  private:
+    void read_styles();
+    
+  private:
+    GdkColor track_background;
   };
 
 }   // namespace timeline
