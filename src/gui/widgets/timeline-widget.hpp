@@ -69,6 +69,10 @@ class TimelineWidget : public Gtk::Table
     Gtk::Adjustment horizontalAdjustment, verticalAdjustment;
     Gtk::HScrollbar horizontalScroll;
     Gtk::VScrollbar verticalScroll;
+    
+    /* ===== Constants ===== */
+  protected:
+    static const int TrackPadding;
 
     friend class timeline::TimelineBody;
   };

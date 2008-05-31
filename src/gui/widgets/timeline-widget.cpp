@@ -30,6 +30,8 @@ namespace lumiera {
 namespace gui {
 namespace widgets {
 
+const int TimelineWidget::TrackPadding = 1;
+
 TimelineWidget::TimelineWidget() :
   Table(2, 2),
   totalHeight(0),
@@ -39,7 +41,7 @@ TimelineWidget::TimelineWidget() :
   verticalScroll(verticalAdjustment),
   ruler("ruler")
   {
-    rowHeaderLayout.set_size_request(100, 100);
+    rowHeaderLayout.set_size_request(100, 0);
 
     body = new TimelineBody(this);
  
@@ -97,7 +99,7 @@ TimelineWidget::move_headers()
 
       const int height = track->get_track_height();
       rowHeaderLayout.move(track->get_header_widget(), 0, offset - y_scroll_offset);
-      offset += height;
+      offset += height + TrackPadding;
     }
     totalHeight = offset;
     verticalAdjustment.set_upper(totalHeight);

@@ -27,6 +27,7 @@
 
 using namespace Gtk;
 using namespace std;
+using namespace lumiera::gui::widgets;
 using namespace lumiera::gui::widgets::timeline;
 
 namespace lumiera {
@@ -69,41 +70,44 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
     Glib::RefPtr<Gdk::Window> window = get_window();
     if(!window)
       return false;
-      
-    read_styles();
-      
-
-    Gtk::Allocation allocation = get_allocation();
-    const int width = allocation.get_width();
-    const int height = allocation.get_height();
-
-    Cairo::RefPtr<Cairo::Context> cairo = window->create_cairo_context();
-    cairo->set_line_width(10.0);
     
-    cairo->rectangle(50, 50, 100, 100);
-    gdk_cairo_set_source_color(cairo->cobj(), &track_background);
+    // Makes sure the widget styles have been loaded
+    read_styles();
+    
+    // Prepare to render via cairo      
+    Gtk::Allocation allocation = get_allocation();
+    Cairo::RefPtr<Cairo::Context> cairo = window->create_cairo_context();
 
-    cairo->fill_preserve();
-
-
+    // Translate the view by the scroll distance
     cairo->translate(
-      -timelineWidget->horizontalAdjustment.get_value(),
-      -timelineWidget->verticalAdjustment.get_value());
-    cairo->save();
-
+      -(int)timelineWidget->horizontalAdjustment.get_value(),
+      -(int)timelineWidget->verticalAdjustment.get_value());
+    
+    // Interate drawing each track
     vector<timeline::Track*>::iterator i;
     for(i = timelineWidget->tracks.begin();
       i != timelineWidget->tracks.end(); i++)
     {
       timeline::Track *track = *i;
-      g_assert(track != NULL);    
-      track->draw_track(cairo);
-    }
+      g_assert(track != NULL);   
 
-    cairo->restore();
+      const int track_height = track->get_track_height();
+    
+      // Draw the track background
+      cairo->rectangle(0, 0, allocation.get_width(), track_height);
+      gdk_cairo_set_source_color(cairo->cobj(), &track_background);
+      cairo->fill();
+    
+      // Render the track
+      cairo->save();
+      track->draw_track(cairo);
+      cairo->restore();
+      
+      // Shift for the next track
+      cairo->translate(0, track_height + TimelineWidget::TrackPadding);
+    }   
 
     return true;
-
   }
   
 void

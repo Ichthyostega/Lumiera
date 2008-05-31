@@ -112,7 +112,7 @@ class "GtkProgressBar" style:highest "lumiera_progressbars"
 
 style "timeline_body"
 {
-  gtkmm__CustomObject_TimelineBody::track_background = "#FF7F00"
+  gtkmm__CustomObject_TimelineBody::track_background = "#7E838B"
 }
 
 class "gtkmm__CustomObject_TimelineBody" style:highest "timeline_body"
