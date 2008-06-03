@@ -556,10 +556,11 @@ is how to implement the relationship between [[MObject]]s and Assets. Do we use 
 
 </pre>
 </div>
-<div title="AssetCreation" modifier="Ichthyostega" created="200709040307" changecount="1">
+<div title="AssetCreation" modifier="Ichthyostega" modified="200806030153" created="200709040307" tags="dynamic impl" changecount="3">
 <pre>Assets are created by a Factories returning smart pointers; the Asset creation is bound to specific use cases and //only available// for these specific situations. There is no generic Asset Factory.
 
-For every Asset we generate a __Ident tuple__ and a long ID (hash) derived from this Ident tuple. The constructor of the abstract base class {{{Asset}}} takes care of this step and automatically registeres the new Asset object with the AssetManager. Typically, the factory methods for concrete Asset classes provide some shortcuts providing sensible default values for some of the Ident tuple data fields. They may take additional parameters &amp;mdash; for example the factory method for creating {{{asset::Media}}} takes a filename (and may at some point in the future aply &quot;magic&quot; based on examination of the file)</pre>
+For every Asset we generate a __Ident tuple__ and a long ID (hash) derived from this Ident tuple. The constructor of the abstract base class {{{Asset}}} takes care of this step and automatically registeres the new Asset object with the AssetManager. Typically, the factory methods for concrete Asset classes provide some shortcuts providing sensible default values for some of the Ident tuple data fields. They may take additional parameters &amp;mdash; for example the factory method for creating {{{asset::Media}}} takes a filename (and may at some point in the future aply &quot;magic&quot; based on examination of the file &amp;rarr; LoadingMedia)
+</pre>
 </div>
 <div title="AssetManager" modifier="Ichthyostega" created="200709200300" changecount="1">
 <pre>The Asset Manager provides an Interface to some internal Database holding all Assets in the current Session and System state. It may be a real Database at some point (and for the moment it's a Hashtable). Each [[Asset]] is registered automatically with the Asset Manager; it can be queried either by it's //identification tuple// or by it's unique ID.</pre>
@@ -752,12 +753,12 @@ Note, //we still have to work out how exactly building, rendering and playback w
 [img[Colaborations in the Build Process|uml/fig128517.png]]
 </pre>
 </div>
-<div title="BuildRenderNode" modifier="Ichthyostega" modified="200806010350" created="200805300137" tags="Builder impl" changecount="11">
+<div title="BuildRenderNode" modifier="Ichthyostega" modified="200806030139" created="200805300137" tags="Builder impl" changecount="12">
 <pre>Actually setting up and wiring a [[processing node|ProcNode]] involves several issues and is carried out at the lowest level of the build process.
-It is closely related to &amp;rarr; [[the way nodes are operated|NodeOperationProtocol]]
+It is closely related to &amp;rarr; [[the way nodes are operated|NodeOperationProtocol]] and the &amp;rarr; [[mechanics of the render process|RenderMechanics]]
 
 !!!object creation
-The Nodes are small polymorphic objects, carrying configuration data, but no state. They are [[specially allocated|ManagementRenderNodes]], and the object creation is accessible solely by the NodeFactory. They //must not be deallocated manually.// The decision of what concrete node type to create depends on the actual build situation and is worked out by the combination of [[mould|BuilderMould]] and [[processing pattern|ProcPatt]] at the current OperationPoint, issuing a call to one of NodeFactory's {{{operator()}}}
+The Nodes are small polymorphic objects, carrying configuration data, but no state. They are [[specially allocated|ManagementRenderNodes]], and the object creation is accessible by means of the NodeFactory solely. They //must not be deallocated manually.// The decision of what concrete node type to create depends on the actual build situation and is worked out by the combination of [[mould|BuilderMould]] and [[processing pattern|ProcPatt]] at the current OperationPoint, issuing a call to one of NodeFactory's {{{operator()}}}
 
 !!!node, plugin and processing function
 Its a good idea to distinguish clearly between those concepts. A plugin is a piece of (possibly external) code we use to carry out operations. We have to //discover its properties and capabilities.// We don't have to discover anything regarding nodes, because we (Lumiera builder and renderengine) are creating, configuring and wiring them to fit the specific purpose. Both are to be distinguished from processing functions, which do the actual calculations on the media data. Every node typically encompasses at least one processing function, which may be an internal function in the node object, a library function from Lumiera or GAVL, or external code loaded from a plugin.
@@ -880,12 +881,12 @@ While building, the application of such a visiting tool (especially the [[NodeCr
 
 </pre>
 </div>
-<div title="BuilderToolKit" modifier="Ichthyostega" modified="200805270340" created="200805210308" tags="impl Builder" changecount="8">
+<div title="BuilderToolKit" modifier="Ichthyostega" modified="200806030202" created="200805210308" tags="impl Builder" changecount="11">
 <pre>Besides the primary working tool within the builder (namely the [[Node Creator Tool|PlanningNodeCreatorTool]]), on a lower level, we encounter several [[elementary building situations|BuilderPrimitives]] &amp;mdash; and for each of these elementary situations we can retrieve a suitable &quot;fitting tool&quot; or [[mould|BuilderMould]]. The palette of these moulds is called the ''tool kit'' of the builder. It is subject to configuration by rules.
 
 
 !!addressing a mould
-All mould instances are owned and managed by the [[tool factory|BuilderToolFactory]], and can be referred to by their type ({{{PipeMould}}}, {{{CombiningMould}}}, {{{SourceChainMould}}}, {{{WiringMould}}}) and a concrete object instance (of suitable type). The returned mould (instance) acts as a handle to stick together the given object instance (from the high-level model) with the corresponding point in the low-level node network under construction. As consequence of this approach, the tool factory instance holds a snapshot of the current building state, including all the active spots in the build process. As the latter is driven by objects from the high-level model appearing (in a sensible order &amp;rarr; see BuilderMechanics) within the NodeCreatorTool, new moulds will be created and fitted as necessary, and existing moulds will be exhausted when finished, until the render node network is complete.
+All mould instances are owned and managed by the [[tool factory|BuilderToolFactory]], and can be referred to by their type (PipeMould, CombiningMould, SourceChainMould, WiringMould) and a concrete object instance (of suitable type). The returned mould (instance) acts as a handle to stick together the given object instance (from the high-level model) with the corresponding point in the low-level node network under construction. As consequence of this approach, the tool factory instance holds a snapshot of the current building state, including all the active spots in the build process. As the latter is driven by objects from the high-level model appearing (in a sensible order &amp;rarr; see BuilderMechanics) within the NodeCreatorTool, new moulds will be created and fitted as necessary, and existing moulds will be exhausted when finished, until the render node network is complete.
 
 !!configuring a mould
 As each mould kind is different, it has a {{{prepare(...)}}} function with suitably typed parameters. The rest is intended to be  self-configuring (for example, a ~CombiningMould will detect the actual kind of Transition and select the internal mode of operation), so that it's sufficient to just call {{{operate()}}}
@@ -1007,7 +1008,7 @@ This is an very important external Interface, because it links together all thre
 <pre>[[ProcLayer and Engine]]
 </pre>
 </div>
-<div title="DefaultsImplementation" modifier="Ichthyostega" modified="200804010137" created="200802200043" tags="spec impl draft" changecount="11">
+<div title="DefaultsImplementation" modifier="Ichthyostega" modified="200806030204" created="200802200043" tags="spec impl draft" changecount="12">
 <pre>As detailed in the [[definition|DefaultsManagement]], {{{default(Obj)}}} is sort of a Joker along the lines &quot;give me a suitable Object and I don't care for further details&quot;. Actually, default objects are implemented by the {{{mobject::session::DefsManager}}}, which remembers and keeps track of anything labeled as &quot;default&quot;. This defaults manager is a singleton and can be accessed via the [[Session]] interface, meaning that the memory track regarding defaults is part of the session state. Accessing an object via the query for an default actually //tagges// this object (storing a weak ref in the ~DefsManager). Alongside with each object successfully queried via &quot;default&quot;, the degree of constriction is remembered, i.e. the number of additional conditions contained in the query. This enables us to search for default objects starting with the most unspecific.
 
 !Skeleton
@@ -1027,7 +1028,7 @@ Taken precisely, the &quot;degree of constriction&quot; yields only a partial or
 {{red{WARN}}} there is an interference with the (planned) Undo function. This is a general problem of the config queries; just ignoring this issue seems reasonable.
 
 !!!Problems with the (preliminary) mock implementation
-As we don't have a Prolog interpreter on board yet, we utilize a mock store with preconfigured answers. (see {{{MockConfigQuery}}}). As this preliminary solution is lacking the ability to create new objects, we need to resort to some trickery here (please look away). The overall logic is quite broken, because the system isn't capable to do any real resolution &amp;mdash; if we ignore this fact, the rest of the algorithm can be implemented, tested and used right now.
+As we don't have a Prolog interpreter on board yet, we utilize a mock store with preconfigured answers. (see MockConfigQuery). As this preliminary solution is lacking the ability to create new objects, we need to resort to some trickery here (please look away). The overall logic is quite broken, because the system isn't capable to do any real resolution &amp;mdash; if we ignore this fact, the rest of the algorithm can be implemented, tested and used right now.
 </pre>
 </div>
 <div title="DefaultsManagement" modifier="Ichthyostega" modified="200803212244" created="200801121708" tags="def spec" changecount="12">
@@ -1306,7 +1307,7 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200804070244" created="200708080322" tags="overview" changecount="22">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200806030207" created="200708080322" tags="overview" changecount="24">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1323,6 +1324,7 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 * [[integrating the Config Query system|ConfigQueryIntegration]]
 * [[identifying the basic Builder operations|BasicBuildingOperations]] and [[planning the Implementation|PlanningNodeCreatorTool]]
 * [[how to handle »attached placement«|AttachedPlacementProblem]]
+* working out the [[basic building situations|BuilderPrimitives]] and [[mechanics of rendering|RenderMechanics]]
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200711210542" created="200711210531" tags="discuss draft" changecount="7">
@@ -1679,7 +1681,7 @@ From experiences with other middle scale projects, I prefer having the test code
 [img[Example: Interfaces/Namespaces of the ~Session-Subsystems|uml/fig130053.png]]
 </pre>
 </div>
-<div title="Loading Media" modifier="Ichthyostega" modified="200712100630" created="200709220005" tags="design spec" changecount="4">
+<div title="LoadingMedia" modifier="Ichthyostega" modified="200806030203" created="200709220005" tags="design spec" changecount="4">
 <pre>Opening and accessing media files on disk poses several problems, most of which belong to the domain of Lumiera's data backend. Here, we focus on the questions related to making media data available to the EDL and the render engine. Each media will be represented by an MediaAsset object, which indeed could be a compound object (in case of MultichannelMedia). Building this asset object thus includes getting informations from the real file on disk. For delegating this to the backend, we use the following query interface:
 * {{{queryFile(char* name)}}} requests accessing the file and yields some (opaque) handle when successful.
 * {{{queryChannel(fHandle, int)}}} will then be issued in sequence with ascending index numbers, until it returns {{{NULL}}}.
@@ -1690,7 +1692,9 @@ From experiences with other middle scale projects, I prefer having the test code
 
 {{red{to be defined in more detail later...}}}
 
-{{red{how to create a test stub for this interface...?}}}</pre>
+&amp;rarr; see &quot;~MediaAccessFacade&quot; for a (preliminary) interface definitioin
+&amp;rarr; see &quot;~MediaAccessMock&quot; for a mock/test implementaion
+</pre>
 </div>
 <div title="LocatingPin" modifier="Ichthyostega" created="200710181527" changecount="1">
 <pre>Used to actually implement the various kinds of [[Placement]] of ~MObjects. ~LocatingPin is the root of a hierarchy of different kinds of placing, constraining and locating a Media Object. Basically, this is an instance of the ''state pattern'': The user sees one Placement object with value semantics, but when the properties of the Placement are changed, actually a ~LocatingPin object (or rather a chain of ~LocatingPins) is changed within the Placement. Subclasses of ~LocatingPin implement different placing/constraining behaviour:
@@ -1762,9 +1766,11 @@ __5/2008__: the allocation mechanism can surely be improved later, but for now I
 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;loading &lt;b&gt;Proc-Layer&lt;/b&gt; devel doku&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
 </div>
-<div title="MediaAsset" modifier="Ichthyostega" modified="200801101307" created="200709021530" tags="def classes" changecount="5">
+<div title="MediaAsset" modifier="Ichthyostega" modified="200806030152" created="200709021530" tags="def classes" changecount="7">
 <pre>The Interface asset::Media is a //key abstraction// It ties together several concepts and enables to deal with them on the interfaces in a uniform manner. Besides, as every Asset kind it belongs rather to the bookkeeping view: an asset::Media holds the specific properties and parametrisation of the media source it stands for. Regarding the __inward interface__ &amp;mdash; as used from within the [[EDL]] or the [[Render Nodes|ProcNode]], it is irrelevant if any given asset::Media object stands for a complete media source, just a clip taken from this source or if a placeholder version of the real media source is used instead.
 [img[Asset Classess|uml/fig130437.png]]
+
+&amp;rarr; see also LoadingMedia
 </pre>
 </div>
 <div title="MemoryManagement" modifier="Ichthyostega" modified="200711180014" created="200708100225" tags="impl decision discuss" changecount="12">
@@ -1824,12 +1830,12 @@ So, when creating a clip out of such a compound media asset, the clip has to be 
 <div title="NodeCreaterTool" modifier="Ichthyostega" created="200712100626" tags="def" changecount="1">
 <pre>NodeCreaterTool is a [[visiting tool|VisitorUse]] used as second step in the [[Builder]]. Starting out from a [[Fixture]], the builder first [[divides the Timeline into segments|SegmentationTool]] and then processes each segment with the NodeCreaterTool to build a render nodes network (Render Engine) for this part of the timeline. While visiting individual Objects and Placements, the NodeCreaterTool creates and wires the necessary [[nodes|ProcNode]]</pre>
 </div>
-<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200806010348" created="200806010251" tags="Rendering dynamic" changecount="4">
+<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200806030420" created="200806010251" tags="Rendering dynamic" changecount="9">
 <pre>The [[nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot;; each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle'', thus we find an operation {{{pull()}}} at the core of this process. There is no such thing as an &quot;engine object&quot; calling nodes iteratively or table driven, rather, the nodes themselves issue recursive calls to their predecessor(s). For this to work, we need the nodes to adhere to a specific protocol:
-# Node is pulled, providing a StateProxy object (encapsulating the access to the frames or buffers)
+# Node is pulled, with a StateProxy object as parameter (encapsulating the access to the frames or buffers)
 # Node may now access current parameter values, using the state accessible via the StateProxy
-# Node calles back into the StateProxy, providing the //input descriptor//
-# StateProxy tries to get the input frames from the Cache in the Backend. If this fails, it forwards the call using the information in the input descriptor
+# Node calles back into the StateProxy for getting the input buffer(s), providing it's //input descriptor//
+# StateProxy tries to get the input frames from the Cache in the Backend. In case of failure, the call is forwarded according to the input descriptor
 # after this call returns, the Node is allowed to dereference the frame pointers and do its calculations
 # finally, when the {{{pull()}}} call returns, the StateProxy may push down the result frames to the cache
 some points to note:
@@ -1839,7 +1845,7 @@ some points to note:
 * generally, a node may have N inputs and M output frames, which are expected to be processed in a single call
 </pre>
 </div>
-<div title="ObjectCreation" modifier="Ichthyostega" modified="200711130113" created="200709030139" tags="impl design" changecount="17">
+<div title="ObjectCreation" modifier="Ichthyostega" modified="200806030153" created="200709030139" tags="impl design" changecount="18">
 <pre>We have to consider carefully how to handle the Creation of new class instances. Because, when done naively, it can defeat all efforts of separating subsystems, or &amp;mdash; the other extreme &amp;mdash; lead to a //switch-on-typeID//  programming style. We strive at a solution somewhere in the middle by utilizing __Abstract Factories__ on Interface or key abstraction classes, but providing specialized overloads for the different use cases. So in each use case we have to decide if we want to create a instance of some general concept (Interface), or if we have a direct collaboration and thus need the Factory to provide a more specific sub-Interface or even a concrete type.
 
 !Object creation use cases
@@ -1850,7 +1856,8 @@ some points to note:
 |mark selection as clip|asset::Clip, session::Clip, Placement with unspec. LocatingPin| doesn't add to EDL|
 |loading Plugin|asset::Effect| usually at program startup|
 |create Session|asset::Track, asset::Pipe| |
-&amp;rarr; [[Creating and registering Assets|AssetCreation]]
+&amp;rarr; [[creating and registering Assets|AssetCreation]]
+&amp;rarr; [[loading media|LoadingMedia]]
 
 !![[MObjects|MObject]]
 |add media to EDL|asset::Clip, session::Clip, Placement with unspecified LocatingPin| creating whole-media clip on-the-fly |
@@ -2628,11 +2635,11 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 //Note, we have yet to specify how exactly the building and rendering will work together with the backend. There are several possibilities how to structure the Playlist//
 </pre>
 </div>
-<div title="ProblemsTodo" modifier="Ichthyostega" modified="200709251721" created="200708050524" tags="design discuss" changecount="15">
+<div title="ProblemsTodo" modifier="Ichthyostega" modified="200806030155" created="200708050524" tags="design discuss" changecount="16">
 <pre>Open issues, Things to be worked out, Problems still to be solved... 
 
 !!Parameter Handling
-The requirements are not quite clear; obviously Parameters are the foundation for getting automation right and for providing effect editing interfaces, so it seems to me we need some sort of introspection, i.e. Parameters need to be discovered, enumerated and described at runtime.
+The requirements are not quite clear; obviously Parameters are the foundation for getting automation right and for providing effect editing interfaces, so it seems to me we need some sort of introspection, i.e. Parameters need to be discovered, enumerated and described at runtime. (&amp;rarr; see [[tag:automation|automation]])
 
 ''Automation Type'': Directly connected is the problem of handling the //type// of parameters sensible, including the value type of automation data. My first (somewhat naive) approach was to &quot;make everything a double&quot;. But this soon leads into quite some of the same problems haunting the automation solution implemented in the current Cinelerra codebase. What makes the issue difficult is the fact we both need static diversity as well as dynamic flexibility. Usually, when combining hierarchies and templates, one has to be very careful; so I just note the problem down at the moment and will revisit it later, when I have a more clear understanding of the demands put onto the [[ProcNode]]s
 
@@ -3019,12 +3026,35 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 [img[Entities comprising the Render Engine|uml/fig128389.png]]
 </pre>
 </div>
-<div title="RenderProcess" modifier="Ichthyostega" modified="200806010402" created="200706190705" tags="Rendering dynamic" changecount="12">
+<div title="RenderMechanics" modifier="Ichthyostega" modified="200806030419" created="200806030230" tags="Rendering impl dynamic" changecount="7">
+<pre>While with respect to the dependencies, the builder and the processing function, the render process is sufficiently characterized by referring to the ''pull principle'' and by defining a [[protocol|NodeOperationProtocol]] each node has to adhere to &amp;mdash; for actually make it happen we have to care for some important details, especially //how to manage the buffers.// It may well be that the length of the code path necessary to invoke the individual processing functions is finally not so important, compared with the time spent within the inner pixel loop of these functions. But my guess is (as of 5/08), that the number of data moving and copying operations //will be//&amp;nbsp; of importance.
+
+!reguirements
+* operations should be &quot;in place&quot; as much as possible
+* because caching necessitates a copy, the points where this happens should be controllable.
+* buffers should accommodate automatically to provide the necessary space without clipping the image.
+* the type of the media data can change while passing through the network, and so does the type of the buffers.
+On the other hand, the processing function within the individual node needs to be shielded from these complexities. It can expect to get just //N~~I~~// input buffers and //N~O~// output buffers of required type. And, moreover, as the decision how to organize the buffers certainly depends on non-local circumstances, it should be preconfigured while building.
+
+!data flow
+[&gt;img[uml/fig131973.png]]
+Not everything can be preconfigured though. The pull principle opens the possibility for the node to decide on a per call base what predecessor(s) to pull (if any). This decision may rely on automation parameters, which thus need to be accessible prior to 
+requesting the buffer(s). Additionally, in a later version we plan to have the node network calculate some control values for adjusting the cache and backend timings &amp;mdash; and of course at some point we'll want to utilize the GPU, resulting in the need to feed data from our processing buffers into some texture representation.
+
+!buffer management
+Besides the StateProxy representing the actual render process and holding a couple of buffer (refs), we employ a lightweight adapter object in between. It is used //for a single {{{pull()}}}-call// &amp;mdash; mapping the actual buffers to the input and output port numbers of the processing node and for dealing with the cache calls. While the StateProxy manages a pool of frame buffers, this interspersed adapter allows us to either use a buffer retrieved from the cache as an input, possibly use a new buffer located within the cache as output, or (in case no caching happens) to just use the same buffer as input and output for &quot;in-place&quot;-processing. The idea is that most of the configuration of this adapter object is prepared in the wiring step while building the node network. 
+@@clear(right):display(block):@@
+</pre>
+</div>
+<div title="RenderProcess" modifier="Ichthyostega" modified="200806030420" created="200706190705" tags="Rendering dynamic" changecount="15">
 <pre>For each segment (of the effective timeline), there is a Processor holding the exit node(s) of a processing network, which is a &quot;Directed Acyclic Graph&quot; of small, preconfigured, stateless [[processing nodes|ProcNode]]. This network is operated according to the ''pull principle'', meaning that the rendering is just initiated by &quot;pulling&quot; output from the exit node, causing a cascade of recursive downcalls. Each node knows its predecessor(s) an can pull the necessary input from there. Consequently, there is no centralized &quot;engine object&quot; which may invoke nodes iteratively or table driven &amp;mdash; rather, the rendering can be seen as a passive service provided for the backend, which may pull from the exit nodes at any time, in any order (?), and possibly multithreaded.
-All State necessary for a given calculation process is encapsulated and accessible by a StateProxy object, which can be seen as the representation of &quot;the process&quot;. At the same time, this proxy acts as a gateway to the backend to handle the communication with the Cache.
+All State necessary for a given calculation process is encapsulated and accessible by a StateProxy object, which can be seen as the representation of &quot;the process&quot;. At the same time, this proxy provides the buffers holding data to be processed and acts as a gateway to the backend to handle the communication with the Cache.
+
 {{red{TODO: fill in more details of the Render Process.}}}
+[img[uml/fig132101.png]]
 * see also
 &amp;rarr; the [[Entities involved in Rendering|RenderEntities]]
+&amp;rarr; the [[mechanics of rendering and buffer management|RenderMechanics]]
 &amp;rarr; the protocol [[how to operate the nodes|NodeOperationProtocol]]
 </pre>
 </div>
@@ -3338,8 +3368,8 @@ h1,h2,h3,h4,h5,h6 {
 /*}}}*/
 </pre>
 </div>
-<div title="TabTimeline" modifier="Ichthyostega" modified="200711082358" created="200706191949" changecount="3">
-<pre>&lt;&lt;timeline better:true maxDays:55 maxEntries:30&gt;&gt;</pre>
+<div title="TabTimeline" modifier="Ichthyostega" modified="200806030148" created="200706191949" changecount="4">
+<pre>&lt;&lt;timeline better:true maxDays:55 maxEntries:45&gt;&gt;</pre>
 </div>
 <div title="TaskMacroPlugin" modifier="Ichthyostega" created="200712100248" tags="systemConfig excludeMissing" changecount="2">
 <pre>/***
@@ -4420,10 +4450,10 @@ Using transitions is a very basic task and thus needs viable support by the GUI.
 Because of this experience, ichthyo wants to support a more general case of transitions, which have N output connections, behave similar to their &quot;simple&quot; counterpart, but leave out the mixing step. As a plus, such transitions can be inserted at the source ports of N clips or between any intermediary or final output pipes as well. Any transition processor capable of handling this situation should provide some flag, in order to decide if he can be placed in such a manner. (wichin the builder, encountering a  inconsistently placed transition is just an [[building error|BuildingError]])
 </pre>
 </div>
-<div title="VirtualClip" modifier="Ichthyostega" modified="200804110329" created="200804110321" tags="def" changecount="7">
+<div title="VirtualClip" modifier="Ichthyostega" modified="200806030159" created="200804110321" tags="def" changecount="13">
 <pre>A ''~Meta-Clip'' or ''Virtual Clip'' (both are synonymous) denotes a clip which doesn't just pull media streams out of a source media asset, but rather provides the results of rendering a complete sub-network. In all other respects it behaves exactly like a &quot;real&quot; clip, i.e. it has [[source ports|ClipSourcePort]], can have attached effects (thus forming a local render pipe) and can be placed and combined with other clips. Depending on what is wired to the source ports, we get two flavours:
-* a __placeholder clip__ has no &quot;embedded&quot; content. Rather, by virtue of placements and wiring requests, the output of some other pipe somewhere in the session will be wired to the clip's source ports. Thus, pulling data from this clip will effectively pull from these source pipes wired to it.
-* a __nested EDL__ is like the other ~EDLs in the Session, just that any missing placement properties will be derived from the Virtual Clip, which is thought as to &quot;contain&quot; the objects of the nested EDL. Typically, you'd also [[configure the tracks|TrackHandling]] of the &quot;inner&quot; EDL such as to connect any output to the source ports of the Virtual Clip.
+* a __placeholder clip__; has no &quot;embedded&quot; content. Rather, by virtue of placements and wiring requests, the output of some other pipe somewhere in the session will be wired to the clip's source ports. Thus, pulling data from this clip will effectively pull from these source pipes wired to it.
+* a __nested EDL __ is like the other ~EDLs in the Session, just that any missing placement properties will be derived from the Virtual Clip, which is thought as to &quot;contain&quot; the objects of the nested EDL. Typically, you'd also [[configure the tracks|TrackHandling]] of the &quot;inner&quot; EDL such as to connect any output to the source ports of the Virtual Clip.
 
 Like any &quot;real&quot; clip, Virtual Clips have a start offset and a length, which will simply translate into an offset of the frame number pulled from the Virtual Clip's source connection or embedded EDL, making it possible to cut, splice, trim and roll them as usual. This of course implies we can have several instances of the same virtual clip with different start offset and length placed differently. The only limitation is that we can't handle cyclic dependencies for pulling data (which has to be detected and flagged as an error by the builder)
 </pre>

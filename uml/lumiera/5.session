@@ -1,14 +1,20 @@
 window_sizes 1140 830 270 860 680 71
 diagrams
-  active  componentdiagram_ref 128005 // Overview
-    702 640 80 4 2 0
+  active  collaborationdiagram_ref 132101 // pull call
+    599 408 100 4 0 0
+  classdiagram_ref 131973 // Engine Details
+    414 544 100 4 0 0
+  classdiagram_ref 128389 // Render Entities
+    829 656 100 4 162 0
 end
 show_stereotypes
 selected 
   package_ref 129 // lumiera
 open
-  componentview_ref 128133 // interfaces
-  classview_ref 128005 // Session
+  
+  package_ref 128261 // MObject
+  classview_ref 128133 // Engine Workings
+  usecaseview_ref 128517 // render process
   class_ref 140677 // QueryHandler
   class_ref 140805 // TypeHandler
   class_ref 140933 // ResolverBase
