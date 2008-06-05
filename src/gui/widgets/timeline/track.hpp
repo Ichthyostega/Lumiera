@@ -42,7 +42,7 @@ class Track
 
     virtual Gtk::Widget& get_header_widget() = 0;
 
-    virtual int get_height();
+    virtual int get_height() = 0;
 
     virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo);
 

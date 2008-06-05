@@ -67,8 +67,8 @@ class TimelineWidget : public Gtk::Table
     timeline::VideoTrack video2;
     std::vector<timeline::Track*> tracks;
 
-    timeline::TimelineBody *body;
-    timeline::HeaderContainer *headerContainer;
+    Glib::RefPtr<timeline::TimelineBody> body;
+    Glib::RefPtr<timeline::HeaderContainer> headerContainer;
     Gtk::Label ruler;
 
     Gtk::Adjustment horizontalAdjustment, verticalAdjustment;
