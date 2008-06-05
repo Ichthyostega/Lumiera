@@ -1,5 +1,5 @@
 /*
-  timeline-panel.cpp  -  Implementation of the timeline panel
+  video-track.hpp  -  Declaration of the timeline video track object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -18,23 +18,41 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
+/** @file video-track.hpp
+ ** This file contains the definition of video track object
+ */
 
-#include "../gtk-lumiera.hpp"
-#include "timeline-panel.hpp"
+#ifndef VIDEO_TRACK_HPP
+#define VIDEO_TRACK_HPP
 
-using namespace Gtk;
+#include "track.hpp"
 
 namespace lumiera {
 namespace gui {
-namespace panels {
+namespace widgets {
+namespace timeline {
 
-TimelinePanel::TimelinePanel() :
-  Panel("timeline", _("Timeline"), "timeline_panel")
+class VideoTrack : public Track
   {
-    pack_start(timeline_widget, PACK_EXPAND_WIDGET);
-  }
+  public:
+    VideoTrack();
 
-}   // namespace panels
+    virtual Gtk::Widget& get_header_widget();
+
+    //virtual int get_height();
+
+    virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo);
+
+  protected:
+    Gtk::Label headerWidget;
+    Gtk::Frame headerFrame;
+  };
+
+}   // namespace timeline
+}   // namespace widgets
 }   // namespace gui
 }   // namespace lumiera
+
+#endif // VIDEO_TRACK_HPP
+

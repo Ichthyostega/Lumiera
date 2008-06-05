@@ -1,5 +1,5 @@
 /*
-  timeline-panel.cpp  -  Implementation of the timeline panel
+  timeline-body.hpp  -  Declaration of the timeline body widget
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -18,23 +18,48 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
+/** @file timeline-body.hpp
+ ** This file contains the definition of timeline body widget
+ */
 
-#include "../gtk-lumiera.hpp"
-#include "timeline-panel.hpp"
+#ifndef TIMELINE_BODY_HPP
+#define TIMELINE_BODY_HPP
 
-using namespace Gtk;
+#include <gtkmm.h>
 
 namespace lumiera {
 namespace gui {
-namespace panels {
+namespace widgets {
 
-TimelinePanel::TimelinePanel() :
-  Panel("timeline", _("Timeline"), "timeline_panel")
+class TimelineWidget;
+
+namespace timeline {
+
+class TimelineBody : public Gtk::DrawingArea
   {
-    pack_start(timeline_widget, PACK_EXPAND_WIDGET);
-  }
+  public:
+    TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widget);
 
-}   // namespace panels
+    /* ===== Events ===== */
+  protected:
+    void on_scroll();
+
+    virtual bool on_expose_event(GdkEventExpose* event);
+    
+    /* ===== Internals ===== */
+  private:
+    void read_styles();
+    
+  private:
+    GdkColor track_background;
+    
+    lumiera::gui::widgets::TimelineWidget *timelineWidget;
+  };
+
+}   // namespace timeline
+}   // namespace widgets
 }   // namespace gui
 }   // namespace lumiera
+
+#endif // TIMELINE_BODY_HPP

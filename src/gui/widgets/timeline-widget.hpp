@@ -1,5 +1,5 @@
 /*
-  timeline.hpp  -  Declaration of the timeline widget
+  timeline-widget.hpp  -  Declaration of the timeline widget
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,32 +19,74 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file timeline.hpp
+/** @file timeline-widget.hpp
  ** This file contains the definition of timeline widget
  */
 
 #ifndef TIMELINE_WIDGET_HPP
 #define TIMELINE_WIDGET_HPP
 
+#include "timeline/header-container.hpp"
+#include "timeline/timeline-body.hpp"
+#include "timeline/track.hpp"
+#include "timeline/video-track.hpp"
+
 #include <gtkmm.h>
+#include <vector>
 
 namespace lumiera {
 namespace gui {
 namespace widgets {
 
-  class TimelineWidget : public Gtk::Widget
-    {
-    public:
-      TimelineWidget();
+class TimelineWidget : public Gtk::Table
+  {
+  public:
+    TimelineWidget();
 
-      /* ===== Overrides ===== */
-    protected:
-      virtual void on_realize();
-      virtual bool on_expose_event(GdkEventExpose* event);
-    };
+    ~TimelineWidget();
+
+    /* ===== Events ===== */
+  protected:
+    void on_scroll();
+    
+    void on_size_allocate(Gtk::Allocation& allocation);
+
+    /* ===== Internals ===== */
+  protected:
+  
+    void update_tracks();
+    
+    void update_scroll();
+    
+    int get_y_scroll_offset() const;
+
+  protected:
+    int totalHeight;
+
+    timeline::VideoTrack video1;
+    timeline::VideoTrack video2;
+    std::vector<timeline::Track*> tracks;
+
+    timeline::TimelineBody *body;
+    timeline::HeaderContainer *headerContainer;
+    Gtk::Label ruler;
+
+    Gtk::Adjustment horizontalAdjustment, verticalAdjustment;
+    Gtk::HScrollbar horizontalScroll;
+    Gtk::VScrollbar verticalScroll;
+    
+    /* ===== Constants ===== */
+  protected:
+    static const int TrackPadding;
+    static const int HeaderWidth;
+
+    friend class timeline::TimelineBody;
+    friend class timeline::HeaderContainer;
+  };
 
 }   // namespace widgets
 }   // namespace gui
 }   // namespace lumiera
 
 #endif // TIMELINE_WIDGET_HPP
+

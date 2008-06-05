@@ -1,5 +1,5 @@
 /*
-  timeline-panel.cpp  -  Implementation of the timeline panel
+  track.cpp  -  Implementation of the timeline track object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,21 +20,38 @@
  
 * *****************************************************/
 
-#include "../gtk-lumiera.hpp"
-#include "timeline-panel.hpp"
-
-using namespace Gtk;
+#include "track.hpp"
 
 namespace lumiera {
 namespace gui {
-namespace panels {
+namespace widgets {
+namespace timeline {
 
-TimelinePanel::TimelinePanel() :
-  Panel("timeline", _("Timeline"), "timeline_panel")
+Track::Track()
   {
-    pack_start(timeline_widget, PACK_EXPAND_WIDGET);
+    
   }
 
-}   // namespace panels
+Glib::ustring
+Track::get_title()
+  {
+    return "Hello";
+  }
+  
+int
+Track::get_height()
+  {
+    return get_header_widget().get_allocation().get_height();
+  }
+
+void
+Track::draw_track(Cairo::RefPtr<Cairo::Context> cairo)
+  {
+    
+  }
+
+}   // namespace timeline
+}   // namespace widgets
 }   // namespace gui
 }   // namespace lumiera
+

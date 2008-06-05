@@ -33,47 +33,55 @@ AM_CFLAGS =\
 
 bin_PROGRAMS += lumigui
 
-lumigui_SOURCES =                                            \
-	  $(lumigui_srcdir)/gtk-lumiera.cpp                   \
-    $(lumigui_srcdir)/gtk-lumiera.hpp                   \
-	  $(lumigui_srcdir)/window-manager.cpp                \
-    $(lumigui_srcdir)/window-manager.hpp                \
-    $(lumigui_srcdir)/workspace/actions.cpp             \
-    $(lumigui_srcdir)/workspace/actions.hpp             \
-    $(lumigui_srcdir)/workspace/workspace-window.cpp    \
-    $(lumigui_srcdir)/workspace/workspace-window.hpp    \
-    $(lumigui_srcdir)/dialogs/render.cpp                \
-    $(lumigui_srcdir)/dialogs/render.hpp                \
-    $(lumigui_srcdir)/dialogs/preferences-dialog.cpp    \
-    $(lumigui_srcdir)/dialogs/preferences-dialog.hpp    \
-    $(lumigui_srcdir)/panels/panel.cpp                  \
-    $(lumigui_srcdir)/panels/panel.hpp                  \
-    $(lumigui_srcdir)/panels/timeline-panel.cpp         \
-    $(lumigui_srcdir)/panels/timeline-panel.hpp         \
-    $(lumigui_srcdir)/panels/viewer-panel.cpp           \
-    $(lumigui_srcdir)/panels/viewer-panel.hpp           \
-    $(lumigui_srcdir)/panels/assets-panel.cpp           \
-    $(lumigui_srcdir)/panels/asset-panels.hpp           \
-    $(lumigui_srcdir)/widgets/video-display-widget.cpp  \
-    $(lumigui_srcdir)/widgets/video-display-widget.hpp  \
-    $(lumigui_srcdir)/widgets/timeline-widget.cpp       \
-    $(lumigui_srcdir)/widgets/timeline-widget.hpp       \
-    $(lumigui_srcdir)/model/project.cpp                 \
-    $(lumigui_srcdir)/model/project.hpp                 \
-    $(lumigui_srcdir)/output/displayer.cpp              \
-    $(lumigui_srcdir)/output/displayer.hpp              \
-    $(lumigui_srcdir)/output/gdkdisplayer.cpp           \
-    $(lumigui_srcdir)/output/gdkdisplayer.hpp           \
-    $(lumigui_srcdir)/output/xvdisplayer.cpp            \
+lumigui_SOURCES =                                               \
+	  $(lumigui_srcdir)/gtk-lumiera.cpp                           \
+    $(lumigui_srcdir)/gtk-lumiera.hpp                           \
+	  $(lumigui_srcdir)/window-manager.cpp                        \
+    $(lumigui_srcdir)/window-manager.hpp                        \
+    $(lumigui_srcdir)/workspace/actions.cpp                     \
+    $(lumigui_srcdir)/workspace/actions.hpp                     \
+    $(lumigui_srcdir)/workspace/workspace-window.cpp            \
+    $(lumigui_srcdir)/workspace/workspace-window.hpp            \
+    $(lumigui_srcdir)/dialogs/render.cpp                        \
+    $(lumigui_srcdir)/dialogs/render.hpp                        \
+    $(lumigui_srcdir)/dialogs/preferences-dialog.cpp            \
+    $(lumigui_srcdir)/dialogs/preferences-dialog.hpp            \
+    $(lumigui_srcdir)/panels/panel.cpp                          \
+    $(lumigui_srcdir)/panels/panel.hpp                          \
+    $(lumigui_srcdir)/panels/timeline-panel.cpp                 \
+    $(lumigui_srcdir)/panels/timeline-panel.hpp                 \
+    $(lumigui_srcdir)/panels/viewer-panel.cpp                   \
+    $(lumigui_srcdir)/panels/viewer-panel.hpp                   \
+    $(lumigui_srcdir)/panels/assets-panel.cpp                   \
+    $(lumigui_srcdir)/panels/asset-panels.hpp                   \
+    $(lumigui_srcdir)/widgets/video-display-widget.cpp          \
+    $(lumigui_srcdir)/widgets/video-display-widget.hpp          \
+    $(lumigui_srcdir)/widgets/timeline-widget.cpp               \
+    $(lumigui_srcdir)/widgets/timeline-widget.hpp               \
+    $(lumigui_srcdir)/widgets/timeline/header-container.cpp     \
+    $(lumigui_srcdir)/widgets/timeline/header-container.hpp     \
+    $(lumigui_srcdir)/widgets/timeline/track.cpp                \
+    $(lumigui_srcdir)/widgets/timeline/track.hpp                \
+    $(lumigui_srcdir)/widgets/timeline/video-track.cpp          \
+    $(lumigui_srcdir)/widgets/timeline/video-track.hpp          \
+    $(lumigui_srcdir)/widgets/timeline/timeline-body.cpp        \
+    $(lumigui_srcdir)/widgets/timeline/timeline-body.hpp        \
+    $(lumigui_srcdir)/model/project.cpp                         \
+    $(lumigui_srcdir)/model/project.hpp                         \
+    $(lumigui_srcdir)/output/displayer.cpp                      \
+    $(lumigui_srcdir)/output/displayer.hpp                      \
+    $(lumigui_srcdir)/output/gdkdisplayer.cpp                   \
+    $(lumigui_srcdir)/output/gdkdisplayer.hpp                   \
+    $(lumigui_srcdir)/output/xvdisplayer.cpp                    \
     $(lumigui_srcdir)/output/xvdisplayer.hpp
 
 lumigui_LDFLAGS = 
 lumigui_LDADD = $(GTK_LUMIERA_LIBS) 
 
-lumigui_DEPENDENCIES =                                  \
-    $(top_builddir)/lumiera_ui.rc                       \
-    $(top_builddir)/assets-panel.png                    \
-    $(top_builddir)/timeline-panel.png                  \
+lumigui_DEPENDENCIES =                                          \
+    $(top_builddir)/lumiera_ui.rc                               \
+    $(top_builddir)/assets-panel.png                            \
+    $(top_builddir)/timeline-panel.png                          \
     $(top_builddir)/viewer-panel.png  
 
 $(top_builddir)/lumiera_ui.rc:

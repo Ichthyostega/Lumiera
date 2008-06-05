@@ -51,6 +51,7 @@ namespace widgets {
       
       virtual bool on_expose_event(GdkEventExpose* event);
 
+      // TEST CODE!!!!
       virtual bool on_button_press_event (GdkEventButton* event);
 
       /* ===== Internals ===== */
