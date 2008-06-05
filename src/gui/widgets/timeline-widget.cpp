@@ -42,17 +42,19 @@ TimelineWidget::TimelineWidget() :
   verticalScroll(verticalAdjustment),
   ruler("ruler")
   {
-    body = new TimelineBody(this);
-    g_assert(body != NULL);
-    headerContainer = new HeaderContainer(this);
-    g_assert(headerContainer != NULL);
+    TimelineBody *body_ptr = new TimelineBody(this);
+    body = Glib::RefPtr<TimelineBody>(body_ptr);
+    g_assert(body);
+    HeaderContainer *header_container_ptr = new HeaderContainer(this);
+    headerContainer = Glib::RefPtr<HeaderContainer>(header_container_ptr);
+    g_assert(headerContainer);
   
     verticalAdjustment.signal_value_changed().connect(
       sigc::mem_fun(this, &TimelineWidget::on_scroll) );
 
-    attach(*body, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
+    attach(*body_ptr, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
     attach(ruler, 1, 2, 0, 1, FILL|EXPAND, SHRINK);
-    attach(*headerContainer, 0, 1, 1, 2, SHRINK, FILL|EXPAND);
+    attach(*header_container_ptr, 0, 1, 1, 2, SHRINK, FILL|EXPAND);
     attach(horizontalScroll, 1, 2, 2, 3, FILL|EXPAND, SHRINK);
     attach(verticalScroll, 2, 3, 1, 2, SHRINK, FILL|EXPAND);
 
@@ -64,10 +66,7 @@ TimelineWidget::TimelineWidget() :
 
 TimelineWidget::~TimelineWidget()
   {
-    g_assert(body != NULL);
-    delete body;
-    g_assert(headerContainer != NULL);
-    delete headerContainer;
+
   }
 
 void
@@ -87,7 +86,7 @@ TimelineWidget::on_size_allocate(Allocation& allocation)
 void
 TimelineWidget::update_tracks()
   {
-    g_assert(headerContainer != NULL);
+    g_assert(headerContainer);
     headerContainer->update_headers();
     
     // Recalculate the total height of the timeline scrolled area
@@ -104,7 +103,7 @@ TimelineWidget::update_tracks()
 void
 TimelineWidget::update_scroll()
   {
-    g_assert(body != NULL);
+    g_assert(body);
     const Allocation body_allocation = body->get_allocation();
     
     // Calculate the length that can be scrolled:

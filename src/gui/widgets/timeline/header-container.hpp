@@ -63,6 +63,7 @@ class HeaderContainer : public Gtk::Container
     
   private:
     lumiera::gui::widgets::TimelineWidget *timelineWidget;
+    std::vector< Glib::RefPtr<Gtk::Widget> > rootHeaders;
 
     Glib::RefPtr<Gdk::Window> gdkWindow;
   };

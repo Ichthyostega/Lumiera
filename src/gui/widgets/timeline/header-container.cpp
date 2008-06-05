@@ -53,10 +53,15 @@ HeaderContainer::update_headers()
       {
         timeline::Track *track = *i;
         g_assert(track != NULL);
+                
+        Glib::RefPtr<Gtk::Frame> headerFrame(new Gtk::Frame());
+        headerFrame->add(track->get_header_widget());
+        headerFrame->set_shadow_type (Gtk::SHADOW_ETCHED_OUT);
+        headerFrame->set_name ("TimelineHeaderBaseUnselected");
+        headerFrame->set_parent(*this);
+        headerFrame->show();
         
-        Widget &header = track->get_header_widget();
-        header.set_parent(*this);
-        header.show();
+        rootHeaders.push_back(headerFrame);
       }
       
     layout_headers();
@@ -136,17 +141,13 @@ HeaderContainer::on_size_allocate (Allocation& allocation)
 void
 HeaderContainer::forall_vfunc(gboolean /* include_internals */,
         GtkCallback callback, gpointer callback_data)
-  {
-    g_assert(timelineWidget != NULL);
-       
-    vector<timeline::Track*> &tracks = timelineWidget->tracks;  
-    vector<timeline::Track*>::iterator i;
-    for(i = tracks.begin(); i != tracks.end(); i++)
+  {      
+    vector< Glib::RefPtr<Gtk::Widget> >::iterator i;
+    for(i = rootHeaders.begin(); i != rootHeaders.end(); i++)
       {
-        timeline::Track *track = *i;
-        g_assert(track != NULL);
-        callback(track->get_header_widget().gobj(),
-          callback_data);
+        Glib::RefPtr<Gtk::Widget> header = *i;
+        g_assert(header);
+        callback(header->gobj(), callback_data);
       }
   }
   
@@ -166,13 +167,10 @@ HeaderContainer::layout_headers()
     
     const Allocation container_allocation = get_allocation();    
     
-    vector<timeline::Track*> &tracks = timelineWidget->tracks;  
-    vector<timeline::Track*>::iterator i;
-    for(i = tracks.begin(); i != tracks.end(); i++)
+    vector<Glib::RefPtr<Gtk::Widget> >::iterator i;
+    for(i = rootHeaders.begin(); i != rootHeaders.end(); i++)
       {
-        timeline::Track *track = *i;
-        g_assert(track != NULL);
-        Widget &header = track->get_header_widget();
+        Glib::RefPtr<Gtk::Widget> header = *i;
         
         const int height = 100;//header->get_track_height();
              
@@ -181,7 +179,7 @@ HeaderContainer::layout_headers()
         header_allocation.set_y (offset - y_scroll_offset);
         header_allocation.set_width (container_allocation.get_width ());
         header_allocation.set_height (height);
-        header.size_allocate(header_allocation);
+        header->size_allocate(header_allocation);
         
         offset += height + TimelineWidget::TrackPadding;
       }
