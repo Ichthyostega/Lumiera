@@ -41,9 +41,6 @@ class TimelineBody : public Gtk::DrawingArea
   public:
     TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widget);
 
-  protected:
-    lumiera::gui::widgets::TimelineWidget *timelineWidget;
-
     /* ===== Events ===== */
   protected:
     void on_scroll();
@@ -56,6 +53,8 @@ class TimelineBody : public Gtk::DrawingArea
     
   private:
     GdkColor track_background;
+    
+    lumiera::gui::widgets::TimelineWidget *timelineWidget;
   };
 
 }   // namespace timeline

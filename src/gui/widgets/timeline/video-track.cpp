@@ -32,20 +32,25 @@ namespace timeline {
 VideoTrack::VideoTrack() :
   headerWidget("HeaderTest")
   {
-    
+    headerFrame.add(headerWidget);
+    headerFrame.set_shadow_type (Gtk::SHADOW_ETCHED_OUT);
+    headerFrame.set_name ("TimelineHeaderBaseUnselected");
   }
 
-Gtk::Widget& VideoTrack::get_header_widget()
+Gtk::Widget&
+VideoTrack::get_header_widget()
   {
-    return headerWidget;
+    return headerFrame;
   }
 
-int VideoTrack::get_track_height()
+/*int
+VideoTrack::get_height()
   {
     return 100;
-  }
+  }*/
 
-void VideoTrack::draw_track(Cairo::RefPtr<Cairo::Context> cairo)
+void
+VideoTrack::draw_track(Cairo::RefPtr<Cairo::Context> cairo)
   {
     
   }
@@ -54,3 +59,4 @@ void VideoTrack::draw_track(Cairo::RefPtr<Cairo::Context> cairo)
 }   // namespace widgets
 }   // namespace gui
 }   // namespace lumiera
+

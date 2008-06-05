@@ -26,6 +26,7 @@
 #ifndef TIMELINE_WIDGET_HPP
 #define TIMELINE_WIDGET_HPP
 
+#include "timeline/header-container.hpp"
 #include "timeline/timeline-body.hpp"
 #include "timeline/track.hpp"
 #include "timeline/video-track.hpp"
@@ -47,12 +48,17 @@ class TimelineWidget : public Gtk::Table
     /* ===== Events ===== */
   protected:
     void on_scroll();
+    
+    void on_size_allocate(Gtk::Allocation& allocation);
 
     /* ===== Internals ===== */
   protected:
-    void layout_tracks();
-
-    void move_headers();
+  
+    void update_tracks();
+    
+    void update_scroll();
+    
+    int get_y_scroll_offset() const;
 
   protected:
     int totalHeight;
@@ -61,10 +67,9 @@ class TimelineWidget : public Gtk::Table
     timeline::VideoTrack video2;
     std::vector<timeline::Track*> tracks;
 
-    Gtk::Layout rowHeaderLayout;
-    Gtk::Label ruler;
-
     timeline::TimelineBody *body;
+    timeline::HeaderContainer *headerContainer;
+    Gtk::Label ruler;
 
     Gtk::Adjustment horizontalAdjustment, verticalAdjustment;
     Gtk::HScrollbar horizontalScroll;
@@ -73,8 +78,10 @@ class TimelineWidget : public Gtk::Table
     /* ===== Constants ===== */
   protected:
     static const int TrackPadding;
+    static const int HeaderWidth;
 
     friend class timeline::TimelineBody;
+    friend class timeline::HeaderContainer;
   };
 
 }   // namespace widgets

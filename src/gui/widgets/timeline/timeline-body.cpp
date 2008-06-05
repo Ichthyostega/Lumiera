@@ -91,7 +91,7 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
       timeline::Track *track = *i;
       g_assert(track != NULL);   
 
-      const int track_height = track->get_track_height();
+      const int track_height = track->get_height();
     
       // Draw the track background
       cairo->rectangle(0, 0, allocation.get_width(), track_height);
@@ -112,23 +112,23 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
   
 void
 TimelineBody::read_styles()
-{
-  GdkColor *colour;
-
-  gtk_widget_style_get(Widget::gobj(), "track_background", &colour, NULL);
-
-  // Did the color load successfully?
-  if(colour != NULL)
-    track_background = *colour;
-  else
   {
-    g_warning("track_background style value failed to load");
-    track_background.red   = 0x0000;
-    track_background.green = 0x0000;
-    track_background.blue  = 0x0000;
-    track_background.pixel = 0x00000000;
+    GdkColor *colour;
+
+    gtk_widget_style_get(Widget::gobj(), "track_background", &colour, NULL);
+
+    // Did the color load successfully?
+    if(colour != NULL)
+      track_background = *colour;
+    else
+    {
+      g_warning("track_background style value failed to load");
+      track_background.red   = 0x0000;
+      track_background.green = 0x0000;
+      track_background.blue  = 0x0000;
+      track_background.pixel = 0x00000000;
+    }
   }
-}
 
 }   // namespace timeline
 }   // namespace widgets

@@ -31,6 +31,7 @@ namespace gui {
 namespace widgets {
 
 const int TimelineWidget::TrackPadding = 1;
+const int TimelineWidget::HeaderWidth = 100;
 
 TimelineWidget::TimelineWidget() :
   Table(2, 2),
@@ -41,68 +42,94 @@ TimelineWidget::TimelineWidget() :
   verticalScroll(verticalAdjustment),
   ruler("ruler")
   {
-    rowHeaderLayout.set_size_request(100, 0);
-
     body = new TimelineBody(this);
- 
+    g_assert(body != NULL);
+    headerContainer = new HeaderContainer(this);
+    g_assert(headerContainer != NULL);
+  
     verticalAdjustment.signal_value_changed().connect(
       sigc::mem_fun(this, &TimelineWidget::on_scroll) );
 
     attach(*body, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
     attach(ruler, 1, 2, 0, 1, FILL|EXPAND, SHRINK);
-    attach(rowHeaderLayout, 0, 1, 1, 2, SHRINK, FILL|EXPAND);
+    attach(*headerContainer, 0, 1, 1, 2, SHRINK, FILL|EXPAND);
     attach(horizontalScroll, 1, 2, 2, 3, FILL|EXPAND, SHRINK);
     attach(verticalScroll, 2, 3, 1, 2, SHRINK, FILL|EXPAND);
 
     tracks.push_back(&video1);
     tracks.push_back(&video2);
-
-    layout_tracks();
+    
+    update_tracks();
   }
 
 TimelineWidget::~TimelineWidget()
   {
+    g_assert(body != NULL);
     delete body;
+    g_assert(headerContainer != NULL);
+    delete headerContainer;
   }
 
 void
 TimelineWidget::on_scroll()
   {
-    move_headers();
+    
   }
-
+  
 void
-TimelineWidget::layout_tracks()
+TimelineWidget::on_size_allocate(Allocation& allocation)
   {
+    Widget::on_size_allocate(allocation);
+    
+    update_scroll();
+  }
+  
+void
+TimelineWidget::update_tracks()
+  {
+    g_assert(headerContainer != NULL);
+    headerContainer->update_headers();
+    
+    // Recalculate the total height of the timeline scrolled area
+    totalHeight = 0;
     vector<timeline::Track*>::iterator i;
     for(i = tracks.begin(); i != tracks.end(); i++)
-    {
-      timeline::Track *track = *i;
-      g_assert(track != NULL);    
-      rowHeaderLayout.put(track->get_header_widget(), 0, 0);
-    }
-
-    move_headers();
+      {
+        timeline::Track *track = *i;
+        g_assert(track != NULL);
+        totalHeight += track->get_height() + TrackPadding;
+      }    
+  }
+  
+void
+TimelineWidget::update_scroll()
+  {
+    g_assert(body != NULL);
+    const Allocation body_allocation = body->get_allocation();
+    
+    // Calculate the length that can be scrolled:
+    // the total height of all the tracks minus one screenful 
+    int y_scroll_length = totalHeight - body_allocation.get_height();
+    if(y_scroll_length < 0) y_scroll_length = 0;    
+    
+    // If by resizing we're now over-scrolled, scroll back to
+    // maximum distance
+    if((int)verticalAdjustment.get_value() > y_scroll_length)
+        verticalAdjustment.set_value(y_scroll_length);
+    
+    verticalAdjustment.set_upper(y_scroll_length);
+    
+    // Hide the scrollbar if no scrolling is possible
+    if(y_scroll_length == 0 && verticalScroll.is_visible())
+      verticalScroll.hide();
+    else if(y_scroll_length != 0 && !verticalScroll.is_visible())
+      verticalScroll.show();
   }
 
-void
-TimelineWidget::move_headers()
+int
+TimelineWidget::get_y_scroll_offset() const
   {
-    int offset = 0;
-    const int y_scroll_offset = (int)verticalAdjustment.get_value();
-
-    vector<Track*>::iterator i;
-    for(i = tracks.begin(); i != tracks.end(); i++)
-    {
-      timeline::Track *track = *i;
-      g_assert(track != NULL);
-
-      const int height = track->get_track_height();
-      rowHeaderLayout.move(track->get_header_widget(), 0, offset - y_scroll_offset);
-      offset += height + TrackPadding;
-    }
-    totalHeight = offset;
-    verticalAdjustment.set_upper(totalHeight);
+    return (int)verticalAdjustment.get_value();
   }
 
 }   // namespace widgets

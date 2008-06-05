@@ -37,6 +37,12 @@ Track::get_title()
   {
     return "Hello";
   }
+  
+int
+Track::get_height()
+  {
+    return get_header_widget().get_allocation().get_height();
+  }
 
 void
 Track::draw_track(Cairo::RefPtr<Cairo::Context> cairo)

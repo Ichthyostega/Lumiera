@@ -1,5 +1,5 @@
 /*
-  track.hpp  -  Declaration of the timeline track object
+  header-container.hpp  -  Declaration of the header container widget
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,40 +19,58 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file track.hpp
- ** This file contains the definition of timeline track object
+/** @file header-container.hpp
+ ** This file contains the definition of the header container
+ ** widget
  */
 
-#ifndef TRACK_HPP
-#define TRACK_HPP
+#ifndef HEADER_CONTAINER_HPP
+#define HEADER_CONTAINER_HPP
 
 #include <gtkmm.h>
+#include <vector>
 
 namespace lumiera {
 namespace gui {
 namespace widgets {
+
+class TimelineWidget;
+
 namespace timeline {
 
-class Track
+class HeaderContainer : public Gtk::Container
   {
   public:
-    Track();
+    HeaderContainer(lumiera::gui::widgets::TimelineWidget *timeline_widget);
+    
+    void update_headers();
 
-    Glib::ustring get_title();
+  private:
+    void on_realize();
+    void on_unrealize();
+  
+    void on_size_allocate (Gtk::Allocation& allocation);
+    void on_size_request (Gtk::Requisition* requisition);
+        
+    void forall_vfunc(gboolean include_internals, GtkCallback callback,
+                      gpointer callback_data);
+                     
+    void on_scroll();
+      
+    /* ===== Internals ===== */
+  private:
+    void layout_headers();
+    
+  private:
+    lumiera::gui::widgets::TimelineWidget *timelineWidget;
 
-    virtual Gtk::Widget& get_header_widget() = 0;
-
-    virtual int get_height();
-
-    virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo);
-
-  protected:
+    Glib::RefPtr<Gdk::Window> gdkWindow;
   };
-
 
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
 }   // namespace lumiera
 
-#endif // TRACK_HPP
+#endif // HEADER_CONTAINER_HPP
+

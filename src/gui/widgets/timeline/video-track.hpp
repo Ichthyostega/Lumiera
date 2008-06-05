@@ -40,12 +40,13 @@ class VideoTrack : public Track
 
     virtual Gtk::Widget& get_header_widget();
 
-    virtual int get_track_height();
+    //virtual int get_height();
 
     virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo);
 
   protected:
     Gtk::Label headerWidget;
+    Gtk::Frame headerFrame;
   };
 
 }   // namespace timeline

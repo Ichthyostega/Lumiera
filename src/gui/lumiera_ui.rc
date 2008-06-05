@@ -5,10 +5,13 @@
 
 #---------- Styles for Standard Widgets ----------#
 
-style "medium_bold_entry"
+style "medium_text"
 {
  	font_name = "sans bold 10"
-
+}
+ 	
+style "medium_bold_entry" = "medium_text"
+{
 	fg[NORMAL] = { 0.70, 0.70, 0.70 }
 	fg[ACTIVE] = { 0.70, 0.70, 0.70 }
 	
@@ -115,5 +118,17 @@ style "timeline_body"
   gtkmm__CustomObject_TimelineBody::track_background = "#7E838B"
 }
 
+style "timeline_header_base" = "default_base"
+{
+  fg[NORMAL] = { 0.77, 0.77, 0.72 }	
+  bg[NORMAL] = { 0.18, 0.19, 0.22 }
+  bg[ACTIVE] = { 0.20, 0.20, 0.20 }	
+  bg[PRELIGHT] = { 0.20, 0.20, 0.20 }
+  bg[INSENSITIVE] = { 0.20, 0.20, 0.20 }
+  bg[SELECTED] = { 0.20, 0.20, 0.20 }
+}
+
 class "gtkmm__CustomObject_TimelineBody" style:highest "timeline_body"
+
+widget "*TimelineHeaderBaseUnselected" style:highest "timeline_header_base"
 
