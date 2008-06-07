@@ -35,9 +35,11 @@ namespace timeline {
 HeaderContainer::HeaderContainer(lumiera::gui::widgets::TimelineWidget *timeline_widget) :
     timelineWidget(timeline_widget)
   {
-    set_flags(Gtk::NO_WINDOW);
+    set_flags(Gtk::NO_WINDOW);  // This widget will not have a window at first
     set_redraw_on_allocate(false);
     
+    // Connect to the timeline widget's vertical scroll event,
+    // so that we get notified when the view shifts
     timelineWidget->verticalAdjustment.signal_value_changed().connect(
       sigc::mem_fun(this, &HeaderContainer::on_scroll) );
   }
@@ -47,8 +49,8 @@ HeaderContainer::update_headers()
   {
     g_assert(timelineWidget != NULL);
     
-    vector<timeline::Track*> &tracks = timelineWidget->tracks;  
-    vector<timeline::Track*>::iterator i;
+    vector< Track* > &tracks = timelineWidget->tracks;  
+    vector< Track* >::iterator i;
     for(i = tracks.begin(); i != tracks.end(); i++)
       {
         timeline::Track *track = *i;
@@ -61,7 +63,8 @@ HeaderContainer::update_headers()
         headerFrame->set_parent(*this);
         headerFrame->show();
         
-        rootHeaders.push_back(headerFrame);
+        const RootHeader header = { headerFrame, track };
+        rootHeaders.push_back(header);
       }
       
     layout_headers();
@@ -93,7 +96,7 @@ HeaderContainer::on_realize()
     attributes.window_type = GDK_WINDOW_CHILD;
     attributes.wclass = GDK_INPUT_OUTPUT;
 
-    gdkWindow = Gdk::Window::create(get_window() /* parent */, &attributes,
+    gdkWindow = Gdk::Window::create(get_window(), &attributes,
             GDK_WA_X | GDK_WA_Y);
     unset_flags(Gtk::NO_WINDOW);
     set_window(gdkWindow);
@@ -108,16 +111,17 @@ HeaderContainer::on_realize()
 void
 HeaderContainer::on_unrealize()
   {
+    // Unreference any window we may have created
     gdkWindow.clear();
 
-    //Call base class:
+    // Call base class:
     Gtk::Widget::on_unrealize();
   }
 
 void
 HeaderContainer::on_size_request (Requisition* requisition)
   {   
-    //Initialize the output parameter:
+    // Initialize the output parameter:
     *requisition = Gtk::Requisition();
 
     requisition->width = TimelineWidget::HeaderWidth; 
@@ -142,18 +146,20 @@ void
 HeaderContainer::forall_vfunc(gboolean /* include_internals */,
         GtkCallback callback, gpointer callback_data)
   {      
-    vector< Glib::RefPtr<Gtk::Widget> >::iterator i;
+    vector< RootHeader >::iterator i;
     for(i = rootHeaders.begin(); i != rootHeaders.end(); i++)
       {
-        Glib::RefPtr<Gtk::Widget> header = *i;
-        g_assert(header);
-        callback(header->gobj(), callback_data);
+        RootHeader header = *i;
+        g_assert(header.widget);
+        callback(header.widget->gobj(), callback_data);
       }
   }
   
 void
 HeaderContainer::on_scroll()
   {
+    // If the scroll has changed, we will have to shift all the
+    // header widgets
     layout_headers();
   }
   
@@ -167,19 +173,21 @@ HeaderContainer::layout_headers()
     
     const Allocation container_allocation = get_allocation();    
     
-    vector<Glib::RefPtr<Gtk::Widget> >::iterator i;
+    vector< RootHeader >::iterator i;
     for(i = rootHeaders.begin(); i != rootHeaders.end(); i++)
       {
-        Glib::RefPtr<Gtk::Widget> header = *i;
+        RootHeader header = *i;
+        g_assert(header.widget);
+        g_assert(header.track != NULL);
         
-        const int height = 100;//header->get_track_height();
+        const int height = header.track->get_height();
              
         Gtk::Allocation header_allocation;
         header_allocation.set_x (0);
         header_allocation.set_y (offset - y_scroll_offset);
         header_allocation.set_width (container_allocation.get_width ());
         header_allocation.set_height (height);
-        header->size_allocate(header_allocation);
+        header.widget->size_allocate(header_allocation);
         
         offset += height + TimelineWidget::TrackPadding;
       }

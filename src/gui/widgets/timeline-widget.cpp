@@ -107,7 +107,9 @@ TimelineWidget::update_scroll()
     g_assert(body != NULL);
     const Allocation body_allocation = body->get_allocation();
     
-    // Calculate the length that can be scrolled:
+    //----- Vertical Scroll -----//
+    
+    // Calculate the vertical length that can be scrolled:
     // the total height of all the tracks minus one screenful 
     int y_scroll_length = totalHeight - body_allocation.get_height();
     if(y_scroll_length < 0) y_scroll_length = 0;    
