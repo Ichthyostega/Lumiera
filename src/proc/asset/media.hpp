@@ -52,6 +52,7 @@ namespace asset
   class MediaFactory;
   class ProcPatt;
   
+  using lumiera::P;
   using lumiera::Time;
   
   
@@ -74,9 +75,9 @@ namespace asset
       const Time len_;
       
     public:
-      typedef shared_ptr<Media> PMedia;
-      typedef shared_ptr<asset::Clip> PClip;
-      typedef shared_ptr<asset::ProcPatt> PProcPatt;
+      typedef P<Media> PMedia;
+      typedef P<asset::Clip> PClip;
+      typedef P<asset::ProcPatt> PProcPatt;
       typedef mobject::session::PClipMO PClipMO;
      
       
@@ -142,7 +143,7 @@ namespace asset
   class MediaFactory : public lumiera::Factory<asset::Media>
     {
     public:
-      typedef shared_ptr<asset::Media> PType;
+      typedef P<asset::Media> PType;
       
       PType operator() (Asset::Ident& key, const string& file="");
       PType operator() (const string& file, const Category& cat);
@@ -152,7 +153,7 @@ namespace asset
       PType operator() (const char* file, const Category& cat);
       PType operator() (const char* file, asset::Kind);
       
-      shared_ptr<asset::Clip>
+      P<asset::Clip>
       operator() (asset::Media& mediaref)  throw(lumiera::error::Invalid);
 
     };

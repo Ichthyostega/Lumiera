@@ -95,7 +95,7 @@ namespace asset
   class MetaFactory : public lumiera::Factory<asset::Meta>
     {
     public:
-      typedef shared_ptr<asset::Meta> PType;
+      typedef P<asset::Meta> PType;
        
       PType operator() (Asset::Ident& key);      ////////////TODO define actual operation 
 

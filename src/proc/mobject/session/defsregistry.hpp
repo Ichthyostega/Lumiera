@@ -28,6 +28,7 @@
 #include "common/multithread.hpp"
 #include "common/query.hpp"
 #include "common/util.hpp"
+#include "common/p.hpp"
 
 #include <set>
 #include <vector>
@@ -41,10 +42,10 @@ namespace mobject
   {
   namespace session
     {
-    using std::tr1::shared_ptr;
-    using std::tr1::weak_ptr;
-    using lumiera::Thread;
+    using lumiera::P;
     using lumiera::Query;
+    using lumiera::Thread;
+    using std::tr1::weak_ptr;
     
     using std::string;
     using boost::format;
@@ -60,7 +61,7 @@ namespace mobject
       
       /** we maintain an independent defaults registry
        *  for every participating kind of objects */
-      typedef std::vector<shared_ptr<TableEntry> > Table;
+      typedef std::vector< P<TableEntry> > Table;
       
       uint maxSlots (0); ///< number of different registered Types
       
@@ -76,7 +77,7 @@ namespace mobject
           Query<TAR> query;
           weak_ptr<TAR> objRef;
           
-          Record (const Query<TAR>& q, const shared_ptr<TAR>& obj)
+          Record (const Query<TAR>& q, const P<TAR>& obj)
             : degree (lumiera::query::countPraed (q)),
               query (q),
               objRef (obj)
@@ -85,15 +86,15 @@ namespace mobject
           
           struct Search  ///< Functor searching for a specific object
             {
-              Search (const shared_ptr<TAR>& obj)
+              Search (const P<TAR>& obj)
                 : obj_(obj) { }
 
-              const shared_ptr<TAR>& obj_;
+              const P<TAR>& obj_;
               
               bool 
               operator() (const Record& rec)
               {
-                shared_ptr<TAR> storedObj (rec.objRef.lock());
+                P<TAR> storedObj (rec.objRef.lock());
                 return storedObj && (storedObj == obj_);
               }
             };
@@ -110,7 +111,7 @@ namespace mobject
             };
             
           operator string ()  const { return str (dumpRecord % degree % query % dumpObj()); }
-          string  dumpObj ()  const { shared_ptr<TAR> o (objRef.lock()); return o? string(*o):"dead"; }
+          string  dumpObj ()  const { P<TAR> o (objRef.lock()); return o? string(*o):"dead"; }
         };
         
       /** every new kind of object (Type) creates a new
@@ -186,7 +187,7 @@ namespace mobject
             typedef typename Slot<TAR>::Registry::iterator II;
             
             II p,i,e;
-            shared_ptr<TAR> next, ptr;
+            P<TAR> next, ptr;
             
             Iter (II from, II to) ///< just ennumerates the given range 
               : p(from), i(from), e(to)
@@ -201,7 +202,7 @@ namespace mobject
                 operator++ ();  // init to first element (or to null if emty)
               }
             
-            shared_ptr<TAR> findNext ()  throw()
+            P<TAR> findNext ()  throw()
               {
                 while (!next)
                   {
@@ -214,9 +215,9 @@ namespace mobject
             
           
           public:
-            shared_ptr<TAR> operator* () { return ptr; }
-            bool hasNext ()              { return next || findNext(); }
-            Iter  operator++ (int)       { Iter tmp=*this; operator++(); return tmp; }            
+            P<TAR> operator* ()    { return ptr; }
+            bool hasNext ()        { return next || findNext(); }
+            Iter  operator++ (int) { Iter tmp=*this; operator++(); return tmp; }            
             Iter& operator++ ()           
               { 
                 ptr=findNext();
@@ -237,7 +238,7 @@ namespace mobject
         template<class TAR>
         Iter<TAR> candidates (const Query<TAR>& query)
           {
-            shared_ptr<TAR> dummy;
+            P<TAR> dummy;
             Record<TAR> entry (query, dummy);
             typedef typename Slot<TAR>::Registry Registry;
             Registry& registry = Slot<TAR>::access(table_);
@@ -261,7 +262,7 @@ namespace mobject
          *          case, also the param obj shared-ptr is rebound!
          */
         template<class TAR>
-        bool put (shared_ptr<TAR>& obj, const Query<TAR>& query)
+        bool put (P<TAR>& obj, const Query<TAR>& query)
           {
             Record<TAR> entry (query, obj);
             typedef typename Slot<TAR>::Registry Registry;
@@ -272,7 +273,7 @@ namespace mobject
             if (  pos!=registry.end()
                && pos->query == query)
               {
-                shared_ptr<TAR> storedObj (pos->objRef.lock());
+                P<TAR> storedObj (pos->objRef.lock());
                 if (storedObj)
                   return (storedObj == obj);
                 else
@@ -290,7 +291,7 @@ namespace mobject
          *  @return false if the object wasn't registered at all.
          */
         template<class TAR>
-        bool forget (const shared_ptr<TAR>& obj)
+        bool forget (const P<TAR>& obj)
           {
             typedef typename Slot<TAR>::Registry Registry;
             typedef typename Record<TAR>::Search SearchFunc;

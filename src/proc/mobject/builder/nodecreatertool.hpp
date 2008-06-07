@@ -24,23 +24,15 @@
 #ifndef MOBJECT_BUILDER_NODECREATERTOOL_H
 #define MOBJECT_BUILDER_NODECREATERTOOL_H
 
-#include "proc/mobject/builder/buildertool.hpp"
+
+#include "proc/mobject/builder/applicablebuildertargettypes.hpp"
+
 #include "proc/engine/processor.hpp"
 
 
 
-namespace mobject
-  {
-  namespace session
-    {
-    // Forward declarations
-    class Effect;
-    class Clip;
-    template<class VAL> class Auto;
-  }
-
-  namespace builder
-    {
+namespace mobject {
+  namespace builder {
 
 
 
@@ -52,10 +44,9 @@ namespace mobject
      * render engine under construction such as to reflect the properties 
      * of the MObject in the actual render.
      */
-    class NodeCreatorTool : public BuilderTool
+    class NodeCreatorTool 
+      : public ApplicableBuilderTargetTypes<NodeCreatorTool>
       {
-        
-        //////////////////////////////////////////////TODO: switch to acyclic visitior!!!!!!!!!!!!!
         
       public:
         virtual void treat (mobject::session::Clip& clip) ;

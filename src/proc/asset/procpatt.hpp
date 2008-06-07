@@ -35,13 +35,14 @@ using std::vector;
 
 namespace asset
   {
+  using lumiera::P;
   using lumiera::Symbol;
 
   class Proc;
   class ProcPatt;
   class BuildInstruct; 
-  typedef shared_ptr<const asset::Proc> PProc;
-  typedef shared_ptr<const asset::ProcPatt> PProcPatt;
+  typedef P<const asset::Proc> PProc;
+  typedef P<const asset::ProcPatt> PProcPatt;
   
   typedef vector<BuildInstruct> InstructionSequence;    
 
@@ -61,14 +62,13 @@ namespace asset
       friend class StructFactoryImpl;
       
     public:
-      shared_ptr<ProcPatt> newCopy (string newID) const;
+      P<ProcPatt> newCopy (string newID) const;
       
       ProcPatt& attach (Symbol where, PProc& node);
       ProcPatt& operator+= (PProcPatt& toReuse);
 
     };
     
-  typedef shared_ptr<const asset::ProcPatt> PProcPatt;
     
     
     

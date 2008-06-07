@@ -31,10 +31,8 @@ using mobject::session::Clip;
 using mobject::session::Effect;
 
 
-namespace mobject
-  {
-  namespace builder
-    {
+namespace mobject {
+  namespace builder {
 
 
 

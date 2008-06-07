@@ -4,8 +4,12 @@ TESTING "Component Test Suite: Builder" ./test-components --group=builder
 
 
 TEST "BuilderTool_test" BuilderTool_test <<END
-out: media is: Asset(VIDEO:lumi.test-1 v1)
-out: catch-all-function called.
+out: apply (tool, clip);
+out: Clip on media : Asset(VIDEO:lumi.test-1 v1)
+out: apply (tool, test1);
+out: treat (AbstractMO&);
+out: apply (tool, test2);
+out: catch-all-function called...
 END
 
 

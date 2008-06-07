@@ -25,11 +25,11 @@
 #define MOBJECT_SESSION_DEFSMANAGER_H
 
 
+#include "common/p.hpp"
 #include "common/query.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/utility.hpp>
-#include <tr1/memory>
 
 
 
@@ -37,7 +37,7 @@ namespace mobject
   {
   namespace session
     {
-    using std::tr1::shared_ptr;
+    using lumiera::P;
     using boost::scoped_ptr;
     
     class DefsRegistry;
@@ -69,14 +69,14 @@ namespace mobject
          *         is considered \e misconfiguration. 
          */
         template<class TAR>
-        shared_ptr<TAR> operator() (const lumiera::Query<TAR>&);
+        P<TAR> operator() (const lumiera::Query<TAR>&);
         
         
         /** search through the registered defaults, never create anything.
          *  @return object fulfilling the query, \c empty ptr if not found. 
          */
         template<class TAR>
-        shared_ptr<TAR> search  (const lumiera::Query<TAR>&);
+        P<TAR> search  (const lumiera::Query<TAR>&);
         
         /** retrieve an object fulfilling the query and register it as default.
          *  The resolution is delegated to the ConfigQuery system (which may cause
@@ -84,7 +84,7 @@ namespace mobject
          *  @return object fulfilling the query, \c empty ptr if no solution.
          */ 
         template<class TAR>
-        shared_ptr<TAR> create  (const lumiera::Query<TAR>&);
+        P<TAR> create  (const lumiera::Query<TAR>&);
         
         /** register the given object as default, after ensuring it fulfills the
          *  query. The latter may cause some properties of the object to be set,
@@ -93,13 +93,13 @@ namespace mobject
          *  @note only a weak ref to the object is stored
          */ 
         template<class TAR>
-        bool define  (const shared_ptr<TAR>&, const lumiera::Query<TAR>&);
+        bool define  (const P<TAR>&, const lumiera::Query<TAR>&);
         
         /** remove the defaults registration of the given object, if there was such
          *  @return false if nothing has been changed because the object wasn't registered
          */
         template<class TAR>
-        bool forget  (const shared_ptr<TAR>&);
+        bool forget  (const P<TAR>&);
         
         
 // Q: can we have something along the line of...?

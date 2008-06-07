@@ -58,12 +58,10 @@
 #define MOBJECT_PLACEMENT_H
 
 #include "pre.hpp"
-#include "proc/mobject/mobject.hpp"
 #include "proc/mobject/session/locatingpin.hpp"
 #include "proc/asset/pipe.hpp"
 
 #include <tr1/memory>
-using std::tr1::shared_ptr;
 
 
 namespace mobject
@@ -72,6 +70,7 @@ namespace mobject
 
   class ExplicitPlacement;
   
+  using std::tr1::shared_ptr;
 
   
   
@@ -85,6 +84,7 @@ namespace mobject
   class Placement : protected shared_ptr<MO>
     {
     protected:
+      typedef shared_ptr<MO> Base;
       typedef lumiera::Time Time;
       typedef asset::shared_ptr<asset::Pipe> Pipe;
       
@@ -99,13 +99,14 @@ namespace mobject
       operator-> ()  const 
         { 
           ENSURE (*this); 
-          return shared_ptr<MO>::operator-> (); 
+          return Base::operator-> (); 
         }      
+      
+      operator string()   const ;
+      size_t use_count()  const { return Base::use_count(); }
       
       virtual ~Placement() {};
       
-      /** */ /////////////////////////////////////////////////////////////TODO: totmachen? 
-     // DEFINE_PROCESSABLE_BY (builder::BuilderTool);
 
       
       /** interface for defining the kind of placement
@@ -128,20 +129,19 @@ namespace mobject
       friend class session::MObjectFactory;
     };
   
-  typedef Placement<MObject> PMO;
   
   
   
   
   /* === defining specialisations to be subclasses === */
 
-#define DEFINE_SPECIALIZED_PLACEMENT(SUBCLASS)        \
+#define DEFINE_SPECIALIZED_PLACEMENT(SUBCLASS, BASE)  \
   template<>                                           \
-  class Placement<SUBCLASS> : public Placement<MObject> \
+  class Placement<SUBCLASS> : public Placement<BASE>    \
     {                                                    \
     protected:                                            \
       Placement (SUBCLASS & m, void (*moKiller)(MObject*)) \
-        : Placement<MObject>::Placement (m, moKiller)      \
+        : Placement<BASE>::Placement (m, moKiller)         \
         { };                                               \
       friend class session::MObjectFactory;                \
                                                            \
@@ -154,7 +154,6 @@ namespace mobject
             (shared_ptr<MObject>::operator-> ());          \
         }                                                  \
     };
-     // DEFINE_PROCESSABLE_BY (builder::BuilderTool);        
   
   /* a note to the maintainer: please don't add any fields or methods to
    * these subclasses which aren't also present in Placement<MObject>!

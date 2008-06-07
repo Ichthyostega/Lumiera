@@ -97,7 +97,7 @@ namespace lumiera
         void throwInvalid (string _) { throw error::Invalid(_); }
         void throwExternal(string _) { throw error::External(_); }
         void throwRuntime (string _) { throw std::runtime_error(_); }
-        void throwExceptn (string _) { throw std::exception(error::State(_)); }
+        void throwExceptn (string _) { throw std::exception(); }
 
         
         /** @test catching, repackaging and rethrowing of errors.
@@ -219,7 +219,7 @@ namespace lumiera
           catch (error::Invalid&e) { cout << "caught error::Invalid: " << e.what() << "\n"; }                
           catch (Error&         e) { cout << "caught lumiera::Error: " << e.what() << "\n"; }                
           catch (runtime_error& e) { cout << "caught std::runtime_error: " << e.what() << "\n"; }                
-          catch (exception&     e) { cout << "caught std::exception: " << e.what() << "\n"; }
+          catch (exception&     e) { cout << "caught std::exception. (unspecific)" << "\n"; }
           catch (...)              { cout << "caught an unknown exception\n"; }
         }
       };

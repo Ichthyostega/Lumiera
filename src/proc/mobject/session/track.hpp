@@ -34,11 +34,13 @@ namespace mobject
   {
   namespace session
     {
+    using lumiera::P;
+    
     class Track;
     typedef asset::Track TrackAsset;
     
-    typedef shared_ptr<Track> PTrack;
-    typedef shared_ptr<TrackAsset> PTrackAsset;
+    typedef P<Track> PTrack;
+    typedef P<TrackAsset> PTrackAsset;
 
 
     /**
@@ -81,7 +83,7 @@ namespace mobject
   } // namespace mobject::session
   
   /** Placement<Track> defined to be subclass of Placement<MObject> */
-  DEFINE_SPECIALIZED_PLACEMENT (session::Track);
+  DEFINE_SPECIALIZED_PLACEMENT (session::Track, session::Meta);
 
 } // namespace mobject
 #endif

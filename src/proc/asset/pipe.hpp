@@ -31,9 +31,10 @@
 
 namespace asset
   {
+  using lumiera::P;
   
   class Pipe;
-  typedef shared_ptr<Pipe> PPipe;
+  typedef P<Pipe> PPipe;
   
   
   template<>

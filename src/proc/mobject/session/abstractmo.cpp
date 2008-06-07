@@ -28,8 +28,14 @@ namespace mobject
   namespace session
     {
 
-    /** */
-
+    /** default/fallback implementation of equality
+     *  using literal object identity (same address)
+     */
+    bool
+    AbstractMO::operator== (const MObject& oo)  const
+    {
+      return (this == &oo);
+    }
 
 
   } // namespace mobject::session

@@ -33,7 +33,7 @@ CUSTOPTIONSFILE  = 'custom-options'
 SRCDIR           = 'src'
 BINDIR           = 'bin'
 TESTDIR          = 'tests'
-VERSION          = '3+alpha.01'
+VERSION          = '0.1+pre.01'
 #-----------------------------------Configuration
 
 # NOTE: scons -h for help.
@@ -68,6 +68,7 @@ def setupBasicEnvironment():
     RegisterPrecompiledHeader_Builder(env)
     handleNoBugSwitches(env)
     
+    env.Append(CPPDEFINES = '_GNU_SOURCE')
     appendCppDefine(env,'DEBUG','DEBUG', 'NDEBUG')
     appendCppDefine(env,'OPENGL','USE_OPENGL')
     appendVal(env,'ARCHFLAGS', 'CCFLAGS')   # for both C and C++

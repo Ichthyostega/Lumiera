@@ -38,8 +38,8 @@ namespace mobject
   namespace session
     {
     using asset::Media;
-    typedef shared_ptr<Media> PMedia;
-    typedef shared_ptr<asset::Clip> PClipAsset;
+    typedef P<Media> PMedia;
+    typedef P<asset::Clip> PClipAsset;
 
 
     /**
@@ -66,6 +66,7 @@ namespace mobject
             and the unlink() function of the asset should take it into
             account when breaking circular references.
          */             
+        
         const Media & mediaDef_;
         const asset::Clip & clipDef_;
 
@@ -98,7 +99,7 @@ namespace mobject
   } // namespace mobject::session
   
   /** Placement<Clip> defined to be subclass of Placement<MObject> */
-  DEFINE_SPECIALIZED_PLACEMENT (session::Clip);
+  DEFINE_SPECIALIZED_PLACEMENT (session::Clip, MObject);
     
 
 } // namespace mobject

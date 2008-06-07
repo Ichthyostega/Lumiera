@@ -48,7 +48,7 @@ namespace asset
     };
     
   
-  typedef shared_ptr<const Track> PTrack;
+  typedef P<const Track> PTrack;
     
     
     
