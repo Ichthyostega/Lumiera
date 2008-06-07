@@ -21,6 +21,7 @@
 * *****************************************************/
 
 #include <cairomm-1.0/cairomm/cairomm.h>
+#include <boost/foreach.hpp>
 
 #include "timeline-body.hpp"
 #include "../timeline-widget.hpp"
@@ -39,7 +40,7 @@ TimelineBody::TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widge
     Glib::ObjectBase("TimelineBody"),
     timelineWidget(timeline_widget)
   {
-    g_assert(timelineWidget != NULL);
+    REQUIRE(timelineWidget != NULL);
         
     // Connect up some events  
     timelineWidget->horizontalAdjustment.signal_value_changed().connect(
@@ -84,28 +85,26 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
       -(int)timelineWidget->verticalAdjustment.get_value());
     
     // Interate drawing each track
-    vector<timeline::Track*>::iterator i;
-    for(i = timelineWidget->tracks.begin();
-      i != timelineWidget->tracks.end(); i++)
-    {
-      timeline::Track *track = *i;
-      g_assert(track != NULL);   
+    BOOST_FOREACH( Track* track, timelineWidget->tracks )
+      {
+        ASSERT(track != NULL);
 
-      const int track_height = track->get_height();
-    
-      // Draw the track background
-      cairo->rectangle(0, 0, allocation.get_width(), track_height);
-      gdk_cairo_set_source_color(cairo->cobj(), &track_background);
-      cairo->fill();
-    
-      // Render the track
-      cairo->save();
-      track->draw_track(cairo);
-      cairo->restore();
+        const int height = track->get_height();
+        ASSERT(height >= 0);
       
-      // Shift for the next track
-      cairo->translate(0, track_height + TimelineWidget::TrackPadding);
-    }   
+        // Draw the track background
+        cairo->rectangle(0, 0, allocation.get_width(), height);
+        gdk_cairo_set_source_color(cairo->cobj(), &track_background);
+        cairo->fill();
+      
+        // Render the track
+        cairo->save();
+        track->draw_track(cairo);
+        cairo->restore();
+        
+        // Shift for the next track
+        cairo->translate(0, height + TimelineWidget::TrackPadding);
+      }   
 
     return true;
   }
@@ -122,7 +121,7 @@ TimelineBody::read_styles()
       track_background = *colour;
     else
     {
-      g_warning("track_background style value failed to load");
+      WARN(gui, "track_background style value failed to load");
       track_background.red   = 0x0000;
       track_background.green = 0x0000;
       track_background.blue  = 0x0000;

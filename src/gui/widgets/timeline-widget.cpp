@@ -22,6 +22,8 @@
 
 #include "timeline-widget.hpp"
 
+#include <boost/foreach.hpp>
+
 using namespace Gtk;
 using namespace std;
 using namespace lumiera::gui::widgets::timeline;
@@ -43,9 +45,9 @@ TimelineWidget::TimelineWidget() :
   ruler("ruler")
   {
     body = new TimelineBody(this);
-    g_assert(body != NULL);
+    ASSERT(body != NULL);
     headerContainer = new HeaderContainer(this);
-    g_assert(headerContainer != NULL);
+    ASSERT(headerContainer != NULL);
   
     verticalAdjustment.signal_value_changed().connect(
       sigc::mem_fun(this, &TimelineWidget::on_scroll) );
@@ -64,9 +66,9 @@ TimelineWidget::TimelineWidget() :
 
 TimelineWidget::~TimelineWidget()
   {
-    g_assert(body != NULL);
+    ASSERT(body != NULL);
     body->unreference();
-    g_assert(headerContainer != NULL);
+    ASSERT(headerContainer != NULL);
     headerContainer->unreference();
   }
 
@@ -87,16 +89,14 @@ TimelineWidget::on_size_allocate(Allocation& allocation)
 void
 TimelineWidget::update_tracks()
   {
-    g_assert(headerContainer != NULL);
+    ASSERT(headerContainer != NULL);
     headerContainer->update_headers();
     
     // Recalculate the total height of the timeline scrolled area
     totalHeight = 0;
-    vector<timeline::Track*>::iterator i;
-    for(i = tracks.begin(); i != tracks.end(); i++)
+    BOOST_FOREACH( Track* track, tracks )
       {
-        timeline::Track *track = *i;
-        g_assert(track != NULL);
+        ASSERT(track != NULL);
         totalHeight += track->get_height() + TrackPadding;
       }    
   }
@@ -104,7 +104,7 @@ TimelineWidget::update_tracks()
 void
 TimelineWidget::update_scroll()
   {
-    g_assert(body != NULL);
+    ASSERT(body != NULL);
     const Allocation body_allocation = body->get_allocation();
     
     //----- Vertical Scroll -----//

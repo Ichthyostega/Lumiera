@@ -24,6 +24,8 @@
 #include <gdkmm/general.h>
 #include <cairomm-1.0/cairomm/cairomm.h>
 
+#include "../gtk-lumiera.hpp"
+
 #include "../output/xvdisplayer.hpp"
 #include "../output/gdkdisplayer.hpp"
 
@@ -137,19 +139,22 @@ VideoDisplayWidget::on_expose_event(GdkEventExpose* event)
 Displayer*
 VideoDisplayWidget::createDisplayer( Gtk::Widget *drawingArea, int width, int height )
   {
+    REQUIRE(drawingArea != NULL);
+    REQUIRE(width >= 0 && height >= 0);
+    
     Displayer *displayer = NULL;
-
+    
     displayer = new XvDisplayer( drawingArea, width, height );
     if ( !displayer->usable() )
-    {
-      delete displayer;
-      displayer = NULL;
-    }
+      {
+        delete displayer;
+        displayer = NULL;
+      }
 
     if ( displayer == NULL )
-    {
-      displayer = new GdkDisplayer( drawingArea, width, height );
-    }
+      {
+        displayer = new GdkDisplayer( drawingArea, width, height );
+      }
 
     return displayer;
   }

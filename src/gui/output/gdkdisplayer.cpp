@@ -22,11 +22,8 @@
  
 * *****************************************************/
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
+#include "../gtk-lumiera.hpp"
 
-#include <gtkmm.h>
 #include <gdk/gdkx.h>
 #include <iostream>
 using std::cerr;
@@ -40,36 +37,49 @@ namespace output {
 
 GdkDisplayer::GdkDisplayer( Gtk::Widget *drawing_area, int width, int height ) :
     drawingArea( drawing_area )
-{
-  imageWidth = width, imageHeight = height;
-}
+  {
+    REQUIRE(drawing_area != NULL);
+    REQUIRE(imageWidth > 0);
+    REQUIRE(imageHeight > 0);
+    
+    imageWidth = width, imageHeight = height;
+  }
 
 bool
 GdkDisplayer::usable()
-{
-  return true;
-}
+  {
+    return true;
+  }
 
 void
 GdkDisplayer::put( void *image )
-{  
-  int video_x = 0, video_y = 0, video_width = 0, video_height = 0;
-  calculateVideoLayout(
-    drawingArea->get_width(),
-    drawingArea->get_height(),
-    preferredWidth(), preferredHeight(),
-    video_x, video_y, video_width, video_height );
+  {  
+    int video_x = 0, video_y = 0, video_width = 0, video_height = 0;
+    calculateVideoLayout(
+      drawingArea->get_width(),
+      drawingArea->get_height(),
+      preferredWidth(), preferredHeight(),
+      video_x, video_y, video_width, video_height );
 
-  GdkWindow *window = drawingArea->get_window()->gobj();
-	GdkGC *gc = gdk_gc_new( window );
-	GdkPixbuf *pix = gdk_pixbuf_new_from_data( (const guchar*)image, GDK_COLORSPACE_RGB, FALSE, 8,
-    preferredWidth(), preferredHeight(), preferredWidth() * 3, NULL, NULL );
-	GdkPixbuf *im = gdk_pixbuf_scale_simple( pix, video_width, video_height, GDK_INTERP_NEAREST );
-  gdk_draw_pixbuf( window, gc, im, 0, 0, video_x, video_y, -1, -1, GDK_RGB_DITHER_NORMAL, 0, 0 );
-	g_object_unref( im );
-	g_object_unref( pix );
-	g_object_unref( gc );
-}
+    GdkWindow *window = drawingArea->get_window()->gobj();
+    ASSERT(window != NULL);  
+      
+	  GdkGC *gc = gdk_gc_new( window );
+	  ASSERT(gc != NULL);
+	  
+	  GdkPixbuf *pixbuf = gdk_pixbuf_new_from_data( (const guchar*)image, GDK_COLORSPACE_RGB, FALSE, 8,
+      preferredWidth(), preferredHeight(), preferredWidth() * 3, NULL, NULL );
+    ASSERT(pixbuf != NULL);
+      
+	  GdkPixbuf *scaled_image = gdk_pixbuf_scale_simple( pixbuf, video_width, video_height, GDK_INTERP_NEAREST );
+	  ASSERT(scaled_image != NULL);
+	  
+    gdk_draw_pixbuf( window, gc, scaled_image, 0, 0, video_x, video_y, -1, -1, GDK_RGB_DITHER_NORMAL, 0, 0 );
+    
+	  g_object_unref( scaled_image );
+	  g_object_unref( pixbuf );
+	  g_object_unref( gc );
+  }
 
 }   // namespace output
 }   // namespace gui

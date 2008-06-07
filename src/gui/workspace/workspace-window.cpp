@@ -42,22 +42,24 @@ namespace lumiera {
 namespace gui {
 namespace workspace {
 	
-  WorkspaceWindow::WorkspaceWindow(Project *source_project) :
-    project(source_project),
-    actions(*this)
+WorkspaceWindow::WorkspaceWindow(Project *source_project) :
+  project(source_project),
+  actions(*this)
   {
+    REQUIRE(source_project != NULL);
+  
     layout = NULL;
 
     create_ui();
   }
 
-  WorkspaceWindow::~WorkspaceWindow()
+WorkspaceWindow::~WorkspaceWindow()
   {
     if(layout != NULL) g_object_unref(layout);
   }
 
-  void
-  WorkspaceWindow::create_ui()
+void
+WorkspaceWindow::create_ui()
   {
     //----- Configure the Window -----//
     set_title(AppTitle);
@@ -106,23 +108,23 @@ namespace workspace {
         "</ui>";
 
     try
-    {
-      uiManager->add_ui_from_string(ui_info);
-    }
+      {
+        uiManager->add_ui_from_string(ui_info);
+      }
     catch(const Glib::Error& ex)
-    {
-      g_error("Building menus failed: %s", ex.what().data());
-      return;
-    }
+      {
+        ERROR(gui, "Building menus failed: %s", ex.what().data());
+        return;
+      }
 
     //----- Set up the Menu Bar -----//
     Gtk::Widget* menu_bar = uiManager->get_widget("/MenuBar");
-    g_assert(menu_bar != NULL);
+    ASSERT(menu_bar != NULL);
     base_container.pack_start(*menu_bar, Gtk::PACK_SHRINK);
     
     //----- Set up the Tool Bar -----//
     Gtk::Toolbar* toolbar = dynamic_cast<Gtk::Toolbar*>(uiManager->get_widget("/ToolBar"));
-    g_assert(toolbar != NULL);
+    ASSERT(toolbar != NULL);
     toolbar->set_toolbar_style(TOOLBAR_ICONS);
     base_container.pack_start(*toolbar, Gtk::PACK_SHRINK);
 

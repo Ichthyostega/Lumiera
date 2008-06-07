@@ -22,6 +22,7 @@
  
 * *****************************************************/
 
+#include "../gtk-lumiera.hpp"
 #include "displayer.hpp"
 #include "xvdisplayer.hpp"
 #include "gdkdisplayer.hpp"
@@ -32,43 +33,53 @@ namespace output {
 
 bool
 Displayer::usable()
-{
-  return false;
-}
+  {
+    return false;
+  }
 
 DisplayerInput
 Displayer::format()
-{
-  return DISPLAY_NONE;
-}
+  {
+    return DISPLAY_NONE;
+  }
 
 int
 Displayer::preferredWidth()
-{
-  return imageWidth;
-}
+  {
+    return imageWidth;
+  }
 
 int
 Displayer::preferredHeight()
-{
-  return imageHeight;
-}
+  {
+    return imageHeight;
+  }
 
 void
 Displayer::calculateVideoLayout(
         int widget_width, int widget_height,
         int image_width, int image_height,
         int &video_x, int &video_y, int &video_width, int &video_height )
-{
-  double ratio_width = ( double ) widget_width / ( double ) image_width;
-  double ratio_height = ( double ) widget_height / ( double ) image_height;
-  double ratio_constant = ratio_height < ratio_width ?
-                         ratio_height : ratio_width;
-  video_width = ( int ) ( image_width * ratio_constant + 0.5 );
-  video_height = ( int ) ( image_height * ratio_constant + 0.5 );
-  video_x = ( widget_width - video_width ) / 2;
-  video_y = ( widget_height - video_height ) / 2;
-}
+  {
+    REQUIRE(widget_width >= 0);
+    REQUIRE(widget_height >= 0);
+    REQUIRE(image_width >= 0);
+    REQUIRE(image_height >= 0);
+
+    double ratio_width = ( double ) widget_width / ( double ) image_width;
+    double ratio_height = ( double ) widget_height / ( double ) image_height;
+    double ratio_constant = ratio_height < ratio_width ?
+                           ratio_height : ratio_width;
+    video_width = ( int ) ( image_width * ratio_constant + 0.5 );
+    video_height = ( int ) ( image_height * ratio_constant + 0.5 );
+    video_x = ( widget_width - video_width ) / 2;
+    video_y = ( widget_height - video_height ) / 2;
+    
+    ENSURE(video_x >= 0 && video_x < widget_width)
+    ENSURE(video_y >= 0 && video_y < widget_height)
+    ENSURE(video_width <= widget_width)
+    ENSURE(video_width <= widget_width)
+  }
 
 }   // namespace output
 }   // namespace gui

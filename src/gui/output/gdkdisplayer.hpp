@@ -41,7 +41,7 @@ namespace lumiera {
 namespace gui {
 namespace output {
 
-  class GdkDisplayer : public Displayer
+class GdkDisplayer : public Displayer
   {
   public:
     GdkDisplayer( Gtk::Widget *drawing_area, int width, int height );

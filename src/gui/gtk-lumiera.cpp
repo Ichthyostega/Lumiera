@@ -21,6 +21,7 @@
 * *****************************************************/
 
 #include <gtkmm.h>
+#include <nobug.h>
 
 #ifdef ENABLE_NLS
 #  include <libintl.h>
@@ -31,6 +32,8 @@
 #include "workspace/workspace-window.hpp"
 #include "model/project.hpp"
 
+NOBUG_CPP_DEFINE_FLAG(gui);
+
 using namespace Gtk;
 using namespace lumiera::gui;
 using namespace lumiera::gui::workspace;
@@ -38,8 +41,8 @@ using namespace lumiera::gui::model;
 
 GtkLumiera the_application;
 
-  int
-  main (int argc, char *argv[])
+int
+main (int argc, char *argv[])
   {
     return the_application.main(argc, argv);
   }
@@ -52,6 +55,8 @@ namespace gui {
   int
   GtkLumiera::main(int argc, char *argv[])
   {
+    NOBUG_INIT;
+  
 	  Main kit(argc, argv);
 		
 	  Glib::set_application_name(AppTitle);

@@ -41,7 +41,7 @@ namespace dialogs {
     videoFrame(_("Video"))
   {
     VBox *v_box = get_vbox();
-    g_assert(v_box != NULL);
+    ASSERT(v_box != NULL);
 
     // The Output File Row
     outputFileHBox.pack_start(outputFileLabel, PACK_SHRINK);
@@ -91,9 +91,9 @@ namespace dialogs {
     dialog.add_button(Gtk::Stock::SAVE, Gtk::RESPONSE_OK);
 
     int result = dialog.run();
-    g_message("%d", result);
+    INFO(gui, "%d", result);
     if(result == RESPONSE_OK)
-      g_message("RESPONSE_OK");
+      INFO(gui, "%d", "RESPONSE_OK");
   }
 
 }   // namespace dialogs

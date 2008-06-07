@@ -26,12 +26,12 @@
 #ifndef TIMELINE_WIDGET_HPP
 #define TIMELINE_WIDGET_HPP
 
+#include "../gtk-lumiera.hpp"
 #include "timeline/header-container.hpp"
 #include "timeline/timeline-body.hpp"
 #include "timeline/track.hpp"
 #include "timeline/video-track.hpp"
 
-#include <gtkmm.h>
 #include <vector>
 
 namespace lumiera {

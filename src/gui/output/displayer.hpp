@@ -38,8 +38,7 @@ namespace output {
 #define MAX_HEIGHT		576
 
   /** Supported Displayer formats
-  */
-
+   */
   typedef enum {
       DISPLAY_NONE,
       DISPLAY_YUV,
@@ -68,14 +67,14 @@ namespace output {
    
 	  If the widget being written to doesn't need a fixed size, then rewrite
 	  the two other put methods as required.
-  */
+   */
   class Displayer
   {
   public:
 
     /** Indicates if an object can be used to render images on the running
 	    system.
-    */
+     */
     virtual bool usable();
 
     /** Indicates the format required by the abstract put method.
@@ -83,22 +82,37 @@ namespace output {
     virtual DisplayerInput format();
 
     /** Expected width of input to put.
-    */
+     */
 	  virtual int preferredWidth();
 
     /** Expected height of input to put.
-    */
+     */
 	  virtual int preferredHeight();
 
-    /** Put an image of a given width and height with the expected input
-	    format (as indicated by the format method).
-     
-	    \param image	image of correct format and specified width/height
-    */
+    /**
+     *  Put an image of a given width and height with the expected input
+	   *  format (as indicated by the format method).
+     *
+	   *  @param image  image of correct format and specified width/height
+     */
 	  virtual void put( void * ) = 0;
 
   protected:
     
+    /**
+     *  Calculates the coordinates for placing a video image inside a widget
+     *
+     *  @param[in] widget_width   The width of the display widget
+     *  @param[in] widget_height  The height of the display widget
+     *  @param[in] image_width    The width of the video image
+     *  @param[in] image_height   The height of the video image
+     *  @param[out] video_x       The x-coordinate of the top left corner of
+     *                            the scaled video image
+     *  @param[out] video_y       The y-coordinate of the top left corner of
+     *                            the scaled video image
+     *  @param[out] video_width   The width of the scale video image
+     *  @param[out] video_height  The height of the scale video image     
+     */
     static void calculateVideoLayout(
         int widget_width, int widget_height,
         int image_width, int image_height,

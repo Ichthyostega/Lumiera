@@ -29,7 +29,7 @@
 #ifndef ACTIONS_HPP
 #define ACTIONS_HPP
 
-#include <gtkmm.h>
+#include "../gtk-lumiera.hpp"
 
 namespace lumiera {
 namespace gui {

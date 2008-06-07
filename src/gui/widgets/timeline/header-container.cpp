@@ -20,6 +20,8 @@
  
 * *****************************************************/
 
+#include <boost/foreach.hpp>
+
 #include "header-container.hpp"
 #include "track.hpp"
 #include "../timeline-widget.hpp"
@@ -35,6 +37,8 @@ namespace timeline {
 HeaderContainer::HeaderContainer(lumiera::gui::widgets::TimelineWidget *timeline_widget) :
     timelineWidget(timeline_widget)
   {
+    REQUIRE(timeline_widget != NULL);
+  
     set_flags(Gtk::NO_WINDOW);  // This widget will not have a window at first
     set_redraw_on_allocate(false);
     
@@ -47,14 +51,11 @@ HeaderContainer::HeaderContainer(lumiera::gui::widgets::TimelineWidget *timeline
 void
 HeaderContainer::update_headers()
   {
-    g_assert(timelineWidget != NULL);
+    ASSERT(timelineWidget != NULL);
     
-    vector< Track* > &tracks = timelineWidget->tracks;  
-    vector< Track* >::iterator i;
-    for(i = tracks.begin(); i != tracks.end(); i++)
+    BOOST_FOREACH( Track* track, timelineWidget->tracks )
       {
-        timeline::Track *track = *i;
-        g_assert(track != NULL);
+        ASSERT(track != NULL);
                 
         Glib::RefPtr<Gtk::Frame> headerFrame(new Gtk::Frame());
         headerFrame->add(track->get_header_widget());
@@ -146,11 +147,9 @@ void
 HeaderContainer::forall_vfunc(gboolean /* include_internals */,
         GtkCallback callback, gpointer callback_data)
   {      
-    vector< RootHeader >::iterator i;
-    for(i = rootHeaders.begin(); i != rootHeaders.end(); i++)
+    BOOST_FOREACH( RootHeader &header, rootHeaders )
       {
-        RootHeader header = *i;
-        g_assert(header.widget);
+        ASSERT(header.widget);
         callback(header.widget->gobj(), callback_data);
       }
   }
@@ -166,21 +165,20 @@ HeaderContainer::on_scroll()
 void
 HeaderContainer::layout_headers()
   {
-    g_assert(timelineWidget != NULL);  
+    ASSERT(timelineWidget != NULL);  
   
     int offset = 0;
     const int y_scroll_offset = timelineWidget->get_y_scroll_offset();
     
     const Allocation container_allocation = get_allocation();    
     
-    vector< RootHeader >::iterator i;
-    for(i = rootHeaders.begin(); i != rootHeaders.end(); i++)
+    BOOST_FOREACH( RootHeader &header, rootHeaders )
       {
-        RootHeader header = *i;
-        g_assert(header.widget);
-        g_assert(header.track != NULL);
+        ASSERT(header.widget);
+        ASSERT(header.track != NULL);
         
         const int height = header.track->get_height();
+        ASSERT(height >= 0);
              
         Gtk::Allocation header_allocation;
         header_allocation.set_x (0);

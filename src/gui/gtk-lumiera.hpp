@@ -29,6 +29,9 @@
 #define GTK_LUMIERA_HPP
 
 #include <gtkmm.h>
+#include <nobug.h>
+
+NOBUG_DECLARE_FLAG(gui);
 
 #ifdef ENABLE_NLS
 #  include <libintl.h>
