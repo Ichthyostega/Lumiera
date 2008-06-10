@@ -120,17 +120,6 @@ AC_CHECK_HEADER([boost/regex.hpp],
 
 AC_LANG_POP([C++])
 
-
-# Print a summary
-AC_MSG_RESULT([
-Configuration Summary:])
-AC_MSG_RESULT([        NoBug build level:               $nobug_level])
-# Add more summary results here
-
-AC_MSG_RESULT([
-Configuration complete, you can now build Lumiera with 'make'
-])
-
 ############## Internatinalization
 #GETTEXT_PACKAGE=gtk-lumiera
 #AC_SUBST(GETTEXT_PACKAGE)
@@ -176,6 +165,15 @@ AC_SUBST(GTK_LUMIERA_LIBS)
 
 # END Gtk Dependancies
 
+# Print a summary
+AC_MSG_RESULT([
+Configuration Summary:])
+AC_MSG_RESULT([        NoBug build level:               $nobug_level])
+# Add more summary results here
+
+AC_MSG_RESULT([
+Configuration complete, you can now build Lumiera with 'make'
+])
 
 AC_CONFIG_FILES(Makefile)
 AC_OUTPUT
