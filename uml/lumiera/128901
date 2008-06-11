@@ -1,6 +1,6 @@
 format 40
 "Builder" // ProcessingLayer::MObject::Builder
-  revision 14
+  revision 16
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -299,7 +299,7 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
       end
     end
 
-    class 132741 "StateProxy"
+    class 132741 "State"
       abstract visibility public stereotype "interface"
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -316,11 +316,72 @@ ${members}};
       
       classrelation 135941 // currFrame (<unidirectional association>)
 	relation 134533 --->
+	  stereotype "vector"
 	  a role_name "currFrame" multiplicity "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
 	    classrelation_ref 135941 // currFrame (<unidirectional association>)
 	  b multiplicity "1" parent class_ref 133253 // Frame
+      end
+
+      operation 135813 "fetch"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+      end
+
+      operation 135941 "allocateBuffer"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+      end
+
+      operation 136197 "releaseBuffer"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+      end
+
+      operation 136325 "isCalculated"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
       end
     end
 

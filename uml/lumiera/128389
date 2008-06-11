@@ -1,6 +1,6 @@
 format 40
 "RenderEngine" // ProcessingLayer::RenderEngine
-  revision 13
+  revision 15
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -82,6 +82,11 @@ format 40
       size A4
     end
 
+    classdiagram 131973 "Render Mechanics"
+      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition yes show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      size A4
+    end
+
     class 131333 "RenderEngine"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
@@ -155,7 +160,7 @@ ${inlines}
 	  a package
 	    cpp default "#include in source"
 	    classrelation_ref 136325 // <dependency>
-	  b multiplicity "" parent class_ref 132741 // StateProxy
+	  b multiplicity "" parent class_ref 132741 // State
       end
 
       attribute 129413 "start"
@@ -232,6 +237,46 @@ ${members}};
 "
 	    classrelation_ref 137861 // params (<directional aggregation by value>)
 	  b multiplicity "" parent class_ref 134533 // Parameter
+      end
+
+      classrelation 152581 // predecessors (<directional aggregation by value>)
+	relation 149125 *-->
+	  stereotype "vector"
+	  a role_name "predecessors" multiplicity "*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 152581 // predecessors (<directional aggregation by value>)
+	  b multiplicity "" parent class_ref 142725 // InputDescriptor
+      end
+
+      operation 135685 "pull"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+      end
+
+      operation 136069 "process"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
       end
     end
 
@@ -415,7 +460,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 134661 // <generalisation>
-	  b multiplicity "" parent class_ref 132741 // StateProxy
+	  b multiplicity "" parent class_ref 132741 // State
       end
     end
 
@@ -436,7 +481,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 134789 // <generalisation>
-	  b multiplicity "" parent class_ref 132741 // StateProxy
+	  b multiplicity "" parent class_ref 132741 // State
       end
     end
 
@@ -457,7 +502,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 134917 // <generalisation>
-	  b multiplicity "" parent class_ref 132741 // StateProxy
+	  b multiplicity "" parent class_ref 132741 // State
       end
     end
 
@@ -567,6 +612,92 @@ ${inlines}
 	    classrelation_ref 141701 // <dependency>
 	  b multiplicity "" parent class_ref 136709 // Media
       end
+    end
+
+    class 142469 "StateProxy"
+      visibility package stereotype "implementation"
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 152453 // <generalisation>
+	relation 148997 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 152453 // <generalisation>
+	  b multiplicity "" parent class_ref 132741 // State
+      end
+    end
+
+    class 142597 "StateAdapter"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 152325 // <generalisation>
+	relation 148869 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 152325 // <generalisation>
+	  b multiplicity "" parent class_ref 132741 // State
+      end
+
+      operation 135557 "retrieve"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+      end
+
+      classrelation 152709 // state (<unidirectional association>)
+	relation 149253 --->
+	  a role_name "state" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 152709 // state (<unidirectional association>)
+	  b multiplicity "" parent class_ref 142469 // StateProxy
+      end
+
+      classrelation 152837 // <unidirectional association>
+	relation 149381 --->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 152837 // <unidirectional association>
+	  b multiplicity "" parent class_ref 133253 // Frame
+      end
+    end
+
+    class 142725 "InputDescriptor"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
     end
   end
 end

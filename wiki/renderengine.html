@@ -917,6 +917,15 @@ TertiaryMid: #99a
 TertiaryDark: #667
 Error: #f88</pre>
 </div>
+<div title="ConManager" modifier="Ichthyostega" created="200806050208" tags="def Builder" changecount="1">
+<pre>The Connection Manager is a __Facade__ for querying information and deriving decisions regarding various aspects of data streams and possible connections.
+* retrieve information about capabilities of a stream type given by ID
+* decide if a connection is possible
+* retrieve a //strategy// for implementing a connection
+
+In the intended implementation, a good deal of this functionality will actually be implemented by [[rules|ConfigRules]], while other parts need to be provided by hard wired logic, at least as a fallback. Anyway, the purpose of the Connection Manager ois to isolate the [[Builder]], which is client of this information and decision services, from these details
+</pre>
+</div>
 <div title="ConfigQuery" modifier="Ichthyostega" modified="200804110335" created="200801181308" tags="def" changecount="5">
 <pre>Configuration Queries are requests to the system to &quot;create or retrieve an object with //this and that // capabilities&quot;. They are resolved by a rule based system ({{red{planned feature}}}) and the user can extend the used rules for each Session. Syntactically, they are stated in ''prolog'' syntax as a conjunction (=logical and) of ''predicates'', for example {{{stream(mpeg), pipe(myPipe)}}}. Queries are typed to the kind of expected result object: {{{Query&lt;Pipe&gt; (&quot;stream(mpeg)&quot;)}}} requests a pipe excepting/delivering mpeg stream data &amp;mdash; and it depends on the current configuration what &quot;mpeg&quot; means. If there is any stream data producing component in the system, which advertises to deliver {{{stream(mpeg)}}}, and a pipe can be configured or connected with this component, then the [[defaults manager|DefaultsManagement]] will create/deliver a [[Pipe|PipeHandling]] object configured accordingly.
 &amp;rarr; [[Configuration Rules system|ConfigRules]]
@@ -1886,12 +1895,12 @@ But because I know the opinions on this topc are varying (users tend to be delig
 My proposed aproach is to treat OpenGL as a separate video raw data type, requiring separete and specialized [[Processing Nodes|ProcNode]] for all calculations. Thus the Builder could connect OpenGL nodes if it is possible to cover the whole render path for preview and fall back to the normal ~ProcNodes for all relevant renders
 </pre>
 </div>
-<div title="OperationPoint" modifier="Ichthyostega" modified="200805270339" created="200805270334" tags="def impl" changecount="3">
+<div title="OperationPoint" modifier="Ichthyostega" modified="200806050155" created="200805270334" tags="def impl" changecount="5">
 <pre>A low-level abstraction within the [[Builder]] &amp;mdash; it serves to encapsulate the details of making multi-channel connections between the render nodes: In some cases, a node can handle N channels internally, while in other cases we need to replicate the node N times and wire each channel individually.
 
 The operation point is provided by the current BuilderMould and used by the [[processing pattern|ProcPatt]] executing within this mould and conducting the current build step. The operation point's interface allows //to abstract//&amp;nbsp; these details, as well as to //gain additional control//&amp;nbsp; if necessary (e.g. addressing only one of the channels). The most prominent build instruction used within the processing patterns (which is the instruction {{{&quot;attach&quot;}}}) relies on the aforementioned //approach of abstracted handling,// letting the operation point determine automatically how to make the connection.
 
-This is possible because the operation point has been provided (by the mould) with informations about the media stream type to be wired, while at the same time relying on the [[render node interface|ProcNode]] for finding out whats possible and making the desired connections.
+This is possible because the operation point has been provided (by the mould) with informations about the media stream type to be wired, which, together with information accessible at the the [[render node interface|ProcNode]] and from the [[referred processing assets|ProcAsset]], with the help of the [[connection manager|ConManager]] allows to figure out what's possible and how to do the desired connections.
 </pre>
 </div>
 <div title="Overview" modifier="Ichthyostega" modified="200804130018" created="200706190300" tags="overview" changecount="12">
@@ -3026,33 +3035,57 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 [img[Entities comprising the Render Engine|uml/fig128389.png]]
 </pre>
 </div>
-<div title="RenderMechanics" modifier="Ichthyostega" modified="200806030419" created="200806030230" tags="Rendering impl dynamic" changecount="7">
-<pre>While with respect to the dependencies, the builder and the processing function, the render process is sufficiently characterized by referring to the ''pull principle'' and by defining a [[protocol|NodeOperationProtocol]] each node has to adhere to &amp;mdash; for actually make it happen we have to care for some important details, especially //how to manage the buffers.// It may well be that the length of the code path necessary to invoke the individual processing functions is finally not so important, compared with the time spent within the inner pixel loop of these functions. But my guess is (as of 5/08), that the number of data moving and copying operations //will be//&amp;nbsp; of importance.
+<div title="RenderMechanics" modifier="Ichthyostega" modified="200806110318" created="200806030230" tags="Rendering impl dynamic" changecount="20">
+<pre>While the render process, with respect to the dependencies, the builder and the processing function is sufficiently characterized by referring to the ''pull principle'' and by defining a [[protocol|NodeOperationProtocol]] each node has to adhere to &amp;mdash; for actually get it coded we have to care for some important details, especially //how to manage the buffers.// It may well be that the length of the code path necessary to invoke the individual processing functions is finally not so important, compared with the time spent at the inner pixel loop within these functions. But my guess is (as of 5/08), that the overall number of data moving and copying operations //will be//&amp;nbsp; of importance.
 
 !reguirements
 * operations should be &quot;in place&quot; as much as possible
 * because caching necessitates a copy, the points where this happens should be controllable.
 * buffers should accommodate automatically to provide the necessary space without clipping the image.
 * the type of the media data can change while passing through the network, and so does the type of the buffers.
-On the other hand, the processing function within the individual node needs to be shielded from these complexities. It can expect to get just //N~~I~~// input buffers and //N~O~// output buffers of required type. And, moreover, as the decision how to organize the buffers certainly depends on non-local circumstances, it should be preconfigured while building.
+On the other hand, the processing function within the individual node needs to be shielded from these complexities. It can expect to get just //N~~I~~// input buffers and //N~~O~~// output buffers of required type. And, moreover, as the decision how to organize the buffers certainly depends on non-local circumstances, it should be preconfigured while building.
 
 !data flow
 [&gt;img[uml/fig131973.png]]
-Not everything can be preconfigured though. The pull principle opens the possibility for the node to decide on a per call base what predecessor(s) to pull (if any). This decision may rely on automation parameters, which thus need to be accessible prior to 
-requesting the buffer(s). Additionally, in a later version we plan to have the node network calculate some control values for adjusting the cache and backend timings &amp;mdash; and of course at some point we'll want to utilize the GPU, resulting in the need to feed data from our processing buffers into some texture representation.
+Not everything can be preconfigured though. The pull principle opens the possibility for the node to decide on a per call base what predecessor(s) to pull (if any). This decision may rely on automation parameters, which thus need to be accessible prior to requesting the buffer(s). Additionally, in a later version we plan to have the node network calculate some control values for adjusting the cache and backend timings &amp;mdash; and of course at some point we'll want to utilize the GPU, resulting in the need to feed data from our processing buffers into some texture representation.
 
 !buffer management
-Besides the StateProxy representing the actual render process and holding a couple of buffer (refs), we employ a lightweight adapter object in between. It is used //for a single {{{pull()}}}-call// &amp;mdash; mapping the actual buffers to the input and output port numbers of the processing node and for dealing with the cache calls. While the StateProxy manages a pool of frame buffers, this interspersed adapter allows us to either use a buffer retrieved from the cache as an input, possibly use a new buffer located within the cache as output, or (in case no caching happens) to just use the same buffer as input and output for &quot;in-place&quot;-processing. The idea is that most of the configuration of this adapter object is prepared in the wiring step while building the node network. 
+Besides the StateProxy representing the actual render process and holding a couple of buffer (refs), we employ a lightweight adapter object in between. It is used //for a single {{{pull()}}}-call// &amp;mdash; mapping the actual buffers to the input and output port numbers of the processing node and for dealing with the cache calls. While the StateProxy manages a pool of frame buffers, this interspersed adapter allows us to either use a buffer retrieved from the cache as an input, possibly use a new buffer located within the cache as output, or (in case no caching happens) to just use the same buffer as input and output for &quot;in-place&quot;-processing. The idea is that most of the configuration of this adapter object is prepared in the wiring step while building the node network.
+
+The usage patern of the buffers can be stack-like when processing nodes requiring multiple input buffers. In the standard case, which also is the simplest case, a pair of buffers (or a single buffer for &quot;in-place&quot; capable nodes) suffices to calculate a whole chain of nodes. But &amp;mdash; as the recursive descent means depth-first processing &amp;mdash; in case multiple input buffers are needed, we may encounter a situation where some of these input buffers already contain processed data, while we have to descend into yet another predecessor node chain to pull the data for the remaining buffers. Care has to be taken //to allocate the buffers as late as possible,// otherwise we could end up holding onto a buffer almost for each node in the network. Effectively this translates into the rule to allocate output buffers only after all input buffers are ready and filled with data; thus we shouldn't allocate buffers when //entering// the recursive call to the predecessor(s), rather we have to wait until we are about to return from the downcall chain.
+Besides, these considerations also show we need a means of passing on the current buffer usage pattern while calling down. This usage pattern not only includes a record of what buffers are occupied, but also the intended use of these occupied buffers, especially if they can be modified in-place, and at which point they may be released and reused.
 @@clear(right):display(block):@@
 </pre>
 </div>
-<div title="RenderProcess" modifier="Ichthyostega" modified="200806030420" created="200706190705" tags="Rendering dynamic" changecount="15">
+<div title="RenderProcess" modifier="Ichthyostega" modified="200806110341" created="200706190705" tags="Rendering dynamic" changecount="26">
 <pre>For each segment (of the effective timeline), there is a Processor holding the exit node(s) of a processing network, which is a &quot;Directed Acyclic Graph&quot; of small, preconfigured, stateless [[processing nodes|ProcNode]]. This network is operated according to the ''pull principle'', meaning that the rendering is just initiated by &quot;pulling&quot; output from the exit node, causing a cascade of recursive downcalls. Each node knows its predecessor(s) an can pull the necessary input from there. Consequently, there is no centralized &quot;engine object&quot; which may invoke nodes iteratively or table driven &amp;mdash; rather, the rendering can be seen as a passive service provided for the backend, which may pull from the exit nodes at any time, in any order (?), and possibly multithreaded.
-All State necessary for a given calculation process is encapsulated and accessible by a StateProxy object, which can be seen as the representation of &quot;the process&quot;. At the same time, this proxy provides the buffers holding data to be processed and acts as a gateway to the backend to handle the communication with the Cache.
+All State necessary for a given calculation process is encapsulated and accessible by a StateProxy object, which can be seen as the representation of &quot;the process&quot;. At the same time, this proxy provides the buffers holding data to be processed and acts as a gateway to the backend to handle the communication with the Cache. In addition to this //top-level State,// each calculation step includes a small [[state adapter object|StateAdapter]] (stack allocated), which is pre-configured by the builder and serves the purpose to isolate the processing function from the detals of buffer management.
 
-{{red{TODO: fill in more details of the Render Process.}}}
-[img[uml/fig132101.png]]
-* see also
+!!Example: calculating a 3 node chain
+[img[uml/fig132229.png]]
+# Caller invokes calculation by pulling from exit node, providing the top-level StateProxy
+# node1 (exit node) builds StateAdapter and calls retrieve() on it to get the desired output result
+# this StateAdapter (ad1) knows he could get the result from Cache, so he tries, but it's a miss
+# thus he pulls from the predecessor node2 according to the [[input descriptor|ProcNodeInputDescriptor]] of node1
+# node2 builds its StateAdapter and calls retrieve()
+# but because StateAdapter (ad2) is configured to directly forward the call down, it pulls from node3
+# node3 builds its StateAdapter and calls retrieve()
+# this StateAdapter (ad3) is configured to look into the Cache...
+# this time producing a Cache hit
+# now StateAdapter ad2 has input data, but needs a output buffer location, which re requests from its //parent state// (ad1)
+# and, because ad1 is configured for Caching, it's clear that this output buffer will be located within the cache
+# thus the allocation request is forwarded to the cache, which provides a new &quot;slot&quot;
+# now node2 has both a valid input and a usable output buffer, thus the process function can be invoked
+# and after the result has been rendered into the output buffer, the input is no longer needed
+# and can be &quot;unlocked&quot; in the Cache
+# now the input data for node1 is available, and as node1 is in-place-capable, no further buffer allocation is necessary prior to calculating
+# the finished result is now in the buffer (which happens to be also the input buffer and is actually located within the Cache)
+# thus it can be marked as ready for the Cache, which may now provide it to other processes (but isn't allowed to overwrite it)
+# finally, when the caller is done with the data, it signalles this to the top-level State object
+# which forwards this information to the cache, which in turn may now do with the released Buffer as he sees fit.
+
+
+__see also__
 &amp;rarr; the [[Entities involved in Rendering|RenderEntities]]
 &amp;rarr; the [[mechanics of rendering and buffer management|RenderMechanics]]
 &amp;rarr; the protocol [[how to operate the nodes|NodeOperationProtocol]]
