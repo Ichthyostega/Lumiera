@@ -1,5 +1,5 @@
 /*
-  EXITNODE.hpp  -  special Processing Node providing "pullable" output
+  State  -  Key Interface representing a render process and encapsulating state
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,28 +18,17 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
 
 
-#ifndef ENGINE_EXITNODE_H
-#define ENGINE_EXITNODE_H
+#include "proc/state.hpp"
 
-#include "proc/engine/procnode.hpp"
-
-
-
-namespace engine
+namespace proc_interface
   {
-
-
-  /**
-   * The output end of each render pipeline.
-   * Pulling from such exit nodes actually ivokes the render process
-   */
-  class ExitNode : public ProcNode
-    {};
-
-
-
-} // namespace engine
-#endif
+  
+  ////////////////////////////////TODO: State is a high -level interface, so can we get rid of this implementation file?
+  /** */
+  
+  
+  
+} // namespace proc_interface

@@ -1839,14 +1839,16 @@ So, when creating a clip out of such a compound media asset, the clip has to be 
 <div title="NodeCreaterTool" modifier="Ichthyostega" created="200712100626" tags="def" changecount="1">
 <pre>NodeCreaterTool is a [[visiting tool|VisitorUse]] used as second step in the [[Builder]]. Starting out from a [[Fixture]], the builder first [[divides the Timeline into segments|SegmentationTool]] and then processes each segment with the NodeCreaterTool to build a render nodes network (Render Engine) for this part of the timeline. While visiting individual Objects and Placements, the NodeCreaterTool creates and wires the necessary [[nodes|ProcNode]]</pre>
 </div>
-<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200806030420" created="200806010251" tags="Rendering dynamic" changecount="9">
+<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200806140024" created="200806010251" tags="Rendering dynamic" changecount="10">
 <pre>The [[nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot;; each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle'', thus we find an operation {{{pull()}}} at the core of this process. There is no such thing as an &quot;engine object&quot; calling nodes iteratively or table driven, rather, the nodes themselves issue recursive calls to their predecessor(s). For this to work, we need the nodes to adhere to a specific protocol:
 # Node is pulled, with a StateProxy object as parameter (encapsulating the access to the frames or buffers)
 # Node may now access current parameter values, using the state accessible via the StateProxy
-# Node calles back into the StateProxy for getting the input buffer(s), providing it's //input descriptor//
-# StateProxy tries to get the input frames from the Cache in the Backend. In case of failure, the call is forwarded according to the input descriptor
-# after this call returns, the Node is allowed to dereference the frame pointers and do its calculations
-# finally, when the {{{pull()}}} call returns, the StateProxy may push down the result frames to the cache
+# using it's //input-output descriptor,// the Node creates a StateAdapter wrapping the StateProxy for accessing the output to pull and probably the input needed to calculate this output
+# StateAdapter first tries to get the output frames from the Cache in the Backend. In case of failure, a {{{process()}}} call is prepared by generating {{{pull()}}} call(s) for the input
+# as late as possible, typically on return, these recursive pull-calls have allocated a buffer containing the input data.
+# after all input is ready and prior to the {{{process()}}} call, the output buffers will be allocated, either from the cache, or alternatively (if not caching) from the &quot;parent&quot; StateAdapter up the callstack.
+# after all buffers are available, the StateAdapter issues the {{{process()}}} call back to the originating node, which now may dereference the frame pointers and do its calculations
+# finally, when the {{{pull()}}} call returns, &quot;parent&quot; state originating the pull holds onto the buffers containing the calculated output result.
 some points to note:
 * the input descriptor is {{{const}}} and precalculated while building (remember another thread may call in parallel)
 * when a node is &quot;inplace-capable&quot;, input and output buffer may actually point to the same location
@@ -3035,7 +3037,7 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 [img[Entities comprising the Render Engine|uml/fig128389.png]]
 </pre>
 </div>
-<div title="RenderMechanics" modifier="Ichthyostega" modified="200806110318" created="200806030230" tags="Rendering impl dynamic" changecount="20">
+<div title="RenderMechanics" modifier="Ichthyostega" modified="200806130010" created="200806030230" tags="Rendering impl dynamic" changecount="22">
 <pre>While the render process, with respect to the dependencies, the builder and the processing function is sufficiently characterized by referring to the ''pull principle'' and by defining a [[protocol|NodeOperationProtocol]] each node has to adhere to &amp;mdash; for actually get it coded we have to care for some important details, especially //how to manage the buffers.// It may well be that the length of the code path necessary to invoke the individual processing functions is finally not so important, compared with the time spent at the inner pixel loop within these functions. But my guess is (as of 5/08), that the overall number of data moving and copying operations //will be//&amp;nbsp; of importance.
 
 !reguirements
@@ -3054,15 +3056,8 @@ Besides the StateProxy representing the actual render process and holding a coup
 
 The usage patern of the buffers can be stack-like when processing nodes requiring multiple input buffers. In the standard case, which also is the simplest case, a pair of buffers (or a single buffer for &quot;in-place&quot; capable nodes) suffices to calculate a whole chain of nodes. But &amp;mdash; as the recursive descent means depth-first processing &amp;mdash; in case multiple input buffers are needed, we may encounter a situation where some of these input buffers already contain processed data, while we have to descend into yet another predecessor node chain to pull the data for the remaining buffers. Care has to be taken //to allocate the buffers as late as possible,// otherwise we could end up holding onto a buffer almost for each node in the network. Effectively this translates into the rule to allocate output buffers only after all input buffers are ready and filled with data; thus we shouldn't allocate buffers when //entering// the recursive call to the predecessor(s), rather we have to wait until we are about to return from the downcall chain.
 Besides, these considerations also show we need a means of passing on the current buffer usage pattern while calling down. This usage pattern not only includes a record of what buffers are occupied, but also the intended use of these occupied buffers, especially if they can be modified in-place, and at which point they may be released and reused.
-@@clear(right):display(block):@@
-</pre>
-</div>
-<div title="RenderProcess" modifier="Ichthyostega" modified="200806110341" created="200706190705" tags="Rendering dynamic" changecount="26">
-<pre>For each segment (of the effective timeline), there is a Processor holding the exit node(s) of a processing network, which is a &quot;Directed Acyclic Graph&quot; of small, preconfigured, stateless [[processing nodes|ProcNode]]. This network is operated according to the ''pull principle'', meaning that the rendering is just initiated by &quot;pulling&quot; output from the exit node, causing a cascade of recursive downcalls. Each node knows its predecessor(s) an can pull the necessary input from there. Consequently, there is no centralized &quot;engine object&quot; which may invoke nodes iteratively or table driven &amp;mdash; rather, the rendering can be seen as a passive service provided for the backend, which may pull from the exit nodes at any time, in any order (?), and possibly multithreaded.
-All State necessary for a given calculation process is encapsulated and accessible by a StateProxy object, which can be seen as the representation of &quot;the process&quot;. At the same time, this proxy provides the buffers holding data to be processed and acts as a gateway to the backend to handle the communication with the Cache. In addition to this //top-level State,// each calculation step includes a small [[state adapter object|StateAdapter]] (stack allocated), which is pre-configured by the builder and serves the purpose to isolate the processing function from the detals of buffer management.
 
 !!Example: calculating a 3 node chain
-[img[uml/fig132229.png]]
 # Caller invokes calculation by pulling from exit node, providing the top-level StateProxy
 # node1 (exit node) builds StateAdapter and calls retrieve() on it to get the desired output result
 # this StateAdapter (ad1) knows he could get the result from Cache, so he tries, but it's a miss
@@ -3083,6 +3078,18 @@ All State necessary for a given calculation process is encapsulated and accessib
 # thus it can be marked as ready for the Cache, which may now provide it to other processes (but isn't allowed to overwrite it)
 # finally, when the caller is done with the data, it signalles this to the top-level State object
 # which forwards this information to the cache, which in turn may now do with the released Buffer as he sees fit.
+[img[uml/fig132229.png]]
+
+@@clear(right):display(block):@@
+__see also__
+&amp;rarr; the [[Entities involved in Rendering|RenderEntities]]
+&amp;rarr; [[Memory management for render nodes|ManagementRenderNodes]]
+&amp;rarr; the protocol [[how to operate the nodes|NodeOperationProtocol]]
+</pre>
+</div>
+<div title="RenderProcess" modifier="Ichthyostega" modified="200806130009" created="200706190705" tags="Rendering dynamic" changecount="27">
+<pre>For each segment (of the effective timeline), there is a Processor holding the exit node(s) of a processing network, which is a &quot;Directed Acyclic Graph&quot; of small, preconfigured, stateless [[processing nodes|ProcNode]]. This network is operated according to the ''pull principle'', meaning that the rendering is just initiated by &quot;pulling&quot; output from the exit node, causing a cascade of recursive downcalls. Each node knows its predecessor(s) an can pull the necessary input from there. Consequently, there is no centralized &quot;engine object&quot; which may invoke nodes iteratively or table driven &amp;mdash; rather, the rendering can be seen as a passive service provided for the backend, which may pull from the exit nodes at any time, in any order (?), and possibly multithreaded.
+All State necessary for a given calculation process is encapsulated and accessible by a StateProxy object, which can be seen as the representation of &quot;the process&quot;. At the same time, this proxy provides the buffers holding data to be processed and acts as a gateway to the backend to handle the communication with the Cache. In addition to this //top-level State,// each calculation step includes a small [[state adapter object|StateAdapter]] (stack allocated), which is pre-configured by the builder and serves the purpose to isolate the processing function from the detals of buffer management.
 
 
 __see also__

@@ -1,5 +1,5 @@
 /*
-  AFRAME.hpp  -  buffer holding a Audio samples for the render process
+  StateProxy  -  Encapsulation of the state corresponding to a render calculation
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,24 +18,15 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
 
 
-#ifndef ENGINE_AFRAME_H
-#define ENGINE_AFRAME_H
+#include "proc/engine/stateproxy.hpp"
 
-#include "proc/frame.hpp"
-
-
-
-namespace engine
-  {
-
-
-  class AFrame : public proc_interface::Frame
-    {};
-
-
-
+namespace engine {
+  
+  /** */
+  
+  
+  
 } // namespace engine
-#endif

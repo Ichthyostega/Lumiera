@@ -1,5 +1,5 @@
 /*
-  VFrame  -  a buffer holding a Video frame for the render process 
+  STATE.hpp  -  Key Interface representing a render process and encapsulating state
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,16 +18,40 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
 
 
-#include "proc/engine/vframe.hpp"
+#ifndef PROC_INTERFACE_STATE_H
+#define PROC_INTERFACE_STATE_H
 
-namespace engine
+
+
+namespace engine { class StateAdapter; }
+
+namespace proc_interface
   {
 
-  /** */
 
-
-
-} // namespace engine
+  class State
+    {
+    protected:
+      virtual ~State() {};
+      
+      /** resolves to the State object currently "in charge".
+       *  Intended as a performance shortcut to avoid calling
+       *  up through a chain of virtual functions when deep down
+       *  in chained ProcNode::pull() calls. This allows derived
+       *  classes to proxy the state inteface.
+       */ 
+      virtual State& getCurrentImplementation () =0;
+      
+      friend class engine::StateAdapter;
+      
+    public:
+      
+    };
+    
+    
+    
+} // namespace proc_interface
+#endif

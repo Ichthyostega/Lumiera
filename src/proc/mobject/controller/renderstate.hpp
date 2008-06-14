@@ -24,7 +24,7 @@
 #ifndef MOBJECT_CONTROLLER_RENDERSTATE_H
 #define MOBJECT_CONTROLLER_RENDERSTATE_H
 
-#include "proc/stateproxy.hpp"
+#include "proc/state.hpp"
 
 
 
@@ -33,7 +33,7 @@ namespace mobject
   namespace controller
     {
 
-    typedef proc_interface::StateProxy StateProxy;
+    typedef proc_interface::State State;
 
 
     /**
@@ -42,11 +42,12 @@ namespace mobject
      * The provided StateProxy serves to hold any mutalbe state used
      * in the render process, so the rest of the render engine 
      * can be stateless.
+     * @todo probably the state management will work different (6/08)
      */
     class RenderState
       {
       public:
-        StateProxy& getStateProxy () ;
+        State& getRenderProcess () ;
       };
 
 

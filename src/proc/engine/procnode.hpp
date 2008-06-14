@@ -26,6 +26,7 @@
 
 #include <vector>
 
+#include "proc/state.hpp"
 #include "proc/mobject/parameter.hpp"
 
 
@@ -34,25 +35,63 @@
 namespace engine {
 
   using std::vector;
+  using proc_interface::State;
   
   class ProcNode;
   class NodeFactory;
   
-  typedef ProcNode* PNode;    ///< @todo handle ProcNode by pointer or by shared-ptr??
+  typedef ProcNode* PNode;
+  
+  
+  /**
+   * Description of the input and output ports and the
+   * predecessor nodes for a given ProcNode.
+   */
+  struct WiringDescriptor
+    {
+      
+    };
+    
 
-
+  /**
+   * Adapter to shield the ProcNode from the actual buffer management,
+   * allowing the processing function within ProcNode to use logical
+   * buffer IDs. StateAdapter is created on the stack for each pull()
+   * call, using setup/wiring data preconfigured by the builder.
+   * Its job is to provide the actual implementation of the Cache
+   * push / fetch and recursive downcall to render the source frames.
+   */
+  class StateAdapter
+    : public State
+    {
+      State& parent_;
+      State& current_;
+      
+    protected:
+      StateAdapter (State& callingProcess, WiringDescriptor const&) 
+        : parent_ (callingProcess),
+          current_(callingProcess.getCurrentImplementation())
+        { }
+      
+      friend class ProcNode; // both are sharing implementation details...
+      
+      
+      virtual State& getCurrentImplementation () { return current_; }
+      
+      /** contains the details of Cache query and recursive calls
+       *  to the predecessor node(s), eventually followed by the 
+       *  ProcNode::process() callback
+       */
+      void retrieve();
+    };
+  
+  
   /**
    * Key abstraction of the Render Engine: A Data processing Node
    */
   class ProcNode
     {
-      typedef mobject::Parameter<double> Param;
-
-      /** The predecessor in a processing pipeline.
-       *  I.e. a source to get data to be processed
-       */
-      PNode datasrc;
-
+      typedef mobject::Parameter<double> Param;   //////TODO: just a placeholder for automation as of 6/2008
       vector<Param> params;
 
     protected:
@@ -62,20 +101,35 @@ namespace engine {
       friend class NodeFactory;
       
       
-      /** do the actual calculations.
+      /** Callback doing the actual calculations
+       *  after input / output buffers are ready
        *  @internal dispatch to implementation. 
-       *            Client code should use #render()
-       *  @todo obviously we need a parameter!!!
+       *            Client code should use #pull()
        */
-      virtual void process() = 0;
+      virtual void process(State&) = 0;
+      
+      friend void StateAdapter::retrieve();  // to issue the process() callback if necessary
+      
+      
+      /** Extension point for subclasses to modify the input sources
+       *  according to automation data and other state dependent properties. 
+       */
+      virtual WiringDescriptor const& getWiring (State&); 
+      
 
     public:
       static NodeFactory create;
       
-      /** render and pull output from this node.
-       *  @todo define the parameter!!!
+      /** Engine Core operation: render and pull output from this node.
+       *  On return, currentProcess will hold onto output buffer(s)
+       *  containing the calculated result frames.
        */
-      void render() { this->process(); }
+      void 
+      pull (State& currentProcess) 
+        {
+          StateAdapter thisStep (currentProcess, getWiring (currentProcess));
+          thisStep.retrieve(); // fetch or calculate results
+        }
 
     };
 

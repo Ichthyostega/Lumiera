@@ -1,5 +1,5 @@
 /*
-  FRAME.hpp  -  Key Abstraction: render process and buffer holding frame data.
+  STATEPROXY.hpp  -  Encapsulation of the state corresponding to a render calculation
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,26 +21,26 @@
 */
 
 
-#ifndef PROC_INTERFACE_FRAME_H
-#define PROC_INTERFACE_FRAME_H
+#ifndef ENGINE_STATEPROXY_H
+#define ENGINE_STATEPROXY_H
+
+
+#include "proc/state.hpp"
+
+
+namespace engine {
 
 
 
-namespace proc_interface
-  {
-
-
-  /**
-   * TODO: how to relate to Cehteh's Frame entity in the Backend?
-   * The latter is the fundamental Frame entity, wheras this Object 
-   * rather represents a buffer set containing frame date.
-   */
-  class Frame
+  class StateProxy
+    : public proc_interface::State
     {
-      /////////////////
+    protected:
+      virtual State& getCurrentImplementation () { return *this; }
+      
     };
     
     
     
-} // namespace proc_interface
+} // namespace engine
 #endif
