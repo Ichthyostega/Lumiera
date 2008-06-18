@@ -29,6 +29,7 @@
 #include "../gtk-lumiera.hpp"
 #include "timeline/header-container.hpp"
 #include "timeline/timeline-body.hpp"
+#include "timeline/timeline-ruler.hpp"
 #include "timeline/track.hpp"
 #include "timeline/video-track.hpp"
 
@@ -67,9 +68,9 @@ class TimelineWidget : public Gtk::Table
     timeline::VideoTrack video2;
     std::vector<timeline::Track*> tracks;
 
-    timeline::TimelineBody *body;
     timeline::HeaderContainer *headerContainer;
-    Gtk::Label ruler;
+    timeline::TimelineBody *body;
+    timeline::TimelineRuler ruler;
 
     Gtk::Adjustment horizontalAdjustment, verticalAdjustment;
     Gtk::HScrollbar horizontalScroll;

@@ -41,8 +41,7 @@ TimelineWidget::TimelineWidget() :
   horizontalAdjustment(0, 0, 0),
   verticalAdjustment(0, 0, 0),
   horizontalScroll(horizontalAdjustment),
-  verticalScroll(verticalAdjustment),
-  ruler("ruler")
+  verticalScroll(verticalAdjustment)
   {
     body = new TimelineBody(this);
     ASSERT(body != NULL);

@@ -25,9 +25,11 @@
 
 #include "timeline-body.hpp"
 #include "../timeline-widget.hpp"
+#include "../../window-manager.hpp"
 
 using namespace Gtk;
 using namespace std;
+using namespace lumiera::gui;
 using namespace lumiera::gui::widgets;
 using namespace lumiera::gui::widgets::timeline;
 
@@ -51,7 +53,7 @@ TimelineBody::TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widge
     // Install style properties
     gtk_widget_class_install_style_property(
       GTK_WIDGET_CLASS(G_OBJECT_GET_CLASS(gobj())), 
-      g_param_spec_boxed("track_background",
+      g_param_spec_boxed("background",
         "Track Background",
         "The background colour of timeline tracks",
         GDK_TYPE_COLOR, G_PARAM_READABLE));
@@ -94,7 +96,7 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
       
         // Draw the track background
         cairo->rectangle(0, 0, allocation.get_width(), height);
-        gdk_cairo_set_source_color(cairo->cobj(), &track_background);
+        gdk_cairo_set_source_color(cairo->cobj(), &background);
         cairo->fill();
       
         // Render the track
@@ -112,21 +114,8 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
 void
 TimelineBody::read_styles()
   {
-    GdkColor *colour;
-
-    gtk_widget_style_get(Widget::gobj(), "track_background", &colour, NULL);
-
-    // Did the color load successfully?
-    if(colour != NULL)
-      track_background = *colour;
-    else
-    {
-      WARN(gui, "track_background style value failed to load");
-      track_background.red   = 0x0000;
-      track_background.green = 0x0000;
-      track_background.blue  = 0x0000;
-      track_background.pixel = 0x00000000;
-    }
+    background = WindowManager::read_style_colour_property(
+      *this, "background", 0, 0, 0);
   }
 
 }   // namespace timeline

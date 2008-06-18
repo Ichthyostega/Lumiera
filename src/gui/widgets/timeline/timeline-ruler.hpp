@@ -1,5 +1,5 @@
 /*
-  timeline-body.hpp  -  Declaration of the timeline body widget
+  timeline-ruler.hpp  -  Declaration of the time ruler widget
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,42 +19,36 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file timeline-body.hpp
- ** This file contains the definition of timeline body widget
+/** @file timeline-ruler.hpp
+ ** This file contains the declaration of the time ruler widget
+ ** widget
  */
-
-#ifndef TIMELINE_BODY_HPP
-#define TIMELINE_BODY_HPP
+ 
+#ifndef TIMELINE_RULER_HPP
+#define TIMELINE_RULER_HPP
 
 #include "../../gtk-lumiera.hpp"
 
 namespace lumiera {
 namespace gui {
 namespace widgets {
-
-class TimelineWidget;
-
 namespace timeline {
 
-class TimelineBody : public Gtk::DrawingArea
+class TimelineRuler : public Gtk::Widget
   {
   public:
-    TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widget);
-
+    TimelineRuler();
+  
     /* ===== Events ===== */
   protected:
-    void on_scroll();
-
     bool on_expose_event(GdkEventExpose* event);
     
     /* ===== Internals ===== */
   private:
     void read_styles();
-    
-  private:
-    GdkColor background;
-    
-    lumiera::gui::widgets::TimelineWidget *timelineWidget;
+
+    int64_t timeOffset;
+    int timeScale;
   };
 
 }   // namespace timeline
@@ -62,4 +56,5 @@ class TimelineBody : public Gtk::DrawingArea
 }   // namespace gui
 }   // namespace lumiera
 
-#endif // TIMELINE_BODY_HPP
+#endif // TIMELINE_RULER_HPP
+

@@ -140,7 +140,7 @@ Displayer*
 VideoDisplayWidget::createDisplayer( Gtk::Widget *drawingArea, int width, int height )
   {
     REQUIRE(drawingArea != NULL);
-    REQUIRE(width >= 0 && height >= 0);
+    REQUIRE(width > 0 && height > 0);
     
     Displayer *displayer = NULL;
     

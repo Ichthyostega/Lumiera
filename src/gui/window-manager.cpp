@@ -25,24 +25,49 @@
 namespace lumiera {
 namespace gui {
 
-  WindowManager::WindowManager()
-    {
+WindowManager::WindowManager()
+  {
+  
+  }
+
+bool
+WindowManager::set_theme(Glib::ustring path)
+  {
+    if(access(path.c_str(), R_OK))
+      {
+        ERROR(gui, "WindowManger: Unable to load rc file \"%s\"", path.c_str());
+        return false;        
+      }
     
-    }
+    gtk_rc_parse(path.c_str());
+    gtk_rc_reset_styles (gtk_settings_get_default());
 
-  bool WindowManager::set_theme(Glib::ustring path)
+    return true;
+  }
+    
+GdkColor
+WindowManager::read_style_colour_property(
+  Gtk::Widget &widget, const gchar *property_name,
+  guint16 red, guint16 green, guint16 blue)
+  {
+    GdkColor *colour;
+
+    gtk_widget_style_get(widget.gobj(), property_name, &colour, NULL);
+
+    // Did the color load successfully?
+    if(colour != NULL)
+      return *colour;
+    else
     {
-      if(access(path.c_str(), R_OK))
-        {
-          g_error("WindowManger: Unable to load rc file \"%s\"", path.c_str());
-          return false;        
-        }
+      WARN(gui, "%s style value failed to load", property_name);
       
-      gtk_rc_parse(path.c_str());
-      gtk_rc_reset_styles (gtk_settings_get_default());
-
-      return true;
+      GdkColor default_colour;
+      default_colour.red = red;
+      default_colour.green = green;
+      default_colour.blue = blue;     
+      return default_colour;
     }
+  }
 
 }   // namespace gui
 }   // namespace lumiera

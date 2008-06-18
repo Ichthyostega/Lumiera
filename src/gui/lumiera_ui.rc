@@ -7,7 +7,7 @@
 
 style "medium_text"
 {
- 	font_name = "sans bold 10"
+ 	font_name = "sans 10"
 }
  	
 style "medium_bold_entry" = "medium_text"
@@ -115,20 +115,28 @@ class "GtkProgressBar" style:highest "lumiera_progressbars"
 
 style "timeline_body"
 {
-  gtkmm__CustomObject_TimelineBody::track_background = "#7E838B"
+  gtkmm__CustomObject_TimelineBody::background = "#7E838B"
+}
+
+style "timeline_ruler" = "default_base"
+{
+#  gtkmm__CustomObject_TimelineRuler::background = "#0000FF"
+#  gtkmm__CustomObject_TimelineRuler::annotations = "#00FF00"
 }
 
 style "timeline_header_base" = "default_base"
 {
-  fg[NORMAL] = { 0.77, 0.77, 0.72 }	
-  bg[NORMAL] = { 0.18, 0.19, 0.22 }
-  bg[ACTIVE] = { 0.20, 0.20, 0.20 }	
-  bg[PRELIGHT] = { 0.20, 0.20, 0.20 }
-  bg[INSENSITIVE] = { 0.20, 0.20, 0.20 }
-  bg[SELECTED] = { 0.20, 0.20, 0.20 }
+#  fg[NORMAL] = { 0.77, 0.77, 0.72 }	
+#  bg[NORMAL] = { 0.18, 0.19, 0.22 }
+#  bg[ACTIVE] = { 0.20, 0.20, 0.20 }	
+#  bg[PRELIGHT] = { 0.20, 0.20, 0.20 }
+#  bg[INSENSITIVE] = { 0.20, 0.20, 0.20 }
+#  bg[SELECTED] = { 0.20, 0.20, 0.20 }
 }
 
 class "gtkmm__CustomObject_TimelineBody" style:highest "timeline_body"
+class "gtkmm__CustomObject_TimelineRuler" style:highest "timeline_ruler"
 
 widget "*TimelineHeaderBaseUnselected" style:highest "timeline_header_base"
+
 

@@ -20,7 +20,6 @@
  
 * *****************************************************/
 
-#include "../gtk-lumiera.hpp"
 #include "actions.hpp"
 #include "workspace-window.hpp"
 

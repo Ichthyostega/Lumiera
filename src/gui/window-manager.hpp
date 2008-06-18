@@ -26,10 +26,10 @@
  ** @see gtk-lumiera.hpp
  */
 
-#include <gtkmm.h>
-
 #ifndef WINDOW_MANAGER_HPP
 #define WINDOW_MANAGER_HPP
+
+#include "gtk-lumiera.hpp"
 
 namespace lumiera {
 namespace gui {
@@ -40,6 +40,10 @@ namespace gui {
     WindowManager();
 
     bool set_theme(Glib::ustring path);
+    
+    static GdkColor read_style_colour_property(
+      Gtk::Widget &widget, const gchar *property_name,
+      guint16 red, guint16 green, guint16 blue);
 
   protected:
     

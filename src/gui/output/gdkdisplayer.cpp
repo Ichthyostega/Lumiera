@@ -39,8 +39,8 @@ GdkDisplayer::GdkDisplayer( Gtk::Widget *drawing_area, int width, int height ) :
     drawingArea( drawing_area )
   {
     REQUIRE(drawing_area != NULL);
-    REQUIRE(imageWidth > 0);
-    REQUIRE(imageHeight > 0);
+    REQUIRE(width > 0);
+    REQUIRE(height > 0);
     
     imageWidth = width, imageHeight = height;
   }

@@ -27,10 +27,6 @@ INCLUDES = \
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\" \
 	$(GTK_LUMIERA_CFLAGS)
 
-AM_CFLAGS =\
-	 -Wall\
-	 -g
-
 bin_PROGRAMS += lumigui
 
 lumigui_SOURCES =                                               \
@@ -66,6 +62,8 @@ lumigui_SOURCES =                                               \
     $(lumigui_srcdir)/widgets/timeline/video-track.hpp          \
     $(lumigui_srcdir)/widgets/timeline/timeline-body.cpp        \
     $(lumigui_srcdir)/widgets/timeline/timeline-body.hpp        \
+    $(lumigui_srcdir)/widgets/timeline/timeline-ruler.cpp       \
+    $(lumigui_srcdir)/widgets/timeline/timeline-ruler.hpp       \
     $(lumigui_srcdir)/model/project.cpp                         \
     $(lumigui_srcdir)/model/project.hpp                         \
     $(lumigui_srcdir)/output/displayer.cpp                      \
@@ -76,7 +74,7 @@ lumigui_SOURCES =                                               \
     $(lumigui_srcdir)/output/xvdisplayer.hpp
 
 lumigui_LDFLAGS = 
-lumigui_LDADD = $(GTK_LUMIERA_LIBS) 
+lumigui_LDADD = $(GTK_LUMIERA_LIBS) liblumicommon.a liblumi.a
 
 lumigui_DEPENDENCIES =                                          \
     $(top_builddir)/lumiera_ui.rc                               \

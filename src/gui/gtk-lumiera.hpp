@@ -31,6 +31,8 @@
 #include <gtkmm.h>
 #include <nobug.h>
 
+
+
 NOBUG_DECLARE_FLAG(gui);
 
 #ifdef ENABLE_NLS

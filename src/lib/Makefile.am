@@ -32,6 +32,7 @@ liblumi_a_SOURCES =				\
 	$(liblumi_a_srcdir)/safeclib.c		\
 	$(liblumi_a_srcdir)/cuckoo.c		\
 	$(liblumi_a_srcdir)/mrucache.c		\
+	$(liblumi_a_srcdir)/time.c	      \
 	$(liblumi_a_srcdir)/appconfig.cpp
 
 noinst_HEADERS +=						\
@@ -46,5 +47,7 @@ noinst_HEADERS +=						\
 	$(liblumi_a_srcdir)/safeclib.h				\
 	$(liblumi_a_srcdir)/cuckoo.h				\
 	$(liblumi_a_srcdir)/mrucache.h				\
+	$(liblumi_a_srcdir)/time.h	      		\
 	$(liblumi_a_srcdir)/appconfig.hpp			\
-	$(liblumi_a_srcdir)/lifecycleregistry.hpp
+	$(liblumi_a_srcdir)/appconfig.hpp
+
