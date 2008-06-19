@@ -42,96 +42,96 @@ TimelineWidget::TimelineWidget() :
   verticalAdjustment(0, 0, 0),
   horizontalScroll(horizontalAdjustment),
   verticalScroll(verticalAdjustment)
-  {
-    body = new TimelineBody(this);
-    ASSERT(body != NULL);
-    headerContainer = new HeaderContainer(this);
-    ASSERT(headerContainer != NULL);
+{
+  body = new TimelineBody(this);
+  ASSERT(body != NULL);
+  headerContainer = new HeaderContainer(this);
+  ASSERT(headerContainer != NULL);
+
+  verticalAdjustment.signal_value_changed().connect(
+    sigc::mem_fun(this, &TimelineWidget::on_scroll) );
+
+  attach(*body, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
+  attach(ruler, 1, 2, 0, 1, FILL|EXPAND, SHRINK);
+  attach(*headerContainer, 0, 1, 1, 2, SHRINK, FILL|EXPAND);
+  attach(horizontalScroll, 1, 2, 2, 3, FILL|EXPAND, SHRINK);
+  attach(verticalScroll, 2, 3, 1, 2, SHRINK, FILL|EXPAND);
+
+  tracks.push_back(&video1);
+  tracks.push_back(&video2);
   
-    verticalAdjustment.signal_value_changed().connect(
-      sigc::mem_fun(this, &TimelineWidget::on_scroll) );
-
-    attach(*body, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
-    attach(ruler, 1, 2, 0, 1, FILL|EXPAND, SHRINK);
-    attach(*headerContainer, 0, 1, 1, 2, SHRINK, FILL|EXPAND);
-    attach(horizontalScroll, 1, 2, 2, 3, FILL|EXPAND, SHRINK);
-    attach(verticalScroll, 2, 3, 1, 2, SHRINK, FILL|EXPAND);
-
-    tracks.push_back(&video1);
-    tracks.push_back(&video2);
-    
-    update_tracks();
-  }
+  update_tracks();
+}
 
 TimelineWidget::~TimelineWidget()
-  {
-    ASSERT(body != NULL);
-    body->unreference();
-    ASSERT(headerContainer != NULL);
-    headerContainer->unreference();
-  }
+{
+  ASSERT(body != NULL);
+  body->unreference();
+  ASSERT(headerContainer != NULL);
+  headerContainer->unreference();
+}
 
 void
 TimelineWidget::on_scroll()
-  {
-    
-  }
+{
+  
+}
   
 void
 TimelineWidget::on_size_allocate(Allocation& allocation)
-  {
-    Widget::on_size_allocate(allocation);
-    
-    update_scroll();
-  }
+{
+  Widget::on_size_allocate(allocation);
   
+  update_scroll();
+}
+
 void
 TimelineWidget::update_tracks()
-  {
-    ASSERT(headerContainer != NULL);
-    headerContainer->update_headers();
-    
-    // Recalculate the total height of the timeline scrolled area
-    totalHeight = 0;
-    BOOST_FOREACH( Track* track, tracks )
-      {
-        ASSERT(track != NULL);
-        totalHeight += track->get_height() + TrackPadding;
-      }    
-  }
+{
+  ASSERT(headerContainer != NULL);
+  headerContainer->update_headers();
+  
+  // Recalculate the total height of the timeline scrolled area
+  totalHeight = 0;
+  BOOST_FOREACH( Track* track, tracks )
+    {
+      ASSERT(track != NULL);
+      totalHeight += track->get_height() + TrackPadding;
+    }    
+}
   
 void
 TimelineWidget::update_scroll()
-  {
-    ASSERT(body != NULL);
-    const Allocation body_allocation = body->get_allocation();
-    
-    //----- Vertical Scroll -----//
-    
-    // Calculate the vertical length that can be scrolled:
-    // the total height of all the tracks minus one screenful 
-    int y_scroll_length = totalHeight - body_allocation.get_height();
-    if(y_scroll_length < 0) y_scroll_length = 0;    
-    
-    // If by resizing we're now over-scrolled, scroll back to
-    // maximum distance
-    if((int)verticalAdjustment.get_value() > y_scroll_length)
-        verticalAdjustment.set_value(y_scroll_length);
-    
-    verticalAdjustment.set_upper(y_scroll_length);
-    
-    // Hide the scrollbar if no scrolling is possible
-    if(y_scroll_length == 0 && verticalScroll.is_visible())
-      verticalScroll.hide();
-    else if(y_scroll_length != 0 && !verticalScroll.is_visible())
-      verticalScroll.show();
-  }
+{
+  ASSERT(body != NULL);
+  const Allocation body_allocation = body->get_allocation();
+  
+  //----- Vertical Scroll -----//
+  
+  // Calculate the vertical length that can be scrolled:
+  // the total height of all the tracks minus one screenful 
+  int y_scroll_length = totalHeight - body_allocation.get_height();
+  if(y_scroll_length < 0) y_scroll_length = 0;    
+  
+  // If by resizing we're now over-scrolled, scroll back to
+  // maximum distance
+  if((int)verticalAdjustment.get_value() > y_scroll_length)
+      verticalAdjustment.set_value(y_scroll_length);
+  
+  verticalAdjustment.set_upper(y_scroll_length);
+  
+  // Hide the scrollbar if no scrolling is possible
+  if(y_scroll_length == 0 && verticalScroll.is_visible())
+    verticalScroll.hide();
+  else if(y_scroll_length != 0 && !verticalScroll.is_visible())
+    verticalScroll.show();
+}
 
 int
 TimelineWidget::get_y_scroll_offset() const
-  {
-    return (int)verticalAdjustment.get_value();
-  }
+{
+  return (int)verticalAdjustment.get_value();
+}
 
 }   // namespace widgets
 }   // namespace gui
