@@ -26,7 +26,6 @@
 #include "../../window-manager.hpp"
 
 extern "C" {
-#include <gavl/gavltime.h>
 #include "../../../lib/time.h"
 }
 
@@ -52,6 +51,13 @@ TimelineRuler::TimelineRuler() :
   timeOffset = 0;
 }
 
+void
+TimelineRuler::set_time_offset(gavl_time_t time_offset)
+{
+  timeOffset = time_offset;
+  queue_draw();
+}
+
 bool
 TimelineRuler::on_expose_event(GdkEventExpose* event)
 {
@@ -71,34 +77,45 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
 
   cairo->translate(allocation.get_x(), allocation.get_y());
 
-  // Render the background
+  // Render the background, and clip inside the area
   Gdk::Cairo::set_source_color(cairo, style->get_bg(STATE_NORMAL));
   cairo->rectangle(0, 0, allocation.get_width(), allocation.get_height());
-  cairo->fill();
+  cairo->fill_preserve();
+  cairo->clip();
   
   // Render ruler annotations
+  Gdk::Cairo::set_source_color(cairo, style->get_fg(STATE_NORMAL));
+  
   gavl_time_t major_spacing = GAVL_TIME_SCALE;
   
-  int64_t time_offset = timeOffset;
-  while(time_offset / timeScale < allocation.get_width())
+  int64_t time_offset = timeOffset - timeOffset % major_spacing;
+  int x = 0;
+  const int64_t x_offset = timeOffset / timeScale;
+
+  do
     {    
+      x = (int)(time_offset / timeScale - x_offset);
+      
+      // Draw the major grid-line
+      cairo->move_to(x + 0.5, 0);
+      cairo->line_to(x + 0.5, allocation.get_height());
+      cairo->set_line_width(1);
+      cairo->stroke();
+      
+      // Draw the text
       pango_layout->set_text(lumiera_tmpbuf_print_time(time_offset));
-      Pango::Rectangle text_extents = pango_layout->get_logical_extents();     
-      Gdk::Cairo::set_source_color(cairo, style->get_fg(STATE_NORMAL));
-      
-      const int64_t x = time_offset / timeScale;
-      cairo->move_to(x, (allocation.get_height() - text_extents.get_height() / Pango::SCALE) / 2);
-      
+      Pango::Rectangle text_extents = pango_layout->get_logical_extents();   
+      cairo->move_to(4 + x, (allocation.get_height() - text_extents.get_height() / Pango::SCALE) / 2);
       pango_layout->add_to_cairo_context(cairo);
-      
       cairo->fill();
       
       time_offset += major_spacing;
     }
+  while(x < allocation.get_width());
 
   return true;
 }
-  
+
 void
 TimelineRuler::read_styles()
 {

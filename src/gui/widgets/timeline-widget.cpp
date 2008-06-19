@@ -48,8 +48,10 @@ TimelineWidget::TimelineWidget() :
   headerContainer = new HeaderContainer(this);
   ASSERT(headerContainer != NULL);
 
-  verticalAdjustment.signal_value_changed().connect(
+  horizontalAdjustment.signal_value_changed().connect(
     sigc::mem_fun(this, &TimelineWidget::on_scroll) );
+  verticalAdjustment.signal_value_changed().connect(
+    sigc::mem_fun(this, &TimelineWidget::on_scroll) );    
 
   attach(*body, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
   attach(ruler, 1, 2, 0, 1, FILL|EXPAND, SHRINK);
@@ -74,7 +76,8 @@ TimelineWidget::~TimelineWidget()
 void
 TimelineWidget::on_scroll()
 {
-  
+  gavl_time_t time = horizontalAdjustment.get_value() * GAVL_TIME_SCALE / 200;
+  ruler.set_time_offset(time);
 }
   
 void
@@ -105,6 +108,10 @@ TimelineWidget::update_scroll()
 {
   ASSERT(body != NULL);
   const Allocation body_allocation = body->get_allocation();
+  
+  //----- Horizontal Scroll ------//
+  
+  horizontalAdjustment.set_upper(1000);
   
   //----- Vertical Scroll -----//
   

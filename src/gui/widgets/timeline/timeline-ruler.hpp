@@ -38,6 +38,8 @@ class TimelineRuler : public Gtk::Widget
   {
   public:
     TimelineRuler();
+    
+    void set_time_offset(gavl_time_t time_offset);
   
     /* ===== Events ===== */
   protected:
@@ -47,7 +49,7 @@ class TimelineRuler : public Gtk::Widget
   private:
     void read_styles();
 
-    int64_t timeOffset;
+    gavl_time_t timeOffset;
     int timeScale;
   };
 

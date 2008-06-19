@@ -31,7 +31,9 @@
 #include <gtkmm.h>
 #include <nobug.h>
 
-
+extern "C" {
+#include <gavl/gavltime.h>
+}
 
 NOBUG_DECLARE_FLAG(gui);
 

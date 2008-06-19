@@ -82,8 +82,7 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
     Cairo::RefPtr<Cairo::Context> cairo = window->create_cairo_context();
 
     // Translate the view by the scroll distance
-    cairo->translate(
-      -(int)timelineWidget->horizontalAdjustment.get_value(),
+    cairo->translate(0,
       -(int)timelineWidget->verticalAdjustment.get_value());
     
     // Interate drawing each track
