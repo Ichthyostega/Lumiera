@@ -43,44 +43,44 @@ namespace timeline {
 
 TimelineRuler::TimelineRuler() :
     Glib::ObjectBase("TimelineRuler")
-  {
-    set_flags(Gtk::NO_WINDOW);  // This widget will not have a window
-    set_size_request(-1, 20);
-    
-    // Install style properties
-    timeScale = GAVL_TIME_SCALE / 200;
-    timeOffset = 0;
-  }
+{
+  set_flags(Gtk::NO_WINDOW);  // This widget will not have a window
+  set_size_request(-1, 20);
+  
+  // Install style properties
+  timeScale = GAVL_TIME_SCALE / 200;
+  timeOffset = 0;
+}
 
 bool
 TimelineRuler::on_expose_event(GdkEventExpose* event)
-  {
-    // This is where we draw on the window
-    Glib::RefPtr<Gdk::Window> window = get_window();
-    if(!window)
-      return false;
-    
-    // Makes sure the widget styles have been loaded
-    read_styles();
-    
-    // Prepare to render via cairo      
-    Allocation allocation = get_allocation();
-    Glib::RefPtr<Style> style = get_style();
-    Cairo::RefPtr<Cairo::Context> cairo = window->create_cairo_context();
-    Glib::RefPtr<Pango::Layout> pango_layout = create_pango_layout("");
- 
-    cairo->translate(allocation.get_x(), allocation.get_y());
+{
+  // This is where we draw on the window
+  Glib::RefPtr<Gdk::Window> window = get_window();
+  if(!window)
+    return false;
+  
+  // Makes sure the widget styles have been loaded
+  read_styles();
+  
+  // Prepare to render via cairo      
+  Allocation allocation = get_allocation();
+  Glib::RefPtr<Style> style = get_style();
+  Cairo::RefPtr<Cairo::Context> cairo = window->create_cairo_context();
+  Glib::RefPtr<Pango::Layout> pango_layout = create_pango_layout("");
 
-    // Render the background
-    Gdk::Cairo::set_source_color(cairo, style->get_bg(STATE_NORMAL));
-    cairo->rectangle(0, 0, allocation.get_width(), allocation.get_height());
-    cairo->fill();
-    
-    // Render ruler annotations
-    gavl_time_t major_spacing = GAVL_TIME_SCALE;
-    
-    int64_t time_offset = timeOffset;
-    while(time_offset / timeScale < allocation.get_width())
+  cairo->translate(allocation.get_x(), allocation.get_y());
+
+  // Render the background
+  Gdk::Cairo::set_source_color(cairo, style->get_bg(STATE_NORMAL));
+  cairo->rectangle(0, 0, allocation.get_width(), allocation.get_height());
+  cairo->fill();
+  
+  // Render ruler annotations
+  gavl_time_t major_spacing = GAVL_TIME_SCALE;
+  
+  int64_t time_offset = timeOffset;
+  while(time_offset / timeScale < allocation.get_width())
     {    
       pango_layout->set_text(lumiera_tmpbuf_print_time(time_offset));
       Pango::Rectangle text_extents = pango_layout->get_logical_extents();     
@@ -96,15 +96,15 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
       time_offset += major_spacing;
     }
 
-    return true;
-  }
+  return true;
+}
   
 void
 TimelineRuler::read_styles()
-  {
-    //background = WindowManager::read_style_colour_property(
-    //  *this, "background", 0, 0, 0);
-  }
+{
+  //background = WindowManager::read_style_colour_property(
+  //  *this, "background", 0, 0, 0);
+}
   
 }   // namespace timeline
 }   // namespace widgets
