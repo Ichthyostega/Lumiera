@@ -81,6 +81,7 @@ private:
   int majorTickHeight;
   int minorLongTickHeight;
   int minorShortTickHeight;
+  int minDivisionWidth;
 };
 
 }   // namespace timeline

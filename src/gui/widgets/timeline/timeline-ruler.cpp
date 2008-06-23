@@ -48,7 +48,8 @@ TimelineRuler::TimelineRuler() :
   annotationVertMargin(0),
   majorTickHeight(0),
   minorLongTickHeight(0),
-  minorShortTickHeight(0)
+  minorShortTickHeight(0),
+  minDivisionWidth(100)
 {
   set_flags(Gtk::NO_WINDOW);  // This widget will not have a window
   
@@ -171,7 +172,6 @@ gavl_time_t
 TimelineRuler::calculate_major_spacing() const
 {
   int i = 0;
-  const int min_division_width = 100;
   
   const gavl_time_t major_spacings[] = {
       GAVL_TIME_SCALE / 1000,    
@@ -202,7 +202,7 @@ TimelineRuler::calculate_major_spacing() const
     {
       const int64_t division_width = major_spacings[i] / timeScale;
       
-      if(division_width > min_division_width)
+      if(division_width > minDivisionWidth)
         break;
     }
 
@@ -216,45 +216,46 @@ TimelineRuler::register_styles() const
 
   gtk_widget_class_install_style_property(klass, 
     g_param_spec_int("height",
-      "Height of the Ruler Widget",
-      "The height of the ruler widget in pixels.",
-      0, G_MAXINT, 4,
-      G_PARAM_READABLE));
-      
+    "Height of the Ruler Widget",
+    "The height of the ruler widget in pixels.",
+    0, G_MAXINT, 18, G_PARAM_READABLE));
+        
+  gtk_widget_class_install_style_property(klass, 
+    g_param_spec_int("major_tick_height",
+    "Height of Major Ticks",
+    "The length of major ticks in pixels.",
+    0, G_MAXINT, 18, G_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property(klass, 
+    g_param_spec_int("minor_long_tick_height",
+    "Height of Long Minor Ticks",
+    "The length of long minor ticks in pixels.",
+    0, G_MAXINT, 6, G_PARAM_READABLE));
+        
+  gtk_widget_class_install_style_property(klass, 
+    g_param_spec_int("minor_short_tick_height",
+    "Height of Short Minor Ticks",
+    "The length of short minor ticks in pixels.",
+    0, G_MAXINT, 3, G_PARAM_READABLE));
+    
   gtk_widget_class_install_style_property(klass, 
     g_param_spec_int("annotation_horz_margin",
-      "Horizontal margin around annotation text",
-      "The horizontal margin around the annotation text in pixels.",
-      0, G_MAXINT, 4,
-      G_PARAM_READABLE));
+    "Horizontal margin around annotation text",
+    "The horizontal margin around the annotation text in pixels.",
+    0, G_MAXINT, 3,
+    G_PARAM_READABLE));
 
   gtk_widget_class_install_style_property(klass, 
-      g_param_spec_int("annotation_vert_margin",
-        "Vertical margin around annotation text",
-        "The vertical margin around the annotation text in pixels.",
-        0, G_MAXINT, 4,
-        G_PARAM_READABLE));
+    g_param_spec_int("annotation_vert_margin",
+    "Vertical margin around annotation text",
+    "The vertical margin around the annotation text in pixels.",
+    0, G_MAXINT, 0, G_PARAM_READABLE));
         
   gtk_widget_class_install_style_property(klass, 
-      g_param_spec_int("major_tick_height",
-        "Height of Major Ticks",
-        "The length of major ticks in pixels.",
-        0, G_MAXINT, 20,
-        G_PARAM_READABLE));
-
-  gtk_widget_class_install_style_property(klass, 
-      g_param_spec_int("minor_long_tick_height",
-        "Height of Long Minor Ticks",
-        "The length of long minor ticks in pixels.",
-        0, G_MAXINT, 8,
-        G_PARAM_READABLE));
-        
-  gtk_widget_class_install_style_property(klass, 
-      g_param_spec_int("minor_short_tick_height",
-        "Height of Short Minor Ticks",
-        "The length of short minor ticks in pixels.",
-        0, G_MAXINT, 8,
-        G_PARAM_READABLE));  
+    g_param_spec_int("min_division_width",
+    "Minimum Division Width",
+    "The minimum distance in pixels that two major division may approach.",
+    0, G_MAXINT, 100, G_PARAM_READABLE));
 }
 
 void
@@ -265,6 +266,7 @@ TimelineRuler::read_styles()
   get_style_property("major_tick_height", majorTickHeight);
   get_style_property("minor_long_tick_height", minorLongTickHeight);
   get_style_property("minor_short_tick_height", minorShortTickHeight);
+  get_style_property("min_division_width", minDivisionWidth);
 }
   
 }   // namespace timeline
