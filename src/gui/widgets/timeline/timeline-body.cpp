@@ -71,17 +71,35 @@ TimelineBody::on_scroll_event (GdkEventScroll* event)
 {
   REQUIRE(timelineWidget != NULL);
   
-  switch(event->direction)
+  if(event->state & GDK_CONTROL_MASK)
   {
-  case GDK_SCROLL_UP:
-    // User scrolled up. Shift 1/16th left
-    timelineWidget->shift_view(-1);
-    break;
-    
-  case GDK_SCROLL_DOWN:
-    // User scrolled down. Shift 1/16th right
-    timelineWidget->shift_view(1);
-    break;    
+    switch(event->direction)
+    {
+    case GDK_SCROLL_UP:
+      // User scrolled up. Zoom in
+      timelineWidget->zoom_view(event->x, 1);
+      break;
+      
+    case GDK_SCROLL_DOWN:
+      // User scrolled down. Zoom out
+      timelineWidget->zoom_view(event->x, -1);
+      break;    
+    }
+  }
+  else
+  {
+    switch(event->direction)
+    {
+    case GDK_SCROLL_UP:
+      // User scrolled up. Shift 1/16th left
+      timelineWidget->shift_view(-1);
+      break;
+      
+    case GDK_SCROLL_DOWN:
+      // User scrolled down. Shift 1/16th right
+      timelineWidget->shift_view(1);
+      break;    
+    }
   }
 }
   

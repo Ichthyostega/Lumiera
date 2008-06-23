@@ -34,6 +34,7 @@ namespace widgets {
 
 const int TimelineWidget::TrackPadding = 1;
 const int TimelineWidget::HeaderWidth = 100;
+const double TimelineWidget::ZoomIncrement = 1.25;
 
 TimelineWidget::TimelineWidget() :
   Table(2, 2),
@@ -177,6 +178,17 @@ TimelineWidget::shift_view(int shift_size)
   
   set_time_offset(get_time_offset() +
     shift_size * timeScale * view_width / 16);
+}
+
+void
+TimelineWidget::zoom_view(int point, int zoom_size)
+{ 
+  int64_t new_time_scale = (double)timeScale * pow(1.25, -zoom_size);
+  if(new_time_scale < 1) new_time_scale = 1;
+  
+  set_time_offset(get_time_offset() +
+    (timeScale - new_time_scale) * point);
+  set_time_scale((int64_t)new_time_scale);
 }
 
 }   // namespace widgets

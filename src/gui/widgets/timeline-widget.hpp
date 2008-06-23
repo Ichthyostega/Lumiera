@@ -94,10 +94,11 @@ protected:
    * width.
    **/
   void shift_view(int shift_size);
+  
+  void zoom_view(int point, int zoom_size);
 
 protected:
   int64_t timeScale;
-  gavl_time_t maxTime, minTime;
 
   int totalHeight;
 
@@ -117,6 +118,7 @@ protected:
 protected:
   static const int TrackPadding;
   static const int HeaderWidth;
+  static const double ZoomIncrement;
 
   friend class timeline::TimelineBody;
   friend class timeline::HeaderContainer;
