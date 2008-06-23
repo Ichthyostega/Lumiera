@@ -7,6 +7,7 @@ AC_PREREQ(2.59)
 AC_COPYRIGHT([
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
+                        Joel Holdsworth <joel@airwebreathe.org.uk>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
