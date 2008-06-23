@@ -55,11 +55,18 @@ public:
 
   /* ===== Events ===== */
 protected:
-  bool on_expose_event(GdkEventExpose* event);
+
+  void on_realize();
+
+  bool on_expose_event(GdkEventExpose *event);
+  
+  void on_size_request (Gtk::Requisition *requisition);
   
   /* ===== Internals ===== */
 private:
   gavl_time_t calculate_major_spacing() const;
+  
+  void register_styles() const;
   
   void read_styles();
   
@@ -71,6 +78,9 @@ private:
   // Style values
   int annotationHorzMargin;
   int annotationVertMargin;
+  int majorTickHeight;
+  int minorLongTickHeight;
+  int minorShortTickHeight;
 };
 
 }   // namespace timeline

@@ -45,27 +45,15 @@ TimelineRuler::TimelineRuler() :
   timeOffset(0),
   timeScale(1),
   annotationHorzMargin(0),
-  annotationVertMargin(0)
+  annotationVertMargin(0),
+  majorTickHeight(0),
+  minorLongTickHeight(0),
+  minorShortTickHeight(0)
 {
   set_flags(Gtk::NO_WINDOW);  // This widget will not have a window
-  set_size_request(-1, 20);
   
   // Install style properties
-  gtk_widget_class_install_style_property(
-    GTK_WIDGET_CLASS(G_OBJECT_GET_CLASS(gobj())), 
-      g_param_spec_int("annotation_horz_margin",
-        "Horizontal margin around annotation text",
-        "The horiztontal margin around the annotation text in pixels.",
-        G_MININT, G_MAXINT, 4,
-        G_PARAM_READABLE));
-
-  gtk_widget_class_install_style_property(
-    GTK_WIDGET_CLASS(G_OBJECT_GET_CLASS(gobj())), 
-      g_param_spec_int("annotation_vert_margin",
-        "Vertical margin around annotation text",
-        "The vertical margin around the annotation text in pixels.",
-        G_MININT, G_MAXINT, 4,
-        G_PARAM_READABLE));
+  register_styles();
 }
 
 void
@@ -83,6 +71,15 @@ TimelineRuler::set_time_scale(int64_t time_scale)
   queue_draw();
 }
 
+void
+TimelineRuler::on_realize()
+{
+  Widget::on_realize();
+
+  // Load styles
+  read_styles();
+}
+
 bool
 TimelineRuler::on_expose_event(GdkEventExpose* event)
 {
@@ -91,11 +88,9 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
   if(!window)
     return false;
     
-  // Load styles
-  read_styles();
-
   // Prepare to render via cairo      
   Allocation allocation = get_allocation();
+  const int height = allocation.get_height();
   Glib::RefPtr<Style> style = get_style();
   Cairo::RefPtr<Cairo::Context> cairo = window->create_cairo_context();
   Glib::RefPtr<Pango::Layout> pango_layout = create_pango_layout("");
@@ -119,6 +114,7 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
   const gavl_time_t major_spacing = calculate_major_spacing();
   const gavl_time_t minor_spacing = major_spacing / 10;
   
+  
   int64_t time_offset = timeOffset - timeOffset % minor_spacing;
   int x = 0;
   const int64_t x_offset = timeOffset / timeScale;
@@ -131,29 +127,26 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
       
       if(time_offset % major_spacing == 0)
         {
-          
           // Draw the major grid-line
-          cairo->move_to(x + 0.5, 0);
-          cairo->line_to(x + 0.5, allocation.get_height());
+          cairo->move_to(x + 0.5, height - majorTickHeight);
+          cairo->line_to(x + 0.5, height);
           cairo->stroke();
           
           // Draw the text
           pango_layout->set_text(lumiera_tmpbuf_print_time(time_offset));
-          //Pango::Rectangle text_extents = pango_layout->get_logical_extents();
-          //const int text_height = text_extents.get_height() / Pango::SCALE;
           cairo->move_to(annotationHorzMargin + x, annotationVertMargin);
           pango_layout->add_to_cairo_context(cairo);
           cairo->fill();
         }
       else
         {
-          // Draw the minor grid-line
+          // Draw the long or short minor grid-line
           if(time_offset % (minor_spacing * 2) == 0)           
-            cairo->move_to(x + 0.5, (4 * allocation.get_height()) / 5);
+            cairo->move_to(x + 0.5, height - minorLongTickHeight);
           else
-            cairo->move_to(x + 0.5, (3 * allocation.get_height()) / 5);
+            cairo->move_to(x + 0.5, height - minorShortTickHeight);
           
-          cairo->line_to(x + 0.5, allocation.get_height());
+          cairo->line_to(x + 0.5, height);
           cairo->stroke();
         }
         
@@ -162,6 +155,16 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
   while(x < allocation.get_width());
 
   return true;
+}
+
+void
+TimelineRuler::on_size_request (Gtk::Requisition *requisition)
+{
+  // Initialize the output parameter
+  *requisition = Gtk::Requisition();
+  
+  requisition->width = 0; 
+  get_style_property("height", requisition->height);
 }
 
 gavl_time_t 
@@ -207,10 +210,61 @@ TimelineRuler::calculate_major_spacing() const
 }
 
 void
+TimelineRuler::register_styles() const
+{
+  GtkWidgetClass *klass = GTK_WIDGET_CLASS(G_OBJECT_GET_CLASS(gobj()));
+
+  gtk_widget_class_install_style_property(klass, 
+    g_param_spec_int("height",
+      "Height of the Ruler Widget",
+      "The height of the ruler widget in pixels.",
+      0, G_MAXINT, 4,
+      G_PARAM_READABLE));
+      
+  gtk_widget_class_install_style_property(klass, 
+    g_param_spec_int("annotation_horz_margin",
+      "Horizontal margin around annotation text",
+      "The horizontal margin around the annotation text in pixels.",
+      0, G_MAXINT, 4,
+      G_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property(klass, 
+      g_param_spec_int("annotation_vert_margin",
+        "Vertical margin around annotation text",
+        "The vertical margin around the annotation text in pixels.",
+        0, G_MAXINT, 4,
+        G_PARAM_READABLE));
+        
+  gtk_widget_class_install_style_property(klass, 
+      g_param_spec_int("major_tick_height",
+        "Height of Major Ticks",
+        "The length of major ticks in pixels.",
+        0, G_MAXINT, 20,
+        G_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property(klass, 
+      g_param_spec_int("minor_long_tick_height",
+        "Height of Long Minor Ticks",
+        "The length of long minor ticks in pixels.",
+        0, G_MAXINT, 8,
+        G_PARAM_READABLE));
+        
+  gtk_widget_class_install_style_property(klass, 
+      g_param_spec_int("minor_short_tick_height",
+        "Height of Short Minor Ticks",
+        "The length of short minor ticks in pixels.",
+        0, G_MAXINT, 8,
+        G_PARAM_READABLE));  
+}
+
+void
 TimelineRuler::read_styles()
 {
   get_style_property("annotation_horz_margin", annotationHorzMargin);
-  get_style_property("annotation_vert_margin", annotationVertMargin);  
+  get_style_property("annotation_vert_margin", annotationVertMargin);
+  get_style_property("major_tick_height", majorTickHeight);
+  get_style_property("minor_long_tick_height", minorLongTickHeight);
+  get_style_property("minor_short_tick_height", minorShortTickHeight);
 }
   
 }   // namespace timeline

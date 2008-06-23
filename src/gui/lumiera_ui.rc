@@ -121,8 +121,13 @@ style "timeline_body"
 style "timeline_ruler" = "default_base"
 {
   font_name = "sans 8"
+  gtkmm__CustomObject_TimelineRuler::height = 20
+  gtkmm__CustomObject_TimelineRuler::major_tick_height = 20
+  gtkmm__CustomObject_TimelineRuler::minor_long_tick_height = 8
+  gtkmm__CustomObject_TimelineRuler::minor_short_tick_height = 4
   gtkmm__CustomObject_TimelineRuler::annotation_horz_margin = 3
   gtkmm__CustomObject_TimelineRuler::annotation_vert_margin = 0
+  
 #  gtkmm__CustomObject_TimelineRuler::annotations = "#00FF00"
 }
 
