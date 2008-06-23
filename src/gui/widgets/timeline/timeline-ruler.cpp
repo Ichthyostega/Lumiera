@@ -117,8 +117,9 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
   Gdk::Cairo::set_source_color(cairo, style->get_fg(STATE_NORMAL));
   
   const gavl_time_t major_spacing = calculate_major_spacing();
+  const gavl_time_t minor_spacing = major_spacing / 10;
   
-  int64_t time_offset = timeOffset - timeOffset % major_spacing;
+  int64_t time_offset = timeOffset - timeOffset % minor_spacing;
   int x = 0;
   const int64_t x_offset = timeOffset / timeScale;
 
@@ -126,21 +127,37 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
     {    
       x = (int)(time_offset / timeScale - x_offset);
       
-      // Draw the major grid-line
-      cairo->move_to(x + 0.5, 0);
-      cairo->line_to(x + 0.5, allocation.get_height());
       cairo->set_line_width(1);
-      cairo->stroke();
       
-      // Draw the text
-      pango_layout->set_text(lumiera_tmpbuf_print_time(time_offset));
-      //Pango::Rectangle text_extents = pango_layout->get_logical_extents();
-      //const int text_height = text_extents.get_height() / Pango::SCALE;
-      cairo->move_to(annotationHorzMargin + x, annotationVertMargin);
-      pango_layout->add_to_cairo_context(cairo);
-      cairo->fill();
-      
-      time_offset += major_spacing;
+      if(time_offset % major_spacing == 0)
+        {
+          
+          // Draw the major grid-line
+          cairo->move_to(x + 0.5, 0);
+          cairo->line_to(x + 0.5, allocation.get_height());
+          cairo->stroke();
+          
+          // Draw the text
+          pango_layout->set_text(lumiera_tmpbuf_print_time(time_offset));
+          //Pango::Rectangle text_extents = pango_layout->get_logical_extents();
+          //const int text_height = text_extents.get_height() / Pango::SCALE;
+          cairo->move_to(annotationHorzMargin + x, annotationVertMargin);
+          pango_layout->add_to_cairo_context(cairo);
+          cairo->fill();
+        }
+      else
+        {
+          // Draw the minor grid-line
+          if(time_offset % (minor_spacing * 2) == 0)           
+            cairo->move_to(x + 0.5, (4 * allocation.get_height()) / 5);
+          else
+            cairo->move_to(x + 0.5, (3 * allocation.get_height()) / 5);
+          
+          cairo->line_to(x + 0.5, allocation.get_height());
+          cairo->stroke();
+        }
+        
+      time_offset += minor_spacing;
     }
   while(x < allocation.get_width());
 
