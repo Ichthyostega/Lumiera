@@ -43,10 +43,29 @@ namespace timeline {
 TimelineRuler::TimelineRuler() :
   Glib::ObjectBase("TimelineRuler"),
   timeOffset(0),
-  timeScale(1)  
+  timeScale(1),
+  annotationHorzMargin(0),
+  annotationVertMargin(0)
 {
   set_flags(Gtk::NO_WINDOW);  // This widget will not have a window
   set_size_request(-1, 20);
+  
+  // Install style properties
+  gtk_widget_class_install_style_property(
+    GTK_WIDGET_CLASS(G_OBJECT_GET_CLASS(gobj())), 
+      g_param_spec_int("annotation_horz_margin",
+        "Horizontal margin around annotation text",
+        "The horiztontal margin around the annotation text in pixels.",
+        G_MININT, G_MAXINT, 4,
+        G_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property(
+    GTK_WIDGET_CLASS(G_OBJECT_GET_CLASS(gobj())), 
+      g_param_spec_int("annotation_vert_margin",
+        "Vertical margin around annotation text",
+        "The vertical margin around the annotation text in pixels.",
+        G_MININT, G_MAXINT, 4,
+        G_PARAM_READABLE));
 }
 
 void
@@ -71,6 +90,9 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
   Glib::RefPtr<Gdk::Window> window = get_window();
   if(!window)
     return false;
+    
+  // Load styles
+  read_styles();
 
   // Prepare to render via cairo      
   Allocation allocation = get_allocation();
@@ -112,10 +134,9 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
       
       // Draw the text
       pango_layout->set_text(lumiera_tmpbuf_print_time(time_offset));
-      Pango::Rectangle text_extents = pango_layout->get_logical_extents();
-      const int text_height = text_extents.get_height() / Pango::SCALE;
-      cairo->move_to(4 + x,
-        (allocation.get_height() - text_height) / 2);
+      //Pango::Rectangle text_extents = pango_layout->get_logical_extents();
+      //const int text_height = text_extents.get_height() / Pango::SCALE;
+      cairo->move_to(annotationHorzMargin + x, annotationVertMargin);
       pango_layout->add_to_cairo_context(cairo);
       cairo->fill();
       
@@ -131,8 +152,6 @@ TimelineRuler::calculate_major_spacing() const
 {
   int i = 0;
   const int min_division_width = 100;
-  
-  g_message("timeScale = %d", timeScale);
   
   const gavl_time_t major_spacings[] = {
       GAVL_TIME_SCALE / 1000,    
@@ -168,6 +187,13 @@ TimelineRuler::calculate_major_spacing() const
     }
 
   return major_spacings[i];
+}
+
+void
+TimelineRuler::read_styles()
+{
+  get_style_property("annotation_horz_margin", annotationHorzMargin);
+  get_style_property("annotation_vert_margin", annotationVertMargin);  
 }
   
 }   // namespace timeline

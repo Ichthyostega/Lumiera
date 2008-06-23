@@ -61,9 +61,16 @@ protected:
 private:
   gavl_time_t calculate_major_spacing() const;
   
+  void read_styles();
+  
 private:
+  // View values
   gavl_time_t timeOffset;
   int64_t timeScale;
+  
+  // Style values
+  int annotationHorzMargin;
+  int annotationVertMargin;
 };
 
 }   // namespace timeline

@@ -39,6 +39,7 @@ const int64_t TimelineWidget::MaxScale = 30000000;
 
 TimelineWidget::TimelineWidget() :
   Table(2, 2),
+  timeOffset(0),
   timeScale(1),
   totalHeight(0),
   horizontalAdjustment(0, 0, 0),
@@ -81,12 +82,13 @@ TimelineWidget::~TimelineWidget()
 gavl_time_t
 TimelineWidget::get_time_offset() const
 {
-  return (gavl_time_t)horizontalAdjustment.get_value();
+  return timeOffset;
 }
 
 void
 TimelineWidget::set_time_offset(gavl_time_t time_offset)
 {
+  timeOffset = time_offset;
   horizontalAdjustment.set_value(time_offset);
   ruler.set_time_offset(time_offset);
 }
@@ -107,8 +109,8 @@ TimelineWidget::set_time_scale(int64_t time_scale)
 void
 TimelineWidget::on_scroll()
 {
-  gavl_time_t time = horizontalAdjustment.get_value();
-  ruler.set_time_offset(time);
+  timeOffset = horizontalAdjustment.get_value();
+  ruler.set_time_offset(timeOffset);
 }
   
 void

@@ -98,6 +98,7 @@ protected:
   void zoom_view(int point, int zoom_size);
 
 protected:
+  gavl_time_t timeOffset;
   int64_t timeScale;
 
   int totalHeight;

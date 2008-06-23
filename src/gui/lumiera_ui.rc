@@ -120,7 +120,8 @@ style "timeline_body"
 
 style "timeline_ruler" = "default_base"
 {
-#  gtkmm__CustomObject_TimelineRuler::background = "#0000FF"
+  font_name = "sans 8"
+  gtkmm__CustomObject_TimelineRuler::annotation_margin = 4
 #  gtkmm__CustomObject_TimelineRuler::annotations = "#00FF00"
 }
 
