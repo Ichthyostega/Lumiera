@@ -41,84 +41,112 @@ namespace timeline {
 TimelineBody::TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widget) :
     Glib::ObjectBase("TimelineBody"),
     timelineWidget(timeline_widget)
-  {
-    REQUIRE(timelineWidget != NULL);
-        
-    // Connect up some events  
-    timelineWidget->horizontalAdjustment.signal_value_changed().connect(
-      sigc::mem_fun(this, &TimelineBody::on_scroll) );
-    timelineWidget->verticalAdjustment.signal_value_changed().connect(
-      sigc::mem_fun(this, &TimelineBody::on_scroll) );
-    
-    // Install style properties
-    gtk_widget_class_install_style_property(
-      GTK_WIDGET_CLASS(G_OBJECT_GET_CLASS(gobj())), 
-      g_param_spec_boxed("background",
-        "Track Background",
-        "The background colour of timeline tracks",
-        GDK_TYPE_COLOR, G_PARAM_READABLE));
+{
+  REQUIRE(timelineWidget != NULL);
+      
+  // Connect up some events  
+  timelineWidget->horizontalAdjustment.signal_value_changed().connect(
+    sigc::mem_fun(this, &TimelineBody::on_scroll) );
+  timelineWidget->verticalAdjustment.signal_value_changed().connect(
+    sigc::mem_fun(this, &TimelineBody::on_scroll) );
+  
+  // Install style properties
+  gtk_widget_class_install_style_property(
+    GTK_WIDGET_CLASS(G_OBJECT_GET_CLASS(gobj())), 
+    g_param_spec_boxed("background",
+      "Track Background",
+      "The background colour of timeline tracks",
+      GDK_TYPE_COLOR, G_PARAM_READABLE));
 
-  }
+}
 
 void
 TimelineBody::on_scroll()
+{
+  queue_draw();
+}
+  
+bool
+TimelineBody::on_scroll_event (GdkEventScroll* event)
+{
+  REQUIRE(timelineWidget != NULL);
+  
+  switch(event->direction)
   {
-    queue_draw();
+  case GDK_SCROLL_UP:
+    // User scrolled up. Shift 1/16th left
+    timelineWidget->shift_view(-1);
+    break;
+    
+  case GDK_SCROLL_DOWN:
+    // User scrolled down. Shift 1/16th right
+    timelineWidget->shift_view(1);
+    break;    
   }
+}
+  
+void
+TimelineBody::on_realize()
+{
+  Widget::on_realize();
+  
+  // We wish to receive all event notifications
+  add_events(Gdk::ALL_EVENTS_MASK);
+}
 
 bool
 TimelineBody::on_expose_event(GdkEventExpose* event)
-  {
-    // This is where we draw on the window
-    Glib::RefPtr<Gdk::Window> window = get_window();
-    if(!window)
-      return false;
-    
-    // Makes sure the widget styles have been loaded
-    read_styles();
-    
-    // Prepare to render via cairo      
-    Gtk::Allocation allocation = get_allocation();
-    Cairo::RefPtr<Cairo::Context> cairo = window->create_cairo_context();
+{
+  // This is where we draw on the window
+  Glib::RefPtr<Gdk::Window> window = get_window();
+  if(!window)
+    return false;
+  
+  // Makes sure the widget styles have been loaded
+  read_styles();
+  
+  // Prepare to render via cairo
+  Glib::RefPtr<Style> style = get_style();
+  Gtk::Allocation allocation = get_allocation();
+  Cairo::RefPtr<Cairo::Context> cairo = window->create_cairo_context();
 
-    // Translate the view by the scroll distance
-    cairo->translate(0,
-      -(int)timelineWidget->verticalAdjustment.get_value());
-    
-    // Interate drawing each track
-    BOOST_FOREACH( Track* track, timelineWidget->tracks )
-      {
-        ASSERT(track != NULL);
+  // Translate the view by the scroll distance
+  cairo->translate(0,
+    -(int)timelineWidget->verticalAdjustment.get_value());
+  
+  // Interate drawing each track
+  BOOST_FOREACH( Track* track, timelineWidget->tracks )
+    {
+      ASSERT(track != NULL);
 
-        const int height = track->get_height();
-        ASSERT(height >= 0);
+      const int height = track->get_height();
+      ASSERT(height >= 0);
+    
+      // Draw the track background
+      cairo->rectangle(0, 0, allocation.get_width(), height);
+      gdk_cairo_set_source_color(cairo->cobj(), &background);
+      cairo->fill();
+    
+      // Render the track
+      cairo->save();
+      track->draw_track(cairo);
+      cairo->restore();
       
-        // Draw the track background
-        cairo->rectangle(0, 0, allocation.get_width(), height);
-        gdk_cairo_set_source_color(cairo->cobj(), &background);
-        cairo->fill();
-      
-        // Render the track
-        cairo->save();
-        track->draw_track(cairo);
-        cairo->restore();
-        
-        // Shift for the next track
-        cairo->translate(0, height + TimelineWidget::TrackPadding);
-      }   
+      // Shift for the next track
+      cairo->translate(0, height + TimelineWidget::TrackPadding);
+    }   
 
-    return true;
-  }
+  return true;
+}
   
 void
 TimelineBody::read_styles()
-  {
-    background = WindowManager::read_style_colour_property(
-      *this, "background", 0, 0, 0);
-  }
+{
+  background = WindowManager::read_style_colour_property(
+    *this, "background", 0, 0, 0);
+}
 
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
 }   // namespace lumiera
-

@@ -41,20 +41,26 @@ namespace widgets {
 namespace timeline {
 
 TimelineRuler::TimelineRuler() :
-    Glib::ObjectBase("TimelineRuler")
+  Glib::ObjectBase("TimelineRuler"),
+  timeOffset(0),
+  timeScale(1)  
 {
   set_flags(Gtk::NO_WINDOW);  // This widget will not have a window
   set_size_request(-1, 20);
-  
-  // Install style properties
-  timeScale = GAVL_TIME_SCALE / 200;
-  timeOffset = 0;
 }
 
 void
 TimelineRuler::set_time_offset(gavl_time_t time_offset)
 {
   timeOffset = time_offset;
+  queue_draw();
+}
+
+void
+TimelineRuler::set_time_scale(int64_t time_scale)
+{
+  REQUIRE(time_scale > 0);
+  timeScale = time_scale;
   queue_draw();
 }
 
@@ -65,10 +71,7 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
   Glib::RefPtr<Gdk::Window> window = get_window();
   if(!window)
     return false;
-  
-  // Makes sure the widget styles have been loaded
-  read_styles();
-  
+
   // Prepare to render via cairo      
   Allocation allocation = get_allocation();
   Glib::RefPtr<Style> style = get_style();
@@ -82,6 +85,10 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
   cairo->rectangle(0, 0, allocation.get_width(), allocation.get_height());
   cairo->fill_preserve();
   cairo->clip();
+  
+  // Make sure we don't have impossible zoom
+  if(timeScale <= 0)
+    return true;
   
   // Render ruler annotations
   Gdk::Cairo::set_source_color(cairo, style->get_fg(STATE_NORMAL));
@@ -114,13 +121,6 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
   while(x < allocation.get_width());
 
   return true;
-}
-
-void
-TimelineRuler::read_styles()
-{
-  //background = WindowManager::read_style_colour_property(
-  //  *this, "background", 0, 0, 0);
 }
   
 }   // namespace timeline

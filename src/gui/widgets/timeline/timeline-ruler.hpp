@@ -35,23 +35,33 @@ namespace widgets {
 namespace timeline {
 
 class TimelineRuler : public Gtk::Widget
-  {
-  public:
-    TimelineRuler();
-    
-    void set_time_offset(gavl_time_t time_offset);
+{
+public:
+  TimelineRuler();
   
-    /* ===== Events ===== */
-  protected:
-    bool on_expose_event(GdkEventExpose* event);
-    
-    /* ===== Internals ===== */
-  private:
-    void read_styles();
+  /**
+   * Sets the time offset. This is the time value displaid at the
+   * left-hand edge of the ruler.
+   */
+  void set_time_offset(gavl_time_t time_offset);
 
-    gavl_time_t timeOffset;
-    int timeScale;
-  };
+  /**
+   * Sets the time scale value.
+   * @param time_scale The scale factor, which is the number of
+   * microseconds per screen pixel. This value must be greater than
+   * zero.
+   */
+  void set_time_scale(int64_t time_scale);
+
+  /* ===== Events ===== */
+protected:
+  bool on_expose_event(GdkEventExpose* event);
+  
+  /* ===== Internals ===== */
+private:
+  gavl_time_t timeOffset;
+  int64_t timeScale;
+};
 
 }   // namespace timeline
 }   // namespace widgets

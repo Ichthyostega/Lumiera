@@ -37,6 +37,7 @@ const int TimelineWidget::HeaderWidth = 100;
 
 TimelineWidget::TimelineWidget() :
   Table(2, 2),
+  timeScale(1),
   totalHeight(0),
   horizontalAdjustment(0, 0, 0),
   verticalAdjustment(0, 0, 0),
@@ -44,14 +45,16 @@ TimelineWidget::TimelineWidget() :
   verticalScroll(verticalAdjustment)
 {
   body = new TimelineBody(this);
-  ASSERT(body != NULL);
+  ENSURE(body != NULL);
   headerContainer = new HeaderContainer(this);
-  ASSERT(headerContainer != NULL);
+  ENSURE(headerContainer != NULL);
 
   horizontalAdjustment.signal_value_changed().connect(
     sigc::mem_fun(this, &TimelineWidget::on_scroll) );
   verticalAdjustment.signal_value_changed().connect(
-    sigc::mem_fun(this, &TimelineWidget::on_scroll) );    
+    sigc::mem_fun(this, &TimelineWidget::on_scroll) );
+    
+  set_time_scale(GAVL_TIME_SCALE / 200);
 
   attach(*body, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
   attach(ruler, 1, 2, 0, 1, FILL|EXPAND, SHRINK);
@@ -67,16 +70,42 @@ TimelineWidget::TimelineWidget() :
 
 TimelineWidget::~TimelineWidget()
 {
-  ASSERT(body != NULL);
+  REQUIRE(body != NULL);
   body->unreference();
-  ASSERT(headerContainer != NULL);
+  REQUIRE(headerContainer != NULL);
   headerContainer->unreference();
+}
+
+gavl_time_t
+TimelineWidget::get_time_offset() const
+{
+  return (gavl_time_t)horizontalAdjustment.get_value();
+}
+
+void
+TimelineWidget::set_time_offset(gavl_time_t time_offset)
+{
+  horizontalAdjustment.set_value(time_offset);
+  ruler.set_time_offset(time_offset);
+}
+
+int64_t
+TimelineWidget::get_time_scale() const
+{
+  return timeScale;
+}
+
+void
+TimelineWidget::set_time_scale(int64_t time_scale)
+{
+  timeScale = time_scale;
+  ruler.set_time_scale(time_scale);
 }
 
 void
 TimelineWidget::on_scroll()
 {
-  gavl_time_t time = horizontalAdjustment.get_value() * GAVL_TIME_SCALE / 200;
+  gavl_time_t time = horizontalAdjustment.get_value();
   ruler.set_time_offset(time);
 }
   
@@ -111,7 +140,8 @@ TimelineWidget::update_scroll()
   
   //----- Horizontal Scroll ------//
   
-  horizontalAdjustment.set_upper(1000);
+  horizontalAdjustment.set_upper(1000 * GAVL_TIME_SCALE / 200);
+  horizontalAdjustment.set_lower(-1000 * GAVL_TIME_SCALE / 200);
   
   //----- Vertical Scroll -----//
   
@@ -140,7 +170,15 @@ TimelineWidget::get_y_scroll_offset() const
   return (int)verticalAdjustment.get_value();
 }
 
+void
+TimelineWidget::shift_view(int shift_size)
+{
+  const int view_width = body->get_allocation().get_width();
+  
+  set_time_offset(get_time_offset() +
+    shift_size * timeScale * view_width / 16);
+}
+
 }   // namespace widgets
 }   // namespace gui
 }   // namespace lumiera
-

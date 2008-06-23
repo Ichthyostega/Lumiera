@@ -33,57 +33,94 @@
 #include "timeline/track.hpp"
 #include "timeline/video-track.hpp"
 
-#include <vector>
-
 namespace lumiera {
 namespace gui {
 namespace widgets {
 
 class TimelineWidget : public Gtk::Table
-  {
-  public:
-    TimelineWidget();
+{
+public:
+  TimelineWidget();
 
-    ~TimelineWidget();
-
-    /* ===== Events ===== */
-  protected:
-    void on_scroll();
-    
-    void on_size_allocate(Gtk::Allocation& allocation);
-
-    /* ===== Internals ===== */
-  protected:
+  ~TimelineWidget();
   
-    void update_tracks();
-    
-    void update_scroll();
-    
-    int get_y_scroll_offset() const;
+  /* ===== Data Access ===== */
+public:
+  /**
+   * Gets the time offset. This is the time value displaid at the
+   * left-hand edge of the timeline body area.
+   */
+  gavl_time_t get_time_offset() const;
 
-  protected:
-    int totalHeight;
+  /**
+   * Sets the time offset. This is the time value displaid at the
+   * left-hand edge of the timeline body area.
+   */
+  void set_time_offset(gavl_time_t time_offset);
+  
+  /**
+   * Gets the time scale value.
+   * @return The scale factor, which is the number of microseconds per
+   * screen pixel.
+   */
+  int64_t get_time_scale() const;
+  
+  /**
+   * Sets the time scale value.
+   * @param time_scale The scale factor, which is the number of
+   * microseconds per screen pixel. This value must be greater than
+   * zero
+   */
+  void set_time_scale(int64_t time_scale);
 
-    timeline::VideoTrack video1;
-    timeline::VideoTrack video2;
-    std::vector<timeline::Track*> tracks;
+  /* ===== Events ===== */
+protected:
+  void on_scroll();
+  
+  void on_size_allocate(Gtk::Allocation& allocation);
 
-    timeline::HeaderContainer *headerContainer;
-    timeline::TimelineBody *body;
-    timeline::TimelineRuler ruler;
+  /* ===== Internals ===== */
+protected:
 
-    Gtk::Adjustment horizontalAdjustment, verticalAdjustment;
-    Gtk::HScrollbar horizontalScroll;
-    Gtk::VScrollbar verticalScroll;
-    
-    /* ===== Constants ===== */
-  protected:
-    static const int TrackPadding;
-    static const int HeaderWidth;
+  void update_tracks();
+  
+  void update_scroll();
+  
+  int get_y_scroll_offset() const;
+  
+  /**
+   * Scrolls the view horizontally as a proportion of the view area.
+   * @param shift_size The size of the shift in 1/16ths of the view
+   * width.
+   **/
+  void shift_view(int shift_size);
 
-    friend class timeline::TimelineBody;
-    friend class timeline::HeaderContainer;
-  };
+protected:
+  int64_t timeScale;
+  gavl_time_t maxTime, minTime;
+
+  int totalHeight;
+
+  timeline::VideoTrack video1;
+  timeline::VideoTrack video2;
+  std::vector<timeline::Track*> tracks;
+
+  timeline::HeaderContainer *headerContainer;
+  timeline::TimelineBody *body;
+  timeline::TimelineRuler ruler;
+
+  Gtk::Adjustment horizontalAdjustment, verticalAdjustment;
+  Gtk::HScrollbar horizontalScroll;
+  Gtk::VScrollbar verticalScroll;
+  
+  /* ===== Constants ===== */
+protected:
+  static const int TrackPadding;
+  static const int HeaderWidth;
+
+  friend class timeline::TimelineBody;
+  friend class timeline::HeaderContainer;
+};
 
 }   // namespace widgets
 }   // namespace gui

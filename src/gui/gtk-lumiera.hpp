@@ -30,6 +30,7 @@
 
 #include <gtkmm.h>
 #include <nobug.h>
+#include <vector>
 
 extern "C" {
 #include <gavl/gavltime.h>

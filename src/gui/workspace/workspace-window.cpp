@@ -148,12 +148,17 @@ WorkspaceWindow::create_ui()
 			       GDL_DOCK_BOTTOM, -1);
 	  gdl_dock_item_dock_to (viewer_panel.get_dock_item(), assets_panel.get_dock_item(),
 			       GDL_DOCK_RIGHT, -1);
-    show_all_children();
 
-	  gdl_dock_placeholder_new ("ph1", (GdlDockObject*)dock->gobj(), GDL_DOCK_TOP, FALSE);
-	  gdl_dock_placeholder_new ("ph2", (GdlDockObject*)dock->gobj(), GDL_DOCK_BOTTOM, FALSE);
-	  gdl_dock_placeholder_new ("ph3", (GdlDockObject*)dock->gobj(), GDL_DOCK_LEFT, FALSE);
-	  gdl_dock_placeholder_new ("ph4", (GdlDockObject*)dock->gobj(), GDL_DOCK_RIGHT, FALSE);
+    show_all_children();
+
+    gchar ph1[] = "ph1";
+	  gdl_dock_placeholder_new (ph1, (GdlDockObject*)dock->gobj(), GDL_DOCK_TOP, FALSE);
+	  gchar ph2[] = "ph2";
+	  gdl_dock_placeholder_new (ph2, (GdlDockObject*)dock->gobj(), GDL_DOCK_BOTTOM, FALSE);
+	  gchar ph3[] = "ph3";
+	  gdl_dock_placeholder_new (ph3, (GdlDockObject*)dock->gobj(), GDL_DOCK_LEFT, FALSE);
+	  gchar ph4[] = "ph4";
+	  gdl_dock_placeholder_new (ph4, (GdlDockObject*)dock->gobj(), GDL_DOCK_RIGHT, FALSE);
   }
 
 }   // namespace workspace
