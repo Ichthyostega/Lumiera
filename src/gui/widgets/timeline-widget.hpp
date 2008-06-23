@@ -119,6 +119,7 @@ protected:
   static const int TrackPadding;
   static const int HeaderWidth;
   static const double ZoomIncrement;
+  static const int64_t MaxScale;
 
   friend class timeline::TimelineBody;
   friend class timeline::HeaderContainer;

@@ -82,7 +82,8 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
 
   // Render the background, and clip inside the area
   Gdk::Cairo::set_source_color(cairo, style->get_bg(STATE_NORMAL));
-  cairo->rectangle(0, 0, allocation.get_width(), allocation.get_height());
+  cairo->rectangle(0, 0, 
+    allocation.get_width(), allocation.get_height());
   cairo->fill_preserve();
   cairo->clip();
   
@@ -93,7 +94,7 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
   // Render ruler annotations
   Gdk::Cairo::set_source_color(cairo, style->get_fg(STATE_NORMAL));
   
-  gavl_time_t major_spacing = GAVL_TIME_SCALE;
+  const gavl_time_t major_spacing = calculate_major_spacing();
   
   int64_t time_offset = timeOffset - timeOffset % major_spacing;
   int x = 0;
@@ -111,8 +112,10 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
       
       // Draw the text
       pango_layout->set_text(lumiera_tmpbuf_print_time(time_offset));
-      Pango::Rectangle text_extents = pango_layout->get_logical_extents();   
-      cairo->move_to(4 + x, (allocation.get_height() - text_extents.get_height() / Pango::SCALE) / 2);
+      Pango::Rectangle text_extents = pango_layout->get_logical_extents();
+      const int text_height = text_extents.get_height() / Pango::SCALE;
+      cairo->move_to(4 + x,
+        (allocation.get_height() - text_height) / 2);
       pango_layout->add_to_cairo_context(cairo);
       cairo->fill();
       
@@ -121,6 +124,50 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
   while(x < allocation.get_width());
 
   return true;
+}
+
+gavl_time_t 
+TimelineRuler::calculate_major_spacing() const
+{
+  int i = 0;
+  const int min_division_width = 100;
+  
+  g_message("timeScale = %d", timeScale);
+  
+  const gavl_time_t major_spacings[] = {
+      GAVL_TIME_SCALE / 1000,    
+      GAVL_TIME_SCALE / 400,
+      GAVL_TIME_SCALE / 200,
+      GAVL_TIME_SCALE / 100,    
+      GAVL_TIME_SCALE / 40,
+      GAVL_TIME_SCALE / 20,
+      GAVL_TIME_SCALE / 10,    
+      GAVL_TIME_SCALE / 4,
+      GAVL_TIME_SCALE / 2,
+      GAVL_TIME_SCALE,
+      2l * GAVL_TIME_SCALE,
+      5l * GAVL_TIME_SCALE,
+      10l * GAVL_TIME_SCALE,
+      15l * GAVL_TIME_SCALE,
+      30l * GAVL_TIME_SCALE,
+      60l * GAVL_TIME_SCALE,
+      2l * 60l * GAVL_TIME_SCALE, 
+      5l * 60l * GAVL_TIME_SCALE,
+      10l * 60l * GAVL_TIME_SCALE,
+      15l * 60l * GAVL_TIME_SCALE,
+      30l * 60l * GAVL_TIME_SCALE,
+      60l * 60l * GAVL_TIME_SCALE
+    };     
+  
+  for(i = 0; i < sizeof(major_spacings) / sizeof(gavl_time_t); i++)
+    {
+      const int64_t division_width = major_spacings[i] / timeScale;
+      
+      if(division_width > min_division_width)
+        break;
+    }
+
+  return major_spacings[i];
 }
   
 }   // namespace timeline

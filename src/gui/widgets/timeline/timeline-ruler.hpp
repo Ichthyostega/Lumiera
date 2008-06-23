@@ -59,6 +59,9 @@ protected:
   
   /* ===== Internals ===== */
 private:
+  gavl_time_t calculate_major_spacing() const;
+  
+private:
   gavl_time_t timeOffset;
   int64_t timeScale;
 };

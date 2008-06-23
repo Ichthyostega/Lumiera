@@ -35,6 +35,7 @@ namespace widgets {
 const int TimelineWidget::TrackPadding = 1;
 const int TimelineWidget::HeaderWidth = 100;
 const double TimelineWidget::ZoomIncrement = 1.25;
+const int64_t TimelineWidget::MaxScale = 30000000;
 
 TimelineWidget::TimelineWidget() :
   Table(2, 2),
@@ -184,11 +185,24 @@ void
 TimelineWidget::zoom_view(int point, int zoom_size)
 { 
   int64_t new_time_scale = (double)timeScale * pow(1.25, -zoom_size);
+  
+  // Limit zooming in too close
   if(new_time_scale < 1) new_time_scale = 1;
   
+  // Nudge zoom problems caused by integer rounding
+  if(new_time_scale == timeScale && zoom_size < 0)
+    new_time_scale++;
+    
+  // Limit zooming out too far
+  if(new_time_scale > MaxScale)
+    new_time_scale = MaxScale;
+  
+  // The view must be shifted so that the zoom is centred on the cursor
   set_time_offset(get_time_offset() +
     (timeScale - new_time_scale) * point);
-  set_time_scale((int64_t)new_time_scale);
+    
+  // Apply the new scale
+  set_time_scale(new_time_scale);
 }
 
 }   // namespace widgets
