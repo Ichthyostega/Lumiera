@@ -20,15 +20,33 @@
  
 */
 
+/** @file procnode.hpp
+ ** Interface to the processing nodes and the render nodes network.
+ **
+ ** Actually, there are three different interfaces to consider
+ ** - the ProcNode#pull is the invocation interface. It is call-style (easily callable by C)
+ ** - the builder interface, comprised by the NodeFactory and the WiringFactory. It's C++ (using templates)
+ ** - the actual processing function is supposed to be a C function; it uses a set of C functions 
+ **   for accessing the frame buffers with the data to be processed.
+ **
+ ** By using the builder interface, concrete node and wiring descriptor classes are created,
+ ** based on some templates. These concrete classes form the "glue" to tie the node network
+ ** together and contain much of the operation beahviour in a hard wired fashion.
+ **
+ ** @see nodefactory.hpp
+ ** @see operationpoint.hpp
+ */
 
 #ifndef ENGINE_PROCNODE_H
 #define ENGINE_PROCNODE_H
 
-#include <vector>
+#include "pre.hpp"
 
+#include "proc/lumiera.hpp"
 #include "proc/state.hpp"
 #include "proc/mobject/parameter.hpp"
 
+#include <vector>
 
 
 
@@ -47,43 +65,19 @@ namespace engine {
    * Description of the input and output ports and the
    * predecessor nodes for a given ProcNode.
    */
-  struct WiringDescriptor
+  class WiringDescriptor
     {
-      
-    };
-    
-
-  /**
-   * Adapter to shield the ProcNode from the actual buffer management,
-   * allowing the processing function within ProcNode to use logical
-   * buffer IDs. StateAdapter is created on the stack for each pull()
-   * call, using setup/wiring data preconfigured by the builder.
-   * Its job is to provide the actual implementation of the Cache
-   * push / fetch and recursive downcall to render the source frames.
-   */
-  class StateAdapter
-    : public State
-    {
-      State& parent_;
-      State& current_;
+    public:
+      virtual ~WiringDescriptor() {}
       
     protected:
-      StateAdapter (State& callingProcess, WiringDescriptor const&) 
-        : parent_ (callingProcess),
-          current_(callingProcess.getCurrentImplementation())
-        { }
+      virtual BufferID  callDown (State& currentProcess, BufferID requiredOutputNr)  const =0; 
       
-      friend class ProcNode; // both are sharing implementation details...
+      friend class ProcNode;
       
-      
-      virtual State& getCurrentImplementation () { return current_; }
-      
-      /** contains the details of Cache query and recursive calls
-       *  to the predecessor node(s), eventually followed by the 
-       *  ProcNode::process() callback
-       */
-      void retrieve();
     };
+  
+  
   
   
   /**
@@ -93,45 +87,39 @@ namespace engine {
     {
       typedef mobject::Parameter<double> Param;   //////TODO: just a placeholder for automation as of 6/2008
       vector<Param> params;
-
+      
+      const WiringDescriptor& wiringConfig_;
+      
     protected:
-      ProcNode();
+      ProcNode (WiringDescriptor const& wd)
+        : wiringConfig_(wd)
+        { }
+        
       virtual ~ProcNode() {};
       
       friend class NodeFactory;
       
       
-      /** Callback doing the actual calculations
-       *  after input / output buffers are ready
-       *  @internal dispatch to implementation. 
-       *            Client code should use #pull()
-       */
-      virtual void process(State&) = 0;
       
-      friend void StateAdapter::retrieve();  // to issue the process() callback if necessary
-      
-      
-      /** Extension point for subclasses to modify the input sources
-       *  according to automation data and other state dependent properties. 
-       */
-      virtual WiringDescriptor const& getWiring (State&); 
-      
-
     public:
       static NodeFactory create;
       
       /** Engine Core operation: render and pull output from this node.
-       *  On return, currentProcess will hold onto output buffer(s)
+       *  On return, currentProcess will hold onto output buffer
        *  containing the calculated result frames.
+       *  @param currentProcess the current processing state for 
+       *         managing buffers and accessing current parameter values
+       *  @param requiredOutputNr the output channel requested (in case
+       *         this node delivers more than one output channel)
+       *  @return ID of the result buffer (accessible via currentProcess) 
        */
-      void 
-      pull (State& currentProcess) 
+      BufferID
+      pull (State& currentProcess, BufferID requiredOutputNr=0) 
         {
-          StateAdapter thisStep (currentProcess, getWiring (currentProcess));
-          thisStep.retrieve(); // fetch or calculate results
+          return this->wiringConfig_.callDown (currentProcess, requiredOutputNr);
         }
-
+      
     };
-
+  
 } // namespace engine
 #endif

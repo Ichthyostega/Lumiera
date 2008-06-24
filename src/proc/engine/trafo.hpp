@@ -43,7 +43,9 @@ namespace engine
   class Trafo : public ProcNode
     {
     protected:
-      Trafo() : ProcNode() { };
+      Trafo (WiringDescriptor const& wd)
+        : ProcNode(wd)
+        { }
       
       friend class NodeFactory;
       

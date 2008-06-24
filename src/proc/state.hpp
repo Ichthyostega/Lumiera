@@ -25,13 +25,20 @@
 #define PROC_INTERFACE_STATE_H
 
 
+#include "pre.hpp"
 
-namespace engine { class StateAdapter; }
+#include "proc/lumiera.hpp"
 
-namespace proc_interface
-  {
+#include <cstddef>
 
 
+namespace engine { 
+  
+  class StateAdapter;
+  
+  typedef std::size_t BufferID;
+  
+  
   class State
     {
     protected:
@@ -50,7 +57,14 @@ namespace proc_interface
     public:
       
     };
-    
+  
+} // namespace engine
+
+
+
+namespace proc_interface {
+
+  using engine::State;
     
     
 } // namespace proc_interface

@@ -881,7 +881,7 @@ While building, the application of such a visiting tool (especially the [[NodeCr
 
 </pre>
 </div>
-<div title="BuilderToolKit" modifier="Ichthyostega" modified="200806030202" created="200805210308" tags="impl Builder" changecount="11">
+<div title="BuilderToolKit" modifier="Ichthyostega" modified="200806211539" created="200805210308" tags="impl Builder" changecount="12">
 <pre>Besides the primary working tool within the builder (namely the [[Node Creator Tool|PlanningNodeCreatorTool]]), on a lower level, we encounter several [[elementary building situations|BuilderPrimitives]] &amp;mdash; and for each of these elementary situations we can retrieve a suitable &quot;fitting tool&quot; or [[mould|BuilderMould]]. The palette of these moulds is called the ''tool kit'' of the builder. It is subject to configuration by rules.
 
 
@@ -895,7 +895,7 @@ As each mould kind is different, it has a {{{prepare(...)}}} function with suita
 When {{{operate()}}} doesn't throw, the result is a list of //successor moulds// &amp;mdash; you shouldn't use the original mould after triggering its operation, because it may have been retracted as a result and reused for another purpose by the tool factory. It is not necessary to store these resulting moulds either (as they can be retrieved as described above), but they can be used right away for the next building step if applicable. In the state they are returned from a successful building step (mould operation = execution of a contained [[processing pattern|ProcPatt]]), they are usually already holding a reference to the part of the network just created and need to be configured only with the next high-level object (effect, placement, pipe, processing pattern or similar, depending on the concrete situation) in order to carry out the next step.
 
 !!single connection step
-at the lowest level within the builder there is the step of building a //connection.// This step is executed by the processing pattern with the help of the mould. Actually, making such a connection is more complicated, because in the standard case it will connect N media streams simultaneously (N=2 for stereo sound or 3D video, N=6 for 5.1 Surround, N=9 for 2nd order Ambisonics). These details are encapsulated within the OperationPoint, which is provides by the mould and exhibits a common interface for the processing pattern to express the connecting operation.
+at the lowest level within the builder there is the step of building a //connection.// This step is executed by the processing pattern with the help of the mould. Actually, making such a connection is more complicated, because in the standard case it will connect N media streams simultaneously (N=2 for stereo sound or 3D video, N=6 for 5.1 Surround, N=9 for 2nd order Ambisonics). These details are encapsulated within the OperationPoint, which is provided by the mould and exhibits a common interface for the processing pattern to express the connecting operation.
 
 &amp;rarr;see also: BuilderPrimitives for the elementary working situations corresponding to each of these [[builder moulds|BuilderMould]]
 </pre>
@@ -1839,7 +1839,7 @@ So, when creating a clip out of such a compound media asset, the clip has to be 
 <div title="NodeCreaterTool" modifier="Ichthyostega" created="200712100626" tags="def" changecount="1">
 <pre>NodeCreaterTool is a [[visiting tool|VisitorUse]] used as second step in the [[Builder]]. Starting out from a [[Fixture]], the builder first [[divides the Timeline into segments|SegmentationTool]] and then processes each segment with the NodeCreaterTool to build a render nodes network (Render Engine) for this part of the timeline. While visiting individual Objects and Placements, the NodeCreaterTool creates and wires the necessary [[nodes|ProcNode]]</pre>
 </div>
-<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200806140024" created="200806010251" tags="Rendering dynamic" changecount="10">
+<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200806220134" created="200806010251" tags="Rendering dynamic" changecount="11">
 <pre>The [[nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot;; each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle'', thus we find an operation {{{pull()}}} at the core of this process. There is no such thing as an &quot;engine object&quot; calling nodes iteratively or table driven, rather, the nodes themselves issue recursive calls to their predecessor(s). For this to work, we need the nodes to adhere to a specific protocol:
 # Node is pulled, with a StateProxy object as parameter (encapsulating the access to the frames or buffers)
 # Node may now access current parameter values, using the state accessible via the StateProxy
@@ -1854,6 +1854,9 @@ some points to note:
 * when a node is &quot;inplace-capable&quot;, input and output buffer may actually point to the same location
 * but there is no guarantee for this to happen, because the cache may be involved (and we can't overwrite the contents of a cache frame)
 * generally, a node may have N inputs and M output frames, which are expected to be processed in a single call
+
+&amp;rarr; the [[&quot;mechanics&quot; of the render process|RenderMechanics]]
+&amp;rarr; more fine grained [[implementation details|RenderImplDetails]]
 </pre>
 </div>
 <div title="ObjectCreation" modifier="Ichthyostega" modified="200806030153" created="200709030139" tags="impl design" changecount="18">
@@ -2731,7 +2734,7 @@ The system is ''open'' inasmuch every part mirrors the structure of correspondin
 &amp;rarr; [[Implementation Details|ImplementationDetails]] {{red{WIP}}}
 </pre>
 </div>
-<div title="ProcNode" modifier="Ichthyostega" modified="200805280214" created="200706220409" tags="def spec" changecount="5">
+<div title="ProcNode" modifier="Ichthyostega" modified="200806211606" created="200706220409" tags="def spec" changecount="6">
 <pre>A data processing node within the Render Engine. Its key feature is the possibility to pull from it one (freely addressable) [[Frame]] of calculated data. Further, each ~ProcNode has the ability to be wired with other nodes and [[Parameter Providers|ParamProvider]]
 
 !! {{red{open questions}}}
@@ -2742,6 +2745,7 @@ The system is ''open'' inasmuch every part mirrors the structure of correspondin
 * how to define and query for additional capabilities
 
 &amp;rarr; see also the [[open design process draft|http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/DesignRenderNodesInterface]]
+&amp;rarr; see [[mem management|ManagementRenderNodes]]
 &amp;rarr; see RenderProcess
 </pre>
 </div>
@@ -3037,10 +3041,39 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 [img[Entities comprising the Render Engine|uml/fig128389.png]]
 </pre>
 </div>
-<div title="RenderMechanics" modifier="Ichthyostega" modified="200806130010" created="200806030230" tags="Rendering impl dynamic" changecount="22">
+<div title="RenderImplDetails" modifier="Ichthyostega" modified="200806222347" created="200806220211" tags="Rendering impl" changecount="4">
+<pre>Below are some notes regarding details of the actual implementation of the render process and processing node operation. In the description of the [[render node operation protocol|NodeOperationProtocol]] and the [[mechanics of the render process|RenderMechanics]], these details were left out deliberately.
+
+!Layered structure of State
+State can be seen as structured like an onion. All the [[StateAdapter]]s in one call stack are supposed to be within one layer: they all know of a &quot;current state&quot;, which in turn is a StateProxy (and thus may refer yet to another state, maybe accros the network or in the backend or whatever). The actual {{{process()}}} function &quot;within&quot; the individual nodes just sees a single StateAdapter and thus can be thought to be a layer below.
+
+!Buffer identification
+Buffers are identified by a //handle-id,// which actually is an int index into virtual or real array holding pointers to these buffers. This array is supposed to be //in the next state-layer above.// Thus, within the {{{process()}}} function, the buffer ~IDs are organized according to this node's output- and input ports (starting with the output at index 0), and are provided by the StateAdapter specifically created for this node, while in the next layer above, all the [[StateAdapter]]s deal with allocation and freeing of buffers via buffer IDs valid relative to the &quot;current state&quot;, i.e. the shared StateProxy object used in this call stack. (And so on. Probably a render farm will add another layer)
+
+!Problem of multi-channel nodes
+Some data processors simply require to work on multiple channels simultanously, while others work just on a single channel and will be replicated by the builder for each channel invoved. Thus, we are struck with the nasty situation that the node graph may go through some nodes spanning the chain of several channels. Now the decision is //not to care for this complexity within a single chain calculating a single channel.// We rely solely on the cache to avoid duplicated calculations. When a given node happens to produce multiple output buffers, we are bound to allocate them for the purpose of this nodes {{{process()}}} call, but we just &quot;let go&quot; the buffers not needed immediately for the channel acutally to be processed. For this to work, it is supposed that the builder has wired in a caching, and that the cache will hit when we touch the same node again for the other channels.
+
+!Configuration of the processing nodes
+Every node is actually decomposed into three parts
+* an interface container of a ProcNode subclass
+* an {{{const}}} WiringDescriptor, which is actually parametrized to a subtype encoding details of the intended operation
+* an StateAdapter object created on the stack for each {{{pull()}}} call and configured specifically for the intended operation
+Thus, the outer container can be changed polymorphically to support the different kinds of nodes (large-scale view). The actual wiring of the nodes is contained in the WiringDescriptor, including the {{{process()}}} function pointer. Additionally, this WiringDescriptor knows the actual type of the StateAdapter to create, and this actual type has been chosen by the builder such as to select details of the desired operation of this mode, for example caching / no caching or maybe ~OpenGL rendering or the special case of a node pulling directly from a source reader. Most of this configuration is done by selecting the right template specialisation within the builder; thus in the critical path most of the calls can be inlined
+
+!Rules for buffer allocation and freeing
+* only output buffers are allocated. It is //never necessary//&amp;nbsp; to allocate input buffers!
+* buffers are to be allocated as late as possible, typically just before invoking {{{process()}}}
+* buffers are allways allocated by calling to the parent StateAdapter, because of the possibility to write to cache.
+* after returing form a {{{pull()}}}, the buffer-ID of the single output requested by this call is returned. By using this ID, the caller can retrieve the actual buffer holding the result from the &quot;current state&quot; StaeProxy.
+* any other buffers filled with results in the course of the same {{{process()}}} call can be released immediately before returning from the {{{pull()}}}
+* similar, and input buffers are to be released immediately after the {{{process()}}} call, but before returing from this {{{pull()}}}
+* buffers are allways released by calling to the &quot;current state&quot; (which is a StateProxy), providing the buffer-ID to be released
+</pre>
+</div>
+<div title="RenderMechanics" modifier="Ichthyostega" modified="200806220133" created="200806030230" tags="Rendering impl dynamic" changecount="24">
 <pre>While the render process, with respect to the dependencies, the builder and the processing function is sufficiently characterized by referring to the ''pull principle'' and by defining a [[protocol|NodeOperationProtocol]] each node has to adhere to &amp;mdash; for actually get it coded we have to care for some important details, especially //how to manage the buffers.// It may well be that the length of the code path necessary to invoke the individual processing functions is finally not so important, compared with the time spent at the inner pixel loop within these functions. But my guess is (as of 5/08), that the overall number of data moving and copying operations //will be//&amp;nbsp; of importance.
 
-!reguirements
+!requirements
 * operations should be &quot;in place&quot; as much as possible
 * because caching necessitates a copy, the points where this happens should be controllable.
 * buffers should accommodate automatically to provide the necessary space without clipping the image.
@@ -3054,8 +3087,9 @@ Not everything can be preconfigured though. The pull principle opens the possibi
 !buffer management
 Besides the StateProxy representing the actual render process and holding a couple of buffer (refs), we employ a lightweight adapter object in between. It is used //for a single {{{pull()}}}-call// &amp;mdash; mapping the actual buffers to the input and output port numbers of the processing node and for dealing with the cache calls. While the StateProxy manages a pool of frame buffers, this interspersed adapter allows us to either use a buffer retrieved from the cache as an input, possibly use a new buffer located within the cache as output, or (in case no caching happens) to just use the same buffer as input and output for &quot;in-place&quot;-processing. The idea is that most of the configuration of this adapter object is prepared in the wiring step while building the node network.
 
-The usage patern of the buffers can be stack-like when processing nodes requiring multiple input buffers. In the standard case, which also is the simplest case, a pair of buffers (or a single buffer for &quot;in-place&quot; capable nodes) suffices to calculate a whole chain of nodes. But &amp;mdash; as the recursive descent means depth-first processing &amp;mdash; in case multiple input buffers are needed, we may encounter a situation where some of these input buffers already contain processed data, while we have to descend into yet another predecessor node chain to pull the data for the remaining buffers. Care has to be taken //to allocate the buffers as late as possible,// otherwise we could end up holding onto a buffer almost for each node in the network. Effectively this translates into the rule to allocate output buffers only after all input buffers are ready and filled with data; thus we shouldn't allocate buffers when //entering// the recursive call to the predecessor(s), rather we have to wait until we are about to return from the downcall chain.
+The usage patern of the buffers can be stack-like when processing nodes require multiple input buffers. In the standard case, which also is the simplest case, a pair of buffers (or a single buffer for &quot;in-place&quot; capable nodes) suffices to calculate a whole chain of nodes. But &amp;mdash; as the recursive descent means depth-first processing &amp;mdash; in case multiple input buffers are needed, we may encounter a situation where some of these input buffers already contain processed data, while we have to descend into yet another predecessor node chain to pull the data for the remaining buffers. Care has to be taken //to allocate the buffers as late as possible,// otherwise we could end up holding onto a buffer almost for each node in the network. Effectively this translates into the rule to allocate output buffers only after all input buffers are ready and filled with data; thus we shouldn't allocate buffers when //entering// the recursive call to the predecessor(s), rather we have to wait until we are about to return from the downcall chain.
 Besides, these considerations also show we need a means of passing on the current buffer usage pattern while calling down. This usage pattern not only includes a record of what buffers are occupied, but also the intended use of these occupied buffers, especially if they can be modified in-place, and at which point they may be released and reused.
+__note__: this process outlined here and below is still an simplification. The actual implementation has some additional [[details to care for|RenderImplDetails]]
 
 !!Example: calculating a 3 node chain
 # Caller invokes calculation by pulling from exit node, providing the top-level StateProxy
@@ -3083,6 +3117,7 @@ Besides, these considerations also show we need a means of passing on the curren
 @@clear(right):display(block):@@
 __see also__
 &amp;rarr; the [[Entities involved in Rendering|RenderEntities]]
+&amp;rarr; additional [[implementation details|RenderImplDetails]]
 &amp;rarr; [[Memory management for render nodes|ManagementRenderNodes]]
 &amp;rarr; the protocol [[how to operate the nodes|NodeOperationProtocol]]
 </pre>
