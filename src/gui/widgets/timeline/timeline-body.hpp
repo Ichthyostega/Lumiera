@@ -43,12 +43,14 @@ class TimelineBody : public Gtk::DrawingArea
 
     /* ===== Events ===== */
   protected:
+    void on_realize();
+  
     void on_scroll();
     
-    bool on_scroll_event (GdkEventScroll* event);
+    bool on_scroll_event(GdkEventScroll* event);
     
-    void on_realize();
-
+    bool on_motion_notify_event(GdkEventMotion *event);
+    
     bool on_expose_event(GdkEventExpose* event);
     
     /* ===== Internals ===== */

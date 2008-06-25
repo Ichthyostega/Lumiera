@@ -136,6 +136,7 @@ style "timeline_ruler" = "default_base"
   gtkmm__CustomObject_TimelineRuler::annotation_horz_margin = 3
   gtkmm__CustomObject_TimelineRuler::annotation_vert_margin = 0
   gtkmm__CustomObject_TimelineRuler::min_division_width = 100
+  gtkmm__CustomObject_TimelineRuler::mouse_chevron_size = 5
 }
 
 style "timeline_header_base" = "default_base"

@@ -207,6 +207,12 @@ TimelineWidget::zoom_view(int point, int zoom_size)
   set_time_scale(new_time_scale);
 }
 
+void
+TimelineWidget::on_mouse_move_in_body(int x, int y)
+{
+  ruler.set_mouse_chevron_time(x * timeScale + timeOffset);
+}
+
 }   // namespace widgets
 }   // namespace gui
 }   // namespace lumiera

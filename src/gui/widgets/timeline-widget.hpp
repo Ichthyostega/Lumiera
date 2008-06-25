@@ -96,6 +96,8 @@ protected:
   void shift_view(int shift_size);
   
   void zoom_view(int point, int zoom_size);
+  
+  void on_mouse_move_in_body(int x, int y);
 
 protected:
   gavl_time_t timeOffset;

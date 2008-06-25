@@ -30,6 +30,7 @@ extern "C" {
 }
 
 using namespace Gtk;
+using namespace Cairo;
 using namespace std;
 using namespace lumiera::gui;
 using namespace lumiera::gui::widgets;
@@ -44,15 +45,15 @@ TimelineRuler::TimelineRuler() :
   Glib::ObjectBase("TimelineRuler"),
   timeOffset(0),
   timeScale(1),
+  mouseChevronTime(0),
   annotationHorzMargin(0),
   annotationVertMargin(0),
   majorTickHeight(0),
   minorLongTickHeight(0),
   minorShortTickHeight(0),
-  minDivisionWidth(100)
-{
-  set_flags(Gtk::NO_WINDOW);  // This widget will not have a window
-  
+  minDivisionWidth(100),
+  mouseChevronSize(0)
+{  
   // Install style properties
   register_styles();
 }
@@ -61,6 +62,7 @@ void
 TimelineRuler::set_time_offset(gavl_time_t time_offset)
 {
   timeOffset = time_offset;
+  rulerImage.clear();
   queue_draw();
 }
 
@@ -69,6 +71,14 @@ TimelineRuler::set_time_scale(int64_t time_scale)
 {
   REQUIRE(time_scale > 0);
   timeScale = time_scale;
+  rulerImage.clear();
+  queue_draw();
+}
+
+void
+TimelineRuler::set_mouse_chevron_time(gavl_time_t time)
+{
+  mouseChevronTime = time;
   queue_draw();
 }
 
@@ -76,6 +86,9 @@ void
 TimelineRuler::on_realize()
 {
   Widget::on_realize();
+  
+  // Set event notifications
+  add_events(Gdk::POINTER_MOTION_MASK);
 
   // Load styles
   read_styles();
@@ -84,30 +97,99 @@ TimelineRuler::on_realize()
 bool
 TimelineRuler::on_expose_event(GdkEventExpose* event)
 {
+  REQUIRE(event != NULL);
+  
   // This is where we draw on the window
   Glib::RefPtr<Gdk::Window> window = get_window();
   if(!window)
     return false;
     
   // Prepare to render via cairo      
-  Allocation allocation = get_allocation();
-  const int height = allocation.get_height();
-  Glib::RefPtr<Style> style = get_style();
-  Cairo::RefPtr<Cairo::Context> cairo = window->create_cairo_context();
+  const Allocation allocation = get_allocation();
+
+  Cairo::RefPtr<Context> cairo = window->create_cairo_context();
+  REQUIRE(cairo);
+
+  // Draw the ruler
+  if(!rulerImage)
+    {
+      // We have no cached rendering - it must be redrawn
+      // but do we need ro allocate a new image?
+      if(!rulerImage ||
+        rulerImage->get_width() != allocation.get_width() ||
+        rulerImage->get_height() != allocation.get_height())
+        rulerImage = ImageSurface::create(FORMAT_RGB24,
+          allocation.get_width(), allocation.get_height());
+          
+      ENSURE(rulerImage);
+        
+      Cairo::RefPtr<Context> image_cairo = Context::create(rulerImage);
+      ENSURE(image_cairo);
+      
+      draw_ruler(image_cairo, allocation);
+    }
+  
+  // Draw the cached ruler image
+  cairo->set_source(rulerImage, 0, 0);
+  cairo->paint();
+  
+  // Draw the mouse chevron
+  draw_mouse_chevron(cairo, allocation);
+
+  return true;
+}
+
+bool
+TimelineRuler::on_motion_notify_event(GdkEventMotion *event)
+{
+  REQUIRE(event != NULL);
+
+  set_mouse_chevron_time(event->x * timeScale + timeOffset);
+  return true;
+}
+
+void
+TimelineRuler::on_size_request (Gtk::Requisition *requisition)
+{
+  REQUIRE(requisition != NULL);
+  
+  // Initialize the output parameter
+  *requisition = Gtk::Requisition();
+  
+  requisition->width = 0; 
+  get_style_property("height", requisition->height);
+}
+
+void
+TimelineRuler::on_size_allocate(Gtk::Allocation& allocation)
+{
+  Widget::on_size_allocate(allocation);
+  rulerImage.clear(); // The widget has changed size - redraw
+}
+
+void
+TimelineRuler::draw_ruler(Cairo::RefPtr<Cairo::Context> cairo,
+    Gdk::Rectangle ruler_rect)
+{
+  REQUIRE(cairo);
+  REQUIRE(ruler_rect.get_width() > 0);
+  REQUIRE(ruler_rect.get_height() > 0);
+  
+  // Preparation steps
+  const int height = ruler_rect.get_height();
   Glib::RefPtr<Pango::Layout> pango_layout = create_pango_layout("");
-
-  cairo->translate(allocation.get_x(), allocation.get_y());
-
+  Glib::RefPtr<Style> style = get_style();
+  
   // Render the background, and clip inside the area
   Gdk::Cairo::set_source_color(cairo, style->get_bg(STATE_NORMAL));
   cairo->rectangle(0, 0, 
-    allocation.get_width(), allocation.get_height());
+    ruler_rect.get_width(), ruler_rect.get_height());
   cairo->fill_preserve();
   cairo->clip();
   
   // Make sure we don't have impossible zoom
   if(timeScale <= 0)
-    return true;
+    return;
   
   // Render ruler annotations
   Gdk::Cairo::set_source_color(cairo, style->get_fg(STATE_NORMAL));
@@ -115,8 +197,10 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
   const gavl_time_t major_spacing = calculate_major_spacing();
   const gavl_time_t minor_spacing = major_spacing / 10;
   
-  
-  int64_t time_offset = timeOffset - timeOffset % minor_spacing;
+  int64_t time_offset = timeOffset - timeOffset % major_spacing;
+  if(timeOffset < 0)
+    time_offset -= major_spacing;
+    
   int x = 0;
   const int64_t x_offset = timeOffset / timeScale;
 
@@ -153,19 +237,30 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
         
       time_offset += minor_spacing;
     }
-  while(x < allocation.get_width());
-
-  return true;
+  while(x < ruler_rect.get_width());
 }
 
 void
-TimelineRuler::on_size_request (Gtk::Requisition *requisition)
+TimelineRuler::draw_mouse_chevron(Cairo::RefPtr<Cairo::Context> cairo,
+    Gdk::Rectangle ruler_rect)
 {
-  // Initialize the output parameter
-  *requisition = Gtk::Requisition();
+  REQUIRE(cairo);
+  REQUIRE(ruler_rect.get_width() > 0);
+  REQUIRE(ruler_rect.get_height() > 0);
   
-  requisition->width = 0; 
-  get_style_property("height", requisition->height);
+  // Set the source colour
+  Glib::RefPtr<Style> style = get_style();
+  Gdk::Cairo::set_source_color(cairo, style->get_fg(STATE_NORMAL));
+  
+  const int x = (mouseChevronTime - timeOffset) / timeScale;
+  cairo->move_to(x + 0.5,
+    ruler_rect.get_height());
+  cairo->line_to(x + mouseChevronSize + 0.5,
+    ruler_rect.get_height() - mouseChevronSize);
+  cairo->line_to(x - mouseChevronSize + 0.5,
+    ruler_rect.get_height() - mouseChevronSize);
+    
+  cairo->fill();
 }
 
 gavl_time_t 
@@ -256,6 +351,12 @@ TimelineRuler::register_styles() const
     "Minimum Division Width",
     "The minimum distance in pixels that two major division may approach.",
     0, G_MAXINT, 100, G_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property(klass, 
+    g_param_spec_int("mouse_chevron_size",
+    "Mouse Chevron Size",
+    "The height of the mouse chevron in pixels.",
+    0, G_MAXINT, 5, G_PARAM_READABLE));
 }
 
 void
@@ -267,6 +368,7 @@ TimelineRuler::read_styles()
   get_style_property("minor_long_tick_height", minorLongTickHeight);
   get_style_property("minor_short_tick_height", minorShortTickHeight);
   get_style_property("min_division_width", minDivisionWidth);
+  get_style_property("mouse_chevron_size", mouseChevronSize);
 }
   
 }   // namespace timeline

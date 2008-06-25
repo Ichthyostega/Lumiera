@@ -61,6 +61,15 @@ TimelineBody::TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widge
 }
 
 void
+TimelineBody::on_realize()
+{
+  Widget::on_realize();
+  
+  // We wish to receive all event notifications
+  add_events(Gdk::POINTER_MOTION_MASK);
+}
+
+void
 TimelineBody::on_scroll()
 {
   queue_draw();
@@ -69,6 +78,7 @@ TimelineBody::on_scroll()
 bool
 TimelineBody::on_scroll_event (GdkEventScroll* event)
 {
+  REQUIRE(event != NULL);
   REQUIRE(timelineWidget != NULL);
   
   if(event->state & GDK_CONTROL_MASK)
@@ -102,19 +112,24 @@ TimelineBody::on_scroll_event (GdkEventScroll* event)
     }
   }
 }
-  
-void
-TimelineBody::on_realize()
+
+bool
+TimelineBody::on_motion_notify_event(GdkEventMotion *event)
 {
-  Widget::on_realize();
+  REQUIRE(event != NULL);
+  REQUIRE(timelineWidget != NULL);
   
-  // We wish to receive all event notifications
-  add_events(Gdk::ALL_EVENTS_MASK);
+  timelineWidget->on_mouse_move_in_body(event->x, event->y);  
+  
+  return true;
 }
 
 bool
 TimelineBody::on_expose_event(GdkEventExpose* event)
 {
+  REQUIRE(event != NULL);
+  REQUIRE(timelineWidget != NULL);
+  
   // This is where we draw on the window
   Glib::RefPtr<Gdk::Window> window = get_window();
   if(!window)
@@ -124,10 +139,13 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
   read_styles();
   
   // Prepare to render via cairo
-  Glib::RefPtr<Style> style = get_style();
+  Glib::RefPtr<Style> style = get_style();  
   Gtk::Allocation allocation = get_allocation();
   Cairo::RefPtr<Cairo::Context> cairo = window->create_cairo_context();
-
+  
+  REQUIRE(style);
+  REQUIRE(cairo);
+  
   // Translate the view by the scroll distance
   cairo->translate(0,
     -(int)timelineWidget->verticalAdjustment.get_value());

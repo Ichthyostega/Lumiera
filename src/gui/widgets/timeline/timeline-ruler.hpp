@@ -34,7 +34,7 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-class TimelineRuler : public Gtk::Widget
+class TimelineRuler : public Gtk::DrawingArea
 {
 public:
   TimelineRuler();
@@ -52,6 +52,8 @@ public:
    * zero.
    */
   void set_time_scale(int64_t time_scale);
+  
+  void set_mouse_chevron_time(gavl_time_t time);
 
   /* ===== Events ===== */
 protected:
@@ -60,10 +62,20 @@ protected:
 
   bool on_expose_event(GdkEventExpose *event);
   
-  void on_size_request (Gtk::Requisition *requisition);
+  bool on_motion_notify_event(GdkEventMotion *event);
+  
+  void on_size_request(Gtk::Requisition *requisition);
+
+  void on_size_allocate(Gtk::Allocation& allocation);
   
   /* ===== Internals ===== */
 private:
+  void draw_ruler(Cairo::RefPtr<Cairo::Context> cairo,
+    Gdk::Rectangle ruler_rect);
+
+  void draw_mouse_chevron(Cairo::RefPtr<Cairo::Context> cairo,
+    Gdk::Rectangle ruler_rect);
+
   gavl_time_t calculate_major_spacing() const;
   
   void register_styles() const;
@@ -74,6 +86,7 @@ private:
   // View values
   gavl_time_t timeOffset;
   int64_t timeScale;
+  int mouseChevronTime;
   
   // Style values
   int annotationHorzMargin;
@@ -82,6 +95,10 @@ private:
   int minorLongTickHeight;
   int minorShortTickHeight;
   int minDivisionWidth;
+  int mouseChevronSize;
+  
+  // Cached ruler image
+  Cairo::RefPtr<Cairo::ImageSurface> rulerImage;
 };
 
 }   // namespace timeline
