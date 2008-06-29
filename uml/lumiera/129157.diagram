@@ -26,11 +26,8 @@ end
 classinstancecanvas 129157 classinstance_ref 133253 // HUE
   xyz 477 444 2000
   end
-classinstancecanvas 129541 classinstance_ref 133381 // vid1
-  xyz 409 293 2000
-  end
 classinstancecanvas 129669 classinstance_ref 133509 // 
-  xyz 138 498 2000
+  xyz 151 399 2000
   end
 classinstancecanvas 129797 classinstance_ref 133637 // video1
   xyz 478 172 2000
@@ -60,6 +57,9 @@ note 134661 "Note: because the Engine Components are stateless, various calculat
   xyzwh 569 45 2000 240 75
 textcanvas 134789 "Video Clip from 2 to 7, with an attached HUE effect starting 3 frames after begin and overlapping by 1 frame beyond the end"
   xyzwh 145 553 2000 175 87
+classinstancecanvas 134917 classinstance_ref 137093 // vid1
+  xyz 410 291 3005
+  end
 objectlinkcanvas 130053 rel relation_ref 135429 // <unidirectional association>
   from ref 129925 z 1999 to ref 128901
   role_a_pos 537 361 3000 no_role_b
@@ -67,46 +67,46 @@ objectlinkcanvas 130437 rel relation_ref 135429 // <unidirectional association>
   from ref 129157 z 1999 to ref 128645
   role_a_pos 539 472 3000 no_role_b
 objectlinkcanvas 130565 rel relation_ref 131973 // <unidirectional association>
-  from ref 128773 z 1999 stereotype "<<has_a>>" xyz 624 285 3000 to ref 128517
+  from ref 128773 z 1999 stereotype "<<has_a>>" xyz 656 263 3000 to ref 128517
   role_a_pos 661 304 3000 no_role_b
-objectlinkcanvas 130693 rel relation_ref 134533 // <unidirectional association>
-  geometry VHr
-  from ref 129541 z 1999 to point 161 304
-  line 130821 z 1999 to ref 129669
-  role_a_pos 173 473 3000 no_role_b
-objectlinkcanvas 130949 rel relation_ref 135429 // <unidirectional association>
-  from ref 128901 z 1999 to ref 129157
-  role_a_pos 538 419 3000 no_role_b
-objectlinkcanvas 131589 rel relation_ref 131973 // <unidirectional association>
-  from ref 129797 z 1999 stereotype "<<has_a>>" xyz 499 284 3000 to ref 129925
-  role_a_pos 537 304 3000 no_role_b
-objectlinkcanvas 132613 rel relation_ref 135429 // <unidirectional association>
-  from ref 128517 z 1999 to ref 132229
-  role_a_pos 662 419 3000 no_role_b
-objectlinkcanvas 132869 rel relation_ref 135429 // <unidirectional association>
-  from ref 132229 z 1999 to ref 128389
-  role_a_pos 662 533 3000 no_role_b
-objectlinkcanvas 133637 rel relation_ref 135429 // <unidirectional association>
-  from ref 133509 z 1999 to ref 133381
-  role_a_pos 348 361 3000 no_role_b
-objectlinkcanvas 133765 rel relation_ref 135429 // <unidirectional association>
-  from ref 133125 z 1999 to ref 132997
-  role_a_pos 416 577 3000 no_role_b
-objectlinkcanvas 133893 rel relation_ref 131973 // <unidirectional association>
-  from ref 133253 z 1999 stereotype "<<has_a>>" xyz 291 273 3000 to ref 133509
-  role_a_pos 348 304 3000 no_role_b
-objectlinkcanvas 134277 rel relation_ref 135429 // <unidirectional association>
-  from ref 133381 z 1999 to ref 133125
-  role_a_pos 349 473 3000 no_role_b
-objectlinkcanvas 134405 rel relation_ref 135429 // <unidirectional association>
+objectlinkcanvas 135045 rel relation_ref 135429 // <unidirectional association>
   from ref 128645 z 1999 to ref 132997
   role_a_pos 446 567 3000 no_role_b
-objectlinkcanvas 134533 rel relation_ref 131845 // <directional aggregation by value>
+objectlinkcanvas 135173 rel relation_ref 131845 // <directional aggregation by value>
   geometry VH
-  from ref 128005 z 1999 to point 123 205
-  line 6 z 1999 to ref 133253
-  role_a_pos 197 183 3000 no_role_b
-line 131973 -_-_
-  from ref 129797 z 1999 to point 445 243
-  line 132101 z 1999 to ref 129541
+  from ref 128005 z 1999 stereotype "<<list>>" xyz 127 141 3000 to point 123 205
+  line 136965 z 1999 to ref 133253
+  role_a_pos 152 186 3000 no_role_b
+objectlinkcanvas 135301 rel relation_ref 135429 // <unidirectional association>
+  from ref 128901 z 1999 to ref 129157
+  role_a_pos 538 419 3000 no_role_b
+objectlinkcanvas 135429 rel relation_ref 131973 // <unidirectional association>
+  from ref 133253 z 1999 stereotype "<<has_a>>" xyz 282 261 3000 to ref 133509
+  role_a_pos 348 304 3000 no_role_b
+objectlinkcanvas 135557 rel relation_ref 135429 // <unidirectional association>
+  from ref 128517 z 1999 to ref 132229
+  role_a_pos 662 419 3000 no_role_b
+objectlinkcanvas 135685 rel relation_ref 135429 // <unidirectional association>
+  from ref 133125 z 1999 to ref 132997
+  role_a_pos 416 577 3000 no_role_b
+objectlinkcanvas 135813 rel relation_ref 135429 // <unidirectional association>
+  from ref 132229 z 1999 to ref 128389
+  role_a_pos 662 533 3000 no_role_b
+objectlinkcanvas 135941 rel relation_ref 131973 // <unidirectional association>
+  from ref 129797 z 1999 stereotype "<<has_a>>" xyz 529 262 3000 to ref 129925
+  role_a_pos 537 304 3000 no_role_b
+objectlinkcanvas 136069 rel relation_ref 135429 // <unidirectional association>
+  from ref 133509 z 1999 to ref 133381
+  role_a_pos 348 361 3000 no_role_b
+objectlinkcanvas 136197 rel relation_ref 135429 // <unidirectional association>
+  from ref 133381 z 1999 to ref 133125
+  role_a_pos 349 473 3000 no_role_b
+objectlinkcanvas 136325 norel
+  geometry VHr
+  from ref 134917 z 1999 to point 174 302
+  line 136453 z 1999 to ref 129669
+  no_role_a no_role_b
+line 136581 -_-_
+  from ref 129797 z 1999 to point 451 237
+  line 136709 z 1999 to ref 134917
 end

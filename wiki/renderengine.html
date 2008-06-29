@@ -1127,16 +1127,17 @@ Basically, each elementary operation has to record the informations necessary to
 {{red{to be defined in more detail later...}}}
 </pre>
 </div>
-<div title="Example1" modifier="Ichthyostega" modified="200706220253" created="200706220239" tags="example" changecount="3">
+<div title="Example1" modifier="Ichthyostega" modified="200806291628" created="200706220239" tags="example" changecount="4">
 <pre>The &amp;raquo;Timeline&amp;laquo; is a sequence of ~MObjects -- here clips -- together with an ExplicitPlacement, locating each clip at a given time and track. (Note: I simplified the time format and wrote frame numbers to make it more clear)
 [img[Example1: Objects in the EDL/Fixture|uml/fig128773.png]]
 
 ----
 After beeing processed by the Builder, we get the following Render Engine configuration
+{{red{note: please take this only as a &quot;big picture&quot;, the implementation details got a lot more complicated as of 6/08}}}
 [img[Example1: generated Render Engine|uml/fig129029.png]]
 </pre>
 </div>
-<div title="Example2" modifier="Ichthyostega" modified="200804100035" created="200706220251" tags="example" changecount="2">
+<div title="Example2" modifier="Ichthyostega" modified="200806291627" created="200706220251" tags="example" changecount="3">
 <pre>{{red{TODO: seemingly this example is slightly outdated, as the implementation of placements is now indirect via LocatingPin objects}}}
 This Example showes the //high level// EDL as well. This needs to be transformed into a Fixture by some facility still to be designed. Basically, each [[Placement]] needs to be queried for this to get the corresponding ExplicitPlacement. The difficult part is to handle possible Placement constraints, e.g. one clip can't be placed at a timespan covered by another clip on the same track. In the current Cinelerra2, all of this is done directly by the GUI actions.
 
@@ -1146,6 +1147,7 @@ The &amp;raquo;Timeline&amp;laquo; is a sequence of ~MObjects -- note: using the
 ----
 After beeing processed by the Builder, we get a Render Engine configuration.&lt;br&gt;
 It has to be segmented at least at every point with changes in the configuration, but some variations are possible, e.g. we could create a Render Engine for every Frame (as Cinelerra2 does) or we could optimize out some configurations (for example the effect extended beyond the end of the clip)
+{{red{note: as of 6/08 this can be taken only as the &quot;big picture&quot;. Implementation will differ in details, and is more complicated than shown here}}}
 [img[Example2: generated Render Engine|uml/fig129157.png]]
 </pre>
 </div>
@@ -3041,7 +3043,7 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 [img[Entities comprising the Render Engine|uml/fig128389.png]]
 </pre>
 </div>
-<div title="RenderImplDetails" modifier="Ichthyostega" modified="200806290012" created="200806220211" tags="Rendering impl" changecount="8">
+<div title="RenderImplDetails" modifier="Ichthyostega" modified="200806291643" created="200806220211" tags="Rendering impl" changecount="11">
 <pre>Below are some notes regarding details of the actual implementation of the render process and processing node operation. In the description of the [[render node operation protocol|NodeOperationProtocol]] and the [[mechanics of the render process|RenderMechanics]], these details were left out deliberately.
 
 !Layered structure of State
@@ -3054,11 +3056,15 @@ For the purpose of node operation, Buffers are identified by a //Buffer-handle,/
 Some data processors simply require to work on multiple channels simultanously, while others work just on a single channel and will be replicated by the builder for each channel invoved. Thus, we are struck with the nasty situation that the node graph may go through some nodes spanning the chain of several channels. Now the decision is //not to care for this complexity within a single chain calculating a single channel.// We rely solely on the cache to avoid duplicated calculations. When a given node happens to produce multiple output buffers, we are bound to allocate them for the purpose of this nodes {{{process()}}} call, but we just &quot;let go&quot; the buffers not needed immediately for the channel acutally to be processed. For this to work, it is supposed that the builder has wired in a caching, and that the cache will hit when we touch the same node again for the other channels.
 
 !Configuration of the processing nodes
+[&gt;img[uml/fig132357.png]]
 Every node is actually decomposed into three parts
 * an interface container of a ProcNode subclass
 * an {{{const}}} WiringDescriptor, which is actually parametrized to a subtype encoding details of the intended operation
 * an StateAdapter object created on the stack for each {{{pull()}}} call and configured specifically for the intended operation
 Thus, the outer container can be changed polymorphically to support the different kinds of nodes (large-scale view). The actual wiring of the nodes is contained in the WiringDescriptor, including the {{{process()}}} function pointer. Additionally, this WiringDescriptor knows the actual type of the StateAdapter to create, and this actual type has been chosen by the builder such as to select details of the desired operation of this mode, for example caching / no caching or maybe ~OpenGL rendering or the special case of a node pulling directly from a source reader. Most of this configuration is done by selecting the right template specialisation within the builder; thus in the critical path most of the calls can be inlined
+
+!!!! composing the actual StateAdapter
+As shown in the class diagram to the right, the actual implementation is assembled by chaining together the various policy classes governing parts of the node operation, like Caching, in-Place calculation capability, etc. (&amp;rarr; see [[here|StateAdapter]] for details). The rationale is that we can allocate at runtime a StateProxy object directly on the stack with the necessary buffer table size and an precisely tailored and mostly inlined implementation of the call sequence for &quot;calculating the predecessor nodes&quot;. We //do employ//&amp;nbsp; some virtual calls for the buffer management in order to avoid coupling the policy classes to the actual number of in/out buffers. (As of 6/2008, this is mainly a precaution to be able to control the number of generated template instances. If we ever get in the region of several hundred individual specialisations, we'd need to separate out the allocation of the &quot;wiring table&quot; into a hand-made stack-like buffer allocated from the heap.)
 
 !Rules for buffer allocation and freeing
 * only output buffers are allocated. It is //never necessary//&amp;nbsp; to allocate input buffers!
@@ -3068,6 +3074,8 @@ Thus, the outer container can be changed polymorphically to support the differen
 * any other buffers filled with results in the course of the same {{{process()}}} call can be released immediately before returning from the {{{pull()}}}
 * similar, and input buffers are to be released immediately after the {{{process()}}} call, but before returing from this {{{pull()}}}
 * buffers are allways released by calling to the &quot;current state&quot; (which is a StateProxy), providing the buffer-ID to be released
+
+@@clear(right):display(block):@@
 </pre>
 </div>
 <div title="RenderMechanics" modifier="Ichthyostega" modified="200806280029" created="200806030230" tags="Rendering impl dynamic" changecount="27">

@@ -33,12 +33,6 @@ classinstancecanvas 129797 classinstance_ref 131717 // vid_a
 classinstancecanvas 129925 classinstance_ref 131845 // aud_a
   xyz 444 398 2000
   end
-classinstancecanvas 131717 classinstance_ref 131973 // vid1
-  xyz 188 427 2000
-  end
-classinstancecanvas 131845 classinstance_ref 132101 // au1
-  xyz 554 289 2000
-  end
 classinstancecanvas 131973 classinstance_ref 132229 // 
   xyz 117 492 2000
   end
@@ -49,9 +43,15 @@ note 133125 "render state proxy passed on"
   xyzwh 123 355 2000 104 53
 textcanvas 133253 "Video and Audio Clip of length = 5 frames positioned at frame 2, producing two output streams (frame sequence)."
   xyzwh 445 507 2000 175 83
+classinstancecanvas 133381 classinstance_ref 137093 // vid1
+  xyz 172 431 2000
+  end
+classinstancecanvas 133893 classinstance_ref 137221 // au1
+  xyz 556 289 2000
+  end
 objectlinkcanvas 128389 rel relation_ref 131845 // <directional aggregation by value>
   geometry VH
-  from ref 128005 z 1999 to point 117 205
+  from ref 128005 z 1999 stereotype "<<list>>" xyz 101 154 3000 to point 117 205
   line 81 z 1999 to ref 128261
   role_a_pos 188 183 3000 no_role_b
 objectlinkcanvas 128901 rel relation_ref 131973 // <unidirectional association>
@@ -75,20 +75,18 @@ objectlinkcanvas 131461 rel relation_ref 135429 // <unidirectional association>
 objectlinkcanvas 131589 rel relation_ref 135429 // <unidirectional association>
   from ref 128773 z 1999 to ref 129925
   role_a_pos 494 373 3000 no_role_b
-objectlinkcanvas 132229 rel relation_ref 134533 // <unidirectional association>
+objectlinkcanvas 133509 norel
   geometry VHr
-  from ref 131717 z 1999 to point 140 438
-  line 1 z 1999 to ref 131973
-  role_a_pos 152 467 3000 no_role_b
-objectlinkcanvas 132485 rel relation_ref 134533 // <unidirectional association>
+  from ref 133381 z 1999 to point 140 442
+  line 133637 z 1999 to ref 131973
+  no_role_a no_role_b
+objectlinkcanvas 134021 norel
   geometry HV
-  from ref 131845 z 1999 to point 676 300
-  line 1 z 1999 to ref 132101
-  role_a_pos 688 328 3000 no_role_b
-line 132613 -_-_
-  from ref 128261 z 1999 to point 244 320
-  line 132741 z 1999 to ref 131717
-line 132869 -_-_
-  from ref 128133 z 1999 to point 583 259
-  line 132997 z 1999 to ref 131845
+  from ref 133893 z 1999 to point 676 300
+  line 134149 z 1999 to ref 132101
+  no_role_a no_role_b
+line 133765 -_-_
+  from ref 128261 z 1999 to ref 133381
+line 134277 -_-_
+  from ref 128133 z 1999 to ref 133893
 end

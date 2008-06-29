@@ -1,6 +1,6 @@
 format 40
 "ProcessingLayer" // ProcessingLayer
-  revision 19
+  revision 21
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -391,26 +391,6 @@ format 40
         end
     end
 
-    classinstance 131973 "vid1"
-      type class_ref 132997 // VRender
-      attributes
-        end
-      relations
-        relation_ref 134533 // <unidirectional association>
-          classinstance_ref 132229 // 
-        end
-    end
-
-    classinstance 132101 "au1"
-      type class_ref 132869 // ARender
-      attributes
-        end
-      relations
-        relation_ref 134533 // <unidirectional association>
-          classinstance_ref 132357 // 
-        end
-    end
-
     classinstance 132229 ""
       type class_ref 133509 // VFrame
       attributes
@@ -496,16 +476,6 @@ format 40
       relations
         relation_ref 135429 // <unidirectional association>
           classinstance_ref 132869 // input
-        end
-    end
-
-    classinstance 133381 "vid1"
-      type class_ref 132997 // VRender
-      attributes
-        end
-      relations
-        relation_ref 134533 // <unidirectional association>
-          classinstance_ref 133509 // 
         end
     end
 
@@ -684,6 +654,22 @@ ${inlines}
 
     classinstance 136965 "ad3"
       type class_ref 142597 // StateAdapter
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 137093 "vid1"
+      type class_ref 142469 // StateProxy
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 137221 "au1"
+      type class_ref 142469 // StateProxy
       attributes
         end
       relations

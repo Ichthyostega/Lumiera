@@ -24,10 +24,6 @@ classcanvas 129157 class_ref 131973 // Link
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 648 444 2000
   end
-classcanvas 129285 class_ref 132101 // Hub
-  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 593 444 2000
-  end
 classcanvas 129413 class_ref 132229 // Projector
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 417 561 2000
@@ -40,25 +36,9 @@ classcanvas 129669 class_ref 132485 // PluginAdapter
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 506 621 2000
   end
-classcanvas 129797 class_ref 132613 // GLPipe
-  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 699 531 2000
-  end
 classcanvas 132229 class_ref 132741 // State
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 36 374 2000
-  end
-classcanvas 132997 class_ref 132869 // ARender
-  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 31 511 2000
-  end
-classcanvas 133125 class_ref 132997 // VRender
-  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 110 511 2000
-  end
-classcanvas 133253 class_ref 133125 // GLRender
-  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 175 511 2000
   end
 classcanvas 133765 class_ref 133253 // Frame
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -97,34 +77,23 @@ relationcanvas 128901 relation_ref 131973 // <unidirectional association>
   multiplicity_a_pos 414 419 3000 no_multiplicity_b
 relationcanvas 129925 relation_ref 132101 // <generalisation>
   geometry VHV
-  from ref 128389 z 1999 to point 445 387
-  line 130693 z 1999 to point 499 387
+  from ref 128389 z 1999 to point 445 397
+  line 130693 z 1999 to point 499 397
   line 130821 z 1999 to ref 128517
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 relationcanvas 130053 relation_ref 132229 // <generalisation>
   geometry VHV
-  from ref 129029 z 1999 to point 516 387
-  line 130949 z 1999 to point 499 387
+  from ref 129029 z 1999 to point 516 397
+  line 130949 z 1999 to point 499 397
   line 131077 z 1999 to ref 128517
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
-relationcanvas 130181 relation_ref 132357 // <generalisation>
-  geometry VHV
-  from ref 129285 z 1999 to point 613 387
-  line 131205 z 1999 to point 499 387
-  line 131333 z 1999 to ref 128517
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 relationcanvas 130309 relation_ref 132485 // <generalisation>
   geometry VHV
-  from ref 129157 z 1999 to point 668 387
-  line 131461 z 1999 to point 499 387
+  from ref 129157 z 1999 to point 668 397
+  line 131461 z 1999 to point 499 397
   line 131589 z 1999 to ref 128517
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
-relationcanvas 131717 relation_ref 132613 // <generalisation>
-  from ref 129797 z 1999 to ref 129157
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 relationcanvas 131845 relation_ref 132741 // <generalisation>
@@ -137,27 +106,6 @@ relationcanvas 131973 relation_ref 132869 // <generalisation>
   no_multiplicity_a no_multiplicity_b
 relationcanvas 132101 relation_ref 132997 // <generalisation>
   from ref 129669 z 1999 to ref 129029
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
-relationcanvas 133381 relation_ref 133509 // <generalisation>
-  geometry VHV
-  from ref 132997 z 1999 to point 58 472
-  line 134277 z 1999 to point 73 472
-  line 134405 z 1999 to ref 132229
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
-relationcanvas 133509 relation_ref 133637 // <generalisation>
-  geometry VHV
-  from ref 133125 z 1999 to point 136 472
-  line 134533 z 1999 to point 73 472
-  line 134661 z 1999 to ref 132229
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
-relationcanvas 133637 relation_ref 133765 // <generalisation>
-  geometry VHV
-  from ref 133253 z 1999 to point 206 472
-  line 134789 z 1999 to point 73 472
-  line 134917 z 1999 to ref 132229
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 relationcanvas 135045 relation_ref 133893 // <generalisation>
@@ -182,11 +130,11 @@ relationcanvas 136965 relation_ref 134533 // <unidirectional association>
   from ref 132229 z 1999 stereotype "<<vector>>" xyz 279 441 3000 to point 306 465
   line 137093 z 1999 to ref 133765
   role_a_pos 318 587 3000 no_role_b
-  multiplicity_a_pos 282 587 3000 multiplicity_b_pos 124 427 3000
+  no_multiplicity_a multiplicity_b_pos 124 427 3000
 relationcanvas 137349 relation_ref 134661 // <generalisation>
   geometry VHV
-  from ref 137221 z 1999 to point 763 387
-  line 137477 z 1999 to point 499 387
+  from ref 137221 z 1999 to point 763 397
+  line 137477 z 1999 to point 499 397
   line 137605 z 1999 to ref 128517
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
@@ -203,8 +151,8 @@ relationcanvas 139397 relation_ref 135429 // <unidirectional association>
   from ref 128517 z 1999 to point 432 264
   line 139525 z 1999 to point 432 294
   line 139653 z 1999 to ref 128517
-  role_a_pos 414 272 3000 no_role_b
-  no_multiplicity_a multiplicity_b_pos 445 291 3000
+  role_a_pos 414 276 3000 no_role_b
+  no_multiplicity_a multiplicity_b_pos 445 296 3000
 relationcanvas 139909 relation_ref 136965 // <generalisation>
   from ref 139781 z 1999 to ref 129029
   no_role_a no_role_b
