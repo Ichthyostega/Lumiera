@@ -3041,14 +3041,14 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 [img[Entities comprising the Render Engine|uml/fig128389.png]]
 </pre>
 </div>
-<div title="RenderImplDetails" modifier="Ichthyostega" modified="200806222347" created="200806220211" tags="Rendering impl" changecount="4">
+<div title="RenderImplDetails" modifier="Ichthyostega" modified="200806290012" created="200806220211" tags="Rendering impl" changecount="8">
 <pre>Below are some notes regarding details of the actual implementation of the render process and processing node operation. In the description of the [[render node operation protocol|NodeOperationProtocol]] and the [[mechanics of the render process|RenderMechanics]], these details were left out deliberately.
 
 !Layered structure of State
 State can be seen as structured like an onion. All the [[StateAdapter]]s in one call stack are supposed to be within one layer: they all know of a &quot;current state&quot;, which in turn is a StateProxy (and thus may refer yet to another state, maybe accros the network or in the backend or whatever). The actual {{{process()}}} function &quot;within&quot; the individual nodes just sees a single StateAdapter and thus can be thought to be a layer below.
 
 !Buffer identification
-Buffers are identified by a //handle-id,// which actually is an int index into virtual or real array holding pointers to these buffers. This array is supposed to be //in the next state-layer above.// Thus, within the {{{process()}}} function, the buffer ~IDs are organized according to this node's output- and input ports (starting with the output at index 0), and are provided by the StateAdapter specifically created for this node, while in the next layer above, all the [[StateAdapter]]s deal with allocation and freeing of buffers via buffer IDs valid relative to the &quot;current state&quot;, i.e. the shared StateProxy object used in this call stack. (And so on. Probably a render farm will add another layer)
+For the purpose of node operation, Buffers are identified by a //Buffer-handle,// which contains both the actual buffer pointer and an internal indes and classification of the source providing the buffer; the latter information is used for deallocation. Especially for calling the {{{process()}}} function (which is supposed to be plain C) the respective StateAdapter provides an array containing just the output and input buffer pointers
 
 !Problem of multi-channel nodes
 Some data processors simply require to work on multiple channels simultanously, while others work just on a single channel and will be replicated by the builder for each channel invoved. Thus, we are struck with the nasty situation that the node graph may go through some nodes spanning the chain of several channels. Now the decision is //not to care for this complexity within a single chain calculating a single channel.// We rely solely on the cache to avoid duplicated calculations. When a given node happens to produce multiple output buffers, we are bound to allocate them for the purpose of this nodes {{{process()}}} call, but we just &quot;let go&quot; the buffers not needed immediately for the channel acutally to be processed. For this to work, it is supposed that the builder has wired in a caching, and that the cache will hit when we touch the same node again for the other channels.
@@ -3063,14 +3063,14 @@ Thus, the outer container can be changed polymorphically to support the differen
 !Rules for buffer allocation and freeing
 * only output buffers are allocated. It is //never necessary//&amp;nbsp; to allocate input buffers!
 * buffers are to be allocated as late as possible, typically just before invoking {{{process()}}}
-* buffers are allways allocated by calling to the parent StateAdapter, because of the possibility to write to cache.
-* after returing form a {{{pull()}}}, the buffer-ID of the single output requested by this call is returned. By using this ID, the caller can retrieve the actual buffer holding the result from the &quot;current state&quot; StaeProxy.
+* buffers are allways allocated by calling to the preceeding StateAdapter in the callstack (&quot;parent stae&quot;), because of the possibility to write to cache.
+* {{{pull()}}} returns the buffer-ID of the single output requested by this call. Using this ID, the caller may retrieve the actual buffer holding the result from the &quot;current state&quot; StaeProxy.
 * any other buffers filled with results in the course of the same {{{process()}}} call can be released immediately before returning from the {{{pull()}}}
 * similar, and input buffers are to be released immediately after the {{{process()}}} call, but before returing from this {{{pull()}}}
 * buffers are allways released by calling to the &quot;current state&quot; (which is a StateProxy), providing the buffer-ID to be released
 </pre>
 </div>
-<div title="RenderMechanics" modifier="Ichthyostega" modified="200806220133" created="200806030230" tags="Rendering impl dynamic" changecount="24">
+<div title="RenderMechanics" modifier="Ichthyostega" modified="200806280029" created="200806030230" tags="Rendering impl dynamic" changecount="27">
 <pre>While the render process, with respect to the dependencies, the builder and the processing function is sufficiently characterized by referring to the ''pull principle'' and by defining a [[protocol|NodeOperationProtocol]] each node has to adhere to &amp;mdash; for actually get it coded we have to care for some important details, especially //how to manage the buffers.// It may well be that the length of the code path necessary to invoke the individual processing functions is finally not so important, compared with the time spent at the inner pixel loop within these functions. But my guess is (as of 5/08), that the overall number of data moving and copying operations //will be//&amp;nbsp; of importance.
 
 !requirements
@@ -3097,12 +3097,12 @@ __note__: this process outlined here and below is still an simplification. The a
 # this StateAdapter (ad1) knows he could get the result from Cache, so he tries, but it's a miss
 # thus he pulls from the predecessor node2 according to the [[input descriptor|ProcNodeInputDescriptor]] of node1
 # node2 builds its StateAdapter and calls retrieve()
-# but because StateAdapter (ad2) is configured to directly forward the call down, it pulls from node3
+# but because StateAdapter (ad2) is configured to directly forward the call down (no caching), it pulls from node3
 # node3 builds its StateAdapter and calls retrieve()
 # this StateAdapter (ad3) is configured to look into the Cache...
 # this time producing a Cache hit
 # now StateAdapter ad2 has input data, but needs a output buffer location, which re requests from its //parent state// (ad1)
-# and, because ad1 is configured for Caching, it's clear that this output buffer will be located within the cache
+# and, because ad1 is configured for Caching and is &quot;in-place&quot; capable, it's clear that this output buffer will be located within the cache
 # thus the allocation request is forwarded to the cache, which provides a new &quot;slot&quot;
 # now node2 has both a valid input and a usable output buffer, thus the process function can be invoked
 # and after the result has been rendered into the output buffer, the input is no longer needed
@@ -3237,6 +3237,33 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
       var splashScreenInstall = true;
 }
 //}}}</pre>
+</div>
+<div title="StateAdapter" modifier="Ichthyostega" modified="200806270120" created="200806261912" tags="Rendering impl spec dynamic" changecount="7">
+<pre>A small (in terms of storage) and specifically configured StateProxy object which is created on the stack for each individual {{{pull()}}} call. The actual type of this object is composed out of several building blocks (policy classes) and placed by the builder as a template parameter on the WiringDescriptor of the individual ProcNode. This happens in the WiringFactory in file {{{nodewiring.cpp}}}, which consequently contains all the possible combinations (pre)generated at compile time.
+
+!building blocks
+* ''Caching'': whether the result frames of this processing step will be communicated to the Cache and thus could be fetched from there instead of actually calculating them.
+* ''Process'': whether this node does any calculations on it's own or just pulls from a source
+* ''Inplace'': whether this node is capable of processing the result &quot;in-place&quot;, thereby overwriting the input buffer
+* ''Multiout'': whether this node produces multiple output channels/frames in one processing step
+
+!!implementation
+!!!!Caching
+When a node participates in ''caching'', a result frame may be pulled immediately from cache instead of calculating it. Moreover, //any output buffer//&amp;nbsp; of this node will be allocated //within the cache.// Consequently, caching interferes with the ability of the next node to calculate &quot;in-Place&quot;. In the other case, when ''not using the cache'', the {{{pull()}}} call immediately starts out with calling down to the predecessor nodes, and the allocation of output buffer(s) is always delegated to the parent state (i.e. the StateProxy pulling results from this node). 
+
+Generally, buffer allocation requests from predecessor nodes (while being pulled by this node) will either be satisfied by using the &quot;current state&quot;, or treated as if they were our own output buffers when this node is in-Place capable.
+
+!!!!Multiple Outputs
+Some simplifications are possible in the default case of a node producing just ''one single output'' stream. Otherwise, we'd have to allocate multiple output buffers, and then, after processing, select the one needed as a result and deallocate the superfluous further buffers.
+
+!!!!in-Place capability
+If a node is capable of calculating the result by ''modifying it's input'' buffer(s), an important performance optimization is possible, because in a chain of in-place capable nodes, we don't need any buffer allocations. But, on the other hand, this optimization may collide with the caching, because a frame retrieved from cache must not be modified.
+Without this optimization, in the base case each processing needs an input and an output. Exceptionally, we could think of special nodes which //require// to process in-place, in which case we'd need to provide a copy of the input buffer to work on under certain circumstances. 
+
+!!!!Processing
+If ''not processing'' we don't have any input buffers, instead we get our output buffers from an external source.
+Otherwise, in the default case of actually ''processing'' out output, we have to organize input buffers, allocate output buffers, call the {{{process()}}} function of the WiringDescriptor and finally release the input buffers.
+</pre>
 </div>
 <div title="StateProxy" modifier="Ichthyostega" modified="200806010404" created="200706220352" tags="def" changecount="4">
 <pre>An Object representing a //Render Process// and containing associated state information.

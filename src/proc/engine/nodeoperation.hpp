@@ -47,6 +47,7 @@ namespace engine {
     {
       State& parent_;
       State& current_;
+      WiringDescriptor const& wiring_;
       
     protected:
       StateAdapter (State& callingProcess, WiringDescriptor const&) 
@@ -54,7 +55,7 @@ namespace engine {
           current_(callingProcess.getCurrentImplementation())
         { }
       
-      friend class ProcNode; // both are sharing implementation details...
+      friend class NodeWiring<StateAdapter>; // both are sharing implementation details...
       
       
       virtual State& getCurrentImplementation () { return current_; }
@@ -63,7 +64,90 @@ namespace engine {
        *  to the predecessor node(s), eventually followed by the 
        *  ProcNode::process() callback
        */
-      void retrieve();
+      BuffHandle retrieve (uint requiredOutputNr)
+        {
+          return retrieveResult (requiredOutputNr);
+        }
+    };
+    
+  struct Caching
+    {
+      void retrieveResult (uint requiredOutputNr)
+        {
+          BuffHandle fetched = current_.fetch (genFrameID (requiredOutputNr));
+          if (fetched)
+            return fetched;
+          
+          // Cache miss, need to calculate
+          BuffHandle calculated[NrO];
+          calculateResult (&calculated);
+          
+          // commit result to Cache
+          current_.isCalculated (NrO, calculated, requiredOutputNr);
+          
+          return calculated[requiredOutputNr];
+        }
+    };
+  
+  struct NoCaching
+    {
+      void retrieveResult (BuffHandle requiredOutputNr)
+        {
+          return calculateResult (0);
+        }
+    };
+  
+  struct Process
+    {
+      BuffHandle calculateResult(BuffHandle* calculated)
+        {
+          uint nrI = this->getNrI();
+          for (uint i = 0; i<nrI; ++i )
+            {
+              BuffHandle inID = predNode.pull(inNo); // invoke predecessor
+              this->inBuff[i] = current_.getBuffer(inID);
+              // now Input #i is ready...
+            }
+          uint nrO = this->getNrO();
+          for (uint i = 0; i<nrO; ++i )
+            {
+              calculated[i] = this->allocateBuffer(this->getBuferType(i));  ///TODO: Null pointer when no caching!!!!!
+              this->outBuff[i] = current_.getBuffer(calculated[i]);
+              // now Output buffer for channel #i is available...
+            }
+            //
+           // Invoke our own process() function
+          this->wiring_.process (this->outBuff);
+          
+          this->feedCache();
+          // Inputs no longer needed
+          for (uint i = 0; i<nrI; ++i)
+            current_.releaseBuffer(inID);  ////TODO.... better release /all/ buffers which are != requiredOutput
+          
+          return calculated[requiredOutputNr];
+        }
+    };
+  
+  struct NoProcess
+    {
+      BuffHandle calculateResult(BuffHandle* calculated)
+        {
+          uint nrO = this->getNrO();
+          for (uint i = 0; i<nrO; ++i )
+            {
+              calculated[i] = this->retrieveInput(i);  ///TODO: Null pointer when no caching!!!!!
+              this->outBuff[i] = current_.getBuffer(calculated[i]);
+              // now Buffer containing Output channel #i is available...
+            }
+          
+          this->feedCache();
+          for (uint i=0; i < nrO; ++i)
+            if (i!=requiredOutputNr)
+              current_.releaseBuffer(i);
+              
+          return calculated[requiredOutputNr];
+        };
+      
     };
   
   

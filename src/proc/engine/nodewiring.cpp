@@ -34,7 +34,7 @@ namespace engine {
    *  control templates (policy classes). Compiling this operator function
    *  actually drives the necessary template instantiations for all cases
    *  encountered while building the node network.
-   *  The created WiringDescriptor objects are bulk allocated similar to the ProcNode
+   *  The created WiringDescriptor object is bulk allocated similar to the ProcNode
    *  objects for a given segment of ther Timeline. It should be further configured
    *  with the actual predecessor nodes pointers and can then be used to create
    *  the new processing node to be wired up.  

@@ -62,8 +62,8 @@ namespace engine {
   
   
   /**
-   * Description of the input and output ports and the
-   * predecessor nodes for a given ProcNode.
+   * Interface: Description of the input and output ports,
+   * processing function and predecessor nodes for a given ProcNode.
    */
   class WiringDescriptor
     {
@@ -71,6 +71,11 @@ namespace engine {
       virtual ~WiringDescriptor() {}
       
     protected:
+      /** the wiring-dependent part of the node operation.
+       *  Includes the creation of a one-way state object on the stack
+       *  holding the actual buffer pointers and issuing the recrusive pull() calls
+       *  @see NodeWiring#callDown default implementation
+       */
       virtual BufferID  callDown (State& currentProcess, BufferID requiredOutputNr)  const =0; 
       
       friend class ProcNode;
@@ -102,10 +107,10 @@ namespace engine {
       
       
     public:
-      static NodeFactory create;
+      static NodeFactory create; ///////TODO: really? probably we'll rather have a NodeFactory object in the builder...
       
       /** Engine Core operation: render and pull output from this node.
-       *  On return, currentProcess will hold onto output buffer
+       *  On return, currentProcess will hold onto output buffer(s)
        *  containing the calculated result frames.
        *  @param currentProcess the current processing state for 
        *         managing buffers and accessing current parameter values
@@ -114,7 +119,7 @@ namespace engine {
        *  @return ID of the result buffer (accessible via currentProcess) 
        */
       BufferID
-      pull (State& currentProcess, BufferID requiredOutputNr=0) 
+      pull (State& currentProcess, BufferID requiredOutputNr=0)  const
         {
           return this->wiringConfig_.callDown (currentProcess, requiredOutputNr);
         }

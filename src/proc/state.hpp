@@ -36,7 +36,33 @@ namespace engine {
   
   class StateAdapter;
   
-  typedef std::size_t BufferID;
+  class BuffHandle
+    {
+    protected:
+      typedef float Buff;
+      typedef Buff* PBuff;//////TODO define the Buffer type(s)
+      
+      PBuff pBuffer_; 
+      long sourceID_;
+      
+      BuffHandle (PBuff pb, long id)
+        : pBuffer_(pb),
+          sourceID_(id)
+        { }
+      
+    public:
+      PBuff 
+      operator->() const 
+        { 
+          return pBuffer_; 
+        }
+      Buff&
+      operator* () const
+        {
+          ENSURE (pBuffer_);
+          return *pBuffer_;
+        }
+    };
   
   
   class State

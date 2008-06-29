@@ -39,8 +39,8 @@ namespace engine {
   
   /**
    * Actual implementation of the link between nodes
-   * and also the track switch for the execution path
-   * while operating the node network for rendering.
+   * and also the "track switch" for the execution path
+   * choosen while operating the node network for rendering.
    * @param STATE StateAdapter object controlling the
    *        behaviour of callDown() while rendering.
    * @see NodeFactory 
@@ -53,8 +53,8 @@ namespace engine {
       friend class WiringFactory;
       
     protected:
-      virtual BufferID
-      callDown (State& currentProcess, BufferID requiredOutputNr)  const 
+      virtual BuffHandle
+      callDown (State& currentProcess, uint requiredOutputNr)  const 
         {
           STATE thisStep (currentProcess, *this);
           return thisStep.retrieve (requiredOutputNr); // fetch or calculate results
