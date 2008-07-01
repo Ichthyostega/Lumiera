@@ -36,21 +36,11 @@ namespace engine {
   
   class StateAdapter;
   
-  class BuffHandle
+  struct BuffHandle
     {
-    protected:
       typedef float Buff;
       typedef Buff* PBuff;//////TODO define the Buffer type(s)
       
-      PBuff pBuffer_; 
-      long sourceID_;
-      
-      BuffHandle (PBuff pb, long id)
-        : pBuffer_(pb),
-          sourceID_(id)
-        { }
-      
-    public:
       PBuff 
       operator->() const 
         { 
@@ -62,6 +52,10 @@ namespace engine {
           ENSURE (pBuffer_);
           return *pBuffer_;
         }
+      
+    protected:
+      PBuff pBuffer_; 
+      long sourceID_;
     };
   
   

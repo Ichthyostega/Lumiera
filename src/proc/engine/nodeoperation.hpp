@@ -20,6 +20,33 @@
  
 */
 
+/** @file nodeoperation.hpp
+ ** Chunks of operation for invoking the rendernodes.
+ ** This header defines the "glue" which holds together the render node network
+ ** and enables to pull a result frames from the nodes. Especially, the aspect of
+ ** buffer management is covered here. Each node has been preconfigured by the builder
+ ** with a WiringDescriptor and a concrete type of a StateAdapter. These concrete
+ ** StateAdapter objects are assembled out of the building blocks defined in this header,
+ ** depending on the desired mode of operation. Any node can be built to 
+ ** - participate in the Caching or ignore the cache
+ ** - actually process a result or just pull frames from a source
+ ** - employ in-Place calculations or use separate in/out buffers
+ ** Additionally, each node may have a given number of input/output pins, expecting to
+ ** be provided with buffers holding a specific kind of data.
+ ** 
+ ** \par composition of the StateAdapter
+ ** For each individual ProcNode#pull() call, the WiringAdapter#callDown() builds an StateAdapter
+ ** instance directly on the stack, holding the actual buffer pointers and state references. Using this
+ ** StateAdapter, the predecessor nodes are pulled. The way these operations are carried out is encoded
+ ** in the actual StateAdapter type known to the NodeWiring (WiringAdapter) instance. All of these actual
+ ** StateAdapter types are built as implementing the engine::State interface, on top of the InvocationStateBase
+ ** and inheriting from a chain of strategy classes (single inheritance, mostly \em no virtual functions).
+ **
+ ** @see engine::ProcNode
+ ** @see engine::StateProxy
+ ** @see nodewiring.hpp interface for building/wiring the nodes
+ **
+ */
 
 #ifndef ENGINE_NODEOPERATION_H
 #define ENGINE_NODEOPERATION_H
@@ -33,6 +60,16 @@
 namespace engine {
   
   
+
+  /** 
+   * (abstract) base class of all concrete StateAdapter types.
+   * Defines the skeleton for the node operation/calculation
+   */
+  class InvocationStateBase
+    : public State
+    {
+      
+    };
   
   /**
    * Adapter to shield the ProcNode from the actual buffer management,
@@ -70,64 +107,108 @@ namespace engine {
         }
     };
     
-  struct Caching
+  template<class NEXT>
+  struct QueryCache : NEXT
     {
-      void retrieveResult (uint requiredOutputNr)
+      BuffHandle step () // brauche: current state
         {
           BuffHandle fetched = current_.fetch (genFrameID (requiredOutputNr));
           if (fetched)
             return fetched;
-          
-          // Cache miss, need to calculate
-          BuffHandle calculated[NrO];
-          calculateResult (&calculated);
-          
-          // commit result to Cache
-          current_.isCalculated (NrO, calculated, requiredOutputNr);
-          
-          return calculated[requiredOutputNr];
+          else
+            return NEXT::step();
         }
     };
+          
   
-  struct NoCaching
+  template<class NEXT>
+  struct PullInput : NEXT
     {
-      void retrieveResult (BuffHandle requiredOutputNr)
+      BuffHandle step ()
         {
-          return calculateResult (0);
-        }
-    };
-  
-  struct Process
-    {
-      BuffHandle calculateResult(BuffHandle* calculated)
-        {
-          uint nrI = this->getNrI();
-          for (uint i = 0; i<nrI; ++i )
+          this->createBuffTable();
+          
+          ASSERT (this->buffTab);
+          ASSERT (0 < this->buffTabSize());
+          ASSERT (this->nrO+this->nrI <= this->buffTabSize());
+          ASSERT (this->buffTab->inHandles = &this->buffTab->handles[this->nrO]);
+          BuffHandle           *inH = this->buffTab->inHandles;
+          BuffHandle::PBuff *inBuff = this->buffTab->inBuffs;
+          
+          for (uint i = 0; i < this->nrI; ++i )
             {
-              BuffHandle inID = predNode.pull(inNo); // invoke predecessor
-              this->inBuff[i] = current_.getBuffer(inID);
+              inBuff[i] =
+                *(inH[i] = this->pullPredecessor(i)); // invoke predecessor
               // now Input #i is ready...
             }
-          uint nrO = this->getNrO();
-          for (uint i = 0; i<nrO; ++i )
-            {
-              calculated[i] = this->allocateBuffer(this->getBuferType(i));  ///TODO: Null pointer when no caching!!!!!
-              this->outBuff[i] = current_.getBuffer(calculated[i]);
-              // now Output buffer for channel #i is available...
-            }
-            //
-           // Invoke our own process() function
-          this->wiring_.process (this->outBuff);
-          
-          this->feedCache();
-          // Inputs no longer needed
-          for (uint i = 0; i<nrI; ++i)
-            current_.releaseBuffer(inID);  ////TODO.... better release /all/ buffers which are != requiredOutput
-          
-          return calculated[requiredOutputNr];
+          return NEXT::step();
         }
     };
   
+  template<class NEXT>
+  struct AllocOutputFromCache
+    {
+      BuffHandle step ()
+        {
+          ASSERT (this->buffTab);
+          ASSERT (this->nrO < this->buffTabSize());
+          BuffHandle           *outH = this->buffTab->handles;
+          BuffHandle::PBuff *outBuff = this->buffTab->buffers;
+          
+          for (uint i = 0; i < this->nrO; ++i )
+            {
+              outBuff[i] =
+                 *(outH[i] = this->allocateBuffer(i));
+              // now Output buffer for channel #i is available...
+            }
+          return NEXT::step();
+        }
+    };
+  
+  template<class NEXT>
+  struct ProcessData
+    {
+      BuffHandle step ()
+        {
+          ASSERT (this->buffTab);
+          ASSERT (this->nrO+this->nrI <= this->buffTabSize());
+          ASSERT (this->validateBuffers());
+          
+           // Invoke our own process() function, providing the buffer array
+          this->wiring_.processFunction (this->buffTab->buffers);
+          
+          return NEXT::step();
+        }
+    };
+  
+  template<class NEXT>
+  struct FeedCache
+    {
+      BuffHandle step ()
+        {
+          // declare all Outputs as finished
+          this->current_.isCalculated(this->buffTab->handles, 
+                                      this->nrO);
+          
+          return NEXT::step();
+        }
+    };
+  
+  template<class NEXT>
+  struct ReleaseBuffers
+    {
+      BuffHandle step ()
+        {
+          // all buffers besides the required Output no longer needed
+          this->current_.releaseBuffers(this->buffTab->handles, 
+                                        this->buffTabSize(), 
+                                        this->requiredOutputNr);
+          
+          return this->buffTab->outH[this->requiredOutputNr];
+        }
+    };
+  
+  template<class NEXT>
   struct NoProcess
     {
       BuffHandle calculateResult(BuffHandle* calculated)
@@ -150,6 +231,35 @@ namespace engine {
       
     };
   
+
+  
+  /* === declare the possible Assembly of these elementary steps === */
+  
+  template<class Config>
+  struct Strategy
+    {
+      BuffHandle step () { NOTREACHED; }
+    };
+  
+  template<>
+  struct Strategy< Config<CACHE,CALCULATE,IN_OUT> >
+    : QueryCache <
+       PullInput<
+        AllocOutputFromCache<
+         ProcessData<
+          FeedCache<
+           ReleaseBuffers< 
+            InvocationStateBase > > > > > >
+    { };
+  
+  template<>
+  struct Strategy< Config<NOCACHE,CALCULATE,IN_OUT> >
+    : PullInput<
+       AllocOutputFromParent<
+        ProcessData<
+          ReleaseBuffers< 
+           InvocationStateBase > > > > 
+    { };
   
   
 } // namespace engine
