@@ -53,6 +53,8 @@
 
 
 #include "proc/engine/procnode.hpp"
+#include "proc/engine/nodewiringconfig.hpp"
+#include "lib/appconfig.hpp"
 
 
 
@@ -260,6 +262,28 @@ namespace engine {
           ReleaseBuffers< 
            InvocationStateBase > > > > 
     { };
+  
+  
+  // At Application startup: build table of all possible operation configs
+  namespace {
+  
+    bool
+    determine_if_case_is_possible (Bits& caseFlags)
+    {
+      ////////////////////////////////////////////////TODO: Henne oder Ei?
+    }
+  
+    void
+    build_table_of_possible_configs ()
+    {
+      registerPossibleCases (&determine_if_case_is_possible);
+    }
+  
+  
+    using namespace lumiera;
+    LifecycleHook schedule_ (ON_BASIC_INIT, &build_table_of_possible_configs);         
+
+  }
   
   
 } // namespace engine

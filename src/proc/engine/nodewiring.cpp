@@ -24,6 +24,8 @@
 #include "proc/engine/procnode.hpp"
 #include "proc/engine/nodewiring.hpp"
 #include "proc/engine/nodeoperation.hpp"
+#include "proc/engine/nodewiringconfig.hpp"
+
 
 namespace engine {
   
@@ -35,7 +37,7 @@ namespace engine {
    *  actually drives the necessary template instantiations for all cases
    *  encountered while building the node network.
    *  The created WiringDescriptor object is bulk allocated similar to the ProcNode
-   *  objects for a given segment of ther Timeline. It should be further configured
+   *  objects for a given segment of the Timeline. It should be further configured
    *  with the actual predecessor nodes pointers and can then be used to create
    *  the new processing node to be wired up.  
    */
@@ -43,7 +45,10 @@ namespace engine {
   WiringFactory::operator() (uint nrOut, uint nrIn, bool cache)
   {
     UNIMPLEMENTED ("build the actual wiring descriptor based on given operation options");
+    
+    return selectConfig(cache, process, inplace).fabricate();
   }
+  // BlockAlloc<NodeWiring< StateAdapter< Config<cache, process, inplace> > > >::fabricate();
 
   
 } // namespace engine
