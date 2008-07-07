@@ -1,6 +1,6 @@
 format 40
 "engine" // design::codegen::proc::engine
-  revision 8
+  revision 9
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -306,7 +306,6 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 132101 // Hub
       end
       comment "special ProcNode used to build data distributing connections"
     end
@@ -501,7 +500,6 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 132613 // GLPipe
       end
       comment "specialized connection element for handling OpenGL implementation details"
     end
@@ -540,7 +538,6 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 132869 // ARender
       end
       comment "Representation of a Audio Render process"
     end
@@ -579,7 +576,6 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 132997 // VRender
       end
       comment "Representation of a Video render process"
     end
@@ -618,7 +614,6 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 133125 // GLRender
       end
       comment "Representation of a OpenGL accellerated Video render process"
     end

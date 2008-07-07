@@ -1,14 +1,23 @@
 window_sizes 1140 830 270 860 680 71
 diagrams
-  active  componentdiagram_ref 128005 // Overview
-    702 640 80 4 2 0
+  classdiagram_ref 131973 // Render Mechanics
+    428 623 100 4 2 0
+  collaborationdiagram_ref 132229 // Render Process
+    817 644 100 4 0 0
+  active  classdiagram_ref 132357 // StateAdapter composition
+    418 520 100 4 0 0
 end
 show_stereotypes
 selected 
-  package_ref 129 // lumiera
+package_ref 129 // lumiera
 open
-  componentview_ref 128133 // interfaces
-  classview_ref 128005 // Session
+  class_ref 132741 // State
+  
+package_ref 129029 // Controller
+  class_ref 131717 // ProcNode
+  class_ref 142469 // StateProxy
+  class_ref 142597 // StateAdapter
+  usecaseview_ref 128005 // Renderengine Use
   class_ref 140677 // QueryHandler
   class_ref 140805 // TypeHandler
   class_ref 140933 // ResolverBase

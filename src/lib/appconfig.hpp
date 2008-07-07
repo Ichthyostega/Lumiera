@@ -129,7 +129,8 @@ namespace lumiera
    *  All other lables are just arbitrary (string) constants and it
    *  is necessary that "someone" cares to fire off the lifcycle events
    *  at the right place. For example, lumiera-main (and the test runner)
-   *  calls \c Appconfig::instance().execute(ON_GLOBAL_INIT) (and..SHUTDOWN) 
+   *  calls \c Appconfig::instance().execute(ON_GLOBAL_INIT) (and..SHUTDOWN)
+   *  @note duplicate or repeated calls with the same callback are a NOP 
    */
   class LifecycleHook
     : private noncopyable
