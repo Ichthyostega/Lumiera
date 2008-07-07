@@ -244,7 +244,7 @@ namespace engine {
     };
   
   template<>
-  struct Strategy< Config<CACHE,CALCULATE,IN_OUT> >
+  struct Strategy< Config<CACHING,PROCESS,INPLACE> >
     : QueryCache <
        PullInput<
         AllocOutputFromCache<
@@ -255,7 +255,7 @@ namespace engine {
     { };
   
   template<>
-  struct Strategy< Config<NOCACHE,CALCULATE,IN_OUT> >
+  struct Strategy< Config<PROCESS> >
     : PullInput<
        AllocOutputFromParent<
         ProcessData<
