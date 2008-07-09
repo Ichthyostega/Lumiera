@@ -27,7 +27,9 @@
 #include "proc/nobugcfg.hpp"
 
 #include <boost/regex.hpp>
-#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/join.hpp>
+#include <boost/algorithm/string/classification.hpp>
 
 using boost::algorithm::split;
 using boost::algorithm::join;

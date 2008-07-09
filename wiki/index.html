@@ -759,10 +759,11 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BuildDependenceis" modifier="Ichthyostega" modified="200708210341" created="200708120103" tags="organization buildsys" changecount="7">
+<div title="BuildDependenceis" modifier="Ichthyostega" modified="200807090324" created="200708120103" tags="organization buildsys" changecount="10">
 <pre>for __Building__
 * gcc (4.1), glibc6 (2.3), libstdc++6 (4.1)
 * [[build system|BuildSystem]] dependencies: SCons (0.96.90), Python (2.3)
+* [[GAVL|http://gmerlin.sourceforge.net/gavl.html]] (1.0.0) 
 * NoBug for Logging, Tracing, Asserting (can be obtained from [[Pipapo.org|http://www.pipapo.org/pipawiki/NoBug]])
 * ~NoBug needs [[valgrind|Valgrind]] (3.2), execinfo.h and libpthread (&amp;rarr; glibc)
 * std::tr1 &amp;mdash; esp. for the former BOOST::shared_ptr (which is now proposed standard)
@@ -773,6 +774,8 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 ** libboost-regex-dev (=1.34.1-2)
 ** libboost-regex1.34.1 (=1.34.1-2) ''binary..''
 //usually, newer versions are OK//
+
+boost 1.35 works too.
 
 for __Running__</pre>
 </div>
