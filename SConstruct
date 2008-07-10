@@ -26,6 +26,8 @@ sys.path.append("./admin/scons")
 
 import os
 from Buildhelper import *
+from LumieraEnvironment import *
+
 
 #-----------------------------------Configuration
 OPTIONSCACHEFILE = 'optcache' 
@@ -53,9 +55,8 @@ def setupBasicEnvironment():
     EnsureSConsVersion(0,96,90)
     
     opts = defineCmdlineOptions() 
- 
-    env = Environment(options=opts) 
-
+    env = LumieraEnvironment(options=opts) 
+    
     env.Append ( CCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honor CFLAGS, only CCFLAGS 
     env.Replace( VERSION=VERSION
                , SRCDIR=SRCDIR
@@ -74,7 +75,7 @@ def setupBasicEnvironment():
     appendVal(env,'ARCHFLAGS', 'CCFLAGS')   # for both C and C++
     appendVal(env,'OPTIMIZE', 'CCFLAGS', val=' -O3')
     appendVal(env,'DEBUG',    'CCFLAGS', val=' -ggdb')
-
+    
     prepareOptionsHelp(opts,env)
     opts.Save(OPTIONSCACHEFILE, env)
     return env
@@ -127,7 +128,7 @@ def defineCmdlineOptions():
         ,PathOption('SRCTAR', 'Create source tarball prior to compiling', '..', PathOption.PathAccept)
         ,PathOption('DOCTAR', 'Create tarball with dev documentaionl', '..', PathOption.PathAccept)
      )
-
+    
     return opts
 
 
@@ -161,38 +162,42 @@ def configurePlatform(env):
         setup platform specific options.
         Abort build in case of failure.
     """
-    conf = Configure(env)
-    # run all configuration checks in the current env
+    conf = env.Configure()
+    # run all configuration checks in the given env
     
-    # Checks for prerequisites ------------
+    # Perform checks for prerequisites --------------------------------------------
+    if not conf.TryAction('pkg-config --version > $TARGET')[0]:
+        print 'We need pkg-config for including library configurations, exiting.'
+        Exit(1)
+    
     if not conf.CheckLibWithHeader('m', 'math.h','C'):
         print 'Did not find math.h / libm, exiting.'
         Exit(1)
-
+    
     if not conf.CheckLibWithHeader('dl', 'dlfcn.h', 'C'):
         print 'Functions for runtime dynamic loading not available, exiting.'
         Exit(1)
-
+    
     if not conf.CheckLibWithHeader('nobugmt', 'nobug.h', 'C'):
         print 'Did not find NoBug [http://www.pipapo.org/pipawiki/NoBug], exiting.'
         Exit(1)
-
+    
     if not conf.CheckLibWithHeader('pthread', 'pthread.h', 'C'):
         print 'Did not find the pthread lib or pthread.h, exiting.'
     else:
        conf.env.Append(CPPFLAGS = ' -DHAVE_PTHREAD')
        conf.env.Append(CCFLAGS = ' -pthread')
-
+    
     if conf.CheckCHeader('execinfo.h'):
        conf.env.Append(CPPFLAGS = ' -DHAS_EXECINFO_H')
-
+    
     if conf.CheckCHeader('valgrind/valgrind.h'):
         conf.env.Append(CPPFLAGS = ' -DHAS_VALGRIND_VALGIND_H')
     
     if not conf.CheckCXXHeader('tr1/memory'):
         print 'We rely on the std::tr1 proposed standard extension for shared_ptr.'
         Exit(1) 
-        
+    
     if not conf.CheckCXXHeader('boost/config.hpp'):
         print 'We need the C++ boost-lib.'
         Exit(1)
@@ -221,7 +226,7 @@ def definePackagingTargets(env, artifacts):
     artifacts['src.tar'] = t
     env.Alias('src.tar', t)
     env.Alias('tar', t)
-
+    
     t =  Tarball(env,location='$DOCTAR',suffix='-doc',dirs='admin doc wiki uml tests')
     artifacts['doc.tar'] = t
     env.Alias('doc.tar', t)
@@ -276,7 +281,7 @@ def definePostBuildTargets(env, artifacts):
     # additional files to be cleaned when cleaning 'build'
     env.Clean ('build', [ 'scache.conf', '.sconf_temp', '.sconsign.dblite', 'config.log' ])
     env.Clean ('build', [ '$SRCDIR/pre.gch' ])
-
+    
     # Doxygen documentation
     # Note: at the moment we only depend on Doxyfile
     #       obviousely, we should depend on all sourcefiles

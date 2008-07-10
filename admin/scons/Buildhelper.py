@@ -111,7 +111,7 @@ def RegisterPrecompiledHeader_Builder(env):
 
 def Tarball(env,location,dirs,suffix=''):
     """ Custom Command: create Tarball of some subdirs
-        location: where to create the tar (optionally incl. filename.tar.gz)
+        location: where to create the tar (may optionally include filename.tar.gz)
         suffix: (optional) suffix to include in the tar name
         dirs: directories to include in the tar
         
@@ -132,7 +132,7 @@ def Tarball(env,location,dirs,suffix=''):
 
 
 def createTarball(target,source,env):
-    """ helper, builds the tar using the python2.3 tarfil lib.
+    """ helper, builds the tar using the python2.3 tarfile lib.
         This allows us to prefix all paths, thus moving the tree
         into a virtual subdirectory containing the Version number,
         as needed by common packaging systems.
