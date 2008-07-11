@@ -1,9 +1,8 @@
 /*
-  main.cpp  -  start the Lumiera Application
+  vgsuppression.c  -  Helper program to generate valgrind suppression files
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
-                        Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -19,28 +18,21 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#define _GNU_SOURCE
+
+/*
+  just place any problematic calls where valgrind whines about in main (with comments please)
+*/
+
+#include "lib/safeclib.h"
 
 
-#include <iostream>
-
-#include "proc/lumiera.hpp"
-
-using std::cout;
-using std::endl;
-using lumiera::Appconfig;
-using lumiera::ON_GLOBAL_INIT;
-using lumiera::ON_GLOBAL_SHUTDOWN;
-
-
-int main (int argc, char* argv[])
+int
+main ()
 {
-  cout << "*** Lumiera NLE for Linux ***" << endl
-       << "    Version: " << Appconfig::get("version") << "\n";
-  
-  Appconfig::lifecycle (ON_GLOBAL_INIT);
-  
-  // great things are happening here....
-  
-  Appconfig::lifecycle (ON_GLOBAL_SHUTDOWN);
+  /* debian etch glibc is lazy about cleaning up TLS */
+  lumiera_tmpbuf_provide (100);
+  lumiera_tmpbuf_freeall ();
+
   return 0;
 }
