@@ -1,0 +1,157 @@
+#
+# This is the GTK style file for Lumiera
+#
+#
+
+#---------- Styles for Standard Widgets ----------#
+
+style "medium_text"
+{
+ 	font_name = "sans 10"
+}
+ 	
+style "medium_bold_entry" = "medium_text"
+{
+	fg[NORMAL] = { 0.70, 0.70, 0.70 }
+	fg[ACTIVE] = { 0.70, 0.70, 0.70 }
+	
+	bg[NORMAL] = { 0.35, 0.35, 0.40 }
+	
+	base[NORMAL] = { 0, 0, 0 }
+	base[ACTIVE] = { 0, 0, 0 }
+	base[SELECTED] = { 0, 0, 0 }
+}
+
+style "default_base" = "medium_text"
+{
+  GtkWidget::cursor_color =  {1.0, 1.0, 1.0 }
+  GtkButton::default_border = { 0, 0, 0, 0 }
+  GtkButton::default_outside_border = { 0, 0, 0, 0 }
+  GtkTreeView::vertical-padding = 0
+  GtkTreeView::horizontal-padding = 0
+  GtkTreeView::even-row-color = { 0, 0, 0 }
+  GtkTreeView::odd-row-color = { 0, 0, 0 }
+  
+  fg[NORMAL] = { 0.80, 0.80, 0.80 }	
+  fg[ACTIVE] = { 0.80, 0.80, 0.80 }	
+  fg[PRELIGHT] = { 1.0, 1.0, 1.0 }
+  fg[INSENSITIVE] = { 0.80, 0.80, 0.80 }	
+  fg[SELECTED] = { 0.80, 0.80, 0.80 }	
+  
+  bg[NORMAL] = { 0.35, 0.35, 0.40 }
+  bg[ACTIVE] = { 0.35, 0.35, 0.40 }
+  bg[PRELIGHT] = "#565690"
+  bg[INSENSITIVE] = { 0.10, 0.10, 0.10 }
+  bg[SELECTED] = { 0, 0.40, 0.60 }
+  
+  text[NORMAL] = { 0.80, 0.80, 0.80 }	
+  text[ACTIVE] = { 0.80, 0.80, 0.80 }	
+  text[PRELIGHT] = { 0.80, 0.80, 0.80 }	
+  text[INSENSITIVE] = { 0.80, 0.80, 0.80}	
+  text[SELECTED] = { 1.0, 1.0, 1.0 }
+  
+  base[ACTIVE]     = "#272a2f"
+  base[NORMAL]      =  "#1a1e20"
+  base[PRELIGHT]     = { 0.20, 0.20, 0.20 }
+  base[INSENSITIVE]  = "#4c5159"
+  base[SELECTED]     = { 0.25, 0.25, 0.25 }
+
+  engine "clearlooks" 
+  {
+    menubarstyle      = 2       # 0 = flat, 1 = sunken, 2 = flat gradient
+#    menuitemstyle     = 1       # 0 = flat, 1 = 3d-ish (gradient), 2 = 3d-ish (button)
+#    listviewitemstyle = 1       # 0 = flat, 1 = 3d-ish (gradient)
+#    progressbarstyle  = 1       # 0 = candy bar, 1 = fancy candy bar, 2 = flat
+  }
+}
+
+style "default_buttons_menus" 
+{
+  font_name = "sans 10"
+  fg[ACTIVE] = { 1.0, 1.0, 1.0 }
+  
+  bg[NORMAL] = { 0.30, 0.30, 0.35 }
+  bg[ACTIVE] = "#565690"
+  bg[PRELIGHT] = { 0.15, 0.15, 0.20 }
+  bg[INSENSITIVE] = { 0.15, 0.15, 0.20 }
+  bg[SELECTED] = { 0.15, 0.15, 0.20 }	
+}
+
+style "lumiera_adjusters" = "default_buttons_menus"
+{
+  fg[NORMAL] = { 0.80, 0.80, 0.80 } 
+  fg[ACTIVE] = { 0.80, 0.80, 0.80 } 
+  fg[PRELIGHT] = { 1.0, 1.0, 1.0 }
+  fg[INSENSITIVE] = { 0.80, 0.80, 0.80 } 
+  fg[SELECTED] = { 0.80, 0.80, 0.80 } 
+
+  bg[NORMAL] = { 0.35, 0.35, 0.40 }
+  bg[ACTIVE] = { 0.35, 0.35, 0.40 }
+  bg[PRELIGHT] = "#565690"
+  bg[INSENSITIVE] = { 0.10, 0.10, 0.10 }
+  bg[SELECTED] = { 0, 0.40, 0.60 }
+}
+
+style "lumiera_progressbars" = "default_buttons_menus"
+{ 
+  bg[NORMAL] = { 0, 0, 0 }
+  bg[PRELIGHT] = { 0.00, 0.36, 0.40 }
+}
+
+style "lumiera_button" = "default_buttons_menus"
+{
+	xthickness = 1
+	ythickness = 1
+}
+
+style "tearoff_arrow" = "medium_bold_entry"
+{
+	fg[NORMAL] = { 0.80, 0.80, 0.80 }
+	fg[PRELIGHT] = { 0.80, 0.80, 0.80 }
+	bg[NORMAL] = { 0.80, 0.80, 0.80 }
+	bg[PRELIGHT] = { 0.80, 0.80, 0.80 }
+}
+
+class "GtkWidget" style:highest "default_base"
+class "GtkScrollbar" style:highest "lumiera_adjusters"
+class "GtkLabel" style:highest "default_buttons_menus"
+class "GtkButton" style:highest "lumiera_button"
+class "GtkArrow" style:highest "tearoff_arrow"
+class "GtkProgressBar" style:highest "lumiera_progressbars"
+
+#---------- Styles for Lumiera Widgets ----------#
+
+style "timeline_body"
+{
+  gtkmm__CustomObject_TimelineBody::background = "#7E838B"
+}
+
+style "timeline_ruler" = "default_base"
+{
+  font_name = "sans 8"
+  gtkmm__CustomObject_TimelineRuler::height = 18
+  gtkmm__CustomObject_TimelineRuler::major_tick_height = 18
+  gtkmm__CustomObject_TimelineRuler::minor_long_tick_height = 6
+  gtkmm__CustomObject_TimelineRuler::minor_short_tick_height = 3
+  gtkmm__CustomObject_TimelineRuler::annotation_horz_margin = 3
+  gtkmm__CustomObject_TimelineRuler::annotation_vert_margin = 0
+  gtkmm__CustomObject_TimelineRuler::min_division_width = 100
+  gtkmm__CustomObject_TimelineRuler::mouse_chevron_size = 5
+}
+
+style "timeline_header_base" = "default_base"
+{
+#  fg[NORMAL] = { 0.77, 0.77, 0.72 }	
+#  bg[NORMAL] = { 0.18, 0.19, 0.22 }
+#  bg[ACTIVE] = { 0.20, 0.20, 0.20 }	
+#  bg[PRELIGHT] = { 0.20, 0.20, 0.20 }
+#  bg[INSENSITIVE] = { 0.20, 0.20, 0.20 }
+#  bg[SELECTED] = { 0.20, 0.20, 0.20 }
+}
+
+class "gtkmm__CustomObject_TimelineBody" style:highest "timeline_body"
+class "gtkmm__CustomObject_TimelineRuler" style:highest "timeline_ruler"
+
+widget "*TimelineHeaderBaseUnselected" style:highest "timeline_header_base"
+
+

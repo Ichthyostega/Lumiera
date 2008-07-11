@@ -90,6 +90,18 @@ def globRootdirs(roots):
 
 
 
+def filterNodes(nlist, removeName=None):
+    """ filter out scons build nodes using the given criteria.
+        removeName: if set, remove all nodes with this srcname
+    """
+    if removeName:
+        predicate = lambda n : not fnmatch.fnmatch(os.path.basename(str(n[0])), removeName)
+    else:
+        predicate = lambda n : True;
+    
+    return filter(predicate, nlist)
+
+
 def RegisterPrecompiledHeader_Builder(env):
     """ Registeres an Custom Builder for generating a precompiled Header.
         Note you should define a dependency to the PCH file
@@ -111,7 +123,7 @@ def RegisterPrecompiledHeader_Builder(env):
 
 def Tarball(env,location,dirs,suffix=''):
     """ Custom Command: create Tarball of some subdirs
-        location: where to create the tar (optionally incl. filename.tar.gz)
+        location: where to create the tar (may optionally include filename.tar.gz)
         suffix: (optional) suffix to include in the tar name
         dirs: directories to include in the tar
         
@@ -132,7 +144,7 @@ def Tarball(env,location,dirs,suffix=''):
 
 
 def createTarball(target,source,env):
-    """ helper, builds the tar using the python2.3 tarfil lib.
+    """ helper, builds the tar using the python2.3 tarfile lib.
         This allows us to prefix all paths, thus moving the tree
         into a virtual subdirectory containing the Version number,
         as needed by common packaging systems.
