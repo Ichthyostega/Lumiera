@@ -69,10 +69,28 @@ lumiera_reference_ensuredestroyed (LumieraReference self)
 }
 
 
+/**
+ * Construct an initial strong reference from an object.
+ * For every object which should be managed with references you need to construct an initial strong reference
+ * which then will be used to initialize all further references.
+ * @param self pointer to the reference to be initialized
+ * @param obj pointer to the object being referenced
+ * @param dtor destructor function which will be called on obj when the last strong reference gets deleted
+ * @return self as given
+ */
 LumieraReference
 lumiera_reference_strong_init_once (LumieraReference self, void* obj, void (*dtor)(void*));
 
 
+/**
+ * Destroy a reference.
+ * All references need to be destroyed when not used any more.
+ * When the last strong reference gets destroyed, the object's destructor is called.
+ * Remaining weak references stay invalidated then until they get destroyed too.
+ * @param self reference to be destroyed
+ * @return self as given
+ * destroying a reference is not thread safe as far as 2 threads try to concurrently destroy it!
+ */
 LumieraReference
 lumiera_reference_destroy (LumieraReference self);
 
@@ -88,18 +106,40 @@ lumiera_reference_get (LumieraReference self)
 }
 
 
+/**
+ * Copy construct a reference as strong reference
+ * @param source reference to copy
+ * @return self as strong reference (always for strong references) or NULL if source is an invalidated weak reference,
+ * in the later case the reference is constructed as weak reference barely to allow it be destroyed
+ */
 LumieraReference
 lumiera_reference_strong_init (LumieraReference self, LumieraReference source);
 
 
+/**
+ * Copy construct a reference as weak reference
+ * @param source reference to copy
+ * @return self (always for strong references) or NULL if self is an invalidated weak reference
+ */
 LumieraReference
 lumiera_reference_weak_init (LumieraReference self, LumieraReference source);
 
 
+/**
+ * turn a (strong) reference into a weak reference
+ * Weaken a reference may remove its last strong reference and thus destroy the object
+ * do nothing if the referene is already weak
+ * @return self or NULL if the final strong reference got removed,
+ */
 LumieraReference
 lumiera_reference_weaken (restrict LumieraReference self);
 
 
+/**
+ * turn a (weak) reference into a strong reference
+ * only references of object which are not already destroyed can be strengthened
+ * @return self when successful, NULL when the object was already destroyed, 'self' stays a dead weak reference in that case
+ */
 LumieraReference
 lumiera_reference_strengthen (LumieraReference self);
 

@@ -44,10 +44,20 @@ typedef struct lumiera_condition_struct lumiera_condition;
 typedef lumiera_condition* LumieraCondition;
 
 
+/**
+ * Initialize a condition variable
+ * @param self is a pointer to the condition variable to be initialized
+ * @return self as given
+ */
 LumieraCondition
 lumiera_condition_init (LumieraCondition self);
 
 
+/**
+ * Destroy a condition variable
+ * @param self is a pointer to the condition variable to be destroyed
+ * @return self as given
+ */
 LumieraCondition
 lumiera_condition_destroy (LumieraCondition self);
 
