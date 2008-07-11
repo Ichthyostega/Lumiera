@@ -26,21 +26,15 @@
 #include "proc/lumiera.hpp"
 
 using std::cout;
-using std::endl;
-using lumiera::Appconfig;
-using lumiera::ON_GLOBAL_INIT;
-using lumiera::ON_GLOBAL_SHUTDOWN;
 
 
 int main (int argc, char* argv[])
 {
-  cout << "*** Lumiera NLE for Linux ***" << endl
-       << "    Version: " << Appconfig::get("version") << "\n";
+  cout << "*** Lumiera NLE for Linux ***" << "\n"
+       << "    Version: quasi niente" << "\n";
   
-  Appconfig::lifecycle (ON_GLOBAL_INIT);
   
   // great things are happening here....
   
-  Appconfig::lifecycle (ON_GLOBAL_SHUTDOWN);
   return 0;
 }

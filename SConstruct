@@ -247,7 +247,6 @@ def defineBuildTargets(env, artifacts):
     
     # use PCH to speed up building
     precomp = ( env.PrecompiledHeader('$SRCDIR/pre')
-              + env.PrecompiledHeader('$SRCDIR/pre_a')
               )
     env.Depends(objproc, precomp)
     env.Depends(objlib, precomp)

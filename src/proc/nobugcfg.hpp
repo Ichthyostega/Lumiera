@@ -45,8 +45,6 @@
 
 #include <syslog.h>
 #include <nobug.h>
-#include "lib/appconfig.hpp"
-#include "common/error.hpp"  ///< make assertions throw instead of abort()
 
 
   /* declare flags used throughout the code base... */
@@ -61,7 +59,7 @@
 namespace lumiera { 
   void initialize_NoBug ();
   namespace {
-    LifecycleHook schedule_ (ON_BASIC_INIT, &initialize_NoBug);         
+//  LifecycleHook schedule_ (ON_BASIC_INIT, &initialize_NoBug);         
 } }  
 #endif /*NOBUGCFG_H    ======= (End) Part 1: DECLARATIONS ======== */
 
