@@ -747,19 +747,19 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BuildDependencies" modifier="Ichthyostega" modified="200807090323" created="200803261326" changecount="9">
+<div title="BuildDependencies" modifier="Ichthyostega" modified="200807110148" created="200803261326" changecount="13">
 <pre>! Programming Languages
 * C
 ** a C99 compatible compiler, some GCC extensions are used, most are optional.
 * C++
 ** C++98
 ** std::tr1 (for &lt;std::tr1::memory&gt;)
-** BOOST ~~(below are the DEBIAN package names)~~
-*** libboost-dev (=1.34.1-2)
-*** libboost-program-options-dev (=1.34.1-2)
-*** libboost-program-options1.34.1 (=1.34.1-2) ''NOTE: binary lib dependency''
-*** libboost-regex-dev (=1.34.1-2)
-*** libboost-regex1.34.1 (=1.34.1-2) ''binary lib depenency''
+* BOOST ~~(listed below are the DEBIAN package names)~~
+** libboost-dev (&gt;=1.34.1-2)
+** libboost-program-options-dev (&gt;=1.34.1-2)
+** libboost-program-options1.34.1 (&gt;=1.34.1-2) ''NOTE: binary dependency''
+** libboost-regex-dev (&gt;=1.34.1-2)
+** libboost-regex1.34.1 (&gt;=1.34.1-2) ''binary..''
 ** //usually, newer versions are OK//
 
 * bash
@@ -769,7 +769,8 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 * autotools
 * SCons
 ** //need either autotools or scons//
-** SCons (0.96.90), Python (2.3)
+** SCons (0.96), Python (2.4)
+** pkg-config
 * Doxygen
 * test.sh (included)
 
@@ -781,6 +782,14 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 * boost (see above, version 1.35 works too)
 * NoBug
 * [[GAVL|http://gmerlin.sourceforge.net/gavl.html]] (1.0.0) 
+* for the GUI: gtkmm-2.4 gdl-1.0 cairomm-1.0 xv
+** libgtkmm-2.4-dev (&gt;=2.8)
+** libcairomm-1.0-dev (&gt;=0.6.0)
+** libgdl-1-dev (&gt;=0.6.1)
+*** libbonoboui2-dev (&gt;=2.14.0)
+** libxv-dev ~~(1.0.2 is known to work)~~
+
+//usually, newer versions are OK//
 
 </pre>
 </div>

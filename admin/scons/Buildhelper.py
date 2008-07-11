@@ -90,6 +90,18 @@ def globRootdirs(roots):
 
 
 
+def filterNodes(nlist, removeName=None):
+    """ filter out scons build nodes using the given criteria.
+        removeName: if set, remove all nodes with this srcname
+    """
+    if removeName:
+        predicate = lambda n : not fnmatch.fnmatch(os.path.basename(str(n[0])), removeName)
+    else:
+        predicate = lambda n : True;
+    
+    return filter(predicate, nlist)
+
+
 def RegisterPrecompiledHeader_Builder(env):
     """ Registeres an Custom Builder for generating a precompiled Header.
         Note you should define a dependency to the PCH file

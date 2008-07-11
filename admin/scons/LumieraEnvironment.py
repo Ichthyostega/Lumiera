@@ -51,15 +51,15 @@ class LumieraEnvironment(Environment):
             for elm in other:
                 self.mergeConf(elm)
         elif isinstance(other, str):
-            if not other in self.libInfo:
-                raise "Lib-info '%s' not available" % other
-            else:
+            if other in self.libInfo:
                 self.mergeConf(self.libInfo[other])
         else:
             self.Append (LIBS = other.get ('LIBS',[]))
             self.Append (LIBPATH = other.get ('LIBPATH', []))    
             self.Append (CPPPATH = other.get('CPPPATH', []))
             self.Append (LINKFLAGS = other.get('LINKFLAGS', []))
+        
+        return self
     
     
     def addLibInfo (self, libID, minVersion=0):
@@ -75,7 +75,12 @@ class LumieraEnvironment(Environment):
         self.libInfo[libID] = libInfo = LumieraEnvironment() 
         libInfo.ParseConfig ('pkg-config --cflags --libs '+ libID )
         return libInfo
-
+    
+    def Glob (self, pattern):
+        """ temporary workaround; newer versions of SCons provide this as a global function
+        """
+        pattern = self.subst(pattern)
+        return glob.glob(pattern)
 
 
 class LumieraConfigContext(SConf):

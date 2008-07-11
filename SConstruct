@@ -35,6 +35,7 @@ CUSTOPTIONSFILE  = 'custom-options'
 SRCDIR           = 'src'
 BINDIR           = 'bin'
 TESTDIR          = 'tests'
+ICONDIR          = 'icons'
 VERSION          = '0.1+pre.01'
 #-----------------------------------Configuration
 
@@ -61,6 +62,7 @@ def setupBasicEnvironment():
     env.Replace( VERSION=VERSION
                , SRCDIR=SRCDIR
                , BINDIR=BINDIR
+               , ICONDIR=ICONDIR
                , CPPPATH=["#"+SRCDIR]   # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['-DLUMIERA_VERSION='+VERSION ]     # note: it's a list to append further defines
                , CCFLAGS='-Wall '                                       # -fdiagnostics-show-option 
@@ -211,8 +213,36 @@ def configurePlatform(env):
         if not conf.CheckLibWithHeader('boost_regex-mt','boost/regex.hpp','C++'):
             print 'We need the boost regular expression lib (incl. binary lib for linking).'
             Exit(1)
-            
-        
+    
+#    if not conf.CheckLibWithHeader('gavl', ['gavlconfig.h', 'gavl/gavl.h'], 'C'):
+    
+    if not conf.CheckPkgConfig('gavl', 1.0):
+        print 'Did not find Gmerlin Audio Video Lib [http://gmerlin.sourceforge.net/gavl.html], exiting.'
+        Exit(1)
+    else:
+        conf.env.mergeConf('gavl')
+    
+    if not conf.CheckPkgConfig('gtkmm-2.4', 2.8):
+        print 'Unable to configure GTK--, exiting.'
+        Exit(1)
+    
+    if not conf.CheckPkgConfig('cairomm-1.0', 0.6):
+        print 'Unable to configure Cairo--, exiting.'
+        Exit(1)
+    
+    if not conf.CheckPkgConfig('gdl-1.0', '0.6.1'):
+        print 'Unable to configure the GNOME DevTool Library, exiting.'
+        Exit(1)
+    
+    if not conf.CheckPkgConfig('xv'): Exit(1)
+#   if not conf.CheckPkgConfig('xext'): Exit(1)
+#   if not conf.CheckPkgConfig('sm'): Exit(1)
+#    
+# obviously not needed?
+    
+    print "** Gathered Library Info: %s" % conf.env.libInfo.keys()
+    
+    
     # create new env containing the finished configuration
     return conf.Finish()
 
@@ -245,7 +275,7 @@ def defineBuildTargets(env, artifacts):
     objlib  = ( srcSubtree(env,'$SRCDIR/common')
               + srcSubtree(env,'$SRCDIR/lib')
               )
-    plugobj = srcSubtree(env,'$SRCDIR/plugin', isShared=True)
+    objplug = srcSubtree(env,'$SRCDIR/plugin', isShared=True)
     core  = ( env.StaticLibrary('$BINDIR/lumiback.la', objback)
             + env.StaticLibrary('$BINDIR/lumiproc.la', objproc)
             + env.StaticLibrary('$BINDIR/lumi.la',     objlib)
@@ -259,7 +289,16 @@ def defineBuildTargets(env, artifacts):
     env.Depends(objlib, precomp)
     
     artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/main.cpp']+ core )
-    artifacts['plugins'] = env.SharedLibrary('$BINDIR/lumiera-plugin', plugobj)
+    artifacts['plugins'] = env.SharedLibrary('$BINDIR/lumiera-plugin', objplug)
+
+    # the Lumiera GTK GUI
+    envgtk  = env.Clone().mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','xv','xext','sm'])
+    objgui  = srcSubtree(envgtk,'$SRCDIR/gui')
+    
+    artifacts['lumigui'] = ( envgtk.Program('$BINDIR/lumigui', objgui + core)
+                           + env.Install('$BINDIR', env.Glob('$ICONDIR/*.png'))
+                           + env.Install('$BINDIR', env.Glob('$SRCDIR/gui/*.rc'))
+                           )
     
     # call subdir SConscript(s) for independent components
     SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts core')
@@ -275,7 +314,7 @@ def definePostBuildTargets(env, artifacts):
     il = env.Alias('install-lib', '$DESTDIR/lib')
     env.Alias('install', [ib, il])
     
-    build = env.Alias('build', artifacts['lumiera']+artifacts['plugins']+artifacts['tools'])
+    build = env.Alias('build', artifacts['lumiera']+artifacts['lumigui']+artifacts['plugins']+artifacts['tools'])
     allbu = env.Alias('allbuild', build+artifacts['testsuite'])
     env.Default('build')
     # additional files to be cleaned when cleaning 'build'

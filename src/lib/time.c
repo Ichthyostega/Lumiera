@@ -28,6 +28,7 @@ lumiera_tmpbuf_print_time (gavl_time_t time)
 {
   int milliseconds, seconds, minutes, hours;
   int negative;
+
   
   if(time < 0)
     {
