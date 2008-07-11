@@ -27,6 +27,7 @@
 
 
 //#include <cstddef>
+#include <algorithm>
 #include <vector>
 #include <bitset>
 #include <boost/scoped_ptr.hpp>
@@ -59,11 +60,11 @@ namespace lumiera {
       {
         typedef NullType Next;
       };
-    template<class TY, class TYPES template<class> class _P_>
+    template<class TY, class TYPES, template<class> class _P_>
     struct Filter<Node<TY,TYPES>,_P_>
-      : CondNode<_P_<TY>, TY, TYPES>
+      : CondNode<_P_<TY>::value, TY, TYPES>
       {
-        typedef CondNode<_P_<TY>, TY, TYPES> Next;
+        typedef CondNode<_P_<TY>::value, TY, TYPES> Next;
       };
     
     
@@ -131,7 +132,10 @@ namespace lumiera {
     struct CombineFlags
       : Combine<FLAGS, FlagOnOff>
       { };
-      
+    
+    
+    using std::max;
+    
     
     template<char bit>  struct Flag                { };
     template<>          struct Flag<0> : NullType  { };
@@ -162,7 +166,7 @@ namespace lumiera {
       };
     
     template<class X>
-    struct DefineConfigFlags;
+    struct DefineConfigByFlags;
     
     template< char f1=0
             , char f2=0
@@ -170,7 +174,7 @@ namespace lumiera {
             , char f4=0
             , char f5=0
             >
-    struct DefineConfigFlags< FlagTuple<f1,f2,f3,f4,f5> >
+    struct DefineConfigByFlags< FlagTuple<f1,f2,f3,f4,f5> >
       : Config<f1,f2,f3,f4,f5>
       { };
     
@@ -218,15 +222,15 @@ namespace lumiera {
                         , TAIL
                    >    >
       {
-        typedef Node<Flag<ff>, FLAGS> CurrConfig;
-        enum{ BITS = max(FlagInfo<CurrConfig>::BITS, FlagInfo<TAIL>::BITS)
+        typedef Node<Flag<ff>, FLAGS> ThisConfig;
+        enum{ BITS = max (FlagInfo<ThisConfig>::BITS, FlagInfo<TAIL>::BITS)
             };
         
         template<class FUNC>
         static FUNC::Ret
         accept (FUNC& functor)
           {
-            functor.template visit<CurrConfig>(FlagInfo<CurrConfig>::CODE);
+            functor.template visit<ThisConfig>(FlagInfo<ThisConfig>::CODE);
             return FlagInfo<TAIL>::accept (functor);
           }
       };
@@ -251,16 +255,18 @@ namespace engine {
   ///////TODO
   using lumiera::typelist::Config;
   using lumiera::typelist::FlagInfo;
+  using lumiera::typelist::DefineConfigByFlags;
   ///////TODO
   
   
   enum Cases
     { 
-      CACHING,
+      CACHING = 1,
       PROCESS,
       INPLACE,
       
-      NUM_Cases
+      NOT_SET   = 0,
+      NUM_Cases = INPLACE
     };
   typedef std::bitset<NUM_Cases> Bits;
 
@@ -293,14 +299,14 @@ namespace engine {
   
   /**
    * Helper for fabricating ProcNode Wiring configurations.
-   * This object builds a table of factories, one for each 
-   * possible node configuration. Provided with the desired
-   * configuration encoded as bits, the related factory can
-   * be invoked, thus producing a product object for the
-   * given configuration.
+   * This object builds a table of factories, holding one factory
+   * for each possible node configuration. Provided with the desired
+   * configuration encoded as bits, the related factory can be invoked,
+   * thus producing a product object for the given configuration.
+   * 
    * \par implementation notes
    * The actual factory class is templated, so it will be defined
-   * at the use site of ConfigSelecgtor. Moreover, this factory
+   * at the use site of ConfigSelector. Moreover, this factory
    * usually expects an ctor argument, which will be fed through
    * when creating the ConfigSelector instance. This is one of
    * the reasons why we go through all these complicated factory
@@ -310,18 +316,19 @@ namespace engine {
    * factories, which in turn happens each time we use a new
    * bulk allocation memory block -- typically for each separate
    * segment of the Timeline and processing node graph.
-   * The selection of the possible flag configurations, for which
-   * Factory instances are created in the table, is governed by
-   * the type parameter of the ConfigSelector ctor. This type
-   * parameter needs to be a Typelist of Typelists, each 
-   * representing a flag configuration. The intention is to
-   * use template metaprogramming to extract all currently defined
-   * configurations for StateProxy objects to drive this selection.
+   * 
+   * NOw the selection of the possible flag configurations, for which
+   * Factory instances are created in the table, is governed by the
+   * type parameter of the ConfigSelector ctor. This type parameter
+   * needs to be a Typelist of Typelists, each representing a flag
+   * configuration. The intention is to to drive this selection by
+   * the use of template metaprogramming for extracting all
+   * currently defined StateProxy object configurations.
    */
   template<template<class CONF> class Factory>
   class ConfigSelector
     {
-      typedef typename Factory::Ret Ret;
+      typedef typename Factory::Ret   Ret;
       typedef typename Factory::Param Param;
       
       struct FacFunctor
@@ -342,7 +349,7 @@ namespace engine {
       typedef boost::scoped_ptr<FacFunctor> PFunc;
       typedef std::map<Bits, PFunc> ConfigTable;
       
-      ConfigTable possibleConfig_;
+      ConfigTable possibleConfig_; ///< Table of factories
       
       /** Helper: a visitor usable with FlagInfo */
       struct FactoryTableBuilder
@@ -363,7 +370,7 @@ namespace engine {
           void
           visit (ulong code)
             {
-              typedef typename DefineConfigFlags<FLAGS> Config;
+              typedef typename DefineConfigByFlags<FLAGS> Config;
               factories_[code].reset (new FactoryHolder<Factory<Config> > (ctor_param_));
             }
           

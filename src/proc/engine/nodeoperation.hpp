@@ -63,16 +63,6 @@ namespace engine {
   
   
 
-  /** 
-   * (abstract) base class of all concrete StateAdapter types.
-   * Defines the skeleton for the node operation/calculation
-   */
-  class InvocationStateBase
-    : public State
-    {
-      
-    };
-  
   /**
    * Adapter to shield the ProcNode from the actual buffer management,
    * allowing the processing function within ProcNode to use logical
@@ -80,15 +70,28 @@ namespace engine {
    * call, using setup/wiring data preconfigured by the builder.
    * Its job is to provide the actual implementation of the Cache
    * push / fetch and recursive downcall to render the source frames.
+   * 
+   * \par assembling the implementation
+   * This is the abstract base class of all concrete StateAdapter types.
+   * Each ProcNode#pull() call creates such a StateAdapter on the stack,
+   * with a concrete type according to the WiringDescriptor of the node
+   * to pull. The concrete type is assembled by a chain of policy templates
+   * on top of InvocationStateBase. For each of the possible configuratons
+   * we define such a chain (see bottom of this header). The WiringFactory
+   * defined in nodewiring.cpp actually drives the instantiation of all
+   * those possible combinations
    */
-  class StateAdapter
+  class InvocationStateBase
     : public State
     {
-      State& parent_;
-      State& current_;
       WiringDescriptor const& wiring_;
       
     protected:
+      State& parent_;
+      State& current_;
+      
+      uint requiredOutputNr;
+
       StateAdapter (State& callingProcess, WiringDescriptor const&) 
         : parent_ (callingProcess),
           current_(callingProcess.getCurrentImplementation())
@@ -99,22 +102,17 @@ namespace engine {
       
       virtual State& getCurrentImplementation () { return current_; }
       
-      /** contains the details of Cache query and recursive calls
-       *  to the predecessor node(s), eventually followed by the 
-       *  ProcNode::process() callback
-       */
-      BuffHandle retrieve (uint requiredOutputNr)
-        {
-          return retrieveResult (requiredOutputNr);
-        }
     };
     
   template<class NEXT>
   struct QueryCache : NEXT
     {
-      BuffHandle step () // brauche: current state
+      BuffHandle
+      step ()
         {
-          BuffHandle fetched = current_.fetch (genFrameID (requiredOutputNr));
+          BuffHandle fetched = this->current_.fetch (
+                                 this->genFrameID (
+                                   this->requiredOutputNr));
           if (fetched)
             return fetched;
           else
@@ -126,12 +124,14 @@ namespace engine {
   template<class NEXT>
   struct PullInput : NEXT
     {
-      BuffHandle step ()
+      BuffHandle
+      step ()
         {
           this->createBuffTable();
           
           ASSERT (this->buffTab);
           ASSERT (0 < this->buffTabSize());
+          ASSERT (this->nrO == this->nrI );
           ASSERT (this->nrO+this->nrI <= this->buffTabSize());
           ASSERT (this->buffTab->inHandles = &this->buffTab->handles[this->nrO]);
           BuffHandle           *inH = this->buffTab->inHandles;
@@ -147,10 +147,40 @@ namespace engine {
         }
     };
   
+  
   template<class NEXT>
-  struct AllocOutputFromCache
+  struct ReadSource : NEXT
     {
-      BuffHandle step ()
+      BuffHandle
+      step ()
+        {
+          this->createBuffTable();
+          
+          ASSERT (this->buffTab);
+          ASSERT (0 < this->buffTabSize());
+          ASSERT (this->nrO+this->nrI <= this->buffTabSize());
+          ASSERT (this->buffTab->inHandles = &this->buffTab->handles[this->nrO]);
+          BuffHandle           *inH  = this->buffTab->inHandles;
+          BuffHandle           *outH = this->buffTab->handles;
+          BuffHandle::PBuff *inBuff  = this->buffTab->inBuffs;
+          BuffHandle::PBuff *outBuff = this->buffTab->buffers;
+          
+          for (uint i = 0; i < this->nrI; ++i )
+            {
+              inBuff[i] = outBuff[i] =
+                *(inH[i] = outH[i] = this->getSource(i)); // TODO: how to access source nodes???
+              // now Input #i is ready...
+            }
+          return NEXT::step();
+        }
+    };
+  
+  
+  template<class NEXT, class BUFFSRC>
+  struct AllocOutput
+    {
+      BuffHandle 
+      step ()
         {
           ASSERT (this->buffTab);
           ASSERT (this->nrO < this->buffTabSize());
@@ -160,17 +190,45 @@ namespace engine {
           for (uint i = 0; i < this->nrO; ++i )
             {
               outBuff[i] =
-                 *(outH[i] = this->allocateBuffer(i));
+                 *(outH[i] = allocateBuffer (i));
               // now Output buffer for channel #i is available...
             }
           return NEXT::step();
         }
+      
+    private:
+      BuffHandle const&
+      allocateBuffer (uint outCh)
+        {
+          BUFFSRC::getBufferProvider(this).allocateBuffer(
+                          this->getBufferDescriptor(outCh));
+        }
     };
+  
+  
+  enum OutBuffProvider { PARENT, CACHE };
+  
+  template<OutBuffProvider>
+  struct OutBuffSource ;
+  
+  template<>
+  struct OutBuffSource<PARENT>
+    {
+      State& getBufferProvider (InvocationStateBase& thisState) { return thisState.parent_; }
+    };
+  
+  template<>
+  struct OutBuffSource<CACHE>
+    {
+      State& getBufferProvider (InvocationStateBase& thisState) { return thisState.current_; }
+    };
+  
   
   template<class NEXT>
   struct ProcessData
     {
-      BuffHandle step ()
+      BuffHandle 
+      step ()
         {
           ASSERT (this->buffTab);
           ASSERT (this->nrO+this->nrI <= this->buffTabSize());
@@ -186,7 +244,8 @@ namespace engine {
   template<class NEXT>
   struct FeedCache
     {
-      BuffHandle step ()
+      BuffHandle 
+      step ()
         {
           // declare all Outputs as finished
           this->current_.isCalculated(this->buffTab->handles, 
@@ -199,7 +258,8 @@ namespace engine {
   template<class NEXT>
   struct ReleaseBuffers
     {
-      BuffHandle step ()
+      BuffHandle 
+      step ()
         {
           // all buffers besides the required Output no longer needed
           this->current_.releaseBuffers(this->buffTab->handles, 
@@ -238,53 +298,79 @@ namespace engine {
   /* === declare the possible Assembly of these elementary steps === */
   
   template<class Config>
-  struct Strategy
-    {
-      BuffHandle step () { NOTREACHED; }
-    };
+  struct Strategy ;
+
   
-  template<>
-  struct Strategy< Config<CACHING,PROCESS,INPLACE> >
+  template<char CACE_Fl=0, char INPLACE_Fl=0>
+  struct SelectBuffProvider;
+  
+  template<> struct SelectBuffProvider<CACHING>         : OutBuffSource<CACHE> { };
+  template<> struct SelectBuffProvider<NOT_SET,INPLACE> : OutBuffSource<PARENT>{ };
+  template<> struct SelectBuffProvider<CACHING,INPLACE> : OutBuffSource<CACHE> { };
+  template<> struct SelectBuffProvider<>                : OutBuffSource<PARENT>{ };
+
+  
+  using lumiera::typelist::Config;
+  
+  template<char INPLACE_Fl>
+  struct Strategy< Config<CACHING,PROCESS,INPLACE_Fl> >
     : QueryCache <
        PullInput<
-        AllocOutputFromCache<
+        AllocOutput<SelectBuffProvider<CACHING,INPLACE_Fl>,
          ProcessData<
           FeedCache<
            ReleaseBuffers< 
             InvocationStateBase > > > > > >
     { };
   
-  template<>
+  template<char INPLACE_Fl>
   struct Strategy< Config<PROCESS> >
     : PullInput<
-       AllocOutputFromParent<
+       AllocOutput<SelectBuffProvider<NOT_SET,INPLACE_Fl>,
         ProcessData<
           ReleaseBuffers< 
            InvocationStateBase > > > > 
     { };
   
+  template<>
+  struct Strategy< Config<> >
+    : ReadSource<
+       ReleaseBuffers< 
+        InvocationStateBase > >  
+    { };
   
-  // At Application startup: build table of all possible operation configs
-  namespace {
+  template<>
+  struct Strategy< Config<INPLACE> > : Strategy< Config<> >  { };
   
-    bool
-    determine_if_case_is_possible (Bits& caseFlags)
-    {
-      ////////////////////////////////////////////////TODO: Henne oder Ei?
-    }
-  
-    void
-    build_table_of_possible_configs ()
-    {
-      registerPossibleCases (&determine_if_case_is_possible);
-    }
-  
-  
-    using namespace lumiera;
-    LifecycleHook schedule_ (ON_BASIC_INIT, &build_table_of_possible_configs);         
+  template<>
+  struct Strategy< Config<CACHING> >
+    : ReadSource<
+       AllocOutput<OutBuffSource<CACHE>,
+        ProcessData<                       // wiring_.processFunction is supposed to do just buffer copying here 
+         ReleaseBuffers< 
+          InvocationStateBase > > > >  
+    { };
 
-  }
   
+  template<class Config>
+  class StateAdapter
+    : Strategy<Config>
+    {
+      
+    protected:
+        
+      /** contains the details of Cache query and recursive calls
+       *  to the predecessor node(s), eventually followed by the 
+       *  ProcNode::process() callback
+       */
+      BuffHandle retrieve (uint outNr)
+        {
+          this->requiredOutputNr = outNr;
+          return Strategy::step ();
+        }
+      
+    };
+    
   
 } // namespace engine
 #endif

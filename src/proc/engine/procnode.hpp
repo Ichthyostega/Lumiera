@@ -76,7 +76,7 @@ namespace engine {
        *  holding the actual buffer pointers and issuing the recrusive pull() calls
        *  @see NodeWiring#callDown default implementation
        */
-      virtual BufferID  callDown (State& currentProcess, BufferID requiredOutputNr)  const =0; 
+      virtual BuffHandle  callDown (State& currentProcess, uint requiredOutputNr)  const =0; 
       
       friend class ProcNode;
       
@@ -118,8 +118,8 @@ namespace engine {
        *         this node delivers more than one output channel)
        *  @return ID of the result buffer (accessible via currentProcess) 
        */
-      BufferID
-      pull (State& currentProcess, BufferID requiredOutputNr=0)  const
+      BuffHandle
+      pull (State& currentProcess, uint requiredOutputNr=0)  const
         {
           return this->wiringConfig_.callDown (currentProcess, requiredOutputNr);
         }
