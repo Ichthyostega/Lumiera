@@ -9,6 +9,10 @@ from Buildhelper import globRootdirs
 
 Import('env','artifacts','core')
 
+# temp fix to add test.h  -- wouldn't it be better to put this header be into src/lib ?  
+env = env.Clone()
+env.Append(CPPPATH='#/.')  # add Rootdir to Includepath, so test/test.h is found
+# temp fix------------- 
 
 def testExecutable(env,tree, exeName=None, obj=None):
     """ declare all targets needed to create a standalone
@@ -52,7 +56,7 @@ def treatPluginTestcase(env):
 moduledirs = globRootdirs('*')
 
 # but have to treat some subdirs individually.
-specials = ['plugin','locking','library']
+specials = ['plugin','locking','library','backend']
 
 
 
