@@ -88,7 +88,7 @@ TimelineRuler::on_realize()
   Widget::on_realize();
   
   // Set event notifications
-  add_events(Gdk::POINTER_MOTION_MASK);
+  add_events(Gdk::POINTER_MOTION_MASK | Gdk::SCROLL_MASK);
 
   // Load styles
   read_styles();
