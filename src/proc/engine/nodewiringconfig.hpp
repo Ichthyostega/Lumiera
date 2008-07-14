@@ -25,6 +25,7 @@
 #define ENGINE_NODEWIRINGCONFIG_H
 
 
+#include "common/util.hpp"
 
 //#include <cstddef>
 #include <algorithm>
@@ -121,11 +122,11 @@ namespace lumiera {
       { };
     template<class TY, class TYPES, template<class T> class _PERM_>
     struct Combine<Node<TY,TYPES>,_PERM_>
-      : Distribute<_PERM_<TY>, Combine<TYPES> >
+      : Distribute<_PERM_<TY>, Combine<TYPES,_PERM_> >
       { };
     
     template<class F>
-    struct FlagOnOff : Types<E>::List
+    struct FlagOnOff : Types<F>::List
       { };
     
     template<class FLAGS>
@@ -168,11 +169,11 @@ namespace lumiera {
     template<class X>
     struct DefineConfigByFlags;
     
-    template< char f1=0
-            , char f2=0
-            , char f3=0
-            , char f4=0
-            , char f5=0
+    template< char f1
+            , char f2
+            , char f3
+            , char f4
+            , char f5
             >
     struct DefineConfigByFlags< FlagTuple<f1,f2,f3,f4,f5> >
       : Config<f1,f2,f3,f4,f5>
@@ -199,7 +200,7 @@ namespace lumiera {
     template<char ff, class FLAGS>
     struct FlagInfo<Node<Flag<ff>, FLAGS> >
       {
-        enum{ BITS = max(ff,   FlagInfo<FLAGS>::BITS)
+        enum{ BITS = MAX(ff,   FlagInfo<FLAGS>::BITS)
             , CODE = (1<<ff) | FlagInfo<FLAGS>::CODE
             }; 
       };
@@ -211,7 +212,7 @@ namespace lumiera {
             };
         
         template<class FUNC>
-        static FUNC::Ret
+        static typename FUNC::Ret
         accept (FUNC& functor)
           {
             return functor.done();
@@ -223,11 +224,11 @@ namespace lumiera {
                    >    >
       {
         typedef Node<Flag<ff>, FLAGS> ThisConfig;
-        enum{ BITS = max (FlagInfo<ThisConfig>::BITS, FlagInfo<TAIL>::BITS)
+        enum{ BITS = MAX (FlagInfo<ThisConfig>::BITS, FlagInfo<TAIL>::BITS)
             };
         
         template<class FUNC>
-        static FUNC::Ret
+        static typename FUNC::Ret
         accept (FUNC& functor)
           {
             functor.template visit<ThisConfig>(FlagInfo<ThisConfig>::CODE);
@@ -270,14 +271,6 @@ namespace engine {
     };
   typedef std::bitset<NUM_Cases> Bits;
 
-  
-  //////////////////////////////////TODO: noch nötig??
-  template<class CONF>
-  Bits
-  getCaseRepresentation (CONF config)
-    {
-      return Bits (FlagInfo<CONF::Flags>::CODE);
-    }
   
   
   
@@ -325,24 +318,25 @@ namespace engine {
    * the use of template metaprogramming for extracting all
    * currently defined StateProxy object configurations.
    */
-  template<template<class CONF> class Factory>
+  template< template<class CONF> class Factory
+          , class PAR            ///< ctor parameter of the Factories
+          , class RET           ///<  common base class of the Factory's products
+          >
   class ConfigSelector
     {
-      typedef typename Factory::Ret   Ret;
-      typedef typename Factory::Param Param;
       
       struct FacFunctor
         {
           virtual ~FacFunctor() {}
-          virtual Ret invoke()  =0;
+          virtual RET invoke()  =0;
         };
       template<class FAC>
       struct FactoryHolder : FacFunctor
         {
           FAC factory_;
-          FactroyHolder(Param p) : factory_(p) {}
+          FactoryHolder(PAR p) : factory_(p) {}
           
-          virtual Ret invoke ()  { return factory_(); }
+          virtual RET invoke ()  { return factory_(); }
         };
       
       
@@ -354,10 +348,10 @@ namespace engine {
       /** Helper: a visitor usable with FlagInfo */
       struct FactoryTableBuilder
         {
-          Param ctor_param_;
+          PAR ctor_param_;
           ConfigTable& factories_;
           
-          FactoryTableBuilder (ConfigTable& tab, Param p)
+          FactoryTableBuilder (ConfigTable& tab, PAR p)
             : ctor_param_(p), 
               factories_(tab) { }
           
@@ -370,7 +364,7 @@ namespace engine {
           void
           visit (ulong code)
             {
-              typedef typename DefineConfigByFlags<FLAGS> Config;
+              typedef DefineConfigByFlags<FLAGS> Config;
               factories_[code].reset (new FactoryHolder<Factory<Config> > (ctor_param_));
             }
           
@@ -379,7 +373,7 @@ namespace engine {
       
     public:
       template<class CONFS>
-      ConfigSelector(Param factory_ctor_param)
+      ConfigSelector(PAR factory_ctor_param)
         {
           FactoryTableBuilder buildTable(this->possibleConfig_,
                                          factory_ctor_param );
@@ -388,7 +382,7 @@ namespace engine {
           FlagInfo<CONFS>::accept (buildTable);
         }
       
-      Ret
+      RET
       operator() (Bits configFlags) ///< invoke the factory corresponding to the given config
         {
           return possibleConfig_[configFlags]->invoke();

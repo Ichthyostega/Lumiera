@@ -34,7 +34,7 @@
 
 namespace engine { 
   
-  class StateAdapter;
+  class InvocationStateBase;
   
   struct BuffHandle
     {
@@ -72,7 +72,7 @@ namespace engine {
        */ 
       virtual State& getCurrentImplementation () =0;
       
-      friend class engine::StateAdapter;
+      friend class engine::InvocationStateBase;
       
     public:
       

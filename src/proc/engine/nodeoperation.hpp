@@ -81,26 +81,78 @@ namespace engine {
    * defined in nodewiring.cpp actually drives the instantiation of all
    * those possible combinations
    */
-  class InvocationStateBase
+  class StateAdapter
     : public State
     {
-      WiringDescriptor const& wiring_;
-      
     protected:
       State& parent_;
       State& current_;
       
       uint requiredOutputNr;
 
-      StateAdapter (State& callingProcess, WiringDescriptor const&) 
+      StateAdapter (State& callingProcess) 
         : parent_ (callingProcess),
           current_(callingProcess.getCurrentImplementation())
         { }
       
-      friend class NodeWiring<StateAdapter>; // both are sharing implementation details...
-      
-      
       virtual State& getCurrentImplementation () { return current_; }
+      
+    };
+  
+  struct BuffTable
+    {
+      BuffHandle        *const outHandle;
+      BuffHandle        *const inHandle;
+      BuffHandle::PBuff *const outBuff;
+      BuffHandle::PBuff *const inBuff;
+    };
+  
+  
+  struct Invocation
+    {
+      WiringDescriptor const& wiring;
+      BuffTable& buffTab;
+      const uint outNr;
+      
+    protected:
+      Invocation (WiringDescriptor const& w, BuffTable& b, uint o)
+        : wiring(w),
+          buffTab(b),
+          outNr(o)
+        { }
+    };
+  
+  
+  template<uint SZ>
+  class InvocationImpl
+    : private StateAdapter,
+      private BuffTableStorage<SZ>,
+      public Invocation
+    {
+
+    protected:
+      InvocationImpl (State& callingProcess, WiringDescriptor const& w, const uint outCh)
+        : StateAdapter(callingProcess),
+          BuffTableStorage(w),
+          Invocation(w, static_cast<BuffTable&>(*this), outCh)
+        { }
+      
+      /** contains the details of Cache query and recursive calls
+       *  to the predecessor node(s), eventually followed by the 
+       *  ProcNode::process() callback
+       */
+      template<class Strategy>
+      BuffHandle retrieve ()
+        {
+          return Strategy::step (*this);
+        }
+    };
+
+    
+    
+    
+  class OperationBase
+    {
       
     };
     
@@ -108,7 +160,7 @@ namespace engine {
   struct QueryCache : NEXT
     {
       BuffHandle
-      step ()
+      step (Invocation& ivo)
         {
           BuffHandle fetched = this->current_.fetch (
                                  this->genFrameID (
@@ -116,7 +168,7 @@ namespace engine {
           if (fetched)
             return fetched;
           else
-            return NEXT::step();
+            return NEXT::step (ivo);
         }
     };
           
@@ -125,7 +177,7 @@ namespace engine {
   struct PullInput : NEXT
     {
       BuffHandle
-      step ()
+      step (Invocation& ivo)
         {
           this->createBuffTable();
           
@@ -143,7 +195,7 @@ namespace engine {
                 *(inH[i] = this->pullPredecessor(i)); // invoke predecessor
               // now Input #i is ready...
             }
-          return NEXT::step();
+          return NEXT::step (ivo);
         }
     };
   
@@ -152,7 +204,7 @@ namespace engine {
   struct ReadSource : NEXT
     {
       BuffHandle
-      step ()
+      step (Invocation& ivo)
         {
           this->createBuffTable();
           
@@ -171,7 +223,7 @@ namespace engine {
                 *(inH[i] = outH[i] = this->getSource(i)); // TODO: how to access source nodes???
               // now Input #i is ready...
             }
-          return NEXT::step();
+          return NEXT::step (ivo);
         }
     };
   
@@ -180,7 +232,7 @@ namespace engine {
   struct AllocOutput
     {
       BuffHandle 
-      step ()
+      step (Invocation& ivo)
         {
           ASSERT (this->buffTab);
           ASSERT (this->nrO < this->buffTabSize());
@@ -193,7 +245,7 @@ namespace engine {
                  *(outH[i] = allocateBuffer (i));
               // now Output buffer for channel #i is available...
             }
-          return NEXT::step();
+          return NEXT::step (ivo);
         }
       
     private:
@@ -228,7 +280,7 @@ namespace engine {
   struct ProcessData
     {
       BuffHandle 
-      step ()
+      step (Invocation& ivo)
         {
           ASSERT (this->buffTab);
           ASSERT (this->nrO+this->nrI <= this->buffTabSize());
@@ -237,7 +289,7 @@ namespace engine {
            // Invoke our own process() function, providing the buffer array
           this->wiring_.processFunction (this->buffTab->buffers);
           
-          return NEXT::step();
+          return NEXT::step (ivo);
         }
     };
   
@@ -245,13 +297,13 @@ namespace engine {
   struct FeedCache
     {
       BuffHandle 
-      step ()
+      step (Invocation& ivo)
         {
           // declare all Outputs as finished
           this->current_.isCalculated(this->buffTab->handles, 
                                       this->nrO);
           
-          return NEXT::step();
+          return NEXT::step (ivo);
         }
     };
   
@@ -259,7 +311,7 @@ namespace engine {
   struct ReleaseBuffers
     {
       BuffHandle 
-      step ()
+      step (Invocation& ivo)
         {
           // all buffers besides the required Output no longer needed
           this->current_.releaseBuffers(this->buffTab->handles, 
@@ -270,28 +322,6 @@ namespace engine {
         }
     };
   
-  template<class NEXT>
-  struct NoProcess
-    {
-      BuffHandle calculateResult(BuffHandle* calculated)
-        {
-          uint nrO = this->getNrO();
-          for (uint i = 0; i<nrO; ++i )
-            {
-              calculated[i] = this->retrieveInput(i);  ///TODO: Null pointer when no caching!!!!!
-              this->outBuff[i] = current_.getBuffer(calculated[i]);
-              // now Buffer containing Output channel #i is available...
-            }
-          
-          this->feedCache();
-          for (uint i=0; i < nrO; ++i)
-            if (i!=requiredOutputNr)
-              current_.releaseBuffer(i);
-              
-          return calculated[requiredOutputNr];
-        };
-      
-    };
   
 
   
@@ -314,13 +344,13 @@ namespace engine {
   
   template<char INPLACE_Fl>
   struct Strategy< Config<CACHING,PROCESS,INPLACE_Fl> >
-    : QueryCache <
+    : QueryCache<
        PullInput<
         AllocOutput<SelectBuffProvider<CACHING,INPLACE_Fl>,
          ProcessData<
           FeedCache<
            ReleaseBuffers< 
-            InvocationStateBase > > > > > >
+            OperationBase > > > > > >
     { };
   
   template<char INPLACE_Fl>
@@ -329,14 +359,14 @@ namespace engine {
        AllocOutput<SelectBuffProvider<NOT_SET,INPLACE_Fl>,
         ProcessData<
           ReleaseBuffers< 
-           InvocationStateBase > > > > 
+           OperationBase > > > > 
     { };
   
   template<>
   struct Strategy< Config<> >
     : ReadSource<
        ReleaseBuffers< 
-        InvocationStateBase > >  
+        OperationBase > >  
     { };
   
   template<>
@@ -348,28 +378,10 @@ namespace engine {
        AllocOutput<OutBuffSource<CACHE>,
         ProcessData<                       // wiring_.processFunction is supposed to do just buffer copying here 
          ReleaseBuffers< 
-          InvocationStateBase > > > >  
+          OperationBase > > > >  
     { };
 
   
-  template<class Config>
-  class StateAdapter
-    : Strategy<Config>
-    {
-      
-    protected:
-        
-      /** contains the details of Cache query and recursive calls
-       *  to the predecessor node(s), eventually followed by the 
-       *  ProcNode::process() callback
-       */
-      BuffHandle retrieve (uint outNr)
-        {
-          this->requiredOutputNr = outNr;
-          return Strategy::step ();
-        }
-      
-    };
     
   
 } // namespace engine
