@@ -1,5 +1,5 @@
 /*
-  TIME.hpp  -  unified representation of a time point, including conversion functions
+  LUMITIME.hpp  -  unified representation of a time point, including conversion functions
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,8 @@
 */
 
 
-#ifndef LUMIERA_TIME_H
-#define LUMIERA_TIME_H
+#ifndef LUMIERA_LUMITIME_H
+#define LUMIERA_LUMITIME_H
 
 #include <boost/operators.hpp>
 

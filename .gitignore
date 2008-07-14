@@ -5,7 +5,7 @@
 *.os
 *.gch
 ,valgrind.log*
-Buildhelper.pyc
+admin/scons/*.pyc
 optcache
 Makefile.in
 build/*

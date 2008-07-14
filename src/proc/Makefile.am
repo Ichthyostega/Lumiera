@@ -114,8 +114,7 @@ liblumiprocmobjectbuilder_a_SOURCES =					\
 	$(liblumiprocmobjectbuilder_a_srcdir)/assembler.cpp		\
 	$(liblumiprocmobjectbuilder_a_srcdir)/conmanager.cpp		\
 	$(liblumiprocmobjectbuilder_a_srcdir)/nodecreatertool.cpp	\
-	$(liblumiprocmobjectbuilder_a_srcdir)/segmentationtool.cpp	\
-	$(liblumiprocmobjectbuilder_a_srcdir)/toolfactory.cpp
+	$(liblumiprocmobjectbuilder_a_srcdir)/segmentationtool.cpp	
 
 
 liblumiprocmobjectcontroller_a_srcdir = $(top_srcdir)/src/proc/mobject/controller
@@ -209,7 +208,6 @@ noinst_HEADERS +=							\
 	$(liblumiproc_a_srcdir)/mobject/builder/conmanager.hpp		\
 	$(liblumiproc_a_srcdir)/mobject/builder/nodecreatertool.hpp	\
 	$(liblumiproc_a_srcdir)/mobject/builder/segmentationtool.hpp	\
-	$(liblumiproc_a_srcdir)/mobject/builder/toolfactory.hpp		\
 	$(liblumiproc_a_srcdir)/mobject/builderfacade.hpp		\
 	$(liblumiproc_a_srcdir)/mobject/controller/pathmanager.hpp	\
 	$(liblumiproc_a_srcdir)/mobject/controller/renderstate.hpp	\

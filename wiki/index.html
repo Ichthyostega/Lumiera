@@ -759,20 +759,29 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BuildDependenceis" modifier="Ichthyostega" modified="200708210341" created="200708120103" tags="organization buildsys" changecount="7">
+<div title="BuildDependenceis" modifier="Ichthyostega" modified="200807110146" created="200708120103" tags="organization buildsys" changecount="15">
 <pre>for __Building__
 * gcc (4.1), glibc6 (2.3), libstdc++6 (4.1)
-* [[build system|BuildSystem]] dependencies: SCons (0.96.90), Python (2.3)
+* [[build system|BuildSystem]] dependencies: SCons (0.96.90), Python (2.4), pkg-config
+* [[GAVL|http://gmerlin.sourceforge.net/gavl.html]] (1.0.0) 
 * NoBug for Logging, Tracing, Asserting (can be obtained from [[Pipapo.org|http://www.pipapo.org/pipawiki/NoBug]])
 * ~NoBug needs [[valgrind|Valgrind]] (3.2), execinfo.h and libpthread (&amp;rarr; glibc)
 * std::tr1 &amp;mdash; esp. for the former BOOST::shared_ptr (which is now proposed standard)
-* BOOST ~~(below are the DEBIAN package names)~~
-** libboost-dev (=1.34.1-2)
-** libboost-program-options-dev (=1.34.1-2)
-** libboost-program-options1.34.1 (=1.34.1-2) ''NOTE: binary dependency''
-** libboost-regex-dev (=1.34.1-2)
-** libboost-regex1.34.1 (=1.34.1-2) ''binary..''
+* BOOST ~~(listed below are the DEBIAN package names)~~
+** libboost-dev (&gt;=1.34.1-2)
+** libboost-program-options-dev (&gt;=1.34.1-2)
+** libboost-program-options1.34.1 (&gt;=1.34.1-2) ''NOTE: binary dependency''
+** libboost-regex-dev (&gt;=1.34.1-2)
+** libboost-regex1.34.1 (&gt;=1.34.1-2) ''binary..''
+* for the GUI: gtkmm-2.4 gdl-1.0 cairomm-1.0 xv
+** libgtkmm-2.4-dev (&gt;=2.8)
+** libcairomm-1.0-dev (&gt;=0.6.0)
+** libgdl-1-dev (&gt;=0.6.1)
+*** libbonoboui2-dev (&gt;=2.14.0)
+** libxv-dev (&gt;=1.0.2)
 //usually, newer versions are OK//
+
+boost 1.35 works too.
 
 for __Running__</pre>
 </div>
@@ -942,14 +951,18 @@ git push git://git.pipapo.org/lumiera/mob
 
 lumiera/mob is an anonymous account at pipapo.org where everyone can commit changes. </pre>
 </div>
-<div title="IRC-Transcripts" modifier="Ichthyostega" modified="200805200550" created="200708120209" tags="discuss irclog" changecount="9">
+<div title="IRC-Transcripts" modifier="Ichthyostega" modified="200807072122" created="200708120209" tags="discuss irclog" changecount="11">
 <pre>We keep a protocol or short summary of each important discussion. The summaries of the monthly developer meetings are posted to the Mailinglist and can be found on pipapo.org too
 
+* [[06-08 developer meeting 5.Jun.2008|IRC_2008-06-05]]
 * [[05-08 developer meeting 8.May.2008|IRC_2008-05-08]]
 * [[04-08 developer meeting 3.Apr.2008|IRC_2008-04-03]]
 * [[03-08 developer meeting 6.Mar.2008|IRC_2008-03-06]]
 * [[1.official developer meeting 1.Feb.2008|IRC_2008-02-01]]
 * [[informal developer meeting 10.Aug.2007|IRC_2007-08-10]]
+
+!talks about distinct topics
+* [[buffer allocation for render nodes (6/08)|IRC_log_BufferAllocation_2008-06]]
 </pre>
 </div>
 <div title="IRC_2007-08-10" modifier="Ichthyostega" created="200802021815" tags="irclog" changecount="1">
@@ -1587,6 +1600,206 @@ Ichthyo explains that the builder needs to detect cycles and check if the high l
 
 Next meeting is on thursday 5th June 21:00 UTC
 </pre>
+</div>
+<div title="IRC_2008-06-05" modifier="Ichthyostega" modified="200807072133" created="200807072132" tags="irclog excludeMissing" changecount="2">
+<pre>! 5.June 2008 on #lumiera
+21:00 -23:15 UTC. __Participants__:
+ * cehteh
+ * ichthyo
+ * joelholdsworth
+ * rcbarnes
+ * raffa
+
+//Protocol written by ichthyo//
+
+
+! Left over from the last meeting
+//Nothing left over and no urgent topics.//
+Seemingly, work is proceeding in all parts of the application.
+
+! Discuss Ideas and Drafts in design process
+//There are no new design proposals and no proposals that can be finalized.//
+
+Ichthyo points out that he's about to work out the details of some of his proposals, which are currently in &quot;idea&quot; state. Following that, most of the meeting is spent on discussing the details of two of these proposals.
+
+!!! Idea: Design the Render Nodes interface
+[[Design of the render nodes interface|http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/DesignRenderNodesInterface]]
+
+''Cehteh'' points out that, as we are in the pre-alpha phase, interfaces may be growing on-demand. Later on, interface versions will be numbered. If needed, we could add a special &quot;draft&quot; or &quot;experimental&quot; tag, or, alternatively, use the common numbering scheme, where odd major version numbers denote the development line of an interface.
+
+''Ichthyo'' agrees, but adds he also meant &quot;interface&quot; in this proposal in a wider sense, like in &quot;what do we need and require from a processing node&quot;. Knowing how generally Lumiera will handle the processing nodes while rendering helps him with defining and implementing the builder
+
+__Conclusion__: &quot;currently in work&quot;. For now, grow interfaces on demand.
+-----
+
+!!! Idea: Placement Metaphor used within the high-level view of Proc-Layer
+[[Placement Metaphor in the Proc-Layer|http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/ProcPlacementMetaphor]]
+
+In the course of the discussion, ''Ichthyo'' explains the rationale
+* one common mechanism for sticking objects together and putting them into the session
+* either specify the &quot;placement&quot;-parameters (time, output destination, track) directly, link to another object's parameters, or derive some or all of those values from the context (up the tree of tracks)
+* ability to build a system of high-level media objects (clips, effects...) which re-adjust automatically on change
+* extensible to handle or derive some parameters based on conditions and rules, e.g. for semi-automatic wiring of the output destination based on tags
+
+''Joelholdsworth'' is concerned that this proposal may go too far and tries to tie things together which aren't really connected. While basically it's no problem having the time position of a clip either absolute, or derived by a link to another object, he can't see a clear benefit of controlling sound pan or video layer order from the placement. Pan, for example, is just an parameter value or interpolated curve, similar to colour correction or gamma adjustment. For the gui, he points out, it's probably better to stick to the object metaphor, so start time, output, layer number or sound pan would be properties of the object.
+
+But that's exactly what Ichthyo wants to avoid. Obviously, this would be the standard solution employed by most current editing apps, and works reasonably well in average cases. But he is looking for a solution which covers this standard case, but also doesn't get into the way when dealing with advanced compositing, working with spatial sound systems (Ambisonics, Wave Field Synthesis) or stereoscopic (3D) video.
+
+//On the whole, there is no conclusion yet.// Certainly, this proposal needs more discussion, parts need to be defined much more clear (esp. the &quot;Pro&quot; arguments), maybe parts of the functionality should be separated out.
+
+While in this discussion, several aspects of the cooperation of GUI and Proc layer are considered.
+* it is not necessary to make all of the Placement proposal visible to the GUI (and the user). Proc layer may as well provide a simplyfied and hard wired API for the most common properties (layer index, pan) and only use this part of the Placement concept for building and wiring the nodes.
+* the adjustment of objects linked together by a placement can be handled as follows: 
+*# GUI notifies Proc of a position/parameter change of one object and gets immediate, synchronous feedback (OK or fail)
+*# Proc detects the other linked objects affected by the change and notifies GUI (both synchronous and asynchronous is possible) to update information regarding those objects
+*# GUI pulls the necessary properties by calling Proc on a per object base.
+* as a rule of thumb, GUI &lt;-&gt; Proc is mostly synchronous, while Backend &lt;-&gt; GUI is often asynchronous, but there are exceptions from the rule
+* we have general //parameters//, which are automatible. These are represented as //control data connections between the nodes.// We certainly don't want to represent some things in this way, though. For example, the in/out points of clips are fixed values.
+* in Ichthyo's concept, the Placement doesn't itself provide such parameter values/sources, rather it can be used to //find// or //derive// parameter sources.
+* the node graph is built bottom up, starting at the source, then via the effects attached locally to a clip, further on upwards (directed by the tree of tracks) to be finally connected via global busses to the output ports. Rendering pulls from these output ports.
+* Joelholdsworth, Cehteh, Ichthyo and Rcbarnes agree that the plain //node-editor// approach is problematic in the context of a NLE. It shows too much details and fails to capture the temporal aspect. We strive at having node-like features and flexibility, but rather within the timeline.
+* especially, the topology of the node graph isn't constant over the whole timeline. But it's the job of the builder in the Proc layer to deal with these complexities, the user shouldn't be overwhelmed with all those details.
+-----
+
+! Next meeting
+* some people in europe complained that 21:00 UTC is too late, esp. with daylight saving
+* there was the proposal to alternate between the current schedule, and sunday 16:00 UTC
+* but Joel can't attend on sunday afternoon for now
+* so we settle down on thursday, 16:30
+
+Next meeting: ''Thursday 3.July 2008 16:30 UTC''
+</pre>
+</div>
+<div title="IRC_log_BufferAllocation_2008-06" modifier="Ichthyostega" created="200806211624" tags="irclog excludeMissing" changecount="1">
+<pre>! 5.June 2008 on #lumiera
+__cehteh__ and __ichthyo__
+{{{
+[2008-06-05 19:21:21] &lt;cehteh&gt; do you need me? .. i am away if not .. i have no much to say for the today meeting either
+[2008-06-05 19:21:57] &lt;ichthyo&gt; I have one topic I want to discuss with you, cehteh
+[2008-06-05 19:22:07] &lt;ichthyo&gt; but it need not be now, or in the meeting
+[2008-06-05 19:22:07] &lt;cehteh&gt; ok
+[2008-06-05 19:22:24] &lt;ichthyo&gt; it's about allocating processing buffers 
+[2008-06-05 19:23:20] &lt;cehteh&gt; the backend will provide them as temporary files/cyclic buffers
+[2008-06-05 19:23:52] &lt;cehteh&gt; its not there yet but in my mind
+[2008-06-05 19:24:11] &lt;ichthyo&gt; haha, same for the builder... it's mostly just in my mind
+[2008-06-05 19:24:42] &lt;cehteh&gt; opened almost like a normal file but giving frame properties instead filename
+[2008-06-05 19:24:56] &lt;cehteh&gt; (there will be a distinct api for that)
+[2008-06-05 19:25:01] &lt;ichthyo&gt; ok
+[2008-06-05 19:25:05] &lt;ichthyo&gt; regarding the buffers: my question is more special
+[2008-06-05 19:25:19] &lt;ichthyo&gt; if you want to cache a frame (intermediary result)
+[2008-06-05 19:25:35] &lt;ichthyo&gt; then I thought we could avoid the copy operation
+[2008-06-05 19:25:44] &lt;ichthyo&gt; I could arrange things accordingly
+[2008-06-05 19:25:46] &lt;cehteh&gt; then the backend creates a backing mmaped file for that maybe manages its size (or do you want to tell how much frames you want to cache?)
+[2008-06-05 19:26:06] &lt;cehteh&gt; yes perfect .. thats what i am planning
+[2008-06-05 19:26:26] &lt;ichthyo&gt; you know, many processing nodes will be able to process &quot;in place&quot;
+[2008-06-05 19:26:34] &lt;ichthyo&gt; but ther are some that can't do this
+[2008-06-05 19:27:44] &lt;ichthyo&gt; so basically each processing function will &quot;see&quot; input frame buffer(s) and output frame buffer(s). but when a node is &quot;in-place-capable&quot;, actually the in and out buffer may point to the same location
+[2008-06-05 19:26:55] &lt;cehteh&gt; basiically all temporary frames with the same properties are allcoated from the same backing file (well maybe 2 caching levels but not important here)
+[2008-06-05 19:27:06] &lt;cehteh&gt; the index give them meaning
+[2008-06-05 19:27:49] &lt;cehteh&gt; do you can query (and lock) a frame by that
+[2008-06-05 19:28:04] &lt;ichthyo&gt; that sounds good
+[2008-06-05 19:28:24] &lt;cehteh&gt; do some inplace editing and then tell the backend &quot;this is now frame N of node X&quot;
+[2008-06-05 19:28:34] &lt;ichthyo&gt; yeah, exactly
+[2008-06-05 19:28:44] &lt;cehteh&gt; (plus a uuid or preferably genertion number)
+[2008-06-05 19:28:39] &lt;ichthyo&gt; basically my Idea was as follows:
+[2008-06-05 19:29:47] &lt;ichthyo&gt; when I know the result will be cached, I'll let the node process into the location of the cache frame, and any node which will /use/ this frame as an input will be wired such that it isn't allowed to modify this frame (which is supposed to be located in the cache)
+[2008-06-05 19:30:45] &lt;cehteh&gt; yes thats managed in the index
+[2008-06-05 19:30:48] &lt;ichthyo&gt; for this to work, I need to &quot;allocate and lock&quot; a location in the cache, and release it when it contains the final processed result
+[2008-06-05 19:31:17] &lt;cehteh&gt; well i try to make no locks there, you query frames which are uniquely identified
+[2008-06-05 19:31:44] &lt;ichthyo&gt; it doesnt need to be a &quot;lock
+[2008-06-05 19:31:55] &lt;ichthyo&gt; just some way to tell that this frame is &quot;under construction&quot;
+[2008-06-05 19:32:01] &lt;cehteh&gt; yes
+[2008-06-05 19:32:14] &lt;cehteh&gt; we thinking the same :)
+[2008-06-05 19:32:57] &lt;cehteh&gt; well problem is when shortly after that another node queries the source frame which got destructed .. thats something the builder needs to avoid, nothing i can do then
+[2008-06-05 19:33:21] &lt;ichthyo&gt; yes, builder will care for that
+[2008-06-05 19:33:41] &lt;ichthyo&gt; I can even tell in advance the maximum number of temporary buffers I need
+[2008-06-05 19:33:51] &lt;cehteh&gt; and it not only needs a under-construcion
+[2008-06-05 19:34:44] &lt;cehteh&gt; there are 2 indices one for source and one for destination
+[2008-06-05 19:35:11] &lt;cehteh&gt; indices will have a pointer to the 'job' working on it i tihnk
+[2008-06-05 19:35:24] &lt;ichthyo&gt; ok
+[2008-06-05 19:35:48] &lt;cehteh&gt; (actually there is a list planed many jobs can read-share an frame)
+[2008-06-05 19:36:40] &lt;cehteh&gt; i would like if I do not need to do *any* checks in that direction ... means the builder delivers clean jobs which dont step on their own foot
+[2008-06-05 19:36:54] &lt;ichthyo&gt; my understanding too
+[2008-06-05 19:37:07] &lt;ichthyo&gt; also, I want the nodes to be freed of any checks
+[2008-06-05 19:37:33] &lt;ichthyo&gt; so they can assume they get a valid buffer pointer to the right sort of buffer
+[2008-06-05 19:37:54] &lt;cehteh&gt; yes thats guranteed
+[2008-06-05 19:37:41] &lt;cehteh&gt; if it fails then we get some hairy bugs ... but checking job dependencies afterwards is costly
+[2008-06-05 19:38:53] &lt;ichthyo&gt; I mean -- I want to prepare everything as much as possible while building, so that all that needs to be &quot;filled in&quot; when starting the processing are the actual buffer locations
+[2008-06-05 19:38:58] &lt;cehteh&gt; *thinkin* prolly easier than it looks
+[2008-06-05 19:39:10] &lt;cehteh&gt; exaxctly
+[2008-06-05 19:39:50] &lt;ichthyo&gt; we can't prepare everything, because, some nodes may include a variable ammount of source frames
+[2008-06-05 19:40:11] &lt;ichthyo&gt; and this number can depend on automation. Classic example is the &quot;time average&quot; video effect
+[2008-06-05 19:39:53] &lt;cehteh&gt; problem is only when the builder generates one node which takes X and in-place generates Y from it
+[2008-06-05 19:40:10] &lt;cehteh&gt; and you have a 2nd node which takes X too 
+[2008-06-05 19:40:23] &lt;cehteh&gt; this needs to be serialized somehow
+[2008-06-05 19:41:12] &lt;ichthyo&gt; regarding the problem you mention: I want to exclude/avoid this situation already when building
+[2008-06-05 19:41:35] &lt;cehteh&gt; yes thats what i was thinking .. thats easiest addressed there
+[2008-06-05 19:41:46] &lt;cehteh&gt; and a very ugly bug when it fails :(
+[2008-06-05 19:41:42] &lt;ichthyo&gt; when a node puts its result into a frame located within the cache
+[2008-06-05 19:41:59] &lt;ichthyo&gt; this frame is treated as if it is read-only
+[2008-06-05 19:42:21] &lt;ichthyo&gt; no node depending on this frame will be wired in a way that allows &quot;in-place&quot;
+[2008-06-05 19:42:33] &lt;cehteh&gt; about the time averaging: i plan to hint some dependencies so you can ask for &quot;maybe&quot; or by some priority depending on quality/whatever
+[2008-06-05 19:43:19] &lt;cehteh&gt; where quality should be runtime adjusted by the profiler
+[2008-06-05 19:43:39] &lt;ichthyo&gt; the problem with time averaging is: we don't know how much frames will be averaged at build time, because that's a automatable effect parameter
+[2008-06-05 19:43:47] &lt;cehteh&gt; thats a case where a dependencie might not be fullfilled .. but only on request
+[2008-06-05 19:44:08] &lt;ichthyo&gt; but the &quot;quality&quot; thing sounds like a good idea
+[2008-06-05 19:44:17] &lt;cehteh&gt; yes then split that rendering into 3 passes?
+[2008-06-05 19:44:27] &lt;cehteh&gt; 1st pass : building the graph
+[2008-06-05 19:44:53] &lt;cehteh&gt; 2nd pass: determine dependencies (by inspecting automation)
+[2008-06-05 19:45:00] &lt;cehteh&gt; 3rd pass: do the render
+[2008-06-05 19:45:10] &lt;ichthyo&gt; maybe?
+[2008-06-05 19:45:17] &lt;ichthyo&gt; 1st pass of course is clear
+[2008-06-05 19:45:25] &lt;cehteh&gt; well do you have a better idea?
+[2008-06-05 19:45:49] &lt;cehteh&gt; so far i thought about 2 pass where the dependency analysis was part of the builder
+[2008-06-05 19:46:02] &lt;ichthyo&gt; agreed
+[2008-06-05 19:46:28] &lt;cehteh&gt; but making it three pass shouldnt be a problem or?
+[2008-06-05 19:46:51] &lt;ichthyo&gt; I also thought after having finished the raw graph, I'll do some configuration calldown, e.g. to determine the maximum number of buffers needed
+[2008-06-05 19:46:59] &lt;cehteh&gt; maybe even adaptive 2/3 pass depending on effects ... but maybe that would complicate it unnecessary
+[2008-06-05 19:47:43] &lt;ichthyo&gt; its not really a problem, just need to be aware and work the details out correctlyy
+[2008-06-05 19:47:49] &lt;cehteh&gt; i dont think you need  to count the buffers (not yet, maybe i oversee soemthing)
+[2008-06-05 19:48:08] &lt;cehteh&gt; otherwise the backend should manage that automatically
+[2008-06-05 19:48:18] &lt;ichthyo&gt; yes, I'm fine with that
+[2008-06-05 19:48:46] &lt;ichthyo&gt; just to note, if it helps with the allocation, I /can/ tell the maximum number of buffers needed
+[2008-06-05 19:49:00] &lt;ichthyo&gt; (for a given segment of the graph, of course)
+[2008-06-05 19:49:09] &lt;cehteh&gt; not sure if i overseen something, but i think when needed such a 'configuration calldown' (and optimizing pass) could be added later
+[2008-06-05 19:49:27] &lt;ichthyo&gt; sure
+[2008-06-05 19:49:50] &lt;cehteh&gt; buffers itself doesnt cost .. but if you really need a lot it will cause IO
+[2008-06-05 19:49:57] &lt;cehteh&gt; but that unavoidable anyways
+[2008-06-05 19:50:05] &lt;ichthyo&gt; no no
+[2008-06-05 19:50:19] &lt;cehteh&gt; yes yes
+[2008-06-05 19:50:20] &lt;ichthyo&gt; I'll try to minimize buffer use as much as possible
+[2008-06-05 19:50:24] &lt;cehteh&gt; :)
+[2008-06-05 19:50:30] &lt;cehteh&gt; of course
+[2008-06-05 19:51:00] &lt;cehteh&gt; but there are always some limits on finite machines
+[2008-06-05 19:51:26] &lt;ichthyo&gt; the problematic case are usual rather rare corner cases, but it should handle those flawless, of course
+[2008-06-05 19:51:36] &lt;ichthyo&gt; similar for the size of the buffers
+[2008-06-05 19:51:46] &lt;ichthyo&gt; I dont want Lumiera to clip the image
+[2008-06-05 19:51:49] &lt;ichthyo&gt; as cinelerra does
+[2008-06-05 19:52:04] &lt;ichthyo&gt; e.g. when using the motion tracker
+[2008-06-05 19:52:20] &lt;cehteh&gt; well if you need safe-regions around you need to use biggier frames
+[2008-06-05 19:52:31] &lt;cehteh&gt; but memory requirements grow quadratic!
+[2008-06-05 19:52:46] &lt;ichthyo&gt; the user should NEVER need to set up the processing buffer size, as is necessary in cinelerra
+[2008-06-05 19:52:59] &lt;cehteh&gt; yes agreed
+[2008-06-05 19:53:15] &lt;ichthyo&gt; I don't think we need safe-regions allways, 
+[2008-06-05 19:53:31] &lt;ichthyo&gt; but, as e.g. the motion tracking will create automation data in Lumiera
+[2008-06-05 19:53:38] &lt;cehteh&gt; yes only for some effect .. motion tracker doesnt need it
+[2008-06-05 19:53:50] &lt;ichthyo&gt; it means the actual buffer size depends on automation data for a given frame
+[2008-06-05 19:53:56] &lt;cehteh&gt; that just xyr transformation
+[2008-06-05 19:54:35] &lt;cehteh&gt; a blur is something which might require a small safe-region to bleed over the edges
+[2008-06-05 19:54:43] &lt;ichthyo&gt; yes, you are right
+[2008-06-05 19:54:52] &lt;ichthyo&gt; if the motion tracker is wired intelligently
+[2008-06-05 19:55:05] &lt;ichthyo&gt; it doesn't need to move anyting itself
+[2008-06-05 19:55:18] &lt;cehteh&gt; mapping the motion tracker transformation to a destionation might need safe regions
+[2008-06-05 19:55:30] &lt;cehteh&gt; (in case of rotations)
+[2008-06-05 19:55:36] &lt;ichthyo&gt; yes agreed
+[2008-06-05 19:56:16] &lt;cehteh&gt; well temp buffers will be allcocated for frames of the same 'class' i aleready saied that
+[2008-06-05 19:56:50] &lt;cehteh&gt; and i will group these classes so that some similar sizes fall in the same class 
+[2008-06-05 19:57:19] &lt;cehteh&gt; that might waste some memory on disk at the end of each frame .. but that doesnt need to be mapped in
+[2008-06-05 19:57:32] &lt;cehteh&gt; the kernel will do that automatically for us
+[2008-06-05 19:57:37] &lt;ichthyo&gt; :)
+[2008-06-05 19:57:59] &lt;cehteh&gt; well mostly .. i need to whip it with the right hints ;)
+[2008-06-05 19:58:10] &lt;ichthyo&gt; :-o
+}}}</pre>
 </div>
 <div title="InlineJavaScript" modifier="Jeremy" created="200603090618" tags="systemConfig" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200603090618">
 <pre>/***

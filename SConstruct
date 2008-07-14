@@ -26,6 +26,8 @@ sys.path.append("./admin/scons")
 
 import os
 from Buildhelper import *
+from LumieraEnvironment import *
+
 
 #-----------------------------------Configuration
 OPTIONSCACHEFILE = 'optcache' 
@@ -33,6 +35,7 @@ CUSTOPTIONSFILE  = 'custom-options'
 SRCDIR           = 'src'
 BINDIR           = 'bin'
 TESTDIR          = 'tests'
+ICONDIR          = 'icons'
 VERSION          = '0.1+pre.01'
 #-----------------------------------Configuration
 
@@ -53,13 +56,13 @@ def setupBasicEnvironment():
     EnsureSConsVersion(0,96,90)
     
     opts = defineCmdlineOptions() 
- 
-    env = Environment(options=opts) 
-
+    env = LumieraEnvironment(options=opts) 
+    
     env.Append ( CCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honor CFLAGS, only CCFLAGS 
     env.Replace( VERSION=VERSION
                , SRCDIR=SRCDIR
                , BINDIR=BINDIR
+               , ICONDIR=ICONDIR
                , CPPPATH=["#"+SRCDIR]   # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['-DLUMIERA_VERSION='+VERSION ]     # note: it's a list to append further defines
                , CCFLAGS='-Wall '                                       # -fdiagnostics-show-option 
@@ -74,7 +77,7 @@ def setupBasicEnvironment():
     appendVal(env,'ARCHFLAGS', 'CCFLAGS')   # for both C and C++
     appendVal(env,'OPTIMIZE', 'CCFLAGS', val=' -O3')
     appendVal(env,'DEBUG',    'CCFLAGS', val=' -ggdb')
-
+    
     prepareOptionsHelp(opts,env)
     opts.Save(OPTIONSCACHEFILE, env)
     return env
@@ -127,7 +130,7 @@ def defineCmdlineOptions():
         ,PathOption('SRCTAR', 'Create source tarball prior to compiling', '..', PathOption.PathAccept)
         ,PathOption('DOCTAR', 'Create tarball with dev documentaionl', '..', PathOption.PathAccept)
      )
-
+    
     return opts
 
 
@@ -161,38 +164,42 @@ def configurePlatform(env):
         setup platform specific options.
         Abort build in case of failure.
     """
-    conf = Configure(env)
-    # run all configuration checks in the current env
+    conf = env.Configure()
+    # run all configuration checks in the given env
     
-    # Checks for prerequisites ------------
+    # Perform checks for prerequisites --------------------------------------------
+    if not conf.TryAction('pkg-config --version > $TARGET')[0]:
+        print 'We need pkg-config for including library configurations, exiting.'
+        Exit(1)
+    
     if not conf.CheckLibWithHeader('m', 'math.h','C'):
         print 'Did not find math.h / libm, exiting.'
         Exit(1)
-
+    
     if not conf.CheckLibWithHeader('dl', 'dlfcn.h', 'C'):
         print 'Functions for runtime dynamic loading not available, exiting.'
         Exit(1)
-
+    
     if not conf.CheckLibWithHeader('nobugmt', 'nobug.h', 'C'):
         print 'Did not find NoBug [http://www.pipapo.org/pipawiki/NoBug], exiting.'
         Exit(1)
-
+    
     if not conf.CheckLibWithHeader('pthread', 'pthread.h', 'C'):
         print 'Did not find the pthread lib or pthread.h, exiting.'
     else:
        conf.env.Append(CPPFLAGS = ' -DHAVE_PTHREAD')
        conf.env.Append(CCFLAGS = ' -pthread')
-
+    
     if conf.CheckCHeader('execinfo.h'):
        conf.env.Append(CPPFLAGS = ' -DHAS_EXECINFO_H')
-
+    
     if conf.CheckCHeader('valgrind/valgrind.h'):
         conf.env.Append(CPPFLAGS = ' -DHAS_VALGRIND_VALGIND_H')
     
     if not conf.CheckCXXHeader('tr1/memory'):
         print 'We rely on the std::tr1 proposed standard extension for shared_ptr.'
         Exit(1) 
-        
+    
     if not conf.CheckCXXHeader('boost/config.hpp'):
         print 'We need the C++ boost-lib.'
         Exit(1)
@@ -206,8 +213,36 @@ def configurePlatform(env):
         if not conf.CheckLibWithHeader('boost_regex-mt','boost/regex.hpp','C++'):
             print 'We need the boost regular expression lib (incl. binary lib for linking).'
             Exit(1)
-            
-        
+    
+#    if not conf.CheckLibWithHeader('gavl', ['gavlconfig.h', 'gavl/gavl.h'], 'C'):
+    
+    if not conf.CheckPkgConfig('gavl', 1.0):
+        print 'Did not find Gmerlin Audio Video Lib [http://gmerlin.sourceforge.net/gavl.html], exiting.'
+        Exit(1)
+    else:
+        conf.env.mergeConf('gavl')
+    
+    if not conf.CheckPkgConfig('gtkmm-2.4', 2.8):
+        print 'Unable to configure GTK--, exiting.'
+        Exit(1)
+    
+    if not conf.CheckPkgConfig('cairomm-1.0', 0.6):
+        print 'Unable to configure Cairo--, exiting.'
+        Exit(1)
+    
+    if not conf.CheckPkgConfig('gdl-1.0', '0.6.1'):
+        print 'Unable to configure the GNOME DevTool Library, exiting.'
+        Exit(1)
+    
+    if not conf.CheckPkgConfig('xv'): Exit(1)
+#   if not conf.CheckPkgConfig('xext'): Exit(1)
+#   if not conf.CheckPkgConfig('sm'): Exit(1)
+#    
+# obviously not needed?
+    
+    print "** Gathered Library Info: %s" % conf.env.libInfo.keys()
+    
+    
     # create new env containing the finished configuration
     return conf.Finish()
 
@@ -221,7 +256,7 @@ def definePackagingTargets(env, artifacts):
     artifacts['src.tar'] = t
     env.Alias('src.tar', t)
     env.Alias('tar', t)
-
+    
     t =  Tarball(env,location='$DOCTAR',suffix='-doc',dirs='admin doc wiki uml tests')
     artifacts['doc.tar'] = t
     env.Alias('doc.tar', t)
@@ -240,7 +275,7 @@ def defineBuildTargets(env, artifacts):
     objlib  = ( srcSubtree(env,'$SRCDIR/common')
               + srcSubtree(env,'$SRCDIR/lib')
               )
-    plugobj = srcSubtree(env,'$SRCDIR/plugin', isShared=True)
+    objplug = srcSubtree(env,'$SRCDIR/plugin', isShared=True)
     core  = ( env.StaticLibrary('$BINDIR/lumiback.la', objback)
             + env.StaticLibrary('$BINDIR/lumiproc.la', objproc)
             + env.StaticLibrary('$BINDIR/lumi.la',     objlib)
@@ -254,7 +289,16 @@ def defineBuildTargets(env, artifacts):
     env.Depends(objlib, precomp)
     
     artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/main.cpp']+ core )
-    artifacts['plugins'] = env.SharedLibrary('$BINDIR/lumiera-plugin', plugobj)
+    artifacts['plugins'] = env.SharedLibrary('$BINDIR/lumiera-plugin', objplug)
+
+    # the Lumiera GTK GUI
+    envgtk  = env.Clone().mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','xv','xext','sm'])
+    objgui  = srcSubtree(envgtk,'$SRCDIR/gui')
+    
+    artifacts['lumigui'] = ( envgtk.Program('$BINDIR/lumigui', objgui + core)
+                           + env.Install('$BINDIR', env.Glob('$ICONDIR/*.png'))
+                           + env.Install('$BINDIR', env.Glob('$SRCDIR/gui/*.rc'))
+                           )
     
     # call subdir SConscript(s) for independent components
     SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts core')
@@ -270,13 +314,13 @@ def definePostBuildTargets(env, artifacts):
     il = env.Alias('install-lib', '$DESTDIR/lib')
     env.Alias('install', [ib, il])
     
-    build = env.Alias('build', artifacts['lumiera']+artifacts['plugins']+artifacts['tools'])
+    build = env.Alias('build', artifacts['lumiera']+artifacts['lumigui']+artifacts['plugins']+artifacts['tools'])
     allbu = env.Alias('allbuild', build+artifacts['testsuite'])
     env.Default('build')
     # additional files to be cleaned when cleaning 'build'
     env.Clean ('build', [ 'scache.conf', '.sconf_temp', '.sconsign.dblite', 'config.log' ])
     env.Clean ('build', [ '$SRCDIR/pre.gch' ])
-
+    
     # Doxygen documentation
     # Note: at the moment we only depend on Doxyfile
     #       obviousely, we should depend on all sourcefiles

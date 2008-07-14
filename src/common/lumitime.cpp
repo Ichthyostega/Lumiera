@@ -1,5 +1,5 @@
 /*
-  TOOLFACTORY.hpp  -  supply of Tool implementations for the Builder
+  Time  -  unified representation of a time point, including conversion functions
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,31 +18,20 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
 
 
-#ifndef MOBJECT_BUILDER_TOOLFACTORY_H
-#define MOBJECT_BUILDER_TOOLFACTORY_H
-
-#include "proc/mobject/builder/buildertool.hpp"
+#include "common/lumitime.hpp"
+#include <limits>
 
 
-
-namespace mobject
+namespace lumiera
   {
-  namespace builder
-    {
+
+   // TODO: dummy values; should be adjusted when switching to the real time implementation provided by the backend
+  
+   const Time Time::MAX = +std::numeric_limits<long>::max();
+   const Time Time::MIN = -std::numeric_limits<long>::max();
 
 
-    class ToolFactory
-      {
-      public:
-        BuilderTool & configure () ;
-      };
-
-
-
-  } // namespace mobject::builder
-
-} // namespace mobject
-#endif
+} // namespace lumiera

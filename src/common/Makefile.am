@@ -25,7 +25,7 @@ liblumicommon_a_CXXFLAGS = $(CXXFLAGS) -Wall
 liblumicommon_a_CPPFLAGS = -I$(top_srcdir)/src/
 
 liblumicommon_a_SOURCES =					\
-	$(liblumicommon_a_srcdir)/time.cpp			\
+	$(liblumicommon_a_srcdir)/lumitime.cpp		\
 	$(liblumicommon_a_srcdir)/util.cpp			\
 	$(liblumicommon_a_srcdir)/visitor.cpp			\
 	$(liblumicommon_a_srcdir)/cmdline.cpp			\
@@ -43,7 +43,7 @@ noinst_HEADERS +=						\
 	$(liblumicommon_a_srcdir)/singleton.hpp			\
 	$(liblumicommon_a_srcdir)/singletonpolicies.hpp		\
 	$(liblumicommon_a_srcdir)/singletonpreconfigure.hpp	\
-	$(liblumicommon_a_srcdir)/time.hpp			\
+	$(liblumicommon_a_srcdir)/lumitime.hpp			\
 	$(liblumicommon_a_srcdir)/typelist.hpp			\
 	$(liblumicommon_a_srcdir)/visitor.hpp			\
 	$(liblumicommon_a_srcdir)/visitordispatcher.hpp		\

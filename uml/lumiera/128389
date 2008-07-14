@@ -1,6 +1,6 @@
 format 40
 "RenderEngine" // ProcessingLayer::RenderEngine
-  revision 13
+  revision 16
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -82,6 +82,16 @@ format 40
       size A4
     end
 
+    classdiagram 131973 "Render Mechanics"
+      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition yes show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      size A4
+    end
+
+    classdiagram 132357 "StateAdapter composition"
+      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      size A4
+    end
+
     class 131333 "RenderEngine"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
@@ -155,7 +165,7 @@ ${inlines}
 	  a package
 	    cpp default "#include in source"
 	    classrelation_ref 136325 // <dependency>
-	  b multiplicity "" parent class_ref 132741 // StateProxy
+	  b multiplicity "" parent class_ref 132741 // State
       end
 
       attribute 129413 "start"
@@ -233,6 +243,46 @@ ${members}};
 	    classrelation_ref 137861 // params (<directional aggregation by value>)
 	  b multiplicity "" parent class_ref 134533 // Parameter
       end
+
+      classrelation 152581 // predecessors (<directional aggregation by value>)
+	relation 149125 *-->
+	  stereotype "array"
+	  a role_name "predecessors" multiplicity "*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 152581 // predecessors (<directional aggregation by value>)
+	  b multiplicity "" parent class_ref 142725 // WiringDescriptor
+      end
+
+      operation 135685 "pull"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+      end
+
+      operation 136069 "process"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+      end
     end
 
     class 131845 "Trafo"
@@ -271,26 +321,6 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 133253 // <generalisation>
-	  b multiplicity "" parent class_ref 131717 // ProcNode
-      end
-    end
-
-    class 132101 "Hub"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
-      classrelation 133125 // <generalisation>
-	relation 132357 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 133125 // <generalisation>
 	  b multiplicity "" parent class_ref 131717 // ProcNode
       end
     end
@@ -374,90 +404,6 @@ ${inlines}
 	    cpp default "${type}"
 	    classrelation_ref 138757 // <generalisation>
 	  b multiplicity "" parent class_ref 131845 // Trafo
-      end
-    end
-
-    class 132613 "GLPipe"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
-      comment "specialized connection node used to handle the transfer of OpenGL data from a image bitmap into texture form"
-      classrelation 133381 // <generalisation>
-	relation 132613 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 133381 // <generalisation>
-	  b multiplicity "" parent class_ref 131973 // Link
-      end
-    end
-
-    class 132869 "ARender"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
-      comment "Representation of a Audio render process"
-      classrelation 134661 // <generalisation>
-	relation 133509 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 134661 // <generalisation>
-	  b multiplicity "" parent class_ref 132741 // StateProxy
-      end
-    end
-
-    class 132997 "VRender"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
-      comment "Representation of a Video render process. (Encapsulates the video buffers for the actual calculations)"
-      classrelation 134789 // <generalisation>
-	relation 133637 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 134789 // <generalisation>
-	  b multiplicity "" parent class_ref 132741 // StateProxy
-      end
-    end
-
-    class 133125 "GLRender"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
-      comment "Representation of a OpenGL accelerated Video render process"
-      classrelation 134917 // <generalisation>
-	relation 133765 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 134917 // <generalisation>
-	  b multiplicity "" parent class_ref 132741 // StateProxy
       end
     end
 
@@ -567,6 +513,272 @@ ${inlines}
 	    classrelation_ref 141701 // <dependency>
 	  b multiplicity "" parent class_ref 136709 // Media
       end
+    end
+
+    class 142469 "StateProxy"
+      visibility package stereotype "implementation"
+      nformals 2
+      formal name "WIRING" type "class" explicit_default_value ""
+        explicit_extends ""
+      formal name "POLICY" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 152453 // <generalisation>
+	relation 148997 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 152453 // <generalisation>
+	  b multiplicity "" parent class_ref 132741 // State
+      end
+
+      classrelation 153221 // <generalisation>
+	relation 149765 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 153221 // <generalisation>
+	  b multiplicity "" parent class_ref 143877 // InPlace
+      end
+
+      classrelation 154117 // wiring (<unidirectional association>)
+	relation 150661 --->
+	  a role_name "wiring" multiplicity "1" const_relation protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 154117 // wiring (<unidirectional association>)
+	  b multiplicity "" parent class_ref 144005 // WiringTable
+      end
+    end
+
+    class 142597 "StateAdapter"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 152325 // <generalisation>
+	relation 148869 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 152325 // <generalisation>
+	  b multiplicity "" parent class_ref 132741 // State
+      end
+
+      operation 135557 "retrieve"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+      end
+
+      classrelation 152709 // state (<unidirectional association>)
+	relation 149253 --->
+	  a role_name "state" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 152709 // state (<unidirectional association>)
+	  b multiplicity "" parent class_ref 142469 // StateProxy
+      end
+
+      classrelation 152837 // <unidirectional association>
+	relation 149381 --->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 152837 // <unidirectional association>
+	  b multiplicity "" parent class_ref 133253 // Frame
+      end
+    end
+
+    class 142725 "WiringDescriptor"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 143365 "NodeWiring"
+      visibility package 
+      nformals 1
+      formal name "STATE" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 152965 // <generalisation>
+	relation 149509 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 152965 // <generalisation>
+	  b multiplicity "" parent class_ref 142725 // WiringDescriptor
+      end
+
+      classrelation 153093 // <dependency>
+	relation 149637 -_->
+	  a default
+	    cpp default "Generated"
+	    classrelation_ref 153093 // <dependency>
+	  b multiplicity "" parent class_ref 142597 // StateAdapter
+      end
+    end
+
+    class 143493 "InvocationStateBase"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 153733 // <generalisation>
+	relation 150277 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 153733 // <generalisation>
+	  b multiplicity "" parent class_ref 132741 // State
+      end
+    end
+
+    class 143621 "Caching"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 153605 // <generalisation>
+	relation 150149 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 153605 // <generalisation>
+	  b multiplicity "" parent class_ref 143493 // InvocationStateBase
+      end
+    end
+
+    class 143749 "Process"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 153477 // <generalisation>
+	relation 150021 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 153477 // <generalisation>
+	  b multiplicity "" parent class_ref 143621 // Caching
+      end
+    end
+
+    class 143877 "InPlace"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 153349 // <generalisation>
+	relation 149893 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 153349 // <generalisation>
+	  b multiplicity "" parent class_ref 143749 // Process
+      end
+    end
+
+    class 144005 "WiringTable"
+      visibility package 
+      nformals 1
+      formal name "SIZ" type "int" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 153861 // <directional aggregation by value>
+	relation 150405 *-->
+	  stereotype "array"
+	  a role_name "" multiplicity "SIZ" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 153861 // <directional aggregation by value>
+	  b multiplicity "" parent class_ref 144133 // BuffHandle
+      end
+
+      classrelation 153989 // <unidirectional association>
+	relation 150533 --->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 153989 // <unidirectional association>
+	  b multiplicity "" parent class_ref 142725 // WiringDescriptor
+      end
+    end
+
+    class 144133 "BuffHandle"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
     end
   end
 end
