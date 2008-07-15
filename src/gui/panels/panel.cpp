@@ -21,27 +21,38 @@
 * *****************************************************/
 
 #include "panel.hpp"
+#include "../gtk-lumiera.hpp"
 
 namespace lumiera {
 namespace gui {
 namespace panels {
 
-Panel::Panel(const gchar *name, const gchar *long_name, GdlDockItemBehavior behavior)
+Panel::Panel(const gchar *name, const gchar *long_name,
+  GdlDockItemBehavior behavior)
 {
-  dock_item = (GdlDockItem*)gdl_dock_item_new (name, long_name, behavior);
+  dock_item = (GdlDockItem*)gdl_dock_item_new (
+    name, long_name, behavior);
   internal_setup();
+  
+  ENSURE(dock_item != NULL);
 }
 
 Panel::Panel(const gchar *name, const gchar *long_name, const gchar *stock_id,
   GdlDockItemBehavior behavior)
 {
-  dock_item = (GdlDockItem*)gdl_dock_item_new_with_stock (name, long_name, stock_id, behavior);
+  dock_item = (GdlDockItem*)gdl_dock_item_new_with_stock (
+    name, long_name, stock_id, behavior);
+  g_object_ref(dock_item);
   internal_setup();
+  
+  ENSURE(dock_item != NULL);
 }
 
 Panel::~Panel()
 {
-  #warning Im not sure that dock_item is freed - is it self deleting?
+  REQUIRE(dock_item != NULL);
+  g_object_unref(dock_item);
+  dock_item = NULL;
 }
 
 GdlDockItem*
@@ -53,6 +64,7 @@ Panel::get_dock_item() const
 void
 Panel::show(bool show)
 {
+  REQUIRE(dock_item != NULL);
   if(show) gdl_dock_item_show_item (dock_item);
   else gdl_dock_item_hide_item (dock_item);
 }
@@ -60,12 +72,17 @@ Panel::show(bool show)
 bool
 Panel::is_shown() const
 {
+  REQUIRE(dock_item != NULL);
   return GTK_WIDGET_VISIBLE((GtkWidget*)dock_item);
 }
 
 void
 Panel::internal_setup()
 {
+  REQUIRE(dock_item != NULL);
+  REQUIRE(gobj() != NULL); 
+  
+  gdl_dock_item_hide_grip(dock_item);
   gtk_container_add ((GtkContainer*)dock_item, (GtkWidget*)gobj());  
   gtk_widget_show ((GtkWidget*)dock_item);
 }

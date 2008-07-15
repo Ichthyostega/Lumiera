@@ -93,6 +93,10 @@ class WorkspaceWindow;
       Glib::RefPtr<Gtk::ToggleAction> assetsPanelAction;
       Glib::RefPtr<Gtk::ToggleAction> timelinePanelAction;
       Glib::RefPtr<Gtk::ToggleAction> viewerPanelAction;
+      
+	    /* ===== Internals ===== */
+    private:
+      bool is_updating_action_state;
 
 	    friend class WorkspaceWindow;
   };
