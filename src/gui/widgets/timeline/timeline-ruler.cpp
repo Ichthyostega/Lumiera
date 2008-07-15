@@ -61,6 +61,9 @@ TimelineRuler::TimelineRuler() :
 void
 TimelineRuler::set_time_offset(gavl_time_t time_offset)
 {
+  // Keep the chevron position lined up
+  mouseChevronTime += time_offset - timeOffset;
+  
   timeOffset = time_offset;
   rulerImage.clear();
   queue_draw();
@@ -70,6 +73,11 @@ void
 TimelineRuler::set_time_scale(int64_t time_scale)
 {
   REQUIRE(time_scale > 0);
+  
+  // Keep the chevron position lined up
+  mouseChevronTime =  
+    (time_scale * (mouseChevronTime - timeOffset)) / timeScale + timeOffset;
+  
   timeScale = time_scale;
   rulerImage.clear();
   queue_draw();
