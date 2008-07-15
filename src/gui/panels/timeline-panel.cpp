@@ -30,8 +30,17 @@ namespace gui {
 namespace panels {
 
 TimelinePanel::TimelinePanel() :
-  Panel("timeline", _("Timeline"), "timeline_panel")
+  Panel("timeline", _("Timeline"), "timeline_panel"),
+  button(Stock::OK)
   {
+    // Setup the toolbar
+    toolbar.append(button);
+    
+    toolbar.set_icon_size(IconSize(ICON_SIZE_MENU));
+    toolbar.set_toolbar_style(TOOLBAR_ICONS);
+    
+    // Add the toolbar
+    pack_start(toolbar, PACK_SHRINK);
     pack_start(timeline_widget, PACK_EXPAND_WIDGET);
   }
 

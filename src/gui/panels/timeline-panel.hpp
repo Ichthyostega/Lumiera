@@ -41,7 +41,13 @@ namespace panels {
       TimelinePanel();
 
     protected:
+    
+      // Widgets
+      Gtk::Toolbar toolbar;
       TimelineWidget timeline_widget;
+      
+      // Toolbar Widgets
+      Gtk::ToolButton button;
     };
 
 }   // namespace panels
