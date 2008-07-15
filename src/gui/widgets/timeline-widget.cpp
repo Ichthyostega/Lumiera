@@ -210,7 +210,7 @@ TimelineWidget::zoom_view(int point, int zoom_size)
 void
 TimelineWidget::on_mouse_move_in_body(int x, int y)
 {
-  ruler.set_mouse_chevron_time(x * timeScale + timeOffset);
+  ruler.set_mouse_chevron_offset(x);
 }
 
 }   // namespace widgets

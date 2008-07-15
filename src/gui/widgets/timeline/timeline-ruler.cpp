@@ -43,16 +43,15 @@ namespace timeline {
 
 TimelineRuler::TimelineRuler() :
   Glib::ObjectBase("TimelineRuler"),
-  timeOffset(0),
+  timeOffset(-1),
   timeScale(1),
-  mouseChevronTime(0),
+  mouseChevronOffset(0),
   annotationHorzMargin(0),
   annotationVertMargin(0),
   majorTickHeight(0),
   minorLongTickHeight(0),
   minorShortTickHeight(0),
-  minDivisionWidth(100),
-  mouseChevronSize(0)
+  minDivisionWidth(100)
 {  
   // Install style properties
   register_styles();
@@ -60,10 +59,7 @@ TimelineRuler::TimelineRuler() :
 
 void
 TimelineRuler::set_time_offset(gavl_time_t time_offset)
-{
-  // Keep the chevron position lined up
-  mouseChevronTime += time_offset - timeOffset;
-  
+{ 
   timeOffset = time_offset;
   rulerImage.clear();
   queue_draw();
@@ -73,20 +69,15 @@ void
 TimelineRuler::set_time_scale(int64_t time_scale)
 {
   REQUIRE(time_scale > 0);
-  
-  // Keep the chevron position lined up
-  mouseChevronTime =  
-    (time_scale * (mouseChevronTime - timeOffset)) / timeScale + timeOffset;
-  
   timeScale = time_scale;
   rulerImage.clear();
   queue_draw();
 }
 
 void
-TimelineRuler::set_mouse_chevron_time(gavl_time_t time)
+TimelineRuler::set_mouse_chevron_offset(int offset)
 {
-  mouseChevronTime = time;
+  mouseChevronOffset = offset;
   queue_draw();
 }
 
@@ -152,7 +143,7 @@ TimelineRuler::on_motion_notify_event(GdkEventMotion *event)
 {
   REQUIRE(event != NULL);
 
-  set_mouse_chevron_time(event->x * timeScale + timeOffset);
+  set_mouse_chevron_offset(event->x);
   return true;
 }
 
@@ -256,16 +247,20 @@ TimelineRuler::draw_mouse_chevron(Cairo::RefPtr<Cairo::Context> cairo,
   REQUIRE(ruler_rect.get_width() > 0);
   REQUIRE(ruler_rect.get_height() > 0);
   
+  // Is the mouse chevron in view?
+  if(mouseChevronOffset < 0 ||
+    mouseChevronOffset >= ruler_rect.get_width())
+    return;
+  
   // Set the source colour
   Glib::RefPtr<Style> style = get_style();
   Gdk::Cairo::set_source_color(cairo, style->get_fg(STATE_NORMAL));
   
-  const int x = (mouseChevronTime - timeOffset) / timeScale;
-  cairo->move_to(x + 0.5,
+  cairo->move_to(mouseChevronOffset + 0.5,
     ruler_rect.get_height());
-  cairo->line_to(x + mouseChevronSize + 0.5,
+  cairo->line_to(mouseChevronOffset + mouseChevronSize + 0.5,
     ruler_rect.get_height() - mouseChevronSize);
-  cairo->line_to(x - mouseChevronSize + 0.5,
+  cairo->line_to(mouseChevronOffset - mouseChevronSize + 0.5,
     ruler_rect.get_height() - mouseChevronSize);
     
   cairo->fill();

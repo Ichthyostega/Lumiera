@@ -53,7 +53,12 @@ public:
    */
   void set_time_scale(int64_t time_scale);
   
-  void set_mouse_chevron_time(gavl_time_t time);
+  /**
+   * Sets the offset of the mouse chevron in pixels from the left
+   * edge of the widget. If offset is less than 0 or greater than the
+   * width, the chevron will not be visible.
+   */
+  void set_mouse_chevron_offset(int offset);
 
   /* ===== Events ===== */
 protected:
@@ -86,7 +91,9 @@ private:
   // View values
   gavl_time_t timeOffset;
   int64_t timeScale;
-  int mouseChevronTime;
+  
+  // Indicated values
+  int mouseChevronOffset;
   
   // Style values
   int annotationHorzMargin;
