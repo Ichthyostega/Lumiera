@@ -40,6 +40,10 @@ namespace timeline {
 
 TimelineBody::TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widget) :
     Glib::ObjectBase("TimelineBody"),
+    dragType(None),
+    mouseDownX(0),
+    mouseDownY(0),
+    beginShiftTimeOffset(0),
     timelineWidget(timeline_widget)
 {
   REQUIRE(timelineWidget != NULL);
@@ -66,7 +70,11 @@ TimelineBody::on_realize()
   Widget::on_realize();
   
   // We wish to receive all event notifications
-  add_events(Gdk::POINTER_MOTION_MASK | Gdk::SCROLL_MASK);
+  add_events(
+    Gdk::POINTER_MOTION_MASK |
+    Gdk::SCROLL_MASK |
+    Gdk::BUTTON_PRESS_MASK |
+    Gdk::BUTTON_RELEASE_MASK);
 }
 
 void
@@ -114,12 +122,52 @@ TimelineBody::on_scroll_event (GdkEventScroll* event)
 }
 
 bool
+TimelineBody::on_button_press_event(GdkEventButton* event)
+{
+  mouseDownX = event->x;
+  mouseDownY = event->y;
+  
+  switch(event->button)
+  {
+  case 2:
+    begin_shift_drag();
+    break;
+    
+  default:
+    dragType = None;
+    break;
+  }  
+}
+  
+bool
+TimelineBody::on_button_release_event(GdkEventButton* event)
+{
+  // Terminate any drags
+  dragType = None;
+}
+
+bool
 TimelineBody::on_motion_notify_event(GdkEventMotion *event)
 {
   REQUIRE(event != NULL);
   REQUIRE(timelineWidget != NULL);
   
-  timelineWidget->on_mouse_move_in_body(event->x, event->y);  
+  timelineWidget->on_mouse_move_in_body(event->x, event->y);
+  
+  switch(dragType)
+  {
+  case Shift:
+    {
+      const int64_t scale = timelineWidget->get_time_scale();
+      gavl_time_t offset = beginShiftTimeOffset +
+        (int64_t)(mouseDownX - event->x) * scale;
+      timelineWidget->set_time_offset(offset);
+      
+      set_vertical_offset((int)(mouseDownY - event->y) +
+        beginShiftVerticalOffset);
+      break;
+    }
+  }
   
   return true;
 }
@@ -147,8 +195,7 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
   REQUIRE(cairo);
   
   // Translate the view by the scroll distance
-  cairo->translate(0,
-    -(int)timelineWidget->verticalAdjustment.get_value());
+  cairo->translate(0, -get_vertical_offset());
   
   // Interate drawing each track
   BOOST_FOREACH( Track* track, timelineWidget->tracks )
@@ -173,6 +220,26 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
     }   
 
   return true;
+}
+
+void
+TimelineBody::begin_shift_drag()
+{
+  dragType = Shift;
+  beginShiftTimeOffset = timelineWidget->get_time_offset();
+  beginShiftVerticalOffset = get_vertical_offset();
+}
+
+int
+TimelineBody::get_vertical_offset() const
+{
+  return (int)timelineWidget->verticalAdjustment.get_value();
+}
+
+void
+TimelineBody::set_vertical_offset(int offset)
+{
+  timelineWidget->verticalAdjustment.set_value(offset);
 }
   
 void

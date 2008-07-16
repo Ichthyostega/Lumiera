@@ -107,6 +107,46 @@ TimelineWidget::set_time_scale(int64_t time_scale)
 }
 
 void
+TimelineWidget::shift_view(int shift_size)
+{
+  const int view_width = body->get_allocation().get_width();
+  
+  set_time_offset(get_time_offset() +
+    shift_size * timeScale * view_width / 16);
+}
+
+void
+TimelineWidget::zoom_view(int zoom_size)
+{
+  const Allocation allocation = body->get_allocation();
+  zoom_view(allocation.get_width() / 2, zoom_size);
+}
+
+void
+TimelineWidget::zoom_view(int point, int zoom_size)
+{ 
+  int64_t new_time_scale = (double)timeScale * pow(1.25, -zoom_size);
+  
+  // Limit zooming in too close
+  if(new_time_scale < 1) new_time_scale = 1;
+  
+  // Nudge zoom problems caused by integer rounding
+  if(new_time_scale == timeScale && zoom_size < 0)
+    new_time_scale++;
+    
+  // Limit zooming out too far
+  if(new_time_scale > MaxScale)
+    new_time_scale = MaxScale;
+  
+  // The view must be shifted so that the zoom is centred on the cursor
+  set_time_offset(get_time_offset() +
+    (timeScale - new_time_scale) * point);
+    
+  // Apply the new scale
+  set_time_scale(new_time_scale);
+}
+
+void
 TimelineWidget::on_scroll()
 {
   timeOffset = horizontalAdjustment.get_value();
@@ -172,39 +212,6 @@ int
 TimelineWidget::get_y_scroll_offset() const
 {
   return (int)verticalAdjustment.get_value();
-}
-
-void
-TimelineWidget::shift_view(int shift_size)
-{
-  const int view_width = body->get_allocation().get_width();
-  
-  set_time_offset(get_time_offset() +
-    shift_size * timeScale * view_width / 16);
-}
-
-void
-TimelineWidget::zoom_view(int point, int zoom_size)
-{ 
-  int64_t new_time_scale = (double)timeScale * pow(1.25, -zoom_size);
-  
-  // Limit zooming in too close
-  if(new_time_scale < 1) new_time_scale = 1;
-  
-  // Nudge zoom problems caused by integer rounding
-  if(new_time_scale == timeScale && zoom_size < 0)
-    new_time_scale++;
-    
-  // Limit zooming out too far
-  if(new_time_scale > MaxScale)
-    new_time_scale = MaxScale;
-  
-  // The view must be shifted so that the zoom is centred on the cursor
-  set_time_offset(get_time_offset() +
-    (timeScale - new_time_scale) * point);
-    
-  // Apply the new scale
-  set_time_scale(new_time_scale);
 }
 
 void

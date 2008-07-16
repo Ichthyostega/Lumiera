@@ -37,31 +37,55 @@ class TimelineWidget;
 namespace timeline {
 
 class TimelineBody : public Gtk::DrawingArea
-  {
-  public:
-    TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widget);
+{
+public:
+  TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widget);
 
-    /* ===== Events ===== */
-  protected:
-    void on_realize();
+  /* ===== Events ===== */
+protected:
+  void on_realize();
+
+  void on_scroll();
   
-    void on_scroll();
-    
-    bool on_scroll_event(GdkEventScroll* event);
-    
-    bool on_motion_notify_event(GdkEventMotion *event);
-    
-    bool on_expose_event(GdkEventExpose* event);
-    
-    /* ===== Internals ===== */
-  private:
-    void read_styles();
-    
-  private:
-    GdkColor background;
-    
-    lumiera::gui::widgets::TimelineWidget *timelineWidget;
+  bool on_scroll_event(GdkEventScroll* event);
+  
+  bool on_button_press_event (GdkEventButton* event);
+  
+  bool on_button_release_event (GdkEventButton* event);
+  
+  bool on_motion_notify_event(GdkEventMotion *event);
+  
+  bool on_expose_event(GdkEventExpose* event);
+  
+  /* ===== Internals ===== */
+private:
+  void begin_shift_drag();
+  
+  int get_vertical_offset() const;
+  
+  void set_vertical_offset(int offset);
+
+  void read_styles();
+  
+private:
+
+  // Internal structures
+  enum DragType
+  {
+    None,
+    Shift
   };
+  
+  // UI State Data
+  DragType dragType;
+  double mouseDownX, mouseDownY;
+  gavl_time_t beginShiftTimeOffset;
+  int beginShiftVerticalOffset;  
+
+  GdkColor background;
+  
+  lumiera::gui::widgets::TimelineWidget *timelineWidget;
+};
 
 }   // namespace timeline
 }   // namespace widgets
