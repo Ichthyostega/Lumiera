@@ -66,7 +66,7 @@ TimelineBody::on_realize()
   Widget::on_realize();
   
   // We wish to receive all event notifications
-  add_events(Gdk::POINTER_MOTION_MASK);
+  add_events(Gdk::POINTER_MOTION_MASK | Gdk::SCROLL_MASK);
 }
 
 void
@@ -140,7 +140,7 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
   
   // Prepare to render via cairo
   Glib::RefPtr<Style> style = get_style();  
-  Gtk::Allocation allocation = get_allocation();
+  const Allocation allocation = get_allocation();
   Cairo::RefPtr<Cairo::Context> cairo = window->create_cairo_context();
   
   REQUIRE(style);

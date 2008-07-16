@@ -77,9 +77,9 @@ namespace workspace {
 
       /* ===== Panels ===== */
     private:  
-      AssetsPanel assets_panel;
-      ViewerPanel viewer_panel;      
-      TimelinePanel timeline_panel;
+      Glib::RefPtr<AssetsPanel> assets_panel;
+      Glib::RefPtr<ViewerPanel> viewer_panel;      
+      Glib::RefPtr<TimelinePanel> timeline_panel;
            
       /* ===== Helpers ===== */
     private:
