@@ -49,8 +49,15 @@ namespace engine {
   class NodeWiring
     : public WiringDescriptor
     {
+      const uint siz_;
+      const uint nrO_; 
       
       friend class WiringFactory;
+      
+    public:
+      virtual uint getNrI()  const { return siz_ - nrO_; }
+      virtual uint getNrO()  const { return nrO_; }
+
       
     protected:
       virtual BuffHandle

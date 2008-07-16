@@ -28,35 +28,17 @@
 #include "pre.hpp"
 
 #include "proc/lumiera.hpp"
+#include "common/frameid.hpp"
+#include "proc/engine/buffhandle.hpp"
 
 #include <cstddef>
 
 
 namespace engine { 
   
-  class InvocationStateBase;
-  
-  struct BuffHandle
-    {
-      typedef float Buff;
-      typedef Buff* PBuff;//////TODO define the Buffer type(s)
-      
-      PBuff 
-      operator->() const 
-        { 
-          return pBuffer_; 
-        }
-      Buff&
-      operator* () const
-        {
-          ENSURE (pBuffer_);
-          return *pBuffer_;
-        }
-      
-    protected:
-      PBuff pBuffer_; 
-      long sourceID_;
-    };
+  using lumiera::FrameID;
+
+  class StateAdapter;
   
   
   class State
@@ -72,9 +54,34 @@ namespace engine {
        */ 
       virtual State& getCurrentImplementation () =0;
       
-      friend class engine::InvocationStateBase;
+      friend class engine::StateAdapter;
       
     public:
+      /** allocate a new writable buffer with type and size according to
+       *  the BufferDescriptor. The actual provider of this buffer depends
+       *  on the State implementation; it could be a temporary, located in
+       *  the cache, used for feeding calculated frames over a network, etc.
+       *  @return a BuffHandle encapsulating the information necessary to get
+       *          at the actual buffer adress and for releasing the buffer.
+       */
+      virtual BuffHandle allocateBuffer (BufferDescriptor const&)  =0;
+      
+      /** resign control of the buffer denoted by the handle */
+      virtual void releaseBuffer (BuffHandle&)  =0;
+      
+      /** declare the data contained in the Buffer to be ready.
+       *  The caller is required to restrain itself from modifying the data
+       *  afterwards, as this buffer now can be used (readonly) by other
+       *  calculation processes in parallel.
+       */
+      virtual void is_calculated (BuffHandle const&)  =0;
+      
+      /** try to fetch an existing buffer containing the denoted frame from
+       *  a cache or similar backing system (e.g. peer over the network).
+       *  @return either a handle to a readonly buffer, or a null handle
+       *  @note the client is resposible for not modifying the provided data
+       */
+      virtual BuffHandle fetch (FrameID const&)  =0;
       
     };
   

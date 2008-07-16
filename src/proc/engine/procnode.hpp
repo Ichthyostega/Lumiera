@@ -70,6 +70,9 @@ namespace engine {
     public:
       virtual ~WiringDescriptor() {}
       
+      virtual uint getNrI()  const =0;           ///////////TODO: indeed need a virtual function??
+      virtual uint getNrO()  const =0;
+      
     protected:
       /** the wiring-dependent part of the node operation.
        *  Includes the creation of a one-way state object on the stack

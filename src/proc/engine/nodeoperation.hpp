@@ -52,7 +52,9 @@
 #define ENGINE_NODEOPERATION_H
 
 
+#include "proc/state.hpp"
 #include "proc/engine/procnode.hpp"
+#include "proc/engine/buffhandle.hpp"
 #include "proc/engine/nodewiringconfig.hpp"
 #include "lib/appconfig.hpp"
 
@@ -88,8 +90,6 @@ namespace engine {
       State& parent_;
       State& current_;
       
-      uint requiredOutputNr;
-
       StateAdapter (State& callingProcess) 
         : parent_ (callingProcess),
           current_(callingProcess.getCurrentImplementation())
@@ -97,44 +97,71 @@ namespace engine {
       
       virtual State& getCurrentImplementation () { return current_; }
       
+      
+    public: /* === proxying the State interface === */
+      
+      virtual void releaseBuffer (BuffHandle& bh)       { current_.releaseBuffer (bh); }
+      
+      virtual void is_calculated (BuffHandle const& bh) { current_.is_calculated (bh); }
+      
+      virtual BuffHandle fetch (FrameID const& fID)     { return current_.fetch (fID); }
+      
+      
+      // note: allocateBuffer()  is choosen specifically based on the actual node wiring
+      
     };
   
-  struct BuffTable
-    {
-      BuffHandle        *const outHandle;
-      BuffHandle        *const inHandle;
-      BuffHandle::PBuff *const outBuff;
-      BuffHandle::PBuff *const inBuff;
-    };
-  
+    
   
   struct Invocation
+    : StateAdapter
     {
       WiringDescriptor const& wiring;
       BuffTable& buffTab;
       const uint outNr;
       
     protected:
-      Invocation (WiringDescriptor const& w, BuffTable& b, uint o)
-        : wiring(w),
+      Invocation (State& callingProcess, WiringDescriptor const& w, BuffTable& b, uint o)
+        : StateAdapter(callingProcess),
+          wiring(w),
           buffTab(b),
           outNr(o)
         { }
     };
-  
-  
+
   template<uint SZ>
+  class BuffTableStorage
+    : public BuffTable
+    {
+      BuffHandle hTab_[SZ];
+      BuffHandle::PBuff pTab_[SZ];
+      
+    protected:
+      BuffTableStorage (WiringDescriptor const& wd)
+        {
+          const uint nrI = wd.getNrI();
+          const uint nrO = wd.getNrO();
+          REQUIRE (nrI+nrO <= SZ);
+          
+          this->outHandle = &hTab_[0];
+          this->inHandle  = &hTab_[nrO];
+          this->outBuff   = &pTab_[0];
+          this->inBuff    = &pTab_[nrO];
+        }
+    };
+  
+  
+  
+  template<uint SZ> /////////////////TODO: rather template on the BufferProvider
   class InvocationImpl
-    : private StateAdapter,
-      private BuffTableStorage<SZ>,
+    : private BuffTableStorage<SZ>,
       public Invocation
     {
 
     protected:
       InvocationImpl (State& callingProcess, WiringDescriptor const& w, const uint outCh)
-        : StateAdapter(callingProcess),
-          BuffTableStorage(w),
-          Invocation(w, static_cast<BuffTable&>(*this), outCh)
+        : BuffTableStorage<SZ>(w),
+          Invocation(callingProcess, w, static_cast<BuffTable&>(*this), outCh)
         { }
       
       /** contains the details of Cache query and recursive calls
@@ -266,13 +293,13 @@ namespace engine {
   template<>
   struct OutBuffSource<PARENT>
     {
-      State& getBufferProvider (InvocationStateBase& thisState) { return thisState.parent_; }
+      static State& getBufferProvider (Invocation& thisState) { return thisState.parent_; }
     };
   
   template<>
   struct OutBuffSource<CACHE>
     {
-      State& getBufferProvider (InvocationStateBase& thisState) { return thisState.current_; }
+      static State& getBufferProvider (Invocation& thisState) { return thisState.current_; }
     };
   
   
@@ -331,7 +358,7 @@ namespace engine {
   struct Strategy ;
 
   
-  template<char CACE_Fl=0, char INPLACE_Fl=0>
+  template<char CACHE_Fl=0, char INPLACE_Fl=0>
   struct SelectBuffProvider;
   
   template<> struct SelectBuffProvider<CACHING>         : OutBuffSource<CACHE> { };
@@ -354,7 +381,7 @@ namespace engine {
     { };
   
   template<char INPLACE_Fl>
-  struct Strategy< Config<PROCESS> >
+  struct Strategy< Config<PROCESS,INPLACE_Fl> >
     : PullInput<
        AllocOutput<SelectBuffProvider<NOT_SET,INPLACE_Fl>,
         ProcessData<
