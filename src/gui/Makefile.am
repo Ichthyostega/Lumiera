@@ -58,8 +58,6 @@ lumigui_SOURCES =                                               \
     $(lumigui_srcdir)/widgets/timeline/header-container.hpp     \
     $(lumigui_srcdir)/widgets/timeline/track.cpp                \
     $(lumigui_srcdir)/widgets/timeline/track.hpp                \
-    $(lumigui_srcdir)/widgets/timeline/video-track.cpp          \
-    $(lumigui_srcdir)/widgets/timeline/video-track.hpp          \
     $(lumigui_srcdir)/widgets/timeline/timeline-body.cpp        \
     $(lumigui_srcdir)/widgets/timeline/timeline-body.hpp        \
     $(lumigui_srcdir)/widgets/timeline/timeline-ruler.cpp       \

@@ -31,7 +31,6 @@
 #include "timeline/timeline-body.hpp"
 #include "timeline/timeline-ruler.hpp"
 #include "timeline/track.hpp"
-#include "timeline/video-track.hpp"
 
 namespace lumiera {
 namespace gui {
@@ -119,8 +118,8 @@ protected:
 
   int totalHeight;
 
-  timeline::VideoTrack video1;
-  timeline::VideoTrack video2;
+  timeline::Track video1;
+  timeline::Track video2;
   std::vector<timeline::Track*> tracks;
 
   timeline::HeaderContainer *headerContainer;

@@ -40,13 +40,14 @@ class Track
 
     Glib::ustring get_title();
 
-    virtual Gtk::Widget& get_header_widget() = 0;
+    Gtk::Widget& get_header_widget();
 
-    virtual int get_height() = 0;
+    int get_height();
 
-    virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo);
+    void draw_track(Cairo::RefPtr<Cairo::Context> cairo);
 
   protected:
+    Gtk::Label headerWidget;
   };
 
 
