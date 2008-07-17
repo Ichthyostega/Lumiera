@@ -148,12 +148,9 @@ TimelineBody::on_button_release_event(GdkEventButton* event)
 
 bool
 TimelineBody::on_motion_notify_event(GdkEventMotion *event)
-{
+{ 
   REQUIRE(event != NULL);
-  REQUIRE(timelineWidget != NULL);
-  
-  timelineWidget->on_mouse_move_in_body(event->x, event->y);
-  
+    
   switch(dragType)
   {
   case Shift:
@@ -169,7 +166,8 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
     }
   }
   
-  return true;
+  // false so that the message is passed up to the owner TimelineWidget
+  return false;
 }
 
 bool

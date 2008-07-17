@@ -52,10 +52,12 @@ TimelineWidget::TimelineWidget() :
   headerContainer = new HeaderContainer(this);
   ENSURE(headerContainer != NULL);
 
-  horizontalAdjustment.signal_value_changed().connect(
-    sigc::mem_fun(this, &TimelineWidget::on_scroll) );
-  verticalAdjustment.signal_value_changed().connect(
-    sigc::mem_fun(this, &TimelineWidget::on_scroll) );
+  horizontalAdjustment.signal_value_changed().connect( sigc::mem_fun(
+    this, &TimelineWidget::on_scroll) );
+  verticalAdjustment.signal_value_changed().connect( sigc::mem_fun(
+    this, &TimelineWidget::on_scroll) );
+  body->signal_motion_notify_event().connect( sigc::mem_fun(
+    this, &TimelineWidget::on_motion_in_body_notify_event) );
     
   set_time_scale(GAVL_TIME_SCALE / 200);
 
@@ -214,10 +216,12 @@ TimelineWidget::get_y_scroll_offset() const
   return (int)verticalAdjustment.get_value();
 }
 
-void
-TimelineWidget::on_mouse_move_in_body(int x, int y)
+bool
+TimelineWidget::on_motion_in_body_notify_event(GdkEventMotion *event)
 {
-  ruler.set_mouse_chevron_offset(x);
+  REQUIRE(event != NULL);
+  ruler.set_mouse_chevron_offset(event->x);
+  return true;
 }
 
 }   // namespace widgets

@@ -49,47 +49,47 @@ namespace model {
 
 namespace workspace {
 
-  /** 
-   * The main lumiera workspace window
-   */
-  class WorkspaceWindow : public Gtk::Window
-    {
-    public:
-	    WorkspaceWindow(lumiera::gui::model::Project *source_project);
-	    virtual ~WorkspaceWindow();
-	
-    private:
-      void create_ui();
+/** 
+* The main lumiera workspace window
+*/
+class WorkspaceWindow : public Gtk::Window
+{
+public:
+  WorkspaceWindow(lumiera::gui::model::Project *source_project);
+  virtual ~WorkspaceWindow();
 
-      /* ===== Model ===== */
-    private:
-      lumiera::gui::model::Project *project;
+private:
+  void create_ui();
 
-      /* ===== UI ===== */
-    private:
-      Glib::RefPtr<Gtk::UIManager> uiManager;
-      Gtk::VBox base_container;
-      Gtk::HBox dock_container;
-      
-      Gtk::Widget *dock;
-      Gtk::Widget *dockbar;
-      GdlDockLayout *layout;
+  /* ===== Model ===== */
+private:
+  lumiera::gui::model::Project *project;
 
-      /* ===== Panels ===== */
-    private:  
-      Glib::RefPtr<AssetsPanel> assets_panel;
-      Glib::RefPtr<ViewerPanel> viewer_panel;      
-      Glib::RefPtr<TimelinePanel> timeline_panel;
-           
-      /* ===== Helpers ===== */
-    private:
-      /**
-       * The instantiation of the actions helper class, which
-       * registers and handles user action events */
-      Actions actions;
+  /* ===== UI ===== */
+private:
+  Glib::RefPtr<Gtk::UIManager> uiManager;
+  Gtk::VBox base_container;
+  Gtk::HBox dock_container;
+  
+  Gtk::Widget *dock;
+  Gtk::Widget *dockbar;
+  GdlDockLayout *layout;
 
-      friend class Actions;
-    };
+  /* ===== Panels ===== */
+private:  
+  AssetsPanel *assets_panel;
+  ViewerPanel *viewer_panel;      
+  TimelinePanel *timeline_panel;
+       
+  /* ===== Helpers ===== */
+private:
+  /**
+   * The instantiation of the actions helper class, which
+   * registers and handles user action events */
+  Actions actions;
+
+  friend class Actions;
+};
 
 }   // namespace workspace
 }   // namespace gui

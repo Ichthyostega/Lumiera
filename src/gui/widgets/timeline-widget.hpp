@@ -111,7 +111,7 @@ protected:
   
   int get_y_scroll_offset() const;
   
-  void on_mouse_move_in_body(int x, int y);
+  bool on_motion_in_body_notify_event(GdkEventMotion *event);
 
 protected:
   gavl_time_t timeOffset;
