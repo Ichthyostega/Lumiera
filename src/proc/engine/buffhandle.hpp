@@ -20,36 +20,30 @@
  
 */
 
-/** @file procnode.hpp
- ** Interface to the processing nodes and the render nodes network.
+/** @file buffhandle.hpp
+ ** Various bits needed to support the buffer management within the render nodes.
+ ** When pulling data from predecessor nodes and calculating new data, each render node
+ ** needs several input and output buffers. These may be allocated and provided by several
+ ** different "buffer providers" (for example the frame cache). For accessing those buffers,
+ ** the node needs to keep a table of buffer pointers, and for releasing the buffers later
+ ** on, we need some handles. The usage pattern of those buffer pointer tables is stack-like,
+ ** thus it makes sense to utilize a single large buffer pointer array per pull() calldown
+ ** sequence and dynamically claim small chunks for each node.
  **
- ** Actually, there are three different interfaces to consider
- ** - the ProcNode#pull is the invocation interface. It is call-style (easily callable by C)
- ** - the builder interface, comprised by the NodeFactory and the WiringFactory. It's C++ (using templates)
- ** - the actual processing function is supposed to be a C function; it uses a set of C functions 
- **   for accessing the frame buffers with the data to be processed.
- **
- ** By using the builder interface, concrete node and wiring descriptor classes are created,
- ** based on some templates. These concrete classes form the "glue" to tie the node network
- ** together and contain much of the operation beahviour in a hard wired fashion.
- **
- ** @see nodefactory.hpp
- ** @see operationpoint.hpp
+ ** @see nodeoperation.hpp
+ ** @see bufftable.hpp       storage for the buffer table
+ ** @see engine::Invocation
  */
 
 #ifndef ENGINE_BUFFHANDLE_H
 #define ENGINE_BUFFHANDLE_H
 
 
-//#include "proc/mobject/parameter.hpp"
-
-//#include <vector>
-
+#include "common/error.hpp"
 
 
 namespace engine {
-
-//  using std::vector;
+  
   
   
   /**
@@ -89,22 +83,6 @@ namespace engine {
       char typeID_; ///////TODO define the Buffer type(s)
     };
   
-  
-    /** 
-     * Tables of buffer handles and corresponding dereferenced buffer pointers.
-     * Used within the invocation of a processing node to calculate data.
-     * The tables are further differentiated into input data buffers and output
-     * data buffers. The tables are supposed to be implemented as bare "C" arrays,
-     * thus the array of real buffer pointers can be fed directly to any processing
-     * function
-     */
-  struct BuffTable
-    {
-      BuffHandle        *const outHandle;
-      BuffHandle        *const inHandle;
-      BuffHandle::PBuff *const outBuff;
-      BuffHandle::PBuff *const inBuff;
-    };
   
   
 } // namespace engine

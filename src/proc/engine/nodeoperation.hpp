@@ -55,6 +55,7 @@
 #include "proc/state.hpp"
 #include "proc/engine/procnode.hpp"
 #include "proc/engine/buffhandle.hpp"
+#include "proc/engine/bufftable.hpp"
 #include "proc/engine/nodewiringconfig.hpp"
 #include "lib/appconfig.hpp"
 
@@ -129,26 +130,6 @@ namespace engine {
         { }
     };
 
-  template<uint SZ>
-  class BuffTableStorage
-    : public BuffTable
-    {
-      BuffHandle hTab_[SZ];
-      BuffHandle::PBuff pTab_[SZ];
-      
-    protected:
-      BuffTableStorage (WiringDescriptor const& wd)
-        {
-          const uint nrI = wd.getNrI();
-          const uint nrO = wd.getNrO();
-          REQUIRE (nrI+nrO <= SZ);
-          
-          this->outHandle = &hTab_[0];
-          this->inHandle  = &hTab_[nrO];
-          this->outBuff   = &pTab_[0];
-          this->inBuff    = &pTab_[nrO];
-        }
-    };
   
   
   

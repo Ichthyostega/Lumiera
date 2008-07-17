@@ -30,6 +30,7 @@
 #include "proc/lumiera.hpp"
 #include "common/frameid.hpp"
 #include "proc/engine/buffhandle.hpp"
+#include "proc/engine/bufftable.hpp"
 
 #include <cstddef>
 
@@ -82,6 +83,9 @@ namespace engine {
        *  @note the client is resposible for not modifying the provided data
        */
       virtual BuffHandle fetch (FrameID const&)  =0;
+      
+      /** necessary for creating a local BuffTableChunk */
+      virtual BuffTableStorage& getBuffTableStorage()  =0; 
       
     };
   
