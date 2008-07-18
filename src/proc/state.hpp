@@ -30,7 +30,6 @@
 #include "proc/lumiera.hpp"
 #include "common/frameid.hpp"
 #include "proc/engine/buffhandle.hpp"
-#include "proc/engine/bufftable.hpp"
 
 #include <cstddef>
 
@@ -40,7 +39,7 @@ namespace engine {
   using lumiera::FrameID;
 
   class StateAdapter;
-  
+  class BuffTableStorage;
   
   class State
     {

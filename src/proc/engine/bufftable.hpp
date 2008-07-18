@@ -27,6 +27,7 @@
 
 #include "common/error.hpp"
 #include "proc/engine/buffhandle.hpp"
+#include "proc/engine/procnode.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <vector>
@@ -59,49 +60,6 @@ namespace engine {
       PBu outBuff;
       PBu inBuff;
     };
-  
-  
-  class BuffTableStorage;
-  class WiringDescriptor;
-  
-  /** 
-   * to be allocated on the stack while evaluating a ProcNode#pull() call.
-   * The "current" State (StateProxy) maintains a BuffTableStorage (=pool),
-   * which can be used to crate such chunks. The claiming and releasing of
-   * slots in the BuffTableStorage is automatically tied to BuffTableChunk
-   * object's lifecycle.
-   */
-  class BuffTableChunk
-    : public BuffTable,
-      boost::noncopyable
-    {
-      const uint siz_;
-      BuffTable::Chunk tab_;
-      BuffTableStorage& sto_;
-      
-    public:
-      BuffTableChunk (WiringDescriptor const& wd, BuffTableStorage& storage)
-        : siz_(wd.getNrI() + wd.getNrO()),
-          tab_(storage.claim (siz_)),
-          sto_(storage)
-        {
-          const uint nrO(wd.getNrO());
-          
-          // Setup the public visible table locations
-          this->outHandle = &tab_.first[ 0 ];
-          this->inHandle  = &tab_.first[nrO];
-          this->outBuff   = &tab_.second[ 0 ];
-          this->inBuff    = &tab_.second[nrO];
-        }
-      
-      ~BuffTableChunk ()
-        {
-          sto_.release (siz_);
-          ASSERT ( sto_.level_check (tab_),
-                  "buffer management logic broken.");
-        }
-    };
-  
   
   
   class BuffTableStorage
@@ -156,6 +114,48 @@ namespace engine {
               && prev_level.second == &pTab_[level_];
         }
     };
+  
+  
+  /** 
+   * to be allocated on the stack while evaluating a ProcNode#pull() call.
+   * The "current" State (StateProxy) maintains a BuffTableStorage (=pool),
+   * which can be used to crate such chunks. The claiming and releasing of
+   * slots in the BuffTableStorage is automatically tied to BuffTableChunk
+   * object's lifecycle.
+   */
+  class BuffTableChunk
+    : public BuffTable,
+      boost::noncopyable
+    {
+      const uint siz_;
+      BuffTable::Chunk tab_;
+      BuffTableStorage& sto_;
+      
+    public:
+      BuffTableChunk (WiringDescriptor const& wd, BuffTableStorage& storage)
+        : siz_(wd.getNrI() + wd.getNrO()),
+          tab_(storage.claim (siz_)),
+          sto_(storage)
+        {
+          const uint nrO(wd.getNrO());
+          
+          // Setup the public visible table locations
+          this->outHandle = &tab_.first[ 0 ];
+          this->inHandle  = &tab_.first[nrO];
+          this->outBuff   = &tab_.second[ 0 ];
+          this->inBuff    = &tab_.second[nrO];
+        }
+      
+      ~BuffTableChunk ()
+        {
+          sto_.release (siz_);
+          ASSERT ( sto_.level_check (tab_),
+                  "buffer management logic broken.");
+        }
+    };
+  
+  
+  
   
   
 } // namespace engine
