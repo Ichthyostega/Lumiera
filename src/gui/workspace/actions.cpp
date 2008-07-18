@@ -108,14 +108,14 @@ Actions::add_stock_item(const Glib::RefPtr<IconFactory>& factory,
 {
   Gtk::IconSource source;
   try
-  {
-    //This throws an exception if the file is not found:
-    source.set_pixbuf( Gdk::Pixbuf::create_from_file(filepath) );
-  }
+    {
+      //This throws an exception if the file is not found:
+      source.set_pixbuf( Gdk::Pixbuf::create_from_file(filepath) );
+    }
   catch(const Glib::Exception& ex)
-  {
-    g_message(ex.what().c_str());
-  }
+    {
+      g_message(ex.what().c_str());
+    }
 
   source.set_size(Gtk::ICON_SIZE_SMALL_TOOLBAR);
   source.set_size_wildcarded(); //Icon may be scaled.
@@ -131,9 +131,9 @@ Actions::add_stock_item(const Glib::RefPtr<IconFactory>& factory,
 void
 Actions::update_action_state()
 {
-  REQUIRE(workspaceWindow.assets_panel);
-  REQUIRE(workspaceWindow.timeline_panel);
-  REQUIRE(workspaceWindow.viewer_panel); 
+  REQUIRE(workspaceWindow.assets_panel != NULL);
+  REQUIRE(workspaceWindow.timeline_panel != NULL);
+  REQUIRE(workspaceWindow.viewer_panel != NULL); 
   
   is_updating_action_state = true;
   assetsPanelAction->set_active(workspaceWindow.assets_panel->is_shown());

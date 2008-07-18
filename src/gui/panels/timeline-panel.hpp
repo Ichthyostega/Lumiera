@@ -35,20 +35,34 @@ namespace lumiera {
 namespace gui {
 namespace panels {
 
-  class TimelinePanel : public Panel
-    {
-    public:
-      TimelinePanel();
+class TimelinePanel : public Panel
+{
+public:
+  TimelinePanel();
 
-    protected:
-    
-      // Widgets
-      Gtk::Toolbar toolbar;
-      TimelineWidget timeline_widget;
-      
-      // Toolbar Widgets
-      Gtk::ToolButton button;
-    };
+private:
+  //----- Event Handlers -----//
+  void on_zoom_in();
+  void on_zoom_out();
+  
+private:
+  void update_zoom_buttons();
+
+private:
+
+  //----- Data -----//
+
+  // Widgets
+  Gtk::Toolbar toolbar;
+  TimelineWidget timelineWidget;
+  
+  // Toolbar Widgets
+  Gtk::ToolButton zoomIn;
+  Gtk::ToolButton zoomOut;
+  
+  //----- Constants -----//
+  static const int ZoomToolSteps;
+};
 
 }   // namespace panels
 }   // namespace gui

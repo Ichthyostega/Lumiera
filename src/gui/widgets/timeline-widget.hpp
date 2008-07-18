@@ -72,7 +72,30 @@ public:
    * zero
    */
   void set_time_scale(int64_t time_scale);
-
+  
+  /**
+   * Zooms the view in or out as by a number of steps while keeping
+   * centre of the view still.
+   * @param zoom_size The number of steps to zoom by. The scale factor
+   * is 1.25^(-zoom_size).
+   **/
+  void zoom_view(int zoom_size);
+  
+  /**
+   * Zooms the view in or out as by a number of steps while keeping a 
+   * given point on the timeline still.
+   * @param zoom_size The number of steps to zoom by. The scale factor
+   * is 1.25^(-zoom_size).
+   **/
+  void zoom_view(int point, int zoom_size);
+  
+  /**
+   * Scrolls the view horizontally as a proportion of the view area.
+   * @param shift_size The size of the shift in 1/16ths of the view
+   * width.
+   **/
+  void shift_view(int shift_size);
+  
   /* ===== Events ===== */
 protected:
   void on_scroll();
@@ -88,16 +111,7 @@ protected:
   
   int get_y_scroll_offset() const;
   
-  /**
-   * Scrolls the view horizontally as a proportion of the view area.
-   * @param shift_size The size of the shift in 1/16ths of the view
-   * width.
-   **/
-  void shift_view(int shift_size);
-  
-  void zoom_view(int point, int zoom_size);
-  
-  void on_mouse_move_in_body(int x, int y);
+  bool on_motion_in_body_notify_event(GdkEventMotion *event);
 
 protected:
   gavl_time_t timeOffset;
@@ -118,11 +132,13 @@ protected:
   Gtk::VScrollbar verticalScroll;
   
   /* ===== Constants ===== */
+public:
+  static const int64_t MaxScale;
+  
 protected:
   static const int TrackPadding;
   static const int HeaderWidth;
   static const double ZoomIncrement;
-  static const int64_t MaxScale;
 
   friend class timeline::TimelineBody;
   friend class timeline::HeaderContainer;

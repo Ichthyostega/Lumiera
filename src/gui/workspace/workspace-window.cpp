@@ -45,126 +45,140 @@ namespace workspace {
 WorkspaceWindow::WorkspaceWindow(Project *source_project) :
   project(source_project),
   actions(*this)
-  {
-    REQUIRE(source_project != NULL);
-      
-    layout = NULL;
+{
+  REQUIRE(source_project != NULL);
+    
+  layout = NULL;
+  assets_panel = NULL;
+  viewer_panel = NULL;
+  timeline_panel = NULL;
 
-    create_ui();
-  }
+  create_ui();
+}
 
 WorkspaceWindow::~WorkspaceWindow()
-  {
-    if(layout != NULL) g_object_unref(layout);
-  }
+{
+  REQUIRE(layout != NULL);
+  g_object_unref(layout);
+  
+  REQUIRE(assets_panel != NULL);
+  assets_panel->unreference();
+  REQUIRE(viewer_panel != NULL);
+  viewer_panel->unreference();
+  REQUIRE(timeline_panel != NULL);
+  timeline_panel->unreference();
+}
 
 void
 WorkspaceWindow::create_ui()
-  {    
-    //----- Configure the Window -----//
-    set_title(AppTitle);
-    set_default_size(1024, 768);
+{    
+  //----- Configure the Window -----//
+  set_title(AppTitle);
+  set_default_size(1024, 768);
 
-    //----- Set up the UI Manager -----//
-    // The UI will be nested within a VBox
-    add(base_container);
+  //----- Set up the UI Manager -----//
+  // The UI will be nested within a VBox
+  add(base_container);
 
-    uiManager = Gtk::UIManager::create();
-    uiManager->insert_action_group(actions.actionGroup);
+  uiManager = Gtk::UIManager::create();
+  uiManager->insert_action_group(actions.actionGroup);
 
-    add_accel_group(uiManager->get_accel_group());
+  add_accel_group(uiManager->get_accel_group());
 
-    //Layout the actions in a menubar and toolbar:
-    Glib::ustring ui_info = 
-        "<ui>"
-        "  <menubar name='MenuBar'>"
-        "    <menu action='FileMenu'>"
-        "      <menuitem action='FileNewProject'/>"
-        "      <menuitem action='FileOpenProject'/>"
-        "      <separator/>"
-        "      <menuitem action='FileRender'/>"
-        "      <separator/>"
-        "      <menuitem action='FileQuit'/>"
-        "    </menu>"
-        "    <menu action='EditMenu'>"
-        "      <menuitem action='EditCopy'/>"
-        "      <menuitem action='EditPaste'/>"
-        "      <separator/>"
-        "      <menuitem action='EditPreferences'/>"
-        "    </menu>"
-        "    <menu action='ViewMenu'>"
-        "      <menuitem action='ViewAssets'/>"
-        "      <menuitem action='ViewTimeline'/>"
-        "      <menuitem action='ViewViewer'/>"
-        "    </menu>"
-        "    <menu action='HelpMenu'>"
-        "      <menuitem action='HelpAbout'/>"
-        "    </menu>"
-        "  </menubar>"
-        "  <toolbar  name='ToolBar'>"
-        "    <toolitem action='FileNewProject'/>"
-        "    <toolitem action='FileOpenProject'/>"
-        "  </toolbar>"
-        "</ui>";
+  //Layout the actions in a menubar and toolbar:
+  Glib::ustring ui_info = 
+      "<ui>"
+      "  <menubar name='MenuBar'>"
+      "    <menu action='FileMenu'>"
+      "      <menuitem action='FileNewProject'/>"
+      "      <menuitem action='FileOpenProject'/>"
+      "      <separator/>"
+      "      <menuitem action='FileRender'/>"
+      "      <separator/>"
+      "      <menuitem action='FileQuit'/>"
+      "    </menu>"
+      "    <menu action='EditMenu'>"
+      "      <menuitem action='EditCopy'/>"
+      "      <menuitem action='EditPaste'/>"
+      "      <separator/>"
+      "      <menuitem action='EditPreferences'/>"
+      "    </menu>"
+      "    <menu action='ViewMenu'>"
+      "      <menuitem action='ViewAssets'/>"
+      "      <menuitem action='ViewTimeline'/>"
+      "      <menuitem action='ViewViewer'/>"
+      "    </menu>"
+      "    <menu action='HelpMenu'>"
+      "      <menuitem action='HelpAbout'/>"
+      "    </menu>"
+      "  </menubar>"
+      "  <toolbar  name='ToolBar'>"
+      "    <toolitem action='FileNewProject'/>"
+      "    <toolitem action='FileOpenProject'/>"
+      "  </toolbar>"
+      "</ui>";
 
-    try
-      {
-        uiManager->add_ui_from_string(ui_info);
-      }
-    catch(const Glib::Error& ex)
-      {
-        ERROR(gui, "Building menus failed: %s", ex.what().data());
-        return;
-      }
+  try
+    {
+      uiManager->add_ui_from_string(ui_info);
+    }
+  catch(const Glib::Error& ex)
+    {
+      ERROR(gui, "Building menus failed: %s", ex.what().data());
+      return;
+    }
 
-    //----- Set up the Menu Bar -----//
-    Gtk::Widget* menu_bar = uiManager->get_widget("/MenuBar");
-    ASSERT(menu_bar != NULL);
-    base_container.pack_start(*menu_bar, Gtk::PACK_SHRINK);
-    
-    //----- Set up the Tool Bar -----//
-    Gtk::Toolbar* toolbar = dynamic_cast<Gtk::Toolbar*>(uiManager->get_widget("/ToolBar"));
-    ASSERT(toolbar != NULL);
-    toolbar->set_toolbar_style(TOOLBAR_ICONS);
-    base_container.pack_start(*toolbar, Gtk::PACK_SHRINK);
-    
-    //----- Create the Panels -----//
-    assets_panel = Glib::RefPtr<AssetsPanel>(new AssetsPanel());
-    viewer_panel = Glib::RefPtr<ViewerPanel>(new ViewerPanel());
-    timeline_panel = Glib::RefPtr<TimelinePanel>(new TimelinePanel());  
+  //----- Set up the Menu Bar -----//
+  Gtk::Widget* menu_bar = uiManager->get_widget("/MenuBar");
+  ASSERT(menu_bar != NULL);
+  base_container.pack_start(*menu_bar, Gtk::PACK_SHRINK);
+  
+  //----- Set up the Tool Bar -----//
+  Gtk::Toolbar* toolbar = dynamic_cast<Gtk::Toolbar*>(uiManager->get_widget("/ToolBar"));
+  ASSERT(toolbar != NULL);
+  toolbar->set_toolbar_style(TOOLBAR_ICONS);
+  base_container.pack_start(*toolbar, Gtk::PACK_SHRINK);
+  
+  //----- Create the Panels -----//
+  assets_panel = new AssetsPanel();
+  ENSURE(assets_panel != NULL);
+  viewer_panel = new ViewerPanel();
+  ENSURE(viewer_panel != NULL);
+  timeline_panel = new TimelinePanel();
+  ENSURE(timeline_panel != NULL);
 
-    //----- Create the Dock -----//
-    dock = Glib::wrap(gdl_dock_new());
-    
-    layout = gdl_dock_layout_new((GdlDock*)dock->gobj());
-	  
-    dockbar = Glib::wrap(gdl_dock_bar_new ((GdlDock*)dock->gobj()));
+  //----- Create the Dock -----//
+  dock = Glib::wrap(gdl_dock_new());
+  
+  layout = gdl_dock_layout_new((GdlDock*)dock->gobj());
+  
+  dockbar = Glib::wrap(gdl_dock_bar_new ((GdlDock*)dock->gobj()));
 
-    dock_container.pack_start(*dockbar, PACK_SHRINK);
-    dock_container.pack_end(*dock, PACK_EXPAND_WIDGET);
-    base_container.pack_start(dock_container, PACK_EXPAND_WIDGET);
+  dock_container.pack_start(*dockbar, PACK_SHRINK);
+  dock_container.pack_end(*dock, PACK_EXPAND_WIDGET);
+  base_container.pack_start(dock_container, PACK_EXPAND_WIDGET);
 
-	  gdl_dock_add_item ((GdlDock*)dock->gobj(), assets_panel->get_dock_item(), GDL_DOCK_LEFT);
-    gdl_dock_add_item ((GdlDock*)dock->gobj(), viewer_panel->get_dock_item(), GDL_DOCK_RIGHT);
-    gdl_dock_add_item ((GdlDock*)dock->gobj(), timeline_panel->get_dock_item(), GDL_DOCK_BOTTOM);
+  gdl_dock_add_item ((GdlDock*)dock->gobj(), assets_panel->get_dock_item(), GDL_DOCK_LEFT);
+  gdl_dock_add_item ((GdlDock*)dock->gobj(), viewer_panel->get_dock_item(), GDL_DOCK_RIGHT);
+  gdl_dock_add_item ((GdlDock*)dock->gobj(), timeline_panel->get_dock_item(), GDL_DOCK_BOTTOM);
 
-    // Manually dock and move around some of the items
-	  gdl_dock_item_dock_to (timeline_panel->get_dock_item(),
-	    assets_panel->get_dock_item(), GDL_DOCK_BOTTOM, -1);
-	  gdl_dock_item_dock_to (viewer_panel->get_dock_item(),
-	    assets_panel->get_dock_item(), GDL_DOCK_RIGHT, -1);
+  // Manually dock and move around some of the items
+  gdl_dock_item_dock_to (timeline_panel->get_dock_item(),
+    assets_panel->get_dock_item(), GDL_DOCK_BOTTOM, -1);
+  gdl_dock_item_dock_to (viewer_panel->get_dock_item(),
+    assets_panel->get_dock_item(), GDL_DOCK_RIGHT, -1);
 
-    show_all_children();
+  show_all_children();
 
-    gchar ph1[] = "ph1";
-	  gdl_dock_placeholder_new (ph1, (GdlDockObject*)dock->gobj(), GDL_DOCK_TOP, FALSE);
-	  gchar ph2[] = "ph2";
-	  gdl_dock_placeholder_new (ph2, (GdlDockObject*)dock->gobj(), GDL_DOCK_BOTTOM, FALSE);
-	  gchar ph3[] = "ph3";
-	  gdl_dock_placeholder_new (ph3, (GdlDockObject*)dock->gobj(), GDL_DOCK_LEFT, FALSE);
-	  gchar ph4[] = "ph4";
-	  gdl_dock_placeholder_new (ph4, (GdlDockObject*)dock->gobj(), GDL_DOCK_RIGHT, FALSE);
-  }
+  gchar ph1[] = "ph1";
+  gdl_dock_placeholder_new (ph1, (GdlDockObject*)dock->gobj(), GDL_DOCK_TOP, FALSE);
+  gchar ph2[] = "ph2";
+  gdl_dock_placeholder_new (ph2, (GdlDockObject*)dock->gobj(), GDL_DOCK_BOTTOM, FALSE);
+  gchar ph3[] = "ph3";
+  gdl_dock_placeholder_new (ph3, (GdlDockObject*)dock->gobj(), GDL_DOCK_LEFT, FALSE);
+  gchar ph4[] = "ph4";
+  gdl_dock_placeholder_new (ph4, (GdlDockObject*)dock->gobj(), GDL_DOCK_RIGHT, FALSE);
+}
 
 }   // namespace workspace
 }   // namespace gui
