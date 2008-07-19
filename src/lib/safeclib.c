@@ -26,19 +26,9 @@
 #include <stdint.h>
 #include <stdarg.h>
 
-/**
- * @file
- * Portable and safe wrapers around some clib functions and some tools
- */
 
 LUMIERA_ERROR_DEFINE (NO_MEMORY, "Out of Memory!");
 
-/**
- * Allocate memory.
- * always succeeds or dies
- * @param size memory to be allocated
- * @return pointer to the allocated memory
- */
 void*
 lumiera_malloc (size_t size)
 {
@@ -49,13 +39,6 @@ lumiera_malloc (size_t size)
 }
 
 
-/**
- * Allocate cleared memory for an array.
- * always succeeds or dies
- * @param n number of elements
- * @param size memory to be allocated
- * @return pointer to the allocated memory
- */
 void*
 lumiera_calloc (size_t n, size_t size)
 {
@@ -66,13 +49,6 @@ lumiera_calloc (size_t n, size_t size)
 }
 
 
-/**
- * Duplicate a C string.
- * always succeeds or dies
- * @param str string to be copied
- * @param len maximal length to be copied
- * @return pointer to the new string, "" if NULL was passed as str
- */
 char*
 lumiera_strndup (const char* str, size_t len)
 {
@@ -88,14 +64,6 @@ lumiera_strndup (const char* str, size_t len)
 }
 
 
-/**
- * Compare two C strings.
- * Handles NULL pointers as "", shortcut for same addresses
- * @param a first string for comparsion
- * @param b second string for comparsion
- * @param len maximal length for the comparsion
- * @return 0 if the strings are identical, -1 if smaller 1 if bigger.
- */
 int
 lumiera_strncmp (const char* a, const char* b, size_t len)
 {
@@ -103,12 +71,6 @@ lumiera_strncmp (const char* a, const char* b, size_t len)
 }
 
 
-/**
- * check 2 strings for identity.
- * @param a first string for comparsion
- * @param b second string for comparsion
- * @return 1 when the strings are the the same, 0 if not.
- */
 int
 lumiera_streq (const char* a, const char* b)
 {
@@ -116,11 +78,6 @@ lumiera_streq (const char* a, const char* b)
 }
 
 
-/**
- * Round robin temporary buffers.
- * This provides 64 buffers per thread which are recycled with each use.
- * The idea here is to have fast buffers for temporal data without need for explicit heap management.
- */
 struct lumiera_tmpbuf_struct
 {
   void* buffers[64];
@@ -147,10 +104,6 @@ lumiera_tmpbuf_init (void)
 }
 
 
-/**
- * free all buffers associated with this thread.
- * This function is called automatically, usually one doesnt need to call it.
- */
 void
 lumiera_tmpbuf_freeall (void)
 {
@@ -166,11 +119,6 @@ lumiera_tmpbuf_freeall (void)
 }
 
 
-/**
- * Query a thread local buffer.
- * @param size minimal needed size for the buffer
- * @return the buffer
- */
 void*
 lumiera_tmpbuf_provide (size_t size)
 {
