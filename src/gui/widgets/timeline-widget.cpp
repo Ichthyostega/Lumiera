@@ -106,6 +106,9 @@ TimelineWidget::set_time_scale(int64_t time_scale)
 {
   timeScale = time_scale;
   ruler.set_time_scale(time_scale);
+  
+  const int view_width = body->get_allocation().get_width();
+  horizontalAdjustment.set_page_size(timeScale * view_width);
 }
 
 void
@@ -186,8 +189,13 @@ TimelineWidget::update_scroll()
   
   //----- Horizontal Scroll ------//
   
+  // TEST CODE
   horizontalAdjustment.set_upper(1000 * GAVL_TIME_SCALE / 200);
   horizontalAdjustment.set_lower(-1000 * GAVL_TIME_SCALE / 200);
+  
+  // Set the page size
+  horizontalAdjustment.set_page_size(
+    timeScale * body_allocation.get_width());
   
   //----- Vertical Scroll -----//
   
