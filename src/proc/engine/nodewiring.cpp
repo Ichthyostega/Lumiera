@@ -46,7 +46,8 @@ namespace engine {
   {
     UNIMPLEMENTED ("build the actual wiring descriptor based on given operation options");
     
-    return selectConfig(cache, process, inplace).fabricate();
+//    Bits config (FlagInfo<Config>::CODE);
+//    return selector(config);
   }
   // BlockAlloc<NodeWiring< StateAdapter< Config<cache, process, inplace> > > >::fabricate();
 

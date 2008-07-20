@@ -84,6 +84,21 @@ namespace engine {
     };
   
   
+  class ProcNode;
+  typedef ProcNode* PNode;
+  
+  
+  struct ChannelDescriptor  ///////TODO collapse this with BufferDescriptor?
+    {
+      BufferDescriptor bufferType;
+    };
+  
+  struct InChanDescriptor : ChannelDescriptor
+    {
+      PNode dataSrc;    ///< the ProcNode to pull this input from
+      uint srcChannel; ///<  output channel to use on the predecessor node
+    };
+  
   
 } // namespace engine
 #endif

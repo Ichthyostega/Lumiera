@@ -60,6 +60,12 @@ namespace engine {
   
   typedef ProcNode* PNode;
   
+  template<class E>
+  struct RefArray
+    {
+      virtual E const& operator[] (uint i)  const =0;
+      virtual ~RefArray() {}
+    };
   
   /**
    * Interface: Description of the input and output ports,
@@ -72,6 +78,13 @@ namespace engine {
       
       virtual uint getNrI()  const =0;           ///////////TODO: indeed need a virtual function??
       virtual uint getNrO()  const =0;
+      
+      RefArray<ChannelDescriptor>& out;
+      RefArray<InChanDescriptor>&  in;
+      
+      typedef void (ProcFunc) (BuffHandle::PBuff, uint);
+      
+      ProcFunc* processFunction;
       
     protected:
       /** the wiring-dependent part of the node operation.
