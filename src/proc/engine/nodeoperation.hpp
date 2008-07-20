@@ -65,7 +65,6 @@
 namespace engine {
   
   
-
   /**
    * Adapter to shield the ProcNode from the actual buffer management,
    * allowing the processing function within ProcNode to use logical
@@ -87,8 +86,7 @@ namespace engine {
         { }
       
       virtual State& getCurrentImplementation () { return current_; }
-
-      typedef State& (StateAdapter::*BufferProvider);
+      
       
       
     public: /* === proxying the State interface === */
@@ -99,72 +97,84 @@ namespace engine {
       
       virtual BuffHandle fetch (FrameID const& fID)     { return current_.fetch (fID); }
       
-      
       // note: allocateBuffer()  is choosen specifically based on the actual node wiring
       
-      
-    protected: /* === API for use by the node operation pull() call === */
-      
-      BufferDescriptor
-      getBufferDescriptor (uint chan)
-        {
-          TODO ("determine BufferDescriptor based on WiringDescriptor channel info");
-        }
     };
   
-    
+  
+  
+  
+  
   /**
    * Invocation context state.
    * A ref to this type is carried through the chain of NEXT::step() functions
    * which form the actual invocation sequence. The various operations in this sequence
-   * access the context via the references in this struct, and also using the inherited
-   * public State intercace. The object instance actually used as Invocation is created
-   * on the stack and parametrized according to the necessities of the invocation
-   * sequence actually configured. This real object instance comes in two flavours:
-   * - a intended/partial invocation (which may be short-circuited due to Cache hit)
-   * - a complete invocation, including storage for managing the buffer handles.
+   * access the context via the references in this struct, while also using the inherited
+   * public State interface. The object instance actually used as Invocation is created
+   * on the stack and parametrized according to the necessities of the invocation sequence
+   * actually configured. Initially, this real instance is configured without BuffTable,
+   * because the invocation may be short-circuited due to Cache hit. Otherwise, when
+   * the invocation sequence actually prepares to call the process function of this
+   * ProcNode, a buffer table chunk is allocated by the StateProxy and wired in.
    */
   struct Invocation
     : StateAdapter
     {
       WiringDescriptor const& wiring;
-      BuffTable& buffTab;
       const uint outNr;
       
+      BuffTable* buffTab;
+      
     protected:
-      /** creates a new invocation context state, 
-       *  configuring it as intended/partial invocation without BuffTable */
-      Invocation (State& callingProcess, WiringDescriptor const& w, BufferProvider buffSrc, uint o)
+      /** creates a new invocation context state, without BuffTable */
+      Invocation (State& callingProcess, WiringDescriptor const& w, uint o)
         : StateAdapter(callingProcess),
           wiring(w), outNr(o),
-          bufferProvider_(buffSrc)
+          buffTab(0)
         { }
       
-      /** used to build a complete invocation, including a buffer table,
-          based on an existing intended/partial invocation */
-      Invocation (Invocation const& currInvocation, BuffTable& localBuffTab)
-        : StateAdapter(currInvocation),
-          wiring(currInvocation.wiring),
-          buffTab(localBuffTab),
-          outNr(currInvocation.outNr),
-          bufferProvider_(currInvocation.bufferProvider_)
-        { }
+      const uint nrO()          const { return wiring.getNrO(); }
+      const uint nrI()          const { return wiring.getNrI(); }
+      const uint buffTabSize()  const { return nrO()+nrI(); }
       
-      /** configuration of the actual entity in charge of allocating Buffers.
-       *  depending on the configured call sequence, this may be a parent StateAdapter,
-       *  or the backend in case we want to fade the results into the Cache  */
-      const BufferProvider bufferProvider_;
+      /** setup the link to an externally allocated buffer table */
+      void setBuffTab (BuffTable* b) { this->buffTab = b; }
       
-    public:
-      BuffHandle const&
-      allocateBuffer (uint outChannel)
+      bool
+      buffTab_isConsistent ()
         {
-          return this->*bufferProvider_.allocateBuffer(
-                   this->getBufferDescriptor(outChannel));
+          return (buffTab)
+              && (0 < buffTabSize())
+              && (nrO()+nrI() <= buffTabSize())
+              && (buffTab->inBuff   == &buffTab->outBuff[nrO()]  )
+              && (buffTab->inHandle == &buffTab->outHandle[nrO()])
+               ;
         }
+      
+      
     };
-
-  
+    
+    
+    struct AllocBufferFromParent  ///< using the parent StateAdapter for buffer allocations
+      : Invocation
+      {
+        AllocBufferFromParent (State& sta, WiringDescriptor const& w, const uint outCh) 
+          : Invocation(sta, w, outCh) {}
+        
+        virtual BuffHandle
+        allocateBuffer (BufferDescriptor const& bd) { return parent_.allocateBuffer(bd); }
+      };
+    
+    struct AllocBufferFromCache   ///< using the global current State, which will delegate to Cache
+      : Invocation
+      {
+        AllocBufferFromCache (State& sta, WiringDescriptor const& w, const uint outCh) 
+          : Invocation(sta, w, outCh) {}
+        
+        virtual BuffHandle
+        allocateBuffer (BufferDescriptor const& bd) { return current_.allocateBuffer(bd); }
+      };
+    
   
   /**
    * The real invocation context state implementation. It is created
@@ -177,17 +187,17 @@ namespace engine {
    * with a concrete type according to the WiringDescriptor of the node to pull.
    * This concrete type encodes a calculation Strategy, which is assembled
    * as a chain of policy templates on top of OperationBase. For each of the
-   * possible configuratons we define such a chain (see bottom of this header).
+   * possible configuratons we define such a chain (see bottom of nodeoperation.hpp).
    * The WiringFactory defined in nodewiring.cpp actually drives the instantiation
    * of all those possible combinations.
    */
-  template<class Strategy, StateAdapter::BufferProvider buffPro>
-  class ActualInvocationOrder
-    : public Invocation
+  template<class Strategy, class BufferProvider>
+  class ActualInvocationProcess
+    : public BufferProvider
     {
     public:
-      InvocationImpl (State& callingProcess, WiringDescriptor const& w, const uint outCh)
-        : Invocation(callingProcess, w, buffPro, outCh)
+      ActualInvocationProcess (State& callingProcess, WiringDescriptor const& w, const uint outCh)
+        : Invocation(callingProcess, w, outCh)
         { }
       
       /** contains the details of Cache query and recursive calls
@@ -199,28 +209,10 @@ namespace engine {
           return Strategy::step (*this);
         }
     };
-
   
-  /** 
-   * Extends the invocation context state by a table of buffer pointers.
-   * This extension is used whenever the call sequence goes into actually
-   * invoking a process() function, which necessiates to build a array of
-   * buffer pointers and to allocate buffers to hold the data to be worked on.
-   * It is implemented as decorating an already created "partial invocation",
-   * just adding the allocation of a Table Chunk for organizing the buffers.
-   */
-  class ProcessInvocation
-    : protected BuffTableChunk,
-      public Invocation
-    {
-    public:
-      ProcessInvocation (Invocation const& currInvocation)
-        : BuffTableChunk(currInvocation.wiring, currInvocation.getBuffTableStorage()),
-          Invocation(currInvocation, static_cast<BuffTable&>(*this))
-        { }
-    };
-    
-    
+  
+  
+  
   /**
    * Collection of functions used to build up the invocation sequence.
    */
@@ -243,23 +235,32 @@ namespace engine {
             return NEXT::step (ivo);
         }
     };
+  
+  
+  template<class NEXT>
+  struct AllocBufferTable : NEXT
+    {
+      BuffHandle
+      step (Invocation& ivo)
+        {
+          BuffTableChunk buffTab (ivo.wiring, ivo.getBuffTableStorage());
+          ivo.setBuffTab(&buffTab);
+          ASSERT (ivo.buffTab);
+          ASSERT (ivo.buffTab_isConsistent());
           
+          return NEXT::step (ivo);
+        }
+    };
+  
   
   template<class NEXT>
   struct PullInput : NEXT
     {
       BuffHandle
-      step (Invocation& started_invocation)
+      step (Invocation& ivo)
         {
-          ProcessInvocation ivo (started_invocation);
-          
-          ASSERT (ivo.buffTab);
-          ASSERT (0 < ivo.buffTabSize());
-          ASSERT (ivo.nrO() == ivo.nrI() );
-          ASSERT (ivo.nrO()+ivo.nrI() <= ivo.buffTabSize());
-          ASSERT (ivo.buffTab->inHandles == &ivo.buffTab->handles[ivo.nrO()]);
-          BuffHandle           *inH = ivo.buffTab->inHandles;
-          BuffHandle::PBuff *inBuff = ivo.buffTab->inBuffs;
+          BuffHandle        *   inH = ivo.buffTab->inHandle;
+          BuffHandle::PBuff *inBuff = ivo.buffTab->inBuff;
           
           for (uint i = 0; i < ivo.nrI(); ++i )
             {
@@ -276,18 +277,14 @@ namespace engine {
   struct ReadSource : NEXT
     {
       BuffHandle
-      step (Invocation& started_invocation)
+      step (Invocation& ivo)
         {
-          ProcessInvocation ivo (started_invocation);
+          BuffHandle           *inH  = ivo.buffTab->inHandle;
+          BuffHandle           *outH = ivo.buffTab->outHandle;
+          BuffHandle::PBuff *inBuff  = ivo.buffTab->inBuff;
+          BuffHandle::PBuff *outBuff = ivo.buffTab->outBuff;
           
-          ASSERT (ivo.buffTab);
-          ASSERT (0 < ivo.buffTabSize());
-          ASSERT (ivo.nrO()+ivo.nrI() <= ivo.buffTabSize());
-          ASSERT (ivo.buffTab->inHandles == &ivo.buffTab->handles[ivo.nrO()]);
-          BuffHandle           *inH  = ivo.buffTab->inHandles;
-          BuffHandle           *outH = ivo.buffTab->handles;
-          BuffHandle::PBuff *inBuff  = ivo.buffTab->inBuffs;
-          BuffHandle::PBuff *outBuff = ivo.buffTab->buffers;
+          ASSERT (ivo.nrO() == ivo.nrI() );
           
           for (uint i = 0; i < ivo.nrI(); ++i )
             {
@@ -308,13 +305,13 @@ namespace engine {
         {
           ASSERT (ivo.buffTab);
           ASSERT (ivo.nrO() < ivo.buffTabSize());
-          BuffHandle           *outH = ivo.buffTab->handles;
-          BuffHandle::PBuff *outBuff = ivo.buffTab->buffers;
+          BuffHandle           *outH = ivo.buffTab->outHandle;
+          BuffHandle::PBuff *outBuff = ivo.buffTab->outBuff;
           
           for (uint i = 0; i < ivo.nrO(); ++i )
             {
               outBuff[i] =
-                 *(outH[i] = ivo.allocateBuffer (i));
+                 *(outH[i] = ivo.allocateBuffer (ivo.wiring.out[i].bufferType);
               // now Output buffer for channel #i is available...
             }
           return NEXT::step (ivo);
@@ -329,11 +326,12 @@ namespace engine {
       step (Invocation& ivo)
         {
           ASSERT (ivo.buffTab);
-          ASSERT (ivo.nrO()+ivo.nrI() <= ivo.buffTabSize());
+          ASSERT (ivo.buffTab_isConsistent());
           ASSERT (this->validateBuffers(ivo));
           
-           // Invoke our own process() function, providing the buffer array
-          ivo.wiring.processFunction (ivo.buffTab->buffers);
+           // Invoke our own process() function,
+          //  providing the array of outBuffer+inBuffer ptrs
+          ivo.wiring.processFunction (ivo.buffTab->outBuff);
           
           return NEXT::step (ivo);
         }
@@ -346,8 +344,8 @@ namespace engine {
       step (Invocation& ivo)
         {
           // declare all Outputs as finished
-          ivo.isCalculated(ivo.buffTab->handles, 
-                           ivo.nrO());
+          ivo.is_calculated(ivo.buffTab->outHandle, 
+                            ivo.nrO());
           
           return NEXT::step (ivo);
         }
@@ -360,29 +358,26 @@ namespace engine {
       step (Invocation& ivo)
         {
           // all buffers besides the required Output no longer needed
-          this->releaseBuffers(ivo.buffTab->handles, 
+          this->releaseBuffers(ivo.buffTab->outHandle, 
                                ivo.buffTabSize(), 
                                ivo.outNr);
           
-          return ivo.buffTab->outH[this->requiredOutputNr];
+          return ivo.buffTab->outHandle[ivo.outNr];
         }
     };
   
   
-
+  
   
   /* === declare the possible Assembly of these elementary steps === */
-  
-  template<StateAdapter::BufferProvider buffPro>
-  struct OutBuffSource{ static const StateAdapter::BufferProvider VALUE = buffPro; };
   
   template<char CACHE_Fl=0, char INPLACE_Fl=0>
   struct SelectBuffProvider;
   
-  template<> struct SelectBuffProvider<CACHING>         : OutBuffSource<CACHE> { };
-  template<> struct SelectBuffProvider<NOT_SET,INPLACE> : OutBuffSource<PARENT>{ };
-  template<> struct SelectBuffProvider<CACHING,INPLACE> : OutBuffSource<CACHE> { };
-  template<> struct SelectBuffProvider<>                : OutBuffSource<PARENT>{ };
+  template<> struct SelectBuffProvider<CACHING>         : AllocBufferFromCache { };
+  template<> struct SelectBuffProvider<NOT_SET,INPLACE> : AllocBufferFromParent{ };
+  template<> struct SelectBuffProvider<CACHING,INPLACE> : AllocBufferFromCache { };
+  template<> struct SelectBuffProvider<>                : AllocBufferFromParent{ };
 
   
   template<class Config>
@@ -393,28 +388,31 @@ namespace engine {
   template<char INPLACE>
   struct Strategy< Config<CACHING,PROCESS,INPLACE> >
     : QueryCache<
-       PullInput<
-        AllocOutput<
-         ProcessData<
-          FeedCache<
-           ReleaseBuffers< 
-            OperationBase > > > > > >
+       AllocBufferTable<
+        PullInput<
+         AllocOutput<
+          ProcessData<
+           FeedCache<
+            ReleaseBuffers< 
+             OperationBase > > > > > > >
     { };
   
   template<char INPLACE>
   struct Strategy< Config<PROCESS,INPLACE> >
-    : PullInput<
-       AllocOutput<
-        ProcessData<
+    : AllocBufferTable<
+       PullInput<
+        AllocOutput<
+         ProcessData<
           ReleaseBuffers< 
-           OperationBase > > > > 
+           OperationBase > > > > >
     { };
   
   template<>
   struct Strategy< Config<> >
-    : ReadSource<
-       ReleaseBuffers< 
-        OperationBase > >  
+    : AllocBufferTable<
+       ReadSource<
+        ReleaseBuffers< 
+         OperationBase > > >  
     { };
   
   template<>
@@ -422,15 +420,16 @@ namespace engine {
   
   template<>
   struct Strategy< Config<CACHING> >
-    : ReadSource<
-       AllocOutput<
-        ProcessData<                       // wiring_.processFunction is supposed to do just buffer copying here 
-         ReleaseBuffers< 
-          OperationBase > > > >  
+    : AllocBufferTable<
+       ReadSource<
+        AllocOutput<
+         ProcessData<                       // wiring_.processFunction is supposed to do just buffer copying here 
+          ReleaseBuffers< 
+           OperationBase > > > > >  
     { };
-
   
-    
+  
+  
   
 } // namespace engine
 #endif
