@@ -61,10 +61,10 @@ specials = ['plugin','locking','library','backend']
 
 
 artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in moduledirs if not dir in specials] 
-#                             + treatPluginTestcase(env)
-#                             + testExecutable(env, 'locking', obj=['test-locking.c','mutex.c','condition.c'])
-#                             + testExecutable(env, 'library', exeName='test-llist', obj=['test-llist.c'])
-#                             + testExecutable(env, 'library', exeName='test-references', obj=['test-references.c'])
+                              + treatPluginTestcase(env)
+                              + testExecutable(env, 'locking', obj=['test-locking.c','mutex.c','condition.c'])
+                              + testExecutable(env, 'library', exeName='test-llist', obj=['test-llist.c'])
+                              + testExecutable(env, 'library', exeName='test-references', obj=['test-references.c'])
                               ) 
                               
 

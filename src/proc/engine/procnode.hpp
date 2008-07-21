@@ -87,6 +87,13 @@ namespace engine {
       ProcFunc* processFunction;
       
     protected:
+      WiringDescriptor (RefArray<ChannelDescriptor>& o, 
+                        RefArray<InChanDescriptor>& i,
+                        ProcFunc pFunc)
+        : out(o), in(i),
+          processFunction(pFunc)
+        { }  
+      
       /** the wiring-dependent part of the node operation.
        *  Includes the creation of a one-way state object on the stack
        *  holding the actual buffer pointers and issuing the recrusive pull() calls
