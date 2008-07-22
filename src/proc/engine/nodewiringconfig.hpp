@@ -40,131 +40,150 @@ namespace lumiera {
   namespace typelist {
   
     template<bool, class T, class TAIL>
-    struct CondNode
-      : TAIL
-      { 
-        typedef TAIL Next; 
-      };
-    template<class T, class TAIL>
-    struct CondNode<true, T, TAIL>
-      : Node<T,TAIL>
-      { 
-        typedef Node<T,TAIL> Next; 
-      };
+    struct CondNode                        { typedef TAIL  Next; };
     
-    template<class TYPES, template<class T> class _P_>
+    template<class T, class TAIL>
+    struct CondNode<true, T, TAIL>         { typedef Node<T,TAIL>  Next; };
+    
+    
+    template< class TYPES
+            , template<class> class _P_
+            >
     struct Filter;
     
     template<template<class> class _P_>
-    struct Filter<NullType,_P_>
-      : NullType
-      {
-        typedef NullType Next;
-      };
-    template<class TY, class TYPES, template<class> class _P_>
-    struct Filter<Node<TY,TYPES>,_P_>
-      : CondNode<_P_<TY>::value, TY, TYPES>
-      {
-        typedef CondNode<_P_<TY>::value, TY, TYPES> Next;
-      };
+    struct Filter<NullType,_P_>            { typedef NullType  List; };
+    
+    template< class TY, class TYPES
+            , template<class> class _P_
+            >
+    struct Filter<Node<TY,TYPES>,_P_>      { typedef typename CondNode<_P_<TY>::value
+                                                                      , TY
+                                                                      , typename Filter<TYPES,_P_>::List
+                                                                      >::Next      
+                                                                      List; };
+    
     
     
     template<class TY1, class TY2>
-    struct Append : Types<TY1,TY2>::List
-      { };
+    struct Append                          { typedef Node<TY1, typename Append<TY2,NullType>::List>  List; };
+    
+    template< class TY, class TYPES
+            , class TAIL
+            >
+    struct Append<Node<TY,TYPES>, TAIL>    { typedef Node<TY,  typename Append<TYPES,  TAIL>::List>  List; };
+    
+    template<class TY, class TYPES>
+    struct Append<NullType, Node<TY,TYPES> >   { typedef Node<TY,TYPES>   List; };
+    
+    template<class TY, class TYPES>
+    struct Append<Node<TY,TYPES>, NullType>    { typedef Node<TY,TYPES>   List; };
+    
     template<class TY1>
-    struct Append<TY1,NullType>
-      : Node<TY1,NullType>
-      { };
+    struct Append<TY1,NullType>            { typedef Node<TY1,NullType>   List; };
+    
     template<class TY2>
-    struct Append<NullType,TY2>
-      : Node<TY2,NullType>
-      { };
-    template<class TY, class TYPES>
-    struct Append<NullType, Node<TY,TYPES> >
-      : Node<TY,TYPES>
-      { };
-    template<class TY, class TYPES>
-    struct Append<Node<TY,TYPES>, NullType>
-      : Node<TY,TYPES>
-      { };
-    template<class TY, class TYPES, class TAIL>
-    struct Append<Node<TY,TYPES>, TAIL>
-      : Node<TY,Append<TYPES, TAIL> >
-      { };
+    struct Append<NullType,TY2>            { typedef Node<TY2,NullType>   List; };
+    
+    template<>
+    struct Append<NullType,NullType>       { typedef NullType             List; };
+    
+    
+    
     
     template<class T, class TY>
-    struct PrefixAll
-      : Append<T,TY>
-      { };
+    struct PrefixAll                       { typedef typename Append<T,TY>::List  List; };
+    
     template<class T>
-    struct PrefixAll<T, NullType>
-      : NullType
-      { };
-    template<class T, class TY, class TYPES>
-    struct PrefixAll<T, Node<TY,TYPES> >
-      : Node< Append<T,TY>
-            , PrefixAll<T,TYPES>
+    struct PrefixAll<T, NullType>          { typedef NullType  List; };
+    
+    template< class T
+            , class TY, class TYPES
             >
-      { };
+    struct PrefixAll<T, Node<TY,TYPES> >   { typedef Node< typename Append<T,TY>::List
+                                                         , typename PrefixAll<T,TYPES>::List
+                                                         >     List; };
+    
+    
+    
     
     template<class TY1,class TY2>
-    struct Distribute : Append<TY1,TY2>
-      { };
-    template<class TY, class TYPES, class TAIL>
-    struct Distribute<Node<TY,TYPES>, TAIL>
-      : Append< PrefixAll<TY,TAIL>
-              , Distribute<TYPES,TAIL>
-              >
-      { };
-    template<class X, template<class T> class _PERM_>
-    struct Combine : Distribute<_PERM_<X>, NullType>
-      { };
-    template<class TY, class TYPES, template<class T> class _PERM_>
-    struct Combine<Node<TY,TYPES>,_PERM_>
-      : Distribute<_PERM_<TY>, Combine<TYPES,_PERM_> >
-      { };
+    struct Distribute                      { typedef typename Append<TY1,TY2>::List  List; };
+    
+    template< class TY, class TYPES
+            , class TAIL
+            >
+    struct Distribute<Node<TY,TYPES>,TAIL> { typedef typename Append< typename PrefixAll<TY,TAIL>::List
+                                                                    , typename Distribute<TYPES,TAIL>::List
+                                                                    >::List                    
+                                                                    List; };
+    
+    
+    
+    
+    template< class X
+            , template<class> class _PERMU_>
+    struct Combine                         { typedef typename Distribute< typename _PERMU_<X>::List
+                                                                        , NullType
+                                                                        >::List  List; };
+    
+    template< class TY, class TYPES
+            , template<class> class _PERMU_>
+    struct Combine<Node<TY,TYPES>,_PERMU_> { typedef typename Distribute< typename _PERMU_<TY>::List
+                                                                        , typename Combine<TYPES,_PERMU_>::List
+                                                                        >::List  List; };
+    
     
     template<class F>
-    struct FlagOnOff : Types<F>::List
-      { };
+    struct FlagOnOff
+      { 
+        typedef typename Types<F>::List  List;
+      };
     
     template<class FLAGS>
     struct CombineFlags
-      : Combine<FLAGS, FlagOnOff>
-      { };
+      { 
+        typedef typename Combine<FLAGS, FlagOnOff>::List  List; 
+      };
+    
     
     
     using std::max;
     
     
-    template<char bit>  struct Flag                { };
-    template<>          struct Flag<0> : NullType  { };
+    template<char bit> struct Flag    { typedef Flag     ID; };
+    template<>         struct Flag<0> { typedef NullType ID; };
+    
+    
     template< char f1=0
             , char f2=0
             , char f3=0
             , char f4=0
             , char f5=0
             >
-    struct FlagTuple 
-      : Types< Flag<f1>
-             , Flag<f2>
-             , Flag<f3>
-             , Flag<f4>
-             , Flag<f5>
-             >::List
-      { };
-      
-    template< char f1=0
-            , char f2=0
-            , char f3=0
-            , char f4=0
-            , char f5=0
-            >
-    struct Config
-      {
-        typedef FlagTuple<f1,f2,f3,f4,f5> Flags;
+    struct Flags        
+      { 
+        typedef typename Types< typename Flag<f1>::ID
+                              , typename Flag<f2>::ID
+                              , typename Flag<f3>::ID
+                              , typename Flag<f4>::ID
+                              , typename Flag<f5>::ID
+                              >::List       
+                              Tuple;
       };
+    
+    
+    template< char f1=0
+            , char f2=0
+            , char f3=0
+            , char f4=0
+            , char f5=0
+            >
+    struct Config 
+      { 
+        typedef typename Flags<f1,f2,f3,f4,f5>::Tuple  Flags; 
+      };
+    
     
     template<class X>
     struct DefineConfigByFlags;
@@ -175,9 +194,10 @@ namespace lumiera {
             , char f4
             , char f5
             >
-    struct DefineConfigByFlags< FlagTuple<f1,f2,f3,f4,f5> >
-      : Config<f1,f2,f3,f4,f5>
-      { };
+    struct DefineConfigByFlags< typename Flags<f1,f2,f3,f4,f5>::Tuple >
+      { 
+        typedef Config<f1,f2,f3,f4,f5> Config; 
+      };
     
     
     /** 
@@ -364,7 +384,7 @@ namespace engine {
           void
           visit (ulong code)
             {
-              typedef DefineConfigByFlags<FLAGS> Config;
+              typedef typename DefineConfigByFlags<FLAGS>::Config Config;
               factories_[code].reset (new FactoryHolder<Factory<Config> > (ctor_param_));
             }
           

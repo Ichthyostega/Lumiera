@@ -64,11 +64,15 @@ namespace lumiera
   namespace typelist
     {
     
-    class NullType { };
+    class NullType 
+      { 
+        typedef NullType List;
+      };
     
     template<class H, class T> 
     struct Node
       {
+        typedef Node List;
         typedef H Head;
         typedef T Tail;
       };
