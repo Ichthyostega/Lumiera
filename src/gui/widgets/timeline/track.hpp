@@ -47,7 +47,8 @@ class Track
     void draw_track(Cairo::RefPtr<Cairo::Context> cairo);
 
   protected:
-    Gtk::Label headerWidget;
+    Gtk::VBox headerWidget;
+    Gtk::Label label;
   };
 
 

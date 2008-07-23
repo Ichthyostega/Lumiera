@@ -28,9 +28,9 @@ namespace widgets {
 namespace timeline {
 
 Track::Track() :
-  headerWidget("HeaderTest")
+  label("XHeaderTest")
 {
-  
+  headerWidget.pack_start(label);
 }
 
 Gtk::Widget&

@@ -58,7 +58,7 @@ TimelineWidget::TimelineWidget() :
     this, &TimelineWidget::on_scroll) );
   body->signal_motion_notify_event().connect( sigc::mem_fun(
     this, &TimelineWidget::on_motion_in_body_notify_event) );
-    
+  
   set_time_scale(GAVL_TIME_SCALE / 200);
 
   attach(*body, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
@@ -212,10 +212,14 @@ TimelineWidget::update_scroll()
   verticalAdjustment.set_upper(y_scroll_length);
   
   // Hide the scrollbar if no scrolling is possible
-  if(y_scroll_length == 0 && verticalScroll.is_visible())
+#if 0
+  // Having this code included seems to cause a layout loop as the
+  // window is shrunk
+  if(y_scroll_length <= 0 && verticalScroll.is_visible())
     verticalScroll.hide();
-  else if(y_scroll_length != 0 && !verticalScroll.is_visible())
+  else if(y_scroll_length > 0 && !verticalScroll.is_visible())
     verticalScroll.show();
+#endif
 }
 
 int
