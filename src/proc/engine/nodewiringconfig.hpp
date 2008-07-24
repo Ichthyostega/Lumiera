@@ -46,9 +46,7 @@ namespace lumiera {
     struct CondNode<true, T, TAIL>         { typedef Node<T,TAIL>  Next; };
     
     
-    template< class TYPES
-            , template<class> class _P_
-            >
+    template< class TYPES , template<class> class _P_>
     struct Filter;
     
     template<template<class> class _P_>
@@ -57,7 +55,7 @@ namespace lumiera {
     template< class TY, class TYPES
             , template<class> class _P_
             >
-    struct Filter<Node<TY,TYPES>,_P_>      { typedef typename CondNode<_P_<TY>::value
+    struct Filter<Node<TY,TYPES>,_P_>      { typedef typename CondNode< _P_<TY>::value
                                                                       , TY
                                                                       , typename Filter<TYPES,_P_>::List
                                                                       >::Next      
@@ -92,7 +90,7 @@ namespace lumiera {
     
     
     template<class T, class TY>
-    struct PrefixAll                       { typedef typename Append<T,TY>::List  List; };
+    struct PrefixAll                       { typedef Node< typename Append<T,TY>::List, NullType>  List; };
     
     template<class T>
     struct PrefixAll<T, NullType>          { typedef NullType  List; };
@@ -108,7 +106,10 @@ namespace lumiera {
     
     
     template<class TY1,class TY2>
-    struct Distribute                      { typedef typename Append<TY1,TY2>::List  List; };
+    struct Distribute                      { typedef typename PrefixAll<TY1,TY2>::List  List; };
+
+    template<class T,class TS>
+    struct Distribute<Node<T,TS>,NullType> { typedef Node<T,TS> List; };
     
     template< class TY, class TYPES
             , class TAIL
@@ -148,7 +149,6 @@ namespace lumiera {
     
     
     
-    using std::max;
     
     
     template<char bit> struct Flag    { typedef Flag     ID; };
