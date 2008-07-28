@@ -75,19 +75,19 @@ lumigui_LDFLAGS =
 lumigui_LDADD = $(GTK_LUMIERA_LIBS) liblumicommon.a liblumi.a
 
 lumigui_DEPENDENCIES =                                          \
-    $(top_builddir)/lumiera_ui.rc                               \
-    $(top_builddir)/assets-panel.png                            \
-    $(top_builddir)/timeline-panel.png                          \
-    $(top_builddir)/viewer-panel.png  
+    $(top_builddir)/lumiera_ui.rc                               
+#    $(top_builddir)/assets-panel.png                            \
+#    $(top_builddir)/timeline-panel.png                          \
+#    $(top_builddir)/viewer-panel.png  
 
-$(top_builddir)/lumiera_ui.rc:
-	cp $(lumigui_srcdir)/lumiera_ui.rc $(top_builddir)
+#$(top_builddir)/lumiera_ui.rc:
+#	cp $(lumigui_srcdir)/lumiera_ui.rc $(top_builddir)
 
-$(top_builddir)/assets-panel.png:
-	cp $(top_srcdir)/icons/assets-panel.png $(top_builddir)
-$(top_builddir)/timeline-panel.png:
-	cp $(top_srcdir)/icons/timeline-panel.png $(top_builddir)
-$(top_builddir)/viewer-panel.png:
-	cp $(top_srcdir)/icons/viewer-panel.png $(top_builddir)
+#$(top_builddir)/assets-panel.png:
+#	cp $(top_srcdir)/icons/assets-panel.png $(top_builddir)
+#$(top_builddir)/timeline-panel.png:
+#	cp $(top_srcdir)/icons/timeline-panel.png $(top_builddir)
+#$(top_builddir)/viewer-panel.png:
+#	cp $(top_srcdir)/icons/viewer-panel.png $(top_builddir)
 
 
