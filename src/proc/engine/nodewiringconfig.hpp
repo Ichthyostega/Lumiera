@@ -38,7 +38,18 @@
 #include "common/typelistutil.hpp"
 namespace lumiera {
   namespace typelist {
-  
+    
+    template<class TY, template<class> class _TRANS_>
+    struct Apply                           { typedef TY List; };
+    
+    template< class TY, class TYPES
+            , template<class> class _TRANS_
+            >
+    struct Apply<Node<TY,TYPES>, _TRANS_ > { typedef Node< typename _TRANS_<TY>::Type
+                                                         , typename Apply<TYPES,_TRANS_>::List
+                                                         > List; };
+    
+    
     template<bool, class T, class TAIL>
     struct CondNode                        { typedef TAIL  Next; };
     
@@ -95,6 +106,9 @@ namespace lumiera {
     template<class T>
     struct PrefixAll<T, NullType>          { typedef NullType  List; };
     
+    template<class T>
+    struct PrefixAll<T, NodeNull>          { typedef Node< typename Append<T,NodeNull>::List, NullType>  List; };
+    
     template< class T
             , class TY, class TYPES
             >
@@ -107,9 +121,9 @@ namespace lumiera {
     
     template<class TY1,class TY2>
     struct Distribute                      { typedef typename PrefixAll<TY1,TY2>::List  List; };
-
-    template<class T,class TS>
-    struct Distribute<Node<T,TS>,NullType> { typedef Node<T,TS> List; };
+    
+    template<class TY>
+    struct Distribute<NullType,TY>         { typedef NullType List; };
     
     template< class TY, class TYPES
             , class TAIL
@@ -125,8 +139,10 @@ namespace lumiera {
     template< class X
             , template<class> class _PERMU_>
     struct Combine                         { typedef typename Distribute< typename _PERMU_<X>::List
-                                                                        , NullType
+                                                                        , Node<NullType,NullType>
                                                                         >::List  List; };
+    template< template<class> class _PERMU_>
+    struct Combine<NullType, _PERMU_ >     { typedef Node<NullType,NullType>     List; };
     
     template< class TY, class TYPES
             , template<class> class _PERMU_>
@@ -138,7 +154,7 @@ namespace lumiera {
     template<class F>
     struct FlagOnOff
       { 
-        typedef typename Types<F>::List  List;
+        typedef Node<F, Node<NullType,NullType> >  List;
       };
     
     template<class FLAGS>
@@ -146,6 +162,46 @@ namespace lumiera {
       { 
         typedef typename Combine<FLAGS, FlagOnOff>::List  List; 
       };
+    
+    
+    
+    /////////// meta utils
+    
+    typedef char Yes_t;
+    struct No_t { char padding[8]; };
+    
+    
+    /** semi-automatic detection if an instantiation is possible.
+     *  Requires help by the template to be tested, which needs to define
+     *  a typedef member \c is_defined. The embedded metafunction Test can be used
+     *  as a predicate for filtering types which may yield a valid instantiation
+     *  of the candidate template in question.
+     *  \par
+     *  A fully automated solution for this problem is impossible by theoretic reasons.
+     *  Any non trivial use of such a \c is_defined trait would break the "One Definition Rule",
+     *  as the state of any type can change from "partially defined" to "fully defined" over
+     *  the course of any translation unit. Thus, even if there may be a \em solution out there,
+     *  we can expect it to break at some point by improvements/fixes to the C++ Language.
+     */
+    template<template<class> class _CandidateTemplate_>
+    struct Instantiation
+      {
+        
+        template<class X>
+        class Test
+          {
+            typedef _CandidateTemplate_<X> Instance;
+            
+            template<class U>
+            static Yes_t check(typename U::is_defined *);
+            template<class U>
+            static No_t  check(...);
+            
+          public:
+            static const bool value = (sizeof(Yes_t)==sizeof(check<Instance>(0)));
+          };
+      };
+    
     
     
     
@@ -170,6 +226,7 @@ namespace lumiera {
                               , typename Flag<f5>::ID
                               >::List       
                               Tuple;
+        typedef Tuple List;
       };
     
     
@@ -181,22 +238,39 @@ namespace lumiera {
             >
     struct Config 
       { 
-        typedef typename Flags<f1,f2,f3,f4,f5>::Tuple  Flags; 
+        typedef typename Flags<f1,f2,f3,f4,f5>::Tuple  Flags;
+        typedef Flags List;
       };
     
     
-    template<class X>
-    struct DefineConfigByFlags;
+    template<char Fl, class CONF> 
+    struct ConfigSetFlag;
     
-    template< char f1
+    template< char Fl
+            , char f1
             , char f2
             , char f3
             , char f4
-            , char f5
+            , char IGN
             >
-    struct DefineConfigByFlags< typename Flags<f1,f2,f3,f4,f5>::Tuple >
+    struct ConfigSetFlag<Fl, Config<f1,f2,f3,f4,IGN> >
+      {
+        typedef Config<Fl,f1,f2,f3,f4> Config;
+      };
+    
+    template<class FLAGS, class CONF=Config<> >
+    struct DefineConfigByFlags
+      {
+        typedef CONF Config;
+        typedef Config Type;
+      };
+    template<char Fl, class FLAGS, class CONF>
+    struct DefineConfigByFlags< Node<Flag<Fl>,FLAGS>, CONF>
       { 
-        typedef Config<f1,f2,f3,f4,f5> Config; 
+        typedef typename ConfigSetFlag< Fl
+                                      , typename DefineConfigByFlags<FLAGS,CONF>::Config
+                                      >::Config Config;
+        typedef Config Type;
       };
     
     
@@ -244,7 +318,7 @@ namespace lumiera {
                    >    >
       {
         typedef Node<Flag<ff>, FLAGS> ThisConfig;
-        enum{ BITS = MAX (FlagInfo<ThisConfig>::BITS, FlagInfo<TAIL>::BITS)
+        enum{ BITS = MAX (char(FlagInfo<ThisConfig>::BITS), char(FlagInfo<TAIL>::BITS))
             };
         
         template<class FUNC>
@@ -259,7 +333,7 @@ namespace lumiera {
     
     
     
-      
+    
   } // namespace typelist
   
 } // namespace lumiera

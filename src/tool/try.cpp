@@ -28,6 +28,8 @@ using boost::format;
 using boost::enable_if;
 #include <boost/type_traits/is_base_of.hpp>
 using boost::is_base_of;
+#include <boost/type_traits/is_abstract.hpp>
+#include <boost/type_traits/is_polymorphic.hpp>
   
   
 #include "common/typelistutil.hpp"
@@ -55,53 +57,63 @@ using lumiera::typelist::Types;
         };
       
       
-      template
-        < class TYPES 
-        , class BASE = NullType
-        >
-      struct Zoing;
-      
-      
-      template<class BASE>
-      struct Zoing<NullType, BASE>
-        : BASE
-        { 
-        };
-      
-      
-      template
-        < class TY, typename TYPES
-        , class BASE
-        >
-      struct Zoing<Node<TY, TYPES>, BASE> 
-        :  TY,
-           Zoing<TYPES, BASE>
-        { 
-        };
-      
+    
+    template<template<class> class _CandidateTemplate_>
+    class Instantiation
+      {
+        template<class ARG>
+        struct If_possibleArgument : _CandidateTemplate_<ARG>
+          {
+            typedef void Type;
+          };
+        
+      public:
+          
+        template<class X, class TEST=void>
+        struct Test
+          : boost::false_type {};
+        
+        template<class X>
+        struct Test<X, typename If_possibleArgument<X>::Type >
+          : boost::true_type {};
+        
+      };
       
   }
   
-  typedef Types< Num<1>
-               , Num<2>
-               , Num<3>
-               >::List List1;
+  struct Boing { typedef boost::true_type is_defined; };
   
-  struct B
-    { typedef List1 Zeug; };
-  struct D : B 
-    {};
+  template<int>  struct Zoing ;
+  
+  template<>     struct Zoing<2> : Boing { enum{wau = 2}; };
+  template<>     struct Zoing<5> : Boing { enum{wau = 5}; };
 
+  typedef char yes_type;
+  struct no_type
+  {
+     char padding[8];
+  };
 
+  template<class U>
+  yes_type check(typename U::is_defined *);
+  template<class U>
+  no_type check(...);
+
+  
 int 
 main (int argc, char* argv[])
   {
     
     NOBUG_INIT;
     
-    typedef Zoing<D::Zeug, NullType> Boing;
+    typedef Zoing<2> Z2;
+    typedef Zoing<3> Z3;
+    typedef Zoing<5> Z5;
+  
+    cout << sizeof(check<Z2>(0)) << " / "
+         << sizeof(check<Z3>(0)) << " / "
+         << sizeof(check<Z5>(0)) ;
     
-    Boing();
     
     cout <<  "\ngulp\n";
     

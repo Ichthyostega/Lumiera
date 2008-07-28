@@ -117,6 +117,8 @@ namespace lumiera
       };
     
     
+    typedef Node<NullType,NullType> NodeNull;
+    
     
   } // namespace typelist
 

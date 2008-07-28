@@ -22,14 +22,14 @@
 
 
 /** @file typelistmaniptest.cpp
- ** \par checking the correct working of basic list manipulation
+ ** \par checking the correct working of simple list manipulation metafunctions
  **
  ** The semi-automatic assembly of processing node invocation code utilizes some
  ** metaprogramming magic built upon simple list manipulation. As template metaprogramming
  ** is kind-of functional programming, most of this is done by recursion.
  ** To check the correct working, this test uses some constant-wrapper types and a debugging
- ** template which will print these constant numbers when creating an instance. This allows to
- ** verify in the output if lists of such constant-wrapper types were manipulated as expected.
+ ** template which will print these constant numbers, thus allowing to verify in the output
+ ** if various lists of such constant-wrapper types were manipulated as expected.
  **
  ** @see typelisttest.cpp
  ** @see typelistutil.hpp
@@ -72,7 +72,7 @@ namespace lumiera {
         
         
         /** debugging template, 
-         *  printing the "number" used for intantiation on ctor call
+         *  printing the "number" used for intantiation
          */
         template<class NUM=NullType, class BASE=NullType>
         struct Printer;
@@ -110,7 +110,6 @@ namespace lumiera {
           {
             static string print () 
               {
-                //typedef InstantiateChained<Node<TY,TYPES>, Printer, NullP> SubList;
                 typedef Node<TY,TYPES> List;
                 return string("\n\t+--") + printSublist<List>()+"+"
                      + BASE::print(); 
@@ -163,6 +162,7 @@ namespace lumiera {
           virtual void run(Arg arg) 
             {
               check_diagnostics ();
+              check_apply  ();
               check_append ();
               check_filter ();
               check_prefix ();
@@ -214,6 +214,15 @@ namespace lumiera {
               
               typedef Append<List1,List2>        Append9;
               DISPLAY (Append9);
+            }
+          
+          template<class X> struct AddConst2          { typedef X        Type; };
+          template<int I>   struct AddConst2<Num<I> > { typedef Num<I+2> Type; };
+          
+          void check_apply ()
+            {
+              typedef Apply<List1, AddConst2> Added2;
+              DISPLAY (Added2);
             }
           
           
