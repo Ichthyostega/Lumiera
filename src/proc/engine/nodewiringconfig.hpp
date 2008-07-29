@@ -31,7 +31,9 @@
 #include <algorithm>
 #include <vector>
 #include <bitset>
+#include <map>
 #include <boost/scoped_ptr.hpp>
+#include <boost/lexical_cast.hpp>
 
   /////////////////TODO: library
   
@@ -277,16 +279,13 @@ namespace lumiera {
     /** 
      * Helper for calculating values and for
      * invoking runtime code based on a given FlagTuple.
-     * Can also be used on a Typelist of several FlagTuples.
+     * Can also be used on a Typelist of several Configs.
      * The latter case is typically used to invoke an operation
      * while ennumerating all Flag-Configurations defined in Code.
      * An example would be to build (at runtime) an dispatcher table.
-     * Explanation: the supposed data structure is a list of lists,
-     * where "list" here refers to a Typelist (compile time). Each
-     * of the inner lists in this structure represents a single
-     * Flag-Configuration. For the Case covering the outer List,
-     * we provide a templated visitaion function, which can accept
-     * a functor object to be invoked on each Flag-Configuration. 
+     * Explanation: For the Case covering a List of Configs, we provide
+     * a templated visitaion function, which can accept a functor object
+     * to be invoked on each Configuration. 
      */
     template<class FLAGS>
     struct FlagInfo;
@@ -312,20 +311,18 @@ namespace lumiera {
             return functor.done();
           }
       };
-    template<char ff, class FLAGS, class TAIL>
-    struct FlagInfo<Node< Node<Flag<ff>, FLAGS>
-                        , TAIL
-                   >    >
+    template<class CONF, class TAIL>
+    struct FlagInfo<Node<CONF, TAIL> >
       {
-        typedef Node<Flag<ff>, FLAGS> ThisConfig;
-        enum{ BITS = MAX (char(FlagInfo<ThisConfig>::BITS), char(FlagInfo<TAIL>::BITS))
+        typedef typename CONF::Flags ThisFlags;
+        enum{ BITS = MAX (char(FlagInfo<ThisFlags>::BITS), char(FlagInfo<TAIL>::BITS))
             };
         
         template<class FUNC>
         static typename FUNC::Ret
         accept (FUNC& functor)
           {
-            functor.template visit<ThisConfig>(FlagInfo<ThisConfig>::CODE);
+            functor.template visit<CONF>(FlagInfo<ThisFlags>::CODE);
             return FlagInfo<TAIL>::accept (functor);
           }
       };
@@ -353,6 +350,8 @@ namespace engine {
   using lumiera::typelist::DefineConfigByFlags;
   ///////TODO
   
+  using boost::lexical_cast;
+  using util::contains;
   
   enum Cases
     { 
@@ -404,17 +403,23 @@ namespace engine {
    * bulk allocation memory block -- typically for each separate
    * segment of the Timeline and processing node graph.
    * 
-   * NOw the selection of the possible flag configurations, for which
+   * Now the selection of the possible flag configurations, for which
    * Factory instances are created in the table, is governed by the
    * type parameter of the ConfigSelector ctor. This type parameter
    * needs to be a Typelist of Typelists, each representing a flag
    * configuration. The intention is to to drive this selection by
    * the use of template metaprogramming for extracting all
    * currently defined StateProxy object configurations.
+   * @todo as the facories live only within the enclosed table (map)
+   *       we could allocate them in-place. Unfortunately this is 
+   *       non-trivial, because the stl containers employ
+   *       value semantics and thus do a copy even on insert.
+   *       Thus, for now we use a shared_ptr to hold the factory
+   *       heap allocated.
    */
   template< template<class CONF> class Factory
-          , class PAR            ///< ctor parameter of the Factories
-          , class RET           ///<  common base class of the Factory's products
+          , typename PAR        ///< ctor parameter of the Factories
+          , typename RET       ///<  common base class of the Factory's products
           >
   class ConfigSelector
     {
@@ -434,8 +439,8 @@ namespace engine {
         };
       
       
-      typedef boost::scoped_ptr<FacFunctor> PFunc;
-      typedef std::map<Bits, PFunc> ConfigTable;
+      typedef boost::shared_ptr<FacFunctor> PFunc;
+      typedef std::map<size_t, PFunc> ConfigTable;
       
       ConfigTable possibleConfig_; ///< Table of factories
       
@@ -454,12 +459,12 @@ namespace engine {
           
           typedef void Ret;
           
-          template<class FLAGS>
+          template<class CONF>
           void
-          visit (ulong code)
+          visit (size_t code)
             {
-              typedef typename DefineConfigByFlags<FLAGS>::Config Config;
-              factories_[code].reset (new FactoryHolder<Factory<Config> > (ctor_param_));
+              PFunc pFactory (new FactoryHolder<Factory<CONF> > (ctor_param_));
+              factories_[code] = pFactory;
             }
           
           void done()  {}
@@ -467,7 +472,7 @@ namespace engine {
       
     public:
       template<class CONFS>
-      ConfigSelector(PAR factory_ctor_param)
+      ConfigSelector(CONFS const&, PAR factory_ctor_param)
         {
           FactoryTableBuilder buildTable(this->possibleConfig_,
                                          factory_ctor_param );
@@ -477,9 +482,12 @@ namespace engine {
         }
       
       RET
-      operator() (Bits configFlags) ///< invoke the factory corresponding to the given config
+      operator() (size_t configFlags) ///< invoke the factory corresponding to the given config
         {
-          return possibleConfig_[configFlags]->invoke();
+          if (contains (possibleConfig_, configFlags))
+            return possibleConfig_[configFlags]->invoke();
+          else
+            throw lumiera::error::Invalid("ConfigSelector: No preconfigured factory for config-bits="+lexical_cast<std::string>(configFlags));
         }
     };
   

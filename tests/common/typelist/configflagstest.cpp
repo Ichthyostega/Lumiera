@@ -167,8 +167,8 @@ namespace lumiera {
         template<class CONF> struct Maybe;
         
         struct Indeed { typedef Yes_t is_defined; };
-        template<> struct Maybe<Conf1> : Indeed { enum{ CODE = 1 }; };
-        template<> struct Maybe<Conf3> : Indeed { enum{ CODE = 3 }; };
+        template<> struct Maybe<Conf1> : Indeed { enum{ CODE = 10 }; };
+        template<> struct Maybe<Conf3> : Indeed { enum{ CODE = 30 }; };
         
         template<char Fl> 
         struct Maybe<Config<TWO,Fl> >
@@ -204,6 +204,7 @@ namespace lumiera {
               check_instantiation ();
               check_filter ();
               check_FlagInfo ();
+              check_ConfigSelector ();
             }
           
           
@@ -301,13 +302,12 @@ namespace lumiera {
                 
                 Ret done()  {return result; }
                 
-                template<class FLAGS>
+                template<class CONF>
                 void
                 visit (ulong code)
                   {
-                    typedef typename DefineConfigByFlags<FLAGS>::Config Config;
                     result += str (format ("visit(code=%u) --> %s\n") 
-                                   % code % Printer<Config>::print() );
+                                   % code % Printer<CONF>::print() );
                   }
               };
           
@@ -323,16 +323,61 @@ namespace lumiera {
               cout << "max bit    : " << FlagInfo<Flags1>::BITS <<"\n";
               cout << "binary code: " << FlagInfo<Flags1>::CODE <<"\n";
               
-              DISPLAY (SomeFlagsets);
-              cout << "max bit in [SomeFlagsets] : " << FlagInfo<SomeFlagsets::List>::BITS <<"\n";
+              typedef Apply<SomeFlagsets::List, DefineConfigByFlags> SomeConfigs;
+              DISPLAY (SomeConfigs);
+              cout << "max bit in [SomeConfigs] : " << FlagInfo<SomeConfigs::List>::BITS <<"\n";
               
               TestVisitor visitor;
-              cout << FlagInfo<SomeFlagsets::List>::accept (visitor);
+              cout << FlagInfo<SomeConfigs::List>::accept (visitor);
             }
           
           
-          void check_Factory()
+            template<class CONF>
+            struct TestFactory
+              {
+                uint operator() ()  { return offset_ + Maybe<CONF>::CODE; }
+                TestFactory(long o) : offset_(o) {}
+                
+              private:
+                long offset_;
+              };
+          
+          
+          void check_ConfigSelector()
             {
+              cout << "\n==== check_ConfigSelector()\n";
+              
+              typedef Apply<AllFlagCombinations::List, DefineConfigByFlags> ListAllConfigs;
+              typedef Filter<ListAllConfigs::List,Instantiation<Maybe>::Test> Possible_Configs;
+              DISPLAY (Possible_Configs);
+              
+              typedef engine::ConfigSelector<TestFactory, long, uint> TestFactorySelector;
+              
+              const long offset = 1000; // parameter fed to all TestFactory ctors
+              TestFactorySelector testConfigSelector (Possible_Configs::List(), offset);
+              
+              
+              #define INVOKE_CONFIG_SELECTOR(CODE) \
+              cout << " Flag-code = " << CODE       \
+                   << " ConfigSelector() ---> "      \
+                   << testConfigSelector (CODE) << "\n";
+              
+              INVOKE_CONFIG_SELECTOR (2);
+              INVOKE_CONFIG_SELECTOR (12);
+              INVOKE_CONFIG_SELECTOR (20);
+              INVOKE_CONFIG_SELECTOR (4);
+              INVOKE_CONFIG_SELECTOR (8);
+              
+              try
+                {
+                  INVOKE_CONFIG_SELECTOR (23);
+                  NOTREACHED ;
+                }
+              catch (lumiera::error::Invalid& err)
+                {
+                  cout << err.what() << "\n";
+                  lumiera_error (); // reset errorflag
+                }
             }
           
           
