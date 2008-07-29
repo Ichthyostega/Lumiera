@@ -42,10 +42,14 @@ public:
 
 private:
   //----- Event Handlers -----//
+  void on_arrow_tool();
+  void on_ibeam_tool();
+  
   void on_zoom_in();
   void on_zoom_out();
   
 private:
+  void update_tool_buttons();
   void update_zoom_buttons();
 
 private:
@@ -57,6 +61,9 @@ private:
   TimelineWidget timelineWidget;
   
   // Toolbar Widgets
+  Gtk::ToggleToolButton arrowTool;
+  Gtk::ToggleToolButton iBeamTool;
+  
   Gtk::ToolButton zoomIn;
   Gtk::ToolButton zoomOut;
   

@@ -21,6 +21,8 @@
 * *****************************************************/
 
 #include "timeline-widget.hpp"
+#include "timeline/timeline-arrow-tool.hpp"
+#include "timeline/timeline-ibeam-tool.hpp"
 
 #include <boost/foreach.hpp>
 
@@ -45,7 +47,8 @@ TimelineWidget::TimelineWidget() :
   horizontalAdjustment(0, 0, 0),
   verticalAdjustment(0, 0, 0),
   horizontalScroll(horizontalAdjustment),
-  verticalScroll(verticalAdjustment)
+  verticalScroll(verticalAdjustment),
+  tool(NULL)
 {
   body = new TimelineBody(this);
   ENSURE(body != NULL);
@@ -71,14 +74,23 @@ TimelineWidget::TimelineWidget() :
   tracks.push_back(&video2);
   
   update_tracks();
+  
+  set_tool(timeline::Arrow);
 }
 
 TimelineWidget::~TimelineWidget()
 {
   REQUIRE(body != NULL);
-  body->unreference();
+  if(body != NULL)
+    body->unreference();
+    
   REQUIRE(headerContainer != NULL);
-  headerContainer->unreference();
+  if(headerContainer != NULL)
+    headerContainer->unreference();
+  
+  REQUIRE(tool != NULL);
+  if(tool != NULL)
+    delete tool;
 }
 
 gavl_time_t
@@ -112,15 +124,6 @@ TimelineWidget::set_time_scale(int64_t time_scale)
 }
 
 void
-TimelineWidget::shift_view(int shift_size)
-{
-  const int view_width = body->get_allocation().get_width();
-  
-  set_time_offset(get_time_offset() +
-    shift_size * timeScale * view_width / 16);
-}
-
-void
 TimelineWidget::zoom_view(int zoom_size)
 {
   const Allocation allocation = body->get_allocation();
@@ -149,6 +152,50 @@ TimelineWidget::zoom_view(int point, int zoom_size)
     
   // Apply the new scale
   set_time_scale(new_time_scale);
+}
+
+void
+TimelineWidget::shift_view(int shift_size)
+{
+  const int view_width = body->get_allocation().get_width();
+  
+  set_time_offset(get_time_offset() +
+    shift_size * timeScale * view_width / 16);
+}
+
+ToolType
+TimelineWidget::get_tool() const
+{
+  REQUIRE(tool != NULL);
+  if(tool != NULL)
+    return tool->get_type();
+  return None;
+}
+  
+void
+TimelineWidget::set_tool(ToolType tool_type)
+{
+  // Tidy up old tool
+  if(tool != NULL)
+  {
+    // Do we need to change tools?
+    if(tool->get_type() == tool_type)
+      return;
+      
+    delete tool;
+  }
+  
+  // Create the new tool
+  switch(tool_type)
+    {
+    case timeline::Arrow:
+      tool = new timeline::ArrowTool();
+      break;
+      
+    case timeline::IBeam:
+      tool = new timeline::IBeamTool();
+      break;
+    }
 }
 
 void

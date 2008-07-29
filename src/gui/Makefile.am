@@ -62,6 +62,12 @@ lumigui_SOURCES =                                               \
     $(lumigui_srcdir)/widgets/timeline/timeline-body.hpp        \
     $(lumigui_srcdir)/widgets/timeline/timeline-ruler.cpp       \
     $(lumigui_srcdir)/widgets/timeline/timeline-ruler.hpp       \
+    $(lumigui_srcdir)/widgets/timeline/timeline-tool.cpp        \
+    $(lumigui_srcdir)/widgets/timeline/timeline-tool.hpp        \
+    $(lumigui_srcdir)/widgets/timeline/timeline-arrow-tool.cpp  \
+    $(lumigui_srcdir)/widgets/timeline/timeline-arrow-tool.hpp  \
+    $(lumigui_srcdir)/widgets/timeline/timeline-ibeam-tool.cpp  \
+    $(lumigui_srcdir)/widgets/timeline/timeline-ibeam-tool.hpp  \
     $(lumigui_srcdir)/model/project.cpp                         \
     $(lumigui_srcdir)/model/project.hpp                         \
     $(lumigui_srcdir)/output/displayer.cpp                      \

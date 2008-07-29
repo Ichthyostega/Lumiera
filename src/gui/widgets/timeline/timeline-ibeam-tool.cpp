@@ -1,5 +1,5 @@
 /*
-  track.hpp  -  Declaration of the timeline track object
+  timeline-ibeam-tool.cpp  -  Implementation of the IBeamTool class
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -18,43 +18,28 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
-/** @file track.hpp
- ** This file contains the definition of timeline track object
- */
+* *****************************************************/
 
-#ifndef TRACK_HPP
-#define TRACK_HPP
-
-#include <gtkmm.h>
+#include "timeline-ibeam-tool.hpp"
 
 namespace lumiera {
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-class Track
+IBeamTool::IBeamTool()
 {
-public:
-  Track();
 
-  Glib::ustring get_title();
+}
 
-  Gtk::Widget& get_header_widget();
-
-  int get_height();
-
-  void draw_track(Cairo::RefPtr<Cairo::Context> cairo);
-
-protected:
-  Gtk::VBox headerWidget;
-  Gtk::Label label;
-};
-
+ToolType
+IBeamTool::get_type() const
+{
+  return IBeam;
+}
 
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
 }   // namespace lumiera
 
-#endif // TRACK_HPP

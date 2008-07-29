@@ -30,6 +30,7 @@
 #include "timeline/header-container.hpp"
 #include "timeline/timeline-body.hpp"
 #include "timeline/timeline-ruler.hpp"
+#include "timeline/timeline-tool.hpp"
 #include "timeline/track.hpp"
 
 namespace lumiera {
@@ -95,6 +96,10 @@ public:
    **/
   void shift_view(int shift_size);
   
+  timeline::ToolType get_tool() const;
+  
+  void set_tool(timeline::ToolType tool_type);
+  
   /* ===== Events ===== */
 protected:
   void on_scroll();
@@ -130,6 +135,8 @@ protected:
   Gtk::HScrollbar horizontalScroll;
   Gtk::VScrollbar verticalScroll;
   
+  timeline::Tool *tool;
+   
   /* ===== Constants ===== */
 public:
   static const int64_t MaxScale;
