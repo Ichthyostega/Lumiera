@@ -53,8 +53,8 @@ This code is heavily inspired by
  */
 
 
-#ifndef LUMIERA_TYPELIST_H
-#define LUMIERA_TYPELIST_H
+#ifndef LUMIERA_META_TYPELIST_H
+#define LUMIERA_META_TYPELIST_H
 
 
 

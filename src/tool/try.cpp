@@ -32,7 +32,7 @@ using boost::is_base_of;
 #include <boost/type_traits/is_polymorphic.hpp>
   
   
-#include "common/typelistutil.hpp"
+#include "common/meta/generator.hpp"
 using lumiera::typelist::NullType;
 using lumiera::typelist::Node;
 using lumiera::typelist::Types;

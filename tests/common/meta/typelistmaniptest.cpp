@@ -39,9 +39,9 @@
 
 
 #include "common/test/run.hpp"
-#include "common/typelistutil.hpp"
+#include "common/meta/generator.hpp"
+#include "common/meta/typelistutil.hpp"
 #include "common/util.hpp"
-#include "proc/engine/nodewiringconfig.hpp"  ///////////TODO move to typelistutil.hpp
 
 #include <boost/format.hpp>
 #include <iostream>

@@ -1,5 +1,5 @@
 /*
-  TYPELISTUTIL.hpp  -  metaprogramming utilities for lists-of-types
+  GENERATOR.hpp  -  metaprogramming utilities for generating classes and interfaces
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -38,7 +38,7 @@ This code is heavily inspired by
 */
 
 
-/** @file typelistutil.hpp
+/** @file generator.hpp
  ** Helpers for working with lumiera::typelist::Types (i.e. lists-of-types). 
  ** The main purpose is to build interfaces and polymorphic implementations
  ** (using virtual functions) based on templated Types or Collections of types,
@@ -50,10 +50,10 @@ This code is heavily inspired by
  */
 
 
-#ifndef LUMIERA_TYPELISTUTIL_H
-#define LUMIERA_TYPELISTUTIL_H
+#ifndef LUMIERA_META_GENERATOR_H
+#define LUMIERA_META_GENERATOR_H
 
-#include "common/typelist.hpp"
+#include "common/meta/typelist.hpp"
 
 
 
@@ -193,42 +193,6 @@ namespace lumiera
         typedef InstantiateWithIndex<TYPES,_X_,BASE,i+1> Next;
         typedef _X_<TY,Next,i> Unit;
         enum{ COUNT = Next::COUNT };
-      };
-    
-    
-    /**
-     * Metafunction counting the number of Types in the collection
-     */
-    template<class TYPES>
-    struct count;
-    template<>
-    struct count<NullType>
-      {
-        enum{ value = 0 };
-      };
-    template<class TY, class TYPES>
-    struct count<Node<TY,TYPES> >
-      {
-        enum{ value = 1 + count<TYPES>::value };
-      };
-    
-    /**
-     * Metafunction " max( sizeof(T) ) for T in TYPES "
-     */
-    template<class TYPES>
-    struct maxSize;
-    template<>
-    struct maxSize<NullType>
-      {
-        enum{ value = 0 };
-      };
-    template<class TY, class TYPES>
-    struct maxSize<Node<TY,TYPES> >
-      {
-        enum{ thisval = sizeof(TY)
-            , nextval = maxSize<TYPES>::value
-            , value   = nextval > thisval?  nextval:thisval
-            };
       };
     
     

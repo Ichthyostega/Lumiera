@@ -1,5 +1,5 @@
 /*
-  TypeListUtil(Test)  -  check the typelist helpers
+  Generator(Test)  -  build an interface + implementation directed by a typelis
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file typelistutiltest.cpp
+/** @file generatortest.cpp
  ** \par what are we doing here??
  **
  ** the following test composes both an interface and the corresponding implementation
@@ -31,14 +31,14 @@
  ** need to be absolutely fixed in the class definition)
  **
  ** @see typelisttest.cpp
- ** @see typelistutil.hpp
+ ** @see generator.hpp
  ** @see lumiera::query::ConfigRules  a real world usage example
  **
  */
 
 
 #include "common/test/run.hpp"
-#include "common/typelistutil.hpp"
+#include "common/meta/generator.hpp"
 
 #include <boost/format.hpp>
 #include <iostream>
@@ -118,7 +118,7 @@ namespace lumiera
        *               for a collection of classes</li>
        *       </ul>
        */
-      class TypeListUtil_test : public Test
+      class TypeListGenerator_test : public Test
         {
           virtual void run(Arg arg) 
             {
@@ -144,7 +144,7 @@ namespace lumiera
       
       
       /** Register this test class... */
-      LAUNCHER (TypeListUtil_test, "unit common");
+      LAUNCHER (TypeListGenerator_test, "unit common");
       
       
       

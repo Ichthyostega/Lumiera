@@ -62,7 +62,6 @@
 #include "proc/engine/buffhandle.hpp"
 #include "proc/engine/bufftable.hpp"
 #include "proc/engine/nodeinvocation.hpp"
-#include "proc/engine/nodewiringconfig.hpp"
 
 
 
@@ -229,6 +228,18 @@ namespace engine {
   
   
   /* === declare the possible Assembly of these elementary steps === */
+  
+  enum Cases
+    { 
+      CACHING = 1,
+      PROCESS,
+      INPLACE,
+      
+      NOT_SET   = 0,
+      NUM_Cases = INPLACE
+    };
+  
+  
   
   template<char CACHE_Fl=0, char INPLACE_Fl=0>
   struct SelectBuffProvider;

@@ -38,10 +38,10 @@
 
 
 #include "common/test/run.hpp"
-#include "common/typelistutil.hpp"
+#include "common/meta/generator.hpp"
+#include "common/meta/typelistutil.hpp"
+#include "proc/engine/nodewiringconfig.hpp"
 #include "common/util.hpp"
-//#include "common/typelist/typelistmanip.hpp"
-#include "proc/engine/nodewiringconfig.hpp"  ///////////TODO move to configflags.hpp
 
 #include <boost/format.hpp>
 #include <iostream>
@@ -343,6 +343,10 @@ namespace lumiera {
               };
           
           
+          /** @test use the ConfigSelector template to build a set of factories,
+           *        based on a set of configurations. Then invoke the apropriate
+           *        factory by specifying the configuration bit code
+           */
           void check_ConfigSelector()
             {
               cout << "\n==== check_ConfigSelector()\n";
