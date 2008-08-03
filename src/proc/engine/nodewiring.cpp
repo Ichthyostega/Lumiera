@@ -26,8 +26,76 @@
 #include "proc/engine/nodeoperation.hpp"
 #include "proc/engine/nodewiringconfig.hpp"
 
+#include "common/meta/typelistutil.hpp"
+
 
 namespace engine {
+  
+  namespace { // internal: setting up a factory for each required configuration
+  
+    using config::CACHING;
+    using config::PROCESS;
+    using config::INPLACE;
+    
+    using config::ConfigSelector;
+    using config::Strategy;
+    
+    using lumiera::typelist::Flags;
+    using lumiera::typelist::CombineFlags;
+    using lumiera::typelist::DefineConfigByFlags;
+    using lumiera::typelist::Instantiation;
+    using lumiera::typelist::Apply;
+    using lumiera::typelist::Filter;
+    
+    
+    typedef Flags<CACHING,PROCESS,INPLACE>::Tuple AllFlags;
+
+    /** build the list of all possible flag combinations */
+    typedef CombineFlags<AllFlags>     AllFlagCombinations;
+
+    /** build a configuration type for each of those flag combinations */
+    typedef Apply<AllFlagCombinations::List, DefineConfigByFlags> AllConfigs;
+              
+    /** filter those configurations which actually define a wiring strategy */
+    typedef Filter<AllConfigs::List, Instantiation<Strategy>::Test> PossibleConfigs;
+    
+    
+    class Alloc {}; ///////////////TODO
+    
+    
+    template<class CONF>
+    class WiringDescriptorFactory
+      {
+        Alloc& alloc_;
+          
+      public:
+        WiringDescriptorFactory(Alloc& a) 
+        : alloc_(a) {}
+        
+        WiringDescriptor&
+        operator() ()  
+          { 
+            /////////////////////////////////////////////TODO 
+            //return offset_ + Maybe<CONF>::CODE; 
+          }
+      };
+    
+    
+    typedef ConfigSelector<WiringDescriptorFactory, WiringDescriptor&, Alloc&> WiringSelector;
+  
+    struct WiringFactoryImpl
+      {
+//        WiringSelector selector;
+        
+        WiringFactoryImpl (Alloc& alloc)
+//          : selector(PossibleConfigs::List(), alloc)
+          { }
+      };
+  
+  } // (END) internals
+  
+  
+  /////////////////////////////TODO: define the ctor
   
   
   /** create and configure a concrete wiring descriptor to tie
@@ -47,7 +115,8 @@ namespace engine {
     UNIMPLEMENTED ("build the actual wiring descriptor based on given operation options");
     
 //    Bits config (FlagInfo<Config>::CODE);
-//    return selector(config);
+    size_t config = 13;  /////////////////////////////////////////TODO
+//    return pImpl_->selector(config);
   }
   // BlockAlloc<NodeWiring< StateAdapter< Config<cache, process, inplace> > > >::fabricate();
 

@@ -25,12 +25,18 @@
  ** Under some circumstances it is necessary to assemble functionality
  ** out of elementary building blocks. Especially, this assembly can be
  ** expressed as template specialisations directed by a configuration type.
- ** Thus, the purpose of this header is to encode a flag-like configuraiton
+ ** Thus, the purpose of this header is to encode flag-like configuraitons
  ** as distinct types, which can be used to select such specialisations. 
  ** Each possible configuration can be encoded as a list of flags, which allows
  ** to generate, filter and process those configurations. The final goal is to
- ** automatically generate a factory which will deliver objects configured
- ** according to the configuration in question. 
+ ** automatically generate a factory which is able to deliver objects
+ ** configured according to the situation encoded in the flags.
+ **
+ ** @note currently there is an inherent limitation to configurations defined by
+ ** a maximum of 5 independant flags. While it is easy to increase this limit,
+ ** you should consider that the final goal is to genarate template instantiations,
+ ** which would lead to more and more code bloat with growing number of possible
+ ** combination.
  ** 
  ** @see proc::engine::config::Strategy usage example
  ** @see proc::engine::config::ConfigSelector 

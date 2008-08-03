@@ -38,8 +38,11 @@
 
 
 #include "common/test/run.hpp"
+#include "common/meta/util.hpp"
 #include "common/meta/generator.hpp"
 #include "common/meta/typelistutil.hpp"
+#include "common/meta/configflags.hpp"
+#include "meta/typelistdiagnostics.hpp"
 #include "proc/engine/nodewiringconfig.hpp"
 #include "common/util.hpp"
 
@@ -68,77 +71,6 @@ namespace lumiera {
             
           , NOT_SET   = 0
           };
-        
-        format fmt ("-<%u>%s");
-        
-        struct NullP
-          {
-            static string print () { return "-"; }
-          };
-        
-        /** debugging template, 
-         *  printing the "number" used for intantiation on ctor call
-         */
-        template<class NUM=NullType, class BASE=NullP>
-        struct Printer;
-        
-        template<class BASE>
-        struct Printer<NullType, BASE>
-          : BASE
-          {
-            static string print () { return str( fmt % "·" % BASE::print()); }
-          };
-        
-        template<class BASE, char Fl>
-        struct Printer<Flag<Fl>, BASE>
-          : BASE
-          {
-            static string print () { return str( fmt % uint(Fl) % BASE::print()); }
-          };
-        
-        
-        
-        /** call the debug-print for a typelist
-         *  utilizing the Printer template */ 
-        template<class L>
-        string
-        printSublist ()
-        {
-          typedef InstantiateChained<L, Printer, NullP> SubList;
-          return SubList::print();
-        }
-        
-        /** Spezialisation for debug-printing of a nested sublist */
-        template<class TY, class TYPES, class BASE>
-        struct Printer<Node<TY,TYPES>, BASE>
-          : BASE
-          {
-            static string print () 
-              {
-                typedef Node<TY,TYPES> List;
-                return string("\n\t+--") + printSublist<List>()+"+"
-                     + BASE::print(); 
-              }
-          };
-        
-        template<char f1, char f2, char f3, char f4, char f5, class BASE>
-        struct Printer<Config<f1,f2,f3,f4,f5>, BASE>
-          : BASE
-          {
-            static string print () 
-              {
-                typedef typename Config<f1,f2,f3,f4,f5>::Flags FlagList;
-                return string("\n\t+-Conf-[") + printSublist<FlagList>()+"]"
-                     + BASE::print(); 
-              }
-          };
-        
-        
-#define DIAGNOSE(LIST) \
-        typedef InstantiateChained<LIST::List, Printer, NullP>  Contents_##LIST;
-                     
-#define DISPLAY(NAME)  \
-        DIAGNOSE(NAME); cout << STRINGIFY(NAME) << "\t" << Contents_##NAME::print() << "\n";
         
         
         
@@ -355,7 +287,7 @@ namespace lumiera {
               typedef Filter<ListAllConfigs::List,Instantiation<Maybe>::Test> Possible_Configs;
               DISPLAY (Possible_Configs);
               
-              typedef engine::ConfigSelector<TestFactory, long, uint> TestFactorySelector;
+              typedef engine::config::ConfigSelector<TestFactory, long, uint> TestFactorySelector;
               
               const long offset = 1000; // parameter fed to all TestFactory ctors
               TestFactorySelector testConfigSelector (Possible_Configs::List(), offset);

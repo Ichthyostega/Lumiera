@@ -41,6 +41,7 @@
 #define LUMIERA_VARIANT_H
 
 
+#include "common/meta/typelistutil.hpp"
 #include "common/meta/generator.hpp"
 
 #include <boost/noncopyable.hpp>

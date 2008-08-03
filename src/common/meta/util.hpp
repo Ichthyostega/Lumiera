@@ -27,14 +27,16 @@
 
   
 namespace lumiera {
+    
+    
+  /* types for figuring out the overload resolution chosen by the compiler */
+
+  typedef char Yes_t;
+  struct No_t { char padding[8]; };
+    
+    
+    
   namespace typelist {
-    
-    
-    /* types for figuring out the overload resolution chosen by the compiler */
-  
-    typedef char Yes_t;
-    struct No_t { char padding[8]; };
-    
     
     /** semi-automatic detection if an instantiation is possible.
      *  Requires help by the template to be tested, which needs to define

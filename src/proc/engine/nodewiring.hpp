@@ -27,6 +27,7 @@
 
 #include "proc/engine/procnode.hpp"
 
+#include <boost/scoped_ptr.hpp>
 #include <cstddef>
 
 
@@ -35,6 +36,8 @@ namespace engine {
 
 
   class WiringFactory;
+  
+  namespace { class WiringFactoryImpl; }
   
   
   /**
@@ -73,6 +76,8 @@ namespace engine {
     
   class WiringFactory
     {
+      boost::scoped_ptr<WiringFactoryImpl> pImpl_;
+      
     public:
       WiringDescriptor&
       operator() (uint nrOut, uint nrIn, bool cache);
