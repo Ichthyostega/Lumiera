@@ -19,12 +19,16 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+import sys
+import getopt
 from xml.dom import minidom
 import os
 import shutil
+import cairo
+import rsvg
 
-svgDir = "svg"
-prerenderedDir = "prerendered"
+#svgDir = "svg"
+#prerenderedDir = "prerendered"
 inkscapePath = "/usr/bin/inkscape"
 artworkLayerPrefix = "artwork:"
 
@@ -63,7 +67,6 @@ def parsePlateLayer( layer ):
         height = float(node.getAttribute("height"))
         rectangles.append([x, y, width, height])
   return rectangles
-        
 
 def parseSVG( file_path ):
   print "Rendering " + file_path
@@ -82,46 +85,91 @@ def parseSVG( file_path ):
               return artwork_name, size, parsePlateLayer( plate )
   return None
 
-def renderSVGIcons():
-  listing = os.listdir(svgDir)
-  for file_path in listing:
-    [root, extension] = os.path.splitext(file_path)
-    if extension.lower() == ".svg":
-      file_path = os.path.join(svgDir, file_path)
-      artwork_name, doc_size, rectangles = parseSVG(file_path)
-      for rectangle in rectangles:
-        x1 = rectangle[0]
-        y1 = doc_size[1] - rectangle[1] - rectangle[3]
-        x2 = x1 + rectangle[2]
-        y2 = y1 + rectangle[3]
-        os.spawnlp(os.P_WAIT, inkscapePath, inkscapePath,
-          file_path,
-          "-z",
-          "-a %g:%g:%g:%g" % (x1, y1, x2, y2),
-          "-w %g" % (rectangle[2]), "-h %g" % (rectangle[3]),
-          "--export-png=%gx%g/%s.png" % (rectangle[2], rectangle[3], artwork_name))
+def renderSvgInkscape(file_path, out_dir, artwork_name, rectangle, doc_size):
 
-def copyPrerenderedIcons():
-  listing = os.listdir(prerenderedDir)
-  for list_item in listing:
-    src_dir = os.path.join(prerenderedDir, list_item)
-    copyMergeDirectory(src_dir, list_item)
+  # Calculate the rendering rectangle
+  x1 = rectangle[0]
+  y1 = doc_size[1] - rectangle[1] - rectangle[3]
+  x2 = x1 + rectangle[2]
+  y2 = y1 + rectangle[3]
+  
+  # Call Inkscape to do the render
+  os.spawnlp(os.P_WAIT, inkscapePath, inkscapePath,
+    file_path,
+    "-z",
+    "-a %g:%g:%g:%g" % (x1, y1, x2, y2),
+    "-w %g" % (rectangle[2]), "-h %g" % (rectangle[3]),
+    "--export-png=" + os.path.join(out_dir, "%gx%g/%s.png" % (rectangle[2], rectangle[3], artwork_name)))
+    
+def renderSvgRsvg(file_path, out_dir, artwork_name, rectangle, doc_size):
+  # Prepare a Cairo context
+  width = int(rectangle[2])
+  height = int(rectangle[3])
+  
+  surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
+  context = cairo.Context(surface)
+  context.translate(-rectangle[0], -rectangle[1])
 
-def main():
+  # Load an render the SVG
+  svg = rsvg.Handle(file=file_path)
+  svg.render_cairo(context)
+
+  # Output a PNG file
+  surface.write_to_png(os.path.join(out_dir,
+    "%ix%i/%s.png" % (width, height, artwork_name)))
+
+def renderSvgIcon(file_path, out_dir):
+  artwork_name, doc_size, rectangles = parseSVG(file_path)
+  for rectangle in rectangles:
+    renderSvgRsvg(file_path, out_dir, artwork_name, rectangle, doc_size)
+
+#def renderSvgIcons():
+#  listing = os.listdir(svgDir)
+#  for file_path in listing:
+#    [root, extension] = os.path.splitext(file_path)
+#    if extension.lower() == ".svg":
+#      renderSvgIcon(os.path.join(svgDir, file_path))
+
+#def copyPrerenderedIcons():
+#  listing = os.listdir(prerenderedDir)
+#  for list_item in listing:
+#    src_dir = os.path.join(prerenderedDir, list_item)
+#    copyMergeDirectory(src_dir, list_item)
+
+def printHelp():
+  print "render-icon.py - An icon rendering utility script for lumiera"
+
+def parseArguments(argv):
+  optlist, args = getopt.getopt(argv, "")
+  
+  if len(args) == 2:
+    return args[0], args[1]
+  
+  printHelp()
+  return None, None
+
+def main(argv):
+  in_path, out_dir = parseArguments(argv)
+  
+  if in_path == None or out_dir == None:
+  	return
+  
+  if os.path.exists(out_dir) == False:
+    print "Directory not found: " + out_dir
+    return
   
   # Create the icons folders
-  createDirectory("48x48")
-  createDirectory("32x32")  
-  createDirectory("24x24")
-  createDirectory("22x22")
-  createDirectory("16x16") 
+  createDirectory(os.path.join(out_dir, "48x48"))
+  createDirectory(os.path.join(out_dir, "32x32"))
+  createDirectory(os.path.join(out_dir, "24x24"))
+  createDirectory(os.path.join(out_dir, "22x22"))
+  createDirectory(os.path.join(out_dir, "16x16"))
   
-  # Render the SVG icons
-  renderSVGIcons()
-  
+  renderSvgIcon(in_path, out_dir)
+    
   # Copy in prerendered icons
-  copyPrerenderedIcons()
+  #copyPrerenderedIcons()
  
 if __name__=="__main__":
-    main()
+    main(sys.argv[1:])
 
