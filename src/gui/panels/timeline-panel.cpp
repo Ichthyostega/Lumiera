@@ -45,6 +45,7 @@ TimelinePanel::TimelinePanel() :
     &TimelinePanel::on_arrow_tool));
   toolbar.append(iBeamTool, mem_fun(this,
     &TimelinePanel::on_ibeam_tool));
+  toolbar.append(seperator1);
   toolbar.append(zoomIn, mem_fun(this, &TimelinePanel::on_zoom_in));
   toolbar.append(zoomOut, mem_fun(this, &TimelinePanel::on_zoom_out));
   

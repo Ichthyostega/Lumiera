@@ -64,6 +64,8 @@ private:
   Gtk::ToggleToolButton arrowTool;
   Gtk::ToggleToolButton iBeamTool;
   
+  Gtk::SeparatorToolItem seperator1;
+  
   Gtk::ToolButton zoomIn;
   Gtk::ToolButton zoomOut;
   
