@@ -141,7 +141,7 @@ Actions::add_stock_icon_source(Gtk::IconSet &icon_set,
     {
       //This throws an exception if the file is not found:
       source.set_pixbuf( Gdk::Pixbuf::create_from_file(
-        Glib::ustring::compose("icons/%1x%1/%2", size, filename) ) );
+        Glib::ustring::compose("%1x%1/%2", size, filename) ) );
     }
   catch(const Glib::Exception& ex)
     {
