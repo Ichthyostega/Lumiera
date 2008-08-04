@@ -179,8 +179,8 @@ TimelineWidget::set_tool(ToolType tool_type)
   if(tool != NULL)
     {
       // Do we need to change tools?
-      //if(tool->get_type() == tool_type)
-      //  return;
+      if(tool->get_type() == tool_type)
+        return;
         
       delete tool;
     }
