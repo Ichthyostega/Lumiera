@@ -21,15 +21,36 @@
 * *****************************************************/
 
 #include "timeline-tool.hpp"
+#include "../timeline-widget.hpp"
 
 namespace lumiera {
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-Tool::Tool()
+Tool::Tool(TimelineWidget *timeline_widget) :
+  timelineWidget(timeline_widget)
 {
+  REQUIRE(timeline_widget != NULL);
+  REQUIRE(timeline_widget->body != NULL);
+}
 
+bool
+Tool::apply_cursor()
+{ 
+  REQUIRE(timelineWidget != NULL);
+  
+  if(timelineWidget->body == NULL)
+    return false;
+  
+  Glib::RefPtr<Gdk::Window> window = 
+    timelineWidget->body->get_window();
+  if(!window)
+    return false;
+  
+  window->set_cursor(get_cursor());
+
+  return true;
 }
 
 }   // namespace timeline

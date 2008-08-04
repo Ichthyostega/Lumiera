@@ -39,7 +39,9 @@ HeaderContainer::HeaderContainer(lumiera::gui::widgets::TimelineWidget *timeline
 {
   REQUIRE(timeline_widget != NULL);
 
-  set_flags(Gtk::NO_WINDOW);  // This widget will not have a window at first
+  // This widget will not have a window at first
+  set_flags(Gtk::NO_WINDOW);
+  
   set_redraw_on_allocate(false);
   
   // Connect to the timeline widget's vertical scroll event,

@@ -27,11 +27,14 @@
 #ifndef TIMELINE_TOOL_HPP
 #define TIMELINE_TOOL_HPP
 
-#include <gtkmm.h>
+#include "../../gtk-lumiera.hpp"
 
 namespace lumiera {
 namespace gui {
 namespace widgets {
+
+class TimelineWidget;
+
 namespace timeline {
   
 enum ToolType
@@ -43,10 +46,19 @@ enum ToolType
 
 class Tool
 {
-public:
-  Tool();
+protected:
+  Tool(TimelineWidget *timeline_widget);
 
+public:
   virtual ToolType get_type() const = 0;
+  
+  bool apply_cursor();
+  
+protected:
+  virtual Gdk::Cursor get_cursor() const = 0;
+  
+protected:
+  TimelineWidget *timelineWidget;
 };
 
 

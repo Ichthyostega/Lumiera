@@ -27,7 +27,8 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-ArrowTool::ArrowTool()
+ArrowTool::ArrowTool(TimelineWidget *timeline_widget) :
+  Tool(timeline_widget)
 {
 
 }
@@ -36,6 +37,12 @@ ToolType
 ArrowTool::get_type() const
 {
   return Arrow;
+}
+
+Gdk::Cursor
+ArrowTool::get_cursor() const
+{
+  return Gdk::Cursor(Gdk::ARROW);
 }
 
 }   // namespace timeline

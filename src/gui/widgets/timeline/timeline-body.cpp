@@ -61,7 +61,6 @@ TimelineBody::TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widge
       "Track Background",
       "The background colour of timeline tracks",
       GDK_TYPE_COLOR, G_PARAM_READABLE));
-
 }
 
 void
@@ -69,12 +68,15 @@ TimelineBody::on_realize()
 {
   Widget::on_realize();
   
-  // We wish to receive all event notifications
+  // We wish to receive event notifications
   add_events(
     Gdk::POINTER_MOTION_MASK |
     Gdk::SCROLL_MASK |
     Gdk::BUTTON_PRESS_MASK |
     Gdk::BUTTON_RELEASE_MASK);
+    
+  // Apply the cursor if possible
+  timelineWidget->tool->apply_cursor();
 }
 
 void

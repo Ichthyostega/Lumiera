@@ -38,7 +38,8 @@ TimelinePanel::TimelinePanel() :
   arrowTool(Gtk::StockID("arrow")),
   iBeamTool(Gtk::StockID("i_beam")),
   zoomIn(Stock::ZOOM_IN),
-  zoomOut(Stock::ZOOM_OUT)
+  zoomOut(Stock::ZOOM_OUT),
+  updatingToolbar(false)
 {
   // Setup the toolbar
   toolbar.append(arrowTool, mem_fun(this,
@@ -63,6 +64,7 @@ TimelinePanel::TimelinePanel() :
 void
 TimelinePanel::on_arrow_tool()
 {
+  if(updatingToolbar) return;
   timelineWidget.set_tool(timeline::Arrow);
   update_tool_buttons();
 }
@@ -70,6 +72,7 @@ TimelinePanel::on_arrow_tool()
 void
 TimelinePanel::on_ibeam_tool()
 {
+  if(updatingToolbar) return;
   timelineWidget.set_tool(timeline::IBeam);
   update_tool_buttons();
 }
@@ -77,6 +80,7 @@ TimelinePanel::on_ibeam_tool()
 void
 TimelinePanel::on_zoom_in()
 {
+
   timelineWidget.zoom_view(ZoomToolSteps);
   update_zoom_buttons();
 }
@@ -90,17 +94,14 @@ TimelinePanel::on_zoom_out()
 
 void
 TimelinePanel::update_tool_buttons()
-{
-  // This is included to prevent recursion
-  static bool updating = false; 
-    
-  if(!updating)
+{    
+  if(!updatingToolbar)
   {
-    updating = true;
+    updatingToolbar = true;
     const timeline::ToolType tool = timelineWidget.get_tool();
     arrowTool.set_active(tool == timeline::Arrow);
     iBeamTool.set_active(tool == timeline::IBeam);
-    updating = false;
+    updatingToolbar = false;
   }
 }
 

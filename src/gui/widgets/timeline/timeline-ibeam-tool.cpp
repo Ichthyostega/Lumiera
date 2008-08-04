@@ -27,15 +27,21 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-IBeamTool::IBeamTool()
+IBeamTool::IBeamTool(TimelineWidget *timeline_widget) :
+  Tool(timeline_widget)
 {
-
 }
 
 ToolType
 IBeamTool::get_type() const
 {
   return IBeam;
+}
+
+Gdk::Cursor
+IBeamTool::get_cursor() const
+{
+  return Gdk::Cursor(Gdk::XTERM);
 }
 
 }   // namespace timeline

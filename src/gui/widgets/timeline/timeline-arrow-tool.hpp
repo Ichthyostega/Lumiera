@@ -37,9 +37,12 @@ namespace timeline {
 class ArrowTool : public Tool
 {
 public:
-  ArrowTool();
+  ArrowTool(TimelineWidget *timeline_widget);
 
   ToolType get_type() const;
+  
+protected:
+  Gdk::Cursor get_cursor() const;
 };
 
 }   // namespace timeline

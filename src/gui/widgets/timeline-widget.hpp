@@ -148,6 +148,7 @@ protected:
 
   friend class timeline::TimelineBody;
   friend class timeline::HeaderContainer;
+  friend class timeline::Tool;
 };
 
 }   // namespace widgets

@@ -69,6 +69,9 @@ private:
   Gtk::ToolButton zoomIn;
   Gtk::ToolButton zoomOut;
   
+  // Internals
+  bool updatingToolbar;
+  
   //----- Constants -----//
   static const int ZoomToolSteps;
 };

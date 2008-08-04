@@ -177,25 +177,28 @@ TimelineWidget::set_tool(ToolType tool_type)
 {
   // Tidy up old tool
   if(tool != NULL)
-  {
-    // Do we need to change tools?
-    if(tool->get_type() == tool_type)
-      return;
-      
-    delete tool;
-  }
+    {
+      // Do we need to change tools?
+      //if(tool->get_type() == tool_type)
+      //  return;
+        
+      delete tool;
+    }
   
   // Create the new tool
   switch(tool_type)
     {
     case timeline::Arrow:
-      tool = new timeline::ArrowTool();
+      tool = new timeline::ArrowTool(this);
       break;
       
     case timeline::IBeam:
-      tool = new timeline::IBeamTool();
+      tool = new timeline::IBeamTool(this);
       break;
     }
+    
+  // Apply the cursor if possible
+  tool->apply_cursor();
 }
 
 void
