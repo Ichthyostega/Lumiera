@@ -47,7 +47,7 @@ namespace engine {
   using std::vector;
   
   class Trafo;
-  typedef Trafo* PTrafo;    ///< @todo handle ProcNode by pointer or by shared-ptr?? 
+  typedef Trafo* PTrafo;    ///< @note ProcNode is handled by pointer and bulk allocated/dealocated 
 
 
   /**
@@ -55,10 +55,6 @@ namespace engine {
    */
   class NodeFactory
     {
-        /** custom deleter func allowing a smart-ptr    
-          *  to take ownership of processing nodes
-          */
-        static void deleterFunc (ProcNode* pno) { delete pno; }
       
       public:
         

@@ -44,8 +44,9 @@ namespace engine {
    * Actual implementation of the link between nodes,
    * also acting as "track switch" for the execution path
    * choosen while operating the node network for rendering.
-   * @param STATE StateAdapter object controlling the
+   * @param STATE Invocation state object controlling the
    *        behaviour of callDown() while rendering.
+   * @see StateAdapter
    * @see NodeFactory 
    */
   template<class STATE>

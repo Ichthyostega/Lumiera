@@ -50,6 +50,109 @@ out: Standard Cmdlineformat:one  two
 END
 
 
+TEST "ConfigFlags_test" ConfigFlags_test <<END
+out: Conf0	:-
+out: Conf1	:-<1>-
+out: Conf2	:-<2>-
+out: Conf3	:-<3>-
+out: Conf4	:-<2>-<4>-
+out: AllFlags	:-<1>-<2>-<3>-<4>-
+out: ______
+out: ______ check_flags()
+out: Flags1	:-<2>-<4>-
+out: Flags2	:-<2>-<4>-
+out: SimpleConfig_defined_by_Typelist	:-<1>-
+out: AnotherConfig_defined_by_Typelist	:-<1>-<2>-<3>-<4>-
+out: ______
+out: ______ check_instantiation()
+out: defined Conf0? ---> 0
+out: defined Conf1? ---> 1
+out: defined Conf2? ---> 1
+out: defined Conf3? ---> 1
+out: defined Conf4? ---> 1
+out: defined Trash? ---> 0
+out: ______
+out: ______ check_filter()
+out: SomeFlagsets	:
+out: 	+---<1>-<3>-+
+out: 	+---<2>-<4>-+-
+out: Configs_defined_by_Flagsets	:
+out: 	+-Conf-[-<1>-<3>-]
+out: 	+-Conf-[-<2>-<4>-]-
+out: Filter_possible_Configs	:
+out: 	+-Conf-[-<2>-<4>-]-
+out: AllFlagCombinations	:
+out: 	+---<1>-<2>-<3>-<4>-<·>-+
+out: 	+---<1>-<2>-<3>-<·>-+
+out: 	+---<1>-<2>-<4>-<·>-+
+out: 	+---<1>-<2>-<·>-+
+out: 	+---<1>-<3>-<4>-<·>-+
+out: 	+---<1>-<3>-<·>-+
+out: 	+---<1>-<4>-<·>-+
+out: 	+---<1>-<·>-+
+out: 	+---<2>-<3>-<4>-<·>-+
+out: 	+---<2>-<3>-<·>-+
+out: 	+---<2>-<4>-<·>-+
+out: 	+---<2>-<·>-+
+out: 	+---<3>-<4>-<·>-+
+out: 	+---<3>-<·>-+
+out: 	+---<4>-<·>-+
+out: 	+---<·>-+-
+out: ListAllConfigs	:
+out: 	+-Conf-[-<1>-<2>-<3>-<4>-]
+out: 	+-Conf-[-<1>-<2>-<3>-]
+out: 	+-Conf-[-<1>-<2>-<4>-]
+out: 	+-Conf-[-<1>-<2>-]
+out: 	+-Conf-[-<1>-<3>-<4>-]
+out: 	+-Conf-[-<1>-<3>-]
+out: 	+-Conf-[-<1>-<4>-]
+out: 	+-Conf-[-<1>-]
+out: 	+-Conf-[-<2>-<3>-<4>-]
+out: 	+-Conf-[-<2>-<3>-]
+out: 	+-Conf-[-<2>-<4>-]
+out: 	+-Conf-[-<2>-]
+out: 	+-Conf-[-<3>-<4>-]
+out: 	+-Conf-[-<3>-]
+out: 	+-Conf-[-<4>-]
+out: 	+-Conf-[-]-
+out: Filter_all_possible_Configs	:
+out: 	+-Conf-[-<1>-]
+out: 	+-Conf-[-<2>-<3>-]
+out: 	+-Conf-[-<2>-<4>-]
+out: 	+-Conf-[-<2>-]
+out: 	+-Conf-[-<3>-]-
+out: ______
+out: ______ check_FlagInfo()
+out: Flags1	:-<1>-<3>-
+out: max bit    : 3
+out: binary code: 10
+out: SomeConfigs	:
+out: 	+-Conf-[-<1>-<3>-]
+out: 	+-Conf-[-<2>-<4>-]-
+out: max bit in [SomeConfigs] : 4
+out: TestVisitor application:
+out: visit(code=10) -->
+out: 	+-Conf-[-<1>-<3>-]-
+out: visit(code=20) -->
+out: 	+-Conf-[-<2>-<4>-]-
+out: ______
+out: ______ check_ConfigSelector()
+out: Possible_Configs	:
+out: 	+-Conf-[-<1>-]
+out: 	+-Conf-[-<2>-<3>-]
+out: 	+-Conf-[-<2>-<4>-]
+out: 	+-Conf-[-<2>-]
+out: 	+-Conf-[-<3>-]-
+out:  Flag-code = 2 ConfigSelector() ---> 1010
+out:  Flag-code = 12 ConfigSelector() ---> 1023
+out:  Flag-code = 20 ConfigSelector() ---> 1024
+out:  Flag-code = 4 ConfigSelector() ---> 1020
+out:  Flag-code = 8 ConfigSelector() ---> 1030
+out: LUMIERA_ERROR_INVALID:invalid input or parameters (ConfigSelector: No preconfigured factory for config-bits=23).
+return: 0
+END
+
+
 TEST "CustomSharedPtr_test" CustomSharedPtr_test <<END
 return: 0
 END
@@ -220,7 +323,7 @@ return: 0
 END
 
 
-TEST "TypeListUtil_test" TypeListUtil_test <<END
+TEST "TypeListGenerator_test" TypeListGenerator_test <<END
 out: ctor DoIt<Block<13> >
 out: ctor DoIt<Block< 8> >
 out: ctor DoIt<Block< 5> >
@@ -237,6 +340,106 @@ out: dtor DoIt<Block< 3> >
 out: dtor DoIt<Block< 5> >
 out: dtor DoIt<Block< 8> >
 out: dtor DoIt<Block<13> >
+return: 0
+END
+
+
+TEST "TypeListManipl_test" TypeListManipl_test <<END
+out: List1	:-<1>-<2>-<3>-
+out: List2	:-<5>-<6>-<7>-
+out: Added2	:-<3>-<4>-<5>-
+out: Append1	:-
+out: Append2	:-<11>-<22>-
+out: Append3	:-<111>-
+out: Append4	:-<222>-
+out: Append5	:-<1>-<2>-<3>-
+out: Append6	:-<5>-<6>-<7>-
+out: Append7	:-<111>-<5>-<6>-<7>-
+out: Append8	:-<1>-<2>-<3>-<222>-
+out: Append9	:-<1>-<2>-<3>-<5>-<6>-<7>-
+out: FilterEven	:-<2>-<6>-
+out: Prefix1	:
+out: 	+---<11>-<22>-+-
+out: Prefix2	:
+out: 	+---<101>-<1>-+
+out: 	+---<101>-<2>-+
+out: 	+---<101>-<3>-+-
+out: Prefix3	:
+out: 	+---<1>-+
+out: 	+---<2>-+
+out: 	+---<3>-+-
+out: Prefix4	:
+out: 	+---<111>-<1>-<2>-<3>-+
+out: 	+---<111>-<0>-+
+out: 	+---<111>-<5>-<6>-<7>-+-
+out: Prefix5	:
+out: 	+---<1>-<2>-<3>-<5>-+
+out: 	+---<1>-<2>-<3>-<6>-+
+out: 	+---<1>-<2>-<3>-<7>-+-
+out: Prefix6	:
+out: 	+---<1>-<2>-<3>-<1>-<2>-<3>-+
+out: 	+---<1>-<2>-<3>-<0>-+
+out: 	+---<1>-<2>-<3>-<5>-<6>-<7>-+-
+out: Dist1	:
+out: 	+---<11>-<1>-+
+out: 	+---<11>-<2>-+
+out: 	+---<11>-<3>-+-
+out: Dist2	:
+out: 	+---<11>-<0>-+
+out: 	+---<22>-<0>-+
+out: 	+---<33>-<0>-+-
+out: Dist3	:
+out: 	+---<11>-<1>-+
+out: 	+---<11>-<2>-+
+out: 	+---<11>-<3>-+
+out: 	+---<22>-<1>-+
+out: 	+---<22>-<2>-+
+out: 	+---<22>-<3>-+
+out: 	+---<33>-<1>-+
+out: 	+---<33>-<2>-+
+out: 	+---<33>-<3>-+-
+out: Dist4	:
+out: 	+---<11>-<1>-<2>-<3>-+
+out: 	+---<11>-<5>-<6>-<7>-+
+out: 	+---<22>-<1>-<2>-<3>-+
+out: 	+---<22>-<5>-<6>-<7>-+
+out: 	+---<33>-<1>-<2>-<3>-+
+out: 	+---<33>-<5>-<6>-<7>-+-
+out: Down	:-<11>-<10>-<9>-<8>-<7>-<6>-<5>-<4>-<3>-<2>-<1>-<0>-
+out: Combi	:
+out: 	+---<1>-<2>-<3>-<·>-+
+out: 	+---<1>-<2>-<2>-<·>-+
+out: 	+---<1>-<2>-<1>-<·>-+
+out: 	+---<1>-<2>-<0>-<·>-+
+out: 	+---<1>-<1>-<3>-<·>-+
+out: 	+---<1>-<1>-<2>-<·>-+
+out: 	+---<1>-<1>-<1>-<·>-+
+out: 	+---<1>-<1>-<0>-<·>-+
+out: 	+---<1>-<0>-<3>-<·>-+
+out: 	+---<1>-<0>-<2>-<·>-+
+out: 	+---<1>-<0>-<1>-<·>-+
+out: 	+---<1>-<0>-<0>-<·>-+
+out: 	+---<0>-<2>-<3>-<·>-+
+out: 	+---<0>-<2>-<2>-<·>-+
+out: 	+---<0>-<2>-<1>-<·>-+
+out: 	+---<0>-<2>-<0>-<·>-+
+out: 	+---<0>-<1>-<3>-<·>-+
+out: 	+---<0>-<1>-<2>-<·>-+
+out: 	+---<0>-<1>-<1>-<·>-+
+out: 	+---<0>-<1>-<0>-<·>-+
+out: 	+---<0>-<0>-<3>-<·>-+
+out: 	+---<0>-<0>-<2>-<·>-+
+out: 	+---<0>-<0>-<1>-<·>-+
+out: 	+---<0>-<0>-<0>-<·>-+-
+out: OnOff	:
+out: 	+---<1>-<2>-<3>-<·>-+
+out: 	+---<1>-<2>-<·>-+
+out: 	+---<1>-<3>-<·>-+
+out: 	+---<1>-<·>-+
+out: 	+---<2>-<3>-<·>-+
+out: 	+---<2>-<·>-+
+out: 	+---<3>-<·>-+
+out: 	+---<·>-+-
 return: 0
 END
 

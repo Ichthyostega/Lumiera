@@ -52,7 +52,6 @@
 using ::test::Test;
 using std::string;
 using std::cout;
-using boost::format;
 
 
 namespace lumiera {
@@ -113,6 +112,7 @@ namespace lumiera {
         
       } // (End) internal defs
       
+#define DELIMITER(TITLE) cout << "______\n______ " << STRINGIFY(TITLE) << "\n";      
       
       
       
@@ -155,7 +155,7 @@ namespace lumiera {
           /** @test conversion between list-of-flags and a config-type in both directions */
           void check_flags ()
             {
-              cout << "\n==== check_flags()\n";
+              DELIMITER (check_flags());
               
               typedef Config<TWO,FOU> Flags1;
               typedef Flags<TWO,FOU>  Flags2;
@@ -186,7 +186,8 @@ namespace lumiera {
                    << "? ---> "                \
                    << Instantiation<Maybe>::Test<NAME>::value << "\n";
               
-              cout << "\n==== check_instantiation()\n";
+              DELIMITER (check_instantiation());
+              
               CAN_INSTANTIATE (Conf0);
               CAN_INSTANTIATE (Conf1);
               CAN_INSTANTIATE (Conf2);
@@ -203,7 +204,7 @@ namespace lumiera {
            */ 
           void check_filter ()
             {
-              cout << "\n==== check_filter()\n";
+              DELIMITER (check_filter());
               
               DISPLAY (SomeFlagsets);
               
@@ -238,7 +239,7 @@ namespace lumiera {
                 void
                 visit (ulong code)
                   {
-                    result += str (format ("visit(code=%u) --> %s\n") 
+                    result += str (format ("visit(code=%u) -->%s\n") 
                                    % code % Printer<CONF>::print() );
                   }
               };
@@ -249,7 +250,7 @@ namespace lumiera {
            */
           void check_FlagInfo()
             {
-              cout << "\n==== check_FlagInfo()\n";
+              DELIMITER (check_FlagInfo());
               
               DISPLAY (Flags1);
               cout << "max bit    : " << FlagInfo<Flags1>::BITS <<"\n";
@@ -281,13 +282,16 @@ namespace lumiera {
            */
           void check_ConfigSelector()
             {
-              cout << "\n==== check_ConfigSelector()\n";
+              DELIMITER (check_ConfigSelector());
               
               typedef Apply<AllFlagCombinations::List, DefineConfigByFlags> ListAllConfigs;
               typedef Filter<ListAllConfigs::List,Instantiation<Maybe>::Test> Possible_Configs;
               DISPLAY (Possible_Configs);
               
-              typedef engine::config::ConfigSelector<TestFactory, long, uint> TestFactorySelector;
+              typedef engine::config::ConfigSelector< TestFactory  // Factory template
+                                                    , uint        //  product type
+                                                    , long       //   common ctor argument
+                                                    > TestFactorySelector;
               
               const long offset = 1000; // parameter fed to all TestFactory ctors
               TestFactorySelector testConfigSelector (Possible_Configs::List(), offset);

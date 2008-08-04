@@ -99,8 +99,8 @@ namespace engine {
      *       heap allocated.
      */
     template< template<class CONF> class Factory
-            , typename PAR        ///< ctor parameter of the Factories
-            , typename RET       ///<  common base class of the Factory's products
+            , typename RET        ///< common base class of the Factory's products
+            , typename PAR       ///<  ctor parameter of the Factories
             >
     class ConfigSelector
       {

@@ -37,6 +37,7 @@
 
 
 #include "common/meta/generator.hpp"
+
 //#include "common/meta/typelistutil.hpp"
 //#include "common/meta/util.hpp"
 //#include "common/util.hpp"
@@ -49,11 +50,33 @@ using boost::format;
 
 namespace lumiera {
   namespace typelist {
+      
+    /** constant-wrapper type for debugging purposes,
+     *  usable for generating lists of distinguishable types
+     */
+    template<int I>
+    struct Num
+      {
+        enum{ VAL=I };
+      };
+    
+    
+    /* some forwards used by configflagstest.cpp */
+    template<char bit> struct Flag;
+    template< char f1
+            , char f2
+            , char f3
+            , char f4
+            , char f5
+            >
+    struct Config;
+    
+    
+    
     namespace test {
-      
-      
       namespace { // internal definitions
       
+        using boost::format;
         
         format fmt ("-<%u>%s");
         
@@ -75,8 +98,15 @@ namespace lumiera {
             static string print () { return str( fmt % "·" % BASE::print()); }
           };
         
+        template<class BASE, int I>
+        struct Printer<Num<I>, BASE>    ///< display the presence of a Num instance in the typelist
+          : BASE
+          {
+            static string print () { return str( fmt % uint(Num<I>::VAL) % BASE::print()); }
+          };
+        
         template<class BASE, char Fl>
-        struct Printer<Flag<Fl>, BASE>
+        struct Printer<Flag<Fl>, BASE>  ///< display the presence of a Flag in the typelist
           : BASE
           {
             static string print () { return str( fmt % uint(Fl) % BASE::print()); }
@@ -124,7 +154,7 @@ namespace lumiera {
         typedef InstantiateChained<LIST::List, Printer, NullP>  Contents_##LIST;
                      
 #define DISPLAY(NAME)  \
-        DIAGNOSE(NAME); cout << STRINGIFY(NAME) << "\t" << Contents_##NAME::print() << "\n";
+        DIAGNOSE(NAME); cout << STRINGIFY(NAME) << "\t:" << Contents_##NAME::print() << "\n";
         
         
         

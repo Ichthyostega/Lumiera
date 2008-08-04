@@ -54,7 +54,7 @@ namespace mobject {
       public:
         /** create node(s) corresponding to the given Processor-Asset
          *  and wire them as a successor to this OperationPoint; then
-         *  move this point to point at the resulting new exit node(s)
+         *  move this point to refer to the resulting new exit node(s)
          */
         void attach (asset::PProc const&);
         

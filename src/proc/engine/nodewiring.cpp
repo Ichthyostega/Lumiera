@@ -30,15 +30,8 @@
 
 
 namespace engine {
-  
-  namespace { // internal: setting up a factory for each required configuration
-  
-    using config::CACHING;
-    using config::PROCESS;
-    using config::INPLACE;
-    
-    using config::ConfigSelector;
-    using config::Strategy;
+
+  namespace config {
     
     using lumiera::typelist::Flags;
     using lumiera::typelist::CombineFlags;
@@ -49,16 +42,24 @@ namespace engine {
     
     
     typedef Flags<CACHING,PROCESS,INPLACE>::Tuple AllFlags;
-
+    
     /** build the list of all possible flag combinations */
     typedef CombineFlags<AllFlags>     AllFlagCombinations;
-
+    
     /** build a configuration type for each of those flag combinations */
     typedef Apply<AllFlagCombinations::List, DefineConfigByFlags> AllConfigs;
               
     /** filter those configurations which actually define a wiring strategy */
     typedef Filter<AllConfigs::List, Instantiation<Strategy>::Test> PossibleConfigs;
     
+  } // namespace config
+  
+  
+  
+  
+  namespace { // internal: setting up a factory for each required configuration
+    
+    using config::ConfigSelector;
     
     class Alloc {}; ///////////////TODO
     
@@ -67,7 +68,7 @@ namespace engine {
     class WiringDescriptorFactory
       {
         Alloc& alloc_;
-          
+        
       public:
         WiringDescriptorFactory(Alloc& a) 
         : alloc_(a) {}
@@ -75,20 +76,32 @@ namespace engine {
         WiringDescriptor&
         operator() ()  
           { 
-            /////////////////////////////////////////////TODO 
-            //return offset_ + Maybe<CONF>::CODE; 
+            /////////////////////////////////////////////TODO
+            
+            typedef config::Strategy<CONF> Strategy;
+            typedef typename config::SelectBuffProvider<>::Type BuffProvider; ////////////////////////TODO: how to extract the required flags from CONF??
+            typedef ActualInvocationProcess<Strategy, BuffProvider> InvocationStateType;
+            
+            typedef NodeWiring<InvocationStateType> Product;
+            
+            Product * dummy (0);
+            return *dummy;
           }
       };
     
     
-    typedef ConfigSelector<WiringDescriptorFactory, WiringDescriptor&, Alloc&> WiringSelector;
-  
+    typedef ConfigSelector< WiringDescriptorFactory  ///< Factory template
+                          , WiringDescriptor&       ///<  type of the product
+                          , Alloc&                 ///<   allocator fed to all factories
+                          > WiringSelector;
+    
+    
     struct WiringFactoryImpl
       {
-//        WiringSelector selector;
+        WiringSelector selector;
         
         WiringFactoryImpl (Alloc& alloc)
-//          : selector(PossibleConfigs::List(), alloc)
+          : selector(config::PossibleConfigs::List(), alloc)
           { }
       };
   
@@ -119,6 +132,6 @@ namespace engine {
 //    return pImpl_->selector(config);
   }
   // BlockAlloc<NodeWiring< StateAdapter< Config<cache, process, inplace> > > >::fabricate();
-
+  
   
 } // namespace engine

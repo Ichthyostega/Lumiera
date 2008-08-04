@@ -248,10 +248,10 @@ namespace engine {
     template<char CACHE_Fl=0, char INPLACE_Fl=0>
     struct SelectBuffProvider;
     
-    template<> struct SelectBuffProvider<CACHING>         : AllocBufferFromCache { };
-    template<> struct SelectBuffProvider<NOT_SET,INPLACE> : AllocBufferFromParent{ };
-    template<> struct SelectBuffProvider<CACHING,INPLACE> : AllocBufferFromCache { };
-    template<> struct SelectBuffProvider<>                : AllocBufferFromParent{ };
+    template<> struct SelectBuffProvider<CACHING>         { typedef AllocBufferFromCache  Type; };
+    template<> struct SelectBuffProvider<NOT_SET,INPLACE> { typedef AllocBufferFromParent Type; };
+    template<> struct SelectBuffProvider<CACHING,INPLACE> { typedef AllocBufferFromCache  Type; };
+    template<> struct SelectBuffProvider<>                { typedef AllocBufferFromParent Type; };
   
     
     template<class Config>

@@ -133,13 +133,16 @@ namespace engine {
       static NodeFactory create; ///////TODO: really? probably we'll rather have a NodeFactory object in the builder...
       
       /** Engine Core operation: render and pull output from this node.
-       *  On return, currentProcess will hold onto output buffer(s)
-       *  containing the calculated result frames.
+       *  On return, currentProcess will hold onto output buffer(s) 
+       *  containing the calculated result frames. In case this node
+       *  calculates a multi channel output, only one channel can be 
+       *  retrieved by such a \c pull() call, but you can expect data
+       *  of the other channels to be processed and fed to cache.
        *  @param currentProcess the current processing state for 
        *         managing buffers and accessing current parameter values
        *  @param requiredOutputNr the output channel requested (in case
        *         this node delivers more than one output channel)
-       *  @return ID of the result buffer (accessible via currentProcess) 
+       *  @return handle to the buffer containing the calculated result. 
        */
       BuffHandle
       pull (State& currentProcess, uint requiredOutputNr=0)  const

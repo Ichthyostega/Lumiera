@@ -41,6 +41,7 @@
 #include "common/test/run.hpp"
 #include "common/meta/generator.hpp"
 #include "common/meta/typelistutil.hpp"
+#include "meta/typelistdiagnostics.hpp"
 #include "common/util.hpp"
 
 #include <boost/format.hpp>
@@ -56,65 +57,7 @@ namespace lumiera {
     namespace test {
       
       
-      namespace { // internal definitions
-      
-        boost::format fmt ("<%i>");
-        
-        /** constant-wrapper type for debugging purposes,
-         *  usable for generating lists of distinguishable types
-         */
-        template<int I>
-        struct Num
-          {
-            enum{ VAL=I };
-            static string str () { return boost::str (fmt % I); }
-          };
-        
-        
-        /** debugging template, 
-         *  printing the "number" used for intantiation
-         */
-        template<class NUM=NullType, class BASE=NullType>
-        struct Printer;
-        
-        template<class X>
-        struct Printer<NullType, X>
-          {
-            static string print () { return "-"; }
-          };
-        
-        template<class BASE, int I>
-        struct Printer<Num<I>, BASE>
-          : BASE
-          {
-            static string print () { return string("-") + Num<I>::str() + BASE::print(); }
-          };
-        
-        
-        typedef Printer<NullType> NullP;
-        
-        /** call the debug-print for a typelist
-         *  utilizing the Printer template */ 
-        template<class L>
-        string
-        printSublist ()
-        {
-          typedef InstantiateChained<L, Printer, NullP> SubList;
-          return SubList::print();
-        }
-        
-        /** Spezialisation for debug-printing of a nested sublist */
-        template<class TY, class TYPES, class BASE>
-        struct Printer<Node<TY,TYPES>, BASE>
-          : BASE
-          {
-            static string print () 
-              {
-                typedef Node<TY,TYPES> List;
-                return string("\n\t+--") + printSublist<List>()+"+"
-                     + BASE::print(); 
-              }
-          };
+      namespace { // test data
         
         
         
@@ -131,16 +74,10 @@ namespace lumiera {
         template<class X> struct CountDown          { typedef NullType List; };
         template<>        struct CountDown<Num<0> > { typedef Node<Num<0>, NullType> List; };
         template<int I>   struct CountDown<Num<I> > { typedef Node<Num<I>, typename CountDown<Num<I-1> >::List> List; };
-          
         
         
-#define DIAGNOSE(LIST) \
-        typedef InstantiateChained<LIST::List, Printer, NullP>  Contents_##LIST;
-                     
-#define DISPLAY(NAME)  \
-        DIAGNOSE(NAME); cout << STRINGIFY(NAME) << "\t" << Contents_##NAME::print() << "\n";
         
-      } // (End) internal defs
+      } // (End) test data
       
       
       
@@ -174,8 +111,8 @@ namespace lumiera {
           void check_diagnostics ()
             {
               // Explanation: the DISPLAY macro expands as follows....
-              typedef InstantiateChained<List1::List, Printer, Printer<NullType> >  Contents_List1;
-              cout << "List1" << "\t" << Contents_List1::print() << "\n";
+              typedef InstantiateChained<List1::List, Printer, NullP >  Contents_List1;
+              cout << "List1" << "\t:" << Contents_List1::print() << "\n";
               
               // That is: we instantiate the "Printer" template for each of the types in List1,
               // forming an inheritance chain. I.e. the defined Type "Contents_List1" inherits

@@ -23,8 +23,8 @@
 /** @file nodeinvocation.hpp
  ** Organize the state related to the invocation of s single ProcNode::pull() call
  ** This header defines part of the "glue" which holds together the render node network
- ** and enables to pull a result frames from the nodes. Doing so requires some invocation
- ** local state tobe maintained, especially a table of buffers used to carry out the
+ ** and enables to pull result frames from the nodes. Doing so requires some invocation
+ ** local state to be maintained, especially a table of buffers used to carry out the
  ** calculations. Further, getting the input buffers filled requires to issue recursive
  ** \c pull() calls, which on the whole creates a stack-like assembly of local invocation
  ** state.
@@ -37,7 +37,7 @@
  ** 
  ** \par composition of the Invocation State
  ** For each individual ProcNode#pull() call, the WiringAdapter#callDown() builds an StateAdapter
- ** instance directly on the stack, holding the actual buffer pointers and state references. Using this
+ ** instance directly on the stack, managing the actual buffer pointers and state references. Using this
  ** StateAdapter, the predecessor nodes are pulled. The way these operations are carried out is encoded
  ** in the actual StateAdapter type known to the NodeWiring (WiringAdapter) instance. All of these actual
  ** StateAdapter types are built as implementing the engine::State interface.
@@ -196,7 +196,7 @@ namespace engine {
     {
     public:
       ActualInvocationProcess (State& callingProcess, WiringDescriptor const& w, const uint outCh)
-        : Invocation(callingProcess, w, outCh)
+        : BufferProvider(callingProcess, w, outCh)
         { }
       
       /** contains the details of Cache query and recursive calls
