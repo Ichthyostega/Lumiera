@@ -51,7 +51,8 @@
 #include "common/util.hpp"
 #include "common/meta/configflags.hpp"
 
-#include <boost/lexical_cast.hpp>
+#include <boost/function.hpp>
+#include <bitset>
 #include <map>
 
 
@@ -59,9 +60,9 @@ namespace engine {
   namespace config {
   
     using lumiera::typelist::FlagInfo;
-    
-    using boost::lexical_cast;
     using util::contains;
+    
+    using lumiera::typelist::CONFIG_FLAGS_MAX;
     
     
     /**
@@ -99,28 +100,26 @@ namespace engine {
      *       heap allocated.
      */
     template< template<class CONF> class Factory
-            , typename RET        ///< common base class of the Factory's products
+            , typename FUNC       ///< common function type of all Factory instances
             , typename PAR       ///<  ctor parameter of the Factories
             >
     class ConfigSelector
       {
+        typedef boost::function<FUNC> FacFunction;
         
-        struct FacFunctor
-          {
-            virtual ~FacFunctor() {}
-            virtual RET invoke()  =0;
-          };
         template<class FAC>
-        struct FactoryHolder : FacFunctor
+        struct FactoryHolder 
+          : private FAC,
+            public FacFunction
           {
-            FAC factory_;
-            FactoryHolder(PAR p) : factory_(p) {}
-            
-            virtual RET invoke ()  { return factory_(); }
+            FactoryHolder(PAR p) 
+              : FAC(p),
+                FacFunction( static_cast<FAC&>(*this))
+              { }  
           };
         
         
-        typedef std::tr1::shared_ptr<FacFunctor> PFunc;
+        typedef std::tr1::shared_ptr<FacFunction> PFunc;
         typedef std::map<size_t, PFunc> ConfigTable;
         
         ConfigTable possibleConfig_; ///< Table of factories
@@ -162,13 +161,14 @@ namespace engine {
             FlagInfo<CONFS>::accept (buildTable);
           }
         
-        RET
-        operator() (size_t configFlags) ///< invoke the factory corresponding to the given config
+        FacFunction&
+        operator[] (size_t configFlags) ///< retrieve the factory corresponding to the given config
           {
             if (contains (possibleConfig_, configFlags))
-              return possibleConfig_[configFlags]->invoke();
+              return *possibleConfig_[configFlags];
             else
-              throw lumiera::error::Invalid("ConfigSelector: No preconfigured factory for config-bits="+lexical_cast<std::string>(configFlags));
+              throw lumiera::error::Invalid("ConfigSelector: No preconfigured factory for config-bits="
+                                           +std::bitset<CONFIG_FLAGS_MAX>(configFlags).to_string());
           }
       };
     

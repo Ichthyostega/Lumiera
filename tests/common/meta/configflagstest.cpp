@@ -112,7 +112,10 @@ namespace lumiera {
         
       } // (End) internal defs
       
-#define DELIMITER(TITLE) cout << "______\n______ " << STRINGIFY(TITLE) << "\n";      
+#define PRINT_DELIMITER(TITLE) \
+  cout << "__________________________\n" \
+          "__________________________ "  \
+       << STRINGIFY(TITLE) << "\n";      
       
       
       
@@ -155,7 +158,7 @@ namespace lumiera {
           /** @test conversion between list-of-flags and a config-type in both directions */
           void check_flags ()
             {
-              DELIMITER (check_flags());
+              PRINT_DELIMITER (check_flags());
               
               typedef Config<TWO,FOU> Flags1;
               typedef Flags<TWO,FOU>  Flags2;
@@ -186,7 +189,7 @@ namespace lumiera {
                    << "? ---> "                \
                    << Instantiation<Maybe>::Test<NAME>::value << "\n";
               
-              DELIMITER (check_instantiation());
+              PRINT_DELIMITER (check_instantiation());
               
               CAN_INSTANTIATE (Conf0);
               CAN_INSTANTIATE (Conf1);
@@ -204,7 +207,7 @@ namespace lumiera {
            */ 
           void check_filter ()
             {
-              DELIMITER (check_filter());
+              PRINT_DELIMITER (check_filter());
               
               DISPLAY (SomeFlagsets);
               
@@ -250,7 +253,7 @@ namespace lumiera {
            */
           void check_FlagInfo()
             {
-              DELIMITER (check_FlagInfo());
+              PRINT_DELIMITER (check_FlagInfo());
               
               DISPLAY (Flags1);
               cout << "max bit    : " << FlagInfo<Flags1>::BITS <<"\n";
@@ -282,14 +285,14 @@ namespace lumiera {
            */
           void check_ConfigSelector()
             {
-              DELIMITER (check_ConfigSelector());
+              PRINT_DELIMITER (check_ConfigSelector());
               
               typedef Apply<AllFlagCombinations::List, DefineConfigByFlags> ListAllConfigs;
               typedef Filter<ListAllConfigs::List,Instantiation<Maybe>::Test> Possible_Configs;
               DISPLAY (Possible_Configs);
               
               typedef engine::config::ConfigSelector< TestFactory  // Factory template
-                                                    , uint        //  product type
+                                                    , uint(void)  //  Factory function type
                                                     , long       //   common ctor argument
                                                     > TestFactorySelector;
               
@@ -300,7 +303,7 @@ namespace lumiera {
               #define INVOKE_CONFIG_SELECTOR(CODE) \
               cout << " Flag-code = " << CODE       \
                    << " ConfigSelector() ---> "      \
-                   << testConfigSelector (CODE) << "\n";
+                   << testConfigSelector[CODE] () << "\n";
               
               INVOKE_CONFIG_SELECTOR (2);
               INVOKE_CONFIG_SELECTOR (12);

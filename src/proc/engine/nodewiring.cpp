@@ -89,9 +89,10 @@ namespace engine {
           }
       };
     
+    typedef WiringDescriptor& (FunctionType)(void);
     
     typedef ConfigSelector< WiringDescriptorFactory  ///< Factory template
-                          , WiringDescriptor&       ///<  type of the product
+                          , FunctionType            ///<  function signature of the Factory
                           , Alloc&                 ///<   allocator fed to all factories
                           > WiringSelector;
     
@@ -129,7 +130,7 @@ namespace engine {
     
 //    Bits config (FlagInfo<Config>::CODE);
     size_t config = 13;  /////////////////////////////////////////TODO
-//    return pImpl_->selector(config);
+//    return pImpl_->selector[config]();
   }
   // BlockAlloc<NodeWiring< StateAdapter< Config<cache, process, inplace> > > >::fabricate();
   

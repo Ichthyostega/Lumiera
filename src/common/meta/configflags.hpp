@@ -55,6 +55,8 @@
 namespace lumiera {
   namespace typelist {
     
+    const size_t CONFIG_FLAGS_MAX = 5;
+
     
     template<char bit> struct Flag    { typedef Flag     ID; };
     template<>         struct Flag<0> { typedef NullType ID; };

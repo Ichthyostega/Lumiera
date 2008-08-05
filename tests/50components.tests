@@ -57,22 +57,22 @@ out: Conf2	:-<2>-
 out: Conf3	:-<3>-
 out: Conf4	:-<2>-<4>-
 out: AllFlags	:-<1>-<2>-<3>-<4>-
-out: ______
-out: ______ check_flags()
+out: __________________________
+out: __________________________ check_flags()
 out: Flags1	:-<2>-<4>-
 out: Flags2	:-<2>-<4>-
 out: SimpleConfig_defined_by_Typelist	:-<1>-
 out: AnotherConfig_defined_by_Typelist	:-<1>-<2>-<3>-<4>-
-out: ______
-out: ______ check_instantiation()
+out: __________________________
+out: __________________________ check_instantiation()
 out: defined Conf0? ---> 0
 out: defined Conf1? ---> 1
 out: defined Conf2? ---> 1
 out: defined Conf3? ---> 1
 out: defined Conf4? ---> 1
 out: defined Trash? ---> 0
-out: ______
-out: ______ check_filter()
+out: __________________________
+out: __________________________ check_filter()
 out: SomeFlagsets	:
 out: 	+---<1>-<3>-+
 out: 	+---<2>-<4>-+-
@@ -121,8 +121,8 @@ out: 	+-Conf-[-<2>-<3>-]
 out: 	+-Conf-[-<2>-<4>-]
 out: 	+-Conf-[-<2>-]
 out: 	+-Conf-[-<3>-]-
-out: ______
-out: ______ check_FlagInfo()
+out: __________________________
+out: __________________________ check_FlagInfo()
 out: Flags1	:-<1>-<3>-
 out: max bit    : 3
 out: binary code: 10
@@ -135,8 +135,8 @@ out: visit(code=10) -->
 out: 	+-Conf-[-<1>-<3>-]-
 out: visit(code=20) -->
 out: 	+-Conf-[-<2>-<4>-]-
-out: ______
-out: ______ check_ConfigSelector()
+out: __________________________
+out: __________________________ check_ConfigSelector()
 out: Possible_Configs	:
 out: 	+-Conf-[-<1>-]
 out: 	+-Conf-[-<2>-<3>-]
@@ -148,7 +148,7 @@ out:  Flag-code = 12 ConfigSelector() ---> 1023
 out:  Flag-code = 20 ConfigSelector() ---> 1024
 out:  Flag-code = 4 ConfigSelector() ---> 1020
 out:  Flag-code = 8 ConfigSelector() ---> 1030
-out: LUMIERA_ERROR_INVALID:invalid input or parameters (ConfigSelector: No preconfigured factory for config-bits=23).
+out: LUMIERA_ERROR_INVALID:invalid input or parameters (ConfigSelector: No preconfigured factory for config-bits=10111).
 return: 0
 END
 
