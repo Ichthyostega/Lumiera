@@ -46,6 +46,15 @@ LUMIERA_ERROR_DECLARE (CONFIG_SYNTAX);
  */
 
 
+struct lumiera_config_struct
+{
+  // cuckoo hash
+  // configfile list
+};
+
+typedef struct lumiera_config_struct lumiera_config;
+typedef lumiera_config* LumieraConfig;
+
 /**
  * Supported high level types: TODO documenting
  */

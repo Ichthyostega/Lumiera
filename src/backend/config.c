@@ -42,6 +42,9 @@ NOBUG_DEFINE_FLAG_PARENT (config, config_all);
 LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX, "Syntax error in configfile");
 
 
+/* singleton config */
+static lumiera_config;
+
 
 int
 lumiera_config_init (const char* path)
