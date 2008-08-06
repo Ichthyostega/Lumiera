@@ -1279,7 +1279,7 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200804070244" created="200708080322" tags="overview" changecount="22">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200808060229" created="200708080322" tags="overview" changecount="25">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1296,6 +1296,8 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 * [[integrating the Config Query system|ConfigQueryIntegration]]
 * [[identifying the basic Builder operations|BasicBuildingOperations]] and [[planning the Implementation|PlanningNodeCreatorTool]]
 * [[how to handle »attached placement«|AttachedPlacementProblem]]
+* working out the [[basic building situations|BuilderPrimitives]] and [[mechanics of rendering|RenderMechanics]]
+* how to classify and [[describe media stream types|StreamTypeDescr]]
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200711210542" created="200711210531" tags="discuss draft" changecount="7">
@@ -3064,6 +3066,32 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
 * it is created in the Controller subsystem while initiating the BuildProcess
 * it is passed on to the generated Render Engine, which in turn passes it down to the individual Processors
 * moreover, it contains methods to communicate with other state relevant parts of the system, thereby shielding the rendering code from any complexities of Thread communication if necessary. (thus the name Proxy)
+</pre>
+</div>
+<div title="StreamTypeDescr" modifier="Ichthyostega" modified="200808060322" created="200808060244" tags="spec discuss draft" changecount="3">
+<pre>//how to classify and describe media streams//
+Media data is understood to appear structured as stream(s) over time. While there may be an inherent internal structuring, at a given perspective ''any stream is a unit and homogeneous''. In the context of digital media data processing, streams are always ''quantized'', which means they appear as a temporal sequence of data chunks called ''frames''.
+
+! Terminology
+* __Media__ is comprised of a set of streams or channels
+* __Stream__ denotes a homogeneous flow of media data of a single kind
+* __Channel__ denotes a elementary stream, which can't be further separated in the given context
+* all of these are delivered and processed in a smallest unit called __Frame__. Each frame corresponds to a //time interval.//
+* a __Buffer__ is a data structure capable of holding a Frame of media data.
+* the __~Stream-Type__ describes the kind of media data contained in the stream
+
+! Problem of Stream Type Description
+Media types vary largely and exhibit a large number of different properties, which can't be subsumed under a single classification scheme. But on the other hand, we want to deal with media objects in a uniform and generic manner, because on the large all kinds of media behave somewhat similar. The problem is, these similarities disappear when describing media with logical precision. Thus we are forced into specialized handling and operations for each kind of media, while we want to implement a generic handling concept.
+
+! Handling Stream Type Description
+!! Identification
+A stream type is denoted by a ~StreamID, which is an identifier, acting as an unique key for accessing information related to the stream type.
+
+!! Requirements
+* set up a buffer and be able to create/retrieve frames of media data.
+* determine if sources and sinks for media data can be connected, and how.
+* determine and enumerate the internal structure of a stream.
+* discover processing facilities
 </pre>
 </div>
 <div title="StrongSeparation" modifier="MichaelPloujnikov" modified="200706271504" created="200706220452" tags="design" changecount="5">
