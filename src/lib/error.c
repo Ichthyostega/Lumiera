@@ -46,12 +46,12 @@ lumiera_error_tls_init (void)
 }
 
 
-const char*
-lumiera_error_set (const char * nerr)
+lumiera_err
+lumiera_error_set (lumiera_err nerr)
 {
   pthread_once (&lumiera_error_initialized, lumiera_error_tls_init);
 
-  const char* err = pthread_getspecific (lumiera_error_tls);
+  lumiera_err err = pthread_getspecific (lumiera_error_tls);
   if (!err)
     pthread_setspecific (lumiera_error_tls, nerr);
 
@@ -59,12 +59,12 @@ lumiera_error_set (const char * nerr)
 }
 
 
-const char*
+lumiera_err
 lumiera_error ()
 {
   pthread_once (&lumiera_error_initialized, lumiera_error_tls_init);
 
-  const char* err = pthread_getspecific (lumiera_error_tls);
+  lumiera_err err = pthread_getspecific (lumiera_error_tls);
   if (err)
     pthread_setspecific (lumiera_error_tls, NULL);
   return err;
