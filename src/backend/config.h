@@ -60,18 +60,18 @@ LUMIERA_ERROR_DECLARE (CONFIG_SYNTAX);
 
 //  * does only initialize the variables, so that they get valid values, but does not allocate them as they will be allocated before as they are singleton.
 //  * lumiera_config_init (const char* searchpath) searchpath is a buildin-default, can be changed via configure and can be appended and overridden by using a flag, e.g. {{{ --config-path-append="" }}} or {{{ --config-path="" }}}
-lumiera_err
+int
 lumiera_config_init (const char* path);
 
 
 //  * frees all space allocated by the ConfigLoader.
-lumiera_err
+int
 lumiera_config_destroy();
 
 
 //  * reads '''one''' single configuration file that will include all settings from other files.
 //  * does not read itself but give delegates reading. The actual reading and parsing will be done in configfile object. s.later.
-lumiera_err
+int
 lumiera_config_load (const char* file);
 
 
@@ -81,12 +81,12 @@ lumiera_config_load (const char* file);
 //  * does initiate the actual saving procedure by delegating the save to the actual configfile objects, see below.
 //  * empty user configuration files in RAM will be deleted from disk on write.
 //  * checks whether the file has changed since last read, and will print out an error if necessary instead of overriding it without notification.
-lumiera_err
+int
 lumiera_config_save ();
 
 
 // * `lumiera_config_purge(const char* filename)` removes all configs loaded from filename
-lumiera_err
+int
 lumiera_config_purge (const char* filename);
 
 
@@ -95,7 +95,7 @@ lumiera_config_purge (const char* filename);
 //  * handles internally everything as string:string key:value pair.
 //  * lowlevel function
 //  * lumiera_config_integer_get (const char* key, int *value) will return integers instead of strings and return 0 if succeeded and -1 if it failed.
-lumiera_err
+int
 lumiera_config_get (const char* key, const char** value);
 
 
@@ -105,7 +105,7 @@ lumiera_config_get (const char* key, const char** value);
 //  * lowlevel function
 //  * tag file as dirty
 //  * set will create a new user configuration file if it does not exist yet or will append a line to the existing one in RAM. These  files, tagged as 'dirty', will be only written if save() is called.
-lumiera_err
+int
 lumiera_config_set (const char* key, const char* value);
 
 
@@ -119,7 +119,7 @@ lumiera_config_set (const char* key, const char* value);
 //    NOTE2: default values are given as strings, the config loader remembers a given default value and checks if it got changed
 //           when it is _set(). Thus a default value can be supressed when set/written
 #define LUMIERA_CONFIG_TYPE(name, type) \
-  lumiera_err \
+  int \
   lumiera_config_##name##_get (const char* key, type* value, const char* def);
 LUMIERA_CONFIG_TYPES
 #undef LUMIERA_CONFIG_TYPE
@@ -129,7 +129,7 @@ LUMIERA_CONFIG_TYPES
 //  * {{{ lumiera_config_TYPE_set (const char* key, TYPE*value, const char* fmt) }}}
 //    Highlevel interface for different types, fmt is a printf format specifier for the desired format, when NULL, defaults apply.
 #define LUMIERA_CONFIG_TYPE(name, type) \
-  lumiera_err \
+  int \
   lumiera_config_##name##_set (const char* key, type* value, const char* fmt);
 LUMIERA_CONFIG_TYPES
 #undef LUMIERA_CONFIG_TYPE
@@ -137,12 +137,12 @@ LUMIERA_CONFIG_TYPES
 
 // * {{{ lumiera_config_reset(...) }}}
 //  * reset a value by key to the system default values, thus removes a user's configuration line.
-lumiera_err
+int
 lumiera_config_reset(const char* key);
 
 
 //  * Find exact place of a setting.
-lumiera_err
+int
 lumiera_config_info (const char* key, const char** filename, unsigned* line);
 
 #endif

@@ -43,75 +43,77 @@ LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX, "Syntax error in configfile");
 
 
 
-lumiera_err
+int
 lumiera_config_init (const char* path)
 {
   UNIMPLEMENTED();
-  return NULL;
+  return -1;
 }
 
 
-lumiera_err
+int
 lumiera_config_destroy()
 {
   UNIMPLEMENTED();
-  return NULL;
+  return -1;
 }
 
 
-lumiera_err
+int
 lumiera_config_load (const char* file)
 {
   UNIMPLEMENTED();
-  return NULL;
+  return -1;
 }
 
 
-lumiera_err
+int
 lumiera_config_save ()
 {
   UNIMPLEMENTED();
-  return NULL;
+  return -1;
 }
 
 
-lumiera_err
+int
 lumiera_config_purge (const char* filename)
 {
   UNIMPLEMENTED();
-  return NULL;
+  return -1;
 }
 
 
-lumiera_err
+int
 lumiera_config_get (const char* key, const char** value)
 {
   UNIMPLEMENTED();
-  return NULL;
+  // env var override
+
+  return -1;
 }
 
 
-lumiera_err
+int
 lumiera_config_set (const char* key, const char* value)
 {
   UNIMPLEMENTED();
-  return NULL;
+  return -1;
 }
 
 
-lumiera_err
+int
 lumiera_config_reset(const char* key)
 {
   UNIMPLEMENTED();
-  return NULL;
+  return -1;
 }
 
 
-lumiera_err
+int
 lumiera_config_info (const char* key, const char** filename, unsigned* line)
 {
   UNIMPLEMENTED();
-  return NULL;
+  return -1;
 }
 
 /*
