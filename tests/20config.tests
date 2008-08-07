@@ -1,0 +1,43 @@
+TESTING "test configuration system" ./test-config
+
+TEST "initializing config system" init <<END
+out: initialized
+out: destroyed
+END
+
+
+PLANNED "loading configfile, simple"  <<END
+END
+
+
+PLANNED "loading configfile, with includes"  <<END
+END
+
+
+PLANNED "env var override"  <<END
+END
+
+
+PLANNED "lowlevel get"  <<END
+END
+
+
+PLANNED "lowlevel set"  <<END
+END
+
+
+PLANNED "saving simple configfile"  <<END
+END
+
+
+PLANNED "complex saving user file"  <<END
+END
+
+
+PLANNED "TYPE get"  <<END
+END
+
+
+PLANNED "TYPE set"  <<END
+END
+

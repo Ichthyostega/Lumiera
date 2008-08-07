@@ -20,6 +20,7 @@
 */
 
 //TODO: Support library includes//
+#include "lib/safeclib.h"
 
 
 //TODO: Lumiera header includes//
@@ -29,7 +30,7 @@
 
 
 //TODO: System includes//
-
+#include <stdint.h>
 
 /**
  * @file
@@ -40,25 +41,35 @@ NOBUG_DEFINE_FLAG_PARENT (config_all, backend);
 NOBUG_DEFINE_FLAG_PARENT (config, config_all);
 
 LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX, "Syntax error in configfile");
+LUMIERA_ERROR_DEFINE (CONFIG_TYPE, "Config value has wrong type");
 
 
 /* singleton config */
-static lumiera_config;
+static LumieraConfig the_config = NULL;
 
 
 int
 lumiera_config_init (const char* path)
 {
-  UNIMPLEMENTED();
-  return -1;
+  REQUIRE (!the_config, "Configuration subsystem already initialized");
+
+  the_config = malloc (sizeof (*the_config));
+  the_config->path = lumiera_strndup (path, SIZE_MAX);
+  return 0;
 }
 
 
-int
-lumiera_config_destroy()
+void
+lumiera_config_destroy ()
 {
-  UNIMPLEMENTED();
-  return -1;
+  if (the_config)
+    {
+      lumiera_free (the_config->path);
+      lumiera_free (the_config);
+      the_config = NULL;
+    }
+  else
+    WARN (config, "Tried to destroy non initialized config subsystem");
 }
 
 
