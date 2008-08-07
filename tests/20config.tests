@@ -34,31 +34,29 @@ PLANNED "complex saving user file"  <<END
 END
 
 
-TEST "number get" number_get <<END
+TEST "number get, default" number_get test.number.1 '1234567890 # comment' <<END
 out: 1234567890
 END
 
 export LUMIERA_TEST_NUMBER_1=987654321
-TEST "number get, env override" number_get <<END
+TEST "number get, env override" number_get test.number.1 '1234567890 # comment' <<END
 out: 987654321
 END
 
 export LUMIERA_TEST_NUMBER_1=barf
-TEST "number get, type error" number_get_nodefault <<END
+TEST "number get, type error" number_get_nodefault test.number.1 <<END
 out: LUMIERA_ERROR_CONFIG_TYPE:value has wrong type
 END
 unset LUMIERA_TEST_NUMBER_1
 
 
-
-PLANNED "number get, syntax error" number_get <<END
+TEST "number get, syntax error" number_get no:fun:blah '1234567890 # comment' <<END
+out: LUMIERA_ERROR_CONFIG_SYNTAX_KEY:syntax error in key
 END
 
 
-PLANNED "number get, default" number_get <<END
-END
-
-PLANNED "number get, no default" number_get <<END
+TEST "number get, no default, no env" number_get_nodefault test.number.1 <<END
+out: LUMIERA_ERROR_CONFIG_NO_ENTRY:no configuration entry
 END
 
 

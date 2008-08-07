@@ -37,11 +37,14 @@ TEST ("init")
 
 TEST ("number_get")
 {
+  REQUIRE (argv[2]);
+  REQUIRE (argv[3]);
+
   lumiera_config_init ("./");
 
   long long number = 0;
 
-  if (!lumiera_config_number_get ("test.number.1", &number, "1234567890 # comment"))
+  if (!lumiera_config_number_get (argv[2], &number, argv[3]))
     printf ("%lld\n", number);
   else
     printf ("%s\n", lumiera_error ());
@@ -52,11 +55,13 @@ TEST ("number_get")
 
 TEST ("number_get_nodefault")
 {
+  REQUIRE (argv[2]);
+
   lumiera_config_init ("./");
 
   long long number = 0;
 
-  if (!lumiera_config_number_get ("test.number.1", &number, NULL))
+  if (!lumiera_config_number_get (argv[2], &number, NULL))
     printf ("%lld\n", number);
   else
     printf ("%s\n", lumiera_error ());
