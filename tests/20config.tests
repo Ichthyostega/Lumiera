@@ -34,10 +34,66 @@ PLANNED "complex saving user file"  <<END
 END
 
 
-PLANNED "TYPE get"  <<END
+TEST "number get" number_get <<END
+out: 1234567890
+END
+
+export LUMIERA_TEST_NUMBER_1=987654321
+TEST "number get, env override" number_get <<END
+out: 987654321
+END
+
+export LUMIERA_TEST_NUMBER_1=barf
+TEST "number get, type error" number_get_nodefault <<END
+out: LUMIERA_ERROR_CONFIG_TYPE:value has wrong type
+END
+unset LUMIERA_TEST_NUMBER_1
+
+
+
+PLANNED "number get, syntax error" number_get <<END
 END
 
 
-PLANNED "TYPE set"  <<END
+PLANNED "number get, default" number_get <<END
+END
+
+PLANNED "number get, no default" number_get <<END
+END
+
+
+PLANNED "number set"  <<END
+END
+
+
+PLANNED "real get"  <<END
+END
+
+
+PLANNED "real set"  <<END
+END
+
+
+PLANNED "string get"  <<END
+END
+
+
+PLANNED "string set"  <<END
+END
+
+
+PLANNED "word get"  <<END
+END
+
+
+PLANNED "word set"  <<END
+END
+
+
+PLANNED "bool get"  <<END
+END
+
+
+PLANNED "bool set"  <<END
 END
 

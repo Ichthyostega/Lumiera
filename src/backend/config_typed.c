@@ -27,6 +27,7 @@
 #include "backend/config.h"
 
 //TODO: internal/static forward declarations//
+extern LumieraConfig lumiera_global_config;
 
 
 //TODO: System includes//
@@ -43,8 +44,44 @@
 int
 lumiera_config_number_get (const char* key, long long* value, const char* def)
 {
-  UNIMPLEMENTED();
-  return -1;
+  TRACE (config_typed);
+
+  int ret = -1;
+
+  const char* raw_value = NULL;
+
+  LUMIERA_RDLOCK_SECTION (config_typed, lumiera_global_config->rh, &lumiera_global_config->lock)
+    {
+      if (lumiera_config_get (key, &raw_value))
+        {
+          /* not found, fall back to default */
+          raw_value = def;
+          TODO ("register default, if given (writelock or mutex!)");
+        }
+
+      if (raw_value)
+        {
+          if (sscanf (raw_value, "%Li", value) == 1)
+            ret = 0; /* all ok */
+          else
+            {
+              if (def && raw_value != def)
+                {
+                  /* we have a 2nd chance, using the default */
+                  if (sscanf (def, "%Li", value) == 1)
+                    ret = 0; /* all ok */
+                  else
+                    LUMIERA_ERROR_SET (config_typed, CONFIG_DEFAULT);
+                }
+              else
+                LUMIERA_ERROR_SET (config_typed, CONFIG_TYPE);
+            }
+        }
+      else
+        LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
+    }
+
+  return ret;
 }
 
 int

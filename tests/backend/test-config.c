@@ -34,4 +34,34 @@ TEST ("init")
   printf ("destroyed\n");
 }
 
+
+TEST ("number_get")
+{
+  lumiera_config_init ("./");
+
+  long long number = 0;
+
+  if (!lumiera_config_number_get ("test.number.1", &number, "1234567890 # comment"))
+    printf ("%lld\n", number);
+  else
+    printf ("%s\n", lumiera_error ());
+
+  lumiera_config_destroy ();
+}
+
+
+TEST ("number_get_nodefault")
+{
+  lumiera_config_init ("./");
+
+  long long number = 0;
+
+  if (!lumiera_config_number_get ("test.number.1", &number, NULL))
+    printf ("%lld\n", number);
+  else
+    printf ("%s\n", lumiera_error ());
+
+  lumiera_config_destroy ();
+}
+
 TESTS_END

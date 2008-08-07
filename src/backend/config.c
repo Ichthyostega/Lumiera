@@ -43,10 +43,11 @@ NOBUG_DEFINE_FLAG_PARENT (config, config_all);
 NOBUG_DEFINE_FLAG_PARENT (config_typed, config_all);
 NOBUG_DEFINE_FLAG_PARENT (config_file, config_all);
 
-LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX, "Syntax error in configfile");
-LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX_KEY, "Syntax error in key");
-LUMIERA_ERROR_DEFINE (CONFIG_TYPE, "Config value has wrong type");
-LUMIERA_ERROR_DEFINE (CONFIG_NO_ENTRY, "No configuration found for key");
+LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX, "syntax error in configfile");
+LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX_KEY, "syntax error in key");
+LUMIERA_ERROR_DEFINE (CONFIG_TYPE, "value has wrong type");
+LUMIERA_ERROR_DEFINE (CONFIG_NO_ENTRY, "no configuration entry");
+LUMIERA_ERROR_DEFINE (CONFIG_DEFAULT, "illegal default value");
 
 
 /* singleton config */
