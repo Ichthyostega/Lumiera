@@ -31,6 +31,7 @@
 
 //TODO: System includes//
 #include <stdint.h>
+#include <stdlib.h>
 
 /**
  * @file
@@ -43,11 +44,13 @@ NOBUG_DEFINE_FLAG_PARENT (config_typed, config_all);
 NOBUG_DEFINE_FLAG_PARENT (config_file, config_all);
 
 LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX, "Syntax error in configfile");
+LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX_KEY, "Syntax error in key");
 LUMIERA_ERROR_DEFINE (CONFIG_TYPE, "Config value has wrong type");
+LUMIERA_ERROR_DEFINE (CONFIG_NO_ENTRY, "No configuration found for key");
 
 
 /* singleton config */
-static LumieraConfig lumiera_global_config = NULL;
+LumieraConfig lumiera_global_config = NULL;
 
 
 int
@@ -78,6 +81,7 @@ lumiera_config_destroy ()
   if (lumiera_global_config)
     {
       RESOURCE_FORGET (config, lumiera_global_config->rh);
+      lumiera_rwlock_destroy (&lumiera_global_config->lock);
       lumiera_free (lumiera_global_config->path);
       lumiera_free (lumiera_global_config);
       lumiera_global_config = NULL;
@@ -114,10 +118,39 @@ lumiera_config_purge (const char* filename)
 int
 lumiera_config_get (const char* key, const char** value)
 {
-  UNIMPLEMENTED();
-  // env var override
+  TRACE (config);
+  REQUIRE (key);
+  REQUIRE (value);
 
-  return -1;
+  int ret = -1;
+
+  /* we translate the key for the env var override by making it uppercase and replace . and - with _,
+   as side effect, this also checks the key syntax */
+  char* tr_key = lumiera_tmpbuf_tr (key,
+                                    "abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVQXYZ01234567_.-",
+                                    "ABCDEFGHIJKLMNOPQRSTUVQXYZABCDEFGHIJKLMNOPQRSTUVQXYZ01234567___",
+                                    NULL);
+  if (!tr_key)
+    {
+      LUMIERA_ERROR_SET (config, CONFIG_SYNTAX_KEY);
+    }
+  else
+    {
+      char* env = lumiera_tmpbuf_snprintf (2048, "LUMIERA_%s", tr_key);
+
+      *value = getenv(env);
+      if (*value)
+        {
+          ret = 0;
+          NOTICE (config, "envvar override for config %s = %s", env, *value);
+        }
+      else
+        {
+          TODO ("lookup key");
+        }
+    }
+
+  return ret;
 }
 
 
