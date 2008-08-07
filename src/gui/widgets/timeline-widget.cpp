@@ -21,8 +21,6 @@
 * *****************************************************/
 
 #include "timeline-widget.hpp"
-#include "timeline/timeline-arrow-tool.hpp"
-#include "timeline/timeline-ibeam-tool.hpp"
 
 #include <boost/foreach.hpp>
 
@@ -46,14 +44,17 @@ TimelineWidget::TimelineWidget() :
   totalHeight(0),
   horizontalAdjustment(0, 0, 0),
   verticalAdjustment(0, 0, 0),
+  selectionStart(0),
+  selectionEnd(0),
   horizontalScroll(horizontalAdjustment),
-  verticalScroll(verticalAdjustment),
-  tool(NULL)
+  verticalScroll(verticalAdjustment)
 {
   body = new TimelineBody(this);
   ENSURE(body != NULL);
   headerContainer = new HeaderContainer(this);
   ENSURE(headerContainer != NULL);
+  ruler = new TimelineRuler(this);
+  ENSURE(ruler != NULL);
 
   horizontalAdjustment.signal_value_changed().connect( sigc::mem_fun(
     this, &TimelineWidget::on_scroll) );
@@ -63,9 +64,10 @@ TimelineWidget::TimelineWidget() :
     this, &TimelineWidget::on_motion_in_body_notify_event) );
   
   set_time_scale(GAVL_TIME_SCALE / 200);
+  set_selection(2000000, 4000000);
 
   attach(*body, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
-  attach(ruler, 1, 2, 0, 1, FILL|EXPAND, SHRINK);
+  attach(*ruler, 1, 2, 0, 1, FILL|EXPAND, SHRINK);
   attach(*headerContainer, 0, 1, 1, 2, SHRINK, FILL|EXPAND);
   attach(horizontalScroll, 1, 2, 2, 3, FILL|EXPAND, SHRINK);
   attach(verticalScroll, 2, 3, 1, 2, SHRINK, FILL|EXPAND);
@@ -87,10 +89,10 @@ TimelineWidget::~TimelineWidget()
   REQUIRE(headerContainer != NULL);
   if(headerContainer != NULL)
     headerContainer->unreference();
-  
-  REQUIRE(tool != NULL);
-  if(tool != NULL)
-    delete tool;
+    
+  REQUIRE(ruler != NULL);
+  if(ruler != NULL)
+    ruler->unreference();
 }
 
 gavl_time_t
@@ -102,9 +104,11 @@ TimelineWidget::get_time_offset() const
 void
 TimelineWidget::set_time_offset(gavl_time_t time_offset)
 {
+  REQUIRE(ruler != NULL);
+  
   timeOffset = time_offset;
   horizontalAdjustment.set_value(time_offset);
-  ruler.set_time_offset(time_offset);
+  ruler->update_view();
 }
 
 int64_t
@@ -116,11 +120,14 @@ TimelineWidget::get_time_scale() const
 void
 TimelineWidget::set_time_scale(int64_t time_scale)
 {
+  REQUIRE(ruler != NULL);
+  
   timeScale = time_scale;
-  ruler.set_time_scale(time_scale);
   
   const int view_width = body->get_allocation().get_width();
   horizontalAdjustment.set_page_size(timeScale * view_width);
+  
+  ruler->update_view();
 }
 
 void
@@ -163,49 +170,56 @@ TimelineWidget::shift_view(int shift_size)
     shift_size * timeScale * view_width / 16);
 }
 
+gavl_time_t
+TimelineWidget::get_selection_start() const
+{
+  return selectionStart;
+}
+
+gavl_time_t
+TimelineWidget::get_selection_end() const
+{
+  return selectionEnd;
+}
+
+void
+TimelineWidget::set_selection(gavl_time_t start, gavl_time_t end)
+{
+  if(start < end)
+    {
+      selectionStart = start;
+      selectionEnd = end;
+    }
+  else
+    {
+      // The selection is back-to-front, flip it round
+      selectionStart = end;
+      selectionEnd = start;
+    }
+
+  ruler->queue_draw();
+  body->queue_draw();
+}
+
 ToolType
 TimelineWidget::get_tool() const
 {
-  REQUIRE(tool != NULL);
-  if(tool != NULL)
-    return tool->get_type();
-  return None;
+  REQUIRE(body != NULL);
+  return body->get_tool();
 }
   
 void
 TimelineWidget::set_tool(ToolType tool_type)
 {
-  // Tidy up old tool
-  if(tool != NULL)
-    {
-      // Do we need to change tools?
-      if(tool->get_type() == tool_type)
-        return;
-        
-      delete tool;
-    }
-  
-  // Create the new tool
-  switch(tool_type)
-    {
-    case timeline::Arrow:
-      tool = new timeline::ArrowTool(this);
-      break;
-      
-    case timeline::IBeam:
-      tool = new timeline::IBeamTool(this);
-      break;
-    }
-    
-  // Apply the cursor if possible
-  tool->apply_cursor();
+  REQUIRE(body != NULL);
+  body->set_tool(tool_type);
 }
 
 void
 TimelineWidget::on_scroll()
 {
   timeOffset = horizontalAdjustment.get_value();
-  ruler.set_time_offset(timeOffset);
+  ruler->update_view();
 }
   
 void
@@ -214,6 +228,18 @@ TimelineWidget::on_size_allocate(Allocation& allocation)
   Widget::on_size_allocate(allocation);
   
   update_scroll();
+}
+
+int
+TimelineWidget::time_to_x(gavl_time_t time) const
+{
+  return (int)((time - timeOffset) / timeScale);
+}
+
+gavl_time_t
+TimelineWidget::x_to_time(int x) const
+{
+  return (gavl_time_t)((int64_t)x * timeScale + timeOffset);
 }
 
 void
@@ -282,7 +308,7 @@ bool
 TimelineWidget::on_motion_in_body_notify_event(GdkEventMotion *event)
 {
   REQUIRE(event != NULL);
-  ruler.set_mouse_chevron_offset(event->x);
+  ruler->set_mouse_chevron_offset(event->x);
   return true;
 }
 

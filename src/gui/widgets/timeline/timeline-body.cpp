@@ -27,6 +27,9 @@
 #include "../timeline-widget.hpp"
 #include "../../window-manager.hpp"
 
+#include "timeline-arrow-tool.hpp"
+#include "timeline-ibeam-tool.hpp"
+
 using namespace Gtk;
 using namespace std;
 using namespace lumiera::gui;
@@ -38,8 +41,10 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-TimelineBody::TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widget) :
+TimelineBody::TimelineBody(lumiera::gui::widgets::TimelineWidget
+  *timeline_widget) :
     Glib::ObjectBase("TimelineBody"),
+    tool(NULL),
     dragType(None),
     mouseDownX(0),
     mouseDownY(0),
@@ -63,6 +68,51 @@ TimelineBody::TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widge
       GDK_TYPE_COLOR, G_PARAM_READABLE));
 }
 
+TimelineBody::~TimelineBody()
+{
+  REQUIRE(tool != NULL);
+  if(tool != NULL)
+    delete tool;
+}
+
+ToolType
+TimelineBody::get_tool() const
+{
+  REQUIRE(tool != NULL);
+  if(tool != NULL)
+    return tool->get_type();
+  return lumiera::gui::widgets::timeline::None;
+}
+  
+void
+TimelineBody::set_tool(timeline::ToolType tool_type)
+{  
+  // Tidy up old tool
+  if(tool != NULL)
+    {
+      // Do we need to change tools?
+      if(tool->get_type() == tool_type)
+        return;
+        
+      delete tool;
+    }
+  
+  // Create the new tool
+  switch(tool_type)
+    {
+    case timeline::Arrow:
+      tool = new ArrowTool(this);
+      break;
+      
+    case timeline::IBeam:
+      tool = new IBeamTool(this);
+      break;
+    }
+    
+  // Apply the cursor if possible
+  tool->apply_cursor();
+}
+
 void
 TimelineBody::on_realize()
 {
@@ -76,7 +126,7 @@ TimelineBody::on_realize()
     Gdk::BUTTON_RELEASE_MASK);
     
   // Apply the cursor if possible
-  timelineWidget->tool->apply_cursor();
+  tool->apply_cursor();
 }
 
 void
@@ -138,7 +188,12 @@ TimelineBody::on_button_press_event(GdkEventButton* event)
   default:
     dragType = None;
     break;
-  }  
+  }
+  
+  // Forward the event to the tool
+  tool->on_button_press_event(event);
+  
+  return true;
 }
   
 bool
@@ -146,11 +201,16 @@ TimelineBody::on_button_release_event(GdkEventButton* event)
 {
   // Terminate any drags
   dragType = None;
+  
+  // Forward the event to the tool
+  tool->on_button_release_event(event);
+  
+  return true;
 }
 
 bool
 TimelineBody::on_motion_notify_event(GdkEventMotion *event)
-{ 
+{
   REQUIRE(event != NULL);
     
   switch(dragType)
@@ -168,6 +228,9 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
     }
   }
   
+  // Forward the event to the tool
+  tool->on_motion_notify_event(event);
+  
   // false so that the message is passed up to the owner TimelineWidget
   return false;
 }
@@ -175,6 +238,8 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
 bool
 TimelineBody::on_expose_event(GdkEventExpose* event)
 {
+  Cairo::Matrix view_matrix;
+  
   REQUIRE(event != NULL);
   REQUIRE(timelineWidget != NULL);
   
@@ -196,6 +261,7 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
   
   // Translate the view by the scroll distance
   cairo->translate(0, -get_vertical_offset());
+  cairo->get_matrix(view_matrix);
   
   // Interate drawing each track
   BOOST_FOREACH( Track* track, timelineWidget->tracks )
@@ -217,8 +283,44 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
       
       // Shift for the next track
       cairo->translate(0, height + TimelineWidget::TrackPadding);
-    }   
+    }
+    
+  //----- Draw the selection -----//
+  const int start_x = timelineWidget->time_to_x(
+    timelineWidget->get_selection_start());
+  const int end_x = timelineWidget->time_to_x(
+    timelineWidget->get_selection_end());
 
+  cairo->set_matrix(view_matrix);
+  
+  // Draw the cover
+  if(end_x > 0 && start_x < allocation.get_width())
+    {
+      cairo->set_source_rgba(1.0, 0, 0, 0.5);
+      cairo->rectangle(start_x + 0.5, 0,
+        end_x - start_x, allocation.get_height());
+      cairo->fill();
+    }
+  
+  cairo->set_source_rgb(1.0, 0, 0);
+  cairo->set_line_width(1);
+  
+  // Draw the start
+  if(start_x >= 0 && start_x < allocation.get_width())
+    {
+      cairo->move_to(start_x + 0.5, 0);
+      cairo->line_to(start_x + 0.5, allocation.get_height());
+      cairo->stroke_preserve();
+    }
+    
+  // Draw the end
+  if(end_x >= 0 && end_x < allocation.get_width())
+    {
+      cairo->move_to(end_x + 0.5, 0);
+      cairo->line_to(end_x + 0.5, allocation.get_height());
+      cairo->stroke_preserve();
+    } 
+  
   return true;
 }
 

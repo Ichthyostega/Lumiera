@@ -27,8 +27,8 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-ArrowTool::ArrowTool(TimelineWidget *timeline_widget) :
-  Tool(timeline_widget)
+ArrowTool::ArrowTool(TimelineBody *timeline_body) :
+  Tool(timeline_body)
 {
 
 }
@@ -43,6 +43,24 @@ Gdk::Cursor
 ArrowTool::get_cursor() const
 {
   return Gdk::Cursor(Gdk::ARROW);
+}
+
+void
+ArrowTool::on_button_press_event(GdkEventButton* event)
+{
+  Tool::on_button_press_event(event);
+}
+
+void
+ArrowTool::on_button_release_event(GdkEventButton* event)
+{
+  Tool::on_button_release_event(event);
+}
+
+void
+ArrowTool::on_motion_notify_event(GdkEventMotion *event)
+{
+  Tool::on_motion_notify_event(event);
 }
 
 }   // namespace timeline

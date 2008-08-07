@@ -38,12 +38,24 @@ namespace timeline {
 class IBeamTool : public Tool
 {
 public:
-  IBeamTool(TimelineWidget *timeline_widget);
+  IBeamTool(TimelineBody *timeline_body);
 
   ToolType get_type() const;
   
 protected:
   Gdk::Cursor get_cursor() const;
+  
+protected:
+  void on_button_press_event(GdkEventButton* event);
+  void on_button_release_event(GdkEventButton* event);
+  void on_motion_notify_event(GdkEventMotion *event);
+  
+private:
+  void set_leading_x(const int x);
+  
+protected:
+  //----- Internals -----//
+  gavl_time_t drag_start_time;
 };
 
 }   // namespace timeline

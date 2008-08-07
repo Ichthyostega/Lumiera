@@ -28,29 +28,44 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-Tool::Tool(TimelineWidget *timeline_widget) :
-  timelineWidget(timeline_widget)
+Tool::Tool(TimelineBody *timeline_body) :
+  timelineBody(timeline_body),
+  isDragging(false)
 {
-  REQUIRE(timeline_widget != NULL);
-  REQUIRE(timeline_widget->body != NULL);
+  REQUIRE(timeline_body != NULL);
 }
 
 bool
 Tool::apply_cursor()
 { 
-  REQUIRE(timelineWidget != NULL);
-  
-  if(timelineWidget->body == NULL)
-    return false;
-  
+  REQUIRE(timelineBody != NULL);
+    
   Glib::RefPtr<Gdk::Window> window = 
-    timelineWidget->body->get_window();
+    timelineBody->get_window();
   if(!window)
     return false;
   
   window->set_cursor(get_cursor());
 
   return true;
+}
+
+void
+Tool::on_button_press_event(GdkEventButton* event)
+{
+  REQUIRE(event != NULL);
+  
+  if(event->button == 1)
+    isDragging = true;
+}
+
+void
+Tool::on_button_release_event(GdkEventButton* event)
+{
+  REQUIRE(event != NULL);
+  
+  if(event->button == 1)
+    isDragging = false;
 }
 
 }   // namespace timeline

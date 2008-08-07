@@ -23,6 +23,7 @@
 #include <cairomm-1.0/cairomm/cairomm.h>
 
 #include "timeline-ruler.hpp"
+#include "../timeline-widget.hpp"
 #include "../../window-manager.hpp"
 
 extern "C" {
@@ -41,43 +42,35 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-TimelineRuler::TimelineRuler() :
+TimelineRuler::TimelineRuler(
+  lumiera::gui::widgets::TimelineWidget *timeline_widget) :
   Glib::ObjectBase("TimelineRuler"),
-  timeOffset(-1),
-  timeScale(1),
   mouseChevronOffset(0),
   annotationHorzMargin(0),
   annotationVertMargin(0),
   majorTickHeight(0),
   minorLongTickHeight(0),
   minorShortTickHeight(0),
-  minDivisionWidth(100)
-{  
+  minDivisionWidth(100),
+  timelineWidget(timeline_widget)
+{
+  REQUIRE(timelineWidget != NULL);
+  
   // Install style properties
   register_styles();
-}
-
-void
-TimelineRuler::set_time_offset(gavl_time_t time_offset)
-{ 
-  timeOffset = time_offset;
-  rulerImage.clear();
-  queue_draw();
-}
-
-void
-TimelineRuler::set_time_scale(int64_t time_scale)
-{
-  REQUIRE(time_scale > 0);
-  timeScale = time_scale;
-  rulerImage.clear();
-  queue_draw();
 }
 
 void
 TimelineRuler::set_mouse_chevron_offset(int offset)
 {
   mouseChevronOffset = offset;
+  queue_draw();
+}
+
+void
+TimelineRuler::update_view()
+{
+  rulerImage.clear();
   queue_draw();
 }
 
@@ -132,8 +125,9 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
   cairo->set_source(rulerImage, 0, 0);
   cairo->paint();
   
-  // Draw the mouse chevron
+  // Draw the overlays
   draw_mouse_chevron(cairo, allocation);
+  draw_selection(cairo, allocation);
 
   return true;
 }
@@ -168,11 +162,15 @@ TimelineRuler::on_size_allocate(Gtk::Allocation& allocation)
 
 void
 TimelineRuler::draw_ruler(Cairo::RefPtr<Cairo::Context> cairo,
-    Gdk::Rectangle ruler_rect)
+    const Gdk::Rectangle ruler_rect)
 {
   REQUIRE(cairo);
   REQUIRE(ruler_rect.get_width() > 0);
   REQUIRE(ruler_rect.get_height() > 0);
+  REQUIRE(timelineWidget != NULL);
+  
+  const gavl_time_t left_offset = timelineWidget->timeOffset;
+  const int64_t time_scale = timelineWidget->timeScale;
   
   // Preparation steps
   const int height = ruler_rect.get_height();
@@ -187,7 +185,7 @@ TimelineRuler::draw_ruler(Cairo::RefPtr<Cairo::Context> cairo,
   cairo->clip();
   
   // Make sure we don't have impossible zoom
-  if(timeScale <= 0)
+  if(time_scale <= 0)
     return;
   
   // Render ruler annotations
@@ -196,16 +194,16 @@ TimelineRuler::draw_ruler(Cairo::RefPtr<Cairo::Context> cairo,
   const gavl_time_t major_spacing = calculate_major_spacing();
   const gavl_time_t minor_spacing = major_spacing / 10;
   
-  int64_t time_offset = timeOffset - timeOffset % major_spacing;
-  if(timeOffset < 0)
+  int64_t time_offset = left_offset - left_offset % major_spacing;
+  if(left_offset < 0)
     time_offset -= major_spacing;
     
   int x = 0;
-  const int64_t x_offset = timeOffset / timeScale;
+  const int64_t x_offset = left_offset / time_scale;
 
   do
     {    
-      x = (int)(time_offset / timeScale - x_offset);
+      x = (int)(time_offset / time_scale - x_offset);
       
       cairo->set_line_width(1);
       
@@ -241,7 +239,7 @@ TimelineRuler::draw_ruler(Cairo::RefPtr<Cairo::Context> cairo,
 
 void
 TimelineRuler::draw_mouse_chevron(Cairo::RefPtr<Cairo::Context> cairo,
-    Gdk::Rectangle ruler_rect)
+    const Gdk::Rectangle ruler_rect)
 {
   REQUIRE(cairo);
   REQUIRE(ruler_rect.get_width() > 0);
@@ -258,19 +256,55 @@ TimelineRuler::draw_mouse_chevron(Cairo::RefPtr<Cairo::Context> cairo,
   
   cairo->move_to(mouseChevronOffset + 0.5,
     ruler_rect.get_height());
-  cairo->line_to(mouseChevronOffset + mouseChevronSize + 0.5,
-    ruler_rect.get_height() - mouseChevronSize);
-  cairo->line_to(mouseChevronOffset - mouseChevronSize + 0.5,
-    ruler_rect.get_height() - mouseChevronSize);
+  cairo->rel_line_to(-mouseChevronSize, -mouseChevronSize);
+  cairo->rel_line_to(2 * mouseChevronSize, 0);
     
   cairo->fill();
+}
+
+void
+TimelineRuler::draw_selection(Cairo::RefPtr<Cairo::Context> cairo,
+  const Gdk::Rectangle ruler_rect)
+{
+  REQUIRE(cairo);
+  REQUIRE(ruler_rect.get_width() > 0);
+  REQUIRE(ruler_rect.get_height() > 0);
+  REQUIRE(timelineWidget != NULL);
+
+  Glib::RefPtr<Style> style = get_style();
+  Gdk::Cairo::set_source_color(cairo, style->get_fg(STATE_NORMAL));
+  
+  // Draw the selection start chevron
+  const int a = timelineWidget->time_to_x(
+    timelineWidget->selectionStart) + 1;
+  if(a >= 0 && a < ruler_rect.get_width())
+    {
+      cairo->move_to(a, ruler_rect.get_height());
+      cairo->rel_line_to(0, -mouseChevronSize);
+      cairo->rel_line_to(-mouseChevronSize, 0);
+      cairo->fill();
+    }
+  
+  // Draw the selection end chevron
+  const int b = timelineWidget->time_to_x(
+    timelineWidget->selectionEnd);
+  if(b >= 0 && b < ruler_rect.get_width())
+    {
+      cairo->move_to(b, ruler_rect.get_height());
+      cairo->rel_line_to(0, -mouseChevronSize);
+      cairo->rel_line_to(mouseChevronSize, 0);
+      cairo->fill();
+    }
 }
 
 gavl_time_t 
 TimelineRuler::calculate_major_spacing() const
 {
-  int i = 0;
+  int i;
   
+  REQUIRE(timelineWidget != NULL);
+  
+  const int64_t time_scale = timelineWidget->timeScale;
   const gavl_time_t major_spacings[] = {
       GAVL_TIME_SCALE / 1000,    
       GAVL_TIME_SCALE / 400,
@@ -298,7 +332,7 @@ TimelineRuler::calculate_major_spacing() const
   
   for(i = 0; i < sizeof(major_spacings) / sizeof(gavl_time_t); i++)
     {
-      const int64_t division_width = major_spacings[i] / timeScale;
+      const int64_t division_width = major_spacings[i] / time_scale;
       
       if(division_width > minDivisionWidth)
         break;

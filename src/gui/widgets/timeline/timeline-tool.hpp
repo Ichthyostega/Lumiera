@@ -32,10 +32,9 @@
 namespace lumiera {
 namespace gui {
 namespace widgets {
-
-class TimelineWidget;
-
 namespace timeline {
+  
+class TimelineBody;
   
 enum ToolType
 {
@@ -47,18 +46,24 @@ enum ToolType
 class Tool
 {
 protected:
-  Tool(TimelineWidget *timeline_widget);
+  Tool(TimelineBody *timeline_body);
 
 public:
   virtual ToolType get_type() const = 0;
   
   bool apply_cursor();
   
-protected:
-  virtual Gdk::Cursor get_cursor() const = 0;
+  virtual void on_button_press_event(GdkEventButton* event);
+  virtual void on_button_release_event(GdkEventButton* event);
+  virtual void on_motion_notify_event(GdkEventMotion *event) {}
   
 protected:
-  TimelineWidget *timelineWidget;
+  virtual Gdk::Cursor get_cursor() const = 0;
+    
+protected:
+  bool isDragging;
+
+  TimelineBody *timelineBody;
 };
 
 
