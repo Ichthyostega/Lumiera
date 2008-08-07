@@ -39,22 +39,34 @@
 
 NOBUG_DEFINE_FLAG_PARENT (config_all, backend);
 NOBUG_DEFINE_FLAG_PARENT (config, config_all);
+NOBUG_DEFINE_FLAG_PARENT (config_typed, config_all);
+NOBUG_DEFINE_FLAG_PARENT (config_file, config_all);
 
 LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX, "Syntax error in configfile");
 LUMIERA_ERROR_DEFINE (CONFIG_TYPE, "Config value has wrong type");
 
 
 /* singleton config */
-static LumieraConfig the_config = NULL;
+static LumieraConfig lumiera_global_config = NULL;
 
 
 int
 lumiera_config_init (const char* path)
 {
-  REQUIRE (!the_config, "Configuration subsystem already initialized");
+  TRACE (config);
+  REQUIRE (!lumiera_global_config, "Configuration subsystem already initialized");
+  REQUIRE (path);
 
-  the_config = malloc (sizeof (*the_config));
-  the_config->path = lumiera_strndup (path, SIZE_MAX);
+  NOBUG_INIT_FLAG (config_all);
+  NOBUG_INIT_FLAG (config);
+  NOBUG_INIT_FLAG (config_typed);
+  NOBUG_INIT_FLAG (config_file);
+
+  lumiera_global_config = lumiera_malloc (sizeof (*lumiera_global_config));
+  lumiera_global_config->path = lumiera_strndup (path, SIZE_MAX);
+  lumiera_rwlock_init (&lumiera_global_config->lock);
+  RESOURCE_ANNOUNCE (config, "rwlock", "config", lumiera_global_config, lumiera_global_config->rh);
+
   return 0;
 }
 
@@ -62,11 +74,13 @@ lumiera_config_init (const char* path)
 void
 lumiera_config_destroy ()
 {
-  if (the_config)
+  TRACE (config);
+  if (lumiera_global_config)
     {
-      lumiera_free (the_config->path);
-      lumiera_free (the_config);
-      the_config = NULL;
+      RESOURCE_FORGET (config, lumiera_global_config->rh);
+      lumiera_free (lumiera_global_config->path);
+      lumiera_free (lumiera_global_config);
+      lumiera_global_config = NULL;
     }
   else
     WARN (config, "Tried to destroy non initialized config subsystem");

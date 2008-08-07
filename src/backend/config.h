@@ -24,13 +24,22 @@
 
 //TODO: Support library includes//
 #include "lib/error.h"
+#include "lib/rwlock.h"
 
 //TODO: Forward declarations//
 struct lumiera_config_struct;
 
 
+/* master config subsystem debug flag */
 NOBUG_DECLARE_FLAG (config_all);
+/* config subsystem internals */
 NOBUG_DECLARE_FLAG (config);
+/* high level typed interface operations */
+NOBUG_DECLARE_FLAG (config_typed);
+/* file operations */
+NOBUG_DECLARE_FLAG (config_file);
+
+
 
 LUMIERA_ERROR_DECLARE (CONFIG_SYNTAX);
 LUMIERA_ERROR_DECLARE (CONFIG_TYPE);
@@ -53,6 +62,15 @@ struct lumiera_config_struct
   // cuckoo hash
   // configfile list
   char* path;
+  /*
+    all access is protected with rwlock's.
+    We use rwlocks here since concurrent reads are likely common.
+
+    So far this is a global config lock, if this is a problem we might granularize it by locking on a file level.
+    config access is not planned to be transaction al yet, if this is a problem we need to expose the rwlock to a config_acquire/config_release function pair
+   */
+  lumiera_rwlock lock;
+  RESOURCE_HANDLE (rh);
 };
 
 typedef struct lumiera_config_struct lumiera_config;
