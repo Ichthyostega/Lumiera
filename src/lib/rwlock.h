@@ -43,6 +43,25 @@ LUMIERA_ERROR_DECLARE(RWLOCK_WLOCK);
  * Read/write locks, header.
  */
 
+#define LUMIERA_RDLOCK_SECTION(flag, handle, rwlock)                                    \
+RESOURCE_HANDLE (rh_##__LINE__##_);                                                     \
+lumiera_rwlockacquirer lock_##__LINE__##_;                                              \
+RESOURCE_ENTER (flag, handle, "acquire rwlock (read)", &lock_##__LINE__##_,             \
+                NOBUG_RESOURCE_EXCLUSIVE, rh_##__LINE__##_);                            \
+for (lumiera_rwlockacquirer_init (&lock_##__LINE__##_, rwlock, LUMIERA_RDLOCKED);       \
+     lock_##__LINE__##_.state == LUMIERA_RDLOCKED;                                      \
+     lumiera_rwlockacquirer_unlock (&lock_##__LINE__##_),                               \
+       ({RESOURCE_LEAVE(flag, rh_##__LINE__##_);}))
+
+#define LUMIERA_WRLOCK_SECTION(flag, handle, rwlock)                                    \
+RESOURCE_HANDLE (rh_##__LINE__##_);                                                     \
+lumiera_rwlockacquirer lock_##__LINE__##_;                                              \
+RESOURCE_ENTER (flag, handle, "acquire rwlock (write)", &lock_##__LINE__##_,            \
+                NOBUG_RESOURCE_EXCLUSIVE, rh_##__LINE__##_);                            \
+for (lumiera_rwlockacquirer_init (&lock_##__LINE__##_, rwlock, LUMIERA_WRLOCKED);       \
+     lock_##__LINE__##_.state == LUMIERA_WRLOCKED;                                      \
+     lumiera_rwlockacquirer_unlock (&lock_##__LINE__##_),                               \
+       ({RESOURCE_LEAVE(flag, rh_##__LINE__##_);}))
 
 /**
  * RWLock.
@@ -89,7 +108,7 @@ typedef struct lumiera_rwlockacquirer_struct* LumieraRWLockacquirer;
 static inline void
 lumiera_rwlockacquirer_ensureunlocked (LumieraRWLockacquirer self)
 {
-  ENSURE (self->state == LUMIERA_UNLOCKED, "forgot to unlock the rwlock mutex");
+  ENSURE (self->state == LUMIERA_UNLOCKED, "forgot to unlock the rwlock");
 }
 
 /* override with a macro to use the cleanup checker */

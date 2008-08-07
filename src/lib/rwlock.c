@@ -69,36 +69,32 @@ lumiera_rwlockacquirer_init (LumieraRWLockacquirer self, LumieraRWLock rwlock, e
   self->rwlock = rwlock;
   self->state = state;
 
-  switch (state)
-    {
-    case LUMIERA_RDLOCKED:
-      switch (pthread_rwlock_rdlock (&rwlock->rwlock))
-        {
-        case 0:
-          break;
-        case EAGAIN:
-          lumiera_error_set (LUMIERA_ERROR_RWLOCK_AGAIN);
-          return NULL;
-        case EDEADLK:
-          lumiera_error_set (LUMIERA_ERROR_RWLOCK_DEADLOCK);
-          return NULL;
-        default:
-          LUMIERA_DIE (RWLOCK_RLOCK);
-        }
-    case LUMIERA_WRLOCKED:
-      switch (pthread_rwlock_wrlock (&rwlock->rwlock))
-        {
-        case 0:
-          break;
-        case EDEADLK:
-          lumiera_error_set (LUMIERA_ERROR_RWLOCK_DEADLOCK);
-          return NULL;
-        default:
-          LUMIERA_DIE (RWLOCK_WLOCK);
-        }
-    default:
-      break;
-    }
+  if (state == LUMIERA_RDLOCKED)
+    switch (pthread_rwlock_rdlock (&rwlock->rwlock))
+      {
+      case 0:
+        break;
+      case EAGAIN:
+        lumiera_error_set (LUMIERA_ERROR_RWLOCK_AGAIN);
+        return NULL;
+      case EDEADLK:
+        lumiera_error_set (LUMIERA_ERROR_RWLOCK_DEADLOCK);
+        return NULL;
+      default:
+        LUMIERA_DIE (RWLOCK_RLOCK);
+      }
+  else
+    switch (pthread_rwlock_wrlock (&rwlock->rwlock))
+      {
+      case 0:
+        break;
+      case EDEADLK:
+        lumiera_error_set (LUMIERA_ERROR_RWLOCK_DEADLOCK);
+        return NULL;
+      default:
+        LUMIERA_DIE (RWLOCK_WLOCK);
+      }
+
   return self;
 }
 
