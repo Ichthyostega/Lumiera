@@ -58,7 +58,7 @@ lumiera_filehandlecache_delete (void)
       RESOURCE_FORGET (filehandlecache, lumiera_fhcache->rh);
       lumiera_mrucache_destroy (&lumiera_fhcache->cache);
       lumiera_mutex_destroy (&lumiera_fhcache->lock);
-      free (lumiera_fhcache);
+      lumiera_free (lumiera_fhcache);
       lumiera_fhcache = NULL;
     }
 }

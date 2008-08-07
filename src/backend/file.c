@@ -50,7 +50,7 @@ lumiera_file_destroy (LumieraFile self)
 {
   TRACE (file);
   lumiera_filedescriptor_release (self->descriptor);
-  free ((void*)self->name);
+  lumiera_free ((void*)self->name);
   return self;
 }
 
@@ -67,7 +67,7 @@ void
 lumiera_file_delete (LumieraFile self)
 {
   TRACE (file);
-  free (lumiera_file_destroy (self));
+  lumiera_free (lumiera_file_destroy (self));
 }
 
 

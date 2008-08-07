@@ -18,7 +18,8 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "error.h"
+#include "lib/error.h"
+#include "lib/safeclib.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -114,8 +115,8 @@ lumiera_tmpbuf_freeall (void)
     {
       pthread_setspecific (lumiera_tmpbuf_tls_key, NULL);
       for (int idx = 0; idx < 64; ++idx)
-        free (buf->buffers[idx]);
-      free (buf);
+        lumiera_free (buf->buffers[idx]);
+      lumiera_free (buf);
     }
 }
 
@@ -133,7 +134,7 @@ lumiera_tmpbuf_provide (size_t size)
 
   if (buf->sizes[buf->idx] < size || buf->sizes[buf->idx] > 8*size)
     {
-      free (buf->buffers[buf->idx]);
+      lumiera_free (buf->buffers[buf->idx]);
       buf->sizes[buf->idx] = (size+4*sizeof(long)) & ~(4*sizeof(long)-1);
       buf->buffers[buf->idx] = lumiera_malloc (buf->sizes[buf->idx]);
     }

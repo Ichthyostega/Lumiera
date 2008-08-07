@@ -234,7 +234,7 @@ lumiera_filedescriptor_delete (LumieraFiledescriptor self)
   TODO ("release filehandle");
 
   lumiera_mutex_destroy (&self->lock);
-  free (self);
+  lumiera_free (self);
 
   lumiera_mutexacquirer_unlock (&registry_lock);
 }

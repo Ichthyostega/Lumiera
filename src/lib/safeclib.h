@@ -51,6 +51,18 @@ lumiera_calloc (size_t n, size_t size);
 
 
 /**
+ * Free previously allocated memory.
+ * @param mem pointer to the memory block obtained by lumiera_malloc or lumiera_calloc
+ */
+static inline void
+lumiera_free (void* mem)
+{
+  /* for now only a alias, might change in future */
+  free (mem);
+}
+
+
+/**
  * Duplicate a C string.
  * always succeeds or dies
  * @param str string to be copied
