@@ -33,7 +33,7 @@
 
 /**
  * @file
- * Here are the high level typed configuration interfaces defined
+ * Here are the high level typed configuration interfaces defined.
  */
 
 /**
@@ -50,8 +50,9 @@ lumiera_config_number_get (const char* key, long long* value, const char* def)
 int
 lumiera_config_number_set (const char* key, long long* value, const char* fmt)
 {
+  TRACE (config_typed);
   UNIMPLEMENTED();
-  return -1;
+  return 0;
 }
 
 
@@ -62,15 +63,17 @@ lumiera_config_number_set (const char* key, long long* value, const char* fmt)
 int
 lumiera_config_real_get (const char* key, long double* value, const char* def)
 {
+  TRACE (config_typed);
   UNIMPLEMENTED();
-  return -1;
+  return 0;
 }
 
 int
 lumiera_config_real_set (const char* key, long double* value, const char* fmt)
 {
+  TRACE (config_typed);
   UNIMPLEMENTED();
-  return -1;
+  return 0;
 }
 
 
@@ -85,15 +88,17 @@ lumiera_config_real_set (const char* key, long double* value, const char* fmt)
 int
 lumiera_config_string_get (const char* key, const char** value, const char* def)
 {
+  TRACE (config_typed);
   UNIMPLEMENTED();
-  return -1;
+  return 0;
 }
 
 int
 lumiera_config_string_set (const char* key, const char** value, const char* fmt)
 {
+  TRACE (config_typed);
   UNIMPLEMENTED();
-  return -1;
+  return 0;
 }
 
 
@@ -105,34 +110,38 @@ lumiera_config_string_set (const char* key, const char** value, const char* fmt)
 int
 lumiera_config_word_get (const char* key, const char** value, const char* def)
 {
+  TRACE (config_typed);
   UNIMPLEMENTED();
-  return -1;
+  return 0;
 }
 
 int
 lumiera_config_word_set (const char* key, const char** value, const char* fmt)
 {
+  TRACE (config_typed);
   UNIMPLEMENTED();
-  return -1;
+  return 0;
 }
 
 
 /**
  * Bool
- * Bool in various formats, (0,1(!1), yes/no, true/false, on/off, set/clear, localized)
+ * Bool in various formats, (0,1(!1), yes/no, true/false, on/off, set/clear)
  */
 int
 lumiera_config_bool_get (const char* key, int* value, const char* def)
 {
+  TRACE (config_typed);
   UNIMPLEMENTED();
-  return -1;
+  return 0;
 }
 
 int
 lumiera_config_bool_set (const char* key, int* value, const char* fmt)
 {
+  TRACE (config_typed);
   UNIMPLEMENTED();
-  return -1;
+  return 0;
 }
 
 

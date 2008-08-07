@@ -94,6 +94,7 @@ lumiera_config_destroy ()
 int
 lumiera_config_load (const char* file)
 {
+  TRACE (config);
   UNIMPLEMENTED();
   return -1;
 }
@@ -102,6 +103,7 @@ lumiera_config_load (const char* file)
 int
 lumiera_config_save ()
 {
+  TRACE (config);
   UNIMPLEMENTED();
   return -1;
 }
@@ -110,6 +112,8 @@ lumiera_config_save ()
 int
 lumiera_config_purge (const char* filename)
 {
+  TRACE (config);
+
   UNIMPLEMENTED();
   return -1;
 }
@@ -157,14 +161,16 @@ lumiera_config_get (const char* key, const char** value)
 int
 lumiera_config_set (const char* key, const char* value)
 {
+  TRACE (config);
   UNIMPLEMENTED();
   return -1;
 }
 
 
 int
-lumiera_config_reset(const char* key)
+lumiera_config_reset (const char* key)
 {
+  TRACE (config);
   UNIMPLEMENTED();
   return -1;
 }
@@ -173,6 +179,7 @@ lumiera_config_reset(const char* key)
 int
 lumiera_config_info (const char* key, const char** filename, unsigned* line)
 {
+  TRACE (config);
   UNIMPLEMENTED();
   return -1;
 }
