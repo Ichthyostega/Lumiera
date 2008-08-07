@@ -52,33 +52,43 @@ lumiera_config_number_get (const char* key, long long* value, const char* def)
 
   LUMIERA_RDLOCK_SECTION (config_typed, lumiera_global_config->rh, &lumiera_global_config->lock)
     {
-      if (lumiera_config_get (key, &raw_value))
+      if (!lumiera_config_get (key, &raw_value))
         {
-          /* not found, fall back to default */
-          raw_value = def;
-          TODO ("register default, if given (writelock or mutex!)");
-        }
-
-      if (raw_value)
-        {
-          if (sscanf (raw_value, "%Li", value) == 1)
-            ret = 0; /* all ok */
-          else
+          if (raw_value)
             {
-              if (def && raw_value != def)
+              /* got it, scan it */
+              if (sscanf (raw_value, "%Li", value) == 1)
+                ret = 0; /* all ok */
+              else
                 {
-                  /* we have a 2nd chance, using the default */
-                  if (sscanf (def, "%Li", value) == 1)
-                    ret = 0; /* all ok */
-                  else
-                    LUMIERA_ERROR_SET (config_typed, CONFIG_DEFAULT);
+                  LUMIERA_ERROR_SET (config_typed, CONFIG_TYPE);
+                  if (def)
+                    /* even when we return an error code we still try to initialize value with our default while in error state */
+                    goto try_default;
+                }
+            }
+          else if (def)
+            {
+              /* not found, fall back to default */
+              ret = 0; /* we presume that the default is ok */
+            try_default:
+
+              if (sscanf (def, "%Li", value) == 1)
+                {
+                  TODO ("register default (writelock or mutex!)");
                 }
               else
-                LUMIERA_ERROR_SET (config_typed, CONFIG_TYPE);
+                {
+                  /* default value is broken!! */
+                  /* note that this error gets ignored when we had a type error above */
+                  ret = -1;
+                  LUMIERA_ERROR_SET (config_typed, CONFIG_DEFAULT);
+                }
             }
+          else
+            /* finally, no config, no default, give up */
+            LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
         }
-      else
-        LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
     }
 
   return ret;

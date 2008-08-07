@@ -152,6 +152,7 @@ lumiera_config_get (const char* key, const char** value)
       else
         {
           TODO ("lookup key");
+          ret = 0; /* assume that the lockup worked for now, value is still NULL, just no error set */
         }
     }
 
