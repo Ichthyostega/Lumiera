@@ -25,6 +25,7 @@
 #include <pthread.h>
 #include <stdint.h>
 #include <stdarg.h>
+#include <nobug.h>
 
 
 LUMIERA_ERROR_DEFINE (NO_MEMORY, "Out of Memory!");
@@ -170,4 +171,38 @@ lumiera_tmpbuf_snprintf (size_t size, const char* fmt, ...)
   va_end (args);
 
   return buf;
+}
+
+
+char*
+lumiera_tmpbuf_tr (const char* in, const char* from, const char* to, const char* def)
+{
+  REQUIRE (strlen (from) == strlen (to), "from and to character set must have equal length");
+
+  char* ret = lumiera_tmpbuf_strndup (in, SIZE_MAX);
+
+  char* wpos;
+  char* rpos;
+  for (wpos = rpos = ret; *rpos; ++rpos, ++wpos)
+    {
+      char* found = strchr (from, *rpos);
+      if (found)
+        *wpos = to[found-from];
+      else if (def)
+        {
+          if (*def)
+            *wpos = *def;
+          else
+            {
+              ++rpos;
+              if (!*rpos)
+                break;
+            }
+        }
+      else
+        return NULL;
+    }
+  *wpos = '\0';
+
+  return ret;
 }

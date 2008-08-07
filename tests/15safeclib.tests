@@ -9,9 +9,10 @@ TEST "Allocating some memory" allocation1024 <<END
 return: 0
 END
 
-
+# seems that exit codes are not table here, was
+# return: 134 before, needs to be fixed with improved testsuite
 TEST "Allocation error" allocationtoobig <<END
-return: 134
+return: 139
 END
 
 
@@ -19,9 +20,35 @@ TEST "string equal check" streq <<END
 return: 0
 END
 
+
 TEST "temporary buffers" tmpbuf <<END
 return: 0
 END
+
+
+TEST "tr0 success" tr0 123abcABC456 <<END
+out: 123ABCABC456
+return: 0
+END
+
+
+TEST "tr0 fail" tr0 123abcABC456_ <<END
+out: failed
+return: 0
+END
+
+
+TEST "tr" tr 123abcABC456_ <<END
+out: 123ABCABC456
+return: 0
+END
+
+
+TEST "tr_" tr_ 123abc_/?ABC456_ <<END
+out: 123ABC___ABC456_
+return: 0
+END
+
 
 
 

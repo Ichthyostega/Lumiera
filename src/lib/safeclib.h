@@ -123,3 +123,17 @@ lumiera_tmpbuf_strndup (const char* src, size_t size);
 char*
 lumiera_tmpbuf_snprintf (size_t size, const char* fmt, ...);
 
+/**
+ * Translates characters in a string, similar to the shell 'tr' utility
+ * @param in input string to  be translated
+ * @param from source character set
+ * @param to destination character set
+ * @param def default destination character when a character is not in the source set,
+ *        when NULL then translation will abort on unknown characters and return NULL,
+ *        when "" then unknown characters will be removed
+ *        when set to a single character string, unknown characters will be replaced with this string
+ * @return temporary buffer containing the constructed of the string
+ */
+char*
+lumiera_tmpbuf_tr (const char* in, const char* from, const char* to, const char* def);
+
