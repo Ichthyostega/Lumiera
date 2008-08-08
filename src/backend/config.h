@@ -85,8 +85,8 @@ typedef lumiera_config* LumieraConfig;
 #define LUMIERA_CONFIG_TYPES                    \
   LUMIERA_CONFIG_TYPE(number, signed long long) \
   LUMIERA_CONFIG_TYPE(real, long double)        \
-  LUMIERA_CONFIG_TYPE(string, const char*)      \
-  LUMIERA_CONFIG_TYPE(word, const char*)        \
+  LUMIERA_CONFIG_TYPE(string, char*)            \
+  LUMIERA_CONFIG_TYPE(word, char*)              \
   LUMIERA_CONFIG_TYPE(bool, int)
 
 

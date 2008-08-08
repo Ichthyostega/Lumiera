@@ -31,6 +31,7 @@ extern LumieraConfig lumiera_global_config;
 
 
 //TODO: System includes//
+#include <stdint.h>
 
 /**
  * @file
@@ -124,24 +125,116 @@ lumiera_config_real_set (const char* key, long double* value, const char* fmt)
 }
 
 
+
+/**
+ * helper function, takes a raw input string and give a tmpbuf with the string parsed back.
+ */
+static char*
+scan_string (const char* in)
+{
+  /* chop leading blanks */
+  in += strspn(in, " \t");
+
+  char quote = *in;
+  char* end;
+  char* ret = NULL;
+
+  if (quote == '"' || quote == '\'')
+    {
+      /* quoted string */
+      ++in;
+      end = strchr (in, quote);
+      while (end && end[1] == quote)
+        end = strchr (end + 2, quote);
+
+      if (end)
+        {
+          ret = lumiera_tmpbuf_strndup (in, end-in);
+
+          /* replace double quote chars with single one */
+          char* wpos;
+          char* rpos;
+          for (wpos = rpos = ret; *rpos; ++rpos, ++wpos)
+            {
+              if (*rpos == quote)
+                ++rpos;
+              *wpos = *rpos;
+            }
+          *wpos = '\0';
+        }
+      else
+        /* quotes doesnt match */
+        LUMIERA_ERROR_SET (config_typed, CONFIG_SYNTAX_VALUE);
+    }
+  else
+    {
+      /* unquoted string */
+      ret = lumiera_tmpbuf_strndup (in, SIZE_MAX);
+
+      /* chop trailing blanks */
+      end = ret + strlen (ret) - 1;
+      while (end > ret && (*end == ' ' || *end == '\t'))
+        *end-- = '\0';
+    }
+
+  return ret;
+}
+
 /**
  * String
  * either a string which covers the whole line
- * or a quoted string until the ending quote
- * suggestion:
- *   "doublequotes" allow normal C backslash escapes
- *   'singlequotes' dont allow escapes except a double '' is the ' itself
  */
 int
-lumiera_config_string_get (const char* key, const char** value, const char* def)
+lumiera_config_string_get (const char* key, char** value, const char* def)
 {
   TRACE (config_typed);
-  UNIMPLEMENTED();
-  return 0;
+
+  int ret = -1;
+
+  const char* raw_value = NULL;
+
+  LUMIERA_RDLOCK_SECTION (config_typed, lumiera_global_config->rh, &lumiera_global_config->lock)
+    {
+      if (!lumiera_config_get (key, &raw_value))
+        {
+          if (raw_value)
+            {
+              *value = scan_string (raw_value);
+
+              TRACE (config_typed, "RAW_VALUE %s, scanned .%s.", raw_value, *value);
+
+              if (*value)
+                ret = 0; /* all ok */
+              else if (def)
+                goto try_default;
+            }
+          else if (def)
+            {
+              ret = 0;
+            try_default:
+
+              *value = scan_string (def);
+              TRACE (config_typed, "DEFAULT %s, scanned .%s.", def, *value);
+              if (*value)
+                {
+                  TODO ("register default (writelock or mutex!)");
+                }
+              else
+                {
+                  ret = -1;
+                  LUMIERA_ERROR_SET (config_typed, CONFIG_DEFAULT);
+                }
+            }
+          else
+            LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
+        }
+    }
+
+  return ret;
 }
 
 int
-lumiera_config_string_set (const char* key, const char** value, const char* fmt)
+lumiera_config_string_set (const char* key, char** value, const char* fmt)
 {
   TRACE (config_typed);
   UNIMPLEMENTED();
@@ -155,7 +248,7 @@ lumiera_config_string_set (const char* key, const char** value, const char* fmt)
  * A single word, no quotes, nothing
  */
 int
-lumiera_config_word_get (const char* key, const char** value, const char* def)
+lumiera_config_word_get (const char* key, char** value, const char* def)
 {
   TRACE (config_typed);
   UNIMPLEMENTED();
@@ -163,7 +256,7 @@ lumiera_config_word_get (const char* key, const char** value, const char* def)
 }
 
 int
-lumiera_config_word_set (const char* key, const char** value, const char* fmt)
+lumiera_config_word_set (const char* key, char** value, const char* fmt)
 {
   TRACE (config_typed);
   UNIMPLEMENTED();

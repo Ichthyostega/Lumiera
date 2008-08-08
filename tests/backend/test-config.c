@@ -69,4 +69,23 @@ TEST ("number_get_nodefault")
   lumiera_config_destroy ();
 }
 
+
+TEST ("string_get")
+{
+  REQUIRE (argv[2]);
+  REQUIRE (argv[3]);
+
+  lumiera_config_init ("./");
+
+  char* string;
+
+  if (!lumiera_config_string_get (argv[2], &string, argv[3]))
+    printf ("'%s'\n", string);
+  else
+    printf ("%s, '%s'\n", lumiera_error (), string);
+
+  lumiera_config_destroy ();
+}
+
+
 TESTS_END

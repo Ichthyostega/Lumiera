@@ -79,7 +79,32 @@ PLANNED "real set"  <<END
 END
 
 
-PLANNED "string get"  <<END
+export LUMIERA_TEST_STRING="teststring"
+
+TEST "string get" string_get test.string default <<END
+out: 'teststring'
+END
+
+
+TEST "string get, default" string_get test.doesntexist default <<END
+out: 'default'
+END
+
+LUMIERA_TEST_STRING='  no leading and trailing blanks  '
+TEST "string get, chopped" string_get test.string default <<END
+out: 'no leading and trailing blanks'
+END
+
+
+LUMIERA_TEST_STRING='  " quoted string with spaces " "ignored" #comment'
+TEST "string get, quoted" string_get test.string default <<END
+out: ' quoted string with spaces '
+END
+
+
+LUMIERA_TEST_STRING='  "quoted string "" not ignored" #comment'
+TEST "string get, quoted, escaped" string_get test.string default <<END
+out: 'quoted string " not ignored'
 END
 
 
