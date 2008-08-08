@@ -39,18 +39,25 @@ out: 1234567890
 END
 
 export LUMIERA_TEST_NUMBER_1=987654321
+
 TEST "number get, env override" number_get test.number.1 '1234567890 # comment' <<END
 out: 987654321
 END
 
 export LUMIERA_TEST_NUMBER_1=barf
 TEST "number get, type error" number_get_nodefault test.number.1 <<END
-out: LUMIERA_ERROR_CONFIG_TYPE:value has wrong type
+out: LUMIERA_ERROR_CONFIG_SYNTAX_VALUE:syntax error in value
 END
+
+LUMIERA_TEST_NUMBER_1=NAN
+TEST "number get, env override, default fallback" number_get test.number.1 '1234567890 # comment' <<END
+out: LUMIERA_ERROR_CONFIG_SYNTAX_VALUE:syntax error in value, 1234567890
+END
+
 unset LUMIERA_TEST_NUMBER_1
 
 
-TEST "number get, syntax error" number_get no:fun:blah '1234567890 # comment' <<END
+TEST "number get, syntax error" number_get_nodefault test.NUMBER.1 <<END
 out: LUMIERA_ERROR_CONFIG_SYNTAX_KEY:syntax error in key
 END
 

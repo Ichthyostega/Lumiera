@@ -47,7 +47,7 @@ TEST ("number_get")
   if (!lumiera_config_number_get (argv[2], &number, argv[3]))
     printf ("%lld\n", number);
   else
-    printf ("%s\n", lumiera_error ());
+    printf ("%s, %lld\n", lumiera_error (), number);
 
   lumiera_config_destroy ();
 }

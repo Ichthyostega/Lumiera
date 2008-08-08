@@ -45,7 +45,7 @@ NOBUG_DEFINE_FLAG_PARENT (config_file, config_all);
 
 LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX, "syntax error in configfile");
 LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX_KEY, "syntax error in key");
-LUMIERA_ERROR_DEFINE (CONFIG_TYPE, "value has wrong type");
+LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX_VALUE, "syntax error in value");
 LUMIERA_ERROR_DEFINE (CONFIG_NO_ENTRY, "no configuration entry");
 LUMIERA_ERROR_DEFINE (CONFIG_DEFAULT, "illegal default value");
 

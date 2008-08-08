@@ -61,7 +61,7 @@ lumiera_config_number_get (const char* key, long long* value, const char* def)
                 ret = 0; /* all ok */
               else
                 {
-                  LUMIERA_ERROR_SET (config_typed, CONFIG_TYPE);
+                  LUMIERA_ERROR_SET (config_typed, CONFIG_SYNTAX_VALUE);
                   if (def)
                     /* even when we return an error code we still try to initialize value with our default while in error state */
                     goto try_default;
@@ -80,7 +80,7 @@ lumiera_config_number_get (const char* key, long long* value, const char* def)
               else
                 {
                   /* default value is broken!! */
-                  /* note that this error gets ignored when we had a type error above */
+                  /* note that this error gets ignored by the application when we had a type error above, but will still be logged with nobug */
                   ret = -1;
                   LUMIERA_ERROR_SET (config_typed, CONFIG_DEFAULT);
                 }
