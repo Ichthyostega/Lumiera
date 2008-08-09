@@ -91,7 +91,7 @@ lumiera_mutex_destroy (LumieraMutex self);
  */
 struct lumiera_mutexacquirer_struct
 {
-  volatile LumieraMutex mutex;
+  LumieraMutex mutex;
   RESOURCE_HANDLE (rh);
 };
 typedef struct lumiera_mutexacquirer_struct lumiera_mutexacquirer;
