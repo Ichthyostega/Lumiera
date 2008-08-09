@@ -38,7 +38,6 @@ liblumi_a_SOURCES =				\
 noinst_HEADERS +=						\
 	$(liblumi_a_srcdir)/plugin.h				\
 	$(liblumi_a_srcdir)/error.h				\
-	$(liblumi_a_srcdir)/locking.h				\
 	$(liblumi_a_srcdir)/mutex.h				\
 	$(liblumi_a_srcdir)/rwlock.h				\
 	$(liblumi_a_srcdir)/condition.h				\

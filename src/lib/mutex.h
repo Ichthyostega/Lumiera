@@ -22,13 +22,19 @@
 #ifndef LUMIERA_MUTEX_H
 #define LUMIERA_MUTEX_H
 
-#include "lib/locking.h"
+#include "lib/error.h"
+
+#include <pthread.h>
+#include <nobug.h>
 
 /**
  * @file
  * Mutual exclusion locking, header.
  */
 
+LUMIERA_ERROR_DECLARE (MUTEX_LOCK);
+LUMIERA_ERROR_DECLARE (MUTEX_UNLOCK);
+LUMIERA_ERROR_DECLARE (MUTEX_DESTROY);
 
 /**
  * Mutual exclusive section.
