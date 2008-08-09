@@ -36,22 +36,24 @@ LUMIERA_ERROR_DEFINE(RWLOCK_WRLOCK, "locking rwlock for writing failed");
  */
 
 LumieraRWLock
-lumiera_rwlock_init (LumieraRWLock self)
+lumiera_rwlock_init (LumieraRWLock self, const char* purpose, struct nobug_flag* flag)
 {
   if (self)
     {
       pthread_rwlock_init (&self->rwlock, NULL);
       NOBUG_RESOURCE_HANDLE_INIT (self->rh);
+      NOBUG_RESOURCE_ANNOUNCE_RAW (flag, "rwlock", purpose, self, self->rh);
     }
   return self;
 }
 
 
 LumieraRWLock
-lumiera_rwlock_destroy (LumieraRWLock self)
+lumiera_rwlock_destroy (LumieraRWLock self, struct nobug_flag* flag)
 {
   if (self)
     {
+      NOBUG_RESOURCE_FORGET_RAW (flag,  self->rh);
       if (pthread_rwlock_destroy (&self->rwlock))
         LUMIERA_DIE (RWLOCK_DESTROY);
     }

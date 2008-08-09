@@ -43,8 +43,7 @@ TEST ("conditionforgotunlock")
 TEST ("mutexsection")
 {
   lumiera_mutex m;
-  lumiera_mutex_init (&m);
-  RESOURCE_ANNOUNCE (NOBUG_ON, "mutex", "mutexsection", &m, m.rh);
+  lumiera_mutex_init (&m, "mutexsection", &NOBUG_FLAG(NOBUG_ON));
 
   LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
     {
@@ -56,36 +55,31 @@ TEST ("mutexsection")
       printf ("mutex locked section 2\n");
     }
 
-  RESOURCE_FORGET (NOBUG_ON, m.rh);
-  lumiera_mutex_destroy (&m);
+  lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
 }
 
 
 TEST ("mutexforgotunlock")
 {
   lumiera_mutex m;
-  lumiera_mutex_init (&m);
-  RESOURCE_ANNOUNCE (NOBUG_ON, "mutex", "mutexforgotunlock", &m, m.rh);
+  lumiera_mutex_init (&m, "mutexforgotunlock", &NOBUG_FLAG(NOBUG_ON));
 
   LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
     {
       break;    // MUTEX_SECTIONS must not be left by a jump
     }
 
-  RESOURCE_FORGET (NOBUG_ON, m.rh);
-  lumiera_mutex_destroy (&m);
+  lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
 }
 
 
 TEST ("nestedmutexsection")
 {
   lumiera_mutex m;
-  lumiera_mutex_init (&m);
-  RESOURCE_ANNOUNCE (NOBUG_ON, "mutex", "m_mutexsection", &m, m.rh);
+  lumiera_mutex_init (&m, "m_mutexsection", &NOBUG_FLAG(NOBUG_ON));
 
   lumiera_mutex n;
-  lumiera_mutex_init (&n);
-  RESOURCE_ANNOUNCE (NOBUG_ON, "mutex", "n_mutexsection", &n, n.rh);
+  lumiera_mutex_init (&n, "n_mutexsection", &NOBUG_FLAG(NOBUG_ON));
 
   LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
     {
@@ -97,11 +91,8 @@ TEST ("nestedmutexsection")
         }
     }
 
-  RESOURCE_FORGET (NOBUG_ON, n.rh);
-  lumiera_mutex_destroy (&n);
-
-  RESOURCE_FORGET (NOBUG_ON, m.rh);
-  lumiera_mutex_destroy (&m);
+  lumiera_mutex_destroy (&n, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
 }
 
 
@@ -109,8 +100,7 @@ TEST ("nestedmutexsection")
 TEST ("rwlocksection")
 {
   lumiera_rwlock rwlock;
-  lumiera_rwlock_init (&rwlock);
-  RESOURCE_ANNOUNCE (NOBUG_ON, "rwlock", "rwlocksection", &rwlock, rwlock.rh);
+  lumiera_rwlock_init (&rwlock, "rwsection", &NOBUG_FLAG(NOBUG_ON));
 
   LUMIERA_WRLOCK_SECTION (NOBUG_ON, &rwlock)
     {
@@ -122,25 +112,20 @@ TEST ("rwlocksection")
       printf ("read locked section 2\n");
     }
 
-  RESOURCE_FORGET (NOBUG_ON, rwlock.rh);
-  lumiera_rwlock_destroy (&rwlock);
+  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON));
 }
-
 
 TEST ("rwlockforgotunlock")
 {
   lumiera_rwlock rwlock;
-  lumiera_rwlock_init (&rwlock);
-  RESOURCE_ANNOUNCE (NOBUG_ON, "rwlock", "rwlockforgotunlock", &rwlock, rwlock.rh);
+  lumiera_rwlock_init (&rwlock, "rwlockforgotunlock", &NOBUG_FLAG(NOBUG_ON));
 
   LUMIERA_RDLOCK_SECTION (NOBUG_ON, &rwlock)
     {
       break;    // LOCK_SECTIONS must not be left by a jump
     }
 
-  RESOURCE_FORGET (NOBUG_ON, rwlock.rh);
-  lumiera_rwlock_destroy (&rwlock);
+  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON));
 }
-
 
 TESTS_END

@@ -80,7 +80,7 @@ typedef lumiera_mutex* LumieraMutex;
  * @return self as given
  */
 LumieraMutex
-lumiera_mutex_init (LumieraMutex self);
+lumiera_mutex_init (LumieraMutex self, const char* purpose, struct nobug_flag* flag);
 
 
 /**
@@ -89,7 +89,7 @@ lumiera_mutex_init (LumieraMutex self);
  * @return self as given
  */
 LumieraMutex
-lumiera_mutex_destroy (LumieraMutex self);
+lumiera_mutex_destroy (LumieraMutex self, struct nobug_flag* flag);
 
 
 /**
@@ -111,3 +111,10 @@ lumiera_mutexacquirer_ensureunlocked (LumieraMutexacquirer self)
 }
 
 #endif
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

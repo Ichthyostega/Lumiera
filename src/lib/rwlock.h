@@ -27,7 +27,6 @@
 #endif
 
 #include <pthread.h>
-//#include <errno.h>
 #include <nobug.h>
 
 LUMIERA_ERROR_DECLARE(RWLOCK_AGAIN);
@@ -111,7 +110,7 @@ typedef lumiera_rwlock* LumieraRWLock;
  * @return self as given
  */
 LumieraRWLock
-lumiera_rwlock_init (LumieraRWLock self);
+lumiera_rwlock_init (LumieraRWLock self, const char* purpose, struct nobug_flag* flag);
 
 /**
  * destroy a rwlock
@@ -119,7 +118,8 @@ lumiera_rwlock_init (LumieraRWLock self);
  * @return self on success or NULL at error
  */
 LumieraRWLock
-lumiera_rwlock_destroy (LumieraRWLock self);
+lumiera_rwlock_destroy (LumieraRWLock self, struct nobug_flag* flag);
+
 
 
 
