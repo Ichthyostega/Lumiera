@@ -151,6 +151,4 @@ TEST ("conditionforgotunlock")
   lumiera_condition_destroy (&cond, &NOBUG_FLAG(NOBUG_ON));
 }
 
-
-
 TESTS_END
