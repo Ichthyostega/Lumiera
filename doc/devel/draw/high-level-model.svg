@@ -10,7 +10,7 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="744.09448"
-   height="1052.3622"
+   height="1052.36"
    id="svg2"
    sodipodi:version="0.32"
    inkscape:version="0.45.1"
@@ -25,86 +25,99 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="271.21781"
-     inkscape:cy="877.33161"
+     inkscape:zoom="0.78110154"
+     inkscape:cx="372.04724"
+     inkscape:cy="530.28803"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="lay_Label"
      inkscape:window-width="1352"
      inkscape:window-height="1016"
-     inkscape:window-x="50"
+     inkscape:window-x="0"
      inkscape:window-y="0"
-     width="760px"
-     height="1024px"
-     showgrid="true"
+     width="744.09448px"
+     height="1052.36px"
+     showgrid="false"
      gridspacingx="1px"
      gridspacingy="1px"
      gridanglex="30px"
      gridanglez="30px"
      grid_units="px"
-     inkscape:grid-points="false"
+     inkscape:grid-points="true"
      inkscape:grid-bbox="false"
      gridcolor="#4b4bf4"
      gridopacity="0.09019608"
      showguides="true"
-     inkscape:guide-bbox="true"
-     inkscape:object-nodes="true"
+     inkscape:guide-bbox="false"
+     inkscape:object-nodes="false"
      gridoriginx="0px"
      gridtolerance="10000"
-     inkscape:object-paths="false"
+     inkscape:object-paths="true"
      objecttolerance="1"
-     inkscape:object-points="false" />
+     inkscape:object-points="false"
+     inkscape:guide-points="true"
+     guidetolerance="5" />
   <defs
      id="defs_global">
+    <linearGradient
+       id="linearGradient11428">
+      <stop
+         style="stop-color:#fff700;stop-opacity:1;"
+         offset="0"
+         id="stop11430" />
+      <stop
+         style="stop-color:#553163;stop-opacity:1;"
+         offset="1"
+         id="stop11432" />
+    </linearGradient>
     <marker
        style="overflow:visible"
        orient="auto"
        id="TriangleOutM"
-       refY="0.0"
+       refY="0"
        inkscape:stockid="TriangleOutM"
-       refX="0.0">
+       refX="0">
       <path
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
-         transform="scale(0.4)"
-         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="scale(0.4,0.4)"
+         d="M 5.77,0 L -2.88,5 L -2.88,-5 L 5.77,0 z "
          id="path3423" />
     </marker>
     <marker
        style="overflow:visible"
        orient="auto"
        id="SquareS"
-       refY="0.0"
+       refY="0"
        inkscape:stockid="SquareS"
-       refX="0.0">
+       refX="0">
       <path
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
-         transform="scale(0.2)"
-         d="M -5.0,-5.0 L -5.0,5.0 L 5.0,5.0 L 5.0,-5.0 L -5.0,-5.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="scale(0.2,0.2)"
+         d="M -5,-5 L -5,5 L 5,5 L 5,-5 L -5,-5 z "
          id="path3399" />
     </marker>
     <marker
        style="overflow:visible"
        orient="auto"
        id="SquareM"
-       refY="0.0"
+       refY="0"
        inkscape:stockid="SquareM"
-       refX="0.0">
+       refX="0">
       <path
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
-         transform="scale(0.4)"
-         d="M -5.0,-5.0 L -5.0,5.0 L 5.0,5.0 L 5.0,-5.0 L -5.0,-5.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="scale(0.4,0.4)"
+         d="M -5,-5 L -5,5 L 5,5 L 5,-5 L -5,-5 z "
          id="path3396" />
     </marker>
     <marker
        style="overflow:visible"
        orient="auto"
        id="DiamondM"
-       refY="0.0"
+       refY="0"
        inkscape:stockid="DiamondM"
-       refX="0.0">
+       refX="0">
       <path
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
-         transform="scale(0.4)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none"
+         transform="scale(0.4,0.4)"
          d="M 0,-7.0710768 L -7.0710894,0 L 0,7.0710589 L 7.0710462,0 L 0,-7.0710768 z "
          id="path3405" />
     </marker>
@@ -112,13 +125,13 @@
        style="overflow:visible"
        orient="auto"
        id="Dot_m"
-       refY="0.0"
+       refY="0"
        inkscape:stockid="Dot_m"
-       refX="0.0">
+       refX="0">
       <path
-         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;marker-end:none"
-         transform="scale(0.4) translate(7.4, 1)"
-         d="M -2.5,-1.0 C -2.5,1.7600000 -4.7400000,4.0 -7.5,4.0 C -10.260000,4.0 -12.5,1.7600000 -12.5,-1.0 C -12.5,-3.7600000 -10.260000,-6.0 -7.5,-6.0 C -4.7400000,-6.0 -2.5,-3.7600000 -2.5,-1.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1pt;marker-start:none;marker-end:none"
+         transform="matrix(0.4,0,0,0.4,2.96,0.4)"
+         d="M -2.5,-1 C -2.5,1.76 -4.74,4 -7.5,4 C -10.26,4 -12.5,1.76 -12.5,-1 C -12.5,-3.76 -10.26,-6 -7.5,-6 C -4.74,-6 -2.5,-3.76 -2.5,-1 z "
          id="path3387" />
     </marker>
     <linearGradient
@@ -331,7 +344,7 @@
        id="filter4397"
        width="1.1174023"
        y="-0.23083568"
-       x="-0.05870117"
+       x="-0.058701169"
        height="1.4616714"
        inkscape:collect="always">
       <feGaussianBlur
@@ -343,28 +356,87 @@
        style="overflow:visible"
        orient="auto"
        id="SquareS8"
-       refY="0.0"
+       refY="0"
        inkscape:stockid="SquareS8"
-       refX="0.0">
+       refX="0">
       <path
-         style="marker-start:none;stroke:#ff465b;stroke-width:1.0pt;fill:#ff465b;fill-rule:evenodd"
-         transform="scale(0.2)"
-         d="M -5.0,-5.0 L -5.0,5.0 L 5.0,5.0 L 5.0,-5.0 L -5.0,-5.0 z "
+         style="fill:#ff465b;fill-rule:evenodd;stroke:#ff465b;stroke-width:1pt;marker-start:none"
+         transform="scale(0.2,0.2)"
+         d="M -5,-5 L -5,5 L 5,5 L 5,-5 L -5,-5 z "
          id="path4182" />
     </marker>
     <marker
        style="overflow:visible"
        orient="auto"
        id="TriangleOutMT"
-       refY="0.0"
+       refY="0"
        inkscape:stockid="TriangleOutMT"
-       refX="0.0">
+       refX="0">
       <path
-         style="marker-start:none;stroke:#ff465b;stroke-width:1.0pt;fill:#ff465b;fill-rule:evenodd"
-         transform="scale(0.4)"
-         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         style="fill:#ff465b;fill-rule:evenodd;stroke:#ff465b;stroke-width:1pt;marker-start:none"
+         transform="scale(0.4,0.4)"
+         d="M 5.77,0 L -2.88,5 L -2.88,-5 L 5.77,0 z "
          id="path4185" />
     </marker>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient11428"
+       id="linearGradient11434"
+       x1="50.468533"
+       y1="46.267605"
+       x2="64.260468"
+       y2="68.541466"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient11428"
+       id="linearGradient11529"
+       gradientUnits="userSpaceOnUse"
+       x1="50.468533"
+       y1="46.267605"
+       x2="64.260468"
+       y2="68.541466"
+       gradientTransform="matrix(2.0887729,0,0,2.0886777,-60.313318,-60.306023)" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient11428"
+       id="linearGradient11543"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.0887729,0,0,2.0886777,-60.313318,-60.306023)"
+       x1="50.468533"
+       y1="46.267605"
+       x2="64.260468"
+       y2="68.541466" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient11428"
+       id="linearGradient11545"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.0887729,0,0,2.0886777,-60.313318,-60.306023)"
+       x1="50.468533"
+       y1="46.267605"
+       x2="64.260468"
+       y2="68.541466" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient11428"
+       id="linearGradient11549"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.0887729,0,0,2.0886777,-60.313318,-60.306023)"
+       x1="50.468533"
+       y1="46.267605"
+       x2="64.260468"
+       y2="68.541466" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient11428"
+       id="linearGradient11551"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.0887729,0,0,2.0886777,-60.313318,-60.306023)"
+       x1="50.468533"
+       y1="46.267605"
+       x2="64.260468"
+       y2="68.541466" />
   </defs>
   <metadata
      id="docinfo">
@@ -405,8 +477,7 @@
      inkscape:label="Basics"
      style="display:inline"
      id="lay_Basics"
-     inkscape:groupmode="layer"
-     sodipodi:insensitive="true">
+     inkscape:groupmode="layer">
     <g
        id="g13475"
        transform="translate(482.37795,-138.13081)">
@@ -1164,144 +1235,91 @@
   </g>
   <g
      inkscape:groupmode="layer"
-     id="layer1"
-     inkscape:label="Label"
-     sodipodi:insensitive="true">
+     id="lay_Label"
+     inkscape:label="Label">
+    <path
+       style="opacity:1;color:#000000;fill:none;fill-opacity:0.2857143;fill-rule:evenodd;stroke:none;stroke-width:0.69999999;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       d="M 50,272.375 L 50,332.375 L 50,417.375 L 330,417.375 L 362,417.36218 L 362,321.36218 L 330,321.375 L 330,272.375 L 50,272.375 z "
+       id="rect2426"
+       sodipodi:nodetypes="ccccccccc" />
+    <rect
+       y="312.36218"
+       x="410"
+       height="130"
+       width="290"
+       id="rect3453"
+       style="opacity:1;color:#000000;fill:none;fill-opacity:0.2857143;fill-rule:evenodd;stroke:none;stroke-width:0.69999999;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
     <text
        xml:space="preserve"
        style="font-size:24.7394104px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;color:#000000;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.69999999;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:url(#Arrow1Mend1);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-       x="140.74243"
-       y="44.540241"
+       x="93.090294"
+       y="49.209541"
        id="text4548"
        sodipodi:linespacing="100%"
        transform="scale(0.9943087,1.0057239)"><tspan
          sodipodi:role="line"
          id="tspan2360"
-         x="140.74243"
-         y="44.540241"
+         x="93.090294"
+         y="49.209541"
          style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.69999999;stroke-opacity:1">Anatomy of the</tspan><tspan
          sodipodi:role="line"
          id="tspan2362"
-         x="140.74243"
-         y="69.279652"
+         x="93.090294"
+         y="73.948952"
          style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.69999999;stroke-opacity:1">high-level model</tspan></text>
-    <text
+    <flowRoot
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;color:#000000;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.69999999;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-       x="50.49926"
-       y="284.04041"
-       id="text3363"
-       sodipodi:linespacing="100%"><tspan
-         sodipodi:role="line"
-         id="tspan3445"
-         x="50.49926"
-         y="284.04041">The model is an association of Media Objects,</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3447"
-         x="50.49926"
-         y="296.04041">grouped to form Processing Pipes, which are</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3449"
-         x="50.49926"
-         y="308.04041">a linear chain of data processing modules,</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3451"
-         x="50.49926"
-         y="320.04041">starting from an source port and providing</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3453"
-         x="50.49926"
-         y="332.04041">an exit point.</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3455"
-         x="50.49926"
-         y="344.04041">Optionally, there may be a wiring plug, requesting</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3457"
-         x="50.49926"
-         y="356.04041">the exit point to be connected to another pipe. When</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3459"
-         x="50.49926"
-         y="368.04041">omitted, the wiring will be figured out automatically.</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3461"
-         x="50.49926"
-         y="380.04041"></tspan><tspan
-         sodipodi:role="line"
-         id="tspan3463"
-         x="50.49926"
-         y="392.04041">Several pipes may be joined together by a transition,</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3465"
-         x="50.49926"
-         y="404.04041">which in the general case simultanously  treats N</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3467"
-         x="50.49926"
-         y="416.04041">media streams. Commonly, a transition simply </tspan><tspan
-         sodipodi:role="line"
-         id="tspan3469"
-         x="50.49926"
-         y="428.04041">combines two streams into one output.</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3471"
-         x="50.49926"
-         y="440.04041"></tspan></text>
-    <text
-       sodipodi:linespacing="100%"
-       id="text3473"
-       y="310.36658"
-       x="414.49927"
-       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;color:#000000;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.69999999;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-       xml:space="preserve"><tspan
-         sodipodi:role="line"
-         id="tspan3575"
-         x="414.49927"
-         y="310.36658">Individual Media Objects are attached,</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3577"
-         x="414.49927"
-         y="322.36658">located or joined together by Placements.</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3579"
-         x="414.49927"
-         y="334.36658">A Placement is a handle for a single MObject</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3581"
-         x="414.49927"
-         y="346.36658">and contains a list of placement specifications,</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3583"
-         x="414.49927"
-         y="358.36658">(called Locating Pin),</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3585"
-         x="414.49927"
-         y="370.36658"></tspan><tspan
-         sodipodi:role="line"
-         id="tspan3587"
-         x="414.49927"
-         y="382.36658">Besides absolute and relative placement, there</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3589"
-         x="414.49927"
-         y="394.36658">is also the possibility of a placement to stick </tspan><tspan
-         sodipodi:role="line"
-         id="tspan3591"
-         x="414.49927"
-         y="406.36658">directly to another MObject's placement, e.g.</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3593"
-         x="414.49927"
-         y="418.36658">to attach an effect to a clip or an automation</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3595"
-         x="414.49927"
-         y="430.36658">data set to an effect.</tspan><tspan
-         sodipodi:role="line"
-         id="tspan3597"
-         x="414.49927"
-         y="442.36658"></tspan></text>
+       id="flowRoot3975"><flowRegion
+         id="flowRegion3977"><use
+           x="0"
+           y="0"
+           xlink:href="#rect2426"
+           id="use3979"
+           width="744.09448"
+           height="1052.3622" /><use
+           x="0"
+           y="0"
+           xlink:href="#rect3453"
+           id="use3981"
+           width="744.09448"
+           height="1052.3622" /></flowRegion><flowPara
+         id="flowPara3983"
+         style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans">The model is an association of <flowSpan
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+   id="flowSpan4046">Media Objects</flowSpan>, grouped to form Processing <flowSpan
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+   id="flowSpan4048">Pipes</flowSpan>, which are a linear chain of data processing modules, starting from an source port and providing an exit point. </flowPara><flowPara
+         id="flowPara3989"
+         style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans">Optionally, there may be a <flowSpan
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+   id="flowSpan4050">wiring plug</flowSpan>, requesting the exit point to be connected to another pipe. When omitted, the wiring will be figured out automatically.  </flowPara><flowPara
+         id="flowPara3987"
+         style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /><flowPara
+         id="flowPara3985"
+         style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans">Several pipes may be joined together by a <flowSpan
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+   id="flowSpan4052">transition</flowSpan>, which in the general case simultanously  treats N media streams. Commonly, a transition simply  combines two streams into one output. </flowPara><flowPara
+         id="flowPara3991"
+         style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans" /><flowPara
+         id="flowPara3993"
+         style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans">Individual Media Objects are attached, located or joined together by <flowSpan
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+   id="flowSpan4054">Placements</flowSpan>. A Placement is a handle for a single MObject and contains a list of placement specifications, (called <flowSpan
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+   id="flowSpan4056">Locating Pin</flowSpan>)</flowPara><flowPara
+         id="flowPara3995"
+         style="font-size:11px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans">Besides absolute and relative placement, there is also the possibility of a placement to stick directly to another MObject's placement, e.g. to <flowSpan
+   style="font-size:11px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+   id="flowSpan4058">attach</flowSpan> an effect to a clip or an automation data set to an effect.</flowPara></flowRoot>    <g
+       id="g_LumiLogo"
+       style="opacity:1;color:#000000;fill:#951616;fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient11549);stroke-width:0.30000001;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       transform="matrix(0.5,0,0,0.5,30,27.359993)">
+      <path
+         sodipodi:nodetypes="ccccccccccccscsssccsccscsssccccsssc"
+         id="LumieraLogo"
+         d="M 0,11.48771 L 0,88.512258 C 0,94.876459 5.12376,100.00587 11.488252,99.999984 L 88.511753,99.999984 C 94.876244,99.999984 100,94.876455 100,88.512258 L 100,11.492269 C 100,5.1280689 94.876244,-1.6079329e-05 88.511753,-1.6079329e-05 L 11.488252,-1.6079329e-05 C 5.6951387,-1.6079329e-05 0,5.5258281 0,11.48771 z M 21.148826,0.26562719 C 29.955201,0.26562719 42.558748,6.0632763 42.558748,35.120436 L 42.558748,77.024531 C 42.558748,87.851217 43.097639,96.997511 50.065277,96.997511 C 52.34862,96.997511 53.64308,95.484552 54.047,94.908832 C 49.700804,94.769736 46.214101,91.194803 46.214101,86.815208 C 46.214101,82.347527 49.840211,78.721581 54.308096,78.721581 C 58.775981,78.721581 62.402092,82.347527 62.402092,86.815208 C 62.402092,88.437921 61.919927,89.921159 61.096608,91.188377 C 61.096608,91.188377 61.031334,91.318919 61.031334,91.318919 C 58.08739,95.518358 54.965657,99.738901 47.519584,99.738901 C 38.713208,99.738901 26.109662,93.941251 26.109662,64.884092 L 26.109662,22.979996 C 26.109662,12.15331 25.57077,3.0070164 18.603134,3.0070164 C 16.319793,3.0070164 15.025331,4.5199752 14.62141,5.0956943 C 18.967606,5.2347913 22.454309,8.8097247 22.454309,13.189319 C 22.454309,17.657001 18.828199,21.282945 14.360314,21.282945 C 9.892429,21.282945 6.2663188,17.657001 6.2663188,13.189319 C 6.2663188,11.566604 6.7484827,10.083368 7.5718019,8.8161505 C 7.5718019,8.8161505 7.6370761,8.6856087 7.6370761,8.6856087 C 10.58102,4.4861692 13.702754,0.26562719 21.148826,0.26562719 z M 75.456921,18.280472 C 79.924808,18.280472 83.550918,21.906416 83.550918,26.374097 C 83.550918,30.841779 79.924808,34.467725 75.456921,34.467725 C 70.989037,34.467725 67.362928,30.841779 67.362928,26.374097 C 67.362928,21.906416 70.989037,18.280472 75.456921,18.280472 z "
+         style="stroke:url(#linearGradient11551)" />
+    </g>
   </g>
 </svg>
