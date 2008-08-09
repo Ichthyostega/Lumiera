@@ -9,8 +9,18 @@ END
 
 
 
+TEST "mutex section" mutexsection <<END
+out: mutex locked section 1
+out: mutex locked section 2
+END
+
+
 TEST "mutex not unlocked asserts" mutexforgotunlock <<END
 return: 134
 END
 
 
+TEST "nested mutex section" nestedmutexsection <<END
+out: outer mutex locked section
+out: inner mutex locked section
+END

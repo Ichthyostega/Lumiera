@@ -37,6 +37,7 @@ lumiera_mutex_init (LumieraMutex self)
   if (self)
     {
       pthread_mutex_init (&self->mutex, NULL);
+      NOBUG_RESOURCE_HANDLE_INIT (self->rh);
     }
   return self;
 }

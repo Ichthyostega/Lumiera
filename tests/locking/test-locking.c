@@ -22,9 +22,9 @@
 #include <stdio.h>
 #include <string.h>
 #include "tests/test.h"
+#include "lib/mutex.h"
 
 int conditionforgotunlock ();
-int mutexforgotunlock ();
 
 TESTS_BEGIN
 
@@ -33,9 +33,71 @@ TEST ("conditionforgotunlock")
   return conditionforgotunlock ();
 }
 
+TEST ("mutexsection")
+{
+  lumiera_mutex m;
+  lumiera_mutex_init (&m);
+  RESOURCE_ANNOUNCE (NOBUG_ON, "mutex", "mutexsection", &m, m.rh);
+
+  LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
+    {
+      printf ("mutex locked section 1\n");
+    }
+
+  LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
+    {
+      printf ("mutex locked section 2\n");
+    }
+
+  RESOURCE_FORGET (NOBUG_ON, m.rh);
+  lumiera_mutex_destroy (&m);
+}
+
+
 TEST ("mutexforgotunlock")
 {
-  return mutexforgotunlock ();
+  lumiera_mutex m;
+  lumiera_mutex_init (&m);
+  RESOURCE_ANNOUNCE (NOBUG_ON, "mutex", "mutexforgotunlock", &m, m.rh);
+
+  LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
+    {
+      break;    // MUTEX_SECTIONS must not be left by a jump
+    }
+
+  RESOURCE_FORGET (NOBUG_ON, m.rh);
+  lumiera_mutex_destroy (&m);
 }
+
+
+TEST ("nestedmutexsection")
+{
+  lumiera_mutex m;
+  lumiera_mutex_init (&m);
+  RESOURCE_ANNOUNCE (NOBUG_ON, "mutex", "m_mutexsection", &m, m.rh);
+
+  lumiera_mutex n;
+  lumiera_mutex_init (&n);
+  RESOURCE_ANNOUNCE (NOBUG_ON, "mutex", "n_mutexsection", &n, n.rh);
+
+  LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
+    {
+      printf ("outer mutex locked section\n");
+
+      LUMIERA_MUTEX_SECTION (NOBUG_ON, &n)
+        {
+          printf ("inner mutex locked section\n");
+        }
+    }
+
+  RESOURCE_FORGET (NOBUG_ON, n.rh);
+  lumiera_mutex_destroy (&n);
+
+  RESOURCE_FORGET (NOBUG_ON, m.rh);
+  lumiera_mutex_destroy (&m);
+}
+
+
+
 
 TESTS_END

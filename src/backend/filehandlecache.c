@@ -45,7 +45,7 @@ lumiera_filehandlecache_new (int max_entries)
   lumiera_fhcache->available = max_entries;
   lumiera_fhcache->checked_out = 0;
   lumiera_mutex_init (&lumiera_fhcache->lock);
-  RESOURCE_ANNOUNCE (filehandlecache, "mutex", "filehandlecache", lumiera_fhcache, lumiera_fhcache->rh);
+  RESOURCE_ANNOUNCE (filehandlecache, "mutex", "filehandlecache", lumiera_fhcache, lumiera_fhcache->lock.rh);
 }
 
 
@@ -55,7 +55,7 @@ lumiera_filehandlecache_delete (void)
   if (lumiera_fhcache)
     {
       REQUIRE (!lumiera_fhcache->checked_out, "Filehandles in use at shutdown");
-      RESOURCE_FORGET (filehandlecache, lumiera_fhcache->rh);
+      RESOURCE_FORGET (filehandlecache, lumiera_fhcache->lock.rh);
       lumiera_mrucache_destroy (&lumiera_fhcache->cache);
       lumiera_mutex_destroy (&lumiera_fhcache->lock);
       lumiera_free (lumiera_fhcache);
@@ -69,7 +69,8 @@ lumiera_filehandlecache_handle_acquire (LumieraFilehandlecache self, LumieraFile
 {
   TRACE (filehandlecache);
   LumieraFilehandle ret = NULL;
-  LUMIERA_MUTEX_SECTION (filehandlecache, self->rh, &self->lock)
+
+  LUMIERA_MUTEX_SECTION (filehandlecache, &self->lock)
   {
     if (self->available <= 0 && self->cache.cached)
       {
@@ -106,7 +107,7 @@ lumiera_filehandlecache_checkout (LumieraFilehandlecache self, LumieraFilehandle
   if (!handle->use_cnt)
     {
       /* lock cache and checkout */
-      LUMIERA_MUTEX_SECTION (filehandlecache, self->rh, &self->lock)
+      LUMIERA_MUTEX_SECTION (filehandlecache, &self->lock)
         {
           lumiera_mrucache_checkout (&self->cache, &handle->cachenode);
         }
@@ -128,7 +129,7 @@ lumiera_filehandlecache_checkin (LumieraFilehandlecache self, LumieraFilehandle 
   if (!--handle->use_cnt)
     {
       /* lock cache and checin */
-      LUMIERA_MUTEX_SECTION (filehandlecache, self->rh, &self->lock)
+      LUMIERA_MUTEX_SECTION (filehandlecache, &self->lock)
         {
           --self->checked_out;
           lumiera_mrucache_checkin (&self->cache, &handle->cachenode);

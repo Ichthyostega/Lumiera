@@ -93,6 +93,9 @@ lumiera_filedescriptor_registry_init (void)
                          3);
   if (!registry)
     LUMIERA_DIE (NO_MEMORY);
+
+  RESOURCE_HANDLE_INIT (registry_mutex.rh);
+  RESOURCE_ANNOUNCE (filedescriptor, "mutex", "filedescriptor registry", &registry, registry_mutex.rh);
 }
 
 void
@@ -100,6 +103,9 @@ lumiera_filedescriptor_registry_destroy (void)
 {
   TRACE (filedescriptor);
   REQUIRE (!cuckoo_nelements (registry));
+
+  RESOURCE_FORGET (filedescriptor, registry_mutex.rh);
+
   if (registry)
     cuckoo_free (registry);
   registry = NULL;
@@ -112,75 +118,72 @@ lumiera_filedescriptor_acquire (const char* name, int flags)
   TRACE (filedescriptor, "%s", name);
   REQUIRE (registry, "not initialized");
 
-  lumiera_mutexacquirer registry_lock;
-  lumiera_mutexacquirer_init_mutex (&registry_lock, &registry_mutex, LUMIERA_LOCKED);
+  LumieraFiledescriptor dest = NULL;
 
-  lumiera_filedescriptor fdesc;
-  fdesc.flags = flags;
-
-  if (stat (name, &fdesc.stat) != 0)
+  LUMIERA_MUTEX_SECTION (filedescriptor, &registry_mutex)
     {
-      if (errno == ENOENT && flags&O_CREAT)
+      lumiera_filedescriptor fdesc;
+      fdesc.flags = flags;
+
+      if (stat (name, &fdesc.stat) != 0)
         {
-          char* dir = lumiera_tmpbuf_strndup (name, PATH_MAX);
-          char* slash = dir;
-          while ((slash = strchr (slash+1, '/')))
+          if (errno == ENOENT && flags&O_CREAT)
             {
-              *slash = '\0';
-              INFO (filedescriptor, "try creating dir: %s", dir);
-              if (mkdir (dir, 0777) == -1 && errno != EEXIST)
+              char* dir = lumiera_tmpbuf_strndup (name, PATH_MAX);
+              char* slash = dir;
+              while ((slash = strchr (slash+1, '/')))
+                {
+                  *slash = '\0';
+                  INFO (filedescriptor, "try creating dir: %s", dir);
+                  if (mkdir (dir, 0777) == -1 && errno != EEXIST)
+                    {
+                      LUMIERA_ERROR_SET (filedescriptor, ERRNO);
+                      goto error;
+                    }
+                  *slash = '/';
+                }
+              int fd;
+              INFO (filedescriptor, "try creating file: %s", name);
+              fd = creat (name, 0777);
+              if (fd == -1)
                 {
                   LUMIERA_ERROR_SET (filedescriptor, ERRNO);
-                  goto efile;
+                  goto error;
                 }
-              *slash = '/';
-            }
-          int fd;
-          INFO (filedescriptor, "try creating file: %s", name);
-          fd = creat (name, 0777);
-          if (fd == -1)
-            {
-              LUMIERA_ERROR_SET (filedescriptor, ERRNO);
-              goto efile;
-            }
-          close (fd);
-          if (stat (name, &fdesc.stat) != 0)
-            {
-              /* finally, no luck */
-              LUMIERA_ERROR_SET (filedescriptor, ERRNO);
-              goto efile;
+              close (fd);
+              if (stat (name, &fdesc.stat) != 0)
+                {
+                  /* finally, no luck */
+                  LUMIERA_ERROR_SET (filedescriptor, ERRNO);
+                  goto error;
+                }
             }
         }
+
+      /* lookup/create descriptor */
+      dest = &fdesc;
+      LumieraFiledescriptor* found = cuckoo_find (registry, &dest);
+
+      if (!found)
+        {
+          TRACE (filedescriptor, "Descriptor not found");
+
+          dest = lumiera_filedescriptor_new (&fdesc);
+          if (!dest)
+            goto error;
+
+          cuckoo_insert (registry, &dest);
+        }
+      else
+        {
+          TRACE (filedescriptor, "Descriptor already existing");
+          dest = *found;
+          ++dest->refcount;
+        }
+    error: ;
     }
 
-  /* lookup/create descriptor */
-  LumieraFiledescriptor dest = &fdesc;
-  LumieraFiledescriptor* found = cuckoo_find (registry, &dest);
-
-  if (!found)
-    {
-      TRACE (filedescriptor, "Descriptor not found");
-
-      dest = lumiera_filedescriptor_new (&fdesc);
-      if (!dest)
-        goto ecreate;
-
-      cuckoo_insert (registry, &dest);
-    }
-  else
-    {
-      TRACE (filedescriptor, "Descriptor already existing");
-      dest = *found;
-      ++dest->refcount;
-    }
-
-  lumiera_mutexacquirer_unlock (&registry_lock);
   return dest;
-
- efile:
- ecreate:
-  lumiera_mutexacquirer_unlock (&registry_lock);
-  return NULL;
 }
 
 
@@ -209,7 +212,7 @@ lumiera_filedescriptor_new (LumieraFiledescriptor template)
   const char* type = "mutex";
   const char* name = "filedescriptor";
 
-  RESOURCE_ANNOUNCE (filedescriptor, type, name, self, self->rh);
+  RESOURCE_ANNOUNCE (filedescriptor, type, name, self, self->lock.rh);
 
   return self;
 }
@@ -219,22 +222,21 @@ void
 lumiera_filedescriptor_delete (LumieraFiledescriptor self)
 {
   TRACE (filedescriptor, "%p", self);
-  lumiera_mutexacquirer registry_lock;
-  lumiera_mutexacquirer_init_mutex (&registry_lock, &registry_mutex, LUMIERA_LOCKED);
 
-  REQUIRE (self->refcount == 0);
+  LUMIERA_MUTEX_SECTION (filedescriptor, &registry_mutex)
+    {
+      REQUIRE (self->refcount == 0);
 
-  RESOURCE_FORGET (filedescriptor, self->rh);
+      RESOURCE_FORGET (filedescriptor, self->lock.rh);
 
-  cuckoo_remove (registry, cuckoo_find (registry, &self));
+      cuckoo_remove (registry, cuckoo_find (registry, &self));
 
-  TODO ("destruct other members (WIP)");
+      TODO ("destruct other members (WIP)");
 
 
-  TODO ("release filehandle");
+      TODO ("release filehandle");
 
-  lumiera_mutex_destroy (&self->lock);
-  lumiera_free (self);
-
-  lumiera_mutexacquirer_unlock (&registry_lock);
+      lumiera_mutex_destroy (&self->lock);
+      lumiera_free (self);
+    }
 }

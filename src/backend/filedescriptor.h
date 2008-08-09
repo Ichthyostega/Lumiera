@@ -55,8 +55,6 @@ struct lumiera_filedescriptor_struct
   LumieraFilehandle handle;
   //LumieraFileMap mappings;
   //LumieraWriteBuffer writebuffer;
-
-  RESOURCE_HANDLE (rh);
 };
 
 /**
