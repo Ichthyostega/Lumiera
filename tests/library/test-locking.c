@@ -19,19 +19,25 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <stdio.h>
-#include <string.h>
 #include "tests/test.h"
 #include "lib/mutex.h"
+#include "lib/condition.h"
 
-int conditionforgotunlock ();
+#include <stdio.h>
+#include <string.h>
 
 TESTS_BEGIN
 
 TEST ("conditionforgotunlock")
 {
-  return conditionforgotunlock ();
+  lumiera_condition c;
+  lumiera_condition_init (&c);
+
+  lumiera_conditionacquirer l;
+  lumiera_conditionacquirer_init (&l, &c, LUMIERA_LOCKED);
+  return 0;
 }
+
 
 TEST ("mutexsection")
 {

@@ -24,10 +24,7 @@ test_error_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/sr
 test_error_LDADD = liblumi.a -lnobugmt -lpthread -ldl
 
 check_PROGRAMS += test-locking
-test_locking_SOURCES = \
-	$(tests_srcdir)/locking/test-locking.c \
-	$(tests_srcdir)/locking/mutex.c \
-	$(tests_srcdir)/locking/condition.c
+test_locking_SOURCES = $(tests_srcdir)/library/test-locking.c
 test_locking_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
 test_locking_LDADD = liblumi.a -lnobugmt -lpthread -ldl -lm
 
