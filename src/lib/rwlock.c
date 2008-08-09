@@ -18,21 +18,22 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <errno.h>
+
+#include "lib/error.h"
 #include "lib/rwlock.h"
+
 
 LUMIERA_ERROR_DEFINE(RWLOCK_AGAIN, "maximum number of readlocks exceed");
 LUMIERA_ERROR_DEFINE(RWLOCK_DEADLOCK, "deadlock detected");
-LUMIERA_ERROR_DEFINE(RWLOCK_DESTROY, "destroy rwlock");
-LUMIERA_ERROR_DEFINE(RWLOCK_UNLOCK, "unlock");
-LUMIERA_ERROR_DEFINE(RWLOCK_RLOCK, "rlock");
-LUMIERA_ERROR_DEFINE(RWLOCK_WLOCK, "wlock");
+LUMIERA_ERROR_DEFINE(RWLOCK_DESTROY, "destroying rwlock");
+LUMIERA_ERROR_DEFINE(RWLOCK_UNLOCK, "unlock rwlock failed");
+LUMIERA_ERROR_DEFINE(RWLOCK_RDLOCK, "locking rwlock for reading failed");
+LUMIERA_ERROR_DEFINE(RWLOCK_WRLOCK, "locking rwlock for writing failed");
 
 /**
  * @file
  * Read/write locks.
  */
-
 
 LumieraRWLock
 lumiera_rwlock_init (LumieraRWLock self)
@@ -40,6 +41,7 @@ lumiera_rwlock_init (LumieraRWLock self)
   if (self)
     {
       pthread_rwlock_init (&self->rwlock, NULL);
+      NOBUG_RESOURCE_HANDLE_INIT (self->rh);
     }
   return self;
 }
@@ -56,94 +58,10 @@ lumiera_rwlock_destroy (LumieraRWLock self)
   return self;
 }
 
-
-
-
-
-LumieraRWLockacquirer
-lumiera_rwlockacquirer_init (LumieraRWLockacquirer self, LumieraRWLock rwlock, enum lumiera_lockstate state)
-{
-  REQUIRE (self);
-  REQUIRE (rwlock);
-  REQUIRE (state != LUMIERA_LOCKED, "illegal state for rwlock");
-  self->rwlock = rwlock;
-  self->state = state;
-
-  if (state == LUMIERA_RDLOCKED)
-    switch (pthread_rwlock_rdlock (&rwlock->rwlock))
-      {
-      case 0:
-        break;
-      case EAGAIN:
-        lumiera_error_set (LUMIERA_ERROR_RWLOCK_AGAIN);
-        return NULL;
-      case EDEADLK:
-        lumiera_error_set (LUMIERA_ERROR_RWLOCK_DEADLOCK);
-        return NULL;
-      default:
-        LUMIERA_DIE (RWLOCK_RLOCK);
-      }
-  else
-    switch (pthread_rwlock_wrlock (&rwlock->rwlock))
-      {
-      case 0:
-        break;
-      case EDEADLK:
-        lumiera_error_set (LUMIERA_ERROR_RWLOCK_DEADLOCK);
-        return NULL;
-      default:
-        LUMIERA_DIE (RWLOCK_WLOCK);
-      }
-
-  return self;
-}
-
-
-
-LumieraRWLockacquirer
-lumiera_rwlockacquirer_rdlock (LumieraRWLockacquirer self)
-{
-  REQUIRE (self);
-  REQUIRE (self->state == LUMIERA_UNLOCKED, "rwlock already locked");
-
-  switch (pthread_rwlock_rdlock (&self->rwlock->rwlock))
-    {
-    case 0:
-      break;
-    case EAGAIN:
-      lumiera_error_set (LUMIERA_ERROR_RWLOCK_AGAIN);
-      return NULL;
-    case EDEADLK:
-      lumiera_error_set (LUMIERA_ERROR_RWLOCK_DEADLOCK);
-      return NULL;
-    default:
-      LUMIERA_DIE (RWLOCK_RLOCK);
-    }
-
-  self->state = LUMIERA_RDLOCKED;
-  return self;
-}
-
-
-
-LumieraRWLockacquirer
-lumiera_rwlockacquirer_wrlock (LumieraRWLockacquirer self)
-{
-  REQUIRE (self);
-  REQUIRE (self->state == LUMIERA_UNLOCKED, "rwlock already locked");
-
-  switch (pthread_rwlock_wrlock (&self->rwlock->rwlock))
-    {
-    case 0:
-      break;
-    case EDEADLK:
-      lumiera_error_set (LUMIERA_ERROR_RWLOCK_DEADLOCK);
-      return NULL;
-    default:
-      LUMIERA_DIE (RWLOCK_WLOCK);
-    }
-
-  self->state = LUMIERA_WRLOCKED;
-  return self;
-}
-
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

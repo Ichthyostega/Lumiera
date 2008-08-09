@@ -24,3 +24,14 @@ TEST "nested mutex section" nestedmutexsection <<END
 out: outer mutex locked section
 out: inner mutex locked section
 END
+
+
+TEST "rwlock section" rwlocksection <<END
+out: write locked section 1
+out: read locked section 2
+END
+
+
+TEST "rwlock not unlocked asserts" rwlockforgotunlock <<END
+return: 134
+END

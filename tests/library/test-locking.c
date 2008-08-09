@@ -22,6 +22,7 @@
 #include "tests/test.h"
 #include "lib/mutex.h"
 #include "lib/condition.h"
+#include "lib/rwlock.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -104,6 +105,42 @@ TEST ("nestedmutexsection")
 }
 
 
+
+TEST ("rwlocksection")
+{
+  lumiera_rwlock rwlock;
+  lumiera_rwlock_init (&rwlock);
+  RESOURCE_ANNOUNCE (NOBUG_ON, "rwlock", "rwlocksection", &rwlock, rwlock.rh);
+
+  LUMIERA_WRLOCK_SECTION (NOBUG_ON, &rwlock)
+    {
+      printf ("write locked section 1\n");
+    }
+
+  LUMIERA_RDLOCK_SECTION (NOBUG_ON, &rwlock)
+    {
+      printf ("read locked section 2\n");
+    }
+
+  RESOURCE_FORGET (NOBUG_ON, rwlock.rh);
+  lumiera_rwlock_destroy (&rwlock);
+}
+
+
+TEST ("rwlockforgotunlock")
+{
+  lumiera_rwlock rwlock;
+  lumiera_rwlock_init (&rwlock);
+  RESOURCE_ANNOUNCE (NOBUG_ON, "rwlock", "rwlockforgotunlock", &rwlock, rwlock.rh);
+
+  LUMIERA_RDLOCK_SECTION (NOBUG_ON, &rwlock)
+    {
+      break;    // LOCK_SECTIONS must not be left by a jump
+    }
+
+  RESOURCE_FORGET (NOBUG_ON, rwlock.rh);
+  lumiera_rwlock_destroy (&rwlock);
+}
 
 
 TESTS_END
