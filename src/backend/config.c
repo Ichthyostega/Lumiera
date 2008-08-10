@@ -127,11 +127,11 @@ lumiera_config_get (const char* key, const char** value)
 
   int ret = -1;
 
-  /* we translate the key for the env var override by making it uppercase and replace . and - with _,
+  /* we translate the key for the env var override by making it uppercase and replace . with _,
    as side effect, this also checks the key syntax */
   char* tr_key = lumiera_tmpbuf_tr (key,
-                                    "abcdefghijklmnopqrstuvwxyz0123456789_.",
-                                    "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789__",
+                                    LUMIERA_CONFIG_KEY_CHARS,
+                                    LUMIERA_CONFIG_ENV_CHARS,
                                     NULL);
   if (!tr_key)
     {
