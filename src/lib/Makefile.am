@@ -27,7 +27,6 @@ liblumi_a_SOURCES =				\
 	$(liblumi_a_srcdir)/mutex.c		\
 	$(liblumi_a_srcdir)/rwlock.c		\
 	$(liblumi_a_srcdir)/condition.c		\
-	$(liblumi_a_srcdir)/references.c	\
 	$(liblumi_a_srcdir)/luid.c		\
 	$(liblumi_a_srcdir)/safeclib.c		\
 	$(liblumi_a_srcdir)/cuckoo.c		\
@@ -41,7 +40,6 @@ noinst_HEADERS +=						\
 	$(liblumi_a_srcdir)/mutex.h				\
 	$(liblumi_a_srcdir)/rwlock.h				\
 	$(liblumi_a_srcdir)/condition.h				\
-	$(liblumi_a_srcdir)/references.h			\
 	$(liblumi_a_srcdir)/luid.h				\
 	$(liblumi_a_srcdir)/safeclib.h				\
 	$(liblumi_a_srcdir)/cuckoo.h				\
