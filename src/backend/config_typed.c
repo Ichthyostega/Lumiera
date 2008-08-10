@@ -127,6 +127,14 @@ lumiera_config_real_set (const char* key, long double* value, const char* fmt)
 
 
 /**
+ * String
+ * unquoted string which covers the whole value area and gets chopped or
+ * quoted string which preserves leading/trailing spaces
+ * either single or double quotes are allowed, doubling the quote in a string escapes it
+ */
+
+
+/**
  * helper function, takes a raw input string and give a tmpbuf with the string parsed back.
  */
 static char*
@@ -180,10 +188,6 @@ scan_string (const char* in)
   return ret;
 }
 
-/**
- * String
- * either a string which covers the whole line
- */
 int
 lumiera_config_string_get (const char* key, char** value, const char* def)
 {
@@ -201,8 +205,6 @@ lumiera_config_string_get (const char* key, char** value, const char* def)
             {
               *value = scan_string (raw_value);
 
-              TRACE (config_typed, "RAW_VALUE %s, scanned .%s.", raw_value, *value);
-
               if (*value)
                 ret = 0; /* all ok */
               else if (def)
@@ -214,7 +216,6 @@ lumiera_config_string_get (const char* key, char** value, const char* def)
             try_default:
 
               *value = scan_string (def);
-              TRACE (config_typed, "DEFAULT %s, scanned .%s.", def, *value);
               if (*value)
                 {
                   TODO ("register default (writelock or mutex!)");
