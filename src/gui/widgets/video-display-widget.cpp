@@ -36,128 +36,67 @@ namespace gui {
 namespace widgets {
 
 VideoDisplayWidget::VideoDisplayWidget() :
-  gdkWindow(NULL),
   displayer(NULL)
-  {
-    set_flags(Gtk::NO_WINDOW);
-  }
+{
+}
 
 VideoDisplayWidget::~VideoDisplayWidget()
-  {
-    if(displayer != NULL)
-      delete displayer;
-  }
+{
+  if(displayer != NULL)
+    delete displayer;
+}
 
 void
 VideoDisplayWidget::on_realize()
-  {
-    set_flags(Gtk::NO_WINDOW);
+{
+  // Call base class:
+  Gtk::Widget::on_realize();
 
-    // Call base class:
-    Gtk::Widget::on_realize();
+  // Set colors
+  modify_bg(Gtk::STATE_NORMAL, Gdk::Color("black"));
 
-    // Create the GdkWindow:
-    GdkWindowAttr attributes;
-    memset(&attributes, 0, sizeof(attributes));
+  if(displayer != NULL)
+    delete displayer;
+  displayer = createDisplayer(this, 320, 240);
 
-    Gtk::Allocation allocation = get_allocation();
-
-    // Set initial position and size of the Gdk::Window:
-    attributes.x = allocation.get_x();
-    attributes.y = allocation.get_y();
-    attributes.width = allocation.get_width();
-    attributes.height = allocation.get_height();
-
-    attributes.event_mask = get_events () | Gdk::EXPOSURE_MASK; 
-    attributes.window_type = GDK_WINDOW_CHILD;
-    attributes.wclass = GDK_INPUT_OUTPUT;
-
-    gdkWindow = Gdk::Window::create(get_window() /* parent */, &attributes,
-            GDK_WA_X | GDK_WA_Y);
-    unset_flags(Gtk::NO_WINDOW);
-    set_window(gdkWindow);
-
-    // Set colors
-    modify_bg(Gtk::STATE_NORMAL, Gdk::Color("black"));
-
-    // Make the widget receive expose events
-    gdkWindow->set_user_data(gobj());
-
-    if(displayer != NULL)
-      delete displayer;
-    displayer = createDisplayer(this, 320, 240);
-
-    add_events(Gdk::ALL_EVENTS_MASK);
-  }
-
-void
-VideoDisplayWidget::on_unrealize()
-  {
-    gdkWindow.clear();
-
-    //Call base class:
-    Gtk::Widget::on_unrealize();
-  }
+  add_events(Gdk::ALL_EVENTS_MASK);
+}
 
 bool 
 VideoDisplayWidget::on_button_press_event (GdkEventButton* event)
-  {
-    unsigned char buffer[320 * 240 * 4];
+{
+  unsigned char buffer[320 * 240 * 4];
 
-    for(int i = 0; i < 320*240*4; i++)
-      buffer[i] = rand();
+  for(int i = 0; i < 320*240*4; i++)
+    buffer[i] = rand();
 
-    displayer->put((void*)buffer);
+  displayer->put((void*)buffer);
 
-    return true;
-  }
-
-bool
-VideoDisplayWidget::on_expose_event(GdkEventExpose* event)
-  {
-    // This is where we draw on the window
-    /*Glib::RefPtr<Gdk::Window> window = get_window();
-    if(window)
-    {
-      Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
-      if(event)
-      {
-        // clip to the area that needs to be re-exposed so we don't draw any
-        // more than we need to.
-        cr->rectangle(event->area.x, event->area.y,
-                event->area.width, event->area.height);
-        cr->clip();
-      }
-
-      // Paint the background
-      cr->set_source_rgb(0.0, 0.0, 0.0);
-      cr->paint();
-    }*/
-    return true;
-  }
+  return true;
+}
 
 Displayer*
 VideoDisplayWidget::createDisplayer( Gtk::Widget *drawingArea, int width, int height )
-  {
-    REQUIRE(drawingArea != NULL);
-    REQUIRE(width > 0 && height > 0);
-    
-    Displayer *displayer = NULL;
-    
-    displayer = new XvDisplayer( drawingArea, width, height );
-    if ( !displayer->usable() )
-      {
-        delete displayer;
-        displayer = NULL;
-      }
+{
+  REQUIRE(drawingArea != NULL);
+  REQUIRE(width > 0 && height > 0);
+  
+  Displayer *displayer = NULL;
+  
+  displayer = new XvDisplayer( drawingArea, width, height );
+  if ( !displayer->usable() )
+    {
+      delete displayer;
+      displayer = NULL;
+    }
 
-    if ( displayer == NULL )
-      {
-        displayer = new GdkDisplayer( drawingArea, width, height );
-      }
+  if ( displayer == NULL )
+    {
+      displayer = new GdkDisplayer( drawingArea, width, height );
+    }
 
-    return displayer;
-  }
+  return displayer;
+}
 
 }   // namespace widgets
 }   // namespace gui

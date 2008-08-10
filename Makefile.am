@@ -1,5 +1,6 @@
 #  Copyright (C)         Lumiera.org
 #    2007,               Christian Thaeter <ct@pipapo.org>
+#    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -46,6 +47,9 @@ include $(top_srcdir)/src/gui/Makefile.am
 
 # plugins
 #include $(top_srcdir)/src...
+
+# resources
+include $(top_srcdir)/icons/Makefile.am
 
 # tests
 include $(top_srcdir)/tests/common/Makefile.am

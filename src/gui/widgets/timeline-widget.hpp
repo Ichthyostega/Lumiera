@@ -30,8 +30,10 @@
 #include "timeline/header-container.hpp"
 #include "timeline/timeline-body.hpp"
 #include "timeline/timeline-ruler.hpp"
+#include "timeline/timeline-tool.hpp"
+#include "timeline/timeline-arrow-tool.hpp"
+#include "timeline/timeline-ibeam-tool.hpp"
 #include "timeline/track.hpp"
-#include "timeline/video-track.hpp"
 
 namespace lumiera {
 namespace gui {
@@ -96,14 +98,30 @@ public:
    **/
   void shift_view(int shift_size);
   
+  gavl_time_t get_selection_start() const;
+  
+  gavl_time_t get_selection_end() const;
+  
+  void set_selection(gavl_time_t start, gavl_time_t end);
+  
+  timeline::ToolType get_tool() const;
+  
+  void set_tool(timeline::ToolType tool_type);
+    
   /* ===== Events ===== */
 protected:
   void on_scroll();
   
   void on_size_allocate(Gtk::Allocation& allocation);
+  
+  /* ===== Utilities ===== */
+protected:
+  int time_to_x(gavl_time_t time) const;
+  
+  gavl_time_t x_to_time(int x) const;
 
   /* ===== Internals ===== */
-protected:
+private:
 
   void update_tracks();
   
@@ -114,23 +132,29 @@ protected:
   bool on_motion_in_body_notify_event(GdkEventMotion *event);
 
 protected:
+
+  // View State
   gavl_time_t timeOffset;
   int64_t timeScale;
+  
+  // Selection State
+  gavl_time_t selectionStart;
+  gavl_time_t selectionEnd;
 
   int totalHeight;
 
-  timeline::VideoTrack video1;
-  timeline::VideoTrack video2;
+  timeline::Track video1;
+  timeline::Track video2;
   std::vector<timeline::Track*> tracks;
 
   timeline::HeaderContainer *headerContainer;
   timeline::TimelineBody *body;
-  timeline::TimelineRuler ruler;
+  timeline::TimelineRuler *ruler;
 
   Gtk::Adjustment horizontalAdjustment, verticalAdjustment;
   Gtk::HScrollbar horizontalScroll;
   Gtk::VScrollbar verticalScroll;
-  
+   
   /* ===== Constants ===== */
 public:
   static const int64_t MaxScale;
@@ -142,6 +166,10 @@ protected:
 
   friend class timeline::TimelineBody;
   friend class timeline::HeaderContainer;
+  friend class timeline::TimelineRuler;
+  friend class timeline::Tool;
+  friend class timeline::ArrowTool;
+  friend class timeline::IBeamTool;
 };
 
 }   // namespace widgets

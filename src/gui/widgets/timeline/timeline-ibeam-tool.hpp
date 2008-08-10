@@ -1,5 +1,5 @@
 /*
-  track.cpp  -  Implementation of the timeline track object
+  timeline-ibeam-tool.hpp  -  Declaration of the ArrowTool class
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -18,47 +18,49 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
+/** @file timeline-ibeam-tool.hpp
+ ** This file contains the definition of ibeam tool class
+ ** tool objects
+ */
 
-#include "track.hpp"
+#ifndef TIMELINE_IBEAM_TOOL_HPP
+#define TIMELINE_IBEAM_TOOL_HPP
+
+#include <gtkmm.h>
+#include "timeline-tool.hpp"
 
 namespace lumiera {
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-Track::Track() :
-  label("XHeaderTest")
+class IBeamTool : public Tool
 {
-  headerWidget.pack_start(label);
-}
+public:
+  IBeamTool(TimelineBody *timeline_body);
 
-Gtk::Widget&
-Track::get_header_widget()
-{
-  return headerWidget;
-}
-
-Glib::ustring
-Track::get_title()
-{
-  return "Hello";
-}
-
-int
-Track::get_height()
-{
-  return 100;
-}
-
-void
-Track::draw_track(Cairo::RefPtr<Cairo::Context> cairo)
-{
+  ToolType get_type() const;
   
-}
+protected:
+  Gdk::Cursor get_cursor() const;
+  
+protected:
+  void on_button_press_event(GdkEventButton* event);
+  void on_button_release_event(GdkEventButton* event);
+  void on_motion_notify_event(GdkEventMotion *event);
+  
+private:
+  void set_leading_x(const int x);
+  
+protected:
+  //----- Internals -----//
+  gavl_time_t drag_start_time;
+};
 
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
 }   // namespace lumiera
 
+#endif // TIMELINE_IBEAM_TOOL_HPP

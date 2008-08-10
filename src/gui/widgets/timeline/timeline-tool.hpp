@@ -1,5 +1,5 @@
 /*
-  video-track.hpp  -  Declaration of the timeline video track object
+  timeline-tool.hpp  -  Declaration of the Tool class
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,40 +19,57 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file video-track.hpp
- ** This file contains the definition of video track object
+/** @file timeline-tool.hpp
+ ** This file contains the definition of base class for timeline
+ ** tool objects
  */
 
-#ifndef VIDEO_TRACK_HPP
-#define VIDEO_TRACK_HPP
+#ifndef TIMELINE_TOOL_HPP
+#define TIMELINE_TOOL_HPP
 
-#include "track.hpp"
+#include "../../gtk-lumiera.hpp"
 
 namespace lumiera {
 namespace gui {
 namespace widgets {
 namespace timeline {
+  
+class TimelineBody;
+  
+enum ToolType
+{
+  None,
+  Arrow,
+  IBeam
+};
 
-class VideoTrack : public Track
-  {
-  public:
-    VideoTrack();
+class Tool
+{
+protected:
+  Tool(TimelineBody *timeline_body);
 
-    virtual Gtk::Widget& get_header_widget();
+public:
+  virtual ToolType get_type() const = 0;
+  
+  bool apply_cursor();
+  
+  virtual void on_button_press_event(GdkEventButton* event);
+  virtual void on_button_release_event(GdkEventButton* event);
+  virtual void on_motion_notify_event(GdkEventMotion *event) {}
+  
+protected:
+  virtual Gdk::Cursor get_cursor() const = 0;
+    
+protected:
+  bool isDragging;
 
-    virtual int get_height();
+  TimelineBody *timelineBody;
+};
 
-    virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo);
-
-  protected:
-    Gtk::Label headerWidget;
-    Gtk::Frame headerFrame;
-  };
 
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
 }   // namespace lumiera
 
-#endif // VIDEO_TRACK_HPP
-
+#endif // TIMELINE_TOOL_HPP

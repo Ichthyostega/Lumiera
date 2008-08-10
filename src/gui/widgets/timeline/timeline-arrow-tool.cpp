@@ -1,5 +1,5 @@
 /*
-  video-track.cpp  -  Implementation of the timeline video track object
+  timeline-arrow-tool.cpp  -  Implementation of the ArrowTool class
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,38 +20,48 @@
  
 * *****************************************************/
 
-#include "video-track.hpp"
-
-using namespace Gtk;
+#include "timeline-arrow-tool.hpp"
 
 namespace lumiera {
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-VideoTrack::VideoTrack() :
-  headerWidget("HeaderTest")
-  {
+ArrowTool::ArrowTool(TimelineBody *timeline_body) :
+  Tool(timeline_body)
+{
 
-  }
+}
 
-Gtk::Widget&
-VideoTrack::get_header_widget()
-  {
-    return headerWidget;
-  }
+ToolType
+ArrowTool::get_type() const
+{
+  return Arrow;
+}
 
-int
-VideoTrack::get_height()
-  {
-    return 100;
-  }
+Gdk::Cursor
+ArrowTool::get_cursor() const
+{
+  return Gdk::Cursor(Gdk::ARROW);
+}
 
 void
-VideoTrack::draw_track(Cairo::RefPtr<Cairo::Context> cairo)
-  {
-    
-  }
+ArrowTool::on_button_press_event(GdkEventButton* event)
+{
+  Tool::on_button_press_event(event);
+}
+
+void
+ArrowTool::on_button_release_event(GdkEventButton* event)
+{
+  Tool::on_button_release_event(event);
+}
+
+void
+ArrowTool::on_motion_notify_event(GdkEventMotion *event)
+{
+  Tool::on_motion_notify_event(event);
+}
 
 }   // namespace timeline
 }   // namespace widgets

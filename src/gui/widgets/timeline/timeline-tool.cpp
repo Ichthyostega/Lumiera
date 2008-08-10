@@ -1,5 +1,5 @@
 /*
-  track.cpp  -  Implementation of the timeline track object
+  timeline-tool.hpp  -  Implementation of the Tool class
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,41 +20,52 @@
  
 * *****************************************************/
 
-#include "track.hpp"
+#include "timeline-tool.hpp"
+#include "../timeline-widget.hpp"
 
 namespace lumiera {
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-Track::Track() :
-  label("XHeaderTest")
+Tool::Tool(TimelineBody *timeline_body) :
+  timelineBody(timeline_body),
+  isDragging(false)
 {
-  headerWidget.pack_start(label);
+  REQUIRE(timeline_body != NULL);
 }
 
-Gtk::Widget&
-Track::get_header_widget()
-{
-  return headerWidget;
-}
+bool
+Tool::apply_cursor()
+{ 
+  REQUIRE(timelineBody != NULL);
+    
+  Glib::RefPtr<Gdk::Window> window = 
+    timelineBody->get_window();
+  if(!window)
+    return false;
+  
+  window->set_cursor(get_cursor());
 
-Glib::ustring
-Track::get_title()
-{
-  return "Hello";
-}
-
-int
-Track::get_height()
-{
-  return 100;
+  return true;
 }
 
 void
-Track::draw_track(Cairo::RefPtr<Cairo::Context> cairo)
+Tool::on_button_press_event(GdkEventButton* event)
 {
+  REQUIRE(event != NULL);
   
+  if(event->button == 1)
+    isDragging = true;
+}
+
+void
+Tool::on_button_release_event(GdkEventButton* event)
+{
+  REQUIRE(event != NULL);
+  
+  if(event->button == 1)
+    isDragging = false;
 }
 
 }   // namespace timeline

@@ -53,9 +53,14 @@ class WorkspaceWindow;
        * labels associated with IDs */
 			static void register_stock_items();
 
-      static void add_stock_item(const Glib::RefPtr<Gtk::IconFactory>& factory,
-                          const Glib::ustring& filepath,
-                          const Glib::ustring& id, const Glib::ustring& label);
+      static bool add_stock_item_set(
+                        const Glib::RefPtr<Gtk::IconFactory>& factory,
+                        const Glib::ustring& filename,
+                        const Glib::ustring& id,
+                        const Glib::ustring& label);
+                            
+      static bool add_stock_icon_source(Gtk::IconSet &icon_set,
+                        int size, const Glib::ustring& filename);
 
 	    /**
        * Updates the state of the menu/toolbar actions

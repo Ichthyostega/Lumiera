@@ -25,6 +25,7 @@
 
 using namespace Gtk;
 using namespace sigc;
+using namespace lumiera::gui::widgets;
 
 namespace lumiera {
 namespace gui {
@@ -34,26 +35,52 @@ const int TimelinePanel::ZoomToolSteps = 2; // 2 seems comfortable
 
 TimelinePanel::TimelinePanel() :
   Panel("timeline", _("Timeline"), "timeline_panel"),
+  arrowTool(Gtk::StockID("arrow")),
+  iBeamTool(Gtk::StockID("i_beam")),
   zoomIn(Stock::ZOOM_IN),
-  zoomOut(Stock::ZOOM_OUT)
+  zoomOut(Stock::ZOOM_OUT),
+  updatingToolbar(false)
 {
   // Setup the toolbar
+  toolbar.append(arrowTool, mem_fun(this,
+    &TimelinePanel::on_arrow_tool));
+  toolbar.append(iBeamTool, mem_fun(this,
+    &TimelinePanel::on_ibeam_tool));
+  toolbar.append(seperator1);
   toolbar.append(zoomIn, mem_fun(this, &TimelinePanel::on_zoom_in));
   toolbar.append(zoomOut, mem_fun(this, &TimelinePanel::on_zoom_out));
   
-  toolbar.set_icon_size(IconSize(ICON_SIZE_SMALL_TOOLBAR));
+  toolbar.set_icon_size(IconSize(ICON_SIZE_LARGE_TOOLBAR));
   toolbar.set_toolbar_style(TOOLBAR_ICONS);
   
   // Add the toolbar
   pack_start(toolbar, PACK_SHRINK);
   pack_start(timelineWidget, PACK_EXPAND_WIDGET);
   
+  update_tool_buttons();
   update_zoom_buttons();
+}
+
+void
+TimelinePanel::on_arrow_tool()
+{
+  if(updatingToolbar) return;
+  timelineWidget.set_tool(timeline::Arrow);
+  update_tool_buttons();
+}
+
+void
+TimelinePanel::on_ibeam_tool()
+{
+  if(updatingToolbar) return;
+  timelineWidget.set_tool(timeline::IBeam);
+  update_tool_buttons();
 }
 
 void
 TimelinePanel::on_zoom_in()
 {
+
   timelineWidget.zoom_view(ZoomToolSteps);
   update_zoom_buttons();
 }
@@ -63,6 +90,19 @@ TimelinePanel::on_zoom_out()
 {
   timelineWidget.zoom_view(-ZoomToolSteps);
   update_zoom_buttons();
+}
+
+void
+TimelinePanel::update_tool_buttons()
+{    
+  if(!updatingToolbar)
+  {
+    updatingToolbar = true;
+    const timeline::ToolType tool = timelineWidget.get_tool();
+    arrowTool.set_active(tool == timeline::Arrow);
+    iBeamTool.set_active(tool == timeline::IBeam);
+    updatingToolbar = false;
+  }
 }
 
 void

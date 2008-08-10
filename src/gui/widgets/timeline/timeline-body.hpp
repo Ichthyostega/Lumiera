@@ -27,6 +27,7 @@
 #define TIMELINE_BODY_HPP
 
 #include "../../gtk-lumiera.hpp"
+#include "timeline-tool.hpp"
 
 namespace lumiera {
 namespace gui {
@@ -40,6 +41,12 @@ class TimelineBody : public Gtk::DrawingArea
 {
 public:
   TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widget);
+  
+  ~TimelineBody();
+  
+  ToolType get_tool() const;
+  
+  void set_tool(ToolType tool_type);
 
   /* ===== Events ===== */
 protected:
@@ -76,15 +83,20 @@ private:
     Shift
   };
   
-  // UI State Data
-  DragType dragType;
+  timeline::Tool *tool;
   double mouseDownX, mouseDownY;
+  
+  // Scroll State
+  DragType dragType;
   gavl_time_t beginShiftTimeOffset;
-  int beginShiftVerticalOffset;  
+  int beginShiftVerticalOffset; 
 
   GdkColor background;
   
   lumiera::gui::widgets::TimelineWidget *timelineWidget;
+
+  friend class ArrowTool;
+  friend class IBeamTool;
 };
 
 }   // namespace timeline

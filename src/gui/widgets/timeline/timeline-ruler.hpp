@@ -32,26 +32,16 @@
 namespace lumiera {
 namespace gui {
 namespace widgets {
+  
+class TimelineWidget;
+  
 namespace timeline {
 
 class TimelineRuler : public Gtk::DrawingArea
 {
 public:
-  TimelineRuler();
-  
-  /**
-   * Sets the time offset. This is the time value displaid at the
-   * left-hand edge of the ruler.
-   */
-  void set_time_offset(gavl_time_t time_offset);
-
-  /**
-   * Sets the time scale value.
-   * @param time_scale The scale factor, which is the number of
-   * microseconds per screen pixel. This value must be greater than
-   * zero.
-   */
-  void set_time_scale(int64_t time_scale);
+  TimelineRuler(
+    lumiera::gui::widgets::TimelineWidget *timeline_widget);
   
   /**
    * Sets the offset of the mouse chevron in pixels from the left
@@ -59,6 +49,8 @@ public:
    * width, the chevron will not be visible.
    */
   void set_mouse_chevron_offset(int offset);
+  
+  void update_view();
 
   /* ===== Events ===== */
 protected:
@@ -76,10 +68,13 @@ protected:
   /* ===== Internals ===== */
 private:
   void draw_ruler(Cairo::RefPtr<Cairo::Context> cairo,
-    Gdk::Rectangle ruler_rect);
+    const Gdk::Rectangle ruler_rect);
 
   void draw_mouse_chevron(Cairo::RefPtr<Cairo::Context> cairo,
-    Gdk::Rectangle ruler_rect);
+    const Gdk::Rectangle ruler_rect);
+    
+  void draw_selection(Cairo::RefPtr<Cairo::Context> cairo,
+    const Gdk::Rectangle ruler_rect);
 
   gavl_time_t calculate_major_spacing() const;
   
@@ -88,9 +83,6 @@ private:
   void read_styles();
   
 private:
-  // View values
-  gavl_time_t timeOffset;
-  int64_t timeScale;
   
   // Indicated values
   int mouseChevronOffset;
@@ -103,6 +95,9 @@ private:
   int minorShortTickHeight;
   int minDivisionWidth;
   int mouseChevronSize;
+  
+  // Owner
+  lumiera::gui::widgets::TimelineWidget *timelineWidget;
   
   // Cached ruler image
   Cairo::RefPtr<Cairo::ImageSurface> rulerImage;
