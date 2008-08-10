@@ -30,25 +30,30 @@ LUMIERA_ERROR_DEFINE (CONDITION_DESTROY, "condition destroy failed");
 
 
 LumieraCondition
-lumiera_condition_init (LumieraCondition self)
+lumiera_condition_init (LumieraCondition self, const char* purpose, struct nobug_flag* flag)
 {
   if (self)
     {
       pthread_cond_init (&self->cond, NULL);
       pthread_mutex_init (&self->mutex, NULL);
+      NOBUG_RESOURCE_HANDLE_INIT (self->rh);
+      NOBUG_RESOURCE_ANNOUNCE_RAW (flag, "cond_var", purpose, self, self->rh);
     }
   return self;
 }
 
 
 LumieraCondition
-lumiera_condition_destroy (LumieraCondition self)
+lumiera_condition_destroy (LumieraCondition self, struct nobug_flag* flag)
 {
   if (self)
     {
+      NOBUG_RESOURCE_FORGET_RAW (flag,  self->rh);
+
       if (pthread_mutex_destroy (&self->mutex))
         LUMIERA_DIE (MUTEX_DESTROY);
-      else if (pthread_cond_destroy (&self->cond))
+
+      if (pthread_cond_destroy (&self->cond))
         LUMIERA_DIE (CONDITION_DESTROY);
     }
   return self;

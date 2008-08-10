@@ -22,7 +22,9 @@
 #ifndef LUMIERA_CONDITION_H
 #define LUMIERA_CONDITION_H
 
-#include "lib/locking.h"
+#include "lib/error.h"
+#include "lib/mutex.h"
+
 
 /**
  * @file
@@ -30,6 +32,49 @@
  */
 
 LUMIERA_ERROR_DECLARE (CONDITION_DESTROY);
+
+
+
+/**
+ * Condition section.
+ * Locks the condition mutex, one can use LUMIERA_CONDITION_WAIT to wait for signals or
+ * LUMIERA_CONDITION_SIGNAL or LUMIERA_CONDITION_BROADCAST to wake waiting threads
+ */
+#define LUMIERA_CONDITION_SECTION(nobugflag, cnd)                                                       \
+  for (lumiera_conditionacquirer NOBUG_CLEANUP(lumiera_conditionacquirer_ensureunlocked)                \
+         lumiera_condition_section_ = {(LumieraCondition)1};                                            \
+       lumiera_condition_section_.condition;)                                                           \
+    for (                                                                                               \
+         ({                                                                                             \
+           lumiera_condition_section_.condition = (cnd);                                                \
+           NOBUG_IF(NOBUG_MODE_ALPHA, lumiera_condition_section_.flag = &NOBUG_FLAG(nobugflag));        \
+           NOBUG_RESOURCE_HANDLE_INIT (lumiera_condition_section_.rh);                                  \
+           RESOURCE_ENTER (nobugflag, (cnd)->rh, "acquire condition", &lumiera_condition_section_,      \
+                           NOBUG_RESOURCE_EXCLUSIVE, lumiera_condition_section_.rh);                    \
+           if (pthread_mutex_lock (&(cnd)->mutex)) LUMIERA_DIE (MUTEX_LOCK);                            \
+         });                                                                                            \
+         lumiera_condition_section_.condition;                                                          \
+         ({                                                                                             \
+           if (lumiera_condition_section_.condition)                                                    \
+             {                                                                                          \
+               pthread_mutex_unlock (&lumiera_condition_section_.condition->mutex);                     \
+               lumiera_condition_section_.condition = NULL;                                             \
+               RESOURCE_LEAVE(nobugflag, lumiera_condition_section_.rh);                                \
+             }                                                                                          \
+         }))
+
+#define LUMIERA_CONDITION_WAIT                                                                                          \
+  do {                                                                                                                  \
+  NOBUG_RESOURCE_STATE_RAW (lumiera_condition_section_.flag, lumiera_condition_section_.rh, NOBUG_RESOURCEING);         \
+  pthread_cond_wait (&lumiera_condition_section_.condition->cond, &lumiera_condition_section_.condition->mutex);        \
+  NOBUG_RESOURCE_STATE_RAW (lumiera_condition_section_.flag, lumiera_condition_section_.rh, NOBUG_RESOURCE_EXCLUSIVE);  \
+  while (0)
+
+#define LUMIERA_CONDITION_SIGNAL (nobugflag) pthread_cond_signal (&lumiera_condition_section_.condition->cond)
+
+#define LUMIERA_CONDITION_BROADCAST (nobugflag)  pthread_cond_broadcast (&lumiera_condition_section_.condition->cond)
+
+
 
 /**
  * Condition variables.
@@ -39,6 +84,7 @@ struct lumiera_condition_struct
 {
   pthread_cond_t cond;
   pthread_mutex_t mutex;
+  RESOURCE_HANDLE (rh);
 };
 typedef struct lumiera_condition_struct lumiera_condition;
 typedef lumiera_condition* LumieraCondition;
@@ -50,7 +96,7 @@ typedef lumiera_condition* LumieraCondition;
  * @return self as given
  */
 LumieraCondition
-lumiera_condition_init (LumieraCondition self);
+lumiera_condition_init (LumieraCondition self, const char* purpose, struct nobug_flag* flag);
 
 
 /**
@@ -59,7 +105,7 @@ lumiera_condition_init (LumieraCondition self);
  * @return self as given
  */
 LumieraCondition
-lumiera_condition_destroy (LumieraCondition self);
+lumiera_condition_destroy (LumieraCondition self, struct nobug_flag* flag);
 
 
 /**
@@ -101,8 +147,9 @@ lumiera_condition_broadcast (LumieraCondition self)
  */
 struct lumiera_conditionacquirer_struct
 {
-  LumieraCondition cond;
-  enum lumiera_lockstate  state;
+  LumieraCondition condition;
+  NOBUG_IF(NOBUG_MODE_ALPHA, struct nobug_flag* flag);
+  RESOURCE_HANDLE (rh);
 };
 typedef struct lumiera_conditionacquirer_struct lumiera_conditionacquirer;
 typedef struct lumiera_conditionacquirer_struct* LumieraConditionacquirer;
@@ -111,108 +158,15 @@ typedef struct lumiera_conditionacquirer_struct* LumieraConditionacquirer;
 static inline void
 lumiera_conditionacquirer_ensureunlocked (LumieraConditionacquirer self)
 {
-  ENSURE (self->state == LUMIERA_UNLOCKED, "forgot to unlock the condition mutex");
-}
-
-/* override with a macro to use the cleanup checker */
-#define lumiera_conditionacquirer \
-lumiera_conditionacquirer NOBUG_CLEANUP(lumiera_conditionacquirer_ensureunlocked)
-
-
-/**
- * initialize a conditionacquirer state
- * @param self conditionacquirer to be initialized, must be an automatic variable
- * @param cond associated condition variable
- * @param state initial state of the mutex, either LUMIERA_LOCKED or LUMIERA_UNLOCKED
- * @return self as given
- * errors are fatal
- */
-static inline LumieraConditionacquirer
-lumiera_conditionacquirer_init (LumieraConditionacquirer self, LumieraCondition cond, enum lumiera_lockstate state)
-{
-  REQUIRE (self);
-  REQUIRE (cond);
-  self->cond = cond;
-  self->state = state;
-  if (state == LUMIERA_LOCKED)
-    if (pthread_mutex_lock (&cond->mutex))
-      LUMIERA_DIE (MUTEX_LOCK);
-
-  return self;
-}
-
-/**
- * lock the mutex.
- * must not already be locked
- * @param self conditionacquirer associated with a condition variable
- */
-static inline void
-lumiera_conditionacquirer_lock (LumieraConditionacquirer self)
-{
-  REQUIRE (self);
-  REQUIRE (self->state == LUMIERA_UNLOCKED, "mutex already locked");
-
-  if (pthread_mutex_lock (&self->cond->mutex))
-    LUMIERA_DIE (MUTEX_LOCK);
-
-  self->state = LUMIERA_LOCKED;
-}
-
-
-/**
- * wait on a locked condition.
- * Waits until the condition variable gets signaled from another thread. Must already be locked.
- * @param self conditionacquirer associated with a condition variable
- */
-static inline void
-lumiera_conditionacquirer_wait (LumieraConditionacquirer self)
-{
-  REQUIRE (self);
-  REQUIRE (self->state == LUMIERA_LOCKED, "mutex must be locked");
-  pthread_cond_wait (&self->cond->cond, &self->cond->mutex);
-}
-
-
-/**
- * release mutex.
- * a conditionacquirer must be unlocked before leaving scope
- * @param self conditionacquirer associated with a condition variable
- */
-static inline void
-lumiera_conditionacquirer_unlock (LumieraConditionacquirer self)
-{
-  REQUIRE (self);
-  REQUIRE (self->state == LUMIERA_LOCKED, "mutex was not locked");
-  if (pthread_mutex_unlock (&self->cond->mutex))
-    LUMIERA_DIE (MUTEX_UNLOCK);
-  self->state = LUMIERA_UNLOCKED;
-}
-
-
-/**
- * signal a single waiting thread
- * @param self conditionacquirer associated with the condition variable to be signaled
- */
-static inline void
-lumiera_conditionacquirer_signal (LumieraConditionacquirer self)
-{
-  REQUIRE (self);
-  REQUIRE (self->state == LUMIERA_LOCKED, "mutex was not locked");
-  pthread_cond_signal (&self->cond->cond);
-}
-
-
-/**
- * signal all waiting threads
- * @param self conditionacquirer associated with the condition variable to be signaled
- */
-static inline void
-lumiera_conditionacquirer_broadcast (LumieraConditionacquirer self)
-{
-  REQUIRE (self);
-  REQUIRE (self->state == LUMIERA_LOCKED, "mutex was not locked");
-  pthread_cond_broadcast (&self->cond->cond);
+  ENSURE (!self->condition, "forgot to unlock condition variable");
 }
 
 
 #endif
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

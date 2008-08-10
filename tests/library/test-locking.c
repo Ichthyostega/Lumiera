@@ -29,16 +29,6 @@
 
 TESTS_BEGIN
 
-TEST ("conditionforgotunlock")
-{
-  lumiera_condition c;
-  lumiera_condition_init (&c);
-
-  lumiera_conditionacquirer l;
-  lumiera_conditionacquirer_init (&l, &c, LUMIERA_LOCKED);
-  return 0;
-}
-
 
 TEST ("mutexsection")
 {
@@ -127,5 +117,40 @@ TEST ("rwlockforgotunlock")
 
   lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON));
 }
+
+
+TEST ("conditionsection")
+{
+  lumiera_condition cond;
+  lumiera_condition_init (&cond, "conditionsection", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_CONDITION_SECTION (NOBUG_ON, &cond)
+    {
+      printf ("condition locked section 1\n");
+    }
+
+  LUMIERA_CONDITION_SECTION (NOBUG_ON, &cond)
+    {
+      printf ("condition locked section 2\n");
+    }
+
+  lumiera_condition_destroy (&cond, &NOBUG_FLAG(NOBUG_ON));
+}
+
+
+TEST ("conditionforgotunlock")
+{
+  lumiera_condition cond;
+  lumiera_condition_init (&cond, "conditionforgotunlock", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_CONDITION_SECTION (NOBUG_ON, &cond)
+    {
+      break;    // CONDITION_SECTIONS must not be left by a jump
+    }
+
+  lumiera_condition_destroy (&cond, &NOBUG_FLAG(NOBUG_ON));
+}
+
+
 
 TESTS_END
