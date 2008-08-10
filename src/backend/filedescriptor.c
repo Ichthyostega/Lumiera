@@ -32,6 +32,7 @@
 #include <fcntl.h>
 #include <limits.h>
 #include <unistd.h>
+#include <errno.h>
 
 
 NOBUG_DEFINE_FLAG_PARENT (filedescriptor, file_all);
@@ -205,14 +206,10 @@ lumiera_filedescriptor_new (LumieraFiledescriptor template)
   self->stat = template->stat;
 
   self->flags = template->flags;
-  lumiera_mutex_init (&self->lock);
   self->refcount = 1;
   self->handle = 0;
 
-  const char* type = "mutex";
-  const char* name = "filedescriptor";
-
-  RESOURCE_ANNOUNCE (filedescriptor, type, name, self, self->lock.rh);
+  lumiera_mutex_init (&self->lock, "filedescriptor", &NOBUG_FLAG (filedescriptor));
 
   return self;
 }
@@ -227,8 +224,6 @@ lumiera_filedescriptor_delete (LumieraFiledescriptor self)
     {
       REQUIRE (self->refcount == 0);
 
-      RESOURCE_FORGET (filedescriptor, self->lock.rh);
-
       cuckoo_remove (registry, cuckoo_find (registry, &self));
 
       TODO ("destruct other members (WIP)");
@@ -236,7 +231,7 @@ lumiera_filedescriptor_delete (LumieraFiledescriptor self)
 
       TODO ("release filehandle");
 
-      lumiera_mutex_destroy (&self->lock);
+      lumiera_mutex_destroy (&self->lock, &NOBUG_FLAG (filedescriptor));
       lumiera_free (self);
     }
 }

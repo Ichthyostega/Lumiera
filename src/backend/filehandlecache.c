@@ -44,8 +44,7 @@ lumiera_filehandlecache_new (int max_entries)
   lumiera_mrucache_init (&lumiera_fhcache->cache, lumiera_filehandle_destroy_node);
   lumiera_fhcache->available = max_entries;
   lumiera_fhcache->checked_out = 0;
-  lumiera_mutex_init (&lumiera_fhcache->lock);
-  RESOURCE_ANNOUNCE (filehandlecache, "mutex", "filehandlecache", lumiera_fhcache, lumiera_fhcache->lock.rh);
+  lumiera_mutex_init (&lumiera_fhcache->lock, "filehandlecache", &NOBUG_FLAG (filehandlecache));
 }
 
 
@@ -55,9 +54,8 @@ lumiera_filehandlecache_delete (void)
   if (lumiera_fhcache)
     {
       REQUIRE (!lumiera_fhcache->checked_out, "Filehandles in use at shutdown");
-      RESOURCE_FORGET (filehandlecache, lumiera_fhcache->lock.rh);
       lumiera_mrucache_destroy (&lumiera_fhcache->cache);
-      lumiera_mutex_destroy (&lumiera_fhcache->lock);
+      lumiera_mutex_destroy (&lumiera_fhcache->lock, &NOBUG_FLAG (filehandlecache));
       lumiera_free (lumiera_fhcache);
       lumiera_fhcache = NULL;
     }
