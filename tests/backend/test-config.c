@@ -88,4 +88,42 @@ TEST ("string_get")
 }
 
 
+TEST ("string_set")
+{
+  REQUIRE (argv[2]);
+  REQUIRE (argv[3]);
+
+  lumiera_config_init ("./");
+
+  lumiera_config_string_set (argv[2], &argv[3], NULL);
+  FIXME ("handle error");
+
+  const char* string;
+  if (!lumiera_config_get (argv[2], &string))
+    printf ("'%s'\n", string);
+  else
+    printf ("%s, '%s'\n", lumiera_error (), string);
+
+  lumiera_config_destroy ();
+}
+
+
+TEST ("word_get")
+{
+  REQUIRE (argv[2]);
+  REQUIRE (argv[3]);
+
+  lumiera_config_init ("./");
+
+  char* word;
+
+  if (!lumiera_config_word_get (argv[2], &word, argv[3]))
+    printf ("'%s'\n", word);
+  else
+    printf ("%s, '%s'\n", lumiera_error (), word);
+
+  lumiera_config_destroy ();
+}
+
+
 TESTS_END

@@ -106,18 +106,26 @@ LUMIERA_TEST_STRING='  "quoted string "" not ignored" #comment'
 TEST "string get, quoted, escaped" string_get test.string default <<END
 out: 'quoted string " not ignored'
 END
+unset LUMIERA_TEST_STRING
 
 
-PLANNED "string set"  <<END
+TEST "string set" string_set test.string 'foo bar' <<END
+out: 'foo bar'
 END
 
 
-PLANNED "word get"  <<END
+export LUMIERA_TEST_WORD='  "  double quote is just right'
+
+TEST "word get" word_get test.word default <<END
+out: '"'
 END
+
+unset LUMIERA_TEST_WORD
 
 
 PLANNED "word set"  <<END
 END
+
 
 
 PLANNED "bool get"  <<END

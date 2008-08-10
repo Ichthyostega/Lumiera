@@ -246,14 +246,77 @@ lumiera_config_string_set (const char* key, char** value, const char* fmt)
 
 /**
  * Word
- * A single word, no quotes, nothing
+ * A single word, no quotes, chopped
  */
+
+/**
+ * helper function, takes a raw input string and give a tmpbuf with the word parsed back.
+ */
+static char*
+scan_word (const char* in)
+{
+  /* chop leading blanks */
+  in += strspn(in, " \t");
+
+  char* ret = lumiera_tmpbuf_strndup (in, SIZE_MAX);
+  char* end = ret;
+
+  /* chop trailing blanks */
+  while (*end != ' ' && *end != '\t')
+    ++end;
+
+  *end++ = '\0';
+
+  return ret;
+}
+
 int
 lumiera_config_word_get (const char* key, char** value, const char* def)
 {
-  TRACE (config_typed);
-  UNIMPLEMENTED();
-  return 0;
+  TRACE (config_typed, "KEY %s", key);
+
+  int ret = -1;
+
+  const char* raw_value = NULL;
+
+  LUMIERA_RDLOCK_SECTION (config_typed, &lumiera_global_config->lock)
+    {
+      if (!lumiera_config_get (key, &raw_value))
+        {
+          if (raw_value)
+            {
+              *value = scan_word (raw_value);
+
+              TRACE (config_typed, "RAW_VALUE %s, scanned .%s.", raw_value, *value);
+
+              if (*value)
+                ret = 0; /* all ok */
+              else if (def)
+                goto try_default;
+            }
+          else if (def)
+            {
+              ret = 0;
+            try_default:
+
+              *value = scan_word (def);
+              TRACE (config_typed, "DEFAULT %s, scanned .%s.", def, *value);
+              if (*value)
+                {
+                  TODO ("register default (writelock or mutex!)");
+                }
+              else
+                {
+                  ret = -1;
+                  LUMIERA_ERROR_SET (config_typed, CONFIG_DEFAULT);
+                }
+            }
+          else
+            LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
+        }
+    }
+
+  return ret;
 }
 
 int
