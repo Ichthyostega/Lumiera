@@ -72,7 +72,6 @@ struct lumiera_config_struct
     config access is not planned to be transaction al yet, if this is a problem we need to expose the rwlock to a config_acquire/config_release function pair
    */
   lumiera_rwlock lock;
-  RESOURCE_HANDLE (rh);
 };
 
 typedef struct lumiera_config_struct lumiera_config;

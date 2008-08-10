@@ -68,8 +68,7 @@ lumiera_config_init (const char* path)
 
   lumiera_global_config = lumiera_malloc (sizeof (*lumiera_global_config));
   lumiera_global_config->path = lumiera_strndup (path, SIZE_MAX);
-  lumiera_rwlock_init (&lumiera_global_config->lock);
-  RESOURCE_ANNOUNCE (config, "rwlock", "config", lumiera_global_config, lumiera_global_config->rh);
+  lumiera_rwlock_init (&lumiera_global_config->lock, "config rwlock", &NOBUG_FLAG (config));
 
   return 0;
 }
@@ -81,8 +80,7 @@ lumiera_config_destroy ()
   TRACE (config);
   if (lumiera_global_config)
     {
-      RESOURCE_FORGET (config, lumiera_global_config->rh);
-      lumiera_rwlock_destroy (&lumiera_global_config->lock);
+      lumiera_rwlock_destroy (&lumiera_global_config->lock, &NOBUG_FLAG (config));
       lumiera_free (lumiera_global_config->path);
       lumiera_free (lumiera_global_config);
       lumiera_global_config = NULL;

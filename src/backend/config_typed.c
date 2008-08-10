@@ -51,7 +51,7 @@ lumiera_config_number_get (const char* key, long long* value, const char* def)
 
   const char* raw_value = NULL;
 
-  LUMIERA_RDLOCK_SECTION (config_typed, lumiera_global_config->rh, &lumiera_global_config->lock)
+  LUMIERA_RDLOCK_SECTION (config_typed, &lumiera_global_config->lock)
     {
       if (!lumiera_config_get (key, &raw_value))
         {
@@ -193,7 +193,7 @@ lumiera_config_string_get (const char* key, char** value, const char* def)
 
   const char* raw_value = NULL;
 
-  LUMIERA_RDLOCK_SECTION (config_typed, lumiera_global_config->rh, &lumiera_global_config->lock)
+  LUMIERA_RDLOCK_SECTION (config_typed, &lumiera_global_config->lock)
     {
       if (!lumiera_config_get (key, &raw_value))
         {
