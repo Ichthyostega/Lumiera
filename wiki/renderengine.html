@@ -3068,7 +3068,7 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
 * moreover, it contains methods to communicate with other state relevant parts of the system, thereby shielding the rendering code from any complexities of Thread communication if necessary. (thus the name Proxy)
 </pre>
 </div>
-<div title="StreamTypeDescr" modifier="Ichthyostega" modified="200808060322" created="200808060244" tags="spec discuss draft" changecount="3">
+<div title="StreamTypeDescr" modifier="Ichthyostega" modified="200808101635" created="200808060244" tags="spec discuss draft" changecount="5">
 <pre>//how to classify and describe media streams//
 Media data is understood to appear structured as stream(s) over time. While there may be an inherent internal structuring, at a given perspective ''any stream is a unit and homogeneous''. In the context of digital media data processing, streams are always ''quantized'', which means they appear as a temporal sequence of data chunks called ''frames''.
 
@@ -3083,9 +3083,16 @@ Media data is understood to appear structured as stream(s) over time. While ther
 ! Problem of Stream Type Description
 Media types vary largely and exhibit a large number of different properties, which can't be subsumed under a single classification scheme. But on the other hand, we want to deal with media objects in a uniform and generic manner, because on the large all kinds of media behave somewhat similar. The problem is, these similarities disappear when describing media with logical precision. Thus we are forced into specialized handling and operations for each kind of media, while we want to implement a generic handling concept.
 
-! Handling Stream Type Description
+! Stream Type handling in the Proc-Layer
 !! Identification
 A stream type is denoted by a ~StreamID, which is an identifier, acting as an unique key for accessing information related to the stream type.
+
+!! Classification
+Within the Proc-Layer, media streams are treated on the large in a similar manner. But, looking closer, note everyting can be coneected together, wile there are also some classes of media streams which can be considered //equivalent// in most respects. Thus, it seems reasonable to separate the distinction between various media streams into several levels (actually three levels).
+* Each media belongs to a fundamental ''kind'' of media, examples being __Video__, __Image__, __Audio__, __MIDI__,... Media streams of different kind can be considered somewhat &quot;completely separate&quot; &amp;mdash; just the handling of each media kind follows a common //generic pattern// augmented with specialisations. It is //impossible to connect// media streams of different kind. Under some circumstances there may be the possibility of a transformation though. For example, a still image can be incorporated into video, sound may be visualized, MIDI may control a souond synthesizer.
+* Below the level of distinct kinds of media streams, we have within every kind a open selection of ''prototypes'', wich may each be &quot;a different thing&quot;, but which may be //rendered//&amp;nbsp; into each other. For example, we have stereoscopic (3D) video and we have the common flat video which lacks the depth information, we have several spatial audio systems (Ambisonics, Wave Field Synthesis), we have panorama simulating systems (5.1, 7.1,...), we have common stereponic audio and monaural audio. It is considered important to retain some openness and configuability within this destinction, which means this classification should better be done by rules then by setting up a fixed property table. For example, it may be desirable in some production to distinguish between digitized film and video or NTSC and PAL, while in another production everything is just &quot;video&quot; and can be converted mostly autmatically. The most notable consequence of such a distinction is that any Bus or [[Pipe]] is always limited to a media stream of a single prototype.
+* Besides the distinction in prototypes, there are the various media ''implementation types''. This classification is not necessarily hierarchical to the prototype classification, while in detail there will be mostly some sort of dependency. For example, both stereophonig and monaural audio may be implemented as 96kHz 24bit PCM with just a different number of channel streams, but similarily we may have a dedicated stereo audio stream with the two channels muliplexed into one stream. For dealing with media streams of various implementation type, we need library routines, which also yield a type classification system. Most notably, for raw sound and video data we use the GAVL library, which defines a classification system for buffers and streams.
+* Besides this type classification, we introduce an ''intention tag''. This is a syntetic classification owned by Lumiera and used for internal wiring decisions. Curently (8/08), we recognize the following intention tags: __Source__, __Raw__, __Intermediary__, __Target__. Only media streams tagget as __Raw__ can be processed.
 
 !! Requirements
 * set up a buffer and be able to create/retrieve frames of media data.
