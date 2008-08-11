@@ -307,6 +307,18 @@ LLIST_FUNC (LList llist_relocate (LList self),
 );
 
 /**
+ * Move a node from one memory location to another.
+ * @param self  target of the move, must be uninitialized or empty before this move
+ * @param source source of the move, will be initialized to a empty list after this call
+ * @return self
+ */
+LLIST_FUNC (LList llist_move (LList self, LList source),
+            *self = *source;
+            llist_init (source);
+            return llist_relocate (self);
+);
+
+/**
  * Insert a node after another.
  * @param self node after which we want to insert
  * @param next node which shall be inserted after self. Could already linked to a list from where it will be removed.
