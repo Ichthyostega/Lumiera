@@ -47,16 +47,6 @@ struct lumiera_configentry_struct
   lumiera_configitem entry;
 };
 
-LumieraConfigentry
-lumiera_configentry_init (const char* entry);
-
-LumieraConfigentry
-lumiera_configentry_destroy (LumieraConfigentry self);
-
-
-LumieraConfigentry
-lumiera_configentry_new (const char* data);
-
 void
 lumiera_configentry_delete ();
 
