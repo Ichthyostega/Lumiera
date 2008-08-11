@@ -59,7 +59,45 @@ typedef struct lumiera_configitem* LumieraConfigitem;
  *          'key = value' or 'key < redirect'
  */
 
+
 //TODO: declarations go here//
+
+enum lumiera_configitem_type
+  {
+    LUMIERA_CONFIGFILE,
+    LUMIERA_CONFISECTION,
+    LUMIERA_CONFIGCOMMENT,
+    LUMIERA_CONFIGDIRECTIVE,
+    LUMIERA_CONFIGENTRY,
+    LUMIERA_CONFIGERRONEOUS
+  };
+
+/**
+ * @file
+ * configitems build a 3 level hierachy:
+ *
+ * 1. file:
+ *      contain sections
+ *
+ * 2.   section:
+ *        [prefix suffix]
+ *        contain lines
+ *
+ * 3.     lines are
+ *        comment:
+ *          empty line or line only containing spaces and tabs
+ *          line starting with spaces and tabs followed by a #
+ *        directive:
+ *          '@include name' or '@readonly'
+ *          directives are only valid at the toplevel section []
+ *        configurationentry:
+ *          'key = value' or 'key < redirect'
+ *        errorneous:
+ *          any line which cant be parsed
+ */
+
+
+
 struct lumiera_configitem_struct
 {
   llist link;                   // all lines on the same hierachy level are linked here (see childs)
@@ -73,6 +111,12 @@ struct lumiera_configitem_struct
   size_t key_size;
   char* delim;                  // delimiter, value starts at delim+1
 };
+
+struct lumiera_configitem_vtable
+{
+
+};
+
 
 /*
 brainstorm:

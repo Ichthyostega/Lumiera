@@ -1,5 +1,5 @@
 /*
-  configline.h  -  single lines from configfiles
+  configentry.h  -  single entries from configfiles
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -19,13 +19,15 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef LUMIERA_CONFIGLINE_H
-#define LUMIERA_CONFIGLINE_H
+#ifndef LUMIERA_CONFIGENTRY_H
+#define LUMIERA_CONFIGENTRY_H
 
 //TODO: Support library includes//
 
 
 //TODO: Forward declarations//
+typedef struct lumiera_configentry_struct lumiera_configentry;
+typedef lumiera_configentry* LumieraConfigentry;
 
 
 //TODO: Lumiera header includes//
@@ -40,10 +42,23 @@
  */
 
 //TODO: declarations go here//
-struct lumiera_configline_struct
+struct lumiera_configentry_struct
 {
-  lumiera_configitem line;
-}
+  lumiera_configitem entry;
+};
+
+LumieraConfigentry
+lumiera_configentry_init (const char* entry);
+
+LumieraConfigentry
+lumiera_configentry_destroy (LumieraConfigentry self);
+
+
+LumieraConfigentry
+lumiera_configentry_new (const char* data);
+
+void
+lumiera_configentry_delete ();
 
 
 #endif
