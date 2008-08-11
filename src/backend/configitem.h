@@ -30,6 +30,7 @@
 typedef struct lumiera_configitem_struct lumiera_configitem;
 typedef lumiera_configitem* LumieraConfigitem;
 
+struct lumiera_configitem_vtable;
 
 //TODO: Lumiera header includes//
 
@@ -62,17 +63,6 @@ typedef lumiera_configitem* LumieraConfigitem;
 
 
 //TODO: declarations go here//
-
-enum lumiera_configitem_type
-  {
-    LUMIERA_CONFIGFILE,
-    LUMIERA_CONFIGSECTION,
-    LUMIERA_CONFIGCOMMENT,
-    LUMIERA_CONFIGDIRECTIVE,
-    LUMIERA_CONFIGENTRY,
-    LUMIERA_CONFIGERRONEOUS
-  };
-
 /**
  * @file
  * configitems build a 3 level hierachy:
@@ -97,23 +87,26 @@ enum lumiera_configitem_type
  *          any line which cant be parsed
  */
 
-
+struct lumiera_configitem_vtable
+{
+  LumieraConfigitem (*new)(LumieraConfigitem);
+  LumieraConfigitem (*destroy)(LumieraConfigitem);
+};
 
 struct lumiera_configitem_struct
 {
-  llist link;                           // all lines on the same hierachy level are linked here (see childs)
-  LumieraConfigitem parent;             // parent section
-  llist childs;                         // root node for all lines below this hierachy
+  llist link;                                   // all lines on the same hierachy level are linked here (see childs)
+  LumieraConfigitem parent;                     // parent section
+  llist childs;                                 // root node for all lines below this hierachy
 
-  llist lookup;                         // all lines with the same key are stacked up on the loockup
+  llist lookup;                                 // all lines with the same key are stacked up on the loockup
 
-  char* line;                           // raw line as read in allocated here trailing \n will be replaced with \0
-  char* key;                            // pointer into line to start of key
+  char* line;                                   // raw line as read in allocated here trailing \n will be replaced with \0
+  char* key;                                    // pointer into line to start of key
   size_t key_size;
-  char* delim;                          // delimiter, value starts at delim+1
-  enum lumiera_configitem_type type;    /* TODO tag by dtor instead enum */
+  char* delim;                                  // delimiter, value starts at delim+1
+  struct lumiera_configitem_vtable* vtable;     // functiontable for subclassing
 };
-
 
 LumieraConfigitem
 lumiera_configitem_init (LumieraConfigitem self);

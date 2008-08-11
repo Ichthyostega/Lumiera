@@ -60,7 +60,7 @@ lumiera_configitem_init (LumieraConfigitem self)
   self->key = NULL;
   self->key_size = 0;
   self->delim = NULL;
-  self->type = LUMIERA_CONFIGERRONEOUS;
+  self->vtable = NULL;
 
   return self;
 }
@@ -69,16 +69,19 @@ LumieraConfigitem
 lumiera_configitem_destroy (LumieraConfigitem self)
 {
   TRACE (config_item);
-  REQUIRE (self);
 
-#if 0
-  if (!llist_is_empty (&self->lookup))
-    TODO ("remove from the lookup hash");
+  if (self)
+    {
+      if (self->vtable && self->vtable->destroy)
+        self->vtable->destroy (self);
 
-  ENSURE (llist_is_empty (&self->childs), "TODO recursively remove childs (needs some kind of typed destructor)");
-  llist_unlink (&self->link);
-  lumiera_free (self->line);
-#endif
+      ENSURE (!llist_is_empty (&self->lookup), "destructor didn't cleaned lookup up");
+      ENSURE (llist_is_empty (&self->childs), "destructor didn't remove childs");
+
+      llist_unlink (&self->link);
+      lumiera_free (self->line);
+    }
+
   return self;
 }
 
@@ -88,46 +91,14 @@ lumiera_configitem_new (const char* line)
 {
   TRACE (config_item);
 
-  /* MOCKUP */
-
-  // create a temporary  configitem for parsing
-
-
   lumiera_configitem tmp;
   lumiera_configitem_init (&tmp);
 
   lumiera_configitem_parse (&tmp, line);
 
-  FIXME ("MOCKUP only");
-
-  LumieraConfigitem self = NULL;
-
-  switch (tmp.type)
-    {
-    case LUMIERA_CONFIGFILE:
-
-      break;
-
-    case LUMIERA_CONFIGSECTION:
-      break;
-
-    case LUMIERA_CONFIGCOMMENT:
-      break;
-
-    case LUMIERA_CONFIGDIRECTIVE:
-      break;
-
-    case LUMIERA_CONFIGENTRY:
-      self = lumiera_malloc (sizeof (lumiera_configentry));
-
-      TODO ("call lumiera_configentry ctor");
-      break;
-
-    case LUMIERA_CONFIGERRONEOUS:
-      break;
-    }
-
-  lumiera_configitem_move (self, &tmp);
+  LumieraConfigitem self = tmp.vtable && tmp.vtable->new
+    ? tmp.vtable->new (&tmp)
+    : lumiera_configitem_move (lumiera_malloc (sizeof (*self)), &tmp);
 
   return self;
 }
@@ -137,8 +108,7 @@ void
 lumiera_configitem_delete (LumieraConfigitem self)
 {
   TRACE (config_item);
-
-  UNIMPLEMENTED ();
+  lumiera_free (lumiera_configitem_destroy (self));
 }
 
 
@@ -163,7 +133,7 @@ lumiera_configitem_move (LumieraConfigitem self, LumieraConfigitem source)
   self->key = source->key;
   self->key_size = source->key_size;
   self->delim = source->delim;
-  self->type = source->type;
+  self->vtable = source->vtable;
   return self;
 }
 
@@ -173,41 +143,48 @@ lumiera_configitem_parse (LumieraConfigitem self, const char* line)
 {
   TRACE (config_item);
 
-  FIXME ("MOCKUP only");
-
   self->line = lumiera_strndup (line, SIZE_MAX);
-  TODO ("parsing here");
 
-  // MOCKUP pretrend this is an entry
-  self->type = LUMIERA_CONFIGENTRY;
+  FIXME ("MOCKUP START");
+
+  TODO ("parsing here");
+  /*
+    HOWTO parse (for simav)
+    in self->line liegt jetzt der 'rohe' string
+
+    parsen setzt folgende werte in self:  .key, .key_size, .delim und vtable. den rest macht dann die 'new' funktion aus der vtable
+
+    es geht jetzt da drum rauszufinden ob diese zeile einses der folgenden sachen ist:
+    (ich zeig hier nur die grundsyntax, das parsen sollte auch entartete situationen behandeln, insbesondere leerzeichen/tabulatoren an allen moeglichen stellen)
+    auserdem sollt hier alles soweit wie moeglich validiert werden z.b. keys auf erlaubte zeichen gescheckt (siehe die _tr function)
+
+    section:
+      '[prefix suffix]'
+       .key == prefix
+       .delim == das leerzeichen (oder tab) vor suffix oder aufs abschliessende ] wenn kein suffix
+
+    kommentar:
+      leere zeile, zeile nur aus leerzeichen und tabulatoren, leerzeichen und tabulatoren gefolgt von # bis zum zeilenende
+      alles ausser vtable auf NULL
+
+    direktive:
+      '@direktive argumente'
+       .key == @
+       .delim == leerzeichen oder tab vor argumente, NULL wenn keine argumente
+
+    configentry:
+      'key = value'
+       .key == key begin
+       .delim == '='
+      'key < redirect'
+       .key == key begin
+       .delim == '='
+
+   */
+  self->vtable = &lumiera_configentry_funcs;  // MOCKUP pretend this is a configentry
 
   return self;
 }
-
-
-/*
-brainstorm:
-
-identify the type of a configitem:
-
-file:
-  parent == NULL
-  line = filename (might be NULL for virtual files)
-  delim = NULL
-section:
-  *delim == ' ' or ']'
-  *key != '@'
-comment:
-  *key == NULL
-directive:
-  *key == '@'
-  *delim == ' '
-configurationentry:
-  *delim == '='
-
-*/
-
-
 
 
 /*
