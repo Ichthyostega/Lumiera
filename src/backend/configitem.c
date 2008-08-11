@@ -3,6 +3,7 @@
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
+                        Simeon Voelkel <simeon_voelkel@arcor.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -178,9 +179,85 @@ lumiera_configitem_parse (LumieraConfigitem self, const char* line)
        .delim == '='
       'key < redirect'
        .key == key begin
-       .delim == '='
+       .delim == '>'
 
    */
+  /*
+   * What should be working (for cehteh) or not yet..
+   *
+   * die Elemente sollten bereits richtig unterschieden werden, die {} sind noch zu füllen.
+   *
+   * TODO: include für verwendete Funkionen wie strlen und isspace
+   *
+   * */
+
+  int linelength = strlen(self->line);
+  int pos = 0;
+
+  char* tmp1 = self->line;
+
+  /*skip leading whitespaces*/
+  while ( isspace(tmp1[0]) && pos < linelength )
+    {
+      tmp1++;
+      pos++:
+    }
+
+  /*decide what this line represents*/
+  if ( tmp1[0] == '\0' || pos == linelenght )
+    {
+      /*this was an empty line*/
+    }
+  else
+  if ( tmp1[0] == '#' )
+    {
+      /*this was a comment*/
+    }
+  else
+  if ( tmp1[0] == '@' )
+    {
+      /*this was a directive*/
+    }
+  else
+  if ( tmp1[0] == '[' )
+    {
+      /*this was a section*/
+    }
+  else
+    {
+      /*this was a configentry*/
+      
+      /*tmp1 points now to the first not-whitespace-character*/
+      self->key = tmp1;
+
+      /*now look for the end of the key and set the keysize*/
+      self->keysize = 0;
+
+      while ( ! isspace(tmp1[0]) && pos < linelength )
+        {
+          tmp1++;
+          self->keysize++;
+          pos++;
+        }
+
+      if ( tmp1[0] == '\0' || pos == linelength )
+        {
+          /*error: line ended with end of the key*/
+        }
+      else 
+        {
+          /*skip the following whitespaces until we reach the delimeter*/
+          while ( isspace(tmp1[0]) && pos < linelength )
+            {
+              tmp1++;
+              pos++;
+            }
+          /*TODO: keep on parsing... ;^)*/
+        }
+
+    }
+
+
   self->vtable = &lumiera_configentry_funcs;  // MOCKUP pretend this is a configentry
 
   return self;
