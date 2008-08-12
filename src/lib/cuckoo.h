@@ -63,6 +63,15 @@ typedef int (*cuckoo_cmpfunc)(const void* item1, const void* item2);
 typedef void (*cuckoo_dtorfunc)(void* item);
 
 /**
+ * Copy function.
+ * User supplied item copy function
+ * @param dest target address for the copy operation
+ * @param src source for the copy operation
+ * @param size size of a item (requested size rounded up to the next CUCKOO_GRANULARITY)
+ */
+typedef void (*cuckoo_cpyfunc)(void* dest, const void* src, size_t size);
+
+/**
  * Initialize a cuckoo hash.
  * @param self pointer to a uninitialized cuckoo datastructure
  * @param h1 hash function for the first table
@@ -70,7 +79,8 @@ typedef void (*cuckoo_dtorfunc)(void* item);
  * @param h3 hash function for the third table
  * @param cmp function which compares two keys
  * @param startsize initial size of table t3, as 2's exponent
- * @param dtor a function used to clean up hash entries, might be NULL if nothing required
+ * @param dtor function used to clean up hash entries, might be NULL if nothing required
+ * @param cpy function used to copy hash entries, when NULL is given memcpy wil be used
  * @return The initialized hashtable or NULL at allocation failure
  */
 Cuckoo
@@ -81,7 +91,8 @@ cuckoo_init (Cuckoo self,
              cuckoo_cmpfunc cmp,
              size_t itemsize,
              unsigned startsize,
-             cuckoo_dtorfunc dtor);
+             cuckoo_dtorfunc dtor,
+             cuckoo_cpyfunc cpy);
 
 /**
  * Allocate a new cuckoo hash.
@@ -100,7 +111,9 @@ cuckoo_new (cuckoo_hashfunc h1,
             cuckoo_cmpfunc cmp,
             size_t itemsize,
             unsigned startsize,
-            cuckoo_dtorfunc dtor);
+            cuckoo_dtorfunc dtor,
+            cuckoo_cpyfunc cpy);
+
 
 /**
  * Destroy a cuckoo hash.

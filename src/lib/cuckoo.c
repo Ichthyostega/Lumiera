@@ -23,6 +23,8 @@
 
 #include <string.h>
 
+#define CUCKOO_GRANULARITY int
+
 enum compact_state
   {
     COMPACTING_OFF,
@@ -54,6 +56,7 @@ struct cuckoo_struct
   size_t elements;
 
   cuckoo_dtorfunc dtor;
+  cuckoo_cpyfunc cpy;
 };
 
 
@@ -63,6 +66,28 @@ static inline uint32_t cuckoo_fast_prng ()
   return rnd = rnd<<1 ^ ((rnd>>30) & 1) ^ ((rnd>>2) & 1);
 }
 
+static inline int
+iszero (void* mem, size_t size)
+{
+  while (size && !*(CUCKOO_GRANULARITY*)mem)
+    {
+      size -= sizeof (CUCKOO_GRANULARITY);
+      mem += sizeof (CUCKOO_GRANULARITY);
+    }
+  return !size;
+}
+
+static inline void
+xmemcpy (void* dst, const void* src, size_t size)
+{
+  while (size)
+    {
+      size -= sizeof (CUCKOO_GRANULARITY);
+      *(CUCKOO_GRANULARITY*)(dst + size) = *(CUCKOO_GRANULARITY*)(src + size);
+    }
+}
+
+
 Cuckoo
 cuckoo_init (Cuckoo self,
              cuckoo_hashfunc h1,
@@ -71,13 +96,15 @@ cuckoo_init (Cuckoo self,
              cuckoo_cmpfunc cmp,
              size_t itemsize,
              unsigned startsize,
-             cuckoo_dtorfunc dtor)
+             cuckoo_dtorfunc dtor,
+             cuckoo_cpyfunc cpy)
 {
   if (!self)
     return NULL;
 
   self->size = 1<<startsize;
-  self->itemsize = itemsize;
+  self->itemsize = (itemsize * sizeof (CUCKOO_GRANULARITY)
+                    + sizeof (CUCKOO_GRANULARITY) - 1) / sizeof (CUCKOO_GRANULARITY); /* round up to next CUCKOO_GRANULARITY boundary */
   self->h1 = h1;
   self->r1 = cuckoo_fast_prng ();
   self->h2 = h2;
@@ -106,6 +133,7 @@ cuckoo_init (Cuckoo self,
   self->elements = 0;
 
   self->dtor = dtor;
+  self->cpy = cpy ? cpy : xmemcpy;
   return self;
 }
 
@@ -116,10 +144,11 @@ cuckoo_new (cuckoo_hashfunc h1,
             cuckoo_cmpfunc cmp,
             size_t itemsize,
             unsigned startsize,
-            cuckoo_dtorfunc dtor)
+            cuckoo_dtorfunc dtor,
+            cuckoo_cpyfunc cpy)
 {
   Cuckoo self = malloc (sizeof (struct cuckoo_struct));
-  if (!cuckoo_init (self, h1, h2, h3, cmp, itemsize, startsize, dtor))
+  if (!cuckoo_init (self, h1, h2, h3, cmp, itemsize, startsize, dtor, cpy))
     {
       free (self);
       return NULL;
@@ -159,28 +188,6 @@ cuckoo_delete (Cuckoo self)
 }
 
 
-static inline int
-iszero (void* mem, size_t size)
-{
-  while (size && !*(int*)mem)
-    {
-      size -= sizeof (int);
-      mem += sizeof (int);
-    }
-  return !size;
-}
-
-static inline void
-xmemcpy (void* dst, void* src, size_t size)
-{
-  while (size)
-    {
-      size -= sizeof (int);
-      *(int*)(dst + size) = *(int*)(src + size);
-    }
-}
-
-
 static int
 cuckoo_insert_internal_ (Cuckoo self, void* item)
 {
@@ -192,9 +199,9 @@ cuckoo_insert_internal_ (Cuckoo self, void* item)
       /* find nest */
       pos = self->t1 + self->itemsize * (self->h1 (item, self->r1) % (4*self->size));
       /* kick old egg out */
-      xmemcpy (tmp, pos, self->itemsize);
+      self->cpy (tmp, pos, self->itemsize);
       /* lay egg */
-      xmemcpy (pos, item, self->itemsize);
+      self->cpy (pos, item, self->itemsize);
 
       if (iszero (tmp, self->itemsize))
         return 1;
@@ -202,9 +209,9 @@ cuckoo_insert_internal_ (Cuckoo self, void* item)
       /* find nest */
       pos = self->t2 + self->itemsize * (self->h2 (tmp, self->r2) % (2*self->size));
       /* kick old egg out */
-      xmemcpy (item, pos, self->itemsize);
+      self->cpy (item, pos, self->itemsize);
       /* lay egg */
-      xmemcpy (pos, tmp, self->itemsize);
+      self->cpy (pos, tmp, self->itemsize);
 
       if (iszero (item, self->itemsize))
         return 1;
@@ -212,15 +219,15 @@ cuckoo_insert_internal_ (Cuckoo self, void* item)
       /* find nest */
       pos = self->t3 + self->itemsize * (self->h3 (item, self->r3) % self->size);
       /* kick old egg out */
-      xmemcpy (tmp, pos, self->itemsize);
+      self->cpy (tmp, pos, self->itemsize);
       /* lay egg */
-      xmemcpy (pos, item, self->itemsize);
+      self->cpy (pos, item, self->itemsize);
 
       if (iszero (tmp, self->itemsize))
         return 1;
 
       /* copy tmp to item, which will be reinserted on next interation / after rehashing */
-      xmemcpy (item, tmp, self->itemsize);
+      self->cpy (item, tmp, self->itemsize);
     }
   return 0;
 }
@@ -253,9 +260,9 @@ cuckoo_rehash (Cuckoo self)
                 {
                   char t[self->itemsize];
                   void* hpos = self->t1 + self->itemsize * hash;
-                  xmemcpy (t, hpos, self->itemsize);
-                  xmemcpy (hpos, pos, self->itemsize);
-                  xmemcpy (pos, t, self->itemsize);
+                  self->cpy (t, hpos, self->itemsize);
+                  self->cpy (hpos, pos, self->itemsize);
+                  self->cpy (pos, t, self->itemsize);
                   if (iszero (t, self->itemsize))
                     break;
                 }
@@ -283,9 +290,9 @@ cuckoo_rehash (Cuckoo self)
                 {
                   char t[self->itemsize];
                   void* hpos = self->t2 + self->itemsize * hash;
-                  xmemcpy (t, hpos, self->itemsize);
-                  xmemcpy (hpos, pos, self->itemsize);
-                  xmemcpy (pos, t, self->itemsize);
+                  self->cpy (t, hpos, self->itemsize);
+                  self->cpy (hpos, pos, self->itemsize);
+                  self->cpy (pos, t, self->itemsize);
                   if (iszero (t, self->itemsize))
                     break;
                 }
@@ -313,9 +320,9 @@ cuckoo_rehash (Cuckoo self)
                 {
                   char t[self->itemsize];
                   void* hpos = self->t3 + self->itemsize * hash;
-                  xmemcpy (t, hpos, self->itemsize);
-                  xmemcpy (hpos, pos, self->itemsize);
-                  xmemcpy (pos, t, self->itemsize);
+                  self->cpy (t, hpos, self->itemsize);
+                  self->cpy (hpos, pos, self->itemsize);
+                  self->cpy (pos, t, self->itemsize);
                   if (iszero (t, self->itemsize))
                     break;
                 }
@@ -451,11 +458,11 @@ cuckoo_insert (Cuckoo self, void* item)
   void* found;
   if ((found = cuckoo_find (self, item)))
     {
-      xmemcpy (found, item, self->itemsize);
+      self->cpy (found, item, self->itemsize);
       return 1;
     }
 
-  xmemcpy (tmp, item, self->itemsize);
+  self->cpy (tmp, item, self->itemsize);
 
   for (unsigned n = 6; n; --n) /* rehash/grow loop */
     {
