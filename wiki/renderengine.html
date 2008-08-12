@@ -564,13 +564,24 @@ For every Asset we generate a __Ident tuple__ and a long ID (hash) derived from 
 <div title="AssetManager" modifier="Ichthyostega" created="200709200300" changecount="1">
 <pre>The Asset Manager provides an Interface to some internal Database holding all Assets in the current Session and System state. It may be a real Database at some point (and for the moment it's a Hashtable). Each [[Asset]] is registered automatically with the Asset Manager; it can be queried either by it's //identification tuple// or by it's unique ID.</pre>
 </div>
-<div title="AttachedPlacementProblem" modifier="Ichthyostega" modified="200804121736" created="200801111305" tags="impl draft dynamic" changecount="3">
-<pre>Placing an MObject relatively to another object such that it should be handled as //attached&amp;nbsp;// to the latter results in several implementation problems. The typical use case is that of an effect attached to a clip or processing pipe.
-* this attachment is not a globally fixed relation, rather, it typically exists only for some limited time span (e.g. the duration of the basic clip the effect is attached to)
+<div title="AttachedPlacementProblem" modifier="Ichthyostega" modified="200808110205" created="200801111305" tags="impl draft dynamic" changecount="12">
+<pre>Placing an MObject relatively to another object such that it should be handled as //attached//&amp;nbsp; to the latter results in several design and implementation challenges. Actually, such an attachment creates a cluster of objects. The typical use case is that of an effect attached to a clip or processing pipe.
+* attachment is not a globally fixed relation between objects, rather, it typically exists only for some limited time span (e.g. the duration of the basic clip the effect is attached to)
 * the order of attachment is important and the attached placement may create a fork in the signal flow, so we need a way for specifying reproducibly how the resulting wiring should be
-* when building, we access the information in reversed direction: we have the target object and need to query for all attachements
+* when building, we access the information in reversed direction: we have the target object and need to query for all attachments
 
-The first step towards an solution is to isolate the problem; obviously we //need the information about attached objects // only for two isolated tasks, namely when building and for creating a GUI representation. So using a query (function call) interface, the rest of the problem is turned into an implementation detail.</pre>
+The first step towards an solution is to isolate the problem; obviously we don't need to store the objects differently, we just need //information about attached objects//&amp;nbsp; for some quite isolated tasks (namely for creating a GUI representation and for combining attached objects into a [[Pipe]] when building). Resorting to a query (function call) interface should turn the rest of the problem into an implementation detail. Thus
+* for an __attachment head__ (= {{{Placement&lt;MObject&gt;}}} to which other objects have been attached) get the ordered list of attachments
+* for an __attached placement__ (member of the cluster) get the placement of the corresponding attachment head
+* retrieve and break the attachment when //deleting.//
+
+!!Implementation notes
+Attachment is managed within the participating placements, mostly by special [[locating pins|LocatingPin]]. Attachment doesn't necessarily nail down an attached object, rather the behaviour depends on the type of the object and the locating pins actually involved, especially on their order and priority. For example, if an {{{Placement&lt;Effect&gt;}}} doesn't contain any locating pin defining a temporal position, the the attachment will result in the placement inheriting the temporal placement of the attachment head (i.e. the clip this effect has been attached to). But, if on the contrary the effect in question //does// have an additional locating pin, for example relative to another object or even to a fixed time position, this one will &quot;win&quot; and determine the start position of the effect &amp;mdash; it may even move the effect out of the time interval covered by the clip, in which case the attachment has no effect on the clip's processing pipe.
+The attachment relation is hierarchical and has a clearly defined //active// and //passive// side: The attachment head is above, but plays the role of the passive partner. But note, this does not mean we are limited to a single attachment head. Actually, each placement has a list of locating pins and thus can attach to several other placements. For example, a transition attaches to at least two local pipes (clips).
+
+!!!!Relation to memory management
+Attachment on itself does //not// keep an object alive. Rather, it's a direct reference and has to be taken into account when deleting an object. On the other hand, processing nodes in the render engine never depend on placements &amp;mdsash; they always refer directly to the MObject instance or even the underlying asset. In the case of MObject instances, the pointer from within the engine will //share ownership// with the placement (remember: both are derived from {{{boost::shared_ptr}}}).
+</pre>
 </div>
 <div title="Automation" modifier="Ichthyostega" modified="200708100315" created="200706250751" tags="def" changecount="5">
 <pre>Automation is treated as a function over time. It is always tied to a specific Parameter (which can thus be variable over the course of the timeline). All details //how// this function is defined are completely abstracted away. The Parameter uses a ParamProvider to get the value for a given Time (point). Typically, this will use linear or bezier interpolation over a set of keyframes internally. Parameters can be configured to have different value ranges and distribution types (on-off, stepped, continuous, bounded)
@@ -1127,7 +1138,7 @@ To make the intended use of the classes more clear, consider the following two e
 <pre>A special kind (subclass) of [[Placement]]. As such it is always linked to a //Subject//, i.e. a MObject. In addition to the properties of a (unspecific) Placement, the ExplicitPlacement specifies a absolute time and track position for locating the Subject
 </pre>
 </div>
-<div title="Factories" modifier="Ichthyostega" modified="200802031822" created="200708100401" tags="impl discuss excludeMissing" changecount="19">
+<div title="Factories" modifier="Ichthyostega" modified="200808110218" created="200708100401" tags="impl discuss excludeMissing" changecount="21">
 <pre>We use Factories
 * for centralizing [[memory management|MemoryManagement]]
 * to support polymorphism (of course...)
@@ -1147,37 +1158,36 @@ To make the intended use of the classes more clear, consider the following two e
 !!chosen design
 My main goal is to have an easy-to-use interface for the implementer of individual classes using this factory mechanism. The intended use should mimic the standard use of operator new, and at the same time there should be a possibility to configure »real« Factory behaviour in.
 
-For this reason I make Factory a Functor, and for handling the concrete memory allocation, it inherits from an Allocator class. The users of this factory template typically either parametrize it with existing smart-pointer types and some Allocator instantiation, or they may chose to create a specialized Factory derived from this Factory template. After typically hiding this configuration behind a typedef, the user adds a static field to the class intended to use the Factory and initializes this field with the concrete Factory (this may pass internal ~IDs to the constructor of the Factory and from there on to the underlying Allocator).
+For this reason I make Factory a Functor, so it can be incorporated as a member into another class, while still looking like a function call to the client code. The users of this factory template typically either parametrize it with existing smart-pointer types, or they may chose to create a specialized Factory derived from this Factory template. After typically hiding this configuration behind a typedef, the user adds a static field to the class intended to use the Factory and initializes this field with the concrete Factory (this may pass internal ~IDs to the constructor of the Factory and from there on to the underlying Allocator).
 {{{
 #include &quot;common/factory.hpp&quot;
 
-  class Blubb
+  class Product
     {
-      int uii ;
+      int wow_;
 
     public:
-      typedef lumiera::factory::RefcountPtr&lt;Blubb&gt; Factory;
+      typedef lumiera::factory::RefcountPtr&lt;Product&gt; Factory;
       static Factory create;
       
-      Blubb() : uii(42) {} ;
+      Product() : wow_(42) {} ;
     };
   
-  /** a static Factory instance 
-   *  for creating refcounting Ptrs to Blubb objects 
+  /** storage for a static Factory instance 
+   *  for creating refcounting Ptrs to Product objects 
    */
-  Blubb::Factory Blubb::create;  // &lt;----note this is a constructor call
+  Product::Factory Product::create;  // &lt;----note this is a ctor call
 }}}
-Now, the clients of {{{class Blubb}}} can create ref-counting pointers to Blubb-objects by doing a fully qualified {{{create()}}} functor call:
+Now, the clients of {{{class Product}}} can create ref-counting pointers to Product-objects by doing a fully qualified {{{create()}}} functor call:
 {{{
-  std::tr1::shared_ptr&lt;Blubb&gt; huii = Blubb::create ();  // &lt;----will invoke the default Blubb() ctor 
-  std::tr1::shared_ptr&lt;Blubb&gt; pfuii = huii;
+  std::tr1::shared_ptr&lt;Product&gt; huii = Product::create ();  // &lt;----will invoke the default Product() ctor 
+  std::tr1::shared_ptr&lt;Product&gt; pfuii = huii;
 }}}
 Some further details
-* Functor inherits (protected) from Allocator, besides that there are no additional requirements.
-* typically, Allocator provides a overloaded {{{operator new(size_t)}}} etc.
+* the product class (or base class) cares for using an custom allocator via an overloaded {{{operator new(size_t)}}} if applicable.
 * thus, when Functor or any derived class issues a new XX(), our custom Allocator gains control
 * the Functor-behaviour relies on a custom {{{operator()}}} which can be overridden in derived classes to take various parameter lists.
-* then, such a Factory class derived from Functor can do specific magic and e.g. create some subclass
+* additionally, such a Factory class derived from Functor can do specific magic and e.g. create some subclass
 * and, as the created smart-pointer is a template parameter, such a custom Functor can create all sorts of Proxies, wrappers and the like
 </pre>
 </div>
@@ -1736,7 +1746,7 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 [img[Asset Classess|uml/fig130437.png]]
 </pre>
 </div>
-<div title="MemoryManagement" modifier="Ichthyostega" modified="200711180014" created="200708100225" tags="impl decision discuss" changecount="12">
+<div title="MemoryManagement" modifier="Ichthyostega" modified="200808110208" created="200708100225" tags="impl decision discuss" changecount="14">
 <pre>Of course: Cinelerra currently leaks memory and crashes regularilly. For the newly written code, besides retaining the same level of performance, a main goal is to use methods and techniques known to support the writing of quality code. So, besides the MultithreadConsiderations, a solid strategy for managing the ownership of allocated memory blocks is necessary right from start.
 
 !Problems
@@ -1762,11 +1772,11 @@ For the case here in question this seems to be the ''resource allocation is cons
 !!!rather harmless
 * Frames (buffers), because they belong to a given [[RenderProcess (=StateProxy)|StateProxy]] and are just passed in into the individual [[ProcNode]]s. This can be handled consistently with conventional methods.
 * each StateProxy belongs to one top-level call to the [[Controller-Facade|Controller]]
-* same for the builder tools
+* similar for the builder tools, which belong to a build process. Moreover, they are pooled and reused.
 * the EDL and the defined [[Asset]]s belong together to one Session. If the Session is closed, this means a internal shutdown of the whole ProcLayer, i.e. closing of all GUI representations and terminating all render processes. If these calles are implemented as blocking operations, we can assert that as long as any GUI representation or any render process is running, there is a valid Session and EDL.
 
 !using Factories
-And, last but not least, doing all actual allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
+And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
 <div title="MultichannelMedia" modifier="Ichthyostega" modified="200710212326" created="200709200255" tags="design" changecount="6">
@@ -3068,7 +3078,7 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
 * moreover, it contains methods to communicate with other state relevant parts of the system, thereby shielding the rendering code from any complexities of Thread communication if necessary. (thus the name Proxy)
 </pre>
 </div>
-<div title="StreamTypeDescr" modifier="Ichthyostega" modified="200808101635" created="200808060244" tags="spec discuss draft" changecount="5">
+<div title="StreamTypeDescr" modifier="Ichthyostega" modified="200808110101" created="200808060244" tags="spec discuss draft" changecount="6">
 <pre>//how to classify and describe media streams//
 Media data is understood to appear structured as stream(s) over time. While there may be an inherent internal structuring, at a given perspective ''any stream is a unit and homogeneous''. In the context of digital media data processing, streams are always ''quantized'', which means they appear as a temporal sequence of data chunks called ''frames''.
 
@@ -3088,15 +3098,15 @@ Media types vary largely and exhibit a large number of different properties, whi
 A stream type is denoted by a ~StreamID, which is an identifier, acting as an unique key for accessing information related to the stream type.
 
 !! Classification
-Within the Proc-Layer, media streams are treated on the large in a similar manner. But, looking closer, note everyting can be coneected together, wile there are also some classes of media streams which can be considered //equivalent// in most respects. Thus, it seems reasonable to separate the distinction between various media streams into several levels (actually three levels).
-* Each media belongs to a fundamental ''kind'' of media, examples being __Video__, __Image__, __Audio__, __MIDI__,... Media streams of different kind can be considered somewhat &quot;completely separate&quot; &amp;mdash; just the handling of each media kind follows a common //generic pattern// augmented with specialisations. It is //impossible to connect// media streams of different kind. Under some circumstances there may be the possibility of a transformation though. For example, a still image can be incorporated into video, sound may be visualized, MIDI may control a souond synthesizer.
-* Below the level of distinct kinds of media streams, we have within every kind a open selection of ''prototypes'', wich may each be &quot;a different thing&quot;, but which may be //rendered//&amp;nbsp; into each other. For example, we have stereoscopic (3D) video and we have the common flat video which lacks the depth information, we have several spatial audio systems (Ambisonics, Wave Field Synthesis), we have panorama simulating systems (5.1, 7.1,...), we have common stereponic audio and monaural audio. It is considered important to retain some openness and configuability within this destinction, which means this classification should better be done by rules then by setting up a fixed property table. For example, it may be desirable in some production to distinguish between digitized film and video or NTSC and PAL, while in another production everything is just &quot;video&quot; and can be converted mostly autmatically. The most notable consequence of such a distinction is that any Bus or [[Pipe]] is always limited to a media stream of a single prototype.
-* Besides the distinction in prototypes, there are the various media ''implementation types''. This classification is not necessarily hierarchical to the prototype classification, while in detail there will be mostly some sort of dependency. For example, both stereophonig and monaural audio may be implemented as 96kHz 24bit PCM with just a different number of channel streams, but similarily we may have a dedicated stereo audio stream with the two channels muliplexed into one stream. For dealing with media streams of various implementation type, we need library routines, which also yield a type classification system. Most notably, for raw sound and video data we use the GAVL library, which defines a classification system for buffers and streams.
-* Besides this type classification, we introduce an ''intention tag''. This is a syntetic classification owned by Lumiera and used for internal wiring decisions. Curently (8/08), we recognize the following intention tags: __Source__, __Raw__, __Intermediary__, __Target__. Only media streams tagget as __Raw__ can be processed.
+Within the Proc-Layer, media streams are treated on the large in a similar manner. But, looking closer, note everything can be connected together, while on the other hand there may be some classes of media streams which can be considered //equivalent// in most respects. Thus, it seems reasonable to separate the distinction between various media streams into several levels
+* Each media belongs to a fundamental ''kind'' of media, examples being __Video__, __Image__, __Audio__, __MIDI__,... Media streams of different kind can be considered somewhat &quot;completely separate&quot; &amp;mdash; just the handling of each of those media kinds follows a common //generic pattern// augmented with specialisations. Basically, it is //impossible to connect// media streams of different kind. Under some circumstances there may be the possibility of a transformation though. For example, a still image can be incorporated into video, sound may be visualized, MIDI may control a sound synthesizer.
+* Below the level of distinct kinds of media streams, within every kind we have an open ended collection of ''prototypes'', which, when compared directly may each be quite distinct and different, but which may be //rendered//&amp;nbsp; into each other. For example, we have stereoscopic (3D) video and we have the common flat video lacking depth information, we have several spatial audio systems (Ambisonics, Wave Field Synthesis), we have panorama simulating sound systems (5.1, 7.1,...), we have common stereophonic and monaural audio. It is considered important to retain some openness and configuability within this level of distinction, which means this classification should better be done by rules then by setting up a fixed property table. For example, it may be desirable for some production to distinguish between digitized film and video NTSC and PAL, while in another production everything is just &quot;video&quot; and can be converted mostly automatically. The most noticeable consequence of such a distinction is that any Bus or [[Pipe]] is always limited to a media stream of a single prototype.
+* Besides the distinction by prototypes, there are the various media ''implementation types''. This classification is not necessarily hierarchically related to the prototype classification, while in practice commonly there will be some sort of dependency. For example, both stereophonic and monaural audio may be implemented as 96kHz 24bit PCM with just a different number of channel streams, as well as we may have a dedicated stereo audio stream with two channels multiplexed into a single stream. For dealing with media streams of various implementation type, we need library routines, which also yield a type classification system. Most notably, for raw sound and video data we use the GAVL library, which defines a classification system for buffers and streams.
+* Besides the type classification detailed thus far, we introduce an ''intention tag''. This is a synthetic classification owned by Lumiera and used for internal wiring decisions. Currently (8/08), we recognize the following intention tags: __Source__, __Raw__, __Intermediary__ and __Target__. Only media streams tagged as __Raw__ can be processed.
 
-!! Requirements
+!! Media handling requirements involving stream type classification
 * set up a buffer and be able to create/retrieve frames of media data.
-* determine if sources and sinks for media data can be connected, and how.
+* determine if a given media data source and sink can be connected, and how.
 * determine and enumerate the internal structure of a stream.
 * discover processing facilities
 </pre>
