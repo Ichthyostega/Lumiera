@@ -34,7 +34,7 @@
 
 
 //TODO: System includes//
-
+#include <ctype.h>
 
 /**
  * @file
@@ -191,74 +191,59 @@ lumiera_configitem_parse (LumieraConfigitem self, const char* line)
    *
    * */
 
-  int linelength = strlen(self->line);
-  int pos = 0;
-
-  char* tmp1 = self->line;
+  char* itr = self->line;
 
   /*skip leading whitespaces*/
-  while ( isspace(tmp1[0]) && pos < linelength )
-    {
-      tmp1++;
-      pos++:
-    }
+  while (*itr && isspace (*itr))
+    itr++;
 
   /*decide what this line represents*/
-  if ( tmp1[0] == '\0' || pos == linelenght )
+  if (!*itr || *itr == '#' )
     {
-      /*this was an empty line*/
+      /*this is an empty line or a  a comment*/
     }
-  else
-  if ( tmp1[0] == '#' )
+  else if (*itr == '@' )
     {
-      /*this was a comment*/
+      /*this is a directive*/
     }
-  else
-  if ( tmp1[0] == '@' )
+  else if (*itr == '[' )
     {
-      /*this was a directive*/
-    }
-  else
-  if ( tmp1[0] == '[' )
-    {
-      /*this was a section*/
+      /*this is a section*/
     }
   else
     {
-      /*this was a configentry*/
-      
-      /*tmp1 points now to the first not-whitespace-character*/
-      self->key = tmp1;
+      /*this is a probably configentry*/
+
+      /*itr points now to the first not-whitespace-character*/
+      self->key = itr;
 
       /*now look for the end of the key and set the keysize*/
-      self->keysize = 0;
+      self->key_size = strspn (itr, "abcdefghijklmnopqrstuvwxyz0123456789_.");
 
-      while ( ! isspace(tmp1[0]) && pos < linelength )
-        {
-          tmp1++;
-          self->keysize++;
-          pos++;
-        }
+      TODO ("if(self->keysize==0) then key_syntax_error");
 
-      if ( tmp1[0] == '\0' || pos == linelength )
+      /* skip blanks */
+      itr += self->key_size;
+      while (*itr && isspace(*itr))
+        itr++;
+
+      if (*itr == '=')
         {
-          /*error: line ended with end of the key*/
+          self->delim = itr;
         }
-      else 
+      else if (*itr == '<')
         {
-          /*skip the following whitespaces until we reach the delimeter*/
-          while ( isspace(tmp1[0]) && pos < linelength )
-            {
-              tmp1++;
-              pos++;
-            }
-          /*TODO: keep on parsing... ;^)*/
+          self->delim = itr;
         }
+      else
+        TODO ("syntax error");
+
+      /* TODO only if still everything ok */
+      self->vtable = &lumiera_configentry_funcs;  // MOCKUP pretend this is a configentry
 
     }
 
 
-  self->vtable = &lumiera_configentry_funcs;  // MOCKUP pretend this is a configentry
 
   return self;
 }
