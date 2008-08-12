@@ -43,6 +43,7 @@ NOBUG_DEFINE_FLAG_PARENT (config, config_all);
 NOBUG_DEFINE_FLAG_PARENT (config_typed, config_all);
 NOBUG_DEFINE_FLAG_PARENT (config_file, config_all);
 NOBUG_DEFINE_FLAG_PARENT (config_item, config_all);
+NOBUG_DEFINE_FLAG_PARENT (config_lookup, config_all);
 
 LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX, "syntax error in configfile");
 LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX_KEY, "syntax error in key");
@@ -67,9 +68,12 @@ lumiera_config_init (const char* path)
   NOBUG_INIT_FLAG (config_typed);
   NOBUG_INIT_FLAG (config_file);
   NOBUG_INIT_FLAG (config_item);
+  NOBUG_INIT_FLAG (config_lookup);
 
   lumiera_global_config = lumiera_malloc (sizeof (*lumiera_global_config));
   lumiera_global_config->path = lumiera_strndup (path, SIZE_MAX);
+  lumiera_config_lookup_init (&lumiera_global_config->keys);
+
   lumiera_rwlock_init (&lumiera_global_config->lock, "config rwlock", &NOBUG_FLAG (config));
 
   return 0;
@@ -83,6 +87,7 @@ lumiera_config_destroy ()
   if (lumiera_global_config)
     {
       lumiera_rwlock_destroy (&lumiera_global_config->lock, &NOBUG_FLAG (config));
+      lumiera_config_lookup_destroy (&lumiera_global_config->keys);
       lumiera_free (lumiera_global_config->path);
       lumiera_free (lumiera_global_config);
       lumiera_global_config = NULL;

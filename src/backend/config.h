@@ -40,6 +40,8 @@ NOBUG_DECLARE_FLAG (config_typed);
 NOBUG_DECLARE_FLAG (config_file);
 /* single config items */
 NOBUG_DECLARE_FLAG (config_item);
+/* lookup config keys */
+NOBUG_DECLARE_FLAG (config_lookup);
 
 
 LUMIERA_ERROR_DECLARE (CONFIG_SYNTAX);
@@ -49,7 +51,7 @@ LUMIERA_ERROR_DECLARE (CONFIG_NO_ENTRY);
 LUMIERA_ERROR_DECLARE (CONFIG_DEFAULT);
 
 //TODO: Lumiera header includes//
-
+#include "backend/config_lookup.h"
 
 //TODO: System includes//
 #include <nobug.h>
@@ -65,7 +67,8 @@ LUMIERA_ERROR_DECLARE (CONFIG_DEFAULT);
 
 struct lumiera_config_struct
 {
-  // cuckoo hash
+  lumiera_config_lookup keys;
+
   // configfile list
   char* path;
   /*
