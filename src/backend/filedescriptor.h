@@ -23,6 +23,7 @@
 #define LUMIERA_FILEDESCRIPTOR_H
 
 #include "lib/mutex.h"
+#include "lib/psplay.h"
 
 
 #include <sys/types.h>
@@ -47,7 +48,8 @@ typedef lumiera_filedescriptor* LumieraFiledescriptor;
 
 struct lumiera_filedescriptor_struct
 {
-  struct stat stat;                     /* create after first open, maintained metadata, MUST BE FIRST! */
+  psplaynode node;                      /* node for the lookup tree */
+  struct stat stat;                     /* create after first open, maintained metadata */
   int flags;                            /* open flags, must be masked for reopen */
   lumiera_mutex lock;                   /* locks operations on this file descriptor */
   unsigned refcount;                    /* reference counter, all users sans registry */
