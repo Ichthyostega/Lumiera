@@ -35,6 +35,7 @@
 
 //TODO: System includes//
 #include <ctype.h>
+#include <stdint.h>
 
 /**
  * @file
@@ -190,7 +191,6 @@ lumiera_configitem_parse (LumieraConfigitem self, const char* line)
    * */
 
   char* itr = self->line;
-  bool faultless = true;
 
   /*skip leading whitespaces*/
   while (*itr && isspace (*itr))
@@ -200,9 +200,6 @@ lumiera_configitem_parse (LumieraConfigitem self, const char* line)
   if (!*itr || *itr == '#' )
     {
       /*this is an empty line or a  a comment*/
-      self->key = NULL;
-      self->keysize = 0;
-      self->delim = NULL;
     }
   else if (*itr == '@' )
     {
@@ -222,47 +219,32 @@ lumiera_configitem_parse (LumieraConfigitem self, const char* line)
       /*now look for the end of the key and set the keysize*/
       self->key_size = strspn (itr, LUMIERA_CONFIG_KEY_CHARS);
 
-      if ( self->keysize==0 )
-        {
-           /*Obviously a malformed "key"; treat this line like a comment*/
-           self->key = NULL;
-           self->keysize = 0;
-           self->delim = NULL;
-           
-           LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
-
-           faultless = false;
-        }
-
       /* skip blanks */
       itr += self->key_size;
       while (*itr && isspace(*itr))
         itr++;
 
-      if (*itr == '=')
+      if (self->key_size && *itr == '=')
         {
+          /*this configentry assigns a value to a key*/
           self->delim = itr;
+          self->vtable = &lumiera_configentry_funcs; 
         }
-      else if (*itr == '<')
+      else if (self->key_size && *itr == '<')
         {
+          /*this configentry is a redirect*/
           self->delim = itr;
+          self->vtable = &lumiera_configentry_funcs;  
         }
       else
         {
           /*this is not a valid configentry; treat this line like a comment*/
           self->key = NULL;
-          self->keysize = 0;
-          self->delim = NULL;
+          self->key_size = 0;
 
           LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
-          faultless = false;
         }
 
-      /*just set vtable if we are sure we had no syntax-error*/
-      if (faultless)
-        {
-          self->vtable = &lumiera_configentry_funcs;  // MOCKUP pretend this is a configentry
-        }
 
     }
 
