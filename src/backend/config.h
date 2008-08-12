@@ -38,6 +38,8 @@ NOBUG_DECLARE_FLAG (config);
 NOBUG_DECLARE_FLAG (config_typed);
 /* file operations */
 NOBUG_DECLARE_FLAG (config_file);
+/* single config items */
+NOBUG_DECLARE_FLAG (config_item);
 
 
 LUMIERA_ERROR_DECLARE (CONFIG_SYNTAX);
