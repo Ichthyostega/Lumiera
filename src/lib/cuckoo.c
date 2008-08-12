@@ -52,6 +52,8 @@ struct cuckoo_struct
 
   enum compact_state autocompact;
   size_t elements;
+
+  cuckoo_dtorfunc dtor;
 };
 
 
@@ -68,7 +70,8 @@ cuckoo_init (Cuckoo self,
              cuckoo_hashfunc h3,
              cuckoo_cmpfunc cmp,
              size_t itemsize,
-             unsigned startsize)
+             unsigned startsize,
+             cuckoo_dtorfunc dtor)
 {
   if (!self)
     return NULL;
@@ -101,6 +104,8 @@ cuckoo_init (Cuckoo self,
 
   self->autocompact = COMPACTING_AUTO;
   self->elements = 0;
+
+  self->dtor = dtor;
   return self;
 }
 
@@ -110,10 +115,11 @@ cuckoo_new (cuckoo_hashfunc h1,
             cuckoo_hashfunc h3,
             cuckoo_cmpfunc cmp,
             size_t itemsize,
-            unsigned startsize)
+            unsigned startsize,
+            cuckoo_dtorfunc dtor)
 {
   Cuckoo self = malloc (sizeof (struct cuckoo_struct));
-  if (!cuckoo_init (self, h1, h2, h3, cmp, itemsize, startsize))
+  if (!cuckoo_init (self, h1, h2, h3, cmp, itemsize, startsize, dtor))
     {
       free (self);
       return NULL;
@@ -126,6 +132,18 @@ cuckoo_destroy (Cuckoo self)
 {
   if (self)
     {
+
+      if (self->dtor)
+        {
+          void* elem;
+          for (elem = self->t1; elem < self->t1 + self->size * 4; elem += self->size)
+            self->dtor (elem);
+          for (elem = self->t2; elem < self->t1 + self->size * 2; elem += self->size)
+            self->dtor (elem);
+          for (elem = self->t3; elem < self->t1 + self->size; elem += self->size)
+            self->dtor (elem);
+        }
+
       free (self->t1);
       free (self->t2);
       free (self->t3);
@@ -135,7 +153,7 @@ cuckoo_destroy (Cuckoo self)
 
 
 void
-cuckoo_free (Cuckoo self)
+cuckoo_delete (Cuckoo self)
 {
   free (cuckoo_destroy (self));
 }
@@ -486,6 +504,9 @@ cuckoo_remove (Cuckoo self, void* item)
 {
   if (item)
     {
+      if (self->dtor)
+        self->dtor (item);
+
       memset (item, 0, self->itemsize);
       --self->elements;
 

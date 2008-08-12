@@ -55,6 +55,14 @@ typedef size_t (*cuckoo_hashfunc)(const void* item, const uint32_t r);
 typedef int (*cuckoo_cmpfunc)(const void* item1, const void* item2);
 
 /**
+ * Item destructor function.
+ * User supplied destructor function. This function is called when items are removed
+ * from the hash or at hash detroy/delete time. Must be safe to be called on a zeroed element.
+ * @param item address of the item to be destroyed
+ */
+typedef void (*cuckoo_dtorfunc)(void* item);
+
+/**
  * Initialize a cuckoo hash.
  * @param self pointer to a uninitialized cuckoo datastructure
  * @param h1 hash function for the first table
@@ -62,6 +70,7 @@ typedef int (*cuckoo_cmpfunc)(const void* item1, const void* item2);
  * @param h3 hash function for the third table
  * @param cmp function which compares two keys
  * @param startsize initial size of table t3, as 2's exponent
+ * @param dtor a function used to clean up hash entries, might be NULL if nothing required
  * @return The initialized hashtable or NULL at allocation failure
  */
 Cuckoo
@@ -71,7 +80,8 @@ cuckoo_init (Cuckoo self,
              cuckoo_hashfunc h3,
              cuckoo_cmpfunc cmp,
              size_t itemsize,
-             unsigned startsize);
+             unsigned startsize,
+             cuckoo_dtorfunc dtor);
 
 /**
  * Allocate a new cuckoo hash.
@@ -80,6 +90,7 @@ cuckoo_init (Cuckoo self,
  * @param h3 hash function for the third table
  * @param cmp function which compares two keys
  * @param startsize initial size of table t3, as 2's exponent
+ * @param dtor a function used to clean up hash entries, might be NULL if nothing required
  * @return The initialized hashtable or NULL at allocation failure
  */
 Cuckoo
@@ -88,7 +99,8 @@ cuckoo_new (cuckoo_hashfunc h1,
             cuckoo_hashfunc h3,
             cuckoo_cmpfunc cmp,
             size_t itemsize,
-            unsigned startsize);
+            unsigned startsize,
+            cuckoo_dtorfunc dtor);
 
 /**
  * Destroy a cuckoo hash.
@@ -104,7 +116,7 @@ cuckoo_destroy (Cuckoo self);
  * @param self handle of the hash table to be freed
  */
 void
-cuckoo_free (Cuckoo self);
+cuckoo_delete (Cuckoo self);
 
 /**
  * Get the number of elements stored in a hash.
