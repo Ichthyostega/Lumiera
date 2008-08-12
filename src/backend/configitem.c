@@ -218,7 +218,7 @@ lumiera_configitem_parse (LumieraConfigitem self, const char* line)
       self->key = itr;
 
       /*now look for the end of the key and set the keysize*/
-      self->key_size = strspn (itr, "abcdefghijklmnopqrstuvwxyz0123456789_.");
+      self->key_size = strspn (itr, LUMIERA_CONFIG_KEY_CHARS);
 
       TODO ("if(self->keysize==0) then key_syntax_error");
 

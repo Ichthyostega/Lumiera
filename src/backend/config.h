@@ -58,6 +58,8 @@ LUMIERA_ERROR_DECLARE (CONFIG_DEFAULT);
    * TODO documentation, http://www.pipapo.org/pipawiki/Lumiera/ConfigLoader
  */
 
+#define LUMIERA_CONFIG_KEY_CHARS "abcdefghijklmnopqrstuvwxyz0123456789_."
+#define LUMIERA_CONFIG_ENV_CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789__"
 
 struct lumiera_config_struct
 {
