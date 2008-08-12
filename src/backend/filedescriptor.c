@@ -89,9 +89,7 @@ lumiera_filedescriptor_registry_init (void)
   TRACE (filedescriptor);
   REQUIRE (!registry);
 
-  registry = cuckoo_new (h1, h2, h3, cmp,
-                         sizeof (LumieraFiledescriptor),
-                         3);
+  registry = cuckoo_new (h1, h2, h3, cmp, sizeof (LumieraFiledescriptor), 3, NULL);
   if (!registry)
     LUMIERA_DIE (NO_MEMORY);
 
@@ -108,7 +106,7 @@ lumiera_filedescriptor_registry_destroy (void)
   RESOURCE_FORGET (filedescriptor, registry_mutex.rh);
 
   if (registry)
-    cuckoo_free (registry);
+    cuckoo_delete (registry);
   registry = NULL;
 }
 
