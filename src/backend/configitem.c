@@ -187,8 +187,6 @@ lumiera_configitem_parse (LumieraConfigitem self, const char* line)
    *
    * die Elemente sollten bereits richtig unterschieden werden, die {} sind noch zu füllen.
    *
-   * TODO: include für verwendete Funkionen wie strlen und isspace
-   *
    * */
 
   char* itr = self->line;
@@ -212,7 +210,7 @@ lumiera_configitem_parse (LumieraConfigitem self, const char* line)
     }
   else
     {
-      /*this is a probably configentry*/
+      /*this is probably a configentry*/
 
       /*itr points now to the first not-whitespace-character*/
       self->key = itr;

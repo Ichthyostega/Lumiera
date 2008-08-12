@@ -157,7 +157,7 @@ scan_string (const char* in)
 
       if (end)
         {
-          ret = lumiera_tmpbuf_strndup (in, end-in);
+          ret = lumiera_tmpbuf_strndup (in, end - in);
 
           /* replace double quote chars with single one */
           char* wpos;
