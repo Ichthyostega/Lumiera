@@ -33,6 +33,7 @@ iconcommand = python $(top_srcdir)/admin/render-icon.py
 48x48pre = $(prerendereddir)/48x48
 
 lumigui_DEPENDENCIES += \
+    rsvg-convert \
     $(16x16)/arrow.png $(22x22)/arrow.png $(24x24)/arrow.png $(32x32)/arrow.png $(48x48)/arrow.png \
     $(16x16)/i-beam.png $(22x22)/i-beam.png $(24x24)/i-beam.png $(32x32)/i-beam.png $(48x48)/i-beam.png \
     $(16x16)/assets-panel.png \

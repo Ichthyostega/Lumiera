@@ -24,12 +24,11 @@ import getopt
 from xml.dom import minidom
 import os
 import shutil
-import cairo
-import rsvg
 
 #svgDir = "svg"
 #prerenderedDir = "prerendered"
 inkscapePath = "/usr/bin/inkscape"
+rsvgPath = "./rsvg-convert"
 artworkLayerPrefix = "artwork:"
 
 def createDirectory( name ):
@@ -105,18 +104,11 @@ def renderSvgRsvg(file_path, out_dir, artwork_name, rectangle, doc_size):
   # Prepare a Cairo context
   width = int(rectangle[2])
   height = int(rectangle[3])
-  
-  surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
-  context = cairo.Context(surface)
-  context.translate(-rectangle[0], -rectangle[1])
-
-  # Load an render the SVG
-  svg = rsvg.Handle(file=file_path)
-  svg.render_cairo(context)
-
-  # Output a PNG file
-  surface.write_to_png(os.path.join(out_dir,
-    "%ix%i/%s.png" % (width, height, artwork_name)))
+    
+  os.spawnlp(os.P_WAIT, rsvgPath, rsvgPath,
+    "--source-rect=%g:%g:%g:%g" % (rectangle[0], rectangle[1], rectangle[2], rectangle[3]),
+  	"--output=" + os.path.join(out_dir, "%gx%g/%s.png" % (rectangle[2], rectangle[3], artwork_name)),
+  	file_path)
 
 def renderSvgIcon(file_path, out_dir):
   artwork_name, doc_size, rectangles = parseSVG(file_path)
