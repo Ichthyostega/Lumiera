@@ -42,6 +42,7 @@ NOBUG_DEFINE_FLAG_PARENT (config_all, backend);
 NOBUG_DEFINE_FLAG_PARENT (config, config_all);
 NOBUG_DEFINE_FLAG_PARENT (config_typed, config_all);
 NOBUG_DEFINE_FLAG_PARENT (config_file, config_all);
+NOBUG_DEFINE_FLAG_PARENT (config_item, config_all);
 
 LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX, "syntax error in configfile");
 LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX_KEY, "syntax error in key");
@@ -65,6 +66,7 @@ lumiera_config_init (const char* path)
   NOBUG_INIT_FLAG (config);
   NOBUG_INIT_FLAG (config_typed);
   NOBUG_INIT_FLAG (config_file);
+  NOBUG_INIT_FLAG (config_item);
 
   lumiera_global_config = lumiera_malloc (sizeof (*lumiera_global_config));
   lumiera_global_config->path = lumiera_strndup (path, SIZE_MAX);
