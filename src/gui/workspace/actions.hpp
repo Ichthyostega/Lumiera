@@ -37,74 +37,74 @@ namespace workspace {
 
 class WorkspaceWindow;
 
+/**
+* A helper class which registers and handles
+* user action events.
+*/
+class Actions
+{
+private:	
+  Actions(WorkspaceWindow &workspace_window);
+
+  /* ===== Internals ===== */
+private:
   /**
-   * A helper class which registers and handles
-   * user action events.
-   */
-  class Actions
-    {
-    private:	
-	    Actions(WorkspaceWindow &workspace_window);
+   * Registers application stock items: icons and
+   * labels associated with IDs */
+  static void register_stock_items();
 
-	    /* ===== Internals ===== */
-    private:
-	    /**
-       * Registers application stock items: icons and
-       * labels associated with IDs */
-			static void register_stock_items();
+  static bool add_stock_item_set(
+                    const Glib::RefPtr<Gtk::IconFactory>& factory,
+                    const Glib::ustring& filename,
+                    const Glib::ustring& id,
+                    const Glib::ustring& label);
+                        
+  static bool add_stock_icon_source(Gtk::IconSet &icon_set,
+                    int size, const Glib::ustring& filename);
 
-      static bool add_stock_item_set(
-                        const Glib::RefPtr<Gtk::IconFactory>& factory,
-                        const Glib::ustring& filename,
-                        const Glib::ustring& id,
-                        const Glib::ustring& label);
-                            
-      static bool add_stock_icon_source(Gtk::IconSet &icon_set,
-                        int size, const Glib::ustring& filename);
+  /**
+   * Updates the state of the menu/toolbar actions
+   * to reflect the current state of the workspace */
+  void update_action_state();
 
-	    /**
-       * Updates the state of the menu/toolbar actions
-       * to reflect the current state of the workspace */
-      void update_action_state();
+  /**
+   * A reference to the MainWindow which owns
+   * this helper */
+  WorkspaceWindow &workspaceWindow;
 
-	    /**
-       * A reference to the MainWindow which owns
-       * this helper */
-	    WorkspaceWindow &workspaceWindow;
+  /* ===== Event Handlers ===== */
+private:
+  void on_menu_file_new_project();
+  void on_menu_file_open_project();
+  void on_menu_file_render();
+  void on_menu_file_quit();
 
-	    /* ===== Event Handlers ===== */
-    private:
-      void on_menu_file_new_project();
-      void on_menu_file_open_project();
-      void on_menu_file_render();
-      void on_menu_file_quit();
+  void on_menu_edit_preferences();
 
-      void on_menu_edit_preferences();
+  void on_menu_view_assets();
+  void on_menu_view_timeline();
+  void on_menu_view_viewer();
 
-      void on_menu_view_assets();
-      void on_menu_view_timeline();
-      void on_menu_view_viewer();
-
-      void on_menu_help_about();
-      
-      // Temporary Junk
-      void on_menu_others();
+  void on_menu_help_about();
+  
+  // Temporary Junk
+  void on_menu_others();
 
 
-	    /* ===== Actions ===== */
-    private:
-	    Glib::RefPtr<Gtk::ActionGroup> actionGroup;
+  /* ===== Actions ===== */
+private:
+  Glib::RefPtr<Gtk::ActionGroup> actionGroup;
 
-      Glib::RefPtr<Gtk::ToggleAction> assetsPanelAction;
-      Glib::RefPtr<Gtk::ToggleAction> timelinePanelAction;
-      Glib::RefPtr<Gtk::ToggleAction> viewerPanelAction;
-      
-	    /* ===== Internals ===== */
-    private:
-      bool is_updating_action_state;
+  Glib::RefPtr<Gtk::ToggleAction> assetsPanelAction;
+  Glib::RefPtr<Gtk::ToggleAction> timelinePanelAction;
+  Glib::RefPtr<Gtk::ToggleAction> viewerPanelAction;
+  
+  /* ===== Internals ===== */
+private:
+  bool is_updating_action_state;
 
-	    friend class WorkspaceWindow;
-  };
+  friend class WorkspaceWindow;
+};
 
 }   // namespace workspace
 }   // namespace gui
