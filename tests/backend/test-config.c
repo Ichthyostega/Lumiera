@@ -127,24 +127,18 @@ TEST ("word_get")
   lumiera_config_destroy ();
 }
 
-TEST ("empty_line_configitem")
+TEST ("configitem_simple_ctor_dtor")
 {
+  REQUIRE (argv[2]);
+  lumiera_config_init ("./");
+
   LumieraConfigitem item;
 
-  item = lumiera_configitem_new ( "" );
+  item = lumiera_configitem_new (argv[2]);
 
-  lumiera_configitem_delete(item);
-  item = NULL;
-}
+  lumiera_configitem_delete (item);
 
-TEST ("blank_line_configitem")
-{
-  LumieraConfigitem item;
-
-  item = lumiera_configitem_new ( "	 	" );
-
-  lumiera_configitem_delete(item);
-  item = NULL;
+  lumiera_config_destroy ();
 }
 
 
