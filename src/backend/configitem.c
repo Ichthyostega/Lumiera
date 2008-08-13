@@ -210,6 +210,7 @@ lumiera_configitem_parse (LumieraConfigitem self, const char* line)
       /*this is a section*/
 
       /*skip blanks before prefix*/
+      itr++;
       while (*itr && isspace(*itr))
         itr++;
 
