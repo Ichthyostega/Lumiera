@@ -299,6 +299,9 @@ LLIST_FUNC (LList llist_unlink (LList self),
 /**
  * Fix a node which got relocated in memory.
  * It is supported to realloc/move list nodes in memory but one must call 'list_relocate' after doing so.
+ * IMPORTANT: it is not possible to relocate nodes which are empty this way, nor can this be determined
+ * after the relocation, so either llist_init them afterwards or insert a bogus node before moving the node
+ * and relocating it and remove it afterwards.
  * @param self node which got relocated
  * @return self
  */
@@ -306,17 +309,6 @@ LLIST_FUNC (LList llist_relocate (LList self),
             return self->next->prev = self->prev->next = self;
 );
 
-/**
- * Move a node from one memory location to another.
- * @param self  target of the move, must be uninitialized or empty before this move
- * @param source source of the move, will be initialized to a empty list after this call
- * @return self
- */
-LLIST_FUNC (LList llist_move (LList self, LList source),
-            *self = *source;
-            llist_init (source);
-            return llist_relocate (self);
-);
 
 /**
  * Insert a node after another.
