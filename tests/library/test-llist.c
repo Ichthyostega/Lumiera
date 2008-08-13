@@ -1,5 +1,5 @@
 /*
-  test-llist.c  -  test the linked lis lib
+  test-llist.c  -  test the linked list lib
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
