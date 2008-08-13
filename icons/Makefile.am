@@ -34,21 +34,21 @@ iconcommand = python $(top_srcdir)/admin/render-icon.py
 
 lumigui_DEPENDENCIES += \
     rsvg-convert \
-    $(16x16)/arrow.png $(22x22)/arrow.png $(24x24)/arrow.png $(32x32)/arrow.png $(48x48)/arrow.png \
-    $(16x16)/i-beam.png $(22x22)/i-beam.png $(24x24)/i-beam.png $(32x32)/i-beam.png $(48x48)/i-beam.png \
-    $(16x16)/assets-panel.png \
-    $(16x16)/timeline-panel.png \
-    $(16x16)/viewer-panel.png  
+    $(16x16)/tool-arrow.png $(22x22)/tool-arrow.png $(24x24)/tool-arrow.png $(32x32)/tool-arrow.png $(48x48)/tool-arrow.png \
+    $(16x16)/tool-i-beam.png $(22x22)/tool-i-beam.png $(24x24)/tool-i-beam.png $(32x32)/tool-i-beam.png $(48x48)/tool-i-beam.png \
+    $(16x16)/panel-assets.png \
+    $(16x16)/panel-timeline.png \
+    $(16x16)/panel-viewer.png  
 
-$(16x16)/arrow.png $(22x22)/arrow.png $(24x24)/arrow.png $(32x32)/arrow.png $(48x48)/arrow.png : $(svgdir)/arrow.svg
+$(16x16)/tool-arrow.png $(22x22)/tool-arrow.png $(24x24)/tool-arrow.png $(32x32)/tool-arrow.png $(48x48)/tool-arrow.png : $(svgdir)/tool-arrow.svg
 	$(iconcommand) $< $(icondir)
-$(16x16)/i-beam.png $(22x22)/i-beam.png $(24x24)/i-beam.png $(32x32)/i-beam.png $(48x48)/i-beam.png : $(svgdir)/i-beam.svg
+$(16x16)/tool-i-beam.png $(22x22)/tool-i-beam.png $(24x24)/tool-i-beam.png $(32x32)/tool-i-beam.png $(48x48)/tool-i-beam.png : $(svgdir)/tool-i-beam.svg
 	$(iconcommand) $< $(icondir)
 
-$(16x16)/assets-panel.png:
-	cp $(16x16pre)/assets-panel.png $(16x16)
-$(16x16)/timeline-panel.png:
-	cp $(16x16pre)/timeline-panel.png $(16x16)
-$(16x16)/viewer-panel.png:
-	cp $(16x16pre)/viewer-panel.png $(16x16)
+$(16x16)/panel-assets.png:
+	cp $(16x16pre)/panel-assets.png $(16x16)
+$(16x16)/panel-timeline.png:
+	cp $(16x16pre)/panel-timeline.png $(16x16)
+$(16x16)/panel-viewer.png:
+	cp $(16x16pre)/panel-viewer.png $(16x16)
 

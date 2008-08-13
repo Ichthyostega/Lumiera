@@ -53,49 +53,51 @@ NOBUG_DECLARE_FLAG(gui);
 namespace lumiera {
 namespace gui {
 
-  /**
-   *  The name of the application 
-   */
-  static const gchar* AppTitle = "Lumiera";
+/**
+ *  The name of the application 
+ */
+static const gchar* AppTitle = "Lumiera";
 
-  /**
-   *  The version number of the application 
-   */
-  static const gchar* AppVersion = N_("0.1-dev");
+/**
+ *  The version number of the application 
+ */
+static const gchar* AppVersion = N_("0.1-dev");
 
-  /**
-   *  The copyright of the application
-   */
-  static const gchar* AppCopyright = N_("© 2008 The Lumiera Team");
+/**
+ *  The copyright of the application
+ */
+static const gchar* AppCopyright = N_("© 2008 The Lumiera Team");
 
-  /**
-   *  The website of the application
-   */
-  static const gchar* AppWebsite = "www.lumiera.org";
+/**
+ *  The website of the application
+ */
+static const gchar* AppWebsite = "www.lumiera.org";
 
-  /**
-   *  An alphabetical list of the application's authors
-   */
-  static const gchar* AppAuthors[] = {
-    "Joel Holdsworth",
-    "Christian Thaeter",
-    "Hermann Vosseler",
-    "<Other Authors Here>"};
+/**
+ *  An alphabetical list of the application's authors
+ */
+static const gchar* AppAuthors[] = {
+  "Joel Holdsworth",
+  "Christian Thaeter",
+  "Hermann Vosseler",
+  "<Other Authors Here>"};
 
-  /**
-   *  The main application class.
-   */
-  class GtkLumiera
-    {
-    public:
-      int main(int argc, char *argv[]);
+/**
+ *  The main application class.
+ */
+class GtkLumiera
+{
+public:
+  int main(int argc, char *argv[]);
+  
+  static Glib::ustring get_home_data_path();
 
-    };
+};
 
-  /**
-   *  Returns a reference to the global application object
-   */
-  GtkLumiera& application();
+/**
+ *  Returns a reference to the global application object
+ */
+GtkLumiera& application();
 
 }   // namespace gui
 }   // namespace lumiera

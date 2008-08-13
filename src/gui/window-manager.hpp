@@ -44,9 +44,25 @@ namespace gui {
     static GdkColor read_style_colour_property(
       Gtk::Widget &widget, const gchar *property_name,
       guint16 red, guint16 green, guint16 blue);
+      
+  private:
+    /**
+     * Registers application stock items: icons and
+     * labels associated with IDs */
+    static void register_stock_items();
 
-  protected:
-    
+    static bool add_stock_item_set(
+      const Glib::RefPtr<Gtk::IconFactory>& factory,
+      const Glib::ustring& icon_name,
+      const Glib::ustring& id,
+      const Glib::ustring& label);
+      
+    static bool add_stock_icon(Gtk::IconSet &icon_set,
+      const Glib::ustring& icon_name, int size);
+                          
+    static bool add_stock_icon_source(Gtk::IconSet &icon_set,
+      const Glib::ustring& base_dir,
+      const Glib::ustring& icon_name, int size);
   };
 
 }   // namespace gui

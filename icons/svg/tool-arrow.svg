@@ -15,7 +15,7 @@
    sodipodi:version="0.32"
    inkscape:version="0.46"
    version="1.0"
-   sodipodi:docname="arrow.svg"
+   sodipodi:docname="tool-arrow.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <defs
      id="defs4">
@@ -522,10 +522,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.6568543"
-     inkscape:cx="90.247594"
+     inkscape:cx="64.614973"
      inkscape:cy="46.534319"
      inkscape:document-units="px"
-     inkscape:current-layer="layer4"
+     inkscape:current-layer="layer3"
      showgrid="true"
      inkscape:snap-nodes="false"
      inkscape:snap-bbox="true"
@@ -559,7 +559,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer3"
-     inkscape:label="artwork:arrow"
+     inkscape:label="artwork:tool-arrow"
      style="display:inline">
     <path
        transform="matrix(0.989175,0,0,1.31555,167.22388,56.536408)"

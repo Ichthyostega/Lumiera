@@ -34,9 +34,9 @@ namespace panels {
 const int TimelinePanel::ZoomToolSteps = 2; // 2 seems comfortable
 
 TimelinePanel::TimelinePanel() :
-  Panel("timeline", _("Timeline"), "timeline_panel"),
-  arrowTool(Gtk::StockID("arrow")),
-  iBeamTool(Gtk::StockID("i_beam")),
+  Panel("timeline", _("Timeline"), "panel_timeline"),
+  arrowTool(Gtk::StockID("tool_arrow")),
+  iBeamTool(Gtk::StockID("tool_i_beam")),
   zoomIn(Stock::ZOOM_IN),
   zoomOut(Stock::ZOOM_OUT),
   updatingToolbar(false)

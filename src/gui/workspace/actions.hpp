@@ -49,20 +49,6 @@ private:
   /* ===== Internals ===== */
 private:
   /**
-   * Registers application stock items: icons and
-   * labels associated with IDs */
-  static void register_stock_items();
-
-  static bool add_stock_item_set(
-                    const Glib::RefPtr<Gtk::IconFactory>& factory,
-                    const Glib::ustring& filename,
-                    const Glib::ustring& id,
-                    const Glib::ustring& label);
-                        
-  static bool add_stock_icon_source(Gtk::IconSet &icon_set,
-                    int size, const Glib::ustring& filename);
-
-  /**
    * Updates the state of the menu/toolbar actions
    * to reflect the current state of the workspace */
   void update_action_state();
@@ -102,7 +88,7 @@ private:
   /* ===== Internals ===== */
 private:
   bool is_updating_action_state;
-
+  
   friend class WorkspaceWindow;
 };
 

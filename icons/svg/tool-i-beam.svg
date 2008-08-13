@@ -15,7 +15,7 @@
    sodipodi:version="0.32"
    inkscape:version="0.46"
    version="1.0"
-   sodipodi:docname="i-beam.svg"
+   sodipodi:docname="tool-i-beam.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <defs
      id="defs4">
@@ -592,7 +592,7 @@
   <g
      inkscape:groupmode="layer"
      id="layer3"
-     inkscape:label="artwork:i-beam"
+     inkscape:label="artwork:tool-i-beam"
      style="display:inline">
     <path
        transform="matrix(0.989175,0,0,1.31555,164.72395,56.536408)"
