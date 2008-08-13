@@ -1,8 +1,9 @@
 /*
-  test-filedescriptors.c
+  test-config.c  -  test the config system
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
+                        Simeon Voelkel <simeon_voelkel@arcor.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,6 +22,7 @@
 #include "lib/safeclib.h"
 
 #include "backend/config.h"
+#include "backend/configitem.h"
 
 #include "tests/test.h"
 
@@ -123,6 +125,26 @@ TEST ("word_get")
     printf ("%s, '%s'\n", lumiera_error (), word);
 
   lumiera_config_destroy ();
+}
+
+TEST ("empty_line_configitem")
+{
+  LumieraConfigitem item;
+
+  item = lumiera_configitem_new ( "" );
+
+  lumiera_configitem_delete(item);
+  item = NULL;
+}
+
+TEST ("blank_line_configitem")
+{
+  LumieraConfigitem item;
+
+  item = lumiera_configitem_new ( "	 	" );
+
+  lumiera_configitem_delete(item);
+  item = NULL;
 }
 
 
