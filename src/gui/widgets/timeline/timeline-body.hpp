@@ -71,6 +71,8 @@ private:
   int get_vertical_offset() const;
   
   void set_vertical_offset(int offset);
+  
+  void register_styles() const;
 
   void read_styles();
   
@@ -91,7 +93,10 @@ private:
   gavl_time_t beginShiftTimeOffset;
   int beginShiftVerticalOffset; 
 
-  GdkColor background;
+  // Style properties
+  GdkColor backgroundColour;
+  GdkColor selectionColour;
+  float selectionAlpha;
   
   lumiera::gui::widgets::TimelineWidget *timelineWidget;
 

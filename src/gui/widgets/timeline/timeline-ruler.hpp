@@ -70,10 +70,10 @@ private:
   void draw_ruler(Cairo::RefPtr<Cairo::Context> cairo,
     const Gdk::Rectangle ruler_rect);
 
-  void draw_mouse_chevron(Cairo::RefPtr<Cairo::Context> cairo,
+  void draw_mouse_chevron(Cairo::RefPtr<Cairo::Context> cr,
     const Gdk::Rectangle ruler_rect);
     
-  void draw_selection(Cairo::RefPtr<Cairo::Context> cairo,
+  void draw_selection(Cairo::RefPtr<Cairo::Context> cr,
     const Gdk::Rectangle ruler_rect);
 
   gavl_time_t calculate_major_spacing() const;
@@ -95,6 +95,7 @@ private:
   int minorShortTickHeight;
   int minDivisionWidth;
   int mouseChevronSize;
+  int selectionChevronSize;
   
   // Owner
   lumiera::gui::widgets::TimelineWidget *timelineWidget;
