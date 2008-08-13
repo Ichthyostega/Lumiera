@@ -77,7 +77,7 @@ lumiera_configitem_destroy (LumieraConfigitem self)
       if (self->vtable && self->vtable->destroy)
         self->vtable->destroy (self);
 
-      ENSURE (!llist_is_empty (&self->lookup), "destructor didn't cleaned lookup up");
+      ENSURE (llist_is_empty (&self->lookup), "destructor didn't cleaned lookup up");
       ENSURE (llist_is_empty (&self->childs), "destructor didn't remove childs");
 
       llist_unlink (&self->link);
@@ -122,12 +122,16 @@ lumiera_configitem_move (LumieraConfigitem self, LumieraConfigitem source)
   REQUIRE (self);
   REQUIRE (source);
 
-  llist_move (&self->link, &source->link);
+  llist_init (&self->link);
+  llist_insertlist_next (&self->link, &source->link);
 
   self->parent = source->parent;
 
-  llist_move (&self->childs, &source->childs);
-  llist_move (&self->lookup, &source->lookup);
+  llist_init (&self->childs);
+  llist_insertlist_next (&self->childs, &source->childs);
+
+  llist_init (&self->lookup);
+  llist_insertlist_next (&self->lookup, &source->lookup);
 
   self->line = source->line;
   source->line = NULL;
