@@ -31,13 +31,6 @@ namespace gui {
 WindowManager::WindowManager()
 {
   register_stock_items();
-  
-  g_message("get_home_dir() : %s", get_home_dir().c_str());
-  g_message("get_tmp_dir() : %s", get_tmp_dir().c_str());
-  g_message("get_current_dir() : %s", get_current_dir().c_str());
-  g_message("get_user_data_dir() : %s", get_user_data_dir().c_str());
-  g_message("get_user_config_dir() : %s", get_user_config_dir().c_str());
-  g_message("get_user_cache_dir () : %s", get_user_cache_dir().c_str());  
 }
 
 bool

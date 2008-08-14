@@ -68,17 +68,20 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
   // View Menu
   actionGroup->add(Action::create("ViewMenu", _("_View")));
   
-  assetsPanelAction = ToggleAction::create("ViewAssets", Gtk::StockID("assets_panel"));
+  assetsPanelAction = ToggleAction::create("ViewAssets",
+    Gtk::StockID("panel_assets"));
   assetsPanelAction->signal_toggled().connect(
     sigc::mem_fun(*this, &Actions::on_menu_view_assets));
   actionGroup->add(assetsPanelAction);
   
-  timelinePanelAction = ToggleAction::create("ViewTimeline", Gtk::StockID("timeline_panel"));
+  timelinePanelAction = ToggleAction::create("ViewTimeline",
+    Gtk::StockID("panel_timeline"));
   timelinePanelAction->signal_toggled().connect(
     sigc::mem_fun(*this, &Actions::on_menu_view_timeline));
   actionGroup->add(timelinePanelAction);
 
-  viewerPanelAction = ToggleAction::create("ViewViewer", Gtk::StockID("viewer_panel"));
+  viewerPanelAction = ToggleAction::create("ViewViewer",
+    Gtk::StockID("panel_viewer"));
   viewerPanelAction->signal_toggled().connect(
     sigc::mem_fun(*this, &Actions::on_menu_view_viewer));
   actionGroup->add(viewerPanelAction);

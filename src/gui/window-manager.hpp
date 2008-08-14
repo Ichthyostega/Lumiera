@@ -34,36 +34,36 @@
 namespace lumiera {
 namespace gui {
 
-  class WindowManager
-  {
-  public:
-    WindowManager();
+class WindowManager
+{
+public:
+  WindowManager();
 
-    bool set_theme(Glib::ustring path);
+  bool set_theme(Glib::ustring path);
+  
+  static GdkColor read_style_colour_property(
+    Gtk::Widget &widget, const gchar *property_name,
+    guint16 red, guint16 green, guint16 blue);
     
-    static GdkColor read_style_colour_property(
-      Gtk::Widget &widget, const gchar *property_name,
-      guint16 red, guint16 green, guint16 blue);
-      
-  private:
-    /**
-     * Registers application stock items: icons and
-     * labels associated with IDs */
-    static void register_stock_items();
+private:
+  /**
+   * Registers application stock items: icons and
+   * labels associated with IDs */
+  static void register_stock_items();
 
-    static bool add_stock_item_set(
-      const Glib::RefPtr<Gtk::IconFactory>& factory,
-      const Glib::ustring& icon_name,
-      const Glib::ustring& id,
-      const Glib::ustring& label);
-      
-    static bool add_stock_icon(Gtk::IconSet &icon_set,
-      const Glib::ustring& icon_name, int size);
-                          
-    static bool add_stock_icon_source(Gtk::IconSet &icon_set,
-      const Glib::ustring& base_dir,
-      const Glib::ustring& icon_name, int size);
-  };
+  static bool add_stock_item_set(
+    const Glib::RefPtr<Gtk::IconFactory>& factory,
+    const Glib::ustring& icon_name,
+    const Glib::ustring& id,
+    const Glib::ustring& label);
+    
+  static bool add_stock_icon(Gtk::IconSet &icon_set,
+    const Glib::ustring& icon_name, int size);
+                        
+  static bool add_stock_icon_source(Gtk::IconSet &icon_set,
+    const Glib::ustring& base_dir,
+    const Glib::ustring& icon_name, int size);
+};
 
 }   // namespace gui
 }   // namespace lumiera
