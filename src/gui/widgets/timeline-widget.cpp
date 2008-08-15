@@ -167,7 +167,7 @@ TimelineWidget::shift_view(int shift_size)
   const int view_width = body->get_allocation().get_width();
   
   set_time_offset(get_time_offset() +
-    shift_size * timeScale * view_width / 16);
+    shift_size * timeScale * view_width / 256);
 }
 
 gavl_time_t

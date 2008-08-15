@@ -68,6 +68,23 @@ Tool::on_button_release_event(GdkEventButton* event)
     isDragging = false;
 }
 
+lumiera::gui::widgets::TimelineWidget*
+Tool::get_timeline_widget() const
+{
+  REQUIRE(timelineBody != NULL);
+  lumiera::gui::widgets::TimelineWidget *timeline_widget =
+    timelineBody->timelineWidget;
+  REQUIRE(timeline_widget != NULL);
+  return timeline_widget;
+}
+
+Gdk::Rectangle
+Tool::get_body_rectangle() const
+{
+  REQUIRE(timelineBody != NULL);
+  return timelineBody->get_allocation();
+}
+
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui

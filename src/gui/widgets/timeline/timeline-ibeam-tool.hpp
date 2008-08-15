@@ -39,6 +39,8 @@ class IBeamTool : public Tool
 {
 public:
   IBeamTool(TimelineBody *timeline_body);
+  
+  ~IBeamTool();
 
   ToolType get_type() const;
   
@@ -51,11 +53,22 @@ protected:
   void on_motion_notify_event(GdkEventMotion *event);
   
 private:
+  bool on_scroll_slide_timer();
+  
+private:
   void set_leading_x(const int x);
   
-protected:
+  void begin_scroll_slide(int scroll_slide_rate);
+  void end_scroll_slide();
+  
+private:
   //----- Internals -----//
-  gavl_time_t drag_start_time;
+  gavl_time_t dragStartTime;
+  sigc::connection scrollSlideEvent;
+  int scrollSlideRate;
+  
+  //----- Constants -----//
+  static const int ScrollSlideRateDivisor;
 };
 
 }   // namespace timeline

@@ -93,7 +93,7 @@ public:
   
   /**
    * Scrolls the view horizontally as a proportion of the view area.
-   * @param shift_size The size of the shift in 1/16ths of the view
+   * @param shift_size The size of the shift in 1/256ths of the view
    * width.
    **/
   void shift_view(int shift_size);

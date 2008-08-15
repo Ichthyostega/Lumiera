@@ -100,6 +100,7 @@ private:
   
   lumiera::gui::widgets::TimelineWidget *timelineWidget;
 
+  friend class Tool;
   friend class ArrowTool;
   friend class IBeamTool;
 };
