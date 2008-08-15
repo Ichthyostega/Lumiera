@@ -136,6 +136,21 @@ char*
 lumiera_tmpbuf_snprintf (size_t size, const char* fmt, ...);
 
 /**
+ * Concat up to 3 strings in a tmpbuf.
+ * @param str1 first string to concat or NULL
+ * @param str1_len how much of the first string shall be used
+ * @param str2 second string to concat or NULL
+ * @param str2_len how much of the second string shall be used
+ * @param str3 third string to concat or NULL
+ * @param str3_len how much of the third string shall be used
+ * @return temporary buffer containing the constructed of the string
+ */
+char*
+lumiera_tmpbuf_strcat3 (const char* str1, size_t str1_len,
+                        const char* str2, size_t str2_len,
+                        const char* str3, size_t str3_len);
+
+/**
  * Translates characters in a string, similar to the shell 'tr' utility
  * @param in input string to  be translated
  * @param from source character set

@@ -176,6 +176,18 @@ lumiera_tmpbuf_snprintf (size_t size, const char* fmt, ...)
 
 
 char*
+lumiera_tmpbuf_strcat3 (const char* str1, size_t str1_len,
+                        const char* str2, size_t str2_len,
+                        const char* str3, size_t str3_len)
+{
+  return lumiera_tmpbuf_snprintf (SIZE_MAX, "%.*s%s%.*s%s%.*s",
+                                  str1?str1_len:0, str1?str1:"", str1?".":"",
+                                  str2?str2_len:0, str2?str2:"",
+                                  str3?".":"", str3?str3_len:0, str3?str3:"");
+}
+
+
+char*
 lumiera_tmpbuf_tr (const char* in, const char* from, const char* to, const char* def)
 {
   REQUIRE (strlen (from) == strlen (to), "from and to character set must have equal length");
