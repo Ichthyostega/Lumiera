@@ -1037,7 +1037,7 @@ An [[EDL]] is just a collection of configured and placed objects (and has no add
 ''State'' is rigorously ''externalized'' and operations are to be ''scheduled'', to simplify locking and error handling. State is either treated similar to media stream data (as addressable and cacheable data frame), or is represented as &quot;parameter&quot; to be served by some [[parameter provider|ParamProvider]]. Automation is just another kind of parameter, i.e. a function, and how this function is calculated is an encapsulated implementation detail (we don't have &quot;bezier automation&quot;, and then maybe a &quot;linear automation&quot;, a &quot;mask automation&quot; and yet another way to handle transitions)
 </pre>
 </div>
-<div title="DesignGoals" modifier="Ichthyostega" modified="200801062154" created="200706210557" tags="design" changecount="16">
+<div title="DesignGoals" modifier="Ichthyostega" modified="200808152210" created="200706210557" tags="design" changecount="17">
 <pre>This __proc-Layer__ and ~Render-Engine implementation started out as a design-draft by [[Ichthyo|mailto:Ichthyostega@web.de]] in summer 2007. The key idea of this design-draft is to use the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]] for the Render Engine, thus separating completely the //building// of the Render Pipeline from //running,// i.e. doing the actual Render. The Nodes in this Pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder.
 
 !Why doesn't the current Cinelerra-2 Design succeed?
@@ -1056,7 +1056,7 @@ As always, the main goal is //to cut down complexity// by the usual approach to 
 
 To achieve this, here we try to separate ''Configuration'' from ''Processing''. Further, in Configuration we try to separate the ''high level view'' (users view when editing) from the ''low level view'' (the actual configuration effective for the calculations). Finally, we try to factor out and encapsulate ''State'' in order to make State explicit.
 
-The main tool used to implement this separation is the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]. Here especially we move all decisions and parametrization into the BuildProcess. The Nodes in the render pipeline should process Video/Audio and do nothing else. No more decisions, tests and conditional operations when running the Pipeline. Move all of this out into the configuration of the pipeline, which is done by the Builder. Make the actual processing nodes Template classes, parametrized by the color model and number of components. Make all Nodes of equal footing with each other, able to be connected freely within the limitations of the necessary input and output. Make the OpenGL rendering into alternate implementation of some operations together with an alternate signal flow (usable only if the whole Pipeline can be built up to support this changed signal flow), thus factoring out all the complexities of managing the data flow between core and hardware accelerated rendering out of the implementation of the actual processing. Introduce separate control data connections for the automation data, separating the case of true multi-channel-effects from the case where one node just gets remote controlled by another node (or two nodes using the same automation data).
+The main tool used to implement this separation is the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]. Here especially we move all decisions and parametrization into the BuildProcess. The Nodes in the render pipeline should process Video/Audio and do nothing else. All decisions, tests and conditional operations are factored out of the render process and handled as configuration of the pipeline, which is done by the Builder. The actual color model and number of ports is configured in by a pre-built wiring descriptor. All Nodes are of equal footing with each other, able to be connected freely within the limitations of the necessary input and output. OpenGL and renderfarm support can be configured in as an alternate implementation of some operations together with an alternate signal flow (usable only if the whole Pipeline can be built up to support this changed signal flow), thus factoring out all the complexities of managing the data flow between core and hardware accelerated rendering. We introduce separate control data connections for the automation data, separating the case of true multi-channel-effects from the case where one node just gets remote controlled by another node (or two nodes are using the same automation data).
 
 Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the EDL in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
 </pre>
@@ -1289,7 +1289,44 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200808060229" created="200708080322" tags="overview" changecount="25">
+<div title="HighLevelModel" modifier="Ichthyostega" modified="200808160329" created="200808152311" tags="spec design discuss" changecount="32">
+<pre>While the low-level model holds the data used for carrying out the actual media data processing (=rendering), the high-level model is what the user works upon when performing edit operations through the GUI (or script driven in &amp;raquo;headless mode&amp;laquo;). Its building blocks and combination rules determine largely what structures can be created within the [[Session]].
+On the whole, it is a collection of [[media objects|MObjects]] stuck together and arranged by [[placements|Placement]].
+
+Basically, the structure of the high-level model is is a very open and flexible one &amp;mdash; every valid connection of the underlying object types is allowed &amp;mdash; but the transformation into a low-level node network for rendering follows certain patterns and only takes into account any objects reachable while processing the session data in accordance to these patterns. Taking into account the parameters and the structure of these objects visited when building, the low-level render node network is configured in detail.
+
+The fundamental metaphor or structural pattern is to create processing ''pipes'', which are a linear chain of data processing modules, starting from an source port and providing an exit point. [[Pipes|Pipe]] are a //concept or pattern,// they don't exist as objects. Each pipe has an input side and an output side and is in itself something like a Bus treating a single [[media stream|StreamType]] (but this stream may still have an internal structure, e.g. several channels related to a spatial audio system). Other processing entities like effects and transitions can be placed (attached) at the pipe, resulting them to be appended to form this chain. Optionally, there may be a ''wiring plug'', requesting the exit point to be connected to another pipe. When omitted, the wiring will be figured out automatically.
+Thus, when making an connection //to// a pipe, output data will be sent to the //source port// (input side) of the pipe, wheras when making a connection //from// a pipe, data from it's exit point will be routed to the destination. Incidentally, the low-level model and the render engine employ //pull-based processing,// but this is rather of no relevance for the high-level model.
+
+
+
+[img[draw/high-level1.png]]
+Normally, pipes are limited to a //strictly linear chain// of data processors (&quot;''effects''&quot;) working on a single data stream type, and consequently there is a single ''exit point'' which may be wired to an destination. As an exception to this rule, you may insert wire tap nodes (probe points), which explicitly may send data to an arbitrary input port; they are never wired automatically. It is possible to create cyclic connections by such arbitrary wiring, which will be detected by the builder and flagged as an error.
+
+While pipes have a rather rigid and limited structure, it is allowed to make several connections to and from any pipe &amp;mdash; even connections requiring an stream type conversion. It is not even necessary to specify //any// output destination, because then the wiring will be figured out automatically by searching the context and finally using some general rule. Connecting multiple outputs to the input of another pipe automatically creates a ''mixing step'' (which optionally can be controlled by a fader). Several pipes may be joined together by a ''transition'', which in the general case simultaneously treats N media streams. Of course, the most common case is to combine two streams into one output, thereby also mixing them. Most available transition plugins belong to this category, but, as said, the model isn't limited to this simple case, and moreover it is possible to attach several overlapping transitions covering the same time interval.
+
+Individual Media Objects are attached, located or joined together by ''Placements''. A [[Placement]] is a handle for a single MObject (implemented as a refcounting smart-ptr) and contains a list of placement specifications, called LocatingPin. Adding an placement to the session acts as if creating an //instance.// (it behaves like a clone in case of multiple placements of the same object). Besides absolute and relative placement, there is also the possibility of a placement to stick directly to another MObject's placement, e.g. for attaching an effect to a clip or to connect an automation data set to an effect. This //stick-to placement// creates sort of a loose clustering of objects: it will derive the position from the placement it is attached to. Note that while the length and the in/out points are a //property of the ~MObject,// it's actual location depends on how it is //placed// and thus can be maintained quite dynamically. Note further that effects can have an length on their own, thus by using these attachement mechaics, the wiring and configuration within the high-level model can be quite time dependant.
+
+[&gt;img[draw/high-level2.png]]
+
+
+
+Actually a ''clip'' is handled as if it was comprised of local pipe(s). In the example shown here, a two-channel clip has three effects attached, plus a wiring plug. Each of those attachments is used only if applicable to the media stream type the respective pipe will process. As the clip has two channels (e.g. video and audio), it will have two ''source ports'' pulling from the underlying media. Thus, as showed in the drawing to the right, by chaining up any attached effect applicable to the respective stream type defined by the source port, effectively each channel (sub)clip gets its own specifically adapted processing pipe.
+
+@@clear(right):display(block):@@
+!!Example of an complete Session
+[img[draw/high-level3.png]]
+The Session contains several independent [[EDL]]s plus an output bus section (''global Pipes''). Each EDL holds a collection of ~MObjects placed within a ''tree of tracks''. 
+Within Lumiera, tracks are a rather passive means for organizing media objects, but aren't involved into the data processing themselves. The possibility of nesting tracks allows for easy grouping. Like the other objects, tracks are connected together by placements: A track holds the list of placements of its child tracks. Each EDL holds a single placement pointing to the root track. 
+
+As placements have the ability to cooperate and derive any missing placement specifications, this creates a hierarchical structure throughout the session, where parts on any level behave similar if applicable. For example, when a track is anchored to some external entity (label, sync point in sound, etc), all objects placed relatively to this track will adjust and follow automatically. This relation between the track tree and the individual objects is especially important for the wiring, which, if not defined locally within an ~MObject's placement, is derived by searching up this track tree and utilizing the wiring plug locating pins found there, if applicable. In the default configuration, the placement of an EDL's root track contains a wiring plug for video and another wiring plug for audio. This setup is sufficient for getting every object within this EDL wired up automatically to the correct global output pipe. Moreover, when adding another wiring plug to some sub track, we can intercept and reroute the connections of all objects creating output of this specific stream type within this track and on all child tracks.
+
+Besides routing to a global pipe, wiring plugs can also connect to the source port of an ''meta-clip''. In this example session, the outputs of ~EDL-2 as defined by locating pins in it's root track's placement, are directed to the source ports of a [[meta-cllip|VirtualClip]] placed within ~EDL-1. Thus, within ~EDL-1, the contents of ~EDL-2 appear like a pseudo-media, from which the (meta) clip has been taken. They can be adorned with effects and processed further completely similar to a real clip.
+
+Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
+</pre>
+</div>
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200808151447" created="200708080322" tags="overview" changecount="26">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1307,7 +1344,7 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 * [[identifying the basic Builder operations|BasicBuildingOperations]] and [[planning the Implementation|PlanningNodeCreatorTool]]
 * [[how to handle »attached placement«|AttachedPlacementProblem]]
 * working out the [[basic building situations|BuilderPrimitives]] and [[mechanics of rendering|RenderMechanics]]
-* how to classify and [[describe media stream types|StreamTypeDescr]]
+* how to classify and [[describe media stream types|StreamType]]
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200711210542" created="200711210531" tags="discuss draft" changecount="7">
@@ -2981,8 +3018,9 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 * a collection of ''global Pipes''
 * the ''Fixture'' with a possibility to [[(re)build it|PlanningBuildFixture]]</pre>
 </div>
-<div title="SessionOverview" modifier="Ichthyostega" modified="200804122351" created="200709272105" tags="design" changecount="21">
-<pre>The [[Session]] (sometimes also called //Project//) contains all informations and objects to be edited by the User. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration, all being represented as [[Asset]]. At any given time, there is //only one current session// opened within the application.
+<div title="SessionOverview" modifier="Ichthyostega" modified="200808152225" created="200709272105" tags="design" changecount="26">
+<pre>The [[Session]] (sometimes also called //Project// ) contains all informations and objects to be edited by the User. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration, all being represented as [[Asset]]. At any given time, there is //only one current session// opened within the application.
+The Session is close to what is visible in the GUI. From a user's perspective, you'll find a timeline-like structure, where various Media Objects are arranged and placed. The available building blocks and the rules how they can be combined together form Lumiera's [[high-level data model|HighLevelModel]]. Basically, besides the [[media objects|MObjects]] there are data connections and all processing is organized around processing chains or [[pipes|Pipe]], which can be either global (in the Session) or local (in real or virtual clips)
 
 !!!larger projects
 For larger editing projects the simple structure of a session containing &quot;the&quot; timeline is not sufficient. Rather, we have several timelines, e.g. one for each scene. Or we could have several layered or nested timelines (compositional work, multimedia productions). To support these cases without making the default case more complicated, Lumiera introduces a //focus// for selecting the //current EDL,// which will receive all editing operations.
@@ -2999,6 +3037,8 @@ The possibility of having multiple ~EDLs helps organizing larger projects. Each 
 !!!default configuration
 While all these possibilities may seem daunting, there is a simple default configuration loaded into any pristine new session:
 It will contain a global video and audio out pipe, just one EDL with a single track; this track will have a internal video and audio pipe (bus) configured with one fading device sending to the global output ports. So, by adding some clip with a simple absolute placement to this track and some time position, the clip gets connected and rendered, after [[(re)building|PlanningBuildFixture]] the [[Fixture]] and passing the result to the [[Builder]] &amp;mdash; and using the resulting render nodes network (Render Engine).
+
+&amp;rarr; [[anatomy of the high-level model|HighLevelModel]]
 </pre>
 </div>
 <div title="SideBarOptions" modifier="CehTeh" created="200706200048" changecount="1">
@@ -3078,7 +3118,22 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
 * moreover, it contains methods to communicate with other state relevant parts of the system, thereby shielding the rendering code from any complexities of Thread communication if necessary. (thus the name Proxy)
 </pre>
 </div>
-<div title="StreamTypeDescr" modifier="Ichthyostega" modified="200808110101" created="200808060244" tags="spec discuss draft" changecount="6">
+<div title="StreamPrototype" modifier="Ichthyostega" modified="200808152103" created="200808152042" tags="def spec" changecount="7">
+<pre>The stream Prototype is part of the specification of a media stream's type. It is a semantic (or problem domain oriented) concept and should be distinguished from the actual implementation type of the media stream. The latter is provided by an [[library implementation|StreamTypeImplFacade]]. While there are some common predefined prototypes, mostly, they are defined within the concrete [[Session]] according to the user's needs. 
+
+Prototypes form an open (extensible) collection, though each prototype belongs to a specific media kind ({{{VIDEO, IMAGE, AUDIO, MIDI,...}}}). The ''distinguishing property'' of a stream prototype is that any [[Pipe]] can process //streams of a specific prototype only.// Thus, two streams with different prototype can be considered &quot;something quite different&quot; from the users point of view, while two streams belonging to the same prototype can be considered equivalent (and will be converted automatically when their implementation types differ). Note this definition is //deliberately fuzzy,// because it depends on the actual situation of the project in question.
+
+Consequently, as we can't get away with an fixed Enum of all stream prototypes, the implementation must rely on a query interface. The intention is to provide a basic set of rules for deciding queries about the most common stream prototypes; besides, a specific session may inject additional rules or utilize a completely different knowledge base. Thus, for a given StreamTypeDescriptor specifying a prototype
+* we can get a [[default|DefaultsManagement]] implementation type
+* we can get a default prototype to a given implementation type by a similar query
+* we can query if a implementation type in question can be //subsumed// under this prototype
+* we can determine if another prototype is //convertible//
+
+!!Examples
+NTSC and PAL video, video versus digitized film, HD video versus SD video, 3D versus flat video, cinemascope versus 4:3, stereophonic versus monaural, periphonic versus panoramic sound, Ambisonics versus 5.1, dolby versus dts,...
+</pre>
+</div>
+<div title="StreamType" modifier="Ichthyostega" modified="200808152026" created="200808060244" tags="spec discuss draft" changecount="4">
 <pre>//how to classify and describe media streams//
 Media data is understood to appear structured as stream(s) over time. While there may be an inherent internal structuring, at a given perspective ''any stream is a unit and homogeneous''. In the context of digital media data processing, streams are always ''quantized'', which means they appear as a temporal sequence of data chunks called ''frames''.
 
@@ -3091,16 +3146,16 @@ Media data is understood to appear structured as stream(s) over time. While ther
 * the __~Stream-Type__ describes the kind of media data contained in the stream
 
 ! Problem of Stream Type Description
-Media types vary largely and exhibit a large number of different properties, which can't be subsumed under a single classification scheme. But on the other hand, we want to deal with media objects in a uniform and generic manner, because on the large all kinds of media behave somewhat similar. The problem is, these similarities disappear when describing media with logical precision. Thus we are forced into specialized handling and operations for each kind of media, while we want to implement a generic handling concept.
+Media types vary largely and exhibit a large number of different properties, which can't be subsumed under a single classification scheme. But on the other hand, we want to deal with media objects in a uniform and generic manner, because generally all kinds of media behave somewhat similar. But the problem is, these similarities disappear when describing media with logical precision. Thus we are forced into specialized handling and operations for each kind of media, while we want to implement a generic handling concept.
 
 ! Stream Type handling in the Proc-Layer
 !! Identification
-A stream type is denoted by a ~StreamID, which is an identifier, acting as an unique key for accessing information related to the stream type.
+A stream type is denoted by a StreamTypeID, which is an identifier, acting as an unique key for accessing information related to the stream type. It corresponds to an StreamTypeDescriptor record, containing an &amp;mdash; //not necessarily complete// &amp;mdash; specification of the stream type, according to the classification detailed below.
 
 !! Classification
-Within the Proc-Layer, media streams are treated on the large in a similar manner. But, looking closer, note everything can be connected together, while on the other hand there may be some classes of media streams which can be considered //equivalent// in most respects. Thus, it seems reasonable to separate the distinction between various media streams into several levels
-* Each media belongs to a fundamental ''kind'' of media, examples being __Video__, __Image__, __Audio__, __MIDI__,... Media streams of different kind can be considered somewhat &quot;completely separate&quot; &amp;mdash; just the handling of each of those media kinds follows a common //generic pattern// augmented with specialisations. Basically, it is //impossible to connect// media streams of different kind. Under some circumstances there may be the possibility of a transformation though. For example, a still image can be incorporated into video, sound may be visualized, MIDI may control a sound synthesizer.
-* Below the level of distinct kinds of media streams, within every kind we have an open ended collection of ''prototypes'', which, when compared directly may each be quite distinct and different, but which may be //rendered//&amp;nbsp; into each other. For example, we have stereoscopic (3D) video and we have the common flat video lacking depth information, we have several spatial audio systems (Ambisonics, Wave Field Synthesis), we have panorama simulating sound systems (5.1, 7.1,...), we have common stereophonic and monaural audio. It is considered important to retain some openness and configuability within this level of distinction, which means this classification should better be done by rules then by setting up a fixed property table. For example, it may be desirable for some production to distinguish between digitized film and video NTSC and PAL, while in another production everything is just &quot;video&quot; and can be converted mostly automatically. The most noticeable consequence of such a distinction is that any Bus or [[Pipe]] is always limited to a media stream of a single prototype.
+Within the Proc-Layer, media streams are treated largely in a similar manner. But, looking closer, note everything can be connected together, while on the other hand there may be some classes of media streams which can be considered //equivalent// in most respects. Thus, it seems reasonable to separate the distinction between various media streams into several levels
+* Each media belongs to a fundamental ''kind'' of media, examples being __Video__, __Image__, __Audio__, __MIDI__,... Media streams of different kind can be considered somewhat &quot;completely separate&quot; &amp;mdash; just the handling of each of those media kinds follows a common //generic pattern// augmented with specialisations. Basically, it is //impossible to connect// media streams of different kind. Under some circumstances there may be the possibility of a //transformation// though. For example, a still image can be incorporated into video, sound may be visualized, MIDI may control a sound synthesizer.
+* Below the level of distinct kinds of media streams, within every kind we have an open ended collection of ''prototypes'', which, when compared directly may each be quite distinct and different, but which may be //rendered//&amp;nbsp; into each other. For example, we have stereoscopic (3D) video and we have the common flat video lacking depth information, we have several spatial audio systems (Ambisonics, Wave Field Synthesis), we have panorama simulating sound systems (5.1, 7.1,...), we have common stereophonic and monaural audio. It is considered important to retain some openness and configurability within this level of distinction, which means this classification should better be done by rules then by setting up a fixed property table. For example, it may be desirable for some production to distinguish between digitized film and video NTSC and PAL, while in another production everything is just &quot;video&quot; and can be converted mostly automatically. The most noticeable consequence of such a distinction is that any Bus or [[Pipe]] is always limited to a media stream of a single prototype. (&amp;rarr; [[more|StreamPrototype]])
 * Besides the distinction by prototypes, there are the various media ''implementation types''. This classification is not necessarily hierarchically related to the prototype classification, while in practice commonly there will be some sort of dependency. For example, both stereophonic and monaural audio may be implemented as 96kHz 24bit PCM with just a different number of channel streams, as well as we may have a dedicated stereo audio stream with two channels multiplexed into a single stream. For dealing with media streams of various implementation type, we need library routines, which also yield a type classification system. Most notably, for raw sound and video data we use the GAVL library, which defines a classification system for buffers and streams.
 * Besides the type classification detailed thus far, we introduce an ''intention tag''. This is a synthetic classification owned by Lumiera and used for internal wiring decisions. Currently (8/08), we recognize the following intention tags: __Source__, __Raw__, __Intermediary__ and __Target__. Only media streams tagged as __Raw__ can be processed.
 
@@ -3109,6 +3164,28 @@ Within the Proc-Layer, media streams are treated on the large in a similar manne
 * determine if a given media data source and sink can be connected, and how.
 * determine and enumerate the internal structure of a stream.
 * discover processing facilities
+</pre>
+</div>
+<div title="StreamTypeDescriptor" modifier="Ichthyostega" modified="200808152027" created="200808151505" tags="def" changecount="6">
+<pre>A description and classification record usable to find out about the properties of a media stream. The stream type descriptor can be accessed using an unique StreamTypeID. The information contained in this descriptor record can intentionally be //incomplete,// in which case the descriptor captures a class of matching media stream types. The following information is maintained:
+* fundamental ''kind'' of media: {{{VIDEO, IMAGE, AUDIO, MIDI,...}}}
+* stream ''prototype'': this is the abstract high level media type, like NTSC, PAL, Film, 3D, Ambisonics, 5.1, monaural,...
+* stream ''implementation type'' accessible by virtue of an StreamTypeImplFacade
+* the ''intended usage category'' of this stream: {{{SOURCE, RAW, INTERMEDIARY, TARGET}}}.
+&amp;rarr; see &amp;raquo;[[Stream Type|StreamType]]&amp;laquo; detailed specification
+&amp;rarr; more [[about prototypes|StreamPrototype]]</pre>
+</div>
+<div title="StreamTypeID" modifier="Ichthyostega" created="200808151510" tags="def" changecount="1">
+<pre>This ID is an symbolic key linked to a StreamTypeDescriptor. The predicate {{{stream(ID)}}} specifies a media stream with the StreamType as detailed by the corresponding descriptor (which may contain complete or partial data defining the type).</pre>
+</div>
+<div title="StreamTypeImplFacade" modifier="Ichthyostega" modified="200808151818" created="200808151520" tags="def" changecount="6">
+<pre>Common interface for dealing with the implementation of media stream data. From a high level perspective, the various kinds of media ({{{VIDEO, IMAGE, AUDIO, MIDI,...}}}) exhibit similar behaviour, while on the implementation level not even the common classification can be settled down to a complete general and useful scheme. Thus, we need separate library implementations for deailing with the various sorts of media data, all providing at least a set of basic operations:
+* set up a buffer
+* create or accept a frame
+* get an tag describing the precise implementation type
+* ...?
+
+&amp;rarr; see also &amp;raquo;[[Stream Type|StreamType]]&amp;laquo;
 </pre>
 </div>
 <div title="StrongSeparation" modifier="MichaelPloujnikov" modified="200706271504" created="200706220452" tags="design" changecount="5">
@@ -4390,10 +4467,10 @@ Using transitions is a very basic task and thus needs viable support by the GUI.
 Because of this experience, ichthyo wants to support a more general case of transitions, which have N output connections, behave similar to their &quot;simple&quot; counterpart, but leave out the mixing step. As a plus, such transitions can be inserted at the source ports of N clips or between any intermediary or final output pipes as well. Any transition processor capable of handling this situation should provide some flag, in order to decide if he can be placed in such a manner. (wichin the builder, encountering a  inconsistently placed transition is just an [[building error|BuildingError]])
 </pre>
 </div>
-<div title="VirtualClip" modifier="Ichthyostega" modified="200804110329" created="200804110321" tags="def" changecount="7">
+<div title="VirtualClip" modifier="Ichthyostega" modified="200808160257" created="200804110321" tags="def" changecount="8">
 <pre>A ''~Meta-Clip'' or ''Virtual Clip'' (both are synonymous) denotes a clip which doesn't just pull media streams out of a source media asset, but rather provides the results of rendering a complete sub-network. In all other respects it behaves exactly like a &quot;real&quot; clip, i.e. it has [[source ports|ClipSourcePort]], can have attached effects (thus forming a local render pipe) and can be placed and combined with other clips. Depending on what is wired to the source ports, we get two flavours:
 * a __placeholder clip__ has no &quot;embedded&quot; content. Rather, by virtue of placements and wiring requests, the output of some other pipe somewhere in the session will be wired to the clip's source ports. Thus, pulling data from this clip will effectively pull from these source pipes wired to it.
-* a __nested EDL__ is like the other ~EDLs in the Session, just that any missing placement properties will be derived from the Virtual Clip, which is thought as to &quot;contain&quot; the objects of the nested EDL. Typically, you'd also [[configure the tracks|TrackHandling]] of the &quot;inner&quot; EDL such as to connect any output to the source ports of the Virtual Clip.
+* a __nested EDL__ is like the other ~EDLs in the Session, just that any missing placement properties will be derived from the Virtual Clip, which is thought as to &quot;contain&quot; the objects of the nested EDL. Typically, this also [[configures the tracks|TrackHandling]] of the &quot;inner&quot; EDL such as to connect any output to the source ports of the Virtual Clip.
 
 Like any &quot;real&quot; clip, Virtual Clips have a start offset and a length, which will simply translate into an offset of the frame number pulled from the Virtual Clip's source connection or embedded EDL, making it possible to cut, splice, trim and roll them as usual. This of course implies we can have several instances of the same virtual clip with different start offset and length placed differently. The only limitation is that we can't handle cyclic dependencies for pulling data (which has to be detected and flagged as an error by the builder)
 </pre>
