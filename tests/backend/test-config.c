@@ -72,11 +72,11 @@ TEST ("lookup")
   LumieraConfigitem item = lumiera_configitem_new ("foo.bar = test");
   lumiera_config_lookup_insert (&lookup, item);
 
-  //  LumieraConfigitem found = lumiera_config_lookup_item_find (&lookup, "foo.bar");
-  // ENSURE (found == item);
+  LumieraConfigitem found = lumiera_config_lookup_item_find (&lookup, "foo.bar");
+  ENSURE (found == item);
 
-  //lumiera_config_lookup_remove (&lookup, found);
-  //ENSURE (found == NULL);
+  lumiera_config_lookup_remove (&lookup, found);
+  ENSURE (!lumiera_config_lookup_item_find (&lookup, "foo.bar"));
 
   lumiera_config_lookup_destroy (&lookup);
   lumiera_config_destroy ();

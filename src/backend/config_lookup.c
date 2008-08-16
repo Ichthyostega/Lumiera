@@ -18,20 +18,12 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-
-//TODO: Support library includes//
 #include "lib/safeclib.h"
 
-
-//TODO: Lumiera header includes//
 #include "backend/config_lookup.h"
 #include "backend/config.h"
 
-//TODO: System includes//
-//#include <stdlib.h>
-//#include <stdint.h>
 
-//TODO: internal/static forward declarations//
 static size_t
 h1 (const void* item, const uint32_t r);
 
@@ -44,23 +36,24 @@ h3 (const void* item, const uint32_t r);
 static int
 cmp (const void* keya, const void* keyb);
 
-static int
-cmp (const void* keya, const void* keyb);
+static void
+dtor (void* item);
+
+static void
+mov (void* dest, void* src, size_t size);
+
+
 
 /**
  * @file
  *
  */
 
-
-//code goes here//
-
-
-
 LumieraConfigLookup
 lumiera_config_lookup_init (LumieraConfigLookup self)
 {
-  self->hash = cuckoo_new (h1, h2, h3, cmp, sizeof (lumiera_config_lookupentry), 3, NULL, NULL); // TODO copy func, dtor
+  TRACE (config_lookup);
+  self->hash = cuckoo_new (sizeof (lumiera_config_lookupentry), &(struct cuckoo_vtable){h1, h2, h3, cmp, dtor, mov});
   return self;
 }
 
@@ -68,9 +61,87 @@ lumiera_config_lookup_init (LumieraConfigLookup self)
 LumieraConfigLookup
 lumiera_config_lookup_destroy (LumieraConfigLookup self)
 {
+  TRACE (config_lookup);
   cuckoo_delete (self->hash);
   return self;
 }
+
+
+
+LumieraConfigLookupentry
+lumiera_config_lookup_insert (LumieraConfigLookup self, LumieraConfigitem item)
+{
+  TRACE (config_lookup);
+  REQUIRE (self);
+  REQUIRE (item);
+  REQUIRE (item->key);
+  REQUIRE (item->key_size);
+
+  lumiera_config_lookupentry tmp;
+  FIXME ("implement section prefix/suffix for the key");
+  lumiera_config_lookupentry_init (&tmp, lumiera_tmpbuf_strcat3 (NULL, 0, item->key, item->key_size, NULL, 0));
+
+  LumieraConfigLookupentry entry = cuckoo_find (self->hash, &tmp);
+
+  if (!entry)
+    entry = cuckoo_insert (self->hash, &tmp);
+
+  if (entry)
+    llist_insert_head (&entry->configitems, &item->lookup);
+
+  return entry;
+}
+
+
+LumieraConfigitem
+lumiera_config_lookup_remove (LumieraConfigLookup self, LumieraConfigitem item)
+{
+  TRACE (config_lookup);
+  REQUIRE (!llist_is_empty (&item->lookup), "item is not in a lookup hash");
+
+  if (llist_is_single (&item->lookup))
+    {
+      /* last item in lookup, remove it from hash */
+      LumieraConfigLookupentry entry = (LumieraConfigLookupentry)llist_next (&item->lookup);
+      llist_unlink (&item->lookup);
+      cuckoo_remove (self->hash, entry);
+    }
+  else
+    {
+      /* more than this item present in hash, just unlink this item */
+      llist_unlink (&item->lookup);
+    }
+
+  return item;
+}
+
+LumieraConfigLookupentry
+lumiera_config_lookup_find (LumieraConfigLookup self, const char* key)
+{
+  TRACE (config_lookup);
+
+  /* fast temporary init without strdup */
+  lumiera_config_lookupentry tmp;
+  tmp.full_key = (char*)key;
+
+  return cuckoo_find (self->hash, &tmp);
+}
+
+
+LumieraConfigitem
+lumiera_config_lookup_item_find (LumieraConfigLookup self, const char* key)
+{
+  TRACE (config_lookup);
+
+  LumieraConfigLookupentry entry =
+    lumiera_config_lookup_find (self, key);
+
+  if (entry && !llist_is_empty (&entry->configitems))
+    return LLIST_TO_STRUCTP (llist_head (&entry->configitems), lumiera_configitem, lookup);
+
+  return NULL;
+}
+
 
 
 
@@ -78,31 +149,21 @@ lumiera_config_lookup_destroy (LumieraConfigLookup self)
 
 
 LumieraConfigLookupentry
-lumiera_config_lookupentry_new (const char* prefix, const char* name, const char* suffix)
+lumiera_config_lookupentry_init (LumieraConfigLookupentry self, const char* key)
 {
-  char* tmpstr = lumiera_tmpbuf_snprintf (LUMIERA_CONFIG_KEY_MAX, "%s%s%s%s%s",
-                                          prefix?prefix:"", prefix?".":"",
-                                          name?name:"",
-                                          suffix?".":"", suffix?suffix:"");
-
-  TRACE (config_lookup, "new key %s", tmpstr);
-
-  LumieraConfigLookupentry self = lumiera_malloc (sizeof (*self));
-
-  self->full_key = lumiera_strndup (tmpstr, LUMIERA_CONFIG_KEY_MAX);
+  TRACE (config_lookup, "key = %s", key);
+  self->full_key = lumiera_strndup (key, SIZE_MAX);
   llist_init (&self->configitems);
-
   return self;
 }
+
 
 void
 lumiera_config_lookupentry_delete (LumieraConfigLookupentry self)
 {
   TRACE (config_lookup);
-
+  REQUIRE (llist_is_empty (&self->configitems), "lookup node still in use");
   lumiera_free (self->full_key);
-  ENSURE (llist_is_empty (&self->configitems));
-  lumiera_free (self);
 }
 
 
@@ -115,32 +176,64 @@ lumiera_config_lookupentry_delete (LumieraConfigLookupentry self)
 static size_t
 h1 (const void* item, const uint32_t r)
 {
-  (void) item;
-  return r;
+  REQUIRE (item);
+  REQUIRE (((LumieraConfigLookupentry)item)->full_key);
+  size_t hash = r;
+  for (const char* s = ((LumieraConfigLookupentry)item)->full_key; *s; ++s)
+    hash = *s ^ ~(*s << 5) ^ (hash << 3) ^ (hash >> 7);
+  return hash;
 }
 
 static size_t
 h2 (const void* item, const uint32_t r)
 {
-  (void) item;
-  return r;
+  REQUIRE (item);
+  REQUIRE (((LumieraConfigLookupentry)item)->full_key);
+  size_t hash = r;
+  for (const char* s = ((LumieraConfigLookupentry)item)->full_key; *s; ++s)
+    hash = *s ^ ~(*s << 7) ^ (hash << 3) ^ (hash >> 5);
+  return hash;
 }
 
 static size_t
 h3 (const void* item, const uint32_t r)
 {
-  (void) item;
-  return r;
+  REQUIRE (item);
+  REQUIRE (((LumieraConfigLookupentry)item)->full_key);
+  size_t hash = r;
+  for (const char* s = ((LumieraConfigLookupentry)item)->full_key; *s; ++s)
+    hash = *s ^ ~(*s << 3) ^ (hash << 5) ^ (hash >> 7);
+  return hash;
 }
 
 static int
 cmp (const void* keya, const void* keyb)
 {
-  (void) keya;
-  (void) keyb;
-
-  return 0;
+  REQUIRE (keya);
+  REQUIRE (((LumieraConfigLookupentry)keya)->full_key);
+  REQUIRE (keyb);
+  REQUIRE (((LumieraConfigLookupentry)keyb)->full_key);
+  return !strcmp (((LumieraConfigLookupentry)keya)->full_key, ((LumieraConfigLookupentry)keyb)->full_key);
 }
+
+static void
+dtor (void* item)
+{
+  if (((LumieraConfigLookupentry)item)->full_key)
+    {
+      REQUIRE (llist_is_empty (&((LumieraConfigLookupentry)item)->configitems), "lookup node still in use");
+      lumiera_free (((LumieraConfigLookupentry)item)->full_key);
+    }
+}
+
+static void
+mov (void* dest, void* src, size_t size)
+{
+  ((LumieraConfigLookupentry)dest)->full_key = ((LumieraConfigLookupentry)src)->full_key;
+  llist_init (&((LumieraConfigLookupentry)dest)->configitems);
+  llist_insertlist_next (&((LumieraConfigLookupentry)dest)->configitems, &((LumieraConfigLookupentry)src)->configitems);
+}
+
 
 /*
 // Local Variables:

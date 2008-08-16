@@ -22,18 +22,20 @@
 #ifndef LUMIERA_CONFIG_LOOKUP_H
 #define LUMIERA_CONFIG_LOOKUP_H
 
-//TODO: Support library includes//
 #include "lib/cuckoo.h"
 #include "lib/llist.h"
 
 
-//TODO: Forward declarations//
+typedef struct lumiera_config_lookup_struct lumiera_config_lookup;
+typedef lumiera_config_lookup* LumieraConfigLookup;
+
+typedef struct lumiera_config_lookupentry_struct lumiera_config_lookupentry;
+typedef lumiera_config_lookupentry* LumieraConfigLookupentry;
 
 
-//TODO: Lumiera header includes//
+#include "backend/configitem.h"
 
 
-//TODO: System includes//
 #include <nobug.h>
 
 
@@ -42,11 +44,6 @@
  *
  */
 
-#define LUMIERA_CONFIG_KEY_MAX 1023
-
-
-
-//TODO: declarations go here//
 
 /*
   Lookup uses a cuckoo hash for now
@@ -56,14 +53,24 @@ struct lumiera_config_lookup_struct
 {
   Cuckoo hash;
 };
-typedef struct lumiera_config_lookup_struct lumiera_config_lookup;
-typedef lumiera_config_lookup* LumieraConfigLookup;
 
 LumieraConfigLookup
 lumiera_config_lookup_init (LumieraConfigLookup self);
 
 LumieraConfigLookup
 lumiera_config_lookup_destroy (LumieraConfigLookup self);
+
+LumieraConfigLookupentry
+lumiera_config_lookup_insert (LumieraConfigLookup self, LumieraConfigitem item);
+
+LumieraConfigitem
+lumiera_config_lookup_remove (LumieraConfigLookup self, LumieraConfigitem item);
+
+LumieraConfigLookupentry
+lumiera_config_lookup_find (LumieraConfigLookup self, const char* key);
+
+LumieraConfigitem
+lumiera_config_lookup_item_find (LumieraConfigLookup self, const char* key);
 
 
 
@@ -73,22 +80,21 @@ lumiera_config_lookup_destroy (LumieraConfigLookup self);
 
 struct lumiera_config_lookupentry_struct
 {
+  /* stack of all configitems stored under this key MUST BE FIRST IN THIS STRUCT */
+  llist configitems;
   /*
     we store a copy of the full key here
     configentry keys are complete as expected
-    section keys are the prefix stored with a trailing dot
+    section keys are the prefix stored with a trailing dot, suffixes will be found by iteration
   */
   char* full_key;
-  /* stack of all configitems stored under this key */
-  llist configitems;
 };
-typedef struct lumiera_config_lookupentry_struct lumiera_config_lookupentry;
-typedef lumiera_config_lookupentry* LumieraConfigLookupentry;
+
 
 LumieraConfigLookupentry
-lumiera_config_lookupentry_init (const char* prefix, const char* name, const char* suffix);
+lumiera_config_lookupentry_init (LumieraConfigLookupentry self, const char* key);
 
-void
+LumieraConfigLookupentry
 lumiera_config_lookupentry_destroy (LumieraConfigLookupentry self);
 
 
