@@ -37,11 +37,22 @@ namespace timeline {
 class ArrowTool : public Tool
 {
 public:
+  /**
+   * Constructor
+   * @param timeline_body The owner timeline body object
+   */
   ArrowTool(TimelineBody *timeline_body);
 
+  /**
+   * Gets the type of tool represented by this class
+   */
   ToolType get_type() const;
   
 protected:
+
+  /**
+   * Gets the cursor to display for this tool at this moment.
+   */
   Gdk::Cursor get_cursor() const;
   
 protected:

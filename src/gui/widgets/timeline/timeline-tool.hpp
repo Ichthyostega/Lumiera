@@ -38,7 +38,10 @@ class TimelineWidget;
 namespace timeline {
   
 class TimelineBody;
-  
+
+/**
+ * Specifies the types of different timeline tool classes.
+ */
 enum ToolType
 {
   None,
@@ -49,13 +52,24 @@ enum ToolType
 class Tool
 {
 protected:
+  /**
+   * Constructor
+   * @param timeline_body The owner timeline body object
+   */
   Tool(TimelineBody *timeline_body);
   
 public:
   virtual ~Tool() {};
 
+  /**
+   * Gets the type of tool represented by this class.
+   * @remarks This must be implemented by all timeline tool classes.
+   */
   virtual ToolType get_type() const = 0;
   
+  /**
+   * Reaplies the cursor for the current tool at the current moment.
+   */
   bool apply_cursor();
   
 public:
@@ -65,12 +79,26 @@ public:
   virtual void on_motion_notify_event(GdkEventMotion *event) {}
   
 protected:
+  /* ===== Internal Overrides ===== */
+  /**
+   * Gets the cursor to display for this tool at this moment.
+   * @remarks This must be implemented by all timeline tool classes.
+   */
   virtual Gdk::Cursor get_cursor() const = 0;
 
 protected:
   /* ===== Utilities ===== */
+  
+  /**
+   * Helper function which retrieves the pointer to owner timeline
+   * widget object, which is the owner of the timeline body.
+   */
   lumiera::gui::widgets::TimelineWidget *get_timeline_widget() const;
   
+  /**
+   * Helper function which retrieves the rectangle of the timeline
+   * body.
+   */
   Gdk::Rectangle get_body_rectangle() const;
 
 protected:

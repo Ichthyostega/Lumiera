@@ -35,16 +35,29 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
+/**
+ * A helper class to implement the timeline i-beam tool
+ */
 class IBeamTool : public Tool
 {
 public:
+  /**
+   * Constructor
+   * @param timeline_body The owner timeline body object
+   */
   IBeamTool(TimelineBody *timeline_body);
   
   ~IBeamTool();
 
+  /**
+   * Gets the type of tool represented by this class
+   */
   ToolType get_type() const;
   
 protected:
+  /**
+   * Gets the cursor to display for this tool at this moment.
+   */
   Gdk::Cursor get_cursor() const;
   
 protected:
@@ -53,21 +66,42 @@ protected:
   void on_motion_notify_event(GdkEventMotion *event);
   
 private:
+  /* ===== Internal Event Handlers ===== */
+
+  /**
+   * An internal event handler, which is called when the scroll slide
+   * timer calls it.
+   */
   bool on_scroll_slide_timer();
   
 private:
+  /* ===== Internal Methods ===== */
+
+  /**
+   * As the user drags, this function is called to update the position
+   * of the moving end of the selection.
+   */
   void set_leading_x(const int x);
   
+  /**
+   * Begins, or continues a scroll slide at a given rate
+   * @param scroll_slide_rate The distance to slide every timer event
+   * in units of 1/256th of the view width.
+   */
   void begin_scroll_slide(int scroll_slide_rate);
+  
+  /**
+   * Ends a scroll slide, and disconnects the slide timer
+   */
   void end_scroll_slide();
   
 private:
-  // ==== Internals ===== //
+  /* ==== Internals ===== */
   gavl_time_t dragStartTime;
   sigc::connection scrollSlideEvent;
   int scrollSlideRate;
   
-  // ===== Constants ===== //
+  /* ===== Constants ===== */
   static const int ScrollSlideRateDivisor;
   static const int ScrollSlideEventInterval;
 };
