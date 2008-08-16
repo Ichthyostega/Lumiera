@@ -33,10 +33,12 @@
 #include "common/p.hpp"
 #include "common/util.hpp"
 #include "common/lumitime.hpp"
-#include "common/error.hpp"   ///< pulls in NoBug via nobugcfg.hpp
+#include "common/error.hpp"   //< pulls in NoBug via nobugcfg.hpp
 #include "lib/appconfig.hpp"
 
-
+/**
+ * The namespace of all lumiera classes.
+ */
 namespace lumiera
   {
     /* additional global configuration goes here... */

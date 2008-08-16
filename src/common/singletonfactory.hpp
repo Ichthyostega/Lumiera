@@ -35,7 +35,7 @@ This code is heavily inspired by
 #define LUMIERA_SINGLETONFACTORY_H
 
 
-#include "common/singletonpolicies.hpp"  ///< several Policies usable together with SingletonFactory
+#include "common/singletonpolicies.hpp"  //< several Policies usable together with SingletonFactory
 
 #include "common/util.hpp"
 #include "proc/nobugcfg.hpp"
