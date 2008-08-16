@@ -53,7 +53,8 @@ public:
    *
    * @param[in] timeline_widget A pointer to the owner timeline widget
    */
-  HeaderContainer(lumiera::gui::widgets::TimelineWidget *timeline_widget);
+  HeaderContainer(lumiera::gui::widgets::TimelineWidget* 
+    timeline_widget);
   
   /**
    * Attaches the header all the header widgets of root
@@ -67,17 +68,41 @@ public:
 
   /* ===== Overrides ===== */
 private:
+  /**
+   * And event handler for the window realized signal.
+   */
   void on_realize();
+  
+  /**
+   * And event handler for the window unrealized signal.
+   */
   void on_unrealize();
 
+  /**
+   * An event handler that is called to notify this widget to allocate
+   * a given area for itself.
+   * @param allocation The area to allocate for this widget.
+   */
   void on_size_allocate (Gtk::Allocation& allocation);
+  
+  /**
+   * An event handler that is called to offer an allocation to this
+   * widget.
+   * @param requisition The area offered for this widget.
+   */
   void on_size_request (Gtk::Requisition* requisition);
-      
+  
+  /**
+   * Applies a given function to all the widgets in the container.
+   **/
   void forall_vfunc(gboolean include_internals, GtkCallback callback,
                     gpointer callback_data);
   
   /* ===== Events ===== */      
-private:         
+private:
+  /**
+   * This event is called when the scroll bar moves.
+   */  
   void on_scroll();
     
   /* ===== Internals ===== */

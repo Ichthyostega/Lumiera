@@ -49,6 +49,9 @@ enum ToolType
   IBeam
 };
 
+/**
+ * The base class of all timeline tools.
+ */
 class Tool
 {
 protected:

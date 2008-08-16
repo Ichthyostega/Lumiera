@@ -34,6 +34,9 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
+/**
+ * A helper class to implement the timeline i-beam tool
+ */
 class ArrowTool : public Tool
 {
 public:
