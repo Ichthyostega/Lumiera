@@ -1,11 +1,5 @@
 TESTING "test configuration system" ./test-config
 
-TEST "initializing config system" init <<END
-out: initialized
-out: destroyed
-END
-
-
 PLANNED "loading configfile, simple"  <<END
 END
 
@@ -133,10 +127,4 @@ END
 
 
 PLANNED "bool set"  <<END
-END
-
-TEST "create configitem with empty line" configitem_simple_ctor_dtor '' <<END
-END
-
-TEST "create configitem with blank line" configitem_simple_ctor_dtor $' \t \t' <<END
 END

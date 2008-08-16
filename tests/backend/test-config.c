@@ -37,6 +37,52 @@ TEST ("init")
 }
 
 
+TEST ("configitem_simple")
+{
+  REQUIRE (argv[2]);
+  lumiera_config_init ("./");
+
+  LumieraConfigitem item;
+
+  item = lumiera_configitem_new (argv[2]);
+  ENSURE (item);
+
+  printf ("line = '%s'\n", item->line);
+  if (item->key)
+    printf ("key = '%.*s'\n", (int)item->key_size, item->key);
+  if (item->delim)
+    {
+      printf ("delim = '%c'\n", *item->delim);
+      printf ("value = '%s'\n", item->delim+1);
+    }
+
+  lumiera_configitem_delete (item);
+
+  lumiera_config_destroy ();
+}
+
+
+TEST ("lookup")
+{
+  lumiera_config_init ("./");
+
+  lumiera_config_lookup lookup;
+  lumiera_config_lookup_init (&lookup);
+
+  LumieraConfigitem item = lumiera_configitem_new ("foo.bar = test");
+  lumiera_config_lookup_insert (&lookup, item);
+
+  //  LumieraConfigitem found = lumiera_config_lookup_item_find (&lookup, "foo.bar");
+  // ENSURE (found == item);
+
+  //lumiera_config_lookup_remove (&lookup, found);
+  //ENSURE (found == NULL);
+
+  lumiera_config_lookup_destroy (&lookup);
+  lumiera_config_destroy ();
+}
+
+
 TEST ("number_get")
 {
   REQUIRE (argv[2]);
@@ -126,20 +172,5 @@ TEST ("word_get")
 
   lumiera_config_destroy ();
 }
-
-TEST ("configitem_simple_ctor_dtor")
-{
-  REQUIRE (argv[2]);
-  lumiera_config_init ("./");
-
-  LumieraConfigitem item;
-
-  item = lumiera_configitem_new (argv[2]);
-
-  lumiera_configitem_delete (item);
-
-  lumiera_config_destroy ();
-}
-
 
 TESTS_END
