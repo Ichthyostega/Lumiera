@@ -132,6 +132,10 @@ public:
    * Sets the type of the tool currently active.
    */
   void set_tool(timeline::ToolType tool_type);
+  
+public:
+  /* ===== Signals ===== */
+  sigc::signal<void, gavl_time_t> mouse_hover_signal() const;
     
   /* ===== Events ===== */
 protected:
@@ -179,6 +183,8 @@ protected:
   Gtk::Adjustment horizontalAdjustment, verticalAdjustment;
   Gtk::HScrollbar horizontalScroll;
   Gtk::VScrollbar verticalScroll;
+  
+  sigc::signal<void, gavl_time_t> mouseHoverSignal;
    
   /* ===== Constants ===== */
 public:

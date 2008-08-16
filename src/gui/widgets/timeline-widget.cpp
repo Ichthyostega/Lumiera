@@ -215,6 +215,12 @@ TimelineWidget::set_tool(ToolType tool_type)
   body->set_tool(tool_type);
 }
 
+sigc::signal<void, gavl_time_t>
+TimelineWidget::mouse_hover_signal() const
+{
+  return mouseHoverSignal;
+}
+
 void
 TimelineWidget::on_scroll()
 {
@@ -309,6 +315,7 @@ TimelineWidget::on_motion_in_body_notify_event(GdkEventMotion *event)
 {
   REQUIRE(event != NULL);
   ruler->set_mouse_chevron_offset(event->x);
+  mouseHoverSignal.emit(x_to_time(event->x));
   return true;
 }
 

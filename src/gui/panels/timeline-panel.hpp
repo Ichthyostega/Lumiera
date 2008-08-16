@@ -55,6 +55,10 @@ private:
   void on_zoom_in();
   void on_zoom_out();
   
+  void on_time_pressed();
+  
+  void on_mouse_hover(gavl_time_t time);
+  
 private:
   void update_tool_buttons();
   void update_zoom_buttons();
@@ -65,6 +69,7 @@ private:
 
   // Widgets
   Gtk::Toolbar toolbar;
+  Gtk::HBox toolStrip;
   TimelineWidget timelineWidget;
   
   // Toolbar Widgets
@@ -75,6 +80,11 @@ private:
   
   Gtk::ToolButton zoomIn;
   Gtk::ToolButton zoomOut;
+  
+  Gtk::SeparatorToolItem seperator2;
+  
+  Gtk::Label timeIndicator;
+  Gtk::ToolButton timeIndicatorButton;
   
   // Internals
   bool updatingToolbar;

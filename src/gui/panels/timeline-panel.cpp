@@ -23,6 +23,10 @@
 #include "../gtk-lumiera.hpp"
 #include "timeline-panel.hpp"
 
+extern "C" {
+#include "../../lib/time.h"
+}
+
 using namespace Gtk;
 using namespace sigc;
 using namespace lumiera::gui::widgets;
@@ -39,8 +43,13 @@ TimelinePanel::TimelinePanel() :
   iBeamTool(Gtk::StockID("tool_i_beam")),
   zoomIn(Stock::ZOOM_IN),
   zoomOut(Stock::ZOOM_OUT),
+  timeIndicator(),
   updatingToolbar(false)
 {
+  // Setup the widget
+  timelineWidget.mouse_hover_signal().connect(
+    mem_fun(this, &TimelinePanel::on_mouse_hover));
+  
   // Setup the toolbar
   toolbar.append(arrowTool, mem_fun(this,
     &TimelinePanel::on_arrow_tool));
@@ -49,6 +58,12 @@ TimelinePanel::TimelinePanel() :
   toolbar.append(seperator1);
   toolbar.append(zoomIn, mem_fun(this, &TimelinePanel::on_zoom_in));
   toolbar.append(zoomOut, mem_fun(this, &TimelinePanel::on_zoom_out));
+  
+  seperator2.set_expand(true);
+  toolbar.append(seperator2);
+
+  timeIndicatorButton.set_label_widget(timeIndicator);
+  toolbar.append(timeIndicatorButton);
   
   toolbar.set_icon_size(IconSize(ICON_SIZE_LARGE_TOOLBAR));
   toolbar.set_toolbar_style(TOOLBAR_ICONS);
@@ -90,6 +105,12 @@ TimelinePanel::on_zoom_out()
 {
   timelineWidget.zoom_view(-ZoomToolSteps);
   update_zoom_buttons();
+}
+
+void
+TimelinePanel::on_mouse_hover(gavl_time_t time)
+{
+  timeIndicator.set_text(lumiera_tmpbuf_print_time(time));
 }
 
 void
