@@ -23,6 +23,8 @@
 #include "timeline-ibeam-tool.hpp"
 #include "../timeline-widget.hpp"
 
+using namespace lumiera::gui::widgets;
+
 namespace lumiera {
 namespace gui {
 namespace widgets {
@@ -30,13 +32,15 @@ namespace timeline {
 
 // ===== Constants ===== //
 
+const int IBeamTool::DragZoneWidth = 5;
 const int IBeamTool::ScrollSlideRateDivisor = 16;
 const int IBeamTool::ScrollSlideEventInterval = 40;
 
 // ===== Implementation ===== //
 
 IBeamTool::IBeamTool(TimelineBody *timeline_body) :
-  dragStartTime(0),
+  dragType(None),
+  pinnedDragTime(0),
   scrollSlideRate(0),
   Tool(timeline_body)
 {
@@ -57,6 +61,26 @@ IBeamTool::get_type() const
 Gdk::Cursor
 IBeamTool::get_cursor() const
 {
+  // Are we dragging?
+  // Make the cursor indicate that type of drag
+  switch(dragType)
+    {
+    case Selection:
+      return Gdk::Cursor(Gdk::XTERM);
+    case GrabStart:
+      return Gdk::Cursor(Gdk::LEFT_SIDE);
+    case GrabEnd:
+      return Gdk::Cursor(Gdk::RIGHT_SIDE);
+    }
+  
+  // Are we hovering over the ends of the selection?
+  // Make the cursor indicate that the user can resize the selection.
+  if(is_mouse_in_start_drag_zone())
+    return Gdk::Cursor(Gdk::LEFT_SIDE);
+  if(is_mouse_in_end_drag_zone())
+    return Gdk::Cursor(Gdk::RIGHT_SIDE);
+  
+  // By default return an I-beam cursor
   return Gdk::Cursor(Gdk::XTERM);
 }
 
@@ -65,29 +89,66 @@ IBeamTool::on_button_press_event(GdkEventButton* event)
 {
   Tool::on_button_press_event(event);
   
-  lumiera::gui::widgets::TimelineWidget *timeline_widget =
-    get_timeline_widget();
+  TimelineWidget *timeline_widget = get_timeline_widget();
   
   if(event->button == 1)
     {
-      dragStartTime = timeline_widget->x_to_time(event->x);
-      timeline_widget->set_selection(dragStartTime, dragStartTime);
+      const gavl_time_t time = timeline_widget->x_to_time(event->x);
+      
+      if(is_mouse_in_start_drag_zone())
+        {
+          // User began to drag the start of the selection
+          dragType = GrabStart;
+          pinnedDragTime = timeline_widget->get_selection_end();
+        }
+      else if(is_mouse_in_end_drag_zone())
+        {
+          // User began to drag the end of the selection
+          dragType = GrabEnd;
+          pinnedDragTime = timeline_widget->get_selection_start();
+        }
+      else
+        {
+          // User began the drag in clear space, begin a Select drag
+          dragType = Selection;
+          pinnedDragTime = time;
+          timeline_widget->set_selection(time, time);
+        }
     }
 }
 
 void
 IBeamTool::on_button_release_event(GdkEventButton* event)
-{
-  Tool::on_button_release_event(event);
+{ 
+  // Ensure that we can't get a mixed up state
+  ENSURE(isDragging == (dragType != None));
+  ENSURE(isDragging == (event->button == 1));
     
   if(event->button == 1)
-    set_leading_x(event->x);
+    {
+      set_leading_x(event->x);
+      
+      // Terminate the drag now the button is released
+      dragType = None;
+      
+      // If there was a scroll slide, terminate it
+      end_scroll_slide();
+      
+      // Apply the cursor - there are some corner cases where it can
+      // change by the end of the drag
+      apply_cursor();
+    }
+    
+  Tool::on_button_release_event(event);
 }
 
 void
 IBeamTool::on_motion_notify_event(GdkEventMotion *event)
 {
   Tool::on_motion_notify_event(event);
+  
+  // Ensure that we can't get a mixed up state
+  ENSURE(isDragging == (dragType != None));
     
   if(isDragging)
     {
@@ -103,15 +164,14 @@ IBeamTool::on_motion_notify_event(GdkEventMotion *event)
           (event->x - body_rect.get_width()) / ScrollSlideRateDivisor);
       else end_scroll_slide();
     }
+    
+  apply_cursor();
 }
 
 bool
 IBeamTool::on_scroll_slide_timer()
-{ 
-  lumiera::gui::widgets::TimelineWidget *timeline_widget =
-    get_timeline_widget();
-    
-  timeline_widget->shift_view(scrollSlideRate);
+{     
+  get_timeline_widget()->shift_view(scrollSlideRate);
     
   // Return true to keep the timer going
   return true;
@@ -120,16 +180,13 @@ IBeamTool::on_scroll_slide_timer()
 void
 IBeamTool::set_leading_x(const int x)
 {
-  REQUIRE(timelineBody != NULL);
-  lumiera::gui::widgets::TimelineWidget *timeline_widget =
-    timelineBody->timelineWidget;
-  REQUIRE(timeline_widget != NULL); 
-  
+  TimelineWidget *timeline_widget = get_timeline_widget();
+
   const gavl_time_t time = timeline_widget->x_to_time(x);
-  if(time > dragStartTime)
-    timeline_widget->set_selection(dragStartTime, time);
+  if(time > pinnedDragTime)
+    timeline_widget->set_selection(pinnedDragTime, time);
   else
-    timeline_widget->set_selection(time, dragStartTime);
+    timeline_widget->set_selection(time, pinnedDragTime);
 }
 
 void
@@ -148,6 +205,30 @@ IBeamTool::end_scroll_slide()
   scrollSlideRate = 0;
   if(scrollSlideEvent.connected())
     scrollSlideEvent.disconnect();
+}
+
+bool
+IBeamTool::is_mouse_in_start_drag_zone() const
+{   
+  TimelineWidget *timeline_widget = get_timeline_widget();
+  
+  const int start_x = timeline_widget->time_to_x(
+    timeline_widget->get_selection_start());
+    
+  return (mousePoint.get_x() <= start_x &&
+    mousePoint.get_x() > start_x - DragZoneWidth);
+}
+  
+bool
+IBeamTool::is_mouse_in_end_drag_zone() const
+{
+  TimelineWidget *timeline_widget = get_timeline_widget();
+      
+  const int end_x = timeline_widget->time_to_x(
+    timeline_widget->get_selection_end());
+    
+  return (mousePoint.get_x() >= end_x &&
+    mousePoint.get_x() < end_x + DragZoneWidth);
 }
 
 }   // namespace timeline

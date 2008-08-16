@@ -98,14 +98,29 @@ public:
    **/
   void shift_view(int shift_size);
   
+  /**
+   * Gets the time at which the selection begins.
+   */
   gavl_time_t get_selection_start() const;
   
+  /**
+   * Gets the time at which the selection begins.
+   */
   gavl_time_t get_selection_end() const;
   
+  /**
+   * Sets the period of the selection.
+   */
   void set_selection(gavl_time_t start, gavl_time_t end);
   
+  /**
+   * Gets the type of the tool currently active.
+   */
   timeline::ToolType get_tool() const;
   
+  /**
+   * Sets the type of the tool currently active.
+   */
   void set_tool(timeline::ToolType tool_type);
     
   /* ===== Events ===== */

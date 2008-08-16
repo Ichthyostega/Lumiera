@@ -59,6 +59,11 @@ protected:
   Tool(TimelineBody *timeline_body);
   
 public:
+  /**
+   * Destructor to be overriden by derived classes.
+   * @remarks If this were not present, derrived class destructors
+   * would not be called.
+   */
   virtual ~Tool() {};
 
   /**
@@ -74,9 +79,29 @@ public:
   
 public:
   /* ===== Event Handlers ===== */
+  /**
+   * The event handler for button press events.
+   * @remarks This can be overriden by the derrived classes, but
+   * Tool::on_button_press_event must be called <b>at the start</b>
+   * of the derrived class's override.
+   */
   virtual void on_button_press_event(GdkEventButton* event);
+  
+  /**
+   * The event handler for button release events.
+   * @remarks This can be overriden by the derrived classes, but
+   * Tool::on_button_release_event must be called <b>at the end</b> of
+   * the derrived class's override.
+   */
   virtual void on_button_release_event(GdkEventButton* event);
-  virtual void on_motion_notify_event(GdkEventMotion *event) {}
+  
+  /**
+   * The event handler for mouse move events.
+   * @remarks This can be overriden by the derrived classes, but
+   * Tool::on_motion_notify_event must be called <b>at the start</b> of
+   * the derrived class's override.
+   */
+  virtual void on_motion_notify_event(GdkEventMotion *event);
   
 protected:
   /* ===== Internal Overrides ===== */
@@ -103,10 +128,10 @@ protected:
 
 protected:
   bool isDragging;
+  Gdk::Point mousePoint;
 
   TimelineBody *timelineBody;
 };
-
 
 }   // namespace timeline
 }   // namespace widgets
