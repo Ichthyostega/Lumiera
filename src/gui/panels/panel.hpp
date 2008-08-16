@@ -35,7 +35,7 @@ namespace gui {
 namespace panels {
 
 /** 
-* The main lumiera workspace window
+* The main lumiera panel window
 */
 class Panel : public Gtk::VBox
 {

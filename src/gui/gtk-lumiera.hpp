@@ -51,7 +51,13 @@ NOBUG_DECLARE_FLAG(gui);
 #endif
 
 namespace lumiera {
+
+/**
+ * The namespace of all GUI code.
+ */
 namespace gui {
+  
+/* ===== Global Constants ===== */
 
 /**
  *  The name of the application 
@@ -81,6 +87,8 @@ static const gchar* AppAuthors[] = {
   "Christian Thaeter",
   "Hermann Vosseler",
   "<Other Authors Here>"};
+  
+/* ===== The Application Class ===== */
 
 /**
  *  The main application class.
@@ -98,6 +106,33 @@ public:
  *  Returns a reference to the global application object
  */
 GtkLumiera& application();
+
+/* ===== Namespace Definitions ===== */
+
+/**
+ * The namespace of all dialog box classes.
+ */
+namespace dialogs {}
+
+/**
+ * The namespace of all video output implementations.
+ */
+namespace output {}
+
+/**
+ * The namespace of all docking panel classes.
+ */
+namespace panels {}
+
+/**
+ * The namespace of all Lumiera custom widgets.
+ */
+namespace widgets {}
+
+/**
+ * The namespace of the workspace window, and it's helper classes.
+ */
+namespace workspace {}
 
 }   // namespace gui
 }   // namespace lumiera

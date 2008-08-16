@@ -35,9 +35,16 @@ namespace lumiera {
 namespace gui {
 namespace panels {
 
+/**
+ * The definition of the timeline panel class, which holds timeline
+ * widgets.
+ */
 class TimelinePanel : public Panel
 {
 public:
+  /**
+   * Constructor
+   */
   TimelinePanel();
 
 private:

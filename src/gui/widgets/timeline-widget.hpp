@@ -38,7 +38,17 @@
 namespace lumiera {
 namespace gui {
 namespace widgets {
+  
+/**
+ * The namespace of all timeline widget helper classes.
+ */
+namespace timeline {}
 
+/**
+ * The timeline widget class.
+ * @remarks This widget is a composite of several widgets contained
+ * within the timeline namespace.
+ */
 class TimelineWidget : public Gtk::Table
 {
 public:
