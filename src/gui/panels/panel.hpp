@@ -27,7 +27,7 @@
 #ifndef PANEL_HPP
 #define PANEL_HPP
 
-#include <gtkmm.h>
+#include "../gtk-lumiera.hpp"
 #include <libgdl-1.0/gdl/gdl-dock-item.h>
 
 namespace lumiera {
