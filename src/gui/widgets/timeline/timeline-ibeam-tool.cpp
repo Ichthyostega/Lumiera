@@ -27,8 +27,13 @@ namespace lumiera {
 namespace gui {
 namespace widgets {
 namespace timeline {
-  
+
+// ===== Constants ===== //
+
 const int IBeamTool::ScrollSlideRateDivisor = 16;
+const int IBeamTool::ScrollSlideEventInterval = 40;
+
+// ===== Implementation ===== //
 
 IBeamTool::IBeamTool(TimelineBody *timeline_body) :
   dragStartTime(0),
@@ -133,7 +138,8 @@ IBeamTool::begin_scroll_slide(int scroll_slide_rate)
   scrollSlideRate = scroll_slide_rate;
   if(!scrollSlideEvent.connected())
     scrollSlideEvent = Glib::signal_timeout().connect(
-      sigc::mem_fun(this, &IBeamTool::on_scroll_slide_timer), 40);
+      sigc::mem_fun(this, &IBeamTool::on_scroll_slide_timer),
+      ScrollSlideEventInterval);
 }
 
 void

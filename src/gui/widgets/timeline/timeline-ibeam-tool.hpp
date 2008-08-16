@@ -62,13 +62,14 @@ private:
   void end_scroll_slide();
   
 private:
-  //----- Internals -----//
+  // ==== Internals ===== //
   gavl_time_t dragStartTime;
   sigc::connection scrollSlideEvent;
   int scrollSlideRate;
   
-  //----- Constants -----//
+  // ===== Constants ===== //
   static const int ScrollSlideRateDivisor;
+  static const int ScrollSlideEventInterval;
 };
 
 }   // namespace timeline
