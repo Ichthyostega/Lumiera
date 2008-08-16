@@ -26,7 +26,7 @@
 #ifndef TRACK_HPP
 #define TRACK_HPP
 
-#include <gtkmm.h>
+#include "../../gtk-lumiera.hpp"
 
 namespace lumiera {
 namespace gui {

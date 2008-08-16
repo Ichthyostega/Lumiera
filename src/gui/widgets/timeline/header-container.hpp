@@ -27,7 +27,7 @@
 #ifndef HEADER_CONTAINER_HPP
 #define HEADER_CONTAINER_HPP
 
-#include <gtkmm.h>
+#include "../../gtk-lumiera.hpp"
 #include <vector>
 
 namespace lumiera {
