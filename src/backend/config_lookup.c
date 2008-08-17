@@ -23,6 +23,9 @@
 #include "backend/config_lookup.h"
 #include "backend/config.h"
 
+/* we only use one fatal error for now, when allocation in the config system fail, something else is pretty wrong */
+LUMIERA_ERROR_DEFINE (CONFIG_LOOKUP, "config lookup failure");
+
 
 static size_t
 h1 (const void* item, const uint32_t r);
@@ -46,7 +49,7 @@ mov (void* dest, void* src, size_t size);
 
 /**
  * @file
- *
+ * Implementation of the lookup of configuration keys using a cuckoo hash.
  */
 
 LumieraConfigLookup
@@ -54,6 +57,10 @@ lumiera_config_lookup_init (LumieraConfigLookup self)
 {
   TRACE (config_lookup);
   self->hash = cuckoo_new (sizeof (lumiera_config_lookupentry), &(struct cuckoo_vtable){h1, h2, h3, cmp, dtor, mov});
+
+  if (!self->hash)
+    LUMIERA_DIE (CONFIG_LOOKUP);
+
   return self;
 }
 
@@ -62,10 +69,10 @@ LumieraConfigLookup
 lumiera_config_lookup_destroy (LumieraConfigLookup self)
 {
   TRACE (config_lookup);
-  cuckoo_delete (self->hash);
+  if (self)
+    cuckoo_delete (self->hash);
   return self;
 }
-
 
 
 LumieraConfigLookupentry
@@ -88,6 +95,8 @@ lumiera_config_lookup_insert (LumieraConfigLookup self, LumieraConfigitem item)
 
   if (entry)
     llist_insert_head (&entry->configitems, &item->lookup);
+  else
+    LUMIERA_DIE (CONFIG_LOOKUP);
 
   return entry;
 }
@@ -144,9 +153,9 @@ lumiera_config_lookup_item_find (LumieraConfigLookup self, const char* key)
 
 
 
-
-
-
+/*
+  Hash table entries
+*/
 
 LumieraConfigLookupentry
 lumiera_config_lookupentry_init (LumieraConfigLookupentry self, const char* key)
