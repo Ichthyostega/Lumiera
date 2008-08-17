@@ -1889,18 +1889,18 @@ So, when creating a clip out of such a compound media asset, the clip has to be 
 <div title="NodeCreaterTool" modifier="Ichthyostega" created="200712100626" tags="def" changecount="1">
 <pre>NodeCreaterTool is a [[visiting tool|VisitorUse]] used as second step in the [[Builder]]. Starting out from a [[Fixture]], the builder first [[divides the Timeline into segments|SegmentationTool]] and then processes each segment with the NodeCreaterTool to build a render nodes network (Render Engine) for this part of the timeline. While visiting individual Objects and Placements, the NodeCreaterTool creates and wires the necessary [[nodes|ProcNode]]</pre>
 </div>
-<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200806220134" created="200806010251" tags="Rendering dynamic" changecount="11">
+<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200807072147" created="200806010251" tags="Rendering dynamic" changecount="15">
 <pre>The [[nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot;; each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle'', thus we find an operation {{{pull()}}} at the core of this process. There is no such thing as an &quot;engine object&quot; calling nodes iteratively or table driven, rather, the nodes themselves issue recursive calls to their predecessor(s). For this to work, we need the nodes to adhere to a specific protocol:
 # Node is pulled, with a StateProxy object as parameter (encapsulating the access to the frames or buffers)
 # Node may now access current parameter values, using the state accessible via the StateProxy
-# using it's //input-output descriptor,// the Node creates a StateAdapter wrapping the StateProxy for accessing the output to pull and probably the input needed to calculate this output
+# using it's //input-output and wiring descriptor,// the Node creates a StateAdapter wrapping the StateProxy for allocating buffers and accessing the required input
 # StateAdapter first tries to get the output frames from the Cache in the Backend. In case of failure, a {{{process()}}} call is prepared by generating {{{pull()}}} call(s) for the input
 # as late as possible, typically on return, these recursive pull-calls have allocated a buffer containing the input data.
-# after all input is ready and prior to the {{{process()}}} call, the output buffers will be allocated, either from the cache, or alternatively (if not caching) from the &quot;parent&quot; StateAdapter up the callstack.
+# when input is ready prior to the {{{process()}}} call, output buffers will be allocated, either from the cache, or (if not caching) from the &quot;parent&quot; StateAdapter up the callstack.
 # after all buffers are available, the StateAdapter issues the {{{process()}}} call back to the originating node, which now may dereference the frame pointers and do its calculations
 # finally, when the {{{pull()}}} call returns, &quot;parent&quot; state originating the pull holds onto the buffers containing the calculated output result.
 some points to note:
-* the input descriptor is {{{const}}} and precalculated while building (remember another thread may call in parallel)
+* the WiringDescriptor is {{{const}}} and precalculated while building (remember another thread may call in parallel)
 * when a node is &quot;inplace-capable&quot;, input and output buffer may actually point to the same location
 * but there is no guarantee for this to happen, because the cache may be involved (and we can't overwrite the contents of a cache frame)
 * generally, a node may have N inputs and M output frames, which are expected to be processed in a single call
@@ -2757,12 +2757,13 @@ Besides, they provide an important __inward interface__ for the [[ProcNode]]s, w
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200805250304" created="200706190056" tags="overview" changecount="10">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200807072140" created="200706190056" tags="overview" changecount="11">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
 &lt;&lt;&lt;
 ''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the foundations and main structures in C++
-* basic AssetManager working
-* currently impmenenting the Builder (&amp;rarr;[[more|PlanningNodeCreatorTool]])
+* basic [[AssetManager]] working
+* [[Builder]] implementation is on the way (&amp;rarr;[[more|BuilderPrimitives]])
+* made a first draft of how to wire and operate procesing nodes (&amp;rarr;[[more|RenderMechanics]])
 &lt;&lt;&lt;
 
 !Summary
@@ -4660,7 +4661,7 @@ Because of this experience, ichthyo wants to support a more general case of tran
 </div>
 <div title="VirtualClip" modifier="Ichthyostega" modified="200808160257" created="200804110321" tags="def" changecount="13">
 <pre>A ''~Meta-Clip'' or ''Virtual Clip'' (both are synonymous) denotes a clip which doesn't just pull media streams out of a source media asset, but rather provides the results of rendering a complete sub-network. In all other respects it behaves exactly like a &quot;real&quot; clip, i.e. it has [[source ports|ClipSourcePort]], can have attached effects (thus forming a local render pipe) and can be placed and combined with other clips. Depending on what is wired to the source ports, we get two flavours:
-* a __placeholder clip__; has no &quot;embedded&quot; content. Rather, by virtue of placements and wiring requests, the output of some other pipe somewhere in the session will be wired to the clip's source ports. Thus, pulling data from this clip will effectively pull from these source pipes wired to it.
+* a __placeholder clip__ has no &quot;embedded&quot; content. Rather, by virtue of placements and wiring requests, the output of some other pipe somewhere in the session will be wired to the clip's source ports. Thus, pulling data from this clip will effectively pull from these source pipes wired to it.
 * a __nested EDL __ is like the other ~EDLs in the Session, just that any missing placement properties will be derived from the Virtual Clip, which is thought as to &quot;contain&quot; the objects of the nested EDL. Typically, this also [[configures the tracks|TrackHandling]] of the &quot;inner&quot; EDL such as to connect any output to the source ports of the Virtual Clip.
 
 Like any &quot;real&quot; clip, Virtual Clips have a start offset and a length, which will simply translate into an offset of the frame number pulled from the Virtual Clip's source connection or embedded EDL, making it possible to cut, splice, trim and roll them as usual. This of course implies we can have several instances of the same virtual clip with different start offset and length placed differently. The only limitation is that we can't handle cyclic dependencies for pulling data (which has to be detected and flagged as an error by the builder)

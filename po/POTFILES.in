@@ -1,0 +1,12 @@
+# List of source files containing translatable strings.
+
+src/gtk-lumiera.cpp
+
+src/workspace/actions.cpp
+
+src/dialogs/preferences-dialog.cpp
+src/dialogs/render.cpp
+
+src/panels/assets-panel.cpp
+src/panels/timeline-panel.cpp
+src/panels/viewer-panel.cpp

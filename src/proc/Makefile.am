@@ -25,9 +25,8 @@ liblumiproc_a_CXXFLAGS = $(CXXFLAGS) -Wall
 liblumiproc_a_CPPFLAGS = -I$(top_srcdir)/src/
 
 liblumiproc_a_SOURCES =							\
-	$(liblumiproc_a_srcdir)/controllerfacade.cpp			\
-	$(liblumiproc_a_srcdir)/frame.cpp				\
-	$(liblumiproc_a_srcdir)/stateproxy.cpp				\
+	$(liblumiproc_a_srcdir)/controllerfacade.cpp		\
+	$(liblumiproc_a_srcdir)/state.cpp				\
 	$(liblumiproc_a_srcdir)/asset.cpp				\
 	$(liblumiproc_a_srcdir)/assetmanager.cpp			\
 	$(liblumiproc_a_srcdir)/nobugcfg.cpp
@@ -66,25 +65,19 @@ liblumiprocengine_a_CXXFLAGS = $(CXXFLAGS) -Wall
 liblumiprocengine_a_CPPFLAGS = -I$(top_srcdir)/src/
 
 liblumiprocengine_a_SOURCES =				\
-	$(liblumiprocengine_a_srcdir)/aframe.cpp	\
-	$(liblumiprocengine_a_srcdir)/arender.cpp	\
-	$(liblumiprocengine_a_srcdir)/codecadapter.cpp	\
-	$(liblumiprocengine_a_srcdir)/exitnode.cpp	\
-	$(liblumiprocengine_a_srcdir)/glbuf.cpp		\
-	$(liblumiprocengine_a_srcdir)/glpipe.cpp	\
-	$(liblumiprocengine_a_srcdir)/glrender.cpp	\
-	$(liblumiprocengine_a_srcdir)/hub.cpp		\
+	$(liblumiprocengine_a_srcdir)/buffhandle.cpp	\
 	$(liblumiprocengine_a_srcdir)/link.cpp		\
 	$(liblumiprocengine_a_srcdir)/mask.cpp		\
+	$(liblumiprocengine_a_srcdir)/nodefactory.cpp	\
+	$(liblumiprocengine_a_srcdir)/nodewiring.cpp	\
 	$(liblumiprocengine_a_srcdir)/pluginadapter.cpp	\
 	$(liblumiprocengine_a_srcdir)/processor.cpp	\
 	$(liblumiprocengine_a_srcdir)/procnode.cpp	\
 	$(liblumiprocengine_a_srcdir)/projector.cpp	\
 	$(liblumiprocengine_a_srcdir)/renderengine.cpp	\
-	$(liblumiprocengine_a_srcdir)/source.cpp	\
-	$(liblumiprocengine_a_srcdir)/trafo.cpp		\
-	$(liblumiprocengine_a_srcdir)/vframe.cpp	\
-	$(liblumiprocengine_a_srcdir)/vrender.cpp
+	$(liblumiprocengine_a_srcdir)/source.cpp		\
+	$(liblumiprocengine_a_srcdir)/stateproxy.cpp	\
+	$(liblumiprocengine_a_srcdir)/trafo.cpp		
 
 
 
@@ -113,7 +106,7 @@ liblumiprocmobjectbuilder_a_CPPFLAGS = -I$(top_srcdir)/src/
 liblumiprocmobjectbuilder_a_SOURCES =					\
 	$(liblumiprocmobjectbuilder_a_srcdir)/assembler.cpp		\
 	$(liblumiprocmobjectbuilder_a_srcdir)/conmanager.cpp		\
-	$(liblumiprocmobjectbuilder_a_srcdir)/nodecreatertool.cpp	\
+	$(liblumiprocmobjectbuilder_a_srcdir)/nodecreatortool.cpp	\
 	$(liblumiprocmobjectbuilder_a_srcdir)/segmentationtool.cpp	\
 	$(liblumiprocmobjectbuilder_a_srcdir)/toolfactory.cpp
 
@@ -125,8 +118,7 @@ liblumiprocmobjectcontroller_a_CXXFLAGS = $(CXXFLAGS) -Wall
 liblumiprocmobjectcontroller_a_CPPFLAGS = -I$(top_srcdir)/src/
 
 liblumiprocmobjectcontroller_a_SOURCES =				\
-	$(liblumiprocmobjectcontroller_a_srcdir)/pathmanager.cpp	\
-	$(liblumiprocmobjectcontroller_a_srcdir)/renderstate.cpp
+	$(liblumiprocmobjectcontroller_a_srcdir)/pathmanager.cpp	
 
 
 liblumiprocmobjectsession_a_srcdir = $(top_srcdir)/src/proc/mobject/session
@@ -139,9 +131,12 @@ liblumiprocmobjectsession_a_SOURCES =					\
 	$(liblumiprocmobjectsession_a_srcdir)/abstractmo.cpp		\
 	$(liblumiprocmobjectsession_a_srcdir)/allocation.cpp		\
 	$(liblumiprocmobjectsession_a_srcdir)/auto.cpp			\
-	$(liblumiprocmobjectsession_a_srcdir)/compoundclip.cpp		\
+	$(liblumiprocmobjectsession_a_srcdir)/clip.cpp			\
+	$(liblumiprocmobjectsession_a_srcdir)/compoundclip.cpp	\
+	$(liblumiprocmobjectsession_a_srcdir)/constraint.cpp		\
+	$(liblumiprocmobjectsession_a_srcdir)/defsmanager.cpp		\
 	$(liblumiprocmobjectsession_a_srcdir)/effect.cpp		\
-	$(liblumiprocmobjectsession_a_srcdir)/fixedlocation.cpp		\
+	$(liblumiprocmobjectsession_a_srcdir)/fixedlocation.cpp	\
 	$(liblumiprocmobjectsession_a_srcdir)/label.cpp			\
 	$(liblumiprocmobjectsession_a_srcdir)/meta.cpp			\
 	$(liblumiprocmobjectsession_a_srcdir)/relativelocation.cpp	\
@@ -153,9 +148,6 @@ liblumiprocmobjectsession_a_SOURCES =					\
 	$(liblumiprocmobjectsession_a_srcdir)/edl.cpp			\
 	$(liblumiprocmobjectsession_a_srcdir)/session.cpp		\
 	$(liblumiprocmobjectsession_a_srcdir)/track.cpp			\
-	$(liblumiprocmobjectsession_a_srcdir)/clip.cpp			\
-	$(liblumiprocmobjectsession_a_srcdir)/constraint.cpp		\
-	$(liblumiprocmobjectsession_a_srcdir)/defsmanager.cpp		\
 	$(liblumiprocmobjectsession_a_srcdir)/fixture.cpp		\
 	$(liblumiprocmobjectsession_a_srcdir)/locatingpin.cpp		\
 	$(liblumiprocmobjectsession_a_srcdir)/mobjectfactory.cpp	\
@@ -243,7 +235,6 @@ noinst_HEADERS +=							\
 	$(liblumiproc_a_srcdir)/mobject/mobject.hpp			\
 	$(liblumiproc_a_srcdir)/mobject/placement.hpp			\
 	$(liblumiproc_a_srcdir)/mobject/session.hpp			\
-	$(liblumiproc_a_srcdir)/stateproxy.hpp				\
 	$(liblumiproc_a_srcdir)/asset.hpp				\
 	$(liblumiproc_a_srcdir)/assetmanager.hpp			\
 	$(liblumiproc_a_srcdir)/lumiera.hpp				\

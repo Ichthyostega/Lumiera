@@ -291,6 +291,15 @@ def defineBuildTargets(env, artifacts):
     artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/main.cpp']+ core )
     artifacts['plugins'] = env.SharedLibrary('$BINDIR/lumiera-plugin', objplug)
     
+    # the Lumiera GTK GUI
+    envgtk  = env.Clone().mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','xv','xext','sm'])
+    objgui  = srcSubtree(envgtk,'$SRCDIR/gui')
+    
+    artifacts['lumigui'] = ( envgtk.Program('$BINDIR/lumigui', objgui + core)
+                           + env.Install('$BINDIR', env.Glob('$ICONDIR/*.png'))
+                           + env.Install('$BINDIR', env.Glob('$SRCDIR/gui/*.rc'))
+                           )
+    
     # call subdir SConscript(s) for independent components
     SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts core')
     SConscript(dirs=[TESTDIR], exports='env artifacts core')
@@ -305,7 +314,7 @@ def definePostBuildTargets(env, artifacts):
     il = env.Alias('install-lib', '$DESTDIR/lib')
     env.Alias('install', [ib, il])
     
-    build = env.Alias('build', artifacts['lumiera']+artifacts['plugins']+artifacts['tools'])
+    build = env.Alias('build', artifacts['lumiera']+artifacts['lumigui']+artifacts['plugins']+artifacts['tools'])
     allbu = env.Alias('allbuild', build+artifacts['testsuite'])
     env.Default('build')
     # additional files to be cleaned when cleaning 'build'

@@ -29,7 +29,7 @@
 #include "common/factory.hpp"
 //#include "common/util.hpp"
 
-#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/join.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>
 #include <iostream>

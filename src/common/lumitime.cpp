@@ -1,5 +1,5 @@
 /*
-  NodeCreaterTool  -  central Tool implementing the Renderengine building
+  Time  -  unified representation of a time point, including conversion functions
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,46 +21,17 @@
 * *****************************************************/
 
 
-#include "proc/mobject/builder/nodecreatertool.hpp"
-#include "proc/mobject/session/clip.hpp"
-#include "proc/mobject/session/effect.hpp"
-#include "proc/mobject/session/auto.hpp"
-
-using mobject::Buildable;
-using mobject::session::Clip;
-using mobject::session::Effect;
-using mobject::session::Auto;
-
-namespace mobject {
-  namespace builder {
+#include "common/lumitime.hpp"
+#include <limits>
 
 
+namespace lumiera
+  {
 
-    void
-    NodeCreatorTool::treat (Buildable& something)
-    {
-    }
-
-
-    void
-    NodeCreatorTool::treat (Clip& clip)
-    {
-    }
+   // TODO: dummy values; should be adjusted when switching to the real time implementation provided by the backend
+  
+   const Time Time::MAX = +std::numeric_limits<long>::max();
+   const Time Time::MIN = -std::numeric_limits<long>::max();
 
 
-    void
-    NodeCreatorTool::treat (Effect& effect)
-    {
-    }
-
-
-    void
-    NodeCreatorTool::treat (Auto<double>& automation)
-    {
-    }
-
-
-
-  } // namespace mobject::builder
-
-} // namespace mobject
+} // namespace lumiera

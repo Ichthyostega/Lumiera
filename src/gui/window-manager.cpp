@@ -1,0 +1,168 @@
+/*
+  window-manager.cpp  -  Defines the global UI Manager class
+ 
+  Copyright (C)         Lumiera.org
+    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
+ 
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of the
+  License, or (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ 
+* *****************************************************/
+
+#include "window-manager.hpp"
+
+using namespace Gtk;
+using namespace Glib;
+
+namespace lumiera {
+namespace gui {
+
+WindowManager::WindowManager()
+{
+  register_stock_items();
+}
+
+bool
+WindowManager::set_theme(Glib::ustring path)
+{
+  if(access(path.c_str(), R_OK))
+    {
+      ERROR(gui, "WindowManger: Unable to load rc file \"%s\"",
+        path.c_str());
+      return false;        
+    }
+  
+  gtk_rc_parse(path.c_str());
+  gtk_rc_reset_styles (gtk_settings_get_default());
+
+  return true;
+}
+    
+GdkColor
+WindowManager::read_style_colour_property(
+  Gtk::Widget &widget, const gchar *property_name,
+  guint16 red, guint16 green, guint16 blue)
+{
+  GdkColor *colour;
+
+  gtk_widget_style_get(widget.gobj(), property_name, &colour, NULL);
+
+  // Did the color load successfully?
+  if(colour != NULL)
+    return *colour;
+  else
+  {
+    WARN(gui, "%s style value failed to load", property_name);
+    
+    GdkColor default_colour;
+    default_colour.red = red;
+    default_colour.green = green;
+    default_colour.blue = blue;     
+    return default_colour;
+  }
+}
+
+void
+WindowManager::register_stock_items()
+{
+  RefPtr<IconFactory> factory = IconFactory::create();
+  
+  add_stock_item_set(factory, "panel-assets", "panel_assets", _("_Assets"));
+  add_stock_item_set(factory, "panel-timeline", "panel_timeline", _("_Timeline"));
+  add_stock_item_set(factory, "panel-viewer", "panel_viewer", _("_Viewer"));
+  
+  add_stock_item_set(factory, "tool-arrow", "tool_arrow", _("_Arrow"));
+  add_stock_item_set(factory, "tool-i-beam", "tool_i_beam", _("_I-Beam"));  
+
+  factory->add_default(); //Add factory to list of factories.
+}
+
+bool
+WindowManager::add_stock_item_set(
+  const Glib::RefPtr<IconFactory>& factory,
+  const Glib::ustring& icon_name,
+  const Glib::ustring& id,
+  const Glib::ustring& label)
+{
+  Gtk::IconSet icon_set;
+  
+  add_stock_icon(icon_set, icon_name, 16);
+  add_stock_icon(icon_set, icon_name, 22);
+  add_stock_icon(icon_set, icon_name, 24);
+  add_stock_icon(icon_set, icon_name, 32);
+  add_stock_icon(icon_set, icon_name, 48);
+
+  if(!icon_set.get_sizes().empty())
+    {
+      const Gtk::StockID stock_id(id);
+      factory->add(stock_id, icon_set);
+      Gtk::Stock::add(Gtk::StockItem(stock_id, label));
+      return true;
+    }
+    
+  ERROR(gui, "Unable to load icon \"%s\"", icon_name.c_str());
+    
+  return false;
+}
+
+bool
+WindowManager::add_stock_icon(Gtk::IconSet &icon_set,
+  const Glib::ustring& icon_name, int size)
+{
+  // Try the ~/.lumiera/icons folder
+  if(add_stock_icon_source(icon_set, ustring::compose("%1/%2",
+    GtkLumiera::get_home_data_path(), ustring("icons")),
+    icon_name, size))
+    return true;
+  
+  if(add_stock_icon_source(
+    icon_set, get_current_dir(), icon_name, size))
+    return true;
+    
+  return false;
+}
+
+bool
+WindowManager::add_stock_icon_source(Gtk::IconSet &icon_set,
+  const Glib::ustring& base_dir, const Glib::ustring& icon_name,
+  int size)
+{
+  Gtk::IconSource source;
+  
+  try
+    {  
+      ustring path = ustring::compose("%1/%2x%2/%3.png",
+        base_dir, size, icon_name);
+        
+      g_message("%s", path.c_str());
+      
+      // This throws an exception if the file is not found:
+      source.set_pixbuf(Gdk::Pixbuf::create_from_file(path));
+    }
+  catch(const Glib::Exception& ex)
+    {
+      g_message("Failed");
+      return false;
+    }
+
+  source.set_size(IconSize(size));
+  //source.set_size_wildcarded(); // Icon may be scaled.
+
+  icon_set.add_source(source);
+
+  return true;
+}
+
+}   // namespace gui
+}   // namespace lumiera

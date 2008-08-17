@@ -7,6 +7,7 @@ AC_PREREQ(2.59)
 AC_COPYRIGHT([
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
+                        Joel Holdsworth <joel@airwebreathe.org.uk>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -120,6 +121,52 @@ AC_CHECK_HEADER([boost/regex.hpp],
 
 AC_LANG_POP([C++])
 
+############## Internatinalization
+#GETTEXT_PACKAGE=gtk-lumiera
+#AC_SUBST(GETTEXT_PACKAGE)
+#AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE", [GETTEXT package name])
+#AM_GLIB_GNU_GETTEXT
+#IT_PROG_INTLTOOL([0.35.0])
+
+# END Internatinalization
+
+
+############## X11 Dependancies
+AC_PATH_X
+AC_PATH_XTRA
+# CFLAGS="$CFLAGS $X_CFLAGS"
+LIBS="$LIBS $X_PRE_LIBS $X_LIBS $X_EXTRA_LIBS"
+
+AC_CHECK_HEADERS([X11/Xlib.h X11/Xutil.h],[],
+	[AC_MSG_ERROR([Xlib.h or Xutil.h not found install xdevel])])
+
+AC_CHECK_HEADERS([sys/ipc.h sys/shm.h],,
+	[AC_MSG_ERROR([Required header not found. Please check that it is installed])]
+)
+AC_CHECK_HEADERS([X11/extensions/Xvlib.h X11/extensions/XShm.h],,
+	[AC_MSG_ERROR([Required xvideo (Xv) extension to X not found. Please check that it is installed.])],
+        [#include <X11/Xlib.h>]
+)
+
+AC_CHECK_LIB(Xext, XInitExtension, ,
+    [AC_MSG_ERROR([Could not link with libXext. Check that you have libXext installed])], -lX11
+)
+AC_CHECK_LIB(Xv, XvQueryAdaptors, ,
+    [AC_MSG_ERROR([Could not link with libXv. Check that you have libXv installed])]
+)
+
+# END X11 Dependancies
+
+
+############## Pkg Dependancies
+PKG_CHECK_MODULES(GTK_LUMIERA, [
+    gtkmm-2.4 >= 2.8 gdl-1.0 >= 0.6.1 cairomm-1.0 >= 0.6.0
+    gavl >= 0.2.5 librsvg-2.0 >= 2.18.1])
+
+AC_SUBST(GTK_LUMIERA_CFLAGS)
+AC_SUBST(GTK_LUMIERA_LIBS)
+
+# END Gtk Dependancies
 
 # Print a summary
 AC_MSG_RESULT([
