@@ -1,6 +1,6 @@
 format 40
 "ProcessingLayer" // ProcessingLayer
-  revision 14
+  revision 22
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -391,26 +391,6 @@ format 40
         end
     end
 
-    classinstance 131973 "vid1"
-      type class_ref 132997 // VRender
-      attributes
-        end
-      relations
-        relation_ref 134533 // <unidirectional association>
-          classinstance_ref 132229 // 
-        end
-    end
-
-    classinstance 132101 "au1"
-      type class_ref 132869 // ARender
-      attributes
-        end
-      relations
-        relation_ref 134533 // <unidirectional association>
-          classinstance_ref 132357 // 
-        end
-    end
-
     classinstance 132229 ""
       type class_ref 133509 // VFrame
       attributes
@@ -496,16 +476,6 @@ format 40
       relations
         relation_ref 135429 // <unidirectional association>
           classinstance_ref 132869 // input
-        end
-    end
-
-    classinstance 133381 "vid1"
-      type class_ref 132997 // VRender
-      attributes
-        end
-      relations
-        relation_ref 134533 // <unidirectional association>
-          classinstance_ref 133509 // 
         end
     end
 
@@ -600,6 +570,109 @@ format 40
       relations
         relation_ref 135429 // <unidirectional association>
           classinstance_ref 134405 // ouput
+        end
+    end
+
+    collaborationdiagram 132229 "Render Process"
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+      size A4
+    end
+
+    classinstance 136197 "node1"
+      type class_ref 131717 // ProcNode
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 136325 "ad1"
+      type class_ref 142597 // StateAdapter
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 136453 "current"
+      type class_ref 142469 // StateProxy
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 136581 "node2"
+      type class_ref 131717 // ProcNode
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 136709 "ad2"
+      type class_ref 142597 // StateAdapter
+      attributes
+        end
+      relations
+        end
+    end
+
+    class 143109 "BackendCache"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 143237 "Caller"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    classinstance 136837 "node3"
+      type class_ref 131717 // ProcNode
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 136965 "ad3"
+      type class_ref 142597 // StateAdapter
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 137093 "vid1"
+      type class_ref 142469 // StateProxy
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 137221 "au1"
+      type class_ref 142469 // StateProxy
+      attributes
+        end
+      relations
         end
     end
   end

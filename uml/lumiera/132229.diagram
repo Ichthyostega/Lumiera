@@ -1,0 +1,184 @@
+format 40
+
+classinstancecanvas 128261 classinstance_ref 136197 // node1
+  xyz 152 504 2000
+  end
+classinstancecanvas 128389 classinstance_ref 136325 // ad1
+  xyz 191 393 2000
+  end
+classinstancecanvas 128517 classinstance_ref 136453 // current
+  xyz 188 92 2000
+  end
+classinstancecanvas 128645 classinstance_ref 136581 // node2
+  xyz 388 393 2000
+  end
+classinstancecanvas 128773 classinstance_ref 136709 // ad2
+  xyz 422 301 2000
+  end
+classinstance 128901 class_ref 143109 // BackendCache
+ name ""  xyz 692 12 2000
+classinstance 129029 class_ref 143237 // Caller
+ name ""  xyz 28 505 2000
+classinstancecanvas 130949 classinstance_ref 136837 // node3
+  xyz 625 300 2000
+  end
+classinstancecanvas 131077 classinstance_ref 136965 // ad3
+  xyz 665 199 2000
+  end
+textcanvas 133381 "node1 using node2 as predecessor; calculates in-place, will push result to Cache"
+  xyzwh 149 538 2000 408 21
+textcanvas 133509 "node2 using node3 as predecessor. Calculates without caching"
+  xyzwh 385 427 2005 350 18
+textcanvas 133637 "node3 doesn't calc, but fetch result from Cache"
+  xyzwh 564 329 2000 231 18
+linkcanvas 129157
+  from ref 129029 z 1999 to ref 128261
+dirscanvas 129285 z 1000 linkcanvas_ref 129157
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  forward_label "1 pull()" xyz 97 480 3000
+linkcanvas 129413
+  from ref 128261 z 1999 to ref 128389
+dirscanvas 130309 z 1000 linkcanvas_ref 129413
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  forward_label "2 retrieve()" xyz 141 437 3000
+  backward_label "16 process()" xyz 236 471 3000
+linkcanvas 129541
+  from ref 128389 z 1999 to ref 128517
+dirscanvas 131717 z 1000 linkcanvas_ref 129541
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  forward_label "3 fetch()
+11 allocateBuffer()
+17 isCalculated()" xyz 128 228 3000
+linkcanvas 129669
+  from ref 128389 z 1999 to ref 128645
+dirscanvas 130437 z 1000 linkcanvas_ref 129669
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  forward_label "4 pull()" xyz 319 369 3000
+linkcanvas 129797
+  from ref 128645 z 1999 to ref 128773
+dirscanvas 130693 z 1000 linkcanvas_ref 129797
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  forward_label "5 retrieve()" xyz 379 349 3000
+  backward_label "13 process()" xyz 469 372 3000
+linkcanvas 130181
+  from ref 128773 z 1999 to ref 128517
+dirscanvas 133765 z 1000 linkcanvas_ref 130181
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  forward_label "14 releaseBuffer()" xyz 285 227 3000
+linkcanvas 131205
+  from ref 128773 z 1999 to ref 130949
+dirscanvas 131845 z 1000 linkcanvas_ref 131205
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  forward_label "6 pull()" xyz 553 276 3000
+linkcanvas 131333
+  from ref 130949 z 1999 to ref 131077
+dirscanvas 131973 z 1000 linkcanvas_ref 131333
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  forward_label "7 retrieve()" xyz 615 236 3000
+linkcanvas 131461
+  from ref 131077 z 1999 to ref 128517
+dirscanvas 132101 z 1000 linkcanvas_ref 131461
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  forward_label "8 fetch()" xyz 449 179 3000
+linkcanvas 131589
+  from ref 128517 z 1999 to point 295 24
+  line 134277 z 1999 to ref 128901
+dirscanvas 132229 z 1000 linkcanvas_ref 134277
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  forward_label "9 fetch
+12 allocateNewFrame
+15 releaseFrame
+18 isCalculatedFrame
+20 releaseFrame" xyz 487 29 3000
+linkcanvas 132357
+  from ref 131077 z 1999 to point 515 211
+  line 132613 z 1999 to ref 128773
+dirscanvas 132741 z 1000 linkcanvas_ref 132357
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+linkcanvas 132485
+  from ref 128773 z 1999 to point 280 312
+  line 132869 z 1999 to ref 128389
+dirscanvas 132997 z 1000 linkcanvas_ref 132485
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  forward_label "10 allocateBuffer()" xyz 306 293 3000
+linkcanvas 133893
+  from ref 129029 z 1999 to point 49 155
+  line 134021 z 1999 to ref 128517
+dirscanvas 134149 z 1000 linkcanvas_ref 134021
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  forward_label "19 releaseBuffer()" xyz 65 100 3000
+msgs
+  msg operation_ref 135685 // "pull()"
+    forward ranks 1 "1" dirscanvas_ref 129285
+    msgs
+      msg operation_ref 135557 // "retrieve()"
+	forward ranks 2 "1.1" dirscanvas_ref 130309
+	msgs
+	  msg operation_ref 135813 // "fetch()"
+	    forward ranks 3 "1.1.1" dirscanvas_ref 131717
+	    no_msg
+	  msg operation_ref 135685 // "pull()"
+	    forward ranks 4 "1.1.2" dirscanvas_ref 130437
+	    msgs
+	      msg operation_ref 135557 // "retrieve()"
+		forward ranks 5 "1.1.2.1" dirscanvas_ref 130693
+		msgs
+		  msg operation_ref 135685 // "pull()"
+		    forward ranks 6 "1.1.2.1.1" dirscanvas_ref 131845
+		    msgs
+		      msg operation_ref 135557 // "retrieve()"
+			forward ranks 7 "1.1.2.1.1.1" dirscanvas_ref 131973
+			msgs
+			  msg operation_ref 135813 // "fetch()"
+			    forward ranks 8 "1.1.2.1.1.1.1" dirscanvas_ref 132101
+			    msgs
+			      explicitmsg "fetch"
+				forward ranks 9 "1.1.2.1.1.1.1.1" dirscanvas_ref 132229
+				no_msg
+			    msgsend
+			msgsend
+		    msgsend
+		msgsend
+	    msgsend
+	msgsend
+    msgsend
+  msg operation_ref 135941 // "allocateBuffer()"
+    forward ranks 10 "2" dirscanvas_ref 132997
+    msgs
+      msg operation_ref 135941 // "allocateBuffer()"
+	forward ranks 11 "2.1" dirscanvas_ref 131717
+	msgs
+	  explicitmsg "allocateNewFrame"
+	    forward ranks 12 "2.1.1" dirscanvas_ref 132229
+	    no_msg
+	msgsend
+    msgsend
+  msg operation_ref 136069 // "process()"
+    backward ranks 13 "3" dirscanvas_ref 130693
+    no_msg
+  msg operation_ref 136197 // "releaseBuffer()"
+    forward ranks 14 "4" dirscanvas_ref 133765
+    msgs
+      explicitmsg "releaseFrame"
+	forward ranks 15 "4.1" dirscanvas_ref 132229
+	no_msg
+    msgsend
+  msg operation_ref 136069 // "process()"
+    backward ranks 16 "5" dirscanvas_ref 130309
+    no_msg
+  msg operation_ref 136325 // "isCalculated()"
+    forward ranks 17 "6" dirscanvas_ref 131717
+    msgs
+      explicitmsg "isCalculatedFrame"
+	forward ranks 18 "6.1" dirscanvas_ref 132229
+	no_msg
+    msgsend
+  msg operation_ref 136197 // "releaseBuffer()"
+    forward ranks 19 "7" dirscanvas_ref 134149
+    msgs
+      explicitmsg "releaseFrame"
+	forward ranks 20 "7.1" dirscanvas_ref 132229
+	no_msg
+    msgsend
+msgsend
+end

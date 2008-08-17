@@ -40,7 +40,9 @@ namespace engine
    */
   class Source : public ProcNode
     {
-      /////////////////TODO
+      Source (WiringDescriptor const& wd)
+        : ProcNode(wd)
+        { }
     };
 
 

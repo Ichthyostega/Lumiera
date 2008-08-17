@@ -48,7 +48,7 @@
 
 #include "common/p.hpp"
 #include "common/query.hpp"
-#include "common/typelistutil.hpp"
+#include "common/meta/generator.hpp"
 #include "common/singletonsubclass.hpp"
 
 //TODO: is it sensible to bring in the types explicitly here? (it's not necessary, but may be convenient...)
