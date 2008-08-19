@@ -56,7 +56,7 @@ TEST ("configitem_simple")
       printf ("value = '%s'\n", item->delim+1);
     }
 
-  lumiera_configitem_delete (item);
+  lumiera_configitem_delete (item, NULL);
 
   lumiera_config_destroy ();
 }
@@ -92,7 +92,9 @@ TEST ("number_get")
 
   long long number = 0;
 
-  if (!lumiera_config_number_get (argv[2], &number, argv[3]))
+  lumiera_config_setdefault (lumiera_tmpbuf_snprintf (SIZE_MAX, "%s = %s", argv[2], argv[3]));
+
+  if (!lumiera_config_number_get (argv[2], &number))
     printf ("%lld\n", number);
   else
     printf ("%s, %lld\n", lumiera_error (), number);
@@ -109,7 +111,7 @@ TEST ("number_get_nodefault")
 
   long long number = 0;
 
-  if (!lumiera_config_number_get (argv[2], &number, NULL))
+  if (!lumiera_config_number_get (argv[2], &number))
     printf ("%lld\n", number);
   else
     printf ("%s\n", lumiera_error ());
@@ -127,7 +129,9 @@ TEST ("string_get")
 
   char* string;
 
-  if (!lumiera_config_string_get (argv[2], &string, argv[3]))
+  lumiera_config_setdefault (lumiera_tmpbuf_snprintf (SIZE_MAX, "%s = %s", argv[2], argv[3]));
+
+  if (!lumiera_config_string_get (argv[2], &string))
     printf ("'%s'\n", string);
   else
     printf ("%s, '%s'\n", lumiera_error (), string);
@@ -139,11 +143,10 @@ TEST ("string_get")
 TEST ("string_set")
 {
   REQUIRE (argv[2]);
-  REQUIRE (argv[3]);
 
   lumiera_config_init ("./");
 
-  lumiera_config_string_set (argv[2], &argv[3], NULL);
+  lumiera_config_string_set (argv[2], &argv[3]);
   FIXME ("handle error");
 
   const char* string;
@@ -165,7 +168,9 @@ TEST ("word_get")
 
   char* word;
 
-  if (!lumiera_config_word_get (argv[2], &word, argv[3]))
+  lumiera_config_setdefault (lumiera_tmpbuf_snprintf (SIZE_MAX, "%s = %s", argv[2], argv[3]));
+
+  if (!lumiera_config_word_get (argv[2], &word))
     printf ("'%s'\n", word);
   else
     printf ("%s, '%s'\n", lumiera_error (), word);

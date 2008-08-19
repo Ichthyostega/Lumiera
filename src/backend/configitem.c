@@ -68,7 +68,7 @@ lumiera_configitem_init (LumieraConfigitem self)
 }
 
 LumieraConfigitem
-lumiera_configitem_destroy (LumieraConfigitem self)
+lumiera_configitem_destroy (LumieraConfigitem self, LumieraConfigLookup lookup)
 {
   TRACE (config_item);
 
@@ -77,7 +77,12 @@ lumiera_configitem_destroy (LumieraConfigitem self)
       if (self->vtable && self->vtable->destroy)
         self->vtable->destroy (self);
 
-      ENSURE (llist_is_empty (&self->lookup), "destructor didn't cleaned lookup up");
+      if (!llist_is_empty (&self->lookup))
+        lumiera_config_lookup_remove (lookup, self);
+
+      LLIST_WHILE_HEAD (&self->childs, node)
+        lumiera_configitem_delete ((LumieraConfigitem) node, lookup);
+
       ENSURE (llist_is_empty (&self->childs), "destructor didn't remove childs");
 
       llist_unlink (&self->link);
@@ -102,15 +107,16 @@ lumiera_configitem_new (const char* line)
     ? tmp.vtable->new (&tmp)
     : lumiera_configitem_move (lumiera_malloc (sizeof (*self)), &tmp);
 
+  TRACE (config_item, "key size of %s is %d", tmp.key, tmp.key_size);
   return self;
 }
 
 
 void
-lumiera_configitem_delete (LumieraConfigitem self)
+lumiera_configitem_delete (LumieraConfigitem self, LumieraConfigLookup lookup)
 {
   TRACE (config_item);
-  lumiera_free (lumiera_configitem_destroy (self));
+  lumiera_free (lumiera_configitem_destroy (self, lookup));
 }
 
 

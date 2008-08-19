@@ -59,7 +59,7 @@ LUMIERA_ERROR_DECLARE (CONFIG_DEFAULT);
 
 /**
  * @file
-   * TODO documentation, http://www.pipapo.org/pipawiki/Lumiera/ConfigLoader
+ * TODO documentation, http://www.pipapo.org/pipawiki/Lumiera/ConfigLoader
  */
 
 #define LUMIERA_CONFIG_KEY_CHARS "abcdefghijklmnopqrstuvwxyz0123456789_."
@@ -69,8 +69,12 @@ struct lumiera_config_struct
 {
   lumiera_config_lookup keys;
 
-  // configfile list
+  lumiera_configitem defaults;          /* registered default values */
+  lumiera_configitem files;             /* all loaded files */
+  lumiera_configitem TODO_unknown;      /* all values which are not part of a file and not default TODO: this will be removed when file support is finished */
+
   char* path;
+
   /*
     all access is protected with rwlock's.
     We use rwlocks here since concurrent reads are likely common.
@@ -89,6 +93,7 @@ typedef lumiera_config* LumieraConfig;
  */
 /* TODO: add here as 'LUMIERA_CONFIG_TYPE(name, ctype)' the _get/_set prototypes are declared automatically below, you still have to implement them in config.c */
 #define LUMIERA_CONFIG_TYPES                    \
+  LUMIERA_CONFIG_TYPE(link, char*)              \
   LUMIERA_CONFIG_TYPE(number, signed long long) \
   LUMIERA_CONFIG_TYPE(real, long double)        \
   LUMIERA_CONFIG_TYPE(string, char*)            \
@@ -160,17 +165,38 @@ int
 lumiera_config_get (const char* key, const char** value);
 
 
+int
+lumiera_config_get_default (const char* key, const char** value);
+
+
 // * {{{ lumiera_config_set(...) }}}
 //  * set a value by key
 //  * handles internally everything as string:string key:value pair.
 //  * lowlevel function
 //  * tag file as dirty
 //  * set will create a new user configuration file if it does not exist yet or will append a line to the existing one in RAM. These  files, tagged as 'dirty', will be only written if save() is called.
+
 /**
+ *
+ *
+ * @param key
+ * @param delim_value delimiter (= or <) followed by the value to be set
  *
  */
 int
-lumiera_config_set (const char* key, const char* value);
+lumiera_config_set (const char* key, const char* delim_value);
+
+
+/**
+ * Installs a default value for a config key.
+ * Any key might have an associated default value which is used when
+ * no other configuration is available, this can be set once.
+ * Any subsequent call will be a no-op.
+ * @param line line with key, delimiter and value to store as default value
+ * @return NULL in case of an error, else a pointer to the default configitem
+ */
+LumieraConfigitem
+lumiera_config_setdefault (const char* line);
 
 
 
@@ -187,7 +213,7 @@ lumiera_config_set (const char* key, const char* value);
  */
 #define LUMIERA_CONFIG_TYPE(name, type) \
   int \
-  lumiera_config_##name##_get (const char* key, type* value, const char* def);
+  lumiera_config_##name##_get (const char* key, type* value);
 LUMIERA_CONFIG_TYPES
 #undef LUMIERA_CONFIG_TYPE
 
@@ -200,7 +226,7 @@ LUMIERA_CONFIG_TYPES
  */
 #define LUMIERA_CONFIG_TYPE(name, type) \
   int \
-  lumiera_config_##name##_set (const char* key, type* value, const char* fmt);
+  lumiera_config_##name##_set (const char* key, type* value);
 LUMIERA_CONFIG_TYPES
 #undef LUMIERA_CONFIG_TYPE
 
@@ -211,7 +237,7 @@ LUMIERA_CONFIG_TYPES
  *
  */
 int
-lumiera_config_reset(const char* key);
+lumiera_config_reset (const char* key);
 
 
 //  * Find exact place of a setting.

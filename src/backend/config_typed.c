@@ -38,12 +38,29 @@ extern LumieraConfig lumiera_global_config;
  * Here are the high level typed configuration interfaces defined.
  */
 
+int
+lumiera_config_link_get (const char* key, char** value)
+{
+  TRACE (config_typed);
+  UNIMPLEMENTED();
+  return 0;
+}
+
+int
+lumiera_config_link_set (const char* key, char** value)
+{
+  TRACE (config_typed);
+  UNIMPLEMENTED();
+  return 0;
+}
+
+
 /**
  * Number
  * signed integer numbers, in different formats (decimal, hex, oct, binary(for masks))
  */
 int
-lumiera_config_number_get (const char* key, long long* value, const char* def)
+lumiera_config_number_get (const char* key, long long* value)
 {
   TRACE (config_typed);
 
@@ -63,31 +80,12 @@ lumiera_config_number_get (const char* key, long long* value, const char* def)
               else
                 {
                   LUMIERA_ERROR_SET (config_typed, CONFIG_SYNTAX_VALUE);
-                  if (def)
-                    /* even when we return an error code we still try to initialize value with our default while in error state */
-                    goto try_default;
-                }
-            }
-          else if (def)
-            {
-              /* not found, fall back to default */
-              ret = 0; /* we presume that the default is ok */
-            try_default:
-
-              if (sscanf (def, "%Li", value) == 1)
-                {
-                  TODO ("register default (writelock or mutex!)");
-                }
-              else
-                {
-                  /* default value is broken!! */
-                  /* note that this error gets ignored by the application when we had a type error above, but will still be logged with nobug */
-                  ret = -1;
-                  LUMIERA_ERROR_SET (config_typed, CONFIG_DEFAULT);
+                  /* try default instead */
+                  if (!lumiera_config_get_default (key, &raw_value))
+                    sscanf (raw_value, "%Li", value);
                 }
             }
           else
-            /* finally, no config, no default, give up */
             LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
         }
     }
@@ -96,7 +94,7 @@ lumiera_config_number_get (const char* key, long long* value, const char* def)
 }
 
 int
-lumiera_config_number_set (const char* key, long long* value, const char* fmt)
+lumiera_config_number_set (const char* key, long long* value)
 {
   TRACE (config_typed);
   UNIMPLEMENTED();
@@ -109,7 +107,7 @@ lumiera_config_number_set (const char* key, long long* value, const char* fmt)
  * floating point number in standard formats (see printf/scanf)
  */
 int
-lumiera_config_real_get (const char* key, long double* value, const char* def)
+lumiera_config_real_get (const char* key, long double* value)
 {
   TRACE (config_typed);
   UNIMPLEMENTED();
@@ -117,7 +115,7 @@ lumiera_config_real_get (const char* key, long double* value, const char* def)
 }
 
 int
-lumiera_config_real_set (const char* key, long double* value, const char* fmt)
+lumiera_config_real_set (const char* key, long double* value)
 {
   TRACE (config_typed);
   UNIMPLEMENTED();
@@ -189,7 +187,7 @@ scan_string (const char* in)
 }
 
 int
-lumiera_config_string_get (const char* key, char** value, const char* def)
+lumiera_config_string_get (const char* key, char** value)
 {
   TRACE (config_typed);
 
@@ -204,27 +202,9 @@ lumiera_config_string_get (const char* key, char** value, const char* def)
           if (raw_value)
             {
               *value = scan_string (raw_value);
-
               if (*value)
                 ret = 0; /* all ok */
-              else if (def)
-                goto try_default;
-            }
-          else if (def)
-            {
-              ret = 0;
-            try_default:
-
-              *value = scan_string (def);
-              if (*value)
-                {
-                  TODO ("register default (writelock or mutex!)");
-                }
-              else
-                {
-                  ret = -1;
-                  LUMIERA_ERROR_SET (config_typed, CONFIG_DEFAULT);
-                }
+              /* else error was raised by scan_string */
             }
           else
             LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
@@ -235,7 +215,7 @@ lumiera_config_string_get (const char* key, char** value, const char* def)
 }
 
 int
-lumiera_config_string_set (const char* key, char** value, const char* fmt)
+lumiera_config_string_set (const char* key, char** value)
 {
   TRACE (config_typed);
   UNIMPLEMENTED();
@@ -271,7 +251,7 @@ scan_word (const char* in)
 }
 
 int
-lumiera_config_word_get (const char* key, char** value, const char* def)
+lumiera_config_word_get (const char* key, char** value)
 {
   TRACE (config_typed, "KEY %s", key);
 
@@ -286,30 +266,8 @@ lumiera_config_word_get (const char* key, char** value, const char* def)
           if (raw_value)
             {
               *value = scan_word (raw_value);
-
-              TRACE (config_typed, "RAW_VALUE %s, scanned .%s.", raw_value, *value);
-
               if (*value)
                 ret = 0; /* all ok */
-              else if (def)
-                goto try_default;
-            }
-          else if (def)
-            {
-              ret = 0;
-            try_default:
-
-              *value = scan_word (def);
-              TRACE (config_typed, "DEFAULT %s, scanned .%s.", def, *value);
-              if (*value)
-                {
-                  TODO ("register default (writelock or mutex!)");
-                }
-              else
-                {
-                  ret = -1;
-                  LUMIERA_ERROR_SET (config_typed, CONFIG_DEFAULT);
-                }
             }
           else
             LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
@@ -320,7 +278,7 @@ lumiera_config_word_get (const char* key, char** value, const char* def)
 }
 
 int
-lumiera_config_word_set (const char* key, char** value, const char* fmt)
+lumiera_config_word_set (const char* key, char** value)
 {
   TRACE (config_typed);
   UNIMPLEMENTED();
@@ -333,7 +291,7 @@ lumiera_config_word_set (const char* key, char** value, const char* fmt)
  * Bool in various formats, (0,1(!1), yes/no, true/false, on/off, set/clear)
  */
 int
-lumiera_config_bool_get (const char* key, int* value, const char* def)
+lumiera_config_bool_get (const char* key, int* value)
 {
   TRACE (config_typed);
   UNIMPLEMENTED();
@@ -341,7 +299,7 @@ lumiera_config_bool_get (const char* key, int* value, const char* def)
 }
 
 int
-lumiera_config_bool_set (const char* key, int* value, const char* fmt)
+lumiera_config_bool_set (const char* key, int* value)
 {
   TRACE (config_typed);
   UNIMPLEMENTED();

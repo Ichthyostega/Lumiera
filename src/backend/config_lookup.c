@@ -102,6 +102,32 @@ lumiera_config_lookup_insert (LumieraConfigLookup self, LumieraConfigitem item)
 }
 
 
+LumieraConfigLookupentry
+lumiera_config_lookup_insert_default (LumieraConfigLookup self, LumieraConfigitem item)
+{
+  TRACE (config_lookup);
+  REQUIRE (self);
+  REQUIRE (item);
+  REQUIRE (item->key);
+  REQUIRE (item->key_size);
+
+  lumiera_config_lookupentry tmp;
+  lumiera_config_lookupentry_init (&tmp, lumiera_tmpbuf_snprintf (SIZE_MAX, "%.*s", item->key_size, item->key));
+
+  LumieraConfigLookupentry entry = cuckoo_find (self->hash, &tmp);
+
+  if (!entry)
+    entry = cuckoo_insert (self->hash, &tmp);
+
+  if (entry)
+    llist_insert_tail (&entry->configitems, &item->lookup);
+  else
+    LUMIERA_DIE (CONFIG_LOOKUP);
+
+  return entry;
+}
+
+
 LumieraConfigitem
 lumiera_config_lookup_remove (LumieraConfigLookup self, LumieraConfigitem item)
 {
@@ -147,6 +173,20 @@ lumiera_config_lookup_item_find (LumieraConfigLookup self, const char* key)
 
   if (entry && !llist_is_empty (&entry->configitems))
     return LLIST_TO_STRUCTP (llist_head (&entry->configitems), lumiera_configitem, lookup);
+
+  return NULL;
+}
+
+LumieraConfigitem
+lumiera_config_lookup_item_tail_find (LumieraConfigLookup self, const char* key)
+{
+  TRACE (config_lookup);
+
+  LumieraConfigLookupentry entry =
+    lumiera_config_lookup_find (self, key);
+
+  if (entry && !llist_is_empty (&entry->configitems))
+    return LLIST_TO_STRUCTP (llist_tail (&entry->configitems), lumiera_configitem, lookup);
 
   return NULL;
 }

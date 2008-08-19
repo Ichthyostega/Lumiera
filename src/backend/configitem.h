@@ -33,6 +33,7 @@ typedef lumiera_configitem* LumieraConfigitem;
 struct lumiera_configitem_vtable;
 
 //TODO: Lumiera header includes//
+#include "backend/config_lookup.h"
 
 
 //TODO: System includes//
@@ -112,13 +113,13 @@ LumieraConfigitem
 lumiera_configitem_init (LumieraConfigitem self);
 
 LumieraConfigitem
-lumiera_configitem_destroy (LumieraConfigitem self);
+lumiera_configitem_destroy (LumieraConfigitem self, LumieraConfigLookup lookup);
 
 LumieraConfigitem
 lumiera_configitem_new (const char* line);
 
 void
-lumiera_configitem_delete (LumieraConfigitem self);
+lumiera_configitem_delete (LumieraConfigitem self, LumieraConfigLookup lookup);
 
 LumieraConfigitem
 lumiera_configitem_parse (LumieraConfigitem self, const char* line);

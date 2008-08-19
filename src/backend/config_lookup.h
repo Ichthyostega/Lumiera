@@ -85,6 +85,21 @@ lumiera_config_lookup_destroy (LumieraConfigLookup self);
 LumieraConfigLookupentry
 lumiera_config_lookup_insert (LumieraConfigLookup self, LumieraConfigitem item);
 
+
+/**
+ * Add a default config item to a lookup structure.
+ * @internal
+ * This function is used internal.
+ * The item must contain a full key and not part of any 'section'
+ * and is inserted as tail of the lookup list.
+ * @param self lookup structure where the item shall be added
+ * @param item config item to add to the lookup structure
+ * @return opaque pointer to a hashtable entry
+ */
+LumieraConfigLookupentry
+lumiera_config_lookup_insert_default (LumieraConfigLookup self, LumieraConfigitem item);
+
+
 /**
  * Remove a config item from a lookup structure.
  * Config must be removed from the lookup when they are not used anymore.
@@ -115,6 +130,16 @@ lumiera_config_lookup_find (LumieraConfigLookup self, const char* key);
  */
 LumieraConfigitem
 lumiera_config_lookup_item_find (LumieraConfigLookup self, const char* key);
+
+/**
+ * Find a the bottommost config item stored to a given key.
+ * defaults sits at the bottom if exists
+ * @param self lookup structure where the key shall be searched
+ * @param key string to be looked up
+ * @return TODO
+ */
+LumieraConfigitem
+lumiera_config_lookup_item_tail_find (LumieraConfigLookup self, const char* key);
 
 
 

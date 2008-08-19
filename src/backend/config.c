@@ -32,6 +32,7 @@
 //TODO: System includes//
 #include <stdint.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 /**
  * @file
@@ -74,7 +75,13 @@ lumiera_config_init (const char* path)
   lumiera_global_config->path = lumiera_strndup (path, SIZE_MAX);
   lumiera_config_lookup_init (&lumiera_global_config->keys);
 
+  lumiera_configitem_init (&lumiera_global_config->defaults);
+  lumiera_configitem_init (&lumiera_global_config->files);
+  lumiera_configitem_init (&lumiera_global_config->TODO_unknown);
+
   lumiera_rwlock_init (&lumiera_global_config->lock, "config rwlock", &NOBUG_FLAG (config));
+
+  TODO ("register path as config.path itself");
 
   return 0;
 }
@@ -87,6 +94,9 @@ lumiera_config_destroy ()
   if (lumiera_global_config)
     {
       lumiera_rwlock_destroy (&lumiera_global_config->lock, &NOBUG_FLAG (config));
+      lumiera_configitem_destroy (&lumiera_global_config->defaults, &lumiera_global_config->keys);
+      lumiera_configitem_destroy (&lumiera_global_config->files, &lumiera_global_config->keys);
+      lumiera_configitem_destroy (&lumiera_global_config->TODO_unknown, &lumiera_global_config->keys);
       lumiera_config_lookup_destroy (&lumiera_global_config->keys);
       lumiera_free (lumiera_global_config->path);
       lumiera_free (lumiera_global_config);
@@ -140,11 +150,8 @@ lumiera_config_get (const char* key, const char** value)
                                     LUMIERA_CONFIG_KEY_CHARS,
                                     LUMIERA_CONFIG_ENV_CHARS,
                                     NULL);
-  if (!tr_key)
-    {
-      LUMIERA_ERROR_SET (config, CONFIG_SYNTAX_KEY);
-    }
-  else
+
+  if (tr_key)
     {
       char* env = lumiera_tmpbuf_snprintf (2048, "LUMIERA_%s", tr_key);
 
@@ -156,9 +163,21 @@ lumiera_config_get (const char* key, const char** value)
         }
       else
         {
-          TODO ("lookup key");
-          ret = 0; /* assume that the lockup worked for now, value is still NULL, just no error set */
+          TODO ("follow '<' delegates?");
+          LumieraConfigitem item = lumiera_config_lookup_item_find (&lumiera_global_config->keys, key);
+
+          if (item)
+            {
+              *value = item->delim+1;
+              ret = 0;
+            }
+          else
+            LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
         }
+    }
+  else
+    {
+      LUMIERA_ERROR_SET (config, CONFIG_SYNTAX_KEY);
     }
 
   return ret;
@@ -166,11 +185,92 @@ lumiera_config_get (const char* key, const char** value)
 
 
 int
-lumiera_config_set (const char* key, const char* value)
+lumiera_config_get_default (const char* key, const char** value)
 {
   TRACE (config);
+  REQUIRE (key);
+  REQUIRE (value);
+
+  int ret = -1;
+
+  TODO ("follow '<' delegates?");
+  TODO ("refactor _get and get_default to iterator access");
+  LumieraConfigitem item = lumiera_config_lookup_item_tail_find (&lumiera_global_config->keys, key);
+
+  if (item && item->parent == &lumiera_global_config->defaults)
+    {
+      *value = item->delim+1;
+      ret = 0;
+    }
+
+  return ret;
+}
+
+
+int
+lumiera_config_set (const char* key, const char* delim_value)
+{
+  TRACE (config);
+
+  TODO ("if does this item already exist in a user writeable file?");
+  TODO ("       replace delim_value");
+
+  TODO ("else");
+  TODO ("       find matching prefix");
+  TODO ("       find matching suffix");
+  TODO ("       find proper prefix indentation, else use config.indent");
+  TODO ("       create configitem with prefix/suffix removed");
+
+
+
+//  * set a value by key
+//  * handles internally everything as string:string key:value pair.
+//  * lowlevel function
+//  * tag file as dirty
+//  * set will create a new user configuration file if it does not exist yet or will append a line to the existing one in RAM. These  files, tagged as 'dirty', will be only written if save() is called.
+
+
+
   UNIMPLEMENTED();
   return -1;
+}
+
+
+LumieraConfigitem
+lumiera_config_setdefault (const char* line)
+{
+  TRACE (config);
+  REQUIRE (line);
+
+  LumieraConfigitem item = NULL;
+
+  LUMIERA_WRLOCK_SECTION (config, &lumiera_global_config->lock)
+    {
+      const char* key = line;
+      while (*key && isspace (*key))
+        key++;
+
+      key = lumiera_tmpbuf_strndup (line, strspn (line, LUMIERA_CONFIG_KEY_CHARS));
+
+      if (!(item = lumiera_config_lookup_item_find (&lumiera_global_config->keys, key)) || item->parent != &lumiera_global_config->defaults)
+        {
+          item = lumiera_configitem_new (line);
+
+          if (item)
+            {
+              ENSURE (item->delim, "default must be a configentry with key=value or key<delegate syntax")
+              ENSURE (*item->delim == '=' || *item->delim == '<', "default must be a configentry with key=value or key<delegate syntax");
+              TRACE (config, "registering default: '%s'", item->line);
+
+              llist_insert_head (&lumiera_global_config->defaults.childs, &item->link);
+              item->parent = &lumiera_global_config->defaults;
+
+              lumiera_config_lookup_insert_default (&lumiera_global_config->keys, item);
+            }
+        }
+    }
+
+  return item;
 }
 
 
