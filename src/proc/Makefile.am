@@ -176,15 +176,6 @@ noinst_HEADERS +=							\
 	$(liblumiproc_a_srcdir)/asset/track.hpp				\
 	$(liblumiproc_a_srcdir)/asset/unknown.hpp			\
 	$(liblumiproc_a_srcdir)/controllerfacade.hpp			\
-	$(liblumiproc_a_srcdir)/engine/aframe.hpp			\
-	$(liblumiproc_a_srcdir)/engine/arender.hpp			\
-	$(liblumiproc_a_srcdir)/engine/codecadapter.hpp			\
-	$(liblumiproc_a_srcdir)/engine/exitnode.hpp			\
-	$(liblumiproc_a_srcdir)/engine/glbuf.hpp			\
-	$(liblumiproc_a_srcdir)/engine/glpipe.hpp			\
-	$(liblumiproc_a_srcdir)/engine/glrender.hpp			\
-	$(liblumiproc_a_srcdir)/engine/hub.hpp				\
-	$(liblumiproc_a_srcdir)/engine/link.hpp				\
 	$(liblumiproc_a_srcdir)/engine/mask.hpp				\
 	$(liblumiproc_a_srcdir)/engine/pluginadapter.hpp		\
 	$(liblumiproc_a_srcdir)/engine/procnode.hpp			\
@@ -192,14 +183,10 @@ noinst_HEADERS +=							\
 	$(liblumiproc_a_srcdir)/engine/renderengine.hpp			\
 	$(liblumiproc_a_srcdir)/engine/source.hpp			\
 	$(liblumiproc_a_srcdir)/engine/trafo.hpp			\
-	$(liblumiproc_a_srcdir)/engine/vframe.hpp			\
-	$(liblumiproc_a_srcdir)/engine/vrender.hpp			\
 	$(liblumiproc_a_srcdir)/engine/processor.hpp			\
-	$(liblumiproc_a_srcdir)/frame.hpp				\
 	$(liblumiproc_a_srcdir)/mobject/builder/assembler.hpp		\
 	$(liblumiproc_a_srcdir)/mobject/builder/buildertool.hpp		\
 	$(liblumiproc_a_srcdir)/mobject/builder/conmanager.hpp		\
-	$(liblumiproc_a_srcdir)/mobject/builder/nodecreatertool.hpp	\
 	$(liblumiproc_a_srcdir)/mobject/builder/segmentationtool.hpp	\
 	$(liblumiproc_a_srcdir)/mobject/builder/toolfactory.hpp		\
 	$(liblumiproc_a_srcdir)/mobject/builderfacade.hpp		\

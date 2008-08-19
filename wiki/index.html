@@ -759,7 +759,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BuildDependenceis" modifier="Ichthyostega" modified="200807110146" created="200708120103" tags="organization buildsys" changecount="15">
+<div title="BuildDependenceis" modifier="Ichthyostega" modified="200808180346" created="200708120103" tags="organization buildsys" changecount="17">
 <pre>for __Building__
 * gcc (4.1), glibc6 (2.3), libstdc++6 (4.1)
 * [[build system|BuildSystem]] dependencies: SCons (0.96.90), Python (2.4), pkg-config
@@ -773,11 +773,12 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 ** libboost-program-options1.34.1 (&gt;=1.34.1-2) ''NOTE: binary dependency''
 ** libboost-regex-dev (&gt;=1.34.1-2)
 ** libboost-regex1.34.1 (&gt;=1.34.1-2) ''binary..''
-* for the GUI: gtkmm-2.4 gdl-1.0 cairomm-1.0 xv
+* for the GUI: gtkmm-2.4 gdl-1.0 libglibmm-2.4 cairomm-1.0 xv
 ** libgtkmm-2.4-dev (&gt;=2.8)
 ** libcairomm-1.0-dev (&gt;=0.6.0)
 ** libgdl-1-dev (&gt;=0.6.1)
 *** libbonoboui2-dev (&gt;=2.14.0)
+** libgtkmm-2.4-dev (&gt;=2.16), requiring glib2.0 (&gt;=2.16)
 ** libxv-dev (&gt;=1.0.2)
 //usually, newer versions are OK//
 
