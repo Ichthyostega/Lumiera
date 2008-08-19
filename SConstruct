@@ -37,6 +37,7 @@ BINDIR           = 'bin'
 TESTDIR          = 'tests'
 ICONDIR          = 'icons'
 VERSION          = '0.1+pre.01'
+SVGRENDERER      = 'admin/render-icon'
 #-----------------------------------Configuration
 
 # NOTE: scons -h for help.
@@ -68,6 +69,7 @@ def setupBasicEnvironment():
                , CCFLAGS='-Wall '                                       # -fdiagnostics-show-option 
                )
     
+    RegisterIcon_Builder(env,SVGRENDERER)
     RegisterPrecompiledHeader_Builder(env)
     handleNoBugSwitches(env)
     
@@ -225,6 +227,10 @@ def configurePlatform(env):
     if not conf.CheckPkgConfig('gtkmm-2.4', 2.8):
         print 'Unable to configure GTK--, exiting.'
         Exit(1)
+        
+    if not conf.CheckPkgConfig('glibmm-2.4', '2.16'):
+        print 'Unable to configure Lib glib--, exiting.'
+        Exit(1)
     
     if not conf.CheckPkgConfig('cairomm-1.0', 0.6):
         print 'Unable to configure Cairo--, exiting.'
@@ -234,6 +240,10 @@ def configurePlatform(env):
         print 'Unable to configure the GNOME DevTool Library, exiting.'
         Exit(1)
     
+    if not conf.CheckPkgConfig('librsvg-2.0', '2.18.1'):
+        print 'Need rsvg Library for rendering icons.'
+        Exit(1)
+        
     if not conf.CheckPkgConfig('xv'): Exit(1)
 #   if not conf.CheckPkgConfig('xext'): Exit(1)
 #   if not conf.CheckPkgConfig('sm'): Exit(1)
@@ -292,16 +302,24 @@ def defineBuildTargets(env, artifacts):
     artifacts['plugins'] = env.SharedLibrary('$BINDIR/lumiera-plugin', objplug)
     
     # the Lumiera GTK GUI
-    envgtk  = env.Clone().mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','xv','xext','sm'])
+    envgtk  = env.Clone().mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','librsvg-2.0','xv','xext','sm'])
     objgui  = srcSubtree(envgtk,'$SRCDIR/gui')
     
+    # render and install Icons
+    vector_icon_dir      = env.subst('$ICONDIR/svg')
+    prerendered_icon_dir = env.subst('$ICONDIR/prerendered')
+    artifacts['icons']   = ( [env.IconRender(f) for f in scanSubtree(vector_icon_dir,      ['*.svg'])]
+                           + [env.IconCopy(f)   for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
+                           )
+    
     artifacts['lumigui'] = ( envgtk.Program('$BINDIR/lumigui', objgui + core)
-                           + env.Install('$BINDIR', env.Glob('$ICONDIR/*.png'))
                            + env.Install('$BINDIR', env.Glob('$SRCDIR/gui/*.rc'))
+                           + artifacts['icons']
                            )
     
     # call subdir SConscript(s) for independent components
     SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts core')
+    SConscript(dirs=['admin'], exports='env envgtk artifacts core')
     SConscript(dirs=[TESTDIR], exports='env artifacts core')
 
 

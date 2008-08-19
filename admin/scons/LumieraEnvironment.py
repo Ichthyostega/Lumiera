@@ -77,10 +77,14 @@ class LumieraEnvironment(Environment):
         return libInfo
     
     def Glob (self, pattern):
-        """ temporary workaround; newer versions of SCons provide this as a global function
-        """
+        """ temporary workaround; newer versions of SCons provide this as a global function """
         pattern = self.subst(pattern)
         return glob.glob(pattern)
+    
+    def AddMethod (self, function):
+        """ temporary workaround; newer versions of SCons provide this as a global function """
+        self.__dict__[function.__name__] = function.__get__(self)
+    
 
 
 class LumieraConfigContext(SConf):
