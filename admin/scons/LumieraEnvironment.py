@@ -22,7 +22,7 @@
 #####################################################################
 
 
-from SCons.SConf       import SConf
+from SCons.SConf       import SConfBase
 from SCons.Environment import Environment
 
 from Buildhelper import *
@@ -76,22 +76,22 @@ class LumieraEnvironment(Environment):
         libInfo.ParseConfig ('pkg-config --cflags --libs '+ libID )
         return libInfo
     
-    def Glob (self, pattern):
-        """ temporary workaround; newer versions of SCons provide this as a global function """
-        pattern = self.subst(pattern)
-        return glob.glob(pattern)
+#   def Glob (self, pattern):
+#       """ temporary workaround; newer versions of SCons provide this as a global function """
+#       pattern = self.subst(pattern)
+#       return glob.glob(pattern)
     
-    def AddMethod (self, function):
-        """ temporary workaround; newer versions of SCons provide this as a global function """
-        self.__dict__[function.__name__] = function.__get__(self)
+#   def AddMethod (self, function):
+#       """ temporary workaround; newer versions of SCons provide this as a global function """
+#       self.__dict__[function.__name__] = function.__get__(self)
     
 
 
-class LumieraConfigContext(SConf):
+class LumieraConfigContext(SConfBase):
     """ Extends the SCons Configure context with some convenience methods
     """
     def __init__(self, *args,**kw):
-        SConf.__init__(self,*args,**kw)
+        SConfBase.__init__(self,*args,**kw)
     
     def CheckPkgConfig (self, libID, minVersion=0):
         print "Checking for library configuration: %s " % libID
