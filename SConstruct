@@ -103,8 +103,7 @@ def handleNoBugSwitches(env):
     level = env['BUILDLEVEL']
     if level in ['ALPHA', 'BETA']:
         if not env['DEBUG']:
-            print 'NoBug: ALPHA or BETA builds without DEBUG not possible, exiting.'
-            Exit(1)
+            print 'Warning: NoBug ALPHA or BETA builds requires DEBUG=yes, switching DEBUG on!'
         env.Replace( DEBUG = 1 )
         env.Append(CPPDEFINES = 'EBUG_'+level)
     elif level == 'RELEASE':
