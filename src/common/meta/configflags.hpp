@@ -107,26 +107,29 @@ namespace lumiera {
             >
     struct ConfigSetFlag<Fl, Config<f1,f2,f3,f4,IGN> >
       {
-        typedef Config<Fl,f1,f2,f3,f4> Config;
+        typedef typelist::Config<Fl,f1,f2,f3,f4> Config;
       };
     
     
     
-    /** build a configuration type for the given list-of-flags */
-    template<class FLAGS, class CONF=Config<> >
-    struct DefineConfigByFlags
+    /** build a configuration type from a list-of-flags */
+    template<class FLAGS, class CONF=typelist::Config<> >
+    struct BuildConfigFromFlags
       {
         typedef CONF Config;
         typedef Config Type;
       };
     template<char Fl, class FLAGS, class CONF>
-    struct DefineConfigByFlags< Node<Flag<Fl>,FLAGS>, CONF>
+    struct BuildConfigFromFlags< Node<Flag<Fl>,FLAGS>, CONF>
       { 
         typedef typename ConfigSetFlag< Fl
-                                      , typename DefineConfigByFlags<FLAGS,CONF>::Config
+                                      , typename BuildConfigFromFlags<FLAGS,CONF>::Config
                                       >::Config Config;
         typedef Config Type;
       };
+    /** create a configuration type for the given list-of-flags */
+    template<class FLAGS>
+    struct DefineConfigByFlags : BuildConfigFromFlags<FLAGS> { };    
     
     
     /** 

@@ -2,6 +2,7 @@
 *~
 *.tar.*
 .[^.]*
+*.o
 *.os
 *.gch
 ,valgrind.log*
@@ -13,5 +14,6 @@ bin/*
 autom4te.cache/*
 scripts/*
 configure
+config.log
 aclocal.m4
 semantic.cache

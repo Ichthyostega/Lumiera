@@ -37,7 +37,7 @@ namespace engine {
 
   class WiringFactory;
   
-  namespace { class WiringFactoryImpl; }
+  namespace { class WiringFactoryImpl; }  ////TODO: better use a named implementation namespace! (produces warings on gcc 4.3)
   
   
   /**
