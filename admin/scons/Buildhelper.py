@@ -151,25 +151,6 @@ def RegisterIcon_Builder(env, renderer):
 
 
 
-def RegisterPrecompiledHeader_Builder(env):
-    """ Registeres an Custom Builder for generating a precompiled Header.
-        Note you should define a dependency to the PCH file
-    """
-    def genCmdline(source, target, env, for_signature):
-        return '$CXXCOM -x c++-header %s' % source[0]
-    def fixSourceDependency(target, source, env):
-        print "precompiled header: %s --> %s" % (source[0],target[0])
-        return (target, source)
-    
-    gchBuilder = env.Builder( generator = genCmdline
-                            , emitter = fixSourceDependency
-                            , suffix = '.gch'
-                            , src_suffix = '.hpp'
-                            )
-    env.Append(BUILDERS = {'PrecompiledHeader' : gchBuilder})    
-
-
-
 def Tarball(env,location,dirs,suffix=''):
     """ Custom Command: create Tarball of some subdirs
         location: where to create the tar (may optionally include filename.tar.gz)

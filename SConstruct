@@ -21,13 +21,6 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #####################################################################
 
-import sys
-sys.path.append("./admin/scons")
-
-import os
-from Buildhelper import *
-from LumieraEnvironment import *
-
 
 #-----------------------------------Configuration
 OPTIONSCACHEFILE = 'optcache' 
@@ -37,6 +30,7 @@ BINDIR           = 'bin'
 TESTDIR          = 'tests'
 ICONDIR          = 'icons'
 VERSION          = '0.1+pre.01'
+TOOLDIR          = './admin/scons'
 SVGRENDERER      = 'admin/render-icon'
 #-----------------------------------Configuration
 
@@ -46,6 +40,14 @@ SVGRENDERER      = 'admin/render-icon'
 # fit together. SCons will derive the necessary build steps.
 
 
+
+import os
+import sys
+
+sys.path.append(TOOLDIR)
+
+from Buildhelper import *
+from LumieraEnvironment import *
 
 
 #####################################################################
@@ -57,7 +59,10 @@ def setupBasicEnvironment():
     EnsureSConsVersion(0,96,90)
     
     opts = defineCmdlineOptions() 
-    env = LumieraEnvironment(options=opts) 
+    env = LumieraEnvironment(options=opts
+                            ,toolpath = [TOOLDIR]
+                            ,tools = ["default", "BuilderGCH"]  
+                            ) 
     
     env.Append ( CCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honor CFLAGS, only CCFLAGS 
     env.Replace( VERSION=VERSION
@@ -70,7 +75,6 @@ def setupBasicEnvironment():
                )
     
     RegisterIcon_Builder(env,SVGRENDERER)
-    RegisterPrecompiledHeader_Builder(env)
     handleNoBugSwitches(env)
     
     env.Append(CPPDEFINES = '_GNU_SOURCE')
@@ -278,6 +282,10 @@ def defineBuildTargets(env, artifacts):
         setup sub-environments with special build options if necessary.
         We use a custom function to declare a whole tree of srcfiles. 
     """
+    # use PCH to speed up building
+    env['GCH'] = ( env.PrecompiledHeader('$SRCDIR/pre.hpp')
+                 + env.PrecompiledHeader('$SRCDIR/pre_a.hpp')
+                 )
     
     objback =   srcSubtree(env,'$SRCDIR/backend') 
     objproc =   srcSubtree(env,'$SRCDIR/proc')
@@ -290,12 +298,6 @@ def defineBuildTargets(env, artifacts):
             + env.StaticLibrary('$BINDIR/lumi.la',     objlib)
             )
     
-    # use PCH to speed up building
-#    precomp = ( env.PrecompiledHeader('$SRCDIR/pre')
-#              + env.PrecompiledHeader('$SRCDIR/pre_a')
-#              )
-#    env.Depends(objproc, precomp)
-#    env.Depends(objlib, precomp)
     
     artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/main.cpp']+ core )
     artifacts['plugins'] = env.SharedLibrary('$BINDIR/lumiera-plugin', objplug)
