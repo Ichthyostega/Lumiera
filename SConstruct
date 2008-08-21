@@ -283,9 +283,9 @@ def defineBuildTargets(env, artifacts):
         We use a custom function to declare a whole tree of srcfiles. 
     """
     # use PCH to speed up building
-    env['GCH'] = ( env.PrecompiledHeader('$SRCDIR/pre.hpp')
-                 + env.PrecompiledHeader('$SRCDIR/pre_a.hpp')
-                 )
+#   env['GCH'] = ( env.PrecompiledHeader('$SRCDIR/pre.hpp')
+#                + env.PrecompiledHeader('$SRCDIR/pre_a.hpp')
+#                )
     
     objback =   srcSubtree(env,'$SRCDIR/backend') 
     objproc =   srcSubtree(env,'$SRCDIR/proc')
