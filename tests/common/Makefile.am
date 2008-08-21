@@ -41,7 +41,7 @@ test_common_SOURCES =						\
 	$(testcommon_srcdir)/factorytest.cpp			\
 	$(testcommon_srcdir)/helloworldtest.cpp			\
 	$(testcommon_srcdir)/lifecycletest.cpp			\
-	$(testcommon_srcdir)/mainsuite.cpp			\
+	$(testcommon_srcdir)/mainsuite.cpp				\
 	$(testcommon_srcdir)/query/queryutilstest.cpp		\
 	$(testcommon_srcdir)/removefromsettest.cpp		\
 	$(testcommon_srcdir)/sanitizedidentifiertest.cpp	\
@@ -50,8 +50,10 @@ test_common_SOURCES =						\
 	$(testcommon_srcdir)/singletontestmocktest.cpp		\
 	$(testcommon_srcdir)/test/cmdlinewrappertest.cpp	\
 	$(testcommon_srcdir)/test/testoptiontest.cpp		\
-	$(testcommon_srcdir)/typelisttest.cpp			\
-	$(testcommon_srcdir)/typelistutiltest.cpp		\
+	$(testcommon_srcdir)/meta/typelisttest.cpp         	\
+	$(testcommon_srcdir)/meta/typelismaniptest.cpp     	\
+	$(testcommon_srcdir)/meta/generatortest.cpp        	\
+	$(testcommon_srcdir)/meta/configflagstest.cpp      	\
 	$(testcommon_srcdir)/visitingtoolconcept.cpp		\
 	$(testcommon_srcdir)/visitingtoolextendedtest.cpp	\
 	$(testcommon_srcdir)/visitingtooltest.cpp
