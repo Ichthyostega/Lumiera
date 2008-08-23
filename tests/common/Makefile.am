@@ -51,7 +51,7 @@ test_common_SOURCES =						\
 	$(testcommon_srcdir)/test/cmdlinewrappertest.cpp	\
 	$(testcommon_srcdir)/test/testoptiontest.cpp		\
 	$(testcommon_srcdir)/meta/typelisttest.cpp         	\
-	$(testcommon_srcdir)/meta/typelismaniptest.cpp     	\
+	$(testcommon_srcdir)/meta/typelistmaniptest.cpp     	\
 	$(testcommon_srcdir)/meta/generatortest.cpp        	\
 	$(testcommon_srcdir)/meta/configflagstest.cpp      	\
 	$(testcommon_srcdir)/visitingtoolconcept.cpp		\
