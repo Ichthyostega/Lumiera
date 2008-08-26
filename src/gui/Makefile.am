@@ -21,7 +21,7 @@ lumigui_srcdir = $(top_srcdir)/src/gui
 #lumigui_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
 #lumigui_CPPFLAGS = -I$(top_srcdir)/src/
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"	\
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\"							\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\"							\
