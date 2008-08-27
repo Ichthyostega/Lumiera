@@ -141,5 +141,36 @@ TEST ("configitem_simple_ctor_dtor")
   lumiera_config_destroy ();
 }
 
+TEST ("configitem_simple_content_check")
+{
+  REQUIRE (argv[2]);
+  lumiera_config_init ("./");
+
+  LumieraConfigitem item;
+
+  item = lumiera_configitem_new (argv[2]);
+
+  if ( item->line )
+    {
+      printf("item->line = \'%s\'\n", item->line);
+    }
+  if ( item->key_size )
+    {
+      printf("item->key_size = \'%i\'\n", item->key_size);
+    }
+  if ( item->key )
+    {
+      printf("item->key = \'%s\'\n", item->key);
+    }
+  if ( item->delim )
+    {
+      printf("item->delim = \'%s\'\n", item->delim);
+    }
+
+  lumiera_configitem_delete (item);
+
+  lumiera_config_destroy ();
+}
+
 
 TESTS_END

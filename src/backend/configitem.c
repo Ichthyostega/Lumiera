@@ -208,6 +208,60 @@ lumiera_configitem_parse (LumieraConfigitem self, const char* line)
   else if (*itr == '@' )
     {
       /*this is a directive*/
+
+      /*itr points now to @*/
+      self->key = itr;
+
+      /*check whether there are illegal whitespaces after @*/
+      itr++;
+      if (*itr && !isspace(*itr))
+        {
+          /*now look for the end of the directive and set the keysize*/
+          self->key_size = strspn (itr, LUMIERA_CONFIG_KEY_CHARS);
+      
+          itr += self->key_size;
+
+          /*we need a key with a length greather than zero and 
+           * either the end of the line 
+           * or a whitespace after the key */
+
+          if ( self->key_size && ( !*itr || (*itr && isspace(*itr)) ))
+            {
+              /*look for given arguments*/ 
+
+              /*skip blanks*/
+              while (*itr && isspace (*itr))
+                itr++;
+
+              if (*itr)
+                {
+                  /*there are arguments given, thus set delim*/
+                  self->delim = itr - 1;
+                }
+              else
+                {
+                  /*no arguments were given*/
+                  self->delim = NULL;
+                }
+            }
+          else
+            {
+              /*malformed lines shall be treated like if they were comments*/
+              self->key = NULL;
+              self->key_size = 0;
+
+              LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
+            }
+        }
+      else
+        {
+          /*there occurred already an error right after the @!*/
+          /*malformed lines shall be treated like if they were comments*/
+          self->key = NULL;
+          self->key_size = 0;
+
+          LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
+        } 
     }
   else if (*itr == '[' )
     {

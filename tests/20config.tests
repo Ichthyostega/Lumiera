@@ -140,3 +140,59 @@ END
 
 TEST "create configitem with blank line" configitem_simple_ctor_dtor $' \t \t' <<END
 END
+
+TEST "create configitem with comment" configitem_simple_ctor_dtor $' #\t comment bla' <<END
+END
+
+TEST "create configitem with section" configitem_simple_ctor_dtor $'\t[prefix suffix ] bla' <<END
+END
+
+TEST "create configitem with directive" configitem_simple_ctor_dtor $' @include \t\t file   \t' <<END
+END
+
+TEST "create configitem with configentry" configitem_simple_ctor_dtor $' key \t=\t value' <<END
+END
+
+TEST "create configitem with configentry (redirect)" configitem_simple_ctor_dtor $'keya <\t\t keyb ' <<END
+END
+
+TEST "check content of configitem with empty line" configitem_simple_content_check $'' << END
+END
+
+TEST "check content of configitem with comment" configitem_simple_content_check $'\t #comment bla' << END
+out: item->line = '	 #comment bla'
+END
+
+TEST "check content of configitem with section" configitem_simple_content_check $'[ key.foo suffix.bar ] ' << END
+out: item->line = '[ key.foo suffix.bar ] '
+out: item->key_size = '7'
+out: item->key = 'key.foo suffix.bar ] '
+out: item->delim = ' suffix.bar ] '
+END
+
+TEST "check content of configitem with directive (without argument)" configitem_simple_content_check $'\t @directive  ' << END
+out: item->line = '	 @directive  '
+out: item->key_size = '9'
+out: item->key = '@directive  '
+END
+
+TEST "check content of configitem with directive (with argument)" configitem_simple_content_check $'\t @directive \targument' << END
+out: item->line = '	 @directive 	argument'
+out: item->key_size = '9'
+out: item->key = '@directive 	argument'
+out: item->delim = '	argument'
+END
+
+TEST "check content of configitem with configentry" configitem_simple_content_check $' \t\t key.foo \t\t=\tbar' << END
+out: item->line = ' 		 key.foo 		=	bar'
+out: item->key_size = '7'
+out: item->key = 'key.foo 		=	bar'
+out: item->delim = '=	bar'
+END
+
+TEST "check content of configitem with configentry (redirect)" configitem_simple_content_check $' \t\t key.foo \t\t<\tkey.bar' << END
+out: item->line = ' 		 key.foo 		<	key.bar'
+out: item->key_size = '7'
+out: item->key = 'key.foo 		<	key.bar'
+out: item->delim = '<	key.bar'
+END
