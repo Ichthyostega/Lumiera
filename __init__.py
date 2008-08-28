@@ -116,8 +116,17 @@ def DoxySourceScan(node, env, path):
 
    file_patterns = data.get("FILE_PATTERNS", default_file_patterns)
    exclude_patterns = data.get("EXCLUDE_PATTERNS", default_exclude_patterns)
+   
+   #
+   # We're running in the top-level directory, but the doxygen
+   # configuration file is in the same directory as node; this means
+   # that relative pathnames in node must be adjusted before they can
+   # go onto the sources list
+   conf_dir = os.path.dirname(str(node))
 
    for node in data.get("INPUT", []):
+      if not os.path.isabs(node):
+         node = os.path.join(conf_dir, node)
       if os.path.isfile(node):
          sources.append(node)
       elif os.path.isdir(node):
@@ -150,7 +159,7 @@ def DoxyEmitter(source, target, env):
       "HTML": ("YES", "html"),
       "LATEX": ("YES", "latex"),
       "RTF": ("NO", "rtf"),
-      "MAN": ("YES", "man"),
+      "MAN": ("NO", "man"),
       "XML": ("NO", "xml"),
    }
 
@@ -185,13 +194,12 @@ def generate(env):
       scan_check = DoxySourceScanCheck,
    )
 
-   doxyfile_builder = env.Builder(
-      action = env.Action("cd ${SOURCE.dir}  &&  ${DOXYGEN} ${SOURCE.file}"),
+   import SCons.Builder
+   doxyfile_builder = SCons.Builder.Builder(
+      action = "cd ${SOURCE.dir}  &&  ${DOXYGEN} ${SOURCE.file}",
       emitter = DoxyEmitter,
       target_factory = env.fs.Entry,
       single_source = True,
-
-
       source_scanner =  doxyfile_scanner,
    )
 
