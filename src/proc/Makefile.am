@@ -22,7 +22,6 @@ liblumiproc_a_srcdir = $(top_srcdir)/src/proc
 noinst_LIBRARIES += liblumiproc.a
 
 liblumiproc_a_CXXFLAGS = $(CXXFLAGS) -Wall
-liblumiproc_a_CPPFLAGS = -I$(top_srcdir)/src/
 
 liblumiproc_a_SOURCES =							\
 	$(liblumiproc_a_srcdir)/controllerfacade.cpp		\
@@ -37,7 +36,6 @@ liblumiprocasset_a_srcdir = $(top_srcdir)/src/proc/asset
 noinst_LIBRARIES += liblumiprocasset.a
 
 liblumiprocasset_a_CXXFLAGS = $(CXXFLAGS) -Wall
-liblumiprocasset_a_CPPFLAGS = -I$(top_srcdir)/src/
 
 liblumiprocasset_a_SOURCES =				\
 	$(liblumiprocasset_a_srcdir)/codec.cpp		\
@@ -62,7 +60,6 @@ liblumiprocengine_a_srcdir = $(top_srcdir)/src/proc/engine
 noinst_LIBRARIES += liblumiprocengine.a
 
 liblumiprocengine_a_CXXFLAGS = $(CXXFLAGS) -Wall
-liblumiprocengine_a_CPPFLAGS = -I$(top_srcdir)/src/
 
 liblumiprocengine_a_SOURCES =				\
 	$(liblumiprocengine_a_srcdir)/buffhandle.cpp	\
@@ -85,7 +82,6 @@ liblumiprocmobject_a_srcdir = $(top_srcdir)/src/proc/mobject
 noinst_LIBRARIES += liblumiprocmobject.a
 
 liblumiprocmobject_a_CXXFLAGS = $(CXXFLAGS) -Wall
-liblumiprocmobject_a_CPPFLAGS = -I$(top_srcdir)/src/
 
 liblumiprocmobject_a_SOURCES =					\
 	$(liblumiprocmobject_a_srcdir)/builderfacade.cpp	\
@@ -101,7 +97,6 @@ liblumiprocmobjectbuilder_a_srcdir = $(top_srcdir)/src/proc/mobject/builder
 noinst_LIBRARIES += liblumiprocmobjectbuilder.a
 
 liblumiprocmobjectbuilder_a_CXXFLAGS = $(CXXFLAGS) -Wall
-liblumiprocmobjectbuilder_a_CPPFLAGS = -I$(top_srcdir)/src/
 
 liblumiprocmobjectbuilder_a_SOURCES =					\
 	$(liblumiprocmobjectbuilder_a_srcdir)/assembler.cpp		\
@@ -115,7 +110,6 @@ liblumiprocmobjectcontroller_a_srcdir = $(top_srcdir)/src/proc/mobject/controlle
 noinst_LIBRARIES += liblumiprocmobjectcontroller.a
 
 liblumiprocmobjectcontroller_a_CXXFLAGS = $(CXXFLAGS) -Wall
-liblumiprocmobjectcontroller_a_CPPFLAGS = -I$(top_srcdir)/src/
 
 liblumiprocmobjectcontroller_a_SOURCES =				\
 	$(liblumiprocmobjectcontroller_a_srcdir)/pathmanager.cpp	
@@ -125,7 +119,6 @@ liblumiprocmobjectsession_a_srcdir = $(top_srcdir)/src/proc/mobject/session
 noinst_LIBRARIES += liblumiprocmobjectsession.a
 
 liblumiprocmobjectsession_a_CXXFLAGS = $(CXXFLAGS) -Wall
-liblumiprocmobjectsession_a_CPPFLAGS = -I$(top_srcdir)/src/
 
 liblumiprocmobjectsession_a_SOURCES =					\
 	$(liblumiprocmobjectsession_a_srcdir)/abstractmo.cpp		\

@@ -27,6 +27,8 @@ BUILT_SOURCES =
 EXTRA_DIST =
 SUBDIRS =
 
+AM_CPPFLAGS = -I$(top_srcdir)/src/
+
 # Only use subdirs if really needed, prefer the include scheme below
 #SUBDIRS +=
 

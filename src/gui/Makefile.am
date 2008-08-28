@@ -19,7 +19,6 @@ lumigui_srcdir = $(top_srcdir)/src/gui
 #noinst_LIBRARIES += liblumigui.a
 
 #lumigui_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
-#lumigui_CPPFLAGS = -I$(top_srcdir)/src/
 
 lumigui_CPPFLAGS = $(AM_CPPFLAGS) \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"	\

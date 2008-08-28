@@ -19,7 +19,6 @@ liblumi_a_srcdir = $(top_srcdir)/src/lib
 noinst_LIBRARIES += liblumi.a
 
 liblumi_a_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
-liblumi_a_CPPFLAGS = -I$(top_srcdir)/src/
 
 liblumi_a_SOURCES =				\
 	$(liblumi_a_srcdir)/plugin.c		\
