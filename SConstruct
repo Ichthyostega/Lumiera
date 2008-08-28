@@ -61,7 +61,7 @@ def setupBasicEnvironment():
     opts = defineCmdlineOptions() 
     env = LumieraEnvironment(options=opts
                             ,toolpath = [TOOLDIR]
-                            ,tools = ["default", "BuilderGCH"]  
+                            ,tools = ["default", "BuilderGCH", "BuilderDoxygen"]  
                             ) 
     
     env.Append ( CCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honor CFLAGS, only CCFLAGS 
@@ -340,16 +340,9 @@ def definePostBuildTargets(env, artifacts):
     env.Clean ('build', [ 'scache.conf', '.sconf_temp', '.sconsign.dblite', 'config.log' ])
     env.Clean ('build', [ '$SRCDIR/pre.gch' ])
     
-    # Doxygen documentation
-    # Note: at the moment we only depend on Doxyfile
-    #       obviousely, we should depend on all sourcefiles
-    #       real Doxygen builder for scons is under developement for 0.97
-    #       so for the moment I prefere not to bother
-    doxyfile = File('doc/devel/Doxyfile')
-    env.NoClean(doxyfile)
-    doxydoc = artifacts['doxydoc'] = [ Dir('doc/devel/html'), Dir('doc/devel/latex') ]
-    env.Command(doxydoc, doxyfile, "doxygen Doxyfile 2>&1 |tee ,doxylog",  chdir='doc/devel')
-    env.Clean ('doc/devel', doxydoc + ['doc/devel/,doxylog'])
+    doxydoc = artifacts['doxydoc'] = env.Doxygen('doc/devel/Doxyfile')
+    env.Alias ('doxydoc', doxydoc)
+    env.Clean ('doxydoc', doxydoc + ['doc/devel/,doxylog','doc/devel/warnings.txt'])
 
 
 def defineInstallTargets(env, artifacts):
