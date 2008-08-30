@@ -59,14 +59,34 @@ protected:
 
   bool on_expose_event(GdkEventExpose *event);
   
+  /**
+   * The event handler for button press events.
+   */
+  bool on_button_press_event(GdkEventButton* event);
+  
+  /**
+   * The event handler for button release events.
+   */
+  bool on_button_release_event(GdkEventButton* event);
+  
+  /**
+   * The event handler for mouse move events.
+   */
   bool on_motion_notify_event(GdkEventMotion *event);
   
   void on_size_request(Gtk::Requisition *requisition);
 
   void on_size_allocate(Gtk::Allocation& allocation);
   
-  /* ===== Internals ===== */
 private:
+  /* ===== Internal Methods ===== */
+
+  /**
+   * As the user drags, this function is called to update the position
+   * of the moving end of the playback period.
+   */
+  void set_leading_x(const int x);
+
   void draw_ruler(Cairo::RefPtr<Cairo::Context> cairo,
     const Gdk::Rectangle ruler_rect);
 
@@ -74,6 +94,9 @@ private:
     const Gdk::Rectangle ruler_rect);
     
   void draw_selection(Cairo::RefPtr<Cairo::Context> cr,
+    const Gdk::Rectangle ruler_rect);
+    
+  void draw_playback_period(Cairo::RefPtr<Cairo::Context> cr,
     const Gdk::Rectangle ruler_rect);
 
   gavl_time_t calculate_major_spacing() const;
@@ -83,6 +106,16 @@ private:
   void read_styles();
   
 private:
+
+  // State values
+  bool isDragging;
+  
+  /**
+   * During a selection drag, one end of the selection is moving with
+   * the mouse, the other is pinned. pinnedDragTime specifies the time
+   * of that point.
+   */
+  gavl_time_t pinnedDragTime;
   
   // Indicated values
   int mouseChevronOffset;
@@ -96,7 +129,11 @@ private:
   int minDivisionWidth;
   int mouseChevronSize;
   int selectionChevronSize;
-  
+  GdkColor playbackArrowColour;
+  float playbackArrowAlpha;
+  int playbackArrowSize;
+  int playbackArrowStemSize;
+
   // Owner
   lumiera::gui::widgets::TimelineWidget *timelineWidget;
   

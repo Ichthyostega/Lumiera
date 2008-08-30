@@ -90,6 +90,7 @@ IBeamTool::on_button_press_event(GdkEventButton* event)
   Tool::on_button_press_event(event);
   
   TimelineWidget *timeline_widget = get_timeline_widget();
+  REQUIRE(timeline_widget != NULL);
   
   if(event->button == 1)
     {
@@ -181,12 +182,16 @@ void
 IBeamTool::set_leading_x(const int x)
 {
   TimelineWidget *timeline_widget = get_timeline_widget();
+  REQUIRE(timeline_widget != NULL);
 
+  const bool set_playback_period = dragType == Selection;
   const gavl_time_t time = timeline_widget->x_to_time(x);
   if(time > pinnedDragTime)
-    timeline_widget->set_selection(pinnedDragTime, time);
+    timeline_widget->set_selection(
+      pinnedDragTime, time, set_playback_period);
   else
-    timeline_widget->set_selection(time, pinnedDragTime);
+    timeline_widget->set_selection(
+      time, pinnedDragTime, set_playback_period);
 }
 
 void

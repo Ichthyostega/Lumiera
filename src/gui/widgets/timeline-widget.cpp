@@ -46,6 +46,8 @@ TimelineWidget::TimelineWidget() :
   verticalAdjustment(0, 0, 0),
   selectionStart(0),
   selectionEnd(0),
+  playbackPeriodStart(0),
+  playbackPeriodEnd(0),
   horizontalScroll(horizontalAdjustment),
   verticalScroll(verticalAdjustment)
 {
@@ -183,8 +185,12 @@ TimelineWidget::get_selection_end() const
 }
 
 void
-TimelineWidget::set_selection(gavl_time_t start, gavl_time_t end)
+TimelineWidget::set_selection(gavl_time_t start, gavl_time_t end,
+  bool reset_playback_period)
 {
+  REQUIRE(ruler != NULL);
+  REQUIRE(body != NULL);
+    
   if(start < end)
     {
       selectionStart = start;
@@ -195,6 +201,46 @@ TimelineWidget::set_selection(gavl_time_t start, gavl_time_t end)
       // The selection is back-to-front, flip it round
       selectionStart = end;
       selectionEnd = start;
+    }
+    
+  if(reset_playback_period)
+    {
+      playbackPeriodStart = selectionStart;
+      playbackPeriodEnd = selectionEnd;
+    }
+
+  ruler->queue_draw();
+  body->queue_draw();
+}
+
+gavl_time_t
+TimelineWidget::get_playback_period_start() const
+{
+  return playbackPeriodStart;
+}
+  
+gavl_time_t
+TimelineWidget::get_playback_period_end() const
+{
+  return playbackPeriodEnd;
+}
+  
+void
+TimelineWidget::set_playback_period(gavl_time_t start, gavl_time_t end)
+{
+  REQUIRE(ruler != NULL);
+  REQUIRE(body != NULL);
+  
+  if(start < end)
+    {
+      playbackPeriodStart = start;
+      playbackPeriodEnd = end;
+    }
+  else
+    {
+      // The period is back-to-front, flip it round
+      playbackPeriodStart = end;
+      playbackPeriodEnd = start;
     }
 
   ruler->queue_draw();

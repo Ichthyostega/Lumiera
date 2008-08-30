@@ -349,23 +349,18 @@ TimelineBody::register_styles() const
 {
   GtkWidgetClass *klass = GTK_WIDGET_CLASS(G_OBJECT_GET_CLASS(gobj()));
 
-  gtk_widget_class_install_style_property(
-    GTK_WIDGET_CLASS(G_OBJECT_GET_CLASS(gobj())), 
-    g_param_spec_boxed("background",
-      "Track Background",
+  gtk_widget_class_install_style_property(klass, 
+    g_param_spec_boxed("background", "Track Background",
       "The background colour of timeline tracks",
       GDK_TYPE_COLOR, G_PARAM_READABLE));
   
-  gtk_widget_class_install_style_property(
-    GTK_WIDGET_CLASS(G_OBJECT_GET_CLASS(gobj())), 
-    g_param_spec_boxed("selection",
-      "End lines of a selection",
+  gtk_widget_class_install_style_property(klass, 
+    g_param_spec_boxed("selection", "End lines of a selection",
       "The colour of selection limit lines",
       GDK_TYPE_COLOR, G_PARAM_READABLE));
       
   gtk_widget_class_install_style_property(klass, 
-    g_param_spec_float("selection_alpha",
-    "Selection Alpha",
+    g_param_spec_float("selection_alpha", "Selection Alpha",
     "The transparency of the selection marque.",
     0, 1.0, 0.5, G_PARAM_READABLE));
 }

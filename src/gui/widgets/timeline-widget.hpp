@@ -120,8 +120,30 @@ public:
   
   /**
    * Sets the period of the selection.
+   * @param start The start time.
+   * @param end The end time.
+   * @param reset_playback_period Specifies whether to set the playback
+   * period to the same as this new selection.
    */
-  void set_selection(gavl_time_t start, gavl_time_t end);
+  void set_selection(gavl_time_t start, gavl_time_t end,
+    bool reset_playback_period = true);
+  
+  /**
+   * Gets the time at which the playback period begins.
+   */
+  gavl_time_t get_playback_period_start() const;
+  
+  /**
+   * Gets the time at which the playback period ends.
+   */
+  gavl_time_t get_playback_period_end() const;
+  
+  /**
+   * Sets the playback period.
+   * @param start The start time.
+   * @param end The end time.
+   */
+  void set_playback_period(gavl_time_t start, gavl_time_t end);
   
   /**
    * Gets the type of the tool currently active.
@@ -169,6 +191,8 @@ protected:
   // Selection State
   gavl_time_t selectionStart;
   gavl_time_t selectionEnd;
+  gavl_time_t playbackPeriodStart;
+  gavl_time_t playbackPeriodEnd;
 
   int totalHeight;
 
