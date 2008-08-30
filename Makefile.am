@@ -27,6 +27,8 @@ BUILT_SOURCES =
 EXTRA_DIST =
 SUBDIRS =
 
+# global pre-processor flags. Per-target variables should include
+# these at the front (if possible) for consistency
 AM_CPPFLAGS = -I$(top_srcdir)/src/ \
 	$(NOBUGMT_LUMIERA_CFLAGS)
 
