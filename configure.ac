@@ -103,7 +103,10 @@ AC_CHECK_HEADER([boost/program_options.hpp],
         ,
         AC_MSG_ERROR([boost::program_options missing            (http://www.boost.org/)])
         )
-# checking for library left out, name contains compiler version here  (libboost_program_options-gcc42-mt-1_34_1.so.1.34.1) any ides how to use that?
+
+# check for the minimum Boost version
+# (http://www.randspringer.de/boost/upt.html)
+AX_BOOST_BASE([1.34.1])
 
 AC_CHECK_HEADER([boost/regex.hpp],
         ,
