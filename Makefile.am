@@ -27,7 +27,8 @@ BUILT_SOURCES =
 EXTRA_DIST =
 SUBDIRS =
 
-AM_CPPFLAGS = -I$(top_srcdir)/src/
+AM_CPPFLAGS = -I$(top_srcdir)/src/ \
+	$(NOBUGMT_LUMIERA_CFLAGS)
 
 # Only use subdirs if really needed, prefer the include scheme below
 #SUBDIRS +=

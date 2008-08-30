@@ -31,7 +31,7 @@ test_components_LDADD =								\
 	liblumi.a								\
 	liblumicommon.a								\
 	liblumibackend.a							\
-	-lnobugmt -lpthread -ldl -lboost_program_options-mt -lboost_regex-mt
+	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt
 
 test_components_SOURCES =							\
 	$(testcomponents_srcdir)/backend/mediaaccessmock.cpp			\

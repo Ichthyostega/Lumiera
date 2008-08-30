@@ -80,15 +80,6 @@ AC_ARG_ENABLE(release, AC_HELP_STRING([--enable-release], [select NoBug RELEASE 
 # C headers and libraries
 AC_LANG_PUSH([C])
 
-AC_CHECK_HEADER([nobug.h],
-        AC_DEFINE(HAVE_NOBUG_H),
-        AC_MSG_ERROR([NoBug header missing                      (http://www.pipapo.org/pipawiki/NoBug)])
-        )
-AC_CHECK_LIB([nobugmt],  nobug_thread_id_get,
-        ,
-        AC_MSG_ERROR([NoBug multithreading library missing      (http://www.pipapo.org/pipawiki/NoBug)])
-        )
-
 AC_CHECK_HEADER([execinfo.h], AC_DEFINE(HAVE_EXECINFO_H))
 # there is a warning in nobug, disabled til fixed AC_CHECK_HEADER([valgrind/valgrind.h], AC_DEFINE(HAVE_VALGRIND_VALGRIND_H))
 
@@ -167,6 +158,19 @@ AC_SUBST(GTK_LUMIERA_CFLAGS)
 AC_SUBST(GTK_LUMIERA_LIBS)
 
 # END Gtk Dependancies
+
+
+############## Nobug Dependancies
+PKG_CHECK_MODULES(NOBUG_LUMIERA, [nobug >= 0.3rc1],
+				 AC_DEFINE(HAVE_NOBUG_H),
+				 AC_MSG_ERROR([NoBug pkg-config metadata missing                      (http://www.pipapo.org/pipawiki/NoBug)])
+)
+PKG_CHECK_MODULES(NOBUGMT_LUMIERA, [nobugmt >= 0.3rc1],
+				 AC_DEFINE(HAVE_NOBUGMT_H),
+				 AC_MSG_ERROR([NoBug pkg-config metadata missing                      (http://www.pipapo.org/pipawiki/NoBug)])
+)
+
+# END Nobug Dependancies
 
 # Print a summary
 AC_MSG_RESULT([
