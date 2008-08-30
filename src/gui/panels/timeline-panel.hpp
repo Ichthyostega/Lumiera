@@ -62,6 +62,8 @@ private:
 private:
   void update_tool_buttons();
   void update_zoom_buttons();
+  
+  void show_time(gavl_time_t time);
 
 private:
 

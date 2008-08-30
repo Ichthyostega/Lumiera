@@ -51,20 +51,19 @@ TimelinePanel::TimelinePanel() :
     mem_fun(this, &TimelinePanel::on_mouse_hover));
   
   // Setup the toolbar
+  timeIndicatorButton.set_label_widget(timeIndicator);
+  toolbar.append(timeIndicatorButton);
+  
+  toolbar.append(seperator1);
+  
   toolbar.append(arrowTool, mem_fun(this,
     &TimelinePanel::on_arrow_tool));
   toolbar.append(iBeamTool, mem_fun(this,
     &TimelinePanel::on_ibeam_tool));
-  toolbar.append(seperator1);
+  toolbar.append(seperator2);
   toolbar.append(zoomIn, mem_fun(this, &TimelinePanel::on_zoom_in));
   toolbar.append(zoomOut, mem_fun(this, &TimelinePanel::on_zoom_out));
-  
-  seperator2.set_expand(true);
-  toolbar.append(seperator2);
 
-  timeIndicatorButton.set_label_widget(timeIndicator);
-  toolbar.append(timeIndicatorButton);
-  
   toolbar.set_icon_size(IconSize(ICON_SIZE_LARGE_TOOLBAR));
   toolbar.set_toolbar_style(TOOLBAR_ICONS);
   
@@ -72,8 +71,10 @@ TimelinePanel::TimelinePanel() :
   pack_start(toolbar, PACK_SHRINK);
   pack_start(timelineWidget, PACK_EXPAND_WIDGET);
   
+  // Set the initial UI state
   update_tool_buttons();
   update_zoom_buttons();
+  show_time(0);
 }
 
 void
@@ -110,7 +111,7 @@ TimelinePanel::on_zoom_out()
 void
 TimelinePanel::on_mouse_hover(gavl_time_t time)
 {
-  timeIndicator.set_text(lumiera_tmpbuf_print_time(time));
+  show_time(time);
 }
 
 void
@@ -132,6 +133,12 @@ TimelinePanel::update_zoom_buttons()
   zoomIn.set_sensitive(timelineWidget.get_time_scale() != 1);
   zoomOut.set_sensitive(timelineWidget.get_time_scale() !=
     TimelineWidget::MaxScale);
+}
+
+void
+TimelinePanel::show_time(gavl_time_t time)
+{
+  timeIndicator.set_text(lumiera_tmpbuf_print_time(time));
 }
 
 }   // namespace panels
