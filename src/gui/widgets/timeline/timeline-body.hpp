@@ -37,32 +37,65 @@ class TimelineWidget;
 
 namespace timeline {
 
+/**
+ * Implementation of the timeline body subwidget. This widget is
+ * displayed in the centre of the timeline widget, and displays the
+ * content of all timeline tracks.
+ */
 class TimelineBody : public Gtk::DrawingArea
 {
 public:
+
+  /**
+   * Constructor
+   * @param timeline_widget The owner widget of this ruler.
+   */
   TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widget);
   
   ~TimelineBody();
   
+  /**
+   * Returns the type of the currently selected timeline tool.
+   */
   ToolType get_tool() const;
   
+  /**
+   * Selects a tool of a specified type.
+   * @param tool_type The type of tool to set.
+   */
   void set_tool(ToolType tool_type);
 
   /* ===== Events ===== */
 protected:
+
+  /**
+   * An event handler for when the widget is realized.
+   */
   void on_realize();
+  
+  /**
+   * An event handler for when the window must be redrawn.
+   */
+  bool on_expose_event(GdkEventExpose* event);
 
   void on_scroll();
   
   bool on_scroll_event(GdkEventScroll* event);
   
-  bool on_button_press_event (GdkEventButton* event);
+  /**
+   * The event handler for button press events.
+   */
+  bool on_button_press_event(GdkEventButton* event);
   
-  bool on_button_release_event (GdkEventButton* event);
+  /**
+   * The event handler for button release events.
+   */
+  bool on_button_release_event(GdkEventButton* event);
   
+  /**
+   * The event handler for mouse move events.
+   */
   bool on_motion_notify_event(GdkEventMotion *event);
-  
-  bool on_expose_event(GdkEventExpose* event);
   
   /* ===== Internals ===== */
 private:
@@ -72,8 +105,14 @@ private:
   
   void set_vertical_offset(int offset);
   
+  /**
+   * Registers all the styles that this class will respond to.
+   */
   void register_styles() const;
 
+  /**
+   * Reads styles from the present stylesheet.
+   */
   void read_styles();
   
 private:
