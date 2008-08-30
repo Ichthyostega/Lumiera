@@ -158,7 +158,7 @@ AC_CHECK_LIB(Xv, XvQueryAdaptors, ,
 # END X11 Dependancies
 
 
-############## Pkg Dependancies
+############## Gtk Dependancies
 PKG_CHECK_MODULES(GTK_LUMIERA, [
     gtkmm-2.4 >= 2.8 gdl-1.0 >= 0.6.1 cairomm-1.0 >= 0.6.0
     gavl >= 0.2.5 librsvg-2.0 >= 2.18.1])
