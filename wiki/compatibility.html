@@ -747,7 +747,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BuildDependencies" modifier="Ichthyostega" modified="200807110148" created="200803261326" changecount="13">
+<div title="BuildDependencies" modifier="Ichthyostega" modified="200808190851" created="200803261326" changecount="15">
 <pre>! Programming Languages
 * C
 ** a C99 compatible compiler, some GCC extensions are used, most are optional.
@@ -782,12 +782,14 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 * boost (see above, version 1.35 works too)
 * NoBug
 * [[GAVL|http://gmerlin.sourceforge.net/gavl.html]] (1.0.0) 
-* for the GUI: gtkmm-2.4 gdl-1.0 cairomm-1.0 xv
+* for the GUI: gtkmm-2.4 gdl-1.0 libglibmm-2.4 cairomm-1.0 xv
 ** libgtkmm-2.4-dev (&gt;=2.8)
 ** libcairomm-1.0-dev (&gt;=0.6.0)
 ** libgdl-1-dev (&gt;=0.6.1)
 *** libbonoboui2-dev (&gt;=2.14.0)
+** libglibmm-2.4-dev (&gt;=2.16), requiring glib2.0 (&gt;=2.16)
 ** libxv-dev ~~(1.0.2 is known to work)~~
+
 
 //usually, newer versions are OK//
 

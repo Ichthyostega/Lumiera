@@ -63,8 +63,9 @@ TimelinePanel::TimelinePanel() :
   toolbar.append(seperator2);
   toolbar.append(zoomIn, mem_fun(this, &TimelinePanel::on_zoom_in));
   toolbar.append(zoomOut, mem_fun(this, &TimelinePanel::on_zoom_out));
-
-  toolbar.set_icon_size(IconSize(ICON_SIZE_LARGE_TOOLBAR));
+  
+// doesn't compile on Etch
+//  toolbar.set_icon_size(IconSize(ICON_SIZE_LARGE_TOOLBAR));
   toolbar.set_toolbar_style(TOOLBAR_ICONS);
   
   // Add the toolbar

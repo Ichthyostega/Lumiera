@@ -22,8 +22,7 @@
 
 
 #include "proc/engine/processor.hpp"
-#include "proc/engine/exitnode.hpp"
-#include "proc/stateproxy.hpp"
+#include "proc/state.hpp"
 
 namespace engine
   {

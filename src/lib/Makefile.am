@@ -49,5 +49,5 @@ noinst_HEADERS +=						\
 	$(liblumi_a_srcdir)/mrucache.h				\
 	$(liblumi_a_srcdir)/time.h	      		\
 	$(liblumi_a_srcdir)/appconfig.hpp			\
-	$(liblumi_a_srcdir)/appconfig.hpp
+	$(liblumi_a_srcdir)/lifecycleregistry.hpp
 

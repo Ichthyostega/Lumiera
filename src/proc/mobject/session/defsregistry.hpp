@@ -52,7 +52,7 @@ namespace mobject
     using boost::lambda::_1;
     using boost::lambda::var;  
     
-    namespace // Implementation details
+    namespace // Implementation details //////////////////TODO better a named implementation namespace (avoids warnings on gcc 4.3)
       {
       struct TableEntry 
         {
@@ -159,7 +159,7 @@ namespace mobject
       template<class TAR>
       size_t Slot<TAR>::index (0);
       
-    }
+    } // (End) impl namespace
     
 
     /**

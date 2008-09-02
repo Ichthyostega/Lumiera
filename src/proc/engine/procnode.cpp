@@ -22,12 +22,14 @@
 
 
 #include "proc/engine/procnode.hpp"
+#include "proc/engine/nodefactory.hpp"
 
-namespace engine
-  {
+namespace engine {
 
 
-  /** */
+  /** Storage for the (single, static) ProcNode factory object.
+   */
+  NodeFactory ProcNode::create;
 
 
 } // namespace engine

@@ -91,7 +91,8 @@ namespace asset
     else
       {
         DoAttach entry(node, where);
-        instructions_.push_back(BuildInstruct(entry));
+        BuildInstruct instruction(entry);
+        instructions_.push_back(instruction);
       }
     TODO ("declare dependency??");
     return *this;

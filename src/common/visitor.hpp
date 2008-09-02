@@ -79,7 +79,7 @@ Credits for many further implementation ideas go to
 #include "common/visitorpolicies.hpp"
 #include "common/visitordispatcher.hpp"
 
-#include "common/typelist.hpp"
+#include "common/meta/typelist.hpp"
 
 
 namespace lumiera

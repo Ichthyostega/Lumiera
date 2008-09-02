@@ -2,10 +2,11 @@
 *~
 *.tar.*
 .[^.]*
+*.o
 *.os
 *.gch
 ,valgrind.log*
-admin/scons/*.pyc
+*.pyc
 optcache
 Makefile.in
 build/*
@@ -13,5 +14,6 @@ bin/*
 autom4te.cache/*
 scripts/*
 configure
+config.log
 aclocal.m4
 semantic.cache

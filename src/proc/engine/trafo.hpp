@@ -42,9 +42,25 @@ namespace engine
    */
   class Trafo : public ProcNode
     {
-      ///////////
+    protected:
+      Trafo (WiringDescriptor const& wd)
+        : ProcNode(wd)
+        { }
+      
+      friend class NodeFactory;
+      
+      
+      
+      /** do the actual calculations.
+       *  @internal dispatch to implementation. 
+       *            Client code should use #render()
+       *  @todo obviously we need a parameter!!!
+       */
+      virtual void process() = 0;
     };
 
+  typedef Trafo* PTrafo;    ///< @todo handle ProcNode by pointer or by shared-ptr??
+  
 
 
 } // namespace engine

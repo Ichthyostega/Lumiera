@@ -14,7 +14,7 @@ classcanvas 129669 class_ref 133253 // Frame
   end
 classcanvas 131845 class_ref 142469 // StateProxy
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 126 211 2000
+  xyz 126 220 2000
   end
 classcanvas 131973 class_ref 142597 // StateAdapter
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -22,11 +22,13 @@ classcanvas 131973 class_ref 142597 // StateAdapter
   end
 classcanvas 132357 class_ref 142725 // WiringDescriptor
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 229 497 2000
+  hidden_operations
+    operation_ref 136453 // callDown
+  xyz 229 498 2000
   end
 classcanvas 135045 class_ref 143365 // NodeWiring
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 241 568 2000
+  xyz 241 561 2000
   end
 textcanvas 135685 "determines concrete Type"
   xyzwh 100 594 2004 130 18
@@ -37,15 +39,15 @@ relationcanvas 129797 relation_ref 134533 // <unidirectional association>
   no_multiplicity_a multiplicity_b_pos 173 109 3000
 relationcanvas 132101 relation_ref 148869 // <generalisation>
   geometry VHV unfixed
-  from ref 131973 z 1999 to point 78 181
-  line 134021 z 1999 to point 118 181
+  from ref 131973 z 1999 to point 78 186
+  line 134021 z 1999 to point 118 186
   line 134149 z 1999 to ref 128517
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 relationcanvas 132229 relation_ref 148997 // <generalisation>
   geometry VHV
-  from ref 131845 z 1999 to point 178 181
-  line 134277 z 1999 to point 118 181
+  from ref 131845 z 1999 to point 178 186
+  line 134277 z 1999 to point 118 186
   line 134405 z 1999 to ref 128517
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
@@ -53,13 +55,13 @@ relationcanvas 132485 relation_ref 149125 // <directional aggregation by value>
   geometry HV
   from ref 128005 z 1999 stereotype "<<array>>" xyz 205 454 3000 to point 277 452
   line 133381 z 1999 to ref 132357
-  role_a_pos 289 472 3000 no_role_b
-  multiplicity_a_pos 265 472 3000 no_multiplicity_b
+  role_a_pos 289 473 3000 no_role_b
+  multiplicity_a_pos 265 473 3000 no_multiplicity_b
 relationcanvas 133509 relation_ref 149253 // <unidirectional association>
   from ref 131973 z 1999 to point 178 312
   line 133637 z 1999 to ref 131845
-  role_a_pos 190 302 3000 no_role_b
-  multiplicity_a_pos 164 302 3000 no_multiplicity_b
+  role_a_pos 190 293 3000 no_role_b
+  multiplicity_a_pos 164 293 3000 no_multiplicity_b
 relationcanvas 134533 relation_ref 149381 // <unidirectional association>
   from ref 131973 z 3004 to ref 129669
   no_role_a no_role_b
