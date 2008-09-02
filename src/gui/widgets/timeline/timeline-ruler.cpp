@@ -63,6 +63,10 @@ TimelineRuler::TimelineRuler(
 {
   REQUIRE(timelineWidget != NULL);
   
+  // Connect event handlers
+  timelineWidget->view_changed_signal().connect(sigc::mem_fun(
+    this, &TimelineRuler::on_update_view) );
+  
   // Install style properties
   register_styles();
 }
@@ -75,7 +79,7 @@ TimelineRuler::set_mouse_chevron_offset(int offset)
 }
 
 void
-TimelineRuler::update_view()
+TimelineRuler::on_update_view()
 {
   rulerImage.clear();
   queue_draw();
@@ -222,8 +226,8 @@ TimelineRuler::draw_ruler(Cairo::RefPtr<Cairo::Context> cr,
   REQUIRE(ruler_rect.get_height() > 0);
   REQUIRE(timelineWidget != NULL);
   
-  const gavl_time_t left_offset = timelineWidget->timeOffset;
-  const int64_t time_scale = timelineWidget->timeScale;
+  const gavl_time_t left_offset = timelineWidget->get_time_offset();
+  const int64_t time_scale = timelineWidget->get_time_scale();
   
   // Preparation steps
   const int height = ruler_rect.get_height();

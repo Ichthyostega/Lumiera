@@ -59,14 +59,14 @@ public:
    */
   void set_mouse_chevron_offset(int offset);
   
-  /**
-   * Causes the ruler to be redrawn from scratch. The cached ruler
-   * backdrop is destroyed and redrawn.
-   */
-  void update_view();
-
   /* ===== Events ===== */
-protected:
+private:
+  /**
+   * An event handler for when the view window of the timeline changes.
+   * @remarks Causes the ruler to be redrawn from scratch. The cached
+   * ruler backdrop is destroyed and redrawn.
+   */
+  void on_update_view();
 
   /**
    * An event handler for when the widget is realized.

@@ -52,6 +52,9 @@ public:
    */
   TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widget);
   
+  /**
+   * Destructor
+   */
   ~TimelineBody();
   
   /**
@@ -69,6 +72,11 @@ public:
 protected:
 
   /**
+   * An event handler for when the view window of the timeline changes.
+   */
+  void on_update_view();
+
+  /**
    * An event handler for when the widget is realized.
    */
   void on_realize();
@@ -77,8 +85,6 @@ protected:
    * An event handler for when the window must be redrawn.
    */
   bool on_expose_event(GdkEventExpose* event);
-
-  void on_scroll();
   
   bool on_scroll_event(GdkEventScroll* event);
   

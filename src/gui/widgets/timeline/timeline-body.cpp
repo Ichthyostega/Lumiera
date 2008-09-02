@@ -55,10 +55,8 @@ TimelineBody::TimelineBody(lumiera::gui::widgets::TimelineWidget
   REQUIRE(timelineWidget != NULL);
       
   // Connect up some events  
-  timelineWidget->horizontalAdjustment.signal_value_changed().connect(
-    sigc::mem_fun(this, &TimelineBody::on_scroll) );
-  timelineWidget->verticalAdjustment.signal_value_changed().connect(
-    sigc::mem_fun(this, &TimelineBody::on_scroll) );
+  timelineWidget->view_changed_signal().connect(sigc::mem_fun(
+    this, &TimelineBody::on_update_view) );
   
   // Install style properties
   register_styles();
@@ -107,6 +105,12 @@ TimelineBody::set_tool(timeline::ToolType tool_type)
     
   // Apply the cursor if possible
   tool->apply_cursor();
+}
+
+void
+TimelineBody::on_update_view()
+{
+  queue_draw();
 }
 
 void
@@ -216,12 +220,6 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
     } 
   
   return true;
-}
-
-void
-TimelineBody::on_scroll()
-{
-  queue_draw();
 }
   
 bool

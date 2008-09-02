@@ -157,6 +157,8 @@ public:
   
 public:
   /* ===== Signals ===== */
+  sigc::signal<void> view_changed_signal() const;
+  
   sigc::signal<void, gavl_time_t> mouse_hover_signal() const;
     
   /* ===== Events ===== */
@@ -208,10 +210,17 @@ protected:
   Gtk::HScrollbar horizontalScroll;
   Gtk::VScrollbar verticalScroll;
   
+  // Signals
+  sigc::signal<void> viewChangedSignal;
   sigc::signal<void, gavl_time_t> mouseHoverSignal;
    
   /* ===== Constants ===== */
 public:
+  /**
+   * The maximum scale for timeline display.
+   * @remarks At MaxScale, every pixel on the timeline is equivalent
+   * to 30000000 gavl_time_t increments.
+   */ 
   static const int64_t MaxScale;
   
 protected:

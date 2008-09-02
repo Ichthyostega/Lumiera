@@ -110,7 +110,8 @@ TimelineWidget::set_time_offset(gavl_time_t time_offset)
   
   timeOffset = time_offset;
   horizontalAdjustment.set_value(time_offset);
-  ruler->update_view();
+  
+  viewChangedSignal.emit();
 }
 
 int64_t
@@ -129,7 +130,7 @@ TimelineWidget::set_time_scale(int64_t time_scale)
   const int view_width = body->get_allocation().get_width();
   horizontalAdjustment.set_page_size(timeScale * view_width);
   
-  ruler->update_view();
+  viewChangedSignal.emit();
 }
 
 void
@@ -261,6 +262,12 @@ TimelineWidget::set_tool(ToolType tool_type)
   body->set_tool(tool_type);
 }
 
+sigc::signal<void>
+TimelineWidget::view_changed_signal() const
+{
+  return viewChangedSignal;
+}
+
 sigc::signal<void, gavl_time_t>
 TimelineWidget::mouse_hover_signal() const
 {
@@ -271,7 +278,7 @@ void
 TimelineWidget::on_scroll()
 {
   timeOffset = horizontalAdjustment.get_value();
-  ruler->update_view();
+  viewChangedSignal.emit();
 }
   
 void
