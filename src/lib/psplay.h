@@ -211,6 +211,26 @@ PSplaynode
 psplay_remove_key (PSplay self, void* key);
 
 
+/**
+ * Delete a node from a splay tree
+ * @param self pointer to the splay tree
+ * @param node node to be removed
+ * Calls the registered delete handler, frees all resources.
+ */
+void
+psplay_delete_node (PSplay self, PSplaynode node);
+
+
+/**
+ * Delete a node by key from a splay tree
+ * @param self pointer to the splay tree
+ * @param key key of the node to be removed
+ * Calls the registered delete handler, frees all resources.
+ */
+void
+psplay_delete_key (PSplay self, void* key);
+
+
 enum psplay_order_enum
   {
     PSPLAY_PREORDER,
