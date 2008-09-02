@@ -234,12 +234,12 @@ TimelineBody::on_scroll_event (GdkEventScroll* event)
     {
     case GDK_SCROLL_UP:
       // User scrolled up. Zoom in
-      timelineWidget->zoom_view(event->x, 16);
+      timelineWidget->zoom_view(event->x, 1);
       break;
       
     case GDK_SCROLL_DOWN:
       // User scrolled down. Zoom out
-      timelineWidget->zoom_view(event->x, -16);
+      timelineWidget->zoom_view(event->x, -1);
       break;    
     }
   }
