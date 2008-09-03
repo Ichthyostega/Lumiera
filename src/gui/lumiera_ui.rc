@@ -140,16 +140,15 @@ style "timeline_ruler" = "default_base"
   gtkmm__CustomObject_TimelineRuler::min_division_width = 100
   gtkmm__CustomObject_TimelineRuler::mouse_chevron_size = 5
   gtkmm__CustomObject_TimelineRuler::selection_chevron_size = 5
+  gtkmm__CustomObject_TimelineRuler::playback_arrow_colour = "#2D2D90"
+  gtkmm__CustomObject_TimelineRuler::playback_arrow_alpha = 0.5
+  gtkmm__CustomObject_TimelineRuler::playback_arrow_size = 10
+  gtkmm__CustomObject_TimelineRuler::playback_arrow_stem_size = 3
 }
 
 style "timeline_header_base" = "default_base"
 {
-#  fg[NORMAL] = { 0.77, 0.77, 0.72 }	
-#  bg[NORMAL] = { 0.18, 0.19, 0.22 }
-#  bg[ACTIVE] = { 0.20, 0.20, 0.20 }	
-#  bg[PRELIGHT] = { 0.20, 0.20, 0.20 }
-#  bg[INSENSITIVE] = { 0.20, 0.20, 0.20 }
-#  bg[SELECTED] = { 0.20, 0.20, 0.20 }
+
 }
 
 class "gtkmm__CustomObject_TimelineBody" style:highest "timeline_body"

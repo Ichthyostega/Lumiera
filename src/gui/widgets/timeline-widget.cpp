@@ -46,6 +46,8 @@ TimelineWidget::TimelineWidget() :
   verticalAdjustment(0, 0, 0),
   selectionStart(0),
   selectionEnd(0),
+  playbackPeriodStart(0),
+  playbackPeriodEnd(0),
   horizontalScroll(horizontalAdjustment),
   verticalScroll(verticalAdjustment)
 {
@@ -108,7 +110,8 @@ TimelineWidget::set_time_offset(gavl_time_t time_offset)
   
   timeOffset = time_offset;
   horizontalAdjustment.set_value(time_offset);
-  ruler->update_view();
+  
+  viewChangedSignal.emit();
 }
 
 int64_t
@@ -127,7 +130,7 @@ TimelineWidget::set_time_scale(int64_t time_scale)
   const int view_width = body->get_allocation().get_width();
   horizontalAdjustment.set_page_size(timeScale * view_width);
   
-  ruler->update_view();
+  viewChangedSignal.emit();
 }
 
 void
@@ -183,8 +186,12 @@ TimelineWidget::get_selection_end() const
 }
 
 void
-TimelineWidget::set_selection(gavl_time_t start, gavl_time_t end)
+TimelineWidget::set_selection(gavl_time_t start, gavl_time_t end,
+  bool reset_playback_period)
 {
+  REQUIRE(ruler != NULL);
+  REQUIRE(body != NULL);
+    
   if(start < end)
     {
       selectionStart = start;
@@ -195,6 +202,46 @@ TimelineWidget::set_selection(gavl_time_t start, gavl_time_t end)
       // The selection is back-to-front, flip it round
       selectionStart = end;
       selectionEnd = start;
+    }
+    
+  if(reset_playback_period)
+    {
+      playbackPeriodStart = selectionStart;
+      playbackPeriodEnd = selectionEnd;
+    }
+
+  ruler->queue_draw();
+  body->queue_draw();
+}
+
+gavl_time_t
+TimelineWidget::get_playback_period_start() const
+{
+  return playbackPeriodStart;
+}
+  
+gavl_time_t
+TimelineWidget::get_playback_period_end() const
+{
+  return playbackPeriodEnd;
+}
+  
+void
+TimelineWidget::set_playback_period(gavl_time_t start, gavl_time_t end)
+{
+  REQUIRE(ruler != NULL);
+  REQUIRE(body != NULL);
+  
+  if(start < end)
+    {
+      playbackPeriodStart = start;
+      playbackPeriodEnd = end;
+    }
+  else
+    {
+      // The period is back-to-front, flip it round
+      playbackPeriodStart = end;
+      playbackPeriodEnd = start;
     }
 
   ruler->queue_draw();
@@ -215,11 +262,23 @@ TimelineWidget::set_tool(ToolType tool_type)
   body->set_tool(tool_type);
 }
 
+sigc::signal<void>
+TimelineWidget::view_changed_signal() const
+{
+  return viewChangedSignal;
+}
+
+sigc::signal<void, gavl_time_t>
+TimelineWidget::mouse_hover_signal() const
+{
+  return mouseHoverSignal;
+}
+
 void
 TimelineWidget::on_scroll()
 {
   timeOffset = horizontalAdjustment.get_value();
-  ruler->update_view();
+  viewChangedSignal.emit();
 }
   
 void
@@ -309,6 +368,7 @@ TimelineWidget::on_motion_in_body_notify_event(GdkEventMotion *event)
 {
   REQUIRE(event != NULL);
   ruler->set_mouse_chevron_offset(event->x);
+  mouseHoverSignal.emit(x_to_time(event->x));
   return true;
 }
 

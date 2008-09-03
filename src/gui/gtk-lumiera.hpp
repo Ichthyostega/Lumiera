@@ -115,6 +115,11 @@ GtkLumiera& application();
 namespace dialogs {}
 
 /**
+ * The namespace of data model classes.
+ */
+namespace model {}
+
+/**
  * The namespace of all video output implementations.
  */
 namespace output {}

@@ -120,8 +120,30 @@ public:
   
   /**
    * Sets the period of the selection.
+   * @param start The start time.
+   * @param end The end time.
+   * @param reset_playback_period Specifies whether to set the playback
+   * period to the same as this new selection.
    */
-  void set_selection(gavl_time_t start, gavl_time_t end);
+  void set_selection(gavl_time_t start, gavl_time_t end,
+    bool reset_playback_period = true);
+  
+  /**
+   * Gets the time at which the playback period begins.
+   */
+  gavl_time_t get_playback_period_start() const;
+  
+  /**
+   * Gets the time at which the playback period ends.
+   */
+  gavl_time_t get_playback_period_end() const;
+  
+  /**
+   * Sets the playback period.
+   * @param start The start time.
+   * @param end The end time.
+   */
+  void set_playback_period(gavl_time_t start, gavl_time_t end);
   
   /**
    * Gets the type of the tool currently active.
@@ -132,6 +154,12 @@ public:
    * Sets the type of the tool currently active.
    */
   void set_tool(timeline::ToolType tool_type);
+  
+public:
+  /* ===== Signals ===== */
+  sigc::signal<void> view_changed_signal() const;
+  
+  sigc::signal<void, gavl_time_t> mouse_hover_signal() const;
     
   /* ===== Events ===== */
 protected:
@@ -165,6 +193,8 @@ protected:
   // Selection State
   gavl_time_t selectionStart;
   gavl_time_t selectionEnd;
+  gavl_time_t playbackPeriodStart;
+  gavl_time_t playbackPeriodEnd;
 
   int totalHeight;
 
@@ -179,9 +209,18 @@ protected:
   Gtk::Adjustment horizontalAdjustment, verticalAdjustment;
   Gtk::HScrollbar horizontalScroll;
   Gtk::VScrollbar verticalScroll;
+  
+  // Signals
+  sigc::signal<void> viewChangedSignal;
+  sigc::signal<void, gavl_time_t> mouseHoverSignal;
    
   /* ===== Constants ===== */
 public:
+  /**
+   * The maximum scale for timeline display.
+   * @remarks At MaxScale, every pixel on the timeline is equivalent
+   * to 30000000 gavl_time_t increments.
+   */ 
   static const int64_t MaxScale;
   
 protected:

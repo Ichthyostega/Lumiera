@@ -61,7 +61,7 @@ def setupBasicEnvironment():
     opts = defineCmdlineOptions() 
     env = LumieraEnvironment(options=opts
                             ,toolpath = [TOOLDIR]
-                            ,tools = ["default", "BuilderGCH"]  
+                            ,tools = ["default", "BuilderGCH", "BuilderDoxygen"]  
                             ) 
     
     env.Append ( CCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honor CFLAGS, only CCFLAGS 
@@ -173,24 +173,21 @@ def configurePlatform(env):
     # run all configuration checks in the given env
     
     # Perform checks for prerequisites --------------------------------------------
+    problems = []
     if not conf.TryAction('pkg-config --version > $TARGET')[0]:
-        print 'We need pkg-config for including library configurations, exiting.'
-        Exit(1)
+        problems.append('We need pkg-config for including library configurations, exiting.')
     
     if not conf.CheckLibWithHeader('m', 'math.h','C'):
-        print 'Did not find math.h / libm, exiting.'
-        Exit(1)
+        problems.append('Did not find math.h / libm.')
     
     if not conf.CheckLibWithHeader('dl', 'dlfcn.h', 'C'):
-        print 'Functions for runtime dynamic loading not available, exiting.'
-        Exit(1)
+        problems.append('Functions for runtime dynamic loading not available.')
     
     if not conf.CheckLibWithHeader('nobugmt', 'nobug.h', 'C'):
-        print 'Did not find NoBug [http://www.pipapo.org/pipawiki/NoBug], exiting.'
-        Exit(1)
+        problems.append('Did not find NoBug [http://www.pipapo.org/pipawiki/NoBug].')
     
     if not conf.CheckLibWithHeader('pthread', 'pthread.h', 'C'):
-        print 'Did not find the pthread lib or pthread.h, exiting.'
+        problems.append('Did not find the pthread lib or pthread.h.')
     else:
        conf.env.Append(CPPFLAGS = ' -DHAVE_PTHREAD')
        conf.env.Append(CCFLAGS = ' -pthread')
@@ -202,56 +199,55 @@ def configurePlatform(env):
         conf.env.Append(CPPFLAGS = ' -DHAS_VALGRIND_VALGIND_H')
     
     if not conf.CheckCXXHeader('tr1/memory'):
-        print 'We rely on the std::tr1 proposed standard extension for shared_ptr.'
-        Exit(1) 
+        problems.append('We rely on the std::tr1 proposed standard extension for shared_ptr.')
     
     if not conf.CheckCXXHeader('boost/config.hpp'):
-        print 'We need the C++ boost-lib.'
-        Exit(1)
+        problems.append('We need the C++ boost-lib.')
     else:
         if not conf.CheckCXXHeader('boost/shared_ptr.hpp'):
-            print 'We need boost::shared_ptr (shared_ptr.hpp).'
-            Exit(1)
+            problems.append('We need boost::shared_ptr (shared_ptr.hpp).')
         if not conf.CheckLibWithHeader('boost_program_options-mt','boost/program_options.hpp','C++'):
-            print 'We need boost::program_options (including binary lib for linking).'
-            Exit(1)
+            problems.append('We need boost::program_options (including binary lib for linking).')
         if not conf.CheckLibWithHeader('boost_regex-mt','boost/regex.hpp','C++'):
-            print 'We need the boost regular expression lib (incl. binary lib for linking).'
-            Exit(1)
+            problems.append('We need the boost regular expression lib (incl. binary lib for linking).')
     
 #    if not conf.CheckLibWithHeader('gavl', ['gavlconfig.h', 'gavl/gavl.h'], 'C'):
     
     if not conf.CheckPkgConfig('gavl', 1.0):
-        print 'Did not find Gmerlin Audio Video Lib [http://gmerlin.sourceforge.net/gavl.html], exiting.'
-        Exit(1)
+        problems.append('Did not find Gmerlin Audio Video Lib [http://gmerlin.sourceforge.net/gavl.html].')
     else:
         conf.env.mergeConf('gavl')
     
     if not conf.CheckPkgConfig('gtkmm-2.4', 2.8):
-        print 'Unable to configure GTK--, exiting.'
-        Exit(1)
+        problems.append('Unable to configure GTK--, exiting.')
         
     if not conf.CheckPkgConfig('glibmm-2.4', '2.16'):
-        print 'Unable to configure Lib glib--, exiting.'
-        Exit(1)
+        problems.append('Unable to configure Lib glib--, exiting.')
     
     if not conf.CheckPkgConfig('cairomm-1.0', 0.6):
-        print 'Unable to configure Cairo--, exiting.'
-        Exit(1)
+        problems.append('Unable to configure Cairo--, exiting.')
     
     if not conf.CheckPkgConfig('gdl-1.0', '0.6.1'):
-        print 'Unable to configure the GNOME DevTool Library, exiting.'
-        Exit(1)
+        problems.append('Unable to configure the GNOME DevTool Library, exiting.')
     
     if not conf.CheckPkgConfig('librsvg-2.0', '2.18.1'):
-        print 'Need rsvg Library for rendering icons.'
-        Exit(1)
+        problems.append('Need rsvg Library for rendering icons.')
         
-    if not conf.CheckPkgConfig('xv'): Exit(1)
+    if not conf.CheckPkgConfig('xv'): problems.append('Need lib xv')
 #   if not conf.CheckPkgConfig('xext'): Exit(1)
 #   if not conf.CheckPkgConfig('sm'): Exit(1)
 #    
 # obviously not needed?
+    
+    
+    # report missing dependencies
+    if problems:
+        print "*** unable to build due to the following problems:"
+        for isue in problems:
+            print " *  %s" % isue
+        print
+        print "build aborted."
+        Exit(1)
     
     print "** Gathered Library Info: %s" % conf.env.libInfo.keys()
     
@@ -340,16 +336,9 @@ def definePostBuildTargets(env, artifacts):
     env.Clean ('build', [ 'scache.conf', '.sconf_temp', '.sconsign.dblite', 'config.log' ])
     env.Clean ('build', [ '$SRCDIR/pre.gch' ])
     
-    # Doxygen documentation
-    # Note: at the moment we only depend on Doxyfile
-    #       obviousely, we should depend on all sourcefiles
-    #       real Doxygen builder for scons is under developement for 0.97
-    #       so for the moment I prefere not to bother
-    doxyfile = File('doc/devel/Doxyfile')
-    env.NoClean(doxyfile)
-    doxydoc = artifacts['doxydoc'] = [ Dir('doc/devel/html'), Dir('doc/devel/latex') ]
-    env.Command(doxydoc, doxyfile, "doxygen Doxyfile 2>&1 |tee ,doxylog",  chdir='doc/devel')
-    env.Clean ('doc/devel', doxydoc + ['doc/devel/,doxylog'])
+    doxydoc = artifacts['doxydoc'] = env.Doxygen('doc/devel/Doxyfile')
+    env.Alias ('doxydoc', doxydoc)
+    env.Clean ('doxydoc', doxydoc + ['doc/devel/,doxylog','doc/devel/warnings.txt'])
 
 
 def defineInstallTargets(env, artifacts):

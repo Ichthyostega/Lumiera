@@ -95,14 +95,17 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
 void
 Actions::update_action_state()
 {
-  REQUIRE(workspaceWindow.assets_panel != NULL);
-  REQUIRE(workspaceWindow.timeline_panel != NULL);
-  REQUIRE(workspaceWindow.viewer_panel != NULL); 
+  REQUIRE(workspaceWindow.assetsPanel != NULL);
+  REQUIRE(workspaceWindow.timelinePanel != NULL);
+  REQUIRE(workspaceWindow.viewerPanel != NULL); 
   
   is_updating_action_state = true;
-  assetsPanelAction->set_active(workspaceWindow.assets_panel->is_shown());
-  timelinePanelAction->set_active(workspaceWindow.timeline_panel->is_shown());
-  viewerPanelAction->set_active(workspaceWindow.viewer_panel->is_shown());
+  assetsPanelAction->set_active(
+    workspaceWindow.assetsPanel->is_shown());
+  timelinePanelAction->set_active(
+    workspaceWindow.timelinePanel->is_shown());
+  viewerPanelAction->set_active(
+    workspaceWindow.viewerPanel->is_shown());
   is_updating_action_state = false;
 }
 
@@ -148,21 +151,21 @@ void
 Actions::on_menu_view_assets()
 {
   if(!is_updating_action_state)
-    workspaceWindow.assets_panel->show(assetsPanelAction->get_active());
+    workspaceWindow.assetsPanel->show(assetsPanelAction->get_active());
 }
 
 void
 Actions::on_menu_view_timeline()
 {
   if(!is_updating_action_state)
-    workspaceWindow.timeline_panel->show(timelinePanelAction->get_active());
+    workspaceWindow.timelinePanel->show(timelinePanelAction->get_active());
 }
 
 void
 Actions::on_menu_view_viewer()
 {
   if(!is_updating_action_state)
-    workspaceWindow.viewer_panel->show(viewerPanelAction->get_active());
+    workspaceWindow.viewerPanel->show(viewerPanelAction->get_active());
 }
 
 void

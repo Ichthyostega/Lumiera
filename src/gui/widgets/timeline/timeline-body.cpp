@@ -55,10 +55,8 @@ TimelineBody::TimelineBody(lumiera::gui::widgets::TimelineWidget
   REQUIRE(timelineWidget != NULL);
       
   // Connect up some events  
-  timelineWidget->horizontalAdjustment.signal_value_changed().connect(
-    sigc::mem_fun(this, &TimelineBody::on_scroll) );
-  timelineWidget->verticalAdjustment.signal_value_changed().connect(
-    sigc::mem_fun(this, &TimelineBody::on_scroll) );
+  timelineWidget->view_changed_signal().connect(sigc::mem_fun(
+    this, &TimelineBody::on_update_view) );
   
   // Install style properties
   register_styles();
@@ -110,6 +108,12 @@ TimelineBody::set_tool(timeline::ToolType tool_type)
 }
 
 void
+TimelineBody::on_update_view()
+{
+  queue_draw();
+}
+
+void
 TimelineBody::on_realize()
 {
   Widget::on_realize();
@@ -123,112 +127,6 @@ TimelineBody::on_realize()
     
   // Apply the cursor if possible
   tool->apply_cursor();
-}
-
-void
-TimelineBody::on_scroll()
-{
-  queue_draw();
-}
-  
-bool
-TimelineBody::on_scroll_event (GdkEventScroll* event)
-{
-  REQUIRE(event != NULL);
-  REQUIRE(timelineWidget != NULL);
-  
-  if(event->state & GDK_CONTROL_MASK)
-  {
-    switch(event->direction)
-    {
-    case GDK_SCROLL_UP:
-      // User scrolled up. Zoom in
-      timelineWidget->zoom_view(event->x, 16);
-      break;
-      
-    case GDK_SCROLL_DOWN:
-      // User scrolled down. Zoom out
-      timelineWidget->zoom_view(event->x, -16);
-      break;    
-    }
-  }
-  else
-  {
-    switch(event->direction)
-    {
-    case GDK_SCROLL_UP:
-      // User scrolled up. Shift 1/16th left
-      timelineWidget->shift_view(-16);
-      break;
-      
-    case GDK_SCROLL_DOWN:
-      // User scrolled down. Shift 1/16th right
-      timelineWidget->shift_view(16);
-      break;    
-    }
-  }
-}
-
-bool
-TimelineBody::on_button_press_event(GdkEventButton* event)
-{
-  mouseDownX = event->x;
-  mouseDownY = event->y;
-  
-  switch(event->button)
-  {
-  case 2:
-    begin_shift_drag();
-    break;
-    
-  default:
-    dragType = None;
-    break;
-  }
-  
-  // Forward the event to the tool
-  tool->on_button_press_event(event);
-  
-  return true;
-}
-  
-bool
-TimelineBody::on_button_release_event(GdkEventButton* event)
-{
-  // Terminate any drags
-  dragType = None;
-  
-  // Forward the event to the tool
-  tool->on_button_release_event(event);
-  
-  return true;
-}
-
-bool
-TimelineBody::on_motion_notify_event(GdkEventMotion *event)
-{
-  REQUIRE(event != NULL);
-    
-  switch(dragType)
-  {
-  case Shift:
-    {
-      const int64_t scale = timelineWidget->get_time_scale();
-      gavl_time_t offset = beginShiftTimeOffset +
-        (int64_t)(mouseDownX - event->x) * scale;
-      timelineWidget->set_time_offset(offset);
-      
-      set_vertical_offset((int)(mouseDownY - event->y) +
-        beginShiftVerticalOffset);
-      break;
-    }
-  }
-  
-  // Forward the event to the tool
-  tool->on_motion_notify_event(event);
-  
-  // false so that the message is passed up to the owner TimelineWidget
-  return false;
 }
 
 bool
@@ -323,6 +221,106 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
   
   return true;
 }
+  
+bool
+TimelineBody::on_scroll_event (GdkEventScroll* event)
+{
+  REQUIRE(event != NULL);
+  REQUIRE(timelineWidget != NULL);
+  
+  if(event->state & GDK_CONTROL_MASK)
+  {
+    switch(event->direction)
+    {
+    case GDK_SCROLL_UP:
+      // User scrolled up. Zoom in
+      timelineWidget->zoom_view(event->x, 1);
+      break;
+      
+    case GDK_SCROLL_DOWN:
+      // User scrolled down. Zoom out
+      timelineWidget->zoom_view(event->x, -1);
+      break;    
+    }
+  }
+  else
+  {
+    switch(event->direction)
+    {
+    case GDK_SCROLL_UP:
+      // User scrolled up. Shift 1/16th left
+      timelineWidget->shift_view(-16);
+      break;
+      
+    case GDK_SCROLL_DOWN:
+      // User scrolled down. Shift 1/16th right
+      timelineWidget->shift_view(16);
+      break;    
+    }
+  }
+}
+
+bool
+TimelineBody::on_button_press_event(GdkEventButton* event)
+{
+  mouseDownX = event->x;
+  mouseDownY = event->y;
+  
+  switch(event->button)
+  {
+  case 2:
+    begin_shift_drag();
+    break;
+    
+  default:
+    dragType = None;
+    break;
+  }
+  
+  // Forward the event to the tool
+  tool->on_button_press_event(event);
+  
+  return true;
+}
+  
+bool
+TimelineBody::on_button_release_event(GdkEventButton* event)
+{
+  // Terminate any drags
+  dragType = None;
+  
+  // Forward the event to the tool
+  tool->on_button_release_event(event);
+  
+  return true;
+}
+
+bool
+TimelineBody::on_motion_notify_event(GdkEventMotion *event)
+{
+  REQUIRE(event != NULL);
+    
+  switch(dragType)
+  {
+  case Shift:
+    {
+      const int64_t scale = timelineWidget->get_time_scale();
+      gavl_time_t offset = beginShiftTimeOffset +
+        (int64_t)(mouseDownX - event->x) * scale;
+      timelineWidget->set_time_offset(offset);
+      
+      set_vertical_offset((int)(mouseDownY - event->y) +
+        beginShiftVerticalOffset);
+      break;
+    }
+  }
+  
+  // Forward the event to the tool
+  tool->on_motion_notify_event(event);
+  
+  // false so that the message is passed up to the owner TimelineWidget
+  return false;
+}
 
 void
 TimelineBody::begin_shift_drag()
@@ -349,23 +347,18 @@ TimelineBody::register_styles() const
 {
   GtkWidgetClass *klass = GTK_WIDGET_CLASS(G_OBJECT_GET_CLASS(gobj()));
 
-  gtk_widget_class_install_style_property(
-    GTK_WIDGET_CLASS(G_OBJECT_GET_CLASS(gobj())), 
-    g_param_spec_boxed("background",
-      "Track Background",
+  gtk_widget_class_install_style_property(klass, 
+    g_param_spec_boxed("background", "Track Background",
       "The background colour of timeline tracks",
       GDK_TYPE_COLOR, G_PARAM_READABLE));
   
-  gtk_widget_class_install_style_property(
-    GTK_WIDGET_CLASS(G_OBJECT_GET_CLASS(gobj())), 
-    g_param_spec_boxed("selection",
-      "End lines of a selection",
+  gtk_widget_class_install_style_property(klass, 
+    g_param_spec_boxed("selection", "End lines of a selection",
       "The colour of selection limit lines",
       GDK_TYPE_COLOR, G_PARAM_READABLE));
       
   gtk_widget_class_install_style_property(klass, 
-    g_param_spec_float("selection_alpha",
-    "Selection Alpha",
+    g_param_spec_float("selection_alpha", "Selection Alpha",
     "The transparency of the selection marque.",
     0, 1.0, 0.5, G_PARAM_READABLE));
 }
