@@ -45,13 +45,7 @@ lumiera_error_tls_init (void)
   pthread_key_create (&lumiera_error_tls, NULL);
 }
 
-/**
- * Set error state for the current thread.
- * If the error state of the current thread was cleared, then set it, else preserve the old state.
- * @param nerr name of the error with 'LUMIERA_ERROR_' prefix (example: LUMIERA_ERROR_NO_MEMORY)
- * @return old state, that is NULL for success, when the state was cleared and a pointer to a pending 
- * error when the error state was already set
- */
+
 const char*
 lumiera_error_set (const char * nerr)
 {
@@ -65,12 +59,6 @@ lumiera_error_set (const char * nerr)
 }
 
 
-/**
- * Get and clear current error state.
- * This function clears the error state, if it needs to be reused, one has to store it in a temporary
- * variable.
- * @return pointer to any pending error of this thread, NULL if no error is pending
- */
 const char*
 lumiera_error ()
 {

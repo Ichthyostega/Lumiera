@@ -55,11 +55,19 @@ struct lumiera_rwlock_struct
 typedef struct lumiera_rwlock_struct lumiera_rwlock;
 typedef lumiera_rwlock* LumieraRWLock;
 
-
+/**
+ * Initialize a rwlock
+ * @param self is a pointer to the rwlock to be initialized
+ * @return self as given
+ */
 LumieraRWLock
 lumiera_rwlock_init (LumieraRWLock self);
 
-
+/**
+ * destroy a rwlock
+ * @param self is a pointer to the rwlock to be initialized
+ * @return self on success or NULL at error
+ */
 LumieraRWLock
 lumiera_rwlock_destroy (LumieraRWLock self);
 
@@ -88,14 +96,31 @@ lumiera_rwlockacquirer_ensureunlocked (LumieraRWLockacquirer self)
 #define lumiera_rwlockacquirer \
 lumiera_rwlockacquirer NOBUG_CLEANUP(lumiera_rwlockacquirer_ensureunlocked)
 
-
+/**
+ * initialize a rwlockacquirer state
+ * @param self rwlockacquirer to be initialized, must be an automatic variable
+ * @param rwlock associated rwlock
+ * @param state initial state of the mutex, either LUMIERA_RDLOCKED, LUMIERA_WRLOCKED or LUMIERA_UNLOCKED
+ * @return self as given or NULL on error
+ */
 LumieraRWLockacquirer
 lumiera_rwlockacquirer_init (LumieraRWLockacquirer self, LumieraRWLock rwlock, enum lumiera_lockstate state);
 
+/**
+ * readlock the rwlock.
+ * must not already be locked
+ * @param self rwlockacquirer associated with a rwlock
+ * @return self as given or NULL on error
+ */
 LumieraRWLockacquirer
 lumiera_rwlockacquirer_rdlock (LumieraRWLockacquirer self);
 
-
+/**
+ * writelock the rwlock.
+ * must not already be locked
+ * @param self rwlockacquirer associated with a rwlock
+ * @return self as given or NULL on error
+ */
 LumieraRWLockacquirer
 lumiera_rwlockacquirer_wrlock (LumieraRWLockacquirer self);
 

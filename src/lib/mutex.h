@@ -51,10 +51,20 @@ typedef struct lumiera_mutex_struct lumiera_mutex;
 typedef lumiera_mutex* LumieraMutex;
 
 
+/**
+ * Initialize a mutex variable
+ * @param self is a pointer to the mutex to be initialized
+ * @return self as given
+ */
 LumieraMutex
 lumiera_mutex_init (LumieraMutex self);
 
 
+/**
+ * Destroy a mutex variable
+ * @param self is a pointer to the mutex to be destroyed
+ * @return self as given
+ */
 LumieraMutex
 lumiera_mutex_destroy (LumieraMutex self);
 
