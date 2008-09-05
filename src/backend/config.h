@@ -55,7 +55,7 @@ LUMIERA_ERROR_DECLARE (CONFIG_DEFAULT);
 
 //TODO: System includes//
 #include <nobug.h>
-
+#include <stdio.h>
 
 /**
  * @file
@@ -151,6 +151,13 @@ lumiera_config_save ();
  */
 int
 lumiera_config_purge (const char* filename);
+
+
+/**
+ * Does a diagnostic dump of the whole config database
+ */
+void
+lumiera_config_dump (FILE* out);
 
 
 // * {{{ lumiera_config_get(...) }}}

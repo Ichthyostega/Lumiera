@@ -274,6 +274,25 @@ lumiera_config_setdefault (const char* line)
 }
 
 
+void
+lumiera_config_dump (FILE* out)
+{
+  fprintf (out, "# registered defaults:\n");
+
+  LLIST_FOREACH (&lumiera_global_config->defaults.childs, node)
+    fprintf (out, "%s\n", ((LumieraConfigitem) node)->line);
+
+  fprintf (out, "# end of defaults\n\n");
+
+#if 0 /*TODO UNIMPLEMENTED */
+  fprintf (out, "# files:\n");
+  lumiera_configitem files;
+  fprintf (out, "# volatiles:")
+  lumiera_configitem TODO_unknown;
+#endif
+}
+
+
 int
 lumiera_config_reset (const char* key)
 {
