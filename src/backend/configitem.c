@@ -146,6 +146,7 @@ lumiera_configitem_move (LumieraConfigitem self, LumieraConfigitem source)
   self->key_size = source->key_size;
   self->delim = source->delim;
   self->vtable = source->vtable;
+
   return self;
 }
 
@@ -296,20 +297,20 @@ lumiera_configitem_parse (LumieraConfigitem self, const char* line)
 
       /* skip blanks */
       itr += self->key_size;
-      while (*itr && isspace(*itr))
+      while (*itr && isspace (*itr))
         itr++;
 
       if (self->key_size && *itr == '=')
         {
           /*this configentry assigns a value to a key*/
           self->delim = itr;
-          self->vtable = &lumiera_configentry_funcs; 
+          self->vtable = &lumiera_configentry_funcs;
         }
       else if (self->key_size && *itr == '<')
         {
           /*this configentry is a redirect*/
           self->delim = itr;
-          self->vtable = &lumiera_configentry_funcs;  
+          self->vtable = &lumiera_configentry_funcs;
         }
       else
         {

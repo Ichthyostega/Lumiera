@@ -194,7 +194,7 @@ lumiera_config_get_default (const char* key, const char** value)
   int ret = -1;
 
   TODO ("follow '<' delegates?");
-  TODO ("refactor _get and get_default to iterator access");
+  TODO ("refactor _get and get_default to iterator access (return LList or Lookupentry)");
   LumieraConfigitem item = lumiera_config_lookup_item_tail_find (&lumiera_global_config->keys, key);
 
   if (item && item->parent == &lumiera_global_config->defaults)
@@ -220,7 +220,7 @@ lumiera_config_set (const char* key, const char* delim_value)
   TODO ("       find matching suffix");
   TODO ("       find proper prefix indentation, else use config.indent");
   TODO ("       create configitem with prefix/suffix removed");
-
+  
 
 
 //  * set a value by key

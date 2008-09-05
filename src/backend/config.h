@@ -80,7 +80,7 @@ struct lumiera_config_struct
     We use rwlocks here since concurrent reads are likely common.
 
     So far this is a global config lock, if this is a problem we might granularize it by locking on a file level.
-    config access is not planned to be transaction al yet, if this is a problem we need to expose the rwlock to a config_acquire/config_release function pair
+    config access is not planned to be transactional yet, if this is a problem we need to expose the rwlock to a config_acquire/config_release function pair
    */
   lumiera_rwlock lock;
 };
