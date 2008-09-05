@@ -23,15 +23,12 @@
   just place any problematic calls where valgrind whines about in main (with comments please)
 */
 
-#include "lib/safeclib.h"
 
 
 int
 main ()
 {
-  /* debian etch glibc is lazy about cleaning up TLS */
-  lumiera_tmpbuf_provide (100);
-  lumiera_tmpbuf_freeall ();
+  /* dummy placeholder */
 
   return 0;
 }
