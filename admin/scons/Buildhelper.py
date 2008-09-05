@@ -28,6 +28,8 @@ import fnmatch
 import re
 import tarfile
 
+from SCons.Action import Action
+
 
 
 #
@@ -58,13 +60,13 @@ def srcSubtree(env,tree,isShared=False,builder=None, **args):
         else:
             builder = lambda f: env.Object(f, **args)
         
-    return [builder(f) for f in scanSrcSubtree(root)] 
+    return [builder(f) for f in scanSubtree(root)] 
 
 
 
 SRCPATTERNS = ['*.c','*.cpp','*.cc']
 
-def scanSrcSubtree(roots):
+def scanSubtree(roots, patterns=SRCPATTERNS):
     """ first expand (possible) wildcards and filter out non-dirs. 
         Then scan the given subtree for source filesnames 
         (python generator function)
@@ -73,7 +75,7 @@ def scanSrcSubtree(roots):
         for (dir,_,files) in os.walk(root):
             if dir.startswith('./'):
                 dir = dir[2:]
-            for p in SRCPATTERNS:
+            for p in patterns:
                 for f in fnmatch.filter(files, p):
                     yield os.path.join(dir,f)
 
@@ -102,22 +104,50 @@ def filterNodes(nlist, removeName=None):
     return filter(predicate, nlist)
 
 
-def RegisterPrecompiledHeader_Builder(env):
-    """ Registeres an Custom Builder for generating a precompiled Header.
-        Note you should define a dependency to the PCH file
-    """
-    def genCmdline(source, target, env, for_signature):
-        return '$CXXCOM -x c++-header %s' % source[0]
-    def fixSourceDependency(target, source, env):
-        print "precompiled header: %s --> %s" % (source[0],target[0])
-        return (target, source)
+
+def getDirname(dir):
+    """ extract directory name without leading path """
+    dir = os.path.realpath(dir)
+    if not os.path.isdir(dir):
+        dir,_ = os.path.split(dir)
+    _, name = os.path.split(dir)
+    return name
     
-    gchBuilder = env.Builder( generator = genCmdline
-                            , emitter = fixSourceDependency
-                            , suffix = '.gch'
-                            , src_suffix = '.hpp'
-                            )
-    env.Append(BUILDERS = {'PrecompiledHeader' : gchBuilder})    
+
+
+def RegisterIcon_Builder(env, renderer):
+    """ Registeres Custom Builders for generating and installing Icons.
+        Additionally you need to build the tool (rsvg-convert.c)
+        used to generate png from the svg source using librsvg. 
+    """
+    renderer = __import__(renderer) # load python script for invoking the render
+    renderer.rsvgPath = env.subst("$BINDIR/rsvg-convert")
+    
+    def invokeRenderer(target, source, env):
+        source = str(source[0])
+        targetdir = env.subst("$BINDIR")
+        renderer.main([source,targetdir])
+        return 0
+        
+    def createIconTargets(target,source,env):
+        """ parse the SVG to get the target file names """
+        source = str(source[0])
+        targetdir = os.path.basename(str(target[0]))
+        targetfiles = renderer.getTargetNames(source)    # parse SVG
+        return (["$BINDIR/%s" % name for name in targetfiles], source)
+    
+    def IconCopy(env, source):
+         """Copy icon to corresponding icon dir. """
+         subdir = getDirname(source)
+         return env.Install("$BINDIR/%s" % subdir, source)
+    
+     
+    buildIcon = env.Builder( action = Action(invokeRenderer, "rendering Icon: $SOURCE --> $TARGETS")
+                           , single_source = True
+                           , emitter = createIconTargets 
+                           )
+    env.Append(BUILDERS = {'IconRender' : buildIcon})    
+    env.AddMethod(IconCopy)
 
 
 
