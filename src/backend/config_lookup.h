@@ -22,7 +22,7 @@
 #ifndef LUMIERA_CONFIG_LOOKUP_H
 #define LUMIERA_CONFIG_LOOKUP_H
 
-#include "lib/cuckoo.h"
+#include "lib/psplay.h"
 #include "lib/llist.h"
 #include "lib/error.h"
 
@@ -41,8 +41,8 @@ typedef lumiera_config_lookupentry* LumieraConfigLookupentry;
 
 /**
  * @file
- * Lookup of configuration keys. Configuration key are dynamically stored in a hashtable
- * this happens for defaults, loaded config files and entries which are set explicitly.
+ * Lookup of configuration keys. Configuration keys are dynamically stored in a splay tree.
+ * This happens for defaults, loaded config files and entries which are set explicitly.
  * The system maintains no central registry of all possible keys.
  * We store here the full keys of configentries as well as the keys of section prefixes.
  * Section prefixes are stored with a trailing dot to disambiguate them from entry keys.
@@ -56,7 +56,7 @@ LUMIERA_ERROR_DECLARE (CONFIG_LOOKUP);
  */
 struct lumiera_config_lookup_struct
 {
-  Cuckoo hash;
+  psplay tree;
 };
 
 /**
@@ -153,12 +153,15 @@ lumiera_config_lookup_item_tail_find (LumieraConfigLookup self, const char* key)
  */
 struct lumiera_config_lookupentry_struct
 {
-  /* stack of all configitems stored under this key MUST BE FIRST IN THIS STRUCT */
+  psplaynode node;
+  /* stack of all configitems stored under this key */
   llist configitems;
+
   /*
     we store a copy of the full key here
     configentry keys are complete as expected
-    section keys are the prefix stored with a trailing dot, suffixes will be found by iteration
+    section keys are the prefix stored with a trailing dot,
+    suffixes will be found by iterative search
   */
   char* full_key;
 };
@@ -168,10 +171,16 @@ struct lumiera_config_lookupentry_struct
 LumieraConfigLookupentry
 lumiera_config_lookupentry_init (LumieraConfigLookupentry self, const char* key);
 
+LumieraConfigLookupentry
+lumiera_config_lookupentry_new (const char* key);
+
 /* internal */
 LumieraConfigLookupentry
 lumiera_config_lookupentry_destroy (LumieraConfigLookupentry self);
 
+
+void
+lumiera_config_lookupentry_delete (LumieraConfigLookupentry self);
 
 #endif
 /*

@@ -26,41 +26,30 @@
 /* we only use one fatal error for now, when allocation in the config system fail, something else is pretty wrong */
 LUMIERA_ERROR_DEFINE (CONFIG_LOOKUP, "config lookup failure");
 
-
-static size_t
-h1 (const void* item, const uint32_t r);
-
-static size_t
-h2 (const void* item, const uint32_t r);
-
-static size_t
-h3 (const void* item, const uint32_t r);
-
+/*
+  support functions for the splay tree
+*/
 static int
-cmp (const void* keya, const void* keyb);
+cmp_fn (const void* a, const void* b);
 
 static void
-dtor (void* item);
+delete_fn (PSplaynode node);
 
-static void
-mov (void* dest, void* src, size_t size);
-
+static const void*
+key_fn (const PSplaynode node);
 
 
 /**
  * @file
- * Implementation of the lookup of configuration keys using a cuckoo hash.
+ * Implementation of the lookup of configuration keys
  */
+
 
 LumieraConfigLookup
 lumiera_config_lookup_init (LumieraConfigLookup self)
 {
   TRACE (config_lookup);
-  self->hash = cuckoo_new (sizeof (lumiera_config_lookupentry), &(struct cuckoo_vtable){h1, h2, h3, cmp, dtor, mov});
-
-  if (!self->hash)
-    LUMIERA_DIE (CONFIG_LOOKUP);
-
+  psplay_init (&self->tree, cmp_fn, key_fn, delete_fn);
   return self;
 }
 
@@ -70,7 +59,7 @@ lumiera_config_lookup_destroy (LumieraConfigLookup self)
 {
   TRACE (config_lookup);
   if (self)
-    cuckoo_delete (self->hash);
+    psplay_destroy (&self->tree);
   return self;
 }
 
@@ -84,20 +73,14 @@ lumiera_config_lookup_insert (LumieraConfigLookup self, LumieraConfigitem item)
   REQUIRE (item->key);
   REQUIRE (item->key_size);
 
-  lumiera_config_lookupentry tmp;
   FIXME ("implement section prefix/suffix for the key");
-  lumiera_config_lookupentry_init (&tmp, lumiera_tmpbuf_strcat3 (NULL, 0, item->key, item->key_size, NULL, 0));
+  const char* key = lumiera_tmpbuf_strcat3 (NULL, 0, item->key, item->key_size, NULL, 0);
 
-  LumieraConfigLookupentry entry = cuckoo_find (self->hash, &tmp);
-
+  LumieraConfigLookupentry entry = (LumieraConfigLookupentry)psplay_find (&self->tree, key, 100);
   if (!entry)
-    entry = cuckoo_insert (self->hash, &tmp);
+    entry = (LumieraConfigLookupentry)psplay_insert (&self->tree, &lumiera_config_lookupentry_new (key)->node, 100);
 
-  if (entry)
-    llist_insert_head (&entry->configitems, &item->lookup);
-  else
-    LUMIERA_DIE (CONFIG_LOOKUP);
-
+  llist_insert_head (&entry->configitems, &item->lookup);
   return entry;
 }
 
@@ -111,19 +94,13 @@ lumiera_config_lookup_insert_default (LumieraConfigLookup self, LumieraConfigite
   REQUIRE (item->key);
   REQUIRE (item->key_size);
 
-  lumiera_config_lookupentry tmp;
-  lumiera_config_lookupentry_init (&tmp, lumiera_tmpbuf_snprintf (SIZE_MAX, "%.*s", item->key_size, item->key));
-
-  LumieraConfigLookupentry entry = cuckoo_find (self->hash, &tmp);
-
+  const char* key = lumiera_tmpbuf_snprintf (SIZE_MAX, "%.*s", item->key_size, item->key);
+  LumieraConfigLookupentry entry = (LumieraConfigLookupentry)psplay_find (&self->tree, key, 100);
   if (!entry)
-    entry = cuckoo_insert (self->hash, &tmp);
+    entry = (LumieraConfigLookupentry)psplay_insert (&self->tree, &lumiera_config_lookupentry_new (key)->node, 100);
+  TODO ("else check that no 'default' item already exists, that is, the tail element's parent points to the 'defaults' in config");
 
-  if (entry)
-    llist_insert_tail (&entry->configitems, &item->lookup);
-  else
-    LUMIERA_DIE (CONFIG_LOOKUP);
-
+  llist_insert_tail (&entry->configitems, &item->lookup);
   return entry;
 }
 
@@ -132,14 +109,14 @@ LumieraConfigitem
 lumiera_config_lookup_remove (LumieraConfigLookup self, LumieraConfigitem item)
 {
   TRACE (config_lookup);
-  REQUIRE (!llist_is_empty (&item->lookup), "item is not in a lookup hash");
+  REQUIRE (!llist_is_empty (&item->lookup), "item is not in a lookup");
 
   if (llist_is_single (&item->lookup))
     {
-      /* last item in lookup, remove it from hash */
-      LumieraConfigLookupentry entry = (LumieraConfigLookupentry)llist_next (&item->lookup);
+      /* last item in lookup, remove it from the splay tree */
+      LumieraConfigLookupentry entry = LLIST_TO_STRUCTP (llist_next (&item->lookup), lumiera_config_lookupentry, configitems);
       llist_unlink (&item->lookup);
-      cuckoo_remove (self->hash, entry);
+      psplay_remove (&self->tree, (PSplaynode)entry);
     }
   else
     {
@@ -150,16 +127,12 @@ lumiera_config_lookup_remove (LumieraConfigLookup self, LumieraConfigitem item)
   return item;
 }
 
+
 LumieraConfigLookupentry
 lumiera_config_lookup_find (LumieraConfigLookup self, const char* key)
 {
   TRACE (config_lookup);
-
-  /* fast temporary init without strdup */
-  lumiera_config_lookupentry tmp;
-  tmp.full_key = (char*)key;
-
-  return cuckoo_find (self->hash, &tmp);
+  return (LumieraConfigLookupentry)psplay_find (&self->tree, key, 100);
 }
 
 
@@ -176,6 +149,7 @@ lumiera_config_lookup_item_find (LumieraConfigLookup self, const char* key)
 
   return NULL;
 }
+
 
 LumieraConfigitem
 lumiera_config_lookup_item_tail_find (LumieraConfigLookup self, const char* key)
@@ -194,15 +168,39 @@ lumiera_config_lookup_item_tail_find (LumieraConfigLookup self, const char* key)
 
 
 /*
-  Hash table entries
+  Lookup entries
 */
 
 LumieraConfigLookupentry
 lumiera_config_lookupentry_init (LumieraConfigLookupentry self, const char* key)
 {
   TRACE (config_lookup, "key = %s", key);
-  self->full_key = lumiera_strndup (key, SIZE_MAX);
-  llist_init (&self->configitems);
+  if (self)
+    {
+      psplaynode_init (&self->node);
+      llist_init (&self->configitems);
+      self->full_key = lumiera_strndup (key, SIZE_MAX);
+    }
+  return self;
+}
+
+
+LumieraConfigLookupentry
+lumiera_config_lookupentry_new (const char* key)
+{
+  return lumiera_config_lookupentry_init (lumiera_malloc (sizeof (lumiera_config_lookupentry)), key);
+}
+
+
+LumieraConfigLookupentry
+lumiera_config_lookupentry_destroy (LumieraConfigLookupentry self)
+{
+  TRACE (config_lookup);
+  if (self)
+    {
+      REQUIRE (llist_is_empty (&self->configitems), "lookup node still in use");
+      lumiera_free (self->full_key);
+    }
   return self;
 }
 
@@ -210,79 +208,27 @@ lumiera_config_lookupentry_init (LumieraConfigLookupentry self, const char* key)
 void
 lumiera_config_lookupentry_delete (LumieraConfigLookupentry self)
 {
-  TRACE (config_lookup);
-  REQUIRE (llist_is_empty (&self->configitems), "lookup node still in use");
-  lumiera_free (self->full_key);
-}
-
-
-
-
-/*
-  Support functions for the cuckoo hash
-*/
-
-static size_t
-h1 (const void* item, const uint32_t r)
-{
-  REQUIRE (item);
-  REQUIRE (((LumieraConfigLookupentry)item)->full_key);
-  size_t hash = r;
-  for (const char* s = ((LumieraConfigLookupentry)item)->full_key; *s; ++s)
-    hash = *s ^ ~(*s << 5) ^ (hash << 3) ^ (hash >> 7);
-  return hash;
-}
-
-static size_t
-h2 (const void* item, const uint32_t r)
-{
-  REQUIRE (item);
-  REQUIRE (((LumieraConfigLookupentry)item)->full_key);
-  size_t hash = r;
-  for (const char* s = ((LumieraConfigLookupentry)item)->full_key; *s; ++s)
-    hash = *s ^ ~(*s << 7) ^ (hash << 3) ^ (hash >> 5);
-  return hash;
-}
-
-static size_t
-h3 (const void* item, const uint32_t r)
-{
-  REQUIRE (item);
-  REQUIRE (((LumieraConfigLookupentry)item)->full_key);
-  size_t hash = r;
-  for (const char* s = ((LumieraConfigLookupentry)item)->full_key; *s; ++s)
-    hash = *s ^ ~(*s << 3) ^ (hash << 5) ^ (hash >> 7);
-  return hash;
+  lumiera_free (lumiera_config_lookupentry_destroy (self));
 }
 
 static int
-cmp (const void* keya, const void* keyb)
+cmp_fn (const void* a, const void* b)
 {
-  REQUIRE (keya);
-  REQUIRE (((LumieraConfigLookupentry)keya)->full_key);
-  REQUIRE (keyb);
-  REQUIRE (((LumieraConfigLookupentry)keyb)->full_key);
-  return !strcmp (((LumieraConfigLookupentry)keya)->full_key, ((LumieraConfigLookupentry)keyb)->full_key);
+  return strcmp ((const char*)a, (const char*)b);
 }
 
 static void
-dtor (void* item)
+delete_fn (PSplaynode node)
 {
-  if (((LumieraConfigLookupentry)item)->full_key)
-    {
-      REQUIRE (llist_is_empty (&((LumieraConfigLookupentry)item)->configitems), "lookup node still in use");
-      lumiera_free (((LumieraConfigLookupentry)item)->full_key);
-    }
+  lumiera_config_lookupentry_delete ((LumieraConfigLookupentry) node);
 }
 
-static void
-mov (void* dest, void* src, size_t size)
-{
-  ((LumieraConfigLookupentry)dest)->full_key = ((LumieraConfigLookupentry)src)->full_key;
-  llist_init (&((LumieraConfigLookupentry)dest)->configitems);
-  llist_insertlist_next (&((LumieraConfigLookupentry)dest)->configitems, &((LumieraConfigLookupentry)src)->configitems);
-}
 
+static const void*
+key_fn (const PSplaynode node)
+{
+  return ((LumieraConfigLookupentry) node)->full_key;
+}
 
 /*
 // Local Variables:
