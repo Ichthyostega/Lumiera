@@ -80,9 +80,6 @@ lumiera_config_number_get (const char* key, long long* value)
               else
                 {
                   LUMIERA_ERROR_SET (config_typed, CONFIG_SYNTAX_VALUE);
-                  /* try default instead */
-                  if (!lumiera_config_get_default (key, &raw_value))
-                    sscanf (raw_value, "%Li", value);
                 }
             }
           else
