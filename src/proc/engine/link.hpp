@@ -40,6 +40,10 @@ namespace engine
    */
   class Link : public ProcNode
     {
+      Link (WiringDescriptor const& wd)
+        : ProcNode(wd)
+        { }
+
       ///////TODO: flatten hierarchy if we don't have common functionallity for all Link-Subclasses
       ///////TODO:  can be decdiede when we know more how to handle OpenGL rendering
     };

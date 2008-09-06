@@ -37,7 +37,7 @@ namespace engine
    */
   class Projector : public Trafo
     {
-      ////////////
+      ////////////TODO adapt ctor
     };
 
 

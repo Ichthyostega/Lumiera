@@ -19,14 +19,14 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file track.hpp
+/** @file timeline/track.hpp
  ** This file contains the definition of timeline track object
  */
 
 #ifndef TRACK_HPP
 #define TRACK_HPP
 
-#include <gtkmm.h>
+#include "../../gtk-lumiera.hpp"
 
 namespace lumiera {
 namespace gui {
@@ -34,20 +34,22 @@ namespace widgets {
 namespace timeline {
 
 class Track
-  {
-  public:
-    Track();
+{
+public:
+  Track();
 
-    Glib::ustring get_title();
+  Glib::ustring get_title();
 
-    virtual Gtk::Widget& get_header_widget() = 0;
+  Gtk::Widget& get_header_widget();
 
-    virtual int get_height() = 0;
+  int get_height();
 
-    virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo);
+  void draw_track(Cairo::RefPtr<Cairo::Context> cairo);
 
-  protected:
-  };
+protected:
+  Gtk::VBox headerWidget;
+  Gtk::Label label;
+};
 
 
 }   // namespace timeline

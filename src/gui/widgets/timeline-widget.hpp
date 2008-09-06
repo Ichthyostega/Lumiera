@@ -30,13 +30,25 @@
 #include "timeline/header-container.hpp"
 #include "timeline/timeline-body.hpp"
 #include "timeline/timeline-ruler.hpp"
+#include "timeline/timeline-tool.hpp"
+#include "timeline/timeline-arrow-tool.hpp"
+#include "timeline/timeline-ibeam-tool.hpp"
 #include "timeline/track.hpp"
-#include "timeline/video-track.hpp"
 
 namespace lumiera {
 namespace gui {
 namespace widgets {
+  
+/**
+ * The namespace of all timeline widget helper classes.
+ */
+namespace timeline {}
 
+/**
+ * The timeline widget class.
+ * @remarks This widget is a composite of several widgets contained
+ * within the timeline namespace.
+ */
 class TimelineWidget : public Gtk::Table
 {
 public:
@@ -91,19 +103,78 @@ public:
   
   /**
    * Scrolls the view horizontally as a proportion of the view area.
-   * @param shift_size The size of the shift in 1/16ths of the view
+   * @param shift_size The size of the shift in 1/256ths of the view
    * width.
    **/
   void shift_view(int shift_size);
   
+  /**
+   * Gets the time at which the selection begins.
+   */
+  gavl_time_t get_selection_start() const;
+  
+  /**
+   * Gets the time at which the selection begins.
+   */
+  gavl_time_t get_selection_end() const;
+  
+  /**
+   * Sets the period of the selection.
+   * @param start The start time.
+   * @param end The end time.
+   * @param reset_playback_period Specifies whether to set the playback
+   * period to the same as this new selection.
+   */
+  void set_selection(gavl_time_t start, gavl_time_t end,
+    bool reset_playback_period = true);
+  
+  /**
+   * Gets the time at which the playback period begins.
+   */
+  gavl_time_t get_playback_period_start() const;
+  
+  /**
+   * Gets the time at which the playback period ends.
+   */
+  gavl_time_t get_playback_period_end() const;
+  
+  /**
+   * Sets the playback period.
+   * @param start The start time.
+   * @param end The end time.
+   */
+  void set_playback_period(gavl_time_t start, gavl_time_t end);
+  
+  /**
+   * Gets the type of the tool currently active.
+   */
+  timeline::ToolType get_tool() const;
+  
+  /**
+   * Sets the type of the tool currently active.
+   */
+  void set_tool(timeline::ToolType tool_type);
+  
+public:
+  /* ===== Signals ===== */
+  sigc::signal<void> view_changed_signal() const;
+  
+  sigc::signal<void, gavl_time_t> mouse_hover_signal() const;
+    
   /* ===== Events ===== */
 protected:
   void on_scroll();
   
   void on_size_allocate(Gtk::Allocation& allocation);
+  
+  /* ===== Utilities ===== */
+protected:
+  int time_to_x(gavl_time_t time) const;
+  
+  gavl_time_t x_to_time(int x) const;
 
   /* ===== Internals ===== */
-protected:
+private:
 
   void update_tracks();
   
@@ -114,25 +185,42 @@ protected:
   bool on_motion_in_body_notify_event(GdkEventMotion *event);
 
 protected:
+
+  // View State
   gavl_time_t timeOffset;
   int64_t timeScale;
+  
+  // Selection State
+  gavl_time_t selectionStart;
+  gavl_time_t selectionEnd;
+  gavl_time_t playbackPeriodStart;
+  gavl_time_t playbackPeriodEnd;
 
   int totalHeight;
 
-  timeline::VideoTrack video1;
-  timeline::VideoTrack video2;
+  timeline::Track video1;
+  timeline::Track video2;
   std::vector<timeline::Track*> tracks;
 
   timeline::HeaderContainer *headerContainer;
   timeline::TimelineBody *body;
-  timeline::TimelineRuler ruler;
+  timeline::TimelineRuler *ruler;
 
   Gtk::Adjustment horizontalAdjustment, verticalAdjustment;
   Gtk::HScrollbar horizontalScroll;
   Gtk::VScrollbar verticalScroll;
   
+  // Signals
+  sigc::signal<void> viewChangedSignal;
+  sigc::signal<void, gavl_time_t> mouseHoverSignal;
+   
   /* ===== Constants ===== */
 public:
+  /**
+   * The maximum scale for timeline display.
+   * @remarks At MaxScale, every pixel on the timeline is equivalent
+   * to 30000000 gavl_time_t increments.
+   */ 
   static const int64_t MaxScale;
   
 protected:
@@ -142,6 +230,10 @@ protected:
 
   friend class timeline::TimelineBody;
   friend class timeline::HeaderContainer;
+  friend class timeline::TimelineRuler;
+  friend class timeline::Tool;
+  friend class timeline::ArrowTool;
+  friend class timeline::IBeamTool;
 };
 
 }   // namespace widgets

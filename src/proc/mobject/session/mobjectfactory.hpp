@@ -28,8 +28,8 @@
 
 
 
-namespace asset
-  {
+namespace asset {
+
   class Clip;
   class Media;
   class Track;
@@ -37,10 +37,9 @@ namespace asset
   
   }
 
-namespace mobject
-  {
-  namespace session
-    {
+namespace mobject {
+  namespace session {
+  
     class Clip;
     class Track;
     class Effect;
@@ -57,10 +56,10 @@ namespace mobject
         
       public:
         
-        Placement<Clip>   operator() (const asset::Clip&, const asset::Media&);
-        Placement<Clip>   operator() (const asset::Clip&, vector<const asset::Media*>);
+        Placement<Clip>   operator() (asset::Clip const&, asset::Media const&);
+        Placement<Clip>   operator() (asset::Clip const&, vector<asset::Media const*>);
         Placement<Track>  operator() (PTrackAsset&);
-        Placement<Effect> operator() (const asset::Effect&);
+        Placement<Effect> operator() (asset::Effect const&);
         
       };
 

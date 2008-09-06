@@ -44,6 +44,10 @@ TimelineWidget::TimelineWidget() :
   totalHeight(0),
   horizontalAdjustment(0, 0, 0),
   verticalAdjustment(0, 0, 0),
+  selectionStart(0),
+  selectionEnd(0),
+  playbackPeriodStart(0),
+  playbackPeriodEnd(0),
   horizontalScroll(horizontalAdjustment),
   verticalScroll(verticalAdjustment)
 {
@@ -51,6 +55,8 @@ TimelineWidget::TimelineWidget() :
   ENSURE(body != NULL);
   headerContainer = new HeaderContainer(this);
   ENSURE(headerContainer != NULL);
+  ruler = new TimelineRuler(this);
+  ENSURE(ruler != NULL);
 
   horizontalAdjustment.signal_value_changed().connect( sigc::mem_fun(
     this, &TimelineWidget::on_scroll) );
@@ -58,11 +64,12 @@ TimelineWidget::TimelineWidget() :
     this, &TimelineWidget::on_scroll) );
   body->signal_motion_notify_event().connect( sigc::mem_fun(
     this, &TimelineWidget::on_motion_in_body_notify_event) );
-    
+  
   set_time_scale(GAVL_TIME_SCALE / 200);
+  set_selection(2000000, 4000000);
 
   attach(*body, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
-  attach(ruler, 1, 2, 0, 1, FILL|EXPAND, SHRINK);
+  attach(*ruler, 1, 2, 0, 1, FILL|EXPAND, SHRINK);
   attach(*headerContainer, 0, 1, 1, 2, SHRINK, FILL|EXPAND);
   attach(horizontalScroll, 1, 2, 2, 3, FILL|EXPAND, SHRINK);
   attach(verticalScroll, 2, 3, 1, 2, SHRINK, FILL|EXPAND);
@@ -71,14 +78,23 @@ TimelineWidget::TimelineWidget() :
   tracks.push_back(&video2);
   
   update_tracks();
+  
+  set_tool(timeline::Arrow);
 }
 
 TimelineWidget::~TimelineWidget()
 {
   REQUIRE(body != NULL);
-  body->unreference();
+  if(body != NULL)
+    body->unreference();
+    
   REQUIRE(headerContainer != NULL);
-  headerContainer->unreference();
+  if(headerContainer != NULL)
+    headerContainer->unreference();
+    
+  REQUIRE(ruler != NULL);
+  if(ruler != NULL)
+    ruler->unreference();
 }
 
 gavl_time_t
@@ -90,9 +106,12 @@ TimelineWidget::get_time_offset() const
 void
 TimelineWidget::set_time_offset(gavl_time_t time_offset)
 {
+  REQUIRE(ruler != NULL);
+  
   timeOffset = time_offset;
   horizontalAdjustment.set_value(time_offset);
-  ruler.set_time_offset(time_offset);
+  
+  viewChangedSignal.emit();
 }
 
 int64_t
@@ -104,17 +123,14 @@ TimelineWidget::get_time_scale() const
 void
 TimelineWidget::set_time_scale(int64_t time_scale)
 {
-  timeScale = time_scale;
-  ruler.set_time_scale(time_scale);
-}
-
-void
-TimelineWidget::shift_view(int shift_size)
-{
-  const int view_width = body->get_allocation().get_width();
+  REQUIRE(ruler != NULL);
   
-  set_time_offset(get_time_offset() +
-    shift_size * timeScale * view_width / 16);
+  timeScale = time_scale;
+  
+  const int view_width = body->get_allocation().get_width();
+  horizontalAdjustment.set_page_size(timeScale * view_width);
+  
+  viewChangedSignal.emit();
 }
 
 void
@@ -149,10 +165,120 @@ TimelineWidget::zoom_view(int point, int zoom_size)
 }
 
 void
+TimelineWidget::shift_view(int shift_size)
+{
+  const int view_width = body->get_allocation().get_width();
+  
+  set_time_offset(get_time_offset() +
+    shift_size * timeScale * view_width / 256);
+}
+
+gavl_time_t
+TimelineWidget::get_selection_start() const
+{
+  return selectionStart;
+}
+
+gavl_time_t
+TimelineWidget::get_selection_end() const
+{
+  return selectionEnd;
+}
+
+void
+TimelineWidget::set_selection(gavl_time_t start, gavl_time_t end,
+  bool reset_playback_period)
+{
+  REQUIRE(ruler != NULL);
+  REQUIRE(body != NULL);
+    
+  if(start < end)
+    {
+      selectionStart = start;
+      selectionEnd = end;
+    }
+  else
+    {
+      // The selection is back-to-front, flip it round
+      selectionStart = end;
+      selectionEnd = start;
+    }
+    
+  if(reset_playback_period)
+    {
+      playbackPeriodStart = selectionStart;
+      playbackPeriodEnd = selectionEnd;
+    }
+
+  ruler->queue_draw();
+  body->queue_draw();
+}
+
+gavl_time_t
+TimelineWidget::get_playback_period_start() const
+{
+  return playbackPeriodStart;
+}
+  
+gavl_time_t
+TimelineWidget::get_playback_period_end() const
+{
+  return playbackPeriodEnd;
+}
+  
+void
+TimelineWidget::set_playback_period(gavl_time_t start, gavl_time_t end)
+{
+  REQUIRE(ruler != NULL);
+  REQUIRE(body != NULL);
+  
+  if(start < end)
+    {
+      playbackPeriodStart = start;
+      playbackPeriodEnd = end;
+    }
+  else
+    {
+      // The period is back-to-front, flip it round
+      playbackPeriodStart = end;
+      playbackPeriodEnd = start;
+    }
+
+  ruler->queue_draw();
+  body->queue_draw();
+}
+
+ToolType
+TimelineWidget::get_tool() const
+{
+  REQUIRE(body != NULL);
+  return body->get_tool();
+}
+  
+void
+TimelineWidget::set_tool(ToolType tool_type)
+{
+  REQUIRE(body != NULL);
+  body->set_tool(tool_type);
+}
+
+sigc::signal<void>
+TimelineWidget::view_changed_signal() const
+{
+  return viewChangedSignal;
+}
+
+sigc::signal<void, gavl_time_t>
+TimelineWidget::mouse_hover_signal() const
+{
+  return mouseHoverSignal;
+}
+
+void
 TimelineWidget::on_scroll()
 {
   timeOffset = horizontalAdjustment.get_value();
-  ruler.set_time_offset(timeOffset);
+  viewChangedSignal.emit();
 }
   
 void
@@ -161,6 +287,18 @@ TimelineWidget::on_size_allocate(Allocation& allocation)
   Widget::on_size_allocate(allocation);
   
   update_scroll();
+}
+
+int
+TimelineWidget::time_to_x(gavl_time_t time) const
+{
+  return (int)((time - timeOffset) / timeScale);
+}
+
+gavl_time_t
+TimelineWidget::x_to_time(int x) const
+{
+  return (gavl_time_t)((int64_t)x * timeScale + timeOffset);
 }
 
 void
@@ -186,8 +324,13 @@ TimelineWidget::update_scroll()
   
   //----- Horizontal Scroll ------//
   
+  // TEST CODE
   horizontalAdjustment.set_upper(1000 * GAVL_TIME_SCALE / 200);
   horizontalAdjustment.set_lower(-1000 * GAVL_TIME_SCALE / 200);
+  
+  // Set the page size
+  horizontalAdjustment.set_page_size(
+    timeScale * body_allocation.get_width());
   
   //----- Vertical Scroll -----//
   
@@ -204,10 +347,14 @@ TimelineWidget::update_scroll()
   verticalAdjustment.set_upper(y_scroll_length);
   
   // Hide the scrollbar if no scrolling is possible
-  if(y_scroll_length == 0 && verticalScroll.is_visible())
+#if 0
+  // Having this code included seems to cause a layout loop as the
+  // window is shrunk
+  if(y_scroll_length <= 0 && verticalScroll.is_visible())
     verticalScroll.hide();
-  else if(y_scroll_length != 0 && !verticalScroll.is_visible())
+  else if(y_scroll_length > 0 && !verticalScroll.is_visible())
     verticalScroll.show();
+#endif
 }
 
 int
@@ -220,7 +367,8 @@ bool
 TimelineWidget::on_motion_in_body_notify_event(GdkEventMotion *event)
 {
   REQUIRE(event != NULL);
-  ruler.set_mouse_chevron_offset(event->x);
+  ruler->set_mouse_chevron_offset(event->x);
+  mouseHoverSignal.emit(x_to_time(event->x));
   return true;
 }
 

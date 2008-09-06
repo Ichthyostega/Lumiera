@@ -19,7 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file viewer-display-widget.hpp
+/** @file video-display-widget.hpp
  ** This file contains the definition of video viewer widget
  */
 
@@ -36,34 +36,29 @@ namespace lumiera {
 namespace gui {
 namespace widgets {
 
-  class VideoDisplayWidget : public Gtk::Widget
-    {
-    public:
-      VideoDisplayWidget();
+class VideoDisplayWidget : public Gtk::DrawingArea
+{
+public:
+  VideoDisplayWidget();
 
-      ~VideoDisplayWidget();
+  ~VideoDisplayWidget();
 
-      /* ===== Overrides ===== */
-    private:
-      virtual void on_realize();
+  /* ===== Overrides ===== */
+private:
+  virtual void on_realize();
   
-      virtual void on_unrealize();
-      
-      virtual bool on_expose_event(GdkEventExpose* event);
+  // TEST CODE!!!!
+  virtual bool on_button_press_event (GdkEventButton* event);
 
-      // TEST CODE!!!!
-      virtual bool on_button_press_event (GdkEventButton* event);
+  /* ===== Internals ===== */
+private:
+  static Displayer*
+    createDisplayer( Gtk::Widget *drawingArea, int width, int height );
 
-      /* ===== Internals ===== */
-    private:
-      static Displayer*
-        createDisplayer( Gtk::Widget *drawingArea, int width, int height );
+private:
 
-    private:
-      Glib::RefPtr<Gdk::Window> gdkWindow;
-
-      Displayer *displayer;
-    };
+  Displayer *displayer;
+};
 
 }   // namespace widgets
 }   // namespace gui

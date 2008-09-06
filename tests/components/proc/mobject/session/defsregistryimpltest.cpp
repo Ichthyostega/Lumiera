@@ -102,8 +102,8 @@ namespace mobject
         {
           scoped_ptr<DefsRegistry> reg_;
           
-          typedef P<Dummy<13> > O;
-          typedef P<Dummy<23> > P;
+          typedef lumiera::P<Dummy<13> > O;
+          typedef lumiera::P<Dummy<23> > P;
           
           typedef Query<Dummy<13> > Q13;
           typedef Query<Dummy<23> > Q23;

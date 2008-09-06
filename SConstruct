@@ -21,13 +21,6 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #####################################################################
 
-import sys
-sys.path.append("./admin/scons")
-
-import os
-from Buildhelper import *
-from LumieraEnvironment import *
-
 
 #-----------------------------------Configuration
 OPTIONSCACHEFILE = 'optcache' 
@@ -37,6 +30,8 @@ BINDIR           = 'bin'
 TESTDIR          = 'tests'
 ICONDIR          = 'icons'
 VERSION          = '0.1+pre.01'
+TOOLDIR          = './admin/scons'
+SVGRENDERER      = 'admin/render-icon'
 #-----------------------------------Configuration
 
 # NOTE: scons -h for help.
@@ -45,6 +40,14 @@ VERSION          = '0.1+pre.01'
 # fit together. SCons will derive the necessary build steps.
 
 
+
+import os
+import sys
+
+sys.path.append(TOOLDIR)
+
+from Buildhelper import *
+from LumieraEnvironment import *
 
 
 #####################################################################
@@ -56,7 +59,10 @@ def setupBasicEnvironment():
     EnsureSConsVersion(0,96,90)
     
     opts = defineCmdlineOptions() 
-    env = LumieraEnvironment(options=opts) 
+    env = LumieraEnvironment(options=opts
+                            ,toolpath = [TOOLDIR]
+                            ,tools = ["default", "BuilderGCH", "BuilderDoxygen"]  
+                            ) 
     
     env.Append ( CCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honor CFLAGS, only CCFLAGS 
     env.Replace( VERSION=VERSION
@@ -68,12 +74,12 @@ def setupBasicEnvironment():
                , CCFLAGS='-Wall '                                       # -fdiagnostics-show-option 
                )
     
-    RegisterPrecompiledHeader_Builder(env)
+    RegisterIcon_Builder(env,SVGRENDERER)
     handleNoBugSwitches(env)
     
     env.Append(CPPDEFINES = '_GNU_SOURCE')
     appendCppDefine(env,'DEBUG','DEBUG', 'NDEBUG')
-    appendCppDefine(env,'OPENGL','USE_OPENGL')
+#   appendCppDefine(env,'OPENGL','USE_OPENGL')
     appendVal(env,'ARCHFLAGS', 'CCFLAGS')   # for both C and C++
     appendVal(env,'OPTIMIZE', 'CCFLAGS', val=' -O3')
     appendVal(env,'DEBUG',    'CCFLAGS', val=' -ggdb')
@@ -101,8 +107,7 @@ def handleNoBugSwitches(env):
     level = env['BUILDLEVEL']
     if level in ['ALPHA', 'BETA']:
         if not env['DEBUG']:
-            print 'NoBug: ALPHA or BETA builds without DEBUG not possible, exiting.'
-            Exit(1)
+            print 'Warning: NoBug ALPHA or BETA builds requires DEBUG=yes, switching DEBUG on!'
         env.Replace( DEBUG = 1 )
         env.Append(CPPDEFINES = 'EBUG_'+level)
     elif level == 'RELEASE':
@@ -123,7 +128,7 @@ def defineCmdlineOptions():
                     allowed_values=('ALPHA', 'BETA', 'RELEASE'))
         ,BoolOption('DEBUG', 'Build with debugging information and no optimizations', False)
         ,BoolOption('OPTIMIZE', 'Build with strong optimization (-O3)', False)
-        ,BoolOption('OPENGL', 'Include support for OpenGL preview rendering', False)
+#       ,BoolOption('OPENGL', 'Include support for OpenGL preview rendering', False)
 #       ,EnumOption('DIST_TARGET', 'Build target architecture', 'auto', 
 #                   allowed_values=('auto', 'i386', 'i686', 'x86_64' ), ignorecase=2)
         ,PathOption('DESTDIR', 'Installation dir prefix', '/usr/local')
@@ -168,24 +173,21 @@ def configurePlatform(env):
     # run all configuration checks in the given env
     
     # Perform checks for prerequisites --------------------------------------------
+    problems = []
     if not conf.TryAction('pkg-config --version > $TARGET')[0]:
-        print 'We need pkg-config for including library configurations, exiting.'
-        Exit(1)
+        problems.append('We need pkg-config for including library configurations, exiting.')
     
     if not conf.CheckLibWithHeader('m', 'math.h','C'):
-        print 'Did not find math.h / libm, exiting.'
-        Exit(1)
+        problems.append('Did not find math.h / libm.')
     
     if not conf.CheckLibWithHeader('dl', 'dlfcn.h', 'C'):
-        print 'Functions for runtime dynamic loading not available, exiting.'
-        Exit(1)
+        problems.append('Functions for runtime dynamic loading not available.')
     
     if not conf.CheckLibWithHeader('nobugmt', 'nobug.h', 'C'):
-        print 'Did not find NoBug [http://www.pipapo.org/pipawiki/NoBug], exiting.'
-        Exit(1)
+        problems.append('Did not find NoBug [http://www.pipapo.org/pipawiki/NoBug].')
     
     if not conf.CheckLibWithHeader('pthread', 'pthread.h', 'C'):
-        print 'Did not find the pthread lib or pthread.h, exiting.'
+        problems.append('Did not find the pthread lib or pthread.h.')
     else:
        conf.env.Append(CPPFLAGS = ' -DHAVE_PTHREAD')
        conf.env.Append(CCFLAGS = ' -pthread')
@@ -197,48 +199,55 @@ def configurePlatform(env):
         conf.env.Append(CPPFLAGS = ' -DHAS_VALGRIND_VALGIND_H')
     
     if not conf.CheckCXXHeader('tr1/memory'):
-        print 'We rely on the std::tr1 proposed standard extension for shared_ptr.'
-        Exit(1) 
+        problems.append('We rely on the std::tr1 proposed standard extension for shared_ptr.')
     
     if not conf.CheckCXXHeader('boost/config.hpp'):
-        print 'We need the C++ boost-lib.'
-        Exit(1)
+        problems.append('We need the C++ boost-lib.')
     else:
         if not conf.CheckCXXHeader('boost/shared_ptr.hpp'):
-            print 'We need boost::shared_ptr (shared_ptr.hpp).'
-            Exit(1)
+            problems.append('We need boost::shared_ptr (shared_ptr.hpp).')
         if not conf.CheckLibWithHeader('boost_program_options-mt','boost/program_options.hpp','C++'):
-            print 'We need boost::program_options (including binary lib for linking).'
-            Exit(1)
+            problems.append('We need boost::program_options (including binary lib for linking).')
         if not conf.CheckLibWithHeader('boost_regex-mt','boost/regex.hpp','C++'):
-            print 'We need the boost regular expression lib (incl. binary lib for linking).'
-            Exit(1)
+            problems.append('We need the boost regular expression lib (incl. binary lib for linking).')
     
 #    if not conf.CheckLibWithHeader('gavl', ['gavlconfig.h', 'gavl/gavl.h'], 'C'):
     
     if not conf.CheckPkgConfig('gavl', 1.0):
-        print 'Did not find Gmerlin Audio Video Lib [http://gmerlin.sourceforge.net/gavl.html], exiting.'
-        Exit(1)
+        problems.append('Did not find Gmerlin Audio Video Lib [http://gmerlin.sourceforge.net/gavl.html].')
     else:
         conf.env.mergeConf('gavl')
     
     if not conf.CheckPkgConfig('gtkmm-2.4', 2.8):
-        print 'Unable to configure GTK--, exiting.'
-        Exit(1)
+        problems.append('Unable to configure GTK--, exiting.')
+        
+    if not conf.CheckPkgConfig('glibmm-2.4', '2.16'):
+        problems.append('Unable to configure Lib glib--, exiting.')
     
     if not conf.CheckPkgConfig('cairomm-1.0', 0.6):
-        print 'Unable to configure Cairo--, exiting.'
-        Exit(1)
+        problems.append('Unable to configure Cairo--, exiting.')
     
     if not conf.CheckPkgConfig('gdl-1.0', '0.6.1'):
-        print 'Unable to configure the GNOME DevTool Library, exiting.'
-        Exit(1)
+        problems.append('Unable to configure the GNOME DevTool Library, exiting.')
     
-    if not conf.CheckPkgConfig('xv'): Exit(1)
+    if not conf.CheckPkgConfig('librsvg-2.0', '2.18.1'):
+        problems.append('Need rsvg Library for rendering icons.')
+        
+    if not conf.CheckPkgConfig('xv'): problems.append('Need lib xv')
 #   if not conf.CheckPkgConfig('xext'): Exit(1)
 #   if not conf.CheckPkgConfig('sm'): Exit(1)
 #    
 # obviously not needed?
+    
+    
+    # report missing dependencies
+    if problems:
+        print "*** unable to build due to the following problems:"
+        for isue in problems:
+            print " *  %s" % isue
+        print
+        print "build aborted."
+        Exit(1)
     
     print "** Gathered Library Info: %s" % conf.env.libInfo.keys()
     
@@ -269,6 +278,10 @@ def defineBuildTargets(env, artifacts):
         setup sub-environments with special build options if necessary.
         We use a custom function to declare a whole tree of srcfiles. 
     """
+    # use PCH to speed up building
+#   env['GCH'] = ( env.PrecompiledHeader('$SRCDIR/pre.hpp')
+#                + env.PrecompiledHeader('$SRCDIR/pre_a.hpp')
+#                )
     
     objback =   srcSubtree(env,'$SRCDIR/backend') 
     objproc =   srcSubtree(env,'$SRCDIR/proc')
@@ -281,27 +294,29 @@ def defineBuildTargets(env, artifacts):
             + env.StaticLibrary('$BINDIR/lumi.la',     objlib)
             )
     
-    # use PCH to speed up building
-    precomp = ( env.PrecompiledHeader('$SRCDIR/pre')
-              + env.PrecompiledHeader('$SRCDIR/pre_a')
-              )
-    env.Depends(objproc, precomp)
-    env.Depends(objlib, precomp)
     
     artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/main.cpp']+ core )
     artifacts['plugins'] = env.SharedLibrary('$BINDIR/lumiera-plugin', objplug)
-
+    
     # the Lumiera GTK GUI
-    envgtk  = env.Clone().mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','xv','xext','sm'])
+    envgtk  = env.Clone().mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','librsvg-2.0','xv','xext','sm'])
     objgui  = srcSubtree(envgtk,'$SRCDIR/gui')
     
+    # render and install Icons
+    vector_icon_dir      = env.subst('$ICONDIR/svg')
+    prerendered_icon_dir = env.subst('$ICONDIR/prerendered')
+    artifacts['icons']   = ( [env.IconRender(f) for f in scanSubtree(vector_icon_dir,      ['*.svg'])]
+                           + [env.IconCopy(f)   for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
+                           )
+    
     artifacts['lumigui'] = ( envgtk.Program('$BINDIR/lumigui', objgui + core)
-                           + env.Install('$BINDIR', env.Glob('$ICONDIR/*.png'))
                            + env.Install('$BINDIR', env.Glob('$SRCDIR/gui/*.rc'))
+                           + artifacts['icons']
                            )
     
     # call subdir SConscript(s) for independent components
     SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts core')
+    SConscript(dirs=['admin'], exports='env envgtk artifacts core')
     SConscript(dirs=[TESTDIR], exports='env artifacts core')
 
 
@@ -321,16 +336,9 @@ def definePostBuildTargets(env, artifacts):
     env.Clean ('build', [ 'scache.conf', '.sconf_temp', '.sconsign.dblite', 'config.log' ])
     env.Clean ('build', [ '$SRCDIR/pre.gch' ])
     
-    # Doxygen documentation
-    # Note: at the moment we only depend on Doxyfile
-    #       obviousely, we should depend on all sourcefiles
-    #       real Doxygen builder for scons is under developement for 0.97
-    #       so for the moment I prefere not to bother
-    doxyfile = File('doc/devel/Doxyfile')
-    env.NoClean(doxyfile)
-    doxydoc = artifacts['doxydoc'] = [ Dir('doc/devel/html'), Dir('doc/devel/latex') ]
-    env.Command(doxydoc, doxyfile, "doxygen Doxyfile 2>&1 |tee ,doxylog",  chdir='doc/devel')
-    env.Clean ('doc/devel', doxydoc + ['doc/devel/,doxylog'])
+    doxydoc = artifacts['doxydoc'] = env.Doxygen('doc/devel/Doxyfile')
+    env.Alias ('doc', doxydoc)
+    env.Clean ('doc', doxydoc + ['doc/devel/,doxylog','doc/devel/warnings.txt'])
 
 
 def defineInstallTargets(env, artifacts):

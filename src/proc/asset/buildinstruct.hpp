@@ -108,7 +108,15 @@ namespace asset
     : public InstructEntry 
     {
       template<typename T>
-      BuildInstruct (T& instr) : InstructEntry(instr) {}
+      BuildInstruct (T& instr) : InstructEntry() {}
+
+      // TODO: this ctor is *not* correct, just to make it compile
+      // There is a strange problem with boost::variant, probably becausse the
+      // template parameter T could be anything (but actually we know it's one
+      // of our Instruction types.
+      // I have to reinvestigate this design anyway, and probably will replace
+      // the boost::variant by something else, derive from a common base or such.
+      // Note: as of 8/2008 ProcPatt is just a draft and not implemented.
     };
     
     

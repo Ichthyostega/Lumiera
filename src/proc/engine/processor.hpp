@@ -25,7 +25,7 @@
 #define ENGINE_PROCESSOR_H
 
 #include "proc/lumiera.hpp"
-#include "proc/stateproxy.hpp"
+#include "proc/state.hpp"
 
 
 

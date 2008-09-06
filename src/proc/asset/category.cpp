@@ -38,7 +38,9 @@ namespace asset
    */
   Category::operator string ()  const
   {
-    char *kinds[6] = { "AUDIO"
+    typedef const char * const SymID;  
+
+    SymID kinds[6] = { "AUDIO"
                      , "VIDEO"
                      , "EFFECT"
                      , "CODEC"

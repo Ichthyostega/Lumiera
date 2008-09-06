@@ -27,28 +27,35 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-Track::Track()
-  {
-    
-  }
+Track::Track() :
+  label("XHeaderTest")
+{
+  headerWidget.pack_start(label);
+}
+
+Gtk::Widget&
+Track::get_header_widget()
+{
+  return headerWidget;
+}
 
 Glib::ustring
 Track::get_title()
-  {
-    return "Hello";
-  }
-  
-/*int
+{
+  return "Hello";
+}
+
+int
 Track::get_height()
-  {
-    return get_header_widget().get_allocation().get_height();
-  }*/
+{
+  return 100;
+}
 
 void
 Track::draw_track(Cairo::RefPtr<Cairo::Context> cairo)
-  {
-    
-  }
+{
+  
+}
 
 }   // namespace timeline
 }   // namespace widgets

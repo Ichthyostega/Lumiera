@@ -32,67 +32,159 @@
 namespace lumiera {
 namespace gui {
 namespace widgets {
+  
+class TimelineWidget;
+  
 namespace timeline {
 
+/**
+ * A subwidget of the TimelineWidget. This class implements a ruler
+ * which is placed along the top edge of the timeline.
+ */
 class TimelineRuler : public Gtk::DrawingArea
 {
 public:
-  TimelineRuler();
+  /**
+   * Constructor
+   * @param timeline_widget The owner widget of this ruler.
+   */
+  TimelineRuler(
+    lumiera::gui::widgets::TimelineWidget *timeline_widget);
   
   /**
-   * Sets the time offset. This is the time value displaid at the
-   * left-hand edge of the ruler.
-   */
-  void set_time_offset(gavl_time_t time_offset);
-
-  /**
-   * Sets the time scale value.
-   * @param time_scale The scale factor, which is the number of
-   * microseconds per screen pixel. This value must be greater than
-   * zero.
-   */
-  void set_time_scale(int64_t time_scale);
-  
-  /**
-   * Sets the offset of the mouse chevron in pixels from the left
-   * edge of the widget. If offset is less than 0 or greater than the
-   * width, the chevron will not be visible.
+   * Sets offset of the mouse chevron
+   * @param offset The offset of the mouse chevron in pixels from the
+   * left edge of the widget. If offset is less than 0 or greater than
+   * the width, the chevron will not be visible.
    */
   void set_mouse_chevron_offset(int offset);
-
+  
   /* ===== Events ===== */
-protected:
+private:
+  /**
+   * An event handler for when the view window of the timeline changes.
+   * @remarks Causes the ruler to be redrawn from scratch. The cached
+   * ruler backdrop is destroyed and redrawn.
+   */
+  void on_update_view();
 
+  /**
+   * An event handler for when the widget is realized.
+   */
   void on_realize();
 
+  /**
+   * An event handler for when the window must be redrawn.
+   */
   bool on_expose_event(GdkEventExpose *event);
   
+  /**
+   * The event handler for button press events.
+   */
+  bool on_button_press_event(GdkEventButton* event);
+  
+  /**
+   * The event handler for button release events.
+   */
+  bool on_button_release_event(GdkEventButton* event);
+  
+  /**
+   * The event handler for mouse move events.
+   */
   bool on_motion_notify_event(GdkEventMotion *event);
   
+  /**
+   * The handler for when the widget must calculate it's new shape.
+   */
   void on_size_request(Gtk::Requisition *requisition);
 
+  /**
+   * The handler for when the widget must take the size of a given
+   * area.
+   */
   void on_size_allocate(Gtk::Allocation& allocation);
   
-  /* ===== Internals ===== */
 private:
-  void draw_ruler(Cairo::RefPtr<Cairo::Context> cairo,
-    Gdk::Rectangle ruler_rect);
+  /* ===== Internal Methods ===== */
 
-  void draw_mouse_chevron(Cairo::RefPtr<Cairo::Context> cairo,
-    Gdk::Rectangle ruler_rect);
+  /**
+   * As the user drags, this function is called to update the position
+   * of the moving end of the playback period.
+   */
+  void set_leading_x(const int x);
 
-  gavl_time_t calculate_major_spacing() const;
+  /**
+   * Draws the ruler graduations.
+   * @param cr The cairo context to draw the ruler into.
+   * @param ruler_rect The area of the ruler widget.
+   */
+  void draw_ruler(Cairo::RefPtr<Cairo::Context> cr,
+    const Gdk::Rectangle ruler_rect);
+
+  /**
+   * Overlays the mouse chevron.
+   * @param cr The cairo context to draw the chevron into.
+   * @param ruler_rect The area of the ruler widget.
+   */
+  void draw_mouse_chevron(Cairo::RefPtr<Cairo::Context> cr,
+    const Gdk::Rectangle ruler_rect);
+    
+  /**
+   * Overlays the currently selected period.
+   * @param cr The cairo context to draw the selection into.
+   * @param ruler_rect The area of the ruler widget.
+   */
+  void draw_selection(Cairo::RefPtr<Cairo::Context> cr,
+    const Gdk::Rectangle ruler_rect);
   
+  /**
+   * Overlays the currently selected playback period.
+   * @param cr The cairo context to draw the period into.
+   * @param ruler_rect The area of the ruler widget.
+   */
+  void draw_playback_period(Cairo::RefPtr<Cairo::Context> cr,
+    const Gdk::Rectangle ruler_rect);
+
+  /**
+   * Given the current zoom, this function calculates the preiod
+   * between major graduations on the ruler scale.
+   * @return The period as a gavl_time_t
+   */
+  gavl_time_t calculate_major_spacing() const;
+
+  /**
+   * Registers all the styles that this class will respond to.
+   */
   void register_styles() const;
   
+  /**
+   * Reads styles from the present stylesheet.
+   */
   void read_styles();
   
 private:
-  // View values
-  gavl_time_t timeOffset;
-  int64_t timeScale;
+
+  // State values
+  
+  /**
+   * This value is set to true if the user is dragging with the left
+   * mouse button.
+   */
+  bool isDragging;
+  
+  /**
+   * During a selection drag, one end of the selection is moving with
+   * the mouse, the other is pinned. pinnedDragTime specifies the time
+   * of that point.
+   */
+  gavl_time_t pinnedDragTime;
   
   // Indicated values
+  /**
+   * The offset from the left of the control in pixels to draw the
+   * mouse chevron. If offset is less than 0 or greater than
+   * the width, the chevron will not be visible.
+   */
   int mouseChevronOffset;
   
   // Style values
@@ -103,8 +195,24 @@ private:
   int minorShortTickHeight;
   int minDivisionWidth;
   int mouseChevronSize;
+  int selectionChevronSize;
+  GdkColor playbackArrowColour;
+  float playbackArrowAlpha;
+  int playbackArrowSize;
+  int playbackArrowStemSize;
+
+  /**
+   * The owner widget
+   */
+  lumiera::gui::widgets::TimelineWidget *timelineWidget;
   
-  // Cached ruler image
+  /**
+   * The caches image of the ruler, over which the chevrons etc. will
+   * be drawn.
+   * @remarks This backdrop is cached because it changes relatively
+   * infrequently in comparison to the chevrons, thus improving
+   * performance somewhat.
+   */
   Cairo::RefPtr<Cairo::ImageSurface> rulerImage;
 };
 

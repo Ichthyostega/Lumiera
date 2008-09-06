@@ -85,7 +85,7 @@ namespace util
          */
         void testStandardCmdlineformat()
           {
-            char* fakeArg[3] = {"CMD", "one ", "two"};
+            const char* fakeArg[3] = {"CMD", "one ", "two"};
             Cmdline theCmdline(3, fakeArg);
             cout << "Standard Cmdlineformat:" << theCmdline << "\n";
           }

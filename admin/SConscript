@@ -1,0 +1,17 @@
+# -*- python -*-
+##
+## SConscript  -  SCons buildscript for helper tools (called by SConstruct)
+##
+
+Import('env','envgtk','artifacts','core')
+
+vgsuppr = env.Program('#$BINDIR/vgsuppression',['vgsuppression.c']+core)
+rsvg    = envgtk.Program('#$BINDIR/rsvg-convert','rsvg-convert.c')
+
+artifacts['tools'] += [ vgsuppr    ## for supressing false valgrind alarms
+                      + rsvg       ## for rendering SVG icons (uses librsvg)
+                      ]
+
+# Rendering the SVG Icons depends on rsvg-convert
+env.Depends(artifacts['icons'], rsvg)
+

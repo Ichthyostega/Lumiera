@@ -40,11 +40,11 @@ liblumicommon_a_SOURCES =					\
 noinst_HEADERS +=						\
 	$(liblumicommon_a_srcdir)/cmdline.hpp			\
 	$(liblumicommon_a_srcdir)/factory.hpp			\
+	$(liblumicommon_a_srcdir)/frameid.hpp			\
 	$(liblumicommon_a_srcdir)/singleton.hpp			\
 	$(liblumicommon_a_srcdir)/singletonpolicies.hpp		\
 	$(liblumicommon_a_srcdir)/singletonpreconfigure.hpp	\
 	$(liblumicommon_a_srcdir)/lumitime.hpp			\
-	$(liblumicommon_a_srcdir)/typelist.hpp			\
 	$(liblumicommon_a_srcdir)/visitor.hpp			\
 	$(liblumicommon_a_srcdir)/visitordispatcher.hpp		\
 	$(liblumicommon_a_srcdir)/visitorpolicies.hpp		\
@@ -56,7 +56,10 @@ noinst_HEADERS +=						\
 	$(liblumicommon_a_srcdir)/query/mockconfigrules.hpp	\
 	$(liblumicommon_a_srcdir)/singletonfactory.hpp		\
 	$(liblumicommon_a_srcdir)/singletonsubclass.hpp		\
-	$(liblumicommon_a_srcdir)/typelistutil.hpp		\
+	$(liblumicommon_a_srcdir)/meta/typelist.hpp		\
+	$(liblumicommon_a_srcdir)/meta/configflags.hpp		\
+	$(liblumicommon_a_srcdir)/meta/generator.hpp		\
+	$(liblumicommon_a_srcdir)/meta/typelistutil.hpp		\
 	$(liblumicommon_a_srcdir)/util.hpp			\
 	$(liblumicommon_a_srcdir)/test/mockinjector.hpp		\
 	$(liblumicommon_a_srcdir)/test/suite.hpp		\
