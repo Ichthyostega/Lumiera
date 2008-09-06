@@ -52,6 +52,39 @@ LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX_VALUE, "syntax error in value");
 LUMIERA_ERROR_DEFINE (CONFIG_NO_ENTRY, "no configuration entry");
 LUMIERA_ERROR_DEFINE (CONFIG_DEFAULT, "illegal default value");
 
+/**
+ *  defaults for the configuraton system itself
+ */
+const char* lumiera_config_defaults[] =
+  {
+    /* Low level formating, don't change these */
+    "config.formatstr.link = '< %s'",
+    "config.formatstr.number.dec = '= %lld'",
+    "config.formatstr.number.hex = '= 0x%llX'",
+    "config.formatstr.number.oct = '= 0%llo'",
+    "config.formatstr.real = '= %Lg'",
+    "config.formatstr.real.dec = '= %Lf'",
+    "config.formatstr.real.sci = '= %Le'",
+    "config.formatstr.string = '=%s'",
+    "config.formatstr.string.dquoted = '= \"%s\"'",
+    "config.formatstr.string.quoted = '= ''%s'''",
+    "config.formatstr.word = '= %s'",
+    "config.formatstr.bool = '= %d'",
+
+    /* default representations per type */
+    "config.formatdef.link < config.formatstr.link",
+    "config.formatdef.number < config.formatstr.number.dec",
+    "config.formatdef.real < config.formatstr.real",
+    "config.formatdef.string < config.formatstr.string",
+    "config.formatdef.word < config.formatstr.word",
+    "config.formatdef.bool < config.formatstr.bool",
+
+    /* per key formatting override stored under */
+    "config.formatkey ='config.format.%s'",
+
+    NULL
+  };
+
 
 /* singleton config */
 LumieraConfig lumiera_global_config = NULL;
@@ -72,7 +105,6 @@ lumiera_config_init (const char* path)
   NOBUG_INIT_FLAG (config_lookup);
 
   lumiera_global_config = lumiera_malloc (sizeof (*lumiera_global_config));
-  lumiera_global_config->path = lumiera_strndup (path, SIZE_MAX);
   lumiera_config_lookup_init (&lumiera_global_config->keys);
 
   lumiera_configitem_init (&lumiera_global_config->defaults);
@@ -81,7 +113,12 @@ lumiera_config_init (const char* path)
 
   lumiera_rwlock_init (&lumiera_global_config->lock, "config rwlock", &NOBUG_FLAG (config));
 
-  TODO ("register path as config.path itself");
+  lumiera_config_setdefault (lumiera_tmpbuf_snprintf (SIZE_MAX, "config.path = %s", path));
+
+  for (const char** itr = lumiera_config_defaults; *itr; ++itr)
+    {
+      lumiera_config_setdefault (*itr);
+    }
 
   return 0;
 }
@@ -98,7 +135,6 @@ lumiera_config_destroy ()
       lumiera_configitem_destroy (&lumiera_global_config->files, &lumiera_global_config->keys);
       lumiera_configitem_destroy (&lumiera_global_config->TODO_unknown, &lumiera_global_config->keys);
       lumiera_config_lookup_destroy (&lumiera_global_config->keys);
-      lumiera_free (lumiera_global_config->path);
       lumiera_free (lumiera_global_config);
       lumiera_global_config = NULL;
     }

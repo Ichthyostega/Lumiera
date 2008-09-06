@@ -73,8 +73,6 @@ struct lumiera_config_struct
   lumiera_configitem files;             /* all loaded files */
   lumiera_configitem TODO_unknown;      /* all values which are not part of a file and not default TODO: this will be removed when file support is finished */
 
-  char* path;
-
   /*
     all access is protected with rwlock's.
     We use rwlocks here since concurrent reads are likely common.
