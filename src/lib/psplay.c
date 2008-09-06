@@ -396,6 +396,23 @@ psplay_remove_key (PSplay self, void* key)
 }
 
 
+void
+psplay_delete_node (PSplay self, PSplaynode node)
+{
+  if (node)
+    self->delete (psplay_remove (self, node));
+}
+
+
+void
+psplay_delete_key (PSplay self, void* key)
+{
+  PSplaynode node = psplay_find (self, key, 0);
+  psplay_delete_node (self, node);
+}
+
+
+
 const psplay_delete_fn PSPLAY_CONT = (psplay_delete_fn)0x0;
 const psplay_delete_fn PSPLAY_STOP = (psplay_delete_fn)0x1;
 const psplay_delete_fn PSPLAY_REMOVE = (psplay_delete_fn)0x2;
