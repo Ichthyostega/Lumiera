@@ -44,9 +44,11 @@ out: .
 out: .
 END
 
+TEST "llist_relocate" relocate <<END
+END
+
 
 # not yet tested functions, write tests when needed
-PLANNED "llist_relocate"
 PLANNED "llist_insertlist_next"
 PLANNED "llist_insertlist_prev"
 PLANNED "llist_insertafter_range"

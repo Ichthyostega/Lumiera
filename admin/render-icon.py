@@ -24,12 +24,11 @@ import getopt
 from xml.dom import minidom
 import os
 import shutil
-import cairo
-import rsvg
 
 #svgDir = "svg"
 #prerenderedDir = "prerendered"
 inkscapePath = "/usr/bin/inkscape"
+rsvgPath = "./rsvg-convert"
 artworkLayerPrefix = "artwork:"
 
 def createDirectory( name ):
@@ -69,7 +68,7 @@ def parsePlateLayer( layer ):
   return rectangles
 
 def parseSVG( file_path ):
-  print "Rendering " + file_path
+  print "Parsing " + file_path
   svgdoc = minidom.parse(file_path)
   for root_node in svgdoc.childNodes:
     if root_node.nodeType == minidom.Node.ELEMENT_NODE:
@@ -106,22 +105,25 @@ def renderSvgRsvg(file_path, out_dir, artwork_name, rectangle, doc_size):
   width = int(rectangle[2])
   height = int(rectangle[3])
   
-  surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
-  context = cairo.Context(surface)
-  context.translate(-rectangle[0], -rectangle[1])
-
-  # Load an render the SVG
-  svg = rsvg.Handle(file=file_path)
-  svg.render_cairo(context)
-
-  # Output a PNG file
-  surface.write_to_png(os.path.join(out_dir,
-    "%ix%i/%s.png" % (width, height, artwork_name)))
+  if not os.path.exists(rsvgPath):
+      print "Error: executable %s not found." % rsvgPath
+    
+  os.spawnlp(os.P_WAIT, rsvgPath, rsvgPath,
+    "--source-rect=%g:%g:%g:%g" % (rectangle[0], rectangle[1], rectangle[2], rectangle[3]),
+  	"--output=" + os.path.join(out_dir, "%gx%g/%s.png" % (rectangle[2], rectangle[3], artwork_name)),
+  	file_path)
 
 def renderSvgIcon(file_path, out_dir):
   artwork_name, doc_size, rectangles = parseSVG(file_path)
   for rectangle in rectangles:
     renderSvgRsvg(file_path, out_dir, artwork_name, rectangle, doc_size)
+
+def getTargetNames(file_path):
+  """get a list of target names to be rendered from the given source SVG
+     usable to setup the build targets for SCons
+  """ 
+  artwork_name, _ , rectangles = parseSVG(file_path)
+  return ["%gx%g/%s.png" % (rectangle[2], rectangle[3], artwork_name) for rectangle in rectangles ]
 
 #def renderSvgIcons():
 #  listing = os.listdir(svgDir)
@@ -137,7 +139,8 @@ def renderSvgIcon(file_path, out_dir):
 #    copyMergeDirectory(src_dir, list_item)
 
 def printHelp():
-  print "render-icon.py - An icon rendering utility script for lumiera"
+  print "render-icon.py SRCFILE.svg TARGETDIR"
+  print "An icon rendering utility script for lumiera"
 
 def parseArguments(argv):
   optlist, args = getopt.getopt(argv, "")

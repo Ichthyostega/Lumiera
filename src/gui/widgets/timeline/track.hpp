@@ -19,14 +19,14 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file track.hpp
+/** @file timeline/track.hpp
  ** This file contains the definition of timeline track object
  */
 
 #ifndef TRACK_HPP
 #define TRACK_HPP
 
-#include <gtkmm.h>
+#include "../../gtk-lumiera.hpp"
 
 namespace lumiera {
 namespace gui {

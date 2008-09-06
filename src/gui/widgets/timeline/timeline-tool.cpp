@@ -23,6 +23,8 @@
 #include "timeline-tool.hpp"
 #include "../timeline-widget.hpp"
 
+using namespace Gdk;
+
 namespace lumiera {
 namespace gui {
 namespace widgets {
@@ -40,7 +42,7 @@ Tool::apply_cursor()
 { 
   REQUIRE(timelineBody != NULL);
     
-  Glib::RefPtr<Gdk::Window> window = 
+  Glib::RefPtr<Window> window = 
     timelineBody->get_window();
   if(!window)
     return false;
@@ -66,6 +68,29 @@ Tool::on_button_release_event(GdkEventButton* event)
   
   if(event->button == 1)
     isDragging = false;
+}
+
+void
+Tool::on_motion_notify_event(GdkEventMotion *event)
+{
+  mousePoint = Point(event->x, event->y);
+}
+
+lumiera::gui::widgets::TimelineWidget*
+Tool::get_timeline_widget() const
+{
+  REQUIRE(timelineBody != NULL);
+  lumiera::gui::widgets::TimelineWidget *timeline_widget =
+    timelineBody->timelineWidget;
+  REQUIRE(timeline_widget != NULL);
+  return timeline_widget;
+}
+
+Gdk::Rectangle
+Tool::get_body_rectangle() const
+{
+  REQUIRE(timelineBody != NULL);
+  return timelineBody->get_allocation();
 }
 
 }   // namespace timeline

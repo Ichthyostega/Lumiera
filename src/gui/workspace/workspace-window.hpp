@@ -56,7 +56,8 @@ class WorkspaceWindow : public Gtk::Window
 {
 public:
   WorkspaceWindow(lumiera::gui::model::Project *source_project);
-  virtual ~WorkspaceWindow();
+  
+  ~WorkspaceWindow();
 
 private:
   void create_ui();
@@ -68,18 +69,22 @@ private:
   /* ===== UI ===== */
 private:
   Glib::RefPtr<Gtk::UIManager> uiManager;
-  Gtk::VBox base_container;
-  Gtk::HBox dock_container;
+  Gtk::VBox baseContainer;
+  Gtk::HBox dockContainer;
   
+  //----- Dock Frame -----//
   Gtk::Widget *dock;
   Gtk::Widget *dockbar;
   GdlDockLayout *layout;
+  
+  //----- Status Bar -----//
+  Gtk::Statusbar statusBar;
 
   /* ===== Panels ===== */
 private:  
-  AssetsPanel *assets_panel;
-  ViewerPanel *viewer_panel;      
-  TimelinePanel *timeline_panel;
+  AssetsPanel *assetsPanel;
+  ViewerPanel *viewerPanel;      
+  TimelinePanel *timelinePanel;
        
   /* ===== Helpers ===== */
 private:

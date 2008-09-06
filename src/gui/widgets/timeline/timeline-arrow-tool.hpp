@@ -34,19 +34,44 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
+/**
+ * A helper class to implement the timeline i-beam tool
+ */
 class ArrowTool : public Tool
 {
 public:
+  /**
+   * Constructor
+   * @param timeline_body The owner timeline body object
+   */
   ArrowTool(TimelineBody *timeline_body);
 
+  /**
+   * Gets the type of tool represented by this class
+   */
   ToolType get_type() const;
   
 protected:
+
+  /**
+   * Gets the cursor to display for this tool at this moment.
+   */
   Gdk::Cursor get_cursor() const;
   
 protected:
+  /**
+   * The event handler for button press events.
+   */
   void on_button_press_event(GdkEventButton* event);
+  
+  /**
+   * The event handler for button release events.
+   */
   void on_button_release_event(GdkEventButton* event);
+  
+  /**
+   * The event handler for mouse move events.
+   */
   void on_motion_notify_event(GdkEventMotion *event);
 };
 

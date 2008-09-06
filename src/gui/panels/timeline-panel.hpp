@@ -35,9 +35,16 @@ namespace lumiera {
 namespace gui {
 namespace panels {
 
+/**
+ * The definition of the timeline panel class, which holds timeline
+ * widgets.
+ */
 class TimelinePanel : public Panel
 {
 public:
+  /**
+   * Constructor
+   */
   TimelinePanel();
 
 private:
@@ -48,9 +55,15 @@ private:
   void on_zoom_in();
   void on_zoom_out();
   
+  void on_time_pressed();
+  
+  void on_mouse_hover(gavl_time_t time);
+  
 private:
   void update_tool_buttons();
   void update_zoom_buttons();
+  
+  void show_time(gavl_time_t time);
 
 private:
 
@@ -58,6 +71,7 @@ private:
 
   // Widgets
   Gtk::Toolbar toolbar;
+  Gtk::HBox toolStrip;
   TimelineWidget timelineWidget;
   
   // Toolbar Widgets
@@ -68,6 +82,11 @@ private:
   
   Gtk::ToolButton zoomIn;
   Gtk::ToolButton zoomOut;
+  
+  Gtk::SeparatorToolItem seperator2;
+  
+  Gtk::Label timeIndicator;
+  Gtk::ToolButton timeIndicatorButton;
   
   // Internals
   bool updatingToolbar;

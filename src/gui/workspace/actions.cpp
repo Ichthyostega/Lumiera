@@ -39,8 +39,6 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
   workspaceWindow(workspace_window),
   is_updating_action_state(false)
 {
-  register_stock_items();
-
   workspace_window.signal_show ().connect_notify(mem_fun(this, &Actions::update_action_state));
 
   //----- Create the Action Group -----//
@@ -70,17 +68,20 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
   // View Menu
   actionGroup->add(Action::create("ViewMenu", _("_View")));
   
-  assetsPanelAction = ToggleAction::create("ViewAssets", Gtk::StockID("assets_panel"));
+  assetsPanelAction = ToggleAction::create("ViewAssets",
+    Gtk::StockID("panel_assets"));
   assetsPanelAction->signal_toggled().connect(
     sigc::mem_fun(*this, &Actions::on_menu_view_assets));
   actionGroup->add(assetsPanelAction);
   
-  timelinePanelAction = ToggleAction::create("ViewTimeline", Gtk::StockID("timeline_panel"));
+  timelinePanelAction = ToggleAction::create("ViewTimeline",
+    Gtk::StockID("panel_timeline"));
   timelinePanelAction->signal_toggled().connect(
     sigc::mem_fun(*this, &Actions::on_menu_view_timeline));
   actionGroup->add(timelinePanelAction);
 
-  viewerPanelAction = ToggleAction::create("ViewViewer", Gtk::StockID("viewer_panel"));
+  viewerPanelAction = ToggleAction::create("ViewViewer",
+    Gtk::StockID("panel_viewer"));
   viewerPanelAction->signal_toggled().connect(
     sigc::mem_fun(*this, &Actions::on_menu_view_viewer));
   actionGroup->add(viewerPanelAction);
@@ -92,81 +93,19 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
 }
 
 void
-Actions::register_stock_items()
-{
-  RefPtr<IconFactory> factory = IconFactory::create();
-  
-  add_stock_item_set(factory, "assets-panel.png", "assets_panel", _("_Assets"));
-  add_stock_item_set(factory, "timeline-panel.png", "timeline_panel", _("_Timeline"));
-  add_stock_item_set(factory, "viewer-panel.png", "viewer_panel", _("_Viewer"));
-  
-  add_stock_item_set(factory, "arrow.png", "arrow", _("_Arrow"));
-  add_stock_item_set(factory, "i-beam.png", "i_beam", _("_I-Beam"));  
-
-  factory->add_default(); //Add factory to list of factories.
-}
-
-bool
-Actions::add_stock_item_set(const Glib::RefPtr<IconFactory>& factory,
-                            const Glib::ustring& filename,
-                            const Glib::ustring& id,
-                            const Glib::ustring& label)
-{
-  Gtk::IconSet icon_set;
-  
-  add_stock_icon_source(icon_set, 16, filename);
-  add_stock_icon_source(icon_set, 22, filename);
-  add_stock_icon_source(icon_set, 24, filename);
-  add_stock_icon_source(icon_set, 32, filename);
-  add_stock_icon_source(icon_set, 48, filename);
-
-  if(!icon_set.get_sizes().empty())
-    {
-      const Gtk::StockID stock_id(id);
-      factory->add(stock_id, icon_set);
-      Gtk::Stock::add(Gtk::StockItem(stock_id, label));
-      return true;
-    }
-    
-  return false;
-}
-
-bool
-Actions::add_stock_icon_source(Gtk::IconSet &icon_set,
-                        int size, const Glib::ustring& filename)
-{
-  Gtk::IconSource source;
-  
-  try
-    {
-      //This throws an exception if the file is not found:
-      source.set_pixbuf( Gdk::Pixbuf::create_from_file(
-        Glib::ustring::compose("%1x%1/%2", size, filename) ) );
-    }
-  catch(const Glib::Exception& ex)
-    {
-      return false;
-    }
-
-  source.set_size(IconSize(size));
-  //source.set_size_wildcarded(); // Icon may be scaled.
-
-  icon_set.add_source(source);
-
-  return true;
-}
-
-void
 Actions::update_action_state()
 {
-  REQUIRE(workspaceWindow.assets_panel != NULL);
-  REQUIRE(workspaceWindow.timeline_panel != NULL);
-  REQUIRE(workspaceWindow.viewer_panel != NULL); 
+  REQUIRE(workspaceWindow.assetsPanel != NULL);
+  REQUIRE(workspaceWindow.timelinePanel != NULL);
+  REQUIRE(workspaceWindow.viewerPanel != NULL); 
   
   is_updating_action_state = true;
-  assetsPanelAction->set_active(workspaceWindow.assets_panel->is_shown());
-  timelinePanelAction->set_active(workspaceWindow.timeline_panel->is_shown());
-  viewerPanelAction->set_active(workspaceWindow.viewer_panel->is_shown());
+  assetsPanelAction->set_active(
+    workspaceWindow.assetsPanel->is_shown());
+  timelinePanelAction->set_active(
+    workspaceWindow.timelinePanel->is_shown());
+  viewerPanelAction->set_active(
+    workspaceWindow.viewerPanel->is_shown());
   is_updating_action_state = false;
 }
 
@@ -212,21 +151,21 @@ void
 Actions::on_menu_view_assets()
 {
   if(!is_updating_action_state)
-    workspaceWindow.assets_panel->show(assetsPanelAction->get_active());
+    workspaceWindow.assetsPanel->show(assetsPanelAction->get_active());
 }
 
 void
 Actions::on_menu_view_timeline()
 {
   if(!is_updating_action_state)
-    workspaceWindow.timeline_panel->show(timelinePanelAction->get_active());
+    workspaceWindow.timelinePanel->show(timelinePanelAction->get_active());
 }
 
 void
 Actions::on_menu_view_viewer()
 {
   if(!is_updating_action_state)
-    workspaceWindow.viewer_panel->show(viewerPanelAction->get_active());
+    workspaceWindow.viewerPanel->show(viewerPanelAction->get_active());
 }
 
 void

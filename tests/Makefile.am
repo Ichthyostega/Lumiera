@@ -33,6 +33,11 @@ test_llist_SOURCES = $(tests_srcdir)/library/test-llist.c
 test_llist_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
 test_llist_LDADD = liblumi.a -lnobugmt -lpthread -ldl -lm
 
+check_PROGRAMS += test-psplay
+test_psplay_SOURCES = $(tests_srcdir)/library/test-psplay.c
+test_psplay_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_psplay_LDADD = liblumi.a -lnobugmt -lpthread -ldl -lm
+
 check_PROGRAMS += test-safeclib
 test_safeclib_SOURCES = $(tests_srcdir)/library/test-safeclib.c
 test_safeclib_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/

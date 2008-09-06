@@ -19,7 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file viewer-display-widget.hpp
+/** @file video-display-widget.hpp
  ** This file contains the definition of video viewer widget
  */
 

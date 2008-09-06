@@ -52,7 +52,7 @@ namespace util
   
   /** create as a tokenized <i>copy</i> of the current commandline.
    *  Note that argv[0] is allways ignored. */
-  Cmdline::Cmdline (int argc, char* argv[])
+  Cmdline::Cmdline (int argc, const char** argv)
     : vector<string> (noneg(argc-1))
     {
       for (int i=1; i<argc; ++i)

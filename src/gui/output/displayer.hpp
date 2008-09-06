@@ -49,69 +49,74 @@ namespace output {
   }
   DisplayerInput;
 
-  /**	A Displayer is a class which is responsible for rendering an image in some
-	  way (ie: Xvideo, GDK, OpenGL etc).
-   
-	  All Displayer classes must extend the Displayer class and minimally rewrite:
-	
-	  + usable() - to indicate if the object can be used, 
-	  + format() - to indicate what type of input the put method expects
-	  + put( void * ) - deal with an image of the expected type and size
-   
-	  By default, all images will be delivered to the put method in a resolution
-	  of IMG_WIDTH * IMG_HEIGHT. If another size is required, then the rewrite
-	  the methods:
-   
-	  + preferredWidth 
-	  + preferredHeight
-   
-	  If the widget being written to doesn't need a fixed size, then rewrite
-	  the two other put methods as required.
+  /**
+   * A Displayer is a class which is responsible for rendering an image
+   * in some way (ie: Xvideo, GDK, OpenGL etc).
+   *
+	 * @remarks All Displayer classes must extend the Displayer class and
+	 * minimally rewrite:
+	 *
+	 * + usable() - to indicate if the object can be used, 
+	 * + format() - to indicate what type of input the put method expects
+	 * + put( void * ) - deal with an image of the expected type and size
+   *
+	 * By default, all images will be delivered to the put method in a
+	 * resolution of IMG_WIDTH * IMG_HEIGHT. If another size is required,
+	 * then the rewrite the methods:
+   *
+	 * + preferredWidth 
+	 * + preferredHeight
+   *
+	 * If the widget being written to doesn't need a fixed size, then
+	 * rewrite the two other put methods as required.
    */
   class Displayer
   {
   public:
 
-    /** Indicates if an object can be used to render images on the running
-	    system.
+    /** 
+     * Indicates if an object can be used to render images on the
+     * running system.
      */
     virtual bool usable();
 
-    /** Indicates the format required by the abstract put method.
+    /** 
+     * Indicates the format required by the abstract put method.
     */
     virtual DisplayerInput format();
 
-    /** Expected width of input to put.
+    /** 
+     * Expected width of input to put.
      */
 	  virtual int preferredWidth();
 
-    /** Expected height of input to put.
+    /** 
+     * Expected height of input to put.
      */
 	  virtual int preferredHeight();
 
     /**
-     *  Put an image of a given width and height with the expected input
-	   *  format (as indicated by the format method).
-     *
-	   *  @param image  image of correct format and specified width/height
+     * Put an image of a given width and height with the expected input
+	   * format (as indicated by the format method).
      */
 	  virtual void put( void * ) = 0;
 
   protected:
     
     /**
-     *  Calculates the coordinates for placing a video image inside a widget
+     * Calculates the coordinates for placing a video image inside a
+     * widget
      *
-     *  @param[in] widget_width   The width of the display widget
-     *  @param[in] widget_height  The height of the display widget
-     *  @param[in] image_width    The width of the video image
-     *  @param[in] image_height   The height of the video image
-     *  @param[out] video_x       The x-coordinate of the top left corner of
-     *                            the scaled video image
-     *  @param[out] video_y       The y-coordinate of the top left corner of
-     *                            the scaled video image
-     *  @param[out] video_width   The width of the scale video image
-     *  @param[out] video_height  The height of the scale video image     
+     * @param[in] widget_width   The width of the display widget.
+     * @param[in] widget_height  The height of the display widget.
+     * @param[in] image_width    The width of the video image.
+     * @param[in] image_height   The height of the video image.
+     * @param[out] video_x       The x-coordinate of the top left
+     *                           corner of the scaled video image.
+     * @param[out] video_y       The y-coordinate of the top left
+     *                           corner of the scaled video image.
+     * @param[out] video_width   The width of the scale video image.
+     * @param[out] video_height  The height of the scale video image.  
      */
     static void calculateVideoLayout(
         int widget_width, int widget_height,

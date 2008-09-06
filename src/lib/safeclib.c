@@ -103,6 +103,7 @@ static void
 lumiera_tmpbuf_init (void)
 {
   pthread_key_create (&lumiera_tmpbuf_tls_key, lumiera_tmpbuf_destroy);
+  TODO ("register an atexit() handler to free tmpbufs");
 }
 
 
@@ -172,6 +173,18 @@ lumiera_tmpbuf_snprintf (size_t size, const char* fmt, ...)
   va_end (args);
 
   return buf;
+}
+
+
+char*
+lumiera_tmpbuf_strcat3 (const char* str1, size_t str1_len,
+                        const char* str2, size_t str2_len,
+                        const char* str3, size_t str3_len)
+{
+  return lumiera_tmpbuf_snprintf (SIZE_MAX, "%.*s%s%.*s%s%.*s",
+                                  str1?str1_len:0, str1?str1:"", str1?".":"",
+                                  str2?str2_len:0, str2?str2:"",
+                                  str3?".":"", str3?str3_len:0, str3?str3:"");
 }
 
 

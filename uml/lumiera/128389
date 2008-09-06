@@ -1,6 +1,6 @@
 format 40
 "RenderEngine" // ProcessingLayer::RenderEngine
-  revision 16
+  revision 17
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -517,11 +517,6 @@ ${inlines}
 
     class 142469 "StateProxy"
       visibility package stereotype "implementation"
-      nformals 2
-      formal name "WIRING" type "class" explicit_default_value ""
-        explicit_extends ""
-      formal name "POLICY" type "class" explicit_default_value ""
-        explicit_extends ""
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
 ${members}  };
@@ -539,22 +534,6 @@ ${inlines}
 	  b multiplicity "" parent class_ref 132741 // State
       end
 
-      classrelation 153221 // <generalisation>
-	relation 149765 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 153221 // <generalisation>
-	  b multiplicity "" parent class_ref 143877 // InPlace
-      end
-
-      classrelation 154117 // wiring (<unidirectional association>)
-	relation 150661 --->
-	  a role_name "wiring" multiplicity "1" const_relation protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 154117 // wiring (<unidirectional association>)
-	  b multiplicity "" parent class_ref 144005 // WiringTable
-      end
     end
 
     class 142597 "StateAdapter"
@@ -621,12 +600,30 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
+      operation 136453 "callDown"
+	cpp_virtual public explicit_return_type ""
+	nparams 2
+	  param inout name "" type class_ref 132741 // State
+	  param in name "requiredOutput" explicit_type "uint"
+	nexceptions 1
+	  exception class_ref 144133 // BuffHandle
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+      end
     end
 
     class 143365 "NodeWiring"
       visibility package 
       nformals 1
-      formal name "STATE" type "class" explicit_default_value ""
+      formal name "CONF" type "class" explicit_default_value ""
         explicit_extends ""
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -648,13 +645,74 @@ ${inlines}
       classrelation 153093 // <dependency>
 	relation 149637 -_->
 	  a default
-	    cpp default "Generated"
+	    cpp default "#include in header"
 	    classrelation_ref 153093 // <dependency>
 	  b multiplicity "" parent class_ref 142597 // StateAdapter
       end
+
+      classrelation 156165 // <association>
+	relation 152581 ----
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 156165 // <association>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 156293 // <association>
+      end
+
+      classrelation 156421 // <association>
+	relation 152709 ----
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 156421 // <association>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 156549 // <association>
+      end
+
+      classrelation 156677 // <association>
+	relation 152837 ----
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 156677 // <association>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 156805 // <association>
+      end
+
+      classrelation 156933 // <unidirectional association>
+	relation 152965 --->
+	  stereotype "creates"
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 156933 // <unidirectional association>
+	  b multiplicity "" parent class_ref 144261 // Invocation
+      end
+
+      operation 136581 "callDown"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+      end
     end
 
-    class 143493 "InvocationStateBase"
+    class 143493 "OperationBase"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -665,16 +723,9 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 153733 // <generalisation>
-	relation 150277 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 153733 // <generalisation>
-	  b multiplicity "" parent class_ref 132741 // State
-      end
     end
 
-    class 143621 "Caching"
+    class 143621 "QueryCache"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -685,16 +736,16 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 153605 // <generalisation>
-	relation 150149 ---|>
+      classrelation 157189 // <generalisation>
+	relation 153221 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 153605 // <generalisation>
-	  b multiplicity "" parent class_ref 143493 // InvocationStateBase
+	    classrelation_ref 157189 // <generalisation>
+	  b multiplicity "" parent class_ref 143749 // PullInput
       end
     end
 
-    class 143749 "Process"
+    class 143749 "PullInput"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -705,16 +756,28 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 153477 // <generalisation>
-	relation 150021 ---|>
+      classrelation 157317 // <generalisation>
+	relation 153349 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 153477 // <generalisation>
-	  b multiplicity "" parent class_ref 143621 // Caching
+	    classrelation_ref 157317 // <generalisation>
+	  b multiplicity "" parent class_ref 144389 // ProcessData
+      end
+
+      classrelation 158085 // <association>
+	relation 154117 ----
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 158085 // <association>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 158213 // <association>
       end
     end
 
-    class 143877 "InPlace"
+    class 143877 "ReadSource"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -725,16 +788,119 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 153349 // <generalisation>
-	relation 149893 ---|>
+      classrelation 157701 // <generalisation>
+	relation 153733 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 153349 // <generalisation>
-	  b multiplicity "" parent class_ref 143749 // Process
+	    classrelation_ref 157701 // <generalisation>
+	  b multiplicity "" parent class_ref 143493 // OperationBase
       end
     end
 
-    class 144005 "WiringTable"
+    class 144389 "ProcessData"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 157445 // <generalisation>
+	relation 153477 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 157445 // <generalisation>
+	  b multiplicity "" parent class_ref 144645 // FeedCache
+      end
+
+      classrelation 157829 // <generalisation>
+	relation 153861 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 157829 // <generalisation>
+	  b multiplicity "" parent class_ref 143493 // OperationBase
+      end
+
+      classrelation 158213 // <association>
+	relation_ref 154117 // <association>
+      end
+    end
+
+    class 144645 "FeedCache"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 157573 // <generalisation>
+	relation 153605 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 157573 // <generalisation>
+	  b multiplicity "" parent class_ref 143493 // OperationBase
+      end
+    end
+
+    class 144517 "Strategy"
+      visibility package 
+      nformals 1
+      formal name "CONF" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 154757 // <generalisation>
+	relation 151301 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 154757 // <generalisation>
+	  b multiplicity "" parent class_ref 143877 // ReadSource
+      end
+
+      classrelation 156293 // <association>
+	relation_ref 152581 // <association>
+      end
+
+      classrelation 156549 // <association>
+	relation_ref 152709 // <association>
+      end
+
+      classrelation 156805 // <association>
+	relation_ref 152837 // <association>
+      end
+
+      classrelation 157061 // <generalisation>
+	relation 153093 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 157061 // <generalisation>
+	  b multiplicity "" parent class_ref 143621 // QueryCache
+      end
+
+      classrelation 157957 // <generalisation>
+	relation 153989 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 157957 // <generalisation>
+	  b multiplicity "" parent class_ref 143749 // PullInput
+      end
+    end
+
+    class 144005 "BuffTable"
       visibility package 
       nformals 1
       formal name "SIZ" type "int" explicit_default_value ""
@@ -779,6 +945,45 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
+    end
+
+    class 144261 "Invocation"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 155781 // <unidirectional association>
+	relation 152197 --->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 155781 // <unidirectional association>
+	  b multiplicity "" parent class_ref 142597 // StateAdapter
+      end
+
+      classrelation 155909 // <unidirectional association>
+	relation 152325 --->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 155909 // <unidirectional association>
+	  b multiplicity "" parent class_ref 142725 // WiringDescriptor
+      end
+
+      classrelation 156037 // <unidirectional association>
+	relation 152453 --->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 156037 // <unidirectional association>
+	  b multiplicity "" parent class_ref 144005 // BuffTable
+      end
     end
   end
 end

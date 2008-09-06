@@ -185,4 +185,23 @@ TEST ("whiles")
 }
 
 
+TEST ("relocate")
+{
+  llist source;
+  llist_init (&source);
+
+  llist something;
+  llist_init (&something);
+
+  llist_insert_head (&source, &something);
+
+  llist target = {NULL,NULL};
+
+  target = source;
+
+  llist_relocate (&target);
+  ENSURE (llist_is_head (&target, &something));
+}
+
+
 TESTS_END

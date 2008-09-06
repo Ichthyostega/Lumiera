@@ -55,7 +55,7 @@ namespace mobject {
      * common selection of types to be handled by any such builder tool.
      * The actual BuilderTool impl should inherit from this template by
      * feeding back its type (CRTP), this causes a dispatcher table entry
-     * be generated for this concrete BuilderTool implementation.
+     * to be generated for this concrete BuilderTool implementation.
      */
     template<class TOOL>
     struct ApplicableBuilderTargetTypes 

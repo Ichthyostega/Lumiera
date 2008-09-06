@@ -47,7 +47,8 @@ test_components_SOURCES =							\
 	$(testcomponents_srcdir)/proc/asset/makecliptest.cpp			\
 	$(testcomponents_srcdir)/proc/asset/orderingofassetstest.cpp		\
 	$(testcomponents_srcdir)/proc/asset/testasset.cpp			\
-	$(testcomponents_srcdir)/proc/engine/sourcenodetest.cpp			\
+	$(testcomponents_srcdir)/proc/engine/bufftabletest.cpp         	\
+	$(testcomponents_srcdir)/proc/engine/sourcenodetest.cpp         	\
 	$(testcomponents_srcdir)/proc/mobject/builder/buildertooltest.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/builder/buildsegmenttest.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/controller/rendersegmenttest.cpp	\

@@ -51,51 +51,93 @@ NOBUG_DECLARE_FLAG(gui);
 #endif
 
 namespace lumiera {
+
+/**
+ * The namespace of all GUI code.
+ */
 namespace gui {
+  
+/* ===== Global Constants ===== */
 
-  /**
-   *  The name of the application 
-   */
-  static const gchar* AppTitle = "Lumiera";
+/**
+ *  The name of the application 
+ */
+static const gchar* AppTitle = "Lumiera";
 
-  /**
-   *  The version number of the application 
-   */
-  static const gchar* AppVersion = N_("0.1-dev");
+/**
+ *  The version number of the application 
+ */
+static const gchar* AppVersion = N_("0.1-dev");
 
-  /**
-   *  The copyright of the application
-   */
-  static const gchar* AppCopyright = N_("© 2008 The Lumiera Team");
+/**
+ *  The copyright of the application
+ */
+static const gchar* AppCopyright = N_("© 2008 The Lumiera Team");
 
-  /**
-   *  The website of the application
-   */
-  static const gchar* AppWebsite = "www.lumiera.org";
+/**
+ *  The website of the application
+ */
+static const gchar* AppWebsite = "www.lumiera.org";
 
-  /**
-   *  An alphabetical list of the application's authors
-   */
-  static const gchar* AppAuthors[] = {
-    "Joel Holdsworth",
-    "Christian Thaeter",
-    "Hermann Vosseler",
-    "<Other Authors Here>"};
+/**
+ *  An alphabetical list of the application's authors
+ */
+static const gchar* AppAuthors[] = {
+  "Joel Holdsworth",
+  "Christian Thaeter",
+  "Hermann Vosseler",
+  "<Other Authors Here>"};
+  
+/* ===== The Application Class ===== */
 
-  /**
-   *  The main application class.
-   */
-  class GtkLumiera
-    {
-    public:
-      int main(int argc, char *argv[]);
+/**
+ *  The main application class.
+ */
+class GtkLumiera
+{
+public:
+  int main(int argc, char *argv[]);
+  
+  static Glib::ustring get_home_data_path();
 
-    };
+};
 
-  /**
-   *  Returns a reference to the global application object
-   */
-  GtkLumiera& application();
+/**
+ *  Returns a reference to the global application object
+ */
+GtkLumiera& application();
+
+/* ===== Namespace Definitions ===== */
+
+/**
+ * The namespace of all dialog box classes.
+ */
+namespace dialogs {}
+
+/**
+ * The namespace of data model classes.
+ */
+namespace model {}
+
+/**
+ * The namespace of all video output implementations.
+ */
+namespace output {}
+
+/**
+ * The namespace of all docking panel classes.
+ */
+namespace panels {}
+
+/**
+ * The namespace of all Lumiera custom widgets.
+ */
+namespace widgets {}
+
+/**
+ * The namespace of the workspace window, and it's helper classes.
+ */
+namespace workspace {}
 
 }   // namespace gui
 }   // namespace lumiera
