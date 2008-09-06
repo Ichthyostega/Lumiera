@@ -103,6 +103,7 @@ static void
 lumiera_tmpbuf_init (void)
 {
   pthread_key_create (&lumiera_tmpbuf_tls_key, lumiera_tmpbuf_destroy);
+  TODO ("register an atexit() handler to free tmpbufs");
 }
 
 

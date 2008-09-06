@@ -135,6 +135,7 @@ lumiera_tmpbuf_strndup (const char* src, size_t size);
 char*
 lumiera_tmpbuf_snprintf (size_t size, const char* fmt, ...);
 
+
 /**
  * Concat up to 3 strings in a tmpbuf.
  * @param str1 first string to concat or NULL
