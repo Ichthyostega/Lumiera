@@ -116,7 +116,7 @@ lumiera_config_lookup_remove (LumieraConfigLookup self, LumieraConfigitem item)
       /* last item in lookup, remove it from the splay tree */
       LumieraConfigLookupentry entry = LLIST_TO_STRUCTP (llist_next (&item->lookup), lumiera_config_lookupentry, configitems);
       llist_unlink (&item->lookup);
-      psplay_remove (&self->tree, (PSplaynode)entry);
+      psplay_delete_node (&self->tree, (PSplaynode)entry);
     }
   else
     {

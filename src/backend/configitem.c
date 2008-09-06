@@ -74,16 +74,16 @@ lumiera_configitem_destroy (LumieraConfigitem self, LumieraConfigLookup lookup)
 
   if (self)
     {
+      LLIST_WHILE_HEAD (&self->childs, node)
+        lumiera_configitem_delete ((LumieraConfigitem) node, lookup);
+
+      ENSURE (llist_is_empty (&self->childs), "destructor didn't remove childs");
+
       if (self->vtable && self->vtable->destroy)
         self->vtable->destroy (self);
 
       if (!llist_is_empty (&self->lookup))
         lumiera_config_lookup_remove (lookup, self);
-
-      LLIST_WHILE_HEAD (&self->childs, node)
-        lumiera_configitem_delete ((LumieraConfigitem) node, lookup);
-
-      ENSURE (llist_is_empty (&self->childs), "destructor didn't remove childs");
 
       llist_unlink (&self->link);
       lumiera_free (self->line);
