@@ -39,12 +39,12 @@ test_llist_LDADD = liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl -lm
 check_PROGRAMS += test-safeclib
 test_safeclib_SOURCES = $(tests_srcdir)/library/test-safeclib.c
 test_safeclib_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-test_safeclib_LDADD = $(builddir)/liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl -lm
+test_safeclib_LDADD = liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl -lm
 
 check_PROGRAMS += test-uuid
 test_uuid_SOURCES = $(tests_srcdir)/library/test-uuid.c
 test_uuid_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-test_uuid_LDADD = $(builddir)/liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl -lm
+test_uuid_LDADD = liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl -lm
 
 check_PROGRAMS += test-references
 test_references_SOURCES = $(tests_srcdir)/library/test-references.c
