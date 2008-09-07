@@ -183,8 +183,10 @@ def configurePlatform(env):
     if not conf.CheckLibWithHeader('dl', 'dlfcn.h', 'C'):
         problems.append('Functions for runtime dynamic loading not available.')
     
-    if not conf.CheckLibWithHeader('nobugmt', 'nobug.h', 'C'):
+    if not conf.CheckPkgConfig('nobugmt', 0.3):
         problems.append('Did not find NoBug [http://www.pipapo.org/pipawiki/NoBug].')
+    else:
+        conf.env.mergeConf('nobugmt')
     
     if not conf.CheckLibWithHeader('pthread', 'pthread.h', 'C'):
         problems.append('Did not find the pthread lib or pthread.h.')
