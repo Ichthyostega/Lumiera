@@ -37,7 +37,7 @@ main (int argc, char** argv)
   if (argc == 1)
     return 0;
 
-  if (!strcmp(argv[1], "uuidgen_2"))
+  if (!strcmp(argv[1], "luidgen_2"))
     {
       lumiera_uid luid1;
       lumiera_uid luid2;
@@ -47,7 +47,7 @@ main (int argc, char** argv)
 
       printf ("%d\n", lumiera_uid_eq (&luid2, &luid1));
     }
-  else if (!strcmp(argv[1], "uuidgen_copy"))
+  else if (!strcmp(argv[1], "luidgen_copy"))
     {
       lumiera_uid luid1;
       lumiera_uid luid2;

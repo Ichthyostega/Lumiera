@@ -1,10 +1,10 @@
-TESTING "UUID's" ./test-uuid
+TESTING "LUID's" ./test-luid
 
-TEST "uuid generate" uuidgen_2 <<END
+TEST "luid generate" luidgen_2 <<END
 out: 0
 END
 
-TEST "uuid copy" uuidgen_copy <<END
+TEST "luid copy" luidgen_copy <<END
 out: 1
 END
 
