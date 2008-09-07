@@ -53,6 +53,7 @@ namespace mobject
     using boost::lambda::var;  
     
     namespace // Implementation details //////////////////TODO better a named implementation namespace (avoids warnings on gcc 4.3)
+//////////////////////////////////////////////////////////FIXME this is a *real* problem, because this namespace create storage, which it shouldn't      
       {
       struct TableEntry 
         {

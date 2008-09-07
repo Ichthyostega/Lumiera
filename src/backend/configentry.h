@@ -1,5 +1,5 @@
 /*
-  mutex.c  -  mutex
+  configentry.h  -  single entries from configfiles
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -19,43 +19,45 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "lib/mutex.h"
+#ifndef LUMIERA_CONFIGENTRY_H
+#define LUMIERA_CONFIGENTRY_H
+
+//TODO: Support library includes//
+
+
+//TODO: Forward declarations//
+typedef struct lumiera_configentry_struct lumiera_configentry;
+typedef lumiera_configentry* LumieraConfigentry;
+
+
+//TODO: Lumiera header includes//
+#include "backend/configitem.h"
+
+//TODO: System includes//
+#include <nobug.h>
+
 
 /**
  * @file
- * Mutual exclusion locking.
  */
 
-LUMIERA_ERROR_DEFINE (MUTEX_LOCK, "Mutex locking failed");
-LUMIERA_ERROR_DEFINE (MUTEX_UNLOCK, "Mutex unlocking failed");
-LUMIERA_ERROR_DEFINE (MUTEX_DESTROY, "Mutex destroy failed");
-
-
-LumieraMutex
-lumiera_mutex_init (LumieraMutex self, const char* purpose, struct nobug_flag* flag)
+//TODO: declarations go here//
+struct lumiera_configentry_struct
 {
-  if (self)
-    {
-      pthread_mutex_init (&self->mutex, NULL);
-      NOBUG_RESOURCE_HANDLE_INIT (self->rh);
-      NOBUG_RESOURCE_ANNOUNCE_RAW (flag, "mutex", purpose, self, self->rh);
-    }
-  return self;
-}
+  lumiera_configitem entry;
+};
+
+extern struct lumiera_configitem_vtable lumiera_configentry_funcs;
 
 
-LumieraMutex
-lumiera_mutex_destroy (LumieraMutex self, struct nobug_flag* flag)
-{
-  if (self)
-    {
-      NOBUG_RESOURCE_FORGET_RAW (flag,  self->rh);
-      if (pthread_mutex_destroy (&self->mutex))
-        LUMIERA_DIE (MUTEX_DESTROY);
-    }
-  return self;
-}
+LumieraConfigitem
+lumiera_configentry_new (LumieraConfigitem tmp);
 
+
+LumieraConfigitem
+lumiera_configentry_destroy (LumieraConfigitem self);
+
+#endif
 /*
 // Local Variables:
 // mode: C

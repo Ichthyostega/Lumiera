@@ -1,5 +1,5 @@
 /*
-  mutex.c  -  mutex
+  luid  -  Lumiera unique identifiers
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -18,44 +18,60 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#ifndef LUMIERA_LUID_H
+#define LUMIERA_LUID_H
 
-#include "lib/mutex.h"
+#include <stdlib.h>
 
 /**
  * @file
- * Mutual exclusion locking.
+ * Lumiera unique identifiers are 128 byte random value. Unlike standard uuid's we
+ * don't tag a version within them and we may store generic pointers in the space
+ * occupied by an luid.
  */
 
-LUMIERA_ERROR_DEFINE (MUTEX_LOCK, "Mutex locking failed");
-LUMIERA_ERROR_DEFINE (MUTEX_UNLOCK, "Mutex unlocking failed");
-LUMIERA_ERROR_DEFINE (MUTEX_DESTROY, "Mutex destroy failed");
+typedef unsigned char lumiera_uid[16];
+
+/**
+ * Retrieve a generic pointer stored in a luid
+ */
+void*
+lumiera_uid_ptr_get (lumiera_uid* luid);
+
+/**
+ * Generate a new luid
+ */
+void
+lumiera_uid_gen (lumiera_uid* luid);
+
+/**
+ * Store a generic pointer in a luid
+ */
+void
+lumiera_uid_set_ptr (lumiera_uid* luid, void* ptr);
 
 
-LumieraMutex
-lumiera_mutex_init (LumieraMutex self, const char* purpose, struct nobug_flag* flag)
-{
-  if (self)
-    {
-      pthread_mutex_init (&self->mutex, NULL);
-      NOBUG_RESOURCE_HANDLE_INIT (self->rh);
-      NOBUG_RESOURCE_ANNOUNCE_RAW (flag, "mutex", purpose, self, self->rh);
-    }
-  return self;
-}
+/**
+ * Copy an luid
+ */
+void
+lumiera_uid_copy (lumiera_uid* dest, lumiera_uid* src);
 
 
-LumieraMutex
-lumiera_mutex_destroy (LumieraMutex self, struct nobug_flag* flag)
-{
-  if (self)
-    {
-      NOBUG_RESOURCE_FORGET_RAW (flag,  self->rh);
-      if (pthread_mutex_destroy (&self->mutex))
-        LUMIERA_DIE (MUTEX_DESTROY);
-    }
-  return self;
-}
+/**
+ * Test 2 luid's for equality
+ */
+int
+lumiera_uid_eq (lumiera_uid* luida, lumiera_uid* luidb);
 
+
+/**
+ * Generate a hashsum over an luid
+ */
+size_t
+lumiera_uid_hash (lumiera_uid* luid);
+
+#endif
 /*
 // Local Variables:
 // mode: C

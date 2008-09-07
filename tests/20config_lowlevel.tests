@@ -1,0 +1,27 @@
+TESTING "test configuration system" ./test-config
+
+TEST "initializing config system" init <<END
+out: initialized
+out: destroyed
+END
+
+
+TEST "create configitem with empty line" configitem_simple '' <<END
+out: line = ''
+END
+
+TEST "create configitem with blank line" configitem_simple '    ' <<END
+out: line = '    '
+END
+
+TEST "create configitem simple entry" configitem_simple 'foo.bar = baz' <<END
+out: line = 'foo.bar = baz'
+out: key = 'foo.bar'
+out: delim = '='
+out: value = ' baz'
+END
+
+
+TEST "key lookup" lookup <<END
+END
+

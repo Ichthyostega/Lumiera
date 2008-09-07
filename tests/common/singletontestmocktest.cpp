@@ -50,11 +50,11 @@ namespace lumiera
     class TestSingletonO
       {
         int callCnt;
-        char* typid;
+        Symbol typid;
         format msg;
 
       public:
-        TestSingletonO(char* ty="TestSingletonO")
+        TestSingletonO(Symbol ty="TestSingletonO")
             : callCnt (0), typid(ty), msg ("%s::doIt() call=%d\n")
         {
           TRACE (singleton, "ctor %s", typid);

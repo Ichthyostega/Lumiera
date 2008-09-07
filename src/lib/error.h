@@ -35,6 +35,7 @@ extern "C" {
  * C Error handling in Lumiera, header.
  */
 
+typedef const char* lumiera_err;
 
 /**
  * Abort unconditionally with a 'Fatal Error!' message.
@@ -49,7 +50,7 @@ extern "C" {
  * @param err name of the error without the 'LUMIERA_ERROR_' prefix (example: NO_MEMORY)
  */
 #define LUMIERA_ERROR_DECLARE(err) \
-extern const char* LUMIERA_ERROR_##err
+extern lumiera_err LUMIERA_ERROR_##err
 
 /**
  * Definition and initialization of an error constant.
@@ -58,7 +59,7 @@ extern const char* LUMIERA_ERROR_##err
  * @param msg message describing the error in plain english (example: "memory allocation failed")
  */
 #define LUMIERA_ERROR_DEFINE(err, msg) \
-const char* LUMIERA_ERROR_##err = "LUMIERA_ERROR_" #err ":" msg
+lumiera_err LUMIERA_ERROR_##err = "LUMIERA_ERROR_" #err ":" msg
 
 /**
  * Helper macro to raise an error for the current thread.
@@ -70,10 +71,23 @@ const char* LUMIERA_ERROR_##err = "LUMIERA_ERROR_" #err ":" msg
 (({ERROR (flag, "%s", strchr(LUMIERA_ERROR_##err, ':')+1);}), \
 lumiera_error_set(LUMIERA_ERROR_##err))
 
-const char*
-lumiera_error_set (const char * err);
+/**
+ * Set error state for the current thread.
+ * If the error state of the current thread was cleared, then set it, else preserve the old state.
+ * @param nerr name of the error with 'LUMIERA_ERROR_' prefix (example: LUMIERA_ERROR_NO_MEMORY)
+ * @return old state, that is NULL for success, when the state was cleared and a pointer to a pending 
+ * error when the error state was already set
+ */
+lumiera_err
+lumiera_error_set (lumiera_err err);
 
-const char*
+/**
+ * Get and clear current error state.
+ * This function clears the error state, if it needs to be reused, one has to store it in a temporary
+ * variable.
+ * @return pointer to any pending error of this thread, NULL if no error is pending
+ */
+lumiera_err
 lumiera_error ();
 
 /*

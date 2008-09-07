@@ -18,27 +18,19 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "error.h"
+#include "lib/error.h"
+#include "lib/safeclib.h"
 
 #include <string.h>
 #include <stdlib.h>
 #include <pthread.h>
 #include <stdint.h>
 #include <stdarg.h>
+#include <nobug.h>
 
-/**
- * @file
- * Portable and safe wrapers around some clib functions and some tools
- */
 
 LUMIERA_ERROR_DEFINE (NO_MEMORY, "Out of Memory!");
 
-/**
- * Allocate memory.
- * always succeeds or dies
- * @param size memory to be allocated
- * @return pointer to the allocated memory
- */
 void*
 lumiera_malloc (size_t size)
 {
@@ -49,13 +41,6 @@ lumiera_malloc (size_t size)
 }
 
 
-/**
- * Allocate cleared memory for an array.
- * always succeeds or dies
- * @param n number of elements
- * @param size memory to be allocated
- * @return pointer to the allocated memory
- */
 void*
 lumiera_calloc (size_t n, size_t size)
 {
@@ -66,13 +51,6 @@ lumiera_calloc (size_t n, size_t size)
 }
 
 
-/**
- * Duplicate a C string.
- * always succeeds or dies
- * @param str string to be copied
- * @param len maximal length to be copied
- * @return pointer to the new string, "" if NULL was passed as str
- */
 char*
 lumiera_strndup (const char* str, size_t len)
 {
@@ -88,14 +66,6 @@ lumiera_strndup (const char* str, size_t len)
 }
 
 
-/**
- * Compare two C strings.
- * Handles NULL pointers as "", shortcut for same addresses
- * @param a first string for comparsion
- * @param b second string for comparsion
- * @param len maximal length for the comparsion
- * @return 0 if the strings are identical, -1 if smaller 1 if bigger.
- */
 int
 lumiera_strncmp (const char* a, const char* b, size_t len)
 {
@@ -103,12 +73,6 @@ lumiera_strncmp (const char* a, const char* b, size_t len)
 }
 
 
-/**
- * check 2 strings for identity.
- * @param a first string for comparsion
- * @param b second string for comparsion
- * @return 1 when the strings are the the same, 0 if not.
- */
 int
 lumiera_streq (const char* a, const char* b)
 {
@@ -116,11 +80,6 @@ lumiera_streq (const char* a, const char* b)
 }
 
 
-/**
- * Round robin temporary buffers.
- * This provides 64 buffers per thread which are recycled with each use.
- * The idea here is to have fast buffers for temporal data without need for explicit heap management.
- */
 struct lumiera_tmpbuf_struct
 {
   void* buffers[64];
@@ -144,13 +103,10 @@ static void
 lumiera_tmpbuf_init (void)
 {
   pthread_key_create (&lumiera_tmpbuf_tls_key, lumiera_tmpbuf_destroy);
+  TODO ("register an atexit() handler to free tmpbufs");
 }
 
 
-/**
- * free all buffers associated with this thread.
- * This function is called automatically, usually one doesnt need to call it.
- */
 void
 lumiera_tmpbuf_freeall (void)
 {
@@ -160,17 +116,12 @@ lumiera_tmpbuf_freeall (void)
     {
       pthread_setspecific (lumiera_tmpbuf_tls_key, NULL);
       for (int idx = 0; idx < 64; ++idx)
-        free (buf->buffers[idx]);
-      free (buf);
+        lumiera_free (buf->buffers[idx]);
+      lumiera_free (buf);
     }
 }
 
 
-/**
- * Query a thread local buffer.
- * @param size minimal needed size for the buffer
- * @return the buffer
- */
 void*
 lumiera_tmpbuf_provide (size_t size)
 {
@@ -184,7 +135,7 @@ lumiera_tmpbuf_provide (size_t size)
 
   if (buf->sizes[buf->idx] < size || buf->sizes[buf->idx] > 8*size)
     {
-      free (buf->buffers[buf->idx]);
+      lumiera_free (buf->buffers[buf->idx]);
       buf->sizes[buf->idx] = (size+4*sizeof(long)) & ~(4*sizeof(long)-1);
       buf->buffers[buf->idx] = lumiera_malloc (buf->sizes[buf->idx]);
     }
@@ -222,4 +173,50 @@ lumiera_tmpbuf_snprintf (size_t size, const char* fmt, ...)
   va_end (args);
 
   return buf;
+}
+
+
+char*
+lumiera_tmpbuf_strcat3 (const char* str1, size_t str1_len,
+                        const char* str2, size_t str2_len,
+                        const char* str3, size_t str3_len)
+{
+  return lumiera_tmpbuf_snprintf (SIZE_MAX, "%.*s%s%.*s%s%.*s",
+                                  str1?str1_len:0, str1?str1:"", str1?".":"",
+                                  str2?str2_len:0, str2?str2:"",
+                                  str3?".":"", str3?str3_len:0, str3?str3:"");
+}
+
+
+char*
+lumiera_tmpbuf_tr (const char* in, const char* from, const char* to, const char* def)
+{
+  REQUIRE (strlen (from) == strlen (to), "from and to character set must have equal length");
+
+  char* ret = lumiera_tmpbuf_strndup (in, SIZE_MAX);
+
+  char* wpos;
+  char* rpos;
+  for (wpos = rpos = ret; *rpos; ++rpos, ++wpos)
+    {
+      char* found = strchr (from, *rpos);
+      if (found)
+        *wpos = to[found-from];
+      else if (def)
+        {
+          if (*def)
+            *wpos = *def;
+          else
+            {
+              ++rpos;
+              if (!*rpos)
+                break;
+            }
+        }
+      else
+        return NULL;
+    }
+  *wpos = '\0';
+
+  return ret;
 }

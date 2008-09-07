@@ -29,19 +29,67 @@
 #include <pthread.h>
 #include <nobug.h>
 
-#include "lib/locking.h"
-
 LUMIERA_ERROR_DECLARE(RWLOCK_AGAIN);
 LUMIERA_ERROR_DECLARE(RWLOCK_DEADLOCK);
 LUMIERA_ERROR_DECLARE(RWLOCK_DESTROY);
 LUMIERA_ERROR_DECLARE(RWLOCK_UNLOCK);
-LUMIERA_ERROR_DECLARE(RWLOCK_RLOCK);
-LUMIERA_ERROR_DECLARE(RWLOCK_WLOCK);
+LUMIERA_ERROR_DECLARE(RWLOCK_RDLOCK);
+LUMIERA_ERROR_DECLARE(RWLOCK_WRLOCK);
 
 /**
  * @file
  * Read/write locks, header.
  */
+
+
+/**
+ * Read locked section.
+ */
+#define LUMIERA_RDLOCK_SECTION(nobugflag, rwlck)                                                                                        \
+  for (lumiera_rwlockacquirer NOBUG_CLEANUP(lumiera_rwlockacquirer_ensureunlocked) lumiera_rwlock_section_ = {(LumieraRWLock)1};        \
+       lumiera_rwlock_section_.rwlock;)                                                                                                 \
+    for (                                                                                                                               \
+         ({                                                                                                                             \
+           lumiera_rwlock_section_.rwlock = (rwlck);                                                                                    \
+           NOBUG_RESOURCE_HANDLE_INIT (lumiera_rwlock_section_.rh);                                                                     \
+           RESOURCE_ENTER (nobugflag, (rwlck)->rh, "acquire rwlock for reading", &lumiera_rwlock_section_,                              \
+                           NOBUG_RESOURCE_EXCLUSIVE, lumiera_rwlock_section_.rh);                                                       \
+           if (pthread_rwlock_rdlock (&(rwlck)->rwlock)) LUMIERA_DIE (RWLOCK_RDLOCK);                                                   \
+         });                                                                                                                            \
+         lumiera_rwlock_section_.rwlock;                                                                                                \
+         ({                                                                                                                             \
+           if (lumiera_rwlock_section_.rwlock)                                                                                          \
+             {                                                                                                                          \
+               pthread_rwlock_unlock (&lumiera_rwlock_section_.rwlock->rwlock);                                                         \
+               lumiera_rwlock_section_.rwlock = NULL;                                                                                   \
+               RESOURCE_LEAVE(nobugflag, lumiera_rwlock_section_.rh);                                                                   \
+             }                                                                                                                          \
+         }))
+
+
+/**
+ * Write locked section.
+ */
+#define LUMIERA_WRLOCK_SECTION(nobugflag, rwlck)                                                                                        \
+  for (lumiera_rwlockacquirer NOBUG_CLEANUP(lumiera_rwlockacquirer_ensureunlocked) lumiera_rwlock_section_ = {(LumieraRWLock)1};        \
+       lumiera_rwlock_section_.rwlock;)                                                                                                 \
+    for (                                                                                                                               \
+         ({                                                                                                                             \
+           lumiera_rwlock_section_.rwlock = (rwlck);                                                                                    \
+           NOBUG_RESOURCE_HANDLE_INIT (lumiera_rwlock_section_.rh);                                                                     \
+           RESOURCE_ENTER (nobugflag, (rwlck)->rh, "acquire rwlock for reading", &lumiera_rwlock_section_,                              \
+                           NOBUG_RESOURCE_EXCLUSIVE, lumiera_rwlock_section_.rh);                                                       \
+           if (pthread_rwlock_wrlock (&(rwlck)->rwlock)) LUMIERA_DIE (RWLOCK_WRLOCK);                                                   \
+         });                                                                                                                            \
+         lumiera_rwlock_section_.rwlock;                                                                                                \
+         ({                                                                                                                             \
+           if (lumiera_rwlock_section_.rwlock)                                                                                          \
+             {                                                                                                                          \
+               pthread_rwlock_unlock (&lumiera_rwlock_section_.rwlock->rwlock);                                                         \
+               lumiera_rwlock_section_.rwlock = NULL;                                                                                   \
+               RESOURCE_LEAVE(nobugflag, lumiera_rwlock_section_.rh);                                                                   \
+             }                                                                                                                          \
+         }))
 
 
 /**
@@ -51,17 +99,27 @@ LUMIERA_ERROR_DECLARE(RWLOCK_WLOCK);
 struct lumiera_rwlock_struct
 {
   pthread_rwlock_t rwlock;
+  RESOURCE_HANDLE (rh);
 };
 typedef struct lumiera_rwlock_struct lumiera_rwlock;
 typedef lumiera_rwlock* LumieraRWLock;
 
-
+/**
+ * Initialize a rwlock
+ * @param self is a pointer to the rwlock to be initialized
+ * @return self as given
+ */
 LumieraRWLock
-lumiera_rwlock_init (LumieraRWLock self);
+lumiera_rwlock_init (LumieraRWLock self, const char* purpose, struct nobug_flag* flag);
 
-
+/**
+ * destroy a rwlock
+ * @param self is a pointer to the rwlock to be initialized
+ * @return self on success or NULL at error
+ */
 LumieraRWLock
-lumiera_rwlock_destroy (LumieraRWLock self);
+lumiera_rwlock_destroy (LumieraRWLock self, struct nobug_flag* flag);
+
 
 
 
@@ -72,7 +130,7 @@ lumiera_rwlock_destroy (LumieraRWLock self);
 struct lumiera_rwlockacquirer_struct
 {
   LumieraRWLock rwlock;
-  enum lumiera_lockstate  state;
+  RESOURCE_HANDLE (rh);
 };
 typedef struct lumiera_rwlockacquirer_struct lumiera_rwlockacquirer;
 typedef struct lumiera_rwlockacquirer_struct* LumieraRWLockacquirer;
@@ -81,39 +139,15 @@ typedef struct lumiera_rwlockacquirer_struct* LumieraRWLockacquirer;
 static inline void
 lumiera_rwlockacquirer_ensureunlocked (LumieraRWLockacquirer self)
 {
-  ENSURE (self->state == LUMIERA_UNLOCKED, "forgot to unlock the rwlock mutex");
-}
-
-/* override with a macro to use the cleanup checker */
-#define lumiera_rwlockacquirer \
-lumiera_rwlockacquirer NOBUG_CLEANUP(lumiera_rwlockacquirer_ensureunlocked)
-
-
-LumieraRWLockacquirer
-lumiera_rwlockacquirer_init (LumieraRWLockacquirer self, LumieraRWLock rwlock, enum lumiera_lockstate state);
-
-LumieraRWLockacquirer
-lumiera_rwlockacquirer_rdlock (LumieraRWLockacquirer self);
-
-
-LumieraRWLockacquirer
-lumiera_rwlockacquirer_wrlock (LumieraRWLockacquirer self);
-
-
-/**
- * release rwlock.
- * a rwlockacquirer must be unlocked before leaving scope
- * @param self rwlockacquirer associated with a rwlock variable
- */
-static inline void
-lumiera_rwlockacquirer_unlock (LumieraRWLockacquirer self)
-{
-  REQUIRE (self);
-  REQUIRE (self->state != LUMIERA_UNLOCKED, "rwlock was not locked");
-  if (pthread_rwlock_unlock (&self->rwlock->rwlock))
-    LUMIERA_DIE (RWLOCK_UNLOCK);
-  self->state = LUMIERA_UNLOCKED;
+  ENSURE (!self->rwlock, "forgot to unlock rwlock");
 }
 
 
 #endif
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/
