@@ -24,10 +24,7 @@ test_error_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 test_error_LDADD = liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl
 
 check_PROGRAMS += test-locking
-test_locking_SOURCES = \
-	$(tests_srcdir)/locking/test-locking.c \
-	$(tests_srcdir)/locking/mutex.c \
-	$(tests_srcdir)/locking/condition.c
+test_locking_SOURCES = $(tests_srcdir)/library/test-locking.c
 test_locking_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 test_locking_LDADD = liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl -lm
 
@@ -36,20 +33,20 @@ test_llist_SOURCES = $(tests_srcdir)/library/test-llist.c
 test_llist_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 test_llist_LDADD = liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl -lm
 
+check_PROGRAMS += test-psplay
+test_psplay_SOURCES = $(tests_srcdir)/library/test-psplay.c
+test_psplay_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_psplay_LDADD = liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl -lm
+
 check_PROGRAMS += test-safeclib
 test_safeclib_SOURCES = $(tests_srcdir)/library/test-safeclib.c
 test_safeclib_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 test_safeclib_LDADD = liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl -lm
 
-check_PROGRAMS += test-uuid
-test_uuid_SOURCES = $(tests_srcdir)/library/test-uuid.c
-test_uuid_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-test_uuid_LDADD = liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl -lm
-
-check_PROGRAMS += test-references
-test_references_SOURCES = $(tests_srcdir)/library/test-references.c
-test_references_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-test_references_LDADD = liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl -lm -lrt
+check_PROGRAMS += test-luid
+test_luid_SOURCES = $(tests_srcdir)/library/test-luid.c
+test_luid_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
+test_luid_LDADD = liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl -lm
 
 check_PROGRAMS += test-filedescriptors
 test_filedescriptors_SOURCES = $(tests_srcdir)/backend/test-filedescriptors.c
@@ -60,5 +57,10 @@ check_PROGRAMS += test-filehandles
 test_filehandles_SOURCES = $(tests_srcdir)/backend/test-filehandles.c
 test_filehandles_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 test_filehandles_LDADD = liblumibackend.a liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl -lm
+
+check_PROGRAMS += test-config
+test_config_SOURCES = $(tests_srcdir)/backend/test-config.c
+test_config_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_config_LDADD = liblumibackend.a liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl -lm
 
 TESTS = $(tests_srcdir)/test.sh

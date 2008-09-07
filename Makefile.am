@@ -46,6 +46,9 @@ include $(top_srcdir)/src/common/Makefile.am
 include $(top_srcdir)/src/lib/Makefile.am
 include $(top_srcdir)/src/backend/Makefile.am
 
+# tools
+include $(top_srcdir)/src/tool/Makefile.am
+
 # gui
 include $(top_srcdir)/src/gui/Makefile.am
 

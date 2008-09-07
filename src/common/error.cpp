@@ -128,10 +128,12 @@ namespace lumiera
   {
     const Error* err=dynamic_cast<const Error*> (&cause);
     if (err)
-      if (isnil (err->cause_))
-        return cause.what(); // cause is root cause
-      else
-        return err->cause_; // cause was caused by another exception
+      {
+        if (isnil (err->cause_))
+          return cause.what(); // cause is root cause
+        else
+          return err->cause_; // cause was caused by another exception
+      }
     
     // unknown other exception type
     return cause.what ();

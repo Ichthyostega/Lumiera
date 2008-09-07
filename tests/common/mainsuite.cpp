@@ -34,7 +34,7 @@ using lumiera::ON_GLOBAL_SHUTDOWN;
  *  cmd line argument.
  *  Note: to ease debugging, we don't catch any exceptions. 
  */
-int main (int argc, char* argv[])
+int main (int argc, const char* argv[])
 {
   util::Cmdline args (argc,argv);
   test::TestOption optparser (args);

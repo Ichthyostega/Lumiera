@@ -1,0 +1,192 @@
+TESTING "test configuration system" ./test-config
+
+PLANNED "loading configfile, simple"  <<END
+END
+
+
+PLANNED "loading configfile, with includes"  <<END
+END
+
+
+PLANNED "env var override"  <<END
+END
+
+
+PLANNED "lowlevel get"  <<END
+END
+
+
+PLANNED "lowlevel set"  <<END
+END
+
+
+PLANNED "saving simple configfile"  <<END
+END
+
+
+PLANNED "complex saving user file"  <<END
+END
+
+
+TEST "number get, default" number_get test.number.1 '1234567890 # comment' <<END
+out: 1234567890
+END
+
+export LUMIERA_TEST_NUMBER_1=987654321
+
+TEST "number get, env override" number_get test.number.1 '1234567890 # comment' <<END
+out: 987654321
+END
+
+export LUMIERA_TEST_NUMBER_1=barf
+TEST "number get, type error" number_get_nodefault test.number.1 <<END
+out: LUMIERA_ERROR_CONFIG_SYNTAX_VALUE:syntax error in value
+END
+
+LUMIERA_TEST_NUMBER_1=NAN
+TEST "number get, env override, default fallback" number_get test.number.1 '1234567890 # comment' <<END
+out: LUMIERA_ERROR_CONFIG_SYNTAX_VALUE:syntax error in value, 1234567890
+END
+
+unset LUMIERA_TEST_NUMBER_1
+
+
+TEST "number get, syntax error" number_get_nodefault test.NUMBER.1 <<END
+out: LUMIERA_ERROR_CONFIG_SYNTAX_KEY:syntax error in key
+END
+
+
+TEST "number get, no default, no env" number_get_nodefault test.number.1 <<END
+out: LUMIERA_ERROR_CONFIG_NO_ENTRY:no configuration entry
+END
+
+
+PLANNED "number set"  <<END
+END
+
+
+PLANNED "real get"  <<END
+END
+
+
+PLANNED "real set"  <<END
+END
+
+
+export LUMIERA_TEST_STRING="teststring"
+
+TEST "string get" string_get test.string default <<END
+out: 'teststring'
+END
+
+
+TEST "string get, default" string_get test.doesntexist default <<END
+out: 'default'
+END
+
+LUMIERA_TEST_STRING='  no leading and trailing blanks  '
+TEST "string get, chopped" string_get test.string default <<END
+out: 'no leading and trailing blanks'
+END
+
+
+LUMIERA_TEST_STRING='  " quoted string with spaces " "ignored" #comment'
+TEST "string get, quoted" string_get test.string default <<END
+out: ' quoted string with spaces '
+END
+
+
+LUMIERA_TEST_STRING='  "quoted string "" not ignored" #comment'
+TEST "string get, quoted, escaped" string_get test.string default <<END
+out: 'quoted string " not ignored'
+END
+unset LUMIERA_TEST_STRING
+
+
+TEST "string set" string_set test.string 'foo bar' <<END
+out: 'foo bar'
+END
+
+
+export LUMIERA_TEST_WORD='  "  double quote is just right'
+
+TEST "word get" word_get test.word default <<END
+out: '"'
+END
+
+unset LUMIERA_TEST_WORD
+
+
+PLANNED "word set"  <<END
+END
+
+
+
+PLANNED "bool get"  <<END
+END
+
+
+PLANNED "bool set"  <<END
+END
+
+TEST "create configitem with empty line" configitem_simple_ctor_dtor '' <<END
+END
+
+TEST "create configitem with blank line" configitem_simple_ctor_dtor $' \t \t' <<END
+END
+
+TEST "create configitem with comment" configitem_simple_ctor_dtor $' #\t comment bla' <<END
+END
+
+TEST "create configitem with section" configitem_simple_ctor_dtor $'\t[prefix suffix ] bla' <<END
+END
+
+TEST "create configitem with directive" configitem_simple_ctor_dtor $' @include \t\t file   \t' <<END
+END
+
+TEST "create configitem with configentry" configitem_simple_ctor_dtor $' key \t=\t value' <<END
+END
+
+TEST "create configitem with configentry (redirect)" configitem_simple_ctor_dtor $'keya <\t\t keyb ' <<END
+END
+
+TEST "check content of configitem with empty line" configitem_simple_content_check $'' << END
+END
+
+TEST "check content of configitem with comment" configitem_simple_content_check $'\t #comment bla' << END
+out: item->line = '	 #comment bla'
+END
+
+TEST "check content of configitem with section" configitem_simple_content_check $'[ key.foo suffix.bar ] ' << END
+out: item->line = '[ key.foo suffix.bar ] '
+out: item->key_size = '7'
+out: item->key = 'key.foo suffix.bar ] '
+out: item->delim = ' suffix.bar ] '
+END
+
+TEST "check content of configitem with directive (without argument)" configitem_simple_content_check $'\t @directive  ' << END
+out: item->line = '	 @directive  '
+out: item->key_size = '9'
+out: item->key = '@directive  '
+END
+
+TEST "check content of configitem with directive (with argument)" configitem_simple_content_check $'\t @directive \targument' << END
+out: item->line = '	 @directive 	argument'
+out: item->key_size = '9'
+out: item->key = '@directive 	argument'
+out: item->delim = '	argument'
+END
+
+TEST "check content of configitem with configentry" configitem_simple_content_check $' \t\t key.foo \t\t=\tbar' << END
+out: item->line = ' 		 key.foo 		=	bar'
+out: item->key_size = '7'
+out: item->key = 'key.foo 		=	bar'
+out: item->delim = '=	bar'
+END
+
+TEST "check content of configitem with configentry (redirect)" configitem_simple_content_check $' \t\t key.foo \t\t<\tkey.bar' << END
+out: item->line = ' 		 key.foo 		<	key.bar'
+out: item->key_size = '7'
+out: item->key = 'key.foo 		<	key.bar'
+out: item->delim = '<	key.bar'
+END
