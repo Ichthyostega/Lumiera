@@ -1,5 +1,5 @@
 /*
-  PROC.hpp  -  key abstraction: media-like assets
+  PROC.hpp  -  key abstraction: data-processing assets
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
