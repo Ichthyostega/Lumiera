@@ -79,7 +79,7 @@ def setupBasicEnvironment():
     
     env.Append(CPPDEFINES = '_GNU_SOURCE')
     appendCppDefine(env,'DEBUG','DEBUG', 'NDEBUG')
-    appendCppDefine(env,'OPENGL','USE_OPENGL')
+#   appendCppDefine(env,'OPENGL','USE_OPENGL')
     appendVal(env,'ARCHFLAGS', 'CCFLAGS')   # for both C and C++
     appendVal(env,'OPTIMIZE', 'CCFLAGS', val=' -O3')
     appendVal(env,'DEBUG',    'CCFLAGS', val=' -ggdb')
@@ -128,7 +128,7 @@ def defineCmdlineOptions():
                     allowed_values=('ALPHA', 'BETA', 'RELEASE'))
         ,BoolOption('DEBUG', 'Build with debugging information and no optimizations', False)
         ,BoolOption('OPTIMIZE', 'Build with strong optimization (-O3)', False)
-        ,BoolOption('OPENGL', 'Include support for OpenGL preview rendering', False)
+#       ,BoolOption('OPENGL', 'Include support for OpenGL preview rendering', False)
 #       ,EnumOption('DIST_TARGET', 'Build target architecture', 'auto', 
 #                   allowed_values=('auto', 'i386', 'i686', 'x86_64' ), ignorecase=2)
         ,PathOption('DESTDIR', 'Installation dir prefix', '/usr/local')
@@ -183,8 +183,10 @@ def configurePlatform(env):
     if not conf.CheckLibWithHeader('dl', 'dlfcn.h', 'C'):
         problems.append('Functions for runtime dynamic loading not available.')
     
-    if not conf.CheckLibWithHeader('nobugmt', 'nobug.h', 'C'):
+    if not conf.CheckPkgConfig('nobugmt', 0.3):
         problems.append('Did not find NoBug [http://www.pipapo.org/pipawiki/NoBug].')
+    else:
+        conf.env.mergeConf('nobugmt')
     
     if not conf.CheckLibWithHeader('pthread', 'pthread.h', 'C'):
         problems.append('Did not find the pthread lib or pthread.h.')
@@ -337,8 +339,8 @@ def definePostBuildTargets(env, artifacts):
     env.Clean ('build', [ '$SRCDIR/pre.gch' ])
     
     doxydoc = artifacts['doxydoc'] = env.Doxygen('doc/devel/Doxyfile')
-    env.Alias ('doxydoc', doxydoc)
-    env.Clean ('doxydoc', doxydoc + ['doc/devel/,doxylog','doc/devel/warnings.txt'])
+    env.Alias ('doc', doxydoc)
+    env.Clean ('doc', doxydoc + ['doc/devel/,doxylog','doc/devel/warnings.txt'])
 
 
 def defineInstallTargets(env, artifacts):
