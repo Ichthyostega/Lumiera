@@ -44,8 +44,8 @@ out: LUMIERA_ERROR_CONFIG_SYNTAX_VALUE:syntax error in value
 END
 
 LUMIERA_TEST_NUMBER_1=NAN
-TEST "number get, env override, default fallback" number_get test.number.1 '1234567890 # comment' <<END
-out: LUMIERA_ERROR_CONFIG_SYNTAX_VALUE:syntax error in value, 1234567890
+TEST "number get, type error" number_get test.number.1 '1234 # comment' <<END
+out: LUMIERA_ERROR_CONFIG_SYNTAX_VALUE:syntax error in value, 0
 END
 
 unset LUMIERA_TEST_NUMBER_1
