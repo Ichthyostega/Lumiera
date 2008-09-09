@@ -33,7 +33,7 @@ LUMIERA_ERROR_DEFINE (TEST, "test error");
 
 #define TESTS_BEGIN                             \
 int                                             \
-main (int argc, char** argv)                    \
+main (int argc, const char** argv)              \
 {                                               \
   NOBUG_INIT;                                   \
   NOBUG_INIT_FLAG (tests);                      \
