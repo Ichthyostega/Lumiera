@@ -171,14 +171,14 @@ lumiera_config_purge (const char* filename)
 }
 
 
-int
+const char*
 lumiera_config_get (const char* key, const char** value)
 {
   TRACE (config);
   REQUIRE (key);
   REQUIRE (value);
 
-  int ret = -1;
+  *value = NULL;
 
   /* we translate the key for the env var override by making it uppercase and replace . with _,
    as side effect, this also checks the key syntax */
@@ -194,7 +194,6 @@ lumiera_config_get (const char* key, const char** value)
       *value = getenv(env);
       if (*value)
         {
-          ret = 0;
           NOTICE (config, "envvar override for config %s = %s", env, *value);
         }
       else
@@ -205,7 +204,6 @@ lumiera_config_get (const char* key, const char** value)
           if (item)
             {
               *value = item->delim+1;
-              ret = 0;
             }
           else
             LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
@@ -216,18 +214,18 @@ lumiera_config_get (const char* key, const char** value)
       LUMIERA_ERROR_SET (config, CONFIG_SYNTAX_KEY);
     }
 
-  return ret;
+  return *value;
 }
 
 
-int
+const char*
 lumiera_config_get_default (const char* key, const char** value)
 {
   TRACE (config);
   REQUIRE (key);
   REQUIRE (value);
 
-  int ret = -1;
+  *value = NULL;
 
   TODO ("follow '<' delegates?");
   TODO ("refactor _get and get_default to iterator access (return LList or Lookupentry)");
@@ -236,39 +234,54 @@ lumiera_config_get_default (const char* key, const char** value)
   if (item && item->parent == &lumiera_global_config->defaults)
     {
       *value = item->delim+1;
-      ret = 0;
     }
 
-  return ret;
+  return *value;
 }
 
 
-int
+LumieraConfigitem
 lumiera_config_set (const char* key, const char* delim_value)
 {
   TRACE (config);
 
-  TODO ("if does this item already exist in a user writeable file?");
-  TODO ("       replace delim_value");
+  LumieraConfigitem item = lumiera_config_lookup_item_find (&lumiera_global_config->keys, key);
+  if (item && item->parent != &lumiera_global_config->defaults)
+    {
+      TODO ("a user writeable file?");
+      TODO ("       replace delim_value");
+      //LumieraConfigitem
+      lumiera_configitem_set_value (item, delim_value);
+    }
+  else
+    {
+      TODO ("create item");
+      TODO ("       find matching prefix");
+      TODO ("       find matching suffix");
+      TODO ("       find proper prefix indentation, else use config.indent");
+      TODO ("       create configitem with prefix/suffix removed");
 
-  TODO ("else");
-  TODO ("       find matching prefix");
-  TODO ("       find matching suffix");
-  TODO ("       find proper prefix indentation, else use config.indent");
-  TODO ("       create configitem with prefix/suffix removed");
-  
+      char* line = lumiera_tmpbuf_snprintf (SIZE_MAX, "%s %s", key, delim_value);
+      item = lumiera_configitem_new (line);
 
+      if (item)
+        {
+          TODO ("next 2 ensure must generate runtime errors");
+          ENSURE (item->delim, "syntax error");
+          ENSURE (*item->delim == '=' || *item->delim == '<', "syntax error,");
 
-//  * set a value by key
-//  * handles internally everything as string:string key:value pair.
-//  * lowlevel function
-//  * tag file as dirty
-//  * set will create a new user configuration file if it does not exist yet or will append a line to the existing one in RAM. These  files, tagged as 'dirty', will be only written if save() is called.
+          TODO ("insert in proper parent (file)");
+          llist_insert_tail (&lumiera_global_config->TODO_unknown.childs, &item->link);
+          item->parent = &lumiera_global_config->TODO_unknown;
+          lumiera_config_lookup_insert (&lumiera_global_config->keys, item);
 
+          TODO ("tag file as dirty");
+        }
+    }
 
+  TODO ("return item?");
 
-  UNIMPLEMENTED();
-  return -1;
+  return item;
 }
 
 
@@ -294,14 +307,14 @@ lumiera_config_setdefault (const char* line)
 
           if (item)
             {
-              ENSURE (item->delim, "default must be a configentry with key=value or key<delegate syntax")
+              ENSURE (item->delim, "default must be a configentry with key=value or key<delegate syntax");
               ENSURE (*item->delim == '=' || *item->delim == '<', "default must be a configentry with key=value or key<delegate syntax");
               TRACE (config, "registering default: '%s'", item->line);
 
               llist_insert_head (&lumiera_global_config->defaults.childs, &item->link);
               item->parent = &lumiera_global_config->defaults;
 
-              lumiera_config_lookup_insert_default (&lumiera_global_config->keys, item);
+              lumiera_config_lookup_insert (&lumiera_global_config->keys, item);
             }
         }
     }

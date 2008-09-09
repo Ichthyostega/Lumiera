@@ -38,8 +38,8 @@ extern LumieraConfig lumiera_global_config;
  * Here are the high level typed configuration interfaces defined.
  */
 
-int
-lumiera_config_link_get (const char* key, char** value)
+const char*
+lumiera_config_link_get (const char* key, const char** value)
 {
   TRACE (config_typed);
   UNIMPLEMENTED();
@@ -47,7 +47,7 @@ lumiera_config_link_get (const char* key, char** value)
 }
 
 int
-lumiera_config_link_set (const char* key, char** value)
+lumiera_config_link_set (const char* key, const char** value)
 {
   TRACE (config_typed);
   UNIMPLEMENTED();
@@ -59,26 +59,23 @@ lumiera_config_link_set (const char* key, char** value)
  * Number
  * signed integer numbers, in different formats (decimal, hex, oct, binary(for masks))
  */
-int
+const char*
 lumiera_config_number_get (const char* key, long long* value)
 {
   TRACE (config_typed);
-
-  int ret = -1;
 
   const char* raw_value = NULL;
 
   LUMIERA_RDLOCK_SECTION (config_typed, &lumiera_global_config->lock)
     {
-      if (!lumiera_config_get (key, &raw_value))
+      if (lumiera_config_get (key, &raw_value))
         {
           if (raw_value)
             {
               /* got it, scan it */
-              if (sscanf (raw_value, "%Li", value) == 1)
-                ret = 0; /* all ok */
-              else
+              if (sscanf (raw_value, "%Li", value) != 1)
                 {
+                  raw_value = NULL;
                   LUMIERA_ERROR_SET (config_typed, CONFIG_SYNTAX_VALUE);
                 }
             }
@@ -87,7 +84,7 @@ lumiera_config_number_get (const char* key, long long* value)
         }
     }
 
-  return ret;
+  return raw_value;
 }
 
 int
@@ -103,7 +100,7 @@ lumiera_config_number_set (const char* key, long long* value)
  * Real
  * floating point number in standard formats (see printf/scanf)
  */
-int
+const char*
 lumiera_config_real_get (const char* key, long double* value)
 {
   TRACE (config_typed);
@@ -183,36 +180,31 @@ scan_string (const char* in)
   return ret;
 }
 
-int
-lumiera_config_string_get (const char* key, char** value)
+const char*
+lumiera_config_string_get (const char* key, const char** value)
 {
   TRACE (config_typed);
 
-  int ret = -1;
-
-  const char* raw_value = NULL;
+  const char* raw_value = *value = NULL;
 
   LUMIERA_RDLOCK_SECTION (config_typed, &lumiera_global_config->lock)
     {
-      if (!lumiera_config_get (key, &raw_value))
+      if (lumiera_config_get (key, &raw_value))
         {
           if (raw_value)
             {
               *value = scan_string (raw_value);
-              if (*value)
-                ret = 0; /* all ok */
-              /* else error was raised by scan_string */
             }
           else
             LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
         }
     }
 
-  return ret;
+  return *value;
 }
 
 int
-lumiera_config_string_set (const char* key, char** value)
+lumiera_config_string_set (const char* key, const char** value)
 {
   TRACE (config_typed);
   UNIMPLEMENTED();
@@ -247,35 +239,31 @@ scan_word (const char* in)
   return ret;
 }
 
-int
-lumiera_config_word_get (const char* key, char** value)
+const char*
+lumiera_config_word_get (const char* key, const char** value)
 {
   TRACE (config_typed, "KEY %s", key);
 
-  int ret = -1;
-
-  const char* raw_value = NULL;
+  const char* raw_value = *value = NULL;
 
   LUMIERA_RDLOCK_SECTION (config_typed, &lumiera_global_config->lock)
     {
-      if (!lumiera_config_get (key, &raw_value))
+      if (lumiera_config_get (key, &raw_value))
         {
           if (raw_value)
             {
               *value = scan_word (raw_value);
-              if (*value)
-                ret = 0; /* all ok */
             }
           else
             LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
         }
     }
 
-  return ret;
+  return *value;
 }
 
 int
-lumiera_config_word_set (const char* key, char** value)
+lumiera_config_word_set (const char* key, const char** value)
 {
   TRACE (config_typed);
   UNIMPLEMENTED();
@@ -287,7 +275,7 @@ lumiera_config_word_set (const char* key, char** value)
  * Bool
  * Bool in various formats, (0,1(!1), yes/no, true/false, on/off, set/clear)
  */
-int
+const char*
 lumiera_config_bool_get (const char* key, int* value)
 {
   TRACE (config_typed);

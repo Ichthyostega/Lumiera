@@ -94,7 +94,7 @@ TEST ("number_get")
 
   lumiera_config_setdefault (lumiera_tmpbuf_snprintf (SIZE_MAX, "%s = %s", argv[2], argv[3]));
 
-  if (!lumiera_config_number_get (argv[2], &number))
+  if (lumiera_config_number_get (argv[2], &number))
     printf ("%lld\n", number);
   else
     printf ("%s, %lld\n", lumiera_error (), number);
@@ -111,7 +111,7 @@ TEST ("number_get_nodefault")
 
   long long number = 0;
 
-  if (!lumiera_config_number_get (argv[2], &number))
+  if (lumiera_config_number_get (argv[2], &number))
     printf ("%lld\n", number);
   else
     printf ("%s\n", lumiera_error ());
@@ -127,11 +127,11 @@ TEST ("string_get")
 
   lumiera_config_init ("./");
 
-  char* string;
+  const char* string;
 
   lumiera_config_setdefault (lumiera_tmpbuf_snprintf (SIZE_MAX, "%s = %s", argv[2], argv[3]));
 
-  if (!lumiera_config_string_get (argv[2], &string))
+  if (lumiera_config_string_get (argv[2], &string))
     printf ("'%s'\n", string);
   else
     printf ("%s, '%s'\n", lumiera_error (), string);
@@ -150,7 +150,7 @@ TEST ("string_set")
   FIXME ("handle error");
 
   const char* string;
-  if (!lumiera_config_get (argv[2], &string))
+  if (lumiera_config_get (argv[2], &string))
     printf ("'%s'\n", string);
   else
     printf ("%s, '%s'\n", lumiera_error (), string);
@@ -166,11 +166,11 @@ TEST ("word_get")
 
   lumiera_config_init ("./");
 
-  char* word;
+  const char* word;
 
   lumiera_config_setdefault (lumiera_tmpbuf_snprintf (SIZE_MAX, "%s = %s", argv[2], argv[3]));
 
-  if (!lumiera_config_word_get (argv[2], &word))
+  if (lumiera_config_word_get (argv[2], &word))
     printf ("'%s'\n", word);
   else
     printf ("%s, '%s'\n", lumiera_error (), word);

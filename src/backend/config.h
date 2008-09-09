@@ -91,11 +91,11 @@ typedef lumiera_config* LumieraConfig;
  */
 /* TODO: add here as 'LUMIERA_CONFIG_TYPE(name, ctype)' the _get/_set prototypes are declared automatically below, you still have to implement them in config.c */
 #define LUMIERA_CONFIG_TYPES                    \
-  LUMIERA_CONFIG_TYPE(link, char*)              \
+  LUMIERA_CONFIG_TYPE(link, const char*)        \
   LUMIERA_CONFIG_TYPE(number, signed long long) \
   LUMIERA_CONFIG_TYPE(real, long double)        \
-  LUMIERA_CONFIG_TYPE(string, char*)            \
-  LUMIERA_CONFIG_TYPE(word, char*)              \
+  LUMIERA_CONFIG_TYPE(string, const char*)      \
+  LUMIERA_CONFIG_TYPE(word, const char*)        \
   LUMIERA_CONFIG_TYPE(bool, int)
 
 
@@ -166,11 +166,11 @@ lumiera_config_dump (FILE* out);
 /**
  *
  */
-int
+const char*
 lumiera_config_get (const char* key, const char** value);
 
 
-int
+const char*
 lumiera_config_get_default (const char* key, const char** value);
 
 
@@ -188,7 +188,7 @@ lumiera_config_get_default (const char* key, const char** value);
  * @param delim_value delimiter (= or <) followed by the value to be set
  *
  */
-int
+LumieraConfigitem
 lumiera_config_set (const char* key, const char* delim_value);
 
 
@@ -196,7 +196,7 @@ lumiera_config_set (const char* key, const char* delim_value);
  * Installs a default value for a config key.
  * Any key might have an associated default value which is used when
  * no other configuration is available, this can be set once.
- * Any subsequent call will be a no-op.
+ * Any subsequent call will be a no-op. This function writelocks the config system.
  * @param line line with key, delimiter and value to store as default value
  * @return NULL in case of an error, else a pointer to the default configitem
  */
@@ -217,7 +217,7 @@ lumiera_config_setdefault (const char* line);
  *
  */
 #define LUMIERA_CONFIG_TYPE(name, type) \
-  int \
+  const char* \
   lumiera_config_##name##_get (const char* key, type* value);
 LUMIERA_CONFIG_TYPES
 #undef LUMIERA_CONFIG_TYPE
