@@ -122,6 +122,9 @@ void
 lumiera_configitem_delete (LumieraConfigitem self, LumieraConfigLookup lookup);
 
 LumieraConfigitem
+lumiera_configitem_set_value (LumieraConfigitem self, const char* delim_value);
+
+LumieraConfigitem
 lumiera_configitem_parse (LumieraConfigitem self, const char* line);
 
 LumieraConfigitem

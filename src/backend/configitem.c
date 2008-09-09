@@ -119,6 +119,18 @@ lumiera_configitem_delete (LumieraConfigitem self, LumieraConfigLookup lookup)
 }
 
 
+LumieraConfigitem
+lumiera_configitem_set_value (LumieraConfigitem self, const char* delim_value)
+{
+  REQUIRE (self->key);
+  REQUIRE (self->delim);
+
+  char* line = lumiera_tmpbuf_snprintf (SIZE_MAX, "%.*s%s", self->delim - self->line, self->line, delim_value);
+  lumiera_configitem_parse (self, line);
+
+  return self;
+}
+
 
 LumieraConfigitem
 lumiera_configitem_move (LumieraConfigitem self, LumieraConfigitem source)
@@ -155,6 +167,7 @@ lumiera_configitem_parse (LumieraConfigitem self, const char* line)
 {
   TRACE (config_item);
 
+  lumiera_free (self->line);
   self->line = lumiera_strndup (line, SIZE_MAX);
 
   FIXME ("MOCKUP START");
