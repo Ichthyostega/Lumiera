@@ -67,7 +67,7 @@ lumiera_config_lookup_destroy (LumieraConfigLookup self)
 LumieraConfigLookupentry
 lumiera_config_lookup_insert (LumieraConfigLookup self, LumieraConfigitem item)
 {
-  TRACE (config_lookup);
+  TRACE (config_lookup, "%s", item->line);
   REQUIRE (self);
   REQUIRE (item);
   REQUIRE (item->key);
@@ -88,7 +88,7 @@ lumiera_config_lookup_insert (LumieraConfigLookup self, LumieraConfigitem item)
 LumieraConfigLookupentry
 lumiera_config_lookup_insert_default (LumieraConfigLookup self, LumieraConfigitem item)
 {
-  TRACE (config_lookup);
+  TRACE (config_lookup, "%s", item->line);
   REQUIRE (self);
   REQUIRE (item);
   REQUIRE (item->key);
@@ -108,7 +108,7 @@ lumiera_config_lookup_insert_default (LumieraConfigLookup self, LumieraConfigite
 LumieraConfigitem
 lumiera_config_lookup_remove (LumieraConfigLookup self, LumieraConfigitem item)
 {
-  TRACE (config_lookup);
+  TRACE (config_lookup, "%s", item->line);
   REQUIRE (!llist_is_empty (&item->lookup), "item is not in a lookup");
 
   if (llist_is_single (&item->lookup))
@@ -131,7 +131,7 @@ lumiera_config_lookup_remove (LumieraConfigLookup self, LumieraConfigitem item)
 LumieraConfigLookupentry
 lumiera_config_lookup_find (LumieraConfigLookup self, const char* key)
 {
-  TRACE (config_lookup);
+  TRACE (config_lookup, "%s", key);
   return (LumieraConfigLookupentry)psplay_find (&self->tree, key, 100);
 }
 
@@ -139,7 +139,7 @@ lumiera_config_lookup_find (LumieraConfigLookup self, const char* key)
 LumieraConfigitem
 lumiera_config_lookup_item_find (LumieraConfigLookup self, const char* key)
 {
-  TRACE (config_lookup);
+  TRACE (config_lookup, "%s", key);
 
   LumieraConfigLookupentry entry =
     lumiera_config_lookup_find (self, key);
@@ -154,7 +154,7 @@ lumiera_config_lookup_item_find (LumieraConfigLookup self, const char* key)
 LumieraConfigitem
 lumiera_config_lookup_item_tail_find (LumieraConfigLookup self, const char* key)
 {
-  TRACE (config_lookup);
+  TRACE (config_lookup, "%s", key);
 
   LumieraConfigLookupentry entry =
     lumiera_config_lookup_find (self, key);
@@ -174,7 +174,7 @@ lumiera_config_lookup_item_tail_find (LumieraConfigLookup self, const char* key)
 LumieraConfigLookupentry
 lumiera_config_lookupentry_init (LumieraConfigLookupentry self, const char* key)
 {
-  TRACE (config_lookup, "key = %s", key);
+  TRACE (config_lookup, "%s", key);
   if (self)
     {
       psplaynode_init (&self->node);

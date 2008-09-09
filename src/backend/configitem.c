@@ -96,7 +96,7 @@ lumiera_configitem_destroy (LumieraConfigitem self, LumieraConfigLookup lookup)
 LumieraConfigitem
 lumiera_configitem_new (const char* line)
 {
-  TRACE (config_item);
+  TRACE (config_item, "%s", line);
 
   lumiera_configitem tmp;
   lumiera_configitem_init (&tmp);
