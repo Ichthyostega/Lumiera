@@ -22,6 +22,11 @@ out: value = ' baz'
 END
 
 
+TEST "set a config and retrieve it" basic_set_get 'foo' '=bar' <<END
+out: bar
+END
+
+
 TEST "key lookup" lookup <<END
 END
 
