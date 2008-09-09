@@ -51,6 +51,13 @@ namespace mobject
     }
     
     
+    
+    /** @internal causes boost::checked_delete from \c scoped_ptr<DefsRegistry>
+     *  to be placed here, where the declaration of DefsRegistry is available.*/
+    DefsManager::~DefsManager() {}
+    
+    
+    
     template<class TAR>
     P<TAR>
     DefsManager::search  (const Query<TAR>& capabilities)

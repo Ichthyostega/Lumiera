@@ -33,14 +33,15 @@
 
 
 
-namespace mobject
-  {
-  namespace session
-    {
+namespace mobject {
+  namespace session {
+    
+    
     using lumiera::P;
     using boost::scoped_ptr;
     
     class DefsRegistry;
+    class SessManagerImpl;
 
 
     /**
@@ -63,6 +64,8 @@ namespace mobject
         friend class SessManagerImpl;
         
       public:
+       ~DefsManager ();
+       
         /** common access point: retrieve the default object fulfilling
          *  some given conditions. May silently trigger object creation.
          *  @throw error::Config in case no solution is possible, which
