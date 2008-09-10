@@ -23,6 +23,7 @@ liblumibackend_a_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
 liblumibackend_a_SOURCES =					\
 	$(liblumibackend_a_srcdir)/mediaaccessfacade.cpp	\
 	$(liblumibackend_a_srcdir)/backend.c			\
+	$(liblumibackend_a_srcdir)/plugin.c			\
 	$(liblumibackend_a_srcdir)/file.c			\
 	$(liblumibackend_a_srcdir)/filehandle.c			\
 	$(liblumibackend_a_srcdir)/filedescriptor.c		\
@@ -30,19 +31,20 @@ liblumibackend_a_SOURCES =					\
 	$(liblumibackend_a_srcdir)/config.c			\
 	$(liblumibackend_a_srcdir)/config_typed.c 		\
 	$(liblumibackend_a_srcdir)/configentry.c 		\
-	$(liblumibackend_a_srcdir)/configitem.c \
+	$(liblumibackend_a_srcdir)/configitem.c 		\
 	$(liblumibackend_a_srcdir)/config_lookup.c
 
 
 noinst_HEADERS +=						\
 	$(liblumibackend_a_srcdir)/mediaaccessfacade.cpp	\
 	$(liblumibackend_a_srcdir)/backend.h			\
+	$(liblumibackend_a_srcdir)/plugin.h			\
 	$(liblumibackend_a_srcdir)/file.h			\
 	$(liblumibackend_a_srcdir)/filehandle.h			\
 	$(liblumibackend_a_srcdir)/filedescriptor.h		\
 	$(liblumibackend_a_srcdir)/filehandlecache.h		\
 	$(liblumibackend_a_srcdir)/config.h 			\
 	$(liblumibackend_a_srcdir)/configentry.h 		\
-	$(liblumibackend_a_srcdir)/configitem.h \
+	$(liblumibackend_a_srcdir)/configitem.h 		\
 	$(liblumibackend_a_srcdir)/config_lookup.h
 

@@ -21,7 +21,6 @@ noinst_LIBRARIES += liblumi.a
 liblumi_a_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
 
 liblumi_a_SOURCES =				\
-	$(liblumi_a_srcdir)/plugin.c		\
 	$(liblumi_a_srcdir)/error.c		\
 	$(liblumi_a_srcdir)/mutex.c		\
 	$(liblumi_a_srcdir)/rwlock.c		\
@@ -35,7 +34,6 @@ liblumi_a_SOURCES =				\
 	$(liblumi_a_srcdir)/appconfig.cpp
 
 noinst_HEADERS +=						\
-	$(liblumi_a_srcdir)/plugin.h				\
 	$(liblumi_a_srcdir)/error.h				\
 	$(liblumi_a_srcdir)/mutex.h				\
 	$(liblumi_a_srcdir)/rwlock.h				\
