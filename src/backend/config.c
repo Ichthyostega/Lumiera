@@ -50,7 +50,7 @@ LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX, "syntax error in configfile");
 LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX_KEY, "syntax error in key");
 LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX_VALUE, "syntax error in value");
 LUMIERA_ERROR_DEFINE (CONFIG_NO_ENTRY, "no configuration entry");
-LUMIERA_ERROR_DEFINE (CONFIG_DEFAULT, "illegal default value");
+
 
 /**
  *  defaults for the configuraton system itself
@@ -248,9 +248,8 @@ lumiera_config_set (const char* key, const char* delim_value)
   LumieraConfigitem item = lumiera_config_lookup_item_find (&lumiera_global_config->keys, key);
   if (item && item->parent != &lumiera_global_config->defaults)
     {
-      TODO ("a user writeable file?");
+      TODO ("is a user writeable file?");
       TODO ("       replace delim_value");
-      //LumieraConfigitem
       lumiera_configitem_set_value (item, delim_value);
     }
   else
@@ -278,8 +277,6 @@ lumiera_config_set (const char* key, const char* delim_value)
           TODO ("tag file as dirty");
         }
     }
-
-  TODO ("return item?");
 
   return item;
 }

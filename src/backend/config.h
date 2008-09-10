@@ -48,7 +48,7 @@ LUMIERA_ERROR_DECLARE (CONFIG_SYNTAX);
 LUMIERA_ERROR_DECLARE (CONFIG_SYNTAX_KEY);
 LUMIERA_ERROR_DECLARE (CONFIG_SYNTAX_VALUE);
 LUMIERA_ERROR_DECLARE (CONFIG_NO_ENTRY);
-LUMIERA_ERROR_DECLARE (CONFIG_DEFAULT);
+
 
 //TODO: Lumiera header includes//
 #include "backend/config_lookup.h"
@@ -235,6 +235,7 @@ LUMIERA_CONFIG_TYPES
   lumiera_config_##name##_set (const char* key, type* value);
 LUMIERA_CONFIG_TYPES
 #undef LUMIERA_CONFIG_TYPE
+
 
 
 // * {{{ lumiera_config_reset(...) }}}
