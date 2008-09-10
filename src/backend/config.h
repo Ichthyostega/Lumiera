@@ -52,6 +52,7 @@ LUMIERA_ERROR_DECLARE (CONFIG_DEFAULT);
 
 //TODO: Lumiera header includes//
 #include "backend/config_lookup.h"
+#include "backend/configitem.h"
 
 //TODO: System includes//
 #include <nobug.h>
@@ -229,8 +230,8 @@ LUMIERA_CONFIG_TYPES
 /**
  *
  */
-#define LUMIERA_CONFIG_TYPE(name, type) \
-  int \
+#define LUMIERA_CONFIG_TYPE(name, type)                         \
+  LumieraConfigitem                                             \
   lumiera_config_##name##_set (const char* key, type* value);
 LUMIERA_CONFIG_TYPES
 #undef LUMIERA_CONFIG_TYPE

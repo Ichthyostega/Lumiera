@@ -46,7 +46,7 @@ lumiera_config_link_get (const char* key, const char** value)
   return 0;
 }
 
-int
+LumieraConfigitem
 lumiera_config_link_set (const char* key, const char** value)
 {
   TRACE (config_typed);
@@ -87,7 +87,7 @@ lumiera_config_number_get (const char* key, long long* value)
   return raw_value;
 }
 
-int
+LumieraConfigitem
 lumiera_config_number_set (const char* key, long long* value)
 {
   TRACE (config_typed);
@@ -108,7 +108,7 @@ lumiera_config_real_get (const char* key, long double* value)
   return 0;
 }
 
-int
+LumieraConfigitem
 lumiera_config_real_set (const char* key, long double* value)
 {
   TRACE (config_typed);
@@ -203,12 +203,20 @@ lumiera_config_string_get (const char* key, const char** value)
   return *value;
 }
 
-int
+LumieraConfigitem
 lumiera_config_string_set (const char* key, const char** value)
 {
   TRACE (config_typed);
-  UNIMPLEMENTED();
-  return 0;
+
+  LumieraConfigitem item = NULL;
+
+  LUMIERA_WRLOCK_SECTION (config_typed, &lumiera_global_config->lock)
+    {
+      const char* fmt = "= %s"; TODO ("use the config system (config.format*...) to deduce the desired format for this key");
+      item = lumiera_config_set (key, lumiera_tmpbuf_snprintf (SIZE_MAX, fmt, *value));
+    }
+
+  return item;
 }
 
 
@@ -262,7 +270,7 @@ lumiera_config_word_get (const char* key, const char** value)
   return *value;
 }
 
-int
+LumieraConfigitem
 lumiera_config_word_set (const char* key, const char** value)
 {
   TRACE (config_typed);
@@ -283,7 +291,8 @@ lumiera_config_bool_get (const char* key, int* value)
   return 0;
 }
 
-int
+
+LumieraConfigitem
 lumiera_config_bool_set (const char* key, int* value)
 {
   TRACE (config_typed);

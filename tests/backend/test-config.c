@@ -171,14 +171,14 @@ TEST ("string_set")
 
   lumiera_config_init ("./");
 
-  lumiera_config_string_set (argv[2], &argv[3]);
-  FIXME ("handle error");
+  if (!lumiera_config_string_set (argv[2], &argv[3]))
+    printf ("failed setting string '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
 
   const char* string;
-  if (lumiera_config_get (argv[2], &string))
+  if (lumiera_config_string_get (argv[2], &string))
     printf ("'%s'\n", string);
   else
-    printf ("%s, '%s'\n", lumiera_error (), string);
+    printf ("%s\n", lumiera_error ());
 
   lumiera_config_destroy ();
 }

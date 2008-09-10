@@ -65,7 +65,7 @@ const char* lumiera_config_defaults[] =
     "config.formatstr.real = '= %Lg'",
     "config.formatstr.real.dec = '= %Lf'",
     "config.formatstr.real.sci = '= %Le'",
-    "config.formatstr.string = '=%s'",
+    "config.formatstr.string = '= %s'",
     "config.formatstr.string.dquoted = '= \"%s\"'",
     "config.formatstr.string.quoted = '= ''%s'''",
     "config.formatstr.word = '= %s'",
