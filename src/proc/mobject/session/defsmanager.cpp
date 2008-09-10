@@ -35,10 +35,9 @@ using lumiera::query::QueryHandler;
 using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
 
 
-namespace mobject
-  {
-  namespace session
-    {
+namespace mobject {
+  namespace session {
+  
     using lumiera::P;
     
     

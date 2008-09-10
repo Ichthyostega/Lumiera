@@ -40,8 +40,7 @@ namespace mobject {
     using lumiera::P;
     using boost::scoped_ptr;
     
-    class DefsRegistry;
-    class SessManagerImpl;
+    namespace impl { class DefsRegistry; }
 
 
     /**
@@ -56,7 +55,7 @@ namespace mobject {
      */
     class DefsManager : private boost::noncopyable
       {
-        scoped_ptr<DefsRegistry> defsRegistry;
+        scoped_ptr<impl::DefsRegistry> defsRegistry;
         
       protected:
         
