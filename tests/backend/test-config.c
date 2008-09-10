@@ -145,6 +145,27 @@ TEST ("number_get_nodefault")
 }
 
 
+TEST ("number_set")
+{
+  REQUIRE (argv[2]);
+  REQUIRE (argv[3]);
+
+  lumiera_config_init ("./");
+
+  signed long long number = atoll (argv[3]);
+
+  if (!lumiera_config_number_set (argv[2], &number))
+    printf ("failed setting number '%s=%lld': %s\n", argv[2], number, lumiera_error ());
+
+  if (lumiera_config_number_get (argv[2], &number))
+    printf ("'%lld'\n", number);
+  else
+    printf ("%s\n", lumiera_error ());
+
+  lumiera_config_destroy ();
+}
+
+
 TEST ("string_get")
 {
   REQUIRE (argv[2]);
@@ -168,6 +189,7 @@ TEST ("string_get")
 TEST ("string_set")
 {
   REQUIRE (argv[2]);
+  REQUIRE (argv[3]);
 
   lumiera_config_init ("./");
 
@@ -202,6 +224,27 @@ TEST ("word_get")
 
   lumiera_config_destroy ();
 }
+
+
+TEST ("word_set")
+{
+  REQUIRE (argv[2]);
+  REQUIRE (argv[3]);
+
+  lumiera_config_init ("./");
+
+  if (!lumiera_config_word_set (argv[2], &argv[3]))
+    printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
+
+  const char* word;
+  if (lumiera_config_word_get (argv[2], &word))
+    printf ("'%s'\n", word);
+  else
+    printf ("%s\n", lumiera_error ());
+
+  lumiera_config_destroy ();
+}
+
 
 TEST ("configitem_simple_ctor_dtor")
 {

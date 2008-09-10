@@ -61,7 +61,8 @@ out: LUMIERA_ERROR_CONFIG_NO_ENTRY:no configuration entry
 END
 
 
-PLANNED "number set"  <<END
+TEST "number set" number_set test.number '-123456789012345' <<END
+out: '-123456789012345'
 END
 
 
@@ -117,7 +118,8 @@ END
 unset LUMIERA_TEST_WORD
 
 
-PLANNED "word set"  <<END
+TEST "word set" word_set test.word 'word foo bar' <<END
+out: 'word'
 END
 
 

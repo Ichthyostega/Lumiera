@@ -91,8 +91,16 @@ LumieraConfigitem
 lumiera_config_number_set (const char* key, long long* value)
 {
   TRACE (config_typed);
-  UNIMPLEMENTED();
-  return 0;
+
+  LumieraConfigitem item = NULL;
+
+  LUMIERA_WRLOCK_SECTION (config_typed, &lumiera_global_config->lock)
+    {
+      const char* fmt = "= %lld"; TODO ("use the config system (config.format*...) to deduce the desired format for this key");
+      item = lumiera_config_set (key, lumiera_tmpbuf_snprintf (SIZE_MAX, fmt, *value));
+    }
+
+  return item;
 }
 
 
@@ -239,7 +247,7 @@ scan_word (const char* in)
   char* end = ret;
 
   /* chop trailing blanks */
-  while (*end != ' ' && *end != '\t')
+  while (*end && *end != ' ' && *end != '\t')
     ++end;
 
   *end++ = '\0';
@@ -274,8 +282,16 @@ LumieraConfigitem
 lumiera_config_word_set (const char* key, const char** value)
 {
   TRACE (config_typed);
-  UNIMPLEMENTED();
-  return 0;
+
+  LumieraConfigitem item = NULL;
+
+  LUMIERA_WRLOCK_SECTION (config_typed, &lumiera_global_config->lock)
+    {
+      const char* fmt = "= %s"; TODO ("use the config system (config.format*...) to deduce the desired format for this key");
+      item = lumiera_config_set (key, lumiera_tmpbuf_snprintf (SIZE_MAX, fmt, scan_word (*value)));
+    }
+
+  return item;
 }
 
 
