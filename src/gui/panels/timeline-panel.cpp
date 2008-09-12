@@ -39,6 +39,11 @@ const int TimelinePanel::ZoomToolSteps = 2; // 2 seems comfortable
 
 TimelinePanel::TimelinePanel() :
   Panel("timeline", _("Timeline"), "panel_timeline"),
+  previousButton(Stock::MEDIA_PREVIOUS),
+  rewindButton(Stock::MEDIA_REWIND),
+  playPauseButton(Stock::MEDIA_PLAY),
+  forwardButton(Stock::MEDIA_FORWARD),
+  nextButton(Stock::MEDIA_NEXT),
   arrowTool(Gtk::StockID("tool_arrow")),
   iBeamTool(Gtk::StockID("tool_i_beam")),
   zoomIn(Stock::ZOOM_IN),
@@ -52,6 +57,13 @@ TimelinePanel::TimelinePanel() :
   
   // Setup the toolbar
   timeIndicatorButton.set_label_widget(timeIndicator);
+  
+  toolbar.append(previousButton);
+  toolbar.append(rewindButton);
+  toolbar.append(playPauseButton);
+  toolbar.append(forwardButton);
+  toolbar.append(nextButton);
+    
   toolbar.append(timeIndicatorButton);
   
   toolbar.append(seperator1);
@@ -60,7 +72,9 @@ TimelinePanel::TimelinePanel() :
     &TimelinePanel::on_arrow_tool));
   toolbar.append(iBeamTool, mem_fun(this,
     &TimelinePanel::on_ibeam_tool));
+    
   toolbar.append(seperator2);
+  
   toolbar.append(zoomIn, mem_fun(this, &TimelinePanel::on_zoom_in));
   toolbar.append(zoomOut, mem_fun(this, &TimelinePanel::on_zoom_out));
   

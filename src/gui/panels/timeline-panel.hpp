@@ -75,6 +75,16 @@ private:
   TimelineWidget timelineWidget;
   
   // Toolbar Widgets
+  
+  Gtk::Label timeIndicator;
+  Gtk::ToolButton timeIndicatorButton;
+  
+  Gtk::ToolButton previousButton;
+  Gtk::ToolButton rewindButton;
+  Gtk::ToolButton playPauseButton;
+  Gtk::ToolButton forwardButton;
+  Gtk::ToolButton nextButton;
+    
   Gtk::ToggleToolButton arrowTool;
   Gtk::ToggleToolButton iBeamTool;
   
@@ -84,10 +94,7 @@ private:
   Gtk::ToolButton zoomOut;
   
   Gtk::SeparatorToolItem seperator2;
-  
-  Gtk::Label timeIndicator;
-  Gtk::ToolButton timeIndicatorButton;
-  
+    
   // Internals
   bool updatingToolbar;
   
