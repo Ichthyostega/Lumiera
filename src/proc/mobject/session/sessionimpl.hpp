@@ -94,6 +94,8 @@ namespace mobject
         friend class lumiera::singleton::StaticCreate<SessManagerImpl>;
         
       public:
+        virtual ~SessManagerImpl() {}
+        
         virtual void clear () ;
         virtual void reset () ;
         virtual void load ()  ;

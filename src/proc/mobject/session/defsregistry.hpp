@@ -21,6 +21,21 @@
 */
 
 
+/** @file defsregistry.hpp
+ ** A piece of implementation code factored out into a separate header (include).
+ ** Only used in defsmanager.cpp and for the unit tests. We can't place it into
+ ** a separate compilation unit, because defsmanager.cpp defines some explicit
+ ** template instantiaton, which cause the different Slots of the DefsrRegistry#table_
+ ** to be filled with data and defaults for the specific Types.
+ ** 
+ ** @see mobject::session::DefsManager
+ ** @see defsregistryimpltest.cpp
+ **
+ */
+
+
+
+
 #ifndef MOBJECT_SESSION_DEFSREGISTRY_H
 #define MOBJECT_SESSION_DEFSREGISTRY_H
 
@@ -52,9 +67,14 @@ namespace mobject
     using boost::lambda::_1;
     using boost::lambda::var;  
     
-    namespace // Implementation details //////////////////TODO better a named implementation namespace (avoids warnings on gcc 4.3)
-//////////////////////////////////////////////////////////FIXME this is a *real* problem, because this namespace create storage, which it shouldn't      
-      {
+    namespace impl {
+      
+      namespace {
+        uint maxSlots (0); ///< number of different registered Types
+        format dumpRecord ("%2i| %64s --> %s\n");
+      }
+      
+      
       struct TableEntry 
         {
           virtual ~TableEntry() {};
@@ -64,9 +84,6 @@ namespace mobject
        *  for every participating kind of objects */
       typedef std::vector< P<TableEntry> > Table;
       
-      uint maxSlots (0); ///< number of different registered Types
-      
-      format dumpRecord ("%2i| %64s --> %s\n");
       
       /** 
        * holding a single "default object" entry 
@@ -83,13 +100,13 @@ namespace mobject
               query (q),
               objRef (obj)
             { }
-
+          
           
           struct Search  ///< Functor searching for a specific object
             {
               Search (const P<TAR>& obj)
                 : obj_(obj) { }
-
+              
               const P<TAR>& obj_;
               
               bool 
@@ -160,9 +177,9 @@ namespace mobject
       template<class TAR>
       size_t Slot<TAR>::index (0);
       
-    } // (End) impl namespace
-    
-
+      
+      
+      
     /**
      * @internal Helper for organizing preconfigured default objects.
      * Maintaines a collection of objects known or encountered as "default"
@@ -315,9 +332,14 @@ namespace mobject
             return res;
           }
       };
-
       
-
+      
+      
+    } // (End) impl namespace
+    
+    using impl::DefsRegistry;
+    
+    
   } // namespace mobject::session
 
 } // namespace mobject

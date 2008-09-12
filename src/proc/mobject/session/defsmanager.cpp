@@ -35,10 +35,9 @@ using lumiera::query::QueryHandler;
 using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
 
 
-namespace mobject
-  {
-  namespace session
-    {
+namespace mobject {
+  namespace session {
+  
     using lumiera::P;
     
     
@@ -49,6 +48,13 @@ namespace mobject
     {
       TODO ("setup basic defaults of the session");
     }
+    
+    
+    
+    /** @internal causes boost::checked_delete from \c scoped_ptr<DefsRegistry>
+     *  to be placed here, where the declaration of DefsRegistry is available.*/
+    DefsManager::~DefsManager() {}
+    
     
     
     template<class TAR>
