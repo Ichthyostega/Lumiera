@@ -63,7 +63,7 @@ namespace lumiera
    * std::tr1::shared_ptr, but forwarding type relationships and
    * ordering operators to the pointee objects.
    * @param TAR the visible pointee type
-   * @param the shared-ptr type used as implementation
+   * @param BASE the shared-ptr type used as implementation
    * @note if the BASE smart-ptr type used as implementation
    *       implies another pointer type than the one used on
    *       the interface (=type TAR), then every access to the 

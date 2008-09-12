@@ -61,7 +61,7 @@ namespace engine {
   typedef ProcNode* PNode;
   
   template<class E>
-  struct RefArray
+  struct RefArray    ///< @todo need an implementation and then probably move it into library
     {
       virtual E const& operator[] (uint i)  const =0;
       virtual ~RefArray() {}
