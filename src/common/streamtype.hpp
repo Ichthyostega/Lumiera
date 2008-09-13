@@ -73,7 +73,7 @@ namespace lumiera
       MediaKind kind;
       Prototype const& prototype;
       ImplFacade * implType;
-      Usage usageTag;
+      Usage intentionTag;
       
     };
   
@@ -91,6 +91,12 @@ namespace lumiera
     };
   
   
+
+  /** 
+   * placeholder definition for the contents of a data buffer
+   */
+  struct DataBuffer { };
+  
   
   /**
    * 
@@ -99,6 +105,14 @@ namespace lumiera
     {
     public:
       Symbol libraryID;
+      
+      bool operator== (ImplFacade const& other)  const;
+      bool operator== (StreamType const& other)  const;
+      
+      bool canConvert (ImplFacade const& other)  const;
+      bool canConvert (StreamType const& other)  const;
+      
+      DataBuffer* createFrame ()  const;
       
     };
     

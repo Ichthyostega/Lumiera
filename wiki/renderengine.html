@@ -1365,7 +1365,7 @@ Besides routing to a global pipe, wiring plugs can also connect to the source po
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200808151447" created="200708080322" tags="overview" changecount="26">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200809130314" created="200708080322" tags="overview" changecount="28">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1383,7 +1383,7 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * [[identifying the basic Builder operations|BasicBuildingOperations]] and [[planning the Implementation|PlanningNodeCreatorTool]]
 * [[how to handle »attached placement«|AttachedPlacementProblem]]
 * working out the [[basic building situations|BuilderPrimitives]] and [[mechanics of rendering|RenderMechanics]]
-* how to classify and [[describe media stream types|StreamType]]
+* how to classify and [[describe media stream types|StreamType]] and how to [[use them|StreamTypeUse]]
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200711210542" created="200711210531" tags="discuss draft" changecount="7">
@@ -3326,7 +3326,7 @@ Consequently, as we can't get away with an fixed Enum of all stream prototypes, 
 NTSC and PAL video, video versus digitized film, HD video versus SD video, 3D versus flat video, cinemascope versus 4:3, stereophonic versus monaural, periphonic versus panoramic sound, Ambisonics versus 5.1, dolby versus linear PCM...
 </pre>
 </div>
-<div title="StreamType" modifier="Ichthyostega" modified="200809112341" created="200808060244" tags="spec discuss draft" changecount="7">
+<div title="StreamType" modifier="Ichthyostega" modified="200809130255" created="200808060244" tags="spec discuss draft" changecount="8">
 <pre>//how to classify and describe media streams//
 Media data is understood to appear structured as stream(s) over time. While there may be an inherent internal structuring, at a given perspective ''any stream is a unit and homogeneous''. In the context of digital media data processing, streams are always ''quantized'', which means they appear as a temporal sequence of data chunks called ''frames''.
 
@@ -3357,15 +3357,16 @@ Within the Proc-Layer, media streams are treated largely in a similar manner. Bu
 * determine if a given media data source and sink can be connected, and how.
 * determine and enumerate the internal structure of a stream.
 * discover processing facilities
-</pre>
+&amp;rarr; see StreamTypeUse</pre>
 </div>
-<div title="StreamTypeDescriptor" modifier="Ichthyostega" modified="200808152027" created="200808151505" tags="def" changecount="6">
+<div title="StreamTypeDescriptor" modifier="Ichthyostega" modified="200809130314" created="200808151505" tags="def" changecount="7">
 <pre>A description and classification record usable to find out about the properties of a media stream. The stream type descriptor can be accessed using an unique StreamTypeID. The information contained in this descriptor record can intentionally be //incomplete,// in which case the descriptor captures a class of matching media stream types. The following information is maintained:
 * fundamental ''kind'' of media: {{{VIDEO, IMAGE, AUDIO, MIDI,...}}}
 * stream ''prototype'': this is the abstract high level media type, like NTSC, PAL, Film, 3D, Ambisonics, 5.1, monaural,...
 * stream ''implementation type'' accessible by virtue of an StreamTypeImplFacade
 * the ''intended usage category'' of this stream: {{{SOURCE, RAW, INTERMEDIARY, TARGET}}}.
 &amp;rarr; see &amp;raquo;[[Stream Type|StreamType]]&amp;laquo; detailed specification
+&amp;rarr; notes about [[using stream types|StreamTypeUse]]
 &amp;rarr; more [[about prototypes|StreamPrototype]]</pre>
 </div>
 <div title="StreamTypeID" modifier="Ichthyostega" created="200808151510" tags="def" changecount="1">
@@ -3379,6 +3380,32 @@ Within the Proc-Layer, media streams are treated largely in a similar manner. Bu
 * ...?
 
 &amp;rarr; see also &amp;raquo;[[Stream Type|StreamType]]&amp;laquo;
+</pre>
+</div>
+<div title="StreamTypeUse" modifier="Ichthyostega" modified="200809130319" created="200809130312" tags="draft discuss dynamic" changecount="4">
+<pre>Questions regarding the use of StreamType within the Proc-Layer.
+
+* what is the relation between Buffer and Frame?
+* how to get the required size of a Buffer?
+* who does buffer allocations and how?
+
+!creating stream types
+seemingly stream types are created based on an already existing media stream (or a Frame of media data?). {{red{really?}}}
+The other use case seems to be that of an //incomplete// stream type based on a [[Prototype|StreamPrototype]]
+
+!Prototype
+According to my current understanding, a prototype is merely classification entity. But then &amp;mdash; how to bootstrap a Prototype?
+And how to do the classification of an existing implementation type
+
+!the ID problem
+Basically I'd prefer the ~IDs to be real identifiers. So they can be used directly within rules. At least the Prototypes //can// have such a textual identifier. But the implementation type is problematic, and consequently the ID of the StreamType as well. Because the actual implementation should not be nailed down to a fixed set of possibilities. And, generally, we can't expect an implementation library to yield textual identifiers for each implementation type. //Is this really a problem? {{red{what are the use cases?}}}//
+
+--------------
+!use cases
+* pulling from a media file
+* connecting pipes and similar wiring problems
+* describing the properties of an processor plugin
+
 </pre>
 </div>
 <div title="StrongSeparation" modifier="MichaelPloujnikov" modified="200706271504" created="200706220452" tags="design" changecount="5">
