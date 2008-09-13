@@ -28,6 +28,7 @@ namespace lumiera
   {
 
    /** */
+   int bla = 3;
   
 
 } // namespace lumiera

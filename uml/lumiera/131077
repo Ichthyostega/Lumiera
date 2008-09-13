@@ -1,6 +1,6 @@
 format 40
 "ConfigQuery" // CommonLib::ConfigQuery
-  revision 1
+  revision 2
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -239,7 +239,7 @@ ${inlines}
       classrelation 150405 // <dependency>
 	relation 147717 -_->
 	  a default
-	    cpp default "Generated"
+	    cpp default "#include in header"
 	    classrelation_ref 150405 // <dependency>
 	  b multiplicity "" parent class_ref 140805 // TypeHandler
       end
@@ -390,7 +390,7 @@ ${inlines}
       classrelation 150533 // <dependency>
 	relation 147845 -_->
 	  a default
-	    cpp default "Generated"
+	    cpp default "#include in header"
 	    classrelation_ref 150533 // <dependency>
 	  b multiplicity "" parent class_ref 140549 // ConfigRules
       end

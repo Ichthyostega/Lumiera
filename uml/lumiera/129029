@@ -1,6 +1,6 @@
-format 38
-"Controller" // ProcessingLayer::MObject::Controller
-  revision 5
+format 40
+"Control" // ProcessingLayer::Control
+  revision 6
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -8,7 +8,7 @@ format 38
   //use case diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
   //collaboration diagram settings
   show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
   //object diagram settings
@@ -34,7 +34,7 @@ format 38
     //object diagram settings
      write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
     //sequence diagram settings
-    show_full_operations_definition default write_horizontally default drawing_language default draw_all_relations default shadow default
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
     //state diagram settings
     package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
     show_activities default region_horizontally default drawing_language default
@@ -172,7 +172,7 @@ ${inlines}
       
       comment "Encapsulates the logic used to get a \"current render process\" in accordance to the currentyl applicable controller settings. The provided StateProxy serves to hold any mutalbe state used in the render process, so the rest of the render engine can be stateless."
       operation 128389 "getStateProxy"
-	public return_type class_ref 132741 // StateProxy
+	public return_type class_ref 132741 // State
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
 	cpp_def "${comment}${inline}${type}
@@ -185,6 +185,19 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 	
 	
       end
+    end
+
+    class 145413 "STypeManager"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
     end
   end
 end

@@ -1,6 +1,6 @@
 format 40
-"controller" // design::codegen::proc::mobject::controller
-  revision 6
+"control" // design::codegen::proc::control
+  revision 7
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -27,13 +27,13 @@ format 40
   show_infonote default drawing_language default
   
   stereotype "src"
-  cpp_h_dir "proc/mobject/controller"
-  cpp_src_dir "proc/mobject/controller"
-  cpp_namespace "mobject::controller"
+  cpp_h_dir "proc/control"
+  cpp_src_dir "proc/control"
+  cpp_namespace "control"
   comment "sourcecode package
 
 The Processing and Render Controller,
-located within the MObject Subsystem"
+and the Proc-Layer dispatcher"
   deploymentview 129157 "gen"
     //deployment diagram settings
     package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
@@ -115,6 +115,44 @@ ${namespace_end}"
 	class_ref 130949 // RenderState
       end
       comment "renderengine state manager"
+    end
+
+    artifact 139781 "stypemanager"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 145413 // STypeManager
+      end
     end
   end
 end

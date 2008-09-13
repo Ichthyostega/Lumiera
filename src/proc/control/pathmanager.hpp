@@ -1,5 +1,5 @@
 /*
-  STypeManager  -  entry point for dealing with media stream types
+  PATHMANAGER.hpp  -  Manager for deciding the actual render strategy
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,16 +18,32 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
 
 
-#include "proc/stypemanager.hpp"
+#ifndef CONTROL_PATHMANAGER_H
+#define CONTROL_PATHMANAGER_H
 
-namespace proc_interface
-  {
+#include "proc/engine/processor.hpp"
+
+
+
+namespace control {
   
-  /** */
   
-  
-  
-} // namespace proc_interface
+  /**
+   * While building a render engine, this Strategy class 
+   * decides on the actual render strategy in accordance
+   * to the current controller settings (system state)
+   */
+  class PathManager
+    {
+    public:
+      engine::Processor* buildProcessor () ;
+      // TODO: allocation, GC??
+    };
+
+
+
+} // namespace control
+#endif

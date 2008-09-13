@@ -21,15 +21,15 @@
 */
 
 
-#ifndef PROC_INTERFACE_STATE_H
-#define PROC_INTERFACE_STATE_H
+#ifndef CONTROL_STYPEMANAGER_H
+#define CONTROL_STYPEMANAGER_H
 
 
 #include "common/streamtype.hpp"
 
 
 
-namespace proc_interface {
+namespace control {
   
   using lumiera::Symbol;
   
@@ -45,6 +45,13 @@ namespace proc_interface {
     };
   
   
+} // namespace control
+
+
+namespace proc_interface {
   
+  using control::STypeManager;
+
+
 } // namespace proc_interface
 #endif

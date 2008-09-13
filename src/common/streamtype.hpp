@@ -20,6 +20,16 @@
  
 */
 
+/** @file streamtype.hpp
+ ** Framework for classification of media streams.
+ ** Besides the actual implementation type of a media stream, the Proc-Layer
+ ** needs a more general way for accessing, comparing and manipulating media streams
+ ** based on type information.
+ ** 
+ ** @see control::STypeManager
+ ** 
+ */
+
 
 #ifndef LUMIERA_STREAMTYPE_HPP
 #define LUMIERA_STREAMTYPE_HPP

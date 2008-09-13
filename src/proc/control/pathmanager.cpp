@@ -1,5 +1,5 @@
 /*
-  RENDERSTATE.hpp  -  renderengine state manager
+  PathManager  -  Manager for deciding the actual render strategy
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,41 +18,22 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
 
 
-#ifndef MOBJECT_CONTROLLER_RENDERSTATE_H
-#define MOBJECT_CONTROLLER_RENDERSTATE_H
+#include "proc/control/pathmanager.hpp"
 
-#include "proc/state.hpp"
-
+namespace control {
 
 
-namespace mobject
+
+  engine::Processor *
+  PathManager::buildProcessor ()
   {
-  namespace controller
-    {
-
-    typedef proc_interface::State State;
-
-
-    /**
-     * Encapsulates the logic used to get a "current render process"
-     * in accordance to the currently applicable controller settings.
-     * The provided StateProxy serves to hold any mutalbe state used
-     * in the render process, so the rest of the render engine 
-     * can be stateless.
-     * @todo probably the state management will work different (6/08)
-     */
-    class RenderState
-      {
-      public:
-        State& getRenderProcess () ;
-      };
+    UNIMPLEMENTED ("build a complete processor and optimize render path");
+    return 0;//////////////////TODO
+  }
 
 
 
-  } // namespace mobject::controller
-
-} // namespace mobject
-#endif
+} // namespace control

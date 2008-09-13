@@ -1,6 +1,6 @@
 format 40
 "common" // design::codegen::common
-  revision 14
+  revision 15
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -200,6 +200,46 @@ ${namespace_end}"
 	class_ref 134917 // Time
       end
       comment "unified representation of a time point, including conversion functions"
+    end
+
+    artifact 139653 "streamtype"
+      stereotype "source"
+      cpp_h "/*
+  ${NAME}.hpp  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+*/
+
+
+#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${includes}
+${declarations}
+
+
+${namespace_start}
+
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "/*
+  ${Name}  -  ${description}
+@{CopyrightClaim}@{GPLHeader}
+* *****************************************************/
+
+
+${includes}
+${namespace_start}
+
+
+${members}
+${namespace_end}"
+      associated_classes
+	class_ref 144773 // StreamType
+	class_ref 144901 // Prototype
+	class_ref 145029 // ImplFacade
+      end
     end
   end
 

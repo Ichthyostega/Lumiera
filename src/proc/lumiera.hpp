@@ -22,6 +22,18 @@
  
 */
 
+/** @file lumiera.hpp
+ ** Basic set of definitions and includes commonly used together.
+ ** Including lumiera.hpp gives you a common set of elementary declarations
+ ** widely used within the C++ code of the Proc-Layer.
+ ** 
+ ** @see main.cpp
+ ** @see pre.hpp
+ ** 
+ */
+
+
+
 #ifndef LUMIERA_H
 #define LUMIERA_H
 
@@ -37,11 +49,67 @@
 #include "lib/appconfig.hpp"
 
 
-namespace lumiera
-  {
-    /* additional global configuration goes here... */
+/**
+ * Namespace for globals.
+ * A small number of definitions and facilities of application wide relevance.
+ * It's probably a good idea to pull it in explicitly and to avoid nesting
+ * implementation namespaces within \c lumiera::
+ */
+namespace lumiera {
+
+  /* additional global configuration goes here... */
   
     
 } // namespace lumiera
+
+
+/**
+ * Namespace for support and library code.
+ */
+namespace lib { 
+
+}
+
+
+/**
+ * The asset subsystem of the Proc-Layer.
+ */
+namespace asset { }
+
+
+/**
+ * Proc-Layer dispatcher, controller and administrative facilities.
+ */
+namespace control { }
+
+
+/**
+ * Render engine code as part of the Proc-Layer.
+ * Backbone of the engine, render nodes base and cooperation.
+ * A good deal of the active engine code is outside the scope of the
+ * Proc-Layer, e.g. code located in backend services and plugins.
+ */
+namespace engine { }
+
+
+
+/**
+ * Media-Objects, edit operations and high-level session.
+ */
+namespace mobject {
+
+
+  /**
+   * Namespace of Session, EDL and user visible high-level objects.
+   */
+  namespace session { }
+
+
+  /**
+   * Namespace of the Builder, transforming high-level into low-level.
+   */
+  namespace builder { }
+
+}
 
 #endif /*LUMIERA_H*/

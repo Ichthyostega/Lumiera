@@ -1,6 +1,6 @@
 format 40
 "ProcessingLayer" // ProcessingLayer
-  revision 22
+  revision 23
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -27,6 +27,8 @@ format 40
   show_infonote default drawing_language default
   
   package_ref 128133 // Asset
+
+  package_ref 129029 // Control
 
   package_ref 128261 // MObject
 
