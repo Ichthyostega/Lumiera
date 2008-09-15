@@ -268,6 +268,15 @@ LUMIERA_INTERFACE_DEFINE (plugin, 0,                                            
                           )
 
 
+/**
+ * Calls a function in interface
+ * @param name name of the interface
+ * @param version version of the interface
+ * @param handle pointer to the interface (LumieraInterface)
+ * @param slot name of the slot to be called
+ */
+#define LUMIERA_INTERFACE_CALL(name, version, handle, slot) \
+  (LUMIERA_INTERFACE_CAST(name, version) handle)->slot
 
 
 typedef struct lumiera_interfaceslot_struct lumiera_interfaceslot;
