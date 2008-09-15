@@ -3382,7 +3382,7 @@ Within the Proc-Layer, media streams are treated largely in a similar manner. Bu
 &amp;rarr; see also &amp;raquo;[[Stream Type|StreamType]]&amp;laquo;
 </pre>
 </div>
-<div title="StreamTypeUse" modifier="Ichthyostega" modified="200809130319" created="200809130312" tags="draft discuss dynamic" changecount="4">
+<div title="StreamTypeUse" modifier="Ichthyostega" modified="200809150339" created="200809130312" tags="draft discuss dynamic" changecount="11">
 <pre>Questions regarding the use of StreamType within the Proc-Layer.
 
 * what is the relation between Buffer and Frame?
@@ -3394,11 +3394,18 @@ seemingly stream types are created based on an already existing media stream (or
 The other use case seems to be that of an //incomplete// stream type based on a [[Prototype|StreamPrototype]]
 
 !Prototype
-According to my current understanding, a prototype is merely classification entity. But then &amp;mdash; how to bootstrap a Prototype?
+According to my current understanding, a prototype is merely a classification entity. But then &amp;mdash; how to bootstrap a Prototype?
 And how to do the classification of an existing implementation type
+
+!Defaults and partial specification
+A StreamType need not be completely defined. It is sufficient to specify the media kind and the Prototype. The implementation type may be just given as a constraint, thus defining some properties and leaving out others. When creating a frame buffer based upon such an //incomplete type,// [[defaults|DefaultsManagement]] are queried to fill in the missing parts.
+Constraints are objects provided by the Lumiera core, but specialized to the internals of the actual implementation library.
+For example there might be a constraint implementation to force a specific {{{gavl_pixelformat_t}}}.
 
 !the ID problem
 Basically I'd prefer the ~IDs to be real identifiers. So they can be used directly within rules. At least the Prototypes //can// have such a textual identifier. But the implementation type is problematic, and consequently the ID of the StreamType as well. Because the actual implementation should not be nailed down to a fixed set of possibilities. And, generally, we can't expect an implementation library to yield textual identifiers for each implementation type. //Is this really a problem? {{red{what are the use cases?}}}//
+As far as I can see, in most cases this is no problem, as the type can be retrieved or derived from an existing media object. Thus, the only problematic case is when we need to persist the type information without being able to guarantee the persistence of the media object this type was derived from. For example this might be a problem when working with proxy media. But at least we should be able to create a constraint (partial type specification) to cover the important part of the type information, i.e. the part which is needed to re-create the model even when the original media isn't there any longer.
+Thus, //constraints may be viewed as type constructing functors.//
 
 --------------
 !use cases

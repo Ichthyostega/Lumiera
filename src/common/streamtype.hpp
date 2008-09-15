@@ -68,6 +68,7 @@ namespace lumiera
       struct Prototype;
       
       class ImplFacade;
+      class ImplConstraint;
       
       
       MediaKind kind;
@@ -99,20 +100,50 @@ namespace lumiera
   
   
   /**
-   * 
+   * A (more or less) concrete implementation type, wired up
+   * as a facade providing the basic set of operations.
    */
   class StreamType::ImplFacade
     {
     public:
       Symbol libraryID;
       
-      bool operator== (ImplFacade const& other)  const;
-      bool operator== (StreamType const& other)  const;
+      virtual bool operator== (ImplFacade const& other)  const;
+      virtual bool operator== (StreamType const& other)  const;
       
-      bool canConvert (ImplFacade const& other)  const;
-      bool canConvert (StreamType const& other)  const;
+      virtual bool canConvert (ImplFacade const& other)  const;
+      virtual bool canConvert (StreamType const& other)  const;
       
-      DataBuffer* createFrame ()  const;
+      virtual DataBuffer* createFrame ()  const;
+      
+    };
+  
+  
+  /**
+   * 
+   */
+  class StreamType::ImplConstraint
+    : public StreamType::ImplFacade
+    {
+    public:
+      Symbol libraryID;
+      
+      virtual bool canConvert (ImplFacade const& other)  const;
+      virtual bool canConvert (StreamType const& other)  const;
+      
+      virtual bool subsumes (ImplFacade const& other)  const;
+      
+      /** modify the other impl type such as to comply with this constraint */
+      virtual void makeCompliant (ImplFacade & other)  const;
+      
+      /** create a default impl type in accordance to this constraint
+       *  and use it to create a new framebuffer */
+      virtual DataBuffer* createFrame ()  const;
+
+      /** similarily create a impl type which complies to this constraint
+       *  as well as to the additional constraints (e.g. frame size).
+       *  Create a new framebuffer of the resutling type */
+      virtual DataBuffer* createFrame (ImplConstraint const& furtherConstraints)  const;
       
     };
     
