@@ -54,13 +54,10 @@
  * Any code which want to use this interface must then include its declaration.
  *
  * Basic definition of an interface is done by:
- * LUMIERA_INTERFACE_DEFINE(iname, version, name, descriptor, data, acquire, release,
- *                          LUMIERA_INTERFACE_DEFINE(iname, version, name, descriptor, data, acquire, release,
- *                                                   LUMIERA_INTERFACE_MAP (slot, function, luid),
- *                                                   ...
- *                                                  ),
- *                          ...
- *                         )
+ * LUMIERA_INTERFACE_INSTANCE(iname, version, name, descriptor, data, acquire, release,
+ *                            LUMIERA_INTERFACE_MAP (slot, function, luid),
+ *                            ...
+ *                           )
  *
  * There are 2 ways to define collections of interfaces:
  * LUMIERA_EXPORT(queryfunc,
@@ -149,8 +146,7 @@ LUMIERA_INTERFACE_TYPE(name, version)                   \
  * @param name name of this slot
  * @param params parentized list of parameters for the function
  */
-#define LUMIERA_INTERFACE_SLOT(ret, name, params)  ret (*name) params; lumiera_uid name##_uid;
-#define PPMPL_FOREACH_LUMIERA_INTERFACE_SLOT(ret, name, params)  LUMIERA_INTERFACE_SLOT(ret, name, params)
+#define PPMPL_FOREACH_LUMIERA_INTERFACE_SLOT(ret, name, params)  ret (*name) params; lumiera_uid name##_uid;
 
 
 /*
@@ -169,7 +165,7 @@ LUMIERA_INTERFACE_TYPE(name, version)                   \
  * @param release a function which is called whenever this interface is closed after use, might be NULL
  * @param ... map functions to interface slots @see LUMIERA_INTERFACE_MAP
  */
-#define LUMIERA_INTERFACE_DEFINE(iname, version, name, descriptor, data, acquire, release, ...)         \
+#define LUMIERA_INTERFACE_INSTANCE(iname, version, name, descriptor, data, acquire, release, ...)       \
 LUMIERA_INTERFACE_TYPE(iname, version) LUMIERA_INTERFACE_DNAME(iname, name, version) =                  \
 {                                                                                                       \
   {                                                                                                     \
@@ -196,24 +192,23 @@ LUMIERA_INTERFACE_TYPE(iname, version) LUMIERA_INTERFACE_DNAME(iname, name, vers
  * this would be good style for C too anyways
  */
 #ifdef __cplusplus
-#define LUMIERA_INTERFACE_MAP(slot, function, luid) \
+#define PPMPL_FOREACH_LUMIERA_INTERFACE_MAP(slot, function, luid) \
   function, LUMIERA_UID_INITIALIZER (uid),
 #else
-#define LUMIERA_INTERFACE_MAP(slot, function, luid) \
+#define PPMPL_FOREACH_LUMIERA_INTERFACE_MAP(slot, function, luid) \
   .slot = function, .slot##_uid = LUMIERA_UID_INITIALIZER (luid),
 #endif
 
-#define PPMPL_FOREACH_LUMIERA_INTERFACE_MAP(slot, function, luid) LUMIERA_INTERFACE_MAP(slot, function, luid)
 
 #define PPMPL_FOREACH_L1_P1_LUMIERA_INTERFACE_DEFINE(iname, version, name, descriptor, data, acquire, release, ...)     \
-LUMIERA_INTERFACE_DEFINE (iname, version,                                                                               \
-                          name,                                                                                         \
-                          descriptor,                                                                                   \
-                          data,                                                                                         \
-                          acquire,                                                                                      \
-                          release,                                                                                      \
-                          __VA_ARGS__                                                                                   \
-                          );
+LUMIERA_INTERFACE_INSTANCE (iname, version,                                                                             \
+                            name,                                                                                       \
+                            descriptor,                                                                                 \
+                            data,                                                                                       \
+                            acquire,                                                                                    \
+                            release,                                                                                    \
+                            __VA_ARGS__                                                                                 \
+                            );
 
 
 #define PPMPL_FOREACH_L1_P2_LUMIERA_INTERFACE_DEFINE(iname, version, name, descriptor, data, acquire, release, ...)     \

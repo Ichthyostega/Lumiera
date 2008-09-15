@@ -48,6 +48,11 @@ test_luid_SOURCES = $(tests_srcdir)/library/test-luid.c
 test_luid_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 test_luid_LDADD = liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl -lm
 
+check_PROGRAMS += test-interfaces
+test_interfaces_SOURCES = $(tests_srcdir)/library/test-interfaces.c
+test_interfaces_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
+test_interfaces_LDADD = liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl -lm
+
 check_PROGRAMS += test-filedescriptors
 test_filedescriptors_SOURCES = $(tests_srcdir)/backend/test-filedescriptors.c
 test_filedescriptors_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
