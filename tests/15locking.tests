@@ -18,6 +18,12 @@ out: inner mutex locked section
 END
 
 
+TEST "chained mutex section" chainedmutexsection <<END
+out: outer mutex locked section
+out: inner but not outer mutex locked section
+END
+
+
 TEST "rwlock section" rwlocksection <<END
 out: write locked section 1
 out: read locked section 2

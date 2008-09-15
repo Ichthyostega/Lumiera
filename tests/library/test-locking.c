@@ -82,10 +82,30 @@ TEST ("nestedmutexsection")
     }
 
   lumiera_mutex_destroy (&n, &NOBUG_FLAG(NOBUG_ON));
-  lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
+ lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
 }
 
+TEST ("chainedmutexsection")
+{
+  lumiera_mutex m;
+  lumiera_mutex_init (&m, "m_mutexsection", &NOBUG_FLAG(NOBUG_ON));
 
+  lumiera_mutex n;
+  lumiera_mutex_init (&n, "n_mutexsection", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
+    {
+      printf ("outer mutex locked section\n");
+
+      LUMIERA_MUTEX_SECTION_CHAIN (NOBUG_ON, &m, &n)
+        {
+          printf ("inner but not outer mutex locked section\n");
+        }
+    }
+
+  lumiera_mutex_destroy (&n, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
+}
 
 TEST ("rwlocksection")
 {
