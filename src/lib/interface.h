@@ -349,6 +349,16 @@ struct lumiera_interface_struct
 #endif
 };
 
+/*
+  API to handle interfaces
+ */
+
+LumieraInterface
+lumiera_interface_acquire (LumieraInterface self);
+
+void
+lumiera_interface_release (LumieraInterface self);
+
 
 #endif /* LUMIERA_INTERFACE_H */
 /*
