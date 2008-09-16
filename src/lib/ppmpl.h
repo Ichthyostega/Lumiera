@@ -138,6 +138,11 @@
 #define PPMPL_FOREACH_L2_P2_PPMPL_FOREACH_L2_NIL PPMPL_FOREACH_L2_FINAL(
 #define PPMPL_FOREACH_L2_FINAL(...)
 
+/**
+ * Canonical preprocessor concat implementation which evaluates its arguments
+ */
+#define PPMPL_CAT(a,b) PPMPL_CAT_(a,b)
+#define PPMPL_CAT_(a,b) a##b
 
 #endif
 /*
