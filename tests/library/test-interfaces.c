@@ -58,11 +58,14 @@ LUMIERA_INTERFACE_INSTANCE (example1, 0,
                             NULL,
                             NULL,
                             NULL,
-                            NULL,
-                            LUMIERA_INTERFACE_MAP (foo1, testfunc,
-                                                   "\066\177\042\305\165\243\236\352\164\250\357\307\211\374\123\066"),
-                            LUMIERA_INTERFACE_MAP (bar1, testfunc,
-                                                   "\162\335\262\306\101\113\106\055\342\205\300\151\262\073\257\343")
+                            LUMIERA_INTERFACE_INLINE (foo1, "\066\177\042\305\165\243\236\352\164\250\357\307\211\374\123\066",
+                                                      void, (const char* msg),
+                                                      {
+                                                        printf ("inline\n");
+                                                      }
+                                                      ),
+                            LUMIERA_INTERFACE_MAP (bar1, "\162\335\262\306\101\113\106\055\342\205\300\151\262\073\257\343",
+                                                   testfunc)
                             );
 
 
@@ -72,22 +75,20 @@ LUMIERA_EXPORT (interfaces_defined_here,
                                           NULL,
                                           NULL,
                                           NULL,
-                                          NULL,
-                                          LUMIERA_INTERFACE_MAP (foo1, testfunc,
-                                                                 "\214\310\136\372\003\344\163\377\075\100\070\200\375\221\227\324"),
-                                          LUMIERA_INTERFACE_MAP (bar1, testfunc,
-                                                                 "\262\253\067\211\157\052\212\140\114\334\231\250\340\075\214\030")
+                                          LUMIERA_INTERFACE_MAP (foo1, "\214\310\136\372\003\344\163\377\075\100\070\200\375\221\227\324",
+                                                                 testfunc),
+                                          LUMIERA_INTERFACE_MAP (bar1, "\262\253\067\211\157\052\212\140\114\334\231\250\340\075\214\030",
+                                                                 testfunc)
                                           ),
                 LUMIERA_INTERFACE_DEFINE (example2, 0,
                                           example2_implementation,
                                           NULL,
                                           NULL,
                                           NULL,
-                                          NULL,
-                                          LUMIERA_INTERFACE_MAP (foo2, testfunc,
-                                                                 "\110\152\002\271\363\052\324\272\373\045\132\270\277\000\271\217"),
-                                          LUMIERA_INTERFACE_MAP (bar2, testfunc,
-                                                                 "\376\042\027\336\355\113\132\233\350\312\170\077\377\370\356\167")
+                                          LUMIERA_INTERFACE_MAP (foo2, "\110\152\002\271\363\052\324\272\373\045\132\270\277\000\271\217",
+                                                                 testfunc),
+                                          LUMIERA_INTERFACE_MAP (bar2, "\376\042\027\336\355\113\132\233\350\312\170\077\377\370\356\167",
+                                                                 testfunc)
                                           )
                 );
 

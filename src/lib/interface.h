@@ -23,6 +23,7 @@
 
 #include "lib/luid.h"
 #include "lib/ppmpl.h"
+#include "lib/psplay.h"
 
 /* TODO better doxygen formating */
 
@@ -53,9 +54,11 @@
  *                          )
  * Any code which want to use this interface must then include its declaration.
  *
- * Basic definition of an interface is done by:
- * LUMIERA_INTERFACE_INSTANCE(iname, version, name, descriptor, data, acquire, release,
- *                            LUMIERA_INTERFACE_MAP (slot, function, luid),
+ * Basic definition of an interface is done by mapping functions to slots or giving
+ * inline definitions for slot functions:
+ * LUMIERA_INTERFACE_INSTANCE(iname, version, name, descriptor, acquire, release,
+ *                            LUMIERA_INTERFACE_MAP (slot, luid, function),
+ *                            LUMIERA_INTERFACE_INLINE (slot, luid, ret, params, {body}),
  *                            ...
  *                           )
  *
@@ -66,7 +69,7 @@
  *               )
  * to export interfaces from the core.
  *
- * LUMIERA_PLUGIN(descriptor, data, acquire, release, luid,
+ * LUMIERA_PLUGIN(descriptor, acquire, release, luid,
  *                LUMIERA_INTERFACE_DEFINE(...),
  *                ...
  *               )
@@ -160,58 +163,86 @@ LUMIERA_INTERFACE_TYPE(name, version)                   \
  * @param version major version of the interface to instance
  * @param name name of the instance
  * @param descriptor pointer to an interface instance which provides a description of this interface, might be NULL
- * @param data a opaque void* pointer which is passed to the implementation
  * @param acquire a function which is called whenever this interface is opened for using, might be NULL
  * @param release a function which is called whenever this interface is closed after use, might be NULL
  * @param ... map functions to interface slots @see LUMIERA_INTERFACE_MAP
  */
-#define LUMIERA_INTERFACE_INSTANCE(iname, version, name, descriptor, data, acquire, release, ...)       \
+#define LUMIERA_INTERFACE_INSTANCE(iname, version, name, descriptor, acquire, release, ...)             \
+PPMPL_FOREACH(_P1_, __VA_ARGS__)                                                                        \
 LUMIERA_INTERFACE_TYPE(iname, version) LUMIERA_INTERFACE_DNAME(iname, name, version) =                  \
 {                                                                                                       \
   {                                                                                                     \
+    PSPLAYNODE_INITIALIZER,                                                                             \
     #name,                                                                                              \
     version,                                                                                            \
     sizeof (LUMIERA_INTERFACE_TYPE(iname, version)),                                                    \
     descriptor,                                                                                         \
-    data,                                                                                               \
     acquire,                                                                                            \
     release                                                                                             \
   },                                                                                                    \
-  PPMPL_FOREACH(_, __VA_ARGS__)                                                                         \
+  PPMPL_FOREACH(_P2_, __VA_ARGS__)                                                                      \
 }
 
 
 /**
  * Map a function to a interface slot
  * @param slot name of the slot to be mapped
- * @param function name of the function to be mapped on slot
  * @param luid unique identifier for this function, use the magic word LUIDGEN here and run the
- * lumiera uuid generator tool (to be written) over the source file to generate luid's automatically
+ *        lumiera uuid generator tool (to be written) over the source file to generate luid's automatically
+ * @param function name of the function to be mapped on slot
  *
  * @note C++ requires that all mappings are in the same order than defined in the interface declaration,
  * this would be good style for C too anyways
  */
+#define PPMPL_FOREACH_P1_LUMIERA_INTERFACE_MAP(slot, luid, function)
 #ifdef __cplusplus
-#define PPMPL_FOREACH_LUMIERA_INTERFACE_MAP(slot, function, luid) \
-  function, LUMIERA_UID_INITIALIZER (uid),
+#define PPMPL_FOREACH_P2_LUMIERA_INTERFACE_MAP(slot, luid, function) \
+  function, LUMIERA_UID_INITIALIZER (luid),
 #else
-#define PPMPL_FOREACH_LUMIERA_INTERFACE_MAP(slot, function, luid) \
+#define PPMPL_FOREACH_P2_LUMIERA_INTERFACE_MAP(slot, luid, function) \
   .slot = function, .slot##_uid = LUMIERA_UID_INITIALIZER (luid),
 #endif
 
 
-#define PPMPL_FOREACH_L1_P1_LUMIERA_INTERFACE_DEFINE(iname, version, name, descriptor, data, acquire, release, ...)     \
-LUMIERA_INTERFACE_INSTANCE (iname, version,                                                                             \
-                            name,                                                                                       \
-                            descriptor,                                                                                 \
-                            data,                                                                                       \
-                            acquire,                                                                                    \
-                            release,                                                                                    \
-                            __VA_ARGS__                                                                                 \
+/**
+ * Map a inline defined function to a interface slot
+ * @param slot name of the slot to be mapped
+ * @param luid unique identifier for this function, use the magic word LUIDGEN here and run the
+ *        lumiera uuid generator tool (to be written) over the source file to generate luid's automatically
+ * @param ret return type of the inline function
+ * @param params parentized list of parameters given to the function
+ * @param ... braced function body
+ *
+ * @note C++ requires that all mappings are in the same order than defined in the interface declaration,
+ * this would be good style for C too anyways
+ */
+#define PPMPL_FOREACH_P1_LUMIERA_INTERFACE_INLINE(slot, luid, ret, params, ...) \
+  static ret                                                                    \
+  LUMIERA_INTERFACE_INLINE_NAME(slot) params                                    \
+  __VA_ARGS__
+
+#ifdef __cplusplus
+#define PPMPL_FOREACH_P2_LUMIERA_INTERFACE_INLINE(slot, luid, ret, params, ...) \
+  LUMIERA_INTERFACE_INLINE_NAME(slot), LUMIERA_UID_INITIALIZER (luid),
+#else
+#define PPMPL_FOREACH_P2_LUMIERA_INTERFACE_INLINE(slot, luid, ret, params, ...) \
+  .slot = LUMIERA_INTERFACE_INLINE_NAME(slot), .slot##_uid = LUMIERA_UID_INITIALIZER (luid),
+#endif
+
+#define LUMIERA_INTERFACE_INLINE_NAME(slot) PPMPL_CAT(lumiera_##slot##_l, __LINE__)
+
+
+#define PPMPL_FOREACH_L1_P1_LUMIERA_INTERFACE_DEFINE(iname, version, name, descriptor, acquire, release, ...)   \
+LUMIERA_INTERFACE_INSTANCE (iname, version,                                                                     \
+                            name,                                                                               \
+                            descriptor,                                                                         \
+                            acquire,                                                                            \
+                            release,                                                                            \
+                            __VA_ARGS__                                                                         \
                             );
 
 
-#define PPMPL_FOREACH_L1_P2_LUMIERA_INTERFACE_DEFINE(iname, version, name, descriptor, data, acquire, release, ...)     \
+#define PPMPL_FOREACH_L1_P2_LUMIERA_INTERFACE_DEFINE(iname, version, name, descriptor, acquire, release, ...)     \
   &LUMIERA_INTERFACE_DNAME(iname, name, version).interface_header_,
 
 
@@ -244,18 +275,16 @@ queryfunc (void)                                                        \
  * it instances a local 'plugin interface' which will be picked up by the plugin loader to query the array of
  * provided interfaces.
  * @param descriptor pointer to an interface instance which provides a description of this plugin, might be NULL
- * @param data a opaque void* pointer which is passed to the implementation
  * @param acquire a function which is called whenever the plugin interface is opened for using, might be NULL
  * @param release a function which is called whenever this plugin interface is closed after use, might be NULL
  * @param luid unique identifier for the this plugin interfaces query, use the magic word LUIDGEN here and run the
  * lumiera uuid generator tool (to be written) over the source file to generate luid's automatically
  * @param ... list of LUMIERA_INTERFACE_DEFINE() for all interfaces this plugin provides.
  */
-#define LUMIERA_PLUGIN(descriptor, data, acquire, release, luid, ...)                           \
+#define LUMIERA_PLUGIN(descriptor, acquire, release, luid, ...)                                 \
 LUMIERA_EXPORT(plugin_interfaces, __VA_ARGS__)                                                  \
 LUMIERA_INTERFACE_DEFINE (plugin, 0,                                                            \
                           lumiera_plugin,                                                       \
-                          NULL,                                                                 \
                           NULL,                                                                 \
                           NULL,                                                                 \
                           NULL,                                                                 \
@@ -297,6 +326,8 @@ struct lumiera_interfaceslot_struct
  */
 struct lumiera_interface_struct
 {
+  /** all known interfaces are registered in a tree */
+  psplaynode node;
   /** name of the interface */
   const char* name;
   /** major version, 0 means experimental */
@@ -306,9 +337,6 @@ struct lumiera_interface_struct
 
   /** metadata descriptor, itself a interface (or NULL) */
   LumieraInterface descriptor;
-
-  /** generic data to be used by the implementation */
-  void* data;
 
   /** must be called before this interface is used, might be nested */
   LumieraInterface (*acquire)(LumieraInterface self);
