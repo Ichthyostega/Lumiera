@@ -280,6 +280,10 @@ out: dtor ~TargetObj(24) successfull
 END
 
 
+PLANNED "StreamTypeBasics_test" StreamTypeBasics_test <<END
+END
+
+
 TEST "TestOption_test" TestOption_test <<END
 out: Testing invocation with cmdline: ...
 out: --> Testgroup=ALL

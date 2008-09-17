@@ -1,5 +1,5 @@
 /*
-  StreamType  -  classification of media stream types 
+  TESTSTREAMTYPES.hpp  -  create test (stub) stream type information
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,19 +18,35 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
 
+
+#ifndef LUMIERA_TEST_TESTSTREAMTYPES_H
+#define LUMIERA_TEST_TESTSTREAMTYPES_H
+
+
+//#include "common/util.hpp"
 
 #include "common/streamtype.hpp"
+#include "proc/control/stypemanager.hpp"
 
 
-namespace lumiera
-  {
 
-   /** */
-   StreamType::ImplFacade::~ImplFacade() 
-   { }
-
-  
+namespace lumiera {
+  namespace test {
+    
+    /** Helper: create an implementation frame
+     *  and build the corresponding streamtype
+     */
+    inline StreamType::ImplFacade
+    createImplType ()
+    {
+      UNIMPLEMENTED ("create a test stream type from a given GAVL type tag");
+    }
+    
+    
+    
+  } // namespace test
 
 } // namespace lumiera
+#endif

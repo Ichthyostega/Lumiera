@@ -3382,7 +3382,7 @@ Within the Proc-Layer, media streams are treated largely in a similar manner. Bu
 &amp;rarr; see also &amp;raquo;[[Stream Type|StreamType]]&amp;laquo;
 </pre>
 </div>
-<div title="StreamTypeUse" modifier="Ichthyostega" modified="200809150339" created="200809130312" tags="draft discuss dynamic" changecount="11">
+<div title="StreamTypeUse" modifier="Ichthyostega" modified="200809170107" created="200809130312" tags="draft discuss dynamic" changecount="13">
 <pre>Questions regarding the use of StreamType within the Proc-Layer.
 
 * what is the relation between Buffer and Frame?
@@ -3409,10 +3409,22 @@ Thus, //constraints may be viewed as type constructing functors.//
 
 --------------
 !use cases
-* pulling from a media file
+* pulling data from a media file
 * connecting pipes and similar wiring problems
 * describing the properties of an processor plugin
 
+!! pulling data from a media file
+To open the file, we need //type discovery code,// resulting in a handle to some library module for accessing the contents, which is in compliance with the Lumiera application. Thus, we can determine the possible return values of this type discovery code and provide code which wires up a corresponding StreamTypeImpleFacade. Further, the {{{control::STypeManager}}} has the ability to build a complete or partial StreamType from
+* an ~ImplFacade
+* a Prototype
+* maybe even from some generic textual IDs?
+
+!! wiring problems
+When deciding if a connection can be made, we can build up the type information starting out from the source. (this requires some work, but it's //possible,// generally speaking.). Thus, we can allways get an ~ImplType for the &quot;lower end&quot; of the connection, and at least a Prototype for the &quot;output side&quot; &amp;mdash; which should be enough to use the query functions provided by the stream type interfaces
+
+!! describing properties
+{{red{currently difficult to define}}} as of 9/2008, because the property description of plugins is not planned yet.
+My Idea was to use [[type implementation constraints|StreanTyoeImplConstraint]] for this, which are a special kind of ~ImplType
 </pre>
 </div>
 <div title="StrongSeparation" modifier="MichaelPloujnikov" modified="200706271504" created="200706220452" tags="design" changecount="5">

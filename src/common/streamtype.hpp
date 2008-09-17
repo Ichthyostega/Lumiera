@@ -40,8 +40,7 @@
 #include <boost/noncopyable.hpp>
 
 
-namespace lumiera
-  {
+namespace lumiera {
 
 
   /**
@@ -116,6 +115,7 @@ namespace lumiera
       
       virtual DataBuffer* createFrame ()  const;
       
+      virtual ~ImplFacade() ;
     };
   
   
