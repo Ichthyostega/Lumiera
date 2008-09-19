@@ -20,18 +20,20 @@
 */
 
 #include "lib/interface.h"
+#include "backend/interfaceregistry.h"
+//#include "lib/interfacedescriptor.h"
 #include "tests/test.h"
 
 /*
   define 2 example interfaces
  */
 
-LUMIERA_INTERFACE_DECLARE (example1, 0,
+LUMIERA_INTERFACE_DECLARE (lumieraorg_testexample_one, 0,
                            LUMIERA_INTERFACE_SLOT (void, foo1, (const char*)),
                            LUMIERA_INTERFACE_SLOT (void, bar1, (const char*)),
 );
 
-LUMIERA_INTERFACE_DECLARE (example2, 0,
+LUMIERA_INTERFACE_DECLARE (lumieraorg_testexample_two, 0,
                            LUMIERA_INTERFACE_SLOT (void, foo2, (const char*)),
                            LUMIERA_INTERFACE_SLOT (void, bar2, (const char*)),
 );
@@ -53,8 +55,8 @@ testfunc (const char* message)
   implementation of some example interfaces
  */
 
-LUMIERA_INTERFACE_INSTANCE (example1, 0,
-                            example1_standalone_implementation,
+LUMIERA_INTERFACE_INSTANCE (lumieraorg_testexample_one, 0,
+                            lumieraorg_standalone_test,
                             NULL,
                             NULL,
                             NULL,
@@ -70,8 +72,8 @@ LUMIERA_INTERFACE_INSTANCE (example1, 0,
 
 
 LUMIERA_EXPORT (interfaces_defined_here,
-                LUMIERA_INTERFACE_DEFINE (example1, 0,
-                                          example1_implementation,
+                LUMIERA_INTERFACE_DEFINE (lumieraorg_testexample_one, 0,
+                                          lumieraorg_first_test,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -80,8 +82,8 @@ LUMIERA_EXPORT (interfaces_defined_here,
                                           LUMIERA_INTERFACE_MAP (bar1, "\262\253\067\211\157\052\212\140\114\334\231\250\340\075\214\030",
                                                                  testfunc)
                                           ),
-                LUMIERA_INTERFACE_DEFINE (example2, 0,
-                                          example2_implementation,
+                LUMIERA_INTERFACE_DEFINE (lumieraorg_testexample_two, 0,
+                                          lumieraorg_second_test,
                                           NULL,
                                           NULL,
                                           NULL,
@@ -97,7 +99,31 @@ TESTS_BEGIN
 
 TEST ("basic")
 {
-  interfaces_defined_here();
+  lumiera_interfaceregistry_init ();
+
+  lumiera_interfaceregistry_bulkregister_interfaces (interfaces_defined_here());
+
+
+  /* some ugly lowlevel handling tests */
+
+  LumieraInterface handle1 =
+    lumiera_interfaceregistry_interface_find ("lumieraorg_testexample_one", 0, "lumieraorg_first_test");
+
+  (LUMIERA_INTERFACE_CAST(lumieraorg_testexample_one, 0)handle1)->bar1 ("this is bar1");
+
+
+  LUMIERA_INTERFACE_TYPE(lumieraorg_testexample_two, 0)* handle2 = LUMIERA_INTERFACE_CAST(lumieraorg_testexample_two, 0)
+    lumiera_interfaceregistry_interface_find ("lumieraorg_testexample_two", 0, "lumieraorg_second_test");
+
+  handle2->foo2 ("this is foo2");
+
+  /* higher level, WIP */
+
+  LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_two, 0, 0, lumieraorg_second_test, handle3);
+  handle3->bar2 ("this is bar2");
+
+  lumiera_interfaceregistry_bulkremove_interfaces (interfaces_defined_here());
+  lumiera_interfaceregistry_destroy ();
 }
 
 TEST ("basic")
