@@ -144,6 +144,10 @@
 #define PPMPL_CAT(a,b) PPMPL_CAT_(a,b)
 #define PPMPL_CAT_(a,b) a##b
 
+
+#define PPMPL_STRINGIFY(a) PPMPL_STRINGIFY_(a)
+#define PPMPL_STRINGIFY_(a) #a
+
 #endif
 /*
 // Local Variables:
