@@ -28,6 +28,7 @@ liblumibackend_a_SOURCES =					\
 	$(liblumibackend_a_srcdir)/filehandle.c			\
 	$(liblumibackend_a_srcdir)/filedescriptor.c		\
 	$(liblumibackend_a_srcdir)/filehandlecache.c		\
+	$(liblumibackend_a_srcdir)/interfaceregistry.c		\
 	$(liblumibackend_a_srcdir)/config.c			\
 	$(liblumibackend_a_srcdir)/config_typed.c 		\
 	$(liblumibackend_a_srcdir)/config_wordlist.c 		\
@@ -44,6 +45,7 @@ noinst_HEADERS +=						\
 	$(liblumibackend_a_srcdir)/filehandle.h			\
 	$(liblumibackend_a_srcdir)/filedescriptor.h		\
 	$(liblumibackend_a_srcdir)/filehandlecache.h		\
+	$(liblumibackend_a_srcdir)/interfaceregistry.h		\
 	$(liblumibackend_a_srcdir)/config.h 			\
 	$(liblumibackend_a_srcdir)/configentry.h 		\
 	$(liblumibackend_a_srcdir)/configitem.h 		\
