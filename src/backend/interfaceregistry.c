@@ -80,7 +80,6 @@ lumiera_interfacenode_delete (LumieraInterfacenode self)
 }
 
 
-
 /**
  * Initialize the interface registry
  */
