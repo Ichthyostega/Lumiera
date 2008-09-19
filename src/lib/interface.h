@@ -95,7 +95,7 @@
  * @param name name of the interface
  * @param version major version of this interface
  */
-#define LUMIERA_INTERFACE_INAME(name, version) lumiera_interface_##name##_##version
+#define LUMIERA_INTERFACE_INAME(name, version) name##_##version
 
 /**
  * Construct a definition identifier for an interface
@@ -103,7 +103,7 @@
  * @param dname name for the instance
  * @param version major version of the interface
  */
-#define LUMIERA_INTERFACE_DNAME(iname, dname, version) lumiera_##dname##_##version##_interface
+#define LUMIERA_INTERFACE_DNAME(iname, dname, version) PPMPL_CAT (LUMIERA_INTERFACE_INAME(name, version), _##dname)
 
 /**
  * Construct the type of the interface
@@ -167,20 +167,21 @@ LUMIERA_INTERFACE_TYPE(name, version)                   \
  * @param release a function which is called whenever this interface is closed after use, might be NULL
  * @param ... map functions to interface slots @see LUMIERA_INTERFACE_MAP
  */
-#define LUMIERA_INTERFACE_INSTANCE(iname, version, name, descriptor, acquire, release, ...)             \
-PPMPL_FOREACH(_P1_, __VA_ARGS__)                                                                        \
-LUMIERA_INTERFACE_TYPE(iname, version) LUMIERA_INTERFACE_DNAME(iname, name, version) =                  \
-{                                                                                                       \
-  {                                                                                                     \
-    PSPLAYNODE_INITIALIZER,                                                                             \
-    #name,                                                                                              \
-    version,                                                                                            \
-    sizeof (LUMIERA_INTERFACE_TYPE(iname, version)),                                                    \
-    descriptor,                                                                                         \
-    acquire,                                                                                            \
-    release                                                                                             \
-  },                                                                                                    \
-  PPMPL_FOREACH(_P2_, __VA_ARGS__)                                                                      \
+#define LUMIERA_INTERFACE_INSTANCE(iname, version, name, descriptor, acquire, release, ...)     \
+PPMPL_FOREACH(_P1_, __VA_ARGS__)                                                                \
+LUMIERA_INTERFACE_TYPE(iname, version) LUMIERA_INTERFACE_DNAME(iname, name, version) =          \
+{                                                                                               \
+{                                                                                               \
+  PSPLAYNODE_INITIALIZER,                                                                       \
+  #iname,                                                                                       \
+  version,                                                                                      \
+  #name,                                                                                        \
+  sizeof (LUMIERA_INTERFACE_TYPE(iname, version)),                                              \
+  descriptor,                                                                                   \
+  acquire,                                                                                      \
+  release                                                                                       \
+},                                                                                              \
+PPMPL_FOREACH(_P2_, __VA_ARGS__)                                                                \
 }
 
 
@@ -283,8 +284,8 @@ queryfunc (void)                                                        \
  */
 #define LUMIERA_PLUGIN(descriptor, acquire, release, luid, ...)                                 \
 LUMIERA_EXPORT(plugin_interfaces, __VA_ARGS__)                                                  \
-LUMIERA_INTERFACE_DEFINE (plugin, 0,                                                            \
-                          lumiera_plugin,                                                       \
+LUMIERA_INTERFACE_DEFINE (lumieraorg_plugin, 0,                                                 \
+                          lumieraorg_plugin_0,                                                  \
                           NULL,                                                                 \
                           NULL,                                                                 \
                           NULL,                                                                 \
@@ -292,15 +293,13 @@ LUMIERA_INTERFACE_DEFINE (plugin, 0,                                            
                           )
 
 
+
 /**
- * Calls a function in interface
- * @param name name of the interface
- * @param version version of the interface
- * @param handle pointer to the interface (LumieraInterface)
- * @param slot name of the slot to be called
+ * create a handle for a interface (WIP)
  */
-#define LUMIERA_INTERFACE_CALL(name, version, handle, slot) \
-  (LUMIERA_INTERFACE_CAST(name, version) handle)->slot
+#define  LUMIERA_INTERFACE_HANDLE(interface, version, reserved, name, handle) \
+  LUMIERA_INTERFACE_TYPE(interface, version)* handle = LUMIERA_INTERFACE_CAST(interface, 0) \
+    lumiera_interfaceregistry_interface_find (#interface, version, #name);
 
 
 typedef struct lumiera_interfaceslot_struct lumiera_interfaceslot;
@@ -328,10 +327,16 @@ struct lumiera_interface_struct
 {
   /** all known interfaces are registered in a tree */
   psplaynode node;
-  /** name of the interface */
-  const char* name;
+
+  /** name of the interface (type) */
+  const char* interface;
+
   /** major version, 0 means experimental */
   unsigned version;
+
+  /** name of this instance */
+  const char* name;
+
   /** size of the whole interface structure (minor version) */
   size_t size;
 
