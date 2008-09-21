@@ -267,18 +267,18 @@ LUMIERA_INTERFACE_INSTANCE (iname, version,                                     
  * @param queryfunc name of the function to be created.
  * @param ... list of LUMIERA_INTERFACE_DEFINE() for all interfaces this plugin provides.
  */
-#define LUMIERA_EXPORT(queryfunc, ...)                                  \
-PPMPL_FOREACH_L1(_P1_, __VA_ARGS__)                                     \
-static const LumieraInterface*                                          \
-queryfunc (void)                                                        \
-{                                                                       \
- static const LumieraInterface interfaces[] =                           \
-  {                                                                     \
-    PPMPL_FOREACH_L1(_P2_, __VA_ARGS__)                                 \
-    NULL                                                                \
-  };                                                                    \
-  return interfaces;                                                    \
-}                                                                       \
+#define LUMIERA_EXPORT(queryfunc, ...)          \
+PPMPL_FOREACH_L1(_P1_, __VA_ARGS__)             \
+static LumieraInterface*                        \
+queryfunc (void)                                \
+{                                               \
+ static LumieraInterface interfaces[] =         \
+  {                                             \
+    PPMPL_FOREACH_L1(_P2_, __VA_ARGS__)         \
+    NULL                                        \
+  };                                            \
+  return interfaces;                            \
+}
 
 
 /**
