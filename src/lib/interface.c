@@ -28,19 +28,19 @@
 
 
 LumieraInterface
-lumiera_interface_acquire (LumieraInterface self)
+lumiera_interface_acquire (LumieraInterface self, int weak)
 {
   if (self && self->acquire)
-    return self->acquire (self);
+    return self->acquire (self, weak);
 
   return self;
 }
 
 void
-lumiera_interface_release (LumieraInterface self)
+lumiera_interface_release (LumieraInterface self, int weak)
 {
   if (self && self->release)
-    self->release (self);
+    self->release (self, weak);
 }
 
 

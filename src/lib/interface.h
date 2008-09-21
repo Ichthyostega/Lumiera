@@ -354,10 +354,21 @@ struct lumiera_interface_struct
   /** metadata descriptor, itself a interface (or NULL) */
   LumieraInterface descriptor;
 
-  /** must be called before this interface is used, might be nested */
-  LumieraInterface (*acquire)(LumieraInterface self);
-  /** called when finished with this interface, must match the acquire calls */
-  void (*release)(LumieraInterface self);
+  /**
+   * Must be called before this interface is used.
+   * might be nested.
+   * @param self pointer to the interface to be acquired
+   * @param weak indicates a weak aquisition when this is not null. Used to resolve aquisition for cross dependencies
+   * @return pointer to the interface or NULL on error
+   */
+  LumieraInterface (*acquire)(LumieraInterface self, int weak);
+  /**
+   * called when finished using this interface
+   * must match the acquire calls
+   * @param self pointer to the interface to be released
+   * @param weak indicates a weak release, must be the same value as used for the acquire function
+   */
+  void (*release)(LumieraInterface self, int weak);
 
 #ifndef __cplusplus
   /** placeholder array for the following function slots, C++ doesn't support flexible arrays */
@@ -370,10 +381,10 @@ struct lumiera_interface_struct
  */
 
 LumieraInterface
-lumiera_interface_acquire (LumieraInterface self);
+lumiera_interface_acquire (LumieraInterface self, int weak);
 
 void
-lumiera_interface_release (LumieraInterface self);
+lumiera_interface_release (LumieraInterface self, int weak);
 
 
 #endif /* LUMIERA_INTERFACE_H */
