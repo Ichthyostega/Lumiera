@@ -100,10 +100,21 @@
 /**
  * Construct a definition identifier for an interface
  * @param iname name of the interface
- * @param dname name for the instance
  * @param version major version of the interface
+ * @param dname name for the instance
  */
-#define LUMIERA_INTERFACE_DNAME(iname, dname, version) PPMPL_CAT (LUMIERA_INTERFACE_INAME(name, version), _##dname)
+#define LUMIERA_INTERFACE_DNAME(iname, version, dname) PPMPL_CAT (LUMIERA_INTERFACE_INAME(iname, version), _##dname)
+
+
+/**
+ * Return a reference (pointer) to an interface implementation
+ * @param iname name of the interface
+ * @param version major version of the interface
+ * @param dname name for the instance
+ */
+#define LUMIERA_INTERFACE_REF(iname, version, dname) \
+  (LumieraInterface)&LUMIERA_INTERFACE_DNAME(iname, version, dname)
+
 
 /**
  * Construct the type of the interface
@@ -169,7 +180,7 @@ LUMIERA_INTERFACE_TYPE(name, version)                   \
  */
 #define LUMIERA_INTERFACE_INSTANCE(iname, version, name, descriptor, acquire, release, ...)     \
 PPMPL_FOREACH(_P1_, __VA_ARGS__)                                                                \
-LUMIERA_INTERFACE_TYPE(iname, version) LUMIERA_INTERFACE_DNAME(iname, name, version) =          \
+LUMIERA_INTERFACE_TYPE(iname, version) LUMIERA_INTERFACE_DNAME(iname, version, name) =          \
 {                                                                                               \
 {                                                                                               \
   PSPLAYNODE_INITIALIZER,                                                                       \
@@ -244,7 +255,7 @@ LUMIERA_INTERFACE_INSTANCE (iname, version,                                     
 
 
 #define PPMPL_FOREACH_L1_P2_LUMIERA_INTERFACE_DEFINE(iname, version, name, descriptor, acquire, release, ...)     \
-  &LUMIERA_INTERFACE_DNAME(iname, name, version).interface_header_,
+  &LUMIERA_INTERFACE_DNAME(iname, version, name).interface_header_,
 
 
 /**
