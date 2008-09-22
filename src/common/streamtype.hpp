@@ -92,11 +92,6 @@ namespace lumiera {
   
   
 
-  /** 
-   * placeholder definition for the contents of a data buffer
-   */
-  struct DataBuffer { };
-  
   
   /**
    * A (more or less) concrete implementation type, wired up
@@ -106,6 +101,13 @@ namespace lumiera {
     {
     public:
       Symbol libraryID;
+      
+      /** placeholder definition for implementation specific type information */
+      struct TypeTag { };
+      
+      /** placeholder definition for the contents of a data buffer */
+      struct DataBuffer { };
+  
       
       virtual bool operator== (ImplFacade const& other)  const =0;
       virtual bool operator== (StreamType const& other)  const =0;
@@ -147,6 +149,8 @@ namespace lumiera {
        *  as well as to the additional constraints (e.g. frame size).
        *  Create a new framebuffer of the resutling type */
       virtual DataBuffer* createFrame (ImplConstraint const& furtherConstraints)  const =0;
+      
+      //TODO: do we need functions to represent and describe this constraint?
       
     };
     

@@ -53,7 +53,7 @@ namespace engine {
    */
   struct BuffHandle
     {
-      typedef lumiera::DataBuffer Buff;
+      typedef lumiera::StreamType::ImplFacade::DataBuffer Buff;
       typedef Buff* PBuff;//////TODO define the Buffer type(s)
       
       PBuff 

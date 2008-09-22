@@ -1,5 +1,5 @@
 /*
-  STYPEMANAGER.hpp  -  entry point for dealing with media stream types
+  MEDIAIMPLLIB.hpp  -  interface providing a facade to an media handling library
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,8 @@
 */
 
 
-#ifndef CONTROL_STYPEMANAGER_H
-#define CONTROL_STYPEMANAGER_H
+#ifndef CONTROL_MEDIAIMPLLIB_H
+#define CONTROL_MEDIAIMPLLIB_H
 
 
 #include "common/streamtype.hpp"
@@ -34,27 +34,21 @@ namespace control {
   using lumiera::Symbol;
   
   
-  class STypeManager
+  class MediaImplLib
     {
     protected:
-      virtual ~STypeManager() {};
+      virtual ~MediaImplLib() {};
       
+      typedef lumiera::StreamType::ImplFacade ImplFacade;
+      typedef lumiera::StreamType::ImplFacade::TypeTag TypeTag;
+      typedef lumiera::StreamType::ImplFacade::DataBuffer DataBuffer;
       
     public:
-      lumiera::StreamType const& getType (Symbol sTypeID) ;
+      virtual Symbol getLibID()  const =0;
       
-      
-      ////////////////TODO: Mechanismus erfinden, mit dem sich MediaImplLib-Instanzen einklinken können....
+      virtual ImplFacade const&  getImplFacade (TypeTag*) =0;
     };
   
   
 } // namespace control
-
-
-namespace proc_interface {
-  
-  using control::STypeManager;
-
-
-} // namespace proc_interface
 #endif
