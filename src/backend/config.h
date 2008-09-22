@@ -217,7 +217,6 @@ lumiera_config_setdefault (const char* line);
 LUMIERA_CONFIG_TYPES
 #undef LUMIERA_CONFIG_TYPE
 
-
 /**
  * Wordlists
  * Wordlists are lists of single words delimited by any of " \t,;".
