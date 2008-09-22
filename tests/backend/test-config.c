@@ -287,4 +287,25 @@ TEST ("configitem_simple_content_check")
   lumiera_config_destroy ();
 }
 
+
+TEST ("wordlist_get_nth")
+{
+  REQUIRE (argv[2]);
+  REQUIRE (argv[3]);
+  REQUIRE (argv[4]);
+
+  lumiera_config_init ("./");
+
+  if (!lumiera_config_wordlist_set (argv[2], &argv[3]))
+    printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
+
+  const char* word = lumiera_config_wordlist_get_nth (argv[2], atoi (argv[4]));
+
+  printf ("'%s'\n", word?word:"NULL");
+
+  lumiera_config_destroy ();
+}
+
+
+
 TESTS_END

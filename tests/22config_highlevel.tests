@@ -192,3 +192,25 @@ out: item->key_size = '7'
 out: item->key = 'key.foo 		<	key.bar'
 out: item->delim = '<	key.bar'
 END
+
+
+TEST "wordlist get item from empty list should fail" wordlist_get_nth 'foo.bar' '' 0 << END
+out: 'NULL'
+END
+
+TEST "wordlist get item past end should fail" wordlist_get_nth 'foo.bar' 'baz barf gnarf' 3 << END
+out: 'NULL'
+END
+
+TEST "wordlist get first item" wordlist_get_nth 'foo.bar' 'baz barf gnarf' 0 << END
+out: 'baz'
+END
+
+TEST "wordlist get last item" wordlist_get_nth 'foo.bar' 'baz barf; gnarf' 2 << END
+out: 'gnarf'
+END
+
+TEST "wordlist get middle" wordlist_get_nth 'foo.bar' 'baz barf, gnarf' 1 << END
+out: 'barf'
+END
+

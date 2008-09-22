@@ -96,6 +96,7 @@ typedef lumiera_config* LumieraConfig;
   LUMIERA_CONFIG_TYPE(number, signed long long) \
   LUMIERA_CONFIG_TYPE(real, long double)        \
   LUMIERA_CONFIG_TYPE(string, const char*)      \
+  LUMIERA_CONFIG_TYPE(wordlist, const char*)    \
   LUMIERA_CONFIG_TYPE(word, const char*)        \
   LUMIERA_CONFIG_TYPE(bool, int)
 
@@ -223,7 +224,11 @@ lumiera_config_setdefault (const char* line);
 LUMIERA_CONFIG_TYPES
 #undef LUMIERA_CONFIG_TYPE
 
-
+/**
+ * special functions for accessing wordlists
+ */
+const char*
+lumiera_config_wordlist_get_nth (const char* key, unsigned nth);
 
 //  * {{{ lumiera_config_TYPE_set (const char* key, TYPE*value, const char* fmt) }}}
 //    Highlevel interface for different types, fmt is a printf format specifier for the desired format, when NULL, defaults apply.

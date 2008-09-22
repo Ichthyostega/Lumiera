@@ -30,6 +30,7 @@ liblumibackend_a_SOURCES =					\
 	$(liblumibackend_a_srcdir)/filehandlecache.c		\
 	$(liblumibackend_a_srcdir)/config.c			\
 	$(liblumibackend_a_srcdir)/config_typed.c 		\
+	$(liblumibackend_a_srcdir)/config_wordlist.c 		\
 	$(liblumibackend_a_srcdir)/configentry.c 		\
 	$(liblumibackend_a_srcdir)/configitem.c 		\
 	$(liblumibackend_a_srcdir)/config_lookup.c
