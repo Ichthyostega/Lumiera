@@ -27,9 +27,10 @@
 namespace lumiera
   {
 
-   /** */
-   StreamType::ImplFacade::~ImplFacade() 
-   { }
+   /** @internal defined here non-inline place the vtable in this object file.*/
+   StreamType::ImplFacade::ImplFacade (Symbol libID)
+     : libraryID(libID)
+     { }
 
   
 

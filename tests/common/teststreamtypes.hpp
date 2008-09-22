@@ -38,7 +38,7 @@ namespace lumiera {
     /** Helper: create an implementation frame
      *  and build the corresponding streamtype
      */
-    inline StreamType::ImplFacade
+    inline StreamType::ImplFacade&
     createImplType ()
     {
       UNIMPLEMENTED ("create a test stream type from a given GAVL type tag");

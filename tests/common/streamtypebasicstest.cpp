@@ -50,7 +50,7 @@ namespace lumiera {
         
         void buildImplType ()
           {
-            StreamType::ImplFacade iType = createImplType ();
+            StreamType::ImplFacade& iType = createImplType ();
             
             UNIMPLEMENTED ("get a lib descriptor"); 
             UNIMPLEMENTED ("check the lib of the type"); 

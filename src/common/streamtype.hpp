@@ -107,15 +107,18 @@ namespace lumiera {
     public:
       Symbol libraryID;
       
-      virtual bool operator== (ImplFacade const& other)  const;
-      virtual bool operator== (StreamType const& other)  const;
+      virtual bool operator== (ImplFacade const& other)  const =0;
+      virtual bool operator== (StreamType const& other)  const =0;
       
-      virtual bool canConvert (ImplFacade const& other)  const;
-      virtual bool canConvert (StreamType const& other)  const;
+      virtual bool canConvert (ImplFacade const& other)  const =0;
+      virtual bool canConvert (StreamType const& other)  const =0;
       
-      virtual DataBuffer* createFrame ()  const;
+      virtual DataBuffer* createFrame ()  const =0;
       
-      virtual ~ImplFacade() ;
+      virtual ~ImplFacade() {};
+      
+    protected:
+      ImplFacade (Symbol libID) ;
     };
   
   
@@ -128,22 +131,22 @@ namespace lumiera {
     public:
       Symbol libraryID;
       
-      virtual bool canConvert (ImplFacade const& other)  const;
-      virtual bool canConvert (StreamType const& other)  const;
+      virtual bool canConvert (ImplFacade const& other)  const =0;
+      virtual bool canConvert (StreamType const& other)  const =0;
       
-      virtual bool subsumes (ImplFacade const& other)  const;
+      virtual bool subsumes (ImplFacade const& other)  const   =0;
       
       /** modify the other impl type such as to comply with this constraint */
-      virtual void makeCompliant (ImplFacade & other)  const;
+      virtual void makeCompliant (ImplFacade & other)  const   =0;
       
       /** create a default impl type in accordance to this constraint
        *  and use it to create a new framebuffer */
-      virtual DataBuffer* createFrame ()  const;
+      virtual DataBuffer* createFrame ()  const =0;
 
       /** similarily create a impl type which complies to this constraint
        *  as well as to the additional constraints (e.g. frame size).
        *  Create a new framebuffer of the resutling type */
-      virtual DataBuffer* createFrame (ImplConstraint const& furtherConstraints)  const;
+      virtual DataBuffer* createFrame (ImplConstraint const& furtherConstraints)  const =0;
       
     };
     
