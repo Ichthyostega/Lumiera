@@ -21,12 +21,48 @@
 * *****************************************************/
 
 
+#include "proc/lumiera.hpp"
 #include "proc/control/stypemanager.hpp"
 
 namespace control {
   
+  using lumiera::StreamType;
+  
   
   /** */
+  StreamType const&
+  STypeManager::getType (Symbol sTypeID) 
+  {
+    UNIMPLEMENTED ("get type just by symbolic ID (query defaults manager)");
+  }
+  
+  
+  StreamType const& 
+  STypeManager::getType (StreamType::Prototype const& protoType)
+  {
+    UNIMPLEMENTED ("build complete StreamType based on prototype; may include querying defaults manager");
+  }
+  
+  
+  StreamType const&
+  STypeManager::getType (StreamType::ImplFacade const& implType)
+  {
+    UNIMPLEMENTED ("build complete StreamType round the given implementation type");
+  }
+  
+  
+  StreamType::ImplFacade const&
+  STypeManager::getImpl (Symbol libID, StreamType::Prototype const& protoType)
+  {
+    UNIMPLEMENTED ("wire up implementation in compliance to a prototype and using a specific MediaImplLib. really tricky.... ");
+  }
+  
+  
+  StreamType::ImplFacade const&
+  STypeManager::getImpl (Symbol libID, StreamType::ImplFacade::TypeTag rawType)
+  {
+    UNIMPLEMENTED ("STypeManager basic functionality: wire up implementation facade (impl type) from given raw type of the library");
+  }
   
   
   

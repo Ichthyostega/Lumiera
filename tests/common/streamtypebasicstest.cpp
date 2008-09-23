@@ -46,9 +46,19 @@ namespace lumiera {
         virtual void run (Arg arg)
           {
             buildImplType ();
+            basicImplTypeProperties ();
           }
         
         void buildImplType ()
+          {
+            UNIMPLEMENTED ("Access/Factory for the STypeManager??");
+            TODO ("set up a GAVL frame type");
+            TODO ("use this to retrieve an ImplFacade from the STypeManager");
+            UNIMPLEMENTED ("at least preliminary implementation of the MediaImplLib interface for lib GAVL");
+            TODO ("how to do a simple consistency check on the returned ImplFacade? can we re-create the GAVL frame type?");
+          }
+        
+        void basicImplTypeProperties ()
           {
             StreamType::ImplFacade& iType = createImplType ();
             

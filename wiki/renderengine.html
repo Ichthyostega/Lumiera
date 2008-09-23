@@ -1058,7 +1058,7 @@ As we don't have a Prolog interpreter on board yet, we utilize a mock store with
 {{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding a exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one soltution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
 &amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
-<div title="DesignDecisions" modifier="Ichthyostega" modified="200805300045" created="200801062209" tags="decision design discuss" changecount="18">
+<div title="DesignDecisions" modifier="Ichthyostega" modified="200809230234" created="200801062209" tags="decision design discuss" changecount="20">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
 
 ''Everything is an object'' &amp;mdash; of course, that's a //no-brainer // todays. Rather, important is what is not &quot;an object&quot;, meaning it can't be arranged arbitrarily
@@ -1072,6 +1072,10 @@ We ''separate'' processing (rendering) and configuration (building). We have a [
 An [[EDL]] is just a collection of configured and placed objects (and has no additional, fixed structure). [[Tracks|Track]] form a mere organisational grid, they are grouping devices not first-class entities (a track doesn't &quot;have&quot; a pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements though). [[Pipes|Pipe]] are hooks for making connections and are the only facility to build processing chains. We have global pipes, and each clip is built around a lokal [[source port|ClipSourcePort]] &amp;mdash; and that's all. No special &quot;media viewer&quot; and &quot;arranger&quot;, no special role for media sources, no commitment to some fixed media stream types (video and audio). All of this is sort of pushed down to be configuration, represented as asset of some kind. For example, we have [[processing pattern|ProcPatt]] assets to represent the way of building the source network for reading from some media file (including codecs treated like effect plugin nodes)
 
 ''State'' is rigorously ''externalized'' and operations are to be ''scheduled'', to simplify locking and error handling. State is either treated similar to media stream data (as addressable and cacheable data frame), or is represented as &quot;parameter&quot; to be served by some [[parameter provider|ParamProvider]]. Consequently, [[Automation]] is just another kind of parameter, i.e. a function &amp;mdash; how this function is calculated is an encapsulated implementation detail (we don't have &quot;bezier automation&quot;, and then maybe a &quot;linear automation&quot;, a &quot;mask automation&quot; and yet another way to handle transitions)
+
+Deliberately there is an limitaion on the flexibility of what can be added to the system via Plugins. We allow configuration and parametrisation to be extended and we allow processing and data handling to be extended, but we disallow extensions to the fundamental structure of the system by plugins. They may provide new implementations for already known subsystems, but they can't introduce new subsystems not envisioned in the general design of the application.
+* thus fixed assortments include: the possbile kinds of MObject and [[Asset]], the possible automation parameter data types, the supported kinds of plugin systems
+* while plugins may extend: the supported kinds of media, the [[media handling libraries|MediaImplLib]] used to deal with those media, the session storage backends, the behaviour of placments
 </pre>
 </div>
 <div title="DesignGoals" modifier="Ichthyostega" modified="200805300046" created="200706210557" tags="design" changecount="20">
@@ -1837,7 +1841,7 @@ __5/2008__: the allocation mechanism can surely be improved later, but for now I
 &amp;rarr; see also LoadingMedia
 </pre>
 </div>
-<div title="MediaImplLib" modifier="Ichthyostega" modified="200809220309" created="200809220304" tags="def spec" changecount="2">
+<div title="MediaImplLib" modifier="Ichthyostega" modified="200809230221" created="200809220304" tags="def spec" changecount="3">
 <pre>The Proc-Layer is designed such as to avoid unnecessary assumptions regarding the properties of the media data and streams. Thus, for anything which is not completely generic, we rely on an abstract [[type description|StreamTypeDescriptor]], which provides a ''Facade'' to an actual library implementation. This way, the fundamental operations can be invoked, like allocating a buffer to hold media data.
 
 In the context of Lumiera and especially in the Proc-Layer, __media implementation library__ means
@@ -1849,7 +1853,8 @@ In the context of Lumiera and especially in the Proc-Layer, __media implementati
 * such a link to an type implementation is registered and maintained by the [[stream type manager|STypeManager]]
 
 !Problem of the implementation data types
-Because we deliberately won't make any asumptions about the implementation library (besides the ones imposed indirectly by the facade interface), we can't integrate the data types of the library first class into the type system. All we can do is to use marker types and rely on the builder to have checked the compatibility of the actual data beforehand.
+Because we deliberately won't make any asumptions about the implementation library (besides the ones imposed indirectly by the facade interface), we can't integrate the data types of the library first class into the type system. All we can do is to use marker types and rely on the builder to have checked the compatibility of the actual data beforehand. 
+It would be possible to circumvent this problem by requiring all supported implementation libraries to be known at compile time, because then the actual media implementation type could be linked to a facade type by generic programming. Indeed, Lumiera follows this route with regards to the possible kinds of MObject or [[Asset]] &amp;mdash; but here to the contraty, being able to include support for a new media data type just by adding a plugin by far outweights the benefits of compile-time checked implementation type selection. So, as a consequence of this design decision we //note the possibility of the media file type discovery code to be misconfigured// and select the //wrong implementation library at runtime.// And thus the render engine needs to be prepared for the source reading node of any pipe to flounder completely, and protect the rest of the system accordingly
 </pre>
 </div>
 <div title="MemoryManagement" modifier="Ichthyostega" modified="200808110208" created="200708100225" tags="impl decision discuss" changecount="14">
@@ -3411,7 +3416,7 @@ An implementation constraint can //stand-in// for a completely specified impleme
 &amp;rarr; see also &amp;raquo;[[Stream Type|StreamType]]&amp;laquo;
 </pre>
 </div>
-<div title="StreamTypeUse" modifier="Ichthyostega" modified="200809220249" created="200809130312" tags="draft discuss dynamic" changecount="16">
+<div title="StreamTypeUse" modifier="Ichthyostega" modified="200809230152" created="200809130312" tags="draft discuss dynamic" changecount="19">
 <pre>Questions regarding the use of StreamType within the Proc-Layer.
 
 * what is the relation between Buffer and Frame?
@@ -3447,6 +3452,8 @@ To open the file, we need //type discovery code,// resulting in a handle to some
 * an ~ImplFacade
 * a Prototype
 * maybe even from some generic textual ~IDs?
+Together this allows to associate a StreamType to each media source, and thus to derive the Prototype governing the immediately connected [[Pipe]]
+A pipe can by design handle data of one Prototype solely.
 
 !! wiring problems
 When deciding if a connection can be made, we can build up the type information starting out from the source. (this requires some work, but it's //possible,// generally speaking.). Thus, we can allways get an ~ImplType for the &quot;lower end&quot; of the connection, and at least a Prototype for the &quot;output side&quot; &amp;mdash; which should be enough to use the query functions provided by the stream type interfaces
