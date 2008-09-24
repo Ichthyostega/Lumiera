@@ -21,6 +21,11 @@ out: delim = '='
 out: value = ' baz'
 END
 
+TEST "reset a value" change_value foo.bar '=foo' '=bar' <<END
+out: foo
+out: bar
+END
+
 TEST "create configitem with empty line" configitem_simple_ctor_dtor '' <<END
 END
 

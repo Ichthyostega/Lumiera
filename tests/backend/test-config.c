@@ -83,6 +83,36 @@ TEST ("lookup")
 }
 
 
+TEST ("change_value")
+{
+  REQUIRE (argv[2]);
+  REQUIRE (argv[3]);
+  REQUIRE (argv[4]);
+
+  lumiera_config_init ("./");
+  const char* value;
+
+  if (!lumiera_config_set (argv[2], argv[3]))
+    printf ("failure setting first time '%s%s': %s\n", argv[2], argv[3], lumiera_error ());
+
+  if (lumiera_config_get (argv[2], &value))
+    printf ("%s\n", value);
+  else
+    printf ("failure retrieving '%s': %s\n", argv[2], lumiera_error ());
+
+  if (!lumiera_config_set (argv[2], argv[4]))
+    printf ("failure setting second time '%s%s': %s\n", argv[2], argv[4], lumiera_error ());
+
+  if (lumiera_config_get (argv[2], &value))
+    printf ("%s\n", value);
+  else
+    printf ("failure retrieving '%s': %s\n", argv[2], lumiera_error ());
+
+  lumiera_config_destroy ();
+}
+
+
+
 TEST ("basic_set_get")
 {
   REQUIRE (argv[2]);
