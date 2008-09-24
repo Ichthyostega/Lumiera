@@ -34,10 +34,10 @@ using std::cout;
 
 namespace lumiera {
   namespace test {
-
+    
     using control::STypeManager;
-  
-
+    
+    
     /*******************************************************************
      * @test check the basic workings of the stream type handling.
      *       create some stream implementation data, build a 
@@ -72,9 +72,9 @@ namespace lumiera {
           }
       };
     
-      LAUNCHER (StreamTypeBasics_test, "unit common");
-
-      
+    LAUNCHER (StreamTypeBasics_test, "unit common");
+    
+    
   } // namespace test
     
 } // namespace lumiera

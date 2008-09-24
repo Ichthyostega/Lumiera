@@ -284,6 +284,10 @@ PLANNED "StreamTypeBasics_test" StreamTypeBasics_test <<END
 END
 
 
+PLANNED "StreamTypeLifecycle_test" StreamTypeLifecycle_test <<END
+END
+
+
 TEST "TestOption_test" TestOption_test <<END
 out: Testing invocation with cmdline: ...
 out: --> Testgroup=ALL
