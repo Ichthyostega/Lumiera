@@ -23,11 +23,52 @@
 
 #include "proc/lumiera.hpp"
 #include "proc/control/stypemanager.hpp"
+#include "proc/control/styperegistry.hpp"
+
 
 namespace control {
   
   using lumiera::StreamType;
+  using lumiera::Symbol;
   
+  /* ======= stream type manager lifecycle ==========*/
+  
+  
+  STypeManager::STypeManager()
+    : reg_(0)
+  { 
+    reset();
+  }
+  
+  STypeManager::~STypeManager()
+  { }
+  
+  /** access the system-wide stream type manager instance.
+   *  Implemented as singleton. */
+  lumiera::Singleton<STypeManager> STypeManager::instance;
+  
+  
+  void 
+  STypeManager::reset() 
+  {
+    reg_.reset(new Registry);
+    lumiera::Appconfig::lifecycle(ON_STREAMTYPES_RESET);
+  }
+  
+  /** \par 
+   *  LifecycleHook, on which all the basic setup and configuration
+   *  providing the pristine state of the stream type system has to be registered.
+   *  @note plugins providing additional streamtype configuration should register
+   *        their basic setup functions using this hook, which can be done via
+   *        the C interface functions 
+   */
+  Symbol ON_STREAMTYPES_RESET ("ON_STREAMTYPES_RESET");
+
+
+  
+  
+  
+  /* ======= implementation of the public interface ========= */
   
   /** */
   StreamType const&
@@ -67,3 +108,12 @@ namespace control {
   
   
 } // namespace control
+
+
+// ==== C interface for registering setup of basic stream type configuration =======
+
+void 
+lumiera_StreamType_registerInitFunction (void setupFun(void))
+{
+  lumiera::LifecycleHook (control::ON_STREAMTYPES_RESET, setupFun);
+}

@@ -24,6 +24,7 @@
 #include "common/test/run.hpp"
 #include "common/util.hpp"
 
+#include "proc/control/stypemanager.hpp"
 #include "teststreamtypes.hpp"
 
 #include <iostream>
@@ -33,7 +34,9 @@ using std::cout;
 
 namespace lumiera {
   namespace test {
-    
+
+    using control::STypeManager;
+  
 
     /*******************************************************************
      * @test check the basic workings of the stream type handling.
@@ -51,7 +54,8 @@ namespace lumiera {
         
         void buildImplType ()
           {
-            UNIMPLEMENTED ("Access/Factory for the STypeManager??");
+            STypeManager& typeManager = STypeManager::instance();
+        
             TODO ("set up a GAVL frame type");
             TODO ("use this to retrieve an ImplFacade from the STypeManager");
             UNIMPLEMENTED ("at least preliminary implementation of the MediaImplLib interface for lib GAVL");

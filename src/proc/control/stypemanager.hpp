@@ -26,7 +26,9 @@
 
 
 #include "common/streamtype.hpp"
+#include "common/singleton.hpp"
 
+#include <boost/scoped_ptr.hpp>
 
 
 namespace control {
@@ -38,7 +40,12 @@ namespace control {
   class STypeManager
     {
       
+      class Registry;
+      boost::scoped_ptr<Registry> reg_;
+      
     public:
+      static lumiera::Singleton<STypeManager> instance;
+      
       /** (re)-access a media stream type using
        *  just a symbolic ID. Effectively this queries a default */
       StreamType const& getType (Symbol sTypeID) ;
@@ -62,8 +69,22 @@ namespace control {
       
       
       ////////////////TODO: design a mechanism allowing to add MediaImplLib implementations by plugin......
+    protected:
+      STypeManager();
+      ~STypeManager();
+      
+      friend class lumiera::singleton::StaticCreate<STypeManager>;
+      
+      /** Lifecycle: reset all type registration information
+       *  to the <i>generic pristine default</i> state. This includes
+       *  hard wired defaults and defauls provided by type plugins, but
+       *  excludes everything added by the session
+       */
+      void reset() ;
+
     };
   
+  extern Symbol ON_STREAMTYPES_RESET;  ///< triggered to load the generic pristine default  
   
 } // namespace control
 
@@ -74,4 +95,20 @@ namespace proc_interface {
 
 
 } // namespace proc_interface
+
+
+extern "C" { //TODO provide a separate header if some C code or plugin happens to need this...
+  
+  /** any stream type implementation, which needs to be present on the
+   *  pristine default level (without any session specific configuration),
+   *  should register a setup function, which will be called on each
+   *  STypemanager::reset()
+   */
+  void
+  lumiera_StreamType_registerInitFunction (void setupFun(void));
+  
+  // TODO provide a C interface usable from such a setupFun to access the STypeManager registration functions.
+}
+
+
 #endif
