@@ -34,18 +34,20 @@ namespace lib {
   
   
   using lumiera::Symbol;
-    
+  
   using lumiera::StreamType;
   typedef StreamType::ImplFacade ImplFacade;
   typedef StreamType::ImplFacade::TypeTag TypeTag;
-
+  
   
   class LibGavl;
   
   /**
    * Concrete media lib implementation facade
    * allowing to work with GAVL data frames and types
-   * in an implementation agnostic way
+   * in an implementation agnostic way.
+   * @note GAVL types are automagically registered into the
+   * control::STypeManager on reset and thus are always available.
    */
   class ImplFacadeGAVL
     : public ImplFacade
@@ -67,7 +69,7 @@ namespace lib {
       virtual DataBuffer* createFrame ()  const;
     };
   
-    
+  
   class LibGavl
     : public control::MediaImplLib
     {
@@ -78,9 +80,7 @@ namespace lib {
       
       virtual ImplFacadeGAVL const&  getImplFacade (TypeTag*);
     };
-    
-    
-  ////////////////////////////////////TODO: dafür sorgen, daß sich das beim Systemstart in den control::STypeManger einklinkt!!!!!!!!
+  
   
   
   } // namespace external

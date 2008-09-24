@@ -1,5 +1,5 @@
 /*
-  STypeManager  -  entry point for dealing with media stream types
+  ImplFacadeGAVL  -  facade for integrating the GAVL media handling library
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -23,6 +23,7 @@
 
 #include "proc/lumiera.hpp"
 #include "lib/external/libgavl.hpp"
+#include "proc/control/stypemanager.hpp"
 
 extern "C" {
 #include <gavl/gavl.h>
@@ -31,10 +32,23 @@ extern "C" {
 
 namespace lib {
   namespace external {
-  
-    namespace { // implementation internals
     
+    using control::STypeManager;
+    using control::ON_STREAMTYPES_RESET;
+    using lumiera::LifecycleHook;
+    
+    void
+    provide_GAVL_stream_implementation_types ()
+      {
+        STypeManager& typeManager = STypeManager::instance();
+        UNIMPLEMENTED ("wire up a ImplFacade for GAVL implemented media streams");
+      }
+    
+    namespace { // internal functionality
+    
+        LifecycleHook _register_gavl_types_ (ON_STREAMTYPES_RESET, &provide_GAVL_stream_implementation_types);         
     }
+  
   
   /** 
    * Use an type information struct, which actually has to be 
@@ -49,7 +63,6 @@ namespace lib {
     TODO ("any chance to verify that the TypeTag actually points to a GAVL frame type descriptor?");
     UNIMPLEMENTED ("wire up an impl facade with the correct GAVL lib functions for the data type in question");
   }
-
   
   
   
