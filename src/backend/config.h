@@ -230,6 +230,12 @@ LUMIERA_CONFIG_TYPES
 const char*
 lumiera_config_wordlist_get_nth (const char* key, unsigned nth);
 
+int
+lumiera_config_wordlist_find (const char* key, const char* value);
+
+const char*
+lumiera_config_wordlist_replace (const char* key, const char* value, const char* subst1, const char* subst2);
+
 //  * {{{ lumiera_config_TYPE_set (const char* key, TYPE*value, const char* fmt) }}}
 //    Highlevel interface for different types, fmt is a printf format specifier for the desired format, when NULL, defaults apply.
 /**

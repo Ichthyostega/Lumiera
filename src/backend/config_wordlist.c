@@ -28,6 +28,7 @@
 #include "backend/config.h"
 
 //TODO: internal/static forward declarations//
+extern LumieraConfig lumiera_global_config;
 
 
 //TODO: System includes//
@@ -61,15 +62,91 @@ lumiera_config_wordlist_get_nth (const char* key, unsigned nth)
   return lumiera_tmpbuf_strndup (value, len);
 }
 
-#if 0
+
 int
 lumiera_config_wordlist_find (const char* key, const char* value)
 {
+  const char* itr;
+  size_t vlen = strlen (value);
+  size_t len;
+
+  if (!lumiera_config_wordlist_get (key, &itr))
+    return -1;
+
+  for (int idx = 0; *itr; itr += len, ++idx)
+    {
+      itr += strspn (itr, " \t,;");
+      len = strcspn (itr, " \t,;");
+
+      if (len == vlen && !strncmp (itr, value, vlen))
+        return idx;
+    }
+
+  return -1;
 }
 
 
+const char*
+lumiera_config_wordlist_replace (const char* key, const char* value, const char* subst1, const char* subst2)
+{
+  const char* wordlist;
+  const char* str = NULL;
+  size_t vlen = strlen (value);
+  size_t len;
+
+  LUMIERA_WRLOCK_SECTION (config_typed, &lumiera_global_config->lock)
+    {
+      if (lumiera_config_get (key, &wordlist))
+        {
+          const char* start = wordlist + strspn (wordlist, " \t,;");
+
+          for (const char* itr = start; *itr; itr += len)
+            {
+              const char* left_end = itr;
+              itr += strspn (itr, " \t,;");
+              len = strcspn (itr, " \t,;");
+
+              if (len == vlen && !strncmp (itr, value, vlen))
+                {
+                  TODO ("figure delimiter from original string out");
+                  const char* delim = " ";
+
+                  /* step over the word */
+                  itr += len;
+                  itr += strspn (itr, " \t,;");
+
+                  /* getting the delimiters right for the corner cases looks ugly, want to refactor it? just do it */
+                  str = lumiera_tmpbuf_snprintf (SIZE_MAX,
+                                                 "%.*s%.*s%s%s%s%s%s%s",
+                                                 start - wordlist, wordlist,
+                                                 left_end - start, start,
+                                                 (left_end - start && subst1 && *subst1) ? delim : "",
+                                                 (subst1 && *subst1) ? subst1 : "",
+                                                 ((left_end - start || (subst1 && *subst1)) && subst2 && *subst2) ? delim : "",
+                                                 (subst2 && *subst2) ? subst2 : "",
+                                                 ((left_end - start || (subst1 && *subst1) || (subst2 && *subst2)) && *itr) ? delim : "",
+                                                 itr
+                                                 );
+
+                  if (!lumiera_config_set (key, lumiera_tmpbuf_snprintf (SIZE_MAX, "=%s", str)))
+                    str = NULL;
+
+                  break;
+                }
+            }
+        }
+    }
+
+  return str;
+}
+
+
+
+#if 0
+
+
 LumieraConfigitem
-lumiera_config_wordlist_set_nth (const char* key, const char** value, unsigned nth)
+lumiera_config_wordlist_remove_nth (const char* key, const char** value, unsigned nth)
 {
 }
 
@@ -77,6 +154,12 @@ LumieraConfigitem
 lumiera_config_wordlist_append (const char* key, const char** value, unsigned nth)
 {
 }
+
+LumieraConfigitem
+lumiera_config_wordlist_preprend (const char* key, const char** value, unsigned nth)
+{
+}
+
 
 LumieraConfigitem
 lumiera_config_wordlist_add (const char* key, const char** value, unsigned nth)

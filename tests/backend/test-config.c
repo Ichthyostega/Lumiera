@@ -288,6 +288,7 @@ TEST ("configitem_simple_ctor_dtor")
   lumiera_config_destroy ();
 }
 
+
 TEST ("configitem_simple_content_check")
 {
   REQUIRE (argv[2]);
@@ -332,6 +333,49 @@ TEST ("wordlist_get_nth")
   const char* word = lumiera_config_wordlist_get_nth (argv[2], atoi (argv[4]));
 
   printf ("'%s'\n", word?word:"NULL");
+
+  lumiera_config_destroy ();
+}
+
+
+TEST ("wordlist_find")
+{
+  REQUIRE (argv[2]);
+  REQUIRE (argv[3]);
+  REQUIRE (argv[4]);
+
+  lumiera_config_init ("./");
+
+  if (!lumiera_config_wordlist_set (argv[2], &argv[3]))
+    printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
+
+  int n = lumiera_config_wordlist_find (argv[2], argv[4]);
+
+  printf ("'%d'\n", n);
+
+  lumiera_config_destroy ();
+}
+
+
+TEST ("wordlist_replace")
+{
+  REQUIRE (argv[2]);
+  REQUIRE (argv[3]);
+  REQUIRE (argv[4]);
+  REQUIRE (argv[5]);
+  REQUIRE (argv[6]);
+
+  lumiera_config_init ("./");
+
+  if (!lumiera_config_wordlist_set (argv[2], &argv[3]))
+    printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
+
+  const char* wordlist = lumiera_config_wordlist_replace (argv[2], argv[4], *argv[5]?argv[5]:NULL, *argv[6]?argv[6]:NULL);
+
+  if (wordlist)
+    printf ("'%s'\n", wordlist);
+  else
+    printf ("%s\n", lumiera_error ());
 
   lumiera_config_destroy ();
 }

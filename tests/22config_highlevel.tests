@@ -151,3 +151,54 @@ TEST "wordlist get middle" wordlist_get_nth 'foo.bar' 'baz barf, gnarf' 1 << END
 out: 'barf'
 END
 
+TEST "wordlist find, non existing" wordlist_find 'foo.bar' 'baz barf, gnarf' blah << END
+out: '-1'
+END
+
+TEST "wordlist find, first" wordlist_find 'foo.bar' 'baz barf, gnarf' baz << END
+out: '0'
+END
+
+TEST "wordlist find, middle" wordlist_find 'foo.bar' 'baz barf, gnarf' barf << END
+out: '1'
+END
+
+TEST "wordlist find, last" wordlist_find 'foo.bar' 'baz barf, gnarf' gnarf << END
+out: '2'
+END
+
+TEST "wordlist replace, middle, insert after" wordlist_replace 'foo.bar' 'baz barf gnarf' barf barf foof << END
+out: ' baz barf foof gnarf'
+END
+
+TEST "wordlist replace, middle, insert before" wordlist_replace 'foo.bar' 'baz barf gnarf' barf foof barf << END
+out: ' baz foof barf gnarf'
+END
+
+TEST "wordlist replace, middle, remove" wordlist_replace 'foo.bar' 'baz barf gnarf' barf '' '' << END
+out: ' baz gnarf'
+END
+
+TEST "wordlist replace, middle, replace1" wordlist_replace 'foo.bar' 'baz barf gnarf' barf 'foof' '' << END
+out: ' baz foof gnarf'
+END
+
+TEST "wordlist replace, middle, replace2" wordlist_replace 'foo.bar' 'baz barf gnarf' barf '' 'foof' << END
+out: ' baz foof gnarf'
+END
+
+TEST "wordlist replace, first, insert before" wordlist_replace 'foo.bar' 'baz barf gnarf' baz 'first' 'baz' << END
+out: ' first baz barf gnarf'
+END
+
+TEST "wordlist replace, first, replace1" wordlist_replace 'foo.bar' 'baz barf gnarf' baz 'first' '' << END
+out: ' first barf gnarf'
+END
+
+TEST "wordlist replace, first, replace2" wordlist_replace 'foo.bar' 'baz barf gnarf' baz '' 'first' << END
+out: ' first barf gnarf'
+END
+
+TEST "wordlist replace, last, insert after" wordlist_replace 'foo.bar' 'baz barf gnarf' gnarf 'gnarf' 'last' << END
+out: ' baz barf gnarf last'
+END

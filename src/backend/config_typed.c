@@ -228,6 +228,53 @@ lumiera_config_string_set (const char* key, const char** value)
 }
 
 
+/**
+ * Wordlist
+ * words delimited by any of " \t,;"
+ */
+
+const char*
+lumiera_config_wordlist_get (const char* key, const char** value)
+{
+  TRACE (config_typed, "KEY %s", key);
+
+  const char* raw_value = *value = NULL;
+
+  LUMIERA_RDLOCK_SECTION (config_typed, &lumiera_global_config->lock)
+    {
+      if (lumiera_config_get (key, &raw_value))
+        {
+          if (raw_value)
+            {
+              *value = raw_value;
+            }
+          else
+            LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
+
+          TODO ("remove the ERROR_SET because config_get sets it already? also in all other getters in this file");
+        }
+    }
+
+  return *value;
+}
+
+
+LumieraConfigitem
+lumiera_config_wordlist_set (const char* key, const char** value)
+{
+  TRACE (config_typed);
+
+  LumieraConfigitem item = NULL;
+
+  LUMIERA_WRLOCK_SECTION (config_typed, &lumiera_global_config->lock)
+    {
+      const char* fmt = "= %s"; TODO ("use the config system (config.format*...) to deduce the desired format for this key");
+      item = lumiera_config_set (key, lumiera_tmpbuf_snprintf (SIZE_MAX, fmt, *value));
+    }
+
+  return item;
+}
+
 
 /**
  * Word
