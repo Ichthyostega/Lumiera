@@ -33,9 +33,6 @@ extern LumieraConfig lumiera_global_config;
 
 //TODO: System includes//
 
-/**
- * return nth word of a wordlist
- */
 const char*
 lumiera_config_wordlist_get_nth (const char* key, unsigned nth)
 {

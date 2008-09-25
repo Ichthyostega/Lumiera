@@ -217,17 +217,49 @@ lumiera_config_setdefault (const char* line);
 LUMIERA_CONFIG_TYPES
 #undef LUMIERA_CONFIG_TYPE
 
+
 /**
- * special functions for accessing wordlists
+ * Wordlists
+ * Wordlists are lists of single words delimited by any of " \t,;".
+ * They can be used to store groups of keys and other kinds of simple references into the config
+ * system. Here are some functions to manipulate single word entries in a wordlist.
+ */
+
+/**
+ * Get nth word of a wordlist.
+ * @param key key under which this wordlist is stored
+ * @param nth index of the word to get, starting with 0
+ * @return pointer to a tempbuf holding the nth word or NULL in case of error
  */
 const char*
 lumiera_config_wordlist_get_nth (const char* key, unsigned nth);
 
+
+/**
+ * Find the index of a word in a wordlist.
+ * @param key key under which this wordlist is stored
+ * @param value word to find
+ * @return index of the first occurence of the word or -1 in case of failure
+ */
 int
 lumiera_config_wordlist_find (const char* key, const char* value);
 
+
+/**
+ * Universal word replacement function.
+ * Replaces a word with up to two new words. This can be used to delete a word (no replacements),
+ * insert a new word before an existing word (giving the new word as subst1 and the old word as subst2)
+ * insert a new word after an existing word (giving  the old word as subst1 and the new word as subst2)
+ * or simply give 2 new words.
+ * @param key key under which this wordlist is stored
+ * @param value word to be replaced
+ * @param subst1 first replacement word
+ * @param subst2 second replacement word
+ * @return internal representation of the wordlist in a tmpbuf or NULL in case of an error
+ */
 const char*
 lumiera_config_wordlist_replace (const char* key, const char* value, const char* subst1, const char* subst2);
+
 
 //  * {{{ lumiera_config_TYPE_set (const char* key, TYPE*value, const char* fmt) }}}
 //    Highlevel interface for different types, fmt is a printf format specifier for the desired format, when NULL, defaults apply.
