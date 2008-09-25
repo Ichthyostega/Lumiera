@@ -34,7 +34,7 @@ using std::cout;
 
 
 namespace lumiera {
-  namespace test {
+  namespace test_format {
     
     using mobject::Session;
     using control::STypeManager;
@@ -108,7 +108,7 @@ namespace lumiera {
     LAUNCHER (StreamTypeLifecycle_test, "unit common");
     
     
-  } // namespace test
+  } // namespace test_format
   
 } // namespace lumiera
 

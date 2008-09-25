@@ -33,7 +33,7 @@ using std::cout;
 
 
 namespace lumiera {
-  namespace test {
+  namespace test_format {
     
     using control::STypeManager;
     
@@ -56,7 +56,7 @@ namespace lumiera {
           {
             STypeManager& typeManager = STypeManager::instance();
         
-            TODO ("set up a GAVL frame type");
+            gavl_video_format_t rawType = createRawType();
             TODO ("use this to retrieve an ImplFacade from the STypeManager");
             UNIMPLEMENTED ("at least preliminary implementation of the MediaImplLib interface for lib GAVL");
             TODO ("how to do a simple consistency check on the returned ImplFacade? can we re-create the GAVL frame type?");
@@ -75,7 +75,7 @@ namespace lumiera {
     LAUNCHER (StreamTypeBasics_test, "unit common");
     
     
-  } // namespace test
+  } // namespace test_format
     
 } // namespace lumiera
 
