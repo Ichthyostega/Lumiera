@@ -66,7 +66,7 @@ lumiera_config_number_get (const char* key, long long* value)
 
   const char* raw_value = NULL;
 
-  LUMIERA_RDLOCK_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
     {
       if (lumiera_config_get (key, &raw_value))
         {
@@ -94,7 +94,7 @@ lumiera_config_number_set (const char* key, long long* value)
 
   LumieraConfigitem item = NULL;
 
-  LUMIERA_WRLOCK_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
     {
       const char* fmt = "= %lld"; TODO ("use the config system (config.format*...) to deduce the desired format for this key");
       item = lumiera_config_set (key, lumiera_tmpbuf_snprintf (SIZE_MAX, fmt, *value));
@@ -195,7 +195,7 @@ lumiera_config_string_get (const char* key, const char** value)
 
   const char* raw_value = *value = NULL;
 
-  LUMIERA_RDLOCK_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
     {
       if (lumiera_config_get (key, &raw_value))
         {
@@ -218,7 +218,7 @@ lumiera_config_string_set (const char* key, const char** value)
 
   LumieraConfigitem item = NULL;
 
-  LUMIERA_WRLOCK_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
     {
       const char* fmt = "= %s"; TODO ("use the config system (config.format*...) to deduce the desired format for this key");
       item = lumiera_config_set (key, lumiera_tmpbuf_snprintf (SIZE_MAX, fmt, *value));
@@ -240,7 +240,7 @@ lumiera_config_wordlist_get (const char* key, const char** value)
 
   const char* raw_value = *value = NULL;
 
-  LUMIERA_RDLOCK_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
     {
       if (lumiera_config_get (key, &raw_value))
         {
@@ -266,7 +266,7 @@ lumiera_config_wordlist_set (const char* key, const char** value)
 
   LumieraConfigitem item = NULL;
 
-  LUMIERA_WRLOCK_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
     {
       const char* fmt = "= %s"; TODO ("use the config system (config.format*...) to deduce the desired format for this key");
       item = lumiera_config_set (key, lumiera_tmpbuf_snprintf (SIZE_MAX, fmt, *value));
@@ -309,7 +309,7 @@ lumiera_config_word_get (const char* key, const char** value)
 
   const char* raw_value = *value = NULL;
 
-  LUMIERA_RDLOCK_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
     {
       if (lumiera_config_get (key, &raw_value))
         {
@@ -332,7 +332,7 @@ lumiera_config_word_set (const char* key, const char** value)
 
   LumieraConfigitem item = NULL;
 
-  LUMIERA_WRLOCK_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
     {
       const char* fmt = "= %s"; TODO ("use the config system (config.format*...) to deduce the desired format for this key");
       item = lumiera_config_set (key, lumiera_tmpbuf_snprintf (SIZE_MAX, fmt, scan_word (*value)));

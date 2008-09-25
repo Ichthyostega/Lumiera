@@ -94,7 +94,7 @@ lumiera_config_wordlist_replace (const char* key, const char* value, const char*
   size_t vlen = strlen (value);
   size_t len;
 
-  LUMIERA_WRLOCK_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
     {
       if (lumiera_config_get (key, &wordlist))
         {

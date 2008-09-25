@@ -24,7 +24,7 @@
 
 //TODO: Support library includes//
 #include "lib/error.h"
-#include "lib/rwlock.h"
+#include "lib/mutex.h"
 
 //TODO: Forward declarations//
 struct lumiera_config_struct;
@@ -74,14 +74,7 @@ struct lumiera_config_struct
   lumiera_configitem files;             /* all loaded files */
   lumiera_configitem TODO_unknown;      /* all values which are not part of a file and not default TODO: this will be removed when file support is finished */
 
-  /*
-    all access is protected with rwlock's.
-    We use rwlocks here since concurrent reads are likely common.
-
-    So far this is a global config lock, if this is a problem we might granularize it by locking on a file level.
-    config access is not planned to be transactional yet, if this is a problem we need to expose the rwlock to a config_acquire/config_release function pair
-   */
-  lumiera_rwlock lock;
+  lumiera_mutex lock;
 };
 
 typedef struct lumiera_config_struct lumiera_config;
@@ -198,7 +191,7 @@ lumiera_config_set (const char* key, const char* delim_value);
  * Installs a default value for a config key.
  * Any key might have an associated default value which is used when
  * no other configuration is available, this can be set once.
- * Any subsequent call will be a no-op. This function writelocks the config system.
+ * Any subsequent call will be a no-op. This function locks the config system.
  * @param line line with key, delimiter and value to store as default value
  * @return NULL in case of an error, else a pointer to the default configitem
  */

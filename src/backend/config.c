@@ -111,7 +111,7 @@ lumiera_config_init (const char* path)
   lumiera_configitem_init (&lumiera_global_config->files);
   lumiera_configitem_init (&lumiera_global_config->TODO_unknown);
 
-  lumiera_rwlock_init (&lumiera_global_config->lock, "config rwlock", &NOBUG_FLAG (config));
+  lumiera_mutex_init (&lumiera_global_config->lock, "config mutex", &NOBUG_FLAG (config));
 
   lumiera_config_setdefault (lumiera_tmpbuf_snprintf (SIZE_MAX, "config.path = %s", path));
 
@@ -130,7 +130,7 @@ lumiera_config_destroy ()
   TRACE (config);
   if (lumiera_global_config)
     {
-      lumiera_rwlock_destroy (&lumiera_global_config->lock, &NOBUG_FLAG (config));
+      lumiera_mutex_destroy (&lumiera_global_config->lock, &NOBUG_FLAG (config));
       lumiera_configitem_destroy (&lumiera_global_config->defaults, &lumiera_global_config->keys);
       lumiera_configitem_destroy (&lumiera_global_config->files, &lumiera_global_config->keys);
       lumiera_configitem_destroy (&lumiera_global_config->TODO_unknown, &lumiera_global_config->keys);
@@ -290,7 +290,7 @@ lumiera_config_setdefault (const char* line)
 
   LumieraConfigitem item = NULL;
 
-  LUMIERA_WRLOCK_SECTION (config, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (config, &lumiera_global_config->lock)
     {
       const char* key = line;
       while (*key && isspace (*key))
