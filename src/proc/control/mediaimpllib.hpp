@@ -46,7 +46,7 @@ namespace control {
     public:
       virtual Symbol getLibID()  const =0;
       
-      virtual ImplFacade const&  getImplFacade (TypeTag*) =0;
+      virtual ImplFacade const&  getImplFacade (TypeTag&) =0;
     };
   
   

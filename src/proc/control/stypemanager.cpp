@@ -36,7 +36,7 @@ namespace control {
   
   STypeManager::STypeManager()
     : reg_(0)
-  { 
+  {
     reset();
   }
   
@@ -55,7 +55,7 @@ namespace control {
     lumiera::Appconfig::lifecycle(ON_STREAMTYPES_RESET);
   }
   
-  /** \par 
+  /** \par
    *  LifecycleHook, on which all the basic setup and configuration
    *  providing the pristine state of the stream type system has to be registered.
    *  @note plugins providing additional streamtype configuration should register
@@ -63,8 +63,8 @@ namespace control {
    *        the C interface functions 
    */
   Symbol ON_STREAMTYPES_RESET ("ON_STREAMTYPES_RESET");
-
-
+  
+  
   
   
   
@@ -100,12 +100,10 @@ namespace control {
   
   
   StreamType::ImplFacade const&
-  STypeManager::getImpl (Symbol libID, StreamType::ImplFacade::TypeTag rawType)
+  STypeManager::fetchImpl (StreamType::ImplFacade::TypeTag rawType)
   {
     UNIMPLEMENTED ("STypeManager basic functionality: wire up implementation facade (impl type) from given raw type of the library");
   }
-  
-  
   
 } // namespace control
 

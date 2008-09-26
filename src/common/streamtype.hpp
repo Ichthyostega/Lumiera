@@ -102,8 +102,7 @@ namespace lumiera {
     public:
       Symbol libraryID;
       
-      /** placeholder definition for implementation specific type information */
-      struct TypeTag { };
+      class TypeTag ; 
       
       /** placeholder definition for the contents of a data buffer */
       struct DataBuffer { };
@@ -125,14 +124,15 @@ namespace lumiera {
   
   
   /**
-   * 
+   * Special case of an implementation type being only partialiy specified
+   * Besides requiring some aspect of the implementation type, there is the
+   * promise to fill in defaults to build a complete implementation type
+   * if necessary.
    */
   class StreamType::ImplConstraint
     : public StreamType::ImplFacade
     {
     public:
-      Symbol libraryID;
-      
       virtual bool canConvert (ImplFacade const& other)  const =0;
       virtual bool canConvert (StreamType const& other)  const =0;
       
@@ -153,6 +153,28 @@ namespace lumiera {
       //TODO: do we need functions to represent and describe this constraint?
       
     };
+  
+  
+    /** 
+     * opaque placeholder (type erasure) 
+     * for implementation specific type info.
+     * Intended to be passed to a concrete
+     * MediaImplLib to build an ImplFacade. 
+     */
+  class StreamType::ImplFacade::TypeTag
+    {
+      void* rawTypeStruct_;
+      
+    public:
+      Symbol libraryID;
+      
+      template<class TY>
+      TypeTag (Symbol lID, TY& rawType)
+        : rawTypeStruct_(&rawType),
+          libraryID(lID)
+        { }
+    };
+
     
   
 

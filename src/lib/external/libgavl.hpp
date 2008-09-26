@@ -78,7 +78,7 @@ namespace lib {
     public:
       virtual Symbol getLibID()  const  { return "GAVL"; }
       
-      virtual ImplFacadeGAVL const&  getImplFacade (TypeTag*);
+      virtual ImplFacadeGAVL const&  getImplFacade (TypeTag&);
     };
   
   

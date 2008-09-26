@@ -45,12 +45,16 @@ namespace lumiera {
       
       const int TEST_FRAME_DUR = GAVL_TIME_SCALE / 25; 
     }
+        
+    Symbol GAVL = "GAVL";
+    
+    
     
     /** Helper: create an raw GAVL type descriptor
      *  usable for generating a Lumiera StreamType 
      */
     inline gavl_video_format_t
-    createRawType ()
+    test_createRawType ()
     {
       gavl_video_format_t type;
       
@@ -63,10 +67,10 @@ namespace lumiera {
       type.image_height = TEST_IMG_WIDTH;   // Height of the image in pixels
       type.frame_width  = TEST_IMG_WIDTH;   // Width of the frame buffer in pixels, might be larger than image_width 
       type.frame_height = TEST_IMG_WIDTH;   // Height of the frame buffer in pixels, might be larger than image_height
-  
+      
       type.pixel_width  = 1;              // Relative width of a pixel (pixel aspect ratio is pixel_width/pixel_height)
       type.pixel_height = 1;             // Relative height of a pixel (pixel aspect ratio is pixel_width/pixel_height)
-
+      
       type.frame_duration = TEST_FRAME_DUR; // Duration of a frame in timescale tics. 
       type.timescale = GAVL_TIME_SCALE;     // Timescale in tics per second  (is defined to be 1000000 as of 9/2008)
       
@@ -77,10 +81,11 @@ namespace lumiera {
     /** Helper: create an implementation frame
      *  and build the corresponding streamtype
      */
-    inline StreamType::ImplFacade&
-    createImplType ()
+    inline StreamType::ImplFacade const&
+    test_createImplType ()
     {
-      UNIMPLEMENTED ("create a test stream type from a given GAVL type tag");
+      gavl_video_format_t rawType = test_createRawType();
+      return control::STypeManager::instance().getImpl (GAVL, rawType);
     }
     
     

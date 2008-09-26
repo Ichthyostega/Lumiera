@@ -58,7 +58,7 @@ namespace lib {
    * @todo how to distinguish the audio and the video case?
    */
   ImplFacadeGAVL const&
-  LibGavl::getImplFacade (TypeTag*)
+  LibGavl::getImplFacade (TypeTag&)
   {
     TODO ("any chance to verify that the TypeTag actually points to a GAVL frame type descriptor?");
     UNIMPLEMENTED ("wire up an impl facade with the correct GAVL lib functions for the data type in question");

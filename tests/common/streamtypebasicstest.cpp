@@ -36,6 +36,7 @@ namespace lumiera {
   namespace test_format {
     
     using control::STypeManager;
+    typedef StreamType::ImplFacade const& ImplType;
     
     
     /*******************************************************************
@@ -56,15 +57,18 @@ namespace lumiera {
           {
             STypeManager& typeManager = STypeManager::instance();
         
-            gavl_video_format_t rawType = createRawType();
-            TODO ("use this to retrieve an ImplFacade from the STypeManager");
+            gavl_video_format_t rawType = test_createRawType();
+            ImplType iTy (typeManager.getImpl (GAVL, rawType));
+            
             UNIMPLEMENTED ("at least preliminary implementation of the MediaImplLib interface for lib GAVL");
+            
             TODO ("how to do a simple consistency check on the returned ImplFacade? can we re-create the GAVL frame type?");
+            ASSERT (GAVL==iTy.libraryID);
           }
         
         void basicImplTypeProperties ()
           {
-            StreamType::ImplFacade& iType = createImplType ();
+            ImplType iTy = test_createImplType ();
             
             UNIMPLEMENTED ("get a lib descriptor"); 
             UNIMPLEMENTED ("check the lib of the type"); 

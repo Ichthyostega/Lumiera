@@ -1841,7 +1841,7 @@ __5/2008__: the allocation mechanism can surely be improved later, but for now I
 &amp;rarr; see also LoadingMedia
 </pre>
 </div>
-<div title="MediaImplLib" modifier="Ichthyostega" modified="200809230221" created="200809220304" tags="def spec" changecount="3">
+<div title="MediaImplLib" modifier="Ichthyostega" modified="200809251942" created="200809220304" tags="def spec" changecount="5">
 <pre>The Proc-Layer is designed such as to avoid unnecessary assumptions regarding the properties of the media data and streams. Thus, for anything which is not completely generic, we rely on an abstract [[type description|StreamTypeDescriptor]], which provides a ''Facade'' to an actual library implementation. This way, the fundamental operations can be invoked, like allocating a buffer to hold media data.
 
 In the context of Lumiera and especially in the Proc-Layer, __media implementation library__ means
@@ -1849,12 +1849,12 @@ In the context of Lumiera and especially in the Proc-Layer, __media implementati
 * such as to provide the minimal set of operations
 ** allocating a frame buffer
 ** describing the type of the data within such a buffer
-* and this subsystem or external library has been integrated to be used by Lumiera by writing adaptation code for accessing these basic operations through the [[implementation facade interface|StreamTypeImplFacade]]
+* and this subsystem or external library has been integrated to be used through Lumiera by writing adaptation code for accessing these basic operations through the [[implementation facade interface|StreamTypeImplFacade]]
 * such a link to an type implementation is registered and maintained by the [[stream type manager|STypeManager]]
 
 !Problem of the implementation data types
 Because we deliberately won't make any asumptions about the implementation library (besides the ones imposed indirectly by the facade interface), we can't integrate the data types of the library first class into the type system. All we can do is to use marker types and rely on the builder to have checked the compatibility of the actual data beforehand. 
-It would be possible to circumvent this problem by requiring all supported implementation libraries to be known at compile time, because then the actual media implementation type could be linked to a facade type by generic programming. Indeed, Lumiera follows this route with regards to the possible kinds of MObject or [[Asset]] &amp;mdash; but here to the contraty, being able to include support for a new media data type just by adding a plugin by far outweights the benefits of compile-time checked implementation type selection. So, as a consequence of this design decision we //note the possibility of the media file type discovery code to be misconfigured// and select the //wrong implementation library at runtime.// And thus the render engine needs to be prepared for the source reading node of any pipe to flounder completely, and protect the rest of the system accordingly
+It would be possible to circumvent this problem by requiring all supported implementation libraries to be known at compile time, because then the actual media implementation type could be linked to a facade type by generic programming. Indeed, Lumiera follows this route with regards to the possible kinds of MObject or [[Asset]] &amp;mdash; but to the contraty, for the problem in question here, being able to include support for a new media data type just by adding a plugin by far outweights the benefits of compile-time checked implementation type selection. So, as a consequence of this design decision we //note the possibility of the media file type discovery code to be misconfigured// and select the //wrong implementation library at runtime.// And thus the render engine needs to be prepared for the source reading node of any pipe to flounder completely, and protect the rest of the system accordingly
 </pre>
 </div>
 <div title="MemoryManagement" modifier="Ichthyostega" modified="200808110208" created="200708100225" tags="impl decision discuss" changecount="14">
@@ -3406,7 +3406,7 @@ Within the Proc-Layer, media streams are treated largely in a similar manner. Bu
 An implementation constraint can //stand-in// for a completely specified implementation type (meaning it's a sub interface of the latter). But actually using it in this way may cause a call to the [[defaults manager|DefaultsImplementation]] to fill in any missing information. An example would be to call {{{createFrame()}}} on the type constraint object, which means being able to allocate memory to hold a data frame, with properties in compliance with the given type constraint. Of cousre, then we need to know all the properties of this stream type, which is where the defaults manager is queried. This allows session customisation to kick in, but may fail under certain cicumstances.
 </pre>
 </div>
-<div title="StreamTypeImplFacade" modifier="Ichthyostega" modified="200808151818" created="200808151520" tags="def" changecount="6">
+<div title="StreamTypeImplFacade" modifier="Ichthyostega" modified="200809251940" created="200808151520" tags="def" changecount="7">
 <pre>Common interface for dealing with the implementation of media stream data. From a high level perspective, the various kinds of media ({{{VIDEO, IMAGE, AUDIO, MIDI,...}}}) exhibit similar behaviour, while on the implementation level not even the common classification can be settled down to a complete general and useful scheme. Thus, we need separate library implementations for deailing with the various sorts of media data, all providing at least a set of basic operations:
 * set up a buffer
 * create or accept a frame
@@ -3414,6 +3414,7 @@ An implementation constraint can //stand-in// for a completely specified impleme
 * ...?
 
 &amp;rarr; see also &amp;raquo;[[Stream Type|StreamType]]&amp;laquo;
+//Note:// there is a sort-of &quot;degraded&quot; variant just requiring some &amp;rarr; [[implementation constraint|StreamTypeImplConstraint]] to hold
 </pre>
 </div>
 <div title="StreamTypeUse" modifier="Ichthyostega" modified="200809230152" created="200809130312" tags="draft discuss dynamic" changecount="19">
