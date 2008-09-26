@@ -91,6 +91,9 @@ lumiera_config_wordlist_replace (const char* key, const char* value, const char*
   size_t vlen = strlen (value);
   size_t len;
 
+  if (!value)
+    return NULL;
+
   LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
     {
       if (lumiera_config_get (key, &wordlist))
@@ -138,14 +141,55 @@ lumiera_config_wordlist_replace (const char* key, const char* value, const char*
 }
 
 
+const char*
+lumiera_config_wordlist_add (const char* key, const char* value)
+{
+  const char* wordlist = NULL;
+
+  if (value && *value)
+    {
+      LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
+        {
+          if (lumiera_config_get (key, &wordlist))
+            {
+              size_t vlen = strlen (value);
+              size_t len;
+
+              for (const char* itr = wordlist; *itr; itr += len)
+                {
+                  itr += strspn (itr, " \t,;");
+                  len = strcspn (itr, " \t,;");
+
+                  if (len == vlen && !strncmp (itr, value, vlen))
+                    goto end;
+                }
+
+              TODO ("figure delimiter from original string out");
+              const char* delim = " ";
+
+              wordlist = lumiera_tmpbuf_snprintf (SIZE_MAX, "%s%s%s",
+                                                  wordlist,
+                                                  wordlist[strspn (wordlist, " \t,;")]?delim:"",
+                                                  value);
+
+              if (!lumiera_config_set (key, lumiera_tmpbuf_snprintf (SIZE_MAX, "=%s", wordlist)))
+                wordlist = NULL;
+            }
+        end:;
+        }
+    }
+
+  return wordlist;
+}
+
 
 #if 0
 
-
-LumieraConfigitem
-lumiera_config_wordlist_remove_nth (const char* key, const char** value, unsigned nth)
+const char*
+lumiera_config_wordlist_remove_nth (const char* key, unsigned nth)
 {
 }
+
 
 LumieraConfigitem
 lumiera_config_wordlist_append (const char* key, const char** value, unsigned nth)
@@ -158,10 +202,6 @@ lumiera_config_wordlist_preprend (const char* key, const char** value, unsigned 
 }
 
 
-LumieraConfigitem
-lumiera_config_wordlist_add (const char* key, const char** value, unsigned nth)
-{
-}
 #endif
 
 

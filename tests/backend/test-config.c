@@ -381,5 +381,33 @@ TEST ("wordlist_replace")
 }
 
 
+TEST ("wordlist_add")
+{
+  REQUIRE (argv[2]);
+  REQUIRE (argv[3]);
+  REQUIRE (argv[4]);
+  REQUIRE (argv[5]);
+
+  lumiera_config_init ("./");
+
+  if (!lumiera_config_wordlist_set (argv[2], &argv[3]))
+    printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
+
+  const char* wordlist = lumiera_config_wordlist_add (argv[2], argv[4]);
+  if (wordlist)
+    printf ("'%s'\n", wordlist);
+  else
+    printf ("%s\n", lumiera_error ());
+
+  wordlist = lumiera_config_wordlist_add (argv[2], argv[5]);
+  if (wordlist)
+    printf ("'%s'\n", wordlist);
+  else
+    printf ("%s\n", lumiera_error ());
+
+  lumiera_config_destroy ();
+}
+
+
 
 TESTS_END

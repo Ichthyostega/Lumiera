@@ -261,6 +261,15 @@ const char*
 lumiera_config_wordlist_replace (const char* key, const char* value, const char* subst1, const char* subst2);
 
 
+/**
+ * Add a word to the end of a wordlist if it doesnt exist already
+ * @param key key under which this wordlist is stored
+ * @param value new word to add
+ * @return internal representation of the wordlist in a tmpbuf or NULL in case of an error
+ */
+const char*
+lumiera_config_wordlist_add (const char* key, const char* value);
+
 //  * {{{ lumiera_config_TYPE_set (const char* key, TYPE*value, const char* fmt) }}}
 //    Highlevel interface for different types, fmt is a printf format specifier for the desired format, when NULL, defaults apply.
 /**

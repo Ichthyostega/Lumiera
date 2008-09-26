@@ -202,3 +202,23 @@ END
 TEST "wordlist replace, last, insert after" wordlist_replace 'foo.bar' 'baz barf gnarf' gnarf 'gnarf' 'last' << END
 out: ' baz barf gnarf last'
 END
+
+TEST "wordlist add 2 words" wordlist_add 'foo.bar' 'baz barf gnarf' first second << END
+out: ' baz barf gnarf first'
+out: ' baz barf gnarf first second'
+END
+
+TEST "wordlist add same word" wordlist_add 'foo.bar' 'baz barf gnarf' same same << END
+out: ' baz barf gnarf same'
+out: ' baz barf gnarf same'
+END
+
+TEST "wordlist add to empty list" wordlist_add 'foo.bar' '' first second << END
+out: ' first'
+out: ' first second'
+END
+
+TEST "wordlist add to empty list, same" wordlist_add 'foo.bar' '' same same << END
+out: ' same'
+out: ' same'
+END
