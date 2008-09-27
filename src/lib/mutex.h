@@ -62,27 +62,28 @@ LUMIERA_ERROR_DECLARE (MUTEX_DESTROY);
 
 /**
  * Mutual exclusion chainbuilder section.
- * Usage: LUMIERA_MUTEX_SECTION(a){LUMIERA_MUTEX_SECTION_CHAIN(a,b){run();}}
+ * Usage: LUMIERA_MUTEX_SECTION(a){LUMIERA_MUTEX_SECTION_CHAIN(b){run();}}
  *     calls lock(a); lock(b); unlock(a); run(); unlock(b);
  * This macro should only be used inside LUMIERA_MUTEX_SECTION and should be
  * called on the correct mutexes, period.
  */
-#define LUMIERA_MUTEX_SECTION_CHAIN(nobugflag, mtxa, mtxb)                                                                      \
-  for (lumiera_mutexacquirer NOBUG_CLEANUP(lumiera_mutexacquirer_ensureunlocked) lumiera_mutex_section_ = {(LumieraMutex)1};    \
+#define LUMIERA_MUTEX_SECTION_CHAIN(nobugflag, mtx)                                                                             \
+  for (lumiera_mutexacquirer *lumiera_mutex_section_old_ = &lumiera_mutex_section_,                                             \
+         NOBUG_CLEANUP(lumiera_mutexacquirer_ensureunlocked) lumiera_mutex_section_ = {(LumieraMutex)1};                        \
        lumiera_mutex_section_.mutex;)                                                                                           \
     for (                                                                                                                       \
          ({                                                                                                                     \
-           lumiera_mutex_section_.mutex = (mtxb);                                                                               \
+           lumiera_mutex_section_.mutex = (mtx);                                                                                \
            NOBUG_RESOURCE_HANDLE_INIT (lumiera_mutex_section_.rh);                                                              \
-           RESOURCE_ENTER (nobugflag, (mtxb)->rh, "acquire mutex", &lumiera_mutex_section_,                                     \
+           RESOURCE_ENTER (nobugflag, (mtx)->rh, "acquire mutex", &lumiera_mutex_section_,                                      \
                            NOBUG_RESOURCE_EXCLUSIVE, lumiera_mutex_section_.rh);                                                \
-           if (pthread_mutex_lock (&(mtxb)->mutex)) LUMIERA_DIE (MUTEX_LOCK);                                                   \
-           if (mtxa)                                                                                                            \
-           {                                                                                                                    \
-               pthread_mutex_unlock (&mtxa->mutex);                                                                             \
-               mtxa = NULL;                                                                                                     \
-               RESOURCE_LEAVE(nobugflag, mtxa.rh);                                                                              \
-           }                                                                                                                    \
+           if (pthread_mutex_lock (&(mtx)->mutex)) LUMIERA_DIE (MUTEX_LOCK);                                                    \
+           if (lumiera_mutex_section_old_->mutex)                                                                               \
+             {                                                                                                                  \
+               pthread_mutex_unlock (&lumiera_mutex_section_old_->mutex->mutex);                                                \
+               lumiera_mutex_section_old_->mutex = NULL;                                                                        \
+               RESOURCE_LEAVE(nobugflag, lumiera_mutex_section_old_->rh);                                                       \
+             }                                                                                                                  \
          });                                                                                                                    \
          lumiera_mutex_section_.mutex;                                                                                          \
          ({                                                                                                                     \
@@ -93,6 +94,68 @@ LUMIERA_ERROR_DECLARE (MUTEX_DESTROY);
                RESOURCE_LEAVE(nobugflag, lumiera_mutex_section_.rh);                                                            \
              }                                                                                                                  \
          }))
+
+
+/**
+ * Recursive Mutual exclusive section.
+ */
+#define LUMIERA_RECMUTEX_SECTION(nobugflag, mtx)                                                                                \
+  for (lumiera_mutexacquirer NOBUG_CLEANUP(lumiera_mutexacquirer_ensureunlocked) lumiera_mutex_section_ = {(LumieraMutex)1};    \
+       lumiera_mutex_section_.mutex;)                                                                                           \
+    for (                                                                                                                       \
+         ({                                                                                                                     \
+           lumiera_mutex_section_.mutex = (mtx);                                                                                \
+           NOBUG_RESOURCE_HANDLE_INIT (lumiera_mutex_section_.rh);                                                              \
+           RESOURCE_ENTER (nobugflag, (mtx)->rh, "acquire recmutex", &lumiera_mutex_section_,                                   \
+                           NOBUG_RESOURCE_RECURSIVE, lumiera_mutex_section_.rh);                                                \
+           if (pthread_mutex_lock (&(mtx)->mutex)) LUMIERA_DIE (MUTEX_LOCK);                                                    \
+         });                                                                                                                    \
+         lumiera_mutex_section_.mutex;                                                                                          \
+         ({                                                                                                                     \
+           if (lumiera_mutex_section_.mutex)                                                                                    \
+             {                                                                                                                  \
+               pthread_mutex_unlock (&lumiera_mutex_section_.mutex->mutex);                                                     \
+               lumiera_mutex_section_.mutex = NULL;                                                                             \
+               RESOURCE_LEAVE(nobugflag, lumiera_mutex_section_.rh);                                                            \
+             }                                                                                                                  \
+         }))
+
+
+/**
+ * Mutual exclusion chainbuilder section.
+ * Usage: LUMIERA_MUTEX_SECTION(a){LUMIERA_RECMUTEX_SECTION_CHAIN(b){run();}}
+ *     calls lock(a); lock(b); unlock(a); run(); unlock(b);
+ * This macro should only be used inside LUMIERA_MUTEX_SECTION and should be
+ * called on the correct mutexes, period.
+ */
+#define LUMIERA_RECMUTEX_SECTION_CHAIN(nobugflag, mtx)                                                                          \
+  for (lumiera_mutexacquirer *lumiera_mutex_section_old_ = &lumiera_mutex_section_,                                             \
+         NOBUG_CLEANUP(lumiera_mutexacquirer_ensureunlocked) lumiera_mutex_section_ = {(LumieraMutex)1};                        \
+       lumiera_mutex_section_.mutex;)                                                                                           \
+    for (                                                                                                                       \
+         ({                                                                                                                     \
+           lumiera_mutex_section_.mutex = (mtx);                                                                                \
+           NOBUG_RESOURCE_HANDLE_INIT (lumiera_mutex_section_.rh);                                                              \
+           RESOURCE_ENTER (nobugflag, (mtx)->rh, "acquire recmutex", &lumiera_mutex_section_,                                   \
+                           NOBUG_RESOURCE_RECURSIVE, lumiera_mutex_section_.rh);                                                \
+           if (pthread_mutex_lock (&(mtx)->mutex)) LUMIERA_DIE (MUTEX_LOCK);                                                    \
+           if (lumiera_mutex_section_old_->mutex)                                                                               \
+             {                                                                                                                  \
+               pthread_mutex_unlock (&lumiera_mutex_section_old_->mutex->mutex);                                                \
+               lumiera_mutex_section_old_->mutex = NULL;                                                                        \
+               RESOURCE_LEAVE(nobugflag, lumiera_mutex_section_old_->rh);                                                       \
+             }                                                                                                                  \
+         });                                                                                                                    \
+         lumiera_mutex_section_.mutex;                                                                                          \
+         ({                                                                                                                     \
+           if (lumiera_mutex_section_.mutex)                                                                                    \
+             {                                                                                                                  \
+               pthread_mutex_unlock (&lumiera_mutex_section_.mutex->mutex);                                                     \
+               lumiera_mutex_section_.mutex = NULL;                                                                             \
+               RESOURCE_LEAVE(nobugflag, lumiera_mutex_section_.rh);                                                            \
+             }                                                                                                                  \
+         }))
+
 
 /**
  * Mutex.
@@ -109,11 +172,21 @@ typedef lumiera_mutex* LumieraMutex;
 
 /**
  * Initialize a mutex variable
+ * This initializes a 'fast' default mutex which must not be locked recursively from one thread.
  * @param self is a pointer to the mutex to be initialized
  * @return self as given
  */
 LumieraMutex
 lumiera_mutex_init (LumieraMutex self, const char* purpose, struct nobug_flag* flag);
+
+/**
+ * Initialize a mutex variable
+ * Initializes a 'recursive' mutex which might be locked by the same thread multiple times.
+ * @param self is a pointer to the mutex to be initialized
+ * @return self as given
+ */
+LumieraMutex
+lumiera_recmutex_init (LumieraMutex self, const char* purpose, struct nobug_flag* flag);
 
 
 /**
