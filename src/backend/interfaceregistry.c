@@ -42,6 +42,7 @@ NOBUG_DEFINE_FLAG_PARENT (interfaceregistry, backend);
 static PSplay interfaceregistry;
 lumiera_mutex lumiera_interface_mutex;
 
+
 static int
 cmp_fn (const void* keya, const void* keyb);
 
