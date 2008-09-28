@@ -66,6 +66,7 @@ namespace lib {
       virtual bool canConvert (ImplFacade const& other)  const;
       virtual bool canConvert (StreamType const& other)  const;
       
+      virtual StreamType::MediaKind getKind()  const;
       virtual DataBuffer* createFrame ()  const;
     };
   

@@ -48,6 +48,7 @@ namespace control {
       
       typedef StreamType::ImplFacade ImplFacade;
       
+      
       /** (re)-access a media stream type using
        *  just a symbolic ID. Effectively this queries a default */
       StreamType const& getType (Symbol sTypeID) ;

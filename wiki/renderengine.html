@@ -3354,7 +3354,7 @@ Consequently, as we can't get away with an fixed Enum of all stream prototypes, 
 NTSC and PAL video, video versus digitized film, HD video versus SD video, 3D versus flat video, cinemascope versus 4:3, stereophonic versus monaural, periphonic versus panoramic sound, Ambisonics versus 5.1, dolby versus linear PCM...
 </pre>
 </div>
-<div title="StreamType" modifier="Ichthyostega" modified="200809130255" created="200808060244" tags="spec discuss draft" changecount="8">
+<div title="StreamType" modifier="Ichthyostega" modified="200809280108" created="200808060244" tags="spec discuss draft" changecount="9">
 <pre>//how to classify and describe media streams//
 Media data is understood to appear structured as stream(s) over time. While there may be an inherent internal structuring, at a given perspective ''any stream is a unit and homogeneous''. In the context of digital media data processing, streams are always ''quantized'', which means they appear as a temporal sequence of data chunks called ''frames''.
 
@@ -3376,8 +3376,8 @@ A stream type is denoted by a StreamTypeID, which is an identifier, acting as an
 !! Classification
 Within the Proc-Layer, media streams are treated largely in a similar manner. But, looking closer, note everything can be connected together, while on the other hand there may be some classes of media streams which can be considered //equivalent// in most respects. Thus, it seems reasonable to separate the distinction between various media streams into several levels
 * Each media belongs to a fundamental ''kind'' of media, examples being __Video__, __Image__, __Audio__, __MIDI__,... Media streams of different kind can be considered somewhat &quot;completely separate&quot; &amp;mdash; just the handling of each of those media kinds follows a common //generic pattern// augmented with specialisations. Basically, it is //impossible to connect// media streams of different kind. Under some circumstances there may be the possibility of a //transformation// though. For example, a still image can be incorporated into video, sound may be visualized, MIDI may control a sound synthesizer.
-* Below the level of distinct kinds of media streams, within every kind we have an open ended collection of ''prototypes'', which, when compared directly may each be quite distinct and different, but which may be //rendered//&amp;nbsp; into each other. For example, we have stereoscopic (3D) video and we have the common flat video lacking depth information, we have several spatial audio systems (Ambisonics, Wave Field Synthesis), we have panorama simulating sound systems (5.1, 7.1,...), we have common stereophonic and monaural audio. It is considered important to retain some openness and configurability within this level of distinction, which means this classification should better be done by rules then by setting up a fixed property table. For example, it may be desirable for some production to distinguish between digitized film and video NTSC and PAL, while in another production everything is just &quot;video&quot; and can be converted automatically. The most noticeable consequence of such a distinction is that any Bus or [[Pipe]] is always limited to a media stream of a single prototype. (&amp;rarr; [[more|StreamPrototype]])
-* Besides the distinction by prototypes, there are the various media ''implementation types''. This classification is not necessarily hierarchically related to the prototype classification, while in practice commonly there will be some sort of dependency. For example, both stereophonic and monaural audio may be implemented as 96kHz 24bit PCM with just a different number of channel streams, as well we may have a dedicated stereo audio stream with two channels multiplexed into a single stream. For dealing with media streams of various implementation type, we need //library// routines, which also yield a //type classification system.// Most notably, for raw sound and video data we use the GAVL library, which defines a classification system for buffers and streams.
+* Below the level of distinct kinds of media streams, within every kind we have an open ended collection of ''prototypes'', which, when compared directly, may each be quite distinct and different, but which may be //rendered//&amp;nbsp; into each other. For example, we have stereoscopic (3D) video and we have the common flat video lacking depth information, we have several spatial audio systems (Ambisonics, Wave Field Synthesis), we have panorama simulating sound systems (5.1, 7.1,...), we have common stereophonic and monaural audio. It is considered important to retain some openness and configurability within this level of distinction, which means this classification should better be done by rules then by setting up a fixed property table. For example, it may be desirable for some production to distinguish between digitized film and video NTSC and PAL, while in another production everything is just &quot;video&quot; and can be converted automatically. The most noticeable consequence of such a distinction is that any Bus or [[Pipe]] is always limited to a media stream of a single prototype. (&amp;rarr; [[more|StreamPrototype]])
+* Besides the distinction by prototypes, there are the various media ''implementation types''. This classification is not necessarily hierarchically related to the prototype classification, while in practice commonly there will be some sort of dependency. For example, both stereophonic and monaural audio may be implemented as 96kHz 24bit PCM with just a different number of channel streams, as well we may have a dedicated stereo audio stream with two channels multiplexed into a single stream. For dealing with media streams of various implementation type, we need //library// routines, which also yield a //type classification system.// Most notably, for raw sound and video data we use the [[GAVL]] library, which defines a classification system for buffers and streams.
 * Besides the type classification detailed thus far, we introduce an ''intention tag''. This is a synthetic classification owned by Lumiera and used for internal wiring decisions. Currently (8/08), we recognize the following intention tags: __Source__, __Raw__, __Intermediary__ and __Target__. Only media streams tagged as __Raw__ can be processed.
 
 !! Media handling requirements involving stream type classification
@@ -3385,7 +3385,9 @@ Within the Proc-Layer, media streams are treated largely in a similar manner. Bu
 * determine if a given media data source and sink can be connected, and how.
 * determine and enumerate the internal structure of a stream.
 * discover processing facilities
-&amp;rarr; see StreamTypeUse</pre>
+&amp;rarr; see StreamTypeUse
+&amp;rarr; [[querying types|StreamTypeQuery]]
+</pre>
 </div>
 <div title="StreamTypeDescriptor" modifier="Ichthyostega" modified="200809130314" created="200808151505" tags="def" changecount="7">
 <pre>A description and classification record usable to find out about the properties of a media stream. The stream type descriptor can be accessed using an unique StreamTypeID. The information contained in this descriptor record can intentionally be //incomplete,// in which case the descriptor captures a class of matching media stream types. The following information is maintained:
@@ -3417,12 +3419,23 @@ An implementation constraint can //stand-in// for a completely specified impleme
 //Note:// there is a sort-of &quot;degraded&quot; variant just requiring some &amp;rarr; [[implementation constraint|StreamTypeImplConstraint]] to hold
 </pre>
 </div>
-<div title="StreamTypeUse" modifier="Ichthyostega" modified="200809230152" created="200809130312" tags="draft discuss dynamic" changecount="19">
+<div title="StreamTypeQuery" modifier="Ichthyostega" modified="200809280130" created="200809280129" tags="spec draft" changecount="4">
+<pre>Querying for media stream type information comes in various flavours
+* you may find a structural object (pipe, output, processing patten) associated with / able to deal with a certain stream type
+* you may need a StreamTypeDescriptor for an existing stream given as implementation data
+* you may want to build or complete type information from partial specification.
+Mostly, those queries involve the ConfigRules system in some way or the other. The [[prototype-|StreamPrototype]] and [[implementation type|StreamTypeImplFacade]]-interfaces themselves are mostly a facade for issuing appropriate queries. Some objects (especially [[pipes|Pipe]]) are tied to a certain stream type and thus store a direct link to type information. Others are just associated with a type by virtue of the DefaultsManagement.
+</pre>
+</div>
+<div title="StreamTypeUse" modifier="Ichthyostega" modified="200809280113" created="200809130312" tags="draft discuss dynamic" changecount="20">
 <pre>Questions regarding the use of StreamType within the Proc-Layer.
-
 * what is the relation between Buffer and Frame?
 * how to get the required size of a Buffer?
 * who does buffer allocations and how?
+
+Mostly, stream types are used for querying, either to decide if they can be connected, or to find usable processing modules.
+Even building a stream type from partial information involves some sort of query.
+&amp;rarr; more on [[media stream type queries|StreamTypeQuery]]
 
 !creating stream types
 seemingly stream types are created based on an already existing media stream (or a Frame of media data?). {{red{really?}}}

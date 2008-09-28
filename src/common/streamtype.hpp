@@ -70,7 +70,6 @@ namespace lumiera {
       class ImplConstraint;
       
       
-      MediaKind kind;
       Prototype const& prototype;
       ImplFacade * implType;
       Usage intentionTag;
@@ -85,13 +84,14 @@ namespace lumiera {
   struct StreamType::Prototype
     {
       Symbol id;
+      MediaKind kind;
       
       bool subsumes (Prototype const& other)  const;
-      bool canConvert (Prototype const& other)  const;
+      bool canRender (Prototype const& other)  const;
     };
   
   
-
+  
   
   /**
    * A (more or less) concrete implementation type, wired up
@@ -106,7 +106,7 @@ namespace lumiera {
       
       /** placeholder definition for the contents of a data buffer */
       struct DataBuffer { };
-  
+      
       
       virtual bool operator== (ImplFacade const& other)  const =0;
       virtual bool operator== (StreamType const& other)  const =0;
@@ -115,6 +115,7 @@ namespace lumiera {
       virtual bool canConvert (StreamType const& other)  const =0;
       
       virtual DataBuffer* createFrame ()  const =0;
+      virtual MediaKind getKind()         const =0;
       
       virtual ~ImplFacade() {};
       
@@ -144,7 +145,7 @@ namespace lumiera {
       /** create a default impl type in accordance to this constraint
        *  and use it to create a new framebuffer */
       virtual DataBuffer* createFrame ()  const =0;
-
+      
       /** similarily create a impl type which complies to this constraint
        *  as well as to the additional constraints (e.g. frame size).
        *  Create a new framebuffer of the resutling type */
@@ -174,10 +175,9 @@ namespace lumiera {
           libraryID(lID)
         { }
     };
-
-    
   
-
-   
+  
+  
+  
 } // namespace lumiera
 #endif
