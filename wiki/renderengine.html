@@ -3419,15 +3419,43 @@ An implementation constraint can //stand-in// for a completely specified impleme
 //Note:// there is a sort-of &quot;degraded&quot; variant just requiring some &amp;rarr; [[implementation constraint|StreamTypeImplConstraint]] to hold
 </pre>
 </div>
-<div title="StreamTypeQuery" modifier="Ichthyostega" modified="200809280130" created="200809280129" tags="spec draft" changecount="4">
+<div title="StreamTypeQuery" modifier="Ichthyostega" modified="200809280322" created="200809280129" tags="spec draft" changecount="17">
 <pre>Querying for media stream type information comes in various flavours
 * you may find a structural object (pipe, output, processing patten) associated with / able to deal with a certain stream type
 * you may need a StreamTypeDescriptor for an existing stream given as implementation data
 * you may want to build or complete type information from partial specification.
 Mostly, those queries involve the ConfigRules system in some way or the other. The [[prototype-|StreamPrototype]] and [[implementation type|StreamTypeImplFacade]]-interfaces themselves are mostly a facade for issuing appropriate queries. Some objects (especially [[pipes|Pipe]]) are tied to a certain stream type and thus store a direct link to type information. Others are just associated with a type by virtue of the DefaultsManagement.
+
+The //problem// with this pivotal role of the config rules is that &amp;mdash; from a design perspective &amp;mdash; not much can be said specifically, besides //&quot;you may be able to find out...&quot;, &quot;...depends on the defaults and the session configuration&quot;.// This way, a good deal of crucial behaviour is pushed out of the core implementation (and it's quite intentionally being done this way). What can be done regarding the design of the core is mostly to setup a framework for the rules and determine possible ''query situations''.
+
+!the kind of media
+the information of the fundamental media kind (video, audio, text, MIDI,...) is assiciated with the prototype, for technical reasons. Prototype information is mandatory for each StreamType, and the impl facade provides a query function (because some implementation libraries, e.g. [[GAVL]], support multiple kinds of media).
+
+!query for a prototype
+__Situation__: given an implementation type, find a prototype to subsume it.
+Required only for building a complete ~StreamType which isn't known at this point.
+The general case of this query is //quite hairy,// because the solution is not necessary clear and unique. And, worse still, it is related to the semantics, requiring semantic information and tagging to be maintained somewhere. For example, while the computer can't &quot;know&quot; what stereopohinc audio is (only a human can by listening to a stereophoic playback and deciding if it actually does convey a spatical sound image), in most cases we can overcome this problem by using the //heuristical rule// of assuming the prototype &quot;stereophonic&quot; when given two identically typed audio channels. This example also shows the necessity of ordering heuristic rules to be able to pick a best fit.
+
+We can inject two different kinds of fallback solutions for this kind of query:
+* we can always build a &quot;catch-all&quot; prototype just based on the kind of media (e.g. {{{prototype(video).}}}). This should match with lowest priority
+* we can search for existing ~StreamTypes with the same impl type, or an impl type which is //equivalent convertible// (see &amp;rarr; StreamConversion). 
+The latter case can yield multiple solutions, which isn't any problem, because the match is limited to classes of equivalent stream implementation, which would be subsumed under the same prototype anyway. Even if the registry holds different prototypes linked to the same implementation type, they would be convertible and thus could stand in for one another. Together this results in the implementation
+# try to get a direct match to an existing impl type which has an associated (complete) ~StreamType, thus bypassing the ConfigRules system altogether
+# run a {{{Query&lt;Prototype&gt;}}} for the given implementation type
+# do the search within equivalence class as described above
+# fall back to the media kind.
+{{red{TODO: how to deal with the problem of hijacking a prototype?}}} &amp;rarr; see [[here|StreamTypeUse]]
+
+!query for an implementation
+__Situation 1__: given an partially specified ~StreamType (just an [[constraint|StreamTypeImplConstraint]])
+__Situation 2__: find an implementation for a given prototype (without any further impl type guidlines)
+Both cases have to go though the [[defaults manager|DefaultsManagement]] in some way, in order to give any default configuration a chance to kick in. This is //one of the most important use cases// of the defaults system: the ability to configure a default fromat for all streams with certain semantic classification. {{{prototype(video)}}} by default is RGBA 24bit non-interlaced for example.
+But after having queried the defaults system, there remains the problem to build a new solution (which will then automatically become a default
+
+!query for an (complete) StreamType
 </pre>
 </div>
-<div title="StreamTypeUse" modifier="Ichthyostega" modified="200809280113" created="200809130312" tags="draft discuss dynamic" changecount="20">
+<div title="StreamTypeUse" modifier="Ichthyostega" modified="200809280320" created="200809130312" tags="draft discuss dynamic" changecount="21">
 <pre>Questions regarding the use of StreamType within the Proc-Layer.
 * what is the relation between Buffer and Frame?
 * how to get the required size of a Buffer?
@@ -3443,7 +3471,9 @@ The other use case seems to be that of an //incomplete// stream type based on a 
 
 !Prototype
 According to my current understanding, a prototype is merely a classification entity. But then &amp;mdash; how to bootstrap a Prototype?
-And how to do the classification of an existing implementation type
+And how to do the classification of an existing implementation type.
+
+Besides, there is the problem of //hijacking a prototype:// when a specific implementation type gets tied to a rather generic protoype, like {{{protoype(video)}}}, how to comply to the rule of prototypes subsuming a class of equivalent implementations?
 
 !Defaults and partial specification
 A StreamType need not be completely defined. It is sufficient to specify the media kind and the Prototype. The implementation type may be just given as a constraint, thus defining some properties and leaving out others. When creating a frame buffer based upon such an //incomplete type,// [[defaults|DefaultsManagement]] are queried to fill in the missing parts.
