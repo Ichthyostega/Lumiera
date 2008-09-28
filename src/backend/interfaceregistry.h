@@ -70,6 +70,8 @@ struct lumiera_interfacenode_struct
   LumieraInterfacenode* deps;
 };
 
+extern lumiera_mutex lumiera_interface_mutex;
+
 
 /**
  * Initialize the interface registry
