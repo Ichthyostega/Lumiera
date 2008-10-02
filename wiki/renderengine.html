@@ -3338,6 +3338,13 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
 * in a future version, it may also encapsulate the communication in a distributed render farm
 </pre>
 </div>
+<div title="StreamConversion" modifier="Ichthyostega" modified="200810020338" created="200810020337" tags="design spec" changecount="2">
+<pre>Conversion of a media stream into a stream of another type is done by a processor module (plugin). The problem of finding such a module is closely related to the StreamType and especially [[problems of querying|StreamTypeQuery]] for such. There can be different kinds of conversions, and the existance or non-existance of such an conversion can influence the stream type classification.
+* different //kinds of media// can be ''transformed'' into each other
+* stream types //subsumed// by a given prototype should be ''lossless convertible''
+* besides, between different stream //implementation types,// there can be a ''rendering'' (lossy conversion) &amp;mdash; or no conversion at all.
+</pre>
+</div>
 <div title="StreamPrototype" modifier="Ichthyostega" modified="200809120021" created="200808152042" tags="def spec" changecount="10">
 <pre>The stream Prototype is part of the specification of a media stream's type. It is a semantic (or problem domain oriented) concept and should be distinguished from the actual implementation type of the media stream. The latter is provided by an [[library implementation|StreamTypeImplFacade]]. While there are some common predefined prototypes, mostly, they are defined within the concrete [[Session]] according to the user's needs. 
 
@@ -3402,8 +3409,8 @@ Within the Proc-Layer, media streams are treated largely in a similar manner. Bu
 <div title="StreamTypeID" modifier="Ichthyostega" created="200808151510" tags="def" changecount="1">
 <pre>This ID is an symbolic key linked to a StreamTypeDescriptor. The predicate {{{stream(ID)}}} specifies a media stream with the StreamType as detailed by the corresponding descriptor (which may contain complete or partial data defining the type).</pre>
 </div>
-<div title="StreamTypeImplConstraint" modifier="Ichthyostega" created="200809220248" tags="def" changecount="1">
-<pre>A special kind of media stream [[implementation type|StreamTypeImplFacade]], which is not fully specified. As such, it is supposed there //actually is// an concrete implementation type, while only caring for some part or detail of this implementation to exhibit a specific property. For example, using an type constraint we can express the requirement of the actual implementation of a video stream to be based on RGB-float, or to enforce a fixed frame size in pixels.
+<div title="StreamTypeImplConstraint" modifier="Ichthyostega" modified="200810020230" created="200809220248" tags="def" changecount="2">
+<pre>A special kind of media stream [[implementation type|StreamTypeImplFacade]], which is not fully specified. As such, it is supposed there //actually is// an concrete implementation type, while only caring for some part or detail of this implementation to exhibit a specific property. For example, using an type constraint we can express the requirement of the actual implementation of a video stream to be based on ~RGB-float, or to enforce a fixed frame size in pixels.
 
 An implementation constraint can //stand-in// for a completely specified implementation type (meaning it's a sub interface of the latter). But actually using it in this way may cause a call to the [[defaults manager|DefaultsImplementation]] to fill in any missing information. An example would be to call {{{createFrame()}}} on the type constraint object, which means being able to allocate memory to hold a data frame, with properties in compliance with the given type constraint. Of cousre, then we need to know all the properties of this stream type, which is where the defaults manager is queried. This allows session customisation to kick in, but may fail under certain cicumstances.
 </pre>
@@ -3419,9 +3426,9 @@ An implementation constraint can //stand-in// for a completely specified impleme
 //Note:// there is a sort-of &quot;degraded&quot; variant just requiring some &amp;rarr; [[implementation constraint|StreamTypeImplConstraint]] to hold
 </pre>
 </div>
-<div title="StreamTypeQuery" modifier="Ichthyostega" modified="200809280322" created="200809280129" tags="spec draft" changecount="17">
+<div title="StreamTypeQuery" modifier="Ichthyostega" modified="200810020327" created="200809280129" tags="spec draft" changecount="22">
 <pre>Querying for media stream type information comes in various flavours
-* you may find a structural object (pipe, output, processing patten) associated with / able to deal with a certain stream type
+* you may want to find a structural object (pipe, output, processing patten) associated with / able to deal with a certain stream type
 * you may need a StreamTypeDescriptor for an existing stream given as implementation data
 * you may want to build or complete type information from partial specification.
 Mostly, those queries involve the ConfigRules system in some way or the other. The [[prototype-|StreamPrototype]] and [[implementation type|StreamTypeImplFacade]]-interfaces themselves are mostly a facade for issuing appropriate queries. Some objects (especially [[pipes|Pipe]]) are tied to a certain stream type and thus store a direct link to type information. Others are just associated with a type by virtue of the DefaultsManagement.
@@ -3439,7 +3446,7 @@ The general case of this query is //quite hairy,// because the solution is not n
 We can inject two different kinds of fallback solutions for this kind of query:
 * we can always build a &quot;catch-all&quot; prototype just based on the kind of media (e.g. {{{prototype(video).}}}). This should match with lowest priority
 * we can search for existing ~StreamTypes with the same impl type, or an impl type which is //equivalent convertible// (see &amp;rarr; StreamConversion). 
-The latter case can yield multiple solutions, which isn't any problem, because the match is limited to classes of equivalent stream implementation, which would be subsumed under the same prototype anyway. Even if the registry holds different prototypes linked to the same implementation type, they would be convertible and thus could stand in for one another. Together this results in the implementation
+The latter case can yield multiple solutions, which isn't any problem, because the match is limited to classes of equivalent stream implementation, which would be subsumed under the same prototype anyway. Even if the registry holds different prototypes linked to the same implementation type, they would be convertible and thus could //stand-in// for one another. Together this results in the implementation
 # try to get a direct match to an existing impl type which has an associated (complete) ~StreamType, thus bypassing the ConfigRules system altogether
 # run a {{{Query&lt;Prototype&gt;}}} for the given implementation type
 # do the search within equivalence class as described above
@@ -3450,9 +3457,18 @@ The latter case can yield multiple solutions, which isn't any problem, because t
 __Situation 1__: given an partially specified ~StreamType (just an [[constraint|StreamTypeImplConstraint]])
 __Situation 2__: find an implementation for a given prototype (without any further impl type guidlines)
 Both cases have to go though the [[defaults manager|DefaultsManagement]] in some way, in order to give any default configuration a chance to kick in. This is //one of the most important use cases// of the defaults system: the ability to configure a default fromat for all streams with certain semantic classification. {{{prototype(video)}}} by default is RGBA 24bit non-interlaced for example.
-But after having queried the defaults system, there remains the problem to build a new solution (which will then automatically become a default
+But after having queried the defaults system, there remains the problem to build a new solution (which will then automatically become default for this case). To be more precise: invoking the defaults system (as implemented in Lumiera) means first searching through existing objects encountered as default, and then issuing an general query with the capabilities in question. This general query in turn is conducted by the query type handler and usually consists of first searching existing objects and then creating a new object to match the capabilities. But, as said, the details depend on the type (and are defined by the query handler installed for this type). Translated to our problem here in question, this means //we have to define the basic operations from which a type query handler can be built.// Thus, to start with, it's completely sufficient to wire a call to the DefaultsManagement and assume the current session configuration contains some rules to cover it. Plus being prepared for the query to fail (throw, that is).
+
+Later on this could be augmented by providing some search mechanisms:
+* search through existing stream type implementations (or a suitable pre filtered selection) and narrow down the possible result(s) by using the constraint as a filter. Obviously this requires support by the MediaImplLib facade for the implementation in question. (This covers __Situation 1__)
+* relate a protoype in question to the other existing prototypes and use the convertibility / subsumption as a filter mechanism. Finally pick an existing impl type which is linked to one of the prototypes found thus far.
+Essentially, we need a search mechanism for impltypes and prototypes. This search mechanism is best defined by rules itself, but needs some primitive operations on types, like ennumerating all registered types, filter those selections and match against a constraint.
 
 !query for an (complete) StreamType
+All situations discussed thus far can also occur wrapped into and triggered by a query for a complete type. Depending on what part is known, the missing bits will be queried. 
+Independent from these is another __Situation__ where we query for a type ''by ID''.
+* a simple symbolic ID can be found by searching through all existing stream types (Operation supported by the type registry within STypeManager)
+* a special ''classificating'' ID can be parsed into the components (media kind, prototype, impltype), resulting in sub searches for these.
 </pre>
 </div>
 <div title="StreamTypeUse" modifier="Ichthyostega" modified="200809280320" created="200809130312" tags="draft discuss dynamic" changecount="21">
