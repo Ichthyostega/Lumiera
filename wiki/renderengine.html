@@ -928,13 +928,18 @@ TertiaryMid: #99a
 TertiaryDark: #667
 Error: #f88</pre>
 </div>
-<div title="ConManager" modifier="Ichthyostega" created="200806050208" tags="def Builder" changecount="1">
-<pre>The Connection Manager is a __Facade__ for querying information and deriving decisions regarding various aspects of data streams and possible connections.
-* retrieve information about capabilities of a stream type given by ID
+<div title="ConManager" modifier="Ichthyostega" modified="200810060300" created="200806050208" tags="def Builder" changecount="4">
+<pre>The Connection Manager is a service for wiring connections and for querying information and deriving decisions regarding various aspects of data streams and the possibility of connections. The purpose of the Connection Manager is to isolate the [[Builder]], which is client of this information and decision services, from the often convoluted details of type information and organizing a connection.
+
+!control connections
+my intention was that it would be sufficient for the builder to pass an connection request, and the Connection Manager will handle the details of establishing a control/parameter link.
+{{red{TODO: handling of parameter values, automation and control connections still need to be designed}}}
+
+!data connections
+Connecting data streams of differing type involves a StreamConversion. Mostly, this aspect is covered by the [[stream type system|StreamType]]. The intended implementation will rely partially on [[rules|ConfigRules]] to define automated conversions, while other parts need to be provided by hard wired logic. Thus, regarding data connections, the ConManager can be seen as a specialized Facade and will delegate to the &amp;rarr; [[stream type manager|STypeManager]]
+* retrieve information about capabilities of a stream type given by ID 
 * decide if a connection is possible
 * retrieve a //strategy// for implementing a connection
-
-In the intended implementation, a good deal of this functionality will actually be implemented by [[rules|ConfigRules]], while other parts need to be provided by hard wired logic, at least as a fallback. Anyway, the purpose of the Connection Manager ois to isolate the [[Builder]], which is client of this information and decision services, from these details
 </pre>
 </div>
 <div title="ConfigQuery" modifier="Ichthyostega" modified="200804110335" created="200801181308" tags="def" changecount="5">
@@ -3338,10 +3343,10 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
 * in a future version, it may also encapsulate the communication in a distributed render farm
 </pre>
 </div>
-<div title="StreamConversion" modifier="Ichthyostega" modified="200810020338" created="200810020337" tags="design spec" changecount="2">
-<pre>Conversion of a media stream into a stream of another type is done by a processor module (plugin). The problem of finding such a module is closely related to the StreamType and especially [[problems of querying|StreamTypeQuery]] for such. There can be different kinds of conversions, and the existance or non-existance of such an conversion can influence the stream type classification.
+<div title="StreamConversion" modifier="Ichthyostega" modified="200810060308" created="200810020337" tags="design spec" changecount="4">
+<pre>Conversion of a media stream into a stream of another type is done by a processor module (plugin). The problem of finding such a module is closely related to the StreamType and especially [[problems of querying|StreamTypeQuery]] for such. (The builder uses a special Facade, the ConManager, to access this functionality). There can be different kinds of conversions, and the existance or non-existance of such an conversion can influence the stream type classification.
 * different //kinds of media// can be ''transformed'' into each other
-* stream types //subsumed// by a given prototype should be ''lossless convertible''
+* stream types //subsumed// by a given prototype should be ''lossless convertible'' and thus can be considered //equivalent.//
 * besides, between different stream //implementation types,// there can be a ''rendering'' (lossy conversion) &amp;mdash; or no conversion at all.
 </pre>
 </div>
@@ -4915,6 +4920,15 @@ Without this optimization, in the base case each processing needs an input and a
 !!!!Processing
 If ''not processing'' we don't have any input buffers, instead we get our output buffers from an external source.
 Otherwise, in the default case of actually ''processing'' out output, we have to organize input buffers, allocate output buffers, call the {{{process()}}} function of the WiringDescriptor and finally release the input buffers.
+</pre>
+</div>
+<div title="WiringRequest" modifier="Ichthyostega" modified="200810060404" created="200810060344" tags="def spec" changecount="2">
+<pre>{{red{This is an early draft as of 9/08}}}
+Wiring requests rather belong to the realm of the high-level model, but play an important role in the build process, because the result of &quot;executing&quot; a wiring request will be to establish an actual low-level data connection. Wiring requests will be created automatically in the course of the build process, but they can be created manually and attached to the media objects in the high-level model as a ''wiring plug'', which is a special kind of LocatingPin (&amp;rarr; [[Placement]])
+
+Wiring requests are small stateful value objects. They will be collected, sorted and processed ordered, such as to finish the building and get a completely wired network of processing nodes. Obviously, there needs to be some reference or smart pointer to the objects to be wired, but this information remains opaque.
+
+&amp;rarr; ConManager
 </pre>
 </div>
 <div title="automation" modifier="Ichthyostega" modified="200805300125" created="200805300057" tags="overview" changecount="8">

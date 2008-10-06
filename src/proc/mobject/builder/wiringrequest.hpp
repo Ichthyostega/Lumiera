@@ -1,5 +1,5 @@
 /*
-  ConManager  -  manages the creation of data/control connections when building the Renderengine
+  WIRINGREQUEST.hpp  -  (interface) the intention to make a data or control connection
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,27 +18,37 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
 
 
-#include "proc/mobject/builder/conmanager.hpp"
-#include "proc/control/stypemanager.hpp"
+#ifndef MOBJECT_BUILDER_WIRINGREQUEST_H
+#define MOBJECT_BUILDER_WIRINGREQUEST_H
+
+
 
 namespace mobject {
   namespace builder {
     
     
-    
     /**
-     * TODO !!!!!!!!!!!!!!!!!!
+     * A stateful value object denoting the wish to establish a link or connection
+     * between two entities. Used to organize the proper working of the build process.
+     * Wiring requests are first to be checked and can be deemed impossible to 
+     * satisfy. Internally, wiring requests contain specific information about
+     * the objects to be connected. This information is exposed only to the
+     * ConManager, which is the facility actually wiring the connections.
      */
-    int
-    ConManager::getConnection ()
-    {
-    }
+    class WiringRequest
+      {
+      public:
+        /**
+         * TODO design sketch......
+         */
+      };
 
 
 
   } // namespace mobject::builder
 
 } // namespace mobject
+#endif
