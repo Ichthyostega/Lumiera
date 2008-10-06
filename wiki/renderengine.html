@@ -3431,7 +3431,7 @@ An implementation constraint can //stand-in// for a completely specified impleme
 //Note:// there is a sort-of &quot;degraded&quot; variant just requiring some &amp;rarr; [[implementation constraint|StreamTypeImplConstraint]] to hold
 </pre>
 </div>
-<div title="StreamTypeQuery" modifier="Ichthyostega" modified="200810020327" created="200809280129" tags="spec draft" changecount="22">
+<div title="StreamTypeQuery" modifier="Ichthyostega" modified="200810060525" created="200809280129" tags="spec draft" changecount="23">
 <pre>Querying for media stream type information comes in various flavours
 * you may want to find a structural object (pipe, output, processing patten) associated with / able to deal with a certain stream type
 * you may need a StreamTypeDescriptor for an existing stream given as implementation data
@@ -3471,9 +3471,10 @@ Essentially, we need a search mechanism for impltypes and prototypes. This searc
 
 !query for an (complete) StreamType
 All situations discussed thus far can also occur wrapped into and triggered by a query for a complete type. Depending on what part is known, the missing bits will be queried. 
-Independent from these is another __Situation__ where we query for a type ''by ID''.
+Independent from these is __another Situation__ where we query for a type ''by ID''.
 * a simple symbolic ID can be found by searching through all existing stream types (Operation supported by the type registry within STypeManager)
 * a special ''classificating'' ID can be parsed into the components (media kind, prototype, impltype), resulting in sub searches for these.
+{{red{not sure if we want to support queries by symboic ID}}}...problem is the impl type, because probably the library needs to support describing any implementation type by a string. Seemingly GAVL does, but requiring it for every lib?
 </pre>
 </div>
 <div title="StreamTypeUse" modifier="Ichthyostega" modified="200809280320" created="200809130312" tags="draft discuss dynamic" changecount="21">

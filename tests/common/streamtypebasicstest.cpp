@@ -29,13 +29,15 @@
 
 #include <iostream>
 using std::cout;
-
+using ::test::Test;
+using util::isnil;
 
 
 namespace lumiera {
   namespace test_format {
     
     using control::STypeManager;
+    typedef StreamType const& SType;
     typedef StreamType::ImplFacade const& ImplType;
     
     
@@ -47,13 +49,18 @@ namespace lumiera {
      */
     class StreamTypeBasics_test : public Test
       {
-        virtual void run (Arg arg)
+        virtual void
+        run (Arg arg)
           {
-            buildImplType ();
-            basicImplTypeProperties ();
+            ImplType iType = buildImplType ();
+            basicImplTypeProperties (iType);
+            
+            SType type = extend2fullType (iType);
+            basicStreamTypeProperties (type, iType);
           }
         
-        void buildImplType ()
+        ImplType
+        buildImplType ()
           {
             STypeManager& typeManager = STypeManager::instance();
         
@@ -64,15 +71,44 @@ namespace lumiera {
             
             TODO ("how to do a simple consistency check on the returned ImplFacade? can we re-create the GAVL frame type?");
             ASSERT (GAVL==iTy.libraryID);
+            return iTy;
           }
         
-        void basicImplTypeProperties ()
+        void
+        basicImplTypeProperties (ImplType refType)
           {
-            ImplType iTy = test_createImplType ();
+            ImplType iTy2 = test_createImplType ();
+            ASSERT (iTy2==refType);
+            ASSERT (refType==iTy2);
+            TODO ("add equality comparable concept to the ImplType class");
             
+            ASSERT (StreamType::VIDEO==refType.getKind());
             UNIMPLEMENTED ("get a lib descriptor"); 
             UNIMPLEMENTED ("check the lib of the type"); 
             UNIMPLEMENTED ("compare two types"); 
+          }
+        
+        SType
+        extend2fullType (ImplType iTy)
+          {
+            return STypeManager::instance().getType(iTy);
+          }
+        
+        void
+        basicStreamTypeProperties (SType type, ImplType iTy)
+          {
+            ASSERT (type.implType);
+            ASSERT (iTy==(*type.implType));  /////////////TODO: really by ptr???
+            ASSERT (&iTy==type.implType);   // actually using the same object (in the registry)
+            
+            ASSERT (!isnil (type.prototype.id));
+            ASSERT (StreamType::VIDEO==type.prototype.kind);
+            ASSERT (StreamType::VIDEO==type.implType->getKind());
+            
+            ASSERT (type.implType->canConvert(iTy));  // of course... they are actually the same
+            ASSERT (iTy.canConvert(type));           // because it's based on the same impl type
+            
+            ASSERT (StreamType::RAW==type.intentionTag);
           }
       };
     

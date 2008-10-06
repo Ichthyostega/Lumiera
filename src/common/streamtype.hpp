@@ -71,7 +71,7 @@ namespace lumiera {
       
       
       Prototype const& prototype;
-      ImplFacade * implType;
+      ImplFacade * implType;       /////////////TODO: really by ptr???
       Usage intentionTag;
       
     };
