@@ -97,11 +97,10 @@ WindowManager::add_stock_item_set(
 {
   Gtk::IconSet icon_set;
   
-  add_stock_icon(icon_set, icon_name, 16);
-  add_stock_icon(icon_set, icon_name, 22);
-  add_stock_icon(icon_set, icon_name, 24);
-  add_stock_icon(icon_set, icon_name, 32);
-  add_stock_icon(icon_set, icon_name, 48);
+  add_stock_icon(icon_set, icon_name, ICON_SIZE_MENU);
+  add_stock_icon(icon_set, icon_name, ICON_SIZE_SMALL_TOOLBAR);
+  add_stock_icon(icon_set, icon_name, ICON_SIZE_LARGE_TOOLBAR);
+  
 
   if(!icon_set.get_sizes().empty())
     {
@@ -118,7 +117,7 @@ WindowManager::add_stock_item_set(
 
 bool
 WindowManager::add_stock_icon(Gtk::IconSet &icon_set,
-  const Glib::ustring& icon_name, int size)
+  const Glib::ustring& icon_name, Gtk::IconSize size)
 {
   // Try the ~/.lumiera/icons folder
   if(add_stock_icon_source(icon_set, ustring::compose("%1/%2",
@@ -136,28 +135,33 @@ WindowManager::add_stock_icon(Gtk::IconSet &icon_set,
 bool
 WindowManager::add_stock_icon_source(Gtk::IconSet &icon_set,
   const Glib::ustring& base_dir, const Glib::ustring& icon_name,
-  int size)
+  Gtk::IconSize size)
 {
+  ustring path;
   Gtk::IconSource source;
+  
+  int width = 0, height = 0;
+  if(!IconSize::lookup(size, width, height))
+    return false;
   
   try
     {  
-      ustring path = ustring::compose("%1/%2x%2/%3.png",
-        base_dir, size, icon_name);
+      ustring path = ustring::compose("%1/%2x%3/%4.png",
+        base_dir, width, height, icon_name);
         
-      g_message("%s", path.c_str());
+      INFO(gui, "Attempting to load icon: %s", path.c_str());
       
       // This throws an exception if the file is not found:
       source.set_pixbuf(Gdk::Pixbuf::create_from_file(path));
     }
   catch(const Glib::Exception& ex)
     {
-      g_message("Failed");
+      INFO(gui, "Failed to load icon: %s", path.c_str());
       return false;
     }
 
-  source.set_size(IconSize(size));
-  //source.set_size_wildcarded(); // Icon may be scaled.
+  source.set_size(size);
+  source.set_size_wildcarded(false); // Icon may be scaled.
 
   icon_set.add_source(source);
 

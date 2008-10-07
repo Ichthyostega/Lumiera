@@ -58,11 +58,11 @@ private:
     const Glib::ustring& label);
     
   static bool add_stock_icon(Gtk::IconSet &icon_set,
-    const Glib::ustring& icon_name, int size);
+    const Glib::ustring& icon_name, Gtk::IconSize size);
                         
   static bool add_stock_icon_source(Gtk::IconSet &icon_set,
     const Glib::ustring& base_dir,
-    const Glib::ustring& icon_name, int size);
+    const Glib::ustring& icon_name, Gtk::IconSize size);
 };
 
 }   // namespace gui
