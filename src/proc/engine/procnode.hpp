@@ -45,6 +45,7 @@
 #include "proc/common.hpp"
 #include "proc/state.hpp"
 #include "proc/mobject/parameter.hpp"
+#include "lib/refarray.hpp"
 
 #include <vector>
 
@@ -60,12 +61,6 @@ namespace engine {
   
   typedef ProcNode* PNode;
   
-  template<class E>
-  struct RefArray    ///< @todo need an implementation and then probably move it into library
-    {
-      virtual E const& operator[] (uint i)  const =0;
-      virtual ~RefArray() {}
-    };
   
   /**
    * Interface: Description of the input and output ports,
@@ -79,16 +74,16 @@ namespace engine {
       virtual uint getNrI()  const =0;           ///////////TODO: indeed need a virtual function??
       virtual uint getNrO()  const =0;
       
-      RefArray<ChannelDescriptor>& out;
-      RefArray<InChanDescriptor>&  in;
+      lib::RefArray<ChannelDescriptor>& out;
+      lib::RefArray<InChanDescriptor>&  in;
       
       typedef void (ProcFunc) (BuffHandle::PBuff, uint);
       
       ProcFunc* processFunction;
       
     protected:
-      WiringDescriptor (RefArray<ChannelDescriptor>& o, 
-                        RefArray<InChanDescriptor>& i,
+      WiringDescriptor (lib::RefArray<ChannelDescriptor>& o, 
+                        lib::RefArray<InChanDescriptor>& i,
                         ProcFunc pFunc)
         : out(o), in(i),
           processFunction(pFunc)

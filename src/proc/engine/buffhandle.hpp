@@ -54,7 +54,7 @@ namespace engine {
   struct BuffHandle
     {
       typedef lumiera::StreamType::ImplFacade::DataBuffer Buff;
-      typedef Buff* PBuff;//////TODO define the Buffer type(s)
+      typedef Buff* PBuff;
       
       PBuff 
       operator->() const 
@@ -81,7 +81,7 @@ namespace engine {
    */
   struct BufferDescriptor
     {
-      char typeID_; ///////TODO define the Buffer type(s)
+      lumiera::StreamType& sType_;
     };
   
   

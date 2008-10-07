@@ -1,5 +1,5 @@
 /*
-  RENDERSTATE.hpp  -  renderengine state manager
+  RENDERSTATE.hpp  -  renderengine state management
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,33 +21,35 @@
 */
 
 
-#ifndef CONTROL_RENDERSTATE_H
-#define CONTROL_RENDERSTATE_H
+#ifndef MOBJECT_BUILDER_RENDERSTATE_H
+#define MOBJECT_BUILDER_RENDERSTATE_H
 
 #include "proc/state.hpp"
 
 
 
-namespace control {
+namespace mobject {
+  namespace builder {
+    
+    typedef proc_interface::State State;
+    
+    
+    /**
+     * Encapsulates the logic used to get a "render process".
+     * The provided StateProxy serves to hold any mutalbe state used
+     * in the render process, so the rest of the render engine 
+     * can be stateless.
+     * @todo probably the state management will work different (6/08)
+     */
+    class RenderState
+      {
+      public:
+        State& getRenderProcess () ;
+      };
   
-  typedef proc_interface::State State;
   
   
-  /**
-   * Encapsulates the logic used to get a "current render process"
-   * in accordance to the currently applicable controller settings.
-   * The provided StateProxy serves to hold any mutalbe state used
-   * in the render process, so the rest of the render engine 
-   * can be stateless.
-   * @todo probably the state management will work different (6/08)
-   */
-  class RenderState
-    {
-    public:
-      State& getRenderProcess () ;
-    };
+  } // namespace mobject::session
 
-
-
-} // namespace control
+} // namespace mobject
 #endif

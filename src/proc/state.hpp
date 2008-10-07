@@ -43,19 +43,6 @@ namespace engine {
   
   class State
     {
-    protected:
-      virtual ~State() {};
-      
-      /** resolves to the State object currently "in charge".
-       *  Intended as a performance shortcut to avoid calling
-       *  up through a chain of virtual functions when deep down
-       *  in chained ProcNode::pull() calls. This allows derived
-       *  classes to proxy the state interface.
-       */ 
-      virtual State& getCurrentImplementation () =0;
-      
-      friend class engine::StateAdapter;
-      
     public:
       /** allocate a new writable buffer with type and size according to
        *  the BufferDescriptor. The actual provider of this buffer depends
@@ -86,6 +73,19 @@ namespace engine {
       /** necessary for creating a local BuffTableChunk */
       virtual BuffTableStorage& getBuffTableStorage()  =0; 
       
+      
+    protected:
+      virtual ~State() {};
+      
+      /** resolves to the State object currently "in charge".
+       *  Intended as a performance shortcut to avoid calling
+       *  up through a chain of virtual functions when deep down
+       *  in chained ProcNode::pull() calls. This allows derived
+       *  classes to proxy the state interface.
+       */ 
+      virtual State& getCurrentImplementation () =0;
+      
+      friend class engine::StateAdapter;
     };
   
 } // namespace engine

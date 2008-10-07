@@ -26,6 +26,7 @@
 
 #include "proc/engine/procnode.hpp"
 #include "proc/engine/bufftable.hpp"
+#include "lib/refarray.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <iostream>
@@ -49,10 +50,11 @@ namespace engine {
       
       /** just some crap to pass in as ctor argument... */
       template<class E>
-      struct DummyArray : RefArray<E>
+      struct DummyArray : lib::RefArray<E>
         {
           E decoy;
           E const& operator[] (uint)  const  { return decoy;}
+          size_t size()               const  { return CHUNK_MAX;}
         };
       DummyArray<ChannelDescriptor> dummy1;
       DummyArray<InChanDescriptor>  dummy2;
