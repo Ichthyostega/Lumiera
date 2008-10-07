@@ -49,6 +49,10 @@ public:
 
 private:
   //----- Event Handlers -----//
+  
+  void on_play_pause();
+  void on_stop();
+  
   void on_arrow_tool();
   void on_ibeam_tool();
   
@@ -58,10 +62,15 @@ private:
   void on_time_pressed();
   
   void on_mouse_hover(gavl_time_t time);
+  void on_playback_period_drag_released();
   
 private:
+  void update_playback_buttons();
   void update_tool_buttons();
   void update_zoom_buttons();
+  
+  void play();
+  bool is_playing() const;
   
   void show_time(gavl_time_t time);
 
@@ -82,6 +91,7 @@ private:
   Gtk::ToolButton previousButton;
   Gtk::ToolButton rewindButton;
   Gtk::ToolButton playPauseButton;
+  Gtk::ToolButton stopButton;
   Gtk::ToolButton forwardButton;
   Gtk::ToolButton nextButton;
     
@@ -98,7 +108,13 @@ private:
   // Internals
   bool updatingToolbar;
   
+private:
+  // TEST CODE
+  bool on_frame();
+  sigc::connection frameEvent;
+  
   //----- Constants -----//
+private:
   static const int ZoomToolSteps;
 };
 

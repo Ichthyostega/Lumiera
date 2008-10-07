@@ -48,6 +48,7 @@ TimelineWidget::TimelineWidget() :
   selectionEnd(0),
   playbackPeriodStart(0),
   playbackPeriodEnd(0),
+  playbackPoint(GAVL_TIME_UNDEFINED),
   horizontalScroll(horizontalAdjustment),
   verticalScroll(verticalAdjustment)
 {
@@ -248,6 +249,20 @@ TimelineWidget::set_playback_period(gavl_time_t start, gavl_time_t end)
   body->queue_draw();
 }
 
+void
+TimelineWidget::set_playback_point(gavl_time_t point)
+{
+  playbackPoint = point;
+  ruler->queue_draw();
+  body->queue_draw();
+}
+
+gavl_time_t
+TimelineWidget::get_playback_point() const
+{
+  return playbackPoint;
+}
+
 ToolType
 TimelineWidget::get_tool() const
 {
@@ -272,6 +287,12 @@ sigc::signal<void, gavl_time_t>
 TimelineWidget::mouse_hover_signal() const
 {
   return mouseHoverSignal;
+}
+
+sigc::signal<void>
+TimelineWidget::playback_period_drag_released_signal() const
+{
+  return playbackPeriodDragReleasedSignal;
 }
 
 void
@@ -370,6 +391,12 @@ TimelineWidget::on_motion_in_body_notify_event(GdkEventMotion *event)
   ruler->set_mouse_chevron_offset(event->x);
   mouseHoverSignal.emit(x_to_time(event->x));
   return true;
+}
+
+void
+TimelineWidget::on_playback_period_drag_released()
+{
+  playbackPeriodDragReleasedSignal.emit();
 }
 
 }   // namespace widgets

@@ -42,6 +42,7 @@ TimelinePanel::TimelinePanel() :
   previousButton(Stock::MEDIA_PREVIOUS),
   rewindButton(Stock::MEDIA_REWIND),
   playPauseButton(Stock::MEDIA_PLAY),
+  stopButton(Stock::MEDIA_STOP),
   forwardButton(Stock::MEDIA_FORWARD),
   nextButton(Stock::MEDIA_NEXT),
   arrowTool(Gtk::StockID("tool_arrow")),
@@ -54,24 +55,29 @@ TimelinePanel::TimelinePanel() :
   // Setup the widget
   timelineWidget.mouse_hover_signal().connect(
     mem_fun(this, &TimelinePanel::on_mouse_hover));
+  timelineWidget.playback_period_drag_released_signal().connect(
+    mem_fun(this, &TimelinePanel::on_playback_period_drag_released));
   
   // Setup the toolbar
   timeIndicatorButton.set_label_widget(timeIndicator);
   
+  toolbar.append(timeIndicatorButton);
+  
   toolbar.append(previousButton);
   toolbar.append(rewindButton);
-  toolbar.append(playPauseButton);
+  toolbar.append(playPauseButton,
+    mem_fun(this, &TimelinePanel::on_play_pause));
+  toolbar.append(stopButton,
+    mem_fun(this, &TimelinePanel::on_stop));
   toolbar.append(forwardButton);
   toolbar.append(nextButton);
-    
-  toolbar.append(timeIndicatorButton);
   
   toolbar.append(seperator1);
   
-  toolbar.append(arrowTool, mem_fun(this,
-    &TimelinePanel::on_arrow_tool));
-  toolbar.append(iBeamTool, mem_fun(this,
-    &TimelinePanel::on_ibeam_tool));
+  toolbar.append(arrowTool,
+    mem_fun(this, &TimelinePanel::on_arrow_tool));
+  toolbar.append(iBeamTool,
+    mem_fun(this, &TimelinePanel::on_ibeam_tool));
     
   toolbar.append(seperator2);
   
@@ -90,6 +96,33 @@ TimelinePanel::TimelinePanel() :
   update_tool_buttons();
   update_zoom_buttons();
   show_time(0);
+}
+
+void
+TimelinePanel::on_play_pause()
+{ 
+  // TEST CODE! 
+  if(!is_playing())
+    {
+      play();
+    }
+  else
+    {
+      frameEvent.disconnect();
+    }
+  
+  update_playback_buttons();
+}
+
+void
+TimelinePanel::on_stop()
+{
+  // TEST CODE! 
+  timelineWidget.set_playback_point(GAVL_TIME_UNDEFINED);
+  frameEvent.disconnect();
+  show_time(timelineWidget.get_playback_period_start());
+  
+  update_playback_buttons();
 }
 
 void
@@ -126,7 +159,26 @@ TimelinePanel::on_zoom_out()
 void
 TimelinePanel::on_mouse_hover(gavl_time_t time)
 {
-  show_time(time);
+
+}
+
+void
+TimelinePanel::on_playback_period_drag_released()
+{
+  //----- TEST CODE - this needs to set the playback point via the
+  // real backend
+  timelineWidget.set_playback_point(
+    timelineWidget.get_playback_period_start());
+  //----- END TEST CODE
+  
+  play();
+}
+
+void
+TimelinePanel::update_playback_buttons()
+{
+  playPauseButton.set_stock_id(is_playing() ?
+    Stock::MEDIA_PAUSE : Stock::MEDIA_PLAY);  
 }
 
 void
@@ -151,9 +203,46 @@ TimelinePanel::update_zoom_buttons()
 }
 
 void
+TimelinePanel::play()
+{
+  if(timelineWidget.get_playback_point() == GAVL_TIME_UNDEFINED)
+    timelineWidget.set_playback_point(
+      timelineWidget.get_playback_period_start());
+  frameEvent = Glib::signal_timeout().connect(
+    sigc::mem_fun(this, &TimelinePanel::on_frame),
+    1000 / 25);
+}
+
+bool
+TimelinePanel::is_playing() const
+{
+  // TEST CODE! - this should be hooked up to the real playback control
+  return frameEvent.connected();
+}
+
+void
 TimelinePanel::show_time(gavl_time_t time)
 {
   timeIndicator.set_text(lumiera_tmpbuf_print_time(time));
+}
+
+bool
+TimelinePanel::on_frame()
+{
+  // TEST CODE!  
+  const gavl_time_t point = timelineWidget.get_playback_point()
+    + GAVL_TIME_SCALE / 25;
+  if(point < timelineWidget.get_playback_period_end())
+    {
+      show_time(point);
+      timelineWidget.set_playback_point(point);
+      
+      
+    }
+  else
+    on_stop();
+    
+  return true;
 }
 
 }   // namespace panels

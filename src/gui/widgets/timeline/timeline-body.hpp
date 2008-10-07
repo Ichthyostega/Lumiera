@@ -105,6 +105,25 @@ protected:
   
   /* ===== Internals ===== */
 private:
+
+  /**
+   * Draws the timeline tracks.
+   * @param cr The cairo context to draw into.
+   */
+  void draw_tracks(Cairo::RefPtr<Cairo::Context> cr);
+  
+  /**
+   * Draws the selected timeline period.
+   * @param cr The cairo context to draw into.
+   */
+  void draw_selection(Cairo::RefPtr<Cairo::Context> cr);
+  
+  /**
+   * Draws the current playback point, if any.
+   * @param cr The cairo context to draw into.
+   */
+  void draw_playback_point(Cairo::RefPtr<Cairo::Context> cr);
+
   void begin_shift_drag();
   
   int get_vertical_offset() const;
@@ -142,6 +161,7 @@ private:
   GdkColor backgroundColour;
   GdkColor selectionColour;
   float selectionAlpha;
+  GdkColor playbackPointColour;
   
   lumiera::gui::widgets::TimelineWidget *timelineWidget;
 

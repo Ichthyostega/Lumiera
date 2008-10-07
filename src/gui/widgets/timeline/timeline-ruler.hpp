@@ -144,6 +144,14 @@ private:
    */
   void draw_playback_period(Cairo::RefPtr<Cairo::Context> cr,
     const Gdk::Rectangle ruler_rect);
+  
+  /**
+   * Overlays the current playback point.
+   * @param cr The cairo context to draw the period into.
+   * @param ruler_rect The area of the ruler widget.
+   */
+  void draw_playback_point(Cairo::RefPtr<Cairo::Context> cr,
+    const Gdk::Rectangle ruler_rect);
 
   /**
    * Given the current zoom, this function calculates the preiod
@@ -196,10 +204,15 @@ private:
   int minDivisionWidth;
   int mouseChevronSize;
   int selectionChevronSize;
-  GdkColor playbackArrowColour;
-  float playbackArrowAlpha;
-  int playbackArrowSize;
-  int playbackArrowStemSize;
+  
+  GdkColor playbackPointColour;
+  float playbackPointAlpha;
+  int playbackPointSize;
+    
+  GdkColor playbackPeriodArrowColour;
+  float playbackPeriodArrowAlpha;
+  int playbackPeriodArrowSize;
+  int playbackPeriodArrowStemSize;
 
   /**
    * The owner widget
@@ -210,7 +223,7 @@ private:
    * The caches image of the ruler, over which the chevrons etc. will
    * be drawn.
    * @remarks This backdrop is cached because it changes relatively
-   * infrequently in comparison to the chevrons, thus improving
+   * infrequently in comparison to the overlays, thus improving
    * performance somewhat.
    */
   Cairo::RefPtr<Cairo::ImageSurface> rulerImage;
