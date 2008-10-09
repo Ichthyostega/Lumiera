@@ -91,7 +91,7 @@ namespace engine {
       
       /** the wiring-dependent part of the node operation.
        *  Includes the creation of a one-way state object on the stack
-       *  holding the actual buffer pointers and issuing the recrusive pull() calls
+       *  holding the actual buffer pointers and issuing the recursive pull() calls
        *  @see NodeWiring#callDown default implementation
        */
       virtual BuffHandle  callDown (State& currentProcess, uint requiredOutputNr)  const =0; 
