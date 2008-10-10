@@ -42,7 +42,7 @@ style "default_base" = "medium_text"
   bg[ACTIVE] = { 0.35, 0.35, 0.40 }
   bg[PRELIGHT] = "#565690"
   bg[INSENSITIVE] = { 0.10, 0.10, 0.10 }
-  bg[SELECTED] = { 0, 0.40, 0.60 }
+  bg[SELECTED] = { 0.40, 0.40, 0.45 }
   
   text[NORMAL] = { 0.80, 0.80, 0.80 }	
   text[ACTIVE] = { 0.80, 0.80, 0.80 }	
@@ -89,7 +89,7 @@ style "lumiera_adjusters" = "default_buttons_menus"
   bg[ACTIVE] = { 0.35, 0.35, 0.40 }
   bg[PRELIGHT] = "#565690"
   bg[INSENSITIVE] = { 0.10, 0.10, 0.10 }
-  bg[SELECTED] = { 0, 0.40, 0.60 }
+  bg[SELECTED] = { 0.35, 0.35, 0.40 }
 }
 
 style "lumiera_progressbars" = "default_buttons_menus"
