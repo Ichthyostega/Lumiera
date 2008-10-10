@@ -27,9 +27,12 @@ using namespace Glib;
 
 namespace lumiera {
 namespace gui {
+  
+IconSize WindowManager::giantIconSize = ICON_SIZE_INVALID;
 
 WindowManager::WindowManager()
 {
+  register_giant_icon_size();  
   register_stock_items();
 }
 
@@ -74,22 +77,29 @@ WindowManager::read_style_colour_property(
 }
 
 void
+WindowManager::register_giant_icon_size()
+{
+  if(giantIconSize == ICON_SIZE_INVALID)
+    giantIconSize = IconSize::register_new ("giant", 48, 48);
+}
+
+void
 WindowManager::register_stock_items()
 {
   RefPtr<IconFactory> factory = IconFactory::create();
   
-  add_stock_item_set(factory, "panel-assets", "panel_assets", _("_Assets"));
-  add_stock_item_set(factory, "panel-timeline", "panel_timeline", _("_Timeline"));
-  add_stock_item_set(factory, "panel-viewer", "panel_viewer", _("_Viewer"));
+  add_stock_icon_set(factory, "panel-assets", "panel_assets", _("_Assets"));
+  add_stock_icon_set(factory, "panel-timeline", "panel_timeline", _("_Timeline"));
+  add_stock_icon_set(factory, "panel-viewer", "panel_viewer", _("_Viewer"));
   
-  add_stock_item_set(factory, "tool-arrow", "tool_arrow", _("_Arrow"));
-  add_stock_item_set(factory, "tool-i-beam", "tool_i_beam", _("_I-Beam"));  
+  add_stock_icon_set(factory, "tool-arrow", "tool_arrow", _("_Arrow"));
+  add_stock_icon_set(factory, "tool-i-beam", "tool_i_beam", _("_I-Beam"));  
 
   factory->add_default(); //Add factory to list of factories.
 }
 
 bool
-WindowManager::add_stock_item_set(
+WindowManager::add_stock_icon_set(
   const Glib::RefPtr<IconFactory>& factory,
   const Glib::ustring& icon_name,
   const Glib::ustring& id,
@@ -97,36 +107,46 @@ WindowManager::add_stock_item_set(
 {
   Gtk::IconSet icon_set;
   
-  add_stock_icon(icon_set, icon_name, ICON_SIZE_MENU);
-  add_stock_icon(icon_set, icon_name, ICON_SIZE_SMALL_TOOLBAR);
-  add_stock_icon(icon_set, icon_name, ICON_SIZE_LARGE_TOOLBAR);
-  
+  // Load all the sizes, wildcarding the first, largest icon to be
+  // loaded
+  bool no_icons = true;
+  no_icons &= !add_stock_icon(
+    icon_set, icon_name, giantIconSize, no_icons);  
+  no_icons &= !add_stock_icon(
+    icon_set, icon_name, ICON_SIZE_BUTTON, no_icons);
+  no_icons &= !add_stock_icon(
+    icon_set, icon_name, ICON_SIZE_MENU, no_icons);
+  no_icons &= !add_stock_icon(
+    icon_set, icon_name, ICON_SIZE_LARGE_TOOLBAR, no_icons);
+  no_icons &= !add_stock_icon(
+    icon_set, icon_name, ICON_SIZE_SMALL_TOOLBAR, no_icons);
 
-  if(!icon_set.get_sizes().empty())
+  if(no_icons)
     {
-      const Gtk::StockID stock_id(id);
-      factory->add(stock_id, icon_set);
-      Gtk::Stock::add(Gtk::StockItem(stock_id, label));
-      return true;
+      // No icons were loaded
+      ERROR(gui, "Unable to load icon \"%s\"", icon_name.c_str());
+      return false;
     }
-    
-  ERROR(gui, "Unable to load icon \"%s\"", icon_name.c_str());
-    
-  return false;
+  
+  // Add the icon set to the icon factory
+  const Gtk::StockID stock_id(id);
+  factory->add(stock_id, icon_set);
+  Gtk::Stock::add(Gtk::StockItem(stock_id, label));
+  return true;
 }
 
 bool
 WindowManager::add_stock_icon(Gtk::IconSet &icon_set,
-  const Glib::ustring& icon_name, Gtk::IconSize size)
+  const Glib::ustring& icon_name, Gtk::IconSize size, bool wildcard)
 {
   // Try the ~/.lumiera/icons folder
   if(add_stock_icon_source(icon_set, ustring::compose("%1/%2",
     GtkLumiera::get_home_data_path(), ustring("icons")),
-    icon_name, size))
+    icon_name, size, wildcard))
     return true;
   
   if(add_stock_icon_source(
-    icon_set, get_current_dir(), icon_name, size))
+    icon_set, get_current_dir(), icon_name, size, wildcard))
     return true;
     
   return false;
@@ -135,7 +155,7 @@ WindowManager::add_stock_icon(Gtk::IconSet &icon_set,
 bool
 WindowManager::add_stock_icon_source(Gtk::IconSet &icon_set,
   const Glib::ustring& base_dir, const Glib::ustring& icon_name,
-  Gtk::IconSize size)
+  Gtk::IconSize size, bool wildcard)
 {
   ustring path;
   Gtk::IconSource source;
@@ -161,7 +181,7 @@ WindowManager::add_stock_icon_source(Gtk::IconSet &icon_set,
     }
 
   source.set_size(size);
-  source.set_size_wildcarded(false); // Icon may be scaled.
+  source.set_size_wildcarded(wildcard);
 
   icon_set.add_source(source);
 
