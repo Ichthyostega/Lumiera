@@ -19,7 +19,7 @@
 testcommon_srcdir = $(top_srcdir)/tests/common
 
 check_PROGRAMS += test-common
-test_common_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(top_srcdir)/src -I$(testcommon_srcdir)
+test_common_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(testcommon_srcdir)
 test_common_LDADD =								\
 	liblumiproc.a								\
 	liblumiprocengine.a							\
@@ -31,7 +31,7 @@ test_common_LDADD =								\
 	liblumi.a								\
 	liblumicommon.a								\
 	liblumibackend.a							\
-	-lnobugmt -lpthread -ldl -lboost_program_options-mt -lboost_regex-mt
+	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt
 
 test_common_SOURCES =						\
 	$(testcommon_srcdir)/appconfigtest.cpp			\

@@ -22,7 +22,6 @@ liblumicommon_a_srcdir = $(top_srcdir)/src/common
 noinst_LIBRARIES += liblumicommon.a
 
 liblumicommon_a_CXXFLAGS = $(CXXFLAGS) -Wall
-liblumicommon_a_CPPFLAGS = -I$(top_srcdir)/src/
 
 liblumicommon_a_SOURCES =					\
 	$(liblumicommon_a_srcdir)/lumitime.cpp		\

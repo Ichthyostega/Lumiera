@@ -1,5 +1,5 @@
 /*
-  test-llist.c  -  test the linked lis lib
+  test-llist.c  -  test the linked list lib
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -182,6 +182,25 @@ TEST ("whiles")
       else printf ("unknown ");
     }
   printf (".\n");
+}
+
+
+TEST ("relocate")
+{
+  llist source;
+  llist_init (&source);
+
+  llist something;
+  llist_init (&something);
+
+  llist_insert_head (&source, &something);
+
+  llist target = {NULL,NULL};
+
+  target = source;
+
+  llist_relocate (&target);
+  ENSURE (llist_is_head (&target, &something));
 }
 
 

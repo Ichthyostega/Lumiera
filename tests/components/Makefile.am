@@ -19,7 +19,7 @@
 testcomponents_srcdir = $(top_srcdir)/tests/components
 
 check_PROGRAMS += test-components
-test_components_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(top_srcdir)/src -I$(testcomponents_srcdir)
+test_components_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(testcomponents_srcdir)
 test_components_LDADD =								\
 	liblumiproc.a								\
 	liblumiprocengine.a							\
@@ -31,7 +31,7 @@ test_components_LDADD =								\
 	liblumi.a								\
 	liblumicommon.a								\
 	liblumibackend.a							\
-	-lnobugmt -lpthread -ldl -lboost_program_options-mt -lboost_regex-mt
+	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt
 
 test_components_SOURCES =							\
 	$(testcomponents_srcdir)/backend/mediaaccessmock.cpp			\

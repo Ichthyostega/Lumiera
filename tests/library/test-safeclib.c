@@ -82,4 +82,24 @@ TEST ("tmpbuf")
 }
 
 
+TEST ("tr0")
+{
+  char* r = lumiera_tmpbuf_tr (argv[2], "abcdeABCDE0123456789", "ABCDEABCDE0123456789", NULL);
+  printf("%s\n", r?r:"failed");
+}
+
+
+TEST ("tr")
+{
+  char* r = lumiera_tmpbuf_tr (argv[2], "abcdeABCDE0123456789", "ABCDEABCDE0123456789", "");
+  printf("%s\n", r?r:"failed");
+}
+
+
+TEST ("tr_")
+{
+  printf("%s\n", lumiera_tmpbuf_tr (argv[2], "abcdeABCDE0123456789", "ABCDEABCDE0123456789", "_"));
+}
+
+
 TESTS_END

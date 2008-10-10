@@ -31,34 +31,35 @@ LUMIERA_ERROR_DEFINE (MUTEX_UNLOCK, "Mutex unlocking failed");
 LUMIERA_ERROR_DEFINE (MUTEX_DESTROY, "Mutex destroy failed");
 
 
-/**
- * Initialize a mutex variable
- * @param self is a pointer to the mutex to be initialized
- * @return self as given
- */
 LumieraMutex
-lumiera_mutex_init (LumieraMutex self)
+lumiera_mutex_init (LumieraMutex self, const char* purpose, struct nobug_flag* flag)
 {
   if (self)
     {
       pthread_mutex_init (&self->mutex, NULL);
+      NOBUG_RESOURCE_HANDLE_INIT (self->rh);
+      NOBUG_RESOURCE_ANNOUNCE_RAW (flag, "mutex", purpose, self, self->rh);
     }
   return self;
 }
 
-/**
- * Destroy a mutex variable
- * @param self is a pointer to the mutex to be destroyed
- * @return self as given
- */
+
 LumieraMutex
-lumiera_mutex_destroy (LumieraMutex self)
+lumiera_mutex_destroy (LumieraMutex self, struct nobug_flag* flag)
 {
   if (self)
     {
+      NOBUG_RESOURCE_FORGET_RAW (flag,  self->rh);
       if (pthread_mutex_destroy (&self->mutex))
         LUMIERA_DIE (MUTEX_DESTROY);
     }
   return self;
 }
 
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

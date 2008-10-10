@@ -21,7 +21,6 @@
 
 #include "lib/mutex.h"
 #include "lib/safeclib.h"
-#include "lib/cuckoo.h"
 
 #include "backend/file.h"
 #include "backend/filedescriptor.h"
@@ -32,6 +31,7 @@
 #include <fcntl.h>
 #include <limits.h>
 #include <unistd.h>
+#include <errno.h>
 
 
 NOBUG_DEFINE_FLAG_PARENT (filedescriptor, file_all);
@@ -41,45 +41,49 @@ NOBUG_DEFINE_FLAG_PARENT (filedescriptor, file_all);
 
   This registry stores all acquired filedescriptors for lookup, they will be freed when not referenced anymore.
  */
-static Cuckoo registry = NULL;
+static PSplay registry = NULL;
 static lumiera_mutex registry_mutex = {PTHREAD_MUTEX_INITIALIZER};
-
-/*
- * setup hashing and compare functions for cuckoo hashing
- */
-static size_t
-h1 (const void* item, const uint32_t r)
-{
-  const LumieraFiledescriptor i = *(const LumieraFiledescriptor*)item;
-  return i->stat.st_dev^i->stat.st_ino^(i->flags&LUMIERA_FILE_MASK)
-    ^((i->stat.st_dev^i->stat.st_ino^(i->flags&LUMIERA_FILE_MASK))>>7)^r;
-}
-
-static size_t
-h2 (const void* item, const uint32_t r)
-{
-  const LumieraFiledescriptor i = *(const LumieraFiledescriptor*)item;
-  return i->stat.st_dev^i->stat.st_ino^(i->flags&LUMIERA_FILE_MASK)
-    ^((i->stat.st_dev^i->stat.st_ino^(i->flags&LUMIERA_FILE_MASK))>>5)^r;
-}
-
-static size_t
-h3 (const void* item, const uint32_t r)
-{
-  const LumieraFiledescriptor i = *(const LumieraFiledescriptor*)item;
-  return i->stat.st_dev^i->stat.st_ino^(i->flags&LUMIERA_FILE_MASK)
-    ^((i->stat.st_dev^i->stat.st_ino^(i->flags&LUMIERA_FILE_MASK))>>3)^r;
-}
 
 
 static int
-cmp (const void* keya, const void* keyb)
+cmp_fn (const void* keya, const void* keyb)
 {
-  const LumieraFiledescriptor a = *(const LumieraFiledescriptor*)keya;
-  const LumieraFiledescriptor b = *(const LumieraFiledescriptor*)keyb;
-  return a->stat.st_dev == b->stat.st_dev && a->stat.st_ino == b->stat.st_ino
-    && (a->flags&LUMIERA_FILE_MASK) == (b->flags&LUMIERA_FILE_MASK);
+  const LumieraFiledescriptor a = (const LumieraFiledescriptor)keya;
+  const LumieraFiledescriptor b = (const LumieraFiledescriptor)keyb;
+
+  if (a->stat.st_dev < b->stat.st_dev)
+    return -1;
+  else if (a->stat.st_dev > b->stat.st_dev)
+    return 1;
+
+  if (a->stat.st_ino < b->stat.st_ino)
+    return -1;
+  else if (a->stat.st_ino > b->stat.st_ino)
+    return 1;
+
+  if ((a->flags&LUMIERA_FILE_MASK) < (b->flags&LUMIERA_FILE_MASK))
+    return -1;
+  else if ((a->flags&LUMIERA_FILE_MASK) > (b->flags&LUMIERA_FILE_MASK))
+    return 1;
+
+  return 0;
 }
+
+
+static void
+delete_fn (PSplaynode node)
+{
+  lumiera_filedescriptor_delete ((LumieraFiledescriptor) node);
+}
+
+
+static const void*
+key_fn (const PSplaynode node)
+{
+  return node;
+}
+
+
 
 void
 lumiera_filedescriptor_registry_init (void)
@@ -88,20 +92,24 @@ lumiera_filedescriptor_registry_init (void)
   TRACE (filedescriptor);
   REQUIRE (!registry);
 
-  registry = cuckoo_new (h1, h2, h3, cmp,
-                         sizeof (LumieraFiledescriptor),
-                         3);
+  registry = psplay_new (cmp_fn, key_fn, delete_fn);
   if (!registry)
     LUMIERA_DIE (NO_MEMORY);
+
+  RESOURCE_HANDLE_INIT (registry_mutex.rh);
+  RESOURCE_ANNOUNCE (filedescriptor, "mutex", "filedescriptor registry", &registry, registry_mutex.rh);
 }
 
 void
 lumiera_filedescriptor_registry_destroy (void)
 {
   TRACE (filedescriptor);
-  REQUIRE (!cuckoo_nelements (registry));
+  REQUIRE (!psplay_nelements (registry));
+
+  RESOURCE_FORGET (filedescriptor, registry_mutex.rh);
+
   if (registry)
-    cuckoo_free (registry);
+    psplay_destroy (registry);
   registry = NULL;
 }
 
@@ -112,82 +120,77 @@ lumiera_filedescriptor_acquire (const char* name, int flags)
   TRACE (filedescriptor, "%s", name);
   REQUIRE (registry, "not initialized");
 
-  lumiera_mutexacquirer registry_lock;
-  lumiera_mutexacquirer_init_mutex (&registry_lock, &registry_mutex, LUMIERA_LOCKED);
+  LumieraFiledescriptor dest = NULL;
 
-  lumiera_filedescriptor fdesc;
-  fdesc.flags = flags;
-
-  if (stat (name, &fdesc.stat) != 0)
+  LUMIERA_MUTEX_SECTION (filedescriptor, &registry_mutex)
     {
-      if (errno == ENOENT && flags&O_CREAT)
+      lumiera_filedescriptor fdesc;
+      fdesc.flags = flags;
+
+      if (stat (name, &fdesc.stat) != 0)
         {
-          char* dir = lumiera_tmpbuf_strndup (name, PATH_MAX);
-          char* slash = dir;
-          while ((slash = strchr (slash+1, '/')))
+          if (errno == ENOENT && flags&O_CREAT)
             {
-              *slash = '\0';
-              INFO (filedescriptor, "try creating dir: %s", dir);
-              if (mkdir (dir, 0777) == -1 && errno != EEXIST)
+              char* dir = lumiera_tmpbuf_strndup (name, PATH_MAX);
+              char* slash = dir;
+              while ((slash = strchr (slash+1, '/')))
+                {
+                  *slash = '\0';
+                  INFO (filedescriptor, "try creating dir: %s", dir);
+                  if (mkdir (dir, 0777) == -1 && errno != EEXIST)
+                    {
+                      LUMIERA_ERROR_SET (filedescriptor, ERRNO);
+                      goto error;
+                    }
+                  *slash = '/';
+                }
+              int fd;
+              INFO (filedescriptor, "try creating file: %s", name);
+              fd = creat (name, 0777);
+              if (fd == -1)
                 {
                   LUMIERA_ERROR_SET (filedescriptor, ERRNO);
-                  goto efile;
+                  goto error;
                 }
-              *slash = '/';
-            }
-          int fd;
-          INFO (filedescriptor, "try creating file: %s", name);
-          fd = creat (name, 0777);
-          if (fd == -1)
-            {
-              LUMIERA_ERROR_SET (filedescriptor, ERRNO);
-              goto efile;
-            }
-          close (fd);
-          if (stat (name, &fdesc.stat) != 0)
-            {
-              /* finally, no luck */
-              LUMIERA_ERROR_SET (filedescriptor, ERRNO);
-              goto efile;
+              close (fd);
+              if (stat (name, &fdesc.stat) != 0)
+                {
+                  /* finally, no luck */
+                  LUMIERA_ERROR_SET (filedescriptor, ERRNO);
+                  goto error;
+                }
             }
         }
-    }
 
-  /* lookup/create descriptor */
-  LumieraFiledescriptor dest = &fdesc;
-  LumieraFiledescriptor* found = cuckoo_find (registry, &dest);
+      /* lookup/create descriptor */
+      dest = (LumieraFiledescriptor) psplay_find (registry, &fdesc, 100);
 
-  if (!found)
-    {
-      TRACE (filedescriptor, "Descriptor not found");
-
-      dest = lumiera_filedescriptor_new (&fdesc);
       if (!dest)
-        goto ecreate;
+        {
+          TRACE (filedescriptor, "Descriptor not found");
 
-      cuckoo_insert (registry, &dest);
-    }
-  else
-    {
-      TRACE (filedescriptor, "Descriptor already existing");
-      dest = *found;
-      ++dest->refcount;
+          dest = lumiera_filedescriptor_new (&fdesc);
+          if (!dest)
+            goto error;
+
+          psplay_insert (registry, &dest->node, 100);
+        }
+      else
+        {
+          TRACE (filedescriptor, "Descriptor already existing");
+          ++dest->refcount;
+        }
+    error: ;
     }
 
-  lumiera_mutexacquirer_unlock (&registry_lock);
   return dest;
-
- efile:
- ecreate:
-  lumiera_mutexacquirer_unlock (&registry_lock);
-  return NULL;
 }
 
 
 void
 lumiera_filedescriptor_release (LumieraFiledescriptor self)
 {
-  TRACE (filedescriptor);
+  TRACE (filedescriptor, "%p", self);
   if (!--self->refcount)
     lumiera_filedescriptor_delete (self);
 }
@@ -199,17 +202,14 @@ lumiera_filedescriptor_new (LumieraFiledescriptor template)
   LumieraFiledescriptor self = lumiera_malloc (sizeof (lumiera_filedescriptor));
   TRACE (filedescriptor, "at %p", self);
 
+  psplaynode_init (&self->node);
   self->stat = template->stat;
 
   self->flags = template->flags;
-  lumiera_mutex_init (&self->lock);
   self->refcount = 1;
   self->handle = 0;
 
-  const char* type = "mutex";
-  const char* name = "filedescriptor";
-
-  RESOURCE_ANNOUNCE (filedescriptor, type, name, self, self->rh);
+  lumiera_mutex_init (&self->lock, "filedescriptor", &NOBUG_FLAG (filedescriptor));
 
   return self;
 }
@@ -219,22 +219,19 @@ void
 lumiera_filedescriptor_delete (LumieraFiledescriptor self)
 {
   TRACE (filedescriptor, "%p", self);
-  lumiera_mutexacquirer registry_lock;
-  lumiera_mutexacquirer_init_mutex (&registry_lock, &registry_mutex, LUMIERA_LOCKED);
 
-  REQUIRE (self->refcount == 0);
+  LUMIERA_MUTEX_SECTION (filedescriptor, &registry_mutex)
+    {
+      REQUIRE (self->refcount == 0);
 
-  RESOURCE_FORGET (filedescriptor, self->rh);
+      psplay_remove (registry, &self->node);
 
-  cuckoo_remove (registry, cuckoo_find (registry, &self));
-
-  TODO ("destruct other members (WIP)");
+      TODO ("destruct other members (WIP)");
 
 
-  TODO ("release filehandle");
+      TODO ("release filehandle");
 
-  lumiera_mutex_destroy (&self->lock);
-  free (self);
-
-  lumiera_mutexacquirer_unlock (&registry_lock);
+      lumiera_mutex_destroy (&self->lock, &NOBUG_FLAG (filedescriptor));
+      lumiera_free (self);
+    }
 }

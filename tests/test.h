@@ -26,27 +26,45 @@
 
 #include "lib/error.h"
 
+#include <stdio.h>
+
+NOBUG_DEFINE_FLAG (tests);
 LUMIERA_ERROR_DEFINE (TEST, "test error");
 
 #define TESTS_BEGIN                             \
 int                                             \
-main (int argc, char** argv)                    \
+main (int argc, const char** argv)              \
 {                                               \
   NOBUG_INIT;                                   \
+  NOBUG_INIT_FLAG (tests);                      \
                                                 \
   if (argc == 1)                                \
-    return 1;
+    {                                           \
+      fprintf (stderr, "missing argument\n");   \
+      return 1;                                 \
+    }
 
-#define TEST(name) \
+#define TEST(name)                              \
  else if (!strcmp(argv[1], name))
 
 
 #define TESTS_END                               \
   else                                          \
-    return 1;                                   \
+    {                                           \
+      fprintf (stderr, "unknown test\n");       \
+      return 1;                                 \
+    }                                           \
                                                 \
   return 0;                                     \
 }
 
 
 #endif
+
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

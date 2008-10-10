@@ -16,6 +16,8 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+ACLOCAL_AMFLAGS = -I m4
+
 bin_PROGRAMS =
 lib_LTLIBRARIES =
 noinst_PROGRAMS =
@@ -26,6 +28,11 @@ noinst_HEADERS =
 BUILT_SOURCES =
 EXTRA_DIST =
 SUBDIRS =
+
+# global pre-processor flags. Per-target variables should include
+# these at the front (if possible) for consistency
+AM_CPPFLAGS = -I$(top_srcdir)/src/ \
+	$(NOBUGMT_LUMIERA_CFLAGS)
 
 # Only use subdirs if really needed, prefer the include scheme below
 #SUBDIRS +=
@@ -38,6 +45,9 @@ include $(top_srcdir)/src/proc/Makefile.am
 include $(top_srcdir)/src/common/Makefile.am
 include $(top_srcdir)/src/lib/Makefile.am
 include $(top_srcdir)/src/backend/Makefile.am
+
+# tools
+include $(top_srcdir)/src/tool/Makefile.am
 
 # gui
 include $(top_srcdir)/src/gui/Makefile.am

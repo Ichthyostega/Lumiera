@@ -80,15 +80,6 @@ AC_ARG_ENABLE(release, AC_HELP_STRING([--enable-release], [select NoBug RELEASE 
 # C headers and libraries
 AC_LANG_PUSH([C])
 
-AC_CHECK_HEADER([nobug.h],
-        AC_DEFINE(HAVE_NOBUG_H),
-        AC_MSG_ERROR([NoBug header missing                      (http://www.pipapo.org/pipawiki/NoBug)])
-        )
-AC_CHECK_LIB([nobugmt],  nobug_thread_id_get,
-        ,
-        AC_MSG_ERROR([NoBug multithreading library missing      (http://www.pipapo.org/pipawiki/NoBug)])
-        )
-
 AC_CHECK_HEADER([execinfo.h], AC_DEFINE(HAVE_EXECINFO_H))
 # there is a warning in nobug, disabled til fixed AC_CHECK_HEADER([valgrind/valgrind.h], AC_DEFINE(HAVE_VALGRIND_VALGRIND_H))
 
@@ -112,7 +103,10 @@ AC_CHECK_HEADER([boost/program_options.hpp],
         ,
         AC_MSG_ERROR([boost::program_options missing            (http://www.boost.org/)])
         )
-# checking for library left out, name contains compiler version here  (libboost_program_options-gcc42-mt-1_34_1.so.1.34.1) any ides how to use that?
+
+# check for the minimum Boost version
+# (http://www.randspringer.de/boost/upt.html)
+AX_BOOST_BASE([1.34.1])
 
 AC_CHECK_HEADER([boost/regex.hpp],
         ,
@@ -158,7 +152,7 @@ AC_CHECK_LIB(Xv, XvQueryAdaptors, ,
 # END X11 Dependancies
 
 
-############## Pkg Dependancies
+############## Gtk Dependancies
 PKG_CHECK_MODULES(GTK_LUMIERA, [
     gtkmm-2.4 >= 2.8 gdl-1.0 >= 0.6.1 cairomm-1.0 >= 0.6.0
     gavl >= 0.2.5 librsvg-2.0 >= 2.18.1])
@@ -167,6 +161,19 @@ AC_SUBST(GTK_LUMIERA_CFLAGS)
 AC_SUBST(GTK_LUMIERA_LIBS)
 
 # END Gtk Dependancies
+
+
+############## Nobug Dependancies
+PKG_CHECK_MODULES(NOBUG_LUMIERA, [nobug >= 0.3rc1],
+				 AC_DEFINE(HAVE_NOBUG_H),
+				 AC_MSG_ERROR([NoBug pkg-config metadata missing                      (http://www.pipapo.org/pipawiki/NoBug)])
+)
+PKG_CHECK_MODULES(NOBUGMT_LUMIERA, [nobugmt >= 0.3rc1],
+				 AC_DEFINE(HAVE_NOBUGMT_H),
+				 AC_MSG_ERROR([NoBug pkg-config metadata missing                      (http://www.pipapo.org/pipawiki/NoBug)])
+)
+
+# END Nobug Dependancies
 
 # Print a summary
 AC_MSG_RESULT([

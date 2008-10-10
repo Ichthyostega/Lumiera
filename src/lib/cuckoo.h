@@ -55,40 +55,60 @@ typedef size_t (*cuckoo_hashfunc)(const void* item, const uint32_t r);
 typedef int (*cuckoo_cmpfunc)(const void* item1, const void* item2);
 
 /**
+ * Item destructor function.
+ * User supplied destructor function. This function is called when items are removed
+ * from the hash or at hash detroy/delete time. Must be safe to be called on a zeroed element.
+ * @param item address of the item to be destroyed
+ */
+typedef void (*cuckoo_dtorfunc)(void* item);
+
+/**
+ * Move function.
+ * User supplied item move function
+ * @param dest target address for the move operation
+ * @param src source for the move operation
+ * @param size size of a item (requested size rounded up to the next CUCKOO_GRANULARITY)
+ * It might be necessary to invalidate the source in some case, cuckoo will zero it out
+ * after moving.
+ */
+typedef void (*cuckoo_movfunc)(void* dest, void* src, size_t size);
+
+
+/**
+ * Function table used to specialize various funtions used by the hash.
+ * TODO some elements might be NULL, then defaults are used
+ */
+struct cuckoo_vtable
+{
+  cuckoo_hashfunc h1;
+  cuckoo_hashfunc h2;
+  cuckoo_hashfunc h3;
+  cuckoo_cmpfunc cmp;
+  cuckoo_dtorfunc dtor;
+  cuckoo_movfunc mov;
+};
+
+
+/**
  * Initialize a cuckoo hash.
  * @param self pointer to a uninitialized cuckoo datastructure
- * @param h1 hash function for the first table
- * @param h2 hash function for the second table
- * @param h3 hash function for the third table
- * @param cmp function which compares two keys
- * @param startsize initial size of table t3, as 2's exponent
+ * @param itemsize size for a single hash entry, will be rounded up to align CUCKOO_GRANULARITY
+ * @param vtable initialized vtable
  * @return The initialized hashtable or NULL at allocation failure
  */
 Cuckoo
-cuckoo_init (Cuckoo self,
-             cuckoo_hashfunc h1,
-             cuckoo_hashfunc h2,
-             cuckoo_hashfunc h3,
-             cuckoo_cmpfunc cmp,
-             size_t itemsize,
-             unsigned startsize);
+cuckoo_init (Cuckoo self, size_t itemsize, struct cuckoo_vtable* vtable);
 
 /**
  * Allocate a new cuckoo hash.
- * @param h1 hash function for the first table
- * @param h2 hash function for the second table
- * @param h3 hash function for the third table
- * @param cmp function which compares two keys
+ * @param itemsize size for a single hash entry, will be rounded up to align CUCKOO_GRANULARITY
  * @param startsize initial size of table t3, as 2's exponent
+ * @param vtable initialized vtable
  * @return The initialized hashtable or NULL at allocation failure
  */
 Cuckoo
-cuckoo_new (cuckoo_hashfunc h1,
-            cuckoo_hashfunc h2,
-            cuckoo_hashfunc h3,
-            cuckoo_cmpfunc cmp,
-            size_t itemsize,
-            unsigned startsize);
+cuckoo_new (size_t itemsize, struct cuckoo_vtable* vtable);
+
 
 /**
  * Destroy a cuckoo hash.
@@ -104,7 +124,7 @@ cuckoo_destroy (Cuckoo self);
  * @param self handle of the hash table to be freed
  */
 void
-cuckoo_free (Cuckoo self);
+cuckoo_delete (Cuckoo self);
 
 /**
  * Get the number of elements stored in a hash.
@@ -117,12 +137,14 @@ cuckoo_nelements (Cuckoo self);
  * Insert an element into a hash.
  * amortized O(1) complexity because it may rarely rehash the tables or even grow them.
  * see cuckoo_reserve() about how to preallocate entries to prevent the growing costs.
+ * Inserting an element already in the hash calls the dtor for the old entry and places
+ * the new one into the hash.
  * @param self handle to the hash table
  * @param item pointer to a item to be inserted
- * @return 1 on successful insert, 0 on allocation failure
+ * @return pointer to inserted element on successful insert, NULL on allocation failure
  * Note: at failure there is one arbitary hash cell lost!
  */
-int
+void*
 cuckoo_insert (Cuckoo self, void* item);
 
 /**

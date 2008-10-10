@@ -32,9 +32,8 @@
 
 
 #include "proc/mobject/session.hpp"
-#include "proc/mobject/session/sessionimpl.hpp"
 #include "proc/mobject/session/defsmanager.hpp"
-#include "proc/mobject/session/defsregistry.hpp"
+#include "proc/mobject/session/sessionimpl.hpp"
 
 #include "common/singleton.hpp"
 

@@ -57,6 +57,32 @@ TEST ("acquire_existing_again")
     return 1;
 }
 
+TEST ("acquire_existing_3files")
+{
+  lumiera_backend_init ();
+  LumieraFiledescriptor descriptor1 = lumiera_filedescriptor_acquire (",tmp_testfile1", LUMIERA_FILE_READONLY);
+
+  LumieraFiledescriptor descriptor2 = lumiera_filedescriptor_acquire (",tmp_testfile2", LUMIERA_FILE_READONLY);
+
+  LumieraFiledescriptor descriptor3 = lumiera_filedescriptor_acquire (",tmp_testfile3", LUMIERA_FILE_READONLY);
+  if (descriptor1)
+    lumiera_filedescriptor_release (descriptor1);
+
+  if (descriptor2)
+    lumiera_filedescriptor_release (descriptor2);
+
+  if (descriptor3)
+    lumiera_filedescriptor_release (descriptor3);
+
+  if (descriptor1 && descriptor2 && descriptor3)
+    {
+      lumiera_backend_destroy ();
+      return 0;
+    }
+  else
+    return 1;
+}
+
 TEST ("acquire_create")
 {
   lumiera_backend_init ();

@@ -19,9 +19,8 @@ lumigui_srcdir = $(top_srcdir)/src/gui
 #noinst_LIBRARIES += liblumigui.a
 
 #lumigui_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
-#lumigui_CPPFLAGS = -I$(top_srcdir)/src/
 
-INCLUDES = \
+lumigui_CPPFLAGS = $(AM_CPPFLAGS) \
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"	\
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\"							\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\"							\
@@ -78,7 +77,7 @@ lumigui_SOURCES =												\
 	$(lumigui_srcdir)/output/xvdisplayer.hpp
 
 lumigui_LDFLAGS = 
-lumigui_LDADD = $(GTK_LUMIERA_LIBS) liblumicommon.a liblumi.a
+lumigui_LDADD = $(GTK_LUMIERA_LIBS) liblumicommon.a liblumi.a $(NOBUGMT_LUMIERA_LIBS)
 
 lumigui_DEPENDENCIES =											\
 	$(top_builddir)/lumiera_ui.rc								\

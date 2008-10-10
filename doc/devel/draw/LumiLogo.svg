@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="100"
+   height="100"
+   id="svg2676"
+   sodipodi:version="0.32"
+   inkscape:version="0.45.1"
+   version="1.0"
+   sodipodi:docbase="/mnt/Lager/heim/devel/lumi/doc/devel/draw"
+   sodipodi:docname="LumiLogo.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:export-filename="/mnt/Lager/heim/devel/lumi/doc/devel/draw/LumiLogo32.png"
+   inkscape:export-xdpi="57.310001"
+   inkscape:export-ydpi="57.310001">
+  <defs
+     id="defs2678">
+    <linearGradient
+       id="linearGradient11428">
+      <stop
+         offset="0"
+         style="stop-color:#eed98e;stop-opacity:1;"
+         id="stop11430" />
+      <stop
+         offset="1"
+         style="stop-color:#553163;stop-opacity:1;"
+         id="stop11432" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient11549"
+       gradientUnits="userSpaceOnUse"
+       inkscape:collect="always"
+       x1="50.468533"
+       y1="46.267605"
+       xlink:href="#linearGradient11428"
+       gradientTransform="matrix(2.0887729,0,0,2.0886777,-60.313318,-60.306023)"
+       x2="64.260468"
+       y2="68.541466" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="8"
+     inkscape:cx="77.291306"
+     inkscape:cy="36.924563"
+     inkscape:document-units="px"
+     inkscape:current-layer="svg2676"
+     width="100px"
+     height="100px"
+     inkscape:window-width="1179"
+     inkscape:window-height="918"
+     inkscape:window-x="365"
+     inkscape:window-y="25" />
+  <metadata
+     id="metadata2681">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Lumiera Logo</dc:title>
+        <dc:date>8/2008</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Lumiera.org</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/2.5/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/2.5/">
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Reproduction" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Distribution" />
+        <cc:requires
+           rdf:resource="http://web.resource.org/cc/Notice" />
+        <cc:requires
+           rdf:resource="http://web.resource.org/cc/Attribution" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://web.resource.org/cc/ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="LumiLogo"
+     inkscape:groupmode="layer"
+     id="lay_Logo"
+     inkscape:export-filename="/mnt/Lager/heim/devel/lumi/doc/devel/draw/LumiLogo.png"
+     inkscape:export-xdpi="114.62687"
+     inkscape:export-ydpi="114.62687">
+    <g
+       style="opacity:1;color:#000000;fill:#951616;fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient11549);stroke-width:0.5;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="g_LumiLogo"
+       transform="matrix(0.5,0,0,0.5,30,30)">
+      <path
+         id="LumieraLogo"
+         sodipodi:nodetypes="ccccccccccccscsssccsccscsssccccsssc"
+         d="M 0,11.48771 L 0,88.512258 C 0,94.876459 5.12376,100.00587 11.488252,99.999984 L 88.511753,99.999984 C 94.876244,99.999984 100,94.876455 100,88.512258 L 100,11.492269 C 100,5.1280689 94.876244,-1.6079329e-05 88.511753,-1.6079329e-05 L 11.488252,-1.6079329e-05 C 5.6951387,-1.6079329e-05 0,5.5258281 0,11.48771 z M 21.148826,0.26562719 C 29.955201,0.26562719 42.558748,6.0632763 42.558748,35.120436 L 42.558748,77.024531 C 42.558748,87.851217 43.097639,96.997511 50.065277,96.997511 C 52.34862,96.997511 53.64308,95.484552 54.047,94.908832 C 49.700804,94.769736 46.214101,91.194803 46.214101,86.815208 C 46.214101,82.347527 49.840211,78.721581 54.308096,78.721581 C 58.775981,78.721581 62.402092,82.347527 62.402092,86.815208 C 62.402092,88.437921 61.919927,89.921159 61.096608,91.188377 C 61.096608,91.188377 61.031334,91.318919 61.031334,91.318919 C 58.08739,95.518358 54.965657,99.738901 47.519584,99.738901 C 38.713208,99.738901 26.109662,93.941251 26.109662,64.884092 L 26.109662,22.979996 C 26.109662,12.15331 25.57077,3.0070164 18.603134,3.0070164 C 16.319793,3.0070164 15.025331,4.5199752 14.62141,5.0956943 C 18.967606,5.2347913 22.454309,8.8097247 22.454309,13.189319 C 22.454309,17.657001 18.828199,21.282945 14.360314,21.282945 C 9.892429,21.282945 6.2663188,17.657001 6.2663188,13.189319 C 6.2663188,11.566604 6.7484827,10.083368 7.5718019,8.8161505 C 7.5718019,8.8161505 7.6370761,8.6856087 7.6370761,8.6856087 C 10.58102,4.4861692 13.702754,0.26562719 21.148826,0.26562719 z M 75.456921,18.280472 C 79.924808,18.280472 83.550918,21.906416 83.550918,26.374097 C 83.550918,30.841779 79.924808,34.467725 75.456921,34.467725 C 70.989037,34.467725 67.362928,30.841779 67.362928,26.374097 C 67.362928,21.906416 70.989037,18.280472 75.456921,18.280472 z " />
+    </g>
+  </g>
+</svg>

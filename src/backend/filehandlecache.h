@@ -49,7 +49,6 @@ struct lumiera_filehandlecache_struct
   int available;
   int checked_out;
   lumiera_mutex lock;
-  RESOURCE_HANDLE (rh);
 };
 
 extern LumieraFilehandlecache lumiera_fhcache;

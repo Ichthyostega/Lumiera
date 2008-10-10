@@ -19,19 +19,19 @@ examples_srcdir = $(top_srcdir)/tests/plugin
 noinst_PROGRAMS += test-plugin
 
 test_plugin_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Werror
-test_plugin_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src
-test_plugin_LDADD = liblumi.a -lnobugmt -lpthread -ldl
+test_plugin_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
+test_plugin_LDADD = liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl
 test_plugin_SOURCES = $(examples_srcdir)/plugin_main.c
 
 noinst_HEADERS += $(examples_srcdir)/hello_interface.h
 
 check_LTLIBRARIES += example_plugin.la example_plugin_cpp.la
-example_plugin_la_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src
+example_plugin_la_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 example_plugin_la_SOURCES = $(examples_srcdir)/example_plugin.c
 # the -rpath option is required, prolly a automake bug?
 example_plugin_la_LDFLAGS = -avoid-version -module -rpath $(shell pwd)
 
-example_plugin_cpp_la_CPPFLAGS = $(AM_CPPFLAGS) -Wall -Werror -I$(top_srcdir)/src
+example_plugin_cpp_la_CPPFLAGS = $(AM_CPPFLAGS) -Wall -Werror
 example_plugin_cpp_la_SOURCES = $(examples_srcdir)/example_plugin.cpp
 # the -rpath option is required, prolly a automake bug?
 example_plugin_cpp_la_LDFLAGS = -avoid-version -module -rpath $(shell pwd)

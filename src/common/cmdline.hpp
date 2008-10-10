@@ -48,7 +48,7 @@ namespace util
   class Cmdline : public VectS
     {
     public:
-      Cmdline (int argc, char* argv[]);
+      Cmdline (int argc, const char** argv);
       explicit Cmdline (const string cmdline);
       
       operator string () const;

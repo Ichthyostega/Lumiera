@@ -22,21 +22,43 @@
 #ifndef LUMIERA_MUTEX_H
 #define LUMIERA_MUTEX_H
 
-#include "lib/locking.h"
+#include "lib/error.h"
+
+#include <pthread.h>
+#include <nobug.h>
 
 /**
  * @file
  * Mutual exclusion locking, header.
  */
-#define LUMIERA_MUTEX_SECTION(flag, handle, mutex)                                      \
-RESOURCE_HANDLE (rh_##__LINE__##_);                                                     \
-lumiera_mutexacquirer lock_##__LINE__##_;                                               \
-RESOURCE_ENTER (flag, handle, "acquire mutex", &lock_##__LINE__##_,                     \
-                NOBUG_RESOURCE_EXCLUSIVE, rh_##__LINE__##_);                            \
-for (lumiera_mutexacquirer_init_mutex (&lock_##__LINE__##_, mutex, LUMIERA_LOCKED);     \
-     lock_##__LINE__##_.state == LUMIERA_LOCKED;                                        \
-     lumiera_mutexacquirer_unlock (&lock_##__LINE__##_),                                \
-       ({RESOURCE_LEAVE(flag, rh_##__LINE__##_);}))
+
+LUMIERA_ERROR_DECLARE (MUTEX_LOCK);
+LUMIERA_ERROR_DECLARE (MUTEX_UNLOCK);
+LUMIERA_ERROR_DECLARE (MUTEX_DESTROY);
+
+/**
+ * Mutual exclusive section.
+ */
+#define LUMIERA_MUTEX_SECTION(nobugflag, mtx)                                                                                   \
+  for (lumiera_mutexacquirer NOBUG_CLEANUP(lumiera_mutexacquirer_ensureunlocked) lumiera_mutex_section_ = {(LumieraMutex)1};    \
+       lumiera_mutex_section_.mutex;)                                                                                           \
+    for (                                                                                                                       \
+         ({                                                                                                                     \
+           lumiera_mutex_section_.mutex = (mtx);                                                                                \
+           NOBUG_RESOURCE_HANDLE_INIT (lumiera_mutex_section_.rh);                                                              \
+           RESOURCE_ENTER (nobugflag, (mtx)->rh, "acquire mutex", &lumiera_mutex_section_,                                      \
+                           NOBUG_RESOURCE_EXCLUSIVE, lumiera_mutex_section_.rh);                                                \
+           if (pthread_mutex_lock (&(mtx)->mutex)) LUMIERA_DIE (MUTEX_LOCK);                                                    \
+         });                                                                                                                    \
+         lumiera_mutex_section_.mutex;                                                                                          \
+         ({                                                                                                                     \
+           if (lumiera_mutex_section_.mutex)                                                                                    \
+             {                                                                                                                  \
+               pthread_mutex_unlock (&lumiera_mutex_section_.mutex->mutex);                                                     \
+               lumiera_mutex_section_.mutex = NULL;                                                                             \
+               RESOURCE_LEAVE(nobugflag, lumiera_mutex_section_.rh);                                                            \
+             }                                                                                                                  \
+         }))
 
 
 /**
@@ -46,27 +68,37 @@ for (lumiera_mutexacquirer_init_mutex (&lock_##__LINE__##_, mutex, LUMIERA_LOCKE
 struct lumiera_mutex_struct
 {
   pthread_mutex_t mutex;
+  RESOURCE_HANDLE (rh);
 };
 typedef struct lumiera_mutex_struct lumiera_mutex;
 typedef lumiera_mutex* LumieraMutex;
 
 
+/**
+ * Initialize a mutex variable
+ * @param self is a pointer to the mutex to be initialized
+ * @return self as given
+ */
 LumieraMutex
-lumiera_mutex_init (LumieraMutex self);
-
-
-LumieraMutex
-lumiera_mutex_destroy (LumieraMutex self);
-
+lumiera_mutex_init (LumieraMutex self, const char* purpose, struct nobug_flag* flag);
 
 
 /**
- * mutexacquirer used to manage the state of a mutex variable.
+ * Destroy a mutex variable
+ * @param self is a pointer to the mutex to be destroyed
+ * @return self as given
+ */
+LumieraMutex
+lumiera_mutex_destroy (LumieraMutex self, struct nobug_flag* flag);
+
+
+/**
+ * mutexacquirer used to manage the state of a mutex.
  */
 struct lumiera_mutexacquirer_struct
 {
   LumieraMutex mutex;
-  enum lumiera_lockstate  state;
+  RESOURCE_HANDLE (rh);
 };
 typedef struct lumiera_mutexacquirer_struct lumiera_mutexacquirer;
 typedef struct lumiera_mutexacquirer_struct* LumieraMutexacquirer;
@@ -75,123 +107,14 @@ typedef struct lumiera_mutexacquirer_struct* LumieraMutexacquirer;
 static inline void
 lumiera_mutexacquirer_ensureunlocked (LumieraMutexacquirer self)
 {
-  ENSURE (self->state == LUMIERA_UNLOCKED, "forgot to unlock mutex");
-}
-
-/* override with a macro to use the cleanup checker */
-#define lumiera_mutexacquirer \
-lumiera_mutexacquirer NOBUG_CLEANUP(lumiera_mutexacquirer_ensureunlocked)
-
-
-/**
- * initialize a mutexacquirer state without mutex.
- * @param self mutexacquirer to be initialized, must be an automatic variable
- * @return self as given
- * This initialization is used when lumiera_mutexacquirer_try_mutex shall be used later
- */
-static inline LumieraMutexacquirer
-lumiera_mutexacquirer_init (LumieraMutexacquirer self)
-{
-  REQUIRE (self);
-  self->mutex = NULL;
-  self->state = LUMIERA_UNLOCKED;
-
-  return self;
-}
-
-/**
- * initialize a mutexacquirer state
- * @param self mutexacquirer to be initialized, must be an automatic variable
- * @param mutex associated mutex
- * @param state initial state of the mutex, either LUMIERA_LOCKED or LUMIERA_UNLOCKED
- * @return self as given
- * errors are fatal
- */
-static inline LumieraMutexacquirer
-lumiera_mutexacquirer_init_mutex (LumieraMutexacquirer self, LumieraMutex mutex, enum lumiera_lockstate state)
-{
-  REQUIRE (self);
-  REQUIRE (mutex);
-  self->mutex = mutex;
-  self->state = state;
-  if (state == LUMIERA_LOCKED)
-    if (pthread_mutex_lock (&mutex->mutex))
-      LUMIERA_DIE (MUTEX_LOCK);
-
-  return self;
-}
-
-
-/**
- * lock the mutex.
- * must not already be locked
- * @param self mutexacquirer associated with a mutex variable
- */
-static inline void
-lumiera_mutexacquirer_lock (LumieraMutexacquirer self)
-{
-  REQUIRE (self);
-  REQUIRE (self->state == LUMIERA_UNLOCKED, "mutex already locked");
-
-  if (pthread_mutex_lock (&self->mutex->mutex))
-    LUMIERA_DIE (MUTEX_LOCK);
-
-  self->state = LUMIERA_LOCKED;
-}
-
-
-/**
- * get the state of a lock.
- * @param self mutexacquirer associated with a mutex variable
- * @return LUMIERA_LOCKED when the mutex is locked by this thead
- */
-static inline enum lumiera_lockstate
-lumiera_mutexacquirer_state (LumieraMutexacquirer self)
-{
-  REQUIRE (self);
-  return self->state;
-}
-
-
-/**
- * try to lock a mutex.
- * must not already be locked
- * @param self mutexacquirer associated with a mutex variable
- * @param mutex pointer to a mutex which should be tried
- * @return LUMIERA_LOCKED when the mutex got locked
- */
-static inline enum lumiera_lockstate
-lumiera_mutexacquirer_try_mutex (LumieraMutexacquirer self, LumieraMutex mutex)
-{
-  REQUIRE (self);
-  REQUIRE (self->state == LUMIERA_UNLOCKED, "mutex already locked");
-
-  self->mutex=mutex;
-  switch (pthread_mutex_trylock (&self->mutex->mutex))
-    {
-    case 0:
-      return self->state = LUMIERA_LOCKED;
-    case EBUSY:
-      return LUMIERA_UNLOCKED;
-    default:
-      LUMIERA_DIE (MUTEX_LOCK);
-    }
-}
-
-
-/**
- * release mutex.
- * a mutexacquirer must be unlocked before leaving scope
- * @param self mutexacquirer associated with a mutex variable
- */
-static inline void
-lumiera_mutexacquirer_unlock (LumieraMutexacquirer self)
-{
-  REQUIRE (self);
-  REQUIRE (self->state == LUMIERA_LOCKED, "mutex was not locked");
-  if (pthread_mutex_unlock (&self->mutex->mutex))
-    LUMIERA_DIE (MUTEX_UNLOCK);
-  self->state = LUMIERA_UNLOCKED;
+  ENSURE (!self->mutex, "forgot to unlock mutex");
 }
 
 #endif
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

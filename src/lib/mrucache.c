@@ -19,6 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "lib/safeclib.h"
 #include "lib/mrucache.h"
 
 
@@ -39,9 +40,9 @@ lumiera_mrucache_destroy (LumieraMruCache self)
     {
       llist_unlink (node);
       if (self->destructor_cb)
-        free (self->destructor_cb (node));
+        lumiera_free (self->destructor_cb (node));
       else
-        free (node);
+        lumiera_free (node);
     }
   self->cached = 0;
   return self;
@@ -52,7 +53,7 @@ lumiera_mrucache_age (LumieraMruCache self, int nelem)
 {
   REQUIRE (self);
   while (self->cached && nelem--)
-    free (lumiera_mrucache_pop (self));
+    lumiera_free (lumiera_mrucache_pop (self));
 
   return nelem;
 }

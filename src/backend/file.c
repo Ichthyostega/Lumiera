@@ -50,7 +50,7 @@ lumiera_file_destroy (LumieraFile self)
 {
   TRACE (file);
   lumiera_filedescriptor_release (self->descriptor);
-  free ((void*)self->name);
+  lumiera_free (self->name);
   return self;
 }
 
@@ -67,7 +67,7 @@ void
 lumiera_file_delete (LumieraFile self)
 {
   TRACE (file);
-  free (lumiera_file_destroy (self));
+  lumiera_free (lumiera_file_destroy (self));
 }
 
 
@@ -79,7 +79,7 @@ lumiera_file_handle_acquire (LumieraFile self)
   REQUIRE (self->descriptor);
   REQUIRE (lumiera_fhcache);
 
-  LUMIERA_MUTEX_SECTION (file, self->descriptor->rh, &self->descriptor->lock)
+  LUMIERA_MUTEX_SECTION (file, &self->descriptor->lock)
     {
       if (!self->descriptor->handle)
         /* no handle yet, get a new one */
@@ -123,7 +123,7 @@ lumiera_file_handle_release (LumieraFile self)
 {
   TRACE (file);
 
-  LUMIERA_MUTEX_SECTION (file, self->descriptor->rh, &self->descriptor->lock)
+  LUMIERA_MUTEX_SECTION (file, &self->descriptor->lock)
     {
       lumiera_filehandlecache_checkin (lumiera_fhcache, self->descriptor->handle);
     }

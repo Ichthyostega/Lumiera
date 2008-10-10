@@ -5,6 +5,7 @@
 
 from os import path
 from Buildhelper import srcSubtree
+from Buildhelper import scanSubtree
 from Buildhelper import globRootdirs
 
 Import('env','artifacts','core')
@@ -29,6 +30,15 @@ def testExecutable(env,tree, exeName=None, obj=None):
     if not exeName:
         exeName = 'test-%s' % tree
     return env.Program('#$BINDIR/'+exeName, obj + core)
+
+
+def testCollection(env,dir):
+    """ treat a Directory containing a collection of standalone tests.
+        Link each of them into an independent executable
+    """
+    exeName = lambda p: path.basename(path.splitext(p)[0])
+    buildIt = lambda p: env.Program("#$BINDIR/"+exeName(p), [p] + core)
+    return [buildIt(f) for f in scanSubtree(dir)] 
 
 
 def treatPluginTestcase(env):
@@ -56,19 +66,14 @@ def treatPluginTestcase(env):
 moduledirs = globRootdirs('*')
 
 # but have to treat some subdirs individually.
-specials = ['plugin','locking','library','backend']
+specials = ['plugin','library','backend']
 
 
 
 artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in moduledirs if not dir in specials] 
                               + treatPluginTestcase(env)
-                              + testExecutable(env, 'locking', obj=['test-locking.c','mutex.c','condition.c'])
-                              + testExecutable(env, 'library', exeName='test-llist', obj=['test-llist.c'])
-                              + testExecutable(env, 'library', exeName='test-references', obj=['test-references.c'])
-                              + testExecutable(env, 'library', exeName='test-safeclib', obj=['test-safeclib.c'])
-                              + testExecutable(env, 'library', exeName='test-uuid',     obj=['test-uuid.c'])
-                              + testExecutable(env, 'backend', exeName='test-filedescriptors', obj=['test-filedescriptors.c'])
-                              + testExecutable(env, 'backend', exeName='test-filehandles', obj=['test-filehandles.c'])
+                              + testCollection(env, 'library')
+                              + testCollection(env, 'backend')
                               ) 
                               
 

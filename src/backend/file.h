@@ -60,7 +60,7 @@ typedef lumiera_file* LumieraFile;
 
 struct lumiera_file_struct
 {
-  const char* name;
+  char* name;
   LumieraFiledescriptor descriptor;
 };
 

@@ -19,10 +19,10 @@ admin_srcdir = $(top_srcdir)/admin
 
 noinst_PROGRAMS += vgsuppression
 vgsuppression_SOURCES = $(admin_srcdir)/vgsuppression.c
-vgsuppression_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
-vgsuppression_LDADD = liblumi.a -lnobugmt -lpthread -ldl
+vgsuppression_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
+vgsuppression_LDADD = liblumi.a $(NOBUGMT_LUMIERA_LIBS) -ldl
 
 noinst_PROGRAMS += rsvg-convert
 rsvg_convert_SOURCES = $(admin_srcdir)/rsvg-convert.c
-rsvg_convert_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
+rsvg_convert_CPPFLAGS = $(AM_CPPFLAGS) $(GTK_LUMIERA_CFLAGS) -std=gnu99 -Wall -Werror
 rsvg_convert_LDADD = -lcairo -lglib-2.0 -lgthread-2.0 -lrsvg-2

@@ -1,8 +1,8 @@
 /*
-  locking.h  -  shared declarations for all locking primitives
+  luidgen.c  - generate a lumiera uuid
 
   Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
+    2008                Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -19,36 +19,33 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef LUMIERA_LOCKING_H
-#define LUMIERA_LOCKING_H
+#include "lib/luid.h"
 
-#include <pthread.h>
-#include <errno.h>
-#include <nobug.h>
-
-#include "lib/error.h"
-
-
-LUMIERA_ERROR_DECLARE (MUTEX_LOCK);
-LUMIERA_ERROR_DECLARE (MUTEX_UNLOCK);
-LUMIERA_ERROR_DECLARE (MUTEX_DESTROY);
+#include <stdio.h>
 
 /**
  * @file
- * Shared declarations for all locking primitives.
+ * Generate amd print a Lumiera uid as octal escaped string
  */
 
-/**
- * used to store the current lock state.
- *
- *
- */
-enum lumiera_lockstate
-  {
-    LUMIERA_UNLOCKED,
-    LUMIERA_LOCKED,
-    LUMIERA_RDLOCKED,
-    LUMIERA_WRLOCKED
-  };
+int
+main (int argc, char** argv)
+{
+  lumiera_uid luid;
+  lumiera_uid_gen (&luid);
 
-#endif
+  printf ("\"");
+  for (int i = 0; i < 16; ++i)
+    printf ("\\%.3hho", *(((char*)&luid)+i));
+  printf ("\"\n");
+
+  return 0;
+}
+
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

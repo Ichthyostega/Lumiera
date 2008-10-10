@@ -51,6 +51,18 @@ lumiera_calloc (size_t n, size_t size);
 
 
 /**
+ * Free previously allocated memory.
+ * @param mem pointer to the memory block obtained by lumiera_malloc or lumiera_calloc
+ */
+static inline void
+lumiera_free (void* mem)
+{
+  /* for now only a alias, might change in future */
+  free (mem);
+}
+
+
+/**
  * Duplicate a C string.
  * always succeeds or dies
  * @param str string to be copied
@@ -122,4 +134,34 @@ lumiera_tmpbuf_strndup (const char* src, size_t size);
  */
 char*
 lumiera_tmpbuf_snprintf (size_t size, const char* fmt, ...);
+
+
+/**
+ * Concat up to 3 strings in a tmpbuf.
+ * @param str1 first string to concat or NULL
+ * @param str1_len how much of the first string shall be used
+ * @param str2 second string to concat or NULL
+ * @param str2_len how much of the second string shall be used
+ * @param str3 third string to concat or NULL
+ * @param str3_len how much of the third string shall be used
+ * @return temporary buffer containing the constructed of the string
+ */
+char*
+lumiera_tmpbuf_strcat3 (const char* str1, size_t str1_len,
+                        const char* str2, size_t str2_len,
+                        const char* str3, size_t str3_len);
+
+/**
+ * Translates characters in a string, similar to the shell 'tr' utility
+ * @param in input string to  be translated
+ * @param from source character set
+ * @param to destination character set
+ * @param def default destination character when a character is not in the source set,
+ *        when NULL then translation will abort on unknown characters and return NULL,
+ *        when "" then unknown characters will be removed
+ *        when set to a single character string, unknown characters will be replaced with this string
+ * @return temporary buffer containing the constructed of the string
+ */
+char*
+lumiera_tmpbuf_tr (const char* in, const char* from, const char* to, const char* def);
 

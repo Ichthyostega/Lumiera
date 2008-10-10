@@ -1,0 +1,15 @@
+TESTING "LUID's" ./test-luid
+
+TEST "luid generate" luidgen_2 <<END
+out: 0
+END
+
+TEST "luid copy" luidgen_copy <<END
+out: 1
+END
+
+TEST "storing pointers" ptrs <<END
+out: 1
+END
+
+

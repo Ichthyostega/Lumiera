@@ -1,8 +1,8 @@
 /*
-  test-uuid.c  -  test the uuid lib
+  test-luid.c  -  test the luid lib
 
-  Copyright (C)         CinelerraCV
-    2007,               Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2007, 2008          Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -23,7 +23,7 @@
 //#include <stdio.h>
 
 
-#include "lib/uuid.h"
+#include "lib/luid.h"
 
 #include <nobug.h>
 
@@ -37,37 +37,45 @@ main (int argc, char** argv)
   if (argc == 1)
     return 0;
 
-  if (!strcmp(argv[1], "uuidgen_2"))
+  if (!strcmp(argv[1], "luidgen_2"))
     {
-      lumiera_uuid uuid1;
-      lumiera_uuid uuid2;
+      lumiera_uid luid1;
+      lumiera_uid luid2;
 
-      lumiera_uuid_gen (&uuid1);
-      lumiera_uuid_gen (&uuid2);
+      lumiera_uid_gen (&luid1);
+      lumiera_uid_gen (&luid2);
 
-      printf ("%d\n", lumiera_uuid_eq (&uuid2, &uuid1));
+      printf ("%d\n", lumiera_uid_eq (&luid2, &luid1));
     }
-  else if (!strcmp(argv[1], "uuidgen_copy"))
+  else if (!strcmp(argv[1], "luidgen_copy"))
     {
-      lumiera_uuid uuid1;
-      lumiera_uuid uuid2;
+      lumiera_uid luid1;
+      lumiera_uid luid2;
 
-      lumiera_uuid_gen (&uuid1);
+      lumiera_uid_gen (&luid1);
 
-      lumiera_uuid_copy (&uuid2, &uuid1);
+      lumiera_uid_copy (&luid2, &luid1);
 
-      printf ("%d\n", lumiera_uuid_eq (&uuid2, &uuid1));
+      printf ("%d\n", lumiera_uid_eq (&luid2, &luid1));
     }
   else if (!strcmp(argv[1], "ptrs"))
     {
-      lumiera_uuid uuid;
+      lumiera_uid luid;
 
-      lumiera_uuid_set_ptr (&uuid, &uuid);
+      lumiera_uid_set_ptr (&luid, &luid);
 
-      printf ("%d\n", lumiera_uuid_ptr_get (&uuid) == &uuid);
+      printf ("%d\n", lumiera_uid_ptr_get (&luid) == &luid);
     }
   else
     return 1;
 
   return 0;
 }
+
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/
