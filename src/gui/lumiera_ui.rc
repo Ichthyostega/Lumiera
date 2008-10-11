@@ -126,6 +126,7 @@ style "timeline_body"
   gtkmm__CustomObject_TimelineBody::background = "#7E838B"
   gtkmm__CustomObject_TimelineBody::selection = "#2D2D90"
   gtkmm__CustomObject_TimelineBody::selection_alpha = 0.5
+  gtkmm__CustomObject_TimelineBody::playback_point = "#006000"
 }
 
 style "timeline_ruler" = "default_base"
@@ -140,10 +141,15 @@ style "timeline_ruler" = "default_base"
   gtkmm__CustomObject_TimelineRuler::min_division_width = 100
   gtkmm__CustomObject_TimelineRuler::mouse_chevron_size = 5
   gtkmm__CustomObject_TimelineRuler::selection_chevron_size = 5
-  gtkmm__CustomObject_TimelineRuler::playback_arrow_colour = "#2D2D90"
-  gtkmm__CustomObject_TimelineRuler::playback_arrow_alpha = 0.5
-  gtkmm__CustomObject_TimelineRuler::playback_arrow_size = 10
-  gtkmm__CustomObject_TimelineRuler::playback_arrow_stem_size = 3
+  
+  gtkmm__CustomObject_TimelineRuler::playback_point_colour = "#006000"
+  gtkmm__CustomObject_TimelineRuler::playback_point_alpha = 0.5
+  gtkmm__CustomObject_TimelineRuler::playback_point_size = 12
+  
+  gtkmm__CustomObject_TimelineRuler::playback_period_arrow_colour = "#2D2D90"
+  gtkmm__CustomObject_TimelineRuler::playback_period_arrow_alpha = 0.5
+  gtkmm__CustomObject_TimelineRuler::playback_period_arrow_size = 10
+  gtkmm__CustomObject_TimelineRuler::playback_period_arrow_stem_size = 3
 }
 
 style "timeline_header_base" = "default_base"

@@ -132,8 +132,6 @@ TimelineBody::on_realize()
 bool
 TimelineBody::on_expose_event(GdkEventExpose* event)
 {
-  Cairo::Matrix view_matrix;
-  
   REQUIRE(event != NULL);
   REQUIRE(timelineWidget != NULL);
   
@@ -146,78 +144,18 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
   read_styles();
   
   // Prepare to render via cairo
-  Glib::RefPtr<Style> style = get_style();  
   const Allocation allocation = get_allocation();
   Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
-  
-  REQUIRE(style);
+
   REQUIRE(cr);
-  
+
   // Translate the view by the scroll distance
   cr->translate(0, -get_vertical_offset());
-  cr->get_matrix(view_matrix);
-  
-  // Interate drawing each track
-  BOOST_FOREACH( Track* track, timelineWidget->tracks )
-    {
-      ASSERT(track != NULL);
 
-      const int height = track->get_height();
-      ASSERT(height >= 0);
-    
-      // Draw the track background
-      cr->rectangle(0, 0, allocation.get_width(), height);
-      gdk_cairo_set_source_color(cr->cobj(), &backgroundColour);
-      cr->fill();
-    
-      // Render the track
-      cr->save();
-      track->draw_track(cr);
-      cr->restore();
-      
-      // Shift for the next track
-      cr->translate(0, height + TimelineWidget::TrackPadding);
-    }
-    
-  //----- Draw the selection -----//
-  const int start_x = timelineWidget->time_to_x(
-    timelineWidget->get_selection_start());
-  const int end_x = timelineWidget->time_to_x(
-    timelineWidget->get_selection_end());
-
-  cr->set_matrix(view_matrix);
-  
-  // Draw the cover
-  if(end_x > 0 && start_x < allocation.get_width())
-    {
-      cr->set_source_rgba(
-        (float)selectionColour.red / 0xFFFF,
-        (float)selectionColour.green / 0xFFFF,
-        (float)selectionColour.blue / 0xFFFF,
-        selectionAlpha);
-      cr->rectangle(start_x + 0.5, 0,
-        end_x - start_x, allocation.get_height());
-      cr->fill();
-    }
-  
-  gdk_cairo_set_source_color(cr->cobj(), &selectionColour);
-  cr->set_line_width(1);
-  
-  // Draw the start
-  if(start_x >= 0 && start_x < allocation.get_width())
-    {
-      cr->move_to(start_x + 0.5, 0);
-      cr->line_to(start_x + 0.5, allocation.get_height());
-      cr->stroke_preserve();
-    }
-    
-  // Draw the end
-  if(end_x >= 0 && end_x < allocation.get_width())
-    {
-      cr->move_to(end_x + 0.5, 0);
-      cr->line_to(end_x + 0.5, allocation.get_height());
-      cr->stroke_preserve();
-    } 
+  // Draw the view
+  draw_tracks(cr);
+  draw_selection(cr);
+  draw_playback_point(cr);
   
   return true;
 }
@@ -323,6 +261,120 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
 }
 
 void
+TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
+{
+  REQUIRE(cr);
+  REQUIRE(timelineWidget != NULL);
+  
+  // Prepare
+  const Allocation allocation = get_allocation();
+  
+  // Save the view matrix
+  Cairo::Matrix view_matrix;
+  cr->get_matrix(view_matrix);
+  
+  // Interate drawing each track
+  BOOST_FOREACH( Track* track, timelineWidget->tracks )
+    {
+      ASSERT(track != NULL);
+
+      const int height = track->get_height();
+      ASSERT(height >= 0);
+    
+      // Draw the track background
+      cr->rectangle(0, 0, allocation.get_width(), height);
+      gdk_cairo_set_source_color(cr->cobj(), &backgroundColour);
+      cr->fill();
+    
+      // Render the track
+      cr->save();
+      track->draw_track(cr);
+      cr->restore();
+      
+      // Shift for the next track
+      cr->translate(0, height + TimelineWidget::TrackPadding);
+    }
+  
+  // Restore the view matrix  
+  cr->set_matrix(view_matrix);
+}
+
+void
+TimelineBody::draw_selection(Cairo::RefPtr<Cairo::Context> cr)
+{
+  REQUIRE(cr);
+  REQUIRE(timelineWidget != NULL);
+  
+  // Prepare
+  const Allocation allocation = get_allocation();
+  
+  const int start_x = timelineWidget->time_to_x(
+    timelineWidget->get_selection_start());
+  const int end_x = timelineWidget->time_to_x(
+    timelineWidget->get_selection_end());
+  
+  // Draw the cover
+  if(end_x > 0 && start_x < allocation.get_width())
+    {
+      cr->set_source_rgba(
+        (float)selectionColour.red / 0xFFFF,
+        (float)selectionColour.green / 0xFFFF,
+        (float)selectionColour.blue / 0xFFFF,
+        selectionAlpha);
+      cr->rectangle(start_x + 0.5, 0,
+        end_x - start_x, allocation.get_height());
+      cr->fill();
+    }
+  
+  gdk_cairo_set_source_color(cr->cobj(), &selectionColour);
+  cr->set_line_width(1);
+  
+  // Draw the start
+  if(start_x >= 0 && start_x < allocation.get_width())
+    {
+      cr->move_to(start_x + 0.5, 0);
+      cr->line_to(start_x + 0.5, allocation.get_height());
+      cr->stroke();
+    }
+    
+  // Draw the end
+  if(end_x >= 0 && end_x < allocation.get_width())
+    {
+      cr->move_to(end_x + 0.5, 0);
+      cr->line_to(end_x + 0.5, allocation.get_height());
+      cr->stroke();
+    }
+}
+
+void
+TimelineBody::draw_playback_point(Cairo::RefPtr<Cairo::Context> cr)
+{   
+  REQUIRE(cr);
+  REQUIRE(timelineWidget != NULL);
+  
+  // Prepare
+  const Allocation allocation = get_allocation();
+  
+  const gavl_time_t point = timelineWidget->get_playback_point();
+  if(point == GAVL_TIME_UNDEFINED)
+    return;
+  
+  const int x = timelineWidget->time_to_x(point);
+    
+  // Set source
+  gdk_cairo_set_source_color(cr->cobj(), &playbackPointColour);
+  cr->set_line_width(1);
+    
+  // Draw
+  if(x >= 0 && x < allocation.get_width())
+    {
+      cr->move_to(x + 0.5, 0);
+      cr->line_to(x + 0.5, allocation.get_height());
+      cr->stroke();
+    }
+}
+
+void
 TimelineBody::begin_shift_drag()
 {
   dragType = Shift;
@@ -361,6 +413,11 @@ TimelineBody::register_styles() const
     g_param_spec_float("selection_alpha", "Selection Alpha",
     "The transparency of the selection marque.",
     0, 1.0, 0.5, G_PARAM_READABLE));
+    
+  gtk_widget_class_install_style_property(klass, 
+    g_param_spec_boxed("playback_point", "Playback Point",
+      "The colour of the playback marker line",
+      GDK_TYPE_COLOR, G_PARAM_READABLE));
 }
   
 void
@@ -368,10 +425,13 @@ TimelineBody::read_styles()
 {
   backgroundColour = WindowManager::read_style_colour_property(
     *this, "background", 0, 0, 0);
+    
   selectionColour = WindowManager::read_style_colour_property(
     *this, "selection", 0, 0, 0);
-    
   get_style_property("selection_alpha", selectionAlpha);
+  
+  playbackPointColour = WindowManager::read_style_colour_property(
+    *this, "playback_point", 0, 0, 0);
 }
 
 }   // namespace timeline

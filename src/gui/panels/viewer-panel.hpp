@@ -31,9 +31,6 @@
 #include "panel.hpp"
 #include "../widgets/video-display-widget.hpp"
 
-using namespace lumiera::gui::widgets;
-using namespace Gtk;
-
 namespace lumiera {
 namespace gui {
 namespace panels {
@@ -45,14 +42,8 @@ namespace panels {
 
     protected:
 
-      ToolButton previousButton;
-      ToolButton rewindButton;
-      ToolButton playPauseButton;
-      ToolButton forwardButton;
-      ToolButton nextButton;
-
-      VideoDisplayWidget display;
-      Toolbar toolBar;
+      lumiera::gui::widgets::VideoDisplayWidget display;
+      Gtk::Toolbar toolBar;
     };
 
 }   // namespace panels

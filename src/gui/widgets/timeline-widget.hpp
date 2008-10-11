@@ -52,8 +52,14 @@ namespace timeline {}
 class TimelineWidget : public Gtk::Table
 {
 public:
+  /**
+   * Constructor
+   */
   TimelineWidget();
 
+  /**
+   * Destructor
+   */
   ~TimelineWidget();
   
   /* ===== Data Access ===== */
@@ -146,6 +152,20 @@ public:
   void set_playback_period(gavl_time_t start, gavl_time_t end);
   
   /**
+   * Sets the time which is currenty being played back.
+   * @param point The time index being played. This value may be
+   * GAVL_TIME_UNDEFINED, if there is no playback point.
+   */
+  void set_playback_point(gavl_time_t point);
+  
+  /**
+   * Gets the current playback point.
+   * @return The time index of the playback point. This value may be
+   * GAVL_TIME_UNDEFINED, if there is no playback point.
+   */
+  gavl_time_t get_playback_point() const;
+  
+  /**
    * Gets the type of the tool currently active.
    */
   timeline::ToolType get_tool() const;
@@ -160,6 +180,8 @@ public:
   sigc::signal<void> view_changed_signal() const;
   
   sigc::signal<void, gavl_time_t> mouse_hover_signal() const;
+  
+  sigc::signal<void> playback_period_drag_released_signal() const;
     
   /* ===== Events ===== */
 protected:
@@ -183,6 +205,8 @@ private:
   int get_y_scroll_offset() const;
   
   bool on_motion_in_body_notify_event(GdkEventMotion *event);
+  
+  void on_playback_period_drag_released();
 
 protected:
 
@@ -195,6 +219,7 @@ protected:
   gavl_time_t selectionEnd;
   gavl_time_t playbackPeriodStart;
   gavl_time_t playbackPeriodEnd;
+  gavl_time_t playbackPoint;
 
   int totalHeight;
 
@@ -202,6 +227,7 @@ protected:
   timeline::Track video2;
   std::vector<timeline::Track*> tracks;
 
+  // Child Widgets
   timeline::HeaderContainer *headerContainer;
   timeline::TimelineBody *body;
   timeline::TimelineRuler *ruler;
@@ -213,6 +239,8 @@ protected:
   // Signals
   sigc::signal<void> viewChangedSignal;
   sigc::signal<void, gavl_time_t> mouseHoverSignal;
+  sigc::signal<void>
+    playbackPeriodDragReleasedSignal;
    
   /* ===== Constants ===== */
 public:

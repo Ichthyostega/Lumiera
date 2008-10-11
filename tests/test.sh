@@ -30,7 +30,7 @@ export LC_ALL=C
 arg0="$0"
 srcdir="$(dirname "$arg0")"
 
-ulimit -S -t 1 -v 524288
+ulimit -S -t 2 -v 524288
 valgrind=""
 if [ "$VALGRINDFLAGS" = 'DISABLE' ]; then
     echo "valgrind explicit disabled"

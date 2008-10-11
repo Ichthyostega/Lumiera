@@ -802,12 +802,14 @@ for __Running__</pre>
 <pre>LumieraWiki
 ShortCuts</pre>
 </div>
-<div title="DesignDocumentation" modifier="CehTeh" modified="200707030409" created="200706181207" tags="process policy" changecount="6">
+<div title="DesignDocumentation" modifier="Ichthyostega" modified="200810050447" created="200706181207" tags="process policy" changecount="7">
 <pre>* There is a [[Manifest]] explaining the vision of the Lumiera project
 * The foundation how we work together is defined in LumieraDesignProcess
 * There is a description how the git repository is set up in RepositorySetup
 * we decided to write code in GNU style, with no tabs (use spaces)
-</pre>
+
+!basic decisions
+* TimeHandling</pre>
 </div>
 <div title="FullScreenPlugin" modifier="CehTeh" modified="200706110313" created="200607241016" tags="systemConfig lewcidExtension" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110313">
 <pre>/***
@@ -4600,6 +4602,77 @@ function addKeyDownHandlers(e)
 Thus no server and no network connection is needed. Simply open the file in your browser and save changes locally. As the wiki HTML is located in the Lumiera source tree, all changes will be managed and distributed via [[GIT|GitNotes]]. While doing so, you sometimes will have to merge conflicing changes manually in the HTML source. There is a 'empty.html' in the same folder serving as template for generating new wikis. Please refrain from editing it.
  * see GettingStarted
  * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.com/#MainFeatures]]
+</pre>
+</div>
+<div title="TimeHandling" modifier="Ichthyostega" modified="200810050506" created="200810050456" changecount="8">
+<pre>/%||'''State'''||''Final''||%/
+||'''State'''||''Draft''||
+||'''Date'''||[[Date(2007-06-21T05:12:03Z)]]||
+||'''Proprosed by'''||[&quot;Ichthyostega&quot;]||
+
+!time handling
+how to handle time values in the code and which policy to aply to the &quot;current&quot; position
+
+!!Description
+# Representation of time values
+#* we use an uniform time type. Time is time, not frames, samples etc.
+#* all timings in Lumiera are based on integral datatypes
+#* we use a fixed, very fine grid, something of the sort of microseconds
+#* the internal representation is based on a {{{typedef int64_t gavl_time_t}}}
+#* we use a set of library routines and  convenience-methods to
+#** get time in different formats (fractional seconds, frame counts)
+#** calculate with time values (overloaded operators)
+#* time measurement is zero based (of course :-P )
+# Quantizing to a frame index or similar
+#* quantizing/rounding shall happen only once at a defined point in the calculation chain and, if in doubt, be done always as late as possible. 
+#* values needing to be quantized to time (grid) positions are calculated by half-way rounding, but the result should not depend on the actual zero-point of the scale (i.e. {{{floor(0.5+val)}}}, thus quant(0.5) yields 1, quant(0.49) yields 0, quant(-0.5) yields 0 )
+# Position of frames[&gt;img[draw/FramePositions1.png]]
+#* frame numbers are zero based and Frame 0 starts at time=0 (or whatever the nominal start time is)
+#* each frame starts when the locator hits its lower border (inclusively) and ends when the locator is on its upper border (exclusively)
+#** when the locator snaps to frames this means it can be placed on the start positions of the frames solely
+#** when the locator is placed on such a start position, this means //always// displaying the frame starting at this position, irrespective of playback direction.
+# Current position for keyframe nodes and automation[&gt;img[draw/FramePositions2.png]]
+#* when parameter values for plugins/automation need to be retrieved on a per frame base (which normally is the case), for each frame there is a well defined __//point of evalutation//__ time position, irrespective of the playback direction
+#* there is no single best choice where to put this &quot;POE&quot;, thus we provide a switch
+#** //point of evalutation// of the automation is in the middle of the timespan covered by a frame
+#** //point of evalutation// is on the lower bound of each frame
+#** maybe additional position or fraction (?)
+#* moreover, we provide an option to snap the keyframe nodes to the //point of evalutation// within each frame or to be able to move them arbitrarily
+#* when keyframes are set by tweaking of parameters, they are located at the //point of evalutation// position.
+
+
+!!!!Tasks
+* figure out what has to be done when switching the &quot;current position&quot; policy on a existing project
+
+
+!!!Alternatives
+Leave everything as in Cinelerra2, i.e. show frames after the locator has passed over them, behave differnt when playing backwards and set the keyframes on the position of the locator but use them on the frame actually to be shown (which differs according to the playback direction but is always &quot;one off&quot;).
+
+Why not? because it makes frame-precise working with keyframes a real pain and even creates contradictory situations when you
+switch back and forward while tweaking.
+
+Similar for the issues with quantized values. At first sight, e.g. directly using the frame numbers as coordinates (as Cinelerra does) seems to be clever, but on the long run we get lots of case distinctions scattered all over the code. Thus better use one uniform scheme and work with precise time values as long as possible and only quantize for rendering a given frame.
+
+
+!!Rationale
+The intention is to make time handling and calculations as uniform and &quot;rational&quot; as possible. We try to stick to the precise mathematical values and let the calculations just yield an result in an uniform manner, instead of sticking to &quot;simple&quot; values like frame counts or even a session-wide frame rate
+# time and interval calculations are tricky. Solve this question once and be done.
+# rounding is always dangerous, rounded values are not the more &quot;clean&quot; values. The floor-rounding rule is chosen, because the length of an interval after quantizion should not depend on the position in relation to the zero point. The usual mathematical rounding behaves &quot;symmetrical&quot; to the zero point, which could yield a different length after quantizion if an interval contains the zero point
+# this is based on the analoy with real film running through a film projector (or the usual fencepost problem)
+# while using the actual position of the locator as the &quot;current&quot; position for keyframes seems more natural at first, it crates problems when mixing footage with different framerate or when using a low-framerate proxy footage
+
+
+
+!Comments
+This is the summary of a discussion cehteh, Plouj and ichthyo just had on irc.
+ -- [&quot;Ichthyostega&quot;] //2007-06-21T05:12:03Z//
+
+We use Gavl now
+ -- [&quot;ct&quot;] //2008-03-05T16:19:22Z//
+
+I've tidied up this old design proposal, we could make it final now. I've changed the rounding rule, please check if it's OK. In the original proposal, we  wanted to use the common mathematical rounding rule, i.e. round(-x) = - round(x) . I changed this, because of the danger of interval lengts or alignment to &quot;jump&quot; dependant on the position in relation to the time zero point.
+ -- [&quot;Ichthyostega&quot;] //2008-10-04T22:47:54Z//
+
 </pre>
 </div>
 <div title="whatInBOUML" modifier="Ichthyostega" modified="200708051535" created="200706260559" tags="discuss policy" changecount="3">

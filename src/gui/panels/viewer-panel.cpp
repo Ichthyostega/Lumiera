@@ -31,20 +31,11 @@ namespace gui {
 namespace panels {
 
 ViewerPanel::ViewerPanel() :
-  Panel("viewer", _("Viewer"), "panel_viewer"),
-  previousButton(Stock::MEDIA_PREVIOUS),
-  rewindButton(Stock::MEDIA_REWIND),
-  playPauseButton(Stock::MEDIA_PLAY),
-  forwardButton(Stock::MEDIA_FORWARD),
-  nextButton(Stock::MEDIA_NEXT)
+  Panel("viewer", _("Viewer"), "panel_viewer")
   {
     //----- Set up the Tool Bar -----//
     // Add the commands
-    toolBar.append(previousButton);
-    toolBar.append(rewindButton);
-    toolBar.append(playPauseButton);
-    toolBar.append(forwardButton);
-    toolBar.append(nextButton);
+
     
     // Configure the toolbar
     toolBar.set_toolbar_style(TOOLBAR_ICONS);

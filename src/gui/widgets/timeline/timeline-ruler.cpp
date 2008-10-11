@@ -56,9 +56,11 @@ TimelineRuler::TimelineRuler(
   minDivisionWidth(100),
   mouseChevronSize(5),
   selectionChevronSize(5),
-  playbackArrowAlpha(0.5f),
-  playbackArrowSize(10),
-  playbackArrowStemSize(3),
+  playbackPointAlpha(0.5f),
+  playbackPointSize(12),
+  playbackPeriodArrowAlpha(0.5f),
+  playbackPeriodArrowSize(10),
+  playbackPeriodArrowStemSize(3),
   timelineWidget(timeline_widget)
 {
   REQUIRE(timelineWidget != NULL);
@@ -143,10 +145,10 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
   draw_mouse_chevron(cr, allocation);
   draw_selection(cr, allocation);
   draw_playback_period(cr, allocation);
+  draw_playback_point(cr, allocation);
 
   return true;
 }
-
 
 bool
 TimelineRuler::on_button_press_event(GdkEventButton* event)
@@ -166,10 +168,14 @@ bool
 TimelineRuler::on_button_release_event(GdkEventButton* event)
 {
   REQUIRE(event != NULL);
+  REQUIRE(timelineWidget != NULL);
   
   if(event->button == 1)
+  {
     isDragging = false;
-    
+    timelineWidget->on_playback_period_drag_released();
+  }
+  
   return true;
 }
 
@@ -364,7 +370,7 @@ TimelineRuler::draw_playback_period(Cairo::RefPtr<Cairo::Context> cr,
   REQUIRE(timelineWidget != NULL);
   
   // Calculate coordinates
-  const float halfSize = playbackArrowSize / 2;
+  const float halfSize = playbackPeriodArrowSize / 2;
   
   const float a = timelineWidget->time_to_x(
     timelineWidget->playbackPeriodStart) + 1 + 0.5f;
@@ -373,15 +379,18 @@ TimelineRuler::draw_playback_period(Cairo::RefPtr<Cairo::Context> cr,
     timelineWidget->playbackPeriodEnd) + 0.5f;
   const float c = d - halfSize;
   
-  const float e = ruler_rect.get_height() - playbackArrowSize - 0.5f;
-  const float f = e + (playbackArrowSize - playbackArrowStemSize) / 2;
-  const float g = ruler_rect.get_height() - playbackArrowSize / 2
+  const float e = ruler_rect.get_height() - playbackPeriodArrowSize
+     - 0.5f;
+  const float f = e + (playbackPeriodArrowSize -
+    playbackPeriodArrowStemSize) / 2;
+  const float g = ruler_rect.get_height() - playbackPeriodArrowSize / 2
     - 0.5f;
   const float i = ruler_rect.get_height() - 0.5f;
-  const float h = i - (playbackArrowSize - playbackArrowStemSize) / 2;
+  const float h = i - (playbackPeriodArrowSize -
+    playbackPeriodArrowStemSize) / 2;
 
   // Contruct the path
-  if(d - a >= playbackArrowSize)
+  if(d - a >= playbackPeriodArrowSize)
     {
       // Draw an arrow: <===>
       cr->move_to(a, g);
@@ -394,30 +403,65 @@ TimelineRuler::draw_playback_period(Cairo::RefPtr<Cairo::Context> cr,
       cr->line_to(c, h);  
       cr->line_to(b, h);
       cr->line_to(b, i);
-      cr->line_to(a, g);
+      cr->close_path();
     }
   else
     { 
       // The space is too narrow for an arrow, so draw calipers: > < 
       cr->move_to(a, g);
       cr->rel_line_to(-halfSize, -halfSize);
-      cr->rel_line_to(0, playbackArrowSize);
+      cr->rel_line_to(0, playbackPeriodArrowSize);
+      cr->close_path();
       
       cr->move_to(d, g);
       cr->rel_line_to(halfSize, -halfSize);
-      cr->rel_line_to(0, playbackArrowSize);
+      cr->rel_line_to(0, playbackPeriodArrowSize);
+      cr->close_path();
     }
 
   // Fill
   cr->set_source_rgba(
-    (float)playbackArrowColour.red / 0xFFFF,
-    (float)playbackArrowColour.green / 0xFFFF,
-    (float)playbackArrowColour.blue / 0xFFFF,
-    playbackArrowAlpha);
+    (float)playbackPeriodArrowColour.red / 0xFFFF,
+    (float)playbackPeriodArrowColour.green / 0xFFFF,
+    (float)playbackPeriodArrowColour.blue / 0xFFFF,
+    playbackPeriodArrowAlpha);
   cr->fill_preserve();
   
   // Stroke
-  gdk_cairo_set_source_color(cr->cobj(), &playbackArrowColour);
+  gdk_cairo_set_source_color(cr->cobj(), &playbackPeriodArrowColour);
+  cr->set_line_width(1);
+  cr->stroke();
+}
+
+void
+TimelineRuler::draw_playback_point(Cairo::RefPtr<Cairo::Context> cr,
+  const Gdk::Rectangle ruler_rect)
+{
+  REQUIRE(cr);
+  REQUIRE(ruler_rect.get_width() > 0);
+  REQUIRE(ruler_rect.get_height() > 0);
+  REQUIRE(timelineWidget != NULL);
+  
+  const gavl_time_t point = timelineWidget->get_playback_point();
+  if(point == GAVL_TIME_UNDEFINED)
+    return;
+  const int x = timelineWidget->time_to_x(point);
+    
+  cr->move_to(x + 0.5, ruler_rect.get_height());
+  cr->rel_line_to(0, -playbackPointSize);
+  cr->rel_line_to(playbackPointSize / 2.0, playbackPointSize / 2.0);
+  cr->close_path();  
+    
+  // Fill
+  cr->set_source_rgba(
+    (float)playbackPointColour.red / 0xFFFF,
+    (float)playbackPointColour.green / 0xFFFF,
+    (float)playbackPointColour.blue / 0xFFFF,
+    playbackPointAlpha);
+  cr->fill_preserve();
+  
+  // Stroke
+  gdk_cairo_set_source_color(cr->cobj(), &playbackPointColour);
   cr->set_line_width(1);
   cr->stroke();
 }
@@ -526,25 +570,47 @@ TimelineRuler::register_styles() const
     "The height of the selection chevrons in pixels.",
     0, G_MAXINT, 5, G_PARAM_READABLE));
     
+  // ----- Playback Marker Styling ----- //
+    
   gtk_widget_class_install_style_property(klass, 
-    g_param_spec_boxed("playback_arrow_colour",
-      "End lines of a selection",
-      "The colour of selection limit lines",
+    g_param_spec_boxed("playback_point_colour",
+      "Playback Marker Colour",
+      "The colour of playback marker",
       GDK_TYPE_COLOR, G_PARAM_READABLE));
       
   gtk_widget_class_install_style_property(klass, 
-    g_param_spec_float("playback_arrow_alpha", "Playback Arrow Alpha",
+    g_param_spec_float("playback_point_alpha", "Playback Arrow Alpha",
+    "The transparency of the playback marker.",
+    0, 1.0, 0.5, G_PARAM_READABLE));
+    
+  gtk_widget_class_install_style_property(klass, 
+    g_param_spec_int("playback_point_size",
+    "Playback Marker Size",
+    "The height of the playback marker in pixels.",
+    0, G_MAXINT, 12, G_PARAM_READABLE));
+    
+  // ----- Playback Period Arrow Styling ----- //
+  
+  gtk_widget_class_install_style_property(klass, 
+    g_param_spec_boxed("playback_period_arrow_colour",
+      "Playback Period Arrow Colour",
+      "The colour of the playback period arrow",
+      GDK_TYPE_COLOR, G_PARAM_READABLE));
+      
+  gtk_widget_class_install_style_property(klass, 
+    g_param_spec_float("playback_period_arrow_alpha",
+    "Playback Period Arrow Alpha",
     "The transparency of the playback period arrow.",
     0, 1.0, 0.5, G_PARAM_READABLE));
     
   gtk_widget_class_install_style_property(klass, 
-    g_param_spec_int("playback_arrow_size",
+    g_param_spec_int("playback_period_arrow_size",
     "Playback Arrow Head Size",
     "The height of the playback arrow head in pixels.",
     0, G_MAXINT, 10, G_PARAM_READABLE));
     
   gtk_widget_class_install_style_property(klass, 
-    g_param_spec_int("playback_arrow_stem_size",
+    g_param_spec_int("playback_period_arrow_stem_size",
     "Playback Arrow Stem Size",
     "The height of the playback arrow head in pixels.",
     0, G_MAXINT, 3, G_PARAM_READABLE));
@@ -561,13 +627,21 @@ TimelineRuler::read_styles()
   get_style_property("min_division_width", minDivisionWidth);
   get_style_property("mouse_chevron_size", mouseChevronSize);
   get_style_property("selection_chevron_size", selectionChevronSize);
-  
-  playbackArrowColour = WindowManager::read_style_colour_property(
-    *this, "playback_arrow_colour", 0, 0, 0);
-  get_style_property("playback_arrow_alpha", playbackArrowAlpha);
-  get_style_property("playback_arrow_size", playbackArrowSize);
-  get_style_property("playback_arrow_stem_size",
-    playbackArrowStemSize);
+    
+  playbackPointColour = WindowManager::read_style_colour_property(
+    *this, "playback_point_colour", 0, 0, 0);
+  get_style_property("playback_point_alpha", playbackPointAlpha);
+  get_style_property("playback_point_size", playbackPointSize);
+    
+  playbackPeriodArrowColour =
+    WindowManager::read_style_colour_property(
+    *this, "playback_period_arrow_colour", 0, 0, 0);
+  get_style_property("playback_period_arrow_alpha",
+    playbackPeriodArrowAlpha);
+  get_style_property("playback_period_arrow_size",
+    playbackPeriodArrowSize);
+  get_style_property("playback_period_arrow_stem_size",
+    playbackPeriodArrowStemSize);
 }
   
 }   // namespace timeline
