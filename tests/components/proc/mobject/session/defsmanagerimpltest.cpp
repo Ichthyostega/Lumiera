@@ -33,7 +33,6 @@
 #include "proc/mobject/session.hpp"
 
 #include <boost/format.hpp>
-#include <cstdlib>
 
 using boost::format;
 using util::isnil;

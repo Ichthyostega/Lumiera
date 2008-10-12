@@ -30,7 +30,6 @@
 
 #include <tr1/functional>
 #include <iostream>
-#include <cstdlib>
 
 using lumiera::Query;
 using util::Cmdline;

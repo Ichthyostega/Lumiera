@@ -30,7 +30,6 @@
 
 #include <boost/scoped_ptr.hpp>
 #include <iostream>
-#include <cstdlib>
 #include <ctime>
 
 using test::Test;
@@ -106,7 +105,7 @@ namespace engine {
       bool
       consistencyCheck (BuffTable const& b, WiringDescriptor const& num, void* lastLevel)
       {
-        return (b.outHandle == lastLevel )  // storage is allocated continously
+        return (b.outHandle == lastLevel )  // storage is allocated continuously
             && (b.outBuff   <= b.inBuff  )  // input slots are behind the output slots
             && (b.outHandle <= b.inHandle)
             && (b.inBuff   == &b.outBuff  [num.getNrO()])
@@ -126,7 +125,7 @@ namespace engine {
      *       allocating a chunk out of a global buffer table storage.
      *       After returning, each allocation should be cleanly
      *       deallocated and the internal level in the storage vector
-     *       should have dopped to zero again.
+     *       should have doped to zero again.
      */
     class BuffTable_test : public Test
       {

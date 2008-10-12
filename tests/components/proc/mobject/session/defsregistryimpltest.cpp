@@ -33,7 +33,6 @@
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/format.hpp>
-#include <cstdlib>
 #include <map>
 
 using lumiera::P;
@@ -216,7 +215,7 @@ namespace mobject {
               ASSERT (!j.hasNext());
               
               // calling with an arbitrary (registered) query
-              // yields the corresponding object at start of the ennumeration
+              // yields the corresponding object at start of the enumeration
               j = reg_->candidates(ps.begin()->first);
               ASSERT ( *j == ps.begin()->second);
               
@@ -257,7 +256,7 @@ namespace mobject {
               ASSERT (!i.hasNext());
               
               ASSERT (!reg_->put (o2, q5));  // trying to (re)register o2 with a existing query
-                                             // counts as failure (nothing chages)
+                                             // counts as failure (nothing changes)
               i = reg_->candidates(q5);
               ASSERT ( *i++ == o1); // direct match
               ASSERT ( *i++ == o1);
