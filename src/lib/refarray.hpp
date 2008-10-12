@@ -25,6 +25,7 @@
 #define LIB_REFARRAY_H
 
 
+#include <boost/noncopyable.hpp>
 
 
 namespace lib {
@@ -36,7 +37,7 @@ namespace lib {
    * holding subclasses.
    */
   template<class E>
-  struct RefArray
+  struct RefArray : boost::noncopyable
     {
       virtual E const& operator[] (uint i)  const =0;   ///////////////////TODO use size_t
       virtual size_t size()  const =0;
