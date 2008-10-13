@@ -94,7 +94,13 @@ namespace lib {
     
     
     /*******************************************************************
-     * @test build a wrapper providing RefArray access to a given vector
+     * @test build several wrappers, each based on a different storage,
+     * all providing RefArray access to a given vector. The rationale
+     * is to expose just the interface.
+     * - RefArrayVectorWrapper is a ref to an existing vector
+     * - RefArrayVector subclasses std::vector
+     * - RefArrayTable holds a fix sized table, i.e. embedded storage  
+     * 
      * @see refarrayimpl.hpp
      */
     class RefArray_test : public Test

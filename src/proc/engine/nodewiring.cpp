@@ -52,14 +52,9 @@ namespace engine {
     /** filter those configurations which actually define a wiring strategy */
     typedef Filter<AllConfigs::List, Instantiation<Strategy>::Test> PossibleConfigs;
     
-  } // namespace config
-  
-  
-  
-  
-  namespace { // internal: setting up a factory for each required configuration
     
-    using config::ConfigSelector;
+    
+    // internal details: setting up a factory for each required configuration
     
     class Alloc {}; ///////////////TODO
     
@@ -91,7 +86,7 @@ namespace engine {
     
     typedef WiringDescriptor& (FunctionType)(void);
     
-    typedef ConfigSelector< WiringDescriptorFactory  ///< Factory template
+    typedef ConfigSelector< WiringDescriptorFactory  ///< Factory template to instantiate 
                           , FunctionType            ///<  function signature of the Factory
                           , Alloc&                 ///<   allocator fed to all factories
                           > WiringSelector;
@@ -106,7 +101,7 @@ namespace engine {
           { }
       };
   
-  } // (END) internals
+  } // (END) internals (namespace config)
   
   
   /////////////////////////////TODO: define the ctor
@@ -132,7 +127,6 @@ namespace engine {
     size_t config = 13;  /////////////////////////////////////////TODO
 //    return pImpl_->selector[config]();
   }
-  // BlockAlloc<NodeWiring< StateAdapter< Config<cache, process, inplace> > > >::fabricate();
   
   
 } // namespace engine

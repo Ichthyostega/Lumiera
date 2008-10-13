@@ -20,6 +20,23 @@
  
 */
 
+/** @file refarrayimpl.hpp
+ ** Some (library-) implementations of the RefArray interface.
+ **
+ ** Being an array-like object exposing just a const ref, it is typically used
+ ** on interfaces, and the type of the array "elements" usually is a ABC or interface.
+ ** The actual implementation usually holds a subclass, and is either based on a vector,
+ ** or a fixed storage contained within the implementation. The only price to pay is
+ ** that of an virtual call on element access.
+ ** 
+ ** For advanced use it would be possible to have a pointer-array or even an embedded
+ ** storage of variant-records, able to hold a mixture of subclasses. (the latter cases
+ ** will be implemented when needed).
+ **
+ ** @see refarraytest.cpp
+ ** 
+ */
+
 
 #ifndef LIB_REFARRAYIMPL_H
 #define LIB_REFARRAYIMPL_H
@@ -36,8 +53,8 @@ using std::vector;
 namespace lib {
   
   /**
-   * Wrap a vector holding objects of a subtype
-   * and provide array-like access using the interface type.
+   * Wrap a vector holding objects of a subtype and
+   * provide array-like access using the interface type.
    */
   template<class B, class IM = B>
   class RefArrayVectorWrapper
@@ -57,7 +74,7 @@ namespace lib {
           return table_.size();
         }
       
-      virtual B const& operator[] (uint i)  const 
+      virtual B const& operator[] (size_t i)  const 
         {
           REQUIRE (i < size());
           return table_[i];
@@ -66,8 +83,8 @@ namespace lib {
   
   
   /**
-   * This variation of the wrapper actually \em is
-   * a vector, but can act as a RefArray
+   * This variation of the wrapper actually
+   *  \em is a vector, but can act as a RefArray
    */
   template<class B, class IM = B>
   class RefArrayVector
@@ -87,6 +104,7 @@ namespace lib {
       using Vect::size;
       using Wrap::operator[];
     };
+  
   
   
   /**
@@ -144,7 +162,7 @@ namespace lib {
           return n; 
         }
       
-      virtual B const& operator[] (uint i)  const 
+      virtual B const& operator[] (size_t i)  const 
         {
           REQUIRE (i < size());
           return array_[i];

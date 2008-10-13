@@ -39,9 +39,9 @@
  ** StateAdapter, the predecessor nodes are pulled. The way these operations are carried out is encoded
  ** in the actual type of Strategy, which is defined at the bottom of this header. Each Strategy is a chain
  ** of elementary operations invoking each other (\c NEXT::step(invocation) ). Notably, all those possible
- ** configurations are pre-build while compiling (it's a small number below 32 configuration instance).
+ ** configurations are pre-built while compiling (it's a small number below 32 configuration instance).
  ** To be able to select the Strategy for each configuration, we need a Factory (ConfigSelector defined in
- ** nodewiringconfig). which is actually instantiated and used in nodewiring.cpp, which is the object
+ ** nodewiringconfig.hpp). which is actually instantiated and used in nodewiring.cpp, which is the object
  ** file holding all those instantiations. 
  **
  ** @see engine::ProcNode
@@ -65,6 +65,7 @@
 
 #include "lib/meta/util.hpp"
 #include "lib/meta/configflags.hpp"
+#include "lib/frameid.hpp"
 
 
 
@@ -74,13 +75,29 @@ namespace engine {
     
     
     /**
-     * Collection of functions used to build up the invocation sequence.
+     * Base class of all concrete invocation sequences.
+     * Could contain a collection of functions used to build up the invocation sequence.
+     * Currently contains just a marker used to detect the existence of an concrete
+     * definition/specialisation for a given specific configuration.
      */
     class OperationBase
       {
         typedef lumiera::Yes_t is_defined;
+        
+        
+        FrameID const&
+        genFrameID (Invocation& ivo)
+          {
+            TODO ("how to represent FrameIDs");
+            //////TODO: decide how to organise generating FrameIDs.
+            //////  who knows the actual time? probably it's encapsulated in State.
+            //////  besides, Invocation knows the output channel and can access the type
+            //////
+            UNIMPLEMENTED ("generate FrameID for current calculation situation");
+          }
       };
-      
+    
+    
     template<class NEXT>
     struct QueryCache : NEXT
       {
@@ -128,7 +145,7 @@ namespace engine {
                   *(inH[i] = this->pullPredecessor(ivo,i)); // invoke predecessor
                 // now Input #i is ready...
               }
-            return NEXT::step (ivo); // note: passing down a ref to the ProcessInvocation
+            return NEXT::step (ivo);
           }
       };
     
@@ -231,6 +248,8 @@ namespace engine {
     
     
     
+    
+    /* =============================================================== */
     /* === declare the possible Assembly of these elementary steps === */
     
     enum Cases

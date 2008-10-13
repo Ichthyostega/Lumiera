@@ -27,7 +27,7 @@
  ** different "buffer providers" (for example the frame cache). For accessing those buffers,
  ** the node needs to keep a table of buffer pointers, and for releasing the buffers later
  ** on, we need some handles. The usage pattern of those buffer pointer tables is stack-like,
- ** thus it makes sense to utilize a single large buffer pointer array per pull() calldown
+ ** thus it makes sense to utilise a single large buffer pointer array per pull() calldown
  ** sequence and dynamically claim small chunks for each node.
  **
  ** @see nodeoperation.hpp

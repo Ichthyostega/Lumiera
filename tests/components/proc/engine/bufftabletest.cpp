@@ -52,8 +52,8 @@ namespace engine {
       struct DummyArray : lib::RefArray<E>
         {
           E decoy;
-          E const& operator[] (uint)  const  { return decoy;}
-          size_t size()               const  { return CHUNK_MAX;}
+          E const& operator[] (size_t)  const  { return decoy; }
+          size_t size()                 const  { return CHUNK_MAX;}
         };
       DummyArray<ChannelDescriptor> dummy1;
       DummyArray<InChanDescriptor>  dummy2;

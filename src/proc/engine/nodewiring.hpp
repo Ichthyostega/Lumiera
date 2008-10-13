@@ -37,13 +37,13 @@ namespace engine {
 
   class WiringFactory;
   
-  namespace { class WiringFactoryImpl; }  ////TODO: better use a named implementation namespace! (produces warings on gcc 4.3)
+  namespace config { class WiringFactoryImpl; }
   
   
   /**
    * Actual implementation of the link between nodes,
    * also acting as "track switch" for the execution path
-   * choosen while operating the node network for rendering.
+   * chosen while operating the node network for rendering.
    * @param STATE Invocation state object controlling the
    *        behaviour of callDown() while rendering.
    * @see StateAdapter
@@ -65,10 +65,10 @@ namespace engine {
       
     protected:
       virtual BuffHandle
-      callDown (State& currentProcess, uint requiredOutputNr)  const 
+      callDown (State& currentProcess, uint requestedOutputNr)  const 
         {
-          STATE thisStep (currentProcess, *this);
-          return thisStep.retrieve (requiredOutputNr); // fetch or calculate results
+          STATE thisStep (currentProcess, *this, requestedOutputNr);
+          return thisStep.retrieve (); // fetch or calculate results
         }
       
     };
@@ -77,7 +77,7 @@ namespace engine {
     
   class WiringFactory
     {
-      boost::scoped_ptr<WiringFactoryImpl> pImpl_;
+      boost::scoped_ptr<config::WiringFactoryImpl> pImpl_;
       
     public:
       WiringDescriptor&

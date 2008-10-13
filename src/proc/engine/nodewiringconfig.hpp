@@ -111,7 +111,7 @@ namespace engine {
         typedef std::tr1::function<FUNC> FacFunction;
         
         template<class FAC>
-        struct FactoryHolder 
+        struct FactoryHolder ///< impl type erasure
           : private FAC,
             public FacFunction
           {

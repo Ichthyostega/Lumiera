@@ -45,8 +45,8 @@ namespace lumiera
       FrameID(long dum=0) : dummy(dum) {}
       operator long () { return dummy; }
       
-      bool operator<  (const FrameID& of)  const { return dummy <  of.dummy; }
-      bool operator== (const FrameID& of)  const { return dummy == of.dummy; }
+      bool operator<  (const FrameID& other)  const { return dummy <  other.dummy; }
+      bool operator== (const FrameID& other)  const { return dummy == other.dummy; }
     };
     
   

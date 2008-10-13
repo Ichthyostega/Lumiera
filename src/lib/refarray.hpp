@@ -36,11 +36,12 @@ namespace lib {
    * and the Implementation wraps some datastructure
    * holding subclasses.
    */
-  template<class E>
+  template<class T>
   struct RefArray : boost::noncopyable
     {
-      virtual E const& operator[] (uint i)  const =0;   ///////////////////TODO use size_t
-      virtual size_t size()  const =0;
+      virtual T const& operator[] (size_t i)  const =0;
+      virtual size_t size()                   const =0;
+      
       virtual ~RefArray() {}
     };
   

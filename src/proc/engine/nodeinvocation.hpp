@@ -21,14 +21,14 @@
 */
 
 /** @file nodeinvocation.hpp
- ** Organize the state related to the invocation of s single ProcNode::pull() call
+ ** Organise the state related to the invocation of s single ProcNode::pull() call
  ** This header defines part of the "glue" which holds together the render node network
  ** and enables to pull result frames from the nodes. Doing so requires some invocation
  ** local state to be maintained, especially a table of buffers used to carry out the
  ** calculations. Further, getting the input buffers filled requires to issue recursive
  ** \c pull() calls, which on the whole creates a stack-like assembly of local invocation
  ** state.
- ** The actual steps to be carried out for a \c pull() call are dependant on the configuration
+ ** The actual steps to be carried out for a \c pull() call are dependent on the configuration
  ** of the node to pull. Each node has been preconfigured by the builder with a WiringDescriptor
  ** and a concrete type of a StateAdapter. The actual sequence of steps is defined in the header
  ** nodeoperation.hpp out of a set of basic operation steps. These steps all use the passed in
@@ -179,14 +179,14 @@ namespace engine {
    * The real invocation context state implementation. It is created
    * by the NodeWiring (WiringDescriptor) of the processing node which
    * is pulled by this invocation, hereby using the internal configuration
-   * information to guide the selecton of the real call sequence 
+   * information to guide the selection of the real call sequence 
    * 
    * \par assembling the call sequence implementation
    * Each ProcNode#pull() call creates such a StateAdapter subclass on the stack,
    * with a concrete type according to the WiringDescriptor of the node to pull.
    * This concrete type encodes a calculation Strategy, which is assembled
    * as a chain of policy templates on top of OperationBase. For each of the
-   * possible configuratons we define such a chain (see bottom of nodeoperation.hpp).
+   * possible configurations we define such a chain (see bottom of nodeoperation.hpp).
    * The WiringFactory defined in nodewiring.cpp actually drives the instantiation
    * of all those possible combinations.
    */

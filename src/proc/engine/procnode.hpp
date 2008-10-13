@@ -74,6 +74,7 @@ namespace engine {
       virtual uint getNrI()  const =0;           ///////////TODO: indeed need a virtual function??
       virtual uint getNrO()  const =0;
       
+                                               /////////////TODO: Questions: is "in" used? can "in" and "out" be the same type? how and when to place the actual chan descriptors?
       lib::RefArray<ChannelDescriptor>& out;
       lib::RefArray<InChanDescriptor>&  in;
       
@@ -130,19 +131,19 @@ namespace engine {
       /** Engine Core operation: render and pull output from this node.
        *  On return, currentProcess will hold onto output buffer(s) 
        *  containing the calculated result frames. In case this node
-       *  calculates a multi channel output, only one channel can be 
+       *  calculates a multichannel output, only one channel can be 
        *  retrieved by such a \c pull() call, but you can expect data
        *  of the other channels to be processed and fed to cache.
        *  @param currentProcess the current processing state for 
        *         managing buffers and accessing current parameter values
-       *  @param requiredOutputNr the output channel requested (in case
-       *         this node delivers more than one output channel)
+       *  @param requestedOutputNr the output channel requested
+       *         (in case this node delivers more than one output channel)
        *  @return handle to the buffer containing the calculated result. 
        */
       BuffHandle
-      pull (State& currentProcess, uint requiredOutputNr=0)  const
+      pull (State& currentProcess, uint requestedOutputNr=0)  const
         {
-          return this->wiringConfig_.callDown (currentProcess, requiredOutputNr);
+          return this->wiringConfig_.callDown (currentProcess, requestedOutputNr);
         }
       
     };

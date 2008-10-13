@@ -58,7 +58,7 @@ namespace mobject {
          */
         void attach (asset::PProc const&);
         
-        /** connect the output this OperationPoint referes such as to
+        /** connect the output this OperationPoint refers such as to
          *  connect or combine with the input of the already existing
          *  nodes accessible via the target OperationPoint. 
          */

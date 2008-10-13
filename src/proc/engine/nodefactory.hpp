@@ -1,5 +1,5 @@
 /*
-  NODEFACTORY.hpp  -  Interface for creating processing nodes of variouos kinds
+  NODEFACTORY.hpp  -  Interface for creating processing nodes of various kinds
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
