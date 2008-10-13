@@ -41,6 +41,7 @@ extern LumieraConfig lumiera_global_config;
 const char*
 lumiera_config_link_get (const char* key, const char** value)
 {
+  (void) key; (void) value;
   TRACE (config_typed);
   UNIMPLEMENTED();
   return 0;
@@ -49,6 +50,7 @@ lumiera_config_link_get (const char* key, const char** value)
 LumieraConfigitem
 lumiera_config_link_set (const char* key, const char** value)
 {
+  (void) key; (void) value;
   TRACE (config_typed);
   UNIMPLEMENTED();
   return 0;
@@ -111,6 +113,7 @@ lumiera_config_number_set (const char* key, long long* value)
 const char*
 lumiera_config_real_get (const char* key, long double* value)
 {
+  (void) key; (void) value;
   TRACE (config_typed);
   UNIMPLEMENTED();
   return 0;
@@ -119,6 +122,7 @@ lumiera_config_real_get (const char* key, long double* value)
 LumieraConfigitem
 lumiera_config_real_set (const char* key, long double* value)
 {
+  (void) key; (void) value;
   TRACE (config_typed);
   UNIMPLEMENTED();
   return 0;
@@ -349,6 +353,7 @@ lumiera_config_word_set (const char* key, const char** value)
 const char*
 lumiera_config_bool_get (const char* key, int* value)
 {
+  (void) key; (void) value;
   TRACE (config_typed);
   UNIMPLEMENTED();
   return 0;
@@ -358,6 +363,7 @@ lumiera_config_bool_get (const char* key, int* value)
 LumieraConfigitem
 lumiera_config_bool_set (const char* key, int* value)
 {
+  (void) key; (void) value;
   TRACE (config_typed);
   UNIMPLEMENTED();
   return 0;

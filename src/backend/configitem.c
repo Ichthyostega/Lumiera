@@ -241,8 +241,8 @@ lumiera_configitem_parse (LumieraConfigitem self, const char* line)
           itr += self->key_size;
 
           /*we need a key with a length greather than zero and 
-           * either the end of the line 
-           * or a whitespace after the key */
+           * either end of line 
+           * or whitespace after key */
 
           if ( self->key_size && ( !*itr || (*itr && isspace(*itr)) ))
             {
