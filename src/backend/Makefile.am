@@ -18,7 +18,7 @@
 liblumibackend_a_srcdir = $(top_srcdir)/src/backend
 noinst_LIBRARIES += liblumibackend.a
 
-liblumibackend_a_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
+liblumibackend_a_CFLAGS = $(CFLAGS) -std=gnu99 -Wextra -Wall -Werror
 
 liblumibackend_a_SOURCES =					\
 	$(liblumibackend_a_srcdir)/mediaaccessfacade.cpp	\
@@ -28,6 +28,7 @@ liblumibackend_a_SOURCES =					\
 	$(liblumibackend_a_srcdir)/filehandle.c			\
 	$(liblumibackend_a_srcdir)/filedescriptor.c		\
 	$(liblumibackend_a_srcdir)/filehandlecache.c		\
+	$(liblumibackend_a_srcdir)/interface.c			\
 	$(liblumibackend_a_srcdir)/interfaceregistry.c		\
 	$(liblumibackend_a_srcdir)/config.c			\
 	$(liblumibackend_a_srcdir)/config_typed.c 		\

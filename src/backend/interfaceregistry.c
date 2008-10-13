@@ -37,7 +37,9 @@
  * by their name and major version.
  */
 
-NOBUG_DEFINE_FLAG_PARENT (interfaceregistry, backend);
+NOBUG_DEFINE_FLAG_PARENT (interface_all, backend);
+NOBUG_DEFINE_FLAG_PARENT (interfaceregistry, interface_all);
+NOBUG_DEFINE_FLAG_PARENT (interface, interface_all);
 
 static PSplay interfaceregistry;
 lumiera_mutex lumiera_interface_mutex;
@@ -57,9 +59,13 @@ key_fn (const PSplaynode node);
 void
 lumiera_interfaceregistry_init (void)
 {
+  NOBUG_INIT_FLAG (interface_all);
   NOBUG_INIT_FLAG (interfaceregistry);
+  NOBUG_INIT_FLAG (interface);
   TRACE (interfaceregistry);
   REQUIRE (!interfaceregistry);
+
+  TODO ("introduce a registrynode structure, place all dynamic interface stuff there, make interface_struct const");
 
   interfaceregistry = psplay_new (cmp_fn, key_fn, NULL);
   if (!interfaceregistry)
@@ -106,6 +112,7 @@ lumiera_interfaceregistry_bulkregister_interfaces (LumieraInterface* self)
     {
       while (*self)
         {
+          TRACE (interfaceregistry, "interface %s, version %d, instance %s", (*self)->interface, (*self)->version, (*self)->name);
           psplay_insert (interfaceregistry, &(*self)->node, 100);
           ++self;
         }
@@ -121,7 +128,10 @@ lumiera_interfaceregistry_remove_interface (LumieraInterface self)
 
   LUMIERA_RECMUTEX_SECTION (interfaceregistry, &lumiera_interface_mutex)
     {
+      REQUIRE (self->refcnt == 0);
       psplay_remove (interfaceregistry, &self->node);
+
+      FIXME ("free deps");
     }
 }
 
@@ -136,8 +146,12 @@ lumiera_interfaceregistry_bulkremove_interfaces (LumieraInterface* self)
     {
       while (*self)
         {
+          TRACE (interfaceregistry, "interface %s, version %d, instance %s", (*self)->interface, (*self)->version, (*self)->name);
+          REQUIRE ((*self)->refcnt == 0, "but is %d", (*self)->refcnt);
+
           psplay_remove (interfaceregistry, &(*self)->node);
           ++self;
+          FIXME ("free deps");
         }
     }
 }

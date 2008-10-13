@@ -31,7 +31,6 @@ liblumi_a_SOURCES =					\
 	$(liblumi_a_srcdir)/psplay.c			\
 	$(liblumi_a_srcdir)/mrucache.c			\
 	$(liblumi_a_srcdir)/time.c			\
-	$(liblumi_a_srcdir)/interface.c			\
 	$(liblumi_a_srcdir)/interfacedescriptor.c	\
 	$(liblumi_a_srcdir)/appconfig.cpp
 

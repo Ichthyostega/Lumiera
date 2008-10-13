@@ -123,6 +123,7 @@
  */
 #define LUMIERA_INTERFACE_TYPE(name, version) struct LUMIERA_INTERFACE_INAME(name, version)
 
+
 /**
  * Construct a cast to the target interface type
  * Used to cast a generic LumieraInterface to the real type
@@ -130,7 +131,6 @@
  * @param version major version of this interface
  */
 #define LUMIERA_INTERFACE_CAST(name, version) (LUMIERA_INTERFACE_TYPE(name, version)*)
-
 
 
 /**
@@ -167,7 +167,6 @@ LUMIERA_INTERFACE_TYPE(name, version)                   \
   Interface definition macros
  */
 
-
 /**
  * Define a interface instance.
  * @param iname name of the interface to instance
@@ -188,6 +187,10 @@ LUMIERA_INTERFACE_TYPE(iname, version) LUMIERA_INTERFACE_DNAME(iname, version, n
   version,                                                                                      \
   #name,                                                                                        \
   sizeof (LUMIERA_INTERFACE_TYPE(iname, version)),                                              \
+  0,                                                                                            \
+  NULL,                                                                                         \
+  0,                                                                                            \
+  NULL,                                                                                         \
   descriptor,                                                                                   \
   acquire,                                                                                      \
   release                                                                                       \
@@ -308,9 +311,12 @@ LUMIERA_INTERFACE_DEFINE (lumieraorg_plugin, 0,                                 
 /**
  * create a handle for a interface (WIP)
  */
-#define  LUMIERA_INTERFACE_HANDLE(interface, version, reserved, name, handle) \
-  LUMIERA_INTERFACE_TYPE(interface, version)* handle = LUMIERA_INTERFACE_CAST(interface, 0) \
-    lumiera_interfaceregistry_interface_find (#interface, version, #name);
+
+#define  LUMIERA_INTERFACE_HANDLE(interface, version) \
+  LUMIERA_INTERFACE_TYPE(interface, version)*
+
+#define  LUMIERA_INTERFACE_OPEN(interface, version, minminor, name) \
+  LUMIERA_INTERFACE_CAST(interface, version) lumiera_interface_open (#interface, version, minminor, #name)
 
 
 typedef struct lumiera_interfaceslot_struct lumiera_interfaceslot;
@@ -351,6 +357,12 @@ struct lumiera_interface_struct
   /** size of the whole interface structure (minor version) */
   size_t size;
 
+  /** reference counters and link used for internal reference management */
+  unsigned refcnt;
+  LumieraInterface lnk;
+  size_t ndeps;
+  LumieraInterface* deps;
+
   /** metadata descriptor, itself a interface (or NULL) */
   LumieraInterface descriptor;
 
@@ -358,17 +370,15 @@ struct lumiera_interface_struct
    * Must be called before this interface is used.
    * might be nested.
    * @param self pointer to the interface to be acquired
-   * @param weak indicates a weak aquisition when this is not null. Used to resolve aquisition for cross dependencies
    * @return pointer to the interface or NULL on error
    */
-  LumieraInterface (*acquire)(LumieraInterface self, int weak);
+  LumieraInterface (*acquire)(LumieraInterface self);
   /**
    * called when finished using this interface
    * must match the acquire calls
    * @param self pointer to the interface to be released
-   * @param weak indicates a weak release, must be the same value as used for the acquire function
    */
-  void (*release)(LumieraInterface self, int weak);
+  void (*release)(LumieraInterface self);
 
 #ifndef __cplusplus
   /** placeholder array for the following function slots, C++ doesn't support flexible arrays */
@@ -380,11 +390,37 @@ struct lumiera_interface_struct
   API to handle interfaces
  */
 
-LumieraInterface
-lumiera_interface_acquire (LumieraInterface self, int weak);
 
+/**
+ * Open an interface by handle.
+ * This is faster because it needs no lookup, one must be sure to have a valid handle
+ * which mets the requirements (version)
+ * @param self pointer to the interface to be opened
+ * @return self on success or NULL on error
+ * @internal This function is mostly for internal purposes
+ */
+LumieraInterface
+lumiera_interface_open_interface (LumieraInterface self);
+
+/**
+ * Open an interface by version and name.
+ * Looks up the requested interface, possibly loading it from a plugin.
+ * @param interface name of the interface definition
+ * @param version major version of the interface definition
+ * @param minminorversion required minor version (structure size)
+ * @param name name of the interface implementation
+ * @return the queried interface handle on success, else NULL
+ */
+LumieraInterface
+lumiera_interface_open (const char* interface, unsigned version, size_t minminorversion, const char* name);
+
+/**
+ * Close an interface after use.
+ * @param self interface to be closed
+ * consider 'self' to be invalidated after this call
+ */
 void
-lumiera_interface_release (LumieraInterface self, int weak);
+lumiera_interface_close (LumieraInterface iface);
 
 
 #endif /* LUMIERA_INTERFACE_H */
