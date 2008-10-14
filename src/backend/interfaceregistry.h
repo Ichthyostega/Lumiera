@@ -22,6 +22,7 @@
 #define LUMIERA_INTERFACEREGISTRY_H
 
 #include "lib/mutex.h"
+#include "lib/psplay.h"
 #include "lib/interface.h"
 
 #include <nobug.h>
@@ -38,7 +39,35 @@ NOBUG_DECLARE_FLAG (interface_all);
 NOBUG_DECLARE_FLAG (interfaceregistry);
 NOBUG_DECLARE_FLAG (interface);
 
+extern PSplay lumiera_interfaceregistry;
 extern lumiera_mutex lumiera_interface_mutex;
+
+
+/**
+ * Interface management node.
+ * All active interfaces managed through this node which contains the dynamic data for
+ * dependency tracking and reference counting.
+ */
+typedef struct lumiera_interfacenode_struct lumiera_interfacenode;
+typedef lumiera_interfacenode* LumieraInterfacenode;
+
+struct lumiera_interfacenode_struct
+{
+  /** all known interfaces are registered in a tree */
+  psplaynode node;
+
+  /** the interface itself */
+  LumieraInterface interface;
+
+  /** reference counters and link used for internal reference management */
+  unsigned refcnt;
+  /** temporary used to stack interfaces when recursively opening/closing them */
+  LumieraInterfacenode lnk;
+  /** allocated size of the following deps table */
+  size_t deps_size;
+  /** NULL terminated table of all dependenncies (interfaces opened on initialization) */
+  LumieraInterfacenode* deps;
+};
 
 
 /**
@@ -62,6 +91,9 @@ lumiera_interfaceregistry_remove_interface (LumieraInterface self);
 
 void
 lumiera_interfaceregistry_bulkremove_interfaces (LumieraInterface* self);
+
+LumieraInterfacenode
+lumiera_interfaceregistry_interfacenode_find (const char* interface, unsigned version, const char* name);
 
 LumieraInterface
 lumiera_interfaceregistry_interface_find (const char* interface, unsigned version, const char* name);

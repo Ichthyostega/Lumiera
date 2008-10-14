@@ -182,15 +182,10 @@ PPMPL_FOREACH(_P1_, __VA_ARGS__)                                                
 LUMIERA_INTERFACE_TYPE(iname, version) LUMIERA_INTERFACE_DNAME(iname, version, name) =          \
 {                                                                                               \
 {                                                                                               \
-  PSPLAYNODE_INITIALIZER,                                                                       \
   #iname,                                                                                       \
   version,                                                                                      \
   #name,                                                                                        \
   sizeof (LUMIERA_INTERFACE_TYPE(iname, version)),                                              \
-  0,                                                                                            \
-  NULL,                                                                                         \
-  0,                                                                                            \
-  NULL,                                                                                         \
   descriptor,                                                                                   \
   acquire,                                                                                      \
   release                                                                                       \
@@ -342,9 +337,6 @@ struct lumiera_interfaceslot_struct
  */
 struct lumiera_interface_struct
 {
-  /** all known interfaces are registered in a tree */
-  psplaynode node;
-
   /** name of the interface (type) */
   const char* interface;
 
@@ -356,12 +348,6 @@ struct lumiera_interface_struct
 
   /** size of the whole interface structure (minor version) */
   size_t size;
-
-  /** reference counters and link used for internal reference management */
-  unsigned refcnt;
-  LumieraInterface lnk;
-  size_t ndeps;
-  LumieraInterface* deps;
 
   /** metadata descriptor, itself a interface (or NULL) */
   LumieraInterface descriptor;
@@ -390,17 +376,6 @@ struct lumiera_interface_struct
   API to handle interfaces
  */
 
-
-/**
- * Open an interface by handle.
- * This is faster because it needs no lookup, one must be sure to have a valid handle
- * which mets the requirements (version)
- * @param self pointer to the interface to be opened
- * @return self on success or NULL on error
- * @internal This function is mostly for internal purposes
- */
-LumieraInterface
-lumiera_interface_open_interface (LumieraInterface self);
 
 /**
  * Open an interface by version and name.
