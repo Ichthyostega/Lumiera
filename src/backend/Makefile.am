@@ -46,7 +46,9 @@ noinst_HEADERS +=						\
 	$(liblumibackend_a_srcdir)/filehandle.h			\
 	$(liblumibackend_a_srcdir)/filedescriptor.h		\
 	$(liblumibackend_a_srcdir)/filehandlecache.h		\
+	$(liblumibackend_a_srcdir)/interface.c			\
 	$(liblumibackend_a_srcdir)/interfaceregistry.h		\
+	$(liblumibackend_a_srcdir)/interfacedescriptor.h	\
 	$(liblumibackend_a_srcdir)/config.h 			\
 	$(liblumibackend_a_srcdir)/configentry.h 		\
 	$(liblumibackend_a_srcdir)/configitem.h 		\

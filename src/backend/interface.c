@@ -21,7 +21,8 @@
 
 #include "lib/mutex.h"
 #include "lib/safeclib.h"
-#include "lib/interface.h"
+
+#include "backend/interface.h"
 
 #include "backend/interfaceregistry.h"
 

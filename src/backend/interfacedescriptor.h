@@ -21,7 +21,7 @@
 #ifndef LUMIERA_INTERFACEDESCRIPTOR_H
 #define LUMIERA_INTERFACEDESCRIPTOR_H
 
-#include "lib/interface.h"
+#include "backend/interface.h"
 
 /**
  * WIP: interface descriptor, needs some generic metadata interface

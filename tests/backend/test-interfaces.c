@@ -19,9 +19,9 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "lib/interface.h"
+#include "backend/interface.h"
 #include "backend/interfaceregistry.h"
-#include "lib/interfacedescriptor.h"
+#include "backend/interfacedescriptor.h"
 #include "tests/test.h"
 
 /*

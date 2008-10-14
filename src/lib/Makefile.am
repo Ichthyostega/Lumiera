@@ -31,7 +31,6 @@ liblumi_a_SOURCES =					\
 	$(liblumi_a_srcdir)/psplay.c			\
 	$(liblumi_a_srcdir)/mrucache.c			\
 	$(liblumi_a_srcdir)/time.c			\
-	$(liblumi_a_srcdir)/interfacedescriptor.c	\
 	$(liblumi_a_srcdir)/appconfig.cpp
 
 noinst_HEADERS +=						\
@@ -47,7 +46,6 @@ noinst_HEADERS +=						\
 	$(liblumi_a_srcdir)/time.h				\
 	$(liblumi_a_srcdir)/ppmpl.h				\
 	$(liblumi_a_srcdir)/interface.h				\
-	$(liblumi_a_srcdir)/interfacedescriptor.h		\
 	$(liblumi_a_srcdir)/appconfig.hpp			\
 	$(liblumi_a_srcdir)/lifecycleregistry.hpp
 

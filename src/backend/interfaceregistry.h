@@ -23,7 +23,8 @@
 
 #include "lib/mutex.h"
 #include "lib/psplay.h"
-#include "lib/interface.h"
+
+#include "backend/interface.h"
 
 #include <nobug.h>
 
