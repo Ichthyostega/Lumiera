@@ -37,6 +37,7 @@
 namespace engine { 
   
   using lumiera::FrameID;
+  using lumiera::NodeID;
 
   class StateAdapter;
   class BuffTableStorage;
@@ -62,6 +63,17 @@ namespace engine {
        *  calculation processes in parallel.
        */
       virtual void is_calculated (BuffHandle const&)  =0;
+      
+      /** generate (or calculate) an ID denoting a media data frame
+       *  appearing at the given position in the render network,
+       *  for the time point this rendering process is currently 
+       *  calculating data for.
+       *  @param NodeID the unique identification of a specific node
+       *  @param chanNo the number of the output channel of this node
+       *  @return a complete FrameID which unambiguously denotes this
+       *        specific frame and can be used for caching 
+       */
+      virtual FrameID const& genFrameID (NodeID const&, uint chanNo)  =0;
       
       /** try to fetch an existing buffer containing the denoted frame from
        *  a cache or similar backing system (e.g. peer over the network).

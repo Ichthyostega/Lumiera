@@ -45,6 +45,7 @@
 #include "proc/common.hpp"
 #include "proc/state.hpp"
 #include "proc/mobject/parameter.hpp"
+#include "common/frameid.hpp"
 #include "lib/refarray.hpp"
 
 #include <vector>
@@ -55,6 +56,7 @@ namespace engine {
 
   using std::vector;
   using proc_interface::State;
+  using lumiera::NodeID;
   
   class ProcNode;
   class NodeFactory;
@@ -82,12 +84,15 @@ namespace engine {
       
       ProcFunc* processFunction;
       
+      NodeID const& nodeID;
+      
     protected:
       WiringDescriptor (lib::RefArray<ChannelDescriptor>& o, 
                         lib::RefArray<InChanDescriptor>& i,
-                        ProcFunc pFunc)
+                        ProcFunc pFunc, NodeID const& nID)
         : out(o), in(i),
-          processFunction(pFunc)
+          processFunction(pFunc),
+          nodeID(nID)
         { }  
       
       /** the wiring-dependent part of the node operation.

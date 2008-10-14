@@ -1606,6 +1606,7 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * [[how to handle »attached placement«|AttachedPlacementProblem]]
 * working out the [[basic building situations|BuilderPrimitives]] and [[mechanics of rendering|RenderMechanics]]
 * how to classify and [[describe media stream types|StreamType]] and how to [[use them|StreamTypeUse]]
+* the [[identification of frames and nodes|NodeFrameNumbering]]
 * the relation of [[Project, Timelines and Sequences|TimelineSequences]]
 * how to [[start the GUI|GuiStart]] and how to [[communicate|GuiCommunication]]
 * build the first LayerSeparationInterfaces
@@ -2214,6 +2215,13 @@ So, when creating a clip out of such a compound media asset, the clip has to be 
 </div>
 <div title="NodeCreaterTool" modifier="Ichthyostega" created="200712100626" tags="def" changecount="1">
 <pre>NodeCreaterTool is a [[visiting tool|VisitorUse]] used as second step in the [[Builder]]. Starting out from a [[Fixture]], the builder first [[divides the Timeline into segments|SegmentationTool]] and then processes each segment with the NodeCreaterTool to build a render nodes network (Render Engine) for this part of the timeline. While visiting individual Objects and Placements, the NodeCreaterTool creates and wires the necessary [[nodes|ProcNode]]</pre>
+</div>
+<div title="NodeFrameNumbering" modifier="Ichthyostega" created="200810140254" tags="spec draft" changecount="2">
+<pre>!Problem of Frame identification
+
+!Problem of Node numbering
+In the most general case the render network may be just a DAG (not just a tree). Especially, multiple exit points may lead down to the same node, and following each of this possible paths the node may be at a different depth on each. This rules out a simple counter starting from the exit level, leaving us with the possibility of either employing a rather convoluted addressing scheme or using arbitrary ID numbers.
+</pre>
 </div>
 <div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200807072147" created="200806010251" tags="Rendering dynamic" changecount="15">
 <pre>The [[nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot;; each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle'', thus we find an operation {{{pull()}}} at the core of this process. There is no such thing as an &quot;engine object&quot; calling nodes iteratively or table driven, rather, the nodes themselves issue recursive calls to their predecessor(s). For this to work, we need the nodes to adhere to a specific protocol:
@@ -3561,7 +3569,7 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 [img[Entities comprising the Render Engine|uml/fig128389.png]]
 </pre>
 </div>
-<div title="RenderImplDetails" modifier="Ichthyostega" modified="200807132338" created="200806220211" tags="Rendering impl img" changecount="20">
+<div title="RenderImplDetails" modifier="Ichthyostega" modified="200810140245" created="200806220211" tags="Rendering impl img" changecount="22">
 <pre>Below are some notes regarding details of the actual implementation of the render process and processing node operation. In the description of the [[render node operation protocol|NodeOperationProtocol]] and the [[mechanics of the render process|RenderMechanics]], these details were left out deliberately.
 
 !Layered structure of State
@@ -3572,6 +3580,8 @@ For the purpose of node operation, Buffers are identified by a //Buffer-handle,/
 
 !Problem of multi-channel nodes
 Some data processors simply require to work on multiple channels simultanously, while others work just on a single channel and will be replicated by the builder for each channel invoved. Thus, we are struck with the nasty situation that the node graph may go through some nodes spanning the chain of several channels. Now the decision is //not to care for this complexity within a single chain calculating a single channel.// We rely solely on the cache to avoid duplicated calculations. When a given node happens to produce multiple output buffers, we are bound to allocate them for the purpose of this nodes {{{process()}}} call, but we just &quot;let go&quot; the buffers not needed immediately for the channel acutally to be processed. For this to work, it is supposed that the builder has wired in a caching, and that the cache will hit when we touch the same node again for the other channels.
+
+Closely related to this is the problem how to number and identify nodes and thus to be able to find calculated frames in cache (&amp;rarr; [[here|NodeFrameNumbering]])
 
 !Configuration of the processing nodes
 [&gt;img[uml/fig132357.png]]

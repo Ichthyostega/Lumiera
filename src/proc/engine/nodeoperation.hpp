@@ -85,16 +85,6 @@ namespace engine {
         typedef lumiera::Yes_t is_defined;
         
         
-        FrameID const&
-        genFrameID (Invocation& ivo)
-          {
-            TODO ("how to represent FrameIDs");
-            //////TODO: decide how to organise generating FrameIDs.
-            //////  who knows the actual time? probably it's encapsulated in State.
-            //////  besides, Invocation knows the output channel and can access the type
-            //////
-            UNIMPLEMENTED ("generate FrameID for current calculation situation");
-          }
       };
     
     
@@ -104,8 +94,7 @@ namespace engine {
         BuffHandle
         step (Invocation& ivo)
           {
-            BuffHandle fetched = ivo.fetch (
-                                   this->genFrameID (ivo));
+            BuffHandle fetched = ivo.fetch (ivo.genFrameID());
             if (fetched)
               return fetched;
             else

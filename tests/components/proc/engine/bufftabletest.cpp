@@ -67,7 +67,7 @@ namespace engine {
           uint ii,oo;
           
           MockSizeRequest()
-            : WiringDescriptor(dummy1,dummy2,0),
+            : WiringDescriptor(dummy1,dummy2,0,NodeID()),
               ii(rand() % CHUNK_MAX),
               oo(rand() % CHUNK_MAX)
             { }

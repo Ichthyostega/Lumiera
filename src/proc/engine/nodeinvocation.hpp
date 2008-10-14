@@ -151,6 +151,21 @@ namespace engine {
         }
       
       
+    public:
+      /** specialised version filling in the additional information, i.e
+       *  the concrete node id and the channel number in question */
+      virtual FrameID const&
+      genFrameID ()
+        {
+          return current_.genFrameID(wiring.nodeID, outNr);
+        }
+      
+      virtual FrameID const&
+      genFrameID (NodeID const& nID, uint chanNo)
+        {
+          return current_.genFrameID (nID,chanNo);
+        }
+      
     };
     
     
