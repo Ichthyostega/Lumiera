@@ -23,7 +23,6 @@ liblumibackend_a_CFLAGS = $(CFLAGS) -std=gnu99 -Wextra -Wall -Werror
 liblumibackend_a_SOURCES =					\
 	$(liblumibackend_a_srcdir)/mediaaccessfacade.cpp	\
 	$(liblumibackend_a_srcdir)/backend.c			\
-	$(liblumibackend_a_srcdir)/plugin.c			\
 	$(liblumibackend_a_srcdir)/file.c			\
 	$(liblumibackend_a_srcdir)/filehandle.c			\
 	$(liblumibackend_a_srcdir)/filedescriptor.c		\
@@ -41,7 +40,6 @@ liblumibackend_a_SOURCES =					\
 noinst_HEADERS +=						\
 	$(liblumibackend_a_srcdir)/mediaaccessfacade.cpp	\
 	$(liblumibackend_a_srcdir)/backend.h			\
-	$(liblumibackend_a_srcdir)/plugin.h			\
 	$(liblumibackend_a_srcdir)/file.h			\
 	$(liblumibackend_a_srcdir)/filehandle.h			\
 	$(liblumibackend_a_srcdir)/filedescriptor.h		\
