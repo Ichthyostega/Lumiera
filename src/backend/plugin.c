@@ -27,8 +27,9 @@
 #include <time.h>
 #include <limits.h>
 
-#include "plugin.h"
-#include "safeclib.h"
+#include "lib/safeclib.h"
+
+#include "backend/plugin.h"
 
 /**
  * @file
