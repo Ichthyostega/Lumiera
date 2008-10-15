@@ -51,6 +51,16 @@ lumiera_calloc (size_t n, size_t size);
 
 
 /**
+ * Change the size of a memory block.
+ * @param ptr pointer to the old memory block obtained by lumiera_malloc or lumiera_calloc
+ * @param size new size of the block
+ * @return address of new block
+ */
+void*
+lumiera_realloc (void* ptr, size_t size);
+
+
+/**
  * Free previously allocated memory.
  * @param mem pointer to the memory block obtained by lumiera_malloc or lumiera_calloc
  */

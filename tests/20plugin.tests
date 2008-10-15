@@ -1,6 +1,6 @@
 TESTING "test plugin example code" ./test-plugin
 
-TEST "C plugin example" C <<END
+PLANNED "C plugin example" C <<END
 out: opened
 out: Hallo Welt!
 out: Tschuess C
@@ -11,7 +11,7 @@ out: closed
 out: closed
 END
 
-TEST "C++ plugin example" C++ <<END
+PLANNED "C++ plugin example" C++ <<END
 out: opened
 out: Hallo Welt!
 out: Tschuess C++

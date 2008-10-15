@@ -131,64 +131,116 @@ END
 PLANNED "bool set"  <<END
 END
 
-TEST "create configitem with empty line" configitem_simple_ctor_dtor '' <<END
+TEST "wordlist get item from empty list should fail" wordlist_get_nth 'foo.bar' '' 0 << END
+out: 'NULL'
 END
 
-TEST "create configitem with blank line" configitem_simple_ctor_dtor $' \t \t' <<END
+TEST "wordlist get item past end should fail" wordlist_get_nth 'foo.bar' 'baz barf gnarf' 3 << END
+out: 'NULL'
 END
 
-TEST "create configitem with comment" configitem_simple_ctor_dtor $' #\t comment bla' <<END
+TEST "wordlist get first item" wordlist_get_nth 'foo.bar' 'baz barf gnarf' 0 << END
+out: 'baz'
 END
 
-TEST "create configitem with section" configitem_simple_ctor_dtor $'\t[prefix suffix ] bla' <<END
+TEST "wordlist get last item" wordlist_get_nth 'foo.bar' 'baz barf; gnarf' 2 << END
+out: 'gnarf'
 END
 
-TEST "create configitem with directive" configitem_simple_ctor_dtor $' @include \t\t file   \t' <<END
+TEST "wordlist get middle" wordlist_get_nth 'foo.bar' 'baz barf, gnarf' 1 << END
+out: 'barf'
 END
 
-TEST "create configitem with configentry" configitem_simple_ctor_dtor $' key \t=\t value' <<END
+TEST "wordlist find, non existing" wordlist_find 'foo.bar' 'baz barf, gnarf' blah << END
+out: '-1'
 END
 
-TEST "create configitem with configentry (redirect)" configitem_simple_ctor_dtor $'keya <\t\t keyb ' <<END
+TEST "wordlist find, first" wordlist_find 'foo.bar' 'baz barf, gnarf' baz << END
+out: '0'
 END
 
-TEST "check content of configitem with empty line" configitem_simple_content_check $'' << END
+TEST "wordlist find, middle" wordlist_find 'foo.bar' 'baz barf, gnarf' barf << END
+out: '1'
 END
 
-TEST "check content of configitem with comment" configitem_simple_content_check $'\t #comment bla' << END
-out: item->line = '	 #comment bla'
+TEST "wordlist find, last" wordlist_find 'foo.bar' 'baz barf, gnarf' gnarf << END
+out: '2'
 END
 
-TEST "check content of configitem with section" configitem_simple_content_check $'[ key.foo suffix.bar ] ' << END
-out: item->line = '[ key.foo suffix.bar ] '
-out: item->key_size = '7'
-out: item->key = 'key.foo suffix.bar ] '
-out: item->delim = ' suffix.bar ] '
+TEST "wordlist replace, middle, insert after" wordlist_replace 'foo.bar' 'baz barf gnarf' barf barf foof << END
+out: ' baz barf foof gnarf'
 END
 
-TEST "check content of configitem with directive (without argument)" configitem_simple_content_check $'\t @directive  ' << END
-out: item->line = '	 @directive  '
-out: item->key_size = '9'
-out: item->key = '@directive  '
+TEST "wordlist replace, middle, insert before" wordlist_replace 'foo.bar' 'baz barf gnarf' barf foof barf << END
+out: ' baz foof barf gnarf'
 END
 
-TEST "check content of configitem with directive (with argument)" configitem_simple_content_check $'\t @directive \targument' << END
-out: item->line = '	 @directive 	argument'
-out: item->key_size = '9'
-out: item->key = '@directive 	argument'
-out: item->delim = '	argument'
+TEST "wordlist replace, middle, remove" wordlist_replace 'foo.bar' 'baz barf gnarf' barf '' '' << END
+out: ' baz gnarf'
 END
 
-TEST "check content of configitem with configentry" configitem_simple_content_check $' \t\t key.foo \t\t=\tbar' << END
-out: item->line = ' 		 key.foo 		=	bar'
-out: item->key_size = '7'
-out: item->key = 'key.foo 		=	bar'
-out: item->delim = '=	bar'
+TEST "wordlist replace, middle, replace1" wordlist_replace 'foo.bar' 'baz barf gnarf' barf 'foof' '' << END
+out: ' baz foof gnarf'
 END
 
-TEST "check content of configitem with configentry (redirect)" configitem_simple_content_check $' \t\t key.foo \t\t<\tkey.bar' << END
-out: item->line = ' 		 key.foo 		<	key.bar'
-out: item->key_size = '7'
-out: item->key = 'key.foo 		<	key.bar'
-out: item->delim = '<	key.bar'
+TEST "wordlist replace, middle, replace2" wordlist_replace 'foo.bar' 'baz barf gnarf' barf '' 'foof' << END
+out: ' baz foof gnarf'
 END
+
+TEST "wordlist replace, first, insert before" wordlist_replace 'foo.bar' 'baz barf gnarf' baz 'first' 'baz' << END
+out: ' first baz barf gnarf'
+END
+
+TEST "wordlist replace, first, replace1" wordlist_replace 'foo.bar' 'baz barf gnarf' baz 'first' '' << END
+out: ' first barf gnarf'
+END
+
+TEST "wordlist replace, first, replace2" wordlist_replace 'foo.bar' 'baz barf gnarf' baz '' 'first' << END
+out: ' first barf gnarf'
+END
+
+TEST "wordlist replace, last, insert after" wordlist_replace 'foo.bar' 'baz barf gnarf' gnarf 'gnarf' 'last' << END
+out: ' baz barf gnarf last'
+END
+
+TEST "wordlist add 2 words" wordlist_add 'foo.bar' 'baz barf gnarf' first second << END
+out: ' baz barf gnarf first'
+out: ' baz barf gnarf first second'
+END
+
+TEST "wordlist add same word" wordlist_add 'foo.bar' 'baz barf gnarf' same same << END
+out: ' baz barf gnarf same'
+out: ' baz barf gnarf same'
+END
+
+TEST "wordlist add to empty list" wordlist_add 'foo.bar' '' first second << END
+out: ' first'
+out: ' first second'
+END
+
+TEST "wordlist add to empty list, same" wordlist_add 'foo.bar' '' same same << END
+out: ' same'
+out: ' same'
+END
+
+
+TEST "wordlist get item from empty list should fail" wordlist_get_nth 'foo.bar' '' 0 << END
+out: 'NULL'
+END
+
+TEST "wordlist get item past end should fail" wordlist_get_nth 'foo.bar' 'baz barf gnarf' 3 << END
+out: 'NULL'
+END
+
+TEST "wordlist get first item" wordlist_get_nth 'foo.bar' 'baz barf gnarf' 0 << END
+out: 'baz'
+END
+
+TEST "wordlist get last item" wordlist_get_nth 'foo.bar' 'baz barf; gnarf' 2 << END
+out: 'gnarf'
+END
+
+TEST "wordlist get middle" wordlist_get_nth 'foo.bar' 'baz barf, gnarf' 1 << END
+out: 'barf'
+END
+

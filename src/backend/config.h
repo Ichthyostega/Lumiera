@@ -24,7 +24,7 @@
 
 //TODO: Support library includes//
 #include "lib/error.h"
-#include "lib/rwlock.h"
+#include "lib/mutex.h"
 
 //TODO: Forward declarations//
 struct lumiera_config_struct;
@@ -74,14 +74,7 @@ struct lumiera_config_struct
   lumiera_configitem files;             /* all loaded files */
   lumiera_configitem TODO_unknown;      /* all values which are not part of a file and not default TODO: this will be removed when file support is finished */
 
-  /*
-    all access is protected with rwlock's.
-    We use rwlocks here since concurrent reads are likely common.
-
-    So far this is a global config lock, if this is a problem we might granularize it by locking on a file level.
-    config access is not planned to be transactional yet, if this is a problem we need to expose the rwlock to a config_acquire/config_release function pair
-   */
-  lumiera_rwlock lock;
+  lumiera_mutex lock;
 };
 
 typedef struct lumiera_config_struct lumiera_config;
@@ -96,6 +89,7 @@ typedef lumiera_config* LumieraConfig;
   LUMIERA_CONFIG_TYPE(number, signed long long) \
   LUMIERA_CONFIG_TYPE(real, long double)        \
   LUMIERA_CONFIG_TYPE(string, const char*)      \
+  LUMIERA_CONFIG_TYPE(wordlist, const char*)    \
   LUMIERA_CONFIG_TYPE(word, const char*)        \
   LUMIERA_CONFIG_TYPE(bool, int)
 
@@ -197,7 +191,7 @@ lumiera_config_set (const char* key, const char* delim_value);
  * Installs a default value for a config key.
  * Any key might have an associated default value which is used when
  * no other configuration is available, this can be set once.
- * Any subsequent call will be a no-op. This function writelocks the config system.
+ * Any subsequent call will be a no-op. This function locks the config system.
  * @param line line with key, delimiter and value to store as default value
  * @return NULL in case of an error, else a pointer to the default configitem
  */
@@ -223,7 +217,57 @@ lumiera_config_setdefault (const char* line);
 LUMIERA_CONFIG_TYPES
 #undef LUMIERA_CONFIG_TYPE
 
+/**
+ * Wordlists
+ * Wordlists are lists of single words delimited by any of " \t,;".
+ * They can be used to store groups of keys and other kinds of simple references into the config
+ * system. Here are some functions to manipulate single word entries in a wordlist.
+ */
 
+/**
+ * Get nth word of a wordlist.
+ * @param key key under which this wordlist is stored
+ * @param nth index of the word to get, starting with 0
+ * @return pointer to a tempbuf holding the nth word or NULL in case of error
+ */
+const char*
+lumiera_config_wordlist_get_nth (const char* key, unsigned nth);
+
+
+/**
+ * Find the index of a word in a wordlist.
+ * @param key key under which this wordlist is stored
+ * @param value word to find
+ * @return index of the first occurence of the word or -1 in case of failure
+ */
+int
+lumiera_config_wordlist_find (const char* key, const char* value);
+
+
+/**
+ * Universal word replacement function.
+ * Replaces a word with up to two new words. This can be used to delete a word (no replacements),
+ * insert a new word before an existing word (giving the new word as subst1 and the old word as subst2)
+ * insert a new word after an existing word (giving  the old word as subst1 and the new word as subst2)
+ * or simply give 2 new words.
+ * @param key key under which this wordlist is stored
+ * @param value word to be replaced
+ * @param subst1 first replacement word
+ * @param subst2 second replacement word
+ * @return internal representation of the wordlist in a tmpbuf or NULL in case of an error
+ */
+const char*
+lumiera_config_wordlist_replace (const char* key, const char* value, const char* subst1, const char* subst2);
+
+
+/**
+ * Add a word to the end of a wordlist if it doesnt exist already
+ * @param key key under which this wordlist is stored
+ * @param value new word to add
+ * @return internal representation of the wordlist in a tmpbuf or NULL in case of an error
+ */
+const char*
+lumiera_config_wordlist_add (const char* key, const char* value);
 
 //  * {{{ lumiera_config_TYPE_set (const char* key, TYPE*value, const char* fmt) }}}
 //    Highlevel interface for different types, fmt is a printf format specifier for the desired format, when NULL, defaults apply.

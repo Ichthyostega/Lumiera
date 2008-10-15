@@ -51,6 +51,17 @@ lumiera_calloc (size_t n, size_t size)
 }
 
 
+void*
+lumiera_realloc (void* ptr, size_t size)
+{
+  void* o = size ? realloc (ptr, size) : NULL;
+  if (!o)
+    LUMIERA_DIE (NO_MEMORY);
+
+  return o;
+}
+
+
 char*
 lumiera_strndup (const char* str, size_t len)
 {
