@@ -42,7 +42,7 @@ NOBUG_DEFINE_FLAG_PARENT (filedescriptor, file_all);
   This registry stores all acquired filedescriptors for lookup, they will be freed when not referenced anymore.
  */
 static PSplay registry = NULL;
-static lumiera_mutex registry_mutex = {PTHREAD_MUTEX_INITIALIZER};
+static lumiera_mutex registry_mutex = {PTHREAD_MUTEX_INITIALIZER NOBUG_RESOURCE_HANDLE_COMMA_INITIALIZER};
 
 
 static int
@@ -96,7 +96,9 @@ lumiera_filedescriptor_registry_init (void)
   if (!registry)
     LUMIERA_DIE (NO_MEMORY);
 
-  RESOURCE_HANDLE_INIT (registry_mutex.rh);
+  TODO ("LumieraMutex lumiera_mutex_init (LumieraMutex self, const char* purpose, struct nobug_flag* flag);");
+
+  //  RESOURCE_HANDLE_INIT (registry_mutex.rh);
   RESOURCE_ANNOUNCE (filedescriptor, "mutex", "filedescriptor registry", &registry, registry_mutex.rh);
 }
 
@@ -107,6 +109,8 @@ lumiera_filedescriptor_registry_destroy (void)
   REQUIRE (!psplay_nelements (registry));
 
   RESOURCE_FORGET (filedescriptor, registry_mutex.rh);
+
+  TODO ("LumieraMutex lumiera_mutex_destroy (LumieraMutex self, struct nobug_flag* flag);");
 
   if (registry)
     psplay_destroy (registry);
