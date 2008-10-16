@@ -61,7 +61,7 @@ namespace asset {
             PM cm = cc->getMedia();
             
             ASSERT (cm);
-            ASSERT (0 < cc->getLength());
+            ASSERT (Time(0) < cc->getLength());
             ASSERT (cm->ident.category.hasKind (VIDEO));
             ASSERT (cm->getFilename() == mm->getFilename());
 TODO ("implement Processing Pattern!!!");   

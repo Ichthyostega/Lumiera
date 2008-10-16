@@ -1,5 +1,5 @@
 /*
-  LUMITIME.hpp  -  unified representation of a time point, including conversion functions
+  LUMITIME.hpp  -  convenience wrapper for working with gavl_time in C++
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -26,35 +26,51 @@
 
 #include <boost/operators.hpp>
 
+extern "C" {
+#include <gavl/gavltime.h>
+}
 
-namespace lumiera
-  {
+namespace lumiera {
 
 
   /**
-   * denotes a temporal position (time point), based on timeline start.
+   * C++ convenience wrapper representing a time value, which could denote
+   * a temporal position (time point) relative to an (implicit) timeline zero
+   * point, or it could represent a time interval.
    * 
-   * @todo currently (9/07) this is a dummy implementation to find out
-   *       what interface the Proc layer needs. Cehteh has already written
-   *       elaborate timehandling functions in the backend and the goal
-   *       is for class Time to be just a thin wrapper!
+   * @note this is currently (10/08) an experimental implementation to ease
+   *       the time handling within C++ code. It is advisable not to use it
+   *       on external interfaces (use gavl_time_t there please).
    */
-  class Time : boost::totally_ordered<Time>
+  class Time 
+    : boost::additive<Time,
+      boost::multipliable<Time, int64_t,
+      boost::totally_ordered<Time> > >
     {
-      long dummy;
+      gavl_time_t t_;
+      
     public:
-      Time(long dum=0) : dummy(dum) {}
-      operator long () { return dummy; }
-      
-      bool operator<  (const Time& ot)  const { return dummy <  ot.dummy; }
-      bool operator== (const Time& ot)  const { return dummy == ot.dummy; }
-      
       static const Time MAX ; 
       static const Time MIN ;
+      
+      Time(gavl_time_t val=0) : t_(val) {}
+      operator gavl_time_t () { return t_; }
+      
+      
+      // Supporting additive
+      Time& operator+= (Time const& tx)  { t_ += tx.t_; return *this; }
+      Time& operator-= (Time const& tx)  { t_ -= tx.t_; return *this; }
+      
+      // Supporting multiplication with integral factor
+      Time& operator*= (int64_t fact)    { t_ *= fact;  return *this; }
+       
+      // Supporting totally_ordered
+      friend bool operator<  (Time const& t1, Time const& t2)  { return t1.t_ <  t2.t_; }
+      friend bool operator== (Time const& t1, Time const& t2)  { return t1.t_ == t2.t_; }
     };
-    
   
-
-   
+  
+  
+  
 } // namespace lumiera
 #endif
