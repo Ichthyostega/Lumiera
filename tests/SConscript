@@ -36,26 +36,32 @@ def testCollection(env,dir):
     """ treat a Directory containing a collection of standalone tests.
         Link each of them into an independent executable
     """
+    srcpatt = ['test-*.c']
     exeName = lambda p: path.basename(path.splitext(p)[0])
     buildIt = lambda p: env.Program("#$BINDIR/"+exeName(p), [p] + core)
-    return [buildIt(f) for f in scanSubtree(dir)] 
+    return [buildIt(f) for f in scanSubtree(dir,srcpatt)] 
 
 
 def treatPluginTestcase(env):
     """ Special case: the test-plugin executable
     """
+    tree = 'backend'
     env = env.Clone()
-    env.Append(CPPPATH='plugin')
-    prfx = 'plugin/example_plugin'
+    env.Append(CPPPATH=tree)
+    prfx = path.join(tree,'example_plugin')
     oC   = env.SharedObject(prfx,        prfx+'.c')
     oCPP = env.SharedObject(prfx+'_cpp', prfx+'.cpp')
     testplugin = ( env.SharedLibrary('#$BINDIR/.libs/example_plugin',     oC,   SHLIBPREFIX='')
                  + env.SharedLibrary('#$BINDIR/.libs/example_plugin_cpp', oCPP, SHLIBPREFIX='')
                  )
-    testExe = env.Program('#$BINDIR/test-plugin', ['plugin/plugin_main.c'] + core)
-    env.Depends(testExe, testplugin)
-    return testExe
-        #-- it depentds (at the moment) on a specific isolated test-plugin,
+#   testExe = env.Program('#$BINDIR/test-plugin', ['plugin/plugin_main.c'] + core)
+#   env.Depends(testExe, testplugin)
+#   return testExe
+        
+        # 10/2008 example_plugin moved to backend directory.
+        #         ...we should try to find some convention here
+    return testplugin
+        #-- it depends (at the moment) on a specific isolated test-plugin,
         #   which is not integrated in the "normal procedure" for building Plugins
         #   (which is not yet implemented as of 8/07)
         #   TODO: handle this case automatically
@@ -71,7 +77,7 @@ specials = ['plugin','library','backend']
 
 
 artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in moduledirs if not dir in specials] 
-                              + treatPluginTestcase(env)
+#                             + treatPluginTestcase(env)
                               + testCollection(env, 'library')
                               + testCollection(env, 'backend')
                               ) 
