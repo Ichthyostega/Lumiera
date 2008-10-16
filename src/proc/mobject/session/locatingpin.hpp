@@ -104,7 +104,7 @@ namespace mobject
         /* Factory functions for adding LocatingPins */
         
         FixedLocation&    operator() (Time start, Track track=0);
-        RelativeLocation& operator() (PMO refObj, Time offset=0);
+        RelativeLocation& operator() (PMO refObj, Time offset=Time(0));   //////////TODO: warning, just a dummy placeholder for now!!
         
         LocatingPin (const LocatingPin&);
         LocatingPin& operator= (const LocatingPin&);

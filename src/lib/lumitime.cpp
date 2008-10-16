@@ -25,12 +25,11 @@
 #include <limits>
 
 
-namespace lumiera
-  {
+namespace lumiera {
 
   
-   const Time Time::MAX = +std::numeric_limits<int64_t>::max();
-   const Time Time::MIN = -std::numeric_limits<int64_t>::max();
+   const Time Time::MAX ( +std::numeric_limits<int64_t>::max() );
+   const Time Time::MIN ( -std::numeric_limits<int64_t>::max() );
 
 
 } // namespace lumiera

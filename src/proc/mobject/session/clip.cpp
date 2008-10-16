@@ -51,7 +51,7 @@ namespace mobject
     Clip::isValid ()  const
     {
       TODO ("check consistency of clip length def, implies accessing the underlying media def");
-      return length > 0;
+      return length > Time(0);
     }
     
     
