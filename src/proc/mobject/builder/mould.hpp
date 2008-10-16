@@ -44,7 +44,7 @@ namespace mobject {
      * the application/execution of a single building step. Mould is 
      * conceived as the passive part, while usually the ProcPatt plays
      * the role of the active counterpart. By means of the Mould interface,
-     * the specifics  of a build situation are abstracted away, thus allowing
+     * the specifics of a build situation are abstracted away, thus allowing
      * the processing pattern to be defined as working on symbolic locations.
      * Most commonly this is "current", denoting the render node just being built.
      * <ul><li>PipeMould supports attaching an effect to a pipe</li>

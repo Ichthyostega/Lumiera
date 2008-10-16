@@ -53,7 +53,7 @@ namespace engine {
   class NodeWiring
     : public WiringDescriptor
     {
-      const uint siz_;
+      const uint siz_;////////////////////////////////////TODO: this can't work! input/output desciptors are really different
       const uint nrO_; 
       
       friend class WiringFactory;
@@ -71,6 +71,10 @@ namespace engine {
           return thisStep.retrieve (); // fetch or calculate results
         }
       
+      
+      //////
+      //////TODO: push "almost everything" up into an ABC
+      //////////  and create an ctor to set up the RefArrays
     };
 
     

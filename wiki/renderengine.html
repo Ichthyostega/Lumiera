@@ -826,14 +826,18 @@ As the builder has to create a render node network implementing most of the feat
 * any non-trivial wiring of render nodes, tracks, pipes and [[automation|Automation]] is done by the services of the [[connection manager|ConManager]]
 </pre>
 </div>
-<div title="BuilderMechanics" modifier="Ichthyostega" created="200805210256" tags="design dynamic Builder" changecount="1">
+<div title="BuilderMechanics" modifier="Ichthyostega" modified="200810160248" created="200805210256" tags="design dynamic Builder" changecount="2">
 <pre>The cooperation of several components creates a context of operation for the primary builder working tool, the [[node creator|PlanningNodeCreatorTool]]:
 * the BuilderToolFactory acts as the &quot;builder for the builder tools&quot;, i.e. we can assume to be able to retrive all needed primary tools and elementary tools from this factory, completely configured and ready to use.
 * the [[Assembler|BuilderAssembler]] has the ability to consume objects from the high level model and feed them to the node creator (which translates into a dispatch of individual operations suited to the objects to be treated). This involves some sort of scheduling or ordering of the operaions, which is the only means to direct the overall process such as to create a sensible and usable result. //This is an fundamental design decision:// the actual working tools have no hard wired knowledge of the &quot;right process&quot;, which makes the whole Builder highly configurable (&quot;open&quot;).
 * the [[connection manager|ConManager]] on the contrary is a passive service provider. Fed with [[wiring requests|WiringRequest]], he can determine if a desired connection is possible, and what steps to take to implement it; the latter recursively creates further building requests to satisfy by the assembler, and possibly new wiring requests.
 
 !!pattern of operation
-The working pattern of this builder mechanics can be described as triggering, enqueuing, priorizing, recursing and exhausting. Without the priorizing part, it would be a depth-first call graph without any context state, forcing us to have all cross reference information available at every node or element to be treated. We prefer to avoid this overhead by ordering the operations into several phases and within these phases into correlated entities with the help of a ''weighting function'' and scheduling with a ''priority queue''</pre>
+The working pattern of this builder mechanics can be described as triggering, enqueuing, priorizing, recursing and exhausting. Without the priorizing part, it would be a depth-first call graph without any context state, forcing us to have all cross reference information available at every node or element to be treated. We prefer to avoid this overhead by ordering the operations into several phases and within these phases into correlated entities with the help of a ''weighting function'' and scheduling with a ''priority queue''
+
+!!call chain
+After preparing the tools with the context state of this build process, the assembler drives the visitation process in the right order. The embedded {{{treat()}}} functions in turn use the toolkit (=the fully configured tool factory) to get the mould(s) for the individual steps they need to carry out. This involves preparing the mould (with the high-level object currently in-the-works, a suitable processing pattern and additional references), followed by operating the mould. The latter &quot;plays&quot; the processing pattern in the context of the mould, which, especially with the help of the operation point, carries out the actual building and/or connecting step. While doing so, the node factory will be invoked, which in turn invokes the wiring factory and thus pre-determines the node's prospective mode of operation when later called for rendering.
+</pre>
 </div>
 <div title="BuilderMould" modifier="Ichthyostega" modified="200805270325" created="200805260248" tags="def" changecount="2">
 <pre>The [[Builder]] uses different kinds of tools for creating a network of render nodes from a given high-level model. When breaking down this (necessarily complex) process into small manageable chunks, we arrive at [[elementary building situations|BuilderPrimitives]]. For each of these there is a specialized tool. We denote these tools as &quot;moulds&quot; because they are a rather passive holder for the objects to be attached and wired up. They are shaped according to the basic form the connections have to follow for each of these basic situations:
@@ -2123,8 +2127,8 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 {{red{let's see if this approach works...}}}
 </pre>
 </div>
-<div title="ManagementRenderNodes" modifier="Ichthyostega" modified="200810180026" created="200805280200" tags="impl decision" changecount="5">
-<pre>Contrary to the &amp;rarr;[[Assets and MObjects|ManagementAssetRelation]], the usage pattern for [[render nodes|ProcNode]] is quite simple: All nodes are created together every time a new segment of the network is being build and are all needed together until this segment is re-built, at which point they can be thrown away altogether. While it would be easy to handle the nodes automatically by smart-ptr (the creation is accessible only by use of the {{{NodeFactory}}} anyways), it //seems advisable to care for a bulk allocation/deallocation here.// The reason being not so much the amount of memory (which is expected to be moderate), but the fact the build process can be triggered repeatedly several times a second when tweaking the EDL, which could lead to fragmentation and memory pressure.
+<div title="ManagementRenderNodes" modifier="Ichthyostega" modified="200810160131" created="200805280200" tags="impl decision" changecount="5">
+<pre>Contrary to the &amp;rarr;[[Assets and MObjects|ManagementAssetRelation]], the usage pattern for [[render nodes|ProcNode]] is quite simple: All nodes are created together every time a new segment of the network is being build and all are needed together until this segment is re-built, at which point they can be thrown away altogether. While it would be easy to handle the nodes automatically by smart-ptr (the creation is accessible only by use of the {{{NodeFactory}}} anyways), it //seems advisable to care for a bulk allocation/deallocation here.// The reason being not so much the amount of memory (which is expected to be moderate), but the fact the build process can be triggered repeatedly several times a second when tweaking the EDL, which could lead to fragmentation and memory pressure.
 
 __10/2008__: the allocation mechanism can surely be improved later, but for now I am going for a simple implementation based on heap allocated objects owned by a vector or smart-ptrs. For each segment of the render nodes network, we have several families of objects, each of with will be maintained by a separate low-level memory manager (as said, for now implemented as vector of smart-ptrs). Together, they form an AllocationCluster; all objects contained in such a cluster will be destroyed together.
 </pre>
@@ -2216,11 +2220,11 @@ So, when creating a clip out of such a compound media asset, the clip has to be 
 <div title="NodeCreaterTool" modifier="Ichthyostega" created="200712100626" tags="def" changecount="1">
 <pre>NodeCreaterTool is a [[visiting tool|VisitorUse]] used as second step in the [[Builder]]. Starting out from a [[Fixture]], the builder first [[divides the Timeline into segments|SegmentationTool]] and then processes each segment with the NodeCreaterTool to build a render nodes network (Render Engine) for this part of the timeline. While visiting individual Objects and Placements, the NodeCreaterTool creates and wires the necessary [[nodes|ProcNode]]</pre>
 </div>
-<div title="NodeFrameNumbering" modifier="Ichthyostega" created="200810140254" tags="spec draft" changecount="2">
+<div title="NodeFrameNumbering" modifier="Ichthyostega" modified="200810160129" created="200810140254" tags="spec draft" changecount="3">
 <pre>!Problem of Frame identification
 
 !Problem of Node numbering
-In the most general case the render network may be just a DAG (not just a tree). Especially, multiple exit points may lead down to the same node, and following each of this possible paths the node may be at a different depth on each. This rules out a simple counter starting from the exit level, leaving us with the possibility of either employing a rather convoluted addressing scheme or using arbitrary ID numbers.
+In the most general case the render network may be just a DAG (not just a tree). Especially, multiple exit points may lead down to the same node, and following each of this possible paths the node may be at a different depth on each. This rules out a simple counter starting from the exit level, leaving us with the possibility of either employing a rather convoluted addressing scheme or using arbitrary ID numbers.{{red{...which is what we do for now}}}
 </pre>
 </div>
 <div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200807072147" created="200806010251" tags="Rendering dynamic" changecount="15">
@@ -3924,7 +3928,7 @@ An implementation constraint can //stand-in// for a completely specified impleme
 //Note:// there is a sort-of &quot;degraded&quot; variant just requiring some &amp;rarr; [[implementation constraint|StreamTypeImplConstraint]] to hold
 </pre>
 </div>
-<div title="StreamTypeQuery" modifier="Ichthyostega" modified="200810060525" created="200809280129" tags="spec draft" changecount="23">
+<div title="StreamTypeQuery" modifier="Ichthyostega" modified="200810020327" created="200809280129" tags="spec draft" changecount="22">
 <pre>Querying for media stream type information comes in various flavours
 * you may want to find a structural object (pipe, output, processing patten) associated with / able to deal with a certain stream type
 * you may need a StreamTypeDescriptor for an existing stream given as implementation data
@@ -3964,7 +3968,7 @@ Essentially, we need a search mechanism for impltypes and prototypes. This searc
 
 !query for an (complete) StreamType
 All situations discussed thus far can also occur wrapped into and triggered by a query for a complete type. Depending on what part is known, the missing bits will be queried. 
-Independent from these is __another Situation__ where we query for a type ''by ID''.
+Independent from these is another __Situation__ where we query for a type ''by ID''.
 * a simple symbolic ID can be found by searching through all existing stream types (Operation supported by the type registry within STypeManager)
 * a special ''classificating'' ID can be parsed into the components (media kind, prototype, impltype), resulting in sub searches for these.
 {{red{not sure if we want to support queries by symboic ID}}}...problem is the impl type, because probably the library needs to support describing any implementation type by a string. Seemingly GAVL does, but requiring it for every lib?

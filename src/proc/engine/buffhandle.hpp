@@ -101,5 +101,7 @@ namespace engine {
     };
   
   
+  //////TODO: invent an input/output description pattern, which can be passed to the wiring factory
+  
 } // namespace engine
 #endif

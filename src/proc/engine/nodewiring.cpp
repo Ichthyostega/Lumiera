@@ -124,8 +124,10 @@ namespace engine {
     UNIMPLEMENTED ("build the actual wiring descriptor based on given operation options");
     
 //    Bits config (FlagInfo<Config>::CODE);
-    size_t config = 13;  /////////////////////////////////////////TODO
 //    return pImpl_->selector[config]();
+    ////
+   /////TODO: change the FunctionType to take an "input/output description pattern"
+   /////TODO: invent such a pattern ---> buffhandle.hpp
   }
   
   
