@@ -133,7 +133,7 @@ namespace engine {
       
     public:
       BuffTableChunk (WiringDescriptor const& wd, BuffTableStorage& storage)
-        : siz_(wd.getNrI() + wd.getNrO()),
+        : siz_(wd.nrI + wd.nrO),
           tab_(storage.claim (siz_)),
           sto_(storage)
         {

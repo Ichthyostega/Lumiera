@@ -46,7 +46,6 @@
 #include "proc/state.hpp"
 #include "proc/mobject/parameter.hpp"
 #include "common/frameid.hpp"
-#include "lib/refarray.hpp"
 
 #include <vector>
 
@@ -71,27 +70,26 @@ namespace engine {
   class WiringDescriptor
     {
     public:
-      virtual ~WiringDescriptor() {}
+      uint nrI;
+      uint nrO;
       
-      virtual uint getNrI()  const =0;           ///////////TODO: indeed need a virtual function??
-      virtual uint getNrO()  const =0;
+      ChannelDescriptor  out[];
+      InChanDescriptor   in[];
       
-                                               /////////////TODO: Questions: is "in" used? can "in" and "out" be the same type? how and when to place the actual chan descriptors?
-      lib::RefArray<ChannelDescriptor>& out;
-      lib::RefArray<InChanDescriptor>&  in;
+      typedef void (ProcFunc) (BuffHandle::PBuff);
       
-      typedef void (ProcFunc) (BuffHandle::PBuff, uint);
-      
-      ProcFunc* processFunction;
+      ProcFunc* procFunction;
       
       NodeID const& nodeID;
       
+      virtual ~WiringDescriptor() {}
+      
     protected:
-      WiringDescriptor (lib::RefArray<ChannelDescriptor>& o, 
-                        lib::RefArray<InChanDescriptor>& i,
+      WiringDescriptor (ChannelDescriptor* o, 
+                        InChanDescriptor* i,
                         ProcFunc pFunc, NodeID const& nID)
         : out(o), in(i),
-          processFunction(pFunc),
+          procFunction(pFunc),
           nodeID(nID)
         { }  
       
@@ -131,7 +129,6 @@ namespace engine {
       
       
     public:
-      static NodeFactory create; ///////TODO: really? probably we'll rather have a NodeFactory object in the builder...
       
       /** Engine Core operation: render and pull output from this node.
        *  On return, currentProcess will hold onto output buffer(s) 

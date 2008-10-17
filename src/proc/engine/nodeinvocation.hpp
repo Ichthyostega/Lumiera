@@ -132,8 +132,8 @@ namespace engine {
           buffTab(0)
         { }
       
-      const uint nrO()          const { return wiring.getNrO(); }
-      const uint nrI()          const { return wiring.getNrI(); }
+      const uint nrO()          const { return wiring.nrO; }
+      const uint nrI()          const { return wiring.nrI; }
       const uint buffTabSize()  const { return nrO()+nrI(); }
       
       /** setup the link to an externally allocated buffer table */

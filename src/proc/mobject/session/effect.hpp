@@ -39,8 +39,8 @@ namespace session {
   class Effect : public AbstractMO
     {
     protected:
-      /** Identifier of the Plugin to be used */
-      string plugID;
+      /** Identifier of the Plug-in to be used */
+      string pluginID;
       
     };
   

@@ -197,7 +197,7 @@ namespace engine {
             
              // Invoke our own process() function,
             //  providing the array of outBuffer+inBuffer ptrs
-            ivo.wiring.processFunction (ivo.buffTab->outBuff);
+            ivo.wiring.procFunction (ivo.buffTab->outBuff);
             
             return NEXT::step (ivo);
           }
