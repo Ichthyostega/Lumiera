@@ -31,7 +31,6 @@
 
 #include "video-display-widget.hpp"
 
-namespace lumiera {
 namespace gui {
 namespace widgets {
 
@@ -100,5 +99,3 @@ VideoDisplayWidget::createDisplayer( Gtk::Widget *drawingArea, int width, int he
 
 }   // namespace widgets
 }   // namespace gui
-}   // namespace lumiera
-

@@ -29,7 +29,6 @@
 
 #include "../../gtk-lumiera.hpp"
 
-namespace lumiera {
 namespace gui {
 namespace widgets {
   
@@ -49,7 +48,7 @@ public:
    * @param timeline_widget The owner widget of this ruler.
    */
   TimelineRuler(
-    lumiera::gui::widgets::TimelineWidget *timeline_widget);
+    gui::widgets::TimelineWidget *timeline_widget);
   
   /**
    * Sets offset of the mouse chevron
@@ -217,7 +216,7 @@ private:
   /**
    * The owner widget
    */
-  lumiera::gui::widgets::TimelineWidget *timelineWidget;
+  gui::widgets::TimelineWidget *timelineWidget;
   
   /**
    * The caches image of the ruler, over which the chevrons etc. will
@@ -232,7 +231,6 @@ private:
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // TIMELINE_RULER_HPP
 

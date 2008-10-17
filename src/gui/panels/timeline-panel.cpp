@@ -29,9 +29,8 @@ extern "C" {
 
 using namespace Gtk;
 using namespace sigc;
-using namespace lumiera::gui::widgets;
+using namespace gui::widgets;
 
-namespace lumiera {
 namespace gui {
 namespace panels {
   
@@ -247,4 +246,3 @@ TimelinePanel::on_frame()
 
 }   // namespace panels
 }   // namespace gui
-}   // namespace lumiera

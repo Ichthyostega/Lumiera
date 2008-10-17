@@ -38,9 +38,8 @@
 #include "../panels/viewer-panel.hpp"
 #include "../panels/timeline-panel.hpp"
 
-using namespace lumiera::gui::panels;
+using namespace gui::panels;
 
-namespace lumiera {
 namespace gui {
 
 namespace model {
@@ -55,7 +54,7 @@ namespace workspace {
 class WorkspaceWindow : public Gtk::Window
 {
 public:
-  WorkspaceWindow(lumiera::gui::model::Project *source_project);
+  WorkspaceWindow(gui::model::Project *source_project);
   
   ~WorkspaceWindow();
 
@@ -64,7 +63,7 @@ private:
 
   /* ===== Model ===== */
 private:
-  lumiera::gui::model::Project *project;
+  gui::model::Project *project;
 
   /* ===== UI ===== */
 private:
@@ -98,6 +97,5 @@ private:
 
 }   // namespace workspace
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // WORKSPACE_WINDOW_HPP

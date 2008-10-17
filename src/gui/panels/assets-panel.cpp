@@ -23,7 +23,6 @@
 #include "../gtk-lumiera.hpp"
 #include "assets-panel.hpp"
 
-namespace lumiera {
 namespace gui {
 namespace panels {
 
@@ -36,4 +35,3 @@ AssetsPanel::AssetsPanel() :
 
 }   // namespace panels
 }   // namespace gui
-}   // namespace lumiera

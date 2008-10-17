@@ -23,7 +23,6 @@
 #include "panel.hpp"
 #include "../gtk-lumiera.hpp"
 
-namespace lumiera {
 namespace gui {
 namespace panels {
 
@@ -89,5 +88,3 @@ Panel::internal_setup()
 
 }   // namespace panels
 }   // namespace gui
-}   // namespace lumiera
-

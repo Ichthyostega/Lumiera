@@ -35,7 +35,6 @@
 #include "timeline/timeline-ibeam-tool.hpp"
 #include "timeline/track.hpp"
 
-namespace lumiera {
 namespace gui {
 namespace widgets {
   
@@ -267,7 +266,6 @@ protected:
 
 }   // namespace widgets
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // TIMELINE_WIDGET_HPP
 

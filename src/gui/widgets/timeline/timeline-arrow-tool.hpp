@@ -29,7 +29,6 @@
 #include <gtkmm.h>
 #include "timeline-tool.hpp"
 
-namespace lumiera {
 namespace gui {
 namespace widgets {
 namespace timeline {
@@ -78,6 +77,5 @@ protected:
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // TIMELINE_ARROW_TOOL_HPP

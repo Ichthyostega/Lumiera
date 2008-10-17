@@ -33,17 +33,16 @@ extern "C" {
 using namespace Gtk;
 using namespace Cairo;
 using namespace std;
-using namespace lumiera::gui;
-using namespace lumiera::gui::widgets;
-using namespace lumiera::gui::widgets::timeline;
+using namespace gui;
+using namespace gui::widgets;
+using namespace gui::widgets::timeline;
 
-namespace lumiera {
 namespace gui {
 namespace widgets {
 namespace timeline {
 
 TimelineRuler::TimelineRuler(
-  lumiera::gui::widgets::TimelineWidget *timeline_widget) :
+  gui::widgets::TimelineWidget *timeline_widget) :
   Glib::ObjectBase("TimelineRuler"),
   isDragging(false),
   pinnedDragTime(0),
@@ -647,4 +646,3 @@ TimelineRuler::read_styles()
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
-}   // namespace lumiera

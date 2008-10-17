@@ -25,7 +25,6 @@
 using namespace Gtk;
 using namespace Glib;
 
-namespace lumiera {
 namespace gui {
   
 IconSize WindowManager::giantIconSize = ICON_SIZE_INVALID;
@@ -189,4 +188,3 @@ WindowManager::add_stock_icon_source(Gtk::IconSet &icon_set,
 }
 
 }   // namespace gui
-}   // namespace lumiera

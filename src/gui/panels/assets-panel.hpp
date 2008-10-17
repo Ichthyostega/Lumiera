@@ -28,7 +28,6 @@
 
 #include "panel.hpp"
 
-namespace lumiera {
 namespace gui {
 namespace panels {
 
@@ -43,6 +42,5 @@ namespace panels {
 
 }   // namespace panels
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // ASSETS_PANEL_HPP

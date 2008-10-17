@@ -31,7 +31,6 @@
 
 using namespace Gtk;
 
-namespace lumiera {
 namespace gui {
 namespace dialogs {
 
@@ -56,6 +55,5 @@ namespace dialogs {
 
 }   // namespace dialogs
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // PREFERENCES_DIALOG_HPP

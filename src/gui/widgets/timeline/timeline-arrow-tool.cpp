@@ -22,7 +22,6 @@
 
 #include "timeline-arrow-tool.hpp"
 
-namespace lumiera {
 namespace gui {
 namespace widgets {
 namespace timeline {
@@ -66,5 +65,3 @@ ArrowTool::on_motion_notify_event(GdkEventMotion *event)
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
-}   // namespace lumiera
-

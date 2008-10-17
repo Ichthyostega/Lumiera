@@ -25,7 +25,6 @@
 
 using namespace Gdk;
 
-namespace lumiera {
 namespace gui {
 namespace widgets {
 namespace timeline {
@@ -76,11 +75,11 @@ Tool::on_motion_notify_event(GdkEventMotion *event)
   mousePoint = Point(event->x, event->y);
 }
 
-lumiera::gui::widgets::TimelineWidget*
+gui::widgets::TimelineWidget*
 Tool::get_timeline_widget() const
 {
   REQUIRE(timelineBody != NULL);
-  lumiera::gui::widgets::TimelineWidget *timeline_widget =
+  gui::widgets::TimelineWidget *timeline_widget =
     timelineBody->timelineWidget;
   REQUIRE(timeline_widget != NULL);
   return timeline_widget;
@@ -96,5 +95,3 @@ Tool::get_body_rectangle() const
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
-}   // namespace lumiera
-

@@ -30,7 +30,6 @@
 
 #include "gtk-lumiera.hpp"
 
-namespace lumiera {
 namespace gui {
 
 /**
@@ -130,6 +129,5 @@ private:
 };
 
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // WINDOW_MANAGER_HPP

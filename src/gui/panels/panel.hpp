@@ -30,7 +30,6 @@
 #include "../gtk-lumiera.hpp"
 #include <libgdl-1.0/gdl/gdl-dock-item.h>
 
-namespace lumiera {
 namespace gui {
 namespace panels {
 
@@ -92,6 +91,5 @@ protected:
 
 }   // namespace panels
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // PANEL_HPP

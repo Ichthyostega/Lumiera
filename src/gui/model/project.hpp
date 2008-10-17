@@ -27,7 +27,6 @@
 #ifndef PROJECT_HPP
 #define PROJECT_HPP
 
-namespace lumiera {
 namespace gui {
 namespace model {
 
@@ -39,6 +38,5 @@ public:
 
 }   // namespace model
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // PROJECT_HPP

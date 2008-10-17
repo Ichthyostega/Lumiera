@@ -29,9 +29,8 @@
 #include "panel.hpp"
 #include "../widgets/timeline-widget.hpp"
 
-using namespace lumiera::gui::widgets;
+using namespace gui::widgets;
 
-namespace lumiera {
 namespace gui {
 namespace panels {
 
@@ -120,6 +119,5 @@ private:
 
 }   // namespace panels
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // TIMELINE_PANEL_H

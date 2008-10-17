@@ -32,16 +32,15 @@
 
 using namespace Gtk;
 using namespace std;
-using namespace lumiera::gui;
-using namespace lumiera::gui::widgets;
-using namespace lumiera::gui::widgets::timeline;
+using namespace gui;
+using namespace gui::widgets;
+using namespace gui::widgets::timeline;
 
-namespace lumiera {
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-TimelineBody::TimelineBody(lumiera::gui::widgets::TimelineWidget
+TimelineBody::TimelineBody(gui::widgets::TimelineWidget
   *timeline_widget) :
     Glib::ObjectBase("TimelineBody"),
     tool(NULL),
@@ -75,7 +74,7 @@ TimelineBody::get_tool() const
   REQUIRE(tool != NULL);
   if(tool != NULL)
     return tool->get_type();
-  return lumiera::gui::widgets::timeline::None;
+  return gui::widgets::timeline::None;
 }
   
 void
@@ -437,4 +436,3 @@ TimelineBody::read_styles()
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
-}   // namespace lumiera

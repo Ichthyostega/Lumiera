@@ -22,7 +22,6 @@
 
 #include "project.hpp"
 
-namespace lumiera {
 namespace gui {
 namespace model {
 
@@ -33,6 +32,3 @@ Project::Project()
 
 }   // namespace model
 }   // namespace gui
-}   // namespace lumiera
-
-

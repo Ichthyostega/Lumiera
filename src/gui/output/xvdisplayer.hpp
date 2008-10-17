@@ -43,7 +43,6 @@ namespace Gtk {
   class Widget;
 }
 
-namespace lumiera {
 namespace gui {
 namespace output {
 
@@ -74,6 +73,5 @@ namespace output {
 
 }   // namespace output
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // XVDISPLAYER_HPP

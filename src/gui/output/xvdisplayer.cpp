@@ -28,7 +28,6 @@
 
 #include "xvdisplayer.hpp"
 
-namespace lumiera {
 namespace gui {
 namespace output {
 
@@ -223,4 +222,3 @@ XvDisplayer::put( void *image )
 
 }   // namespace output
 }   // namespace gui
-}   // namespace lumiera
