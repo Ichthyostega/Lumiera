@@ -27,6 +27,7 @@
 
 #include "proc/engine/procnode.hpp"
 
+#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <cstddef>
 
@@ -38,6 +39,28 @@ namespace engine {
   class WiringFactory;
   
   namespace config { class WiringFactoryImpl; }
+  
+  using lib::RefArray;
+  
+  
+  /**
+   * Finding out about a concrete way of wiring up a
+   * ProcNode about to be built. Such a (temporary) setup object
+   * is used while building the low-level model. It is loaded with
+   * information concerning the intended connections to be made
+   * and then used to initialise the wiring descriptor, which
+   * in turn allows us to setup the ProcNode.  
+   */
+  class WiringInstaller : boost::noncopyable
+    {
+    public:
+      RefArray<ChannelDescriptor>& makeOutDescriptor() ;
+      RefArray<InChanDescriptor>&  makeInDescriptor() ;
+      WiringDescriptor::ProcFunc*  resolveProcessingFunction() ;
+      lumiera::NodeID const&       createNodeID() ;
+    };
+  
+  
   
   
   /**
@@ -54,6 +77,16 @@ namespace engine {
     : public WiringDescriptor
     {
       
+      NodeWiring(WiringInstaller& setup)
+        : WiringDescriptor(setup.makeOutDescriptor(), 
+                           setup.makeInDescriptor(),
+                           setup.resolveProcessingFunction(),
+                           setup.createNodeID())
+        {
+          nrO = out.size();
+          nrI = in.size();
+        }
+      
       friend class WiringFactory;
       
       
@@ -65,10 +98,6 @@ namespace engine {
           return thisStep.retrieve (); // fetch or calculate results
         }
       
-      
-      //////
-      //////TODO: push "almost everything" up into an ABC
-      //////////  and create an ctor to set up the RefArrays
     };
 
     
@@ -79,7 +108,7 @@ namespace engine {
       
     public:
       WiringDescriptor&
-      operator() (uint nrOut, uint nrIn, bool cache);
+      operator() (WiringInstaller& setup, bool cache);
     };
   
   

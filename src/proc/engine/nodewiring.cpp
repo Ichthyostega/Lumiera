@@ -119,7 +119,7 @@ namespace engine {
    *  the new processing node to be wired up.  
    */
   WiringDescriptor&
-  WiringFactory::operator() (uint nrOut, uint nrIn, bool cache)
+  WiringFactory::operator() (WiringInstaller& setup, bool cache)
   {
     UNIMPLEMENTED ("build the actual wiring descriptor based on given operation options");
     

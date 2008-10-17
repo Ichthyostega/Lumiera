@@ -24,12 +24,58 @@
 #include "proc/engine/nodefactory.hpp"
 #include "proc/mobject/session/effect.hpp"
 
-namespace engine {
+#include "proc/engine/nodewiring.hpp"
 
+namespace engine {
+  
+  namespace { // Details of node fabrication
+
+    class Alloc {}; ///////////////TODO
+    
+    template<class NODE>
+    NODE &
+    makeNode ()
+    {
+      ////TODO: this is a draft how it /might/ work
+      ////TODO: of course this can't be hard wired....
+      
+      ProcNode * predecessor1, predecessor2;
+      
+      WiringInstaller setup;
+      setup.defineInput (4, predecessor1, 2);
+      setup.defineInput (2, predecessor2);
+      
+      WiringFactory* wFac;
+      
+      Alloc allocator;
+      bool doCache = (2 == 2); // find out Cache should be used for this node
+      
+      WiringDescriptor & wDesc = (*wFac)(setup,doCache);
+      
+      NODE *newNode = new(allocator()) NODE (wDesc);   // actually this line needs to be atomic
+      
+      return *newNode;
+      
+      /*
+       * Problems to be solved:
+       * - write a generic allocator, which later on can be augmented to do block wise bulk allocation
+       * - the allocator needs to keep track of the objects; actually he owns the objects
+       * - we need to access the wiring descriptor of the predecessor nodes. Which means, the code
+       *   must be in the body of NodeFactory (because the latter is friend of ProcNode and can access the wiring descriptor)
+       * - btw reconsider if this level of protection is necessary, or if the const WiringDescriptor cant be just on the public interface of ProcNode
+       * - find out how the Caching/ReadInput/InPlace detection can work
+       * - think about a sensible Ctor for NodeFactory. This one must create the WiringFactory and pass the Allocator.
+       * - all of this will be installed into the ToolFactory, i.e. it is part of the build process
+       */
+    }
+    
+  } // (END) Details of node fabrication
+  
+  
   using mobject::Placement;
   using mobject::session::Effect;
   
-
+  
   /** create a processing node able to render an effect */
   PTrafo
   NodeFactory::operator() (Placement<Effect> const&)

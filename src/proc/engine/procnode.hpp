@@ -46,6 +46,7 @@
 #include "proc/state.hpp"
 #include "proc/mobject/parameter.hpp"
 #include "common/frameid.hpp"
+#include "lib/refarray.hpp"
 
 #include <vector>
 
@@ -58,8 +59,6 @@ namespace engine {
   using lumiera::NodeID;
   
   class ProcNode;
-  class NodeFactory;
-  
   typedef ProcNode* PNode;
   
   
@@ -70,11 +69,11 @@ namespace engine {
   class WiringDescriptor
     {
     public:
-      uint nrI;
       uint nrO;
+      uint nrI;
       
-      ChannelDescriptor  out[];
-      InChanDescriptor   in[];
+      lib::RefArray<ChannelDescriptor>& out;
+      lib::RefArray<InChanDescriptor>&  in;
       
       typedef void (ProcFunc) (BuffHandle::PBuff);
       
@@ -85,8 +84,8 @@ namespace engine {
       virtual ~WiringDescriptor() {}
       
     protected:
-      WiringDescriptor (ChannelDescriptor* o, 
-                        InChanDescriptor* i,
+      WiringDescriptor (lib::RefArray<ChannelDescriptor>& o, 
+                        lib::RefArray<InChanDescriptor>& i,
                         ProcFunc pFunc, NodeID const& nID)
         : out(o), in(i),
           procFunction(pFunc),
