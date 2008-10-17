@@ -528,7 +528,7 @@ Even if the low-level memory manager(s) may use raw storage, we require that the
 &amp;rarr; see MemoryManagement
 </pre>
 </div>
-<div title="Asset" modifier="Ichthyostega" modified="200906071813" created="200708100337" tags="def classes img" changecount="16">
+<div title="Asset" modifier="Ichthyostega" modified="200810162246" created="200708100337" tags="def classes img" changecount="17">
 <pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the EDL is the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with each Session. Besides, there is a collection of basic Assets always available by default.
 
 The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situation is similar. Assets thus serve two quite distinct purposes. One is to load, list, group search and browse them, and to provide an entry point to create new or get at existing MObjects in the EDL, while the other purpose is to provide attribute and property informations to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
@@ -545,9 +545,9 @@ Some piece of Media Data accessible at some external Location and able to be pro
 
 !Processing Asset
 Some software component able to work on media data in the Lumiera Render engine Framework. This includes all sorts of loadable effects, as well as some of the standard, internal facilities (Mask, Projector). Note that Processing Assets typically provide some attachment Point or means of communication with GUI facilities.
-* __outward interface operations__ include...
-* __inward interface operations__ include...
-&amp;rarr; ProcAsset {{red{to be defined}}}
+* __outward interface operations__ include getting name and description, investigating the media types the processor is able to handle, cause the underlying module to be acutally loaded...
+* __inward interface operations__ include resolving the actual processing function.
+&amp;rarr; ProcAsset
 
 !Structural Asset
 Some of the building blocks providing the framework for the objects placed into the current Session. Notable examples are [[processing pipes|Pipe]] within the high-level-model, Viewer attachment points, Tracks, etc.
@@ -1308,6 +1308,16 @@ Basically, each elementary operation has to record the informations necessary to
 {{red{to be defined in more detail later...}}}
 </pre>
 </div>
+<div title="EffectHandling" modifier="Ichthyostega" modified="200810170025" created="200810162300" tags="design dynamic" changecount="3">
+<pre>We have to deal with effects on various different levels. One thing is to decide if an effect is applicable, another question is to find out about variable and automatable parameters, find a module which can be used as an effect GUI and finally to access a processing function which can be executed on a buffer filled with suitable data.
+
+The effect asset (which is a [[processing asset|ProcAsset]]) provides an unified interface for loading external processing modules and querying their properties. As usual with assets, this is the &quot;bookkeeping view&quot; to start with, but we can create a //processor// from such an asset, i.e. an instance of the processing facility which can be used and wired into the model. Such a processor is an MObject and can be placed into the session (high level model); moreover it holds a concrete wiring for the various control parameters and it has an active link to the effect GUI module. As every ~MObject, it could be placed multiple times to affect several pipes, but all those different Placements would behave as being linked together (with respect to the control parameter sources and the GUI)
+
+When building the low-level model, the actual processing code is resolved and a processing function is installed into the processing node representing the effect. This step includes checking of actual [[media type information|StreamType]], which may result in selecting a specifically tailored implementation function. The parameter wiring on the other hand is //shared// between the effect ~MObject, the corresponding GUI module and all low-level processing nodes. Actually, parameters are more of a reference than actually being values: they provide a {{{getValue()}}} function, which also works with automation. This way, any parameter or automation changes are reflected immediately into the produced output.
+
+Initially, only the parameter (descriptors) are present on the effect ~MObject, while the actual [[parameter providers|ParamProvider]] are created or wired (by the ConManager) on demand.
+</pre>
+</div>
 <div title="Example1" modifier="Ichthyostega" modified="200906071812" created="200706220239" tags="example img" changecount="5">
 <pre>The &amp;raquo;Timeline&amp;laquo; is a sequence of ~MObjects -- here clips -- together with an ExplicitPlacement, locating each clip at a given time and track. (Note: I simplified the time format and wrote frame numbers to make it more clear)
 [img[Example1: Objects in the EDL/Fixture|uml/fig128773.png]]
@@ -2047,6 +2057,7 @@ The general idea is, that each facade interface actually provides access to a sp
 * it is allways //placed// in some manner, i.e. it is allways accessed via a [[Placement]]
 * {{red{and what else?}}}
 
+<<<<<<< HEAD:wiki/renderengine.html
 &amp;rarr; overview [[MObject class hierarchy|MObjects]]</pre>
 </div>
 <div title="MObjectRef" modifier="Ichthyostega" modified="200906020120" created="200904242107" tags="SessionLogic GuiIntegration design draft discuss" changecount="21">
@@ -2085,8 +2096,14 @@ Presumably, none of the both models is usable as-is; rather we try to reconstruc
 </div>
 <div title="MObjects" modifier="Ichthyostega" modified="200906071811" created="200706190636" tags="overview img" changecount="17">
 <pre>The ~MObjects Subsystem contains everything related to the [[EDL]] and the various Media Objects placed within. It is complemented by the Asset Management (see &amp;rarr; [[Asset]]). Examples for [[MObjects |MObject]](&amp;rarr; def) being:
+=======
+&amp;rarr; [[overview of the MObject hierarchy|MObjects]]</pre>
+</div>
+<div title="MObjects" modifier="Ichthyostega" modified="200810162229" created="200706190636" tags="overview" changecount="11">
+<pre>The ~MObjects Subsystem contains everything related to the [[EDL]] and the various Media Objects placed within. It is complemented by the Asset Management (see &amp;rarr; [[Asset]]). Examples for [[MObjects|MObject]] being:
+>>>>>>> some initial considerations how to handle Effects:wiki/renderengine.html
 * audio/video clips
-* effects and plugins
+* [[effects and plugins|EffectHandling]]
 * special facilities like mask and projector
 * [[Automation]] sets
 * labels and other (maybe functional) markup
@@ -2344,7 +2361,7 @@ see also: RenderEntities, [[two Examples (Object diagrams)|Examples]]
 &lt;!--}}}--&gt;
 </pre>
 </div>
-<div title="ParamProvider" modifier="Ichthyostega" modified="200805300124" created="200706220517" tags="def automation" changecount="9">
+<div title="ParamProvider" modifier="Ichthyostega" modified="200810170040" created="200706220517" tags="def automation" changecount="12">
 <pre>A ParamProvider is the counterpart for (one or many) [[Parameter]] instances. It implements the value access function made available by the Parameter object to its clients.
 
 To give a concrete example: 
@@ -2352,9 +2369,13 @@ To give a concrete example:
 * the Plugin has a Parameter Object (from which we could query the information of this parameter being a continuous float function)
 * this Parameter Object provides a getValue() function, which is internally linked (i.e. by configuration) to a //Parameter Provider//
 * the actual object implementing the ParamProvider Interface could be a Automation MObject located somewhere in the EDL and would do bezier interpolation on a given keyframe set.
-* while building the Render Engine configuration actually at work, the Builder would have to setup this link between the Plugin Parameter Object and the ParamProvider; he can do so, because he sees the link between the Automation MObject and the corresponding Effect MObject
+* Param providers are created on demand; while building the Render Engine configuration actually at work, the Builder would have to setup a link between the Plugin Parameter Object and the ParamProvider; he can do so, because he sees the link between the Automation MObject and the corresponding Effect MObject
+
+!!ParamProvider ownership and lifecycle
+Actually, ParamProvider is just an interface which is implemented either by a constant or an [[Automation]] function. In both cases, access is via direct reference, while the link to the ParamProvider is maintained by a smart-ptr, which &amp;mdash; in the case of automation may share ownership with the [[Placement]] of the automation data set.
 
 &amp;rarr; see the class diagram for [[Automation]]
+&amp;rarr; see EffectHandling
 </pre>
 </div>
 <div title="Parameter" modifier="Ichthyostega" modified="200805300124" created="200706220505" tags="def automation" changecount="1">
@@ -3219,10 +3240,14 @@ We need to work out guidelines for dealing with operations going on simultaneous
 
 While the Backend is responsible for Data access and management and for carrying out the computation intensive media opteratons, the middle Layer or ~Proc-Layer contains [[assets|Asset]] and [[Session]], i.e. the user-visible data model and provides configuration and behaviour for these entities. Besides, he is responsible for [[building and configuring|Builder]] the [[render engine|RenderEngine]] based on the current Session state.</pre>
 </div>
+<<<<<<< HEAD:wiki/renderengine.html
 <div title="ProcAsset" modifier="Ichthyostega" modified="200906071810" created="200709221343" tags="def classes img" changecount="2">
+=======
+<div title="ProcAsset" modifier="Ichthyostega" modified="200810162240" created="200709221343" tags="def classes" changecount="2">
+>>>>>>> some initial considerations how to handle Effects:wiki/renderengine.html
 <pre>All Assets of kind asset::Proc represent //processing algorithms// in the bookkeeping view. They enable loading, browsing and maybe even parametrizing all the Effects, Plugins and Codecs available for use within the Lumiera Session.
 
-Besides, they provide an important __inward interface__ for the [[ProcNode]]s, which will use these asset entries to dispatch the actual processing call when rendering. 
+Besides, they provide an __inward interface__ for the [[ProcNode]]s enabling them to dispatch the actual processing call when rendering. Actually, this interface is always accessed via an ~Effect-MObject; mostly it is investigated and queried in the build process when creating the corresponding processor nodes. &amp;rarr; see EffectHandling for details
 
 {{red{todo: the naming scheme??}}}
 
