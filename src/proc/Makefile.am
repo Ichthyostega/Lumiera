@@ -106,13 +106,13 @@ liblumiprocmobjectbuilder_a_SOURCES =					\
 	$(liblumiprocmobjectbuilder_a_srcdir)/toolfactory.cpp
 
 
-liblumiprocmobjectcontroller_a_srcdir = $(top_srcdir)/src/proc/mobject/controller
-noinst_LIBRARIES += liblumiprocmobjectcontroller.a
+liblumiproccontrol_a_srcdir = $(top_srcdir)/src/proc/control
+noinst_LIBRARIES += liblumiproccontrol.a
 
-liblumiprocmobjectcontroller_a_CXXFLAGS = $(CXXFLAGS) -Wall
+liblumiproccontrol_a_CXXFLAGS = $(CXXFLAGS) -Wall
 
-liblumiprocmobjectcontroller_a_SOURCES =				\
-	$(liblumiprocmobjectcontroller_a_srcdir)/pathmanager.cpp	
+liblumiproccontrol_a_SOURCES =				\
+	$(liblumiproccontrol_a_srcdir)/pathmanager.cpp	
 
 
 liblumiprocmobjectsession_a_srcdir = $(top_srcdir)/src/proc/mobject/session
@@ -183,8 +183,8 @@ noinst_HEADERS +=							\
 	$(liblumiproc_a_srcdir)/mobject/builder/segmentationtool.hpp	\
 	$(liblumiproc_a_srcdir)/mobject/builder/toolfactory.hpp		\
 	$(liblumiproc_a_srcdir)/mobject/builderfacade.hpp		\
-	$(liblumiproc_a_srcdir)/mobject/controller/pathmanager.hpp	\
-	$(liblumiproc_a_srcdir)/mobject/controller/renderstate.hpp	\
+	$(liblumiproc_a_srcdir)/control/pathmanager.hpp	\
+	$(liblumiproc_a_srcdir)/control/renderstate.hpp	\
 	$(liblumiproc_a_srcdir)/mobject/interpolator.hpp		\
 	$(liblumiproc_a_srcdir)/mobject/parameter.hpp			\
 	$(liblumiproc_a_srcdir)/mobject/paramprovider.hpp		\
