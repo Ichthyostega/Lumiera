@@ -48,7 +48,7 @@ lumigui_SOURCES =												\
 	$(lumigui_srcdir)/panels/viewer-panel.cpp					\
 	$(lumigui_srcdir)/panels/viewer-panel.hpp					\
 	$(lumigui_srcdir)/panels/assets-panel.cpp					\
-	$(lumigui_srcdir)/panels/asset-panels.hpp					\
+	$(lumigui_srcdir)/panels/assets-panel.hpp					\
 	$(lumigui_srcdir)/widgets/video-display-widget.cpp			\
 	$(lumigui_srcdir)/widgets/video-display-widget.hpp			\
 	$(lumigui_srcdir)/widgets/timeline-widget.cpp				\
