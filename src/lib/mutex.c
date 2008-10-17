@@ -44,6 +44,30 @@ lumiera_mutex_init (LumieraMutex self, const char* purpose, struct nobug_flag* f
 }
 
 
+static pthread_once_t recursive_mutexattr_once = PTHREAD_ONCE_INIT;
+static pthread_mutexattr_t recursive_mutexattr;
+
+static void recursive_mutexattr_init()
+{
+  pthread_mutexattr_init (&recursive_mutexattr);
+  pthread_mutexattr_settype (&recursive_mutexattr, PTHREAD_MUTEX_RECURSIVE);
+}
+
+
+LumieraMutex
+lumiera_recmutex_init (LumieraMutex self, const char* purpose, struct nobug_flag* flag)
+{
+  if (self)
+    {
+      pthread_once(&recursive_mutexattr_once, recursive_mutexattr_init);
+      pthread_mutex_init (&self->mutex, &recursive_mutexattr);
+      NOBUG_RESOURCE_HANDLE_INIT (self->rh);
+      NOBUG_RESOURCE_ANNOUNCE_RAW (flag, "recmutex", purpose, self, self->rh);
+    }
+  return self;
+}
+
+
 LumieraMutex
 lumiera_mutex_destroy (LumieraMutex self, struct nobug_flag* flag)
 {

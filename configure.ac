@@ -1,5 +1,5 @@
 AC_INIT(lumiera, 0.1pre)
-AC_CONFIG_SRCDIR(src/lib/plugin.c)
+AC_CONFIG_SRCDIR(src/lib/luid.c)
 AC_CONFIG_AUX_DIR(scripts)
 AM_INIT_AUTOMAKE
 AC_PREREQ(2.59)

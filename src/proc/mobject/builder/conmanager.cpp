@@ -1,5 +1,5 @@
 /*
-  ConManager  -  manages the creation of additional ProcNode connections for the Renderengine
+  ConManager  -  manages the creation of data/control connections when building the Renderengine
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,15 +22,13 @@
 
 
 #include "proc/mobject/builder/conmanager.hpp"
+#include "proc/control/stypemanager.hpp"
 
-namespace mobject
-  {
-
-  namespace builder
-    {
-
-
-
+namespace mobject {
+  namespace builder {
+    
+    
+    
     /**
      * TODO !!!!!!!!!!!!!!!!!!
      */

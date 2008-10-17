@@ -1,5 +1,5 @@
 /*
-  PathManager  -  Manager for deciding the actual render strategy
+  MEDIAIMPLLIB.hpp  -  interface providing a facade to an media handling library
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,26 +18,37 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
 
 
-#include "proc/mobject/controller/pathmanager.hpp"
+#ifndef CONTROL_MEDIAIMPLLIB_H
+#define CONTROL_MEDIAIMPLLIB_H
 
-namespace mobject
-  {
-  namespace controller
+
+#include "common/streamtype.hpp"
+
+
+
+namespace control {
+  
+  using lumiera::Symbol;
+  
+  
+  class MediaImplLib
     {
-
-
-
-    engine::Processor *
-    PathManager::buildProcessor ()
-    {
-      return 0;//////////////////TODO
-    }
-
-
-
-  } // namespace mobject::controller
-
-} // namespace mobject
+    protected:
+      virtual ~MediaImplLib() {};
+      
+      typedef lumiera::StreamType::ImplFacade ImplFacade;
+      typedef lumiera::StreamType::ImplFacade::TypeTag TypeTag;
+      typedef lumiera::StreamType::ImplFacade::DataBuffer DataBuffer;
+      
+    public:
+      virtual Symbol getLibID()  const =0;
+      
+      virtual ImplFacade const&  getImplFacade (TypeTag&) =0;
+    };
+  
+  
+} // namespace control
+#endif

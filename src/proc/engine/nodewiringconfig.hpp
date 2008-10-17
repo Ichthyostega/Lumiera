@@ -19,6 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
+
 /** @file nodewiringconfig.hpp
  ** Sometimes we need to coose a different implementation for dealing with
  ** some special cases. While for simple cases, just testing a flag or using a
@@ -44,6 +45,8 @@
  ** @see configflags.hpp
  ** 
  */
+
+
 #ifndef ENGINE_NODEWIRINGCONFIG_H
 #define ENGINE_NODEWIRINGCONFIG_H
 

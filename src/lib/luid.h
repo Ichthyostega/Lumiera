@@ -31,6 +31,22 @@
  */
 
 typedef unsigned char lumiera_uid[16];
+typedef lumiera_uid* LumieraUid;
+
+/*
+ C++ can't initialize arrays from string literals with the trailing \0 cropped
+ C can't initialize non constant members,
+ there we go
+*/
+#ifdef __cplusplus
+#define LUMIERA_UID_INITIALIZER(l)                              \
+  {                                                             \
+    l[0], l[1], l[2], l[3], l[4], l[5], l[6], l[7],             \
+    l[8], l[9], l[10], l[11], l[12], l[13], l[14], l[15]        \
+  }
+#else
+#define LUMIERA_UID_INITIALIZER(l) l
+#endif
 
 /**
  * Retrieve a generic pointer stored in a luid

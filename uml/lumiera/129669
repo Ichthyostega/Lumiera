@@ -1,6 +1,6 @@
 format 40
 "proc" // design::codegen::proc
-  revision 7
+  revision 8
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -150,7 +150,7 @@ ${namespace_start}
 ${members}
 ${namespace_end}"
       associated_classes
-	class_ref 132741 // StateProxy
+	class_ref 132741 // State
       end
       comment "Key Interface representing a render process and encapsulating state"
     end
@@ -235,6 +235,8 @@ ${namespace_end}"
   end
 
   package_ref 130053 // asset
+
+  package_ref 130693 // control
 
   package_ref 130181 // mobject
 

@@ -51,6 +51,7 @@ struct psplaynode_struct
   PSplaynode right;
 };
 
+#define PSPLAYNODE_INITIALIZER {NULL, NULL}
 
 /**
  * Function use to compare keys

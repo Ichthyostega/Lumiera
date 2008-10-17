@@ -1,6 +1,6 @@
 format 40
 "mobject" // design::codegen::proc::mobject
-  revision 8
+  revision 9
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -394,6 +394,4 @@ ${namespace_end}"
   package_ref 130437 // session
 
   package_ref 130565 // builder
-
-  package_ref 130693 // controller
 end

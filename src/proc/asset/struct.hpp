@@ -74,7 +74,7 @@ namespace asset
     
   /**
    * key abstraction: structural asset
-   * @todo just a stub, have to figure out what a asset::Proc is
+   * @todo just a stub, have to figure out what a asset::Struct is
    */
   class Struct : public Asset
     {

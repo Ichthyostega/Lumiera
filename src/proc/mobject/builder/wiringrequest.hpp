@@ -1,5 +1,5 @@
 /*
-  RENDERSTATE.hpp  -  renderengine state manager
+  WIRINGREQUEST.hpp  -  (interface) the intention to make a data or control connection
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,38 +21,34 @@
 */
 
 
-#ifndef MOBJECT_CONTROLLER_RENDERSTATE_H
-#define MOBJECT_CONTROLLER_RENDERSTATE_H
-
-#include "proc/state.hpp"
+#ifndef MOBJECT_BUILDER_WIRINGREQUEST_H
+#define MOBJECT_BUILDER_WIRINGREQUEST_H
 
 
 
-namespace mobject
-  {
-  namespace controller
-    {
-
-    typedef proc_interface::State State;
-
-
+namespace mobject {
+  namespace builder {
+    
+    
     /**
-     * Encapsulates the logic used to get a "current render process"
-     * in accordance to the currently applicable controller settings.
-     * The provided StateProxy serves to hold any mutalbe state used
-     * in the render process, so the rest of the render engine 
-     * can be stateless.
-     * @todo probably the state management will work different (6/08)
+     * A stateful value object denoting the wish to establish a link or connection
+     * between two entities. Used to organize the proper working of the build process.
+     * Wiring requests are first to be checked and can be deemed impossible to 
+     * satisfy. Internally, wiring requests contain specific information about
+     * the objects to be connected. This information is exposed only to the
+     * ConManager, which is the facility actually wiring the connections.
      */
-    class RenderState
+    class WiringRequest
       {
       public:
-        State& getRenderProcess () ;
+        /**
+         * TODO design sketch......
+         */
       };
 
 
 
-  } // namespace mobject::controller
+  } // namespace mobject::builder
 
 } // namespace mobject
 #endif

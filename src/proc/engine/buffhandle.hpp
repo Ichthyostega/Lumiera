@@ -40,6 +40,7 @@
 
 
 #include "common/error.hpp"
+#include "common/streamtype.hpp"
 
 
 namespace engine {
@@ -52,7 +53,7 @@ namespace engine {
    */
   struct BuffHandle
     {
-      typedef float Buff;
+      typedef lumiera::StreamType::ImplFacade::DataBuffer Buff;
       typedef Buff* PBuff;//////TODO define the Buffer type(s)
       
       PBuff 

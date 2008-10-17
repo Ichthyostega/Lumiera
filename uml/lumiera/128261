@@ -1,6 +1,6 @@
 format 40
 "MObject" // ProcessingLayer::MObject
-  revision 31
+  revision 32
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -1188,8 +1188,6 @@ ${inlines}
   end
 
   package_ref 128901 // Builder
-
-  package_ref 129029 // Controller
 
   usecaseview 128261 "config examples"
     //use case diagram settings

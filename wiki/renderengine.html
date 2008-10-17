@@ -928,13 +928,18 @@ TertiaryMid: #99a
 TertiaryDark: #667
 Error: #f88</pre>
 </div>
-<div title="ConManager" modifier="Ichthyostega" created="200806050208" tags="def Builder" changecount="1">
-<pre>The Connection Manager is a __Facade__ for querying information and deriving decisions regarding various aspects of data streams and possible connections.
-* retrieve information about capabilities of a stream type given by ID
+<div title="ConManager" modifier="Ichthyostega" modified="200810060300" created="200806050208" tags="def Builder" changecount="4">
+<pre>The Connection Manager is a service for wiring connections and for querying information and deriving decisions regarding various aspects of data streams and the possibility of connections. The purpose of the Connection Manager is to isolate the [[Builder]], which is client of this information and decision services, from the often convoluted details of type information and organizing a connection.
+
+!control connections
+my intention was that it would be sufficient for the builder to pass an connection request, and the Connection Manager will handle the details of establishing a control/parameter link.
+{{red{TODO: handling of parameter values, automation and control connections still need to be designed}}}
+
+!data connections
+Connecting data streams of differing type involves a StreamConversion. Mostly, this aspect is covered by the [[stream type system|StreamType]]. The intended implementation will rely partially on [[rules|ConfigRules]] to define automated conversions, while other parts need to be provided by hard wired logic. Thus, regarding data connections, the ConManager can be seen as a specialized Facade and will delegate to the &amp;rarr; [[stream type manager|STypeManager]]
+* retrieve information about capabilities of a stream type given by ID 
 * decide if a connection is possible
 * retrieve a //strategy// for implementing a connection
-
-In the intended implementation, a good deal of this functionality will actually be implemented by [[rules|ConfigRules]], while other parts need to be provided by hard wired logic, at least as a fallback. Anyway, the purpose of the Connection Manager ois to isolate the [[Builder]], which is client of this information and decision services, from these details
 </pre>
 </div>
 <div title="ConfigQuery" modifier="Ichthyostega" modified="200804110335" created="200801181308" tags="def" changecount="5">
@@ -1058,7 +1063,7 @@ As we don't have a Prolog interpreter on board yet, we utilize a mock store with
 {{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding a exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one soltution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
 &amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
-<div title="DesignDecisions" modifier="Ichthyostega" modified="200805300045" created="200801062209" tags="decision design discuss" changecount="18">
+<div title="DesignDecisions" modifier="Ichthyostega" modified="200809230234" created="200801062209" tags="decision design discuss" changecount="20">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
 
 ''Everything is an object'' &amp;mdash; of course, that's a //no-brainer // todays. Rather, important is what is not &quot;an object&quot;, meaning it can't be arranged arbitrarily
@@ -1072,6 +1077,10 @@ We ''separate'' processing (rendering) and configuration (building). We have a [
 An [[EDL]] is just a collection of configured and placed objects (and has no additional, fixed structure). [[Tracks|Track]] form a mere organisational grid, they are grouping devices not first-class entities (a track doesn't &quot;have&quot; a pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements though). [[Pipes|Pipe]] are hooks for making connections and are the only facility to build processing chains. We have global pipes, and each clip is built around a lokal [[source port|ClipSourcePort]] &amp;mdash; and that's all. No special &quot;media viewer&quot; and &quot;arranger&quot;, no special role for media sources, no commitment to some fixed media stream types (video and audio). All of this is sort of pushed down to be configuration, represented as asset of some kind. For example, we have [[processing pattern|ProcPatt]] assets to represent the way of building the source network for reading from some media file (including codecs treated like effect plugin nodes)
 
 ''State'' is rigorously ''externalized'' and operations are to be ''scheduled'', to simplify locking and error handling. State is either treated similar to media stream data (as addressable and cacheable data frame), or is represented as &quot;parameter&quot; to be served by some [[parameter provider|ParamProvider]]. Consequently, [[Automation]] is just another kind of parameter, i.e. a function &amp;mdash; how this function is calculated is an encapsulated implementation detail (we don't have &quot;bezier automation&quot;, and then maybe a &quot;linear automation&quot;, a &quot;mask automation&quot; and yet another way to handle transitions)
+
+Deliberately there is an limitaion on the flexibility of what can be added to the system via Plugins. We allow configuration and parametrisation to be extended and we allow processing and data handling to be extended, but we disallow extensions to the fundamental structure of the system by plugins. They may provide new implementations for already known subsystems, but they can't introduce new subsystems not envisioned in the general design of the application.
+* thus fixed assortments include: the possbile kinds of MObject and [[Asset]], the possible automation parameter data types, the supported kinds of plugin systems
+* while plugins may extend: the supported kinds of media, the [[media handling libraries|MediaImplLib]] used to deal with those media, the session storage backends, the behaviour of placments
 </pre>
 </div>
 <div title="DesignGoals" modifier="Ichthyostega" modified="200805300046" created="200706210557" tags="design" changecount="20">
@@ -1320,6 +1329,11 @@ Slider.prototype.stop = function()
 }
 //}}}</pre>
 </div>
+<div title="GAVL" modifier="Ichthyostega" created="200809220251" tags="def" changecount="1">
+<pre>The ''Gmerlin Audio Video Library''. &amp;rarr; see [[homepage|http://gmerlin.sourceforge.net/gavl.html]]
+Used within Lumiera as a foundation for working with raw video and audio media data
+</pre>
+</div>
 <div title="GOPs" modifier="Ichthyostega" modified="200706220333" created="200706220301" tags="def" changecount="2">
 <pre>__G__roup __of__ __P__ictures: several compressed video formats don't encode single frames. Normally, such formats are considered mere //delivery formates// but it was one of the key strenghts of Cinelrra from start to be able to do real non linear editing on such formats (like the ~MPEG2-ts unsed in HDV video). The problem of course is that the data backend needs to decode the whole GOP to be serve  single raw video frames.
 
@@ -1365,7 +1379,7 @@ Besides routing to a global pipe, wiring plugs can also connect to the source po
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200808151447" created="200708080322" tags="overview" changecount="26">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200809130314" created="200708080322" tags="overview" changecount="28">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1383,7 +1397,7 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * [[identifying the basic Builder operations|BasicBuildingOperations]] and [[planning the Implementation|PlanningNodeCreatorTool]]
 * [[how to handle »attached placement«|AttachedPlacementProblem]]
 * working out the [[basic building situations|BuilderPrimitives]] and [[mechanics of rendering|RenderMechanics]]
-* how to classify and [[describe media stream types|StreamType]]
+* how to classify and [[describe media stream types|StreamType]] and how to [[use them|StreamTypeUse]]
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200711210542" created="200711210531" tags="discuss draft" changecount="7">
@@ -1830,6 +1844,22 @@ __5/2008__: the allocation mechanism can surely be improved later, but for now I
 [img[Asset Classess|uml/fig130437.png]]
 
 &amp;rarr; see also LoadingMedia
+</pre>
+</div>
+<div title="MediaImplLib" modifier="Ichthyostega" modified="200809251942" created="200809220304" tags="def spec" changecount="5">
+<pre>The Proc-Layer is designed such as to avoid unnecessary assumptions regarding the properties of the media data and streams. Thus, for anything which is not completely generic, we rely on an abstract [[type description|StreamTypeDescriptor]], which provides a ''Facade'' to an actual library implementation. This way, the fundamental operations can be invoked, like allocating a buffer to hold media data.
+
+In the context of Lumiera and especially in the Proc-Layer, __media implementation library__ means
+* a subsystem which allows to work with media data of a specific kind
+* such as to provide the minimal set of operations
+** allocating a frame buffer
+** describing the type of the data within such a buffer
+* and this subsystem or external library has been integrated to be used through Lumiera by writing adaptation code for accessing these basic operations through the [[implementation facade interface|StreamTypeImplFacade]]
+* such a link to an type implementation is registered and maintained by the [[stream type manager|STypeManager]]
+
+!Problem of the implementation data types
+Because we deliberately won't make any asumptions about the implementation library (besides the ones imposed indirectly by the facade interface), we can't integrate the data types of the library first class into the type system. All we can do is to use marker types and rely on the builder to have checked the compatibility of the actual data beforehand. 
+It would be possible to circumvent this problem by requiring all supported implementation libraries to be known at compile time, because then the actual media implementation type could be linked to a facade type by generic programming. Indeed, Lumiera follows this route with regards to the possible kinds of MObject or [[Asset]] &amp;mdash; but to the contraty, for the problem in question here, being able to include support for a new media data type just by adding a plugin by far outweights the benefits of compile-time checked implementation type selection. So, as a consequence of this design decision we //note the possibility of the media file type discovery code to be misconfigured// and select the //wrong implementation library at runtime.// And thus the render engine needs to be prepared for the source reading node of any pipe to flounder completely, and protect the rest of the system accordingly
 </pre>
 </div>
 <div title="MemoryManagement" modifier="Ichthyostega" modified="200808110208" created="200708100225" tags="impl decision discuss" changecount="14">
@@ -3196,6 +3226,9 @@ __see also__
 
 Rendering can be seen as a passive service available to the Backend, which remains in charge what to render and when. Render processes may be running in parallel without any limitations. All of the storage and data management falls into the realm of the Backend. The render nodes themselves are ''completely stateless'' &amp;mdash; if some state is necessary for carrying out the calculations, the backend will provide a //state frame// in addition to the data frames.</pre>
 </div>
+<div title="STypeManager" modifier="Ichthyostega" created="200809220230" changecount="1">
+<pre>A facility allowing the Proc-Layer to work with abstracted [[media stream types|StreamType]], linking (abstract or opaque) [[type tags|StreamTypeDescriptor]] to an [[library|MediaImplLib]], which provides functionality for acutally dealing with data of this media stream type. Thus, the stream type manager is a kind of registry of all the external libraries which can be bridged and accessed by Lumiera (for working with media data, that is). The most basic set of libraries is instelled here automatically at application start, most notably the [[GAVL]] library for working with uncompressed video and audio data. //Later on, when plugins will introduce further external libraries, these need to be registered here too.//</pre>
+</div>
 <div title="Session" modifier="Ichthyostega" modified="200712100526" created="200712100525" tags="def" changecount="3">
 <pre>The Session contains all informations, state and objects to be edited by the User. From a users view, the Session is synonymous to the //current Project//. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]]. &amp;rarr; [[Session design overview|SessionOverview]]
 
@@ -3310,22 +3343,30 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
 * in a future version, it may also encapsulate the communication in a distributed render farm
 </pre>
 </div>
-<div title="StreamPrototype" modifier="Ichthyostega" modified="200808152103" created="200808152042" tags="def spec" changecount="7">
+<div title="StreamConversion" modifier="Ichthyostega" modified="200810060308" created="200810020337" tags="design spec" changecount="4">
+<pre>Conversion of a media stream into a stream of another type is done by a processor module (plugin). The problem of finding such a module is closely related to the StreamType and especially [[problems of querying|StreamTypeQuery]] for such. (The builder uses a special Facade, the ConManager, to access this functionality). There can be different kinds of conversions, and the existance or non-existance of such an conversion can influence the stream type classification.
+* different //kinds of media// can be ''transformed'' into each other
+* stream types //subsumed// by a given prototype should be ''lossless convertible'' and thus can be considered //equivalent.//
+* besides, between different stream //implementation types,// there can be a ''rendering'' (lossy conversion) &amp;mdash; or no conversion at all.
+</pre>
+</div>
+<div title="StreamPrototype" modifier="Ichthyostega" modified="200809120021" created="200808152042" tags="def spec" changecount="10">
 <pre>The stream Prototype is part of the specification of a media stream's type. It is a semantic (or problem domain oriented) concept and should be distinguished from the actual implementation type of the media stream. The latter is provided by an [[library implementation|StreamTypeImplFacade]]. While there are some common predefined prototypes, mostly, they are defined within the concrete [[Session]] according to the user's needs. 
 
-Prototypes form an open (extensible) collection, though each prototype belongs to a specific media kind ({{{VIDEO, IMAGE, AUDIO, MIDI,...}}}). The ''distinguishing property'' of a stream prototype is that any [[Pipe]] can process //streams of a specific prototype only.// Thus, two streams with different prototype can be considered &quot;something quite different&quot; from the users point of view, while two streams belonging to the same prototype can be considered equivalent (and will be converted automatically when their implementation types differ). Note this definition is //deliberately fuzzy,// because it depends on the actual situation of the project in question.
+Prototypes form an open (extensible) collection, though each prototype belongs to a specific media kind ({{{VIDEO, IMAGE, AUDIO, MIDI,...}}}).
+The ''distinguishing property'' of a stream prototype is that any [[Pipe]] can process //streams of a specific prototype only.// Thus, two streams with different prototype can be considered &quot;something quite different&quot; from the users point of view, while two streams belonging to the same prototype can be considered equivalent (and will be converted automatically when their implementation types differ). Note this definition is //deliberately fuzzy,// because it depends on the actual situation of the project in question.
 
 Consequently, as we can't get away with an fixed Enum of all stream prototypes, the implementation must rely on a query interface. The intention is to provide a basic set of rules for deciding queries about the most common stream prototypes; besides, a specific session may inject additional rules or utilize a completely different knowledge base. Thus, for a given StreamTypeDescriptor specifying a prototype
 * we can get a [[default|DefaultsManagement]] implementation type
 * we can get a default prototype to a given implementation type by a similar query
-* we can query if a implementation type in question can be //subsumed// under this prototype
+* we can query if a implementation type in question can be //subsumed// by this prototype
 * we can determine if another prototype is //convertible//
 
 !!Examples
-NTSC and PAL video, video versus digitized film, HD video versus SD video, 3D versus flat video, cinemascope versus 4:3, stereophonic versus monaural, periphonic versus panoramic sound, Ambisonics versus 5.1, dolby versus dts,...
+NTSC and PAL video, video versus digitized film, HD video versus SD video, 3D versus flat video, cinemascope versus 4:3, stereophonic versus monaural, periphonic versus panoramic sound, Ambisonics versus 5.1, dolby versus linear PCM...
 </pre>
 </div>
-<div title="StreamType" modifier="Ichthyostega" modified="200808152026" created="200808060244" tags="spec discuss draft" changecount="4">
+<div title="StreamType" modifier="Ichthyostega" modified="200809280108" created="200808060244" tags="spec discuss draft" changecount="9">
 <pre>//how to classify and describe media streams//
 Media data is understood to appear structured as stream(s) over time. While there may be an inherent internal structuring, at a given perspective ''any stream is a unit and homogeneous''. In the context of digital media data processing, streams are always ''quantized'', which means they appear as a temporal sequence of data chunks called ''frames''.
 
@@ -3347,8 +3388,8 @@ A stream type is denoted by a StreamTypeID, which is an identifier, acting as an
 !! Classification
 Within the Proc-Layer, media streams are treated largely in a similar manner. But, looking closer, note everything can be connected together, while on the other hand there may be some classes of media streams which can be considered //equivalent// in most respects. Thus, it seems reasonable to separate the distinction between various media streams into several levels
 * Each media belongs to a fundamental ''kind'' of media, examples being __Video__, __Image__, __Audio__, __MIDI__,... Media streams of different kind can be considered somewhat &quot;completely separate&quot; &amp;mdash; just the handling of each of those media kinds follows a common //generic pattern// augmented with specialisations. Basically, it is //impossible to connect// media streams of different kind. Under some circumstances there may be the possibility of a //transformation// though. For example, a still image can be incorporated into video, sound may be visualized, MIDI may control a sound synthesizer.
-* Below the level of distinct kinds of media streams, within every kind we have an open ended collection of ''prototypes'', which, when compared directly may each be quite distinct and different, but which may be //rendered//&amp;nbsp; into each other. For example, we have stereoscopic (3D) video and we have the common flat video lacking depth information, we have several spatial audio systems (Ambisonics, Wave Field Synthesis), we have panorama simulating sound systems (5.1, 7.1,...), we have common stereophonic and monaural audio. It is considered important to retain some openness and configurability within this level of distinction, which means this classification should better be done by rules then by setting up a fixed property table. For example, it may be desirable for some production to distinguish between digitized film and video NTSC and PAL, while in another production everything is just &quot;video&quot; and can be converted mostly automatically. The most noticeable consequence of such a distinction is that any Bus or [[Pipe]] is always limited to a media stream of a single prototype. (&amp;rarr; [[more|StreamPrototype]])
-* Besides the distinction by prototypes, there are the various media ''implementation types''. This classification is not necessarily hierarchically related to the prototype classification, while in practice commonly there will be some sort of dependency. For example, both stereophonic and monaural audio may be implemented as 96kHz 24bit PCM with just a different number of channel streams, as well as we may have a dedicated stereo audio stream with two channels multiplexed into a single stream. For dealing with media streams of various implementation type, we need library routines, which also yield a type classification system. Most notably, for raw sound and video data we use the GAVL library, which defines a classification system for buffers and streams.
+* Below the level of distinct kinds of media streams, within every kind we have an open ended collection of ''prototypes'', which, when compared directly, may each be quite distinct and different, but which may be //rendered//&amp;nbsp; into each other. For example, we have stereoscopic (3D) video and we have the common flat video lacking depth information, we have several spatial audio systems (Ambisonics, Wave Field Synthesis), we have panorama simulating sound systems (5.1, 7.1,...), we have common stereophonic and monaural audio. It is considered important to retain some openness and configurability within this level of distinction, which means this classification should better be done by rules then by setting up a fixed property table. For example, it may be desirable for some production to distinguish between digitized film and video NTSC and PAL, while in another production everything is just &quot;video&quot; and can be converted automatically. The most noticeable consequence of such a distinction is that any Bus or [[Pipe]] is always limited to a media stream of a single prototype. (&amp;rarr; [[more|StreamPrototype]])
+* Besides the distinction by prototypes, there are the various media ''implementation types''. This classification is not necessarily hierarchically related to the prototype classification, while in practice commonly there will be some sort of dependency. For example, both stereophonic and monaural audio may be implemented as 96kHz 24bit PCM with just a different number of channel streams, as well we may have a dedicated stereo audio stream with two channels multiplexed into a single stream. For dealing with media streams of various implementation type, we need //library// routines, which also yield a //type classification system.// Most notably, for raw sound and video data we use the [[GAVL]] library, which defines a classification system for buffers and streams.
 * Besides the type classification detailed thus far, we introduce an ''intention tag''. This is a synthetic classification owned by Lumiera and used for internal wiring decisions. Currently (8/08), we recognize the following intention tags: __Source__, __Raw__, __Intermediary__ and __Target__. Only media streams tagged as __Raw__ can be processed.
 
 !! Media handling requirements involving stream type classification
@@ -3356,21 +3397,30 @@ Within the Proc-Layer, media streams are treated largely in a similar manner. Bu
 * determine if a given media data source and sink can be connected, and how.
 * determine and enumerate the internal structure of a stream.
 * discover processing facilities
+&amp;rarr; see StreamTypeUse
+&amp;rarr; [[querying types|StreamTypeQuery]]
 </pre>
 </div>
-<div title="StreamTypeDescriptor" modifier="Ichthyostega" modified="200808152027" created="200808151505" tags="def" changecount="6">
+<div title="StreamTypeDescriptor" modifier="Ichthyostega" modified="200809130314" created="200808151505" tags="def" changecount="7">
 <pre>A description and classification record usable to find out about the properties of a media stream. The stream type descriptor can be accessed using an unique StreamTypeID. The information contained in this descriptor record can intentionally be //incomplete,// in which case the descriptor captures a class of matching media stream types. The following information is maintained:
 * fundamental ''kind'' of media: {{{VIDEO, IMAGE, AUDIO, MIDI,...}}}
 * stream ''prototype'': this is the abstract high level media type, like NTSC, PAL, Film, 3D, Ambisonics, 5.1, monaural,...
 * stream ''implementation type'' accessible by virtue of an StreamTypeImplFacade
 * the ''intended usage category'' of this stream: {{{SOURCE, RAW, INTERMEDIARY, TARGET}}}.
 &amp;rarr; see &amp;raquo;[[Stream Type|StreamType]]&amp;laquo; detailed specification
+&amp;rarr; notes about [[using stream types|StreamTypeUse]]
 &amp;rarr; more [[about prototypes|StreamPrototype]]</pre>
 </div>
 <div title="StreamTypeID" modifier="Ichthyostega" created="200808151510" tags="def" changecount="1">
 <pre>This ID is an symbolic key linked to a StreamTypeDescriptor. The predicate {{{stream(ID)}}} specifies a media stream with the StreamType as detailed by the corresponding descriptor (which may contain complete or partial data defining the type).</pre>
 </div>
-<div title="StreamTypeImplFacade" modifier="Ichthyostega" modified="200808151818" created="200808151520" tags="def" changecount="6">
+<div title="StreamTypeImplConstraint" modifier="Ichthyostega" modified="200810020230" created="200809220248" tags="def" changecount="2">
+<pre>A special kind of media stream [[implementation type|StreamTypeImplFacade]], which is not fully specified. As such, it is supposed there //actually is// an concrete implementation type, while only caring for some part or detail of this implementation to exhibit a specific property. For example, using an type constraint we can express the requirement of the actual implementation of a video stream to be based on ~RGB-float, or to enforce a fixed frame size in pixels.
+
+An implementation constraint can //stand-in// for a completely specified implementation type (meaning it's a sub interface of the latter). But actually using it in this way may cause a call to the [[defaults manager|DefaultsImplementation]] to fill in any missing information. An example would be to call {{{createFrame()}}} on the type constraint object, which means being able to allocate memory to hold a data frame, with properties in compliance with the given type constraint. Of cousre, then we need to know all the properties of this stream type, which is where the defaults manager is queried. This allows session customisation to kick in, but may fail under certain cicumstances.
+</pre>
+</div>
+<div title="StreamTypeImplFacade" modifier="Ichthyostega" modified="200809251940" created="200808151520" tags="def" changecount="7">
 <pre>Common interface for dealing with the implementation of media stream data. From a high level perspective, the various kinds of media ({{{VIDEO, IMAGE, AUDIO, MIDI,...}}}) exhibit similar behaviour, while on the implementation level not even the common classification can be settled down to a complete general and useful scheme. Thus, we need separate library implementations for deailing with the various sorts of media data, all providing at least a set of basic operations:
 * set up a buffer
 * create or accept a frame
@@ -3378,6 +3428,105 @@ Within the Proc-Layer, media streams are treated largely in a similar manner. Bu
 * ...?
 
 &amp;rarr; see also &amp;raquo;[[Stream Type|StreamType]]&amp;laquo;
+//Note:// there is a sort-of &quot;degraded&quot; variant just requiring some &amp;rarr; [[implementation constraint|StreamTypeImplConstraint]] to hold
+</pre>
+</div>
+<div title="StreamTypeQuery" modifier="Ichthyostega" modified="200810060525" created="200809280129" tags="spec draft" changecount="23">
+<pre>Querying for media stream type information comes in various flavours
+* you may want to find a structural object (pipe, output, processing patten) associated with / able to deal with a certain stream type
+* you may need a StreamTypeDescriptor for an existing stream given as implementation data
+* you may want to build or complete type information from partial specification.
+Mostly, those queries involve the ConfigRules system in some way or the other. The [[prototype-|StreamPrototype]] and [[implementation type|StreamTypeImplFacade]]-interfaces themselves are mostly a facade for issuing appropriate queries. Some objects (especially [[pipes|Pipe]]) are tied to a certain stream type and thus store a direct link to type information. Others are just associated with a type by virtue of the DefaultsManagement.
+
+The //problem// with this pivotal role of the config rules is that &amp;mdash; from a design perspective &amp;mdash; not much can be said specifically, besides //&quot;you may be able to find out...&quot;, &quot;...depends on the defaults and the session configuration&quot;.// This way, a good deal of crucial behaviour is pushed out of the core implementation (and it's quite intentionally being done this way). What can be done regarding the design of the core is mostly to setup a framework for the rules and determine possible ''query situations''.
+
+!the kind of media
+the information of the fundamental media kind (video, audio, text, MIDI,...) is assiciated with the prototype, for technical reasons. Prototype information is mandatory for each StreamType, and the impl facade provides a query function (because some implementation libraries, e.g. [[GAVL]], support multiple kinds of media).
+
+!query for a prototype
+__Situation__: given an implementation type, find a prototype to subsume it.
+Required only for building a complete ~StreamType which isn't known at this point.
+The general case of this query is //quite hairy,// because the solution is not necessary clear and unique. And, worse still, it is related to the semantics, requiring semantic information and tagging to be maintained somewhere. For example, while the computer can't &quot;know&quot; what stereopohinc audio is (only a human can by listening to a stereophoic playback and deciding if it actually does convey a spatical sound image), in most cases we can overcome this problem by using the //heuristical rule// of assuming the prototype &quot;stereophonic&quot; when given two identically typed audio channels. This example also shows the necessity of ordering heuristic rules to be able to pick a best fit.
+
+We can inject two different kinds of fallback solutions for this kind of query:
+* we can always build a &quot;catch-all&quot; prototype just based on the kind of media (e.g. {{{prototype(video).}}}). This should match with lowest priority
+* we can search for existing ~StreamTypes with the same impl type, or an impl type which is //equivalent convertible// (see &amp;rarr; StreamConversion). 
+The latter case can yield multiple solutions, which isn't any problem, because the match is limited to classes of equivalent stream implementation, which would be subsumed under the same prototype anyway. Even if the registry holds different prototypes linked to the same implementation type, they would be convertible and thus could //stand-in// for one another. Together this results in the implementation
+# try to get a direct match to an existing impl type which has an associated (complete) ~StreamType, thus bypassing the ConfigRules system altogether
+# run a {{{Query&lt;Prototype&gt;}}} for the given implementation type
+# do the search within equivalence class as described above
+# fall back to the media kind.
+{{red{TODO: how to deal with the problem of hijacking a prototype?}}} &amp;rarr; see [[here|StreamTypeUse]]
+
+!query for an implementation
+__Situation 1__: given an partially specified ~StreamType (just an [[constraint|StreamTypeImplConstraint]])
+__Situation 2__: find an implementation for a given prototype (without any further impl type guidlines)
+Both cases have to go though the [[defaults manager|DefaultsManagement]] in some way, in order to give any default configuration a chance to kick in. This is //one of the most important use cases// of the defaults system: the ability to configure a default fromat for all streams with certain semantic classification. {{{prototype(video)}}} by default is RGBA 24bit non-interlaced for example.
+But after having queried the defaults system, there remains the problem to build a new solution (which will then automatically become default for this case). To be more precise: invoking the defaults system (as implemented in Lumiera) means first searching through existing objects encountered as default, and then issuing an general query with the capabilities in question. This general query in turn is conducted by the query type handler and usually consists of first searching existing objects and then creating a new object to match the capabilities. But, as said, the details depend on the type (and are defined by the query handler installed for this type). Translated to our problem here in question, this means //we have to define the basic operations from which a type query handler can be built.// Thus, to start with, it's completely sufficient to wire a call to the DefaultsManagement and assume the current session configuration contains some rules to cover it. Plus being prepared for the query to fail (throw, that is).
+
+Later on this could be augmented by providing some search mechanisms:
+* search through existing stream type implementations (or a suitable pre filtered selection) and narrow down the possible result(s) by using the constraint as a filter. Obviously this requires support by the MediaImplLib facade for the implementation in question. (This covers __Situation 1__)
+* relate a protoype in question to the other existing prototypes and use the convertibility / subsumption as a filter mechanism. Finally pick an existing impl type which is linked to one of the prototypes found thus far.
+Essentially, we need a search mechanism for impltypes and prototypes. This search mechanism is best defined by rules itself, but needs some primitive operations on types, like ennumerating all registered types, filter those selections and match against a constraint.
+
+!query for an (complete) StreamType
+All situations discussed thus far can also occur wrapped into and triggered by a query for a complete type. Depending on what part is known, the missing bits will be queried. 
+Independent from these is __another Situation__ where we query for a type ''by ID''.
+* a simple symbolic ID can be found by searching through all existing stream types (Operation supported by the type registry within STypeManager)
+* a special ''classificating'' ID can be parsed into the components (media kind, prototype, impltype), resulting in sub searches for these.
+{{red{not sure if we want to support queries by symboic ID}}}...problem is the impl type, because probably the library needs to support describing any implementation type by a string. Seemingly GAVL does, but requiring it for every lib?
+</pre>
+</div>
+<div title="StreamTypeUse" modifier="Ichthyostega" modified="200809280320" created="200809130312" tags="draft discuss dynamic" changecount="21">
+<pre>Questions regarding the use of StreamType within the Proc-Layer.
+* what is the relation between Buffer and Frame?
+* how to get the required size of a Buffer?
+* who does buffer allocations and how?
+
+Mostly, stream types are used for querying, either to decide if they can be connected, or to find usable processing modules.
+Even building a stream type from partial information involves some sort of query.
+&amp;rarr; more on [[media stream type queries|StreamTypeQuery]]
+
+!creating stream types
+seemingly stream types are created based on an already existing media stream (or a Frame of media data?). {{red{really?}}}
+The other use case seems to be that of an //incomplete// stream type based on a [[Prototype|StreamPrototype]]
+
+!Prototype
+According to my current understanding, a prototype is merely a classification entity. But then &amp;mdash; how to bootstrap a Prototype?
+And how to do the classification of an existing implementation type.
+
+Besides, there is the problem of //hijacking a prototype:// when a specific implementation type gets tied to a rather generic protoype, like {{{protoype(video)}}}, how to comply to the rule of prototypes subsuming a class of equivalent implementations?
+
+!Defaults and partial specification
+A StreamType need not be completely defined. It is sufficient to specify the media kind and the Prototype. The implementation type may be just given as a constraint, thus defining some properties and leaving out others. When creating a frame buffer based upon such an //incomplete type,// [[defaults|DefaultsManagement]] are queried to fill in the missing parts.
+Constraints are objects provided by the Lumiera core, but specialized to the internals of the actual implementation library.
+For example there might be a constraint implementation to force a specific {{{gavl_pixelformat_t}}}.
+
+!the ID problem
+Basically I'd prefer the ~IDs to be real identifiers. So they can be used directly within rules. At least the Prototypes //can// have such a textual identifier. But the implementation type is problematic, and consequently the ID of the StreamType as well. Because the actual implementation should not be nailed down to a fixed set of possibilities. And, generally, we can't expect an implementation library to yield textual identifiers for each implementation type. //Is this really a problem? {{red{what are the use cases?}}}//
+As far as I can see, in most cases this is no problem, as the type can be retrieved or derived from an existing media object. Thus, the only problematic case is when we need to persist the type information without being able to guarantee the persistence of the media object this type was derived from. For example this might be a problem when working with proxy media. But at least we should be able to create a constraint (partial type specification) to cover the important part of the type information, i.e. the part which is needed to re-create the model even when the original media isn't there any longer.
+Thus, //constraints may be viewed as type constructing functors.//
+
+--------------
+!use cases
+* pulling data from a media file
+* connecting pipes and similar wiring problems
+* describing the properties of an processor plugin
+
+!! pulling data from a media file
+To open the file, we need //type discovery code,// resulting in a handle to some library module for accessing the contents, which is in compliance with the Lumiera application. Thus, we can determine the possible return values of this type discovery code and provide code which wires up a corresponding StreamTypeImplFacade. Further, the {{{control::STypeManager}}} has the ability to build a complete or partial StreamType from
+* an ~ImplFacade
+* a Prototype
+* maybe even from some generic textual ~IDs?
+Together this allows to associate a StreamType to each media source, and thus to derive the Prototype governing the immediately connected [[Pipe]]
+A pipe can by design handle data of one Prototype solely.
+
+!! wiring problems
+When deciding if a connection can be made, we can build up the type information starting out from the source. (this requires some work, but it's //possible,// generally speaking.). Thus, we can allways get an ~ImplType for the &quot;lower end&quot; of the connection, and at least a Prototype for the &quot;output side&quot; &amp;mdash; which should be enough to use the query functions provided by the stream type interfaces
+
+!! describing properties
+{{red{currently difficult to define}}} as of 9/2008, because the property description of plugins is not planned yet.
+My Idea was to use [[type implementation constraints|StreamTypeImplConstraint]] for this, which are a special kind of ~ImplType
 </pre>
 </div>
 <div title="StrongSeparation" modifier="MichaelPloujnikov" modified="200706271504" created="200706220452" tags="design" changecount="5">
@@ -4772,6 +4921,15 @@ Without this optimization, in the base case each processing needs an input and a
 !!!!Processing
 If ''not processing'' we don't have any input buffers, instead we get our output buffers from an external source.
 Otherwise, in the default case of actually ''processing'' out output, we have to organize input buffers, allocate output buffers, call the {{{process()}}} function of the WiringDescriptor and finally release the input buffers.
+</pre>
+</div>
+<div title="WiringRequest" modifier="Ichthyostega" modified="200810060404" created="200810060344" tags="def spec" changecount="2">
+<pre>{{red{This is an early draft as of 9/08}}}
+Wiring requests rather belong to the realm of the high-level model, but play an important role in the build process, because the result of &quot;executing&quot; a wiring request will be to establish an actual low-level data connection. Wiring requests will be created automatically in the course of the build process, but they can be created manually and attached to the media objects in the high-level model as a ''wiring plug'', which is a special kind of LocatingPin (&amp;rarr; [[Placement]])
+
+Wiring requests are small stateful value objects. They will be collected, sorted and processed ordered, such as to finish the building and get a completely wired network of processing nodes. Obviously, there needs to be some reference or smart pointer to the objects to be wired, but this information remains opaque.
+
+&amp;rarr; ConManager
 </pre>
 </div>
 <div title="automation" modifier="Ichthyostega" modified="200805300125" created="200805300057" tags="overview" changecount="8">
