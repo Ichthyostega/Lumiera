@@ -30,7 +30,6 @@
 #include "../../gtk-lumiera.hpp"
 #include <vector>
 
-namespace lumiera {
 namespace gui {
 namespace widgets {
 
@@ -53,8 +52,7 @@ public:
    *
    * @param[in] timeline_widget A pointer to the owner timeline widget
    */
-  HeaderContainer(lumiera::gui::widgets::TimelineWidget* 
-    timeline_widget);
+  HeaderContainer(gui::widgets::TimelineWidget* timeline_widget);
   
   /**
    * Attaches the header all the header widgets of root
@@ -135,7 +133,7 @@ private:
   /**
    * The owner TimelineWidget of which this class is a helper
    */
-  lumiera::gui::widgets::TimelineWidget *timelineWidget;
+  gui::widgets::TimelineWidget *timelineWidget;
   
   /**
    * The widget's window object. 
@@ -175,7 +173,6 @@ private:
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // HEADER_CONTAINER_HPP
 

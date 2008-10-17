@@ -28,7 +28,6 @@
 
 #include "../../gtk-lumiera.hpp"
 
-namespace lumiera {
 namespace gui {
 namespace widgets {
 namespace timeline {
@@ -58,6 +57,5 @@ protected:
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // TRACK_HPP

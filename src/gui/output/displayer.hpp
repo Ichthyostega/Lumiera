@@ -30,7 +30,6 @@
 #ifndef DISPLAYER_HPP
 #define DISPLAYER_HPP
 
-namespace lumiera {
 namespace gui {
 namespace output {
 
@@ -130,6 +129,5 @@ namespace output {
 
 }   // namespace output
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // DISPLAYER_HPP

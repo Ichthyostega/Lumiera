@@ -27,7 +27,6 @@
 #include "xvdisplayer.hpp"
 #include "gdkdisplayer.hpp"
 
-namespace lumiera {
 namespace gui {
 namespace output {
 
@@ -83,4 +82,3 @@ Displayer::calculateVideoLayout(
 
 }   // namespace output
 }   // namespace gui
-}   // namespace lumiera

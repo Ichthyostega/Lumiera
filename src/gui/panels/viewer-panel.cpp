@@ -23,10 +23,9 @@
 #include "../gtk-lumiera.hpp"
 #include "viewer-panel.hpp"
 
-using namespace lumiera::gui::widgets;
+using namespace gui::widgets;
 using namespace Gtk;
 
-namespace lumiera {
 namespace gui {
 namespace panels {
 
@@ -47,4 +46,3 @@ ViewerPanel::ViewerPanel() :
 
 }   // namespace panels
 }   // namespace gui
-}   // namespace lumiera

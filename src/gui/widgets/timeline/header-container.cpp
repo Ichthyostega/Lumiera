@@ -29,12 +29,12 @@
 using namespace Gtk;
 using namespace std;
 
-namespace lumiera {
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-HeaderContainer::HeaderContainer(lumiera::gui::widgets::TimelineWidget *timeline_widget) :
+HeaderContainer::HeaderContainer(gui::widgets::TimelineWidget
+    *timeline_widget) :
     Glib::ObjectBase("HeaderContainer"),
     timelineWidget(timeline_widget),
     margin(-1)
@@ -282,4 +282,3 @@ HeaderContainer::read_styles()
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
-}   // namespace lumiera

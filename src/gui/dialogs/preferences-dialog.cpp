@@ -26,7 +26,6 @@
 
 using namespace Gtk;
 
-namespace lumiera {
 namespace gui {
 namespace dialogs {
 
@@ -58,4 +57,3 @@ namespace dialogs {
 
 }   // namespace dialogs
 }   // namespace gui
-}   // namespace lumiera

@@ -23,9 +23,8 @@
 #include "timeline-ibeam-tool.hpp"
 #include "../timeline-widget.hpp"
 
-using namespace lumiera::gui::widgets;
+using namespace gui::widgets;
 
-namespace lumiera {
 namespace gui {
 namespace widgets {
 namespace timeline {
@@ -239,5 +238,3 @@ IBeamTool::is_mouse_in_end_drag_zone() const
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
-}   // namespace lumiera
-

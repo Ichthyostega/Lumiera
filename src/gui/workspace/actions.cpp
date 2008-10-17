@@ -29,9 +29,8 @@
 using namespace Gtk;
 using namespace Glib;
 using namespace sigc;
-using namespace lumiera::gui;
+using namespace gui;
 
-namespace lumiera {
 namespace gui {
 namespace workspace {
 
@@ -200,5 +199,4 @@ Actions::on_menu_others()
 
 }   // namespace workspace
 }   // namespace gui
-}   // namespace lumiera
 

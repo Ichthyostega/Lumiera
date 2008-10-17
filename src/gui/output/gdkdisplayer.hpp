@@ -37,7 +37,6 @@ namespace Gtk {
   class Widget;
 }
 
-namespace lumiera {
 namespace gui {
 namespace output {
 
@@ -57,6 +56,5 @@ class GdkDisplayer : public Displayer
 
 }   // namespace output
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // GDKDISPLAYER_HPP

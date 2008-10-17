@@ -30,9 +30,8 @@
 
 #include "../output/displayer.hpp"
 
-using namespace lumiera::gui::output;
+using namespace gui::output;
 
-namespace lumiera {
 namespace gui {
 namespace widgets {
 
@@ -62,6 +61,5 @@ private:
 
 }   // namespace widgets
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // VIDEO_DISPLAY_WIDGET_HPP

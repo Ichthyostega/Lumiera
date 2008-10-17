@@ -36,9 +36,8 @@
 #include "workspace-window.hpp"
 
 using namespace Gtk;
-using namespace lumiera::gui::model;
+using namespace gui::model;
 
-namespace lumiera {
 namespace gui {
 namespace workspace {
 	
@@ -194,5 +193,3 @@ WorkspaceWindow::create_ui()
 
 }   // namespace workspace
 }   // namespace gui
-}   // namespace lumiera
-

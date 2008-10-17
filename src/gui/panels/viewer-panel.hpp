@@ -31,7 +31,6 @@
 #include "panel.hpp"
 #include "../widgets/video-display-widget.hpp"
 
-namespace lumiera {
 namespace gui {
 namespace panels {
 
@@ -42,12 +41,11 @@ namespace panels {
 
     protected:
 
-      lumiera::gui::widgets::VideoDisplayWidget display;
+      gui::widgets::VideoDisplayWidget display;
       Gtk::Toolbar toolBar;
     };
 
 }   // namespace panels
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // VIEWER_PANEL_HPP

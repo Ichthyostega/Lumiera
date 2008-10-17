@@ -24,7 +24,6 @@
 
 using namespace Gtk;
 
-namespace lumiera {
 namespace gui {
 namespace widgets {
 namespace timeline {
@@ -65,5 +64,4 @@ Track::draw_track(Cairo::RefPtr<Cairo::Context> cairo)
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
-}   // namespace lumiera
 

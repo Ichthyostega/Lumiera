@@ -29,7 +29,6 @@
 
 #include "../../gtk-lumiera.hpp"
 
-namespace lumiera {
 namespace gui {
 namespace widgets {
 
@@ -121,7 +120,7 @@ protected:
    * Helper function which retrieves the pointer to owner timeline
    * widget object, which is the owner of the timeline body.
    */
-  lumiera::gui::widgets::TimelineWidget *get_timeline_widget() const;
+  gui::widgets::TimelineWidget *get_timeline_widget() const;
   
   /**
    * Helper function which retrieves the rectangle of the timeline
@@ -139,6 +138,5 @@ protected:
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // TIMELINE_TOOL_HPP

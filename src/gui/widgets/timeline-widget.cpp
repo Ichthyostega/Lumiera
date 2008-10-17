@@ -26,9 +26,8 @@
 
 using namespace Gtk;
 using namespace std;
-using namespace lumiera::gui::widgets::timeline;
+using namespace gui::widgets::timeline;
 
-namespace lumiera {
 namespace gui {
 namespace widgets {
 
@@ -403,4 +402,3 @@ TimelineWidget::on_playback_period_drag_released()
 
 }   // namespace widgets
 }   // namespace gui
-}   // namespace lumiera

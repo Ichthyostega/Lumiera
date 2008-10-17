@@ -31,7 +31,6 @@
 
 #include "../gtk-lumiera.hpp"
 
-namespace lumiera {
 namespace gui {
 namespace workspace {
 
@@ -94,6 +93,5 @@ private:
 
 }   // namespace workspace
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // ACTIONS_H

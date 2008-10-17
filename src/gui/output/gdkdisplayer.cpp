@@ -31,7 +31,6 @@ using std::endl;
 
 #include "gdkdisplayer.hpp"
 
-namespace lumiera {
 namespace gui {
 namespace output {
 
@@ -83,4 +82,3 @@ GdkDisplayer::put( void *image )
 
 }   // namespace output
 }   // namespace gui
-}   // namespace lumiera

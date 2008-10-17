@@ -29,7 +29,6 @@
 #include "../../gtk-lumiera.hpp"
 #include "timeline-tool.hpp"
 
-namespace lumiera {
 namespace gui {
 namespace widgets {
 
@@ -50,7 +49,7 @@ public:
    * Constructor
    * @param timeline_widget The owner widget of this ruler.
    */
-  TimelineBody(lumiera::gui::widgets::TimelineWidget *timeline_widget);
+  TimelineBody(gui::widgets::TimelineWidget *timeline_widget);
   
   /**
    * Destructor
@@ -163,7 +162,7 @@ private:
   float selectionAlpha;
   GdkColor playbackPointColour;
   
-  lumiera::gui::widgets::TimelineWidget *timelineWidget;
+  gui::widgets::TimelineWidget *timelineWidget;
 
   friend class Tool;
   friend class ArrowTool;
@@ -173,6 +172,5 @@ private:
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // TIMELINE_BODY_HPP
