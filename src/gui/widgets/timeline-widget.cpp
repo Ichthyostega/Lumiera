@@ -68,17 +68,17 @@ TimelineWidget::TimelineWidget() :
   
   set_time_scale(GAVL_TIME_SCALE / 200);
   set_selection(2000000, 4000000);
-
+  
+  tracks.push_back(&video1);
+  tracks.push_back(&video2);
+  
+  update_tracks();
+  
   attach(*body, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
   attach(*ruler, 1, 2, 0, 1, FILL|EXPAND, SHRINK);
   attach(*headerContainer, 0, 1, 1, 2, SHRINK, FILL|EXPAND);
   attach(horizontalScroll, 1, 2, 2, 3, FILL|EXPAND, SHRINK);
   attach(verticalScroll, 2, 3, 1, 2, SHRINK, FILL|EXPAND);
-
-  tracks.push_back(&video1);
-  tracks.push_back(&video2);
-  
-  update_tracks();
   
   set_tool(timeline::Arrow);
 }
@@ -376,6 +376,7 @@ TimelineWidget::update_scroll()
   else if(y_scroll_length > 0 && !verticalScroll.is_visible())
     verticalScroll.show();
 #endif
+
 }
 
 int
@@ -390,6 +391,7 @@ TimelineWidget::on_motion_in_body_notify_event(GdkEventMotion *event)
   REQUIRE(event != NULL);
   ruler->set_mouse_chevron_offset(event->x);
   mouseHoverSignal.emit(x_to_time(event->x));
+  
   return true;
 }
 

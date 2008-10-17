@@ -185,6 +185,7 @@ public:
     
   /* ===== Events ===== */
 protected:
+  
   void on_scroll();
   
   void on_size_allocate(Gtk::Allocation& allocation);

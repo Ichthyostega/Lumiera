@@ -152,14 +152,13 @@ style "timeline_ruler" = "default_base"
   gtkmm__CustomObject_TimelineRuler::playback_period_arrow_stem_size = 3
 }
 
-style "timeline_header_base" = "default_base"
+style "header_container" = "default_base"
 {
-
+  gtkmm__CustomObject_HeaderContainer::heading_margin = 4
 }
 
 class "gtkmm__CustomObject_TimelineBody" style:highest "timeline_body"
 class "gtkmm__CustomObject_TimelineRuler" style:highest "timeline_ruler"
-
-widget "*TimelineHeaderBaseUnselected" style:highest "timeline_header_base"
+class "gtkmm__CustomObject_HeaderContainer" style:highest "header_container"
 
 

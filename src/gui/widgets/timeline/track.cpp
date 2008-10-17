@@ -22,15 +22,20 @@
 
 #include "track.hpp"
 
+using namespace Gtk;
+
 namespace lumiera {
 namespace gui {
 namespace widgets {
 namespace timeline {
 
 Track::Track() :
-  label("XHeaderTest")
+  label1("test1"), label2("test2"), label3("test3"), label4("test4")
 {
-  headerWidget.pack_start(label);
+  headerWidget.pack_start(label1, PACK_EXPAND_WIDGET);
+  headerWidget.pack_start(label2, PACK_EXPAND_WIDGET);
+  headerWidget.pack_start(label3, PACK_EXPAND_WIDGET);
+  headerWidget.pack_start(label4, PACK_EXPAND_WIDGET);
 }
 
 Gtk::Widget&

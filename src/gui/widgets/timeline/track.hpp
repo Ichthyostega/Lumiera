@@ -19,7 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file timeline/track.hpp
+/** @file widgets/timeline/track.hpp
  ** This file contains the definition of timeline track object
  */
 
@@ -48,7 +48,10 @@ public:
 
 protected:
   Gtk::VBox headerWidget;
-  Gtk::Label label;
+  Gtk::Label label1;
+  Gtk::Label label2;
+  Gtk::CheckButton label3;
+  Gtk::Button label4;
 };
 
 

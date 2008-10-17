@@ -69,12 +69,12 @@ public:
   /* ===== Overrides ===== */
 private:
   /**
-   * And event handler for the window realized signal.
+   * An event handler for the window realized signal.
    */
   void on_realize();
   
   /**
-   * And event handler for the window unrealized signal.
+   * An event handler for the window unrealized signal.
    */
   void on_unrealize();
 
@@ -97,9 +97,15 @@ private:
    **/
   void forall_vfunc(gboolean include_internals, GtkCallback callback,
                     gpointer callback_data);
-  
+
   /* ===== Events ===== */      
 private:
+
+  /**
+   * An event handler for when the window must be redrawn.
+   */
+  bool on_expose_event(GdkEventExpose *event);
+
   /**
    * This event is called when the scroll bar moves.
    */  
@@ -114,12 +120,32 @@ private:
    */
   void layout_headers();
   
+  /**
+   * Registers all the styles that this class will respond to.
+   */
+  void register_styles() const;
+  
+  /**
+   * Reads styles from the present stylesheet.
+   */
+  void read_styles();
+  
 private:
 
   /**
    * The owner TimelineWidget of which this class is a helper
    */
   lumiera::gui::widgets::TimelineWidget *timelineWidget;
+  
+  /**
+   * The widget's window object. 
+   * 
+   * @note This is needed for the sake of clipping when
+   * widgets are scrolled.
+   */
+  Glib::RefPtr<Gdk::Window> gdkWindow;
+  
+  //----- Header List -----//
 
   /**
    * A structure to represent a header widget and it's
@@ -127,7 +153,7 @@ private:
    */
   struct RootHeader
   {
-    Glib::RefPtr<Gtk::Widget> widget;
+    Gtk::Widget *widget;
     Track *track;
   };
   
@@ -137,13 +163,13 @@ private:
    */
   std::vector< RootHeader > rootHeaders;
 
+  //----- Style Values -----//
+  
   /**
-   * The widget's window object. 
-   * 
-   * @note This is needed for the sake of clipping when
-   * widgets are scrolled.
-   */
-  Glib::RefPtr<Gdk::Window> gdkWindow;
+   * The style value which indicates the amount of padding around each
+   * header pixels.
+   **/
+  int margin;
 };
 
 }   // namespace timeline
