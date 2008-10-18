@@ -26,6 +26,7 @@
 
 #include <string>
 #include "proc/nobugcfg.hpp"
+#include "lib/appconfig.hpp"
 #include "lib/error.h"
 
 

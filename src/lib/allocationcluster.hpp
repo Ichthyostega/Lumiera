@@ -35,8 +35,8 @@
  */
 
 
-#ifndef LUMIERA_APPCONFIG_H
-#define LUMIERA_APPCONFIG_H
+#ifndef LIB_ALLOCATIONCLUSTER_H
+#define LIB_ALLOCATIONCLUSTER_H
 
 //#include <map>
 #include <string>

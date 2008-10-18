@@ -54,11 +54,11 @@ namespace lib {
       }
     catch (lumiera::Error & ex)
       {
-        WARN ("Exception while closing AllocationCluster: %s",ex.what());
+        WARN (oper, "Exception while closing AllocationCluster: %s",ex.what());
       }
     catch (...)
       {
-        ERROR ("Unexpected fatal Exception while closing AllocationCluster. Application will terminate.");
+        ERROR (NOBUG_ON, "Unexpected fatal Exception while closing AllocationCluster. Application will terminate.");
         throw;
       }
   }
