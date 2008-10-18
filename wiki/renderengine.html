@@ -514,6 +514,17 @@ ColorPalette
 
 SiteUrl</pre>
 </div>
+<div title="AllocationCluster" modifier="Ichthyostega" created="200810180031" tags="def" changecount="1">
+<pre>Memory management facility for the low-level model (render nodes network). The model is organised into temporal segments, which are considered to be structurally constant and uniform. The objects within each segment are strongly interconnected, and thus each segment is being built in a single build process and is replaced or released as a whole. __~AllocationCluster__ implements memory management to support this usage pattern. He owns a number of object families of various types.
+* [[processing nodes|ProcNode]] &amp;mdash; probably with several subclasses (?)
+* [[wiring descriptors|WiringDescriptor]]
+* the input/output descriptor arrays used by the latter
+
+To Each of those families we can expect an initially undetermined (but rather large) number of individual objects, which can be expected to be allocated within a short timespan and which are to be released cleanly on destruction of the AllocationCluster.
+
+&amp;rarr; see MemoryManagement
+</pre>
+</div>
 <div title="Asset" modifier="Ichthyostega" modified="200801061942" created="200708100337" tags="def classes" changecount="15">
 <pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the EDL is the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with each Session. Besides, there is a collection of basic Assets always available by default.
 
@@ -1826,10 +1837,10 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 {{red{let's see if this approach works...}}}
 </pre>
 </div>
-<div title="ManagementRenderNodes" modifier="Ichthyostega" modified="200805280201" created="200805280200" tags="impl decision" changecount="4">
-<pre>Contrary to the &amp;rarr;[[Assets and MObjects|ManagementAssetRelation]], the usage pattern for [[render nodes|ProcNode]] is quite simple: All nodes are created together every time a new segment of the network is being build and are all needed together until this segment is re-built, at which point they can be thrown away altogether. While it would be easy to handle the nodes automatically by smart-ptr (the creation is accessible only by use of the {{{NodeFactory}}} anyways), it //seems advisable to care for a bulk allocation/deallocation here.// The reason being not so much the amount of memory (which is expected to be moderate), but the fact, that the build process can be triggered repeatedly several times a second when tweaking the EDL, which could lead to fragmentation and memory pressure.
+<div title="ManagementRenderNodes" modifier="Ichthyostega" modified="200810180026" created="200805280200" tags="impl decision" changecount="5">
+<pre>Contrary to the &amp;rarr;[[Assets and MObjects|ManagementAssetRelation]], the usage pattern for [[render nodes|ProcNode]] is quite simple: All nodes are created together every time a new segment of the network is being build and are all needed together until this segment is re-built, at which point they can be thrown away altogether. While it would be easy to handle the nodes automatically by smart-ptr (the creation is accessible only by use of the {{{NodeFactory}}} anyways), it //seems advisable to care for a bulk allocation/deallocation here.// The reason being not so much the amount of memory (which is expected to be moderate), but the fact the build process can be triggered repeatedly several times a second when tweaking the EDL, which could lead to fragmentation and memory pressure.
 
-__5/2008__: the allocation mechanism can surely be improved later, but for now I am going for a simple implementation based on keeping all nodes of one kind together in a vector. The list of possible node kinds is hard wired, allowing to generate the object holding a chunk of nodes for one segment, mostly relying on the runtime system for the management.
+__10/2008__: the allocation mechanism can surely be improved later, but for now I am going for a simple implementation based on heap allocated objects owned by a vector or smart-ptrs. For each segment of the render nodes network, we have several families of objects, each of with will be maintained by a separate low-level memory manager (as said, for now implemented as vector of smart-ptrs). Together, they form an AllocationCluster; all objects contained in such a cluster will be destroyed together.
 </pre>
 </div>
 <div title="MarkupPreHead" modifier="Ichthyostega" modified="200802030405" created="200706172303" changecount="2">
