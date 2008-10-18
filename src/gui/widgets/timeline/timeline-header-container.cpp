@@ -1,5 +1,6 @@
 /*
-  header-container.cpp  -  Implementation of the header container widget
+  timeline-header-container.cpp  -  Implementation of the timeline
+  header container widget
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -22,7 +23,7 @@
 
 #include <boost/foreach.hpp>
 
-#include "header-container.hpp"
+#include "timeline-header-container.hpp"
 #include "track.hpp"
 #include "../timeline-widget.hpp"
 
@@ -33,9 +34,9 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-HeaderContainer::HeaderContainer(gui::widgets::TimelineWidget
+TimelineHeaderContainer::TimelineHeaderContainer(gui::widgets::TimelineWidget
     *timeline_widget) :
-    Glib::ObjectBase("HeaderContainer"),
+    Glib::ObjectBase("TimelineHeaderContainer"),
     timelineWidget(timeline_widget),
     margin(-1)
 {
@@ -49,14 +50,14 @@ HeaderContainer::HeaderContainer(gui::widgets::TimelineWidget
   // Connect to the timeline widget's vertical scroll event,
   // so that we get notified when the view shifts
   timelineWidget->verticalAdjustment.signal_value_changed().connect(
-    sigc::mem_fun(this, &HeaderContainer::on_scroll) );
+    sigc::mem_fun(this, &TimelineHeaderContainer::on_scroll) );
     
   // Install style properties
   register_styles();
 }
   
 void
-HeaderContainer::update_headers()
+TimelineHeaderContainer::update_headers()
 {
   REQUIRE(timelineWidget != NULL);
   
@@ -83,7 +84,7 @@ HeaderContainer::update_headers()
 }
   
 void
-HeaderContainer::on_realize()
+TimelineHeaderContainer::on_realize()
 {
   set_flags(Gtk::NO_WINDOW);
   
@@ -119,7 +120,7 @@ HeaderContainer::on_realize()
 }
   
 void
-HeaderContainer::on_unrealize()
+TimelineHeaderContainer::on_unrealize()
 {
   // Unreference any window we may have created
   gdkWindow.clear();
@@ -129,7 +130,7 @@ HeaderContainer::on_unrealize()
 }
 
 void
-HeaderContainer::on_size_request (Requisition* requisition)
+TimelineHeaderContainer::on_size_request (Requisition* requisition)
 { 
   // Initialize the output parameter:
   *requisition = Gtk::Requisition();
@@ -148,7 +149,7 @@ HeaderContainer::on_size_request (Requisition* requisition)
 }
   
 void
-HeaderContainer::on_size_allocate (Allocation& allocation)
+TimelineHeaderContainer::on_size_allocate (Allocation& allocation)
 { 
   // Use the offered allocation for this container:
   set_allocation(allocation);
@@ -162,7 +163,7 @@ HeaderContainer::on_size_allocate (Allocation& allocation)
 }
   
 void
-HeaderContainer::forall_vfunc(gboolean /* include_internals */,
+TimelineHeaderContainer::forall_vfunc(gboolean /* include_internals */,
         GtkCallback callback, gpointer callback_data)
 { 
   BOOST_FOREACH( RootHeader &header, rootHeaders )
@@ -173,7 +174,7 @@ HeaderContainer::forall_vfunc(gboolean /* include_internals */,
 }
 
 bool
-HeaderContainer::on_expose_event(GdkEventExpose *event)
+TimelineHeaderContainer::on_expose_event(GdkEventExpose *event)
 {
   if(gdkWindow)
     {
@@ -211,7 +212,7 @@ HeaderContainer::on_expose_event(GdkEventExpose *event)
 }
   
 void
-HeaderContainer::on_scroll()
+TimelineHeaderContainer::on_scroll()
 {
   // If the scroll has changed, we will have to shift all the
   // header widgets
@@ -219,7 +220,7 @@ HeaderContainer::on_scroll()
 }
   
 void
-HeaderContainer::layout_headers()
+TimelineHeaderContainer::layout_headers()
 {
   ASSERT(timelineWidget != NULL);
   
@@ -261,7 +262,7 @@ HeaderContainer::layout_headers()
 }
 
 void
-HeaderContainer::register_styles() const
+TimelineHeaderContainer::register_styles() const
 {
   GtkWidgetClass *klass = GTK_WIDGET_CLASS(G_OBJECT_GET_CLASS(gobj()));
 
@@ -273,7 +274,7 @@ HeaderContainer::register_styles() const
 }
 
 void
-HeaderContainer::read_styles()
+TimelineHeaderContainer::read_styles()
 {
   if(margin <= 0)
     get_style_property("heading_margin", margin);

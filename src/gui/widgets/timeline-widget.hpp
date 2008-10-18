@@ -27,7 +27,7 @@
 #define TIMELINE_WIDGET_HPP
 
 #include "../gtk-lumiera.hpp"
-#include "timeline/header-container.hpp"
+#include "timeline/timeline-header-container.hpp"
 #include "timeline/timeline-body.hpp"
 #include "timeline/timeline-ruler.hpp"
 #include "timeline/timeline-tool.hpp"
@@ -228,7 +228,7 @@ protected:
   std::vector<timeline::Track*> tracks;
 
   // Child Widgets
-  timeline::HeaderContainer *headerContainer;
+  timeline::TimelineHeaderContainer *headerContainer;
   timeline::TimelineBody *body;
   timeline::TimelineRuler *ruler;
 
@@ -257,7 +257,7 @@ protected:
   static const double ZoomIncrement;
 
   friend class timeline::TimelineBody;
-  friend class timeline::HeaderContainer;
+  friend class timeline::TimelineHeaderContainer;
   friend class timeline::TimelineRuler;
   friend class timeline::Tool;
   friend class timeline::ArrowTool;

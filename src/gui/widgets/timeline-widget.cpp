@@ -53,7 +53,7 @@ TimelineWidget::TimelineWidget() :
 {
   body = new TimelineBody(this);
   ENSURE(body != NULL);
-  headerContainer = new HeaderContainer(this);
+  headerContainer = new TimelineHeaderContainer(this);
   ENSURE(headerContainer != NULL);
   ruler = new TimelineRuler(this);
   ENSURE(ruler != NULL);
