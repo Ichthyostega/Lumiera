@@ -42,7 +42,7 @@ style "default_base" = "medium_text"
   bg[ACTIVE] = { 0.35, 0.35, 0.40 }
   bg[PRELIGHT] = "#565690"
   bg[INSENSITIVE] = { 0.10, 0.10, 0.10 }
-  bg[SELECTED] = { 0, 0.40, 0.60 }
+  bg[SELECTED] = { 0.40, 0.40, 0.45 }
   
   text[NORMAL] = { 0.80, 0.80, 0.80 }	
   text[ACTIVE] = { 0.80, 0.80, 0.80 }	
@@ -89,7 +89,7 @@ style "lumiera_adjusters" = "default_buttons_menus"
   bg[ACTIVE] = { 0.35, 0.35, 0.40 }
   bg[PRELIGHT] = "#565690"
   bg[INSENSITIVE] = { 0.10, 0.10, 0.10 }
-  bg[SELECTED] = { 0, 0.40, 0.60 }
+  bg[SELECTED] = { 0.35, 0.35, 0.40 }
 }
 
 style "lumiera_progressbars" = "default_buttons_menus"
@@ -126,6 +126,7 @@ style "timeline_body"
   gtkmm__CustomObject_TimelineBody::background = "#7E838B"
   gtkmm__CustomObject_TimelineBody::selection = "#2D2D90"
   gtkmm__CustomObject_TimelineBody::selection_alpha = 0.5
+  gtkmm__CustomObject_TimelineBody::playback_point = "#006000"
 }
 
 style "timeline_ruler" = "default_base"
@@ -140,20 +141,24 @@ style "timeline_ruler" = "default_base"
   gtkmm__CustomObject_TimelineRuler::min_division_width = 100
   gtkmm__CustomObject_TimelineRuler::mouse_chevron_size = 5
   gtkmm__CustomObject_TimelineRuler::selection_chevron_size = 5
-  gtkmm__CustomObject_TimelineRuler::playback_arrow_colour = "#2D2D90"
-  gtkmm__CustomObject_TimelineRuler::playback_arrow_alpha = 0.5
-  gtkmm__CustomObject_TimelineRuler::playback_arrow_size = 10
-  gtkmm__CustomObject_TimelineRuler::playback_arrow_stem_size = 3
+  
+  gtkmm__CustomObject_TimelineRuler::playback_point_colour = "#006000"
+  gtkmm__CustomObject_TimelineRuler::playback_point_alpha = 0.5
+  gtkmm__CustomObject_TimelineRuler::playback_point_size = 12
+  
+  gtkmm__CustomObject_TimelineRuler::playback_period_arrow_colour = "#2D2D90"
+  gtkmm__CustomObject_TimelineRuler::playback_period_arrow_alpha = 0.5
+  gtkmm__CustomObject_TimelineRuler::playback_period_arrow_size = 10
+  gtkmm__CustomObject_TimelineRuler::playback_period_arrow_stem_size = 3
 }
 
-style "timeline_header_base" = "default_base"
+style "header_container" = "default_base"
 {
-
+  gtkmm__CustomObject_HeaderContainer::heading_margin = 4
 }
 
 class "gtkmm__CustomObject_TimelineBody" style:highest "timeline_body"
 class "gtkmm__CustomObject_TimelineRuler" style:highest "timeline_ruler"
-
-widget "*TimelineHeaderBaseUnselected" style:highest "timeline_header_base"
+class "gtkmm__CustomObject_HeaderContainer" style:highest "header_container"
 
 

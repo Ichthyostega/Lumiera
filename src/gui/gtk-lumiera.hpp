@@ -31,8 +31,6 @@ NOBUG_DECLARE_FLAG(gui);
 #  define bindtextdomain(Package, Directory)
 #endif
 
-namespace lumiera {
-
 /**
  * The namespace of all GUI code.
  */
@@ -156,7 +154,6 @@ private:
 
 
 }   // namespace gui
-}   // namespace lumiera
 
 #endif // GTK_LUMIERA_HPP
 

@@ -28,7 +28,7 @@ NOBUG_CPP_DEFINE_FLAG(gui);
 using namespace Gtk;
 using namespace Glib;
 using namespace sigc;
-using namespace lumiera::gui;
+using namespace gui;
 
 GtkLumiera the_application;
 
@@ -40,7 +40,6 @@ main (int argc, char *argv[])
 
 
 
-namespace lumiera {
 namespace gui {
 
 int
@@ -209,6 +208,5 @@ Actions::on_menu_help_about()
 
 
 }   // namespace gui
-}   // namespace lumiera
 
 
