@@ -27,7 +27,6 @@ test_components_LDADD =								\
 	liblumiprocmobjectsession.a						\
 	liblumiprocasset.a							\
 	liblumiprocmobject.a							\
-	liblumiprocmobjectcontroller.a						\
 	liblumi.a								\
 	liblumicommon.a								\
 	liblumibackend.a							\
