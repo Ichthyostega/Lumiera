@@ -31,6 +31,7 @@
 #include <gtkmm.h>
 #include <nobug.h>
 #include <vector>
+#include <boost/utility.hpp>
 
 extern "C" {
 #include <gavl/gavltime.h>
@@ -91,7 +92,7 @@ static const gchar* AppAuthors[] = {
 /**
  *  The main application class.
  */
-class GtkLumiera
+class GtkLumiera : private boost::noncopyable
 {
 public:
   int main(int argc, char *argv[]);
