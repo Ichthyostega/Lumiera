@@ -514,7 +514,7 @@ ColorPalette
 
 SiteUrl</pre>
 </div>
-<div title="AllocationCluster" modifier="Ichthyostega" modified="200810180124" created="200810180031" tags="def" changecount="6">
+<div title="AllocationCluster" modifier="Ichthyostega" modified="200810200127" created="200810180031" tags="def" changecount="9">
 <pre>Memory management facility for the low-level model (render nodes network). The model is organised into temporal segments, which are considered to be structurally constant and uniform. The objects within each segment are strongly interconnected, and thus each segment is being built in a single build process and is replaced or released as a whole. __~AllocationCluster__ implements memory management to support this usage pattern. He owns a number of object families of various types.[&gt;img[draw/AllocationCluster.png]]
 * [[processing nodes|ProcNode]] &amp;mdash; probably with several subclasses (?)
 * [[wiring descriptors|WiringDescriptor]]
@@ -523,7 +523,7 @@ SiteUrl</pre>
 To Each of those families we can expect an initially undetermined (but rather large) number of individual objects, which can be expected to be allocated within a short timespan and which are to be released cleanly on destruction of the AllocationCluster.
 
 ''Problem of calling the dtors''
-Even if the low-level memory manager(s) may use raw storage, we require that the allocated objects desctuctores be called. This means keeping track at least of the number of objects acllocated (without wasting too much memory for bookeeping). Besides, as the objects are expected to be interconnected, it may be dangerous to destroy a given family of objects while another family of objects may rely on the former in its destructor. //If we happen do get into this situation,// we need to define a priority order on the types and assure the destruction sequence is respected.
+Even if the low-level memory manager(s) may use raw storage, we require that the allocated object's destructors be called. This means keeping track at least of the number of objects allocated (without wasting too much memory for bookkeeping). Besides, as the objects are expected to be interconnected, it may be dangerous to destroy a given family of objects while another family of objects may rely on the former in its destructor. //If we happen do get into this situation,// we need to define a priority order on the types and assure the destruction sequence is respected.
 
 &amp;rarr; see MemoryManagement
 </pre>

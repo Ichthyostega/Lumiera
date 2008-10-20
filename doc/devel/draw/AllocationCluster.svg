@@ -6,7 +6,6 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="800"
@@ -25,9 +24,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="280.90499"
-     inkscape:cy="352.82916"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="311.29718"
+     inkscape:cy="408.68554"
      inkscape:document-units="px"
      inkscape:current-layer="svg2"
      inkscape:window-width="1485"
@@ -54,186 +53,6 @@
      guidetolerance="5" />
   <defs
      id="globals">
-    <linearGradient
-       id="linearGrad_fade2white">
-      <stop
-         style="stop-color:#ffffff;stop-opacity:0;"
-         offset="0"
-         id="stop4903" />
-      <stop
-         id="stop4913"
-         offset="0.44999999"
-         style="stop-color:#ffffff;stop-opacity:1;" />
-      <stop
-         style="stop-color:#ffffff;stop-opacity:1;"
-         offset="1"
-         id="stop4905" />
-    </linearGradient>
-    <linearGradient
-       id="linearGrad_InKa1">
-      <stop
-         id="stop4406"
-         style="stop-color:#525025;stop-opacity:0.50196081;"
-         offset="0" />
-      <stop
-         id="stop4408"
-         style="stop-color:#b3b888;stop-opacity:0.25098041;"
-         offset="0.01" />
-      <stop
-         id="stop4410"
-         style="stop-color:#fafcf3;stop-opacity:0;"
-         offset="0.12616667" />
-      <stop
-         id="stop4412"
-         style="stop-color:#fbfcf3;stop-opacity:0;"
-         offset="1" />
-    </linearGradient>
-    <linearGradient
-       id="linearGrad_InKb1">
-      <stop
-         offset="0"
-         style="stop-color:#ffffff;stop-opacity:1;"
-         id="stop4428" />
-      <stop
-         offset="0.03"
-         style="stop-color:#fdfdf8;stop-opacity:0.70588237;"
-         id="stop4431" />
-      <stop
-         offset="0.18000001"
-         style="stop-color:#fafcf3;stop-opacity:0;"
-         id="stop4433" />
-      <stop
-         offset="1"
-         style="stop-color:#fbfcf3;stop-opacity:0;"
-         id="stop4435" />
-    </linearGradient>
-    <linearGradient
-       id="linearGradient_shad1">
-      <stop
-         style="stop-color:#21304e;stop-opacity:0.71354169;"
-         offset="0"
-         id="stop4552" />
-      <stop
-         id="stop4650"
-         offset="0.16666667"
-         style="stop-color:#283247;stop-opacity:0.36979166;" />
-      <stop
-         style="stop-color:#303540;stop-opacity:0.09895834;"
-         offset="1"
-         id="stop4554" />
-    </linearGradient>
-    <linearGradient
-       id="linearGrad_deepShad">
-      <stop
-         style="stop-color:#111111;stop-opacity:1;"
-         offset="0"
-         id="stop4444" />
-      <stop
-         id="stop4454"
-         offset="0.49133334"
-         style="stop-color:#111111;stop-opacity:0.73725492;" />
-      <stop
-         id="stop4450"
-         offset="0.67000002"
-         style="stop-color:#ffffff;stop-opacity:0.47843137;" />
-      <stop
-         style="stop-color:#ffffff;stop-opacity:0.47916666;"
-         offset="1"
-         id="stop4446" />
-    </linearGradient>
-    <linearGradient
-       id="linearGrad_blue">
-      <stop
-         style="stop-color:#8b87e3;stop-opacity:1;"
-         offset="0"
-         id="stop4430" />
-      <stop
-         id="stop4438"
-         offset="0.34999999"
-         style="stop-color:#6964d0;stop-opacity:1;" />
-      <stop
-         id="stop4436"
-         offset="0.61424905"
-         style="stop-color:#6964d0;stop-opacity:1;" />
-      <stop
-         style="stop-color:#5550ad;stop-opacity:1;"
-         offset="0.8967222"
-         id="stop4440" />
-      <stop
-         style="stop-color:#413d8a;stop-opacity:1;"
-         offset="1"
-         id="stop4432" />
-    </linearGradient>
-    <linearGradient
-       id="linearGrad_baroque">
-      <stop
-         offset="0"
-         style="stop-color:#eed98e;stop-opacity:1;"
-         id="stop11430" />
-      <stop
-         offset="1"
-         style="stop-color:#553163;stop-opacity:1;"
-         id="stop11432" />
-    </linearGradient>
-    <linearGradient
-       id="linearGrad_In1">
-      <stop
-         offset="0"
-         style="stop-color:#3e3e3e;stop-opacity:0.72941178;"
-         id="stop8557" />
-      <stop
-         offset="0.18208332"
-         style="stop-color:#7e7e7e;stop-opacity:0.58854169;"
-         id="stop9540" />
-      <stop
-         offset="0.44109029"
-         style="stop-color:#ffffff;stop-opacity:0;"
-         id="stop8563" />
-      <stop
-         offset="1"
-         style="stop-color:#ffffff;stop-opacity:0;"
-         id="stop8553" />
-    </linearGradient>
-    <linearGradient
-       id="linearGrad_RoundHigh1">
-      <stop
-         offset="0"
-         style="stop-color:#d9eadb;stop-opacity:1;"
-         id="stop5572" />
-      <stop
-         offset="0.75833333"
-         style="stop-color:#bad8cd;stop-opacity:1;"
-         id="stop5578" />
-      <stop
-         offset="1"
-         style="stop-color:#8cc0ac;stop-opacity:0.78431374;"
-         id="stop5574" />
-    </linearGradient>
-    <radialGradient
-       r="10.15"
-       id="radialGrad_Placement"
-       fx="200"
-       fy="227.36218"
-       gradientUnits="userSpaceOnUse"
-       inkscape:collect="always"
-       cy="227.36218"
-       cx="200"
-       xlink:href="#linearGrad_RoundHigh1" />
-    <linearGradient
-       id="linearGrad_wht">
-      <stop
-         offset="0"
-         style="stop-color:#ececec;stop-opacity:0.86666667;"
-         id="stop3550" />
-      <stop
-         offset="0.64166665"
-         style="stop-color:#f2f2f2;stop-opacity:0.87058824;"
-         id="stop3556" />
-      <stop
-         offset="1"
-         style="stop-color:#ffffff;stop-opacity:0.96078432;"
-         id="stop3552" />
-    </linearGradient>
     <marker
        style="overflow:visible"
        orient="auto"
@@ -289,7 +108,7 @@
      id="lay1"
      inkscape:groupmode="layer" />
   <rect
-     style="opacity:1;color:#000000;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     style="opacity:1;color:#000000;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
      id="rect3207"
      width="79.864258"
      height="160.22624"
@@ -339,7 +158,7 @@
      id="rect4194"
      style="opacity:1;color:#000000;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
   <rect
-     style="opacity:1;color:#000000;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     style="opacity:1;color:#000000;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
      id="rect4196"
      width="130.09683"
      height="80"
@@ -360,7 +179,7 @@
      x="350.00003"
      y="160" />
   <rect
-     style="opacity:1;color:#000000;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     style="opacity:1;color:#000000;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
      id="rect4202"
      width="70"
      height="150"
@@ -487,14 +306,14 @@
        id="tspan4253">&lt;T2&gt;</tspan></text>
   <text
      xml:space="preserve"
-     style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;color:#000000;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;text-indent:0;text-decoration:none;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb"
-     x="447.5"
+     style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;color:#000000;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+     x="434.06497"
      y="148"
      id="text4245"
      sodipodi:linespacing="100%"><tspan
        sodipodi:role="line"
        id="tspan4247"
-       x="447.5"
+       x="434.06497"
        y="148">raw storage</tspan></text>
   <text
      sodipodi:linespacing="100%"
