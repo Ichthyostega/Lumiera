@@ -100,9 +100,9 @@ namespace lumiera
     
     
     /**
-     * For each posible call entry point via some subclass of the visitable hierarchy,
+     * For each possible call entry point via some subclass of the visitable hierarchy,
      * we maintain a dispatcher table to keep track of all concrete tool implementations
-     * able to recieve and process calls on objects of this subclass.
+     * able to receive and process calls on objects of this subclass.
      */
     template<class TAR, class TOOL>
     class Dispatcher

@@ -31,7 +31,13 @@
 
 namespace lib {
   
-  
+  class AllocationCluster::MemoryManager
+    {
+      
+    };
+
+
+
   /** creating a new AllocationCluster prepares a table capable
    *  of holding the individual object families to come. Each of those
    *  is managed by a separate instance of the low-level memory manager.
