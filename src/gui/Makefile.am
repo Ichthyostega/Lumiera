@@ -29,9 +29,9 @@ lumigui_CPPFLAGS = $(AM_CPPFLAGS) \
 bin_PROGRAMS += lumigui
 
 lumigui_SOURCES =															\
-	  $(lumigui_srcdir)/gtk-lumiera.cpp										\
+	$(lumigui_srcdir)/gtk-lumiera.cpp										\
 	$(lumigui_srcdir)/gtk-lumiera.hpp										\
-	  $(lumigui_srcdir)/window-manager.cpp									\
+	$(lumigui_srcdir)/window-manager.cpp									\
 	$(lumigui_srcdir)/window-manager.hpp									\
 	$(lumigui_srcdir)/workspace/actions.cpp									\
 	$(lumigui_srcdir)/workspace/actions.hpp									\
@@ -77,8 +77,8 @@ lumigui_SOURCES =															\
 	$(lumigui_srcdir)/output/xvdisplayer.hpp
 
 lumigui_LDFLAGS = 
-lumigui_LDADD = $(GTK_LUMIERA_LIBS) liblumibackend.a liblumicommon.a 		\
-	liblumi.a $(NOBUGMT_LUMIERA_LIBS)
+lumigui_LDADD = $(GTK_LUMIERA_LIBS) liblumiproc.a liblumibackend.a			\
+	liblumicommon.a liblumi.a $(NOBUGMT_LUMIERA_LIBS)
 
 lumigui_DEPENDENCIES =														\
 	$(top_builddir)/lumiera_ui.rc											\
