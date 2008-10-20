@@ -77,7 +77,8 @@ lumigui_SOURCES =															\
 	$(lumigui_srcdir)/output/xvdisplayer.hpp
 
 lumigui_LDFLAGS = 
-lumigui_LDADD = $(GTK_LUMIERA_LIBS) liblumicommon.a liblumi.a $(NOBUGMT_LUMIERA_LIBS)
+lumigui_LDADD = $(GTK_LUMIERA_LIBS) liblumibackend.a liblumicommon.a 		\
+	liblumi.a $(NOBUGMT_LUMIERA_LIBS)
 
 lumigui_DEPENDENCIES =														\
 	$(top_builddir)/lumiera_ui.rc											\
