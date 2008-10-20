@@ -76,11 +76,11 @@ namespace lib {
    *          aren't used after shutting down a given AllocationCluster.
    */
   class AllocationCluster
-    : boost::noncopyable
     {
       
     public:
       AllocationCluster ();
+      AllocationCluster (const AllocationCluster&);
       ~AllocationCluster ()  throw();
       
       template<class TY>
@@ -170,7 +170,7 @@ namespace lib {
       void finishAlloc (PMemManager&, void*);
       
       /** create a new MemoryManager implementation */
-      MemoryManager* setupMemoryManager (TypeInfo);
+      static MemoryManager* setupMemoryManager (TypeInfo const&);
     };
   
   
@@ -202,6 +202,7 @@ namespace lib {
       get(ManagerTable& handlers)
         {
           ENSURE (id_ < handlers.size() || 1 <= handlers.size()); // 0th Element used as "undefined" marker
+          TODO ("this is very fishy and probably not threadsafe...!");
           
           return handlers[id_<handlers.size()? id_ : 0 ];
         }
@@ -215,15 +216,19 @@ namespace lib {
           if (id_ >= handlers.size())
             handlers.resize(id_);
           if (!handlers[id_])
-            handlers[id_].reset (setupMemoryManager (TypeInfo((TY*)0)));
+            {
+              TY* type_hint(0);
+              TypeInfo info (type_hint);
+              handlers[id_].reset (setupMemoryManager (info));
+            }
         }
       
       static void
       kill (void* obj)
         {
-          ASSERT (INSTANCEOF (TY,obj));
           TY* p = static_cast<TY*>(obj);
           ASSERT (p);
+          ASSERT (INSTANCEOF (TY,p));
           p->~TY();
         }
       
@@ -243,17 +248,16 @@ namespace lib {
   void*
   AllocationCluster::allocation()
   {
-    scoped_ptr<MemoryManager> typeHandler (TypeSlot<TY>::get (typeHandlers_));
-    if (!typeHandler)
+    if (!TypeSlot<TY>::get (typeHandlers_))
       TypeSlot<TY>::setup (typeHandlers_);
-    return initiateAlloc (typeHandler);
+    return initiateAlloc (TypeSlot<TY>::get (typeHandlers_));
   }
     
   template<class TY>
   TY&
   AllocationCluster::commit (TY* obj)
   {
-    scoped_ptr<MemoryManager> typeHandler (TypeSlot<TY>::get (typeHandlers_));
+    PMemManager & typeHandler (TypeSlot<TY>::get (typeHandlers_));
     REQUIRE (typeHandler);
     REQUIRE (obj);
     finishAlloc (typeHandler, obj);
