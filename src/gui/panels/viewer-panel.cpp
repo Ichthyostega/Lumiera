@@ -31,18 +31,10 @@ namespace panels {
 
 ViewerPanel::ViewerPanel() :
   Panel("viewer", _("Viewer"), "panel_viewer")
-  {
-    //----- Set up the Tool Bar -----//
-    // Add the commands
-
-    
-    // Configure the toolbar
-    toolBar.set_toolbar_style(TOOLBAR_ICONS);
-    
-    //----- Pack in the Widgets -----//
-    pack_start(display, PACK_EXPAND_WIDGET);
-    pack_start(toolBar, PACK_SHRINK);
-  }
+{    
+  //----- Pack in the Widgets -----//
+  pack_start(display, PACK_EXPAND_WIDGET);
+}
 
 }   // namespace panels
 }   // namespace gui
