@@ -82,7 +82,7 @@ lumigui_LDADD = $(GTK_LUMIERA_LIBS) liblumicommon.a liblumi.a $(NOBUGMT_LUMIERA_
 lumigui_DEPENDENCIES =											\
 	$(top_builddir)/lumiera_ui.rc								\
 	$(top_builddir)/liblumicommon.a								\
-	$(top_builddir)/liblumi.a
+	$(top_builddir)/liblumiera.a
 	 
 $(top_builddir)/lumiera_ui.rc:
 	cp $(lumigui_srcdir)/lumiera_ui.rc $(top_builddir)
