@@ -26,6 +26,7 @@
 #include "common/util.hpp"
 
 #include "lib/allocationcluster.hpp"
+#include "lib/scopedholder.hpp"
 
 #include <vector>
 #include <limits>
@@ -76,8 +77,8 @@ namespace lib {
             }
         };
       
-      
-      typedef vector<AllocationCluster> ClusterList;
+      typedef ScopedHolder<AllocationCluster> PCluster;
+      typedef vector<PCluster> ClusterList;
       
       inline char
       truncChar (uint x)
@@ -117,15 +118,17 @@ namespace lib {
                             };
       
       void
-      fillIt (AllocationCluster& clu)
+      fillIt (PCluster& clu)
         {
+          clu.create();
+          
           if (20<NUM_FAMILIES)
             NUM_FAMILIES = 20;
           
           for (uint i=0; i<NUM_OBJECTS; ++i)
             {
               char id = truncChar(i);
-              (*(invoke[rand() % NUM_FAMILIES])) (clu,id);
+              (*(invoke[rand() % NUM_FAMILIES])) (*clu,id);
             }
         }
       

@@ -48,18 +48,17 @@
 #define LIB_ALLOCATIONCLUSTER_H
 
 #include <vector>
-#include <string>
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
 #include "common/multithread.hpp"
 #include "common/error.hpp"
 #include "common/util.hpp"
+#include "lib/scopedholder.hpp"
 
 
 
 namespace lib {
-  using std::string;
   using boost::scoped_ptr;
 
 
@@ -158,7 +157,7 @@ namespace lib {
       
       
       typedef scoped_ptr<MemoryManager> PMemManager;
-      typedef std::vector<PMemManager> ManagerTable;
+      typedef std::vector<ScopedPtrHolder<MemoryManager> > ManagerTable;
       ManagerTable typeHandlers_;
       
       
@@ -214,12 +213,13 @@ namespace lib {
           if (!id_)
             id_= ++maxTypeIDs;
           if (id_ >= handlers.size())
-            handlers.resize(id_);
+            for (size_t idx=handlers.size(); idx<id_; ++idx)
+              handlers.push_back(ScopedPtrHolder<MemoryManager>());     ////////////////////////////////////////TODO  calls ~MemoryManager() but shouldn't
           if (!handlers[id_])
             {
               TY* type_hint(0);
               TypeInfo info (type_hint);
-              handlers[id_].reset (setupMemoryManager (info));
+              handlers[id_].reset (setupMemoryManager (info));          ////////////////////////////////////////TODO  calls ~MemoryManager() but shouldn't
             }
         }
       
