@@ -27,8 +27,7 @@ test_common_LDADD =								\
 	liblumiprocmobjectsession.a						\
 	liblumiprocasset.a							\
 	liblumiprocmobject.a							\
-	liblumiprocmobjectcontroller.a						\
-	liblumi.a								\
+	liblumiera.a								\
 	liblumicommon.a								\
 	liblumibackend.a							\
 	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt

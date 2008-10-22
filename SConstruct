@@ -293,7 +293,7 @@ def defineBuildTargets(env, artifacts):
     objplug = srcSubtree(env,'$SRCDIR/plugin', isShared=True)
     core  = ( env.StaticLibrary('$BINDIR/lumiback.la', objback)
             + env.StaticLibrary('$BINDIR/lumiproc.la', objproc)
-            + env.StaticLibrary('$BINDIR/lumi.la',     objlib)
+            + env.StaticLibrary('$BINDIR/lumiera.la',  objlib)
             )
     
     

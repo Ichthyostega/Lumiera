@@ -49,6 +49,7 @@ lumiera_interface_open (const char* interface, unsigned version, size_t minminor
 {
   LumieraInterfacenode self = NULL;
   TRACE (interface, "%s", name);
+  WARN_IF (version == 0, interface, "opening experimental interface: %s_%d_%s", interface, version, name);
 
   LUMIERA_RECMUTEX_SECTION (interfaceregistry, &lumiera_interface_mutex)
     {

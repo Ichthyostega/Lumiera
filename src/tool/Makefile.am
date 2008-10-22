@@ -24,5 +24,4 @@ luidgen_CPPFLAGS = -I$(top_srcdir)/src/
 luidgen_SOURCES =                                               \
 	  $(lumitool_srcdir)/luidgen.c
 
-luidgen_LDADD = liblumi.a
-
+luidgen_LDADD = liblumiera.a
