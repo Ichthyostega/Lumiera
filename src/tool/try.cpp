@@ -17,6 +17,7 @@
 #include <iostream>
 #include <typeinfo>
 #include <boost/format.hpp>
+#include <boost/utility/typed_in_place_factory.hpp>
 
 using std::string;
 using std::cout;
@@ -28,6 +29,18 @@ using boost::format;
       boost::format fmt ("<%2i>");
       
   }
+  
+  struct No {};
+  
+  template<class TY, class P0=No, class P1=No, class P2=No>
+  struct Invoker
+    {
+      static TY*
+      call (P0& p0, P1& p1, P2& p2)
+        {
+          return new TY (p0,p1,p2);
+        }
+    };
   
 int 
 main (int argc, char* argv[])

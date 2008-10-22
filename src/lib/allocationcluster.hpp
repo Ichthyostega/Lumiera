@@ -163,13 +163,12 @@ namespace lib {
       
       /** implementation of the actual memory allocation
        *  is pushed down to the MemoryManager impl. */
-      void* initiateAlloc (PMemManager&);
+      void* initiateAlloc (size_t& slot);
+      void* initiateAlloc (TypeInfo type, size_t& slot);
       
       /** enrol the allocation after successful ctor call */ 
-      void finishAlloc (PMemManager&, void*);
+      void finishAlloc (size_t& slot, void*);
       
-      /** create a new MemoryManager implementation */
-      static MemoryManager* setupMemoryManager (TypeInfo const&);
     };
   
   
@@ -197,30 +196,30 @@ namespace lib {
     {
       static size_t id_; ///< table pos of the memory manager in charge for type TY
       
-      static PMemManager&
-      get(ManagerTable& handlers)
+      static size_t &
+      get()                        //ManagerTable& handlers)
         {
-          ENSURE (id_ < handlers.size() || 1 <= handlers.size()); // 0th Element used as "undefined" marker
-          TODO ("this is very fishy and probably not threadsafe...!");
+          //ENSURE (id_ < handlers.size() || 1 <= handlers.size()); // 0th Element used as "undefined" marker
           
-          return handlers[id_<handlers.size()? id_ : 0 ];
+          return id_;                   //handlers[id_<handlers.size()? id_ : 0 ];
         }
       
-      static void
-      setup(ManagerTable& handlers)
+      static TypeInfo
+      setup()                       //  ManagerTable& handlers)
         {
           lumiera::Thread::Lock<AllocationCluster> guard   SIDEEFFECT;
           if (!id_)
             id_= ++maxTypeIDs;
-          if (id_ >= handlers.size())
-            for (size_t idx=handlers.size(); idx<id_; ++idx)
-              handlers.push_back(ScopedPtrHolder<MemoryManager>());     ////////////////////////////////////////TODO  calls ~MemoryManager() but shouldn't
-          if (!handlers[id_])
-            {
+//        if (id_ >= handlers.size())
+//          for (size_t idx=handlers.size(); idx<id_; ++idx)
+//            handlers.push_back(ScopedPtrHolder<MemoryManager>());     ////////////////////////////////////////TODO  calls ~MemoryManager() but shouldn't
+//        if (!handlers[id_])
+//          {
               TY* type_hint(0);
               TypeInfo info (type_hint);
-              handlers[id_].reset (setupMemoryManager (info));          ////////////////////////////////////////TODO  calls ~MemoryManager() but shouldn't
-            }
+              return info;
+//            handlers[id_].reset (setupMemoryManager (info));          ////////////////////////////////////////TODO  calls ~MemoryManager() but shouldn't
+//          }
         }
       
       static void
@@ -238,8 +237,6 @@ namespace lib {
   /** storage for static bookkeeping of type allocation slots */
   template<class TY>
   size_t AllocationCluster::TypeSlot<TY>::id_;
-    
-  size_t AllocationCluster::maxTypeIDs;
   
   
 
@@ -248,19 +245,24 @@ namespace lib {
   void*
   AllocationCluster::allocation()
   {
-    if (!TypeSlot<TY>::get (typeHandlers_))
-      TypeSlot<TY>::setup (typeHandlers_);
-    return initiateAlloc (TypeSlot<TY>::get (typeHandlers_));
+//  if (!TypeSlot<TY>::get (typeHandlers_))
+//    TypeSlot<TY>::setup (typeHandlers_);
+//  return initiateAlloc (TypeSlot<TY>::get (typeHandlers_));
+    void *mem = initiateAlloc (TypeSlot<TY>::get());
+    if (!mem)
+      mem = initiateAlloc (TypeSlot<TY>::setup(),TypeSlot<TY>::get());
+    ENSURE (mem);
+    return mem;
   }
     
   template<class TY>
   TY&
   AllocationCluster::commit (TY* obj)
   {
-    PMemManager & typeHandler (TypeSlot<TY>::get (typeHandlers_));
-    REQUIRE (typeHandler);
+//  PMemManager & typeHandler (TypeSlot<TY>::get (typeHandlers_));
+//  REQUIRE (typeHandler);
     REQUIRE (obj);
-    finishAlloc (typeHandler, obj);
+    finishAlloc (TypeSlot<TY>::get(), obj);
     return *obj;
   }
   
