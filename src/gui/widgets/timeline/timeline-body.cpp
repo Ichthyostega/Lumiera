@@ -147,11 +147,8 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
   Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
 
   REQUIRE(cr);
-
-  // Translate the view by the scroll distance
-  cr->translate(0, -get_vertical_offset());
-
-  // Draw the view
+  
+  //----- Draw the view -----//
   draw_tracks(cr);
   draw_selection(cr);
   draw_playback_point(cr);
@@ -271,6 +268,9 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
   // Save the view matrix
   Cairo::Matrix view_matrix;
   cr->get_matrix(view_matrix);
+  
+  // Translate the view by the scroll distance
+  cr->translate(0, -get_vertical_offset());
   
   // Interate drawing each track
   BOOST_FOREACH( Track* track, timelineWidget->tracks )
