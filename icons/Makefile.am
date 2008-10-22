@@ -33,17 +33,39 @@ iconcommand = python $(top_srcdir)/admin/render-icon.py
 48x48pre = $(prerendereddir)/48x48
 
 lumigui_DEPENDENCIES += \
-    rsvg-convert \
-    $(16x16)/tool-arrow.png $(22x22)/tool-arrow.png $(24x24)/tool-arrow.png $(32x32)/tool-arrow.png $(48x48)/tool-arrow.png \
-    $(16x16)/tool-i-beam.png $(22x22)/tool-i-beam.png $(24x24)/tool-i-beam.png $(32x32)/tool-i-beam.png $(48x48)/tool-i-beam.png \
-    $(16x16)/panel-assets.png $(22x22)/panel-assets.png $(32x32)/panel-assets.png \
-    $(16x16)/panel-timeline.png \
-    $(16x16)/panel-viewer.png $(22x22)/panel-viewer.png $(32x32)/panel-viewer.png
+	rsvg-convert \
+	$(16x16)/tool-arrow.png $(22x22)/tool-arrow.png $(24x24)/tool-arrow.png $(32x32)/tool-arrow.png $(48x48)/tool-arrow.png \
+	$(16x16)/tool-i-beam.png $(22x22)/tool-i-beam.png $(24x24)/tool-i-beam.png $(32x32)/tool-i-beam.png $(48x48)/tool-i-beam.png \
+	$(16x16)/track-disabled.png \
+	$(16x16)/track-enabled.png \
+	$(16x16)/track-locked.png \
+	$(16x16)/track-unlocked.png \
+	$(16x16)/panel-assets.png $(22x22)/panel-assets.png $(32x32)/panel-assets.png \
+	$(16x16)/panel-timeline.png \
+	$(16x16)/panel-viewer.png $(22x22)/panel-viewer.png $(32x32)/panel-viewer.png
+
+# ========== SVG Icons ==========
+
+# Timeline Tools
 
 $(16x16)/tool-arrow.png $(22x22)/tool-arrow.png $(24x24)/tool-arrow.png $(32x32)/tool-arrow.png $(48x48)/tool-arrow.png : $(svgdir)/tool-arrow.svg
 	$(iconcommand) $< $(icondir)
 $(16x16)/tool-i-beam.png $(22x22)/tool-i-beam.png $(24x24)/tool-i-beam.png $(32x32)/tool-i-beam.png $(48x48)/tool-i-beam.png : $(svgdir)/tool-i-beam.svg
 	$(iconcommand) $< $(icondir)
+
+# Timeline Tracks
+$(16x16)/track-disabled.png : $(svgdir)/track-disabled.svg
+	$(iconcommand) $< $(icondir)
+$(16x16)/track-enabled.png : $(svgdir)/track-enabled.svg
+	$(iconcommand) $< $(icondir)
+$(16x16)/track-locked.png : $(svgdir)/track-locked.svg
+	$(iconcommand) $< $(icondir)
+$(16x16)/track-unlocked.png : $(svgdir)/track-unlocked.svg
+	$(iconcommand) $< $(icondir)
+
+# ========== Prerendered Icons ==========
+
+# Panels
 
 $(16x16)/panel-assets.png:
 	cp $(16x16pre)/panel-assets.png $(16x16)

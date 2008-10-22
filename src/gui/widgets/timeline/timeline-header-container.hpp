@@ -119,6 +119,21 @@ private:
    */
   void layout_headers();
   
+  void layout_headers_recursive(Track *track,
+    const int y_scroll_offset, int &offset,
+    const int header_width, int depth) const;
+  
+  /**
+   * Recursively sets all the track header widgets to be child widgets
+   * of this widget.
+   **/
+  void set_parent_recursive(Track *track);
+  
+  static void size_request_recursive(Track *track);
+  
+  static void forall_vfunc_recursive(Track* track,
+    GtkCallback callback, gpointer callback_data);
+  
   /**
    * Registers all the styles that this class will respond to.
    */
@@ -143,24 +158,6 @@ private:
    * widgets are scrolled.
    */
   Glib::RefPtr<Gdk::Window> gdkWindow;
-  
-  //----- Header List -----//
-
-  /**
-   * A structure to represent a header widget and it's
-   * associated track
-   */
-  struct RootHeader
-  {
-    Gtk::Widget *widget;
-    Track *track;
-  };
-  
-  /**
-   * Contains a list of the root currently present on
-   * the timeline view
-   */
-  std::vector< RootHeader > rootHeaders;
 
   //----- Style Values -----//
   

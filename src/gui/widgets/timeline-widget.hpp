@@ -202,6 +202,8 @@ private:
   
   void update_scroll();
   
+  static int measure_branch_height(timeline::Track* track);
+  
   int get_y_scroll_offset() const;
   
   bool on_motion_in_body_notify_event(GdkEventMotion *event);
@@ -224,6 +226,9 @@ protected:
   int totalHeight;
 
   timeline::Track video1;
+  timeline::Track video1a;
+  timeline::Track video1b;
+  timeline::Track video1ba;
   timeline::Track video2;
   std::vector<timeline::Track*> tracks;
 
@@ -239,8 +244,7 @@ protected:
   // Signals
   sigc::signal<void> viewChangedSignal;
   sigc::signal<void, gavl_time_t> mouseHoverSignal;
-  sigc::signal<void>
-    playbackPeriodDragReleasedSignal;
+  sigc::signal<void> playbackPeriodDragReleasedSignal;
    
   /* ===== Constants ===== */
 public:
