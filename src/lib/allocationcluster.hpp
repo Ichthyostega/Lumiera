@@ -53,7 +53,7 @@
 
 #include "common/multithread.hpp"
 #include "common/error.hpp"
-#include "common/util.hpp"
+//#include "common/util.hpp"
 #include "lib/scopedholder.hpp"
 
 
@@ -123,7 +123,7 @@ namespace lib {
         }
 
       
-    protected:
+    private:
       /** initiate an allocation for the given type */
       template<class TY>
       void*
@@ -156,10 +156,16 @@ namespace lib {
       static size_t maxTypeIDs;
       
       
-      typedef scoped_ptr<MemoryManager> PMemManager;
-      typedef std::vector<ScopedPtrHolder<MemoryManager> > ManagerTable;
+      typedef ScopedPtrHolder<MemoryManager> HMemManager;
+      typedef std::vector<HMemManager> ManagerTable;
       ManagerTable typeHandlers_;
       
+      HMemManager& 
+      handler (size_t slot)
+        {
+          ASSERT (0<slot && slot<=typeHandlers_.size());
+          return typeHandlers_[slot-1];
+        }
       
       /** implementation of the actual memory allocation
        *  is pushed down to the MemoryManager impl. */
@@ -187,6 +193,11 @@ namespace lib {
             : allocSize(sizeof(TY)),
               killIt(&TypeSlot<TY>::kill)
             { }
+          
+          TypeInfo()  ///< denotes "unknown" type
+            : allocSize(0),
+              killIt(0)
+            { }  
         };
   
   
@@ -238,11 +249,10 @@ namespace lib {
   template<class TY>
   size_t AllocationCluster::TypeSlot<TY>::id_;
   
-  
 
   
   template<class TY>
-  void*
+  inline void*
   AllocationCluster::allocation()
   {
 //  if (!TypeSlot<TY>::get (typeHandlers_))
@@ -256,7 +266,7 @@ namespace lib {
   }
     
   template<class TY>
-  TY&
+  inline TY&
   AllocationCluster::commit (TY* obj)
   {
 //  PMemManager & typeHandler (TypeSlot<TY>::get (typeHandlers_));

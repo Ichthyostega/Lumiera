@@ -56,6 +56,7 @@
   NOBUG_DECLARE_FLAG(singleton);
   NOBUG_DECLARE_FLAG(assetmem);
   NOBUG_DECLARE_FLAG(mobjectmem);
+  NOBUG_DECLARE_FLAG(buildermem);
   
   
 namespace lumiera { 
@@ -80,6 +81,7 @@ namespace lumiera {
   NOBUG_CPP_DEFINE_FLAG_LIMIT(singleton, LOG_WARNING);
   NOBUG_CPP_DEFINE_FLAG_LIMIT(assetmem,  LOG_WARNING);
   NOBUG_CPP_DEFINE_FLAG_LIMIT(mobjectmem, LOG_WARNING);
+  NOBUG_CPP_DEFINE_FLAG_LIMIT(buildermem, LOG_INFO);
 
   
 

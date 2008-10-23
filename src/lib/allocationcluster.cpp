@@ -23,18 +23,51 @@
 
 #include "lib/allocationcluster.hpp"
 #include "common/error.hpp"
-//#include "common/util.hpp"
+#include "common/util.hpp"
 
 
-//using util::isnil;
+using util::isnil;
 //using util::cStr;
 
 namespace lib {
   
+  /**
+   * "Low-level" Memory manager for allocating small objects of a fixed size.
+   * The usage pattern is definite: Objects will be allocated in the course of
+   * a build process and then live until all Objects will be purged in one sway.
+   * Allocations will be requested one by one and immediately committed after
+   * successful ctor call of the object being allocated. Allocations and commits
+   * can be assumed to come in pairs, thus if an allocation immediately follows
+   * another one (without commit), the previous allocation can be considered
+   * a failure and can be dropped silently. After an allocation has succeeds
+   * (i.e. was committed), the MemoryManager is in charge for the lifecycle
+   * of the object within the allocated spaces and has to guarantee calling
+   * it's dtor, either on shutdown or on explicit #purge() -- the type info
+   * structure handed in on initialisation provides a means for invoking
+   * the dtor without actually knowing the object's type.
+   * 
+   * @todo this is a preliminary or pseudo-implementation based on 
+   * a vector of smart pointers,  i.e. actually the objects are heap 
+   * allocated. What actually should happen is for the MemoryManager to
+   * allocate raw memory chunk wise, sub partition it and place the objects
+   * into this private memory buffer. Further, possibly we could maintain
+   * a pool of raw memory chunks used by all MemoryManager instances. I am
+   * skipping those details for now (10/2008) because they should be based
+   * on real-world measurements, not guessing.
+   */
   class AllocationCluster::MemoryManager
     {
+      typedef std::vector<char*> MemTable;
+      TypeInfo type_;
+      MemTable mem_;
+      size_t top_;
+      
     public:
-      MemoryManager(TypeInfo info);
+      MemoryManager(TypeInfo info) { reset(info); }
+      ~MemoryManager()             { purge(); }
+      
+      void purge();
+      void reset(TypeInfo info);
       
       void* allocate();
       
@@ -42,24 +75,66 @@ namespace lib {
     };
 
   
-  AllocationCluster::MemoryManager::MemoryManager (TypeInfo info)
-  {
-    UNIMPLEMENTED ("create a new MemoryManager instance for the specific type given");
-    //////////////////////////////////////////////////////TODO
-  }
-  
-  void*
-  AllocationCluster::MemoryManager::allocate()
-  {
-    UNIMPLEMENTED ("do the actual raw memory allocation");
-    return 0; ////////////////////////////////////////////TODO
-  }
   
   void
+  AllocationCluster::MemoryManager::reset (TypeInfo info)
+  {
+    Thread::Lock<MemoryManager> guard   SIDEEFFECT;
+    
+    if (0 < mem_.size()) purge();
+    type_ = info;
+    
+    ENSURE (0==top_);
+    ENSURE (isnil (mem_));
+    ENSURE (0 < type_.allocSize);
+    ENSURE (type_.killIt);
+  }
+  
+  
+  void
+  AllocationCluster::MemoryManager::purge()
+  {
+    Thread::Lock<MemoryManager> guard   SIDEEFFECT;
+
+    REQUIRE (type_.killIt, "we need a deleter function");
+    REQUIRE (0 < type_.allocSize, "allocation size unknown");
+    REQUIRE (top_ == mem_.size() || (top_+1) == mem_.size());
+    
+    while (top_)
+      type_.killIt (&mem_[--top_]);
+    mem_.resize(0);
+  }// note: unnecessary to kill pending allocations
+  
+  
+  inline void*
+  AllocationCluster::MemoryManager::allocate()
+  {
+    Thread::Lock<MemoryManager> guard   SIDEEFFECT;
+    
+    REQUIRE (0 < type_.allocSize);
+    REQUIRE (top_ <= mem_.size());
+
+    if (top_==mem_.size())
+      mem_.resize(top_+1);
+    mem_[top_] = new char[type_.allocSize];
+    
+    ENSURE (top_ < mem_.size());
+    return mem_[top_];
+  }
+  
+  
+  inline void
   AllocationCluster::MemoryManager::commit (void* pendingAlloc)
   {
-    UNIMPLEMENTED ("commit a pending allocation to be valid");
-    //////////////////////////////////////////////////////TODO
+    Thread::Lock<MemoryManager> guard   SIDEEFFECT;
+
+    REQUIRE (pendingAlloc);
+    ASSERT (top_ < mem_.size());
+    ASSERT (pendingAlloc == mem_[top_], "allocation protocol violated");
+    
+    ++top_;
+    
+    ENSURE (top_ == mem_.size());
   }
   
   
@@ -75,6 +150,7 @@ namespace lib {
   AllocationCluster::AllocationCluster()
 //    : configParam_  (new Configmap),
   {
+    TRACE (buildermem, "new AllocationCluster");
   }
   
   
@@ -86,6 +162,13 @@ namespace lib {
   {
     try
       {
+        Thread::Lock<AllocationCluster> guard   SIDEEFFECT
+        
+        TRACE (buildermem, "shutting down AllocationCluster");
+        for (size_t i = typeHandlers_.size(); 0 < i; --i)
+          handler(i)->purge();
+        
+        typeHandlers_.resize(0);
         
       }
     catch (lumiera::Error & ex)
@@ -104,10 +187,10 @@ namespace lib {
   void*
   AllocationCluster::initiateAlloc (size_t& slot)
   {
-    if (!slot || slot > typeHandlers_.size() || !typeHandlers_[slot-1])
-      return 0;  // Memory manager not yet initialised
+    if (!slot || slot > typeHandlers_.size() || !handler(slot) )
+      return 0; // Memory manager not yet initialised
     else
-      return typeHandlers_[slot-1]->allocate();
+      return handler(slot)->allocate();
   }
   
   
@@ -117,16 +200,16 @@ namespace lib {
     ASSERT (0 < slot);
     
       {
-        Thread::Lock<AllocationCluster> guard   SIDEEFFECT;    ////TODO: it's sufficient to just lock the instance, not the whole class
-    
+        Thread::Lock<AllocationCluster> guard   SIDEEFFECT;   /////TODO: decide tradeoff: lock just the instance, or lock the AllocationCluster class?
+        
         if (slot > typeHandlers_.size())
           typeHandlers_.resize(slot);
-        if (!typeHandlers_[slot-1])
-          typeHandlers_[slot-1].reset (new MemoryManager (type));
+        if (!handler(slot))
+          handler(slot).reset (new MemoryManager (type));
         
       }
     
-    ASSERT (typeHandlers_[slot-1]);
+    ASSERT (handler(slot));
     return initiateAlloc(slot); 
   }
   
@@ -134,10 +217,10 @@ namespace lib {
   void
   AllocationCluster::finishAlloc (size_t& slot, void* allocatedObj)
   {
-    ASSERT (typeHandlers_[slot-1]);
+    ASSERT (handler(slot));
     ASSERT (allocatedObj);
     
-    typeHandlers_[slot-1]->commit(allocatedObj);
+    handler(slot)->commit(allocatedObj);
   }
   
   
