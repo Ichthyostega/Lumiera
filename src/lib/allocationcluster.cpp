@@ -104,39 +104,40 @@ namespace lib {
   void*
   AllocationCluster::initiateAlloc (size_t& slot)
   {
-    TODO ("this is still a bit fishy, probably off by one and not threadsafe...!");
-    
-    if (!slot || slot >= typeHandlers_.size() || !typeHandlers_[slot])
+    if (!slot || slot > typeHandlers_.size() || !typeHandlers_[slot-1])
       return 0;  // Memory manager not yet initialised
     else
-      return typeHandlers_[slot]->allocate();
+      return typeHandlers_[slot-1]->allocate();
   }
   
   
   void*
   AllocationCluster::initiateAlloc (TypeInfo type, size_t& slot)
   {
-    ASSERT (0 < slot && (slot >=typeHandlers_.size() || !typeHandlers_[slot]));
-
-    if (slot >= typeHandlers_.size())
-      typeHandlers_.resize(slot);
-    if (!typeHandlers_[slot])
-      typeHandlers_[slot].reset (new MemoryManager (type));
+    ASSERT (0 < slot);
     
-    ASSERT (typeHandlers_[slot]);
+      {
+        Thread::Lock<AllocationCluster> guard   SIDEEFFECT;    ////TODO: it's sufficient to just lock the instance, not the whole class
     
+        if (slot > typeHandlers_.size())
+          typeHandlers_.resize(slot);
+        if (!typeHandlers_[slot-1])
+          typeHandlers_[slot-1].reset (new MemoryManager (type));
+        
+      }
+    
+    ASSERT (typeHandlers_[slot-1]);
     return initiateAlloc(slot); 
-    
   }
   
   
   void
   AllocationCluster::finishAlloc (size_t& slot, void* allocatedObj)
   {
-    ASSERT (typeHandlers_[slot]);
+    ASSERT (typeHandlers_[slot-1]);
     ASSERT (allocatedObj);
     
-    typeHandlers_[slot]->commit(allocatedObj);
+    typeHandlers_[slot-1]->commit(allocatedObj);
   }
   
   

@@ -60,7 +60,7 @@
 
 namespace lib {
   using boost::scoped_ptr;
-
+  using lumiera::Thread;
 
   /**
    * A pile of objects sharing common allocation and lifecycle.
@@ -207,7 +207,7 @@ namespace lib {
       static TypeInfo
       setup()                       //  ManagerTable& handlers)
         {
-          lumiera::Thread::Lock<AllocationCluster> guard   SIDEEFFECT;
+          Thread::Lock<AllocationCluster> guard   SIDEEFFECT;
           if (!id_)
             id_= ++maxTypeIDs;
 //        if (id_ >= handlers.size())
