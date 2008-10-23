@@ -3,6 +3,7 @@
 ## SConscript  -  SCons buildscript for the Testsuite (called by SConstruct)
 ##
 
+import os
 from os import path
 from Buildhelper import srcSubtree
 from Buildhelper import scanSubtree
@@ -92,9 +93,16 @@ artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in moduledirs
 #
 #  - the product of running the Testsuite is the ",testlog"
 #  - it depends on all artifacts defined as "ts" above
+#  - if not set via options switch, the environment variable TESTSUITES
+#    is explicitly propagated to test.sh
 #
 testEnv = env.Clone()
-testEnv.Append(ENV = {'VALGRINDFLAGS' : 'DISABLE'})
+if not env['VALGRIND']:
+    testEnv.Append(ENV = {'VALGRINDFLAGS' : 'DISABLE'})
+testsuites = env['TESTSUITES'] or os.environ.get('TESTSUITES')
+if testsuites:
+    testEnv['ENV']['TESTSUITES'] = testsuites 
+ 
 testDir = env.Dir('#$BINDIR')
 runTest = env.File("test.sh").abspath
 
@@ -110,5 +118,5 @@ runTs = testEnv.Command(',testlog', ts, runTest,  chdir=testDir)
 env.Alias('testcode', ts )
 env.Alias('check', runTs )
 
-# declare tempfiles of test.sh as cleanable  
+# allow tempfiles of test.sh to be cleaned  
 env.Clean ('check', [',testlog.pre',',expect_stdout',',stdout',',stderr',',testtmp','.libs']) 
