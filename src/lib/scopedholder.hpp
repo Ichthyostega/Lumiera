@@ -111,6 +111,19 @@ namespace lib {
     
     
   
+  /**
+   * Inline buffer holding and owning an object similar to scoped_ptr.
+   * Access to the contained object is similar to a smart-pointer,
+   * but the object isn't heap allocated, rather placed into an
+   * buffer within ScopedHolder. Initially, ScopedHolder is empty
+   * and behaves like a null pointer. The contained object must be
+   * created explicitly by calling #create() (using the default ctor).
+   * This state change is remembered (requiring 1 char of additional 
+   * storage). After the creation of the object, ScopedHolder is
+   * effectively noncopyable, which is enforced by run-time checks.
+   * ScopedHolder may be used to hold noncopyable objects within STL
+   * containers inline without extra heap allocation.
+   */
   template<class TY>
   class ScopedHolder
     {
@@ -186,7 +199,7 @@ namespace lib {
       {
         if (ref)
           throw lumiera::error::Logic("ScopedHolder protocol violation: "
-                                      "attempt after having invoked create().");
+                                      "copy operation after having invoked create().");
         return 0;
       }
     };
