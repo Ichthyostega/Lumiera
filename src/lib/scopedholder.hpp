@@ -29,7 +29,7 @@
  ** or even a garbage collector. Sometimes the circumstances rather call
  ** for a very simple or lightweight solution though.
  ** 
- ** ScopedPtrHolder is a small extension to boost::scoped_ptr, enabling
+ ** ScopedPtrHolder is a simple extension to boost::scoped_ptr, enabling
  ** to use it within STL containers if we stick to a specific protocol.
  ** The idea is to permit copying as long as the scoped_ptr is empty.
  ** This can be used to allow for extension of the STL container on
@@ -57,10 +57,10 @@ namespace lib {
   
   
   
-    
+  
   /**
    * Extension to boost::scoped_ptr, allowing copy operations
-   * as long as the pointer is still null.
+   * on empty pointers (i.e. contained pointer is null).
    * @throw error::Logic on attempt to copy otherwise
    */
   template<class B>
@@ -79,12 +79,12 @@ namespace lib {
       explicit ScopedPtrHolder (SU * p)  // never throws
         : _Parent(p)
         { }
-
+      
       template<class SU>
       explicit ScopedPtrHolder (std::auto_ptr<SU> p)  // never throws
         : _Parent(p.release())
         { }
-
+      
       ScopedPtrHolder (ScopedPtrHolder const& ref)
         : _Parent(must_be_null (ref))
         { }
@@ -107,9 +107,9 @@ namespace lib {
         return 0;
       }
     };
-    
-    
-    
+  
+  
+  
   
   /**
    * Inline buffer holding and owning an object similar to scoped_ptr.
@@ -131,7 +131,7 @@ namespace lib {
       char created_;
       
       typedef ScopedHolder<TY> _ThisType;
-
+      
       
     public:
       ScopedHolder()
@@ -150,10 +150,10 @@ namespace lib {
       ~ScopedHolder()
         {
           if (created_)
-            content_->~TY();
+            get()->~TY();
         }
-
-        
+      
+      
       ScopedHolder (ScopedHolder const& ref)
         : created_(must_be_empty (ref))
         { }
@@ -173,26 +173,30 @@ namespace lib {
           ASSERT (created_);
           return (TY&) content_;
         }
-
+      
       TY* 
       operator-> ()  const // never throws
         {
           ASSERT (created_);
           return (TY*) &content_;
         }
-
-      TY* get()          const { return &content_; }
-      bool operator! ()  const { return !created_; }
+      
+      TY* get() const     // never throws
+        { 
+          return (TY*) &content_; 
+        }
       
       
       typedef char _ThisType::*unspecified_bool_type;
-
+      
       /** implicit conversion to "bool" */
       operator unspecified_bool_type()  const // never throws
         {
           return created_?  &_ThisType::created_ : 0;
         }
-
+      
+      bool operator! ()  const { return !created_;      }
+      
       
     private:
       static char must_be_empty (_ThisType const& ref)

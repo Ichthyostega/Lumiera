@@ -27,33 +27,29 @@
 
 #include "lib/scopedholder.hpp"
 
+#include <boost/noncopyable.hpp>
 #include <iostream>
 #include <map>
-//#include <limits>
-//#include <boost/lexical_cast.hpp>
-#include <boost/noncopyable.hpp>
 
-//using boost::lexical_cast;
-//using util::for_each;
-using util::isnil;
-using ::Test;
-
-//using std::numeric_limits;
-//using std::vector;
-using std::map;
-using std::cout;
 
 namespace lib {
   namespace test {
+    
+    using ::Test;
+    using util::isnil;
+    
+    using std::map;
+    using std::cout;
     
     namespace { // yet another test dummy
       
       long checksum = 0;
       bool magic = false;
       
-      class Dummy : boost::noncopyable
+      class Dummy 
+        : boost::noncopyable
         {
-          long val_;
+          int val_;
           
         public:
           Dummy ()
@@ -73,7 +69,7 @@ namespace lib {
         };
       
       
-      typedef ScopedHolder<Dummy> HolderD;
+      typedef ScopedHolder<Dummy>    HolderD;
       typedef ScopedPtrHolder<Dummy> PtrHolderD;
       
     }
@@ -107,7 +103,7 @@ namespace lib {
             checkSTLContainer<PtrHolderD>();
           }
         
-        void create_contained_object (HolderD&    holder) { holder.create(); }
+        void create_contained_object (HolderD&    holder) { holder.create();           }
         void create_contained_object (PtrHolderD& holder) { holder.reset(new Dummy()); }
         
         
@@ -123,12 +119,11 @@ namespace lib {
               
               create_contained_object (holder);
               ASSERT (holder);
-              ASSERT (true==holder);
               ASSERT (false!=holder);
               ASSERT (holder!=false);
               
               ASSERT (0!=checksum);
-              ASSERT (! *holder);
+              ASSERT ( &(*holder));
               ASSERT (holder->add(2) == checksum+2);
               
               Dummy *rawP = holder.get();
@@ -136,6 +131,11 @@ namespace lib {
               ASSERT (holder);
               ASSERT (rawP == &(*holder));
               ASSERT (rawP->add(-5) == holder->add(-5));
+              
+              TRACE (test, "holder at %x", &holder);
+              TRACE (test, "object at %x", holder.get() );
+              TRACE (test, "size(object) = %d", sizeof(*holder));
+              TRACE (test, "size(holder) = %d", sizeof(holder));
             }
             ASSERT (0==checksum);
           }
@@ -155,7 +155,7 @@ namespace lib {
                   create_contained_object (holder);
                   NOTREACHED ;
                 }
-              catch (long val)
+              catch (int val)
                 {
                   ASSERT (0!=checksum);
                   checksum -= val;
@@ -178,11 +178,14 @@ namespace lib {
               HO holder;
               HO holder2 (holder);
               holder2 = holder;
+              // copy and assignment of empty holders is tolerated
               
+              // but after enclosing an object it will be copy protected...
               ASSERT (!holder);
               create_contained_object (holder);
               ASSERT (holder);
               long currSum = checksum;
+              void* adr = holder.get();
               try
                 {
                   holder2 = holder;
@@ -192,6 +195,7 @@ namespace lib {
                 {
                   ASSERT (holder);
                   ASSERT (!holder2);
+                  ASSERT (holder.get()==adr);
                   ASSERT (checksum==currSum);
                 }
               
@@ -204,6 +208,7 @@ namespace lib {
                 {
                   ASSERT (holder);
                   ASSERT (!holder2);
+                  ASSERT (holder.get()==adr);
                   ASSERT (checksum==currSum);
                 }
               
@@ -220,6 +225,7 @@ namespace lib {
                 {
                   ASSERT (holder);
                   ASSERT (holder2);
+                  ASSERT (holder.get()==adr);
                   ASSERT (checksum==currSum);
                 }
               
@@ -239,7 +245,7 @@ namespace lib {
           }
         
         
-        /** @test a collection of noncopyable objects
+        /** @test collection of noncopyable objects
          *        maintained within a STL map
          */
         template<class HO>
@@ -254,15 +260,18 @@ namespace lib {
               ASSERT (isnil (maph));
               
               for (uint i=0; i<100; ++i)
-                ASSERT (!maph[i]);
-              
-              ASSERT (!isnil (maph)); // 100 holder objects created by sideeffect
-              ASSERT (0==checksum);  //  ....without creating any contained object
+                {
+                  HO & contained = maph[i];
+                  ASSERT (!contained);
+                }                      // 100 holder objects created by sideeffect
+                                      
+              ASSERT (0==checksum);  // ..... without creating any contained object!
+              ASSERT (!isnil (maph));
               ASSERT (100==maph.size());
               
               for (uint i=0; i<100; ++i)
                 {
-                  create_contained_object (maph[i])
+                  create_contained_object (maph[i]);
                   ASSERT (maph[i]);
                   ASSERT (0 < maph[i]->add(12));
                 }
@@ -270,15 +279,17 @@ namespace lib {
               ASSERT (0!=checksum);
               
               
-              long theVal = maph[55]->add(0); 
+              long value55 = maph[55]->add(0); 
               long currSum = checksum;
               
               ASSERT (1 == maph.erase(55));
+              ASSERT (checksum == currSum - value55); // proves object#55's dtor has been invoked
               ASSERT (maph.size() == 99);
-              ASSERT (checksum == currSum - theVal); // proves no55's dtor has been invoked
-
+              
+              maph[55];                            // create new empty holder by sideeffect...
+              ASSERT (&maph[55]);
               ASSERT (!maph[55]);
-              ASSERT (maph.size() == 100); // created a new empty holder by sideeffect
+              ASSERT (maph.size() == 100);
             }
             ASSERT (0==checksum);
           }
@@ -286,10 +297,10 @@ namespace lib {
         
       };
     
-      LAUNCHER (ScopedHolder_test, "unit common");
-
-
-  }// namespace test
+    LAUNCHER (ScopedHolder_test, "unit common");
     
+    
+  }// namespace test
+
 } // namespace lib
 
