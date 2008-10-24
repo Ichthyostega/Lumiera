@@ -63,8 +63,8 @@ namespace lib {
       size_t top_;
       
     public:
-      MemoryManager(TypeInfo info) { reset(info); }
-      ~MemoryManager()             { purge(); }
+      MemoryManager(TypeInfo info) : top_(0) { reset(info); }
+      ~MemoryManager()                       { purge(); }
       
       void purge();
       void reset(TypeInfo info);
@@ -102,7 +102,7 @@ namespace lib {
     
     while (top_)
       type_.killIt (&mem_[--top_]);
-    mem_.resize(0);
+    mem_.clear();
   }// note: unnecessary to kill pending allocations
   
   
@@ -168,7 +168,7 @@ namespace lib {
         for (size_t i = typeHandlers_.size(); 0 < i; --i)
           handler(i)->purge();
         
-        typeHandlers_.resize(0);
+        typeHandlers_.clear();
         
       }
     catch (lumiera::Error & ex)
@@ -203,7 +203,7 @@ namespace lib {
         Thread::Lock<AllocationCluster> guard   SIDEEFFECT;   /////TODO: decide tradeoff: lock just the instance, or lock the AllocationCluster class?
         
         if (slot > typeHandlers_.size())
-          typeHandlers_.resize(slot);
+          typeHandlers_.resize(slot); /////////////////////////////TODO: still a fundamental problem buried here with the way stl::vector grows...
         if (!handler(slot))
           handler(slot).reset (new MemoryManager (type));
         

@@ -57,7 +57,7 @@ namespace lib {
           char content[i];
           
         public:
-          Dummy (char id)
+          Dummy (char id=1)
             {
               content[0] = id;
               checksum += id;
@@ -75,6 +75,8 @@ namespace lib {
             {
               checksum -= content[0];
             }
+          
+          char getID()  { return content[0]; }
         };
       
       typedef ScopedHolder<AllocationCluster> PCluster;
@@ -149,8 +151,35 @@ namespace lib {
             if (1 < arg.size()) NUM_OBJECTS  = lexical_cast<uint> (arg[1]);
             if (2 < arg.size()) NUM_FAMILIES = lexical_cast<uint> (arg[2]);
             
+            simpleUsage();
             checkAllocation();
             checkErrorHandling();
+          }
+        
+        
+        void
+        simpleUsage()
+          {
+            AllocationCluster clu;
+            
+            char c1(123), c2(56), c3(3), c4(4), c5(5);
+            Dummy<44>& ref1 = clu.create<Dummy<44> > ();
+            Dummy<37>& ref2 = clu.create<Dummy<37> > (c1);
+            Dummy<37>& ref3 = clu.create<Dummy<37> > (c2);
+            Dummy<1234>& rX = clu.create<Dummy<1234> > (c3,c4,c5);
+            
+            ASSERT (&ref1);
+            ASSERT (&ref2);
+            ASSERT (&ref3);
+            ASSERT (&rX);
+            TRACE (test, "sizeof( Dummy<1234> ) = %d", sizeof(rX));
+            
+            ASSERT (123==ref2.getID());
+            ASSERT (3+4+5==rX.getID());
+            // shows that the returned references actually
+            // point at the objects we created. Just use them
+            // and let them go. When clu goes out of scope,
+            // all created objects dtors will be invoked.
           }
         
         void
