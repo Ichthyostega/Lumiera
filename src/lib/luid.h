@@ -49,6 +49,11 @@ typedef lumiera_uid* LumieraUid;
 #endif
 
 /**
+ * LUIDGEN will be replaced by the 'luidgen' tool with a random uuid
+ */
+#define LUIDGEN "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
+
+/**
  * Retrieve a generic pointer stored in a luid
  */
 void*
