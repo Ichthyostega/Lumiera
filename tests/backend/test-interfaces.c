@@ -80,7 +80,15 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                             testrelease,
                             LUMIERA_INTERFACE_INLINE (name, "\073\003\054\127\344\046\324\321\221\262\232\026\376\123\125\243",
                                                       const char*, (LumieraInterface iface),
+                                                      {return "LumieraTest";}
+                                                      ),
+                            LUMIERA_INTERFACE_INLINE (brief, LUIDGEN,
+                                                      const char*, (LumieraInterface iface),
                                                       {return "Lumiera Test suite examples";}
+                                                      ),
+                            LUMIERA_INTERFACE_INLINE (homepage, LUIDGEN,
+                                                      const char*, (LumieraInterface iface),
+                                                      {return "http://www.lumiera.org/develompent.html";}
                                                       ),
                             LUMIERA_INTERFACE_INLINE (version, "\271\330\345\066\304\217\211\065\157\120\031\365\304\363\364\074",
                                                       const char*, (LumieraInterface iface),
@@ -88,7 +96,11 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                                                       ),
                             LUMIERA_INTERFACE_INLINE (author, "\367\160\342\065\147\007\237\371\141\335\371\131\025\030\257\232",
                                                       const char*, (LumieraInterface iface),
-                                                      {return "Christian Thaeter <ct@pipapo.org>";}
+                                                      {return "Christian Thaeter";}
+                                                      ),
+                            LUMIERA_INTERFACE_INLINE (email, LUIDGEN,
+                                                      const char*, (LumieraInterface iface),
+                                                      {return "ct@pipapo.org";}
                                                       ),
                             LUMIERA_INTERFACE_INLINE (copyright, "\163\106\344\014\251\125\111\252\236\322\174\120\335\225\333\245",
                                                       const char*, (LumieraInterface iface),
@@ -116,6 +128,16 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                                                           "along with this program; if not, write to the Free Software\n"
                                                           "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA";
                                                       }
+                                                      ),
+
+                            LUMIERA_INTERFACE_INLINE (state, LUIDGEN,
+                                                      int, (LumieraInterface iface),
+                                                      {return LUMIERA_INTERFACE_EXPERIMENTAL;}
+                                                      ),
+
+                            LUMIERA_INTERFACE_INLINE (versioncmp, LUIDGEN,
+                                                      int, (const char* a, const char* b),
+                                                      {return 0;}
                                                       )
                             );
 
