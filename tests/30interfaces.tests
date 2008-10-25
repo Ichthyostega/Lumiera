@@ -1,0 +1,38 @@
+TESTING "test interfaces" ./test-interfaces
+
+TEST "Basic operations" basic <<END
+return: 0
+END
+
+
+TEST "opening / closing interfaces" open_close <<END
+return: 0
+END
+
+
+TEST "dependencies 1" dependencies_one <<END
+return: 0
+END
+
+
+TEST "dependencies 2" dependencies_two <<END
+return: 0
+END
+
+
+TEST "dependencies 3" dependencies_three <<END
+return: 0
+END
+
+
+TEST "depedencies 4" dependencies_four <<END
+return: 0
+END
+
+
+TEST "dependencies all" dependencies_all <<END
+return: 0
+END
+
+
+
