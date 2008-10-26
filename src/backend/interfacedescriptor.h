@@ -26,12 +26,12 @@
 
 /**
  * Release state of an interface implementation.
- * The interfase subsystem must be able to categorize implementation to present possible
+ * The interface subsystem must be able to categorize implementations to present possible
  * upgrade paths to the user. This is done by the tagging it to a certain state in concert
  * with the version and the user supplied version compare function. The respective numbers
  * are choosen in a way that a higher value indicates precedence when selecting an implementation.
- * Note that 'BETA' is higher than 'DEPRECATED' (we make the assumption that BETA is at least
- * maintained code and something gets deprecated for some reason), for common practice it is still
+ * Note that 'BETA' is higher than 'DEPRECATED', we make the assumption that BETA is at least
+ * maintained code and something gets deprecated for some reason. For common practice it is
  * suggested to make a stable release before declaring its predcessor version as deprecated.
  */
 enum lumiera_interface_state {
@@ -70,6 +70,65 @@ LUMIERA_INTERFACE_DECLARE (lumieraorg_interfacedescriptor, 0,
                            LUMIERA_INTERFACE_SLOT (int, versioncmp, (const char*, const char*))
                            );
 
+
+#if 0
+/**
+ * For convinience, a copy'n'paste descriptor
+ */
+LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
+                            /*IDENTIFIER*/,
+                            NULL, NULL, NULL,
+                            LUMIERA_INTERFACE_INLINE (name, LUIDGEN,
+                                                      const char*, (LumieraInterface iface),
+                                                      {return /*NAME*/;}
+                                                      ),
+                            LUMIERA_INTERFACE_INLINE (brief, LUIDGEN,
+                                                      const char*, (LumieraInterface iface),
+                                                      {return /*BRIEF*/;}
+                                                      ),
+                            LUMIERA_INTERFACE_INLINE (homepage, LUIDGEN,
+                                                      const char*, (LumieraInterface iface),
+                                                      {return /*HOMEPAGE*/;}
+                                                      ),
+                            LUMIERA_INTERFACE_INLINE (version, LUIDGEN,
+                                                      const char*, (LumieraInterface iface),
+                                                      {return /*VERSION*/;}
+                                                      ),
+                            LUMIERA_INTERFACE_INLINE (author, LUIDGEN,
+                                                      const char*, (LumieraInterface iface),
+                                                      {return /*AUTHOR*/;}
+                                                      ),
+                            LUMIERA_INTERFACE_INLINE (email, LUIDGEN,
+                                                      const char*, (LumieraInterface iface),
+                                                      {return /*EMAIL*/;}
+                                                      ),
+                            LUMIERA_INTERFACE_INLINE (copyright, LUIDGEN,
+                                                      const char*, (LumieraInterface iface),
+                                                      {
+                                                        return
+                                                          "Copyright (C)        "/*ORGANIZATION*/"\n"
+                                                          "  "/*YEARS*/"               "/*AUTHOR*/" <"/*EMAIL*/">";
+                                                      }
+                                                      ),
+                            LUMIERA_INTERFACE_INLINE (license, LUIDGEN,
+                                                      const char*, (LumieraInterface iface),
+                                                      {
+                                                        return
+                                                          /*LICENSE*/;
+                                                      }
+                                                      ),
+
+                            LUMIERA_INTERFACE_INLINE (state, LUIDGEN,
+                                                      int, (LumieraInterface iface),
+                                                      {return /*LUMIERA_INTERFACE_EXPERIMENTAL*/;}
+                                                      ),
+
+                            LUMIERA_INTERFACE_INLINE (versioncmp, LUIDGEN,
+                                                      int, (const char* a, const char* b),
+                                                      {return /*COMPARERESULT*/;}
+                                                      )
+                            );
+#endif
 
 
 #endif /* LUMIERA_INTERFACEDESCRIPTORS_H */
