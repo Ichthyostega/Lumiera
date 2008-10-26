@@ -19,25 +19,98 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "lib/safeclib.h"
 #include "lib/luid.h"
 
+#include <unistd.h>
+#include <stdint.h>
+#include <errno.h>
 #include <stdio.h>
+#include <string.h>
+#include <nobug.h>
 
 /**
  * @file
  * Generate amd print a Lumiera uid as octal escaped string
+ * or process a file replaceing 'LUIDGEN' with a octal escaped string
  */
+
 
 int
 main (int argc, char** argv)
 {
+  NOBUG_INIT;
   lumiera_uid luid;
-  lumiera_uid_gen (&luid);
 
-  printf ("\"");
-  for (int i = 0; i < 16; ++i)
-    printf ("\\%.3hho", *(((char*)&luid)+i));
-  printf ("\"\n");
+  if (argc == 1)
+    {
+      lumiera_uid_gen (&luid);
+      printf ("\"");
+      for (int i = 0; i < 16; ++i)
+        printf ("\\%.3hho", *(((char*)&luid)+i));
+      printf ("\"\n");
+    }
+  else
+    {
+      for (int i = 1; i < argc; ++i)
+        {
+          FILE* in = fopen (argv[i], "r");
+          if (!in)
+            {
+              fprintf (stderr, "Failed to open file %s for reading: %s\n", argv[i], strerror (errno));
+              continue;
+            }
+
+          char* outname = lumiera_tmpbuf_snprintf (SIZE_MAX, "%s.luidgen", argv[i]);
+          FILE* out = fopen (outname, "wx");
+          if (!out)
+            {
+              fprintf (stderr, "Failed to open file %s for writing: %s\n", outname, strerror (errno));
+              fclose (in);
+              continue;
+            }
+
+          char buf[4096];
+          char luidbuf[67];
+
+          printf ("Luidgen %s ", argv[i]); fflush (stdout);
+
+          while (fgets (buf, 4096, in))
+            {
+              char* pos;
+              while ((pos = strstr(buf, "LUIDGEN")))
+                {
+                  memmove (pos+66, pos+7, strlen (pos+7)+1);
+                  lumiera_uid_gen (&luid);
+                  sprintf (luidbuf, "\""LUMIERA_UID_FMT"\"", LUMIERA_UID_ELEMENTS(luid));
+                  memcpy (pos, luidbuf, 66);
+                  putchar ('.'); fflush (stdout);
+                }
+              fputs (buf, out);
+            }
+
+          fclose (out);
+          fclose (in);
+
+          char* backup = lumiera_tmpbuf_snprintf (SIZE_MAX, "%s~", argv[i]);
+          unlink (backup);
+ 
+          if (!!rename (argv[i], backup))
+            {
+              fprintf (stderr, "Failed to create backupfile %s: %s\n", backup, strerror (errno));
+              continue;
+            }
+
+          if (!!rename (outname, argv[i]))
+            {
+              fprintf (stderr, "Renaming %s to %s failed: %s\n", outname, argv[i], strerror (errno));
+              rename (backup, argv[i]);
+              continue;
+            }
+
+          printf (" done\n");
+        }
+    }
 
   return 0;
 }
