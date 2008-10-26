@@ -48,11 +48,6 @@ test_luid_SOURCES = $(tests_srcdir)/library/test-luid.c
 test_luid_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 test_luid_LDADD = liblumiera.a $(NOBUGMT_LUMIERA_LIBS) -lm
 
-check_PROGRAMS += test-interfaces
-test_interfaces_SOURCES = $(tests_srcdir)/backend/test-interfaces.c
-test_interfaces_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-test_interfaces_LDADD = liblumibackend.a liblumiera.a $(NOBUGMT_LUMIERA_LIBS) -lm
-
 check_PROGRAMS += test-filedescriptors
 test_filedescriptors_SOURCES = $(tests_srcdir)/backend/test-filedescriptors.c
 test_filedescriptors_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
@@ -67,5 +62,16 @@ check_PROGRAMS += test-config
 test_config_SOURCES = $(tests_srcdir)/backend/test-config.c
 test_config_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
 test_config_LDADD = liblumibackend.a liblumiera.a $(NOBUGMT_LUMIERA_LIBS) -lm
+
+check_LTLIBRARIES += examplepluginc.la
+examplepluginc_la_SOURCES = $(tests_srcdir)/backend/example_plugin.c
+examplepluginc_la_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+examplepluginc_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/null
+
+check_PROGRAMS += test-interfaces
+test_interfaces_SOURCES = $(tests_srcdir)/backend/test-interfaces.c
+test_interfaces_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
+test_interfaces_LDADD = liblumibackend.a liblumiera.a $(NOBUGMT_LUMIERA_LIBS) -lm
+test_interfaces_DEPENDENCIES = examplepluginc.la
 
 TESTS = $(tests_srcdir)/test.sh
