@@ -26,6 +26,7 @@
 #include "common/util.hpp"
 
 #include "lib/scopedholder.hpp"
+#include "testdummy.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <iostream>
@@ -40,39 +41,9 @@ namespace lib {
     
     using std::map;
     using std::cout;
-    
-    namespace { // yet another test dummy
       
-      long checksum = 0;
-      bool magic = false;
-      
-      class Dummy 
-        : boost::noncopyable
-        {
-          int val_;
-          
-        public:
-          Dummy ()
-            : val_(1 + (rand() % 100000000))
-            {
-              checksum += val_;
-              if (magic)
-                throw val_;
-            }
-          
-          ~Dummy()
-            {
-              checksum -= val_;
-            }
-          
-          long add (int i)  { return val_+i; }
-        };
-      
-      
-      typedef ScopedHolder<Dummy>    HolderD;
-      typedef ScopedPtrHolder<Dummy> PtrHolderD;
-      
-    }
+    typedef ScopedHolder<Dummy>    HolderD;
+    typedef ScopedPtrHolder<Dummy> PtrHolderD;
     
     
     /**********************************************************************************

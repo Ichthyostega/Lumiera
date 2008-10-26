@@ -39,7 +39,15 @@
  ** ScopedHolder implements a similar concept for in-place storage of
  ** noncopyable objects within STL containers.
  ** 
+ ** While the added copy operations (secured with the "empty" requirement)
+ ** are enough to use those holders within fixed sized STL containers,
+ ** supporting dynamic growth (like in std::vector#resize() ) additionally
+ ** requires a facility to transfer the lifecycle management control between
+ ** holder instances. This is the purpose of the \c transfer_control
+ ** friend function.  
+ ** 
  ** @see scopedholdertest.cpp
+ ** @see scopedholdertransfer.hpp use in std::vector
  ** @see AllocationCluster usage example
  */
 
@@ -69,6 +77,13 @@ namespace lib {
     {
       typedef boost::scoped_ptr<B> _Parent;
       
+      static B* must_be_null (_Parent const& ptr)
+      {
+        if (ptr)
+          throw lumiera::error::Logic("ScopedPtrHolder protocol violation: "
+                                      "attempt to copy from non-null.");
+        return 0;
+      }
       
     public:
       ScopedPtrHolder ()
@@ -97,14 +112,13 @@ namespace lib {
           return *this;
         }
       
-      
-    private:
-      static B* must_be_null (_Parent const& ptr)
+      friend void
+      transfer_control (ScopedPtrHolder& from, ScopedPtrHolder& to)
       {
-        if (ptr)
-          throw lumiera::error::Logic("ScopedPtrHolder protocol violation: "
-                                      "attempt to copy from non-null.");
-        return 0;
+        if (!from) return;
+        TRACE (test, "transfer_control<ScopedPtrHolder>... from=%x to=%x",&from, &to);
+        must_be_null (to);
+        to.swap(from);
       }
     };
   
@@ -133,10 +147,21 @@ namespace lib {
       typedef ScopedHolder<TY> _ThisType;
       
       
+      static char must_be_empty (_ThisType const& ref)
+      {
+        if (ref)
+          throw lumiera::error::Logic("ScopedHolder protocol violation: "
+                                      "copy operation after having invoked create().");
+        return 0;
+      }
+      
     public:
       ScopedHolder()
         : created_(0)
         { }
+      
+      ~ScopedHolder() { clear(); }
+      
       
       TY& 
       create ()
@@ -147,7 +172,8 @@ namespace lib {
           return *obj;
         }
       
-      ~ScopedHolder()
+      void
+      clear ()
         {
           if (created_)
             get()->~TY();
@@ -198,16 +224,28 @@ namespace lib {
       bool operator! ()  const { return !created_;      }
       
       
-    private:
-      static char must_be_empty (_ThisType const& ref)
+      friend void
+      transfer_control (ScopedHolder& from, ScopedHolder& to)
       {
-        if (ref)
-          throw lumiera::error::Logic("ScopedHolder protocol violation: "
-                                      "copy operation after having invoked create().");
-        return 0;
+        if (!from) return;
+        TRACE (test, "transfer_control<ScopedHolder>... from=%x to=%x",&from, &to);
+        must_be_empty (to);
+        to.create();
+        try
+          {
+            transfer_control(*from,*to);  // note: assumed to have no side-effect in case it throws
+            from.clear();
+            return;
+          }
+        catch(...)
+          {
+            to.clear();
+            WARN (test, "transfer_control operation aborted.");
+            throw;
+          }
       }
     };
-  
+
   
   
   
