@@ -291,17 +291,15 @@ queryfunc (void)                                \
  * lumiera uuid generator tool (to be written) over the source file to generate luid's automatically
  * @param ... list of LUMIERA_INTERFACE_DEFINE() for all interfaces this plugin provides.
  */
-#define LUMIERA_PLUGIN(descriptor, acquire, release, luid, ...)                                 \
+#define LUMIERA_PLUGIN(acquire, release, luid, ...)                                             \
 LUMIERA_EXPORT(plugin_interfaces, __VA_ARGS__)                                                  \
-LUMIERA_INTERFACE_DEFINE (lumieraorg_plugin, 0,                                                 \
-                          lumieraorg_plugin_0,                                                  \
-                          NULL,                                                                 \
-                          NULL,                                                                 \
-                          NULL,                                                                 \
-                          LUMIERA_INTERFACE_MAP (plugin_interfaces, plugin_interfaces, luid)    \
-                          )
-
-
+LUMIERA_INTERFACE_INSTANCE (lumieraorg_plugin, 0,                                               \
+                            lumieraorg_plugin,                                                  \
+                            NULL,                                                               \
+                            acquire,                                                            \
+                            release,                                                            \
+                            LUMIERA_INTERFACE_MAP (plugin_interfaces, luid, plugin_interfaces)  \
+                            );
 
 /**
  * create a handle for a interface (WIP)
@@ -371,6 +369,15 @@ struct lumiera_interface_struct
   lumiera_interfaceslot functions[];
 #endif
 };
+
+
+/**
+ * Plugin interface
+ */
+LUMIERA_INTERFACE_DECLARE (lumieraorg_plugin, 0,
+                           LUMIERA_INTERFACE_SLOT (LumieraInterface*, plugin_interfaces, (void)),
+);
+
 
 /*
   API to handle interfaces
