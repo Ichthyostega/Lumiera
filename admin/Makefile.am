@@ -24,5 +24,5 @@ vgsuppression_LDADD = liblumiera.a $(NOBUGMT_LUMIERA_LIBS) -ldl
 
 noinst_PROGRAMS += rsvg-convert
 rsvg_convert_SOURCES = $(admin_srcdir)/rsvg-convert.c
-rsvg_convert_CPPFLAGS = $(AM_CPPFLAGS) $(GTK_LUMIERA_CFLAGS) -std=gnu99 -Wall -Werror
+rsvg_convert_CPPFLAGS = $(AM_CPPFLAGS) $(LUMIERA_GUI_CFLAGS) -std=gnu99 -Wall -Werror
 rsvg_convert_LDADD = -lcairo -lglib-2.0 -lgthread-2.0 -lrsvg-2
