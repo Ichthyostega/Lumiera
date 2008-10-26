@@ -161,7 +161,7 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
   workspaceWindow(workspace_window),
   is_updating_action_state(false)
 {
-  workspace_window.signal_show ().connect_notify(mem_fun(this, &Actions::update_action_state));
+  workspace_window.signal_show ().connect_notify(sigc::mem_fun(this, &Actions::update_action_state));
 
   //----- Create the Action Group -----//
   actionGroup = ActionGroup::create();
