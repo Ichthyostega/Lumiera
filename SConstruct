@@ -102,7 +102,7 @@ def appendVal(env,var,targetVar,val=None):
 def handleNoBugSwitches(env):
     """ set the build level for NoBug. 
         Release builds imply no DEBUG
-        wheras ALPHA and BETA require DEBUG
+        whereas ALPHA and BETA require DEBUG
     """
     level = env['BUILDLEVEL']
     if level in ['ALPHA', 'BETA']:
@@ -128,6 +128,8 @@ def defineCmdlineOptions():
                     allowed_values=('ALPHA', 'BETA', 'RELEASE'))
         ,BoolOption('DEBUG', 'Build with debugging information and no optimizations', False)
         ,BoolOption('OPTIMIZE', 'Build with strong optimization (-O3)', False)
+        ,BoolOption('VALGRIND', 'Run Testsuite under valgrind control', True)
+        ,('TESTSUITES', 'Run only Testsuites matching the given pattern', '')
 #       ,BoolOption('OPENGL', 'Include support for OpenGL preview rendering', False)
 #       ,EnumOption('DIST_TARGET', 'Build target architecture', 'auto', 
 #                   allowed_values=('auto', 'i386', 'i686', 'x86_64' ), ignorecase=2)
