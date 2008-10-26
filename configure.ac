@@ -24,7 +24,11 @@ AC_COPYRIGHT([
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 ])
 
+#
+# Global configuration
+#
 AC_GNU_SOURCE
+AC_DISABLE_STATIC
 
 #
 # Required programs
