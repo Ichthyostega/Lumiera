@@ -82,11 +82,11 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                                                       const char*, (LumieraInterface iface),
                                                       {return "LumieraTest";}
                                                       ),
-                            LUMIERA_INTERFACE_INLINE (brief, LUIDGEN,
+                            LUMIERA_INTERFACE_INLINE (brief, "\241\337\035\172\323\377\355\036\171\326\323\163\177\242\364\172",
                                                       const char*, (LumieraInterface iface),
                                                       {return "Lumiera Test suite examples";}
                                                       ),
-                            LUMIERA_INTERFACE_INLINE (homepage, LUIDGEN,
+                            LUMIERA_INTERFACE_INLINE (homepage, "\030\374\031\152\024\167\154\346\303\372\177\353\304\306\275\247",
                                                       const char*, (LumieraInterface iface),
                                                       {return "http://www.lumiera.org/develompent.html";}
                                                       ),
@@ -98,7 +98,7 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                                                       const char*, (LumieraInterface iface),
                                                       {return "Christian Thaeter";}
                                                       ),
-                            LUMIERA_INTERFACE_INLINE (email, LUIDGEN,
+                            LUMIERA_INTERFACE_INLINE (email, "\334\272\125\312\140\347\121\020\155\047\226\352\244\141\107\363",
                                                       const char*, (LumieraInterface iface),
                                                       {return "ct@pipapo.org";}
                                                       ),
@@ -130,12 +130,12 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                                                       }
                                                       ),
 
-                            LUMIERA_INTERFACE_INLINE (state, LUIDGEN,
+                            LUMIERA_INTERFACE_INLINE (state, "\364\002\115\170\361\321\301\244\350\322\270\362\010\231\207\334",
                                                       int, (LumieraInterface iface),
                                                       {return LUMIERA_INTERFACE_EXPERIMENTAL;}
                                                       ),
 
-                            LUMIERA_INTERFACE_INLINE (versioncmp, LUIDGEN,
+                            LUMIERA_INTERFACE_INLINE (versioncmp, "\136\037\234\304\100\247\244\342\324\353\072\060\161\053\077\263",
                                                       int, (const char* a, const char* b),
                                                       {return 0;}
                                                       )
