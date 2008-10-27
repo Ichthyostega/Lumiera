@@ -32,6 +32,10 @@
 #include "workspace/workspace-window.hpp"
 #include "model/project.hpp"
 
+extern "C" {
+#include "backend/interface.h"
+}
+
 NOBUG_CPP_DEFINE_FLAG(gui);
 
 using namespace Gtk;

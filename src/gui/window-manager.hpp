@@ -35,7 +35,7 @@ namespace gui {
 /**
  * The centralised manager of all lumiera-gui's windows.
  **/
-class WindowManager
+class WindowManager : private boost::noncopyable
 {
 public:
   /**

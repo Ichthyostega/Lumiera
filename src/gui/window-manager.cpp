@@ -92,7 +92,12 @@ WindowManager::register_stock_items()
   add_stock_icon_set(factory, "panel-viewer", "panel_viewer", _("_Viewer"));
   
   add_stock_icon_set(factory, "tool-arrow", "tool_arrow", _("_Arrow"));
-  add_stock_icon_set(factory, "tool-i-beam", "tool_i_beam", _("_I-Beam"));  
+  add_stock_icon_set(factory, "tool-i-beam", "tool_i_beam", _("_I-Beam"));
+  
+  add_stock_icon_set(factory, "track-disabled", "track_disabled", _("Track Disabled"));
+  add_stock_icon_set(factory, "track-enabled", "track_enabled", _("Track Enabled"));
+  add_stock_icon_set(factory, "track-locked", "track_locked", _("Track Locked"));
+  add_stock_icon_set(factory, "track-unlocked", "track_unlocked", _("Track Unlocked")); 
 
   factory->add_default(); //Add factory to list of factories.
 }

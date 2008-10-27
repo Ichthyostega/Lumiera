@@ -36,6 +36,8 @@ class TimelineWidget;
 
 namespace timeline {
 
+class Track;
+
 /**
  * Implementation of the timeline body subwidget. This widget is
  * displayed in the centre of the timeline widget, and displays the
@@ -110,6 +112,10 @@ private:
    * @param cr The cairo context to draw into.
    */
   void draw_tracks(Cairo::RefPtr<Cairo::Context> cr);
+  
+  void draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
+    const gui::widgets::timeline::Track *track,
+    const int view_width) const;
   
   /**
    * Draws the selected timeline period.

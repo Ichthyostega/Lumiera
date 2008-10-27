@@ -66,7 +66,7 @@ static inline uint32_t psplay_fast_prng ()
 
 
 PSplay
-psplay_init (PSplay self, psplay_cmp_fn cmp, psplay_key_fn key, psplay_delete_fn delete)
+psplay_init (PSplay self, psplay_cmp_fn cmp, psplay_key_fn key, psplay_delete_fn del)
 {
   NOBUG_INIT_FLAG (psplay);
   TRACE (psplay);
@@ -79,7 +79,7 @@ psplay_init (PSplay self, psplay_cmp_fn cmp, psplay_key_fn key, psplay_delete_fn
       self->found_parent = &self->tree;
       self->cmp = cmp;
       self->key = key;
-      self->delete = delete;
+      self->del = del;
       self->elem_cnt = 0;
       self->log2 = 0;
     }
@@ -88,12 +88,12 @@ psplay_init (PSplay self, psplay_cmp_fn cmp, psplay_key_fn key, psplay_delete_fn
 
 
 PSplay
-psplay_new (psplay_cmp_fn cmp, psplay_key_fn key, psplay_delete_fn delete)
+psplay_new (psplay_cmp_fn cmp, psplay_key_fn key, psplay_delete_fn del)
 {
   PSplay self = malloc (sizeof *self);
   if (self)
     {
-      psplay_init (self , cmp, key, delete);
+      psplay_init (self , cmp, key, del);
     }
   return self;
 }
@@ -107,8 +107,8 @@ psplay_destroy (PSplay self)
   if (self) while (self->tree)
     {
       PSplaynode n = psplay_remove (self, self->tree);
-      if (self->delete)
-        self->delete (n);
+      if (self->del)
+        self->del (n);
     }
   return self;
 }
@@ -400,7 +400,7 @@ void
 psplay_delete_node (PSplay self, PSplaynode node)
 {
   if (node)
-    self->delete (psplay_remove (self, node));
+    self->del (psplay_remove (self, node));
 }
 
 
@@ -428,8 +428,8 @@ psplay_handle (PSplay self, PSplaynode node, psplay_delete_fn res)
   else if (res == PSPLAY_REMOVE)
     {
       psplay_remove (self, node);
-      if (self->delete)
-        self->delete (node);
+      if (self->del)
+        self->del (node);
     }
   else
     {

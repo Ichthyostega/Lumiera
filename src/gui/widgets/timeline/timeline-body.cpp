@@ -147,11 +147,8 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
   Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
 
   REQUIRE(cr);
-
-  // Translate the view by the scroll distance
-  cr->translate(0, -get_vertical_offset());
-
-  // Draw the view
+  
+  //----- Draw the view -----//
   draw_tracks(cr);
   draw_selection(cr);
   draw_playback_point(cr);
@@ -272,30 +269,50 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
   Cairo::Matrix view_matrix;
   cr->get_matrix(view_matrix);
   
+  // Translate the view by the scroll distance
+  cr->translate(0, -get_vertical_offset());
+  
   // Interate drawing each track
   BOOST_FOREACH( Track* track, timelineWidget->tracks )
     {
       ASSERT(track != NULL);
-
-      const int height = track->get_height();
-      ASSERT(height >= 0);
-    
-      // Draw the track background
-      cr->rectangle(0, 0, allocation.get_width(), height);
-      gdk_cairo_set_source_color(cr->cobj(), &backgroundColour);
-      cr->fill();
-    
-      // Render the track
-      cr->save();
-      track->draw_track(cr);
-      cr->restore();
-      
-      // Shift for the next track
-      cr->translate(0, height + TimelineWidget::TrackPadding);
+      draw_track_recursive(cr, track, allocation.get_width());
     }
   
   // Restore the view matrix  
   cr->set_matrix(view_matrix);
+}
+
+void
+TimelineBody::draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
+  const Track *track, const int view_width) const
+{
+  REQUIRE(cr);
+  REQUIRE(track != NULL);
+  
+  const int height = track->get_height();
+  ASSERT(height >= 0);
+
+  // Draw the track background
+  cr->rectangle(0, 0, view_width,
+    height - TimelineWidget::TrackPadding);
+  GdkColor colour = backgroundColour;   // Needed to preserve const qualifier
+  gdk_cairo_set_source_color(cr->cobj(), &colour);
+  cr->fill();
+
+  // Render the track
+  cr->save();
+  track->draw_track(cr);
+  cr->restore();
+  
+  // Shift for the next track
+  cr->translate(0, height);
+  
+  BOOST_FOREACH( Track* child, track->get_child_tracks() )
+    {
+      ASSERT(track != NULL);
+      draw_track_recursive(cr, child, view_width);
+    }
 }
 
 void

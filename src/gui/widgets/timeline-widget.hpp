@@ -27,7 +27,7 @@
 #define TIMELINE_WIDGET_HPP
 
 #include "../gtk-lumiera.hpp"
-#include "timeline/header-container.hpp"
+#include "timeline/timeline-header-container.hpp"
 #include "timeline/timeline-body.hpp"
 #include "timeline/timeline-ruler.hpp"
 #include "timeline/timeline-tool.hpp"
@@ -202,6 +202,8 @@ private:
   
   void update_scroll();
   
+  static int measure_branch_height(timeline::Track* track);
+  
   int get_y_scroll_offset() const;
   
   bool on_motion_in_body_notify_event(GdkEventMotion *event);
@@ -224,11 +226,14 @@ protected:
   int totalHeight;
 
   timeline::Track video1;
+  timeline::Track video1a;
+  timeline::Track video1b;
+  timeline::Track video1ba;
   timeline::Track video2;
   std::vector<timeline::Track*> tracks;
 
   // Child Widgets
-  timeline::HeaderContainer *headerContainer;
+  timeline::TimelineHeaderContainer *headerContainer;
   timeline::TimelineBody *body;
   timeline::TimelineRuler *ruler;
 
@@ -239,8 +244,7 @@ protected:
   // Signals
   sigc::signal<void> viewChangedSignal;
   sigc::signal<void, gavl_time_t> mouseHoverSignal;
-  sigc::signal<void>
-    playbackPeriodDragReleasedSignal;
+  sigc::signal<void> playbackPeriodDragReleasedSignal;
    
   /* ===== Constants ===== */
 public:
@@ -257,7 +261,7 @@ protected:
   static const double ZoomIncrement;
 
   friend class timeline::TimelineBody;
-  friend class timeline::HeaderContainer;
+  friend class timeline::TimelineHeaderContainer;
   friend class timeline::TimelineRuler;
   friend class timeline::Tool;
   friend class timeline::ArrowTool;

@@ -1,5 +1,6 @@
 /*
-  header-container.hpp  -  Declaration of the header container widget
+  timeline-header-container.cpp  -  Declaration of the timeline
+  header container widget
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,7 +20,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file header-container.hpp
+/** @file timeline-header-container.hpp
  ** This file contains the definition of the header container
  ** widget
  */
@@ -40,11 +41,11 @@ namespace timeline {
 class Track;
 
 /**
- * A helper class for the TimelineWidget. HeaderContainer is
- * container widget for all the left-hand-side header widgets
+ * A helper class for the TimelineWidget. TimelineHeaderContainer
+ * is container widget for all the left-hand-side header widgets
  * associated with timeline tracks.
  */
-class HeaderContainer : public Gtk::Container
+class TimelineHeaderContainer : public Gtk::Container
 {
 public:
   /**
@@ -52,7 +53,7 @@ public:
    *
    * @param[in] timeline_widget A pointer to the owner timeline widget
    */
-  HeaderContainer(gui::widgets::TimelineWidget* timeline_widget);
+  TimelineHeaderContainer(gui::widgets::TimelineWidget* timeline_widget);
   
   /**
    * Attaches the header all the header widgets of root
@@ -118,6 +119,21 @@ private:
    */
   void layout_headers();
   
+  void layout_headers_recursive(Track *track,
+    const int y_scroll_offset, int &offset,
+    const int header_width, int depth) const;
+  
+  /**
+   * Recursively sets all the track header widgets to be child widgets
+   * of this widget.
+   **/
+  void set_parent_recursive(Track *track);
+  
+  static void size_request_recursive(Track *track);
+  
+  static void forall_vfunc_recursive(Track* track,
+    GtkCallback callback, gpointer callback_data);
+  
   /**
    * Registers all the styles that this class will respond to.
    */
@@ -142,24 +158,6 @@ private:
    * widgets are scrolled.
    */
   Glib::RefPtr<Gdk::Window> gdkWindow;
-  
-  //----- Header List -----//
-
-  /**
-   * A structure to represent a header widget and it's
-   * associated track
-   */
-  struct RootHeader
-  {
-    Gtk::Widget *widget;
-    Track *track;
-  };
-  
-  /**
-   * Contains a list of the root currently present on
-   * the timeline view
-   */
-  std::vector< RootHeader > rootHeaders;
 
   //----- Style Values -----//
   

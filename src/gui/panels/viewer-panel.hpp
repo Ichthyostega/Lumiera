@@ -34,16 +34,24 @@
 namespace gui {
 namespace panels {
 
-  class ViewerPanel : public Panel
-    {
-    public:
-      ViewerPanel();
+/**
+ * A panel to display the video output.
+ **/
+class ViewerPanel : public Panel
+{
+public:
+  /**
+   * Contructor.
+   **/
+  ViewerPanel();
 
-    protected:
+protected:
 
-      gui::widgets::VideoDisplayWidget display;
-      Gtk::Toolbar toolBar;
-    };
+  /**
+   * The video display widget, which will display the video.
+   **/
+  gui::widgets::VideoDisplayWidget display;
+};
 
 }   // namespace panels
 }   // namespace gui
