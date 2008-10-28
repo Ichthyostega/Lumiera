@@ -148,7 +148,6 @@ namespace lib {
    *  is managed by a separate instance of the low-level memory manager.
    */
   AllocationCluster::AllocationCluster()
-//    : configParam_  (new Configmap),
   {
     TRACE (buildermem, "new AllocationCluster");
   }
@@ -203,7 +202,7 @@ namespace lib {
         Thread::Lock<AllocationCluster> guard   SIDEEFFECT;   /////TODO: decide tradeoff: lock just the instance, or lock the AllocationCluster class?
         
         if (slot > typeHandlers_.size())
-          typeHandlers_.resize(slot); /////////////////////////////TODO: still a fundamental problem buried here with the way stl::vector grows...
+          typeHandlers_.resize(slot);
         if (!handler(slot))
           handler(slot).reset (new MemoryManager (type));
         

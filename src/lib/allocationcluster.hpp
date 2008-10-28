@@ -55,6 +55,7 @@
 #include "common/error.hpp"
 //#include "common/util.hpp"
 #include "lib/scopedholder.hpp"
+#include "lib/scopedholdertransfer.hpp"
 
 
 
@@ -75,11 +76,11 @@ namespace lib {
    *          aren't used after shutting down a given AllocationCluster.
    */
   class AllocationCluster
+    : boost::noncopyable
     {
       
     public:
       AllocationCluster ();
-      AllocationCluster (const AllocationCluster&);
       ~AllocationCluster ()  throw();
       
       template<class TY>
@@ -157,7 +158,8 @@ namespace lib {
       
       
       typedef ScopedPtrHolder<MemoryManager> HMemManager;
-      typedef std::vector<HMemManager> ManagerTable;
+      typedef Allocator_TransferNoncopyable<HMemManager> Allo; 
+      typedef std::vector<HMemManager,Allo> ManagerTable;
       ManagerTable typeHandlers_;
       
       HMemManager& 
@@ -208,29 +210,19 @@ namespace lib {
       static size_t id_; ///< table pos of the memory manager in charge for type TY
       
       static size_t &
-      get()                        //ManagerTable& handlers)
+      get()
         {
-          //ENSURE (id_ < handlers.size() || 1 <= handlers.size()); // 0th Element used as "undefined" marker
-          
-          return id_;                   //handlers[id_<handlers.size()? id_ : 0 ];
+          return id_; 
         }
       
       static TypeInfo
-      setup()                       //  ManagerTable& handlers)
+      setup()
         {
           Thread::Lock<AllocationCluster> guard   SIDEEFFECT;
           if (!id_)
             id_= ++maxTypeIDs;
-//        if (id_ >= handlers.size())
-//          for (size_t idx=handlers.size(); idx<id_; ++idx)
-//            handlers.push_back(ScopedPtrHolder<MemoryManager>());     ////////////////////////////////////////TODO  calls ~MemoryManager() but shouldn't
-//        if (!handlers[id_])
-//          {
-              TY* type_hint(0);
-              TypeInfo info (type_hint);
-              return info;
-//            handlers[id_].reset (setupMemoryManager (info));          ////////////////////////////////////////TODO  calls ~MemoryManager() but shouldn't
-//          }
+          
+          return TypeInfo ((TY*) 0 );
         }
       
       static void
@@ -255,9 +247,6 @@ namespace lib {
   inline void*
   AllocationCluster::allocation()
   {
-//  if (!TypeSlot<TY>::get (typeHandlers_))
-//    TypeSlot<TY>::setup (typeHandlers_);
-//  return initiateAlloc (TypeSlot<TY>::get (typeHandlers_));
     void *mem = initiateAlloc (TypeSlot<TY>::get());
     if (!mem)
       mem = initiateAlloc (TypeSlot<TY>::setup(),TypeSlot<TY>::get());
@@ -269,8 +258,6 @@ namespace lib {
   inline TY&
   AllocationCluster::commit (TY* obj)
   {
-//  PMemManager & typeHandler (TypeSlot<TY>::get (typeHandlers_));
-//  REQUIRE (typeHandler);
     REQUIRE (obj);
     finishAlloc (TypeSlot<TY>::get(), obj);
     return *obj;
