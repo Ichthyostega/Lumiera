@@ -215,7 +215,6 @@ def configurePlatform(env):
         if not conf.CheckLibWithHeader('boost_regex-mt','boost/regex.hpp','C++'):
             problems.append('We need the boost regular expression lib (incl. binary lib for linking).')
     
-#    if not conf.CheckLibWithHeader('gavl', ['gavlconfig.h', 'gavl/gavl.h'], 'C'):
     
     if not conf.CheckPkgConfig('gavl', 1.0):
         problems.append('Did not find Gmerlin Audio Video Lib [http://gmerlin.sourceforge.net/gavl.html].')
@@ -232,13 +231,16 @@ def configurePlatform(env):
         problems.append('Unable to configure Cairo--, exiting.')
     
     if not conf.CheckPkgConfig('gdl-1.0', '0.6.1'):
-        problems.append('Unable to configure the GNOME DevTool Library, exiting.')
+        problems.append('Unable to configure the GNOME DevTool Library.')
     
     if not conf.CheckPkgConfig('librsvg-2.0', '2.18.1'):
         problems.append('Need rsvg Library for rendering icons.')
         
-    if not conf.CheckPkgConfig('xv'): problems.append('Need lib xv')
-#   if not conf.CheckPkgConfig('xext'): Exit(1)
+    if not conf.CheckCHeader(['X11/Xutil.h', 'X11/Xlib.h'],'<>'):
+        problems.append('Xlib.h and Xutil.h required. Please install libx11-dev.')
+    
+    if not conf.CheckPkgConfig('xv')  : problems.append('Need libXv...')
+    if not conf.CheckPkgConfig('xext'): problems.append('Need libXext.')
 #   if not conf.CheckPkgConfig('sm'): Exit(1)
 #    
 # obviously not needed?
