@@ -52,15 +52,12 @@ def treatPluginTestcase(env):
     prfx = path.join(tree,'example_plugin')
     oC   = env.SharedObject(prfx,        prfx+'.c')
     oCPP = env.SharedObject(prfx+'_cpp', prfx+'.cpp')
-    testplugin = ( env.SharedLibrary('#$BINDIR/.libs/example_plugin',     oC,   SHLIBPREFIX='')
-                 + env.SharedLibrary('#$BINDIR/.libs/example_plugin_cpp', oCPP, SHLIBPREFIX='')
+    testplugin = ( env.SharedLibrary('#$BINDIR/.libs/examplepluginc',      oC, SHLIBPREFIX='')
+
+# doesn't compile yet...
+#                 + env.SharedLibrary('#$BINDIR/.libs/exampleplugincpp', oCPP, SHLIBPREFIX='')
                  )
-#   testExe = env.Program('#$BINDIR/test-plugin', ['plugin/plugin_main.c'] + core)
-#   env.Depends(testExe, testplugin)
-#   return testExe
-        
-        # 10/2008 example_plugin moved to backend directory.
-        #         ...we should try to find some convention here
+    
     return testplugin
         #-- it depends (at the moment) on a specific isolated test-plugin,
         #   which is not integrated in the "normal procedure" for building Plugins
@@ -78,7 +75,7 @@ specials = ['plugin','library','backend']
 
 
 artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in moduledirs if not dir in specials] 
-#                             + treatPluginTestcase(env)
+                              + treatPluginTestcase(env)
                               + testCollection(env, 'library')
                               + testCollection(env, 'backend')
                               ) 
