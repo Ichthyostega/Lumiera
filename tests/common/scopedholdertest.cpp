@@ -120,7 +120,7 @@ namespace lib {
             {
               HO holder;
               
-              magic = true;
+              throw_in_ctor = true;
               try
                 {
                   create_contained_object (holder);
@@ -134,7 +134,7 @@ namespace lib {
                 }
               ASSERT (!holder); /* because the exception happens in ctor
                                    object doesn't count as "created" */
-              magic = false;
+              throw_in_ctor = false;
             }
             ASSERT (0==checksum);
           }

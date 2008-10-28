@@ -31,7 +31,7 @@ namespace lib {
     namespace { // yet another test dummy
       
       long checksum = 0;
-      bool magic = false;
+      bool throw_in_ctor = false;
       
       class Dummy 
         : boost::noncopyable
@@ -43,7 +43,7 @@ namespace lib {
             : val_(1 + (rand() % 100000000))
             {
               checksum += val_;
-              if (magic)
+              if (throw_in_ctor)
                 throw val_;
             }
           

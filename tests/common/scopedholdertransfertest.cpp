@@ -39,22 +39,63 @@ namespace lib {
     using ::Test;
     using util::isnil;
     
-    using std::map;
+    using std::vector;
     using std::cout;
     
+    namespace { // extending the Dummy for our special purpose....
       
-    typedef ScopedHolder<Dummy>    HolderD;
-    typedef ScopedPtrHolder<Dummy> PtrHolderD;
+      bool throw_in_transfer = false;
+    
+      class FixedDummy
+        : public Dummy
+        {
+        public:
+          FixedDummy()
+            {
+              TRACE  (test, "CTOR      FixedDummy() --> this=%x val=%d", this, getVal());
+            }
+          
+          ~FixedDummy()
+            {
+              TRACE  (test, "DTOR     ~FixedDummy()  this=%x val=%d", this, getVal());
+            }
+          
+          friend void
+          transfer_control (FixedDummy& from, FixedDummy& to)
+          {
+            TRACE  (test, "TRANSFER  target=%x   <-- source=%x  (%d,%d)", &to,&from, to.getVal(),from.getVal());
+            
+            if (throw_in_transfer)
+              throw to.getVal();
+            
+            to.setVal (from.getVal());
+            from.setVal(0);
+          }
+          
+        };
+      
+      
+      typedef ScopedHolder<FixedDummy>    HolderD;
+      typedef ScopedPtrHolder<FixedDummy> PtrHolderD;
+      
+      template<class HOL>
+      struct Table
+        {
+          typedef Allocator_TransferNoncopyable<HOL> Allo; 
+          typedef typename std::vector<HOL,Allo> Type;
+          
+        };
+    }
+      
       
     
     
     /**********************************************************************************
-     *  @test ScopedHolder and ScopedPtrHolder are initially empty and copyable. 
-     *        After taking ownership, they prohibit copy operations, manage the
-     *        lifecycle of the contained object and provide smart-ptr like access.
-     *        A series of identical tests is conducted both with the ScopedPtrHolder
-     *        (the contained objects are heap allocated but managed by the holder)
-     *        and with the ScopedHolder (objects placed inline)
+     *  @test growing a vector containing noncopyable objects wrapped into ScopedHolder
+     *        instances. This requires the use of a custom allocator, invoking a 
+     *        \c transfer_control() function to be provided for the concrete
+     *        noncopyable class type, being invoked when the vector
+     *        needs to reallocate.
      */
     class ScopedHolderTransfer_test : public Test
       {
@@ -74,8 +115,8 @@ namespace lib {
             checkErrorHandling<PtrHolderD>();
           }
         
-        void create_contained_object (HolderD&    holder) { holder.create();           }
-        void create_contained_object (PtrHolderD& holder) { holder.reset(new Dummy()); }
+        void create_contained_object (HolderD&    holder) { holder.create();                }
+        void create_contained_object (PtrHolderD& holder) { holder.reset(new FixedDummy()); }
         
         
         template<class HO>
@@ -84,30 +125,23 @@ namespace lib {
           {
             ASSERT (0==checksum);
             {
-              UNIMPLEMENTED ("create constant sized vector holding noncopyables");
-              HO holder;
-              ASSERT (!holder);
+              typedef typename Table<HO>::Type Vect;
+              
+              Vect table(50);
               ASSERT (0==checksum);
               
-              create_contained_object (holder);
-              ASSERT (holder);
-              ASSERT (false!=holder);
-              ASSERT (holder!=false);
+              for (uint i=0; i<10; ++i)
+                create_contained_object (table[i]);
               
-              ASSERT (0!=checksum);
-              ASSERT ( &(*holder));
-              ASSERT (holder->add(2) == checksum+2);
+              ASSERT (0 < checksum);
+              ASSERT ( table[9]);
+              ASSERT (!table[10]);
               
-              Dummy *rawP = holder.get();
+              Dummy *rawP = table[5].get();
               ASSERT (rawP);
-              ASSERT (holder);
-              ASSERT (rawP == &(*holder));
-              ASSERT (rawP->add(-5) == holder->add(-5));
-              
-              TRACE (test, "holder at %x", &holder);
-              TRACE (test, "object at %x", holder.get() );
-              TRACE (test, "size(object) = %d", sizeof(*holder));
-              TRACE (test, "size(holder) = %d", sizeof(holder));
+              ASSERT (table[5]);
+              ASSERT (rawP == &(*table[5]));
+              ASSERT (rawP->add(-555) == table[5]->add(-555));
             }
             ASSERT (0==checksum);
           }
@@ -119,7 +153,25 @@ namespace lib {
           {
             ASSERT (0==checksum);
             {
-              UNIMPLEMENTED ("check growing a vector holding noncopyables");
+              typedef typename Table<HO>::Type Vect;
+              
+              Vect table;
+              table.reserve(2);
+              ASSERT (0==checksum);
+              
+              cout << "\n..install one element at index[0]\n";
+              table.push_back(HO());
+              ASSERT (0==checksum);
+              
+              create_contained_object (table[0]); // switches into "managed" state
+              ASSERT (0 < checksum);
+              int theSum = checksum;
+              
+              cout << "\n..*** resize table to 16 elements\n";
+              for (uint i=0; i<15; ++i)
+                table.push_back(HO());
+              
+              ASSERT (theSum==checksum);
             }
             ASSERT (0==checksum);
           }
@@ -129,26 +181,48 @@ namespace lib {
         void
         checkErrorHandling()
           {
-            UNIMPLEMENTED ("throw an error while growing");
             ASSERT (0==checksum);
             {
-              HO holder;
+              typedef typename Table<HO>::Type Vect;
               
-              magic = true;
+              Vect table(5);
+              table.reserve(5);
+              ASSERT (0==checksum);
+              
+              create_contained_object (table[2]);
+              create_contained_object (table[4]);
+              ASSERT (0 < checksum);
+              int theSum = checksum;
+              
+              cout << "\n.throw some exceptions...\n";
+              throw_in_ctor = true;
               try
                 {
-                  create_contained_object (holder);
+                  create_contained_object (table[3]);
                   NOTREACHED ;
                 }
               catch (int val)
                 {
-                  ASSERT (0!=checksum);
+                  ASSERT (theSum < checksum);
                   checksum -= val;
-                  ASSERT (0==checksum);
+                  ASSERT (theSum==checksum);
                 }
-              ASSERT (!holder); /* because the exception happens in ctor
-                                   object doesn't count as "created" */
-              magic = false;
+              ASSERT ( table[2]); 
+              ASSERT (!table[3]); // not created because of exception 
+              ASSERT ( table[4]); 
+              
+              throw_in_ctor = false;
+              throw_in_transfer=true;  // can do this only when using ScopedHolder
+              try
+                {
+                  table.resize(10);
+                }
+              catch (int val)
+                {
+                  ASSERT ( table.size() < 10);
+                }
+              ASSERT (theSum == checksum);
+              throw_in_transfer=false;
             }
             ASSERT (0==checksum);
           }
