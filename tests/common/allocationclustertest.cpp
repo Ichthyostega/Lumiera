@@ -40,6 +40,8 @@ using ::Test;
 using std::numeric_limits;
 using std::vector;
 
+
+
 namespace lib {
   namespace test {
     
@@ -49,7 +51,8 @@ namespace lib {
       uint NUM_OBJECTS  = 500;
       uint NUM_FAMILIES = 5;
       
-      long checksum = 0;
+      long checksum = 0; // validate proper pairing of ctor/dtor calls
+      bool randomFailures = false;
       
       template<uint i>
       class Dummy
@@ -67,7 +70,7 @@ namespace lib {
               char id = i1 + i2 + i3;
               content[0] = id;
               checksum += id;
-              if (0 == (rand() % 20))
+              if (randomFailures && 0 == (rand() % 20))
                 throw id;
             }
           
@@ -137,6 +140,7 @@ namespace lib {
     }
     
     
+    
     /*************************************************************************
      *  @test verify the proper workings of our custom allocation scheme
      *        managing families of interconnected objects for the segments
@@ -182,6 +186,7 @@ namespace lib {
             // all created objects dtors will be invoked.
           }
         
+        
         void
         checkAllocation()
           {
@@ -194,11 +199,14 @@ namespace lib {
             ASSERT (0==checksum);
           }
         
+        
         void
         checkErrorHandling()
           {
             ASSERT (0==checksum);
             {
+              randomFailures = true;
+              
               AllocationCluster clu;
               for (uint i=0; i<NUM_OBJECTS; ++i)
                 try
@@ -212,14 +220,14 @@ namespace lib {
                     checksum -= id;  // exception thrown from within constructor, 
                   }                 //  thus dtor won't be called. Repair the checksum!
             }
+            randomFailures = false;
             ASSERT (0==checksum);
           }
       };
     
       LAUNCHER (AllocationCluster_test, "unit common");
-
-
-  }// namespace test
     
-} // namespace lib
+    
+  }// namespace test
 
+} // namespace lib

@@ -1,5 +1,5 @@
 /*
-  AllocationCluster  -  allocating and owning a pile of objects 
+  AllocationCluster  -  allocating and owning a pile of objects
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -25,9 +25,8 @@
 #include "common/error.hpp"
 #include "common/util.hpp"
 
-
 using util::isnil;
-//using util::cStr;
+
 
 namespace lib {
   
@@ -47,7 +46,7 @@ namespace lib {
    * the dtor without actually knowing the object's type.
    * 
    * @todo this is a preliminary or pseudo-implementation based on 
-   * a vector of smart pointers,  i.e. actually the objects are heap 
+   * a vector of raw pointers,  i.e. actually the objects are heap 
    * allocated. What actually should happen is for the MemoryManager to
    * allocate raw memory chunk wise, sub partition it and place the objects
    * into this private memory buffer. Further, possibly we could maintain
@@ -76,7 +75,7 @@ namespace lib {
     private:
       void clearStorage();
     };
-
+  
   
   
   void
@@ -98,7 +97,7 @@ namespace lib {
   AllocationCluster::MemoryManager::purge()
   {
     Thread::Lock<MemoryManager> guard   SIDEEFFECT;
-
+    
     REQUIRE (type_.killIt, "we need a deleter function");
     REQUIRE (0 < type_.allocSize, "allocation size unknown");
     REQUIRE (top_ == mem_.size() || (top_+1) == mem_.size());
@@ -116,7 +115,7 @@ namespace lib {
       delete[] mem_[--i];
     mem_.clear();
   }
-
+  
   
   inline void*
   AllocationCluster::MemoryManager::allocate()
@@ -125,10 +124,11 @@ namespace lib {
     
     REQUIRE (0 < type_.allocSize);
     REQUIRE (top_ <= mem_.size());
-
+    
     if (top_==mem_.size())
       mem_.resize(top_+1);
-    if (!mem_[top_])
+    
+    if (!mem_[top_]) // re-use existing allocation, if any
       mem_[top_] = new char[type_.allocSize];
     
     ENSURE (top_ < mem_.size());
@@ -141,7 +141,7 @@ namespace lib {
   AllocationCluster::MemoryManager::commit (void* pendingAlloc)
   {
     Thread::Lock<MemoryManager> guard   SIDEEFFECT;
-
+    
     REQUIRE (pendingAlloc);
     ASSERT (top_ < mem_.size());
     ASSERT (pendingAlloc == mem_[top_], "allocation protocol violated");
@@ -155,8 +155,8 @@ namespace lib {
   
   /** storage for static bookkeeping of type allocation slots */
   size_t AllocationCluster::maxTypeIDs;
-
-
+  
+  
   /** creating a new AllocationCluster prepares a table capable
    *  of holding the individual object families to come. Each of those
    *  is managed by a separate instance of the low-level memory manager.
@@ -224,7 +224,7 @@ namespace lib {
       }
     
     ASSERT (handler(slot));
-    return initiateAlloc(slot); 
+    return initiateAlloc(slot);
   }
   
   

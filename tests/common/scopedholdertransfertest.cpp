@@ -159,7 +159,7 @@ namespace lib {
               table.reserve(2);
               ASSERT (0==checksum);
               
-              cout << "\n..install one element at index[0]\n";
+              cout << ".\n..install one element at index[0]\n";
               table.push_back(HO());
               ASSERT (0==checksum);
               
@@ -167,7 +167,7 @@ namespace lib {
               ASSERT (0 < checksum);
               int theSum = checksum;
               
-              cout << "\n..*** resize table to 16 elements\n";
+              cout << ".\n..*** resize table to 16 elements\n";
               for (uint i=0; i<15; ++i)
                 table.push_back(HO());
               
@@ -194,7 +194,7 @@ namespace lib {
               ASSERT (0 < checksum);
               int theSum = checksum;
               
-              cout << "\n.throw some exceptions...\n";
+              cout << ".\n.throw some exceptions...\n";
               throw_in_ctor = true;
               try
                 {

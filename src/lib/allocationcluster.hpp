@@ -1,5 +1,5 @@
 /*
-  ALLOCATIONCLUSTER.hpp  -  allocating and owning a pile of objects 
+  ALLOCATIONCLUSTER.hpp  -  allocating and owning a pile of objects
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -53,7 +53,6 @@
 
 #include "common/multithread.hpp"
 #include "common/error.hpp"
-//#include "common/util.hpp"
 #include "lib/scopedholder.hpp"
 #include "lib/scopedholdertransfer.hpp"
 
@@ -69,11 +68,14 @@ namespace lib {
    * Each of those contains a initially undetermined (but rather large)
    * number of individual objects, which can be expected to be allocated
    * within a short timespan and which are to be released cleanly on
-   * destruction of the AllocationCluster. There is a service creating
-   * individual objects with arbitrary ctor parameters and it is possible
-   * to control the oder in which the object families are to be discarded.
+   * destruction of the AllocationCluster. We provide a service creating
+   * individual objects with arbitrary ctor parameters.
    * @warning make sure the objects dtors aren't called and object references
    *          aren't used after shutting down a given AllocationCluster.
+   * @todo    implement a facility to control the oder in which
+   *          the object families are to be discarded. Currently
+   *          they are just purged in reverse order defined by
+   *          the first request for allocating a certain type.
    */
   class AllocationCluster
     : boost::noncopyable
@@ -82,6 +84,7 @@ namespace lib {
     public:
       AllocationCluster ();
       ~AllocationCluster ()  throw();
+      
       
       template<class TY>
       TY&
@@ -122,7 +125,7 @@ namespace lib {
           TY* obj = new(allocation<TY>()) TY (p0,p1,p2,p3);
           return commit(obj);
         }
-
+      
       
     private:
       /** initiate an allocation for the given type */
@@ -160,7 +163,9 @@ namespace lib {
       typedef ScopedPtrHolder<MemoryManager> HMemManager;
       typedef Allocator_TransferNoncopyable<HMemManager> Allo; 
       typedef std::vector<HMemManager,Allo> ManagerTable;
-      ManagerTable typeHandlers_;
+      
+      ManagerTable typeHandlers_;  ///< table of active MemoryManager instances 
+      
       
       HMemManager& 
       handler (size_t slot)
@@ -174,7 +179,7 @@ namespace lib {
       void* initiateAlloc (size_t& slot);
       void* initiateAlloc (TypeInfo type, size_t& slot);
       
-      /** enrol the allocation after successful ctor call */ 
+      /** enrol the allocation after successful ctor call */
       void finishAlloc (size_t& slot, void*);
       
     };
@@ -188,7 +193,7 @@ namespace lib {
   struct AllocationCluster::TypeInfo
         {
           size_t allocSize;
-          void (*killIt)(void*);
+          void (*killIt)(void*);  ///< deleter function
           
           template<class TY>
           TypeInfo(TY*)
@@ -203,11 +208,11 @@ namespace lib {
         };
   
   
-
+  
   template<class TY>
   struct AllocationCluster::TypeSlot
     {
-      static size_t id_; ///< table pos of the memory manager in charge for type TY
+      static size_t id_; ///< table pos+1 of the memory manager in charge for type TY
       
       static size_t &
       get()
@@ -241,7 +246,7 @@ namespace lib {
   template<class TY>
   size_t AllocationCluster::TypeSlot<TY>::id_;
   
-
+  
   
   template<class TY>
   inline void*
@@ -253,7 +258,7 @@ namespace lib {
     ENSURE (mem);
     return mem;
   }
-    
+  
   template<class TY>
   inline TY&
   AllocationCluster::commit (TY* obj)
