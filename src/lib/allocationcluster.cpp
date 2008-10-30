@@ -60,7 +60,7 @@ namespace lib {
       typedef std::vector<char*> MemTable;
       TypeInfo type_;
       MemTable mem_;
-      size_t top_;
+      size_t top_;   ///< index of the next slot available for allocation
       
     public:
       MemoryManager(TypeInfo info) : top_(0) { reset(info); }
@@ -72,6 +72,9 @@ namespace lib {
       void* allocate();
       
       void commit (void* pendingAlloc);
+      
+    private:
+      void clearStorage();
     };
 
   
@@ -101,10 +104,19 @@ namespace lib {
     REQUIRE (top_ == mem_.size() || (top_+1) == mem_.size());
     
     while (top_)
-      type_.killIt (&mem_[--top_]);
-    mem_.clear();
+      type_.killIt (mem_[--top_]);
+    clearStorage();
   }// note: unnecessary to kill pending allocations
   
+  
+  inline void
+  AllocationCluster::MemoryManager::clearStorage()
+  {
+    for (size_t i=mem_.size(); 0 < i; )
+      delete[] mem_[--i];
+    mem_.clear();
+  }
+
   
   inline void*
   AllocationCluster::MemoryManager::allocate()
@@ -116,9 +128,11 @@ namespace lib {
 
     if (top_==mem_.size())
       mem_.resize(top_+1);
-    mem_[top_] = new char[type_.allocSize];
+    if (!mem_[top_])
+      mem_[top_] = new char[type_.allocSize];
     
     ENSURE (top_ < mem_.size());
+    ENSURE (mem_[top_]);
     return mem_[top_];
   }
   
@@ -165,7 +179,8 @@ namespace lib {
         
         TRACE (buildermem, "shutting down AllocationCluster");
         for (size_t i = typeHandlers_.size(); 0 < i; --i)
-          handler(i)->purge();
+          if (handler(i))
+            handler(i)->purge();
         
         typeHandlers_.clear();
         

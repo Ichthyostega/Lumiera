@@ -66,9 +66,9 @@ namespace lib {
             {
               char id = i1 + i2 + i3;
               content[0] = id;
+              checksum += id;
               if (0 == (rand() % 20))
                 throw id;
-              checksum += id;
             }
           
           ~Dummy()
@@ -209,8 +209,8 @@ namespace lib {
                   }
                 catch (char id)
                   {
-                    checksum -= id;
-                  }
+                    checksum -= id;  // exception thrown from within constructor, 
+                  }                 //  thus dtor won't be called. Repair the checksum!
             }
             ASSERT (0==checksum);
           }
