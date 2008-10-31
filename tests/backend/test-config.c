@@ -330,7 +330,7 @@ TEST ("wordlist_get_nth")
   if (!lumiera_config_wordlist_set (argv[2], &argv[3]))
     printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
 
-  const char* word = lumiera_config_wordlist_get_nth (argv[2], atoi (argv[4]));
+  const char* word = lumiera_config_wordlist_get_nth (argv[2], atoi (argv[4]), " \t,;");
 
   printf ("'%s'\n", word?word:"NULL");
 
@@ -349,7 +349,7 @@ TEST ("wordlist_find")
   if (!lumiera_config_wordlist_set (argv[2], &argv[3]))
     printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
 
-  int n = lumiera_config_wordlist_find (argv[2], argv[4]);
+  int n = lumiera_config_wordlist_find (argv[2], argv[4], " \t,;");
 
   printf ("'%d'\n", n);
 
@@ -370,7 +370,7 @@ TEST ("wordlist_replace")
   if (!lumiera_config_wordlist_set (argv[2], &argv[3]))
     printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
 
-  const char* wordlist = lumiera_config_wordlist_replace (argv[2], argv[4], *argv[5]?argv[5]:NULL, *argv[6]?argv[6]:NULL);
+  const char* wordlist = lumiera_config_wordlist_replace (argv[2], argv[4], *argv[5]?argv[5]:NULL, *argv[6]?argv[6]:NULL, " \t,;");
 
   if (wordlist)
     printf ("'%s'\n", wordlist);
@@ -393,13 +393,13 @@ TEST ("wordlist_add")
   if (!lumiera_config_wordlist_set (argv[2], &argv[3]))
     printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
 
-  const char* wordlist = lumiera_config_wordlist_add (argv[2], argv[4]);
+  const char* wordlist = lumiera_config_wordlist_add (argv[2], argv[4], " \t,;");
   if (wordlist)
     printf ("'%s'\n", wordlist);
   else
     printf ("%s\n", lumiera_error ());
 
-  wordlist = lumiera_config_wordlist_add (argv[2], argv[5]);
+  wordlist = lumiera_config_wordlist_add (argv[2], argv[5], " \t,;");
   if (wordlist)
     printf ("'%s'\n", wordlist);
   else
