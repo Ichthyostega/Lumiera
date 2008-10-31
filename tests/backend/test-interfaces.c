@@ -298,7 +298,7 @@ TEST ("basic")
 {
   lumiera_interfaceregistry_init ();
 
-  lumiera_interfaceregistry_bulkregister_interfaces (interfaces_defined_here());
+  lumiera_interfaceregistry_bulkregister_interfaces (interfaces_defined_here(), NULL);
 
 
   /* some ugly lowlevel handling tests */
@@ -321,7 +321,7 @@ TEST ("basic")
 TEST ("open_close")
 {
   lumiera_interfaceregistry_init ();
-  lumiera_interfaceregistry_bulkregister_interfaces (interfaces_defined_here());
+  lumiera_interfaceregistry_bulkregister_interfaces (interfaces_defined_here(), NULL);
 
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_one, 0) handle =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_one, 0, 0, lumieraorg_first_test);
@@ -338,7 +338,7 @@ TEST ("open_close")
 TEST ("dependencies_one")
 {
   lumiera_interfaceregistry_init ();
-  lumiera_interfaceregistry_bulkregister_interfaces (dependencytests());
+  lumiera_interfaceregistry_bulkregister_interfaces (dependencytests(), NULL);
 
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_one);
@@ -356,7 +356,7 @@ TEST ("dependencies_one")
 TEST ("dependencies_two")
 {
   lumiera_interfaceregistry_init ();
-  lumiera_interfaceregistry_bulkregister_interfaces (dependencytests());
+  lumiera_interfaceregistry_bulkregister_interfaces (dependencytests(), NULL);
 
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_two);
@@ -373,7 +373,7 @@ TEST ("dependencies_two")
 TEST ("dependencies_three")
 {
   lumiera_interfaceregistry_init ();
-  lumiera_interfaceregistry_bulkregister_interfaces (dependencytests());
+  lumiera_interfaceregistry_bulkregister_interfaces (dependencytests(), NULL);
 
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_three);
@@ -391,7 +391,7 @@ TEST ("dependencies_three")
 TEST ("dependencies_four")
 {
   lumiera_interfaceregistry_init ();
-  lumiera_interfaceregistry_bulkregister_interfaces (dependencytests());
+  lumiera_interfaceregistry_bulkregister_interfaces (dependencytests(), NULL);
 
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_four);
@@ -410,7 +410,7 @@ TEST ("dependencies_four")
 TEST ("dependencies_all")
 {
   lumiera_interfaceregistry_init ();
-  lumiera_interfaceregistry_bulkregister_interfaces (dependencytests());
+  lumiera_interfaceregistry_bulkregister_interfaces (dependencytests(), NULL);
 
   TRACE (tests, "OPEN one");
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle_one =
