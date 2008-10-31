@@ -19,25 +19,20 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-//TODO: Support library includes//
 #include "lib/error.h"
 #include "lib/safeclib.h"
 
 
-//TODO: Lumiera header includes//
 #include "backend/config.h"
 
-//TODO: internal/static forward declarations//
 extern LumieraConfig lumiera_global_config;
 
-
-//TODO: System includes//
 
 /**
  * return nth word of a wordlist
  */
 const char*
-lumiera_config_wordlist_get_nth (const char* key, unsigned nth)
+lumiera_config_wordlist_get_nth (const char* key, unsigned nth, const char* delims)
 {
   const char* value;
   size_t len;
@@ -47,8 +42,8 @@ lumiera_config_wordlist_get_nth (const char* key, unsigned nth)
 
   for (;;)
     {
-      value += strspn (value, " \t,;");
-      len = strcspn (value, " \t,;");
+      value += strspn (value, delims);
+      len = strcspn (value, delims);
       if (!nth && *value)
         break;
 
@@ -64,7 +59,7 @@ lumiera_config_wordlist_get_nth (const char* key, unsigned nth)
 
 
 int
-lumiera_config_wordlist_find (const char* key, const char* value)
+lumiera_config_wordlist_find (const char* key, const char* value, const char* delims)
 {
   const char* itr;
   size_t vlen = strlen (value);
@@ -75,8 +70,8 @@ lumiera_config_wordlist_find (const char* key, const char* value)
 
   for (int idx = 0; *itr; itr += len, ++idx)
     {
-      itr += strspn (itr, " \t,;");
-      len = strcspn (itr, " \t,;");
+      itr += strspn (itr, delims);
+      len = strcspn (itr, delims);
 
       if (len == vlen && !strncmp (itr, value, vlen))
         return idx;
@@ -87,7 +82,7 @@ lumiera_config_wordlist_find (const char* key, const char* value)
 
 
 const char*
-lumiera_config_wordlist_replace (const char* key, const char* value, const char* subst1, const char* subst2)
+lumiera_config_wordlist_replace (const char* key, const char* value, const char* subst1, const char* subst2, const char* delims)
 {
   const char* wordlist;
   const char* str = NULL;
@@ -106,28 +101,25 @@ lumiera_config_wordlist_replace (const char* key, const char* value, const char*
           for (const char* itr = start; *itr; itr += len)
             {
               const char* left_end = itr;
-              itr += strspn (itr, " \t,;");
-              len = strcspn (itr, " \t,;");
+              itr += strspn (itr, delims);
+              len = strcspn (itr, delims);
 
               if (len == vlen && !strncmp (itr, value, vlen))
                 {
-                  TODO ("figure delimiter from original string out");
-                  const char* delim = " ";
-
                   /* step over the word */
                   itr += len;
-                  itr += strspn (itr, " \t,;");
+                  itr += strspn (itr, delims);
 
                   /* getting the delimiters right for the corner cases looks ugly, want to refactor it? just do it */
                   str = lumiera_tmpbuf_snprintf (SIZE_MAX,
-                                                 "%.*s%.*s%s%s%s%s%s%s",
+                                                 "%.*s%.*s%.1s%s%.1s%s%.1s%s",
                                                  start - wordlist, wordlist,
                                                  left_end - start, start,
-                                                 (left_end - start && subst1 && *subst1) ? delim : "",
+                                                 (left_end - start && subst1 && *subst1) ? delims : "",
                                                  (subst1 && *subst1) ? subst1 : "",
-                                                 ((left_end - start || (subst1 && *subst1)) && subst2 && *subst2) ? delim : "",
+                                                 ((left_end - start || (subst1 && *subst1)) && subst2 && *subst2) ? delims : "",
                                                  (subst2 && *subst2) ? subst2 : "",
-                                                 ((left_end - start || (subst1 && *subst1) || (subst2 && *subst2)) && *itr) ? delim : "",
+                                                 ((left_end - start || (subst1 && *subst1) || (subst2 && *subst2)) && *itr) ? delims : "",
                                                  itr
                                                  );
 
@@ -145,7 +137,7 @@ lumiera_config_wordlist_replace (const char* key, const char* value, const char*
 
 
 const char*
-lumiera_config_wordlist_add (const char* key, const char* value)
+lumiera_config_wordlist_add (const char* key, const char* value, const char* delims)
 {
   const char* wordlist = NULL;
 
@@ -160,19 +152,16 @@ lumiera_config_wordlist_add (const char* key, const char* value)
 
               for (const char* itr = wordlist; *itr; itr += len)
                 {
-                  itr += strspn (itr, " \t,;");
-                  len = strcspn (itr, " \t,;");
+                  itr += strspn (itr, delims);
+                  len = strcspn (itr, delims);
 
                   if (len == vlen && !strncmp (itr, value, vlen))
                     goto end;
                 }
 
-              TODO ("figure delimiter from original string out");
-              const char* delim = " ";
-
-              wordlist = lumiera_tmpbuf_snprintf (SIZE_MAX, "%s%s%s",
+              wordlist = lumiera_tmpbuf_snprintf (SIZE_MAX, "%s%.1s%s",
                                                   wordlist,
-                                                  wordlist[strspn (wordlist, " \t,;")]?delim:"",
+                                                  wordlist[strspn (wordlist, delims)] ? delims : "",
                                                   value);
 
               if (!lumiera_config_set (key, lumiera_tmpbuf_snprintf (SIZE_MAX, "=%s", wordlist)))
