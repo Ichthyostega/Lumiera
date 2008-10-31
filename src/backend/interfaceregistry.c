@@ -53,13 +53,15 @@ key_fn (const PSplaynode node);
 
 
 static LumieraInterfacenode
-lumiera_interfacenode_new (LumieraInterface iface)
+lumiera_interfacenode_new (LumieraInterface iface, LumieraPlugin plugin)
 {
   LumieraInterfacenode self = lumiera_malloc (sizeof (*self));
 
   psplaynode_init (&self->node);
   self->interface = iface;
   self->refcnt = 0;
+  self->plugin = plugin;
+  FIXME ("plugin handling (refcnt, atime)");
   self->lnk = NULL;
   self->deps_size = 0;
   self->deps = NULL;
@@ -74,6 +76,7 @@ lumiera_interfacenode_delete (LumieraInterfacenode self)
   if (self)
     {
       REQUIRE (self->refcnt == 0);
+      FIXME ("plugin handling");
       lumiera_free (self->deps);
       lumiera_free (self);
     }
@@ -115,7 +118,7 @@ lumiera_interfaceregistry_destroy (void)
 
 
 void
-lumiera_interfaceregistry_register_interface (LumieraInterface self)
+lumiera_interfaceregistry_register_interface (LumieraInterface self, LumieraPlugin plugin)
 {
   TRACE (interfaceregistry);
   REQUIRE (self);
@@ -123,13 +126,13 @@ lumiera_interfaceregistry_register_interface (LumieraInterface self)
   LUMIERA_RECMUTEX_SECTION (interfaceregistry, &lumiera_interface_mutex)
     {
       TRACE (interfaceregistry, "interface %s, version %d, instance %s", self->interface, self->version, self->name);
-      psplay_insert (lumiera_interfaceregistry, &lumiera_interfacenode_new (self)->node, 100);
+      psplay_insert (lumiera_interfaceregistry, &lumiera_interfacenode_new (self, plugin)->node, 100);
     }
 }
 
 
 void
-lumiera_interfaceregistry_bulkregister_interfaces (LumieraInterface* self)
+lumiera_interfaceregistry_bulkregister_interfaces (LumieraInterface* self, LumieraPlugin plugin)
 {
   TRACE (interfaceregistry);
   REQUIRE (self);
@@ -139,7 +142,7 @@ lumiera_interfaceregistry_bulkregister_interfaces (LumieraInterface* self)
       while (*self)
         {
           TRACE (interfaceregistry, "interface %s, version %d, instance %s", (*self)->interface, (*self)->version, (*self)->name);
-          psplay_insert (lumiera_interfaceregistry, &lumiera_interfacenode_new (*self)->node, 100);
+          psplay_insert (lumiera_interfaceregistry, &lumiera_interfacenode_new (*self, plugin)->node, 100);
           ++self;
         }
     }
