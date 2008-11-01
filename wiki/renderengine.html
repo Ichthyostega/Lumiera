@@ -514,6 +514,20 @@ ColorPalette
 
 SiteUrl</pre>
 </div>
+<div title="AllocationCluster" modifier="Ichthyostega" modified="200810200127" created="200810180031" tags="def" changecount="9">
+<pre>Memory management facility for the low-level model (render nodes network). The model is organised into temporal segments, which are considered to be structurally constant and uniform. The objects within each segment are strongly interconnected, and thus each segment is being built in a single build process and is replaced or released as a whole. __~AllocationCluster__ implements memory management to support this usage pattern. He owns a number of object families of various types.[&gt;img[draw/AllocationCluster.png]]
+* [[processing nodes|ProcNode]] &amp;mdash; probably with several subclasses (?)
+* [[wiring descriptors|WiringDescriptor]]
+* the input/output descriptor arrays used by the latter
+
+To Each of those families we can expect an initially undetermined (but rather large) number of individual objects, which can be expected to be allocated within a short timespan and which are to be released cleanly on destruction of the AllocationCluster.
+
+''Problem of calling the dtors''
+Even if the low-level memory manager(s) may use raw storage, we require that the allocated object's destructors be called. This means keeping track at least of the number of objects allocated (without wasting too much memory for bookkeeping). Besides, as the objects are expected to be interconnected, it may be dangerous to destroy a given family of objects while another family of objects may rely on the former in its destructor. //If we happen do get into this situation,// we need to define a priority order on the types and assure the destruction sequence is respected.
+
+&amp;rarr; see MemoryManagement
+</pre>
+</div>
 <div title="Asset" modifier="Ichthyostega" modified="200801061942" created="200708100337" tags="def classes" changecount="15">
 <pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the EDL is the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with each Session. Besides, there is a collection of basic Assets always available by default.
 
@@ -1107,8 +1121,16 @@ The main tool used to implement this separation is the [[Builder Pattern|http://
 Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the EDL in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
 </pre>
 </div>
-<div title="EDL" modifier="Ichthyostega" modified="200712100537" created="200706210610" tags="def" changecount="8">
-<pre>''EDL'' is a short-hand for __E__dit __D__ecision __L__ist. The use of this term can be confusing; for the usual meaning see the definition in [[Wikipedia|http://en.wikipedia.org/wiki/Edit_decision_list]]
+<div title="EDL" modifier="Ichthyostega" modified="200811011755" created="200706210610" tags="def" changecount="9">
+<pre>&lt;&lt;&lt;
+{{red{WARNING: Naming is currently being discussed (11/08)}}}
+* [[EDL]] probably will be called ''Sequence'' (or maybe ''Arrangement'')
+* [[Session]] maybe renamed to ''Project''
+* there seems to be a new entity called [[Timeline]] which holds the global Pipes
+&lt;&lt;&lt;
+
+
+''EDL'' is a short-hand for __E__dit __D__ecision __L__ist. The use of this term can be confusing; for the usual meaning see the definition in [[Wikipedia|http://en.wikipedia.org/wiki/Edit_decision_list]]
 
 Cinelerra uses this term in a related manner but with a somewhat shifted focus (and we just stick to this usage here): In Lumiera the EDL is comprised of the whole set of clips and other media objects parametrized and placed onto the tracks by the user. It is the result of the user's //editing efforts.//
 
@@ -1379,7 +1401,7 @@ Besides routing to a global pipe, wiring plugs can also connect to the source po
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200809130314" created="200708080322" tags="overview" changecount="28">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200811011805" created="200708080322" tags="overview" changecount="29">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1398,6 +1420,7 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * [[how to handle »attached placement«|AttachedPlacementProblem]]
 * working out the [[basic building situations|BuilderPrimitives]] and [[mechanics of rendering|RenderMechanics]]
 * how to classify and [[describe media stream types|StreamType]] and how to [[use them|StreamTypeUse]]
+* the relation of [[Project, Timelines and Sequences|TimelineSequences]]
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200711210542" created="200711210531" tags="discuss draft" changecount="7">
@@ -1782,7 +1805,7 @@ From experiences with other middle scale projects, I prefer having the test code
 * {{red{and what else?}}}
 </pre>
 </div>
-<div title="MObjects" modifier="Ichthyostega" modified="200710100118" created="200706190636" tags="overview" changecount="9">
+<div title="MObjects" modifier="Ichthyostega" modified="200810180118" created="200706190636" tags="overview" changecount="10">
 <pre>The ~MObjects Subsystem contains everything related to the [[EDL]] and the various Media Objects placed within. It is complemented by the Asset Management (see &amp;rarr; [[Asset]]). Examples for [[MObjects|MObject]] being:
 * audio/video clips
 * effects and plugins
@@ -1826,10 +1849,10 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 {{red{let's see if this approach works...}}}
 </pre>
 </div>
-<div title="ManagementRenderNodes" modifier="Ichthyostega" modified="200805280201" created="200805280200" tags="impl decision" changecount="4">
-<pre>Contrary to the &amp;rarr;[[Assets and MObjects|ManagementAssetRelation]], the usage pattern for [[render nodes|ProcNode]] is quite simple: All nodes are created together every time a new segment of the network is being build and are all needed together until this segment is re-built, at which point they can be thrown away altogether. While it would be easy to handle the nodes automatically by smart-ptr (the creation is accessible only by use of the {{{NodeFactory}}} anyways), it //seems advisable to care for a bulk allocation/deallocation here.// The reason being not so much the amount of memory (which is expected to be moderate), but the fact, that the build process can be triggered repeatedly several times a second when tweaking the EDL, which could lead to fragmentation and memory pressure.
+<div title="ManagementRenderNodes" modifier="Ichthyostega" modified="200810180026" created="200805280200" tags="impl decision" changecount="5">
+<pre>Contrary to the &amp;rarr;[[Assets and MObjects|ManagementAssetRelation]], the usage pattern for [[render nodes|ProcNode]] is quite simple: All nodes are created together every time a new segment of the network is being build and are all needed together until this segment is re-built, at which point they can be thrown away altogether. While it would be easy to handle the nodes automatically by smart-ptr (the creation is accessible only by use of the {{{NodeFactory}}} anyways), it //seems advisable to care for a bulk allocation/deallocation here.// The reason being not so much the amount of memory (which is expected to be moderate), but the fact the build process can be triggered repeatedly several times a second when tweaking the EDL, which could lead to fragmentation and memory pressure.
 
-__5/2008__: the allocation mechanism can surely be improved later, but for now I am going for a simple implementation based on keeping all nodes of one kind together in a vector. The list of possible node kinds is hard wired, allowing to generate the object holding a chunk of nodes for one segment, mostly relying on the runtime system for the management.
+__10/2008__: the allocation mechanism can surely be improved later, but for now I am going for a simple implementation based on heap allocated objects owned by a vector or smart-ptrs. For each segment of the render nodes network, we have several families of objects, each of with will be maintained by a separate low-level memory manager (as said, for now implemented as vector of smart-ptrs). Together, they form an AllocationCluster; all objects contained in such a cluster will be destroyed together.
 </pre>
 </div>
 <div title="MarkupPreHead" modifier="Ichthyostega" modified="200802030405" created="200706172303" changecount="2">
@@ -2787,13 +2810,14 @@ Besides, they provide an important __inward interface__ for the [[ProcNode]]s, w
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200807072140" created="200706190056" tags="overview" changecount="11">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200811011806" created="200706190056" tags="overview" changecount="12">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
 &lt;&lt;&lt;
 ''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the foundations and main structures in C++
 * basic [[AssetManager]] working
 * [[Builder]] implementation is on the way (&amp;rarr;[[more|BuilderPrimitives]])
 * made a first draft of how to wire and operate procesing nodes (&amp;rarr;[[more|RenderMechanics]])
+* working out the relation of [[Project, Timelines and Sequences|TimelineSequences]]
 &lt;&lt;&lt;
 
 !Summary
@@ -3239,12 +3263,22 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 * a collection of ''global Pipes''
 * the ''Fixture'' with a possibility to [[(re)build it|PlanningBuildFixture]]</pre>
 </div>
-<div title="SessionOverview" modifier="Ichthyostega" modified="200808152225" created="200709272105" tags="design" changecount="26">
-<pre>The [[Session]] (sometimes also called //Project// ) contains all informations and objects to be edited by the User. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration, all being represented as [[Asset]]. At any given time, there is //only one current session// opened within the application.
-The Session is close to what is visible in the GUI. From a user's perspective, you'll find a timeline-like structure, where various Media Objects are arranged and placed. The available building blocks and the rules how they can be combined together form Lumiera's [[high-level data model|HighLevelModel]]. Basically, besides the [[media objects|MObjects]] there are data connections and all processing is organized around processing chains or [[pipes|Pipe]], which can be either global (in the Session) or local (in real or virtual clips)
+<div title="SessionOverview" modifier="Ichthyostega" modified="200811011805" created="200709272105" tags="design" changecount="29">
+<pre>&lt;&lt;&lt;
+{{red{WARNING: Naming is currently being discussed (11/08)}}}
+* [[EDL]] probably will be called ''Sequence'' (or maybe ''Arrangement'')
+* [[Session]] maybe renamed to ''Project''
+* there seems to be a new entity called [[Timeline]] which holds the global Pipes
+&lt;&lt;&lt;
+The [[Session]] (sometimes also called //Project// ) contains all informations and objects to be edited by the User. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration, all being represented as [[Asset]]. At any given time, there is //only one current session// opened within the application.
+The Session is close to what is visible in the GUI. From a user's perspective, you'll find a [[Timeline]]-like structure, containing an [[EDL (or Sequence)|EDL]], where various Media Objects are arranged and placed. The available building blocks and the rules how they can be combined together form Lumiera's [[high-level data model|HighLevelModel]]. Basically, besides the [[media objects|MObjects]] there are data connections and all processing is organized around processing chains or [[pipes|Pipe]], which can be either global (in the Session) or local (in real or virtual clips)
 
 !!!larger projects
-For larger editing projects the simple structure of a session containing &quot;the&quot; timeline is not sufficient. Rather, we have several timelines, e.g. one for each scene. Or we could have several layered or nested timelines (compositional work, multimedia productions). To support these cases without making the default case more complicated, Lumiera introduces a //focus// for selecting the //current EDL,// which will receive all editing operations.
+For larger editing projects the simple structure of a session containing &quot;the&quot; timeline is not sufficient. Rather
+* we may have several [[EDLs (=Sequences)|EDL]], e.g. one for each scene. These sequences can be even layered or nested (compositional work).
+* within one project, there may be multiple, //independant Timelines// &amp;mdash; each of which may have an associated Viewer or Monitor
+To support these cases without making the default case more complicated, Lumiera introduces a //focus// for selecting the //current EDL,// which will receive all editing operations. [[Timelines|Timeline]] on the other hand are always top-level objects and can't be combined further. You can render a given timeline to output.
+&amp;rarr; see [[Relation of Project, Timelines and Sequences|TimelineSequences]]
 
 !!!the definitive state
 With all the structural complexities possible within such a session, we need an isolation layer to provide __one__ definitive state where all configuration has been made explicit. Thus the session manages one special object list, the [[Fixture]], which can be seen as all currently active objects placed onto a single timeline.
@@ -3260,6 +3294,8 @@ While all these possibilities may seem daunting, there is a simple default confi
 It will contain a global video and audio out pipe, just one EDL with a single track; this track will have a internal video and audio pipe (bus) configured with one fading device sending to the global output ports. So, by adding some clip with a simple absolute placement to this track and some time position, the clip gets connected and rendered, after [[(re)building|PlanningBuildFixture]] the [[Fixture]] and passing the result to the [[Builder]] &amp;mdash; and using the resulting render nodes network (Render Engine).
 
 &amp;rarr; [[anatomy of the high-level model|HighLevelModel]]
+&amp;rarr; considerations regarding [[Tracks and Pipes within the EDL|TrackPipeEDL]]
+&amp;rarr; see [[Relation of Project, Timelines and Sequences|TimelineSequences]]
 </pre>
 </div>
 <div title="SideBarOptions" modifier="CehTeh" created="200706200048" changecount="1">
@@ -4717,20 +4753,37 @@ function addKeyDownHandlers(e)
 <div title="TiddlyWiki" modifier="Ichthyostega" created="200706220430" changecount="1">
 <pre>http://tiddlywiki.com/</pre>
 </div>
-<div title="Timeline" modifier="Ichthyostega" created="200706250721" tags="def" changecount="1">
-<pre>Timeline is the name of a specific facility located in the [[Fixture]] (EDL): It is a ordered list of ExplicitPlacement.s of MObjects. By traversing the Playlist you get at all elements actually to be rendered; the [[Builder]] uses this Timeline-list to construct actual Render Engine configurations to carry out the calculations.
+<div title="Timeline" modifier="Ichthyostega" modified="200811011838" created="200706250721" tags="def" changecount="4">
+<pre>Timeline is the top level element within the [[Session (Project)|Session]]. It is visible within a //timeline view// in the GUI and represents the definitive arrangement of media objects, to be rendered for output or viewed in a Monitor (viewer window). A timeline is comprised of:
+* a time axis in abolute time (WIP: not clear if this is an entity or just a conceptual definition) 
+* a PlayControler
+* a list of global Pipes representing the possible outputs
+* //exactly one// top-level [[EDL (Sequence)|EDL]], which in turn may contain further nested ~EDLs (Sequences).
+Please note especially that following this design //a timeline doesn't define tracks.// [[Tracks form a Tree|Track]] and are part of the individual ~EDLs (Sequences), together with the media objects placed to these tracks.
 
+Within the Project, there may be ''multiple timelines'', to be viewed and rendered independently. But, being the top-level entities, multiple timelines may not be combined further. You can always just render (or view) one specific timeline. A given sequence may be referred directly or indirectly from multiple timelines though.
+
+''Note'': in early drafts of the design (2007) there was an entity called &quot;Timeline&quot; within the [[Fixture]]. This entity seems superfluous and has been dropped. It never got any relevance in existing code and at most was used in some code comments.
 </pre>
 </div>
-<div title="Track" modifier="Ichthyostega" modified="200801062330" created="200801062320" tags="def design decision" changecount="3">
-<pre>Tracks are just a structure used to organize the Media Objects within the EDL. They form a grid, and besides that, they have no special meaning. They are grouping devices, not first-class entities. A track doesn't &quot;have&quot; a port or pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements.
+<div title="TimelineSequences" modifier="Ichthyostega" modified="200811011854" created="200811011836" tags="design draft discuss" changecount="2">
+<pre>Each Project can contain ''multiple timelines'', to be viewed and rendered independently. But, being the top-level entities, multiple timelines may not be combined further. You can always just render (or view) one specific timeline. Of course it is possible to use ~Sub-EDLs (~Sub-Sequences) within the top-level Sequence within a timeline to organize a movie into several scenes or chapters. 
 
-Tracks are assets on their own, but they can be found within a given EDL. So, several ~EDLs can share a single track or each EDL can have its own, separate tracks. 
-* Like most ~MObjects, tracks have a asset view: you can find a track asset in the asset manager.
-* and they have an object view: there is an track MObject which can be [[placed|Placement]], thus defining properties of this track within one EDL
+As stated in the [[definition|Timeline]], a timeline refers to exactly one EDL (Sequence), and the latter defines a tree of [[tracks|Track]] and a bunch of media objects placed to these tracks. A Sequence may optionally also contain nested sequences as [[meta-clips|MetaClip]]. Moreover, obviously several timelines (top-level entities) may refer to the same Sequence without problems.
+This is because the top-level entities (Timelines) are not permitted to be combined further. You may play or render a given timeline, you may even play several timelines simultanously in different monitor windows, and these different timelines may incorporate the same sequence in a different way
+</pre>
+</div>
+<div title="Track" modifier="Ichthyostega" modified="200811011843" created="200801062320" tags="def design decision" changecount="5">
+<pre>Tracks are just a structure used to organize the Media Objects within the EDL. Tracks are associated allways to a specific EDL and the Tracks of an EDL form a //tree.// They can be considered to be an organizing grid, and besides that, they have no special meaning. They are grouping devices, not first-class entities. A track doesn't &quot;have&quot; a port or pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements.
+
+The ~Track-IDs are assets on their own, but they can be found within a given EDL. So, several ~EDLs can share a single track or each EDL can have tracks with their own, separate identity. (the latter is the default)
+* Like most ~MObjects, tracks have a asset view: you can find a track asset (a track ID) in the asset manager.
+* and they have an object view: there is an track MObject which can be [[placed|Placement]], thus defining properties of this track within one EDL, e.g. the starting point in time
 Of course, we can place other ~MObjects relative to some track (that's the main reason why we want to have tracks). In this sense, the [[handling of Tracks|TrackHandling]] is somewhat special: the placement of some track can be found directly within the EDL (and not within the general collection of placed objects which form the contents of any EDL). This placement defines properties of the track, which will be inherited if necessary by all ~MObjects placed to this track. For example, if placing (=plugging) a track to some global [[Pipe]], and if placing a clip to this track, without placing the clip directly to another pipe, the associated-to-pipe information of the track will be fetched by the builder when needed to make the output connection of the clip.
 &amp;rarr; [[Handling of Tracks|TrackHandling]]
 &amp;rarr; [[Handling of Pipes|PipeHandling]]
+
+&amp;rarr; [[Anatomy of the high-level model|HighLevelModel]]
 </pre>
 </div>
 <div title="TrackHandling" modifier="Ichthyostega" modified="200804110259" created="200804110013" tags="spec" changecount="23">
