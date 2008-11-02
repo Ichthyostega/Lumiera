@@ -4,7 +4,7 @@ classcanvas 128005 class_ref 128005 // SessionImpl
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 18 679 2000
   end
-classcanvas 128133 class_ref 128133 // EDL
+classcanvas 128133 class_ref 128133 // Seq
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 231 679 2000
   end
@@ -34,11 +34,11 @@ classcanvas 130949 class_ref 128773 // AbstractMO
   end
 classcanvas 131461 class_ref 128901 // Clip
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 279 361 2000
+  xyz 279 368 2000
   end
 classcanvas 131717 class_ref 129029 // Effect
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
-  xyz 332 361 2000
+  xyz 332 368 2000
   end
 classcanvas 131973 class_ref 129157 // Meta
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
@@ -74,10 +74,8 @@ classcanvas 136581 class_ref 129925 // Auto
   end
 note 136837 "Placement \"locates\" a Media Object"
   xyzwh 370 73 3005 207 36
-textcanvas 136965 "the Timeline is a list of placements reduced to absolute coordinates (time, track)"
-  xyzwh 468 919 2000 121 90
 textcanvas 137093 "Fixture is the actual assembly of various Media Objects ready to be performed"
-  xyzwh -27 863 2000 147 108
+  xyzwh 28 862 2000 151 86
 classcanvas 137221 class_ref 130053 // Wish
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 560 532 2000
@@ -114,8 +112,10 @@ classcanvas 146437 class_ref 140421 // Plug
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
   xyz 560 597 2000
   end
-textcanvas 146821 "global processing Pipe Asset"
-  xyzwh 271 568 2000 149 24
+classcanvas 146949 class_ref 145541 // Timeline
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  xyz 114 546 2000
+  end
 relationcanvas 128389 relation_ref 128005 // <directional aggregation by value>
   from ref 128005 z 1999 to ref 128133
   role_a_pos 200 676 3000 no_role_b
@@ -173,7 +173,7 @@ relationcanvas 135685 relation_ref 130949 // <generalisation>
   no_multiplicity_a no_multiplicity_b
 relationcanvas 135941 relation_ref 131077 // <directional aggregation by value>
   from ref 128261 z 1999 stereotype "<<list>>" xyz 371 893 3000 to ref 135813
-  role_a_pos 389 857 3000 no_role_b
+  role_a_pos 365 849 3000 no_role_b
   multiplicity_a_pos 451 877 3000 no_multiplicity_b
 relationcanvas 136069 relation_ref 131205 // <unidirectional association>
   from ref 135813 z 1999 to point 433 897
@@ -258,21 +258,16 @@ relationcanvas 145285 relation_ref 145029 // <directional aggregation by value>
   from ref 129029 z 1999 stereotype "<<vector>>" xyz 389 732 3000 to point 445 749
   line 145413 z 1999 to point 369 749
   line 145541 z 1999 to ref 129029
-  role_a_pos 382 748 3000 no_role_b
-  multiplicity_a_pos 403 704 3000 no_multiplicity_b
+  role_a_pos 390 750 3000 no_role_b
+  multiplicity_a_pos 410 715 3000 no_multiplicity_b
 relationcanvas 145669 relation_ref 145157 // <unidirectional association>
   from ref 128133 z 1999 to ref 129029
-  role_a_pos 376 681 3000 no_role_b
+  role_a_pos 392 672 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 relationcanvas 145925 relation_ref 145413 // <unidirectional association>
   from ref 128261 z 1999 to ref 129925
   role_a_pos 321 978 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
-relationcanvas 146181 relation_ref 145541 // <directional aggregation>
-  from ref 128005 z 1999 to point 311 616
-  line 146309 z 1999 stereotype "<<vector>>" xyz 103 649 3000 to ref 146053
-  role_a_pos 307 594 3000 no_role_b
-  multiplicity_a_pos 329 627 3000 no_multiplicity_b
 relationcanvas 146565 relation_ref 145669 // <generalisation>
   from ref 146437 z 1999 to ref 137221
   no_role_a no_role_b
@@ -281,4 +276,8 @@ relationcanvas 146693 relation_ref 145797 // <unidirectional association>
   from ref 146437 z 1999 to ref 146053
   role_a_pos 398 594 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
+relationcanvas 147077 relation_ref 155653 // <directional aggregation by value>
+  from ref 146949 z 1999 stereotype "<<list>>" xyz 191 582 3000 to ref 146053
+  role_a_pos 285 575 3000 no_role_b
+  multiplicity_a_pos 327 613 3000 multiplicity_b_pos 180 584 3000
 end

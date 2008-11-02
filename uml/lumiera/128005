@@ -1,6 +1,6 @@
 format 40
 "design" // design
-  revision 11
+  revision 13
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -50,7 +50,7 @@ Not a real code package, rather a container for design drafts, specifications, d
     component 128005 "Builder"
       stereotype "subsystem"
       provided_classes
-	class_ref 132741 // StateProxy
+	class_ref 132741 // State
       end
       required_classes
 	class_ref 128261 // Fixture
@@ -61,7 +61,7 @@ Not a real code package, rather a container for design drafts, specifications, d
     component 128133 "Session"
       stereotype "subsystem"
       provided_classes
-	class_ref 128133 // EDL
+	class_ref 128133 // Seq
 	class_ref 128261 // Fixture
 	class_ref 128517 // MObject
 	class_ref 134661 // ParamProvider
@@ -99,7 +99,7 @@ Not a real code package, rather a container for design drafts, specifications, d
 
     component 128901 "Engine"
       required_classes
-	class_ref 132741 // StateProxy
+	class_ref 132741 // State
       end
       simplerelation 128133
 	-_->
@@ -147,6 +147,206 @@ Not a real code package, rather a container for design drafts, specifications, d
     component 131077 "client code"
       required_classes
 	class_ref 141957 // ProcDispatcher
+      end
+    end
+  end
+
+  classview 129413 "Project Entities"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default
+    
+    classdiagram 132741 "TimelineSequences"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      size A4
+    end
+
+    class 145669 "Project"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 158981 // <aggregation by value>
+	relation 154885 *---
+	  a role_name "" multiplicity "1..*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 158981 // <aggregation by value>
+	  b role_name "" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 159109 // <aggregation by value>
+      end
+
+      classrelation 159365 // <aggregation by value>
+	relation 155141 *---
+	  a role_name "" multiplicity "1..*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 159365 // <aggregation by value>
+	  b role_name "" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 159493 // <aggregation by value>
+      end
+    end
+
+    class 145925 "PlayControl"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 160389 // <unidirectional association>
+	relation 156037 --->
+	  stereotype "direct"
+	  a role_name "" multiplicity "*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 160389 // <unidirectional association>
+	  b multiplicity "" parent class_ref 146437 // PlayheadCursor
+      end
+    end
+
+    class 146053 "Monitor"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 160133 // <unidirectional association>
+	relation 155781 --->
+	  stereotype "attach"
+	  a role_name "" multiplicity "0..1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 160133 // <unidirectional association>
+	  b multiplicity "" parent class_ref 145541 // Timeline
+      end
+
+      classrelation 160517 // <association>
+	relation 156165 ----
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 160517 // <association>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 160645 // <association>
+      end
+    end
+
+    class 146181 "RenderTask"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 160261 // <unidirectional association>
+	relation 155909 --->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 160261 // <unidirectional association>
+	  b multiplicity "" parent class_ref 145541 // Timeline
+      end
+    end
+
+    class 146309 "Sequence"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 159493 // <aggregation by value>
+	relation_ref 155141 // <aggregation by value>
+      end
+
+      classrelation 159877 // subSequences (<unidirectional association>)
+	relation 155525 --->
+	  stereotype "contains"
+	  a role_name "subSequences" multiplicity "*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 159877 // subSequences (<unidirectional association>)
+	  b multiplicity "1..*" parent class_ref 146309 // Sequence
+      end
+
+      classrelation 161541 // <unidirectional association>
+	relation 156933 --->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 161541 // <unidirectional association>
+	  b multiplicity "" parent class_ref 128517 // MObject
+      end
+
+      classrelation 161669 // trackTree (<unidirectional association>)
+	relation 157061 --->
+	  a role_name "trackTree" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 161669 // trackTree (<unidirectional association>)
+	  b multiplicity "" parent class_ref 128389 // Track
+      end
+    end
+
+    class 146437 "PlayheadCursor"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 160645 // <association>
+	relation_ref 156165 // <association>
+      end
+
+      classrelation 160901 // <association>
+	relation_ref 156293 // <association>
       end
     end
   end
