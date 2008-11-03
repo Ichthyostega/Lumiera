@@ -88,7 +88,19 @@ lumiera_error_set (lumiera_err err);
  * @return pointer to any pending error of this thread, NULL if no error is pending
  */
 lumiera_err
-lumiera_error ();
+lumiera_error (void);
+
+
+/**
+ * Check current error state without clearing it
+ * Please avoid this function and use lumiera_error() if possible. Errors must be cleared else certain
+ * parts of the application refuse to cooperate with you. This shall only be used to decide if one
+ * wants to barf out of a loop or subroutine to deliver the error to a higher level.
+ * @return pointer to any pending error of this thread, NULL if no error is pending
+ */
+lumiera_err
+lumiera_error_peek (void);
+
 
 /*
   predefined errors

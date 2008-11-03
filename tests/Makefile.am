@@ -72,6 +72,6 @@ check_PROGRAMS += test-interfaces
 test_interfaces_SOURCES = $(tests_srcdir)/backend/test-interfaces.c
 test_interfaces_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 test_interfaces_LDADD = liblumibackend.a liblumiera.a $(NOBUGMT_LUMIERA_LIBS) -lm
-test_interfaces_DEPENDENCIES = examplepluginc.la
+test_interfaces_DEPENDENCIES = examplepluginc.la liblumibackend.a liblumiera.a
 
 TESTS = $(tests_srcdir)/test.sh
