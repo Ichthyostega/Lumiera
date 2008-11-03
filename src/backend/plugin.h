@@ -36,6 +36,7 @@
 
 
 LUMIERA_ERROR_DECLARE(PLUGIN_DLOPEN);
+LUMIERA_ERROR_DECLARE(PLUGIN_PLUGINPATH);
 
 
 NOBUG_DECLARE_FLAG (plugin);
@@ -48,18 +49,11 @@ typedef struct lumiera_plugin_struct lumiera_plugin;
 typedef lumiera_plugin* LumieraPlugin;
 
 
-/**
- * Initialize the plugin system.
- * always succeeds or aborts
- */
-void
-lumiera_pluginregistry_init (void);
+int
+lumiera_plugin_cmp_fn (const void* keya, const void* keyb);
 
-/**
- * destroy the plugin system, free all resources
- */
-void
-lumiera_pluginregistry_destroy (void);
+const void*
+lumiera_plugin_key_fn (const PSplaynode node);
 
 
 LumieraPlugin
@@ -68,6 +62,8 @@ lumiera_plugin_load (const char* plugin);
 
 int
 lumiera_plugin_register (LumieraPlugin);
+
+
 
 
 /**
