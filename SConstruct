@@ -63,6 +63,7 @@ def setupBasicEnvironment():
                             ,toolpath = [TOOLDIR]
                             ,tools = ["default", "BuilderGCH", "BuilderDoxygen"]  
                             ) 
+    handleVerboseMessages(env)
     
     env.Append ( CCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honor CFLAGS, only CCFLAGS 
     env.Replace( VERSION=VERSION
@@ -73,7 +74,6 @@ def setupBasicEnvironment():
                , CPPDEFINES=['-DLUMIERA_VERSION='+VERSION ]     # note: it's a list to append further defines
                , CCFLAGS='-Wall '                                       # -fdiagnostics-show-option 
                )
-    
     RegisterIcon_Builder(env,SVGRENDERER)
     handleNoBugSwitches(env)
     
@@ -113,6 +113,15 @@ def handleNoBugSwitches(env):
     elif level == 'RELEASE':
         env.Replace( DEBUG = 0 )
 
+def handleVerboseMessages(env):
+    """ toggle verbose build output """
+    if not env['VERBOSE']:
+       # SetOption('silent', True)
+       env['CCCOMSTR'] = "  Compiling    $SOURCE"
+       env['CXXCOMSTR'] = "  Compiling++  $SOURCE"
+       env['LINKCOMSTR'] = "  Linking -->  $TARGET"
+       env['LDMODULECOMSTR'] = "  creating module [ $TARGET ]"
+
 
 
 
@@ -129,6 +138,7 @@ def defineCmdlineOptions():
         ,BoolOption('DEBUG', 'Build with debugging information and no optimizations', False)
         ,BoolOption('OPTIMIZE', 'Build with strong optimization (-O3)', False)
         ,BoolOption('VALGRIND', 'Run Testsuite under valgrind control', True)
+        ,BoolOption('VERBOSE',  'Print full build commands', False)
         ,('TESTSUITES', 'Run only Testsuites matching the given pattern', '')
 #       ,BoolOption('OPENGL', 'Include support for OpenGL preview rendering', False)
 #       ,EnumOption('DIST_TARGET', 'Build target architecture', 'auto', 
@@ -153,7 +163,7 @@ Special Targets:
      build   : just compile and link
      testcode: additionally compile the Testsuite
      check   : build and run the Testsuite
-     doc     : generate documetation (Doxygen)
+     doc     : generate documentation (Doxygen)
      install : install created artifacts at PREFIX
      src.tar : create source tarball
      doc.tar : create developer doc tarball
@@ -302,7 +312,7 @@ def defineBuildTargets(env, artifacts):
     
     
     artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/main.cpp']+ core )
-    artifacts['plugins'] = env.SharedLibrary('$BINDIR/lumiera-plugin', objplug)
+    artifacts['plugins'] = env.LoadableModule('$BINDIR/lumiera-plugin', objplug)
     
     # the Lumiera GTK GUI
     envgtk  = env.Clone().mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','librsvg-2.0','xv','xext','sm'])

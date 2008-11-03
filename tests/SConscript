@@ -52,7 +52,7 @@ def treatPluginTestcase(env):
     prfx = path.join(tree,'example_plugin')
     oC   = env.SharedObject(prfx,        prfx+'.c')
     oCPP = env.SharedObject(prfx+'_cpp', prfx+'.cpp')
-    testplugin = ( env.SharedLibrary('#$BINDIR/.libs/examplepluginc',      oC, SHLIBPREFIX='')
+    testplugin = ( env.LoadableModule('#$BINDIR/.libs/examplepluginc',      oC, SHLIBPREFIX='')
 
 # doesn't compile yet...
 #                 + env.SharedLibrary('#$BINDIR/.libs/exampleplugincpp', oCPP, SHLIBPREFIX='')
