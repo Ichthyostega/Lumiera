@@ -21,11 +21,13 @@
 #ifndef LUMIERA_PLUGIN_H
 #define LUMIERA_PLUGIN_H
 
+#include "lib/psplay.h"
+#include "lib/error.h"
+
+#include "backend/interface.h"
 
 #include <stdlib.h>
 #include <nobug.h>
-
-#include "lib/error.h"
 
 /**
  * @file
@@ -35,8 +37,11 @@
  */
 
 
+LUMIERA_ERROR_DECLARE(PLUGIN_INIT);
 LUMIERA_ERROR_DECLARE(PLUGIN_DLOPEN);
-LUMIERA_ERROR_DECLARE(PLUGIN_PLUGINPATH);
+LUMIERA_ERROR_DECLARE(PLUGIN_WTF);
+LUMIERA_ERROR_DECLARE(PLUGIN_REGISTER);
+LUMIERA_ERROR_DECLARE(PLUGIN_VERSION);
 
 
 NOBUG_DECLARE_FLAG (plugin);
@@ -47,6 +52,7 @@ NOBUG_DECLARE_FLAG (plugin);
 struct lumiera_plugin_struct;
 typedef struct lumiera_plugin_struct lumiera_plugin;
 typedef lumiera_plugin* LumieraPlugin;
+enum lumiera_plugin_type;
 
 
 int
@@ -55,6 +61,11 @@ lumiera_plugin_cmp_fn (const void* keya, const void* keyb);
 const void*
 lumiera_plugin_key_fn (const PSplaynode node);
 
+LumieraPlugin
+lumiera_plugin_new (const char* name);
+
+LumieraPlugin
+lumiera_plugin_init (LumieraPlugin self, void* handle, LumieraInterface plugin);
 
 LumieraPlugin
 lumiera_plugin_load (const char* plugin);
@@ -68,7 +79,7 @@ lumiera_plugin_register (LumieraPlugin);
 
 /**
  * discover new plugins
- * traverses the configured plugin dirs and calls the callback_load function for any plugin
+ * traverses the configured plugin paths and calls the callback_load function for any plugin
  * not actually loaded. If callback_load returns a plugin (and not NULL) then this is feed to
  * the callback_register function.
  */

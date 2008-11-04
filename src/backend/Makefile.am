@@ -30,6 +30,7 @@ liblumibackend_a_SOURCES =					\
 	$(liblumibackend_a_srcdir)/interface.c			\
 	$(liblumibackend_a_srcdir)/interfaceregistry.c		\
 	$(liblumibackend_a_srcdir)/plugin.c			\
+	$(liblumibackend_a_srcdir)/plugin_dynlib.c		\
 	$(liblumibackend_a_srcdir)/config.c			\
 	$(liblumibackend_a_srcdir)/config_typed.c 		\
 	$(liblumibackend_a_srcdir)/config_wordlist.c 		\

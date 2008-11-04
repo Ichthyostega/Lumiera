@@ -87,6 +87,10 @@ AC_LANG_PUSH([C])
 AC_CHECK_HEADER([execinfo.h], AC_DEFINE(HAVE_EXECINFO_H))
 # there is a warning in nobug, disabled til fixed AC_CHECK_HEADER([valgrind/valgrind.h], AC_DEFINE(HAVE_VALGRIND_VALGRIND_H))
 
+AC_CHECK_LIB(dl, dlopen, [LUMIERA_PLUGIN_LIBS="$LUMIERA_PLUGIN_LIBS -ldl"],
+                   [AC_MSG_ERROR([Dynamic linking not supported, report a bug])]
+)
+
 AC_LANG_POP([C])
 
 
@@ -160,6 +164,7 @@ AC_CHECK_LIB(Xv, XvQueryAdaptors, [LUMIERA_GUI_LIBS="$LUMIERA_GUI_LIBS -lXv"],
 # END X11 Dependancies
 
 
+AC_SUBST(LUMIERA_PLUGIN_LIBS)
 AC_SUBST(LUMIERA_GUI_CFLAGS)
 AC_SUBST(LUMIERA_GUI_LIBS)
 
