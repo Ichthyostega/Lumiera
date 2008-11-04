@@ -47,7 +47,7 @@ namespace engine {
   using std::vector;
   
   class Trafo;
-  typedef Trafo* PTrafo;    ///< @note ProcNode is handled by pointer and bulk allocated/dealocated 
+  typedef Trafo* PTrafo;    ///< @note ProcNode is handled by pointer and bulk allocated/deallocated 
 
 
   /**

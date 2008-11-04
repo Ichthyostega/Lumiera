@@ -24,7 +24,7 @@
 #ifndef MOBJECT_BUILDER_OPERATIONPOINT_H
 #define MOBJECT_BUILDER_OPERATIONPOINT_H
 
-#include "proc/engine/procnode.hpp"
+#include "proc/engine/procnode.hpp"         /////TODO can we get rid of this header here?
 #include "lib/query.hpp"
 
 #include <vector>
