@@ -58,8 +58,8 @@ LUMIERA_ERROR_DEFINE(PLUGIN_VERSION, "Plugin Version unsupported");
  * and c source modules which get compiled on the fly.
  */
 #define LUMIERA_PLUGIN_TYPES                    \
-  LUMIERA_PLUGIN_TYPE_PLANNED(DYNLIB, ".so")    \
-  LUMIERA_PLUGIN_TYPE_PLANNED(DYNLIB, ".lum")   \
+  LUMIERA_PLUGIN_TYPE(DYNLIB, ".so")            \
+  LUMIERA_PLUGIN_TYPE(DYNLIB, ".lum")           \
   LUMIERA_PLUGIN_TYPE_PLANNED(LUA, ".lua")      \
   LUMIERA_PLUGIN_TYPE_PLANNED(CSOURCE, ".c")
 
