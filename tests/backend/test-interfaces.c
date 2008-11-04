@@ -22,7 +22,10 @@
 #include "backend/interface.h"
 #include "backend/interfaceregistry.h"
 #include "backend/interfacedescriptor.h"
+#include "backend/config.h"
+
 #include "tests/test.h"
+#include "tests/backend/hello_interface.h"
 
 /*
   define 2 example interfaces
@@ -452,11 +455,65 @@ TEST ("dependencies_all")
 }
 
 
-
-TEST ("highlevel, plugin")
+TEST ("plugin_discover")
 {
+  lumiera_config_init ("./");
+  lumiera_interfaceregistry_init ();
+
+  if (lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register))
+    {
+      LumieraPlugin p = lumiera_plugin_lookup (".libs/examplepluginc.so");
+      printf ("found plugin: %s\n", lumiera_plugin_name (p));
+      lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
+    }
+  else
+    printf ("error: %s\n", lumiera_error ());
+
+  lumiera_interfaceregistry_destroy ();
+  lumiera_config_destroy ();
+}
 
 
+TEST ("plugin_unload")
+{
+  lumiera_config_init ("./");
+  lumiera_interfaceregistry_init ();
+
+  lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
+  lumiera_plugin_unload (lumiera_plugin_lookup (".libs/examplepluginc.so"));
+  LumieraPlugin p = lumiera_plugin_lookup (".libs/examplepluginc.so");
+  printf ("plugin unload: %p\n", p);
+
+  lumiera_interfaceregistry_destroy ();
+  lumiera_config_destroy ();
+}
+
+
+TEST ("plugin_examplepluginc")
+{
+  lumiera_config_init ("./");
+  lumiera_interfaceregistry_init ();
+  lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
+
+  TODO ("macro to derrive minminor version from a slot");
+
+  LUMIERA_INTERFACE_HANDLE(lumieraorg_testhello, 0) german =
+    LUMIERA_INTERFACE_OPEN (lumieraorg_testhello, 0, 0, lumieraorg_hello_german);
+
+  LUMIERA_INTERFACE_HANDLE(lumieraorg_testhello, 0) english =
+    LUMIERA_INTERFACE_OPEN (lumieraorg_testhello, 0, 0, lumieraorg_hello_english);
+
+  german->hello ();
+  german->goodbye ("Welt!");
+
+  english->hello ();
+  english->goodbye ("World!");
+
+  LUMIERA_INTERFACE_CLOSE (german);
+  LUMIERA_INTERFACE_CLOSE (english);
+
+  lumiera_interfaceregistry_destroy ();
+  lumiera_config_destroy ();
 }
 
 TESTS_END

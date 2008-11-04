@@ -1,0 +1,29 @@
+TESTING "testing plugins" ./test-interfaces
+
+
+TEST "discovering plugins, missing path" plugin_discover <<END
+out: error: LUMIERA_ERROR_CONFIG_NO_ENTRY:no configuration entry
+return: 0
+END
+
+export LUMIERA_PLUGIN_PATH=.libs
+
+TEST "discovering plugins" plugin_discover <<END
+out: found plugin: .libs/examplepluginc.so
+return: 0
+END
+
+TEST "plugin unloading" plugin_unload <<END
+out: plugin unload: (nil)
+return: 0
+END
+
+TEST "C plugin test" plugin_examplepluginc <<END
+out: Hallo Welt!
+out: Tschuess Welt!
+out: Hello World!
+out: Bye World!
+return: 0
+END
+
+unset LUMIERA_PLUGIN_PATH
