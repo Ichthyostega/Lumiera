@@ -36,12 +36,11 @@ using proc_interface::PAsset;  // TODO better way to refer to a track?
 using std::vector;
 using std::string;
 
-namespace mobject
-  {
-  namespace session
-    {
+namespace mobject {
+  namespace session {
 
-    class EDL
+    
+    class EDL  ///////////////////////////TODO is considered to be renamed as "Sequence". Should be converted to an Inteface
       {
       protected:
         Placement<Track>  track;
@@ -59,6 +58,11 @@ namespace mobject
             UNIMPLEMENTED ("what ist the 'size' of an EDL?");
             return 0;
           }
+        
+        bool isValid() { return this->validate(); }
+        
+      private:
+        virtual bool validate() =0;
       };
 
 

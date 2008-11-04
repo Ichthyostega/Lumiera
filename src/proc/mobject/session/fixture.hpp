@@ -38,10 +38,8 @@ using std::tr1::shared_ptr;
 
 
 
-namespace mobject
-  {
-  namespace session
-    {
+namespace mobject {
+  namespace session {
 
 
 
@@ -54,6 +52,14 @@ namespace mobject
       public:
         list<ExplicitPlacement*> & getPlaylistForRender () ;
         Auto<double>* getAutomation () ; ///< @todo: just a placeholder at the moment!!!
+        
+      private:
+        virtual bool validate() 
+          {
+            TODO ("how to validate a Fixture?");
+            return false;
+          }
+
       };
     
     

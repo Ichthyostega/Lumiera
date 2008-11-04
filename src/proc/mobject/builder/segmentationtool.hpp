@@ -28,6 +28,8 @@
 #include "proc/mobject/builder/applicablebuildertargettypes.hpp"
 
 #include "proc/mobject/session/segment.hpp"
+#include "proc/mobject/session/fixture.hpp"   //////TODO really on the header??
+
 
 #include <list>
 using std::list;
@@ -49,12 +51,15 @@ namespace mobject {
       : public ApplicableBuilderTargetTypes<SegmentationTool>
       {
         
+        SegmentationTool (session::Fixture &) ;
         
       public:
         void treat (mobject::session::Clip& clip) ;
         void treat (mobject::session::Effect& effect) ;
 
         void treat (mobject::Buildable& something) ;
+        
+        //////////////////////////////////////////////////////////TODO make it respond to the util::isnil test!
 
       protected:
         typedef mobject::session::Segment Segment;

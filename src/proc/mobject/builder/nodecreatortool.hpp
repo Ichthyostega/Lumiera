@@ -28,6 +28,7 @@
 #include "proc/mobject/builder/applicablebuildertargettypes.hpp"
 
 #include "proc/engine/processor.hpp"
+#include "proc/mobject/builder/toolfactory.hpp"
 
 
 
@@ -36,10 +37,9 @@ namespace mobject {
 
 
 
-    // TODO: define Lifecycle...
 
     /**
-     * This Tool implementation plays the central role in the buld process:
+     * This Tool implementation plays the central role in the build process:
      * given a MObject from Session, it is able to attach ProcNodes to the 
      * render engine under construction such as to reflect the properties 
      * of the MObject in the actual render.
@@ -47,6 +47,19 @@ namespace mobject {
     class NodeCreatorTool 
       : public ApplicableBuilderTargetTypes<NodeCreatorTool>
       {
+        ToolFactory& toolKit_;
+        
+        /** holds the Processor (Render Engine Element)
+         *  to be built by the current build step */
+        engine::Processor& proc_;
+        
+        
+        NodeCreatorTool (ToolFactory& tofa, engine::Processor& proc)
+          : toolKit_(tofa),
+            proc_(proc)
+          { }
+        
+        friend class ToolFactory;
         
       public:
         virtual void treat (mobject::session::Clip& clip) ;
@@ -55,11 +68,6 @@ namespace mobject {
         virtual void treat (mobject::Buildable& something) ;
 
 
-      protected:
-        /** holds the Processor (Render Engine Element)
-         *  to be built by the current build step 
-         */
-        engine::Processor* proc;
 
       };
 

@@ -24,9 +24,10 @@
 #ifndef MOBJECT_BUILDER_OPERATIONPOINT_H
 #define MOBJECT_BUILDER_OPERATIONPOINT_H
 
-#include "proc/engine/procnode.hpp"         /////TODO can we get rid of this header here?
+//#include "proc/engine/procnode.hpp"         /////TODO can we get rid of this header here?
 #include "lib/query.hpp"
 
+#include <boost/scoped_ptr.hpp>
 #include <vector>
 #include <string>
 
@@ -36,6 +37,8 @@ namespace mobject {
 
     using std::vector;
     using std::string;
+    
+    struct RefPoint;
 
     /**
      * A point in the render node network under construction.
@@ -46,10 +49,7 @@ namespace mobject {
      */
     class OperationPoint
       {
-        typedef engine::PNode PNode;
-        
-        vector<PNode> refPoint_;
-        const string streamID_;
+        boost::scoped_ptr<RefPoint> refPoint_;
         
       public:
         /** create node(s) corresponding to the given Processor-Asset

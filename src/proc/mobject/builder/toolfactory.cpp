@@ -22,17 +22,69 @@
 
 
 #include "proc/mobject/builder/toolfactory.hpp"
+#include "common/util.hpp"
 
-namespace mobject
-  {
-  namespace builder
+//#include <boost/ptr_container/ptr_vector.hpp>
+
+namespace mobject {
+  namespace builder {
+
+    using util::isnil;
+    
+    
+    struct BuildProcessState
+      {
+        
+        session::Fixture & fixedTimeline_;
+        std::auto_ptr<engine::Processor> procSegment_;   /////////////////TODO consider renaming Processor
+        
+        boost::scoped_ptr<SegementationTool> segmentation_;
+        boost::scoped_ptr<NodeCreatorTool> fabrication_;
+        
+        
+        BuildProcessState (session::Fixture& theTimeline)
+          : fixedTimeline_(theTimeline),
+            procSegment_(new engine::Processor())
+          { }
+        
+      };
+
+    ToolFactory::ToolFactory (session::Fixture& theTimeline)
+      : state_(new BuildProcessState (theTimeline))
     {
-
-
-
-    BuilderTool &
-    ToolFactory::configure ()
+      ENSURE (state_->fixedTimeline_.isValid());
+      ENSURE (state_->procSegment_);
+    }
+    
+    
+    SegmentationTool &
+    ToolFactory::configureSegmentation ()
     {
+      REQUIRE (state_->fixedTimeline_.isValid());
+      REQUIRE (state_->procSegment_);
+      
+      state->segmentation_.reset (new SegmentationTool (state->fixedTimeline_));
+      return *(state->segmentation_);
+    }
+    
+    
+    NodeCreatorTool &
+    ToolFactory::configureFabrication () //////////////////////TODO: should iterate in some way!
+    {
+      REQUIRE (state_->procSegment_);
+      REQUIRE (!isnil (*(state_>segmentation)));
+      
+      state->fabrication_.reset (new NodeCreatorTool(*this));
+      return *(state->fabrication_);
+    }
+    
+    
+    std::auto_ptr<engine::Processor>
+    ToolFactory::getProduct ()
+    {
+      state_->segmentation_.reset(0);
+      state_->fabrication_.reset(0);
+      return state_->procSegment_;
     }
 
 

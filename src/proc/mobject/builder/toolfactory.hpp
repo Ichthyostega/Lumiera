@@ -24,16 +24,21 @@
 #ifndef MOBJECT_BUILDER_TOOLFACTORY_H
 #define MOBJECT_BUILDER_TOOLFACTORY_H
 
-#include "proc/mobject/builder/buildertool.hpp"
+#include "proc/mobject/session/fixture.hpp"
+#include "proc/mobject/builder/segmentationtool.hpp"
+#include "proc/mobject/builder/nodecreatortool.hpp"
 #include "proc/mobject/builder/mould.hpp"
+#include "proc/engine/processor.hpp"
+
+#include <boost/scoped_ptr.hpp>
 
 
 
-namespace mobject
-  {
-  namespace builder
-    {
+namespace mobject {
+  namespace builder {
 
+    struct BuildProcessState;
+    
 
     /**
      * provides the builder with the necessary, preconfigured tools.
@@ -43,8 +48,22 @@ namespace mobject
      */
     class ToolFactory
       {
+        boost::scoped_ptr<BuildProcessState> state_;
+        
       public:
-        BuilderTool & configure () ;
+        /** prepare a builder tool kit for dealing with the given Fixture,
+         *  which is a snapshot of some timeline made explicit. */
+        ToolFactory (session::Fixture&);
+        
+        /** prepare a tool for properly segmenting the Fixture */
+        SegmentationTool &  configureSegmentation ();
+        
+        /** prepare a tool for building the processor for a single segment */
+        NodeCreatorTool &   configureFabrication ();
+        
+        /** receive the finished product of the build process; effectively
+         *  releases any other builder tool object */
+        std::auto_ptr<engine::Processor> getProduct ();
       };
 
 
