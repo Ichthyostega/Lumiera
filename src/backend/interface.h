@@ -102,9 +102,18 @@
  * @param iname name of the interface
  * @param version major version of the interface
  * @param dname name for the instance
+ * @return constructed identifier
  */
-#define LUMIERA_INTERFACE_DNAME(iname, version, dname) PPMPL_CAT (LUMIERA_INTERFACE_INAME(iname, version), _##dname)
+#define LUMIERA_INTERFACE_DNAME(iname, version, dname) PPMPL_CAT (LUMIERA_INTERFACE_INAME (iname, version), _##dname)
 
+/**
+ * Construct a definition string r for an interface
+ * @param iname name of the interface
+ * @param version major version of the interface
+ * @param dname name for the instance
+ * @return constructed string
+ */
+#define LUMIERA_INTERFACE_DSTRING(iname, version, dname) PPMPL_STRINGIFY (LUMIERA_INTERFACE_DNAME (iname, version, dname))
 
 /**
  * Return a reference (pointer) to an interface implementation
@@ -293,7 +302,7 @@ queryfunc (void)                                \
  */
 #define LUMIERA_PLUGIN(acquire, release, luid, ...)                                             \
 LUMIERA_EXPORT(plugin_interfaces, __VA_ARGS__)                                                  \
-LUMIERA_INTERFACE_INSTANCE (lumieraorg_plugin, 0,                                               \
+LUMIERA_INTERFACE_INSTANCE (lumieraorg__plugin, 0,                                              \
                             lumieraorg_plugin,                                                  \
                             NULL,                                                               \
                             acquire,                                                            \
@@ -374,7 +383,7 @@ struct lumiera_interface_struct
 /**
  * Plugin interface
  */
-LUMIERA_INTERFACE_DECLARE (lumieraorg_plugin, 0,
+LUMIERA_INTERFACE_DECLARE (lumieraorg__plugin, 0,
                            LUMIERA_INTERFACE_SLOT (LumieraInterface*, plugin_interfaces, (void)),
 );
 
@@ -402,7 +411,16 @@ lumiera_interface_open (const char* interface, unsigned version, size_t minminor
  * consider 'self' to be invalidated after this call
  */
 void
-lumiera_interface_close (LumieraInterface iface);
+lumiera_interface_close (LumieraInterface self);
+
+/**
+ * Runtime check for interface type and version
+ * @param self interface to check
+ * @param iname name of the interface
+ * @return version of the interface or ~0 (-1) if iname doesn't match the requested name
+ */
+unsigned
+lumiera_interface_version (LumieraInterface self, const char* iname);
 
 
 #endif /* LUMIERA_INTERFACE_H */

@@ -229,6 +229,16 @@ lumiera_interface_close (LumieraInterface self)
 }
 
 
+unsigned
+lumiera_interface_version (LumieraInterface self, const char* iname)
+{
+  if (self && iname && !strcmp (self->interface, iname))
+    return self->version;
+
+  return ~0;
+}
+
+
 /* internal function, does no locking! */
 static void
 lumiera_interfacenode_close (LumieraInterfacenode self)
