@@ -58,7 +58,7 @@
 
 
 LUMIERA_ERROR_DECLARE(PLUGIN_INIT);
-LUMIERA_ERROR_DECLARE(PLUGIN_DLOPEN);
+LUMIERA_ERROR_DECLARE(PLUGIN_OPEN);
 LUMIERA_ERROR_DECLARE(PLUGIN_WTF);
 LUMIERA_ERROR_DECLARE(PLUGIN_REGISTER);
 LUMIERA_ERROR_DECLARE(PLUGIN_VERSION);
@@ -107,7 +107,6 @@ LumieraPlugin
 lumiera_plugin_load (const char* plugin);
 
 
-
 /**
  * Register a plugin and its interfaces.
  * Registers the plugin (unconditionally) at the pluginregistry.
@@ -121,18 +120,40 @@ int
 lumiera_plugin_register (LumieraPlugin self);
 
 
+/**
+ * Query the error state of a plugin
+ * @param self plugin to query
+ * @return error identifier, NULL if no error was set
+ */
 lumiera_err
 lumiera_plugin_error (LumieraPlugin self);
+
+/**
+ * Query the plugin handle
+ * @param self plugin to query
+ * @return opaque handle set by the loader functions
+ */
+void*
+lumiera_plugin_handle (LumieraPlugin self);
 
 
 /**
  * Tries to unload a plugin.
  * When the Plugin is unused, then all resources associated with it are freed and it will be removed from memory
- * @param plugin name of the plugin to be unloaded.
- * @return 0 on success, else the number if users which keeping the plugin loaded
+ * @param plugin the plugin to be unloaded.
+ * @return 0 on success, else the refcount of users which keeping the plugin loaded
  */
 unsigned
 lumiera_plugin_unload (LumieraPlugin self);
+
+
+/**
+ * Lookup a plugin handle in the pluginregistry
+ * @param name name of the plugin to be looked up
+ * @return plugin handle on success, NULL if the plugin is not found in the registry
+ */
+LumieraPlugin
+lumiera_plugin_lookup (const char* name);
 
 
 /**

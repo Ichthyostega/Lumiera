@@ -38,13 +38,15 @@
  * Plugin loader.
  */
 
+/* just some declarations */
 extern PSplay lumiera_pluginregistry;
+static char* init_exts_globs ();
 
-/* TODO should be set by the build system to the actual plugin path */
+/* TODO default plugin path should be set by the build system */
 
 /* errors */
 LUMIERA_ERROR_DEFINE(PLUGIN_INIT, "Initialization error");
-LUMIERA_ERROR_DEFINE(PLUGIN_DLOPEN, "Could not open plugin");
+LUMIERA_ERROR_DEFINE(PLUGIN_OPEN, "Could not open plugin");
 LUMIERA_ERROR_DEFINE(PLUGIN_WTF, "Not a Lumiera plugin");
 LUMIERA_ERROR_DEFINE(PLUGIN_REGISTER, "Could not register plugin");
 LUMIERA_ERROR_DEFINE(PLUGIN_VERSION, "Plugin Version unsupported");
@@ -91,6 +93,8 @@ static lumiera_plugintype lumiera_plugin_types[] =
     {NULL, NULL, NULL}
   };
 #undef LUMIERA_PLUGIN_TYPE
+
+
 
 
 struct lumiera_plugin_struct
@@ -143,9 +147,20 @@ lumiera_plugin_init (LumieraPlugin self, void* handle, LumieraInterface plugin)
 }
 
 
+lumiera_err
+lumiera_plugin_error (LumieraPlugin self)
+{
+  REQUIRE (self);
+  return self->error;
+}
 
+void *
+lumiera_plugin_handle (LumieraPlugin self)
+{
+  REQUIRE (self);
+  return self->handle;
+}
 
-static char* init_exts_globs ();
 
 int
 lumiera_plugin_discover (LumieraPlugin (*callback_load)(const char* plugin),
@@ -214,6 +229,7 @@ lumiera_plugin_load (const char* plugin)
   return NULL;
 }
 
+
 int
 lumiera_plugin_register (LumieraPlugin plugin)
 {
@@ -251,6 +267,57 @@ lumiera_plugin_register (LumieraPlugin plugin)
 }
 
 
+unsigned
+lumiera_plugin_unload (LumieraPlugin self)
+{
+  TRACE (plugin);
+
+  if (!self)
+    return 0;
+
+  if (self->refcnt)
+    return self->refcnt;
+
+  /* dispatch on ext, call the registered function */
+  const char* ext = strrchr (self->name, '.');
+
+  LumieraPlugintype itr = lumiera_plugin_types;
+  while (itr->ext)
+    {
+      if (!strcmp (itr->ext, ext))
+        {
+          //unregister plugin
+          if (psplay_remove (lumiera_pluginregistry, &self->node))
+            {
+              if (!self->error)
+                {
+                  LUMIERA_INTERFACE_HANDLE(lumieraorg__plugin, 0) handle =
+                    LUMIERA_INTERFACE_CAST(lumieraorg__plugin, 0) self->plugin;
+
+                  lumiera_interfaceregistry_bulkremove_interfaces (handle->plugin_interfaces ());
+                }
+              itr->lumiera_plugin_unload_fn (self);
+              break;
+            }
+        }
+      ++itr;
+    }
+
+  return 0;
+}
+
+
+LumieraPlugin
+lumiera_plugin_lookup (const char* name)
+{
+  LumieraPlugin ret = NULL;
+
+  if (name)
+    LUMIERA_RECMUTEX_SECTION (plugin, &lumiera_interface_mutex)
+      ret = (LumieraPlugin) psplay_find (lumiera_pluginregistry, name, 100);
+
+  return ret;
+}
 
 
 static char* init_exts_globs ()

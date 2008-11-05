@@ -44,7 +44,7 @@ lumiera_plugin_load_DYNLIB (const char* name)
         LUMIERA_ERROR_SET (plugin, PLUGIN_WTF);
     }
   else
-    LUMIERA_ERROR_SET (plugin, PLUGIN_DLOPEN);
+    LUMIERA_ERROR_SET (plugin, PLUGIN_OPEN);
 
   return lumiera_plugin_init (self, handle, plugin);
 }
@@ -53,6 +53,6 @@ lumiera_plugin_load_DYNLIB (const char* name)
 void
 lumiera_plugin_unload_DYNLIB (LumieraPlugin self)
 {
-  (void) self;
-  UNIMPLEMENTED();
+  TRACE (plugin);
+  dlclose (lumiera_plugin_handle (self));
 }
