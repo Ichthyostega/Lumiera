@@ -320,6 +320,9 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg__plugin, 0,                              
 #define  LUMIERA_INTERFACE_OPEN(interface, version, minminor, name) \
   LUMIERA_INTERFACE_CAST(interface, version) lumiera_interface_open (#interface, version, minminor, #name)
 
+#define  LUMIERA_INTERFACE_CLOSE(handle) \
+  lumiera_interface_close (&(handle)->interface_header_)
+
 
 typedef struct lumiera_interfaceslot_struct lumiera_interfaceslot;
 typedef lumiera_interfaceslot* LumieraInterfaceslot;
