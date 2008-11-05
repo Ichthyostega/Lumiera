@@ -362,3 +362,31 @@ lumiera_plugin_key_fn (const PSplaynode node)
   return ((LumieraPlugin)node)->name;
 }
 
+
+void
+lumiera_plugin_delete_fn (PSplaynode node)
+{
+  LumieraPlugin self = (LumieraPlugin) node;
+
+  ENSURE (!self->refcnt, "plugin %s still in use at shutdown", self->name);
+
+
+  const char* ext = strrchr (self->name, '.');
+
+  LumieraPlugintype itr = lumiera_plugin_types;
+  while (itr->ext)
+    {
+      if (!strcmp (itr->ext, ext))
+        {
+          if (!self->error)
+            {
+              LUMIERA_INTERFACE_HANDLE(lumieraorg__plugin, 0) handle =
+                LUMIERA_INTERFACE_CAST(lumieraorg__plugin, 0) self->plugin;
+              lumiera_interfaceregistry_bulkremove_interfaces (handle->plugin_interfaces ());
+            }
+          itr->lumiera_plugin_unload_fn (self);
+          break;
+        }
+      ++itr;
+    }
+}

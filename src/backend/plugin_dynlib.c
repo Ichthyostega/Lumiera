@@ -54,5 +54,7 @@ void
 lumiera_plugin_unload_DYNLIB (LumieraPlugin self)
 {
   TRACE (plugin);
-  dlclose (lumiera_plugin_handle (self));
+  void* handle = lumiera_plugin_handle (self);
+  if (handle)
+    dlclose (handle);
 }

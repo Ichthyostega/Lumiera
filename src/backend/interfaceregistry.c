@@ -106,7 +106,7 @@ lumiera_interfaceregistry_init (void)
   if (!lumiera_interfaceregistry)
     LUMIERA_DIE (ERRNO);
 
-  lumiera_pluginregistry = psplay_new (lumiera_plugin_cmp_fn, lumiera_plugin_key_fn, NULL);
+  lumiera_pluginregistry = psplay_new (lumiera_plugin_cmp_fn, lumiera_plugin_key_fn, lumiera_plugin_delete_fn);
   if (!lumiera_pluginregistry)
     LUMIERA_DIE (ERRNO);
 
@@ -118,20 +118,18 @@ void
 lumiera_interfaceregistry_destroy (void)
 {
   TRACE (interfaceregistry);
-  REQUIRE (!psplay_nelements (lumiera_interfaceregistry));
-
-  lumiera_mutex_destroy (&lumiera_interface_mutex, &NOBUG_FLAG(interfaceregistry));
-
-  if (lumiera_interfaceregistry)
-    psplay_destroy (lumiera_interfaceregistry);
-  lumiera_interfaceregistry = NULL;
-
-  TODO ("provide a delete function for the psplay tree to tear it down");
-  REQUIRE (psplay_nelements (lumiera_pluginregistry) == 0, "plugins still loaded at destroy");
 
   if (lumiera_pluginregistry)
     psplay_delete (lumiera_pluginregistry);
   lumiera_pluginregistry = NULL;
+
+  lumiera_mutex_destroy (&lumiera_interface_mutex, &NOBUG_FLAG(interfaceregistry));
+
+  REQUIRE (!psplay_nelements (lumiera_interfaceregistry), "some interfaces still registered at shutdown");
+
+  if (lumiera_interfaceregistry)
+    psplay_destroy (lumiera_interfaceregistry);
+  lumiera_interfaceregistry = NULL;
 }
 
 

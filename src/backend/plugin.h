@@ -174,5 +174,7 @@ lumiera_plugin_cmp_fn (const void* keya, const void* keyb);
 const void*
 lumiera_plugin_key_fn (const PSplaynode node);
 
+void
+lumiera_plugin_delete_fn (PSplaynode node);
 
 #endif /* LUMIERA_PLUGIN_H */
