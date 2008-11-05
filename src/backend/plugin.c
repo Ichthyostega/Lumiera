@@ -154,11 +154,33 @@ lumiera_plugin_error (LumieraPlugin self)
   return self->error;
 }
 
-void *
+
+void*
 lumiera_plugin_handle (LumieraPlugin self)
 {
   REQUIRE (self);
   return self->handle;
+}
+
+
+const char*
+lumiera_plugin_name (LumieraPlugin self)
+{
+  return self?self->name:NULL;
+}
+
+
+void
+lumiera_plugin_refinc (LumieraPlugin self)
+{
+  ++self->refcnt;
+}
+
+
+void
+lumiera_plugin_refdec (LumieraPlugin self)
+{
+  --self->refcnt;
 }
 
 
@@ -369,7 +391,6 @@ lumiera_plugin_delete_fn (PSplaynode node)
   LumieraPlugin self = (LumieraPlugin) node;
 
   ENSURE (!self->refcnt, "plugin %s still in use at shutdown", self->name);
-
 
   const char* ext = strrchr (self->name, '.');
 

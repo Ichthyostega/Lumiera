@@ -138,6 +138,34 @@ lumiera_plugin_handle (LumieraPlugin self);
 
 
 /**
+ * Query the plugin name
+ * The name is the path and filname under which it was loaded
+ * @param self plugin to query
+ * @return pointer to the name string
+ */
+const char*
+lumiera_plugin_name (LumieraPlugin self);
+
+
+/**
+ * Increment refcount
+ * @internal
+ * @param self plugin which refcount to increment
+ */
+void
+lumiera_plugin_refinc (LumieraPlugin self);
+
+
+/**
+ * Decrement refcount
+ * @internal
+ * @param self plugin which refcount to decrement
+ */
+void
+lumiera_plugin_refdec (LumieraPlugin self);
+
+
+/**
  * Tries to unload a plugin.
  * When the Plugin is unused, then all resources associated with it are freed and it will be removed from memory
  * @param plugin the plugin to be unloaded.
