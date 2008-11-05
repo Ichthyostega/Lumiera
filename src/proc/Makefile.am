@@ -71,9 +71,9 @@ liblumiprocengine_la_SOURCES =					\
 	$(liblumiprocengine_la_srcdir)/nodefactory.cpp		\
 	$(liblumiprocengine_la_srcdir)/nodewiring.cpp		\
 	$(liblumiprocengine_la_srcdir)/pluginadapter.cpp	\
-	$(liblumiprocengine_la_srcdir)/rendergraph.cpp		\
 	$(liblumiprocengine_la_srcdir)/procnode.cpp		\
 	$(liblumiprocengine_la_srcdir)/projector.cpp		\
+	$(liblumiprocengine_la_srcdir)/rendergraph.cpp		\
 	$(liblumiprocengine_la_srcdir)/renderengine.cpp		\
 	$(liblumiprocengine_la_srcdir)/source.cpp		\
 	$(liblumiprocengine_la_srcdir)/stateproxy.cpp		\
@@ -161,6 +161,7 @@ liblumiprocmobjectsession_la_SOURCES =					\
 	$(liblumiprocmobjectsession_la_srcdir)/meta.cpp			\
 	$(liblumiprocmobjectsession_la_srcdir)/relativelocation.cpp	\
 	$(liblumiprocmobjectsession_la_srcdir)/segment.cpp		\
+	$(liblumiprocmobjectsession_la_srcdir)/segmentation.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/simpleclip.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/plug.cpp			\
 	$(liblumiprocmobjectsession_la_srcdir)/session-impl.cpp		\
@@ -229,6 +230,7 @@ noinst_HEADERS +=							\
 	$(liblumiproc_la_srcdir)/mobject/session/simpleclip.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/session/mobjectfactory.hpp	\
 	$(liblumiproc_la_srcdir)/mobject/session/segment.hpp		\
+	$(liblumiproc_la_srcdir)/mobject/session/segmentation.hpp	\
 	$(liblumiproc_la_srcdir)/mobject/session/track.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/session/wish.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/session/clip.hpp		\

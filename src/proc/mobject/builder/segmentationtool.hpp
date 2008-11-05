@@ -27,7 +27,7 @@
 
 #include "proc/mobject/builder/applicablebuildertargettypes.hpp"
 
-#include "proc/mobject/session/segment.hpp"
+#include "proc/mobject/session/segmentation.hpp"
 #include "proc/mobject/session/fixture.hpp"   //////TODO really on the header??
 
 
@@ -42,7 +42,7 @@ namespace mobject {
 
     /**
      * Tool implementation for deriving a partitioning of the current 
-     * timeline, such that each segement has a constant configuration. 
+     * timeline, such that each Segment has a constant configuration. 
      * "Constant" means here, that any remaining changes over time
      * can be represented by automation solely, without the need 
      * to change the node connections.
@@ -61,12 +61,11 @@ namespace mobject {
         
         //////////////////////////////////////////////////////////TODO make it respond to the util::isnil test!
 
-      protected:
+      private:
         typedef mobject::session::Segment Segment;
 
         /** Partitioning of the Timeline to be created by this tool. */
-        list<Segment*> segments;
-        // TODO handle alloc!!!!
+        session::Segmentation& segments_;
 
       };
 

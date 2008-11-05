@@ -1,5 +1,5 @@
 /*
-  Segment  -  Segment of the timeline for rendering.
+  Segementation  -  Partitioning of a timeline for organising the render graph.
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,8 +20,7 @@
  
 * *****************************************************/
 
-#include "proc/mobject/session/segment.hpp"
-#include "proc/mobject/explicitplacement.hpp"
+#include "proc/mobject/session/segmentation.hpp"
 
 
 

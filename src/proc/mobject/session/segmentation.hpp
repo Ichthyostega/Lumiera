@@ -1,5 +1,5 @@
 /*
-  Segment  -  Segment of the timeline for rendering.
+  SEGMENTATION.hpp  -  Partitioning of a timeline for organising the render graph.
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,20 +18,43 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
+
+
+#ifndef MOBJECT_SESSION_SEGMENTATION_H
+#define MOBJECT_SESSION_SEGMENTATION_H
+
 
 #include "proc/mobject/session/segment.hpp"
-#include "proc/mobject/explicitplacement.hpp"
 
+#include <list>
+
+using std::list;
 
 
 namespace mobject {
   namespace session {
 
-    /** */
+
+    /**
+     * For the purpose of building and rendering, the fixture (for each timeline) 
+     * is partitioned such that each segment is <i>structurally constant</i>. 
+     * The Segmentation defines and maintains this partitioning. Further,
+     * it is the general entry point for accessing the correct part of the engine
+     * responsible for a given timeline time point.
+     * @see SegmentationTool actually calculating the Segmentation
+     */
+    class Segmentation
+      {
+
+        /** segments of the engine in ordered sequence. */
+        list<Segement> segments_;
+
+      };
 
 
 
   } // namespace mobject::session
 
 } // namespace mobject
+#endif

@@ -24,14 +24,12 @@
 #include "proc/mobject/session/fixture.hpp"
 #include "include/logging.h"
 
-namespace mobject
-  {
-  namespace session
-    {
+namespace mobject {
+  namespace session {
 
 
 
-    list<ExplicitPlacement*> &
+    list<ExplicitPlacement> &
     Fixture::getPlaylistForRender ()
     {
       UNIMPLEMENTED ("get Playlist For Render");
