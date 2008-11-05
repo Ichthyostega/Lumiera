@@ -215,6 +215,9 @@ lumiera_plugin_discover (LumieraPlugin (*callback_load)(const char* plugin),
       ++i;
     }
 
+  if (lumiera_error_peek ())
+    return 0;
+
   if (globs.gl_pathc)
     LUMIERA_RECMUTEX_SECTION (plugin, &lumiera_interface_mutex)
       {
