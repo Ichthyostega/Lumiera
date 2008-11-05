@@ -22,6 +22,7 @@
 #include "lib/mutex.h"
 #include "lib/safeclib.h"
 
+#include "backend/plugin.h"
 #include "backend/interface.h"
 
 #include "backend/interfaceregistry.h"
@@ -133,8 +134,9 @@ depwalk (LumieraInterfacenode self, LumieraInterfacenode* stack)
 
           if (!cycle)
             {
+              if ((*dep)->plugin)
+                lumiera_plugin_refinc ((*dep)->plugin);
               ++(*dep)->refcnt;
-
               (*dep)->lnk = *stack;
               *stack = *dep;
 
@@ -184,7 +186,10 @@ lumiera_interface_open_interfacenode (LumieraInterfacenode self)
 
           if (!cycle)
             {
+              if (self->plugin)
+                lumiera_plugin_refinc (self->plugin);
               ++self->refcnt;
+
               self->lnk = stack;
               stack = self;
               int collect_dependencies_bak = collect_dependencies;
@@ -290,6 +295,8 @@ lumiera_interfacenode_close (LumieraInterfacenode self)
 
       stack = self->lnk;
       self->lnk = NULL;
+      if (self->plugin)
+        lumiera_plugin_refdec (self->plugin);
       --self->refcnt;
     }
 }

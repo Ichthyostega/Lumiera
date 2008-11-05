@@ -65,7 +65,6 @@ lumiera_interfacenode_new (LumieraInterface iface, LumieraPlugin plugin)
   self->interface = iface;
   self->refcnt = 0;
   self->plugin = plugin;
-  FIXME ("plugin handling (refcnt, atime)");
   self->lnk = NULL;
   self->deps_size = 0;
   self->deps = NULL;
@@ -80,7 +79,6 @@ lumiera_interfacenode_delete (LumieraInterfacenode self)
   if (self)
     {
       REQUIRE (self->refcnt == 0);
-      FIXME ("plugin handling");
       lumiera_free (self->deps);
       lumiera_free (self);
     }

@@ -107,7 +107,7 @@ struct lumiera_plugin_struct
   /* use count for all interfaces of this plugin */
   unsigned refcnt;
 
-  /* time when the last open or close action happened */
+  /* time when the refcounter dropped to 0 last time */
   time_t last;
 
   /* when loading plugins en masse we do not want to fail completely if one doesnt cooperate, instead we record local errors here */
@@ -180,7 +180,8 @@ lumiera_plugin_refinc (LumieraPlugin self)
 void
 lumiera_plugin_refdec (LumieraPlugin self)
 {
-  --self->refcnt;
+  if (!--self->refcnt)
+    time (&self->last);
 }
 
 
