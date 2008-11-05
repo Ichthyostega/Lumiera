@@ -26,7 +26,7 @@
 
 #include <list>
 
-#include "proc/engine/processor.hpp"
+#include "proc/engine/rendergraph.hpp"
 
 
 using std::list;
@@ -36,16 +36,14 @@ namespace engine
   {
 
 
-  class RenderEngine : public Processor
+  class RenderEngine : public RenderGraph
     {
     public:
-      /**
-       * TODO: will probably be handled differently (see Cehteh)
-       */
-      void play () ;
+       ///// TODO: find out about the public operations
+       // note: the play controller lives in the backend
 
     private:
-      list<Processor> renderSegments;
+      list<RenderGraph> renderSegments;
 
     };
 

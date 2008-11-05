@@ -28,7 +28,7 @@
 #include "proc/mobject/builder/segmentationtool.hpp"
 #include "proc/mobject/builder/nodecreatortool.hpp"
 #include "proc/mobject/builder/mould.hpp"
-#include "proc/engine/processor.hpp"
+#include "proc/engine/rendergraph.hpp"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -58,12 +58,12 @@ namespace mobject {
         /** prepare a tool for properly segmenting the Fixture */
         SegmentationTool &  configureSegmentation ();
         
-        /** prepare a tool for building the processor for a single segment */
+        /** prepare a tool for building the render engine (graph) for a single segment */
         NodeCreatorTool &   configureFabrication ();
         
         /** receive the finished product of the build process; effectively
          *  releases any other builder tool object */
-        std::auto_ptr<engine::Processor> getProduct ();
+        std::auto_ptr<engine::RenderGraph> getProduct ();
       };
 
 

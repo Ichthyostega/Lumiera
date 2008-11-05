@@ -23,17 +23,10 @@
 
 #include "proc/engine/renderengine.hpp"
 
-namespace engine
-  {
+namespace engine {
 
 
-
-  /**
-   * TODO: will probably be handled differently (see Cehteh)
-   */
-  void
-  RenderEngine::play ()
-  {}
+  /** */
 
 
 

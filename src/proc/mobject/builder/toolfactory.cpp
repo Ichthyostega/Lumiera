@@ -36,7 +36,7 @@ namespace mobject {
       {
         
         session::Fixture & fixedTimeline_;
-        std::auto_ptr<engine::Processor> procSegment_;   /////////////////TODO consider renaming Processor
+        std::auto_ptr<engine::RenderGraph> procSegment_;
         
         boost::scoped_ptr<SegementationTool> segmentation_;
         boost::scoped_ptr<NodeCreatorTool> fabrication_;
@@ -44,7 +44,7 @@ namespace mobject {
         
         BuildProcessState (session::Fixture& theTimeline)
           : fixedTimeline_(theTimeline),
-            procSegment_(new engine::Processor())
+            procSegment_(new engine::RenderGraph())
           { }
         
       };
@@ -79,7 +79,7 @@ namespace mobject {
     }
     
     
-    std::auto_ptr<engine::Processor>
+    std::auto_ptr<engine::RenderGraph>
     ToolFactory::getProduct ()
     {
       state_->segmentation_.reset(0);

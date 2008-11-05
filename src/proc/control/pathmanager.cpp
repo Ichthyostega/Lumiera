@@ -27,13 +27,7 @@ namespace control {
 
 
 
-  engine::Processor *
-  PathManager::buildProcessor ()
-  {
-    UNIMPLEMENTED ("build a complete processor and optimize render path");
-    return 0;//////////////////TODO
-  }
-
+  /** */
 
 
 } // namespace control

@@ -27,7 +27,7 @@
 
 #include "proc/mobject/builder/applicablebuildertargettypes.hpp"
 
-#include "proc/engine/processor.hpp"
+#include "proc/engine/rendergraph.hpp"
 #include "proc/mobject/builder/toolfactory.hpp"
 
 
@@ -49,12 +49,12 @@ namespace mobject {
       {
         ToolFactory& toolKit_;
         
-        /** holds the Processor (Render Engine Element)
+        /** holds the RenderGraph (Render Engine Element)
          *  to be built by the current build step */
-        engine::Processor& proc_;
+        engine::RenderGraph& proc_;
         
         
-        NodeCreatorTool (ToolFactory& tofa, engine::Processor& proc)
+        NodeCreatorTool (ToolFactory& tofa, engine::RenderGraph& proc)
           : toolKit_(tofa),
             proc_(proc)
           { }

@@ -1,5 +1,5 @@
 /*
-  PROCESSOR.hpp  -  a single render pipeline for one segment of the timeline
+  RenderGraph  -  render network corresponding to one segment of the timeline
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,36 +18,17 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
 
 
-#ifndef ENGINE_PROCESSOR_H
-#define ENGINE_PROCESSOR_H
-
-#include "proc/common.hpp"
+#include "proc/engine/rendergraph.hpp"
 #include "proc/state.hpp"
 
+namespace engine {
 
+  /** */
 
-namespace engine
-  {
-
-  class ExitNode;
-
-  class Processor
-    {
-    protected:
-      ExitNode * output;
-
-      /** begin of the timerange covered by this processor */
-      lumiera::Time start;
-
-      /**end (exclusive) of the timerange  */
-      lumiera::Time end;
-
-    };
 
 
 
 } // namespace engine
-#endif
