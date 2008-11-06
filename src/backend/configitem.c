@@ -31,184 +31,23 @@
 #include "backend/configentry.h"
 
 
+//TODO: internal/static forward declarations//
+
+static LumieraConfigitem parse_directive (LumieraConfigitem self, char* itr);
+
+static LumieraConfigitem parse_section (LumieraConfigitem self, char* itr);
+
+static LumieraConfigitem parse_configentry (LumieraConfigitem self, char* itr);
+
+
 //TODO: System includes//
 #include <ctype.h>
 #include <stdint.h>
 
 
-//TODO: internal/static forward declarations//
-
-static LumieraConfigitem 
-parse_directive(LumieraConfigitem self, char* itr)
-{
-  /*itr points now to @*/
-  self->key = itr;
-
-  /*check whether there are illegal whitespaces after @*/
-  itr++;
-  if (*itr && !isspace(*itr))
-    {
-      /*now look for the end of the directive and set the keysize*/
-      self->key_size = strspn (itr, LUMIERA_CONFIG_KEY_CHARS);
-  
-      itr += self->key_size;
-
-      /*we need a key with a length greather than zero and 
-       * either end of line 
-       * or whitespace after key */
-
-      if ( self->key_size && ( !*itr || (*itr && isspace(*itr)) ))
-        {
-          /*look for given arguments*/ 
-
-          /*skip blanks*/
-          while (*itr && isspace (*itr))
-            itr++;
-
-          if (*itr)
-            {
-              /*there are arguments given, thus set delim*/
-              self->delim = itr - 1;
-            }
-          else
-            {
-              /*no arguments were given*/
-              self->delim = NULL;
-            }
-        }
-      else
-        {
-          /*malformed lines shall be treated like if they were comments*/
-          self->key = NULL;
-          self->key_size = 0;
-
-          LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
-        }
-    }
-  else
-    {
-      /*there occurred already an error right after the @!*/
-      /*malformed lines shall be treated like if they were comments*/
-      self->key = NULL;
-      self->key_size = 0;
-
-      LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
-    } 
-  return self;
-}
-
-static LumieraConfigitem 
-parse_section(LumieraConfigitem self, char* itr)
-{
-  /*skip blanks before prefix*/
-  itr++;
-  while (*itr && isspace(*itr))
-    itr++;
-
-  /*itr points now to the begin of the key*/
-  self->key = itr;
-
-  /*now look for the end of the key and set the keysize*/
-  self->key_size = strspn (itr, LUMIERA_CONFIG_KEY_CHARS);
-
-  itr += self->key_size;
-
-  /*if the line ends ends with prefix] delim points to ] 
-   * and not the last (blank) character before the final square bracket*/
-  if (self->key_size && *itr && *itr == ']')
-    {
-      self->delim = itr;
-      TODO("self->vtable = &lumiera_configsection_funcs;");
-    }
-  else if (self->key_size && *itr && isspace(*itr))
-    {
-      /* skip blanks until we reach the suffix or the final square bracket*/
-      while (*itr && isspace(*itr))
-        itr++;
-
-      if (*itr && *itr == ']')
-        {
-          /*final square bracket reached, so place delim one char before the 
-           * actual position which must be a whitespace: no extra check necessary*/
-          self->delim = itr - 1;
-          TODO("self->vtable = &lumiera_configsection_funcs;");
-        }
-      else if (*itr)
-        {
-          TODO("check wheter suffix is made of legal characters");
-
-          /*delim points to the last whitespace before the actual position;
-           * no extra check needed*/
-          self->delim = itr - 1;
-          TODO("self->vtable = &lumiera_configsection_funcs;");
-        }
-      else
-        {
-          /*malformed section line, treat this line like a comment*/
-          self->key = NULL;
-          self->key_size = 0;
-
-          LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
-
-        }
-    }
-  else
-    {
-      /*error: either *itr is false, points neither to a blank nor to a closed square 
-       * bracket or the key_size is zero*/
-
-      /*treat this line like a comment*/
-      self->key = NULL;
-      self->key_size = 0;
-
-      LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
-
-    }
-  
-  return self;
-}
-
-static LumieraConfigitem 
-parse_configentry(LumieraConfigitem self, char* itr)
-{
-  /*itr points now to the first not-whitespace-character*/
-  self->key = itr;
-
-  /*now look for the end of the key and set the keysize*/
-  self->key_size = strspn (itr, LUMIERA_CONFIG_KEY_CHARS);
-
-  /* skip blanks */
-  itr += self->key_size;
-  while (*itr && isspace (*itr))
-    itr++;
-
-  if (self->key_size && *itr == '=')
-    {
-      /*this configentry assigns a value to a key*/
-      self->delim = itr;
-      self->vtable = &lumiera_configentry_funcs;
-    }
-  else if (self->key_size && *itr == '<')
-    {
-      /*this configentry is a redirect*/
-      self->delim = itr;
-      self->vtable = &lumiera_configentry_funcs;
-    }
-  else
-    {
-      /*this is not a valid configentry; treat this line like a comment*/
-      self->key = NULL;
-      self->key_size = 0;
-
-      LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
-    }
-
-  return self;
-}
-
-
 /**
  * @file
+ * create a configitem out of a single line.
  *
  */
 
@@ -364,6 +203,172 @@ lumiera_configitem_parse (LumieraConfigitem self, const char* line)
   else
     {
       self = parse_configentry (self, itr); /*this is probably a configentry*/
+    }
+
+  return self;
+}
+
+static LumieraConfigitem 
+parse_directive (LumieraConfigitem self, char* itr)
+{
+  /*itr points now to @*/
+  self->key = itr;
+
+  /*check whether there are illegal whitespaces after @*/
+  itr++;
+  if (*itr && !isspace(*itr))
+    {
+      /*now look for the end of the directive and set the keysize*/
+      self->key_size = strspn (itr, LUMIERA_CONFIG_KEY_CHARS);
+  
+      itr += self->key_size;
+
+      /*we need a key with a length greather than zero and 
+       * either end of line 
+       * or whitespace after key */
+
+      if ( self->key_size && ( !*itr || (*itr && isspace(*itr)) ))
+        {
+          /*look for given arguments*/ 
+
+          /*skip blanks*/
+          while (*itr && isspace (*itr))
+            itr++;
+
+          if (*itr)
+            {
+              /*there are arguments given, thus set delim*/
+              self->delim = itr - 1;
+            }
+          else
+            {
+              /*no arguments were given*/
+              self->delim = NULL;
+            }
+        }
+      else
+        {
+          /*malformed lines shall be treated like if they were comments*/
+          self->key = NULL;
+          self->key_size = 0;
+
+          LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
+        }
+    }
+  else
+    {
+      /*there occurred already an error right after the @!*/
+      /*malformed lines shall be treated like if they were comments*/
+      self->key = NULL;
+      self->key_size = 0;
+
+      LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
+    } 
+  return self;
+}
+
+static LumieraConfigitem 
+parse_section (LumieraConfigitem self, char* itr)
+{
+  /*skip blanks before prefix*/
+  itr++;
+  while (*itr && isspace(*itr))
+    itr++;
+
+  /*itr points now to the begin of the key*/
+  self->key = itr;
+
+  /*now look for the end of the key and set the keysize*/
+  self->key_size = strspn (itr, LUMIERA_CONFIG_KEY_CHARS);
+
+  itr += self->key_size;
+
+  /*if the line ends ends with prefix] delim points to ] 
+   * and not the last (blank) character before the final square bracket*/
+  if (self->key_size && *itr && *itr == ']')
+    {
+      self->delim = itr;
+      TODO("self->vtable = &lumiera_configsection_funcs;");
+    }
+  else if (self->key_size && *itr && isspace(*itr))
+    {
+      /* skip blanks until we reach the suffix or the final square bracket*/
+      while (*itr && isspace(*itr))
+        itr++;
+
+      if (*itr && *itr == ']')
+        {
+          /*final square bracket reached, so place delim one char before the 
+           * actual position which must be a whitespace: no extra check necessary*/
+          self->delim = itr - 1;
+          TODO("self->vtable = &lumiera_configsection_funcs;");
+        }
+      else if (*itr)
+        {
+          TODO("check wheter suffix is made of legal characters");
+
+          /*delim points to the last whitespace before the actual position;
+           * no extra check needed*/
+          self->delim = itr - 1;
+          TODO("self->vtable = &lumiera_configsection_funcs;");
+        }
+      else
+        {
+          /*malformed section line, treat this line like a comment*/
+          self->key = NULL;
+          self->key_size = 0;
+
+          LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
+        }
+    }
+  else
+    {
+      /*error: either *itr is false, points neither to a blank nor to a closed square 
+       * bracket or the key_size is zero*/
+
+      /*treat this line like a comment*/
+      self->key = NULL;
+      self->key_size = 0;
+
+      LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
+    }
+  
+  return self;
+}
+
+static LumieraConfigitem 
+parse_configentry (LumieraConfigitem self, char* itr)
+{
+  /*itr points now to the first not-whitespace-character*/
+  self->key = itr;
+
+  /*now look for the end of the key and set the keysize*/
+  self->key_size = strspn (itr, LUMIERA_CONFIG_KEY_CHARS);
+
+  /* skip blanks */
+  itr += self->key_size;
+  while (*itr && isspace (*itr))
+    itr++;
+
+  if (self->key_size && *itr == '=')
+    {
+      /*this configentry assigns a value to a key*/
+      self->delim = itr;
+      self->vtable = &lumiera_configentry_funcs;
+    }
+  else if (self->key_size && *itr == '<')
+    {
+      /*this configentry is a redirect*/
+      self->delim = itr;
+      self->vtable = &lumiera_configentry_funcs;
+    }
+  else
+    {
+      /*this is not a valid configentry; treat this line like a comment*/
+      self->key = NULL;
+      self->key_size = 0;
+
+      LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
     }
 
   return self;
