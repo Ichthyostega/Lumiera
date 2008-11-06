@@ -112,7 +112,8 @@ noinst_LIBRARIES += liblumiproccontrol.a
 liblumiproccontrol_a_CXXFLAGS = $(CXXFLAGS) -Wall
 
 liblumiproccontrol_a_SOURCES =				\
-	$(liblumiproccontrol_a_srcdir)/pathmanager.cpp	
+	$(liblumiproccontrol_a_srcdir)/pathmanager.cpp			\
+	$(liblumiproccontrol_a_srcdir)/stypemanager.cpp
 
 
 liblumiprocmobjectsession_a_srcdir = $(top_srcdir)/src/proc/mobject/session
@@ -125,11 +126,11 @@ liblumiprocmobjectsession_a_SOURCES =					\
 	$(liblumiprocmobjectsession_a_srcdir)/allocation.cpp		\
 	$(liblumiprocmobjectsession_a_srcdir)/auto.cpp			\
 	$(liblumiprocmobjectsession_a_srcdir)/clip.cpp			\
-	$(liblumiprocmobjectsession_a_srcdir)/compoundclip.cpp	\
+	$(liblumiprocmobjectsession_a_srcdir)/compoundclip.cpp		\
 	$(liblumiprocmobjectsession_a_srcdir)/constraint.cpp		\
 	$(liblumiprocmobjectsession_a_srcdir)/defsmanager.cpp		\
 	$(liblumiprocmobjectsession_a_srcdir)/effect.cpp		\
-	$(liblumiprocmobjectsession_a_srcdir)/fixedlocation.cpp	\
+	$(liblumiprocmobjectsession_a_srcdir)/fixedlocation.cpp		\
 	$(liblumiprocmobjectsession_a_srcdir)/label.cpp			\
 	$(liblumiprocmobjectsession_a_srcdir)/meta.cpp			\
 	$(liblumiprocmobjectsession_a_srcdir)/relativelocation.cpp	\
