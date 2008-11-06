@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #include "hello_interface.h"
-#include "backend/interfacedescriptor.h"
+#include "lumiera/interfacedescriptor.h"
 
 int myopen(void)
 {

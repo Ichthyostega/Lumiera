@@ -21,8 +21,8 @@
 */
 #include "lib/safeclib.h"
 
-#include "backend/config.h"
-#include "backend/configitem.h"
+#include "lumiera/config.h"
+#include "lumiera/configitem.h"
 
 #include "tests/test.h"
 

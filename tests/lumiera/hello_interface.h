@@ -1,4 +1,4 @@
-#include "backend/interface.h"
+#include "lumiera/interface.h"
 
 LUMIERA_INTERFACE_DECLARE (lumieraorg_testhello, 0,
                            LUMIERA_INTERFACE_SLOT (void, hello, (void)),

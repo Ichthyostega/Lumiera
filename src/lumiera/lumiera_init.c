@@ -1,5 +1,5 @@
 /*
-  lumiera.c  -  Lumiera main application shell
+  lumiera_init.c  -  Lumiera initialization and shutdowen and global state
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -29,23 +29,29 @@
 
 
 //TODO: System includes//
-#include <stdio.h>
 
 /**
  * @file
  *
  */
 
+NOBUG_DEFINE_FLAG (all);
+NOBUG_DEFINE_FLAG_PARENT (lumiera_all, all);
+NOBUG_DEFINE_FLAG_PARENT (lumiera, lumiera_all);
+
 
 //code goes here//
-int
-main (int argc, char** argv)
+
+void
+lumiera_init (void)
 {
-  lumiera_init ();
-  (void) argc;
-  (void) argv;
-  printf ("Lumiera is alive ...\n");
+  NOBUG_INIT;
+  NOBUG_INIT_FLAG (all);
+  NOBUG_INIT_FLAG (lumiera_all);
+  NOBUG_INIT_FLAG (lumiera);
+
 }
+
 
 
 /*

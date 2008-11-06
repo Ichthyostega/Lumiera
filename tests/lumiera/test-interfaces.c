@@ -19,13 +19,13 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "backend/interface.h"
-#include "backend/interfaceregistry.h"
-#include "backend/interfacedescriptor.h"
-#include "backend/config.h"
+#include "lumiera/interface.h"
+#include "lumiera/interfaceregistry.h"
+#include "lumiera/interfacedescriptor.h"
+#include "lumiera/config.h"
 
 #include "tests/test.h"
-#include "tests/backend/hello_interface.h"
+#include "tests/lumiera/hello_interface.h"
 
 /*
   define 2 example interfaces

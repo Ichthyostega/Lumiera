@@ -45,6 +45,8 @@ NOBUG_DECLARE_FLAG (lumiera);
  */
 
 //TODO: declarations go here//
+void
+lumiera_init (void);
 
 
 #endif
