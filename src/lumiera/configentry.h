@@ -31,7 +31,7 @@ typedef lumiera_configentry* LumieraConfigentry;
 
 
 //TODO: Lumiera header includes//
-#include "backend/configitem.h"
+#include "lumiera/configitem.h"
 
 //TODO: System includes//
 #include <nobug.h>

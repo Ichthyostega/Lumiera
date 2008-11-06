@@ -24,7 +24,8 @@
 
 
 //TODO: Lumiera header includes//
-#include "backend/config.h"
+#include "lumiera/lumiera.h"
+#include "lumiera/config.h"
 
 //TODO: internal/static forward declarations//
 
@@ -39,7 +40,7 @@
  *
  */
 
-NOBUG_DEFINE_FLAG_PARENT (config_all, backend);
+NOBUG_DEFINE_FLAG_PARENT (config_all, lumiera_all);
 NOBUG_DEFINE_FLAG_PARENT (config, config_all);
 NOBUG_DEFINE_FLAG_PARENT (config_typed, config_all);
 NOBUG_DEFINE_FLAG_PARENT (config_file, config_all);
@@ -193,7 +194,7 @@ lumiera_config_get (const char* key, const char** value)
     {
       char* env = lumiera_tmpbuf_snprintf (2048, "LUMIERA_%s", tr_key);
 
-      *value = getenv(env);
+      *value = getenv (env);
       if (*value)
         {
           NOTICE (config, "envvar override for config %s = %s", env, *value);

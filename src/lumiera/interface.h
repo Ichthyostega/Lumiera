@@ -407,7 +407,6 @@ LUMIERA_INTERFACE_DECLARE (lumieraorg__plugin, 0,
   API to handle interfaces
  */
 
-
 /**
  * Open an interface by version and name.
  * Looks up the requested interface, possibly loading it from a plugin.

@@ -25,9 +25,9 @@
 #include "lib/mutex.h"
 #include "lib/error.h"
 
-#include "backend/interfaceregistry.h"
-#include "backend/config.h"
-#include "backend/plugin.h"
+#include "lumiera/interfaceregistry.h"
+#include "lumiera/config.h"
+#include "lumiera/plugin.h"
 
 #include <glob.h>
 

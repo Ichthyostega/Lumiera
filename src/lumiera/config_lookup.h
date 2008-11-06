@@ -33,7 +33,7 @@ typedef struct lumiera_config_lookupentry_struct lumiera_config_lookupentry;
 typedef lumiera_config_lookupentry* LumieraConfigLookupentry;
 
 
-#include "backend/configitem.h"
+#include "lumiera/configitem.h"
 
 
 #include <nobug.h>

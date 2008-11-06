@@ -1,5 +1,5 @@
 /*
-  configentry.c  -  single entries from configfiles
+  lumiera.h  -  Lumiera main application shell
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -19,16 +19,24 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#ifndef LUMIERA_LUMIERA_H
+#define LUMIERA_LUMIERA_H
+
 //TODO: Support library includes//
-#include "lib/safeclib.h"
+
+
+//TODO: Forward declarations//
+
 
 //TODO: Lumiera header includes//
-#include "backend/configentry.h"
-
-//TODO: internal/static forward declarations//
 
 
 //TODO: System includes//
+#include <nobug.h>
+
+NOBUG_DECLARE_FLAG (all);
+NOBUG_DECLARE_FLAG (lumiera_all);
+NOBUG_DECLARE_FLAG (lumiera);
 
 
 /**
@@ -36,35 +44,10 @@
  *
  */
 
-//code goes here//
-LumieraConfigitem
-lumiera_configentry_new (LumieraConfigitem tmp)
-{
-  LumieraConfigentry self = lumiera_malloc (sizeof (*self));
-  lumiera_configitem_move ((LumieraConfigitem)self, tmp);
-
-  TODO ("initialize other stuff here (lookup, parent, ...)");
-
-  return (LumieraConfigitem)self;
-}
+//TODO: declarations go here//
 
 
-LumieraConfigitem
-lumiera_configentry_destroy (LumieraConfigitem self)
-{
-  TODO ("cleanup other stuff here (lookup, parent, ...)");
-
-  return self;
-}
-
-struct lumiera_configitem_vtable lumiera_configentry_funcs =
-  {
-    .new = lumiera_configentry_new,
-    .destroy = lumiera_configentry_destroy
-  };
-
-
-
+#endif
 /*
 // Local Variables:
 // mode: C

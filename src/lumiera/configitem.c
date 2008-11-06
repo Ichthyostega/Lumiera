@@ -24,9 +24,10 @@
 #include "lib/safeclib.h"
 
 
-#include "backend/config.h"
-#include "backend/configitem.h"
-#include "backend/configentry.h"
+//TODO: Lumiera header includes//
+#include "lumiera/config.h"
+#include "lumiera/configitem.h"
+#include "lumiera/configentry.h"
 
 
 static LumieraConfigitem parse_directive (LumieraConfigitem self, char* itr);

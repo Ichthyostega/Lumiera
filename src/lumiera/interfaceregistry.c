@@ -29,8 +29,9 @@
 
 
 
-#include "backend/plugin.h"
-#include "backend/interfaceregistry.h"
+#include "lumiera/lumiera.h"
+#include "lumiera/plugin.h"
+#include "lumiera/interfaceregistry.h"
 
 /**
  * @file
@@ -39,7 +40,7 @@
  * by their name and major version.
  */
 
-NOBUG_DEFINE_FLAG_PARENT (interface_all, backend);
+NOBUG_DEFINE_FLAG_PARENT (interface_all, lumiera_all);
 NOBUG_DEFINE_FLAG_PARENT (plugin, interface_all);
 NOBUG_DEFINE_FLAG_PARENT (interfaceregistry, interface_all);
 NOBUG_DEFINE_FLAG_PARENT (interface, interface_all);

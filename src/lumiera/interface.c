@@ -22,10 +22,10 @@
 #include "lib/mutex.h"
 #include "lib/safeclib.h"
 
-#include "backend/plugin.h"
-#include "backend/interface.h"
+#include "lumiera/plugin.h"
+#include "lumiera/interface.h"
 
-#include "backend/interfaceregistry.h"
+#include "lumiera/interfaceregistry.h"
 
 #include <nobug.h>
 

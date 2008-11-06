@@ -18,7 +18,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include "backend/plugin.h"
+#include "lumiera/plugin.h"
 
 #include <dlfcn.h>
 #include <nobug.h>
