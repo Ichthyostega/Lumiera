@@ -103,26 +103,25 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                             );
 
 
-LUMIERA_PLUGIN (NULL, NULL,
-                "\046\150\040\062\077\110\134\143\236\244\346\365\072\377\371\263",
-                LUMIERA_INTERFACE_DEFINE (lumieraorg_testhello, 0,
-                                          lumieraorg_hello_german,
-                                          LUMIERA_INTERFACE_REF (lumieraorg_interfacedescriptor, 0, lumieraorg_exampleplugin_descriptor),
-                                          NULL,
-                                          NULL,
-                                          LUMIERA_INTERFACE_MAP (hello, "\167\012\306\023\031\151\006\362\026\003\125\017\170\022\100\333",
-                                                                 hallo),
-                                          LUMIERA_INTERFACE_MAP (goodbye, "\324\267\214\166\340\213\155\053\157\125\064\264\167\235\020\223",
-                                                                 tschuess)
-                                          ),
-                LUMIERA_INTERFACE_DEFINE (lumieraorg_testhello, 0,
-                                          lumieraorg_hello_english,
-                                          LUMIERA_INTERFACE_REF (lumieraorg_interfacedescriptor, 0, lumieraorg_exampleplugin_descriptor),
-                                          NULL,
-                                          NULL,
-                                          LUMIERA_INTERFACE_MAP (hello, "\326\247\370\247\032\103\223\357\262\007\356\042\051\330\073\116",
-                                                                 hello),
-                                          LUMIERA_INTERFACE_MAP (goodbye, "\365\141\371\047\101\230\050\106\071\231\022\235\325\112\354\241",
-                                                                 bye)
-                                          )
-                )
+LUMIERA_EXPORT(
+               LUMIERA_INTERFACE_DEFINE (lumieraorg_testhello, 0,
+                                         lumieraorg_hello_german,
+                                         LUMIERA_INTERFACE_REF (lumieraorg_interfacedescriptor, 0, lumieraorg_exampleplugin_descriptor),
+                                         NULL,
+                                         NULL,
+                                         LUMIERA_INTERFACE_MAP (hello, "\167\012\306\023\031\151\006\362\026\003\125\017\170\022\100\333",
+                                                                hallo),
+                                         LUMIERA_INTERFACE_MAP (goodbye, "\324\267\214\166\340\213\155\053\157\125\064\264\167\235\020\223",
+                                                                tschuess)
+                                         ),
+               LUMIERA_INTERFACE_DEFINE (lumieraorg_testhello, 0,
+                                         lumieraorg_hello_english,
+                                         LUMIERA_INTERFACE_REF (lumieraorg_interfacedescriptor, 0, lumieraorg_exampleplugin_descriptor),
+                                         NULL,
+                                         NULL,
+                                         LUMIERA_INTERFACE_MAP (hello, "\326\247\370\247\032\103\223\357\262\007\356\042\051\330\073\116",
+                                                                hello),
+                                         LUMIERA_INTERFACE_MAP (goodbye, "\365\141\371\047\101\230\050\106\071\231\022\235\325\112\354\241",
+                                                                bye)
+                                         )
+               )

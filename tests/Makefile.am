@@ -65,7 +65,7 @@ test_config_LDADD = liblumibackend.a liblumiera.a $(NOBUGMT_LUMIERA_LIBS)
 
 check_LTLIBRARIES += examplepluginc.la
 examplepluginc_la_SOURCES = $(tests_srcdir)/backend/example_plugin.c
-examplepluginc_la_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+examplepluginc_la_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -DLUMIERA_PLUGIN -I$(top_srcdir)/src/
 examplepluginc_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/null
 
 check_PROGRAMS += test-interfaces
