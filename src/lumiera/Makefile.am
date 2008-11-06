@@ -53,9 +53,9 @@ liblumierainit_a_SOURCES =			\
 
 
 bin_PROGRAMS += lumiera
-lumiera_CPPFLAGS = $(AM_CPPFLAGS)
+lumiera_CPPFLAGS = $(AM_CPPFLAGS) -DLUMIERA_CONFIG_PATH="\"$(pkgdatadir)/config\""
 lumiera_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
-lumiera_LDADD = liblumierainit.a liblumieraconfig.a liblumieraplugin.a liblumiera.a $(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS)
+lumiera_LDADD = liblumieraplugin.a liblumieraconfig.a liblumierainit.a liblumiera.a $(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS)
 
 lumiera_SOURCES =				\
 	$(lumiera_srcdir)/lumiera.c

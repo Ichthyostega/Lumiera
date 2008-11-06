@@ -24,12 +24,21 @@
 
 //TODO: Lumiera header includes//
 #include "lumiera/lumiera.h"
+#include "lumiera/interface.h"
+#include "lumiera/interfaceregistry.h"
+#include "lumiera/plugin.h"
+#include "lumiera/config.h"
 
 //TODO: internal/static forward declarations//
 
 
 //TODO: System includes//
 #include <stdio.h>
+
+#ifndef LUMIERA_CONFIG_PATH
+#error LUMIERA_CONFIG_PATH not defined
+#endif
+
 
 /**
  * @file
@@ -41,10 +50,25 @@
 int
 main (int argc, char** argv)
 {
-  lumiera_init ();
   (void) argc;
   (void) argv;
-  printf ("Lumiera is alive ...\n");
+  lumiera_init ();
+
+  TODO ("commandline parser");
+  lumiera_config_init (LUMIERA_CONFIG_PATH);
+
+  lumiera_interfaceregistry_init ();
+  TODO ("plugindb support instead loading all plugins at once");
+  lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
+
+  TRACE (lumiera, "Lumiera is alive");
+
+  TODO ("video editing");
+
+  TRACE (lumiera, "initiating shutdown sequence");
+  lumiera_interfaceregistry_destroy ();
+  lumiera_config_destroy ();
+  lumiera_shutdown ();
 }
 
 

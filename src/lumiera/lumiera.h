@@ -48,6 +48,9 @@ NOBUG_DECLARE_FLAG (lumiera);
 void
 lumiera_init (void);
 
+void
+lumiera_shutdown (void);
+
 
 #endif
 /*

@@ -49,7 +49,14 @@ lumiera_init (void)
   NOBUG_INIT_FLAG (all);
   NOBUG_INIT_FLAG (lumiera_all);
   NOBUG_INIT_FLAG (lumiera);
+  TRACE (lumiera, "initializing");
+}
 
+
+void
+lumiera_shutdown (void)
+{
+  TRACE (lumiera, "shutdown");
 }
 
 
