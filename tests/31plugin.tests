@@ -2,7 +2,7 @@ TESTING "testing plugins" ./test-interfaces
 
 
 TEST "discovering plugins, missing path" plugin_discover <<END
-out: error: LUMIERA_ERROR_CONFIG_NO_ENTRY:no configuration entry
+out: found plugin: (null)
 return: 0
 END
 

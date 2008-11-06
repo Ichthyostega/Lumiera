@@ -33,6 +33,10 @@
 
 #include <nobug.h>
 
+#ifndef LUMIERA_PLUGIN_PATH
+#error TODO: hey ichthyo, please figure the $pkglib path out by scons and use it as -DLUMIERA_PLUGIN_PATH for this source
+#endif
+
 /**
  * @file
  * Plugin loader.
@@ -193,6 +197,8 @@ lumiera_plugin_discover (LumieraPlugin (*callback_load)(const char* plugin),
   REQUIRE (callback_load);
   REQUIRE (callback_register);
 
+  lumiera_config_setdefault ("plugin.path ="LUMIERA_PLUGIN_PATH);
+
   /* construct glob trail {.so,.c,.foo} ... */
   static char* exts_globs = NULL;
   if (!exts_globs)
@@ -205,7 +211,7 @@ lumiera_plugin_discover (LumieraPlugin (*callback_load)(const char* plugin),
 
   while ((path = lumiera_config_wordlist_get_nth ("plugin.path", i, ":")))
     {
-      path = lumiera_tmpbuf_snprintf (SIZE_MAX,"%s%s", path, exts_globs);
+      path = lumiera_tmpbuf_snprintf (SIZE_MAX,"%s/%s", path, exts_globs);
       TRACE (plugin, "globbing path '%s'", path);
       int ret = glob (path, flags, NULL, &globs);
       if (ret == GLOB_NOSPACE)
@@ -214,9 +220,6 @@ lumiera_plugin_discover (LumieraPlugin (*callback_load)(const char* plugin),
       flags |= GLOB_APPEND;
       ++i;
     }
-
-  if (lumiera_error_peek ())
-    return 0;
 
   if (globs.gl_pathc)
     LUMIERA_RECMUTEX_SECTION (plugin, &lumiera_interface_mutex)
@@ -350,7 +353,7 @@ lumiera_plugin_lookup (const char* name)
 static char* init_exts_globs ()
 {
   char* exts_globs;
-  size_t exts_sz = 4; /* / * { } \0 less one comma */
+  size_t exts_sz = 3; /* * { } \0 less one comma */
   LumieraPlugintype itr = lumiera_plugin_types;
   while (itr->ext)
     {
@@ -362,7 +365,7 @@ static char* init_exts_globs ()
   *exts_globs = '\0';
 
   itr = lumiera_plugin_types;
-  strcat (exts_globs, "/*{");
+  strcat (exts_globs, "*{");
 
   while (itr->ext)
     {
