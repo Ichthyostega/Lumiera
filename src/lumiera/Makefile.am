@@ -28,7 +28,8 @@ liblumieraconfig_a_SOURCES =			\
 	$(lumiera_srcdir)/config_wordlist.c	\
 	$(lumiera_srcdir)/configentry.c		\
 	$(lumiera_srcdir)/configitem.c		\
-	$(lumiera_srcdir)/config_lookup.c
+	$(lumiera_srcdir)/config_lookup.c	\
+	$(lumiera_srcdir)/config_interface.c
 
 
 
@@ -70,4 +71,5 @@ noinst_HEADERS +=				\
 	$(lumiera_srcdir)/configentry.h		\
 	$(lumiera_srcdir)/configitem.h		\
 	$(lumiera_srcdir)/config_lookup.h	\
+	$(lumiera_srcdir)/config_interface.h	\
 	$(lumiera_srcdir)/lumiera.h

@@ -86,7 +86,7 @@ typedef lumiera_config* LumieraConfig;
 /* TODO: add here as 'LUMIERA_CONFIG_TYPE(name, ctype)' the _get/_set prototypes are declared automatically below, you still have to implement them in config.c */
 #define LUMIERA_CONFIG_TYPES                    \
   LUMIERA_CONFIG_TYPE(link, const char*)        \
-  LUMIERA_CONFIG_TYPE(number, signed long long) \
+  LUMIERA_CONFIG_TYPE(number, long long)        \
   LUMIERA_CONFIG_TYPE(real, long double)        \
   LUMIERA_CONFIG_TYPE(string, const char*)      \
   LUMIERA_CONFIG_TYPE(wordlist, const char*)    \
