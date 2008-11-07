@@ -18,45 +18,29 @@
 lumiera_srcdir = $(top_srcdir)/src/lumiera
 
 
-noinst_LIBRARIES += liblumieraconfig.a
-liblumieraconfig_a_CPPFLAGS = $(AM_CPPFLAGS)
-liblumieraconfig_a_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
+noinst_LIBRARIES += liblumieracore.a
+liblumieracore_a_CPPFLAGS = $(AM_CPPFLAGS) -DLUMIERA_PLUGIN_PATH="\"$(pkglibdir)\""
+liblumieracore_a_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
 
-liblumieraconfig_a_SOURCES =			\
+liblumieracore_a_SOURCES =			\
 	$(lumiera_srcdir)/config.c		\
 	$(lumiera_srcdir)/config_typed.c	\
 	$(lumiera_srcdir)/config_wordlist.c	\
 	$(lumiera_srcdir)/configentry.c		\
 	$(lumiera_srcdir)/configitem.c		\
 	$(lumiera_srcdir)/config_lookup.c	\
-	$(lumiera_srcdir)/config_interface.c
-
-
-
-noinst_LIBRARIES += liblumieraplugin.a
-liblumieraplugin_a_CPPFLAGS = $(AM_CPPFLAGS) -DLUMIERA_PLUGIN_PATH="\"$(pkglibdir)\""
-liblumieraplugin_a_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
-
-liblumieraplugin_a_SOURCES =			\
+	$(lumiera_srcdir)/config_interface.c	\
 	$(lumiera_srcdir)/interface.c		\
 	$(lumiera_srcdir)/interfaceregistry.c	\
 	$(lumiera_srcdir)/plugin.c		\
-	$(lumiera_srcdir)/plugin_dynlib.c
-
-
-
-noinst_LIBRARIES += liblumierainit.a
-liblumierainit_a_CPPFLAGS = $(AM_CPPFLAGS)
-liblumierainit_a_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
-
-liblumierainit_a_SOURCES =			\
+	$(lumiera_srcdir)/plugin_dynlib.c	\
 	$(lumiera_srcdir)/lumiera_init.c
 
 
 bin_PROGRAMS += lumiera
 lumiera_CPPFLAGS = $(AM_CPPFLAGS) -DLUMIERA_CONFIG_PATH="\"$(pkgdatadir)/config\""
 lumiera_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
-lumiera_LDADD = liblumieraplugin.a liblumieraconfig.a liblumierainit.a liblumiera.a $(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS)
+lumiera_LDADD = liblumieracore.a liblumiera.a $(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS)
 
 lumiera_SOURCES =				\
 	$(lumiera_srcdir)/lumiera.c

@@ -64,7 +64,7 @@ test_filehandles_LDADD = liblumibackend.a liblumiera.a $(NOBUGMT_LUMIERA_LIBS)
 check_PROGRAMS += test-config
 test_config_SOURCES = $(tests_srcdir)/lumiera/test-config.c
 test_config_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
-test_config_LDADD = liblumieraconfig.a liblumierainit.a liblumiera.a $(NOBUGMT_LUMIERA_LIBS)
+test_config_LDADD = liblumieracore.a liblumiera.a $(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS)
 
 check_LTLIBRARIES += examplepluginc.la
 examplepluginc_la_SOURCES = $(tests_srcdir)/lumiera/example_plugin.c
@@ -74,8 +74,8 @@ examplepluginc_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/nul
 check_PROGRAMS += test-interfaces
 test_interfaces_SOURCES = $(tests_srcdir)/lumiera/test-interfaces.c
 test_interfaces_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-test_interfaces_LDADD =  liblumieraplugin.a liblumieraconfig.a liblumierainit.a liblumiera.a $(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS)
-test_interfaces_DEPENDENCIES = examplepluginc.la liblumierainit.a liblumieraconfig.a liblumieraplugin.a liblumiera.a
+test_interfaces_LDADD =  liblumieracore.a liblumiera.a $(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS)
+test_interfaces_DEPENDENCIES = examplepluginc.la liblumieracore.a liblumiera.a
 
 check_PROGRAMS += test-filemmap
 test_filemmap_SOURCES = $(tests_srcdir)/backend/test-filemmap.c
