@@ -34,7 +34,7 @@
 #include <nobug.h>
 
 #ifndef LUMIERA_PLUGIN_PATH
-#error TODO: hey ichthyo, please figure the $pkglib path out by scons and use it as -DLUMIERA_PLUGIN_PATH for this source
+#error please define the plugin search path as -DLUMIERA_PLUGIN_PATH, e.g. as $INSTALL_PREFIX/lib/lumiera
 #endif
 
 /**
