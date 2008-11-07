@@ -27,6 +27,8 @@ return: 0
 END
 
 TEST "C plugin test, nested" plugin_examplepluginc_nested <<END
+out: config path is:  ./
+out: plugin path is: .libs
 out: Hallo Welt!
 out: Hello World!
 out: Bye World!

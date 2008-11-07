@@ -2,6 +2,7 @@
 
 #include "hello_interface.h"
 #include "lumiera/interfacedescriptor.h"
+#include "lumiera/config_interface.h"
 
 LUMIERA_PLUGIN_INTERFACEHANDLE;
 
@@ -49,11 +50,21 @@ void yeahbabe (void)
   LUMIERA_INTERFACE_HANDLE (lumieraorg_testhello, 0) english =
     LUMIERA_INTERFACE_OPEN  (lumieraorg_testhello, 0, 0, lumieraorg_hello_english);
 
+  LUMIERA_INTERFACE_HANDLE (lumieraorg_configuration, 0) config =
+    LUMIERA_INTERFACE_OPEN  (lumieraorg_configuration, 0, 0, lumieraorg_configuration);
+
+  const char* path;
+  if (config->wordlist_get ("config.path", &path))
+    printf ("config path is: %s\n", path);
+  if (config->wordlist_get ("plugin.path", &path))
+    printf ("plugin path is: %s\n", path);
+
+  LUMIERA_INTERFACE_CLOSE (config);
+
   german->hello ();
   english->hello ();
   english->goodbye ("World!");
   german->goodbye ("Welt!");
-
 
   LUMIERA_INTERFACE_CLOSE (german);
   LUMIERA_INTERFACE_CLOSE (english);

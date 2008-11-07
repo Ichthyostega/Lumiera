@@ -23,6 +23,7 @@
 #include "lumiera/interfaceregistry.h"
 #include "lumiera/interfacedescriptor.h"
 #include "lumiera/config.h"
+#include "lumiera/config_interface.h"
 
 #include "tests/test.h"
 #include "tests/lumiera/hello_interface.h"
@@ -524,6 +525,7 @@ TEST ("plugin_examplepluginc_nested")
   lumiera_config_init ("./");
   lumiera_interfaceregistry_init ();
   lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
+  lumiera_config_interface_init ();
 
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testtest, 0) test =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testtest, 0, 0, lumieraorg_test_both);
@@ -532,6 +534,7 @@ TEST ("plugin_examplepluginc_nested")
 
   LUMIERA_INTERFACE_CLOSE (test);
 
+  lumiera_config_interface_destroy ();
   lumiera_interfaceregistry_destroy ();
   lumiera_config_destroy ();
 }
