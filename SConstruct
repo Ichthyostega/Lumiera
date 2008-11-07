@@ -80,9 +80,9 @@ def setupBasicEnvironment():
     env.Append(CPPDEFINES = '_GNU_SOURCE')
     appendCppDefine(env,'DEBUG','DEBUG', 'NDEBUG')
 #   appendCppDefine(env,'OPENGL','USE_OPENGL')
-    appendVal(env,'ARCHFLAGS', 'CCFLAGS')   # for both C and C++
-    appendVal(env,'OPTIMIZE', 'CCFLAGS', val=' -O3')
-    appendVal(env,'DEBUG',    'CCFLAGS', val=' -ggdb')
+    appendVal(env,'ARCHFLAGS','CCFLAGS')   # for both C and C++
+    appendVal(env,'OPTIMIZE', 'CCFLAGS',   val=' -O3')
+    appendVal(env,'DEBUG',    'CCFLAGS',   val=' -ggdb')
     
     prepareOptionsHelp(opts,env)
     opts.Save(OPTIONSCACHEFILE, env)
@@ -90,13 +90,13 @@ def setupBasicEnvironment():
 
 def appendCppDefine(env,var,cppVar, elseVal=''):
     if env[var]:
-        env.Append(CPPDEFINES = cppVar )
+        env.Append(CPPDEFINES = env.subst(cppVar) )
     elif elseVal:
-        env.Append(CPPDEFINES = elseVal)
+        env.Append(CPPDEFINES = env.subst(elseVal))
 
 def appendVal(env,var,targetVar,val=None):
     if env[var]:
-        env.Append( **{targetVar: val or env[var]})
+        env.Append( **{targetVar: env.subst(val) or env[var]})
 
 
 def handleNoBugSwitches(env):
