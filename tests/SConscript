@@ -48,14 +48,13 @@ def treatPluginTestcase(env):
     """
     tree = 'backend'
     env = env.Clone()
-    env.Append(CPPPATH=tree)
+    env.Append(CPPPATH=tree, CPPDEFINES='LUMIERA_PLUGIN')
     prfx = path.join(tree,'example_plugin')
     oC   = env.SharedObject(prfx,        prfx+'.c')
     oCPP = env.SharedObject(prfx+'_cpp', prfx+'.cpp')
-    testplugin = ( env.LoadableModule('#$BINDIR/.libs/examplepluginc',      oC, SHLIBPREFIX='')
-
+    testplugin = ( env.LoadableModule('#$BINDIR/.libs/examplepluginc',    oC, SHLIBPREFIX='')
+#                + env.SharedLibrary('#$BINDIR/.libs/exampleplugincpp', oCPP, SHLIBPREFIX='')
 # doesn't compile yet...
-#                 + env.SharedLibrary('#$BINDIR/.libs/exampleplugincpp', oCPP, SHLIBPREFIX='')
                  )
     
     return testplugin

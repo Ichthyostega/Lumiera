@@ -84,6 +84,10 @@ def setupBasicEnvironment():
     appendVal(env,'OPTIMIZE', 'CCFLAGS',   val=' -O3')
     appendVal(env,'DEBUG',    'CCFLAGS',   val=' -ggdb')
     
+    # setup search path for Lumiera plugins
+    appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR\\"'
+                                   ,'LUMIERA_PLUGIN_PATH=\\"$DESTDIR/lib/lumiera\\"') 
+    
     prepareOptionsHelp(opts,env)
     opts.Save(OPTIONSCACHEFILE, env)
     return env
@@ -144,6 +148,7 @@ def defineCmdlineOptions():
 #       ,EnumOption('DIST_TARGET', 'Build target architecture', 'auto', 
 #                   allowed_values=('auto', 'i386', 'i686', 'x86_64' ), ignorecase=2)
         ,PathOption('DESTDIR', 'Installation dir prefix', '/usr/local')
+        ,PathOption('PKGLIBDIR', 'Installation dir for plugins, defaults to DESTDIR/lib/lumiera', '',PathOption.PathAccept)
         ,PathOption('SRCTAR', 'Create source tarball prior to compiling', '..', PathOption.PathAccept)
         ,PathOption('DOCTAR', 'Create tarball with dev documentaionl', '..', PathOption.PathAccept)
      )
