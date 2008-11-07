@@ -73,9 +73,9 @@ lumiera_mmapcache_delete (void);
  * when mmaped_limit is reached, the oldest mmap object gets dropped else a new allocated object
  * is returned
  * @param self pointer to the cache
- * @return the new mmap
+ * @return the new uninitialized mmap
  */
-LumieraMMap
+void*
 lumiera_mmapcache_mmap_acquire (LumieraMMapcache self);
 
 
@@ -91,8 +91,7 @@ lumiera_mmapcache_announce (LumieraMMapcache self, LumieraMMap map);
 
 /**
  * Remove a mmap object from the cache quotas.
- * Update the statistics kept in the cache,
- * called by mmap's destructor only
+ * Update the statistics kept in the cache, remove it from the cache.
  * @param self pointer to the cache
  * @param map object to be removed
  */

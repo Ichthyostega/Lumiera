@@ -31,15 +31,19 @@
 
 NOBUG_DEFINE_FLAG_PARENT (file, file_all);
 
-LUMIERA_ERROR_DEFINE(FILE_CHANGED, "File changed unexpected");
+LUMIERA_ERROR_DEFINE (FILE_CHANGED, "File changed unexpected");
 
 
 LumieraFile
-lumiera_file_init (LumieraFile self, const char* name, int flags)
+lumiera_file_init (LumieraFile self, const char* name, int flags, size_t chunksize)
 {
   TRACE (file);
   if (!(self->descriptor = lumiera_filedescriptor_acquire (name, flags)))
     return NULL;
+
+  if (chunksize && !self->descriptor->mmapings)
+    self->descriptor->mmapings = lumiera_mmapings_new (self, chunksize);
+
   self->name = lumiera_strndup (name, PATH_MAX);
 
   return self;
@@ -56,11 +60,11 @@ lumiera_file_destroy (LumieraFile self)
 
 
 LumieraFile
-lumiera_file_new (const char* name, int flags)
+lumiera_file_new (const char* name, int flags, size_t chunksize)
 {
   TRACE (file);
   LumieraFile self = lumiera_malloc (sizeof (lumiera_file));
-  return lumiera_file_init (self, name, flags);
+  return lumiera_file_init (self, name, flags, chunksize);
 }
 
 void
@@ -127,4 +131,11 @@ lumiera_file_handle_release (LumieraFile self)
     {
       lumiera_filehandlecache_checkin (lumiera_fhcache, self->descriptor->handle);
     }
+}
+
+LumieraMMapings
+lumiera_file_mmapings (LumieraFile self)
+{
+  REQUIRE (self->descriptor->mmapings, "mmapings not initialized")
+  return self->descriptor->mmapings;
 }

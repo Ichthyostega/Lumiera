@@ -36,6 +36,7 @@ typedef lumiera_filedescriptor* LumieraFiledescriptor;
 
 #include "backend/filehandle.h"
 #include "backend/file.h"
+#include "backend/mmapings.h"
 
 /**
  * @file
@@ -43,19 +44,35 @@ typedef lumiera_filedescriptor* LumieraFiledescriptor;
  * Filedescriptors are the underlying working horse in accessing files.
  * All information associated with managing a file is kept here.
  */
-
-
-
 struct lumiera_filedescriptor_struct
 {
-  psplaynode node;                      /* node for the lookup tree */
-  struct stat stat;                     /* create after first open, maintained metadata */
-  int flags;                            /* open flags, must be masked for reopen */
-  lumiera_mutex lock;                   /* locks operations on this file descriptor */
-  unsigned refcount;                    /* reference counter, all users sans registry */
+  /** node for the lookup tree */
+  psplaynode node;
 
+  /** create after first open, maintained metadata */
+  struct stat stat;
+
+  /**
+   * files which are written are rounded up to (the next chunk boundary)
+   * by the mmaping backend and will be ftruncated to the realsize on close.
+   */
+  off_t realsize;
+
+  /** open flags, must be masked for reopen */
+  int flags;
+
+  /** locks operations on this file descriptor */
+  lumiera_mutex lock;
+
+  /** reference counter, all users (except registry) */
+  unsigned refcount;
+
+  /** Associated posix filehandle */
   LumieraFilehandle handle;
-  //LumieraFileMap mappings;
+
+  /** established memory mappings */
+  LumieraMMapings mmapings;
+
   //LumieraWriteBuffer writebuffer;
 };
 

@@ -20,7 +20,10 @@ all                                     # global logging
         filedescriptor                  # internal filedescriptors
         filehandle                      # posix filehandles
         filehandlecache                 # mrucache for filehandles
-      map_all                           # file mapping subsystem
+      mmap_all                          # file mapping subsystem
+        mmap                            # mmap objects
+        mmapings                        # mmap range containers
+        mmapcache                       # mmap range containers
       cache_all                         # caching subsystem
       scheduler_all                     # all scheduler
         threads                         # threadpool management

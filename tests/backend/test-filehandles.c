@@ -31,7 +31,7 @@ TESTS_BEGIN
 TEST ("basic")
 {
   lumiera_backend_init ();
-  LumieraFile file = lumiera_file_new (",tmp_testfile", LUMIERA_FILE_CREATE);
+  LumieraFile file = lumiera_file_new (",tmp_testfile", LUMIERA_FILE_CREATE, 4096);
 
   /* get the filehandle */
   int fd = lumiera_file_handle_acquire (file);
@@ -58,7 +58,7 @@ TEST ("more")
   /*create 100 files*/
   for (int i=0; i<100; ++i)
     {
-      files[i]= lumiera_file_new (lumiera_tmpbuf_snprintf (256, ",tmpdir/testfile%d", i), LUMIERA_FILE_CREATE);
+      files[i]= lumiera_file_new (lumiera_tmpbuf_snprintf (256, ",tmpdir/testfile%d", i), LUMIERA_FILE_CREATE, 4096);
     }
 
   /* get the filehandles, this gross overallocates filehandles */

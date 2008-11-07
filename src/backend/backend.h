@@ -24,8 +24,9 @@
 #include <nobug.h>
 
 NOBUG_DECLARE_FLAG (backend);
-NOBUG_DECLARE_FLAG (file_all);
-NOBUG_DECLARE_FLAG (file);
+
+extern size_t lumiera_backend_pagesize;
+
 
 int
 lumiera_backend_init (void);

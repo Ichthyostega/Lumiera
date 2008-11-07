@@ -74,4 +74,9 @@ test_interfaces_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 test_interfaces_LDADD = liblumibackend.a liblumiera.a $(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS)
 test_interfaces_DEPENDENCIES = examplepluginc.la liblumibackend.a liblumiera.a
 
+check_PROGRAMS += test-filemmap
+test_filemmap_SOURCES = $(tests_srcdir)/backend/test-filemmap.c
+test_filemmap_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_filemmap_LDADD = liblumibackend.a liblumiera.a -lnobugmt -lpthread -ldl -lm
+
 TESTS = $(tests_srcdir)/test.sh

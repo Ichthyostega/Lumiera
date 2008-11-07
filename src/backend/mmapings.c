@@ -1,0 +1,158 @@
+/*
+  mmapings.c  -  manage ranges of mmaped areas on a filedescriptor
+
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of the
+  License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+
+#include "lib/mutex.h"
+#include "lib/safeclib.h"
+
+
+#include "backend/mmapings.h"
+#include "backend/mmapcache.h"
+
+
+/**
+ * @file
+ *
+ */
+
+NOBUG_DEFINE_FLAG_PARENT (mmapings, mmap_all);
+
+
+LumieraMMapings
+lumiera_mmapings_init (LumieraMMapings self, LumieraFile file, size_t chunksize)
+{
+  TRACE (mmapings);
+  REQUIRE (!file->descriptor->mmapings);
+
+  llist_init (&self->mmaps);
+  self->descriptor = file->descriptor;
+  self->chunksize = chunksize;
+
+  lumiera_mutex_init (&self->lock, "mmapings", &NOBUG_FLAG(mmapings));
+
+  return self;
+}
+
+
+LumieraMMapings
+lumiera_mmapings_destroy (LumieraMMapings self)
+{
+  TRACE (mmapings);
+  if (!self)
+    return NULL;
+
+  LLIST_WHILE_TAIL (&self->mmaps, node)
+    {
+      LumieraMMap mmap = LLIST_TO_STRUCTP (node, lumiera_mmap, searchnode);
+      lumiera_mmap_delete (mmap);
+    }
+
+  lumiera_mutex_destroy (&self->lock, &NOBUG_FLAG(mmapings));
+
+  return self;
+}
+
+
+LumieraMMapings
+lumiera_mmapings_new (LumieraFile file, size_t chunksize)
+{
+  LumieraMMapings self = lumiera_malloc (sizeof (*self));
+  return lumiera_mmapings_init (self, file, chunksize);
+}
+
+
+void
+lumiera_mmapings_delete (LumieraMMapings self)
+{
+  TRACE (mmapings);
+  free (lumiera_mmapings_destroy (self));
+}
+
+
+LumieraMMap
+lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, LList acquirer, off_t start, size_t size)
+{
+  TRACE (mmapings);
+
+  LumieraMMap ret = NULL;
+
+  LUMIERA_MUTEX_SECTION (mmapings, &self->lock)
+    {
+      REQUIRE (llist_is_empty (acquirer));
+
+      /* find best matching mmap, crude way */
+      LLIST_FOREACH (&self->mmaps, node)
+        {
+          LumieraMMap mmap = LLIST_TO_STRUCTP (node, lumiera_mmap, searchnode);
+
+          if (mmap->size >= size && mmap->start <= start && mmap->start+mmap->size >= start+size)
+            {
+              ret = mmap;
+              break;
+            }
+        }
+
+      if (!ret)
+        {
+          /* create new mmap */
+          TRACE (mmapings, "mmap not found, creating", mmap);
+          ret = lumiera_mmap_new (file, acquirer, start, size, self->chunksize);
+
+          llist_insert_head (&self->mmaps, &ret->searchnode);
+
+          TODO ("sort search list");
+        }
+      else
+        {
+          /* found mmap */
+
+          UNIMPLEMENTED ("reuse existing mmap");
+          //lumiera_mmapcache_checkout (lumiera_mcache, self);
+          // checkout add acquirer
+        }
+    }
+
+  return ret;
+}
+
+
+void
+lumiera_mmapings_release_mmap (LumieraMMapings self, LList acquirer, LumieraMMap map)
+{
+  TRACE (mmapings);
+  LUMIERA_MUTEX_SECTION (mmapings, &self->lock)
+    {
+      llist_unlink (acquirer);
+      if (llist_is_empty (&map->cachenode))
+        {
+          TRACE (mmapings, "checkin");
+          lumiera_mmapcache_checkin (lumiera_mcache, map);
+        }
+    }
+}
+
+
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

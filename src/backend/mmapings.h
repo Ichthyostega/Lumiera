@@ -45,9 +45,6 @@ struct lumiera_mmapings_struct
   /** mmaped ranges are kept in an list sorted by the size of the mmaping, might be improved to a tree someday **/
   llist mmaps;
 
-  /** sum of all mmaped areas, areas might be overlapping **/
-  //  size_t vsz;
-
   /**
    * chunkssize is the smallest granularity which is used for mmapping files, it
    * should reflect the intended file usage, that is 'pagesize' for small or non growing
