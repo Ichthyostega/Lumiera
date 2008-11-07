@@ -78,3 +78,32 @@ Sensible defaults are initialized at installation time.
 
  plugin.path
 
+
+I/O Backend
+-----------
+
+File handling
+~~~~~~~~~~~~~
+
+How many filehandles the backend shall use [approx 2/3 of all available]
+
+ backend.filehandles
+
+
+
+Memory mapped Files
+~~~~~~~~~~~~~~~~~~~
+
+Address space limit (memory mapping)
+Defaults:
+3GiB on 32 bit arch
+192TiB on 64 bit arch
+
+ backend.as_limit
+
+Default start size for mmaping windows.
+128MB on 32 bit arch
+2GB on 64 bit arch
+
+ backend.mmap_window_size
+

@@ -19,7 +19,10 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "lib/safeclib.h"
+
 #include "backend/backend.h"
+#include "backend/config.h"
 #include "backend/filehandlecache.h"
 #include "backend/filedescriptor.h"
 #include "backend/mmapcache.h"
@@ -56,30 +59,38 @@ lumiera_backend_init (void)
 
   TODO ("add config options to override following defaults");
 
-  /* roughly 2/3 of all availables filehandles are managed by the backend */
-  int max_entries = (sysconf (_SC_OPEN_MAX)-10)*2/3;
-  INFO (backend, "using %d filehandles", max_entries);
+
+  const char* filehandles = lumiera_tmpbuf_snprintf (SIZE_MAX,
+                                                     "backend.filehandles = %d",
+                                                     /* roughly 2/3 of all availables filehandles are managed by the backend */
+                                                     (sysconf (_SC_OPEN_MAX)-10)*2/3);
+
+  lumiera_config_setdefault (filehandles);
+
+  long long max_entries;
+  lumiera_config_number_get ("backend.filehandles", &max_entries);
   lumiera_filehandlecache_new (max_entries);
 
-  struct rlimit as_limit;
-  getrlimit (RLIMIT_AS, &as_limit);
-
-  if (as_limit.rlim_cur == RLIM_INFINITY)
-    {
 #if SIZE_MAX <= 4294967295UL
-      INFO (backend, "address space not limited, backend will mmap at most 1.5GiB");
-      as_limit.rlim_cur = 1610612736U;
+  lumiera_config_setdefault ("backend.as_limit = 3221225469");
 #else
-      INFO (backend, "address space not limited, backend will mmap at most 192TiB");
-      as_limit.rlim_cur = 211106232532992U;
+  lumiera_config_setdefault ("backend.as_limit = 211106232532992");
 #endif
+
+  struct rlimit as_rlimit;
+  getrlimit (RLIMIT_AS, &as_rlimit);
+
+  long long as_limit = (long long)as_rlimit.rlim_cur;
+  if (as_rlimit.rlim_cur == RLIM_INFINITY)
+    {
+      lumiera_config_number_get ("backend.as_limit", &as_limit);
     }
   else
     {
-      INFO (backend, "address space limited to %luMiB", as_limit.rlim_cur/1024/1024);
+      INFO (backend, "address space limited to %luMiB", as_rlimit.rlim_cur/1024/1024);
     }
 
-  lumiera_mmapcache_new (as_limit.rlim_cur);
+  lumiera_mmapcache_new (as_limit);
 
   return 0;
 }

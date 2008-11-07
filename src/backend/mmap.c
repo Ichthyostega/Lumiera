@@ -23,6 +23,7 @@
 
 #include "backend/mmap.h"
 #include "backend/mmapcache.h"
+#include "backend/config.h"
 
 #include <unistd.h>
 #include <sys/mman.h>
@@ -46,16 +47,6 @@ LUMIERA_ERROR_DEFINE (MMAP_SPACE, "Address space exhausted");
  *
  */
 
-/**
- * default size for the mmaping window
- * 128MB on 32 bit arch
- * 2GB on 64 bit arch
- */
-#if SIZE_MAX <= 4294967295U
-static size_t mmap_window_size = 134217728UL;
-#else
-static size_t mmap_window_size = 2147483648UL;
-#endif
 
 LumieraMMap
 lumiera_mmap_init (LumieraMMap self, LumieraFile file, LList acquirer, off_t start, size_t size, size_t chunksize)
@@ -68,6 +59,25 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, LList acquirer, off_t sta
   REQUIRE (llist_is_empty (acquirer));
   REQUIRE (start >= 0);
   REQUIRE (size);
+
+  static int once = 0;
+  if (!once)
+    {
+      once = 1;
+      /**
+       * default size for the mmaping window
+       * 128MB on 32 bit arch
+       * 2GB on 64 bit arch
+       */
+#if SIZE_MAX <= 4294967295U
+      lumiera_config_setdefault ("backend.mmap_window_size = 134217728");
+#else
+      lumiera_config_setdefault ("backend.mmap_window_size = 2147483648");
+#endif
+    }
+
+  long long mmap_window_size = 0;
+  lumiera_config_number_get ("backend.mmap_window_size", &mmap_window_size);
 
   LumieraFiledescriptor descriptor = file->descriptor;
 
@@ -139,7 +149,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, LList acquirer, off_t sta
                   goto ewrite;
                 }
             }
-          else if (length < mmap_window_size)
+          else if (length < (size_t)mmap_window_size)
             length = mmap_window_size;
 
           if ((descriptor->flags & O_ACCMODE) == O_RDONLY)
