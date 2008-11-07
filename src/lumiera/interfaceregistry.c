@@ -110,6 +110,8 @@ lumiera_interfaceregistry_init (void)
     LUMIERA_DIE (ERRNO);
 
   lumiera_recmutex_init (&lumiera_interface_mutex, "interfaceregistry", &NOBUG_FLAG(interfaceregistry));
+
+  lumiera_interface_init ();
 }
 
 
@@ -117,6 +119,8 @@ void
 lumiera_interfaceregistry_destroy (void)
 {
   TRACE (interfaceregistry);
+
+  lumiera_interface_destroy ();
 
   if (lumiera_pluginregistry)
     psplay_delete (lumiera_pluginregistry);

@@ -292,7 +292,10 @@ LUMIERA_PLUGININTERFACE
 /**
  * Create a plugin interface when being copiled as plugin
  */
-#ifdef LUMIERA_PLUGIN
+#ifdef LUMIERA_PLUGIN /* compile as plugin */
+#define LUMIERA_PLUGIN_INTERFACEHANDLE static LUMIERA_INTERFACE_HANDLE(lumieraorg_interface, 0) lumiera_interface_handle
+#define LUMIERA_PLUGIN_STORE_INTERFACEHANDLE(name)  lumiera_interface_handle = LUMIERA_INTERFACE_CAST (lumieraorg_interface, 0) name
+
 #define LUMIERA_PLUGININTERFACE                                                         \
 LUMIERA_INTERFACE_INSTANCE (lumieraorg__plugin, 0,                                      \
                             lumieraorg_plugin,                                          \
@@ -305,7 +308,19 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg__plugin, 0,                              
                             );
 #define LUMIERA_INTERFACE_REGISTEREXPORTED
 #define LUMIERA_INTERFACE_UNREGISTEREXPORTED
-#else
+
+#define  LUMIERA_INTERFACE_OPEN(interface, version, minminor, name) \
+  LUMIERA_INTERFACE_CAST(interface, version) lumiera_interface_handle->open (#interface, version, minminor, #name)
+
+#define  LUMIERA_INTERFACE_CLOSE(handle) \
+  lumiera_interface_handle->close (&(handle)->interface_header_)
+
+
+#else /* compile as buildin */
+
+#define LUMIERA_PLUGIN_INTERFACEHANDLE static LUMIERA_INTERFACE_HANDLE(lumieraorg_interface, 0) lumiera_interface_handle
+#define LUMIERA_PLUGIN_STORE_INTERFACEHANDLE(name)  lumiera_interface_handle = LUMIERA_INTERFACE_CAST (lumieraorg_interface, 0) name
+
 #define LUMIERA_PLUGININTERFACE
 /**
  * Register all exported interfaces when not a plugin
@@ -319,7 +334,15 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg__plugin, 0,                              
  */
 #define LUMIERA_INTERFACE_UNREGISTEREXPORTED    \
   lumiera_interfaceregistry_bulkremove_interfaces (lumiera_plugin_interfaces())
+
+#define  LUMIERA_INTERFACE_OPEN(interface, version, minminor, name) \
+  LUMIERA_INTERFACE_CAST(interface, version) lumiera_interface_open (#interface, version, minminor, #name)
+
+#define  LUMIERA_INTERFACE_CLOSE(handle) \
+  lumiera_interface_close (&(handle)->interface_header_)
+
 #endif
+
 
 
 /**
@@ -328,12 +351,6 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg__plugin, 0,                              
 
 #define  LUMIERA_INTERFACE_HANDLE(interface, version) \
   LUMIERA_INTERFACE_TYPE(interface, version)*
-
-#define  LUMIERA_INTERFACE_OPEN(interface, version, minminor, name) \
-  LUMIERA_INTERFACE_CAST(interface, version) lumiera_interface_open (#interface, version, minminor, #name)
-
-#define  LUMIERA_INTERFACE_CLOSE(handle) \
-  lumiera_interface_close (&(handle)->interface_header_)
 
 
 typedef struct lumiera_interfaceslot_struct lumiera_interfaceslot;
@@ -378,9 +395,12 @@ struct lumiera_interface_struct
    * Must be called before this interface is used.
    * might be nested.
    * @param self pointer to the interface to be acquired
+   * @param interfaces pointer to a 'interfaces' interface giving plugins access to
+   *        opening and closing interfaces, this is already opened and if a plugin
+   *        wants to use other interfaces it has to store this pointer
    * @return pointer to the interface or NULL on error
    */
-  LumieraInterface (*acquire)(LumieraInterface self);
+  LumieraInterface (*acquire)(LumieraInterface self, LumieraInterface interfaces);
   /**
    * called when finished using this interface
    * must match the acquire calls
@@ -393,15 +413,6 @@ struct lumiera_interface_struct
   lumiera_interfaceslot functions[];
 #endif
 };
-
-
-/**
- * Plugin interface
- */
-LUMIERA_INTERFACE_DECLARE (lumieraorg__plugin, 0,
-                           LUMIERA_INTERFACE_SLOT (LumieraInterface*, plugin_interfaces, (void)),
-);
-
 
 /*
   API to handle interfaces
@@ -435,6 +446,41 @@ lumiera_interface_close (LumieraInterface self);
  */
 unsigned
 lumiera_interface_version (LumieraInterface self, const char* iname);
+
+/**
+ * Define an interface for the above
+ */
+LUMIERA_INTERFACE_DECLARE (lumieraorg_interface, 0,
+                           LUMIERA_INTERFACE_SLOT (LumieraInterface,
+                                                   open,
+                                                   (const char* interface, unsigned version, size_t minminorversion, const char* name)),
+                           LUMIERA_INTERFACE_SLOT (void, close, (LumieraInterface self)),
+                           LUMIERA_INTERFACE_SLOT (unsigned, version, (LumieraInterface self, const char* iname)),
+);
+
+/**
+ * registering implementations of the above interface
+ */
+void
+lumiera_interface_init (void);
+
+/**
+ * deregistering implementations of the above interface
+ */
+void
+lumiera_interface_destroy (void);
+
+
+
+
+
+/**
+ * Plugin interface
+ */
+LUMIERA_INTERFACE_DECLARE (lumieraorg__plugin, 0,
+                           LUMIERA_INTERFACE_SLOT (LumieraInterface*, plugin_interfaces, (void)),
+);
+
 
 
 #endif /* LUMIERA_INTERFACE_H */

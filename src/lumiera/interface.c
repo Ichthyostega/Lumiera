@@ -37,6 +37,8 @@
  * Interfaces can be opened multiple times and cross reference each other.
  */
 
+/* the mother of all interfaces */
+LumieraInterface lumiera_interface_interface;
 
 static LumieraInterfacenode
 lumiera_interface_open_interfacenode (LumieraInterfacenode self);
@@ -201,7 +203,7 @@ lumiera_interface_open_interfacenode (LumieraInterfacenode self)
                     {
                       TRACE (interface, "Acquire %s", self->interface->name);
                       collect_dependencies = self->deps?0:1;
-                      self->interface = self->interface->acquire (self->interface);
+                      self->interface = self->interface->acquire (self->interface, lumiera_interface_interface);
                     }
                 }
               else
@@ -301,6 +303,41 @@ lumiera_interfacenode_close (LumieraInterfacenode self)
     }
 }
 
+/**
+ * Definitinon of 'the mother of all interfaces'
+ * since this interface is singleton and required for any component to open any other
+ * interface this should get a very stable interface and likely never change.
+ */
+LUMIERA_EXPORT(
+               LUMIERA_INTERFACE_DEFINE (lumieraorg_interface, 0,
+                                         lumieraorg_interface,
+                                         NULL,
+                                         NULL,
+                                         NULL,
+                                         LUMIERA_INTERFACE_MAP (open, "\322\165\227\133\252\355\125\104\157\167\253\267\117\273\174\022",
+                                                                lumiera_interface_open),
+                                         LUMIERA_INTERFACE_MAP (close, "\264\037\253\243\312\273\024\104\030\007\076\006\154\071\340\102",
+                                                                lumiera_interface_close),
+                                         LUMIERA_INTERFACE_MAP (version, "\004\272\070\214\006\235\047\212\007\165\115\221\146\274\217\324",
+                                                                lumiera_interface_version),
+                                         )
+               )
+
+
+void
+lumiera_interface_init (void)
+{
+  LUMIERA_INTERFACE_REGISTEREXPORTED;
+  lumiera_interface_interface =
+    lumiera_interface_open ("lumieraorg_interface", 0, 0, "lumieraorg_interface");
+}
+
+void
+lumiera_interface_destroy (void)
+{
+  lumiera_interface_close (lumiera_interface_interface);
+  LUMIERA_INTERFACE_UNREGISTEREXPORTED;
+}
 
 /*
 // Local Variables:
