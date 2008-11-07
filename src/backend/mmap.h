@@ -62,19 +62,20 @@ struct lumiera_mmap_struct
 
   /** array with refcounters per page **/
   unsigned short* refmap;
-
-  //RESOURCE_HANDLE (rh);
 };
 
 
 LumieraMMap
 lumiera_mmap_init (LumieraMMap self, LumieraFile file, LList acquirer, off_t start, size_t size, size_t chunksize);
 
+
 LumieraMMap
 lumiera_mmap_new (LumieraFile file, LList acquirer, off_t start, size_t size, size_t chunksize);
 
+
 void
 lumiera_mmap_delete (LumieraMMap self);
+
 
 void*
 lumiera_mmap_destroy_node (LList node);

@@ -36,7 +36,7 @@ typedef lumiera_mmapings* LumieraMMapings;
 
 /**
  * @file
- * Keeps all mmaped areas
+ * Manage the mmap objects of a file
  *
  */
 
@@ -54,7 +54,6 @@ struct lumiera_mmapings_struct
 
   LumieraFiledescriptor descriptor;
   lumiera_mutex lock;
-  RESOURCE_HANDLE (rh);
 };
 
 /**

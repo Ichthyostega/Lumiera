@@ -47,7 +47,6 @@ struct lumiera_mmapcache_struct
   size_t total;
   size_t cached;
   lumiera_mutex lock;
-  RESOURCE_HANDLE (rh);
 };
 
 extern LumieraMMapcache lumiera_mcache;
