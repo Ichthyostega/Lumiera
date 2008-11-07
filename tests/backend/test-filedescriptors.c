@@ -20,6 +20,7 @@
 */
 #include "lib/safeclib.h"
 
+#include "backend/config.h"
 #include "backend/backend.h"
 #include "backend/filedescriptor.h"
 
@@ -29,12 +30,14 @@ TESTS_BEGIN
 
 TEST ("acquire_existing")
 {
+  lumiera_config_init ("./");
   lumiera_backend_init ();
   LumieraFiledescriptor descriptor = lumiera_filedescriptor_acquire (",tmp_testfile", LUMIERA_FILE_READONLY);
   if (descriptor)
     {
       lumiera_filedescriptor_release (descriptor);
       lumiera_backend_destroy ();
+      lumiera_config_destroy ();
       return 0;
     }
   else
@@ -43,6 +46,7 @@ TEST ("acquire_existing")
 
 TEST ("acquire_existing_again")
 {
+  lumiera_config_init ("./");
   lumiera_backend_init ();
   LumieraFiledescriptor descriptor = lumiera_filedescriptor_acquire (",tmp_testfile", LUMIERA_FILE_READONLY);
   if (descriptor)
@@ -51,6 +55,7 @@ TEST ("acquire_existing_again")
       lumiera_filedescriptor_release (descriptor2);
       lumiera_filedescriptor_release (descriptor);
       lumiera_backend_destroy ();
+      lumiera_config_destroy ();
       return 0;
     }
   else
@@ -59,6 +64,7 @@ TEST ("acquire_existing_again")
 
 TEST ("acquire_existing_3files")
 {
+  lumiera_config_init ("./");
   lumiera_backend_init ();
   LumieraFiledescriptor descriptor1 = lumiera_filedescriptor_acquire (",tmp_testfile1", LUMIERA_FILE_READONLY);
 
@@ -77,6 +83,7 @@ TEST ("acquire_existing_3files")
   if (descriptor1 && descriptor2 && descriptor3)
     {
       lumiera_backend_destroy ();
+      lumiera_config_destroy ();
       return 0;
     }
   else
@@ -85,12 +92,14 @@ TEST ("acquire_existing_3files")
 
 TEST ("acquire_create")
 {
+  lumiera_config_init ("./");
   lumiera_backend_init ();
   LumieraFiledescriptor descriptor = lumiera_filedescriptor_acquire (",tmp_testfile", LUMIERA_FILE_CREATE);
   if (descriptor)
     {
       lumiera_filedescriptor_release (descriptor);
       lumiera_backend_destroy ();
+      lumiera_config_destroy ();
       return 0;
     }
   else
@@ -99,6 +108,7 @@ TEST ("acquire_create")
 
 TEST ("acquire_create_dir")
 {
+  lumiera_config_init ("./");
   lumiera_backend_init ();
   LumieraFiledescriptor descriptor =
     lumiera_filedescriptor_acquire (",tmp_testdir/nested/,tmp_testfile", LUMIERA_FILE_CREATE);
@@ -106,6 +116,7 @@ TEST ("acquire_create_dir")
     {
       lumiera_filedescriptor_release (descriptor);
       lumiera_backend_destroy ();
+      lumiera_config_destroy ();
       return 0;
     }
   else
