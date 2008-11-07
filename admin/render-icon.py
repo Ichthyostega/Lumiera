@@ -34,7 +34,7 @@ artworkLayerPrefix = "artwork:"
 
 def createDirectory( name ):
   if Path.isfile(name):
-    print "WARNING: moving %s to %s.bak because it's in the way." % name
+    print "WARNING: moving %s to %s.bak because it's in the way." % (name,name)
     bak_name = name + ".bak"
     if Path.isfile(bak_name):
       os.remove(bak_name)
