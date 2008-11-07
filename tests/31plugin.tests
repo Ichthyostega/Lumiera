@@ -26,4 +26,12 @@ out: Bye World!
 return: 0
 END
 
+TEST "C plugin test, nested" plugin_examplepluginc_nested <<END
+out: Hallo Welt!
+out: Hello World!
+out: Bye World!
+out: Tschuess Welt!
+return: 0
+END
+
 unset LUMIERA_PLUGIN_PATH

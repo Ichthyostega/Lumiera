@@ -3,37 +3,62 @@
 #include "hello_interface.h"
 #include "lumiera/interfacedescriptor.h"
 
-int myopen(void)
+LUMIERA_PLUGIN_INTERFACEHANDLE;
+
+LumieraInterface
+myopen (LumieraInterface self, LumieraInterface interfaces)
 {
-  printf("opened\n");
-  return 0;
+  LUMIERA_PLUGIN_STORE_INTERFACEHANDLE (interfaces);
+
+  fprintf (stderr, "opened %p global interfaces %p\n", self, interfaces);
+  return self;
 }
 
-int myclose(void)
+void
+myclose (LumieraInterface self)
 {
-  printf("closed\n");
-  return 0;
+  fprintf (stderr, "closed %p\n", self);
 }
 
-void hallo(void)
+void hallo (void)
 {
-  printf("Hallo Welt!\n");
+  printf ("Hallo Welt!\n");
 }
 
-void tschuess(const char* m)
+void tschuess (const char* m)
 {
-  printf("Tschuess %s\n", m);
+  printf ("Tschuess %s\n", m);
 }
 
-void hello(void)
+void hello (void)
 {
-  printf("Hello World!\n");
+  printf ("Hello World!\n");
 }
 
-void bye(const char* m)
+void bye (const char* m)
 {
-  printf("Bye %s\n", m);
+  printf ("Bye %s\n", m);
 }
+
+
+void yeahbabe (void)
+{
+  LUMIERA_INTERFACE_HANDLE (lumieraorg_testhello, 0) german =
+    LUMIERA_INTERFACE_OPEN  (lumieraorg_testhello, 0, 0, lumieraorg_hello_german);
+
+  LUMIERA_INTERFACE_HANDLE (lumieraorg_testhello, 0) english =
+    LUMIERA_INTERFACE_OPEN  (lumieraorg_testhello, 0, 0, lumieraorg_hello_english);
+
+  german->hello ();
+  english->hello ();
+  english->goodbye ("World!");
+  german->goodbye ("Welt!");
+
+
+  LUMIERA_INTERFACE_CLOSE (german);
+  LUMIERA_INTERFACE_CLOSE (english);
+}
+
 
 
 LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
@@ -107,8 +132,8 @@ LUMIERA_EXPORT(
                LUMIERA_INTERFACE_DEFINE (lumieraorg_testhello, 0,
                                          lumieraorg_hello_german,
                                          LUMIERA_INTERFACE_REF (lumieraorg_interfacedescriptor, 0, lumieraorg_exampleplugin_descriptor),
-                                         NULL,
-                                         NULL,
+                                         myopen,
+                                         myclose,
                                          LUMIERA_INTERFACE_MAP (hello, "\167\012\306\023\031\151\006\362\026\003\125\017\170\022\100\333",
                                                                 hallo),
                                          LUMIERA_INTERFACE_MAP (goodbye, "\324\267\214\166\340\213\155\053\157\125\064\264\167\235\020\223",
@@ -117,11 +142,19 @@ LUMIERA_EXPORT(
                LUMIERA_INTERFACE_DEFINE (lumieraorg_testhello, 0,
                                          lumieraorg_hello_english,
                                          LUMIERA_INTERFACE_REF (lumieraorg_interfacedescriptor, 0, lumieraorg_exampleplugin_descriptor),
-                                         NULL,
-                                         NULL,
+                                         myopen,
+                                         myclose,
                                          LUMIERA_INTERFACE_MAP (hello, "\326\247\370\247\032\103\223\357\262\007\356\042\051\330\073\116",
                                                                 hello),
                                          LUMIERA_INTERFACE_MAP (goodbye, "\365\141\371\047\101\230\050\106\071\231\022\235\325\112\354\241",
                                                                 bye)
+                                         ),
+               LUMIERA_INTERFACE_DEFINE (lumieraorg_testtest, 0,
+                                         lumieraorg_test_both,
+                                         LUMIERA_INTERFACE_REF (lumieraorg_interfacedescriptor, 0, lumieraorg_exampleplugin_descriptor),
+                                         myopen,
+                                         myclose,
+                                         LUMIERA_INTERFACE_MAP (testit, "\101\060\122\277\370\023\164\257\347\247\164\325\157\266\323\370",
+                                                                yeahbabe)
                                          )
                )
