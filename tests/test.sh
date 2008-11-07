@@ -200,7 +200,8 @@ function RUNTESTS()
         echo "$t"
     done | sort | uniq | {
         while read i; do
-            echo $i >&2
+            echo
+            echo "### $i" >&2
             if test -f $i; then
                 source $i
             fi

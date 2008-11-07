@@ -21,137 +21,188 @@
 #ifndef LUMIERA_PLUGIN_H
 #define LUMIERA_PLUGIN_H
 
-#ifdef __cplusplus
-extern "C" {
-#elif 0
-} /*eek, fixes emacs indenting for now*/
-#endif
+#include "lib/psplay.h"
+#include "lib/error.h"
+
+#include "backend/interface.h"
 
 #include <stdlib.h>
 #include <nobug.h>
 
-#include "error.h"
-
 /**
  * @file
- * Plugin loader, header.
+ * Lumiera plugins defines 'interfaces' as shown in interface.h, the plugin system handles the loading
+ * of all kinds of plugins under the hood, invoked from the interface system. Most things defined here
+ * are called internally and should not be used by other parts of the application.
+ *
+ * Plugin discovery
+ * The plugin_discover() function offers a automatic way to load and register new plugins. It traverses
+ * all configured plugin directories. It takes to function for loading and registering plugins as
+ * parameter, by now this only uses the here defined plugin_load() and plugin_register() functions
+ * which lets it load any newly found plugin unconditionally. Later these callbacks will be replaced by
+ * a smarter system (plugindb) which makes it possible to load plugins on-demand and select proper
+ * plugins based on their version and capabilities.
+ *
+ * Plugin loading
+ * Plugins are loaded and initialized in a sequence of steps:
+ * plugin_load() dispatches to a specific loader function depending on the type (extension) of a plugin.
+ * This loader allocates a new plugin structure with plugin_new() and then does it work and eventually
+ * finalizing the plugin structure initialization with plugin_init() by providing a handle to a
+ * lumieraorg__plugin interface. plugin_init() also stores the current error state (which might be clean)
+ * into the plugin. After that the plugin can be registered which records it in the pluginregistry and if
+ * its error state is clean, registering all interfaces it offers in the interface registry. With that
+ * the plugin is ready to be used. Plugins with the error state set should still be registered to prevent
+ * further discovery runs to try loading them again.
+ *
  */
 
 
-NOBUG_DECLARE_FLAG (lumiera_plugin);
+LUMIERA_ERROR_DECLARE(PLUGIN_INIT);
+LUMIERA_ERROR_DECLARE(PLUGIN_OPEN);
+LUMIERA_ERROR_DECLARE(PLUGIN_WTF);
+LUMIERA_ERROR_DECLARE(PLUGIN_REGISTER);
+LUMIERA_ERROR_DECLARE(PLUGIN_VERSION);
+
+
+NOBUG_DECLARE_FLAG (plugin);
 
 /* tool macros*/
-#define LUMIERA_INTERFACE_TYPE(name, version) struct lumiera_interface_##name##_##version
-#define LUMIERA_INTERFACE_CAST(name, version) (LUMIERA_INTERFACE_TYPE(name, version)*)
-
-/* Interface definition */
-#define LUMIERA_INTERFACE(name, version, ...)   \
-LUMIERA_INTERFACE_TYPE(name, version)           \
-{                                               \
-  struct lumiera_interface interface_header_; \
-  __VA_ARGS__                                   \
-}
-
-#define LUMIERA_INTERFACE_PROTO(ret, name, params)  ret (*name) params;
-
-/* Interface instantiation */
-#define LUMIERA_INTERFACE_IMPLEMENT(iname, version, name, open, close, ...)  \
-LUMIERA_INTERFACE_TYPE(iname, version) name##_##version =                    \
-{                                                                            \
-  {                                                                          \
-    version,                                                                 \
-    sizeof(LUMIERA_INTERFACE_TYPE(iname, version)),                          \
-    NULL,                                                                    \
-    0,                                                                       \
-    open,                                                                    \
-    close                                                                    \
-  },                                                                         \
-  __VA_ARGS__                                                                \
-}
 
 
-
-/* internally used */
-struct lumiera_plugin;
+struct lumiera_plugin_struct;
+typedef struct lumiera_plugin_struct lumiera_plugin;
+typedef lumiera_plugin* LumieraPlugin;
+enum lumiera_plugin_type;
 
 /**
- * This is the header for any interface exported by plugins.
- * Real interfaces append their functions at the end. There are few standard functions on each Interface
- * Every function is required to be implemnted.
+ * Allocates an preinitializes a plugin structure
+ * @internal
+ * @param name path/filename of the plugin
+ * @return new allocated/preinitialized plugin structure with its error state set to LUMIERA_ERROR_PLUGIN_INIT
  */
-struct lumiera_interface
-{
-  /// interface version number
-  unsigned version;
-  /// size of the full structure is used to determine the revision (adding a new function increments the size)
-  size_t size;
-  /// back reference to plugin
-  struct lumiera_plugin* plugin;
-  /// incremented for each user of this interface and decremented when closed
-  unsigned use_count;
-
-  /// called for each open of this interface
-  int (*open)(void);
-  /// called for each close of this interface
-  int (*close)(void);
-};
+LumieraPlugin
+lumiera_plugin_new (const char* name);
 
 /**
- * Initialize the plugin system.
- * always succeeds or aborts
+ * Complete plugin initialization
+ * @internal
+ * Stores any pending error (from loading) in self which clears out the LUMIERA_ERROR_PLUGIN_INIT error state
+ * which was initialized by lumiera_plugin_new(), stores the handle and plugin pointers in the plugin struct.
+ * @param self pointer to the plugin struct
+ * @param handle opaque handle refering to some plugin type specific data
+ * @param plugin a lumieraorg__plugin interface which will be used to initialize this plugin
+ */
+LumieraPlugin
+lumiera_plugin_init (LumieraPlugin self, void* handle, LumieraInterface plugin);
+
+
+/**
+ * Tries to load a plugin
+ * Creates a new plugin structure and tries to load and initialize the plugin.
+ * The plugins error state may be set on any problem which should be queried later.
+ * @param plugin path/filename of the plugin to load
+ * @return pointer to the new plugin structure (always, never NULL, check error state)
+ */
+LumieraPlugin
+lumiera_plugin_load (const char* plugin);
+
+
+/**
+ * Register a plugin and its interfaces.
+ * Registers the plugin (unconditionally) at the pluginregistry.
+ * When the error state of the plugin is NULL then use its lumieraorg__plugin interface
+ * to register all interfaces offered by the plugin at the interface registry.
+ * Registered plugins will be automatic unloaded at application end.
+ * @param self the plugin to be registered (calling with NULL is a no-op)
+ * @return 1 on success (including calling with NULL) and 0 when a error occured
+ */
+int
+lumiera_plugin_register (LumieraPlugin self);
+
+
+/**
+ * Query the error state of a plugin
+ * @param self plugin to query
+ * @return error identifier, NULL if no error was set
+ */
+lumiera_err
+lumiera_plugin_error (LumieraPlugin self);
+
+/**
+ * Query the plugin handle
+ * @param self plugin to query
+ * @return opaque handle set by the loader functions
+ */
+void*
+lumiera_plugin_handle (LumieraPlugin self);
+
+
+/**
+ * Query the plugin name
+ * The name is the path and filname under which it was loaded
+ * @param self plugin to query
+ * @return pointer to the name string
+ */
+const char*
+lumiera_plugin_name (LumieraPlugin self);
+
+
+/**
+ * Increment refcount
+ * @internal
+ * @param self plugin which refcount to increment
  */
 void
-lumiera_init_plugin (void);
+lumiera_plugin_refinc (LumieraPlugin self);
 
 
 /**
- * Make an interface available.
- * To use an interface provided by a plugin it must be opened first. It is allowed to open an interface 
- * more than once. Each open must be paired with a close.
- * @param name name of the plugin to use.
- * @param interface name of the interface to open.
- * @param min_revision the size of the interface structure is used as measure of a minimal required 
- * revision (new functions are appended at the end)
- * @return handle to the interface or NULL in case of a error. The application shall cast this handle to
- * the actual interface type.
- */
-struct lumiera_interface*
-lumiera_interface_open (const char* plugin, const char* name, size_t min_revision);
-
-
-/**
- * Close an interface. Does not free associated resources
- * Calling this function with self==NULL is legal. Every interface handle must be closed only once.
- * @param ptr interface to be closed
+ * Decrement refcount
+ * @internal
+ * @param self plugin which refcount to decrement
  */
 void
-lumiera_interface_close (void* self);
+lumiera_plugin_refdec (LumieraPlugin self);
+
 
 /**
  * Tries to unload a plugin.
  * When the Plugin is unused, then all resources associated with it are freed and it will be removed from memory
- * @param plugin name of the plugin to be unloaded.
- * @return 0 on success, else the number if users which keeping the plugin loaded
+ * @param plugin the plugin to be unloaded.
+ * @return 0 on success, else the refcount of users which keeping the plugin loaded
  */
-int
-lumiera_plugin_unload (const char* plugin);
+unsigned
+lumiera_plugin_unload (LumieraPlugin self);
+
 
 /**
- * Tries to unload plugins which are not in use.
- * Calls lumiera_plugin_unload() for each Plugin which is not used for more than age seconds.
- * This function might be infrequently called by the scheduler to remove things which are not needed.
- * @param age timeout in seconds when to unload plugins
+ * Lookup a plugin handle in the pluginregistry
+ * @param name name of the plugin to be looked up
+ * @return plugin handle on success, NULL if the plugin is not found in the registry
  */
+LumieraPlugin
+lumiera_plugin_lookup (const char* name);
+
+
+/**
+ * discover new plugins
+ * traverses the configured plugin paths and calls the callback_load function for any plugin
+ * not actually loaded. If callback_load returns a plugin (and not NULL) then this is feed to
+ * the callback_register function.
+ */
+int
+lumiera_plugin_discover (LumieraPlugin (*callback_load)(const char* plugin),
+                         int (*callback_register) (LumieraPlugin));
+
+
+/* psplay support functions */
+int
+lumiera_plugin_cmp_fn (const void* keya, const void* keyb);
+
+const void*
+lumiera_plugin_key_fn (const PSplaynode node);
+
 void
-lumiera_plugin_expire (time_t age);
+lumiera_plugin_delete_fn (PSplaynode node);
 
-LUMIERA_ERROR_DECLARE(PLUGIN_DLOPEN);
-LUMIERA_ERROR_DECLARE(PLUGIN_HOOK);
-LUMIERA_ERROR_DECLARE(PLUGIN_NFILE);
-LUMIERA_ERROR_DECLARE(PLUGIN_NIFACE);
-LUMIERA_ERROR_DECLARE(PLUGIN_REVISION);
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
 #endif /* LUMIERA_PLUGIN_H */

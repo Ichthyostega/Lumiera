@@ -15,10 +15,10 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-liblumi_a_srcdir = $(top_srcdir)/src/lib
-noinst_LIBRARIES += liblumi.a
+liblumiera_a_srcdir = $(top_srcdir)/src/lib
+noinst_LIBRARIES += liblumiera.a
 
-liblumi_a_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
+liblumiera_a_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
 
 liblumiera_a_SOURCES =					\
 	$(liblumiera_a_srcdir)/error.c			\
@@ -31,7 +31,7 @@ liblumiera_a_SOURCES =					\
 	$(liblumiera_a_srcdir)/psplay.c			\
 	$(liblumiera_a_srcdir)/mrucache.c		\
 	$(liblumiera_a_srcdir)/time.c			\
-	$(liblumiera_a_srcdir)/allocationcluster.cpp	\
+	$(liblumiera_a_srcdir)/allocationcluster.cpp\
 	$(liblumiera_a_srcdir)/external/libgavl.cpp	\
 	$(liblumiera_a_srcdir)/appconfig.cpp
 
@@ -48,9 +48,8 @@ noinst_HEADERS +=						\
 	$(liblumiera_a_srcdir)/time.h				\
 	$(liblumiera_a_srcdir)/ppmpl.h				\
 	$(liblumiera_a_srcdir)/appconfig.hpp			\
-	$(liblumiera_a_srcdir)/allocationcluster.hpp		\
-	$(liblumiera_a_srcdir)/scopedholdertransfer.hpp		\
+	$(liblumiera_a_srcdir)/allocationcluster.hpp	\
+	$(liblumiera_a_srcdir)/scopedholdertransfer.hpp	\
 	$(liblumiera_a_srcdir)/scopedholder.hpp			\
 	$(liblumiera_a_srcdir)/external/libgavl.hpp		\
 	$(liblumiera_a_srcdir)/lifecycleregistry.hpp
-

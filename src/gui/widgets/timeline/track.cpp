@@ -29,12 +29,31 @@ namespace widgets {
 namespace timeline {
 
 Track::Track() :
-  label1("test1"), label2("test2"), label3("test3"), label4("test4")
+  enableButton(Gtk::StockID("track_enabled")),
+  lockButton(Gtk::StockID("track_unlocked"))
 {
-  headerWidget.pack_start(label1, PACK_EXPAND_WIDGET);
-  headerWidget.pack_start(label2, PACK_EXPAND_WIDGET);
-  headerWidget.pack_start(label3, PACK_EXPAND_WIDGET);
-  headerWidget.pack_start(label4, PACK_EXPAND_WIDGET);
+  buttonBar.append(enableButton);
+  buttonBar.append(lockButton);
+  
+  buttonBar.set_toolbar_style(TOOLBAR_ICONS);
+//  buttonBar.set_icon_size(ICON_SIZE_MENU);       /////TODO: commented out because it makes compile fail on Etch based system
+  
+
+  headerWidget.pack_start(titleBox, PACK_SHRINK);
+  headerWidget.pack_start(buttonBar, PACK_SHRINK);
+}
+
+void
+Track::add_child_track(timeline::Track* child)
+{
+  REQUIRE(child != NULL);
+  children.push_back(child);
+}
+
+const std::vector<timeline::Track*>&
+Track::get_child_tracks() const
+{
+  return children;
 }
 
 Gtk::Widget&
@@ -43,20 +62,20 @@ Track::get_header_widget()
   return headerWidget;
 }
 
+int
+Track::get_height() const
+{
+  return 100;
+}
+
 Glib::ustring
 Track::get_title()
 {
   return "Hello";
 }
 
-int
-Track::get_height()
-{
-  return 100;
-}
-
 void
-Track::draw_track(Cairo::RefPtr<Cairo::Context> cairo)
+Track::draw_track(Cairo::RefPtr<Cairo::Context> cairo) const
 {
   
 }

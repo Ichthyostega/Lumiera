@@ -53,7 +53,7 @@ TimelineWidget::TimelineWidget() :
 {
   body = new TimelineBody(this);
   ENSURE(body != NULL);
-  headerContainer = new HeaderContainer(this);
+  headerContainer = new TimelineHeaderContainer(this);
   ENSURE(headerContainer != NULL);
   ruler = new TimelineRuler(this);
   ENSURE(ruler != NULL);
@@ -69,6 +69,9 @@ TimelineWidget::TimelineWidget() :
   set_selection(2000000, 4000000);
   
   tracks.push_back(&video1);
+  video1.add_child_track(&video1a);
+  video1.add_child_track(&video1b);
+  video1b.add_child_track(&video1ba);
   tracks.push_back(&video2);
   
   update_tracks();
@@ -332,7 +335,7 @@ TimelineWidget::update_tracks()
   BOOST_FOREACH( Track* track, tracks )
     {
       ASSERT(track != NULL);
-      totalHeight += track->get_height() + TrackPadding;
+      totalHeight += measure_branch_height(track);
     }    
 }
   
@@ -376,6 +379,20 @@ TimelineWidget::update_scroll()
     verticalScroll.show();
 #endif
 
+}
+
+int
+TimelineWidget::measure_branch_height(Track* track)
+{
+  REQUIRE(track != NULL);
+  
+  int height = track->get_height();
+  
+  // Recurse through all the children
+  BOOST_FOREACH( Track* child, track->get_child_tracks() )
+    height += measure_branch_height(child);
+  
+  return height;
 }
 
 int

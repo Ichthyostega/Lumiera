@@ -20,23 +20,23 @@ testcommon_srcdir = $(top_srcdir)/tests/common
 
 check_PROGRAMS += test-common
 test_common_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(testcommon_srcdir)
-test_common_LDADD =						 \
-	liblumiprocmobjectbuilder.a					\
-	liblumiprocmobjectsession.a					\
-	liblumiprocmobject.a						\
+test_common_LDADD =							\
+	liblumiprocmobjectbuilder.a				\
+	liblumiprocmobjectsession.a				\
+	liblumiprocmobject.a					\
 	liblumiprocengine.a						\
-	liblumiproccontrol.a						\
+	liblumiproccontrol.a					\
 	liblumiproc.a							\
 	liblumiprocasset.a						\
-	liblumibackend.a							\
+	liblumibackend.a						\
 	liblumicommon.a							\
 	liblumiera.a							\
 	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt
 
-test_common_SOURCES =						 \
-	$(testcommon_srcdir)/allocationclustertest.cpp		\
+test_common_SOURCES =						\
+	$(testcommon_srcdir)/allocationclustertest.cpp	\
 	$(testcommon_srcdir)/appconfigtest.cpp			\
-	$(testcommon_srcdir)/customsharedptrtest.cpp		\
+	$(testcommon_srcdir)/customsharedptrtest.cpp	\
 	$(testcommon_srcdir)/exceptionerrortest.cpp		\
 	$(testcommon_srcdir)/factoryspecialtest.cpp		\
 	$(testcommon_srcdir)/factorytest.cpp			\
@@ -44,27 +44,27 @@ test_common_SOURCES =						 \
 	$(testcommon_srcdir)/lifecycletest.cpp			\
 	$(testcommon_srcdir)/mainsuite.cpp				\
 	$(testcommon_srcdir)/meta/typelisttest.cpp         	\
-	$(testcommon_srcdir)/meta/typelistmaniptest.cpp     	\
+	$(testcommon_srcdir)/meta/typelistmaniptest.cpp     \
 	$(testcommon_srcdir)/meta/generatortest.cpp        	\
 	$(testcommon_srcdir)/meta/configflagstest.cpp      	\
 	$(testcommon_srcdir)/query/queryutilstest.cpp		\
-	$(testcommon_srcdir)/removefromsettest.cpp		\
+	$(testcommon_srcdir)/removefromsettest.cpp			\
 	$(testcommon_srcdir)/sanitizedidentifiertest.cpp	\
 	$(testcommon_srcdir)/scopedholdertest.cpp			\
 	$(testcommon_srcdir)/scopedholdertransfertest.cpp	\
 	$(testcommon_srcdir)/singletonsubclasstest.cpp		\
-	$(testcommon_srcdir)/singletontest.cpp			\
+	$(testcommon_srcdir)/singletontest.cpp				\
 	$(testcommon_srcdir)/singletontestmocktest.cpp		\
 	$(testcommon_srcdir)/streamtypebasicstest.cpp		\
 	$(testcommon_srcdir)/streamtypelifecycletest.cpp	\
 	$(testcommon_srcdir)/test/cmdlinewrappertest.cpp	\
 	$(testcommon_srcdir)/test/testoptiontest.cpp		\
-	$(testcommon_srcdir)/vectortransfertest.cpp		\
+	$(testcommon_srcdir)/vectortransfertest.cpp			\
 	$(testcommon_srcdir)/visitingtoolconcept.cpp		\
 	$(testcommon_srcdir)/visitingtoolextendedtest.cpp	\
 	$(testcommon_srcdir)/visitingtooltest.cpp
 
 noinst_HEADERS +=					\
 	$(testcommon_srcdir)/query/querydiagnostics.hpp	\
-	$(testcommon_srcdir)/testdummy.hpp 			\
+	$(testcommon_srcdir)/testdummy.hpp 				\
 	$(testcommon_srcdir)/testtargetobj.hpp

@@ -32,25 +32,42 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
+class Clip;
+
 class Track
 {
 public:
   Track();
 
+  void add_child_track(timeline::Track* child);
+
+  const std::vector<timeline::Track*>& get_child_tracks() const;
+  
+  Gtk::Widget& get_header_widget();
+  
+  int get_height() const;
+
   Glib::ustring get_title();
 
-  Gtk::Widget& get_header_widget();
+  void draw_track(Cairo::RefPtr<Cairo::Context> cairo) const;
+  
+private:
+  
+private:
 
-  int get_height();
+  //----- Data -----//
+  std::vector<timeline::Track*> children;
+  std::vector<timeline::Clip*> clips;
 
-  void draw_track(Cairo::RefPtr<Cairo::Context> cairo);
-
-protected:
+  //----- Header Widgets ------//
+  
   Gtk::VBox headerWidget;
-  Gtk::Label label1;
-  Gtk::Label label2;
-  Gtk::CheckButton label3;
-  Gtk::Button label4;
+  
+  Gtk::ToolButton enableButton;
+  Gtk::ToolButton lockButton;
+  
+  Gtk::Entry titleBox;
+  Gtk::Toolbar buttonBar;
 };
 
 

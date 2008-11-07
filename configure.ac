@@ -24,7 +24,11 @@ AC_COPYRIGHT([
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 ])
 
+#
+# Global configuration
+#
 AC_GNU_SOURCE
+AC_DISABLE_STATIC
 
 #
 # Required programs
@@ -83,6 +87,10 @@ AC_LANG_PUSH([C])
 AC_CHECK_HEADER([execinfo.h], AC_DEFINE(HAVE_EXECINFO_H))
 # there is a warning in nobug, disabled til fixed AC_CHECK_HEADER([valgrind/valgrind.h], AC_DEFINE(HAVE_VALGRIND_VALGRIND_H))
 
+AC_CHECK_LIB(dl, dlopen, [LUMIERA_PLUGIN_LIBS="$LUMIERA_PLUGIN_LIBS -ldl"],
+                   [AC_MSG_ERROR([Dynamic linking not supported, report a bug])]
+)
+
 AC_LANG_POP([C])
 
 
@@ -124,15 +132,19 @@ AC_LANG_POP([C++])
 
 # END Internatinalization
 
+############## Gtk Dependancies
+PKG_CHECK_MODULES(LUMIERA_GUI, [
+    gtkmm-2.4 >= 2.8 gdl-1.0 >= 0.6.1 cairomm-1.0 >= 0.6.0
+    gavl >= 0.2.5 librsvg-2.0 >= 2.18.1])
+
+# END Gtk Dependancies
 
 ############## X11 Dependancies
 AC_PATH_X
 AC_PATH_XTRA
-# CFLAGS="$CFLAGS $X_CFLAGS"
-LIBS="$LIBS $X_PRE_LIBS $X_LIBS $X_EXTRA_LIBS"
 
 AC_CHECK_HEADERS([X11/Xlib.h X11/Xutil.h],[],
-	[AC_MSG_ERROR([Xlib.h or Xutil.h not found install xdevel])])
+                             [AC_MSG_ERROR([Xlib.h or Xutil.h not found install xdevel])])
 
 AC_CHECK_HEADERS([sys/ipc.h sys/shm.h],,
 	[AC_MSG_ERROR([Required header not found. Please check that it is installed])]
@@ -142,25 +154,19 @@ AC_CHECK_HEADERS([X11/extensions/Xvlib.h X11/extensions/XShm.h],,
         [#include <X11/Xlib.h>]
 )
 
-AC_CHECK_LIB(Xext, XInitExtension, ,
-    [AC_MSG_ERROR([Could not link with libXext. Check that you have libXext installed])], -lX11
+AC_CHECK_LIB(Xext, XInitExtension, [LUMIERA_GUI_LIBS="$LUMIERA_GUI_LIBS -lXext"],
+                   [AC_MSG_ERROR([Could not link with libXext. Check that you have libXext installed])], -lX11
 )
-AC_CHECK_LIB(Xv, XvQueryAdaptors, ,
-    [AC_MSG_ERROR([Could not link with libXv. Check that you have libXv installed])]
+AC_CHECK_LIB(Xv, XvQueryAdaptors, [LUMIERA_GUI_LIBS="$LUMIERA_GUI_LIBS -lXv"],
+     [AC_MSG_ERROR([Could not link with libXv. Check that you have libXv installed])]
 )
 
 # END X11 Dependancies
 
 
-############## Gtk Dependancies
-PKG_CHECK_MODULES(GTK_LUMIERA, [
-    gtkmm-2.4 >= 2.8 gdl-1.0 >= 0.6.1 cairomm-1.0 >= 0.6.0
-    gavl >= 0.2.5 librsvg-2.0 >= 2.18.1])
-
-AC_SUBST(GTK_LUMIERA_CFLAGS)
-AC_SUBST(GTK_LUMIERA_LIBS)
-
-# END Gtk Dependancies
+AC_SUBST(LUMIERA_PLUGIN_LIBS)
+AC_SUBST(LUMIERA_GUI_CFLAGS)
+AC_SUBST(LUMIERA_GUI_LIBS)
 
 
 ############## Nobug Dependancies

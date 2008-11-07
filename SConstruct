@@ -63,6 +63,7 @@ def setupBasicEnvironment():
                             ,toolpath = [TOOLDIR]
                             ,tools = ["default", "BuilderGCH", "BuilderDoxygen"]  
                             ) 
+    handleVerboseMessages(env)
     
     env.Append ( CCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honor CFLAGS, only CCFLAGS 
     env.Replace( VERSION=VERSION
@@ -73,7 +74,6 @@ def setupBasicEnvironment():
                , CPPDEFINES=['-DLUMIERA_VERSION='+VERSION ]     # note: it's a list to append further defines
                , CCFLAGS='-Wall '                                       # -fdiagnostics-show-option 
                )
-    
     RegisterIcon_Builder(env,SVGRENDERER)
     handleNoBugSwitches(env)
     
@@ -102,7 +102,7 @@ def appendVal(env,var,targetVar,val=None):
 def handleNoBugSwitches(env):
     """ set the build level for NoBug. 
         Release builds imply no DEBUG
-        wheras ALPHA and BETA require DEBUG
+        whereas ALPHA and BETA require DEBUG
     """
     level = env['BUILDLEVEL']
     if level in ['ALPHA', 'BETA']:
@@ -112,6 +112,15 @@ def handleNoBugSwitches(env):
         env.Append(CPPDEFINES = 'EBUG_'+level)
     elif level == 'RELEASE':
         env.Replace( DEBUG = 0 )
+
+def handleVerboseMessages(env):
+    """ toggle verbose build output """
+    if not env['VERBOSE']:
+       # SetOption('silent', True)
+       env['CCCOMSTR'] = "  Compiling    $SOURCE"
+       env['CXXCOMSTR'] = "  Compiling++  $SOURCE"
+       env['LINKCOMSTR'] = "  Linking -->  $TARGET"
+       env['LDMODULECOMSTR'] = "  creating module [ $TARGET ]"
 
 
 
@@ -128,6 +137,9 @@ def defineCmdlineOptions():
                     allowed_values=('ALPHA', 'BETA', 'RELEASE'))
         ,BoolOption('DEBUG', 'Build with debugging information and no optimizations', False)
         ,BoolOption('OPTIMIZE', 'Build with strong optimization (-O3)', False)
+        ,BoolOption('VALGRIND', 'Run Testsuite under valgrind control', True)
+        ,BoolOption('VERBOSE',  'Print full build commands', False)
+        ,('TESTSUITES', 'Run only Testsuites matching the given pattern', '')
 #       ,BoolOption('OPENGL', 'Include support for OpenGL preview rendering', False)
 #       ,EnumOption('DIST_TARGET', 'Build target architecture', 'auto', 
 #                   allowed_values=('auto', 'i386', 'i686', 'x86_64' ), ignorecase=2)
@@ -151,7 +163,7 @@ Special Targets:
      build   : just compile and link
      testcode: additionally compile the Testsuite
      check   : build and run the Testsuite
-     doc     : generate documetation (Doxygen)
+     doc     : generate documentation (Doxygen)
      install : install created artifacts at PREFIX
      src.tar : create source tarball
      doc.tar : create developer doc tarball
@@ -213,7 +225,6 @@ def configurePlatform(env):
         if not conf.CheckLibWithHeader('boost_regex-mt','boost/regex.hpp','C++'):
             problems.append('We need the boost regular expression lib (incl. binary lib for linking).')
     
-#    if not conf.CheckLibWithHeader('gavl', ['gavlconfig.h', 'gavl/gavl.h'], 'C'):
     
     if not conf.CheckPkgConfig('gavl', 1.0):
         problems.append('Did not find Gmerlin Audio Video Lib [http://gmerlin.sourceforge.net/gavl.html].')
@@ -230,13 +241,16 @@ def configurePlatform(env):
         problems.append('Unable to configure Cairo--, exiting.')
     
     if not conf.CheckPkgConfig('gdl-1.0', '0.6.1'):
-        problems.append('Unable to configure the GNOME DevTool Library, exiting.')
+        problems.append('Unable to configure the GNOME DevTool Library.')
     
     if not conf.CheckPkgConfig('librsvg-2.0', '2.18.1'):
         problems.append('Need rsvg Library for rendering icons.')
         
-    if not conf.CheckPkgConfig('xv'): problems.append('Need lib xv')
-#   if not conf.CheckPkgConfig('xext'): Exit(1)
+    if not conf.CheckCHeader(['X11/Xutil.h', 'X11/Xlib.h'],'<>'):
+        problems.append('Xlib.h and Xutil.h required. Please install libx11-dev.')
+    
+    if not conf.CheckPkgConfig('xv')  : problems.append('Need libXv...')
+    if not conf.CheckPkgConfig('xext'): problems.append('Need libXext.')
 #   if not conf.CheckPkgConfig('sm'): Exit(1)
 #    
 # obviously not needed?
@@ -298,7 +312,7 @@ def defineBuildTargets(env, artifacts):
     
     
     artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/main.cpp']+ core )
-    artifacts['plugins'] = env.SharedLibrary('$BINDIR/lumiera-plugin', objplug)
+    artifacts['plugins'] = env.LoadableModule('$BINDIR/lumiera-plugin', objplug)
     
     # the Lumiera GTK GUI
     envgtk  = env.Clone().mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','librsvg-2.0','xv','xext','sm'])

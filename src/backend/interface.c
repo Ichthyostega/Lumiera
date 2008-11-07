@@ -22,6 +22,7 @@
 #include "lib/mutex.h"
 #include "lib/safeclib.h"
 
+#include "backend/plugin.h"
 #include "backend/interface.h"
 
 #include "backend/interfaceregistry.h"
@@ -49,6 +50,7 @@ lumiera_interface_open (const char* interface, unsigned version, size_t minminor
 {
   LumieraInterfacenode self = NULL;
   TRACE (interface, "%s", name);
+  WARN_IF (version == 0, interface, "opening experimental interface: %s_%d_%s", interface, version, name);
 
   LUMIERA_RECMUTEX_SECTION (interfaceregistry, &lumiera_interface_mutex)
     {
@@ -132,8 +134,9 @@ depwalk (LumieraInterfacenode self, LumieraInterfacenode* stack)
 
           if (!cycle)
             {
+              if ((*dep)->plugin)
+                lumiera_plugin_refinc ((*dep)->plugin);
               ++(*dep)->refcnt;
-
               (*dep)->lnk = *stack;
               *stack = *dep;
 
@@ -183,7 +186,10 @@ lumiera_interface_open_interfacenode (LumieraInterfacenode self)
 
           if (!cycle)
             {
+              if (self->plugin)
+                lumiera_plugin_refinc (self->plugin);
               ++self->refcnt;
+
               self->lnk = stack;
               stack = self;
               int collect_dependencies_bak = collect_dependencies;
@@ -225,6 +231,16 @@ lumiera_interface_close (LumieraInterface self)
     {
       lumiera_interfacenode_close ((LumieraInterfacenode)psplay_find (lumiera_interfaceregistry, self, 100));
     }
+}
+
+
+unsigned
+lumiera_interface_version (LumieraInterface self, const char* iname)
+{
+  if (self && iname && !strcmp (self->interface, iname))
+    return self->version;
+
+  return ~0;
 }
 
 
@@ -279,6 +295,8 @@ lumiera_interfacenode_close (LumieraInterfacenode self)
 
       stack = self->lnk;
       self->lnk = NULL;
+      if (self->plugin)
+        lumiera_plugin_refdec (self->plugin);
       --self->refcnt;
     }
 }

@@ -1,6 +1,6 @@
 format 40
 "ProcessingLayer" // ProcessingLayer
-  revision 23
+  revision 24
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -120,8 +120,6 @@ format 40
       attributes
         attribute_ref 128517 // length
           "5"
-        attribute_ref 128645 // start
-          "100"
         end
       relations
         end
@@ -132,8 +130,6 @@ format 40
       attributes
         attribute_ref 128517 // length
           "8820"
-        attribute_ref 128645 // start
-          "176400"
         end
       relations
         end
@@ -180,15 +176,13 @@ format 40
       attributes
         attribute_ref 128517 // length
           "5"
-        attribute_ref 128645 // start
-          "100"
         end
       relations
         end
     end
 
     classinstance 129541 ""
-      type class_ref 128133 // EDL
+      type class_ref 128133 // Seq
       attributes
         end
       relations
@@ -220,8 +214,6 @@ format 40
       attributes
         attribute_ref 128517 // length
           "5"
-        attribute_ref 128645 // start
-          "100"
         end
       relations
         end
@@ -244,7 +236,7 @@ format 40
       attributes
         attribute_ref 128517 // length
           "3"
-        attribute_ref 128901 // plugID
+        attribute_ref 128901 // plugin
           "\"Hue\""
         end
       relations
@@ -270,7 +262,7 @@ format 40
       attributes
         attribute_ref 128517 // length
           "3"
-        attribute_ref 128901 // plugID
+        attribute_ref 128901 // plugin
           "\"Hue\""
         end
       relations

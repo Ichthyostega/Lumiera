@@ -1,6 +1,6 @@
 format 40
 "MObject" // ProcessingLayer::MObject
-  revision 32
+  revision 33
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -62,7 +62,7 @@ ${inlines}
       comment "Primary Interface for all editing tasks.
 The session contains defaults, all the assets being edited, and a set of EDL with the individual MObjects to be manipulated and rendered."
       operation 133509 "currEDL"
-	public return_type class_ref 128133 // EDL
+	public return_type class_ref 128133 // Seq
 	nparams 0
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
 	cpp_def "${comment}${inline}${type}
@@ -133,7 +133,7 @@ ${inlines}
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
 "
 	    classrelation_ref 128005 // edls (<directional aggregation by value>)
-	  b multiplicity "" parent class_ref 128133 // EDL
+	  b multiplicity "" parent class_ref 128133 // Seq
       end
 
       classrelation 128261 // theFixture (<unidirectional association>)
@@ -250,7 +250,93 @@ of the current session config and contents.
       end
     end
 
-    class 128133 "EDL"
+    class 145541 "Timeline"
+      abstract visibility public 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 159109 // <aggregation by value>
+	relation_ref 154885 // <aggregation by value>
+      end
+
+      classrelation 159237 // <unidirectional association>
+	relation 155013 --->
+	  stereotype "own"
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 159237 // <unidirectional association>
+	  b multiplicity "" parent class_ref 145925 // PlayControl
+      end
+
+      classrelation 159621 // <unidirectional association>
+	relation 155269 --->
+	  a role_name "" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 159621 // <unidirectional association>
+	  b multiplicity "" parent class_ref 146309 // Sequence
+      end
+
+      classrelation 160005 // globalBusses (<directional aggregation by value>)
+	relation 155653 *-->
+	  stereotype "list"
+	  a role_name "globalBusses" multiplicity "*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 160005 // globalBusses (<directional aggregation by value>)
+	  b multiplicity "1" parent class_ref 138117 // Pipe
+      end
+    end
+
+    class 145797 "TimelineView"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 158853 // <realization>
+	relation 154757 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 158853 // <realization>
+	  b multiplicity "" parent class_ref 145541 // Timeline
+      end
+
+      classrelation 159749 // <unidirectional association>
+	relation 155397 --->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 159749 // <unidirectional association>
+	  b multiplicity "" parent class_ref 146309 // Sequence
+      end
+
+      classrelation 160773 // <association>
+	relation 156293 ----
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 160773 // <association>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 160901 // <association>
+      end
+    end
+
+    class 128133 "Seq"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -298,16 +384,16 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 128517 // <generalisation>
-	  b multiplicity "" parent class_ref 128133 // EDL
+	  b multiplicity "" parent class_ref 128133 // Seq
       end
 
-      classrelation 131717 // theTimeline (<directional aggregation by value>)
+      classrelation 131717 // effectiveTimeline (<directional aggregation by value>)
 	relation 131077 *-->
 	  stereotype "list"
-	  a role_name "theTimeline" multiplicity "*" protected
+	  a role_name "effectiveTimeline" multiplicity "*" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
-	    classrelation_ref 131717 // theTimeline (<directional aggregation by value>)
+	    classrelation_ref 131717 // effectiveTimeline (<directional aggregation by value>)
 	  b multiplicity "" parent class_ref 129797 // ExplicitPlacement
       end
 
@@ -422,6 +508,14 @@ ${inlines}
 	    classrelation_ref 147205 // subTracks (<directional aggregation by value>)
 	  b multiplicity "" parent class_ref 128389 // Track
 	  association_type class_ref 128645 // Placement
+      end
+
+      classrelation 161413 // <realization>
+	relation 156805 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 161413 // <realization>
+	  b multiplicity "" parent class_ref 128517 // MObject
       end
     end
 
@@ -618,16 +712,6 @@ ${inlines}
 	  b multiplicity "" parent class_ref 128773 // AbstractMO
       end
 
-      attribute 128645 "start"
-	protected type class_ref 134917 // Time
-	init_value "Time(0)"
-	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
-"
-	java_decl ""
-	idl_decl ""
-	comment "startpos in source"
-      end
-
       classrelation 142469 // source (<unidirectional association>)
 	relation 140677 --->
 	  a role_name "source" multiplicity "1" protected
@@ -636,6 +720,14 @@ ${inlines}
 "
 	    classrelation_ref 142469 // source (<unidirectional association>)
 	  b multiplicity "*" parent class_ref 136709 // Media
+      end
+
+      classrelation 161029 // <realization>
+	relation 156421 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 161029 // <realization>
+	  b multiplicity "" parent class_ref 128517 // MObject
       end
     end
 
@@ -711,13 +803,21 @@ ${inlines}
 	  b multiplicity "" parent class_ref 128773 // AbstractMO
       end
 
-      attribute 128901 "plugID"
+      attribute 128901 "plugin"
 	protected explicit_type "string"
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
 	idl_decl ""
 	comment "Identifier of the Plugin to be used"
+      end
+
+      classrelation 161157 // <realization>
+	relation 156549 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 161157 // <realization>
+	  b multiplicity "" parent class_ref 128517 // MObject
       end
     end
 
@@ -910,6 +1010,14 @@ ${inlines}
 	    cpp default "${type}"
 	    classrelation_ref 130949 // <generalisation>
 	  b multiplicity "" parent class_ref 129157 // Meta
+      end
+
+      classrelation 161285 // <realization>
+	relation 156677 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 161285 // <realization>
+	  b multiplicity "" parent class_ref 128517 // MObject
       end
     end
 

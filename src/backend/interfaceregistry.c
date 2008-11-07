@@ -29,6 +29,7 @@
 
 
 
+#include "backend/plugin.h"
 #include "backend/interfaceregistry.h"
 
 /**
@@ -39,27 +40,31 @@
  */
 
 NOBUG_DEFINE_FLAG_PARENT (interface_all, backend);
+NOBUG_DEFINE_FLAG_PARENT (plugin, interface_all);
 NOBUG_DEFINE_FLAG_PARENT (interfaceregistry, interface_all);
 NOBUG_DEFINE_FLAG_PARENT (interface, interface_all);
 
 PSplay lumiera_interfaceregistry;
+PSplay lumiera_pluginregistry;
 lumiera_mutex lumiera_interface_mutex;
 
 static int
-cmp_fn (const void* keya, const void* keyb);
+lumiera_interface_cmp_fn (const void* keya, const void* keyb);
 
 static const void*
-key_fn (const PSplaynode node);
+lumiera_interface_key_fn (const PSplaynode node);
+
 
 
 static LumieraInterfacenode
-lumiera_interfacenode_new (LumieraInterface iface)
+lumiera_interfacenode_new (LumieraInterface iface, LumieraPlugin plugin)
 {
   LumieraInterfacenode self = lumiera_malloc (sizeof (*self));
 
   psplaynode_init (&self->node);
   self->interface = iface;
   self->refcnt = 0;
+  self->plugin = plugin;
   self->lnk = NULL;
   self->deps_size = 0;
   self->deps = NULL;
@@ -89,11 +94,18 @@ lumiera_interfaceregistry_init (void)
   NOBUG_INIT_FLAG (interface_all);
   NOBUG_INIT_FLAG (interfaceregistry);
   NOBUG_INIT_FLAG (interface);
+  NOBUG_INIT_FLAG (plugin);
+
   TRACE (interfaceregistry);
   REQUIRE (!lumiera_interfaceregistry);
+  REQUIRE (!lumiera_pluginregistry);
 
-  lumiera_interfaceregistry = psplay_new (cmp_fn, key_fn, NULL);
+  lumiera_interfaceregistry = psplay_new (lumiera_interface_cmp_fn, lumiera_interface_key_fn, NULL);
   if (!lumiera_interfaceregistry)
+    LUMIERA_DIE (ERRNO);
+
+  lumiera_pluginregistry = psplay_new (lumiera_plugin_cmp_fn, lumiera_plugin_key_fn, lumiera_plugin_delete_fn);
+  if (!lumiera_pluginregistry)
     LUMIERA_DIE (ERRNO);
 
   lumiera_recmutex_init (&lumiera_interface_mutex, "interfaceregistry", &NOBUG_FLAG(interfaceregistry));
@@ -104,9 +116,14 @@ void
 lumiera_interfaceregistry_destroy (void)
 {
   TRACE (interfaceregistry);
-  REQUIRE (!psplay_nelements (lumiera_interfaceregistry));
+
+  if (lumiera_pluginregistry)
+    psplay_delete (lumiera_pluginregistry);
+  lumiera_pluginregistry = NULL;
 
   lumiera_mutex_destroy (&lumiera_interface_mutex, &NOBUG_FLAG(interfaceregistry));
+
+  REQUIRE (!psplay_nelements (lumiera_interfaceregistry), "some interfaces still registered at shutdown");
 
   if (lumiera_interfaceregistry)
     psplay_destroy (lumiera_interfaceregistry);
@@ -115,7 +132,7 @@ lumiera_interfaceregistry_destroy (void)
 
 
 void
-lumiera_interfaceregistry_register_interface (LumieraInterface self)
+lumiera_interfaceregistry_register_interface (LumieraInterface self, LumieraPlugin plugin)
 {
   TRACE (interfaceregistry);
   REQUIRE (self);
@@ -123,13 +140,13 @@ lumiera_interfaceregistry_register_interface (LumieraInterface self)
   LUMIERA_RECMUTEX_SECTION (interfaceregistry, &lumiera_interface_mutex)
     {
       TRACE (interfaceregistry, "interface %s, version %d, instance %s", self->interface, self->version, self->name);
-      psplay_insert (lumiera_interfaceregistry, &lumiera_interfacenode_new (self)->node, 100);
+      psplay_insert (lumiera_interfaceregistry, &lumiera_interfacenode_new (self, plugin)->node, 100);
     }
 }
 
 
 void
-lumiera_interfaceregistry_bulkregister_interfaces (LumieraInterface* self)
+lumiera_interfaceregistry_bulkregister_interfaces (LumieraInterface* self, LumieraPlugin plugin)
 {
   TRACE (interfaceregistry);
   REQUIRE (self);
@@ -139,7 +156,7 @@ lumiera_interfaceregistry_bulkregister_interfaces (LumieraInterface* self)
       while (*self)
         {
           TRACE (interfaceregistry, "interface %s, version %d, instance %s", (*self)->interface, (*self)->version, (*self)->name);
-          psplay_insert (lumiera_interfaceregistry, &lumiera_interfacenode_new (*self)->node, 100);
+          psplay_insert (lumiera_interfaceregistry, &lumiera_interfacenode_new (*self, plugin)->node, 100);
           ++self;
         }
     }
@@ -213,7 +230,7 @@ lumiera_interfaceregistry_interface_find (const char* interface, unsigned versio
 
 
 static int
-cmp_fn (const void* keya, const void* keyb)
+lumiera_interface_cmp_fn (const void* keya, const void* keyb)
 {
   const LumieraInterface a = (const LumieraInterface)keya;
   const LumieraInterface b = (const LumieraInterface)keyb;
@@ -240,11 +257,10 @@ cmp_fn (const void* keya, const void* keyb)
 
 
 static const void*
-key_fn (const PSplaynode node)
+lumiera_interface_key_fn (const PSplaynode node)
 {
   return ((LumieraInterfacenode)node)->interface;
 }
-
 
 /*
 // Local Variables:

@@ -22,7 +22,10 @@
 #include "backend/interface.h"
 #include "backend/interfaceregistry.h"
 #include "backend/interfacedescriptor.h"
+#include "backend/config.h"
+
 #include "tests/test.h"
+#include "tests/backend/hello_interface.h"
 
 /*
   define 2 example interfaces
@@ -80,7 +83,15 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                             testrelease,
                             LUMIERA_INTERFACE_INLINE (name, "\073\003\054\127\344\046\324\321\221\262\232\026\376\123\125\243",
                                                       const char*, (LumieraInterface iface),
+                                                      {return "LumieraTest";}
+                                                      ),
+                            LUMIERA_INTERFACE_INLINE (brief, "\241\337\035\172\323\377\355\036\171\326\323\163\177\242\364\172",
+                                                      const char*, (LumieraInterface iface),
                                                       {return "Lumiera Test suite examples";}
+                                                      ),
+                            LUMIERA_INTERFACE_INLINE (homepage, "\030\374\031\152\024\167\154\346\303\372\177\353\304\306\275\247",
+                                                      const char*, (LumieraInterface iface),
+                                                      {return "http://www.lumiera.org/develompent.html";}
                                                       ),
                             LUMIERA_INTERFACE_INLINE (version, "\271\330\345\066\304\217\211\065\157\120\031\365\304\363\364\074",
                                                       const char*, (LumieraInterface iface),
@@ -88,7 +99,11 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                                                       ),
                             LUMIERA_INTERFACE_INLINE (author, "\367\160\342\065\147\007\237\371\141\335\371\131\025\030\257\232",
                                                       const char*, (LumieraInterface iface),
-                                                      {return "Christian Thaeter <ct@pipapo.org>";}
+                                                      {return "Christian Thaeter";}
+                                                      ),
+                            LUMIERA_INTERFACE_INLINE (email, "\334\272\125\312\140\347\121\020\155\047\226\352\244\141\107\363",
+                                                      const char*, (LumieraInterface iface),
+                                                      {return "ct@pipapo.org";}
                                                       ),
                             LUMIERA_INTERFACE_INLINE (copyright, "\163\106\344\014\251\125\111\252\236\322\174\120\335\225\333\245",
                                                       const char*, (LumieraInterface iface),
@@ -116,33 +131,21 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                                                           "along with this program; if not, write to the Free Software\n"
                                                           "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA";
                                                       }
+                                                      ),
+
+                            LUMIERA_INTERFACE_INLINE (state, "\364\002\115\170\361\321\301\244\350\322\270\362\010\231\207\334",
+                                                      int, (LumieraInterface iface),
+                                                      {return LUMIERA_INTERFACE_EXPERIMENTAL;}
+                                                      ),
+
+                            LUMIERA_INTERFACE_INLINE (versioncmp, "\136\037\234\304\100\247\244\342\324\353\072\060\161\053\077\263",
+                                                      int, (const char* a, const char* b),
+                                                      {return 0;}
                                                       )
                             );
 
 
 
-LUMIERA_EXPORT (interfaces_defined_here,
-                LUMIERA_INTERFACE_DEFINE (lumieraorg_testexample_one, 0,
-                                          lumieraorg_first_test,
-                                          LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_tests_descriptor),
-                                          testacquire,
-                                          testrelease,
-                                          LUMIERA_INTERFACE_MAP (foo1, "\214\310\136\372\003\344\163\377\075\100\070\200\375\221\227\324",
-                                                                 testfunc),
-                                          LUMIERA_INTERFACE_MAP (bar1, "\262\253\067\211\157\052\212\140\114\334\231\250\340\075\214\030",
-                                                                 testfunc)
-                                          ),
-                LUMIERA_INTERFACE_DEFINE (lumieraorg_testexample_two, 0,
-                                          lumieraorg_second_test,
-                                          LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_tests_descriptor),
-                                          testacquire,
-                                          testrelease,
-                                          LUMIERA_INTERFACE_MAP (foo2, "\110\152\002\271\363\052\324\272\373\045\132\270\277\000\271\217",
-                                                                 testfunc),
-                                          LUMIERA_INTERFACE_MAP (bar2, "\376\042\027\336\355\113\132\233\350\312\170\077\377\370\356\167",
-                                                                 testfunc)
-                                          )
-                );
 
 
 /*
@@ -242,7 +245,27 @@ testrelease_four (LumieraInterface self)
 }
 
 
-LUMIERA_EXPORT (dependencytests,
+LUMIERA_EXPORT (
+                LUMIERA_INTERFACE_DEFINE (lumieraorg_testexample_one, 0,
+                                          lumieraorg_first_test,
+                                          LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_tests_descriptor),
+                                          testacquire,
+                                          testrelease,
+                                          LUMIERA_INTERFACE_MAP (foo1, "\214\310\136\372\003\344\163\377\075\100\070\200\375\221\227\324",
+                                                                 testfunc),
+                                          LUMIERA_INTERFACE_MAP (bar1, "\262\253\067\211\157\052\212\140\114\334\231\250\340\075\214\030",
+                                                                 testfunc)
+                                          ),
+                LUMIERA_INTERFACE_DEFINE (lumieraorg_testexample_two, 0,
+                                          lumieraorg_second_test,
+                                          LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_tests_descriptor),
+                                          testacquire,
+                                          testrelease,
+                                          LUMIERA_INTERFACE_MAP (foo2, "\110\152\002\271\363\052\324\272\373\045\132\270\277\000\271\217",
+                                                                 testfunc),
+                                          LUMIERA_INTERFACE_MAP (bar2, "\376\042\027\336\355\113\132\233\350\312\170\077\377\370\356\167",
+                                                                 testfunc)
+                                          ),
                 LUMIERA_INTERFACE_DEFINE (lumieraorg_testexample_void, 0,
                                           lumieraorg_dependencytest_one,
                                           LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_tests_descriptor),
@@ -276,7 +299,7 @@ TEST ("basic")
 {
   lumiera_interfaceregistry_init ();
 
-  lumiera_interfaceregistry_bulkregister_interfaces (interfaces_defined_here());
+  lumiera_interfaceregistry_bulkregister_interfaces (lumiera_plugin_interfaces(), NULL);
 
 
   /* some ugly lowlevel handling tests */
@@ -292,14 +315,14 @@ TEST ("basic")
 
   handle2->foo2 ("this is foo2");
 
-  lumiera_interfaceregistry_bulkremove_interfaces (interfaces_defined_here());
+  LUMIERA_INTERFACE_UNREGISTEREXPORTED;
   lumiera_interfaceregistry_destroy ();
 }
 
 TEST ("open_close")
 {
   lumiera_interfaceregistry_init ();
-  lumiera_interfaceregistry_bulkregister_interfaces (interfaces_defined_here());
+  lumiera_interfaceregistry_bulkregister_interfaces (lumiera_plugin_interfaces(), NULL);
 
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_one, 0) handle =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_one, 0, 0, lumieraorg_first_test);
@@ -309,14 +332,14 @@ TEST ("open_close")
 
   lumiera_interface_close ((LumieraInterface)handle);
 
-  lumiera_interfaceregistry_bulkremove_interfaces (interfaces_defined_here());
+  LUMIERA_INTERFACE_UNREGISTEREXPORTED;
   lumiera_interfaceregistry_destroy ();
 }
 
 TEST ("dependencies_one")
 {
   lumiera_interfaceregistry_init ();
-  lumiera_interfaceregistry_bulkregister_interfaces (dependencytests());
+  LUMIERA_INTERFACE_REGISTEREXPORTED;
 
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_one);
@@ -326,7 +349,7 @@ TEST ("dependencies_one")
 
   lumiera_interface_close ((LumieraInterface)handle);
 
-  lumiera_interfaceregistry_bulkremove_interfaces (dependencytests());
+  LUMIERA_INTERFACE_UNREGISTEREXPORTED;
   lumiera_interfaceregistry_destroy ();
 }
 
@@ -334,7 +357,7 @@ TEST ("dependencies_one")
 TEST ("dependencies_two")
 {
   lumiera_interfaceregistry_init ();
-  lumiera_interfaceregistry_bulkregister_interfaces (dependencytests());
+  LUMIERA_INTERFACE_REGISTEREXPORTED;
 
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_two);
@@ -344,14 +367,14 @@ TEST ("dependencies_two")
 
   lumiera_interface_close ((LumieraInterface)handle);
 
-  lumiera_interfaceregistry_bulkremove_interfaces (dependencytests());
+  LUMIERA_INTERFACE_UNREGISTEREXPORTED;
   lumiera_interfaceregistry_destroy ();
 }
 
 TEST ("dependencies_three")
 {
   lumiera_interfaceregistry_init ();
-  lumiera_interfaceregistry_bulkregister_interfaces (dependencytests());
+  LUMIERA_INTERFACE_REGISTEREXPORTED;
 
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_three);
@@ -361,7 +384,7 @@ TEST ("dependencies_three")
 
   lumiera_interface_close ((LumieraInterface)handle);
 
-  lumiera_interfaceregistry_bulkremove_interfaces (dependencytests());
+  LUMIERA_INTERFACE_UNREGISTEREXPORTED;
   lumiera_interfaceregistry_destroy ();
 }
 
@@ -369,7 +392,7 @@ TEST ("dependencies_three")
 TEST ("dependencies_four")
 {
   lumiera_interfaceregistry_init ();
-  lumiera_interfaceregistry_bulkregister_interfaces (dependencytests());
+  LUMIERA_INTERFACE_REGISTEREXPORTED;
 
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_four);
@@ -379,7 +402,7 @@ TEST ("dependencies_four")
 
   lumiera_interface_close ((LumieraInterface)handle);
 
-  lumiera_interfaceregistry_bulkremove_interfaces (dependencytests());
+  LUMIERA_INTERFACE_UNREGISTEREXPORTED;
   lumiera_interfaceregistry_destroy ();
 }
 
@@ -388,7 +411,7 @@ TEST ("dependencies_four")
 TEST ("dependencies_all")
 {
   lumiera_interfaceregistry_init ();
-  lumiera_interfaceregistry_bulkregister_interfaces (dependencytests());
+  LUMIERA_INTERFACE_REGISTEREXPORTED;
 
   TRACE (tests, "OPEN one");
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle_one =
@@ -425,16 +448,70 @@ TEST ("dependencies_all")
   lumiera_interface_close ((LumieraInterface)handle_one);
 
 
-  lumiera_interfaceregistry_bulkremove_interfaces (dependencytests());
+  LUMIERA_INTERFACE_UNREGISTEREXPORTED;
   lumiera_interfaceregistry_destroy ();
 }
 
 
-
-TEST ("highlevel, plugin")
+TEST ("plugin_discover")
 {
+  lumiera_config_init ("./");
+  lumiera_interfaceregistry_init ();
+
+  if (lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register))
+    {
+      LumieraPlugin p = lumiera_plugin_lookup (".libs/examplepluginc.so");
+      printf ("found plugin: %s\n", lumiera_plugin_name (p));
+      lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
+    }
+  else
+    printf ("error: %s\n", lumiera_error ());
+
+  lumiera_interfaceregistry_destroy ();
+  lumiera_config_destroy ();
+}
 
 
+TEST ("plugin_unload")
+{
+  lumiera_config_init ("./");
+  lumiera_interfaceregistry_init ();
+
+  lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
+  lumiera_plugin_unload (lumiera_plugin_lookup (".libs/examplepluginc.so"));
+  LumieraPlugin p = lumiera_plugin_lookup (".libs/examplepluginc.so");
+  printf ("plugin unload: %p\n", p);
+
+  lumiera_interfaceregistry_destroy ();
+  lumiera_config_destroy ();
+}
+
+
+TEST ("plugin_examplepluginc")
+{
+  lumiera_config_init ("./");
+  lumiera_interfaceregistry_init ();
+  lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
+
+  TODO ("macro to derrive minminor version from a slot");
+
+  LUMIERA_INTERFACE_HANDLE(lumieraorg_testhello, 0) german =
+    LUMIERA_INTERFACE_OPEN (lumieraorg_testhello, 0, 0, lumieraorg_hello_german);
+
+  LUMIERA_INTERFACE_HANDLE(lumieraorg_testhello, 0) english =
+    LUMIERA_INTERFACE_OPEN (lumieraorg_testhello, 0, 0, lumieraorg_hello_english);
+
+  german->hello ();
+  german->goodbye ("Welt!");
+
+  english->hello ();
+  english->goodbye ("World!");
+
+  LUMIERA_INTERFACE_CLOSE (german);
+  LUMIERA_INTERFACE_CLOSE (english);
+
+  lumiera_interfaceregistry_destroy ();
+  lumiera_config_destroy ();
 }
 
 TESTS_END

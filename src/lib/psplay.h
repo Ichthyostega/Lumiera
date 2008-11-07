@@ -94,7 +94,7 @@ struct psplay_struct
   PSplaynode* found_parent;             /* maybe direct parent of last found node, used for fast remove */
   psplay_cmp_fn cmp;
   psplay_key_fn key;
-  psplay_delete_fn delete;
+  psplay_delete_fn del;
 
   size_t elem_cnt;
   unsigned log2;                        /* roughly log2 of the elem_cnt*/
@@ -122,7 +122,7 @@ psplay_nelements (PSplay self)
  * @return self
  */
 PSplay
-psplay_init (PSplay self, psplay_cmp_fn cmp, psplay_key_fn key, psplay_delete_fn delete);
+psplay_init (PSplay self, psplay_cmp_fn cmp, psplay_key_fn key, psplay_delete_fn del);
 
 
 /**
@@ -142,7 +142,7 @@ psplay_destroy (PSplay self);
  * @return allcoated splay tree or NULL on error
  */
 PSplay
-psplay_new (psplay_cmp_fn cmp, psplay_key_fn key, psplay_delete_fn delete);
+psplay_new (psplay_cmp_fn cmp, psplay_key_fn key, psplay_delete_fn del);
 
 
 /**
