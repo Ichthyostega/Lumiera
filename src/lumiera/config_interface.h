@@ -33,15 +33,11 @@
  * Declares the interface for the lumiera configuration system
  */
 
-#ifndef LUMIERA_PLUGIN
-
 void
 lumiera_config_interface_init (void);
 
 void
 lumiera_config_interface_destroy (void);
-
-#endif
 
 /*
   Note that some interfaces return ints rather than underlying opaque pointers, this is then the truth value of the pointer

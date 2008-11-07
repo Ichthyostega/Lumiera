@@ -52,7 +52,7 @@ main (int argc, char** argv)
 {
   (void) argc;
   (void) argv;
-  lumiera_init ();
+  lumiera_preinit ();
 
   TODO ("commandline parser");
   lumiera_config_init (LUMIERA_CONFIG_PATH);
@@ -61,14 +61,15 @@ main (int argc, char** argv)
   TODO ("plugindb support instead loading all plugins at once");
   lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
 
+  lumiera_init ();
   TRACE (lumiera, "Lumiera is alive");
 
   TODO ("video editing");
 
   TRACE (lumiera, "initiating shutdown sequence");
+  lumiera_shutdown ();
   lumiera_interfaceregistry_destroy ();
   lumiera_config_destroy ();
-  lumiera_shutdown ();
 }
 
 

@@ -24,6 +24,7 @@
 
 //TODO: Lumiera header includes//
 #include "lumiera/lumiera.h"
+#include "lumiera/config_interface.h"
 
 //TODO: internal/static forward declarations//
 
@@ -42,22 +43,52 @@ NOBUG_DEFINE_FLAG_PARENT (lumiera, lumiera_all);
 
 //code goes here//
 
+/**
+ * Early initialization
+ * Sets up some important basic stuff, this is run as *very* first before anything
+ * else got initialized. Used for NoBug and other kinds of hooks. There is no matching
+ * shutdown function for this, consider moving as much as possible to lumiera_init()
+ */
 void
-lumiera_init (void)
+lumiera_preinit (void)
 {
   NOBUG_INIT;
   NOBUG_INIT_FLAG (all);
   NOBUG_INIT_FLAG (lumiera_all);
   NOBUG_INIT_FLAG (lumiera);
-  TRACE (lumiera, "initializing");
+  TRACE (lumiera, "booting up");
 }
 
 
+/**
+ * Standard initialization procedure
+ * Boots all buildin subsystems up as described in DesignProcess/GlobalInitilaization.
+ * The configuration and interfaces/plugin subsystems are already started at this point and
+ * commandline arguments are parsed.
+ */
+void
+lumiera_init (void)
+{
+  TRACE (lumiera, "initializing");
+
+  lumiera_config_interface_init ();
+}
+
+
+/**
+ * Shutdown procedure
+ * This shuts all subsystem which got initialized in lumiera_init down.
+ * Shutdowns should be arranged in reverse initialization order.
+ */
 void
 lumiera_shutdown (void)
 {
   TRACE (lumiera, "shutdown");
+
+  lumiera_config_interface_destroy ();
 }
+
+
 
 
 
