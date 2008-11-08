@@ -70,14 +70,14 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, LList acquirer, off_t sta
        * 2GB on 64 bit arch
        */
 #if SIZE_MAX <= 4294967295U
-      lumiera_config_setdefault ("backend.mmap_window_size = 134217728");
+      lumiera_config_setdefault ("backend.mmap.window_size = 134217728");
 #else
-      lumiera_config_setdefault ("backend.mmap_window_size = 2147483648");
+      lumiera_config_setdefault ("backend.mmap.window_size = 2147483648");
 #endif
     }
 
   long long mmap_window_size = 0;
-  lumiera_config_number_get ("backend.mmap_window_size", &mmap_window_size);
+  lumiera_config_number_get ("backend.mmap.window_size", &mmap_window_size);
 
   LumieraFiledescriptor descriptor = file->descriptor;
 

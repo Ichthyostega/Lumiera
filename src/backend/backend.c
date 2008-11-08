@@ -61,20 +61,20 @@ lumiera_backend_init (void)
 
 
   const char* filehandles = lumiera_tmpbuf_snprintf (SIZE_MAX,
-                                                     "backend.filehandles = %d",
+                                                     "backend.file.max_handles = %d",
                                                      /* roughly 2/3 of all availables filehandles are managed by the backend */
                                                      (sysconf (_SC_OPEN_MAX)-10)*2/3);
 
   lumiera_config_setdefault (filehandles);
 
   long long max_entries;
-  lumiera_config_number_get ("backend.filehandles", &max_entries);
+  lumiera_config_number_get ("backend.file.max_handles", &max_entries);
   lumiera_filehandlecache_new (max_entries);
 
 #if SIZE_MAX <= 4294967295UL
-  lumiera_config_setdefault ("backend.as_limit = 3221225469");
+  lumiera_config_setdefault ("backend.mmap.as_limit = 3221225469");
 #else
-  lumiera_config_setdefault ("backend.as_limit = 211106232532992");
+  lumiera_config_setdefault ("backend.mmap.as_limit = 211106232532992");
 #endif
 
   struct rlimit as_rlimit;
@@ -83,7 +83,7 @@ lumiera_backend_init (void)
   long long as_limit = (long long)as_rlimit.rlim_cur;
   if (as_rlimit.rlim_cur == RLIM_INFINITY)
     {
-      lumiera_config_number_get ("backend.as_limit", &as_limit);
+      lumiera_config_number_get ("backend.mmap.as_limit", &as_limit);
     }
   else
     {
