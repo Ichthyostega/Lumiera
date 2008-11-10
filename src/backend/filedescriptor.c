@@ -131,6 +131,7 @@ lumiera_filedescriptor_acquire (const char* name, int flags)
         {
           if (errno == ENOENT && flags&O_CREAT)
             {
+              errno = 0;
               char* dir = lumiera_tmpbuf_strndup (name, PATH_MAX);
               char* slash = dir;
               while ((slash = strchr (slash+1, '/')))
@@ -146,7 +147,8 @@ lumiera_filedescriptor_acquire (const char* name, int flags)
                 }
               int fd;
               INFO (filedescriptor, "try creating file: %s", name);
-              fd = creat (name, 0777);
+              TODO ("creat mode from config");
+              fd = creat (name, 0666);
               if (fd == -1)
                 {
                   LUMIERA_ERROR_SET (filedescriptor, ERRNO);
@@ -227,9 +229,11 @@ lumiera_filedescriptor_new (LumieraFiledescriptor template)
   psplaynode_init (&self->node);
   self->stat = template->stat;
 
+  self->realsize = template->stat.st_size;
   self->flags = template->flags;
   self->refcount = 1;
-  self->handle = 0;
+  self->handle =  NULL;
+  self->mmapings = NULL;
 
   lumiera_mutex_init (&self->lock, "filedescriptor", &NOBUG_FLAG (filedescriptor));
 

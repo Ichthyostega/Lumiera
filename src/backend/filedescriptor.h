@@ -53,7 +53,7 @@ struct lumiera_filedescriptor_struct
   struct stat stat;
 
   /**
-   * files which are written are rounded up to (the next chunk boundary)
+   * files which are written are rounded up to the next chunk boundary
    * by the mmaping backend and will be ftruncated to the realsize on close.
    */
   off_t realsize;
