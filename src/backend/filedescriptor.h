@@ -108,8 +108,10 @@ lumiera_filedescriptor_acquire (const char* name, int flags);
  * @param self filedescriptor to be released
  */
 void
-lumiera_filedescriptor_release (LumieraFiledescriptor self);
+lumiera_filedescriptor_release (LumieraFiledescriptor self, const char* name);
 
+int
+lumiera_filedescriptor_handle (LumieraFiledescriptor self, const char* name);
 
 /**
  * Allocate a new filedescriptor cloned from a template
@@ -125,6 +127,6 @@ lumiera_filedescriptor_new (LumieraFiledescriptor template);
  * @param self the filedescriptor to be deleted
  */
 void
-lumiera_filedescriptor_delete (LumieraFiledescriptor self);
+lumiera_filedescriptor_delete (LumieraFiledescriptor self, const char* name);
 
 #endif

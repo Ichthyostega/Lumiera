@@ -68,4 +68,7 @@ lumiera_filehandle_new ();
 void*
 lumiera_filehandle_destroy_node (LList node);
 
+int
+lumiera_filehandle_handle (LumieraFilehandle self, const char* name, int flags, struct stat* stat);
+
 #endif

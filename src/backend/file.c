@@ -53,7 +53,8 @@ LumieraFile
 lumiera_file_destroy (LumieraFile self)
 {
   TRACE (file);
-  lumiera_filedescriptor_release (self->descriptor);
+
+  lumiera_filedescriptor_release (self->descriptor, self->name);
   lumiera_free (self->name);
   return self;
 }
@@ -83,42 +84,7 @@ lumiera_file_handle_acquire (LumieraFile self)
   REQUIRE (self->descriptor);
   REQUIRE (lumiera_fhcache);
 
-  LUMIERA_MUTEX_SECTION (file, &self->descriptor->lock)
-    {
-      if (!self->descriptor->handle)
-        /* no handle yet, get a new one */
-        lumiera_filehandlecache_handle_acquire (lumiera_fhcache, self->descriptor);
-      else
-        lumiera_filehandlecache_checkout (lumiera_fhcache, self->descriptor->handle);
-
-      if (self->descriptor->handle->fd == -1)
-        {
-          int fd;
-          fd = open (self->name, self->descriptor->flags & LUMIERA_FILE_MASK);
-          if (fd == -1)
-            {
-              LUMIERA_ERROR_SET (file, ERRNO);
-            }
-          else
-            {
-              struct stat st;
-              if (fstat (fd, &st) == -1)
-                {
-                  close (fd);
-                  LUMIERA_ERROR_SET (file, ERRNO);
-                }
-              else if (self->descriptor->stat.st_dev != st.st_dev || self->descriptor->stat.st_ino != st.st_ino)
-                {
-                  close (fd);
-                  /* Woops this is not the file we expected to use */
-                  LUMIERA_ERROR_SET (file, FILE_CHANGED);
-                }
-            }
-          self->descriptor->handle->fd = fd;
-        }
-    }
-
-  return self->descriptor->handle->fd;
+  return lumiera_filedescriptor_handle (self->descriptor, self->name);
 }
 
 

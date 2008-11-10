@@ -73,7 +73,8 @@ cmp_fn (const void* keya, const void* keyb)
 static void
 delete_fn (PSplaynode node)
 {
-  lumiera_filedescriptor_delete ((LumieraFiledescriptor) node);
+  TODO ("figure name out? or is the handle here always closed");
+  lumiera_filedescriptor_delete ((LumieraFiledescriptor) node, NULL);
 }
 
 
@@ -187,11 +188,33 @@ lumiera_filedescriptor_acquire (const char* name, int flags)
 
 
 void
-lumiera_filedescriptor_release (LumieraFiledescriptor self)
+lumiera_filedescriptor_release (LumieraFiledescriptor self, const char* name)
 {
-  TRACE (filedescriptor, "%p", self);
+  TRACE (filedescriptor, "%p, refcount: %d", self, self->refcount);
   if (!--self->refcount)
-    lumiera_filedescriptor_delete (self);
+    lumiera_filedescriptor_delete (self, name);
+}
+
+
+int
+lumiera_filedescriptor_handle (LumieraFiledescriptor self, const char* name)
+{
+  TRACE (filedescriptor);
+
+  int fd = -1;
+
+  LUMIERA_MUTEX_SECTION (filedescriptor, &self->lock)
+    {
+      if (!self->handle)
+        /* no handle yet, get a new one */
+        lumiera_filehandlecache_handle_acquire (lumiera_fhcache, self);
+      else
+        lumiera_filehandlecache_checkout (lumiera_fhcache, self->handle);
+
+      fd = lumiera_filehandle_handle (self->handle, name, self->flags, &self->stat);
+    }
+
+  return fd;
 }
 
 
@@ -215,9 +238,9 @@ lumiera_filedescriptor_new (LumieraFiledescriptor template)
 
 
 void
-lumiera_filedescriptor_delete (LumieraFiledescriptor self)
+lumiera_filedescriptor_delete (LumieraFiledescriptor self, const char* name)
 {
-  TRACE (filedescriptor, "%p", self);
+  TRACE (filedescriptor, "%p %s", self, name);
 
   LUMIERA_MUTEX_SECTION (filedescriptor, &registry_mutex)
     {
