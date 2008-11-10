@@ -28,8 +28,6 @@
 
 #include <unistd.h>
 
-NOBUG_DEFINE_FLAG_PARENT (filehandle, file_all);
-
 LumieraFilehandle
 lumiera_filehandle_new ()
 {

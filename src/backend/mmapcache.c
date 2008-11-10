@@ -52,6 +52,7 @@ lumiera_mmapcache_new (size_t limit)
 void
 lumiera_mmapcache_delete (void)
 {
+  TRACE (mmapcache);
   if (lumiera_mcache)
     {
       REQUIRE (lumiera_mcache->total == lumiera_mcache->cached, "MMaps still checked out at shutdown");
