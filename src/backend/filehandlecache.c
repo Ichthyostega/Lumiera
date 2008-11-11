@@ -74,6 +74,7 @@ lumiera_filehandlecache_handle_acquire (LumieraFilehandlecache self, LumieraFile
       {
         /* pop a filehandle from cache */
         ret = lumiera_mrucache_pop (&self->cache);
+        ret = lumiera_filehandle_init (lumiera_mrucache_pop (&self->cache), desc);
         if (self->available < 0)
           /* try to free overallocated filehandles */
           self->available -= self->available + lumiera_mrucache_age (&self->cache, -self->available);
@@ -81,14 +82,13 @@ lumiera_filehandlecache_handle_acquire (LumieraFilehandlecache self, LumieraFile
     else
       {
         /* allocate new filehandle if we are below the limit or no cached handles are available (overallocating) */
-        ret = lumiera_filehandle_new ();
+        NOTICE (filehandlecache, "overallocating filehandle");
+        ret = lumiera_filehandle_new (desc);
         if (!ret)
           LUMIERA_ERROR_SET (filehandlecache, FILEHANDLECACHE_NOHANDLE);
         else
           --self->available;
       }
-    ret->use_cnt = 1;
-    ret->descriptor = desc;
     desc->handle = ret;
     ++self->checked_out;
   }

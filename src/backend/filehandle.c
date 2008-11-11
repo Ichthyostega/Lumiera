@@ -29,17 +29,25 @@
 #include <unistd.h>
 
 LumieraFilehandle
-lumiera_filehandle_new ()
+lumiera_filehandle_init (LumieraFilehandle self, LumieraFiledescriptor desc)
 {
-  LumieraFilehandle self = lumiera_malloc (sizeof (lumiera_filehandle));
   TRACE (filehandle, "%p", self);
-
-  llist_init (&self->cachenode);
-  self->fd = -1;
-  self->use_cnt = 1;
-  self->descriptor = NULL;
-
+  if (self)
+    {
+      llist_init (&self->cachenode);
+      self->fd = -1;
+      self->use_cnt = 1;
+      self->descriptor = desc;
+    }
   return self;
+}
+
+
+LumieraFilehandle
+lumiera_filehandle_new (LumieraFiledescriptor desc)
+{
+  LumieraFilehandle self = lumiera_malloc (sizeof (*self));
+  return lumiera_filehandle_init (self, desc);
 }
 
 
@@ -53,8 +61,6 @@ lumiera_filehandle_destroy_node (LList node)
 
   if (self->fd >= 0)
     close (self->fd);
-  self->fd = -1;
-  self->descriptor = NULL;
   return self;
 }
 

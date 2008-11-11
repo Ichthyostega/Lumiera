@@ -52,11 +52,21 @@ struct lumiera_filehandle_struct
 };
 
 /**
- * Allocate a new filehandle structure.
+ * Initialize filehandle structure.
+ * @param self filehandle sttructure to be initialized
+ * @param descriptor on which this filehandle will be attached
  * @return new filehandle structure
  */
 LumieraFilehandle
-lumiera_filehandle_new ();
+lumiera_filehandle_init (LumieraFilehandle self, LumieraFiledescriptor descriptor);
+
+/**
+ * Allocate a new filehandle structure.
+ * @param descriptor on which this filehandle will be attached
+ * @return new filehandle structure
+ */
+LumieraFilehandle
+lumiera_filehandle_new (LumieraFiledescriptor descriptor);
 
 
 /**
