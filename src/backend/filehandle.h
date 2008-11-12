@@ -37,6 +37,7 @@ NOBUG_DECLARE_FLAG (filehandle);
  * Filehandles manage the underlying POSIX filehandle for a filedescriptor.
  * Since we want to support handling of more files than POSIX filehandles are available on a common system
  * the filehandles are opened, cached and closed on demand, see 'filehandlecache'.
+ * Access to filehandles is locked from elsewhere (filedescriptor, filehandlecache)
  */
 
 
@@ -78,7 +79,8 @@ lumiera_filehandle_new (LumieraFiledescriptor descriptor);
 void*
 lumiera_filehandle_destroy_node (LList node);
 
+
 int
-lumiera_filehandle_handle (LumieraFilehandle self, const char* name, int flags, struct stat* stat);
+lumiera_filehandle_handle (LumieraFilehandle self);
 
 #endif

@@ -61,6 +61,8 @@ typedef lumiera_file* LumieraFile;
 
 struct lumiera_file_struct
 {
+  /* all files of one descriptor */
+  llist node;
   char* name;
   LumieraFiledescriptor descriptor;
 };

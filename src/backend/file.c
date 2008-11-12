@@ -38,7 +38,10 @@ LumieraFile
 lumiera_file_init (LumieraFile self, const char* name, int flags, size_t chunksize)
 {
   TRACE (file);
-  if (!(self->descriptor = lumiera_filedescriptor_acquire (name, flags)))
+
+  llist_init (&self->node);
+
+  if (!(self->descriptor = lumiera_filedescriptor_acquire (name, flags, &self->node)))
     return NULL;
 
   if (chunksize && !self->descriptor->mmapings)
@@ -54,7 +57,7 @@ lumiera_file_destroy (LumieraFile self)
 {
   TRACE (file);
 
-  lumiera_filedescriptor_release (self->descriptor, self->name);
+  lumiera_filedescriptor_release (self->descriptor, self->name, &self->node);
   lumiera_free (self->name);
   return self;
 }
@@ -84,7 +87,7 @@ lumiera_file_handle_acquire (LumieraFile self)
   REQUIRE (self->descriptor);
   REQUIRE (lumiera_fhcache);
 
-  return lumiera_filedescriptor_handle (self->descriptor, self->name);
+  return lumiera_filedescriptor_handle (self->descriptor);
 }
 
 

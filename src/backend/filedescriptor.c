@@ -115,10 +115,11 @@ lumiera_filedescriptor_registry_destroy (void)
 
 
 LumieraFiledescriptor
-lumiera_filedescriptor_acquire (const char* name, int flags)
+lumiera_filedescriptor_acquire (const char* name, int flags, LList filenode)
 {
   TRACE (filedescriptor, "%s", name);
   REQUIRE (registry, "not initialized");
+  REQUIRE (llist_is_empty (filenode));
 
   LumieraFiledescriptor dest = NULL;
 
@@ -169,19 +170,14 @@ lumiera_filedescriptor_acquire (const char* name, int flags)
 
       if (!dest)
         {
-          TRACE (filedescriptor, "Descriptor not found");
-
           dest = lumiera_filedescriptor_new (&fdesc);
           if (!dest)
             goto error;
 
           psplay_insert (registry, &dest->node, 100);
         }
-      else
-        {
-          TRACE (filedescriptor, "Descriptor already existing");
-          ++dest->refcount;
-        }
+
+      llist_insert_head (&dest->files, filenode);
     error: ;
     }
 
@@ -190,16 +186,24 @@ lumiera_filedescriptor_acquire (const char* name, int flags)
 
 
 void
-lumiera_filedescriptor_release (LumieraFiledescriptor self, const char* name)
+lumiera_filedescriptor_release (LumieraFiledescriptor self, const char* name, LList filenode)
 {
-  TRACE (filedescriptor, "%p, refcount: %d", self, self->refcount);
-  if (!--self->refcount)
+  TRACE (filedescriptor);
+
+  if (filenode)
+    LUMIERA_MUTEX_SECTION (filedescriptor, &self->lock)
+      {
+        REQUIRE (llist_is_member (&self->files, filenode));
+        llist_unlink (filenode);
+      }
+
+  if (llist_is_empty (&self->files))
     lumiera_filedescriptor_delete (self, name);
 }
 
 
 int
-lumiera_filedescriptor_handle (LumieraFiledescriptor self, const char* name)
+lumiera_filedescriptor_handle (LumieraFiledescriptor self)
 {
   TRACE (filedescriptor);
 
@@ -213,10 +217,36 @@ lumiera_filedescriptor_handle (LumieraFiledescriptor self, const char* name)
       else
         lumiera_filehandlecache_checkout (lumiera_fhcache, self->handle);
 
-      fd = lumiera_filehandle_handle (self->handle, name, self->flags, &self->stat);
+      fd = lumiera_filehandle_handle (self->handle);
     }
 
   return fd;
+}
+
+
+const char*
+lumiera_filedescriptor_name (LumieraFiledescriptor self)
+{
+  REQUIRE (!llist_is_empty (&self->files));
+
+  return ((LumieraFile)(llist_head (&self->files)))->name;
+}
+
+
+int
+lumiera_filedescriptor_flags (LumieraFiledescriptor self)
+{
+  return self->flags;
+}
+
+
+int
+lumiera_filedescriptor_samestat (LumieraFiledescriptor self, struct stat* stat)
+{
+  if (self->stat.st_dev == stat->st_dev && self->stat.st_ino == stat->st_ino)
+    return 1;
+
+  return 0;
 }
 
 
@@ -231,9 +261,9 @@ lumiera_filedescriptor_new (LumieraFiledescriptor template)
 
   self->realsize = template->stat.st_size;
   self->flags = template->flags;
-  self->refcount = 1;
   self->handle =  NULL;
   self->mmapings = NULL;
+  llist_init (&self->files);
 
   lumiera_mutex_init (&self->lock, "filedescriptor", &NOBUG_FLAG (filedescriptor));
 
@@ -248,7 +278,7 @@ lumiera_filedescriptor_delete (LumieraFiledescriptor self, const char* name)
 
   LUMIERA_MUTEX_SECTION (filedescriptor, &registry_mutex)
     {
-      REQUIRE (self->refcount == 0);
+      REQUIRE (llist_is_empty (&self->files));
 
       psplay_remove (registry, &self->node);
 
@@ -258,7 +288,7 @@ lumiera_filedescriptor_delete (LumieraFiledescriptor self, const char* name)
         {
           TRACE (filedescriptor, "truncate %s to %lld", name, self->realsize);
           lumiera_filehandlecache_checkout (lumiera_fhcache, self->handle);
-          ftruncate (lumiera_filehandle_handle (self->handle, name, self->flags, &self->stat), self->realsize);
+          ftruncate (lumiera_filehandle_handle (self->handle), self->realsize);
           lumiera_filehandlecache_checkin (lumiera_fhcache, self->handle);
         }
 

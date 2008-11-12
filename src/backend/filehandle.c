@@ -74,14 +74,14 @@ lumiera_filehandle_get (LumieraFilehandle self)
 
 
 int
-lumiera_filehandle_handle (LumieraFilehandle self, const char* name, int flags, struct stat* stat)
+lumiera_filehandle_handle (LumieraFilehandle self)
 {
   TRACE (filehandle);
 
   int fd = -1;
   if (self->fd == -1)
     {
-      fd = open (name, flags & LUMIERA_FILE_MASK);
+      fd = open (lumiera_filedescriptor_name (self->descriptor), lumiera_filedescriptor_flags (self->descriptor) & LUMIERA_FILE_MASK);
       if (fd == -1)
         {
           LUMIERA_ERROR_SET (filehandle, ERRNO);
@@ -94,7 +94,7 @@ lumiera_filehandle_handle (LumieraFilehandle self, const char* name, int flags, 
               close (fd);
               LUMIERA_ERROR_SET (filehandle, ERRNO);
             }
-          else if (stat->st_dev != st.st_dev || stat->st_ino != st.st_ino)
+          else if (!lumiera_filedescriptor_samestat (self->descriptor, &st))
             {
               close (fd);
               /* Woops this is not the file we expected to use */

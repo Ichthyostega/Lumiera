@@ -24,6 +24,7 @@
 
 #include "lib/mutex.h"
 #include "lib/psplay.h"
+#include "lib/llist.h"
 
 
 #include <sys/types.h>
@@ -64,16 +65,14 @@ struct lumiera_filedescriptor_struct
   /** locks operations on this file descriptor */
   lumiera_mutex lock;
 
-  /** reference counter, all users (except registry) */
-  unsigned refcount;
-
   /** Associated posix filehandle */
   LumieraFilehandle handle;
 
   /** established memory mappings */
   LumieraMMapings mmapings;
 
-  //LumieraWriteBuffer writebuffer;
+  /** list of all attached 'file' structures, that are the names of the files */
+  llist files;
 };
 
 /**
@@ -100,18 +99,28 @@ lumiera_filedescriptor_registry_destroy (void);
  * @return descriptor on success or NULL on error
  */
 LumieraFiledescriptor
-lumiera_filedescriptor_acquire (const char* name, int flags);
+lumiera_filedescriptor_acquire (const char* name, int flags, LList filenode);
 
 
 /**
  * Release a filedescriptor.
  * @param self filedescriptor to be released
+ * @param file the file struct which initiated the release
  */
 void
-lumiera_filedescriptor_release (LumieraFiledescriptor self, const char* name);
+lumiera_filedescriptor_release (LumieraFiledescriptor self, const char* name, LList filenode);
 
 int
-lumiera_filedescriptor_handle (LumieraFiledescriptor self, const char* name);
+lumiera_filedescriptor_handle (LumieraFiledescriptor self);
+
+const char*
+lumiera_filedescriptor_name (LumieraFiledescriptor self);
+
+int
+lumiera_filedescriptor_flags (LumieraFiledescriptor self);
+
+int
+lumiera_filedescriptor_samestat (LumieraFiledescriptor self, struct stat* stat);
 
 /**
  * Allocate a new filedescriptor cloned from a template
