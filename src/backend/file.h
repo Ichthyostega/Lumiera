@@ -30,6 +30,7 @@
 NOBUG_DECLARE_FLAG (file);
 
 LUMIERA_ERROR_DECLARE(FILE_CHANGED);
+LUMIERA_ERROR_DECLARE(FILE_NOCHUNKSIZE);
 
 /**
  * @file
@@ -75,7 +76,7 @@ struct lumiera_file_struct
  * @return self
  */
 LumieraFile
-lumiera_file_init (LumieraFile self, const char* name, int flags, size_t chunksize);
+lumiera_file_init (LumieraFile self, const char* name, int flags);
 
 /**
  * Destroy a file structure.
@@ -92,12 +93,10 @@ lumiera_file_destroy (LumieraFile self);
  * Allocate a new file structure.
  * @param name filename
  * @param flags open flags
- * @param chunksize allocation/mmaping granularity, must be 2's exponent of pagesize
- *        only used at the first access to a file and ignored for subsequnet accesses
  * @return new file structure
  */
 LumieraFile
-lumiera_file_new (const char* name, int flags, size_t chunksize);
+lumiera_file_new (const char* name, int flags);
 
 /**
  * Frees a file structure.
@@ -136,6 +135,14 @@ lumiera_file_descriptor (LumieraFile self)
 
 LumieraMMapings
 lumiera_file_mmapings (LumieraFile self);
+
+/**
+ * Set the chunksize for mapping operations
+ * @param chunksize allocation/mmaping granularity, must be 2's exponent of pagesize
+ *        only used at the first access to a file and ignored for subsequnet accesses
+ */
+size_t
+lumiera_file_chunksize_set (LumieraFile self, size_t chunksize);
 
 #endif
 

@@ -32,10 +32,11 @@
 NOBUG_DEFINE_FLAG_PARENT (file, file_all);
 
 LUMIERA_ERROR_DEFINE (FILE_CHANGED, "File changed unexpected");
+LUMIERA_ERROR_DEFINE (FILE_NOCHUNKSIZE, "Chunksize not set");
 
 
 LumieraFile
-lumiera_file_init (LumieraFile self, const char* name, int flags, size_t chunksize)
+lumiera_file_init (LumieraFile self, const char* name, int flags)
 {
   TRACE (file);
 
@@ -43,9 +44,6 @@ lumiera_file_init (LumieraFile self, const char* name, int flags, size_t chunksi
 
   if (!(self->descriptor = lumiera_filedescriptor_acquire (name, flags, &self->node)))
     return NULL;
-
-  if (chunksize && !self->descriptor->mmapings)
-    self->descriptor->mmapings = lumiera_mmapings_new (self, chunksize);
 
   self->name = lumiera_strndup (name, PATH_MAX);
 
@@ -64,11 +62,11 @@ lumiera_file_destroy (LumieraFile self)
 
 
 LumieraFile
-lumiera_file_new (const char* name, int flags, size_t chunksize)
+lumiera_file_new (const char* name, int flags)
 {
   TRACE (file);
   LumieraFile self = lumiera_malloc (sizeof (lumiera_file));
-  return lumiera_file_init (self, name, flags, chunksize);
+  return lumiera_file_init (self, name, flags);
 }
 
 void
@@ -102,9 +100,23 @@ lumiera_file_handle_release (LumieraFile self)
     }
 }
 
+
+size_t
+lumiera_file_chunksize_set (LumieraFile self, size_t chunksize)
+{
+  if (chunksize && !self->descriptor->mmapings)
+    self->descriptor->mmapings = lumiera_mmapings_new (self, chunksize);
+
+  return self->descriptor->mmapings->chunksize;
+}
+
+
+
 LumieraMMapings
 lumiera_file_mmapings (LumieraFile self)
 {
-  REQUIRE (self->descriptor->mmapings, "mmapings not initialized")
+  if (!self->descriptor->mmapings)
+    LUMIERA_ERROR_SET (file, FILE_NOCHUNKSIZE);
+
   return self->descriptor->mmapings;
 }
