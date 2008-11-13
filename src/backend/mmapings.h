@@ -33,6 +33,7 @@ typedef lumiera_mmapings* LumieraMMapings;
 
 #include <nobug.h>
 
+NOBUG_DECLARE_FLAG (mmapings);
 
 /**
  * @file

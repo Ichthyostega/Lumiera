@@ -32,8 +32,6 @@
  *
  */
 
-NOBUG_DEFINE_FLAG_PARENT (mmapings, mmap_all);
-
 
 LumieraMMapings
 lumiera_mmapings_init (LumieraMMapings self, LumieraFile file, size_t chunksize)

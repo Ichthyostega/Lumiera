@@ -35,6 +35,9 @@ NOBUG_DEFINE_FLAG (backend);
 NOBUG_DEFINE_FLAG_PARENT (file_all, backend);
 NOBUG_DEFINE_FLAG_PARENT (filehandle, file_all);
 
+NOBUG_DEFINE_FLAG_PARENT (mmapings, mmap_all);
+
+
 
 NOBUG_DECLARE_FLAG (file);
 
