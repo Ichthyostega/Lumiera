@@ -37,6 +37,7 @@ typedef lumiera_mmap* LumieraMMap;
 
 NOBUG_DECLARE_FLAG (mmap);
 
+
 /**
  * @file
  * MMap objects cover a memory maped range in a file
@@ -53,14 +54,14 @@ struct lumiera_mmap_struct
   /** used for the mrucache when checked in the cache OR for attaching owners when checked out **/
   llist cachenode;
 
-  /** all mmaps of a file are chained in this list, used to find ranges **/
+  /** all mmaps of a filedescriptor are chained in this list, used to find ranges **/
   llist searchnode;
 
   off_t start;
   size_t size;
   void* address;
 
-  /** array with refcounters per page **/
+  /** array with refcounters per chunk **/
   unsigned short* refmap;
 };
 

@@ -28,7 +28,6 @@
 #include <unistd.h>
 #include <sys/mman.h>
 
-
 /**
  * @file
  *
@@ -206,7 +205,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, LList acquirer, off_t sta
  ewrite:
  efile:
   lumiera_file_handle_release (file);
-  free (self);
+  lumiera_free (self);
   return NULL;
 }
 
@@ -233,10 +232,11 @@ lumiera_mmap_delete (LumieraMMap self)
   TRACE (mmap);
   if (self)
     {
-      //LUMIERA_MUTEX_SECTION (mmapings, self->rh, &self->lock)
-
       lumiera_mmapcache_forget (lumiera_mcache, self);
-      llist_unlink (&self->searchnode); TODO ("must lock mmapings -> deadlock");
+
+      /* The matching mappings->lock must be hold or being unrelevant (mappings destructor) here, we can't asset this from here, good luck */
+      llist_unlink (&self->searchnode);
+
       munmap (self->address, self->size);
       free (self->refmap);
       free (self);

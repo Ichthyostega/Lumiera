@@ -261,7 +261,7 @@ lumiera_filedescriptor_new (LumieraFiledescriptor template)
 
   self->realsize = template->stat.st_size;
   self->flags = template->flags;
-  self->handle =  NULL;
+  self->handle = NULL;
   self->mmapings = NULL;
   llist_init (&self->files);
 

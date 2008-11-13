@@ -103,5 +103,6 @@ lumiera_filehandle_handle (LumieraFilehandle self)
         }
       self->fd = fd;
     }
+
   return self->fd;
 }

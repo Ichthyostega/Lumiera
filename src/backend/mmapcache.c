@@ -106,6 +106,7 @@ lumiera_mmapcache_forget (LumieraMMapcache self, LumieraMMap map)
       if (!llist_is_empty (&map->cachenode))
         {
           TODO ("cached stats");
+          REQUIRE (llist_is_member (&self->cache.cache_list, &map->cachenode), "Map object not in cache");
           llist_unlink (&map->cachenode);
         }
       self->total -= map->size;

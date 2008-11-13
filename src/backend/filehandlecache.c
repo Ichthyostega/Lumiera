@@ -116,6 +116,7 @@ lumiera_filehandlecache_checkout (LumieraFilehandlecache self, LumieraFilehandle
   return handle;
 }
 
+
 void
 lumiera_filehandlecache_checkin (LumieraFilehandlecache self, LumieraFilehandle handle)
 {

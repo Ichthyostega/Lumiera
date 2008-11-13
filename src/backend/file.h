@@ -49,9 +49,15 @@ typedef lumiera_file* LumieraFile;
 
 
 #include "backend/filehandle.h"
-#include "backend/file.h"
 #include "backend/mmapings.h"
 
+/**
+ * File modes:
+ * LUMIERA_FILE_READONLY        existing file for reading only
+ * LUMIERA_FILE_READWRITE       existing file for reading and writing
+ * LUMIERA_FILE_CREATE          non-existing file for reading and writing
+ * LUMIERA_FILE_RECREATE        remove and recreated existing, file for reading and writing
+ */
 #define LUMIERA_FILE_READONLY (O_RDONLY | O_LARGEFILE | O_NOATIME)
 #define LUMIERA_FILE_READWRITE (O_RDWR | O_LARGEFILE | O_NOATIME)
 #define LUMIERA_FILE_CREATE (O_RDWR | O_LARGEFILE | O_NOATIME | O_CREAT | O_EXCL)
