@@ -94,8 +94,7 @@ WARN_LOGFILE           = warnings.txt
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = ../../src/ \
-                         ../../tests/
+INPUT                  = ../../src/
 INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.c \
                          *.cc \
