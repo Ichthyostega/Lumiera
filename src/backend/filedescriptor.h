@@ -111,7 +111,10 @@ void
 lumiera_filedescriptor_release (LumieraFiledescriptor self, const char* name, LList filenode);
 
 int
-lumiera_filedescriptor_handle (LumieraFiledescriptor self);
+lumiera_filedescriptor_handle_acquire (LumieraFiledescriptor self);
+
+void
+lumiera_filedescriptor_handle_release (LumieraFiledescriptor self);
 
 const char*
 lumiera_filedescriptor_name (LumieraFiledescriptor self);

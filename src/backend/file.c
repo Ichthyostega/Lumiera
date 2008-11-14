@@ -85,7 +85,7 @@ lumiera_file_handle_acquire (LumieraFile self)
   REQUIRE (self->descriptor);
   REQUIRE (lumiera_fhcache);
 
-  return lumiera_filedescriptor_handle (self->descriptor);
+  return lumiera_filedescriptor_handle_acquire (self->descriptor);
 }
 
 
@@ -93,11 +93,11 @@ void
 lumiera_file_handle_release (LumieraFile self)
 {
   TRACE (file);
+  REQUIRE (self);
+  REQUIRE (self->descriptor);
+  REQUIRE (lumiera_fhcache);
 
-  LUMIERA_MUTEX_SECTION (file, &self->descriptor->lock)
-    {
-      lumiera_filehandlecache_checkin (lumiera_fhcache, self->descriptor->handle);
-    }
+  return lumiera_filedescriptor_handle_release (self->descriptor);
 }
 
 

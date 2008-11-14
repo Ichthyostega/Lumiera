@@ -203,7 +203,7 @@ lumiera_filedescriptor_release (LumieraFiledescriptor self, const char* name, LL
 
 
 int
-lumiera_filedescriptor_handle (LumieraFiledescriptor self)
+lumiera_filedescriptor_handle_acquire (LumieraFiledescriptor self)
 {
   TRACE (filedescriptor);
 
@@ -221,6 +221,17 @@ lumiera_filedescriptor_handle (LumieraFiledescriptor self)
     }
 
   return fd;
+}
+
+
+void
+lumiera_filedescriptor_handle_release (LumieraFiledescriptor self)
+{
+  TRACE (filedescriptor);
+  REQUIRE (self->handle);
+
+  LUMIERA_MUTEX_SECTION (filedescriptor, &self->lock)
+    lumiera_filehandlecache_checkin (lumiera_fhcache, self->handle);
 }
 
 
