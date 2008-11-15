@@ -174,6 +174,8 @@ public:
    */
   void set_tool(timeline::ToolType tool_type);
   
+  timeline::Track* get_hovering_track() const;
+  
 public:
   /* ===== Signals ===== */
   sigc::signal<void> view_changed_signal() const;
@@ -181,6 +183,9 @@ public:
   sigc::signal<void, gavl_time_t> mouse_hover_signal() const;
   
   sigc::signal<void> playback_period_drag_released_signal() const;
+  
+  sigc::signal<void, timeline::Track*> hovering_track_changed_signal() 
+    const;
     
   /* ===== Events ===== */
 protected:
@@ -209,6 +214,8 @@ private:
   bool on_motion_in_body_notify_event(GdkEventMotion *event);
   
   void on_playback_period_drag_released();
+  
+  void set_hovering_track(timeline::Track *hovering_track);
 
 protected:
 
@@ -222,6 +229,8 @@ protected:
   gavl_time_t playbackPeriodStart;
   gavl_time_t playbackPeriodEnd;
   gavl_time_t playbackPoint;
+  
+  timeline::Track *hoveringTrack;
 
   int totalHeight;
 
@@ -245,6 +254,7 @@ protected:
   sigc::signal<void> viewChangedSignal;
   sigc::signal<void, gavl_time_t> mouseHoverSignal;
   sigc::signal<void> playbackPeriodDragReleasedSignal;
+  sigc::signal<void, timeline::Track*> hoveringTrackChangedSignal;
    
   /* ===== Constants ===== */
 public:

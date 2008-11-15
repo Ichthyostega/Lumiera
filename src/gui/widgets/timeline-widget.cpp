@@ -32,7 +32,7 @@ namespace gui {
 namespace widgets {
 
 const int TimelineWidget::TrackPadding = 1;
-const int TimelineWidget::HeaderWidth = 100;
+const int TimelineWidget::HeaderWidth = 150;
 const double TimelineWidget::ZoomIncrement = 1.25;
 const int64_t TimelineWidget::MaxScale = 30000000;
 
@@ -48,6 +48,7 @@ TimelineWidget::TimelineWidget() :
   playbackPeriodStart(0),
   playbackPeriodEnd(0),
   playbackPoint(GAVL_TIME_UNDEFINED),
+  hoveringTrack(NULL),
   horizontalScroll(horizontalAdjustment),
   verticalScroll(verticalAdjustment)
 {
@@ -99,6 +100,8 @@ TimelineWidget::~TimelineWidget()
   if(ruler != NULL)
     ruler->unreference();
 }
+
+/* ===== Data Access ===== */
 
 gavl_time_t
 TimelineWidget::get_time_offset() const
@@ -279,6 +282,14 @@ TimelineWidget::set_tool(ToolType tool_type)
   body->set_tool(tool_type);
 }
 
+timeline::Track*
+TimelineWidget::get_hovering_track() const
+{
+  return hoveringTrack;
+}
+
+/* ===== Signals ===== */
+
 sigc::signal<void>
 TimelineWidget::view_changed_signal() const
 {
@@ -297,6 +308,14 @@ TimelineWidget::playback_period_drag_released_signal() const
   return playbackPeriodDragReleasedSignal;
 }
 
+sigc::signal<void, timeline::Track*>
+TimelineWidget::hovering_track_changed_signal() const
+{
+  return hoveringTrackChangedSignal;
+}
+
+/* ===== Events ===== */
+
 void
 TimelineWidget::on_scroll()
 {
@@ -312,6 +331,8 @@ TimelineWidget::on_size_allocate(Allocation& allocation)
   update_scroll();
 }
 
+/* ===== Utilities ===== */
+
 int
 TimelineWidget::time_to_x(gavl_time_t time) const
 {
@@ -323,6 +344,8 @@ TimelineWidget::x_to_time(int x) const
 {
   return (gavl_time_t)((int64_t)x * timeScale + timeOffset);
 }
+
+/* ===== Internals ===== */
 
 void
 TimelineWidget::update_tracks()
@@ -415,6 +438,13 @@ void
 TimelineWidget::on_playback_period_drag_released()
 {
   playbackPeriodDragReleasedSignal.emit();
+}
+
+void
+TimelineWidget::set_hovering_track(timeline::Track *hovering_track)
+{
+  hoveringTrack = hovering_track;
+  hoveringTrackChangedSignal.emit(hovering_track);
 }
 
 }   // namespace widgets

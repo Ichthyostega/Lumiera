@@ -135,6 +135,11 @@ private:
   
   void set_vertical_offset(int offset);
   
+  Track* track_from_point(const int y) const;
+  
+  static Track* track_from_branch(Track *track, const int y,
+    int &offset);
+  
   /**
    * Registers all the styles that this class will respond to.
    */

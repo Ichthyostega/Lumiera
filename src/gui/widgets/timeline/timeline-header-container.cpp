@@ -38,7 +38,8 @@ TimelineHeaderContainer::TimelineHeaderContainer(gui::widgets::TimelineWidget
     *timeline_widget) :
     Glib::ObjectBase("TimelineHeaderContainer"),
     timelineWidget(timeline_widget),
-    margin(-1)
+    margin(-1),
+    expand_button_size(12)
 {
   REQUIRE(timeline_widget != NULL);
 
@@ -51,6 +52,12 @@ TimelineHeaderContainer::TimelineHeaderContainer(gui::widgets::TimelineWidget
   // so that we get notified when the view shifts
   timelineWidget->verticalAdjustment.signal_value_changed().connect(
     sigc::mem_fun(this, &TimelineHeaderContainer::on_scroll) );
+    
+  // Connect to the timeline widget's hover event,
+  // so that we get notified when tracks are hovered on
+  timelineWidget->hovering_track_changed_signal().connect(
+    sigc::mem_fun(this,
+    &TimelineHeaderContainer::on_hovering_track_changed) );
     
   // Install style properties
   register_styles();
@@ -95,11 +102,18 @@ TimelineHeaderContainer::on_realize()
   unset_flags(Gtk::NO_WINDOW);
   set_window(gdkWindow);
   
-  // Unset the background so as to make the colour match the parent window
+  // Unset the background so as to make the colour match the parent
+  // window
   unset_bg(STATE_NORMAL);
 
   // Make the widget receive expose events
   gdkWindow->set_user_data(gobj());
+  
+  // Make the widget sensitive to mouse events
+  add_events(
+    Gdk::POINTER_MOTION_MASK |
+    Gdk::BUTTON_PRESS_MASK |
+    Gdk::BUTTON_RELEASE_MASK);
 }
   
 void
@@ -110,6 +124,13 @@ TimelineHeaderContainer::on_unrealize()
 
   // Call base class:
   Gtk::Widget::on_unrealize();
+}
+
+bool TimelineHeaderContainer::on_motion_notify_event (
+  GdkEventMotion* event)
+{
+  REQUIRE(event != NULL);
+  return Container::on_motion_notify_event(event);
 }
 
 void
@@ -159,33 +180,23 @@ TimelineHeaderContainer::on_expose_event(GdkEventExpose *event)
 {
   if(gdkWindow)
     {
-      int offset = 0;
-      const int y_scroll_offset = timelineWidget->get_y_scroll_offset();
-      
-      Glib::RefPtr<Style> style = get_style();
+      // Start at an offset from the scroll offset
+      int offset = -timelineWidget->get_y_scroll_offset();
+
       const Allocation container_allocation = get_allocation();
       
       read_styles();
        
       // Paint a border underneath all the root headers
-      BOOST_FOREACH( Track* track, timelineWidget->tracks )
+      BOOST_FOREACH( const Track* track, timelineWidget->tracks )
         {
           ASSERT(track != NULL);
           
-          const int height = TimelineWidget::measure_branch_height(
-            track);
-          ASSERT(height >= 0);
-               
-          style->paint_box(
-            gdkWindow, STATE_NORMAL, SHADOW_OUT,
-            Gdk::Rectangle(
-              0, 0,
+          draw_header_decoration(track,
+            Gdk::Rectangle(0, 0,
               container_allocation.get_width(),
               container_allocation.get_height()),
-            *this, "", 0, offset - y_scroll_offset,
-            container_allocation.get_width(), height);
-          
-          offset += height + TimelineWidget::TrackPadding;
+              0, offset);
         }
     }
 
@@ -199,6 +210,14 @@ TimelineHeaderContainer::on_scroll()
   // header widgets
   layout_headers();
 }
+
+void
+TimelineHeaderContainer::on_hovering_track_changed(
+  timeline::Track *hovering_track)
+{
+  // The hovering track has changed, redraw so we can light the header
+  //queue_draw();
+}
   
 void
 TimelineHeaderContainer::layout_headers()
@@ -209,8 +228,7 @@ TimelineHeaderContainer::layout_headers()
   if(!gdkWindow)
     return;
 
-  int offset = 0;
-  const int y_scroll_offset = timelineWidget->get_y_scroll_offset();
+  int offset = -timelineWidget->get_y_scroll_offset();
   
   read_styles();
   
@@ -221,8 +239,7 @@ TimelineHeaderContainer::layout_headers()
   BOOST_FOREACH( Track* track, timelineWidget->tracks )
     {
       ASSERT(track != NULL);
-      layout_headers_recursive(track, y_scroll_offset, offset,
-        header_width, 0);
+      layout_headers_recursive(track, offset, header_width, 0);
     }
     
   // Repaint the background of our parenting
@@ -231,30 +248,32 @@ TimelineHeaderContainer::layout_headers()
 
 void
 TimelineHeaderContainer::layout_headers_recursive(Track *track,
-  const int y_scroll_offset, int &offset,
-  const int header_width, int depth) const
+  int &offset, const int header_width, const int depth) const
 {
+  REQUIRE(depth >= 0);
+  
   const int height = track->get_height();
   ASSERT(height >= 0);
-  
+
   const int indent = depth * 10;
        
   Allocation header_allocation;
-  header_allocation.set_x (margin + indent);
-  header_allocation.set_y (offset - y_scroll_offset + margin);
-  header_allocation.set_width (header_width - indent);
-  header_allocation.set_height (height - margin * 2);
+  header_allocation.set_x (margin + indent + expand_button_size);
+  header_allocation.set_y (offset + margin);
+  header_allocation.set_width (
+    max( header_width - indent - expand_button_size, 0 ));
+  header_allocation.set_height (
+    height - margin * 2 - TimelineWidget::TrackPadding);
   
   Widget &widget = track->get_header_widget();
   if(widget.is_visible())
     widget.size_allocate (header_allocation);
   
-  offset += height + TimelineWidget::TrackPadding;
+  offset += height;
   
   // Recurse through all the children
   BOOST_FOREACH( Track* child, track->get_child_tracks() )
-    layout_headers_recursive(child, y_scroll_offset, offset,
-      header_width, depth + 1);
+    layout_headers_recursive(child, offset, header_width, depth + 1);
 }
 
 void
@@ -292,6 +311,47 @@ TimelineHeaderContainer::forall_vfunc_recursive(Track* track,
   // Recurse through all the children
   BOOST_FOREACH( Track* child, track->get_child_tracks() )
     forall_vfunc_recursive(child, callback, callback_data);
+}
+
+void
+TimelineHeaderContainer::draw_header_decoration(const Track* track,
+    const Gdk::Rectangle &clip_rect, const int depth, int &offset)
+{
+  REQUIRE(track != NULL);
+  REQUIRE(depth >= 0);
+  REQUIRE(clip_rect.get_width() > 0);
+  REQUIRE(clip_rect.get_height() > 0);
+  
+  Glib::RefPtr<Style> style = get_style();
+  ASSERT(style);
+  
+  const int height = track->get_height();
+  const int box_height = height - TimelineWidget::TrackPadding;
+  ASSERT(height >= 0);
+  
+  const int indent = depth * 10;
+  
+  // Paint the box, if it will be visible
+  if(indent < clip_rect.get_width() && box_height > 0 &&
+    offset + box_height > clip_rect.get_y()  &&
+    offset < clip_rect.get_y() + clip_rect.get_height())
+    {
+      style->paint_box(gdkWindow, STATE_NORMAL,
+        SHADOW_OUT, clip_rect, *this, "", indent, offset,
+        clip_rect.get_width() - indent, box_height);
+        
+      // Paint the expander
+      style->paint_expander (gdkWindow, STATE_NORMAL, 
+        clip_rect, *this, "",
+        indent + expand_button_size / 2 + margin,
+        offset + box_height / 2, EXPANDER_EXPANDED);
+    }
+  
+  offset += height;
+  
+  // Recurse through all the children
+  BOOST_FOREACH( const Track* child, track->get_child_tracks() )
+    draw_header_decoration(child, clip_rect, depth + 1, offset);
 }
 
 void

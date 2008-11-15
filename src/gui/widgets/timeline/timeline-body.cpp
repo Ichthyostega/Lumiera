@@ -233,24 +233,30 @@ bool
 TimelineBody::on_motion_notify_event(GdkEventMotion *event)
 {
   REQUIRE(event != NULL);
-    
+  
+  // Handle a middle-mouse drag if one is occuring
   switch(dragType)
-  {
-  case Shift:
     {
-      const int64_t scale = timelineWidget->get_time_scale();
-      gavl_time_t offset = beginShiftTimeOffset +
-        (int64_t)(mouseDownX - event->x) * scale;
-      timelineWidget->set_time_offset(offset);
-      
-      set_vertical_offset((int)(mouseDownY - event->y) +
-        beginShiftVerticalOffset);
-      break;
+    case Shift:
+      {
+        const int64_t scale = timelineWidget->get_time_scale();
+        gavl_time_t offset = beginShiftTimeOffset +
+          (int64_t)(mouseDownX - event->x) * scale;
+        timelineWidget->set_time_offset(offset);
+        
+        set_vertical_offset((int)(mouseDownY - event->y) +
+          beginShiftVerticalOffset);
+        break;
+      }
     }
-  }
   
   // Forward the event to the tool
   tool->on_motion_notify_event(event);
+  
+  // See if the track that we're hovering over has changed
+  Track *new_hovering_track = track_from_point(event->y);
+  if(timelineWidget->get_hovering_track() != new_hovering_track)
+      timelineWidget->set_hovering_track(new_hovering_track);
   
   // false so that the message is passed up to the owner TimelineWidget
   return false;
@@ -308,6 +314,7 @@ TimelineBody::draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
   // Shift for the next track
   cr->translate(0, height);
   
+  // Recurse drawing into children
   BOOST_FOREACH( Track* child, track->get_child_tracks() )
     {
       ASSERT(track != NULL);
@@ -408,6 +415,51 @@ void
 TimelineBody::set_vertical_offset(int offset)
 {
   timelineWidget->verticalAdjustment.set_value(offset);
+}
+
+Track*
+TimelineBody::track_from_point(const int y) const
+{
+  int offset = -get_vertical_offset();
+  
+  BOOST_FOREACH( Track* track, timelineWidget->tracks )
+    {
+      ASSERT(track != NULL);
+      Track* result = track_from_branch(track, y, offset);
+      if(result != NULL)
+        return result;
+    }
+  
+  // No track has been found with this point in it
+  return NULL;
+}
+
+Track* TimelineBody::track_from_branch(Track *track,
+  const int y, int &offset)
+{
+  REQUIRE(track != NULL);
+  
+  const int height = track->get_height();
+  ASSERT(height >= 0);
+  
+  // Does the point fall in this track?
+  if(offset <= y && y < offset + height)
+    return track;
+  
+  // Add the height of this track to the accumulation
+  offset += height;
+  
+  // Recurse drawing into children
+  BOOST_FOREACH( Track* child, track->get_child_tracks() )
+    {
+      ASSERT(track != NULL);
+      Track* result = track_from_branch(child, y, offset);
+      if(result != NULL)
+        return result;
+    }
+    
+  // No track has been found in this branch
+  return NULL;
 }
 
 void

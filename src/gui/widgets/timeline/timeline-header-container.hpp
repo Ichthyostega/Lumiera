@@ -76,6 +76,12 @@ private:
    * An event handler for the window unrealized signal.
    */
   void on_unrealize();
+  
+  /**
+   * An event handler for mouse movement events.
+   * @param event The GDK event containing details of the event.
+   */
+  bool on_motion_notify_event (GdkEventMotion* event);
 
   /**
    * An event handler that is called to notify this widget to allocate
@@ -109,30 +115,47 @@ private:
    * This event is called when the scroll bar moves.
    */  
   void on_scroll();
+  
+  void on_hovering_track_changed(timeline::Track *hovering_track);
     
   /* ===== Internals ===== */
 private:
 
   /**
-   * Moves all the header widgets to the correct position
-   * given scroll, stacking etc.
+   * Moves all the header widgets to the correct position given scroll,
+   * stacking etc.
    */
   void layout_headers();
   
-  void layout_headers_recursive(Track *track,
-    const int y_scroll_offset, int &offset,
-    const int header_width, int depth) const;
+  /**
+   * Recursively lays out all the controls in the header widget.
+   * @param track The parent track object which will be recursed into.
+   * @param offset A shared value used to accumulate the y-offset of
+   * header widgets.
+   * @param header_width The width of this widget in pixels.
+   * @param depth The depth within the tree of track.
+   **/
+  void layout_headers_recursive(Track *track, int &offset,
+    const int header_width, const int depth) const;
   
   /**
    * Recursively sets all the track header widgets to be child widgets
    * of this widget.
+   * @param track The parent track object which will be recursed into.
    **/
   void set_parent_recursive(Track *track);
   
+  /**
+   * Recursively causes all the visible track header widgets to call
+   * size_request( ).
+   **/
   static void size_request_recursive(Track *track);
   
   static void forall_vfunc_recursive(Track* track,
     GtkCallback callback, gpointer callback_data);
+    
+  void draw_header_decoration(const Track* track,
+    const Gdk::Rectangle &clip_rect, const int depth, int &offset);
   
   /**
    * Registers all the styles that this class will respond to.
@@ -166,6 +189,8 @@ private:
    * header pixels.
    **/
   int margin;
+  
+  int expand_button_size;
 };
 
 }   // namespace timeline
