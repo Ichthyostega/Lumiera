@@ -24,7 +24,7 @@ noinst_LIBRARIES += liblumicommon.a
 liblumicommon_a_CXXFLAGS = $(CXXFLAGS) -Wall
 
 liblumicommon_a_SOURCES =					\
-	$(liblumicommon_a_srcdir)/lumitime.cpp		\
+	$(liblumicommon_a_srcdir)/lumitime.cpp			\
 	$(liblumicommon_a_srcdir)/util.cpp			\
 	$(liblumicommon_a_srcdir)/visitor.cpp			\
 	$(liblumicommon_a_srcdir)/cmdline.cpp			\
@@ -32,6 +32,7 @@ liblumicommon_a_SOURCES =					\
 	$(liblumicommon_a_srcdir)/error.cpp			\
 	$(liblumicommon_a_srcdir)/query.cpp			\
 	$(liblumicommon_a_srcdir)/query/mockconfigrules.cpp	\
+	$(liblumicommon_a_srcdir)/streamtype.cpp		\
 	$(liblumicommon_a_srcdir)/test/suite.cpp		\
 	$(liblumicommon_a_srcdir)/test/testoption.cpp
 

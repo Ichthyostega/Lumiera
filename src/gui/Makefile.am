@@ -21,10 +21,10 @@ lumigui_srcdir = $(top_srcdir)/src/gui
 #lumigui_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
 
 lumigui_CPPFLAGS = $(AM_CPPFLAGS) \
-	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"				\
-	-DPACKAGE_SRC_DIR=\""$(srcdir)"\"										\
-	-DPACKAGE_DATA_DIR=\""$(datadir)"\"										\
-	$(GTK_LUMIERA_CFLAGS)
+	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"	\
+	-DPACKAGE_SRC_DIR=\""$(srcdir)"\"							\
+	-DPACKAGE_DATA_DIR=\""$(datadir)"\"							\
+	$(LUMIERA_GUI_CFLAGS)
 
 bin_PROGRAMS += lumigui
 
@@ -78,15 +78,15 @@ lumigui_SOURCES =															\
 	$(lumigui_srcdir)/output/xvdisplayer.cpp								\
 	$(lumigui_srcdir)/output/xvdisplayer.hpp
 
-lumigui_LDFLAGS = 
-lumigui_LDADD = $(GTK_LUMIERA_LIBS) liblumiproc.a liblumibackend.a			\
-	liblumicommon.a liblumiera.a $(NOBUGMT_LUMIERA_LIBS)
+lumigui_LDFLAGS =
+# $(LIBS) $(X_PRE_LIBS) $(X_LIBS) $(X_EXTRA_LIBS)
+lumigui_LDADD = $(LUMIERA_GUI_LIBS) liblumicommon.a liblumiera.a $(NOBUGMT_LUMIERA_LIBS)
 
-lumigui_DEPENDENCIES =														\
-	$(top_builddir)/lumiera_ui.rc											\
-	$(top_builddir)/liblumicommon.a											\
-	$(top_builddir)/liblumi.a
-	 
+lumigui_DEPENDENCIES =											\
+	$(top_builddir)/lumiera_ui.rc								\
+	$(top_builddir)/liblumicommon.a								\
+	$(top_builddir)/liblumiera.a
+
 $(top_builddir)/lumiera_ui.rc:
 	cp $(lumigui_srcdir)/lumiera_ui.rc $(top_builddir)
 

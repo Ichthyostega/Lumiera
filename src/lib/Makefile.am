@@ -31,6 +31,8 @@ liblumiera_a_SOURCES =					\
 	$(liblumiera_a_srcdir)/psplay.c			\
 	$(liblumiera_a_srcdir)/mrucache.c		\
 	$(liblumiera_a_srcdir)/time.c			\
+	$(liblumiera_a_srcdir)/allocationcluster.cpp\
+	$(liblumiera_a_srcdir)/external/libgavl.cpp	\
 	$(liblumiera_a_srcdir)/appconfig.cpp
 
 noinst_HEADERS +=						\
@@ -46,5 +48,8 @@ noinst_HEADERS +=						\
 	$(liblumiera_a_srcdir)/time.h				\
 	$(liblumiera_a_srcdir)/ppmpl.h				\
 	$(liblumiera_a_srcdir)/appconfig.hpp			\
+	$(liblumiera_a_srcdir)/allocationcluster.hpp	\
+	$(liblumiera_a_srcdir)/scopedholdertransfer.hpp	\
+	$(liblumiera_a_srcdir)/scopedholder.hpp			\
+	$(liblumiera_a_srcdir)/external/libgavl.hpp		\
 	$(liblumiera_a_srcdir)/lifecycleregistry.hpp
-

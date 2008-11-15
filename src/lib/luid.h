@@ -48,6 +48,27 @@ typedef lumiera_uid* LumieraUid;
 #define LUMIERA_UID_INITIALIZER(l) l
 #endif
 
+#define LUMIERA_UID_FMT                 \
+  "\\%.3hho\\%.3hho\\%.3hho\\%.3hho"    \
+  "\\%.3hho\\%.3hho\\%.3hho\\%.3hho"    \
+  "\\%.3hho\\%.3hho\\%.3hho\\%.3hho"    \
+  "\\%.3hho\\%.3hho\\%.3hho\\%.3hho"
+
+#define LUMIERA_UID_CHAR(l,n) ((unsigned char*)l)[n]
+
+
+#define LUMIERA_UID_ELEMENTS(l)                                                                         \
+  LUMIERA_UID_CHAR(l,0), LUMIERA_UID_CHAR(l,1), LUMIERA_UID_CHAR(l,2), LUMIERA_UID_CHAR(l,3),           \
+    LUMIERA_UID_CHAR(l,4), LUMIERA_UID_CHAR(l,5), LUMIERA_UID_CHAR(l,6), LUMIERA_UID_CHAR(l,7),         \
+    LUMIERA_UID_CHAR(l,8), LUMIERA_UID_CHAR(l,9), LUMIERA_UID_CHAR(l,10), LUMIERA_UID_CHAR(l,11),       \
+    LUMIERA_UID_CHAR(l,12), LUMIERA_UID_CHAR(l,13), LUMIERA_UID_CHAR(l,14), LUMIERA_UID_CHAR(l,15)
+
+/**
+ * LUIDGEN will be replaced by the 'luidgen' tool with a random uuid
+ */
+#define LUIDGEN PLEASE_RUN_THE_LUIDGEN_TOOL_ON_THIS_FILE
+
+
 /**
  * Retrieve a generic pointer stored in a luid
  */

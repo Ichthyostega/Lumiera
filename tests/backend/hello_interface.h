@@ -1,6 +1,6 @@
-#include "lib/plugin.h"
+#include "backend/interface.h"
 
-LUMIERA_INTERFACE(hello, 1,
-                  LUMIERA_INTERFACE_PROTO(void, hello, (void))
-                  LUMIERA_INTERFACE_PROTO(void, goodbye, (const char*))
-                  );
+LUMIERA_INTERFACE_DECLARE (lumieraorg_testhello, 0,
+                           LUMIERA_INTERFACE_SLOT (void, hello, (void)),
+                           LUMIERA_INTERFACE_SLOT (void, goodbye, (const char*)),
+);

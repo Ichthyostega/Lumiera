@@ -18,320 +18,403 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
-#include <stdio.h>
-#include <unistd.h>
-#include <search.h>
-#include <string.h>
-#include <dlfcn.h>
-#include <pthread.h>
-#include <time.h>
-#include <limits.h>
+
 
 #include "lib/safeclib.h"
+#include "lib/psplay.h"
+#include "lib/mutex.h"
+#include "lib/error.h"
 
+#include "backend/interfaceregistry.h"
+#include "backend/config.h"
 #include "backend/plugin.h"
+
+#include <glob.h>
+
+#include <nobug.h>
+
+#ifndef LUMIERA_PLUGIN_PATH
+#error please define the plugin search path as -DLUMIERA_PLUGIN_PATH, e.g. as $INSTALL_PREFIX/lib/lumiera
+#endif
 
 /**
  * @file
  * Plugin loader.
  */
 
+/* just some declarations */
+extern PSplay lumiera_pluginregistry;
+static char* init_exts_globs ();
 
-/* TODO should be set by the build system to the actual plugin path */
-#define LUMIERA_PLUGIN_PATH "~/.lumiera/plugins:/usr/local/lib/lumiera/plugins:.libs"
-
-NOBUG_DEFINE_FLAG (lumiera_plugin);
+/* TODO default plugin path should be set by the build system */
 
 /* errors */
-LUMIERA_ERROR_DEFINE(PLUGIN_DLOPEN, "Could not open plugin");
-LUMIERA_ERROR_DEFINE(PLUGIN_HOOK, "Hook function failed");
-LUMIERA_ERROR_DEFINE(PLUGIN_NFILE, "No such plugin");
-LUMIERA_ERROR_DEFINE(PLUGIN_NIFACE, "No such interface");
-LUMIERA_ERROR_DEFINE(PLUGIN_REVISION, "Interface revision too old");
+LUMIERA_ERROR_DEFINE(PLUGIN_INIT, "Initialization error");
+LUMIERA_ERROR_DEFINE(PLUGIN_OPEN, "Could not open plugin");
+LUMIERA_ERROR_DEFINE(PLUGIN_WTF, "Not a Lumiera plugin");
+LUMIERA_ERROR_DEFINE(PLUGIN_REGISTER, "Could not register plugin");
+LUMIERA_ERROR_DEFINE(PLUGIN_VERSION, "Plugin Version unsupported");
 
-/*
-  supported (planned) plugin types and their file extensions
-*/
+#define LUMIERA_PLUGIN_TYPE_PLANNED(name, ext)
 
-enum lumiera_plugin_type
-  {
-    LUMIERA_PLUGIN_NULL,
-    LUMIERA_PLUGIN_DYNLIB,
-    LUMIERA_PLUGIN_CSOURCE
-  };
+/**
+ * Supported (and planned) plugin types and their file extensions
+ * This maps filename extensions to implementations (of the respective _load_NAME and _unload_NAME functions)
+ * So far we only support platform dynamic libraries, later we may add plugins implemented in lua
+ * and c source modules which get compiled on the fly.
+ */
+#define LUMIERA_PLUGIN_TYPES                    \
+  LUMIERA_PLUGIN_TYPE(DYNLIB, ".so")            \
+  LUMIERA_PLUGIN_TYPE(DYNLIB, ".lum")           \
+  LUMIERA_PLUGIN_TYPE_PLANNED(LUA, ".lua")      \
+  LUMIERA_PLUGIN_TYPE_PLANNED(CSOURCE, ".c")
 
-static const struct
+
+/**
+ * record the extension and a callback function for loading the associated plugin for each plugin type
+ */
+struct lumiera_plugintype_struct
 {
-  const char* const ext;
-  enum lumiera_plugin_type type;
-} lumiera_plugin_extensions [] =
+  LumieraPlugin (*lumiera_plugin_load_fn)(const char*);
+  void (*lumiera_plugin_unload_fn)(LumieraPlugin);
+  const char* ext;
+};
+typedef struct lumiera_plugintype_struct lumiera_plugintype;
+typedef lumiera_plugintype* LumieraPlugintype;
+
+/* forward declare loader functions for all types */
+#define LUMIERA_PLUGIN_TYPE(type, ext)                          \
+  LumieraPlugin lumiera_plugin_load_##type (const char*);       \
+  void lumiera_plugin_unload_##type (LumieraPlugin);
+LUMIERA_PLUGIN_TYPES
+#undef LUMIERA_PLUGIN_TYPE
+
+/* and now setup a table which will be used for dispatching loaders depending on the type of the plugin */
+#define LUMIERA_PLUGIN_TYPE(type, ext) {lumiera_plugin_load_##type, lumiera_plugin_unload_##type, ext},
+static lumiera_plugintype lumiera_plugin_types[] =
   {
-    {"so",       LUMIERA_PLUGIN_DYNLIB},
-    {"o",        LUMIERA_PLUGIN_DYNLIB},
-    {"c",        LUMIERA_PLUGIN_CSOURCE},
-    /* extend here */
-    {NULL,       LUMIERA_PLUGIN_NULL}
+    LUMIERA_PLUGIN_TYPES
+    {NULL, NULL, NULL}
   };
+#undef LUMIERA_PLUGIN_TYPE
 
 
-struct lumiera_plugin
+
+
+struct lumiera_plugin_struct
 {
-  /* short name as queried ("effects/audio/normalize") used for sorting/finding */
-  const char* name;
+  psplaynode node;
 
   /* long names as looked up ("/usr/local/lib/lumiera/plugins/effects/audio/normalize.so") */
-  const char* pathname;
+  const char* name;
 
   /* use count for all interfaces of this plugin */
-  unsigned use_count;
+  unsigned refcnt;
 
-  /* time when the last open or close action happened */
+  /* time when the refcounter dropped to 0 last time */
   time_t last;
 
-  /* kind of plugin */
-  enum lumiera_plugin_type type;
+  /* when loading plugins en masse we do not want to fail completely if one doesnt cooperate, instead we record local errors here */
+  lumiera_err error;
 
-  /* dlopen handle */
+  /* the 'plugin' interface itself */
+  LumieraInterface plugin;
+
+  /* generic handle for the plugin, dlopen handle, etc */
   void* handle;
 };
 
 
-/* global plugin registry */
-void* lumiera_plugin_registry = NULL;
-
-/* plugin operations are protected by one big mutex */
-pthread_mutex_t lumiera_plugin_mutex = PTHREAD_MUTEX_INITIALIZER;
-
-/**
- * the compare function for the registry tree.
- * Compares the names of two struct lumiera_plugin.
- * @return 0 if a and b are equal, just like strcmp. */
-static int
-lumiera_plugin_name_cmp (const void* a, const void* b)
+LumieraPlugin
+lumiera_plugin_new (const char* name)
 {
-  return strcmp (((struct lumiera_plugin*) a)->name, ((struct lumiera_plugin*) b)->name);
+  LumieraPlugin self = lumiera_malloc (sizeof (*self));
+
+  psplaynode_init (&self->node);
+  self->name = lumiera_strndup (name, SIZE_MAX);
+  self->refcnt = 0;
+  time (&self->last);
+  self->error = LUMIERA_ERROR_PLUGIN_INIT;
+  self->plugin = NULL;
+  self->handle = NULL;
+  return self;
 }
+
+
+LumieraPlugin
+lumiera_plugin_init (LumieraPlugin self, void* handle, LumieraInterface plugin)
+{
+  self->error = lumiera_error ();
+  self->plugin = plugin;
+  self->handle = handle;
+  return self;
+}
+
+
+lumiera_err
+lumiera_plugin_error (LumieraPlugin self)
+{
+  REQUIRE (self);
+  return self->error;
+}
+
+
+void*
+lumiera_plugin_handle (LumieraPlugin self)
+{
+  REQUIRE (self);
+  return self->handle;
+}
+
+
+const char*
+lumiera_plugin_name (LumieraPlugin self)
+{
+  return self?self->name:NULL;
+}
+
 
 void
-lumiera_init_plugin (void)
+lumiera_plugin_refinc (LumieraPlugin self)
 {
-  NOBUG_INIT_FLAG (lumiera_plugin);
+  ++self->refcnt;
 }
 
-/**
- * Find and set pathname for the plugin.
- * Searches through given path for given plugin, trying to find the file's location in the filesystem.
- * If found, self->pathname will be set to the found plugin file.
- * @param self The lumiera_plugin to open look for.
- * @param path The path to search trough (paths seperated by ":")
- * @return 0 on success. -1 on error, or if plugin not found in path.
- */
+
+void
+lumiera_plugin_refdec (LumieraPlugin self)
+{
+  if (!--self->refcnt)
+    time (&self->last);
+}
+
+
 int
-lumiera_plugin_lookup (struct lumiera_plugin* self, const char* path)
+lumiera_plugin_discover (LumieraPlugin (*callback_load)(const char* plugin),
+                         int (*callback_register) (LumieraPlugin))
 {
-  if (!path)
-    return -1;
+  TRACE (plugin);
+  REQUIRE (callback_load);
+  REQUIRE (callback_register);
 
-  if (strlen(path) > 1023)
-    return -1;        /*TODO error handling*/
+  lumiera_config_setdefault ("plugin.path ="LUMIERA_PLUGIN_PATH);
 
-  char tpath[1024];
-  TODO("dunno if PATH_MAX may be undefined (in case arbitary lengths are supported), I check that later");
-  char pathname[1024] = {0};
-  char* tmp;
+  /* construct glob trail {.so,.c,.foo} ... */
+  static char* exts_globs = NULL;
+  if (!exts_globs)
+    exts_globs = init_exts_globs (&exts_globs);
 
-  strcpy(tpath, path);
+  const char* path;
+  unsigned i = 0;
+  int flags = GLOB_PERIOD|GLOB_BRACE|GLOB_TILDE_CHECK;
+  glob_t globs;
 
-  /*for each in path*/
-  for (char* tok = strtok_r (tpath, ":", &tmp); tok; tok = strtok_r (NULL, ":", &tmp))
+  while ((path = lumiera_config_wordlist_get_nth ("plugin.path", i, ":")))
     {
-      /*for each extension*/
-      for (int i = 0; lumiera_plugin_extensions[i].ext; ++i)
-        {
-          /* path/name.extension */
-          int r = snprintf(pathname, 1024, "%s/%s.%s", tok, self->name, lumiera_plugin_extensions[i].ext);
-          if (r >= 1024)
-            return -1; /*TODO error handling, name too long*/
+      path = lumiera_tmpbuf_snprintf (SIZE_MAX,"%s/%s", path, exts_globs);
+      TRACE (plugin, "globbing path '%s'", path);
+      int ret = glob (path, flags, NULL, &globs);
+      if (ret == GLOB_NOSPACE)
+        LUMIERA_DIE (NO_MEMORY);
 
-          TRACE (lumiera_plugin, "trying %s", pathname);
-
-          if (!access(pathname, R_OK))
-            {
-              /* got it */
-              TRACE (lumiera_plugin, "found %s", pathname);
-              self->pathname = lumiera_strndup (pathname, PATH_MAX);
-
-              self->type = lumiera_plugin_extensions[i].type;
-              return 0;
-            }
-        }
+      flags |= GLOB_APPEND;
+      ++i;
     }
-  return -1; /* plugin not found */
+
+  if (globs.gl_pathc)
+    LUMIERA_RECMUTEX_SECTION (plugin, &lumiera_interface_mutex)
+      {
+        for (char** itr = globs.gl_pathv; *itr; ++itr)
+          {
+            if (!psplay_find (lumiera_pluginregistry, *itr, 100))
+              {
+                TRACE (plugin, "found new plugin '%s'", *itr);
+                callback_register (callback_load (*itr));
+              }
+          }
+      }
+
+  globfree (&globs);
+
+  return !lumiera_error_peek ();
 }
 
 
-struct lumiera_interface*
-lumiera_interface_open (const char* name, const char* interface, size_t min_revision)
+LumieraPlugin
+lumiera_plugin_load (const char* plugin)
 {
-  //REQUIRE (min_revision > sizeof(struct lumiera_interface), "try to use an empty interface eh?");
-  REQUIRE (interface, "interface name must be given");
+  TRACE (plugin);
 
-  pthread_mutex_lock (&lumiera_plugin_mutex);
+  /* dispatch on ext, call the registered function */
+  const char* ext = strrchr (plugin, '.');
 
-  struct lumiera_plugin plugin;
-  struct lumiera_plugin** found;
-
-  plugin.name = name; /* for searching */
-
-  found = tsearch (&plugin, &lumiera_plugin_registry, lumiera_plugin_name_cmp);
-  if (!found)
-    LUMIERA_DIE (NO_MEMORY);
-
-  if (*found == &plugin)
+  LumieraPlugintype itr = lumiera_plugin_types;
+  while (itr->ext)
     {
-      NOTICE (lumiera_plugin, "new plugin");
+      if (!strcmp (itr->ext, ext))
+        return itr->lumiera_plugin_load_fn (plugin);
+      ++itr;
+    }
+  return NULL;
+}
 
-      /* now really create new item */
-      *found = lumiera_malloc (sizeof (struct lumiera_plugin));
 
-      if (name) /* NULL is main app, no lookup needed */
+int
+lumiera_plugin_register (LumieraPlugin plugin)
+{
+  TRACE (plugin);
+  if (!plugin)
+    return 1;
+
+  LUMIERA_RECMUTEX_SECTION (plugin, &lumiera_interface_mutex)
+    {
+      if (psplay_insert (lumiera_pluginregistry, &plugin->node, 100))
         {
-          /*lookup for $LUMIERA_PLUGIN_PATH*/
-          (*found)->name = lumiera_strndup (name, PATH_MAX);
-
-          if (!!lumiera_plugin_lookup (*found, getenv("LUMIERA_PLUGIN_PATH"))
-#ifdef LUMIERA_PLUGIN_PATH
-              /* else lookup for -DLUMIERA_PLUGIN_PATH */
-              && !!lumiera_plugin_lookup (*found, LUMIERA_PLUGIN_PATH)
-#endif
-              )
+          if (!plugin->error)
             {
-              LUMIERA_ERROR_SET (lumiera_plugin, PLUGIN_NFILE);
-              goto elookup;
+              switch (lumiera_interface_version (plugin->plugin, "lumieraorg__plugin"))
+                {
+                case 0:
+                  {
+                    TRACE (plugin, "registering %s", plugin->name);
+                    LUMIERA_INTERFACE_HANDLE(lumieraorg__plugin, 0) handle =
+                      LUMIERA_INTERFACE_CAST(lumieraorg__plugin, 0) plugin->plugin;
+                    lumiera_interfaceregistry_bulkregister_interfaces (handle->plugin_interfaces (), plugin);
+                  }
+                  break;
+                default:
+                  LUMIERA_ERROR_SET (plugin, PLUGIN_VERSION);
+                }
             }
         }
       else
         {
-          (*found)->name = NULL;
-          (*found)->pathname = NULL;
-        }
-
-      (*found)->use_count = 0;
-
-      PLANNED("if .so like then dlopen; else if .c like tcc compile");
-      TODO("factor dlopen and dlsym out");
-
-      TRACE(lumiera_plugin, "trying to open %s", (*found)->pathname);
-
-      (*found)->handle = dlopen ((*found)->pathname, RTLD_LAZY|RTLD_LOCAL);
-      if (!(*found)->handle)
-        {
-          ERROR (lumiera_plugin, "dlopen failed: %s", dlerror());
-          LUMIERA_ERROR_SET (lumiera_plugin, PLUGIN_DLOPEN);
-          goto edlopen;
-        }
-
-      /* if the plugin defines a 'lumiera_plugin_init' function, we call it, must return 0 on success */
-      int (*init)(void) = dlsym((*found)->handle, "lumiera_plugin_init");
-      if (init && init())
-        {
-          //ERROR (lumiera_plugin, "lumiera_plugin_init failed: %s: %s", name, interface);
-          LUMIERA_ERROR_SET (lumiera_plugin, PLUGIN_HOOK);
-          goto einit;
+          LUMIERA_ERROR_SET (plugin, PLUGIN_REGISTER);
         }
     }
-  /* we have the plugin, now get the interface descriptor */
-  struct lumiera_interface* ret;
-
-  dlerror();
-  ret = dlsym ((*found)->handle, interface);
-
-  const char *dlerr = dlerror();
-  TRACE(lumiera_plugin, "%s", dlerr);
-  TODO ("need some way to tell 'interface not provided by plugin', maybe lumiera_plugin_error()?");
-  if (dlerr)
-    {
-      //ERROR (lumiera_plugin, "plugin %s doesnt provide interface %s", name, interface);
-      LUMIERA_ERROR_SET (lumiera_plugin, PLUGIN_NIFACE);
-      goto edlsym;
-    }
-
-  /* is the interface older than required? */
-  if (ret->size < min_revision)
-    {
-      ERROR (lumiera_plugin, "plugin %s provides older interface %s revision than required", name, interface);
-      LUMIERA_ERROR_SET (lumiera_plugin, PLUGIN_REVISION);
-      goto erevision;
-    }
-
-  ret->plugin = *found;
-
-  /* if the interface provides a 'open' function, call it now, must return 0 on success */
-  if (ret->open && ret->open())
-    {
-      ERROR (lumiera_plugin, "open hook indicated an error");
-      LUMIERA_ERROR_SET (lumiera_plugin, PLUGIN_HOOK);
-      goto eopen;
-    }
-
-  (*found)->use_count++;
-  (*found)->last = time (NULL);
-  ret->use_count++;
-
-  pthread_mutex_unlock (&lumiera_plugin_mutex);
-  return ret;
-
-  /* Error cleanup */
- einit:
-  dlclose((*found)->handle);
- eopen:
- erevision:
- edlsym:
- edlopen:
- elookup:
-  free ((char*)(*found)->name);
-  free (*found);
-  *found = &plugin;
-  tdelete (&plugin, &lumiera_plugin_registry, lumiera_plugin_name_cmp);
-  pthread_mutex_unlock (&lumiera_plugin_mutex);
-  return NULL;
+  return !!lumiera_error_peek();
 }
 
-void
-lumiera_interface_close (void* ptr)
+
+unsigned
+lumiera_plugin_unload (LumieraPlugin self)
 {
-  TRACE (lumiera_plugin, "%p", ptr);
-  if(!ptr)
-    return;
+  TRACE (plugin);
 
-  struct lumiera_interface* self = (struct lumiera_interface*) ptr;
+  if (!self)
+    return 0;
 
-  pthread_mutex_lock (&lumiera_plugin_mutex);
+  if (self->refcnt)
+    return self->refcnt;
 
-  struct lumiera_plugin* plugin = self->plugin;
-  
-  plugin->use_count--;
-  self->use_count--;
+  /* dispatch on ext, call the registered function */
+  const char* ext = strrchr (self->name, '.');
 
-  /* if the interface provides a 'close' function, call it now */
-  if (self->close)
-    self->close();
-
-  /* plugin not longer in use, unload it */
-  if (!plugin->use_count)
+  LumieraPlugintype itr = lumiera_plugin_types;
+  while (itr->ext)
     {
-      TODO ("we dont want to close here, instead store time of recent use and make a expire run, already planned in my head");
-
-      /* if the plugin defines a 'lumiera_plugin_destroy' function, we call it */
-      int (*destroy)(void) = dlsym(plugin->handle, "lumiera_plugin_destroy");
-      if (destroy)
-        destroy();
-
-      /* and now cleanup */
-      tdelete (plugin, &lumiera_plugin_registry, lumiera_plugin_name_cmp);
-      free ((char*)plugin->name);
-      dlclose(plugin->handle);
-      free (plugin);
+      if (!strcmp (itr->ext, ext))
+        {
+          LUMIERA_RECMUTEX_SECTION (plugin, &lumiera_interface_mutex)
+            {
+              if (psplay_remove (lumiera_pluginregistry, &self->node))
+                {
+                  if (!self->error)
+                    {
+                      LUMIERA_INTERFACE_HANDLE(lumieraorg__plugin, 0) handle =
+                        LUMIERA_INTERFACE_CAST(lumieraorg__plugin, 0) self->plugin;
+                      lumiera_interfaceregistry_bulkremove_interfaces (handle->plugin_interfaces ());
+                    }
+                }
+            }
+          itr->lumiera_plugin_unload_fn (self);
+          break;
+        }
+      ++itr;
     }
-  pthread_mutex_unlock (&lumiera_plugin_mutex);
+
+  return 0;
+}
+
+
+LumieraPlugin
+lumiera_plugin_lookup (const char* name)
+{
+  LumieraPlugin ret = NULL;
+
+  if (name)
+    LUMIERA_RECMUTEX_SECTION (plugin, &lumiera_interface_mutex)
+      ret = (LumieraPlugin) psplay_find (lumiera_pluginregistry, name, 100);
+
+  return ret;
+}
+
+
+static char* init_exts_globs ()
+{
+  char* exts_globs;
+  size_t exts_sz = 3; /* * { } \0 less one comma */
+  LumieraPlugintype itr = lumiera_plugin_types;
+  while (itr->ext)
+    {
+      exts_sz += strlen (itr->ext) + 1;
+      ++itr;
+    }
+
+  exts_globs = lumiera_malloc (exts_sz);
+  *exts_globs = '\0';
+
+  itr = lumiera_plugin_types;
+  strcat (exts_globs, "*{");
+
+  while (itr->ext)
+    {
+      strcat (exts_globs, itr->ext);
+      strcat (exts_globs, ",");
+      ++itr;
+    }
+  exts_globs[exts_sz-2] = '}';
+  TRACE (plugin, "initialized extension glob to '%s'", exts_globs);
+  return exts_globs;
+}
+
+int
+lumiera_plugin_cmp_fn (const void* keya, const void* keyb)
+{
+  return strcmp ((const char*)keya, (const char*)keyb);
+}
+
+
+const void*
+lumiera_plugin_key_fn (const PSplaynode node)
+{
+  return ((LumieraPlugin)node)->name;
+}
+
+
+void
+lumiera_plugin_delete_fn (PSplaynode node)
+{
+  LumieraPlugin self = (LumieraPlugin) node;
+
+  ENSURE (!self->refcnt, "plugin %s still in use at shutdown", self->name);
+
+  const char* ext = strrchr (self->name, '.');
+
+  LumieraPlugintype itr = lumiera_plugin_types;
+  while (itr->ext)
+    {
+      if (!strcmp (itr->ext, ext))
+        {
+          if (!self->error)
+            {
+              LUMIERA_INTERFACE_HANDLE(lumieraorg__plugin, 0) handle =
+                LUMIERA_INTERFACE_CAST(lumieraorg__plugin, 0) self->plugin;
+              lumiera_interfaceregistry_bulkremove_interfaces (handle->plugin_interfaces ());
+            }
+          itr->lumiera_plugin_unload_fn (self);
+          break;
+        }
+      ++itr;
+    }
 }

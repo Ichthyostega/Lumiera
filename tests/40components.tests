@@ -10,6 +10,11 @@ return: 0
 END
 
 
+TEST "AllocationCluster_test" AllocationCluster_test <<END
+return: 0
+END
+
+
 TEST "Appconfig_test" Appconfig_test <<END
 return: 0
 END
@@ -266,6 +271,30 @@ out: TestSingletonO::doIt() call=3
 END
 
 
+TEST "ScopedHolder_test" ScopedHolder_test <<END
+out: checking ScopedHolder<Dummy>...
+out: checking ScopedPtrHolder<Dummy>...
+END
+
+
+TEST "ScopedHolderTransfer_test" ScopedHolderTransfer_test <<END
+out: checking ScopedHolder<Dummy>...
+out: .
+out: ..install one element at index[0]
+out: .
+out: ..*** resize table to 16 elements
+out: .
+out: .throw some exceptions...
+out: checking ScopedPtrHolder<Dummy>...
+out: .
+out: ..install one element at index[0]
+out: .
+out: ..*** resize table to 16 elements
+out: .
+out: .throw some exceptions...
+END
+
+
 TEST "Singleton_test" Singleton_test 23 <<END
 out: testing TargetObj(23) as Singleton(statically allocated)
 out: ctor TargetObj(23) successfull
@@ -448,6 +477,11 @@ out: 	+---<2>-<3>-<·>-+
 out: 	+---<2>-<·>-+
 out: 	+---<3>-<·>-+
 out: 	+---<·>-+-
+return: 0
+END
+
+
+TEST "VectorTransfer_test" VectorTransfer_test <<END
 return: 0
 END
 

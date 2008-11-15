@@ -25,6 +25,7 @@
 #include "lib/psplay.h"
 
 #include "backend/interface.h"
+#include "backend/plugin.h"
 
 #include <nobug.h>
 
@@ -62,6 +63,10 @@ struct lumiera_interfacenode_struct
 
   /** reference counters and link used for internal reference management */
   unsigned refcnt;
+
+  /** backreference to its plugin if it comes from a plugin, else NULL */
+  LumieraPlugin plugin;
+
   /** temporary used to stack interfaces when recursively opening/closing them */
   LumieraInterfacenode lnk;
   /** allocated size of the following deps table */
@@ -84,10 +89,10 @@ lumiera_interfaceregistry_destroy (void);
 
 
 void
-lumiera_interfaceregistry_register_interface (LumieraInterface self);
+lumiera_interfaceregistry_register_interface (LumieraInterface self, LumieraPlugin plugin);
 
 void
-lumiera_interfaceregistry_bulkregister_interfaces (LumieraInterface* self);
+lumiera_interfaceregistry_bulkregister_interfaces (LumieraInterface* self, LumieraPlugin plugin);
 
 void
 lumiera_interfaceregistry_remove_interface (LumieraInterface self);

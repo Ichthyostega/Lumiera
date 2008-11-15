@@ -11,12 +11,16 @@
 // 4/08  - conversions on the value_type used for boost::any
 // 5/08  - how to guard a downcasting access, so it is compiled in only if the involved types are convertible
 // 7/08  - combining partial specialisation and subclasses 
+// 10/8  - abusing the STL containers to hold noncopyable values
 
 
 #include <nobug.h>
+//#include "proc/nobugcfg.hpp"
+
 #include <iostream>
-#include <typeinfo>
+//#include <typeinfo>
 #include <boost/format.hpp>
+//#include <boost/noncopyable.hpp>
 
 using std::string;
 using std::cout;
@@ -24,10 +28,11 @@ using boost::format;
 
 
   namespace {
-      
       boost::format fmt ("<%2i>");
-      
+      long checksum = 0;
   }
+  
+  
   
 int 
 main (int argc, char* argv[])
@@ -35,7 +40,7 @@ main (int argc, char* argv[])
     
     NOBUG_INIT;
     
-    cout <<  "\ngulp\n";
+    cout <<  "\n.gulp.\n";
     
     
     return 0;

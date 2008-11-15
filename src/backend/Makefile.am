@@ -18,7 +18,8 @@
 liblumibackend_a_srcdir = $(top_srcdir)/src/backend
 noinst_LIBRARIES += liblumibackend.a
 
-liblumibackend_a_CFLAGS = $(CFLAGS) -std=gnu99 -Wextra -Wall -Werror
+liblumibackend_a_CPPFLAGS = $(AM_CPPFLAGS) -DLUMIERA_PLUGIN_PATH="\"$(pkglibdir)\""
+liblumibackend_a_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
 
 liblumibackend_a_SOURCES =					\
 	$(liblumibackend_a_srcdir)/mediaaccessfacade.cpp	\
@@ -29,6 +30,8 @@ liblumibackend_a_SOURCES =					\
 	$(liblumibackend_a_srcdir)/filehandlecache.c		\
 	$(liblumibackend_a_srcdir)/interface.c			\
 	$(liblumibackend_a_srcdir)/interfaceregistry.c		\
+	$(liblumibackend_a_srcdir)/plugin.c			\
+	$(liblumibackend_a_srcdir)/plugin_dynlib.c		\
 	$(liblumibackend_a_srcdir)/config.c			\
 	$(liblumibackend_a_srcdir)/config_typed.c 		\
 	$(liblumibackend_a_srcdir)/config_wordlist.c 		\
@@ -47,6 +50,7 @@ noinst_HEADERS +=						\
 	$(liblumibackend_a_srcdir)/interface.h			\
 	$(liblumibackend_a_srcdir)/interfaceregistry.h		\
 	$(liblumibackend_a_srcdir)/interfacedescriptor.h	\
+	$(liblumibackend_a_srcdir)/plugin.h			\
 	$(liblumibackend_a_srcdir)/config.h 			\
 	$(liblumibackend_a_srcdir)/configentry.h 		\
 	$(liblumibackend_a_srcdir)/configitem.h 		\
