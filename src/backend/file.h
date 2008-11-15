@@ -74,6 +74,7 @@ struct lumiera_file_struct
   LumieraFiledescriptor descriptor;
 };
 
+
 /**
  * Initialize a file structure.
  * @param self pointer to the file structure
@@ -83,6 +84,7 @@ struct lumiera_file_struct
  */
 LumieraFile
 lumiera_file_init (LumieraFile self, const char* name, int flags);
+
 
 /**
  * Destroy a file structure.
@@ -95,6 +97,7 @@ lumiera_file_init (LumieraFile self, const char* name, int flags);
 LumieraFile
 lumiera_file_destroy (LumieraFile self);
 
+
 /**
  * Allocate a new file structure.
  * @param name filename
@@ -104,12 +107,14 @@ lumiera_file_destroy (LumieraFile self);
 LumieraFile
 lumiera_file_new (const char* name, int flags);
 
+
 /**
  * Frees a file structure.
  * @param self file structure to be freed
  */
 void
 lumiera_file_delete (LumieraFile self);
+
 
 /**
  * Get a POSIX filehandle for a file.
@@ -124,6 +129,7 @@ lumiera_file_delete (LumieraFile self);
 int
 lumiera_file_handle_acquire (LumieraFile self);
 
+
 /**
  * Put filehandle back into cache aging.
  * @param self file which handle to be released
@@ -132,15 +138,15 @@ void
 lumiera_file_handle_release (LumieraFile self);
 
 
-static inline LumieraFiledescriptor
-lumiera_file_descriptor (LumieraFile self)
-{
-  return self->descriptor;
-}
-
-
+/**
+ * Query the underlying mmapings object from a file
+ * The MMapings only exists after a chunksize got set with lumiera_file_chunksize_set()
+ * @param self the file to query
+ * @return Handle to the MMapings object or NULL on error (setting the error state)
+ */
 LumieraMMapings
 lumiera_file_mmapings (LumieraFile self);
+
 
 /**
  * Set the chunksize for mapping operations
