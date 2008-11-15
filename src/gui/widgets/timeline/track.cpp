@@ -29,6 +29,7 @@ namespace widgets {
 namespace timeline {
 
 Track::Track() :
+  expanded(true),
   enableButton(Gtk::StockID("track_enabled")),
   lockButton(Gtk::StockID("track_unlocked"))
 {
@@ -40,19 +41,6 @@ Track::Track() :
 
   headerWidget.pack_start(titleBox, PACK_SHRINK);
   headerWidget.pack_start(buttonBar, PACK_SHRINK);
-}
-
-void
-Track::add_child_track(timeline::Track* child)
-{
-  REQUIRE(child != NULL);
-  children.push_back(child);
-}
-
-const std::vector<timeline::Track*>&
-Track::get_child_tracks() const
-{
-  return children;
 }
 
 Gtk::Widget&
@@ -71,6 +59,16 @@ Glib::ustring
 Track::get_title()
 {
   return "Hello";
+}
+
+bool Track::get_expanded() const
+{
+  return expanded;
+}
+
+void Track::set_expanded(bool expanded)
+{
+  this->expanded = expanded;
 }
 
 void

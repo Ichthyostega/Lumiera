@@ -38,6 +38,8 @@ TimelineHeaderContainer::TimelineHeaderContainer(gui::widgets::TimelineWidget
     *timeline_widget) :
     Glib::ObjectBase("TimelineHeaderContainer"),
     timelineWidget(timeline_widget),
+    hoveringExpander(NULL),
+    clickedExpander(NULL),
     margin(-1),
     expand_button_size(12)
 {
@@ -123,13 +125,53 @@ TimelineHeaderContainer::on_unrealize()
   gdkWindow.clear();
 
   // Call base class:
-  Gtk::Widget::on_unrealize();
+  Container::on_unrealize();
+}
+
+bool TimelineHeaderContainer::on_button_press_event (
+  GdkEventButton* event)
+{
+  // Did the user press the button on an expander?
+  if(hoveringExpander != NULL)
+    {
+      // Yes? The prime for a release event
+      clickedExpander = hoveringExpander;
+      queue_draw();
+    }
+  
+  return Container::on_button_press_event(event);
+}
+
+bool TimelineHeaderContainer::on_button_release_event (
+  GdkEventButton* event)
+{
+  // Did the user release the button on an expander?
+  if(clickedExpander != NULL)
+    {
+      // Yes? The toggle the expanding
+      clickedExpander->set_expanded(!clickedExpander->get_expanded());
+      clickedExpander = NULL;
+      layout_headers();
+    }
+
+  return Container::on_button_release_event(event);    
 }
 
 bool TimelineHeaderContainer::on_motion_notify_event (
   GdkEventMotion* event)
 {
   REQUIRE(event != NULL);
+ 
+  // Are we hovering on an expander?
+  Track *expander = expander_button_from_point(
+    Gdk::Point(event->x, event->y));
+  
+  if(expander != hoveringExpander)
+    {
+      hoveringExpander = expander;
+      queue_draw();
+    }
+    
   return Container::on_motion_notify_event(event);
 }
 
@@ -188,15 +230,14 @@ TimelineHeaderContainer::on_expose_event(GdkEventExpose *event)
       read_styles();
        
       // Paint a border underneath all the root headers
-      BOOST_FOREACH( const Track* track, timelineWidget->tracks )
+      BOOST_FOREACH( Track* track, timelineWidget->tracks )
         {
           ASSERT(track != NULL);
           
           draw_header_decoration(track,
             Gdk::Rectangle(0, 0,
               container_allocation.get_width(),
-              container_allocation.get_height()),
-              0, offset);
+              container_allocation.get_height()));
         }
     }
 
@@ -216,7 +257,7 @@ TimelineHeaderContainer::on_hovering_track_changed(
   timeline::Track *hovering_track)
 {
   // The hovering track has changed, redraw so we can light the header
-  //queue_draw();
+  queue_draw();
 }
   
 void
@@ -228,18 +269,22 @@ TimelineHeaderContainer::layout_headers()
   if(!gdkWindow)
     return;
 
-  int offset = -timelineWidget->get_y_scroll_offset();
-  
+  // Make sure the style are loaded
   read_styles();
-  
+    
+  // Clear previously cached layout
+  headerBoxes.clear();
+
+  // Start at minus-the-scroll offset
+  int offset = -timelineWidget->get_y_scroll_offset();
+    
   const Allocation container_allocation = get_allocation();
-  const int header_width = container_allocation.get_width ()
-     - margin * 2;
+  const int header_width = container_allocation.get_width();
   
   BOOST_FOREACH( Track* track, timelineWidget->tracks )
     {
       ASSERT(track != NULL);
-      layout_headers_recursive(track, offset, header_width, 0);
+      layout_headers_recursive(track, offset, header_width, 0, true);
     }
     
   // Repaint the background of our parenting
@@ -248,32 +293,50 @@ TimelineHeaderContainer::layout_headers()
 
 void
 TimelineHeaderContainer::layout_headers_recursive(Track *track,
-  int &offset, const int header_width, const int depth) const
+  int &offset, const int header_width, const int depth,
+  bool parent_expanded)
 {
   REQUIRE(depth >= 0);
   
-  const int height = track->get_height();
-  ASSERT(height >= 0);
-
   const int indent = depth * 10;
-       
-  Allocation header_allocation;
-  header_allocation.set_x (margin + indent + expand_button_size);
-  header_allocation.set_y (offset + margin);
-  header_allocation.set_width (
-    max( header_width - indent - expand_button_size, 0 ));
-  header_allocation.set_height (
-    height - margin * 2 - TimelineWidget::TrackPadding);
-  
   Widget &widget = track->get_header_widget();
-  if(widget.is_visible())
-    widget.size_allocate (header_allocation);
   
-  offset += height;
-  
+  if(parent_expanded)
+    {
+      // Calculate the box of the header
+      Gdk::Rectangle header_box(
+        indent,                                               // x
+        offset,                                               // y
+        max( header_width - indent, 0 ),                      // width
+        track->get_height() - TimelineWidget::TrackPadding);  // height
+      ASSERT(header_box.get_height() >= 0);
+      
+      // Cache the bounding box
+      headerBoxes[track] = header_box;
+        
+      // Calculate the allocation of the header widget
+      Allocation header_allocation(
+        header_box.get_x() + margin + expand_button_size,     // x
+        header_box.get_y() + margin,                          // y
+        max( header_box.get_width() - expand_button_size -
+          margin * 2, 0 ),                                    // width
+        header_box.get_height() - margin * 2);                // height
+      
+      // Apply the allocation to the header
+      widget.size_allocate (header_allocation);
+      if(!widget.is_visible())
+        widget.show();
+      
+      offset += header_box.get_height();
+    }
+  else
+    if(widget.is_visible())
+      widget.hide();
+    
   // Recurse through all the children
-  BOOST_FOREACH( Track* child, track->get_child_tracks() )
-    layout_headers_recursive(child, offset, header_width, depth + 1);
+  BOOST_FOREACH( Track* child, track->get_child_tracks() ) 
+    layout_headers_recursive(child, offset, header_width, depth + 1,
+      track->get_expanded() && parent_expanded);
 }
 
 void
@@ -314,44 +377,88 @@ TimelineHeaderContainer::forall_vfunc_recursive(Track* track,
 }
 
 void
-TimelineHeaderContainer::draw_header_decoration(const Track* track,
-    const Gdk::Rectangle &clip_rect, const int depth, int &offset)
+TimelineHeaderContainer::draw_header_decoration(Track* track,
+    const Gdk::Rectangle &clip_rect)
 {
   REQUIRE(track != NULL);
-  REQUIRE(depth >= 0);
   REQUIRE(clip_rect.get_width() > 0);
   REQUIRE(clip_rect.get_height() > 0);
   
   Glib::RefPtr<Style> style = get_style();
   ASSERT(style);
   
-  const int height = track->get_height();
-  const int box_height = height - TimelineWidget::TrackPadding;
-  ASSERT(height >= 0);
-  
-  const int indent = depth * 10;
+  // Get the cached header box
+  ASSERT(headerBoxes.find(track) != headerBoxes.end());  
+  const Gdk::Rectangle &box = headerBoxes[track];
   
   // Paint the box, if it will be visible
-  if(indent < clip_rect.get_width() && box_height > 0 &&
-    offset + box_height > clip_rect.get_y()  &&
-    offset < clip_rect.get_y() + clip_rect.get_height())
+  if(box.get_x() < clip_rect.get_width() &&
+    box.get_height() > 0 &&
+    box.get_y() + box.get_height() > clip_rect.get_y()  &&
+    box.get_y() < clip_rect.get_y() + clip_rect.get_height())
     {
+      // Use paint_box to draw a themed bevel around the header
       style->paint_box(gdkWindow, STATE_NORMAL,
-        SHADOW_OUT, clip_rect, *this, "", indent, offset,
-        clip_rect.get_width() - indent, box_height);
+        SHADOW_OUT, clip_rect, *this, "",
+        box.get_x(), box.get_y(),
+        box.get_width(), box.get_height());
         
-      // Paint the expander
-      style->paint_expander (gdkWindow, STATE_NORMAL, 
-        clip_rect, *this, "",
-        indent + expand_button_size / 2 + margin,
-        offset + box_height / 2, EXPANDER_EXPANDED);
+      // Paint the expander if there are child tracks
+      StateType state_type = STATE_NORMAL;
+      if(clickedExpander == track) state_type = STATE_SELECTED;
+      else if(hoveringExpander == track) state_type = STATE_PRELIGHT;
+      
+      const ExpanderStyle expander_style = 
+        track->get_expanded() ? EXPANDER_EXPANDED : EXPANDER_COLLAPSED;
+      
+      if(!track->get_child_tracks().empty())
+        style->paint_expander (gdkWindow,
+          state_type, 
+          clip_rect, *this, "",
+          box.get_x() + expand_button_size / 2 + margin,
+          box.get_y() + box.get_height() / 2,
+          expander_style);
     }
   
-  offset += height;
-  
   // Recurse through all the children
-  BOOST_FOREACH( const Track* child, track->get_child_tracks() )
-    draw_header_decoration(child, clip_rect, depth + 1, offset);
+  if(track->get_expanded())
+    BOOST_FOREACH( Track* child, track->get_child_tracks() )
+      draw_header_decoration(child, clip_rect);
+}
+
+Track*
+TimelineHeaderContainer::expander_button_from_point(
+  const Gdk::Point &point)
+{
+  std::pair<Track*, Gdk::Rectangle> pair; 
+  BOOST_FOREACH( pair, headerBoxes )
+    {
+      // Hit test the rectangle
+      const Gdk::Rectangle rect =
+        get_expander_button_rectangle(pair.first);
+      
+      if(point.get_x() >= rect.get_x() &&
+        point.get_x() < rect.get_x() + rect.get_width() &&
+        point.get_y() >= rect.get_y() &&
+        point.get_y() < rect.get_y() + rect.get_height())
+        return pair.first;
+    }
+    
+  return NULL;
+}
+
+const Gdk::Rectangle
+TimelineHeaderContainer::get_expander_button_rectangle(
+  Track* track)
+{
+  REQUIRE(track != NULL);
+  ASSERT(headerBoxes.find(track) != headerBoxes.end());  
+  
+  const Gdk::Rectangle &box = headerBoxes[track];
+  const int y_centre = box.get_y() + box.get_height() / 2;  
+  return Gdk::Rectangle(
+    margin + box.get_x(), y_centre - expand_button_size / 2,
+    expand_button_size, expand_button_size);
 }
 
 void

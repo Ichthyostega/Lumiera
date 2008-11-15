@@ -33,7 +33,7 @@
 #include "timeline/timeline-tool.hpp"
 #include "timeline/timeline-arrow-tool.hpp"
 #include "timeline/timeline-ibeam-tool.hpp"
-#include "timeline/track.hpp"
+#include "timeline/group-track.hpp"
 
 namespace gui {
 namespace widgets {
@@ -234,11 +234,11 @@ protected:
 
   int totalHeight;
 
-  timeline::Track video1;
-  timeline::Track video1a;
-  timeline::Track video1b;
-  timeline::Track video1ba;
-  timeline::Track video2;
+  timeline::GroupTrack video1;
+  timeline::GroupTrack video1a;
+  timeline::GroupTrack video1b;
+  timeline::GroupTrack video1ba;
+  timeline::GroupTrack video2;
   std::vector<timeline::Track*> tracks;
 
   // Child Widgets

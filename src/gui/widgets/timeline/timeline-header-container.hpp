@@ -78,6 +78,18 @@ private:
   void on_unrealize();
   
   /**
+   * An event handler for mouse button press events.
+   * @param event The GDK event containing details of the event.
+   */
+  bool on_button_press_event (GdkEventButton* event);
+  
+  /**
+   * An event handler for mouse button release events.
+   * @param event The GDK event containing details of the event.
+   */
+  bool on_button_release_event (GdkEventButton* event);
+  
+  /**
    * An event handler for mouse movement events.
    * @param event The GDK event containing details of the event.
    */
@@ -136,7 +148,7 @@ private:
    * @param depth The depth within the tree of track.
    **/
   void layout_headers_recursive(Track *track, int &offset,
-    const int header_width, const int depth) const;
+    const int header_width, const int depth, bool parent_expanded);
   
   /**
    * Recursively sets all the track header widgets to be child widgets
@@ -153,9 +165,21 @@ private:
   
   static void forall_vfunc_recursive(Track* track,
     GtkCallback callback, gpointer callback_data);
-    
-  void draw_header_decoration(const Track* track,
-    const Gdk::Rectangle &clip_rect, const int depth, int &offset);
+  
+  /**
+   * Draws the border decoration around the track header.
+   * @param track The track to draw the decoration for.
+   * @param clip_rect The clip to drawing to.
+   * @param depth The depth within the tree of this track. This is used
+   * to control the amount of indention.
+   * @param offset The vertical offset of the headers in pixels.
+   **/
+  void draw_header_decoration(Track* track,
+    const Gdk::Rectangle &clip_rect);
+  
+  Track* expander_button_from_point(const Gdk::Point &point);
+  
+  const Gdk::Rectangle get_expander_button_rectangle(Track* track);
   
   /**
    * Registers all the styles that this class will respond to.
@@ -181,6 +205,13 @@ private:
    * widgets are scrolled.
    */
   Glib::RefPtr<Gdk::Window> gdkWindow;
+  
+  std::map<Track*, Gdk::Rectangle> headerBoxes;
+  
+  //----- User Interaction State -----//
+  Track *hoveringExpander;
+  
+  Track *clickedExpander;
 
   //----- Style Values -----//
   
