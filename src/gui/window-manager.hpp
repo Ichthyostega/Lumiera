@@ -66,9 +66,9 @@ public:
 private:
 
   /**
-   * Registers the extra large icon size.
+   * Registers the custom icon sizes.
    **/
-  static void register_giant_icon_size();
+  static void register_app_icon_sizes();
 
   /**
    * Registers application stock items: icons and
@@ -118,14 +118,21 @@ private:
     const Glib::ustring& base_dir, const Glib::ustring& icon_name,
     Gtk::IconSize size, bool wildcard);
     
-private:
+public:
 
   /**
    * The registered icon size for giant 48x48 px icons.
    * @remarks This value is set to BuiltinIconSize::ICON_SIZE_INVALID
    * until register_giant_icon_size is called.
    **/
-  static Gtk::IconSize giantIconSize;
+  static Gtk::IconSize GiantIconSize;
+  
+  /**
+   * The registered icon size for giant 16x16 px icons.
+   * @remarks This value is set to BuiltinIconSize::ICON_SIZE_INVALID
+   * until register_app_icon_sizes is called.
+   **/
+  static Gtk::IconSize MenuIconSize;
 };
 
 }   // namespace gui

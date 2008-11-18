@@ -21,6 +21,7 @@
 * *****************************************************/
 
 #include "track.hpp"
+#include "../../window-manager.hpp"
 
 using namespace Gtk;
 
@@ -37,7 +38,7 @@ Track::Track() :
   buttonBar.append(lockButton);
   
   buttonBar.set_toolbar_style(TOOLBAR_ICONS);
-//  buttonBar.set_icon_size(ICON_SIZE_MENU);       /////TODO: commented out because it makes compile fail on Etch based system
+  buttonBar.set_icon_size(WindowManager::MenuIconSize);
   
 
   headerWidget.pack_start(titleBox, PACK_SHRINK);

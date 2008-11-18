@@ -27,11 +27,12 @@ using namespace Glib;
 
 namespace gui {
   
-IconSize WindowManager::giantIconSize = ICON_SIZE_INVALID;
+IconSize WindowManager::GiantIconSize = ICON_SIZE_INVALID;
+IconSize WindowManager::MenuIconSize = ICON_SIZE_INVALID;
 
 WindowManager::WindowManager()
 {
-  register_giant_icon_size();  
+  register_app_icon_sizes();  
   register_stock_items();
 }
 
@@ -76,10 +77,12 @@ WindowManager::read_style_colour_property(
 }
 
 void
-WindowManager::register_giant_icon_size()
+WindowManager::register_app_icon_sizes()
 {
-  if(giantIconSize == ICON_SIZE_INVALID)
-    giantIconSize = IconSize::register_new ("giant", 48, 48);
+  if(GiantIconSize == ICON_SIZE_INVALID)
+    GiantIconSize = IconSize::register_new ("giant", 48, 48);
+  if(MenuIconSize == ICON_SIZE_INVALID)
+    MenuIconSize = IconSize::register_new ("menu", 16, 16);
 }
 
 void
@@ -115,7 +118,7 @@ WindowManager::add_stock_icon_set(
   // loaded
   bool no_icons = true;
   no_icons &= !add_stock_icon(
-    icon_set, icon_name, giantIconSize, no_icons);  
+    icon_set, icon_name, GiantIconSize, no_icons);  
   no_icons &= !add_stock_icon(
     icon_set, icon_name, ICON_SIZE_BUTTON, no_icons);
   no_icons &= !add_stock_icon(
@@ -123,7 +126,7 @@ WindowManager::add_stock_icon_set(
   no_icons &= !add_stock_icon(
     icon_set, icon_name, ICON_SIZE_LARGE_TOOLBAR, no_icons);
   no_icons &= !add_stock_icon(
-    icon_set, icon_name, ICON_SIZE_SMALL_TOOLBAR, no_icons);
+    icon_set, icon_name, MenuIconSize, no_icons);
 
   if(no_icons)
     {
