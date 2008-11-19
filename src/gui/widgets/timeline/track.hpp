@@ -29,20 +29,19 @@
 #include "../../gtk-lumiera.hpp"
 
 namespace gui {
-namespace widgets {
+namespace widgets { 
 namespace timeline {
-
-class Clip;
+  
+class TimelineViewWindow;
 
 class Track
 {
 public:
   Track();
 
-  void add_child_track(timeline::Track* child);
+  void add_child_track(Track* child);
 
-  virtual const std::vector<timeline::Track*>& get_child_tracks()
-    const = 0;
+  virtual const std::vector<Track*>& get_child_tracks() const;
   
   Gtk::Widget& get_header_widget();
   
@@ -54,12 +53,12 @@ public:
   
   void set_expanded(bool expanded);
 
-  void draw_track(Cairo::RefPtr<Cairo::Context> cairo) const;
+  virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
+    TimelineViewWindow* const window)
+    const = 0;
 
 private:
 
-
-  std::vector<timeline::Clip*> clips;
   bool expanded;
 
   //----- Header Widgets ------//
@@ -71,6 +70,9 @@ private:
   
   Gtk::Entry titleBox;
   Gtk::Toolbar buttonBar;
+  
+private:
+  static const std::vector<Track*> NoChildren;
 };
 
 

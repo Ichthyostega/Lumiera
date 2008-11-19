@@ -26,7 +26,7 @@
 #ifndef TIMELINE_WIDGET_HPP
 #define TIMELINE_WIDGET_HPP
 
-#include "../gtk-lumiera.hpp"
+#include "timeline/timeline-view-window.hpp"
 #include "timeline/timeline-header-container.hpp"
 #include "timeline/timeline-body.hpp"
 #include "timeline/timeline-ruler.hpp"
@@ -34,6 +34,7 @@
 #include "timeline/timeline-arrow-tool.hpp"
 #include "timeline/timeline-ibeam-tool.hpp"
 #include "timeline/group-track.hpp"
+#include "timeline/clip-track.hpp"
 
 namespace gui {
 namespace widgets {
@@ -63,55 +64,12 @@ public:
   
   /* ===== Data Access ===== */
 public:
-  /**
-   * Gets the time offset. This is the time value displaid at the
-   * left-hand edge of the timeline body area.
-   */
-  gavl_time_t get_time_offset() const;
 
   /**
-   * Sets the time offset. This is the time value displaid at the
-   * left-hand edge of the timeline body area.
-   */
-  void set_time_offset(gavl_time_t time_offset);
-  
-  /**
-   * Gets the time scale value.
-   * @return The scale factor, which is the number of microseconds per
-   * screen pixel.
-   */
-  int64_t get_time_scale() const;
-  
-  /**
-   * Sets the time scale value.
-   * @param time_scale The scale factor, which is the number of
-   * microseconds per screen pixel. This value must be greater than
-   * zero
-   */
-  void set_time_scale(int64_t time_scale);
-  
-  /**
-   * Zooms the view in or out as by a number of steps while keeping
-   * centre of the view still.
-   * @param zoom_size The number of steps to zoom by. The scale factor
-   * is 1.25^(-zoom_size).
+   * Gets a reference to the timeline view window object.
+   * @return Returns the timeline view window object.
    **/
-  void zoom_view(int zoom_size);
-  
-  /**
-   * Zooms the view in or out as by a number of steps while keeping a 
-   * given point on the timeline still.
-   * @param zoom_size The number of steps to zoom by. The scale factor
-   * is 1.25^(-zoom_size).
-   **/
-  void zoom_view(int point, int zoom_size);
-  
-  /**
-   * Scrolls the view horizontally as a proportion of the view area.
-   * @param shift_size The size of the shift in 1/256ths of the view
-   * width.
-   **/
-  void shift_view(int shift_size);
+  timeline::TimelineViewWindow& get_view_window();
   
   /**
    * Gets the time at which the selection begins.
@@ -178,15 +136,13 @@ public:
   
 public:
   /* ===== Signals ===== */
-  sigc::signal<void> view_changed_signal() const;
-  
   sigc::signal<void, gavl_time_t> mouse_hover_signal() const;
   
   sigc::signal<void> playback_period_drag_released_signal() const;
   
   sigc::signal<void, timeline::Track*> hovering_track_changed_signal() 
     const;
-    
+  
   /* ===== Events ===== */
 protected:
   
@@ -194,11 +150,11 @@ protected:
   
   void on_size_allocate(Gtk::Allocation& allocation);
   
+  void on_view_window_changed();
+  
   /* ===== Utilities ===== */
 protected:
-  int time_to_x(gavl_time_t time) const;
-  
-  gavl_time_t x_to_time(int x) const;
+
 
   /* ===== Internals ===== */
 private:
@@ -220,8 +176,7 @@ private:
 protected:
 
   // View State
-  gavl_time_t timeOffset;
-  int64_t timeScale;
+  timeline::TimelineViewWindow viewWindow;
   
   // Selection State
   gavl_time_t selectionStart;
@@ -237,8 +192,8 @@ protected:
   timeline::GroupTrack video1;
   timeline::GroupTrack video1a;
   timeline::GroupTrack video1b;
-  timeline::GroupTrack video1ba;
-  timeline::GroupTrack video2;
+  timeline::ClipTrack video1ba;
+  timeline::ClipTrack video2;
   std::vector<timeline::Track*> tracks;
 
   // Child Widgets
@@ -251,7 +206,6 @@ protected:
   Gtk::VScrollbar verticalScroll;
   
   // Signals
-  sigc::signal<void> viewChangedSignal;
   sigc::signal<void, gavl_time_t> mouseHoverSignal;
   sigc::signal<void> playbackPeriodDragReleasedSignal;
   sigc::signal<void, timeline::Track*> hoveringTrackChangedSignal;
@@ -270,6 +224,7 @@ protected:
   static const int HeaderWidth;
   static const double ZoomIncrement;
 
+  friend class timeline::TimelineViewWindow;
   friend class timeline::TimelineBody;
   friend class timeline::TimelineHeaderContainer;
   friend class timeline::TimelineRuler;

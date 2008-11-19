@@ -1,5 +1,5 @@
 /*
-  group-track.hpp  -  Declaration of the timeline track object
+  group-track.hpp  -  Declaration of the timeline group track object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -39,9 +39,12 @@ public:
   
   void add_child_track(timeline::Track* child);
   
-public:
   const std::vector<timeline::Track*>& get_child_tracks() const;
   
+  virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
+    TimelineViewWindow* constwindow)
+    const;
+    
 private:
   //----- Data -----//
   std::vector<timeline::Track*> children;

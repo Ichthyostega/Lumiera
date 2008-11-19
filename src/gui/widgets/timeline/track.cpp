@@ -28,6 +28,8 @@ using namespace Gtk;
 namespace gui {
 namespace widgets {
 namespace timeline {
+  
+const std::vector<timeline::Track*> Track::NoChildren;
 
 Track::Track() :
   expanded(true),
@@ -43,6 +45,12 @@ Track::Track() :
 
   headerWidget.pack_start(titleBox, PACK_SHRINK);
   headerWidget.pack_start(buttonBar, PACK_SHRINK);
+}
+
+const std::vector<Track*>&
+Track::get_child_tracks() const
+{
+  return NoChildren;
 }
 
 Gtk::Widget&
@@ -71,12 +79,6 @@ bool Track::get_expanded() const
 void Track::set_expanded(bool expanded)
 {
   this->expanded = expanded;
-}
-
-void
-Track::draw_track(Cairo::RefPtr<Cairo::Context> cairo) const
-{
-  
 }
 
 }   // namespace timeline

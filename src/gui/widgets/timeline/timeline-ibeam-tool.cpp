@@ -93,7 +93,8 @@ IBeamTool::on_button_press_event(GdkEventButton* event)
   
   if(event->button == 1)
     {
-      const gavl_time_t time = timeline_widget->x_to_time(event->x);
+      const gavl_time_t time = 
+        get_timeline_widget()->get_view_window().x_to_time(event->x);
       
       if(is_mouse_in_start_drag_zone())
         {
@@ -171,7 +172,7 @@ IBeamTool::on_motion_notify_event(GdkEventMotion *event)
 bool
 IBeamTool::on_scroll_slide_timer()
 {     
-  get_timeline_widget()->shift_view(scrollSlideRate);
+  get_timeline_widget()->get_view_window().shift_view(scrollSlideRate);
     
   // Return true to keep the timer going
   return true;
@@ -184,7 +185,8 @@ IBeamTool::set_leading_x(const int x)
   REQUIRE(timeline_widget != NULL);
 
   const bool set_playback_period = dragType == Selection;
-  const gavl_time_t time = timeline_widget->x_to_time(x);
+  const gavl_time_t time =
+    timeline_widget->get_view_window().x_to_time(x);
   if(time > pinnedDragTime)
     timeline_widget->set_selection(
       pinnedDragTime, time, set_playback_period);
@@ -216,7 +218,7 @@ IBeamTool::is_mouse_in_start_drag_zone() const
 {   
   TimelineWidget *timeline_widget = get_timeline_widget();
   
-  const int start_x = timeline_widget->time_to_x(
+  const int start_x = timeline_widget->get_view_window().time_to_x(
     timeline_widget->get_selection_start());
     
   return (mousePoint.get_x() <= start_x &&
@@ -228,7 +230,7 @@ IBeamTool::is_mouse_in_end_drag_zone() const
 {
   TimelineWidget *timeline_widget = get_timeline_widget();
       
-  const int end_x = timeline_widget->time_to_x(
+  const int end_x = timeline_widget->get_view_window().time_to_x(
     timeline_widget->get_selection_end());
     
   return (mousePoint.get_x() >= end_x &&

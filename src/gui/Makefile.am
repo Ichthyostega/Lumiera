@@ -53,6 +53,8 @@ lumigui_SOURCES =															\
 	$(lumigui_srcdir)/widgets/video-display-widget.hpp						\
 	$(lumigui_srcdir)/widgets/timeline-widget.cpp							\
 	$(lumigui_srcdir)/widgets/timeline-widget.hpp							\
+	$(lumigui_srcdir)/widgets/timeline/timeline-view-window.cpp				\
+	$(lumigui_srcdir)/widgets/timeline/timeline-view-window.hpp				\
 	$(lumigui_srcdir)/widgets/timeline/timeline-header-container.cpp		\
 	$(lumigui_srcdir)/widgets/timeline/timeline-header-container.hpp		\
 	$(lumigui_srcdir)/widgets/timeline/timeline-body.cpp					\
@@ -67,8 +69,12 @@ lumigui_SOURCES =															\
 	$(lumigui_srcdir)/widgets/timeline/timeline-ibeam-tool.hpp				\
 	$(lumigui_srcdir)/widgets/timeline/track.cpp							\
 	$(lumigui_srcdir)/widgets/timeline/track.hpp							\
+	$(lumigui_srcdir)/widgets/timeline/clip-track.cpp						\
+	$(lumigui_srcdir)/widgets/timeline/clip-track.hpp						\
 	$(lumigui_srcdir)/widgets/timeline/group-track.cpp						\
 	$(lumigui_srcdir)/widgets/timeline/group-track.hpp						\
+	$(lumigui_srcdir)/widgets/timeline/clip.cpp								\
+	$(lumigui_srcdir)/widgets/timeline/clip.hpp								\
 	$(lumigui_srcdir)/model/project.cpp										\
 	$(lumigui_srcdir)/model/project.hpp										\
 	$(lumigui_srcdir)/output/displayer.cpp									\

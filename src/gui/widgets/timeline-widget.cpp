@@ -38,8 +38,7 @@ const int64_t TimelineWidget::MaxScale = 30000000;
 
 TimelineWidget::TimelineWidget() :
   Table(2, 2),
-  timeOffset(0),
-  timeScale(1),
+  viewWindow(this, 0, 1),
   totalHeight(0),
   horizontalAdjustment(0, 0, 0),
   verticalAdjustment(0, 0, 0),
@@ -65,8 +64,10 @@ TimelineWidget::TimelineWidget() :
     this, &TimelineWidget::on_scroll) );
   body->signal_motion_notify_event().connect( sigc::mem_fun(
     this, &TimelineWidget::on_motion_in_body_notify_event) );
+  viewWindow.changed_signal().connect( sigc::mem_fun(
+    this, &TimelineWidget::on_view_window_changed) );
   
-  set_time_scale(GAVL_TIME_SCALE / 200);
+  viewWindow.set_time_scale(GAVL_TIME_SCALE / 200);
   set_selection(2000000, 4000000);
   
   tracks.push_back(&video1);
@@ -103,80 +104,10 @@ TimelineWidget::~TimelineWidget()
 
 /* ===== Data Access ===== */
 
-gavl_time_t
-TimelineWidget::get_time_offset() const
+TimelineViewWindow&
+TimelineWidget::get_view_window()
 {
-  return timeOffset;
-}
-
-void
-TimelineWidget::set_time_offset(gavl_time_t time_offset)
-{
-  REQUIRE(ruler != NULL);
-  
-  timeOffset = time_offset;
-  horizontalAdjustment.set_value(time_offset);
-  
-  viewChangedSignal.emit();
-}
-
-int64_t
-TimelineWidget::get_time_scale() const
-{
-  return timeScale;
-}
-
-void
-TimelineWidget::set_time_scale(int64_t time_scale)
-{
-  REQUIRE(ruler != NULL);
-  
-  timeScale = time_scale;
-  
-  const int view_width = body->get_allocation().get_width();
-  horizontalAdjustment.set_page_size(timeScale * view_width);
-  
-  viewChangedSignal.emit();
-}
-
-void
-TimelineWidget::zoom_view(int zoom_size)
-{
-  const Allocation allocation = body->get_allocation();
-  zoom_view(allocation.get_width() / 2, zoom_size);
-}
-
-void
-TimelineWidget::zoom_view(int point, int zoom_size)
-{ 
-  int64_t new_time_scale = (double)timeScale * pow(1.25, -zoom_size);
-  
-  // Limit zooming in too close
-  if(new_time_scale < 1) new_time_scale = 1;
-  
-  // Nudge zoom problems caused by integer rounding
-  if(new_time_scale == timeScale && zoom_size < 0)
-    new_time_scale++;
-    
-  // Limit zooming out too far
-  if(new_time_scale > MaxScale)
-    new_time_scale = MaxScale;
-  
-  // The view must be shifted so that the zoom is centred on the cursor
-  set_time_offset(get_time_offset() +
-    (timeScale - new_time_scale) * point);
-    
-  // Apply the new scale
-  set_time_scale(new_time_scale);
-}
-
-void
-TimelineWidget::shift_view(int shift_size)
-{
-  const int view_width = body->get_allocation().get_width();
-  
-  set_time_offset(get_time_offset() +
-    shift_size * timeScale * view_width / 256);
+  return viewWindow;
 }
 
 gavl_time_t
@@ -290,12 +221,6 @@ TimelineWidget::get_hovering_track() const
 
 /* ===== Signals ===== */
 
-sigc::signal<void>
-TimelineWidget::view_changed_signal() const
-{
-  return viewChangedSignal;
-}
-
 sigc::signal<void, gavl_time_t>
 TimelineWidget::mouse_hover_signal() const
 {
@@ -319,8 +244,7 @@ TimelineWidget::hovering_track_changed_signal() const
 void
 TimelineWidget::on_scroll()
 {
-  timeOffset = horizontalAdjustment.get_value();
-  viewChangedSignal.emit();
+  viewWindow.set_time_offset(horizontalAdjustment.get_value());
 }
   
 void
@@ -331,18 +255,16 @@ TimelineWidget::on_size_allocate(Allocation& allocation)
   update_scroll();
 }
 
-/* ===== Utilities ===== */
-
-int
-TimelineWidget::time_to_x(gavl_time_t time) const
+void
+TimelineWidget::on_view_window_changed()
 {
-  return (int)((time - timeOffset) / timeScale);
-}
-
-gavl_time_t
-TimelineWidget::x_to_time(int x) const
-{
-  return (gavl_time_t)((int64_t)x * timeScale + timeOffset);
+  REQUIRE(ruler != NULL);
+   
+  const int view_width = body->get_allocation().get_width();
+  horizontalAdjustment.set_page_size(
+    viewWindow.get_time_scale() * view_width);
+  horizontalAdjustment.set_value(
+    viewWindow.get_time_offset());
 }
 
 /* ===== Internals ===== */
@@ -376,7 +298,7 @@ TimelineWidget::update_scroll()
   
   // Set the page size
   horizontalAdjustment.set_page_size(
-    timeScale * body_allocation.get_width());
+    viewWindow.get_time_scale() * body_allocation.get_width());
   
   //----- Vertical Scroll -----//
   
@@ -429,7 +351,7 @@ TimelineWidget::on_motion_in_body_notify_event(GdkEventMotion *event)
 {
   REQUIRE(event != NULL);
   ruler->set_mouse_chevron_offset(event->x);
-  mouseHoverSignal.emit(x_to_time(event->x));
+  mouseHoverSignal.emit(viewWindow.x_to_time(event->x));
   
   return true;
 }

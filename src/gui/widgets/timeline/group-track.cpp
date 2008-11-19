@@ -44,6 +44,13 @@ GroupTrack::get_child_tracks() const
 {
   return children;
 }
+
+void
+GroupTrack::draw_track(Cairo::RefPtr<Cairo::Context> cairo,
+    TimelineViewWindow* const window) const
+{
+  
+}
   
 }   // namespace timeline
 }   // namespace widgets

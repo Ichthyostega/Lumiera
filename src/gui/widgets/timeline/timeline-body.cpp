@@ -54,8 +54,8 @@ TimelineBody::TimelineBody(gui::widgets::TimelineWidget
   REQUIRE(timelineWidget != NULL);
       
   // Connect up some events  
-  timelineWidget->view_changed_signal().connect(sigc::mem_fun(
-    this, &TimelineBody::on_update_view) );
+  timelineWidget->get_view_window().changed_signal().connect(
+    sigc::mem_fun(this, &TimelineBody::on_update_view) );
   
   // Install style properties
   register_styles();
@@ -162,18 +162,20 @@ TimelineBody::on_scroll_event (GdkEventScroll* event)
   REQUIRE(event != NULL);
   REQUIRE(timelineWidget != NULL);
   
+  TimelineViewWindow &window = timelineWidget->get_view_window();
+  
   if(event->state & GDK_CONTROL_MASK)
   {
     switch(event->direction)
     {
     case GDK_SCROLL_UP:
       // User scrolled up. Zoom in
-      timelineWidget->zoom_view(event->x, 1);
+      window.zoom_view(event->x, 1);
       break;
       
     case GDK_SCROLL_DOWN:
       // User scrolled down. Zoom out
-      timelineWidget->zoom_view(event->x, -1);
+      window.zoom_view(event->x, -1);
       break;    
     }
   }
@@ -183,12 +185,12 @@ TimelineBody::on_scroll_event (GdkEventScroll* event)
     {
     case GDK_SCROLL_UP:
       // User scrolled up. Shift 1/16th left
-      timelineWidget->shift_view(-16);
+      window.shift_view(-16);
       break;
       
     case GDK_SCROLL_DOWN:
       // User scrolled down. Shift 1/16th right
-      timelineWidget->shift_view(16);
+      window.shift_view(16);
       break;    
     }
   }
@@ -239,10 +241,12 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
     {
     case Shift:
       {
-        const int64_t scale = timelineWidget->get_time_scale();
+        TimelineViewWindow &window = timelineWidget->get_view_window();
+        
+        const int64_t scale = window.get_time_scale();
         gavl_time_t offset = beginShiftTimeOffset +
           (int64_t)(mouseDownX - event->x) * scale;
-        timelineWidget->set_time_offset(offset);
+        window.set_time_offset(offset);
         
         set_vertical_offset((int)(mouseDownY - event->y) +
           beginShiftVerticalOffset);
@@ -308,7 +312,7 @@ TimelineBody::draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
 
   // Render the track
   cr->save();
-  track->draw_track(cr);
+  track->draw_track(cr, &timelineWidget->get_view_window());
   cr->restore();
   
   // Shift for the next track
@@ -331,9 +335,10 @@ TimelineBody::draw_selection(Cairo::RefPtr<Cairo::Context> cr)
   // Prepare
   const Allocation allocation = get_allocation();
   
-  const int start_x = timelineWidget->time_to_x(
+  const TimelineViewWindow &window = timelineWidget->get_view_window();
+  const int start_x = window.time_to_x(
     timelineWidget->get_selection_start());
-  const int end_x = timelineWidget->time_to_x(
+  const int end_x = window.time_to_x(
     timelineWidget->get_selection_end());
   
   // Draw the cover
@@ -382,7 +387,7 @@ TimelineBody::draw_playback_point(Cairo::RefPtr<Cairo::Context> cr)
   if(point == GAVL_TIME_UNDEFINED)
     return;
   
-  const int x = timelineWidget->time_to_x(point);
+  const int x = timelineWidget->get_view_window().time_to_x(point);
     
   // Set source
   gdk_cairo_set_source_color(cr->cobj(), &playbackPointColour);
@@ -401,7 +406,8 @@ void
 TimelineBody::begin_shift_drag()
 {
   dragType = Shift;
-  beginShiftTimeOffset = timelineWidget->get_time_offset();
+  beginShiftTimeOffset =
+    timelineWidget->get_view_window().get_time_offset();
   beginShiftVerticalOffset = get_vertical_offset();
 }
 

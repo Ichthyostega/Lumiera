@@ -143,15 +143,14 @@ TimelinePanel::on_ibeam_tool()
 void
 TimelinePanel::on_zoom_in()
 {
-
-  timelineWidget.zoom_view(ZoomToolSteps);
+  timelineWidget.get_view_window().zoom_view(ZoomToolSteps);
   update_zoom_buttons();
 }
 
 void
 TimelinePanel::on_zoom_out()
 {
-  timelineWidget.zoom_view(-ZoomToolSteps);
+  timelineWidget.get_view_window().zoom_view(-ZoomToolSteps);
   update_zoom_buttons();
 }
 
@@ -196,9 +195,10 @@ TimelinePanel::update_tool_buttons()
 void
 TimelinePanel::update_zoom_buttons()
 {
-  zoomIn.set_sensitive(timelineWidget.get_time_scale() != 1);
-  zoomOut.set_sensitive(timelineWidget.get_time_scale() !=
-    TimelineWidget::MaxScale);
+  zoomIn.set_sensitive(timelineWidget.get_view_window().get_time_scale()
+    != 1);
+  zoomOut.set_sensitive(timelineWidget.get_view_window().get_time_scale()
+    != TimelineWidget::MaxScale);
 }
 
 void
