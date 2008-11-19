@@ -303,12 +303,14 @@ TimelineHeaderContainer::layout_headers_recursive(Track *track,
   
   if(parent_expanded)
     {
+      const int track_height = track->get_height();
+      
       // Calculate the box of the header
       Gdk::Rectangle header_box(
         indent,                                               // x
         offset,                                               // y
         max( header_width - indent, 0 ),                      // width
-        track->get_height() - TimelineWidget::TrackPadding);  // height
+        track_height - TimelineWidget::TrackPadding);  // height
       ASSERT(header_box.get_height() >= 0);
       
       // Cache the bounding box
@@ -327,7 +329,8 @@ TimelineHeaderContainer::layout_headers_recursive(Track *track,
       if(!widget.is_visible())
         widget.show();
       
-      offset += header_box.get_height();
+      // Offset for the next header
+      offset += track_height;
     }
   else
     if(widget.is_visible())
