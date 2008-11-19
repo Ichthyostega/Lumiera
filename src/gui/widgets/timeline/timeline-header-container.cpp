@@ -458,10 +458,9 @@ TimelineHeaderContainer::get_expander_button_rectangle(
   ASSERT(headerBoxes.find(track) != headerBoxes.end());  
   
   const Gdk::Rectangle &box = headerBoxes[track];
-  const int y_centre = box.get_y() + box.get_height() / 2;  
   return Gdk::Rectangle(
-    margin + box.get_x(), y_centre - expand_button_size / 2,
-    expand_button_size, expand_button_size);
+    margin + box.get_x(), margin + box.get_y(),
+    expand_button_size, box.get_height() - margin * 2);
 }
 
 void
