@@ -26,9 +26,15 @@
 namespace gui {
 namespace panels {
 
-Panel::Panel(const gchar *name, const gchar *long_name,
-  GdlDockItemBehavior behavior)
+Panel::Panel(model::Project *const owner_project,
+  const gchar *name, const gchar *long_name,
+  GdlDockItemBehavior behavior) :
+  project(owner_project)
 {
+  REQUIRE(owner_project != NULL);
+  REQUIRE(name != NULL);
+  REQUIRE(long_name != NULL);
+  
   dock_item = (GdlDockItem*)gdl_dock_item_new (
     name, long_name, behavior);
   internal_setup();
@@ -36,9 +42,16 @@ Panel::Panel(const gchar *name, const gchar *long_name,
   ENSURE(dock_item != NULL);
 }
 
-Panel::Panel(const gchar *name, const gchar *long_name, const gchar *stock_id,
-  GdlDockItemBehavior behavior)
+Panel::Panel(model::Project *const owner_project,
+  const gchar *name, const gchar *long_name, const gchar *stock_id,
+  GdlDockItemBehavior behavior) :
+  project(owner_project)
 {
+  REQUIRE(owner_project != NULL);
+  REQUIRE(name != NULL);
+  REQUIRE(long_name != NULL);
+  REQUIRE(stock_id != NULL);
+  
   dock_item = (GdlDockItem*)gdl_dock_item_new_with_stock (
     name, long_name, stock_id, behavior);
   g_object_ref(dock_item);

@@ -31,14 +31,18 @@
 namespace gui {
 namespace panels {
 
-  class AssetsPanel : public Panel
-    {
-    public:
-      AssetsPanel();
+class AssetsPanel : public Panel
+{
+public:
+  /**
+   * Constructor
+   *  @param owner_project The project associated with this panel.
+   **/
+  AssetsPanel(model::Project *const owner_project);
 
-    protected:
-      Gtk::Label placeholder;
-    };
+protected:
+  Gtk::Label placeholder;
+};
 
 }   // namespace panels
 }   // namespace gui

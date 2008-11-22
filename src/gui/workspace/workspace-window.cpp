@@ -140,11 +140,11 @@ WorkspaceWindow::create_ui()
   baseContainer.pack_start(*toolbar, Gtk::PACK_SHRINK);
   
   //----- Create the Panels -----//
-  assetsPanel = new AssetsPanel();
+  assetsPanel = new AssetsPanel(project);
   ENSURE(assetsPanel != NULL);
-  viewerPanel = new ViewerPanel();
+  viewerPanel = new ViewerPanel(project);
   ENSURE(viewerPanel != NULL);
-  timelinePanel = new TimelinePanel();
+  timelinePanel = new TimelinePanel(project);
   ENSURE(timelinePanel != NULL);
 
   //----- Create the Dock -----//

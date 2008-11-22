@@ -77,6 +77,8 @@ lumigui_SOURCES =															\
 	$(lumigui_srcdir)/widgets/timeline/clip.hpp								\
 	$(lumigui_srcdir)/model/project.cpp										\
 	$(lumigui_srcdir)/model/project.hpp										\
+	$(lumigui_srcdir)/model/sequence.cpp									\
+	$(lumigui_srcdir)/model/sequence.hpp									\
 	$(lumigui_srcdir)/output/displayer.cpp									\
 	$(lumigui_srcdir)/output/displayer.hpp									\
 	$(lumigui_srcdir)/output/gdkdisplayer.cpp								\

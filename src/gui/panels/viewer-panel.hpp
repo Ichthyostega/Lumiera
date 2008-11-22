@@ -42,8 +42,9 @@ class ViewerPanel : public Panel
 public:
   /**
    * Contructor.
+     @param owner_project The project associated with this panel.
    **/
-  ViewerPanel();
+  ViewerPanel(model::Project *const owner_project);
 
 protected:
 

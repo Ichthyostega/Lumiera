@@ -20,8 +20,12 @@
  
 * *****************************************************/
 
+#include <boost/foreach.hpp>
+
 #include "../gtk-lumiera.hpp"
 #include "timeline-panel.hpp"
+
+#include "../model/project.hpp"
 
 extern "C" {
 #include "../../lib/time.h"
@@ -30,14 +34,15 @@ extern "C" {
 using namespace Gtk;
 using namespace sigc;
 using namespace gui::widgets;
+using namespace gui::model;
 
 namespace gui {
 namespace panels {
   
 const int TimelinePanel::ZoomToolSteps = 2; // 2 seems comfortable
 
-TimelinePanel::TimelinePanel() :
-  Panel("timeline", _("Timeline"), "panel_timeline"),
+TimelinePanel::TimelinePanel(model::Project *const owner_project) :
+  Panel(owner_project, "timeline", _("Timeline"), "panel_timeline"),
   previousButton(Stock::MEDIA_PREVIOUS),
   rewindButton(Stock::MEDIA_REWIND),
   playPauseButton(Stock::MEDIA_PLAY),
@@ -49,14 +54,17 @@ TimelinePanel::TimelinePanel() :
   zoomIn(Stock::ZOOM_IN),
   zoomOut(Stock::ZOOM_OUT),
   timeIndicator(),
-  updatingToolbar(false)
+  updatingToolbar(false),
+  currentTool(timeline::IBeam)
 {
   // Setup the widget
-  timelineWidget.mouse_hover_signal().connect(
-    mem_fun(this, &TimelinePanel::on_mouse_hover));
-  timelineWidget.playback_period_drag_released_signal().connect(
-    mem_fun(this, &TimelinePanel::on_playback_period_drag_released));
-  
+  //timelineWidget.mouse_hover_signal().connect(
+  //  mem_fun(this, &TimelinePanel::on_mouse_hover));
+  //timelineWidget.playback_period_drag_released_signal().connect(
+  //  mem_fun(this, &TimelinePanel::on_playback_period_drag_released));
+  notebook.signal_switch_page().connect(
+    mem_fun(this, &TimelinePanel::on_page_switched));
+
   // Setup the toolbar
   timeIndicatorButton.set_label_widget(timeIndicator);
   
@@ -83,18 +91,24 @@ TimelinePanel::TimelinePanel() :
   toolbar.append(zoomIn, mem_fun(this, &TimelinePanel::on_zoom_in));
   toolbar.append(zoomOut, mem_fun(this, &TimelinePanel::on_zoom_out));
   
-// doesn't compile on Etch
-//  toolbar.set_icon_size(IconSize(ICON_SIZE_LARGE_TOOLBAR));
   toolbar.set_toolbar_style(TOOLBAR_ICONS);
   
   // Add the toolbar
   pack_start(toolbar, PACK_SHRINK);
-  pack_start(timelineWidget, PACK_EXPAND_WIDGET);
+  pack_start(notebook, PACK_EXPAND_WIDGET);
   
   // Set the initial UI state
+  update_notebook();
   update_tool_buttons();
   update_zoom_buttons();
   show_time(0);
+}
+
+TimelinePanel::~TimelinePanel()
+{
+  // Free allocated widgets
+  BOOST_FOREACH( TimelineWidget* widget, notebook_pages )
+    delete widget;
 }
 
 void
@@ -117,40 +131,54 @@ void
 TimelinePanel::on_stop()
 {
   // TEST CODE! 
-  timelineWidget.set_playback_point(GAVL_TIME_UNDEFINED);
+  /*timelineWidget.set_playback_point(GAVL_TIME_UNDEFINED);
   frameEvent.disconnect();
   show_time(timelineWidget.get_playback_period_start());
   
-  update_playback_buttons();
+  update_playback_buttons();*/
 }
 
 void
 TimelinePanel::on_arrow_tool()
 {
-  if(updatingToolbar) return;
-  timelineWidget.set_tool(timeline::Arrow);
-  update_tool_buttons();
+  set_tool(timeline::Arrow);
 }
 
 void
 TimelinePanel::on_ibeam_tool()
-{
-  if(updatingToolbar) return;
-  timelineWidget.set_tool(timeline::IBeam);
-  update_tool_buttons();
+{  
+  set_tool(timeline::IBeam);
 }
 
 void
 TimelinePanel::on_zoom_in()
 {
-  timelineWidget.get_view_window().zoom_view(ZoomToolSteps);
+  TimelineWidget *const  widget = get_current_page();
+  ASSERT(widget != NULL);
+  
+  widget->get_view_window().zoom_view(ZoomToolSteps);
   update_zoom_buttons();
 }
 
 void
 TimelinePanel::on_zoom_out()
 {
-  timelineWidget.get_view_window().zoom_view(-ZoomToolSteps);
+  TimelineWidget *const  widget = get_current_page();
+  ASSERT(widget != NULL);
+  
+  widget->get_view_window().zoom_view(-ZoomToolSteps);
+  update_zoom_buttons();
+}
+
+void
+TimelinePanel::on_page_switched(GtkNotebookPage*, guint)
+{
+  // The page has changed. Update the UI for this new page
+  
+  // Set the tool in the new page to be the same as the tool in the last
+  // page
+  set_tool(currentTool); 
+
   update_zoom_buttons();
 }
 
@@ -165,11 +193,26 @@ TimelinePanel::on_playback_period_drag_released()
 {
   //----- TEST CODE - this needs to set the playback point via the
   // real backend
-  timelineWidget.set_playback_point(
-    timelineWidget.get_playback_period_start());
+  
+  TimelineWidget *const  widget = get_current_page();
+  ASSERT(widget != NULL);
+  
+  widget->set_playback_point(widget->get_playback_period_start());
   //----- END TEST CODE
   
   play();
+}
+
+void
+TimelinePanel::update_notebook()
+{
+  BOOST_FOREACH( Sequence* const sequence, project->get_sequences() )
+    {
+      TimelineWidget * const widget = new TimelineWidget();
+      notebook_pages.push_back(widget);
+      notebook.append_page(*widget, sequence->get_name());
+      notebook.set_tab_reorderable(*widget);
+    }
 }
 
 void
@@ -185,9 +228,8 @@ TimelinePanel::update_tool_buttons()
   if(!updatingToolbar)
   {
     updatingToolbar = true;
-    const timeline::ToolType tool = timelineWidget.get_tool();
-    arrowTool.set_active(tool == timeline::Arrow);
-    iBeamTool.set_active(tool == timeline::IBeam);
+    arrowTool.set_active(currentTool == timeline::Arrow);
+    iBeamTool.set_active(currentTool == timeline::IBeam);
     updatingToolbar = false;
   }
 }
@@ -195,21 +237,24 @@ TimelinePanel::update_tool_buttons()
 void
 TimelinePanel::update_zoom_buttons()
 {
-  zoomIn.set_sensitive(timelineWidget.get_view_window().get_time_scale()
+  TimelineWidget *const widget = get_current_page();
+  ASSERT(widget != NULL);
+  
+  zoomIn.set_sensitive(widget->get_view_window().get_time_scale()
     != 1);
-  zoomOut.set_sensitive(timelineWidget.get_view_window().get_time_scale()
+  zoomOut.set_sensitive(widget->get_view_window().get_time_scale()
     != TimelineWidget::MaxScale);
 }
 
 void
 TimelinePanel::play()
 {
-  if(timelineWidget.get_playback_point() == GAVL_TIME_UNDEFINED)
+  /*if(timelineWidget.get_playback_point() == GAVL_TIME_UNDEFINED)
     timelineWidget.set_playback_point(
       timelineWidget.get_playback_period_start());
   frameEvent = Glib::signal_timeout().connect(
     sigc::mem_fun(this, &TimelinePanel::on_frame),
-    1000 / 25);
+    1000 / 25);*/
 }
 
 bool
@@ -220,16 +265,37 @@ TimelinePanel::is_playing() const
 }
 
 void
+TimelinePanel::set_tool(timeline::ToolType tool)
+{
+  if(updatingToolbar) return;
+  
+  TimelineWidget *const  widget = get_current_page();
+  ASSERT(widget != NULL);
+   
+  currentTool = tool;
+  widget->set_tool(tool);
+  update_tool_buttons();
+}
+
+void
 TimelinePanel::show_time(gavl_time_t time)
 {
   timeIndicator.set_text(lumiera_tmpbuf_print_time(time));
+}
+
+TimelineWidget*
+TimelinePanel::get_current_page()
+{
+  Widget* const widget = (*notebook.get_current()).get_child();
+  REQUIRE(widget != NULL);
+  return (TimelineWidget*)widget;
 }
 
 bool
 TimelinePanel::on_frame()
 {
   // TEST CODE!  
-  const gavl_time_t point = timelineWidget.get_playback_point()
+  /*const gavl_time_t point = timelineWidget.get_playback_point()
     + GAVL_TIME_SCALE / 25;
   if(point < timelineWidget.get_playback_period_end())
     {
@@ -239,7 +305,7 @@ TimelinePanel::on_frame()
       
     }
   else
-    on_stop();
+    on_stop();*/
     
   return true;
 }

@@ -43,8 +43,15 @@ class TimelinePanel : public Panel
 public:
   /**
    * Constructor
+   *  @param owner_project The project associated with this panel.
    */
-  TimelinePanel();
+  TimelinePanel(model::Project *const owner_project);
+
+
+  /**
+   * Destructor 
+   **/
+  ~TimelinePanel();
 
 private:
   //----- Event Handlers -----//
@@ -60,10 +67,15 @@ private:
   
   void on_time_pressed();
   
+  void on_page_switched(GtkNotebookPage*, guint);
+  
   void on_mouse_hover(gavl_time_t time);
   void on_playback_period_drag_released();
   
 private:
+
+  void update_notebook();
+
   void update_playback_buttons();
   void update_tool_buttons();
   void update_zoom_buttons();
@@ -71,7 +83,11 @@ private:
   void play();
   bool is_playing() const;
   
+  void set_tool(gui::widgets::timeline::ToolType tool);
+  
   void show_time(gavl_time_t time);
+  
+  TimelineWidget* get_current_page();
 
 private:
 
@@ -80,7 +96,10 @@ private:
   // Widgets
   Gtk::Toolbar toolbar;
   Gtk::HBox toolStrip;
-  TimelineWidget timelineWidget;
+  
+  // Body Widgets
+  Gtk::Notebook notebook;
+  std::list<TimelineWidget*> notebook_pages;
   
   // Toolbar Widgets
   
@@ -106,6 +125,7 @@ private:
     
   // Internals
   bool updatingToolbar;
+  gui::widgets::timeline::ToolType currentTool;
   
 private:
   // TEST CODE

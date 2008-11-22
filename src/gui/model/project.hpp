@@ -27,13 +27,25 @@
 #ifndef PROJECT_HPP
 #define PROJECT_HPP
 
+#include "sequence.hpp"
+
 namespace gui {
 namespace model {
-
+  
 class Project
 {
 public:
   Project();
+  
+  std::list<Sequence*>& get_sequences();
+  
+private:
+
+  std::list<Sequence*> sequences;
+
+  // TEST CODE
+  Sequence sequenceA;
+  Sequence sequenceB;
 };
 
 }   // namespace model

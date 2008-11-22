@@ -21,13 +21,25 @@
 * *****************************************************/
 
 #include "project.hpp"
+#include "sequence.hpp"
 
 namespace gui {
 namespace model {
 
 Project::Project()
 {
+  // TEST CODE
+  sequenceA.set_name("Sequence A");
+  sequenceB.set_name("Sequence B");
   
+  sequences.push_back(&sequenceA);
+  sequences.push_back(&sequenceB);
+}
+
+std::list<Sequence*>&
+Project::get_sequences()
+{
+  return sequences;
 }
 
 }   // namespace model

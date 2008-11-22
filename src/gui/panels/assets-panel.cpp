@@ -26,9 +26,9 @@
 namespace gui {
 namespace panels {
 
-AssetsPanel::AssetsPanel() :
-  Panel("assets", _("Assets"), "panel_assets"),
-  placeholder("Placeholder label. Is this supposed to be titled assets\nas in the proc layer? or resources\nas in cinelerra?")
+AssetsPanel::AssetsPanel(model::Project *const owner_project) :
+  Panel(owner_project, "assets", _("Assets"), "panel_assets"),
+  placeholder("Assets/Media")
   {
     pack_start(placeholder);
   }
