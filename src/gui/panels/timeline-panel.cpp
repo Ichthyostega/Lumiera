@@ -57,13 +57,15 @@ TimelinePanel::TimelinePanel(model::Project *const owner_project) :
   updatingToolbar(false),
   currentTool(timeline::IBeam)
 {
-  // Setup the widget
   //timelineWidget.mouse_hover_signal().connect(
   //  mem_fun(this, &TimelinePanel::on_mouse_hover));
   //timelineWidget.playback_period_drag_released_signal().connect(
   //  mem_fun(this, &TimelinePanel::on_playback_period_drag_released));
+  
+  // Setup the notebook  
   notebook.signal_switch_page().connect(
     mem_fun(this, &TimelinePanel::on_page_switched));
+  notebook.popup_enable();
 
   // Setup the toolbar
   timeIndicatorButton.set_label_widget(timeIndicator);
