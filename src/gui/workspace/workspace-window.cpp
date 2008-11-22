@@ -68,6 +68,12 @@ WorkspaceWindow::~WorkspaceWindow()
   timelinePanel->unreference();
 }
 
+Project*
+WorkspaceWindow::get_project() const
+{
+  return project;
+}
+
 void
 WorkspaceWindow::create_ui()
 {    
@@ -106,6 +112,9 @@ WorkspaceWindow::create_ui()
       "      <menuitem action='ViewAssets'/>"
       "      <menuitem action='ViewTimeline'/>"
       "      <menuitem action='ViewViewer'/>"
+      "    </menu>"
+      "    <menu action='SequenceMenu'>"
+      "      <menuitem action='SequenceAdd'/>"
       "    </menu>"
       "    <menu action='HelpMenu'>"
       "      <menuitem action='HelpAbout'/>"

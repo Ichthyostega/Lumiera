@@ -26,6 +26,8 @@
 #include "../dialogs/render.hpp"
 #include "../dialogs/preferences-dialog.hpp"
 
+#include "../model/project.hpp"
+
 using namespace Gtk;
 using namespace Glib;
 using namespace sigc;
@@ -84,6 +86,11 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
   viewerPanelAction->signal_toggled().connect(
     sigc::mem_fun(*this, &Actions::on_menu_view_viewer));
   actionGroup->add(viewerPanelAction);
+  
+  // Sequence Menu
+  actionGroup->add(Action::create("SequenceMenu", _("_Sequence")));
+  actionGroup->add(Action::create("SequenceAdd", _("_Add...")),
+    sigc::mem_fun(*this, &Actions::on_menu_sequence_add));
 
   // Help Menu
   actionGroup->add(Action::create("HelpMenu", _("_Help")) );
@@ -166,6 +173,14 @@ Actions::on_menu_view_viewer()
   if(!is_updating_action_state)
     workspaceWindow.viewerPanel->show(viewerPanelAction->get_active());
 }
+
+void
+Actions::on_menu_sequence_add()
+{
+  workspaceWindow.get_project()->add_new_sequence("New Sequence");
+}
+
+/* ===== View Menu Event Handlers ===== */
 
 void
 Actions::on_menu_help_about()

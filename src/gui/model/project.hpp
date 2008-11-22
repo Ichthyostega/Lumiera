@@ -37,12 +37,21 @@ class Project
 public:
   Project();
   
-  std::list<Sequence*>& get_sequences();
+  ~Project();
+    
+  const std::list<Sequence*>& get_sequences();
+  
+  void add_new_sequence(Glib::ustring name);
+  
+public:
+  sigc::signal<void>& signal_sequence_list_changed();
   
 private:
 
   std::list<Sequence*> sequences;
-
+  
+  sigc::signal<void> sequenceListChangedSignal;
+  
   // TEST CODE
   Sequence sequenceA;
   Sequence sequenceB;

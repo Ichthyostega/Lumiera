@@ -33,6 +33,7 @@ extern "C" {
 
 using namespace Gtk;
 using namespace sigc;
+using namespace std;
 using namespace gui::widgets;
 using namespace gui::model;
 
@@ -56,11 +57,15 @@ TimelinePanel::TimelinePanel(model::Project *const owner_project) :
   timeIndicator(),
   updatingToolbar(false),
   currentTool(timeline::IBeam)
-{
+{  
   //timelineWidget.mouse_hover_signal().connect(
   //  mem_fun(this, &TimelinePanel::on_mouse_hover));
   //timelineWidget.playback_period_drag_released_signal().connect(
   //  mem_fun(this, &TimelinePanel::on_playback_period_drag_released));
+  
+  // Hook up notifications
+  project->signal_sequence_list_changed().connect(
+    mem_fun(this, &TimelinePanel::on_sequence_list_changed));
   
   // Setup the notebook  
   notebook.signal_switch_page().connect(
@@ -109,8 +114,9 @@ TimelinePanel::TimelinePanel(model::Project *const owner_project) :
 TimelinePanel::~TimelinePanel()
 {
   // Free allocated widgets
-  BOOST_FOREACH( TimelineWidget* widget, notebook_pages )
-    delete widget;
+  pair<model::Sequence*, TimelineWidget*> pair; 
+  BOOST_FOREACH( pair, notebook_pages )
+    delete pair.second;
 }
 
 void
@@ -206,15 +212,44 @@ TimelinePanel::on_playback_period_drag_released()
 }
 
 void
+TimelinePanel::on_sequence_list_changed()
+{
+  update_notebook();
+}
+
+void
 TimelinePanel::update_notebook()
 {
+  std::map<Sequence*, TimelineWidget*> old_pages(notebook_pages);
+  notebook_pages.clear();
+  
   BOOST_FOREACH( Sequence* const sequence, project->get_sequences() )
     {
-      TimelineWidget * const widget = new TimelineWidget();
-      notebook_pages.push_back(widget);
-      notebook.append_page(*widget, sequence->get_name());
-      notebook.set_tab_reorderable(*widget);
+      std::map<Sequence*, TimelineWidget*>::iterator iterator =
+        old_pages.find(sequence);
+      if(iterator != old_pages.end())
+        {
+          // This sequence has not been changed
+          // leave it in the new list
+          notebook_pages[iterator->first] = iterator->second;
+          old_pages.erase(iterator->first);
+        }
+      else
+        {
+          // This is a new sequence, add it in
+          TimelineWidget * const widget = new TimelineWidget();
+          notebook_pages[sequence] = widget;
+          notebook.append_page(*widget, sequence->get_name());
+          notebook.set_tab_reorderable(*widget);
+        }
     }
+    
+  // Free widgets which have been removed
+  pair<model::Sequence*, TimelineWidget*> pair; 
+  BOOST_FOREACH( pair, old_pages )
+    delete pair.second;
+    
+  notebook.show_all_children();
 }
 
 void

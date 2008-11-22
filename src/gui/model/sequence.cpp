@@ -1,5 +1,5 @@
 /*
-  panel.cpp  -  Implementation of the Project class
+  sequence.hpp  -  Implementation of the Sequence class
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,47 +20,26 @@
  
 * *****************************************************/
 
-#include <boost/foreach.hpp>
-
-#include "project.hpp"
 #include "sequence.hpp"
 
 namespace gui {
 namespace model {
 
-Project::Project()
+Sequence::Sequence()
 {
-  // TEST CODE
-  add_new_sequence("Sequence A");
-  add_new_sequence("Sequence B");
+  
 }
 
-Project::~Project()
+const Glib::ustring
+Sequence::get_name() const
 {
-  BOOST_FOREACH( Sequence* const sequence, sequences )
-    delete sequence;    
+  return name;
 }
-
-const std::list<Sequence*>&
-Project::get_sequences()
-{
-  return sequences;
-}
-
+  
 void
-Project::add_new_sequence(Glib::ustring name)
+Sequence::set_name(const Glib::ustring &name)
 {
-  Sequence* const sequence = new Sequence();
-  sequence->set_name(name);
-  sequences.push_back(sequence);
-  sequenceListChangedSignal.emit();
-
-}
-
-sigc::signal<void>&
-Project::signal_sequence_list_changed()
-{
-  return sequenceListChangedSignal;
+  this->name = name;
 }
 
 }   // namespace model

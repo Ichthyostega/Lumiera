@@ -57,6 +57,8 @@ public:
   WorkspaceWindow(gui::model::Project *source_project);
   
   ~WorkspaceWindow();
+  
+  gui::model::Project* get_project() const;
 
 private:
   void create_ui();

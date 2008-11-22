@@ -470,6 +470,10 @@ Track* TimelineBody::track_from_branch(Track *track,
 void
 TimelineBody::register_styles() const
 {
+  static bool registered = false;
+  if(registered) return;
+  registered = true;
+  
   GtkWidgetClass *klass = GTK_WIDGET_CLASS(G_OBJECT_GET_CLASS(gobj()));
 
   gtk_widget_class_install_style_property(klass, 

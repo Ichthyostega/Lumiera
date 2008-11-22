@@ -32,6 +32,11 @@
 using namespace gui::widgets;
 
 namespace gui {
+  
+namespace model {
+class Sequence;
+}
+  
 namespace panels {
 
 /**
@@ -72,6 +77,8 @@ private:
   void on_mouse_hover(gavl_time_t time);
   void on_playback_period_drag_released();
   
+  void on_sequence_list_changed();
+  
 private:
 
   void update_notebook();
@@ -99,7 +106,7 @@ private:
   
   // Body Widgets
   Gtk::Notebook notebook;
-  std::list<TimelineWidget*> notebook_pages;
+  std::map<model::Sequence*, TimelineWidget*> notebook_pages;
   
   // Toolbar Widgets
   

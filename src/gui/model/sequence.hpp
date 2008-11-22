@@ -1,5 +1,5 @@
 /*
-  panel.cpp  -  Implementation of the Project class
+  sequence.hpp  -  Definition of the Sequence class
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -18,50 +18,34 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
+/** @file sequence.hpp
+ ** This file contains the definition of Sequence, a class which
+ ** contains a 
+ */
 
-#include <boost/foreach.hpp>
+#ifndef SEQUENCE_HPP
+#define SEQUENCE_HPP
 
-#include "project.hpp"
-#include "sequence.hpp"
+#include "../gtk-lumiera.hpp"
 
 namespace gui {
 namespace model {
 
-Project::Project()
+class Sequence
 {
-  // TEST CODE
-  add_new_sequence("Sequence A");
-  add_new_sequence("Sequence B");
-}
-
-Project::~Project()
-{
-  BOOST_FOREACH( Sequence* const sequence, sequences )
-    delete sequence;    
-}
-
-const std::list<Sequence*>&
-Project::get_sequences()
-{
-  return sequences;
-}
-
-void
-Project::add_new_sequence(Glib::ustring name)
-{
-  Sequence* const sequence = new Sequence();
-  sequence->set_name(name);
-  sequences.push_back(sequence);
-  sequenceListChangedSignal.emit();
-
-}
-
-sigc::signal<void>&
-Project::signal_sequence_list_changed()
-{
-  return sequenceListChangedSignal;
-}
+public:
+  Sequence();
+  
+  const Glib::ustring get_name() const;
+  
+  void set_name(const Glib::ustring &name);
+  
+private:
+  Glib::ustring name;
+};
 
 }   // namespace model
 }   // namespace gui
+
+#endif // SEQUENCE_HPP
