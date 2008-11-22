@@ -37,9 +37,17 @@ void
 ClipTrack::draw_track(Cairo::RefPtr<Cairo::Context> cairo,
     TimelineViewWindow* const window) const
 {
-  cairo->set_source_rgb(0, 0, 0.5);
-  cairo->rectangle(window->time_to_x(0), 10, 20, 20);
-  cairo->fill();
+  
+  
+  cairo->rectangle(window->time_to_x(0), 1,
+    window->time_to_x(500000) - window->time_to_x(0),
+    get_height() - 2);
+  
+  cairo->set_source_rgb(0.5, 0.5, 0.5);
+  cairo->fill_preserve();
+  
+  cairo->set_source_rgb(0.25, 0.25, 0.25);
+  cairo->stroke();
 }
 
 }   // namespace timeline
