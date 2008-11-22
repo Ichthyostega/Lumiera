@@ -304,8 +304,7 @@ TimelineBody::draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
   ASSERT(height >= 0);
 
   // Draw the track background
-  cr->rectangle(0, 0, view_width,
-    height - TimelineWidget::TrackPadding);
+  cr->rectangle(0, 0, view_width, height);
   GdkColor colour = backgroundColour;   // Needed to preserve const qualifier
   gdk_cairo_set_source_color(cr->cobj(), &colour);
   cr->fill();
@@ -316,7 +315,7 @@ TimelineBody::draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
   cr->restore();
   
   // Shift for the next track
-  cr->translate(0, height);
+  cr->translate(0, height  + TimelineWidget::TrackPadding);
   
   // Recurse drawing into children
   BOOST_FOREACH( Track* child, track->get_child_tracks() )

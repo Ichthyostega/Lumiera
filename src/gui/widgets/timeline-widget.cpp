@@ -331,7 +331,7 @@ TimelineWidget::measure_branch_height(Track* track)
 {
   REQUIRE(track != NULL);
   
-  int height = track->get_height();
+  int height = track->get_height() + TrackPadding;
   
   // Recurse through all the children
   BOOST_FOREACH( Track* child, track->get_child_tracks() )

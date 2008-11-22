@@ -310,7 +310,7 @@ TimelineHeaderContainer::layout_headers_recursive(Track *track,
         indent,                                               // x
         offset,                                               // y
         max( header_width - indent, 0 ),                      // width
-        track_height - TimelineWidget::TrackPadding);         // height
+        track_height);                                        // height
       ASSERT(header_box.get_height() >= 0);
       
       // Cache the bounding box
@@ -330,7 +330,7 @@ TimelineHeaderContainer::layout_headers_recursive(Track *track,
         widget.show();
       
       // Offset for the next header
-      offset += track_height;
+      offset += track_height + TimelineWidget::TrackPadding;
     }
   else
     if(widget.is_visible())
