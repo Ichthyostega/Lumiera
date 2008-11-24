@@ -37,6 +37,7 @@ lumigui_SOURCES =															\
 	$(lumigui_srcdir)/workspace/actions.hpp									\
 	$(lumigui_srcdir)/workspace/workspace-window.cpp						\
 	$(lumigui_srcdir)/workspace/workspace-window.hpp						\
+	$(lumigui_srcdir)/dialogs/dialog.hpp									\
 	$(lumigui_srcdir)/dialogs/render.cpp									\
 	$(lumigui_srcdir)/dialogs/render.hpp									\
 	$(lumigui_srcdir)/dialogs/preferences-dialog.cpp						\

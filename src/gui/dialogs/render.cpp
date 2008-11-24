@@ -23,6 +23,7 @@
 #include "../gtk-lumiera.hpp"
 
 #include "render.hpp"
+#include "dialog.hpp"
 
 using namespace Gtk;
 
@@ -64,8 +65,8 @@ Render::Render(Window &parent) :
   v_box->pack_start(videoFrame);
 
   // Configure the dialog
-  v_box->set_spacing(4);
-  set_border_width(5);
+  v_box->set_spacing(BoxSpacing);
+  set_border_width(BorderPadding);
   set_resizable(false);
 
   // Configure the Cancel and Render buttons    

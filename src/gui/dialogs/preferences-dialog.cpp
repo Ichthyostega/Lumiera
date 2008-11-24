@@ -23,6 +23,7 @@
 #include "../gtk-lumiera.hpp"
 
 #include "preferences-dialog.hpp"
+#include "dialog.hpp"
 
 using namespace Gtk;
 
@@ -44,8 +45,8 @@ PreferencesDialog::PreferencesDialog(Window &parent) :
   v_box->pack_start(notebook);
 
   // Configure the dialog
-  v_box->set_spacing(4);
-  set_border_width(5);
+  v_box->set_spacing(BoxSpacing);
+  set_border_width(BorderPadding);
   set_resizable(false);
 
   // Configure the Cancel and OK buttons    
