@@ -24,8 +24,8 @@
  **
  */
 
-#ifndef RENDER_H
-#define RENDER_H
+#ifndef RENDER_HPP
+#define RENDER_HPP
 
 #include "../gtk-lumiera.hpp"
 
@@ -65,4 +65,4 @@ protected:
 }   // namespace dialogs
 }   // namespace gui
 
-#endif // RENDER_H
+#endif // RENDER_HPP
