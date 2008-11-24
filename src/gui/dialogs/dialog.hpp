@@ -30,7 +30,14 @@
 namespace gui {
 namespace dialogs {
 
+/**
+ * The space in pixels to pad the border of Lumiera dialog boxes.
+ **/
 static const int BorderPadding = 5;
+
+/**
+ * The spacing for VBoxes and HBoxes in Lumiera dialogs.
+ **/
 static const int BoxSpacing = 4;
 
 }   // namespace dialogs
