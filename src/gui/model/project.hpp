@@ -51,10 +51,6 @@ private:
   std::list<Sequence*> sequences;
   
   sigc::signal<void> sequenceListChangedSignal;
-  
-  // TEST CODE
-  Sequence sequenceA;
-  Sequence sequenceB;
 };
 
 }   // namespace model
