@@ -1,5 +1,5 @@
 /*
-  dialog.hpp  -  Definitions of globals for dialogs
+  sequence-ane.hpp  -  Definition of the sequence name dialog
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,28 +19,45 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file render.hpp
- ** This file contains definitions of globals for dialogs
+/** @file sequence-name.hpp
+ ** This file contains the definition of the sequence name dialog
  **
  */
 
-#ifndef DIALOG_HPP
-#define DIALOG_HPP
+#ifndef SEQUENCE_NAME_H
+#define SEQUENCE_NAME_H
+
+#include "../gtk-lumiera.hpp"
 
 namespace gui {
 namespace dialogs {
 
-/**
- * The space in pixels to pad the border of Lumiera dialog boxes.
- **/
-static const int BorderPadding = 8;
+/** 
+ * The defintion of sequence name dialog class
+ */
+class SequenceName : public Gtk::Dialog
+{
+public:
 
-/**
- * The spacing for VBoxes and HBoxes in Lumiera dialogs.
- **/
-static const int BoxSpacing = 6;
+  enum Action
+  {
+    AddSequence,
+    RenameSequence
+  };
+  
+public:
+  SequenceName(Gtk::Window &parent, SequenceName::Action action,
+    Glib::ustring default_title);
+    
+  const Glib::ustring get_name() const;
+
+private:
+  Gtk::HBox hBox;
+  Gtk::Label caption;
+  Gtk::Entry name;
+};
 
 }   // namespace dialogs
 }   // namespace gui
 
-#endif // DIALOG_HPP
+#endif // SEQUENCE_NAME_H

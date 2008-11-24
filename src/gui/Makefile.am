@@ -42,6 +42,8 @@ lumigui_SOURCES =															\
 	$(lumigui_srcdir)/dialogs/render.hpp									\
 	$(lumigui_srcdir)/dialogs/preferences-dialog.cpp						\
 	$(lumigui_srcdir)/dialogs/preferences-dialog.hpp						\
+	$(lumigui_srcdir)/dialogs/sequence-name.cpp								\
+	$(lumigui_srcdir)/dialogs/sequence-name.hpp								\
 	$(lumigui_srcdir)/panels/panel.cpp										\
 	$(lumigui_srcdir)/panels/panel.hpp										\
 	$(lumigui_srcdir)/panels/timeline-panel.cpp								\
