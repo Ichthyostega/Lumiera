@@ -34,35 +34,35 @@ using namespace Gtk;
 namespace gui {
 namespace dialogs {
 
-  /** 
-   * The defintion of render output dialog class
-   */
-  class Render : public Dialog
-  {
-  public:
-    Render(Window &parent);
+/** 
+ * The defintion of render output dialog class
+ */
+class Render : public Dialog
+{
+public:
+  Render(Window &parent);
 
-  protected:
-    void on_button_browse();
+protected:
+  void on_button_browse();
 
-  protected:
-    HBox outputFileHBox;
-    Label outputFileLabel;
-    Entry outputFilePathEntry;
+protected:
+  HBox outputFileHBox;
+  Label outputFileLabel;
+  Entry outputFilePathEntry;
 
-    Image browseButtonImage;
-    Button outputFileBrowseButton;
+  Image browseButtonImage;
+  Button outputFileBrowseButton;
 
-    HBox containerFormatHBox;
-    Label containerFormatLabel;
-    ComboBox containerFormat;
+  HBox containerFormatHBox;
+  Label containerFormatLabel;
+  ComboBox containerFormat;
 
-    Frame audioFrame;
+  Frame audioFrame;
 
-    Frame videoFrame;
+  Frame videoFrame;
 
-    Image renderButtonImage;
-  };
+  Image renderButtonImage;
+};
 
 }   // namespace dialogs
 }   // namespace gui

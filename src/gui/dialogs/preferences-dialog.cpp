@@ -29,31 +29,31 @@ using namespace Gtk;
 namespace gui {
 namespace dialogs {
 
-  PreferencesDialog::PreferencesDialog(Window &parent) :
-    Dialog(_("Preferences"), parent, true)
-  {
-    VBox *v_box = get_vbox();
-    g_assert(v_box != NULL);
+PreferencesDialog::PreferencesDialog(Window &parent) :
+  Dialog(_("Preferences"), parent, true)
+{
+  VBox *v_box = get_vbox();
+  g_assert(v_box != NULL);
 
-    interfaceBox.pack_start(interfaceThemeCombo, PACK_SHRINK);
-    interfaceBox.set_spacing(4);
-    interfaceBox.set_border_width(5);
+  interfaceBox.pack_start(interfaceThemeCombo, PACK_SHRINK);
+  interfaceBox.set_spacing(4);
+  interfaceBox.set_border_width(5);
 
-    notebook.append_page(interfaceBox, _("Interface"));
-    
-    v_box->pack_start(notebook);
+  notebook.append_page(interfaceBox, _("Interface"));
+  
+  v_box->pack_start(notebook);
 
-    // Configure the dialog
-    v_box->set_spacing(4);
-    set_border_width(5);
-    set_resizable(false);
+  // Configure the dialog
+  v_box->set_spacing(4);
+  set_border_width(5);
+  set_resizable(false);
 
-    // Configure the Cancel and OK buttons    
-    add_button(Stock::CANCEL, RESPONSE_CANCEL);
-    add_button(Stock::OK, RESPONSE_OK);
+  // Configure the Cancel and OK buttons    
+  add_button(Stock::CANCEL, RESPONSE_CANCEL);
+  add_button(Stock::OK, RESPONSE_OK);
 
-    show_all_children();
-  }
+  show_all_children();
+}
 
 }   // namespace dialogs
 }   // namespace gui

@@ -34,24 +34,24 @@ using namespace Gtk;
 namespace gui {
 namespace dialogs {
 
-  /** 
-   * The defintion of render output dialog class
-   */
-  class PreferencesDialog : public Dialog
-  {
-  public:
-    PreferencesDialog(Window &parent);
+/** 
+ * The defintion of render output dialog class
+ */
+class PreferencesDialog : public Dialog
+{
+public:
+  PreferencesDialog(Window &parent);
 
-  protected:
-    
+protected:
+  
 
-  protected:
-    Notebook notebook;
+protected:
+  Notebook notebook;
 
-    VBox interfaceBox;
-    ComboBox interfaceThemeCombo;
+  VBox interfaceBox;
+  ComboBox interfaceThemeCombo;
 
-  };
+};
 
 }   // namespace dialogs
 }   // namespace gui
