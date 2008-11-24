@@ -27,9 +27,7 @@
 #ifndef PREFERENCES_DIALOG_HPP
 #define PREFERENCES_DIALOG_HPP
 
-#include <gtkmm.h>
-
-using namespace Gtk;
+#include "../gtk-lumiera.hpp"
 
 namespace gui {
 namespace dialogs {
@@ -37,20 +35,19 @@ namespace dialogs {
 /** 
  * The defintion of render output dialog class
  */
-class PreferencesDialog : public Dialog
+class PreferencesDialog : public Gtk::Dialog
 {
 public:
-  PreferencesDialog(Window &parent);
+  PreferencesDialog(Gtk::Window &parent);
 
 protected:
   
 
 protected:
-  Notebook notebook;
+  Gtk::Notebook notebook;
 
-  VBox interfaceBox;
-  ComboBox interfaceThemeCombo;
-
+  Gtk::VBox interfaceBox;
+  Gtk::ComboBox interfaceThemeCombo;
 };
 
 }   // namespace dialogs

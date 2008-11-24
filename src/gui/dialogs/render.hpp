@@ -27,9 +27,7 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include <gtkmm.h>
-
-using namespace Gtk;
+#include "../gtk-lumiera.hpp"
 
 namespace gui {
 namespace dialogs {
@@ -37,31 +35,31 @@ namespace dialogs {
 /** 
  * The defintion of render output dialog class
  */
-class Render : public Dialog
+class Render : public Gtk::Dialog
 {
 public:
-  Render(Window &parent);
+  Render(Gtk::Window &parent);
 
 protected:
   void on_button_browse();
 
 protected:
-  HBox outputFileHBox;
-  Label outputFileLabel;
-  Entry outputFilePathEntry;
+  Gtk::HBox outputFileHBox;
+  Gtk::Label outputFileLabel;
+  Gtk::Entry outputFilePathEntry;
 
-  Image browseButtonImage;
-  Button outputFileBrowseButton;
+  Gtk::Image browseButtonImage;
+  Gtk::Button outputFileBrowseButton;
 
-  HBox containerFormatHBox;
-  Label containerFormatLabel;
-  ComboBox containerFormat;
+  Gtk::HBox containerFormatHBox;
+  Gtk::Label containerFormatLabel;
+  Gtk::ComboBox containerFormat;
 
-  Frame audioFrame;
+  Gtk::Frame audioFrame;
 
-  Frame videoFrame;
+  Gtk::Frame videoFrame;
 
-  Image renderButtonImage;
+  Gtk::Image renderButtonImage;
 };
 
 }   // namespace dialogs
