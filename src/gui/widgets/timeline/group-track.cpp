@@ -33,13 +33,13 @@ GroupTrack::GroupTrack()
 }
   
 void
-GroupTrack::add_child_track(timeline::Track* child)
+GroupTrack::add_child_track(Track* child)
 {
   REQUIRE(child != NULL);
   children.push_back(child);
 }
 
-const std::vector<timeline::Track*>&
+const std::vector<Track*>&
 GroupTrack::get_child_tracks() const
 {
   return children;

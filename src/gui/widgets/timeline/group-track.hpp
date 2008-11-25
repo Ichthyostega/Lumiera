@@ -37,9 +37,9 @@ class GroupTrack : public Track
 public:
   GroupTrack();
   
-  void add_child_track(timeline::Track* child);
+  void add_child_track(Track* child);
   
-  const std::vector<timeline::Track*>& get_child_tracks() const;
+  const std::vector<Track*>& get_child_tracks() const;
   
   virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
     TimelineViewWindow* constwindow)
@@ -47,7 +47,7 @@ public:
     
 private:
   //----- Data -----//
-  std::vector<timeline::Track*> children;
+  std::vector<Track*> children;
 };
 
 }   // namespace timeline
