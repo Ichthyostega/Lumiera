@@ -1,5 +1,5 @@
 /*
-  panel.cpp  -  Implementation of the Project class
+  project.cpp  -  Implementation of the Project class
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>

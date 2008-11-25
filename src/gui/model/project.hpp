@@ -21,7 +21,7 @@
 */
 /** @file project.hpp
  ** This file contains the definition of Project, a class which
- ** store project data, and wraps proc layer data
+ ** stores project data, and wraps proc layer data
  */
 
 #ifndef PROJECT_HPP
