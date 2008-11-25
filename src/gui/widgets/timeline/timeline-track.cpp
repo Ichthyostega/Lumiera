@@ -29,7 +29,7 @@ namespace gui {
 namespace widgets {
 namespace timeline {
   
-const std::vector<timeline::Track*> Track::NoChildren;
+const std::vector<Track*> Track::NoChildren;
 
 Track::Track() :
   expanded(true),
