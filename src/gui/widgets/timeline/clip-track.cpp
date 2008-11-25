@@ -1,5 +1,5 @@
 /*
-  clip-track.cpp  -  Implementation of the timeline group track object
+  clip-track.cpp  -  Implementation of the timeline clip track object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>

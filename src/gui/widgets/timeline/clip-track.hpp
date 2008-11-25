@@ -1,5 +1,5 @@
 /*
-  clip-track.hpp  -  Declaration of the timeline track object
+  clip-track.hpp  -  Declaration of the timeline clip track object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
