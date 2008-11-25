@@ -1,5 +1,5 @@
 /*
-  clip.hpp  -  Declaration of the timeline clip object
+  timeline-group-track.cpp  -  Implementation of the timeline group track object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -18,28 +18,40 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
-/** @file widgets/timeline/clip.hpp
- ** This file contains the definition of timeline clip object
- */
+* *****************************************************/
 
-#ifndef CLIP_HPP
-#define CLIP_HPP
+#include "timeline-group-track.hpp"
+
+using namespace Gtk;
 
 namespace gui {
 namespace widgets {
 namespace timeline {
-
-class Clip
+  
+GroupTrack::GroupTrack()
 {
-public:
-  Clip();
+}
+  
+void
+GroupTrack::add_child_track(Track* child)
+{
+  REQUIRE(child != NULL);
+  children.push_back(child);
+}
 
-};
+const std::vector<Track*>&
+GroupTrack::get_child_tracks() const
+{
+  return children;
+}
 
-
+void
+GroupTrack::draw_track(Cairo::RefPtr<Cairo::Context> cairo,
+    TimelineViewWindow* const window) const
+{
+  
+}
+  
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
-
-#endif // CLIP_HPP

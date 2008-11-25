@@ -70,14 +70,14 @@ lumigui_SOURCES =															\
 	$(lumigui_srcdir)/widgets/timeline/timeline-arrow-tool.hpp				\
 	$(lumigui_srcdir)/widgets/timeline/timeline-ibeam-tool.cpp				\
 	$(lumigui_srcdir)/widgets/timeline/timeline-ibeam-tool.hpp				\
-	$(lumigui_srcdir)/widgets/timeline/track.cpp							\
-	$(lumigui_srcdir)/widgets/timeline/track.hpp							\
-	$(lumigui_srcdir)/widgets/timeline/clip-track.cpp						\
-	$(lumigui_srcdir)/widgets/timeline/clip-track.hpp						\
-	$(lumigui_srcdir)/widgets/timeline/group-track.cpp						\
-	$(lumigui_srcdir)/widgets/timeline/group-track.hpp						\
-	$(lumigui_srcdir)/widgets/timeline/clip.cpp								\
-	$(lumigui_srcdir)/widgets/timeline/clip.hpp								\
+	$(lumigui_srcdir)/widgets/timeline/timeline-track.cpp					\
+	$(lumigui_srcdir)/widgets/timeline/timeline-track.hpp					\
+	$(lumigui_srcdir)/widgets/timeline/timeline-clip-track.cpp				\
+	$(lumigui_srcdir)/widgets/timeline/timeline-clip-track.hpp				\
+	$(lumigui_srcdir)/widgets/timeline/timeline-group-track.cpp				\
+	$(lumigui_srcdir)/widgets/timeline/timeline-group-track.hpp				\
+	$(lumigui_srcdir)/widgets/timeline/timeline-clip.cpp					\
+	$(lumigui_srcdir)/widgets/timeline/timeline-clip.hpp					\
 	$(lumigui_srcdir)/model/project.cpp										\
 	$(lumigui_srcdir)/model/project.hpp										\
 	$(lumigui_srcdir)/model/sequence.cpp									\

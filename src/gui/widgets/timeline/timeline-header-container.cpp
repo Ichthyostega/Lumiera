@@ -24,7 +24,7 @@
 #include <boost/foreach.hpp>
 
 #include "timeline-header-container.hpp"
-#include "track.hpp"
+#include "timeline-track.hpp"
 #include "../timeline-widget.hpp"
 
 using namespace Gtk;

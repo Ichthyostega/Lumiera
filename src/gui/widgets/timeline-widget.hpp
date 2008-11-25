@@ -33,8 +33,8 @@
 #include "timeline/timeline-tool.hpp"
 #include "timeline/timeline-arrow-tool.hpp"
 #include "timeline/timeline-ibeam-tool.hpp"
-#include "timeline/group-track.hpp"
-#include "timeline/clip-track.hpp"
+#include "timeline/timeline-group-track.hpp"
+#include "timeline/timeline-clip-track.hpp"
 
 namespace gui {
 namespace widgets {

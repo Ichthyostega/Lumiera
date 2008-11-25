@@ -1,5 +1,5 @@
 /*
-  track.hpp  -  Declaration of the timeline group track object
+  timeline-group-track.hpp  -  Declaration of the timeline group track object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,65 +19,39 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file widgets/timeline/track.hpp
- ** This file contains the definition of timeline track object
+/** @file widgets/timeline/timeline-group-track.hpp
+ ** This file contains the definition of group track timeline objects
  */
 
-#ifndef TRACK_HPP
-#define TRACK_HPP
+#ifndef TIMELINE_GROUP_TRACK_HPP
+#define TIMELINE_GROUP_TRACK_HPP
 
-#include "../../gtk-lumiera.hpp"
+#include "timeline-track.hpp"
 
 namespace gui {
-namespace widgets { 
+namespace widgets {
 namespace timeline {
   
-class TimelineViewWindow;
-
-class Track
+class GroupTrack : public Track
 {
 public:
-  Track();
-
+  GroupTrack();
+  
   void add_child_track(Track* child);
-
-  virtual const std::vector<Track*>& get_child_tracks() const;
   
-  Gtk::Widget& get_header_widget();
+  const std::vector<Track*>& get_child_tracks() const;
   
-  int get_height() const;
-
-  Glib::ustring get_title();
-  
-  bool get_expanded() const;
-  
-  void set_expanded(bool expanded);
-
   virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
-    TimelineViewWindow* const window)
-    const = 0;
-
+    TimelineViewWindow* constwindow)
+    const;
+    
 private:
-
-  bool expanded;
-
-  //----- Header Widgets ------//
-  
-  Gtk::VBox headerWidget;
-  
-  Gtk::ToolButton enableButton;
-  Gtk::ToolButton lockButton;
-  
-  Gtk::Entry titleBox;
-  Gtk::Toolbar buttonBar;
-  
-private:
-  static const std::vector<Track*> NoChildren;
+  //----- Data -----//
+  std::vector<Track*> children;
 };
-
 
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
 
-#endif // TRACK_HPP
+#endif // TIMELINE_GROUP_TRACK_HPP

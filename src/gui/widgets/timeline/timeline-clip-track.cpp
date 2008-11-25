@@ -1,5 +1,5 @@
 /*
-  group-track.hpp  -  Declaration of the timeline group track object
+  timeline-clip-track.cpp  -  Implementation of the timeline clip track object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -18,40 +18,38 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
-/** @file widgets/timeline/group-track.hpp
- ** This file contains the definition of group track timeline objects
- */
+* *****************************************************/
 
-#ifndef GROUP_TRACK_HPP
-#define GROUP_TRACK_HPP
+#include "timeline-clip-track.hpp"
+#include "timeline-view-window.hpp"
 
-#include "track.hpp"
+using namespace Gtk;
 
 namespace gui {
 namespace widgets {
 namespace timeline {
   
-class GroupTrack : public Track
+ClipTrack::ClipTrack()
 {
-public:
-  GroupTrack();
+}
+
+void
+ClipTrack::draw_track(Cairo::RefPtr<Cairo::Context> cairo,
+    TimelineViewWindow* const window) const
+{
   
-  void add_child_track(Track* child);
   
-  const std::vector<Track*>& get_child_tracks() const;
+  cairo->rectangle(window->time_to_x(0), 1,
+    window->time_to_x(500000) - window->time_to_x(0),
+    get_height() - 2);
   
-  virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
-    TimelineViewWindow* constwindow)
-    const;
-    
-private:
-  //----- Data -----//
-  std::vector<Track*> children;
-};
+  cairo->set_source_rgb(0.5, 0.5, 0.5);
+  cairo->fill_preserve();
+  
+  cairo->set_source_rgb(0.25, 0.25, 0.25);
+  cairo->stroke();
+}
 
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
-
-#endif // GROUP_TRACK_HPP

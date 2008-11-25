@@ -1,5 +1,5 @@
 /*
-  group-track.cpp  -  Implementation of the timeline group track object
+  timeline-track.cpp  -  Implementation of the timeline track object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,7 +20,8 @@
  
 * *****************************************************/
 
-#include "group-track.hpp"
+#include "timeline-track.hpp"
+#include "../../window-manager.hpp"
 
 using namespace Gtk;
 
@@ -28,30 +29,59 @@ namespace gui {
 namespace widgets {
 namespace timeline {
   
-GroupTrack::GroupTrack()
+const std::vector<timeline::Track*> Track::NoChildren;
+
+Track::Track() :
+  expanded(true),
+  enableButton(Gtk::StockID("track_enabled")),
+  lockButton(Gtk::StockID("track_unlocked"))
 {
-}
+  buttonBar.append(enableButton);
+  buttonBar.append(lockButton);
   
-void
-GroupTrack::add_child_track(Track* child)
-{
-  REQUIRE(child != NULL);
-  children.push_back(child);
+  buttonBar.set_toolbar_style(TOOLBAR_ICONS);
+  buttonBar.set_icon_size(WindowManager::MenuIconSize);
+  
+
+  headerWidget.pack_start(titleBox, PACK_SHRINK);
+  headerWidget.pack_start(buttonBar, PACK_SHRINK);
 }
 
 const std::vector<Track*>&
-GroupTrack::get_child_tracks() const
+Track::get_child_tracks() const
 {
-  return children;
+  return NoChildren;
 }
 
-void
-GroupTrack::draw_track(Cairo::RefPtr<Cairo::Context> cairo,
-    TimelineViewWindow* const window) const
+Gtk::Widget&
+Track::get_header_widget()
 {
-  
+  return headerWidget;
 }
-  
+
+int
+Track::get_height() const
+{
+  return 100;
+}
+
+Glib::ustring
+Track::get_title()
+{
+  return "Hello";
+}
+
+bool Track::get_expanded() const
+{
+  return expanded;
+}
+
+void Track::set_expanded(bool expanded)
+{
+  this->expanded = expanded;
+}
+
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
+
