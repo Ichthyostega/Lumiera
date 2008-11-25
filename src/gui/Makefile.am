@@ -21,9 +21,9 @@ lumigui_srcdir = $(top_srcdir)/src/gui
 #lumigui_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
 
 lumigui_CPPFLAGS = $(AM_CPPFLAGS) \
-	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"	\
-	-DPACKAGE_SRC_DIR=\""$(srcdir)"\"							\
-	-DPACKAGE_DATA_DIR=\""$(datadir)"\"							\
+	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"				\
+	-DPACKAGE_SRC_DIR=\""$(srcdir)"\"										\
+	-DPACKAGE_DATA_DIR=\""$(datadir)"\"										\
 	$(LUMIERA_GUI_CFLAGS)
 
 bin_PROGRAMS += lumigui
@@ -99,9 +99,9 @@ lumigui_LDFLAGS =
 # $(LIBS) $(X_PRE_LIBS) $(X_LIBS) $(X_EXTRA_LIBS)
 lumigui_LDADD = $(LUMIERA_GUI_LIBS) liblumicommon.a liblumiera.a $(NOBUGMT_LUMIERA_LIBS)
 
-lumigui_DEPENDENCIES =											\
-	$(top_builddir)/lumiera_ui.rc								\
-	$(top_builddir)/liblumicommon.a								\
+lumigui_DEPENDENCIES =														\
+	$(top_builddir)/lumiera_ui.rc											\
+	$(top_builddir)/liblumicommon.a											\
 	$(top_builddir)/liblumiera.a
 
 $(top_builddir)/lumiera_ui.rc:
