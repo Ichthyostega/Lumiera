@@ -1,5 +1,5 @@
 /*
-  sequence.hpp  -  Definition of the Sequence class
+  clip-track.hpp  -  Declaration of a clip containing track object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,39 +19,34 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file sequence.hpp
- ** This file contains the definition of Sequence, a class which
- ** contains a 
+/**
+ * @file widgets/timeline/clip-track.hpp
+ * This file contains the definition of timeline track objects which
+ * contain clips.
  */
 
-#ifndef SEQUENCE_HPP
-#define SEQUENCE_HPP
+#ifndef CLIP_TRACK_HPP
+#define CLIP_TRACK_HPP
 
-#include "../gtk-lumiera.hpp"
+#include "track.hpp"
 
 namespace gui {
 namespace model {
   
-class Track;
-
-class Sequence
+class ClipTrack : public Track
 {
 public:
-  Sequence();
+  ClipTrack();
   
-  const Glib::ustring get_name() const;
-  
-  void set_name(const Glib::ustring &name);
-  
-  const std::list<Track*>& get_tracks() const;
+
   
 private:
-  Glib::ustring name;
   
-  std::list<Track*> tracks;
+  //std::vector<Clip*> clips;
+  
 };
 
-}   // namespace model
+}   // namespace timeline
 }   // namespace gui
 
-#endif // SEQUENCE_HPP
+#endif // CLIP_TRACK_HPP

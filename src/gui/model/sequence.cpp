@@ -42,5 +42,11 @@ Sequence::set_name(const Glib::ustring &name)
   this->name = name;
 }
 
+const std::list<Track*>&
+Sequence::get_tracks() const
+{
+  return tracks;
+}
+
 }   // namespace model
 }   // namespace gui

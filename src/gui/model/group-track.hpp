@@ -1,5 +1,5 @@
 /*
-  sequence.hpp  -  Definition of the Sequence class
+  group-track.hpp  -  Declaration of the timeline group track object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,39 +19,33 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file sequence.hpp
- ** This file contains the definition of Sequence, a class which
- ** contains a 
+/** @file widgets/timeline/group-track.hpp
+ ** This file contains the definition of group track timeline objects
  */
 
-#ifndef SEQUENCE_HPP
-#define SEQUENCE_HPP
+#ifndef GROUP_TRACK_HPP
+#define GROUP_TRACK_HPP
 
-#include "../gtk-lumiera.hpp"
+#include "track.hpp"
 
 namespace gui {
 namespace model {
   
-class Track;
-
-class Sequence
+class GroupTrack : public Track
 {
 public:
-  Sequence();
+  GroupTrack();
   
-  const Glib::ustring get_name() const;
+  void add_child_track(Track* child);
   
-  void set_name(const Glib::ustring &name);
-  
-  const std::list<Track*>& get_tracks() const;
-  
+  const std::vector<Track*>& get_child_tracks() const;
+      
 private:
-  Glib::ustring name;
-  
-  std::list<Track*> tracks;
+  //----- Data -----//
+  std::vector<Track*> children;
 };
 
 }   // namespace model
 }   // namespace gui
 
-#endif // SEQUENCE_HPP
+#endif // GROUP_TRACK_HPP

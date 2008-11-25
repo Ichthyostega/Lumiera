@@ -1,5 +1,5 @@
 /*
-  sequence.hpp  -  Definition of the Sequence class
+  track.cpp  -  Implementation of the Track class
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -18,40 +18,33 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
-/** @file sequence.hpp
- ** This file contains the definition of Sequence, a class which
- ** contains a 
- */
+* *****************************************************/
 
-#ifndef SEQUENCE_HPP
-#define SEQUENCE_HPP
+#include <boost/foreach.hpp>
 
-#include "../gtk-lumiera.hpp"
+#include "track.hpp"
 
 namespace gui {
 namespace model {
-  
-class Track;
 
-class Sequence
+const std::vector<Track*> Track::NoChildren;
+
+Track::Track()
 {
-public:
-  Sequence();
-  
-  const Glib::ustring get_name() const;
-  
-  void set_name(const Glib::ustring &name);
-  
-  const std::list<Track*>& get_tracks() const;
-  
-private:
-  Glib::ustring name;
-  
-  std::list<Track*> tracks;
-};
+
+}
+
+const std::vector<Track*>&
+Track::get_child_tracks() const
+{
+  return NoChildren;
+}
+
+Glib::ustring
+Track::get_title()
+{
+  return "Hello";
+}
 
 }   // namespace model
 }   // namespace gui
-
-#endif // SEQUENCE_HPP
