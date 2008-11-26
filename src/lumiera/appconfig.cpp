@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-#include "lib/appconfig.hpp"
-#include "common/error.hpp"
+#include "lumiera/appconfig.hpp"
+#include "include/error.hpp"
 #include "common/util.hpp"
 
 

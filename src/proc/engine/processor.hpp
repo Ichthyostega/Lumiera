@@ -24,7 +24,7 @@
 #ifndef ENGINE_PROCESSOR_H
 #define ENGINE_PROCESSOR_H
 
-#include "proc/lumiera.hpp"
+#include "proc/common.hpp"
 #include "proc/state.hpp"
 
 

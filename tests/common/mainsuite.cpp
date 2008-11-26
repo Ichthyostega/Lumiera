@@ -23,7 +23,7 @@
 
 #include "common/test/suite.hpp"
 #include "common/test/testoption.hpp"
-#include "lib/appconfig.hpp"
+#include "lumiera/appconfig.hpp"
 
 using lumiera::Appconfig;
 using lumiera::ON_GLOBAL_INIT;

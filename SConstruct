@@ -87,6 +87,8 @@ def setupBasicEnvironment():
     # setup search path for Lumiera plugins
     appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR\\"'
                                    ,'LUMIERA_PLUGIN_PATH=\\"$DESTDIR/lib/lumiera\\"') 
+    appendCppDefine(env,'PKGDATADIR','LUMIERA_CONFIG_PATH=\\"$PKGLIBDIR\\"'
+                                    ,'LUMIERA_CONFIG_PATH=\\"$DESTDIR/share/lumiera\\"') 
     
     prepareOptionsHelp(opts,env)
     opts.Save(OPTIONSCACHEFILE, env)
@@ -149,6 +151,7 @@ def defineCmdlineOptions():
 #                   allowed_values=('auto', 'i386', 'i686', 'x86_64' ), ignorecase=2)
         ,PathOption('DESTDIR', 'Installation dir prefix', '/usr/local')
         ,PathOption('PKGLIBDIR', 'Installation dir for plugins, defaults to DESTDIR/lib/lumiera', '',PathOption.PathAccept)
+        ,PathOption('PKGDATADIR', 'Installation dir for default config, usually DESTDIR/share/lumiera', '',PathOption.PathAccept)
         ,PathOption('SRCTAR', 'Create source tarball prior to compiling', '..', PathOption.PathAccept)
         ,PathOption('DOCTAR', 'Create tarball with dev documentaionl', '..', PathOption.PathAccept)
      )
@@ -306,7 +309,8 @@ def defineBuildTargets(env, artifacts):
     
     objback =   srcSubtree(env,'$SRCDIR/backend') 
     objproc =   srcSubtree(env,'$SRCDIR/proc')
-    objlib  = ( srcSubtree(env,'$SRCDIR/common')
+    objlib  = ( srcSubtree(env,'$SRCDIR/lumiera')
+              + srcSubtree(env,'$SRCDIR/common')
               + srcSubtree(env,'$SRCDIR/lib')
               )
     objplug = srcSubtree(env,'$SRCDIR/plugin', isShared=True)
@@ -316,7 +320,7 @@ def defineBuildTargets(env, artifacts):
             )
     
     
-    artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/main.cpp']+ core )
+    artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/lumiera/main.cpp']+ core )
     artifacts['plugins'] = env.LoadableModule('$BINDIR/lumiera-plugin', objplug)
     
     # the Lumiera GTK GUI

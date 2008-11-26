@@ -27,7 +27,7 @@
 #include "pre.hpp"
 
 
-#include "proc/lumiera.hpp"
+#include "proc/common.hpp"
 #include "proc/mobject/builder/buildertool.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/asset.hpp"                 // TODO finally not needed?

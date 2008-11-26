@@ -27,7 +27,7 @@
  ** The idea is that configuration and some globally used flag 
  ** declarations are to be kept in one central location. Normally,
  ** this header will be included via some of the basic headers like
- ** error.hpp, which in turn gets included by proc/lumiera.hpp
+ ** error.hpp, which in turn gets included by proc/common.hpp
  **
  ** @par Besides the usual guarded declarations, this header contains
  ** one section with the corresponding <b>definitions</b>. This section
@@ -45,8 +45,8 @@
 
 #include <syslog.h>
 #include <nobug.h>
-#include "lib/appconfig.hpp"
-#include "common/error.hpp"  ///< make assertions throw instead of abort()
+#include "lumiera/appconfig.hpp"
+#include "include/error.hpp"  ///< make assertions throw instead of abort()
 
 
   /* declare flags used throughout the code base... */

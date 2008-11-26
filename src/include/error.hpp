@@ -25,13 +25,13 @@
 #define LUMIERA_ERROR_HPP_
 
 #include <string>
-#include "proc/nobugcfg.hpp"
-#include "lib/appconfig.hpp"
+#include "include/nobugcfg.hpp"
+#include "lumiera/appconfig.hpp"
 #include "lib/error.h"
 
 
-namespace lumiera
-  {
+namespace lumiera {
+  
   using std::string;
 
 

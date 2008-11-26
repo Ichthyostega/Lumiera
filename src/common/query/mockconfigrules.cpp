@@ -28,7 +28,7 @@
 #include "proc/asset/pipe.hpp"
 
 
-#include "proc/nobugcfg.hpp"
+#include "include/nobugcfg.hpp"
 #include "common/util.hpp"
 
 using util::isnil;

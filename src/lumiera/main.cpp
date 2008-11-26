@@ -2,7 +2,8 @@
   main.cpp  -  start the Lumiera Application
 
   Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
+    2007-2008,          Joel Holdsworth <joel@airwebreathe.org.uk>
+                        Christian Thaeter <ct@pipapo.org>
                         Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
@@ -23,7 +24,7 @@
 
 #include <iostream>
 
-#include "proc/lumiera.hpp"
+#include "proc/common.hpp"
 
 using std::cout;
 using std::endl;

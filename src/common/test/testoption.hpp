@@ -24,7 +24,7 @@
 #ifndef TESTHELPER_TESTOPTION_H
 #define TESTHELPER_TESTOPTION_H
 
-#include "common/cmdline.hpp"
+#include "lib/cmdline.hpp"
 
 #include <string>
 #include <iostream>

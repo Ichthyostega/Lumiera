@@ -53,8 +53,8 @@
 #include <tr1/memory>
 
 
-namespace lumiera
-  {
+namespace lumiera {
+  
   using std::tr1::shared_ptr;
   using std::tr1::weak_ptr;
   

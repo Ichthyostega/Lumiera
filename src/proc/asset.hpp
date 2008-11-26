@@ -56,7 +56,7 @@
 
 
 #include "proc/asset/category.hpp"
-#include "common/error.hpp"
+#include "include/error.hpp"
 #include "common/p.hpp"
 
 #include <boost/type_traits/is_base_of.hpp>

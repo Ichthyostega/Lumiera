@@ -1,8 +1,10 @@
 #include <stdio.h>
 
-#include "hello_interface.h"
 #include "lumiera/interfacedescriptor.h"
 #include "lumiera/config_interface.h"
+
+#include "tests/lumiera/hello_interface.h"
+
 
 LUMIERA_PLUGIN_INTERFACEHANDLE;
 

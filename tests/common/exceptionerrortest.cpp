@@ -23,7 +23,7 @@
 
 
 #include "lib/error.h"
-#include "common/error.hpp"
+#include "include/error.hpp"
 
 #include "common/test/run.hpp"
 #include "common/util.hpp"

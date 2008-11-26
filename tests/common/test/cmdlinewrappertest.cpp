@@ -22,7 +22,7 @@
 
 
 #include "common/test/run.hpp"
-#include "common/cmdline.hpp"
+#include "lib/cmdline.hpp"
 #include "common/util.hpp"
 
 #include <iostream>

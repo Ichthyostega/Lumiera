@@ -22,9 +22,9 @@
 
 
 
-#include "common/cmdline.hpp"
+#include "lib/cmdline.hpp"
 #include "common/util.hpp"
-#include "proc/nobugcfg.hpp"
+#include "include/nobugcfg.hpp"
 
 #include <boost/regex.hpp>
 #include <boost/algorithm/string/split.hpp>

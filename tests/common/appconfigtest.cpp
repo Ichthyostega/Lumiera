@@ -25,7 +25,7 @@
 #include "common/test/run.hpp"
 #include "common/util.hpp"
 
-#include "lib/appconfig.hpp"
+#include "lumiera/appconfig.hpp"
 
 
 

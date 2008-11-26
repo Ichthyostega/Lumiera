@@ -27,7 +27,7 @@
 
 #include "pre.hpp"
 
-#include "proc/lumiera.hpp"
+#include "proc/common.hpp"
 #include "common/frameid.hpp"
 #include "proc/engine/buffhandle.hpp"
 

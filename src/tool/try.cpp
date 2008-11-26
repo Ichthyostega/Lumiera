@@ -15,7 +15,7 @@
 
 
 #include <nobug.h>
-//#include "proc/nobugcfg.hpp"
+//#include "include/nobugcfg.hpp"
 
 #include <iostream>
 //#include <typeinfo>
