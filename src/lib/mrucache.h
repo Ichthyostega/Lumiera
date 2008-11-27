@@ -30,7 +30,7 @@
  * @file
  * Most recent used cache
  * Elements (addressed by a LList node) are either checked in the cache and thereby subject of aging
- * or checked out under control of the user. Most operations require that the chache is locked. This locking
+ * or checked out under control of the user. Most operations require that the cache is locked. This locking
  * must be done from elsewhere.
  */
 
@@ -63,7 +63,7 @@ lumiera_mrucache_init (LumieraMruCache self, lumiera_cache_destructor_fn destruc
 
 /**
  * Destroy a cache.
- * frees all checked in items.
+ * calls the registered destructor and frees all checked in items.
  * @param self cache to be destroyed
  * @return self
  */
@@ -133,7 +133,8 @@ static inline void
 lumiera_mrucache_checkout (LumieraMruCache self, LList node)
 {
   REQUIRE (self);
-  REQUIRE (node && llist_is_member (&self->cache_list, node));   /* speedup loop warning :P, this check is costly */
+  /* speedup loop warning :P, this check is costly */
+  REQUIRE (node && llist_is_member (&self->cache_list, node), "Node not in cache");
   llist_unlink (node);
   --self->cached;
 }
@@ -144,7 +145,7 @@ lumiera_mrucache_checkout (LumieraMruCache self, LList node)
  * This function is used to get a new element by deleting the oldest least used one from the cache.
  * The cache must be locked for this operation.
  * @param self cache
- * @return pointer to the uninitialized memory ready for being reused
+ * @return pointer to the uninitialized memory ready for being reused or NULL when no element was available
  */
 static inline void*
 lumiera_mrucache_pop (LumieraMruCache self)
