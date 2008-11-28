@@ -41,7 +41,7 @@
  */
 
 NOBUG_DEFINE_FLAG_PARENT (config_all, lumiera_all);
-NOBUG_DEFINE_FLAG_PARENT (config, config_all);
+NOBUG_DEFINE_FLAG_PARENT (configsys, config_all);
 NOBUG_DEFINE_FLAG_PARENT (config_typed, config_all);
 NOBUG_DEFINE_FLAG_PARENT (config_file, config_all);
 NOBUG_DEFINE_FLAG_PARENT (config_item, config_all);
@@ -94,12 +94,12 @@ LumieraConfig lumiera_global_config = NULL;
 int
 lumiera_config_init (const char* path)
 {
-  TRACE (config);
+  TRACE (configsys);
   REQUIRE (!lumiera_global_config, "Configuration subsystem already initialized");
   REQUIRE (path);
 
   NOBUG_INIT_FLAG (config_all);
-  NOBUG_INIT_FLAG (config);
+  NOBUG_INIT_FLAG (configsys);
   NOBUG_INIT_FLAG (config_typed);
   NOBUG_INIT_FLAG (config_file);
   NOBUG_INIT_FLAG (config_item);
@@ -112,7 +112,7 @@ lumiera_config_init (const char* path)
   lumiera_configitem_init (&lumiera_global_config->files);
   lumiera_configitem_init (&lumiera_global_config->TODO_unknown);
 
-  lumiera_mutex_init (&lumiera_global_config->lock, "config mutex", &NOBUG_FLAG (config));
+  lumiera_mutex_init (&lumiera_global_config->lock, "config mutex", &NOBUG_FLAG (configsys));
 
   lumiera_config_setdefault (lumiera_tmpbuf_snprintf (SIZE_MAX, "config.path = %s", path));
 
@@ -128,10 +128,10 @@ lumiera_config_init (const char* path)
 void
 lumiera_config_destroy ()
 {
-  TRACE (config);
+  TRACE (configsys);
   if (lumiera_global_config)
     {
-      lumiera_mutex_destroy (&lumiera_global_config->lock, &NOBUG_FLAG (config));
+      lumiera_mutex_destroy (&lumiera_global_config->lock, &NOBUG_FLAG (configsys));
       lumiera_configitem_destroy (&lumiera_global_config->defaults, &lumiera_global_config->keys);
       lumiera_configitem_destroy (&lumiera_global_config->files, &lumiera_global_config->keys);
       lumiera_configitem_destroy (&lumiera_global_config->TODO_unknown, &lumiera_global_config->keys);
@@ -140,7 +140,7 @@ lumiera_config_destroy ()
       lumiera_global_config = NULL;
     }
   else
-    WARN (config, "Tried to destroy non initialized config subsystem");
+    WARN (configsys, "Tried to destroy non initialized config subsystem");
 }
 
 
@@ -148,7 +148,7 @@ int
 lumiera_config_load (const char* file)
 {
   (void) file;
-  TRACE (config);
+  TRACE (configsys);
   UNIMPLEMENTED();
   return -1;
 }
@@ -157,7 +157,7 @@ lumiera_config_load (const char* file)
 int
 lumiera_config_save ()
 {
-  TRACE (config);
+  TRACE (configsys);
   UNIMPLEMENTED();
   return -1;
 }
@@ -167,7 +167,7 @@ int
 lumiera_config_purge (const char* filename)
 {
   (void) filename;
-  TRACE (config);
+  TRACE (configsys);
 
   UNIMPLEMENTED();
   return -1;
@@ -177,7 +177,7 @@ lumiera_config_purge (const char* filename)
 const char*
 lumiera_config_get (const char* key, const char** value)
 {
-  TRACE (config);
+  TRACE (configsys);
   REQUIRE (key);
   REQUIRE (value);
 
@@ -197,7 +197,7 @@ lumiera_config_get (const char* key, const char** value)
       *value = getenv (env);
       if (*value)
         {
-          NOTICE (config, "envvar override for config %s = %s", env, *value);
+          NOTICE (configsys, "envvar override for config %s = %s", env, *value);
         }
       else
         {
@@ -209,12 +209,12 @@ lumiera_config_get (const char* key, const char** value)
               *value = item->delim+1;
             }
           else
-            LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
+            LUMIERA_ERROR_SET (configsys, CONFIG_NO_ENTRY);
         }
     }
   else
     {
-      LUMIERA_ERROR_SET (config, CONFIG_SYNTAX_KEY);
+      LUMIERA_ERROR_SET (configsys, CONFIG_SYNTAX_KEY);
     }
 
   return *value;
@@ -224,7 +224,7 @@ lumiera_config_get (const char* key, const char** value)
 const char*
 lumiera_config_get_default (const char* key, const char** value)
 {
-  TRACE (config);
+  TRACE (configsys);
   REQUIRE (key);
   REQUIRE (value);
 
@@ -246,7 +246,7 @@ lumiera_config_get_default (const char* key, const char** value)
 LumieraConfigitem
 lumiera_config_set (const char* key, const char* delim_value)
 {
-  TRACE (config);
+  TRACE (configsys);
 
   LumieraConfigitem item = lumiera_config_lookup_item_find (&lumiera_global_config->keys, key);
   if (item && item->parent != &lumiera_global_config->defaults)
@@ -288,12 +288,12 @@ lumiera_config_set (const char* key, const char* delim_value)
 LumieraConfigitem
 lumiera_config_setdefault (const char* line)
 {
-  TRACE (config);
+  TRACE (configsys);
   REQUIRE (line);
 
   LumieraConfigitem item = NULL;
 
-  LUMIERA_MUTEX_SECTION (config, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (configsys, &lumiera_global_config->lock)
     {
       const char* key = line;
       while (*key && isspace (*key))
@@ -309,7 +309,7 @@ lumiera_config_setdefault (const char* line)
             {
               ENSURE (item->delim, "default must be a configentry with key=value or key<delegate syntax");
               ENSURE (*item->delim == '=' || *item->delim == '<', "default must be a configentry with key=value or key<delegate syntax");
-              TRACE (config, "registering default: '%s'", item->line);
+              TRACE (configsys, "registering default: '%s'", item->line);
 
               llist_insert_head (&lumiera_global_config->defaults.childs, &item->link);
               item->parent = &lumiera_global_config->defaults;
@@ -346,7 +346,7 @@ int
 lumiera_config_reset (const char* key)
 {
   (void) key;
-  TRACE (config);
+  TRACE (configsys);
   UNIMPLEMENTED();
   return -1;
 }
@@ -358,7 +358,7 @@ lumiera_config_info (const char* key, const char** filename, unsigned* line)
   (void) key;
   (void) filename;
   (void) line;
-  TRACE (config);
+  TRACE (configsys);
   UNIMPLEMENTED();
   return -1;
 }

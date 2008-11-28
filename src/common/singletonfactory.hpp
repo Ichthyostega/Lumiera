@@ -98,8 +98,6 @@ namespace lumiera
        */
       static void destroy()
         {
-          TRACE (singleton, "Singleton: triggering destruction");
-          
           REQUIRE (!isDead_);
           Create<SI>::destroy (pInstance_);
           pInstance_ = 0;

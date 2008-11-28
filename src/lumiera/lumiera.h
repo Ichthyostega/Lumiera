@@ -34,9 +34,6 @@
 //TODO: System includes//
 #include <nobug.h>
 
-NOBUG_DECLARE_FLAG (all);
-NOBUG_DECLARE_FLAG (lumiera_all);
-NOBUG_DECLARE_FLAG (lumiera);
 
 
 /**

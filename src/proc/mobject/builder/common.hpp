@@ -1,8 +1,8 @@
 /*
-  NoBugCfg  -  NoBug definitions and initialisation for the Proc-Layer 
+  COMMON.hpp  -  common definitions for the Builder subsystem
  
   Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -18,28 +18,23 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
 
+
+#ifndef MOBJECT_BUILDER_COMMON_H
+#define MOBJECT_BUILDER_COMMON_H
 
 #include "include/nobugcfg.hpp"
 
-#define NOBUG_INIT_DEFS_
-#include "include/nobugcfg.hpp"
-#undef NOBUG_INIT_DEFS_
 
-
-namespace lumiera
-  {
-  void 
-  initialize_NoBug () 
-  {
-    NOBUG_INIT;
+namespace mobject {
+  namespace builder {
     
-#ifdef DEBUG
-    static uint callCount = 0;
-    ASSERT ( 0 == callCount++ );
-#endif    
-  }
+    
+    NOBUG_DECLARE_FLAG (buildermem);
+    
+    
+  } // namespace builder
 
-}
-
+} // namespace mobject
+#endif

@@ -82,7 +82,7 @@ lumiera_config_number_get (const char* key, long long* value)
                 }
             }
           else
-            LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
+            LUMIERA_ERROR_SET (configsys, CONFIG_NO_ENTRY);
         }
     }
 
@@ -208,7 +208,7 @@ lumiera_config_string_get (const char* key, const char** value)
               *value = scan_string (raw_value);
             }
           else
-            LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
+            LUMIERA_ERROR_SET (configsys, CONFIG_NO_ENTRY);
         }
     }
 
@@ -253,7 +253,7 @@ lumiera_config_wordlist_get (const char* key, const char** value)
               *value = raw_value;
             }
           else
-            LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
+            LUMIERA_ERROR_SET (configsys, CONFIG_NO_ENTRY);
 
           TODO ("remove the ERROR_SET because config_get sets it already? also in all other getters in this file");
         }
@@ -322,7 +322,7 @@ lumiera_config_word_get (const char* key, const char** value)
               *value = scan_word (raw_value);
             }
           else
-            LUMIERA_ERROR_SET (config, CONFIG_NO_ENTRY);
+            LUMIERA_ERROR_SET (configsys, CONFIG_NO_ENTRY);
         }
     }
 

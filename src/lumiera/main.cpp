@@ -35,8 +35,7 @@ using lumiera::ON_GLOBAL_SHUTDOWN;
 
 int main (int argc, char* argv[])
 {
-  cout << "*** Lumiera NLE for Linux ***" << endl
-       << "    Version: " << Appconfig::get("version") << "\n";
+  cout << "*** Lumiera NLE for Linux ***" << endl;
   
   Appconfig::lifecycle (ON_GLOBAL_INIT);
   

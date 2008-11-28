@@ -47,7 +47,10 @@ using proc_interface::AssetManager;
 namespace mobject
   {
   using lumiera::P;
-
+  
+  NOBUG_DECLARE_FLAG (mobjectmem);
+  
+  
   namespace session
     {
     class MObjectFactory;

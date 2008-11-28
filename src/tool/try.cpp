@@ -41,7 +41,11 @@ main (int argc, char* argv[])
     NOBUG_INIT;
     
     cout <<  "\n.gulp.\n";
-    
+   
+   int * p = 0;
+
+   int oh = *p;
+
     
     return 0;
   }

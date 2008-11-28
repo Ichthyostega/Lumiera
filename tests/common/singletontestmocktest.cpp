@@ -57,11 +57,11 @@ namespace lumiera
         TestSingletonO(Symbol ty="TestSingletonO")
             : callCnt (0), typid(ty), msg ("%s::doIt() call=%d\n")
         {
-          TRACE (singleton, "ctor %s", typid);
+          TRACE (test, "ctor %s", typid);
         }
         virtual ~TestSingletonO()
         {
-          TRACE (singleton, "dtor %s", typid);
+          TRACE (test, "dtor %s", typid);
         }
 
         void doIt ()

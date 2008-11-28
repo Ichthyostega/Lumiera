@@ -23,6 +23,7 @@
 
 
 //TODO: Lumiera header includes//
+#include "include/nobugcfg.hpp"
 #include "lumiera/lumiera.h"
 #include "lumiera/config_interface.h"
 
@@ -36,9 +37,6 @@
  *
  */
 
-NOBUG_DEFINE_FLAG (all);
-NOBUG_DEFINE_FLAG_PARENT (lumiera_all, all);
-NOBUG_DEFINE_FLAG_PARENT (lumiera, lumiera_all);
 
 
 //code goes here//
@@ -52,10 +50,6 @@ NOBUG_DEFINE_FLAG_PARENT (lumiera, lumiera_all);
 void
 lumiera_preinit (void)
 {
-  NOBUG_INIT;
-  NOBUG_INIT_FLAG (all);
-  NOBUG_INIT_FLAG (lumiera_all);
-  NOBUG_INIT_FLAG (lumiera);
   TRACE (lumiera, "booting up");
 }
 

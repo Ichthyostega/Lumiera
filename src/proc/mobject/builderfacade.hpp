@@ -24,6 +24,7 @@
 #ifndef MOBJECT_BUILDERFACADE_H
 #define MOBJECT_BUILDERFACADE_H
 
+#include "proc/mobject/builder/common.hpp"
 #include "proc/engine/renderengine.hpp"
 
 

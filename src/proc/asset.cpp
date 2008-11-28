@@ -42,6 +42,10 @@ using util::cStr;
 
 namespace asset
   {
+  
+  using ::NOBUG_FLAG(memory);
+  NOBUG_CPP_DEFINE_FLAG_PARENT(assetmem,  memory);
+
 
   Asset::Ident::Ident(const string& n, const Category& cat, const string& o, const uint ver) 
     :   name(util::sanitize (n)), 

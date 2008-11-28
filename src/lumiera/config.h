@@ -33,7 +33,7 @@ struct lumiera_config_struct;
 /* master config subsystem debug flag */
 NOBUG_DECLARE_FLAG (config_all);
 /* config subsystem internals */
-NOBUG_DECLARE_FLAG (config);
+NOBUG_DECLARE_FLAG (configsys);
 /* high level typed interface operations */
 NOBUG_DECLARE_FLAG (config_typed);
 /* file operations */

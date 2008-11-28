@@ -64,8 +64,8 @@ namespace lumiera
         
         void injectSubclass (SI* mockobj)
           {
-            TRACE_IF (mockobj,  singleton, "Singleton: installing Mock object");
-            TRACE_IF (!mockobj, singleton, "Singleton: removing Mock object");
+            TRACE_IF (mockobj,  test, "Singleton: installing Mock object");
+            TRACE_IF (!mockobj, test, "Singleton: removing Mock object");
             mock_.reset (mockobj);
           }
         

@@ -56,6 +56,7 @@
 
 
 #include "proc/asset/category.hpp"
+#include "include/nobugcfg.hpp"
 #include "include/error.hpp"
 #include "common/p.hpp"
 
@@ -83,6 +84,8 @@ namespace asset
   using std::tr1::static_pointer_cast;
 
   using lumiera::P;
+  
+  NOBUG_DECLARE_FLAG (assetmem);
   
   
   /** 

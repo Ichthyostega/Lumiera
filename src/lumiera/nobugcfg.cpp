@@ -1,8 +1,8 @@
 /*
-  MObject  -  Key Abstraction: A Media Object in the Session
+  NoBugCfg  -  NoBug definitions and initialisation for the Proc-Layer 
  
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2008,               Christian Thaeter <ct@pipapo.org>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,20 +21,27 @@
 * *****************************************************/
 
 
-#include "proc/mobject/mobject.hpp"
-#include "proc/mobject/session/mobjectfactory.hpp"
+#include "include/nobugcfg.hpp"
 
-namespace mobject
+#define NOBUG_INIT_DEFS_
+#include "include/nobugcfg.hpp"
+#undef NOBUG_INIT_DEFS_
+
+
+
+
+namespace lumiera
   {
+  void 
+  initialise_NoBug () 
+  {
+    NOBUG_INIT;
+    
+#ifdef DEBUG
+    static uint callCount = 0;
+    ASSERT ( 0 == callCount++ );
+#endif    
+  }
 
-  using ::NOBUG_FLAG(memory);
-  NOBUG_CPP_DEFINE_FLAG_PARENT(mobjectmem, memory);
-  
-  
-  /** Storage for the (single, static) MObject factory object.
-   */
-  session::MObjectFactory MObject::create;
+}
 
-
-
-} // namespace mobject
