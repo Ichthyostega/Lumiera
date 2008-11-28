@@ -33,9 +33,6 @@ namespace lumiera
   {
   
 
-#ifndef LUMIERA_VERSION
-#define LUMIERA_VERSION 0++devel
-#endif
 
   Symbol ON_BASIC_INIT      ("ON_BASIC_INIT");
   Symbol ON_GLOBAL_INIT     ("ON_GLOBAL_INIT");
@@ -53,34 +50,14 @@ namespace lumiera
    *  client codes POV it just behaves like intended). 
    */
   Appconfig::Appconfig()
-    : configParam_  (new Configmap),
-      lifecycleHooks_(new LifecycleRegistry)
+    : lifecycleHooks_(new LifecycleRegistry)
   {
     lifecycleHooks_->execute (ON_BASIC_INIT);   // note in most cases a NOP
-    
-    (*configParam_)["version"] = STRINGIFY (LUMIERA_VERSION);
   }
   
   
   
   
-  
-  const string &
-  Appconfig::get (const string & key)
-  {
-    try
-      {
-        const string& val = (*instance().configParam_)[key];
-        WARN_IF ( isnil(val), config, "undefined config parameter \"%s\" requested.", key.c_str());
-        return val;
-      }
-    catch (...)
-      {
-        ERROR (config, "error while accessing configuration parameter \"%s\".", key.c_str());
-        static string NOTFOUND ("");
-        return NOTFOUND;
-  }   }
-
   
   void
   Appconfig::lifecycle (Symbol event_label)
@@ -130,11 +107,4 @@ void
 lumiera_Lifecycle_execute (const char* eventLabel)
 {
   lumiera::Appconfig::lifecycle (eventLabel);
-}
-
-
-const char*
-lumiera_Appconfig_get (const char* key)
-{
-  return cStr (lumiera::Appconfig::get(key));
 }

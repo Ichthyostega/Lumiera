@@ -15,7 +15,7 @@ return: 0
 END
 
 
-TEST "Appconfig_test" Appconfig_test <<END
+PLANNED "Appconfig_test" Appconfig_test <<END
 return: 0
 END
 

@@ -41,13 +41,14 @@ namespace lumiera
         virtual void run (Arg arg)
           {
             testAccess("version");
+            UNIMPLEMENTED ("reorganise config access for C++");
           }
         
         /** @test accessing a value from lumiera::Appconfig */
         void testAccess (const string& key)
         {
-          string ver = lumiera::Appconfig::get(key);
-          ASSERT ( !util::isnil(ver));
+//        string ver = lumiera::Appconfig::get(key);
+//        ASSERT ( !util::isnil(ver));
         }
       };
     

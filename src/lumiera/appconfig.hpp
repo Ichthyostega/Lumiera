@@ -87,10 +87,6 @@ namespace lumiera
       }
       
       
-      /** access the configuation value for a given key.
-       *  @return empty string for unknown keys, config value else */
-      static const string & get (const string& key);  // never throws
-      
       /** fire off all lifecycle callbacks
        *  registered under the given label  */
       static void lifecycle (Symbol eventLabel);
@@ -99,11 +95,8 @@ namespace lumiera
       // for querying the current lifecycle phase...
       
     private:
-      typedef std::map<string,string> Configmap; 
-      typedef scoped_ptr<Configmap> PConfig;
       typedef scoped_ptr<LifecycleRegistry> PLife;
       
-      PConfig configParam_;
       PLife lifecycleHooks_;
       
       friend class LifecycleHook;
@@ -150,7 +143,6 @@ extern "C" {  //TODO provide a separate header if some C code happens to need th
 
   void lumiera_LifecycleHook_add (const char* eventLabel, void callbackFun(void));
   void lumiera_Lifecycle_execute (const char* eventLabel);
-  const char* lumiera_Appconfig_get (const char* key);
   
 }
 

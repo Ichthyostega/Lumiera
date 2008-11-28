@@ -59,7 +59,7 @@ namespace lumiera
 
   
   /**
-   * Registry of callback functions accessable by a label (ID)
+   * Registry of callback functions accessible by a label (ID)
    * provided at registration. Registered functions will be added
    * to a list, which can be triggered via label. Used by Appconfig
    * to implement the lumiera lifecycle (init, shutdown) hooks.
@@ -73,6 +73,7 @@ namespace lumiera
       typedef Callbacks::iterator Iter;
       
       
+      /** @note only one copy of each distinct callback remembered */ 
       bool enroll (const string label, Hook toCall)
         {
           return table_[label]
