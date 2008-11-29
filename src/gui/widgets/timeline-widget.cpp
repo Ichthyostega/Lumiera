@@ -331,6 +331,9 @@ TimelineWidget::create_timeline_track_from_model_track(
     return new timeline::ClipTrack();
   else if(typeid(*model_track) == typeid(model::GroupTrack))
     return new timeline::GroupTrack();
+  
+  ASSERT(NULL); // Unknown track type;
+  return NULL
 }
 
 timeline::Track*
