@@ -98,6 +98,11 @@ TimelineWidget::~TimelineWidget()
   REQUIRE(ruler != NULL);
   if(ruler != NULL)
     ruler->unreference();
+    
+  // Free allocated timeline tracks
+  pair<model::Track*, timeline::Track*> pair; 
+  BOOST_FOREACH( pair, trackMap )
+    delete pair.second;
 }
 
 /* ===== Data Access ===== */
@@ -333,7 +338,7 @@ TimelineWidget::create_timeline_track_from_model_track(
     return new timeline::GroupTrack();
   
   ASSERT(NULL); // Unknown track type;
-  return NULL
+  return NULL;
 }
 
 timeline::Track*
