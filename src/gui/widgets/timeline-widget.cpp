@@ -299,37 +299,35 @@ TimelineWidget::create_timeline_tracks()
 {
   REQUIRE(sequence != NULL);
   
-  create_timeline_tracks_from_branch(sequence->get_tracks());
+  BOOST_FOREACH(model::Track* child, sequence->get_tracks())
+    create_timeline_tracks_from_branch(child);
 }
 
 void
 TimelineWidget::create_timeline_tracks_from_branch(
-  const std::list<model::Track*>& tracks)
+  model::Track* const model_track)
 {
-  BOOST_FOREACH(model::Track* model_track, tracks)
+  REQUIRE(model_track != NULL);
+  
+  // Is a timeline UI track present in the map already?
+  std::map<model::Track*, timeline::Track*>::const_iterator iterator
+    = trackMap.find(model_track);
+  if(iterator == trackMap.end())
     {
-      ASSERT(model_track != NULL);
-      
-      // Is a timeline UI track present in the map already?
-      std::map<model::Track*, timeline::Track*>::const_iterator iterator
-        = trackMap.find(model_track);
-      if(iterator == trackMap.end())
-        {
-          // The timeline UI track is not present
-          // We will need to create one
-          trackMap[model_track] = 
-            create_timeline_track_from_model_track(model_track);
-        }
-      
-      // Recurse to child tracks
-      create_timeline_tracks_from_branch(
-        model_track->get_child_tracks());
+      // The timeline UI track is not present
+      // We will need to create one
+      trackMap[model_track] = 
+        create_timeline_track_from_model_track(model_track);
     }
+  
+  // Recurse to child tracks
+  BOOST_FOREACH(model::Track* child, model_track->get_child_tracks())
+    create_timeline_tracks_from_branch(child);
 }
 
 timeline::Track*
 TimelineWidget::create_timeline_track_from_model_track(
-  model::Track *model_track)
+  model::Track* const model_track)
 {
   REQUIRE(model_track);
   

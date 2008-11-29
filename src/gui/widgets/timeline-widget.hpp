@@ -171,12 +171,12 @@ private:
   
   /**
    * Iterates through a branch of tracks, recursing into each sub-branch
-   * creating UI timeline tracks for each model track, if they don't
+   * creating UI timeline tracks for each model track if they don't
    * already exist in trackMap.
-   * @param list The list of model tracks to interate through.
+   * @param list The parent track of the branch.
    **/
   void create_timeline_tracks_from_branch(
-    const std::list<model::Track*>& list);
+    model::Track* const model_track);
   
   /**
    * Creates a timeline UI track to correspond to a model track.
@@ -185,7 +185,7 @@ private:
    * unreckognised type (this is an error condition).
    **/
   static timeline::Track* create_timeline_track_from_model_track(
-    model::Track *model_track);
+    model::Track* const model_track);
   
   /**
    * Looks up a timeline UI track in trackMap that corresponds to a
