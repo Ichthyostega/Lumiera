@@ -30,6 +30,11 @@
 #include "timeline-tool.hpp"
 
 namespace gui {
+
+namespace model {
+class Track;
+}
+  
 namespace widgets {
 
 class TimelineWidget;
@@ -114,8 +119,7 @@ private:
   void draw_tracks(Cairo::RefPtr<Cairo::Context> cr);
   
   void draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
-    const gui::widgets::timeline::Track *track,
-    const int view_width) const;
+    model::Track *track, const int view_width) const;
   
   /**
    * Draws the selected timeline period.
@@ -135,10 +139,10 @@ private:
   
   void set_vertical_offset(int offset);
   
-  Track* track_from_point(const int y) const;
+  timeline::Track* track_from_point(const int y) const;
   
-  static Track* track_from_branch(Track *track, const int y,
-    int &offset);
+  timeline::Track* track_from_branch(model::Track *model_track,
+    const int y, int &offset) const;
   
   /**
    * Registers all the styles that this class will respond to.

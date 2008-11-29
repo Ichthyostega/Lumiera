@@ -29,6 +29,10 @@
 
 #include "../gtk-lumiera.hpp"
 
+// TEST CODE
+#include "group-track.hpp"
+#include "clip-track.hpp"
+
 namespace gui {
 namespace model {
   
@@ -47,6 +51,14 @@ public:
   
 private:
   Glib::ustring name;
+  
+  // TEST CODE
+  GroupTrack video1;
+  GroupTrack video1a;
+  GroupTrack video1b;
+  ClipTrack video1ba;
+  ClipTrack video2;
+  // END TEST CODE
   
   std::list<Track*> tracks;
 };

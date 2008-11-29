@@ -38,11 +38,11 @@ public:
   
   void add_child_track(Track* child);
   
-  const std::vector<Track*>& get_child_tracks() const;
+  const std::list<Track*>& get_child_tracks() const;
       
 private:
   //----- Data -----//
-  std::vector<Track*> children;
+  std::list<Track*> children;
 };
 
 }   // namespace model

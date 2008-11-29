@@ -29,8 +29,6 @@ namespace gui {
 namespace widgets {
 namespace timeline {
   
-const std::vector<Track*> Track::NoChildren;
-
 Track::Track() :
   expanded(true),
   enableButton(Gtk::StockID("track_enabled")),
@@ -41,16 +39,9 @@ Track::Track() :
   
   buttonBar.set_toolbar_style(TOOLBAR_ICONS);
   buttonBar.set_icon_size(WindowManager::MenuIconSize);
-  
 
   headerWidget.pack_start(titleBox, PACK_SHRINK);
   headerWidget.pack_start(buttonBar, PACK_SHRINK);
-}
-
-const std::vector<Track*>&
-Track::get_child_tracks() const
-{
-  return NoChildren;
 }
 
 Gtk::Widget&
@@ -63,12 +54,6 @@ int
 Track::get_height() const
 {
   return 100;
-}
-
-Glib::ustring
-Track::get_title()
-{
-  return "Hello";
 }
 
 bool Track::get_expanded() const

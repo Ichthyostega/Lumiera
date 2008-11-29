@@ -22,6 +22,8 @@
 /** @file widgets/timeline/timeline-clip.hpp
  ** This file contains the definition of timeline clip object
  */
+ 
+#include "../../model/clip.hpp"
 
 #ifndef TIMELINE_CLIP_HPP
 #define TIMELINE_CLIP_HPP
@@ -30,7 +32,7 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-class Clip
+class Clip : public model::Clip
 {
 public:
   Clip();

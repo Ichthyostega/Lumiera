@@ -237,7 +237,7 @@ TimelinePanel::update_notebook()
       else
         {
           // This is a new sequence, add it in
-          TimelineWidget * const widget = new TimelineWidget();
+          TimelineWidget * const widget = new TimelineWidget(sequence);
           notebook_pages[sequence] = widget;
           notebook.append_page(*widget, sequence->get_name());
           notebook.set_tab_reorderable(*widget);

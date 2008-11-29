@@ -1,5 +1,5 @@
 /*
-  timeline-clip-track.hpp  -  Declaration of the timeline clip track object
+  timeline-track.cpp  -  Implementation of the timeline clip object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -18,38 +18,18 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
-/**
- * @file widgets/timeline/timeline-clip-track.hpp
- * This file contains the definition of timeline track objects which
- * contain clips.
- */
+* *****************************************************/
 
-#ifndef TIMELINE_CLIP_TRACK_HPP
-#define TIMELINE_CLIP_TRACK_HPP
-
-#include "timeline-track.hpp"
-#include "../../model/clip-track.hpp"
+#include "clip.hpp"
 
 namespace gui {
-namespace widgets {
-namespace timeline {
+namespace model {
 
-class Clip;
-class TimelineViewWindow;
-  
-class ClipTrack : public timeline::Track
+Clip::Clip()
 {
-public:
-  ClipTrack();
   
-  void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
-    TimelineViewWindow* const window) const;
-  
-};
+}
 
-}   // namespace timeline
-}   // namespace widgets
+}   // namespace model
 }   // namespace gui
 
-#endif // TIMELINE_CLIP_TRACK_HPP

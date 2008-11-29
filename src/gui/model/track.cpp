@@ -27,14 +27,14 @@
 namespace gui {
 namespace model {
 
-const std::vector<Track*> Track::NoChildren;
+const std::list<Track*> Track::NoChildren;
 
 Track::Track()
 {
 
 }
 
-const std::vector<Track*>&
+const std::list<Track*>&
 Track::get_child_tracks() const
 {
   return NoChildren;

@@ -32,9 +32,6 @@
 
 using namespace Gtk;
 using namespace std;
-using namespace gui;
-using namespace gui::widgets;
-using namespace gui::widgets::timeline;
 
 namespace gui {
 namespace widgets {
@@ -258,7 +255,7 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
   tool->on_motion_notify_event(event);
   
   // See if the track that we're hovering over has changed
-  Track *new_hovering_track = track_from_point(event->y);
+  timeline::Track *new_hovering_track = track_from_point(event->y);
   if(timelineWidget->get_hovering_track() != new_hovering_track)
       timelineWidget->set_hovering_track(new_hovering_track);
   
@@ -271,6 +268,7 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
 {
   REQUIRE(cr);
   REQUIRE(timelineWidget != NULL);
+  REQUIRE(timelineWidget->sequence != NULL);
   
   // Prepare
   const Allocation allocation = get_allocation();
@@ -283,11 +281,9 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
   cr->translate(0, -get_vertical_offset());
   
   // Interate drawing each track
-  BOOST_FOREACH( Track* track, timelineWidget->tracks )
-    {
-      ASSERT(track != NULL);
-      draw_track_recursive(cr, track, allocation.get_width());
-    }
+  BOOST_FOREACH( model::Track* model_track,
+    timelineWidget->sequence->get_tracks() )
+    draw_track_recursive(cr, model_track, allocation.get_width());
   
   // Restore the view matrix  
   cr->set_matrix(view_matrix);
@@ -295,12 +291,17 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
 
 void
 TimelineBody::draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
-  const Track *track, const int view_width) const
+  model::Track *model_track, const int view_width) const
 {
   REQUIRE(cr);
-  REQUIRE(track != NULL);
+  REQUIRE(model_track != NULL);
+  REQUIRE(timelineWidget != NULL);
   
-  const int height = track->get_height();
+  timeline::Track *timeline_track = timelineWidget->
+    lookup_timeline_track(model_track);
+  ASSERT(timeline_track != NULL);
+  
+  const int height = timeline_track->get_height();
   ASSERT(height >= 0);
 
   // Draw the track background
@@ -311,18 +312,15 @@ TimelineBody::draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
 
   // Render the track
   cr->save();
-  track->draw_track(cr, &timelineWidget->get_view_window());
+  timeline_track->draw_track(cr, &timelineWidget->get_view_window());
   cr->restore();
   
   // Shift for the next track
   cr->translate(0, height  + TimelineWidget::TrackPadding);
   
   // Recurse drawing into children
-  BOOST_FOREACH( Track* child, track->get_child_tracks() )
-    {
-      ASSERT(track != NULL);
-      draw_track_recursive(cr, child, view_width);
-    }
+  BOOST_FOREACH( model::Track* child, model_track->get_child_tracks() )
+    draw_track_recursive(cr, child, view_width);
 }
 
 void
@@ -422,15 +420,19 @@ TimelineBody::set_vertical_offset(int offset)
   timelineWidget->verticalAdjustment.set_value(offset);
 }
 
-Track*
+timeline::Track*
 TimelineBody::track_from_point(const int y) const
 {
+  REQUIRE(timelineWidget != NULL);
+  REQUIRE(timelineWidget->sequence != NULL);
+  
   int offset = -get_vertical_offset();
   
-  BOOST_FOREACH( Track* track, timelineWidget->tracks )
+  BOOST_FOREACH( model::Track* model_track,
+    timelineWidget->sequence->get_tracks() )
     {
-      ASSERT(track != NULL);
-      Track* result = track_from_branch(track, y, offset);
+      timeline::Track* result = track_from_branch(
+        model_track, y, offset);
       if(result != NULL)
         return result;
     }
@@ -439,26 +441,30 @@ TimelineBody::track_from_point(const int y) const
   return NULL;
 }
 
-Track* TimelineBody::track_from_branch(Track *track,
-  const int y, int &offset)
+timeline::Track* TimelineBody::track_from_branch(
+  model::Track *model_track,
+  const int y, int &offset) const
 {
-  REQUIRE(track != NULL);
+  REQUIRE(timelineWidget != NULL);
   
-  const int height = track->get_height();
+  timeline::Track *timeline_track = timelineWidget->
+    lookup_timeline_track(model_track);
+  ASSERT(timeline_track != NULL);
+  
+  const int height = timeline_track->get_height();
   ASSERT(height >= 0);
   
   // Does the point fall in this track?
   if(offset <= y && y < offset + height)
-    return track;
+    return timeline_track;
   
   // Add the height of this track to the accumulation
   offset += height;
   
   // Recurse drawing into children
-  BOOST_FOREACH( Track* child, track->get_child_tracks() )
+  BOOST_FOREACH( model::Track* child, model_track->get_child_tracks() )
     {
-      ASSERT(track != NULL);
-      Track* result = track_from_branch(child, y, offset);
+      timeline::Track* result = track_from_branch(child, y, offset);
       if(result != NULL)
         return result;
     }

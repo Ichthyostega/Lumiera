@@ -36,6 +36,8 @@
 #include "timeline/timeline-group-track.hpp"
 #include "timeline/timeline-clip-track.hpp"
 
+#include "../model/sequence.hpp"
+
 namespace gui {
 namespace widgets {
   
@@ -55,7 +57,7 @@ public:
   /**
    * Constructor
    */
-  TimelineWidget();
+  TimelineWidget(model::Sequence *source_sequence);
 
   /**
    * Destructor
@@ -161,9 +163,19 @@ private:
 
   void update_tracks();
   
+  void create_timeline_tracks();
+  
+  void create_timeline_tracks_from_branch(
+    const std::list<model::Track*>& list);
+    
+  static timeline::Track* create_timeline_track_from_model_track(
+    model::Track *model_track);
+  
+  timeline::Track* lookup_timeline_track(model::Track *model_track);
+  
   void update_scroll();
   
-  static int measure_branch_height(timeline::Track* track);
+  int measure_branch_height(model::Track* model_track);
   
   int get_y_scroll_offset() const;
   
@@ -174,6 +186,10 @@ private:
   void set_hovering_track(timeline::Track *hovering_track);
 
 protected:
+
+  // Model Data
+  model::Sequence* const sequence;
+  std::map<model::Track*, timeline::Track*> trackMap;
 
   // View State
   timeline::TimelineViewWindow viewWindow;
@@ -188,13 +204,6 @@ protected:
   timeline::Track *hoveringTrack;
 
   int totalHeight;
-
-  timeline::GroupTrack video1;
-  timeline::GroupTrack video1a;
-  timeline::GroupTrack video1b;
-  timeline::ClipTrack video1ba;
-  timeline::ClipTrack video2;
-  std::vector<timeline::Track*> tracks;
 
   // Child Widgets
   timeline::TimelineHeaderContainer *headerContainer;

@@ -33,6 +33,8 @@
 namespace gui {
 namespace model {
   
+class Clip;
+  
 class ClipTrack : public Track
 {
 public:
@@ -42,7 +44,7 @@ public:
   
 private:
   
-  //std::vector<Clip*> clips;
+  std::vector<Clip*> clips;
   
 };
 

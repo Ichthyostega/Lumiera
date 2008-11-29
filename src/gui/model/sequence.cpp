@@ -27,7 +27,22 @@ namespace model {
 
 Sequence::Sequence()
 {
+  // TEST CODE
+  static bool first = true;
   
+  tracks.push_back(&video1);
+  
+  if(first)
+  {
+    video1.add_child_track(&video1a);
+    video1.add_child_track(&video1b);
+    video1b.add_child_track(&video1ba);
+    first = false;
+  }
+  
+  tracks.push_back(&video2);
+  
+  // END TEST CODE
 }
 
 const Glib::ustring
@@ -35,7 +50,7 @@ Sequence::get_name() const
 {
   return name;
 }
-  
+
 void
 Sequence::set_name(const Glib::ustring &name)
 {

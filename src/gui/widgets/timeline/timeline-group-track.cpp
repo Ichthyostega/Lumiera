@@ -31,19 +31,6 @@ namespace timeline {
 GroupTrack::GroupTrack()
 {
 }
-  
-void
-GroupTrack::add_child_track(Track* child)
-{
-  REQUIRE(child != NULL);
-  children.push_back(child);
-}
-
-const std::vector<Track*>&
-GroupTrack::get_child_tracks() const
-{
-  return children;
-}
 
 void
 GroupTrack::draw_track(Cairo::RefPtr<Cairo::Context> cairo,

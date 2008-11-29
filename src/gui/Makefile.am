@@ -88,6 +88,8 @@ lumigui_SOURCES =															\
 	$(lumigui_srcdir)/model/clip-track.hpp									\
 	$(lumigui_srcdir)/model/group-track.cpp									\
 	$(lumigui_srcdir)/model/group-track.hpp									\
+	$(lumigui_srcdir)/model/clip.cpp										\
+	$(lumigui_srcdir)/model/clip.hpp										\
 	$(lumigui_srcdir)/output/displayer.cpp									\
 	$(lumigui_srcdir)/output/displayer.hpp									\
 	$(lumigui_srcdir)/output/gdkdisplayer.cpp								\

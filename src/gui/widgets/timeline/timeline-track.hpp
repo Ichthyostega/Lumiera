@@ -23,10 +23,11 @@
  ** This file contains the definition of timeline track object
  */
 
+#include "../../gtk-lumiera.hpp"
+#include "../../model/track.hpp"
+
 #ifndef TIMELINE_TRACK_HPP
 #define TIMELINE_TRACK_HPP
-
-#include "../../gtk-lumiera.hpp"
 
 namespace gui {
 namespace widgets { 
@@ -38,16 +39,10 @@ class Track
 {
 public:
   Track();
-
-  void add_child_track(Track* child);
-
-  virtual const std::vector<Track*>& get_child_tracks() const;
   
   Gtk::Widget& get_header_widget();
   
   int get_height() const;
-
-  Glib::ustring get_title();
   
   bool get_expanded() const;
   
@@ -70,9 +65,6 @@ private:
   
   Gtk::Entry titleBox;
   Gtk::Toolbar buttonBar;
-  
-private:
-  static const std::vector<Track*> NoChildren;
 };
 
 

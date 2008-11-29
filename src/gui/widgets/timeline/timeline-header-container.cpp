@@ -67,12 +67,10 @@ TimelineHeaderContainer::TimelineHeaderContainer(gui::widgets::TimelineWidget
  
 void
 TimelineHeaderContainer::update_headers()
-{
-  REQUIRE(timelineWidget != NULL);
-    
+{    
   // Add fresh headers  
-  BOOST_FOREACH( Track* track, timelineWidget->tracks )
-    set_parent_recursive(track);
+  BOOST_FOREACH( model::Track* model_track, get_tracks() )
+      set_parent_recursive(model_track);
 }
   
 void
@@ -181,8 +179,8 @@ TimelineHeaderContainer::on_size_request (Requisition* requisition)
   // We don't care about the size of all the child widgets, but if we
   // don't send the size request down the tree, some widgets fail to
   // calculate their text layout correctly. 
-  BOOST_FOREACH( Track* track, timelineWidget->tracks )
-    size_request_recursive(track);
+  BOOST_FOREACH( model::Track* model_track, get_tracks() )
+    size_request_recursive(model_track);
     
   // Initialize the output parameter:
   *requisition = Gtk::Requisition();
@@ -210,7 +208,7 @@ TimelineHeaderContainer::forall_vfunc(gboolean /* include_internals */,
 { 
   REQUIRE(callback != NULL);
   
-  BOOST_FOREACH( Track* track, timelineWidget->tracks )
+  BOOST_FOREACH( model::Track* track, get_tracks() )
     {
       ASSERT(track != NULL);
       forall_vfunc_recursive(track, callback, callback_data);
@@ -219,7 +217,7 @@ TimelineHeaderContainer::forall_vfunc(gboolean /* include_internals */,
 
 bool
 TimelineHeaderContainer::on_expose_event(GdkEventExpose *event)
-{
+{ 
   if(gdkWindow)
     {
       // Start at an offset from the scroll offset
@@ -230,11 +228,11 @@ TimelineHeaderContainer::on_expose_event(GdkEventExpose *event)
       read_styles();
        
       // Paint a border underneath all the root headers
-      BOOST_FOREACH( Track* track, timelineWidget->tracks )
+      BOOST_FOREACH( model::Track* model_track, get_tracks() )
         {
-          ASSERT(track != NULL);
+          ASSERT(model_track != NULL);
           
-          draw_header_decoration(track,
+          draw_header_decoration(model_track,
             Gdk::Rectangle(0, 0,
               container_allocation.get_width(),
               container_allocation.get_height()));
@@ -262,9 +260,7 @@ TimelineHeaderContainer::on_hovering_track_changed(
   
 void
 TimelineHeaderContainer::layout_headers()
-{
-  ASSERT(timelineWidget != NULL);
-  
+{  
   // We can't layout before the widget has been set up
   if(!gdkWindow)
     return;
@@ -281,29 +277,31 @@ TimelineHeaderContainer::layout_headers()
   const Allocation container_allocation = get_allocation();
   const int header_width = container_allocation.get_width();
   
-  BOOST_FOREACH( Track* track, timelineWidget->tracks )
-    {
-      ASSERT(track != NULL);
-      layout_headers_recursive(track, offset, header_width, 0, true);
-    }
+  BOOST_FOREACH( model::Track* model_track, get_tracks() )
+    layout_headers_recursive(
+      model_track, offset, header_width, 0, true);
     
   // Repaint the background of our parenting
   queue_draw ();
 }
 
 void
-TimelineHeaderContainer::layout_headers_recursive(Track *track,
-  int &offset, const int header_width, const int depth,
-  bool parent_expanded)
+TimelineHeaderContainer::layout_headers_recursive(
+  model::Track *model_track, int &offset, const int header_width,
+  const int depth, bool parent_expanded)
 {
   REQUIRE(depth >= 0);
+  REQUIRE(model_track != NULL);
+  
+  timeline::Track* const timeline_track =
+    lookup_timeline_track(model_track);
   
   const int indent = depth * 10;
-  Widget &widget = track->get_header_widget();
+  Widget &widget = timeline_track->get_header_widget();
   
   if(parent_expanded)
     {
-      const int track_height = track->get_height();
+      const int track_height = timeline_track->get_height();
       
       // Calculate the box of the header
       Gdk::Rectangle header_box(
@@ -314,7 +312,7 @@ TimelineHeaderContainer::layout_headers_recursive(Track *track,
       ASSERT(header_box.get_height() >= 0);
       
       // Cache the bounding box
-      headerBoxes[track] = header_box;
+      headerBoxes[timeline_track] = header_box;
         
       // Calculate the allocation of the header widget
       Allocation header_allocation(
@@ -337,62 +335,71 @@ TimelineHeaderContainer::layout_headers_recursive(Track *track,
       widget.hide();
     
   // Recurse through all the children
-  BOOST_FOREACH( Track* child, track->get_child_tracks() ) 
-    layout_headers_recursive(child, offset, header_width, depth + 1,
-      track->get_expanded() && parent_expanded);
+  BOOST_FOREACH( model::Track* child, model_track->get_child_tracks() ) 
+    layout_headers_recursive(
+      child, offset, header_width, depth + 1,
+      timeline_track->get_expanded() && parent_expanded);
 }
 
 void
-TimelineHeaderContainer::set_parent_recursive(Track *track)
-{
-  REQUIRE(track != NULL);
-  track->get_header_widget().set_parent(*this);
+TimelineHeaderContainer::set_parent_recursive(
+  model::Track* const model_track)
+{ 
+  lookup_timeline_track(model_track)->
+    get_header_widget().set_parent(*this);
   
   // Recurse through all the children
-  BOOST_FOREACH( Track* child, track->get_child_tracks() )
+  BOOST_FOREACH( model::Track* child, model_track->get_child_tracks() )
     set_parent_recursive(child);
 }
 
 void
-TimelineHeaderContainer::size_request_recursive(Track *track)
-{
-  REQUIRE(track != NULL);
-  if(track->get_header_widget().is_visible())
-    track->get_header_widget().size_request();
+TimelineHeaderContainer::size_request_recursive(
+  model::Track* const model_track)
+{  
+  Widget &widget =
+    lookup_timeline_track(model_track)->get_header_widget();
+  if(widget.is_visible())
+    widget.size_request();
   
   // Recurse through all the children
-  BOOST_FOREACH( Track* child, track->get_child_tracks() )
+  BOOST_FOREACH( model::Track* child, model_track->get_child_tracks() )
     size_request_recursive(child);
 }
 
 void
-TimelineHeaderContainer::forall_vfunc_recursive(Track* track,
-  GtkCallback callback, gpointer callback_data)
+TimelineHeaderContainer::forall_vfunc_recursive(
+  model::Track* const model_track, GtkCallback callback,
+  gpointer callback_data)
 {
-  REQUIRE(track != NULL);
   REQUIRE(callback != NULL);
-  
-  callback(track->get_header_widget().gobj(), callback_data);
+    
+  callback( lookup_timeline_track(model_track)->
+    get_header_widget().gobj(), callback_data) ;
   
   // Recurse through all the children
-  BOOST_FOREACH( Track* child, track->get_child_tracks() )
+  BOOST_FOREACH( model::Track* child, model_track->get_child_tracks() )
     forall_vfunc_recursive(child, callback, callback_data);
 }
 
 void
-TimelineHeaderContainer::draw_header_decoration(Track* track,
+TimelineHeaderContainer::draw_header_decoration(
+    model::Track* const model_track,
     const Gdk::Rectangle &clip_rect)
 {
-  REQUIRE(track != NULL);
+  REQUIRE(model_track != NULL);
   REQUIRE(clip_rect.get_width() > 0);
   REQUIRE(clip_rect.get_height() > 0);
   
   Glib::RefPtr<Style> style = get_style();
   ASSERT(style);
   
+  timeline::Track* const timeline_track =
+    lookup_timeline_track(model_track);
+  
   // Get the cached header box
-  ASSERT(headerBoxes.find(track) != headerBoxes.end());  
-  const Gdk::Rectangle &box = headerBoxes[track];
+  ASSERT(headerBoxes.find(timeline_track) != headerBoxes.end());  
+  const Gdk::Rectangle &box = headerBoxes[timeline_track];
   
   // Paint the box, if it will be visible
   if(box.get_x() < clip_rect.get_width() &&
@@ -408,13 +415,16 @@ TimelineHeaderContainer::draw_header_decoration(Track* track,
         
       // Paint the expander if there are child tracks
       StateType state_type = STATE_NORMAL;
-      if(clickedExpander == track) state_type = STATE_SELECTED;
-      else if(hoveringExpander == track) state_type = STATE_PRELIGHT;
+      if(clickedExpander == timeline_track)
+        state_type = STATE_SELECTED;
+      else if(hoveringExpander == timeline_track)
+        state_type = STATE_PRELIGHT;
       
       const ExpanderStyle expander_style = 
-        track->get_expanded() ? EXPANDER_EXPANDED : EXPANDER_COLLAPSED;
+        timeline_track->get_expanded() ?
+          EXPANDER_EXPANDED : EXPANDER_COLLAPSED;
       
-      if(!track->get_child_tracks().empty())
+      if(!model_track->get_child_tracks().empty())
         style->paint_expander (gdkWindow,
           state_type, 
           clip_rect, *this, "",
@@ -424,8 +434,9 @@ TimelineHeaderContainer::draw_header_decoration(Track* track,
     }
   
   // Recurse through all the children
-  if(track->get_expanded())
-    BOOST_FOREACH( Track* child, track->get_child_tracks() )
+  if(timeline_track->get_expanded())
+    BOOST_FOREACH( model::Track* child,
+      model_track->get_child_tracks() )
       draw_header_decoration(child, clip_rect);
 }
 
@@ -461,6 +472,28 @@ TimelineHeaderContainer::get_expander_button_rectangle(
   return Gdk::Rectangle(
     margin + box.get_x(), margin + box.get_y(),
     expand_button_size, box.get_height() - margin * 2);
+}
+
+timeline::Track*
+TimelineHeaderContainer::lookup_timeline_track(
+  model::Track *model_track)
+{
+  REQUIRE(model_track != NULL);
+  REQUIRE(timelineWidget != NULL);
+  
+  timeline::Track* const timeline_track =
+    timelineWidget->lookup_timeline_track(model_track);
+  ENSURE(timeline_track != NULL);
+  
+  return timeline_track;
+}
+
+const std::list<model::Track*>&
+TimelineHeaderContainer::get_tracks() const
+{
+  REQUIRE(timelineWidget != NULL);
+  REQUIRE(timelineWidget->sequence != NULL);
+  return timelineWidget->sequence->get_tracks();
 }
 
 void

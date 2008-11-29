@@ -27,27 +27,20 @@
 #define TIMELINE_GROUP_TRACK_HPP
 
 #include "timeline-track.hpp"
+#include "../../model/group-track.hpp"
 
 namespace gui {
 namespace widgets {
 namespace timeline {
   
-class GroupTrack : public Track
+class GroupTrack : public timeline::Track
 {
 public:
   GroupTrack();
   
-  void add_child_track(Track* child);
-  
-  const std::vector<Track*>& get_child_tracks() const;
-  
-  virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
+  void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
     TimelineViewWindow* constwindow)
     const;
-    
-private:
-  //----- Data -----//
-  std::vector<Track*> children;
 };
 
 }   // namespace timeline

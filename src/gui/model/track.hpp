@@ -37,14 +37,14 @@ class Track
 public:
   Track();
 
-  void add_child_track(Track* child);
+  virtual void add_child_track(Track* child) {};
 
-  virtual const std::vector<Track*>& get_child_tracks() const;
+  virtual const std::list<Track*>& get_child_tracks() const;
     
   Glib::ustring get_title();
     
 private:
-  static const std::vector<Track*> NoChildren;
+  static const std::list<Track*> NoChildren;
 };
 
 }   // namespace model

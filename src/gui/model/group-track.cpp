@@ -36,7 +36,7 @@ GroupTrack::add_child_track(Track* child)
   children.push_back(child);
 }
 
-const std::vector<Track*>&
+const std::list<Track*>&
 GroupTrack::get_child_tracks() const
 {
   return children;

@@ -23,6 +23,7 @@
 #include "timeline-widget.hpp"
 
 #include <boost/foreach.hpp>
+#include <typeinfo>
 
 using namespace Gtk;
 using namespace std;
@@ -36,8 +37,9 @@ const int TimelineWidget::HeaderWidth = 150;
 const double TimelineWidget::ZoomIncrement = 1.25;
 const int64_t TimelineWidget::MaxScale = 30000000;
 
-TimelineWidget::TimelineWidget() :
+TimelineWidget::TimelineWidget(model::Sequence* const source_sequence) :
   Table(2, 2),
+  sequence(source_sequence),
   viewWindow(this, 0, 1),
   totalHeight(0),
   horizontalAdjustment(0, 0, 0),
@@ -51,6 +53,8 @@ TimelineWidget::TimelineWidget() :
   horizontalScroll(horizontalAdjustment),
   verticalScroll(verticalAdjustment)
 {
+  REQUIRE(sequence != NULL);
+  
   body = new TimelineBody(this);
   ENSURE(body != NULL);
   headerContainer = new TimelineHeaderContainer(this);
@@ -69,12 +73,6 @@ TimelineWidget::TimelineWidget() :
   
   viewWindow.set_time_scale(GAVL_TIME_SCALE / 200);
   set_selection(2000000, 4000000);
-  
-  tracks.push_back(&video1);
-  video1.add_child_track(&video1a);
-  video1.add_child_track(&video1b);
-  video1b.add_child_track(&video1ba);
-  tracks.push_back(&video2);
   
   update_tracks();
   
@@ -271,17 +269,87 @@ TimelineWidget::on_view_window_changed()
 
 void
 TimelineWidget::update_tracks()
-{
+{ 
+  REQUIRE(sequence != NULL);
+  
+  // Create timeline tracks from all the model tracks
+  create_timeline_tracks();
+  
+  // Update the header container
   ASSERT(headerContainer != NULL);
   headerContainer->update_headers();
   
   // Recalculate the total height of the timeline scrolled area
   totalHeight = 0;
-  BOOST_FOREACH( Track* track, tracks )
+  BOOST_FOREACH(model::Track* track, sequence->get_tracks())
     {
       ASSERT(track != NULL);
       totalHeight += measure_branch_height(track);
     }    
+}
+
+void
+TimelineWidget::create_timeline_tracks()
+{
+  REQUIRE(sequence != NULL);
+  
+  create_timeline_tracks_from_branch(sequence->get_tracks());
+}
+
+void
+TimelineWidget::create_timeline_tracks_from_branch(
+  const std::list<model::Track*>& tracks)
+{
+  BOOST_FOREACH(model::Track* model_track, tracks)
+    {
+      ASSERT(model_track != NULL);
+      
+      // Is a timeline UI track present in the map already?
+      std::map<model::Track*, timeline::Track*>::const_iterator iterator
+        = trackMap.find(model_track);
+      if(iterator == trackMap.end())
+        {
+          // The timeline UI track is not present
+          // We will need to create one
+          trackMap[model_track] = 
+            create_timeline_track_from_model_track(model_track);
+        }
+      
+      // Recurse to child tracks
+      create_timeline_tracks_from_branch(
+        model_track->get_child_tracks());
+    }
+}
+
+timeline::Track*
+TimelineWidget::create_timeline_track_from_model_track(
+  model::Track *model_track)
+{
+  REQUIRE(model_track);
+  
+  if(typeid(*model_track) == typeid(model::ClipTrack))
+    return new timeline::ClipTrack();
+  else if(typeid(*model_track) == typeid(model::GroupTrack))
+    return new timeline::GroupTrack();
+}
+
+timeline::Track*
+TimelineWidget::lookup_timeline_track(model::Track *model_track)
+{
+  ASSERT(sequence != NULL);  
+  std::map<model::Track*, timeline::Track*>::const_iterator iterator =
+    trackMap.find(model_track);
+  if(iterator == trackMap.end())
+    {
+      // The track is not present in the map
+      // We are in an error condition if the timeline track is not found
+      // - the timeline tracks must always be synchronous with the model
+      // tracks.
+      ENSURE(iterator->second != NULL);
+      return NULL;
+    }
+  ENSURE(iterator->second != NULL);
+  return iterator->second;
 }
   
 void
@@ -327,14 +395,18 @@ TimelineWidget::update_scroll()
 }
 
 int
-TimelineWidget::measure_branch_height(Track* track)
+TimelineWidget::measure_branch_height(model::Track* model_track)
 {
-  REQUIRE(track != NULL);
+  REQUIRE(model_track != NULL);
   
-  int height = track->get_height() + TrackPadding;
+  const timeline::Track *timeline_track =
+    lookup_timeline_track(model_track);
+  ENSURE(timeline_track != NULL);
   
-  // Recurse through all the children
-  BOOST_FOREACH( Track* child, track->get_child_tracks() )
+  int height = timeline_track->get_height() + TrackPadding;
+  
+  // Recurse through all the children  
+  BOOST_FOREACH( model::Track* child, model_track->get_child_tracks() )
     height += measure_branch_height(child);
   
   return height;

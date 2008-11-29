@@ -32,6 +32,11 @@
 #include <vector>
 
 namespace gui {
+  
+namespace model {
+class Track;
+}
+  
 namespace widgets {
 
 class TimelineWidget;
@@ -147,7 +152,7 @@ private:
    * @param header_width The width of this widget in pixels.
    * @param depth The depth within the tree of track.
    **/
-  void layout_headers_recursive(Track *track, int &offset,
+  void layout_headers_recursive(model::Track *track, int &offset,
     const int header_width, const int depth, bool parent_expanded);
   
   /**
@@ -155,15 +160,15 @@ private:
    * of this widget.
    * @param track The parent track object which will be recursed into.
    **/
-  void set_parent_recursive(Track *track);
+  void set_parent_recursive(model::Track* const model_track);
   
   /**
    * Recursively causes all the visible track header widgets to call
    * size_request( ).
    **/
-  static void size_request_recursive(Track *track);
+  void size_request_recursive(model::Track* const model_track);
   
-  static void forall_vfunc_recursive(Track* track,
+  void forall_vfunc_recursive(model::Track* const model_track,
     GtkCallback callback, gpointer callback_data);
   
   /**
@@ -174,12 +179,35 @@ private:
    * to control the amount of indention.
    * @param offset The vertical offset of the headers in pixels.
    **/
-  void draw_header_decoration(Track* track,
+  void draw_header_decoration(model::Track* const track,
     const Gdk::Rectangle &clip_rect);
   
   Track* expander_button_from_point(const Gdk::Point &point);
   
-  const Gdk::Rectangle get_expander_button_rectangle(Track* track);
+  const Gdk::Rectangle get_expander_button_rectangle(
+    timeline::Track* track);
+  
+  /**
+   * A helper function which calls lookup_timeline_track within the
+   * parent timeline widget, but also applies lots of data consistency
+   * checks in the process.
+   * @param model_track The model track to look up in the parent widget.
+   * @return Returns the track found, or returns NULL if no matching
+   * track was found.
+   * @remarks If the return value is going to be NULL, an ENSURE will
+   * fail.
+   **/
+  timeline::Track* lookup_timeline_track(model::Track *model_track);
+
+/**
+   * A helper function which calls get_tracks within the sequence of the
+   * parent timeline widget, but also applies lots of data consistency
+   * checks in the process.
+   * @param model_track The model track to look up in the parent widget.
+   * @return Returns the track found, or returns NULL if no matching
+   * track was found.
+   **/  
+  const std::list<model::Track*>& get_tracks() const;
   
   /**
    * Registers all the styles that this class will respond to.
@@ -206,12 +234,12 @@ private:
    */
   Glib::RefPtr<Gdk::Window> gdkWindow;
   
-  std::map<Track*, Gdk::Rectangle> headerBoxes;
+  std::map<timeline::Track*, Gdk::Rectangle> headerBoxes;
   
   //----- User Interaction State -----//
-  Track *hoveringExpander;
+  timeline::Track *hoveringExpander;
   
-  Track *clickedExpander;
+  timeline::Track *clickedExpander;
 
   //----- Style Values -----//
   
