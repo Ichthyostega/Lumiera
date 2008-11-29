@@ -163,14 +163,37 @@ private:
 
   void update_tracks();
   
+  /**
+   * Ensures timeline UI tracks have been created for every model track
+   * present in sequence.
+   **/
   void create_timeline_tracks();
   
+  /**
+   * Iterates through a branch of tracks, recursing into each sub-branch
+   * creating UI timeline tracks for each model track, if they don't
+   * already exist in trackMap.
+   * @param list The list of model tracks to interate through.
+   **/
   void create_timeline_tracks_from_branch(
     const std::list<model::Track*>& list);
-    
+  
+  /**
+   * Creates a timeline UI track to correspond to a model track.
+   * @param model_track The model track to create a timeline track from.
+   * @return The timeline track created, or NULL if model_track has an
+   * unreckognised type (this is an error condition).
+   **/
   static timeline::Track* create_timeline_track_from_model_track(
     model::Track *model_track);
   
+  /**
+   * Looks up a timeline UI track in trackMap that corresponds to a
+   * given model_track.
+   * @param model_track The model track to look up.
+   * @returns The timeline UI track found, or NULL if model_track has no
+   * corresponding timeline UI track (this is an error condition).
+   **/
   timeline::Track* lookup_timeline_track(model::Track *model_track);
   
   void update_scroll();

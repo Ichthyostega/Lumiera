@@ -87,6 +87,7 @@ TimelineWidget::TimelineWidget(model::Sequence* const source_sequence) :
 
 TimelineWidget::~TimelineWidget()
 {
+  // Destroy child widgets
   REQUIRE(body != NULL);
   if(body != NULL)
     body->unreference();
@@ -332,6 +333,8 @@ TimelineWidget::create_timeline_track_from_model_track(
 {
   REQUIRE(model_track);
   
+  // Choose a corresponding timeline track class from the model track's
+  // class
   if(typeid(*model_track) == typeid(model::ClipTrack))
     return new timeline::ClipTrack();
   else if(typeid(*model_track) == typeid(model::GroupTrack))
