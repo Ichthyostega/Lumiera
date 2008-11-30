@@ -30,8 +30,8 @@
 
 
 
-namespace lumiera
-  {
+namespace lumiera {
+  
   void 
   initialise_NoBug () 
   {
@@ -40,7 +40,7 @@ namespace lumiera
 #ifdef DEBUG
     static uint callCount = 0;
     ASSERT ( 0 == callCount++ );
-#endif    
+#endif
   }
 
 }

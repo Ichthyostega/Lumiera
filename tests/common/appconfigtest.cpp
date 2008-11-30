@@ -1,5 +1,5 @@
 /*
-  Appconfig(Test)  -  accessing the allways-available Appconfig singleton
+  Appconfig(Test)  -  accessing the always-available Appconfig singleton
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -30,10 +30,8 @@
 
 
 
-namespace lumiera
-  {
-  namespace test
-    {
+namespace lumiera {
+  namespace test {
     
   
     class Appconfig_test : public Test

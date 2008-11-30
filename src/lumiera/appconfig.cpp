@@ -1,5 +1,5 @@
 /*
-  Appconfig  -  for global initialization and configuration 
+  Appconfig  -  for global initialisation and configuration 
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -29,8 +29,7 @@
 using util::isnil;
 using util::cStr;
 
-namespace lumiera
-  {
+namespace lumiera {
   
 
 
@@ -39,7 +38,7 @@ namespace lumiera
   Symbol ON_GLOBAL_SHUTDOWN ("ON_GLOBAL_SHUTDOWN");
   
 
-  /** perform initialization triggered on first access. 
+  /** perform initialisation triggered on first access. 
    *  Will execute the ON_BASIC_INIT hook, but under typical
    *  circumstances this is a NOP, because when callbacks are
    *  added to this hook, the Appconfig singleton instance has

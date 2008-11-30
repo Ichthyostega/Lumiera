@@ -71,7 +71,7 @@ struct lumiera_interfacenode_struct
   LumieraInterfacenode lnk;
   /** allocated size of the following deps table */
   size_t deps_size;
-  /** NULL terminated table of all dependenncies (interfaces opened on initialization) */
+  /** NULL terminated table of all dependencies (interfaces opened on initialization) */
   LumieraInterfacenode* deps;
 };
 

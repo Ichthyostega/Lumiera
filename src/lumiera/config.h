@@ -95,7 +95,7 @@ typedef lumiera_config* LumieraConfig;
 
 
 //  * does only initialize the variables, so that they get valid values, but does not allocate them as they will be allocated before as they are singleton.
-//  * lumiera_config_init (const char* searchpath) searchpath is a buildin-default, can be changed via configure and can be appended and overridden by using a flag, e.g. {{{ --config-path-append="" }}} or {{{ --config-path="" }}}
+//  * lumiera_config_init (const char* searchpath) searchpath is a builtin-default, can be changed via configure and can be appended and overridden by using a flag, e.g. {{{ --config-path-append="" }}} or {{{ --config-path="" }}}
 
 /**
  * Initialize the configuration subsystem.
@@ -240,7 +240,7 @@ lumiera_config_wordlist_get_nth (const char* key, unsigned nth, const char* deli
  * @param key key under which this wordlist is stored
  * @param value word to find
  * @param delims a string literal listing all characters which are treated as delimiters
- * @return index of the first occurence of the word or -1 in case of failure
+ * @return index of the first occurrence of the word or -1 in case of failure
  */
 int
 lumiera_config_wordlist_find (const char* key, const char* value, const char* delims);

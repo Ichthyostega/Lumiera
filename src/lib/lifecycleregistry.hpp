@@ -24,10 +24,10 @@
 /** @file lifecycleregistry.hpp
  ** Helper for registering lifecycle event callbacks, which are
  ** provided as a global service by lumiera::Appconfig. This service
- ** allows to enroll functions under a given label and then to call
+ ** allows to enrol functions under a given label and then to call
  ** all those registered functions. 
  ** @note this is in fact an event mechanism, and if we start using
- ** more than just this basic functionallity, we should switch to
+ ** more than just this basic functionality, we should switch to
  ** boost::signals. (which has the downside of being an binary
  ** dependency).
  **
@@ -47,8 +47,8 @@
 #include "common/util.hpp"
 
 
-namespace lumiera
-  {
+namespace lumiera {
+  
   using boost::noncopyable;
   using boost::function;
   using util::contains;

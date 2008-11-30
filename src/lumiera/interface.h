@@ -290,7 +290,7 @@ LUMIERA_PLUGININTERFACE
 
 
 /**
- * Create a plugin interface when being copiled as plugin
+ * Create a plugin interface when being compiled as plugin
  */
 #ifdef LUMIERA_PLUGIN /* compile as plugin */
 #define LUMIERA_PLUGIN_INTERFACEHANDLE static LUMIERA_INTERFACE_HANDLE(lumieraorg_interface, 0) lumiera_interface_handle

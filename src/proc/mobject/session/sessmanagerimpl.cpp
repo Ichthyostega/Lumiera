@@ -22,7 +22,7 @@
 
 
 /** @file sessmanagerimpl.cpp
- ** Implemention of the Session management functions.
+ ** Implementation of the Session management functions.
  ** The Class SessManager is declared alongside with mobject::Session,
  ** because it serves as smart ptr-to-Impl at the same time. Effectively,
  ** the session manager owns the current session object and only grants

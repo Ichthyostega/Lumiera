@@ -24,7 +24,7 @@
 /** @file configflagstest.cpp
  ** \par build a type representing a single configuration defined by a set of flags
  **
- ** The semi-automatic assembly of processing node invocation code utilizes some
+ ** The semi-automatic assembly of processing node invocation code utilises some
  ** metaprogramming to generate a factory, which in turn produces node wiring objects
  ** according to the configuration to be used for the corresponding ProcNode. This relies on
  ** generating a distinct type based on a given set of configuration flags,
@@ -128,7 +128,7 @@ namespace lumiera {
        *       all possible defined specialisations of some template based on
        *       such configuration-tuples. This allows us to assemble the glue code
        *       for pulling data from processing nodes out of small building blocks
-       *       in all possible configuraions.
+       *       in all possible configurations.
        */
       class ConfigFlags_test : public Test
         {
@@ -280,7 +280,7 @@ namespace lumiera {
           
           
           /** @test use the ConfigSelector template to build a set of factories,
-           *        based on a set of configurations. Then invoke the apropriate
+           *        based on a set of configurations. Then invoke the appropriate
            *        factory by specifying the configuration bit code
            */
           void check_ConfigSelector()

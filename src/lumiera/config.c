@@ -54,7 +54,7 @@ LUMIERA_ERROR_DEFINE (CONFIG_NO_ENTRY, "no configuration entry");
 
 
 /**
- *  defaults for the configuraton system itself
+ *  defaults for the configuration system itself
  */
 const char* lumiera_config_defaults[] =
   {

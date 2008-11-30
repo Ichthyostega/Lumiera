@@ -56,7 +56,7 @@ lumiera_preinit (void)
 
 /**
  * Standard initialization procedure
- * Boots all buildin subsystems up as described in DesignProcess/GlobalInitilaization.
+ * Boots all builtin subsystems up as described in DesignProcess/GlobalInitilaization.
  * The configuration and interfaces/plugin subsystems are already started at this point and
  * commandline arguments are parsed.
  */

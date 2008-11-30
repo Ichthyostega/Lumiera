@@ -1,5 +1,5 @@
 /*
-  configitem.h  -  generalized hierachy of configuration items
+  configitem.h  -  generalized hierarchy of configuration items
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -42,7 +42,7 @@ struct lumiera_configitem_vtable;
 
 /**
  * @file
- * configitems build a 3 level hierachy:
+ * configitems build a 3 level hierarchy:
  *
  * 1. file:
  *      contain sections
@@ -66,7 +66,7 @@ struct lumiera_configitem_vtable;
 //TODO: declarations go here//
 /**
  * @file
- * configitems build a 3 level hierachy:
+ * configitems build a 3 level hierarchy:
  *
  * 1. file:
  *      contain sections
@@ -84,7 +84,7 @@ struct lumiera_configitem_vtable;
  *          directives are only valid at the toplevel section []
  *        configurationentry:
  *          'key = value' or 'key < redirect'
- *        errorneous:
+ *        erroneous:
  *          any line which cant be parsed
  */
 
@@ -96,11 +96,11 @@ struct lumiera_configitem_vtable
 
 struct lumiera_configitem_struct
 {
-  llist link;                                   // all lines on the same hierachy level are linked here (see childs)
+  llist link;                                   // all lines on the same hierarchy level are linked here (see childs)
   LumieraConfigitem parent;                     // parent section
-  llist childs;                                 // root node for all lines below this hierachy
+  llist childs;                                 // root node for all lines below this hierarchy
 
-  llist lookup;                                 // all lines with the same key are stacked up on the loockup
+  llist lookup;                                 // all lines with the same key are stacked up on the lookup
 
   char* line;                                   // raw line as read in allocated here trailing \n will be replaced with \0
   char* key;                                    // pointer into line to start of key
