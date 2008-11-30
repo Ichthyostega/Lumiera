@@ -1,5 +1,5 @@
 /*
-  CustomSharedPtr(Test)  -  refcounting, equality and comparisons
+  CustomSharedPtr(Test)  -  ref counting, equality and comparisons
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -174,16 +174,15 @@ namespace asset
             P<XX> pX1;                  // Base: shared_ptr<XX>
             P<XX,P<X> > pX2;            // Base: P<X>
             P<XX,shared_ptr<X> > pX3;   // Base: shared_ptr<X>
-            P<XX,shared_ptr<long> > pLo;// Base: shared_ptr<long>       (quite a nonsene, but well...)
+            P<XX,shared_ptr<long> > pLo;// Base: shared_ptr<long>       (quite a nonsense, but well...)
             P<X,string> pLoL;           // Base: std::string
             P<string> pLoLoL;           // Base: shared_ptr<string>
             
-            ASSERT (INSTANCEOF (P<X>, &pX));
             ASSERT (INSTANCEOF (shared_ptr<X>, &pX));
             
             ASSERT ( INSTANCEOF (shared_ptr<XX>, &pX1));
 //          ASSERT (!INSTANCEOF (shared_ptr<X>,  &pX1));     // doesn't compile (no RTTI) -- that's correct
-//          ASSERT (!INSTANCEOF (P<X>,           &pX1));
+//          ASSERT (!INSTANCEOF (P<X>,           &pX1));     // similar, type mismatch detected by compiler
             
             ASSERT ( INSTANCEOF (shared_ptr<X>,  &pX2));
 //          ASSERT (!INSTANCEOF (shared_ptr<XX>, &pX2));
@@ -209,8 +208,8 @@ namespace asset
             pX = pX1;   // OK: pointee subtype...
             pX = pX2;   // invokes shared_ptr<X>::operator= (shared_ptr<X> const&)
             pX = pX3;
-//          pX = pLo;   // similar, but long*   not asignable to X*
-//          pX = pLoL;  // similar, but string* not asignable to X*
+//          pX = pLo;   // similar, but long*   not assignable to X*
+//          pX = pLoL;  // similar, but string* not assignable to X*
 //          pX = pLoLoL;   // same...
                           //  you won't be able to do much with the "LoLo"-Types, 
                          //   as their types and pointee types's relations don't match
@@ -295,7 +294,7 @@ namespace asset
             ASSERT (!(pXX <= pX5));
             ASSERT (!(pXX >= pX5));
             
-            ASSERT ( (pX5 == pX6));    // compare two empty ptrs: "equal, aequivalent but not orderable"
+            ASSERT ( (pX5 == pX6));    // compare two empty ptrs: "equal, equivalent but not orderable"
             ASSERT (!(pX5 != pX6));
             ASSERT (!(pX5 <  pX6));
             ASSERT (!(pX5 >  pX6));
