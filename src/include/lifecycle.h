@@ -74,9 +74,6 @@ namespace lumiera {
       
       LifecycleHook (Symbol eventLabel, Hook callbackFun);
       
-      /** for chained calls (add multiple callbacks) */
-      LifecycleHook& add (Hook callbackFun);
-      
       /** alternative, static interface for registering a callback */
       static void add (Symbol eventLabel, Hook callbackFun);
       

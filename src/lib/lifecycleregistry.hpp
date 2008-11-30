@@ -35,8 +35,8 @@
  */
 
 
-#ifndef LUMIERA_LIFECYCLE_H
-#define LUMIERA_LIFECYCLE_H
+#ifndef LUMIERA_LIFECYCLEREGISTRY_H
+#define LUMIERA_LIFECYCLEREGISTRY_H
 
 #include <map>
 #include <set>

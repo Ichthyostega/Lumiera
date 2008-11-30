@@ -24,6 +24,7 @@
 #include "common/test/suite.hpp"
 #include "common/test/testoption.hpp"
 #include "lumiera/appstate.hpp"
+#include "include/lifecycle.h"
 
 using lumiera::AppState;
 using lumiera::ON_GLOBAL_INIT;

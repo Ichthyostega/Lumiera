@@ -21,6 +21,7 @@
 * *****************************************************/
 
 
+#include "include/lifecycle.h"
 #include "lumiera/appstate.hpp"
 #include "lib/lifecycleregistry.hpp"
 
@@ -88,10 +89,10 @@ namespace lumiera {
   
   LifecycleHook::LifecycleHook (Symbol eventLabel, Callback callbackFun)
   {
-    this->add (eventLabel,callbackFun);
+    add (eventLabel,callbackFun);
   }
   
-  LifecycleHook&
+  void
   LifecycleHook::add (Symbol eventLabel, Callback callbackFun)
   {
     bool isNew = AppState::instance().lifecycleHooks_->enroll (eventLabel,callbackFun);
@@ -100,7 +101,13 @@ namespace lumiera {
       callbackFun();  // when this code executes,
                      //  then per definition we are already post "basic init"
                     //   (which happens in the AppState ctor); thus fire it immediately
-    return *this;
+  }
+  
+  
+  void
+  trigger (Symbol eventLabel)
+  {
+    AppState::lifecycle (eventLabel);
   }
   
   
