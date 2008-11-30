@@ -30,15 +30,16 @@
 
 #include <boost/format.hpp>
 
+#include "include/symbol.hpp"
 
-namespace lumiera
-  {
+
+namespace lumiera {
+
   using std::string;
   using boost::format;
 
-  /* ==== comon definitions for rule based queries ==== */
+  /* ==== common definitions for rule based queries ==== */
   
-  typedef const char * const Symbol;  
       
 
   /** 
