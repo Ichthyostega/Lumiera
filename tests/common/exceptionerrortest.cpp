@@ -182,7 +182,7 @@ namespace lumiera
          *        this should result in the global unknown() handler to be called,
          *        so usually it will terminate the testrun. 
          *  @note inside error.hpp, an initialisation hook has been installed into
-         *        Appconfig, causing our own unknown() handler to be installed and
+         *        AppState, causing our own unknown() handler to be installed and
          *        invoked, which gives additional diagnostics.*/
         void terminateUnknown ()  throw() 
         {

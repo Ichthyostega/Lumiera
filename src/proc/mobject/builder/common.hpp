@@ -24,7 +24,7 @@
 #ifndef MOBJECT_BUILDER_COMMON_H
 #define MOBJECT_BUILDER_COMMON_H
 
-#include "include/nobugcfg.hpp"
+#include "include/nobugcfg.h"
 
 
 namespace mobject {

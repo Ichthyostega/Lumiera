@@ -45,8 +45,8 @@
 #include "common/p.hpp"
 #include "common/util.hpp"
 #include "common/lumitime.hpp"
-#include "include/error.hpp"   ///< pulls in NoBug via nobugcfg.hpp
-#include "lumiera/appconfig.hpp"
+#include "include/error.hpp"   ///< pulls in NoBug via nobugcfg.h
+#include "lumiera/appstate.hpp"
 
 
 /**

@@ -24,7 +24,7 @@
 
 #include "lib/cmdline.hpp"
 #include "common/util.hpp"
-#include "include/nobugcfg.hpp"
+#include "include/nobugcfg.h"
 
 #include <boost/regex.hpp>
 #include <boost/algorithm/string/split.hpp>

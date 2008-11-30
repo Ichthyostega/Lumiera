@@ -25,8 +25,8 @@
 #define LUMIERA_ERROR_HPP_
 
 #include <string>
-#include "include/nobugcfg.hpp"
-#include "lumiera/appconfig.hpp"
+#include "include/nobugcfg.h"
+#include "include/lifecycle.h"
 #include "lib/error.h"
 
 
@@ -154,7 +154,7 @@ namespace lumiera {
     /** install our own handler for undeclared exceptions. Will be
      *  called automatically ON_BASIC_INIT when including errror.hpp
      *  @note it's OK this is defined multiple times...
-     *  @see appconfig.hpp  */
+     *  @see appstate.hpp  */
     void install_unexpectedException_handler ();
     namespace {
       LifecycleHook schedule_ (ON_BASIC_INIT, &install_unexpectedException_handler);         

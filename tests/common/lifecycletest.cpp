@@ -1,5 +1,5 @@
 /*
-  LifeCycle(Test)  -  checking the lifecycle callback hooks provided by Appconfig
+  LifeCycle(Test)  -  checking the lifecycle callback hooks provided by AppState
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -25,7 +25,7 @@
 #include "common/test/run.hpp"
 #include "common/util.hpp"
 
-#include "lumiera/appconfig.hpp"
+#include "lumiera/appstate.hpp"
 
 
 
@@ -64,7 +64,7 @@ namespace lumiera
             ASSERT (1 == basicInit, "the basic-init callback has been invoked more than once");
             
             ASSERT (!customCallback);
-            Appconfig::lifecycle (MY_MAGIC_MEGA_EVENT);
+            AppState::lifecycle (MY_MAGIC_MEGA_EVENT);
             ASSERT ( 1 == customCallback);
           }
         

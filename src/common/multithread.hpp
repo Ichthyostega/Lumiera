@@ -26,7 +26,7 @@
 #ifndef LUMIERA_MULTITHREAD_H
 #define LUMIERA_MULTITHREAD_H
 
-#include "include/nobugcfg.hpp"
+#include "include/nobugcfg.h"
 #include "common/util.hpp"
 
 

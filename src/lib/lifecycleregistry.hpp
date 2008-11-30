@@ -23,7 +23,7 @@
 
 /** @file lifecycleregistry.hpp
  ** Helper for registering lifecycle event callbacks, which are
- ** provided as a global service by lumiera::Appconfig. This service
+ ** provided as a global service by lumiera::AppState. This service
  ** allows to enrol functions under a given label and then to call
  ** all those registered functions. 
  ** @note this is in fact an event mechanism, and if we start using
@@ -31,7 +31,7 @@
  ** boost::signals. (which has the downside of being an binary
  ** dependency).
  **
- ** @see appconfig.hpp
+ ** @see appstate.hpp
  */
 
 
@@ -54,14 +54,14 @@ namespace lumiera {
   using util::contains;
   using std::string;
 
-  typedef const char * const Symbol;  //TODO define a real Symbol class, i.e. same literal string==same pointer,
+//  typedef const char * const Symbol;  //TODO define a real Symbol class, i.e. same literal string==same pointer,
                                       //     so we don't have to store string keys in the map...
 
   
   /**
    * Registry of callback functions accessible by a label (ID)
    * provided at registration. Registered functions will be added
-   * to a list, which can be triggered via label. Used by Appconfig
+   * to a list, which can be triggered via label. Used by AppState
    * to implement the lumiera lifecycle (init, shutdown) hooks.
    */
   class LifecycleRegistry
@@ -95,7 +95,7 @@ namespace lumiera {
       std::map<const string, Callbacks> table_;
       
       LifecycleRegistry ()  {}
-      friend class Appconfig;
+      friend class AppState;
       
     };
 

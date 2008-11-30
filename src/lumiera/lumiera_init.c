@@ -23,7 +23,7 @@
 
 
 //TODO: Lumiera header includes//
-#include "include/nobugcfg.hpp"
+#include "include/nobugcfg.h"
 #include "lumiera/lumiera.h"
 #include "lumiera/config_interface.h"
 

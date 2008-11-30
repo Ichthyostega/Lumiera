@@ -23,9 +23,9 @@
 
 #include "common/test/suite.hpp"
 #include "common/test/testoption.hpp"
-#include "lumiera/appconfig.hpp"
+#include "lumiera/appstate.hpp"
 
-using lumiera::Appconfig;
+using lumiera::AppState;
 using lumiera::ON_GLOBAL_INIT;
 using lumiera::ON_GLOBAL_SHUTDOWN;
 
@@ -39,13 +39,13 @@ int main (int argc, const char* argv[])
   util::Cmdline args (argc,argv);
   test::TestOption optparser (args);
   test::Suite suite (optparser.getTestgroup());
-  Appconfig::lifecycle(ON_GLOBAL_INIT);
+  AppState::lifecycle(ON_GLOBAL_INIT);
   
   if (optparser.getDescribe())
     suite.describe();
   else
     suite.run (args);
 
-  Appconfig::lifecycle(ON_GLOBAL_SHUTDOWN);
+  AppState::lifecycle(ON_GLOBAL_SHUTDOWN);
   return 0;
 }

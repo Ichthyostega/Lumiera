@@ -52,7 +52,7 @@ namespace control {
   STypeManager::reset() 
   {
     reg_.reset(new Registry);
-    lumiera::Appconfig::lifecycle(ON_STREAMTYPES_RESET);
+    lumiera::AppState::lifecycle(ON_STREAMTYPES_RESET);
   }
   
   /** \par

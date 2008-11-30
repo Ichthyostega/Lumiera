@@ -24,7 +24,7 @@
 #include "common/configrules.hpp"
 #include "common/query/mockconfigrules.hpp"
 //#include "common/util.hpp"
-#include "include/nobugcfg.hpp"
+#include "include/nobugcfg.h"
 
 
 

@@ -1,5 +1,5 @@
 /*
-  Appconfig(Test)  -  accessing the always-available Appconfig singleton
+  Appconfig(Test)  -  accessing the always-available AppState singleton
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -25,7 +25,7 @@
 #include "common/test/run.hpp"
 #include "common/util.hpp"
 
-#include "lumiera/appconfig.hpp"
+#include "lumiera/appstate.hpp"
 
 
 
@@ -42,10 +42,10 @@ namespace lumiera {
             UNIMPLEMENTED ("reorganise config access for C++");
           }
         
-        /** @test accessing a value from lumiera::Appconfig */
+        /** @test accessing a value from lumiera::AppState */
         void testAccess (const string& key)
         {
-//        string ver = lumiera::Appconfig::get(key);
+//        string ver = lumiera::AppState::get(key);
 //        ASSERT ( !util::isnil(ver));
         }
       };

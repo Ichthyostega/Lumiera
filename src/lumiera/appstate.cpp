@@ -1,5 +1,5 @@
 /*
-  Appconfig  -  for global initialisation and configuration 
+  AppState  -  application initialisation and behaviour 
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,9 @@
 * *****************************************************/
 
 
-#include "lumiera/appconfig.hpp"
+#include "lumiera/appstate.hpp"
+#include "lib/lifecycleregistry.hpp"
+
 #include "include/error.hpp"
 #include "common/util.hpp"
 
@@ -31,41 +33,53 @@ using util::cStr;
 
 namespace lumiera {
   
-
-
+  
+  
   Symbol ON_BASIC_INIT      ("ON_BASIC_INIT");
   Symbol ON_GLOBAL_INIT     ("ON_GLOBAL_INIT");
   Symbol ON_GLOBAL_SHUTDOWN ("ON_GLOBAL_SHUTDOWN");
   
-
+  
   /** perform initialisation triggered on first access. 
    *  Will execute the ON_BASIC_INIT hook, but under typical
    *  circumstances this is a NOP, because when callbacks are
-   *  added to this hook, the Appconfig singleton instance has
+   *  added to this hook, the AppState singleton instance has
    *  already been created. For this reason, there is special
    *  treatment for the ON_BASIC_INIT in LifecycleHook::add,
    *  causing the provided callbacks to be fired immediately.
    *  (btw, this is nothing to be worried of, because from
    *  client codes POV it just behaves like intended). 
    */
-  Appconfig::Appconfig()
+  AppState::AppState()
     : lifecycleHooks_(new LifecycleRegistry)
   {
     lifecycleHooks_->execute (ON_BASIC_INIT);   // note in most cases a NOP
   }
   
   
+  AppState::~AppState()  { }
+  
+  
+  
+  AppState& 
+  AppState::instance()  // Meyer's singleton
+  {
+    static scoped_ptr<AppState> theApp_ (0);
+    if (!theApp_) theApp_.reset (new AppState ());
+    return *theApp_;
+  }
   
   
   
   void
-  Appconfig::lifecycle (Symbol event_label)
+  AppState::lifecycle (Symbol event_label)
   {
     instance().lifecycleHooks_->execute(event_label);
   }
-
-
-
+  
+  
+  
+  
   
   // ==== implementation LifecycleHook class =======
   
@@ -80,12 +94,12 @@ namespace lumiera {
   LifecycleHook&
   LifecycleHook::add (Symbol eventLabel, Callback callbackFun)
   {
-    bool isNew = Appconfig::instance().lifecycleHooks_->enroll (eventLabel,callbackFun);
+    bool isNew = AppState::instance().lifecycleHooks_->enroll (eventLabel,callbackFun);
     
     if (isNew && !strcmp(ON_BASIC_INIT, eventLabel))
       callbackFun();  // when this code executes,
                      //  then per definition we are already post "basic init"
-                    //   (which happens in the Appconfig ctor); thus fire it immediately
+                    //   (which happens in the AppState ctor); thus fire it immediately
     return *this;
   }
   
@@ -93,17 +107,28 @@ namespace lumiera {
   
 } // namespace lumiera
 
-// ==== implementation C interface =======
 
-void 
-lumiera_LifecycleHook_add (const char* eventLabel, void callbackFun(void))
-{
-  lumiera::LifecycleHook (eventLabel, callbackFun);
+extern "C" { /* ==== implementation C interface for lifecycle hooks ======= */
+  
+  
+  extern const char * lumiera_ON_BASIC_INIT       = lumiera::ON_BASIC_INIT;
+  extern const char * lumiera_ON_GLOBAL_INIT      = lumiera::ON_GLOBAL_INIT;
+  extern const char * lumiera_ON_GLOBAL_SHUTDOWN  = lumiera::ON_GLOBAL_SHUTDOWN;
+  
+  
+  
+  void 
+  lumiera_LifecycleHook_add (const char* eventLabel, void callbackFun(void))
+  {
+    lumiera::LifecycleHook (eventLabel, callbackFun);
+  }
+  
+  
+  void
+  lumiera_Lifecycle_trigger (const char* eventLabel)
+  {
+    lumiera::AppState::lifecycle (eventLabel);
+  }
+  
 }
 
-
-void
-lumiera_Lifecycle_execute (const char* eventLabel)
-{
-  lumiera::Appconfig::lifecycle (eventLabel);
-}

@@ -22,7 +22,7 @@
  
 */
 
-/** @file nobugcfg.hpp
+/** @file nobugcfg.h
  ** This header is for including and configuring NoBug.
  ** The idea is that configuration and some commonly used flag 
  ** declarations are to be kept in one central location. Subsystems
@@ -67,7 +67,7 @@
 
 #ifdef __cplusplus  /* ============= C++ ================ */
 
-#include "lumiera/appstate.hpp"
+#include "include/lifecycle.h"
 #include "include/error.hpp"  ///< make assertions throw instead of abort()
 
 namespace lumiera { 

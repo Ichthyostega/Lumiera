@@ -21,10 +21,10 @@
 * *****************************************************/
 
 
-#include "include/nobugcfg.hpp"
+#include "include/nobugcfg.h"
 
 #define NOBUG_INIT_DEFS_
-#include "include/nobugcfg.hpp"
+#include "include/nobugcfg.h"
 #undef NOBUG_INIT_DEFS_
 
 

@@ -38,7 +38,7 @@ This code is heavily inspired by
 #include "common/singletonpolicies.hpp"  // several Policies usable together with SingletonFactory
 
 #include "common/util.hpp"
-#include "include/nobugcfg.hpp"
+#include "include/nobugcfg.h"
 
 
 

@@ -219,5 +219,5 @@ noinst_HEADERS +=							\
 	$(liblumiproc_a_srcdir)/asset.hpp				\
 	$(liblumiproc_a_srcdir)/assetmanager.hpp			\
 	$(liblumiproc_a_srcdir)/lumiera.hpp				\
-	$(liblumiproc_a_srcdir)/nobugcfg.hpp
+	$(liblumiproc_a_srcdir)/nobugcfg.h
 

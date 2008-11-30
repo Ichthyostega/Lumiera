@@ -47,7 +47,7 @@ noinst_HEADERS +=						\
 	$(liblumiera_a_srcdir)/mrucache.h			\
 	$(liblumiera_a_srcdir)/time.h				\
 	$(liblumiera_a_srcdir)/ppmpl.h				\
-	$(liblumiera_a_srcdir)/appconfig.hpp			\
+	$(liblumiera_a_srcdir)/appstate.hpp			\
 	$(liblumiera_a_srcdir)/allocationcluster.hpp	\
 	$(liblumiera_a_srcdir)/scopedholdertransfer.hpp	\
 	$(liblumiera_a_srcdir)/scopedholder.hpp			\

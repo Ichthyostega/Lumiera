@@ -56,7 +56,7 @@
 
 
 #include "proc/asset/category.hpp"
-#include "include/nobugcfg.hpp"
+#include "include/nobugcfg.h"
 #include "include/error.hpp"
 #include "common/p.hpp"
 

@@ -196,7 +196,7 @@ Actions::on_menu_help_about()
   
   //dialog.set_program_name(AppTitle);
   dialog.set_version(AppVersion);
-  //dialog.set_version(Appconfig::get("version"));
+  //dialog.set_version(AppState::get("version"));
   dialog.set_copyright(AppCopyright);
   dialog.set_website(AppWebsite);
   dialog.set_authors(StringArrayHandle(AppAuthors,
