@@ -1,5 +1,5 @@
 /*
-  mainsuite.cpp  -  "the" Lumiera self test suite
+  mainsuite.cpp  -  execute a suite of test objects, possibly filtered by category
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -32,7 +32,7 @@ using lumiera::ON_GLOBAL_SHUTDOWN;
 
 
 /** run all tests or any single test specified in the first
- *  cmd line argument.
+ *  command line argument.
  *  Note: to ease debugging, we don't catch any exceptions. 
  */
 int main (int argc, const char* argv[])

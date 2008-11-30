@@ -1,5 +1,5 @@
 /*
-  TestOption  -  handle cmdline for invoking Testsuite
+  Option  -  handle cmdline for starting the Lumiera application
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,7 @@
 * *****************************************************/
 
 
-#include "common/test/testoption.hpp"
-#include "common/test/suite.hpp"
+#include "lumiera/option.hpp"
 
 #include "include/error.hpp"
 
@@ -35,19 +34,17 @@ namespace op = boost::program_options;
 
 using util::VectS;
 
-namespace test
-  {
+namespace lumiera {
   
   
-  /** set up an options parser to use the current commandline.
+  /** set up an options parser to use the application commandline.
    *  Recognises the following options
    *  \code
    *  --help
-   *  --group <groupID>
-   *  --describe
    *  \endcode
+   *  @todo describe the actual options
    */
-  TestOption::TestOption (util::Cmdline& cmdline)
+  Option::Option (util::Cmdline& cmdline)
     : syntax("Run a collection of test cases. Supported parameters"),
       parameters()
     {
@@ -88,7 +85,7 @@ namespace test
   /** @return the Tests-Group as given on cmdline, or Suite::ALLGROUP as default
    */
   const string 
-  TestOption::getTestgroup ()
+  Option::getTestgroup ()
     {
       ASSERT (parameters.count ("group"));
       return parameters["group"].as<string>();
@@ -97,7 +94,7 @@ namespace test
   /** @return ID of a single test to run, empty string if not specified
    */
   const string
-  TestOption::getTestID ()
+  Option::getTestID ()
     {
       if (parameters.count ("id") &&
           parameters["id"].as<VectS>().size() > 0)
@@ -108,7 +105,7 @@ namespace test
   
   /** @return \c true if --describe switch was given */
   const bool 
-  TestOption::getDescribe ()
+  Option::getDescribe ()
     {
       return parameters["describe"].as<bool>();
     }
@@ -123,4 +120,4 @@ namespace test
 
   
   
-} // namespace test
+} // namespace lumiera

@@ -24,23 +24,63 @@
 
 #include <iostream>
 
-#include "proc/common.hpp"
+#include "include/nobugcfg.h"
+#include "include/error.hpp"
+#include "include/lifecycle.h"
+#include "lumiera/appstate.hpp"
+#include "lumiera/option.hpp"
 
-using std::cout;
-using std::endl;
 using lumiera::AppState;
 using lumiera::ON_GLOBAL_INIT;
 using lumiera::ON_GLOBAL_SHUTDOWN;
 
 
-int main (int argc, char* argv[])
+int
+main (int argc, char* argv[])
 {
-  cout << "*** Lumiera NLE for Linux ***" << endl;
+  NOTICE (lumiera, "*** Lumiera NLE for Linux ***");
   
-  AppState::lifecycle (ON_GLOBAL_INIT);
+  util::Cmdline args (argc,argv);
+  AppState& application = AppState::instance();
+  application.decide (lumiera::Option (args));
   
-  // great things are happening here....
+  try
+    {
+      AppState::lifecycle (ON_GLOBAL_INIT);
+      
+      if (application.isLoadExistingSession())
+          Session::current.load (application.getSessionFile());
+      
+      if (application.isServerNode())
+          ServerNode::open (application.getNodeServices());
+      
+      if (application.isUseGUI())
+          GuiFacade::start();
+      
+      if (application.isRunScript())
+          ScriptEnv::run (application.getScriptFile());
+      
+      return 0;
+    }
+  
+  catch (lumiera::Error& problem)
+    {
+      application.abort (problem);
+    }
+  catch (...)
+    {
+      application.abort();
+    }
+  
+}
+
+
+
+void
+shutdown ()
+{
+  /////////////TODO: any sensible way how this function can be activated?
   
   AppState::lifecycle (ON_GLOBAL_SHUTDOWN);
-  return 0;
+  
 }

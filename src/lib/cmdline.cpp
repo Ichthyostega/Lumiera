@@ -50,8 +50,8 @@ using boost::regex_search;
 namespace util
   {
   
-  /** create as a tokenized <i>copy</i> of the current commandline.
-   *  Note that argv[0] is allways ignored. */
+  /** create as a tokenised <i>copy</i> of the current commandline.
+   *  Note that argv[0] is always ignored. */
   Cmdline::Cmdline (int argc, const char** argv)
     : vector<string> (noneg(argc-1))
     {
@@ -63,7 +63,7 @@ namespace util
     }
    
     
-  /** create by tokenizing a string 
+  /** create by tokenising a string 
    *  (e.g. "fake" cmdline, separated by whitespace) 
    */ 
   Cmdline::Cmdline (const string cmdline)

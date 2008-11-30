@@ -1,5 +1,5 @@
 /*
-  TESTOPTION.hpp  -  handle cmdline for invoking Testsuite
+  OPTION.hpp  -  handle cmdline for starting the Lumiera application
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,8 @@
 */
 
 
-#ifndef TESTHELPER_TESTOPTION_H
-#define TESTHELPER_TESTOPTION_H
+#ifndef LUMIERA_OPTION_H
+#define LUMIERA_OPTION_H
 
 #include "lib/cmdline.hpp"
 
@@ -33,8 +33,8 @@
 
 
 
-namespace test
-  {
+namespace lumiera {
+  
   using std::string;
   using std::ostream;
   
@@ -50,10 +50,10 @@ namespace test
    * vector will contain only the remaining
    * unrecognised parts.
    */
-  class TestOption : private boost::noncopyable
+  class Option : private boost::noncopyable
     {
     public:
-      TestOption (util::Cmdline& cmdline);
+      Option (util::Cmdline& cmdline);
       const string getTestgroup ();
       const string getTestID ();
       const bool getDescribe ();
@@ -71,5 +71,5 @@ namespace test
   ostream& operator<< (ostream& os, const TestOption& to);
  
   
-} // namespace test
+} // namespace lumiera
 #endif

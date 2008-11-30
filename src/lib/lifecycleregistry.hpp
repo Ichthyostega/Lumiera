@@ -54,8 +54,6 @@ namespace lumiera {
   using util::contains;
   using std::string;
 
-//  typedef const char * const Symbol;  //TODO define a real Symbol class, i.e. same literal string==same pointer,
-                                      //     so we don't have to store string keys in the map...
 
   
   /**
