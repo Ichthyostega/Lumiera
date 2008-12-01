@@ -1,5 +1,5 @@
 /*
-  Asset}  -  Superinterface: bookeeping view of "things" present in the session
+  Asset  -  Superinterface: bookkeeping view of "things" present in the session
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -40,8 +40,7 @@ using util::and_all;
 using util::cStr;
 
 
-namespace asset
-  {
+namespace asset {
   
   using ::NOBUG_FLAG(memory);
   NOBUG_CPP_DEFINE_FLAG_PARENT(assetmem,  memory);
@@ -96,7 +95,7 @@ namespace asset
   }
   
   /**
-   * whether this asset is swithced on and consequently included
+   * whether this asset is switched on and consequently included
    * in the fixture and participates in rendering.
    */
   bool
@@ -137,7 +136,7 @@ namespace asset
     other->unlink (this->id);  
   }
     
-  /** release all links to other <i>dependant</i> 
+  /** release all links to other <i>dependent</i> 
    *  asset objects held internally and advise all parent
    *  assets to do so with the link to this asset. 
    *  @note we don't release upward links to parent assets,

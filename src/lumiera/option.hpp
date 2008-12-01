@@ -62,13 +62,13 @@ namespace lumiera {
       boost::program_options::options_description syntax;
       boost::program_options::variables_map parameters;
       
-      friend ostream& operator<< (ostream&, const TestOption&);
+      friend ostream& operator<< (ostream&, const Option&);
     };
   
     
   /** for outputting the help messages. Forward accumulated 
    *  help messages from all contained option definitions */
-  ostream& operator<< (ostream& os, const TestOption& to);
+  ostream& operator<< (ostream& os, const Option& to);
  
   
 } // namespace lumiera

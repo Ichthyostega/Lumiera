@@ -80,7 +80,45 @@ namespace lumiera {
       static void lifecycle (Symbol eventLabel);
       
       
+      /** evaluate the command line options and maybe additional configuration
+       *  such as to be able to determine the further behaviour of the application.
+       *  Set the internal state within this object accordingly */
+      void evaluate (lumiera::Option& options);
       
+      
+      /** building on the state determined by #evaluate, decide if the given Subsys
+       *  needs to be pulled up and, if necessary, register the Subsys and its
+       *  prerequisites to be maintained throughout the application's lifetime. */
+      void maybeStart (lumiera::Subsys&);
+      
+      
+      enum ExitCode {
+        NORMAL_EXIT,
+        CLEAN_EXIT_AFTER_ERROR,
+        CLEAN_EMERGENCY_EXIT,
+        FAILED_EMERGENCY_EXIT
+      };
+      
+      /** put the main thread of the application into a wait state, if some subsystem(s)
+       *  registered with #maybeStart still need to be maintained. On termination of
+       *  one of those components, tear down the remaining components and initiate
+       *  a normal or emergency shutdown of the application, depending on the
+       *  triggering component's mode of termination (exit or exception). 
+       *  @return global application exit code */
+      ExitCode maybeWait();
+      
+      
+      /** initiate the controlled error shutdown sequence
+       *  @param problem causing exception */
+      ExitCode abort (lumiera::Error& problem);
+      
+      
+      /** initiate an fatal emergency shutdown,
+       *  caused by an unforeseen error condition */
+      ExitCode abort ();
+      
+      
+    
     private:
       typedef scoped_ptr<LifecycleRegistry> PLife;
       

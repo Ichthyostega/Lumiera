@@ -113,7 +113,7 @@ namespace lumiera {
   
 
   ostream& 
-  operator<< (ostream& os, const TestOption& to)
+  operator<< (ostream& os, const Option& to)
     {
       return os << to.syntax;
     }

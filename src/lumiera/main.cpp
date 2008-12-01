@@ -73,7 +73,7 @@ main (int argc, const char* argv[])
       application.maybeStart (lumigui);
       application.maybeStart (script);
       
-      return 0; // main thread terminating after successful startup
+      return application.maybeWait();
     }
   
   

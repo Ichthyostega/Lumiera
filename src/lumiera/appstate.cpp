@@ -80,6 +80,52 @@ namespace lumiera {
   
   
   
+  void
+  AppState::evaluate (lumiera::Option& options)
+  {
+    UNIMPLEMENTED ("evaluate the options and set global application state");
+  }
+  
+  
+  
+  void
+  AppState::maybeStart (lumiera::Subsys&)
+  {
+    UNIMPLEMENTED ("maybe register and activate the given subsystem");
+  }
+  
+  
+  
+  using AppState::ExitCode;
+  
+  
+  ExitCode
+  AppState::maybeWait()
+  {
+    UNIMPLEMENTED ("wait on termination and normal shutdown");
+  }
+  
+  
+  
+  ExitCode
+  AppState::abort (lumiera::Error& problem)
+  {
+    UNIMPLEMENTED ("clean error shutdown");
+  }
+  
+  
+  
+  ExitCode
+  AppState::abort ()
+  {
+    UNIMPLEMENTED ("emergency shutdown");
+  }
+  
+  
+  
+  
+  
+  
   
   
   // ==== implementation LifecycleHook class =======
