@@ -30,38 +30,52 @@
 #include "lumiera/appstate.hpp"
 #include "lumiera/option.hpp"
 
+using util::Cmdline;
+using lumiera::Subsys;
 using lumiera::AppState;
 using lumiera::ON_GLOBAL_INIT;
-using lumiera::ON_GLOBAL_SHUTDOWN;
+
+namespace {
+  Subsys engine  = backend::EngineFacade::getDescriptor();
+  Subsys netNode = backend::NetNodeFacade::getDescriptor();
+  Subsys script  = backend::ScriptRunnerFacade::getDescriptor();
+  Subsys builder = proc::Facade::getBuilderDescriptor();
+  Subsys session = proc::Facade::getSessionDescriptor();
+  Subsys lumigui = gui::Facade::getDescriptor();
+}
+
 
 
 int
-main (int argc, char* argv[])
+main (int argc, const char* argv[])
 {
   NOTICE (lumiera, "*** Lumiera NLE for Linux ***");
   
-  util::Cmdline args (argc,argv);
+  Cmdline args (argc,argv);
   AppState& application = AppState::instance();
-  application.decide (lumiera::Option (args));
+  lumiera::Option options (args);
+  application.evaluate (options);
   
   try
     {
       AppState::lifecycle (ON_GLOBAL_INIT);
       
-      if (application.isLoadExistingSession())
-          Session::current.load (application.getSessionFile());
+      session.depends (builder);
+      netNode.depends (session);
+      netNode.depends (engine);
+      lumigui.depends (session);
+      lumigui.depends (engine);
+      script.depends (session);
+      script.depends (engine);
       
-      if (application.isServerNode())
-          ServerNode::open (application.getNodeServices());
+      application.maybeStart (session);
+      application.maybeStart (netNode);
+      application.maybeStart (lumigui);
+      application.maybeStart (script);
       
-      if (application.isUseGUI())
-          GuiFacade::start();
-      
-      if (application.isRunScript())
-          ScriptEnv::run (application.getScriptFile());
-      
-      return 0;
+      return 0; // main thread terminating after successful startup
     }
+  
   
   catch (lumiera::Error& problem)
     {
@@ -71,16 +85,4 @@ main (int argc, char* argv[])
     {
       application.abort();
     }
-  
-}
-
-
-
-void
-shutdown ()
-{
-  /////////////TODO: any sensible way how this function can be activated?
-  
-  AppState::lifecycle (ON_GLOBAL_SHUTDOWN);
-  
 }
