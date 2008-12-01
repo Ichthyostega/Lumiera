@@ -48,9 +48,11 @@ namespace lumiera {
     : syntax("Run a collection of test cases. Supported parameters"),
       parameters()
     {
+      UNIMPLEMENTED ("parse main Lumiera application parameters");
+      
       syntax.add_options()
         ("help,h",      "produce help message")
-        ("group,g",     op::value<string>()->default_value(Suite::ALLGROUP),
+        ("group,g",     op::value<string>()->default_value("blablubb"),
                         "the group (selection) of testcases to execute")
         ("describe",    op::bool_switch(),
                         "enumerate all testcases in this Suite in a format usable with ./test.sh.")
@@ -87,6 +89,8 @@ namespace lumiera {
   const string 
   Option::getTestgroup ()
     {
+      NOTREACHED; ////////////////////////////TODO: define real query functions
+      
       ASSERT (parameters.count ("group"));
       return parameters["group"].as<string>();
     }
@@ -96,6 +100,8 @@ namespace lumiera {
   const string
   Option::getTestID ()
     {
+      NOTREACHED; ////////////////////////////TODO: define real query functions
+      
       if (parameters.count ("id") &&
           parameters["id"].as<VectS>().size() > 0)
         return parameters["id"].as<VectS>()[0];
@@ -107,6 +113,8 @@ namespace lumiera {
   const bool 
   Option::getDescribe ()
     {
+      NOTREACHED; ////////////////////////////TODO: define real query functions
+
       return parameters["describe"].as<bool>();
     }
   
@@ -115,6 +123,8 @@ namespace lumiera {
   ostream& 
   operator<< (ostream& os, const Option& to)
     {
+      NOTREACHED; ////////////////////////////TODO: define real query help messg
+
       return os << to.syntax;
     }
 

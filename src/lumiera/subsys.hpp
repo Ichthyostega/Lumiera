@@ -45,6 +45,7 @@
 
 //#include "include/symbol.hpp"
 #include "include/error.hpp"
+#include "lumiera/option.hpp"
 
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
@@ -59,7 +60,6 @@ namespace lumiera {
 //  using boost::scoped_ptr;
   using boost::noncopyable;
   
-  typedef void (SigTerm)(Error*); ///////////////////TODO better use Glib-- Signal type?
   
   
   /**
@@ -71,7 +71,8 @@ namespace lumiera {
     : private noncopyable
     {
     public:
-//    Subsys ();
+      typedef void (SigTerm)(Error*); ///////////////////TODO better use Glib-- Signal type?
+      
       
       virtual ~Subsys () {};
       
@@ -112,7 +113,7 @@ namespace lumiera {
   
   
   //------ implementation skeleton ----------
-  Subsys&
+  inline Subsys&
   Subsys::depends (Subsys& prereq)
   {
     TODO ("anything else to care when defining a dependency on the prerequisite subsystem??");/////////////////////TODO
@@ -122,7 +123,7 @@ namespace lumiera {
   
   
   
-  bool
+  inline bool
   Subsys::isRunning()
   {
     UNIMPLEMENTED ("maintain isRunning flag in a threadsafe manner");

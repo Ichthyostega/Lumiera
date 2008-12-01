@@ -96,7 +96,7 @@ namespace lumiera {
   
   
   
-  using AppState::ExitCode;
+  typedef AppState::ExitCode ExitCode;
   
   
   ExitCode

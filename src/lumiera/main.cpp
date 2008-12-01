@@ -30,18 +30,24 @@
 #include "lumiera/appstate.hpp"
 #include "lumiera/option.hpp"
 
+#include "backend/enginefacade.hpp"
+#include "backend/netnodefacade.hpp"
+#include "backend/scriptrunnerfacade.hpp"
+#include "proc/facade.hpp"
+#include "gui/guifacade.hpp"
+
 using util::Cmdline;
 using lumiera::Subsys;
 using lumiera::AppState;
 using lumiera::ON_GLOBAL_INIT;
 
 namespace {
-  Subsys engine  = backend::EngineFacade::getDescriptor();
-  Subsys netNode = backend::NetNodeFacade::getDescriptor();
-  Subsys script  = backend::ScriptRunnerFacade::getDescriptor();
-  Subsys builder = proc::Facade::getBuilderDescriptor();
-  Subsys session = proc::Facade::getSessionDescriptor();
-  Subsys lumigui = gui::Facade::getDescriptor();
+  Subsys& engine  = backend::EngineFacade::getDescriptor();
+  Subsys& netNode = backend::NetNodeFacade::getDescriptor();
+  Subsys& script  = backend::ScriptRunnerFacade::getDescriptor();
+  Subsys& builder = proc::Facade::getBuilderDescriptor();
+  Subsys& session = proc::Facade::getSessionDescriptor();
+  Subsys& lumigui = gui::GuiFacade::getDescriptor();
 }
 
 
