@@ -45,13 +45,13 @@
 #include "common/p.hpp"
 #include "common/util.hpp"
 #include "common/lumitime.hpp"
+#include "include/symbol.hpp"
 #include "include/error.hpp"   ///< pulls in NoBug via nobugcfg.h
-#include "lumiera/appstate.hpp"
 
 
 /**
- * Namespace for globals.
- * A small number of definitions and facilities of application wide relevance.
+ * Lumiera public interface.
+ * Global interfaces and facilities accessible from plugins and scripts.
  * It's probably a good idea to pull it in explicitly and to avoid nesting
  * implementation namespaces within \c lumiera::
  */
@@ -64,7 +64,7 @@ namespace lumiera {
 
 
 /**
- * Namespace for support and library code.
+ * Implementation namespace for support and library code.
  */
 namespace lib { 
 
@@ -73,12 +73,14 @@ namespace lib {
 
 /**
  * The asset subsystem of the Proc-Layer.
+ * @todo refactor proc namespaces
  */
 namespace asset { }
 
 
 /**
  * Proc-Layer dispatcher, controller and administrative facilities.
+ * @todo refactor proc namespaces
  */
 namespace control { }
 
@@ -88,6 +90,7 @@ namespace control { }
  * Backbone of the engine, render nodes base and cooperation.
  * A good deal of the active engine code is outside the scope of the
  * Proc-Layer, e.g. code located in backend services and plugins.
+ * @todo refactor proc namespaces
  */
 namespace engine { }
 
@@ -95,6 +98,8 @@ namespace engine { }
 
 /**
  * Media-Objects, edit operations and high-level session.
+ * @todo is this interface or implementation ??
+ * @todo refactor proc namespaces
  */
 namespace mobject {
 

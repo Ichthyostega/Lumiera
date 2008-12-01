@@ -24,6 +24,7 @@
 #include "proc/common.hpp"
 #include "proc/control/stypemanager.hpp"
 #include "proc/control/styperegistry.hpp"
+#include "lumiera/appstate.hpp"
 
 
 namespace control {
