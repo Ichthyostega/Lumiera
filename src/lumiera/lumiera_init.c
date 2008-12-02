@@ -41,29 +41,6 @@
 
 //code goes here//
 
-/**
- * Early initialization
- * Sets up some important basic stuff, this is run as *very* first before anything
- * else got initialized. Used for NoBug and other kinds of hooks. There is no matching
- * shutdown function for this, consider moving as much as possible to lumiera_init()
- */
-void
-lumiera_preinit (void)
-{
-  TRACE (lumiera, "booting up");
-}
-
-
-/**
- * Standard initialization procedure
- * Boots all builtin subsystems up as described in DesignProcess/GlobalInitilaization.
- * The configuration and interfaces/plugin subsystems are already started at this point and
- * commandline arguments are parsed.
- */
-void
-lumiera_init (void)
-{
-}
 
 
 /**

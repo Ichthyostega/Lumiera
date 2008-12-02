@@ -28,7 +28,6 @@
 #include "lumiera/interface.h"
 #include "lumiera/interfaceregistry.h"
 #include "lumiera/plugin.h"
-#include "lumiera/config.h"
 
 //TODO: internal/static forward declarations//
 
@@ -36,9 +35,6 @@
 //TODO: System includes//
 #include <stdio.h>
 
-#ifndef LUMIERA_CONFIG_PATH
-#error LUMIERA_CONFIG_PATH not defined
-#endif
 
 
 /**
@@ -53,18 +49,11 @@ start (int argc, char** argv)
 {
   (void) argc;
   (void) argv;
-  lumiera_preinit ();
 
-  TODO ("commandline parser");
-  lumiera_config_init (LUMIERA_CONFIG_PATH);
-
-
-  TODO ("video editing");
 
   TRACE (lumiera, "initiating shutdown sequence");
   lumiera_shutdown ();
   lumiera_interfaceregistry_destroy ();
-  lumiera_config_destroy ();
 }
 
 

@@ -22,8 +22,6 @@
 */
 
 
-#include <iostream>
-
 #include "include/nobugcfg.h"
 #include "include/error.hpp"
 #include "lumiera/appstate.hpp"

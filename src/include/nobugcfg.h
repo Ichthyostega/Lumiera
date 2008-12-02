@@ -73,7 +73,7 @@
 namespace lumiera { 
   void initialise_NoBug ();
   namespace {
-    LifecycleHook schedule_ (ON_BASIC_INIT, &initialise_NoBug);         
+    LifecycleHook trigger_it_ (ON_BASIC_INIT, &initialise_NoBug);         
 } }
 #endif /* =====================(End) C++ ================ */
 
@@ -105,9 +105,9 @@ namespace lumiera {
   NOBUG_CPP_DEFINE_FLAG              (all);
   NOBUG_CPP_DEFINE_FLAG_PARENT       (lumiera_all, all);
   NOBUG_CPP_DEFINE_FLAG_PARENT       (lumiera,     lumiera_all);
-  NOBUG_CPP_DEFINE_FLAG_PARENT_LIMIT (operate,     lumiera,    LOG_INFO);
+  NOBUG_CPP_DEFINE_FLAG_PARENT       (config,      lumiera);
+  NOBUG_CPP_DEFINE_FLAG_PARENT       (operate,     lumiera);
   NOBUG_CPP_DEFINE_FLAG_PARENT_LIMIT (render,      lumiera,    LOG_WARNING);
-  NOBUG_CPP_DEFINE_FLAG_PARENT_LIMIT (config,      lumiera,    LOG_WARNING);
   NOBUG_CPP_DEFINE_FLAG_PARENT_LIMIT (memory,      lumiera,    LOG_WARNING);
   NOBUG_CPP_DEFINE_FLAG_PARENT_LIMIT (test,        all,        LOG_ERR);
 

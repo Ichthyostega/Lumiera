@@ -41,28 +41,32 @@ namespace lumiera {
    *  Recognises the following options
    *  \code
    *  --help
+   *  [--session] FILENAME
+   *  --script FILENAME
+   *  --headless
+   *  --port #
    *  \endcode
    *  @todo describe the actual options
    */
   Option::Option (util::Cmdline& cmdline)
-    : syntax("Run a collection of test cases. Supported parameters"),
+    : syntax("Lumiera, the non linear video editor. Supported parameters"),
       parameters()
     {
-      UNIMPLEMENTED ("parse main Lumiera application parameters");
-      
       syntax.add_options()
         ("help,h",      "produce help message")
-        ("group,g",     op::value<string>()->default_value("blablubb"),
-                        "the group (selection) of testcases to execute")
-        ("describe",    op::bool_switch(),
-                        "enumerate all testcases in this Suite in a format usable with ./test.sh.")
-        ("id",          op::value<VectS>(),
-                        "an individual testcase to be called.\nIf not specified, run all.")
+        ("session,f",   op::value<string>(),
+                        "session file to load")
+        ("script,s",    op::value<string>(),
+                        "execute the given LUA script")
+        ("headless",    op::bool_switch(),
+                        "start without GUI")
+        ("port,p",      op::value<int>(),
+                        "open renderfarm node at given port")
         ;
       
       // the testcase-ID is really an positional parameter
       op::positional_options_description posopt;
-      posopt.add("id", -1);
+      posopt.add("session", -1);
       
       op::parsed_options parsed = 
         op::command_line_parser (cmdline)
@@ -78,7 +82,10 @@ namespace lumiera {
       cmdline = op::collect_unrecognized(parsed.options, op::include_positional);
       
       if (parameters.count("help"))
-        std::cerr << *this;
+        {
+          std::cerr << *this;
+          exit(-1);
+        }
     }
   
   
@@ -121,11 +128,9 @@ namespace lumiera {
   
 
   ostream& 
-  operator<< (ostream& os, const Option& to)
+  operator<< (ostream& os, const Option& ops)
     {
-      NOTREACHED; ////////////////////////////TODO: define real query help messg
-
-      return os << to.syntax;
+      return os << ops.syntax;
     }
 
   

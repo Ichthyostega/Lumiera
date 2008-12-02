@@ -44,7 +44,7 @@ namespace lumiera
     Symbol MY_MAGIC_MEGA_EVENT = "dial M for murder";
     
     
-    namespace // register them to be invoced by lifecycle event id 
+    namespace // register them to be invoked by lifecycle event id 
       {
       LifecycleHook _schedule1 (ON_BASIC_INIT, &basicInitHook);         
       LifecycleHook _schedule2 (MY_MAGIC_MEGA_EVENT, &myCallback);   

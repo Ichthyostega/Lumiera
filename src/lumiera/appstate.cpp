@@ -35,6 +35,7 @@ extern "C" {
 }
 
 #include "common/util.hpp"
+#include "include/configfacade.hpp" //////////TODO: temp hack to force configfacade.o to be linked in
 
 
 using util::isnil;
@@ -158,6 +159,9 @@ namespace lumiera {
   ExitCode
   AppState::abort (lumiera::Error& problem)
   {
+          
+    INFO (operate, "Address of Config Facade = %x", &lumiera::Config::instance());   //////////TODO: a temp hack to force configfacade.cpp to be linked into lumiera.exe
+          
     UNIMPLEMENTED ("clean error shutdown");
   }
   

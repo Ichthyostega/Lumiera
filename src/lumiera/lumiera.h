@@ -42,11 +42,6 @@
  */
 
 //TODO: declarations go here//
-void
-lumiera_preinit (void);
-
-void
-lumiera_init (void);
 
 void
 lumiera_shutdown (void);
