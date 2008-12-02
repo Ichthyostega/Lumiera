@@ -21,16 +21,25 @@
 * *****************************************************/
 
 
+#include "include/error.hpp"
 #include "include/lifecycle.h"
 #include "lumiera/appstate.hpp"
 #include "lib/lifecycleregistry.hpp"
 
-#include "include/error.hpp"
+extern "C" {
+#include "lumiera/config_interface.h"
+
+#include "lumiera/interface.h"
+#include "lumiera/interfaceregistry.h"
+#include "lumiera/plugin.h"
+}
+
 #include "common/util.hpp"
 
 
 using util::isnil;
 using util::cStr;
+
 
 namespace lumiera {
   
@@ -52,7 +61,8 @@ namespace lumiera {
    *  client codes POV it just behaves like intended). 
    */
   AppState::AppState()
-    : lifecycleHooks_(new LifecycleRegistry)
+    : lifecycleHooks_(new LifecycleRegistry),
+      parts_(0)
   {
     lifecycleHooks_->execute (ON_BASIC_INIT);   // note in most cases a NOP
   }
@@ -80,10 +90,48 @@ namespace lumiera {
   
   
   
+  
+  
+  // ==== implementation startup sequence for main() =======
+  
+  struct SubsystemRunner
+    {
+      Option& opts_;
+      
+      SubsystemRunner (Option& opts)
+        : opts_(opts)
+        { }
+      
+    };
+  
+  
+#define _THROW_IF \
+  if (lumiera_error_peek()) \
+    throw error::Fatal (lumiera_error());   
+  
+  
+  
   void
-  AppState::evaluate (lumiera::Option& options)
+  AppState::init (Option& options)
   {
-    UNIMPLEMENTED ("evaluate the options and set global application state");
+    TRACE (lumiera, "initialising application core...");
+    
+    lumiera_interfaceregistry_init ();
+    _THROW_IF
+    
+    TODO ("use a plugindb instead of loading all plugins at once");
+    lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
+    _THROW_IF
+    
+    lumiera_config_interface_init ();
+    _THROW_IF
+    
+    AppState::lifecycle (ON_GLOBAL_INIT);
+    _THROW_IF
+    
+    
+    parts_.reset (new SubsystemRunner (options));
+    TRACE (lumiera, "Lumiera core started successfully.");
   }
   
   

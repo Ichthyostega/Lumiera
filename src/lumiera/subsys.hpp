@@ -73,8 +73,7 @@ namespace lumiera {
     public:
       typedef void (SigTerm)(Error*); ///////////////////TODO better use Glib-- Signal type?
       
-      
-      virtual ~Subsys () {};
+      virtual ~Subsys();
       
       
       /** define a dependency to another Subsys
@@ -110,25 +109,6 @@ namespace lumiera {
       std::vector<Subsys*> prereq_;
     };
   
-  
-  
-  //------ implementation skeleton ----------
-  inline Subsys&
-  Subsys::depends (Subsys& prereq)
-  {
-    TODO ("anything else to care when defining a dependency on the prerequisite subsystem??");/////////////////////TODO
-    prereq_.push_back(&prereq);
-    return *this;
-  }
-  
-  
-  
-  inline bool
-  Subsys::isRunning()
-  {
-    UNIMPLEMENTED ("maintain isRunning flag in a threadsafe manner");
-    return false;
-  }
   
   
 } // namespace lumiera

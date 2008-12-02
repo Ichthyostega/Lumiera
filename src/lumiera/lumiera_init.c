@@ -63,9 +63,6 @@ lumiera_preinit (void)
 void
 lumiera_init (void)
 {
-  TRACE (lumiera, "initializing");
-
-  lumiera_config_interface_init ();
 }
 
 

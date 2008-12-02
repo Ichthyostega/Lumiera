@@ -33,7 +33,7 @@
 /**
  * @file
  * Interface instances are published and activated by registering them
- * into a gloabl registry, which is defined here. This instances are identified
+ * into a global registry, which is defined here. This instances are identified
  * by their name and major version.
  */
 

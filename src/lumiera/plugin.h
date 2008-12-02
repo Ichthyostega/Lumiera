@@ -72,7 +72,7 @@ NOBUG_DECLARE_FLAG (plugin);
 struct lumiera_plugin_struct;
 typedef struct lumiera_plugin_struct lumiera_plugin;
 typedef lumiera_plugin* LumieraPlugin;
-enum lumiera_plugin_type;
+
 
 /**
  * Allocates an preinitializes a plugin structure
@@ -89,7 +89,7 @@ lumiera_plugin_new (const char* name);
  * Stores any pending error (from loading) in self which clears out the LUMIERA_ERROR_PLUGIN_INIT error state
  * which was initialized by lumiera_plugin_new(), stores the handle and plugin pointers in the plugin struct.
  * @param self pointer to the plugin struct
- * @param handle opaque handle refering to some plugin type specific data
+ * @param handle opaque handle referring to some plugin type specific data
  * @param plugin a lumieraorg__plugin interface which will be used to initialize this plugin
  */
 LumieraPlugin

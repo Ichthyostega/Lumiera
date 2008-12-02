@@ -53,6 +53,7 @@ namespace lumiera {
   using boost::noncopyable;
   
   class LifecycleRegistry;
+  class SubsystemRunner;
   
   
   /**
@@ -82,10 +83,11 @@ namespace lumiera {
       static void lifecycle (Symbol eventLabel);
       
       
-      /** evaluate the command line options and maybe additional configuration
+      /** evaluate the result of option parsing and maybe additional configuration
        *  such as to be able to determine the further behaviour of the application.
-       *  Set the internal state within this object accordingly */
-      void evaluate (lumiera::Option& options);
+       *  Set the internal state within this object accordingly.
+       *  @return the AppState singleton instance */
+      void init (lumiera::Option& options);
       
       
       /** building on the state determined by #evaluate, decide if the given Subsys
@@ -123,8 +125,10 @@ namespace lumiera {
     
     private:
       typedef scoped_ptr<LifecycleRegistry> PLife;
+      typedef scoped_ptr<SubsystemRunner>   PSub;
       
       PLife lifecycleHooks_;
+      PSub  parts_;
       
       friend class LifecycleHook;
       

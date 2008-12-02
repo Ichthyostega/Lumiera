@@ -26,7 +26,6 @@
 
 #include "include/nobugcfg.h"
 #include "include/error.hpp"
-#include "include/lifecycle.h"
 #include "lumiera/appstate.hpp"
 #include "lumiera/option.hpp"
 
@@ -57,14 +56,12 @@ main (int argc, const char* argv[])
 {
   NOTICE (lumiera, "*** Lumiera NLE for Linux ***");
   
-  Cmdline args (argc,argv);
   AppState& application = AppState::instance();
-  lumiera::Option options (args);
-  application.evaluate (options);
-  
   try
     {
-      AppState::lifecycle (ON_GLOBAL_INIT);
+      Cmdline args (argc,argv);
+      lumiera::Option options (args);
+      application.init (options);
       
       session.depends (builder);
       netNode.depends (session);

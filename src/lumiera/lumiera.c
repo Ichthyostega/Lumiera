@@ -58,12 +58,6 @@ start (int argc, char** argv)
   TODO ("commandline parser");
   lumiera_config_init (LUMIERA_CONFIG_PATH);
 
-  lumiera_interfaceregistry_init ();
-  TODO ("plugindb support instead loading all plugins at once");
-  lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
-
-  lumiera_init ();
-  TRACE (lumiera, "Lumiera is alive");
 
   TODO ("video editing");
 
