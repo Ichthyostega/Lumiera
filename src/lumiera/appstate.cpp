@@ -25,6 +25,7 @@
 #include "include/lifecycle.h"
 #include "lumiera/appstate.hpp"
 #include "lib/lifecycleregistry.hpp"
+#include "lumiera/subsystemrunner.hpp"
 
 extern "C" {
 #include "lumiera/config_interface.h"
@@ -34,12 +35,11 @@ extern "C" {
 #include "lumiera/plugin.h"
 }
 
-#include "common/util.hpp"
+//#include "common/util.hpp"
 #include "include/configfacade.hpp" //////////TODO: temp hack to force configfacade.o to be linked in
 
 
-using util::isnil;
-using util::cStr;
+//using util::isnil;
 
 
 namespace lumiera {
