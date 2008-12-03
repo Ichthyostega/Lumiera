@@ -32,6 +32,7 @@ namespace backend {
   class EngineSubsysDescriptor
     : public Subsys
     {
+      operator string () { return "Engine"; }
       
       bool 
       shouldStart (lumiera::Option&)

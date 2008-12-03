@@ -77,6 +77,9 @@ namespace lumiera {
       
       virtual ~Subsys();
       
+      /** a human readable name */
+      virtual operator string ()  =0;
+
       
       /** define a dependency to another Subsys
        *  required for running this subsystem */

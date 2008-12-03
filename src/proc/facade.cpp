@@ -33,6 +33,7 @@ namespace proc {
   class BuilderSubsysDescriptor
     : public Subsys
     {
+      operator string () { return "Builder"; }
       
       bool 
       shouldStart (lumiera::Option&)
@@ -61,6 +62,7 @@ namespace proc {
   class SessionSubsysDescriptor
     : public Subsys
     {
+      operator string () { return "Session"; }
       
       bool 
       shouldStart (lumiera::Option&)

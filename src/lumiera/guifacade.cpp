@@ -32,6 +32,7 @@ namespace gui {
   class GuiSubsysDescriptor
     : public Subsys
     {
+      operator string () { return "Lumiera GTK GUI"; }
       
       bool 
       shouldStart (lumiera::Option&)

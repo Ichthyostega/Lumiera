@@ -32,6 +32,7 @@ namespace backend {
   class ScriptRunnerSubsysDescriptor
     : public Subsys
     {
+      operator string () { return "Script runner"; }
       
       bool 
       shouldStart (lumiera::Option&)

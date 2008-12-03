@@ -32,6 +32,7 @@ namespace backend {
   class NetNodeSubsysDescriptor
     : public Subsys
     {
+      operator string () { return "Renderfarm node"; }
       
       bool 
       shouldStart (lumiera::Option&)
