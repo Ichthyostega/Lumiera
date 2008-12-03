@@ -127,6 +127,8 @@ namespace lumiera {
       triggerStartup (Subsys* susy)
         {
           ASSERT (susy);
+          INFO (operate, "Starting subsystem \"%s\"", cStr(*susy));
+          
           for_each (susy->prereq_, start_);
           bool started = susy.start (opts_, bind (&SubsystemRunner::sigTerm, this, susy, _1));
           

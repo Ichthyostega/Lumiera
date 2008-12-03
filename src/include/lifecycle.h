@@ -50,6 +50,9 @@ namespace lumiera {
   extern Symbol ON_GLOBAL_INIT;     ///< to be triggered in main()             @note no magic!
   extern Symbol ON_GLOBAL_SHUTDOWN; ///< to be triggered at the end of main()  @note no magic!
   
+  extern Symbol ON_EMERGENCY;       ///< activated on shutdown after premature failure of a subsystem
+
+  
   // client code is free to register and use additional lifecycle events
   
   

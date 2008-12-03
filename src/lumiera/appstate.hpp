@@ -68,7 +68,7 @@ namespace lumiera {
     private:
       AppState ();
       
-      ~AppState ();                 ///< deletion prohibited
+      ~AppState ();
       friend void boost::checked_delete<AppState>(AppState*);
       
       
@@ -85,8 +85,7 @@ namespace lumiera {
       
       /** evaluate the result of option parsing and maybe additional configuration
        *  such as to be able to determine the further behaviour of the application.
-       *  Set the internal state within this object accordingly.
-       *  @return the AppState singleton instance */
+       *  Set the internal state within this object accordingly. */
       void init (lumiera::Option& options);
       
       
@@ -119,7 +118,7 @@ namespace lumiera {
       
       /** initiate an fatal emergency shutdown,
        *  caused by an unforeseen error condition */
-      ExitCode abort ();
+      ExitCode abort ()  throw();
       
       
     
@@ -128,7 +127,9 @@ namespace lumiera {
       typedef scoped_ptr<SubsystemRunner>   PSub;
       
       PLife lifecycleHooks_;
-      PSub  parts_;
+      PSub  subsystems_;
+      
+      bool emergency_;
       
       friend class LifecycleHook;
       

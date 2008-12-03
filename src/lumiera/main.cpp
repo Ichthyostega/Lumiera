@@ -80,10 +80,10 @@ main (int argc, const char* argv[])
   
   catch (lumiera::Error& problem)
     {
-      application.abort (problem);
+      return application.abort (problem);
     }
   catch (...)
     {
-      application.abort();
+      return application.abort();
     }
 }
