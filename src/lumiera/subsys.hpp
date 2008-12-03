@@ -48,6 +48,7 @@
 #include "lumiera/option.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <boost/tr1/functional.hpp>
 //#include <boost/scoped_ptr.hpp>
 //#include <string>
 #include <vector>
@@ -59,6 +60,7 @@ namespace lumiera {
   using std::string;
 //  using boost::scoped_ptr;
   using boost::noncopyable;
+  using std::tr1::function;
   
   
   
@@ -71,7 +73,7 @@ namespace lumiera {
     : private noncopyable
     {
     public:
-      typedef void (SigTerm)(Error*); ///////////////////TODO better use Glib-- Signal type?
+      typedef function<void(Error*)> SigTerm;
       
       virtual ~Subsys();
       
@@ -81,20 +83,23 @@ namespace lumiera {
       Subsys& depends (Subsys& prereq);
       
       
-      /** a query to run on the application option state
-       *  to determine if this subsystem should be activated. */
+      /** query application option state to determine 
+       *  if this subsystem should be activated. */
       virtual bool shouldStart (lumiera::Option&)  =0;
       
       
       /** how to start up this subsystem. Failure to start up
        *  usually terminates the whole application. When this subsystem
        *  ceases to work, it must assure to activate the given signal.
-       *  @param termination to be signalled by the subsystem. 
+       *  @param options may be influencing the operation mode 
+       *  @param termination to be signalled by the subsystem.
+       *  @warning termination must be signalled reliably.  
        *  @return \c true if actually started. */
-      virtual bool start (lumiera::Option&, SigTerm termination)  =0;
+      virtual bool start (lumiera::Option&, SigTerm)  =0;
       
       
       /** initiate termination of this subsystem.
+       *  may be called repeatedly any time...
        *  @warning must not block nor throw. */
       virtual void triggerShutdown ()  throw() =0;
       

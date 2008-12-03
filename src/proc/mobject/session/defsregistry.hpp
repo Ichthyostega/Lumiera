@@ -173,7 +173,7 @@ namespace mobject
         };
         
         
-      // static vars to organize one Table Slot per type....
+      // static vars to organise one Table Slot per type....
       template<class TAR>
       size_t Slot<TAR>::index (0);
       
