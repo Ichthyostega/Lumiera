@@ -152,13 +152,8 @@ namespace lumiera {
     
     
     /** install our own handler for undeclared exceptions. Will be
-     *  called automatically ON_BASIC_INIT when including errror.hpp
-     *  @note it's OK this is defined multiple times...
-     *  @see appstate.hpp  */
+     *  called automatically ON_BASIC_INIT when linking error.cpp */
     void install_unexpectedException_handler ();
-    namespace {
-      LifecycleHook schedule_ (ON_BASIC_INIT, &install_unexpectedException_handler);         
-    }
     
   } // namespace error
 

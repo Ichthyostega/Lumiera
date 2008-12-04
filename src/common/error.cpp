@@ -172,6 +172,11 @@ namespace lumiera {
       std::set_unexpected (lumiera_unexpectedException);      
     }
     
+    namespace {
+      LifecycleHook schedule_ (ON_BASIC_INIT, &install_unexpectedException_handler);         
+    }
+    
+    
   } // namespace error
   
 } // namespace lumiera
