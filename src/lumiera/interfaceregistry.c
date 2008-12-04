@@ -29,7 +29,6 @@
 
 
 
-#include "lumiera/lumiera.h"
 #include "lumiera/plugin.h"
 #include "lumiera/interfaceregistry.h"
 

@@ -24,15 +24,18 @@
 #include "backend/enginefacade.hpp"
 #include "common/singleton.hpp"
 
+#include <string>
+
 
 namespace backend {
 
+  using std::string;
   using lumiera::Subsys;
   
   class EngineSubsysDescriptor
     : public Subsys
     {
-      operator string () { return "Engine"; }
+      operator string ()  const { return "Engine"; }
       
       bool 
       shouldStart (lumiera::Option&)

@@ -24,15 +24,18 @@
 #include "backend/scriptrunnerfacade.hpp"
 #include "common/singleton.hpp"
 
+#include <string>
+
 
 namespace backend {
-
+  
+  using std::string;
   using lumiera::Subsys;
   
   class ScriptRunnerSubsysDescriptor
     : public Subsys
     {
-      operator string () { return "Script runner"; }
+      operator string ()  const { return "Script runner"; }
       
       bool 
       shouldStart (lumiera::Option&)

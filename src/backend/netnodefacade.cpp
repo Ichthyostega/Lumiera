@@ -24,15 +24,17 @@
 #include "backend/netnodefacade.hpp"
 #include "common/singleton.hpp"
 
+#include <string>
 
 namespace backend {
-
+  
+  using std::string;
   using lumiera::Subsys;
   
   class NetNodeSubsysDescriptor
     : public Subsys
     {
-      operator string () { return "Renderfarm node"; }
+      operator string ()  const { return "Renderfarm node"; }
       
       bool 
       shouldStart (lumiera::Option&)

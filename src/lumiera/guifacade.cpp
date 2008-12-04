@@ -24,15 +24,18 @@
 #include "gui/guifacade.hpp"
 #include "common/singleton.hpp"
 
+#include <string>
+
 
 namespace gui {
-
+  
+  using std::string;
   using lumiera::Subsys;
   
   class GuiSubsysDescriptor
     : public Subsys
     {
-      operator string () { return "Lumiera GTK GUI"; }
+      operator string ()  const { return "Lumiera GTK GUI"; }
       
       bool 
       shouldStart (lumiera::Option&)

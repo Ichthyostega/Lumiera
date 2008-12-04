@@ -29,7 +29,7 @@
 #include "lumiera/subsys.hpp"
 #include "common/multithread.hpp"
 
-#include <boost/tr1/functional.hpp>
+#include <tr1/functional>
 #include <vector>
 
 
@@ -37,12 +37,20 @@ namespace lumiera {
 
   using std::tr1::bind;
   using std::tr1::function;
+  using std::tr1::placeholders::_1;
   using std::vector;
   using util::cStr;
   using util::isnil;
   using util::and_all;
   using util::for_each;
   using util::removeall;
+  
+  namespace {
+    function<bool(Subsys*)>
+    isRunning() {
+      return bind (&Subsys::isRunning, _1);
+    }
+  }
   
   
   /*****************************************************************************
@@ -81,15 +89,18 @@ namespace lumiera {
   class SubsystemRunner
     {
       Option& opts_;
+      volatile bool emergency_;
       vector<Subsys*> running_;
       
-      function<void(Subsys&)>  start_,
+      function<void(Subsys*)>  start_,
                                killIt_;
+      
       
     public:
       
       SubsystemRunner (Option& opts)
         : opts_(opts)
+        , emergency_(false)
         , start_(bind (&SubsystemRunner::triggerStartup, this,_1))
         , killIt_(bind (&Subsys::triggerShutdown, _1))
         { }
@@ -112,12 +123,15 @@ namespace lumiera {
           for_each (running_, killIt_);
         }
       
-      void
+      bool
       wait ()
         {
           //Lock(*this).wait (&SubsystemRunner::allDead);
           return isEmergencyExit();
         }
+      
+      bool isEmergencyExit ()           { return emergency_; }
+      void triggerEmergency (bool cond) { emergency_ |= cond; }
       
       
       
@@ -129,17 +143,17 @@ namespace lumiera {
           ASSERT (susy);
           INFO (operate, "Starting subsystem \"%s\"", cStr(*susy));
           
-          for_each (susy->prereq_, start_);
-          bool started = susy.start (opts_, bind (&SubsystemRunner::sigTerm, this, susy, _1));
+          for_each (susy->getPrerequisites(), start_);
+          bool started = susy->start (opts_, bind (&SubsystemRunner::sigTerm, this, susy, _1));
           
-          if (started && !susy.isRunning())
+          if (started && !susy->isRunning())
             {
-              throw error::Logic("Subsystem "+susy+" failed to start");
+              throw error::Logic("Subsystem "+string(*susy)+" failed to start");
             }
-          if (!and_all (susy->prereq_, isRunning_))
+          if (!and_all (susy->getPrerequisites(), isRunning() ))
             {
               susy->triggerShutdown();
-              throw error::Logic("Unable to start all prerequisites of Subsystem "+susy);
+              throw error::Logic("Unable to start all prerequisites of Subsystem "+string(*susy));
         }   }
       
       void
@@ -147,8 +161,9 @@ namespace lumiera {
         {
           ASSERT (susy);
           //Lock guard (*this);
-          ERROR_IF (susy.isRunning(), lumiera, "Subsystem '%s' signals termination, "
-                                               "without resetting running state", cStr(susy));
+          triggerEmergency(problem);
+          ERROR_IF (susy->isRunning(), lumiera, "Subsystem '%s' signals termination, "
+                                                "without resetting running state", cStr(*susy));
           removeall (running_, susy);
           shutdownAll();
           //guard.notify();

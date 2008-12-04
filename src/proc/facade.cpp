@@ -24,16 +24,19 @@
 #include "proc/facade.hpp"
 #include "common/singleton.hpp"
 
+#include <string>
+
 
 namespace proc {
-
+  
+  using std::string;
   using lumiera::Subsys;
   
   
   class BuilderSubsysDescriptor
     : public Subsys
     {
-      operator string () { return "Builder"; }
+      operator string ()  const { return "Builder"; }
       
       bool 
       shouldStart (lumiera::Option&)
@@ -62,7 +65,7 @@ namespace proc {
   class SessionSubsysDescriptor
     : public Subsys
     {
-      operator string () { return "Session"; }
+      operator string ()  const { return "Session"; }
       
       bool 
       shouldStart (lumiera::Option&)

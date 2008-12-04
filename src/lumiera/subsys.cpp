@@ -53,8 +53,8 @@ namespace lumiera {
   bool
   Subsys::isRunning()
   {
-    UNIMPLEMENTED ("maintain isRunning flag in a threadsafe manner");
-    return false;
+    TODO ("maintain isRunning flag in a threadsafe manner");
+    return true;
   }
   
   

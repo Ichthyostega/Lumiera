@@ -195,7 +195,11 @@ namespace lumiera {
     
     try
       {
-        if (subsystems_) subsystems_->shutdownAll();
+        if (subsystems_)
+          {
+            subsystems_->triggerEmergency(true);
+            subsystems_->shutdownAll();
+          }
         return maybeWait ();
       }
     catch (...)

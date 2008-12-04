@@ -48,7 +48,7 @@
 #include "lumiera/option.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <boost/tr1/functional.hpp>
+#include <tr1/functional>
 //#include <boost/scoped_ptr.hpp>
 //#include <string>
 #include <vector>
@@ -78,7 +78,7 @@ namespace lumiera {
       virtual ~Subsys();
       
       /** a human readable name */
-      virtual operator string ()  =0;
+      virtual operator string ()  const =0;
 
       
       /** define a dependency to another Subsys
@@ -111,6 +111,10 @@ namespace lumiera {
        *  When returning \c false here, the application may 
        *  terminate at any point without further notice*/
       bool isRunning();
+      
+      const std::vector<Subsys*>
+      getPrerequisites () { return prereq_; }
+      
       
       
     private:
