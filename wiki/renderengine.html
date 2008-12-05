@@ -1364,6 +1364,29 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
+<div title="GuiCommunication" modifier="Ichthyostega" modified="200812050555" created="200812050543" tags="GuiIntegration draft" changecount="2">
+<pre>All communication between Proc-Layer and GUI has to be routed through the respective LayerSeparationInterfaces. Following a fundamental design decision within Lumiera, these interface are //intended to be language agnostic// &amp;mdash; forcing them to stick to the least common denominator. Which creates the additional problem of how to create a smooth integration without forcing the architecture into functional decomposition style. To solve this problem, we rely on the well known solution of using a __business facade__ and delegation proxies.
+Thus, the Proc-Layer exposes (one or several) facade interfaces for the GUI to use it's functionality, and similarily the GUI provides a [[notification facade|GuiNotificationFacade]] for pushing back status information created as result of the edit operations, the build process and the render tasks.
+
+!anatomy of the Proc/GUI interface
+* the GuiFacade is used as a general lifecycle facade to start up the GUI and to set up the LayerSeparationInterfaces.
+* GuiFacade is implemented by a class //in core// and exposes a notification proxy implementing GuiNotificationFacade, which actually is wired through the InterfaceSystem to forward to the corresponding implementation facade object within the GUI
+* similarly, starting the fundamental subsystems within proc installs Interfaces into the InterfaceSystem and exposes them through proxy objects
+
+</pre>
+</div>
+<div title="GuiIntegration" modifier="Ichthyostega" created="200812050532" tags="overview" changecount="1">
+<pre>Considering how to interface to and integrate with the GUI Layer. Running the GUI is //optional,// but it requires to be [[started up|GuiStart]], installing the necessary LayerSeparationInterfaces.</pre>
+</div>
+<div title="GuiStart" modifier="Ichthyostega" modified="200812050606" created="200812050525" tags="GuiIntegration" changecount="3">
+<pre>Starting up the GUI is optional and is considered part of the Application start/stop and lifecycle.
+* main and AppState activate the lifecyle methods on the ~GuiSubsysDescriptor
+* loading a GuiStarterPlugin creates an instance of the notification interface within the InterfaceSystem
+* its implementation (within GuiStarterPlugin) is linked against the GuiNotificationFacade, i.e. the actual implementation. This link is hard wired.
+* the process of loading this GuiStarterPlugin creates an interface ref on the calling side, which is made available through the usual singleton factory embedded within the GuiNotificationFacade interface.
+* activating this singleton factory yields the (single) instance of the forwarding proxy, which calls through this interface ref.
+</pre>
+</div>
 <div title="HighLevelModel" modifier="Ichthyostega" modified="200808160329" created="200808152311" tags="spec design discuss" changecount="32">
 <pre>While the low-level model holds the data used for carrying out the actual media data processing (=rendering), the high-level model is what the user works upon when performing edit operations through the GUI (or script driven in &amp;raquo;headless mode&amp;laquo;). Its building blocks and combination rules determine largely what structures can be created within the [[Session]].
 On the whole, it is a collection of [[media objects|MObjects]] stuck together and arranged by [[placements|Placement]].
@@ -1401,7 +1424,7 @@ Besides routing to a global pipe, wiring plugs can also connect to the source po
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200811011805" created="200708080322" tags="overview" changecount="29">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200812050524" created="200708080322" tags="overview" changecount="30">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1421,6 +1444,7 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * working out the [[basic building situations|BuilderPrimitives]] and [[mechanics of rendering|RenderMechanics]]
 * how to classify and [[describe media stream types|StreamType]] and how to [[use them|StreamTypeUse]]
 * the relation of [[Project, Timelines and Sequences|TimelineSequences]]
+* how to [[start the GUI|GuiStart]] and how to [[communicate|GuiCommunication]]
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200711210542" created="200711210531" tags="discuss draft" changecount="7">
@@ -1775,6 +1799,16 @@ From experiences with other middle scale projects, I prefer having the test code
 * Subdir src/proc/engine (namespace engine) uses directly the (local) interface components StateProxy and ParamProvider; triggering of the render process is initiated by the controller and can be requested via the controller facade. Normally, the playback/render controller located in the backend will just use this interface and won't be aware of the build process at all.
 
 [img[Example: Interfaces/Namespaces of the ~Session-Subsystems|uml/fig130053.png]]
+</pre>
+</div>
+<div title="LayerSeparationInterfaces" modifier="Ichthyostega" created="200812050619" tags="def" changecount="1">
+<pre>Lumiera uses a 3-layered architecture. Separation between layers is crucial. Any communication between the layers regarding the normal operation of the application should //at least be initiated// through ''Layer abstraction interfaces''. This is a low-impact version of layering, because, aside from this triggering, direct cooperation of parts within the single Lumiera process is allowed, under the condition that is is implemented using additional abstractions (interfaces with implementation level granularity). We stick to the policy of //disallowing direct coupling of implementations located in different layers.//
+
+To implement such a structure, each layer separation interface actually is comprised of several parts:
+* an CLI interface to be installed into the InterfaceSystem
+* a facade interface defining the respective abstractions in terms of the implementation language (C or C++)
+* a implementation object on the service proiding side which is directly addressed by the implementation instantiated within the InterfaceSystem
+* a proxy object on the client side, which usually is given inline alongside with the CLI interface definition.
 </pre>
 </div>
 <div title="LoadingMedia" modifier="Ichthyostega" modified="200806030203" created="200709220005" tags="design spec" changecount="4">
@@ -2810,7 +2844,7 @@ Besides, they provide an important __inward interface__ for the [[ProcNode]]s, w
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200811011806" created="200706190056" tags="overview" changecount="12">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200812050522" created="200706190056" tags="overview" changecount="15">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
 &lt;&lt;&lt;
 ''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the foundations and main structures in C++
@@ -2818,6 +2852,7 @@ Besides, they provide an important __inward interface__ for the [[ProcNode]]s, w
 * [[Builder]] implementation is on the way (&amp;rarr;[[more|BuilderPrimitives]])
 * made a first draft of how to wire and operate procesing nodes (&amp;rarr;[[more|RenderMechanics]])
 * working out the relation of [[Project, Timelines and Sequences|TimelineSequences]]
+* first attempts to [[integrate with the GUI|GuiIntegration]]
 &lt;&lt;&lt;
 
 !Summary
