@@ -59,7 +59,9 @@ namespace backend {
       
     };
   
-  static lumiera::Singleton<ScriptRunnerSubsysDescriptor> theDescriptor;  //////////////////TODO: work out startup sequence. Don't use static init!
+  namespace {
+    lumiera::Singleton<ScriptRunnerSubsysDescriptor> theDescriptor;
+  }
   
   
   

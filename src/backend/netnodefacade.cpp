@@ -58,7 +58,9 @@ namespace backend {
       
     };
   
-  static lumiera::Singleton<NetNodeSubsysDescriptor> theDescriptor;  //////////////////TODO: work out startup sequence. Don't use static init!
+  namespace {
+    lumiera::Singleton<NetNodeSubsysDescriptor> theDescriptor;
+  }
   
   
   

@@ -83,7 +83,7 @@ namespace lumiera
     
     
     /*******************************************************************
-     * @test spezialized variant of the Singleton Factory, for creating
+     * @test specialised variant of the Singleton Factory, for creating
      *       subclasses (implementation classes) without coupling the 
      *       caller to the concrete class type.
      * Expected results: an instance of the subclass is created.
@@ -106,7 +106,7 @@ namespace lumiera
             singleton::UseSubclass<Impl> typeinfo;                       
             
             // define an instance of the Singleton factory,
-            // spezialized to create the concrete Type passed in
+            // Specialised to create the concrete Type passed in
             SingletonSubclassFactory<Interface> instance (typeinfo);
             
             // Now use the Singleton factory...

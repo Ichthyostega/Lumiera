@@ -89,8 +89,10 @@ namespace proc {
       
     };
   
-  static lumiera::Singleton<BuilderSubsysDescriptor> theBuilderDescriptor;  //////////////////TODO: work out startup sequence. Don't use static init!
-  static lumiera::Singleton<BuilderSubsysDescriptor> theSessionDescriptor;  //////////////////TODO: work out startup sequence. Don't use static init!
+  namespace {
+    lumiera::Singleton<BuilderSubsysDescriptor> theBuilderDescriptor;   
+    lumiera::Singleton<BuilderSubsysDescriptor> theSessionDescriptor;
+  }
   
   
   

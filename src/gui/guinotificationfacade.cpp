@@ -1,5 +1,5 @@
 /*
-  GuiFacade  -  access point for communicating with the Lumiera GTK GUI
+  GuiNotificationFacade  -  access point for pushing informations into the GUI
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,10 @@
 * *****************************************************/
 
 
-#include "gui/guifacade.hpp"
+#include "include/guinotificationfacade.h"
 #include "common/singleton.hpp"
+#include "include/nobugcfg.h"
+#include "common/util.hpp"
 
 #include <string>
 
@@ -30,48 +32,25 @@
 namespace gui {
   
   using std::string;
+  using util::cStr;
   
-  class GuiSubsysDescriptor
-    : public lumiera::Subsys
+  class GuiNotificationFacade
+    : public GuiNotification
     {
-      operator string ()  const { return "Lumiera GTK GUI"; }
-      
-      bool 
-      shouldStart (lumiera::Option&)
+      void
+      displayInfo (string const& text)
         {
-          UNIMPLEMENTED ("determine, if a GUI is needed");
-          return false;
-        }
-      
-      bool
-      start (lumiera::Option&, Subsys::SigTerm termination)
-        {
-          UNIMPLEMENTED ("load and start the GUI and register shutdown hook");
-          return false;
+          INFO (operate, "GUI: display '%s' as notification message.", cStr(text));
         }
       
       void
-      triggerShutdown ()  throw()
+      triggerGuiShutdown (string const& cause)
         {
-          UNIMPLEMENTED ("initiate closing the GUI");
+          NOTICE (operate, "GUI: shutdown triggered with explanation '%s'....", cStr(cause));
         }
-      
     };
   
-  namespace {
-    lumiera::Singleton<GuiSubsysDescriptor> theDescriptor;
-  }
+    
+//////////////////////////////////////////////TODO: define an instance lumieraorg_guinotification_facade by forwarding to GuiNotificationFacade    
   
-  
-  
-  
-  /** @internal intended for use by main(). */
-  lumiera::Subsys&
-  GuiFacade::getDescriptor()
-  {
-    return theDescriptor();
-  }
-
-
-
 } // namespace gui

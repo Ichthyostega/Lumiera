@@ -45,8 +45,8 @@
 #include <typeinfo>
 
 
-namespace lumiera
-  {
+namespace lumiera {
+  
   using boost::scoped_ptr;
   
   
@@ -54,7 +54,7 @@ namespace lumiera
     {
       /** 
        * Helper template to use the general policy classes of the lumiera::Singleton,
-       * but change the way they are parametrized on-the-fly. 
+       * but change the way they are parametrised on-the-fly. 
        */
       template<template<class> class POL, class I>
       struct Adapter
@@ -63,7 +63,7 @@ namespace lumiera
           struct Link
             {
               virtual ~Link() {}
-              virtual I* create ()          = 0;   ///< @note compiler will check the actual type is asignable...
+              virtual I* create ()          = 0;   ///< @note compiler will check the actual type is assignable...
               virtual void destroy (I* pSi) = 0;
             };
           
@@ -73,14 +73,14 @@ namespace lumiera
               virtual S* create ()           { return POL<S>::create (); }                 // covariance checked!
               virtual void destroy (I* pSi)  { POL<S>::destroy (static_cast<S*> (pSi)); }
             };
-
-            
+          
+          
           struct My_scoped_ptr : scoped_ptr<Link> ///< implementation detail: defeat static initialisation
             {
               using scoped_ptr<Link>::get;
               My_scoped_ptr() : scoped_ptr<Link> (get()? get() : 0) {}   ///< bypass if already configured
             };
-            
+          
           /** we configure this link \e later, when the singleton factory
            *  is actually created, to point at the desired implementation subclass.
            */
@@ -94,9 +94,9 @@ namespace lumiera
               static void destroy (II* pSi)  { link->destroy (pSi); }
             };
         };
-        
+      
       template<template<class> class A, class I>
-      typename Adapter<A,I>::My_scoped_ptr Adapter<A,I>::link;    // note: use special ctor (due to stati init order!)
+      typename Adapter<A,I>::My_scoped_ptr Adapter<A,I>::link;    // note: use special ctor (due to static init order!)
       
       
       /** type-information used to configure the factory instance
@@ -115,7 +115,7 @@ namespace lumiera
    * a subclass or wrap the product in some way. For the user code, it should behave
    * exactly like the standard SingletonFactory. The configuration of the product
    * actually to be created is delayed until the ctor call, so it can be hidden
-   * away to the implementaton of a class using the SingletonFactory.
+   * away to the implementation of a class using the SingletonFactory.
    * 
    * @see configrules.cpp usage example
    */
@@ -134,10 +134,10 @@ namespace lumiera
     {
     public:
       /** The singleton-factory ctor configures what concrete type to create.
-       *  It takes type information passed as dummy parameter and installes
+       *  It takes type information passed as dummy parameter and installs
        *  a trampoline object in the static field of class Adapter to perform
        *  the necessary up/downcasts. This allows to use whatever policy
-       *  class ist wanted, but parametrizes this policy template with
+       *  class is desired, but parametrises this policy template with
        *  the concrete type to be created. (only the  "create" policy
        *  needs to know the actual class, because it allocates storage)
        */
@@ -156,11 +156,11 @@ namespace lumiera
                       "If using several instances of the sub-class-creating "
                       "singleton factory, all *must* be configured to create "
                       "objects of exactly the same implementation type!");
-#endif              
+#endif
         }
     };
-    
-    
+  
+  
   /**
    * Default Singleton configuration (subclass creating factory)
    * @note all Policy template parameters taking default values
