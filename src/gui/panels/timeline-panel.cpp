@@ -114,10 +114,7 @@ TimelinePanel::TimelinePanel(model::Project *const owner_project) :
 
 TimelinePanel::~TimelinePanel()
 {
-  // Free allocated widgets
-  pair<const model::Sequence*, TimelineWidget*> pair; 
-  BOOST_FOREACH( pair, notebook_pages )
-    delete pair.second;
+
 }
 
 void
@@ -221,15 +218,15 @@ TimelinePanel::on_sequence_list_changed()
 void
 TimelinePanel::update_notebook()
 {
-  std::map<const model::Sequence*, TimelineWidget*>
+  std::map<const model::Sequence*, shared_ptr<TimelineWidget> >
     old_pages(notebook_pages);
   notebook_pages.clear();
 
-  BOOST_FOREACH( boost::shared_ptr< model::Sequence > sequence,
+  BOOST_FOREACH( shared_ptr< model::Sequence > sequence,
     project->get_sequences() )
     {
-      std::map<const model::Sequence*, TimelineWidget*>::iterator
-        iterator = old_pages.find(sequence.get());
+      std::map<const model::Sequence*, shared_ptr<TimelineWidget> >::
+        iterator iterator = old_pages.find(sequence.get());
       if(iterator != old_pages.end())
         {
           // This sequence has not been changed
@@ -240,17 +237,13 @@ TimelinePanel::update_notebook()
       else
         {
           // This is a new sequence, add it in
-          TimelineWidget * const widget = new TimelineWidget(sequence);
+          shared_ptr< TimelineWidget > widget(
+            new TimelineWidget(sequence));
           notebook_pages[sequence.get()] = widget;
-          notebook.append_page(*widget, sequence->get_name());
-          notebook.set_tab_reorderable(*widget);
+          notebook.append_page(*widget.get(), sequence->get_name());
+          notebook.set_tab_reorderable(*widget.get());
         }
     }
-    
-  // Free widgets which have been removed
-  pair<const  model::Sequence*, TimelineWidget*> pair; 
-  BOOST_FOREACH( pair, old_pages )
-    delete pair.second;
     
   notebook.show_all_children();
 }

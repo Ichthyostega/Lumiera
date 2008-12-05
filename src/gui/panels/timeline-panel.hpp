@@ -106,7 +106,7 @@ private:
   
   // Body Widgets
   Gtk::Notebook notebook;
-  std::map< const model::Sequence*, TimelineWidget*>
+  std::map< const model::Sequence*, boost::shared_ptr<TimelineWidget> >
     notebook_pages;
   
   // Toolbar Widgets
