@@ -181,7 +181,7 @@ void
 Actions::on_menu_sequence_add()
 {
   dialogs::SequenceName dialog(workspaceWindow,
-    dialogs::SequenceName::AddSequence, "New Track");
+    dialogs::SequenceName::AddSequence, "New Sequence");
   if(dialog.run() == RESPONSE_OK)
     workspaceWindow.get_project()->add_new_sequence(dialog.get_name());
 }
