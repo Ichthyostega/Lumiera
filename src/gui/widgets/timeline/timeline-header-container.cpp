@@ -492,7 +492,7 @@ const std::list<model::Track*>&
 TimelineHeaderContainer::get_tracks() const
 {
   REQUIRE(timelineWidget != NULL);
-  REQUIRE(timelineWidget->sequence != NULL);
+  REQUIRE(timelineWidget->sequence);
   return timelineWidget->sequence->get_tracks();
 }
 

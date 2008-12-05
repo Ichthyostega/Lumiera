@@ -37,7 +37,8 @@ const int TimelineWidget::HeaderWidth = 150;
 const double TimelineWidget::ZoomIncrement = 1.25;
 const int64_t TimelineWidget::MaxScale = 30000000;
 
-TimelineWidget::TimelineWidget(model::Sequence* const source_sequence) :
+TimelineWidget::TimelineWidget(
+  boost::shared_ptr<model::Sequence> source_sequence) :
   Table(2, 2),
   sequence(source_sequence),
   viewWindow(this, 0, 1),
@@ -53,7 +54,7 @@ TimelineWidget::TimelineWidget(model::Sequence* const source_sequence) :
   horizontalScroll(horizontalAdjustment),
   verticalScroll(verticalAdjustment)
 {
-  REQUIRE(sequence != NULL);
+  REQUIRE(sequence);
   
   body = new TimelineBody(this);
   ENSURE(body != NULL);
@@ -276,7 +277,7 @@ TimelineWidget::on_view_window_changed()
 void
 TimelineWidget::update_tracks()
 { 
-  REQUIRE(sequence != NULL);
+  REQUIRE(sequence);
   
   // Create timeline tracks from all the model tracks
   create_timeline_tracks();
@@ -297,7 +298,7 @@ TimelineWidget::update_tracks()
 void
 TimelineWidget::create_timeline_tracks()
 {
-  REQUIRE(sequence != NULL);
+  REQUIRE(sequence);
   
   BOOST_FOREACH(model::Track* child, sequence->get_tracks())
     create_timeline_tracks_from_branch(child);
@@ -345,7 +346,7 @@ TimelineWidget::create_timeline_track_from_model_track(
 timeline::Track*
 TimelineWidget::lookup_timeline_track(model::Track *model_track)
 {
-  ASSERT(sequence != NULL);  
+  REQUIRE(sequence);  
   std::map<model::Track*, timeline::Track*>::const_iterator iterator =
     trackMap.find(model_track);
   if(iterator == trackMap.end())

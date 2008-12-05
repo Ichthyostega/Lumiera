@@ -57,7 +57,7 @@ public:
   /**
    * Constructor
    */
-  TimelineWidget(model::Sequence *source_sequence);
+  TimelineWidget(boost::shared_ptr<model::Sequence> source_sequence);
 
   /**
    * Destructor
@@ -211,7 +211,7 @@ private:
 protected:
 
   // Model Data
-  model::Sequence* const sequence;
+  const boost::shared_ptr<model::Sequence> sequence;
   std::map<model::Track*, timeline::Track*> trackMap;
 
   // View State

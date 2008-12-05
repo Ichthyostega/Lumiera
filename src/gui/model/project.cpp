@@ -25,6 +25,9 @@
 #include "project.hpp"
 #include "sequence.hpp"
 
+using namespace std;
+using namespace boost;
+
 namespace gui {
 namespace model {
 
@@ -37,11 +40,10 @@ Project::Project()
 
 Project::~Project()
 {
-  BOOST_FOREACH( Sequence* const sequence, sequences )
-    delete sequence;    
+
 }
 
-const std::list<Sequence*>&
+const std::list< shared_ptr<Sequence> >&
 Project::get_sequences()
 {
   return sequences;
@@ -50,7 +52,7 @@ Project::get_sequences()
 void
 Project::add_new_sequence(Glib::ustring name)
 {
-  Sequence* const sequence = new Sequence();
+  shared_ptr<Sequence> sequence(new Sequence());
   sequence->set_name(name);
   sequences.push_back(sequence);
   sequenceListChangedSignal.emit();

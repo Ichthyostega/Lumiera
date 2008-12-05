@@ -39,7 +39,7 @@ public:
   
   ~Project();
     
-  const std::list<Sequence*>& get_sequences();
+  const std::list< boost::shared_ptr<Sequence> >& get_sequences();
   
   void add_new_sequence(Glib::ustring name);
   
@@ -48,7 +48,7 @@ public:
   
 private:
 
-  std::list<Sequence*> sequences;
+  std::list< boost::shared_ptr<Sequence> > sequences;
   
   sigc::signal<void> sequenceListChangedSignal;
 };

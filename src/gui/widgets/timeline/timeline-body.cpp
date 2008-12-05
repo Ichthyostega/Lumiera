@@ -268,7 +268,7 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
 {
   REQUIRE(cr);
   REQUIRE(timelineWidget != NULL);
-  REQUIRE(timelineWidget->sequence != NULL);
+  REQUIRE(timelineWidget->sequence);
   
   // Prepare
   const Allocation allocation = get_allocation();
@@ -424,7 +424,7 @@ timeline::Track*
 TimelineBody::track_from_point(const int y) const
 {
   REQUIRE(timelineWidget != NULL);
-  REQUIRE(timelineWidget->sequence != NULL);
+  REQUIRE(timelineWidget->sequence);
   
   int offset = -get_vertical_offset();
   
