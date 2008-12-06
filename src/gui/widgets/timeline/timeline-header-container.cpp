@@ -197,7 +197,11 @@ TimelineHeaderContainer::on_size_allocate (Allocation& allocation)
   
   // Resize the widget's window
   if(gdkWindow)
-    gdkWindow->resize(allocation.get_width(), allocation.get_height());
+    {
+      gdkWindow->move(allocation.get_x(), allocation.get_y());
+      gdkWindow->resize(
+        allocation.get_width(), allocation.get_height());
+    }
   
   // Relayout the child widgets of the headers
   layout_headers();
