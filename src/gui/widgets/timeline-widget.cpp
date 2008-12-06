@@ -314,7 +314,7 @@ TimelineWidget::create_timeline_tracks_from_branch(
   
   // Is a timeline UI track present in the map already?
   const model::Track *track = model_track.get();
-  if(contains(trackMap, track))
+  if(!contains(trackMap, track))
     {
       // The timeline UI track is not present
       // We will need to create one
