@@ -259,12 +259,12 @@ void
 TimelinePanel::update_tool_buttons()
 {    
   if(!updatingToolbar)
-  {
-    updatingToolbar = true;
-    arrowTool.set_active(currentTool == timeline::Arrow);
-    iBeamTool.set_active(currentTool == timeline::IBeam);
-    updatingToolbar = false;
-  }
+    {
+      updatingToolbar = true;
+      arrowTool.set_active(currentTool == timeline::Arrow);
+      iBeamTool.set_active(currentTool == timeline::IBeam);
+      updatingToolbar = false;
+    }
 }
 
 void
