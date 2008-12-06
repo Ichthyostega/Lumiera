@@ -309,7 +309,7 @@ void
 TimelineWidget::create_timeline_tracks_from_branch(
   shared_ptr<model::Track> model_track)
 {
-  REQUIRE(model_track != NULL);
+  REQUIRE(model_track);
   
   // Is a timeline UI track present in the map already?
   std::map<const model::Track*, timeline::Track*>::const_iterator
@@ -411,7 +411,7 @@ int
 TimelineWidget::measure_branch_height(
   boost::shared_ptr<model::Track> model_track)
 {
-  REQUIRE(model_track != NULL);
+  REQUIRE(model_track);
   
   const timeline::Track *timeline_track =
     lookup_timeline_track(model_track);
