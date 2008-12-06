@@ -28,6 +28,7 @@
 using namespace Gtk;
 using namespace std;
 using namespace boost;
+using namespace util;
 using namespace gui::widgets::timeline;
 
 namespace gui {
@@ -312,9 +313,8 @@ TimelineWidget::create_timeline_tracks_from_branch(
   REQUIRE(model_track);
   
   // Is a timeline UI track present in the map already?
-  std::map<const model::Track*, timeline::Track*>::const_iterator
-    iterator = trackMap.find(model_track.get());
-  if(iterator == trackMap.end())
+  const model::Track *track = model_track.get();
+  if(contains(trackMap, track))
     {
       // The timeline UI track is not present
       // We will need to create one
