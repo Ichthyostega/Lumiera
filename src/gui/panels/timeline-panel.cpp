@@ -219,8 +219,8 @@ void
 TimelinePanel::update_notebook()
 {
   std::map<const model::Sequence*, shared_ptr<TimelineWidget> >
-    old_pages(notebook_pages);
-  notebook_pages.clear();
+    old_pages;
+  old_pages.swap(notebook_pages);
 
   BOOST_FOREACH( shared_ptr< model::Sequence > sequence,
     project->get_sequences() )
