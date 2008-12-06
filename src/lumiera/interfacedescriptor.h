@@ -29,10 +29,10 @@
  * The interface subsystem must be able to categorize implementations to present possible
  * upgrade paths to the user. This is done by the tagging it to a certain state in concert
  * with the version and the user supplied version compare function. The respective numbers
- * are choosen in a way that a higher value indicates precedence when selecting an implementation.
+ * are chosen in a way that a higher value indicates precedence when selecting an implementation.
  * Note that 'BETA' is higher than 'DEPRECATED', we make the assumption that BETA is at least
  * maintained code and something gets deprecated for some reason. For common practice it is
- * suggested to make a stable release before declaring its predcessor version as deprecated.
+ * suggested to make a stable release before declaring its predecessor version as deprecated.
  */
 enum lumiera_interface_state {
   /** some known bugs exist which won't be fixed, don't use this */
@@ -73,7 +73,7 @@ LUMIERA_INTERFACE_DECLARE (lumieraorg_interfacedescriptor, 0,
 
 #if 0
 /**
- * For convinience, a copy'n'paste descriptor
+ * For convenience, a copy'n'paste descriptor
  */
 LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0,
                             /*IDENTIFIER*/,

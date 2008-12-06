@@ -40,11 +40,11 @@ namespace gui {
   class GuiNotificationInterfaceProxy
     : public GuiNotification
     {
-      LUMIERA_INTERFACE_HANDLE(lumieraorg_guinotification, 0) interface_;
+      LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 1) * interface_;
       
       GuiNotificationInterfaceProxy ()
         {
-          interface_ = LUMIERA_INTERFACE_OPEN (lumieraorg_guinotification, 0, 0, lumieraorg_guinotification_facade);
+          interface_ = LUMIERA_INTERFACE_OPEN (lumieraorg_GuiNotification, 1, 2, lumieraorg_GuiNotificationFacade);
           if (!interface_)
             throw lumiera::error::State ("unable to access GuiNotificationFacade");
         }

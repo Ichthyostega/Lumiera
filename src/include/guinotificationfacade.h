@@ -49,7 +49,7 @@ namespace gui {
   
   
   /*********************************************************************
-   * Global access point pushing state update and notification of events
+   * Global access point to push state update and notification of events
    * from the lower layers into the Lumiera GUI. Typically, this happens
    * asynchronously and triggered by events within the lower layers.
    * 
@@ -74,7 +74,7 @@ namespace gui {
 extern "C" {
 #include "lumiera/interface.h"
 
-LUMIERA_INTERFACE_DECLARE (lumieraorg_guinotification, 0,
+LUMIERA_INTERFACE_DECLARE (lumieraorg_GuiNotification, 1,
                            LUMIERA_INTERFACE_SLOT (void, displayInfo,        (const char*)),
                            LUMIERA_INTERFACE_SLOT (void, triggerGuiShutdown, (const char*)),
 );
