@@ -358,7 +358,7 @@ TimelineWidget::lookup_timeline_track(
       // We are in an error condition if the timeline track is not found
       // - the timeline tracks must always be synchronous with the model
       // tracks.
-      ENSURE(iterator->second != NULL);
+      ENSURE(0);
       return NULL;
     }
   ENSURE(iterator->second != NULL);
