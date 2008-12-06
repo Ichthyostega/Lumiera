@@ -43,7 +43,7 @@ Project::~Project()
 
 }
 
-const std::list< shared_ptr<Sequence> >&
+lumiera::observable_list< boost::shared_ptr<Sequence> >&
 Project::get_sequences()
 {
   return sequences;
@@ -55,14 +55,6 @@ Project::add_new_sequence(Glib::ustring name)
   shared_ptr<Sequence> sequence(new Sequence());
   sequence->set_name(name);
   sequences.push_back(sequence);
-  sequenceListChangedSignal.emit();
-
-}
-
-sigc::signal<void>&
-Project::signal_sequence_list_changed()
-{
-  return sequenceListChangedSignal;
 }
 
 }   // namespace model

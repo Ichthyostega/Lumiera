@@ -28,6 +28,7 @@
 #define PROJECT_HPP
 
 #include "sequence.hpp"
+#include "../../common/observable-list.hpp"
 
 namespace gui {
 namespace model {
@@ -39,18 +40,14 @@ public:
   
   ~Project();
     
-  const std::list< boost::shared_ptr<Sequence> >& get_sequences();
+  lumiera::observable_list< boost::shared_ptr<Sequence> >&
+    get_sequences();
   
   void add_new_sequence(Glib::ustring name);
   
-public:
-  sigc::signal<void>& signal_sequence_list_changed();
-  
 private:
 
-  std::list< boost::shared_ptr<Sequence> > sequences;
-  
-  sigc::signal<void> sequenceListChangedSignal;
+  lumiera::observable_list< boost::shared_ptr<Sequence> > sequences;
 };
 
 }   // namespace model

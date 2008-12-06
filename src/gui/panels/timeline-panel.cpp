@@ -65,7 +65,7 @@ TimelinePanel::TimelinePanel(model::Project *const owner_project) :
   //  mem_fun(this, &TimelinePanel::on_playback_period_drag_released));
   
   // Hook up notifications
-  project->signal_sequence_list_changed().connect(
+  project->get_sequences().signal_changed().connect(
     mem_fun(this, &TimelinePanel::on_sequence_list_changed));
   
   // Setup the notebook  
