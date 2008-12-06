@@ -27,14 +27,14 @@
 namespace gui {
 namespace model {
 
-const std::list<Track*> Track::NoChildren;
+const std::list< boost::shared_ptr<model::Track> > Track::NoChildren;
 
 Track::Track()
 {
 
 }
 
-const std::list<Track*>&
+const std::list< boost::shared_ptr<model::Track> >&
 Track::get_child_tracks() const
 {
   return NoChildren;

@@ -119,7 +119,7 @@ private:
   void draw_tracks(Cairo::RefPtr<Cairo::Context> cr);
   
   void draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
-    model::Track *track, const int view_width) const;
+    boost::shared_ptr<model::Track> track, const int view_width) const;
   
   /**
    * Draws the selected timeline period.
@@ -141,7 +141,8 @@ private:
   
   timeline::Track* track_from_point(const int y) const;
   
-  timeline::Track* track_from_branch(model::Track *model_track,
+  timeline::Track* track_from_branch(
+    boost::shared_ptr<model::Track> model_track,
     const int y, int &offset) const;
   
   /**
@@ -177,7 +178,7 @@ private:
   float selectionAlpha;
   GdkColor playbackPointColour;
   
-  gui::widgets::TimelineWidget *timelineWidget;
+  gui::widgets::TimelineWidget* const timelineWidget;
 
   friend class Tool;
   friend class ArrowTool;

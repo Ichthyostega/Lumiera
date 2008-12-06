@@ -22,13 +22,15 @@
 
 #include "sequence.hpp"
 
+using namespace boost;
+
 namespace gui {
 namespace model {
 
 Sequence::Sequence()
 {
   // TEST CODE
-  static bool first = true;
+  /*static bool first = true;
   
   tracks.push_back(&video1);
   
@@ -40,7 +42,7 @@ Sequence::Sequence()
     first = false;
   }
   
-  tracks.push_back(&video2);
+  tracks.push_back(&video2);*/
   
   // END TEST CODE
 }
@@ -57,10 +59,16 @@ Sequence::set_name(const Glib::ustring &name)
   this->name = name;
 }
 
-const std::list<Track*>&
+const std::list< boost::shared_ptr<Track> >&
 Sequence::get_tracks() const
 {
   return tracks;
+}
+
+void
+Sequence::add_track(shared_ptr<Track> track)
+{
+  tracks.push_back(track);
 }
 
 }   // namespace model

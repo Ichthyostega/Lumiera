@@ -32,6 +32,7 @@
 
 using namespace Gtk;
 using namespace std;
+using namespace boost;
 
 namespace gui {
 namespace widgets {
@@ -281,7 +282,7 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
   cr->translate(0, -get_vertical_offset());
   
   // Interate drawing each track
-  BOOST_FOREACH( model::Track* model_track,
+  BOOST_FOREACH( shared_ptr<model::Track> model_track,
     timelineWidget->sequence->get_tracks() )
     draw_track_recursive(cr, model_track, allocation.get_width());
   
@@ -291,7 +292,7 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
 
 void
 TimelineBody::draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
-  model::Track *model_track, const int view_width) const
+  shared_ptr<model::Track> model_track, const int view_width) const
 {
   REQUIRE(cr);
   REQUIRE(model_track != NULL);
@@ -319,7 +320,8 @@ TimelineBody::draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
   cr->translate(0, height  + TimelineWidget::TrackPadding);
   
   // Recurse drawing into children
-  BOOST_FOREACH( model::Track* child, model_track->get_child_tracks() )
+  BOOST_FOREACH( shared_ptr<model::Track> child,
+    model_track->get_child_tracks() )
     draw_track_recursive(cr, child, view_width);
 }
 
@@ -428,7 +430,7 @@ TimelineBody::track_from_point(const int y) const
   
   int offset = -get_vertical_offset();
   
-  BOOST_FOREACH( model::Track* model_track,
+  BOOST_FOREACH( shared_ptr<model::Track> model_track,
     timelineWidget->sequence->get_tracks() )
     {
       timeline::Track* result = track_from_branch(
@@ -442,7 +444,7 @@ TimelineBody::track_from_point(const int y) const
 }
 
 timeline::Track* TimelineBody::track_from_branch(
-  model::Track *model_track,
+  shared_ptr<model::Track> model_track,
   const int y, int &offset) const
 {
   REQUIRE(timelineWidget != NULL);
@@ -462,7 +464,8 @@ timeline::Track* TimelineBody::track_from_branch(
   offset += height;
   
   // Recurse drawing into children
-  BOOST_FOREACH( model::Track* child, model_track->get_child_tracks() )
+  BOOST_FOREACH( shared_ptr<model::Track> child,
+    model_track->get_child_tracks() )
     {
       timeline::Track* result = track_from_branch(child, y, offset);
       if(result != NULL)

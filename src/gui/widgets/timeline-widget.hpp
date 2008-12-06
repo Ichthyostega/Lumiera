@@ -176,7 +176,7 @@ private:
    * @param list The parent track of the branch.
    **/
   void create_timeline_tracks_from_branch(
-    model::Track* const model_track);
+    boost::shared_ptr<model::Track> model_track);
   
   /**
    * Creates a timeline UI track to correspond to a model track.
@@ -185,7 +185,7 @@ private:
    * unreckognised type (this is an error condition).
    **/
   static timeline::Track* create_timeline_track_from_model_track(
-    model::Track* const model_track);
+    boost::shared_ptr<model::Track> model_track);
   
   /**
    * Looks up a timeline UI track in trackMap that corresponds to a
@@ -194,11 +194,13 @@ private:
    * @returns The timeline UI track found, or NULL if model_track has no
    * corresponding timeline UI track (this is an error condition).
    **/
-  timeline::Track* lookup_timeline_track(model::Track *model_track);
+  timeline::Track* lookup_timeline_track(
+    boost::shared_ptr<model::Track> model_track);
   
   void update_scroll();
   
-  int measure_branch_height(model::Track* model_track);
+  int measure_branch_height(
+    boost::shared_ptr<model::Track> model_track);
   
   int get_y_scroll_offset() const;
   
@@ -212,7 +214,7 @@ protected:
 
   // Model Data
   const boost::shared_ptr<model::Sequence> sequence;
-  std::map<model::Track*, timeline::Track*> trackMap;
+  std::map<const model::Track*, timeline::Track*> trackMap;
 
   // View State
   timeline::TimelineViewWindow viewWindow;

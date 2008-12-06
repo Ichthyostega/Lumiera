@@ -152,34 +152,39 @@ private:
    * @param header_width The width of this widget in pixels.
    * @param depth The depth within the tree of track.
    **/
-  void layout_headers_recursive(model::Track *track, int &offset,
-    const int header_width, const int depth, bool parent_expanded);
+  void layout_headers_recursive(boost::shared_ptr<model::Track> track,
+    int &offset, const int header_width, const int depth,
+    bool parent_expanded);
   
   /**
    * Recursively sets all the track header widgets to be child widgets
    * of this widget.
    * @param track The parent track object which will be recursed into.
    **/
-  void set_parent_recursive(model::Track* const model_track);
+  void set_parent_recursive(boost::shared_ptr<model::Track> const
+    model_track);
   
   /**
    * Recursively causes all the visible track header widgets to call
    * size_request( ).
    **/
-  void size_request_recursive(model::Track* const model_track);
+  void size_request_recursive(
+    boost::shared_ptr<model::Track> model_track);
   
-  void forall_vfunc_recursive(model::Track* const model_track,
+  void forall_vfunc_recursive(
+    boost::shared_ptr<model::Track> model_track,
     GtkCallback callback, gpointer callback_data);
   
   /**
    * Draws the border decoration around the track header.
-   * @param track The track to draw the decoration for.
+   * @param model_track The track to draw the decoration for.
    * @param clip_rect The clip to drawing to.
    * @param depth The depth within the tree of this track. This is used
    * to control the amount of indention.
    * @param offset The vertical offset of the headers in pixels.
    **/
-  void draw_header_decoration(model::Track* const track,
+  void draw_header_decoration(
+    boost::shared_ptr<model::Track> model_track,
     const Gdk::Rectangle &clip_rect);
   
   Track* expander_button_from_point(const Gdk::Point &point);
@@ -197,7 +202,8 @@ private:
    * @remarks If the return value is going to be NULL, an ENSURE will
    * fail.
    **/
-  timeline::Track* lookup_timeline_track(model::Track *model_track);
+  timeline::Track* lookup_timeline_track(
+    boost::shared_ptr<model::Track> model_track);
 
 /**
    * A helper function which calls get_tracks within the sequence of the
@@ -207,7 +213,8 @@ private:
    * @return Returns the track found, or returns NULL if no matching
    * track was found.
    **/  
-  const std::list<model::Track*>& get_tracks() const;
+  const std::list< boost::shared_ptr<model::Track> >&
+    get_tracks() const;
   
   /**
    * Registers all the styles that this class will respond to.
@@ -224,7 +231,7 @@ private:
   /**
    * The owner TimelineWidget of which this class is a helper
    */
-  gui::widgets::TimelineWidget *timelineWidget;
+  gui::widgets::TimelineWidget* const timelineWidget;
   
   /**
    * The widget's window object. 

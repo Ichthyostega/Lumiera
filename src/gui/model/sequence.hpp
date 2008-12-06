@@ -47,7 +47,9 @@ public:
   
   void set_name(const Glib::ustring &name);
   
-  const std::list<Track*>& get_tracks() const;
+  const std::list< boost::shared_ptr<Track> >& get_tracks() const;
+  
+  void add_track(boost::shared_ptr<Track> track);
   
 private:
   Glib::ustring name;
@@ -60,7 +62,7 @@ private:
   ClipTrack video2;
   // END TEST CODE
   
-  std::list<Track*> tracks;
+  std::list< boost::shared_ptr<Track> > tracks;
 };
 
 }   // namespace model

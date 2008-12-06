@@ -27,6 +27,7 @@
 
 using namespace Gtk;
 using namespace std;
+using namespace boost;
 using namespace gui::widgets::timeline;
 
 namespace gui {
@@ -102,7 +103,7 @@ TimelineWidget::~TimelineWidget()
     ruler->unreference();
     
   // Free allocated timeline tracks
-  pair<model::Track*, timeline::Track*> pair; 
+  pair<const model::Track*, timeline::Track*> pair; 
   BOOST_FOREACH( pair, trackMap )
     delete pair.second;
 }
@@ -288,9 +289,9 @@ TimelineWidget::update_tracks()
   
   // Recalculate the total height of the timeline scrolled area
   totalHeight = 0;
-  BOOST_FOREACH(model::Track* track, sequence->get_tracks())
+  BOOST_FOREACH(shared_ptr<model::Track> track, sequence->get_tracks())
     {
-      ASSERT(track != NULL);
+      ASSERT(track);
       totalHeight += measure_branch_height(track);
     }    
 }
@@ -300,35 +301,36 @@ TimelineWidget::create_timeline_tracks()
 {
   REQUIRE(sequence);
   
-  BOOST_FOREACH(model::Track* child, sequence->get_tracks())
+  BOOST_FOREACH(shared_ptr<model::Track> child, sequence->get_tracks())
     create_timeline_tracks_from_branch(child);
 }
 
 void
 TimelineWidget::create_timeline_tracks_from_branch(
-  model::Track* const model_track)
+  shared_ptr<model::Track> model_track)
 {
   REQUIRE(model_track != NULL);
   
   // Is a timeline UI track present in the map already?
-  std::map<model::Track*, timeline::Track*>::const_iterator iterator
-    = trackMap.find(model_track);
+  std::map<const model::Track*, timeline::Track*>::const_iterator
+    iterator = trackMap.find(model_track.get());
   if(iterator == trackMap.end())
     {
       // The timeline UI track is not present
       // We will need to create one
-      trackMap[model_track] = 
+      trackMap[model_track.get()] = 
         create_timeline_track_from_model_track(model_track);
     }
   
   // Recurse to child tracks
-  BOOST_FOREACH(model::Track* child, model_track->get_child_tracks())
+  BOOST_FOREACH(boost::shared_ptr<model::Track> child,
+    model_track->get_child_tracks())
     create_timeline_tracks_from_branch(child);
 }
 
 timeline::Track*
 TimelineWidget::create_timeline_track_from_model_track(
-  model::Track* const model_track)
+  boost::shared_ptr<model::Track> model_track)
 {
   REQUIRE(model_track);
   
@@ -344,11 +346,12 @@ TimelineWidget::create_timeline_track_from_model_track(
 }
 
 timeline::Track*
-TimelineWidget::lookup_timeline_track(model::Track *model_track)
+TimelineWidget::lookup_timeline_track(
+  boost::shared_ptr<model::Track> model_track)
 {
   REQUIRE(sequence);  
-  std::map<model::Track*, timeline::Track*>::const_iterator iterator =
-    trackMap.find(model_track);
+  std::map<const model::Track*, timeline::Track*>::const_iterator
+    iterator = trackMap.find(model_track.get());
   if(iterator == trackMap.end())
     {
       // The track is not present in the map
@@ -405,7 +408,8 @@ TimelineWidget::update_scroll()
 }
 
 int
-TimelineWidget::measure_branch_height(model::Track* model_track)
+TimelineWidget::measure_branch_height(
+  boost::shared_ptr<model::Track> model_track)
 {
   REQUIRE(model_track != NULL);
   
@@ -416,7 +420,8 @@ TimelineWidget::measure_branch_height(model::Track* model_track)
   int height = timeline_track->get_height() + TrackPadding;
   
   // Recurse through all the children  
-  BOOST_FOREACH( model::Track* child, model_track->get_child_tracks() )
+  BOOST_FOREACH( boost::shared_ptr<model::Track> child,
+    model_track->get_child_tracks() )
     height += measure_branch_height(child);
   
   return height;

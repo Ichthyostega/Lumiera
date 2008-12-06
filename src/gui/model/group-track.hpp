@@ -36,13 +36,12 @@ class GroupTrack : public Track
 public:
   GroupTrack();
   
-  void add_child_track(Track* child);
-  
-  const std::list<Track*>& get_child_tracks() const;
+  const std::list< boost::shared_ptr<model::Track> >&
+    get_child_tracks() const;
       
 private:
   //----- Data -----//
-  std::list<Track*> children;
+  std::list< boost::shared_ptr<Track> > children;
 };
 
 }   // namespace model

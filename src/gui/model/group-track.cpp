@@ -28,15 +28,8 @@ namespace model {
 GroupTrack::GroupTrack()
 {
 }
-  
-void
-GroupTrack::add_child_track(Track* child)
-{
-  REQUIRE(child != NULL);
-  children.push_back(child);
-}
 
-const std::list<Track*>&
+const std::list< boost::shared_ptr<model::Track> >&
 GroupTrack::get_child_tracks() const
 {
   return children;

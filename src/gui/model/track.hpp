@@ -39,12 +39,13 @@ public:
 
   virtual void add_child_track(Track* child) {};
 
-  virtual const std::list<Track*>& get_child_tracks() const;
+  virtual const std::list< boost::shared_ptr<model::Track> >&
+    get_child_tracks() const;
     
   Glib::ustring get_title();
     
 private:
-  static const std::list<Track*> NoChildren;
+  static const std::list< boost::shared_ptr<model::Track> > NoChildren;
 };
 
 }   // namespace model

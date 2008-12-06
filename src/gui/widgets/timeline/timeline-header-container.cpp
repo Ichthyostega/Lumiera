@@ -29,6 +29,7 @@
 
 using namespace Gtk;
 using namespace std;
+using namespace boost;
 
 namespace gui {
 namespace widgets {
@@ -69,7 +70,7 @@ void
 TimelineHeaderContainer::update_headers()
 {    
   // Add fresh headers  
-  BOOST_FOREACH( model::Track* model_track, get_tracks() )
+  BOOST_FOREACH( shared_ptr<model::Track> model_track, get_tracks() )
       set_parent_recursive(model_track);
 }
   
@@ -179,7 +180,7 @@ TimelineHeaderContainer::on_size_request (Requisition* requisition)
   // We don't care about the size of all the child widgets, but if we
   // don't send the size request down the tree, some widgets fail to
   // calculate their text layout correctly. 
-  BOOST_FOREACH( model::Track* model_track, get_tracks() )
+  BOOST_FOREACH( shared_ptr<model::Track> model_track, get_tracks() )
     size_request_recursive(model_track);
     
   // Initialize the output parameter:
@@ -208,7 +209,7 @@ TimelineHeaderContainer::forall_vfunc(gboolean /* include_internals */,
 { 
   REQUIRE(callback != NULL);
   
-  BOOST_FOREACH( model::Track* track, get_tracks() )
+  BOOST_FOREACH( shared_ptr<model::Track> track, get_tracks() )
     {
       ASSERT(track != NULL);
       forall_vfunc_recursive(track, callback, callback_data);
@@ -228,7 +229,8 @@ TimelineHeaderContainer::on_expose_event(GdkEventExpose *event)
       read_styles();
        
       // Paint a border underneath all the root headers
-      BOOST_FOREACH( model::Track* model_track, get_tracks() )
+      BOOST_FOREACH( shared_ptr<model::Track> model_track,
+        get_tracks() )
         {
           ASSERT(model_track != NULL);
           
@@ -277,7 +279,7 @@ TimelineHeaderContainer::layout_headers()
   const Allocation container_allocation = get_allocation();
   const int header_width = container_allocation.get_width();
   
-  BOOST_FOREACH( model::Track* model_track, get_tracks() )
+  BOOST_FOREACH( shared_ptr<model::Track> model_track, get_tracks() )
     layout_headers_recursive(
       model_track, offset, header_width, 0, true);
     
@@ -287,8 +289,8 @@ TimelineHeaderContainer::layout_headers()
 
 void
 TimelineHeaderContainer::layout_headers_recursive(
-  model::Track *model_track, int &offset, const int header_width,
-  const int depth, bool parent_expanded)
+  shared_ptr<model::Track> model_track, int &offset,
+  const int header_width, const int depth, bool parent_expanded)
 {
   REQUIRE(depth >= 0);
   REQUIRE(model_track != NULL);
@@ -335,7 +337,8 @@ TimelineHeaderContainer::layout_headers_recursive(
       widget.hide();
     
   // Recurse through all the children
-  BOOST_FOREACH( model::Track* child, model_track->get_child_tracks() ) 
+  BOOST_FOREACH( boost::shared_ptr<model::Track> child,
+    model_track->get_child_tracks() ) 
     layout_headers_recursive(
       child, offset, header_width, depth + 1,
       timeline_track->get_expanded() && parent_expanded);
@@ -343,19 +346,20 @@ TimelineHeaderContainer::layout_headers_recursive(
 
 void
 TimelineHeaderContainer::set_parent_recursive(
-  model::Track* const model_track)
+  boost::shared_ptr<model::Track> model_track)
 { 
   lookup_timeline_track(model_track)->
     get_header_widget().set_parent(*this);
   
   // Recurse through all the children
-  BOOST_FOREACH( model::Track* child, model_track->get_child_tracks() )
+  BOOST_FOREACH( boost::shared_ptr<model::Track> child,
+    model_track->get_child_tracks() )
     set_parent_recursive(child);
 }
 
 void
 TimelineHeaderContainer::size_request_recursive(
-  model::Track* const model_track)
+  shared_ptr<model::Track> const model_track)
 {  
   Widget &widget =
     lookup_timeline_track(model_track)->get_header_widget();
@@ -363,13 +367,14 @@ TimelineHeaderContainer::size_request_recursive(
     widget.size_request();
   
   // Recurse through all the children
-  BOOST_FOREACH( model::Track* child, model_track->get_child_tracks() )
+  BOOST_FOREACH( shared_ptr<model::Track> child,
+    model_track->get_child_tracks() )
     size_request_recursive(child);
 }
 
 void
 TimelineHeaderContainer::forall_vfunc_recursive(
-  model::Track* const model_track, GtkCallback callback,
+  shared_ptr<model::Track> model_track, GtkCallback callback,
   gpointer callback_data)
 {
   REQUIRE(callback != NULL);
@@ -378,13 +383,14 @@ TimelineHeaderContainer::forall_vfunc_recursive(
     get_header_widget().gobj(), callback_data) ;
   
   // Recurse through all the children
-  BOOST_FOREACH( model::Track* child, model_track->get_child_tracks() )
+  BOOST_FOREACH( shared_ptr<model::Track> child,
+    model_track->get_child_tracks() )
     forall_vfunc_recursive(child, callback, callback_data);
 }
 
 void
 TimelineHeaderContainer::draw_header_decoration(
-    model::Track* const model_track,
+    shared_ptr<model::Track> model_track,
     const Gdk::Rectangle &clip_rect)
 {
   REQUIRE(model_track != NULL);
@@ -435,7 +441,7 @@ TimelineHeaderContainer::draw_header_decoration(
   
   // Recurse through all the children
   if(timeline_track->get_expanded())
-    BOOST_FOREACH( model::Track* child,
+    BOOST_FOREACH( shared_ptr<model::Track> child,
       model_track->get_child_tracks() )
       draw_header_decoration(child, clip_rect);
 }
@@ -476,7 +482,7 @@ TimelineHeaderContainer::get_expander_button_rectangle(
 
 timeline::Track*
 TimelineHeaderContainer::lookup_timeline_track(
-  model::Track *model_track)
+  shared_ptr<model::Track> model_track)
 {
   REQUIRE(model_track != NULL);
   REQUIRE(timelineWidget != NULL);
@@ -488,7 +494,7 @@ TimelineHeaderContainer::lookup_timeline_track(
   return timeline_track;
 }
 
-const std::list<model::Track*>&
+const std::list< boost::shared_ptr<model::Track> >&
 TimelineHeaderContainer::get_tracks() const
 {
   REQUIRE(timelineWidget != NULL);
