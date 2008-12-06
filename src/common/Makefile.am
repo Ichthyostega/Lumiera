@@ -61,6 +61,7 @@ noinst_HEADERS +=						\
 	$(liblumicommon_a_srcdir)/meta/generator.hpp		\
 	$(liblumicommon_a_srcdir)/meta/typelistutil.hpp		\
 	$(liblumicommon_a_srcdir)/util.hpp			\
+	$(liblumicommon_a_srcdir)/observable-list.hpp		\
 	$(liblumicommon_a_srcdir)/test/mockinjector.hpp		\
 	$(liblumicommon_a_srcdir)/test/suite.hpp		\
 	$(liblumicommon_a_srcdir)/test/testoption.hpp		\

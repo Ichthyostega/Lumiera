@@ -101,6 +101,11 @@ AC_CHECK_HEADER([tr1/memory],
         ,
         AC_MSG_ERROR([std::tr1 proposed standard extension for shared_ptr missing])
         )
+        
+AC_CHECK_HEADER([boost/foreach.hpp],
+        ,
+        AC_MSG_ERROR([boost::foreach missing                    (http://www.boost.org/)])
+        )
 
 AC_CHECK_HEADER([boost/shared_ptr.hpp],
         ,
@@ -122,6 +127,8 @@ AC_CHECK_HEADER([boost/regex.hpp],
         )
 
 AC_LANG_POP([C++])
+
+PKG_CHECK_MODULES(LUMIERA_GUI_LIBS, [sigc++-2.0 >= 2.0.18])
 
 ############## Internatinalization
 #GETTEXT_PACKAGE=gtk-lumiera
