@@ -271,12 +271,14 @@ void
 TimelinePanel::update_zoom_buttons()
 {
   TimelineWidget *const widget = get_current_page();
-  ASSERT(widget != NULL);
   
-  zoomIn.set_sensitive(widget->get_view_window().get_time_scale()
-    != 1);
-  zoomOut.set_sensitive(widget->get_view_window().get_time_scale()
-    != TimelineWidget::MaxScale);
+  if(widget != NULL)
+    {
+      zoomIn.set_sensitive(widget->get_view_window().get_time_scale()
+        != 1);
+      zoomOut.set_sensitive(widget->get_view_window().get_time_scale()
+        != TimelineWidget::MaxScale);
+    }
 }
 
 void
@@ -302,12 +304,13 @@ TimelinePanel::set_tool(timeline::ToolType tool)
 {
   if(updatingToolbar) return;
   
-  TimelineWidget *const  widget = get_current_page();
-  ASSERT(widget != NULL);
-   
-  currentTool = tool;
-  widget->set_tool(tool);
-  update_tool_buttons();
+  TimelineWidget *const widget = get_current_page();
+  if(widget != NULL)
+    {
+      currentTool = tool;
+      widget->set_tool(tool);
+      update_tool_buttons();
+    }
 }
 
 void
@@ -319,7 +322,10 @@ TimelinePanel::show_time(gavl_time_t time)
 TimelineWidget*
 TimelinePanel::get_current_page()
 {
-  Widget* const widget = (*notebook.get_current()).get_child();
+  Notebook::PageList::iterator page_iterator = notebook.get_current();
+  if(!page_iterator) return NULL;  
+  
+  Widget* const widget = (*page_iterator).get_child();
   REQUIRE(widget != NULL);
   return (TimelineWidget*)widget;
 }
