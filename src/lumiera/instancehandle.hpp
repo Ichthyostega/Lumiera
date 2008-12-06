@@ -39,8 +39,11 @@
 #define LUMIERA_INSTANCEHANDLE_H
 
 
+#include "include/nobugcfg.h"
+
 extern "C" {
 #include "lumiera/interface.h"
+#include "lumiera/interfaceregistry.h"
 }
 
 #include <boost/noncopyable.hpp>
@@ -79,7 +82,8 @@ namespace lumiera {
    * @todo when provided with the type of an facade interface class, care for enabling/disabling
    *       access through the facade proxy singleton when opening/closing the registration.
    */
-  template< class I         ///< fully mangled name of the interface type 
+  template< class I         ///< fully mangled name of the interface type
+          , class FA = I    ///< facade interface type to be used by clients
           >
   class InstanceHandle
     : private boost::noncopyable
@@ -96,9 +100,9 @@ namespace lumiera {
        *  @param impName unmangled name of the instance (implementation)
        */
       InstanceHandle (string const& iName, uint version, size_t minminor, string const& impName)
-        : descriptors_(0),
+        : desc_(0),
           instance_(static_cast<I*> 
-              (lumiera_interface_open (iName, version, minminor, impName)))
+              (lumiera_interface_open (iName.c_str(), version, minminor, impName.c_str())))
         { }
       
       /** Set up an InstanceHandle managing the 
@@ -109,7 +113,7 @@ namespace lumiera {
        */
       InstanceHandle (LumieraInterface* descriptors)
         : desc_(descriptors),
-          instance_(static_cast<I*> (register_and_open (desc_)))
+          instance_(reinterpret_cast<I*> (register_and_open (desc_)))
         { }
       
       ~InstanceHandle ()
@@ -120,6 +124,23 @@ namespace lumiera {
         }
       
       
+      /** act as smart pointer providing access through the facade. 
+       *  @todo implement the case where the Facade differs from I
+       *  @note we don't provide operator*                      */
+      FA * operator-> ()  const { return accessFacade(); }      
+      
+      
+      /** directly access the instance via the CLI interface */
+      I& get ()  const { ENSURE(instance_); return *instance_; }
+      
+      
+    private:
+      FA *
+      accessFacade()
+        {
+          ENSURE (instance_);
+          return static_cast<FA *> (instance_);    /////////////////TODO: actually handle the case when the facade differs from the interface by using the proxy
+        }
     };
   
   

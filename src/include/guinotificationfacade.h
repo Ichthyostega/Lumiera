@@ -53,14 +53,22 @@ namespace gui {
    * from the lower layers into the Lumiera GUI. Typically, this happens
    * asynchronously and triggered by events within the lower layers.
    * 
+   * This is a layer separation facade interface. Clients should use
+   * the embedded #facade factory, which yields a proxy routing any 
+   * calls through the lumieraorg_GuiNotification interface
+   * @throws lumiera::error::State when interface is not opened
    */
   class GuiNotification
     {
     public:
       static lumiera::SingletonSub<GuiNotification> facade;
       
+      /** push a user visible notification text */
       virtual void displayInfo (string const& text)          =0;
       
+      /** causes the GUI to shut down unconditionally
+       *  @param cause user visible explanation of the
+       *         reason causing this shutdown      */
       virtual void triggerGuiShutdown (string const& cause)  =0;
       
     protected:

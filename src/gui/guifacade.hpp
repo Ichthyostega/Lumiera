@@ -41,16 +41,17 @@
 #include "lumiera/subsys.hpp"
 
 
-
 namespace gui {
+  
   
   
   /*********************************************************************
    * Global access point for loading and starting up the Lumiera GTK GUI
-   * and for defining the public interface(s) for addressing the GUI
-   * from Backend or Proc-Layer.
+   * and for controlling the GUI lifecycle. The implementation part of
+   * this class also is responsible for making the "business" interface
+   * of the GUI available, i.e. gui::GuiNotification
    * 
-   * If running Lumiera with a GUI is required (the default case),
+   * When running Lumiera with a GUI is required (the default case),
    * it is loaded as dynamic module, thus defining the interface(s) 
    * for any further access. After successfully loading and starting
    * the GUI, this gui::Facade is wired internally with this interface
@@ -66,6 +67,10 @@ namespace gui {
        *  wired accordingly to allow main to load, 
        *  start and stop the Lumiera GTK GUI. */
       static lumiera::Subsys& getDescriptor();
+      
+      
+      /** weather the GUI has been started and all intfaces are opened */
+      static bool isUp();
       
       
       //////////////////TODO: define the global access interface for the GUI

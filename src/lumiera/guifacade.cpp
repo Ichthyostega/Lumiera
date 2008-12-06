@@ -23,44 +23,100 @@
 
 #include "gui/guifacade.hpp"
 #include "common/singleton.hpp"
+#include "lumiera/instancehandle.hpp"
 
+extern "C" {
+#include "lumiera/interface.h"
+}
+
+#include <boost/scoped_ptr.hpp>
 #include <string>
 
 
 namespace gui {
   
   using std::string;
+  using boost::scoped_ptr;
+  using lumiera::Subsys;
   
-  class GuiSubsysDescriptor
-    : public lumiera::Subsys
+  /** interface of the GuiStarterPlugin */
+  LUMIERA_INTERFACE_DECLARE (lumieraorg_Gui, 1
+  );
+  
+  ///////////////////////////////////////////////////TODO: Placeholder
+  LumieraInterface*
+  getGuiStarterPlugin_InstanceDescriptor()
+  {
+    UNIMPLEMENTED ("implement the GuiStarterPlugin");
+    return 0;
+  }
+  ///////////////////////////////////////////////////TODO: Placeholder
+  
+  
+  struct GuiRunner
+    : public GuiFacade
     {
-      operator string ()  const { return "Lumiera GTK GUI"; }
+      typedef lumiera::InstanceHandle<LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1)> GuiHandle;
       
-      bool 
-      shouldStart (lumiera::Option&)
+      Subsys& guiSubsysHandle_;
+      Subsys::SigTerm terminate_;
+      
+      GuiHandle theGUI_;
+      
+      
+      GuiRunner (Subsys& handle, Subsys::SigTerm terminationSignal)
+        : guiSubsysHandle_(handle),
+          terminate_(terminationSignal),
+          theGUI_(getGuiStarterPlugin_InstanceDescriptor())
         {
-          UNIMPLEMENTED ("determine, if a GUI is needed");
-          return false;
+          ////TODO assert theGUI, i.e. implement a bool conversion there!
+          TODO ("start gui thread, passing the terminationSignal");
         }
       
-      bool
-      start (lumiera::Option&, Subsys::SigTerm termination)
+      ~GuiRunner ()
         {
-          UNIMPLEMENTED ("load and start the GUI and register shutdown hook");
-          return false;
+          ////TODO any cleanup here?
         }
-      
-      void
-      triggerShutdown ()  throw()
-        {
-          UNIMPLEMENTED ("initiate closing the GUI");
-        }
-      
     };
   
-  namespace {
+  
+  
+  
+  namespace { // implementation details
+    
+    scoped_ptr<GuiFacade> facade (0);
+    
+    class GuiSubsysDescriptor
+      : public lumiera::Subsys
+      {
+        operator string ()  const { return "Lumiera GTK GUI"; }
+        
+        bool 
+        shouldStart (lumiera::Option&)
+          {
+            UNIMPLEMENTED ("determine, if a GUI is needed");
+            return false;
+          }
+        
+        bool
+        start (lumiera::Option&, Subsys::SigTerm termination)
+          {
+            UNIMPLEMENTED ("load and start the GUI and register shutdown hook");
+            facade.reset (new GuiRunner (*this, termination));  /////////////////////TODO: actually decorate the termSignal, in order to delete the facade
+            return false;
+          }
+        
+        void
+        triggerShutdown ()  throw()
+          {
+            UNIMPLEMENTED ("initiate closing the GUI");
+          }
+        
+      };
+    
     lumiera::Singleton<GuiSubsysDescriptor> theDescriptor;
-  }
+    
+  } // (End) impl details
   
   
   
@@ -70,6 +126,13 @@ namespace gui {
   GuiFacade::getDescriptor()
   {
     return theDescriptor();
+  }
+  
+  
+  bool
+  GuiFacade::isUp ()
+  {
+    return (facade);
   }
 
 
