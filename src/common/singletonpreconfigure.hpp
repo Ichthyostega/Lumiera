@@ -61,7 +61,7 @@ namespace lumiera
     
     
   /* ********************************************************************** */
-  /* Forward declarations of all Classes we want to specialize the template */
+  /* Forward declarations of all Classes we want to specialise the template */
   /* ********************************************************************** */
     
   namespace test
@@ -87,8 +87,7 @@ namespace backend_interface
   /* Specialisation Definitions */
   /* ************************** */
 
-namespace lumiera
-  {
+namespace lumiera {
   
   using test::MockInjector;
   

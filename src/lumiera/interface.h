@@ -316,7 +316,7 @@ LUMIERA_INTERFACE_INSTANCE (lumieraorg__plugin, 0,                              
   lumiera_interface_handle->close (&(handle)->interface_header_)
 
 
-#else /* compile as buildin */
+#else /* compile as builtin */
 
 #define LUMIERA_PLUGIN_INTERFACEHANDLE static LUMIERA_INTERFACE_HANDLE(lumieraorg_interface, 0) lumiera_interface_handle
 #define LUMIERA_PLUGIN_STORE_INTERFACEHANDLE(name)  lumiera_interface_handle = LUMIERA_INTERFACE_CAST (lumieraorg_interface, 0) name

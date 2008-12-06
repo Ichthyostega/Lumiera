@@ -94,7 +94,7 @@ namespace lumiera
       /** @internal helper used to delegate destroying the single instance
        *  to the Create policy, at the same time allowing the Life policy
        *  to control the point in the Application lifecycle when the 
-       *  destruction of this instance occures.
+       *  destruction of this instance occurs.
        */
       static void destroy()
         {
@@ -131,7 +131,7 @@ namespace lumiera
 /////       the object may already have been released when the runtime system calls the
 /////       destructors of static objects at shutdown.
 /////       It seems this would either cost us much of the flexibility or get complicated
-/////       to a point where we could as well implement our own Depenency Injection Manager.
+/////       to a point where we could as well implement our own Dependency Injection Manager.
 
 } // namespace lumiera
 #endif

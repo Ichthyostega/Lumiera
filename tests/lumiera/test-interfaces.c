@@ -499,7 +499,7 @@ TEST ("plugin_examplepluginc")
   lumiera_interfaceregistry_init ();
   lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
 
-  TODO ("macro to derrive minminor version from a slot");
+  TODO ("macro to derive minminor version from a slot");
 
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testhello, 0) german =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testhello, 0, 0, lumieraorg_hello_german);

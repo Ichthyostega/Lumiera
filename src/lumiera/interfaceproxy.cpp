@@ -78,6 +78,8 @@ namespace gui {
   /** storage for the facade proxy factory used by client code to invoke through the interface */
   lumiera::SingletonSub<GuiNotification> GuiNotification::facade (typeinfo_proxyInstance_to_create);
   
+  ///////////////////////////////////////TODO: this solution is not correct, because it doesn't detect when the interface is shut down!
+  
 
 
 } // namespace gui

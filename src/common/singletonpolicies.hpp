@@ -95,7 +95,7 @@ namespace lumiera
            *  the provided deleter function(s) at application shutdown,
            *  relying on the runtime system calling destructors of static
            *  objects. Because this Policy class can be shared between 
-           *  several Singletons, we need to memoize all registered
+           *  several Singletons, we need to memorise all registered
            *  deleter functions for calling them at shutdown.
            */ 
           static void scheduleDelete (DelFunc kill_the_singleton) 
