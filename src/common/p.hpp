@@ -59,7 +59,7 @@ namespace lumiera {
   using std::tr1::weak_ptr;
   
   /**
-   * customized refcounting smart pointer template, built upon
+   * Customised refcounting smart pointer template, built upon
    * std::tr1::shared_ptr, but forwarding type relationships and
    * ordering operators to the pointee objects.
    * @param TAR the visible pointee type

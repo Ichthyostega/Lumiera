@@ -59,6 +59,11 @@ namespace lumiera {
   
   namespace { // implementation details
   
+    /** takes a bunch of instance definitions, as typically created
+     *  when defining interfaces for external use, and registers them
+     *  with the InterfaceSystem. Then uses the data found in the
+     *  \em first descriptor to open an instance handle.  
+     */
     LumieraInterface
     register_and_open (LumieraInterface* descriptors)
     {
@@ -69,6 +74,18 @@ namespace lumiera {
                                      masterI->version,
                                      masterI->size,
                                      masterI->name);
+    }
+    
+    /** do a lookup within the interfaceregistry
+     *  using the name/version found within the interface
+     *  handle, to ensure it is still valid and registered */
+    bool
+    verify_validity (LumieraInterface ifa)
+    {
+      REQUIRE (ifa);
+      return (ifa == lumiera_interfaceregistry_interface_find (ifa->interface, 
+                                                               ifa->version, 
+                                                               ifa->name));
     }
     
   } // (End) impl details
@@ -90,6 +107,8 @@ namespace lumiera {
     { 
       LumieraInterface* desc_;
       I* instance_;
+      
+      typedef InstanceHandle<I,FA> _ThisType;
       
     public:
       /** Set up an InstanceHandle representing a plugin.
@@ -118,10 +137,11 @@ namespace lumiera {
       
       ~InstanceHandle ()
         {
-          lumiera_interface_close ((LumieraInterface)instance_);
+          lumiera_interface_close (&instance_->interface_header_);
           if (desc_)
             lumiera_interfaceregistry_bulkremove_interfaces (desc_);
         }
+      
       
       
       /** act as smart pointer providing access through the facade. 
@@ -129,9 +149,18 @@ namespace lumiera {
        *  @note we don't provide operator*                      */
       FA * operator-> ()  const { return accessFacade(); }      
       
-      
       /** directly access the instance via the CLI interface */
       I& get ()  const { ENSURE(instance_); return *instance_; }
+      
+      
+      
+      typedef I* _ThisType::*unspecified_bool_type;
+      
+      /** implicit conversion to "bool" */
+      operator unspecified_bool_type()  const // never throws
+        { return isValid()?  &_ThisType::instance_ : 0; }
+      
+      bool operator! ()  const { return !isValid();     }
       
       
     private:
@@ -140,6 +169,13 @@ namespace lumiera {
         {
           ENSURE (instance_);
           return static_cast<FA *> (instance_);    /////////////////TODO: actually handle the case when the facade differs from the interface by using the proxy
+        }
+      
+      bool 
+      isValid()  const
+        { 
+          return instance_ 
+              && verify_validity (&instance_->interface_header_);
         }
     };
   

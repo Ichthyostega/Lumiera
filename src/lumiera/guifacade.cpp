@@ -38,6 +38,7 @@ namespace gui {
   using std::string;
   using boost::scoped_ptr;
   using lumiera::Subsys;
+  using lumiera::InstanceHandle;
   
   /** interface of the GuiStarterPlugin */
   LUMIERA_INTERFACE_DECLARE (lumieraorg_Gui, 1
@@ -56,7 +57,7 @@ namespace gui {
   struct GuiRunner
     : public GuiFacade
     {
-      typedef lumiera::InstanceHandle<LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1)> GuiHandle;
+      typedef InstanceHandle<LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1)> GuiHandle;
       
       Subsys& guiSubsysHandle_;
       Subsys::SigTerm terminate_;
@@ -69,7 +70,7 @@ namespace gui {
           terminate_(terminationSignal),
           theGUI_(getGuiStarterPlugin_InstanceDescriptor())
         {
-          ////TODO assert theGUI, i.e. implement a bool conversion there!
+          ASSERT (theGUI_);
           TODO ("start gui thread, passing the terminationSignal");
         }
       
