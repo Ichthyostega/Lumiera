@@ -141,8 +141,8 @@ def defineCmdlineOptions():
         ('ARCHFLAGS', 'Set architecture-specific compilation flags (passed literally to gcc)','')
         ,EnumOption('BUILDLEVEL', 'NoBug build level for debugging', 'ALPHA',
                     allowed_values=('ALPHA', 'BETA', 'RELEASE'))
-        ,BoolOption('DEBUG', 'Build with debugging information and no optimizations', False)
-        ,BoolOption('OPTIMIZE', 'Build with strong optimization (-O3)', False)
+        ,BoolOption('DEBUG', 'Build with debugging information and no optimisations', False)
+        ,BoolOption('OPTIMIZE', 'Build with strong optimisation (-O3)', False)
         ,BoolOption('VALGRIND', 'Run Testsuite under valgrind control', True)
         ,BoolOption('VERBOSE',  'Print full build commands', False)
         ,('TESTSUITES', 'Run only Testsuites matching the given pattern', '')
@@ -153,7 +153,7 @@ def defineCmdlineOptions():
         ,PathOption('PKGLIBDIR', 'Installation dir for plugins, defaults to DESTDIR/lib/lumiera', '',PathOption.PathAccept)
         ,PathOption('PKGDATADIR', 'Installation dir for default config, usually DESTDIR/share/lumiera', '',PathOption.PathAccept)
         ,PathOption('SRCTAR', 'Create source tarball prior to compiling', '..', PathOption.PathAccept)
-        ,PathOption('DOCTAR', 'Create tarball with dev documentaionl', '..', PathOption.PathAccept)
+        ,PathOption('DOCTAR', 'Create tarball with developer documentation', '..', PathOption.PathAccept)
      )
     
     return opts

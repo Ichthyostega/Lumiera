@@ -22,12 +22,10 @@
 
 
 #include "gui/guifacade.hpp"
+#include "include/guinotificationfacade.h"
+#include "include/error.hpp"
 #include "common/singleton.hpp"
 #include "lumiera/instancehandle.hpp"
-
-extern "C" {
-#include "lumiera/interface.h"
-}
 
 #include <boost/scoped_ptr.hpp>
 #include <string>
@@ -40,18 +38,7 @@ namespace gui {
   using lumiera::Subsys;
   using lumiera::InstanceHandle;
   
-  /** interface of the GuiStarterPlugin */
-  LUMIERA_INTERFACE_DECLARE (lumieraorg_Gui, 1
-  );
   
-  ///////////////////////////////////////////////////TODO: Placeholder
-  LumieraInterface*
-  getGuiStarterPlugin_InstanceDescriptor()
-  {
-    UNIMPLEMENTED ("implement the GuiStarterPlugin");
-    return 0;
-  }
-  ///////////////////////////////////////////////////TODO: Placeholder
   
   
   struct GuiRunner
@@ -59,33 +46,33 @@ namespace gui {
     {
       typedef InstanceHandle<LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1)> GuiHandle;
       
-      Subsys& guiSubsysHandle_;
-      Subsys::SigTerm terminate_;
-      
       GuiHandle theGUI_;
       
       
-      GuiRunner (Subsys& handle, Subsys::SigTerm terminationSignal)
-        : guiSubsysHandle_(handle),
-          terminate_(terminationSignal),
-          theGUI_(getGuiStarterPlugin_InstanceDescriptor())
+      GuiRunner (Subsys::SigTerm terminationHandle)
+        : theGUI_("lumieraorg_Gui", 1, 1, "lumieraorg_GuiStarterPlugin") // load GuiStarterPlugin
         {
           ASSERT (theGUI_);
-          TODO ("start gui thread, passing the terminationSignal");
+          if (!kickOff (terminationHandle))
+            throw lumiera::error::Fatal("failed to bring up GUI",lumiera_error());
         }
       
-      ~GuiRunner ()
-        {
-          ////TODO any cleanup here?
+      ~GuiRunner () {  }
+      
+      
+      bool kickOff (Subsys::SigTerm& terminationHandle) 
+        { 
+          return theGUI_->kickOff (reinterpret_cast<void*> (&terminationHandle))
+              && !lumiera_error_peek();
         }
     };
   
   
   
   
-  namespace { // implementation details
+  namespace { // implementation details : start GUI through GuiStarterPlugin
     
-    scoped_ptr<GuiFacade> facade (0);
+    scoped_ptr<GuiRunner> facade (0);
     
     class GuiSubsysDescriptor
       : public lumiera::Subsys
@@ -102,15 +89,16 @@ namespace gui {
         bool
         start (lumiera::Option&, Subsys::SigTerm termination)
           {
-            UNIMPLEMENTED ("load and start the GUI and register shutdown hook");
-            facade.reset (new GuiRunner (*this, termination));  /////////////////////TODO: actually decorate the termSignal, in order to delete the facade
-            return false;
+            facade.reset (new GuiRunner (termination));  /////////////////////TODO: actually decorate the termSignal, in order to delete the facade
+            return true;
           }
         
         void
         triggerShutdown ()  throw()
           {
-            UNIMPLEMENTED ("initiate closing the GUI");
+            try { GuiNotification::facade().triggerGuiShutdown ("Application shutdown"); }
+            
+            catch (...){}
           }
         
       };
@@ -118,6 +106,8 @@ namespace gui {
     lumiera::Singleton<GuiSubsysDescriptor> theDescriptor;
     
   } // (End) impl details
+  
+  
   
   
   

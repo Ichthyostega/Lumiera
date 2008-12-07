@@ -34,8 +34,8 @@
  */
 
 
-#ifndef GUI_FACADE_H
-#define GUI_FACADE_H
+#ifndef GUI_GUINOTIFICATION_H
+#define GUI_GUINOTIFICATION_H
 
 
 #include "common/singletonsubclass.hpp"

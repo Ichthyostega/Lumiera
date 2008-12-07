@@ -62,7 +62,7 @@ namespace gui {
     
     
     
-    /* ================== define an lumieraorg_guinotification instance ======================= */
+    /* ================== define an lumieraorg_GuiNotification instance ======================= */
     
     LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0
                                ,lumieraorg_GuiNotificationFacade_descriptor
@@ -124,7 +124,7 @@ namespace gui {
                                                           )
                                , LUMIERA_INTERFACE_INLINE (versioncmp, "\253\066\335\233\025\161\135\347\377\156\121\135\347\313\130\014",
                                                            int, (const char* a, const char* b),
-                                                             {return 0;}  ////////////////////////////////////////////TODO
+                                                             {return 0;}  ////////////////////////////////////////////TODO define version ordering
                                                           )
                                );
     

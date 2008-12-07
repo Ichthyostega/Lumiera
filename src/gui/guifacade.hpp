@@ -40,6 +40,10 @@
 
 #include "lumiera/subsys.hpp"
 
+extern "C" {
+#include "lumiera/interface.h"
+}
+
 
 namespace gui {
   
@@ -60,25 +64,44 @@ namespace gui {
    * access via interface handles for communication with Backend and
    * Proc-Layer.
    * 
+   * @note this facade is intended to be used by Lumiera main solely.
+   *       client code should always use the "business" interface(s).
+   * 
    */
-  struct GuiFacade
+  class GuiFacade
     {
+    public:
+      
       /** provide a descriptor for lumiera::AppState,
        *  wired accordingly to allow main to load, 
        *  start and stop the Lumiera GTK GUI. */
       static lumiera::Subsys& getDescriptor();
       
       
-      /** weather the GUI has been started and all intfaces are opened */
+      /** weather the GUI has been started and all interfaces are opened */
       static bool isUp();
       
       
-      //////////////////TODO: define the global access interface for the GUI
-      //////////////////TODO: provide a function for accessing this interface
-      //////////////////TODO: register similar proxy/facade interfaces for Proc/Backend
+      /*  ===== control interface for the GuiStarterPlugin ======= */
       
+      /** start the actual GUI thread(s), after successfully loading
+       *  the GuiStarterPlugin, that is. The implementation of this function
+       *  must ensure to invoke the given termination signal reliably after
+       *  shutting down the GUI, otherwise the application will hang on exit.
+       *  @internal this function is invoked automatically during the GUI
+       *            loading and startup process. Don't call it manually.
+       */
+      virtual bool kickOff (lumiera::Subsys::SigTerm&)  =0;
+      
+      
+    protected:
+      virtual ~GuiFacade() {}
     };
     
+  /** interface of the GuiStarterPlugin */
+  LUMIERA_INTERFACE_DECLARE (lumieraorg_Gui, 1,
+                             LUMIERA_INTERFACE_SLOT (bool, kickOff, (void*))
+  );
   
   
 } // namespace gui

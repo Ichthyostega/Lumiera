@@ -74,7 +74,7 @@ namespace lumiera {
   /** @note we set the C-style errorstate as a side effect */
   Error::Error (string description, const char* id) throw()
     : std::exception (),
-      id_ (default_or_given (id)),
+      id_ (error::default_or_given (id)),
       msg_ (error::default_usermsg (this)),
       desc_ (description),
       cause_ ("")
@@ -86,7 +86,7 @@ namespace lumiera {
   Error::Error (std::exception& cause, 
                 string description, const char* id) throw()
     : std::exception (),
-      id_ (default_or_given (id)),
+      id_ (error::default_or_given (id)),
       msg_ (error::default_usermsg (this)),
       desc_ (description),
       cause_ (extractCauseMsg(cause))

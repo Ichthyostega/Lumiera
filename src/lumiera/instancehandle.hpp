@@ -120,7 +120,7 @@ namespace lumiera {
        */
       InstanceHandle (string const& iName, uint version, size_t minminor, string const& impName)
         : desc_(0),
-          instance_(static_cast<I*> 
+          instance_(reinterpret_cast<I*> 
               (lumiera_interface_open (iName.c_str(), version, minminor, impName.c_str())))
         { }
       
@@ -165,7 +165,7 @@ namespace lumiera {
       
     private:
       FA *
-      accessFacade()
+      accessFacade()  const
         {
           ENSURE (instance_);
           return static_cast<FA *> (instance_);    /////////////////TODO: actually handle the case when the facade differs from the interface by using the proxy
