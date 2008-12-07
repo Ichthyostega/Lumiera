@@ -41,10 +41,17 @@ namespace lumiera {
      *  catch clauses.
      *  @todo to be localised
      */
-    inline const string default_usermsg (Error* exception_obj)  throw() 
+    inline const string
+    default_usermsg (Error* exception_obj)  throw() 
     {
       return string("Sorry, Lumiera encountered an internal error. (")
            + typeid(*exception_obj).name() + ")";
+    }
+    
+    inline const char*
+    default_or_given (const char* id)
+    {
+      return id? id : LUMIERA_ERROR_STATE;
     }
     
     
@@ -67,7 +74,7 @@ namespace lumiera {
   /** @note we set the C-style errorstate as a side effect */
   Error::Error (string description, const char* id) throw()
     : std::exception (),
-      id_ (id),
+      id_ (default_or_given (id)),
       msg_ (error::default_usermsg (this)),
       desc_ (description),
       cause_ ("")
@@ -79,7 +86,7 @@ namespace lumiera {
   Error::Error (std::exception& cause, 
                 string description, const char* id) throw()
     : std::exception (),
-      id_ (id),
+      id_ (default_or_given (id)),
       msg_ (error::default_usermsg (this)),
       desc_ (description),
       cause_ (extractCauseMsg(cause))
