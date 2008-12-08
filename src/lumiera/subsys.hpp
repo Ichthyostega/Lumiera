@@ -23,7 +23,7 @@
 /** @file subsys.hpp
  ** Describing dependencies and lifecycle of the application's primary parts.
  ** Within Lumiera's main(), a small number of well-known application subsystems
- ** need to be started and maintained, while observing some interrelations.
+ ** need to be started and maintained, observing some interrelations.
  ** While the activation of the key components is controlled by options, maybe
  ** some prerequisite subsystems need to be pulled up, and in case of an regular
  ** or irregular exit of a given subsystem, the whole dependency graph needs 
@@ -56,7 +56,6 @@
 namespace lumiera {
   
   using std::string;
-//  using boost::scoped_ptr;
   using boost::noncopyable;
   using std::tr1::function;
   

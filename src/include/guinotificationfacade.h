@@ -38,6 +38,8 @@
 #define GUI_GUINOTIFICATION_H
 
 
+#ifdef __cplusplus  /* ============== C++ Interface ================= */
+
 #include "common/singletonsubclass.hpp"
 
 #include <string>
@@ -79,7 +81,11 @@ namespace gui {
   
 } // namespace gui
 
+
 extern "C" {
+#endif /* =========================== CLI Interface ================= */ 
+
+  
 #include "lumiera/interface.h"
 
 LUMIERA_INTERFACE_DECLARE (lumieraorg_GuiNotification, 1,
@@ -88,6 +94,7 @@ LUMIERA_INTERFACE_DECLARE (lumieraorg_GuiNotification, 1,
 );
 
 
+#ifdef __cplusplus
 }
-
+#endif
 #endif
