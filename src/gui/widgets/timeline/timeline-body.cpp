@@ -256,7 +256,8 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
   tool->on_motion_notify_event(event);
   
   // See if the track that we're hovering over has changed
-  timeline::Track *new_hovering_track = track_from_point(event->y);
+  shared_ptr<timeline::Track> new_hovering_track =
+    track_from_point(event->y);
   if(timelineWidget->get_hovering_track() != new_hovering_track)
       timelineWidget->set_hovering_track(new_hovering_track);
   
@@ -298,9 +299,8 @@ TimelineBody::draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
   REQUIRE(model_track != NULL);
   REQUIRE(timelineWidget != NULL);
   
-  timeline::Track *timeline_track = timelineWidget->
+  shared_ptr<timeline::Track> timeline_track = timelineWidget->
     lookup_timeline_track(model_track);
-  ASSERT(timeline_track != NULL);
   
   const int height = timeline_track->get_height();
   ASSERT(height >= 0);
@@ -422,7 +422,7 @@ TimelineBody::set_vertical_offset(int offset)
   timelineWidget->verticalAdjustment.set_value(offset);
 }
 
-timeline::Track*
+shared_ptr<timeline::Track>
 TimelineBody::track_from_point(const int y) const
 {
   REQUIRE(timelineWidget != NULL);
@@ -433,25 +433,24 @@ TimelineBody::track_from_point(const int y) const
   BOOST_FOREACH( shared_ptr<model::Track> model_track,
     timelineWidget->sequence->get_tracks() )
     {
-      timeline::Track* result = track_from_branch(
+      shared_ptr<timeline::Track> result = track_from_branch(
         model_track, y, offset);
-      if(result != NULL)
+      if(result)
         return result;
     }
   
   // No track has been found with this point in it
-  return NULL;
+  return boost::shared_ptr<timeline::Track>();
 }
 
-timeline::Track* TimelineBody::track_from_branch(
+shared_ptr<timeline::Track> TimelineBody::track_from_branch(
   shared_ptr<model::Track> model_track,
   const int y, int &offset) const
 {
   REQUIRE(timelineWidget != NULL);
   
-  timeline::Track *timeline_track = timelineWidget->
+  shared_ptr<timeline::Track> timeline_track = timelineWidget->
     lookup_timeline_track(model_track);
-  ASSERT(timeline_track != NULL);
   
   const int height = timeline_track->get_height();
   ASSERT(height >= 0);
@@ -467,13 +466,14 @@ timeline::Track* TimelineBody::track_from_branch(
   BOOST_FOREACH( shared_ptr<model::Track> child,
     model_track->get_child_tracks() )
     {
-      timeline::Track* result = track_from_branch(child, y, offset);
+      shared_ptr<timeline::Track> result =
+        track_from_branch(child, y, offset);
       if(result != NULL)
         return result;
     }
     
   // No track has been found in this branch
-  return NULL;
+  return shared_ptr<timeline::Track>();
 }
 
 void

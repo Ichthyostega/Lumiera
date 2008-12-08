@@ -40,7 +40,7 @@ const double TimelineWidget::ZoomIncrement = 1.25;
 const int64_t TimelineWidget::MaxScale = 30000000;
 
 TimelineWidget::TimelineWidget(
-  boost::shared_ptr<model::Sequence> source_sequence) :
+  shared_ptr<model::Sequence> source_sequence) :
   Table(2, 2),
   sequence(source_sequence),
   viewWindow(this, 0, 1),
@@ -52,7 +52,6 @@ TimelineWidget::TimelineWidget(
   playbackPeriodStart(0),
   playbackPeriodEnd(0),
   playbackPoint(GAVL_TIME_UNDEFINED),
-  hoveringTrack(NULL),
   horizontalScroll(horizontalAdjustment),
   verticalScroll(verticalAdjustment)
 {
@@ -102,11 +101,6 @@ TimelineWidget::~TimelineWidget()
   REQUIRE(ruler != NULL);
   if(ruler != NULL)
     ruler->unreference();
-    
-  // Free allocated timeline tracks
-  pair<const model::Track*, timeline::Track*> pair; 
-  BOOST_FOREACH( pair, trackMap )
-    delete pair.second;
 }
 
 /* ===== Data Access ===== */
@@ -220,7 +214,7 @@ TimelineWidget::set_tool(ToolType tool_type)
   body->set_tool(tool_type);
 }
 
-timeline::Track*
+shared_ptr<timeline::Track>
 TimelineWidget::get_hovering_track() const
 {
   return hoveringTrack;
@@ -240,7 +234,7 @@ TimelineWidget::playback_period_drag_released_signal() const
   return playbackPeriodDragReleasedSignal;
 }
 
-sigc::signal<void, timeline::Track*>
+sigc::signal<void, shared_ptr<timeline::Track> >
 TimelineWidget::hovering_track_changed_signal() const
 {
   return hoveringTrackChangedSignal;
@@ -323,35 +317,35 @@ TimelineWidget::create_timeline_tracks_from_branch(
     }
   
   // Recurse to child tracks
-  BOOST_FOREACH(boost::shared_ptr<model::Track> child,
+  BOOST_FOREACH(shared_ptr<model::Track> child,
     model_track->get_child_tracks())
     create_timeline_tracks_from_branch(child);
 }
 
-timeline::Track*
+shared_ptr<timeline::Track>
 TimelineWidget::create_timeline_track_from_model_track(
-  boost::shared_ptr<model::Track> model_track)
+  shared_ptr<model::Track> model_track)
 {
   REQUIRE(model_track);
   
   // Choose a corresponding timeline track class from the model track's
   // class
   if(typeid(*model_track) == typeid(model::ClipTrack))
-    return new timeline::ClipTrack();
+    return shared_ptr<timeline::Track>(new timeline::ClipTrack());
   else if(typeid(*model_track) == typeid(model::GroupTrack))
-    return new timeline::GroupTrack();
+    return shared_ptr<timeline::Track>(new timeline::GroupTrack());
   
   ASSERT(NULL); // Unknown track type;
-  return NULL;
+  return shared_ptr<timeline::Track>();
 }
 
-timeline::Track*
+shared_ptr<timeline::Track>
 TimelineWidget::lookup_timeline_track(
-  boost::shared_ptr<model::Track> model_track)
+  shared_ptr<model::Track> model_track)
 {
   REQUIRE(sequence);  
-  std::map<const model::Track*, timeline::Track*>::const_iterator
-    iterator = trackMap.find(model_track.get());
+  std::map<const model::Track*, shared_ptr<timeline::Track> >::
+    const_iterator iterator = trackMap.find(model_track.get());
   if(iterator == trackMap.end())
     {
       // The track is not present in the map
@@ -359,7 +353,7 @@ TimelineWidget::lookup_timeline_track(
       // - the timeline tracks must always be synchronous with the model
       // tracks.
       ENSURE(0);
-      return NULL;
+      return shared_ptr<timeline::Track>();
     }
   ENSURE(iterator->second != NULL);
   return iterator->second;
@@ -409,18 +403,18 @@ TimelineWidget::update_scroll()
 
 int
 TimelineWidget::measure_branch_height(
-  boost::shared_ptr<model::Track> model_track)
+  shared_ptr<model::Track> model_track)
 {
   REQUIRE(model_track);
   
-  const timeline::Track *timeline_track =
+  const shared_ptr<timeline::Track> timeline_track =
     lookup_timeline_track(model_track);
-  ENSURE(timeline_track != NULL);
+  ENSURE(timeline_track);
   
   int height = timeline_track->get_height() + TrackPadding;
   
   // Recurse through all the children  
-  BOOST_FOREACH( boost::shared_ptr<model::Track> child,
+  BOOST_FOREACH( shared_ptr<model::Track> child,
     model_track->get_child_tracks() )
     height += measure_branch_height(child);
   
@@ -450,7 +444,8 @@ TimelineWidget::on_playback_period_drag_released()
 }
 
 void
-TimelineWidget::set_hovering_track(timeline::Track *hovering_track)
+TimelineWidget::set_hovering_track(
+  shared_ptr<timeline::Track> hovering_track)
 {
   hoveringTrack = hovering_track;
   hoveringTrackChangedSignal.emit(hovering_track);

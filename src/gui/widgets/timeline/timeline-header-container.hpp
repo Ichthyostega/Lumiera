@@ -133,7 +133,8 @@ private:
    */  
   void on_scroll();
   
-  void on_hovering_track_changed(timeline::Track *hovering_track);
+  void on_hovering_track_changed(
+    boost::shared_ptr<timeline::Track> hovering_track);
     
   /* ===== Internals ===== */
 private:
@@ -187,10 +188,11 @@ private:
     boost::shared_ptr<model::Track> model_track,
     const Gdk::Rectangle &clip_rect);
   
-  Track* expander_button_from_point(const Gdk::Point &point);
+  boost::shared_ptr<timeline::Track> expander_button_from_point(
+    const Gdk::Point &point);
   
   const Gdk::Rectangle get_expander_button_rectangle(
-    timeline::Track* track);
+    boost::shared_ptr<timeline::Track> track);
   
   /**
    * A helper function which calls lookup_timeline_track within the
@@ -202,7 +204,7 @@ private:
    * @remarks If the return value is going to be NULL, an ENSURE will
    * fail.
    **/
-  timeline::Track* lookup_timeline_track(
+  boost::shared_ptr<timeline::Track> lookup_timeline_track(
     boost::shared_ptr<model::Track> model_track);
 
 /**
@@ -241,12 +243,13 @@ private:
    */
   Glib::RefPtr<Gdk::Window> gdkWindow;
   
-  std::map<timeline::Track*, Gdk::Rectangle> headerBoxes;
+  std::map<boost::shared_ptr<timeline::Track>, Gdk::Rectangle>
+    headerBoxes;
   
   //----- User Interaction State -----//
-  timeline::Track *hoveringExpander;
+  boost::shared_ptr<timeline::Track> hoveringExpander;
   
-  timeline::Track *clickedExpander;
+  boost::shared_ptr<timeline::Track> clickedExpander;
 
   //----- Style Values -----//
   

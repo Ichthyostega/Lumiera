@@ -134,7 +134,7 @@ public:
    */
   void set_tool(timeline::ToolType tool_type);
   
-  timeline::Track* get_hovering_track() const;
+  boost::shared_ptr<timeline::Track> get_hovering_track() const;
   
 public:
   /* ===== Signals ===== */
@@ -142,8 +142,8 @@ public:
   
   sigc::signal<void> playback_period_drag_released_signal() const;
   
-  sigc::signal<void, timeline::Track*> hovering_track_changed_signal() 
-    const;
+  sigc::signal<void, boost::shared_ptr<timeline::Track> >
+    hovering_track_changed_signal() const;
   
   /* ===== Events ===== */
 protected:
@@ -181,20 +181,22 @@ private:
   /**
    * Creates a timeline UI track to correspond to a model track.
    * @param model_track The model track to create a timeline track from.
-   * @return The timeline track created, or NULL if model_track has an
-   * unreckognised type (this is an error condition).
+   * @return The timeline track created, or an empty shared_ptr if
+   * model_track has an unreckognised type (this is an error condition).
    **/
-  static timeline::Track* create_timeline_track_from_model_track(
+  static boost::shared_ptr<timeline::Track>
+    create_timeline_track_from_model_track(
     boost::shared_ptr<model::Track> model_track);
   
   /**
    * Looks up a timeline UI track in trackMap that corresponds to a
    * given model_track.
    * @param model_track The model track to look up.
-   * @returns The timeline UI track found, or NULL if model_track has no
-   * corresponding timeline UI track (this is an error condition).
+   * @returns The timeline UI track found, or an empty shared_ptr if
+   * model_track has no corresponding timeline UI track (this is an
+   * error condition).
    **/
-  timeline::Track* lookup_timeline_track(
+  boost::shared_ptr<timeline::Track> lookup_timeline_track(
     boost::shared_ptr<model::Track> model_track);
   
   void update_scroll();
@@ -208,13 +210,15 @@ private:
   
   void on_playback_period_drag_released();
   
-  void set_hovering_track(timeline::Track *hovering_track);
+  void set_hovering_track(
+    boost::shared_ptr<timeline::Track> hovering_track);
 
 protected:
 
   // Model Data
   const boost::shared_ptr<model::Sequence> sequence;
-  std::map<const model::Track*, timeline::Track*> trackMap;
+  std::map<const model::Track*, boost::shared_ptr<timeline::Track> >
+    trackMap;
 
   // View State
   timeline::TimelineViewWindow viewWindow;
@@ -226,7 +230,7 @@ protected:
   gavl_time_t playbackPeriodEnd;
   gavl_time_t playbackPoint;
   
-  timeline::Track *hoveringTrack;
+  boost::shared_ptr<timeline::Track> hoveringTrack;
 
   int totalHeight;
 
@@ -242,7 +246,8 @@ protected:
   // Signals
   sigc::signal<void, gavl_time_t> mouseHoverSignal;
   sigc::signal<void> playbackPeriodDragReleasedSignal;
-  sigc::signal<void, timeline::Track*> hoveringTrackChangedSignal;
+  sigc::signal<void, boost::shared_ptr<timeline::Track> >
+    hoveringTrackChangedSignal;
    
   /* ===== Constants ===== */
 public:

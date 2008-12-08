@@ -40,9 +40,9 @@ Sequence::Sequence()
     video1.add_child_track(&video1b);
     video1b.add_child_track(&video1ba);
     first = false;
-  }
+  }*/
   
-  tracks.push_back(&video2);*/
+  tracks.push_back(shared_ptr<Track>(new ClipTrack()));
   
   // END TEST CODE
 }

@@ -139,9 +139,10 @@ private:
   
   void set_vertical_offset(int offset);
   
-  timeline::Track* track_from_point(const int y) const;
+  boost::shared_ptr<timeline::Track> track_from_point(const int y)
+    const;
   
-  timeline::Track* track_from_branch(
+  boost::shared_ptr<timeline::Track> track_from_branch(
     boost::shared_ptr<model::Track> model_track,
     const int y, int &offset) const;
   
