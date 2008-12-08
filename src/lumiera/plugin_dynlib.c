@@ -32,6 +32,7 @@ LumieraPlugin
 lumiera_plugin_load_DYNLIB (const char* name)
 {
   TRACE (plugin);
+  REQUIRE (name);
   LumieraPlugin self = lumiera_plugin_new (name);
   LumieraInterface plugin = NULL;
 
@@ -45,6 +46,11 @@ lumiera_plugin_load_DYNLIB (const char* name)
     }
   else
     LUMIERA_ERROR_SET (plugin, PLUGIN_OPEN);
+
+#ifdef DEBUG
+  const char* problem = dlerror(); 
+  WARN_IF (problem,  plugin, "Problem opening shared object %s : %s", name, problem);
+#endif
 
   return lumiera_plugin_init (self, handle, plugin);
 }
