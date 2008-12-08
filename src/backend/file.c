@@ -40,12 +40,15 @@ lumiera_file_init (LumieraFile self, const char* name, int flags)
 {
   TRACE (file);
 
-  llist_init (&self->node);
+  if (self)
+    {
+      llist_init (&self->node);
 
-  if (!(self->descriptor = lumiera_filedescriptor_acquire (name, flags, &self->node)))
-    return NULL;
+      if (!(self->descriptor = lumiera_filedescriptor_acquire (name, flags, &self->node)))
+        return NULL;
 
-  self->name = lumiera_strndup (name, PATH_MAX);
+      self->name = lumiera_strndup (name, PATH_MAX);
+    }
 
   return self;
 }
@@ -66,7 +69,13 @@ lumiera_file_new (const char* name, int flags)
 {
   TRACE (file);
   LumieraFile self = lumiera_malloc (sizeof (lumiera_file));
-  return lumiera_file_init (self, name, flags);
+  if (!lumiera_file_init (self, name, flags))
+    {
+      lumiera_free (self);
+      self = NULL;
+    }
+
+  return self;
 }
 
 void

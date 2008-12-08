@@ -80,7 +80,7 @@ struct lumiera_file_struct
  * @param self pointer to the file structure
  * @param name filename
  * @param flags open flags
- * @return self
+ * @return self or NULL in case of an error
  */
 LumieraFile
 lumiera_file_init (LumieraFile self, const char* name, int flags);
@@ -102,7 +102,7 @@ lumiera_file_destroy (LumieraFile self);
  * Allocate a new file structure.
  * @param name filename
  * @param flags open flags
- * @return new file structure
+ * @return new file structure or NULL in case of an error
  */
 LumieraFile
 lumiera_file_new (const char* name, int flags);
