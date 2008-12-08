@@ -48,6 +48,7 @@ typedef struct lumiera_file_struct lumiera_file;
 typedef lumiera_file* LumieraFile;
 
 
+#include "backend/filedescriptor.h"
 #include "backend/filehandle.h"
 #include "backend/mmapings.h"
 
@@ -151,10 +152,19 @@ lumiera_file_mmapings (LumieraFile self);
 /**
  * Set the chunksize for mapping operations
  * @param chunksize allocation/mmaping granularity, must be 2's exponent of pagesize
- *        only used at the first access to a file and ignored for subsequnet accesses
+ *        only used at the first access to a file and ignored for subsequent accesses
+ * @return the effective chunksize used for the file
  */
 size_t
 lumiera_file_chunksize_set (LumieraFile self, size_t chunksize);
+
+
+/**
+ * Get the chunksize for mapping operations
+ * @return the effective chunksize used for the file
+ */
+size_t
+lumiera_file_chunksize_get (LumieraFile self);
 
 #endif
 

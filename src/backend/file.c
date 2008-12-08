@@ -24,7 +24,6 @@
 
 #include "backend/file.h"
 #include "backend/filehandlecache.h"
-#include "backend/filedescriptor.h"
 
 #include <limits.h>
 #include <unistd.h>
@@ -119,6 +118,12 @@ lumiera_file_chunksize_set (LumieraFile self, size_t chunksize)
   return self->descriptor->mmapings->chunksize;
 }
 
+
+size_t
+lumiera_file_chunksize_get (LumieraFile self)
+{
+  return self->descriptor->mmapings->chunksize;
+}
 
 
 LumieraMMapings
