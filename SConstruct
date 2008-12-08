@@ -313,15 +313,24 @@ def defineBuildTargets(env, artifacts):
               + srcSubtree(env,'$SRCDIR/common')
               + srcSubtree(env,'$SRCDIR/lib')
               )
-    objplug = srcSubtree(env,'$SRCDIR/plugin', isShared=True)
     core  = ( env.StaticLibrary('$BINDIR/lumiback.la', objback)
             + env.StaticLibrary('$BINDIR/lumiproc.la', objproc)
             + env.StaticLibrary('$BINDIR/lumiera.la',  objlib)
             )
     
-    
     artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/lumiera/main.cpp']+ core )
-    artifacts['plugins'] = env.LoadableModule('$BINDIR/lumiera-plugin', objplug)
+    
+    # temporary solution to build the GuiStarterPlugin (TODO: implement plugin building as discussed on November meeting)
+    envplug = env.Clone()
+    envplug.Append(CPPPATH='$SRCDIR/plugin', CPPDEFINES='LUMIERA_PLUGIN')
+    
+#   objplug = srcSubtree(envplug,'$SRCDIR/plugin', isShared=True)
+#   guistarterplugin = envplug.LoadableModule('$BINDIR/guistart', objplug, SHLIBPREFIX='')
+    
+    objplug = envplug.SharedObject('$SRCDIR/plugin/guistarterplugin.cpp')
+    guistarterplugin = env.LoadableModule('#$BINDIR/guistart', objplug, SHLIBPREFIX='')
+    
+    artifacts['plugins'] = guistarterplugin 
     
     # the Lumiera GTK GUI
     envgtk  = env.Clone().mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','librsvg-2.0','xv','xext','sm'])

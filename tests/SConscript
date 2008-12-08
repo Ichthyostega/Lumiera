@@ -18,7 +18,7 @@ env.Append(CPPPATH='#/.')  # add Rootdir to Includepath, so test/test.h is found
 
 def testExecutable(env,tree, exeName=None, obj=None):
     """ declare all targets needed to create a standalone
-        Test executalbe of the given Sub-tree. Note that
+        Test executable of the given Sub-tree. Note that
         each subdir is built in its own Environment.
     """
     env = env.Clone()
