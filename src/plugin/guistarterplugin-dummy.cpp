@@ -22,30 +22,17 @@
  
 * *****************************************************/
 
-/** @file guistarterplugin.hpp
- ** Start up the Lumiera GTK GUI when loading it as dynamic module.
- ** This plugin is linked together with the Lumiera GUI code; when loaded as
- ** Lumiera plugin, it allows to kick off the main GUI thread and thus to bring up
- ** the GUI. The loading and shutdown process is carried out by gui::GuiFacade and
- ** controlled by lumiera::AppState, which in turn is activated by Lumiera main().
- ** 
- ** After successfully loading this module, a call to #kickOff is expected to be
- ** issued, passing a termination signal (callback) to be executed when the GUI
- ** terminates. This call returns immediately, after spawning off the main thread
- ** and setting up the termination callback accordingly. Additionally, it cares
- ** for opening the primary "business" interface of the GUI, i.e. the interface
- ** gui::GuiNotification.
+/** @file guistarterplugin-dummy.hpp
+ ** THIS IS A DUMMY used for an early draft of loading the GUI as shared module.
  **
- ** @see lumiera::AppState
- ** @see gui::GuiFacade
- ** @see guifacade.cpp
- ** @see ///////////////////////////////////TODO: add link to the gui main routine here!
+ ** The reason for this is: have to figure out how to build it; probably need to
+ ** link parts of the core lib dynamically  
+ ** 
+ ** @see guistarterplugin.cpp how it is intended to work
+ ** 
  */
 
 
-#include "gui/guifacade.hpp"
-#include "lumiera/subsys.hpp"
-#include "common/singleton.hpp"
 
 extern "C" {
 #include "lumiera/interface.h"
@@ -54,41 +41,31 @@ extern "C" {
 
 #include <string>
 
-using std::string;
 
 #include <iostream> /////////////TODO
 using std::cout;   //////////////TODO
 
 
-using lumiera::Subsys;
-using gui::LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1);
+/* re-declare interface to avoid import */
+LUMIERA_INTERFACE_DECLARE (lumieraorg_Gui, 1,
+                           LUMIERA_INTERFACE_SLOT (bool, kickOff, (void*))
+);
 
 
 namespace gui {
   
   namespace { // implementation details
     
-    /** 
-     * Implement the necessary steps for starting up the GUI main thread
-     */
-    struct GuiFacadeImpl
-      : public GuiFacade
+    bool
+    kickOff_dummy_implementation () 
       {
+        cout << " *** Ha Ha Ha\n"
+             << "     this is the GuiStarterPlugin speaking!\n"
+             << "     now, the Lumiera GUI should be spawned....\n"
+             << "     but actually nothing happens!!!!!!!!!!!!!!\n\n";
         
-        bool kickOff (Subsys::SigTerm& terminationHandle) 
-          {
-            cout << " *** Ha Ha Ha\n"
-                 << "     this is the GuiStarterPlugin speaking!\n"
-                 << "     now, the Lumiera GUI should be spawned....\n"
-                 << "     but actually nothing happens!!!!!!!!!!!!!!\n\n";
-            
-            terminationHandle(0); // signal immediate shutdown without error
-            return true;
-          }
-      };
-    
-    
-    lumiera::Singleton<GuiFacadeImpl> facade_;
+        return true; // hey, lets just pretend we started....
+      }
     
   } // (End) impl details
 
@@ -107,11 +84,11 @@ extern "C" { /* ================== define an lumieraorg_Gui instance ===========
                              , NULL, NULL, NULL
                              , LUMIERA_INTERFACE_INLINE (name, "\126\247\365\337\126\254\173\037\130\310\337\345\200\347\323\136",
                                                          const char*, (LumieraInterface iface),
-                                                           { return "GuiStarterPlugin"; }
+                                                           { return "GuiStarterPlugin-dummy"; }
                                                         )
                              , LUMIERA_INTERFACE_INLINE (brief, "\056\346\322\365\344\104\232\232\355\213\367\056\301\144\051\021",
                                                          const char*, (LumieraInterface iface),
-                                                           { return "entry point to start up the Lumiera GTK GUI contained in this dynamic module"; }
+                                                           { return "a dummy to simulate starting up the Lumiera GTK GUI loaded from DYNLIB"; }
                                                         )
                              , LUMIERA_INTERFACE_INLINE (homepage, "\357\056\117\165\320\066\273\130\113\100\367\022\221\350\236\256",
                                                          const char*, (LumieraInterface iface),
@@ -179,8 +156,7 @@ extern "C" { /* ================== define an lumieraorg_Gui instance ===========
                                           , LUMIERA_INTERFACE_INLINE (kickOff, "\255\142\006\244\057\170\152\312\301\372\220\323\230\026\200\065",
                                                                       bool, (void* termSig),
                                                                         { 
-                                                                          return gui::facade_().kickOff (
-                                                                                     *reinterpret_cast<Subsys::SigTerm *> (termSig));
+                                                                          return gui::kickOff_dummy_implementation(); ////////TODO
                                                                         }
                                                                      )
                                           )

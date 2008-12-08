@@ -323,11 +323,7 @@ def defineBuildTargets(env, artifacts):
     # temporary solution to build the GuiStarterPlugin (TODO: implement plugin building as discussed on November meeting)
     envplug = env.Clone()
     envplug.Append(CPPPATH='$SRCDIR/plugin', CPPDEFINES='LUMIERA_PLUGIN')
-    
-#   objplug = srcSubtree(envplug,'$SRCDIR/plugin', isShared=True)
-#   guistarterplugin = envplug.LoadableModule('$BINDIR/guistart', objplug, SHLIBPREFIX='')
-    
-    objplug = envplug.SharedObject('$SRCDIR/plugin/guistarterplugin.cpp')
+    objplug = envplug.SharedObject('$SRCDIR/plugin/guistarterplugin-dummy.cpp')
     guistarterplugin = env.LoadableModule('#$BINDIR/guistart', objplug, SHLIBPREFIX='')
     
     artifacts['plugins'] = guistarterplugin 

@@ -42,22 +42,6 @@ namespace gui {
   using lumiera::Subsys;
   using lumiera::InstanceHandle;
   using util::dispatchSequenced;
-
-  
-  /** path to the dynamic module to load the GUI from
-   *  @todo we need an actual solution. Either find it in the same directory,
-   *  or the lib dir or otherwise retrieve the path from the config system */
-  const string LUMIERA_GuiStarterPlugin_path ("liblumiera-plugin.so");
-  
-  inline void
-  discover_GuiStarterPlugin ()
-    {
-      LumieraPlugin GuiP = lumiera_plugin_lookup (LUMIERA_GuiStarterPlugin_path.c_str());
-      if (!GuiP || lumiera_error_peek())
-        throw lumiera::error::Config("unable to load the GUI module from \""
-                                    +LUMIERA_GuiStarterPlugin_path+"\"");
-    }
-  
   
   
   
@@ -117,8 +101,6 @@ namespace gui {
             //Lock guard (*this);
             if (facade) return false; // already started
             
-            discover_GuiStarterPlugin(); ////TODO temporary solution
-
             facade.reset (
               new GuiRunner (                            // trigger loading load the GuiStarterPlugin...
                 dispatchSequenced( closeOnTermination_  //  on termination call this->closeGuiModule(*) first

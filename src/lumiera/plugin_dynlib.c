@@ -48,8 +48,11 @@ lumiera_plugin_load_DYNLIB (const char* name)
     LUMIERA_ERROR_SET (plugin, PLUGIN_OPEN);
 
 #ifdef DEBUG
-  const char* problem = dlerror(); 
-  WARN_IF (problem,  plugin, "Problem opening shared object %s : %s", name, problem);
+  if (lumiera_error_peek())
+    {
+      const char* problem = dlerror(); 
+      WARN_IF (problem,  plugin, "Problem opening shared object %s : %s", name, problem);
+    }
 #endif
 
   return lumiera_plugin_init (self, handle, plugin);
