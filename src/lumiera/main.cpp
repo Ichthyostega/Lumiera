@@ -64,8 +64,8 @@ main (int argc, const char* argv[])
       session.depends (builder);
       netNode.depends (session);
       netNode.depends (engine);
-      lumigui.depends (session);
-      lumigui.depends (engine);
+//    lumigui.depends (session);   //////TODO commented out in order to be able to start up a dummy GuiStarterPlugin
+//    lumigui.depends (engine);
       script.depends (session);
       script.depends (engine);
       

@@ -41,7 +41,7 @@ namespace proc {
       bool 
       shouldStart (lumiera::Option&)
         {
-          UNIMPLEMENTED ("determine, if we need a Builder Thread");
+          TODO ("determine, if we need a Builder Thread");
           return false;
         }
       
@@ -58,6 +58,13 @@ namespace proc {
           UNIMPLEMENTED ("halt the Builder and cancel any build process");  /////TODO really cancel??
         }
       
+      bool 
+      checkRunningState ()  throw()
+        {
+          //Lock guard (*this);
+          TODO ("implement detecting running state");
+          return false;
+        }
     };
   
   
@@ -70,7 +77,7 @@ namespace proc {
       bool 
       shouldStart (lumiera::Option&)
         {
-          UNIMPLEMENTED ("determine, if an existing Session schould be loaded");
+          TODO ("determine, if an existing Session schould be loaded");
           return false;
         }
       
@@ -87,6 +94,13 @@ namespace proc {
           UNIMPLEMENTED ("initiate closing this Session");
         }
       
+      bool 
+      checkRunningState ()  throw()
+        {
+          //Lock guard (*this);
+          TODO ("implement detecting running state");
+          return false;
+        }
     };
   
   namespace {

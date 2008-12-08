@@ -39,7 +39,7 @@ namespace backend {
       bool 
       shouldStart (lumiera::Option&)
         {
-          UNIMPLEMENTED ("determine, if render node service should be provided");
+          TODO ("determine, if render node service should be provided");
           return false;
         }
       
@@ -56,6 +56,13 @@ namespace backend {
           UNIMPLEMENTED ("initiate shutting down the render node");
         }
       
+      bool 
+      checkRunningState ()  throw()
+        {
+          //Lock guard (*this);
+          TODO ("implement detecting running state");
+          return false;
+        }
     };
   
   namespace {

@@ -40,7 +40,7 @@ namespace backend {
       bool 
       shouldStart (lumiera::Option&)
         {
-          UNIMPLEMENTED ("determine, if a script should be executed");
+          TODO ("determine, if a script should be executed");
           return false;
         }
       
@@ -57,6 +57,13 @@ namespace backend {
           UNIMPLEMENTED ("halt any running script");
         }
       
+      bool 
+      checkRunningState ()  throw()
+        {
+          //Lock guard (*this);
+          TODO ("implement detecting running state");
+          return false;
+        }
     };
   
   namespace {

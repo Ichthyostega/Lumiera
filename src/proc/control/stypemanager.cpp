@@ -24,7 +24,7 @@
 #include "proc/common.hpp"
 #include "proc/control/stypemanager.hpp"
 #include "proc/control/styperegistry.hpp"
-#include "lumiera/appstate.hpp"
+#include "include/lifecycle.h"
 
 
 namespace control {
@@ -53,7 +53,7 @@ namespace control {
   STypeManager::reset() 
   {
     reg_.reset(new Registry);
-    lumiera::AppState::lifecycle(ON_STREAMTYPES_RESET);
+    lumiera::LifecycleHook::trigger (ON_STREAMTYPES_RESET);
   }
   
   /** \par

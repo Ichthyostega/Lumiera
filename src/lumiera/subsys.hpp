@@ -43,14 +43,12 @@
 #ifndef LUMIERA_SUBSYS_H
 #define LUMIERA_SUBSYS_H
 
-//#include "include/symbol.hpp"
 #include "include/error.hpp"
 #include "lumiera/option.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <tr1/functional>
-//#include <boost/scoped_ptr.hpp>
-//#include <string>
+#include <string>
 #include <vector>
 
 
@@ -85,6 +83,9 @@ namespace lumiera {
        *  required for running this subsystem */
       Subsys& depends (Subsys& prereq);
       
+      /** @return true if Up */
+      bool isRunning();
+      
       
       /** query application option state to determine 
        *  if this subsystem should be activated. */
@@ -107,17 +108,18 @@ namespace lumiera {
       virtual void triggerShutdown ()  throw() =0;
       
       
-      /** weather this subsystem is currently operational.
-       *  When returning \c false here, the application may 
-       *  terminate at any point without further notice*/
-      bool isRunning();
-      
       const std::vector<Subsys*>
       getPrerequisites () { return prereq_; }
       
       
-      
     private:
+      /** weather this subsystem is actually operational.
+       *  When returning \c false here, the application may 
+       *  terminate at any point without further notice
+       *  Note further, that a subsystem must not be in
+       *  running state when signalling termination. */
+      virtual bool checkRunningState()  throw() =0;
+      
       std::vector<Subsys*> prereq_;
     };
   

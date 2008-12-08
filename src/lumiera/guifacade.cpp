@@ -25,9 +25,11 @@
 #include "include/guinotificationfacade.h"
 #include "include/error.hpp"
 #include "common/singleton.hpp"
+#include "lib/functorutil.hpp"
 #include "lumiera/instancehandle.hpp"
 
 #include <boost/scoped_ptr.hpp>
+#include <tr1/functional>
 #include <string>
 
 
@@ -35,9 +37,12 @@ namespace gui {
   
   using std::string;
   using boost::scoped_ptr;
+  using std::tr1::bind;
+  using std::tr1::placeholders::_1;
   using lumiera::Subsys;
   using lumiera::InstanceHandle;
-  
+  using util::dispatchSequenced;
+
   
   
   
@@ -80,16 +85,27 @@ namespace gui {
         operator string ()  const { return "Lumiera GTK GUI"; }
         
         bool 
-        shouldStart (lumiera::Option&)
+        shouldStart (lumiera::Option& opts)
           {
-            UNIMPLEMENTED ("determine, if a GUI is needed");
-            return false;
+            if (opts.isHeadless() || 0 < opts.getPort())
+              {
+                INFO (lumiera, "*not* starting the GUI...");
+                return false;
+              }
+            else
+              return true;
           }
         
         bool
         start (lumiera::Option&, Subsys::SigTerm termination)
           {
-            facade.reset (new GuiRunner (termination));  /////////////////////TODO: actually decorate the termSignal, in order to delete the facade
+            //Lock guard (*this);
+            if (facade) return false; // already started
+            
+            facade.reset (
+              new GuiRunner (                            // trigger loading load the GuiStarterPlugin...
+                dispatchSequenced( closeOnTermination_  //  on termination call this->closeGuiModule(*) first
+                                 , termination)));     //...followed by invoking the given termSignal
             return true;
           }
         
@@ -100,6 +116,34 @@ namespace gui {
             
             catch (...){}
           }
+        
+        bool 
+        checkRunningState ()  throw()
+          {
+            //Lock guard (*this);
+            return (facade);
+          }
+        
+        void
+        closeGuiModule (lumiera::Error *)
+          {
+            //Lock guard (*this);
+            if (!facade)
+              {
+                TRACE (operate, "duplicate? call of the termination signal, "
+                                "GUI is currently closed.");
+              }
+            else
+              facade.reset (0);
+          }
+        
+        
+        Subsys::SigTerm closeOnTermination_;
+        
+      public:
+        GuiSubsysDescriptor()
+          : closeOnTermination_ (bind (&GuiSubsysDescriptor::closeGuiModule, this, _1))
+          { }
         
       };
     

@@ -67,9 +67,10 @@ namespace lumiera {
    *  client codes POV it just behaves like intended). 
    */
   AppState::AppState()
-    : lifecycleHooks_(new LifecycleRegistry),
-      subsystems_(0),
-      emergency_(false)
+    : lifecycleHooks_(new LifecycleRegistry)
+    , subsystems_(0)
+    , emergency_(false)
+    , core_up_ (false)
   {
     lifecycleHooks_->execute (ON_BASIC_INIT);   // note in most cases a NOP
   }
@@ -122,6 +123,7 @@ namespace lumiera {
     lumiera_config_interface_init ();
     _THROW_IF
     
+    core_up_= true;
     AppState::lifecycle (ON_GLOBAL_INIT);
     _THROW_IF
     
@@ -237,12 +239,13 @@ namespace lumiera {
    */
   AppState::~AppState()
     {
-      try
-      {
-        TRACE (lumiera, "shutting down basic application layer...");
-        lumiera_config_interface_destroy ();
-        lumiera_interfaceregistry_destroy ();
-      }
+      if (core_up_)
+        try
+        {
+          TRACE (lumiera, "shutting down basic application layer...");
+          lumiera_config_interface_destroy ();
+          lumiera_interfaceregistry_destroy ();
+        }
     catch (...)
       {
         log_and_clear_unexpected_errorstate();
@@ -277,7 +280,7 @@ namespace lumiera {
   
   
   void
-  trigger (Symbol eventLabel)
+  LifecycleHook::trigger (Symbol eventLabel)
   {
     AppState::lifecycle (eventLabel);
   }

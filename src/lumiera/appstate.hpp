@@ -130,6 +130,7 @@ namespace lumiera {
       PSub  subsystems_;
       
       bool emergency_;
+      bool core_up_;
       
       friend class LifecycleHook;
       
