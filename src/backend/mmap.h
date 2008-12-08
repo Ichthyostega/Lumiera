@@ -29,6 +29,7 @@ typedef struct lumiera_mmap_struct lumiera_mmap;
 typedef lumiera_mmap* LumieraMMap;
 
 
+#include "backend/file.h"
 #include "backend/filedescriptor.h"
 
 
@@ -61,17 +62,27 @@ struct lumiera_mmap_struct
   size_t size;
   void* address;
 
+  /** accumulated references, this is 0 when checked into the cache **/
+  unsigned long refcnt;
+
   /** array with refcounters per chunk **/
-  unsigned short* refmap;
+  unsigned short* refmap;       // TODO flexible array?
 };
 
 
 LumieraMMap
-lumiera_mmap_init (LumieraMMap self, LumieraFile file, LList acquirer, off_t start, size_t size, size_t chunksize);
+lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size);
 
 
 LumieraMMap
-lumiera_mmap_new (LumieraFile file, LList acquirer, off_t start, size_t size, size_t chunksize);
+lumiera_mmap_new (LumieraFile file, off_t start, size_t size);
+
+
+static inline void*
+lumiera_mmap_address (LumieraMMap self)
+{
+  return self->address;
+}
 
 
 void

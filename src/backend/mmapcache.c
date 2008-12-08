@@ -138,6 +138,7 @@ lumiera_mmapcache_checkout (LumieraMMapcache self, LumieraMMap handle)
     {
       TODO ("cached stats");
       lumiera_mrucache_checkout (&self->cache, &handle->cachenode);
+      ++handle->refcnt;
     }
 
   return handle;
@@ -152,6 +153,7 @@ lumiera_mmapcache_checkin (LumieraMMapcache self, LumieraMMap handle)
   LUMIERA_MUTEX_SECTION (mmapcache, &self->lock)
     {
       TODO ("cached stats");
+      --handle->refcnt;
       lumiera_mrucache_checkin (&self->cache, &handle->cachenode);
     }
 }

@@ -27,6 +27,7 @@
 
 #include <unistd.h>
 #include <sys/mman.h>
+#include <errno.h>
 
 /**
  * @file
@@ -48,14 +49,12 @@ LUMIERA_ERROR_DEFINE (MMAP_SPACE, "Address space exhausted");
 
 
 LumieraMMap
-lumiera_mmap_init (LumieraMMap self, LumieraFile file, LList acquirer, off_t start, size_t size, size_t chunksize)
+lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
 {
   TRACE (mmap);
 
   REQUIRE (self);
   REQUIRE (file);
-  REQUIRE (acquirer);
-  REQUIRE (llist_is_empty (acquirer));
   REQUIRE (start >= 0);
   REQUIRE (size);
 
@@ -85,9 +84,10 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, LList acquirer, off_t sta
   if (fd == -1)
     goto efile;
 
-  void* addr = NULL;
+  void* addr = (void*)-1;
   off_t begin = 0;
   size_t length = 0;
+  size_t chunksize = lumiera_file_chunksize_get (file);
 
   /**
    * Maintaining the right[tm] mmaping size is a bit tricky:
@@ -99,31 +99,35 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, LList acquirer, off_t sta
    *  - Requests beyond the file end must ftruncate and map additional pages
    *  - Create the 'refmap' which contains a refounter per chunk
    **/
-  while (!addr)
+
+  /**
+   * Recovering address space strategies:
+   * mmap() will fail when too much memory got mmaped after some time which is then
+   * recovered in the following way
+   *  1. create a new mmap while the cachelimit is not reached.
+   *  2. All unused mmaps are kept in a mrucache, drop the oldest one.
+   *   mmap() still fails..
+   *  3.a When the intented mmaping size is the same as mmap_window_size then reduce (/2) the window size and retry.
+   *  3.b When the intented mmaping size was biggier than mmap_window_size then free more mmaps from the cache.
+   *  4 When the cache is empty (that means all mmaps in use), scan the mmaps in use if they can be reduced
+   *    mmap_window_size is already reduced now (half of refmap free from either end)
+   **/
+  enum {
+    FIRST_TRY,
+    DROP_FROM_CACHE,
+    REDUCE_WINDOW,
+    REDUCE_IN_USE,
+    GIVE_UP
+  } strategy = FIRST_TRY;
+
+  while (addr == (void*)-1)
     {
-      /**
-       * Recovering address space strategies:
-       * mmap() will fail when too much memory got mmaped after some time which is then
-       * recovered in the following way
-       *  1. create a new mmap while the cachelimit is not reached.
-       *  2. All unused mmaps are kept in a mrucache, drop the oldest one.
-       *   mmap() still fails..
-       *  3.a When the intented mmaping size is the same as mmap_window_size then reduce (/2) the window size and retry.
-       *  3.b When the intented mmaping size was biggier than mmap_window_size then free more mmaps from the cache.
-       *  4 When the cache is empty (that means all mmaps in use), scan the mmaps in use if they can be reduced
-       *    mmap_window_size is already reduced now (half of refmap free from either end)
-       **/
-      enum {
-        FIRST_TRY,
-        DROP_FROM_CACHE,
-        REDUCE_WINDOW,
-        REDUCE_IN_USE,
-        GIVE_UP
-      } strategy = FIRST_TRY;
+      TODO ("check if current mmaped size exceeds configured as_size (as_size be smaller than retrieved from getrlimit())");
 
       switch (strategy++)
         {
         case FIRST_TRY:
+          TRACE (mmap, "FIRST_TRY");
           /* align begin and end to chunk boundaries */
           begin = start & ~(chunksize-1);
           length = ((start+size+chunksize-1) & ~(chunksize-1)) - begin;
@@ -142,18 +146,15 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, LList acquirer, off_t sta
                   descriptor->stat.st_size = begin+length;
                   descriptor->realsize = start+size;
                 }
-              else
-                {
-                  LUMIERA_ERROR_SET (mmap, MMAP_NWRITE);
-                  goto ewrite;
-                }
             }
           else if (length < (size_t)mmap_window_size)
             length = mmap_window_size;
 
           if ((descriptor->flags & O_ACCMODE) == O_RDONLY)
-            /* The last mmaped chunk of a file can be as small as possible when the file is readonly */
-            length = start+size - begin;
+            {
+              /* The last mmaped chunk of a file can be as small as possible when the file is readonly */
+              length = start+size - begin;
+            }
           break;
 
         case DROP_FROM_CACHE:
@@ -182,6 +183,9 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, LList acquirer, off_t sta
                    MAP_SHARED,
                    fd,
                    begin);
+
+      INFO_IF (addr==(void*)-1, mmap, "mmap failed %s", strerror (errno));
+      ENSURE (errno == 0 || errno == ENOMEM, "unexpected mmap error %s", strerror (errno));
     }
 
   llist_init (&self->cachenode);
@@ -190,11 +194,8 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, LList acquirer, off_t sta
   self->start = begin;
   self->size = length;
   self->address = addr;
-
-  self->refmap = lumiera_calloc (length/chunksize, sizeof (unsigned short));
-
-  llist_insert_head (&self->cachenode, acquirer);
-
+  self->refmap = lumiera_calloc ((length-1)/chunksize+1, sizeof (unsigned short));
+  self->refcnt = 1;
   lumiera_mmapcache_announce (lumiera_mcache, self);
 
   lumiera_file_handle_release (file);
@@ -202,7 +203,6 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, LList acquirer, off_t sta
 
  espace:
  etruncate:
- ewrite:
  efile:
   lumiera_file_handle_release (file);
   lumiera_free (self);
@@ -210,17 +210,17 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, LList acquirer, off_t sta
 }
 
 LumieraMMap
-lumiera_mmap_new (LumieraFile file, LList acquirer, off_t start, size_t size, size_t chunksize)
+lumiera_mmap_new (LumieraFile file, off_t start, size_t size)
 {
   TRACE (mmap);
 
   LumieraMMap self = lumiera_mmapcache_mmap_acquire (lumiera_mcache);
 
-  if (lumiera_mmap_init (self, file, acquirer, start, size, chunksize))
+  if (lumiera_mmap_init (self, file, start, size))
     return self;
   else
     {
-      free (self);
+      lumiera_free (self);
       return NULL;
     }
 }
@@ -237,9 +237,10 @@ lumiera_mmap_delete (LumieraMMap self)
       /* The matching mappings->lock must be hold or being unrelevant (mappings destructor) here, we can't asset this from here, good luck */
       llist_unlink (&self->searchnode);
 
+      TRACE (mmap, "unmap at %p with size %zd", self->address, self->size);
       munmap (self->address, self->size);
-      free (self->refmap);
-      free (self);
+      lumiera_free (self->refmap);
+      lumiera_free (self);
     }
 }
 
@@ -256,7 +257,7 @@ lumiera_mmap_destroy_node (LList node)
   llist_unlink (&self->searchnode); TODO ("must lock mmapings -> deadlock");
 
   munmap (self->address, self->size);
-  free (self->refmap);
+  lumiera_free (self->refmap);
 
   return self;
 }

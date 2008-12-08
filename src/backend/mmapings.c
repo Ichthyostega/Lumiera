@@ -95,9 +95,11 @@ lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, LList acq
     {
       REQUIRE (llist_is_empty (acquirer));
 
-      /* find best matching mmap, crude way */
+      /* find first matching mmap, crude way */
       LLIST_FOREACH (&self->mmaps, node)
         {
+          TODO ("improve this selection algorithm, choose mmaps by size, move mfu to head etc");
+
           LumieraMMap mmap = LLIST_TO_STRUCTP (node, lumiera_mmap, searchnode);
 
           if (mmap->size >= size && mmap->start <= start && mmap->start+mmap->size >= start+size)
@@ -107,24 +109,25 @@ lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, LList acq
             }
         }
 
-      if (!ret)
+      /* found? */
+      if (ret)
         {
-          /* create new mmap */
-          TRACE (mmapings, "mmap not found, creating", mmap);
-          ret = lumiera_mmap_new (file, acquirer, start, size, self->chunksize);
-
-          llist_insert_head (&self->mmaps, &ret->searchnode);
-
-          TODO ("sort search list");
+          if (!ret->refcnt)
+            /* in cache, needs to me checked out */
+            lumiera_mmapcache_checkout (lumiera_mcache, ret);
         }
       else
         {
-          /* found mmap */
+          /* create new mmap */
+          TRACE (mmapings, "mmap not found, creating", mmap);
+          ret = lumiera_mmap_new (file, start, size);
 
-          UNIMPLEMENTED ("reuse existing mmap");
-          //lumiera_mmapcache_checkout (lumiera_mcache, self);
-          // checkout add acquirer
+          llist_insert_head (&self->mmaps, &ret->searchnode);
+
+          TODO ("sort search list?");
         }
+
+      llist_insert_head (&ret->cachenode, acquirer);
     }
 
   return ret;

@@ -30,6 +30,7 @@ typedef lumiera_mmapings* LumieraMMapings;
 
 #include "backend/filedescriptor.h"
 #include "backend/mmap.h"
+#include "backend/file.h"
 
 #include <nobug.h>
 
