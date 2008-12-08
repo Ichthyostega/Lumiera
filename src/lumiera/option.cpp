@@ -56,7 +56,7 @@ namespace lumiera {
         ("help,h",      "produce help message")
         ("session,f",   op::value<string>(),
                         "session file to load")
-        ("script,s",    op::value<string>(),
+        ("script,s",    op::value<VectS>(),
                         "execute the given LUA script")
         ("headless",    op::bool_switch(),
                         "start without GUI")
@@ -64,9 +64,9 @@ namespace lumiera {
                         "open renderfarm node at given port")
         ;
       
-      // the testcase-ID is really an positional parameter
+      // the name of an session file to open...
       op::positional_options_description posopt;
-      posopt.add("session", -1);
+      posopt.add("session", 1);   // ... can be given as 1st positional parameter
       
       op::parsed_options parsed = 
         op::command_line_parser (cmdline)
@@ -90,39 +90,45 @@ namespace lumiera {
   
   
   
+  /** should an existing session file be loaded? */
+  bool 
+  Option::isOpenSession ()
+    {
+      return (parameters.count ("session"));
+    }
   
-  /** @return the Tests-Group as given on cmdline, or Suite::ALLGROUP as default
-   */
+  /** @return the name of the session file to open */
   const string 
-  Option::getTestgroup ()
+  Option::getSessName ()
     {
-      NOTREACHED; ////////////////////////////TODO: define real query functions
-      
-      ASSERT (parameters.count ("group"));
-      return parameters["group"].as<string>();
+      ASSERT (parameters.count ("session"));
+      return parameters["session"].as<string>();
     }
   
-  /** @return ID of a single test to run, empty string if not specified
-   */
-  const string
-  Option::getTestID ()
+  /** @return an (maybe empty) vector 
+   *  containing all specified scripts to run. */
+  const VectS
+  Option::getScripts ()
     {
-      NOTREACHED; ////////////////////////////TODO: define real query functions
-      
-      if (parameters.count ("id") &&
-          parameters["id"].as<VectS>().size() > 0)
-        return parameters["id"].as<VectS>()[0];
+      return parameters["script"].as<VectS>();
+    }
+  
+  /** @return \c true if --headless switch was given */
+  bool 
+  Option::isHeadless ()
+    {
+      return parameters["headless"].as<bool>();
+    }
+  
+  /** @return the port number for a render node server
+   *          or 0 if --port was not specified */
+  int
+  Option::getPort ()
+    {
+      if (parameters.count ("port"))
+        return parameters["port"].as<int>();
       else
-        return string ();
-    }
-  
-  /** @return \c true if --describe switch was given */
-  const bool 
-  Option::getDescribe ()
-    {
-      NOTREACHED; ////////////////////////////TODO: define real query functions
-
-      return parameters["describe"].as<bool>();
+        return 0;
     }
   
   

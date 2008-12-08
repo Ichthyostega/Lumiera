@@ -37,6 +37,7 @@ namespace lumiera {
   
   using std::string;
   using std::ostream;
+  using util::VectS;
   
 
   
@@ -54,9 +55,12 @@ namespace lumiera {
     {
     public:
       Option (util::Cmdline& cmdline);
-      const string getTestgroup ();
-      const string getTestID ();
-      const bool getDescribe ();
+      const string getSessName();
+      const VectS  getScripts();
+      bool isOpenSession ();
+      bool isHeadless();
+      int  getPort();
+      
       
     private:
       boost::program_options::options_description syntax;
