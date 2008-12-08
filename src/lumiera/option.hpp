@@ -55,11 +55,16 @@ namespace lumiera {
     {
     public:
       Option (util::Cmdline& cmdline);
+      
       const string getSessName();
       const VectS  getScripts();
+      const VectS  getConfigDefs();
+      int          getPort();
+      
       bool isOpenSession ();
+      bool isConfigDefs();
       bool isHeadless();
-      int  getPort();
+      bool isHelp();
       
       
     private:

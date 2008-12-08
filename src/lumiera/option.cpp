@@ -24,6 +24,7 @@
 #include "lumiera/option.hpp"
 
 #include "include/error.hpp"
+#include "common/util.hpp"
 
 
 
@@ -33,9 +34,10 @@ typedef boost::program_options::variables_map VarMap;
 namespace op = boost::program_options;
 
 using util::VectS;
+using util::cStr;
+
 
 namespace lumiera {
-  
   
   /** set up an options parser to use the application commandline.
    *  Recognises the following options
@@ -55,13 +57,15 @@ namespace lumiera {
       syntax.add_options()
         ("help,h",      "produce help message")
         ("session,f",   op::value<string>(),
-                        "session file to load")
+                        "session file to load (UNIMPLEMENTED)")
         ("script,s",    op::value<VectS>(),
-                        "execute the given LUA script")
+                        "execute the given LUA script (UNIMPLEMENTED)")
         ("headless",    op::bool_switch(),
                         "start without GUI")
         ("port,p",      op::value<int>(),
-                        "open renderfarm node at given port")
+                        "open renderfarm node at given port (UNIMPLEMENTED)")
+        ("define,def,D",op::value<VectS>(),
+                        "enter definition into config system (UNIMPLEMENTED)")
         ;
       
       // the name of an session file to open...
@@ -81,21 +85,28 @@ namespace lumiera {
       // remove all recognised options from original cmdline vector
       cmdline = op::collect_unrecognized(parsed.options, op::include_positional);
       
-      if (parameters.count("help"))
+      if (isHelp())
         {
           std::cerr << *this;
           exit(-1);
+        }
+      if (isConfigDefs())
+        {
+          UNIMPLEMENTED ("feed definitions from commandline to Config system");
         }
     }
   
   
   
+  /** syntax help requested? */
+  bool Option::isHelp ()        { return (parameters.count("help")); }
+  
   /** should an existing session file be loaded? */
-  bool 
-  Option::isOpenSession ()
-    {
-      return (parameters.count ("session"));
-    }
+  bool Option::isOpenSession () { return (parameters.count ("session")); }
+  
+  /** additional Config defs to fed to config system? */
+  bool Option::isConfigDefs ()  { return (parameters.count ("define")); }
+  
   
   /** @return the name of the session file to open */
   const string 
@@ -111,6 +122,14 @@ namespace lumiera {
   Option::getScripts ()
     {
       return parameters["script"].as<VectS>();
+    }
+  
+  /** @return an (maybe empty) vector 
+   *  containing any additional Config definitions to set. */
+  const VectS
+  Option::getConfigDefs ()
+    {
+      return parameters["define"].as<VectS>();
     }
   
   /** @return \c true if --headless switch was given */
