@@ -67,6 +67,7 @@ lumiera_mmapcache_delete (void)
 void*
 lumiera_mmapcache_mmap_acquire (LumieraMMapcache self)
 {
+  TRACE (mmapcache);
   void* map = NULL;
 
   LUMIERA_MUTEX_SECTION (mmapcache, &self->lock)
@@ -91,6 +92,7 @@ lumiera_mmapcache_mmap_acquire (LumieraMMapcache self)
 void
 lumiera_mmapcache_announce (LumieraMMapcache self, LumieraMMap map)
 {
+  TRACE (mmapcache);
   LUMIERA_MUTEX_SECTION (mmapcache, &self->lock)
     {
       self->total += map->size;
@@ -101,6 +103,7 @@ lumiera_mmapcache_announce (LumieraMMapcache self, LumieraMMap map)
 void
 lumiera_mmapcache_forget (LumieraMMapcache self, LumieraMMap map)
 {
+  TRACE (mmapcache);
   LUMIERA_MUTEX_SECTION (mmapcache, &self->lock)
     {
       if (!llist_is_empty (&map->cachenode))
