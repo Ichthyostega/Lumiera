@@ -284,7 +284,7 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
   
   // Interate drawing each track
   BOOST_FOREACH( shared_ptr<model::Track> model_track,
-    timelineWidget->sequence->get_tracks() )
+    timelineWidget->sequence->get_child_tracks() )
     draw_track_recursive(cr, model_track, allocation.get_width());
   
   // Restore the view matrix  
@@ -431,7 +431,7 @@ TimelineBody::track_from_point(const int y) const
   int offset = -get_vertical_offset();
   
   BOOST_FOREACH( shared_ptr<model::Track> model_track,
-    timelineWidget->sequence->get_tracks() )
+    timelineWidget->sequence->get_child_tracks() )
     {
       shared_ptr<timeline::Track> result = track_from_branch(
         model_track, y, offset);

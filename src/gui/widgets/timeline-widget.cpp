@@ -284,7 +284,7 @@ TimelineWidget::update_tracks()
   
   // Recalculate the total height of the timeline scrolled area
   totalHeight = 0;
-  BOOST_FOREACH(shared_ptr<model::Track> track, sequence->get_tracks())
+  BOOST_FOREACH(shared_ptr<model::Track> track, sequence->get_child_tracks())
     {
       ASSERT(track);
       totalHeight += measure_branch_height(track);
@@ -296,7 +296,7 @@ TimelineWidget::create_timeline_tracks()
 {
   REQUIRE(sequence);
   
-  BOOST_FOREACH(shared_ptr<model::Track> child, sequence->get_tracks())
+  BOOST_FOREACH(shared_ptr<model::Track> child, sequence->get_child_tracks())
     create_timeline_tracks_from_branch(child);
 }
 

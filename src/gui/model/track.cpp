@@ -20,30 +20,14 @@
  
 * *****************************************************/
 
-#include <boost/foreach.hpp>
-
 #include "track.hpp"
 
 namespace gui {
 namespace model {
 
-const std::list< boost::shared_ptr<model::Track> > Track::NoChildren;
-
 Track::Track()
 {
 
-}
-
-const std::list< boost::shared_ptr<model::Track> >&
-Track::get_child_tracks() const
-{
-  return NoChildren;
-}
-
-Glib::ustring
-Track::get_title()
-{
-  return "Hello";
 }
 
 }   // namespace model

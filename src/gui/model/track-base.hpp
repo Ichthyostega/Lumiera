@@ -1,5 +1,5 @@
 /*
-  sequence.hpp  -  Definition of the Sequence class
+  track-track.hpp  -  Definition of the TrackBase class
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,39 +19,43 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file sequence.hpp
- ** This file contains the definition of Sequence, a class which
- ** contains a 
+/** @file track-base.hpp
+ ** This file contains the definition of TrackBase, a class which
+ ** represents a base functionality for tracks and sequences which
+ ** are also track parents. This class wraps proc layer data
  */
 
-#ifndef SEQUENCE_HPP
-#define SEQUENCE_HPP
+#include "../gtk-lumiera.hpp"
 
-#include "track-base.hpp"
-
-// TEST CODE
-#include "group-track.hpp"
-#include "clip-track.hpp"
+#ifndef TRACK_BASE_HPP
+#define TRACK_BASE_HPP
 
 namespace gui {
 namespace model {
-  
+
 class Track;
 
-class Sequence : public TrackBase
+class TrackBase
 {
 public:
-  Sequence();
-  
-  const std::list< boost::shared_ptr<model::Track> >&
+  TrackBase();
+
+  virtual void add_child_track(Track* child) {};
+
+  virtual const std::list< boost::shared_ptr<Track> >&
     get_child_tracks() const;
-      
+    
+  const Glib::ustring get_name() const;
+  
+  void set_name(const Glib::ustring &name);
+    
 private:
-  //----- Data -----//
-  std::list< boost::shared_ptr<Track> > tracks;
+  Glib::ustring name;
+
+  static const std::list< boost::shared_ptr<Track> > NoChildren;
 };
 
 }   // namespace model
 }   // namespace gui
 
-#endif // SEQUENCE_HPP
+#endif // TRACK_BASE_HPP

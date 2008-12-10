@@ -49,28 +49,10 @@ Sequence::Sequence()
   // END TEST CODE
 }
 
-const Glib::ustring
-Sequence::get_name() const
-{
-  return name;
-}
-
-void
-Sequence::set_name(const Glib::ustring &name)
-{
-  this->name = name;
-}
-
 const std::list< boost::shared_ptr<Track> >&
-Sequence::get_tracks() const
+Sequence::get_child_tracks() const
 {
   return tracks;
-}
-
-void
-Sequence::add_track(shared_ptr<Track> track)
-{
-  tracks.push_back(track);
 }
 
 }   // namespace model

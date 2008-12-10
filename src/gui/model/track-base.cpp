@@ -1,5 +1,5 @@
 /*
-  sequence.hpp  -  Definition of the Sequence class
+  track-base.cpp  -  Implementation of the TrackBase class
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -18,40 +18,36 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
-/** @file sequence.hpp
- ** This file contains the definition of Sequence, a class which
- ** contains a 
- */
+* *****************************************************/
 
-#ifndef SEQUENCE_HPP
-#define SEQUENCE_HPP
-
-#include "track-base.hpp"
-
-// TEST CODE
-#include "group-track.hpp"
-#include "clip-track.hpp"
+#include "track.hpp"
 
 namespace gui {
 namespace model {
-  
-class Track;
 
-class Sequence : public TrackBase
+const std::list< boost::shared_ptr<Track> > TrackBase::NoChildren;
+
+TrackBase::TrackBase()
 {
-public:
-  Sequence();
-  
-  const std::list< boost::shared_ptr<model::Track> >&
-    get_child_tracks() const;
-      
-private:
-  //----- Data -----//
-  std::list< boost::shared_ptr<Track> > tracks;
-};
+}
+
+const std::list< boost::shared_ptr<model::Track> >&
+TrackBase::get_child_tracks() const
+{
+  return NoChildren;
+}
+
+const Glib::ustring
+TrackBase::get_name() const
+{
+  return name;
+}
+
+void
+TrackBase::set_name(const Glib::ustring &name)
+{
+  this->name = name;
+}
 
 }   // namespace model
 }   // namespace gui
-
-#endif // SEQUENCE_HPP
