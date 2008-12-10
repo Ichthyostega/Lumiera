@@ -40,7 +40,7 @@ template<class T, class Allocator = std::allocator<T> >
 class observable_list
 {
 public:
-  // ========== Typedefs ========= //
+  /* ===== Typedefs ===== */
   typedef typename std::list<T, Allocator>::iterator iterator;
   typedef typename std::list<T, Allocator>::const_iterator
     const_iterator;
@@ -53,7 +53,7 @@ public:
   typedef typename std::list<T, Allocator>::size_type size_type;
 
 public:
-  // ========== Constructors ========= //
+  /* ===== Constructors ===== */
   explicit observable_list(const Allocator& allocator = Allocator()) :
     list(allocator) {};
     
@@ -73,7 +73,7 @@ public:
     list(x.list) {};
     
 public:
-  // ========== Iterators ========= //
+  /* ===== Iterators ===== */
   iterator begin() { return list.begin(); }
   const_iterator begin() const { return list.begin(); }
   iterator end() { return list.end(); }
@@ -84,7 +84,7 @@ public:
   const_reverse_iterator rend() const { return list.rend(); }  
   
 public:
-  // ========== Capacity ========= //
+  /* ===== Capacity ===== */
   bool empty() const { return list.empty(); };
   size_type size() const { return list.size(); };
   size_type max_size() const { return list.max_size(); };
@@ -96,14 +96,14 @@ public:
     }
     
 public:
-  // ========== Element Access ========= //
+  /* ===== Element Access ===== */
   reference front() { return list.front(); };
   const_reference front() const { return list.front(); };
   reference back() { return list.back(); };
   const_reference back() const { return list.back(); };
   
 public:
-  // ========== Modifiers ========= //
+  /* ===== Modifiers ===== */
   template<class InputIterator>
   void assign(InputIterator first, InputIterator last)
     {
@@ -264,7 +264,7 @@ public:
     }
     
 public:
-  // ========== Signals ========= //
+  /* ===== Signals ===== */
   
   /**
    * Access to the signal which will be emit every time the list is
@@ -272,9 +272,9 @@ public:
    * @return Returns the signal object which will emit notifications.
    **/
   sigc::signal<void>& signal_changed()
-  {
-    return changed;
-  }
+    {
+      return changed;
+    }
 
 private:
   sigc::signal<void> changed;
