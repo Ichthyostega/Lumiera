@@ -70,7 +70,7 @@ TimelineHeaderContainer::update_headers()
 {    
   // Add fresh headers  
   BOOST_FOREACH( shared_ptr<model::Track> model_track, get_tracks() )
-      set_parent_recursive(model_track);
+    set_parent_recursive(model_track);
 }
   
 void
