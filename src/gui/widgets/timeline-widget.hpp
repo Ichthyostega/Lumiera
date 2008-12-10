@@ -161,6 +161,11 @@ protected:
   /* ===== Internals ===== */
 private:
 
+  // ----- Track Mapping Functions ----- //
+
+  /**
+   * Updates the timeline widget to match the state of the track tree.
+   **/
   void update_tracks();
   
   /**
@@ -199,6 +204,8 @@ private:
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
     boost::shared_ptr<model::Track> model_track);
   
+  // ----- Layout Functions ----- //
+  
   void update_scroll();
   
   int measure_branch_height(
@@ -206,9 +213,13 @@ private:
   
   int get_y_scroll_offset() const;
   
-  bool on_motion_in_body_notify_event(GdkEventMotion *event);
-  
+  // ----- Event Handlers -----//
+    
   void on_playback_period_drag_released();
+  
+  bool on_motion_in_body_notify_event(GdkEventMotion *event);  
+  
+  // ----- Other Functions ----- //
   
   void set_hovering_track(
     boost::shared_ptr<timeline::Track> hovering_track);
@@ -216,7 +227,22 @@ private:
 protected:
 
   // Model Data
+  
+  /**
+   * A pointer to the sequence object which this timeline_widget will
+   * represent.
+   * @remarks This pointer is set by the constructor and is constant, so
+   * will not change in value during the lifetime of the class.
+   **/
   const boost::shared_ptr<model::Sequence> sequence;
+  
+  /**
+   * The trackMap maps model tracks to timeline widget tracks which are
+   * responsible for the UI representation of a track.
+   * @remarks The tree structure is maintianed by the model, and as the
+   * widget is updated with update_tracks, timeline tracks are added and
+   * removed from the map in correspondance with the tree.
+   **/
   std::map<const model::Track*, boost::shared_ptr<timeline::Track> >
     trackMap;
 
