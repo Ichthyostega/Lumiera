@@ -30,15 +30,17 @@ namespace model {
 Sequence::Sequence()
 {
   // TEST CODE
-  /*static bool first = true;
+  static bool first = true;
   
-  tracks.push_back(&video1);
+  shared_ptr<GroupTrack> group_track, group_track2;
+  tracks.push_back(group_track = shared_ptr<GroupTrack>(new GroupTrack()));
   
-  if(first)
+  /*if(first)
   {
-    video1.add_child_track(&video1a);
-    video1.add_child_track(&video1b);
-    video1b.add_child_track(&video1ba);
+    group_track.add_child_track(shared_ptr<Track>(new ClipTrack()));
+    group_track.add_child_track(
+      group_track2 = shared_ptr<Track>(new GroupTrack()));
+    group_track2.add_child_track(shared_ptr<Track>(new ClipTrack()));
     first = false;
   }*/
   
