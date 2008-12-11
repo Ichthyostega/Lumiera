@@ -38,6 +38,7 @@ liblumibackend_a_SOURCES =					\
 	$(liblumibackend_a_srcdir)/configentry.c 		\
 	$(liblumibackend_a_srcdir)/configitem.c 		\
 	$(liblumibackend_a_srcdir)/config_lookup.c		\
+	$(liblumibackend_a_srcdir)/resourcecollector.c		\
 	$(liblumibackend_a_srcdir)/mmap.c			\
 	$(liblumibackend_a_srcdir)/mmapings.c			\
 	$(liblumibackend_a_srcdir)/mmapcache.c
@@ -57,6 +58,7 @@ noinst_HEADERS +=						\
 	$(liblumibackend_a_srcdir)/configentry.h 		\
 	$(liblumibackend_a_srcdir)/configitem.h 		\
 	$(liblumibackend_a_srcdir)/config_lookup.h		\
+	$(liblumibackend_a_srcdir)/resourcecollector.h		\
 	$(liblumibackend_a_srcdir)/mmap.h			\
 	$(liblumibackend_a_srcdir)/mmapings.h			\
 	$(liblumibackend_a_srcdir)/mmapcache.h

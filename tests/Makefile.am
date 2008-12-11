@@ -79,4 +79,9 @@ test_filemmap_SOURCES = $(tests_srcdir)/backend/test-filemmap.c
 test_filemmap_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
 test_filemmap_LDADD = liblumibackend.a liblumiera.a -lnobugmt -lpthread -ldl -lm
 
+check_PROGRAMS += test-resourcecollector
+test_resourcecollector_SOURCES = $(tests_srcdir)/backend/test-resourcecollector.c
+test_resourcecollector_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_resourcecollector_LDADD = liblumibackend.a liblumiera.a -lnobugmt -lpthread -ldl -lm
+
 TESTS = $(tests_srcdir)/test.sh
