@@ -40,7 +40,7 @@ def isCleanupOperation(env):
 
 def isHelpRequest():
     """ this is a hack: SCons does all configure tests even if only
-        the helpmessage is requested. SCons doesn't export the
+        the help message is requested. SCons doesn't export the
         help option for retrieval by env.GetOption(), 
         so we scan the commandline directly. 
     """
@@ -48,8 +48,8 @@ def isHelpRequest():
 
 
 
-def srcSubtree(env,tree,isShared=False,builder=None, **args):
-    """ convienience wrapper: scans the given subtree, which is
+def srcSubtree(env,tree,isShared=True,builder=None, **args):
+    """ convenience wrapper: scans the given subtree, which is
         relative to the current SConscript, find all source files and
         declare them as Static or SharedObjects for compilation
     """
@@ -68,7 +68,7 @@ SRCPATTERNS = ['*.c','*.cpp','*.cc']
 
 def scanSubtree(roots, patterns=SRCPATTERNS):
     """ first expand (possible) wildcards and filter out non-dirs. 
-        Then scan the given subtree for source filesnames 
+        Then scan the given subtree for source filenames 
         (python generator function)
     """
     for root in globRootdirs(roots):
@@ -116,7 +116,7 @@ def getDirname(dir):
 
 
 def RegisterIcon_Builder(env, renderer):
-    """ Registeres Custom Builders for generating and installing Icons.
+    """ Registers Custom Builders for generating and installing Icons.
         Additionally you need to build the tool (rsvg-convert.c)
         used to generate png from the svg source using librsvg. 
     """
@@ -157,7 +157,7 @@ def Tarball(env,location,dirs,suffix=''):
         suffix: (optional) suffix to include in the tar name
         dirs: directories to include in the tar
         
-        This is a bit of a hack, because we want to be able to include arbitrary dirctories,
+        This is a bit of a hack, because we want to be able to include arbitrary directories,
         without creating new dependencies on those dirs. Esp. we want to tar the source tree
         prior to compiling. Solution is 
          - use the Command-Builder, but pass all target specifications as custom build vars

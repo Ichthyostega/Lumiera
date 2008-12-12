@@ -27,6 +27,7 @@ OPTIONSCACHEFILE = 'optcache'
 CUSTOPTIONSFILE  = 'custom-options'
 SRCDIR           = 'src'
 BINDIR           = 'bin'
+LIBDIR           = 'bin/.libs'
 TESTDIR          = 'tests'
 ICONDIR          = 'icons'
 VERSION          = '0.1+pre.01'
@@ -65,14 +66,17 @@ def setupBasicEnvironment():
                             ) 
     handleVerboseMessages(env)
     
-    env.Append ( CCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honor CFLAGS, only CCFLAGS 
+    env.Append ( CCCOM=' -std=gnu99') 
+    env.Append ( SHCCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honour CFLAGS, only CCFLAGS 
     env.Replace( VERSION=VERSION
                , SRCDIR=SRCDIR
                , BINDIR=BINDIR
+               , LIBDIR=LIBDIR
                , ICONDIR=ICONDIR
                , CPPPATH=["#"+SRCDIR]   # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['-DLUMIERA_VERSION='+VERSION ]     # note: it's a list to append further defines
-               , CCFLAGS='-Wall '                                       # -fdiagnostics-show-option 
+               , CCFLAGS='-Wall '                                       # -fdiagnostics-show-option
+               , CFLAGS='-std=gnu99' 
                )
     RegisterIcon_Builder(env,SVGRENDERER)
     handleNoBugSwitches(env)
@@ -123,10 +127,10 @@ def handleVerboseMessages(env):
     """ toggle verbose build output """
     if not env['VERBOSE']:
        # SetOption('silent', True)
-       env['CCCOMSTR'] = "  Compiling    $SOURCE"
-       env['CXXCOMSTR'] = "  Compiling++  $SOURCE"
-       env['LINKCOMSTR'] = "  Linking -->  $TARGET"
-       env['LDMODULECOMSTR'] = "  creating module [ $TARGET ]"
+       env['CCCOMSTR'] = env['SHCCCOMSTR']   = "  Compiling    $SOURCE"
+       env['CXXCOMSTR'] = env['SHCXXCOMSTR'] = "  Compiling++  $SOURCE"
+       env['LINKCOMSTR']                     = "  Linking -->  $TARGET"
+       env['LDMODULECOMSTR']                 = "  creating module [ $TARGET ]"
 
 
 
@@ -313,12 +317,13 @@ def defineBuildTargets(env, artifacts):
               + srcSubtree(env,'$SRCDIR/common')
               + srcSubtree(env,'$SRCDIR/lib')
               )
-    core  = ( env.StaticLibrary('$BINDIR/lumiback.la', objback)
-            + env.StaticLibrary('$BINDIR/lumiproc.la', objproc)
-            + env.StaticLibrary('$BINDIR/lumiera.la',  objlib)
+    core  = ( env.SharedLibrary('$LIBDIR/lumiback', objback)
+            + env.SharedLibrary('$LIBDIR/lumiproc', objproc)
+            + env.SharedLibrary('$LIBDIR/lumiera',  objlib)
             )
     
     artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/lumiera/main.cpp']+ core )
+    artifacts['corelib'] = core
     
     # temporary solution to build the GuiStarterPlugin (TODO: implement plugin building as discussed on November meeting)
     envplug = env.Clone()
@@ -375,6 +380,7 @@ def defineInstallTargets(env, artifacts):
     """ define some artifacts to be installed into target locations.
     """
     env.Install(dir = '$DESTDIR/bin', source=artifacts['lumiera'])
+    env.Install(dir = '$DESTDIR/lib', source=artifacts['corelib'])
     env.Install(dir = '$DESTDIR/lib', source=artifacts['plugins'])
     env.Install(dir = '$DESTDIR/bin', source=artifacts['tools'])
     
