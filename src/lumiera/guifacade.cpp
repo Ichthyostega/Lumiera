@@ -129,8 +129,8 @@ namespace gui {
             //Lock guard (*this);
             if (!facade)
               {
-                TRACE (operate, "duplicate? call of the termination signal, "
-                                "GUI is currently closed.");
+                WARN (operate, "Termination signal invoked, but GUI is currently closed. "
+                               "Probably this is due to some broken startup logic and should be fixed.");
               }
             else
               facade.reset (0);
@@ -144,6 +144,16 @@ namespace gui {
           : closeOnTermination_ (bind (&GuiSubsysDescriptor::closeGuiModule, this, _1))
           { }
         
+        ~GuiSubsysDescriptor()
+          {
+            if (facade)
+              {
+                WARN (operate, "GUI subsystem terminates, but GuiFacade isn't properly closed. "
+                               "Closing it forcedly; this indicates broken startup logic and should be fixed.");
+                try { facade.reset (0); }
+                catch(...) { WARN_IF (lumiera_error_peek(), operate, "Ignoring error: %s", lumiera_error()); }
+              }
+          }
       };
     
     lumiera::Singleton<GuiSubsysDescriptor> theDescriptor;
