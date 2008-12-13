@@ -299,7 +299,7 @@ TimelineWidget::create_timeline_tracks()
   
   BOOST_FOREACH(shared_ptr<model::Track> child,
     sequence->get_child_tracks())
-    create_timeline_tracks_from_branch(sequence);
+    create_timeline_tracks_from_branch(child);
 }
 
 void
