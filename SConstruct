@@ -317,19 +317,19 @@ def defineBuildTargets(env, artifacts):
               + srcSubtree(env,'$SRCDIR/common')
               + srcSubtree(env,'$SRCDIR/lib')
               )
-    core  = ( env.SharedLibrary('$LIBDIR/lumiback', objback)
-            + env.SharedLibrary('$LIBDIR/lumiproc', objproc)
-            + env.SharedLibrary('$LIBDIR/lumiera',  objlib)
+    core  = ( env.SharedLibrary('$LIBDIR/lumiback', objback,  SHLIBPREFIX='')
+            + env.SharedLibrary('$LIBDIR/lumiproc', objproc,  SHLIBPREFIX='')
+            + env.SharedLibrary('$LIBDIR/lumiera',  objlib,   SHLIBPREFIX='')
             )
     
-    artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/lumiera/main.cpp']+ core )
+    artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/main.cpp'], LIBS=core)
     artifacts['corelib'] = core
     
     # temporary solution to build the GuiStarterPlugin (TODO: implement plugin building as discussed on November meeting)
     envplug = env.Clone()
     envplug.Append(CPPPATH='$SRCDIR/plugin', CPPDEFINES='LUMIERA_PLUGIN')
-    objplug = envplug.SharedObject('$SRCDIR/plugin/guistarterplugin-dummy.cpp')
-    guistarterplugin = env.LoadableModule('#$BINDIR/guistart', objplug, SHLIBPREFIX='')
+    guistarterplugin = env.LoadableModule('#$BINDIR/guistart', 
+                                          envplug.SharedObject('$SRCDIR/guistart.cpp'), LIBS=core,  SHLIBPREFIX='')
     
     artifacts['plugins'] = guistarterplugin 
     
