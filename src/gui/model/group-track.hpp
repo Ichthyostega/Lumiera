@@ -26,22 +26,16 @@
 #ifndef GROUP_TRACK_HPP
 #define GROUP_TRACK_HPP
 
-#include "track.hpp"
+#include "parent-track.hpp"
 
 namespace gui {
 namespace model {
   
-class GroupTrack : public Track
+class GroupTrack : public ParentTrack
 {
 public:
   GroupTrack();
-  
-  const std::list< boost::shared_ptr<model::Track> >&
-    get_child_tracks() const;
-      
-private:
-  //----- Data -----//
-  std::list< boost::shared_ptr<Track> > children;
+
 };
 
 }   // namespace model

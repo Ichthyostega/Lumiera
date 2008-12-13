@@ -497,7 +497,7 @@ TimelineHeaderContainer::lookup_timeline_track(
   return timeline_track;
 }
 
-const std::list< boost::shared_ptr<model::Track> >&
+const std::list< boost::shared_ptr<model::Track> >
 TimelineHeaderContainer::get_tracks() const
 {
   REQUIRE(timelineWidget != NULL);

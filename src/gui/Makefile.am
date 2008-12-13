@@ -80,14 +80,14 @@ lumigui_SOURCES =															\
 	$(lumigui_srcdir)/widgets/timeline/timeline-clip.hpp					\
 	$(lumigui_srcdir)/model/project.cpp										\
 	$(lumigui_srcdir)/model/project.hpp										\
-	$(lumigui_srcdir)/model/track-base.cpp									\
-	$(lumigui_srcdir)/model/track-base.hpp									\
-	$(lumigui_srcdir)/model/sequence.cpp									\
-	$(lumigui_srcdir)/model/sequence.hpp									\
 	$(lumigui_srcdir)/model/track.cpp										\
 	$(lumigui_srcdir)/model/track.hpp										\
 	$(lumigui_srcdir)/model/clip-track.cpp									\
 	$(lumigui_srcdir)/model/clip-track.hpp									\
+	$(lumigui_srcdir)/model/parent-track.cpp								\
+	$(lumigui_srcdir)/model/parent-track.hpp								\
+	$(lumigui_srcdir)/model/sequence.cpp									\
+	$(lumigui_srcdir)/model/sequence.hpp									\
 	$(lumigui_srcdir)/model/group-track.cpp									\
 	$(lumigui_srcdir)/model/group-track.hpp									\
 	$(lumigui_srcdir)/model/clip.cpp										\

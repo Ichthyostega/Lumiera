@@ -28,12 +28,6 @@ namespace model {
 GroupTrack::GroupTrack()
 {
 }
-
-const std::list< boost::shared_ptr<model::Track> >&
-GroupTrack::get_child_tracks() const
-{
-  return children;
-}
   
 }   // namespace model
 }   // namespace gui

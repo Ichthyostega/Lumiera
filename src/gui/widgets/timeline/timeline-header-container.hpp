@@ -215,7 +215,7 @@ private:
    * @return Returns the track found, or returns NULL if no matching
    * track was found.
    **/  
-  const std::list< boost::shared_ptr<model::Track> >&
+  const std::list< boost::shared_ptr<model::Track> >
     get_tracks() const;
   
   /**

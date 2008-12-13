@@ -1,5 +1,5 @@
 /*
-  track-track.hpp  -  Definition of the TrackBase class
+  parent-track.hpp  -  Definition of the ParentTrack class
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,43 +19,48 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file track-base.hpp
- ** This file contains the definition of TrackBase, a class which
+/** @file parent-track.hpp
+ ** This file contains the definition of ParentTrack, a class which
  ** represents a base functionality for tracks and sequences which
  ** are also track parents. This class wraps proc layer data
  */
 
-#include "../gtk-lumiera.hpp"
+#include "track.hpp"
+#include "../../common/observable-list.hpp"
 
-#ifndef TRACK_BASE_HPP
-#define TRACK_BASE_HPP
+#ifndef PARENT_TRACK_HPP
+#define PARENT_TRACK_HPP
 
 namespace gui {
 namespace model {
 
-class Track;
-
-class TrackBase
+class ParentTrack : public Track
 {
+protected:
+  ParentTrack();
+
 public:
-  TrackBase();
-
   virtual void add_child_track(Track* child) {};
-
-  virtual const std::list< boost::shared_ptr<Track> >&
+  
+  std::list< boost::shared_ptr<Track> >
     get_child_tracks() const;
+
+  lumiera::observable_list< boost::shared_ptr<Track> >&
+    get_child_track_list();
     
   const Glib::ustring get_name() const;
   
   void set_name(const Glib::ustring &name);
     
 private:
+  //----- Data -----//
   Glib::ustring name;
 
-  static const std::list< boost::shared_ptr<Track> > NoChildren;
+protected:
+  lumiera::observable_list< boost::shared_ptr<Track> > tracks;
 };
 
 }   // namespace model
 }   // namespace gui
 
-#endif // TRACK_BASE_HPP
+#endif // PARENT_TRACK_HPP
