@@ -264,6 +264,19 @@ public:
     }
     
 public:
+  /* ===== Conversions ===== */
+  
+  /**
+   * Returns a copy of this observable_list converted to an STL list
+   * object.
+   * @return Returns a copy of the STL list.
+   **/
+  std::list<T, Allocator> to_list() const
+    {
+      return list;
+    }
+    
+public:
   /* ===== Signals ===== */
   
   /**
