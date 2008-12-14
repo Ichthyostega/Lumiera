@@ -255,6 +255,9 @@ def configurePlatform(env):
     if not conf.CheckPkgConfig('glibmm-2.4', '2.16'):
         problems.append('Unable to configure Lib glib--, exiting.')
     
+    if not conf.CheckPkgConfig('gthread-2.0', '2.16'):
+        problems.append('Need gthread support lib for glib-- based thread handling.')
+    
     if not conf.CheckPkgConfig('cairomm-1.0', 0.6):
         problems.append('Unable to configure Cairo--, exiting.')
     
@@ -312,6 +315,8 @@ def defineBuildTargets(env, artifacts):
         setup sub-environments with special build options if necessary.
         We use a custom function to declare a whole tree of srcfiles. 
     """
+    env.mergeConf(['glibmm-2.4','gthread-2.0'])
+    
     # use PCH to speed up building
 #   env['GCH'] = ( env.PrecompiledHeader('$SRCDIR/pre.hpp')
 #                + env.PrecompiledHeader('$SRCDIR/pre_a.hpp')
