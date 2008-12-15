@@ -1,5 +1,5 @@
 /*
-  CONCURRENCY.hpp  -  generic interface for multithreading primitives
+  CONCURRENCY.hpp  -  generic helper for object based locking and synchronisation
  
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -21,10 +21,21 @@
 
 */
 
+/** @file concurrency.hpp
+ ** Collection of helpers and wrappers to support dealing with concurrency issues.
+ ** Actually, everything is implemented either by the Lumiera backend, or directly
+ ** by pthread. The purpose is to support and automate the most common use cases
+ ** in object oriented style.
+ **
+ ** @see mutex.h
+ ** @see concurrency-locking-test.cpp
+ ** @see asset::AssetManager::reg() usage example
+ ** @see subsystemrunner.hpp usage example
+ */
 
 
-#ifndef LUMIERA_MULTITHREAD_H
-#define LUMIERA_MULTITHREAD_H
+#ifndef LUMIERA_CONCURRENCY_H
+#define LUMIERA_CONCURRENCY_H
 
 #include "include/nobugcfg.h"
 #include "lib/util.hpp"
@@ -33,23 +44,53 @@
 namespace lumiera {
       
     /**
-     * Interface/Policy for managing parallelism issues.
-     * Basically everything is forwarded to the corresponding backend functions,
-     * because managing threads and locking belongs to the Lumiera backend layer.
+     * Facility for monitor object based locking. 
+     * To be attached either on a per class base or per object base.
+     * Typically, the client class will inherit from this template (but it
+     * is possible to use it stand-alone, if inheriting isn't an option).
+     * The interface for clients to access the functionality is the embedded
+     * Lock template, which should be instantiated as an automatic variable
+     * within the scope to be protected.
      * 
-     * @todo actually implement this policy using the Lumiera databackend.
+     * @todo actually implement this facility using the Lumiera backend.
      */
     struct Concurrency
       {
+        struct Monitor
+          {
+            void acquireLock() { TODO ("acquire Thread Lock"); }
+            void releaseLock() { TODO ("release Thread Lock"); }
+          };
+        
+        template<class X>
+        static Monitor& getMonitor(X* forThis);
+        
         template<class X>
         class Lock
           {
+            Monitor& mon_;
           public:
-            Lock()    { TODO ("aquire Thread Lock for Class"); }
-            Lock(X*)  { TODO ("aquire Thread Lock for Instance"); }
-            ~Lock()   { TODO ("release Thread Lock"); }
+            Lock(X* it=0)
+              : mon_(getMonitor<X> (it)) 
+              { 
+                mon_.acquireLock(); 
+              }
+            
+            ~Lock()
+              { 
+                mon_.releaseLock(); 
+              }
           };
       };
+    
+    
+    
+    template<class X>
+    Concurrency::Monitor&
+    Concurrency::getMonitor(X* forThis)
+    {
+      UNIMPLEMENTED ("get moni");
+    }
     
   
 } // namespace lumiera
