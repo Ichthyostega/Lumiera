@@ -56,8 +56,8 @@ namespace lib {
       
       class Victim
         {
-          long cnt_[NUM_COUNTERS];
-          uint step_;         ///< @note stored as instance variable
+          volatile long cnt_[NUM_COUNTERS];
+          volatile uint step_;         ///< @note stored as instance variable
 
           void
           pause ()
