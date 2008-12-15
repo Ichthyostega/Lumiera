@@ -38,7 +38,8 @@ Track::Track() :
   buttonBar.append(lockButton);
   
   buttonBar.set_toolbar_style(TOOLBAR_ICONS);
-  buttonBar.set_icon_size(WindowManager::MenuIconSize);
+//buttonBar.set_icon_size(WindowManager::MenuIconSize);
+//TODO  uncommented for now, doesn't compile on etch. 12/15/08 ichthyo
 
   headerWidget.pack_start(titleBox, PACK_SHRINK);
   headerWidget.pack_start(buttonBar, PACK_SHRINK);
