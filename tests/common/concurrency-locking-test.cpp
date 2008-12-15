@@ -55,7 +55,7 @@ namespace lib {
       
       
       class Victim
-        : Concurrency
+        : public Concurrency
         {
           volatile long cnt_[NUM_COUNTERS];
           volatile uint step_;         ///< @note stored as instance variable
@@ -64,6 +64,7 @@ namespace lib {
           pause ()
             {
               Lock<Victim> guard (this); // note recursive lock
+              
               for ( uint i=0, lim=(rand() % MAX_PAUSE); i<lim; ++i);
             }
           

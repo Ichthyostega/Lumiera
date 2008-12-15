@@ -40,8 +40,15 @@
 #include "include/nobugcfg.h"
 #include "lib/util.hpp"
 
+#include <boost/scoped_ptr.hpp>
+
+#include <iostream> ///////////////////////////TODO
+using std::cerr;
+
 
 namespace lib {
+
+    using boost::scoped_ptr;
       
     /**
      * Facility for monitor object based locking. 
@@ -58,20 +65,38 @@ namespace lib {
       {
         struct Monitor
           {
-            void acquireLock() { TODO ("acquire Thread Lock"); }
-            void releaseLock() { TODO ("release Thread Lock"); }
+            Monitor()  { TODO ("maybe create mutex struct here?"); }
+            ~Monitor() { TODO ("destroy mutex, assert it isn't locked!"); } /////TODO:  Probably need to unlock it silently in case of a class-level monitor?
+            
+            void acquireLock() { cerr << "acquire Thread Lock\n"; }
+            void releaseLock() { cerr << "release Thread Lock\n"; }
           };
         
+        Monitor objectMonitor_;
+        
+        /////////////////////////////////////////////////////////////////////////TODO: any better idea for where to put the template parameter? so we can get rid of it for the typical usage scenario?
+        /////////////////////////////////////////////////////////////////////////TODO: better solution for the storage? Implement the per-this locking without subclassing!
+        /////////////////////////////////////////////////////////////////////////TODO: factor out the recursive/non-recursive mutex case as policy...
+        
         template<class X>
-        static Monitor& getMonitor(X* forThis);
+        static inline Monitor& getMonitor();
+        
+        static inline Monitor& getMonitor(Concurrency* forThis);
+        
         
         template<class X>
         class Lock
           {
             Monitor& mon_;
           public:
-            Lock(X* it=0)
-              : mon_(getMonitor<X> (it)) 
+            Lock(X* it)
+              : mon_(getMonitor(it)) 
+              { 
+                mon_.acquireLock(); 
+              }
+            
+            Lock()
+              : mon_(getMonitor<X>()) 
               { 
                 mon_.acquireLock(); 
               }
@@ -85,11 +110,22 @@ namespace lib {
     
     
     
+    Concurrency::Monitor&
+    Concurrency::getMonitor(Concurrency* forThis)
+    {
+      REQUIRE (forThis);
+      return forThis->objectMonitor_;
+    }
+    
     template<class X>
     Concurrency::Monitor&
-    Concurrency::getMonitor(X* forThis)
+    Concurrency::getMonitor()
     {
-      UNIMPLEMENTED ("get moni");
+      //TODO: guard this by a Mutex? consider double checked locking? (but then class Monitor needs to be volatile, thus is it worth the effort?)
+      
+      static scoped_ptr<Monitor> classMonitor_ (0);
+      if (!classMonitor_) classMonitor_.reset (new Monitor ());
+      return *classMonitor_;
     }
     
   
