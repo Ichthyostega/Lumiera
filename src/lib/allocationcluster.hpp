@@ -51,8 +51,8 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
-#include "lib/multithread.hpp"
 #include "include/error.hpp"
+#include "lib/concurrency.hpp"
 #include "lib/scopedholder.hpp"
 #include "lib/scopedholdertransfer.hpp"
 
@@ -60,7 +60,7 @@
 
 namespace lib {
   using boost::scoped_ptr;
-  using lumiera::Thread;
+  using lumiera::Concurrency;
 
   /**
    * A pile of objects sharing common allocation and lifecycle.
@@ -223,7 +223,7 @@ namespace lib {
       static TypeInfo
       setup()
         {
-          Thread::Lock<AllocationCluster> guard   SIDEEFFECT;
+          Concurrency::Lock<AllocationCluster> guard   SIDEEFFECT;
           if (!id_)
             id_= ++maxTypeIDs;
           

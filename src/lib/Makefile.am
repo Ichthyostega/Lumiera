@@ -68,7 +68,7 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/visitor.hpp			\
 	$(liblumiera_la_srcdir)/visitordispatcher.hpp		\
 	$(liblumiera_la_srcdir)/visitorpolicies.hpp		\
-	$(liblumiera_la_srcdir)/multithread.hpp			\
+	$(liblumiera_la_srcdir)/concurrency.hpp			\
 	$(liblumiera_la_srcdir)/p.hpp				\
 	$(liblumiera_la_srcdir)/query.hpp			\
 	$(liblumiera_la_srcdir)/singletonfactory.hpp		\

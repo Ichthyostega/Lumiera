@@ -26,9 +26,9 @@
 #define LUMIERA_VISITORDISPATCHER_H
 
 #include "include/error.hpp"
-#include "lib/util.hpp"
+#include "lib/concurrency.hpp"
 #include "lib/singleton.hpp"
-#include "lib/multithread.hpp"
+#include "lib/util.hpp"
 
 #include <vector>
 
@@ -62,7 +62,7 @@ namespace lumiera
       static void
       generateID (size_t& id)
         {
-          Thread::Lock<Tag> guard   SIDEEFFECT;
+          Concurrency::Lock<Tag> guard   SIDEEFFECT;
           if (!id)
             id = ++lastRegisteredID;
         }
@@ -138,7 +138,7 @@ namespace lumiera
         void
         accomodate (size_t index)
           {
-            Thread::Lock<Dispatcher> guard   SIDEEFFECT;
+            Concurrency::Lock<Dispatcher> guard   SIDEEFFECT;
             if (index > table_.size())
               table_.resize (index);      // performance bottleneck?? TODO: measure the real impact!
           }

@@ -1,5 +1,5 @@
 /*
-  MultithreadLocking(Test)  -  check the monitor object based locking
+  ConcurrencyLocking(Test)  -  check the monitor object based locking
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -25,7 +25,7 @@
 //#include "common/util.hpp"
 #include "common/error.hpp"
 
-#include "common/multithread.hpp"
+#include "common/concurrency.hpp"
 
 #include <glibmm.h>
 
@@ -171,9 +171,9 @@ namespace lib {
      * But because the class Victim uses an object level monitor to
      * guard the mutations, the state should remain consistent.
      * 
-     * @see multithread.hpp
+     * @see concurrency.hpp
      */
-    class MultithreadLocking_test : public Test
+    class ConcurrencyLocking_test : public Test
       {
         
         virtual void run(Arg arg) 
@@ -202,7 +202,7 @@ namespace lib {
       
     
     /** Register this test class... */
-    LAUNCHER (MultithreadLocking_test, "unit common");
+    LAUNCHER (ConcurrencyLocking_test, "unit common");
     
     
     

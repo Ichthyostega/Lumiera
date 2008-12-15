@@ -81,7 +81,7 @@ namespace lib {
   void
   AllocationCluster::MemoryManager::reset (TypeInfo info)
   {
-    Thread::Lock<MemoryManager> guard   SIDEEFFECT;
+    Concurrency::Lock<MemoryManager> guard   SIDEEFFECT;
     
     if (0 < mem_.size()) purge();
     type_ = info;
@@ -96,7 +96,7 @@ namespace lib {
   void
   AllocationCluster::MemoryManager::purge()
   {
-    Thread::Lock<MemoryManager> guard   SIDEEFFECT;
+    Concurrency::Lock<MemoryManager> guard   SIDEEFFECT;
     
     REQUIRE (type_.killIt, "we need a deleter function");
     REQUIRE (0 < type_.allocSize, "allocation size unknown");
@@ -120,7 +120,7 @@ namespace lib {
   inline void*
   AllocationCluster::MemoryManager::allocate()
   {
-    Thread::Lock<MemoryManager> guard   SIDEEFFECT;
+    Concurrency::Lock<MemoryManager> guard   SIDEEFFECT;
     
     REQUIRE (0 < type_.allocSize);
     REQUIRE (top_ <= mem_.size());
@@ -140,7 +140,7 @@ namespace lib {
   inline void
   AllocationCluster::MemoryManager::commit (void* pendingAlloc)
   {
-    Thread::Lock<MemoryManager> guard   SIDEEFFECT;
+    Concurrency::Lock<MemoryManager> guard   SIDEEFFECT;
     
     REQUIRE (pendingAlloc);
     ASSERT (top_ < mem_.size());
@@ -175,7 +175,7 @@ namespace lib {
   {
     try
       {
-        Thread::Lock<AllocationCluster> guard   SIDEEFFECT
+        Concurrency::Lock<AllocationCluster> guard   SIDEEFFECT
         
         TRACE (memory, "shutting down AllocationCluster");
         for (size_t i = typeHandlers_.size(); 0 < i; --i)
@@ -214,7 +214,7 @@ namespace lib {
     ASSERT (0 < slot);
     
       {
-        Thread::Lock<AllocationCluster> guard   SIDEEFFECT;   /////TODO: decide tradeoff: lock just the instance, or lock the AllocationCluster class?
+        Concurrency::Lock<AllocationCluster> guard   SIDEEFFECT;   /////TODO: decide tradeoff: lock just the instance, or lock the AllocationCluster class?
         
         if (slot > typeHandlers_.size())
           typeHandlers_.resize(slot);

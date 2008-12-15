@@ -1,5 +1,5 @@
 /*
-  MULTITHREAD.hpp  -  generic interface for multithreading primitives
+  CONCURRENCY.hpp  -  generic interface for multithreading primitives
  
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -30,8 +30,7 @@
 #include "lib/util.hpp"
 
 
-namespace lumiera
-  {
+namespace lumiera {
       
     /**
      * Interface/Policy for managing parallelism issues.
@@ -40,7 +39,7 @@ namespace lumiera
      * 
      * @todo actually implement this policy using the Lumiera databackend.
      */
-    struct Thread
+    struct Concurrency
       {
         template<class X>
         class Lock
