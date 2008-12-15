@@ -53,13 +53,12 @@
 #include <boost/lambda/lambda.hpp>
 
 
-namespace mobject
-  {
-  namespace session
-    {
+namespace mobject {
+  namespace session {
+    
     using lumiera::P;
     using lumiera::Query;
-    using lumiera::Concurrency;
+    using lib::Concurrency;
     using std::tr1::weak_ptr;
     
     using std::string;

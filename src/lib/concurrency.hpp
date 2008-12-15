@@ -34,14 +34,14 @@
  */
 
 
-#ifndef LUMIERA_CONCURRENCY_H
-#define LUMIERA_CONCURRENCY_H
+#ifndef LIB_CONCURRENCY_H
+#define LIB_CONCURRENCY_H
 
 #include "include/nobugcfg.h"
 #include "lib/util.hpp"
 
 
-namespace lumiera {
+namespace lib {
       
     /**
      * Facility for monitor object based locking. 

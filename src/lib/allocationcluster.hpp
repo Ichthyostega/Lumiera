@@ -60,7 +60,6 @@
 
 namespace lib {
   using boost::scoped_ptr;
-  using lumiera::Concurrency;
 
   /**
    * A pile of objects sharing common allocation and lifecycle.

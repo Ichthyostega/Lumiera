@@ -39,7 +39,7 @@ using boost::bind;
 using util::for_each;
 
 using lumiera::Singleton;
-using lumiera::Concurrency;
+using lib::Concurrency;
 
 
 namespace asset

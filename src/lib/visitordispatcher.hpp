@@ -33,10 +33,10 @@
 #include <vector>
 
 
-namespace lumiera
-  {
-  namespace visitor
-    {
+namespace lumiera {
+  namespace visitor {
+  
+    using lib::Concurrency;
 
     template<class TOOL> class Tag;
     
