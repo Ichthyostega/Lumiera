@@ -63,7 +63,7 @@ namespace lib {
           void
           pause ()
             {
-              Lock<Victim> guard (this); // note recursive lock
+              Lock guard (this); // note recursive lock
               
               for ( uint i=0, lim=(rand() % MAX_PAUSE); i<lim; ++i);
             }
@@ -89,7 +89,7 @@ namespace lib {
           void 
           inc (uint newStep)
             {
-              Lock<Victim> guard (this);
+              Lock guard (this);
               step_ = newStep;
               incrementAll();
             }
@@ -97,7 +97,7 @@ namespace lib {
           bool
           belowLimit ()
             {
-              Lock<Victim> guard (this);
+              Lock guard (this);
               return cnt_[0] < MAX_SUM;
             }
           

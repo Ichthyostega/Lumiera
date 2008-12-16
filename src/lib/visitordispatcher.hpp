@@ -62,7 +62,7 @@ namespace lumiera {
       static void
       generateID (size_t& id)
         {
-          Concurrency::Lock<Tag> guard   SIDEEFFECT;
+          Concurrency::ClassLock<Tag> guard();
           if (!id)
             id = ++lastRegisteredID;
         }
@@ -138,7 +138,7 @@ namespace lumiera {
         void
         accomodate (size_t index)
           {
-            Concurrency::Lock<Dispatcher> guard   SIDEEFFECT;
+            Concurrency::ClassLock<Dispatcher> guard();
             if (index > table_.size())
               table_.resize (index);      // performance bottleneck?? TODO: measure the real impact!
           }

@@ -162,7 +162,7 @@ namespace mobject {
           static void
           createSlot (Table& table)
             {
-              Concurrency::Lock<TableEntry> guard   SIDEEFFECT;
+              Concurrency::ClassLock<TableEntry> guard();
               if (!index)
                 index = ++maxSlots;
               if (index > table.size())

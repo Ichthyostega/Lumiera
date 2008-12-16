@@ -74,7 +74,6 @@ namespace lib {
         
         Monitor objectMonitor_;
         
-        /////////////////////////////////////////////////////////////////////////TODO: any better idea for where to put the template parameter? so we can get rid of it for the typical usage scenario?
         /////////////////////////////////////////////////////////////////////////TODO: better solution for the storage? Implement the per-this locking without subclassing!
         /////////////////////////////////////////////////////////////////////////TODO: factor out the recursive/non-recursive mutex case as policy...
         
@@ -84,19 +83,17 @@ namespace lib {
         static inline Monitor& getMonitor(Concurrency* forThis);
         
         
-        template<class X>
         class Lock
           {
             Monitor& mon_;
           public:
-            Lock(X* it)
-              : mon_(getMonitor(it)) 
+            template<class X>
+            Lock(X* it) : mon_(getMonitor(it)) 
               { 
                 mon_.acquireLock(); 
               }
             
-            Lock()
-              : mon_(getMonitor<X>()) 
+            Lock(Monitor& m) : mon_(m) 
               { 
                 mon_.acquireLock(); 
               }
@@ -106,7 +103,16 @@ namespace lib {
                 mon_.releaseLock(); 
               }
           };
+        
+        template<class X>
+        struct ClassLock : Lock
+          {
+            ClassLock() : Lock (getMonitor<X>()) {}
+          };
+        
       };
+    
+      
     
     
     

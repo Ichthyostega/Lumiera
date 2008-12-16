@@ -222,7 +222,7 @@ namespace lib {
       static TypeInfo
       setup()
         {
-          Concurrency::Lock<AllocationCluster> guard   SIDEEFFECT;
+          Concurrency::ClassLock<AllocationCluster> guard();
           if (!id_)
             id_= ++maxTypeIDs;
           
