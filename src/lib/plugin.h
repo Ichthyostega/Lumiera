@@ -24,7 +24,7 @@
 #include "lib/psplay.h"
 #include "lib/error.h"
 
-#include "lumiera/interface.h"
+#include "lib/interface.h"
 
 #include <stdlib.h>
 #include <nobug.h>

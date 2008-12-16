@@ -21,10 +21,10 @@
 
 //TODO: Support library includes//
 #include "lib/safeclib.h"
+#include "lib/config.h"
 
 
 //TODO: Lumiera header includes//
-#include "lumiera/config.h"
 
 //TODO: internal/static forward declarations//
 

@@ -33,7 +33,7 @@
 #include "model/project.hpp"
 
 extern "C" {
-#include "lumiera/interface.h"
+#include "lib/interface.h"
 }
 
 NOBUG_CPP_DEFINE_FLAG(gui);

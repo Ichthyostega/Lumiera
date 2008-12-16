@@ -28,11 +28,11 @@
 #include "lumiera/subsystemrunner.hpp"
 
 extern "C" {
-#include "lumiera/config_interface.h"
+#include "lib/config_interface.h"
 
-#include "lumiera/interface.h"
-#include "lumiera/interfaceregistry.h"
-#include "lumiera/plugin.h"
+#include "lib/interface.h"
+#include "lib/interfaceregistry.h"
+#include "lib/plugin.h"
 }
 
 #include "common/util.hpp"

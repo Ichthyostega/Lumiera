@@ -27,7 +27,7 @@
 #include "include/error.hpp"
 
 extern "C" {
-#include "lumiera/interface.h"
+#include "lib/interface.h"
 }
 
 using util::cStr;

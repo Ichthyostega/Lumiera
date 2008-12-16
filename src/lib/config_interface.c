@@ -23,8 +23,8 @@
 
 
 //TODO: Lumiera header includes//
-#include "lumiera/config_interface.h"
-#include "lumiera/config.h"
+#include "lib/config_interface.h"
+#include "lib/config.h"
 
 //TODO: internal/static forward declarations//
 
@@ -140,7 +140,7 @@ LUMIERA_EXPORT(
 
 #ifndef LUMIERA_PLUGIN
 
-#include "lumiera/interfaceregistry.h"
+#include "lib/interfaceregistry.h"
 void
 lumiera_config_interface_init (void)
 {

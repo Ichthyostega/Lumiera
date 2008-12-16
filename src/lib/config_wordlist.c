@@ -23,7 +23,7 @@
 #include "lib/safeclib.h"
 
 
-#include "lumiera/config.h"
+#include "lib/config.h"
 
 extern LumieraConfig lumiera_global_config;
 

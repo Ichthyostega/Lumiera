@@ -29,8 +29,8 @@
 
 
 
-#include "lumiera/plugin.h"
-#include "lumiera/interfaceregistry.h"
+#include "lib/plugin.h"
+#include "lib/interfaceregistry.h"
 
 /**
  * @file

@@ -18,7 +18,7 @@
 liblumiera_a_srcdir = $(top_srcdir)/src/lib
 noinst_LIBRARIES += liblumiera.a
 
-liblumiera_a_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
+liblumiera_a_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror -DLUMIERA_PLUGIN_PATH="\"$(pkglibdir)\""
 
 liblumiera_a_SOURCES =					\
 	$(liblumiera_a_srcdir)/error.c			\
@@ -31,6 +31,17 @@ liblumiera_a_SOURCES =					\
 	$(liblumiera_a_srcdir)/psplay.c			\
 	$(liblumiera_a_srcdir)/mrucache.c		\
 	$(liblumiera_a_srcdir)/time.c			\
+	$(liblumiera_a_srcdir)/config.c			\
+	$(liblumiera_a_srcdir)/config_typed.c		\
+	$(liblumiera_a_srcdir)/config_wordlist.c	\
+	$(liblumiera_a_srcdir)/configentry.c		\
+	$(liblumiera_a_srcdir)/configitem.c		\
+	$(liblumiera_a_srcdir)/config_lookup.c		\
+	$(liblumiera_a_srcdir)/config_interface.c	\
+	$(liblumiera_a_srcdir)/interface.c		\
+	$(liblumiera_a_srcdir)/interfaceregistry.c	\
+	$(liblumiera_a_srcdir)/plugin.c			\
+	$(liblumiera_a_srcdir)/plugin_dynlib.c		\
 	$(liblumiera_a_srcdir)/allocationcluster.cpp	\
 	$(liblumiera_a_srcdir)/external/libgavl.cpp	\
 	$(liblumiera_a_srcdir)/cmdline.cpp
@@ -47,6 +58,15 @@ noinst_HEADERS +=					\
 	$(liblumiera_a_srcdir)/mrucache.h		\
 	$(liblumiera_a_srcdir)/time.h			\
 	$(liblumiera_a_srcdir)/ppmpl.h			\
+	$(liblumiera_a_srcdir)/interface.h		\
+	$(liblumiera_a_srcdir)/interfaceregistry.h	\
+	$(liblumiera_a_srcdir)/interfacedescriptor.h	\
+	$(liblumiera_a_srcdir)/plugin.h			\
+	$(liblumiera_a_srcdir)/config.h			\
+	$(liblumiera_a_srcdir)/configentry.h		\
+	$(liblumiera_a_srcdir)/configitem.h		\
+	$(liblumiera_a_srcdir)/config_lookup.h		\
+	$(liblumiera_a_srcdir)/config_interface.h	\
 	$(liblumiera_a_srcdir)/allocationcluster.hpp	\
 	$(liblumiera_a_srcdir)/scopedholdertransfer.hpp	\
 	$(liblumiera_a_srcdir)/scopedholder.hpp		\

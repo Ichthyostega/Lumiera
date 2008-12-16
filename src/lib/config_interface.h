@@ -24,7 +24,7 @@
 
 //TODO: Support library includes//
 
-#include "lumiera/interface.h"
+#include "lib/interface.h"
 
 //TODO: Forward declarations//
 

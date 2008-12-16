@@ -24,8 +24,8 @@
 #include "lib/mutex.h"
 #include "lib/psplay.h"
 
-#include "lumiera/interface.h"
-#include "lumiera/plugin.h"
+#include "lib/interface.h"
+#include "lib/plugin.h"
 
 #include <nobug.h>
 

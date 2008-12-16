@@ -48,8 +48,8 @@
 #include "common/singleton.hpp"
 
 extern "C" {
-#include "lumiera/interface.h"
-#include "lumiera/interfacedescriptor.h"
+#include "lib/interface.h"
+#include "lib/interfacedescriptor.h"
 }
 
 #include <string>

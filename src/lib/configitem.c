@@ -25,9 +25,9 @@
 
 
 //TODO: Lumiera header includes//
-#include "lumiera/config.h"
-#include "lumiera/configitem.h"
-#include "lumiera/configentry.h"
+#include "lib/config.h"
+#include "lib/configitem.h"
+#include "lib/configentry.h"
 
 
 static LumieraConfigitem parse_directive (LumieraConfigitem self, char* itr);

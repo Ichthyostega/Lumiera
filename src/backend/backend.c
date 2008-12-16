@@ -22,7 +22,7 @@
 #include "lib/safeclib.h"
 
 #include "backend/backend.h"
-#include "lumiera/config.h"
+#include "lib/config.h"
 #include "backend/filehandlecache.h"
 #include "backend/filedescriptor.h"
 #include "backend/mmapcache.h"

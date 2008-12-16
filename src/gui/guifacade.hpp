@@ -41,7 +41,7 @@
 #include "lumiera/subsys.hpp"
 
 extern "C" {
-#include "lumiera/interface.h"
+#include "lib/interface.h"
 }
 
 

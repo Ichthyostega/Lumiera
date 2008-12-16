@@ -42,8 +42,8 @@
 #include "include/nobugcfg.h"
 
 extern "C" {
-#include "lumiera/interface.h"
-#include "lumiera/interfaceregistry.h"
+#include "lib/interface.h"
+#include "lib/interfaceregistry.h"
 }
 
 #include <boost/noncopyable.hpp>
