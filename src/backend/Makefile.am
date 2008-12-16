@@ -15,37 +15,36 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-liblumibackend_a_srcdir = $(top_srcdir)/src/backend
-noinst_LIBRARIES += liblumibackend.a
+liblumierabackend_la_srcdir = $(top_srcdir)/src/backend
+lib_LTLIBRARIES += liblumierabackend.la
 
-liblumibackend_a_CPPFLAGS = $(AM_CPPFLAGS)
-liblumibackend_a_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
+liblumierabackend_la_CPPFLAGS = $(AM_CPPFLAGS)
+liblumierabackend_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
+liblumierabackend_la_LIBADD = liblumiera.la
 
-liblumibackend_a_SOURCES =					\
-	$(liblumibackend_a_srcdir)/mediaaccessfacade.cpp	\
-	$(liblumibackend_a_srcdir)/backend.c			\
-	$(liblumibackend_a_srcdir)/file.c			\
-	$(liblumibackend_a_srcdir)/filehandle.c			\
-	$(liblumibackend_a_srcdir)/filedescriptor.c		\
-	$(liblumibackend_a_srcdir)/resourcecollector.c		\
-	$(liblumibackend_a_srcdir)/mmap.c			\
-	$(liblumibackend_a_srcdir)/mmapings.c			\
-	$(liblumibackend_a_srcdir)/mmapcache.c			\
-	$(liblumibackend_a_srcdir)/filehandlecache.c		\
-	$(liblumibackend_a_srcdir)/enginefacade.cpp		\
-	$(liblumibackend_a_srcdir)/mediaaccessfacade.cpp	\
-	$(liblumibackend_a_srcdir)/scriptrunnerfacade.cpp	\
-	$(liblumibackend_a_srcdir)/netnodefacade.cpp
+liblumierabackend_la_SOURCES =					\
+	$(liblumierabackend_la_srcdir)/mediaaccessfacade.cpp	\
+	$(liblumierabackend_la_srcdir)/backend.c		\
+	$(liblumierabackend_la_srcdir)/file.c			\
+	$(liblumierabackend_la_srcdir)/filehandle.c		\
+	$(liblumierabackend_la_srcdir)/filedescriptor.c		\
+	$(liblumierabackend_la_srcdir)/resourcecollector.c	\
+	$(liblumierabackend_la_srcdir)/mmap.c			\
+	$(liblumierabackend_la_srcdir)/mmapings.c		\
+	$(liblumierabackend_la_srcdir)/mmapcache.c		\
+	$(liblumierabackend_la_srcdir)/filehandlecache.c	\
+	$(liblumierabackend_la_srcdir)/enginefacade.cpp		\
+	$(liblumierabackend_la_srcdir)/scriptrunnerfacade.cpp	\
+	$(liblumierabackend_la_srcdir)/netnodefacade.cpp
 
 
 noinst_HEADERS +=						\
-	$(liblumibackend_a_srcdir)/mediaaccessfacade.cpp	\
-	$(liblumibackend_a_srcdir)/backend.h			\
-	$(liblumibackend_a_srcdir)/file.h			\
-	$(liblumibackend_a_srcdir)/filehandle.h			\
-	$(liblumibackend_a_srcdir)/filedescriptor.h		\
-	$(liblumibackend_a_srcdir)/filehandlecache.h		\
-	$(liblumibackend_a_srcdir)/resourcecollector.h		\
-	$(liblumibackend_a_srcdir)/mmap.h			\
-	$(liblumibackend_a_srcdir)/mmapings.h			\
-	$(liblumibackend_a_srcdir)/mmapcache.h
+	$(liblumierabackend_la_srcdir)/backend.h		\
+	$(liblumierabackend_la_srcdir)/file.h			\
+	$(liblumierabackend_la_srcdir)/filehandle.h		\
+	$(liblumierabackend_la_srcdir)/filedescriptor.h		\
+	$(liblumierabackend_la_srcdir)/filehandlecache.h	\
+	$(liblumierabackend_la_srcdir)/resourcecollector.h	\
+	$(liblumierabackend_la_srcdir)/mmap.h			\
+	$(liblumierabackend_la_srcdir)/mmapings.h		\
+	$(liblumierabackend_la_srcdir)/mmapcache.h
