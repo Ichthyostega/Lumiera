@@ -89,13 +89,13 @@ namespace mobject {
      * Base class of all BuilderTools, used according to the visitor pattern: 
      * each Tool contains the concrete implementation for one task to be done
      * to the various MObject classes. The concrete builder tool implementation
-     * should not diretcly inherit from this base interface, but rather through
-     * an instantiation of the "Applicable" template parametrized with all 
+     * should not directly inherit from this base interface, but rather through
+     * an instantiation of the "Applicable" template parametrised with all 
      * concrete Buildable classes, for which it wants calls to be dispatched.
      * \par
      * In addition to lumiera::visitor::Tool, BuilderTool adds support for dealing
      * with objects normally handled by means of smart-pointers or similar
-     * wrappers, most notably mobject::Placement. The visitaion is initiated
+     * wrappers, most notably mobject::Placement. The visitation is initiated
      * by calling the stand-alone function \c (BuilderTool& tool, WRA& wrappedTargetObj) ,
      * which forwards to the visitation mechanism supported by the type contained
      * in the wrapper, but stores away a pointer to the wrapped object, which can

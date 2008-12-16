@@ -27,7 +27,6 @@ liblumicommon_a_SOURCES =					\
 	$(liblumicommon_a_srcdir)/lumitime.cpp			\
 	$(liblumicommon_a_srcdir)/util.cpp			\
 	$(liblumicommon_a_srcdir)/visitor.cpp			\
-	$(liblumicommon_a_srcdir)/cmdline.cpp			\
 	$(liblumicommon_a_srcdir)/configrules.cpp		\
 	$(liblumicommon_a_srcdir)/error.cpp			\
 	$(liblumicommon_a_srcdir)/query.cpp			\
@@ -38,7 +37,6 @@ liblumicommon_a_SOURCES =					\
 
 
 noinst_HEADERS +=						\
-	$(liblumicommon_a_srcdir)/cmdline.hpp			\
 	$(liblumicommon_a_srcdir)/factory.hpp			\
 	$(liblumicommon_a_srcdir)/frameid.hpp			\
 	$(liblumicommon_a_srcdir)/singleton.hpp			\
@@ -49,7 +47,6 @@ noinst_HEADERS +=						\
 	$(liblumicommon_a_srcdir)/visitordispatcher.hpp		\
 	$(liblumicommon_a_srcdir)/visitorpolicies.hpp		\
 	$(liblumicommon_a_srcdir)/configrules.hpp		\
-	$(liblumicommon_a_srcdir)/error.hpp			\
 	$(liblumicommon_a_srcdir)/multithread.hpp		\
 	$(liblumicommon_a_srcdir)/p.hpp				\
 	$(liblumicommon_a_srcdir)/query.hpp			\

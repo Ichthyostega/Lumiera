@@ -79,14 +79,6 @@ LumieraFilehandle
 lumiera_filehandlecache_handle_acquire (LumieraFilehandlecache self, LumieraFiledescriptor desc);
 
 /**
- * Add filehande back to cache, the filehandle becomes subject of aging.
- * @param self pointer to the cache
- * @param handle filehandle to be put back
- */
-void
-lumiera_filehandlecache_add_filehandle (LumieraFilehandlecache self, LumieraFilehandle handle);
-
-/**
  * Remove a filehandle from cache aging
  * Filehandles which are subject of cache aging must be checked out before they can be used.
  * @param self the filehandlecache

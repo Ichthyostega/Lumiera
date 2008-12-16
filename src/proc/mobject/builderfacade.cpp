@@ -21,10 +21,15 @@
 * *****************************************************/
 
 
+#include "proc/mobject/builder/common.hpp"
 #include "proc/mobject/builderfacade.hpp"
 
-namespace mobject
-  {
+namespace mobject {
+  
+  namespace builder {
+    using ::NOBUG_FLAG(memory);
+    NOBUG_CPP_DEFINE_FLAG_PARENT(buildermem, memory);
+  }
 
 
   /**

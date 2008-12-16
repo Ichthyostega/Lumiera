@@ -18,7 +18,7 @@ env.Append(CPPPATH='#/.')  # add Rootdir to Includepath, so test/test.h is found
 
 def testExecutable(env,tree, exeName=None, obj=None):
     """ declare all targets needed to create a standalone
-        Test executalbe of the given Sub-tree. Note that
+        Test executable of the given Sub-tree. Note that
         each subdir is built in its own Environment.
     """
     env = env.Clone()
@@ -27,7 +27,7 @@ def testExecutable(env,tree, exeName=None, obj=None):
     if obj:
         obj = [path.join(tree,name) for name in obj]
     else:
-        obj = srcSubtree(env,tree) # use all sourcefiles found in subtree
+        obj = srcSubtree(env,tree, isShared=False) # use all sourcefiles found in subtree
     if not exeName:
         exeName = 'test-%s' % tree
     return env.Program('#$BINDIR/'+exeName, obj + core)
@@ -46,14 +46,14 @@ def testCollection(env,dir):
 def treatPluginTestcase(env):
     """ Special case: the test-plugin executable
     """
-    tree = 'backend'
+    tree = 'plugin'
     env = env.Clone()
     env.Append(CPPPATH=tree, CPPDEFINES='LUMIERA_PLUGIN')
     prfx = path.join(tree,'example_plugin')
     oC   = env.SharedObject(prfx,        prfx+'.c')
     oCPP = env.SharedObject(prfx+'_cpp', prfx+'.cpp')
-    testplugin = ( env.LoadableModule('#$BINDIR/.libs/examplepluginc',    oC, SHLIBPREFIX='')
-#                + env.SharedLibrary('#$BINDIR/.libs/exampleplugincpp', oCPP, SHLIBPREFIX='')
+    testplugin = ( env.LoadableModule('#$LIBDIR/examplepluginc',    oC, SHLIBPREFIX='')
+#                + env.SharedLibrary('#$LIBDIR/exampleplugincpp', oCPP, SHLIBPREFIX='')
 # doesn't compile yet...
                  )
     
@@ -69,7 +69,7 @@ def treatPluginTestcase(env):
 moduledirs = globRootdirs('*')
 
 # but have to treat some subdirs individually.
-specials = ['plugin','library','backend']
+specials = ['plugin','library','backend','lumiera']
 
 
 
@@ -77,6 +77,7 @@ artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in moduledirs
                               + treatPluginTestcase(env)
                               + testCollection(env, 'library')
                               + testCollection(env, 'backend')
+                              + testCollection(env, 'lumiera')
                               ) 
                               
 

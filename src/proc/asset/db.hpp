@@ -28,7 +28,7 @@
 #include "pre_a.hpp"
 
 #include "proc/asset.hpp"
-#include "common/error.hpp"
+#include "include/error.hpp"
 
 #include <tr1/memory>
 #include <tr1/unordered_map>
@@ -130,11 +130,11 @@ namespace asset
             }
           catch (lumiera::Error& EX)
             {
-              WARN (oper, "Problems while clearing Asset registry: %s", EX.what());
+              WARN (operate, "Problems while clearing Asset registry: %s", EX.what());
             }
           catch (...)
             {
-              ERROR (oper, "Serious trouble while clearing Asset registry.");
+              ERROR (operate, "Serious trouble while clearing Asset registry.");
         }   }
       
       

@@ -30,13 +30,15 @@ typedef lumiera_mmapings* LumieraMMapings;
 
 #include "backend/filedescriptor.h"
 #include "backend/mmap.h"
+#include "backend/file.h"
 
 #include <nobug.h>
 
+NOBUG_DECLARE_FLAG (mmapings);
 
 /**
  * @file
- * Keeps all mmaped areas
+ * Manage the mmap objects of a file
  *
  */
 
@@ -44,9 +46,6 @@ struct lumiera_mmapings_struct
 {
   /** mmaped ranges are kept in an list sorted by the size of the mmaping, might be improved to a tree someday **/
   llist mmaps;
-
-  /** sum of all mmaped areas, areas might be overlapping **/
-  //  size_t vsz;
 
   /**
    * chunkssize is the smallest granularity which is used for mmapping files, it
@@ -57,7 +56,6 @@ struct lumiera_mmapings_struct
 
   LumieraFiledescriptor descriptor;
   lumiera_mutex lock;
-  RESOURCE_HANDLE (rh);
 };
 
 /**

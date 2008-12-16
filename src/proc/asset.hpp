@@ -1,5 +1,5 @@
 /*
-  ASSET.hpp  -  Superinterface: bookeeping view of "things" present in the session
+  ASSET.hpp  -  Superinterface: bookkeeping view of "things" present in the session
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -30,7 +30,7 @@
  **
  ** Assets are handled by a hierarchy of interfaces. Below the top level Asset interface
  ** there are interfaces for various different <i>Kinds</i> of Assets, like asset::Media,
- ** asset::Proc, etc. Code utilizing the specific properties of e.g. Media assets, will
+ ** asset::Proc, etc. Code utilising the specific properties of e.g. Media assets, will
  ** be implemented directly against the asset::Media interface. To make this feasible 
  ** while at the same time being able to handle all asset Kinds in a uniform manner, 
  ** we use a hierarchy of ID classes. These IDs are actually just thin wrappers around 
@@ -56,7 +56,8 @@
 
 
 #include "proc/asset/category.hpp"
-#include "common/error.hpp"
+#include "include/nobugcfg.h"
+#include "include/error.hpp"
 #include "common/p.hpp"
 
 #include <boost/type_traits/is_base_of.hpp>
@@ -75,8 +76,7 @@ using std::set;
 
 
 
-namespace asset
-  {
+namespace asset {
   
   using std::size_t;
   using std::tr1::shared_ptr;
@@ -84,13 +84,15 @@ namespace asset
 
   using lumiera::P;
   
+  NOBUG_DECLARE_FLAG (assetmem);
+  
   
   /** 
    * thin wrapper around a size_t hash ID 
    * used as primary key for all Asset objects.
-   * The Templace parameter is intended for tagging
+   * The Template parameter is intended for tagging
    * the ID with type information, causing the
-   * compiler to select specialized behaviour 
+   * compiler to select specialised behaviour 
    * for the different kinds of Assets.
    * @see Asset
    * @see AssetManager#getID generating ID values
@@ -119,15 +121,15 @@ namespace asset
   
   
   /**
-   * Superinterface describing especially bookeeping properties.
+   * Superinterface describing especially bookkeeping properties.
    * As of 09/2007, there are four  <b>Kinds</b> of Assets, each
    * comprising a sub-Interface of the Asset Interface:
    * <ul><li>asset::Media representing mediafiles</li>
    *     <li>asset::Proc representing media data processing components (e.g. Effects)</li>
-   *     <li>asset::Struct representing structural components used in the sesion (e.g. Tracks)</li>
+   *     <li>asset::Struct representing structural components used in the session (e.g. Tracks)</li>
    *     <li>asset::Meta representing meta objects created while editing (e.g. Automation)</li>
    * </ul> 
-   * And of course there are various concret Asset subclasses, like asset::Clip,
+   * And of course there are various concrete Asset subclasses, like asset::Clip,
    * asset::Effect, asset::Codec, asset::Track, asset::Dataset.
    * @note Assets objects have a strict unique identity and because of this are non-copyable.
    *       You can not create an Asset derived object without registering it with the AssetManager
@@ -149,7 +151,7 @@ namespace asset
       struct Ident
         : boost::totally_ordered<Ident>
         {
-          /** element ID, comprehensible but sanitized.
+          /** element ID, comprehensible but sanitised.
            *  The tuple (category, name, org) is unique.
            */
           string name;
@@ -161,7 +163,7 @@ namespace asset
     
           /** origin or authorship id. 
            *  Can be a project abbreviation, a package id or just the authors nickname or UID.
-           *  This allows for the compnent name to be more generic (e.g. "blur"). 
+           *  This allows for the component name to be more generic (e.g. "blur"). 
            *  Default for all assets provided by the core Lumiera codebase is "lumi".
            */
           const string org;

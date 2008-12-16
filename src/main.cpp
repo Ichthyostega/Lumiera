@@ -2,7 +2,8 @@
   main.cpp  -  start the Lumiera Application
 
   Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
+    2007-2008,          Joel Holdsworth <joel@airwebreathe.org.uk>
+                        Christian Thaeter <ct@pipapo.org>
                         Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
@@ -21,26 +22,68 @@
 */
 
 
-#include <iostream>
+#include "include/nobugcfg.h"
+#include "include/error.hpp"
+#include "lumiera/appstate.hpp"
+#include "lumiera/option.hpp"
 
-#include "proc/lumiera.hpp"
+#include "backend/enginefacade.hpp"
+#include "backend/netnodefacade.hpp"
+#include "backend/scriptrunnerfacade.hpp"
+#include "proc/facade.hpp"
+#include "gui/guifacade.hpp"
 
-using std::cout;
-using std::endl;
-using lumiera::Appconfig;
+using util::Cmdline;
+using lumiera::Subsys;
+using lumiera::AppState;
 using lumiera::ON_GLOBAL_INIT;
-using lumiera::ON_GLOBAL_SHUTDOWN;
+
+namespace {
+  Subsys& engine  = backend::EngineFacade::getDescriptor();
+  Subsys& netNode = backend::NetNodeFacade::getDescriptor();
+  Subsys& script  = backend::ScriptRunnerFacade::getDescriptor();
+  Subsys& builder = proc::Facade::getBuilderDescriptor();
+  Subsys& session = proc::Facade::getSessionDescriptor();
+  Subsys& lumigui = gui::GuiFacade::getDescriptor();
+}
 
 
-int main (int argc, char* argv[])
+
+int
+main (int argc, const char* argv[])
 {
-  cout << "*** Lumiera NLE for Linux ***" << endl
-       << "    Version: " << Appconfig::get("version") << "\n";
+  NOTICE (lumiera, "*** Lumiera NLE for Linux ***");
   
-  Appconfig::lifecycle (ON_GLOBAL_INIT);
+  AppState& application = AppState::instance();
+  try
+    {
+      Cmdline args (argc,argv);
+      lumiera::Option options (args);
+      application.init (options);
+      
+      session.depends (builder);
+      netNode.depends (session);
+      netNode.depends (engine);
+//    lumigui.depends (session);   //////TODO commented out in order to be able to start up a dummy GuiStarterPlugin
+//    lumigui.depends (engine);
+      script.depends (session);
+      script.depends (engine);
+      
+      application.maybeStart (session);
+      application.maybeStart (netNode);
+      application.maybeStart (lumigui);
+      application.maybeStart (script);
+      
+      return application.maybeWait();
+    }
   
-  // great things are happening here....
   
-  Appconfig::lifecycle (ON_GLOBAL_SHUTDOWN);
-  return 0;
+  catch (lumiera::Error& problem)
+    {
+      return application.abort (problem);
+    }
+  catch (...)
+    {
+      return application.abort();
+    }
 }

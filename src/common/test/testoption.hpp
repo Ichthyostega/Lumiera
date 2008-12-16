@@ -24,7 +24,7 @@
 #ifndef TESTHELPER_TESTOPTION_H
 #define TESTHELPER_TESTOPTION_H
 
-#include "common/cmdline.hpp"
+#include "lib/cmdline.hpp"
 
 #include <string>
 #include <iostream>
@@ -48,7 +48,7 @@ namespace test
    * to be parsed is taken wrapped into a Cmdline
    * instance; after parsing this commandline
    * vector will contain only the remaining
-   * unrecognized parts.
+   * unrecognised parts.
    */
   class TestOption : private boost::noncopyable
     {
@@ -66,8 +66,8 @@ namespace test
     };
   
     
-  /** for outputting the help messages. Forward accummulated 
-   *  help messages from all contained option defintions */
+  /** for outputting the help messages. Forward accumulated 
+   *  help messages from all contained option definitions */
   ostream& operator<< (ostream& os, const TestOption& to);
  
   

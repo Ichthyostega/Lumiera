@@ -26,7 +26,7 @@
 
 #include <list>
 
-#include "proc/lumiera.hpp"
+#include "proc/common.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 
 

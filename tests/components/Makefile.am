@@ -27,9 +27,10 @@ test_components_LDADD =								\
 	liblumiprocmobjectsession.a						\
 	liblumiprocasset.a							\
 	liblumiprocmobject.a							\
-	liblumiera.a								\
 	liblumicommon.a								\
+	liblumieracore.a							\
 	liblumibackend.a							\
+	liblumiera.a								\
 	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt
 
 test_components_SOURCES =							\

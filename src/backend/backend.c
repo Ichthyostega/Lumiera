@@ -19,13 +19,35 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "lib/safeclib.h"
+
 #include "backend/backend.h"
+#include "lumiera/config.h"
 #include "backend/filehandlecache.h"
 #include "backend/filedescriptor.h"
+#include "backend/mmapcache.h"
+
+#include <unistd.h>
+#include <sys/resource.h>
 
 //NOBUG_DEFINE_FLAG_PARENT (backend, lumiera); TODO
 NOBUG_DEFINE_FLAG (backend);
 NOBUG_DEFINE_FLAG_PARENT (file_all, backend);
+NOBUG_DEFINE_FLAG_PARENT (filehandle, file_all);
+
+NOBUG_DEFINE_FLAG_PARENT (mmapings, mmap_all);
+
+
+
+NOBUG_DECLARE_FLAG (file);
+
+NOBUG_DECLARE_FLAG (mmap_all);
+NOBUG_DECLARE_FLAG (mmap);
+NOBUG_DECLARE_FLAG (mmapings);
+NOBUG_DECLARE_FLAG (mmapcache);
+
+
+size_t lumiera_backend_pagesize;
 
 int
 lumiera_backend_init (void)
@@ -33,13 +55,51 @@ lumiera_backend_init (void)
   NOBUG_INIT_FLAG (backend);
   NOBUG_INIT_FLAG (file_all);
   NOBUG_INIT_FLAG (file);
+  NOBUG_INIT_FLAG (filehandle);
+  NOBUG_INIT_FLAG (mmap_all);
+  NOBUG_INIT_FLAG (mmap);
+  NOBUG_INIT_FLAG (mmapings);
+  NOBUG_INIT_FLAG (mmapcache);
+
   TRACE (backend);
   lumiera_filedescriptor_registry_init ();
 
-  int max_entries = 10;         TODO("determine by sysconf (_SC_OPEN_MAX) minus some (big) safety margin "
-                                     "add some override to run tests with few filehandles");
+  lumiera_backend_pagesize = sysconf(_SC_PAGESIZE);
 
+  TODO ("add config options to override following defaults");
+
+
+  const char* filehandles = lumiera_tmpbuf_snprintf (SIZE_MAX,
+                                                     "backend.file.max_handles = %d",
+                                                     /* roughly 2/3 of all availables filehandles are managed by the backend */
+                                                     (sysconf (_SC_OPEN_MAX)-10)*2/3);
+
+  lumiera_config_setdefault (filehandles);
+
+  long long max_entries;
+  lumiera_config_number_get ("backend.file.max_handles", &max_entries);
   lumiera_filehandlecache_new (max_entries);
+
+#if SIZE_MAX <= 4294967295UL
+  lumiera_config_setdefault ("backend.mmap.as_limit = 3221225469");
+#else
+  lumiera_config_setdefault ("backend.mmap.as_limit = 211106232532992");
+#endif
+
+  struct rlimit as_rlimit;
+  getrlimit (RLIMIT_AS, &as_rlimit);
+
+  long long as_limit = (long long)as_rlimit.rlim_cur;
+  if (as_rlimit.rlim_cur == RLIM_INFINITY)
+    {
+      lumiera_config_number_get ("backend.mmap.as_limit", &as_limit);
+    }
+  else
+    {
+      INFO (backend, "address space limited to %luMiB", as_rlimit.rlim_cur/1024/1024);
+    }
+
+  lumiera_mmapcache_new (as_limit);
 
   return 0;
 }
@@ -48,6 +108,7 @@ void
 lumiera_backend_destroy (void)
 {
   TRACE (backend);
-  lumiera_filedescriptor_registry_destroy ();
+  lumiera_mmapcache_delete ();
   lumiera_filehandlecache_delete ();
+  lumiera_filedescriptor_registry_destroy ();
 }

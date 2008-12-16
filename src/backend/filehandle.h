@@ -29,12 +29,15 @@ typedef lumiera_filehandle* LumieraFilehandle;
 
 #include "backend/filedescriptor.h"
 
+NOBUG_DECLARE_FLAG (filehandle);
+
 /**
  * @file
  * Filehandles.
  * Filehandles manage the underlying POSIX filehandle for a filedescriptor.
  * Since we want to support handling of more files than POSIX filehandles are available on a common system
  * the filehandles are opened, cached and closed on demand, see 'filehandlecache'.
+ * Access to filehandles is locked from elsewhere (filedescriptor, filehandlecache)
  */
 
 
@@ -50,11 +53,21 @@ struct lumiera_filehandle_struct
 };
 
 /**
- * Allocate a new filehandle structure.
+ * Initialize filehandle structure.
+ * @param self filehandle sttructure to be initialized
+ * @param descriptor on which this filehandle will be attached
  * @return new filehandle structure
  */
 LumieraFilehandle
-lumiera_filehandle_new ();
+lumiera_filehandle_init (LumieraFilehandle self, LumieraFiledescriptor descriptor);
+
+/**
+ * Allocate a new filehandle structure.
+ * @param descriptor on which this filehandle will be attached
+ * @return new filehandle structure
+ */
+LumieraFilehandle
+lumiera_filehandle_new (LumieraFiledescriptor descriptor);
 
 
 /**
@@ -65,5 +78,9 @@ lumiera_filehandle_new ();
  */
 void*
 lumiera_filehandle_destroy_node (LList node);
+
+
+int
+lumiera_filehandle_handle (LumieraFilehandle self);
 
 #endif

@@ -29,6 +29,7 @@ typedef struct lumiera_mmap_struct lumiera_mmap;
 typedef lumiera_mmap* LumieraMMap;
 
 
+#include "backend/file.h"
 #include "backend/filedescriptor.h"
 
 
@@ -36,6 +37,7 @@ typedef lumiera_mmap* LumieraMMap;
 #include <sys/mman.h>
 
 NOBUG_DECLARE_FLAG (mmap);
+
 
 /**
  * @file
@@ -53,30 +55,43 @@ struct lumiera_mmap_struct
   /** used for the mrucache when checked in the cache OR for attaching owners when checked out **/
   llist cachenode;
 
-  /** all mmaps of a file are chained in this list, used to find ranges **/
+  /** all mmaps of a filedescriptor are chained in this list, used to find ranges **/
   llist searchnode;
 
   off_t start;
   size_t size;
   void* address;
 
-  /** array with refcounters per page **/
-  unsigned short* refmap;
+  /** accumulated references, this is 0 when checked into the cache **/
+  unsigned long refcnt;
 
-  /** 0 when this mmap is in cache, else the count of attached owners **/
-  unsigned use_cnt;
-  //RESOURCE_HANDLE (rh);
+  /** array with refcounters per chunk **/
+  unsigned short* refmap;       // TODO flexible array?
 };
 
 
 LumieraMMap
-lumiera_mmap_init (LumieraMMap self, LumieraFile file, LList acquirer, off_t start, size_t size, size_t chunksize);
+lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size);
+
 
 LumieraMMap
-lumiera_mmap_new (LumieraFile file, LList acquirer, off_t start, size_t size, size_t chunksize);
+lumiera_mmap_new (LumieraFile file, off_t start, size_t size);
+
+
+static inline void*
+lumiera_mmap_address (LumieraMMap self)
+{
+  return self->address;
+}
+
+
+void
+lumiera_mmap_delete (LumieraMMap self);
+
 
 void*
 lumiera_mmap_destroy_node (LList node);
+
 
 #endif
 /*

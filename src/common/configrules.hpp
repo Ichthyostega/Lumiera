@@ -31,7 +31,7 @@
  ** preconfigured Map.
  **
  ** Fully implementing this facility would require the participating objects to register capabilities
- ** they want to provide, together with functors carrying out the neccessary configuration steps.
+ ** they want to provide, together with functors carrying out the necessary configuration steps.
  ** All details and consequences of this approach still have to be worked out...
  **
  ** @note this is rather a scrapbook and in flux... don't take this code too literal!
@@ -79,7 +79,7 @@ namespace lumiera
     //  
     //  stream(T, mpeg) :- type(T, track), type(P, pipe), resolve(P, stream(P,mpeg)), place_to(P, T).
     //
-    // The type guard is inserted auomatically, while the predicate implementations for
+    // The type guard is inserted automatically, while the predicate implementations for
     // find/1, make/1, stream/2, and place_to/2 are to be provided by the target types.
     //
     // As a example, the goal ":-retrieve(T, stream(T,mpeg))." would search a Track object, try to
@@ -102,7 +102,7 @@ namespace lumiera
       };
       
     /**
-     * the "backside" interface towards the classes participating
+     * the "back side" interface towards the classes participating
      * in the configuration system (the config system will be
      * delivering instances of these classes for a given query). 
      * This one currently is just brainstorming. The idea is that
@@ -127,7 +127,7 @@ namespace lumiera
       };
     
     /** 
-     * the "frontside" interface: the Proc-Layer code can
+     * the "front side" interface: the Proc-Layer code can
      * use this QueryHandler to retrieve instances of the
      * type TY fulfilling the given Query. To start with,
      * we use a mock implementation. 
@@ -167,7 +167,7 @@ namespace lumiera
      * thus inheriting from the Handler classes for each type. In
      * the (future) version using YAP Prolog, this will drive the
      * generation and registration of the necessary predicate 
-     * implementations for each concrete type, using the speicalisations
+     * implementations for each concrete type, using the specialisations
      * given alongside with the types. For now it just serves to generate
      * the necessary resolve(Query<TY>) virtual functions (implemented
      * by MockConfigRules) 

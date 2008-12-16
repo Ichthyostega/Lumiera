@@ -52,7 +52,7 @@
 #include <boost/noncopyable.hpp>
 
 #include "common/multithread.hpp"
-#include "common/error.hpp"
+#include "include/error.hpp"
 #include "lib/scopedholder.hpp"
 #include "lib/scopedholdertransfer.hpp"
 

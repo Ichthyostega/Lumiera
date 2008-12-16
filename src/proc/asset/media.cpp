@@ -29,7 +29,7 @@
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"
 #include "common/util.hpp"
-#include "proc/nobugcfg.hpp"
+#include "include/nobugcfg.h"
 
 #include <boost/regex.hpp>
 #include <boost/format.hpp>

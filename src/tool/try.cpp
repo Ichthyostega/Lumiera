@@ -15,7 +15,7 @@
 
 
 #include <nobug.h>
-//#include "proc/nobugcfg.hpp"
+//#include "include/nobugcfg.h"
 
 #include <iostream>
 //#include <typeinfo>
@@ -41,7 +41,11 @@ main (int argc, char* argv[])
     NOBUG_INIT;
     
     cout <<  "\n.gulp.\n";
-    
+   
+   int * p = 0;
+
+   int oh = *p;
+
     
     return 0;
   }

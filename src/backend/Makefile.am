@@ -18,7 +18,7 @@
 liblumibackend_a_srcdir = $(top_srcdir)/src/backend
 noinst_LIBRARIES += liblumibackend.a
 
-liblumibackend_a_CPPFLAGS = $(AM_CPPFLAGS) -DLUMIERA_PLUGIN_PATH="\"$(pkglibdir)\""
+liblumibackend_a_CPPFLAGS = $(AM_CPPFLAGS)
 liblumibackend_a_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
 
 liblumibackend_a_SOURCES =					\
@@ -27,17 +27,15 @@ liblumibackend_a_SOURCES =					\
 	$(liblumibackend_a_srcdir)/file.c			\
 	$(liblumibackend_a_srcdir)/filehandle.c			\
 	$(liblumibackend_a_srcdir)/filedescriptor.c		\
+	$(liblumibackend_a_srcdir)/resourcecollector.c		\
+	$(liblumibackend_a_srcdir)/mmap.c			\
+	$(liblumibackend_a_srcdir)/mmapings.c			\
+	$(liblumibackend_a_srcdir)/mmapcache.c			\
 	$(liblumibackend_a_srcdir)/filehandlecache.c		\
-	$(liblumibackend_a_srcdir)/interface.c			\
-	$(liblumibackend_a_srcdir)/interfaceregistry.c		\
-	$(liblumibackend_a_srcdir)/plugin.c			\
-	$(liblumibackend_a_srcdir)/plugin_dynlib.c		\
-	$(liblumibackend_a_srcdir)/config.c			\
-	$(liblumibackend_a_srcdir)/config_typed.c 		\
-	$(liblumibackend_a_srcdir)/config_wordlist.c 		\
-	$(liblumibackend_a_srcdir)/configentry.c 		\
-	$(liblumibackend_a_srcdir)/configitem.c 		\
-	$(liblumibackend_a_srcdir)/config_lookup.c
+	$(liblumibackend_a_srcdir)/enginefacade.cpp		\
+	$(liblumibackend_a_srcdir)/mediaaccessfacade.cpp	\
+	$(liblumibackend_a_srcdir)/scriptrunnerfacade.cpp	\
+	$(liblumibackend_a_srcdir)/netnodefacade.cpp
 
 
 noinst_HEADERS +=						\
@@ -47,12 +45,7 @@ noinst_HEADERS +=						\
 	$(liblumibackend_a_srcdir)/filehandle.h			\
 	$(liblumibackend_a_srcdir)/filedescriptor.h		\
 	$(liblumibackend_a_srcdir)/filehandlecache.h		\
-	$(liblumibackend_a_srcdir)/interface.h			\
-	$(liblumibackend_a_srcdir)/interfaceregistry.h		\
-	$(liblumibackend_a_srcdir)/interfacedescriptor.h	\
-	$(liblumibackend_a_srcdir)/plugin.h			\
-	$(liblumibackend_a_srcdir)/config.h 			\
-	$(liblumibackend_a_srcdir)/configentry.h 		\
-	$(liblumibackend_a_srcdir)/configitem.h 		\
-	$(liblumibackend_a_srcdir)/config_lookup.h
-
+	$(liblumibackend_a_srcdir)/resourcecollector.h		\
+	$(liblumibackend_a_srcdir)/mmap.h			\
+	$(liblumibackend_a_srcdir)/mmapings.h			\
+	$(liblumibackend_a_srcdir)/mmapcache.h

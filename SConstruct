@@ -27,6 +27,7 @@ OPTIONSCACHEFILE = 'optcache'
 CUSTOPTIONSFILE  = 'custom-options'
 SRCDIR           = 'src'
 BINDIR           = 'bin'
+LIBDIR           = '.libs'
 TESTDIR          = 'tests'
 ICONDIR          = 'icons'
 VERSION          = '0.1+pre.01'
@@ -65,14 +66,17 @@ def setupBasicEnvironment():
                             ) 
     handleVerboseMessages(env)
     
-    env.Append ( CCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honor CFLAGS, only CCFLAGS 
+    env.Append ( CCCOM=' -std=gnu99') 
+    env.Append ( SHCCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honour CFLAGS, only CCFLAGS 
     env.Replace( VERSION=VERSION
                , SRCDIR=SRCDIR
                , BINDIR=BINDIR
+               , LIBDIR=LIBDIR
                , ICONDIR=ICONDIR
                , CPPPATH=["#"+SRCDIR]   # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['-DLUMIERA_VERSION='+VERSION ]     # note: it's a list to append further defines
-               , CCFLAGS='-Wall '                                       # -fdiagnostics-show-option 
+               , CCFLAGS='-Wall '                                       # -fdiagnostics-show-option
+               , CFLAGS='-std=gnu99' 
                )
     RegisterIcon_Builder(env,SVGRENDERER)
     handleNoBugSwitches(env)
@@ -87,6 +91,8 @@ def setupBasicEnvironment():
     # setup search path for Lumiera plugins
     appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR\\"'
                                    ,'LUMIERA_PLUGIN_PATH=\\"$DESTDIR/lib/lumiera\\"') 
+    appendCppDefine(env,'PKGDATADIR','LUMIERA_CONFIG_PATH=\\"$PKGLIBDIR\\"'
+                                    ,'LUMIERA_CONFIG_PATH=\\"$DESTDIR/share/lumiera\\"') 
     
     prepareOptionsHelp(opts,env)
     opts.Save(OPTIONSCACHEFILE, env)
@@ -121,10 +127,10 @@ def handleVerboseMessages(env):
     """ toggle verbose build output """
     if not env['VERBOSE']:
        # SetOption('silent', True)
-       env['CCCOMSTR'] = "  Compiling    $SOURCE"
-       env['CXXCOMSTR'] = "  Compiling++  $SOURCE"
-       env['LINKCOMSTR'] = "  Linking -->  $TARGET"
-       env['LDMODULECOMSTR'] = "  creating module [ $TARGET ]"
+       env['CCCOMSTR'] = env['SHCCCOMSTR']   = "  Compiling    $SOURCE"
+       env['CXXCOMSTR'] = env['SHCXXCOMSTR'] = "  Compiling++  $SOURCE"
+       env['LINKCOMSTR']                     = "  Linking -->  $TARGET"
+       env['LDMODULECOMSTR']                 = "  creating module [ $TARGET ]"
 
 
 
@@ -139,8 +145,8 @@ def defineCmdlineOptions():
         ('ARCHFLAGS', 'Set architecture-specific compilation flags (passed literally to gcc)','')
         ,EnumOption('BUILDLEVEL', 'NoBug build level for debugging', 'ALPHA',
                     allowed_values=('ALPHA', 'BETA', 'RELEASE'))
-        ,BoolOption('DEBUG', 'Build with debugging information and no optimizations', False)
-        ,BoolOption('OPTIMIZE', 'Build with strong optimization (-O3)', False)
+        ,BoolOption('DEBUG', 'Build with debugging information and no optimisations', False)
+        ,BoolOption('OPTIMIZE', 'Build with strong optimisation (-O3)', False)
         ,BoolOption('VALGRIND', 'Run Testsuite under valgrind control', True)
         ,BoolOption('VERBOSE',  'Print full build commands', False)
         ,('TESTSUITES', 'Run only Testsuites matching the given pattern', '')
@@ -149,8 +155,9 @@ def defineCmdlineOptions():
 #                   allowed_values=('auto', 'i386', 'i686', 'x86_64' ), ignorecase=2)
         ,PathOption('DESTDIR', 'Installation dir prefix', '/usr/local')
         ,PathOption('PKGLIBDIR', 'Installation dir for plugins, defaults to DESTDIR/lib/lumiera', '',PathOption.PathAccept)
+        ,PathOption('PKGDATADIR', 'Installation dir for default config, usually DESTDIR/share/lumiera', '',PathOption.PathAccept)
         ,PathOption('SRCTAR', 'Create source tarball prior to compiling', '..', PathOption.PathAccept)
-        ,PathOption('DOCTAR', 'Create tarball with dev documentaionl', '..', PathOption.PathAccept)
+        ,PathOption('DOCTAR', 'Create tarball with developer documentation', '..', PathOption.PathAccept)
      )
     
     return opts
@@ -306,18 +313,25 @@ def defineBuildTargets(env, artifacts):
     
     objback =   srcSubtree(env,'$SRCDIR/backend') 
     objproc =   srcSubtree(env,'$SRCDIR/proc')
-    objlib  = ( srcSubtree(env,'$SRCDIR/common')
+    objlib  = ( srcSubtree(env,'$SRCDIR/lumiera')
+              + srcSubtree(env,'$SRCDIR/common')
               + srcSubtree(env,'$SRCDIR/lib')
               )
-    objplug = srcSubtree(env,'$SRCDIR/plugin', isShared=True)
-    core  = ( env.StaticLibrary('$BINDIR/lumiback.la', objback)
-            + env.StaticLibrary('$BINDIR/lumiproc.la', objproc)
-            + env.StaticLibrary('$BINDIR/lumiera.la',  objlib)
+    core  = ( env.SharedLibrary('$LIBDIR/lumiback', objback,  SHLIBPREFIX='')
+            + env.SharedLibrary('$LIBDIR/lumiproc', objproc,  SHLIBPREFIX='')
+            + env.SharedLibrary('$LIBDIR/lumiera',  objlib,   SHLIBPREFIX='')
             )
     
+    artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/main.cpp'], LIBS=core)
+    artifacts['corelib'] = core
     
-    artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/main.cpp']+ core )
-    artifacts['plugins'] = env.LoadableModule('$BINDIR/lumiera-plugin', objplug)
+    # temporary solution to build the GuiStarterPlugin (TODO: implement plugin building as discussed on November meeting)
+    envplug = env.Clone()
+    envplug.Append(CPPPATH='$SRCDIR/plugin', CPPDEFINES='LUMIERA_PLUGIN')
+    guistarterplugin = env.LoadableModule('#$BINDIR/guistart', 
+                                          envplug.SharedObject('$SRCDIR/guistart.cpp'), LIBS=core,  SHLIBPREFIX='')
+    
+    artifacts['plugins'] = guistarterplugin 
     
     # the Lumiera GTK GUI
     envgtk  = env.Clone().mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','librsvg-2.0','xv','xext','sm'])
@@ -366,6 +380,7 @@ def defineInstallTargets(env, artifacts):
     """ define some artifacts to be installed into target locations.
     """
     env.Install(dir = '$DESTDIR/bin', source=artifacts['lumiera'])
+    env.Install(dir = '$DESTDIR/lib', source=artifacts['corelib'])
     env.Install(dir = '$DESTDIR/lib', source=artifacts['plugins'])
     env.Install(dir = '$DESTDIR/bin', source=artifacts['tools'])
     

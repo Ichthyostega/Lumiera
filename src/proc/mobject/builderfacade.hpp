@@ -24,19 +24,19 @@
 #ifndef MOBJECT_BUILDERFACADE_H
 #define MOBJECT_BUILDERFACADE_H
 
+#include "proc/mobject/builder/common.hpp"
 #include "proc/engine/renderengine.hpp"
 
 
 
-namespace mobject
-  {
+namespace mobject {
 
 
   /**
    * Provides unified access to the builder functionality.
    * While individual components of the builder subsystem may be called
-   * if necessary or suitable, it is usually better to do all extern invocations
-   * via the high level methods of this Facade.
+   * if necessary or suitable, it is usually better to do all external
+   * invocations via the high level methods of this Facade.
    */
   class BuilderFacade
     {

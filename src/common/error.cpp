@@ -22,7 +22,7 @@
 
 
 
-#include "common/error.hpp"
+#include "include/error.hpp"
 #include "common/util.hpp"
 
 #include <exception>
@@ -33,21 +33,25 @@ using util::isnil;
 using std::exception;
 
 
-namespace lumiera
-  {
-
-  namespace error
-    {
+namespace lumiera {
+  namespace error {
     
     /** the message shown to the user per default
      *  if an exception reaches one of the top-level
      *  catch clauses.
-     *  @todo to be localized
+     *  @todo to be localised
      */
-    inline const string default_usermsg (Error* exception_obj)  throw() 
+    inline const string
+    default_usermsg (Error* exception_obj)  throw() 
     {
       return string("Sorry, Lumiera encountered an internal error. (")
            + typeid(*exception_obj).name() + ")";
+    }
+    
+    inline const char*
+    default_or_given (const char* id)
+    {
+      return id? id : LUMIERA_ERROR_STATE;
     }
     
     
@@ -55,7 +59,7 @@ namespace lumiera
     LUMIERA_ERROR_DEFINE (LOGIC    , "internal logic broken");   
     LUMIERA_ERROR_DEFINE (FATAL    , "floundered");      
     LUMIERA_ERROR_DEFINE (CONFIG   , "misconfiguration"); 
-    LUMIERA_ERROR_DEFINE (STATE    , "unforseen state"); 
+    LUMIERA_ERROR_DEFINE (STATE    , "unforeseen state"); 
     LUMIERA_ERROR_DEFINE (INVALID  , "invalid input or parameters"); 
     LUMIERA_ERROR_DEFINE (EXTERNAL , "failure in external service"); 
     LUMIERA_ERROR_DEFINE (ASSERTION, "assertion failure");
@@ -70,7 +74,7 @@ namespace lumiera
   /** @note we set the C-style errorstate as a side effect */
   Error::Error (string description, const char* id) throw()
     : std::exception (),
-      id_ (id),
+      id_ (error::default_or_given (id)),
       msg_ (error::default_usermsg (this)),
       desc_ (description),
       cause_ ("")
@@ -82,7 +86,7 @@ namespace lumiera
   Error::Error (std::exception& cause, 
                 string description, const char* id) throw()
     : std::exception (),
-      id_ (id),
+      id_ (error::default_or_given (id)),
       msg_ (error::default_usermsg (this)),
       desc_ (description),
       cause_ (extractCauseMsg(cause))
@@ -99,8 +103,8 @@ namespace lumiera
       desc_ (ref.desc_),
       cause_ (extractCauseMsg(ref))
   { }
-
-
+  
+  
   
   /** Description of the problem, including the internal char constant
    *  in accordance to Lumiera's error identification scheme.
@@ -119,7 +123,7 @@ namespace lumiera
     return what_.c_str(); 
   }
   
-
+  
   /** @internal get at the description message of the 
    *  first exception encountered in a chain of exceptions
    */
@@ -138,29 +142,8 @@ namespace lumiera
     // unknown other exception type
     return cause.what ();
   }
-
   
-/* -- originally, I wanted to chain the exception objects themselfs.
-      but this doesn't work; we'd need to clone the "cause" error object,
-      because it can be destroyed when leaving the original
-      handler by throwing a new exception.
-      Anyways, not needed at the moment; maybe later? 8/2007  
   
-  const exception&
-  Error::rootCause () const throw()
-    {
-      const exception * root(this);
-      if (this->cause)
-        if (Error* err = dynamic_cast<Error*> (this->cause))
-          root = &err->rootCause ();
-        else
-          root = this->cause;
-      
-      ENSURE (root);
-      ENSURE (root!=this || !cause); 
-      return *root;
-    }
-*/  
   
   
   
@@ -182,7 +165,7 @@ namespace lumiera
       
       std::terminate();
     }
-
+    
     void assertion_terminate (const string& location)
     {
       throw Fatal (location, LUMIERA_ERROR_ASSERTION)
@@ -195,6 +178,11 @@ namespace lumiera
     {
       std::set_unexpected (lumiera_unexpectedException);      
     }
+    
+    namespace {
+      LifecycleHook schedule_ (ON_BASIC_INIT, &install_unexpectedException_handler);         
+    }
+    
     
   } // namespace error
   

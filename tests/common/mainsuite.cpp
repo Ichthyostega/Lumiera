@@ -1,5 +1,5 @@
 /*
-  mainsuite.cpp  -  "the" Lumiera self test suite
+  mainsuite.cpp  -  execute a suite of test objects, possibly filtered by category
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -23,15 +23,16 @@
 
 #include "common/test/suite.hpp"
 #include "common/test/testoption.hpp"
-#include "lib/appconfig.hpp"
+#include "lumiera/appstate.hpp"
+#include "include/lifecycle.h"
 
-using lumiera::Appconfig;
+using lumiera::AppState;
 using lumiera::ON_GLOBAL_INIT;
 using lumiera::ON_GLOBAL_SHUTDOWN;
 
 
 /** run all tests or any single test specified in the first
- *  cmd line argument.
+ *  command line argument.
  *  Note: to ease debugging, we don't catch any exceptions. 
  */
 int main (int argc, const char* argv[])
@@ -39,13 +40,13 @@ int main (int argc, const char* argv[])
   util::Cmdline args (argc,argv);
   test::TestOption optparser (args);
   test::Suite suite (optparser.getTestgroup());
-  Appconfig::lifecycle(ON_GLOBAL_INIT);
+  AppState::lifecycle(ON_GLOBAL_INIT);
   
   if (optparser.getDescribe())
     suite.describe();
   else
     suite.run (args);
 
-  Appconfig::lifecycle(ON_GLOBAL_SHUTDOWN);
+  AppState::lifecycle(ON_GLOBAL_SHUTDOWN);
   return 0;
 }

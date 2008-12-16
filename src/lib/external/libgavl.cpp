@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "proc/lumiera.hpp"
+#include "proc/common.hpp"
 #include "lib/external/libgavl.hpp"
 #include "proc/control/stypemanager.hpp"
 

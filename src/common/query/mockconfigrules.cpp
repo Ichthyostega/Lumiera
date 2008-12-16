@@ -28,7 +28,7 @@
 #include "proc/asset/pipe.hpp"
 
 
-#include "proc/nobugcfg.hpp"
+#include "include/nobugcfg.h"
 #include "common/util.hpp"
 
 using util::isnil;
@@ -88,7 +88,7 @@ namespace lumiera
     void
     MockTable::fill_mock_table ()
     {
-      INFO (config, "creating mock answers for some config queries...");
+      INFO (config, "creating mock answers for some hard wired config queries...");
       isInit_ = true; // allow re-entrance
       
       typedef const ProcPatt cPP;

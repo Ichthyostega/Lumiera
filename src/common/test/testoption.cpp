@@ -1,5 +1,5 @@
 /*
-  Suite  -  handle cmdline for invoking Testsuite
+  TestOption  -  handle cmdline for invoking Testsuite
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -24,7 +24,7 @@
 #include "common/test/testoption.hpp"
 #include "common/test/suite.hpp"
 
-#include "common/error.hpp"
+#include "include/error.hpp"
 
 
 
@@ -40,7 +40,7 @@ namespace test
   
   
   /** set up an options parser to use the current commandline.
-   *  reconizes the following options
+   *  Recognises the following options
    *  \code
    *  --help
    *  --group <groupID>
@@ -56,7 +56,7 @@ namespace test
         ("group,g",     op::value<string>()->default_value(Suite::ALLGROUP),
                         "the group (selection) of testcases to execute")
         ("describe",    op::bool_switch(),
-                        "ennumerate all testcases in this Suite in a format usable with ./test.sh.")
+                        "enumerate all testcases in this Suite in a format usable with ./test.sh.")
         ("id",          op::value<VectS>(),
                         "an individual testcase to be called.\nIf not specified, run all.")
         ;
@@ -75,7 +75,7 @@ namespace test
       op::store (parsed, parameters);
       op::notify(parameters);   
       
-      // remove all recognized options from original cmdline vector
+      // remove all recognised options from original cmdline vector
       cmdline = op::collect_unrecognized(parsed.options, op::include_positional);
       
       if (parameters.count("help"))

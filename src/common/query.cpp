@@ -23,7 +23,7 @@
 
 #include "common/query.hpp"
 #include "common/util.hpp"
-#include "proc/nobugcfg.hpp"
+#include "include/nobugcfg.h"
 
 #include <boost/algorithm/string.hpp>
 #include <boost/regex.hpp>

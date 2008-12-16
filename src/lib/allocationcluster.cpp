@@ -22,7 +22,7 @@
 
 
 #include "lib/allocationcluster.hpp"
-#include "common/error.hpp"
+#include "include/error.hpp"
 #include "common/util.hpp"
 
 using util::isnil;
@@ -163,7 +163,7 @@ namespace lib {
    */
   AllocationCluster::AllocationCluster()
   {
-    TRACE (buildermem, "new AllocationCluster");
+    TRACE (memory, "new AllocationCluster");
   }
   
   
@@ -177,7 +177,7 @@ namespace lib {
       {
         Thread::Lock<AllocationCluster> guard   SIDEEFFECT
         
-        TRACE (buildermem, "shutting down AllocationCluster");
+        TRACE (memory, "shutting down AllocationCluster");
         for (size_t i = typeHandlers_.size(); 0 < i; --i)
           if (handler(i))
             handler(i)->purge();
@@ -187,7 +187,7 @@ namespace lib {
       }
     catch (lumiera::Error & ex)
       {
-        WARN (oper, "Exception while closing AllocationCluster: %s",ex.what());
+        WARN (operate, "Exception while closing AllocationCluster: %s",ex.what());
       }
     catch (...)
       {

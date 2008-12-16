@@ -25,7 +25,7 @@
 #ifndef LUMIERA_VISITORDISPATCHER_H
 #define LUMIERA_VISITORDISPATCHER_H
 
-#include "common/error.hpp"
+#include "include/error.hpp"
 #include "common/util.hpp"
 #include "common/singleton.hpp"
 #include "common/multithread.hpp"

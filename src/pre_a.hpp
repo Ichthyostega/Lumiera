@@ -42,7 +42,7 @@
 #include <boost/format.hpp>
 #include <boost/bind.hpp>
 
-#include "proc/lumiera.hpp"
+#include "proc/common.hpp"
 #include "proc/asset.hpp"
 
 

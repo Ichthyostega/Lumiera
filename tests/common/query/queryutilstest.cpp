@@ -24,7 +24,7 @@
 #include "common/test/run.hpp"
 #include "common/util.hpp"
 
-#include "common/cmdline.hpp"
+#include "lib/cmdline.hpp"
 #include "common/query.hpp"
 #include "query/querydiagnostics.hpp"
 

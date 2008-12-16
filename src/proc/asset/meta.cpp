@@ -24,7 +24,7 @@
 #include "proc/assetmanager.hpp"
 #include "proc/asset/meta.hpp"
 #include "common/util.hpp"
-#include "proc/nobugcfg.hpp"
+#include "include/nobugcfg.h"
 
 
 namespace asset

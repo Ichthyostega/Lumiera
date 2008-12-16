@@ -22,7 +22,7 @@
 
 
 #include "proc/mobject/session/fixture.hpp"
-#include "proc/nobugcfg.hpp"
+#include "include/nobugcfg.h"
 
 namespace mobject
   {

@@ -23,7 +23,7 @@
 
 #include "proc/mobject/session/sessionimpl.hpp"
 #include "proc/mobject/placement.hpp"
-#include "common/error.hpp"
+#include "include/error.hpp"
 
 namespace mobject
   {

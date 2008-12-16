@@ -30,6 +30,7 @@
 NOBUG_DECLARE_FLAG (file);
 
 LUMIERA_ERROR_DECLARE(FILE_CHANGED);
+LUMIERA_ERROR_DECLARE(FILE_NOCHUNKSIZE);
 
 /**
  * @file
@@ -47,9 +48,17 @@ typedef struct lumiera_file_struct lumiera_file;
 typedef lumiera_file* LumieraFile;
 
 
-#include "backend/filehandle.h"
 #include "backend/filedescriptor.h"
+#include "backend/filehandle.h"
+#include "backend/mmapings.h"
 
+/**
+ * File modes:
+ * LUMIERA_FILE_READONLY        existing file for reading only
+ * LUMIERA_FILE_READWRITE       existing file for reading and writing
+ * LUMIERA_FILE_CREATE          non-existing file for reading and writing
+ * LUMIERA_FILE_RECREATE        remove and recreated existing, file for reading and writing
+ */
 #define LUMIERA_FILE_READONLY (O_RDONLY | O_LARGEFILE | O_NOATIME)
 #define LUMIERA_FILE_READWRITE (O_RDWR | O_LARGEFILE | O_NOATIME)
 #define LUMIERA_FILE_CREATE (O_RDWR | O_LARGEFILE | O_NOATIME | O_CREAT | O_EXCL)
@@ -60,37 +69,45 @@ typedef lumiera_file* LumieraFile;
 
 struct lumiera_file_struct
 {
+  /* all files of one descriptor */
+  llist node;
   char* name;
   LumieraFiledescriptor descriptor;
 };
+
 
 /**
  * Initialize a file structure.
  * @param self pointer to the file structure
  * @param name filename
  * @param flags open flags
- * @return self
+ * @return self or NULL in case of an error
  */
 LumieraFile
 lumiera_file_init (LumieraFile self, const char* name, int flags);
+
 
 /**
  * Destroy a file structure.
  * frees all associated resources, releases the filedescriptor etc.
  * @param self file structure to be destroyed
+ * @param chunksize allocation/mmaping granularity, must be 2's exponent of pagesize
+ *        only used at the first access to a file and ignored for subsequnet accesses
  * @return self
  */
 LumieraFile
 lumiera_file_destroy (LumieraFile self);
 
+
 /**
  * Allocate a new file structure.
  * @param name filename
  * @param flags open flags
- * @return new file structure
+ * @return new file structure or NULL in case of an error
  */
 LumieraFile
 lumiera_file_new (const char* name, int flags);
+
 
 /**
  * Frees a file structure.
@@ -98,6 +115,7 @@ lumiera_file_new (const char* name, int flags);
  */
 void
 lumiera_file_delete (LumieraFile self);
+
 
 /**
  * Get a POSIX filehandle for a file.
@@ -112,12 +130,41 @@ lumiera_file_delete (LumieraFile self);
 int
 lumiera_file_handle_acquire (LumieraFile self);
 
+
 /**
  * Put filehandle back into cache aging.
  * @param self file which handle to be released
  */
 void
 lumiera_file_handle_release (LumieraFile self);
+
+
+/**
+ * Query the underlying mmapings object from a file
+ * The MMapings only exists after a chunksize got set with lumiera_file_chunksize_set()
+ * @param self the file to query
+ * @return Handle to the MMapings object or NULL on error (setting the error state)
+ */
+LumieraMMapings
+lumiera_file_mmapings (LumieraFile self);
+
+
+/**
+ * Set the chunksize for mapping operations
+ * @param chunksize allocation/mmaping granularity, must be 2's exponent of pagesize
+ *        only used at the first access to a file and ignored for subsequent accesses
+ * @return the effective chunksize used for the file
+ */
+size_t
+lumiera_file_chunksize_set (LumieraFile self, size_t chunksize);
+
+
+/**
+ * Get the chunksize for mapping operations
+ * @return the effective chunksize used for the file
+ */
+size_t
+lumiera_file_chunksize_get (LumieraFile self);
 
 #endif
 

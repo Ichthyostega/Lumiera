@@ -22,7 +22,7 @@
 
 
 #include "common/test/run.hpp"
-#include "common/error.hpp"
+#include "include/error.hpp"
 
 #include "proc/engine/procnode.hpp"
 #include "proc/engine/bufftable.hpp"

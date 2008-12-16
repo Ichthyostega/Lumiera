@@ -22,7 +22,7 @@
 
 
 /** @file sessmanagerimpl.cpp
- ** Implemention of the Session management functions.
+ ** Implementation of the Session management functions.
  ** The Class SessManager is declared alongside with mobject::Session,
  ** because it serves as smart ptr-to-Impl at the same time. Effectively,
  ** the session manager owns the current session object and only grants
@@ -40,16 +40,14 @@
 #include "proc/mobject/session/sessionimpl.hpp"
 #include "proc/mobject/session/defsmanager.hpp"
 //#include "proc/mobject/session/defsregistry.hpp"
-#include "common/error.hpp"
+#include "include/error.hpp"
 
 using boost::scoped_ptr;
 
 
 
-namespace mobject
-  {
-  namespace session
-    {
+namespace mobject {
+  namespace session {
     
     LUMIERA_ERROR_DEFINE (CREATE_SESSION, "unable to create basic session");
     
@@ -71,8 +69,8 @@ namespace mobject
           }
         catch (...)
           {
-            ERROR (oper, "Unrecoverable Failure while creating the empty default session.");
-            throw lumiera::error::Fatal ( "Failure while creating the basic session object. Sysstem halted." 
+            ERROR (operate, "Unrecoverable Failure while creating the empty default session.");
+            throw lumiera::error::Fatal ( "Failure while creating the basic session object. System halted." 
                                         , LUMIERA_ERROR_CREATE_SESSION );
           }
 
@@ -86,7 +84,7 @@ namespace mobject
      *  Session manger instance is created. It can be used to load an
      *  existing session; otherwise an empty default Session an a
      *  Defaults manager (Config Query system) is created at first
-     *  \link #operator-> access \endlink to the sesion object.
+     *  \link #operator-> access \endlink to the session object.
      */
     SessManagerImpl::SessManagerImpl ()  throw()
       : pDefs_ (0),
@@ -105,7 +103,7 @@ namespace mobject
 
 
     /** @note this operation is atomic and either succeeds or
-     *        failes completely, in which case the current session
+     *        fails completely, in which case the current session
      *        remains unaltered.
      *  @todo for this to work, we need to change the implementation of
      *        AssetManager so support this kind of transactional switch!

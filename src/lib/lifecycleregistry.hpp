@@ -23,45 +23,43 @@
 
 /** @file lifecycleregistry.hpp
  ** Helper for registering lifecycle event callbacks, which are
- ** provided as a global service by lumiera::Appconfig. This service
- ** allows to enroll functions under a given label and then to call
+ ** provided as a global service by lumiera::AppState. This service
+ ** allows to enrol functions under a given label and then to call
  ** all those registered functions. 
  ** @note this is in fact an event mechanism, and if we start using
- ** more than just this basic functionallity, we should switch to
+ ** more than just this basic functionality, we should switch to
  ** boost::signals. (which has the downside of being an binary
  ** dependency).
  **
- ** @see appconfig.hpp
+ ** @see appstate.hpp
  */
 
 
-#ifndef LUMIERA_LIFECYCLE_H
-#define LUMIERA_LIFECYCLE_H
+#ifndef LUMIERA_LIFECYCLEREGISTRY_H
+#define LUMIERA_LIFECYCLEREGISTRY_H
 
 #include <map>
 #include <set>
 #include <string>
-#include <boost/function.hpp>
+#include <tr1/functional>
 #include <boost/noncopyable.hpp>
 
 #include "common/util.hpp"
 
 
-namespace lumiera
-  {
+namespace lumiera {
+  
   using boost::noncopyable;
-  using boost::function;
+  using std::tr1::function;
   using util::contains;
   using std::string;
 
-  typedef const char * const Symbol;  //TODO define a real Symbol class, i.e. same literal string==same pointer,
-                                      //     so we don't have to store string keys in the map...
 
   
   /**
-   * Registry of callback functions accessable by a label (ID)
+   * Registry of callback functions accessible by a label (ID)
    * provided at registration. Registered functions will be added
-   * to a list, which can be triggered via label. Used by Appconfig
+   * to a list, which can be triggered via label. Used by AppState
    * to implement the lumiera lifecycle (init, shutdown) hooks.
    */
   class LifecycleRegistry
@@ -73,6 +71,7 @@ namespace lumiera
       typedef Callbacks::iterator Iter;
       
       
+      /** @note only one copy of each distinct callback remembered */ 
       bool enroll (const string label, Hook toCall)
         {
           return table_[label]
@@ -94,7 +93,7 @@ namespace lumiera
       std::map<const string, Callbacks> table_;
       
       LifecycleRegistry ()  {}
-      friend class Appconfig;
+      friend class AppState;
       
     };
 

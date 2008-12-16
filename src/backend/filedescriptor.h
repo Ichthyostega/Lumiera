@@ -24,6 +24,7 @@
 
 #include "lib/mutex.h"
 #include "lib/psplay.h"
+#include "lib/llist.h"
 
 
 #include <sys/types.h>
@@ -36,6 +37,7 @@ typedef lumiera_filedescriptor* LumieraFiledescriptor;
 
 #include "backend/filehandle.h"
 #include "backend/file.h"
+#include "backend/mmapings.h"
 
 /**
  * @file
@@ -43,20 +45,34 @@ typedef lumiera_filedescriptor* LumieraFiledescriptor;
  * Filedescriptors are the underlying working horse in accessing files.
  * All information associated with managing a file is kept here.
  */
-
-
-
 struct lumiera_filedescriptor_struct
 {
-  psplaynode node;                      /* node for the lookup tree */
-  struct stat stat;                     /* create after first open, maintained metadata */
-  int flags;                            /* open flags, must be masked for reopen */
-  lumiera_mutex lock;                   /* locks operations on this file descriptor */
-  unsigned refcount;                    /* reference counter, all users sans registry */
+  /** node for the lookup tree */
+  psplaynode node;
 
+  /** create after first open, maintained metadata */
+  struct stat stat;
+
+  /**
+   * files which are written are rounded up to the next chunk boundary
+   * by the mmaping backend and will be ftruncated to the realsize on close.
+   */
+  off_t realsize;
+
+  /** open flags, must be masked for reopen */
+  int flags;
+
+  /** locks operations on this file descriptor */
+  lumiera_mutex lock;
+
+  /** Associated posix filehandle */
   LumieraFilehandle handle;
-  //LumieraFileMap mappings;
-  //LumieraWriteBuffer writebuffer;
+
+  /** established memory mappings */
+  LumieraMMapings mmapings;
+
+  /** list of all attached 'file' structures, that are the names of the files */
+  llist files;
 };
 
 /**
@@ -83,16 +99,31 @@ lumiera_filedescriptor_registry_destroy (void);
  * @return descriptor on success or NULL on error
  */
 LumieraFiledescriptor
-lumiera_filedescriptor_acquire (const char* name, int flags);
+lumiera_filedescriptor_acquire (const char* name, int flags, LList filenode);
 
 
 /**
  * Release a filedescriptor.
  * @param self filedescriptor to be released
+ * @param file the file struct which initiated the release
  */
 void
-lumiera_filedescriptor_release (LumieraFiledescriptor self);
+lumiera_filedescriptor_release (LumieraFiledescriptor self, const char* name, LList filenode);
 
+int
+lumiera_filedescriptor_handle_acquire (LumieraFiledescriptor self);
+
+void
+lumiera_filedescriptor_handle_release (LumieraFiledescriptor self);
+
+const char*
+lumiera_filedescriptor_name (LumieraFiledescriptor self);
+
+int
+lumiera_filedescriptor_flags (LumieraFiledescriptor self);
+
+int
+lumiera_filedescriptor_samestat (LumieraFiledescriptor self, struct stat* stat);
 
 /**
  * Allocate a new filedescriptor cloned from a template
@@ -108,6 +139,6 @@ lumiera_filedescriptor_new (LumieraFiledescriptor template);
  * @param self the filedescriptor to be deleted
  */
 void
-lumiera_filedescriptor_delete (LumieraFiledescriptor self);
+lumiera_filedescriptor_delete (LumieraFiledescriptor self, const char* name);
 
 #endif

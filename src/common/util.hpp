@@ -31,10 +31,10 @@
 
 
 
-namespace util
-  {
+namespace util {
+  
   using std::string;
-
+  
   
   template <class NUM>
   inline int
@@ -43,7 +43,7 @@ namespace util
     return (n==0)? 0 :((n<0)? -1:+1 );
   }
   
-
+  
   /** a family of util functions providing a "no value whatsoever" test.
       Works on strings and all STL containers, includes NULL test for pointers */
   template <class CONT>
@@ -65,7 +65,7 @@ namespace util
   {
     return !pCStr || 0 == std::strlen(pCStr);
   }
-
+  
   
   /** cut a numeric value to be >=0 */
   template <typename NUM>
@@ -100,7 +100,7 @@ namespace util
   }
   
   /** shortcut for brute-force containment test
-   *  in any sequencial container */
+   *  in any sequential container */
   template <typename SEQ>
   inline bool 
   contains (SEQ& cont, typename SEQ::const_reference val)
@@ -112,7 +112,7 @@ namespace util
   }
   
   /** shortcut for removing all copies of an Element
-   *  in any sequencial collection */
+   *  in any sequential collection */
   template <typename SEQ>
   inline typename SEQ::iterator 
   removeall (SEQ& coll, typename SEQ::value_type& val)
@@ -187,7 +187,7 @@ namespace util
   
   /** produce an identifier based on the given string.
    *  remove non-standard-chars, reduce sequences of punctuation 
-   *  and whitespace to single underscores. The sanitized string
+   *  and whitespace to single underscores. The sanitised string
    *  will start with an alphanumeric character.
    * 
    * @par Example Conversions
@@ -215,7 +215,7 @@ namespace util
   {
     return org.c_str();
   }
-
+  
   
 } // namespace util
 
@@ -223,7 +223,7 @@ namespace util
 
  /* === some common macro definitions === */
 
-/** supress "warning: unused variable" on vars, which are
+/** suppress "warning: unused variable" on vars, which are
  *  introduced into a scope because of some sideeffect, i.e. Locking
  */
 #define SIDEEFFECT __attribute__ ((unused));

@@ -24,23 +24,30 @@
 
 #include "backend/file.h"
 #include "backend/filehandlecache.h"
-#include "backend/filedescriptor.h"
 
 #include <limits.h>
 #include <unistd.h>
 
 NOBUG_DEFINE_FLAG_PARENT (file, file_all);
 
-LUMIERA_ERROR_DEFINE(FILE_CHANGED, "File changed unexpected");
+LUMIERA_ERROR_DEFINE (FILE_CHANGED, "File changed unexpected");
+LUMIERA_ERROR_DEFINE (FILE_NOCHUNKSIZE, "Chunksize not set");
 
 
 LumieraFile
 lumiera_file_init (LumieraFile self, const char* name, int flags)
 {
   TRACE (file);
-  if (!(self->descriptor = lumiera_filedescriptor_acquire (name, flags)))
-    return NULL;
-  self->name = lumiera_strndup (name, PATH_MAX);
+
+  if (self)
+    {
+      llist_init (&self->node);
+
+      if (!(self->descriptor = lumiera_filedescriptor_acquire (name, flags, &self->node)))
+        return NULL;
+
+      self->name = lumiera_strndup (name, PATH_MAX);
+    }
 
   return self;
 }
@@ -49,7 +56,8 @@ LumieraFile
 lumiera_file_destroy (LumieraFile self)
 {
   TRACE (file);
-  lumiera_filedescriptor_release (self->descriptor);
+
+  lumiera_filedescriptor_release (self->descriptor, self->name, &self->node);
   lumiera_free (self->name);
   return self;
 }
@@ -60,7 +68,13 @@ lumiera_file_new (const char* name, int flags)
 {
   TRACE (file);
   LumieraFile self = lumiera_malloc (sizeof (lumiera_file));
-  return lumiera_file_init (self, name, flags);
+  if (!lumiera_file_init (self, name, flags))
+    {
+      lumiera_free (self);
+      self = NULL;
+    }
+
+  return self;
 }
 
 void
@@ -79,42 +93,7 @@ lumiera_file_handle_acquire (LumieraFile self)
   REQUIRE (self->descriptor);
   REQUIRE (lumiera_fhcache);
 
-  LUMIERA_MUTEX_SECTION (file, &self->descriptor->lock)
-    {
-      if (!self->descriptor->handle)
-        /* no handle yet, get a new one */
-        lumiera_filehandlecache_handle_acquire (lumiera_fhcache, self->descriptor);
-      else
-        lumiera_filehandlecache_checkout (lumiera_fhcache, self->descriptor->handle);
-
-      if (self->descriptor->handle->fd == -1)
-        {
-          int fd;
-          fd = open (self->name, self->descriptor->flags & LUMIERA_FILE_MASK);
-          if (fd == -1)
-            {
-              LUMIERA_ERROR_SET (file, ERRNO);
-            }
-          else
-            {
-              struct stat st;
-              if (fstat (fd, &st) == -1)
-                {
-                  close (fd);
-                  LUMIERA_ERROR_SET (file, ERRNO);
-                }
-              else if (self->descriptor->stat.st_dev != st.st_dev || self->descriptor->stat.st_ino != st.st_ino)
-                {
-                  close (fd);
-                  /* Woops this is not the file we expected to use */
-                  LUMIERA_ERROR_SET (file, FILE_CHANGED);
-                }
-            }
-          self->descriptor->handle->fd = fd;
-        }
-    }
-
-  return self->descriptor->handle->fd;
+  return lumiera_filedescriptor_handle_acquire (self->descriptor);
 }
 
 
@@ -122,9 +101,36 @@ void
 lumiera_file_handle_release (LumieraFile self)
 {
   TRACE (file);
+  REQUIRE (self);
+  REQUIRE (self->descriptor);
+  REQUIRE (lumiera_fhcache);
 
-  LUMIERA_MUTEX_SECTION (file, &self->descriptor->lock)
-    {
-      lumiera_filehandlecache_checkin (lumiera_fhcache, self->descriptor->handle);
-    }
+  return lumiera_filedescriptor_handle_release (self->descriptor);
+}
+
+
+size_t
+lumiera_file_chunksize_set (LumieraFile self, size_t chunksize)
+{
+  if (chunksize && !self->descriptor->mmapings)
+    self->descriptor->mmapings = lumiera_mmapings_new (self, chunksize);
+
+  return self->descriptor->mmapings->chunksize;
+}
+
+
+size_t
+lumiera_file_chunksize_get (LumieraFile self)
+{
+  return self->descriptor->mmapings->chunksize;
+}
+
+
+LumieraMMapings
+lumiera_file_mmapings (LumieraFile self)
+{
+  if (!self->descriptor->mmapings)
+    LUMIERA_ERROR_SET (file, FILE_NOCHUNKSIZE);
+
+  return self->descriptor->mmapings;
 }

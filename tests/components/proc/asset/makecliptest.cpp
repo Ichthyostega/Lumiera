@@ -35,11 +35,10 @@ using std::string;
 
 using std::tr1::static_pointer_cast; //TODO only temporarily;
 
-namespace asset
-  {
-  namespace test
-    {
+namespace asset {
+  namespace test {
     
+    using mobject::NOBUG_FLAG(mobjectmem);
     
     
     

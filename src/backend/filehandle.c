@@ -28,20 +28,26 @@
 
 #include <unistd.h>
 
-NOBUG_DEFINE_FLAG_PARENT (filehandle, file_all);
+LumieraFilehandle
+lumiera_filehandle_init (LumieraFilehandle self, LumieraFiledescriptor desc)
+{
+  TRACE (filehandle, "%p", self);
+  if (self)
+    {
+      llist_init (&self->cachenode);
+      self->fd = -1;
+      self->use_cnt = 1;
+      self->descriptor = desc;
+    }
+  return self;
+}
+
 
 LumieraFilehandle
-lumiera_filehandle_new ()
+lumiera_filehandle_new (LumieraFiledescriptor desc)
 {
-  LumieraFilehandle self = lumiera_malloc (sizeof (lumiera_filehandle));
-  TRACE (filehandle, "%p", self);
-
-  llist_init (&self->cachenode);
-  self->fd = -1;
-  self->use_cnt = 1;
-  self->descriptor = NULL;
-
-  return self;
+  LumieraFilehandle self = lumiera_malloc (sizeof (*self));
+  return lumiera_filehandle_init (self, desc);
 }
 
 
@@ -55,8 +61,6 @@ lumiera_filehandle_destroy_node (LList node)
 
   if (self->fd >= 0)
     close (self->fd);
-  self->fd = -1;
-  self->descriptor = NULL;
   return self;
 }
 
@@ -68,3 +72,37 @@ lumiera_filehandle_get (LumieraFilehandle self)
   return -1;
 }
 
+
+int
+lumiera_filehandle_handle (LumieraFilehandle self)
+{
+  TRACE (filehandle);
+
+  int fd = -1;
+  if (self->fd == -1)
+    {
+      fd = open (lumiera_filedescriptor_name (self->descriptor), lumiera_filedescriptor_flags (self->descriptor) & LUMIERA_FILE_MASK);
+      if (fd == -1)
+        {
+          LUMIERA_ERROR_SET (filehandle, ERRNO);
+        }
+      else
+        {
+          struct stat st;
+          if (fstat (fd, &st) == -1)
+            {
+              close (fd);
+              LUMIERA_ERROR_SET (filehandle, ERRNO);
+            }
+          else if (!lumiera_filedescriptor_samestat (self->descriptor, &st))
+            {
+              close (fd);
+              /* Woops this is not the file we expected to use */
+              LUMIERA_ERROR_SET (filehandle, FILE_CHANGED);
+            }
+        }
+      self->fd = fd;
+    }
+
+  return self->fd;
+}

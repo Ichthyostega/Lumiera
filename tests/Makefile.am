@@ -58,20 +58,33 @@ test_filehandles_SOURCES = $(tests_srcdir)/backend/test-filehandles.c
 test_filehandles_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 test_filehandles_LDADD = liblumibackend.a liblumiera.a $(NOBUGMT_LUMIERA_LIBS)
 
+
+
+
 check_PROGRAMS += test-config
-test_config_SOURCES = $(tests_srcdir)/backend/test-config.c
+test_config_SOURCES = $(tests_srcdir)/lumiera/test-config.c
 test_config_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
-test_config_LDADD = liblumibackend.a liblumiera.a $(NOBUGMT_LUMIERA_LIBS)
+test_config_LDADD = liblumieracore.a liblumiera.a $(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS)
 
 check_LTLIBRARIES += examplepluginc.la
-examplepluginc_la_SOURCES = $(tests_srcdir)/backend/example_plugin.c
+examplepluginc_la_SOURCES = $(tests_srcdir)/plugin/example_plugin.c
 examplepluginc_la_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -DLUMIERA_PLUGIN -I$(top_srcdir)/src/
 examplepluginc_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/null
 
 check_PROGRAMS += test-interfaces
-test_interfaces_SOURCES = $(tests_srcdir)/backend/test-interfaces.c
+test_interfaces_SOURCES = $(tests_srcdir)/lumiera/test-interfaces.c
 test_interfaces_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-test_interfaces_LDADD = liblumibackend.a liblumiera.a $(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS)
-test_interfaces_DEPENDENCIES = examplepluginc.la liblumibackend.a liblumiera.a
+test_interfaces_LDADD =  liblumieracore.a liblumiera.a $(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS)
+test_interfaces_DEPENDENCIES = examplepluginc.la liblumieracore.a liblumiera.a
+
+check_PROGRAMS += test-filemmap
+test_filemmap_SOURCES = $(tests_srcdir)/backend/test-filemmap.c
+test_filemmap_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_filemmap_LDADD = liblumibackend.a liblumiera.a -lnobugmt -lpthread -ldl -lm
+
+check_PROGRAMS += test-resourcecollector
+test_resourcecollector_SOURCES = $(tests_srcdir)/backend/test-resourcecollector.c
+test_resourcecollector_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_resourcecollector_LDADD = liblumibackend.a liblumiera.a -lnobugmt -lpthread -ldl -lm
 
 TESTS = $(tests_srcdir)/test.sh
