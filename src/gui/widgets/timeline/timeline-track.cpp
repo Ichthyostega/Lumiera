@@ -20,6 +20,9 @@
  
 * *****************************************************/
 
+#warning This header must soon be removed when we drop Etch compatibility
+#include <gtk/gtktoolbar.h>
+
 #include "timeline-track.hpp"
 #include "../../window-manager.hpp"
 
@@ -38,8 +41,16 @@ Track::Track() :
   buttonBar.append(lockButton);
   
   buttonBar.set_toolbar_style(TOOLBAR_ICONS);
-//buttonBar.set_icon_size(WindowManager::MenuIconSize);
-//TODO  uncommented for now, doesn't compile on etch. 12/15/08 ichthyo
+  
+#if 0
+  buttonBar.set_icon_size(WindowManager::MenuIconSize);
+#else
+#warning This code soon be removed when we drop Etch compatibility
+
+  // Temporary bodge for etch compatibility - will be removed soon
+  gtk_toolbar_set_icon_size (buttonBar.gobj(),
+    (GtkIconSize)(int)WindowManager::MenuIconSize);
+#endif
 
   headerWidget.pack_start(titleBox, PACK_SHRINK);
   headerWidget.pack_start(buttonBar, PACK_SHRINK);

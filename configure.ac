@@ -135,8 +135,13 @@ PKG_CHECK_MODULES(LUMIERA_COMMON_LIBS, [sigc++-2.0 >= 2.0.18])
 # END Internatinalization
 
 ############## Gtk Dependancies
+
+# gtk+-2.0 >= 2.8 gtkmm-2.4 >= 2.8 for Debian Etch compatibility
+# gtk+-2.0 >= 2.12 gtkmm-2.4 >= 2.12 for Debian Lenny compatibility
+
 PKG_CHECK_MODULES(LUMIERA_GUI, [
-    gtkmm-2.4 >= 2.8 gdl-1.0 >= 0.6.1 cairomm-1.0 >= 0.6.0
+    gtk+-2.0 >= 2.8 gtkmm-2.4 >= 2.8
+    gdl-1.0 >= 0.6.1 cairomm-1.0 >= 0.6.0
     gavl >= 0.2.5 librsvg-2.0 >= 2.18.1])
 
 # END Gtk Dependancies
