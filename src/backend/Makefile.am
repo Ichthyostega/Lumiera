@@ -19,7 +19,7 @@ liblumibackend_a_srcdir = $(top_srcdir)/src/backend
 noinst_LIBRARIES += liblumibackend.a
 
 liblumibackend_a_CPPFLAGS = $(AM_CPPFLAGS)
-liblumibackend_a_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
+liblumibackend_a_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall
 
 liblumibackend_a_SOURCES =					\
 	$(liblumibackend_a_srcdir)/mediaaccessfacade.cpp	\
