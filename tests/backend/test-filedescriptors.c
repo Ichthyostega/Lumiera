@@ -20,7 +20,7 @@
 */
 #include "lib/safeclib.h"
 
-#include "backend/config.h"
+#include "lumiera/config.h"
 #include "backend/backend.h"
 #include "backend/filedescriptor.h"
 

@@ -31,25 +31,24 @@ liblumiera_a_SOURCES =					\
 	$(liblumiera_a_srcdir)/psplay.c			\
 	$(liblumiera_a_srcdir)/mrucache.c		\
 	$(liblumiera_a_srcdir)/time.c			\
-	$(liblumiera_a_srcdir)/allocationcluster.cpp\
+	$(liblumiera_a_srcdir)/allocationcluster.cpp	\
 	$(liblumiera_a_srcdir)/external/libgavl.cpp	\
-	$(liblumiera_a_srcdir)/appconfig.cpp
+	$(liblumiera_a_srcdir)/cmdline.cpp
 
-noinst_HEADERS +=						\
-	$(liblumiera_a_srcdir)/error.h				\
-	$(liblumiera_a_srcdir)/mutex.h				\
-	$(liblumiera_a_srcdir)/rwlock.h				\
-	$(liblumiera_a_srcdir)/condition.h			\
-	$(liblumiera_a_srcdir)/luid.h				\
-	$(liblumiera_a_srcdir)/safeclib.h			\
-	$(liblumiera_a_srcdir)/cuckoo.h				\
-	$(liblumiera_a_srcdir)/psplay.h				\
-	$(liblumiera_a_srcdir)/mrucache.h			\
-	$(liblumiera_a_srcdir)/time.h				\
-	$(liblumiera_a_srcdir)/ppmpl.h				\
-	$(liblumiera_a_srcdir)/appstate.hpp			\
+noinst_HEADERS +=					\
+	$(liblumiera_a_srcdir)/error.h			\
+	$(liblumiera_a_srcdir)/mutex.h			\
+	$(liblumiera_a_srcdir)/rwlock.h			\
+	$(liblumiera_a_srcdir)/condition.h		\
+	$(liblumiera_a_srcdir)/luid.h			\
+	$(liblumiera_a_srcdir)/safeclib.h		\
+	$(liblumiera_a_srcdir)/cuckoo.h			\
+	$(liblumiera_a_srcdir)/psplay.h			\
+	$(liblumiera_a_srcdir)/mrucache.h		\
+	$(liblumiera_a_srcdir)/time.h			\
+	$(liblumiera_a_srcdir)/ppmpl.h			\
 	$(liblumiera_a_srcdir)/allocationcluster.hpp	\
 	$(liblumiera_a_srcdir)/scopedholdertransfer.hpp	\
-	$(liblumiera_a_srcdir)/scopedholder.hpp			\
-	$(liblumiera_a_srcdir)/external/libgavl.hpp		\
+	$(liblumiera_a_srcdir)/scopedholder.hpp		\
+	$(liblumiera_a_srcdir)/external/libgavl.hpp	\
 	$(liblumiera_a_srcdir)/lifecycleregistry.hpp

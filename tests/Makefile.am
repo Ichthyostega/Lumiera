@@ -67,7 +67,7 @@ test_config_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/s
 test_config_LDADD = liblumieracore.a liblumiera.a $(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS)
 
 check_LTLIBRARIES += examplepluginc.la
-examplepluginc_la_SOURCES = $(tests_srcdir)/lumiera/example_plugin.c
+examplepluginc_la_SOURCES = $(tests_srcdir)/plugin/example_plugin.c
 examplepluginc_la_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -DLUMIERA_PLUGIN -I$(top_srcdir)/src/
 examplepluginc_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/null
 

@@ -23,7 +23,7 @@
 
 #include "backend/mmap.h"
 #include "backend/mmapcache.h"
-#include "backend/config.h"
+#include "lumiera/config.h"
 
 #include <unistd.h>
 #include <sys/mman.h>

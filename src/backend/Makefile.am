@@ -31,7 +31,12 @@ liblumibackend_a_SOURCES =					\
 	$(liblumibackend_a_srcdir)/mmap.c			\
 	$(liblumibackend_a_srcdir)/mmapings.c			\
 	$(liblumibackend_a_srcdir)/mmapcache.c			\
-	$(liblumibackend_a_srcdir)/filehandlecache.c
+	$(liblumibackend_a_srcdir)/filehandlecache.c		\
+	$(liblumibackend_a_srcdir)/enginefacade.cpp		\
+	$(liblumibackend_a_srcdir)/mediaaccessfacade.cpp	\
+	$(liblumibackend_a_srcdir)/scriptrunnerfacade.cpp	\
+	$(liblumibackend_a_srcdir)/netnodefacade.cpp
+
 
 noinst_HEADERS +=						\
 	$(liblumibackend_a_srcdir)/mediaaccessfacade.cpp	\

@@ -20,17 +20,18 @@ testcommon_srcdir = $(top_srcdir)/tests/common
 
 check_PROGRAMS += test-common
 test_common_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(testcommon_srcdir)
-test_common_LDADD =							\
-	liblumiprocmobjectbuilder.a				\
-	liblumiprocmobjectsession.a				\
-	liblumiprocmobject.a					\
-	liblumiprocengine.a						\
-	liblumiproccontrol.a					\
-	liblumiproc.a							\
-	liblumiprocasset.a						\
-	liblumibackend.a						\
-	liblumicommon.a							\
-	liblumiera.a							\
+test_common_LDADD =									\
+	liblumiprocmobjectbuilder.a							\
+	liblumiprocmobjectsession.a							\
+	liblumiprocmobject.a								\
+	liblumiprocengine.a								\
+	liblumiproccontrol.a								\
+	liblumiproc.a									\
+	liblumiprocasset.a								\
+	liblumibackend.a								\
+	liblumicommon.a									\
+	liblumieracore.a								\
+	liblumiera.a									\
 	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt
 
 test_common_SOURCES =						\

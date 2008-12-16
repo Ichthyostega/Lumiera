@@ -24,11 +24,11 @@ noinst_LIBRARIES += liblumiproc.a
 liblumiproc_a_CXXFLAGS = $(CXXFLAGS) -Wall
 
 liblumiproc_a_SOURCES =							\
-	$(liblumiproc_a_srcdir)/controllerfacade.cpp		\
+	$(liblumiproc_a_srcdir)/controllerfacade.cpp			\
+	$(liblumiproc_a_srcdir)/facade.cpp				\
 	$(liblumiproc_a_srcdir)/state.cpp				\
 	$(liblumiproc_a_srcdir)/asset.cpp				\
-	$(liblumiproc_a_srcdir)/assetmanager.cpp			\
-	$(liblumiproc_a_srcdir)/nobugcfg.cpp
+	$(liblumiproc_a_srcdir)/assetmanager.cpp
 
 
 
@@ -218,6 +218,5 @@ noinst_HEADERS +=							\
 	$(liblumiproc_a_srcdir)/mobject/session.hpp			\
 	$(liblumiproc_a_srcdir)/asset.hpp				\
 	$(liblumiproc_a_srcdir)/assetmanager.hpp			\
-	$(liblumiproc_a_srcdir)/lumiera.hpp				\
-	$(liblumiproc_a_srcdir)/nobugcfg.h
+	$(liblumiproc_a_srcdir)/facade.cpp
 
