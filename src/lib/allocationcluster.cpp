@@ -23,7 +23,7 @@
 
 #include "lib/allocationcluster.hpp"
 #include "include/error.hpp"
-#include "common/util.hpp"
+#include "lib/util.hpp"
 
 using util::isnil;
 

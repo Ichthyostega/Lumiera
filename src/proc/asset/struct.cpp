@@ -26,11 +26,11 @@
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/track.hpp"
 #include "proc/asset/pipe.hpp"
-#include "common/configrules.hpp"
+#include "lib/configrules.hpp"
 
 #include "proc/asset/structfactoryimpl.hpp"
 
-#include "common/util.hpp"
+#include "lib/util.hpp"
 #include "include/nobugcfg.h"
 
 #include <boost/format.hpp>

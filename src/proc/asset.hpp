@@ -58,7 +58,7 @@
 #include "proc/asset/category.hpp"
 #include "include/nobugcfg.h"
 #include "include/error.hpp"
-#include "common/p.hpp"
+#include "lib/p.hpp"
 
 #include <boost/type_traits/is_base_of.hpp>
 #include <boost/operators.hpp>

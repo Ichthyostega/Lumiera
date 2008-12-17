@@ -20,30 +20,38 @@ lib_LTLIBRARIES += liblumiera.la
 
 liblumiera_la_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror -DLUMIERA_PLUGIN_PATH="\"$(pkglibdir)\""
 
-liblumiera_la_SOURCES =					\
-	$(liblumiera_la_srcdir)/error.c			\
-	$(liblumiera_la_srcdir)/mutex.c			\
-	$(liblumiera_la_srcdir)/rwlock.c		\
-	$(liblumiera_la_srcdir)/condition.c		\
-	$(liblumiera_la_srcdir)/luid.c			\
-	$(liblumiera_la_srcdir)/safeclib.c		\
-	$(liblumiera_la_srcdir)/cuckoo.c		\
-	$(liblumiera_la_srcdir)/psplay.c		\
-	$(liblumiera_la_srcdir)/mrucache.c		\
-	$(liblumiera_la_srcdir)/time.c			\
-	$(liblumiera_la_srcdir)/config.c		\
-	$(liblumiera_la_srcdir)/config_typed.c		\
-	$(liblumiera_la_srcdir)/config_wordlist.c	\
-	$(liblumiera_la_srcdir)/configentry.c		\
-	$(liblumiera_la_srcdir)/configitem.c		\
-	$(liblumiera_la_srcdir)/config_lookup.c		\
-	$(liblumiera_la_srcdir)/config_interface.c	\
-	$(liblumiera_la_srcdir)/interface.c		\
-	$(liblumiera_la_srcdir)/interfaceregistry.c	\
-	$(liblumiera_la_srcdir)/plugin.c		\
-	$(liblumiera_la_srcdir)/plugin_dynlib.c		\
-	$(liblumiera_la_srcdir)/allocationcluster.cpp	\
-	$(liblumiera_la_srcdir)/external/libgavl.cpp	\
+liblumiera_la_SOURCES =						\
+	$(liblumiera_la_srcdir)/error.c				\
+	$(liblumiera_la_srcdir)/mutex.c				\
+	$(liblumiera_la_srcdir)/rwlock.c			\
+	$(liblumiera_la_srcdir)/condition.c			\
+	$(liblumiera_la_srcdir)/luid.c				\
+	$(liblumiera_la_srcdir)/safeclib.c			\
+	$(liblumiera_la_srcdir)/cuckoo.c			\
+	$(liblumiera_la_srcdir)/psplay.c			\
+	$(liblumiera_la_srcdir)/mrucache.c			\
+	$(liblumiera_la_srcdir)/time.c				\
+	$(liblumiera_la_srcdir)/config.c			\
+	$(liblumiera_la_srcdir)/config_typed.c			\
+	$(liblumiera_la_srcdir)/config_wordlist.c		\
+	$(liblumiera_la_srcdir)/configentry.c			\
+	$(liblumiera_la_srcdir)/configitem.c			\
+	$(liblumiera_la_srcdir)/config_lookup.c			\
+	$(liblumiera_la_srcdir)/config_interface.c		\
+	$(liblumiera_la_srcdir)/interface.c			\
+	$(liblumiera_la_srcdir)/interfaceregistry.c		\
+	$(liblumiera_la_srcdir)/plugin.c			\
+	$(liblumiera_la_srcdir)/plugin_dynlib.c			\
+	$(liblumiera_la_srcdir)/allocationcluster.cpp		\
+	$(liblumiera_la_srcdir)/external/libgavl.cpp		\
+	$(liblumiera_la_srcdir)/lumitime.cpp			\
+	$(liblumiera_la_srcdir)/util.cpp			\
+	$(liblumiera_la_srcdir)/visitor.cpp			\
+	$(liblumiera_la_srcdir)/configrules.cpp			\
+	$(liblumiera_la_srcdir)/error.cpp			\
+	$(liblumiera_la_srcdir)/query.cpp			\
+	$(liblumiera_la_srcdir)/query/mockconfigrules.cpp	\
+	$(liblumiera_la_srcdir)/streamtype.cpp			\
 	$(liblumiera_la_srcdir)/cmdline.cpp
 
 noinst_HEADERS +=						\
@@ -71,4 +79,31 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/scopedholdertransfer.hpp	\
 	$(liblumiera_la_srcdir)/scopedholder.hpp		\
 	$(liblumiera_la_srcdir)/external/libgavl.hpp		\
-	$(liblumiera_la_srcdir)/lifecycleregistry.hpp
+	$(liblumiera_la_srcdir)/lifecycleregistry.hpp		\
+	$(liblumiera_la_srcdir)/factory.hpp			\
+	$(liblumiera_la_srcdir)/frameid.hpp			\
+	$(liblumiera_la_srcdir)/singleton.hpp			\
+	$(liblumiera_la_srcdir)/singletonpolicies.hpp		\
+	$(liblumiera_la_srcdir)/singletonpreconfigure.hpp	\
+	$(liblumiera_la_srcdir)/lumitime.hpp			\
+	$(liblumiera_la_srcdir)/visitor.hpp			\
+	$(liblumiera_la_srcdir)/visitordispatcher.hpp		\
+	$(liblumiera_la_srcdir)/visitorpolicies.hpp		\
+	$(liblumiera_la_srcdir)/configrules.hpp			\
+	$(liblumiera_la_srcdir)/multithread.hpp			\
+	$(liblumiera_la_srcdir)/p.hpp				\
+	$(liblumiera_la_srcdir)/query.hpp			\
+	$(liblumiera_la_srcdir)/singletonfactory.hpp		\
+	$(liblumiera_la_srcdir)/singletonsubclass.hpp		\
+	$(liblumiera_la_srcdir)/meta/typelist.hpp		\
+	$(liblumiera_la_srcdir)/meta/configflags.hpp		\
+	$(liblumiera_la_srcdir)/meta/generator.hpp		\
+	$(liblumiera_la_srcdir)/meta/typelistutil.hpp		\
+	$(liblumiera_la_srcdir)/util.hpp			\
+	$(liblumiera_la_srcdir)/observable-list.hpp		\
+	$(liblumiera_la_srcdir)/test/mockinjector.hpp		\
+	$(liblumiera_la_srcdir)/test/suite.hpp			\
+	$(liblumiera_la_srcdir)/test/testoption.hpp		\
+	$(liblumiera_la_srcdir)/test/run.hpp			\
+	$(liblumiera_la_srcdir)/query/mockconfigrules.hpp
+

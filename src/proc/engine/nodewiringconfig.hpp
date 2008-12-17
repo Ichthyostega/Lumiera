@@ -51,8 +51,8 @@
 #define ENGINE_NODEWIRINGCONFIG_H
 
 
-#include "common/util.hpp"
-#include "common/meta/configflags.hpp"
+#include "lib/util.hpp"
+#include "lib/meta/configflags.hpp"
 
 #include <boost/function.hpp>
 #include <bitset>

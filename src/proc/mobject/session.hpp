@@ -35,7 +35,7 @@
 
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/defsmanager.hpp"
-#include "common/singleton.hpp"
+#include "lib/singleton.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <tr1/memory>

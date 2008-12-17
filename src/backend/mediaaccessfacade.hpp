@@ -25,7 +25,7 @@
 #define BACKEND_INTERFACE_MEDIAACCESSFACADE_H
 
 
-#include "common/singleton.hpp"
+#include "lib/singleton.hpp"
 #include "include/error.hpp"
 
 

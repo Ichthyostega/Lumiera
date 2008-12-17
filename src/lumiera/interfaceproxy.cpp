@@ -21,9 +21,9 @@
 * *****************************************************/
 
 
-#include "common/singletonsubclass.hpp"
+#include "lib/singletonsubclass.hpp"
 #include "include/guinotificationfacade.h"
-#include "common/util.hpp"
+#include "lib/util.hpp"
 #include "include/error.hpp"
 
 extern "C" {

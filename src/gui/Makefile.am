@@ -101,12 +101,11 @@ lumigui_SOURCES =								\
 
 lumigui_LDFLAGS =
 # $(LIBS) $(X_PRE_LIBS) $(X_LIBS) $(X_EXTRA_LIBS)
-lumigui_LDADD = $(LUMIERA_GUI_LIBS) liblumicommon.a liblumiera.a $(NOBUGMT_LUMIERA_LIBS)
+lumigui_LDADD = $(LUMIERA_GUI_LIBS) liblumiera.la $(NOBUGMT_LUMIERA_LIBS)
 
-lumigui_DEPENDENCIES =														\
-	$(top_builddir)/lumiera_ui.rc											\
-	$(top_builddir)/liblumicommon.a											\
-	$(top_builddir)/liblumiera.a
+lumigui_DEPENDENCIES =				\
+	$(top_builddir)/lumiera_ui.rc		\
+	$(top_builddir)/liblumiera.la
 
 $(top_builddir)/lumiera_ui.rc:
 	cp $(lumigui_srcdir)/lumiera_ui.rc $(top_builddir)

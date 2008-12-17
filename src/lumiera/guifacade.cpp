@@ -24,7 +24,7 @@
 #include "gui/guifacade.hpp"
 #include "include/guinotificationfacade.h"
 #include "include/error.hpp"
-#include "common/singleton.hpp"
+#include "lib/singleton.hpp"
 #include "lib/functorutil.hpp"
 #include "lumiera/instancehandle.hpp"
 

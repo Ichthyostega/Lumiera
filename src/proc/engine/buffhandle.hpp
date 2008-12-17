@@ -40,7 +40,7 @@
 
 
 #include "include/error.hpp"
-#include "common/streamtype.hpp"
+#include "lib/streamtype.hpp"
 
 
 namespace engine {

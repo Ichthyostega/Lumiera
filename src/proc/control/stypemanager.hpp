@@ -25,8 +25,8 @@
 #define CONTROL_STYPEMANAGER_H
 
 
-#include "common/streamtype.hpp"
-#include "common/singleton.hpp"
+#include "lib/streamtype.hpp"
+#include "lib/singleton.hpp"
 
 #include <boost/scoped_ptr.hpp>
 

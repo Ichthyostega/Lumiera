@@ -40,7 +40,7 @@
 
 #include "proc/asset.hpp"
 #include "include/error.hpp"
-#include "common/singleton.hpp"
+#include "lib/singleton.hpp"
 
 
 #include <cstddef>

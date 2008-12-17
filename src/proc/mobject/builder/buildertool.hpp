@@ -53,10 +53,10 @@
 #ifndef MOBJECT_BUILDER_TOOL_H
 #define MOBJECT_BUILDER_TOOL_H
 
-#include "common/visitor.hpp"
-#include "common/wrapperptr.hpp"
+#include "lib/visitor.hpp"
+#include "lib/wrapperptr.hpp"
 
-#include "common/p.hpp"
+#include "lib/p.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 

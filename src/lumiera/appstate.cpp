@@ -35,7 +35,7 @@ extern "C" {
 #include "lib/plugin.h"
 }
 
-#include "common/util.hpp"
+#include "lib/util.hpp"
 #include "include/configfacade.hpp" //////////TODO: temp hack to force configfacade.o to be linked in
 
 using util::cStr;

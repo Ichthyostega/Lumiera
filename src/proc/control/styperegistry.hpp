@@ -37,9 +37,9 @@
 #define CONTROL_STYPEREGISTRY_H
 
 
-//#include "common/query.hpp"
-//#include "common/util.hpp"
-//#include "common/p.hpp"
+//#include "lib/query.hpp"
+//#include "lib/util.hpp"
+//#include "lib/p.hpp"
 
 //#include <set>
 //#include <vector>

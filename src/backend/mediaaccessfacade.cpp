@@ -23,7 +23,7 @@
 
 #include "backend/mediaaccessfacade.hpp"
 
-#include "common/util.hpp"
+#include "lib/util.hpp"
 
 using util::isnil;
 using lumiera::error::Invalid;

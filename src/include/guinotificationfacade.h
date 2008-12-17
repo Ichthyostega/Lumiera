@@ -40,7 +40,7 @@
 
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
-#include "common/singletonsubclass.hpp"
+#include "lib/singletonsubclass.hpp"
 
 #include <string>
 

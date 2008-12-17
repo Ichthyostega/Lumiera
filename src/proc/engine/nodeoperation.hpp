@@ -63,8 +63,8 @@
 #include "proc/engine/bufftable.hpp"
 #include "proc/engine/nodeinvocation.hpp"
 
-#include "common/meta/util.hpp"
-#include "common/meta/configflags.hpp"
+#include "lib/meta/util.hpp"
+#include "lib/meta/configflags.hpp"
 
 
 

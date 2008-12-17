@@ -28,7 +28,7 @@
 #define PROJECT_HPP
 
 #include "sequence.hpp"
-#include "../../common/observable-list.hpp"
+#include "lib/observable-list.hpp"
 
 namespace gui {
 namespace model {

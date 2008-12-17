@@ -22,9 +22,9 @@
 
 
 #include "include/guinotificationfacade.h"
-#include "common/singleton.hpp"
+#include "lib/singleton.hpp"
 #include "include/nobugcfg.h"
-#include "common/util.hpp"
+#include "lib/util.hpp"
 
 extern "C" {
 #include "lumiera/interfacedescriptor.h"

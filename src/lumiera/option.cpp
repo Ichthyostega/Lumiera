@@ -24,7 +24,7 @@
 #include "lumiera/option.hpp"
 
 #include "include/error.hpp"
-#include "common/util.hpp"
+#include "lib/util.hpp"
 
 
 

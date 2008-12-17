@@ -33,7 +33,7 @@
 #include <vector>
 #include <boost/utility.hpp>
 #include <boost/shared_ptr.hpp>
-#include "../common/util.hpp"
+#include "lib/util.hpp"
 
 extern "C" {
 #include <gavl/gavltime.h>

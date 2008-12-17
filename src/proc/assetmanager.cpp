@@ -24,8 +24,8 @@
 #include "proc/assetmanager.hpp"
 #include "proc/asset/db.hpp"
 
-#include "common/multithread.hpp"
-#include "common/util.hpp"
+#include "lib/multithread.hpp"
+#include "lib/util.hpp"
 
 #include <boost/function.hpp>
 

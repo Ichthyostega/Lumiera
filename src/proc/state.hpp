@@ -28,7 +28,7 @@
 #include "pre.hpp"
 
 #include "proc/common.hpp"
-#include "common/frameid.hpp"
+#include "lib/frameid.hpp"
 #include "proc/engine/buffhandle.hpp"
 
 #include <cstddef>
