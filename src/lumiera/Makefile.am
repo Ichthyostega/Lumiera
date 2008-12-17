@@ -17,31 +17,22 @@
 
 lumiera_srcdir = $(top_srcdir)/src/lumiera
 
+bin_PROGRAMS += lumiera
+lumiera_CPPFLAGS = $(AM_CPPFLAGS) -DLUMIERA_CONFIG_PATH="\"$(pkgdatadir)/config\""
+lumiera_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
+lumiera_LDADD = liblumierabackend.la liblumieraproc.la liblumiera.la \
+		$(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS) -lboost_program_options-mt -lboost_regex-mt
 
-noinst_LIBRARIES += liblumieracore.a
-liblumieracore_a_CPPFLAGS = $(AM_CPPFLAGS) -DLUMIERA_CONFIG_PATH="\"$(pkgdatadir)/config\""
-liblumieracore_a_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
-
-liblumieracore_a_SOURCES =			\
+lumiera_SOURCES =				\
 	$(lumiera_srcdir)/guifacade.cpp		\
 	$(lumiera_srcdir)/configfacade.cpp	\
 	$(lumiera_srcdir)/appstate.cpp		\
 	$(lumiera_srcdir)/option.cpp		\
 	$(lumiera_srcdir)/subsys.cpp		\
 	$(lumiera_srcdir)/interfaceproxy.cpp	\
-	$(lumiera_srcdir)/nobugcfg.cpp
-
-
-
-bin_PROGRAMS += lumiera
-lumiera_CPPFLAGS = $(AM_CPPFLAGS) -DLUMIERA_CONFIG_PATH="\"$(pkgdatadir)/config\""
-lumiera_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
-lumiera_LDADD = liblumieracore.a liblumibackend.a liblumiproc.a liblumiera.a liblumicommon.a \
-		$(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS) -lboost_program_options-mt -lboost_regex-mt
-
-lumiera_SOURCES =				\
-	$(top_srcdir)/src/guistart.cpp		\
-	$(top_srcdir)/src/main.cpp
+	$(lumiera_srcdir)/nobugcfg.cpp		\
+	$(lumiera_srcdir)/guistart.cpp		\
+	$(lumiera_srcdir)/main.cpp
 
 
 noinst_HEADERS +=				\
