@@ -29,7 +29,6 @@
 #define HEADER_CONTAINER_HPP
 
 #include "../../gtk-lumiera.hpp"
-#include <vector>
 
 namespace gui {
   
