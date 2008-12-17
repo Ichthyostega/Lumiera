@@ -371,8 +371,14 @@ void
 TimelineHeaderContainer::set_parent_recursive(
   boost::shared_ptr<model::Track> model_track)
 { 
-  lookup_timeline_track(model_track)->
-    get_header_widget().set_parent(*this);
+  Widget &widget = lookup_timeline_track(model_track)->
+    get_header_widget();
+  
+  const Container *parent = widget.get_parent();
+  if(parent == NULL)  // Is the header unparented?
+    widget.set_parent(*this);
+  else if(parent != this) // The header is parented by another container
+    widget.reparent(*this);
   
   // Recurse through all the children
   BOOST_FOREACH( boost::shared_ptr<model::Track> child,
