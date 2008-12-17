@@ -166,12 +166,19 @@ private:
     model_track);
   
   /**
-   * Recursively causes all the visible track header widgets to call
-   * size_request( ).
+   * Recursively causes all the visible track header widgets in a branch
+   * to call size_request( ).
    **/
   void size_request_recursive(
     boost::shared_ptr<model::Track> model_track);
   
+  /**
+   * Recursively calls a callback on all the header widgets in a branch.
+   * @param model_track The root track of the branch.
+   * @param callback The callback to apply to the branch. This includes
+   * model_track and all it's children.
+   * @param callback_data The user data parameter for the callback.
+   **/
   void forall_vfunc_recursive(
     boost::shared_ptr<model::Track> model_track,
     GtkCallback callback, gpointer callback_data);
@@ -188,9 +195,22 @@ private:
     boost::shared_ptr<model::Track> model_track,
     const Gdk::Rectangle &clip_rect);
   
+  /**
+   * Given a point, expander_button_from_point finds the track of the
+   * expand button that this point is hovering over, if there is one.
+   * @param point The window coordiates point to hit-test.
+   * @return Returns a pointer to the track whose expander button is
+   * being hovered over, or NULL if no button has been found.
+   **/
   boost::shared_ptr<timeline::Track> expander_button_from_point(
     const Gdk::Point &point);
   
+  /**
+   * Gets the rectangular hit-target area of a track header's expander
+   * button.
+   * @param track The track to get the expander button rectangle of.
+   * @return Returns the rectangle of the expander button of track.
+   **/
   const Gdk::Rectangle get_expander_button_rectangle(
     boost::shared_ptr<timeline::Track> track);
   
@@ -273,6 +293,10 @@ private:
    **/
   int margin;
   
+  /**
+   * The style value which indicates the size to draw the expand button
+   * in pixels.
+   **/
   int expand_button_size;
 };
 
