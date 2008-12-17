@@ -1,4 +1,4 @@
-#include "lumiera/interface.h"
+#include "lib/interface.h"
 
 /*
   one interface which can greet in different languages

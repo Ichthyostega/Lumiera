@@ -23,8 +23,8 @@
 //#include <string.h>
 
 #include "lib/llist.h"
+#include "lib/config.h"
 
-#include "backend/config.h"
 #include "backend/backend.h"
 #include "backend/file.h"
 #include "backend/filedescriptor.h"
