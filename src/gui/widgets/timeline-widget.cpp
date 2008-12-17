@@ -85,6 +85,10 @@ TimelineWidget::TimelineWidget(
   attach(verticalScroll, 2, 3, 1, 2, SHRINK, FILL|EXPAND);
   
   set_tool(timeline::Arrow);
+  
+  // Receive notifications of changes to the tracks
+  sequence->get_child_track_list().signal_changed().connect(
+    sigc::mem_fun( this, &TimelineWidget::on_track_list_changed ) );
 }
 
 TimelineWidget::~TimelineWidget()
@@ -268,6 +272,16 @@ TimelineWidget::on_view_window_changed()
     viewWindow.get_time_offset());
 }
 
+void
+TimelineWidget::on_add_track_command()
+{
+  REQUIRE(sequence);
+  
+  // # TEST CODE
+  sequence->get_child_track_list().push_back(
+    shared_ptr<model::Track>(new model::ClipTrack()));
+}
+
 /* ===== Internals ===== */
 
 void
@@ -296,10 +310,15 @@ void
 TimelineWidget::create_timeline_tracks()
 {
   REQUIRE(sequence);
+  REQUIRE(headerContainer != NULL);
+  REQUIRE(body != NULL);
   
   BOOST_FOREACH(shared_ptr<model::Track> child,
     sequence->get_child_tracks())
     create_timeline_tracks_from_branch(child);
+    
+  headerContainer->show_all_children();
+  body->queue_draw();
 }
 
 void
@@ -440,6 +459,12 @@ TimelineWidget::on_motion_in_body_notify_event(GdkEventMotion *event)
   mouseHoverSignal.emit(viewWindow.x_to_time(event->x));
   
   return true;
+}
+
+void
+TimelineWidget::on_track_list_changed()
+{
+  update_tracks();
 }
 
 void

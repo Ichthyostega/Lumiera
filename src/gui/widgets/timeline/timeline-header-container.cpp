@@ -81,6 +81,12 @@ TimelineHeaderContainer::on_realize()
   // Call base class:
   Gtk::Container::on_realize();
   
+  // Create the context menu
+  Menu::MenuList& menu_list = contextMenu.items();
+  menu_list.push_back( Menu_Helpers::MenuElem("_Add Track",
+    sigc::mem_fun(timelineWidget,
+    &TimelineWidget::on_add_track_command) ) );
+  
   // Create the GdkWindow:
   GdkWindowAttr attributes;
   memset(&attributes, 0, sizeof(attributes));
@@ -129,15 +135,29 @@ TimelineHeaderContainer::on_unrealize()
 bool TimelineHeaderContainer::on_button_press_event (
   GdkEventButton* event)
 {
-  // Did the user press the button on an expander?
-  if(hoveringExpander != NULL)
+  REQUIRE(event != NULL);
+  
+  switch(event->button)
     {
-      // Yes? The prime for a release event
-      clickedExpander = hoveringExpander;
-      queue_draw();
+    case 1: // Left Click
+      // Did the user press the button on an expander?
+      if(hoveringExpander != NULL)
+        {
+          // Yes? The prime for a release event
+          clickedExpander = hoveringExpander;
+          queue_draw();
+        }
+      break;
+      
+    case 3: // Right Click
+      // Popup the context menu
+      contextMenu.popup(event->button, event->time);
+      break;
+    
+
     }
   
-  return Container::on_button_press_event(event);
+  return true;
 }
 
 bool TimelineHeaderContainer::on_button_release_event (

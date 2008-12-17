@@ -246,6 +246,8 @@ private:
   std::map<boost::shared_ptr<timeline::Track>, Gdk::Rectangle>
     headerBoxes;
   
+  Gtk::Menu contextMenu;
+  
   //----- User Interaction State -----//
   boost::shared_ptr<timeline::Track> hoveringExpander;
   

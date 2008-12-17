@@ -154,6 +154,8 @@ protected:
   
   void on_view_window_changed();
   
+  void on_add_track_command();
+  
   /* ===== Utilities ===== */
 protected:
 
@@ -214,6 +216,12 @@ private:
   int get_y_scroll_offset() const;
   
   // ----- Event Handlers -----//
+  
+  /**
+   * An event handler that receives notifications for when the
+   * sequence's track tree has been changed.
+   **/
+  void on_track_list_changed();
     
   void on_playback_period_drag_released();
   
