@@ -36,8 +36,8 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-TimelineHeaderContainer::TimelineHeaderContainer(gui::widgets::TimelineWidget
-    *timeline_widget) :
+TimelineHeaderContainer::TimelineHeaderContainer(
+  gui::widgets::TimelineWidget *timeline_widget) :
     Glib::ObjectBase("TimelineHeaderContainer"),
     timelineWidget(timeline_widget),
     margin(-1),
@@ -61,6 +61,12 @@ TimelineHeaderContainer::TimelineHeaderContainer(gui::widgets::TimelineWidget
     sigc::mem_fun(this,
     &TimelineHeaderContainer::on_hovering_track_changed) );
     
+  // Create the context menu
+  Menu::MenuList& menu_list = contextMenu.items();
+  menu_list.push_back( Menu_Helpers::MenuElem("_Add Track",
+    sigc::mem_fun(timelineWidget,
+    &TimelineWidget::on_add_track_command) ) );
+    
   // Install style properties
   register_styles();
 }
@@ -80,12 +86,6 @@ TimelineHeaderContainer::on_realize()
   
   // Call base class:
   Gtk::Container::on_realize();
-  
-  // Create the context menu
-  Menu::MenuList& menu_list = contextMenu.items();
-  menu_list.push_back( Menu_Helpers::MenuElem("_Add Track",
-    sigc::mem_fun(timelineWidget,
-    &TimelineWidget::on_add_track_command) ) );
   
   // Create the GdkWindow:
   GdkWindowAttr attributes;
