@@ -20,7 +20,7 @@ admin_srcdir = $(top_srcdir)/admin
 noinst_PROGRAMS += vgsuppression
 vgsuppression_SOURCES = $(admin_srcdir)/vgsuppression.c
 vgsuppression_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-vgsuppression_LDADD = liblumiera.a $(NOBUGMT_LUMIERA_LIBS) -ldl
+vgsuppression_LDADD = liblumiera.la $(NOBUGMT_LUMIERA_LIBS) -ldl
 
 noinst_PROGRAMS += rsvg-convert
 rsvg_convert_SOURCES = $(admin_srcdir)/rsvg-convert.c
