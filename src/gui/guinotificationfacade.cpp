@@ -27,7 +27,7 @@
 #include "lib/util.hpp"
 
 extern "C" {
-#include "lumiera/interfacedescriptor.h"
+#include "lib/interfacedescriptor.h"
 }
 
 #include <string>

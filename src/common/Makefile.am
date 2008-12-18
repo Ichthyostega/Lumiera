@@ -28,7 +28,7 @@ liblumicommon_a_SOURCES =					\
 	$(liblumicommon_a_srcdir)/util.cpp			\
 	$(liblumicommon_a_srcdir)/visitor.cpp			\
 	$(liblumicommon_a_srcdir)/configrules.cpp		\
-	$(liblumicommon_a_srcdir)/error.cpp			\
+	$(liblumicommon_a_srcdir)/exception.cpp			\
 	$(liblumicommon_a_srcdir)/query.cpp			\
 	$(liblumicommon_a_srcdir)/query/mockconfigrules.cpp	\
 	$(liblumicommon_a_srcdir)/streamtype.cpp		\

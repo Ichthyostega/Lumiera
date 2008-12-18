@@ -48,7 +48,7 @@ liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/util.cpp			\
 	$(liblumiera_la_srcdir)/visitor.cpp			\
 	$(liblumiera_la_srcdir)/configrules.cpp			\
-	$(liblumiera_la_srcdir)/error.cpp			\
+	$(liblumiera_la_srcdir)/exception.cpp			\
 	$(liblumiera_la_srcdir)/query.cpp			\
 	$(liblumiera_la_srcdir)/query/mockconfigrules.cpp	\
 	$(liblumiera_la_srcdir)/streamtype.cpp			\
