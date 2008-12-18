@@ -31,6 +31,7 @@ bin_PROGRAMS += lumigui
 lumigui_SOURCES =								\
 	$(lumigui_srcdir)/gtk-lumiera.cpp					\
 	$(lumigui_srcdir)/gtk-lumiera.hpp					\
+	$(lumigui_srcdir)/guinotificationfacade.cpp				\
 	$(lumigui_srcdir)/window-manager.cpp					\
 	$(lumigui_srcdir)/window-manager.hpp					\
 	$(lumigui_srcdir)/workspace/actions.cpp					\

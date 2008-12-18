@@ -15,7 +15,7 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-lumiera_srcdir = $(top_srcdir)/src/lumiera
+lumiera_srcdir = $(top_srcdir)/src
 
 bin_PROGRAMS += lumiera
 lumiera_CPPFLAGS = $(AM_CPPFLAGS) -DLUMIERA_CONFIG_PATH="\"$(pkgdatadir)/config\""
@@ -24,20 +24,19 @@ lumiera_LDADD = liblumierabackend.la liblumieraproc.la liblumiera.la \
 		$(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS) -lboost_program_options-mt -lboost_regex-mt
 
 lumiera_SOURCES =				\
-	$(lumiera_srcdir)/guifacade.cpp		\
-	$(lumiera_srcdir)/configfacade.cpp	\
-	$(lumiera_srcdir)/appstate.cpp		\
-	$(lumiera_srcdir)/option.cpp		\
-	$(lumiera_srcdir)/subsys.cpp		\
-	$(lumiera_srcdir)/interfaceproxy.cpp	\
-	$(lumiera_srcdir)/nobugcfg.cpp		\
-	$(lumiera_srcdir)/guistart.cpp		\
+	$(lumiera_srcdir)/lumiera/guifacade.cpp		\
+	$(lumiera_srcdir)/lumiera/configfacade.cpp	\
+	$(lumiera_srcdir)/lumiera/appstate.cpp		\
+	$(lumiera_srcdir)/lumiera/option.cpp		\
+	$(lumiera_srcdir)/lumiera/subsys.cpp		\
+	$(lumiera_srcdir)/lumiera/interfaceproxy.cpp	\
+	$(lumiera_srcdir)/lumiera/nobugcfg.cpp		\
 	$(lumiera_srcdir)/main.cpp
 
 
 noinst_HEADERS +=				\
-	$(lumiera_srcdir)/subsys.hpp		\
-	$(lumiera_srcdir)/appstate.hpp		\
-	$(lumiera_srcdir)/option.hpp		\
-	$(lumiera_srcdir)/subsystemrunner.hpp	\
-	$(lumiera_srcdir)/instancehandle.hpp
+	$(lumiera_srcdir)/lumiera/subsys.hpp		\
+	$(lumiera_srcdir)/lumiera/appstate.hpp		\
+	$(lumiera_srcdir)/lumiera/option.hpp		\
+	$(lumiera_srcdir)/lumiera/subsystemrunner.hpp	\
+	$(lumiera_srcdir)/lumiera/instancehandle.hpp

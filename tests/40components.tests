@@ -1,4 +1,4 @@
-TESTING "Component Test Suite: common and basic components" ./test-common --group=common
+TESTING "Component Test Suite: common and basic components" ./test-lib --group=common
 
 
 
