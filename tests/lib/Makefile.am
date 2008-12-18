@@ -21,17 +21,17 @@ testlib_srcdir = $(top_srcdir)/tests/lib
 check_PROGRAMS += test-lib
 test_lib_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(testlib_srcdir)
 
-test_lib_LDADD =									\
-	liblumiprocmobjectbuilder.la							\
-	liblumiprocmobjectsession.la							\
-	liblumiprocmobject.la								\
-	liblumiprocengine.la								\
-	liblumiproccontrol.la								\
-	liblumieraproc.la								\
-	liblumiprocasset.la								\
-	liblumierabackend.la								\
-	liblumieracommon.la                \
-	liblumiera.la									\
+test_lib_LDADD =			\
+	liblumiprocmobjectbuilder.la	\
+	liblumiprocmobjectsession.la	\
+	liblumiprocmobject.la		\
+	liblumiprocengine.la		\
+	liblumiproccontrol.la		\
+	liblumieraproc.la		\
+	liblumiprocasset.la		\
+	liblumierabackend.la		\
+	liblumieracommon.la		\
+	liblumiera.la			\
 	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt
 
 test_lib_SOURCES =						\

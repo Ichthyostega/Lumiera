@@ -22,14 +22,14 @@ check_PROGRAMS += test-components
 test_components_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(testcomponents_srcdir)
 
 test_components_LDADD =								\
-	liblumieraproc.la								\
+	liblumieraproc.la							\
 	liblumiprocengine.la							\
 	liblumiprocmobjectbuilder.la						\
 	liblumiprocmobjectsession.la						\
 	liblumiprocasset.la							\
 	liblumiprocmobject.la							\
 	liblumierabackend.la							\
-    liblumieracommon.la                \
+	liblumieracommon.la  							\
 	liblumiera.la								\
 	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt
 

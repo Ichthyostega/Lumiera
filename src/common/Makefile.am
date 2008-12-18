@@ -48,8 +48,8 @@ liblumieracommon_la_SOURCES =                  \
 noinst_HEADERS +=               \
 	$(liblumieracommon_la_srcdir)/interface.h		\
 	$(liblumieracommon_la_srcdir)/interfaceregistry.h	\
-	$(liblumieracommon_la_srcdir)/interfacedescriptor.h \
-	$(liblumieracommon_la_srcdir)/plugin.h 		\
+	$(liblumieracommon_la_srcdir)/interfacedescriptor.h	\
+	$(liblumieracommon_la_srcdir)/plugin.h 			\
 	$(liblumieracommon_la_srcdir)/config.h 		\
 	$(liblumieracommon_la_srcdir)/configentry.h		\
 	$(liblumieracommon_la_srcdir)/configitem.h		\
