@@ -19,8 +19,7 @@
 testlib_srcdir = $(top_srcdir)/tests/lib
 
 check_PROGRAMS += test-lib
-test_lib_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(testlib_srcdir)    \
-    -DLUMIERA_CONFIG_PATH="\"$(pkgdatadir)/config\""   
+test_lib_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(testlib_srcdir)
 
 test_lib_LDADD =									\
 	liblumiprocmobjectbuilder.la							\
@@ -31,6 +30,7 @@ test_lib_LDADD =									\
 	liblumieraproc.la								\
 	liblumiprocasset.la								\
 	liblumierabackend.la								\
+	liblumieracommon.la                \
 	liblumiera.la									\
 	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt
 
@@ -64,14 +64,6 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/visitingtoolconcept.cpp		\
 	$(testlib_srcdir)/visitingtoolextendedtest.cpp		\
 	$(testlib_srcdir)/visitingtooltest.cpp
-
-# temporary Fix because of unresolved dependency problems regarding startup and core
-test_lib_SOURCES +=                             \
-	$(lumiera_srcdir)/lumiera/appstate.cpp  	\
-	$(lumiera_srcdir)/lumiera/configfacade.cpp	\
-	$(lumiera_srcdir)/lumiera/subsys.cpp       	\
-	$(lumiera_srcdir)/lumiera/nobugcfg.cpp
-          
 
 noinst_HEADERS +=					\
 	$(testlib_srcdir)/query/querydiagnostics.hpp	\
