@@ -18,7 +18,7 @@
 liblumiera_la_srcdir = $(top_srcdir)/src/lib
 lib_LTLIBRARIES += liblumiera.la
 
-liblumiera_la_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror -DLUMIERA_PLUGIN_PATH="\"$(pkglibdir)\""
+liblumiera_la_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
 
 liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/error.c				\
