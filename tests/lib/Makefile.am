@@ -34,7 +34,7 @@ test_lib_LDADD =									\
 	liblumiera.a									\
 	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt
 
-test_common_SOURCES =						\
+test_lib_SOURCES =						\
 	$(testlib_srcdir)/allocationclustertest.cpp		\
 	$(testlib_srcdir)/appconfigtest.cpp			\
 	$(testlib_srcdir)/customsharedptrtest.cpp		\

@@ -24,6 +24,7 @@ lumigui_CPPFLAGS = $(AM_CPPFLAGS)					\
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"	\
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\"				\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\"				\
+	-DLUMIERA_CONFIG_PATH="\"$(pkgdatadir)/config\"" \
 	$(LUMIERA_GUI_CFLAGS)
 
 bin_PROGRAMS += lumigui
@@ -100,13 +101,25 @@ lumigui_SOURCES =								\
 	$(lumigui_srcdir)/output/xvdisplayer.cpp				\
 	$(lumigui_srcdir)/output/xvdisplayer.hpp
 
+lumigui_SOURCES +=                             \
+	$(lumiera_srcdir)/lumiera/guifacade.cpp     \
+	$(lumiera_srcdir)/lumiera/configfacade.cpp  \
+	$(lumiera_srcdir)/lumiera/appstate.cpp      \
+	$(lumiera_srcdir)/lumiera/option.cpp        \
+	$(lumiera_srcdir)/lumiera/subsys.cpp        \
+	$(lumiera_srcdir)/lumiera/interfaceproxy.cpp    \
+	$(lumiera_srcdir)/lumiera/nobugcfg.cpp      
+
 lumigui_LDFLAGS =
 # $(LIBS) $(X_PRE_LIBS) $(X_LIBS) $(X_EXTRA_LIBS)
-lumigui_LDADD = $(LUMIERA_GUI_LIBS) liblumiera.la $(NOBUGMT_LUMIERA_LIBS)
+lumigui_LDADD = liblumierabackend.la liblumieraproc.la liblumiera.la \
+                $(LUMIERA_GUI_LIBS) $(NOBUGMT_LUMIERA_LIBS) -lboost_program_options-mt -lboost_regex-mt
 
 lumigui_DEPENDENCIES =				\
 	$(top_builddir)/lumiera_ui.rc		\
-	$(top_builddir)/liblumiera.la
+	$(top_builddir)/liblumiera.la        \
+	$(top_builddir)/liblumierabackend.la \
+	$(top_builddir)/liblumieraproc.la    
 
 $(top_builddir)/lumiera_ui.rc:
 	cp $(lumigui_srcdir)/lumiera_ui.rc $(top_builddir)
