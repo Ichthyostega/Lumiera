@@ -22,6 +22,7 @@ liblumiera_la_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror -DLUMIERA_PLUGIN_PATH=
 
 liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/error.c				\
+	$(liblumiera_la_srcdir)/exception.cpp 			\
 	$(liblumiera_la_srcdir)/mutex.c				\
 	$(liblumiera_la_srcdir)/rwlock.c			\
 	$(liblumiera_la_srcdir)/condition.c			\
@@ -31,26 +32,12 @@ liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/psplay.c			\
 	$(liblumiera_la_srcdir)/mrucache.c			\
 	$(liblumiera_la_srcdir)/time.c				\
-	$(liblumiera_la_srcdir)/config.c			\
-	$(liblumiera_la_srcdir)/config_typed.c			\
-	$(liblumiera_la_srcdir)/config_wordlist.c		\
-	$(liblumiera_la_srcdir)/configentry.c			\
-	$(liblumiera_la_srcdir)/configitem.c			\
-	$(liblumiera_la_srcdir)/config_lookup.c			\
-	$(liblumiera_la_srcdir)/config_interface.c		\
-	$(liblumiera_la_srcdir)/interface.c			\
-	$(liblumiera_la_srcdir)/interfaceregistry.c		\
-	$(liblumiera_la_srcdir)/plugin.c			\
-	$(liblumiera_la_srcdir)/plugin_dynlib.c			\
 	$(liblumiera_la_srcdir)/allocationcluster.cpp		\
 	$(liblumiera_la_srcdir)/external/libgavl.cpp		\
 	$(liblumiera_la_srcdir)/lumitime.cpp			\
 	$(liblumiera_la_srcdir)/util.cpp			\
 	$(liblumiera_la_srcdir)/visitor.cpp			\
-	$(liblumiera_la_srcdir)/configrules.cpp			\
-	$(liblumiera_la_srcdir)/exception.cpp			\
 	$(liblumiera_la_srcdir)/query.cpp			\
-	$(liblumiera_la_srcdir)/query/mockconfigrules.cpp	\
 	$(liblumiera_la_srcdir)/streamtype.cpp			\
 	$(liblumiera_la_srcdir)/test/testoption.cpp 		\
 	$(liblumiera_la_srcdir)/test/suite.cpp 			\
@@ -68,15 +55,6 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/mrucache.h			\
 	$(liblumiera_la_srcdir)/time.h				\
 	$(liblumiera_la_srcdir)/ppmpl.h				\
-	$(liblumiera_la_srcdir)/interface.h			\
-	$(liblumiera_la_srcdir)/interfaceregistry.h		\
-	$(liblumiera_la_srcdir)/interfacedescriptor.h		\
-	$(liblumiera_la_srcdir)/plugin.h			\
-	$(liblumiera_la_srcdir)/config.h			\
-	$(liblumiera_la_srcdir)/configentry.h			\
-	$(liblumiera_la_srcdir)/configitem.h			\
-	$(liblumiera_la_srcdir)/config_lookup.h			\
-	$(liblumiera_la_srcdir)/config_interface.h		\
 	$(liblumiera_la_srcdir)/allocationcluster.hpp		\
 	$(liblumiera_la_srcdir)/scopedholdertransfer.hpp	\
 	$(liblumiera_la_srcdir)/scopedholder.hpp		\
@@ -91,7 +69,6 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/visitor.hpp			\
 	$(liblumiera_la_srcdir)/visitordispatcher.hpp		\
 	$(liblumiera_la_srcdir)/visitorpolicies.hpp		\
-	$(liblumiera_la_srcdir)/configrules.hpp			\
 	$(liblumiera_la_srcdir)/multithread.hpp			\
 	$(liblumiera_la_srcdir)/p.hpp				\
 	$(liblumiera_la_srcdir)/query.hpp			\
@@ -107,5 +84,4 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/test/suite.hpp			\
 	$(liblumiera_la_srcdir)/test/testoption.hpp		\
 	$(liblumiera_la_srcdir)/test/run.hpp			\
-	$(liblumiera_la_srcdir)/query/mockconfigrules.hpp
 

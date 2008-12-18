@@ -28,7 +28,7 @@
 
 #include "proc/asset.hpp"
 #include "proc/asset/pipe.hpp"
-#include "lib/configrules.hpp"
+#include "common/configrules.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
 

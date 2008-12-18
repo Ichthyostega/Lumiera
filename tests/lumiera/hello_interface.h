@@ -1,4 +1,4 @@
-#include "lib/interface.h"
+#include "common/interface.h"
 
 /*
   one interface which can greet in different languages

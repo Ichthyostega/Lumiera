@@ -23,7 +23,7 @@
 //#include <string.h>
 
 #include "lib/llist.h"
-#include "lib/config.h"
+#include "common/config.h"
 
 #include "backend/backend.h"
 #include "backend/file.h"

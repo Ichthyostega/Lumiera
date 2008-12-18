@@ -24,7 +24,7 @@
 
 //TODO: Support library includes//
 
-#include "lib/interface.h"
+#include "common/interface.h"
 
 //TODO: Forward declarations//
 

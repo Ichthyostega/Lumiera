@@ -33,7 +33,7 @@
 #include "model/project.hpp"
 
 extern "C" {
-#include "lib/interface.h"
+#include "common/interface.h"
 }
 
 NOBUG_CPP_DEFINE_FLAG(gui);

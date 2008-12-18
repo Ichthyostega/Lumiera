@@ -27,7 +27,7 @@
 #include "lib/util.hpp"
 
 extern "C" {
-#include "lib/interfacedescriptor.h"
+#include "common/interfacedescriptor.h"
 }
 
 #include <string>

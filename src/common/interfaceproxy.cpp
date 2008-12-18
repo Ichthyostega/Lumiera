@@ -27,7 +27,7 @@
 #include "include/error.hpp"
 
 extern "C" {
-#include "lib/interface.h"
+#include "common/interface.h"
 }
 
 using util::cStr;

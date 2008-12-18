@@ -25,9 +25,9 @@
 #include "lib/mutex.h"
 #include "lib/error.h"
 
-#include "lib/interfaceregistry.h"
-#include "lib/config.h"
-#include "lib/plugin.h"
+#include "common/interfaceregistry.h"
+#include "common/config.h"
+#include "common/plugin.h"
 
 #include <glob.h>
 

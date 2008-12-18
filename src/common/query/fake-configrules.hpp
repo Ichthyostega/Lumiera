@@ -1,5 +1,5 @@
 /*
-  MOCKCONFIGRULES.hpp  -  mock implementation of the config rules system
+  FAKE-CONFIGRULES.hpp  -  dummy implementation of the config rules system
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,9 +21,9 @@
 */
 
 
-/** @file mockconfigrules.hpp
+/** @file fake-configrules.hpp
  ** Mock/Test/Debugging Implementation of the config rules system.
- ** Instead of actually parsing/analyzing/resolving queries, this implementation
+ ** Instead of actually parsing/analysing/resolving queries, this implementation
  ** uses a Table of hard wired queries together with preconfigured object instances
  ** as answer values. As of 1/2008 it is used to "keep the implementation work going"
  ** -- later on, when we use a real Prolog interpreter, it still may be useful for
@@ -35,11 +35,11 @@
  */
 
 
-#ifndef LUMIERA_MOCKCONFIGRULES_H
-#define LUMIERA_MOCKCONFIGRULES_H
+#ifndef LUMIERA_FAKECONFIGRULES_H
+#define LUMIERA_FAKECONFIGRULES_H
 
 #include "proc/mobject/session.hpp"
-#include "lib/configrules.hpp"
+#include "common/configrules.hpp"
 #include "lib/util.hpp"
 
 #include <boost/scoped_ptr.hpp>

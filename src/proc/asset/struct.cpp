@@ -26,7 +26,7 @@
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/track.hpp"
 #include "proc/asset/pipe.hpp"
-#include "lib/configrules.hpp"
+#include "common/configrules.hpp"
 
 #include "proc/asset/structfactoryimpl.hpp"
 

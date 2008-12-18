@@ -86,7 +86,7 @@ extern "C" {
 #endif /* =========================== CLI Interface ================= */ 
 
   
-#include "lib/interface.h"
+#include "common/interface.h"
 
 LUMIERA_INTERFACE_DECLARE (lumieraorg_GuiNotification, 1,
                            LUMIERA_INTERFACE_SLOT (void, displayInfo,        (const char*)),

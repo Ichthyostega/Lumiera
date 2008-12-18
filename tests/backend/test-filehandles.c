@@ -20,7 +20,7 @@
 */
 #include "lib/llist.h"
 #include "lib/safeclib.h"
-#include "lib/config.h"
+#include "common/config.h"
 
 #include "backend/backend.h"
 #include "backend/filehandlecache.h"

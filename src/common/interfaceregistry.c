@@ -29,8 +29,8 @@
 
 
 
-#include "lib/plugin.h"
-#include "lib/interfaceregistry.h"
+#include "common/plugin.h"
+#include "common/interfaceregistry.h"
 
 /**
  * @file

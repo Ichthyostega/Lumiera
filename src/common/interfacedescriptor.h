@@ -21,7 +21,7 @@
 #ifndef LUMIERA_INTERFACEDESCRIPTOR_H
 #define LUMIERA_INTERFACEDESCRIPTOR_H
 
-#include "lib/interface.h"
+#include "common/interface.h"
 
 
 /**

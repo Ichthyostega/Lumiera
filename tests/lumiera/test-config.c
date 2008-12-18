@@ -21,8 +21,8 @@
 */
 #include "lib/safeclib.h"
 
-#include "lib/config.h"
-#include "lib/configitem.h"
+#include "common/config.h"
+#include "common/configitem.h"
 
 #include "tests/test.h"
 

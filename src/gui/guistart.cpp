@@ -48,8 +48,8 @@
 #include "lib/singleton.hpp"
 
 extern "C" {
-#include "lib/interface.h"
-#include "lib/interfacedescriptor.h"
+#include "common/interface.h"
+#include "common/interfacedescriptor.h"
 }
 
 #include <string>

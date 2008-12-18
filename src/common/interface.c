@@ -22,10 +22,10 @@
 #include "lib/mutex.h"
 #include "lib/safeclib.h"
 
-#include "lib/plugin.h"
-#include "lib/interface.h"
+#include "common/plugin.h"
+#include "common/interface.h"
 
-#include "lib/interfaceregistry.h"
+#include "common/interfaceregistry.h"
 
 #include <nobug.h>
 

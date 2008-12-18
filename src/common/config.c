@@ -21,7 +21,7 @@
 
 //TODO: Support library includes//
 #include "lib/safeclib.h"
-#include "lib/config.h"
+#include "common/config.h"
 
 
 //TODO: Lumiera header includes//

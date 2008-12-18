@@ -58,7 +58,7 @@ namespace lumiera {
           return string(typeid(OBJ).name())+": "+*this;
         }
       
-      operator string& () { return *this; }      // TODO: needed temporarily by mockconfigrules
+      operator string& () { return *this; }      // TODO: needed temporarily by fake-configrules
     };                                          //        for calling removeTerm on the string-ref....
 
     

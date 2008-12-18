@@ -41,7 +41,7 @@
 #include "common/subsys.hpp"
 
 extern "C" {
-#include "lib/interface.h"
+#include "common/interface.h"
 }
 
 

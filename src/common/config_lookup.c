@@ -20,8 +20,8 @@
 */
 #include "lib/safeclib.h"
 
-#include "lib/config_lookup.h"
-#include "lib/config.h"
+#include "common/config_lookup.h"
+#include "common/config.h"
 
 /* we only use one fatal error for now, when allocation in the config system fail, something else is pretty wrong */
 LUMIERA_ERROR_DEFINE (CONFIG_LOOKUP, "config lookup failure");

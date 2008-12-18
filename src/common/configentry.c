@@ -23,7 +23,7 @@
 #include "lib/safeclib.h"
 
 //TODO: Lumiera header includes//
-#include "lib/configentry.h"
+#include "common/configentry.h"
 
 //TODO: internal/static forward declarations//
 

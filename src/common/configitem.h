@@ -33,7 +33,7 @@ typedef lumiera_configitem* LumieraConfigitem;
 struct lumiera_configitem_vtable;
 
 //TODO: Lumiera header includes//
-#include "lib/config_lookup.h"
+#include "common/config_lookup.h"
 
 
 //TODO: System includes//

@@ -24,8 +24,8 @@
 #include "lib/mutex.h"
 #include "lib/psplay.h"
 
-#include "lib/interface.h"
-#include "lib/plugin.h"
+#include "common/interface.h"
+#include "common/plugin.h"
 
 #include <nobug.h>
 

@@ -23,7 +23,7 @@
 
 #include "backend/mmap.h"
 #include "backend/mmapcache.h"
-#include "lib/config.h"
+#include "common/config.h"
 
 #include <unistd.h>
 #include <sys/mman.h>

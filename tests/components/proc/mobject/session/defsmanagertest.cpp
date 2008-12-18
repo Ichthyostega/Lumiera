@@ -29,7 +29,7 @@
 #include "proc/asset.hpp"
 #include "proc/asset/pipe.hpp"
 #include "lib/query.hpp"
-#include "lib/configrules.hpp"   ///////TODO just temp
+#include "common/configrules.hpp"   ///////TODO just temp
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
 

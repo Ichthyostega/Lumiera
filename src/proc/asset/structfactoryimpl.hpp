@@ -35,7 +35,7 @@
 
 
 #include "proc/mobject/session.hpp"
-#include "lib/configrules.hpp"
+#include "common/configrules.hpp"
 #include "include/error.hpp"
 #include "lib/util.hpp"
 

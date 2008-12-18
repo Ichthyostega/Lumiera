@@ -51,8 +51,8 @@ LUMIERA_ERROR_DECLARE (CONFIG_NO_ENTRY);
 
 
 //TODO: Lumiera header includes//
-#include "lib/config_lookup.h"
-#include "lib/configitem.h"
+#include "common/config_lookup.h"
+#include "common/configitem.h"
 
 //TODO: System includes//
 #include <nobug.h>

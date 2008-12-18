@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-#include "lib/configrules.hpp"
-#include "lib/query/mockconfigrules.hpp"
+#include "common/configrules.hpp"
+#include "common/query/fake-configrules.hpp"
 //#include "lib/util.hpp"
 #include "include/nobugcfg.h"
 

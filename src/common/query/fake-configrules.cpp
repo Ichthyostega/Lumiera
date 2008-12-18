@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "lib/query/mockconfigrules.hpp"
+#include "common/query/fake-configrules.hpp"
 
 #include "proc/mobject/session/track.hpp"
 #include "proc/asset/procpatt.hpp"

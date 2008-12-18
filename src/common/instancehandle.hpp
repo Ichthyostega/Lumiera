@@ -42,8 +42,8 @@
 #include "include/nobugcfg.h"
 
 extern "C" {
-#include "lib/interface.h"
-#include "lib/interfaceregistry.h"
+#include "common/interface.h"
+#include "common/interfaceregistry.h"
 }
 
 #include <boost/noncopyable.hpp>

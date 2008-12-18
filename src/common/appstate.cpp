@@ -28,11 +28,11 @@
 #include "common/subsystemrunner.hpp"
 
 extern "C" {
-#include "lib/config_interface.h"
+#include "common/config_interface.h"
 
-#include "lib/interface.h"
-#include "lib/interfaceregistry.h"
-#include "lib/plugin.h"
+#include "common/interface.h"
+#include "common/interfaceregistry.h"
+#include "common/plugin.h"
 }
 
 #include "lib/util.hpp"

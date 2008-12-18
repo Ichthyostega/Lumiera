@@ -24,7 +24,7 @@
 
 
 //TODO: Lumiera header includes//
-#include "lib/config.h"
+#include "common/config.h"
 
 //TODO: internal/static forward declarations//
 extern LumieraConfig lumiera_global_config;

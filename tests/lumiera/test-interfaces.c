@@ -19,11 +19,11 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "lib/interface.h"
-#include "lib/interfaceregistry.h"
-#include "lib/interfacedescriptor.h"
-#include "lib/config.h"
-#include "lib/config_interface.h"
+#include "common/interface.h"
+#include "common/interfaceregistry.h"
+#include "common/interfacedescriptor.h"
+#include "common/config.h"
+#include "common/config_interface.h"
 
 #include "tests/test.h"
 #include "tests/lumiera/hello_interface.h"
