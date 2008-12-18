@@ -29,7 +29,6 @@ lumigui_CPPFLAGS = $(AM_CPPFLAGS)					\
 	$(LUMIERA_GUI_CFLAGS)
 
 lumigui_LDADD =					\
-	-L$(top_buiddir)			\
 	liblumieracommon.la			\
 	liblumierabackend.la			\
 	liblumieraproc.la			\
