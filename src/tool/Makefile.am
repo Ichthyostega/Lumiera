@@ -20,17 +20,8 @@ lumitool_srcdir = $(top_srcdir)/src/tool
 noinst_PROGRAMS += luidgen
 
 luidgen_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
-luidgen_CPPFLAGS = -I$(top_srcdir)/src/             \
-	-DLUMIERA_CONFIG_PATH="\"$(pkgdatadir)/config\""   
+luidgen_CPPFLAGS = -I$(top_srcdir)/src/  
 luidgen_SOURCES =                                   \
 	$(lumitool_srcdir)/luidgen.c
 
-# temporary Fix because of unresolved dependency problems regarding startup and core
-luidgen_SOURCES +=                             \
-	$(lumiera_srcdir)/lumiera/appstate.cpp      \
-	$(lumiera_srcdir)/lumiera/configfacade.cpp  \
-	$(lumiera_srcdir)/lumiera/subsys.cpp        \
-	$(lumiera_srcdir)/lumiera/nobugcfg.cpp
-          
-
-luidgen_LDADD = liblumiera.la liblumieraproc.la -lboost_regex-mt -lboost_program_options-mt -ldl $(NOBUGMT_LUMIERA_LIBS)
+luidgen_LDADD = liblumiera.la  $(NOBUGMT_LUMIERA_LIBS)   liblumieracommon.la liblumieraproc.la -lboost_regex-mt -lboost_program_options-mt -ldl

@@ -18,8 +18,8 @@
 liblumieracommon_la_srcdir = $(top_srcdir)/src/common
 lib_LTLIBRARIES += liblumieracommon.la
 
-liblumieracommon_la_CPPFLAGS = $(AM_CPPFLAGS)
-liblumieracommon_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
+liblumieracommon_la_CPPFLAGS = $(AM_CPPFLAGS)  -DLUMIERA_CONFIG_PATH="\"$(pkgdatadir)/config\""
+liblumieracommon_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror  -DLUMIERA_PLUGIN_PATH="\"$(pkglibdir)/\""
 liblumieracommon_la_LIBADD = liblumiera.la
 
 liblumieracommon_la_SOURCES =                  \

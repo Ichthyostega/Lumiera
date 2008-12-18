@@ -83,5 +83,5 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/test/mockinjector.hpp		\
 	$(liblumiera_la_srcdir)/test/suite.hpp			\
 	$(liblumiera_la_srcdir)/test/testoption.hpp		\
-	$(liblumiera_la_srcdir)/test/run.hpp			\
+	$(liblumiera_la_srcdir)/test/run.hpp
 
