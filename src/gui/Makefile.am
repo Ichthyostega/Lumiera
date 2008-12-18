@@ -16,21 +16,29 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 lumigui_srcdir = $(top_srcdir)/src/gui
-#noinst_LIBRARIES += liblumigui.a
+lib_LTLIBRARIES += libgui.la
+bin_PROGRAMS += lumigui
 
 #lumigui_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
 
-lumigui_CPPFLAGS = $(AM_CPPFLAGS)					\
-	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"	\
-	-DPACKAGE_SRC_DIR=\""$(srcdir)"\"				\
-	-DPACKAGE_DATA_DIR=\""$(datadir)"\"				\
-	$(LUMIERA_GUI_CFLAGS)
-
-bin_PROGRAMS += lumigui
+lumigui_CPPFLAGS = $(AM_CPPFLAGS)                   \
+    -DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"  \
+    -DPACKAGE_SRC_DIR=\""$(srcdir)"\"               \
+    -DPACKAGE_DATA_DIR=\""$(datadir)"\"             \
+    $(LUMIERA_GUI_CFLAGS)
+    
+libgui_la_CPPFLAGS = $(AM_CPPFLAGS)                   \
+    -DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"  \
+    -DPACKAGE_SRC_DIR=\""$(srcdir)"\"               \
+    -DPACKAGE_DATA_DIR=\""$(datadir)"\"             \
+    $(LUMIERA_GUI_CFLAGS)
 
 lumigui_SOURCES =								\
 	$(lumigui_srcdir)/gtk-lumiera.cpp					\
-	$(lumigui_srcdir)/gtk-lumiera.hpp					\
+	$(lumigui_srcdir)/gtk-lumiera.hpp					
+	
+libgui_la_SOURCES =	                           \
+    $(lumigui_srcdir)/guistart.cpp             \
 	$(lumigui_srcdir)/guinotificationfacade.cpp				\
 	$(lumigui_srcdir)/window-manager.cpp					\
 	$(lumigui_srcdir)/window-manager.hpp					\
@@ -102,7 +110,10 @@ lumigui_SOURCES =								\
 
 lumigui_LDFLAGS =
 # $(LIBS) $(X_PRE_LIBS) $(X_LIBS) $(X_EXTRA_LIBS)
-lumigui_LDADD = liblumieracommon.la liblumierabackend.la liblumieraproc.la liblumiera.la \
+
+libgui_la_LIBADD = liblumieracommon.la liblumierabackend.la liblumieraproc.la liblumiera.la \
+                $(LUMIERA_GUI_LIBS) $(NOBUGMT_LUMIERA_LIBS)
+lumigui_LDADD = liblumieracommon.la liblumierabackend.la liblumieraproc.la liblumiera.la libgui.la \
                 $(LUMIERA_GUI_LIBS) $(NOBUGMT_LUMIERA_LIBS) -lboost_program_options-mt -lboost_regex-mt
 
 lumigui_DEPENDENCIES =				\
@@ -111,6 +122,7 @@ lumigui_DEPENDENCIES =				\
 	$(top_builddir)/liblumiera.la        \
 	$(top_builddir)/liblumierabackend.la \
 	$(top_builddir)/liblumieraproc.la    
+	
 
 $(top_builddir)/lumiera_ui.rc:
 	cp $(lumigui_srcdir)/lumiera_ui.rc $(top_builddir)
