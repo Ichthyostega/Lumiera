@@ -314,7 +314,7 @@ def defineBuildTargets(env, artifacts):
     objback =   srcSubtree(env,'$SRCDIR/backend') 
     objproc =   srcSubtree(env,'$SRCDIR/proc')
     objlib  = ( srcSubtree(env,'$SRCDIR/lumiera')
-              + srcSubtree(env,'$SRCDIR/common')
+#              + srcSubtree(env,'$SRCDIR/common')
               + srcSubtree(env,'$SRCDIR/lib')
               )
     core  = ( env.SharedLibrary('$LIBDIR/lumiback', objback,  SHLIBPREFIX='')
