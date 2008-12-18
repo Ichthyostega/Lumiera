@@ -21,12 +21,12 @@
 * *****************************************************/
 
 
-#include "common/test/run.hpp"
+#include "lib/test/run.hpp"
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/edl.hpp"             // TODO only temporarily needed
 #include "proc/mobject/session/fixture.hpp"             // TODO only temporarily needed
 #include "proc/assetmanager.hpp"
-//#include "common/util.hpp"
+//#include "lib/util.hpp"
 //#include <boost/format.hpp>
 #include <iostream>
 

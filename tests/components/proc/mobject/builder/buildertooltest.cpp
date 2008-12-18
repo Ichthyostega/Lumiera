@@ -21,14 +21,14 @@
 * *****************************************************/
 
 
-#include "common/test/run.hpp"
+#include "lib/test/run.hpp"
 
 #include "proc/mobject/builder/buildertool.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/asset/category.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/mobject/session/clip.hpp"
-#include "common/util.hpp"
+#include "lib/util.hpp"
 
 #include <iostream>
 

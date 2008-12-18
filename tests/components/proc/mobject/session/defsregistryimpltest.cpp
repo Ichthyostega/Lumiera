@@ -21,15 +21,15 @@
 * *****************************************************/
 
 
-#include "common/test/run.hpp"
-#include "common/util.hpp"
+#include "lib/test/run.hpp"
+#include "lib/util.hpp"
 
 #include "proc/mobject/session/defsregistry.hpp"
-#include "common/factory.hpp"
-#include "common/query.hpp"
-#include "common/p.hpp"
+#include "lib/factory.hpp"
+#include "lib/query.hpp"
+#include "lib/p.hpp"
 
-#include "../common/query/querydiagnostics.hpp"
+#include "../lib/query/querydiagnostics.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/format.hpp>

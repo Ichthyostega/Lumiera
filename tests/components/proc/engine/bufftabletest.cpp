@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "common/test/run.hpp"
+#include "lib/test/run.hpp"
 #include "include/error.hpp"
 
 #include "proc/engine/procnode.hpp"

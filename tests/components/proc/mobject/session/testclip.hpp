@@ -26,7 +26,7 @@
 
 
 #include "proc/mobject/session/clip.hpp"
-//#include "common/util.hpp"
+//#include "lib/util.hpp"
 
 
 //#include <boost/format.hpp>

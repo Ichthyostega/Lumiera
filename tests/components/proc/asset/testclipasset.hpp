@@ -25,9 +25,9 @@
 #define ASSET_TESTCLIPASSET_H
 
 
-#include "common/test/run.hpp"
-//#include "common/factory.hpp"
-//#include "common/util.hpp"
+#include "lib/test/run.hpp"
+//#include "lib/factory.hpp"
+//#include "lib/util.hpp"
 
 //#include <boost/format.hpp>
 #include <iostream>

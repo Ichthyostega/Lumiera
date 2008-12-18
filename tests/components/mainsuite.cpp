@@ -1,1 +1,1 @@
-../common/mainsuite.cpp
+../lib/mainsuite.cpp
