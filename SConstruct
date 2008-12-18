@@ -68,6 +68,10 @@ def setupBasicEnvironment():
     
     env.Append ( CCCOM=' -std=gnu99') 
     env.Append ( SHCCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honour CFLAGS, only CCFLAGS 
+    env.Replace( SETCC=env.subst('$SETCC '))
+    env.Replace( CC=env['SETCC'])           # possibly using another compiler command...
+    env.Replace( SETCXX=env.subst('$SETCXX '))
+    env.Replace( CXX=env['SETCXX'])
     env.Replace( VERSION=VERSION
                , SRCDIR=SRCDIR
                , BINDIR=BINDIR
@@ -142,7 +146,9 @@ def defineCmdlineOptions():
     """
     opts = Options([OPTIONSCACHEFILE, CUSTOPTIONSFILE])
     opts.AddOptions(
-        ('ARCHFLAGS', 'Set architecture-specific compilation flags (passed literally to gcc)','')
+         ('ARCHFLAGS', 'Set architecture-specific compilation flags (passed literally to gcc)','')
+        ,('SETCC', 'Set the C compiler to use. (you can use $CC to refer to the default)','$CC')
+        ,('SETCXX', 'Set the C++ compiler to use. (you can refer to $CXX)','$CXX')
         ,EnumOption('BUILDLEVEL', 'NoBug build level for debugging', 'ALPHA',
                     allowed_values=('ALPHA', 'BETA', 'RELEASE'))
         ,BoolOption('DEBUG', 'Build with debugging information and no optimisations', False)
