@@ -19,18 +19,18 @@
 testcomponents_srcdir = $(top_srcdir)/tests/components
 
 check_PROGRAMS += test-components
-test_components_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(testcomponents_srcdir)
+test_components_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(testcomponents_srcdir) \
+    -DLUMIERA_CONFIG_PATH="\"$(pkgdatadir)/config\""   
+
 test_components_LDADD =								\
-	liblumiproc.a								\
-	liblumiprocengine.a							\
-	liblumiprocmobjectbuilder.a						\
-	liblumiprocmobjectsession.a						\
-	liblumiprocasset.a							\
-	liblumiprocmobject.a							\
-	liblumicommon.a								\
-	liblumieracore.a							\
-	liblumibackend.a							\
-	liblumiera.a								\
+	liblumieraproc.la								\
+	liblumiprocengine.la							\
+	liblumiprocmobjectbuilder.la						\
+	liblumiprocmobjectsession.la						\
+	liblumiprocasset.la							\
+	liblumiprocmobject.la							\
+	liblumierabackend.la							\
+	liblumiera.la								\
 	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt
 
 test_components_SOURCES =							\
@@ -63,6 +63,14 @@ test_components_SOURCES =							\
 	$(testcomponents_srcdir)/proc/mobject/session/defsregistryimpltest.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/session/sessionstructuretest.cpp	\
 	$(testcomponents_srcdir)/mainsuite.cpp
+
+# temporary Fix because of unresolved dependency problems regarding startup and core
+test_components_SOURCES +=                             \
+    $(lumiera_srcdir)/lumiera/appstate.cpp      \
+    $(lumiera_srcdir)/lumiera/configfacade.cpp  \
+    $(lumiera_srcdir)/lumiera/subsys.cpp        \
+    $(lumiera_srcdir)/lumiera/nobugcfg.cpp
+          
 
 noinst_HEADERS +=							\
 	$(testcomponents_srcdir)/backend/mediaaccessmock.hpp		\

@@ -101,6 +101,7 @@ lumigui_SOURCES =								\
 	$(lumigui_srcdir)/output/xvdisplayer.cpp				\
 	$(lumigui_srcdir)/output/xvdisplayer.hpp
 
+# temporary Fix because of unresolved dependency problems regarding startup and core
 lumigui_SOURCES +=                             \
 	$(lumiera_srcdir)/lumiera/guifacade.cpp     \
 	$(lumiera_srcdir)/lumiera/configfacade.cpp  \

@@ -25,6 +25,7 @@ luidgen_CPPFLAGS = -I$(top_srcdir)/src/             \
 luidgen_SOURCES =                                   \
 	$(lumitool_srcdir)/luidgen.c
 
+# temporary Fix because of unresolved dependency problems regarding startup and core
 luidgen_SOURCES +=                             \
 	$(lumiera_srcdir)/lumiera/appstate.cpp      \
 	$(lumiera_srcdir)/lumiera/configfacade.cpp  \
@@ -32,4 +33,4 @@ luidgen_SOURCES +=                             \
 	$(lumiera_srcdir)/lumiera/nobugcfg.cpp
           
 
-luidgen_LDADD = liblumiera.la liblumieraproc.la -lboost_regex-mt -ldl $(NOBUGMT_LUMIERA_LIBS)
+luidgen_LDADD = liblumiera.la liblumieraproc.la -lboost_regex-mt -lboost_program_options-mt -ldl $(NOBUGMT_LUMIERA_LIBS)

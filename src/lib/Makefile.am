@@ -52,6 +52,8 @@ liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/query.cpp			\
 	$(liblumiera_la_srcdir)/query/mockconfigrules.cpp	\
 	$(liblumiera_la_srcdir)/streamtype.cpp			\
+	$(liblumiera_la_srcdir)/test/testoption.cpp 		\
+	$(liblumiera_la_srcdir)/test/suite.cpp 			\
 	$(liblumiera_la_srcdir)/cmdline.cpp
 
 noinst_HEADERS +=						\
