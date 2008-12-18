@@ -44,7 +44,7 @@
 
 
 #include "gui/guifacade.hpp"
-#include "lumiera/subsys.hpp"
+#include "common/subsys.hpp"
 #include "lib/singleton.hpp"
 
 extern "C" {

@@ -26,7 +26,7 @@
 
 #include "include/error.hpp"
 #include "lib/util.hpp"
-#include "lumiera/subsys.hpp"
+#include "common/subsys.hpp"
 #include "lib/multithread.hpp"
 
 #include <tr1/functional>

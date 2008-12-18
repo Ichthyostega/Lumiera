@@ -1,0 +1,7 @@
+Common application services (liblumieracommon)
+
+contains:
+ * the config system
+ * commandline parsing
+ * interfaces and plugin loading
+ * lua interpreter (planned)

@@ -26,7 +26,7 @@
 #include "include/error.hpp"
 #include "lib/singleton.hpp"
 #include "lib/functorutil.hpp"
-#include "lumiera/instancehandle.hpp"
+#include "common/instancehandle.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <tr1/functional>

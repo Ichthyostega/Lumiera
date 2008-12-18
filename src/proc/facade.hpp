@@ -25,7 +25,7 @@
 #define PROC_INTERFACE_FACADE_H
 
 
-#include "lumiera/subsys.hpp"
+#include "common/subsys.hpp"
 
 
 

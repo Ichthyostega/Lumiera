@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "lumiera/subsys.hpp"
+#include "common/subsys.hpp"
 
 #include "include/error.hpp"
 //#include "lib/util.hpp"

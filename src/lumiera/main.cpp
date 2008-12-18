@@ -24,8 +24,8 @@
 
 #include "include/nobugcfg.h"
 #include "include/error.hpp"
-#include "lumiera/appstate.hpp"
-#include "lumiera/option.hpp"
+#include "common/appstate.hpp"
+#include "common/option.hpp"
 
 #include "backend/enginefacade.hpp"
 #include "backend/netnodefacade.hpp"

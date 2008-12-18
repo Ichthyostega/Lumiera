@@ -44,7 +44,7 @@
 #define LUMIERA_SUBSYS_H
 
 #include "include/error.hpp"
-#include "lumiera/option.hpp"
+#include "common/option.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <tr1/functional>

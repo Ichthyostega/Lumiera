@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "lumiera/option.hpp"
+#include "common/option.hpp"
 
 #include "include/error.hpp"
 #include "lib/util.hpp"

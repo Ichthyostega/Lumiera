@@ -36,8 +36,8 @@
 #define LUMIERA_APPSTATE_H
 
 #include "include/symbol.hpp"
-#include "lumiera/option.hpp"
-#include "lumiera/subsys.hpp"
+#include "common/option.hpp"
+#include "common/subsys.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>

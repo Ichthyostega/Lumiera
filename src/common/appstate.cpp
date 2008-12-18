@@ -23,9 +23,9 @@
 
 #include "include/error.hpp"
 #include "include/lifecycle.h"
-#include "lumiera/appstate.hpp"
+#include "common/appstate.hpp"
 #include "lib/lifecycleregistry.hpp"
-#include "lumiera/subsystemrunner.hpp"
+#include "common/subsystemrunner.hpp"
 
 extern "C" {
 #include "lib/config_interface.h"

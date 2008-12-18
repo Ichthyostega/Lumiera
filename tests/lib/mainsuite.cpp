@@ -23,7 +23,7 @@
 
 #include "lib/test/suite.hpp"
 #include "lib/test/testoption.hpp"
-#include "lumiera/appstate.hpp"
+#include "common/appstate.hpp"
 #include "include/lifecycle.h"
 
 using lumiera::AppState;

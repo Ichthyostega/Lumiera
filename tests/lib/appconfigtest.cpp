@@ -25,7 +25,7 @@
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
-#include "lumiera/appstate.hpp"
+#include "common/appstate.hpp"
 
 
 
