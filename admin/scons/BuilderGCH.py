@@ -61,7 +61,7 @@ def setup_dependency(target,source,env, key):
             if header_path in [x.path for x in deps]:
                 print "Precompiled header(%s) %s  \t <--- %s" % (key,header_path,source[0])
                 env.Depends(target, header)
-    
+
 
 def static_pch_emitter(target,source,env):
     SCons.Defaults.StaticObjectEmitter( target, source, env )
@@ -73,9 +73,9 @@ def shared_pch_emitter(target,source,env):
     setup_dependency(target,source,env, key='GCH-sh')
     return (target, source)
 
+
 def generate(env):
-    """
-    Add builders and construction variables for the Gch builder.
+    """ Add builders and construction variables for the Gch builder.
     """
     env.Append(BUILDERS = {
         'gch': env.Builder(
@@ -87,7 +87,7 @@ def generate(env):
         target_factory = env.fs.File,
         ),
         })
-
+    
     try:
         bld   = env['BUILDERS']['GCH']
         bldsh = env['BUILDERS']['GCH-sh']
@@ -96,11 +96,11 @@ def generate(env):
         bldsh = GchShBuilder
         env['BUILDERS']['PrecompiledHeader'] = bld
         env['BUILDERS']['PrecompiledHeaderShared'] = bldsh
-
+    
     env['GCHCOM']     = '$CXX -o $TARGET -x c++-header -c $CXXFLAGS $_CCCOMCOM $SOURCE'
     env['GCHSHCOM']   = '$CXX -o $TARGET -x c++-header -c $SHCXXFLAGS $_CCCOMCOM $SOURCE'
     env['GCHSUFFIX']  = '.gch'
-
+    
     for suffix in SCons.Util.Split('.c .C .cc .cxx .cpp .c++'):
         env['BUILDERS']['StaticObject'].add_emitter( suffix, static_pch_emitter )
         env['BUILDERS']['SharedObject'].add_emitter( suffix, shared_pch_emitter )
