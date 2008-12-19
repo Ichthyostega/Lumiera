@@ -347,7 +347,7 @@ def defineBuildTargets(env, artifacts):
                            + [env.IconCopy(f)   for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
                            )
     
-    guimodule = envgtk.LoadableModule('$LIBDIR/gui', objgui, SHLIBPREFIX='')
+    guimodule = envgtk.LoadableModule('$LIBDIR/gtk_gui', objgui, SHLIBPREFIX='', SHLIBSUFFIX='.lum')
     artifacts['lumigui'] = ( guimodule
                            + envgtk.Program('$BINDIR/lumigui', objgui )
                            + env.Install('$BINDIR', env.Glob('$SRCDIR/gui/*.rc'))
