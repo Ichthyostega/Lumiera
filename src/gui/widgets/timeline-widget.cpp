@@ -289,12 +289,19 @@ TimelineWidget::update_tracks()
 { 
   REQUIRE(sequence);
   
+  // Remove any tracks which are no longer present in the model
+  remove_orphaned_tracks();
+  
   // Create timeline tracks from all the model tracks
   create_timeline_tracks();
   
   // Update the header container
   ASSERT(headerContainer != NULL);
+  headerContainer->show_all_children();
   headerContainer->update_headers();
+  
+  // Update the body
+  body->queue_draw();
   
   // Recalculate the total height of the timeline scrolled area
   totalHeight = 0;
@@ -316,9 +323,6 @@ TimelineWidget::create_timeline_tracks()
   BOOST_FOREACH(shared_ptr<model::Track> child,
     sequence->get_child_tracks())
     create_timeline_tracks_from_branch(child);
-    
-  headerContainer->show_all_children();
-  body->queue_draw();
 }
 
 void
@@ -351,12 +355,57 @@ TimelineWidget::create_timeline_track_from_model_track(
   // Choose a corresponding timeline track class from the model track's
   // class
   if(typeid(*model_track) == typeid(model::ClipTrack))
-    return shared_ptr<timeline::Track>(new timeline::ClipTrack());
+    return shared_ptr<timeline::Track>(new timeline::ClipTrack(*this));
   else if(typeid(*model_track) == typeid(model::GroupTrack))
-    return shared_ptr<timeline::Track>(new timeline::GroupTrack());
+    return shared_ptr<timeline::Track>(new timeline::GroupTrack(*this));
   
   ASSERT(NULL); // Unknown track type;
   return shared_ptr<timeline::Track>();
+}
+
+void
+TimelineWidget::remove_orphaned_tracks()
+{
+  REQUIRE(sequence);
+  REQUIRE(headerContainer != NULL);
+  REQUIRE(body != NULL);
+  
+  std::map<boost::shared_ptr<model::Track>,
+    boost::shared_ptr<timeline::Track> >
+    orphan_track_map(trackMap);
+  
+  // Remove all tracks which are still present in the sequence
+  BOOST_FOREACH(shared_ptr<model::Track> child,
+    sequence->get_child_tracks())
+    search_orphaned_tracks_in_branch(child, orphan_track_map);
+  
+  // orphan_track_map now contains all the orphaned tracks
+  // Remove them
+  std::pair<shared_ptr<model::Track>, shared_ptr<timeline::Track> >
+    pair; 
+  BOOST_FOREACH( pair, orphan_track_map )
+    {
+      ENSURE(pair.first)
+      trackMap.erase(pair.first);
+    }
+}
+
+void
+TimelineWidget::search_orphaned_tracks_in_branch(
+    boost::shared_ptr<model::Track> model_track,
+    std::map<boost::shared_ptr<model::Track>,
+    boost::shared_ptr<timeline::Track> > &orphan_track_map)
+{
+  REQUIRE(model_track);
+  
+  // Is the timeline UI still present?
+  if(contains(orphan_track_map, model_track))
+    orphan_track_map.erase(model_track);
+  
+  // Recurse to child tracks
+  BOOST_FOREACH(shared_ptr<model::Track> child,
+    model_track->get_child_tracks())
+    search_orphaned_tracks_in_branch(child, orphan_track_map);
 }
 
 shared_ptr<timeline::Track>
@@ -378,7 +427,32 @@ TimelineWidget::lookup_timeline_track(
   ENSURE(iterator->second != NULL);
   return iterator->second;
 }
+
+boost::shared_ptr<model::Track>
+TimelineWidget::lookup_model_track(
+  const timeline::Track *timeline_track) const
+{
+  REQUIRE(sequence);  
   
+  std::pair<shared_ptr<model::Track>, shared_ptr<timeline::Track> >
+    pair; 
+  BOOST_FOREACH( pair, trackMap )
+    {
+      if(pair.second.get() == timeline_track)
+        {
+          ENSURE(pair.first);
+          return pair.first;
+        }  
+    }
+    
+  // The track is not present in the map
+  // We are in an error condition if the timeline track is not found
+  // - the timeline tracks must always be synchronous with the model
+  // tracks.
+  ENSURE(0);
+  return shared_ptr<model::Track>();
+}   
+
 void
 TimelineWidget::update_scroll()
 {

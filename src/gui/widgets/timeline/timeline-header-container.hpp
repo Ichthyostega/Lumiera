@@ -118,6 +118,12 @@ private:
    **/
   void forall_vfunc(gboolean include_internals, GtkCallback callback,
                     gpointer callback_data);
+  
+  /**
+   * An event handler that is called when a widget is removed from the
+   * container.
+   **/             
+  void on_remove(Widget* widget);
 
   /* ===== Events ===== */      
 private:
@@ -193,6 +199,9 @@ private:
   void draw_header_decoration(
     boost::shared_ptr<model::Track> model_track,
     const Gdk::Rectangle &clip_rect);
+    
+  boost::shared_ptr<timeline::Track> header_from_point(
+    const Gdk::Point &point);
   
   /**
    * Given a point, expander_button_from_point finds the track of the
@@ -297,6 +306,8 @@ private:
    * in pixels.
    **/
   int expand_button_size;
+  
+  friend class timeline::Track;
 };
 
 }   // namespace timeline

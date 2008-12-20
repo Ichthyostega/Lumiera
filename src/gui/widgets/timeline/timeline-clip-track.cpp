@@ -29,7 +29,8 @@ namespace gui {
 namespace widgets {
 namespace timeline {
   
-ClipTrack::ClipTrack()
+ClipTrack::ClipTrack(TimelineWidget &timeline_widget) :
+  Track(timeline_widget)
 {
 }
 

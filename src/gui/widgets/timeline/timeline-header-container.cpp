@@ -150,11 +150,25 @@ bool TimelineHeaderContainer::on_button_press_event (
       break;
       
     case 3: // Right Click
-      // Popup the context menu
-      contextMenu.popup(event->button, event->time);
-      break;
-    
-
+      {
+        // Popup the context menu
+        shared_ptr<Track> header = header_from_point(
+          Gdk::Point(event->x, event->y));
+        
+        // Are we hovering on a header?
+        if(header)
+          {
+            // Yes - show the header's context menu
+            header->show_header_context_menu(
+              event->button, event->time);
+          }
+        else
+          {
+            // No - show the default context menu
+            contextMenu.popup(event->button, event->time);
+          }
+        break;
+      }
     }
   
   return true;
@@ -237,6 +251,12 @@ TimelineHeaderContainer::forall_vfunc(gboolean /* include_internals */,
       ASSERT(track != NULL);
       forall_vfunc_recursive(track, callback, callback_data);
     }
+}
+
+void
+TimelineHeaderContainer::on_remove(Widget* widget)
+{
+  // Do nothing - this is just to keep Gtk::Container happy
 }
 
 bool
@@ -475,6 +495,25 @@ TimelineHeaderContainer::draw_header_decoration(
     BOOST_FOREACH( shared_ptr<model::Track> child,
       model_track->get_child_tracks() )
       draw_header_decoration(child, clip_rect);
+}
+
+boost::shared_ptr<timeline::Track>
+TimelineHeaderContainer::header_from_point(const Gdk::Point &point)
+{
+  std::pair<shared_ptr<timeline::Track>, Gdk::Rectangle> pair; 
+  BOOST_FOREACH( pair, headerBoxes )
+    {
+      // Hit test the rectangle
+      const Gdk::Rectangle &rect = pair.second;
+      
+      if(point.get_x() >= rect.get_x() &&
+        point.get_x() < rect.get_x() + rect.get_width() &&
+        point.get_y() >= rect.get_y() &&
+        point.get_y() < rect.get_y() + rect.get_height())
+        return pair.first;
+    }
+    
+  return shared_ptr<timeline::Track>();
 }
 
 shared_ptr<timeline::Track>

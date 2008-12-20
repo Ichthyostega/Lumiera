@@ -191,9 +191,20 @@ private:
    * @return The timeline track created, or an empty shared_ptr if
    * model_track has an unreckognised type (this is an error condition).
    **/
-  static boost::shared_ptr<timeline::Track>
+  boost::shared_ptr<timeline::Track>
     create_timeline_track_from_model_track(
     boost::shared_ptr<model::Track> model_track);
+  
+  /**
+   * Removes any UI tracks which no longer have corresponding model
+   * tracks present in the sequence.
+   **/
+  void remove_orphaned_tracks();
+  
+  void search_orphaned_tracks_in_branch(
+    boost::shared_ptr<model::Track> model_track,
+    std::map<boost::shared_ptr<model::Track>,
+    boost::shared_ptr<timeline::Track> > &orphan_track_map);
   
   /**
    * Looks up a timeline UI track in trackMap that corresponds to a
@@ -205,6 +216,17 @@ private:
    **/
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
     boost::shared_ptr<model::Track> model_track) const;
+    
+  /**
+   * Looks up a model track in trackMap that corresponds to a
+   * given timeline track.
+   * @param timeline_track The timeline UI track to look up.
+   * @returns The model track found, or an empty shared_ptr if
+   * timeline_track has no corresponding timeline UI track (this is an
+   * error condition).
+   **/
+  boost::shared_ptr<model::Track> lookup_model_track(
+    const timeline::Track *timeline_track) const;
   
   // ----- Layout Functions ----- //
   
@@ -305,6 +327,7 @@ protected:
   friend class timeline::Tool;
   friend class timeline::ArrowTool;
   friend class timeline::IBeamTool;
+  friend class timeline::Track;
 };
 
 }   // namespace widgets

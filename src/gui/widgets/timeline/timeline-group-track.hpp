@@ -36,7 +36,7 @@ namespace timeline {
 class GroupTrack : public timeline::Track
 {
 public:
-  GroupTrack();
+  GroupTrack(TimelineWidget &timeline_widget);
   
   void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
     TimelineViewWindow* constwindow)
