@@ -21,16 +21,16 @@
 * *****************************************************/
 
 
-#include "common/test/run.hpp"
+#include "lib/test/run.hpp"
 
-#include "common/util.hpp"
+#include "lib/util.hpp"
 #include <boost/lexical_cast.hpp>
 
 using boost::lexical_cast;
 using util::isnil;
 
 
-#include "common/lumitime.hpp"
+#include "lib/lumitime.hpp"
 
 
 
