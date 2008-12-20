@@ -33,6 +33,7 @@
 #include <vector>
 #include <boost/utility.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include "../common/util.hpp"
 
 extern "C" {

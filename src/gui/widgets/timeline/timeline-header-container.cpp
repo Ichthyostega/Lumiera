@@ -434,7 +434,8 @@ TimelineHeaderContainer::draw_header_decoration(
     lookup_timeline_track(model_track);
   
   // Get the cached header box
-  ASSERT(contains(headerBoxes, timeline_track));  
+  weak_ptr<timeline::Track> ptr(timeline_track);
+  ASSERT(contains(headerBoxes, ptr));  
   const Gdk::Rectangle &box = headerBoxes[timeline_track];
   
   // Paint the box, if it will be visible
@@ -502,7 +503,8 @@ TimelineHeaderContainer::get_expander_button_rectangle(
   shared_ptr<Track> track)
 {
   REQUIRE(track != NULL);
-  ASSERT(contains(headerBoxes, track));  
+  weak_ptr<timeline::Track> ptr(track);
+  ASSERT(contains(headerBoxes, ptr));  
   
   const Gdk::Rectangle &box = headerBoxes[track];
   return Gdk::Rectangle(
