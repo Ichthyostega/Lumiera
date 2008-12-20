@@ -23,7 +23,7 @@
 
 #include "proc/assetmanager.hpp"
 #include "proc/asset/proc.hpp"
-#include "common/util.hpp"
+#include "lib/util.hpp"
 #include "include/nobugcfg.h"
 
 

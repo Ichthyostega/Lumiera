@@ -36,7 +36,7 @@
 #define INTERFACE_CONFIGFACADE_H
 
 
-#include "common/singleton.hpp"
+#include "lib/singleton.hpp"
 
 #include <string>
 

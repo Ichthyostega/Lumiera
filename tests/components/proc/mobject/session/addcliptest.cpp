@@ -21,12 +21,12 @@
 * *****************************************************/
 
 
-#include "common/test/run.hpp"
+#include "lib/test/run.hpp"
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/placement.hpp"
-#include "common/util.hpp"
+#include "lib/util.hpp"
 
 //#include <boost/format.hpp>
 #include <iostream>

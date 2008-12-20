@@ -152,7 +152,7 @@ namespace lumiera {
     
     
     /** install our own handler for undeclared exceptions. Will be
-     *  called automatically ON_BASIC_INIT when linking error.cpp */
+     *  called automatically ON_BASIC_INIT when linking exception.cpp */
     void install_unexpectedException_handler ();
     
   } // namespace error

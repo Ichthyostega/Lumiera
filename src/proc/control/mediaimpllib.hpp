@@ -25,7 +25,7 @@
 #define CONTROL_MEDIAIMPLLIB_H
 
 
-#include "common/streamtype.hpp"
+#include "lib/streamtype.hpp"
 
 
 

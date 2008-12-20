@@ -39,7 +39,7 @@
 #include "pre_a.hpp"
 
 #include "proc/asset.hpp"
-#include "common/factory.hpp"
+#include "lib/factory.hpp"
 
 
 

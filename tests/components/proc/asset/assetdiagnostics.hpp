@@ -34,7 +34,7 @@
 
 
 #include "proc/assetmanager.hpp"
-#include "common/util.hpp"
+#include "lib/util.hpp"
 
 #include <boost/format.hpp>
 #include <boost/bind.hpp>

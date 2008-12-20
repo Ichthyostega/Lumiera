@@ -43,10 +43,10 @@ AM_CPPFLAGS = -I$(top_srcdir)/src/ \
 include $(top_srcdir)/admin/Makefile.am
 
 # core
-include $(top_srcdir)/src/proc/Makefile.am
-include $(top_srcdir)/src/common/Makefile.am
 include $(top_srcdir)/src/lib/Makefile.am
+include $(top_srcdir)/src/proc/Makefile.am
 include $(top_srcdir)/src/backend/Makefile.am
+include $(top_srcdir)/src/common/Makefile.am
 include $(top_srcdir)/src/lumiera/Makefile.am
 
 # tools
@@ -62,7 +62,7 @@ include $(top_srcdir)/src/gui/Makefile.am
 include $(top_srcdir)/icons/Makefile.am
 
 # tests
-include $(top_srcdir)/tests/common/Makefile.am
+include $(top_srcdir)/tests/lib/Makefile.am
 include $(top_srcdir)/tests/components/Makefile.am
 include $(top_srcdir)/tests/Makefile.am
 

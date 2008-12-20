@@ -40,9 +40,9 @@
 #include "pre_a.hpp"
 
 #include "proc/asset.hpp"
-#include "common/query.hpp"
-#include "common/factory.hpp"
-#include "common/singleton.hpp"
+#include "lib/query.hpp"
+#include "lib/factory.hpp"
+#include "lib/singleton.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <string>

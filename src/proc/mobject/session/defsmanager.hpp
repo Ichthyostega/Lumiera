@@ -25,8 +25,8 @@
 #define MOBJECT_SESSION_DEFSMANAGER_H
 
 
-#include "common/p.hpp"
-#include "common/query.hpp"
+#include "lib/p.hpp"
+#include "lib/query.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/utility.hpp>

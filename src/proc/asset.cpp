@@ -23,7 +23,7 @@
 
 #include "proc/asset.hpp"
 #include "proc/assetmanager.hpp"
-#include "common/util.hpp"
+#include "lib/util.hpp"
 
 #include <boost/function.hpp>
 #include <boost/format.hpp>

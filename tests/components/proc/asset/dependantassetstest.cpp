@@ -21,12 +21,12 @@
 * *****************************************************/
 
 
-#include "common/test/run.hpp"
+#include "lib/test/run.hpp"
 #include "proc/asset/testasset.hpp"
 #include "proc/asset/assetdiagnostics.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
-#include "common/util.hpp"
+#include "lib/util.hpp"
 
 using util::contains;
 using util::isnil;

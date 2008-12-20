@@ -35,7 +35,7 @@
 #include "proc/mobject/session/defsmanager.hpp"
 #include "proc/mobject/session/sessionimpl.hpp"
 
-#include "common/singleton.hpp"
+#include "lib/singleton.hpp"
 
 
 using lumiera::Singleton;

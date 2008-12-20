@@ -17,56 +17,21 @@
 
 lumiera_srcdir = $(top_srcdir)/src/lumiera
 
-
-noinst_LIBRARIES += liblumieracore.a
-liblumieracore_a_CPPFLAGS = $(AM_CPPFLAGS) -DLUMIERA_PLUGIN_PATH="\"$(pkglibdir)\"" -DLUMIERA_CONFIG_PATH="\"$(pkgdatadir)/config\""
-liblumieracore_a_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
-
-liblumieracore_a_SOURCES =			\
-	$(lumiera_srcdir)/config.c		\
-	$(lumiera_srcdir)/config_typed.c	\
-	$(lumiera_srcdir)/config_wordlist.c	\
-	$(lumiera_srcdir)/configentry.c		\
-	$(lumiera_srcdir)/configitem.c		\
-	$(lumiera_srcdir)/config_lookup.c	\
-	$(lumiera_srcdir)/config_interface.c	\
-	$(lumiera_srcdir)/interface.c		\
-	$(lumiera_srcdir)/interfaceregistry.c	\
-	$(lumiera_srcdir)/plugin.c		\
-	$(lumiera_srcdir)/plugin_dynlib.c	\
-	$(lumiera_srcdir)/guifacade.cpp		\
-	$(lumiera_srcdir)/configfacade.cpp	\
-	$(lumiera_srcdir)/appstate.cpp		\
-	$(lumiera_srcdir)/option.cpp		\
-	$(lumiera_srcdir)/subsys.cpp		\
-	$(lumiera_srcdir)/interfaceproxy.cpp	\
-	$(lumiera_srcdir)/nobugcfg.cpp
-
-
-
 bin_PROGRAMS += lumiera
-lumiera_CPPFLAGS = $(AM_CPPFLAGS) -DLUMIERA_CONFIG_PATH="\"$(pkgdatadir)/config\""
+lumiera_CPPFLAGS = $(AM_CPPFLAGS)
 lumiera_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
-lumiera_LDADD = liblumieracore.a liblumibackend.a liblumiproc.a liblumiera.a liblumicommon.a \
-		$(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS) -lboost_program_options-mt -lboost_regex-mt
+
+lumiera_LDADD =					\
+	liblumieracommon.la			\
+	liblumierabackend.la			\
+	liblumieraproc.la			\
+	liblumiera.la				\
+	$(LUMIERA_PLUGIN_LIBS)			\
+	$(NOBUGMT_LUMIERA_LIBS)			\
+	-lboost_program_options-mt		\
+	-lboost_regex-mt
 
 lumiera_SOURCES =				\
-	$(top_srcdir)/src/guistart.cpp		\
-	$(top_srcdir)/src/main.cpp
+	$(lumiera_srcdir)/main.cpp
 
 
-noinst_HEADERS +=				\
-	$(lumiera_srcdir)/interface.h		\
-	$(lumiera_srcdir)/interfaceregistry.h	\
-	$(lumiera_srcdir)/interfacedescriptor.h	\
-	$(lumiera_srcdir)/plugin.h		\
-	$(lumiera_srcdir)/config.h		\
-	$(lumiera_srcdir)/configentry.h		\
-	$(lumiera_srcdir)/configitem.h		\
-	$(lumiera_srcdir)/config_lookup.h	\
-	$(lumiera_srcdir)/config_interface.h	\
-	$(lumiera_srcdir)/subsys.hpp		\
-	$(lumiera_srcdir)/appstate.hpp		\
-	$(lumiera_srcdir)/option.hpp		\
-	$(lumiera_srcdir)/subsystemrunner.hpp	\
-	$(lumiera_srcdir)/instancehandle.hpp

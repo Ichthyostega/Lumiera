@@ -22,7 +22,7 @@
 
 
 #include "backend/scriptrunnerfacade.hpp"
-#include "common/singleton.hpp"
+#include "lib/singleton.hpp"
 
 #include <string>
 

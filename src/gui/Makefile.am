@@ -16,9 +16,11 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 lumigui_srcdir = $(top_srcdir)/src/gui
-#noinst_LIBRARIES += liblumigui.a
 
-#lumigui_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
+#
+# lumigui is the standalone gui mockup, will be removed later
+#
+bin_PROGRAMS += lumigui
 
 lumigui_CPPFLAGS = $(AM_CPPFLAGS)											\
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"				\
@@ -26,7 +28,59 @@ lumigui_CPPFLAGS = $(AM_CPPFLAGS)											\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\"										\
 	$(LUMIERA_GUI_CFLAGS)
 
-bin_PROGRAMS += lumigui
+lumigui_LDADD =					\
+	liblumieracommon.la			\
+	liblumierabackend.la			\
+	liblumieraproc.la			\
+	liblumiera.la				\
+	libgui.la				\
+	$(LUMIERA_GUI_LIBS)			\
+	$(NOBUGMT_LUMIERA_LIBS)			\
+	-lboost_program_options-mt		\
+	-lboost_regex-mt
+
+lumigui_SOURCES =				\
+	$(lumigui_srcdir)/gtk-lumiera.cpp	\
+	$(lumigui_srcdir)/gtk-lumiera.hpp
+
+lumigui_DEPENDENCIES =				\
+	$(top_builddir)/lumiera_ui.rc		\
+	$(top_builddir)/liblumieracommon.la	\
+	$(top_builddir)/liblumiera.la		\
+	$(top_builddir)/liblumierabackend.la	\
+	$(top_builddir)/liblumieraproc.la
+
+#
+# gtkgui.lum becomes the pluginized gu
+#
+
+pkglib_LTLIBRARIES += gtkgui.la
+
+gtkgui_la_CPPFLAGS = $(AM_CPPFLAGS) -Wall -Werror -DLUMIERA_PLUGIN -I$(top_srcdir)/src/
+gtkgui_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/null -shrext .lum
+
+gtkgui_la_LIBADD =		\
+	liblumieracommon.la	\
+	liblumierabackend.la	\
+	liblumieraproc.la	\
+	liblumiera.la		\
+	$(LUMIERA_GUI_LIBS)	\
+	$(NOBUGMT_LUMIERA_LIBS)
+
+gtkgui_la_SOURCES =			\
+	$(lumigui_srcdir)/guistart.cpp
+
+
+#
+# libgui is a convinience library used by lumigui and the gtkgui module
+#
+noinst_LTLIBRARIES += libgui.la
+
+libgui_la_CPPFLAGS = $(AM_CPPFLAGS)					\
+	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"	\
+	-DPACKAGE_SRC_DIR=\""$(srcdir)"\"				\
+	-DPACKAGE_DATA_DIR=\""$(datadir)"\"				\
+	$(LUMIERA_GUI_CFLAGS)
 
 lumigui_SOURCES =															\
 	$(lumigui_srcdir)/gtk-lumiera.cpp										\
@@ -99,15 +153,19 @@ lumigui_SOURCES =															\
 	$(lumigui_srcdir)/output/xvdisplayer.cpp								\
 	$(lumigui_srcdir)/output/xvdisplayer.hpp
 
-lumigui_LDFLAGS =
-# $(LIBS) $(X_PRE_LIBS) $(X_LIBS) $(X_EXTRA_LIBS)
-lumigui_LDADD = $(LUMIERA_GUI_LIBS) liblumicommon.a liblumiera.a $(NOBUGMT_LUMIERA_LIBS)
 
-lumigui_DEPENDENCIES =														\
-	$(top_builddir)/lumiera_ui.rc											\
-	$(top_builddir)/liblumicommon.a											\
-	$(top_builddir)/liblumiera.a
+libgui_la_LIBADD =		\
+	liblumieracommon.la	\
+	liblumierabackend.la	\
+	liblumieraproc.la	\
+	liblumiera.la		\
+	$(LUMIERA_GUI_LIBS)	\
+	$(NOBUGMT_LUMIERA_LIBS)
 
+
+#
+# themes, locales and other supplemental data
+#
 $(top_builddir)/lumiera_ui.rc:
 	cp $(lumigui_srcdir)/lumiera_ui.rc $(top_builddir)
 

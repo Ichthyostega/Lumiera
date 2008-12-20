@@ -23,8 +23,8 @@
 
 #include "pre_a.hpp"
 
-#include "common/test/run.hpp"
-#include "common/util.hpp"
+#include "lib/test/run.hpp"
+#include "lib/util.hpp"
 
 #include "proc/asset.hpp"
 #include "proc/asset/pipe.hpp"

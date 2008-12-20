@@ -23,8 +23,8 @@
 //#include <string.h>
 
 #include "lib/llist.h"
+#include "common/config.h"
 
-#include "backend/config.h"
 #include "backend/backend.h"
 #include "backend/file.h"
 #include "backend/filedescriptor.h"
@@ -105,7 +105,6 @@ TEST ("fd_semantic")
 
 TEST ("mmap_missing_chunksize")
 {
-  lumiera_config_init ("./");
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_CREATE);
 
@@ -123,7 +122,6 @@ TEST ("mmap_missing_chunksize")
 
 TEST ("mmap_forget_releasing")
 {
-  lumiera_config_init ("./");
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_CREATE);
   lumiera_file_chunksize_set (file, 4096);
@@ -146,7 +144,6 @@ TEST ("mmap_forget_releasing")
 
 TEST ("mmap_simple")
 {
-  lumiera_config_init ("./");
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_CREATE);
   lumiera_file_chunksize_set (file, 4096);
@@ -174,7 +171,6 @@ TEST ("mmap_simple")
 
 TEST ("mmap_checkout_twice")
 {
-  lumiera_config_init ("./");
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_CREATE);
   lumiera_file_chunksize_set (file, 4096);
@@ -210,7 +206,6 @@ TEST ("mmap_checkout_twice")
 
 TEST ("mmap_checkout_again")
 {
-  lumiera_config_init ("./");
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_CREATE);
   lumiera_file_chunksize_set (file, 4096);
@@ -242,7 +237,6 @@ TEST ("mmap_checkout_again")
 
 TEST ("mmap_grow_existing_file")
 {
-  lumiera_config_init ("./");
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_READWRITE);
 
@@ -270,7 +264,6 @@ TEST ("mmap_grow_existing_file")
 
 TEST ("mmap_readonly_file")
 {
-  lumiera_config_init ("./");
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_READONLY);
 

@@ -51,7 +51,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
-#include "common/multithread.hpp"
+#include "lib/multithread.hpp"
 #include "include/error.hpp"
 #include "lib/scopedholder.hpp"
 #include "lib/scopedholdertransfer.hpp"

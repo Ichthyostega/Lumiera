@@ -37,7 +37,7 @@
 #include "proc/mobject/session.hpp"
 #include "common/configrules.hpp"
 #include "include/error.hpp"
-#include "common/util.hpp"
+#include "lib/util.hpp"
 
 #include <boost/format.hpp>
 

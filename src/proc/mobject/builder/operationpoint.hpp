@@ -25,7 +25,7 @@
 #define MOBJECT_BUILDER_OPERATIONPOINT_H
 
 #include "proc/engine/procnode.hpp"
-#include "common/query.hpp"
+#include "lib/query.hpp"
 
 #include <vector>
 #include <string>

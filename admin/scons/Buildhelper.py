@@ -112,7 +112,43 @@ def getDirname(dir):
         dir,_ = os.path.split(dir)
     _, name = os.path.split(dir)
     return name
+
+
+
+def checkCommandOption(env, optID, val=None, cmdName=None):
+    """ evaluate and verify an option, which may point at a command.
+        besides specifying a path, the option may read True, yes or 1,
+        denoting that the system default for this command should be used.
+        @return: True, if the key has been expanded and validated,
+                 False, if this failed and the key was removed
+    """
+    if not val:
+        if not env.get(optID): return False
+        else:
+            val = env.get(optID)
     
+    if val=='True' or val=='true' or val=='yes' or val=='1' or val == 1 :
+        if not cmdName:
+            print "WARNING: no default for %s, please specify a full path." % optID
+            del env[optID]
+            return False
+        else:
+            val = env.WhereIs(cmdName)
+            if not val:
+                print "WARNING: %s not found, please specify a full path" % cmdName
+                del env[optID]
+                return False
+    
+    if not os.path.isfile(val):
+        val = env.WhereIs(val)
+    
+    if val and os.path.isfile(val):
+        env[optID] = val
+        return True
+    else:
+        del env[optID]
+        return False
+
 
 
 def RegisterIcon_Builder(env, renderer):

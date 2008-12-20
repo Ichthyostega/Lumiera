@@ -21,8 +21,8 @@
 */
 #include "lib/safeclib.h"
 
-#include "lumiera/config.h"
-#include "lumiera/configitem.h"
+#include "common/config.h"
+#include "common/configitem.h"
 
 #include "tests/test.h"
 
@@ -30,7 +30,7 @@ TESTS_BEGIN
 
 TEST ("init")
 {
-  lumiera_config_init ("./");
+/*  lumiera_config_init ("./"); */
   printf ("initialized\n");
   lumiera_config_destroy ();
   printf ("destroyed\n");
@@ -40,7 +40,6 @@ TEST ("init")
 TEST ("configitem_simple")
 {
   REQUIRE (argv[2]);
-  lumiera_config_init ("./");
 
   LumieraConfigitem item;
 
@@ -64,7 +63,6 @@ TEST ("configitem_simple")
 
 TEST ("lookup")
 {
-  lumiera_config_init ("./");
 
   lumiera_config_lookup lookup;
   lumiera_config_lookup_init (&lookup);
@@ -89,7 +87,6 @@ TEST ("change_value")
   REQUIRE (argv[3]);
   REQUIRE (argv[4]);
 
-  lumiera_config_init ("./");
   const char* value;
 
   if (!lumiera_config_set (argv[2], argv[3]))
@@ -118,8 +115,6 @@ TEST ("basic_set_get")
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
 
-  lumiera_config_init ("./");
-
   if (!lumiera_config_set (argv[2], argv[3]))
     printf ("failure setting first time '%s%s': %s\n", argv[2], argv[3], lumiera_error ());
 
@@ -143,8 +138,6 @@ TEST ("number_get")
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
 
-  lumiera_config_init ("./");
-
   long long number = 0;
 
   lumiera_config_setdefault (lumiera_tmpbuf_snprintf (SIZE_MAX, "%s = %s", argv[2], argv[3]));
@@ -162,8 +155,6 @@ TEST ("number_get_nodefault")
 {
   REQUIRE (argv[2]);
 
-  lumiera_config_init ("./");
-
   long long number = 0;
 
   if (lumiera_config_number_get (argv[2], &number))
@@ -179,8 +170,6 @@ TEST ("number_set")
 {
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
-
-  lumiera_config_init ("./");
 
   signed long long number = atoll (argv[3]);
 
@@ -201,8 +190,6 @@ TEST ("string_get")
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
 
-  lumiera_config_init ("./");
-
   const char* string;
 
   lumiera_config_setdefault (lumiera_tmpbuf_snprintf (SIZE_MAX, "%s = %s", argv[2], argv[3]));
@@ -220,8 +207,6 @@ TEST ("string_set")
 {
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
-
-  lumiera_config_init ("./");
 
   if (!lumiera_config_string_set (argv[2], &argv[3]))
     printf ("failed setting string '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
@@ -241,8 +226,6 @@ TEST ("word_get")
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
 
-  lumiera_config_init ("./");
-
   const char* word;
 
   lumiera_config_setdefault (lumiera_tmpbuf_snprintf (SIZE_MAX, "%s = %s", argv[2], argv[3]));
@@ -261,8 +244,6 @@ TEST ("word_set")
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
 
-  lumiera_config_init ("./");
-
   if (!lumiera_config_word_set (argv[2], &argv[3]))
     printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
 
@@ -279,7 +260,6 @@ TEST ("word_set")
 TEST ("configitem_simple_ctor_dtor")
 {
   REQUIRE (argv[2]);
-  lumiera_config_init ("./");
 
   LumieraConfigitem item;
 
@@ -292,7 +272,6 @@ TEST ("configitem_simple_ctor_dtor")
 TEST ("configitem_simple_content_check")
 {
   REQUIRE (argv[2]);
-  lumiera_config_init ("./");
 
   LumieraConfigitem item;
 
@@ -325,8 +304,6 @@ TEST ("wordlist_get_nth")
   REQUIRE (argv[3]);
   REQUIRE (argv[4]);
 
-  lumiera_config_init ("./");
-
   if (!lumiera_config_wordlist_set (argv[2], &argv[3]))
     printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
 
@@ -343,8 +320,6 @@ TEST ("wordlist_find")
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
   REQUIRE (argv[4]);
-
-  lumiera_config_init ("./");
 
   if (!lumiera_config_wordlist_set (argv[2], &argv[3]))
     printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
@@ -364,8 +339,6 @@ TEST ("wordlist_replace")
   REQUIRE (argv[4]);
   REQUIRE (argv[5]);
   REQUIRE (argv[6]);
-
-  lumiera_config_init ("./");
 
   if (!lumiera_config_wordlist_set (argv[2], &argv[3]))
     printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
@@ -387,8 +360,6 @@ TEST ("wordlist_add")
   REQUIRE (argv[3]);
   REQUIRE (argv[4]);
   REQUIRE (argv[5]);
-
-  lumiera_config_init ("./");
 
   if (!lumiera_config_wordlist_set (argv[2], &argv[3]))
     printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());

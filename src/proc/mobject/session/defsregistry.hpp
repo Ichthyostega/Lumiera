@@ -40,10 +40,10 @@
 #define MOBJECT_SESSION_DEFSREGISTRY_H
 
 
-#include "common/multithread.hpp"
-#include "common/query.hpp"
-#include "common/util.hpp"
-#include "common/p.hpp"
+#include "lib/multithread.hpp"
+#include "lib/query.hpp"
+#include "lib/util.hpp"
+#include "lib/p.hpp"
 
 #include <set>
 #include <vector>

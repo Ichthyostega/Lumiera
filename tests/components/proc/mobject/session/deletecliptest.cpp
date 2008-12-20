@@ -21,13 +21,13 @@
 * *****************************************************/
 
 
-#include "common/test/run.hpp"
+#include "lib/test/run.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/edl.hpp"               // TODO: really neded?
 #include "proc/mobject/session/testsession1.hpp"
 #include "proc/mobject/session/clip.hpp"              // TODO: really neded?
-//#include "common/util.hpp"
+//#include "lib/util.hpp"
 
 //#include <boost/format.hpp>
 #include <iostream>

@@ -44,7 +44,7 @@
 #include <tr1/functional>
 #include <boost/noncopyable.hpp>
 
-#include "common/util.hpp"
+#include "lib/util.hpp"
 
 
 namespace lumiera {

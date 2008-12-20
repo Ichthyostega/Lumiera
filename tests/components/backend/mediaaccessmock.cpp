@@ -35,7 +35,7 @@
 
 #include "backend/mediaaccessmock.hpp"
 
-#include "common/util.hpp"
+#include "lib/util.hpp"
 
 #include <iostream>
 #include <vector>

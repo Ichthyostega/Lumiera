@@ -42,9 +42,9 @@
 
     /* common types frequently used... */
 
-#include "common/p.hpp"
-#include "common/util.hpp"
-#include "common/lumitime.hpp"
+#include "lib/p.hpp"
+#include "lib/util.hpp"
+#include "lib/lumitime.hpp"
 #include "include/symbol.hpp"
 #include "include/error.hpp"   ///< pulls in NoBug via nobugcfg.h
 

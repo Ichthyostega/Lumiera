@@ -20,8 +20,8 @@
 */
 #include "lib/llist.h"
 #include "lib/safeclib.h"
+#include "common/config.h"
 
-#include "backend/config.h"
 #include "backend/backend.h"
 #include "backend/filehandlecache.h"
 
@@ -31,7 +31,6 @@ TESTS_BEGIN
 
 TEST ("basic")
 {
-  lumiera_config_init ("./");
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp_testfile", LUMIERA_FILE_CREATE);
 
@@ -53,7 +52,6 @@ TEST ("basic")
 
 TEST ("more")
 {
-  lumiera_config_init ("./");
   lumiera_backend_init ();
 
   LumieraFile files[100];

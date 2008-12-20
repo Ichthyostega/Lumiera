@@ -23,8 +23,8 @@
 
 #include <stdio.h>
 
-#include "lumiera/interfacedescriptor.h"
-#include "lumiera/config_interface.h"
+#include "common/interfacedescriptor.h"
+#include "common/config_interface.h"
 
 #include "tests/lumiera/hello_interface.h"
 

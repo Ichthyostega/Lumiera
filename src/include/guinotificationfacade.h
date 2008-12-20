@@ -40,7 +40,7 @@
 
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
-#include "common/singletonsubclass.hpp"
+#include "lib/singletonsubclass.hpp"
 
 #include <string>
 
@@ -86,7 +86,7 @@ extern "C" {
 #endif /* =========================== CLI Interface ================= */ 
 
   
-#include "lumiera/interface.h"
+#include "common/interface.h"
 
 LUMIERA_INTERFACE_DECLARE (lumieraorg_GuiNotification, 1,
                            LUMIERA_INTERFACE_SLOT (void, displayInfo,        (const char*)),

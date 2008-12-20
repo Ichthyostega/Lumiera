@@ -20,17 +20,17 @@ testcomponents_srcdir = $(top_srcdir)/tests/components
 
 check_PROGRAMS += test-components
 test_components_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(testcomponents_srcdir)
+
 test_components_LDADD =								\
-	liblumiproc.a								\
-	liblumiprocengine.a							\
-	liblumiprocmobjectbuilder.a						\
-	liblumiprocmobjectsession.a						\
-	liblumiprocasset.a							\
-	liblumiprocmobject.a							\
-	liblumicommon.a								\
-	liblumieracore.a							\
-	liblumibackend.a							\
-	liblumiera.a								\
+	liblumieraproc.la							\
+	liblumiprocengine.la							\
+	liblumiprocmobjectbuilder.la						\
+	liblumiprocmobjectsession.la						\
+	liblumiprocasset.la							\
+	liblumiprocmobject.la							\
+	liblumierabackend.la							\
+	liblumieracommon.la  							\
+	liblumiera.la								\
 	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt
 
 test_components_SOURCES =							\

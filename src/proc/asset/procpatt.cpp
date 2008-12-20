@@ -25,7 +25,7 @@
 #include "proc/asset/proc.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/asset/buildinstruct.hpp"
-#include "common/util.hpp"
+#include "lib/util.hpp"
 
 using util::isnil;
 

@@ -19,11 +19,11 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "lumiera/interface.h"
-#include "lumiera/interfaceregistry.h"
-#include "lumiera/interfacedescriptor.h"
-#include "lumiera/config.h"
-#include "lumiera/config_interface.h"
+#include "common/interface.h"
+#include "common/interfaceregistry.h"
+#include "common/interfacedescriptor.h"
+#include "common/config.h"
+#include "common/config_interface.h"
 
 #include "tests/test.h"
 #include "tests/lumiera/hello_interface.h"
@@ -461,7 +461,6 @@ TEST ("dependencies_all")
 
 TEST ("plugin_discover")
 {
-  lumiera_config_init ("./");
   lumiera_interfaceregistry_init ();
 
   if (lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register))
@@ -480,7 +479,6 @@ TEST ("plugin_discover")
 
 TEST ("plugin_unload")
 {
-  lumiera_config_init ("./");
   lumiera_interfaceregistry_init ();
 
   lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
@@ -495,7 +493,6 @@ TEST ("plugin_unload")
 
 TEST ("plugin_examplepluginc")
 {
-  lumiera_config_init ("./");
   lumiera_interfaceregistry_init ();
   lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
 
@@ -522,7 +519,6 @@ TEST ("plugin_examplepluginc")
 
 TEST ("plugin_examplepluginc_nested")
 {
-  lumiera_config_init ("./");
   lumiera_interfaceregistry_init ();
   lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
   lumiera_config_interface_init ();

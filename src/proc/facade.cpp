@@ -22,7 +22,7 @@
 
 
 #include "proc/facade.hpp"
-#include "common/singleton.hpp"
+#include "lib/singleton.hpp"
 
 #include <string>
 

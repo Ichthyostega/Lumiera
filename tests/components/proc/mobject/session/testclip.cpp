@@ -26,7 +26,7 @@
 #include "backend/mediaaccessmock.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
-#include "common/singleton.hpp"
+#include "lib/singleton.hpp"
 
 namespace mobject
   {

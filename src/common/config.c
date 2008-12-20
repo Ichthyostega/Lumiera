@@ -1,0 +1,371 @@
+/*
+  config.c  -  Lumiera configuration system
+
+  Copyright (C)         Lumiera.org
+    2008,               Christian Thaeter <ct@pipapo.org>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of the
+  License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+*/
+
+//TODO: Support library includes//
+#include "lib/safeclib.h"
+#include "common/config.h"
+
+
+//TODO: Lumiera header includes//
+
+//TODO: internal/static forward declarations//
+
+
+//TODO: System includes//
+#include <stdint.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+/**
+ * @file
+ *
+ */
+
+NOBUG_DEFINE_FLAG_PARENT (config_all, lumiera_all);
+NOBUG_DEFINE_FLAG_PARENT (configsys, config_all);
+NOBUG_DEFINE_FLAG_PARENT (config_typed, config_all);
+NOBUG_DEFINE_FLAG_PARENT (config_file, config_all);
+NOBUG_DEFINE_FLAG_PARENT (config_item, config_all);
+NOBUG_DEFINE_FLAG_PARENT (config_lookup, config_all);
+
+LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX, "syntax error in configfile");
+LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX_KEY, "syntax error in key");
+LUMIERA_ERROR_DEFINE (CONFIG_SYNTAX_VALUE, "syntax error in value");
+LUMIERA_ERROR_DEFINE (CONFIG_NO_ENTRY, "no configuration entry");
+
+
+/**
+ *  defaults for the configuration system itself
+ */
+const char* lumiera_config_defaults[] =
+  {
+    /* Low level formating, don't change these */
+    "config.formatstr.link = '< %s'",
+    "config.formatstr.number.dec = '= %lld'",
+    "config.formatstr.number.hex = '= 0x%llX'",
+    "config.formatstr.number.oct = '= 0%llo'",
+    "config.formatstr.real = '= %Lg'",
+    "config.formatstr.real.dec = '= %Lf'",
+    "config.formatstr.real.sci = '= %Le'",
+    "config.formatstr.string = '= %s'",
+    "config.formatstr.string.dquoted = '= \"%s\"'",
+    "config.formatstr.string.quoted = '= ''%s'''",
+    "config.formatstr.word = '= %s'",
+    "config.formatstr.bool = '= %d'",
+
+    /* default representations per type */
+    "config.formatdef.link < config.formatstr.link",
+    "config.formatdef.number < config.formatstr.number.dec",
+    "config.formatdef.real < config.formatstr.real",
+    "config.formatdef.string < config.formatstr.string",
+    "config.formatdef.word < config.formatstr.word",
+    "config.formatdef.bool < config.formatstr.bool",
+
+    /* per key formatting override stored under */
+    "config.formatkey ='config.format.%s'",
+
+    NULL
+  };
+
+
+/* singleton config */
+LumieraConfig lumiera_global_config = NULL;
+
+
+int
+lumiera_config_init (const char* path)
+{
+  TRACE (configsys);
+  REQUIRE (!lumiera_global_config, "Configuration subsystem already initialized");
+  REQUIRE (path);
+
+  NOBUG_INIT_FLAG (config_all);
+  NOBUG_INIT_FLAG (configsys);
+  NOBUG_INIT_FLAG (config_typed);
+  NOBUG_INIT_FLAG (config_file);
+  NOBUG_INIT_FLAG (config_item);
+  NOBUG_INIT_FLAG (config_lookup);
+
+  lumiera_global_config = lumiera_malloc (sizeof (*lumiera_global_config));
+  lumiera_config_lookup_init (&lumiera_global_config->keys);
+
+  lumiera_configitem_init (&lumiera_global_config->defaults);
+  lumiera_configitem_init (&lumiera_global_config->files);
+  lumiera_configitem_init (&lumiera_global_config->TODO_unknown);
+
+  lumiera_mutex_init (&lumiera_global_config->lock, "config mutex", &NOBUG_FLAG (configsys));
+
+  lumiera_config_setdefault (lumiera_tmpbuf_snprintf (SIZE_MAX, "config.path = %s", path));
+
+  for (const char** itr = lumiera_config_defaults; *itr; ++itr)
+    {
+      lumiera_config_setdefault (*itr);
+    }
+
+  return 0;
+}
+
+
+void
+lumiera_config_destroy ()
+{
+  TRACE (configsys);
+  if (lumiera_global_config)
+    {
+      lumiera_mutex_destroy (&lumiera_global_config->lock, &NOBUG_FLAG (configsys));
+      lumiera_configitem_destroy (&lumiera_global_config->defaults, &lumiera_global_config->keys);
+      lumiera_configitem_destroy (&lumiera_global_config->files, &lumiera_global_config->keys);
+      lumiera_configitem_destroy (&lumiera_global_config->TODO_unknown, &lumiera_global_config->keys);
+      lumiera_config_lookup_destroy (&lumiera_global_config->keys);
+      lumiera_free (lumiera_global_config);
+      lumiera_global_config = NULL;
+    }
+  else
+    WARN (configsys, "Tried to destroy non initialized config subsystem");
+}
+
+
+int
+lumiera_config_load (const char* file)
+{
+  (void) file;
+  TRACE (configsys);
+  UNIMPLEMENTED();
+  return -1;
+}
+
+
+int
+lumiera_config_save ()
+{
+  TRACE (configsys);
+  UNIMPLEMENTED();
+  return -1;
+}
+
+
+int
+lumiera_config_purge (const char* filename)
+{
+  (void) filename;
+  TRACE (configsys);
+
+  UNIMPLEMENTED();
+  return -1;
+}
+
+
+const char*
+lumiera_config_get (const char* key, const char** value)
+{
+  TRACE (configsys);
+  REQUIRE (key);
+  REQUIRE (value);
+
+  *value = NULL;
+
+  /* we translate the key for the env var override by making it uppercase and replace . with _,
+   as side effect, this also checks the key syntax */
+  char* tr_key = lumiera_tmpbuf_tr (key,
+                                    LUMIERA_CONFIG_KEY_CHARS,
+                                    LUMIERA_CONFIG_ENV_CHARS,
+                                    NULL);
+
+  if (tr_key)
+    {
+      char* env = lumiera_tmpbuf_snprintf (2048, "LUMIERA_%s", tr_key);
+
+      *value = getenv (env);
+      if (*value)
+        {
+          NOTICE (configsys, "envvar override for config %s = %s", env, *value);
+        }
+      else
+        {
+          TODO ("follow '<' delegates?");
+          LumieraConfigitem item = lumiera_config_lookup_item_find (&lumiera_global_config->keys, key);
+
+          if (item)
+            {
+              *value = item->delim+1;
+            }
+          else
+            LUMIERA_ERROR_SET (configsys, CONFIG_NO_ENTRY);
+        }
+    }
+  else
+    {
+      LUMIERA_ERROR_SET (configsys, CONFIG_SYNTAX_KEY);
+    }
+
+  return *value;
+}
+
+
+const char*
+lumiera_config_get_default (const char* key, const char** value)
+{
+  TRACE (configsys);
+  REQUIRE (key);
+  REQUIRE (value);
+
+  *value = NULL;
+
+  TODO ("follow '<' delegates?");
+  TODO ("refactor _get and get_default to iterator access (return LList or Lookupentry)");
+  LumieraConfigitem item = lumiera_config_lookup_item_tail_find (&lumiera_global_config->keys, key);
+
+  if (item && item->parent == &lumiera_global_config->defaults)
+    {
+      *value = item->delim+1;
+    }
+
+  return *value;
+}
+
+
+LumieraConfigitem
+lumiera_config_set (const char* key, const char* delim_value)
+{
+  TRACE (configsys);
+
+  LumieraConfigitem item = lumiera_config_lookup_item_find (&lumiera_global_config->keys, key);
+  if (item && item->parent != &lumiera_global_config->defaults)
+    {
+      TODO ("is a user writeable file?");
+      TODO ("       replace delim_value");
+      lumiera_configitem_set_value (item, delim_value);
+    }
+  else
+    {
+      TODO ("create item");
+      TODO ("       find matching prefix");
+      TODO ("       find matching suffix");
+      TODO ("       find proper prefix indentation, else use config.indent");
+      TODO ("       create configitem with prefix/suffix removed");
+
+      char* line = lumiera_tmpbuf_snprintf (SIZE_MAX, "%s %s", key, delim_value);
+      item = lumiera_configitem_new (line);
+
+      if (item)
+        {
+          TODO ("next 2 ensure must generate runtime errors");
+          ENSURE (item->delim, "syntax error");
+          ENSURE (*item->delim == '=' || *item->delim == '<', "syntax error,");
+
+          TODO ("insert in proper parent (file)");
+          llist_insert_tail (&lumiera_global_config->TODO_unknown.childs, &item->link);
+          item->parent = &lumiera_global_config->TODO_unknown;
+          lumiera_config_lookup_insert (&lumiera_global_config->keys, item);
+
+          TODO ("tag file as dirty");
+        }
+    }
+
+  return item;
+}
+
+
+LumieraConfigitem
+lumiera_config_setdefault (const char* line)
+{
+  TRACE (configsys);
+  REQUIRE (line);
+
+  LumieraConfigitem item = NULL;
+
+  LUMIERA_MUTEX_SECTION (configsys, &lumiera_global_config->lock)
+    {
+      const char* key = line;
+      while (*key && isspace (*key))
+        key++;
+
+      key = lumiera_tmpbuf_strndup (line, strspn (line, LUMIERA_CONFIG_KEY_CHARS));
+
+      if (!(item = lumiera_config_lookup_item_find (&lumiera_global_config->keys, key)) || item->parent != &lumiera_global_config->defaults)
+        {
+          item = lumiera_configitem_new (line);
+
+          if (item)
+            {
+              ENSURE (item->delim, "default must be a configentry with key=value or key<delegate syntax");
+              ENSURE (*item->delim == '=' || *item->delim == '<', "default must be a configentry with key=value or key<delegate syntax");
+              TRACE (configsys, "registering default: '%s'", item->line);
+
+              llist_insert_head (&lumiera_global_config->defaults.childs, &item->link);
+              item->parent = &lumiera_global_config->defaults;
+
+              lumiera_config_lookup_insert (&lumiera_global_config->keys, item);
+            }
+        }
+    }
+
+  return item;
+}
+
+
+void
+lumiera_config_dump (FILE* out)
+{
+  fprintf (out, "# registered defaults:\n");
+
+  LLIST_FOREACH (&lumiera_global_config->defaults.childs, node)
+    fprintf (out, "%s\n", ((LumieraConfigitem) node)->line);
+
+  fprintf (out, "# end of defaults\n\n");
+
+#if 0 /*TODO UNIMPLEMENTED */
+  fprintf (out, "# files:\n");
+  lumiera_configitem files;
+  fprintf (out, "# volatiles:")
+  lumiera_configitem TODO_unknown;
+#endif
+}
+
+
+int
+lumiera_config_reset (const char* key)
+{
+  (void) key;
+  TRACE (configsys);
+  UNIMPLEMENTED();
+  return -1;
+}
+
+
+int
+lumiera_config_info (const char* key, const char** filename, unsigned* line)
+{
+  (void) key;
+  (void) filename;
+  (void) line;
+  TRACE (configsys);
+  UNIMPLEMENTED();
+  return -1;
+}
+
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

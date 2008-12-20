@@ -38,10 +38,10 @@
 #define GUI_FACADE_H
 
 
-#include "lumiera/subsys.hpp"
+#include "common/subsys.hpp"
 
 extern "C" {
-#include "lumiera/interface.h"
+#include "common/interface.h"
 }
 
 

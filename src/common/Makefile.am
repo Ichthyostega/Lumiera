@@ -15,52 +15,51 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+liblumieracommon_la_srcdir = $(top_srcdir)/src/common
+lib_LTLIBRARIES += liblumieracommon.la
 
-# TODO use -Wextra -Werror
+liblumieracommon_la_CPPFLAGS = $(AM_CPPFLAGS)  -DLUMIERA_CONFIG_PATH="\"$(pkgdatadir)/config\"" -DLUMIERA_PLUGIN_PATH="\"$(pkglibdir)/\""
+liblumieracommon_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
+liblumieracommon_la_LIBADD = liblumiera.la
 
-liblumicommon_a_srcdir = $(top_srcdir)/src/common
-noinst_LIBRARIES += liblumicommon.a
+liblumieracommon_la_SOURCES =						\
+	$(liblumieracommon_la_srcdir)/config.c				\
+	$(liblumieracommon_la_srcdir)/config_typed.c			\
+	$(liblumieracommon_la_srcdir)/config_wordlist.c			\
+	$(liblumieracommon_la_srcdir)/configentry.c			\
+	$(liblumieracommon_la_srcdir)/configitem.c			\
+	$(liblumieracommon_la_srcdir)/config_lookup.c			\
+	$(liblumieracommon_la_srcdir)/config_interface.c		\
+	$(liblumieracommon_la_srcdir)/configrules.cpp			\
+	$(liblumieracommon_la_srcdir)/query/fake-configrules.cpp	\
+	$(liblumieracommon_la_srcdir)/interface.c			\
+	$(liblumieracommon_la_srcdir)/interfaceregistry.c		\
+	$(liblumieracommon_la_srcdir)/plugin.c				\
+	$(liblumieracommon_la_srcdir)/plugin_dynlib.c			\
+	$(liblumieracommon_la_srcdir)/guifacade.cpp			\
+	$(liblumieracommon_la_srcdir)/configfacade.cpp			\
+	$(liblumieracommon_la_srcdir)/appstate.cpp			\
+	$(liblumieracommon_la_srcdir)/option.cpp			\
+	$(liblumieracommon_la_srcdir)/subsys.cpp			\
+	$(liblumieracommon_la_srcdir)/interfaceproxy.cpp		\
+	$(liblumieracommon_la_srcdir)/nobugcfg.cpp
 
-liblumicommon_a_CXXFLAGS = $(CXXFLAGS) -Wall
 
-liblumicommon_a_SOURCES =					\
-	$(liblumicommon_a_srcdir)/lumitime.cpp			\
-	$(liblumicommon_a_srcdir)/util.cpp			\
-	$(liblumicommon_a_srcdir)/visitor.cpp			\
-	$(liblumicommon_a_srcdir)/configrules.cpp		\
-	$(liblumicommon_a_srcdir)/error.cpp			\
-	$(liblumicommon_a_srcdir)/query.cpp			\
-	$(liblumicommon_a_srcdir)/query/mockconfigrules.cpp	\
-	$(liblumicommon_a_srcdir)/streamtype.cpp		\
-	$(liblumicommon_a_srcdir)/test/suite.cpp		\
-	$(liblumicommon_a_srcdir)/test/testoption.cpp
-
-
-noinst_HEADERS +=						\
-	$(liblumicommon_a_srcdir)/factory.hpp			\
-	$(liblumicommon_a_srcdir)/frameid.hpp			\
-	$(liblumicommon_a_srcdir)/singleton.hpp			\
-	$(liblumicommon_a_srcdir)/singletonpolicies.hpp		\
-	$(liblumicommon_a_srcdir)/singletonpreconfigure.hpp	\
-	$(liblumicommon_a_srcdir)/lumitime.hpp			\
-	$(liblumicommon_a_srcdir)/visitor.hpp			\
-	$(liblumicommon_a_srcdir)/visitordispatcher.hpp		\
-	$(liblumicommon_a_srcdir)/visitorpolicies.hpp		\
-	$(liblumicommon_a_srcdir)/configrules.hpp		\
-	$(liblumicommon_a_srcdir)/multithread.hpp		\
-	$(liblumicommon_a_srcdir)/p.hpp				\
-	$(liblumicommon_a_srcdir)/query.hpp			\
-	$(liblumicommon_a_srcdir)/query/mockconfigrules.hpp	\
-	$(liblumicommon_a_srcdir)/singletonfactory.hpp		\
-	$(liblumicommon_a_srcdir)/singletonsubclass.hpp		\
-	$(liblumicommon_a_srcdir)/meta/typelist.hpp		\
-	$(liblumicommon_a_srcdir)/meta/configflags.hpp		\
-	$(liblumicommon_a_srcdir)/meta/generator.hpp		\
-	$(liblumicommon_a_srcdir)/meta/typelistutil.hpp		\
-	$(liblumicommon_a_srcdir)/util.hpp			\
-	$(liblumicommon_a_srcdir)/observable-list.hpp		\
-	$(liblumicommon_a_srcdir)/test/mockinjector.hpp		\
-	$(liblumicommon_a_srcdir)/test/suite.hpp		\
-	$(liblumicommon_a_srcdir)/test/testoption.hpp		\
-	$(liblumicommon_a_srcdir)/test/run.hpp
+noinst_HEADERS +=							\
+	$(liblumieracommon_la_srcdir)/interface.h			\
+	$(liblumieracommon_la_srcdir)/interfaceregistry.h		\
+	$(liblumieracommon_la_srcdir)/interfacedescriptor.h		\
+	$(liblumieracommon_la_srcdir)/plugin.h				\
+	$(liblumieracommon_la_srcdir)/config.h				\
+	$(liblumieracommon_la_srcdir)/configentry.h			\
+	$(liblumieracommon_la_srcdir)/configitem.h			\
+	$(liblumieracommon_la_srcdir)/config_lookup.h			\
+	$(liblumieracommon_la_srcdir)/config_interface.h		\
+	$(liblumieracommon_la_srcdir)/configrules.hpp			\
+	$(liblumieracommon_la_srcdir)/query/fake-configrules.hpp	\
+	$(liblumieracommon_la_srcdir)/subsys.hpp			\
+	$(liblumieracommon_la_srcdir)/appstate.hpp			\
+	$(liblumieracommon_la_srcdir)/option.hpp			\
+	$(liblumieracommon_la_srcdir)/subsystemrunner.hpp		\
+	$(liblumieracommon_la_srcdir)/instancehandle.hpp
 

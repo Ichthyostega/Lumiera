@@ -46,10 +46,10 @@
 #ifndef LUMIERA_CONFIGRULES_H
 #define LUMIERA_CONFIGRULES_H
 
-#include "common/p.hpp"
-#include "common/query.hpp"
-#include "common/meta/generator.hpp"
-#include "common/singletonsubclass.hpp"
+#include "lib/p.hpp"
+#include "lib/query.hpp"
+#include "lib/meta/generator.hpp"
+#include "lib/singletonsubclass.hpp"
 
 //TODO: is it sensible to bring in the types explicitly here? (it's not necessary, but may be convenient...)
 #include "proc/mobject/session/track.hpp"

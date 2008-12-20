@@ -1,7 +1,1 @@
-The main application shell
-
-contains:
- * the config system
- * commandline parsing
- * interfaces and plugin loading
- * lua interpreter (planned)
+The Lumiera application shell

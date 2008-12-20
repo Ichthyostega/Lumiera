@@ -64,6 +64,8 @@ def setupBasicEnvironment():
                             ,toolpath = [TOOLDIR]
                             ,tools = ["default", "BuilderGCH", "BuilderDoxygen"]  
                             ) 
+    env.Tool("ToolDistCC")
+    env.Tool("ToolCCache")
     handleVerboseMessages(env)
     
     env.Append ( CCCOM=' -std=gnu99') 
@@ -142,7 +144,11 @@ def defineCmdlineOptions():
     """
     opts = Options([OPTIONSCACHEFILE, CUSTOPTIONSFILE])
     opts.AddOptions(
-        ('ARCHFLAGS', 'Set architecture-specific compilation flags (passed literally to gcc)','')
+         ('ARCHFLAGS', 'Set architecture-specific compilation flags (passed literally to gcc)','')
+        ,('CC', 'Set the C compiler to use.', 'gcc')
+        ,('CXX', 'Set the C++ compiler to use.', 'g++')
+        ,PathOption('CCACHE', 'Integrate with CCache', '', PathOption.PathAccept)
+        ,PathOption('DISTCC', 'Invoke C/C++ compiler commands through DistCC', '', PathOption.PathAccept)
         ,EnumOption('BUILDLEVEL', 'NoBug build level for debugging', 'ALPHA',
                     allowed_values=('ALPHA', 'BETA', 'RELEASE'))
         ,BoolOption('DEBUG', 'Build with debugging information and no optimisations', False)
@@ -311,30 +317,27 @@ def defineBuildTargets(env, artifacts):
 #                + env.PrecompiledHeader('$SRCDIR/pre_a.hpp')
 #                )
     
-    objback =   srcSubtree(env,'$SRCDIR/backend') 
-    objproc =   srcSubtree(env,'$SRCDIR/proc')
-    objlib  = ( srcSubtree(env,'$SRCDIR/lumiera')
-              + srcSubtree(env,'$SRCDIR/common')
-              + srcSubtree(env,'$SRCDIR/lib')
-              )
-    core  = ( env.SharedLibrary('$LIBDIR/lumiback', objback,  SHLIBPREFIX='')
-            + env.SharedLibrary('$LIBDIR/lumiproc', objproc,  SHLIBPREFIX='')
-            + env.SharedLibrary('$LIBDIR/lumiera',  objlib,   SHLIBPREFIX='')
+    objapp  = srcSubtree(env,'$SRCDIR/common')
+    objback = srcSubtree(env,'$SRCDIR/backend') 
+    objproc = srcSubtree(env,'$SRCDIR/proc')
+    objlib  = srcSubtree(env,'$SRCDIR/lib')
+    
+    core  = ( env.SharedLibrary('$LIBDIR/lumieracommon', objapp)
+            + env.SharedLibrary('$LIBDIR/lumierabackend', objback)
+            + env.SharedLibrary('$LIBDIR/lumieraproc', objproc)
+            + env.SharedLibrary('$LIBDIR/lumiera',  objlib)
             )
     
-    artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/main.cpp'], LIBS=core)
+    artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/lumiera/main.cpp'], LIBS=core)
     artifacts['corelib'] = core
     
-    # temporary solution to build the GuiStarterPlugin (TODO: implement plugin building as discussed on November meeting)
-    envplug = env.Clone()
-    envplug.Append(CPPPATH='$SRCDIR/plugin', CPPDEFINES='LUMIERA_PLUGIN')
-    guistarterplugin = env.LoadableModule('#$BINDIR/guistart', 
-                                          envplug.SharedObject('$SRCDIR/guistart.cpp'), LIBS=core,  SHLIBPREFIX='')
     
-    artifacts['plugins'] = guistarterplugin 
+    artifacts['plugins'] = [] # currently none 
+    
     
     # the Lumiera GTK GUI
     envgtk  = env.Clone().mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','librsvg-2.0','xv','xext','sm'])
+    envgtk.Append(CPPDEFINES='LUMIERA_PLUGIN', LIBS=core)
     objgui  = srcSubtree(envgtk,'$SRCDIR/gui')
     
     # render and install Icons
@@ -344,7 +347,9 @@ def defineBuildTargets(env, artifacts):
                            + [env.IconCopy(f)   for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
                            )
     
-    artifacts['lumigui'] = ( envgtk.Program('$BINDIR/lumigui', objgui + core)
+    guimodule = envgtk.LoadableModule('$LIBDIR/gtk_gui', objgui, SHLIBPREFIX='', SHLIBSUFFIX='.lum')
+    artifacts['lumigui'] = ( guimodule
+                           + envgtk.Program('$BINDIR/lumigui', objgui )
                            + env.Install('$BINDIR', env.Glob('$SRCDIR/gui/*.rc'))
                            + artifacts['icons']
                            )

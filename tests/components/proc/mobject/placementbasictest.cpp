@@ -21,14 +21,14 @@
 * *****************************************************/
 
 
-#include "common/test/run.hpp"
+#include "lib/test/run.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/explicitplacement.hpp"
-#include "common/util.hpp"
+#include "lib/util.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"   ////TODO: avoidable?
 
 //#include <boost/format.hpp>

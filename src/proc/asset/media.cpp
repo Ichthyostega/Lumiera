@@ -28,7 +28,7 @@
 #include "proc/asset/unknown.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"
-#include "common/util.hpp"
+#include "lib/util.hpp"
 #include "include/nobugcfg.h"
 
 #include <boost/regex.hpp>
