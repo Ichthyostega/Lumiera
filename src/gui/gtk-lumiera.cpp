@@ -37,6 +37,16 @@ main (int argc, char *argv[])
   return the_application.main(argc, argv);
 }
 
+extern "C"
+void
+start_dummy_gui ()
+{
+  NOTICE(gui, "This is a placeholder for the Lumiera GTK-GUI starting....");
+}
+
+
+
+
 
 
 namespace gui {

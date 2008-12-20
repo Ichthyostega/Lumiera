@@ -23,7 +23,7 @@
 
 #include <iostream>
 
-#include "proc/lumiera.hpp"
+#include "proc/common.hpp"
 
 using std::cout;
 

@@ -23,67 +23,17 @@
 
 
 #include "include/nobugcfg.h"
-#include "include/error.hpp"
-#include "common/appstate.hpp"
-#include "common/option.hpp"
-
-#include "backend/enginefacade.hpp"
-#include "backend/netnodefacade.hpp"
-#include "backend/scriptrunnerfacade.hpp"
-#include "proc/facade.hpp"
-#include "gui/guifacade.hpp"
-
-using util::Cmdline;
-using lumiera::Subsys;
-using lumiera::AppState;
-using lumiera::ON_GLOBAL_INIT;
-
-namespace {
-  Subsys& engine  = backend::EngineFacade::getDescriptor();
-  Subsys& netNode = backend::NetNodeFacade::getDescriptor();
-  Subsys& script  = backend::ScriptRunnerFacade::getDescriptor();
-  Subsys& builder = proc::Facade::getBuilderDescriptor();
-  Subsys& session = proc::Facade::getSessionDescriptor();
-  Subsys& lumigui = gui::GuiFacade::getDescriptor();
-}
+#include "common/dummy-func.hpp"
 
 
 
 int
 main (int argc, const char* argv[])
 {
+  NOBUG_INIT;
+  
   NOTICE (lumiera, "*** Lumiera NLE for Linux ***");
   
-  AppState& application = AppState::instance();
-  try
-    {
-      Cmdline args (argc,argv);
-      lumiera::Option options (args);
-      application.init (options);
-      
-      session.depends (builder);
-      netNode.depends (session);
-      netNode.depends (engine);
-//    lumigui.depends (session);   //////TODO commented out in order to be able to start up a dummy GuiStarterPlugin
-//    lumigui.depends (engine);
-      script.depends (session);
-      script.depends (engine);
-      
-      application.maybeStart (session);
-      application.maybeStart (netNode);
-      application.maybeStart (lumigui);
-      application.maybeStart (script);
-      
-      return application.maybeWait();
-    }
+  lumiera::loadDummyGui();
   
-  
-  catch (lumiera::Error& problem)
-    {
-      return application.abort (problem);
-    }
-  catch (...)
-    {
-      return application.abort();
-    }
 }

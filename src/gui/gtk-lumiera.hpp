@@ -12,13 +12,19 @@
 #include <vector>
 #include <boost/utility.hpp>
 #include <boost/shared_ptr.hpp>
-#include "lib/util.hpp"
 
 #include <libgdl-1.0/gdl/gdl-dock-layout.h>
 
 extern "C" {
 #include <gavl/gavltime.h>
+
+
+/** Dummy function just to demonstrate loading the GUI as 
+ *  shared module from the SCons build.  */
+void start_dummy_gui ();
+
 }
+
 
 NOBUG_DECLARE_FLAG(gui);
 

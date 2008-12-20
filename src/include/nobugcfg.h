@@ -24,37 +24,6 @@
 
 /** @file nobugcfg.h
  ** This header is for including and configuring NoBug.
- ** The idea is that configuration and some commonly used flag 
- ** declarations are to be kept in one central location. Subsystems
- ** are free to define and use additional flags for local use. Typically,
- ** this header will be included via some of the basic headers like error.hpp,
- ** which in turn gets included e.g. by proc/common.hpp
- **
- ** This header can thus be assumed to be effectively global. It should contain
- ** only declarations of global relevance, as any change causes the whole project 
- ** to be rebuilt. Moreover, for C++ this header assures automatic initialisation
- ** of NoBug by placing a static ctor call.
- **
- ** Besides the usual guarded declarations, this header contains one section
- ** with the corresponding <b>definitions</b>. This section is to be included once
- ** by some translation unit (currently this is lumiera/nobugcfg.cpp) in order to
- ** generate the necessary definitions.
- ** 
- ** @par Logging configuration
- ** By default, logging is configured such as to emit a small number of informative
- ** messages on the starting terminal and to report fatal errors. But besides the
- ** usual fine-grained tracing messages, we define a small number of distinct 
- ** thematic <b>Logging Channels</b> providing a consistent high-level view of
- ** what is going on with regards to a specific aspect of the application
- ** - \c operate documents a high-level overall view of what the application \em does
- ** - \c render focuses on the working of the render engine (without logging each frame)
- ** - \c config shows anything of relevance regarding the configured state of App and session
- ** - \c memory allows to diagnose a high-level view of memory management
- ** 
- ** Any log level can be overridden by an environment variable, for example
- ** \code NOBUG_LOG='operate:INFO' ./lumiera \endcode
- ** 
- ** @todo logging to files?
  */
 
 
@@ -67,14 +36,6 @@
 
 #ifdef __cplusplus  /* ============= C++ ================ */
 
-#include "include/lifecycle.h"
-#include "include/error.hpp"  ///< make assertions throw instead of abort()
-
-namespace lumiera { 
-  void initialise_NoBug ();
-  namespace {
-    LifecycleHook trigger_it_ (ON_BASIC_INIT, &initialise_NoBug);         
-} }
 #endif /* =====================(End) C++ ================ */
 
 

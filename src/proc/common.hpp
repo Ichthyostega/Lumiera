@@ -41,11 +41,8 @@
 
     /* common types frequently used... */
 
-#include "lib/p.hpp"
-#include "lib/util.hpp"
-#include "lib/lumitime.hpp"
-#include "include/symbol.hpp"
-#include "include/error.hpp"   ///< pulls in NoBug via nobugcfg.h
+#include "include/nobugcfg.h"
+#include "common/dummy-func.hpp"
 
 
 /**
