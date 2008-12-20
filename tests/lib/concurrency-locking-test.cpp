@@ -21,11 +21,11 @@
 * *****************************************************/
 
 
-#include "common/test/run.hpp"
+#include "lib/test/run.hpp"
 //#include "common/util.hpp"
-#include "common/error.hpp"
+#include "include/error.hpp"
 
-#include "common/concurrency.hpp"
+#include "lib/concurrency.hpp"
 
 #include <glibmm.h>
 

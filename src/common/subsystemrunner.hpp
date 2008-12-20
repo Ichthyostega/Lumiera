@@ -27,7 +27,7 @@
 #include "include/error.hpp"
 #include "lib/util.hpp"
 #include "common/subsys.hpp"
-#include "lib/multithread.hpp"
+#include "lib/concurrency.hpp"
 
 #include <tr1/functional>
 #include <vector>
