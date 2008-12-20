@@ -328,12 +328,11 @@ TimelineWidget::create_timeline_tracks_from_branch(
   REQUIRE(model_track);
   
   // Is a timeline UI track present in the map already?
-  const model::Track *track = model_track.get();
-  if(!contains(trackMap, track))
+  if(!contains(trackMap, model_track))
     {
       // The timeline UI track is not present
       // We will need to create one
-      trackMap[model_track.get()] = 
+      trackMap[model_track] = 
         create_timeline_track_from_model_track(model_track);
     }
   
@@ -365,8 +364,8 @@ TimelineWidget::lookup_timeline_track(
   shared_ptr<model::Track> model_track)
 {
   REQUIRE(sequence);  
-  std::map<const model::Track*, shared_ptr<timeline::Track> >::
-    const_iterator iterator = trackMap.find(model_track.get());
+  std::map<shared_ptr<model::Track>, shared_ptr<timeline::Track> >::
+    const_iterator iterator = trackMap.find(model_track);
   if(iterator == trackMap.end())
     {
       // The track is not present in the map

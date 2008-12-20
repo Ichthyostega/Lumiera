@@ -251,7 +251,8 @@ protected:
    * widget is updated with update_tracks, timeline tracks are added and
    * removed from the map in correspondance with the tree.
    **/
-  std::map<const model::Track*, boost::shared_ptr<timeline::Track> >
+  std::map<boost::shared_ptr<model::Track>,
+    boost::shared_ptr<timeline::Track> >
     trackMap;
 
   // View State
