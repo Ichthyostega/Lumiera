@@ -45,7 +45,7 @@
 #include "proc/common.hpp"
 #include "proc/state.hpp"
 #include "proc/mobject/parameter.hpp"
-#include "common/frameid.hpp"
+#include "lib/frameid.hpp"
 #include "lib/refarray.hpp"
 
 #include <vector>
