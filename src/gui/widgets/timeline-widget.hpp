@@ -204,7 +204,7 @@ private:
    * error condition).
    **/
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
-    boost::shared_ptr<model::Track> model_track);
+    boost::shared_ptr<model::Track> model_track) const;
   
   // ----- Layout Functions ----- //
   

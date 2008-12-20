@@ -361,7 +361,7 @@ TimelineWidget::create_timeline_track_from_model_track(
 
 shared_ptr<timeline::Track>
 TimelineWidget::lookup_timeline_track(
-  shared_ptr<model::Track> model_track)
+  shared_ptr<model::Track> model_track) const
 {
   REQUIRE(sequence);  
   std::map<shared_ptr<model::Track>, shared_ptr<timeline::Track> >::
