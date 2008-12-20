@@ -26,7 +26,7 @@
  */
 
 #include "track.hpp"
-#include "../../common/observable-list.hpp"
+#include "../../lib/observable-list.hpp"
 
 #ifndef PARENT_TRACK_HPP
 #define PARENT_TRACK_HPP

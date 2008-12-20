@@ -82,7 +82,7 @@ libgui_la_CPPFLAGS = $(AM_CPPFLAGS)					\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\"				\
 	$(LUMIERA_GUI_CFLAGS)
 
-lumigui_SOURCES =															\
+libgui_la_SOURCES =															\
 	$(lumigui_srcdir)/gtk-lumiera.cpp										\
 	$(lumigui_srcdir)/gtk-lumiera.hpp										\
 	$(lumigui_srcdir)/window-manager.cpp									\
