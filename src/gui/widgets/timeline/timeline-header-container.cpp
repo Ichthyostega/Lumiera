@@ -63,7 +63,7 @@ TimelineHeaderContainer::TimelineHeaderContainer(
     
   // Create the context menu
   Menu::MenuList& menu_list = contextMenu.items();
-  menu_list.push_back( Menu_Helpers::MenuElem("_Add Track",
+  menu_list.push_back( Menu_Helpers::MenuElem(_("_Add Track"),
     sigc::mem_fun(timelineWidget,
     &TimelineWidget::on_add_track_command) ) );
     
