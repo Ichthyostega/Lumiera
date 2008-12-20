@@ -68,12 +68,14 @@ Track::get_height() const
   return 100;
 }
 
-bool Track::get_expanded() const
+bool
+Track::get_expanded() const
 {
   return expanded;
 }
 
-void Track::set_expanded(bool expanded)
+void
+Track::set_expanded(bool expanded)
 {
   this->expanded = expanded;
 }
