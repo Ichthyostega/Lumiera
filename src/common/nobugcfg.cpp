@@ -21,24 +21,26 @@
 * *****************************************************/
 
 
-#include "proc/nobugcfg.hpp"
+#include "include/nobugcfg.h"
 
 #define NOBUG_INIT_DEFS_
-#include "proc/nobugcfg.hpp"
+#include "include/nobugcfg.h"
 #undef NOBUG_INIT_DEFS_
 
 
-namespace lumiera
-  {
+
+
+namespace lumiera {
+  
   void 
-  initialize_NoBug () 
+  initialise_NoBug () 
   {
     NOBUG_INIT;
     
 #ifdef DEBUG
     static uint callCount = 0;
     ASSERT ( 0 == callCount++ );
-#endif    
+#endif
   }
 
 }

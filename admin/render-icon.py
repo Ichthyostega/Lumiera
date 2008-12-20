@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+#
 # render-icons.py  -  Icon rendering utility script
 #
 #  Copyright (C)         Lumiera.org
@@ -20,9 +20,10 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 import sys
+import os
+import os.path as Path
 import getopt
 from xml.dom import minidom
-import os
 import shutil
 
 #svgDir = "svg"
@@ -32,14 +33,20 @@ rsvgPath = "./rsvg-convert"
 artworkLayerPrefix = "artwork:"
 
 def createDirectory( name ):
-  if os.path.exists(name) == False:
+  if Path.isfile(name):
+    print "WARNING: moving %s to %s.bak because it's in the way." % (name,name)
+    bak_name = name + ".bak"
+    if Path.isfile(bak_name):
+      os.remove(bak_name)
+    os.rename(name,bak_name)
+  if not Path.isdir(name):
     os.mkdir(name)
-    
+
 def copyMergeDirectory( src, dst ):
   listing = os.listdir(src)
   for file_name in listing:
-    src_file_path = os.path.join(src, file_name)
-    dst_file_path = os.path.join(dst, file_name)   
+    src_file_path = Path.join(src, file_name)
+    dst_file_path = Path.join(dst, file_name)   
     shutil.copyfile(src_file_path, dst_file_path)
 
 def getDocumentSize( svg_element ):
@@ -99,7 +106,7 @@ def renderSvgInkscape(file_path, out_dir, artwork_name, rectangle, doc_size):
     "-a %g:%g:%g:%g" % (x1, y1, x2, y2),
     "-w %g" % (rectangle[2]), "-h %g" % (rectangle[3]),
     "--export-png=" + os.path.join(out_dir, "%gx%g/%s.png" % (rectangle[2], rectangle[3], artwork_name)))
-    
+
 def renderSvgRsvg(file_path, out_dir, artwork_name, rectangle, doc_size):
   # Prepare a Cairo context
   width = int(rectangle[2])
@@ -154,19 +161,23 @@ def parseArguments(argv):
 def main(argv):
   in_path, out_dir = parseArguments(argv)
   
-  if in_path == None or out_dir == None:
-  	return
+  if not (in_path and out_dir):
+    print "Missing arguments in_path and out_dir."
+    sys.exit(1)
   
-  if os.path.exists(out_dir) == False:
-    print "Directory not found: " + out_dir
-    return
+  if Path.isfile(out_dir):
+    print "Unable to use '%s' as output directory, because it\'s a file." % out_dir
+    sys.exit(1)
+  if not Path.isdir(out_dir):
+    print "Output directory '%s' not found." % out_dir
+    sys.exit(1)
   
   # Create the icons folders
-  createDirectory(os.path.join(out_dir, "48x48"))
-  createDirectory(os.path.join(out_dir, "32x32"))
-  createDirectory(os.path.join(out_dir, "24x24"))
-  createDirectory(os.path.join(out_dir, "22x22"))
-  createDirectory(os.path.join(out_dir, "16x16"))
+  createDirectory(Path.join(out_dir, "48x48"))
+  createDirectory(Path.join(out_dir, "32x32"))
+  createDirectory(Path.join(out_dir, "24x24"))
+  createDirectory(Path.join(out_dir, "22x22"))
+  createDirectory(Path.join(out_dir, "16x16"))
   
   renderSvgIcon(in_path, out_dir)
     
