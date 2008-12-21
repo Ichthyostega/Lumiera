@@ -28,7 +28,6 @@ liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/condition.c			\
 	$(liblumiera_la_srcdir)/luid.c				\
 	$(liblumiera_la_srcdir)/safeclib.c			\
-	$(liblumiera_la_srcdir)/cuckoo.c			\
 	$(liblumiera_la_srcdir)/psplay.c			\
 	$(liblumiera_la_srcdir)/mrucache.c			\
 	$(liblumiera_la_srcdir)/time.c				\
@@ -50,7 +49,6 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/condition.h			\
 	$(liblumiera_la_srcdir)/luid.h				\
 	$(liblumiera_la_srcdir)/safeclib.h			\
-	$(liblumiera_la_srcdir)/cuckoo.h			\
 	$(liblumiera_la_srcdir)/psplay.h			\
 	$(liblumiera_la_srcdir)/mrucache.h			\
 	$(liblumiera_la_srcdir)/time.h				\
