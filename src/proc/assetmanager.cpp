@@ -143,11 +143,11 @@ namespace asset
         throw UnknownID (id);
   }
   
-  /** convienience shortcut for fetching the registered smart-ptr
+  /** Convenience shortcut for fetching the registered smart-ptr
    *  which is in charge of the given asset instance. By querying
    *  directly asset.id (of type ID<Asset>), the call to registry.get()
    *  can bypass the dynamic cast, because the type of the asset 
-   *  is explicitely given by type KIND. 
+   *  is explicitly given by type KIND. 
    */
   template<class KIND>
   P<KIND>
@@ -197,7 +197,7 @@ namespace asset
 
   /**
    * remove the given asset from the internal DB
-   * <i>together with all its dependants</i> 
+   * <i>together with all its dependents</i> 
    */
   void
   AssetManager::remove (IDA id)  
