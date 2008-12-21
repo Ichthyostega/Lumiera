@@ -82,7 +82,6 @@ libgui_la_CPPFLAGS = $(AM_CPPFLAGS)					\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\"				\
 	$(LUMIERA_GUI_CFLAGS)
 
-
 libgui_la_SOURCES =							\
 	$(lumigui_srcdir)/guinotificationfacade.cpp			\
 	$(lumigui_srcdir)/window-manager.cpp				\
@@ -142,10 +141,10 @@ libgui_la_SOURCES =							\
 	$(lumigui_srcdir)/model/parent-track.hpp				\
 	$(lumigui_srcdir)/model/group-track.cpp				\
 	$(lumigui_srcdir)/model/group-track.hpp				\
-	$(lumigui_srcdir)/model/clip.cpp					\
-	$(lumigui_srcdir)/model/clip.hpp					\
 	$(lumigui_srcdir)/model/sequence.cpp				\
 	$(lumigui_srcdir)/model/sequence.hpp				\
+	$(lumigui_srcdir)/model/clip.cpp					\
+	$(lumigui_srcdir)/model/clip.hpp					\
 	$(lumigui_srcdir)/output/displayer.cpp				\
 	$(lumigui_srcdir)/output/displayer.hpp				\
 	$(lumigui_srcdir)/output/gdkdisplayer.cpp			\
