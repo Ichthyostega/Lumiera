@@ -51,15 +51,15 @@ lumigui_DEPENDENCIES =				\
 	$(top_builddir)/liblumieraproc.la
 
 #
-# gtkgui.lum becomes the pluginized gu
+# gtk_gui.lum becomes the pluginized gui
 #
 
-pkglib_LTLIBRARIES += gtkgui.la
+pkglib_LTLIBRARIES += gtk_gui.la
 
-gtkgui_la_CPPFLAGS = $(AM_CPPFLAGS) -Wall -Werror -DLUMIERA_PLUGIN -I$(top_srcdir)/src/
-gtkgui_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/null -shrext .lum
+gtk_gui_la_CPPFLAGS = $(AM_CPPFLAGS) -Wall -Werror -DLUMIERA_PLUGIN -I$(top_srcdir)/src/
+gtk_gui_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/null -shrext .lum
 
-gtkgui_la_LIBADD =		\
+gtk_gui_la_LIBADD =		\
 	liblumieracommon.la	\
 	liblumierabackend.la	\
 	liblumieraproc.la	\
@@ -67,12 +67,12 @@ gtkgui_la_LIBADD =		\
 	$(LUMIERA_GUI_LIBS)	\
 	$(NOBUGMT_LUMIERA_LIBS)
 
-gtkgui_la_SOURCES =			\
+gtk_gui_la_SOURCES =			\
 	$(lumigui_srcdir)/guistart.cpp
 
 
 #
-# libgui is a convenience library used by lumigui and the gtkgui module
+# libgui is a convenience library used by lumigui and the gtk_gui module
 #
 noinst_LTLIBRARIES += libgui.la
 
