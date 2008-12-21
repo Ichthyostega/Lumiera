@@ -25,6 +25,7 @@
 
 #include "../../gtk-lumiera.hpp"
 #include "../../model/track.hpp"
+#include "timeline-header-container.hpp"
 
 #ifndef TIMELINE_TRACK_HPP
 #define TIMELINE_TRACK_HPP
@@ -38,7 +39,7 @@ class TimelineViewWindow;
 class Track
 {
 public:
-  Track();
+  Track(TimelineWidget &timeline_widget);
   
   Gtk::Widget& get_header_widget();
   
@@ -47,12 +48,19 @@ public:
   bool get_expanded() const;
   
   void set_expanded(bool expanded);
+  
+  void show_header_context_menu(guint button, guint32 time);
 
   virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
     TimelineViewWindow* const window)
     const = 0;
 
 private:
+  void on_remove_track();
+
+private:
+
+  TimelineWidget &timelineWidget;
 
   bool expanded;
 
@@ -65,6 +73,8 @@ private:
   
   Gtk::Entry titleBox;
   Gtk::Toolbar buttonBar;
+  
+  Gtk::Menu contextMenu;
 };
 
 

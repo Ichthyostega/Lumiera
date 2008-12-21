@@ -20,16 +20,22 @@
  
 * *****************************************************/
 
+#warning This header must soon be removed when we drop Etch compatibility
+#include <gtk/gtktoolbar.h>
+
 #include "timeline-track.hpp"
+#include "../timeline-widget.hpp"
 #include "../../window-manager.hpp"
 
+using namespace boost;
 using namespace Gtk;
 
 namespace gui {
 namespace widgets {
 namespace timeline {
   
-Track::Track() :
+Track::Track(TimelineWidget &timeline_widget) :
+  timelineWidget(timeline_widget),
   expanded(true),
   enableButton(Gtk::StockID("track_enabled")),
   lockButton(Gtk::StockID("track_unlocked"))
@@ -38,11 +44,27 @@ Track::Track() :
   buttonBar.append(lockButton);
   
   buttonBar.set_toolbar_style(TOOLBAR_ICONS);
-//buttonBar.set_icon_size(WindowManager::MenuIconSize);
-//TODO  uncommented for now, doesn't compile on etch. 12/15/08 ichthyo
+  
+#if 0
+  buttonBar.set_icon_size(WindowManager::MenuIconSize);
+#else
+#warning This code soon be removed when we drop Etch compatibility
+
+  // Temporary bodge for etch compatibility - will be removed soon
+  gtk_toolbar_set_icon_size (buttonBar.gobj(),
+    (GtkIconSize)(int)WindowManager::MenuIconSize);
+#endif
 
   headerWidget.pack_start(titleBox, PACK_SHRINK);
   headerWidget.pack_start(buttonBar, PACK_SHRINK);
+  
+  // Setup the context menu
+  Menu::MenuList& menu_list = contextMenu.items();
+  menu_list.push_back( Menu_Helpers::MenuElem(_("_Add Track"),
+    sigc::mem_fun(timelineWidget,
+    &TimelineWidget::on_add_track_command) ) );
+  menu_list.push_back( Menu_Helpers::MenuElem(_("_Remove Track"),
+    sigc::mem_fun(this, &Track::on_remove_track) ) );
 }
 
 Gtk::Widget&
@@ -57,14 +79,33 @@ Track::get_height() const
   return 100;
 }
 
-bool Track::get_expanded() const
+bool
+Track::get_expanded() const
 {
   return expanded;
 }
 
-void Track::set_expanded(bool expanded)
+void
+Track::set_expanded(bool expanded)
 {
   this->expanded = expanded;
+}
+
+void
+Track::show_header_context_menu(guint button, guint32 time)
+{
+  contextMenu.popup(button, time);
+}
+
+void
+Track::on_remove_track()
+{
+  shared_ptr<model::Track> model_track =
+    timelineWidget.lookup_model_track(this);
+  ASSERT(model_track);
+  ASSERT(timelineWidget.sequence);
+  
+  timelineWidget.sequence->get_child_track_list().remove(model_track);
 }
 
 }   // namespace timeline

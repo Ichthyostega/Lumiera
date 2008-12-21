@@ -36,8 +36,8 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-TimelineHeaderContainer::TimelineHeaderContainer(gui::widgets::TimelineWidget
-    *timeline_widget) :
+TimelineHeaderContainer::TimelineHeaderContainer(
+  gui::widgets::TimelineWidget *timeline_widget) :
     Glib::ObjectBase("TimelineHeaderContainer"),
     timelineWidget(timeline_widget),
     margin(-1),
@@ -60,6 +60,12 @@ TimelineHeaderContainer::TimelineHeaderContainer(gui::widgets::TimelineWidget
   timelineWidget->hovering_track_changed_signal().connect(
     sigc::mem_fun(this,
     &TimelineHeaderContainer::on_hovering_track_changed) );
+    
+  // Create the context menu
+  Menu::MenuList& menu_list = contextMenu.items();
+  menu_list.push_back( Menu_Helpers::MenuElem(_("_Add Track"),
+    sigc::mem_fun(timelineWidget,
+    &TimelineWidget::on_add_track_command) ) );
     
   // Install style properties
   register_styles();
@@ -129,15 +135,43 @@ TimelineHeaderContainer::on_unrealize()
 bool TimelineHeaderContainer::on_button_press_event (
   GdkEventButton* event)
 {
-  // Did the user press the button on an expander?
-  if(hoveringExpander != NULL)
+  REQUIRE(event != NULL);
+  
+  switch(event->button)
     {
-      // Yes? The prime for a release event
-      clickedExpander = hoveringExpander;
-      queue_draw();
+    case 1: // Left Click
+      // Did the user press the button on an expander?
+      if(hoveringExpander != NULL)
+        {
+          // Yes? The prime for a release event
+          clickedExpander = hoveringExpander;
+          queue_draw();
+        }
+      break;
+      
+    case 3: // Right Click
+      {
+        // Popup the context menu
+        shared_ptr<Track> header = header_from_point(
+          Gdk::Point(event->x, event->y));
+        
+        // Are we hovering on a header?
+        if(header)
+          {
+            // Yes - show the header's context menu
+            header->show_header_context_menu(
+              event->button, event->time);
+          }
+        else
+          {
+            // No - show the default context menu
+            contextMenu.popup(event->button, event->time);
+          }
+        break;
+      }
     }
   
-  return Container::on_button_press_event(event);
+  return true;
 }
 
 bool TimelineHeaderContainer::on_button_release_event (
@@ -217,6 +251,12 @@ TimelineHeaderContainer::forall_vfunc(gboolean /* include_internals */,
       ASSERT(track != NULL);
       forall_vfunc_recursive(track, callback, callback_data);
     }
+}
+
+void
+TimelineHeaderContainer::on_remove(Widget* widget)
+{
+  // Do nothing - this is just to keep Gtk::Container happy
 }
 
 bool
@@ -351,11 +391,18 @@ void
 TimelineHeaderContainer::set_parent_recursive(
   boost::shared_ptr<model::Track> model_track)
 { 
-  lookup_timeline_track(model_track)->
-    get_header_widget().set_parent(*this);
+  // Set the header's parent widget
+  Widget &widget = lookup_timeline_track(model_track)->
+    get_header_widget();
+  
+  const Container *parent = widget.get_parent();
+  if(parent == NULL)  // Is the header unparented?
+    widget.set_parent(*this);
+  else if(parent != this) // The header is parented by another container
+    widget.reparent(*this);
   
   // Recurse through all the children
-  BOOST_FOREACH( boost::shared_ptr<model::Track> child,
+  BOOST_FOREACH( shared_ptr<model::Track> child,
     model_track->get_child_tracks() )
     set_parent_recursive(child);
 }
@@ -407,7 +454,8 @@ TimelineHeaderContainer::draw_header_decoration(
     lookup_timeline_track(model_track);
   
   // Get the cached header box
-  ASSERT(contains(headerBoxes, timeline_track));  
+  weak_ptr<timeline::Track> ptr(timeline_track);
+  ASSERT(contains(headerBoxes, ptr));  
   const Gdk::Rectangle &box = headerBoxes[timeline_track];
   
   // Paint the box, if it will be visible
@@ -449,6 +497,25 @@ TimelineHeaderContainer::draw_header_decoration(
       draw_header_decoration(child, clip_rect);
 }
 
+boost::shared_ptr<timeline::Track>
+TimelineHeaderContainer::header_from_point(const Gdk::Point &point)
+{
+  std::pair<shared_ptr<timeline::Track>, Gdk::Rectangle> pair; 
+  BOOST_FOREACH( pair, headerBoxes )
+    {
+      // Hit test the rectangle
+      const Gdk::Rectangle &rect = pair.second;
+      
+      if(point.get_x() >= rect.get_x() &&
+        point.get_x() < rect.get_x() + rect.get_width() &&
+        point.get_y() >= rect.get_y() &&
+        point.get_y() < rect.get_y() + rect.get_height())
+        return pair.first;
+    }
+    
+  return shared_ptr<timeline::Track>();
+}
+
 shared_ptr<timeline::Track>
 TimelineHeaderContainer::expander_button_from_point(
   const Gdk::Point &point)
@@ -475,7 +542,8 @@ TimelineHeaderContainer::get_expander_button_rectangle(
   shared_ptr<Track> track)
 {
   REQUIRE(track != NULL);
-  ASSERT(contains(headerBoxes, track));  
+  weak_ptr<timeline::Track> ptr(track);
+  ASSERT(contains(headerBoxes, ptr));  
   
   const Gdk::Rectangle &box = headerBoxes[track];
   return Gdk::Rectangle(
@@ -497,7 +565,7 @@ TimelineHeaderContainer::lookup_timeline_track(
   return timeline_track;
 }
 
-const std::list< boost::shared_ptr<model::Track> >&
+const std::list< boost::shared_ptr<model::Track> >
 TimelineHeaderContainer::get_tracks() const
 {
   REQUIRE(timelineWidget != NULL);

@@ -24,7 +24,7 @@
  ** represents a track, and wraps proc layer data
  */
 
-#include "track-base.hpp"
+#include "../gtk-lumiera.hpp"
 
 #ifndef TRACK_HPP
 #define TRACK_HPP
@@ -32,12 +32,17 @@
 namespace gui {
 namespace model {
   
-class Track : public TrackBase
+class Track
 {
-public:
+protected:
   Track();
 
+public:
+  virtual std::list< boost::shared_ptr<Track> >
+    get_child_tracks() const;
 
+protected:
+  static const std::list< boost::shared_ptr<Track> > NoChildren;
 };
 
 }   // namespace model

@@ -92,6 +92,11 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
   actionGroup->add(Action::create("SequenceMenu", _("_Sequence")));
   actionGroup->add(Action::create("SequenceAdd", _("_Add...")),
     sigc::mem_fun(*this, &Actions::on_menu_sequence_add));
+    
+  // Track Menu
+  actionGroup->add(Action::create("TrackMenu", _("_Track")));
+  actionGroup->add(Action::create("TrackAdd", _("_Add...")),
+    sigc::mem_fun(*this, &Actions::on_menu_track_add));
 
   // Help Menu
   actionGroup->add(Action::create("HelpMenu", _("_Help")) );
@@ -184,6 +189,14 @@ Actions::on_menu_sequence_add()
     dialogs::SequenceName::AddSequence, "New Sequence");
   if(dialog.run() == RESPONSE_OK)
     workspaceWindow.get_project()->add_new_sequence(dialog.get_name());
+}
+
+/* ===== Track Menu Event Handlers ===== */
+
+void
+Actions::on_menu_track_add()
+{
+  g_message("Hello");
 }
 
 /* ===== View Menu Event Handlers ===== */

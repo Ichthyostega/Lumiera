@@ -28,7 +28,8 @@ namespace gui {
 namespace widgets {
 namespace timeline {
   
-GroupTrack::GroupTrack()
+GroupTrack::GroupTrack(TimelineWidget &timeline_widget) :
+  Track(timeline_widget)
 {
 }
 

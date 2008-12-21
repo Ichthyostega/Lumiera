@@ -49,11 +49,5 @@ Sequence::Sequence()
   // END TEST CODE
 }
 
-const std::list< boost::shared_ptr<Track> >&
-Sequence::get_child_tracks() const
-{
-  return tracks;
-}
-
 }   // namespace model
 }   // namespace gui

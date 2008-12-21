@@ -27,7 +27,7 @@
 #ifndef SEQUENCE_HPP
 #define SEQUENCE_HPP
 
-#include "track-base.hpp"
+#include "parent-track.hpp"
 
 // TEST CODE
 #include "group-track.hpp"
@@ -38,17 +38,14 @@ namespace model {
   
 class Track;
 
-class Sequence : public TrackBase
+class Sequence : public ParentTrack
 {
 public:
   Sequence();
   
-  const std::list< boost::shared_ptr<model::Track> >&
-    get_child_tracks() const;
       
 private:
-  //----- Data -----//
-  std::list< boost::shared_ptr<Track> > tracks;
+
 };
 
 }   // namespace model

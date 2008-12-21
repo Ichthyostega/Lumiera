@@ -1,5 +1,5 @@
 /*
-  track-base.cpp  -  Implementation of the TrackBase class
+  parent-track-.cpp  -  Implementation of the ParentTrack class
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,31 +20,35 @@
  
 * *****************************************************/
 
-#include "track.hpp"
+#include "parent-track.hpp"
 
 namespace gui {
 namespace model {
 
-const std::list< boost::shared_ptr<Track> > TrackBase::NoChildren;
-
-TrackBase::TrackBase()
+ParentTrack::ParentTrack()
 {
 }
 
-const std::list< boost::shared_ptr<model::Track> >&
-TrackBase::get_child_tracks() const
+std::list< boost::shared_ptr<Track> >
+ParentTrack::get_child_tracks() const
 {
-  return NoChildren;
+  return tracks.to_list();
+}
+
+lumiera::observable_list< boost::shared_ptr<Track> >&
+ParentTrack::get_child_track_list()
+{
+  return tracks;
 }
 
 const Glib::ustring
-TrackBase::get_name() const
+ParentTrack::get_name() const
 {
   return name;
 }
 
 void
-TrackBase::set_name(const Glib::ustring &name)
+ParentTrack::set_name(const Glib::ustring &name)
 {
   this->name = name;
 }

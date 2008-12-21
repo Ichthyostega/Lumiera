@@ -41,7 +41,7 @@ class TimelineViewWindow;
 class ClipTrack : public timeline::Track
 {
 public:
-  ClipTrack();
+  ClipTrack(TimelineWidget &timeline_widget);
   
   void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
     TimelineViewWindow* const window) const;
