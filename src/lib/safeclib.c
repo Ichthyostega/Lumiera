@@ -107,6 +107,7 @@ lumiera_tmpbuf_freeall (void);
 static void
 lumiera_tmpbuf_destroy (void* buf)
 {
+  (void) buf;
   lumiera_tmpbuf_freeall ();
 }
 
