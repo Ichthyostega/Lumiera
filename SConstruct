@@ -77,7 +77,7 @@ def setupBasicEnvironment():
                , ICONDIR=ICONDIR
                , CPPPATH=["#"+SRCDIR]   # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['-DLUMIERA_VERSION='+VERSION ]     # note: it's a list to append further defines
-               , CCFLAGS='-Wall '                                       # -fdiagnostics-show-option
+               , CCFLAGS='-Wall -Wextra '
                , CFLAGS='-std=gnu99' 
                )
     RegisterIcon_Builder(env,SVGRENDERER)
