@@ -40,6 +40,11 @@
 #include "include/nobugcfg.h"
 #include "lib/util.hpp"
 
+extern "C" {
+#include "lib/mutex.h"
+#include "lib/condition.h"
+}
+
 #include <boost/scoped_ptr.hpp>
 
 #include <iostream> ///////////////////////////TODO
@@ -65,8 +70,16 @@ namespace lib {
       {
         struct Monitor
           {
-            Monitor()  { TODO ("maybe create mutex struct here?"); }
-            ~Monitor() { TODO ("destroy mutex, assert it isn't locked!"); } /////TODO:  Probably need to unlock it silently in case of a class-level monitor?
+            lumiera_mutex mtx_;
+            
+            Monitor()  
+              {
+                lumiera_recmutex_init (&mtx_, "Monitor object", &NOBUG_FLAG (memory));
+              }
+            ~Monitor() 
+              {
+                lumiera_mutex_destroy (&mtx_, &NOBUG_FLAG (memory));
+              }
             
             void acquireLock() { cerr << "acquire Thread Lock\n"; }
             void releaseLock() { cerr << "release Thread Lock\n"; }
@@ -74,7 +87,6 @@ namespace lib {
         
         Monitor objectMonitor_;
         
-        /////////////////////////////////////////////////////////////////////////TODO: better solution for the storage? Implement the per-this locking without subclassing!
         /////////////////////////////////////////////////////////////////////////TODO: factor out the recursive/non-recursive mutex case as policy...
         
         template<class X>
@@ -127,7 +139,10 @@ namespace lib {
     Concurrency::Monitor&
     Concurrency::getMonitor()
     {
-      //TODO: guard this by a Mutex? consider double checked locking? (but then class Monitor needs to be volatile, thus is it worth the effort?)
+      //TODO: a rather obscure race condition is hidden here:
+      //TODO: depending on the build order, the dtor of this static variable may be called, while another thread is still holding an ClassLock.
+      //TODO: An possible solution would be to use an shared_ptr to the Monitor in case of a ClassLock and to protect access with another Mutex.
+      //TODO. But I am really questioning if we can't ignore this case and state: "don't hold a ClassLock when your code maybe still running in shutdown phase!"
       
       static scoped_ptr<Monitor> classMonitor_ (0);
       if (!classMonitor_) classMonitor_.reset (new Monitor ());
