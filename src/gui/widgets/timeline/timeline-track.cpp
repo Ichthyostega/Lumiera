@@ -29,6 +29,7 @@
 
 using namespace boost;
 using namespace Gtk;
+using namespace sigc;
 
 namespace gui {
 namespace widgets {
@@ -37,9 +38,14 @@ namespace timeline {
 Track::Track(TimelineWidget &timeline_widget) :
   timelineWidget(timeline_widget),
   expanded(true),
+  titleMenuButton("4HelloHelloHello"),
   enableButton(Gtk::StockID("track_enabled")),
   lockButton(Gtk::StockID("track_unlocked"))
-{
+{  
+  titleMenuButton.set_relief(RELIEF_HALF);
+  titleMenuButton.signal_pressed().connect(
+    mem_fun(this, &Track::on_title_menu_button) );
+  
   buttonBar.append(enableButton);
   buttonBar.append(lockButton);
   
@@ -55,16 +61,20 @@ Track::Track(TimelineWidget &timeline_widget) :
     (GtkIconSize)(int)WindowManager::MenuIconSize);
 #endif
 
-  headerWidget.pack_start(titleBox, PACK_SHRINK);
+  headerWidget.pack_start(titleMenuButton, PACK_SHRINK);
   headerWidget.pack_start(buttonBar, PACK_SHRINK);
   
+  // Setup the title menu
+  Menu::MenuList& title_list = titleMenu.items();
+  title_list.push_back( Menu_Helpers::MenuElem(_("_Name..."),
+    mem_fun(this, &Track::on_remove_track) ) );
+  
   // Setup the context menu
-  Menu::MenuList& menu_list = contextMenu.items();
-  menu_list.push_back( Menu_Helpers::MenuElem(_("_Add Track"),
-    sigc::mem_fun(timelineWidget,
-    &TimelineWidget::on_add_track_command) ) );
-  menu_list.push_back( Menu_Helpers::MenuElem(_("_Remove Track"),
-    sigc::mem_fun(this, &Track::on_remove_track) ) );
+  Menu::MenuList& context_list = contextMenu.items();
+  context_list.push_back( Menu_Helpers::MenuElem(_("_Add Track"),
+    mem_fun(timelineWidget, &TimelineWidget::on_add_track_command) ) );
+  context_list.push_back( Menu_Helpers::MenuElem(_("_Remove Track"),
+    mem_fun(this, &Track::on_remove_track) ) );
 }
 
 Gtk::Widget&
@@ -95,6 +105,13 @@ void
 Track::show_header_context_menu(guint button, guint32 time)
 {
   contextMenu.popup(button, time);
+}
+
+void
+Track::on_title_menu_button()
+{
+  g_message("Hello");
+  titleMenu.popup(0, gtk_get_current_event_time());
 }
 
 void

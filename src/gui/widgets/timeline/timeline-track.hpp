@@ -56,6 +56,9 @@ public:
     const = 0;
 
 private:
+
+  void on_title_menu_button();
+
   void on_remove_track();
 
 private:
@@ -68,11 +71,15 @@ private:
   
   Gtk::VBox headerWidget;
   
+  Gtk::Button titleMenuButton;
+  
   Gtk::ToolButton enableButton;
   Gtk::ToolButton lockButton;
   
   Gtk::Entry titleBox;
   Gtk::Toolbar buttonBar;
+  
+  Gtk::Menu titleMenu;
   
   Gtk::Menu contextMenu;
 };
