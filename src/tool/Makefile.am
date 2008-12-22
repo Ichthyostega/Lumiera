@@ -20,7 +20,7 @@ lumitool_srcdir = $(top_srcdir)/src/tool
 noinst_PROGRAMS += luidgen
 
 luidgen_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
-luidgen_CPPFLAGS = -I$(top_srcdir)/src/  
+luidgen_CPPFLAGS = -I$(top_srcdir)/src/
 luidgen_SOURCES =                                   \
 	$(lumitool_srcdir)/luidgen.c
 

@@ -28,6 +28,9 @@ lumigui_CPPFLAGS = $(AM_CPPFLAGS)					\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\"				\
 	$(LUMIERA_GUI_CFLAGS)
 
+lumigui_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+lumigui_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
+
 lumigui_LDADD =					\
 	liblumieracommon.la			\
 	liblumierabackend.la			\
@@ -56,7 +59,9 @@ lumigui_DEPENDENCIES =				\
 
 pkglib_LTLIBRARIES += gtk_gui.la
 
-gtk_gui_la_CPPFLAGS = $(AM_CPPFLAGS) -Wall -Werror -DLUMIERA_PLUGIN -I$(top_srcdir)/src/
+gtk_gui_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+gtk_gui_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
+gtk_gui_la_CPPFLAGS = $(AM_CPPFLAGS) -DLUMIERA_PLUGIN -I$(top_srcdir)/src/
 gtk_gui_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/null -shrext .lum
 
 gtk_gui_la_LIBADD =		\
@@ -75,6 +80,9 @@ gtk_gui_la_SOURCES =			\
 # libgui is a convenience library used by lumigui and the gtk_gui module
 #
 noinst_LTLIBRARIES += libgui.la
+
+libgui_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+libgui_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 libgui_la_CPPFLAGS = $(AM_CPPFLAGS)					\
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"	\

@@ -19,7 +19,8 @@ lumiera_srcdir = $(top_srcdir)/src/lumiera
 
 bin_PROGRAMS += lumiera
 lumiera_CPPFLAGS = $(AM_CPPFLAGS)
-lumiera_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
+lumiera_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+lumiera_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 lumiera_LDADD =					\
 	liblumieracommon.la			\

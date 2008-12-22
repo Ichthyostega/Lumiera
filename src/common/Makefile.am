@@ -20,6 +20,7 @@ lib_LTLIBRARIES += liblumieracommon.la
 
 liblumieracommon_la_CPPFLAGS = $(AM_CPPFLAGS)  -DLUMIERA_CONFIG_PATH="\"$(pkgdatadir)/config\"" -DLUMIERA_PLUGIN_PATH="\"$(pkglibdir)/\""
 liblumieracommon_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
+liblumieracommon_la_CXXFLAGS = $(AM_CXXFLAGS) -Wextra -Wall
 liblumieracommon_la_LIBADD = liblumiera.la
 
 liblumieracommon_la_SOURCES =						\
