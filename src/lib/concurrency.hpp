@@ -47,14 +47,43 @@ extern "C" {
 
 #include <boost/scoped_ptr.hpp>
 
-#include <iostream> ///////////////////////////TODO
-using std::cerr;
 
 
 namespace lib {
 
     using boost::scoped_ptr;
+    
+    
+    namespace sync { // Helpers for Monitor based synchronisation
       
+      class RecMutex 
+        {
+          lumiera_mutex mtx_;
+          
+        public:
+          RecMutex()  { lumiera_recmutex_init (&mtx_, "Obj.Monitor RecMutex", &NOBUG_FLAG (sync)); }
+          ~RecMutex() { lumiera_mutex_destroy (&mtx_, &NOBUG_FLAG (sync)); }
+          
+            void acquire() 
+              {
+                TODO ("Record we may block on mutex");
+                
+                 if (pthread_mutex_lock (&mtx_.mutex))
+                   throw lumiera::error::State("Mutex acquire failed.");  ///////TODO capture the error-code
+  
+                TODO ("Record we successfully acquired the mutex");
+              }
+            void release() 
+              { 
+                TODO ("Record we are releasing the mutex");
+                pthread_mutex_unlock (&mtx_.mutex);
+              }
+        };
+      
+    } // namespace sync
+    
+    
+    
     /**
      * Facility for monitor object based locking. 
      * To be attached either on a per class base or per object base.
@@ -70,19 +99,12 @@ namespace lib {
       {
         struct Monitor
           {
-            lumiera_mutex mtx_;
+            sync::RecMutex mtx_;
+            Monitor() {}
+            ~Monitor() {}
             
-            Monitor()  
-              {
-                lumiera_recmutex_init (&mtx_, "Monitor object", &NOBUG_FLAG (memory));
-              }
-            ~Monitor() 
-              {
-                lumiera_mutex_destroy (&mtx_, &NOBUG_FLAG (memory));
-              }
-            
-            void acquireLock() { cerr << "acquire Thread Lock\n"; }
-            void releaseLock() { cerr << "release Thread Lock\n"; }
+            void acquireLock() { mtx_.acquire(); }
+            void releaseLock() { mtx_.release(); }
           };
         
         Monitor objectMonitor_;

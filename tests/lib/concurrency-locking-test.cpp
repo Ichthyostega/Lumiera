@@ -22,21 +22,14 @@
 
 
 #include "lib/test/run.hpp"
-//#include "common/util.hpp"
 #include "include/error.hpp"
 
 #include "lib/concurrency.hpp"
 
 #include <glibmm.h>
 
-//#include <boost/lexical_cast.hpp>
-//#include <boost/format.hpp>
 #include <iostream>
 
-//using boost::lexical_cast;
-//using boost::format;
-//using util::isnil;
-//using std::string;
 using std::cout;
 using test::Test;
 
@@ -178,7 +171,8 @@ namespace lib {
     class ConcurrencyLocking_test : public Test
       {
         
-        virtual void run(Arg arg) 
+        virtual void
+        run (Arg) 
           {
             if (!Glib::thread_supported()) 
               Glib::thread_init();
