@@ -39,6 +39,7 @@
 
 #include "include/nobugcfg.h"
 #include "lib/util.hpp"
+#include "include/error.hpp"
 
 extern "C" {
 #include "lib/mutex.h"
@@ -46,7 +47,8 @@ extern "C" {
 }
 
 #include <boost/scoped_ptr.hpp>
-
+#include <cerrno>
+#include <ctime>
 
 
 namespace lib {
@@ -54,30 +56,75 @@ namespace lib {
     using boost::scoped_ptr;
     
     
-    namespace sync { // Helpers for Monitor based synchronisation
+    /** Helpers and building blocks for Monitor based synchronisation */
+    namespace sync {
+      
       
       class RecMutex 
         {
           lumiera_mutex mtx_;
           
-        public:
-          RecMutex()  { lumiera_recmutex_init (&mtx_, "Obj.Monitor RecMutex", &NOBUG_FLAG (sync)); }
-          ~RecMutex() { lumiera_mutex_destroy (&mtx_, &NOBUG_FLAG (sync)); }
+          pthread_mutex_t* get () { return &mtx_.mutex; }
+          friend class Condition;
           
-            void acquire() 
+        public:
+          RecMutex()  { lumiera_recmutex_init (&mtx_, "Obj.Monitor RecMutex", &NOBUG_FLAG(sync)); }
+          ~RecMutex() { lumiera_mutex_destroy (&mtx_, &NOBUG_FLAG(sync)); }
+          
+            void 
+            acquire() 
               {
                 TODO ("Record we may block on mutex");
                 
-                 if (pthread_mutex_lock (&mtx_.mutex))
+                 if (pthread_mutex_lock (get()))
                    throw lumiera::error::State("Mutex acquire failed.");  ///////TODO capture the error-code
   
                 TODO ("Record we successfully acquired the mutex");
               }
-            void release() 
+            
+            void 
+            release() 
               { 
                 TODO ("Record we are releasing the mutex");
-                pthread_mutex_unlock (&mtx_.mutex);
+                pthread_mutex_unlock (get());
               }
+            
+        };
+      
+      
+      class Condition
+        {
+          lumiera_condition cond_;
+          
+        public:
+          Condition()  { lumiera_condition_init (&cond_, "Obj.Monitor Condition", &NOBUG_FLAG(sync) ); }
+          ~Condition()  { lumiera_condition_destroy (&cond_, &NOBUG_FLAG(sync) ); }
+          
+          void
+          signal (bool wakeAll=false) 
+            {
+              if (wakeAll)
+                  pthread_cond_broadcast (&cond_.cond);
+              else
+                  pthread_cond_signal (&cond_.cond);
+            }
+          
+          template<class BF>
+          bool
+          wait (volatile BF const& predicate, RecMutex& mtx, timespec* waitEndTime=0)
+            {
+              int err=0;
+              while (!predicate() && !err)
+                if (waitEndTime)
+                  err = pthread_cond_timedwait (&cond_.cond, mtx.get(), waitEndTime);
+                else
+                  err = pthread_cond_wait (&cond_.cond, mtx.get());
+              
+              if (!err)           return true;
+              if (ETIMEDOUT==err) return false;
+              
+              throw lumiera::error::State ("Condition wait failed."); ///////////TODO extract error-code
+            }
         };
       
     } // namespace sync
