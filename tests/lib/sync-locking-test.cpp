@@ -1,5 +1,5 @@
 /*
-  ConcurrencyLocking(Test)  -  check the monitor object based locking
+  SyncLocking(Test)  -  check the monitor object based locking
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -24,7 +24,7 @@
 #include "lib/test/run.hpp"
 #include "include/error.hpp"
 
-#include "lib/concurrency.hpp"
+#include "lib/sync.hpp"
 
 #include <glibmm.h>
 
@@ -48,7 +48,7 @@ namespace lib {
       
       
       class Victim
-        : public Concurrency
+        : public Sync
         {
           volatile long cnt_[NUM_COUNTERS];
           volatile uint step_;         ///< @note stored as instance variable
@@ -166,9 +166,9 @@ namespace lib {
      * But because the class Victim uses an object level monitor to
      * guard the mutations, the state should remain consistent.
      * 
-     * @see concurrency.hpp
+     * @see sync.hpp
      */
-    class ConcurrencyLocking_test : public Test
+    class SyncLocking_test : public Test
       {
         
         virtual void
@@ -198,7 +198,7 @@ namespace lib {
       
     
     /** Register this test class... */
-    LAUNCHER (ConcurrencyLocking_test, "unit common");
+    LAUNCHER (SyncLocking_test, "unit common");
     
     
     

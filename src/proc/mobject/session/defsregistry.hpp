@@ -40,7 +40,7 @@
 #define MOBJECT_SESSION_DEFSREGISTRY_H
 
 
-#include "lib/concurrency.hpp"
+#include "lib/sync.hpp"
 #include "lib/query.hpp"
 #include "lib/util.hpp"
 #include "lib/p.hpp"
@@ -58,7 +58,7 @@ namespace mobject {
     
     using lumiera::P;
     using lumiera::Query;
-    using lib::Concurrency;
+    using lib::Sync;
     using std::tr1::weak_ptr;
     
     using std::string;
@@ -162,7 +162,7 @@ namespace mobject {
           static void
           createSlot (Table& table)
             {
-              Concurrency::ClassLock<TableEntry> guard();
+              Sync::ClassLock<TableEntry> guard();
               if (!index)
                 index = ++maxSlots;
               if (index > table.size())

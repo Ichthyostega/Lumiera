@@ -26,7 +26,7 @@
 #define LUMIERA_VISITORDISPATCHER_H
 
 #include "include/error.hpp"
-#include "lib/concurrency.hpp"
+#include "lib/sync.hpp"
 #include "lib/singleton.hpp"
 #include "lib/util.hpp"
 
@@ -36,7 +36,7 @@
 namespace lumiera {
   namespace visitor {
   
-    using lib::Concurrency;
+    using lib::Sync;
 
     template<class TOOL> class Tag;
     
@@ -62,7 +62,7 @@ namespace lumiera {
       static void
       generateID (size_t& id)
         {
-          Concurrency::ClassLock<Tag> guard();
+          Sync::ClassLock<Tag> guard();
           if (!id)
             id = ++lastRegisteredID;
         }
@@ -138,7 +138,7 @@ namespace lumiera {
         void
         accomodate (size_t index)
           {
-            Concurrency::ClassLock<Dispatcher> guard();
+            Sync::ClassLock<Dispatcher> guard();
             if (index > table_.size())
               table_.resize (index);      // performance bottleneck?? TODO: measure the real impact!
           }

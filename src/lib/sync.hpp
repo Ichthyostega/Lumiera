@@ -21,7 +21,7 @@
 
 */
 
-/** @file concurrency.hpp
+/** @file sync.hpp
  ** Collection of helpers and wrappers to support dealing with concurrency issues.
  ** Actually, everything is implemented either by the Lumiera backend, or directly
  ** by pthread. The purpose is to support and automate the most common use cases
@@ -95,7 +95,7 @@ namespace lib {
      * 
      * @todo actually implement this facility using the Lumiera backend.
      */
-    struct Concurrency
+    struct Sync
       {
         struct Monitor
           {
@@ -114,7 +114,7 @@ namespace lib {
         template<class X>
         static inline Monitor& getMonitor();
         
-        static inline Monitor& getMonitor(Concurrency* forThis);
+        static inline Monitor& getMonitor(Sync* forThis);
         
         
         class Lock
@@ -150,16 +150,16 @@ namespace lib {
     
     
     
-    Concurrency::Monitor&
-    Concurrency::getMonitor(Concurrency* forThis)
+    Sync::Monitor&
+    Sync::getMonitor(Sync* forThis)
     {
       REQUIRE (forThis);
       return forThis->objectMonitor_;
     }
     
     template<class X>
-    Concurrency::Monitor&
-    Concurrency::getMonitor()
+    Sync::Monitor&
+    Sync::getMonitor()
     {
       //TODO: a rather obscure race condition is hidden here:
       //TODO: depending on the build order, the dtor of this static variable may be called, while another thread is still holding an ClassLock.

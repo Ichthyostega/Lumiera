@@ -52,7 +52,7 @@
 #include <boost/noncopyable.hpp>
 
 #include "include/error.hpp"
-#include "lib/concurrency.hpp"
+#include "lib/sync.hpp"
 #include "lib/scopedholder.hpp"
 #include "lib/scopedholdertransfer.hpp"
 
@@ -222,7 +222,7 @@ namespace lib {
       static TypeInfo
       setup()
         {
-          Concurrency::ClassLock<AllocationCluster> guard();
+          Sync::ClassLock<AllocationCluster> guard();
           if (!id_)
             id_= ++maxTypeIDs;
           

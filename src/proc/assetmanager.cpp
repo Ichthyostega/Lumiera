@@ -24,7 +24,7 @@
 #include "proc/assetmanager.hpp"
 #include "proc/asset/db.hpp"
 
-#include "lib/concurrency.hpp"
+#include "lib/sync.hpp"
 #include "lib/util.hpp"
 
 #include <boost/function.hpp>
@@ -39,7 +39,7 @@ using boost::bind;
 using util::for_each;
 
 using lumiera::Singleton;
-using lib::Concurrency;
+using lib::Sync;
 
 
 namespace asset
@@ -116,7 +116,7 @@ namespace asset
     TODO ("check validity of Ident Category");
     ID<KIND> asset_id (getID (idi));
     
-    Concurrency::ClassLock<DB> guard();
+    Sync::ClassLock<DB> guard();
     TODO ("handle duplicate Registrations");
     P<KIND> smart_ptr (obj, &destroy);
 

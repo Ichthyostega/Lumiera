@@ -34,7 +34,7 @@ This code is heavily inspired by
 #ifndef LUMIERA_SINGLETONPOLICIES_H
 #define LUMIERA_SINGLETONPOLICIES_H
 
-#include "lib/concurrency.hpp"
+#include "lib/sync.hpp"
 #include "include/error.hpp"
 
 #include <vector>
@@ -139,7 +139,7 @@ namespace lumiera
       struct Multithreaded
         {
           typedef volatile S VolatileType;
-          typedef lib::Concurrency::ClassLock<S> Lock;
+          typedef lib::Sync::ClassLock<S> Lock;
         };
       
       
