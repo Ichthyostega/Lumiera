@@ -147,6 +147,8 @@ namespace lib {
         struct Monitor
           {
             sync::RecMutex mtx_;
+            sync::Condition cond_;
+            
             Monitor() {}
             ~Monitor() {}
             
