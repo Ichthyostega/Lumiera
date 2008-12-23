@@ -46,17 +46,20 @@ lumigui_SOURCES =				\
 	$(lumigui_srcdir)/gtk-lumiera.cpp	\
 	$(lumigui_srcdir)/gtk-lumiera.hpp
 
-lumigui_DEPENDENCIES =				\
-	$(top_builddir)/lumiera_ui.rc		\
-	$(top_builddir)/liblumieracommon.la	\
-	$(top_builddir)/liblumiera.la		\
-	$(top_builddir)/liblumierabackend.la	\
-	$(top_builddir)/liblumieraproc.la
+
+#
+# themes, locales and other supplemental data
+#
+dist_pkgdata_DATA += lumiera_ui.rc
+CLEANFILES += lumiera_ui.rc
+
+lumiera_ui.rc:
+	cp $(lumigui_srcdir)/lumiera_ui.rc $(top_builddir)
+
 
 #
 # gtk_gui.lum becomes the pluginized gui
 #
-
 pkglib_LTLIBRARIES += gtk_gui.la
 
 gtk_gui_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
@@ -169,9 +172,4 @@ libgui_la_LIBADD =		\
 	$(NOBUGMT_LUMIERA_LIBS)
 
 
-#
-# themes, locales and other supplemental data
-#
-$(top_builddir)/lumiera_ui.rc:
-	cp $(lumigui_srcdir)/lumiera_ui.rc $(top_builddir)
 
