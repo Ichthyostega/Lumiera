@@ -27,7 +27,7 @@
 
 #include <unistd.h>
 
-NOBUG_DEFINE_FLAG_PARENT (resourcecollector, backend);
+NOBUG_DEFINE_FLAG (resourcecollector); /* TODO: make this a hierachy, derrive from PARENT (library) ? */
 
 llist lumiera_resourcecollector_registry[LUMIERA_RESOURCE_END];
 lumiera_mutex lumiera_resourcecollector_lock;

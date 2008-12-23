@@ -92,7 +92,7 @@ test_filemmap_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)
 test_filemmap_LDADD = liblumierabackend.la liblumiera.la -lnobugmt -lpthread -ldl -lm     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
 
 check_PROGRAMS += test-resourcecollector
-test_resourcecollector_SOURCES = $(tests_srcdir)/backend/test-resourcecollector.c
+test_resourcecollector_SOURCES = $(tests_srcdir)/library/test-resourcecollector.c
 test_resourcecollector_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
 test_resourcecollector_LDADD = liblumierabackend.la liblumiera.la -lnobugmt -lpthread -ldl -lm     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
 
