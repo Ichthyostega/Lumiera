@@ -62,6 +62,15 @@ enum lumiera_thread_class
     LUMIERA_THREAD_BATCH,
     /** Something to do when there is really nothing else to do **/
     LUMIERA_THREAD_IDLE,
+
+    /**
+     * flag to let the decision to run the function in a thread open to the backend.
+     * depending on load it might decide to run it sequentially.
+     * This has some constraints:
+     *  The condition variable to signal the finish of the thread must not be used.
+     *  The Thread must be very careful with locking, better don't.
+     **/
+    LUMIERA_THREAD_OR_NOT = 1<<16
   };
 
 /**
