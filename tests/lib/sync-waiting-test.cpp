@@ -65,7 +65,8 @@ namespace lib {
       
       
       class SyncOnBool
-        : public Token
+        : public Token,
+          public Sync
         {
           bool got_new_data_;
           
@@ -74,16 +75,16 @@ namespace lib {
           
           void getIt()
             {
-              //Lock(*this).wait (got_new_data_);
+              Lock(this).wait (got_new_data_);
               sum_ += input_;
             }
           
           void provide (uint val)
             {
-              //Lock sync(*this);
+              Lock sync(this);
               input_ = val;
               got_new_data_ = true;
-              //sync.notifyAll();
+              sync.notifyAll();
             }
         };
       

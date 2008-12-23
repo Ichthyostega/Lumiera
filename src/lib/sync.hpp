@@ -97,7 +97,7 @@ namespace lib {
           lumiera_condition cond_;
           
         public:
-          Condition()  { lumiera_condition_init (&cond_, "Obj.Monitor Condition", &NOBUG_FLAG(sync) ); }
+          Condition()   { lumiera_condition_init    (&cond_, "Obj.Monitor Condition", &NOBUG_FLAG(sync) ); }
           ~Condition()  { lumiera_condition_destroy (&cond_, &NOBUG_FLAG(sync) ); }
           
           void
@@ -109,9 +109,10 @@ namespace lib {
                   pthread_cond_signal (&cond_.cond);
             }
           
+          
           template<class BF>
           bool
-          wait (volatile BF const& predicate, RecMutex& mtx, timespec* waitEndTime=0)
+          wait (BF& predicate, RecMutex& mtx, timespec* waitEndTime=0)
             {
               int err=0;
               while (!predicate() && !err)
@@ -126,6 +127,43 @@ namespace lib {
               throw lumiera::error::State ("Condition wait failed."); ///////////TODO extract error-code
             }
         };
+      
+      
+      struct Monitor
+        {
+          sync::RecMutex mtx_;
+          sync::Condition cond_;
+          
+          Monitor() {}
+          ~Monitor() {}
+          
+          void acquireLock() { mtx_.acquire(); }
+          void releaseLock() { mtx_.release(); }
+          
+          void signal(bool a){ cond_.signal(a);}
+          
+          inline bool wait (volatile bool&, ulong);
+        };
+     
+      
+      typedef volatile bool& Flag;
+      
+      struct BoolFlagPredicate
+        {
+          Flag flag_;
+          BoolFlagPredicate (Flag f) : flag_(f) {}
+         
+          bool operator() () { return flag_; }
+        };
+      
+     
+      bool
+      Monitor::wait(Flag flag, ulong timeoout)
+      {
+        BoolFlagPredicate checkFlag(flag);
+        return cond_.wait(checkFlag, mtx_, (timespec*)0);                                   
+      }
+
       
     } // namespace sync
     
@@ -144,17 +182,7 @@ namespace lib {
      */
     struct Sync
       {
-        struct Monitor
-          {
-            sync::RecMutex mtx_;
-            sync::Condition cond_;
-            
-            Monitor() {}
-            ~Monitor() {}
-            
-            void acquireLock() { mtx_.acquire(); }
-            void releaseLock() { mtx_.release(); }
-          };
+        typedef sync::Monitor Monitor;
         
         Monitor objectMonitor_;
         
@@ -169,23 +197,21 @@ namespace lib {
         class Lock
           {
             Monitor& mon_;
+            
           public:
             template<class X>
-            Lock(X* it) : mon_(getMonitor(it)) 
-              { 
-                mon_.acquireLock(); 
-              }
+            Lock(X* it) : mon_(getMonitor(it)){ mon_.acquireLock(); }
+            Lock(Monitor& m) : mon_(m)        { mon_.acquireLock(); }
+            ~Lock()                           { mon_.releaseLock(); }
             
-            Lock(Monitor& m) : mon_(m) 
-              { 
-                mon_.acquireLock(); 
-              }
+            template<typename C>
+            bool wait (C& cond, ulong time=0) { return mon_.wait(cond,time);}
             
-            ~Lock()
-              { 
-                mon_.releaseLock(); 
-              }
+            void notifyAll()                  { mon_.signal(true); }
+            void notify()                     { mon_.signal(false);}
+            
           };
+        
         
         template<class X>
         struct ClassLock : Lock
