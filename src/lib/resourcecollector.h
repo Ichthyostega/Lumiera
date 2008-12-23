@@ -34,6 +34,8 @@ enum lumiera_resource
     LUMIERA_RESOURCE_MEMORY,
     /** OS filehandles **/
     LUMIERA_RESOURCE_FILEHANDLE,
+    /** CPU time, as in threads and such  **/
+    LUMIERA_RESOURCE_CPU,
     /** mmaped regions **/
     LUMIERA_RESOURCE_MMAP,
     /** disk space for the storage area, context is a pointer to the filename indication the device **/
