@@ -26,7 +26,7 @@
 #include "common/config_interface.h"
 
 #include "tests/test.h"
-#include "tests/lumiera/hello_interface.h"
+#include "tests/common/hello_interface.h"
 
 /*
   define 2 example interfaces
