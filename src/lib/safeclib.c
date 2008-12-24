@@ -122,7 +122,9 @@ lumiera_tmpbuf_init (void)
 void
 lumiera_tmpbuf_freeall (void)
 {
-  pthread_once (&lumiera_tmpbuf_tls_once, lumiera_tmpbuf_init);
+  if (lumiera_tmpbuf_tls_once == PTHREAD_ONCE_INIT)
+    pthread_once (&lumiera_tmpbuf_tls_once, lumiera_tmpbuf_init);
+
   struct lumiera_tmpbuf_struct* buf = pthread_getspecific (lumiera_tmpbuf_tls_key);
   if (buf)
     {
@@ -137,7 +139,9 @@ lumiera_tmpbuf_freeall (void)
 void*
 lumiera_tmpbuf_provide (size_t size)
 {
-  pthread_once (&lumiera_tmpbuf_tls_once, lumiera_tmpbuf_init);
+  if (lumiera_tmpbuf_tls_once == PTHREAD_ONCE_INIT)
+    pthread_once (&lumiera_tmpbuf_tls_once, lumiera_tmpbuf_init);
+
   struct lumiera_tmpbuf_struct* buf = pthread_getspecific (lumiera_tmpbuf_tls_key);
   if (!buf)
     pthread_setspecific (lumiera_tmpbuf_tls_key,

@@ -49,7 +49,8 @@ lumiera_error_tls_init (void)
 lumiera_err
 lumiera_error_set (lumiera_err nerr)
 {
-  pthread_once (&lumiera_error_initialized, lumiera_error_tls_init);
+  if (lumiera_error_initialized == PTHREAD_ONCE_INIT)
+    pthread_once (&lumiera_error_initialized, lumiera_error_tls_init);
 
   lumiera_err err = pthread_getspecific (lumiera_error_tls);
   if (!err)
@@ -62,7 +63,8 @@ lumiera_error_set (lumiera_err nerr)
 lumiera_err
 lumiera_error (void)
 {
-  pthread_once (&lumiera_error_initialized, lumiera_error_tls_init);
+  if (lumiera_error_initialized == PTHREAD_ONCE_INIT)
+    pthread_once (&lumiera_error_initialized, lumiera_error_tls_init);
 
   lumiera_err err = pthread_getspecific (lumiera_error_tls);
   if (err)
@@ -74,7 +76,8 @@ lumiera_error (void)
 lumiera_err
 lumiera_error_peek (void)
 {
-  pthread_once (&lumiera_error_initialized, lumiera_error_tls_init);
+  if (lumiera_error_initialized == PTHREAD_ONCE_INIT)
+    pthread_once (&lumiera_error_initialized, lumiera_error_tls_init);
 
   return pthread_getspecific (lumiera_error_tls);
 }

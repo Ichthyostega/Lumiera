@@ -59,7 +59,9 @@ lumiera_recmutex_init (LumieraMutex self, const char* purpose, struct nobug_flag
 {
   if (self)
     {
-      pthread_once(&recursive_mutexattr_once, recursive_mutexattr_init);
+      if (recursive_mutexattr_once == PTHREAD_ONCE_INIT)
+        pthread_once (&recursive_mutexattr_once, recursive_mutexattr_init);
+
       pthread_mutex_init (&self->mutex, &recursive_mutexattr);
       NOBUG_RESOURCE_HANDLE_INIT (self->rh);
       NOBUG_RESOURCE_ANNOUNCE_RAW (flag, "recmutex", purpose, self, self->rh);
