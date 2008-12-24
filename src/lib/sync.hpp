@@ -60,55 +60,105 @@ namespace lib {
     /** Helpers and building blocks for Monitor based synchronisation */
     namespace sync {
       
-      class Timeout;
-    
-      class RecMutex 
+      
+      struct Wrapped_LumieraExcMutex
+        : public lumiera_mutex
         {
-          lumiera_mutex mtx_;
-          
-          pthread_mutex_t* get () { return &mtx_.mutex; }
-          friend class Condition;
-          
+        protected:
+          Wrapped_LumieraExcMutex() { lumiera_mutex_init    (this, "Obj.Monitor ExclMutex", &NOBUG_FLAG(sync)); }
+         ~Wrapped_LumieraExcMutex() { lumiera_mutex_destroy (this, &NOBUG_FLAG(sync)); }
+         
+         //------------------Resource-Tracking------
+         void __may_block() { TODO ("Record we may block on mutex"); }
+         void __enter()     { TODO ("Record we successfully acquired the mutex"); }
+         void __leave()     { TODO ("Record we are releasing the mutex"); }
+        };
+      
+        
+      struct Wrapped_LumieraRecMutex
+        : public lumiera_mutex
+        {
+        protected:
+          Wrapped_LumieraRecMutex() { lumiera_recmutex_init (this, "Obj.Monitor ExclMutex", &NOBUG_FLAG(sync)); }
+         ~Wrapped_LumieraRecMutex() { lumiera_mutex_destroy (this, &NOBUG_FLAG(sync)); }
+         
+         //------------------Resource-Tracking------
+         void __may_block() { TODO ("Record we may block on mutex"); }
+         void __enter()     { TODO ("Record we successfully acquired the mutex"); }
+         void __leave()     { TODO ("Record we are releasing the mutex"); }
+        };
+      
+        
+      struct Wrapped_LumieraExcCond
+        : public lumiera_condition
+        {
+        protected:
+          Wrapped_LumieraExcCond() { lumiera_condition_init    (this, "Obj.Monitor Condition", &NOBUG_FLAG(sync) ); }
+         ~Wrapped_LumieraExcCond() { lumiera_condition_destroy (this, &NOBUG_FLAG(sync) ); }
+         
+         //------------------Resource-Tracking------
+         void __may_block() { TODO ("Record we may block on mutex"); }
+         void __enter()     { TODO ("Record we successfully acquired the mutex"); }
+         void __leave()     { TODO ("Record we are releasing the mutex"); }
+        };
+      
+        
+      struct Wrapped_LumieraRecCond
+        : public lumiera_condition
+        {
+        protected:
+          Wrapped_LumieraRecCond() { lumiera_condition_init    (this, "Obj.Monitor Condition", &NOBUG_FLAG(sync) ); } ////////TODO
+         ~Wrapped_LumieraRecCond() { lumiera_condition_destroy (this, &NOBUG_FLAG(sync) ); }
+         
+         //------------------Resource-Tracking------
+         void __may_block() { TODO ("Record we may block on mutex"); }
+         void __enter()     { TODO ("Record we successfully acquired the mutex"); }
+         void __leave()     { TODO ("Record we are releasing the mutex"); }
+        };
+      
+      
+      template<class MTX>
+      class Mutex 
+        : protected MTX
+        {
         public:
-          RecMutex()  { lumiera_recmutex_init (&mtx_, "Obj.Monitor RecMutex", &NOBUG_FLAG(sync)); }
-          ~RecMutex() { lumiera_mutex_destroy (&mtx_, &NOBUG_FLAG(sync)); }
-          
             void 
             acquire() 
               {
-                TODO ("Record we may block on mutex");
+                __may_block();
                 
-                 if (pthread_mutex_lock (get()))
-                   throw lumiera::error::State("Mutex acquire failed.");  ///////TODO capture the error-code
-  
-                TODO ("Record we successfully acquired the mutex");
+                if (pthread_mutex_lock (&mutex))
+                  throw lumiera::error::State("Mutex acquire failed.");  ///////TODO capture the error-code
+                
+                __enter();
               }
             
             void 
             release() 
               { 
-                TODO ("Record we are releasing the mutex");
-                pthread_mutex_unlock (get());
+                __leave();
+                
+                pthread_mutex_unlock (&mutex);
               }
             
         };
       
       
+      class Timeout;
+      
+      
+      template<class CDX>
       class Condition
+        : public Mutex<CDX>
         {
-          lumiera_condition cond_;
-          
         public:
-          Condition()   { lumiera_condition_init    (&cond_, "Obj.Monitor Condition", &NOBUG_FLAG(sync) ); }
-          ~Condition()  { lumiera_condition_destroy (&cond_, &NOBUG_FLAG(sync) ); }
-          
           void
           signal (bool wakeAll=false) 
             {
               if (wakeAll)
-                  pthread_cond_broadcast (&cond_.cond);
+                  pthread_cond_broadcast (&cond);
               else
-                  pthread_cond_signal (&cond_.cond);
+                  pthread_cond_signal (&cond);
             }
           
           
@@ -119,9 +169,9 @@ namespace lib {
               int err=0;
               while (!predicate() && !err)
                 if (waitEndTime)
-                  err = pthread_cond_timedwait (&cond_.cond, mtx.get(), &waitEndTime);
+                  err = pthread_cond_timedwait (&cond, &mutex, &waitEndTime);
                 else
-                  err = pthread_cond_wait (&cond_.cond, mtx.get());
+                  err = pthread_cond_wait (&cond, &mutex);
               
               if (!err)           return true;
               if (ETIMEDOUT==err) return false;
@@ -164,10 +214,8 @@ namespace lib {
       typedef volatile bool& Flag;
       
       class Monitor
+        : Condition<Wrapped_LumieraExcCond>  /////////TODO: to be refactored. This is just one example, using the non-recursive condition
         {
-          RecMutex mtx_;
-          Condition cond_;
-          
           Timeout timeout_;
           
           //////TODO my intention is to make two variants of the monitor, where the simple one leaves out the condition part
@@ -176,10 +224,10 @@ namespace lib {
           Monitor() {}
           ~Monitor() {}
           
-          void acquireLock() { mtx_.acquire(); }
-          void releaseLock() { mtx_.release(); }
+          void acquireLock() { acquire(); }
+          void releaseLock() { release(); }
           
-          void signal(bool a){ cond_.signal(a);}
+          void signal(bool a){ signal(a); }
           
           inline bool wait (Flag, ulong);
           inline void setTimeout(ulong);
@@ -211,7 +259,7 @@ namespace lib {
       Monitor::isTimedWait () {return (timeout_);}
       
       
-    } // namespace sync
+    } // namespace sync (helpers and building blocks)
     
     
     
