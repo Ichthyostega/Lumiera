@@ -27,6 +27,7 @@ liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/mutex.c				\
 	$(liblumiera_la_srcdir)/rwlock.c			\
 	$(liblumiera_la_srcdir)/condition.c			\
+	$(liblumiera_la_srcdir)/reccondition.c			\
 	$(liblumiera_la_srcdir)/luid.c				\
 	$(liblumiera_la_srcdir)/safeclib.c			\
 	$(liblumiera_la_srcdir)/psplay.c			\
@@ -50,6 +51,7 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/mutex.h				\
 	$(liblumiera_la_srcdir)/rwlock.h			\
 	$(liblumiera_la_srcdir)/condition.h			\
+	$(liblumiera_la_srcdir)/reccondition.h			\
 	$(liblumiera_la_srcdir)/luid.h				\
 	$(liblumiera_la_srcdir)/safeclib.h			\
 	$(liblumiera_la_srcdir)/psplay.h			\
