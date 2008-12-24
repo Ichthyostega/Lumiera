@@ -57,7 +57,7 @@ LUMIERA_ERROR_DECLARE (CONDITION_DESTROY);
          });                                                                                            \
          lumiera_condition_section_.condition;                                                          \
          ({                                                                                             \
-           LUMIERA_CONDITION_UNLOCK(nobugflag)                                                          \
+           LUMIERA_CONDITION_UNLOCK                                                                     \
          }))
 
 
@@ -68,12 +68,12 @@ LUMIERA_ERROR_DECLARE (CONDITION_DESTROY);
  * got unlocked.
  * @param nobugflag NoBug flag used to log actions on the condition
  */
-#define LUMIERA_CONDITION_UNLOCK                                                \
-  if (lumiera_condition_section_.condition)                                     \
-    {                                                                           \
-      pthread_mutex_unlock (&lumiera_condition_section_.condition->mutex);      \
-      lumiera_condition_section_.condition = NULL;                              \
-      RESOURCE_LEAVE(nobugflag, lumiera_condition_section_.rh);                 \
+#define LUMIERA_CONDITION_UNLOCK                                                                \
+  if (lumiera_condition_section_.condition)                                                     \
+    {                                                                                           \
+      pthread_mutex_unlock (&lumiera_condition_section_.condition->mutex);                      \
+      lumiera_condition_section_.condition = NULL;                                              \
+      NOBUG_RESOURCE_LEAVE_RAW(lumiera_condition_section_.flag, lumiera_condition_section_.rh); \
     }
 
 
