@@ -28,14 +28,15 @@
  ** in object oriented style.
  **
  ** @see mutex.h
- ** @see concurrency-locking-test.cpp
+ ** @see sync-locking-test.cpp
+ ** @see sync-waiting-test.cpp
  ** @see asset::AssetManager::reg() usage example
  ** @see subsystemrunner.hpp usage example
  */
 
 
-#ifndef LIB_CONCURRENCY_H
-#define LIB_CONCURRENCY_H
+#ifndef LIB_SYNC_H
+#define LIB_SYNC_H
 
 #include "include/nobugcfg.h"
 #include "lib/util.hpp"
@@ -59,7 +60,8 @@ namespace lib {
     /** Helpers and building blocks for Monitor based synchronisation */
     namespace sync {
       
-      
+      class Timeout;
+    
       class RecMutex 
         {
           lumiera_mutex mtx_;
@@ -110,14 +112,14 @@ namespace lib {
             }
           
           
-          template<class BF>
+          template<class BF, class MTX>
           bool
-          wait (BF& predicate, RecMutex& mtx, timespec* waitEndTime=0)
+          wait (BF& predicate, MTX& mtx, Timeout& waitEndTime)
             {
               int err=0;
               while (!predicate() && !err)
                 if (waitEndTime)
-                  err = pthread_cond_timedwait (&cond_.cond, mtx.get(), waitEndTime);
+                  err = pthread_cond_timedwait (&cond_.cond, mtx.get(), &waitEndTime);
                 else
                   err = pthread_cond_wait (&cond_.cond, mtx.get());
               
@@ -128,12 +130,49 @@ namespace lib {
             }
         };
       
-      
-      struct Monitor
+      /** helper for specifying an optional timeout
+       *  for an timed wait. It wraps a timespec-struct
+       *  and allows for easy initialisation by a given
+       *  relative offset.
+       */
+      struct Timeout
+        : timespec
         {
-          sync::RecMutex mtx_;
-          sync::Condition cond_;
+          Timeout() { tv_sec=tv_nsec=0; }
           
+          /** initialise to NOW() + offset (in milliseconds) */
+          Timeout&
+          setOffset (ulong offs)
+            {
+              if (offs)
+                {
+                  clock_gettime(CLOCK_REALTIME, this);
+                  tv_sec   += offs / 1000;
+                  tv_nsec  += 1000000 * (offs % 1000);
+                  if (tv_nsec > 1000000000)
+                    {
+                      tv_sec += tv_nsec / 1000000000;
+                      tv_nsec %= 1000000000;
+                }   }
+              return *this;
+            }
+          
+          operator bool() { return 0 != tv_sec; } // allows if (timeout_)....
+        };
+      
+      
+      typedef volatile bool& Flag;
+      
+      class Monitor
+        {
+          RecMutex mtx_;
+          Condition cond_;
+          
+          Timeout timeout_;
+          
+          //////TODO my intention is to make two variants of the monitor, where the simple one leaves out the condition part
+          
+        public:
           Monitor() {}
           ~Monitor() {}
           
@@ -142,11 +181,12 @@ namespace lib {
           
           void signal(bool a){ cond_.signal(a);}
           
-          inline bool wait (volatile bool&, ulong);
+          inline bool wait (Flag, ulong);
+          inline void setTimeout(ulong);
+          inline bool isTimedWait();
         };
      
       
-      typedef volatile bool& Flag;
       
       struct BoolFlagPredicate
         {
@@ -158,12 +198,18 @@ namespace lib {
       
      
       bool
-      Monitor::wait(Flag flag, ulong timeoout)
+      Monitor::wait (Flag flag, ulong timedwait)
       {
         BoolFlagPredicate checkFlag(flag);
-        return cond_.wait(checkFlag, mtx_, (timespec*)0);                                   
+        return cond_.wait(checkFlag, mtx_, timeout_.setOffset(timedwait));                                   
       }
-
+      
+      void
+      Monitor::setTimeout (ulong relative) {timeout_.setOffset(relative);}
+      
+      bool
+      Monitor::isTimedWait () {return (timeout_);}
+      
       
     } // namespace sync
     
@@ -206,6 +252,7 @@ namespace lib {
             
             template<typename C>
             bool wait (C& cond, ulong time=0) { return mon_.wait(cond,time);}
+            void setTimeout(ulong time)       { mon_.setTimeout(time); }
             
             void notifyAll()                  { mon_.signal(true); }
             void notify()                     { mon_.signal(false);}
@@ -240,6 +287,7 @@ namespace lib {
       //TODO: depending on the build order, the dtor of this static variable may be called, while another thread is still holding an ClassLock.
       //TODO: An possible solution would be to use an shared_ptr to the Monitor in case of a ClassLock and to protect access with another Mutex.
       //TODO. But I am really questioning if we can't ignore this case and state: "don't hold a ClassLock when your code maybe still running in shutdown phase!"
+      //TODO: probably best Idea is to detect this situation in DEBUG or ALPHA mode
       
       static scoped_ptr<Monitor> classMonitor_ (0);
       if (!classMonitor_) classMonitor_.reset (new Monitor ());
