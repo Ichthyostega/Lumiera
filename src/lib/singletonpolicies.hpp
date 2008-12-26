@@ -40,10 +40,10 @@ This code is heavily inspired by
 #include <vector>
 
 
-namespace lumiera
-  {
-  namespace singleton
-    {
+namespace lumiera {
+  namespace singleton {
+    
+    
       /* === several Policies usable in conjunction with lumiera::Singleton === */
       
       /** 
@@ -139,7 +139,7 @@ namespace lumiera
       struct Multithreaded
         {
           typedef volatile S VolatileType;
-          typedef lib::Sync<>::ClassLock<S> Lock;
+          typedef lib::ClassLock<S> Lock;
         };
       
       

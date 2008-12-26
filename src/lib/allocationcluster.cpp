@@ -81,7 +81,7 @@ namespace lib {
   void
   AllocationCluster::MemoryManager::reset (TypeInfo info)
   {
-    Sync<>::ClassLock<MemoryManager> guard();
+    ClassLock<MemoryManager> guard();
     
     if (0 < mem_.size()) purge();
     type_ = info;
@@ -96,7 +96,7 @@ namespace lib {
   void
   AllocationCluster::MemoryManager::purge()
   {
-    Sync<>::ClassLock<MemoryManager> guard();
+    ClassLock<MemoryManager> guard();
     
     REQUIRE (type_.killIt, "we need a deleter function");
     REQUIRE (0 < type_.allocSize, "allocation size unknown");
@@ -120,7 +120,7 @@ namespace lib {
   inline void*
   AllocationCluster::MemoryManager::allocate()
   {
-    Sync<>::ClassLock<MemoryManager> guard();
+    ClassLock<MemoryManager> guard();
     
     REQUIRE (0 < type_.allocSize);
     REQUIRE (top_ <= mem_.size());
@@ -140,7 +140,7 @@ namespace lib {
   inline void
   AllocationCluster::MemoryManager::commit (void* pendingAlloc)
   {
-    Sync<>::ClassLock<MemoryManager> guard();
+    ClassLock<MemoryManager> guard();
     
     REQUIRE (pendingAlloc);
     ASSERT (top_ < mem_.size());
@@ -175,7 +175,7 @@ namespace lib {
   {
     try
       {
-        Sync<>::ClassLock<AllocationCluster> guard();
+        ClassLock<AllocationCluster> guard();
         
         TRACE (memory, "shutting down AllocationCluster");
         for (size_t i = typeHandlers_.size(); 0 < i; --i)
@@ -214,7 +214,7 @@ namespace lib {
     ASSERT (0 < slot);
     
       {
-        Sync<>::ClassLock<AllocationCluster> guard();   /////TODO: decide tradeoff: lock just the instance, or lock the AllocationCluster class?
+        ClassLock<AllocationCluster> guard();   /////TODO: decide tradeoff: lock just the instance, or lock the AllocationCluster class?
         
         if (slot > typeHandlers_.size())
           typeHandlers_.resize(slot);

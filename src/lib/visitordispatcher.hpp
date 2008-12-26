@@ -36,7 +36,7 @@
 namespace lumiera {
   namespace visitor {
   
-    using lib::Sync;
+    using lib::ClassLock;
 
     template<class TOOL> class Tag;
     
@@ -62,7 +62,7 @@ namespace lumiera {
       static void
       generateID (size_t& id)
         {
-          Sync<>::ClassLock<Tag> guard();
+          ClassLock<Tag> guard();
           if (!id)
             id = ++lastRegisteredID;
         }
@@ -138,7 +138,7 @@ namespace lumiera {
         void
         accomodate (size_t index)
           {
-            Sync<>::ClassLock<Dispatcher> guard();
+            ClassLock<Dispatcher> guard();
             if (index > table_.size())
               table_.resize (index);      // performance bottleneck?? TODO: measure the real impact!
           }

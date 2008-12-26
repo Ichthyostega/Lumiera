@@ -284,7 +284,7 @@ namespace lib {
      * @todo actually implement this facility using the Lumiera backend.
      */
     template<class CONF = NonrecursiveLock_NoWait>
-    struct Sync
+    class Sync
       {
         typedef sync::Monitor<CONF> Monitor;
         Monitor objectMonitor_;
@@ -296,22 +296,8 @@ namespace lib {
             return forThis->objectMonitor_;
           }
         
-        template<class X>
-        static Monitor&
-        getMonitor()
-          {
-            //TODO: a rather obscure race condition is hidden here:
-            //TODO: depending on the build order, the dtor of this static variable may be called, while another thread is still holding an ClassLock.
-            //TODO: An possible solution would be to use an shared_ptr to the Monitor in case of a ClassLock and to protect access with another Mutex.
-            //TODO. But I am really questioning if we can't ignore this case and state: "don't hold a ClassLock when your code maybe still running in shutdown phase!"
-            //TODO: probably best Idea is to detect this situation in DEBUG or ALPHA mode
-            
-            static scoped_ptr<Monitor> classMonitor_ (0);
-            if (!classMonitor_) classMonitor_.reset (new Monitor ());
-            return *classMonitor_;
-          }
         
-        
+      public:
         class Lock
           {
             Monitor& mon_;
@@ -332,14 +318,35 @@ namespace lib {
           };
         
         
-        template<class X>
-        struct ClassLock : Lock
-          {
-            ClassLock() : Lock (getMonitor<X>()) {}
-          };
-        
       };
     
+        
+      template<class X, class CONF = NonrecursiveLock_NoWait>
+      class ClassLock 
+        : public Sync<CONF>::Lock
+        {
+          typedef typename Sync<CONF>::Lock Lock;
+          typedef typename Sync<CONF>::Monitor Monitor;
+          
+          
+          static Monitor&
+          getMonitor()
+            {
+              //TODO: a rather obscure race condition is hidden here:
+              //TODO: depending on the build order, the dtor of this static variable may be called, while another thread is still holding an ClassLock.
+              //TODO: An possible solution would be to use an shared_ptr to the Monitor in case of a ClassLock and to protect access with another Mutex.
+              //TODO. But I am really questioning if we can't ignore this case and state: "don't hold a ClassLock when your code maybe still running in shutdown phase!"
+              //TODO: probably best Idea is to detect this situation in DEBUG or ALPHA mode
+              
+              static scoped_ptr<Monitor> classMonitor_ (0);
+              if (!classMonitor_) classMonitor_.reset (new Monitor ());
+              return *classMonitor_;
+            }
+          
+          
+        public:
+          ClassLock() : Lock (getMonitor()) {}
+        };
     
   
 } // namespace lumiera

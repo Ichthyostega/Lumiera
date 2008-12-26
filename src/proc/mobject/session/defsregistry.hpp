@@ -58,7 +58,7 @@ namespace mobject {
     
     using lumiera::P;
     using lumiera::Query;
-    using lib::Sync;
+    using lib::ClassLock;
     using std::tr1::weak_ptr;
     
     using std::string;
@@ -162,7 +162,7 @@ namespace mobject {
           static void
           createSlot (Table& table)
             {
-              Sync<>::ClassLock<TableEntry> guard();
+              ClassLock<TableEntry> guard();
               if (!index)
                 index = ++maxSlots;
               if (index > table.size())
