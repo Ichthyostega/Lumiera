@@ -7,7 +7,7 @@
 
 style "medium_text"
 {
- 	font_name = "sans 10"
+
 }
  	
 style "medium_bold_entry" = "medium_text"
@@ -67,7 +67,6 @@ style "default_base" = "medium_text"
 
 style "default_buttons_menus" 
 {
-  font_name = "sans 10"
   fg[ACTIVE] = { 1.0, 1.0, 1.0 }
   
   bg[NORMAL] = { 0.30, 0.30, 0.35 }
