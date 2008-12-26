@@ -49,7 +49,7 @@ namespace asset
      */
     class MediaStructureQuery_test : public Test
       {
-        virtual void run(Arg arg) 
+        virtual void run(Arg) 
           {
             UNIMPLEMENTED ("querying media file structure from backend");
           }

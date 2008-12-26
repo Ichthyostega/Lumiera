@@ -61,7 +61,7 @@ namespace mobject
       class DeleteClip_test : public Test
         {
           virtual void
-          run (Arg arg) 
+          run (Arg) 
             {
               buildTestseesion1();
               PSess sess = Session::current;

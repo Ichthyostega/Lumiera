@@ -49,12 +49,9 @@ using std::map;
 
 
 
-namespace mobject
-  {
-  namespace session
-    {
-    namespace test
-      {
+namespace mobject {
+  namespace session {
+    namespace test  {
       
       format typePatt ("Dummy<%2i>");
       format instancePatt ("obj_%s_%i");
@@ -131,7 +128,8 @@ namespace mobject
             { }
           
           
-          virtual void run(Arg arg) 
+          virtual void 
+          run (Arg) 
             {
               this->reg_.reset (new DefsRegistry);
               
@@ -143,10 +141,11 @@ namespace mobject
           
           
           
-          void fill_table ()
+          void
+          fill_table ()
             {
                // at start the registry is indeed empty
-              //  thus a query doesnt yield any results....
+              //  thus a query doesn't yield any results....
               ASSERT ( ! *(reg_->candidates(Q13 ("something"))) );
               
               reg_->put (o1, q5);
@@ -168,7 +167,8 @@ namespace mobject
             }
           
           
-          void check_query ()
+          void
+          check_query ()
             {
               Iter13 i (reg_->candidates(Q13 ("irrelevant query")));
               ASSERT ( i.hasNext());
@@ -223,7 +223,8 @@ namespace mobject
             }
           
           
-          void check_remove ()
+          void
+          check_remove ()
             {
               reg_->forget (o2);
               

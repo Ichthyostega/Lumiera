@@ -1,5 +1,5 @@
 /*
-  mmap.h  -  memory mapped acces to files
+  mmap.h  -  memory mapped access to files
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>

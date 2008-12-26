@@ -1,5 +1,5 @@
 /*
-  BuilderTool(Test)  -  specialized visitor used within the builder for processing Placements
+  BuilderTool(Test)  -  specialised visitor used within the builder for processing Placements
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -63,14 +63,14 @@ namespace mobject {
         };
       
       /** 
-       * Subclass-1 is \em not defined "processable",
+       * Subclass-1 is \em not defined "processible",
        * thus will always be handled as TestMO...
        */
       class TestSubMO1 : public TestMO 
         { };
       
       /** 
-       * Subclass-2 \em is defined "processable", 
+       * Subclass-2 \em is defined "processible", 
        * but we omit the necessary "applicable" definition in TestTool,
        * resulting in an invocation of the error (catch-all) function...
        */
@@ -91,14 +91,14 @@ namespace mobject {
       
       
       /**
-       * BuilderTool implementation for checking the invokation of the correct
+       * BuilderTool implementation for checking the invocation of the correct
        * \c treat() function and for accessing the original Placement from 
        * within this invocation. It is declared to be applicable to Clip
        * and TestMO objects (wrapped into any acceptable shared-ptr).
        * Intentionally, we omit to declare it applicable to TestSubMO2 instances.
        * In reality this would be a case of misconfiguration, because TestSubMO2
        * is defined to be processable and consequently has an \apply() function,
-       * which, due to this ommission can't find a dispatcher entry when invoked,
+       * which, due to this omission can't find a dispatcher entry when invoked,
        * so it will call the \c onUnknown(Buildable&) instead
        */
       class TestTool 
@@ -111,6 +111,7 @@ namespace mobject {
             { 
               Placement<Clip>& pC = getPlacement<Clip>();
               cout << "Clip on media : "<< str(pC->getMedia()) <<"\n";
+              ASSERT (pC->operator==(c));
               log_ = string (pC);
             }
           void treat (AbstractMO&)
@@ -118,7 +119,7 @@ namespace mobject {
               cout << "treat (AbstractMO&);\n";
               log_ = string (getPlacement<MObject>());
             }
-          void onUnknown (Buildable& bxx)
+          void onUnknown (Buildable&)
             { 
               cout << "catch-all-function called...\n";
               log_ = string (getPlacement<MObject>());
@@ -131,13 +132,13 @@ namespace mobject {
       
       
       /*************************************************************************************
-       * @test the generic visitor pattern specialized for treating MObjects in the builder.
+       * @test the generic visitor pattern specialised for treating MObjects in the builder.
        * Besides using existing MObject types (at the moment session::Clip),
        * we create a yet-unknown new MObject subclass. When passing such to any
        * BuilderTool subclass, the compiler enforces the definition  of a catch-all
        * function, which is called, when there is no other applicable \c treat(MO&)
-       * function. Note further, whithin the specific  treat-functions we get direct
-       * references, whithout interfering with  Placements and memory management.
+       * function. Note further, within the specific  treat-functions we get direct
+       * references, without interfering with  Placements and memory management.
        * But from within the \c treat() function, we may access the wrapper object
        * (i.e. shared_ptr, or lumiera::P or Placement) used when invoking the 
        * BuilderTool by using the protected interface on BuilderTool.
@@ -146,7 +147,7 @@ namespace mobject {
        */
       class BuilderTool_test : public Test
         {
-          virtual void run(Arg arg) 
+          virtual void run(Arg) 
             {
                           
               TestTool t1;

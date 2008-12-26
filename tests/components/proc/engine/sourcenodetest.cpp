@@ -1,5 +1,5 @@
 /*
-  SourceNode(Test)  -  unit test of the source readering render node
+  SourceNode(Test)  -  unit test of the source reading render node
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -46,7 +46,7 @@ namespace engine
      */
     class SourceNode_test : public Test
       {
-        virtual void run(Arg arg) 
+        virtual void run(Arg) 
           {
             UNIMPLEMENTED ("render node pulling source data from backend");
           } 

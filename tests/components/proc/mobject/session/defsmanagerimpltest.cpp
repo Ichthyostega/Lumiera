@@ -40,10 +40,9 @@ using util::isnil;
 using std::string;
 
 
-namespace asset
-  {
-  namespace test
-    {
+namespace asset {
+  namespace test {
+    
     using mobject::Session;
     using lumiera::Symbol;
     using lumiera::Query;
@@ -81,7 +80,8 @@ namespace asset
      */
     class DefsManagerImpl_test : public Test
       {
-        virtual void run(Arg arg) 
+        virtual void
+        run(Arg) 
           {
             define_and_search();
             string pipeID = create();
@@ -91,12 +91,13 @@ namespace asset
         
         
         
-        void define_and_search ()
+        void
+        define_and_search ()
           {
             string sID = newID ("stream");
             
              // create Pipes explicitly 
-            //  (without utilizing default queries)
+            //  (without utilising default queries)
             PPipe pipe1 = Struct::create (newID("pipe"), newID("stream")); 
             PPipe pipe2 = Struct::create (newID("pipe"), sID            );
             
@@ -122,7 +123,8 @@ lumiera::query::setFakeBypass("stream("+sID+")"); //////////////////////////////
           }
         
         
-        const string& create ()
+        const string&
+        create()
           { 
             string sID = newID ("stream");
             Query<Pipe> query_for_streamID ("stream("+sID+")");
@@ -143,7 +145,8 @@ lumiera::query::setFakeBypass("stream("+sID+")"); //////////////////////////////
           }
         
         
-        void forget(string pID)
+        void 
+        forget (string pID)
           { 
             PPipe pipe = Pipe::query ("pipe("+pID+")");
             REQUIRE (find (pipe->getPipeID()), "need an object registered as default");

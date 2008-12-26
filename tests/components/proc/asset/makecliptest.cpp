@@ -52,7 +52,7 @@ namespace asset {
         typedef P<asset::Media> PM;
         typedef asset::Media::PClipMO PC;
             
-        virtual void run (Arg arg) 
+        virtual void run (Arg) 
           {
             
             PM mm = asset::Media::create("test-1", VIDEO);

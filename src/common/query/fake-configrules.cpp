@@ -1,5 +1,5 @@
 /*
-  MockConfigRules  -  mock implementation of the config rules system
+  FakeConfigRules  -  dummy implementation of the config rules system
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -34,11 +34,10 @@
 using util::isnil;
 
 
-namespace lumiera
-  {
+namespace lumiera {
   
-  namespace query
-    {
+  namespace query {
+    
     using asset::Struct;
     using asset::Pipe;
     using asset::PPipe;
@@ -46,8 +45,8 @@ namespace lumiera
     using asset::ProcPatt;
     using asset::PProcPatt;
     
-    namespace
-      {
+    namespace {
+      
       typedef std::pair<const string, any> AnyPair;
       
       /** helper to simplify creating mock table entries, wrapped correctly */
@@ -81,7 +80,7 @@ namespace lumiera
     
     
     /** hard coded answers to configuration queries.
-     *  @note while filling the table re-entrace
+     *  @note while filling the table re-entrance
      *        will be quite common, so the order of
      *        creating the objects is important.
      */

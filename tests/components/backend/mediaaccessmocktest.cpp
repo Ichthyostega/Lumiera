@@ -53,7 +53,7 @@ namespace backend_interface
       {
         typedef MediaAccessFacade MAF;
         
-        virtual void run(Arg arg) 
+        virtual void run(Arg) 
           {
             MAF::instance.injectSubclass (new MediaAccessMock);
             

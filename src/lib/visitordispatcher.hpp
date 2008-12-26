@@ -74,7 +74,7 @@ namespace lumiera
       
       template<class TOOLImpl>
       static Tag&
-      get (TOOLImpl* const concreteTool=0)
+      get (TOOLImpl* const =0)
         {
           Tag& t = TagTypeRegistry<TOOL,TOOLImpl>::tag;
           if (!t) generateID (t.tagID);

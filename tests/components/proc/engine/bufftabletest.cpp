@@ -52,7 +52,7 @@ namespace engine {
       struct DummyArray : RefArray<E>
         {
           E decoy;
-          E const& operator[] (uint i)  const  { return decoy;}
+          E const& operator[] (uint)  const  { return decoy;}
         };
       DummyArray<ChannelDescriptor> dummy1;
       DummyArray<InChanDescriptor>  dummy2;
@@ -133,7 +133,7 @@ namespace engine {
         PSto pStorage;
         ulong counter;
         
-        virtual void run(Arg arg) 
+        virtual void run(Arg) 
           {
              counter = 0;
              std::srand (time (NULL));

@@ -1,5 +1,5 @@
 /*
-  mmap.c  -  memory mapped acces to files
+  mmap.c  -  memory mapped access to files
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>
@@ -38,7 +38,7 @@ NOBUG_DEFINE_FLAG_PARENT (mmap_all, backend);
 NOBUG_DEFINE_FLAG_PARENT (mmap, mmap_all);
 
 
-LUMIERA_ERROR_DEFINE (MMAP_NWRITE, "Backing file not writeable");
+LUMIERA_ERROR_DEFINE (MMAP_NWRITE, "Backing file not writable");
 LUMIERA_ERROR_DEFINE (MMAP_SPACE, "Address space exhausted");
 
 
@@ -63,7 +63,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
     {
       once = 1;
       /**
-       * default size for the mmaping window
+       * default size for the mmapping window
        * 128MB on 32 bit arch
        * 2GB on 64 bit arch
        */
@@ -90,25 +90,25 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
   size_t chunksize = lumiera_file_chunksize_get (file);
 
   /**
-   * Maintaining the right[tm] mmaping size is a bit tricky:
+   * Maintaining the right[tm] mmapping size is a bit tricky:
    *  - We have the default mmap_window_size which will be backed off when address space gets exhausted
-   *  - When a biggier size is requested we have to fullfill it
-   *  - The last mmaped chunk of a file can be as small as possible when the file is readonly
-   *  - When the file is writeable, the last chunk should be rounded up to chunksize
+   *  - When a bigger size is requested we have to fulfil it
+   *  - The last mmapped chunk of a file can be as small as possible when the file is readonly
+   *  - When the file is writable, the last chunk should be rounded up to chunksize
    *  - All boundaries will be aligned up/down to chunk boundaries
    *  - Requests beyond the file end must ftruncate and map additional pages
-   *  - Create the 'refmap' which contains a refounter per chunk
+   *  - Create the 'refmap' which contains a refcounter per chunk
    **/
 
   /**
    * Recovering address space strategies:
-   * mmap() will fail when too much memory got mmaped after some time which is then
+   * mmap() will fail when too much memory got mmapped after some time which is then
    * recovered in the following way
    *  1. create a new mmap while the cachelimit is not reached.
    *  2. All unused mmaps are kept in a mrucache, drop the oldest one.
    *   mmap() still fails..
-   *  3.a When the intented mmaping size is the same as mmap_window_size then reduce (/2) the window size and retry.
-   *  3.b When the intented mmaping size was biggier than mmap_window_size then free more mmaps from the cache.
+   *  3.a When the intended mmapping size is the same as mmap_window_size then reduce (/2) the window size and retry.
+   *  3.b When the intended mmapping size was bigger than mmap_window_size then free more mmaps from the cache.
    *  4 When the cache is empty (that means all mmaps in use), scan the mmaps in use if they can be reduced
    *    mmap_window_size is already reduced now (half of refmap free from either end)
    **/
@@ -122,7 +122,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
 
   while (addr == (void*)-1)
     {
-      TODO ("check if current mmaped size exceeds configured as_size (as_size be smaller than retrieved from getrlimit())");
+      TODO ("check if current mmapped size exceeds configured as_size (as_size be smaller than retrieved from getrlimit())");
 
       switch (strategy++)
         {
@@ -137,7 +137,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
               /* request past the end */
               if ((descriptor->flags & O_ACCMODE) == O_RDWR)
                 {
-                  /* extend file (writeable) */
+                  /* extend file (writable) */
                   if (ftruncate (fd, begin+length) == -1)
                     {
                       LUMIERA_ERROR_SET (mmap, ERRNO);
@@ -152,7 +152,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
 
           if ((descriptor->flags & O_ACCMODE) == O_RDONLY)
             {
-              /* The last mmaped chunk of a file can be as small as possible when the file is readonly */
+              /* The last mmapped chunk of a file can be as small as possible when the file is readonly */
               length = start+size - begin;
             }
           break;
@@ -234,7 +234,7 @@ lumiera_mmap_delete (LumieraMMap self)
     {
       lumiera_mmapcache_forget (lumiera_mcache, self);
 
-      /* The matching mappings->lock must be hold or being unrelevant (mappings destructor) here, we can't asset this from here, good luck */
+      /* The matching mappings->lock must be hold or being irrelevant (mappings destructor) here, we can't asset this from here, good luck */
       llist_unlink (&self->searchnode);
 
       TRACE (mmap, "unmap at %p with size %zd", self->address, self->size);
@@ -254,7 +254,7 @@ lumiera_mmap_destroy_node (LList node)
 
   lumiera_mmapcache_forget (lumiera_mcache, self);
 
-  llist_unlink (&self->searchnode); TODO ("must lock mmapings -> deadlock");
+  llist_unlink (&self->searchnode); TODO ("must lock mmappings -> deadlock");
 
   munmap (self->address, self->size);
   lumiera_free (self->refmap);
