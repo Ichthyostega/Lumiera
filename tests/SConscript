@@ -69,15 +69,13 @@ def treatPluginTestcase(env):
 moduledirs = globRootdirs('*')
 
 # but have to treat some subdirs individually.
-specials = ['plugin','library','backend','lumiera']
+specials = ['plugin','lib','components']
 
 
 
-artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in moduledirs if not dir in specials] 
+artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in ['lib','components'] ] 
                               + treatPluginTestcase(env)
-                              + testCollection(env, 'library')
-                              + testCollection(env, 'backend')
-                              + testCollection(env, 'lumiera')
+                              + [ testCollection(env, dir) for dir in moduledirs if not dir in specials]
                               ) 
                               
 
