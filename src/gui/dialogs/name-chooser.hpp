@@ -33,9 +33,9 @@ namespace gui {
 namespace dialogs {
 
 /** 
- * The defintion of sequence name dialog class
+ * The defintion of the name chooser dialog class
  */
-class SequenceName : public Gtk::Dialog
+class NameChooser : public Gtk::Dialog
 {
 public:
 
@@ -46,8 +46,9 @@ public:
   };
   
 public:
-  SequenceName(Gtk::Window &parent, SequenceName::Action action,
-    Glib::ustring default_title);
+
+  NameChooser(Gtk::Window &parent, Glib::ustring title,
+    Glib::ustring default_name);
     
   const Glib::ustring get_name() const;
 

@@ -25,7 +25,7 @@
 
 #include "../dialogs/render.hpp"
 #include "../dialogs/preferences-dialog.hpp"
-#include "../dialogs/sequence-name.hpp"
+#include "../dialogs/name-chooser.hpp"
 
 #include "../model/project.hpp"
 
@@ -185,8 +185,8 @@ Actions::on_menu_view_viewer()
 void
 Actions::on_menu_sequence_add()
 {
-  dialogs::SequenceName dialog(workspaceWindow,
-    dialogs::SequenceName::AddSequence, "New Sequence");
+  dialogs::NameChooser dialog(workspaceWindow,
+    _("Add Sequence"), _("New Sequence"));
   if(dialog.run() == RESPONSE_OK)
     workspaceWindow.get_project()->add_new_sequence(dialog.get_name());
 }

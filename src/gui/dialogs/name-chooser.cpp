@@ -21,7 +21,7 @@
 * *****************************************************/
 
 #include "../gtk-lumiera.hpp"
-#include "sequence-name.hpp"
+#include "name-chooser.hpp"
 #include "dialog.hpp"
 
 using namespace Gtk;
@@ -30,28 +30,13 @@ using namespace Glib;
 namespace gui {
 namespace dialogs {
 
-SequenceName::SequenceName(Window &parent, Action action,
-  ustring default_title) :
-  Dialog::Dialog("", parent, true),
+NameChooser::NameChooser(Window &parent, Glib::ustring title,
+    Glib::ustring default_name) :
+  Dialog::Dialog(title, parent, true),
   caption(_("Name:"))
 {
-  // Choose the dialog title
-  ustring title;
-  
-  switch(action)
-  {
-  case AddSequence: title = _("Add Sequence"); break;
-  case RenameSequence: title = _("Rename Sequence"); break;
-   
-  default:
-    ASSERT(0); // An invalid action value was supplied
-    break;
-  }
-    
-  set_title(title);
-
   // Add the controls
-  name.set_text(default_title);
+  name.set_text(default_name);
   name.set_activates_default();
   
   hBox.pack_start(caption);
@@ -75,7 +60,7 @@ SequenceName::SequenceName(Window &parent, Action action,
   show_all_children();
 }
 
-const Glib::ustring SequenceName::get_name() const
+const Glib::ustring NameChooser::get_name() const
 {
   return name.get_text();
 }
