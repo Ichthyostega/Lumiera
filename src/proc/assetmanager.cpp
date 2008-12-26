@@ -42,8 +42,7 @@ using lumiera::Singleton;
 using lib::Sync;
 
 
-namespace asset
-  {
+namespace asset {
   
   /** 
    * AssetManager error responses, caused by querying
@@ -113,14 +112,15 @@ namespace asset
       throw(lumiera::error::Invalid)
   {
     AssetManager& _aMang (AssetManager::instance());
+    DB& registry (_aMang.registry);
     TODO ("check validity of Ident Category");
     ID<KIND> asset_id (getID (idi));
     
-    Sync<>::ClassLock<DB> guard();
+    DB::Lock guard(&registry);
     TODO ("handle duplicate Registrations");
     P<KIND> smart_ptr (obj, &destroy);
 
-    _aMang.registry.put (asset_id, smart_ptr);
+    registry.put (asset_id, smart_ptr);
     return asset_id;
   }
   
