@@ -296,7 +296,7 @@ TimelineWidget::update_tracks()
   create_timeline_tracks();
   
   // Update the header container
-  ASSERT(headerContainer != NULL);
+  REQUIRE(headerContainer != NULL);
   headerContainer->show_all_children();
   headerContainer->update_headers();
   
@@ -308,7 +308,7 @@ TimelineWidget::update_tracks()
   BOOST_FOREACH(shared_ptr<model::Track> track,
     sequence->get_child_tracks())
     {
-      ASSERT(track);
+      REQUIRE(track);
       totalHeight += measure_branch_height(track);
     }    
 }
@@ -456,7 +456,7 @@ TimelineWidget::lookup_model_track(
 void
 TimelineWidget::update_scroll()
 {
-  ASSERT(body != NULL);
+  REQUIRE(body != NULL);
   const Allocation body_allocation = body->get_allocation();
   
   //----- Horizontal Scroll ------//
@@ -511,7 +511,7 @@ TimelineWidget::measure_branch_height(
   BOOST_FOREACH( shared_ptr<model::Track> child,
     model_track->get_child_tracks() )
     {
-      ASSERT(child != NULL);
+      REQUIRE(child);
       height += measure_branch_height(child);
     }
     

@@ -160,7 +160,7 @@ void
 TimelinePanel::on_zoom_in()
 {
   TimelineWidget *const  widget = get_current_page();
-  ASSERT(widget != NULL);
+  REQUIRE(widget != NULL);
   
   widget->get_view_window().zoom_view(ZoomToolSteps);
   update_zoom_buttons();
@@ -170,7 +170,7 @@ void
 TimelinePanel::on_zoom_out()
 {
   TimelineWidget *const  widget = get_current_page();
-  ASSERT(widget != NULL);
+  REQUIRE(widget != NULL);
   
   widget->get_view_window().zoom_view(-ZoomToolSteps);
   update_zoom_buttons();
@@ -201,7 +201,7 @@ TimelinePanel::on_playback_period_drag_released()
   // real backend
   
   TimelineWidget *const  widget = get_current_page();
-  ASSERT(widget != NULL);
+  REQUIRE(widget != NULL);
   
   widget->set_playback_point(widget->get_playback_period_start());
   //----- END TEST CODE

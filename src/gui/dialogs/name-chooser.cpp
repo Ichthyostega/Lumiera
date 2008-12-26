@@ -44,7 +44,7 @@ NameChooser::NameChooser(Window &parent, Glib::ustring title,
   hBox.set_spacing(BoxSpacing);
 
   VBox* const v_box = get_vbox();
-  ASSERT(v_box != NULL);
+  REQUIRE(v_box != NULL);
   v_box->pack_start(hBox);
   
   // Configure the dialog

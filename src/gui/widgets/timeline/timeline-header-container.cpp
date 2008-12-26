@@ -248,7 +248,7 @@ TimelineHeaderContainer::forall_vfunc(gboolean /* include_internals */,
   
   BOOST_FOREACH( shared_ptr<model::Track> track, get_tracks() )
     {
-      ASSERT(track != NULL);
+      REQUIRE(track);
       forall_vfunc_recursive(track, callback, callback_data);
     }
 }
@@ -275,7 +275,7 @@ TimelineHeaderContainer::on_expose_event(GdkEventExpose *event)
       BOOST_FOREACH( shared_ptr<model::Track> model_track,
         get_tracks() )
         {
-          ASSERT(model_track != NULL);
+          REQUIRE(model_track);
           
           draw_header_decoration(model_track,
             Gdk::Rectangle(0, 0,
@@ -354,7 +354,7 @@ TimelineHeaderContainer::layout_headers_recursive(
         offset,                                               // y
         max( header_width - indent, 0 ),                      // width
         track_height);                                        // height
-      ASSERT(header_box.get_height() >= 0);
+      REQUIRE(header_box.get_height() >= 0);
       
       // Cache the bounding box
       headerBoxes[timeline_track] = header_box;
@@ -448,14 +448,14 @@ TimelineHeaderContainer::draw_header_decoration(
   REQUIRE(clip_rect.get_height() > 0);
   
   Glib::RefPtr<Style> style = get_style();
-  ASSERT(style);
+  REQUIRE(style);
   
   shared_ptr<timeline::Track> timeline_track =
     lookup_timeline_track(model_track);
   
   // Get the cached header box
   weak_ptr<timeline::Track> ptr(timeline_track);
-  ASSERT(contains(headerBoxes, ptr));  
+  REQUIRE(contains(headerBoxes, ptr));  
   const Gdk::Rectangle &box = headerBoxes[timeline_track];
   
   // Paint the box, if it will be visible
@@ -543,7 +543,7 @@ TimelineHeaderContainer::get_expander_button_rectangle(
 {
   REQUIRE(track != NULL);
   weak_ptr<timeline::Track> ptr(track);
-  ASSERT(contains(headerBoxes, ptr));  
+  REQUIRE(contains(headerBoxes, ptr));  
   
   const Gdk::Rectangle &box = headerBoxes[track];
   return Gdk::Rectangle(

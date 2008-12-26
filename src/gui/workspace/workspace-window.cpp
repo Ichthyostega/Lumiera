@@ -141,13 +141,13 @@ WorkspaceWindow::create_ui()
 
   //----- Set up the Menu Bar -----//
   Gtk::Widget* menu_bar = uiManager->get_widget("/MenuBar");
-  ASSERT(menu_bar != NULL);
+  REQUIRE(menu_bar != NULL);
   baseContainer.pack_start(*menu_bar, Gtk::PACK_SHRINK);
   
   //----- Set up the Tool Bar -----//
   Gtk::Toolbar* toolbar = dynamic_cast<Gtk::Toolbar*>(
     uiManager->get_widget("/ToolBar"));
-  ASSERT(toolbar != NULL);
+  REQUIRE(toolbar != NULL);
   toolbar->set_toolbar_style(TOOLBAR_ICONS);
   baseContainer.pack_start(*toolbar, Gtk::PACK_SHRINK);
   

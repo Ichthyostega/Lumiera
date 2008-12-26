@@ -303,7 +303,7 @@ TimelineBody::draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
     lookup_timeline_track(model_track);
   
   const int height = timeline_track->get_height();
-  ASSERT(height >= 0);
+  REQUIRE(height >= 0);
 
   // Draw the track background
   cr->rectangle(0, 0, view_width, height);
@@ -453,7 +453,7 @@ shared_ptr<timeline::Track> TimelineBody::track_from_branch(
     lookup_timeline_track(model_track);
   
   const int height = timeline_track->get_height();
-  ASSERT(height >= 0);
+  REQUIRE(height >= 0);
   
   // Does the point fall in this track?
   if(offset <= y && y < offset + height)

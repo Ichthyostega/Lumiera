@@ -201,7 +201,7 @@ void
 XvDisplayer::put( void *image )
   {
     REQUIRE(image != NULL);
-    ASSERT(drawingArea != NULL);
+    REQUIRE(drawingArea != NULL);
     
     if(xvImage != NULL)
       {

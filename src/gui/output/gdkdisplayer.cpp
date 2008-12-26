@@ -61,17 +61,17 @@ GdkDisplayer::put( void *image )
       video_x, video_y, video_width, video_height );
 
     GdkWindow *window = drawingArea->get_window()->gobj();
-    ASSERT(window != NULL);  
+    REQUIRE(window != NULL);  
       
 	  GdkGC *gc = gdk_gc_new( window );
-	  ASSERT(gc != NULL);
+	  REQUIRE(gc != NULL);
 	  
 	  GdkPixbuf *pixbuf = gdk_pixbuf_new_from_data( (const guchar*)image, GDK_COLORSPACE_RGB, FALSE, 8,
       preferredWidth(), preferredHeight(), preferredWidth() * 3, NULL, NULL );
-    ASSERT(pixbuf != NULL);
+    REQUIRE(pixbuf != NULL);
       
 	  GdkPixbuf *scaled_image = gdk_pixbuf_scale_simple( pixbuf, video_width, video_height, GDK_INTERP_NEAREST );
-	  ASSERT(scaled_image != NULL);
+	  REQUIRE(scaled_image != NULL);
 	  
     gdk_draw_pixbuf( window, gc, scaled_image, 0, 0, video_x, video_y, -1, -1, GDK_RGB_DITHER_NORMAL, 0, 0 );
     

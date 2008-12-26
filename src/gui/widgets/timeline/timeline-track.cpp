@@ -110,8 +110,8 @@ Track::on_remove_track()
 {
   shared_ptr<model::Track> model_track =
     timelineWidget.lookup_model_track(this);
-  ASSERT(model_track);
-  ASSERT(timelineWidget.sequence);
+  REQUIRE(model_track);
+  REQUIRE(timelineWidget.sequence);
   
   timelineWidget.sequence->get_child_track_list().remove(model_track);
 }

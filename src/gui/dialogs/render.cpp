@@ -41,7 +41,7 @@ Render::Render(Window &parent) :
   videoFrame(_("Video"))
 {
   VBox *v_box = get_vbox();
-  ASSERT(v_box != NULL);
+  REQUIRE(v_box != NULL);
 
   // The Output File Row
   outputFileHBox.pack_start(outputFileLabel, PACK_SHRINK);
