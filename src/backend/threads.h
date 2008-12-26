@@ -23,6 +23,7 @@
 #define LUMIERA_THREADS_H
 
 //TODO: Support library includes//
+#include "lib/condition.h"
 
 
 //TODO: Forward declarations//
