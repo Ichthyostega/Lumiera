@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "include/error.hpp"
+#include "lib/error.hpp"
 #include "include/lifecycle.h"
 #include "common/appstate.hpp"
 #include "lib/lifecycleregistry.hpp"

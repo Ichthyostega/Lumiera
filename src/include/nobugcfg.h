@@ -68,7 +68,7 @@
 #ifdef __cplusplus  /* ============= C++ ================ */
 
 #include "include/lifecycle.h"
-#include "include/error.hpp"  ///< make assertions throw instead of abort()
+#include "lib/error.hpp"  ///< make assertions throw instead of abort()
 
 namespace lumiera { 
   void initialise_NoBug ();

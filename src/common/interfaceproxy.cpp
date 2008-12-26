@@ -24,7 +24,7 @@
 #include "lib/singletonsubclass.hpp"
 #include "include/guinotificationfacade.h"
 #include "lib/util.hpp"
-#include "include/error.hpp"
+#include "lib/error.hpp"
 
 extern "C" {
 #include "common/interface.h"

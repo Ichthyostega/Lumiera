@@ -34,7 +34,7 @@
 #include "lib/cmdline.hpp"
 #include "lib/test/suite.hpp"
 #include "lib/test/run.hpp"
-#include "include/error.hpp"
+#include "lib/error.hpp"
 #include "lib/util.hpp"
 
 

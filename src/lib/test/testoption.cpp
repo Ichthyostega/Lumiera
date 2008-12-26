@@ -24,7 +24,7 @@
 #include "lib/test/testoption.hpp"
 #include "lib/test/suite.hpp"
 
-#include "include/error.hpp"
+#include "lib/error.hpp"
 
 
 

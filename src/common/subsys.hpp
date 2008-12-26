@@ -43,7 +43,7 @@
 #ifndef LUMIERA_SUBSYS_H
 #define LUMIERA_SUBSYS_H
 
-#include "include/error.hpp"
+#include "lib/error.hpp"
 #include "common/option.hpp"
 
 #include <boost/noncopyable.hpp>

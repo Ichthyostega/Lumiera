@@ -25,7 +25,7 @@
 #define ENGINE_BUFFHTABLE_H
 
 
-#include "include/error.hpp"
+#include "lib/error.hpp"
 #include "proc/engine/buffhandle.hpp"
 #include "proc/engine/procnode.hpp"
 

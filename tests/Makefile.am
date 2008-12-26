@@ -20,7 +20,7 @@ tests_srcdir = $(top_srcdir)/tests
 
 
 check_PROGRAMS += test-error
-test_error_SOURCES = $(tests_srcdir)/error/errortest.c
+test_error_SOURCES = $(tests_srcdir)/library/test-error.c
 test_error_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 test_error_LDADD = liblumiera.la $(NOBUGMT_LUMIERA_LIBS)     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
 

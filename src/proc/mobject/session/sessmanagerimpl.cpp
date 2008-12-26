@@ -40,7 +40,7 @@
 #include "proc/mobject/session/sessionimpl.hpp"
 #include "proc/mobject/session/defsmanager.hpp"
 //#include "proc/mobject/session/defsregistry.hpp"
-#include "include/error.hpp"
+#include "lib/error.hpp"
 
 using boost::scoped_ptr;
 

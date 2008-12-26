@@ -35,7 +35,7 @@ This code is heavily inspired by
 #define LUMIERA_SINGLETONPOLICIES_H
 
 #include "lib/multithread.hpp"
-#include "include/error.hpp"
+#include "lib/error.hpp"
 
 #include <vector>
 

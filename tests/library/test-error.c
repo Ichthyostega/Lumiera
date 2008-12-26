@@ -1,5 +1,5 @@
 /*
-  errortest.c  -  test error handling
+  test-error.c  -  test error handling
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>

@@ -46,6 +46,7 @@ liblumiera_la_SOURCES =						\
 
 noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/error.h				\
+	$(liblumiera_la_srcdir)/error.hpp			\
 	$(liblumiera_la_srcdir)/mutex.h				\
 	$(liblumiera_la_srcdir)/rwlock.h			\
 	$(liblumiera_la_srcdir)/condition.h			\

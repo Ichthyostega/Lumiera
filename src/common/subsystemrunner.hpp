@@ -24,7 +24,7 @@
 #ifndef LUMIERA_SUBSYSTEMRUNNER_H
 #define LUMIERA_SUBSYSTEMRUNNER_H
 
-#include "include/error.hpp"
+#include "lib/error.hpp"
 #include "lib/util.hpp"
 #include "common/subsys.hpp"
 #include "lib/multithread.hpp"

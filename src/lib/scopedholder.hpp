@@ -57,7 +57,7 @@
 
 #include <boost/scoped_ptr.hpp>
 
-#include "include/error.hpp"
+#include "lib/error.hpp"
 
 
 
