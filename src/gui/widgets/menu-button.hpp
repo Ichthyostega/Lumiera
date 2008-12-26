@@ -71,15 +71,37 @@ public:
    **/
   Gtk::Menu& get_menu();
   
+  /**
+   * Pops up the menu.
+   **/
   void popup();
 
 protected:
+
+  /**
+   * An event handler for when the button is pressed.
+   **/
   virtual void on_pressed();
 
 private:
+
+  /**
+   * A callback function used to determine the correct position for the
+   * popup menu.
+   * @param x The x-coordinate to display the menu in root window
+   * coordinates.
+   * @param y The y-coordinate to display the menu in root window
+   * coordinates.
+   * @param push_in This value is set to true if the menu should be
+   * pushed in if it collides with the edge of the screen.
+   **/
   void on_menu_position(int& x, int& y, bool& push_in);
 
 private:
+
+  /**
+   * The internal menu object which is the popup menu of this widget.
+   **/
   Gtk::Menu menu;
 };
 
