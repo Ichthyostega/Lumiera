@@ -33,23 +33,27 @@ namespace gui {
 namespace dialogs {
 
 /** 
- * The defintion of the name chooser dialog class
+ * The name chooser dialog is a modal dialog box that prompts the user
+ * to choose a string name.
  */
 class NameChooser : public Gtk::Dialog
 {
 public:
-
-  enum Action
-  {
-    AddSequence,
-    RenameSequence
-  };
-  
-public:
-
+  /**
+   * Creates a name chooser dialog.
+   * @param parent The window which will be the parent of this dialog.
+   * @param title The string for the title of this dialog.
+   * @param default_name The name that will be shown by default in the
+   * edit box of the dialog.
+   **/
   NameChooser(Gtk::Window &parent, Glib::ustring title,
     Glib::ustring default_name);
-    
+  
+  /**
+   * Gets the current name of the chosen in the dialog.
+   * @return Returns the name currently typed into the edit box of the
+   * dialog.
+   **/
   const Glib::ustring get_name() const;
 
 private:
