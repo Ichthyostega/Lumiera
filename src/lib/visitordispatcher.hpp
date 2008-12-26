@@ -26,7 +26,7 @@
 #define LUMIERA_VISITORDISPATCHER_H
 
 #include "include/error.hpp"
-#include "lib/sync.hpp"
+#include "lib/sync-classlock.hpp"
 #include "lib/singleton.hpp"
 #include "lib/util.hpp"
 

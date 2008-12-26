@@ -34,7 +34,7 @@ This code is heavily inspired by
 #ifndef LUMIERA_SINGLETONPOLICIES_H
 #define LUMIERA_SINGLETONPOLICIES_H
 
-#include "lib/sync.hpp"
+#include "lib/sync-classlock.hpp"
 #include "include/error.hpp"
 
 #include <vector>

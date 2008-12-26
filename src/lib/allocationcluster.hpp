@@ -52,7 +52,7 @@
 #include <boost/noncopyable.hpp>
 
 #include "include/error.hpp"
-#include "lib/sync.hpp"
+#include "lib/sync-classlock.hpp"
 #include "lib/scopedholder.hpp"
 #include "lib/scopedholdertransfer.hpp"
 

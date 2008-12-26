@@ -40,7 +40,7 @@
 #define MOBJECT_SESSION_DEFSREGISTRY_H
 
 
-#include "lib/sync.hpp"
+#include "lib/sync-classlock.hpp"
 #include "lib/query.hpp"
 #include "lib/util.hpp"
 #include "lib/p.hpp"
