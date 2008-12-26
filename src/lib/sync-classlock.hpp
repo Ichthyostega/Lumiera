@@ -27,6 +27,8 @@
  ** being problematic in conjunction with static startup/shutdown, doing so is sometimes
  ** necessary to setup type based dispatcher tables, managing singleton creation etc.
  **
+ ** @note simply using the ClassLock may cause a Monitor object (with a mutex) to be
+ **       created at static initialisation and destroyed on application shutdown.
  ** @see singletonfactory.hpp usage example
  */
 
@@ -39,31 +41,73 @@
 
 namespace lib {
   
+  namespace { // implementation details
+    
+    template<class X>
+    struct NiftyHolder 
+      {
+        static uint accessed_;
+        static char content_[sizeof(X)];
+        
+        NiftyHolder() 
+          {
+            if (!accessed_)
+              new(content_) X();
+            ++accessed_; 
+          }
+        
+       ~NiftyHolder() 
+          {
+            --accessed_; 
+            if (0==accessed_)
+              get().~X();
+          }
+       
+       X&
+       get()
+        { 
+          X* obj = reinterpret_cast<X*> (&content_);
+          ASSERT (obj, "Logic of Schwartz counter broken.");
+          return *obj;
+        }
+      };
+    
+    template<class X>
+    uint NiftyHolder<X>::accessed_;
+    
+    template<class X>
+    char NiftyHolder<X>::content_[sizeof(X)];
+    
+  } // (End) implementation details
+  
+  
+  
+  /**
+   * A synchronisation protection guard employing a lock scoped
+   * to the parameter type as a whole, not an individual instance.
+   * After creating an instance, every other access specifying the same
+   * type is blocked.
+   * @warn beware of recursion when using a nonrecursive Mutex
+   * @see Sync::Lock the usual simple instance-bound variant
+   */
   template<class X, class CONF = NonrecursiveLock_NoWait>
   class ClassLock 
     : public Sync<CONF>::Lock
     {
       typedef typename Sync<CONF>::Lock Lock;
-      typedef typename Sync<CONF>::Monitor Monitor;
+      typedef typename sync::Monitor<CONF> Monitor;
       
-      
-      static Monitor&
-      getMonitor()
+      Monitor&
+      getPerClassMonitor()
         {
-          //TODO: a rather obscure race condition is hidden here:
-          //TODO: depending on the build order, the dtor of this static variable may be called, while another thread is still holding an ClassLock.
-          //TODO: An possible solution would be to use an shared_ptr to the Monitor in case of a ClassLock and to protect access with another Mutex.
-          //TODO. But I am really questioning if we can't ignore this case and state: "don't hold a ClassLock when your code maybe still running in shutdown phase!"
-          //TODO: probably best Idea is to detect this situation in DEBUG or ALPHA mode
-          
-          static scoped_ptr<Monitor> classMonitor_ (0);
-          if (!classMonitor_) classMonitor_.reset (new Monitor ());
-          return *classMonitor_;
+          static NiftyHolder<Monitor> __used_here;
+          return __used_here.get();
         }
       
-      
     public:
-      ClassLock() : Lock (getMonitor()) {}
+      ClassLock() : Lock (getPerClassMonitor()) {}
+      
+      uint use_count() { return NiftyHolder<Monitor>::accessed_; }
     };
   
   
