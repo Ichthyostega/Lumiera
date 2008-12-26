@@ -58,6 +58,8 @@ public:
 
 private:
 
+  void on_set_name();
+
   void on_remove_track();
   
 

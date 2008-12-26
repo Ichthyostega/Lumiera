@@ -41,17 +41,5 @@ ParentTrack::get_child_track_list()
   return tracks;
 }
 
-const Glib::ustring
-ParentTrack::get_name() const
-{
-  return name;
-}
-
-void
-ParentTrack::set_name(const Glib::ustring &name)
-{
-  this->name = name;
-}
-
 }   // namespace model
 }   // namespace gui

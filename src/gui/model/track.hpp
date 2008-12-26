@@ -40,6 +40,14 @@ protected:
 public:
   virtual std::list< boost::shared_ptr<Track> >
     get_child_tracks() const;
+    
+  const Glib::ustring get_name() const;
+  
+  void set_name(const Glib::ustring &name);
+    
+private:
+  //----- Data -----//
+  Glib::ustring name;
 
 protected:
   static const std::list< boost::shared_ptr<Track> > NoChildren;

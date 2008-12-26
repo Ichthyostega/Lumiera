@@ -38,5 +38,17 @@ Track::get_child_tracks() const
   return Track::NoChildren;
 }
 
+const Glib::ustring
+Track::get_name() const
+{
+  return name;
+}
+
+void
+Track::set_name(const Glib::ustring &name)
+{
+  this->name = name;
+}
+
 }   // namespace model
 }   // namespace gui

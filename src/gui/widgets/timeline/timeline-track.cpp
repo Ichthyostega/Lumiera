@@ -26,6 +26,7 @@
 #include "timeline-track.hpp"
 #include "../timeline-widget.hpp"
 #include "../../window-manager.hpp"
+#include "../../dialogs/name-chooser.hpp"
 
 using namespace boost;
 using namespace Gtk;
@@ -65,7 +66,7 @@ Track::Track(TimelineWidget &timeline_widget) :
   // Setup the title menu
   Menu::MenuList& title_list = titleMenuButton.get_menu().items();
   title_list.push_back( Menu_Helpers::MenuElem(_("_Name..."),
-    mem_fun(this, &Track::on_remove_track) ) );
+    mem_fun(this, &Track::on_set_name) ) );
   
   // Setup the context menu
   Menu::MenuList& context_list = contextMenu.items();
@@ -103,6 +104,24 @@ void
 Track::show_header_context_menu(guint button, guint32 time)
 {
   contextMenu.popup(button, time);
+}
+
+void
+Track::on_set_name()
+{
+  shared_ptr<model::Track> model_track =
+    timelineWidget.lookup_model_track(this);
+  REQUIRE(model_track);
+  
+  Gtk::Window *window = dynamic_cast<Window*>(
+    timelineWidget.get_toplevel());
+  REQUIRE(window != NULL); 
+    
+  dialogs::NameChooser dialog(*window,
+    _("Set Track Name"), model_track->get_name());
+    
+  if(dialog.run() == RESPONSE_OK)
+    model_track->set_name(dialog.get_name());
 }
 
 void

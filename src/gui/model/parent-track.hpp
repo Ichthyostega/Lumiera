@@ -47,14 +47,6 @@ public:
 
   lumiera::observable_list< boost::shared_ptr<Track> >&
     get_child_track_list();
-    
-  const Glib::ustring get_name() const;
-  
-  void set_name(const Glib::ustring &name);
-    
-private:
-  //----- Data -----//
-  Glib::ustring name;
 
 protected:
   lumiera::observable_list< boost::shared_ptr<Track> > tracks;
