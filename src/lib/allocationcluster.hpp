@@ -222,7 +222,7 @@ namespace lib {
       static TypeInfo
       setup()
         {
-          Sync::ClassLock<AllocationCluster> guard();
+          Sync<>::ClassLock<AllocationCluster> guard();
           if (!id_)
             id_= ++maxTypeIDs;
           

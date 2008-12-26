@@ -162,7 +162,7 @@ namespace mobject {
           static void
           createSlot (Table& table)
             {
-              Sync::ClassLock<TableEntry> guard();
+              Sync<>::ClassLock<TableEntry> guard();
               if (!index)
                 index = ++maxSlots;
               if (index > table.size())

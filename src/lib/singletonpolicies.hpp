@@ -139,7 +139,7 @@ namespace lumiera
       struct Multithreaded
         {
           typedef volatile S VolatileType;
-          typedef lib::Sync::ClassLock<S> Lock;
+          typedef lib::Sync<>::ClassLock<S> Lock;
         };
       
       

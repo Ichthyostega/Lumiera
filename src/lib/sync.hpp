@@ -121,6 +121,12 @@ namespace lib {
       class Mutex 
         : protected MTX
         {
+        protected:
+          using MTX::mutex;
+          using MTX::__may_block;
+          using MTX::__enter;
+          using MTX::__leave;
+          
         public:
             void 
             acquire() 
@@ -151,6 +157,10 @@ namespace lib {
       class Condition
         : public Mutex<CDX>
         {
+        protected:
+          using CDX::cond;
+          using CDX::mutex;
+          
         public:
           void
           signal (bool wakeAll=false) 
@@ -162,9 +172,9 @@ namespace lib {
             }
           
           
-          template<class BF, class MTX>
+          template<class BF>
           bool
-          wait (BF& predicate, MTX& mtx, Timeout& waitEndTime)
+          wait (BF& predicate, Timeout& waitEndTime)
             {
               int err=0;
               while (!predicate() && !err)
@@ -210,31 +220,7 @@ namespace lib {
           operator bool() { return 0 != tv_sec; } // allows if (timeout_)....
         };
       
-      
       typedef volatile bool& Flag;
-      
-      class Monitor
-        : Condition<Wrapped_LumieraExcCond>  /////////TODO: to be refactored. This is just one example, using the non-recursive condition
-        {
-          Timeout timeout_;
-          
-          //////TODO my intention is to make two variants of the monitor, where the simple one leaves out the condition part
-          
-        public:
-          Monitor() {}
-          ~Monitor() {}
-          
-          void acquireLock() { acquire(); }
-          void releaseLock() { release(); }
-          
-          void signal(bool a){ signal(a); }
-          
-          inline bool wait (Flag, ulong);
-          inline void setTimeout(ulong);
-          inline bool isTimedWait();
-        };
-     
-      
       
       struct BoolFlagPredicate
         {
@@ -244,23 +230,46 @@ namespace lib {
           bool operator() () { return flag_; }
         };
       
+      
+      template<class IMPL>
+      class Monitor
+        : IMPL
+        {
+          Timeout timeout_;
+          
+        public:
+          Monitor() {}
+          ~Monitor() {}
+          
+          void acquireLock() { IMPL::acquire(); }
+          void releaseLock() { IMPL::release(); }
+          
+          void signal(bool a){ IMPL::signal(a); }
+          
+          bool wait (Flag flag, ulong timedwait=0)
+            {
+              BoolFlagPredicate checkFlag(flag);
+              return IMPL::wait(checkFlag, timeout_.setOffset(timedwait));                                   
+            }
+          
+          void setTimeout(ulong relative) {timeout_.setOffset(relative);}
+          bool isTimedWait()              {return (timeout_);}
+        };
      
-      bool
-      Monitor::wait (Flag flag, ulong timedwait)
-      {
-        BoolFlagPredicate checkFlag(flag);
-        return cond_.wait(checkFlag, mtx_, timeout_.setOffset(timedwait));                                   
-      }
-      
-      void
-      Monitor::setTimeout (ulong relative) {timeout_.setOffset(relative);}
-      
-      bool
-      Monitor::isTimedWait () {return (timeout_);}
+      typedef Mutex<Wrapped_LumieraExcMutex> NonrecursiveLock_NoWait;
+      typedef Mutex<Wrapped_LumieraRecMutex> RecursiveLock_NoWait;
+      typedef Condition<Wrapped_LumieraExcCond>  NonrecursiveLock_Waitable;
+      typedef Condition<Wrapped_LumieraRecCond>  RecursiveLock_Waitable;
       
       
     } // namespace sync (helpers and building blocks)
     
+    
+    
+    using sync::NonrecursiveLock_NoWait;
+    using sync::NonrecursiveLock_Waitable;
+    using sync::RecursiveLock_NoWait;
+    using sync::RecursiveLock_Waitable;
     
     
     /**
@@ -274,18 +283,33 @@ namespace lib {
      * 
      * @todo actually implement this facility using the Lumiera backend.
      */
+    template<class CONF = NonrecursiveLock_NoWait>
     struct Sync
       {
-        typedef sync::Monitor Monitor;
-        
+        typedef sync::Monitor<CONF> Monitor;
         Monitor objectMonitor_;
         
-        /////////////////////////////////////////////////////////////////////////TODO: factor out the recursive/non-recursive mutex case as policy...
+        static Monitor&
+        getMonitor(Sync* forThis)
+          {
+            REQUIRE (forThis);
+            return forThis->objectMonitor_;
+          }
         
         template<class X>
-        static inline Monitor& getMonitor();
-        
-        static inline Monitor& getMonitor(Sync* forThis);
+        static Monitor&
+        getMonitor()
+          {
+            //TODO: a rather obscure race condition is hidden here:
+            //TODO: depending on the build order, the dtor of this static variable may be called, while another thread is still holding an ClassLock.
+            //TODO: An possible solution would be to use an shared_ptr to the Monitor in case of a ClassLock and to protect access with another Mutex.
+            //TODO. But I am really questioning if we can't ignore this case and state: "don't hold a ClassLock when your code maybe still running in shutdown phase!"
+            //TODO: probably best Idea is to detect this situation in DEBUG or ALPHA mode
+            
+            static scoped_ptr<Monitor> classMonitor_ (0);
+            if (!classMonitor_) classMonitor_.reset (new Monitor ());
+            return *classMonitor_;
+          }
         
         
         class Lock
@@ -316,31 +340,6 @@ namespace lib {
         
       };
     
-      
-    
-    
-    
-    Sync::Monitor&
-    Sync::getMonitor(Sync* forThis)
-    {
-      REQUIRE (forThis);
-      return forThis->objectMonitor_;
-    }
-    
-    template<class X>
-    Sync::Monitor&
-    Sync::getMonitor()
-    {
-      //TODO: a rather obscure race condition is hidden here:
-      //TODO: depending on the build order, the dtor of this static variable may be called, while another thread is still holding an ClassLock.
-      //TODO: An possible solution would be to use an shared_ptr to the Monitor in case of a ClassLock and to protect access with another Mutex.
-      //TODO. But I am really questioning if we can't ignore this case and state: "don't hold a ClassLock when your code maybe still running in shutdown phase!"
-      //TODO: probably best Idea is to detect this situation in DEBUG or ALPHA mode
-      
-      static scoped_ptr<Monitor> classMonitor_ (0);
-      if (!classMonitor_) classMonitor_.reset (new Monitor ());
-      return *classMonitor_;
-    }
     
   
 } // namespace lumiera

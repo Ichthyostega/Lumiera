@@ -48,7 +48,7 @@ namespace lib {
       
       
       class Victim
-        : public Sync
+        : public Sync<RecursiveLock_NoWait>
         {
           volatile long cnt_[NUM_COUNTERS];
           volatile uint step_;         ///< @note stored as instance variable

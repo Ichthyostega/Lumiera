@@ -116,7 +116,7 @@ namespace asset
     TODO ("check validity of Ident Category");
     ID<KIND> asset_id (getID (idi));
     
-    Sync::ClassLock<DB> guard();
+    Sync<>::ClassLock<DB> guard();
     TODO ("handle duplicate Registrations");
     P<KIND> smart_ptr (obj, &destroy);
 

@@ -66,7 +66,7 @@ namespace lib {
       
       class SyncOnBool
         : public Token,
-          public Sync
+          public Sync<NonrecursiveLock_Waitable>
         {
           bool got_new_data_;
           
