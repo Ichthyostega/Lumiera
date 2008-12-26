@@ -25,6 +25,7 @@
 
 #include "../../gtk-lumiera.hpp"
 #include "../../model/track.hpp"
+#include "../menu-button.hpp"
 #include "timeline-header-container.hpp"
 
 #ifndef TIMELINE_TRACK_HPP
@@ -57,9 +58,8 @@ public:
 
 private:
 
-  void on_title_menu_button();
-
   void on_remove_track();
+  
 
 private:
 
@@ -71,15 +71,13 @@ private:
   
   Gtk::VBox headerWidget;
   
-  Gtk::Button titleMenuButton;
+  MenuButton titleMenuButton;
   
   Gtk::ToolButton enableButton;
   Gtk::ToolButton lockButton;
   
   Gtk::Entry titleBox;
   Gtk::Toolbar buttonBar;
-  
-  Gtk::Menu titleMenu;
   
   Gtk::Menu contextMenu;
 };

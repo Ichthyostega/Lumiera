@@ -43,8 +43,6 @@ Track::Track(TimelineWidget &timeline_widget) :
   lockButton(Gtk::StockID("track_unlocked"))
 {  
   titleMenuButton.set_relief(RELIEF_HALF);
-  titleMenuButton.signal_pressed().connect(
-    mem_fun(this, &Track::on_title_menu_button) );
   
   buttonBar.append(enableButton);
   buttonBar.append(lockButton);
@@ -65,7 +63,7 @@ Track::Track(TimelineWidget &timeline_widget) :
   headerWidget.pack_start(buttonBar, PACK_SHRINK);
   
   // Setup the title menu
-  Menu::MenuList& title_list = titleMenu.items();
+  Menu::MenuList& title_list = titleMenuButton.get_menu().items();
   title_list.push_back( Menu_Helpers::MenuElem(_("_Name..."),
     mem_fun(this, &Track::on_remove_track) ) );
   
@@ -105,13 +103,6 @@ void
 Track::show_header_context_menu(guint button, guint32 time)
 {
   contextMenu.popup(button, time);
-}
-
-void
-Track::on_title_menu_button()
-{
-  g_message("Hello");
-  titleMenu.popup(0, gtk_get_current_event_time());
 }
 
 void

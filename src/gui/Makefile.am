@@ -108,6 +108,8 @@ libgui_la_SOURCES =															\
 	$(lumigui_srcdir)/panels/assets-panel.hpp								\
 	$(lumigui_srcdir)/widgets/video-display-widget.cpp						\
 	$(lumigui_srcdir)/widgets/video-display-widget.hpp						\
+	$(lumigui_srcdir)/widgets/menu-button.cpp								\
+	$(lumigui_srcdir)/widgets/menu-button.hpp								\
 	$(lumigui_srcdir)/widgets/timeline-widget.cpp							\
 	$(lumigui_srcdir)/widgets/timeline-widget.hpp							\
 	$(lumigui_srcdir)/widgets/timeline/timeline-view-window.cpp				\
