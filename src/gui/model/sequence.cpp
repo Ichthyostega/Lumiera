@@ -34,6 +34,7 @@ Sequence::Sequence()
   
   shared_ptr<GroupTrack> group_track, group_track2;
   tracks.push_back(group_track = shared_ptr<GroupTrack>(new GroupTrack()));
+  group_track->set_name("Group Track");
   
   /*if(first)
   {

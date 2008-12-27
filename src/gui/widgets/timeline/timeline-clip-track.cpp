@@ -29,8 +29,9 @@ namespace gui {
 namespace widgets {
 namespace timeline {
   
-ClipTrack::ClipTrack(TimelineWidget &timeline_widget) :
-  Track(timeline_widget)
+ClipTrack::ClipTrack(TimelineWidget &timeline_widget,
+  boost::shared_ptr<model::Track> track) :
+  Track(timeline_widget, track)
 {
 }
 

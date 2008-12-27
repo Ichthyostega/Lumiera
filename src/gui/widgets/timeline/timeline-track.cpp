@@ -36,13 +36,16 @@ namespace gui {
 namespace widgets {
 namespace timeline {
   
-Track::Track(TimelineWidget &timeline_widget) :
+Track::Track(TimelineWidget &timeline_widget,
+  shared_ptr<model::Track> track) :
   timelineWidget(timeline_widget),
+  model_track(track),
   expanded(true),
-  titleMenuButton("4HelloHelloHello"),
   enableButton(Gtk::StockID("track_enabled")),
   lockButton(Gtk::StockID("track_unlocked"))
-{  
+{
+  REQUIRE(model_track);
+  
   titleMenuButton.set_relief(RELIEF_HALF);
   
   buttonBar.append(enableButton);
@@ -63,10 +66,11 @@ Track::Track(TimelineWidget &timeline_widget) :
   headerWidget.pack_start(titleMenuButton, PACK_SHRINK);
   headerWidget.pack_start(buttonBar, PACK_SHRINK);
   
-  // Setup the title menu
+  // Setup the title menu button
   Menu::MenuList& title_list = titleMenuButton.get_menu().items();
   title_list.push_back( Menu_Helpers::MenuElem(_("_Name..."),
     mem_fun(this, &Track::on_set_name) ) );
+  update_name();
   
   // Setup the context menu
   Menu::MenuList& context_list = contextMenu.items();
@@ -107,10 +111,15 @@ Track::show_header_context_menu(guint button, guint32 time)
 }
 
 void
+Track::update_name()
+{
+  REQUIRE(model_track);
+  titleMenuButton.set_label(model_track->get_name());
+}
+
+void
 Track::on_set_name()
 {
-  shared_ptr<model::Track> model_track =
-    timelineWidget.lookup_model_track(this);
   REQUIRE(model_track);
   
   Gtk::Window *window = dynamic_cast<Window*>(
@@ -121,14 +130,15 @@ Track::on_set_name()
     _("Set Track Name"), model_track->get_name());
     
   if(dialog.run() == RESPONSE_OK)
-    model_track->set_name(dialog.get_name());
+    {
+      model_track->set_name(dialog.get_name());
+      update_name();
+    }
 }
 
 void
 Track::on_remove_track()
 {
-  shared_ptr<model::Track> model_track =
-    timelineWidget.lookup_model_track(this);
   REQUIRE(model_track);
   REQUIRE(timelineWidget.sequence);
   

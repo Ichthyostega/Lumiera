@@ -40,7 +40,8 @@ class TimelineViewWindow;
 class Track
 {
 public:
-  Track(TimelineWidget &timeline_widget);
+  Track(TimelineWidget &timeline_widget,
+    boost::shared_ptr<model::Track> track);
   
   Gtk::Widget& get_header_widget();
   
@@ -57,7 +58,12 @@ public:
     const = 0;
 
 private:
+  //----- Internals -----//
+  void update_name();
+  
+private:
 
+  //----- Event Handlers -----//
   void on_set_name();
 
   void on_remove_track();
@@ -66,6 +72,7 @@ private:
 private:
 
   TimelineWidget &timelineWidget;
+  boost::shared_ptr<model::Track> model_track;
 
   bool expanded;
 

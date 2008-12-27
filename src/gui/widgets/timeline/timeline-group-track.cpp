@@ -28,8 +28,9 @@ namespace gui {
 namespace widgets {
 namespace timeline {
   
-GroupTrack::GroupTrack(TimelineWidget &timeline_widget) :
-  Track(timeline_widget)
+GroupTrack::GroupTrack(TimelineWidget &timeline_widget,
+  boost::shared_ptr<model::Track> track) :
+  Track(timeline_widget, track)
 {
 }
 

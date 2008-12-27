@@ -355,9 +355,11 @@ TimelineWidget::create_timeline_track_from_model_track(
   // Choose a corresponding timeline track class from the model track's
   // class
   if(typeid(*model_track) == typeid(model::ClipTrack))
-    return shared_ptr<timeline::Track>(new timeline::ClipTrack(*this));
+    return shared_ptr<timeline::Track>(new timeline::ClipTrack(
+      *this, model_track));
   else if(typeid(*model_track) == typeid(model::GroupTrack))
-    return shared_ptr<timeline::Track>(new timeline::GroupTrack(*this));
+    return shared_ptr<timeline::Track>(new timeline::GroupTrack(
+      *this, model_track));
   
   ASSERT(NULL); // Unknown track type;
   return shared_ptr<timeline::Track>();
