@@ -47,14 +47,12 @@ extern "C" {
 #include "lib/condition.h"
 }
 
-#include <boost/scoped_ptr.hpp>
 #include <cerrno>
 #include <ctime>
 
 
 namespace lib {
-
-    using boost::scoped_ptr;
+    
     
     
     /** Helpers and building blocks for Monitor based synchronisation */
@@ -229,6 +227,19 @@ namespace lib {
          
           bool operator() () { return flag_; }
         };
+
+
+      template<class X>
+      struct BoolMethodPredicate
+        {
+          typedef volatile bool (X::*Method)(void);
+          
+          X& instance_;
+          Method method_;
+          BoolMethodPredicate (X& x, Method m) : instance_(x), method_(m) {}
+         
+          bool operator() () { return (instance_.*method_)(); }
+        };
       
       
       template<class IMPL>
@@ -246,10 +257,19 @@ namespace lib {
           
           void signal(bool a){ IMPL::signal(a); }
           
-          bool wait (Flag flag, ulong timedwait=0)
+          bool
+          wait (Flag flag, ulong timedwait=0)
             {
               BoolFlagPredicate checkFlag(flag);
               return IMPL::wait(checkFlag, timeout_.setOffset(timedwait));                                   
+            }
+          
+          template<class X>
+          bool
+          wait (X& instance, volatile bool (X::*method)(void), ulong timedwait=0)
+            {
+              BoolMethodPredicate<X> invokeMethod(instance, method);
+              return IMPL::wait(invokeMethod, timeout_.setOffset(timedwait));                                   
             }
           
           void setTimeout(ulong relative) {timeout_.setOffset(relative);}
@@ -308,13 +328,20 @@ namespace lib {
             Lock(Monitor& m) : mon_(m)        { mon_.acquireLock(); }
             ~Lock()                           { mon_.releaseLock(); }
             
-            template<typename C>
-            bool wait (C& cond, ulong time=0) { return mon_.wait(cond,time);}
+            void notify()                     { mon_.signal(false);}
+            void notifyAll()                  { mon_.signal(true); }
             void setTimeout(ulong time)       { mon_.setTimeout(time); }
             
-            void notifyAll()                  { mon_.signal(true); }
-            void notify()                     { mon_.signal(false);}
+            template<typename C>
+            bool wait (C& cond, ulong time=0) { return mon_.wait(cond,time);}
             
+            template<class X>
+            Lock(X* it, volatile bool (X::*method)(void))
+              : mon_(getMonitor(it)) 
+              { 
+                mon_.acquireLock();
+                mon_.wait(*it,method);
+              }
           };
         
         

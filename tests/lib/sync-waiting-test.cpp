@@ -64,11 +64,13 @@ namespace lib {
         };
       
       
+      /** demonstrates how to wait on a simple boolean flag */
       class SyncOnBool
         : public Token,
           public Sync<NonrecursiveLock_Waitable>
         {
-          bool got_new_data_;
+        protected:
+          volatile bool got_new_data_;
           
         public:
           SyncOnBool() : got_new_data_ (false) {}
@@ -86,6 +88,24 @@ namespace lib {
               got_new_data_ = true;
               sync.notifyAll();
             }
+        };
+      
+      
+      /** this variant demonstrates how to wait on an condition
+       *  defined in terms of a (bool) member function
+       */
+      class SyncOnMemberPredicate
+        : public SyncOnBool
+        {
+          volatile bool checkTheFlag() { return this->got_new_data_; }
+          
+        public:
+          void getIt()
+            {
+              Lock guard(this, &SyncOnMemberPredicate::checkTheFlag);
+              sum_ += input_;
+            }
+          
         };
       
     } // (End) test classes and data....
@@ -115,9 +135,12 @@ namespace lib {
           {
             if (!Glib::thread_supported()) 
               Glib::thread_init();
-
+            
             SyncOnBool use_sync_var;
             waitPingPong (use_sync_var);
+            
+            SyncOnMemberPredicate use_member_pred;
+            waitPingPong (use_member_pred);
           }
         
         
