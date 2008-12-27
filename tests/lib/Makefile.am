@@ -19,7 +19,7 @@
 testlib_srcdir = $(top_srcdir)/tests/lib
 
 check_PROGRAMS += test-lib
-test_lib_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(testlib_srcdir)
+test_lib_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(testlib_srcdir)                                   	$(LUMIERA_GUI_CFLAGS)
 
 test_lib_LDADD =			\
 	liblumiprocmobjectbuilder.la	\
@@ -32,6 +32,7 @@ test_lib_LDADD =			\
 	liblumierabackend.la		\
 	liblumieracommon.la		\
 	liblumiera.la			\
+	$(LUMIERA_GUI_LIBS)			\
 	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt
 
 test_lib_SOURCES =						\

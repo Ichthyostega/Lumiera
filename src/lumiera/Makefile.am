@@ -18,7 +18,7 @@
 lumiera_srcdir = $(top_srcdir)/src/lumiera
 
 bin_PROGRAMS += lumiera
-lumiera_CPPFLAGS = $(AM_CPPFLAGS)
+lumiera_CPPFLAGS = $(AM_CPPFLAGS)                                   	$(LUMIERA_GUI_CFLAGS)
 lumiera_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
 lumiera_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
@@ -28,6 +28,7 @@ lumiera_LDADD =					\
 	liblumieraproc.la			\
 	liblumiera.la				\
 	$(LUMIERA_PLUGIN_LIBS)			\
+	$(LUMIERA_GUI_LIBS)			\
 	$(NOBUGMT_LUMIERA_LIBS)			\
 	-lboost_program_options-mt		\
 	-lboost_regex-mt
