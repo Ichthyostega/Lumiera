@@ -39,8 +39,8 @@
 #define LIB_SYNC_H
 
 #include "include/nobugcfg.h"
+#include "lib/error.hpp"
 #include "lib/util.hpp"
-#include "include/error.hpp"
 
 extern "C" {
 #include "lib/mutex.h"
