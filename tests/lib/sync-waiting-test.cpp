@@ -26,11 +26,8 @@
 
 #include "lib/sync.hpp"
 
-#include <glibmm.h>
+#include <glibmm.h> //////////////TODO temp solution, replace by backend!
 
-#include <iostream>
-
-using std::cout;
 using test::Test;
 
 
@@ -124,14 +121,17 @@ namespace lib {
      * This test covers the second part of the monitor pattern, which builds upon
      * the locking part an additionally uses an embedded condition. We provide
      * several pre-configured ways of specifying the condition to wait upon.
+     * - check a boolean flag
+     * - evaluate a member function as predicate
      * 
+     * @see SyncLocking_test
      * @see sync.hpp
      */
     class SyncWaiting_test : public Test
       {
         
         virtual void
-        run (Arg) 
+        run (Arg)
           {
             if (!Glib::thread_supported()) 
               Glib::thread_init();
@@ -146,7 +146,8 @@ namespace lib {
         
         /** 
          * Helper actually performing the test: 
-         * creates two threads and let them block and wait cross-wise.
+         * creates two threads and let them block and wait until a start value is given.
+         * When awakened, each thread should add the start value to a common sum field.
          * @param tok object containing the monitor and condition to be tested. 
          */
         void 

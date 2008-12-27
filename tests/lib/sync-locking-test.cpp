@@ -166,13 +166,15 @@ namespace lib {
      * But because the class Victim uses an object level monitor to
      * guard the mutations, the state should remain consistent.
      * 
+     * @see SyncWaiting_test condition based wait/notify
+     * @see SyncClasslock_test locking a type, not an instance 
      * @see sync.hpp
      */
     class SyncLocking_test : public Test
       {
         
         virtual void
-        run (Arg) 
+        run (Arg)
           {
             if (!Glib::thread_supported()) 
               Glib::thread_init();

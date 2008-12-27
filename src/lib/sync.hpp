@@ -22,10 +22,39 @@
 */
 
 /** @file sync.hpp
- ** Collection of helpers and wrappers to support dealing with concurrency issues.
+ ** Collection of OO-wrappers to support dealing with concurrency issues.
  ** Actually, everything is implemented either by the Lumiera backend, or directly
  ** by pthread. The purpose is to support and automate the most common use cases
- ** in object oriented style.
+ ** in object oriented style; especially we build upon the monitor object pattern.
+ ** 
+ ** A class becomes \em lockable by inheriting from lib::Sync with the appropriate
+ ** parametrisation. This causes any instance to inherit a monitor member (object),
+ ** managing a mutex and (optionally) a condition variable for waiting. The actual
+ ** synchronisation is achieved by placing a guard object as local (stack) variable
+ ** into a given scope (typically a member function body). This guard object of
+ ** class lib::Sync::Lock accesses the enclosing object's monitor and automatically
+ ** manages the locking and unlocking; optionally it may also be used for waiting
+ ** on a condition.
+ ** 
+ ** Please note:
+ ** - It is important to select a suitable parametrisation of the monitor.
+ **   This is done by specifying one of the defined policy classes.
+ ** - Be sure to pick the recursive mutex implementation when recursive calls
+ **   of synchronised functions can't be avoided. (performance penalty)
+ ** - You can't use the Lock#wait and Lock#notify functions unless you pick
+ **   a parametrisation including a condition variable.
+ ** - The "this" pointer is fed to the ctor of the Lock guard object. Thus
+ **   you may use any object's monitor as appropriate, especially in cases 
+ **   when adding the monitor to a given class may cause size problems.
+ ** - For sake of completeness, this implementation provides the ability for
+ **   timed waits. But please consider that in most cases there are better
+ **   solutions for running an operation with given timeout by utilising the
+ **   Lumiera scheduler. Thus use of timed waits is \b discouraged.
+ ** - There is a special variant of the Lock guard called ClassLock, which
+ **   can be used to lock based on a type, not an instance. 
+ ** - in DEBUG mode, the implementation includes NoBug resource tracking.
+ ** 
+ ** @todo fully implement the NoBug resource tracking calls 
  **
  ** @see mutex.h
  ** @see sync-locking-test.cpp
@@ -51,8 +80,8 @@ extern "C" {
 #include <ctime>
 
 
+
 namespace lib {
-    
     
     
     /** Helpers and building blocks for Monitor based synchronisation */
@@ -72,7 +101,7 @@ namespace lib {
          void __leave()     { TODO ("Record we are releasing the mutex"); }
         };
       
-        
+      
       struct Wrapped_LumieraRecMutex
         : public lumiera_mutex
         {
@@ -86,7 +115,7 @@ namespace lib {
          void __leave()     { TODO ("Record we are releasing the mutex"); }
         };
       
-        
+      
       struct Wrapped_LumieraExcCond
         : public lumiera_condition
         {
@@ -100,9 +129,9 @@ namespace lib {
          void __leave()     { TODO ("Record we are releasing the mutex"); }
         };
       
-        
+      
       struct Wrapped_LumieraRecCond
-        : public lumiera_condition
+        : public lumiera_condition  //////////////////////////////////////////TODO use correct implementation here!
         {
         protected:
           Wrapped_LumieraRecCond() { lumiera_condition_init    (this, "Obj.Monitor Condition", &NOBUG_FLAG(sync) ); } ////////TODO
@@ -115,8 +144,11 @@ namespace lib {
         };
       
       
+      
+      /* ========== abstractions defining the usable synchronisation primitives ============== */
+      
       template<class MTX>
-      class Mutex 
+      class Mutex
         : protected MTX
         {
         protected:
@@ -126,8 +158,8 @@ namespace lib {
           using MTX::__leave;
           
         public:
-            void 
-            acquire() 
+            void
+            acquire()
               {
                 __may_block();
                 
@@ -137,8 +169,8 @@ namespace lib {
                 __enter();
               }
             
-            void 
-            release() 
+            void
+            release()
               { 
                 __leave();
                 
@@ -161,7 +193,7 @@ namespace lib {
           
         public:
           void
-          signal (bool wakeAll=false) 
+          signal (bool wakeAll=false)
             {
               if (wakeAll)
                   pthread_cond_broadcast (&cond);
@@ -188,10 +220,11 @@ namespace lib {
             }
         };
       
-      /** helper for specifying an optional timeout
-       *  for an timed wait. It wraps a timespec-struct
-       *  and allows for easy initialisation by a given
-       *  relative offset.
+      
+      /** 
+       * helper for specifying an optional timeout for an timed wait.
+       * Wrapping a timespec-struct, it allows for easy initialisation
+       * by a given relative offset.
        */
       struct Timeout
         : timespec
@@ -218,6 +251,10 @@ namespace lib {
           operator bool() { return 0 != tv_sec; } // allows if (timeout_)....
         };
       
+      
+      
+      /* ==== functor types for defining the waiting condition ==== */  
+        
       typedef volatile bool& Flag;
       
       struct BoolFlagPredicate
@@ -227,8 +264,8 @@ namespace lib {
          
           bool operator() () { return flag_; }
         };
-
-
+      
+      
       template<class X>
       struct BoolMethodPredicate
         {
@@ -242,6 +279,10 @@ namespace lib {
         };
       
       
+      
+      /**
+       * Object Monitor for synchronisation and waiting.
+       */
       template<class IMPL>
       class Monitor
         : IMPL
@@ -286,13 +327,24 @@ namespace lib {
     
     
     
+    
+    
+    
+    
+    /* Interface to be used by client code:
+     * Inherit from class Sync with a suitable Policy.
+     * Then use the embedded Lock class.
+     */
+    
+    /* =======  Policy classes  ======= */
+    
     using sync::NonrecursiveLock_NoWait;
     using sync::NonrecursiveLock_Waitable;
     using sync::RecursiveLock_NoWait;
     using sync::RecursiveLock_Waitable;
     
     
-    /**
+    /*************************************************************************
      * Facility for monitor object based locking. 
      * To be attached either on a per class base or per object base.
      * Typically, the client class will inherit from this template (but it
@@ -300,8 +352,7 @@ namespace lib {
      * The interface for clients to access the functionality is the embedded
      * Lock template, which should be instantiated as an automatic variable
      * within the scope to be protected.
-     * 
-     * @todo actually implement this facility using the Lumiera backend.
+     *  
      */
     template<class CONF = NonrecursiveLock_NoWait>
     class Sync
@@ -335,6 +386,10 @@ namespace lib {
             template<typename C>
             bool wait (C& cond, ulong time=0) { return mon_.wait(cond,time);}
             
+            /** convenience shortcut: 
+             *  Locks and immediately enters wait state,
+             *  observing a condition defined as member function.
+             */
             template<class X>
             Lock(X* it, volatile bool (X::*method)(void))
               : mon_(getMonitor(it)) 
@@ -346,9 +401,9 @@ namespace lib {
         
         
       };
-    
-    
-    
+  
+  
+  
   
 } // namespace lumiera
 #endif
