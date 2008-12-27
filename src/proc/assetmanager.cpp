@@ -24,7 +24,7 @@
 #include "proc/assetmanager.hpp"
 #include "proc/asset/db.hpp"
 
-#include "lib/multithread.hpp"
+#include "lib/sync.hpp"
 #include "lib/util.hpp"
 
 #include <boost/function.hpp>
@@ -39,11 +39,10 @@ using boost::bind;
 using util::for_each;
 
 using lumiera::Singleton;
-using lumiera::Thread;
+using lib::Sync;
 
 
-namespace asset
-  {
+namespace asset {
   
   /** 
    * AssetManager error responses, caused by querying
@@ -113,14 +112,15 @@ namespace asset
       throw(lumiera::error::Invalid)
   {
     AssetManager& _aMang (AssetManager::instance());
+    DB& registry (_aMang.registry);
     TODO ("check validity of Ident Category");
     ID<KIND> asset_id (getID (idi));
     
-    Thread::Lock<DB> guard   SIDEEFFECT;
+    DB::Lock guard(&registry);
     TODO ("handle duplicate Registrations");
     P<KIND> smart_ptr (obj, &destroy);
 
-    _aMang.registry.put (asset_id, smart_ptr);
+    registry.put (asset_id, smart_ptr);
     return asset_id;
   }
   
@@ -143,11 +143,11 @@ namespace asset
         throw UnknownID (id);
   }
   
-  /** convienience shortcut for fetching the registered smart-ptr
+  /** Convenience shortcut for fetching the registered smart-ptr
    *  which is in charge of the given asset instance. By querying
    *  directly asset.id (of type ID<Asset>), the call to registry.get()
    *  can bypass the dynamic cast, because the type of the asset 
-   *  is explicitely given by type KIND. 
+   *  is explicitly given by type KIND. 
    */
   template<class KIND>
   P<KIND>
@@ -197,7 +197,7 @@ namespace asset
 
   /**
    * remove the given asset from the internal DB
-   * <i>together with all its dependants</i> 
+   * <i>together with all its dependents</i> 
    */
   void
   AssetManager::remove (IDA id)  

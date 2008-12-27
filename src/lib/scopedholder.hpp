@@ -221,7 +221,7 @@ namespace lib {
           return created_?  &_ThisType::created_ : 0;
         }
       
-      bool operator! ()  const { return !created_;      }
+      bool operator! ()  const { return !created_; }
       
       
       friend void

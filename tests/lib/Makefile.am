@@ -58,6 +58,7 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/singletontestmocktest.cpp		\
 	$(testlib_srcdir)/streamtypebasicstest.cpp		\
 	$(testlib_srcdir)/streamtypelifecycletest.cpp		\
+	$(testlib_srcdir)/sync-locking-test.cpp			\
 	$(testlib_srcdir)/test/cmdlinewrappertest.cpp		\
 	$(testlib_srcdir)/test/testoptiontest.cpp		\
 	$(testlib_srcdir)/vectortransfertest.cpp		\

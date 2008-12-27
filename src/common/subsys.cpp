@@ -53,7 +53,7 @@ namespace lumiera {
   bool
   Subsys::isRunning()
   {
-    //Lock guard (*this);
+    //Lock guard (this);
     return checkRunningState();
   }
   

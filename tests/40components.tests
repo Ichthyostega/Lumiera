@@ -317,6 +317,21 @@ PLANNED "StreamTypeLifecycle_test" StreamTypeLifecycle_test <<END
 END
 
 
+TEST "Multithread Locking by Monitor" SyncLocking_test  <<END
+return: 0
+END
+
+
+TEST "Multithread Locking whole class" SyncClasslock_test  <<END
+return: 0
+END
+
+
+TEST "Wait/Notify on Object Monitor" SyncWaiting_test  <<END
+return: 0
+END
+
+
 TEST "TestOption_test" TestOption_test <<END
 out: Testing invocation with cmdline: ...
 out: --> Testgroup=ALL

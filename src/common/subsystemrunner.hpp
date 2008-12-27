@@ -27,7 +27,7 @@
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 #include "common/subsys.hpp"
-#include "lib/multithread.hpp"
+#include "lib/sync.hpp"
 
 #include <tr1/functional>
 #include <vector>
@@ -87,6 +87,7 @@ namespace lumiera {
    * @see main.cpp   
    */
   class SubsystemRunner
+//  : Sync  
     {
       Option& opts_;
       volatile bool emergency_;
@@ -108,7 +109,7 @@ namespace lumiera {
       void
       maybeRun (Subsys& susy)
         {
-          //Lock guard (*this);
+          //Lock guard (this);
           
           if (!susy.isRunning() && susy.shouldStart (opts_))
             triggerStartup (&susy);
@@ -119,14 +120,14 @@ namespace lumiera {
       void
       shutdownAll ()
         {
-          //Lock guard (*this);
+          //Lock guard (this);
           for_each (running_, killIt_);
         }
       
       bool
       wait ()
         {
-          //Lock(*this).wait (&SubsystemRunner::allDead);
+          //Lock(this).wait (&SubsystemRunner::allDead);
           return isEmergencyExit();
         }
       
@@ -160,7 +161,7 @@ namespace lumiera {
       sigTerm (Subsys* susy, Error* problem) ///< called from subsystem on termination
         {
           ASSERT (susy);
-          //Lock guard (*this);
+          //Lock guard (this);
           triggerEmergency(problem);
           ERROR_IF (susy->isRunning(), lumiera, "Subsystem '%s' signals termination, "
                                                 "without resetting running state", cStr(*susy));
@@ -173,7 +174,7 @@ namespace lumiera {
       allDead ()
         {
           if (isEmergencyExit())
-            ; //Lock(*this).setTimeout(EMERGENCYTIMEOUT);
+            ; //Lock(this).setTimeout(EMERGENCYTIMEOUT);
           
           return isnil (running_);  // end wait if no running subsystem left
         }

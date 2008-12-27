@@ -40,7 +40,7 @@ namespace lumiera {
   LUMIERA_ERROR_DECLARE(EXCEPTION);  
   
   /**
-   * Interface and Baseclass of all Exceptions thrown 
+   * Interface and Base class of all Exceptions thrown 
    * from within Lumiera (C++) code. Common operations
    * for getting an diagnostic message and for obtaining
    * the root cause, i.e. the first exception encountered
@@ -56,7 +56,7 @@ namespace lumiera {
       Error (const Error&) throw();
       virtual ~Error () throw() {};
       
-      /** yield a diagnostic message characterizing the problem */
+      /** yield a diagnostic message characterising the problem */
       virtual const char* what () const throw();
 
       /** the internal Lumiera-error-ID (was set as C-errorstate in ctor) */
@@ -68,12 +68,12 @@ namespace lumiera {
       /** If this exception was caused by a chain of further exceptions,
        *  return the description of the first one registered in this throw sequence.
        *  This works only if every exceptions thrown as a consequence of another exception 
-       *  is propperly constructed by passing the original exception to the constructor
+       *  is properly constructed by passing the original exception to the constructor
        *  @return the description string, maybe empty (if there is no known root cause)
        */
       const string& rootCause () const throw()  { return this->cause_; }
 
-      /** replace the previous or default friendly message for the user. To be localized. */
+      /** replace the previous or default friendly message for the user. To be localised. */
       Error& setUsermsg (const string& newMsg) throw() { this->msg_ = newMsg; return *this; }
 
       /** give additional developer info. Typically used at intermediate handlers to add context. */
@@ -82,10 +82,10 @@ namespace lumiera {
       
     private:
       const char* id_;       ///< an LUMIERA_ERROR id, which is set as errorstate on construction
-      string msg_;           ///< friendly message intended for users (to be localized)
+      string msg_;           ///< friendly message intended for users (to be localised)
       string desc_;          ///< detailed description of the error situation for the developers
       mutable string what_;  ///< buffer for generating the detailed description on demand
-      const string cause_;   ///< descriptoin of first exception encountered in the chain
+      const string cause_;   ///< description of first exception encountered in the chain
 
       static const string extractCauseMsg (const std::exception&)  throw();
     };
@@ -95,7 +95,7 @@ namespace lumiera {
     
     
     
-  /* === Exception Subcategories === */
+  /* === Exception Sub-categories === */
     
   namespace error
     {
@@ -123,10 +123,10 @@ namespace lumiera {
     
 /** Macro for creating derived exception classes properly 
  *  integrated into Lumiera's exception hierarchy. Using
- *  this macro asures that the new class will get the full
+ *  this macro assures that the new class will get the full
  *  set of constructors and behaviour common to all exception
  *  classes, so it should be used when creating an derived
- *  exception type for more then stricly local purposes
+ *  exception type for more then strictly local purposes
  */
 #define LUMIERA_EXCEPTION_DECLARE(CLASS, PARENT, _ID_) \
     class CLASS : public PARENT                         \
