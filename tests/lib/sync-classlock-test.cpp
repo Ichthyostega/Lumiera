@@ -22,7 +22,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "include/error.hpp"
+#include "lib/error.hpp"
 
 #include "lib/sync-classlock.hpp"
 
