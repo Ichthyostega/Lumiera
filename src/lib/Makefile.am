@@ -82,6 +82,8 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/meta/typelistutil.hpp		\
 	$(liblumiera_la_srcdir)/util.hpp			\
 	$(liblumiera_la_srcdir)/observable-list.hpp		\
+	$(liblumiera_la_srcdir)/sync.hpp			\
+	$(liblumiera_la_srcdir)/sync-classlock.hpp		\
 	$(liblumiera_la_srcdir)/test/mockinjector.hpp		\
 	$(liblumiera_la_srcdir)/test/suite.hpp			\
 	$(liblumiera_la_srcdir)/test/testoption.hpp		\
