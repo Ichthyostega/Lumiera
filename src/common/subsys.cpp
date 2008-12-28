@@ -23,15 +23,8 @@
 
 #include "common/subsys.hpp"
 
-#include "lib/error.hpp"
-//#include "lib/util.hpp"
-
-
-//using util::isnil;
-//using util::cStr;
 
 namespace lumiera {
-  
   
   
   
@@ -43,7 +36,6 @@ namespace lumiera {
   Subsys&
   Subsys::depends (Subsys& prereq)
   {
-    TODO ("anything else to care when defining a dependency on the prerequisite subsystem??");/////////////////////TODO
     prereq_.push_back(&prereq);
     return *this;
   }
@@ -53,7 +45,6 @@ namespace lumiera {
   bool
   Subsys::isRunning()
   {
-    //Lock guard (this);
     return checkRunningState();
   }
   

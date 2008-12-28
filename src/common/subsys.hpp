@@ -65,6 +65,7 @@ namespace lumiera {
    * Dependencies and lifecycle of a partially independent Subsystem of the Application.
    * Using such descriptors, AppState as activated from main() is able to pull up,
    * maintain and shut down the primary parts of the Application.
+   * @note synchronisation is up to the implementor.
    */
   class Subsys
     : private noncopyable

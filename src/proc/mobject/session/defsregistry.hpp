@@ -25,7 +25,7 @@
  ** A piece of implementation code factored out into a separate header (include).
  ** Only used in defsmanager.cpp and for the unit tests. We can't place it into
  ** a separate compilation unit, because defsmanager.cpp defines some explicit
- ** template instantiaton, which cause the different Slots of the DefsrRegistry#table_
+ ** template instantiation, which cause the different Slots of the DefsrRegistry#table_
  ** to be filled with data and defaults for the specific Types.
  ** 
  ** @see mobject::session::DefsManager
@@ -80,7 +80,7 @@ namespace mobject {
         };
       
       /** we maintain an independent defaults registry
-       *  for every participating kind of objects */
+       *  for every participating kind of object. */
       typedef std::vector< P<TableEntry> > Table;
       
       
@@ -180,8 +180,8 @@ namespace mobject {
       
       
     /**
-     * @internal Helper for organizing preconfigured default objects.
-     * Maintaines a collection of objects known or encountered as "default"
+     * @internal Helper for organising preconfigured default objects.
+     * Maintains a collection of objects known or encountered as "default"
      * for a given type. This collection is ordered by "degree of constriction",
      * which is implemented by counting the number of predicates in the query
      * used to define or identify each object.
@@ -206,17 +206,17 @@ namespace mobject {
             II p,i,e;
             P<TAR> next, ptr;
             
-            Iter (II from, II to) ///< just ennumerates the given range 
+            Iter (II from, II to) ///< just enumerates the given range 
               : p(from), i(from), e(to)
               {
                 if (i!=e) ++i;  // p is next to be tested, i always one ahead
                 operator++ ();
               }
             
-            Iter (II match, II from, II to) ///< returns direct match first, then ennumerates 
+            Iter (II match, II from, II to) ///< returns direct match first, then enumerates 
               : p(match), i(from), e(to)
               { 
-                operator++ ();  // init to first element (or to null if emty)
+                operator++ ();  // init to first element (or to null if empty)
               }
             
             P<TAR> findNext ()  throw()
@@ -233,7 +233,7 @@ namespace mobject {
           
           public:
             P<TAR> operator* ()    { return ptr; }
-            bool hasNext ()        { return next || findNext(); }
+            bool  hasNext ()       { return next || findNext(); }
             Iter  operator++ (int) { Iter tmp=*this; operator++(); return tmp; }            
             Iter& operator++ ()           
               { 
@@ -243,12 +243,12 @@ namespace mobject {
               }
           };
         
-        /** find a sequence of "default" objects possibliy matching the query.
+        /** find a sequence of "default" objects possibly matching the query.
          *  If there was a registration for some object of the given kind with
          *  the \em same query, this one will be first in the sequence. Besides,
          *  the sequence will yield all still existing registered "default" objects
          *  of this kind, ordered ascending by "degree of constriction", i.e. starting
-         *  with the object registered togehter with the shortest query.
+         *  with the object registered together with the shortest query.
          *  @return a forward input iterator yielding this sequence
          *  @note none of the queries will be evaluated (we're just counting predicates)
          */
@@ -265,7 +265,7 @@ namespace mobject {
             typename Registry::iterator end = registry.end();
             
             if (pos==end)
-              return Iter<TAR> (registry.begin(), end);        // just ennumerate contents
+              return Iter<TAR> (registry.begin(), end);        // just enumerate contents
             else
               return Iter<TAR> (pos, registry.begin(), end); // start with direct match
           }

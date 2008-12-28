@@ -76,6 +76,12 @@ namespace lib {
    *          the object families are to be discarded. Currently
    *          they are just purged in reverse order defined by
    *          the first request for allocating a certain type.
+   * @todo    should we use an per-instance lock? We can't avoid
+   *          the class-wide lock, unless also the type-ID registration
+   *          is done on a per-instance base. AllocationCluster is intended
+   *          to be used within the builder, which executes in a dedicated
+   *          thread. Thus I doubt lock contention could be a problem and
+   *          we can avoid using a mutex per instance. Re-evaluate this!
    */
   class AllocationCluster
     : boost::noncopyable

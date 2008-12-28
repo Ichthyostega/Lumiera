@@ -23,6 +23,7 @@
 
 #include "gui/guifacade.hpp"
 #include "include/guinotificationfacade.h"
+#include "lib/sync.hpp"
 #include "lib/error.hpp"
 #include "lib/singleton.hpp"
 #include "lib/functorutil.hpp"
@@ -42,6 +43,7 @@ namespace gui {
   using lumiera::Subsys;
   using lumiera::InstanceHandle;
   using util::dispatchSequenced;
+  using lib::Sync;
   
   
   
@@ -79,7 +81,8 @@ namespace gui {
     scoped_ptr<GuiRunner> facade (0);
     
     class GuiSubsysDescriptor
-      : public lumiera::Subsys
+      : public lumiera::Subsys,
+        public Sync<>
       {
         operator string ()  const { return "Lumiera GTK GUI"; }
         
@@ -98,7 +101,7 @@ namespace gui {
         bool
         start (lumiera::Option&, Subsys::SigTerm termination)
           {
-            //Lock guard (*this);
+            Lock guard (this);
             if (facade) return false; // already started
             
             facade.reset (
@@ -119,14 +122,14 @@ namespace gui {
         bool 
         checkRunningState ()  throw()
           {
-            //Lock guard (*this);
+            Lock guard (this);
             return (facade);
           }
         
         void
         closeGuiModule (lumiera::Error *)
           {
-            //Lock guard (*this);
+            Lock guard (this);
             if (!facade)
               {
                 WARN (operate, "Termination signal invoked, but GUI is currently closed. "

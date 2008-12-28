@@ -44,8 +44,16 @@ namespace lumiera {
   using util::and_all;
   using util::for_each;
   using util::removeall;
+  using lib::Sync;
+  using lib::RecursiveLock_Waitable;
   
   namespace {
+    
+    /** limit waiting for subsystem shutdown in case of 
+     *  an emergency shutdown to max 2 seconds */
+    const uint EMERGENCYTIMEOUT = 2000; 
+    
+    
     function<bool(Subsys*)>
     isRunning() {
       return bind (&Subsys::isRunning, _1);
@@ -76,10 +84,9 @@ namespace lumiera {
    * Usually, the startup process is conducted from one (main) thread, which enters
    * a blocking wait() after starting the subsystems. Awakened by some termination
    * signal from one of the subsystems, termination of any remaining subsystems
-   * will be triggered. The wait() function returns after shutdown of all subsystems,
+   * will be triggered. The #wait() function returns after shutdown of all subsystems,
    * signalling an emergency exit (caused by an exception) with its return value.
    * 
-   * @todo implement an object monitor primitive based on a mutex and a condition. Inherit from this privately and create local instances of the embedded Lock class to activate the locking and wait/notify
    * @todo maybe use my refArray (see builder) to use Subsys& instead of Subsys* ??
    * 
    * @see lumiera::AppState
@@ -87,7 +94,7 @@ namespace lumiera {
    * @see main.cpp   
    */
   class SubsystemRunner
-//  : Sync  
+    : public Sync<RecursiveLock_Waitable>  
     {
       Option& opts_;
       volatile bool emergency_;
@@ -109,7 +116,7 @@ namespace lumiera {
       void
       maybeRun (Subsys& susy)
         {
-          //Lock guard (this);
+          Lock guard (this);
           
           if (!susy.isRunning() && susy.shouldStart (opts_))
             triggerStartup (&susy);
@@ -120,23 +127,28 @@ namespace lumiera {
       void
       shutdownAll ()
         {
-          //Lock guard (this);
+          Lock guard (this);
           for_each (running_, killIt_);
+        }
+      
+      void
+      triggerEmergency (bool cond)
+        { 
+          Lock guard (this);
+          emergency_ |= cond;
         }
       
       bool
       wait ()
         {
-          //Lock(this).wait (&SubsystemRunner::allDead);
+          Lock wait_blocking(this, &SubsystemRunner::allDead);
           return isEmergencyExit();
         }
-      
-      bool isEmergencyExit ()           { return emergency_; }
-      void triggerEmergency (bool cond) { emergency_ |= cond; }
       
       
       
     private:
+      bool isEmergencyExit () { return emergency_; }
       
       void
       triggerStartup (Subsys* susy)
@@ -161,20 +173,24 @@ namespace lumiera {
       sigTerm (Subsys* susy, Error* problem) ///< called from subsystem on termination
         {
           ASSERT (susy);
-          //Lock guard (this);
+          Lock sync (this);
           triggerEmergency(problem);
           ERROR_IF (susy->isRunning(), lumiera, "Subsystem '%s' signals termination, "
                                                 "without resetting running state", cStr(*susy));
           removeall (running_, susy);
           shutdownAll();
-          //guard.notify();
+          sync.notify();
         }
       
-      bool
+      volatile bool
       allDead ()
         {
           if (isEmergencyExit())
-            ; //Lock(this).setTimeout(EMERGENCYTIMEOUT);
+            {
+              Lock sync(this);
+              if (!sync.isTimedWait())
+                sync.setTimeout(EMERGENCYTIMEOUT);
+            }
           
           return isnil (running_);  // end wait if no running subsystem left
         }

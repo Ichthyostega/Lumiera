@@ -133,7 +133,7 @@ namespace lumiera {
       
       /**
        * Policy for handling multithreaded access to the singleton instance
-       * @todo actually implement this policy using the Lumiera databackend.
+       * @todo we could consider using a single shared lock for all singleton types...
        */
       template<class S>
       struct Multithreaded

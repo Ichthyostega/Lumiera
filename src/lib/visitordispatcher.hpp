@@ -105,6 +105,8 @@ namespace lumiera {
      * For each possible call entry point via some subclass of the visitable hierarchy,
      * we maintain a dispatcher table to keep track of all concrete tool implementations
      * able to receive and process calls on objects of this subclass.
+     * @param TAR the concrete target (subclass) type within the visitable hierarchy
+     * @param TOOL the overall tool family (base class of all concrete tools)
      */
     template<class TAR, class TOOL>
     class Dispatcher
@@ -140,7 +142,7 @@ namespace lumiera {
         void
         accomodate (size_t index)
           {
-            ClassLock<Dispatcher> guard();
+            ClassLock<Dispatcher> guard();  // note: this lock is also used for the singleton!
             if (index > table_.size())
               table_.resize (index);      // performance bottleneck?? TODO: measure the real impact!
           }
