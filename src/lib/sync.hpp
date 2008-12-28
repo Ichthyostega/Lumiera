@@ -106,7 +106,7 @@ namespace lib {
         : public lumiera_mutex
         {
         protected:
-          Wrapped_LumieraRecMutex() { lumiera_recmutex_init (this, "Obj.Monitor ExclMutex", &NOBUG_FLAG(sync)); }
+          Wrapped_LumieraRecMutex() { lumiera_recmutex_init (this, "Obj.Monitor RecMutex", &NOBUG_FLAG(sync)); }
          ~Wrapped_LumieraRecMutex() { lumiera_mutex_destroy (this, &NOBUG_FLAG(sync)); }
          
          //------------------Resource-Tracking------
@@ -120,7 +120,7 @@ namespace lib {
         : public lumiera_condition
         {
         protected:
-          Wrapped_LumieraExcCond() { lumiera_condition_init    (this, "Obj.Monitor Condition", &NOBUG_FLAG(sync) ); }
+          Wrapped_LumieraExcCond() { lumiera_condition_init    (this, "Obj.Monitor ExclCondition", &NOBUG_FLAG(sync) ); }
          ~Wrapped_LumieraExcCond() { lumiera_condition_destroy (this, &NOBUG_FLAG(sync) ); }
          
          //------------------Resource-Tracking------
@@ -133,8 +133,41 @@ namespace lib {
       struct Wrapped_LumieraRecCond
         : public lumiera_condition  //////////////////////////////////////////TODO use correct implementation here!
         {
+
+          ///////////////////////////////////////////////////////////////////////////////TODO temporary hack until implemented in the backend
+          static pthread_mutexattr_t*
+          getMutexAttr()
+            {
+              static pthread_mutexattr_t recursive_mutexattr;
+              return &recursive_mutexattr;
+            }
+          
+          static void
+          recursive_mutexattr_init()
+            {
+              pthread_mutexattr_init (getMutexAttr());
+              pthread_mutexattr_settype (getMutexAttr(), PTHREAD_MUTEX_RECURSIVE);
+            }
+          
+          static LumieraCondition
+          lumiera_reccondition_init (LumieraCondition self, const char* purpose, struct nobug_flag* flag)
+            {
+              if (self)
+                {
+                  static pthread_once_t recursive_mutexattr_once = PTHREAD_ONCE_INIT;
+                  pthread_once(&recursive_mutexattr_once, recursive_mutexattr_init);
+                  pthread_mutex_init (&self->mutex, getMutexAttr());
+                  
+                  pthread_cond_init (&self->cond, NULL);
+                  NOBUG_RESOURCE_HANDLE_INIT (self->rh);
+                  NOBUG_RESOURCE_ANNOUNCE_RAW (flag, "cond_var", purpose, self, self->rh);
+                }
+              return self;
+            }
+          ///////////////////////////////////////////////////////////////////////////////TODO temporary hack until implemented in the backend
+
         protected:
-          Wrapped_LumieraRecCond() { lumiera_condition_init    (this, "Obj.Monitor Condition", &NOBUG_FLAG(sync) ); } ////////TODO
+          Wrapped_LumieraRecCond() { lumiera_reccondition_init (this, "Obj.Monitor RecCondition", &NOBUG_FLAG(sync) ); } ////////TODO
          ~Wrapped_LumieraRecCond() { lumiera_condition_destroy (this, &NOBUG_FLAG(sync) ); }
          
          //------------------Resource-Tracking------
