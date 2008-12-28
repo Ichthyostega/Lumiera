@@ -9,7 +9,7 @@ END
 
 TEST "QueryUtils_test" QueryUtils_test  normalizeID  <<END
 out: ..original : a A AA dufte 1a _1 A_A BÄH    White  space  §&Ω%€GΩ%€ar  Ω  baäääääge!!!!!  : 
-out: normalized : a a aA dufte o1a o_1 a_A bH o white_space gar_bage :
+out: normalised : a a aA dufte o1a o_1 a_A bH o white_space gar_bage :
 END
 
 

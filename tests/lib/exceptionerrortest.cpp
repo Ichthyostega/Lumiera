@@ -91,17 +91,17 @@ namespace lumiera
         
         
         /** @test simply throw some exception and pass context info */
-        void throwSpecial (string _) { throw SpecificError(); }
-        void throwDerived (string _) { throw DerivedError(); }
+        void throwSpecial (string  ) { throw SpecificError(); }
+        void throwDerived (string  ) { throw DerivedError(); }
         void throwFatal   (string _) { throw error::Fatal(_); }
         void throwInvalid (string _) { throw error::Invalid(_); }
         void throwExternal(string _) { throw error::External(_); }
         void throwRuntime (string _) { throw std::runtime_error(_); }
-        void throwExceptn (string _) { throw std::exception(); }
+        void throwExceptn (string  ) { throw std::exception(); }
 
         
         /** @test catching, repackaging and rethrowing of errors.
-         *  This feature is important for passing exceptions transparentely
+         *  This feature is important for passing exceptions transparently
          *  over several layers. The nested operation will throw an error::External,
          *  which we are able to catch because it is derived from std::exception.
          *  We don't need to know the exact type, but we can classify the error situation
@@ -178,9 +178,9 @@ namespace lumiera
         }
         
         
-        /** @test terminate the Application by throwing an undclared exception.
+        /** @test terminate the Application by throwing an undeclared exception.
          *        this should result in the global unknown() handler to be called,
-         *        so usually it will terminate the testrun. 
+         *        so usually it will terminate the test run. 
          *  @note inside error.hpp, an initialisation hook has been installed into
          *        AppState, causing our own unknown() handler to be installed and
          *        invoked, which gives additional diagnostics.*/

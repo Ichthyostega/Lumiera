@@ -44,12 +44,10 @@ using std::cout;
 
 
 
-namespace lumiera
-  {
-  namespace query
-    {
-    namespace test
-      {
+namespace lumiera {
+  namespace query {
+    namespace test{
+      
       
       struct Thing
         {
@@ -59,7 +57,7 @@ namespace lumiera
       
       
       /************************************************************************
-       * @test check the various small helpers and utilities we utilize
+       * @test check the various small helpers and utilities we utilise
        *       for dealing with ConfigQuery 
        */
       class QueryUtils_test : public Test
@@ -88,7 +86,7 @@ namespace lumiera
           
           
           
-          /** @test sanitizing and normalizing various tokens */
+          /** @test sanitising and normalising various tokens */
           void
           check_normalizeID ()
             {
@@ -101,7 +99,7 @@ namespace lumiera
               
               for_each (tokens, bind ( &normalizeID, _1 ));
               
-              cout << "normalized : " << tokens << " :\n";
+              cout << "normalised : " << tokens << " :\n";
             }
           
           
@@ -115,7 +113,7 @@ namespace lumiera
               ASSERT ("tok" == extractID ("pred", "pred(tok), pred(tux)." ));
               ASSERT ("tok" == extractID ("pred", "other(xyz) pred(tok) pred(tux)" ));
               ASSERT ("tok" == extractID ("pred", "some( pred(tok)" ));
-
+              
               ASSERT (isnil (extractID ("pred", "pred (tok)")));
               ASSERT (isnil (extractID ("pred", "pred tok)" )));
               ASSERT (isnil (extractID ("pred", "pred(tok " )));
@@ -127,14 +125,14 @@ namespace lumiera
           void
           check_removeTerm ()
             {
-              // successfull-----Symbol---input-string----------------------extracted------remaining-------------
+              // successful------Symbol---input-string----------------------extracted------remaining-------------
               ASSERT_removeTerm ("pred", "pred(tok).",                     "pred(tok)",   "."                    );
               ASSERT_removeTerm ("pred", "    pred( tok )",                "pred(tok)",   "    "                 );
               ASSERT_removeTerm ("pred", "pred(tok), pred(tux).",          "pred(tok)",   "pred(tux)."           );
               ASSERT_removeTerm ("pred", "other(xyz) pred(tok) pred(tux)", "pred(tok)",   "other(xyz) pred(tux)" );
               ASSERT_removeTerm ("pred", "some( pred(tok)",                "pred(tok)",   "some( "               );
               
-              // not successfull
+              // not successful
               ASSERT_removeTerm ("pred", "pred (tok",                      "",            "pred (tok" );
               ASSERT_removeTerm ("pred", "pred tok)",                      "",            "pred tok)" );
               ASSERT_removeTerm ("pred", "pred(tok",                       "",            "pred(tok"  );
@@ -149,7 +147,7 @@ namespace lumiera
           
           
           
-          /** @test counting of predicates in a quiery
+          /** @test counting of predicates in a query
            *  (currently 4/08 regexp based...)
            */
           void
@@ -167,7 +165,7 @@ namespace lumiera
       
       
     } // namespace test
-    
+  
   } // namespace query
 
 } // namespace lumiera

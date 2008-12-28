@@ -180,38 +180,38 @@ END
 
 
 TEST "Factory_test" Factory_test 5  <<END
-out: ctor TargetObj(5) successfull
+out: ctor TargetObj(5) successful
 out: now the smart-ptr has refcount=3
 out: .....TargetObj(5): data="*****", array[5]={0,1,2,3,4,}
-out: dtor ~TargetObj(5) successfull
+out: dtor ~TargetObj(5) successful
 END
 
 
 TEST "Factory_special_test" Factory_special_test 5  <<END
 out: checkPlacement--------
-out: ctor TargetObj(5) successfull
+out: ctor TargetObj(5) successful
 out: created 3 shared_ptrs to Object placed in static buffer.
 out: .....TargetObj(5): data="*****", array[5]={0,1,2,3,4,}
-out: dtor ~TargetObj(5) successfull
-out: ctor TargetObj(6) successfull
+out: dtor ~TargetObj(5) successful
+out: ctor TargetObj(6) successful
 out: created 4 shared_ptrs to Object placed in static buffer.
-out: dtor ~TargetObj(6) successfull
+out: dtor ~TargetObj(6) successful
 out: checkPrivate--------
-out: ctor TargetObj(5) successfull
+out: ctor TargetObj(5) successful
 out: created 3 shared_ptrs to paranoid Object.
 out: .....TargetObj(5): data="*****", array[5]={0,1,2,3,4,}
-out: dtor ~TargetObj(5) successfull
+out: dtor ~TargetObj(5) successful
 out: checkMalloc--------
-out: ctor TargetObj(7) successfull
+out: ctor TargetObj(7) successful
 out: created auto_ptr to malloc-ed Object.
 out: .....TargetObj(7): data="*******", array[7]={0,1,2,3,4,5,6,}
-out: dtor ~TargetObj(7) successfull
+out: dtor ~TargetObj(7) successful
 out: checkPImpl--------
-out: ctor TargetObj(12) successfull
+out: ctor TargetObj(12) successful
 out: created auto_ptr to Interface Object.
 out: .....ImplObj::funky() called
 out: .....TargetObj(12): data="************", array[12]={0,1,2,3,4,5,6,7,8,9,10,11,}
-out: dtor ~TargetObj(12) successfull
+out: dtor ~TargetObj(12) successful
 END
 
 
@@ -251,10 +251,10 @@ END
 
 TEST "SingletonSubclass_test" SingletonSubclass_test 13 <<END
 out: using the Singleton should create TargetObj(13)...
-out: ctor TargetObj(13) successfull
+out: ctor TargetObj(13) successful
 out: calling a non-static method on the Singleton-Implementation
 out: .....TargetObj(13): data="*************", array[13]={0,1,2,3,4,5,6,7,8,9,10,11,12,}
-out: dtor ~TargetObj(13) successfull
+out: dtor ~TargetObj(13) successful
 END
 
 
@@ -297,15 +297,15 @@ END
 
 TEST "Singleton_test" Singleton_test 23 <<END
 out: testing TargetObj(23) as Singleton(statically allocated)
-out: ctor TargetObj(23) successfull
+out: ctor TargetObj(23) successful
 out: calling a non-static method on the Singleton instance
 out: .....TargetObj(23): data="***********************", array[23]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,}
 out: testing TargetObj(24) as Singleton(heap allocated)
-out: ctor TargetObj(24) successfull
+out: ctor TargetObj(24) successful
 out: calling a non-static method on the Singleton instance
 out: .....TargetObj(24): data="************************", array[24]={0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,}
-out: dtor ~TargetObj(23) successfull
-out: dtor ~TargetObj(24) successfull
+out: dtor ~TargetObj(23) successful
+out: dtor ~TargetObj(24) successful
 END
 
 
