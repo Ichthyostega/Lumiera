@@ -77,9 +77,12 @@ extern "C" {
 #include "lib/reccondition.h"
 }
 
+#include <boost/noncopyable.hpp>
+#include <pthread.h>
 #include <cerrno>
 #include <ctime>
 
+using boost::noncopyable;
 
 
 namespace lib {
@@ -157,6 +160,11 @@ namespace lib {
           using MTX::__may_block;
           using MTX::__enter;
           using MTX::__leave;
+          
+         ~Mutex () { }
+          Mutex () { }
+          Mutex (const Mutex&); ///< noncopyable...
+          const Mutex& operator= (const Mutex&);
           
         public:
             void
@@ -283,6 +291,8 @@ namespace lib {
       
       /**
        * Object Monitor for synchronisation and waiting.
+       * Implemented by a (wrapped) set of sync primitives,
+       * which are default constructible and noncopyable.
        */
       template<class IMPL>
       class Monitor
@@ -293,6 +303,11 @@ namespace lib {
         public:
           Monitor() {}
           ~Monitor() {}
+          
+          /** allow copy, without interfering with the identity of IMPL */
+          Monitor (Monitor const& ref) : IMPL(), timeout_(ref.timeout_) { }
+          const Monitor& operator= (Monitor const& ref) { timeout_ = ref.timeout_; }
+          
           
           void acquireLock() { IMPL::acquire(); }
           void releaseLock() { IMPL::release(); }
@@ -371,13 +386,13 @@ namespace lib {
         
       public:
         class Lock
+          : private noncopyable
           {
             Monitor& mon_;
             
           public:
             template<class X>
             Lock(X* it) : mon_(getMonitor(it)){ mon_.acquireLock(); }
-            Lock(Monitor& m) : mon_(m)        { mon_.acquireLock(); }
             ~Lock()                           { mon_.releaseLock(); }
             
             void notify()                     { mon_.signal(false);}
@@ -386,11 +401,12 @@ namespace lib {
             
             template<typename C>
             bool wait (C& cond, ulong time=0) { return mon_.wait(cond,time);}
+            bool isTimedWait()                { return mon_.isTimedWait(); }
+            
             
             /** convenience shortcut: 
              *  Locks and immediately enters wait state,
-             *  observing a condition defined as member function.
-             */
+             *  observing a condition defined as member function. */
             template<class X>
             Lock(X* it, bool (X::*method)(void))
               : mon_(getMonitor(it)) 
@@ -398,6 +414,11 @@ namespace lib {
                 mon_.acquireLock();
                 mon_.wait(*it,method);
               }
+            
+          protected:
+            /** for creating a ClassLock */
+            Lock(Monitor& m) : mon_(m)
+              { mon_.acquireLock(); }
           };
         
         
