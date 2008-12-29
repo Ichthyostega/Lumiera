@@ -30,17 +30,29 @@ using namespace sigc;
 namespace gui {
 namespace widgets {
   
+const ArrowType arrowType = ARROW_DOWN;
+const ShadowType shadowType = SHADOW_NONE;
+  
 MenuButton::MenuButton() :
-  Button()
-{}
+  Button(),
+  arrow(arrowType, shadowType)
+{
+  setup_button();
+}
 
-MenuButton::MenuButton(const Gtk::StockID& stock_id)
-  : Button(stock_id)
-{}  
+MenuButton::MenuButton(const Gtk::StockID& stock_id) :
+  Button(stock_id),
+  arrow(arrowType, shadowType)
+{
+  setup_button();
+}  
 
-MenuButton::MenuButton(const Glib::ustring& label, bool mnemonic)
-  : Button(label, mnemonic)
-{}
+MenuButton::MenuButton(const Glib::ustring& label, bool mnemonic) :
+  Button(label, mnemonic),
+  arrow(arrowType, shadowType)
+{
+  setup_button();
+}
 
 Gtk::Menu&
 MenuButton::get_menu()
@@ -49,16 +61,24 @@ MenuButton::get_menu()
 }
 
 void
-MenuButton::on_pressed()
-{
-  popup();
-}
-
-void
 MenuButton::popup()
 {
   menu.popup( mem_fun(this, &MenuButton::on_menu_position),
     0, gtk_get_current_event_time());
+}
+
+void
+MenuButton::setup_button()
+{
+  arrow.set(ARROW_DOWN, SHADOW_NONE);
+  set_image_position(POS_RIGHT);
+  set_image(arrow);
+}
+
+void
+MenuButton::on_pressed()
+{
+  popup();
 }
 
 void

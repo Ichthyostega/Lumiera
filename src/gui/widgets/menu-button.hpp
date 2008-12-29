@@ -79,6 +79,11 @@ public:
 protected:
 
   /**
+   * An internal method which sets up the button at creat time.
+   **/
+  void setup_button();
+
+  /**
    * An event handler for when the button is pressed.
    **/
   virtual void on_pressed();
@@ -103,6 +108,12 @@ private:
    * The internal menu object which is the popup menu of this widget.
    **/
   Gtk::Menu menu;
+  
+  /**
+   * The arrow widget that will be displayed to hint the user that this
+   * button is a drop-down.
+   **/
+  Gtk::Arrow arrow;
 };
 
 } // gui
