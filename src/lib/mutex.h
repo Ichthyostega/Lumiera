@@ -41,7 +41,7 @@ LUMIERA_ERROR_DECLARE (MUTEX_DESTROY);
  */
 #define LUMIERA_MUTEX_SECTION(nobugflag, mtx)                                                           \
   for (lumiera_mutexacquirer NOBUG_CLEANUP(lumiera_mutexacquirer_ensureunlocked) lumiera_mutex_section_ \
-         = {(LumieraMutex)1 NOBUG_RESOURCE_HANDLE_COMMA_INITIALIZER};                                   \
+         = {(LumieraMutex)1 NOBUG_ALPHA_COMMA_NULL};                                                    \
        lumiera_mutex_section_.mutex;)                                                                   \
     for (                                                                                               \
          ({                                                                                             \
@@ -71,7 +71,7 @@ LUMIERA_ERROR_DECLARE (MUTEX_DESTROY);
 #define LUMIERA_MUTEX_SECTION_CHAIN(nobugflag, mtx)                                                     \
   for (lumiera_mutexacquirer *lumiera_mutex_section_old_ = &lumiera_mutex_section_,                     \
          NOBUG_CLEANUP(lumiera_mutexacquirer_ensureunlocked) lumiera_mutex_section_ = {(LumieraMutex)1  \
-           NOBUG_RESOURCE_HANDLE_COMMA_INITIALIZER};                                                    \
+           NOBUG_ALPHA_COMMA_NULL};                                                                     \
        lumiera_mutex_section_.mutex;)                                                                   \
     for (                                                                                               \
          ({                                                                                             \
@@ -103,7 +103,7 @@ LUMIERA_ERROR_DECLARE (MUTEX_DESTROY);
  */
 #define LUMIERA_RECMUTEX_SECTION(nobugflag, mtx)                                                        \
   for (lumiera_mutexacquirer NOBUG_CLEANUP(lumiera_mutexacquirer_ensureunlocked) lumiera_mutex_section_ \
-         = {(LumieraMutex)1 NOBUG_RESOURCE_HANDLE_COMMA_INITIALIZER};                                   \
+         = {(LumieraMutex)1 NOBUG_ALPHA_COMMA_NULL};                                                    \
        lumiera_mutex_section_.mutex;)                                                                   \
     for (                                                                                               \
          ({                                                                                             \
@@ -134,7 +134,7 @@ LUMIERA_ERROR_DECLARE (MUTEX_DESTROY);
 #define LUMIERA_RECMUTEX_SECTION_CHAIN(nobugflag, mtx)                                                  \
   for (lumiera_mutexacquirer *lumiera_mutex_section_old_ = &lumiera_mutex_section_,                     \
          NOBUG_CLEANUP(lumiera_mutexacquirer_ensureunlocked) lumiera_mutex_section_ = {(LumieraMutex)1  \
-           NOBUG_RESOURCE_HANDLE_COMMA_INITIALIZER};                                                    \
+           NOBUG_ALPHA_COMMA_NULL};                                                                     \
        lumiera_mutex_section_.mutex;)                                                                   \
     for (                                                                                               \
          ({                                                                                             \
