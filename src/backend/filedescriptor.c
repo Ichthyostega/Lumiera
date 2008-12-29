@@ -301,6 +301,7 @@ lumiera_filedescriptor_delete (LumieraFiledescriptor self, const char* name)
           lumiera_filehandlecache_checkout (lumiera_fhcache, self->handle);
           int dummy = ftruncate (lumiera_filehandle_handle (self->handle), self->realsize);
           (void) dummy; /* this is present to silence a warning */
+          TODO ("handle error case better");
           lumiera_filehandlecache_checkin (lumiera_fhcache, self->handle);
         }
 
