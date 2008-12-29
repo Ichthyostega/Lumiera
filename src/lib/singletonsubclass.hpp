@@ -50,8 +50,8 @@ namespace lumiera {
   using boost::scoped_ptr;
   
   
-  namespace singleton
-    {
+  namespace singleton {
+    
       /** 
        * Helper template to use the general policy classes of the lumiera::Singleton,
        * but change the way they are parametrised on-the-fly. 
@@ -123,13 +123,11 @@ namespace lumiera {
     < class SI  // the class to use as Interface for the Singleton
     , template <class> class Create    = singleton::StaticCreate   // how to create/destroy the instance
     , template <class> class Life      = singleton::AutoDestroy   // how to manage Singleton Lifecycle
-    , template <class> class Threading = singleton::IgnoreThreadsafety  //TODO use Multithreaded!!!
     >
   class SingletonSubclassFactory
     : public SingletonFactory< SI
                              , singleton::Adapter<Create,SI>::template Adapted
                              , Life
-                             , Threading
                              >
     {
     public:

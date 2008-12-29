@@ -64,8 +64,8 @@ namespace lumiera
   /* Forward declarations of all Classes we want to specialise the template */
   /* ********************************************************************** */
     
-  namespace test
-    {
+  namespace test {
+    
     class TestSingletonO;
     using lumiera::Singleton;
     

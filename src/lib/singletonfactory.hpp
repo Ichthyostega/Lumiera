@@ -37,31 +37,40 @@ This code is heavily inspired by
 
 #include "lib/singletonpolicies.hpp"  // several Policies usable together with SingletonFactory
 
-#include "lib/util.hpp"
 #include "include/nobugcfg.h"
+#include "lib/util.hpp"
+#include "lib/sync-classlock.hpp"
 
 
 
-namespace lumiera
-  {
+namespace lumiera {
   
   /**
    * A configurable Template for implementing Singletons. 
-   * Actually this is a Functor object, which could be placed into a static field
+   * Actually this is a Factory object, which could be placed into a static field
    * of the Singleton (target) class or used directly. 
-   * @note internally uses static fields, so all functor instances share pInstance_
+   * @note internally uses static fields, so all factory instances share pInstance_
+   * @note there is an ongoing discussion regarding Double Checked Locking pattern,
+   *       which in this case boils down to the question: does \c pthread_mutex_lock/unlock
+   *       constitute a memory barrier, such as to force any memory writes done within
+   *       the singleton ctor to be flushed and visible to other threads when releasing
+   *       the lock? To my understanding, the answer is yes. See
+   *       http://www.opengroup.org/onlinepubs/000095399/basedefs/xbd_chap04.html#tag_04_10
+   * @param SI the class of the Singleton instance
+   * @param Create policy defining how to create/destroy the instance
+   * @oaram Life policy defining how to manage Singleton Lifecycle
    */
   template
-    < class SI  // the class of the Singleton instance
-    , template <class> class Create    = singleton::StaticCreate   // how to create/destroy the instance
-    , template <class> class Life      = singleton::AutoDestroy   // how to manage Singleton Lifecycle
-    , template <class> class Threading = singleton::IgnoreThreadsafety  //TODO use Multithreaded!!!
+    < class SI
+    , template <class> class Create    = singleton::StaticCreate 
+    , template <class> class Life      = singleton::AutoDestroy
     >
   class SingletonFactory
     {
-      typedef typename Threading<SI>::VolatileType SType;
-      typedef typename Threading<SI>::Lock ThreadLock;
-      static SType* pInstance_;
+      typedef SI* volatile  PType;
+      typedef lib::ClassLock<SI> ThreadLock;
+      
+      static PType pInstance_;
       static bool isDead_;
       
     public:
@@ -110,21 +119,19 @@ namespace lumiera
   template
     < class SI,
       template <class> class C,
-      template <class> class L,
-      template <class> class T
+      template <class> class L
     >
-    typename SingletonFactory<SI,C,L,T>::SType* 
-    SingletonFactory<SI,C,L,T>::pInstance_;
+    typename SingletonFactory<SI,C,L>::PType 
+    SingletonFactory<SI,C,L>::pInstance_;
   
   template
     < class SI,
       template <class> class C,
-      template <class> class L,
-      template <class> class T
+      template <class> class L
     >
-    bool SingletonFactory<SI,C,L,T>::isDead_;
-
-
+    bool SingletonFactory<SI,C,L>::isDead_;
+  
+  
   
 ///// TODO: get rid of the static fields?
 /////       is tricky because of invoking the destructors. If we rely on instance vars,
@@ -132,6 +139,6 @@ namespace lumiera
 /////       destructors of static objects at shutdown.
 /////       It seems this would either cost us much of the flexibility or get complicated
 /////       to a point where we could as well implement our own Dependency Injection Manager.
-
+  
 } // namespace lumiera
 #endif
