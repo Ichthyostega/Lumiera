@@ -21,7 +21,7 @@
 liblumiproc_la_srcdir = $(top_srcdir)/src/proc
 noinst_LTLIBRARIES += liblumiproc.la
 
-liblumiproc_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+liblumiproc_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra #-Werror
 liblumiproc_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 liblumiproc_la_SOURCES =							\
@@ -36,7 +36,7 @@ liblumiproc_la_SOURCES =							\
 liblumiprocasset_la_srcdir = $(top_srcdir)/src/proc/asset
 noinst_LTLIBRARIES += liblumiprocasset.la
 
-liblumiprocasset_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+liblumiprocasset_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra #-Werror
 liblumiprocasset_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 liblumiprocasset_la_SOURCES =				\
@@ -61,7 +61,7 @@ liblumiprocasset_la_SOURCES =				\
 liblumiprocengine_la_srcdir = $(top_srcdir)/src/proc/engine
 noinst_LTLIBRARIES += liblumiprocengine.la
 
-liblumiprocengine_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+liblumiprocengine_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra #-Werror
 liblumiprocengine_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 liblumiprocengine_la_SOURCES =						\
@@ -84,7 +84,7 @@ liblumiprocengine_la_SOURCES =						\
 liblumiprocmobject_la_srcdir = $(top_srcdir)/src/proc/mobject
 noinst_LTLIBRARIES += liblumiprocmobject.la
 
-liblumiprocmobject_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+liblumiprocmobject_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra #-Werror
 liblumiprocmobject_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 liblumiprocmobject_la_SOURCES =					\
@@ -100,7 +100,7 @@ liblumiprocmobject_la_SOURCES =					\
 liblumiprocmobjectbuilder_la_srcdir = $(top_srcdir)/src/proc/mobject/builder
 noinst_LTLIBRARIES += liblumiprocmobjectbuilder.la
 
-liblumiprocmobjectbuilder_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+liblumiprocmobjectbuilder_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra #-Werror
 liblumiprocmobjectbuilder_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 liblumiprocmobjectbuilder_la_SOURCES =					\
@@ -114,7 +114,7 @@ liblumiprocmobjectbuilder_la_SOURCES =					\
 liblumiproccontrol_la_srcdir = $(top_srcdir)/src/proc/control
 noinst_LTLIBRARIES += liblumiproccontrol.la
 
-liblumiproccontrol_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+liblumiproccontrol_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra #-Werror
 liblumiproccontrol_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 liblumiproccontrol_la_SOURCES =					\
@@ -125,7 +125,7 @@ liblumiproccontrol_la_SOURCES =					\
 liblumiprocmobjectsession_la_srcdir = $(top_srcdir)/src/proc/mobject/session
 noinst_LTLIBRARIES += liblumiprocmobjectsession.la
 
-liblumiprocmobjectsession_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+liblumiprocmobjectsession_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra #-Werror
 liblumiprocmobjectsession_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 liblumiprocmobjectsession_la_SOURCES =					\
@@ -231,7 +231,7 @@ noinst_HEADERS +=							\
 liblumieraproc_la_srcdir = $(top_srcdir)/src/proc
 lib_LTLIBRARIES += liblumieraproc.la
 
-liblumieraproc_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+liblumieraproc_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra #-Werror
 liblumieraproc_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 liblumieraproc_la_SOURCES =

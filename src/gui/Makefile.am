@@ -84,7 +84,7 @@ gtk_gui_la_SOURCES =			\
 #
 noinst_LTLIBRARIES += libgui.la
 
-libgui_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+libgui_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra #-Werror
 libgui_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 libgui_la_CPPFLAGS = $(AM_CPPFLAGS)					\
@@ -106,8 +106,8 @@ libgui_la_SOURCES =							\
 	$(lumigui_srcdir)/dialogs/render.hpp				\
 	$(lumigui_srcdir)/dialogs/preferences-dialog.cpp			\
 	$(lumigui_srcdir)/dialogs/preferences-dialog.hpp			\
-	$(lumigui_srcdir)/dialogs/sequence-name.cpp			\
-	$(lumigui_srcdir)/dialogs/sequence-name.hpp			\
+	$(lumigui_srcdir)/dialogs/name-chooser.cpp			\
+	$(lumigui_srcdir)/dialogs/name-chooser.hpp			\
 	$(lumigui_srcdir)/panels/panel.cpp				\
 	$(lumigui_srcdir)/panels/panel.hpp				\
 	$(lumigui_srcdir)/panels/timeline-panel.cpp			\
@@ -116,6 +116,8 @@ libgui_la_SOURCES =							\
 	$(lumigui_srcdir)/panels/viewer-panel.hpp			\
 	$(lumigui_srcdir)/panels/assets-panel.cpp			\
 	$(lumigui_srcdir)/panels/assets-panel.hpp			\
+	$(lumigui_srcdir)/widgets/menu-button.cpp			\
+	$(lumigui_srcdir)/widgets/menu-button.hpp			\
 	$(lumigui_srcdir)/widgets/video-display-widget.cpp		\
 	$(lumigui_srcdir)/widgets/video-display-widget.hpp		\
 	$(lumigui_srcdir)/widgets/timeline-widget.cpp			\
