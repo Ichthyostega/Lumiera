@@ -84,7 +84,7 @@ gtk_gui_la_SOURCES =			\
 #
 noinst_LTLIBRARIES += libgui.la
 
-libgui_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra #-Werror
+libgui_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
 libgui_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 libgui_la_CPPFLAGS = $(AM_CPPFLAGS)					\
