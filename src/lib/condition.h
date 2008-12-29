@@ -39,6 +39,8 @@ LUMIERA_ERROR_DECLARE (CONDITION_DESTROY);
  * Condition section.
  * Locks the condition mutex, one can use LUMIERA_CONDITION_WAIT to wait for signals or
  * LUMIERA_CONDITION_SIGNAL or LUMIERA_CONDITION_BROADCAST to wake waiting threads
+ * @param nobugflag NoBug flag used to log actions on the condition
+ * @param cnd Condition variable to be locked
  */
 #define LUMIERA_CONDITION_SECTION(nobugflag, cnd)                                                       \
   for (lumiera_conditionacquirer NOBUG_CLEANUP(lumiera_conditionacquirer_ensureunlocked)                \
@@ -55,24 +57,64 @@ LUMIERA_ERROR_DECLARE (CONDITION_DESTROY);
          });                                                                                            \
          lumiera_condition_section_.condition;                                                          \
          ({                                                                                             \
-           if (lumiera_condition_section_.condition)                                                    \
-             {                                                                                          \
-               pthread_mutex_unlock (&lumiera_condition_section_.condition->mutex);                     \
-               lumiera_condition_section_.condition = NULL;                                             \
-               RESOURCE_LEAVE(nobugflag, lumiera_condition_section_.rh);                                \
-             }                                                                                          \
+           LUMIERA_CONDITION_UNLOCK                                                                     \
          }))
 
-#define LUMIERA_CONDITION_WAIT                                                                                          \
+
+/**
+ * Explicit mutex unlock for a condition variable
+ * One can early unlock the mutex of a condition variable prior leaving a CONDITION_SECTION.
+ * The CONDITION_WAIT, CONDITION_SIGNAL and CONDITION_BROADCAST macros must not be used after the mutex
+ * got unlocked.
+ * @param nobugflag NoBug flag used to log actions on the condition
+ */
+#define LUMIERA_CONDITION_UNLOCK                                                                \
+  if (lumiera_condition_section_.condition)                                                     \
+    {                                                                                           \
+      pthread_mutex_unlock (&lumiera_condition_section_.condition->mutex);                      \
+      lumiera_condition_section_.condition = NULL;                                              \
+      NOBUG_RESOURCE_LEAVE_RAW(lumiera_condition_section_.flag, lumiera_condition_section_.rh); \
+    }
+
+
+/**
+ * Wait for a condition.
+ * Must be used inside a CONDITION_SECTION.
+ * @param expr Conditon which must become true, else the condition variable goes back into sleep
+ */
+#define LUMIERA_CONDITION_WAIT(expr)                                                                                    \
   do {                                                                                                                  \
-  NOBUG_RESOURCE_STATE_RAW (lumiera_condition_section_.flag, lumiera_condition_section_.rh, NOBUG_RESOURCEING);         \
-  pthread_cond_wait (&lumiera_condition_section_.condition->cond, &lumiera_condition_section_.condition->mutex);        \
-  NOBUG_RESOURCE_STATE_RAW (lumiera_condition_section_.flag, lumiera_condition_section_.rh, NOBUG_RESOURCE_EXCLUSIVE);  \
-  while (0)
+    ENSURE (lumiera_condition_section_.condition, "Condition mutex not locked");                                        \
+    NOBUG_RESOURCE_STATE_RAW (lumiera_condition_section_.flag, lumiera_condition_section_.rh, NOBUG_RESOURCE_WAITING);  \
+    pthread_cond_wait (&lumiera_condition_section_.condition->cond, &lumiera_condition_section_.condition->mutex);      \
+    NOBUG_RESOURCE_STATE_RAW (lumiera_condition_section_.flag, lumiera_condition_section_.rh, NOBUG_RESOURCE_EXCLUSIVE);\
+  } while (!(expr))
 
-#define LUMIERA_CONDITION_SIGNAL (nobugflag) pthread_cond_signal (&lumiera_condition_section_.condition->cond)
 
-#define LUMIERA_CONDITION_BROADCAST (nobugflag)  pthread_cond_broadcast (&lumiera_condition_section_.condition->cond)
+/**
+ * Signal a condition variable
+ * Must be used inside a CONDITION_SECTION.
+ * Wakes one thread waiting on the condition variable
+ */
+#define LUMIERA_CONDITION_SIGNAL                                                        \
+do {                                                                                    \
+  ENSURE (lumiera_condition_section_.condition, "Condition mutex not locked");          \
+  NOBUG_IF(NOBUG_MODE_ALPHA, TRACE(lumiera_condition_section_.flag, "Signaling"));      \
+  pthread_cond_signal (&lumiera_condition_section_.condition->cond);                    \
+} while (0)
+
+
+/**
+ * Broadcast a condition variable
+ * Must be used inside a CONDITION_SECTION.
+ * Wakes all threads waiting on the condition variable
+ */
+#define LUMIERA_CONDITION_BROADCAST                                                     \
+do {                                                                                    \
+  ENSURE (lumiera_condition_section_.condition, "Condition mutex not locked");          \
+  NOBUG_IF(NOBUG_MODE_ALPHA, TRACE(lumiera_condition_section_.flag, "Broadcasting"));   \
+  pthread_cond_broadcast (&lumiera_condition_section_.condition->cond);                 \
+} while (0)
 
 
 
@@ -109,40 +151,6 @@ lumiera_condition_destroy (LumieraCondition self, struct nobug_flag* flag);
 
 
 /**
- * signal a single waiting thread.
- * @param self condition variable to be signaled, must be given, all errors are fatal
- */
-static inline void
-lumiera_condition_signal (LumieraCondition self)
-{
-  REQUIRE (self);
-  if (pthread_mutex_lock (&self->mutex))
-    LUMIERA_DIE (MUTEX_LOCK);
-  pthread_cond_signal (&self->cond);
-  if (pthread_mutex_unlock (&self->mutex))
-    LUMIERA_DIE (MUTEX_UNLOCK);
-}
-
-/**
- * signal all waiting threads
- * @param self condition variable to be signaled, must be given, all errors are fatal
- */
-static inline void
-lumiera_condition_broadcast (LumieraCondition self)
-{
-  REQUIRE (self);
-  if (pthread_mutex_lock (&self->mutex))
-    LUMIERA_DIE (MUTEX_LOCK);
-  pthread_cond_broadcast (&self->cond);
-  if (pthread_mutex_unlock (&self->mutex))
-    LUMIERA_DIE (MUTEX_UNLOCK);
-}
-
-
-
-
-
-/**
  * conditionacquirer used to manage the state of a condition variable.
  */
 struct lumiera_conditionacquirer_struct
@@ -153,6 +161,7 @@ struct lumiera_conditionacquirer_struct
 };
 typedef struct lumiera_conditionacquirer_struct lumiera_conditionacquirer;
 typedef struct lumiera_conditionacquirer_struct* LumieraConditionacquirer;
+
 
 /* helper function for nobug */
 static inline void

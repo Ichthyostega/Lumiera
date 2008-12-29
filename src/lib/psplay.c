@@ -290,7 +290,7 @@ psplay_insert (PSplay self, PSplaynode node, int splayfactor)
         }
     }
   ++self->elem_cnt;
-  if (self->elem_cnt >= 1<<self->log2) ++self->log2;
+  if (self->elem_cnt >= 1UL<<self->log2) ++self->log2;
   if (splayfactor && trail.depth > 2)
     psplay_splay (self, &trail, splayfactor);
   return node;
@@ -384,7 +384,7 @@ psplay_remove (PSplay self, PSplaynode node)
       *r = i;
     }
   --self->elem_cnt;
-  if (self->elem_cnt < 1<<self->log2) --self->log2;
+  if (self->elem_cnt < 1UL<<self->log2) --self->log2;
   return node;
 }
 

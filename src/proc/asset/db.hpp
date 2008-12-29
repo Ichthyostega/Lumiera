@@ -27,18 +27,22 @@
 
 #include "pre_a.hpp"
 
+#include "lib/sync.hpp"
 #include "proc/asset.hpp"
-#include "include/error.hpp"
+#include "lib/error.hpp"
 
 #include <tr1/memory>
 #include <tr1/unordered_map>
 #include <boost/utility.hpp>
 
 
-namespace asset
-  {
+namespace asset {
+  
   using std::tr1::static_pointer_cast;
   using std::tr1::dynamic_pointer_cast;
+  
+  using lib::Sync;
+  using lib::RecursiveLock_NoWait;
   
     
   /* ===== hash implementations ===== */
@@ -83,7 +87,9 @@ namespace asset
    * instances known to the Asset Manager subsystem. 
    * As of 8/2007 implemented by a hashtable.
    */
-  class DB : private boost::noncopyable
+  class DB 
+    : private boost::noncopyable,
+      public Sync<RecursiveLock_NoWait>
     {
       IdHashtable table;
       

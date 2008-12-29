@@ -69,15 +69,13 @@ def treatPluginTestcase(env):
 moduledirs = globRootdirs('*')
 
 # but have to treat some subdirs individually.
-specials = ['plugin','library','backend','lumiera']
+specials = ['plugin','lib','components']
 
 
 
-artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in moduledirs if not dir in specials] 
+artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in ['lib','components'] ] 
                               + treatPluginTestcase(env)
-                              + testCollection(env, 'library')
-                              + testCollection(env, 'backend')
-                              + testCollection(env, 'lumiera')
+                              + [ testCollection(env, dir) for dir in moduledirs if not dir in specials]
                               ) 
                               
 
@@ -94,9 +92,14 @@ artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in moduledirs
 #    is explicitly propagated to test.sh
 #
 testEnv = env.Clone()
-if not env['VALGRIND']:
-    testEnv.Append(ENV = { 'VALGRINDFLAGS' : 'DISABLE'
-                         , 'LUMIERA_CONFIG_PATH' : './' })
+
+valgrind = os.environ.get('VALGRINDFLAGS', '') # unset if not defined
+if not valgrind and not env['VALGRIND']:
+    valgrind = 'DISABLE'
+
+testEnv.Append(ENV = { 'VALGRINDFLAGS' : valgrind
+                     , 'LUMIERA_CONFIG_PATH' : './' 
+                     })
     
 testsuites = env['TESTSUITES'] or os.environ.get('TESTSUITES')
 if testsuites:

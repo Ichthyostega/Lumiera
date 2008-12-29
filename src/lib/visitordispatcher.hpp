@@ -25,19 +25,21 @@
 #ifndef LUMIERA_VISITORDISPATCHER_H
 #define LUMIERA_VISITORDISPATCHER_H
 
-#include "include/error.hpp"
+#include "lib/error.hpp"
 #include "lib/util.hpp"
+#include "lib/sync-classlock.hpp"
 #include "lib/singleton.hpp"
-#include "lib/multithread.hpp"
+#include "lib/util.hpp"
 
 #include <vector>
 
 
-namespace lumiera
-  {
-  namespace visitor
-    {
-
+namespace lumiera {
+  namespace visitor {
+    
+    using lib::ClassLock;
+    
+    
     template<class TOOL> class Tag;
     
     
@@ -62,7 +64,7 @@ namespace lumiera
       static void
       generateID (size_t& id)
         {
-          Thread::Lock<Tag> guard   SIDEEFFECT;
+          ClassLock<Tag> guard();
           if (!id)
             id = ++lastRegisteredID;
         }
@@ -74,7 +76,7 @@ namespace lumiera
       
       template<class TOOLImpl>
       static Tag&
-      get (TOOLImpl* const concreteTool=0)
+      get (TOOLImpl* const =0)
         {
           Tag& t = TagTypeRegistry<TOOL,TOOLImpl>::tag;
           if (!t) generateID (t.tagID);
@@ -88,10 +90,10 @@ namespace lumiera
     /** storage for the Tag registry for each concrete tool */
     template<class TOOL, class TOOLImpl>
     Tag<TOOL> TagTypeRegistry<TOOL,TOOLImpl>::tag; 
-
+    
     template<class TOOL>
     size_t Tag<TOOL>::lastRegisteredID (0);
-
+    
     
     
     
@@ -129,7 +131,7 @@ namespace lumiera
           }
         
         typedef ReturnType (*Trampoline) (TAR&, TOOL& );
-
+        
         
         /** VTable for storing the Trampoline pointers */
         std::vector<Trampoline> table_;
@@ -138,7 +140,7 @@ namespace lumiera
         void
         accomodate (size_t index)
           {
-            Thread::Lock<Dispatcher> guard   SIDEEFFECT;
+            ClassLock<Dispatcher> guard();
             if (index > table_.size())
               table_.resize (index);      // performance bottleneck?? TODO: measure the real impact!
           }
@@ -173,7 +175,7 @@ namespace lumiera
           {
             return tool.onUnknown (target);
           }
-
+        
         
       public:
         static Singleton<Dispatcher<TAR,TOOL> > instance;
@@ -201,11 +203,11 @@ namespace lumiera
               
           }
       };
-
+    
     /** storage for the dispatcher table(s) */
     template<class TAR, class TOOL>
     Singleton<Dispatcher<TAR,TOOL> > Dispatcher<TAR,TOOL>::instance;
-
+    
     
     
     

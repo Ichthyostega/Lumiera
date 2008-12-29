@@ -299,7 +299,7 @@ lumiera_filedescriptor_delete (LumieraFiledescriptor self, const char* name)
         {
           TRACE (filedescriptor, "truncate %s to %lld", name, self->realsize);
           lumiera_filehandlecache_checkout (lumiera_fhcache, self->handle);
-          ftruncate (lumiera_filehandle_handle (self->handle), self->realsize);
+          (void) ftruncate (lumiera_filehandle_handle (self->handle), self->realsize);
           lumiera_filehandlecache_checkin (lumiera_fhcache, self->handle);
         }
 

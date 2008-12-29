@@ -23,7 +23,7 @@
 
 
 #include "include/nobugcfg.h"
-#include "include/error.hpp"
+#include "lib/error.hpp"
 #include "common/appstate.hpp"
 #include "common/option.hpp"
 

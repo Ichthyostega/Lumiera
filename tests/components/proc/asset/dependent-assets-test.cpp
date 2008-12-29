@@ -1,5 +1,5 @@
 /*
-  DependantAssets(Test)  -  check the asset dependency handling
+  DependentAssets(Test)  -  check the asset dependency handling
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -42,14 +42,14 @@ namespace asset
     
     
     /*******************************************************************
-     * @test the handling of Assets dependant on other Assets and the
+     * @test the handling of Assets dependent on other Assets and the
      *       enabling/disabling of Assets.
      * @see  asset::Asset
      * @see  asset::Clip
      */
-    class DependantAssets_test : public Test
+    class DependentAssets_test : public Test
       {
-        virtual void run (Arg arg) 
+        virtual void run (Arg) 
           {
              checkDependencyMechanics ();
              checkUnlinking ();
@@ -206,7 +206,7 @@ namespace asset
     
     
     /** Register this test class... */
-    LAUNCHER (DependantAssets_test, "unit function asset");
+    LAUNCHER (DependentAssets_test, "unit function asset");
     
     
     

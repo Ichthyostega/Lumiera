@@ -41,12 +41,9 @@ using std::string;
 using std::cout;
 
 
-namespace mobject
-  {
-  namespace session
-    {
-    namespace test
-      {
+namespace mobject {
+  namespace session {
+    namespace test  {
       
       using asset::VIDEO;
       
@@ -65,7 +62,7 @@ namespace mobject
           typedef shared_ptr<asset::Clip> PCA;
           
           virtual void
-          run (Arg arg) 
+          run (Arg) 
             {
               // create Clip-MObject, which is wrapped into a placement (smart ptr)
               PM media = asset::Media::create("test-1", VIDEO);
@@ -77,12 +74,12 @@ namespace mobject
               ASSERT (clip_media->ident.category.hasKind (VIDEO));
               
               // using the Placement interface
-              // TODO: how to handle unterdetermined Placement? Throw?
+              // TODO: how to handle insufficiently determinated Placement? Throw?
               FixedLocation & fixloc = pc.chain(Time(1)); // TODO: the track??
               ExplicitPlacement expla = pc.resolve();
               ASSERT (expla.time == 1);
               ASSERT (!expla.chain.isOverdetermined());
-              //ASSERT (*expla == *pc);  ////////////////////////TODO: definie equality on placements
+              //ASSERT (*expla == *pc);  ////////////////////////TODO: define equality on placements
               
               // now overconstraining with another Placement
               pc.chain(Time(2));

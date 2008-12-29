@@ -22,11 +22,14 @@ lumigui_srcdir = $(top_srcdir)/src/gui
 #
 bin_PROGRAMS += lumigui
 
-lumigui_CPPFLAGS = $(AM_CPPFLAGS)											\
-	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"				\
-	-DPACKAGE_SRC_DIR=\""$(srcdir)"\"										\
-	-DPACKAGE_DATA_DIR=\""$(datadir)"\"										\
+lumigui_CPPFLAGS = $(AM_CPPFLAGS)					\
+	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"	\
+	-DPACKAGE_SRC_DIR=\""$(srcdir)"\"				\
+	-DPACKAGE_DATA_DIR=\""$(datadir)"\"				\
 	$(LUMIERA_GUI_CFLAGS)
+
+lumigui_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+lumigui_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 lumigui_LDADD =					\
 	liblumieracommon.la			\
@@ -43,23 +46,28 @@ lumigui_SOURCES =				\
 	$(lumigui_srcdir)/gtk-lumiera.cpp	\
 	$(lumigui_srcdir)/gtk-lumiera.hpp
 
-lumigui_DEPENDENCIES =				\
-	$(top_builddir)/lumiera_ui.rc		\
-	$(top_builddir)/liblumieracommon.la	\
-	$(top_builddir)/liblumiera.la		\
-	$(top_builddir)/liblumierabackend.la	\
-	$(top_builddir)/liblumieraproc.la
 
 #
-# gtkgui.lum becomes the pluginized gu
+# themes, locales and other supplemental data
 #
+dist_pkgdata_DATA += lumiera_ui.rc
+CLEANFILES += lumiera_ui.rc
 
-pkglib_LTLIBRARIES += gtkgui.la
+lumiera_ui.rc:
+	cp $(lumigui_srcdir)/lumiera_ui.rc $(top_builddir)
 
-gtkgui_la_CPPFLAGS = $(AM_CPPFLAGS) -Wall -Werror -DLUMIERA_PLUGIN -I$(top_srcdir)/src/
-gtkgui_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/null -shrext .lum
 
-gtkgui_la_LIBADD =		\
+#
+# gtk_gui.lum becomes the pluginized gui
+#
+pkglib_LTLIBRARIES += gtk_gui.la
+
+gtk_gui_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+gtk_gui_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
+gtk_gui_la_CPPFLAGS = $(AM_CPPFLAGS) -DLUMIERA_PLUGIN -I$(top_srcdir)/src/
+gtk_gui_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/null -shrext .lum
+
+gtk_gui_la_LIBADD =		\
 	liblumieracommon.la	\
 	liblumierabackend.la	\
 	liblumieraproc.la	\
@@ -67,14 +75,17 @@ gtkgui_la_LIBADD =		\
 	$(LUMIERA_GUI_LIBS)	\
 	$(NOBUGMT_LUMIERA_LIBS)
 
-gtkgui_la_SOURCES =			\
+gtk_gui_la_SOURCES =			\
 	$(lumigui_srcdir)/guistart.cpp
 
 
 #
-# libgui is a convinience library used by lumigui and the gtkgui module
+# libgui is a convenience library used by lumigui and the gtk_gui module
 #
 noinst_LTLIBRARIES += libgui.la
+
+libgui_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+libgui_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 libgui_la_CPPFLAGS = $(AM_CPPFLAGS)					\
 	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"	\
@@ -82,79 +93,75 @@ libgui_la_CPPFLAGS = $(AM_CPPFLAGS)					\
 	-DPACKAGE_DATA_DIR=\""$(datadir)"\"				\
 	$(LUMIERA_GUI_CFLAGS)
 
-libgui_la_SOURCES =															\
-	$(lumigui_srcdir)/gtk-lumiera.cpp										\
-	$(lumigui_srcdir)/gtk-lumiera.hpp										\
-	$(lumigui_srcdir)/window-manager.cpp									\
-	$(lumigui_srcdir)/window-manager.hpp									\
-	$(lumigui_srcdir)/workspace/actions.cpp									\
-	$(lumigui_srcdir)/workspace/actions.hpp									\
-	$(lumigui_srcdir)/workspace/workspace-window.cpp						\
-	$(lumigui_srcdir)/workspace/workspace-window.hpp						\
-	$(lumigui_srcdir)/dialogs/dialog.hpp									\
-	$(lumigui_srcdir)/dialogs/render.cpp									\
-	$(lumigui_srcdir)/dialogs/render.hpp									\
-	$(lumigui_srcdir)/dialogs/preferences-dialog.cpp						\
-	$(lumigui_srcdir)/dialogs/preferences-dialog.hpp						\
-	$(lumigui_srcdir)/dialogs/name-chooser.cpp								\
-	$(lumigui_srcdir)/dialogs/name-chooser.hpp								\
-	$(lumigui_srcdir)/panels/panel.cpp										\
-	$(lumigui_srcdir)/panels/panel.hpp										\
-	$(lumigui_srcdir)/panels/timeline-panel.cpp								\
-	$(lumigui_srcdir)/panels/timeline-panel.hpp								\
-	$(lumigui_srcdir)/panels/viewer-panel.cpp								\
-	$(lumigui_srcdir)/panels/viewer-panel.hpp								\
-	$(lumigui_srcdir)/panels/assets-panel.cpp								\
-	$(lumigui_srcdir)/panels/assets-panel.hpp								\
-	$(lumigui_srcdir)/widgets/video-display-widget.cpp						\
-	$(lumigui_srcdir)/widgets/video-display-widget.hpp						\
-	$(lumigui_srcdir)/widgets/menu-button.cpp								\
-	$(lumigui_srcdir)/widgets/menu-button.hpp								\
-	$(lumigui_srcdir)/widgets/timeline-widget.cpp							\
-	$(lumigui_srcdir)/widgets/timeline-widget.hpp							\
-	$(lumigui_srcdir)/widgets/timeline/timeline-view-window.cpp				\
-	$(lumigui_srcdir)/widgets/timeline/timeline-view-window.hpp				\
-	$(lumigui_srcdir)/widgets/timeline/timeline-header-container.cpp		\
-	$(lumigui_srcdir)/widgets/timeline/timeline-header-container.hpp		\
-	$(lumigui_srcdir)/widgets/timeline/timeline-body.cpp					\
-	$(lumigui_srcdir)/widgets/timeline/timeline-body.hpp					\
-	$(lumigui_srcdir)/widgets/timeline/timeline-ruler.cpp					\
-	$(lumigui_srcdir)/widgets/timeline/timeline-ruler.hpp					\
-	$(lumigui_srcdir)/widgets/timeline/timeline-tool.cpp					\
-	$(lumigui_srcdir)/widgets/timeline/timeline-tool.hpp					\
-	$(lumigui_srcdir)/widgets/timeline/timeline-arrow-tool.cpp				\
-	$(lumigui_srcdir)/widgets/timeline/timeline-arrow-tool.hpp				\
-	$(lumigui_srcdir)/widgets/timeline/timeline-ibeam-tool.cpp				\
-	$(lumigui_srcdir)/widgets/timeline/timeline-ibeam-tool.hpp				\
-	$(lumigui_srcdir)/widgets/timeline/timeline-track.cpp					\
-	$(lumigui_srcdir)/widgets/timeline/timeline-track.hpp					\
-	$(lumigui_srcdir)/widgets/timeline/timeline-clip-track.cpp				\
-	$(lumigui_srcdir)/widgets/timeline/timeline-clip-track.hpp				\
-	$(lumigui_srcdir)/widgets/timeline/timeline-group-track.cpp				\
-	$(lumigui_srcdir)/widgets/timeline/timeline-group-track.hpp				\
-	$(lumigui_srcdir)/widgets/timeline/timeline-clip.cpp					\
-	$(lumigui_srcdir)/widgets/timeline/timeline-clip.hpp					\
-	$(lumigui_srcdir)/model/project.cpp										\
-	$(lumigui_srcdir)/model/project.hpp										\
-	$(lumigui_srcdir)/model/track.cpp										\
-	$(lumigui_srcdir)/model/track.hpp										\
-	$(lumigui_srcdir)/model/parent-track.cpp								\
-	$(lumigui_srcdir)/model/parent-track.hpp								\
-	$(lumigui_srcdir)/model/group-track.cpp									\
-	$(lumigui_srcdir)/model/group-track.hpp									\
-	$(lumigui_srcdir)/model/sequence.cpp									\
-	$(lumigui_srcdir)/model/sequence.hpp									\
-	$(lumigui_srcdir)/model/clip-track.cpp									\
-	$(lumigui_srcdir)/model/clip-track.hpp									\
-	$(lumigui_srcdir)/model/clip.cpp										\
-	$(lumigui_srcdir)/model/clip.hpp										\
-	$(lumigui_srcdir)/output/displayer.cpp									\
-	$(lumigui_srcdir)/output/displayer.hpp									\
-	$(lumigui_srcdir)/output/gdkdisplayer.cpp								\
-	$(lumigui_srcdir)/output/gdkdisplayer.hpp								\
-	$(lumigui_srcdir)/output/xvdisplayer.cpp								\
+libgui_la_SOURCES =							\
+	$(lumigui_srcdir)/guinotificationfacade.cpp			\
+	$(lumigui_srcdir)/window-manager.cpp				\
+	$(lumigui_srcdir)/window-manager.hpp				\
+	$(lumigui_srcdir)/workspace/actions.cpp				\
+	$(lumigui_srcdir)/workspace/actions.hpp				\
+	$(lumigui_srcdir)/workspace/workspace-window.cpp			\
+	$(lumigui_srcdir)/workspace/workspace-window.hpp			\
+	$(lumigui_srcdir)/dialogs/dialog.hpp				\
+	$(lumigui_srcdir)/dialogs/render.cpp				\
+	$(lumigui_srcdir)/dialogs/render.hpp				\
+	$(lumigui_srcdir)/dialogs/preferences-dialog.cpp			\
+	$(lumigui_srcdir)/dialogs/preferences-dialog.hpp			\
+	$(lumigui_srcdir)/dialogs/sequence-name.cpp			\
+	$(lumigui_srcdir)/dialogs/sequence-name.hpp			\
+	$(lumigui_srcdir)/panels/panel.cpp				\
+	$(lumigui_srcdir)/panels/panel.hpp				\
+	$(lumigui_srcdir)/panels/timeline-panel.cpp			\
+	$(lumigui_srcdir)/panels/timeline-panel.hpp			\
+	$(lumigui_srcdir)/panels/viewer-panel.cpp			\
+	$(lumigui_srcdir)/panels/viewer-panel.hpp			\
+	$(lumigui_srcdir)/panels/assets-panel.cpp			\
+	$(lumigui_srcdir)/panels/assets-panel.hpp			\
+	$(lumigui_srcdir)/widgets/video-display-widget.cpp		\
+	$(lumigui_srcdir)/widgets/video-display-widget.hpp		\
+	$(lumigui_srcdir)/widgets/timeline-widget.cpp			\
+	$(lumigui_srcdir)/widgets/timeline-widget.hpp			\
+	$(lumigui_srcdir)/widgets/timeline/timeline-view-window.cpp	\
+	$(lumigui_srcdir)/widgets/timeline/timeline-view-window.hpp	\
+	$(lumigui_srcdir)/widgets/timeline/timeline-header-container.cpp	\
+	$(lumigui_srcdir)/widgets/timeline/timeline-header-container.hpp	\
+	$(lumigui_srcdir)/widgets/timeline/timeline-body.cpp		\
+	$(lumigui_srcdir)/widgets/timeline/timeline-body.hpp		\
+	$(lumigui_srcdir)/widgets/timeline/timeline-ruler.cpp		\
+	$(lumigui_srcdir)/widgets/timeline/timeline-ruler.hpp		\
+	$(lumigui_srcdir)/widgets/timeline/timeline-tool.cpp		\
+	$(lumigui_srcdir)/widgets/timeline/timeline-tool.hpp		\
+	$(lumigui_srcdir)/widgets/timeline/timeline-arrow-tool.cpp	\
+	$(lumigui_srcdir)/widgets/timeline/timeline-arrow-tool.hpp	\
+	$(lumigui_srcdir)/widgets/timeline/timeline-ibeam-tool.cpp	\
+	$(lumigui_srcdir)/widgets/timeline/timeline-ibeam-tool.hpp	\
+	$(lumigui_srcdir)/widgets/timeline/timeline-track.cpp		\
+	$(lumigui_srcdir)/widgets/timeline/timeline-track.hpp		\
+	$(lumigui_srcdir)/widgets/timeline/timeline-clip-track.cpp	\
+	$(lumigui_srcdir)/widgets/timeline/timeline-clip-track.hpp	\
+	$(lumigui_srcdir)/widgets/timeline/timeline-group-track.cpp	\
+	$(lumigui_srcdir)/widgets/timeline/timeline-group-track.hpp	\
+	$(lumigui_srcdir)/widgets/timeline/timeline-clip.cpp		\
+	$(lumigui_srcdir)/widgets/timeline/timeline-clip.hpp		\
+	$(lumigui_srcdir)/model/project.cpp				\
+	$(lumigui_srcdir)/model/project.hpp				\
+	$(lumigui_srcdir)/model/track.cpp				\
+	$(lumigui_srcdir)/model/track.hpp				\
+	$(lumigui_srcdir)/model/clip-track.cpp				\
+	$(lumigui_srcdir)/model/clip-track.hpp				\
+	$(lumigui_srcdir)/model/parent-track.cpp				\
+	$(lumigui_srcdir)/model/parent-track.hpp				\
+	$(lumigui_srcdir)/model/group-track.cpp				\
+	$(lumigui_srcdir)/model/group-track.hpp				\
+	$(lumigui_srcdir)/model/sequence.cpp				\
+	$(lumigui_srcdir)/model/sequence.hpp				\
+	$(lumigui_srcdir)/model/clip.cpp					\
+	$(lumigui_srcdir)/model/clip.hpp					\
+	$(lumigui_srcdir)/output/displayer.cpp				\
+	$(lumigui_srcdir)/output/displayer.hpp				\
+	$(lumigui_srcdir)/output/gdkdisplayer.cpp			\
+	$(lumigui_srcdir)/output/gdkdisplayer.hpp			\
+	$(lumigui_srcdir)/output/xvdisplayer.cpp				\
 	$(lumigui_srcdir)/output/xvdisplayer.hpp
-
 
 libgui_la_LIBADD =		\
 	liblumieracommon.la	\
@@ -165,9 +172,4 @@ libgui_la_LIBADD =		\
 	$(NOBUGMT_LUMIERA_LIBS)
 
 
-#
-# themes, locales and other supplemental data
-#
-$(top_builddir)/lumiera_ui.rc:
-	cp $(lumigui_srcdir)/lumiera_ui.rc $(top_builddir)
 

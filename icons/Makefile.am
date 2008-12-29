@@ -32,17 +32,19 @@ iconcommand = python $(top_srcdir)/admin/render-icon.py
 32x32pre = $(prerendereddir)/32x32
 48x48pre = $(prerendereddir)/48x48
 
-lumigui_DEPENDENCIES += \
-	$(16x16)/tool-arrow.png $(22x22)/tool-arrow.png $(24x24)/tool-arrow.png $(32x32)/tool-arrow.png $(48x48)/tool-arrow.png \
-	$(16x16)/tool-i-beam.png $(22x22)/tool-i-beam.png $(24x24)/tool-i-beam.png $(32x32)/tool-i-beam.png $(48x48)/tool-i-beam.png \
-	$(16x16)/track-disabled.png \
-	$(16x16)/track-enabled.png \
-	$(16x16)/track-locked.png \
-	$(16x16)/track-unlocked.png \
-	$(16x16)/panel-assets.png $(22x22)/panel-assets.png $(32x32)/panel-assets.png \
-	$(16x16)/panel-timeline.png \
+dist_pkgdata_DATA +=															\
+	$(16x16)/tool-arrow.png $(22x22)/tool-arrow.png $(24x24)/tool-arrow.png $(32x32)/tool-arrow.png $(48x48)/tool-arrow.png		\
+	$(16x16)/tool-i-beam.png $(22x22)/tool-i-beam.png $(24x24)/tool-i-beam.png $(32x32)/tool-i-beam.png $(48x48)/tool-i-beam.png	\
+	$(16x16)/track-disabled.png													\
+	$(16x16)/track-enabled.png													\
+	$(16x16)/track-locked.png													\
+	$(16x16)/track-unlocked.png													\
+	$(16x16)/panel-assets.png $(22x22)/panel-assets.png $(32x32)/panel-assets.png							\
+	$(16x16)/panel-timeline.png													\
 	$(16x16)/panel-viewer.png $(22x22)/panel-viewer.png $(32x32)/panel-viewer.png
 
+clean-local:
+	rm -rf $(16x16) $(22x22) $(24x24) $(32x32) $(48x48)
 
 # ========== SVG Icons ==========
 
@@ -73,7 +75,7 @@ $(22x22)/panel-assets.png:
 	cp $(22x22pre)/panel-assets.png $(22x22)
 $(32x32)/panel-assets.png:
 	cp $(32x32pre)/panel-assets.png $(32x32)
-	
+
 $(16x16)/panel-timeline.png:
 	cp $(16x16pre)/panel-timeline.png $(16x16)
 

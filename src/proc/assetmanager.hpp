@@ -39,7 +39,7 @@
 #include "pre_a.hpp"
 
 #include "proc/asset.hpp"
-#include "include/error.hpp"
+#include "lib/error.hpp"
 #include "lib/singleton.hpp"
 
 
@@ -53,8 +53,7 @@ using std::list;
 
 
 
-namespace asset
-  {
+namespace asset {
   
   class DB;
   
@@ -62,7 +61,8 @@ namespace asset
   /**
    * Facade for the Asset subsystem
    */
-  class AssetManager : private boost::noncopyable
+  class AssetManager 
+    : private boost::noncopyable
     {
       asset::DB & registry;
     

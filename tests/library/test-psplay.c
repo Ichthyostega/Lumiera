@@ -1,5 +1,5 @@
 /*
-  test-psplay.c  -  test the probanilistic splay tree
+  test-psplay.c  -  test the probabilistic splay tree
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>

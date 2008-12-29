@@ -19,7 +19,7 @@
 testlib_srcdir = $(top_srcdir)/tests/lib
 
 check_PROGRAMS += test-lib
-test_lib_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(testlib_srcdir)
+test_lib_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(testlib_srcdir)                                   	$(LUMIERA_GUI_CFLAGS)
 
 test_lib_LDADD =			\
 	liblumiprocmobjectbuilder.la	\
@@ -32,6 +32,7 @@ test_lib_LDADD =			\
 	liblumierabackend.la		\
 	liblumieracommon.la		\
 	liblumiera.la			\
+	$(LUMIERA_GUI_LIBS)			\
 	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt
 
 test_lib_SOURCES =						\
@@ -58,6 +59,9 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/singletontestmocktest.cpp		\
 	$(testlib_srcdir)/streamtypebasicstest.cpp		\
 	$(testlib_srcdir)/streamtypelifecycletest.cpp		\
+	$(testlib_srcdir)/sync-classlock-test.cpp		\
+	$(testlib_srcdir)/sync-locking-test.cpp			\
+	$(testlib_srcdir)/sync-waiting-test.cpp			\
 	$(testlib_srcdir)/test/cmdlinewrappertest.cpp		\
 	$(testlib_srcdir)/test/testoptiontest.cpp		\
 	$(testlib_srcdir)/vectortransfertest.cpp		\

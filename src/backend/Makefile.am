@@ -19,8 +19,7 @@ liblumierabackend_la_srcdir = $(top_srcdir)/src/backend
 lib_LTLIBRARIES += liblumierabackend.la
 
 liblumierabackend_la_CPPFLAGS = $(AM_CPPFLAGS)
-liblumierabackend_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall
-#liblumierabackend_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
+liblumierabackend_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror 
 liblumierabackend_la_LIBADD = liblumiera.la
 
 liblumierabackend_la_SOURCES =					\
@@ -29,7 +28,6 @@ liblumierabackend_la_SOURCES =					\
 	$(liblumierabackend_la_srcdir)/file.c			\
 	$(liblumierabackend_la_srcdir)/filehandle.c		\
 	$(liblumierabackend_la_srcdir)/filedescriptor.c		\
-	$(liblumierabackend_la_srcdir)/resourcecollector.c	\
 	$(liblumierabackend_la_srcdir)/mmap.c			\
 	$(liblumierabackend_la_srcdir)/mmapings.c		\
 	$(liblumierabackend_la_srcdir)/mmapcache.c		\
@@ -45,19 +43,6 @@ noinst_HEADERS +=						\
 	$(liblumierabackend_la_srcdir)/filehandle.h		\
 	$(liblumierabackend_la_srcdir)/filedescriptor.h		\
 	$(liblumierabackend_la_srcdir)/filehandlecache.h	\
-	$(liblumierabackend_la_srcdir)/resourcecollector.h	\
-	$(liblumierabackend_la_srcdir)/mmap.h			\
-	$(liblumierabackend_la_srcdir)/mmapings.h		\
-	$(liblumierabackend_la_srcdir)/mmapcache.h
-
-
-noinst_HEADERS +=						\
-	$(liblumierabackend_la_srcdir)/backend.h		\
-	$(liblumierabackend_la_srcdir)/file.h			\
-	$(liblumierabackend_la_srcdir)/filehandle.h		\
-	$(liblumierabackend_la_srcdir)/filedescriptor.h		\
-	$(liblumierabackend_la_srcdir)/filehandlecache.h	\
-	$(liblumierabackend_la_srcdir)/resourcecollector.h	\
 	$(liblumierabackend_la_srcdir)/mmap.h			\
 	$(liblumierabackend_la_srcdir)/mmapings.h		\
 	$(liblumierabackend_la_srcdir)/mmapcache.h
@@ -66,7 +51,6 @@ noinst_HEADERS +=						\
 	$(liblumierabackend_la_srcdir)/filehandle.h		\
 	$(liblumierabackend_la_srcdir)/filedescriptor.h		\
 	$(liblumierabackend_la_srcdir)/filehandlecache.h	\
-	$(liblumierabackend_la_srcdir)/resourcecollector.h	\
 	$(liblumierabackend_la_srcdir)/mmap.h			\
 	$(liblumierabackend_la_srcdir)/mmapings.h		\
 	$(liblumierabackend_la_srcdir)/mmapcache.h

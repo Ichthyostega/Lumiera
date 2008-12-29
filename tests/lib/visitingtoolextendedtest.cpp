@@ -144,7 +144,7 @@ namespace lumiera
        */
       class VisitingToolExtended_test : public Test
         {
-          virtual void run(Arg arg) 
+          virtual void run(Arg) 
             {
               known_visitor_known_class();
               visitor_not_visiting_some_class();

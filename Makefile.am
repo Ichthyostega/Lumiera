@@ -27,9 +27,11 @@ check_LTLIBRARIES =
 pkglib_LTLIBRARIES =
 noinst_LTLIBRARIES =
 noinst_HEADERS =
+dist_pkgdata_DATA =
 BUILT_SOURCES =
 EXTRA_DIST =
 SUBDIRS =
+CLEANFILES =
 
 # global pre-processor flags. Per-target variables should include
 # these at the front (if possible) for consistency

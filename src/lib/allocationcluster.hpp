@@ -51,17 +51,17 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
-#include "lib/multithread.hpp"
-#include "include/error.hpp"
+#include "lib/error.hpp"
+#include "lib/sync-classlock.hpp"
 #include "lib/scopedholder.hpp"
 #include "lib/scopedholdertransfer.hpp"
 
 
 
 namespace lib {
+  
   using boost::scoped_ptr;
-  using lumiera::Thread;
-
+  
   /**
    * A pile of objects sharing common allocation and lifecycle.
    * AllocationCluster owns a number of object families of various types.
@@ -223,7 +223,7 @@ namespace lib {
       static TypeInfo
       setup()
         {
-          Thread::Lock<AllocationCluster> guard   SIDEEFFECT;
+          ClassLock<AllocationCluster> guard();
           if (!id_)
             id_= ++maxTypeIDs;
           

@@ -56,7 +56,7 @@ namespace mobject
       class AddClip_test : public Test
         {
           virtual void
-          run (Arg arg) 
+          run (Arg) 
             {
               PSess sess = Session::current;
               PMO clip = TestClip::create();

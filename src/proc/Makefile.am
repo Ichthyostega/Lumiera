@@ -21,7 +21,8 @@
 liblumiproc_la_srcdir = $(top_srcdir)/src/proc
 noinst_LTLIBRARIES += liblumiproc.la
 
-liblumiproc_la_CXXFLAGS = $(CXXFLAGS) -Wall
+liblumiproc_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+liblumiproc_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 liblumiproc_la_SOURCES =							\
 	$(liblumiproc_la_srcdir)/controllerfacade.cpp			\
@@ -35,13 +36,14 @@ liblumiproc_la_SOURCES =							\
 liblumiprocasset_la_srcdir = $(top_srcdir)/src/proc/asset
 noinst_LTLIBRARIES += liblumiprocasset.la
 
-liblumiprocasset_la_CXXFLAGS = $(CXXFLAGS) -Wall
+liblumiprocasset_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+liblumiprocasset_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 liblumiprocasset_la_SOURCES =				\
 	$(liblumiprocasset_la_srcdir)/codec.cpp		\
 	$(liblumiprocasset_la_srcdir)/compoundmedia.cpp	\
 	$(liblumiprocasset_la_srcdir)/dataset.cpp	\
-	$(liblumiprocasset_la_srcdir)/effect.cpp		\
+	$(liblumiprocasset_la_srcdir)/effect.cpp	\
 	$(liblumiprocasset_la_srcdir)/preview.cpp	\
 	$(liblumiprocasset_la_srcdir)/unknown.cpp	\
 	$(liblumiprocasset_la_srcdir)/clip.cpp		\
@@ -51,7 +53,7 @@ liblumiprocasset_la_SOURCES =				\
 	$(liblumiprocasset_la_srcdir)/pipe.cpp		\
 	$(liblumiprocasset_la_srcdir)/proc.cpp		\
 	$(liblumiprocasset_la_srcdir)/procpatt.cpp	\
-	$(liblumiprocasset_la_srcdir)/struct.cpp		\
+	$(liblumiprocasset_la_srcdir)/struct.cpp	\
 	$(liblumiprocasset_la_srcdir)/track.cpp
 
 
@@ -59,33 +61,35 @@ liblumiprocasset_la_SOURCES =				\
 liblumiprocengine_la_srcdir = $(top_srcdir)/src/proc/engine
 noinst_LTLIBRARIES += liblumiprocengine.la
 
-liblumiprocengine_la_CXXFLAGS = $(CXXFLAGS) -Wall
+liblumiprocengine_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+liblumiprocengine_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
-liblumiprocengine_la_SOURCES =				\
-	$(liblumiprocengine_la_srcdir)/buffhandle.cpp	\
-	$(liblumiprocengine_la_srcdir)/link.cpp		\
-	$(liblumiprocengine_la_srcdir)/mask.cpp		\
-	$(liblumiprocengine_la_srcdir)/nodefactory.cpp	\
-	$(liblumiprocengine_la_srcdir)/nodewiring.cpp	\
-	$(liblumiprocengine_la_srcdir)/pluginadapter.cpp	\
-	$(liblumiprocengine_la_srcdir)/processor.cpp	\
-	$(liblumiprocengine_la_srcdir)/procnode.cpp	\
-	$(liblumiprocengine_la_srcdir)/projector.cpp	\
-	$(liblumiprocengine_la_srcdir)/renderengine.cpp	\
-	$(liblumiprocengine_la_srcdir)/source.cpp		\
-	$(liblumiprocengine_la_srcdir)/stateproxy.cpp	\
-	$(liblumiprocengine_la_srcdir)/trafo.cpp		
+liblumiprocengine_la_SOURCES =						\
+	$(liblumiprocengine_la_srcdir)/buffhandle.cpp			\
+	$(liblumiprocengine_la_srcdir)/link.cpp				\
+	$(liblumiprocengine_la_srcdir)/mask.cpp				\
+	$(liblumiprocengine_la_srcdir)/nodefactory.cpp			\
+	$(liblumiprocengine_la_srcdir)/nodewiring.cpp			\
+	$(liblumiprocengine_la_srcdir)/pluginadapter.cpp		\
+	$(liblumiprocengine_la_srcdir)/processor.cpp			\
+	$(liblumiprocengine_la_srcdir)/procnode.cpp			\
+	$(liblumiprocengine_la_srcdir)/projector.cpp			\
+	$(liblumiprocengine_la_srcdir)/renderengine.cpp			\
+	$(liblumiprocengine_la_srcdir)/source.cpp			\
+	$(liblumiprocengine_la_srcdir)/stateproxy.cpp			\
+	$(liblumiprocengine_la_srcdir)/trafo.cpp
 
 
 
 liblumiprocmobject_la_srcdir = $(top_srcdir)/src/proc/mobject
 noinst_LTLIBRARIES += liblumiprocmobject.la
 
-liblumiprocmobject_la_CXXFLAGS = $(CXXFLAGS) -Wall
+liblumiprocmobject_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+liblumiprocmobject_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 liblumiprocmobject_la_SOURCES =					\
 	$(liblumiprocmobject_la_srcdir)/builderfacade.cpp	\
-	$(liblumiprocmobject_la_srcdir)/interpolator.cpp		\
+	$(liblumiprocmobject_la_srcdir)/interpolator.cpp	\
 	$(liblumiprocmobject_la_srcdir)/mobject.cpp		\
 	$(liblumiprocmobject_la_srcdir)/parameter.cpp		\
 	$(liblumiprocmobject_la_srcdir)/paramprovider.cpp	\
@@ -96,7 +100,8 @@ liblumiprocmobject_la_SOURCES =					\
 liblumiprocmobjectbuilder_la_srcdir = $(top_srcdir)/src/proc/mobject/builder
 noinst_LTLIBRARIES += liblumiprocmobjectbuilder.la
 
-liblumiprocmobjectbuilder_la_CXXFLAGS = $(CXXFLAGS) -Wall
+liblumiprocmobjectbuilder_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+liblumiprocmobjectbuilder_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 liblumiprocmobjectbuilder_la_SOURCES =					\
 	$(liblumiprocmobjectbuilder_la_srcdir)/assembler.cpp		\
@@ -109,17 +114,19 @@ liblumiprocmobjectbuilder_la_SOURCES =					\
 liblumiproccontrol_la_srcdir = $(top_srcdir)/src/proc/control
 noinst_LTLIBRARIES += liblumiproccontrol.la
 
-liblumiproccontrol_la_CXXFLAGS = $(CXXFLAGS) -Wall
+liblumiproccontrol_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+liblumiproccontrol_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
-liblumiproccontrol_la_SOURCES =				\
-	$(liblumiproccontrol_la_srcdir)/pathmanager.cpp			\
+liblumiproccontrol_la_SOURCES =					\
+	$(liblumiproccontrol_la_srcdir)/pathmanager.cpp		\
 	$(liblumiproccontrol_la_srcdir)/stypemanager.cpp
 
 
 liblumiprocmobjectsession_la_srcdir = $(top_srcdir)/src/proc/mobject/session
 noinst_LTLIBRARIES += liblumiprocmobjectsession.la
 
-liblumiprocmobjectsession_la_CXXFLAGS = $(CXXFLAGS) -Wall
+liblumiprocmobjectsession_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+liblumiprocmobjectsession_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 liblumiprocmobjectsession_la_SOURCES =					\
 	$(liblumiprocmobjectsession_la_srcdir)/abstractmo.cpp		\
@@ -130,8 +137,8 @@ liblumiprocmobjectsession_la_SOURCES =					\
 	$(liblumiprocmobjectsession_la_srcdir)/constraint.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/defsmanager.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/effect.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/fixedlocation.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/label.cpp			\
+	$(liblumiprocmobjectsession_la_srcdir)/fixedlocation.cpp	\
+	$(liblumiprocmobjectsession_la_srcdir)/label.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/meta.cpp			\
 	$(liblumiprocmobjectsession_la_srcdir)/relativelocation.cpp	\
 	$(liblumiprocmobjectsession_la_srcdir)/segment.cpp		\
@@ -141,7 +148,7 @@ liblumiprocmobjectsession_la_SOURCES =					\
 	$(liblumiprocmobjectsession_la_srcdir)/sessmanagerimpl.cpp	\
 	$(liblumiprocmobjectsession_la_srcdir)/edl.cpp			\
 	$(liblumiprocmobjectsession_la_srcdir)/session.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/track.cpp			\
+	$(liblumiprocmobjectsession_la_srcdir)/track.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/fixture.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/locatingpin.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/mobjectfactory.cpp	\
@@ -153,39 +160,39 @@ liblumiprocmobjectsession_la_SOURCES =					\
 noinst_HEADERS +=							\
 	$(liblumiproc_la_srcdir)/asset/category.hpp			\
 	$(liblumiproc_la_srcdir)/asset/clip.hpp				\
-	$(liblumiproc_la_srcdir)/asset/codec.hpp				\
-	$(liblumiproc_la_srcdir)/asset/compoundmedia.hpp			\
+	$(liblumiproc_la_srcdir)/asset/codec.hpp			\
+	$(liblumiproc_la_srcdir)/asset/compoundmedia.hpp		\
 	$(liblumiproc_la_srcdir)/asset/dataset.hpp			\
 	$(liblumiproc_la_srcdir)/asset/effect.hpp			\
 	$(liblumiproc_la_srcdir)/asset/preview.hpp			\
 	$(liblumiproc_la_srcdir)/asset/db.hpp				\
-	$(liblumiproc_la_srcdir)/asset/buildinstruct.hpp			\
-	$(liblumiproc_la_srcdir)/asset/media.hpp				\
+	$(liblumiproc_la_srcdir)/asset/buildinstruct.hpp		\
+	$(liblumiproc_la_srcdir)/asset/media.hpp			\
 	$(liblumiproc_la_srcdir)/asset/meta.hpp				\
 	$(liblumiproc_la_srcdir)/asset/pipe.hpp				\
 	$(liblumiproc_la_srcdir)/asset/proc.hpp				\
 	$(liblumiproc_la_srcdir)/asset/procpatt.hpp			\
 	$(liblumiproc_la_srcdir)/asset/struct.hpp			\
 	$(liblumiproc_la_srcdir)/asset/structfactoryimpl.hpp		\
-	$(liblumiproc_la_srcdir)/asset/track.hpp				\
+	$(liblumiproc_la_srcdir)/asset/track.hpp			\
 	$(liblumiproc_la_srcdir)/asset/unknown.hpp			\
 	$(liblumiproc_la_srcdir)/controllerfacade.hpp			\
-	$(liblumiproc_la_srcdir)/engine/mask.hpp				\
+	$(liblumiproc_la_srcdir)/engine/mask.hpp			\
 	$(liblumiproc_la_srcdir)/engine/pluginadapter.hpp		\
 	$(liblumiproc_la_srcdir)/engine/procnode.hpp			\
 	$(liblumiproc_la_srcdir)/engine/projector.hpp			\
-	$(liblumiproc_la_srcdir)/engine/renderengine.hpp			\
+	$(liblumiproc_la_srcdir)/engine/renderengine.hpp		\
 	$(liblumiproc_la_srcdir)/engine/source.hpp			\
 	$(liblumiproc_la_srcdir)/engine/trafo.hpp			\
 	$(liblumiproc_la_srcdir)/engine/processor.hpp			\
 	$(liblumiproc_la_srcdir)/mobject/builder/assembler.hpp		\
-	$(liblumiproc_la_srcdir)/mobject/builder/buildertool.hpp		\
+	$(liblumiproc_la_srcdir)/mobject/builder/buildertool.hpp	\
 	$(liblumiproc_la_srcdir)/mobject/builder/conmanager.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/builder/segmentationtool.hpp	\
-	$(liblumiproc_la_srcdir)/mobject/builder/toolfactory.hpp		\
+	$(liblumiproc_la_srcdir)/mobject/builder/toolfactory.hpp	\
 	$(liblumiproc_la_srcdir)/mobject/builderfacade.hpp		\
-	$(liblumiproc_la_srcdir)/control/pathmanager.hpp	\
-	$(liblumiproc_la_srcdir)/control/renderstate.hpp	\
+	$(liblumiproc_la_srcdir)/control/pathmanager.hpp		\
+	$(liblumiproc_la_srcdir)/control/renderstate.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/interpolator.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/parameter.hpp			\
 	$(liblumiproc_la_srcdir)/mobject/paramprovider.hpp		\
@@ -205,12 +212,12 @@ noinst_HEADERS +=							\
 	$(liblumiproc_la_srcdir)/mobject/session/wish.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/session/clip.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/session/constraint.hpp		\
-	$(liblumiproc_la_srcdir)/mobject/session/defsmanager.hpp		\
-	$(liblumiproc_la_srcdir)/mobject/session/edl.hpp			\
+	$(liblumiproc_la_srcdir)/mobject/session/defsmanager.hpp	\
+	$(liblumiproc_la_srcdir)/mobject/session/edl.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/session/fixture.hpp		\
-	$(liblumiproc_la_srcdir)/mobject/session/locatingpin.hpp		\
+	$(liblumiproc_la_srcdir)/mobject/session/locatingpin.hpp	\
 	$(liblumiproc_la_srcdir)/mobject/session/plug.hpp		\
-	$(liblumiproc_la_srcdir)/mobject/session/sessionimpl.hpp		\
+	$(liblumiproc_la_srcdir)/mobject/session/sessionimpl.hpp	\
 	$(liblumiproc_la_srcdir)/mobject/session/defsregistry.hpp	\
 	$(liblumiproc_la_srcdir)/mobject/explicitplacement.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/mobject.hpp			\
@@ -224,7 +231,8 @@ noinst_HEADERS +=							\
 liblumieraproc_la_srcdir = $(top_srcdir)/src/proc
 lib_LTLIBRARIES += liblumieraproc.la
 
-liblumieraproc_la_CXXFLAGS = $(CXXFLAGS) -Wall
+liblumieraproc_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+liblumieraproc_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 liblumieraproc_la_SOURCES =
 

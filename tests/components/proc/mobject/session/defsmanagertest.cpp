@@ -76,7 +76,8 @@ namespace asset
      */
     class DefsManager_test : public Test
       {
-        virtual void run(Arg arg) 
+        virtual void
+        run (Arg arg)
           {
             string pipeID   = isnil(arg)?  "Black Hole" : arg[1];
             string streamID = 2>arg.size()? "teststream" : arg[2] ;
@@ -93,7 +94,8 @@ namespace asset
         
         
         
-        void retrieveSimpleDefault (string pID)
+        void
+        retrieveSimpleDefault (string)
           { 
             PPipe pipe1 = Pipe::query (""); // "the default pipe"
             PPipe pipe2;
@@ -112,8 +114,9 @@ namespace asset
           }
         
         
-        void retrieveConstrainedDefault (string pID, string sID)
-          { 
+        void
+        retrieveConstrainedDefault (string pID, string sID)
+          {
             PPipe pipe1 = Pipe::query (""); // "the default pipe"
             ASSERT (sID != pipe1->getProcPatt()->queryStreamID(),
                     "stream-ID \"%s\" not suitable for test, because "
@@ -133,7 +136,7 @@ namespace asset
         string failureCreatesNewDefault ()
           { 
             PPipe pipe1 = Session::current->defaults(Query<Pipe> ()); // "the default pipe"
-
+            
             string new_pID (str (format ("dummy_%s_%i") 
                                  % pipe1->getPipeID()
                                  % std::rand()
@@ -168,7 +171,7 @@ namespace asset
                 
                 QueryHandler<Pipe>& typeHandler = ConfigRules::instance();  
                 PPipe pipe2 = asset::Struct::create (pID, "quatsch");
-
+                
                 typeHandler.resolve (pipe2, query_for_pID); // in the mock impl this has the side effect
                 ASSERT (pipe2);                            //  of replacing the mock entry
                 ////////////////////////////////////////////   so from now on the test works as intended....                

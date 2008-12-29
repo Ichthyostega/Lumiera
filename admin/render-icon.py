@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+#
 # render-icons.py  -  Icon rendering utility script
 #
 #  Copyright (C)         Lumiera.org
@@ -32,8 +32,14 @@ rsvgPath = "./rsvg-convert"
 artworkLayerPrefix = "artwork:"
 
 def createDirectory( name ):
-  if os.path.exists(name) == False:
-    os.mkdir(name)
+  try:
+    if os.path.isfile(name):
+      os.remove(name)
+    if not os.path.exists(name):
+      os.mkdir(name)
+  except:
+    print 'WARNING: createDirectory("%s") failed. Permission problems?' % name
+
 
 def copyMergeDirectory( src, dst ):
   listing = os.listdir(src)

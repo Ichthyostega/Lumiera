@@ -26,7 +26,7 @@
 #include "common/interfacedescriptor.h"
 #include "common/config_interface.h"
 
-#include "tests/lumiera/hello_interface.h"
+#include "tests/common/hello_interface.h"
 
 
 LUMIERA_PLUGIN_INTERFACEHANDLE;

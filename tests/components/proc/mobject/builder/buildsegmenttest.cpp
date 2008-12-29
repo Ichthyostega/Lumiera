@@ -49,7 +49,7 @@ namespace mobject
        */
       class BuildSegment_test : public Test
         {
-          virtual void run(Arg arg) 
+          virtual void run(Arg) 
             {
               UNIMPLEMENTED ("oh my");
             } 

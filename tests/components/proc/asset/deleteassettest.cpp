@@ -42,7 +42,7 @@ namespace asset
     
     
     /*******************************************************************
-     * @test deleting an Asset includes removing all dependant Assets
+     * @test deleting an Asset includes removing all dependent Assets
      *       and all MObjects relying on these. Especially this means
      *       breaking all links between the involved Objects, so the
      *       shared-ptrs can do the actual cleanup.
@@ -51,7 +51,7 @@ namespace asset
      */
     class DeleteAsset_test : public Test
       {
-        virtual void run(Arg arg) 
+        virtual void run(Arg) 
           {
             UNIMPLEMENTED ("delete asset and update all dependencies");
           } 

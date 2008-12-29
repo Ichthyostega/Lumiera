@@ -32,12 +32,10 @@ using std::string;
 using std::cout;
 
 
-namespace lumiera
-  {
-  namespace visitor
-    {
-    namespace test1
-      {
+namespace lumiera {
+  namespace visitor {
+    namespace test1 {
+      
       typedef visitor::Tool<> VisitingTool;
       
       class HomoSapiens : public Visitable<>
@@ -100,7 +98,7 @@ namespace lumiera
       /*************************************************************************
        * @test our lib implementation of the visitor pattern.
        *       Defines a hierarchy of test classes to check the following cases
-       *       <ul><li>calling the correct visiting tool specialized function
+       *       <ul><li>calling the correct visiting tool specialised function
        *               for given concrete hierarchy classes</li>
        *           <li>visiting tool not declaring to visit some class 
        *               is silently ignored by default</li>
@@ -110,13 +108,15 @@ namespace lumiera
        */
       class VisitingTool_test : public Test
         {
-          virtual void run(Arg arg) 
+          virtual void
+          run (Arg) 
             {
               known_visitor_known_class();
               visiting_extended_hierarchy();
             } 
           
-          void known_visitor_known_class()
+          void
+          known_visitor_known_class()
             {
               Boss x1;
               BigBoss x2;
@@ -132,7 +132,8 @@ namespace lumiera
               homo2.apply (vista);
             }
           
-          void visiting_extended_hierarchy()
+          void
+          visiting_extended_hierarchy()
             {
               HomoSapiens x1;
               Leader x2;
@@ -144,7 +145,7 @@ namespace lumiera
               Babbler bab;
               VisitingTool& vista (bab);
               homo1.apply (vista);  // silent error handler (not Applicable to HomoSapiens)
-              homo2.apply (vista); //  Leader handeld as Visionary and treated as Boss
+              homo2.apply (vista); //  Leader handled as Visionary and treated as Boss
             }
             
         };

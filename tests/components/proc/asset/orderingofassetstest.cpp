@@ -34,10 +34,8 @@ using util::isnil;
 using std::string;
 
 
-namespace asset
-  {
-  namespace test
-    {
+namespace asset {
+  namespace test {
     
     
     
@@ -46,7 +44,7 @@ namespace asset
      * @test validate the equality and order relations of 
      *       Asset::Ident and Asset objects.
      * @note a known problem is that only Asset smart ptrs
-     *       are supported for comparison, not smartptrs
+     *       are supported for comparison, not smartpointers
      *       of Asset subclasses. To solve this, we would
      *       either have to repeat the operator definitions,
      *       or resort to template metaprogramming tricks.
@@ -57,7 +55,7 @@ namespace asset
      */
     class OrderingOfAssets_test : public Test
       {
-        virtual void run(Arg arg) 
+        virtual void run(Arg) 
           {
             Asset::Ident key1("Au-1", Category(AUDIO), "ichthyo", 5);
             PAsset mm1 = asset::Media::create(key1, "Name-1");

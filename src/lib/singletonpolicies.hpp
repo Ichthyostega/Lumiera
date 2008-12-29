@@ -34,16 +34,16 @@ This code is heavily inspired by
 #ifndef LUMIERA_SINGLETONPOLICIES_H
 #define LUMIERA_SINGLETONPOLICIES_H
 
-#include "lib/multithread.hpp"
-#include "include/error.hpp"
+#include "lib/error.hpp"
+#include "lib/sync-classlock.hpp"
 
 #include <vector>
 
 
-namespace lumiera
-  {
-  namespace singleton
-    {
+namespace lumiera {
+  namespace singleton {
+    
+    
       /* === several Policies usable in conjunction with lumiera::Singleton === */
       
       /** 
@@ -77,11 +77,11 @@ namespace lumiera
           static S* create ()         { return new S; }
           static void destroy (S* pS) { delete pS;    }
         };
-        
-        
       
-
-        
+      
+      
+      
+      
       typedef void (*DelFunc)(void);
       using std::vector;
         
@@ -139,7 +139,7 @@ namespace lumiera
       struct Multithreaded
         {
           typedef volatile S VolatileType;
-          typedef lumiera::Thread::Lock<S> Lock;
+          typedef lib::ClassLock<S> Lock;
         };
       
       
@@ -152,7 +152,7 @@ namespace lumiera
           typedef S VolatileType;
           struct Lock {};
         };
-      
+    
     
   } // namespace singleton
   

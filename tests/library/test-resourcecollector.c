@@ -19,7 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "backend/resourcecollector.h"
+#include "lib/resourcecollector.h"
 
 #include "tests/test.h"
 

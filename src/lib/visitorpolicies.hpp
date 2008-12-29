@@ -32,7 +32,7 @@
 #ifndef LUMIERA_VISITORPOLICIES_H
 #define LUMIERA_VISITORPOLICIES_H
 
-#include "include/error.hpp"
+#include "lib/error.hpp"
 
 
 namespace lumiera

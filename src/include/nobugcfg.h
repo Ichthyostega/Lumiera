@@ -68,7 +68,7 @@
 #ifdef __cplusplus  /* ============= C++ ================ */
 
 #include "include/lifecycle.h"
-#include "include/error.hpp"  ///< make assertions throw instead of abort()
+#include "lib/error.hpp"  ///< make assertions throw instead of abort()
 
 namespace lumiera { 
   void initialise_NoBug ();
@@ -88,6 +88,7 @@ namespace lumiera {
   NOBUG_DECLARE_FLAG (render);         ///< logging channel focusing on the render engine's workings
   NOBUG_DECLARE_FLAG (config);         ///< logging channel covering application and session configuration
   NOBUG_DECLARE_FLAG (memory);         ///< logging channel covering memory management issues
+  NOBUG_DECLARE_FLAG (sync);           ///< especially for tracing synchronisation
   NOBUG_DECLARE_FLAG (test);
 
 
@@ -109,6 +110,7 @@ namespace lumiera {
   NOBUG_CPP_DEFINE_FLAG_PARENT       (operate,     lumiera);
   NOBUG_CPP_DEFINE_FLAG_PARENT_LIMIT (render,      lumiera,    LOG_WARNING);
   NOBUG_CPP_DEFINE_FLAG_PARENT_LIMIT (memory,      lumiera,    LOG_WARNING);
+  NOBUG_CPP_DEFINE_FLAG_PARENT_LIMIT (sync,        memory,     LOG_WARNING);
   NOBUG_CPP_DEFINE_FLAG_PARENT_LIMIT (test,        all,        LOG_ERR);
 
 

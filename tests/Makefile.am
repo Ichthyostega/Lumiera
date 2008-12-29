@@ -20,7 +20,7 @@ tests_srcdir = $(top_srcdir)/tests
 
 
 check_PROGRAMS += test-error
-test_error_SOURCES = $(tests_srcdir)/error/errortest.c
+test_error_SOURCES = $(tests_srcdir)/library/test-error.c
 test_error_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 test_error_LDADD = liblumiera.la $(NOBUGMT_LUMIERA_LIBS)     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
 
@@ -60,12 +60,20 @@ test_filehandles_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 test_filehandles_LDADD = liblumierabackend.la liblumiera.la $(NOBUGMT_LUMIERA_LIBS)     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
 
 
-
-
 check_PROGRAMS += test-config
-test_config_SOURCES = $(tests_srcdir)/lumiera/test-config.c
+test_config_SOURCES = $(tests_srcdir)/common/test-config.c
 test_config_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
-test_config_LDADD = liblumiera.la $(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS)     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
+test_config_LDADD =				\
+	liblumieraproc.la			\
+	liblumieracommon.la			\
+	liblumiera.la				\
+	$(LUMIERA_PLUGIN_LIBS)			\
+	$(NOBUGMT_LUMIERA_LIBS)			\
+	-ldl					\
+	-lboost_program_options-mt		\
+	-lboost_regex-mt
+
+
 
 check_LTLIBRARIES += examplepluginc.la
 examplepluginc_la_SOURCES = $(tests_srcdir)/plugin/example_plugin.c
@@ -73,7 +81,7 @@ examplepluginc_la_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -DLUMIERA_P
 examplepluginc_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/null
 
 check_PROGRAMS += test-interfaces
-test_interfaces_SOURCES = $(tests_srcdir)/lumiera/test-interfaces.c
+test_interfaces_SOURCES = $(tests_srcdir)/common/test-interfaces.c
 test_interfaces_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 test_interfaces_LDADD = liblumiera.la $(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS)      liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
 test_interfaces_DEPENDENCIES = examplepluginc.la liblumiera.la 
@@ -84,7 +92,7 @@ test_filemmap_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)
 test_filemmap_LDADD = liblumierabackend.la liblumiera.la -lnobugmt -lpthread -ldl -lm     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
 
 check_PROGRAMS += test-resourcecollector
-test_resourcecollector_SOURCES = $(tests_srcdir)/backend/test-resourcecollector.c
+test_resourcecollector_SOURCES = $(tests_srcdir)/library/test-resourcecollector.c
 test_resourcecollector_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
 test_resourcecollector_LDADD = liblumierabackend.la liblumiera.la -lnobugmt -lpthread -ldl -lm     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
 

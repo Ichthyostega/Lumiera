@@ -38,7 +38,7 @@ namespace util
   
     class SanitizedIdentifier_test : public Test
       {
-        virtual void run (Arg arg)
+        virtual void run (Arg)
           {
             print_clean ("Word");
             print_clean ("a Sentence");

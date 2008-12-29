@@ -24,7 +24,7 @@
 #include "proc/mobject/session/defsmanager.hpp"
 #include "proc/mobject/session/defsregistry.hpp"
 #include "common/configrules.hpp"
-#include "include/error.hpp"
+#include "lib/error.hpp"
 
 #include <boost/format.hpp>
 
