@@ -29,18 +29,81 @@
 
 
 //TODO: System includes//
-
+#include <pthread.h>
 
 /**
  * @file
  *
  */
 
-NOBUG_DEFINE_FLAG_PARENT (threads, lumiera); /*TODO insert a suitable/better parent flag here */ 
+NOBUG_DEFINE_FLAG_PARENT (threads, lumiera); /*TODO insert a suitable/better parent flag here */
 
 
 //code goes here//
 
+/* really dumb mutex, to make the mockup little less brittle */
+static pthread_mutex_t threads_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+static pthread_once_t attr_once = PTHREAD_ONCE_INIT;
+static pthread_attr_t attrs;
+
+static void thread_attr_init (void)
+{
+  pthread_attr_init (&attrs);
+  pthread_attr_setdetachstate (&attrs, PTHREAD_CREATE_DETACHED);
+  pthread_attr_setdetachstate (&attrs, PTHREAD_CREATE_DETACHED);
+}
+
+struct lumiera_thread_mockup
+{
+  void (*fn)(void*);
+  void* arg;
+};
+
+
+static void* pthread_runner (void* thread)
+{
+  struct lumiera_thread_mockup* starter = (struct lumiera_thread_mockup*) thread;
+  (void) starter;
+  pthread_mutex_lock (&threads_mutex);
+  pthread_mutex_unlock (&threads_mutex);
+  starter->fn (starter->arg);
+  return NULL;
+}
+
+
+LumieraThread
+lumiera_thread_run (enum lumiera_thread_class kind,
+                    void (*start_routine)(void *),
+                    void * arg,
+                    LumieraCondition finished,
+                    const char* purpose,
+                    struct nobug_flag* flag)
+{
+  (void) kind;
+  (void) finished;
+  (void) purpose;
+  (void) flag;
+
+  REQUIRE (!finished, "Condition variable for finish notification not yet implemented");
+
+  if (attr_once == PTHREAD_ONCE_INIT)
+    pthread_once (&attr_once, thread_attr_init);
+
+  static struct lumiera_thread_mockup thread;
+
+  thread.fn = start_routine;
+  thread.arg = arg;
+
+  pthread_mutex_lock (&threads_mutex);
+
+  pthread_t dummy;
+  pthread_create (&dummy, &attrs, pthread_runner, &thread);
+
+  pthread_mutex_unlock (&threads_mutex);
+
+  return (LumieraThread) 1;
+}
 
 
 /*
