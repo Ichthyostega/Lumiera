@@ -58,6 +58,13 @@ namespace lumiera {
 //  using boost::scoped_ptr;
   
   namespace { // implementation details
+    
+    void
+    throwIfError() 
+    {
+      if (lumiera_error_peek())
+        throw lumiera::error::Config("failed to open interface or plugin.",lumiera_error());
+    }
   
     /** takes a bunch of instance definitions, as typically created
      *  when defining interfaces for external use, and registers them
@@ -69,6 +76,7 @@ namespace lumiera {
     {
       if (!descriptors) return NULL;
       lumiera_interfaceregistry_bulkregister_interfaces (descriptors, NULL);
+      throwIfError();
       LumieraInterface masterI = descriptors[0];
       return lumiera_interface_open (masterI->interface,
                                      masterI->version,
@@ -122,7 +130,9 @@ namespace lumiera {
         : desc_(0),
           instance_(reinterpret_cast<I*> 
               (lumiera_interface_open (iName.c_str(), version, minminor, impName.c_str())))
-        { }
+        { 
+          throwIfError();
+        }
       
       /** Set up an InstanceHandle managing the 
        *  registration and deregistration of interface(s).
@@ -133,7 +143,9 @@ namespace lumiera {
       InstanceHandle (LumieraInterface* descriptors)
         : desc_(descriptors),
           instance_(reinterpret_cast<I*> (register_and_open (desc_)))
-        { }
+        { 
+          throwIfError();
+        }
       
       ~InstanceHandle ()
         {

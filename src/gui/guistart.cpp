@@ -83,7 +83,7 @@ namespace gui {
                  << "     but actually nothing happens!!!!!!!!!!!!!!\n\n";
             
             terminationHandle(0); // signal immediate shutdown without error
-            return true;
+            return false;
           }
       };
     

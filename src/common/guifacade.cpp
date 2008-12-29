@@ -44,6 +44,7 @@ namespace gui {
   using lumiera::InstanceHandle;
   using util::dispatchSequenced;
   using lib::Sync;
+  using lib::RecursiveLock_NoWait;
   
   
   
@@ -82,7 +83,7 @@ namespace gui {
     
     class GuiSubsysDescriptor
       : public lumiera::Subsys,
-        public Sync<>
+        public Sync<RecursiveLock_NoWait>
       {
         operator string ()  const { return "Lumiera GTK GUI"; }
         
