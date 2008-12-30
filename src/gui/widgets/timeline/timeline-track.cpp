@@ -70,6 +70,10 @@ Track::Track(TimelineWidget &timeline_widget,
   Menu::MenuList& title_list = titleMenuButton.get_menu().items();
   title_list.push_back( Menu_Helpers::MenuElem(_("_Name..."),
     mem_fun(this, &Track::on_set_name) ) );
+  title_list.push_back( Menu_Helpers::SeparatorElem() );
+  title_list.push_back( Menu_Helpers::MenuElem(_("_Remove"),
+    mem_fun(this, &Track::on_remove_track) ) );
+    
   update_name();
   
   // Setup the context menu
