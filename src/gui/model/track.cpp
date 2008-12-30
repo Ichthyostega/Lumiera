@@ -51,6 +51,12 @@ Track::set_name(const std::string &name)
   this->name = name;
 }
 
+bool
+Track::remove_child_track(const boost::shared_ptr<Track> track)
+{
+  return false;
+}
+
 std::string
 Track::print_branch()
 {

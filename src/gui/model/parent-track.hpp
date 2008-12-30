@@ -45,6 +45,8 @@ public:
 
   lumiera::observable_list< boost::shared_ptr<Track> >&
     get_child_track_list();
+    
+  bool remove_child_track(const boost::shared_ptr<Track> track);
 
 protected:
   lumiera::observable_list< boost::shared_ptr<Track> > tracks;

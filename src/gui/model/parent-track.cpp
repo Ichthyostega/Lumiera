@@ -21,6 +21,7 @@
 * *****************************************************/
 
 #include "parent-track.hpp"
+#include <boost/foreach.hpp>
 
 namespace gui {
 namespace model {
@@ -39,6 +40,28 @@ lumiera::observable_list< boost::shared_ptr<Track> >&
 ParentTrack::get_child_track_list()
 {
   return tracks;
+}
+
+bool
+ParentTrack::remove_child_track(const boost::shared_ptr<Track> track)
+{
+  REQUIRE(track);
+  
+  BOOST_FOREACH(const boost::shared_ptr<Track> child_track, tracks)
+    {
+      REQUIRE(child_track);
+      
+      if(track.get() == child_track.get())
+        {
+          tracks.remove(track);
+          return true;
+        }
+        
+      if(child_track->remove_child_track(track))
+        return true;
+    }
+    
+  return false;
 }
 
 }   // namespace model

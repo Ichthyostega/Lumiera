@@ -37,11 +37,14 @@ class GroupTrack : public timeline::Track
 {
 public:
   GroupTrack(TimelineWidget &timeline_widget,
-    boost::shared_ptr<model::Track> track);
+    boost::shared_ptr<model::GroupTrack> track);
   
   void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
     TimelineViewWindow* constwindow)
     const;
+    
+protected:
+  void on_child_list_changed();
 };
 
 }   // namespace timeline

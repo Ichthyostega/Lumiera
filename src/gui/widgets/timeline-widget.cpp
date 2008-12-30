@@ -338,6 +338,9 @@ TimelineWidget::create_timeline_tracks_from_branch(
       // We will need to create one
       trackMap[model_track] = 
         create_timeline_track_from_model_track(model_track);
+      
+      // Hook up 
+
     }
   
   // Recurse to child tracks
@@ -359,7 +362,7 @@ TimelineWidget::create_timeline_track_from_model_track(
       *this, model_track));
   else if(typeid(*model_track) == typeid(model::GroupTrack))
     return shared_ptr<timeline::Track>(new timeline::GroupTrack(
-      *this, model_track));
+      *this, dynamic_pointer_cast<model::GroupTrack>(model_track)));
   
   ASSERT(NULL); // Unknown track type;
   return shared_ptr<timeline::Track>();

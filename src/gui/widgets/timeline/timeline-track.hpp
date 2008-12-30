@@ -37,7 +37,7 @@ namespace timeline {
   
 class TimelineViewWindow;
 
-class Track
+class Track : public sigc::trackable
 {
 public:
   Track(TimelineWidget &timeline_widget,
@@ -68,12 +68,12 @@ private:
 
   void on_remove_track();
   
-
-private:
+protected:
 
   TimelineWidget &timelineWidget;
   boost::shared_ptr<model::Track> model_track;
 
+private:
   bool expanded;
 
   //----- Header Widgets ------//

@@ -328,6 +328,7 @@ protected:
   friend class timeline::ArrowTool;
   friend class timeline::IBeamTool;
   friend class timeline::Track;
+  friend class timeline::GroupTrack;
 };
 
 }   // namespace widgets

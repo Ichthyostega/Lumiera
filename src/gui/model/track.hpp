@@ -45,9 +45,13 @@ public:
   
   void set_name(const std::string &name);
   
+  virtual bool remove_child_track(const boost::shared_ptr<Track> track);
+  
   std::string print_branch();
   
   virtual std::string print_track() = 0;
+  
+  
   
 protected:
   std::string print_branch_recursive(const unsigned int indentation);
