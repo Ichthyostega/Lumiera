@@ -1,5 +1,5 @@
 /*
-  timeline-header-container.cpp  -  Declaration of the timeline
+  timeline-header-container.hpp  -  Declaration of the timeline
   header container widget
  
   Copyright (C)         Lumiera.org
