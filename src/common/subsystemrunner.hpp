@@ -182,7 +182,7 @@ namespace lumiera {
           sync.notify();
         }
       
-      volatile bool
+      bool
       allDead ()
         {
           if (isEmergencyExit())

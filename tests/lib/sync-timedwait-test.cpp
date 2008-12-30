@@ -81,7 +81,7 @@ namespace lib {
           }
         
         
-        volatile bool
+        bool
         neverHappens()                              ///< the "condition test" used for waiting....
           {
             Lock currentLock(this);                 // get the Lock recursively
