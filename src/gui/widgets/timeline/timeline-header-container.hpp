@@ -123,7 +123,7 @@ private:
    * An event handler that is called when a widget is removed from the
    * container.
    **/             
-  void on_remove(Widget* widget);
+  void on_remove(Widget*);
 
   /* ===== Events ===== */      
 private:

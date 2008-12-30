@@ -40,7 +40,8 @@ protected:
   ParentTrack();
 
 public:
-  virtual void add_child_track(Track* child) {};
+  virtual void add_child_track(Track* child)
+    { (void)child; };
   
   std::list< boost::shared_ptr<Track> >
     get_child_tracks() const;

@@ -32,9 +32,9 @@ namespace gui {
 namespace output {
 
 XvDisplayer::XvDisplayer( Gtk::Widget *drawing_area, int width, int height ) :
-    xvImage( NULL ),
+    gotPort( false ),
     drawingArea( drawing_area ),
-    gotPort( false )
+    xvImage( NULL )
   {
     INFO(gui, "Trying XVideo at %d x %d", width, height);
 

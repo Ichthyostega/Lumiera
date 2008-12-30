@@ -30,7 +30,7 @@ namespace model {
 Sequence::Sequence()
 {
   // TEST CODE
-  static bool first = true;
+  //static bool first = true;
   
   shared_ptr<GroupTrack> group_track, group_track2;
   tracks.push_back(group_track = shared_ptr<GroupTrack>(new GroupTrack()));

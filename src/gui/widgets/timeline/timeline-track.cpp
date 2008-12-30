@@ -20,7 +20,7 @@
  
 * *****************************************************/
 
-#warning This header must soon be removed when we drop Etch compatibility
+// !!! This header must soon be removed when we drop Etch compatibility
 #include <gtk/gtktoolbar.h>
 
 #include "timeline-track.hpp"
@@ -56,8 +56,8 @@ Track::Track(TimelineWidget &timeline_widget,
 #if 0
   buttonBar.set_icon_size(WindowManager::MenuIconSize);
 #else
-#warning This code soon be removed when we drop Etch compatibility
-
+  TODO("This code soon be removed when we drop Etch compatibility");
+  
   // Temporary bodge for etch compatibility - will be removed soon
   gtk_toolbar_set_icon_size (buttonBar.gobj(),
     (GtkIconSize)(int)WindowManager::MenuIconSize);

@@ -254,7 +254,7 @@ TimelineHeaderContainer::forall_vfunc(gboolean /* include_internals */,
 }
 
 void
-TimelineHeaderContainer::on_remove(Widget* widget)
+TimelineHeaderContainer::on_remove(Widget*)
 {
   // Do nothing - this is just to keep Gtk::Container happy
 }
@@ -264,9 +264,6 @@ TimelineHeaderContainer::on_expose_event(GdkEventExpose *event)
 { 
   if(gdkWindow)
     {
-      // Start at an offset from the scroll offset
-      int offset = -timelineWidget->get_y_scroll_offset();
-
       const Allocation container_allocation = get_allocation();
       
       read_styles();
@@ -299,6 +296,8 @@ void
 TimelineHeaderContainer::on_hovering_track_changed(
   boost::shared_ptr<timeline::Track> hovering_track)
 {
+  (void)hovering_track;
+  
   // The hovering track has changed, redraw so we can light the header
   queue_draw();
 }
@@ -492,9 +491,11 @@ TimelineHeaderContainer::draw_header_decoration(
   
   // Recurse through all the children
   if(timeline_track->get_expanded())
-    BOOST_FOREACH( shared_ptr<model::Track> child,
-      model_track->get_child_tracks() )
-      draw_header_decoration(child, clip_rect);
+    {
+      BOOST_FOREACH( shared_ptr<model::Track> child,
+        model_track->get_child_tracks() )
+        draw_header_decoration(child, clip_rect);
+    }
 }
 
 boost::shared_ptr<timeline::Track>

@@ -78,7 +78,7 @@ void
 WorkspaceWindow::create_ui()
 {    
   //----- Configure the Window -----//
-  set_title(AppTitle);
+  set_title(GtkLumiera::AppTitle);
   set_default_size(1024, 768);
 
   //----- Set up the UI Manager -----//

@@ -129,10 +129,10 @@ protected:
   Gdk::Rectangle get_body_rectangle() const;
 
 protected:
+  TimelineBody *timelineBody;
+
   bool isDragging;
   Gdk::Point mousePoint;
-
-  TimelineBody *timelineBody;
 };
 
 }   // namespace timeline

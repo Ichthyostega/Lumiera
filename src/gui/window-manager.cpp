@@ -68,10 +68,7 @@ WindowManager::read_style_colour_property(
   {
     WARN(gui, "%s style value failed to load", property_name);
     
-    GdkColor default_colour;
-    default_colour.red = red;
-    default_colour.green = green;
-    default_colour.blue = blue;     
+    const GdkColor default_colour = {0, red, green, blue};  
     return default_colour;
   }
 }

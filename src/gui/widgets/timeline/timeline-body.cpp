@@ -42,9 +42,9 @@ TimelineBody::TimelineBody(gui::widgets::TimelineWidget
   *timeline_widget) :
     Glib::ObjectBase("TimelineBody"),
     tool(NULL),
-    dragType(None),
     mouseDownX(0),
     mouseDownY(0),
+    dragType(None),
     beginShiftTimeOffset(0),
     selectionAlpha(0.5),
     timelineWidget(timeline_widget)
@@ -97,6 +97,9 @@ TimelineBody::set_tool(timeline::ToolType tool_type)
       
     case timeline::IBeam:
       tool = new IBeamTool(this);
+      break;
+      
+    default:
       break;
     }
     
@@ -174,7 +177,10 @@ TimelineBody::on_scroll_event (GdkEventScroll* event)
     case GDK_SCROLL_DOWN:
       // User scrolled down. Zoom out
       window.zoom_view(event->x, -1);
-      break;    
+      break;
+      
+    default:
+      break;
     }
   }
   else
@@ -189,9 +195,14 @@ TimelineBody::on_scroll_event (GdkEventScroll* event)
     case GDK_SCROLL_DOWN:
       // User scrolled down. Shift 1/16th right
       window.shift_view(16);
-      break;    
+      break;
+    
+    default:
+      break;
     }
   }
+  
+  return true;
 }
 
 bool
@@ -250,6 +261,9 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
           beginShiftVerticalOffset);
         break;
       }
+      
+    default:
+      break;
     }
   
   // Forward the event to the tool
@@ -383,7 +397,7 @@ TimelineBody::draw_playback_point(Cairo::RefPtr<Cairo::Context> cr)
   const Allocation allocation = get_allocation();
   
   const gavl_time_t point = timelineWidget->get_playback_point();
-  if(point == GAVL_TIME_UNDEFINED)
+  if(point == (gavl_time_t)GAVL_TIME_UNDEFINED)
     return;
   
   const int x = timelineWidget->get_view_window().time_to_x(point);

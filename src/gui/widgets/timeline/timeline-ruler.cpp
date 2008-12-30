@@ -447,7 +447,7 @@ TimelineRuler::draw_playback_point(Cairo::RefPtr<Cairo::Context> cr,
   REQUIRE(timelineWidget != NULL);
   
   const gavl_time_t point = timelineWidget->get_playback_point();
-  if(point == GAVL_TIME_UNDEFINED)
+  if(point == (gavl_time_t)GAVL_TIME_UNDEFINED)
     return;
   const int x = timelineWidget->get_view_window().time_to_x(point);
     
@@ -473,7 +473,7 @@ TimelineRuler::draw_playback_point(Cairo::RefPtr<Cairo::Context> cr,
 gavl_time_t 
 TimelineRuler::calculate_major_spacing() const
 {
-  int i;
+  unsigned int i;
   
   REQUIRE(timelineWidget != NULL);
   

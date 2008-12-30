@@ -38,7 +38,8 @@ void
 GroupTrack::draw_track(Cairo::RefPtr<Cairo::Context> cairo,
     TimelineViewWindow* const window) const
 {
-  
+  (void)cairo;
+  (void)window;
 }
   
 }   // namespace timeline

@@ -38,10 +38,10 @@ const int IBeamTool::ScrollSlideEventInterval = 40;
 // ===== Implementation ===== //
 
 IBeamTool::IBeamTool(TimelineBody *timeline_body) :
+  Tool(timeline_body),
   dragType(None),
   pinnedDragTime(0),
-  scrollSlideRate(0),
-  Tool(timeline_body)
+  scrollSlideRate(0)
 {
 
 }
@@ -70,6 +70,8 @@ IBeamTool::get_cursor() const
       return Gdk::Cursor(Gdk::LEFT_SIDE);
     case GrabEnd:
       return Gdk::Cursor(Gdk::RIGHT_SIDE);
+    default:
+      break;
     }
   
   // Are we hovering over the ends of the selection?

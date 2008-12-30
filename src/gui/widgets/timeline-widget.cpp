@@ -44,14 +44,14 @@ TimelineWidget::TimelineWidget(
   Table(2, 2),
   sequence(source_sequence),
   viewWindow(this, 0, 1),
-  totalHeight(0),
-  horizontalAdjustment(0, 0, 0),
-  verticalAdjustment(0, 0, 0),
   selectionStart(0),
   selectionEnd(0),
   playbackPeriodStart(0),
   playbackPeriodEnd(0),
   playbackPoint(GAVL_TIME_UNDEFINED),
+  totalHeight(0),
+  horizontalAdjustment(0, 0, 0),
+  verticalAdjustment(0, 0, 0),
   horizontalScroll(horizontalAdjustment),
   verticalScroll(verticalAdjustment)
 {
