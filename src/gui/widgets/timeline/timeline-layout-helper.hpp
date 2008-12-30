@@ -28,10 +28,13 @@
 #define TIMELINE_LAYOUT_HELPER_HPP
 
 #include "../../gtk-lumiera.hpp"
+#include "../../../lib/tree.hpp"
 
 namespace gui {
 namespace widgets {
 namespace timeline {
+  
+class Track;
 
 /**
  * A helper class for the TimelineWidget. TimelineLayoutHelper
@@ -40,7 +43,9 @@ namespace timeline {
  */
 class TimelineLayoutHelper
 {
-
+protected:
+  
+  lumiera::tree<Track*> currentTrackTree;
 };
 
 }   // namespace timeline
