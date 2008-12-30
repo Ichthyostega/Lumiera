@@ -74,6 +74,7 @@
 extern "C" {
 #include "lib/mutex.h"
 #include "lib/condition.h"
+#include "lib/reccondition.h"
 }
 
 #include <cerrno>
@@ -106,7 +107,7 @@ namespace lib {
         : public lumiera_mutex
         {
         protected:
-          Wrapped_LumieraRecMutex() { lumiera_recmutex_init (this, "Obj.Monitor ExclMutex", &NOBUG_FLAG(sync)); }
+          Wrapped_LumieraRecMutex() { lumiera_recmutex_init (this, "Obj.Monitor RecMutex", &NOBUG_FLAG(sync)); }
          ~Wrapped_LumieraRecMutex() { lumiera_mutex_destroy (this, &NOBUG_FLAG(sync)); }
          
          //------------------Resource-Tracking------
@@ -120,7 +121,7 @@ namespace lib {
         : public lumiera_condition
         {
         protected:
-          Wrapped_LumieraExcCond() { lumiera_condition_init    (this, "Obj.Monitor Condition", &NOBUG_FLAG(sync) ); }
+          Wrapped_LumieraExcCond() { lumiera_condition_init    (this, "Obj.Monitor ExclCondition", &NOBUG_FLAG(sync) ); }
          ~Wrapped_LumieraExcCond() { lumiera_condition_destroy (this, &NOBUG_FLAG(sync) ); }
          
          //------------------Resource-Tracking------
@@ -131,11 +132,11 @@ namespace lib {
       
       
       struct Wrapped_LumieraRecCond
-        : public lumiera_condition  //////////////////////////////////////////TODO use correct implementation here!
+        : public lumiera_reccondition
         {
         protected:
-          Wrapped_LumieraRecCond() { lumiera_condition_init    (this, "Obj.Monitor Condition", &NOBUG_FLAG(sync) ); } ////////TODO
-         ~Wrapped_LumieraRecCond() { lumiera_condition_destroy (this, &NOBUG_FLAG(sync) ); }
+          Wrapped_LumieraRecCond() { lumiera_reccondition_init    (this, "Obj.Monitor RecCondition", &NOBUG_FLAG(sync) ); } ////////TODO
+         ~Wrapped_LumieraRecCond() { lumiera_reccondition_destroy (this, &NOBUG_FLAG(sync) ); }
          
          //------------------Resource-Tracking------
          void __may_block() { TODO ("Record we may block on mutex"); }
