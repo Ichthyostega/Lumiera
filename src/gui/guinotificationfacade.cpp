@@ -68,40 +68,42 @@ namespace gui {
                                ,lumieraorg_GuiNotificationFacade_descriptor
                                , NULL, NULL, NULL
                                , LUMIERA_INTERFACE_INLINE (name, "\044\117\156\365\344\056\362\220\166\350\320\214\115\221\302\177",
-                                                           const char*, (LumieraInterface iface),
-                                                             { return "GuiNotification"; }
+                                                           const char*, (LumieraInterface ifa),
+                                                             { (void)ifa;  return "GuiNotification"; }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (brief, "\160\240\102\325\175\145\270\140\350\241\163\303\331\343\253\142",
-                                                           const char*, (LumieraInterface iface),
-                                                             { return "GUI Interface: push state update and notification of events into the GUI"; }
+                                                           const char*, (LumieraInterface ifa),
+                                                             { (void)ifa;  return "GUI Interface: push state update and notification of events into the GUI"; }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (homepage, "\217\232\066\101\042\116\054\217\070\233\253\241\166\145\234\133",
-                                                           const char*, (LumieraInterface iface),
-                                                             { return "http://www.lumiera.org/develompent.html" ;}
+                                                           const char*, (LumieraInterface ifa),
+                                                             { (void)ifa;  return "http://www.lumiera.org/develompent.html" ;}
                                                           )
                                , LUMIERA_INTERFACE_INLINE (version, "\350\365\121\052\037\022\300\021\171\357\017\367\270\071\266\376",
-                                                           const char*, (LumieraInterface iface),
-                                                             { return "0.1~pre"; }
+                                                           const char*, (LumieraInterface ifa),
+                                                             { (void)ifa;  return "0.1~pre"; }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (author, "\117\007\006\234\153\206\000\344\303\043\027\261\045\320\166\133",
-                                                           const char*, (LumieraInterface iface),
-                                                             { return "Hermann Vosseler"; }
+                                                           const char*, (LumieraInterface ifa),
+                                                             { (void)ifa;  return "Hermann Vosseler"; }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (email, "\356\243\022\137\345\275\016\034\337\144\031\260\303\050\140\327",
-                                                           const char*, (LumieraInterface iface),
-                                                             { return "Ichthyostega@web.de"; }
+                                                           const char*, (LumieraInterface ifa),
+                                                             { (void)ifa;  return "Ichthyostega@web.de"; }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (copyright, "\365\220\260\051\267\345\330\046\145\134\331\320\115\157\332\356",
-                                                           const char*, (LumieraInterface iface),
+                                                           const char*, (LumieraInterface ifa),
                                                              {
+                                                               (void)ifa;
                                                                return
                                                                  "Copyright (C)        Lumiera.org\n"
                                                                  "  2008               Hermann Vosseler <Ichthyostega@web.de>";
                                                              }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (license, "\155\335\361\364\221\012\115\325\306\046\153\152\002\117\075\077",
-                                                           const char*, (LumieraInterface iface),
+                                                           const char*, (LumieraInterface ifa),
                                                              {
+                                                               (void)ifa;
                                                                return
                                                                  "This program is free software; you can redistribute it and/or modify\n"
                                                                  "it under the terms of the GNU General Public License as published by\n"
@@ -119,8 +121,8 @@ namespace gui {
                                                              }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (state, "\227\170\230\144\310\330\131\175\367\152\327\324\113\275\223\245",
-                                                           int, (LumieraInterface iface),
-                                                             {return LUMIERA_INTERFACE_EXPERIMENTAL; }
+                                                           int, (LumieraInterface ifa),
+                                                             {(void)ifa;  return LUMIERA_INTERFACE_EXPERIMENTAL; }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (versioncmp, "\253\066\335\233\025\161\135\347\377\156\121\135\347\313\130\014",
                                                            int, (const char* a, const char* b),

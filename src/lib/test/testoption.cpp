@@ -107,7 +107,7 @@ namespace test
     }
   
   /** @return \c true if --describe switch was given */
-  const bool 
+  bool 
   TestOption::getDescribe ()
     {
       return parameters["describe"].as<bool>();

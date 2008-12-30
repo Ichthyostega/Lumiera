@@ -132,7 +132,7 @@ namespace lumiera {
        */
       class ConfigFlags_test : public Test
         {
-          virtual void run(Arg arg) 
+          virtual void run(Arg) 
             {
               check_testdata ();
               check_flags();
