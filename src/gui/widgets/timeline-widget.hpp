@@ -35,6 +35,7 @@
 #include "timeline/timeline-ibeam-tool.hpp"
 #include "timeline/timeline-group-track.hpp"
 #include "timeline/timeline-clip-track.hpp"
+#include "timeline/timeline-layout-helper.hpp"
 
 #include "../model/sequence.hpp"
 
@@ -276,6 +277,9 @@ protected:
   std::map<boost::shared_ptr<model::Track>,
     boost::shared_ptr<timeline::Track> >
     trackMap;
+    
+  // Helper Classes
+  timeline::TimelineLayoutHelper layoutHelper;
 
   // View State
   timeline::TimelineViewWindow viewWindow;
