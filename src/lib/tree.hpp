@@ -606,7 +606,7 @@ void tree<T, tree_node_allocator>::erase_children(const iterator_base& it)
       prev=cur;
       cur=cur->next_sibling;
       erase_children(pre_order_iterator(prev));
-      kp::destructor(&prev->data);
+      lumiera::destructor(&prev->data);
       alloc_.deallocate(prev,1);
       }
    it.node->first_child=0;
@@ -637,7 +637,7 @@ iter tree<T, tree_node_allocator>::erase(iter it)
       cur->next_sibling->prev_sibling=cur->prev_sibling;
       }
 
-   kp::destructor(&cur->data);
+   lumiera::destructor(&cur->data);
    alloc_.deallocate(cur,1);
    return ret;
    }
@@ -863,7 +863,7 @@ iter tree<T, tree_node_allocator>::append_child(iter position)
    assert(position.node);
 
    tree_node *tmp=alloc_.allocate(1,0);
-   kp::constructor(&tmp->data);
+   lumiera::constructor(&tmp->data);
    tmp->first_child=0;
    tmp->last_child=0;
 
@@ -888,7 +888,7 @@ iter tree<T, tree_node_allocator>::prepend_child(iter position)
    assert(position.node);
 
    tree_node *tmp=alloc_.allocate(1,0);
-   kp::constructor(&tmp->data);
+   lumiera::constructor(&tmp->data);
    tmp->first_child=0;
    tmp->last_child=0;
 
@@ -917,7 +917,7 @@ iter tree<T, tree_node_allocator>::append_child(iter position, const T& x)
    assert(position.node);
 
    tree_node* tmp = alloc_.allocate(1,0);
-   kp::constructor(&tmp->data, x);
+   lumiera::constructor(&tmp->data, x);
    tmp->first_child=0;
    tmp->last_child=0;
 
@@ -942,7 +942,7 @@ iter tree<T, tree_node_allocator>::prepend_child(iter position, const T& x)
    assert(position.node);
 
    tree_node* tmp = alloc_.allocate(1,0);
-   kp::constructor(&tmp->data, x);
+   lumiera::constructor(&tmp->data, x);
    tmp->first_child=0;
    tmp->last_child=0;
 
@@ -1029,7 +1029,7 @@ iter tree<T, tree_node_allocator>::insert(iter position, const T& x)
                           // insert before the feet.
       }
    tree_node* tmp = alloc_.allocate(1,0);
-   kp::constructor(&tmp->data, x);
+   lumiera::constructor(&tmp->data, x);
    tmp->first_child=0;
    tmp->last_child=0;
 
@@ -1051,7 +1051,7 @@ template <class T, class tree_node_allocator>
 typename tree<T, tree_node_allocator>::sibling_iterator tree<T, tree_node_allocator>::insert(sibling_iterator position, const T& x)
    {
    tree_node* tmp = alloc_.allocate(1,0);
-   kp::constructor(&tmp->data, x);
+   lumiera::constructor(&tmp->data, x);
    tmp->first_child=0;
    tmp->last_child=0;
 
@@ -1081,7 +1081,7 @@ template <class iter>
 iter tree<T, tree_node_allocator>::insert_after(iter position, const T& x)
    {
    tree_node* tmp = alloc_.allocate(1,0);
-   kp::constructor(&tmp->data, x);
+   lumiera::constructor(&tmp->data, x);
    tmp->first_child=0;
    tmp->last_child=0;
 
@@ -1134,8 +1134,8 @@ template <class T, class tree_node_allocator>
 template <class iter>
 iter tree<T, tree_node_allocator>::replace(iter position, const T& x)
    {
-   kp::destructor(&position.node->data);
-   kp::constructor(&position.node->data, x);
+   lumiera::destructor(&position.node->data);
+   lumiera::constructor(&position.node->data, x);
    return position;
    }
 
@@ -1153,7 +1153,7 @@ iter tree<T, tree_node_allocator>::replace(iter position, const iterator_base& f
    erase_children(position);  
 // std::cout << "no warning!" << std::endl;
    tree_node* tmp = alloc_.allocate(1,0);
-   kp::constructor(&tmp->data, (*from));
+   lumiera::constructor(&tmp->data, (*from));
    tmp->first_child=0;
    tmp->last_child=0;
    if(current_to->prev_sibling==0) {
@@ -1173,7 +1173,7 @@ iter tree<T, tree_node_allocator>::replace(iter position, const iterator_base& f
       }
    tmp->next_sibling=current_to->next_sibling;
    tmp->parent=current_to->parent;
-   kp::destructor(&current_to->data);
+   lumiera::destructor(&current_to->data);
    alloc_.deallocate(current_to,1);
    current_to=tmp;
    
