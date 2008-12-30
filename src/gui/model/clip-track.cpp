@@ -29,5 +29,15 @@ ClipTrack::ClipTrack()
 {
 }
 
+std::string
+ClipTrack::print_track()
+{
+  std::ostringstream os;
+  
+  os << "ClipTrack\t\"" << get_name() << "\"";
+  
+  return os.str();
+}
+
 }   // namespace model
 }   // namespace gui

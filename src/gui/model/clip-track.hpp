@@ -40,7 +40,7 @@ class ClipTrack : public Track
 public:
   ClipTrack();
   
-
+  std::string print_track();
   
 private:
   

@@ -21,6 +21,7 @@
 * *****************************************************/
 
 #include "track.hpp"
+#include <boost/foreach.hpp>
 
 namespace gui {
 namespace model {
@@ -38,16 +39,41 @@ Track::get_child_tracks() const
   return Track::NoChildren;
 }
 
-const Glib::ustring
+const std::string
 Track::get_name() const
 {
   return name;
 }
 
 void
-Track::set_name(const Glib::ustring &name)
+Track::set_name(const std::string &name)
 {
   this->name = name;
+}
+
+std::string
+Track::print_branch()
+{
+  return print_branch_recursive(0);
+}
+
+std::string
+Track::print_branch_recursive(const unsigned int indentation)
+{
+  Glib::ustring str;
+
+  for(unsigned int i = 0; i < indentation; i++)
+    str += "  ";
+  str += print_track();
+  str += "\n";
+  
+  BOOST_FOREACH(boost::shared_ptr<Track> track, get_child_tracks())
+    {
+      REQUIRE(track);
+      str += track->print_branch_recursive(indentation + 1);
+    }
+  
+  return str;
 }
 
 }   // namespace model

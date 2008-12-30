@@ -36,6 +36,7 @@ class GroupTrack : public ParentTrack
 public:
   GroupTrack();
 
+  std::string print_track();
 };
 
 }   // namespace model
