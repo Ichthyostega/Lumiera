@@ -31,7 +31,15 @@
 #include "../../../lib/tree.hpp"
 
 namespace gui {
+
+namespace model {
+class Track;
+}
+  
 namespace widgets {
+
+class TimelineWidget;
+  
 namespace timeline {
   
 class Track;
@@ -41,11 +49,23 @@ class Track;
  * is a class which calculates the layout of tracks in the timeline
  * track tree.
  */
-class TimelineLayoutHelper
+class TimelineLayoutHelper : public boost::noncopyable
 {
+public:
+  TimelineLayoutHelper(TimelineWidget &owner);
 protected:
   
-  lumiera::tree<Track*> currentTrackTree;
+  void clone_tree_from_sequence();
+  
+  void add_branch(
+    lumiera::tree< boost::shared_ptr<model::Track> >::iterator_base
+      parent_iterator, 
+    boost::shared_ptr<model::Track> parent);
+  
+protected:
+  TimelineWidget &timelineWidget;
+  
+  lumiera::tree< boost::shared_ptr<model::Track> > layoutTree;
 };
 
 }   // namespace timeline

@@ -43,6 +43,7 @@ TimelineWidget::TimelineWidget(
   shared_ptr<model::Sequence> source_sequence) :
   Table(2, 2),
   sequence(source_sequence),
+  layoutHelper(*this),
   viewWindow(this, 0, 1),
   selectionStart(0),
   selectionEnd(0),
