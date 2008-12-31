@@ -63,7 +63,7 @@ TimelineLayoutHelper::add_branch(
   BOOST_FOREACH(shared_ptr<model::Track> child,
     parent->get_child_tracks())
     {
-      lumiera::tree< shared_ptr<model::Track> >::iterator_base
+      tree< shared_ptr<model::Track> >::iterator_base
         child_iterator = 
           layoutTree.append_child(parent_iterator, child);
       add_branch(child_iterator, child);
