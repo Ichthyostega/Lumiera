@@ -26,9 +26,11 @@
 #include "common/subsystem-runner.hpp"
 
 #include "include/symbol.hpp"
+#include "lib/thread-wrapper.hpp"
 #include "lib/error.hpp"
 #include "lib/query.hpp"
 #include "lib/util.hpp"
+#include "lib/sync.hpp"
 
 #include <tr1/functional>
 #include <iostream>
@@ -38,6 +40,8 @@ using std::tr1::bind;
 using std::tr1::placeholders::_1;
 using util::isnil;
 using test::Test;
+using lib::Sync;
+using lib::RecursiveLock_Waitable;
 
 
 namespace lumiera {
@@ -67,17 +71,15 @@ namespace lumiera {
        */
       class MockSys
         : public lumiera::Subsys,
-          public Sync<RecursiveLock_NoWait>
+          public Sync<RecursiveLock_Waitable>
         {
-          bool isUp_;
           Literal id_;
           Literal spec_;
           
+          bool isUp_;
           volatile bool termRequest_;
           int running_duration_;
           
-          
-          operator string ()  const { return "MockSys(\""+id_+"\")"; }
           
           bool 
           shouldStart (lumiera::Option&)
@@ -100,7 +102,7 @@ namespace lumiera {
               
               if ("true"==startSpec) //----simulate successful subsystem start
                 { 
-                  Thread (bind (&MockSys::run, this, termination));
+                  Thread (id_, bind (&MockSys::run, this, termination));            /////TODO: the thread description should be rather "Test: "+string(*this), but this requires to implement the class Literal as planned
                   isUp_ = true;
                 }
               else
@@ -131,12 +133,13 @@ namespace lumiera {
               cout << *this << ": start running...\n";
               
               Literal runSpec (extractID ("run",spec_));
-              ASSERT (!isnil (startSpec));
+              ASSERT (!isnil (runSpec));
               
               if ("false"!=runSpec) //----actually hold running state for some time
                 {
                   running_duration_ = (rand() % MAX_RUNNING_TIME_ms);
-                  Lock wait(this, &MockSys::tick);
+                  
+                  Lock wait_blocking (this, &MockSys::tick);
                 }
               
               Error problemIndicator("simulated Problem killing a subsystem");
@@ -177,11 +180,14 @@ namespace lumiera {
             { }
           
           ~MockSys() { cout << *this << " dead.\n"; }
+          
+          operator string ()  const { return "MockSys(\""+id_+"\")"; }
+          
+          friend inline ostream&
+          operator<< (ostream& os, MockSys const& mosi) { return os << string(mosi); }
+
         };
     
-    
-    inline ostream& operator<< (ostream& os, MockSys const& mosi) { return os << string(mosi); }
-
   
       
     } // (End) test classes and data....
