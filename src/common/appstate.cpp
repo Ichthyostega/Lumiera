@@ -25,7 +25,7 @@
 #include "include/lifecycle.h"
 #include "common/appstate.hpp"
 #include "lib/lifecycleregistry.hpp"
-#include "common/subsystemrunner.hpp"
+#include "common/subsystem-runner.hpp"
 
 extern "C" {
 #include "common/config_interface.h"

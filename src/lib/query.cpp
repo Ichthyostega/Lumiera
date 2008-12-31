@@ -39,14 +39,11 @@ using util::contains;
 using util::isnil;
 
 
-namespace lumiera
-  {
-  
-  namespace query
-    {
-
-    namespace // local definitions
-      {
+namespace lumiera {
+  namespace query {
+    
+    namespace { // local definitions
+      
       typedef boost::function<bool(string::value_type)> ChPredicate;
       
       ChPredicate is_alpha = boost::algorithm::is_alpha();    
@@ -92,8 +89,8 @@ namespace lumiera
     /** (preliminary) helper: instead of really parsing and evaluating the terms,
      *  just do a regular expression match to extract the literal argument 
      *  behind the given predicate symbol. e.g calling
-     *  queryID ("stream", "id(abc), stream(mpeg)") 
-     *  yields "mpeg"
+     *  \code extractID ("stream", "id(abc), stream(mpeg)") \endcode 
+     *  yields \c "mpeg"
      */
     const string
     extractID (Symbol sym, const string& termString)

@@ -95,4 +95,4 @@ namespace lib {
     
   } // namespace test
 
-} // namespace lumiera
+} // namespace lib
