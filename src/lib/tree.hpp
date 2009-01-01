@@ -1,30 +1,15 @@
 /* 
 
-   $Id: tree.hh,v 1.151 2008/05/07 15:46:14 peekas Exp $
+   $Id: tree.hpp,v 1.151 2008/05/07 15:46:14 peekas Exp $
 
    STL-like templated tree class.
    Copyright (C) 2001-2006  Kasper Peeters <kasper.peeters@aei.mpg.de>.
+   Copyright (C) 2009       Joel Holdsworth <joel@airwebreathe.org.uk>.
 
 */
-
-/** \mainpage tree.hh
-    \author   Kasper Peeters
-    \version  2.62
-    \date     28-Aug-2008
-    \see      http://www.aei.mpg.de/~peekas/tree/
-    \see      http://www.aei.mpg.de/~peekas/tree/ChangeLog
-
-   The tree.hh library for C++ provides an STL-like container class
-   for n-ary trees, templated over the data stored at the
-   nodes. Various types of iterators are provided (post-order,
-   pre-order, and others). Where possible the access methods are
-   compatible with the STL or alternative algorithms are
-   available. 
-*/
-
 
 /*
-   The tree.hh code is free software; you can redistribute it and/or modify
+   The tree.hpp code is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
    the Free Software Foundation; version 2 or 3.
    
@@ -100,6 +85,15 @@ class tree_node_ { // size: 5*4=20 bytes (on 32 bit arch), can be reduced by 8.
       T data;
 }; // __attribute__((packed));
 
+/**
+ * A STL-like tree implementation class
+ * @remarks The tree class provides an STL-like container
+ * class for n-ary trees, templated over the data stored at the
+ * nodes. Various types of iterators are provided (post-order,
+ * pre-order, and others). Where possible the access methods are
+ * compatible with the STL or alternative algorithms are
+ * available.
+ **/
 template <class T, class tree_node_allocator = std::allocator<tree_node_<T> > >
 class tree {
    protected:
