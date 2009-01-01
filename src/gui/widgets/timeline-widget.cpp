@@ -50,12 +50,12 @@ TimelineWidget::TimelineWidget(
   playbackPeriodStart(0),
   playbackPeriodEnd(0),
   playbackPoint(GAVL_TIME_UNDEFINED),
-  totalHeight(0),
   horizontalAdjustment(0, 0, 0),
   verticalAdjustment(0, 0, 0),
   horizontalScroll(horizontalAdjustment),
   verticalScroll(verticalAdjustment)
 {
+  g_message("TimelineWidget::TimelineWidget");
   REQUIRE(sequence);
   
   body = new TimelineBody(this);
@@ -64,6 +64,8 @@ TimelineWidget::TimelineWidget(
   ENSURE(headerContainer != NULL);
   ruler = new TimelineRuler(this);
   ENSURE(ruler != NULL);
+  
+  g_message("Widgets Constructed");
 
   horizontalAdjustment.signal_value_changed().connect( sigc::mem_fun(
     this, &TimelineWidget::on_scroll) );
@@ -77,6 +79,7 @@ TimelineWidget::TimelineWidget(
   viewWindow.set_time_scale(GAVL_TIME_SCALE / 200);
   set_selection(2000000, 4000000);
   
+  g_message("update_tracks");
   update_tracks();
   
   attach(*body, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
@@ -90,6 +93,7 @@ TimelineWidget::TimelineWidget(
   // Receive notifications of changes to the tracks
   sequence->get_child_track_list().signal_changed().connect(
     sigc::mem_fun( this, &TimelineWidget::on_track_list_changed ) );
+  g_message("Constructor }");
 }
 
 TimelineWidget::~TimelineWidget()
@@ -296,6 +300,10 @@ TimelineWidget::update_tracks()
   // Create timeline tracks from all the model tracks
   create_timeline_tracks();
   
+  // Update the layout helper
+  layoutHelper.clone_tree_from_sequence();
+  layoutHelper.update_layout();
+  
   // Update the header container
   REQUIRE(headerContainer != NULL);
   headerContainer->show_all_children();
@@ -303,15 +311,6 @@ TimelineWidget::update_tracks()
   
   // Update the body
   body->queue_draw();
-  
-  // Recalculate the total height of the timeline scrolled area
-  totalHeight = 0;
-  BOOST_FOREACH(shared_ptr<model::Track> track,
-    sequence->get_child_tracks())
-    {
-      REQUIRE(track);
-      totalHeight += measure_branch_height(track);
-    }    
 }
 
 void
@@ -339,9 +338,6 @@ TimelineWidget::create_timeline_tracks_from_branch(
       // We will need to create one
       trackMap[model_track] = 
         create_timeline_track_from_model_track(model_track);
-      
-      // Hook up 
-
     }
   
   // Recurse to child tracks
@@ -419,6 +415,9 @@ TimelineWidget::lookup_timeline_track(
   shared_ptr<model::Track> model_track) const
 {
   REQUIRE(sequence);  
+  REQUIRE(model_track);
+  REQUIRE(model_track != sequence); // The sequence isn't really a track
+
   std::map<shared_ptr<model::Track>, shared_ptr<timeline::Track> >::
     const_iterator iterator = trackMap.find(model_track);
   if(iterator == trackMap.end())
@@ -433,31 +432,6 @@ TimelineWidget::lookup_timeline_track(
   ENSURE(iterator->second != NULL);
   return iterator->second;
 }
-
-boost::shared_ptr<model::Track>
-TimelineWidget::lookup_model_track(
-  const timeline::Track *timeline_track) const
-{
-  REQUIRE(sequence);  
-  
-  std::pair<shared_ptr<model::Track>, shared_ptr<timeline::Track> >
-    pair; 
-  BOOST_FOREACH( pair, trackMap )
-    {
-      if(pair.second.get() == timeline_track)
-        {
-          ENSURE(pair.first);
-          return pair.first;
-        }  
-    }
-    
-  // The track is not present in the map
-  // We are in an error condition if the timeline track is not found
-  // - the timeline tracks must always be synchronous with the model
-  // tracks.
-  ENSURE(0);
-  return shared_ptr<model::Track>();
-}   
 
 void
 TimelineWidget::update_scroll()
@@ -479,7 +453,8 @@ TimelineWidget::update_scroll()
   
   // Calculate the vertical length that can be scrolled:
   // the total height of all the tracks minus one screenful 
-  int y_scroll_length = totalHeight - body_allocation.get_height();
+  int y_scroll_length = layoutHelper.get_total_height() -
+    body_allocation.get_height();
   if(y_scroll_length < 0) y_scroll_length = 0;    
   
   // If by resizing we're now over-scrolled, scroll back to
@@ -499,29 +474,6 @@ TimelineWidget::update_scroll()
     verticalScroll.show();
 #endif
 
-}
-
-int
-TimelineWidget::measure_branch_height(
-  shared_ptr<model::Track> model_track)
-{
-  REQUIRE(model_track);
-  
-  const shared_ptr<timeline::Track> timeline_track =
-    lookup_timeline_track(model_track);
-  ENSURE(timeline_track);
-  
-  int height = timeline_track->get_height() + TrackPadding;
-  
-  // Recurse through all the children  
-  BOOST_FOREACH( shared_ptr<model::Track> child,
-    model_track->get_child_tracks() )
-    {
-      REQUIRE(child);
-      height += measure_branch_height(child);
-    }
-    
-  return height;
 }
 
 int

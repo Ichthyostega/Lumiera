@@ -31,13 +31,15 @@ using namespace Gtk;
 using namespace std;
 using namespace boost;
 using namespace lumiera;
+using namespace util;
 
 namespace gui {
 namespace widgets {
 namespace timeline {
   
-TimelineLayoutHelper::TimelineLayoutHelper(TimelineWidget &owner)
-  : timelineWidget(owner)
+TimelineLayoutHelper::TimelineLayoutHelper(TimelineWidget &owner) :
+  timelineWidget(owner),
+  totalHeight(0)
 {
 }
 
@@ -48,10 +50,14 @@ TimelineLayoutHelper::clone_tree_from_sequence()
   REQUIRE(sequence);
   
   layoutTree.clear();
-  TrackTree::iterator_base iterator =
-    layoutTree.set_head(sequence);
-  
+  TrackTree::iterator_base iterator = layoutTree.set_head(sequence);
   add_branch(iterator, sequence);
+}
+
+TimelineLayoutHelper::TrackTree&
+TimelineLayoutHelper::get_layout_tree()
+{
+  return layoutTree;
 }
 
 void
@@ -68,6 +74,45 @@ TimelineLayoutHelper::add_branch(
     }
 }
 
+optional<Gdk::Rectangle>
+TimelineLayoutHelper::get_track_header_rect(
+  boost::weak_ptr<timeline::Track> track)
+{
+  if(contains(headerBoxes, track))
+  {
+    Gdk::Rectangle rect(headerBoxes[track]);
+    rect.set_y(rect.get_y() - timelineWidget.get_y_scroll_offset());
+    return optional<Gdk::Rectangle>(rect);
+  }
+  return optional<Gdk::Rectangle>();
+}
+
+weak_ptr<timeline::Track>
+TimelineLayoutHelper::header_from_point(const Gdk::Point &point)
+{
+  std::pair<weak_ptr<timeline::Track>, Gdk::Rectangle> pair; 
+  BOOST_FOREACH( pair, headerBoxes )
+    {
+      // Hit test the rectangle
+      const Gdk::Rectangle &rect = pair.second;
+      
+      if(point.get_x() >= rect.get_x() &&
+        point.get_x() < rect.get_x() + rect.get_width() &&
+        point.get_y() >= rect.get_y() &&
+        point.get_y() < rect.get_y() + rect.get_height())
+        return pair.first;
+    }
+    
+  return shared_ptr<timeline::Track>();
+}
+
+int
+TimelineLayoutHelper::get_total_height() const
+{
+  ENSURE(totalHeight >= 0);
+  return totalHeight;
+}
+
 void
 TimelineLayoutHelper::update_layout()
 {  
@@ -81,11 +126,13 @@ TimelineLayoutHelper::update_layout()
   int offset = 0;//-timelineWidget->get_y_scroll_offset();
     
   //const Allocation container_allocation = get_allocation();
-  const int header_width = 100;//container_allocation.get_width();
+  const int header_width = 150;//container_allocation.get_width();
   const int indent_width = 10;
-   
+  
   layout_headers_recursive(layoutTree.begin(),
     offset, header_width, indent_width, 0, true);
+    
+  totalHeight = offset;
 }
 
 void

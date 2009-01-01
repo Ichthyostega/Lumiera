@@ -90,6 +90,12 @@ Track::get_header_widget()
   return headerWidget;
 }
 
+shared_ptr<model::Track>
+Track::get_model_track() const
+{
+  return model_track;
+}
+
 int
 Track::get_height() const
 {

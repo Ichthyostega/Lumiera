@@ -56,17 +56,30 @@ public:
   
 public:
   TimelineLayoutHelper(TimelineWidget &owner);
-protected:
-  
+    
   void clone_tree_from_sequence();
+  
+  TrackTree& get_layout_tree();
+  
+  /**
+   * Recalculates the track layout from layoutTree.
+   **/
+  void update_layout();
+  
+  boost::optional<Gdk::Rectangle> get_track_header_rect(
+    boost::weak_ptr<timeline::Track> track);
+    
+  boost::weak_ptr<timeline::Track> header_from_point(
+    const Gdk::Point &point);
+    
+  int get_total_height() const;
+  
+protected:
   
   void add_branch(TrackTree::iterator_base parent_iterator, 
     boost::shared_ptr<model::Track> parent);
   
-  /**
-   * Recaculates the track layout from layoutTree.
-   **/
-  void update_layout();
+
   
   /**
    * Recursively lays out all the controls in the header widget.
@@ -113,6 +126,8 @@ protected:
    **/
   std::map<boost::weak_ptr<timeline::Track>, Gdk::Rectangle>
     headerBoxes;
+    
+  int totalHeight;
 };
 
 }   // namespace timeline

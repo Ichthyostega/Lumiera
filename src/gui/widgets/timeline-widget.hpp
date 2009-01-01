@@ -217,24 +217,10 @@ private:
    **/
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
     boost::shared_ptr<model::Track> model_track) const;
-    
-  /**
-   * Looks up a model track in trackMap that corresponds to a
-   * given timeline track.
-   * @param timeline_track The timeline UI track to look up.
-   * @returns The model track found, or an empty shared_ptr if
-   * timeline_track has no corresponding timeline UI track (this is an
-   * error condition).
-   **/
-  boost::shared_ptr<model::Track> lookup_model_track(
-    const timeline::Track *timeline_track) const;
   
   // ----- Layout Functions ----- //
   
   void update_scroll();
-  
-  int measure_branch_height(
-    boost::shared_ptr<model::Track> model_track);
   
   int get_y_scroll_offset() const;
   
@@ -292,8 +278,6 @@ protected:
   gavl_time_t playbackPoint;
   
   boost::shared_ptr<timeline::Track> hoveringTrack;
-
-  int totalHeight;
 
   // Child Widgets
   timeline::TimelineHeaderContainer *headerContainer;
