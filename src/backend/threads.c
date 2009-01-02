@@ -98,10 +98,11 @@ lumiera_thread_run (enum lumiera_thread_class kind,
   pthread_mutex_lock (&threads_mutex);
 
   pthread_t dummy;
-  pthread_create (&dummy, &attrs, pthread_runner, &thread);
+  int error = pthread_create (&dummy, &attrs, pthread_runner, &thread);
 
   pthread_mutex_unlock (&threads_mutex);
 
+  if (error) return 0;        /////TODO temporary addition by Ichthyo; probably we'll set lumiera_error?
   return (LumieraThread) 1;
 }
 
