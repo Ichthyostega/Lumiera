@@ -332,6 +332,11 @@ return: 0
 END
 
 
+TEST "Create 20 Threads passing context" ThreadWrapper_test  <<END
+return: 0
+END
+
+
 TEST "TestOption_test" TestOption_test <<END
 out: Testing invocation with cmdline: ...
 out: --> Testgroup=ALL
