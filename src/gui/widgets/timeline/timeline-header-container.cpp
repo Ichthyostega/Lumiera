@@ -317,14 +317,14 @@ TimelineHeaderContainer::layout_headers()
   if(!gdkWindow)
     return;
     
-  TimelineLayoutHelper &layoutHelper =
+  TimelineLayoutHelper &layout_helper =
     timelineWidget->layoutHelper;
-  const TimelineLayoutHelper::TrackTree &layoutTree =
-    layoutHelper.get_layout_tree();
+  const TimelineLayoutHelper::TrackTree &layout_tree =
+    layout_helper.get_layout_tree();
   
   TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
-  for(iterator = ++layoutTree.begin(); // ++ so that we skip the sequence root
-    iterator != layoutTree.end();
+  for(iterator = ++layout_tree.begin(); // ++ so that we skip the sequence root
+    iterator != layout_tree.end();
     iterator++)
     {      
       const shared_ptr<timeline::Track> timeline_track =
@@ -333,7 +333,7 @@ TimelineHeaderContainer::layout_headers()
       Widget &widget = timeline_track->get_header_widget();
       
       optional<Gdk::Rectangle> header_rect =
-        layoutHelper.get_track_header_rect(timeline_track);
+        layout_helper.get_track_header_rect(timeline_track);
       
       if(header_rect)
         {
@@ -480,12 +480,12 @@ shared_ptr<timeline::Track>
 TimelineHeaderContainer::expander_button_from_point(
   const Gdk::Point &point)
 { 
-  const TimelineLayoutHelper::TrackTree &layoutTree =
+  const TimelineLayoutHelper::TrackTree &layout_tree =
     timelineWidget->layoutHelper.get_layout_tree();
   
   TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
-  for(iterator = ++layoutTree.begin(); // ++ so we skip the sequence root
-    iterator != layoutTree.end();
+  for(iterator = ++layout_tree.begin(); // ++ so we skip the sequence root
+    iterator != layout_tree.end();
     iterator++)
     {
       const shared_ptr<timeline::Track> timeline_track =
