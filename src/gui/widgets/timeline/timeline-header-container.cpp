@@ -311,6 +311,7 @@ void
 TimelineHeaderContainer::layout_headers()
 { 
   REQUIRE(timelineWidget != NULL);
+  REQUIRE(margin >= 0); // read_styles must have been called before now
 
   // We can't layout before the widget has been set up
   if(!gdkWindow)
@@ -568,7 +569,10 @@ void
 TimelineHeaderContainer::read_styles()
 {
   if(margin <= 0)
-    get_style_property("heading_margin", margin);
+    {
+      get_style_property("heading_margin", margin);
+      margin = max(margin, 0);
+    }
   else 
     WARN(gui, "TimelineHeaderContainer::read_styles()"
       " should only be called once");
