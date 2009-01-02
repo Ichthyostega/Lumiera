@@ -87,6 +87,9 @@ TimelineHeaderContainer::on_realize()
   // Call base class:
   Gtk::Container::on_realize();
   
+  // Load the styles up
+  read_styles();
+  
   // Create the GdkWindow:
   GdkWindowAttr attributes;
   memset(&attributes, 0, sizeof(attributes));
@@ -269,8 +272,6 @@ TimelineHeaderContainer::on_expose_event(GdkEventExpose *event)
   if(gdkWindow)
     {
       const Allocation container_allocation = get_allocation();
-      
-      read_styles();
        
       // Paint a border underneath all the root headers
       BOOST_FOREACH( shared_ptr<model::Track> model_track,
@@ -314,7 +315,7 @@ TimelineHeaderContainer::layout_headers()
   // We can't layout before the widget has been set up
   if(!gdkWindow)
     return;
-  
+    
   TimelineLayoutHelper &layoutHelper =
     timelineWidget->layoutHelper;
   const TimelineLayoutHelper::TrackTree &layoutTree =
@@ -568,6 +569,9 @@ TimelineHeaderContainer::read_styles()
 {
   if(margin <= 0)
     get_style_property("heading_margin", margin);
+  else 
+    WARN(gui, "TimelineHeaderContainer::read_styles()"
+      " should only be called once");
 }
 
 }   // namespace timeline
