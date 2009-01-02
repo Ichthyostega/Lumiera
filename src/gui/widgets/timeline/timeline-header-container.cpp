@@ -69,6 +69,9 @@ TimelineHeaderContainer::TimelineHeaderContainer(
     
   // Install style properties
   register_styles();
+  
+  // Load the styles up
+  read_styles();
 }
  
 void
@@ -86,9 +89,6 @@ TimelineHeaderContainer::on_realize()
   
   // Call base class:
   Gtk::Container::on_realize();
-  
-  // Load the styles up
-  read_styles();
   
   // Create the GdkWindow:
   GdkWindowAttr attributes;
