@@ -102,7 +102,8 @@ TimelineLayoutHelper::header_from_point(const Gdk::Point &point)
         point.get_y() < rect.get_y() + rect.get_height())
         return pair.first;
     }
-    
+  
+  // No track was found - return an empty pointer
   return shared_ptr<timeline::Track>();
 }
 
