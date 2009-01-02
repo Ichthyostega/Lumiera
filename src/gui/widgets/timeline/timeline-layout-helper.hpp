@@ -48,53 +48,124 @@ class Track;
  * A helper class for the TimelineWidget. TimelineLayoutHelper
  * is a class which calculates the layout of tracks in the timeline
  * track tree.
+ * @see gui::widgets::TimelineWidget
  */
 class TimelineLayoutHelper : public boost::noncopyable
 {
 public:
+  /**
+   * Definition of the layout track tree type.
+   **/
   typedef lumiera::tree< boost::shared_ptr<model::Track> > TrackTree;
   
 public:
+  /**
+   * Constructor.
+   * @param owner The timeline widget which is the owner of this helper
+   * class.
+   **/
   TimelineLayoutHelper(TimelineWidget &owner);
-    
+  
+  /**
+   * Clones the timelineWidget sequence's track tree to create a layout
+   * tree which will be identitcal to it.
+   * @remarks The current layout tree will be deleted and replaced with
+   * the clone.
+   * @see add_branch
+   **/
   void clone_tree_from_sequence();
   
+  /**
+   * Gets a reference to the helper's layout tree.
+   * @return Returns a reference to the helper's layout tree.
+   **/
   TrackTree& get_layout_tree();
   
   /**
    * Recalculates the track layout from layoutTree.
+   * @see layout_headers_recursive
    **/
   void update_layout();
   
+  /**
+   * Get's the header rectangle of a given timeline track.
+   * @param[in] track The track which will be looked up.
+   * @return Returns the rectangle of the header offset by the y-scroll
+   * offset, or if the track is hidden, or not present in the layout
+   * tree, an empty optional will be returned.
+   * @remarks This function is only usable after update_layout() has
+   * been called on a valid tree of tracks.
+   * @see update_layout()
+   **/
   boost::optional<Gdk::Rectangle> get_track_header_rect(
     boost::weak_ptr<timeline::Track> track);
-    
+  
+  /**
+   * Searches for a header which has the specified point inside of it.
+   * @param[in] point The point to search with.
+   * @return Returns the header which has been found, or if no header is
+   * found, an empty shared pointer is returned.
+   * @remarks The point specified is relative to the scroll offset, so
+   * y = 0 is the top edge of the scroll view. This function is only
+   * usable after update_layout() has been called on a valid tree of
+   * tracks.
+   * @see update_layout()
+   **/
   boost::shared_ptr<timeline::Track> header_from_point(
     Gdk::Point point);
-    
+  
+  /**
+   * Searches for a tack which has the specified y-offset inside of it.
+   * @param[in] y The y-coordinate to search with.
+   * @return Returns the track which has been found, or if no track is
+   * found, an empty shared pointer is returned.
+   * @remarks The point specified is relative to the scroll offset, so
+   * y = 0 is the top edge of the scroll view. This function is only
+   * usable after update_layout() has been called on a valid tree of
+   * tracks.
+   * @see update_layout()
+   **/
   boost::shared_ptr<timeline::Track> track_from_y(int y);
-    
+  
+  /**
+   * Returns the total height in pixels of the layout tree.
+   * @remarks This function is only on returns a valid value fter
+   * update_layout() has been called on a valid tree of tracks.
+   * @see update_layout()
+   **/
   int get_total_height() const;
   
 protected:
   
+  /**
+   * A helper function for clone_tree_from_sequence(). This function
+   * clones a branch within the model tree into the specified point in
+   * that layout tree.
+   * @param[in] parent_iterator The iterator of the node in the tree
+   * which will become the parent of any tracks added.
+   * @param[in] parent A pointer to the model track whose children
+   * will be added to the layout tree branch.
+   * @see clone_tree_from_sequence()
+   **/
   void add_branch(TrackTree::iterator_base parent_iterator, 
     boost::shared_ptr<model::Track> parent);
   
-
-  
   /**
-   * Recursively lays out all the controls in the header widget.
-  
-  * /!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! [in,out]
-  * 
-  * 
-  *  * @param track The parent track object which will be recursed into.
-   * @param offset A shared value used to accumulate the y-offset of
-   * header widgets.
-   * @param header_width The width of this widget in pixels.
-   * !!!!!!!!!!! indent_width
-   * @param depth The depth within the tree of track.
+   * Recursively calculates the boxes for a given branch in the timeline
+   * tree.
+   * @param[in] parent_iterator The iterator of the parent of the branch
+   * whose boxes will be laid out.
+   * @param[in,out] offset The accumulating y-offset value in pixels.
+   * This value should be set to 0 on the first call, and will
+   * susequently accumulate the offset of each box.
+   * @param[in] header_width The width of the header container widget in
+   * pixels
+   * @param[in] depth The depth within the tree of tracks. depth = 0 for
+   * root tracks.
+   * @param[in] parent_expanded This value is set to true if all of the
+   * ancestors of this track, up to the root are expanded and visible,
+   * false if any of them are collapsed.
+   * @see update_layout()
    **/
   void layout_headers_recursive(
     TrackTree::iterator_base parent_iterator,
@@ -116,19 +187,31 @@ protected:
   
 protected:
 
+  /**
+   * The owner timeline widget as provided to the constructor.
+   **/
   TimelineWidget &timelineWidget;
   
+  /**
+   * The layout tree.
+   **/
   TrackTree layoutTree;
   
   /**
    * A map of tracks to the rectangles of their headers.
    * @remarks This map is used as a cache, so that the rectangles don't
    * need to be perpetually recalculated. This cache is regenerated by
-   * the layout_headers method.
+   * the update_layout method.
+   * @see update_layout()
    **/
   std::map<boost::weak_ptr<timeline::Track>, Gdk::Rectangle>
     headerBoxes;
-    
+  
+  /**
+   * The total height of the track tree layout in pixels. This value
+   * is only valid after layout_headers has been called.
+   * @see update_layout()
+   **/
   int totalHeight;
 };
 
