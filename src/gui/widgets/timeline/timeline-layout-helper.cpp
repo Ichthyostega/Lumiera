@@ -88,8 +88,12 @@ TimelineLayoutHelper::get_track_header_rect(
 }
 
 shared_ptr<timeline::Track>
-TimelineLayoutHelper::header_from_point(const Gdk::Point &point)
+TimelineLayoutHelper::header_from_point(Gdk::Point point)
 {
+  // Apply the scroll offset
+  point.set_y(point.get_y() + timelineWidget.get_y_scroll_offset());
+  
+  // Search the headers
   std::pair<weak_ptr<timeline::Track>, Gdk::Rectangle> pair; 
   BOOST_FOREACH( pair, headerBoxes )
     {
@@ -108,8 +112,12 @@ TimelineLayoutHelper::header_from_point(const Gdk::Point &point)
 }
 
 boost::shared_ptr<timeline::Track>
-TimelineLayoutHelper::track_from_y(const int y)
+TimelineLayoutHelper::track_from_y(int y)
 {
+  // Apply the scroll offset
+  y += timelineWidget.get_y_scroll_offset();
+  
+  // Search the tracks
   std::pair<weak_ptr<timeline::Track>, Gdk::Rectangle> pair; 
   BOOST_FOREACH( pair, headerBoxes )
     {
