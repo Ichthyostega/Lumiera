@@ -287,26 +287,46 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
   REQUIRE(timelineWidget->sequence);
   
   // Prepare
+  TimelineLayoutHelper &layout_helper = timelineWidget->layoutHelper;
+  const TimelineLayoutHelper::TrackTree &layout_tree =
+    layout_helper.get_layout_tree();
   const Allocation allocation = get_allocation();
   
   // Save the view matrix
   Cairo::Matrix view_matrix;
   cr->get_matrix(view_matrix);
   
-  // Translate the view by the scroll distance
-  cr->translate(0, -get_vertical_offset());
-  
-  // Interate drawing each track
-  BOOST_FOREACH( shared_ptr<model::Track> model_track,
-    timelineWidget->sequence->get_child_tracks() )
-    draw_track_recursive(cr, model_track, allocation.get_width());
+  // Iterate drawing each track
+  TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
+  for(iterator = ++layout_tree.begin(); // ++ so we skip the sequence root
+    iterator != layout_tree.end();
+    iterator++)
+    {
+      const shared_ptr<model::Track> model_track(*iterator);
+      const shared_ptr<timeline::Track> timeline_track =
+        timelineWidget->lookup_timeline_track(*iterator);
+        
+      optional<Gdk::Rectangle> rect =
+        layout_helper.get_track_header_rect(timeline_track);
+      
+      // Is this track visible?
+      if(rect)
+        {
+          // Translate to the top of the track
+          cr->set_matrix(view_matrix);
+          cr->translate(0, rect->get_y());
+          
+          // Draw the track
+          draw_track(cr, model_track, allocation.get_width());
+        } 
+    }
   
   // Restore the view matrix  
   cr->set_matrix(view_matrix);
 }
 
 void
-TimelineBody::draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
+TimelineBody::draw_track(Cairo::RefPtr<Cairo::Context> cr,
   shared_ptr<model::Track> model_track, const int view_width) const
 {
   REQUIRE(cr);
@@ -329,14 +349,6 @@ TimelineBody::draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
   cr->save();
   timeline_track->draw_track(cr, &timelineWidget->get_view_window());
   cr->restore();
-  
-  // Shift for the next track
-  cr->translate(0, height  + TimelineWidget::TrackPadding);
-  
-  // Recurse drawing into children
-  BOOST_FOREACH( shared_ptr<model::Track> child,
-    model_track->get_child_tracks() )
-    draw_track_recursive(cr, child, view_width);
 }
 
 void

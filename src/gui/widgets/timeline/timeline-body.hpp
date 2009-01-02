@@ -118,7 +118,7 @@ private:
    */
   void draw_tracks(Cairo::RefPtr<Cairo::Context> cr);
   
-  void draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
+  void draw_track(Cairo::RefPtr<Cairo::Context> cr,
     boost::shared_ptr<model::Track> track, const int view_width) const;
   
   /**
