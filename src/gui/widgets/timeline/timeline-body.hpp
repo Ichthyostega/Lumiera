@@ -160,7 +160,7 @@ private:
     Shift
   };
   
-  timeline::Tool *tool;
+  boost::scoped_ptr<timeline::Tool> tool;
   double mouseDownX, mouseDownY;
   
   // Scroll State

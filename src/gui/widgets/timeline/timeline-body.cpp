@@ -58,42 +58,36 @@ TimelineBody::TimelineBody(TimelineWidget &timeline_widget) :
 
 TimelineBody::~TimelineBody()
 {
-  REQUIRE(tool != NULL);
-  if(tool != NULL)
-    delete tool;
+  WARN_IF(!tool, gui, "An invalid tool pointer is unexpected here");
 }
 
 ToolType
 TimelineBody::get_tool() const
 {
-  REQUIRE(tool != NULL);
-  if(tool != NULL)
-    return tool->get_type();
-  return gui::widgets::timeline::None;
+  REQUIRE(tool);
+  return tool->get_type();
 }
   
 void
 TimelineBody::set_tool(timeline::ToolType tool_type)
 {  
   // Tidy up old tool
-  if(tool != NULL)
+  if(tool)
     {
       // Do we need to change tools?
       if(tool->get_type() == tool_type)
         return;
-        
-      delete tool;
     }
   
   // Create the new tool
   switch(tool_type)
     {
     case timeline::Arrow:
-      tool = new ArrowTool(*this);
+      tool.reset(new ArrowTool(*this));
       break;
       
     case timeline::IBeam:
-      tool = new IBeamTool(*this);
+      tool.reset(new IBeamTool(*this));
       break;
       
     default:
