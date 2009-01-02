@@ -150,6 +150,8 @@ TimelineLayoutHelper::update_layout()
     offset, header_width, indent_width, 0, true);
     
   totalHeight = offset;
+  
+  timelineWidget.on_layout_changed();
 }
 
 void

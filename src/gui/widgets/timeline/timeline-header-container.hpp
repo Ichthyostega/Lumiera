@@ -283,6 +283,7 @@ private:
    **/
   int expand_button_size;
   
+  friend class gui::widgets::TimelineWidget;
   friend class timeline::Track;
 };
 

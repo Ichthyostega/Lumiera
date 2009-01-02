@@ -220,6 +220,8 @@ private:
   
   // ----- Layout Functions ----- //
   
+  void on_layout_changed();
+  
   void update_scroll();
   
   int get_y_scroll_offset() const;

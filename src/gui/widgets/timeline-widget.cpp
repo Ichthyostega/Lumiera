@@ -295,17 +295,14 @@ TimelineWidget::update_tracks()
   // Create timeline tracks from all the model tracks
   create_timeline_tracks();
   
-  // Update the layout helper
-  layoutHelper.clone_tree_from_sequence();
-  layoutHelper.update_layout();
-  
   // Update the header container
   REQUIRE(headerContainer != NULL);
   headerContainer->show_all_children();
   headerContainer->update_headers();
   
-  // Update the body
-  body->queue_draw();
+  // Update the layout helper
+  layoutHelper.clone_tree_from_sequence();
+  layoutHelper.update_layout();
 }
 
 void
@@ -426,6 +423,16 @@ TimelineWidget::lookup_timeline_track(
     }
   ENSURE(iterator->second != NULL);
   return iterator->second;
+}
+
+void
+TimelineWidget::on_layout_changed()
+{
+  REQUIRE(headerContainer != NULL);
+  REQUIRE(body != NULL);
+  
+  headerContainer->layout_headers();
+  body->queue_draw();
 }
 
 void

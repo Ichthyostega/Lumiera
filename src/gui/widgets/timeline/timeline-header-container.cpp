@@ -190,7 +190,6 @@ bool TimelineHeaderContainer::on_button_release_event (
       clickedExpander.reset();
       
       timelineWidget->layoutHelper.update_layout();
-      layout_headers();
     }
 
   return Container::on_button_release_event(event);    
