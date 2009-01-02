@@ -308,6 +308,7 @@ public:
 protected:
   static const int TrackPadding;
   static const int HeaderWidth;
+  static const int HeaderIndentWidth;
   static const double ZoomIncrement;
 
   friend class timeline::TimelineViewWindow;

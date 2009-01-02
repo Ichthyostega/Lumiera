@@ -133,24 +133,20 @@ TimelineLayoutHelper::get_total_height() const
 void
 TimelineLayoutHelper::update_layout()
 {  
-  // Make sure the style are loaded
-  //read_styles();
+  int offset = 0;
     
   // Clear previously cached layout
   headerBoxes.clear();
-
-  // Start at minus-the-scroll offset
-  int offset = 0;//-timelineWidget->get_y_scroll_offset();
-    
-  //const Allocation container_allocation = get_allocation();
-  const int header_width = 150;//container_allocation.get_width();
-  const int indent_width = 10;
   
+  // Do the layout
+  const int header_width = TimelineWidget::HeaderWidth;
+  const int indent_width = TimelineWidget::HeaderIndentWidth;
   layout_headers_recursive(layoutTree.begin(),
     offset, header_width, indent_width, 0, true);
     
   totalHeight = offset;
   
+  // Signal that the layout has changed
   timelineWidget.on_layout_changed();
 }
 

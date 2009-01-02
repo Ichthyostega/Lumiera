@@ -86,7 +86,7 @@ protected:
   /**
    * Recursively lays out all the controls in the header widget.
   
-  * /!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  * /!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! [in,out]
   * 
   * 
   *  * @param track The parent track object which will be recursed into.
