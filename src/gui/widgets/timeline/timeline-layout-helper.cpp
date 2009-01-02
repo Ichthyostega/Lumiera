@@ -162,7 +162,7 @@ void
 TimelineLayoutHelper::layout_headers_recursive(
   TrackTree::iterator_base parent_iterator,
   int &offset, const int header_width, const int indent_width,
-  const int depth, bool parent_expanded)
+  const int depth, const bool parent_expanded)
 {
   REQUIRE(depth >= 0);
   
