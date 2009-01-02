@@ -62,7 +62,7 @@ TimelineWidget::TimelineWidget(
   ENSURE(body != NULL);
   headerContainer = new TimelineHeaderContainer(*this);
   ENSURE(headerContainer != NULL);
-  ruler = new TimelineRuler(this);
+  ruler = new TimelineRuler(*this);
   ENSURE(ruler != NULL);
 
   horizontalAdjustment.signal_value_changed().connect( sigc::mem_fun(
