@@ -87,7 +87,7 @@ TimelineLayoutHelper::get_track_header_rect(
   return optional<Gdk::Rectangle>();
 }
 
-weak_ptr<timeline::Track>
+shared_ptr<timeline::Track>
 TimelineLayoutHelper::header_from_point(const Gdk::Point &point)
 {
   std::pair<weak_ptr<timeline::Track>, Gdk::Rectangle> pair; 
@@ -100,7 +100,7 @@ TimelineLayoutHelper::header_from_point(const Gdk::Point &point)
         point.get_x() < rect.get_x() + rect.get_width() &&
         point.get_y() >= rect.get_y() &&
         point.get_y() < rect.get_y() + rect.get_height())
-        return pair.first;
+        return shared_ptr<timeline::Track>(pair.first);
     }
   
   // No track was found - return an empty pointer

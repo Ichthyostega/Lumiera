@@ -69,7 +69,7 @@ public:
   boost::optional<Gdk::Rectangle> get_track_header_rect(
     boost::weak_ptr<timeline::Track> track);
     
-  boost::weak_ptr<timeline::Track> header_from_point(
+  boost::shared_ptr<timeline::Track> header_from_point(
     const Gdk::Point &point);
     
   boost::shared_ptr<timeline::Track> track_from_y(const int y);
