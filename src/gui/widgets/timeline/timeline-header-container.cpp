@@ -37,14 +37,12 @@ namespace widgets {
 namespace timeline {
 
 TimelineHeaderContainer::TimelineHeaderContainer(
-  gui::widgets::TimelineWidget *timeline_widget) :
+  gui::widgets::TimelineWidget &timeline_widget) :
     Glib::ObjectBase("TimelineHeaderContainer"),
     timelineWidget(timeline_widget),
     margin(-1),
     expand_button_size(12)
 {
-  REQUIRE(timeline_widget != NULL);
-
   // This widget will not have a window at first
   set_flags(Gtk::NO_WINDOW);
   
@@ -52,12 +50,12 @@ TimelineHeaderContainer::TimelineHeaderContainer(
   
   // Connect to the timeline widget's vertical scroll event,
   // so that we get notified when the view shifts
-  timelineWidget->verticalAdjustment.signal_value_changed().connect(
+  timelineWidget.verticalAdjustment.signal_value_changed().connect(
     sigc::mem_fun(this, &TimelineHeaderContainer::on_scroll) );
     
   // Connect to the timeline widget's hover event,
   // so that we get notified when tracks are hovered on
-  timelineWidget->hovering_track_changed_signal().connect(
+  timelineWidget.hovering_track_changed_signal().connect(
     sigc::mem_fun(this,
     &TimelineHeaderContainer::on_hovering_track_changed) );
     
@@ -138,7 +136,6 @@ TimelineHeaderContainer::on_unrealize()
 bool TimelineHeaderContainer::on_button_press_event (
   GdkEventButton* event)
 {
-  REQUIRE(timelineWidget != NULL);
   REQUIRE(event != NULL);
   
   switch(event->button)
@@ -157,7 +154,7 @@ bool TimelineHeaderContainer::on_button_press_event (
       {
         // Popup the context menu
         shared_ptr<Track> header(
-          timelineWidget->layoutHelper.header_from_point(
+          timelineWidget.layoutHelper.header_from_point(
             Gdk::Point(event->x, event->y)));
         
         // Are we hovering on a header?
@@ -189,7 +186,7 @@ bool TimelineHeaderContainer::on_button_release_event (
       clickedExpander->set_expanded(!clickedExpander->get_expanded());
       clickedExpander.reset();
       
-      timelineWidget->layoutHelper.update_layout();
+      timelineWidget.layoutHelper.update_layout();
     }
 
   return Container::on_button_release_event(event);    
@@ -309,7 +306,6 @@ TimelineHeaderContainer::on_hovering_track_changed(
 void
 TimelineHeaderContainer::layout_headers()
 { 
-  REQUIRE(timelineWidget != NULL);
   REQUIRE(margin >= 0); // read_styles must have been called before now
 
   // We can't layout before the widget has been set up
@@ -317,7 +313,7 @@ TimelineHeaderContainer::layout_headers()
     return;
     
   TimelineLayoutHelper &layout_helper =
-    timelineWidget->layoutHelper;
+    timelineWidget.layoutHelper;
   const TimelineLayoutHelper::TrackTree &layout_tree =
     layout_helper.get_layout_tree();
   
@@ -417,7 +413,6 @@ TimelineHeaderContainer::draw_header_decoration(
     shared_ptr<model::Track> model_track,
     const Gdk::Rectangle &clip_rect)
 {
-  REQUIRE(timelineWidget != NULL);
   REQUIRE(model_track != NULL);
   REQUIRE(clip_rect.get_width() > 0);
   REQUIRE(clip_rect.get_height() > 0);
@@ -430,7 +425,7 @@ TimelineHeaderContainer::draw_header_decoration(
   
   // Get the header box  
   const optional<Gdk::Rectangle> &optional_box = 
-    timelineWidget->layoutHelper.get_track_header_rect(timeline_track);
+    timelineWidget.layoutHelper.get_track_header_rect(timeline_track);
   REQUIRE(optional_box);
   const Gdk::Rectangle box = *optional_box;
   
@@ -480,7 +475,7 @@ TimelineHeaderContainer::expander_button_from_point(
   const Gdk::Point &point)
 { 
   const TimelineLayoutHelper::TrackTree &layout_tree =
-    timelineWidget->layoutHelper.get_layout_tree();
+    timelineWidget.layoutHelper.get_layout_tree();
   
   TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
   for(iterator = ++layout_tree.begin(); // ++ so we skip the sequence root
@@ -511,11 +506,10 @@ const optional<Gdk::Rectangle>
 TimelineHeaderContainer::get_expander_button_rectangle(
   shared_ptr<Track> track)
 {
-  REQUIRE(timelineWidget != NULL);
   REQUIRE(track != NULL);
   
   optional<Gdk::Rectangle> box =
-    timelineWidget->layoutHelper.get_track_header_rect(track);
+    timelineWidget.layoutHelper.get_track_header_rect(track);
   if(box)
     {
       return optional<Gdk::Rectangle>(Gdk::Rectangle(
@@ -531,10 +525,9 @@ TimelineHeaderContainer::lookup_timeline_track(
   shared_ptr<model::Track> model_track)
 {
   REQUIRE(model_track != NULL);
-  REQUIRE(timelineWidget != NULL);
   
   shared_ptr<timeline::Track> timeline_track =
-    timelineWidget->lookup_timeline_track(model_track);
+    timelineWidget.lookup_timeline_track(model_track);
   ENSURE(timeline_track);
   
   return timeline_track;
@@ -543,9 +536,8 @@ TimelineHeaderContainer::lookup_timeline_track(
 const std::list< boost::shared_ptr<model::Track> >
 TimelineHeaderContainer::get_tracks() const
 {
-  REQUIRE(timelineWidget != NULL);
-  REQUIRE(timelineWidget->sequence);
-  return timelineWidget->sequence->get_child_tracks();
+  [.sequence);
+  return timelineWidget.sequence->get_child_tracks();
 }
 
 void

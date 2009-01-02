@@ -57,7 +57,7 @@ public:
    *
    * @param[in] timeline_widget A pointer to the owner timeline widget
    */
-  TimelineHeaderContainer(gui::widgets::TimelineWidget* timeline_widget);
+  TimelineHeaderContainer(gui::widgets::TimelineWidget &timeline_widget);
   
   /**
    * Attaches the header all the header widgets of root
@@ -246,7 +246,7 @@ private:
   /**
    * The owner TimelineWidget of which this class is a helper
    */
-  gui::widgets::TimelineWidget* const timelineWidget;
+  gui::widgets::TimelineWidget &timelineWidget;
   
   /**
    * The widget's window object. 
