@@ -536,7 +536,7 @@ TimelineHeaderContainer::lookup_timeline_track(
 const std::list< boost::shared_ptr<model::Track> >
 TimelineHeaderContainer::get_tracks() const
 {
-  [.sequence);
+  REQUIRE(timelineWidget.sequence);
   return timelineWidget.sequence->get_child_tracks();
 }
 
