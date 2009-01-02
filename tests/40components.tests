@@ -337,6 +337,11 @@ return: 0
 END
 
 
+TEST "Starting and stopping subsystems" SubsystemRunner_test  <<END
+return: 0
+END
+
+
 TEST "TestOption_test" TestOption_test <<END
 out: Testing invocation with cmdline: ...
 out: --> Testgroup=ALL

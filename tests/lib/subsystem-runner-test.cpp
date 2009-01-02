@@ -24,6 +24,7 @@
 #include "lib/test/run.hpp"
 #include "common/subsys.hpp"
 #include "common/subsystem-runner.hpp"
+#include "common/option.hpp"
 
 #include "include/symbol.hpp"
 #include "lib/thread-wrapper.hpp"
@@ -59,6 +60,11 @@ namespace lumiera {
        *  shutdown request every XX milliseconds */ 
       const uint TICK_DURATION_ms = 5;
       
+      /** dummy options just to be ignored */
+      util::Cmdline dummyArgs ("");
+      lumiera::Option dummyOpt (dummyArgs);
+      
+      
       
       /** 
        * A simulated "Lumiera Subsystem".
@@ -77,6 +83,7 @@ namespace lumiera {
           Literal spec_;
           
           bool isUp_;
+          bool didRun_;
           volatile bool termRequest_;
           int running_duration_;
           
@@ -137,6 +144,7 @@ namespace lumiera {
               
               if ("false"!=runSpec) //----actually hold running state for some time
                 {
+                  didRun_ = true;
                   running_duration_ = (rand() % MAX_RUNNING_TIME_ms);
                   
                   Lock wait_blocking (this, &MockSys::tick);
@@ -175,6 +183,7 @@ namespace lumiera {
             : id_(id),
               spec_(spec),
               isUp_(false),
+              didRun_(false),
               termRequest_(false),
               running_duration_(0)
             { }
@@ -185,7 +194,8 @@ namespace lumiera {
           
           friend inline ostream&
           operator<< (ostream& os, MockSys const& mosi) { return os << string(mosi); }
-
+          
+          bool didRun ()  const { return didRun_; }
         };
     
   
@@ -217,9 +227,25 @@ namespace lumiera {
         virtual void
         run (Arg) 
           {
-            
+            singleSubsys_complete_cycle();
           }
         
+        
+        void
+        singleSubsys_complete_cycle()
+          {
+            MockSys unit ("one", "start(true), run(true).");
+            SubsystemRunner runner(dummyOpt);
+            REQUIRE (!unit.isRunning());
+            REQUIRE (!unit.didRun());
+            
+            runner.maybeRun (unit);
+            bool emergency = runner.wait();
+            
+            ASSERT (!emergency);
+            ASSERT (!unit.isRunning());
+            ASSERT (unit.didRun());
+          }
       };
     
       
