@@ -36,6 +36,7 @@ namespace widgets {
 
 const int TimelineWidget::TrackPadding = 1;
 const int TimelineWidget::HeaderWidth = 150;
+const int TimelineWidget::HeaderIndentWidth = 10;
 const double TimelineWidget::ZoomIncrement = 1.25;
 const int64_t TimelineWidget::MaxScale = 30000000;
 
