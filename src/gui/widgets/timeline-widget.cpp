@@ -55,7 +55,6 @@ TimelineWidget::TimelineWidget(
   horizontalScroll(horizontalAdjustment),
   verticalScroll(verticalAdjustment)
 {
-  g_message("TimelineWidget::TimelineWidget");
   REQUIRE(sequence);
   
   body = new TimelineBody(this);
@@ -64,8 +63,6 @@ TimelineWidget::TimelineWidget(
   ENSURE(headerContainer != NULL);
   ruler = new TimelineRuler(this);
   ENSURE(ruler != NULL);
-  
-  g_message("Widgets Constructed");
 
   horizontalAdjustment.signal_value_changed().connect( sigc::mem_fun(
     this, &TimelineWidget::on_scroll) );
@@ -79,7 +76,6 @@ TimelineWidget::TimelineWidget(
   viewWindow.set_time_scale(GAVL_TIME_SCALE / 200);
   set_selection(2000000, 4000000);
   
-  g_message("update_tracks");
   update_tracks();
   
   attach(*body, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
@@ -93,7 +89,6 @@ TimelineWidget::TimelineWidget(
   // Receive notifications of changes to the tracks
   sequence->get_child_track_list().signal_changed().connect(
     sigc::mem_fun( this, &TimelineWidget::on_track_list_changed ) );
-  g_message("Constructor }");
 }
 
 TimelineWidget::~TimelineWidget()
