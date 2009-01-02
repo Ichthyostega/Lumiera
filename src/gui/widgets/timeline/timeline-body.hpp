@@ -119,7 +119,8 @@ private:
   void draw_tracks(Cairo::RefPtr<Cairo::Context> cr);
   
   void draw_track(Cairo::RefPtr<Cairo::Context> cr,
-    boost::shared_ptr<model::Track> track, const int view_width) const;
+    boost::shared_ptr<timeline::Track> timeline_track,
+    const int view_width) const;
   
   /**
    * Draws the selected timeline period.

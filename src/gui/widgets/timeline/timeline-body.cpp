@@ -317,7 +317,7 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
           cr->translate(0, rect->get_y());
           
           // Draw the track
-          draw_track(cr, model_track, allocation.get_width());
+          draw_track(cr, timeline_track, allocation.get_width());
         } 
     }
   
@@ -327,15 +327,13 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
 
 void
 TimelineBody::draw_track(Cairo::RefPtr<Cairo::Context> cr,
-  shared_ptr<model::Track> model_track, const int view_width) const
+  shared_ptr<timeline::Track> timeline_track,
+  const int view_width) const
 {
   REQUIRE(cr);
-  REQUIRE(model_track != NULL);
+  REQUIRE(timeline_track != NULL);
   REQUIRE(timelineWidget != NULL);
-  
-  shared_ptr<timeline::Track> timeline_track = timelineWidget->
-    lookup_timeline_track(model_track);
-  
+    
   const int height = timeline_track->get_height();
   REQUIRE(height >= 0);
 
