@@ -244,6 +244,7 @@ bool
 TimelineBody::on_motion_notify_event(GdkEventMotion *event)
 {
   REQUIRE(event != NULL);
+  REQUIRE(timelineWidget != NULL);
   
   // Handle a middle-mouse drag if one is occuring
   switch(dragType)
@@ -270,8 +271,8 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
   tool->on_motion_notify_event(event);
   
   // See if the track that we're hovering over has changed
-  shared_ptr<timeline::Track> new_hovering_track =
-    track_from_point(event->y);
+  shared_ptr<timeline::Track> new_hovering_track(
+    timelineWidget->layoutHelper.track_from_y(event->y));
   if(timelineWidget->get_hovering_track() != new_hovering_track)
       timelineWidget->set_hovering_track(new_hovering_track);
   
@@ -444,60 +445,6 @@ void
 TimelineBody::set_vertical_offset(int offset)
 {
   timelineWidget->verticalAdjustment.set_value(offset);
-}
-
-shared_ptr<timeline::Track>
-TimelineBody::track_from_point(const int y) const
-{
-  REQUIRE(timelineWidget != NULL);
-  REQUIRE(timelineWidget->sequence);
-  
-  int offset = -get_vertical_offset();
-  
-  BOOST_FOREACH( shared_ptr<model::Track> model_track,
-    timelineWidget->sequence->get_child_tracks() )
-    {
-      shared_ptr<timeline::Track> result = track_from_branch(
-        model_track, y, offset);
-      if(result)
-        return result;
-    }
-  
-  // No track has been found with this point in it
-  return boost::shared_ptr<timeline::Track>();
-}
-
-shared_ptr<timeline::Track> TimelineBody::track_from_branch(
-  shared_ptr<model::Track> model_track,
-  const int y, int &offset) const
-{
-  REQUIRE(timelineWidget != NULL);
-  
-  shared_ptr<timeline::Track> timeline_track = timelineWidget->
-    lookup_timeline_track(model_track);
-  
-  const int height = timeline_track->get_height();
-  REQUIRE(height >= 0);
-  
-  // Does the point fall in this track?
-  if(offset <= y && y < offset + height)
-    return timeline_track;
-  
-  // Add the height of this track to the accumulation
-  offset += height;
-  
-  // Recurse drawing into children
-  BOOST_FOREACH( shared_ptr<model::Track> child,
-    model_track->get_child_tracks() )
-    {
-      shared_ptr<timeline::Track> result =
-        track_from_branch(child, y, offset);
-      if(result != NULL)
-        return result;
-    }
-    
-  // No track has been found in this branch
-  return shared_ptr<timeline::Track>();
 }
 
 void
