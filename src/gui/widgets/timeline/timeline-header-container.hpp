@@ -55,9 +55,10 @@ public:
   /**
    * Constructor
    *
-   * @param[in] timeline_widget A pointer to the owner timeline widget
+   * @param[in] timeline_widget A reference to the owner timeline widget
    */
-  TimelineHeaderContainer(gui::widgets::TimelineWidget &timeline_widget);
+  TimelineHeaderContainer(
+    gui::widgets::TimelineWidget &timeline_widget);
   
   /**
    * Attaches the header all the header widgets of root
