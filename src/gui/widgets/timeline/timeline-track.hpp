@@ -45,6 +45,8 @@ public:
   
   Gtk::Widget& get_header_widget();
   
+  boost::shared_ptr<model::Track> get_model_track() const;
+  
   int get_height() const;
   
   bool get_expanded() const;

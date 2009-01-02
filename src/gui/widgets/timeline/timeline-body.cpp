@@ -244,6 +244,7 @@ bool
 TimelineBody::on_motion_notify_event(GdkEventMotion *event)
 {
   REQUIRE(event != NULL);
+  REQUIRE(timelineWidget != NULL);
   
   // Handle a middle-mouse drag if one is occuring
   switch(dragType)
@@ -270,8 +271,8 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
   tool->on_motion_notify_event(event);
   
   // See if the track that we're hovering over has changed
-  shared_ptr<timeline::Track> new_hovering_track =
-    track_from_point(event->y);
+  shared_ptr<timeline::Track> new_hovering_track(
+    timelineWidget->layoutHelper.track_from_y(event->y));
   if(timelineWidget->get_hovering_track() != new_hovering_track)
       timelineWidget->set_hovering_track(new_hovering_track);
   
@@ -287,35 +288,53 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
   REQUIRE(timelineWidget->sequence);
   
   // Prepare
+  TimelineLayoutHelper &layout_helper = timelineWidget->layoutHelper;
+  const TimelineLayoutHelper::TrackTree &layout_tree =
+    layout_helper.get_layout_tree();
   const Allocation allocation = get_allocation();
   
   // Save the view matrix
   Cairo::Matrix view_matrix;
   cr->get_matrix(view_matrix);
   
-  // Translate the view by the scroll distance
-  cr->translate(0, -get_vertical_offset());
-  
-  // Interate drawing each track
-  BOOST_FOREACH( shared_ptr<model::Track> model_track,
-    timelineWidget->sequence->get_child_tracks() )
-    draw_track_recursive(cr, model_track, allocation.get_width());
+  // Iterate drawing each track
+  TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
+  for(iterator = ++layout_tree.begin(); // ++ so we skip the sequence root
+    iterator != layout_tree.end();
+    iterator++)
+    {
+      const shared_ptr<model::Track> model_track(*iterator);
+      const shared_ptr<timeline::Track> timeline_track =
+        timelineWidget->lookup_timeline_track(*iterator);
+        
+      optional<Gdk::Rectangle> rect =
+        layout_helper.get_track_header_rect(timeline_track);
+      
+      // Is this track visible?
+      if(rect)
+        {
+          // Translate to the top of the track
+          cr->set_matrix(view_matrix);
+          cr->translate(0, rect->get_y());
+          
+          // Draw the track
+          draw_track(cr, timeline_track, allocation.get_width());
+        } 
+    }
   
   // Restore the view matrix  
   cr->set_matrix(view_matrix);
 }
 
 void
-TimelineBody::draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
-  shared_ptr<model::Track> model_track, const int view_width) const
+TimelineBody::draw_track(Cairo::RefPtr<Cairo::Context> cr,
+  shared_ptr<timeline::Track> timeline_track,
+  const int view_width) const
 {
   REQUIRE(cr);
-  REQUIRE(model_track != NULL);
+  REQUIRE(timeline_track != NULL);
   REQUIRE(timelineWidget != NULL);
-  
-  shared_ptr<timeline::Track> timeline_track = timelineWidget->
-    lookup_timeline_track(model_track);
-  
+    
   const int height = timeline_track->get_height();
   REQUIRE(height >= 0);
 
@@ -329,14 +348,6 @@ TimelineBody::draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
   cr->save();
   timeline_track->draw_track(cr, &timelineWidget->get_view_window());
   cr->restore();
-  
-  // Shift for the next track
-  cr->translate(0, height  + TimelineWidget::TrackPadding);
-  
-  // Recurse drawing into children
-  BOOST_FOREACH( shared_ptr<model::Track> child,
-    model_track->get_child_tracks() )
-    draw_track_recursive(cr, child, view_width);
 }
 
 void
@@ -434,60 +445,6 @@ void
 TimelineBody::set_vertical_offset(int offset)
 {
   timelineWidget->verticalAdjustment.set_value(offset);
-}
-
-shared_ptr<timeline::Track>
-TimelineBody::track_from_point(const int y) const
-{
-  REQUIRE(timelineWidget != NULL);
-  REQUIRE(timelineWidget->sequence);
-  
-  int offset = -get_vertical_offset();
-  
-  BOOST_FOREACH( shared_ptr<model::Track> model_track,
-    timelineWidget->sequence->get_child_tracks() )
-    {
-      shared_ptr<timeline::Track> result = track_from_branch(
-        model_track, y, offset);
-      if(result)
-        return result;
-    }
-  
-  // No track has been found with this point in it
-  return boost::shared_ptr<timeline::Track>();
-}
-
-shared_ptr<timeline::Track> TimelineBody::track_from_branch(
-  shared_ptr<model::Track> model_track,
-  const int y, int &offset) const
-{
-  REQUIRE(timelineWidget != NULL);
-  
-  shared_ptr<timeline::Track> timeline_track = timelineWidget->
-    lookup_timeline_track(model_track);
-  
-  const int height = timeline_track->get_height();
-  REQUIRE(height >= 0);
-  
-  // Does the point fall in this track?
-  if(offset <= y && y < offset + height)
-    return timeline_track;
-  
-  // Add the height of this track to the accumulation
-  offset += height;
-  
-  // Recurse drawing into children
-  BOOST_FOREACH( shared_ptr<model::Track> child,
-    model_track->get_child_tracks() )
-    {
-      shared_ptr<timeline::Track> result =
-        track_from_branch(child, y, offset);
-      if(result != NULL)
-        return result;
-    }
-    
-  // No track has been found in this branch
-  return shared_ptr<timeline::Track>();
 }
 
 void

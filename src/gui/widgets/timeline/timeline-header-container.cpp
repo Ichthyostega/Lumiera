@@ -69,6 +69,9 @@ TimelineHeaderContainer::TimelineHeaderContainer(
     
   // Install style properties
   register_styles();
+  
+  // Load the styles up
+  read_styles();
 }
  
 void
@@ -135,6 +138,7 @@ TimelineHeaderContainer::on_unrealize()
 bool TimelineHeaderContainer::on_button_press_event (
   GdkEventButton* event)
 {
+  REQUIRE(timelineWidget != NULL);
   REQUIRE(event != NULL);
   
   switch(event->button)
@@ -152,8 +156,9 @@ bool TimelineHeaderContainer::on_button_press_event (
     case 3: // Right Click
       {
         // Popup the context menu
-        shared_ptr<Track> header = header_from_point(
-          Gdk::Point(event->x, event->y));
+        shared_ptr<Track> header(
+          timelineWidget->layoutHelper.header_from_point(
+            Gdk::Point(event->x, event->y)));
         
         // Are we hovering on a header?
         if(header)
@@ -183,7 +188,8 @@ bool TimelineHeaderContainer::on_button_release_event (
       // Yes? The toggle the expanding
       clickedExpander->set_expanded(!clickedExpander->get_expanded());
       clickedExpander.reset();
-      layout_headers();
+      
+      timelineWidget->layoutHelper.update_layout();
     }
 
   return Container::on_button_release_event(event);    
@@ -265,8 +271,6 @@ TimelineHeaderContainer::on_expose_event(GdkEventExpose *event)
   if(gdkWindow)
     {
       const Allocation container_allocation = get_allocation();
-      
-      read_styles();
        
       // Paint a border underneath all the root headers
       BOOST_FOREACH( shared_ptr<model::Track> model_track,
@@ -304,86 +308,57 @@ TimelineHeaderContainer::on_hovering_track_changed(
   
 void
 TimelineHeaderContainer::layout_headers()
-{  
+{ 
+  REQUIRE(timelineWidget != NULL);
+  REQUIRE(margin >= 0); // read_styles must have been called before now
+
   // We can't layout before the widget has been set up
   if(!gdkWindow)
     return;
-
-  // Make sure the style are loaded
-  read_styles();
     
-  // Clear previously cached layout
-  headerBoxes.clear();
-
-  // Start at minus-the-scroll offset
-  int offset = -timelineWidget->get_y_scroll_offset();
-    
-  const Allocation container_allocation = get_allocation();
-  const int header_width = container_allocation.get_width();
+  TimelineLayoutHelper &layout_helper =
+    timelineWidget->layoutHelper;
+  const TimelineLayoutHelper::TrackTree &layout_tree =
+    layout_helper.get_layout_tree();
   
-  BOOST_FOREACH( shared_ptr<model::Track> model_track, get_tracks() )
-    layout_headers_recursive(
-      model_track, offset, header_width, 0, true);
+  TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
+  for(iterator = ++layout_tree.begin(); // ++ so that we skip the sequence root
+    iterator != layout_tree.end();
+    iterator++)
+    {      
+      const shared_ptr<timeline::Track> timeline_track =
+        lookup_timeline_track(*iterator);
+      
+      Widget &widget = timeline_track->get_header_widget();
+      
+      optional<Gdk::Rectangle> header_rect =
+        layout_helper.get_track_header_rect(timeline_track);
+      
+      if(header_rect)
+        {
+          REQUIRE(header_rect->get_width() >= 0);
+          REQUIRE(header_rect->get_height() >= 0);
+            
+          // Calculate the allocation of the header widget
+          Allocation header_allocation(
+            header_rect->get_x() + margin + expand_button_size,   // x
+            header_rect->get_y() + margin,                        // y
+            max( header_rect->get_width() - expand_button_size -
+              margin * 2, 0 ),                                    // width
+            header_rect->get_height() - margin * 2);              // height
+          
+          // Apply the allocation to the header
+          widget.size_allocate (header_allocation);
+          if(!widget.is_visible())
+            widget.show();
+        }
+      else // No header rect, so the track must be hidden
+        if(widget.is_visible())
+          widget.hide();
+    }
     
   // Repaint the background of our parenting
   queue_draw ();
-}
-
-void
-TimelineHeaderContainer::layout_headers_recursive(
-  shared_ptr<model::Track> model_track, int &offset,
-  const int header_width, const int depth, bool parent_expanded)
-{
-  REQUIRE(depth >= 0);
-  REQUIRE(model_track != NULL);
-  
-  shared_ptr<timeline::Track> timeline_track =
-    lookup_timeline_track(model_track);
-  
-  const int indent = depth * 10;
-  Widget &widget = timeline_track->get_header_widget();
-  
-  if(parent_expanded)
-    {
-      const int track_height = timeline_track->get_height();
-      
-      // Calculate the box of the header
-      Gdk::Rectangle header_box(
-        indent,                                               // x
-        offset,                                               // y
-        max( header_width - indent, 0 ),                      // width
-        track_height);                                        // height
-      REQUIRE(header_box.get_height() >= 0);
-      
-      // Cache the bounding box
-      headerBoxes[timeline_track] = header_box;
-        
-      // Calculate the allocation of the header widget
-      Allocation header_allocation(
-        header_box.get_x() + margin + expand_button_size,     // x
-        header_box.get_y() + margin,                          // y
-        max( header_box.get_width() - expand_button_size -
-          margin * 2, 0 ),                                    // width
-        header_box.get_height() - margin * 2);                // height
-      
-      // Apply the allocation to the header
-      widget.size_allocate (header_allocation);
-      if(!widget.is_visible())
-        widget.show();
-      
-      // Offset for the next header
-      offset += track_height + TimelineWidget::TrackPadding;
-    }
-  else
-    if(widget.is_visible())
-      widget.hide();
-    
-  // Recurse through all the children
-  BOOST_FOREACH( boost::shared_ptr<model::Track> child,
-    model_track->get_child_tracks() ) 
-    layout_headers_recursive(
-      child, offset, header_width, depth + 1,
-      timeline_track->get_expanded() && parent_expanded);
 }
 
 void
@@ -442,6 +417,7 @@ TimelineHeaderContainer::draw_header_decoration(
     shared_ptr<model::Track> model_track,
     const Gdk::Rectangle &clip_rect)
 {
+  REQUIRE(timelineWidget != NULL);
   REQUIRE(model_track != NULL);
   REQUIRE(clip_rect.get_width() > 0);
   REQUIRE(clip_rect.get_height() > 0);
@@ -452,10 +428,11 @@ TimelineHeaderContainer::draw_header_decoration(
   shared_ptr<timeline::Track> timeline_track =
     lookup_timeline_track(model_track);
   
-  // Get the cached header box
-  weak_ptr<timeline::Track> ptr(timeline_track);
-  REQUIRE(contains(headerBoxes, ptr));  
-  const Gdk::Rectangle &box = headerBoxes[timeline_track];
+  // Get the header box  
+  const optional<Gdk::Rectangle> &optional_box = 
+    timelineWidget->layoutHelper.get_track_header_rect(timeline_track);
+  REQUIRE(optional_box);
+  const Gdk::Rectangle box = *optional_box;
   
   // Paint the box, if it will be visible
   if(box.get_x() < clip_rect.get_width() &&
@@ -498,58 +475,55 @@ TimelineHeaderContainer::draw_header_decoration(
     }
 }
 
-boost::shared_ptr<timeline::Track>
-TimelineHeaderContainer::header_from_point(const Gdk::Point &point)
-{
-  std::pair<shared_ptr<timeline::Track>, Gdk::Rectangle> pair; 
-  BOOST_FOREACH( pair, headerBoxes )
-    {
-      // Hit test the rectangle
-      const Gdk::Rectangle &rect = pair.second;
-      
-      if(point.get_x() >= rect.get_x() &&
-        point.get_x() < rect.get_x() + rect.get_width() &&
-        point.get_y() >= rect.get_y() &&
-        point.get_y() < rect.get_y() + rect.get_height())
-        return pair.first;
-    }
-    
-  return shared_ptr<timeline::Track>();
-}
-
 shared_ptr<timeline::Track>
 TimelineHeaderContainer::expander_button_from_point(
   const Gdk::Point &point)
-{
-  std::pair<shared_ptr<timeline::Track>, Gdk::Rectangle> pair; 
-  BOOST_FOREACH( pair, headerBoxes )
+{ 
+  const TimelineLayoutHelper::TrackTree &layout_tree =
+    timelineWidget->layoutHelper.get_layout_tree();
+  
+  TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
+  for(iterator = ++layout_tree.begin(); // ++ so we skip the sequence root
+    iterator != layout_tree.end();
+    iterator++)
     {
-      // Hit test the rectangle
-      const Gdk::Rectangle rect =
-        get_expander_button_rectangle(pair.first);
+      const shared_ptr<timeline::Track> timeline_track =
+        lookup_timeline_track(*iterator);
       
-      if(point.get_x() >= rect.get_x() &&
-        point.get_x() < rect.get_x() + rect.get_width() &&
-        point.get_y() >= rect.get_y() &&
-        point.get_y() < rect.get_y() + rect.get_height())
-        return pair.first;
+      // Hit test the rectangle
+      const optional<Gdk::Rectangle> rect =
+        get_expander_button_rectangle(timeline_track);
+      
+      if(rect)
+        {
+          if(point.get_x() >= rect->get_x() &&
+            point.get_x() < rect->get_x() + rect->get_width() &&
+            point.get_y() >= rect->get_y() &&
+            point.get_y() < rect->get_y() + rect->get_height())
+            return timeline_track;
+        }
     }
     
   return shared_ptr<timeline::Track>();
 }
 
-const Gdk::Rectangle
+const optional<Gdk::Rectangle>
 TimelineHeaderContainer::get_expander_button_rectangle(
   shared_ptr<Track> track)
 {
+  REQUIRE(timelineWidget != NULL);
   REQUIRE(track != NULL);
-  weak_ptr<timeline::Track> ptr(track);
-  REQUIRE(contains(headerBoxes, ptr));  
   
-  const Gdk::Rectangle &box = headerBoxes[track];
-  return Gdk::Rectangle(
-    margin + box.get_x(), margin + box.get_y(),
-    expand_button_size, box.get_height() - margin * 2);
+  optional<Gdk::Rectangle> box =
+    timelineWidget->layoutHelper.get_track_header_rect(track);
+  if(box)
+    {
+      return optional<Gdk::Rectangle>(Gdk::Rectangle(
+        margin + box->get_x(), margin + box->get_y(),
+        expand_button_size, box->get_height() - margin * 2));
+    }
+    
+  return optional<Gdk::Rectangle>();
 }
 
 shared_ptr<timeline::Track>
@@ -594,7 +568,13 @@ void
 TimelineHeaderContainer::read_styles()
 {
   if(margin <= 0)
-    get_style_property("heading_margin", margin);
+    {
+      get_style_property("heading_margin", margin);
+      margin = max(margin, 0);
+    }
+  else 
+    WARN(gui, "TimelineHeaderContainer::read_styles()"
+      " should only be called once");
 }
 
 }   // namespace timeline

@@ -118,8 +118,9 @@ private:
    */
   void draw_tracks(Cairo::RefPtr<Cairo::Context> cr);
   
-  void draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
-    boost::shared_ptr<model::Track> track, const int view_width) const;
+  void draw_track(Cairo::RefPtr<Cairo::Context> cr,
+    boost::shared_ptr<timeline::Track> timeline_track,
+    const int view_width) const;
   
   /**
    * Draws the selected timeline period.
@@ -138,14 +139,7 @@ private:
   int get_vertical_offset() const;
   
   void set_vertical_offset(int offset);
-  
-  boost::shared_ptr<timeline::Track> track_from_point(const int y)
-    const;
-  
-  boost::shared_ptr<timeline::Track> track_from_branch(
-    boost::shared_ptr<model::Track> model_track,
-    const int y, int &offset) const;
-  
+   
   /**
    * Registers all the styles that this class will respond to.
    */
