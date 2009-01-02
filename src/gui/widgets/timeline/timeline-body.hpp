@@ -54,9 +54,10 @@ public:
 
   /**
    * Constructor
-   * @param timeline_widget The owner widget of this ruler.
+   * @param timeline_widget A reference to the owner widget of this
+   * ruler.
    */
-  TimelineBody(gui::widgets::TimelineWidget *timeline_widget);
+  TimelineBody(gui::widgets::TimelineWidget &timeline_widget);
   
   /**
    * Destructor
@@ -173,7 +174,7 @@ private:
   float selectionAlpha;
   GdkColor playbackPointColour;
   
-  gui::widgets::TimelineWidget* const timelineWidget;
+  gui::widgets::TimelineWidget &timelineWidget;
 
   friend class Tool;
   friend class ArrowTool;

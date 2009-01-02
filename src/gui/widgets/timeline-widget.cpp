@@ -58,7 +58,7 @@ TimelineWidget::TimelineWidget(
 {
   REQUIRE(sequence);
   
-  body = new TimelineBody(this);
+  body = new TimelineBody(*this);
   ENSURE(body != NULL);
   headerContainer = new TimelineHeaderContainer(*this);
   ENSURE(headerContainer != NULL);

@@ -26,7 +26,7 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-ArrowTool::ArrowTool(TimelineBody *timeline_body) :
+ArrowTool::ArrowTool(TimelineBody &timeline_body) :
   Tool(timeline_body)
 {
 
