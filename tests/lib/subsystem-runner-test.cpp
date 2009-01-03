@@ -38,7 +38,6 @@
 
 using std::cout;
 using std::tr1::bind;
-using std::tr1::placeholders::_1;
 using util::isnil;
 using test::Test;
 using lib::Sync;
@@ -64,6 +63,10 @@ namespace lumiera {
       util::Cmdline dummyArgs ("");
       lumiera::Option dummyOpt (dummyArgs);
       
+      /** marker for simulated failure exceptions */
+      LUMIERA_ERROR_DEFINE( TEST, "simulated failure.");
+
+      
       
       
       /** 
@@ -82,8 +85,8 @@ namespace lumiera {
           Literal id_;
           Literal spec_;
           
-          bool isUp_;
-          bool didRun_;
+          volatile bool isUp_;
+          volatile bool didRun_;
           volatile bool termRequest_;
           int running_duration_;
           
@@ -113,8 +116,11 @@ namespace lumiera {
                   isUp_ = true;
                 }
               else
+              if ("fail"==startSpec) //----starting incorrectly reports success
+                return true;
+              else
               if ("throw"==startSpec) //---starting flounders
-                throw error::Fatal("simulated failure to start the subsystem");
+                throw error::Fatal("simulated failure to start the subsystem", LUMIERA_ERROR_TEST);
               
               return isUp_;
             }
@@ -150,16 +156,17 @@ namespace lumiera {
                   Lock wait_blocking (this, &MockSys::tick);
                 }
               
-              Error problemIndicator("simulated Problem killing a subsystem");
+              Error problemIndicator("simulated Problem killing a subsystem",LUMIERA_ERROR_TEST);
               lumiera_error();   //  reset error state....
                                 //   Note: in real life this actually
                                //    would be an catched exception! 
               
-              Lock guard (this);
-              isUp_ = false;
-              
-              termination ("true"==runSpec? 0 : &problemIndicator);
-            }
+              {
+                Lock guard (this);
+                isUp_ = false;
+                
+                termination ("true"==runSpec? 0 : &problemIndicator);
+            } }
           
           
           bool
@@ -228,6 +235,10 @@ namespace lumiera {
         run (Arg) 
           {
             singleSubsys_complete_cycle();
+            singleSubsys_start_failure();
+            singleSubsys_emegency_exit();
+            
+            dependentSubsys_complete_cycle();
           }
         
         
@@ -245,6 +256,99 @@ namespace lumiera {
             ASSERT (!emergency);
             ASSERT (!unit.isRunning());
             ASSERT (unit.didRun());
+          }
+        
+        
+        void
+        singleSubsys_start_failure()
+          {
+            MockSys unit1 ("U1", "start(false), run(false).");
+            MockSys unit2 ("U2", "start(throw), run(false).");
+            MockSys unit3 ("U3", "start(fail),  run(false).");  // simulates incorrect behaviour
+            MockSys unit4 ("U4", "start(true),  run(false).");
+            SubsystemRunner runner(dummyOpt);
+            
+            runner.maybeRun (unit1);
+            runner.maybeRun (unit4);
+            try 
+              { 
+                runner.maybeRun (unit2);
+                NOTREACHED;
+              }
+            catch (lumiera::Error&)
+              {
+                ASSERT (lumiera_error() == LUMIERA_ERROR_TEST);
+              }
+            try 
+              { 
+                runner.maybeRun (unit3);
+                NOTREACHED;
+              }
+            catch (lumiera::Error&)
+              {
+                ASSERT (lumiera_error() == error::LUMIERA_ERROR_LOGIC); // incorrect behaviour trapped
+              }
+            
+            
+            bool emergency = runner.wait();
+            
+            ASSERT (emergency);       // emergency state from unit4 got propagated
+            ASSERT (!unit1.isRunning());
+            ASSERT (!unit2.isRunning());
+            ASSERT (!unit3.isRunning());
+            ASSERT (!unit4.isRunning());
+            ASSERT (!unit1.didRun());
+            ASSERT (!unit2.didRun());
+            ASSERT (!unit3.didRun());
+            ASSERT (!unit4.didRun());
+          }
+        
+        
+        void
+        singleSubsys_emegency_exit()
+          {
+            MockSys unit ("one", "start(true), run(fail).");
+            SubsystemRunner runner(dummyOpt);
+            
+            runner.maybeRun (unit);
+            bool emergency = runner.wait();
+            
+            ASSERT (emergency);      // emergency state got propagated
+            ASSERT (!unit.isRunning());
+            ASSERT (unit.didRun());
+          }
+        
+        
+        void
+        dependentSubsys_complete_cycle()
+          {
+            MockSys unit1 ("U1", "start(true), run(true).");
+            MockSys unit2 ("U2", "start(true), run(true).");
+            MockSys unit3 ("U3", "start(true), run(true).");
+            MockSys unit4 ("U4", "start(true), run(true).");
+            unit2.depends (unit1);
+            unit4.depends (unit3);
+            unit4.depends (unit1);
+            unit3.depends (unit2);
+            SubsystemRunner runner(dummyOpt);
+            
+            runner.maybeRun (unit4);
+            ASSERT (unit1.isRunning());
+            ASSERT (unit2.isRunning());
+            ASSERT (unit3.isRunning());
+            ASSERT (unit4.isRunning());
+            
+            bool emergency = runner.wait();
+            
+            ASSERT (!emergency);
+            ASSERT (!unit1.isRunning());
+            ASSERT (!unit2.isRunning());
+            ASSERT (!unit3.isRunning());
+            ASSERT (!unit4.isRunning());
+            ASSERT (unit1.didRun());
+            ASSERT (unit2.didRun());
+            ASSERT (unit3.didRun());
+            ASSERT (unit4.didRun());
           }
       };
     

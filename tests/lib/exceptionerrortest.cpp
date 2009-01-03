@@ -1,5 +1,5 @@
 /*
-  Exceptionhandlin(Test)  -  throwing and catching our exception type
+  ExceptionError(Test)  -  throwing and catching our exception type
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -41,13 +41,11 @@ using std::cout;
 
 
 
-namespace lumiera
-  {
-  namespace test
-    {
-        
+namespace lumiera {
+  namespace test  {
+    
     /** local specific error-constant for use in the 
-     *  construcor of the nested SpecificError class.
+     *  constructor of the nested SpecificError class.
      */
     LUMIERA_ERROR_DEFINE(LIFE_AND_UNIVERSE, "and everything?");
     LUMIERA_ERROR_DEFINE(DERIVED, "convoluted exception");
@@ -98,7 +96,7 @@ namespace lumiera
         void throwExternal(string _) { throw error::External(_); }
         void throwRuntime (string _) { throw std::runtime_error(_); }
         void throwExceptn (string  ) { throw std::exception(); }
-
+        
         
         /** @test catching, repackaging and rethrowing of errors.
          *  This feature is important for passing exceptions transparently
@@ -126,7 +124,7 @@ namespace lumiera
           try { nestedThrower (msg); }
           catch (Error& e)
             {
-              cout << "2nd intermediate handler caught: " << e.what() 
+              cout << "2nd intermediate handler caught: " << e.what()
                    << "....will rethrow as error::Config\n";
               throw error::Config (e);
             }
@@ -172,7 +170,7 @@ namespace lumiera
           ASSERT (err2.rootCause() == err1.what());
           ASSERT (err3.rootCause() == err1.what());
           ASSERT (err4.rootCause() == err1.what());
-
+          
           ASSERT (err5.rootCause() == rerr.what());
           ASSERT (err6.rootCause() == rerr.what());
         }
@@ -214,22 +212,22 @@ namespace lumiera
               (this->*funky) (context);
             }
           
-          catch (SpecificError& e) { cout << "caught: " << e.what() << "..the answer is: " << e.revealIt() << "\n"; }                
-          catch (error::Logic&  e) { cout << "caught error::Logic: " << e.what() << "\n"; }                
-          catch (error::Invalid&e) { cout << "caught error::Invalid: " << e.what() << "\n"; }                
-          catch (Error&         e) { cout << "caught lumiera::Error: " << e.what() << "\n"; }                
-          catch (runtime_error& e) { cout << "caught std::runtime_error: " << e.what() << "\n"; }                
+          catch (SpecificError& e) { cout << "caught: " << e.what() << "..the answer is: " << e.revealIt() << "\n"; }
+          catch (error::Logic&  e) { cout << "caught error::Logic: " << e.what() << "\n"; }
+          catch (error::Invalid&e) { cout << "caught error::Invalid: " << e.what() << "\n"; }
+          catch (Error&         e) { cout << "caught lumiera::Error: " << e.what() << "\n"; }
+          catch (runtime_error& e) { cout << "caught std::runtime_error: " << e.what() << "\n"; }
           catch (exception&     e) { cout << "caught std::exception. (unspecific)" << "\n"; }
           catch (...)              { cout << "caught an unknown exception\n"; }
         }
       };
-
-      
-      
-      /** register this test class... */
-      LAUNCHER (ExceptionError_test, "function common");
-
-      
+    
+    
+    
+    /** register this test class... */
+    LAUNCHER (ExceptionError_test, "function common");
+    
+    
   } // namespace test
     
 } // namespace util
