@@ -338,6 +338,11 @@ END
 
 
 TEST "Starting and stopping subsystems" SubsystemRunner_test  <<END
+out: -----singleSubsys_complete_cycle-----
+out: -----singleSubsys_start_failure-----
+out: -----singleSubsys_emegency_exit-----
+out: -----dependentSubsys_complete_cycle-----
+out: -----dependentSubsys_start_failure-----
 return: 0
 END
 

@@ -133,7 +133,7 @@ namespace lumiera {
       triggerEmergency (bool cond)
         { 
           Lock guard (this);
-          emergency_ |= cond;
+          if (cond) emergency_= true;
         }
       
       bool

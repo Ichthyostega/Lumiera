@@ -47,18 +47,18 @@ using lib::RecursiveLock_Waitable;
 
 namespace lumiera {
   namespace test  {
-  
-    namespace { // private test classes and data...
     
+    namespace { // private test classes and data...
+      
       using query::extractID;
       
       /** limit for the randomly selected duration of
        *  subsystem's running phase (milliseconds) */
-      const uint MAX_RUNNING_TIME_ms = 60;
+      const uint MAX_RUNNING_TIME_ms = 80;
       const uint MIN_RUNNING_TIME_ms = 10;
       
       /** the "running" subsystem checks for a
-       *  shutdown request every XX milliseconds */ 
+       *  shutdown request every XX milliseconds */
       const uint TICK_DURATION_ms = 5;
       
       /** dummy options just to be ignored */
@@ -67,7 +67,7 @@ namespace lumiera {
       
       /** marker for simulated failure exceptions */
       LUMIERA_ERROR_DEFINE( TEST, "simulated failure.");
-
+      
       
       
       
@@ -93,7 +93,7 @@ namespace lumiera {
           int running_duration_;
           
           
-          bool 
+          bool
           shouldStart (lumiera::Option&)
             {
               Literal startSpec (extractID ("start",spec_));
@@ -109,7 +109,6 @@ namespace lumiera {
               
               Lock guard (this);
               Literal startSpec (extractID ("start",spec_));
-              ASSERT ("false"!=startSpec);
               ASSERT (!isnil (startSpec));
               
               if ("true"==startSpec) //----simulate successful subsystem start
@@ -118,7 +117,7 @@ namespace lumiera {
                   isUp_ = true;
                 }
               else
-              if ("fail"==startSpec) //----starting incorrectly reports success
+              if ("fail"==startSpec) //----not starting, incorrectly reporting success
                 return true;
               else
               if ("throw"==startSpec) //---starting flounders
@@ -132,7 +131,8 @@ namespace lumiera {
             {
               // note: *not* locking here...
               termRequest_ = true;
-              cout << *this << ": triggerShutdown()\n";
+              
+              INFO (test, "triggerShutdown() --> %s....", cStr(*this));
             }
           
           bool 
@@ -146,16 +146,16 @@ namespace lumiera {
           void
           run (Subsys::SigTerm termination)  ///< simulates a "running" subsystem
             {
-              cout << *this << ": start running...\n";
-              
               Literal runSpec (extractID ("run",spec_));
               ASSERT (!isnil (runSpec));
               
-              if ("false"!=runSpec) //----actually hold running state for some time
+              if ("false"!=runSpec) //----actually enter running state for some time
                 {
                   didRun_ = true;
                   running_duration_  =  MIN_RUNNING_TIME_ms;
                   running_duration_ += (rand() % (MAX_RUNNING_TIME_ms - MIN_RUNNING_TIME_ms));
+                  
+                  INFO (test, "thread %s now running....", cStr(*this));
                   
                   Lock wait_blocking (this, &MockSys::tick);
                 }
@@ -163,19 +163,19 @@ namespace lumiera {
               Error problemIndicator("simulated Problem killing a subsystem",LUMIERA_ERROR_TEST);
               lumiera_error();   //  reset error state....
                                 //   Note: in real life this actually
-                               //    would be an catched exception! 
+                               //    would be an catched exception!
               
               {
                 Lock guard (this);
                 isUp_ = false;
                 
-                cout << *this << ": terminates.\n";
+                INFO (test, "thread %s terminates.", cStr(*this));
                 termination ("true"==runSpec? 0 : &problemIndicator);
             } }
           
           
           bool
-          tick ()   ///< simulates async termination, either on request or by timing 
+          tick ()   ///< simulates async termination, either on request or by timing
             {
               Lock sync(this);
               if (!sync.isTimedWait())
@@ -200,7 +200,7 @@ namespace lumiera {
               running_duration_(0)
             { }
           
-          ~MockSys() { cout << *this << " dead.\n"; }
+          ~MockSys() { }
           
           operator string ()  const { return "MockSys(\""+id_+"\")"; }
           
@@ -209,8 +209,8 @@ namespace lumiera {
           
           bool didRun ()  const { return didRun_; }
         };
-    
-  
+      
+      
       
     } // (End) test classes and data....
     
@@ -227,6 +227,8 @@ namespace lumiera {
      * @test managing start and stop of several dependent "subsystems"
      *       under various conditions. Using mock-subsystems, which actually
      *       spawn a thread and finish by themselves and generally behave sane.
+     *       For each such MockSys, we can define a behaviour pattern, e.g.
+     *       weather the start succeeds and if the run terminates with error.
      * 
      * @see lumiera::Subsys
      * @see lumiera::SubsystemRunner
@@ -237,13 +239,14 @@ namespace lumiera {
       {
         
         virtual void
-        run (Arg) 
+        run (Arg)
           {
             singleSubsys_complete_cycle();
             singleSubsys_start_failure();
             singleSubsys_emegency_exit();
             
             dependentSubsys_complete_cycle();
+            dependentSubsys_start_failure();
           }
         
         
@@ -330,18 +333,6 @@ namespace lumiera {
           }
         
         
-        void zoing(string zoz)
-          {
-            cout << "zoing! "<<zoz<<"\n";
-            cout << "zoing! "<<zoz<<"\n";
-            cout << "zoing! "<<zoz<<"\n";
-            cout << "zoing! "<<zoz<<"\n";
-            cout << "zoing! "<<zoz<<"\n";
-            bool boo=true;
-            while (boo)
-              ;
-          }
-        
         void
         dependentSubsys_complete_cycle()
           {
@@ -366,24 +357,61 @@ namespace lumiera {
             bool emergency = runner.wait();
             
             ASSERT (!emergency);
-/*
             ASSERT (!unit1.isRunning());
             ASSERT (!unit2.isRunning());
             ASSERT (!unit3.isRunning());
             ASSERT (!unit4.isRunning());
-*/
-            if (unit1.isRunning()) zoing("1");
-            if (unit2.isRunning()) zoing("2");
-            if (unit3.isRunning()) zoing("3");
-            if (unit4.isRunning()) zoing("4");
             ASSERT (unit1.didRun());
             ASSERT (unit2.didRun());
             ASSERT (unit3.didRun());
             ASSERT (unit4.didRun());
           }
+        
+        
+        void
+        dependentSubsys_start_failure()
+          {
+            cout << "-----dependentSubsys_start_failure-----\n";
+            
+            MockSys unit1 ("U1", "start(true), run(true).");
+            MockSys unit2 ("U2", "start(true), run(true).");
+            MockSys unit3 ("U3", "start(false),run(false)."); // note
+            MockSys unit4 ("U4", "start(true), run(true).");
+            unit2.depends (unit1);
+            unit4.depends (unit3);
+            unit4.depends (unit1);
+            unit3.depends (unit2);
+            SubsystemRunner runner(dummyOpt);
+            
+            try 
+              { 
+                runner.maybeRun (unit4);
+                NOTREACHED;
+              }
+            catch (lumiera::Error&)
+              {
+                ASSERT (lumiera_error() == error::LUMIERA_ERROR_LOGIC); // failure to bring up prerequisites is detected
+              }
+            ASSERT ( unit1.isRunning());
+            ASSERT ( unit2.isRunning());
+            ASSERT (!unit3.isRunning());
+            // shutdown has been triggered for unit4, but may require some time
+            
+            bool emergency = runner.wait();
+            
+            ASSERT (!emergency);     // no problems with the subsystems actually running...
+            ASSERT (!unit1.isRunning());
+            ASSERT (!unit2.isRunning());
+            ASSERT (!unit3.isRunning());
+            ASSERT (!unit4.isRunning());
+            ASSERT ( unit1.didRun());
+            ASSERT ( unit2.didRun());
+            ASSERT (!unit3.didRun());
+            // can't say for sure if unit4 actually did run
+          }
       };
     
-      
+    
     
     /** Register this test class... */
     LAUNCHER (SubsystemRunner_test, "function common");
