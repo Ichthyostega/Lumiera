@@ -245,7 +245,8 @@ TimelineLayoutHelper::layout_headers_recursive(
                
         // Now we have the branch_height, obscure tracks according to
         // the animation state
-        offset = offset - branch_height + branch_height * animation_state / Track::MaxExpandAnimation;
+        const float a = (1.0f - (float)animation_state / (float)Track::MaxExpandAnimation);
+        offset = offset - branch_height * a * a;
 
         TrackTree::pre_order_iterator descendant_iterator(iterator);
         descendant_iterator++;
@@ -262,7 +263,6 @@ TimelineLayoutHelper::layout_headers_recursive(
             if(rect.get_y() + rect.get_height() > offset)
               headerBoxes.erase(track);
           }
-        
         
         // Make sure the global animation state includes this branch's
         // animation state
