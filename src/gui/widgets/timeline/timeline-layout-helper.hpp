@@ -167,9 +167,11 @@ protected:
    * false if any of them are collapsed.
    * @see update_layout()
    **/
+#warning is_animating not documented
   void layout_headers_recursive(
     TrackTree::iterator_base parent_iterator,
-    int &offset, const int header_width, const int indent_width,
+    int &offset, int &common_animation_state,
+    const int header_width, const int indent_width,
     const int depth, const bool parent_expanded);
   
   /**
@@ -184,6 +186,10 @@ protected:
    **/
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
     boost::shared_ptr<model::Track> model_track);
+    
+  void begin_animation();
+  
+  bool on_animation_tick();
   
 protected:
 
@@ -213,6 +219,14 @@ protected:
    * @see update_layout()
    **/
   int totalHeight;
+  
+  sigc::connection animationTimer;
+  
+  int animation_state;
+  
+protected:
+  
+  static const int AnimationTimeout;
 };
 
 }   // namespace timeline

@@ -36,11 +36,15 @@ namespace gui {
 namespace widgets {
 namespace timeline {
   
+const int Track::NoAnimationState = -1;
+const int Track::MaxExpandAnimation = 10;
+  
 Track::Track(TimelineWidget &timeline_widget,
   shared_ptr<model::Track> track) :
   timelineWidget(timeline_widget),
   model_track(track),
   expanded(true),
+  expandAnimationState(Track::NoAnimationState),
   enableButton(Gtk::StockID("track_enabled")),
   lockButton(Gtk::StockID("track_unlocked"))
 {
@@ -109,9 +113,56 @@ Track::get_expanded() const
 }
 
 void
-Track::set_expanded(bool expanded)
+Track::expand_collapse(ExpandDirection direction)
 {
-  this->expanded = expanded;
+  expandDirection = direction;
+  if(direction == Expand)
+    {
+      expanded = true;
+      expandAnimationState = 0;
+    }
+  else
+    {
+      expanded = false;
+      expandAnimationState = MaxExpandAnimation;
+    }
+}
+
+int
+Track::get_expand_animation_state() const
+{
+  ENSURE((expandAnimationState >= 0 &&
+    expandAnimationState <= MaxExpandAnimation) ||
+    expandAnimationState == NoAnimationState);
+  return expandAnimationState;
+}
+  
+void
+Track::tick_expand_animation()
+{ 
+  if(expandAnimationState <= NoAnimationState)
+  {
+    WARN(gui, "tick_expand_animation() was called when"
+      " expandAnimationState was set to NoAnimationState");
+    return;    
+  }
+
+  if(expandDirection == Expand)
+    {
+      expandAnimationState++;
+      if(expandAnimationState >= MaxExpandAnimation)
+        expandAnimationState = NoAnimationState;
+    }
+  else
+    {
+      expandAnimationState--;
+      if(expandAnimationState <= 0)
+        expandAnimationState = NoAnimationState;
+    }  
+  
+  ENSURE((expandAnimationState >= 0 &&
+    expandAnimationState <= MaxExpandAnimation) ||
+    expandAnimationState == NoAnimationState);
 }
 
 void

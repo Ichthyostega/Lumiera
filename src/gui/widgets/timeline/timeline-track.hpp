@@ -40,6 +40,14 @@ class TimelineViewWindow;
 class Track : public sigc::trackable
 {
 public:
+  
+  enum ExpandDirection
+  {
+    Expand,
+    Collapse
+  };
+  
+public:
   Track(TimelineWidget &timeline_widget,
     boost::shared_ptr<model::Track> track);
   
@@ -51,13 +59,22 @@ public:
   
   bool get_expanded() const;
   
-  void set_expanded(bool expanded);
+  void expand_collapse(ExpandDirection direction);
+  
+  // -1 for no animation
+  int get_expand_animation_state() const;
+  
+  void tick_expand_animation();
   
   void show_header_context_menu(guint button, guint32 time);
 
   virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
     TimelineViewWindow* const window)
     const = 0;
+    
+public:
+  static const int NoAnimationState;
+  static const int MaxExpandAnimation;
 
 private:
   //----- Internals -----//
@@ -77,6 +94,11 @@ protected:
 
 private:
   bool expanded;
+  
+
+  
+  ExpandDirection expandDirection;
+  int expandAnimationState;
 
   //----- Header Widgets ------//
   

@@ -37,9 +37,12 @@ namespace gui {
 namespace widgets {
 namespace timeline {
   
+const int TimelineLayoutHelper::AnimationTimeout = 20; // 20ms
+  
 TimelineLayoutHelper::TimelineLayoutHelper(TimelineWidget &owner) :
   timelineWidget(owner),
-  totalHeight(0)
+  totalHeight(0),
+  animation_state(Track::NoAnimationState)
 {
 }
 
@@ -140,8 +143,11 @@ TimelineLayoutHelper::get_total_height() const
 
 void
 TimelineLayoutHelper::update_layout()
-{  
+{
   int offset = 0;
+  
+  // Reset the animation state value, before it gets recalculated
+  animation_state = Track::NoAnimationState;
     
   // Clear previously cached layout
   headerBoxes.clear();
@@ -150,18 +156,23 @@ TimelineLayoutHelper::update_layout()
   const int header_width = TimelineWidget::HeaderWidth;
   const int indent_width = TimelineWidget::HeaderIndentWidth;
   layout_headers_recursive(layoutTree.begin(),
-    offset, header_width, indent_width, 0, true);
+    offset, animation_state, header_width, indent_width, 0, true);
     
   totalHeight = offset;
   
   // Signal that the layout has changed
   timelineWidget.on_layout_changed();
+  
+  // Begin animating as necessary
+  if(animation_state != Track::NoAnimationState && !animationTimer)
+    begin_animation();
 }
 
 void
 TimelineLayoutHelper::layout_headers_recursive(
   TrackTree::iterator_base parent_iterator,
-  int &offset, const int header_width, const int indent_width,
+  int &offset, int &common_animation_state,
+  const int header_width, const int indent_width,
   const int depth, const bool parent_expanded)
 {
   REQUIRE(depth >= 0);
@@ -175,8 +186,13 @@ TimelineLayoutHelper::layout_headers_recursive(
       REQUIRE(model_track);
       
       shared_ptr<timeline::Track> timeline_track =
-        lookup_timeline_track(model_track);   
-            
+        lookup_timeline_track(model_track);
+      
+      // Is the track animating?
+      const int animation_state =
+        timeline_track->get_expand_animation_state();
+      
+      // Is the track going to be shown?
       if(parent_expanded)
         {          
           // Calculate and store the box of the header
@@ -192,10 +208,67 @@ TimelineLayoutHelper::layout_headers_recursive(
           // Offset for the next header
           offset += track_height + TimelineWidget::TrackPadding;
         }
+        
+      // Recurse to children
+      const bool expand_child =
+        ((animation_state != Track::NoAnimationState) ||
+          timeline_track->get_expanded())
+          && parent_expanded;
       
-      layout_headers_recursive(iterator, offset, header_width,
-        indent_width, depth + 1,
-        timeline_track->get_expanded() && parent_expanded);
+      layout_headers_recursive(iterator, offset, common_animation_state,
+        header_width, indent_width, depth + 1, expand_child);
+      
+      // Do collapse animation as necessary
+      if(animation_state != Track::NoAnimationState)
+      {
+        timeline_track->tick_expand_animation();
+      
+        // Calculate the total height of the branch
+        // Get the top and bottom descendants, and use them to get the
+        // total height
+        const shared_ptr<timeline::Track> &first_descendant_track =
+          lookup_timeline_track(
+            *(++TrackTree::pre_order_iterator(iterator)));
+        const shared_ptr<timeline::Track> &last_descendant_track =
+          lookup_timeline_track(
+            *(--TrackTree::pre_order_iterator(
+              ++TrackTree::sibling_iterator(iterator))));
+        
+        const Gdk::Rectangle &first_rect =
+          headerBoxes[first_descendant_track];
+        const Gdk::Rectangle &last_rect =
+          headerBoxes[last_descendant_track];
+        
+        const int branch_height =
+          (last_rect.get_y() + last_rect.get_height()) -
+          first_rect.get_y();
+               
+        // Now we have the branch_height, obscure tracks according to
+        // the animation state
+        offset = offset - branch_height + branch_height * animation_state / Track::MaxExpandAnimation;
+
+        TrackTree::pre_order_iterator descendant_iterator(iterator);
+        descendant_iterator++;
+        TrackTree::sibling_iterator end_iterator(iterator);
+        end_iterator++;
+        
+        for(descendant_iterator = layoutTree.begin(parent_iterator);
+          descendant_iterator != end_iterator;
+          descendant_iterator++)
+          {
+            const weak_ptr<timeline::Track> &track =
+              lookup_timeline_track(*descendant_iterator);
+            const Gdk::Rectangle &rect = headerBoxes[track];
+            if(rect.get_y() + rect.get_height() > offset)
+              headerBoxes.erase(track);
+          }
+        
+        
+        // Make sure the global animation state includes this branch's
+        // animation state
+        common_animation_state = max(
+          common_animation_state, animation_state);
+      }
     }
 }
 
@@ -209,6 +282,21 @@ TimelineLayoutHelper::lookup_timeline_track(
   ENSURE(timeline_track);
   
   return timeline_track;
+}
+
+void
+TimelineLayoutHelper::begin_animation()
+{
+  animationTimer = Glib::signal_timeout().connect(
+    sigc::mem_fun(this, &TimelineLayoutHelper::on_animation_tick),
+    AnimationTimeout);
+}
+
+bool
+TimelineLayoutHelper::on_animation_tick()
+{
+  update_layout();
+  return animation_state != Track::NoAnimationState;
 }
 
 }   // namespace timeline

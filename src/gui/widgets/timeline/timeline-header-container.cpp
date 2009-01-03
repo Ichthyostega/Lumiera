@@ -183,7 +183,8 @@ bool TimelineHeaderContainer::on_button_release_event (
   if(clickedExpander != NULL)
     {
       // Yes? The toggle the expanding
-      clickedExpander->set_expanded(!clickedExpander->get_expanded());
+      clickedExpander->expand_collapse(
+        clickedExpander->get_expanded() ? Track::Collapse : Track::Expand);
       clickedExpander.reset();
       
       timelineWidget.layoutHelper.update_layout();
