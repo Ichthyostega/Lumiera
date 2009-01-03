@@ -269,10 +269,16 @@ TimelineHeaderContainer::on_expose_event(GdkEventExpose *event)
     {
       const Allocation container_allocation = get_allocation();
        
-      // Paint a border underneath all the root headers
-      BOOST_FOREACH( shared_ptr<model::Track> model_track,
-        get_tracks() )
+      // Paint a border underneath all the headers
+      const TimelineLayoutHelper::TrackTree &layout_tree =
+        timelineWidget.layoutHelper.get_layout_tree();
+      
+      TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
+      for(iterator = ++layout_tree.begin(); // ++ so that we skip the sequence root
+        iterator != layout_tree.end();
+        iterator++)
         {
+          shared_ptr<model::Track> model_track = *iterator;
           REQUIRE(model_track);
           
           draw_header_decoration(model_track,
@@ -426,48 +432,41 @@ TimelineHeaderContainer::draw_header_decoration(
   // Get the header box  
   const optional<Gdk::Rectangle> &optional_box = 
     timelineWidget.layoutHelper.get_track_header_rect(timeline_track);
-  REQUIRE(optional_box);
+  if(!optional_box)
+    return;
   const Gdk::Rectangle box = *optional_box;
   
-  // Paint the box, if it will be visible
-  if(box.get_x() < clip_rect.get_width() &&
-    box.get_height() > 0 &&
-    box.get_y() + box.get_height() > clip_rect.get_y()  &&
-    box.get_y() < clip_rect.get_y() + clip_rect.get_height())
-    {
-      // Use paint_box to draw a themed bevel around the header
-      style->paint_box(gdkWindow, STATE_NORMAL,
-        SHADOW_OUT, clip_rect, *this, "",
-        box.get_x(), box.get_y(),
-        box.get_width(), box.get_height());
-        
-      // Paint the expander if there are child tracks
-      StateType state_type = STATE_NORMAL;
-      if(clickedExpander == timeline_track)
-        state_type = STATE_SELECTED;
-      else if(hoveringExpander == timeline_track)
-        state_type = STATE_PRELIGHT;
-      
-      const ExpanderStyle expander_style = 
-        timeline_track->get_expanded() ?
-          EXPANDER_EXPANDED : EXPANDER_COLLAPSED;
-      
-      if(!model_track->get_child_tracks().empty())
-        style->paint_expander (gdkWindow,
-          state_type, 
-          clip_rect, *this, "",
-          box.get_x() + expand_button_size / 2 + margin,
-          box.get_y() + box.get_height() / 2,
-          expander_style);
-    }
+  // Don't paint the box, if it won't be visible
+  if(box.get_x() >= clip_rect.get_width() ||
+    box.get_height() <= 0 ||
+    box.get_y() + box.get_height() <= clip_rect.get_y()  ||
+    box.get_y() >= clip_rect.get_y() + clip_rect.get_height())
+    return;
+
+  // Use paint_box to draw a themed bevel around the header
+  style->paint_box(gdkWindow, STATE_NORMAL,
+    SHADOW_OUT, clip_rect, *this, "",
+    box.get_x(), box.get_y(),
+    box.get_width(), box.get_height());
+    
+  // Paint the expander if there are child tracks
+  StateType state_type = STATE_NORMAL;
+  if(clickedExpander == timeline_track)
+    state_type = STATE_SELECTED;
+  else if(hoveringExpander == timeline_track)
+    state_type = STATE_PRELIGHT;
   
-  // Recurse through all the children
-  if(timeline_track->get_expanded())
-    {
-      BOOST_FOREACH( shared_ptr<model::Track> child,
-        model_track->get_child_tracks() )
-        draw_header_decoration(child, clip_rect);
-    }
+  const ExpanderStyle expander_style = 
+    timeline_track->get_expanded() ?
+      EXPANDER_EXPANDED : EXPANDER_COLLAPSED;
+  
+  if(!model_track->get_child_tracks().empty())
+    style->paint_expander (gdkWindow,
+      state_type, 
+      clip_rect, *this, "",
+      box.get_x() + expand_button_size / 2 + margin,
+      box.get_y() + box.get_height() / 2,
+      expander_style);
 }
 
 shared_ptr<timeline::Track>
