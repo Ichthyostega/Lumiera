@@ -43,6 +43,7 @@ using util::cStr;
 using test::Test;
 using lib::Sync;
 using lib::RecursiveLock_Waitable;
+using lib::Thread;
 
 
 namespace lumiera {

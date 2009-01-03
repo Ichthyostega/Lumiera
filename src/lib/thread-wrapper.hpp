@@ -21,8 +21,8 @@
 */
 
 
-#ifndef LUMIERA_THREADWRAPPER_H
-#define LUMIERA_THREADWRAPPER_H
+#ifndef LIB_THREADWRAPPER_H
+#define LIB_THREADWRAPPER_H
 
 
 #include "include/nobugcfg.h"
@@ -36,14 +36,11 @@ extern "C" {
 #include <boost/noncopyable.hpp>
 
 
-namespace lumiera {
+namespace lib {
   
   using std::tr1::bind;
   using std::tr1::function;
-  using std::tr1::placeholders::_1;
-  
-  using lib::Sync;
-  using lib::NonrecursiveLock_Waitable;
+  using lumiera::Literal;
   
   
   /**
@@ -106,7 +103,7 @@ namespace lumiera {
                              );
           
           if (!res)
-            throw error::State("failed to create new thread.");
+            throw lumiera::error::State("failed to create new thread.");
           
           // make sure the new thread had the opportunity to take the Operation
           // prior to leaving and thereby possibly destroying this local context
@@ -116,5 +113,5 @@ namespace lumiera {
   
   
   
- } // namespace lumiera
+ } // namespace lib
 #endif

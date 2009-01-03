@@ -34,8 +34,8 @@ using test::Test;
 
 
 
-namespace lumiera {
-  namespace test  {
+namespace lib {
+  namespace test {
   
     namespace { // private test classes and data...
       
@@ -86,7 +86,7 @@ namespace lumiera {
      *       lumiera::Thread wrapper for binding to an arbitrary operation
      *       and passing the appropriate context.
      * 
-     * @see lumiera::Thread
+     * @see lib::Thread
      * @see threads.h
      */
     class ThreadWrapper_test : public Test
@@ -114,4 +114,4 @@ namespace lumiera {
     
   } // namespace test
 
-} // namespace lumiera
+} // namespace lib

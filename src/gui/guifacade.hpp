@@ -91,7 +91,7 @@ namespace gui {
        *  @internal this function is invoked automatically during the GUI
        *            loading and startup process. Don't call it manually.
        */
-      virtual bool kickOff (lumiera::Subsys::SigTerm&)  =0;
+      virtual void kickOff (lumiera::Subsys::SigTerm&)  =0;
       
       
     protected:
@@ -100,7 +100,7 @@ namespace gui {
     
   /** interface of the GuiStarterPlugin */
   LUMIERA_INTERFACE_DECLARE (lumieraorg_Gui, 1,
-                             LUMIERA_INTERFACE_SLOT (bool, kickOff, (void*))
+                             LUMIERA_INTERFACE_SLOT (void, kickOff, (void*))
   );
   
   

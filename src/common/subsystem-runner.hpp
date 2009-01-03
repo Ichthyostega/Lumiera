@@ -177,6 +177,7 @@ namespace lumiera {
           ASSERT (susy);
           Lock sync (this);
           triggerEmergency(problem);
+          INFO (operate, "Subsystem '%s' terminated.", cStr(*susy));
           ERROR_IF (susy->isRunning(), lumiera, "Subsystem '%s' signals termination, "
                                                 "without resetting running state", cStr(*susy));
           removeall (running_, susy);

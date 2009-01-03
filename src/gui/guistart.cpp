@@ -75,7 +75,7 @@ namespace gui {
       : public GuiFacade
       {
         
-        bool kickOff (Subsys::SigTerm& terminationHandle) 
+        void kickOff (Subsys::SigTerm& terminationHandle) 
           {
             cout << " *** Ha Ha Ha\n"
                  << "     this is the GuiStarterPlugin speaking!\n"
@@ -83,7 +83,6 @@ namespace gui {
                  << "     but actually nothing happens!!!!!!!!!!!!!!\n\n";
             
             terminationHandle(0); // signal immediate shutdown without error
-            return false;
           }
       };
     
@@ -179,9 +178,9 @@ extern "C" { /* ================== define an lumieraorg_Gui instance ===========
                                           , NULL  /* on open  */
                                           , NULL  /* on close */
                                           , LUMIERA_INTERFACE_INLINE (kickOff, "\255\142\006\244\057\170\152\312\301\372\220\323\230\026\200\065",
-                                                                      bool, (void* termSig),
+                                                                      void, (void* termSig),
                                                                         { 
-                                                                          return gui::facade_().kickOff (
+                                                                          gui::facade_().kickOff (
                                                                                      *reinterpret_cast<Subsys::SigTerm *> (termSig));
                                                                         }
                                                                      )
