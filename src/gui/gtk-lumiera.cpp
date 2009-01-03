@@ -46,20 +46,14 @@ using namespace gui::model;
 
 GtkLumiera the_application;
 
-int
-main (int argc, char *argv[])
-{
-  return the_application.main(argc, argv);
-}
 
 
 
 namespace gui {
 
-int
+void
 GtkLumiera::main(int argc, char *argv[])
 {
-  NOBUG_INIT;
 
   Main kit(argc, argv);
   
@@ -92,3 +86,14 @@ application()
 }   // namespace gui
 
 
+
+/**
+ * Run the Lumiera GTK GUI as standalone application without backend.
+ */
+int
+main (int argc, char *argv[])
+{
+  NOBUG_INIT;
+  gui::application().main(argc, argv);
+  return 0;
+}

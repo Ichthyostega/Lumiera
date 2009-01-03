@@ -98,7 +98,7 @@ static const gchar* AppAuthors[] = {
 class GtkLumiera : private boost::noncopyable
 {
 public:
-  int main(int argc, char *argv[]);
+  void main(int argc, char *argv[]);
   
   static Glib::ustring get_home_data_path();
 

@@ -31,18 +31,24 @@
  ** 
  ** After successfully loading this module, a call to #kickOff is expected to be
  ** issued, passing a termination signal (callback) to be executed when the GUI
- ** terminates. This call returns immediately, after spawning off the main thread
- ** and setting up the termination callback accordingly. Additionally, it cares
- ** for opening the primary "business" interface of the GUI, i.e. the interface
- ** gui::GuiNotification.
+ ** terminates. This call remains blocked within the main GTK event loop; thus
+ ** typically this should already run within a separate dedicated GUI thread.
+ ** Especially, the gui::GuiRunner will ensure this to happen.
+ ** 
+ ** Prior to entering the GTK event loop, all primary "business" interface of the GUI
+ ** will be opened (currently as of 1/09 this is the interface gui::GuiNotification.)
+ ** @todo implement this!
  **
  ** @see lumiera::AppState
  ** @see gui::GuiFacade
  ** @see guifacade.cpp
- ** @see ///////////////////////////////////TODO: add link to the gui main routine here!
+ ** @see gui::GtkLumiera#main the GTK GUI main
  */
 
 
+#include "gui/gtk-lumiera.hpp"
+#include "include/nobugcfg.h"
+#include "lib/error.hpp"
 #include "gui/guifacade.hpp"
 #include "common/subsys.hpp"
 #include "lib/singleton.hpp"
@@ -52,12 +58,7 @@ extern "C" {
 #include "common/interfacedescriptor.h"
 }
 
-#include <string>
 
-using std::string;
-
-#include <iostream> /////////////TODO
-using std::cout;   //////////////TODO
 
 
 using lumiera::Subsys;
@@ -75,14 +76,30 @@ namespace gui {
       : public GuiFacade
       {
         
-        void kickOff (Subsys::SigTerm& terminationHandle) 
+        void kickOff (Subsys::SigTerm& reportTermination) 
           {
-            cout << " *** Ha Ha Ha\n"
-                 << "     this is the GuiStarterPlugin speaking!\n"
-                 << "     now, the Lumiera GUI should be spawned....\n"
-                 << "     but actually nothing happens!!!!!!!!!!!!!!\n\n";
-            
-            terminationHandle(0); // signal immediate shutdown without error
+            try
+              {
+                int argc =0;   /////////////////////////////////////////////////////////////////////////////TODO pass arguments from core
+                char *argv[] = {};
+                
+                gui::application().main(argc, argv);   // execute the GTK Event Loop
+                
+                if (!lumiera_error_peek())
+                  {
+                    reportTermination(0);          // report GUI shutdown without error
+                    return;
+                  }
+              }
+            catch (lumiera::Error& problem)
+              {
+                reportTermination(&problem); // signal shutdown reporting the error
+                return;
+              }
+            catch (...){ }
+            lumiera::error::Fatal problemIndicator("unexpected error terminated the GUI.", lumiera_error());
+            reportTermination (&problemIndicator);
+            return;
           }
       };
     
