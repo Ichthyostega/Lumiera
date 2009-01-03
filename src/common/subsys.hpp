@@ -83,7 +83,8 @@ namespace lumiera {
        *  required for running this subsystem */
       Subsys& depends (Subsys& prereq);
       
-      /** @return true if Up */
+      /** @return true if Up
+       *  @warning must not block nor throw. */
       bool isRunning();
       
       

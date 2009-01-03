@@ -39,6 +39,7 @@
 using std::cout;
 using std::tr1::bind;
 using util::isnil;
+using util::cStr;
 using test::Test;
 using lib::Sync;
 using lib::RecursiveLock_Waitable;
@@ -53,7 +54,8 @@ namespace lumiera {
       
       /** limit for the randomly selected duration of
        *  subsystem's running phase (milliseconds) */
-      const uint MAX_RUNNING_TIME_ms = 50;
+      const uint MAX_RUNNING_TIME_ms = 60;
+      const uint MIN_RUNNING_TIME_ms = 10;
       
       /** the "running" subsystem checks for a
        *  shutdown request every XX milliseconds */ 
@@ -103,9 +105,9 @@ namespace lumiera {
           bool
           start (lumiera::Option&, Subsys::SigTerm termination)
             {
-              Lock guard (this);
-              if (isUp_) return false;  // already started
+              REQUIRE (!isUp_, "attempt to start %s twice!", cStr(*this));
               
+              Lock guard (this);
               Literal startSpec (extractID ("start",spec_));
               ASSERT ("false"!=startSpec);
               ASSERT (!isnil (startSpec));
@@ -128,6 +130,7 @@ namespace lumiera {
           void
           triggerShutdown ()  throw()
             {
+              // note: *not* locking here...
               termRequest_ = true;
               cout << *this << ": triggerShutdown()\n";
             }
@@ -135,7 +138,7 @@ namespace lumiera {
           bool 
           checkRunningState ()  throw()
             {
-              Lock guard (this);
+              // note: *not* locking here...
               return isUp_;
             }
           
@@ -151,7 +154,8 @@ namespace lumiera {
               if ("false"!=runSpec) //----actually hold running state for some time
                 {
                   didRun_ = true;
-                  running_duration_ = (rand() % MAX_RUNNING_TIME_ms);
+                  running_duration_  =  MIN_RUNNING_TIME_ms;
+                  running_duration_ += (rand() % (MAX_RUNNING_TIME_ms - MIN_RUNNING_TIME_ms));
                   
                   Lock wait_blocking (this, &MockSys::tick);
                 }
@@ -165,6 +169,7 @@ namespace lumiera {
                 Lock guard (this);
                 isUp_ = false;
                 
+                cout << *this << ": terminates.\n";
                 termination ("true"==runSpec? 0 : &problemIndicator);
             } }
           
@@ -245,6 +250,8 @@ namespace lumiera {
         void
         singleSubsys_complete_cycle()
           {
+            cout << "-----singleSubsys_complete_cycle-----\n";
+            
             MockSys unit ("one", "start(true), run(true).");
             SubsystemRunner runner(dummyOpt);
             REQUIRE (!unit.isRunning());
@@ -262,6 +269,8 @@ namespace lumiera {
         void
         singleSubsys_start_failure()
           {
+            cout << "-----singleSubsys_start_failure-----\n";
+            
             MockSys unit1 ("U1", "start(false), run(false).");
             MockSys unit2 ("U2", "start(throw), run(false).");
             MockSys unit3 ("U3", "start(fail),  run(false).");  // simulates incorrect behaviour
@@ -307,6 +316,8 @@ namespace lumiera {
         void
         singleSubsys_emegency_exit()
           {
+            cout << "-----singleSubsys_emegency_exit-----\n";
+            
             MockSys unit ("one", "start(true), run(fail).");
             SubsystemRunner runner(dummyOpt);
             
@@ -319,9 +330,23 @@ namespace lumiera {
           }
         
         
+        void zoing(string zoz)
+          {
+            cout << "zoing! "<<zoz<<"\n";
+            cout << "zoing! "<<zoz<<"\n";
+            cout << "zoing! "<<zoz<<"\n";
+            cout << "zoing! "<<zoz<<"\n";
+            cout << "zoing! "<<zoz<<"\n";
+            bool boo=true;
+            while (boo)
+              ;
+          }
+        
         void
         dependentSubsys_complete_cycle()
           {
+            cout << "-----dependentSubsys_complete_cycle-----\n";
+            
             MockSys unit1 ("U1", "start(true), run(true).");
             MockSys unit2 ("U2", "start(true), run(true).");
             MockSys unit3 ("U3", "start(true), run(true).");
@@ -341,10 +366,16 @@ namespace lumiera {
             bool emergency = runner.wait();
             
             ASSERT (!emergency);
+/*
             ASSERT (!unit1.isRunning());
             ASSERT (!unit2.isRunning());
             ASSERT (!unit3.isRunning());
             ASSERT (!unit4.isRunning());
+*/
+            if (unit1.isRunning()) zoing("1");
+            if (unit2.isRunning()) zoing("2");
+            if (unit3.isRunning()) zoing("3");
+            if (unit4.isRunning()) zoing("4");
             ASSERT (unit1.didRun());
             ASSERT (unit2.didRun());
             ASSERT (unit3.didRun());

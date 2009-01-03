@@ -120,8 +120,6 @@ namespace lumiera {
           
           if (!susy.isRunning() && susy.shouldStart (opts_))
             triggerStartup (&susy);
-          if (susy.isRunning())
-            running_.push_back (&susy);
         }
       
       void
@@ -154,15 +152,19 @@ namespace lumiera {
       triggerStartup (Subsys* susy)
         {
           ASSERT (susy);
-          INFO (operate, "Starting subsystem \"%s\"", cStr(*susy));
+          if (susy->isRunning()) return;
+          
+          INFO (operate, "Triggering startup of subsystem \"%s\"", cStr(*susy));
           
           for_each (susy->getPrerequisites(), start_);
           bool started = susy->start (opts_, bind (&SubsystemRunner::sigTerm, this, susy, _1));
           
-          if (started && !susy->isRunning())
-            {
+          if (started)
+            if (susy->isRunning())
+              running_.push_back (susy); // now responsible for managing the started subsystem
+            else
               throw error::Logic("Subsystem "+string(*susy)+" failed to start");
-            }
+          
           if (!and_all (susy->getPrerequisites(), isRunning() ))
             {
               susy->triggerShutdown();
