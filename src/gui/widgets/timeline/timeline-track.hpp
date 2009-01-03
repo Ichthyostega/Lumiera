@@ -66,6 +66,8 @@ public:
   
   void tick_expand_animation();
   
+  Gtk::ExpanderStyle get_expander_style() const;
+  
   void show_header_context_menu(guint button, guint32 time);
 
   virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo,

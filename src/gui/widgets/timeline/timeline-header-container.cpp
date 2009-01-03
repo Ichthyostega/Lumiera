@@ -457,43 +457,13 @@ TimelineHeaderContainer::draw_header_decoration(
   else if(hoveringExpander == timeline_track)
     state_type = STATE_PRELIGHT;
   
-  ExpanderStyle expander_style;
-  const int animation_state =
-    timeline_track->get_expand_animation_state();
-    
-  if(animation_state == Track::NoAnimationState)
-    expander_style = timeline_track->get_expanded() ?
-      EXPANDER_EXPANDED : EXPANDER_COLLAPSED;
-  else
-    {
-      const int notch = Track::MaxExpandAnimation / 3;
-      if(timeline_track->get_expanded())
-        {
-          if(animation_state >= notch * 2)
-            expander_style = EXPANDER_SEMI_EXPANDED;
-          else if(animation_state >= notch)
-            expander_style = EXPANDER_SEMI_COLLAPSED;
-          else
-            expander_style = EXPANDER_COLLAPSED;
-        }
-      else
-        {
-          if(animation_state <= notch)
-            expander_style = EXPANDER_COLLAPSED;
-          else if(animation_state <= notch * 2)
-            expander_style = EXPANDER_SEMI_COLLAPSED;
-          else
-            expander_style = EXPANDER_SEMI_EXPANDED;
-        }
-    }
-  
   if(!model_track->get_child_tracks().empty())
     style->paint_expander (gdkWindow,
       state_type, 
       clip_rect, *this, "",
       box.get_x() + expand_button_size / 2 + margin,
       box.get_y() + box.get_height() / 2,
-      expander_style);
+      timeline_track->get_expander_style());
 }
 
 shared_ptr<timeline::Track>

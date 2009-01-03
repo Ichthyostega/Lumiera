@@ -165,6 +165,37 @@ Track::tick_expand_animation()
     expandAnimationState == NoAnimationState);
 }
 
+Gtk::ExpanderStyle
+Track::get_expander_style() const
+{
+  const int notch = Track::MaxExpandAnimation / 3;
+  if(expanded)
+    {
+      if(expandAnimationState == Track::NoAnimationState)
+        return EXPANDER_EXPANDED;
+      else if(expandAnimationState >= notch * 2)
+        return EXPANDER_SEMI_EXPANDED;
+      else if(expandAnimationState >= notch)
+        return EXPANDER_SEMI_COLLAPSED;
+      else
+        return EXPANDER_COLLAPSED;
+    }
+  else
+    {
+      if(expandAnimationState == Track::NoAnimationState)
+        return EXPANDER_COLLAPSED;
+      else if(expandAnimationState <= notch)
+        return EXPANDER_SEMI_COLLAPSED;
+      else if(expandAnimationState <= notch * 2)
+        return EXPANDER_SEMI_EXPANDED;
+      else
+        return EXPANDER_EXPANDED;
+    }
+    
+  ERROR(gui, "Track::get_expander_style() final return reached");  
+  return EXPANDER_COLLAPSED;   // This should never happen
+}
+
 void
 Track::show_header_context_menu(guint button, guint32 time)
 {
