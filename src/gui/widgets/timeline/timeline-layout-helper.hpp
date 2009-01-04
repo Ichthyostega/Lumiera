@@ -166,6 +166,7 @@ protected:
    * @param[in] parent_expanded This value is set to true if all of the
    * ancestors of this track, up to the root are expanded and visible,
    * false if any of them are collapsed.
+   * @return Returns the height of the branch in pixels.
    * @see update_layout()
    **/
   int layout_headers_recursive(
