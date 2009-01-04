@@ -155,11 +155,12 @@ protected:
    * tree.
    * @param[in] parent_iterator The iterator of the parent of the branch
    * whose boxes will be laid out.
-   * @param[in,out] offset The accumulating y-offset value in pixels.
-   * This value should be set to 0 on the first call, and will
-   * susequently accumulate the offset of each box.
+   * @param[in] branch_offset The y-coordinate of the start of this
+   * branch as measured in pixels from the origin.
    * @param[in] header_width The width of the header container widget in
-   * pixels
+   * pixels.
+   * @param[in] header_width The width of indentation per branch in
+   * pixels.
    * @param[in] depth The depth within the tree of tracks. depth = 0 for
    * root tracks.
    * @param[in] parent_expanded This value is set to true if all of the
@@ -167,12 +168,10 @@ protected:
    * false if any of them are collapsed.
    * @see update_layout()
    **/
-#warning is_animating not documented
-  void layout_headers_recursive(
-    TrackTree::iterator_base parent_iterator,
-    int &offset, int &common_animation_state,
-    const int header_width, const int indent_width,
-    const int depth, const bool parent_expanded);
+  int layout_headers_recursive(
+    TrackTree::iterator_base parent_iterator, const int branch_offset,
+    const int header_width, const int indent_width, const int depth,
+    const bool parent_expanded);
   
   /**
    * A helper function which calls lookup_timeline_track within the
