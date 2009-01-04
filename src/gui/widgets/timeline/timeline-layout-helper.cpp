@@ -227,13 +227,9 @@ TimelineLayoutHelper::layout_headers_recursive(
         // shown as expanded
         const float a = ((float)track_animation_state /
           (float)Track::MaxExpandAnimation);
-        g_message("branch_height = %d", child_branch_height);
         child_branch_height *= a * a;
         const int y_limit =
           branch_offset + child_offset + child_branch_height;
-        g_message("track_animation_state = %d", track_animation_state);
-        g_message("branch_height = %d", child_branch_height);
-        g_message("y_limit = %d", y_limit);
         
         // Obscure tracks according to the animation state
         TrackTree::pre_order_iterator descendant_iterator(iterator);
