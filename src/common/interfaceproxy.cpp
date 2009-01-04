@@ -21,7 +21,8 @@
 * *****************************************************/
 
 
-#include "lib/singletonsubclass.hpp"
+#include "include/interfaceproxy.hpp"
+#include "lib/singletonsubclass.hpp" ////////////////////TODO
 #include "include/guinotificationfacade.h"
 #include "lib/util.hpp"
 #include "lib/error.hpp"

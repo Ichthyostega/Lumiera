@@ -70,7 +70,8 @@ namespace gui {
   namespace { // implementation details
     
     /** 
-     * Implement the necessary steps for starting up the GUI main thread
+     * Implement the necessary steps for actually making the Lumiera Gui available.
+     * Open the business interface(s) and start up the GTK GUI main event loop.
      */
     struct GuiFacadeImpl
       : public GuiFacade
@@ -104,7 +105,7 @@ namespace gui {
       };
     
     
-    lumiera::Singleton<GuiFacadeImpl> facade_;
+    lumiera::Singleton<GuiFacadeImpl> guiImplProvider_;
     
   } // (End) impl details
 
@@ -197,7 +198,7 @@ extern "C" { /* ================== define an lumieraorg_Gui instance ===========
                                           , LUMIERA_INTERFACE_INLINE (kickOff, "\255\142\006\244\057\170\152\312\301\372\220\323\230\026\200\065",
                                                                       void, (void* termSig),
                                                                         { 
-                                                                          gui::facade_().kickOff (
+                                                                          gui::guiImplProvider_().kickOff (
                                                                                      *reinterpret_cast<Subsys::SigTerm *> (termSig));
                                                                         }
                                                                      )

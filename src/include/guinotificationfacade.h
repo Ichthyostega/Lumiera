@@ -83,7 +83,7 @@ namespace gui {
 
 
 extern "C" {
-#endif /* =========================== CLI Interface ================= */ 
+#endif /* =========================== CL Interface ===================== */ 
 
   
 #include "common/interface.h"

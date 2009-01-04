@@ -161,7 +161,7 @@ namespace lumiera {
        *  @note we don't provide operator*                      */
       FA * operator-> ()  const { return accessFacade(); }      
       
-      /** directly access the instance via the CLI interface */
+      /** directly access the instance via the CL interface */
       I& get ()  const { ENSURE(instance_); return *instance_; }
       
       

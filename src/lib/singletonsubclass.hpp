@@ -21,14 +21,14 @@
 */
 
 /** @file singletonsubclass.hpp
- ** Spezialized SingletonFactory creating sublcasses of the nominal type.
+ ** Specialised SingletonFactory creating subclasses of the nominal type.
  ** The rationale is to be able to defer the decision what type to create
- ** down to the point where the singleton factory is actualy created.
+ ** down to the point where the singleton factory is actually created.
  ** Thus the code using the singleton need not know the implementation
  ** class, but nevertheless gets an non-virtual access function to the
  ** singleton instance (which can be inlined), and the compiler is
  ** still able to spot type errors. Maybe someone knows a less 
- ** contrieved solution fulfilling the same criteria....?
+ ** contrived solution fulfilling the same criteria....?
  ** 
  ** @see configrules.cpp usage example
  ** @see SingletonSubclass_test
@@ -63,7 +63,7 @@ namespace lumiera {
           struct Link
             {
               virtual ~Link() {}
-              virtual I* create ()          = 0;   ///< @note compiler will check the actual type is assignable...
+              virtual I* create ()          = 0;   ///< @note compiler will check if the actual type is assignable...
               virtual void destroy (I* pSi) = 0;
             };
           
