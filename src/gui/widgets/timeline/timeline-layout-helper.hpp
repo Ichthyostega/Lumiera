@@ -186,9 +186,15 @@ protected:
    **/
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
     boost::shared_ptr<model::Track> model_track);
-    
+  
+  /**
+   * A helper function which kicks off the animation timer.
+   **/
   void begin_animation();
   
+  /**
+   * The animation timer tick callback.
+   **/
   bool on_animation_tick();
   
 protected:
@@ -220,12 +226,26 @@ protected:
    **/
   int totalHeight;
   
+  /**
+   * The connection to the animation timer.
+   * @see begin_animation()
+   * @see on_animation_tick()
+   **/
   sigc::connection animationTimer;
   
-  int animation_state;
+  /**
+   * This value is true if the layout animation should continue.
+   * @remarks This value is recalculated by update_layout()
+   * @see update_layout()
+   * @see on_animation_tick()
+   **/
+  bool is_animating;
   
 protected:
   
+  /**
+   * The frequencey of animation timer ticks in milliseconds.
+   **/
   static const int AnimationTimeout;
 };
 

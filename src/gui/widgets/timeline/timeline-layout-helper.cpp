@@ -42,7 +42,7 @@ const int TimelineLayoutHelper::AnimationTimeout = 20; // 20ms
 TimelineLayoutHelper::TimelineLayoutHelper(TimelineWidget &owner) :
   timelineWidget(owner),
   totalHeight(0),
-  animation_state(Track::NoAnimationState)
+  is_animating(false)
 {
 }
 
@@ -145,7 +145,7 @@ void
 TimelineLayoutHelper::update_layout()
 {
   // Reset the animation state value, before it gets recalculated
-  animation_state = Track::NoAnimationState;
+  is_animating = false;
     
   // Clear previously cached layout
   headerBoxes.clear();
@@ -160,7 +160,7 @@ TimelineLayoutHelper::update_layout()
   timelineWidget.on_layout_changed();
   
   // Begin animating as necessary
-  if(animation_state != Track::NoAnimationState && !animationTimer)
+  if(is_animating && !animationTimer)
     begin_animation();
 }
 
@@ -188,6 +188,8 @@ TimelineLayoutHelper::layout_headers_recursive(
       // Is the track animating?
       const int track_animation_state =
         timeline_track->get_expand_animation_state();
+      if(track_animation_state != Track::NoAnimationState)
+        is_animating = true;
       
       // Is the track going to be shown?
       if(parent_expanded)
@@ -208,11 +210,10 @@ TimelineLayoutHelper::layout_headers_recursive(
       
       // Recurse to children
       const bool expand_child =
-        ((animation_state != Track::NoAnimationState) ||
-          timeline_track->get_expanded())
+        (is_animating || timeline_track->get_expanded())
           && parent_expanded;
            
-      const int branch_height = layout_headers_recursive(
+      int child_branch_height = layout_headers_recursive(
         iterator, branch_offset + child_offset,
         header_width, indent_width, depth + 1, expand_child);
       
@@ -226,9 +227,14 @@ TimelineLayoutHelper::layout_headers_recursive(
         // shown as expanded
         const float a = ((float)track_animation_state /
           (float)Track::MaxExpandAnimation);
-        child_offset += branch_height * a * a;
-        const int y_limit = branch_offset + child_offset;
-
+        g_message("branch_height = %d", child_branch_height);
+        child_branch_height *= a * a;
+        const int y_limit =
+          branch_offset + child_offset + child_branch_height;
+        g_message("track_animation_state = %d", track_animation_state);
+        g_message("branch_height = %d", child_branch_height);
+        g_message("y_limit = %d", y_limit);
+        
         // Obscure tracks according to the animation state
         TrackTree::pre_order_iterator descendant_iterator(iterator);
         descendant_iterator++;
@@ -239,20 +245,16 @@ TimelineLayoutHelper::layout_headers_recursive(
           descendant_iterator != end;
           descendant_iterator++)
           {
-            const Gdk::Rectangle &rect = headerBoxes[
-              lookup_timeline_track(*descendant_iterator)];
+            const weak_ptr<timeline::Track> track = 
+              lookup_timeline_track(*descendant_iterator);
+            const Gdk::Rectangle &rect = headerBoxes[track];
             
             if(rect.get_y() + rect.get_height() > y_limit)
               headerBoxes.erase(track);
           }
-        
-        // Make sure the global animation state includes this branch's
-        // animation state
-        animation_state = max(
-          animation_state, track_animation_state);
       }
-      else // If no animation, just append the normal length
-        child_offset += branch_height;
+      
+      child_offset += child_branch_height;
     }
     
   return child_offset;
@@ -282,7 +284,7 @@ bool
 TimelineLayoutHelper::on_animation_tick()
 {
   update_layout();
-  return animation_state != Track::NoAnimationState;
+  return is_animating;
 }
 
 }   // namespace timeline
