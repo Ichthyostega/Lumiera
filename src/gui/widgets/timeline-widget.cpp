@@ -387,7 +387,7 @@ TimelineWidget::remove_orphaned_tracks()
     pair; 
   BOOST_FOREACH( pair, orphan_track_map )
     {
-      ENSURE(pair.first)
+      ENSURE(pair.first);
       trackMap.erase(pair.first);
     }
 }
