@@ -36,25 +36,18 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-const int Track::NoAnimationState = -1;
-const int Track::MaxExpandAnimation = 65536;
-const double Track::ExpandAnimationPeriod = 0.15;
-
-Glib::Timer Track::timer;
+const float Track::ExpandAnimationPeriod = 0.15;
   
 Track::Track(TimelineWidget &timeline_widget,
   shared_ptr<model::Track> track) :
   timelineWidget(timeline_widget),
   model_track(track),
   expanded(true),
-  expandAnimationState(Track::NoAnimationState),
+  expandDirection(None),
   enableButton(Gtk::StockID("track_enabled")),
   lockButton(Gtk::StockID("track_unlocked"))
 {
   REQUIRE(model_track);
-  
-  // Ensure that the timer is running
-  timer.start();
   
   titleMenuButton.set_relief(RELIEF_HALF);
   
@@ -121,71 +114,81 @@ Track::get_expanded() const
 void
 Track::expand_collapse(ExpandDirection direction)
 {
+  REQUIRE(direction != None);
+  
   expandDirection = direction;
   if(direction == Expand)
     {
       expanded = true;
-      expandAnimationState = 0;
+      expandAnimationState = 0.0;
     }
   else
     {
       expanded = false;
-      expandAnimationState = MaxExpandAnimation;
+      expandAnimationState = 1.0;
     }
-    
-  lastTickTime = timer.elapsed();
+  
+  // Create a timer if we don't already have one
+  if(!expand_timer)
+    {
+      expand_timer.reset(new Glib::Timer());
+      expand_timer->start();
+    }
+  else  // Reset the timer if we do
+    expand_timer->reset();
 }
 
-int
+float
 Track::get_expand_animation_state() const
 {
-  ENSURE((expandAnimationState >= 0 &&
-    expandAnimationState <= MaxExpandAnimation) ||
-    expandAnimationState == NoAnimationState);
+  ENSURE(expandAnimationState >= 0.0 &&
+    expandAnimationState <= 1.0);
   return expandAnimationState;
+}
+
+bool
+Track::is_expand_animating() const
+{
+  return expandDirection != None;
 }
   
 void
 Track::tick_expand_animation()
 {
-  if(expandAnimationState <= NoAnimationState)
-  {
-    WARN(gui, "tick_expand_animation() was called when"
-      " expandAnimationState was set to NoAnimationState");
-    return;    
-  }
-
-  const double delta = MaxExpandAnimation * (timer.elapsed() - lastTickTime) / ExpandAnimationPeriod;
+  REQUIRE(expandDirection != None); // tick_expand_animation should not
+                                    // be unless is_expand_animating
+                                    // returns true
+  REQUIRE(expand_timer);
+  const float delta = 
+    (float)expand_timer->elapsed() / ExpandAnimationPeriod;
+  expand_timer->reset(); // reset the timer to t=0
 
   if(expandDirection == Expand)
     {
       expandAnimationState += delta;
-      if(expandAnimationState >= MaxExpandAnimation)
-        expandAnimationState = NoAnimationState;
+      if(expandAnimationState >= 1.0)
+        expandDirection = None;
     }
   else
     {
       expandAnimationState -= delta;
-      if(expandAnimationState <= 0)
-        expandAnimationState = NoAnimationState;
+      if(expandAnimationState <= 0.0)
+        expandDirection = None;
     }
     
-  lastTickTime = timer.elapsed();
-  
-  ENSURE((expandAnimationState >= 0 &&
-    expandAnimationState <= MaxExpandAnimation) ||
-    expandAnimationState == NoAnimationState);
+  if(expandDirection == None)
+    expand_timer.reset();  // We've finished with the timer - delete it
 }
 
 Gtk::ExpanderStyle
 Track::get_expander_style() const
 {
-  const int notch = Track::MaxExpandAnimation / 3;
+  const int notch = 1.0 / 3.0;
   if(expanded)
     {
-      if(expandAnimationState == Track::NoAnimationState)
+      if(expandDirection == None)
         return EXPANDER_EXPANDED;
-      else if(expandAnimationState >= notch * 2)
+      else if(expandAnimationState >= notch * 2.0)
         return EXPANDER_SEMI_EXPANDED;
       else if(expandAnimationState >= notch)
         return EXPANDER_SEMI_COLLAPSED;
@@ -194,11 +197,11 @@ Track::get_expander_style() const
     }
   else
     {
-      if(expandAnimationState == Track::NoAnimationState)
+      if(expandDirection == None)
         return EXPANDER_COLLAPSED;
       else if(expandAnimationState <= notch)
         return EXPANDER_SEMI_COLLAPSED;
-      else if(expandAnimationState <= notch * 2)
+      else if(expandAnimationState <= notch * 2.0)
         return EXPANDER_SEMI_EXPANDED;
       else
         return EXPANDER_EXPANDED;

@@ -37,12 +37,23 @@ namespace timeline {
   
 class TimelineViewWindow;
 
+/**
+ * Timeline tracks are created by the timeline widget to correspond to
+ * model tracks. Timeline tracks are used to store UI specific state
+ * data.
+ **/
 class Track : public sigc::trackable
 {
 public:
   
+  /**
+   * An enum used by the branch expand/collapse animation.
+   * ExpandDirection represents whether the branch us being expanded or
+   * collapsed, or neither.
+   **/ 
   enum ExpandDirection
   {
+    None,
     Expand,
     Collapse
   };
@@ -57,15 +68,48 @@ public:
   
   int get_height() const;
   
+  /**
+   * Gets whether the descendant tracks are expanded or collapsed.
+   * @return Returns true if the branch is expanded, false if it's
+   * collapsed.
+   * @see expand_collapse
+   **/
   bool get_expanded() const;
   
+  /**
+   * Expands or collapses this branch.
+   * @param direction Specifies whether this branch should be expanded
+   * or collapse. direction must not equal None
+   **/
   void expand_collapse(ExpandDirection direction);
   
-  // -1 for no animation
-  int get_expand_animation_state() const;
+  /**
+   * The current expand state.
+   * @return Returns the expand state value, this value is a number
+   * between 0 and 1.0, and is recalculated by tick_expand_animation().
+   * @remarks A value of 1.0 is given when the branch is fully expanded
+   * (and animating), 0.0 is given when the branch is fully collapsed
+   * (and animating). When the branch is not animating this value has
+   * an indeterminate value.
+   * @see tick_expand_animation
+   **/
+  float get_expand_animation_state() const;
   
+  /**
+   * Gets whether the branch is animation.
+   * @return Returns true if the branch is animating, false if not.
+   **/
+  bool is_expand_animating() const;
+  
+  /**
+   * When this track is being animated, tick_expand_animation must be
+   * called repeatedly to cause the animation to progress.
+   **/ 
   void tick_expand_animation();
   
+  /**
+   * Calculates the expander style, given the animation state.
+   **/
   Gtk::ExpanderStyle get_expander_style() const;
   
   void show_header_context_menu(guint button, guint32 time);
@@ -75,9 +119,12 @@ public:
     const = 0;
     
 public:
-  static const int NoAnimationState;
-  static const int MaxExpandAnimation;
-  static const double ExpandAnimationPeriod;
+  //----- Constants -----//
+  
+  /**
+   * Specifies the period of the expand animation in seconds.
+   **/
+  static const float ExpandAnimationPeriod;
 
 private:
   //----- Internals -----//
@@ -96,13 +143,36 @@ protected:
   boost::shared_ptr<model::Track> model_track;
 
 private:
+
+  /**
+   * This bool is true if this branch is expanded. false if it is
+   * collapsed.
+   **/
   bool expanded;
   
+  /**
+   * This enum specifies which direction the expand/collapse animation
+   * is moving - if any.
+   * @remarks If no animation is occuring, expandDirection is set to
+   * None.
+   **/
   ExpandDirection expandDirection;
+  
+  /**
+   * The current expand state.
+   * @remarks This value is a number between 0 and 1.0,
+   * and is recalculated by tick_expand_animation(). This variable is
+   * set to 1.0 when the branch is fully expanded (and animating) and
+   * 0.0 when the branch is fully collapsed (and animating). When the
+   * branch is not animating this value has an indeterminate value.
+   * @see tick_expand_animation
+   **/
   double expandAnimationState;
   
-  static Glib::Timer timer;
-  double lastTickTime;
+  /**
+   * An internal timer used for the expand/collapse animation.
+   **/
+  boost::scoped_ptr<Glib::Timer> expand_timer;
 
   //----- Header Widgets ------//
   

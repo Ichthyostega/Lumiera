@@ -185,12 +185,6 @@ TimelineLayoutHelper::layout_headers_recursive(
       shared_ptr<timeline::Track> timeline_track =
         lookup_timeline_track(model_track);
       
-      // Is the track animating?
-      const int track_animation_state =
-        timeline_track->get_expand_animation_state();
-      if(track_animation_state != Track::NoAnimationState)
-        is_animating = true;
-      
       // Is the track going to be shown?
       if(parent_expanded)
         {          
@@ -207,6 +201,11 @@ TimelineLayoutHelper::layout_headers_recursive(
           // Offset for the next header
           child_offset += track_height + TimelineWidget::TrackPadding;
         }
+        
+      // Is the track animating?
+      const bool is_track_animating =
+        timeline_track->is_expand_animating();
+      is_animating |= is_track_animating;
       
       // Recurse to children
       const bool expand_child =
@@ -218,15 +217,11 @@ TimelineLayoutHelper::layout_headers_recursive(
         header_width, indent_width, depth + 1, expand_child);
       
       // Do collapse animation as necessary
-      if(track_animation_state != Track::NoAnimationState)
-      {
-        // Tick the track expand animation
-        timeline_track->tick_expand_animation();
-                     
+      if(is_track_animating)
+      {                     
         // Calculate the height of te area which will be
         // shown as expanded
-        const float a = ((float)track_animation_state /
-          (float)Track::MaxExpandAnimation);
+        const float a = timeline_track->get_expand_animation_state();
         child_branch_height *= a * a;
         const int y_limit =
           branch_offset + child_offset + child_branch_height;
@@ -248,6 +243,9 @@ TimelineLayoutHelper::layout_headers_recursive(
             if(rect.get_y() + rect.get_height() > y_limit)
               headerBoxes.erase(track);
           }
+          
+        // Tick the track expand animation
+        timeline_track->tick_expand_animation();
       }
       
       child_offset += child_branch_height;
