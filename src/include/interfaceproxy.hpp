@@ -90,18 +90,77 @@ namespace lumiera {
    * 
    */
   template<class FA>
-  class InterfaceProxy
+  class FacadeAccessor
     {
+      FA* insta_;
       
-      friend class lumiera::InstanceHandle;/////////////TODO use an abstraction here!
       
     public:
+      FA&
+      operator() ()
+        {
+          if (insta_)
+            return *insta_;
+          else
+            throw error::State("Facade interface currently closed.");
+        }
+    };
+  
+  template<class IMP>
+  class Holder
+    {
+      static IMP& open()
+        {
+          static char buff[sizeof(IMP)];
+          IMP* p = new(buff) IMP();
+          insta_ = p;
+          return *p;
+        }
       
+      template<class IMP>
+      static void close()
+        {
+          IMP* p = static_cast<IMP*> (insta_);
+          insta_ = 0;
+          p->~IMP();
+        }
       
       
     };
   
+  template<class FA>
+  class Proxy;
   
+  template<class IH>
+  class Mixi;
+  
+  template<class FA, class I>
+  class Mixi<InstanceHandle<I,FA> >
+    : Holder<Proxy<FA> >,
+      public FA
+    {
+      I* _i_;
+    public:
+      void setupInterface(I& interface) { _i_ = &interface; }
+      
+    };
+  
+  class XYZ;
+
+  template<>
+  class Proxy<XYZ>
+    : public Mixi<XYZ>
+    {
+      
+    };
+  
+  template<class FA, class I>
+  void
+  pullUp (InstanceHandle<I,FA>& iha)
+    {
+      Proxy<InstanceHandle<I,FA> >::open().setupInterface(iha.get());
+      
+    }
   
 } // namespace lumiera
 #endif
