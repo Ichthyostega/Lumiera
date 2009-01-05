@@ -35,9 +35,12 @@ using namespace sigc;
 namespace gui {
 namespace widgets {
 namespace timeline {
-  
+
 const int Track::NoAnimationState = -1;
-const int Track::MaxExpandAnimation = 10;
+const int Track::MaxExpandAnimation = 65536;
+const double Track::ExpandAnimationPeriod = 0.15;
+
+Glib::Timer Track::timer;
   
 Track::Track(TimelineWidget &timeline_widget,
   shared_ptr<model::Track> track) :
@@ -49,6 +52,9 @@ Track::Track(TimelineWidget &timeline_widget,
   lockButton(Gtk::StockID("track_unlocked"))
 {
   REQUIRE(model_track);
+  
+  // Ensure that the timer is running
+  timer.start();
   
   titleMenuButton.set_relief(RELIEF_HALF);
   
@@ -126,6 +132,8 @@ Track::expand_collapse(ExpandDirection direction)
       expanded = false;
       expandAnimationState = MaxExpandAnimation;
     }
+    
+  lastTickTime = timer.elapsed();
 }
 
 int
@@ -139,7 +147,7 @@ Track::get_expand_animation_state() const
   
 void
 Track::tick_expand_animation()
-{ 
+{
   if(expandAnimationState <= NoAnimationState)
   {
     WARN(gui, "tick_expand_animation() was called when"
@@ -147,18 +155,22 @@ Track::tick_expand_animation()
     return;    
   }
 
+  const double delta = MaxExpandAnimation * (timer.elapsed() - lastTickTime) / ExpandAnimationPeriod;
+
   if(expandDirection == Expand)
     {
-      expandAnimationState++;
+      expandAnimationState += delta;
       if(expandAnimationState >= MaxExpandAnimation)
         expandAnimationState = NoAnimationState;
     }
   else
     {
-      expandAnimationState--;
+      expandAnimationState -= delta;
       if(expandAnimationState <= 0)
         expandAnimationState = NoAnimationState;
-    }  
+    }
+    
+  lastTickTime = timer.elapsed();
   
   ENSURE((expandAnimationState >= 0 &&
     expandAnimationState <= MaxExpandAnimation) ||

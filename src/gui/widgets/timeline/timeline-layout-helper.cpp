@@ -271,9 +271,9 @@ TimelineLayoutHelper::lookup_timeline_track(
 void
 TimelineLayoutHelper::begin_animation()
 {
-  animationTimer = Glib::signal_timeout().connect(
+  animationTimer = Glib::signal_idle().connect(
     sigc::mem_fun(this, &TimelineLayoutHelper::on_animation_tick),
-    AnimationTimeout);
+    Glib::PRIORITY_DEFAULT);
 }
 
 bool

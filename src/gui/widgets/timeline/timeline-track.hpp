@@ -77,6 +77,7 @@ public:
 public:
   static const int NoAnimationState;
   static const int MaxExpandAnimation;
+  static const double ExpandAnimationPeriod;
 
 private:
   //----- Internals -----//
@@ -97,10 +98,11 @@ protected:
 private:
   bool expanded;
   
-
-  
   ExpandDirection expandDirection;
-  int expandAnimationState;
+  double expandAnimationState;
+  
+  static Glib::Timer timer;
+  double lastTickTime;
 
   //----- Header Widgets ------//
   
