@@ -33,8 +33,8 @@
 
 
 
-namespace test
-  {
+namespace test {
+  
   using std::string;
   using std::ostream;
   
@@ -56,7 +56,7 @@ namespace test
       TestOption (util::Cmdline& cmdline);
       const string getTestgroup ();
       const string getTestID ();
-      const bool getDescribe ();
+      bool getDescribe ();
       
     private:
       boost::program_options::options_description syntax;

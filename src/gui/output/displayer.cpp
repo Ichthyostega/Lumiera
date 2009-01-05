@@ -74,10 +74,10 @@ Displayer::calculateVideoLayout(
     video_x = ( widget_width - video_width ) / 2;
     video_y = ( widget_height - video_height ) / 2;
     
-    ENSURE(video_x >= 0 && video_x < widget_width)
-    ENSURE(video_y >= 0 && video_y < widget_height)
-    ENSURE(video_width <= widget_width)
-    ENSURE(video_width <= widget_width)
+    ENSURE(video_x >= 0 && video_x < widget_width);
+    ENSURE(video_y >= 0 && video_y < widget_height);
+    ENSURE(video_width <= widget_width);
+    ENSURE(video_width <= widget_width);
   }
 
 }   // namespace output

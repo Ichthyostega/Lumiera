@@ -94,7 +94,7 @@ namespace lib {
       class SyncOnMemberPredicate
         : public SyncOnBool
         {
-          volatile bool checkTheFlag() { return this->got_new_data_; }
+          bool checkTheFlag() { return this->got_new_data_; }
           
         public:
           void getIt()

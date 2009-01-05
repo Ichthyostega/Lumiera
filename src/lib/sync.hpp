@@ -269,7 +269,7 @@ namespace lib {
       template<class X>
       struct BoolMethodPredicate
         {
-          typedef volatile bool (X::*Method)(void);
+          typedef bool (X::*Method)(void);
           
           X& instance_;
           Method method_;
@@ -307,7 +307,7 @@ namespace lib {
           
           template<class X>
           bool
-          wait (X& instance, volatile bool (X::*method)(void), ulong timedwait=0)
+          wait (X& instance, bool (X::*method)(void), ulong timedwait=0)
             {
               BoolMethodPredicate<X> invokeMethod(instance, method);
               return IMPL::wait(invokeMethod, timeout_.setOffset(timedwait));                                   
@@ -391,7 +391,7 @@ namespace lib {
              *  observing a condition defined as member function.
              */
             template<class X>
-            Lock(X* it, volatile bool (X::*method)(void))
+            Lock(X* it, bool (X::*method)(void))
               : mon_(getMonitor(it)) 
               { 
                 mon_.acquireLock();

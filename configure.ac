@@ -1,6 +1,7 @@
 AC_INIT(lumiera, 0.1pre)
-AC_CONFIG_SRCDIR(src/lib/luid.c)
-AC_CONFIG_AUX_DIR(scripts)
+AC_CONFIG_SRCDIR([src/lib/luid.c])
+AC_CONFIG_AUX_DIR([scripts])
+AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE
 AC_PREREQ(2.59)
 

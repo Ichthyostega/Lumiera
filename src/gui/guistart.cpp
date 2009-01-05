@@ -106,32 +106,33 @@ extern "C" { /* ================== define an lumieraorg_Gui instance ===========
                              ,lumieraorg_GuiStarterPlugin_descriptor
                              , NULL, NULL, NULL
                              , LUMIERA_INTERFACE_INLINE (name, "\126\247\365\337\126\254\173\037\130\310\337\345\200\347\323\136",
-                                                         const char*, (LumieraInterface iface),
-                                                           { return "GuiStarterPlugin"; }
+                                                         const char*, (LumieraInterface ifa),
+                                                           { (void)ifa;  return "GuiStarterPlugin"; }
                                                         )
                              , LUMIERA_INTERFACE_INLINE (brief, "\056\346\322\365\344\104\232\232\355\213\367\056\301\144\051\021",
-                                                         const char*, (LumieraInterface iface),
-                                                           { return "entry point to start up the Lumiera GTK GUI contained in this dynamic module"; }
+                                                         const char*, (LumieraInterface ifa),
+                                                           { (void)ifa;  return "entry point to start up the Lumiera GTK GUI contained in this dynamic module"; }
                                                         )
                              , LUMIERA_INTERFACE_INLINE (homepage, "\357\056\117\165\320\066\273\130\113\100\367\022\221\350\236\256",
-                                                         const char*, (LumieraInterface iface),
-                                                           { return "http://www.lumiera.org/develompent.html" ;}
+                                                         const char*, (LumieraInterface ifa),
+                                                           { (void)ifa;  return "http://www.lumiera.org/develompent.html" ;}
                                                         )
                              , LUMIERA_INTERFACE_INLINE (version, "\013\117\366\210\070\320\274\076\253\230\032\116\271\161\027\354",
-                                                         const char*, (LumieraInterface iface),
-                                                           { return "0.1~pre"; }
+                                                         const char*, (LumieraInterface ifa),
+                                                           { (void)ifa;  return "0.1~pre"; }
                                                         )
                              , LUMIERA_INTERFACE_INLINE (author, "\371\262\024\273\170\105\163\261\351\240\051\003\153\040\256\155",
-                                                         const char*, (LumieraInterface iface),
-                                                           { return "Joel Holdsworth, Christian Thaeter, Hermann Vosseler"; }
+                                                         const char*, (LumieraInterface ifa),
+                                                           { (void)ifa;  return "Joel Holdsworth, Christian Thaeter, Hermann Vosseler"; }
                                                         )
                              , LUMIERA_INTERFACE_INLINE (email, "\353\242\247\130\056\242\314\145\053\162\003\060\200\357\303\214",
-                                                         const char*, (LumieraInterface iface),
-                                                           { return "Lumiera@lists.lumiera.org"; }
+                                                         const char*, (LumieraInterface ifa),
+                                                           { (void)ifa;  return "Lumiera@lists.lumiera.org"; }
                                                         )
                              , LUMIERA_INTERFACE_INLINE (copyright, "\172\325\335\304\015\222\377\372\343\151\255\020\030\103\320\101",
-                                                         const char*, (LumieraInterface iface),
+                                                         const char*, (LumieraInterface ifa),
                                                            {
+                                                             (void)ifa;
                                                              return
                                                                "Copyright (C)       Lumiera.org\n"
                                                                "2007-2008,          Joel Holdsworth <joel@airwebreathe.org.uk>\n"
@@ -140,8 +141,9 @@ extern "C" { /* ================== define an lumieraorg_Gui instance ===========
                                                            }
                                                         )
                              , LUMIERA_INTERFACE_INLINE (license, "\016\264\202\005\160\305\033\227\037\077\143\363\263\011\167\257",
-                                                         const char*, (LumieraInterface iface),
+                                                         const char*, (LumieraInterface ifa),
                                                            {
+                                                             (void)ifa;
                                                              return
                                                                "This program is free software; you can redistribute it and/or modify\n"
                                                                "it under the terms of the GNU General Public License as published by\n"
@@ -159,8 +161,8 @@ extern "C" { /* ================== define an lumieraorg_Gui instance ===========
                                                            }
                                                         )
                              , LUMIERA_INTERFACE_INLINE (state, "\006\070\035\065\267\073\016\107\376\027\355\035\135\176\107\064",
-                                                         int, (LumieraInterface iface),
-                                                           {return LUMIERA_INTERFACE_EXPERIMENTAL; }
+                                                         int, (LumieraInterface ifa),
+                                                           {(void)ifa;  return LUMIERA_INTERFACE_EXPERIMENTAL; }
                                                         )
                              , LUMIERA_INTERFACE_INLINE (versioncmp, "\224\077\275\040\357\244\311\244\112\030\042\163\061\166\245\325",
                                                          int, (const char* a, const char* b),
