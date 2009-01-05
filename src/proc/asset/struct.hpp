@@ -49,8 +49,8 @@
 
 
 
-namespace asset
-  {
+namespace asset {
+  
   using std::string;
   using std::wstring;
   using boost::scoped_ptr;
@@ -108,7 +108,7 @@ namespace asset
   
   
   /** 
-   * Factory specialized for createing Structural Asset objects.
+   * Factory specialised for creating Structural Asset objects.
    */ 
   class StructFactory : public lumiera::Factory<asset::Struct>
     {

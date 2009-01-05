@@ -82,7 +82,7 @@ namespace asset
   
   
   /** Factory method for Structural Asset instances.
-   *  First tries to relove the asset by issuing an capability query.
+   *  First tries to resolve the asset by issuing an capability query.
    *  If unsuccessful, use some internally specialised ctor call.
    *  @todo work out the struct asset naming scheme!
    *  @return an Struct smart ptr linked to the internally registered smart ptr
@@ -144,8 +144,7 @@ namespace asset
 #include "proc/asset/pipe.hpp"
 
 
-namespace asset
-  {
+namespace asset {
   
   template P<Pipe>     StructFactory::operator() (const Query<Pipe>& query);
   template P<Track>    StructFactory::operator() (const Query<Track>& query);
