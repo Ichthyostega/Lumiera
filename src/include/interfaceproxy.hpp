@@ -79,137 +79,143 @@
 
 #include "lib/error.hpp"
 
-#include <string>
 
 
 namespace lumiera {
+  namespace facade {
   
-  using std::string;
   
+    /*********************************************************************
+     * 
+     */
+    template<class FA>
+    class Accessor
+      {
+      protected:
+        static FA* implProxy_;
+        
+        
+      public:
+        FA&
+        operator() ()
+          {
+            if (implProxy_)
+              return *implProxy_;
+            else
+              throw error::State("Facade interface currently closed.");
+          }
+      };
+    
+    template<class IHA>
+    void openProxy (IHA& iha);
+    
+    template<class IHA>
+    void closeProxy (IHA& iha);
+    
+    template<class IHA>
+    class Proxy;
+    
+    
+  } // namespace facade
   
-  /*********************************************************************
-   * 
-   */
-  template<class FA>
-  class FacadeAccessor
-    {
-    protected:
-      static FA* implProxy_;
-      
-      
-    public:
-      FA&
-      operator() ()
-        {
-          if (implProxy_)
-            return *implProxy_;
-          else
-            throw error::State("Facade interface currently closed.");
-        }
-    };
-  
-  template<class IHA>
-  void openProxy (IHA& iha);
-  
-  template<class IHA>
-  void closeProxy (IHA& iha);
-  
-  template<class IHA>
-  class Proxy;
-  
-}
+} // namespace lumiera
 
 #include "common/instancehandle.hpp"
 
 namespace lumiera {
-  
-  template<class IHA>
-  class Holder;
-  
-  template<class FA, class I>
-  class Holder<InstanceHandle<I,FA> >
-    : FacadeAccessor<FA>,
-      protected FA
-    {
-    protected:
-      typedef InstanceHandle<I,FA> IHandle;
-      typedef FacadeAccessor<FA> Access;
-      typedef Holder<IHandle> THolder;
-      typedef Proxy<IHandle> Proxy;
-      
-      static Proxy& open(IHandle& iha)
-        {
-          static char buff[sizeof(Proxy)];
-          Proxy* p = new(buff) Proxy(iha);
-          Access::implProxy_ = p;
-          return *p;
-        }
-      
-      static void close()
-        {
-          if (!Access::implProxy_) return;
-          Proxy* p = static_cast<Proxy*> (Access::implProxy_);
-          Access::implProxy_ = 0;
-          p->~Proxy();
-        }
-      
-      
-      I& _i_;
-      
-      Holder (IHandle& iha)
-        : _i_(iha.get())
-        {  }
-      
-    };
+  namespace facade {
   
   
-  template<class FA>
-  FA* FacadeAccessor<FA>::implProxy_;
+    template<class IHA>
+    class Holder;
+    
+    template<class FA, class I>
+    class Holder<InstanceHandle<I,FA> >
+      : Accessor<FA>,
+        protected FA
+      {
+      protected:
+        typedef InstanceHandle<I,FA> IHandle;
+        typedef Holder<IHandle> THolder;
+        typedef Proxy<IHandle> Proxy;
+        typedef Accessor<FA> Access;
+        
+        static Proxy& open(IHandle& iha)
+          {
+            static char buff[sizeof(Proxy)];
+            Proxy* p = new(buff) Proxy(iha);
+            Access::implProxy_ = p;
+            return *p;
+          }
+        
+        static void close()
+          {
+            if (!Access::implProxy_) return;
+            Proxy* p = static_cast<Proxy*> (Access::implProxy_);
+            Access::implProxy_ = 0;
+            p->~Proxy();
+          }
+        
+        
+        I& _i_;
+        
+        Holder (IHandle& iha)
+          : _i_(iha.get())
+          {  }
+        
+      };
+    
+    
+    template<class FA>
+    FA* Accessor<FA>::implProxy_;
+    
+    
+    struct XYZ
+      {
+        virtual ~XYZ(){}
+        
+        virtual int zoing(int i)  =0;
+      };
+    
+    struct II {};
   
-  
-  struct XYZ
-    {
-      virtual ~XYZ(){}
-      
-      virtual int zoing(int i)  =0;
-    };
-  
-  struct II {};
-
-  typedef InstanceHandle<II,XYZ> IIXYZ;
-  
-  
-  template<>
-  class Proxy<IIXYZ>
-    : public Holder<IIXYZ>
-    {
-      //----Proxy-Implementation-of-XYZ--------
-      
-      virtual int
-      zoing (int i)
-        {
-          return (rand() % i);
-        }
-      
-      
-    public:
-      Proxy (IHandle iha) : THolder(iha) {} 
-    };
-  
-  
-  template<class IHA>
-  void
-  openProxy (IHA& iha)
-    {
-      Proxy<IHA>::open(iha);
-    }
-  
-  template<class IHA>
-  void
-  closeProxy (IHA& iha)
-    {
-      Proxy<IHA>::close();
-    }
+    typedef InstanceHandle<II,XYZ> IIXYZ;
+    
+    
+    template<>
+    class Proxy<IIXYZ>
+      : public Holder<IIXYZ>
+      {
+        //----Proxy-Implementation-of-XYZ--------
+        
+        virtual int
+        zoing (int i)
+          {
+            return (rand() % i);
+          }
+        
+        
+      public:
+        Proxy (IHandle iha) : THolder(iha) {} 
+      };
+    
+    
+    template<class IHA>
+    void
+    openProxy (IHA& iha)
+      {
+        Proxy<IHA>::open(iha);
+      }
+    
+    template<class IHA>
+    void
+    closeProxy (IHA& iha)
+      {
+        Proxy<IHA>::close();
+      }
+    
+    
+  } // namespace facade
   
 } // namespace lumiera
 #endif
