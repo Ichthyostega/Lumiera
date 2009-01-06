@@ -124,7 +124,7 @@ AC_CHECK_HEADER([boost/regex.hpp],
 
 AC_LANG_POP([C++])
 
-PKG_CHECK_MODULES(LUMIERA_COMMON_LIBS, [sigc++-2.0 >= 2.0.18])
+PKG_CHECK_MODULES(LUMIERA_COMMON_LIBS, [sigc++-2.0 >= 2.0.17])
 
 ############## Internatinalization
 #GETTEXT_PACKAGE=gtk-lumiera
