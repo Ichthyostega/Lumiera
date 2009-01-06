@@ -22,70 +22,24 @@
 
 
 #include "include/interfaceproxy.hpp"
-#include "lib/singletonsubclass.hpp" ////////////////////TODO
-#include "include/guinotificationfacade.h"
-#include "lib/util.hpp"
+#include "common/instancehandle.hpp"
 #include "lib/error.hpp"
-
-extern "C" {
-#include "common/interface.h"
-}
+#include "lib/util.hpp"
 
 using util::cStr;
 
 
-namespace singleton = lumiera::singleton;
+#include "include/guinotificationfacade.h"
 
 namespace gui {
-
-  class GuiNotificationInterfaceProxy
-    : public GuiNotification
-    {
-      LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 1) * interface_;
-      
-      GuiNotificationInterfaceProxy ()
-        {
-          interface_ = LUMIERA_INTERFACE_OPEN (lumieraorg_GuiNotification, 1, 2, lumieraorg_GuiNotificationFacade);
-          if (!interface_)
-            throw lumiera::error::State ("unable to access GuiNotificationFacade");
-        }
-      
-      friend class singleton::StaticCreate<GuiNotificationInterfaceProxy>;
-      
-      
-      
-      /* ======== forwarding through interface ========== */
-      
-      void
-      displayInfo (string const& text)
-        {
-          interface_->displayInfo (cStr(text));
-        }
-      
-      void
-      triggerGuiShutdown (string const& cause)
-        {
-          interface_->triggerGuiShutdown (cStr(cause));
-        }
-      
-      
-    };
-  
-  namespace {
-  
-    singleton::UseSubclass<GuiNotificationInterfaceProxy> typeinfo_proxyInstance_to_create;
-  }
   
   /** storage for the facade proxy factory used by client code to invoke through the interface */
-  lumiera::SingletonSub<GuiNotification> GuiNotification::facade (typeinfo_proxyInstance_to_create);
-  
-  ///////////////////////////////////////TODO: this solution is not correct, because it doesn't detect when the interface is shut down!
-  
-
+  lumiera::facade::Accessor<GuiNotification> GuiNotification::facade;
 
 } // namespace gui
 
-#include "common/instancehandle.hpp"
+
+
 
 namespace lumiera {
   namespace facade {
@@ -105,6 +59,13 @@ namespace lumiera {
         typedef Proxy<IHandle> Proxy;
         typedef Accessor<FA> Access;
         
+        I& _i_;
+        
+        Holder (IHandle& iha)
+          : _i_(iha.get())
+          {  }
+        
+      public:
         static Proxy& open(IHandle& iha)
           {
             static char buff[sizeof(Proxy)];
@@ -120,49 +81,11 @@ namespace lumiera {
             Access::implProxy_ = 0;
             p->~Proxy();
           }
-        
-        
-        I& _i_;
-        
-        Holder (IHandle& iha)
-          : _i_(iha.get())
-          {  }
-        
       };
     
     
     template<class FA>
     FA* Accessor<FA>::implProxy_;
-    
-    
-    struct XYZ
-      {
-        virtual ~XYZ(){}
-        
-        virtual int zoing(int i)  =0;
-      };
-    
-    struct II {};
-  
-    typedef InstanceHandle<II,XYZ> IIXYZ;
-    
-    
-    template<>
-    class Proxy<IIXYZ>
-      : public Holder<IIXYZ>
-      {
-        //----Proxy-Implementation-of-XYZ--------
-        
-        virtual int
-        zoing (int i)
-          {
-            return (rand() % i);
-          }
-        
-        
-      public:
-        Proxy (IHandle iha) : THolder(iha) {} 
-      };
     
     
     template<class IHA>
@@ -174,10 +97,37 @@ namespace lumiera {
     
     template<class IHA>
     void
-    closeProxy (IHA& iha)
+    closeProxy (IHA&)
       {
         Proxy<IHA>::close();
       }
+    
+    
+  
+    typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 1)
+                          , gui::GuiNotification
+                          > Handle_GuiNotification;
+    
+    
+    template<>
+    class Proxy<Handle_GuiNotification>
+      : public Holder<Handle_GuiNotification>
+      {
+        //----Proxy-Implementation-of-GuiNotification--------
+        
+        void displayInfo (string const& text)           { _i_.displayInfo (cStr(text)); }
+        void triggerGuiShutdown (string const& cause)   { _i_.triggerGuiShutdown (cStr(cause)); }
+        
+        
+      public:
+        Proxy (IHandle& iha) : THolder(iha) {} 
+      };
+    
+    
+    
+    
+    template  void openProxy<Handle_GuiNotification>  (Handle_GuiNotification&);
+    template  void closeProxy<Handle_GuiNotification> (Handle_GuiNotification&);
     
     
   } // namespace facade

@@ -40,7 +40,7 @@
 
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
-#include "lib/singletonsubclass.hpp"
+#include "include/interfaceproxy.hpp"
 
 #include <string>
 
@@ -63,7 +63,7 @@ namespace gui {
   class GuiNotification
     {
     public:
-      static lumiera::SingletonSub<GuiNotification> facade;
+      static lumiera::facade::Accessor<GuiNotification> facade;
       
       /** push a user visible notification text */
       virtual void displayInfo (string const& text)          =0;
