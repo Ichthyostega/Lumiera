@@ -48,7 +48,9 @@ TEST ("mmap_semantic")
   int fd = open (",mmaptest", O_RDWR|O_CREAT, 0666);
   printf ("got fd %d\n", fd);
   printf ("error %s\n", strerror (errno));
-  ftruncate (fd, 8192);
+  int dummy = ftruncate (fd, 8192);
+  (void)dummy;
+  TODO ("handle error case better");
 
   void* addr = mmap (NULL,
                      8192,
