@@ -40,6 +40,7 @@
 
 
 #include "include/nobugcfg.h"
+#include "lib/error.hpp"
 
 extern "C" {
 #include "common/interface.h"
@@ -55,7 +56,6 @@ extern "C" {
 namespace lumiera {
   
   using std::string;
-//  using boost::scoped_ptr;
   
   namespace { // implementation details
     

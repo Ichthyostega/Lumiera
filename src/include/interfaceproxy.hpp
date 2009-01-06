@@ -77,6 +77,7 @@
 #define LUMIERA_INTERFACE_PROXY_H
 
 
+#include "lib/error.hpp"
 
 #include <string>
 
@@ -92,74 +93,122 @@ namespace lumiera {
   template<class FA>
   class FacadeAccessor
     {
-      FA* insta_;
+    protected:
+      static FA* implProxy_;
       
       
     public:
       FA&
       operator() ()
         {
-          if (insta_)
-            return *insta_;
+          if (implProxy_)
+            return *implProxy_;
           else
             throw error::State("Facade interface currently closed.");
         }
     };
   
-  template<class IMP>
-  class Holder
+  template<class IHA>
+  void openProxy (IHA& iha);
+  
+  template<class IHA>
+  void closeProxy (IHA& iha);
+  
+  template<class IHA>
+  class Proxy;
+  
+}
+
+#include "common/instancehandle.hpp"
+
+namespace lumiera {
+  
+  template<class IHA>
+  class Holder;
+  
+  template<class FA, class I>
+  class Holder<InstanceHandle<I,FA> >
+    : FacadeAccessor<FA>,
+      protected FA
     {
-      static IMP& open()
+    protected:
+      typedef InstanceHandle<I,FA> IHandle;
+      typedef FacadeAccessor<FA> Access;
+      typedef Holder<IHandle> THolder;
+      typedef Proxy<IHandle> Proxy;
+      
+      static Proxy& open(IHandle& iha)
         {
-          static char buff[sizeof(IMP)];
-          IMP* p = new(buff) IMP();
-          insta_ = p;
+          static char buff[sizeof(Proxy)];
+          Proxy* p = new(buff) Proxy(iha);
+          Access::implProxy_ = p;
           return *p;
         }
       
-      template<class IMP>
       static void close()
         {
-          IMP* p = static_cast<IMP*> (insta_);
-          insta_ = 0;
-          p->~IMP();
+          if (!Access::implProxy_) return;
+          Proxy* p = static_cast<Proxy*> (Access::implProxy_);
+          Access::implProxy_ = 0;
+          p->~Proxy();
         }
       
       
+      I& _i_;
+      
+      Holder (IHandle& iha)
+        : _i_(iha.get())
+        {  }
+      
     };
+  
   
   template<class FA>
-  class Proxy;
+  FA* FacadeAccessor<FA>::implProxy_;
   
-  template<class IH>
-  class Mixi;
   
-  template<class FA, class I>
-  class Mixi<InstanceHandle<I,FA> >
-    : Holder<Proxy<FA> >,
-      public FA
+  struct XYZ
     {
-      I* _i_;
-    public:
-      void setupInterface(I& interface) { _i_ = &interface; }
+      virtual ~XYZ(){}
       
+      virtual int zoing(int i)  =0;
     };
   
-  class XYZ;
+  struct II {};
 
+  typedef InstanceHandle<II,XYZ> IIXYZ;
+  
+  
   template<>
-  class Proxy<XYZ>
-    : public Mixi<XYZ>
+  class Proxy<IIXYZ>
+    : public Holder<IIXYZ>
     {
+      //----Proxy-Implementation-of-XYZ--------
       
+      virtual int
+      zoing (int i)
+        {
+          return (rand() % i);
+        }
+      
+      
+    public:
+      Proxy (IHandle iha) : THolder(iha) {} 
     };
   
-  template<class FA, class I>
+  
+  template<class IHA>
   void
-  pullUp (InstanceHandle<I,FA>& iha)
+  openProxy (IHA& iha)
     {
-      Proxy<InstanceHandle<I,FA> >::open().setupInterface(iha.get());
-      
+      Proxy<IHA>::open(iha);
+    }
+  
+  template<class IHA>
+  void
+  closeProxy (IHA& iha)
+    {
+      Proxy<IHA>::close();
     }
   
 } // namespace lumiera
