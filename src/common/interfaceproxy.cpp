@@ -61,12 +61,12 @@ namespace lumiera {
         
         I& _i_;
         
-        Holder (IHandle& iha)
+        Holder (IHandle const& iha)
           : _i_(iha.get())
           {  }
         
       public:
-        static Proxy& open(IHandle& iha)
+        static Proxy& open(IHandle const& iha)
           {
             static char buff[sizeof(Proxy)];
             Proxy* p = new(buff) Proxy(iha);
@@ -90,14 +90,14 @@ namespace lumiera {
     
     template<class IHA>
     void
-    openProxy (IHA& iha)
+    openProxy (IHA const& iha)
       {
         Proxy<IHA>::open(iha);
       }
     
     template<class IHA>
     void
-    closeProxy (IHA&)
+    closeProxy ()
       {
         Proxy<IHA>::close();
       }
@@ -120,14 +120,14 @@ namespace lumiera {
         
         
       public:
-        Proxy (IHandle& iha) : THolder(iha) {} 
+        Proxy (IHandle const& iha) : THolder(iha) {} 
       };
     
     
     
     
-    template  void openProxy<Handle_GuiNotification>  (Handle_GuiNotification&);
-    template  void closeProxy<Handle_GuiNotification> (Handle_GuiNotification&);
+    template  void openProxy<Handle_GuiNotification>  (Handle_GuiNotification const&);
+    template  void closeProxy<Handle_GuiNotification> (void);
     
     
   } // namespace facade

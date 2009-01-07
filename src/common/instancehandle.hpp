@@ -31,7 +31,9 @@
  **
  ** @see gui::GuiFacade usage example
  ** @see interface.h
- ** @see interfaceproxy.cpp
+ ** @see interfaceproxy.hpp (more explanations)
+ ** @see interfaceproxy.cpp (Implementation of the proxies)
+ **
  */
 
 
@@ -41,6 +43,7 @@
 
 #include "include/nobugcfg.h"
 #include "lib/error.hpp"
+#include "include/interfaceproxy.hpp"
 
 extern "C" {
 #include "common/interface.h"
@@ -48,7 +51,6 @@ extern "C" {
 }
 
 #include <boost/noncopyable.hpp>
-//#include <boost/scoped_ptr.hpp>
 #include <string>
 
 
@@ -56,6 +58,10 @@ extern "C" {
 namespace lumiera {
   
   using std::string;
+  
+  template<class I, class FA>
+  class InstanceHandle;
+  
   
   namespace { // implementation details
     
@@ -96,7 +102,57 @@ namespace lumiera {
                                                                ifa->name));
     }
     
+    
+    /**
+     * @internal Helper/Adapter for establishing a link
+     * between an InstanceHandle and a facade interface,
+     * which is going to be implemented through the given
+     * interface/plugin. This way, creating the InstanceHandle
+     * automatically creates a lumiera::facade::Proxy, to route
+     * any facade calls through the interface/plugin. Similarly,
+     * when destroying the InstanceHandle, the proxy will be closed.
+     */
+    template<class I, class FA>
+    struct FacadeLink
+      : boost::noncopyable
+      {
+        typedef InstanceHandle<I,FA> IH;
+        
+        FacadeLink (IH const& iha) { facade::openProxy(iha); }
+       ~FacadeLink()               { facade::closeProxy<IH>(); }
+        
+        FA&
+        operator() (IH const&)  const
+          {
+            return facade::Accessor<FA>()();
+          }
+      };
+    
+    
+    /**
+     * @internal when the InstanceHandle isn't associated with a
+     * facade interface, then this specialisation switches 
+     * the FacadeLink into "NOP" mode.
+     */
+    template<class I>
+    struct FacadeLink<I,I>
+      : boost::noncopyable
+      {
+        typedef InstanceHandle<I,I> IH;
+        
+        FacadeLink (IH const&)     { /* NOP */ }
+       ~FacadeLink()               { /* NOP */ }
+       
+        I&
+        operator() (IH const& handle)  const
+          {
+            return handle.get();
+          }
+      };
+    
   } // (End) impl details
+  
+  
   
   
   
@@ -104,8 +160,11 @@ namespace lumiera {
    * Handle tracking the registration of an interface, deregistering it on deletion.
    * Depending on which flavour of the ctor is used, either (bulk) registration of interfaces
    * or plugin loading is triggered. The interface type is defined by type parameter.
-   * @todo when provided with the type of an facade interface class, care for enabling/disabling
-   *       access through the facade proxy singleton when opening/closing the registration.
+   * Additionally, choosing a facade interface as second type parameter causes installation
+   * of a proxy, which implements the facade by routing calls through the basic interface
+   * represented by this handle. This proxy will be "closed" automatically when this
+   * InstanceHandle goes out of scope. Of course, the proxy needs to be implemented
+   * somewhere, typically in interfaceproxy.cpp
    */
   template< class I         ///< fully mangled name of the interface type
           , class FA = I    ///< facade interface type to be used by clients
@@ -115,6 +174,7 @@ namespace lumiera {
     { 
       LumieraInterface* desc_;
       I* instance_;
+      FacadeLink<I,FA> facadeLink_;
       
       typedef InstanceHandle<I,FA> _ThisType;
       
@@ -127,9 +187,10 @@ namespace lumiera {
        *  @param impName unmangled name of the instance (implementation)
        */
       InstanceHandle (string const& iName, uint version, size_t minminor, string const& impName)
-        : desc_(0),
-          instance_(reinterpret_cast<I*> 
+        : desc_(0)
+        , instance_(reinterpret_cast<I*> 
               (lumiera_interface_open (iName.c_str(), version, minminor, impName.c_str())))
+        , facadeLink_(*this)
         { 
           throwIfError();
         }
@@ -141,8 +202,9 @@ namespace lumiera {
        *         usually available through lumiera_plugin_interfaces() 
        */
       InstanceHandle (LumieraInterface* descriptors)
-        : desc_(descriptors),
-          instance_(reinterpret_cast<I*> (register_and_open (desc_)))
+        : desc_(descriptors)
+        , instance_(reinterpret_cast<I*> (register_and_open (desc_)))
+        , facadeLink_(*this)
         { 
           throwIfError();
         }
@@ -157,9 +219,8 @@ namespace lumiera {
       
       
       /** act as smart pointer providing access through the facade. 
-       *  @todo implement the case where the Facade differs from I
        *  @note we don't provide operator*                      */
-      FA * operator-> ()  const { return accessFacade(); }      
+      FA * operator-> ()  const { return &(facadeLink_(*this)); }      
       
       /** directly access the instance via the CL interface */
       I& get ()  const { ENSURE(instance_); return *instance_; }
@@ -176,13 +237,6 @@ namespace lumiera {
       
       
     private:
-      FA *
-      accessFacade()  const
-        {
-          ENSURE (instance_);
-          return static_cast<FA *> (instance_);    /////////////////TODO: actually handle the case when the facade differs from the interface by using the proxy
-        }
-      
       bool 
       isValid()  const
         { 
