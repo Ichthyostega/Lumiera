@@ -36,9 +36,7 @@ using namespace util;
 namespace gui {
 namespace widgets {
 namespace timeline {
-  
-const int TimelineLayoutHelper::AnimationTimeout = 20; // 20ms
-  
+
 TimelineLayoutHelper::TimelineLayoutHelper(TimelineWidget &owner) :
   timelineWidget(owner),
   totalHeight(0),

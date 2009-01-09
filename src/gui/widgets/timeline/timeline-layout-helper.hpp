@@ -240,13 +240,6 @@ protected:
    * @see on_animation_tick()
    **/
   bool is_animating;
-  
-protected:
-  
-  /**
-   * The frequencey of animation timer ticks in milliseconds.
-   **/
-  static const int AnimationTimeout;
 };
 
 }   // namespace timeline
