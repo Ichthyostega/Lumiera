@@ -432,7 +432,7 @@ TimelineWidget::on_layout_changed()
   REQUIRE(headerContainer != NULL);
   REQUIRE(body != NULL);
   
-  headerContainer->layout_headers();
+  headerContainer->on_layout_changed();
   body->queue_draw();
 }
 
