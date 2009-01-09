@@ -183,14 +183,13 @@ Track::tick_expand_animation()
 Gtk::ExpanderStyle
 Track::get_expander_style() const
 {
-  const int notch = 1.0 / 3.0;
   if(expanded)
     {
       if(expandDirection == None)
         return EXPANDER_EXPANDED;
-      else if(expandAnimationState >= notch * 2.0)
+      else if(expandAnimationState >= 2.0 / 3.0)
         return EXPANDER_SEMI_EXPANDED;
-      else if(expandAnimationState >= notch)
+      else if(expandAnimationState >= 1.0 / 3.0)
         return EXPANDER_SEMI_COLLAPSED;
       else
         return EXPANDER_COLLAPSED;
@@ -199,12 +198,12 @@ Track::get_expander_style() const
     {
       if(expandDirection == None)
         return EXPANDER_COLLAPSED;
-      else if(expandAnimationState <= notch)
-        return EXPANDER_SEMI_COLLAPSED;
-      else if(expandAnimationState <= notch * 2.0)
+      else if(expandAnimationState >= 2.0 / 3.0)
+        return EXPANDER_EXPANDED;
+      else if(expandAnimationState >= 1.0 / 3.0)
         return EXPANDER_SEMI_EXPANDED;
       else
-        return EXPANDER_EXPANDED;
+        return EXPANDER_SEMI_COLLAPSED;
     }
     
   ERROR(gui, "Track::get_expander_style() final return reached");  
