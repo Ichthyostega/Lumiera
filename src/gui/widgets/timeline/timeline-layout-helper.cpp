@@ -40,7 +40,7 @@ namespace timeline {
 TimelineLayoutHelper::TimelineLayoutHelper(TimelineWidget &owner) :
   timelineWidget(owner),
   totalHeight(0),
-  is_animating(false)
+  animating(false)
 {
 }
 
@@ -139,11 +139,17 @@ TimelineLayoutHelper::get_total_height() const
   return totalHeight;
 }
 
+bool
+TimelineLayoutHelper::is_animating() const
+{
+  return animating;
+}
+
 void
 TimelineLayoutHelper::update_layout()
 {
   // Reset the animation state value, before it gets recalculated
-  is_animating = false;
+  animating = false;
     
   // Clear previously cached layout
   headerBoxes.clear();
@@ -158,7 +164,7 @@ TimelineLayoutHelper::update_layout()
   timelineWidget.on_layout_changed();
   
   // Begin animating as necessary
-  if(is_animating && !animationTimer)
+  if(animating && !animationTimer)
     begin_animation();
 }
 
@@ -203,11 +209,11 @@ TimelineLayoutHelper::layout_headers_recursive(
       // Is the track animating?
       const bool is_track_animating =
         timeline_track->is_expand_animating();
-      is_animating |= is_track_animating;
+      animating |= is_track_animating;
       
       // Recurse to children
       const bool expand_child =
-        (is_animating || timeline_track->get_expanded())
+        (animating || timeline_track->get_expanded())
           && parent_expanded;
            
       int child_branch_height = layout_headers_recursive(
@@ -276,7 +282,7 @@ bool
 TimelineLayoutHelper::on_animation_tick()
 {
   update_layout();
-  return is_animating;
+  return animating;
 }
 
 }   // namespace timeline

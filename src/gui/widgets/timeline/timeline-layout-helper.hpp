@@ -135,6 +135,8 @@ public:
    **/
   int get_total_height() const;
   
+  bool is_animating() const;
+  
 protected:
   
   /**
@@ -239,7 +241,7 @@ protected:
    * @see update_layout()
    * @see on_animation_tick()
    **/
-  bool is_animating;
+  bool animating;
 };
 
 }   // namespace timeline
