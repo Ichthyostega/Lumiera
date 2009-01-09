@@ -221,7 +221,7 @@ private:
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
     boost::shared_ptr<model::Track> model_track);
 
-/**
+  /**
    * A helper function which calls get_tracks within the sequence of the
    * parent timeline widget, but also applies lots of data consistency
    * checks in the process.
