@@ -129,6 +129,8 @@ private:
   /* ===== Events ===== */      
 private:
 
+  void on_layout_changed();
+
   /**
    * An event handler for when the window must be redrawn.
    */

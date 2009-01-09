@@ -263,6 +263,12 @@ TimelineHeaderContainer::on_remove(Widget*)
   // Do nothing - this is just to keep Gtk::Container happy
 }
 
+void
+TimelineHeaderContainer::on_layout_changed()
+{
+  layout_headers();
+}
+
 bool
 TimelineHeaderContainer::on_expose_event(GdkEventExpose *event)
 { 
