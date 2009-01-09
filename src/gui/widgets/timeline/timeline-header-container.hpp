@@ -162,13 +162,6 @@ private:
     model_track);
   
   /**
-   * Recursively causes all the visible track header widgets in a branch
-   * to call size_request( ).
-   **/
-  void size_request_recursive(
-    boost::shared_ptr<model::Track> model_track);
-  
-  /**
    * Recursively calls a callback on all the header widgets in a branch.
    * @param model_track The root track of the branch.
    * @param callback The callback to apply to the branch. This includes

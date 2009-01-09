@@ -217,8 +217,20 @@ TimelineHeaderContainer::on_size_request (Requisition* requisition)
   // We don't care about the size of all the child widgets, but if we
   // don't send the size request down the tree, some widgets fail to
   // calculate their text layout correctly. 
-  BOOST_FOREACH( shared_ptr<model::Track> model_track, get_tracks() )
-    size_request_recursive(model_track);
+    
+  const TimelineLayoutHelper::TrackTree &layout_tree =
+    timelineWidget.layoutHelper.get_layout_tree();
+    
+  TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
+  for(iterator = ++layout_tree.begin(); // ++ so that we skip the sequence root
+    iterator != layout_tree.end();
+    iterator++)
+    {
+      Widget &widget =
+        lookup_timeline_track(*iterator)->get_header_widget();
+      if(widget.is_visible())
+        widget.size_request();
+    }
     
   // Initialize the output parameter:
   *requisition = Gtk::Requisition();
@@ -388,21 +400,6 @@ TimelineHeaderContainer::set_parent_recursive(
   BOOST_FOREACH( shared_ptr<model::Track> child,
     model_track->get_child_tracks() )
     set_parent_recursive(child);
-}
-
-void
-TimelineHeaderContainer::size_request_recursive(
-  shared_ptr<model::Track> const model_track)
-{  
-  Widget &widget =
-    lookup_timeline_track(model_track)->get_header_widget();
-  if(widget.is_visible())
-    widget.size_request();
-  
-  // Recurse through all the children
-  BOOST_FOREACH( shared_ptr<model::Track> child,
-    model_track->get_child_tracks() )
-    size_request_recursive(child);
 }
 
 void
