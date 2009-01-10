@@ -60,6 +60,13 @@ namespace util {
     return !pContainer || pContainer->empty();
   }
   
+  template <class CONT>
+  inline bool
+  isnil (CONT* pContainer)
+  {
+    return !pContainer || pContainer->empty();
+  }
+  
   inline bool
   isnil (const char* pCStr)
   {

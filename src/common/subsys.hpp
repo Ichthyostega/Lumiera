@@ -71,7 +71,7 @@ namespace lumiera {
     : private noncopyable
     {
     public:
-      typedef function<void(Error*)> SigTerm;
+      typedef function<void(string*)> SigTerm;
       
       virtual ~Subsys();
       

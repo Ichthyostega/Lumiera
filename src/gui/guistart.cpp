@@ -89,7 +89,7 @@ namespace gui {
         
        ~GuiLifecycle ()
           {
-            reportOnTermination_(0);    /////////TODO: pass on error information
+            reportOnTermination_(&error_);             // inform main thread that the GUI has been shut down. 
           }
         
         

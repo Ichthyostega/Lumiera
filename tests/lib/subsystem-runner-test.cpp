@@ -165,13 +165,14 @@ namespace lumiera {
               lumiera_error();   //  reset error state....
                                 //   Note: in real life this actually
                                //    would be an catched exception!
+              string problemReport (problemIndicator.what());
               
               {
                 Lock guard (this);
                 isUp_ = false;
                 
                 INFO (test, "thread %s terminates.", cStr(*this));
-                termination ("true"==runSpec? 0 : &problemIndicator);
+                termination ("true"==runSpec? 0 : &problemReport);
             } }
           
           

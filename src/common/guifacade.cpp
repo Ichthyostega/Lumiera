@@ -136,7 +136,7 @@ namespace gui {
         
         
         void
-        closeGuiModule (lumiera::Error *)
+        closeGuiModule (std::string *)
           {
             Lock guard (this);
             if (!facade)

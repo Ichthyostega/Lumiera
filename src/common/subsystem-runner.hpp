@@ -31,6 +31,7 @@
 
 #include <tr1/functional>
 #include <vector>
+#include <string>
 
 
 namespace lumiera {
@@ -39,6 +40,7 @@ namespace lumiera {
   using std::tr1::function;
   using std::tr1::placeholders::_1;
   using std::vector;
+  using std::string;
   using util::cStr;
   using util::isnil;
   using util::and_all;
@@ -172,12 +174,13 @@ namespace lumiera {
         }   }
       
       void
-      sigTerm (Subsys* susy, Error* problem) ///< called from subsystem on termination
+      sigTerm (Subsys* susy, string* problem) ///< called from subsystem on termination
         {
           ASSERT (susy);
           Lock sync (this);
-          triggerEmergency(problem);
+          triggerEmergency(!isnil (problem));
           INFO (operate, "Subsystem '%s' terminated.", cStr(*susy));
+          WARN_IF (!isnil(problem), operate, "Irregular shutdown caused by: %s", cStr(*problem));
           ERROR_IF (susy->isRunning(), lumiera, "Subsystem '%s' signals termination, "
                                                 "without resetting running state", cStr(*susy));
           removeall (running_, susy);
