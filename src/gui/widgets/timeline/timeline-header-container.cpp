@@ -149,12 +149,17 @@ bool TimelineHeaderContainer::on_button_press_event (
     {
     case 1: // Left Click
       // Did the user press the button on an expander?
-      if(hoveringExpander != NULL)
+      if(hoveringExpander)
         {
           // Yes? The prime for a release event
           clickedExpander = hoveringExpander;
           queue_draw();
         }
+      else if(hoveringTrack)  // Is the user hovering on a track
+        {
+          
+        }
+        
       break;
       
     case 3: // Right Click
@@ -186,6 +191,8 @@ bool TimelineHeaderContainer::on_button_press_event (
 bool TimelineHeaderContainer::on_button_release_event (
   GdkEventButton* event)
 {
+  TimelineLayoutHelper &layout = timelineWidget.layoutHelper;
+  
   // Did the user release the button on an expander?
   if(clickedExpander != NULL)
     {
@@ -194,8 +201,12 @@ bool TimelineHeaderContainer::on_button_release_event (
         clickedExpander->get_expanded() ? Track::Collapse : Track::Expand);
       clickedExpander.reset();
       
-      timelineWidget.layoutHelper.update_layout();
+      layout.update_layout();
     }
+    
+  // Has the user been dragging?
+  if(layout.get_dragging_track())
+    layout.end_dragging_track();
 
   return Container::on_button_release_event(event);    
 }
@@ -204,31 +215,50 @@ bool TimelineHeaderContainer::on_motion_notify_event (
   GdkEventMotion* event)
 {
   REQUIRE(event != NULL);
-
-  // Hit test the rectangle
-  shared_ptr<timeline::Track> header =
-    timelineWidget.layoutHelper.header_from_point(
-    Gdk::Point(event->x, event->y));
   
-  if(header)
-  {
-    const optional<Gdk::Rectangle> rect =
-      get_expander_button_rectangle(header);
+  const bool result = Container::on_motion_notify_event(event);  
+  
+  const Gdk::Point point(event->x, event->y);
+  TimelineLayoutHelper &layout = timelineWidget.layoutHelper;
+  
+  // Are we beginning to drag a header?
+  if((event->state & GDK_BUTTON1_MASK) && hoveringTrack &&
+    !hoveringExpander && !layout.get_dragging_track())
+    {
+      layout.begin_dragging_track(hoveringTrack);
+      return result;
+    }
     
-    REQUIRE(rect);
+  // Are we currently dragging?
+  if(layout.get_dragging_track())
+    {
+      layout.drag_to_point(point);
+      return result;
+    }
+  
+  // Hit test the rectangle
+  hoveringTrack = layout.header_from_point(point);
+  
+  if(hoveringTrack)
+    {
+      const optional<Gdk::Rectangle> rect =
+        get_expander_button_rectangle(hoveringTrack);
+      
+      REQUIRE(rect);
 
-    // Are we hovering on the expander?
-    if(event->x >= rect->get_x() &&
-      event->x < rect->get_x() + rect->get_width() &&
-      event->y >= rect->get_y() &&
-      event->y < rect->get_y() + rect->get_height())
-      {
-        hoveringExpander = header;
-        queue_draw();
-      }
-  }
+      // Are we hovering on the expander?
+      if(event->x >= rect->get_x() &&
+        event->x < rect->get_x() + rect->get_width() &&
+        event->y >= rect->get_y() &&
+        event->y < rect->get_y() + rect->get_height())
+        {
+          hoveringExpander = hoveringTrack;
+          queue_draw();
+        }
+      else hoveringExpander.reset();
+    }
     
-  return Container::on_motion_notify_event(event);
+  return result;
 }
 
 void

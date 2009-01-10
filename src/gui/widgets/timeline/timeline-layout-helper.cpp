@@ -132,6 +132,71 @@ TimelineLayoutHelper::track_from_y(int y)
   return shared_ptr<timeline::Track>();
 }
 
+void
+TimelineLayoutHelper::begin_dragging_track(
+  boost::shared_ptr<timeline::Track> track)
+{
+  REQUIRE(track);
+  draggingTrack = track;
+  g_message("begin_dragging_track");
+  
+  // Find the track in the tree
+  const shared_ptr<model::Track> model_track = track->get_model_track();
+  REQUIRE(model_track);
+  for(draggingTrackIter = layoutTree.begin();
+    draggingTrackIter != layoutTree.end();
+    draggingTrackIter++)
+    {
+      if(*draggingTrackIter == model_track)
+        break;
+    }
+}
+
+void
+TimelineLayoutHelper::end_dragging_track()
+{
+  draggingTrack.reset();
+  clone_tree_from_sequence();
+  update_layout();
+}
+
+boost::shared_ptr<timeline::Track>
+TimelineLayoutHelper::get_dragging_track() const
+{
+  return draggingTrack;
+}
+
+void
+TimelineLayoutHelper::drag_to_point(Gdk::Point point)
+{
+  // Apply the scroll offset
+  point.set_y(point.get_y() + timelineWidget.get_y_scroll_offset());
+  
+  // Search the headers
+  TrackTree::pre_order_iterator iterator;
+  for(iterator = ++layoutTree.begin(); // ++ so we miss out the root sequence
+    iterator != layoutTree.end();
+    iterator++)
+    {
+      // Hit test the rectangle      
+      const weak_ptr<timeline::Track> track = 
+        lookup_timeline_track(*iterator);
+      const Gdk::Rectangle &rect = headerBoxes[track];
+      
+      if(point.get_x() >= rect.get_x() &&
+        point.get_x() < rect.get_x() + rect.get_width() &&
+        point.get_y() >= rect.get_y() &&
+        point.get_y() < rect.get_y() + rect.get_height())
+        {
+          // Relocate the header
+          draggingTrackIter = layoutTree.move_after(
+            iterator, draggingTrackIter);
+          update_layout();
+          return;
+        }
+    }
+}
+
 int
 TimelineLayoutHelper::get_total_height() const
 {

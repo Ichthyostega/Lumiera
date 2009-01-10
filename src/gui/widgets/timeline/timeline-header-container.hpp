@@ -221,6 +221,8 @@ private:
   Gtk::Menu contextMenu;
     
   //----- User Interaction State -----//
+  boost::shared_ptr<timeline::Track> hoveringTrack;
+  
   boost::shared_ptr<timeline::Track> hoveringExpander;
   
   boost::shared_ptr<timeline::Track> clickedExpander;

@@ -127,6 +127,14 @@ public:
    **/
   boost::shared_ptr<timeline::Track> track_from_y(int y);
   
+  void begin_dragging_track(boost::shared_ptr<timeline::Track> track);
+  
+  void end_dragging_track();
+  
+  boost::shared_ptr<timeline::Track> get_dragging_track() const;
+  
+  void drag_to_point(Gdk::Point point);
+  
   /**
    * Returns the total height in pixels of the layout tree.
    * @remarks This function is only on returns a valid value fter
@@ -227,6 +235,10 @@ protected:
    * @see update_layout()
    **/
   int totalHeight;
+  
+  TrackTree::pre_order_iterator draggingTrackIter;
+  
+  boost::shared_ptr<timeline::Track> draggingTrack;
   
   /**
    * The connection to the animation timer.
