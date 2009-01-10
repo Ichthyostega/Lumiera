@@ -41,7 +41,8 @@ namespace test
    */
   class TestOption_test : public Test
     {
-      virtual void run(Arg arg)
+      void
+      run (Arg)
         {
           noOptions();
           help();
@@ -52,6 +53,7 @@ namespace test
           additionalCmd();
           additionalCmd2();
         }
+      
       
       /** @test performs the actual test for the option parser test::TestOption */
       void doIt (const string cmdline)

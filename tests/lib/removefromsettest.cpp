@@ -67,7 +67,7 @@ namespace util
     class RemoveFromSet_test : public Test
       {
         virtual void
-        run (Arg arg)
+        run (Arg)
           {
             test_remove (" nothing ");
             test_remove ("0");

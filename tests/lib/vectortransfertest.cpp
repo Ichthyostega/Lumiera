@@ -62,6 +62,7 @@ namespace lib {
            */
           
           TransDummy (const TransDummy& o)
+            : Dummy()
             {
               TRACE  (test, "COPY-ctor TransDummy( ref=%x ) --> this=%x", &o,this);
               ASSERT (!o, "protocol violation: real copy operations inhibited");
@@ -113,18 +114,17 @@ namespace lib {
     
     
     /**********************************************************************************
-     *  @test ScopedHolder and ScopedPtrHolder are initially empty and copyable. 
-     *        After taking ownership, they prohibit copy operations, manage the
-     *        lifecycle of the contained object and provide smart-ptr like access.
-     *        A series of identical tests is conducted both with the ScopedPtrHolder
-     *        (the contained objects are heap allocated but managed by the holder)
-     *        and with the ScopedHolder (objects placed inline)
+     *  @test growing (re-allocating) a vector with noncopyable objects, with the
+     *        help of a special Allocator and a custom \c transfer_control operation
+     *        provided by the contained objects. The idea is to allow some special
+     *        copy-operations for the purpose of re-allocations within the vector,
+     *        without requiring the object to be really copyable.
      */
     class VectorTransfer_test : public Test
       {
         
         virtual void 
-        run (Arg arg)
+        run (Arg)
           {
             cout << "\n..setup table space for 2 elements\n";
             TransDummyVector table;

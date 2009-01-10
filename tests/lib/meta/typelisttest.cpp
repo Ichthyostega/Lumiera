@@ -78,7 +78,8 @@ namespace lumiera
        */
       class TypeList_test : public Test
         {
-          virtual void run(Arg arg) 
+          void
+          run (Arg) 
             {
               AssembledClass wow_me_has_numbers;
               

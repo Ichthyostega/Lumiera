@@ -97,7 +97,7 @@ namespace lumiera
       
       template<class TOOLImpl>
       static Tag&
-      get (TOOLImpl* const concreteTool=0)
+      get (TOOLImpl* const =0)  // param used to pass type info
         {
           // we have a race condition here...
           Tag& t = TagTypeRegistry<TOOL,TOOLImpl>::tag;
