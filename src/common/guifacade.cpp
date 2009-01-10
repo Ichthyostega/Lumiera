@@ -66,6 +66,10 @@ namespace gui {
           
           if (lumiera_error_peek())
             throw lumiera::error::Fatal("failed to bring up GUI",lumiera_error());
+          
+          ///////////////////////////////////////////////////////TODO: just a test to verify the GuiNotification facade is properly opened
+          GuiNotification::facade().displayInfo("Test-Notification message pushed to GUI!!!!");
+          ///////////////////////////////////////////////////////TODO: just a test to verify the GuiNotification facade is properly opened
         }
       
       ~GuiRunner () {  }

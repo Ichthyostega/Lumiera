@@ -45,6 +45,9 @@ namespace lumiera {
   namespace facade {
   
   
+    LUMIERA_ERROR_DEFINE (FACADE_LIFECYCLE, "facade interface currently not accessible");  
+
+    
     template<class IHA>
     class Holder;
     

@@ -20,16 +20,13 @@
  
 */
 
-/** @file guifacade.hpp
- ** Interface for the GUI loader and for accessing the GUI interface from the
- ** lower layers of Lumiera. While part of the public interface of the Lumiera GUI,
- ** the implementation of this facility is part of the core application (and not
- ** contained within the GUI dynamic module), because it's job is to load and
- ** activate this module and to startup the GUI.
+/** @file guinotificationfacade.hpp
+ ** Main public Interface of the Lumiera GUI. While generally speaking, the GUI
+ ** controls the application and thus acts on its own, it exposes some services
+ ** usable by scripts or the two lower layers. The main purpose of these services
+ ** is to push informations and status updates into the GUI.
  **
- ** @see lumiera::AppState
- ** @see lumiera::Option
- ** @see guifacade.cpp
+ ** @see gui::GuiFacade
  ** @see main.cpp
  */
 

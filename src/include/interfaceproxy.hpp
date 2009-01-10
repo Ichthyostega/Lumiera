@@ -84,6 +84,9 @@
 namespace lumiera {
   namespace facade {
   
+    /** error-ID for accessing a (currently) closed facade */
+    LUMIERA_ERROR_DECLARE(FACADE_LIFECYCLE);  
+
   
     /*********************************************************************
      * 

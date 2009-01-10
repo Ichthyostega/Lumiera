@@ -22,22 +22,22 @@
  
 * *****************************************************/
 
+
 /** @file guistart.cpp
  ** Start up the Lumiera GTK GUI when loading it as dynamic module.
  ** This plugin is linked together with the Lumiera GUI code; when loaded as
- ** Lumiera plugin, it allows to kick off the main GUI thread and thus to bring up
- ** the GUI. The loading and shutdown process is carried out by gui::GuiFacade and
+ ** Lumiera plugin, it allows to kick off the GTK main event loop and thus to bring
+ ** up the GUI. The loading and shutdown process is carried out by gui::GuiFacade and
  ** controlled by lumiera::AppState, which in turn is activated by Lumiera main().
  ** 
  ** After successfully loading this module, a call to #kickOff is expected to be
  ** issued, passing a termination signal (callback) to be executed when the GUI
- ** terminates. This call remains blocked within the main GTK event loop; thus
- ** typically this should already run within a separate dedicated GUI thread.
+ ** terminates. The \c kickOff() call remains blocked within the main GTK event loop;
+ ** thus typically this call should be issued within a separate dedicated GUI thread.
  ** Especially, the gui::GuiRunner will ensure this to happen.
  ** 
  ** Prior to entering the GTK event loop, all primary "business" interface of the GUI
  ** will be opened (currently as of 1/09 this is the interface gui::GuiNotification.)
- ** @todo implement this!
  **
  ** @see lumiera::AppState
  ** @see gui::GuiFacade
@@ -50,6 +50,7 @@
 #include "include/nobugcfg.h"
 #include "lib/error.hpp"
 #include "gui/guifacade.hpp"
+#include "gui/notification-service.hpp"
 #include "common/subsys.hpp"
 #include "lib/singleton.hpp"
 
@@ -58,9 +59,11 @@ extern "C" {
 #include "common/interfacedescriptor.h"
 }
 
+#include <string>
 
 
 
+using std::string;
 using lumiera::Subsys;
 using gui::LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1);
 
@@ -73,41 +76,58 @@ namespace gui {
      * Implement the necessary steps for actually making the Lumiera Gui available.
      * Open the business interface(s) and start up the GTK GUI main event loop.
      */
-    struct GuiFacadeImpl
-      : public GuiFacade
+    struct GuiLifecycle
       {
+        string error_;
+        Subsys::SigTerm& reportOnTermination_;
+        NotificationService activateNotificationService_;
         
-        void kickOff (Subsys::SigTerm& reportTermination) 
+        GuiLifecycle (Subsys::SigTerm& terminationHandler)
+          : reportOnTermination_(terminationHandler)
+          , activateNotificationService_()             // opens the GuiNotification facade interface 
+          { }
+        
+       ~GuiLifecycle ()
+          {
+            reportOnTermination_(0);    /////////TODO: pass on error information
+          }
+        
+        
+        void
+        run ()
           {
             try
               {
-                int argc =0;   /////////////////////////////////////////////////////////////////////////////TODO pass arguments from core
-                char *argv[] = {};
+                int argc =0;
+                char *argv[] = {};                     // dummy command line for GTK
                 
                 gui::application().main(argc, argv);   // execute the GTK Event Loop
                 
                 if (!lumiera_error_peek())
-                  {
-                    reportTermination(0);          // report GUI shutdown without error
                     return;
-                  }
               }
             catch (lumiera::Error& problem)
               {
-                reportTermination(&problem); // signal shutdown reporting the error
+                error_ = problem.what();
+                lumiera_error();                       // clear error flag
                 return;
               }
             catch (...){ }
-            lumiera::error::Fatal problemIndicator("unexpected error terminated the GUI.", lumiera_error());
-            reportTermination (&problemIndicator);
+            error_ = "unexpected error terminated the GUI.";
             return;
           }
       };
     
     
-    lumiera::Singleton<GuiFacadeImpl> guiImplProvider_;
     
   } // (End) impl details
+  
+  
+  void
+  kickOff (Subsys::SigTerm& reportTermination)
+  {
+    GuiLifecycle(reportTermination).run();
+  }
 
 } // namespace gui
 
@@ -198,8 +218,7 @@ extern "C" { /* ================== define an lumieraorg_Gui instance ===========
                                           , LUMIERA_INTERFACE_INLINE (kickOff, "\255\142\006\244\057\170\152\312\301\372\220\323\230\026\200\065",
                                                                       void, (void* termSig),
                                                                         { 
-                                                                          gui::guiImplProvider_().kickOff (
-                                                                                     *reinterpret_cast<Subsys::SigTerm *> (termSig));
+                                                                          gui::kickOff (*reinterpret_cast<Subsys::SigTerm *> (termSig));
                                                                         }
                                                                      )
                                           )

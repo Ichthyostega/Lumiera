@@ -72,22 +72,22 @@ namespace lumiera {
         throw lumiera::error::Config("failed to open interface or plugin.",lumiera_error());
     }
   
-    /** takes a bunch of instance definitions, as typically created
-     *  when defining interfaces for external use, and registers them
+    /** takes a (single) instance definitions, as typically created
+     *  when defining interfaces for external use, and registers it
      *  with the InterfaceSystem. Then uses the data found in the
-     *  \em first descriptor to open an instance handle.  
+     *  \em given instance descriptor to open an instance handle.
+     *  @throws error::Config when the registration process fails  
      */
     LumieraInterface
-    register_and_open (LumieraInterface* descriptors)
+    register_and_open (LumieraInterface descriptor)
     {
-      if (!descriptors) return NULL;
-      lumiera_interfaceregistry_bulkregister_interfaces (descriptors, NULL);
+      if (!descriptor) return NULL;
+      lumiera_interfaceregistry_register_interface (descriptor, NULL);
       throwIfError();
-      LumieraInterface masterI = descriptors[0];
-      return lumiera_interface_open (masterI->interface,
-                                     masterI->version,
-                                     masterI->size,
-                                     masterI->name);
+      return lumiera_interface_open (descriptor->interface,
+                                     descriptor->version,
+                                     descriptor->size,
+                                     descriptor->name);
     }
     
     /** do a lookup within the interfaceregistry
@@ -172,7 +172,7 @@ namespace lumiera {
   class InstanceHandle
     : private boost::noncopyable
     { 
-      LumieraInterface* desc_;
+      LumieraInterface desc_;
       I* instance_;
       FacadeLink<I,FA> facadeLink_;
       
@@ -198,11 +198,11 @@ namespace lumiera {
       /** Set up an InstanceHandle managing the 
        *  registration and deregistration of interface(s).
        *  Should be placed at the service providing side.
-       *  @param descriptors zero terminated array of interface descriptors,
-       *         usually available through lumiera_plugin_interfaces() 
+       *  @param a (single) interface descriptor, which can be created with
+       *         LUMIERA_INTERFACE_INSTANCE and referred to by LUMIERA_INTERFACE_REF 
        */
-      InstanceHandle (LumieraInterface* descriptors)
-        : desc_(descriptors)
+      InstanceHandle (LumieraInterface descriptor)
+        : desc_(descriptor)
         , instance_(reinterpret_cast<I*> (register_and_open (desc_)))
         , facadeLink_(*this)
         { 
@@ -213,7 +213,7 @@ namespace lumiera {
         {
           lumiera_interface_close (&instance_->interface_header_);
           if (desc_)
-            lumiera_interfaceregistry_bulkremove_interfaces (desc_);
+            lumiera_interfaceregistry_remove_interface (desc_);
         }
       
       
