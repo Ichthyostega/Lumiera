@@ -306,12 +306,13 @@ namespace lumiera {
             try 
               { 
                 runner.maybeRun (unit4);
-                NOTREACHED;
               }
             catch (lumiera::Error&)
               {
                 ASSERT (lumiera_error() == error::LUMIERA_ERROR_LOGIC); // detected that the subsystem didn't come up
-              }
+              }                                                         //   (due to the way the test subsystem is written,
+                                                                        //    this may not always be detected, because there
+                                                                        //    is a short time window where isUp_==true )
             
             
             bool emergency = runner.wait();
