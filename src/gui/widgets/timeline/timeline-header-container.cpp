@@ -74,7 +74,7 @@ TimelineHeaderContainer::TimelineHeaderContainer(
  
 void
 TimelineHeaderContainer::update_headers()
-{    
+{  
   // Ensure headers are parented correctly
   pair<shared_ptr<model::Track>, shared_ptr<timeline::Track> > pair; 
   BOOST_FOREACH( pair, timelineWidget.trackMap )
@@ -274,10 +274,11 @@ TimelineHeaderContainer::forall_vfunc(gboolean /* include_internals */,
 { 
   REQUIRE(callback != NULL);
   
-  BOOST_FOREACH( shared_ptr<model::Track> track, get_tracks() )
+  pair<shared_ptr<model::Track>, shared_ptr<timeline::Track> > pair; 
+  BOOST_FOREACH( pair, timelineWidget.trackMap )
     {
-      REQUIRE(track);
-      forall_vfunc_recursive(track, callback, callback_data);
+      REQUIRE(pair.second);
+      callback(pair.second->get_header_widget().gobj(), callback_data);
     }
 }
 
@@ -395,22 +396,6 @@ TimelineHeaderContainer::layout_headers()
 }
 
 void
-TimelineHeaderContainer::forall_vfunc_recursive(
-  shared_ptr<model::Track> model_track, GtkCallback callback,
-  gpointer callback_data)
-{
-  REQUIRE(callback != NULL);
-    
-  callback( lookup_timeline_track(model_track)->
-    get_header_widget().gobj(), callback_data) ;
-  
-  // Recurse through all the children
-  BOOST_FOREACH( shared_ptr<model::Track> child,
-    model_track->get_child_tracks() )
-    forall_vfunc_recursive(child, callback, callback_data);
-}
-
-void
 TimelineHeaderContainer::draw_header_decoration(
     shared_ptr<model::Track> model_track,
     const Gdk::Rectangle &clip_rect)
@@ -522,13 +507,6 @@ TimelineHeaderContainer::lookup_timeline_track(
   ENSURE(timeline_track);
   
   return timeline_track;
-}
-
-const std::list< boost::shared_ptr<model::Track> >
-TimelineHeaderContainer::get_tracks() const
-{
-  REQUIRE(timelineWidget.sequence);
-  return timelineWidget.sequence->get_child_tracks();
 }
 
 void

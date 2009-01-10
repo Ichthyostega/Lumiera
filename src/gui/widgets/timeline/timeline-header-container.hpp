@@ -152,18 +152,7 @@ private:
    * stacking etc.
    */
   void layout_headers();
-  
-  /**
-   * Recursively calls a callback on all the header widgets in a branch.
-   * @param model_track The root track of the branch.
-   * @param callback The callback to apply to the branch. This includes
-   * model_track and all it's children.
-   * @param callback_data The user data parameter for the callback.
-   **/
-  void forall_vfunc_recursive(
-    boost::shared_ptr<model::Track> model_track,
-    GtkCallback callback, gpointer callback_data);
-  
+
   /**
    * Draws the border decoration around the track header.
    * @param model_track The track to draw the decoration for.
@@ -207,17 +196,6 @@ private:
    **/
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
     boost::shared_ptr<model::Track> model_track);
-
-  /**
-   * A helper function which calls get_tracks within the sequence of the
-   * parent timeline widget, but also applies lots of data consistency
-   * checks in the process.
-   * @param model_track The model track to look up in the parent widget.
-   * @return Returns the track found, or returns NULL if no matching
-   * track was found.
-   **/  
-  const std::list< boost::shared_ptr<model::Track> >
-    get_tracks() const;
   
   /**
    * Registers all the styles that this class will respond to.
