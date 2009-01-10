@@ -204,16 +204,29 @@ bool TimelineHeaderContainer::on_motion_notify_event (
   GdkEventMotion* event)
 {
   REQUIRE(event != NULL);
- 
-  // Are we hovering on an expander?
-  shared_ptr<timeline::Track> expander = expander_button_from_point(
+
+  // Hit test the rectangle
+  shared_ptr<timeline::Track> header =
+    timelineWidget.layoutHelper.header_from_point(
     Gdk::Point(event->x, event->y));
   
-  if(expander != hoveringExpander)
-    {
-      hoveringExpander = expander;
-      queue_draw();
-    }
+  if(header)
+  {
+    const optional<Gdk::Rectangle> rect =
+      get_expander_button_rectangle(header);
+    
+    REQUIRE(rect);
+
+    // Are we hovering on the expander?
+    if(event->x >= rect->get_x() &&
+      event->x < rect->get_x() + rect->get_width() &&
+      event->y >= rect->get_y() &&
+      event->y < rect->get_y() + rect->get_height())
+      {
+        hoveringExpander = header;
+        queue_draw();
+      }
+  }
     
   return Container::on_motion_notify_event(event);
 }
@@ -439,38 +452,6 @@ TimelineHeaderContainer::draw_header_decoration(
       box.get_x() + expand_button_size / 2 + margin,
       box.get_y() + box.get_height() / 2,
       timeline_track->get_expander_style());
-}
-
-shared_ptr<timeline::Track>
-TimelineHeaderContainer::expander_button_from_point(
-  const Gdk::Point &point)
-{ 
-  const TimelineLayoutHelper::TrackTree &layout_tree =
-    timelineWidget.layoutHelper.get_layout_tree();
-  
-  TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
-  for(iterator = ++layout_tree.begin(); // ++ so we skip the sequence root
-    iterator != layout_tree.end();
-    iterator++)
-    {
-      const shared_ptr<timeline::Track> timeline_track =
-        lookup_timeline_track(*iterator);
-      
-      // Hit test the rectangle
-      const optional<Gdk::Rectangle> rect =
-        get_expander_button_rectangle(timeline_track);
-      
-      if(rect)
-        {
-          if(point.get_x() >= rect->get_x() &&
-            point.get_x() < rect->get_x() + rect->get_width() &&
-            point.get_y() >= rect->get_y() &&
-            point.get_y() < rect->get_y() + rect->get_height())
-            return timeline_track;
-        }
-    }
-    
-  return shared_ptr<timeline::Track>();
 }
 
 const optional<Gdk::Rectangle>

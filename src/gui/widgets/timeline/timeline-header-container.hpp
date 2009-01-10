@@ -166,16 +166,6 @@ private:
     const Gdk::Rectangle &clip_rect);
   
   /**
-   * Given a point, expander_button_from_point finds the track of the
-   * expand button that this point is hovering over, if there is one.
-   * @param point The window coordiates point to hit-test.
-   * @return Returns a pointer to the track whose expander button is
-   * being hovered over, or NULL if no button has been found.
-   **/
-  boost::shared_ptr<timeline::Track> expander_button_from_point(
-    const Gdk::Point &point);
-  
-  /**
    * Gets the rectangular hit-target area of a track header's expander
    * button.
    * @param track The track to get the expander button rectangle of.
