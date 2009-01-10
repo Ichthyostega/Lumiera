@@ -81,7 +81,6 @@ TimelineHeaderContainer::update_headers()
     {
       REQUIRE(pair.first);
       
-      // Set the header's parent widget
       Widget &widget = lookup_timeline_track(pair.first)->
         get_header_widget();
       
