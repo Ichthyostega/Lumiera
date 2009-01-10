@@ -315,9 +315,8 @@ namespace lumiera {
                                                                         //    is a short time window where isUp_==true )
             
             
-            bool emergency = runner.wait();
+            runner.wait();
             
-            ASSERT (emergency);       // emergency state from unit4 got propagated
             ASSERT (!unit1.isRunning());
             ASSERT (!unit2.isRunning());
             ASSERT (!unit3.isRunning());

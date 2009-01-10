@@ -69,8 +69,8 @@ GtkLumiera::main(int argc, char *argv[])
 
   kit.run(main_window);
   
-  return 0;
 }
+
 
 Glib::ustring
 GtkLumiera::get_home_data_path()

@@ -61,6 +61,6 @@ noinst_HEADERS +=							\
 	$(liblumieracommon_la_srcdir)/subsys.hpp			\
 	$(liblumieracommon_la_srcdir)/appstate.hpp			\
 	$(liblumieracommon_la_srcdir)/option.hpp			\
-	$(liblumieracommon_la_srcdir)/subsystemrunner.hpp		\
+	$(liblumieracommon_la_srcdir)/subsystem-runner.hpp		\
 	$(liblumieracommon_la_srcdir)/instancehandle.hpp
 
