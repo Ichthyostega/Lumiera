@@ -59,7 +59,7 @@ namespace lumiera {
       protected:
         typedef InstanceHandle<I,FA> IHandle;
         typedef Holder<IHandle> THolder;
-        typedef Proxy<IHandle> Proxy;
+        typedef Proxy<IHandle> TProxy;
         typedef Accessor<FA> Access;
         
         I& _i_;
@@ -69,10 +69,10 @@ namespace lumiera {
           {  }
         
       public:
-        static Proxy& open(IHandle const& iha)
+        static TProxy& open(IHandle const& iha)
           {
-            static char buff[sizeof(Proxy)];
-            Proxy* p = new(buff) Proxy(iha);
+            static char buff[sizeof(TProxy)];
+            TProxy* p = new(buff) TProxy(iha);
             Access::implProxy_ = p;
             return *p;
           }
@@ -80,9 +80,9 @@ namespace lumiera {
         static void close()
           {
             if (!Access::implProxy_) return;
-            Proxy* p = static_cast<Proxy*> (Access::implProxy_);
+            TProxy* p = static_cast<TProxy*> (Access::implProxy_);
             Access::implProxy_ = 0;
-            p->~Proxy();
+            p->~TProxy();
           }
       };
     

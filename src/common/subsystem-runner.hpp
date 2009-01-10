@@ -162,10 +162,12 @@ namespace lumiera {
           bool started = susy->start (opts_, bind (&SubsystemRunner::sigTerm, this, susy, _1));
           
           if (started)
-            if (susy->isRunning())
-              running_.push_back (susy); // now responsible for managing the started subsystem
-            else
-              throw error::Logic("Subsystem "+string(*susy)+" failed to start");
+            {
+              if (susy->isRunning())
+                running_.push_back (susy); // now responsible for managing the started subsystem
+              else
+                throw error::Logic("Subsystem "+string(*susy)+" failed to start");
+            }
           
           if (!and_all (susy->getPrerequisites(), isRunning() ))
             {

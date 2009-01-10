@@ -29,7 +29,7 @@
 #define GTK_LUMIERA_HPP
 
 #include <gtkmm.h>
-#include <nobug.h>
+#include <nobug.h>               // need to include this after gtkmm.h, because types.h from GTK tries to shaddow the ERROR macro from windows, which kills NoBug's ERROR macro
 #include <vector>
 #include <boost/utility.hpp>
 #include <boost/shared_ptr.hpp>

@@ -101,7 +101,11 @@ namespace lumiera {
                                                                ifa->version, 
                                                                ifa->name));
     }
+  
+  } // (End) impl details
     
+  
+  namespace facade {
     
     /**
      * @internal Helper/Adapter for establishing a link
@@ -113,13 +117,13 @@ namespace lumiera {
      * when destroying the InstanceHandle, the proxy will be closed.
      */
     template<class I, class FA>
-    struct FacadeLink
+    struct Link
       : boost::noncopyable
       {
         typedef InstanceHandle<I,FA> IH;
         
-        FacadeLink (IH const& iha) { facade::openProxy(iha); }
-       ~FacadeLink()               { facade::closeProxy<IH>(); }
+        Link (IH const& iha) { facade::openProxy(iha); }
+       ~Link()               { facade::closeProxy<IH>(); }
         
         FA&
         operator() (IH const&)  const
@@ -132,16 +136,16 @@ namespace lumiera {
     /**
      * @internal when the InstanceHandle isn't associated with a
      * facade interface, then this specialisation switches 
-     * the FacadeLink into "NOP" mode.
+     * the facade::Link into "NOP" mode.
      */
     template<class I>
-    struct FacadeLink<I,I>
+    struct Link<I,I>
       : boost::noncopyable
       {
         typedef InstanceHandle<I,I> IH;
         
-        FacadeLink (IH const&)     { /* NOP */ }
-       ~FacadeLink()               { /* NOP */ }
+        Link (IH const&)     { /* NOP */ }
+       ~Link()               { /* NOP */ }
        
         I&
         operator() (IH const& handle)  const
@@ -150,7 +154,7 @@ namespace lumiera {
           }
       };
     
-  } // (End) impl details
+  } // namespace facade (impl details)
   
   
   
@@ -174,7 +178,7 @@ namespace lumiera {
     { 
       LumieraInterface desc_;
       I* instance_;
-      FacadeLink<I,FA> facadeLink_;
+      facade::Link<I,FA> facadeLink_;
       
       typedef InstanceHandle<I,FA> _ThisType;
       

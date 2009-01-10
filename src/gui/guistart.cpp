@@ -45,8 +45,9 @@
  ** @see gui::GtkLumiera#main the GTK GUI main
  */
 
+#include <locale>               // need to include this to prevent errors when libintl.h defines textdomain (because gtk-lumiera removes the def when ENABLE_NLS isn't defined)
 
-#include "gui/gtk-lumiera.hpp"
+#include "gui/gtk-lumiera.hpp"  // need to include this before nobugcfg.h, because types.h from GTK tries to shaddow the ERROR macro from windows, which kills nobug's ERROR macro
 #include "include/nobugcfg.h"
 #include "lib/error.hpp"
 #include "gui/guifacade.hpp"

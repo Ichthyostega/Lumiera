@@ -103,6 +103,7 @@ namespace lumiera {
                   || "throw"==startSpec;
             }
           
+          
           bool
           start (lumiera::Option&, Subsys::SigTerm termination)
             {
@@ -282,8 +283,8 @@ namespace lumiera {
             MockSys unit4 ("U4", "start(true),  run(false).");
             SubsystemRunner runner(dummyOpt);
             
-            runner.maybeRun (unit1);
-            runner.maybeRun (unit4);
+            runner.maybeRun (unit1);  // this one doesn't start at all, which isn't considered an error
+            
             try 
               { 
                 runner.maybeRun (unit2);
@@ -301,6 +302,15 @@ namespace lumiera {
             catch (lumiera::Error&)
               {
                 ASSERT (lumiera_error() == error::LUMIERA_ERROR_LOGIC); // incorrect behaviour trapped
+              }
+            try 
+              { 
+                runner.maybeRun (unit4);
+                NOTREACHED;
+              }
+            catch (lumiera::Error&)
+              {
+                ASSERT (lumiera_error() == error::LUMIERA_ERROR_LOGIC); // detected that the subsystem didn't come up
               }
             
             
