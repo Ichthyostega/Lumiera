@@ -79,6 +79,8 @@ TimelineHeaderContainer::update_headers()
   pair<shared_ptr<model::Track>, shared_ptr<timeline::Track> > pair; 
   BOOST_FOREACH( pair, timelineWidget.trackMap )
     {
+      REQUIRE(pair.first);
+      
       // Set the header's parent widget
       Widget &widget = lookup_timeline_track(pair.first)->
         get_header_widget();
