@@ -1,6 +1,7 @@
 AC_INIT(lumiera, 0.1pre)
-AC_CONFIG_SRCDIR(src/lib/luid.c)
-AC_CONFIG_AUX_DIR(scripts)
+AC_CONFIG_SRCDIR([src/lib/luid.c])
+AC_CONFIG_AUX_DIR([scripts])
+AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE
 AC_PREREQ(2.59)
 
@@ -123,7 +124,7 @@ AC_CHECK_HEADER([boost/regex.hpp],
 
 AC_LANG_POP([C++])
 
-PKG_CHECK_MODULES(LUMIERA_COMMON_LIBS, [sigc++-2.0 >= 2.0.18])
+PKG_CHECK_MODULES(LUMIERA_COMMON_LIBS, [sigc++-2.0 >= 2.0.17])
 
 ############## Internatinalization
 #GETTEXT_PACKAGE=gtk-lumiera

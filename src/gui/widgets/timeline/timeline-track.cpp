@@ -20,7 +20,7 @@
  
 * *****************************************************/
 
-#warning This header must soon be removed when we drop Etch compatibility
+// !!! This header must soon be removed when we drop Etch compatibility
 #include <gtk/gtktoolbar.h>
 
 #include "timeline-track.hpp"
@@ -35,12 +35,15 @@ using namespace sigc;
 namespace gui {
 namespace widgets {
 namespace timeline {
+
+const float Track::ExpandAnimationPeriod = 0.15;
   
 Track::Track(TimelineWidget &timeline_widget,
   shared_ptr<model::Track> track) :
   timelineWidget(timeline_widget),
   model_track(track),
   expanded(true),
+  expandDirection(None),
   enableButton(Gtk::StockID("track_enabled")),
   lockButton(Gtk::StockID("track_unlocked"))
 {
@@ -56,8 +59,8 @@ Track::Track(TimelineWidget &timeline_widget,
 #if 0
   buttonBar.set_icon_size(WindowManager::MenuIconSize);
 #else
-#warning This code soon be removed when we drop Etch compatibility
-
+  TODO("This code soon be removed when we drop Etch compatibility");
+  
   // Temporary bodge for etch compatibility - will be removed soon
   gtk_toolbar_set_icon_size (buttonBar.gobj(),
     (GtkIconSize)(int)WindowManager::MenuIconSize);
@@ -70,6 +73,10 @@ Track::Track(TimelineWidget &timeline_widget,
   Menu::MenuList& title_list = titleMenuButton.get_menu().items();
   title_list.push_back( Menu_Helpers::MenuElem(_("_Name..."),
     mem_fun(this, &Track::on_set_name) ) );
+  title_list.push_back( Menu_Helpers::SeparatorElem() );
+  title_list.push_back( Menu_Helpers::MenuElem(_("_Remove"),
+    mem_fun(this, &Track::on_remove_track) ) );
+    
   update_name();
   
   // Setup the context menu
@@ -86,6 +93,12 @@ Track::get_header_widget()
   return headerWidget;
 }
 
+shared_ptr<model::Track>
+Track::get_model_track() const
+{
+  return model_track;
+}
+
 int
 Track::get_height() const
 {
@@ -99,9 +112,102 @@ Track::get_expanded() const
 }
 
 void
-Track::set_expanded(bool expanded)
+Track::expand_collapse(ExpandDirection direction)
 {
-  this->expanded = expanded;
+  REQUIRE(direction != None);
+  
+  expandDirection = direction;
+  if(direction == Expand)
+    {
+      expanded = true;
+      expandAnimationState = 0.0;
+    }
+  else
+    {
+      expanded = false;
+      expandAnimationState = 1.0;
+    }
+  
+  // Create a timer if we don't already have one
+  if(!expand_timer)
+    {
+      expand_timer.reset(new Glib::Timer());
+      expand_timer->start();
+    }
+  else  // Reset the timer if we do
+    expand_timer->reset();
+}
+
+float
+Track::get_expand_animation_state() const
+{
+  ENSURE(expandAnimationState >= 0.0 &&
+    expandAnimationState <= 1.0);
+  return expandAnimationState;
+}
+
+bool
+Track::is_expand_animating() const
+{
+  return expandDirection != None;
+}
+  
+void
+Track::tick_expand_animation()
+{
+  REQUIRE(expandDirection != None); // tick_expand_animation should not
+                                    // be unless is_expand_animating
+                                    // returns true
+  REQUIRE(expand_timer);
+  const float delta = 
+    (float)expand_timer->elapsed() / ExpandAnimationPeriod;
+  expand_timer->reset(); // reset the timer to t=0
+
+  if(expandDirection == Expand)
+    {
+      expandAnimationState += delta;
+      if(expandAnimationState >= 1.0)
+        expandDirection = None;
+    }
+  else
+    {
+      expandAnimationState -= delta;
+      if(expandAnimationState <= 0.0)
+        expandDirection = None;
+    }
+    
+  if(expandDirection == None)
+    expand_timer.reset();  // We've finished with the timer - delete it
+}
+
+Gtk::ExpanderStyle
+Track::get_expander_style() const
+{
+  if(expanded)
+    {
+      if(expandDirection == None)
+        return EXPANDER_EXPANDED;
+      else if(expandAnimationState >= 2.0 / 3.0)
+        return EXPANDER_SEMI_EXPANDED;
+      else if(expandAnimationState >= 1.0 / 3.0)
+        return EXPANDER_SEMI_COLLAPSED;
+      else
+        return EXPANDER_COLLAPSED;
+    }
+  else
+    {
+      if(expandDirection == None)
+        return EXPANDER_COLLAPSED;
+      else if(expandAnimationState >= 2.0 / 3.0)
+        return EXPANDER_EXPANDED;
+      else if(expandAnimationState >= 1.0 / 3.0)
+        return EXPANDER_SEMI_EXPANDED;
+      else
+        return EXPANDER_SEMI_COLLAPSED;
+    }
+    
+  ERROR(gui, "Track::get_expander_style() final return reached");  
+  return EXPANDER_COLLAPSED;   // This should never happen
 }
 
 void
@@ -142,7 +248,7 @@ Track::on_remove_track()
   REQUIRE(model_track);
   REQUIRE(timelineWidget.sequence);
   
-  timelineWidget.sequence->get_child_track_list().remove(model_track);
+  timelineWidget.sequence->remove_child_track(model_track);
 }
 
 }   // namespace timeline

@@ -45,10 +45,11 @@ class TimelineRuler : public Gtk::DrawingArea
 public:
   /**
    * Constructor
-   * @param timeline_widget The owner widget of this ruler.
+   * @param timeline_widget A reference to the owner widget of this
+   * ruler.
    */
   TimelineRuler(
-    gui::widgets::TimelineWidget *timeline_widget);
+    gui::widgets::TimelineWidget &timeline_widget);
   
   /**
    * Sets offset of the mouse chevron
@@ -216,7 +217,7 @@ private:
   /**
    * The owner widget
    */
-  gui::widgets::TimelineWidget *timelineWidget;
+  gui::widgets::TimelineWidget &timelineWidget;
   
   /**
    * The caches image of the ruler, over which the chevrons etc. will

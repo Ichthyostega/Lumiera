@@ -58,7 +58,7 @@ protected:
    * Constructor
    * @param timeline_body The owner timeline body object
    */
-  Tool(TimelineBody *timeline_body);
+  Tool(TimelineBody &timeline_body);
   
 public:
   /**
@@ -120,7 +120,7 @@ protected:
    * Helper function which retrieves the pointer to owner timeline
    * widget object, which is the owner of the timeline body.
    */
-  gui::widgets::TimelineWidget *get_timeline_widget() const;
+  gui::widgets::TimelineWidget &get_timeline_widget() const;
   
   /**
    * Helper function which retrieves the rectangle of the timeline
@@ -129,10 +129,10 @@ protected:
   Gdk::Rectangle get_body_rectangle() const;
 
 protected:
+  TimelineBody &timelineBody;
+
   bool isDragging;
   Gdk::Point mousePoint;
-
-  TimelineBody *timelineBody;
 };
 
 }   // namespace timeline

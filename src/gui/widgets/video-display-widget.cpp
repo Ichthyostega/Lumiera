@@ -64,6 +64,8 @@ VideoDisplayWidget::on_realize()
 bool 
 VideoDisplayWidget::on_button_press_event (GdkEventButton* event)
 {
+  (void)event;
+  
   unsigned char buffer[320 * 240 * 4];
 
   for(int i = 0; i < 320*240*4; i++)

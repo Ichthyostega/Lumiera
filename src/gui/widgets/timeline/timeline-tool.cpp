@@ -29,20 +29,16 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-Tool::Tool(TimelineBody *timeline_body) :
+Tool::Tool(TimelineBody &timeline_body) :
   timelineBody(timeline_body),
   isDragging(false)
 {
-  REQUIRE(timeline_body != NULL);
 }
 
 bool
 Tool::apply_cursor()
-{ 
-  REQUIRE(timelineBody != NULL);
-    
-  Glib::RefPtr<Window> window = 
-    timelineBody->get_window();
+{     
+  Glib::RefPtr<Window> window = timelineBody.get_window();
   if(!window)
     return false;
   
@@ -75,21 +71,18 @@ Tool::on_motion_notify_event(GdkEventMotion *event)
   mousePoint = Point(event->x, event->y);
 }
 
-gui::widgets::TimelineWidget*
+gui::widgets::TimelineWidget&
 Tool::get_timeline_widget() const
 {
-  REQUIRE(timelineBody != NULL);
-  gui::widgets::TimelineWidget *timeline_widget =
-    timelineBody->timelineWidget;
-  REQUIRE(timeline_widget != NULL);
+  gui::widgets::TimelineWidget &timeline_widget =
+    timelineBody.timelineWidget;
   return timeline_widget;
 }
 
 Gdk::Rectangle
 Tool::get_body_rectangle() const
 {
-  REQUIRE(timelineBody != NULL);
-  return timelineBody->get_allocation();
+  return timelineBody.get_allocation();
 }
 
 }   // namespace timeline

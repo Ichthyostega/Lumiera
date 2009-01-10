@@ -44,7 +44,7 @@ public:
    * Constructor
    * @param timeline_body The owner timeline body object
    */
-  IBeamTool(TimelineBody *timeline_body);
+  IBeamTool(TimelineBody &timeline_body);
   
   /**
    * Gets the type of tool represented by this class

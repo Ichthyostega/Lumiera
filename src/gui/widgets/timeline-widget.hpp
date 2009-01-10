@@ -35,6 +35,7 @@
 #include "timeline/timeline-ibeam-tool.hpp"
 #include "timeline/timeline-group-track.hpp"
 #include "timeline/timeline-clip-track.hpp"
+#include "timeline/timeline-layout-helper.hpp"
 
 #include "../model/sequence.hpp"
 
@@ -216,24 +217,12 @@ private:
    **/
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
     boost::shared_ptr<model::Track> model_track) const;
-    
-  /**
-   * Looks up a model track in trackMap that corresponds to a
-   * given timeline track.
-   * @param timeline_track The timeline UI track to look up.
-   * @returns The model track found, or an empty shared_ptr if
-   * timeline_track has no corresponding timeline UI track (this is an
-   * error condition).
-   **/
-  boost::shared_ptr<model::Track> lookup_model_track(
-    const timeline::Track *timeline_track) const;
   
   // ----- Layout Functions ----- //
   
-  void update_scroll();
+  void on_layout_changed();
   
-  int measure_branch_height(
-    boost::shared_ptr<model::Track> model_track);
+  void update_scroll();
   
   int get_y_scroll_offset() const;
   
@@ -276,6 +265,9 @@ protected:
   std::map<boost::shared_ptr<model::Track>,
     boost::shared_ptr<timeline::Track> >
     trackMap;
+    
+  // Helper Classes
+  timeline::TimelineLayoutHelper layoutHelper;
 
   // View State
   timeline::TimelineViewWindow viewWindow;
@@ -288,8 +280,6 @@ protected:
   gavl_time_t playbackPoint;
   
   boost::shared_ptr<timeline::Track> hoveringTrack;
-
-  int totalHeight;
 
   // Child Widgets
   timeline::TimelineHeaderContainer *headerContainer;
@@ -318,16 +308,19 @@ public:
 protected:
   static const int TrackPadding;
   static const int HeaderWidth;
+  static const int HeaderIndentWidth;
   static const double ZoomIncrement;
 
   friend class timeline::TimelineViewWindow;
   friend class timeline::TimelineBody;
   friend class timeline::TimelineHeaderContainer;
+  friend class timeline::TimelineLayoutHelper;
   friend class timeline::TimelineRuler;
   friend class timeline::Tool;
   friend class timeline::ArrowTool;
   friend class timeline::IBeamTool;
   friend class timeline::Track;
+  friend class timeline::GroupTrack;
 };
 
 }   // namespace widgets

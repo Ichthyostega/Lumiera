@@ -40,19 +40,48 @@ namespace Gtk {
 namespace gui {
 namespace output {
 
+/**
+ * GdkDisplayer is a class which is responsible for rendering a video
+ * image via GDK.
+ **/
 class GdkDisplayer : public Displayer
-  {
-  public:
-    GdkDisplayer( Gtk::Widget *drawing_area, int width, int height );
+{
+public:
 
-    void put( void *image );
-  
-  protected:
-    bool usable();
+  /**
+   * Constructor
+   * @param[in] drawing_area The widget into which the video image will
+   * be drawn. This value must not be NULL.
+   * @param[in] width The width of the video image in pixels. This value
+   * must be greater than zero.
+   * @param[in] height The height of the video image in pixels. This
+   * value must be greater than zero.
+   **/
+  GdkDisplayer( Gtk::Widget *drawing_area, int width, int height );
 
-  private:
-    Gtk::Widget *drawingArea;
-  };
+  /**
+   * Put an image of a given width and height with the expected input
+   * format (as indicated by the format method).
+   * @param[in] image The video image array to draw.
+   */
+  void put( const void* image );
+
+protected:
+
+  /** 
+   * Indicates if this object can be used to render images on the
+   * running system.
+   */
+  bool usable();
+
+private:
+
+  /**
+   * The widget that video will be drawn into.
+   * @remarks This value must be a valid pointer.
+   **/
+  Gtk::Widget *drawingArea;
+};
 
 }   // namespace output
 }   // namespace gui

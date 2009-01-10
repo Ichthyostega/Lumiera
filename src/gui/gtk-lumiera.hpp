@@ -32,8 +32,10 @@
 #include <nobug.h>               // need to include this after gtkmm.h, because types.h from GTK tries to shaddow the ERROR macro from windows, which kills NoBug's ERROR macro
 #include <vector>
 #include <boost/utility.hpp>
+#include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 #include "lib/util.hpp"
 
 extern "C" {
@@ -59,37 +61,6 @@ NOBUG_DECLARE_FLAG(gui);
  */
 namespace gui {
   
-/* ===== Global Constants ===== */
-
-/**
- *  The name of the application 
- */
-static const gchar* AppTitle = "Lumiera";
-
-/**
- *  The version number of the application 
- */
-static const gchar* AppVersion = N_("0.1-dev");
-
-/**
- *  The copyright of the application
- */
-static const gchar* AppCopyright = N_("© 2008 The Lumiera Team");
-
-/**
- *  The website of the application
- */
-static const gchar* AppWebsite = "www.lumiera.org";
-
-/**
- *  An alphabetical list of the application's authors
- */
-static const gchar* AppAuthors[] = {
-  "Joel Holdsworth",
-  "Christian Thaeter",
-  "Hermann Vosseler",
-  "<Other Authors Here>"};
-  
 /* ===== The Application Class ===== */
 
 /**
@@ -102,6 +73,38 @@ public:
   
   static Glib::ustring get_home_data_path();
 
+
+public:
+  /* ----- Constants ----- */
+  /**
+   *  The name of the application 
+   */
+  static const gchar* AppTitle;
+
+  /**
+   *  The version number of the application 
+   */
+  static const gchar* AppVersion;
+
+  /**
+   *  The copyright of the application
+   */
+  static const gchar* AppCopyright;
+
+  /**
+   *  The website of the application
+   */
+  static const gchar* AppWebsite;
+
+  /**
+   *  An alphabetical list of the application's authors
+   */
+  static const gchar* AppAuthors[];
+  
+  /**
+   *  The number of authors in AppAuthors
+   **/
+  static const int AppAuthorCount;
 };
 
 /**

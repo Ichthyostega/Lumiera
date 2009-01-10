@@ -28,6 +28,16 @@ namespace model {
 GroupTrack::GroupTrack()
 {
 }
+
+std::string
+GroupTrack::print_track()
+{
+  std::ostringstream os;
+  
+  os << "GroupTrack\t\"" << get_name() << "\"";
+  
+  return os.str();
+}
   
 }   // namespace model
 }   // namespace gui

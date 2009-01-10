@@ -43,7 +43,8 @@ class Sequence : public ParentTrack
 public:
   Sequence();
   
-      
+  std::string print_track();
+
 private:
 
 };

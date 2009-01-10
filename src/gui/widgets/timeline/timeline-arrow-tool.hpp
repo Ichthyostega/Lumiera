@@ -43,7 +43,7 @@ public:
    * Constructor
    * @param timeline_body The owner timeline body object
    */
-  ArrowTool(TimelineBody *timeline_body);
+  ArrowTool(TimelineBody &timeline_body);
 
   /**
    * Gets the type of tool represented by this class

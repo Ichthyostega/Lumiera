@@ -54,9 +54,10 @@ public:
 
   /**
    * Constructor
-   * @param timeline_widget The owner widget of this ruler.
+   * @param timeline_widget A reference to the owner widget of this
+   * ruler.
    */
-  TimelineBody(gui::widgets::TimelineWidget *timeline_widget);
+  TimelineBody(gui::widgets::TimelineWidget &timeline_widget);
   
   /**
    * Destructor
@@ -118,8 +119,9 @@ private:
    */
   void draw_tracks(Cairo::RefPtr<Cairo::Context> cr);
   
-  void draw_track_recursive(Cairo::RefPtr<Cairo::Context> cr,
-    boost::shared_ptr<model::Track> track, const int view_width) const;
+  void draw_track(Cairo::RefPtr<Cairo::Context> cr,
+    boost::shared_ptr<timeline::Track> timeline_track,
+    const int view_width) const;
   
   /**
    * Draws the selected timeline period.
@@ -138,14 +140,7 @@ private:
   int get_vertical_offset() const;
   
   void set_vertical_offset(int offset);
-  
-  boost::shared_ptr<timeline::Track> track_from_point(const int y)
-    const;
-  
-  boost::shared_ptr<timeline::Track> track_from_branch(
-    boost::shared_ptr<model::Track> model_track,
-    const int y, int &offset) const;
-  
+   
   /**
    * Registers all the styles that this class will respond to.
    */
@@ -165,7 +160,7 @@ private:
     Shift
   };
   
-  timeline::Tool *tool;
+  boost::scoped_ptr<timeline::Tool> tool;
   double mouseDownX, mouseDownY;
   
   // Scroll State
@@ -179,7 +174,7 @@ private:
   float selectionAlpha;
   GdkColor playbackPointColour;
   
-  gui::widgets::TimelineWidget* const timelineWidget;
+  gui::widgets::TimelineWidget &timelineWidget;
 
   friend class Tool;
   friend class ArrowTool;

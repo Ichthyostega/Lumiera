@@ -21,24 +21,39 @@
 * *****************************************************/
 
 #include "timeline-group-track.hpp"
+#include "../timeline-widget.hpp"
 
 using namespace Gtk;
+using namespace boost;
+using namespace sigc;
 
 namespace gui {
 namespace widgets {
 namespace timeline {
   
 GroupTrack::GroupTrack(TimelineWidget &timeline_widget,
-  boost::shared_ptr<model::Track> track) :
+  shared_ptr<model::GroupTrack> track) :
   Track(timeline_widget, track)
+{ 
+  REQUIRE(track);
+  
+  // Receive notifications of changes to the tracks
+  track->get_child_track_list().signal_changed().connect(
+    sigc::mem_fun( this, &GroupTrack::on_child_list_changed ) );
+}
+
+void
+GroupTrack::on_child_list_changed()
 {
+  timelineWidget.on_track_list_changed();
 }
 
 void
 GroupTrack::draw_track(Cairo::RefPtr<Cairo::Context> cairo,
     TimelineViewWindow* const window) const
 {
-  
+  (void)cairo;
+  (void)window;
 }
   
 }   // namespace timeline

@@ -41,13 +41,24 @@ public:
   virtual std::list< boost::shared_ptr<Track> >
     get_child_tracks() const;
     
-  const Glib::ustring get_name() const;
+  const std::string get_name() const;
   
-  void set_name(const Glib::ustring &name);
-    
+  void set_name(const std::string &name);
+  
+  virtual bool remove_child_track(const boost::shared_ptr<Track> track);
+  
+  std::string print_branch();
+  
+  virtual std::string print_track() = 0;
+  
+  
+  
+protected:
+  std::string print_branch_recursive(const unsigned int indentation);
+
 private:
   //----- Data -----//
-  Glib::ustring name;
+  std::string name;
 
 protected:
   static const std::list< boost::shared_ptr<Track> > NoChildren;

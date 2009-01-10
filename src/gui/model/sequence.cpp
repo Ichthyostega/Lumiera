@@ -33,21 +33,39 @@ Sequence::Sequence()
   static bool first = true;
   
   shared_ptr<GroupTrack> group_track, group_track2;
+  shared_ptr<ClipTrack> clip_track;
   tracks.push_back(group_track = shared_ptr<GroupTrack>(new GroupTrack()));
   group_track->set_name("Group Track");
-  
-  /*if(first)
+    
+  if(first)
   {
-    group_track.add_child_track(shared_ptr<Track>(new ClipTrack()));
-    group_track.add_child_track(
-      group_track2 = shared_ptr<Track>(new GroupTrack()));
-    group_track2.add_child_track(shared_ptr<Track>(new ClipTrack()));
+    group_track->get_child_track_list().push_back(
+      clip_track = shared_ptr<ClipTrack>(new ClipTrack()));
+    group_track->get_child_track_list().push_back(
+      group_track2 = shared_ptr<GroupTrack>(new GroupTrack()));
+    group_track2->set_name("Group Track 2");
+    group_track2->get_child_track_list().push_back(
+      shared_ptr<ClipTrack>(new ClipTrack()));
     first = false;
-  }*/
+  }
+  
+  tracks.push_back(shared_ptr<GroupTrack>(new GroupTrack()));
   
   tracks.push_back(shared_ptr<Track>(new ClipTrack()));
   
   // END TEST CODE
+  
+  INFO(gui, "\n%s", print_branch().c_str());
+}
+
+std::string
+Sequence::print_track()
+{
+  std::ostringstream os;
+  
+  os << "Sequence\t\"" << get_name() << "\"";
+  
+  return os.str();
 }
 
 }   // namespace model

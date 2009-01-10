@@ -45,6 +45,7 @@ const int TimelinePanel::ZoomToolSteps = 2; // 2 seems comfortable
 
 TimelinePanel::TimelinePanel(model::Project *const owner_project) :
   Panel(owner_project, "timeline", _("Timeline"), "panel_timeline"),
+  timeIndicator(),
   previousButton(Stock::MEDIA_PREVIOUS),
   rewindButton(Stock::MEDIA_REWIND),
   playPauseButton(Stock::MEDIA_PLAY),
@@ -55,7 +56,6 @@ TimelinePanel::TimelinePanel(model::Project *const owner_project) :
   iBeamTool(Gtk::StockID("tool_i_beam")),
   zoomIn(Stock::ZOOM_IN),
   zoomOut(Stock::ZOOM_OUT),
-  timeIndicator(),
   updatingToolbar(false),
   currentTool(timeline::IBeam)
 {  
@@ -191,7 +191,7 @@ TimelinePanel::on_page_switched(GtkNotebookPage*, guint)
 void
 TimelinePanel::on_mouse_hover(gavl_time_t time)
 {
-
+  (void)time;
 }
 
 void

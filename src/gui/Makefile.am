@@ -144,6 +144,8 @@ libgui_la_SOURCES =							\
 	$(lumigui_srcdir)/widgets/timeline/timeline-group-track.hpp	\
 	$(lumigui_srcdir)/widgets/timeline/timeline-clip.cpp		\
 	$(lumigui_srcdir)/widgets/timeline/timeline-clip.hpp		\
+	$(lumigui_srcdir)/widgets/timeline/timeline-layout-helper.cpp	\
+	$(lumigui_srcdir)/widgets/timeline/timeline-layout-helper.hpp	\
 	$(lumigui_srcdir)/model/project.cpp				\
 	$(lumigui_srcdir)/model/project.hpp				\
 	$(lumigui_srcdir)/model/track.cpp				\

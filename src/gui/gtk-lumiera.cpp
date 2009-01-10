@@ -44,6 +44,7 @@ using namespace gui;
 using namespace gui::workspace;
 using namespace gui::model;
 
+
 GtkLumiera the_application;
 
 
@@ -66,7 +67,9 @@ GtkLumiera::main(int argc, char *argv[])
 
   WorkspaceWindow main_window(&project);
 
-  kit.run(main_window); 
+  kit.run(main_window);
+  
+  return 0;
 }
 
 Glib::ustring
@@ -82,6 +85,20 @@ application()
 {
   return the_application;  
 }
+
+/* ===== Constants ===== */
+
+const gchar* GtkLumiera::AppTitle = "Lumiera";
+const gchar* GtkLumiera::AppVersion = _("0.1-dev");
+const gchar* GtkLumiera::AppCopyright = 
+  _("© 2008 The Lumiera Team");
+const gchar* GtkLumiera::AppWebsite = "www.lumiera.org";
+const gchar* GtkLumiera::AppAuthors[] = {
+  "Joel Holdsworth",
+  "Christian Thaeter",
+  "Hermann Vosseler",
+  "<Other Authors Here>"};
+const int GtkLumiera::AppAuthorCount = 4;
 
 }   // namespace gui
 

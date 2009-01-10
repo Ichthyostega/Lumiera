@@ -33,6 +33,7 @@ iconcommand = python $(top_srcdir)/admin/render-icon.py
 48x48pre = $(prerendereddir)/48x48
 
 dist_pkgdata_DATA +=															\
+	$(16x16)/app-icon.png $(22x22)/app-icon.png $(24x24)/app-icon.png $(32x32)/app-icon.png $(48x48)/app-icon.png			\
 	$(16x16)/tool-arrow.png $(22x22)/tool-arrow.png $(24x24)/tool-arrow.png $(32x32)/tool-arrow.png $(48x48)/tool-arrow.png		\
 	$(16x16)/tool-i-beam.png $(22x22)/tool-i-beam.png $(24x24)/tool-i-beam.png $(32x32)/tool-i-beam.png $(48x48)/tool-i-beam.png	\
 	$(16x16)/track-disabled.png													\
@@ -47,6 +48,11 @@ clean-local:
 	rm -rf $(16x16) $(22x22) $(24x24) $(32x32) $(48x48)
 
 # ========== SVG Icons ==========
+
+# App Icon
+
+$(16x16)/app-icon.png $(22x22)/app-icon.png $(24x24)/app-icon.png $(32x32)/app-icon.png $(48x48)/app-icon.png : $(svgdir)/app-icon.svg $(top_builddir)/rsvg-convert
+	$(iconcommand) $< $(icondir)
 
 # Timeline Tools
 

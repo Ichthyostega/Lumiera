@@ -54,12 +54,11 @@ protected:
   Gtk::HBox containerFormatHBox;
   Gtk::Label containerFormatLabel;
   Gtk::ComboBox containerFormat;
+  
+  Gtk::Image renderButtonImage;
 
   Gtk::Frame audioFrame;
-
   Gtk::Frame videoFrame;
-
-  Gtk::Image renderButtonImage;
 };
 
 }   // namespace dialogs
