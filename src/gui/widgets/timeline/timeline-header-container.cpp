@@ -26,6 +26,7 @@
 #include "timeline-header-container.hpp"
 #include "timeline-track.hpp"
 #include "../timeline-widget.hpp"
+#include "../../util/rectangle.hpp"
 
 using namespace Gtk;
 using namespace std;
@@ -247,10 +248,7 @@ bool TimelineHeaderContainer::on_motion_notify_event (
       REQUIRE(rect);
 
       // Are we hovering on the expander?
-      if(event->x >= rect->get_x() &&
-        event->x < rect->get_x() + rect->get_width() &&
-        event->y >= rect->get_y() &&
-        event->y < rect->get_y() + rect->get_height())
+      if(util::pt_in_rect(point, *rect))
         {
           hoveringExpander = hoveringTrack;
           queue_draw();

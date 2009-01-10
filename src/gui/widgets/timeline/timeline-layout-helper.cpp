@@ -26,6 +26,7 @@
 #include "timeline-layout-helper.hpp"
 #include "../timeline-widget.hpp"
 #include "../../model/sequence.hpp"
+#include "../../util/rectangle.hpp"
 
 using namespace Gtk;
 using namespace std;
@@ -98,13 +99,8 @@ TimelineLayoutHelper::header_from_point(Gdk::Point point)
   std::pair<weak_ptr<timeline::Track>, Gdk::Rectangle> pair; 
   BOOST_FOREACH( pair, headerBoxes )
     {
-      // Hit test the rectangle
-      const Gdk::Rectangle &rect = pair.second;
-      
-      if(point.get_x() >= rect.get_x() &&
-        point.get_x() < rect.get_x() + rect.get_width() &&
-        point.get_y() >= rect.get_y() &&
-        point.get_y() < rect.get_y() + rect.get_height())
+      // Hit test the rectangle      
+      if(util::pt_in_rect(point, pair.second))
         return shared_ptr<timeline::Track>(pair.first);
     }
   
@@ -181,12 +177,8 @@ TimelineLayoutHelper::drag_to_point(Gdk::Point point)
       // Hit test the rectangle      
       const weak_ptr<timeline::Track> track = 
         lookup_timeline_track(*iterator);
-      const Gdk::Rectangle &rect = headerBoxes[track];
       
-      if(point.get_x() >= rect.get_x() &&
-        point.get_x() < rect.get_x() + rect.get_width() &&
-        point.get_y() >= rect.get_y() &&
-        point.get_y() < rect.get_y() + rect.get_height())
+      if(util::pt_in_rect(point, headerBoxes[track]))
         {
           // Relocate the header
           draggingTrackIter = layoutTree.move_after(

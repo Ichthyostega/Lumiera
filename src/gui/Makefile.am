@@ -164,8 +164,10 @@ libgui_la_SOURCES =							\
 	$(lumigui_srcdir)/output/displayer.hpp				\
 	$(lumigui_srcdir)/output/gdkdisplayer.cpp			\
 	$(lumigui_srcdir)/output/gdkdisplayer.hpp			\
-	$(lumigui_srcdir)/output/xvdisplayer.cpp				\
-	$(lumigui_srcdir)/output/xvdisplayer.hpp
+	$(lumigui_srcdir)/output/xvdisplayer.cpp			\
+	$(lumigui_srcdir)/output/xvdisplayer.hpp			\
+	$(lumigui_srcdir)/util/rectangle.cpp				\
+	$(lumigui_srcdir)/util/rectangle.hpp
 
 libgui_la_LIBADD =		\
 	liblumieracommon.la	\
