@@ -296,11 +296,6 @@ TimelineWidget::update_tracks()
   // Create timeline tracks from all the model tracks
   create_timeline_tracks();
   
-  // Update the header container
-  REQUIRE(headerContainer != NULL);
-  headerContainer->show_all_children();
-  headerContainer->update_headers();
-  
   // Update the layout helper
   layoutHelper.clone_tree_from_sequence();
   layoutHelper.update_layout();
@@ -316,6 +311,10 @@ TimelineWidget::create_timeline_tracks()
   BOOST_FOREACH(shared_ptr<model::Track> child,
     sequence->get_child_tracks())
     create_timeline_tracks_from_branch(child);
+    
+  // Update the header container
+  REQUIRE(headerContainer != NULL);
+  headerContainer->update_headers();
 }
 
 void

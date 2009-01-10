@@ -75,9 +75,20 @@ TimelineHeaderContainer::TimelineHeaderContainer(
 void
 TimelineHeaderContainer::update_headers()
 {    
-  // Add fresh headers  
-  BOOST_FOREACH( shared_ptr<model::Track> model_track, get_tracks() )
-    set_parent_recursive(model_track);
+  // Ensure headers are parented correctly
+  pair<shared_ptr<model::Track>, shared_ptr<timeline::Track> > pair; 
+  BOOST_FOREACH( pair, timelineWidget.trackMap )
+    {
+      // Set the header's parent widget
+      Widget &widget = lookup_timeline_track(pair.first)->
+        get_header_widget();
+      
+      const Container *parent = widget.get_parent();
+      if(parent == NULL)  // Is the header unparented?
+        widget.set_parent(*this);
+      ENSURE(widget.get_parent() == this);
+    }
+  
 }
   
 void
@@ -380,26 +391,6 @@ TimelineHeaderContainer::layout_headers()
     
   // Repaint the background of our parenting
   queue_draw ();
-}
-
-void
-TimelineHeaderContainer::set_parent_recursive(
-  boost::shared_ptr<model::Track> model_track)
-{ 
-  // Set the header's parent widget
-  Widget &widget = lookup_timeline_track(model_track)->
-    get_header_widget();
-  
-  const Container *parent = widget.get_parent();
-  if(parent == NULL)  // Is the header unparented?
-    widget.set_parent(*this);
-  else if(parent != this) // The header is parented by another container
-    widget.reparent(*this);
-  
-  // Recurse through all the children
-  BOOST_FOREACH( shared_ptr<model::Track> child,
-    model_track->get_child_tracks() )
-    set_parent_recursive(child);
 }
 
 void

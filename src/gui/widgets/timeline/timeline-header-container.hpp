@@ -152,14 +152,6 @@ private:
    * stacking etc.
    */
   void layout_headers();
-    
-  /**
-   * Recursively sets all the track header widgets to be child widgets
-   * of this widget.
-   * @param track The parent track object which will be recursed into.
-   **/
-  void set_parent_recursive(boost::shared_ptr<model::Track> const
-    model_track);
   
   /**
    * Recursively calls a callback on all the header widgets in a branch.
