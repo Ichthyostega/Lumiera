@@ -79,17 +79,12 @@ TimelineHeaderContainer::update_headers()
   pair<shared_ptr<model::Track>, shared_ptr<timeline::Track> > pair; 
   BOOST_FOREACH( pair, timelineWidget.trackMap )
     {
-      REQUIRE(pair.first);
-      
-      Widget &widget = lookup_timeline_track(pair.first)->
-        get_header_widget();
-      
-      const Container *parent = widget.get_parent();
-      if(parent == NULL)  // Is the header unparented?
+      REQUIRE(pair.second);
+      Widget &widget = pair.second->get_header_widget();
+      if(widget.get_parent() == NULL)  // Is the header unparented?
         widget.set_parent(*this);
       ENSURE(widget.get_parent() == this);
     }
-  
 }
   
 void
