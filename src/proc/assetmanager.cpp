@@ -183,16 +183,19 @@ namespace asset {
   }
 
   
-  void 
-  recursive_call (AssetManager* instance, PAsset& pA)
-  { 
-    instance->remove (pA->getID());
-  }
-
-  function<void(PAsset&)> 
-  detach_child_recursively ()  ///< @return a functor recursively invoking remove(child)  
-  {
-    return bind( &recursive_call, &AssetManager::instance(), _1 );
+  namespace { // details implementing AssetManager::remove
+  
+    void 
+    recursive_call (AssetManager* instance, PAsset& pA)
+    { 
+      instance->remove (pA->getID());
+    }
+  
+    function<void(PAsset&)> 
+    detach_child_recursively ()  ///< @return a functor recursively invoking remove(child)  
+    {
+      return bind( &recursive_call, &AssetManager::instance(), _1 );
+    }
   }
 
   /**

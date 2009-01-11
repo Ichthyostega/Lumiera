@@ -31,10 +31,9 @@
 using std::string;
 
 
-namespace asset
-  {
-  namespace test
-    {
+namespace asset {
+  namespace test{
+    
     using lumiera::P;
     using std::tr1::shared_ptr;
     using std::tr1::weak_ptr;
@@ -71,7 +70,7 @@ namespace asset
     class CustomSharedPtr_test : public Test
       {
         virtual void
-        run (Arg arg) 
+        run (Arg) 
           {
             check_refcounting ();
             check_shared_ownership ();

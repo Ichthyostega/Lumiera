@@ -58,7 +58,7 @@ namespace lumiera
     class LifeCycle_test : public Test
       {
         virtual void 
-        run (Arg arg)
+        run (Arg)
           {
             ASSERT (basicInit, "the basic-init callback hasn't been invoked automatically");
             ASSERT (1 == basicInit, "the basic-init callback has been invoked more than once");

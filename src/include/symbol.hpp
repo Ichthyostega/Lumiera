@@ -23,7 +23,7 @@
 /** @file symbol.hpp
  ** WIP placeholder definition for a planned Symbol datatype.
  ** 
- ** @todo the (currently just planned as of 11/08) rules based configuration
+ ** @todo for the (currently just planned as of 11/08) rules based configuration
  ** in the Proc-Layer a explicit Symbol datatype will probably very helpful.
  ** For now we just a typedef is sufficient. A real Symbol datatype should 
  ** - be definable by string constant
@@ -41,11 +41,14 @@
 #define LUMIERA_SYMBOL_H
 
 
+#include <string>
 
 
 namespace lumiera {
   
-  typedef const char * const Symbol;  //TODO define a real Symbol class, i.e. same literal string==same pointer,
+  typedef const char * const Symbol;  ///< Token or Atom with distinct identity @todo define a real Symbol class, i.e. same literal string==same pointer,
+
+  typedef const std::string Literal; ///< inline string literal @todo improve interaction with Symbol
 
   
   

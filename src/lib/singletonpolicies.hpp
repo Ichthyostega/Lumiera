@@ -35,7 +35,6 @@ This code is heavily inspired by
 #define LUMIERA_SINGLETONPOLICIES_H
 
 #include "lib/error.hpp"
-#include "lib/sync-classlock.hpp"
 
 #include <vector>
 
@@ -84,7 +83,7 @@ namespace lumiera {
       
       typedef void (*DelFunc)(void);
       using std::vector;
-        
+      
       /**
        * Policy relying on the compiler/runtime system for Singleton Lifecycle
        */
@@ -98,7 +97,8 @@ namespace lumiera {
            *  several Singletons, we need to memorise all registered
            *  deleter functions for calling them at shutdown.
            */ 
-          static void scheduleDelete (DelFunc kill_the_singleton) 
+          static void
+          scheduleDelete (DelFunc kill_the_singleton)
             {
                  class DeleteTrigger
                         {
@@ -122,36 +122,15 @@ namespace lumiera {
               finally.schedule (kill_the_singleton);
             }
           
-          static void onDeadReference ()
+          static void
+          onDeadReference ()
             {
               throw error::Logic ("Trying to access the a Singleton instance that has "
                                   "already been released or finished its lifecycle.");
             }
         };
-      
-      
-      
-      /**
-       * Policy for handling multithreaded access to the singleton instance
-       * @todo actually implement this policy using the Lumiera databackend.
-       */
-      template<class S>
-      struct Multithreaded
-        {
-          typedef volatile S VolatileType;
-          typedef lib::ClassLock<S> Lock;
-        };
-      
-      
-      /**
-       * Policy just ignoring thread safety
-       */
-      template<class S>
-      struct IgnoreThreadsafety
-        {
-          typedef S VolatileType;
-          struct Lock {};
-        };
+    
+    
     
     
   } // namespace singleton

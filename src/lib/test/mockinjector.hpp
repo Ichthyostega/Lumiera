@@ -31,15 +31,14 @@
 #include <boost/scoped_ptr.hpp>
 
 
-namespace lumiera
-  {
-  namespace test
-    {
+namespace lumiera {
+  namespace test {
+    
     using boost::scoped_ptr;
     
     /**
      * Special SingletonFactory allowing to inject some instance of the Singleton
-     * class, thus shaddowing "the" (default) Singleton instance temporarily.
+     * class, thus shadowing "the" (default) Singleton instance temporarily.
      * This allows installing a Mock Subclass of the Singleton for running tests,
      * while the Singleton can be used as usual in production code.
      * @note we use the default policies or SingletonFactory 

@@ -46,7 +46,8 @@ namespace util
     /** @test for util::Cmdline, wrapping various example cmdlines */
     class CmdlineWrapper_test : public Test
       {
-        virtual void run (Arg arg)
+        void
+        run (Arg)
           {
             testLine("");
             testLine("\n\t ");

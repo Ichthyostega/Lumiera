@@ -74,11 +74,15 @@
 extern "C" {
 #include "lib/mutex.h"
 #include "lib/condition.h"
+#include "lib/reccondition.h"
 }
 
+#include <boost/noncopyable.hpp>
+#include <pthread.h>
 #include <cerrno>
 #include <ctime>
 
+using boost::noncopyable;
 
 
 namespace lib {
@@ -106,7 +110,7 @@ namespace lib {
         : public lumiera_mutex
         {
         protected:
-          Wrapped_LumieraRecMutex() { lumiera_recmutex_init (this, "Obj.Monitor ExclMutex", &NOBUG_FLAG(sync)); }
+          Wrapped_LumieraRecMutex() { lumiera_recmutex_init (this, "Obj.Monitor RecMutex", &NOBUG_FLAG(sync)); }
          ~Wrapped_LumieraRecMutex() { lumiera_mutex_destroy (this, &NOBUG_FLAG(sync)); }
          
          //------------------Resource-Tracking------
@@ -120,7 +124,7 @@ namespace lib {
         : public lumiera_condition
         {
         protected:
-          Wrapped_LumieraExcCond() { lumiera_condition_init    (this, "Obj.Monitor Condition", &NOBUG_FLAG(sync) ); }
+          Wrapped_LumieraExcCond() { lumiera_condition_init    (this, "Obj.Monitor ExclCondition", &NOBUG_FLAG(sync) ); }
          ~Wrapped_LumieraExcCond() { lumiera_condition_destroy (this, &NOBUG_FLAG(sync) ); }
          
          //------------------Resource-Tracking------
@@ -131,11 +135,11 @@ namespace lib {
       
       
       struct Wrapped_LumieraRecCond
-        : public lumiera_condition  //////////////////////////////////////////TODO use correct implementation here!
+        : public lumiera_reccondition
         {
         protected:
-          Wrapped_LumieraRecCond() { lumiera_condition_init    (this, "Obj.Monitor Condition", &NOBUG_FLAG(sync) ); } ////////TODO
-         ~Wrapped_LumieraRecCond() { lumiera_condition_destroy (this, &NOBUG_FLAG(sync) ); }
+          Wrapped_LumieraRecCond() { lumiera_reccondition_init    (this, "Obj.Monitor RecCondition", &NOBUG_FLAG(sync) ); } ////////TODO
+         ~Wrapped_LumieraRecCond() { lumiera_reccondition_destroy (this, &NOBUG_FLAG(sync) ); }
          
          //------------------Resource-Tracking------
          void __may_block() { TODO ("Record we may block on mutex"); }
@@ -156,6 +160,11 @@ namespace lib {
           using MTX::__may_block;
           using MTX::__enter;
           using MTX::__leave;
+          
+         ~Mutex () { }
+          Mutex () { }
+          Mutex (const Mutex&); ///< noncopyable...
+          const Mutex& operator= (const Mutex&);
           
         public:
             void
@@ -282,6 +291,8 @@ namespace lib {
       
       /**
        * Object Monitor for synchronisation and waiting.
+       * Implemented by a (wrapped) set of sync primitives,
+       * which are default constructible and noncopyable.
        */
       template<class IMPL>
       class Monitor
@@ -292,6 +303,11 @@ namespace lib {
         public:
           Monitor() {}
           ~Monitor() {}
+          
+          /** allow copy, without interfering with the identity of IMPL */
+          Monitor (Monitor const& ref) : IMPL(), timeout_(ref.timeout_) { }
+          const Monitor& operator= (Monitor const& ref) { timeout_ = ref.timeout_; }
+          
           
           void acquireLock() { IMPL::acquire(); }
           void releaseLock() { IMPL::release(); }
@@ -370,13 +386,13 @@ namespace lib {
         
       public:
         class Lock
+          : private noncopyable
           {
             Monitor& mon_;
             
           public:
             template<class X>
             Lock(X* it) : mon_(getMonitor(it)){ mon_.acquireLock(); }
-            Lock(Monitor& m) : mon_(m)        { mon_.acquireLock(); }
             ~Lock()                           { mon_.releaseLock(); }
             
             void notify()                     { mon_.signal(false);}
@@ -385,11 +401,12 @@ namespace lib {
             
             template<typename C>
             bool wait (C& cond, ulong time=0) { return mon_.wait(cond,time);}
+            bool isTimedWait()                { return mon_.isTimedWait(); }
+            
             
             /** convenience shortcut: 
              *  Locks and immediately enters wait state,
-             *  observing a condition defined as member function.
-             */
+             *  observing a condition defined as member function. */
             template<class X>
             Lock(X* it, bool (X::*method)(void))
               : mon_(getMonitor(it)) 
@@ -397,6 +414,11 @@ namespace lib {
                 mon_.acquireLock();
                 mon_.wait(*it,method);
               }
+            
+          protected:
+            /** for creating a ClassLock */
+            Lock(Monitor& m) : mon_(m)
+              { mon_.acquireLock(); }
           };
         
         

@@ -24,6 +24,7 @@
 #include "lib/allocationcluster.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
+#include "lib/sync.hpp"
 
 using util::isnil;
 
@@ -38,9 +39,9 @@ namespace lib {
    * successful ctor call of the object being allocated. Allocations and commits
    * can be assumed to come in pairs, thus if an allocation immediately follows
    * another one (without commit), the previous allocation can be considered
-   * a failure and can be dropped silently. After an allocation has succeeds
+   * a failure and can be dropped silently. After an allocation succeeds
    * (i.e. was committed), the MemoryManager is in charge for the lifecycle
-   * of the object within the allocated spaces and has to guarantee calling
+   * of the object within the allocated space and has to guarantee calling
    * it's dtor, either on shutdown or on explicit #purge() -- the type info
    * structure handed in on initialisation provides a means for invoking
    * the dtor without actually knowing the object's type.
@@ -55,6 +56,7 @@ namespace lib {
    * on real-world measurements, not guessing.
    */
   class AllocationCluster::MemoryManager
+    : public Sync<RecursiveLock_NoWait>
     {
       typedef std::vector<char*> MemTable;
       TypeInfo type_;
@@ -81,7 +83,7 @@ namespace lib {
   void
   AllocationCluster::MemoryManager::reset (TypeInfo info)
   {
-    ClassLock<MemoryManager> guard();
+    Lock instance();
     
     if (0 < mem_.size()) purge();
     type_ = info;
@@ -96,7 +98,7 @@ namespace lib {
   void
   AllocationCluster::MemoryManager::purge()
   {
-    ClassLock<MemoryManager> guard();
+    Lock instance();
     
     REQUIRE (type_.killIt, "we need a deleter function");
     REQUIRE (0 < type_.allocSize, "allocation size unknown");
@@ -120,7 +122,7 @@ namespace lib {
   inline void*
   AllocationCluster::MemoryManager::allocate()
   {
-    ClassLock<MemoryManager> guard();
+    Lock instance();
     
     REQUIRE (0 < type_.allocSize);
     REQUIRE (top_ <= mem_.size());
@@ -140,7 +142,7 @@ namespace lib {
   inline void
   AllocationCluster::MemoryManager::commit (void* pendingAlloc)
   {
-    ClassLock<MemoryManager> guard();
+    Lock instance();
     
     REQUIRE (pendingAlloc);
     ASSERT (top_ < mem_.size());
@@ -174,8 +176,8 @@ namespace lib {
   AllocationCluster::~AllocationCluster()  throw()
   {
     try
-      {
-        ClassLock<AllocationCluster> guard();
+      {                                         // avoiding a per-instance lock for now.
+        ClassLock<AllocationCluster> guard();  //  (see note in the class description)
         
         TRACE (memory, "shutting down AllocationCluster");
         for (size_t i = typeHandlers_.size(); 0 < i; --i)
@@ -213,8 +215,8 @@ namespace lib {
   {
     ASSERT (0 < slot);
     
-      {
-        ClassLock<AllocationCluster> guard();   /////TODO: decide tradeoff: lock just the instance, or lock the AllocationCluster class?
+      {                                         // avoiding a per-instance lock for now.
+        ClassLock<AllocationCluster> guard();  //  (see note in the class description)
         
         if (slot > typeHandlers_.size())
           typeHandlers_.resize(slot);

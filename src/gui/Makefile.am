@@ -64,7 +64,7 @@ pkglib_LTLIBRARIES += gtk_gui.la
 
 gtk_gui_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
 gtk_gui_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
-gtk_gui_la_CPPFLAGS = $(AM_CPPFLAGS) -DLUMIERA_PLUGIN -I$(top_srcdir)/src/
+gtk_gui_la_CPPFLAGS = $(AM_CPPFLAGS) $(LUMIERA_GUI_CFLAGS) -DLUMIERA_PLUGIN -I$(top_srcdir)/src/
 gtk_gui_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/null -shrext .lum
 
 gtk_gui_la_LIBADD =		\
@@ -72,10 +72,11 @@ gtk_gui_la_LIBADD =		\
 	liblumierabackend.la	\
 	liblumieraproc.la	\
 	liblumiera.la		\
+	libgui.la		\
 	$(LUMIERA_GUI_LIBS)	\
 	$(NOBUGMT_LUMIERA_LIBS)
 
-gtk_gui_la_SOURCES =			\
+gtk_gui_la_SOURCES =		\
 	$(lumigui_srcdir)/guistart.cpp
 
 
@@ -94,18 +95,18 @@ libgui_la_CPPFLAGS = $(AM_CPPFLAGS)					\
 	$(LUMIERA_GUI_CFLAGS)
 
 libgui_la_SOURCES =							\
-	$(lumigui_srcdir)/guinotificationfacade.cpp			\
+	$(lumigui_srcdir)/notification-service.cpp			\
 	$(lumigui_srcdir)/window-manager.cpp				\
 	$(lumigui_srcdir)/window-manager.hpp				\
 	$(lumigui_srcdir)/workspace/actions.cpp				\
 	$(lumigui_srcdir)/workspace/actions.hpp				\
-	$(lumigui_srcdir)/workspace/workspace-window.cpp			\
-	$(lumigui_srcdir)/workspace/workspace-window.hpp			\
+	$(lumigui_srcdir)/workspace/workspace-window.cpp		\
+	$(lumigui_srcdir)/workspace/workspace-window.hpp		\
 	$(lumigui_srcdir)/dialogs/dialog.hpp				\
 	$(lumigui_srcdir)/dialogs/render.cpp				\
 	$(lumigui_srcdir)/dialogs/render.hpp				\
-	$(lumigui_srcdir)/dialogs/preferences-dialog.cpp			\
-	$(lumigui_srcdir)/dialogs/preferences-dialog.hpp			\
+	$(lumigui_srcdir)/dialogs/preferences-dialog.cpp		\
+	$(lumigui_srcdir)/dialogs/preferences-dialog.hpp		\
 	$(lumigui_srcdir)/dialogs/name-chooser.cpp			\
 	$(lumigui_srcdir)/dialogs/name-chooser.hpp			\
 	$(lumigui_srcdir)/panels/panel.cpp				\
@@ -152,14 +153,14 @@ libgui_la_SOURCES =							\
 	$(lumigui_srcdir)/model/track.hpp				\
 	$(lumigui_srcdir)/model/clip-track.cpp				\
 	$(lumigui_srcdir)/model/clip-track.hpp				\
-	$(lumigui_srcdir)/model/parent-track.cpp				\
-	$(lumigui_srcdir)/model/parent-track.hpp				\
+	$(lumigui_srcdir)/model/parent-track.cpp			\
+	$(lumigui_srcdir)/model/parent-track.hpp			\
 	$(lumigui_srcdir)/model/group-track.cpp				\
 	$(lumigui_srcdir)/model/group-track.hpp				\
 	$(lumigui_srcdir)/model/sequence.cpp				\
 	$(lumigui_srcdir)/model/sequence.hpp				\
-	$(lumigui_srcdir)/model/clip.cpp					\
-	$(lumigui_srcdir)/model/clip.hpp					\
+	$(lumigui_srcdir)/model/clip.cpp				\
+	$(lumigui_srcdir)/model/clip.hpp				\
 	$(lumigui_srcdir)/output/displayer.cpp				\
 	$(lumigui_srcdir)/output/displayer.hpp				\
 	$(lumigui_srcdir)/output/gdkdisplayer.cpp			\

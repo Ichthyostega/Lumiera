@@ -42,7 +42,7 @@ namespace mobject {
     
     
     
-    /** initialize the most basic internal defaults. */
+    /** initialise the most basic internal defaults. */
     DefsManager::DefsManager ()  throw()
       : defsRegistry(new DefsRegistry)
     {
@@ -142,11 +142,10 @@ namespace mobject {
 #include "proc/asset/track.hpp"
 #include "proc/mobject/session/track.hpp"
 
-namespace mobject
-  {
-  namespace session
-    {
-
+namespace mobject {
+  namespace session {
+    
+    
     using asset::Pipe;
     using asset::PPipe;
     using asset::ProcPatt;
@@ -164,7 +163,8 @@ namespace mobject
     
     template bool DefsManager::define (const PPipe&, const Query<Pipe>&);
     template bool DefsManager::forget (const PPipe&);
-
+    
+    
   } // namespace mobject::session
 
 } // namespace mobject

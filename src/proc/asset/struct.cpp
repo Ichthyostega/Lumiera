@@ -82,8 +82,8 @@ namespace asset
   
   
   /** Factory method for Structural Asset instances.
-   *  First tries to relove the asset by issuing an capability query.
-   *  If unsuccessfull, use some internally specialized ctor call.
+   *  First tries to resolve the asset by issuing an capability query.
+   *  If unsuccessful, use some internally specialised ctor call.
    *  @todo work out the struct asset naming scheme!
    *  @return an Struct smart ptr linked to the internally registered smart ptr
    *          created as a side effect of calling the concrete Struct subclass ctor.
@@ -109,7 +109,7 @@ namespace asset
   
   
   /** Factory method for creating Pipes explicitly.
-   *  Normalizes pipe- and streamID, then retrieves the
+   *  Normalises pipe- and streamID, then retrieves the
    *  default processing pattern (ProcPatt) for this streamID.
    *  The Pipe ctor will fill out the shortDesc and longDesc
    *  automatically, based on pipeID and streamID (and they
@@ -144,8 +144,7 @@ namespace asset
 #include "proc/asset/pipe.hpp"
 
 
-namespace asset
-  {
+namespace asset {
   
   template P<Pipe>     StructFactory::operator() (const Query<Pipe>& query);
   template P<Track>    StructFactory::operator() (const Query<Track>& query);

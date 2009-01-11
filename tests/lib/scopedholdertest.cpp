@@ -58,7 +58,7 @@ namespace lib {
       {
         
         virtual void 
-        run (Arg arg)
+        run (Arg)
           {
             
             cout << "checking ScopedHolder<Dummy>...\n";

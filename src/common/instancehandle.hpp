@@ -31,7 +31,9 @@
  **
  ** @see gui::GuiFacade usage example
  ** @see interface.h
- ** @see interfaceproxy.cpp
+ ** @see interfaceproxy.hpp (more explanations)
+ ** @see interfaceproxy.cpp (Implementation of the proxies)
+ **
  */
 
 
@@ -40,6 +42,8 @@
 
 
 #include "include/nobugcfg.h"
+#include "lib/error.hpp"
+#include "include/interfaceproxy.hpp"
 
 extern "C" {
 #include "common/interface.h"
@@ -47,7 +51,6 @@ extern "C" {
 }
 
 #include <boost/noncopyable.hpp>
-//#include <boost/scoped_ptr.hpp>
 #include <string>
 
 
@@ -55,25 +58,36 @@ extern "C" {
 namespace lumiera {
   
   using std::string;
-//  using boost::scoped_ptr;
+  
+  template<class I, class FA>
+  class InstanceHandle;
+  
   
   namespace { // implementation details
+    
+    void
+    throwIfError() 
+    {
+      if (lumiera_error_peek())
+        throw lumiera::error::Config("failed to open interface or plugin.",lumiera_error());
+    }
   
-    /** takes a bunch of instance definitions, as typically created
-     *  when defining interfaces for external use, and registers them
+    /** takes a (single) instance definitions, as typically created
+     *  when defining interfaces for external use, and registers it
      *  with the InterfaceSystem. Then uses the data found in the
-     *  \em first descriptor to open an instance handle.  
+     *  \em given instance descriptor to open an instance handle.
+     *  @throws error::Config when the registration process fails  
      */
     LumieraInterface
-    register_and_open (LumieraInterface* descriptors)
+    register_and_open (LumieraInterface descriptor)
     {
-      if (!descriptors) return NULL;
-      lumiera_interfaceregistry_bulkregister_interfaces (descriptors, NULL);
-      LumieraInterface masterI = descriptors[0];
-      return lumiera_interface_open (masterI->interface,
-                                     masterI->version,
-                                     masterI->size,
-                                     masterI->name);
+      if (!descriptor) return NULL;
+      lumiera_interfaceregistry_register_interface (descriptor, NULL);
+      throwIfError();
+      return lumiera_interface_open (descriptor->interface,
+                                     descriptor->version,
+                                     descriptor->size,
+                                     descriptor->name);
     }
     
     /** do a lookup within the interfaceregistry
@@ -87,8 +101,62 @@ namespace lumiera {
                                                                ifa->version, 
                                                                ifa->name));
     }
-    
+  
   } // (End) impl details
+    
+  
+  namespace facade {
+    
+    /**
+     * @internal Helper/Adapter for establishing a link
+     * between an InstanceHandle and a facade interface,
+     * which is going to be implemented through the given
+     * interface/plugin. This way, creating the InstanceHandle
+     * automatically creates a lumiera::facade::Proxy, to route
+     * any facade calls through the interface/plugin. Similarly,
+     * when destroying the InstanceHandle, the proxy will be closed.
+     */
+    template<class I, class FA>
+    struct Link
+      : boost::noncopyable
+      {
+        typedef InstanceHandle<I,FA> IH;
+        
+        Link (IH const& iha) { facade::openProxy(iha); }
+       ~Link()               { facade::closeProxy<IH>(); }
+        
+        FA&
+        operator() (IH const&)  const
+          {
+            return facade::Accessor<FA>()();
+          }
+      };
+    
+    
+    /**
+     * @internal when the InstanceHandle isn't associated with a
+     * facade interface, then this specialisation switches 
+     * the facade::Link into "NOP" mode.
+     */
+    template<class I>
+    struct Link<I,I>
+      : boost::noncopyable
+      {
+        typedef InstanceHandle<I,I> IH;
+        
+        Link (IH const&)     { /* NOP */ }
+       ~Link()               { /* NOP */ }
+       
+        I&
+        operator() (IH const& handle)  const
+          {
+            return handle.get();
+          }
+      };
+    
+  } // namespace facade (impl details)
+  
+  
   
   
   
@@ -96,8 +164,11 @@ namespace lumiera {
    * Handle tracking the registration of an interface, deregistering it on deletion.
    * Depending on which flavour of the ctor is used, either (bulk) registration of interfaces
    * or plugin loading is triggered. The interface type is defined by type parameter.
-   * @todo when provided with the type of an facade interface class, care for enabling/disabling
-   *       access through the facade proxy singleton when opening/closing the registration.
+   * Additionally, choosing a facade interface as second type parameter causes installation
+   * of a proxy, which implements the facade by routing calls through the basic interface
+   * represented by this handle. This proxy will be "closed" automatically when this
+   * InstanceHandle goes out of scope. Of course, the proxy needs to be implemented
+   * somewhere, typically in interfaceproxy.cpp
    */
   template< class I         ///< fully mangled name of the interface type
           , class FA = I    ///< facade interface type to be used by clients
@@ -105,8 +176,9 @@ namespace lumiera {
   class InstanceHandle
     : private boost::noncopyable
     { 
-      LumieraInterface* desc_;
+      LumieraInterface desc_;
       I* instance_;
+      facade::Link<I,FA> facadeLink_;
       
       typedef InstanceHandle<I,FA> _ThisType;
       
@@ -119,37 +191,42 @@ namespace lumiera {
        *  @param impName unmangled name of the instance (implementation)
        */
       InstanceHandle (string const& iName, uint version, size_t minminor, string const& impName)
-        : desc_(0),
-          instance_(reinterpret_cast<I*> 
+        : desc_(0)
+        , instance_(reinterpret_cast<I*> 
               (lumiera_interface_open (iName.c_str(), version, minminor, impName.c_str())))
-        { }
+        , facadeLink_(*this)
+        { 
+          throwIfError();
+        }
       
       /** Set up an InstanceHandle managing the 
        *  registration and deregistration of interface(s).
        *  Should be placed at the service providing side.
-       *  @param descriptors zero terminated array of interface descriptors,
-       *         usually available through lumiera_plugin_interfaces() 
+       *  @param a (single) interface descriptor, which can be created with
+       *         LUMIERA_INTERFACE_INSTANCE and referred to by LUMIERA_INTERFACE_REF 
        */
-      InstanceHandle (LumieraInterface* descriptors)
-        : desc_(descriptors),
-          instance_(reinterpret_cast<I*> (register_and_open (desc_)))
-        { }
+      InstanceHandle (LumieraInterface descriptor)
+        : desc_(descriptor)
+        , instance_(reinterpret_cast<I*> (register_and_open (desc_)))
+        , facadeLink_(*this)
+        { 
+          throwIfError();
+        }
       
       ~InstanceHandle ()
         {
           lumiera_interface_close (&instance_->interface_header_);
           if (desc_)
-            lumiera_interfaceregistry_bulkremove_interfaces (desc_);
+            lumiera_interfaceregistry_remove_interface (desc_);
         }
       
       
       
       /** act as smart pointer providing access through the facade. 
-       *  @todo implement the case where the Facade differs from I
        *  @note we don't provide operator*                      */
-      FA * operator-> ()  const { return accessFacade(); }      
+      FA * operator-> ()  const { return &(facadeLink_(*this)); }      
       
-      /** directly access the instance via the CLI interface */
+      /** directly access the instance via the CL interface */
       I& get ()  const { ENSURE(instance_); return *instance_; }
       
       
@@ -164,13 +241,6 @@ namespace lumiera {
       
       
     private:
-      FA *
-      accessFacade()  const
-        {
-          ENSURE (instance_);
-          return static_cast<FA *> (instance_);    /////////////////TODO: actually handle the case when the facade differs from the interface by using the proxy
-        }
-      
       bool 
       isValid()  const
         { 

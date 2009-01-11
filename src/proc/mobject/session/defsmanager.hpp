@@ -44,8 +44,8 @@ namespace mobject {
 
 
     /**
-     * Organize a collection of preconfigured default objects.
-     * For various kinds of objects we can tweek the default parametrisation
+     * Organise a collection of preconfigured default objects.
+     * For various kinds of objects we can tweak the default parametrisation
      * as part of the general session configuration. A ref to an instance of
      * this class is accessible through the current session and can be used
      * to fill in parts of the configuration of new objects, if the user 
@@ -88,10 +88,10 @@ namespace mobject {
         template<class TAR>
         P<TAR> create  (const lumiera::Query<TAR>&);
         
-        /** register the given object as default, after ensuring it fulfills the
+        /** register the given object as default, after ensuring it fulfils the
          *  query. The latter may cause some properties of the object to be set,
          *  trigger creation of additional objects, and may fail altogether.
-         *  @return true if query was successfull and object is registered as default
+         *  @return true if query was successful and object is registered as default
          *  @note only a weak ref to the object is stored
          */ 
         template<class TAR>

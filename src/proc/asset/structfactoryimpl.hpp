@@ -79,7 +79,7 @@ namespace asset
   
   
   /** 
-   * Implementation deatils, esp. concerning how configuration
+   * Implementation details, especially concerning how configuration
    * queries are resolved and when to create new objects automatically.
    * @todo better use a general struct traits class, esp.for creating the Ident
    */ 

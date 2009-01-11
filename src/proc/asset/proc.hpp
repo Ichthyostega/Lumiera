@@ -42,8 +42,8 @@
 
 
 
-namespace asset
-  {
+namespace asset {
+  
   
   class Proc;
   class ProcFactory;
@@ -92,7 +92,7 @@ namespace asset
   
   
   /** 
-   * Factory specialized for createing Processor Asset objects.
+   * Factory specialised for creating Processor Asset objects.
    */ 
   class ProcFactory : public lumiera::Factory<asset::Proc>
     {

@@ -1,5 +1,5 @@
 /*
-  GuiNotificationFacade  -  access point for pushing informations into the GUI
+  NotificationService  -  public service allowing to push informations into the GUI
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "include/guinotificationfacade.h"
+#include "gui/notification-service.hpp"
 #include "lib/singleton.hpp"
 #include "include/nobugcfg.h"
 #include "lib/util.hpp"
@@ -33,33 +33,31 @@ extern "C" {
 #include <string>
 
 
+
+
 namespace gui {
   
   using std::string;
   using util::cStr;
+
+  
+  void 
+  NotificationService::displayInfo (string const& text)
+  {
+    INFO (operate, "@GUI: display '%s' as notification message.", cStr(text));
+    ////////////////////////TODO actually push the information to the GUI
+  }
+  
+  
+  void
+  NotificationService::triggerGuiShutdown (string const& cause)
+  {
+    NOTICE (operate, "@GUI: shutdown triggered with explanation '%s'....", cStr(cause));
+    TODO ("actually request a shutdown from the GUI");
+  }
+  
   
   namespace { // facade implementation details
-    
-    
-    struct GuiNotificationFacade
-      : public GuiNotification
-      {
-        void
-        displayInfo (string const& text)
-          {
-            INFO (operate, "@GUI: display '%s' as notification message.", cStr(text));
-          }
-        
-        void
-        triggerGuiShutdown (string const& cause)
-          {
-            NOTICE (operate, "@GUI: shutdown triggered with explanation '%s'....", cStr(cause));
-          }
-      };
-    
-    lumiera::Singleton<GuiNotificationFacade> _facade;
-    
-    
     
     
     /* ================== define an lumieraorg_GuiNotification instance ======================= */
@@ -131,6 +129,16 @@ namespace gui {
                                );
     
     
+    
+    
+    
+    using lumiera::facade::LUMIERA_ERROR_FACADE_LIFECYCLE;
+    typedef lib::SingletonRef<GuiNotification>::Accessor InstanceRef;
+
+    InstanceRef _instance; ///< a backdoor for the C Language impl to access the actual GuiNotification implementation...
+    
+    
+    
     LUMIERA_INTERFACE_INSTANCE (lumieraorg_GuiNotification, 1
                                ,lumieraorg_GuiNotificationFacade
                                , LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_GuiNotificationFacade_descriptor)
@@ -138,15 +146,37 @@ namespace gui {
                                , NULL /* on  close */
                                , LUMIERA_INTERFACE_INLINE (displayInfo, "\366\075\213\163\207\040\221\233\010\366\174\374\317\126\331\205",
                                                            void, (const char* text),
-                                                             { return _facade().displayInfo(text); }
+                                                             { 
+                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE);  
+                                                               else
+                                                                 _instance->displayInfo(text); 
+                                                             }
                                                           )
                                , LUMIERA_INTERFACE_INLINE (triggerGuiShutdown, "\267\043\244\065\107\314\370\175\063\330\264\257\302\146\326\303",
                                                            void, (const char* cause),
-                                                             { return _facade().triggerGuiShutdown(cause); }
+                                                             { 
+                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE);
+                                                               else
+                                                                 _instance->triggerGuiShutdown(cause); 
+                                                             }
                                                           )
                                );
-    
-    
+
+
+
   } // (END) facade implementation details
+  
+  
+  
+  
+  NotificationService::NotificationService () 
+    : implInstance_(this,_instance),
+      serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_GuiNotification, 1,lumieraorg_GuiNotificationFacade))
+  {
+    INFO (operate, "GuiNotification Facade opened.");
+  }
+  
+  
+
 
 } // namespace gui

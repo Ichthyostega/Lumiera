@@ -97,7 +97,7 @@ namespace lumiera
       
       template<class TOOLImpl>
       static Tag&
-      get (TOOLImpl* const concreteTool=0)
+      get (TOOLImpl* const =0)  // param used to pass type info
         {
           // we have a race condition here...
           Tag& t = TagTypeRegistry<TOOL,TOOLImpl>::tag;
@@ -410,7 +410,7 @@ namespace lumiera
        */
       class VisitingTool_concept : public Test
         {
-          virtual void run(Arg arg) 
+          virtual void run(Arg) 
             {
               known_visitor_known_class();
               visitor_not_visiting_some_class();

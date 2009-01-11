@@ -33,18 +33,11 @@ namespace proc {
   
   
   /*********************************************************************
-   * Global access point for loading and starting up the Lumiera GTK GUI
-   * and for defining the public interface(s) for addressing the GUI
-   * from Backend or Proc-Layer.
+   * Global access point for the services implemented by the Proc-Layer.
    * 
-   * If running Lumiera with a GUI is required (the default case),
-   * it is loaded as dynamic module, thus defining the interface(s) 
-   * for any further access. After successfully loading and starting
-   * the GUI, this gui::Facade is wired internally with this interface
-   * such as to allow transparent access from within the core. This
-   * startup sequence includes providing the GUI with similar facade
-   * access via interface handles for communication with Backend and
-   * Proc-Layer.
+   * @todo this is a dummy placeholder as of 1/2009. Currently, there
+   *       is only implementation-level code within the Proc-Layer and
+   *       the interfaces need to be worked out.
    * 
    */
   struct Facade

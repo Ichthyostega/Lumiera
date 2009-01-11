@@ -22,28 +22,36 @@
  
 * *****************************************************/
 
+
 /** @file guistart.cpp
  ** Start up the Lumiera GTK GUI when loading it as dynamic module.
  ** This plugin is linked together with the Lumiera GUI code; when loaded as
- ** Lumiera plugin, it allows to kick off the main GUI thread and thus to bring up
- ** the GUI. The loading and shutdown process is carried out by gui::GuiFacade and
+ ** Lumiera plugin, it allows to kick off the GTK main event loop and thus to bring
+ ** up the GUI. The loading and shutdown process is carried out by gui::GuiFacade and
  ** controlled by lumiera::AppState, which in turn is activated by Lumiera main().
  ** 
  ** After successfully loading this module, a call to #kickOff is expected to be
  ** issued, passing a termination signal (callback) to be executed when the GUI
- ** terminates. This call returns immediately, after spawning off the main thread
- ** and setting up the termination callback accordingly. Additionally, it cares
- ** for opening the primary "business" interface of the GUI, i.e. the interface
- ** gui::GuiNotification.
+ ** terminates. The \c kickOff() call remains blocked within the main GTK event loop;
+ ** thus typically this call should be issued within a separate dedicated GUI thread.
+ ** Especially, the gui::GuiRunner will ensure this to happen.
+ ** 
+ ** Prior to entering the GTK event loop, all primary "business" interface of the GUI
+ ** will be opened (currently as of 1/09 this is the interface gui::GuiNotification.)
  **
  ** @see lumiera::AppState
  ** @see gui::GuiFacade
  ** @see guifacade.cpp
- ** @see ///////////////////////////////////TODO: add link to the gui main routine here!
+ ** @see gui::GtkLumiera#main the GTK GUI main
  */
 
+#include <locale>               // need to include this to prevent errors when libintl.h defines textdomain (because gtk-lumiera removes the def when ENABLE_NLS isn't defined)
 
+#include "gui/gtk-lumiera.hpp"  // need to include this before nobugcfg.h, because types.h from GTK tries to shaddow the ERROR macro from windows, which kills nobug's ERROR macro
+#include "include/nobugcfg.h"
+#include "lib/error.hpp"
 #include "gui/guifacade.hpp"
+#include "gui/notification-service.hpp"
 #include "common/subsys.hpp"
 #include "lib/singleton.hpp"
 
@@ -54,12 +62,9 @@ extern "C" {
 
 #include <string>
 
+
+
 using std::string;
-
-#include <iostream> /////////////TODO
-using std::cout;   //////////////TODO
-
-
 using lumiera::Subsys;
 using gui::LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1);
 
@@ -69,28 +74,61 @@ namespace gui {
   namespace { // implementation details
     
     /** 
-     * Implement the necessary steps for starting up the GUI main thread
+     * Implement the necessary steps for actually making the Lumiera Gui available.
+     * Open the business interface(s) and start up the GTK GUI main event loop.
      */
-    struct GuiFacadeImpl
-      : public GuiFacade
+    struct GuiLifecycle
       {
+        string error_;
+        Subsys::SigTerm& reportOnTermination_;
+        NotificationService activateNotificationService_;
         
-        bool kickOff (Subsys::SigTerm& terminationHandle) 
+        GuiLifecycle (Subsys::SigTerm& terminationHandler)
+          : reportOnTermination_(terminationHandler)
+          , activateNotificationService_()             // opens the GuiNotification facade interface 
+          { }
+        
+       ~GuiLifecycle ()
           {
-            cout << " *** Ha Ha Ha\n"
-                 << "     this is the GuiStarterPlugin speaking!\n"
-                 << "     now, the Lumiera GUI should be spawned....\n"
-                 << "     but actually nothing happens!!!!!!!!!!!!!!\n\n";
-            
-            terminationHandle(0); // signal immediate shutdown without error
-            return true;
+            reportOnTermination_(&error_);             // inform main thread that the GUI has been shut down. 
+          }
+        
+        
+        void
+        run ()
+          {
+            try
+              {
+                int argc =0;
+                char *argv[] = {};                     // dummy command line for GTK
+                
+                gui::application().main(argc, argv);   // execute the GTK Event Loop
+                
+                if (!lumiera_error_peek())
+                    return;
+              }
+            catch (lumiera::Error& problem)
+              {
+                error_ = problem.what();
+                lumiera_error();                       // clear error flag
+                return;
+              }
+            catch (...){ }
+            error_ = "unexpected error terminated the GUI.";
+            return;
           }
       };
     
     
-    lumiera::Singleton<GuiFacadeImpl> facade_;
     
   } // (End) impl details
+  
+  
+  void
+  kickOff (Subsys::SigTerm& reportTermination)
+  {
+    GuiLifecycle(reportTermination).run();
+  }
 
 } // namespace gui
 
@@ -179,10 +217,9 @@ extern "C" { /* ================== define an lumieraorg_Gui instance ===========
                                           , NULL  /* on open  */
                                           , NULL  /* on close */
                                           , LUMIERA_INTERFACE_INLINE (kickOff, "\255\142\006\244\057\170\152\312\301\372\220\323\230\026\200\065",
-                                                                      bool, (void* termSig),
+                                                                      void, (void* termSig),
                                                                         { 
-                                                                          return gui::facade_().kickOff (
-                                                                                     *reinterpret_cast<Subsys::SigTerm *> (termSig));
+                                                                          gui::kickOff (*reinterpret_cast<Subsys::SigTerm *> (termSig));
                                                                         }
                                                                      )
                                           )

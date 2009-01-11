@@ -73,7 +73,7 @@ namespace lumiera
     {
       for (uint i=0; i<cnt_; ++i)
         heapArray_[i] = lexical_cast<string>(i);
-      cout << format("ctor TargetObj(%i) successfull\n") % cnt_;
+      cout << format("ctor TargetObj(%i) successful\n") % cnt_;
     }
     
     
@@ -82,7 +82,7 @@ namespace lumiera
     {
       delete heapData_;
       delete[] heapArray_;
-      cout << format("dtor ~TargetObj(%i) successfull\n") % cnt_;
+      cout << format("dtor ~TargetObj(%i) successful\n") % cnt_;
     }
     
     
