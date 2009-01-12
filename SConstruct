@@ -28,6 +28,7 @@ CUSTOPTIONSFILE  = 'custom-options'
 SRCDIR           = 'src'
 BINDIR           = 'bin'
 LIBDIR           = '.libs'
+PLUGDIR          = '.libs'
 TESTDIR          = 'tests'
 ICONDIR          = 'icons'
 VERSION          = '0.1+pre.01'
@@ -74,6 +75,7 @@ def setupBasicEnvironment():
                , SRCDIR=SRCDIR
                , BINDIR=BINDIR
                , LIBDIR=LIBDIR
+               , PLUGDIR=PLUGDIR
                , ICONDIR=ICONDIR
                , CPPPATH=["#"+SRCDIR]   # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['-DLUMIERA_VERSION='+VERSION ]     # note: it's a list to append further defines
@@ -336,12 +338,15 @@ def defineBuildTargets(env, artifacts):
     artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/lumiera/main.cpp'], LIBS=core)
     artifacts['corelib'] = core
     
-    
+    # building Lumiera Plugins
+    envPlu = env.Clone()
+    envPlu.Append(CPPDEFINES='LUMIERA_PLUGIN')
     artifacts['plugins'] = [] # currently none 
     
     
     # the Lumiera GTK GUI
-    envgtk  = env.Clone().mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','librsvg-2.0','xv','xext','sm'])
+    envgtk = env.Clone()
+    envgtk.mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','librsvg-2.0','xv','xext','sm'])
     envgtk.Append(CPPDEFINES='LUMIERA_PLUGIN', LIBS=core)
     objgui  = srcSubtree(envgtk,'$SRCDIR/gui')
     
@@ -362,7 +367,7 @@ def defineBuildTargets(env, artifacts):
     # call subdir SConscript(s) for independent components
     SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts core')
     SConscript(dirs=['admin'], exports='env envgtk artifacts core')
-    SConscript(dirs=[TESTDIR], exports='env artifacts core')
+    SConscript(dirs=[TESTDIR], exports='env envPlu artifacts core')
 
 
 
