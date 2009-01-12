@@ -171,10 +171,10 @@ namespace lumiera {
               {
                 Lock guard (this);
                 isUp_ = false;
-                
-                INFO (test, "thread %s terminates.", cStr(*this));
-                termination ("true"==runSpec? 0 : &problemReport);
-            } }
+              }
+              INFO (test, "thread %s terminates.", cStr(*this));
+              termination ("true"==runSpec? 0 : &problemReport);
+            }
           
           
           bool
