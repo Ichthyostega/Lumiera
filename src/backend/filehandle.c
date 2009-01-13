@@ -84,7 +84,7 @@ lumiera_filehandle_handle (LumieraFilehandle self)
       fd = open (lumiera_filedescriptor_name (self->descriptor), lumiera_filedescriptor_flags (self->descriptor) & LUMIERA_FILE_MASK);
       if (fd == -1)
         {
-          LUMIERA_ERROR_SET (filehandle, ERRNO);
+          LUMIERA_ERROR_SET (filehandle, ERRNO, lumiera_filedescriptor_name (self->descriptor));
         }
       else
         {
@@ -92,13 +92,13 @@ lumiera_filehandle_handle (LumieraFilehandle self)
           if (fstat (fd, &st) == -1)
             {
               close (fd);
-              LUMIERA_ERROR_SET (filehandle, ERRNO);
+              LUMIERA_ERROR_SET (filehandle, ERRNO, lumiera_filedescriptor_name (self->descriptor));
             }
           else if (!lumiera_filedescriptor_samestat (self->descriptor, &st))
             {
               close (fd);
               /* Woops this is not the file we expected to use */
-              LUMIERA_ERROR_SET (filehandle, FILE_CHANGED);
+              LUMIERA_ERROR_SET (filehandle, FILE_CHANGED, lumiera_filedescriptor_name (self->descriptor));
             }
         }
       self->fd = fd;

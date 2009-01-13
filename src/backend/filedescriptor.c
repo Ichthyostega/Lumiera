@@ -141,7 +141,7 @@ lumiera_filedescriptor_acquire (const char* name, int flags, LList filenode)
                   INFO (filedescriptor, "try creating dir: %s", dir);
                   if (mkdir (dir, 0777) == -1 && errno != EEXIST)
                     {
-                      LUMIERA_ERROR_SET (filedescriptor, ERRNO);
+                      LUMIERA_ERROR_SET (filedescriptor, ERRNO, name);
                       goto error;
                     }
                   *slash = '/';
@@ -152,14 +152,14 @@ lumiera_filedescriptor_acquire (const char* name, int flags, LList filenode)
               fd = creat (name, 0666);
               if (fd == -1)
                 {
-                  LUMIERA_ERROR_SET (filedescriptor, ERRNO);
+                  LUMIERA_ERROR_SET (filedescriptor, ERRNO, name);
                   goto error;
                 }
               close (fd);
               if (stat (name, &fdesc.stat) != 0)
                 {
                   /* finally, no luck */
-                  LUMIERA_ERROR_SET (filedescriptor, ERRNO);
+                  LUMIERA_ERROR_SET (filedescriptor, ERRNO, name);
                   goto error;
                 }
             }

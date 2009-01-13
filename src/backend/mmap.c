@@ -140,7 +140,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
                   /* extend file (writable) */
                   if (ftruncate (fd, begin+length) == -1)
                     {
-                      LUMIERA_ERROR_SET (mmap, ERRNO);
+                      LUMIERA_ERROR_SET (mmap, ERRNO, lumiera_filedescriptor_name (file->descriptor));
                       goto etruncate;
                     };
                   descriptor->stat.st_size = begin+length;
@@ -173,7 +173,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
           break;
 
         case GIVE_UP:
-          LUMIERA_ERROR_SET (mmap, MMAP_SPACE);
+          LUMIERA_ERROR_SET (mmap, MMAP_SPACE, lumiera_filedescriptor_name (file->descriptor));
           goto espace;
         }
 

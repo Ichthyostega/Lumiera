@@ -147,7 +147,7 @@ namespace gui {
                                , LUMIERA_INTERFACE_INLINE (displayInfo, "\366\075\213\163\207\040\221\233\010\366\174\374\317\126\331\205",
                                                            void, (const char* text),
                                                              { 
-                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE);  
+                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, text);
                                                                else
                                                                  _instance->displayInfo(text); 
                                                              }
@@ -155,7 +155,7 @@ namespace gui {
                                , LUMIERA_INTERFACE_INLINE (triggerGuiShutdown, "\267\043\244\065\107\314\370\175\063\330\264\257\302\146\326\303",
                                                            void, (const char* cause),
                                                              { 
-                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE);
+                                                               if (!_instance) lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, cause);
                                                                else
                                                                  _instance->triggerGuiShutdown(cause); 
                                                              }

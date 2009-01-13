@@ -18,6 +18,7 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+#include "lib/safeclib.h"
 #include "common/plugin.h"
 
 #include <dlfcn.h>
@@ -42,18 +43,10 @@ lumiera_plugin_load_DYNLIB (const char* name)
       plugin = (LumieraInterface) dlsym (handle, LUMIERA_INTERFACE_DSTRING (lumieraorg__plugin, 0, lumieraorg_plugin));
 
       if (!plugin)
-        LUMIERA_ERROR_SET (plugin, PLUGIN_WTF);
+        LUMIERA_ERROR_SET (plugin, PLUGIN_WTF, name);
     }
   else
-    LUMIERA_ERROR_SET (plugin, PLUGIN_OPEN);
-
-#ifdef DEBUG
-  if (lumiera_error_peek())
-    {
-      const char* problem = dlerror(); 
-      WARN_IF (problem,  plugin, "Problem opening shared object %s : %s", name, problem);
-    }
-#endif
+    LUMIERA_ERROR_SET (plugin, PLUGIN_OPEN, lumiera_tmpbuf_snprintf (4096, "%s: %s", name, dlerror()));
 
   return lumiera_plugin_init (self, handle, plugin);
 }

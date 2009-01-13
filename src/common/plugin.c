@@ -283,13 +283,13 @@ lumiera_plugin_register (LumieraPlugin plugin)
                   }
                   break;
                 default:
-                  LUMIERA_ERROR_SET (plugin, PLUGIN_VERSION);
+                  LUMIERA_ERROR_SET (plugin, PLUGIN_VERSION, plugin->name);
                 }
             }
         }
       else
         {
-          LUMIERA_ERROR_SET (plugin, PLUGIN_REGISTER);
+          LUMIERA_ERROR_SET (plugin, PLUGIN_REGISTER, plugin->name);
         }
     }
   return !!lumiera_error_peek();

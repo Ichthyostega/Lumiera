@@ -67,19 +67,30 @@ lumiera_err LUMIERA_ERROR_##err = "LUMIERA_ERROR_" #err ":" msg
  * @param flag NoBug flag describing the subsystem where the error was raised
  * @param err name of the error without the 'LUMIERA_ERROR_' prefix (example: NO_MEMORY)
  */
-#define LUMIERA_ERROR_SET(flag, err)                          \
-(({ERROR (flag, "%s", strchr(LUMIERA_ERROR_##err, ':')+1);}), \
-lumiera_error_set(LUMIERA_ERROR_##err))
+#define LUMIERA_ERROR_SET(flag, err, extra)                                                             \
+  do {                                                                                                  \
+  const char* theextra = extra;                                                                         \
+  ERROR (flag, "%s%s%s", strchr(LUMIERA_ERROR_##err, ':')+1, theextra?": ":"", theextra?theextra:"");   \
+  lumiera_error_set(LUMIERA_ERROR_##err, theextra);                                                     \
+  } while (0)
 
 /**
  * Set error state for the current thread.
  * If the error state of the current thread was cleared, then set it, else preserve the old state.
  * @param nerr name of the error with 'LUMIERA_ERROR_' prefix (example: LUMIERA_ERROR_NO_MEMORY)
- * @return old state, that is NULL for success, when the state was cleared and a pointer to a pending 
+ * @param extra a string (possibly a constructed tmpbuf) which adds some more context to the error occured this will be copied
+ * @return old state, that is NULL for success, when the state was cleared and a pointer to a pending
  * error when the error state was already set
  */
 lumiera_err
-lumiera_error_set (lumiera_err err);
+lumiera_error_set (lumiera_err nerr, const char* extra);
+
+/**
+ * Query the extra context for the last error
+ * @return the extra string from the last error
+ */
+const char*
+lumiera_error_extra (void);
 
 /**
  * Get and clear current error state.
