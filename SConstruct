@@ -324,19 +324,18 @@ def defineBuildTargets(env, artifacts):
 #                + env.PrecompiledHeader('$SRCDIR/pre_a.hpp')
 #                )
     
-    objapp  = srcSubtree(env,'$SRCDIR/common')
-    objback = srcSubtree(env,'$SRCDIR/backend') 
-    objproc = srcSubtree(env,'$SRCDIR/proc')
-    objlib  = srcSubtree(env,'$SRCDIR/lib')
     
-    core  = ( env.SharedLibrary('$LIBDIR/lumieracommon', objapp)
-            + env.SharedLibrary('$LIBDIR/lumierabackend', objback)
-            + env.SharedLibrary('$LIBDIR/lumieraproc', objproc)
-            + env.SharedLibrary('$LIBDIR/lumiera',  objlib)
-            )
+    
+    lApp  = env.SharedLibrary('$LIBDIR/lumieracommon',  srcSubtree(env,'$SRCDIR/common'))
+    lBack = env.SharedLibrary('$LIBDIR/lumierabackend', srcSubtree(env,'$SRCDIR/backend'))
+    lProc = env.SharedLibrary('$LIBDIR/lumieraproc',    srcSubtree(env,'$SRCDIR/proc'))
+    lLib  = env.SharedLibrary('$LIBDIR/lumiera',        srcSubtree(env,'$SRCDIR/lib'))
+    
+    core = lLib+lApp+lBack+lProc
     
     artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/lumiera/main.cpp'], LIBS=core)
-    artifacts['corelib'] = core
+    artifacts['corelib'] = lLib+lApp
+    artifacts['support'] = lLib
     
     # building Lumiera Plugins
     envPlu = env.Clone()

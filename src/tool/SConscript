@@ -5,10 +5,11 @@
 
 Import('env','artifacts','core')
 
+support_lib = artifacts['support']
 
 # build the ubiquitous Hello World application (note: C source)
 artifacts['tools'] = [ env.Program('#$BINDIR/hello-world','hello.c')
-                     + env.Program('#$BINDIR/luidgen', ['luidgen.c']+core)
+                     + env.Program('#$BINDIR/luidgen', ['luidgen.c'] + support_lib)
                      + env.Program('#$BINDIR/try', 'try.cpp')             #### to try out some feature...
                      ]
 
