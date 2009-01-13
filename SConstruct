@@ -344,10 +344,10 @@ def defineBuildTargets(env, artifacts):
     
     
     # the Lumiera GTK GUI
-    envgtk = env.Clone()
-    envgtk.mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','librsvg-2.0','xv','xext','sm'])
-    envgtk.Append(CPPDEFINES='LUMIERA_PLUGIN', LIBS=core)
-    objgui  = srcSubtree(envgtk,'$SRCDIR/gui')
+    envGtk = env.Clone()
+    envGtk.mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','librsvg-2.0','xv','xext','sm'])
+    envGtk.Append(CPPDEFINES='LUMIERA_PLUGIN', LIBS=core)
+    objgui  = srcSubtree(envGtk,'$SRCDIR/gui')
     
     # render and install Icons
     vector_icon_dir      = env.subst('$ICONDIR/svg')
@@ -356,17 +356,16 @@ def defineBuildTargets(env, artifacts):
                            + [env.IconCopy(f)   for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
                            )
     
-    guimodule = envgtk.LoadableModule('$LIBDIR/gtk_gui', objgui, SHLIBPREFIX='', SHLIBSUFFIX='.lum')
+    guimodule = envGtk.LoadableModule('$LIBDIR/gtk_gui', objgui, SHLIBPREFIX='', SHLIBSUFFIX='.lum')
     artifacts['lumigui'] = ( guimodule
-                           + envgtk.Program('$BINDIR/lumigui', objgui )
+                           + envGtk.Program('$BINDIR/lumigui', objgui )
                            + env.Install('$BINDIR', env.Glob('$SRCDIR/gui/*.rc'))
                            + artifacts['icons']
                            )
     
     # call subdir SConscript(s) for independent components
-    SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts core')
-    SConscript(dirs=['admin'], exports='env envgtk artifacts core')
-    SConscript(dirs=[TESTDIR], exports='env envPlu artifacts core')
+    SConscript(dirs=[SRCDIR+'/tool'], exports='env envGtk artifacts core')
+    SConscript(dirs=[TESTDIR],        exports='env envPlu artifacts core')
 
 
 
