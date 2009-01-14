@@ -125,6 +125,8 @@ libgui_la_SOURCES =							\
 	$(lumigui_srcdir)/widgets/timeline-widget.hpp			\
 	$(lumigui_srcdir)/widgets/timeline/timeline-view-window.cpp	\
 	$(lumigui_srcdir)/widgets/timeline/timeline-view-window.hpp	\
+	$(lumigui_srcdir)/widgets/timeline/timeline-header-widget.cpp	\
+	$(lumigui_srcdir)/widgets/timeline/timeline-header-widget.hpp	\
 	$(lumigui_srcdir)/widgets/timeline/timeline-header-container.cpp	\
 	$(lumigui_srcdir)/widgets/timeline/timeline-header-container.hpp	\
 	$(lumigui_srcdir)/widgets/timeline/timeline-body.cpp		\

@@ -40,9 +40,7 @@ namespace timeline {
 TimelineHeaderContainer::TimelineHeaderContainer(
   gui::widgets::TimelineWidget &timeline_widget) :
     Glib::ObjectBase("TimelineHeaderContainer"),
-    timelineWidget(timeline_widget),
-    margin(-1),
-    expand_button_size(12)
+    timelineWidget(timeline_widget)
 {
   // This widget will not have a window at first
   set_flags(Gtk::NO_WINDOW);
@@ -65,12 +63,6 @@ TimelineHeaderContainer::TimelineHeaderContainer(
   menu_list.push_back( Menu_Helpers::MenuElem(_("_Add Track"),
     sigc::mem_fun(timelineWidget,
     &TimelineWidget::on_add_track_command) ) );
-    
-  // Install style properties
-  register_styles();
-  
-  // Load the styles up
-  read_styles();
 }
  
 void
@@ -148,19 +140,7 @@ bool TimelineHeaderContainer::on_button_press_event (
   
   switch(event->button)
     {
-    case 1: // Left Click
-      // Did the user press the button on an expander?
-      if(hoveringExpander)
-        {
-          // Yes? The prime for a release event
-          clickedExpander = hoveringExpander;
-          queue_draw();
-        }
-      else if(hoveringTrack)  // Is the user hovering on a track
-        {
-          
-        }
-        
+    case 1: // Left Click        
       break;
       
     case 3: // Right Click
@@ -194,17 +174,6 @@ bool TimelineHeaderContainer::on_button_release_event (
 {
   TimelineLayoutHelper &layout = timelineWidget.layoutHelper;
   
-  // Did the user release the button on an expander?
-  if(clickedExpander != NULL)
-    {
-      // Yes? The toggle the expanding
-      clickedExpander->expand_collapse(
-        clickedExpander->get_expanded() ? Track::Collapse : Track::Expand);
-      clickedExpander.reset();
-      
-      layout.update_layout();
-    }
-    
   // Has the user been dragging?
   if(layout.get_dragging_track())
     layout.end_dragging_track();
@@ -216,45 +185,35 @@ bool TimelineHeaderContainer::on_motion_notify_event (
   GdkEventMotion* event)
 {
   REQUIRE(event != NULL);
+  REQUIRE(gdkWindow);
   
   const bool result = Container::on_motion_notify_event(event);  
-  
-  const Gdk::Point point(event->x, event->y);
-  TimelineLayoutHelper &layout = timelineWidget.layoutHelper;
+
+  TimelineLayoutHelper &layout = timelineWidget.layoutHelper;  
+
+  // Get the mouse point
+  int window_x = 0, window_y = 0;
+  gdkWindow->get_origin(window_x, window_y);
+  mousePoint = Gdk::Point(event->x_root - window_x,
+    event->y_root - window_y);
   
   // Are we beginning to drag a header?
   if((event->state & GDK_BUTTON1_MASK) && hoveringTrack &&
-    !hoveringExpander && !layout.get_dragging_track())
+    !layout.get_dragging_track())
     {
-      layout.begin_dragging_track(hoveringTrack);
+      layout.begin_dragging_track(mousePoint);
       return result;
     }
     
   // Are we currently dragging?
   if(layout.get_dragging_track())
     {
-      layout.drag_to_point(point);
+      layout.drag_to_point(mousePoint);
       return result;
     }
   
   // Hit test the rectangle
-  hoveringTrack = layout.header_from_point(point);
-  
-  if(hoveringTrack)
-    {
-      const optional<Gdk::Rectangle> rect =
-        get_expander_button_rectangle(hoveringTrack);
-      
-      REQUIRE(rect);
-
-      // Are we hovering on the expander?
-      if(util::pt_in_rect(point, *rect))
-        {
-          hoveringExpander = hoveringTrack;
-          queue_draw();
-        }
-      else hoveringExpander.reset();
-    }
+  hoveringTrack = layout.header_from_point(mousePoint);
     
   return result;
 }
@@ -295,8 +254,7 @@ TimelineHeaderContainer::on_size_allocate (Allocation& allocation)
   // Resize the widget's window
   if(gdkWindow)
     {
-      gdkWindow->move(allocation.get_x(), allocation.get_y());
-      gdkWindow->resize(
+      gdkWindow->move_resize(allocation.get_x(), allocation.get_y(),
         allocation.get_width(), allocation.get_height());
     }
   
@@ -330,35 +288,6 @@ TimelineHeaderContainer::on_layout_changed()
   layout_headers();
 }
 
-bool
-TimelineHeaderContainer::on_expose_event(GdkEventExpose *event)
-{ 
-  if(gdkWindow)
-    {
-      const Allocation container_allocation = get_allocation();
-       
-      // Paint a border underneath all the headers
-      const TimelineLayoutHelper::TrackTree &layout_tree =
-        timelineWidget.layoutHelper.get_layout_tree();
-      
-      TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
-      for(iterator = ++layout_tree.begin(); // ++ so that we skip the sequence root
-        iterator != layout_tree.end();
-        iterator++)
-        {
-          shared_ptr<model::Track> model_track = *iterator;
-          REQUIRE(model_track);
-          
-          draw_header_decoration(model_track,
-            Gdk::Rectangle(0, 0,
-              container_allocation.get_width(),
-              container_allocation.get_height()));
-        }
-    }
-
-  return Container::on_expose_event(event);
-}
-  
 void
 TimelineHeaderContainer::on_scroll()
 {
@@ -373,15 +302,12 @@ TimelineHeaderContainer::on_hovering_track_changed(
 {
   (void)hovering_track;
   
-  // The hovering track has changed, redraw so we can light the header
-  queue_draw();
+
 }
   
 void
 TimelineHeaderContainer::layout_headers()
 { 
-  REQUIRE(margin >= 0); // read_styles must have been called before now
-
   // We can't layout before the widget has been set up
   if(!gdkWindow)
     return;
@@ -390,6 +316,9 @@ TimelineHeaderContainer::layout_headers()
     timelineWidget.layoutHelper;
   const TimelineLayoutHelper::TrackTree &layout_tree =
     layout_helper.get_layout_tree();
+    
+  shared_ptr<timeline::Track> dragging_track =
+    layout_helper.get_dragging_track();
   
   TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
   for(iterator = ++layout_tree.begin(); // ++ so that we skip the sequence root
@@ -408,17 +337,9 @@ TimelineHeaderContainer::layout_headers()
         {
           REQUIRE(header_rect->get_width() >= 0);
           REQUIRE(header_rect->get_height() >= 0);
-            
-          // Calculate the allocation of the header widget
-          Allocation header_allocation(
-            header_rect->get_x() + margin + expand_button_size,   // x
-            header_rect->get_y() + margin,                        // y
-            max( header_rect->get_width() - expand_button_size -
-              margin * 2, 0 ),                                    // width
-            header_rect->get_height() - margin * 2);              // height
           
           // Apply the allocation to the header
-          widget.size_allocate (header_allocation);
+          widget.size_allocate (*header_rect);
           if(!widget.is_visible())
             widget.show();
         }
@@ -426,78 +347,9 @@ TimelineHeaderContainer::layout_headers()
         if(widget.is_visible())
           widget.hide();
     }
-    
+  
   // Repaint the background of our parenting
-  queue_draw ();
-}
-
-void
-TimelineHeaderContainer::draw_header_decoration(
-    shared_ptr<model::Track> model_track,
-    const Gdk::Rectangle &clip_rect)
-{
-  REQUIRE(model_track != NULL);
-  REQUIRE(clip_rect.get_width() > 0);
-  REQUIRE(clip_rect.get_height() > 0);
-  
-  Glib::RefPtr<Style> style = get_style();
-  REQUIRE(style);
-  
-  shared_ptr<timeline::Track> timeline_track =
-    lookup_timeline_track(model_track);
-  
-  // Get the header box  
-  const optional<Gdk::Rectangle> &optional_box = 
-    timelineWidget.layoutHelper.get_track_header_rect(timeline_track);
-  if(!optional_box)
-    return;
-  const Gdk::Rectangle box = *optional_box;
-  
-  // Don't paint the box, if it won't be visible
-  if(box.get_x() >= clip_rect.get_width() ||
-    box.get_height() <= 0 ||
-    box.get_y() + box.get_height() <= clip_rect.get_y()  ||
-    box.get_y() >= clip_rect.get_y() + clip_rect.get_height())
-    return;
-
-  // Use paint_box to draw a themed bevel around the header
-  style->paint_box(gdkWindow, STATE_NORMAL,
-    SHADOW_OUT, clip_rect, *this, "",
-    box.get_x(), box.get_y(),
-    box.get_width(), box.get_height());
-    
-  // Paint the expander if there are child tracks
-  StateType state_type = STATE_NORMAL;
-  if(clickedExpander == timeline_track)
-    state_type = STATE_SELECTED;
-  else if(hoveringExpander == timeline_track)
-    state_type = STATE_PRELIGHT;
-  
-  if(!model_track->get_child_tracks().empty())
-    style->paint_expander (gdkWindow,
-      state_type, 
-      clip_rect, *this, "",
-      box.get_x() + expand_button_size / 2 + margin,
-      box.get_y() + box.get_height() / 2,
-      timeline_track->get_expander_style());
-}
-
-const optional<Gdk::Rectangle>
-TimelineHeaderContainer::get_expander_button_rectangle(
-  shared_ptr<Track> track)
-{
-  REQUIRE(track != NULL);
-  
-  optional<Gdk::Rectangle> box =
-    timelineWidget.layoutHelper.get_track_header_rect(track);
-  if(box)
-    {
-      return optional<Gdk::Rectangle>(Gdk::Rectangle(
-        margin + box->get_x(), margin + box->get_y(),
-        expand_button_size, box->get_height() - margin * 2));
-    }
-    
-  return optional<Gdk::Rectangle>();
+  queue_draw();
 }
 
 shared_ptr<timeline::Track>
@@ -511,35 +363,6 @@ TimelineHeaderContainer::lookup_timeline_track(
   ENSURE(timeline_track);
   
   return timeline_track;
-}
-
-void
-TimelineHeaderContainer::register_styles() const
-{
-  static bool registered = false;
-  if(registered) return;
-  registered = true;
-  
-  GtkWidgetClass *klass = GTK_WIDGET_CLASS(G_OBJECT_GET_CLASS(gobj()));
-
-  gtk_widget_class_install_style_property(klass, 
-    g_param_spec_int("heading_margin",
-    "Heading Margin",
-    "The amount of padding around each header pixels.",
-    0, G_MAXINT, 4, G_PARAM_READABLE));
-}
-
-void
-TimelineHeaderContainer::read_styles()
-{
-  if(margin <= 0)
-    {
-      get_style_property("heading_margin", margin);
-      margin = max(margin, 0);
-    }
-  else 
-    WARN(gui, "TimelineHeaderContainer::read_styles()"
-      " should only be called once");
 }
 
 }   // namespace timeline

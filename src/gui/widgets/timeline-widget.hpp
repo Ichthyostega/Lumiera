@@ -314,6 +314,7 @@ protected:
   friend class timeline::TimelineViewWindow;
   friend class timeline::TimelineBody;
   friend class timeline::TimelineHeaderContainer;
+  friend class timeline::TimelineHeaderWidget;
   friend class timeline::TimelineLayoutHelper;
   friend class timeline::TimelineRuler;
   friend class timeline::Tool;

@@ -27,6 +27,7 @@
 #include "../../model/track.hpp"
 #include "../menu-button.hpp"
 #include "timeline-header-container.hpp"
+#include "timeline-header-widget.hpp"
 
 #ifndef TIMELINE_TRACK_HPP
 #define TIMELINE_TRACK_HPP
@@ -176,7 +177,9 @@ private:
 
   //----- Header Widgets ------//
   
-  Gtk::VBox headerWidget;
+  timeline::TimelineHeaderWidget headerWidget;
+  
+  Gtk::VBox headerBox;
   
   MenuButton titleMenuButton;
   
@@ -187,6 +190,8 @@ private:
   Gtk::Toolbar buttonBar;
   
   Gtk::Menu contextMenu;
+  
+  friend class TimelineHeaderWidget;
 };
 
 

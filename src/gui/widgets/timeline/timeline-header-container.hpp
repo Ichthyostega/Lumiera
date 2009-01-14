@@ -132,11 +132,6 @@ private:
   void on_layout_changed();
 
   /**
-   * An event handler for when the window must be redrawn.
-   */
-  bool on_expose_event(GdkEventExpose *event);
-
-  /**
    * This event is called when the scroll bar moves.
    */  
   void on_scroll();
@@ -166,15 +161,6 @@ private:
     const Gdk::Rectangle &clip_rect);
   
   /**
-   * Gets the rectangular hit-target area of a track header's expander
-   * button.
-   * @param track The track to get the expander button rectangle of.
-   * @return Returns the rectangle of the expander button of track.
-   **/
-  const boost::optional<Gdk::Rectangle> get_expander_button_rectangle(
-    boost::shared_ptr<timeline::Track> track);
-  
-  /**
    * A helper function which calls lookup_timeline_track within the
    * parent timeline widget, but also applies lots of data consistency
    * checks in the process.
@@ -186,16 +172,6 @@ private:
    **/
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
     boost::shared_ptr<model::Track> model_track);
-  
-  /**
-   * Registers all the styles that this class will respond to.
-   */
-  void register_styles() const;
-  
-  /**
-   * Reads styles from the present stylesheet.
-   */
-  void read_styles();
   
 private:
 
@@ -220,27 +196,11 @@ private:
    **/
   Gtk::Menu contextMenu;
     
-  //----- User Interaction State -----//
+  //----- User Interaction State -----//  
   boost::shared_ptr<timeline::Track> hoveringTrack;
-  
-  boost::shared_ptr<timeline::Track> hoveringExpander;
-  
-  boost::shared_ptr<timeline::Track> clickedExpander;
 
-  //----- Style Values -----//
-  
-  /**
-   * The style value which indicates the amount of padding around each
-   * header pixels.
-   **/
-  int margin;
-  
-  /**
-   * The style value which indicates the size to draw the expand button
-   * in pixels.
-   **/
-  int expand_button_size;
-  
+  Gdk::Point mousePoint;
+
   friend class gui::widgets::TimelineWidget;
   friend class timeline::Track;
 };

@@ -128,16 +128,22 @@ TimelineLayoutHelper::track_from_y(int y)
   return shared_ptr<timeline::Track>();
 }
 
-void
+bool
 TimelineLayoutHelper::begin_dragging_track(
-  boost::shared_ptr<timeline::Track> track)
+  const Gdk::Point &mouse_point)
 {
-  REQUIRE(track);
-  draggingTrack = track;
-  g_message("begin_dragging_track");
+  draggingTrack = header_from_point(mouse_point);
+  if(!draggingTrack)
+    return false;
+    
+  const Gdk::Rectangle &rect = headerBoxes[draggingTrack];
+  dragStartOffset = Gdk::Point(
+    mouse_point.get_x() - rect.get_x(),
+    mouse_point.get_y() - rect.get_y());
   
   // Find the track in the tree
-  const shared_ptr<model::Track> model_track = track->get_model_track();
+  const shared_ptr<model::Track> model_track =
+    draggingTrack->get_model_track();
   REQUIRE(model_track);
   for(draggingTrackIter = layoutTree.begin();
     draggingTrackIter != layoutTree.end();
@@ -146,6 +152,8 @@ TimelineLayoutHelper::begin_dragging_track(
       if(*draggingTrackIter == model_track)
         break;
     }
+    
+  return true;
 }
 
 void
@@ -163,10 +171,11 @@ TimelineLayoutHelper::get_dragging_track() const
 }
 
 void
-TimelineLayoutHelper::drag_to_point(Gdk::Point point)
+TimelineLayoutHelper::drag_to_point(const Gdk::Point &point)
 {
   // Apply the scroll offset
-  point.set_y(point.get_y() + timelineWidget.get_y_scroll_offset());
+  dragPoint = Gdk::Point(point.get_x(),
+    point.get_y() + timelineWidget.get_y_scroll_offset());
   
   // Search the headers
   TrackTree::pre_order_iterator iterator;
@@ -240,12 +249,13 @@ TimelineLayoutHelper::layout_headers_recursive(
     iterator != layoutTree.end(parent_iterator);
     iterator++)
     {
+      Gdk::Rectangle rect;
       const shared_ptr<model::Track> &model_track = *iterator;
       REQUIRE(model_track);
       
       shared_ptr<timeline::Track> timeline_track =
         lookup_timeline_track(model_track);
-      
+            
       // Is the track going to be shown?
       if(parent_expanded)
         {          
@@ -253,7 +263,7 @@ TimelineLayoutHelper::layout_headers_recursive(
           const int track_height = timeline_track->get_height();
           const int indent = depth * indent_width;
           
-          headerBoxes[timeline_track] = Gdk::Rectangle(
+          rect = Gdk::Rectangle(
             indent,                                           // x
             branch_offset + child_offset,                     // y
             max( header_width - indent, 0 ),                  // width
@@ -261,7 +271,17 @@ TimelineLayoutHelper::layout_headers_recursive(
           
           // Offset for the next header
           child_offset += track_height + TimelineWidget::TrackPadding;
+          
+          // Is this header being dragged?
+          if(timeline_track == draggingTrack)
+            {
+              rect.set_y(dragPoint.get_y() - dragStartOffset.get_y());
+            }
+            
+          headerBoxes[timeline_track] = rect;
         }
+        
+
         
       // Is the track animating?
       const bool is_track_animating =

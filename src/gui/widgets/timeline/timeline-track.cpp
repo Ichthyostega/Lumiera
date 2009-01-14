@@ -44,6 +44,7 @@ Track::Track(TimelineWidget &timeline_widget,
   model_track(track),
   expanded(true),
   expandDirection(None),
+  headerWidget(*this),
   enableButton(Gtk::StockID("track_enabled")),
   lockButton(Gtk::StockID("track_unlocked"))
 {
@@ -65,9 +66,11 @@ Track::Track(TimelineWidget &timeline_widget,
   gtk_toolbar_set_icon_size (buttonBar.gobj(),
     (GtkIconSize)(int)WindowManager::MenuIconSize);
 #endif
+  
+  headerWidget.set_child_widget(headerBox);
 
-  headerWidget.pack_start(titleMenuButton, PACK_SHRINK);
-  headerWidget.pack_start(buttonBar, PACK_SHRINK);
+  headerBox.pack_start(titleMenuButton, PACK_SHRINK);
+  headerBox.pack_start(buttonBar, PACK_SHRINK);
   
   // Setup the title menu button
   Menu::MenuList& title_list = titleMenuButton.get_menu().items();
