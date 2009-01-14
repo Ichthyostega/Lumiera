@@ -42,6 +42,7 @@
 #include <set>
 #include <string>
 #include <tr1/functional>
+#include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
 #include "lib/util.hpp"
@@ -49,6 +50,7 @@
 
 namespace lumiera {
   
+  using boost::scoped_ptr;
   using boost::noncopyable;
   using std::tr1::function;
   using util::contains;
@@ -89,11 +91,25 @@ namespace lumiera {
         }
       
       
+      /** get the (single) LifecycleRegistry instance. 
+       *  @warning don't use it after the end of main()! */
+      static LifecycleRegistry& instance()   // Meyer's singleton
+        {
+          static scoped_ptr<LifecycleRegistry> theRegistry_;
+          if (!theRegistry_) theRegistry_.reset (new LifecycleRegistry ());
+          return *theRegistry_;
+        }
+      
+      
     private:
       std::map<const string, Callbacks> table_;
       
-      LifecycleRegistry ()  {}
-      friend class AppState;
+      LifecycleRegistry ()  {
+        execute (ON_BASIC_INIT);   // just to be sure, typically a NOP, because nothing is registered yet 
+      }
+      
+      ~LifecycleRegistry () {}
+      friend void boost::checked_delete<LifecycleRegistry>(LifecycleRegistry*);
       
     };
 

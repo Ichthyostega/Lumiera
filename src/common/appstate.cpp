@@ -24,7 +24,6 @@
 #include "lib/error.hpp"
 #include "include/lifecycle.h"
 #include "common/appstate.hpp"
-#include "lib/lifecycleregistry.hpp"
 #include "common/subsystem-runner.hpp"
 
 extern "C" {
@@ -51,7 +50,16 @@ namespace lumiera {
     {
       if (const char * errorstate = lumiera_error ())
         ERROR (NOBUG_ON, "*** Unexpected error: %s\n     Triggering emergency exit.", errorstate);
-  } }
+    }
+    
+    void
+    createAppStateInstance(){
+      AppState::instance();
+    }
+    
+    LifecycleHook schedule_ (ON_BASIC_INIT, &createAppStateInstance);         
+    
+  }
   
   
   
@@ -67,13 +75,10 @@ namespace lumiera {
    *  client codes POV it just behaves like intended). 
    */
   AppState::AppState()
-    : lifecycleHooks_(new LifecycleRegistry)
-    , subsystems_(0)
+    : subsystems_(0)
     , emergency_(false)
     , core_up_ (false)
-  {
-    lifecycleHooks_->execute (ON_BASIC_INIT);   // note in most cases a NOP
-  }
+  { }
   
   
   
@@ -84,14 +89,6 @@ namespace lumiera {
     static scoped_ptr<AppState> theApp_ (0);
     if (!theApp_) theApp_.reset (new AppState ());
     return *theApp_;
-  }
-  
-  
-  
-  void
-  AppState::lifecycle (Symbol event_label)
-  {
-    instance().lifecycleHooks_->execute(event_label);
   }
   
   
@@ -124,7 +121,7 @@ namespace lumiera {
     _THROW_IF
     
     core_up_= true;
-    AppState::lifecycle (ON_GLOBAL_INIT);
+    LifecycleHook::trigger (ON_GLOBAL_INIT);
     _THROW_IF
     
     
@@ -173,12 +170,12 @@ namespace lumiera {
     if (emergency_)
       {
         ERROR (operate, "Triggering emergency exit...");
-        lifecycle (ON_EMERGENCY);
+        LifecycleHook::trigger (ON_EMERGENCY);
         return CLEAN_EMERGENCY_EXIT;
       }
     else
       {
-        lifecycle (ON_GLOBAL_SHUTDOWN);
+        LifecycleHook::trigger (ON_GLOBAL_SHUTDOWN);
         return NORMAL_EXIT;
       }
   }
@@ -219,12 +216,12 @@ namespace lumiera {
     
     if (emergency_)
       {
-        lifecycle (ON_EMERGENCY);
+        LifecycleHook::trigger (ON_EMERGENCY);
         return FAILED_EMERGENCY_EXIT;
       }
     else
       {
-        lifecycle (ON_GLOBAL_SHUTDOWN);
+        LifecycleHook::trigger (ON_GLOBAL_SHUTDOWN);
         return CLEAN_EXIT_AFTER_ERROR;
       }
   }
@@ -256,70 +253,4 @@ namespace lumiera {
   
   
   
-  
-  // ==== implementation LifecycleHook class =======
-  
-  typedef LifecycleRegistry::Hook Callback;
-  
-  
-  LifecycleHook::LifecycleHook (Symbol eventLabel, Callback callbackFun)
-  {
-    add (eventLabel,callbackFun);
-  }
-  
-  void
-  LifecycleHook::add (Symbol eventLabel, Callback callbackFun)
-  {
-    bool isNew = AppState::instance().lifecycleHooks_->enroll (eventLabel,callbackFun);
-    
-    if (isNew && !strcmp(ON_BASIC_INIT, eventLabel))
-      callbackFun();  // when this code executes,
-                     //  then per definition we are already post "basic init"
-                    //   (which happens in the AppState ctor); thus fire it immediately
-  }
-  
-  
-  void
-  LifecycleHook::trigger (Symbol eventLabel)
-  {
-    AppState::lifecycle (eventLabel);
-  }
-  
-  
-  
-  Symbol ON_BASIC_INIT      ("ON_BASIC_INIT");
-  Symbol ON_GLOBAL_INIT     ("ON_GLOBAL_INIT");
-  Symbol ON_GLOBAL_SHUTDOWN ("ON_GLOBAL_SHUTDOWN");
-  
-  Symbol ON_EMERGENCY       ("ON_EMERGENCY");
-  
-  
 } // namespace lumiera
-
-
-extern "C" { /* ==== implementation C interface for lifecycle hooks ======= */
-  
-  
-  extern const char * lumiera_ON_BASIC_INIT       = lumiera::ON_BASIC_INIT;
-  extern const char * lumiera_ON_GLOBAL_INIT      = lumiera::ON_GLOBAL_INIT;
-  extern const char * lumiera_ON_GLOBAL_SHUTDOWN  = lumiera::ON_GLOBAL_SHUTDOWN;
-  
-  extern const char * lumiera_ON_EMERGENCY        = lumiera::ON_EMERGENCY;
-  
-  
-  
-  void 
-  lumiera_LifecycleHook_add (const char* eventLabel, void callbackFun(void))
-  {
-    lumiera::LifecycleHook (eventLabel, callbackFun);
-  }
-  
-  
-  void
-  lumiera_Lifecycle_trigger (const char* eventLabel)
-  {
-    lumiera::AppState::lifecycle (eventLabel);
-  }
-  
-}
-

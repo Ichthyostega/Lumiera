@@ -36,8 +36,9 @@ liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/time.c				\
 	$(liblumiera_la_srcdir)/resourcecollector.c		\
 	$(liblumiera_la_srcdir)/allocationcluster.cpp		\
-	$(liblumiera_la_srcdir)/external/libgavl.cpp		\
 	$(liblumiera_la_srcdir)/lumitime.cpp			\
+	$(liblumiera_la_srcdir)/lifecycle.cpp			\
+	$(liblumiera_la_srcdir)/nobugcfg.cpp			\
 	$(liblumiera_la_srcdir)/util.cpp			\
 	$(liblumiera_la_srcdir)/visitor.cpp			\
 	$(liblumiera_la_srcdir)/query.cpp			\
@@ -64,7 +65,6 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/allocationcluster.hpp		\
 	$(liblumiera_la_srcdir)/scopedholdertransfer.hpp	\
 	$(liblumiera_la_srcdir)/scopedholder.hpp		\
-	$(liblumiera_la_srcdir)/external/libgavl.hpp		\
 	$(liblumiera_la_srcdir)/lifecycleregistry.hpp		\
 	$(liblumiera_la_srcdir)/factory.hpp			\
 	$(liblumiera_la_srcdir)/frameid.hpp			\

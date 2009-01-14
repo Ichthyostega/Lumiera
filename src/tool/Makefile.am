@@ -18,10 +18,19 @@
 lumitool_srcdir = $(top_srcdir)/src/tool
 
 noinst_PROGRAMS += luidgen
-
 luidgen_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
 luidgen_CPPFLAGS = -I$(top_srcdir)/src/
-luidgen_SOURCES =                                   \
-	$(lumitool_srcdir)/luidgen.c
+luidgen_LDADD = liblumiera.la  $(NOBUGMT_LUMIERA_LIBS)                liblumieracommon.la liblumieraproc.la -lboost_regex-mt -lboost_program_options-mt -ldl
+luidgen_SOURCES = $(lumitool_srcdir)/luidgen.c
 
-luidgen_LDADD = liblumiera.la  $(NOBUGMT_LUMIERA_LIBS)   liblumieracommon.la liblumieraproc.la -lboost_regex-mt -lboost_program_options-mt -ldl
+
+noinst_PROGRAMS += vgsuppression
+vgsuppression_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
+vgsuppression_LDADD = liblumiera.la $(NOBUGMT_LUMIERA_LIBS) -ldl      liblumieracommon.la liblumieraproc.la -lboost_regex-mt -lboost_program_options-mt -ldl
+vgsuppression_SOURCES = $(admin_srcdir)/vgsuppression.c
+
+
+noinst_PROGRAMS += rsvg-convert
+rsvg_convert_CPPFLAGS = $(AM_CPPFLAGS) $(LUMIERA_GUI_CFLAGS) -std=gnu99 -Wall -Werror
+rsvg_convert_LDADD = -lcairo -lglib-2.0 -lgthread-2.0 -lrsvg-2
+rsvg_convert_SOURCES = $(admin_srcdir)/rsvg-convert.c

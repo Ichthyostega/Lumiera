@@ -28,6 +28,7 @@ CUSTOPTIONSFILE  = 'custom-options'
 SRCDIR           = 'src'
 BINDIR           = 'bin'
 LIBDIR           = '.libs'
+PLUGDIR          = '.libs'
 TESTDIR          = 'tests'
 ICONDIR          = 'icons'
 VERSION          = '0.1+pre.01'
@@ -74,6 +75,7 @@ def setupBasicEnvironment():
                , SRCDIR=SRCDIR
                , BINDIR=BINDIR
                , LIBDIR=LIBDIR
+               , PLUGDIR=PLUGDIR
                , ICONDIR=ICONDIR
                , CPPPATH=["#"+SRCDIR]   # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['-DLUMIERA_VERSION='+VERSION ]     # note: it's a list to append further defines
@@ -322,28 +324,30 @@ def defineBuildTargets(env, artifacts):
 #                + env.PrecompiledHeader('$SRCDIR/pre_a.hpp')
 #                )
     
-    objapp  = srcSubtree(env,'$SRCDIR/common')
-    objback = srcSubtree(env,'$SRCDIR/backend') 
-    objproc = srcSubtree(env,'$SRCDIR/proc')
-    objlib  = srcSubtree(env,'$SRCDIR/lib')
     
-    core  = ( env.SharedLibrary('$LIBDIR/lumieracommon', objapp)
-            + env.SharedLibrary('$LIBDIR/lumierabackend', objback)
-            + env.SharedLibrary('$LIBDIR/lumieraproc', objproc)
-            + env.SharedLibrary('$LIBDIR/lumiera',  objlib)
-            )
+    
+    lApp  = env.SharedLibrary('$LIBDIR/lumieracommon',  srcSubtree(env,'$SRCDIR/common'))
+    lBack = env.SharedLibrary('$LIBDIR/lumierabackend', srcSubtree(env,'$SRCDIR/backend'))
+    lProc = env.SharedLibrary('$LIBDIR/lumieraproc',    srcSubtree(env,'$SRCDIR/proc'))
+    lLib  = env.SharedLibrary('$LIBDIR/lumiera',        srcSubtree(env,'$SRCDIR/lib'))
+    
+    core = lLib+lApp+lBack+lProc
     
     artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/lumiera/main.cpp'], LIBS=core)
-    artifacts['corelib'] = core
+    artifacts['corelib'] = lLib+lApp
+    artifacts['support'] = lLib
     
-    
+    # building Lumiera Plugins
+    envPlu = env.Clone()
+    envPlu.Append(CPPDEFINES='LUMIERA_PLUGIN')
     artifacts['plugins'] = [] # currently none 
     
     
     # the Lumiera GTK GUI
-    envgtk  = env.Clone().mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','librsvg-2.0','xv','xext','sm'])
-    envgtk.Append(CPPDEFINES='LUMIERA_PLUGIN', LIBS=core)
-    objgui  = srcSubtree(envgtk,'$SRCDIR/gui')
+    envGtk = env.Clone()
+    envGtk.mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','librsvg-2.0','xv','xext','sm'])
+    envGtk.Append(CPPDEFINES='LUMIERA_PLUGIN', LIBS=core)
+    objgui  = srcSubtree(envGtk,'$SRCDIR/gui')
     
     # render and install Icons
     vector_icon_dir      = env.subst('$ICONDIR/svg')
@@ -352,17 +356,16 @@ def defineBuildTargets(env, artifacts):
                            + [env.IconCopy(f)   for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
                            )
     
-    guimodule = envgtk.LoadableModule('$LIBDIR/gtk_gui', objgui, SHLIBPREFIX='', SHLIBSUFFIX='.lum')
+    guimodule = envGtk.LoadableModule('$LIBDIR/gtk_gui', objgui, SHLIBPREFIX='', SHLIBSUFFIX='.lum')
     artifacts['lumigui'] = ( guimodule
-                           + envgtk.Program('$BINDIR/lumigui', objgui )
+                           + envGtk.Program('$BINDIR/lumigui', objgui )
                            + env.Install('$BINDIR', env.Glob('$SRCDIR/gui/*.rc'))
                            + artifacts['icons']
                            )
     
     # call subdir SConscript(s) for independent components
-    SConscript(dirs=[SRCDIR+'/tool'], exports='env artifacts core')
-    SConscript(dirs=['admin'], exports='env envgtk artifacts core')
-    SConscript(dirs=[TESTDIR], exports='env artifacts core')
+    SConscript(dirs=[SRCDIR+'/tool'], exports='env envGtk artifacts core')
+    SConscript(dirs=[TESTDIR],        exports='env envPlu artifacts core')
 
 
 

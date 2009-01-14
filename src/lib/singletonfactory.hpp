@@ -58,7 +58,7 @@ namespace lumiera {
    *       http://www.opengroup.org/onlinepubs/000095399/basedefs/xbd_chap04.html#tag_04_10
    * @param SI the class of the Singleton instance
    * @param Create policy defining how to create/destroy the instance
-   * @oaram Life policy defining how to manage Singleton Lifecycle
+   * @param Life policy defining how to manage Singleton Lifecycle
    */
   template
     < class SI
@@ -133,12 +133,14 @@ namespace lumiera {
   
   
   
-///// TODO: get rid of the static fields?
-/////       is tricky because of invoking the destructors. If we rely on instance vars,
+///// Question: can we get rid of the static fields?
+/////       this is tricky because of invoking the destructors. If we rely on instance vars,
 /////       the object may already have been released when the runtime system calls the
 /////       destructors of static objects at shutdown.
 /////       It seems this would either cost us much of the flexibility or get complicated
 /////       to a point where we could as well implement our own Dependency Injection Manager.
+/////       But the whole point of my pervasive use of this singleton template is to remain
+/////       below this borderline of integration ("IoC yes, but avoid DI").
   
 } // namespace lumiera
 #endif
