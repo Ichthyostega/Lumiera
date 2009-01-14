@@ -35,7 +35,7 @@ main (int argc, char** argv)
 
   if (!strcmp(argv[1], "set"))
     {
-      lumiera_error_set (LUMIERA_ERROR_TEST);
+      lumiera_error_set (LUMIERA_ERROR_TEST, NULL);
     }
 
   if (!strcmp(argv[1], "get_no"))
@@ -47,7 +47,7 @@ main (int argc, char** argv)
 
   if (!strcmp(argv[1], "get"))
     {
-      lumiera_error_set (LUMIERA_ERROR_TEST);
+      lumiera_error_set (LUMIERA_ERROR_TEST, NULL);
       const char* err;
       err = lumiera_error ();
       printf ("%s\n", err);
@@ -55,7 +55,7 @@ main (int argc, char** argv)
 
   if (!strcmp(argv[1], "get2"))
     {
-      lumiera_error_set (LUMIERA_ERROR_TEST);
+      lumiera_error_set (LUMIERA_ERROR_TEST, NULL);
       const char* err;
       err = lumiera_error ();
       printf ("%s\n", err);

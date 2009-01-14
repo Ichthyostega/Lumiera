@@ -77,12 +77,12 @@ lumiera_config_number_get (const char* key, long long* value)
               /* got it, scan it */
               if (sscanf (raw_value, "%Li", value) != 1)
                 {
+                  LUMIERA_ERROR_SET (config_typed, CONFIG_SYNTAX_VALUE, lumiera_tmpbuf_snprintf (5000, "key '%s', value '%s'", key, raw_value));
                   raw_value = NULL;
-                  LUMIERA_ERROR_SET (config_typed, CONFIG_SYNTAX_VALUE);
                 }
             }
           else
-            LUMIERA_ERROR_SET (configsys, CONFIG_NO_ENTRY);
+            LUMIERA_ERROR_SET (configsys, CONFIG_NO_ENTRY, key);
         }
     }
 
@@ -176,7 +176,7 @@ scan_string (const char* in)
         }
       else
         /* quotes doesnt match */
-        LUMIERA_ERROR_SET (config_typed, CONFIG_SYNTAX_VALUE);
+        LUMIERA_ERROR_SET (config_typed, CONFIG_SYNTAX_VALUE, "unmatched quotes");
     }
   else
     {
@@ -208,7 +208,7 @@ lumiera_config_string_get (const char* key, const char** value)
               *value = scan_string (raw_value);
             }
           else
-            LUMIERA_ERROR_SET (configsys, CONFIG_NO_ENTRY);
+            LUMIERA_ERROR_SET (configsys, CONFIG_NO_ENTRY, key);
         }
     }
 
@@ -253,7 +253,7 @@ lumiera_config_wordlist_get (const char* key, const char** value)
               *value = raw_value;
             }
           else
-            LUMIERA_ERROR_SET (configsys, CONFIG_NO_ENTRY);
+            LUMIERA_ERROR_SET (configsys, CONFIG_NO_ENTRY, key);
 
           TODO ("remove the ERROR_SET because config_get sets it already? also in all other getters in this file");
         }
@@ -322,7 +322,7 @@ lumiera_config_word_get (const char* key, const char** value)
               *value = scan_word (raw_value);
             }
           else
-            LUMIERA_ERROR_SET (configsys, CONFIG_NO_ENTRY);
+            LUMIERA_ERROR_SET (configsys, CONFIG_NO_ENTRY, key);
         }
     }
 

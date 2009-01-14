@@ -130,7 +130,7 @@ LumieraMMapings
 lumiera_file_mmapings (LumieraFile self)
 {
   if (!self->descriptor->mmapings)
-    LUMIERA_ERROR_SET (file, FILE_NOCHUNKSIZE);
+    LUMIERA_ERROR_SET (file, FILE_NOCHUNKSIZE, lumiera_filedescriptor_name (self->descriptor));
 
   return self->descriptor->mmapings;
 }

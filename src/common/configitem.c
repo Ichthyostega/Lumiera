@@ -250,7 +250,7 @@ parse_directive (LumieraConfigitem self, char* itr)
           self->key = NULL;
           self->key_size = 0;
 
-          LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
+          LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX, self->line);
         }
     }
   else
@@ -260,7 +260,7 @@ parse_directive (LumieraConfigitem self, char* itr)
       self->key = NULL;
       self->key_size = 0;
 
-      LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
+      LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX, self->line);
     }
   return self;
 }
@@ -317,7 +317,7 @@ parse_section (LumieraConfigitem self, char* itr)
           self->key = NULL;
           self->key_size = 0;
 
-          LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
+          LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX, self->line);
         }
     }
   else
@@ -329,7 +329,7 @@ parse_section (LumieraConfigitem self, char* itr)
       self->key = NULL;
       self->key_size = 0;
 
-      LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
+      LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX, self->line);
     }
 
   return self;
@@ -368,7 +368,7 @@ parse_configentry (LumieraConfigitem self, char* itr)
       self->key = NULL;
       self->key_size = 0;
 
-      LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX);
+      LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX, self->line);
     }
 
   return self;

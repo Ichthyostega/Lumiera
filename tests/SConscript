@@ -8,12 +8,15 @@ from os import path
 from Buildhelper import srcSubtree
 from Buildhelper import scanSubtree
 from Buildhelper import globRootdirs
+from Buildhelper import createPlugins
 
-Import('env','artifacts','core')
+Import('env','envPlu','artifacts','core')
 
 # temp fix to add test.h  -- wouldn't it be better to put this header be into src/lib ?  
 env = env.Clone()
 env.Append(CPPPATH='#/.')  # add Rootdir to Includepath, so test/test.h is found
+envPlu = envPlu.Clone()
+envPlu.Append(CPPPATH='#/.')
 # temp fix------------- 
 
 def testExecutable(env,tree, exeName=None, obj=None):
@@ -43,39 +46,18 @@ def testCollection(env,dir):
     return [buildIt(f) for f in scanSubtree(dir,srcpatt)] 
 
 
-def treatPluginTestcase(env):
-    """ Special case: the test-plugin executable
-    """
-    tree = 'plugin'
-    env = env.Clone()
-    env.Append(CPPPATH=tree, CPPDEFINES='LUMIERA_PLUGIN')
-    prfx = path.join(tree,'example_plugin')
-    oC   = env.SharedObject(prfx,        prfx+'.c')
-    oCPP = env.SharedObject(prfx+'_cpp', prfx+'.cpp')
-    testplugin = ( env.LoadableModule('#$LIBDIR/examplepluginc',    oC, SHLIBPREFIX='')
-#                + env.SharedLibrary('#$LIBDIR/exampleplugincpp', oCPP, SHLIBPREFIX='')
-# doesn't compile yet...
-                 )
-    
-    return testplugin
-        #-- it depends (at the moment) on a specific isolated test-plugin,
-        #   which is not integrated in the "normal procedure" for building Plugins
-        #   (which is not yet implemented as of 8/07)
-        #   TODO: handle this case automatically
 
 
-# 
-# build a Test-Executable out of every subdir...
-moduledirs = globRootdirs('*')
 
 # but have to treat some subdirs individually.
 specials = ['plugin','lib','components']
+moduledirs = globRootdirs('*')
 
 
 
 artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in ['lib','components'] ] 
-                              + treatPluginTestcase(env)
                               + [ testCollection(env, dir) for dir in moduledirs if not dir in specials]
+                              + createPlugins(envPlu, 'plugin')
                               ) 
                               
 

@@ -52,7 +52,6 @@ namespace lumiera {
   using boost::scoped_ptr;
   using boost::noncopyable;
   
-  class LifecycleRegistry;
   class SubsystemRunner;
   
   
@@ -76,11 +75,6 @@ namespace lumiera {
       /** get the (single) AppState instance. 
        *  @warning don't use it after the end of main()! */
       static AppState& instance();
-      
-      
-      /** fire off all lifecycle callbacks
-       *  registered under the given label  */
-      static void lifecycle (Symbol eventLabel);
       
       
       /** evaluate the result of option parsing and maybe additional configuration
@@ -123,16 +117,12 @@ namespace lumiera {
       
     
     private:
-      typedef scoped_ptr<LifecycleRegistry> PLife;
       typedef scoped_ptr<SubsystemRunner>   PSub;
       
-      PLife lifecycleHooks_;
       PSub  subsystems_;
       
       bool emergency_;
       bool core_up_;
-      
-      friend class LifecycleHook;
       
     };
   

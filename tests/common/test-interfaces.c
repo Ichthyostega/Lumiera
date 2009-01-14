@@ -465,7 +465,7 @@ TEST ("plugin_discover")
 
   if (lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register))
     {
-      LumieraPlugin p = lumiera_plugin_lookup (".libs/examplepluginc.so");
+      LumieraPlugin p = lumiera_plugin_lookup (".libs/examplepluginc.lum");
       printf ("found plugin: %s\n", lumiera_plugin_name (p));
       lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
     }
