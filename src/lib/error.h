@@ -64,8 +64,10 @@ lumiera_err LUMIERA_ERROR_##err = "LUMIERA_ERROR_" #err ":" msg
 /**
  * Helper macro to raise an error for the current thread.
  * This macro eases setting an error. It adds NoBug logging support to the low level error handling.
+ * Used for unexpected errors which can be handled without any problems.
  * @param flag NoBug flag describing the subsystem where the error was raised
  * @param err name of the error without the 'LUMIERA_ERROR_' prefix (example: NO_MEMORY)
+ * @param extra optional string (or NULL) which adds some more context to the error, can be a temporary
  */
 #define LUMIERA_ERROR_SET(flag, err, extra)                                                             \
   do {                                                                                                  \
@@ -75,10 +77,55 @@ lumiera_err LUMIERA_ERROR_##err = "LUMIERA_ERROR_" #err ":" msg
   } while (0)
 
 /**
+ * Helper macro to raise an error for the current thread.
+ * Same as LUMIERA_ERROR_SET(), but logs at 'LOG_ALERT' level.
+ * Use this when the application is about to do a emergency shutdown.
+ * @param flag NoBug flag describing the subsystem where the error was raised
+ * @param err name of the error without the 'LUMIERA_ERROR_' prefix (example: NO_MEMORY)
+ * @param extra optional string (or NULL) which adds some more context to the error, can be a temporary
+ */
+#define LUMIERA_ERROR_SET_ALERT(flag, err, extra)                                                       \
+  do {                                                                                                  \
+  const char* theextra = extra;                                                                         \
+  ALERT (flag, "%s%s%s", strchr(LUMIERA_ERROR_##err, ':')+1, theextra?": ":"", theextra?theextra:"");   \
+  lumiera_error_set(LUMIERA_ERROR_##err, theextra);                                                     \
+  } while (0)
+
+/**
+ * Helper macro to raise an error for the current thread.
+ * Same as LUMIERA_ERROR_SET(), but logs at 'LOG_CRIT' level.
+ * Use this when a requested task can not be completed (maybe user intervention is necessary).
+ * @param flag NoBug flag describing the subsystem where the error was raised
+ * @param err name of the error without the 'LUMIERA_ERROR_' prefix (example: NO_MEMORY)
+ * @param extra optional string (or NULL) which adds some more context to the error, can be a temporary
+ */
+#define LUMIERA_ERROR_SET_CRITICAL(flag, err, extra)                                                    \
+  do {                                                                                                  \
+  const char* theextra = extra;                                                                         \
+  CRITICAL (flag, "%s%s%s", strchr(LUMIERA_ERROR_##err, ':')+1, theextra?": ":"", theextra?theextra:"");\
+  lumiera_error_set(LUMIERA_ERROR_##err, theextra);                                                     \
+  } while (0)
+
+/**
+ * Helper macro to raise an error for the current thread.
+ * Same as LUMIERA_ERROR_SET(), but logs at 'LOG_WARNING' level.
+ * Use this when a not unexected error happens which can be handled.
+ * @param flag NoBug flag describing the subsystem where the error was raised
+ * @param err name of the error without the 'LUMIERA_ERROR_' prefix (example: NO_MEMORY)
+ * @param extra optional string (or NULL) which adds some more context to the error, can be a temporary
+ */
+#define LUMIERA_ERROR_SET_WARNING(flag, err, extra)                                                     \
+  do {                                                                                                  \
+  const char* theextra = extra;                                                                         \
+  WARN (flag, "%s%s%s", strchr(LUMIERA_ERROR_##err, ':')+1, theextra?": ":"", theextra?theextra:"");    \
+  lumiera_error_set(LUMIERA_ERROR_##err, theextra);                                                     \
+  } while (0)
+
+/**
  * Set error state for the current thread.
  * If the error state of the current thread was cleared, then set it, else preserve the old state.
  * @param nerr name of the error with 'LUMIERA_ERROR_' prefix (example: LUMIERA_ERROR_NO_MEMORY)
- * @param extra a string (possibly a constructed tmpbuf) which adds some more context to the error occured this will be copied
+ * @param extra a string (possibly a constructed tmpbuf) which adds some more context to the error, can be a temporary
  * @return old state, that is NULL for success, when the state was cleared and a pointer to a pending
  * error when the error state was already set
  */
