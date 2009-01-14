@@ -10,7 +10,7 @@ export LUMIERA_PLUGIN_PATH=.libs
 export LUMIERA_CONFIG_PATH=./
 
 TEST "discovering plugins" plugin_discover <<END
-out: found plugin: .libs/examplepluginc.so
+out: found plugin: .libs/examplepluginc.lum
 return: 0
 END
 
