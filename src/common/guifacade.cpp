@@ -27,7 +27,6 @@
 #include "lib/error.hpp"
 #include "lib/singleton.hpp"
 #include "lib/functorutil.hpp"
-#include "lib/thread-wrapper.hpp"
 #include "common/instancehandle.hpp"
 
 #include <boost/scoped_ptr.hpp>
@@ -46,7 +45,6 @@ namespace gui {
   using util::dispatchSequenced;
   using lib::Sync;
   using lib::RecursiveLock_NoWait;
-  using lib::Thread;
   
   
   
@@ -62,7 +60,7 @@ namespace gui {
         : theGUI_("lumieraorg_Gui", 1, 1, "lumieraorg_GuiStarterPlugin") // load GuiStarterPlugin
         {
           ASSERT (theGUI_);
-          Thread ("GUI-Main", bind (&GuiRunner::kickOff, this, terminationHandle));
+          this->kickOff (terminationHandle);
           
           if (lumiera_error_peek())
             throw lumiera::error::Fatal("failed to bring up GUI",lumiera_error());

@@ -53,6 +53,7 @@
 #include "gui/guifacade.hpp"
 #include "gui/notification-service.hpp"
 #include "common/subsys.hpp"
+#include "lib/thread-wrapper.hpp"
 #include "lib/singleton.hpp"
 
 extern "C" {
@@ -60,11 +61,14 @@ extern "C" {
 #include "common/interfacedescriptor.h"
 }
 
+#include <tr1/functional>
 #include <string>
 
 
 
 using std::string;
+using lib::Thread;
+using std::tr1::bind;
 using lumiera::Subsys;
 using gui::LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1);
 
@@ -120,14 +124,19 @@ namespace gui {
       };
     
     
+    void
+    runGUI (Subsys::SigTerm& reportTermination)
+    {
+      GuiLifecycle(reportTermination).run();
+    }
     
   } // (End) impl details
   
   
   void
-  kickOff (Subsys::SigTerm& reportTermination)
+  kickOff (Subsys::SigTerm& terminationHandle)
   {
-    GuiLifecycle(reportTermination).run();
+    Thread ("GUI-Main", bind (&runGUI, terminationHandle));
   }
 
 } // namespace gui
