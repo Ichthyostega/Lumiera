@@ -25,15 +25,13 @@
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
-#include "common/appstate.hpp"
+#include "include/lifecycle.h"
 
 
 
 
-namespace lumiera
-  {
-  namespace test
-    {
+namespace lumiera {
+  namespace test  {
     
     uint basicInit (0);
     uint customCallback (0);
@@ -41,13 +39,13 @@ namespace lumiera
     void basicInitHook () { ++basicInit; }
     void myCallback() { ++customCallback; }
 
-    Symbol MY_MAGIC_MEGA_EVENT = "dial M for murder";
+    Symbol MY_DEADLY_EVENT = "dial M for murder";
     
     
     namespace // register them to be invoked by lifecycle event id 
       {
       LifecycleHook _schedule1 (ON_BASIC_INIT, &basicInitHook);         
-      LifecycleHook _schedule2 (MY_MAGIC_MEGA_EVENT, &myCallback);   
+      LifecycleHook _schedule2 (MY_DEADLY_EVENT, &myCallback);   
     }
     
     
@@ -64,7 +62,7 @@ namespace lumiera
             ASSERT (1 == basicInit, "the basic-init callback has been invoked more than once");
             
             ASSERT (!customCallback);
-            AppState::lifecycle (MY_MAGIC_MEGA_EVENT);
+            LifecycleHook::trigger  (MY_DEADLY_EVENT);
             ASSERT ( 1 == customCallback);
           }
         

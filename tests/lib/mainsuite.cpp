@@ -23,10 +23,9 @@
 
 #include "lib/test/suite.hpp"
 #include "lib/test/testoption.hpp"
-#include "common/appstate.hpp"
 #include "include/lifecycle.h"
 
-using lumiera::AppState;
+using lumiera::LifecycleHook;
 using lumiera::ON_GLOBAL_INIT;
 using lumiera::ON_GLOBAL_SHUTDOWN;
 
@@ -40,13 +39,13 @@ int main (int argc, const char* argv[])
   util::Cmdline args (argc,argv);
   test::TestOption optparser (args);
   test::Suite suite (optparser.getTestgroup());
-  AppState::lifecycle(ON_GLOBAL_INIT);
+  LifecycleHook::trigger (ON_GLOBAL_INIT);
   
   if (optparser.getDescribe())
     suite.describe();
   else
     suite.run (args);
 
-  AppState::lifecycle(ON_GLOBAL_SHUTDOWN);
+  LifecycleHook::trigger (ON_GLOBAL_SHUTDOWN);
   return 0;
 }

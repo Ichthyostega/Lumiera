@@ -22,7 +22,7 @@
 
 
 #include "proc/common.hpp"
-#include "lib/external/libgavl.hpp"
+#include "common/external/libgavl.hpp"
 #include "proc/control/stypemanager.hpp"
 
 extern "C" {

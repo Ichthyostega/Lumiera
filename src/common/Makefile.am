@@ -32,6 +32,7 @@ liblumieracommon_la_SOURCES =						\
 	$(liblumieracommon_la_srcdir)/config_lookup.c			\
 	$(liblumieracommon_la_srcdir)/config_interface.c		\
 	$(liblumieracommon_la_srcdir)/configrules.cpp			\
+	$(liblumieracommon_la_srcdir)/external/libgavl.cpp		\
 	$(liblumieracommon_la_srcdir)/query/fake-configrules.cpp	\
 	$(liblumieracommon_la_srcdir)/interface.c			\
 	$(liblumieracommon_la_srcdir)/interfaceregistry.c		\
@@ -42,8 +43,7 @@ liblumieracommon_la_SOURCES =						\
 	$(liblumieracommon_la_srcdir)/appstate.cpp			\
 	$(liblumieracommon_la_srcdir)/option.cpp			\
 	$(liblumieracommon_la_srcdir)/subsys.cpp			\
-	$(liblumieracommon_la_srcdir)/interfaceproxy.cpp		\
-	$(liblumieracommon_la_srcdir)/nobugcfg.cpp
+	$(liblumieracommon_la_srcdir)/interfaceproxy.cpp		
 
 
 noinst_HEADERS +=							\
@@ -57,6 +57,7 @@ noinst_HEADERS +=							\
 	$(liblumieracommon_la_srcdir)/config_lookup.h			\
 	$(liblumieracommon_la_srcdir)/config_interface.h		\
 	$(liblumieracommon_la_srcdir)/configrules.hpp			\
+	$(liblumieracommon_la_srcdir)/external/libgavl.hpp		\
 	$(liblumieracommon_la_srcdir)/query/fake-configrules.hpp	\
 	$(liblumieracommon_la_srcdir)/subsys.hpp			\
 	$(liblumieracommon_la_srcdir)/appstate.hpp			\
