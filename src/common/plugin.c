@@ -289,7 +289,7 @@ lumiera_plugin_register (LumieraPlugin plugin)
         }
       else
         {
-          LUMIERA_ERROR_SET (plugin, PLUGIN_REGISTER, plugin->name);
+          LUMIERA_ERROR_SET_CRITICAL (plugin, PLUGIN_REGISTER, plugin->name);
         }
     }
   return !!lumiera_error_peek();

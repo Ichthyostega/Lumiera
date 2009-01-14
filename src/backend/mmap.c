@@ -124,6 +124,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
     {
       TODO ("check if current mmapped size exceeds configured as_size (as_size be smaller than retrieved from getrlimit())");
 
+      TODO ("use resourcecllector here");
       switch (strategy++)
         {
         case FIRST_TRY:
@@ -173,7 +174,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
           break;
 
         case GIVE_UP:
-          LUMIERA_ERROR_SET (mmap, MMAP_SPACE, lumiera_filedescriptor_name (file->descriptor));
+          LUMIERA_ERROR_SET_ALERT (mmap, MMAP_SPACE, lumiera_filedescriptor_name (file->descriptor));
           goto espace;
         }
 
