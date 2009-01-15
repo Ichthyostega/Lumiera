@@ -37,7 +37,11 @@ extern "C"
 void
 start_dummy_gui ()
 {
-  NOTICE(gui, "This is a placeholder for the Lumiera GTK-GUI starting....");
+  NOTICE(gui, "Dummy Lumiera GTK-GUI starting....");
+  
+  int argc =0;
+  char *argv[] = {}; // faked command line for GTK
+  gui::application().main(argc, argv);
 }
 
 
@@ -90,7 +94,7 @@ void
 WorkspaceWindow::create_ui()
 {    
   //----- Configure the Window -----//
-  set_title(AppTitle);
+  set_title(GtkLumiera::AppTitle);
   set_default_size(1024, 768);
 
   //----- Set up the UI Manager -----//

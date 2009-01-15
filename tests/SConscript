@@ -55,7 +55,7 @@ moduledirs = globRootdirs('*')
 
 
 
-artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in ['lib','components'] ] 
+artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in ['bugs'] ]                # was: ['lib','components'] 
                               + [ testCollection(env, dir) for dir in moduledirs if not dir in specials]
                               + createPlugins(envPlu, 'plugin')
                               ) 

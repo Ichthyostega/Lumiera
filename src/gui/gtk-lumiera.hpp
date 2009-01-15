@@ -16,6 +16,8 @@
 #include <boost/weak_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 
+#include <libgdl-1.0/gdl/gdl-dock-layout.h>
+
 extern "C" {
 #include <gavl/gavltime.h>
 

@@ -16,7 +16,7 @@ rsvg    = envGtk.Program('#$BINDIR/rsvg-convert','rsvg-convert.c')
 # build additional test and administrative tools....
 artifacts['tools'] = [ env.Program('#$BINDIR/hello-world','hello.c')      #### hello world (checks C build)      
                      + env.Program('#$BINDIR/try', 'try.cpp')             #### to try out some feature...
-                     + luidgen
+#                    + luidgen
                      + vgsuppr
                      + rsvg
                      ]
