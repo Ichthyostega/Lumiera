@@ -243,24 +243,28 @@ TimelineLayoutHelper::layout_headers_recursive(
   REQUIRE(depth >= 0);
   
   int child_offset = 0;
-  
+    
   TrackTree::sibling_iterator iterator;
   for(iterator = layoutTree.begin(parent_iterator);
     iterator != layoutTree.end(parent_iterator);
     iterator++)
     {
       Gdk::Rectangle rect;
+      int track_height = 0;
+            
       const shared_ptr<model::Track> &model_track = *iterator;
       REQUIRE(model_track);
-      
       shared_ptr<timeline::Track> timeline_track =
         lookup_timeline_track(model_track);
+        
+      const bool being_dragged = (timeline_track == draggingTrack);
             
       // Is the track going to be shown?
       if(parent_expanded)
         {          
           // Calculate and store the box of the header
-          const int track_height = timeline_track->get_height();
+          track_height = timeline_track->get_height() +
+            TimelineWidget::TrackPadding;
           const int indent = depth * indent_width;
           
           rect = Gdk::Rectangle(
@@ -270,18 +274,14 @@ TimelineLayoutHelper::layout_headers_recursive(
             track_height);                                    // height
           
           // Offset for the next header
-          child_offset += track_height + TimelineWidget::TrackPadding;
+          child_offset += track_height;
           
           // Is this header being dragged?
-          if(timeline_track == draggingTrack)
-            {
-              rect.set_y(dragPoint.get_y() - dragStartOffset.get_y());
-            }
+          if(being_dragged)
+            rect.set_y(dragPoint.get_y() - dragStartOffset.get_y());
             
           headerBoxes[timeline_track] = rect;
         }
-        
-
         
       // Is the track animating?
       const bool is_track_animating =
@@ -292,10 +292,11 @@ TimelineLayoutHelper::layout_headers_recursive(
       const bool expand_child =
         (animating || timeline_track->get_expanded())
           && parent_expanded;
-           
+      
       int child_branch_height = layout_headers_recursive(
-        iterator, branch_offset + child_offset,
-        header_width, indent_width, depth + 1, expand_child);
+        iterator, rect.get_y() + track_height,
+        header_width, indent_width, depth + 1,
+        expand_child);
       
       // Do collapse animation as necessary
       if(is_track_animating)
