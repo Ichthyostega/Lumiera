@@ -79,7 +79,7 @@ namespace lumiera {
       desc_ (description),
       cause_ ("")
   {
-          lumiera_error_set (this->id_, description.c_str ());
+    lumiera_error_set (this->id_, description.c_str ());
   }
   
   
