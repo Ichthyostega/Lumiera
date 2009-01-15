@@ -1,0 +1,14 @@
+# -*- python -*-
+##
+## SConscript  -  SCons buildscript for tool subdirectory (called by SConstruct)
+##
+
+Import('env','envGtk','artifacts','core')
+
+support_lib = artifacts['support']
+
+vgsuppr = env.Program('#$BINDIR/vgsuppression','vgsuppression.c', LIBS=core)              ## for suppressing false valgrind alarms
+
+# build additional test 
+artifacts['tools'] = [vgsuppr]
+
