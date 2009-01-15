@@ -78,13 +78,12 @@ test_config_LDADD =				\
 check_LTLIBRARIES += examplepluginc.la
 examplepluginc_la_SOURCES = $(tests_srcdir)/plugin/examplepluginc/example_plugin.c
 examplepluginc_la_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -DLUMIERA_PLUGIN -I$(top_srcdir)/src/
-examplepluginc_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/null
+examplepluginc_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/null -shrext .lum
 
 check_PROGRAMS += test-interfaces
 test_interfaces_SOURCES = $(tests_srcdir)/common/test-interfaces.c
 test_interfaces_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 test_interfaces_LDADD = liblumiera.la $(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS)      liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
-test_interfaces_DEPENDENCIES = examplepluginc.la liblumiera.la 
 
 check_PROGRAMS += test-filemmap
 test_filemmap_SOURCES = $(tests_srcdir)/backend/test-filemmap.c
