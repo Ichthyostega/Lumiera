@@ -3,11 +3,24 @@
 ## SConscript  -  SCons buildscript for tool subdirectory (called by SConstruct)
 ##
 
-Import('env','artifacts','core')
+Import('env','envGtk','artifacts','core')
+
+support_lib = artifacts['support']
+
+vgsuppr = env.Program('#$BINDIR/vgsuppression','vgsuppression.c', LIBS=core)              ## for suppressing false valgrind alarms
+luidgen = env.Program('#$BINDIR/luidgen', 'luidgen.c',            LIBS=support_lib)       ## for rendering SVG icons (uses librsvg)
+
+rsvg    = envGtk.Program('#$BINDIR/rsvg-convert','rsvg-convert.c')
 
 
-# build the ubiquitous Hello World application (note: C source)
-artifacts['tools'] = [ env.Program('#$BINDIR/hello-world','hello.c')
+# build additional test and administrative tools....
+artifacts['tools'] = [ env.Program('#$BINDIR/hello-world','hello.c')      #### hello world (checks C build)      
                      + env.Program('#$BINDIR/try', 'try.cpp')             #### to try out some feature...
+                     + luidgen
+                     + vgsuppr
+                     + rsvg
                      ]
+
+# Rendering the SVG Icons depends on rsvg-convert
+env.Depends(artifacts['icons'], rsvg)
 

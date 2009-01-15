@@ -8,12 +8,13 @@
 #define GTK_LUMIERA_HPP
 
 #include <gtkmm.h>
-#include <nobug.h>
+#include <nobug.h>               // need to include this after gtkmm.h, because types.h from GTK tries to shaddow the ERROR macro from windows, which kills NoBug's ERROR macro
 #include <vector>
 #include <boost/utility.hpp>
+#include <boost/optional.hpp>
 #include <boost/shared_ptr.hpp>
-
-#include <libgdl-1.0/gdl/gdl-dock-layout.h>
+#include <boost/weak_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 extern "C" {
 #include <gavl/gavltime.h>
@@ -45,12 +46,6 @@ NOBUG_DECLARE_FLAG(gui);
  */
 namespace gui {
   
-/* ===== Global Constants ===== */
-
-/**
- *  The name of the application 
- */
-static const gchar* AppTitle = "Lumiera";
 
 
   
@@ -62,9 +57,15 @@ static const gchar* AppTitle = "Lumiera";
 class GtkLumiera : private boost::noncopyable
 {
 public:
-  int main(int argc, char *argv[]);
+  void main(int argc, char *argv[]);
   
 
+/* ===== Global Constants ===== */
+public:
+/**
+ *  The name of the application 
+ */
+static const gchar* AppTitle;
 };
 
 /**

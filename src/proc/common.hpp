@@ -43,6 +43,7 @@
 
 #include "include/nobugcfg.h"
 #include "common/dummy-func.hpp"
+#include "include/symbol.hpp"
 
 
 /**

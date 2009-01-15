@@ -7,7 +7,7 @@
 
 style "medium_text"
 {
- 	font_name = "sans 10"
+
 }
  	
 style "medium_bold_entry" = "medium_text"
@@ -67,7 +67,6 @@ style "default_base" = "medium_text"
 
 style "default_buttons_menus" 
 {
-  font_name = "sans 10"
   fg[ACTIVE] = { 1.0, 1.0, 1.0 }
   
   bg[NORMAL] = { 0.30, 0.30, 0.35 }
@@ -152,13 +151,14 @@ style "timeline_ruler" = "default_base"
   gtkmm__CustomObject_TimelineRuler::playback_period_arrow_stem_size = 3
 }
 
-style "timeline_header_container" = "default_base"
+style "timeline_header_widget" = "default_base"
 {
-  gtkmm__CustomObject_HeaderContainer::heading_margin = 4
+  gtkmm__CustomObject_TimelineHeaderWidget::margin = 4
+  gtkmm__CustomObject_TimelineHeaderWidget::expand_button_size = 12
 }
 
 class "gtkmm__CustomObject_TimelineBody" style:highest "timeline_body"
 class "gtkmm__CustomObject_TimelineRuler" style:highest "timeline_ruler"
-class "gtkmm__CustomObject_TimelineHeaderContainer" style:highest "timeline_header_container"
+class "gtkmm__CustomObject_TimelineHeaderWidget" style:highest "timeline_header_widget"
 
 

@@ -29,13 +29,9 @@ using namespace Gtk;
 using namespace Glib;
 using namespace gui;
 
+
 GtkLumiera the_application;
 
-int
-main (int argc, char *argv[])
-{
-  return the_application.main(argc, argv);
-}
 
 extern "C"
 void
@@ -51,10 +47,9 @@ start_dummy_gui ()
 
 namespace gui {
 
-int
+void
 GtkLumiera::main(int argc, char *argv[])
 {
-  NOBUG_INIT;
 
   Main kit(argc, argv);
   
@@ -62,9 +57,8 @@ GtkLumiera::main(int argc, char *argv[])
 
   workspace::WorkspaceWindow main_window;
 
-  kit.run(main_window); 
+  kit.run(main_window);
   
-  return 23;
 }
 
 
@@ -215,7 +209,21 @@ Actions::on_menu_help_about()
 }   // namespace workspace
 
 
+/* ===== Constants ===== */
+
+const gchar* GtkLumiera::AppTitle = "Lumiera";
 
 }   // namespace gui
 
 
+
+/**
+ * Run the Lumiera GTK GUI as standalone application without backend.
+ */
+int
+main (int argc, char *argv[])
+{
+  NOBUG_INIT;
+  gui::application().main(argc, argv);
+  return 0;
+}
