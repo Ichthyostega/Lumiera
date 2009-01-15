@@ -139,7 +139,8 @@ TimelineLayoutHelper::begin_dragging_track(
   const Gdk::Rectangle &rect = headerBoxes[draggingTrack];
   dragStartOffset = Gdk::Point(
     mouse_point.get_x() - rect.get_x(),
-    mouse_point.get_y() - rect.get_y());
+    mouse_point.get_y() - rect.get_y() +
+      timelineWidget.get_y_scroll_offset());
   
   // Find the track in the tree
   const shared_ptr<model::Track> model_track =
@@ -187,7 +188,7 @@ TimelineLayoutHelper::drag_to_point(const Gdk::Point &point)
       const weak_ptr<timeline::Track> track = 
         lookup_timeline_track(*iterator);
       
-      if(util::pt_in_rect(point, headerBoxes[track]))
+      if(util::pt_in_rect(dragPoint, headerBoxes[track]))
         {
           // Relocate the header
           draggingTrackIter = layoutTree.move_after(
