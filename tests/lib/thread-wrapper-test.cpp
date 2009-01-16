@@ -24,7 +24,7 @@
 #include "lib/test/run.hpp"
 
 #include "include/symbol.hpp"
-#include "lib/thread-wrapper.hpp"
+#include "backend/thread-wrapper.hpp"
 #include "lib/sync.hpp"
 
 #include <tr1/functional>
