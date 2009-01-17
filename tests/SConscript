@@ -63,6 +63,10 @@ artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in ['lib','co
 
 
 
+# for creating a Valgrind-Suppression file
+vgsuppr = env.Program('#$BINDIR/vgsuppression','tool/vgsuppression.c', LIBS=core)   ## for suppressing false valgrind alarms
+artifacts['tools'] += [vgsuppr]
+Depends(ts,vgsuppr)
 
 
 #
