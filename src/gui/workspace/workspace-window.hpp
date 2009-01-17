@@ -46,6 +46,10 @@ namespace model {
   class Project;
 } // model
 
+namespace controller {
+  class Controller;
+} // model
+
 namespace workspace {
 
 /** 
@@ -54,18 +58,25 @@ namespace workspace {
 class WorkspaceWindow : public Gtk::Window
 {
 public:
-  WorkspaceWindow(gui::model::Project &source_project);
+  WorkspaceWindow(gui::model::Project &source_project,
+    gui::controller::Controller &source_controller);
   
   ~WorkspaceWindow();
   
   gui::model::Project& get_project();
+  
+  gui::controller::Controller& get_controller();
 
 private:
   void create_ui();
-
+  
   /* ===== Model ===== */
 private:
   gui::model::Project &project;
+
+  /* ===== Controller ===== */
+private:
+  gui::controller::Controller &controller;
 
   /* ===== UI ===== */
 private:

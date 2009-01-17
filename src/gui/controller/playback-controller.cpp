@@ -1,5 +1,5 @@
 /*
-  assets-panel.cpp  -  Implementation of the assets panel
+  timeline-track.cpp  -  Implementation of the timeline track object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,18 +20,20 @@
  
 * *****************************************************/
 
-#include "../gtk-lumiera.hpp"
-#include "assets-panel.hpp"
+// !!! This header must soon be removed when we drop Etch compatibility
+#include <gtk/gtktoolbar.h>
+
+#include "playback-controller.hpp"
 
 namespace gui {
-namespace panels {
+namespace controller { 
 
-AssetsPanel::AssetsPanel(workspace::WorkspaceWindow &workspace_window) :
-  Panel(workspace_window, "assets", _("Assets"), "panel_assets"),
-  placeholder("Assets/Media")
-  {
-    pack_start(placeholder);
-  }
+void
+PlaybackController::play()
+{
+  g_message("Play");
+}
 
-}   // namespace panels
+}   // namespace controller
 }   // namespace gui
+

@@ -48,10 +48,9 @@ class TimelinePanel : public Panel
 public:
   /**
    * Constructor
-   *  @param owner_project The project associated with this panel.
+   * @param workspace_window The window that owns this panel.
    */
-  TimelinePanel(model::Project &owner_project);
-
+  TimelinePanel(workspace::WorkspaceWindow &workspace_window);
 
   /**
    * Destructor 

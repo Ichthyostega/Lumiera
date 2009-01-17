@@ -1,5 +1,5 @@
 /*
-  assets-panel.cpp  -  Implementation of the assets panel
+  controllerk.cpp  -  Implementation of the timeline track object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,18 +20,22 @@
  
 * *****************************************************/
 
-#include "../gtk-lumiera.hpp"
-#include "assets-panel.hpp"
+#include "controller.hpp"
 
 namespace gui {
-namespace panels {
+namespace controller {
+  
+Controller::Controller(model::Project &model_project) :
+  project(model_project)
+{
+  
+}
 
-AssetsPanel::AssetsPanel(workspace::WorkspaceWindow &workspace_window) :
-  Panel(workspace_window, "assets", _("Assets"), "panel_assets"),
-  placeholder("Assets/Media")
-  {
-    pack_start(placeholder);
-  }
+PlaybackController& Controller::get_playback_controller()
+{
+  return playback;
+}
 
-}   // namespace panels
+}   // namespace controller
 }   // namespace gui
+

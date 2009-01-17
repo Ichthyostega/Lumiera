@@ -25,7 +25,9 @@
 #include "../gtk-lumiera.hpp"
 #include "timeline-panel.hpp"
 
+#include "../workspace/workspace-window.hpp"
 #include "../model/project.hpp"
+#include "../controller/controller.hpp"
 
 extern "C" {
 #include "../../lib/time.h"
@@ -43,8 +45,9 @@ namespace panels {
   
 const int TimelinePanel::ZoomToolSteps = 2; // 2 seems comfortable
 
-TimelinePanel::TimelinePanel(model::Project &owner_project) :
-  Panel(owner_project, "timeline", _("Timeline"), "panel_timeline"),
+TimelinePanel::TimelinePanel(workspace::WorkspaceWindow
+    &workspace_window) :
+  Panel(workspace_window, "timeline", _("Timeline"), "panel_timeline"),
   timeIndicator(),
   previousButton(Stock::MEDIA_PREVIOUS),
   rewindButton(Stock::MEDIA_REWIND),
@@ -65,7 +68,7 @@ TimelinePanel::TimelinePanel(model::Project &owner_project) :
   //  mem_fun(this, &TimelinePanel::on_playback_period_drag_released));
   
   // Hook up notifications
-  project.get_sequences().signal_changed().connect(
+  workspace.get_project().get_sequences().signal_changed().connect(
     mem_fun(this, &TimelinePanel::on_sequence_list_changed));
   
   // Setup the notebook  
@@ -119,7 +122,9 @@ TimelinePanel::~TimelinePanel()
 
 void
 TimelinePanel::on_play_pause()
-{ 
+{
+  workspace.get_controller().get_playback_controller().play();  
+  
   // TEST CODE! 
   if(!is_playing())
     {
@@ -223,7 +228,7 @@ TimelinePanel::update_notebook()
   old_pages.swap(notebook_pages);
 
   BOOST_FOREACH( shared_ptr< model::Sequence > sequence,
-    project.get_sequences() )
+    workspace.get_project().get_sequences() )
     {
       std::map<const model::Sequence*, shared_ptr<TimelineWidget> >::
         iterator iterator = old_pages.find(sequence.get());
