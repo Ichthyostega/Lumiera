@@ -36,6 +36,13 @@ using namespace util;
 namespace gui {
 namespace widgets {
 namespace timeline {
+  
+// ===== Constants ===== //
+
+const int TimelineHeaderContainer::ScrollSlideRateDivisor = 4;
+const int TimelineHeaderContainer::ScrollSlideEventInterval = 40;
+
+// ===== Implementation ===== //
 
 TimelineHeaderContainer::TimelineHeaderContainer(
   gui::widgets::TimelineWidget &timeline_widget) :
@@ -208,7 +215,19 @@ bool TimelineHeaderContainer::on_motion_notify_event (
   // Are we currently dragging?
   if(layout.get_dragging_track())
     {
+      // Forward the message to the layout manager
       layout.drag_to_point(mousePoint);
+      
+      // Is the mouse out of bounds? if so we must begin scrolling
+      const int height = get_allocation().get_height();
+      const int y = mousePoint.get_y();
+      
+      if(y < 0)
+        begin_scroll_slide(y / ScrollSlideRateDivisor);
+      else if(y > height)
+        begin_scroll_slide((y - height) / ScrollSlideRateDivisor);
+      else end_scroll_slide();
+      
       return result;
     }
   
@@ -304,6 +323,22 @@ TimelineHeaderContainer::on_hovering_track_changed(
   
 
 }
+
+bool
+TimelineHeaderContainer::on_scroll_slide_timer()
+{   
+  // Shift the view
+  const int view_height = get_allocation().get_height();
+  timelineWidget.set_y_scroll_offset(
+    timelineWidget.get_y_scroll_offset() +
+    scrollSlideRate * view_height / 256);
+    
+  // Keep the layout manager updated
+  timelineWidget.layoutHelper.drag_to_point(mousePoint);
+  
+  // Return true to keep the timer going
+  return true;
+}
   
 void
 TimelineHeaderContainer::layout_headers()
@@ -363,6 +398,24 @@ TimelineHeaderContainer::lookup_timeline_track(
   ENSURE(timeline_track);
   
   return timeline_track;
+}
+
+void
+TimelineHeaderContainer::begin_scroll_slide(int scroll_slide_rate)
+{
+  scrollSlideRate = scroll_slide_rate;
+  if(!scrollSlideEvent.connected())
+    scrollSlideEvent = Glib::signal_timeout().connect(sigc::mem_fun(
+      this, &TimelineHeaderContainer::on_scroll_slide_timer),
+      ScrollSlideEventInterval);
+}
+
+void
+TimelineHeaderContainer::end_scroll_slide()
+{
+  scrollSlideRate = 0;
+  if(scrollSlideEvent.connected())
+    scrollSlideEvent.disconnect();
 }
 
 }   // namespace timeline

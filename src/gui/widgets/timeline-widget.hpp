@@ -226,6 +226,8 @@ private:
   
   int get_y_scroll_offset() const;
   
+  void set_y_scroll_offset(const int offset);
+  
   // ----- Event Handlers -----//
   
   /**
