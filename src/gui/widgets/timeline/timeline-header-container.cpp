@@ -183,7 +183,7 @@ bool TimelineHeaderContainer::on_button_release_event (
   
   // Has the user been dragging?
   if(layout.get_dragging_track())
-    layout.end_dragging_track();
+    end_drag();
 
   return Container::on_button_release_event(event);    
 }
@@ -208,7 +208,7 @@ bool TimelineHeaderContainer::on_motion_notify_event (
   if((event->state & GDK_BUTTON1_MASK) && hoveringTrack &&
     !layout.get_dragging_track())
     {
-      layout.begin_dragging_track(mousePoint);
+      begin_drag();      
       return result;
     }
     
@@ -398,6 +398,66 @@ TimelineHeaderContainer::lookup_timeline_track(
   ENSURE(timeline_track);
   
   return timeline_track;
+}
+
+void
+TimelineHeaderContainer::begin_drag()
+{
+  TimelineLayoutHelper &layout = timelineWidget.layoutHelper;
+  
+  shared_ptr<timeline::Track> dragging_track =
+    layout.begin_dragging_track(mousePoint);
+  ENSURE(dragging_track); // Something strange has happened if we
+                          // were somehow not hovering on a track
+
+  const TimelineLayoutHelper::TrackTree::pre_order_iterator node =
+    layout.iterator_from_track(dragging_track->get_model_track());
+  set_keep_above_recursive(node, true);
+}
+
+void
+TimelineHeaderContainer::end_drag()
+{ 
+  TimelineLayoutHelper &layout = timelineWidget.layoutHelper;
+  
+  shared_ptr<timeline::Track> dragging_track =
+    layout.get_dragging_track();
+  ENSURE(dragging_track); // Something strange has happened if we
+                          // were somehow not dragging on a track  
+
+  const TimelineLayoutHelper::TrackTree::pre_order_iterator node =
+    layout.iterator_from_track(dragging_track->get_model_track());
+  set_keep_above_recursive(node, false);
+  
+  layout.end_dragging_track();
+}
+
+void
+TimelineHeaderContainer::set_keep_above_recursive(
+  TimelineLayoutHelper::TrackTree::iterator_base node,
+  const bool keep_above)
+{
+  TimelineLayoutHelper::TrackTree::pre_order_iterator iter;
+  
+  const TimelineLayoutHelper::TrackTree &layout_tree =
+    timelineWidget.layoutHelper.get_layout_tree();
+    
+  shared_ptr<timeline::Track> timeline_track =
+    lookup_timeline_track(*node);
+  REQUIRE(timeline_track);
+
+  Glib::RefPtr<Gdk::Window> window =
+    timeline_track->get_header_widget().get_window();
+  ENSURE(window); // Something strange has happened if there was no
+                  // window
+  window->set_keep_above(keep_above);
+  
+  for(iter = layout_tree.begin(node);
+    iter != layout_tree.end(node);
+    iter++)
+    {
+      set_keep_above_recursive(iter, keep_above);
+    }
 }
 
 void

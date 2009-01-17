@@ -128,13 +128,13 @@ TimelineLayoutHelper::track_from_y(int y)
   return shared_ptr<timeline::Track>();
 }
 
-bool
+shared_ptr<timeline::Track>
 TimelineLayoutHelper::begin_dragging_track(
   const Gdk::Point &mouse_point)
 {
   draggingTrack = header_from_point(mouse_point);
   if(!draggingTrack)
-    return false;
+    return shared_ptr<timeline::Track>();
     
   const Gdk::Rectangle &rect = headerBoxes[draggingTrack];
   dragStartOffset = Gdk::Point(
@@ -142,19 +142,11 @@ TimelineLayoutHelper::begin_dragging_track(
     mouse_point.get_y() - rect.get_y() +
       timelineWidget.get_y_scroll_offset());
   
-  // Find the track in the tree
   const shared_ptr<model::Track> model_track =
     draggingTrack->get_model_track();
-  REQUIRE(model_track);
-  for(draggingTrackIter = layoutTree.begin();
-    draggingTrackIter != layoutTree.end();
-    draggingTrackIter++)
-    {
-      if(*draggingTrackIter == model_track)
-        break;
-    }
+  draggingTrackIter = iterator_from_track(model_track);
     
-  return true;
+  return draggingTrack;
 }
 
 void
@@ -210,6 +202,22 @@ bool
 TimelineLayoutHelper::is_animating() const
 {
   return animating;
+}
+
+TimelineLayoutHelper::TrackTree::pre_order_iterator
+TimelineLayoutHelper::iterator_from_track(
+  boost::shared_ptr<model::Track> model_track)
+{
+  REQUIRE(model_track);
+  
+  TrackTree::pre_order_iterator iter;
+  for(iter = layoutTree.begin(); iter != layoutTree.end(); iter++)
+    {
+      if(*iter == model_track)
+        break;
+    }
+    
+  return iter;
 }
 
 void

@@ -127,7 +127,8 @@ public:
    **/
   boost::shared_ptr<timeline::Track> track_from_y(int y);
   
-  bool begin_dragging_track(const Gdk::Point &mouse_point);
+  boost::shared_ptr<timeline::Track>
+    begin_dragging_track(const Gdk::Point &mouse_point);
   
   void end_dragging_track();
   
@@ -144,6 +145,16 @@ public:
   int get_total_height() const;
   
   bool is_animating() const;
+
+  /**
+   * A utility function which finds the iterator of a track in the
+   * layout tree.
+   * @param model_track The model track to look for.
+   * @return Returns the model iterator of layoutTree.end() if no
+   * iterator was found.
+   **/
+  TrackTree::pre_order_iterator iterator_from_track(
+    boost::shared_ptr<model::Track> model_track);
   
 protected:
   

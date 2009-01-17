@@ -29,6 +29,7 @@
 #define HEADER_CONTAINER_HPP
 
 #include "../../gtk-lumiera.hpp"
+#include "timeline-layout-helper.hpp"
 
 namespace gui {
   
@@ -181,6 +182,15 @@ private:
    **/
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
     boost::shared_ptr<model::Track> model_track);
+    
+  void begin_drag();
+  
+  
+  void end_drag();
+  
+  void set_keep_above_recursive(
+    TimelineLayoutHelper::TrackTree::iterator_base node,
+    const bool keep_above);
     
   /**
    * Begins, or continues a scroll slide at a given rate
