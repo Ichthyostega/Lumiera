@@ -45,6 +45,10 @@ public:
    * @param workspace_window The window that owns this panel.
    **/
   ViewerPanel(workspace::WorkspaceWindow &owner_window);
+  
+protected:
+
+  void on_frame(void *buffer);
 
 protected:
 

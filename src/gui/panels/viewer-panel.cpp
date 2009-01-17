@@ -23,8 +23,13 @@
 #include "../gtk-lumiera.hpp"
 #include "viewer-panel.hpp"
 
-using namespace gui::widgets;
+#include "../workspace/workspace-window.hpp"
+#include "../controller/controller.hpp"
+#include "../controller/playback-controller.hpp"
+
 using namespace Gtk;
+using namespace gui::widgets;
+using namespace gui::controller;
 
 namespace gui {
 namespace panels {
@@ -34,6 +39,20 @@ ViewerPanel::ViewerPanel(workspace::WorkspaceWindow &workspace_window) :
 {    
   //----- Pack in the Widgets -----//
   pack_start(display, PACK_EXPAND_WIDGET);
+  
+  PlaybackController &playback =
+    workspace_window.get_controller().get_playback_controller();
+    
+  playback.attach_viewer(sigc::mem_fun(this, &ViewerPanel::on_frame));
+}
+
+void
+ViewerPanel::on_frame(void *buffer)
+{
+  Displayer *displayer = display.get_displayer();
+  REQUIRE(displayer);
+  
+  displayer->put(buffer);
 }
 
 }   // namespace panels

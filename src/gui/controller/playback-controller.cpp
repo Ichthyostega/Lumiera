@@ -29,7 +29,13 @@ namespace controller {
 void
 PlaybackController::play()
 {
-  g_message("Play");
+  pull_frame();
+}
+
+void
+PlaybackController::attach_viewer(const sigc::slot<void, void*>& on_frame)
+{
+  frame_signal.connect(on_frame);
 }
 
 void PlaybackController::playback_thread()
@@ -39,7 +45,12 @@ void PlaybackController::playback_thread()
 
 void PlaybackController::pull_frame()
 {
+  unsigned char buffer[320 * 240 * 4];
+
+  for(int i = 0; i < 320*240*4; i++)
+    buffer[i] = rand();
   
+  frame_signal.emit(buffer);
 }
 
 }   // namespace controller

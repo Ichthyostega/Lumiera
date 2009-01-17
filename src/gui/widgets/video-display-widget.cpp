@@ -45,6 +45,12 @@ VideoDisplayWidget::~VideoDisplayWidget()
     delete displayer;
 }
 
+Displayer*
+VideoDisplayWidget::get_displayer() const
+{
+  return displayer;
+}
+
 void
 VideoDisplayWidget::on_realize()
 {

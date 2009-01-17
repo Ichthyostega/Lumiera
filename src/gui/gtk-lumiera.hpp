@@ -37,7 +37,6 @@
 #include <boost/weak_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 #include "lib/util.hpp"
-#include "backend/thread-wrapper.hpp"
 
 extern "C" {
 #include <gavl/gavltime.h>

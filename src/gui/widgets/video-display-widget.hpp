@@ -41,6 +41,8 @@ public:
   VideoDisplayWidget();
 
   ~VideoDisplayWidget();
+  
+  Displayer* get_displayer() const;
 
   /* ===== Overrides ===== */
 private:

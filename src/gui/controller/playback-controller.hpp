@@ -23,6 +23,8 @@
  ** This file contains the definition of the playback controller object
  */
 
+#include <sigc++/sigc++.h>
+
 #ifndef PLAYBACK_CONTROLLER_HPP
 #define PLAYBACK_CONTROLLER_HPP
 
@@ -34,12 +36,17 @@ class PlaybackController
 public:
 
   void play();
+
+  void attach_viewer(const sigc::slot<void, void*>& on_frame);
   
 private:
 
   void playback_thread();
 
   void pull_frame();
+  
+private:
+  sigc::signal<void, void*> frame_signal;
 };
 
 }   // namespace controller
