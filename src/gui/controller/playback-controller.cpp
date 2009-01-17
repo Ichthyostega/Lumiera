@@ -20,9 +20,6 @@
  
 * *****************************************************/
 
-// !!! This header must soon be removed when we drop Etch compatibility
-#include <gtk/gtktoolbar.h>
-
 #include "playback-controller.hpp"
 
 namespace gui {
