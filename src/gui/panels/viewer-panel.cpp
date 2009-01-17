@@ -29,7 +29,7 @@ using namespace Gtk;
 namespace gui {
 namespace panels {
 
-ViewerPanel::ViewerPanel(model::Project *const owner_project) :
+ViewerPanel::ViewerPanel(model::Project &owner_project) :
   Panel(owner_project, "viewer", _("Viewer"), "panel_viewer")
 {    
   //----- Pack in the Widgets -----//

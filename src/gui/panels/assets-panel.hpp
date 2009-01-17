@@ -38,7 +38,7 @@ public:
    * Constructor
    *  @param owner_project The project associated with this panel.
    **/
-  AssetsPanel(model::Project *const owner_project);
+  AssetsPanel(model::Project &owner_project);
 
 protected:
   Gtk::Label placeholder;

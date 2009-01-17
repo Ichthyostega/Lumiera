@@ -50,7 +50,7 @@ public:
    * Constructor
    *  @param owner_project The project associated with this panel.
    */
-  TimelinePanel(model::Project *const owner_project);
+  TimelinePanel(model::Project &owner_project);
 
 
   /**

@@ -26,7 +26,7 @@
 namespace gui {
 namespace panels {
 
-AssetsPanel::AssetsPanel(model::Project *const owner_project) :
+AssetsPanel::AssetsPanel(model::Project &owner_project) :
   Panel(owner_project, "assets", _("Assets"), "panel_assets"),
   placeholder("Assets/Media")
   {

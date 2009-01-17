@@ -51,7 +51,7 @@ protected:
    *  @param long_name The name to display on the caption
    *  @param behavior The GDL behaviour of this item
    */
-  Panel(model::Project *const owner_project,
+  Panel(model::Project &owner_project,
     const gchar *name, const gchar *long_name,
     GdlDockItemBehavior behavior = GDL_DOCK_ITEM_BEH_NORMAL);
 
@@ -63,7 +63,7 @@ protected:
    *  @param stock_id The id of the stock item to display on the caption
    *  @param behavior The GDL behaviour of this item
    */
-  Panel(model::Project *const owner_project,
+  Panel(model::Project &owner_project,
     const gchar *name, const gchar *long_name, const gchar *stock_id,
     GdlDockItemBehavior behavior = GDL_DOCK_ITEM_BEH_NORMAL);
 
@@ -99,7 +99,7 @@ private:
 
 protected:
 
-  model::Project *const project;
+  model::Project &project;
 
   GdlDockItem* dock_item;
 };

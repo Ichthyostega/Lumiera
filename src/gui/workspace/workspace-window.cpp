@@ -41,12 +41,10 @@ using namespace gui::model;
 namespace gui {
 namespace workspace {
 	
-WorkspaceWindow::WorkspaceWindow(Project *source_project) :
+WorkspaceWindow::WorkspaceWindow(Project &source_project) :
   project(source_project),
   actions(*this)
-{
-  REQUIRE(source_project != NULL);
-    
+{    
   layout = NULL;
   assetsPanel = NULL;
   viewerPanel = NULL;
@@ -68,8 +66,8 @@ WorkspaceWindow::~WorkspaceWindow()
   timelinePanel->unreference();
 }
 
-Project*
-WorkspaceWindow::get_project() const
+Project&
+WorkspaceWindow::get_project()
 {
   return project;
 }

@@ -43,7 +43,7 @@ namespace panels {
   
 const int TimelinePanel::ZoomToolSteps = 2; // 2 seems comfortable
 
-TimelinePanel::TimelinePanel(model::Project *const owner_project) :
+TimelinePanel::TimelinePanel(model::Project &owner_project) :
   Panel(owner_project, "timeline", _("Timeline"), "panel_timeline"),
   timeIndicator(),
   previousButton(Stock::MEDIA_PREVIOUS),
@@ -65,7 +65,7 @@ TimelinePanel::TimelinePanel(model::Project *const owner_project) :
   //  mem_fun(this, &TimelinePanel::on_playback_period_drag_released));
   
   // Hook up notifications
-  project->get_sequences().signal_changed().connect(
+  project.get_sequences().signal_changed().connect(
     mem_fun(this, &TimelinePanel::on_sequence_list_changed));
   
   // Setup the notebook  
@@ -223,7 +223,7 @@ TimelinePanel::update_notebook()
   old_pages.swap(notebook_pages);
 
   BOOST_FOREACH( shared_ptr< model::Sequence > sequence,
-    project->get_sequences() )
+    project.get_sequences() )
     {
       std::map<const model::Sequence*, shared_ptr<TimelineWidget> >::
         iterator iterator = old_pages.find(sequence.get());

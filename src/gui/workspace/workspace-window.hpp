@@ -54,18 +54,18 @@ namespace workspace {
 class WorkspaceWindow : public Gtk::Window
 {
 public:
-  WorkspaceWindow(gui::model::Project *source_project);
+  WorkspaceWindow(gui::model::Project &source_project);
   
   ~WorkspaceWindow();
   
-  gui::model::Project* get_project() const;
+  gui::model::Project& get_project();
 
 private:
   void create_ui();
 
   /* ===== Model ===== */
 private:
-  gui::model::Project *project;
+  gui::model::Project &project;
 
   /* ===== UI ===== */
 private:
