@@ -29,7 +29,7 @@
 #include "lib/sync.hpp"
 
 extern "C" {
-#include "lib/threads.h"
+#include "backend/threads.h"
 }
 
 #include <tr1/functional>

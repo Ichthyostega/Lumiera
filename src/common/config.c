@@ -208,7 +208,7 @@ lumiera_config_get (const char* key, const char** value)
               *value = item->delim+1;
             }
           else
-            LUMIERA_ERROR_SET (configsys, CONFIG_NO_ENTRY, key);
+            LUMIERA_ERROR_SET_WARNING (configsys, CONFIG_NO_ENTRY, key);
         }
     }
   else

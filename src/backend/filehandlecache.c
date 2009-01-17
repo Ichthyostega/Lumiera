@@ -84,8 +84,9 @@ lumiera_filehandlecache_handle_acquire (LumieraFilehandlecache self, LumieraFile
         /* allocate new filehandle if we are below the limit or no cached handles are available (overallocating) */
         NOTICE (filehandlecache, "overallocating filehandle");
         ret = lumiera_filehandle_new (desc);
+        TODO ("use resourcecollector here");
         if (!ret)
-          LUMIERA_ERROR_SET (filehandlecache, FILEHANDLECACHE_NOHANDLE, lumiera_filedescriptor_name (desc));
+          LUMIERA_ERROR_SET_ALERT (filehandlecache, FILEHANDLECACHE_NOHANDLE, lumiera_filedescriptor_name (desc));
         else
           --self->available;
       }

@@ -53,7 +53,7 @@
 #include "gui/guifacade.hpp"
 #include "gui/notification-service.hpp"
 #include "common/subsys.hpp"
-#include "lib/thread-wrapper.hpp"
+#include "backend/thread-wrapper.hpp"
 #include "lib/singleton.hpp"
 
 extern "C" {

@@ -27,7 +27,7 @@
 #include "common/option.hpp"
 
 #include "include/symbol.hpp"
-#include "lib/thread-wrapper.hpp"
+#include "backend/thread-wrapper.hpp"
 #include "lib/error.hpp"
 #include "lib/query.hpp"
 #include "lib/util.hpp"

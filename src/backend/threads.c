@@ -23,7 +23,7 @@
 
 
 //TODO: Lumiera header includes//
-#include "lib/threads.h"
+#include "threads.h"
 
 //TODO: internal/static forward declarations//
 
