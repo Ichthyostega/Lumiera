@@ -36,6 +36,9 @@ public:
   void play();
   
 private:
+
+  void playback_thread();
+
   void pull_frame();
 };
 

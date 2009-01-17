@@ -21,6 +21,7 @@
 * *****************************************************/
 
 #include "playback-controller.hpp"
+#include "../gtk-lumiera.hpp"
 
 namespace gui {
 namespace controller { 
@@ -29,6 +30,16 @@ void
 PlaybackController::play()
 {
   g_message("Play");
+}
+
+void PlaybackController::playback_thread()
+{
+  pull_frame();
+}
+
+void PlaybackController::pull_frame()
+{
+  
 }
 
 }   // namespace controller
