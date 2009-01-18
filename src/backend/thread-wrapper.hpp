@@ -44,6 +44,85 @@ namespace lib {
   
   typedef struct nobug_flag* NoBugFlag;
   
+  class Thread;
+  
+  /**
+   * Brainstorming-in-code: how I would like to shape the API for joining threads.
+   * Intended use: This non-copyable handle has to be created within the thread which
+   * wants to wait-blocking on the termination of another thread. You then pass it
+   * into the ctor of the Thread starting wrapper class (see below), which causes
+   * the embedded lock/condition var to be used to sync on the end of the newly
+   * created thread. Note, after ending the execution, the newly created thread
+   * will be on hold until either the #join() function is called or this handle
+   * goes out of scope altogether. Explanation: this is implemented by locking
+   * the embedded monitor immediately in the ctor. Thus, unless entering the
+   * wait state, the contained mutex remains locked and prevents the thread
+   * manager from invoking the broadcast() on the condition var. 
+   * 
+   * @note this is a draft. It doesn't even work, because Cehteh is still planning
+   *       details of the thread handling and didn't implement the waiting feature. 
+   */
+  class JoinHandle
+    : public Sync<NonrecursiveLock_Waitable>
+    , Sync<NonrecursiveLock_Waitable>::Lock
+    {
+      typedef Sync<NonrecursiveLock_Waitable> SyncBase;
+      
+      bool isWaiting_;
+      volatile bool armed_;
+      
+      friend class Thread;
+      
+      LumieraCondition
+      accessLockedCondition()
+        {
+          ASSERT (!armed_, "Lifecycle error, JoinHandle used for several threads.");
+          armed_ = true;
+          return accessMonitor().accessCond();
+        }
+      
+      bool
+      wakeupCheck()
+        {
+          if (!armed_)
+            throw lumiera::error::Logic ("no thread created blocking on this JoinHandle");
+          
+          if (!isWaiting_)
+            {
+              isWaiting_ = true;
+              return false; // causes entering the blocking wait
+            }
+          TODO ("any possibility to detect spurious wakeups? can they happen?");
+          return true; // causes end of the blocking wait
+        }
+      
+      
+    public:
+      /** Create a promise, that the current thread will or may
+       *  wait-blocking on another not-yet existing thread to terminate.
+       *  When passed in on creation of the other thread, as long as this
+       *  handle lives, the other thread will be on hold after termination. 
+       */
+      JoinHandle()
+        : SyncBase::Lock(this)
+        , isWaiting_(false)
+        , armed_(false)
+        { }
+      
+      /** put the current thread into a blocking wait until another thread
+       *  has terminated. This other thread needs to be created by the Thread
+       *  wrapper, passing this JoinHandle as ctor parameter.
+       *  @throws error::Logic if no thread has been registered to block on this
+       */ 
+      void
+      join()
+        {
+          accessMonitor().wait (*this, &JoinHandle::wakeupCheck);
+        }
+    };
+  
+  
+  
   
   /****************************************************************************
    * A thin convenience wrapper for dealing with threads,
@@ -65,8 +144,8 @@ namespace lib {
    *       is superfluous in the final application. Re-evaluate this!
    */
   class Thread
-    : public Sync<NonrecursiveLock_Waitable>,
-      boost::noncopyable
+    : public Sync<NonrecursiveLock_Waitable>
+    , boost::noncopyable
     {
       volatile bool started_;
       
@@ -90,14 +169,14 @@ namespace lib {
       
       
       void
-      start_thread (Literal& purpose, NoBugFlag logging_flag)
+      start_thread (lumiera_thread_class kind, Literal& purpose, NoBugFlag logging_flag, LumieraCondition joinCond=0)
         {
           Lock sync(this);
           LumieraThread res = 
-          lumiera_thread_run ( LUMIERA_THREAD_INTERACTIVE
+          lumiera_thread_run ( kind
                              , &run         // invoking the run helper and..
                              , this         // passing this start context as parameter
-                             , 0            // no condition variable provided (for now...)
+                             , joinCond     // maybe wait-blocking for the thread to terminate
                              , purpose.c_str()
                              , logging_flag
                              );
@@ -127,7 +206,21 @@ namespace lib {
         : started_(false),
           operation_(operation)
         {
-          start_thread (purpose, logging_flag);
+          start_thread (LUMIERA_THREAD_INTERACTIVE, purpose, logging_flag);
+        }
+      
+      /** Variant of the standard case, used to register a JoinHandle in addition to starting a thread.
+       *  @param join ref to a JoinHandle, which needs to be created in the thread which plans
+       *         to wait-blocking on the termination of this newly created thread 
+       * 
+       */
+      Thread (Literal& purpose, Operation const& operation, 
+              JoinHandle& join, NoBugFlag logging_flag = &NOBUG_FLAG(operate))   ///TODO: define a dedicated flag for threads
+        : started_(false),
+          operation_(operation)
+        {
+          start_thread (LUMIERA_THREAD_INTERACTIVE, purpose, logging_flag, 
+                        join.accessLockedCondition());
         }
     };
   
