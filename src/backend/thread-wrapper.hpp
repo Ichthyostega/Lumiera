@@ -42,8 +42,10 @@ namespace lib {
   using std::tr1::function;
   using lumiera::Literal;
   
+  typedef struct nobug_flag* NoBugFlag;
   
-  /**
+  
+  /****************************************************************************
    * A thin convenience wrapper for dealing with threads,
    * as implemented by the backend (on top of pthread).
    * Using this wrapper...
@@ -87,10 +89,8 @@ namespace lib {
         }
       
       
-    public:
-      Thread (Literal& purpose, Operation const& operation, struct nobug_flag *logging_flag = &NOBUG_FLAG(operate))
-        : started_(false),
-          operation_(operation)
+      void
+      start_thread (Literal& purpose, NoBugFlag logging_flag)
         {
           Lock sync(this);
           LumieraThread res = 
@@ -108,6 +108,26 @@ namespace lib {
           // make sure the new thread had the opportunity to take the Operation
           // prior to leaving and thereby possibly destroying this local context
           sync.wait (started_);
+        }
+        
+    public:
+      /** Create a new thread to execute the given operation.
+       *  The new thread starts up synchronously, i.e. when the ctor returns, the new thread
+       *  has started running and taken over (copied) the operation functor passed in. The
+       *  thread will be created by lumiera_thread_run (declared in threads.h), it can't 
+       *  be cancelled and it can't be joined.
+       *  @param purpose fixed char string used to denote the thread for diagnostics
+       *  @param logging_flag NoBug flag to receive diagnostics regarding the new thread
+       *  @param operation defining what to execute within the new thread. Any functor
+       *         which can be bound to function<void(void)>. Note this functor will be
+       *         copied onto the stack of the new thread, thus it can be transient.
+       * 
+       */
+      Thread (Literal& purpose, Operation const& operation, NoBugFlag logging_flag = &NOBUG_FLAG(operate))   ///TODO: define a dedicated flag for threads
+        : started_(false),
+          operation_(operation)
+        {
+          start_thread (purpose, logging_flag);
         }
     };
   
