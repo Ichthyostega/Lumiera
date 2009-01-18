@@ -123,16 +123,13 @@ TimelinePanel::~TimelinePanel()
 void
 TimelinePanel::on_play_pause()
 {
-  workspace.get_controller().get_playback_controller().play();  
-  
-  // TEST CODE! 
   if(!is_playing())
     {
       play();
     }
   else
     {
-      frameEvent.disconnect();
+      pause();
     }
   
   update_playback_buttons();
@@ -141,12 +138,8 @@ TimelinePanel::on_play_pause()
 void
 TimelinePanel::on_stop()
 {
-  // TEST CODE! 
-  /*timelineWidget.set_playback_point(GAVL_TIME_UNDEFINED);
-  frameEvent.disconnect();
-  show_time(timelineWidget.get_playback_period_start());
-  
-  update_playback_buttons();*/
+  workspace.get_controller().get_playback_controller().stop();  
+  update_playback_buttons();
 }
 
 void
@@ -288,20 +281,21 @@ TimelinePanel::update_zoom_buttons()
 
 void
 TimelinePanel::play()
+{   
+  workspace.get_controller().get_playback_controller().play();
+}
+
+void
+TimelinePanel::pause()
 {
-  /*if(timelineWidget.get_playback_point() == GAVL_TIME_UNDEFINED)
-    timelineWidget.set_playback_point(
-      timelineWidget.get_playback_period_start());
-  frameEvent = Glib::signal_timeout().connect(
-    sigc::mem_fun(this, &TimelinePanel::on_frame),
-    1000 / 25);*/
+  workspace.get_controller().get_playback_controller().pause();
 }
 
 bool
 TimelinePanel::is_playing() const
 {
-  // TEST CODE! - this should be hooked up to the real playback control
-  return frameEvent.connected();
+  return workspace.get_controller().get_playback_controller().
+    is_playing();
 }
 
 void

@@ -141,9 +141,9 @@ PKG_CHECK_MODULES(LUMIERA_COMMON_LIBS, [sigc++-2.0 >= 2.0.17])
 # gtk+-2.0 >= 2.12 gtkmm-2.4 >= 2.12 for Debian Lenny compatibility
 
 PKG_CHECK_MODULES(LUMIERA_GUI, [
-    gtk+-2.0 >= 2.8 gtkmm-2.4 >= 2.8
-    gdl-1.0 >= 0.6.1 cairomm-1.0 >= 0.6.0
-    gavl >= 0.2.5 librsvg-2.0 >= 2.18.1])
+    gtk+-2.0 >= 2.8 gtkmm-2.4 >= 2.8 gdl-1.0 >= 0.6.1
+    cairomm-1.0 >= 0.6.0 gavl >= 0.2.5 librsvg-2.0 >= 2.18.1
+    gthread-2.0 >= 2.12.4])
 
 # END Gtk Dependancies
 

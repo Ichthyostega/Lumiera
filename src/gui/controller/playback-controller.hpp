@@ -24,6 +24,7 @@
  */
 
 #include <sigc++/sigc++.h>
+#include <glibmm.h>
 
 #ifndef PLAYBACK_CONTROLLER_HPP
 #define PLAYBACK_CONTROLLER_HPP
@@ -35,17 +36,44 @@ class PlaybackController
 {
 public:
 
+  PlaybackController();
+  
+  ~PlaybackController();
+
   void play();
+  
+  void pause();
+  
+  void stop();
+  
+  bool is_playing();
 
   void attach_viewer(const sigc::slot<void, void*>& on_frame);
   
 private:
 
+  void start_playback_thread();
+
   void playback_thread();
 
   void pull_frame();
   
+  void on_frame();
+  
 private:
+
+  Glib::Thread *thread;
+  
+  Glib::StaticMutex mutex;
+  
+  Glib::Dispatcher dispatcher;
+  
+  volatile bool finish_playback_thread;
+  
+  volatile bool playing;
+  
+  unsigned char buffer[320 * 240 * 4];
+  
   sigc::signal<void, void*> frame_signal;
 };
 

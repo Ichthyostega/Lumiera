@@ -67,21 +67,6 @@ VideoDisplayWidget::on_realize()
   add_events(Gdk::ALL_EVENTS_MASK);
 }
 
-bool 
-VideoDisplayWidget::on_button_press_event (GdkEventButton* event)
-{
-  (void)event;
-  
-  unsigned char buffer[320 * 240 * 4];
-
-  for(int i = 0; i < 320*240*4; i++)
-    buffer[i] = rand();
-
-  displayer->put((void*)buffer);
-
-  return true;
-}
-
 Displayer*
 VideoDisplayWidget::createDisplayer( Gtk::Widget *drawingArea, int width, int height )
 {

@@ -26,30 +26,94 @@
 namespace gui {
 namespace controller { 
 
-void
-PlaybackController::play()
+PlaybackController::PlaybackController() :
+  finish_playback_thread(false),
+  playing(false)
 {
-  pull_frame();
+  start_playback_thread();
+}
+
+PlaybackController::~PlaybackController()
+{
+  mutex.lock();
+  finish_playback_thread = true;
+  mutex.unlock();
+  thread->join();
 }
 
 void
-PlaybackController::attach_viewer(const sigc::slot<void, void*>& on_frame)
+PlaybackController::play()
+{
+  Glib::Mutex::Lock lock(mutex);
+  playing = true;
+}
+
+void
+PlaybackController::pause()
+{
+  Glib::Mutex::Lock lock(mutex);
+  playing = false;
+}
+
+void
+PlaybackController::stop()
+{
+  Glib::Mutex::Lock lock(mutex);
+  playing = false;
+}
+
+bool
+PlaybackController::is_playing()
+{
+  Glib::Mutex::Lock lock(mutex);
+  return playing;
+}
+
+void
+PlaybackController::start_playback_thread()
+{
+  dispatcher.connect(sigc::mem_fun(this, &PlaybackController::on_frame));
+  thread = Glib::Thread::create (sigc::mem_fun(
+    this, &PlaybackController::playback_thread), true);
+}
+
+void
+PlaybackController::attach_viewer(
+  const sigc::slot<void, void*>& on_frame)
 {
   frame_signal.connect(on_frame);
 }
 
-void PlaybackController::playback_thread()
-{
-  pull_frame();
+void
+PlaybackController::playback_thread()
+{  
+  for(;;)
+    {
+      {
+        Glib::Mutex::Lock lock(mutex);
+        if(finish_playback_thread)
+          return;
+      }
+      
+      if(is_playing())
+        pull_frame();
+        
+      Glib::Thread::yield();
+    }
 }
 
-void PlaybackController::pull_frame()
+void
+PlaybackController::pull_frame()
 {
-  unsigned char buffer[320 * 240 * 4];
-
   for(int i = 0; i < 320*240*4; i++)
     buffer[i] = rand();
-  
+
+  dispatcher.emit();
+}
+
+void
+PlaybackController::on_frame()
+{
   frame_signal.emit(buffer);
 }
 

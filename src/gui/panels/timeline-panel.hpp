@@ -87,6 +87,9 @@ private:
   void update_zoom_buttons();
   
   void play();
+  
+  void pause();
+  
   bool is_playing() const;
   
   void set_tool(gui::widgets::timeline::ToolType tool);
@@ -137,7 +140,6 @@ private:
 private:
   // TEST CODE
   bool on_frame();
-  sigc::connection frameEvent;
   
   //----- Constants -----//
 private:

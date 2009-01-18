@@ -47,9 +47,6 @@ public:
   /* ===== Overrides ===== */
 private:
   virtual void on_realize();
-  
-  // TEST CODE!!!!
-  virtual bool on_button_press_event (GdkEventButton* event);
 
   /* ===== Internals ===== */
 private:
