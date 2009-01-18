@@ -138,9 +138,9 @@ void rgb_buffer_to_yuy2(unsigned char *in, unsigned char *out)
       rgb_to_yuv(r1, g1, b1, y1, u1, v1);
       
       out[i] = y0;
-      out[i + 1] = (byte)(((int)u0 + (int)u1) / 2);
+      out[i + 1] = u0;
       out[i + 2] = y1;
-      out[i + 3] = (byte)(((int)v0 + (int)v1) / 2);
+      out[i + 3] = v0;
     }
 }
 
@@ -168,7 +168,6 @@ PlaybackController::pull_frame()
   else
   {  
     unsigned char row[320 * 3];
-
     
     for(int x = 0; x < 320; x++)
       {
