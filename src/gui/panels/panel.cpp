@@ -26,12 +26,11 @@
 namespace gui {
 namespace panels {
 
-Panel::Panel(model::Project *const owner_project,
+Panel::Panel(workspace::WorkspaceWindow &workspace_window,
   const gchar *name, const gchar *long_name,
   GdlDockItemBehavior behavior) :
-  project(owner_project)
+  workspace(workspace_window)
 {
-  REQUIRE(owner_project != NULL);
   REQUIRE(name != NULL);
   REQUIRE(long_name != NULL);
   
@@ -42,12 +41,11 @@ Panel::Panel(model::Project *const owner_project,
   ENSURE(dock_item != NULL);
 }
 
-Panel::Panel(model::Project *const owner_project,
+Panel::Panel(workspace::WorkspaceWindow &workspace_window,
   const gchar *name, const gchar *long_name, const gchar *stock_id,
   GdlDockItemBehavior behavior) :
-  project(owner_project)
+  workspace(workspace_window)
 {
-  REQUIRE(owner_project != NULL);
   REQUIRE(name != NULL);
   REQUIRE(long_name != NULL);
   REQUIRE(stock_id != NULL);

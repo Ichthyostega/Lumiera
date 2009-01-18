@@ -32,8 +32,8 @@
 
 namespace gui {
 
-namespace model {
-class Project;  
+namespace workspace {
+class WorkspaceWindow;  
 }
 
 namespace panels {
@@ -46,24 +46,24 @@ class Panel : public Gtk::VBox
 protected:
   /**
    *  Constructs a panel object
-   *  @param owner_project The project associated with this panel.
+   *  @param workspace_window The window that owns this panel.
    *  @param name The internal name of this panel
    *  @param long_name The name to display on the caption
    *  @param behavior The GDL behaviour of this item
    */
-  Panel(model::Project *const owner_project,
+  Panel(workspace::WorkspaceWindow &workspace_window,
     const gchar *name, const gchar *long_name,
     GdlDockItemBehavior behavior = GDL_DOCK_ITEM_BEH_NORMAL);
 
   /**
    *  Constructs a panel object with a stock item for a caption
-   *  @param owner_project The project associated with this panel.
+   *  @param owner_window The window that owns this panel.
    *  @param name The internal name of this panel
    *  @param long_name The name to display on the caption
    *  @param stock_id The id of the stock item to display on the caption
    *  @param behavior The GDL behaviour of this item
    */
-  Panel(model::Project *const owner_project,
+  Panel(workspace::WorkspaceWindow &owner_window,
     const gchar *name, const gchar *long_name, const gchar *stock_id,
     GdlDockItemBehavior behavior = GDL_DOCK_ITEM_BEH_NORMAL);
 
@@ -99,7 +99,7 @@ private:
 
 protected:
 
-  model::Project *const project;
+  workspace::WorkspaceWindow &workspace;
 
   GdlDockItem* dock_item;
 };

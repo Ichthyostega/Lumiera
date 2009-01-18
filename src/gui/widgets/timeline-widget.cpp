@@ -484,6 +484,12 @@ TimelineWidget::get_y_scroll_offset() const
   return (int)verticalAdjustment.get_value();
 }
 
+void
+TimelineWidget::set_y_scroll_offset(const int offset)
+{
+  verticalAdjustment.set_value(offset);
+}
+
 bool
 TimelineWidget::on_motion_in_body_notify_event(GdkEventMotion *event)
 {

@@ -188,7 +188,7 @@ Actions::on_menu_sequence_add()
   dialogs::NameChooser dialog(workspaceWindow,
     _("Add Sequence"), _("New Sequence"));
   if(dialog.run() == RESPONSE_OK)
-    workspaceWindow.get_project()->add_new_sequence(dialog.get_name());
+    workspaceWindow.get_project().add_new_sequence(dialog.get_name());
 }
 
 /* ===== Track Menu Event Handlers ===== */

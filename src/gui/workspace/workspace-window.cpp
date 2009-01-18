@@ -37,16 +37,17 @@
 
 using namespace Gtk;
 using namespace gui::model;
+using namespace gui::controller;
 
 namespace gui {
 namespace workspace {
 	
-WorkspaceWindow::WorkspaceWindow(Project *source_project) :
+WorkspaceWindow::WorkspaceWindow(Project &source_project,
+  gui::controller::Controller &source_controller) :
   project(source_project),
+  controller(source_controller),
   actions(*this)
-{
-  REQUIRE(source_project != NULL);
-    
+{    
   layout = NULL;
   assetsPanel = NULL;
   viewerPanel = NULL;
@@ -68,10 +69,16 @@ WorkspaceWindow::~WorkspaceWindow()
   timelinePanel->unreference();
 }
 
-Project*
-WorkspaceWindow::get_project() const
+Project&
+WorkspaceWindow::get_project()
 {
   return project;
+}
+
+Controller&
+WorkspaceWindow::get_controller()
+{
+  return controller;
 }
 
 void
@@ -152,11 +159,11 @@ WorkspaceWindow::create_ui()
   baseContainer.pack_start(*toolbar, Gtk::PACK_SHRINK);
   
   //----- Create the Panels -----//
-  assetsPanel = new AssetsPanel(project);
+  assetsPanel = new AssetsPanel(*this);
   ENSURE(assetsPanel != NULL);
-  viewerPanel = new ViewerPanel(project);
+  viewerPanel = new ViewerPanel(*this);
   ENSURE(viewerPanel != NULL);
-  timelinePanel = new TimelinePanel(project);
+  timelinePanel = new TimelinePanel(*this);
   ENSURE(timelinePanel != NULL);
 
   //----- Create the Dock -----//

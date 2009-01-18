@@ -48,10 +48,9 @@ class TimelinePanel : public Panel
 public:
   /**
    * Constructor
-   *  @param owner_project The project associated with this panel.
+   * @param workspace_window The window that owns this panel.
    */
-  TimelinePanel(model::Project *const owner_project);
-
+  TimelinePanel(workspace::WorkspaceWindow &workspace_window);
 
   /**
    * Destructor 
@@ -88,6 +87,9 @@ private:
   void update_zoom_buttons();
   
   void play();
+  
+  void pause();
+  
   bool is_playing() const;
   
   void set_tool(gui::widgets::timeline::ToolType tool);
@@ -138,7 +140,6 @@ private:
 private:
   // TEST CODE
   bool on_frame();
-  sigc::connection frameEvent;
   
   //----- Constants -----//
 private:

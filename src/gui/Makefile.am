@@ -163,6 +163,10 @@ libgui_la_SOURCES =							\
 	$(lumigui_srcdir)/model/sequence.hpp				\
 	$(lumigui_srcdir)/model/clip.cpp				\
 	$(lumigui_srcdir)/model/clip.hpp				\
+	$(lumigui_srcdir)/controller/controller.cpp			\
+	$(lumigui_srcdir)/controller/controller.hpp			\
+	$(lumigui_srcdir)/controller/playback-controller.cpp		\
+	$(lumigui_srcdir)/controller/playback-controller.hpp		\
 	$(lumigui_srcdir)/output/displayer.cpp				\
 	$(lumigui_srcdir)/output/displayer.hpp				\
 	$(lumigui_srcdir)/output/gdkdisplayer.cpp			\

@@ -25,7 +25,9 @@
 #include "../gtk-lumiera.hpp"
 #include "timeline-panel.hpp"
 
+#include "../workspace/workspace-window.hpp"
 #include "../model/project.hpp"
+#include "../controller/controller.hpp"
 
 extern "C" {
 #include "../../lib/time.h"
@@ -43,8 +45,9 @@ namespace panels {
   
 const int TimelinePanel::ZoomToolSteps = 2; // 2 seems comfortable
 
-TimelinePanel::TimelinePanel(model::Project *const owner_project) :
-  Panel(owner_project, "timeline", _("Timeline"), "panel_timeline"),
+TimelinePanel::TimelinePanel(workspace::WorkspaceWindow
+    &workspace_window) :
+  Panel(workspace_window, "timeline", _("Timeline"), "panel_timeline"),
   timeIndicator(),
   previousButton(Stock::MEDIA_PREVIOUS),
   rewindButton(Stock::MEDIA_REWIND),
@@ -65,7 +68,7 @@ TimelinePanel::TimelinePanel(model::Project *const owner_project) :
   //  mem_fun(this, &TimelinePanel::on_playback_period_drag_released));
   
   // Hook up notifications
-  project->get_sequences().signal_changed().connect(
+  workspace.get_project().get_sequences().signal_changed().connect(
     mem_fun(this, &TimelinePanel::on_sequence_list_changed));
   
   // Setup the notebook  
@@ -119,15 +122,14 @@ TimelinePanel::~TimelinePanel()
 
 void
 TimelinePanel::on_play_pause()
-{ 
-  // TEST CODE! 
+{
   if(!is_playing())
     {
       play();
     }
   else
     {
-      frameEvent.disconnect();
+      pause();
     }
   
   update_playback_buttons();
@@ -136,12 +138,8 @@ TimelinePanel::on_play_pause()
 void
 TimelinePanel::on_stop()
 {
-  // TEST CODE! 
-  /*timelineWidget.set_playback_point(GAVL_TIME_UNDEFINED);
-  frameEvent.disconnect();
-  show_time(timelineWidget.get_playback_period_start());
-  
-  update_playback_buttons();*/
+  workspace.get_controller().get_playback_controller().stop();  
+  update_playback_buttons();
 }
 
 void
@@ -223,7 +221,7 @@ TimelinePanel::update_notebook()
   old_pages.swap(notebook_pages);
 
   BOOST_FOREACH( shared_ptr< model::Sequence > sequence,
-    project->get_sequences() )
+    workspace.get_project().get_sequences() )
     {
       std::map<const model::Sequence*, shared_ptr<TimelineWidget> >::
         iterator iterator = old_pages.find(sequence.get());
@@ -283,20 +281,21 @@ TimelinePanel::update_zoom_buttons()
 
 void
 TimelinePanel::play()
+{   
+  workspace.get_controller().get_playback_controller().play();
+}
+
+void
+TimelinePanel::pause()
 {
-  /*if(timelineWidget.get_playback_point() == GAVL_TIME_UNDEFINED)
-    timelineWidget.set_playback_point(
-      timelineWidget.get_playback_period_start());
-  frameEvent = Glib::signal_timeout().connect(
-    sigc::mem_fun(this, &TimelinePanel::on_frame),
-    1000 / 25);*/
+  workspace.get_controller().get_playback_controller().pause();
 }
 
 bool
 TimelinePanel::is_playing() const
 {
-  // TEST CODE! - this should be hooked up to the real playback control
-  return frameEvent.connected();
+  return workspace.get_controller().get_playback_controller().
+    is_playing();
 }
 
 void

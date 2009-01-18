@@ -34,11 +34,12 @@ namespace panels {
 class AssetsPanel : public Panel
 {
 public:
+  
   /**
-   * Constructor
-   *  @param owner_project The project associated with this panel.
+   * Contructor.
+   * @param workspace_window The window that owns this panel.
    **/
-  AssetsPanel(model::Project *const owner_project);
+  AssetsPanel(workspace::WorkspaceWindow &workspace_window);
 
 protected:
   Gtk::Label placeholder;

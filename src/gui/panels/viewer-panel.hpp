@@ -42,9 +42,13 @@ class ViewerPanel : public Panel
 public:
   /**
    * Contructor.
-     @param owner_project The project associated with this panel.
+   * @param workspace_window The window that owns this panel.
    **/
-  ViewerPanel(model::Project *const owner_project);
+  ViewerPanel(workspace::WorkspaceWindow &owner_window);
+  
+protected:
+
+  void on_frame(void *buffer);
 
 protected:
 

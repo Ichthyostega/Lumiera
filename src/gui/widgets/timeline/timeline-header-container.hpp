@@ -29,6 +29,7 @@
 #define HEADER_CONTAINER_HPP
 
 #include "../../gtk-lumiera.hpp"
+#include "timeline-layout-helper.hpp"
 
 namespace gui {
   
@@ -139,6 +140,15 @@ private:
   void on_hovering_track_changed(
     boost::shared_ptr<timeline::Track> hovering_track);
     
+private:
+  /* ===== Internal Event Handlers ===== */
+
+  /**
+   * An internal event handler, which is called when the scroll slide
+   * timer calls it.
+   */
+  bool on_scroll_slide_timer();
+    
   /* ===== Internals ===== */
 private:
 
@@ -172,6 +182,27 @@ private:
    **/
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
     boost::shared_ptr<model::Track> model_track);
+    
+  void begin_drag();
+  
+  
+  void end_drag();
+  
+  void set_keep_above_recursive(
+    TimelineLayoutHelper::TrackTree::iterator_base node,
+    const bool keep_above);
+    
+  /**
+   * Begins, or continues a scroll slide at a given rate
+   * @param scroll_slide_rate The distance to slide every timer event
+   * in units of 1/256th of the view height.
+   */
+  void begin_scroll_slide(int scroll_slide_rate);
+  
+  /**
+   * Ends a scroll slide, and disconnects the slide timer
+   */
+  void end_scroll_slide();
   
 private:
 
@@ -195,11 +226,38 @@ private:
    * click is not processed by track headers.
    **/
   Gtk::Menu contextMenu;
+  
+  /**
+   * This connection is used to represent the timer which causes scroll
+   * sliding to occur.
+   * @remarks Scroll sliding is an animated scroll which occurs when
+   * the user drags a header outside the area of the timeline body.
+   */
+  sigc::connection scrollSlideEvent;
+  
+  /**
+   * Specifies the rate at which scroll sliding is currently taking
+   * place.
+   */
+  int scrollSlideRate;
     
   //----- User Interaction State -----//  
   boost::shared_ptr<timeline::Track> hoveringTrack;
 
   Gdk::Point mousePoint;
+  
+  /* ===== Constants ===== */  
+  /**
+   * The amount to divide the mouse overshoot by to produce the slide
+   * scroll rate.
+   * @remarks Smaller values cause faster scrolling.
+   */
+  static const int ScrollSlideRateDivisor;
+  
+  /**
+   * The interval between scroll slide events in ms.
+   */
+  static const int ScrollSlideEventInterval;
 
   friend class gui::widgets::TimelineWidget;
   friend class timeline::Track;

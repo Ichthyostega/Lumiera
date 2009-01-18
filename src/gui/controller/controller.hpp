@@ -1,8 +1,8 @@
 /*
-  assets-panel.cpp  -  Implementation of the assets panel
+  controller.hpp  -  Declaration of the controller object
  
   Copyright (C)         Lumiera.org
-    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
+    2009,               Joel Holdsworth <joel@airwebreathe.org.uk>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -18,20 +18,39 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
+/** @file controller/controller.hpp
+ ** This file contains the definition of the controller object
+ */
 
-#include "../gtk-lumiera.hpp"
-#include "assets-panel.hpp"
+#include "playback-controller.hpp"
+
+#ifndef CONTROLLER_HPP
+#define CONTROLLER_HPP
 
 namespace gui {
-namespace panels {
 
-AssetsPanel::AssetsPanel(workspace::WorkspaceWindow &workspace_window) :
-  Panel(workspace_window, "assets", _("Assets"), "panel_assets"),
-  placeholder("Assets/Media")
-  {
-    pack_start(placeholder);
-  }
+namespace model {
+class Project;
+} // namespace model
+  
+namespace controller { 
 
-}   // namespace panels
+class Controller
+{
+public:
+  Controller(model::Project &model_project);
+
+  PlaybackController& get_playback_controller();
+
+private:
+  model::Project &project;
+  
+  PlaybackController playback;
+};
+
+}   // namespace controller
 }   // namespace gui
+
+#endif // CONTROLLER_HPP
+

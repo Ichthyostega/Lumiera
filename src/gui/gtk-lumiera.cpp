@@ -31,6 +31,7 @@
 #include "window-manager.hpp"
 #include "workspace/workspace-window.hpp"
 #include "model/project.hpp"
+#include "controller/controller.hpp"
 
 extern "C" {
 #include "common/interface.h"
@@ -43,6 +44,7 @@ using namespace Glib;
 using namespace gui;
 using namespace gui::workspace;
 using namespace gui::model;
+using namespace gui::controller;
 
 
 GtkLumiera the_application;
@@ -55,17 +57,19 @@ namespace gui {
 void
 GtkLumiera::main(int argc, char *argv[])
 {
+  Glib::thread_init();
 
   Main kit(argc, argv);
   
   Glib::set_application_name(AppTitle);
 
   Project project;
+  Controller controller(project);
   WindowManager window_manager;
 
   window_manager.set_theme("lumiera_ui.rc");
 
-  WorkspaceWindow main_window(&project);
+  WorkspaceWindow main_window(project, controller);
 
   kit.run(main_window);
   

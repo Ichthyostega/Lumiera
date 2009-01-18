@@ -45,6 +45,12 @@ VideoDisplayWidget::~VideoDisplayWidget()
     delete displayer;
 }
 
+Displayer*
+VideoDisplayWidget::get_displayer() const
+{
+  return displayer;
+}
+
 void
 VideoDisplayWidget::on_realize()
 {
@@ -59,21 +65,6 @@ VideoDisplayWidget::on_realize()
   displayer = createDisplayer(this, 320, 240);
 
   add_events(Gdk::ALL_EVENTS_MASK);
-}
-
-bool 
-VideoDisplayWidget::on_button_press_event (GdkEventButton* event)
-{
-  (void)event;
-  
-  unsigned char buffer[320 * 240 * 4];
-
-  for(int i = 0; i < 320*240*4; i++)
-    buffer[i] = rand();
-
-  displayer->put((void*)buffer);
-
-  return true;
 }
 
 Displayer*
