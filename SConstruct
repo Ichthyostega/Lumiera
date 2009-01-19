@@ -257,7 +257,7 @@ def configurePlatform(env):
     if not conf.CheckPkgConfig('glibmm-2.4', '2.16'):
         problems.append('Unable to configure Lib glib--, exiting.')
     
-    if not conf.CheckPkgConfig('gthread-2.0', '2.12'):
+    if not conf.CheckPkgConfig('gthread-2.0', '2.12.4'):
         problems.append('Need gthread support lib for glib-- based thread handling.')
     
     if not conf.CheckPkgConfig('cairomm-1.0', 0.6):
