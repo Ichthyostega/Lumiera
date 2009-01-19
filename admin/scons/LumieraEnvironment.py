@@ -88,7 +88,7 @@ class LumieraEnvironment(Environment):
         
         
 #### temporary pre 1.0 SCons compatibility hack ####
-_ver = map(int, SCons.__version__.split('.'))
+_ver = map(int, SCons.__version__.split('.')[:2])
 _old = (_ver[0]<1 and _ver[1]<98)
 if _old:
     ConfigBase = SCons.SConf.SConf
