@@ -184,13 +184,15 @@ private:
     boost::shared_ptr<model::Track> model_track);
     
   void begin_drag();
-  
-  
-  void end_drag();
-  
-  void set_keep_above_recursive(
-    TimelineLayoutHelper::TrackTree::iterator_base node,
-    const bool keep_above);
+    
+  /**
+   * Recusively raises all the header widget windows in a branch to the 
+   * top of the Z-order.
+   * @param node The window of node's track header will be raised, as
+   * well as all it's descendant nodes.
+   **/
+  void raise_recursive(
+    TimelineLayoutHelper::TrackTree::iterator_base node);
     
   /**
    * Begins, or continues a scroll slide at a given rate

@@ -183,7 +183,7 @@ bool TimelineHeaderContainer::on_button_release_event (
   
   // Has the user been dragging?
   if(layout.get_dragging_track())
-    end_drag();
+    layout.end_dragging_track();
 
   return Container::on_button_release_event(event);    
 }
@@ -404,38 +404,16 @@ void
 TimelineHeaderContainer::begin_drag()
 {
   TimelineLayoutHelper &layout = timelineWidget.layoutHelper;
-  
-  shared_ptr<timeline::Track> dragging_track =
-    layout.begin_dragging_track(mousePoint);
-  ENSURE(dragging_track); // Something strange has happened if we
-                          // were somehow not hovering on a track
+  layout.begin_dragging_track(mousePoint);
 
-  const TimelineLayoutHelper::TrackTree::pre_order_iterator node =
-    layout.iterator_from_track(dragging_track->get_model_track());
-  set_keep_above_recursive(node, true);
+  // Raise all the header widgets so they float above the widgets not
+  // being dragged
+  raise_recursive(layout.get_dragging_track_iter());
 }
 
 void
-TimelineHeaderContainer::end_drag()
-{ 
-  TimelineLayoutHelper &layout = timelineWidget.layoutHelper;
-  
-  shared_ptr<timeline::Track> dragging_track =
-    layout.get_dragging_track();
-  ENSURE(dragging_track); // Something strange has happened if we
-                          // were somehow not dragging on a track  
-
-  const TimelineLayoutHelper::TrackTree::pre_order_iterator node =
-    layout.iterator_from_track(dragging_track->get_model_track());
-  set_keep_above_recursive(node, false);
-  
-  layout.end_dragging_track();
-}
-
-void
-TimelineHeaderContainer::set_keep_above_recursive(
-  TimelineLayoutHelper::TrackTree::iterator_base node,
-  const bool keep_above)
+TimelineHeaderContainer::raise_recursive(
+  TimelineLayoutHelper::TrackTree::iterator_base node)
 {
   TimelineLayoutHelper::TrackTree::pre_order_iterator iter;
   
@@ -450,13 +428,13 @@ TimelineHeaderContainer::set_keep_above_recursive(
     timeline_track->get_header_widget().get_window();
   ENSURE(window); // Something strange has happened if there was no
                   // window
-  window->set_keep_above(keep_above);
+  window->raise();
   
   for(iter = layout_tree.begin(node);
     iter != layout_tree.end(node);
     iter++)
     {
-      set_keep_above_recursive(iter, keep_above);
+      raise_recursive(iter);
     }
 }
 

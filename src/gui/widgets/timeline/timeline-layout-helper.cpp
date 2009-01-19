@@ -163,6 +163,12 @@ TimelineLayoutHelper::get_dragging_track() const
   return draggingTrack;
 }
 
+TimelineLayoutHelper::TrackTree::pre_order_iterator
+TimelineLayoutHelper::get_dragging_track_iter() const
+{
+  return draggingTrackIter;
+}
+
 void
 TimelineLayoutHelper::drag_to_point(const Gdk::Point &point)
 {

@@ -134,6 +134,8 @@ public:
   
   boost::shared_ptr<timeline::Track> get_dragging_track() const;
   
+  TrackTree::pre_order_iterator get_dragging_track_iter() const;
+  
   void drag_to_point(const Gdk::Point &point);
   
   /**
