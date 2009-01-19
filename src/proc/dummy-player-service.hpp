@@ -68,8 +68,17 @@ namespace proc {
       
       /* === Implementation of the Facade Interface === */
       
-      void displayInfo (string const& text);
-      void triggerGuiShutdown (string const& cause);
+      Process& start();
+      
+      
+      /** for now we use an single inline Process...
+       *  @todo actually implement multiple independent Playback processes!
+       *  @todo I am aware holding this object inline may cause a segfault at shutdown! 
+       */
+      Process theProcess_;
+      
+      Subsys::SigTerm notifyTermination_;
+      
       
       
       /* === Interface Lifecycle === */
@@ -82,7 +91,9 @@ namespace proc {
       ServiceInstanceHandle serviceInstance_;
       
     public:
-      DummyPlayerService();
+      DummyPlayerService(Subsys::SigTerm terminationHandle);
+      
+     ~DummyPlayerService() { notifyTermination_(); }
       
     };
     

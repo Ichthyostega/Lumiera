@@ -171,7 +171,7 @@ namespace gui {
   
   NotificationService::NotificationService () 
     : implInstance_(this,_instance),
-      serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_GuiNotification, 1,lumieraorg_GuiNotificationFacade))
+      serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_GuiNotification, 0,lumieraorg_GuiNotificationFacade))
   {
     INFO (operate, "GuiNotification Facade opened.");
   }

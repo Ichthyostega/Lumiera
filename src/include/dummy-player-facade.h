@@ -38,12 +38,12 @@ typedef lumiera_playprocess* LumieraPlayProcess;
 #include "common/subsys.hpp"
 #include "include/interfaceproxy.hpp"
 
+#include <boost/noncopyable.hpp>
 
 
 
 namespace proc {
-
-  class PlayProcess;
+  
   
   
   /******************************************************************
@@ -68,31 +68,34 @@ namespace proc {
       static lumiera::facade::Accessor<DummyPlayer> facade;
       
       
+      /**
+       * Continuous playback process, which has been started with a specific
+       * output size, format and framerate. It is a handle to a calculation process,
+       * which is about to produce a stream of frames to be retrieved by calling
+       * the #getFrame function on this handle.
+       * 
+       * @todo solve the lifecycle and ownership! 
+       */
+      class Process
+        : public LumieraPlayProcess,
+          boost::noncopyable
+        {
+        public:
+          virtual void        pause(bool) =0;
+          virtual void* const getFrame()  =0;
+          
+          virtual ~Process();
+        };
+      
+      
       //////////////////TODO: define some dummy negotiation about size and framerate....
       
-      virtual PlayProcess& start()   =0;
+      virtual Process& start()   =0;
       
       virtual ~DummyPlayer();
     };
   
   
-  /**
-   * Continuous playback process, which has been started with a specific
-   * output size, format and framerate. It is a handle to a calculation process,
-   * which is about to produce a stream of frames to be retrieved by calling
-   * the #getFrame function on this handle.
-   * 
-   * @todo solve the lifecycle and ownership! 
-   */
-  class PlayProcess
-    : public LumieraPlayProcess
-    {
-    public:
-      virtual void        pause(bool) =0;
-      virtual void* const getFrame()  =0;
-      
-      virtual ~PlayProcess();
-    };
   
   
 } // namespace proc
@@ -100,9 +103,9 @@ namespace proc {
 
 
 extern "C" {
-#endif /* =========================== CL Interface ===================== */ 
+#endif /* =========================== CL Interface ===================== */
 
-  
+
 #include "common/interface.h"
 
 LUMIERA_INTERFACE_DECLARE (lumieraorg_DummyPlayer, 0
