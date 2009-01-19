@@ -208,12 +208,11 @@ Actions::on_menu_help_about()
   AboutDialog dialog;
   
   //dialog.set_program_name(AppTitle);
-  dialog.set_version(GtkLumiera::AppVersion);
+  dialog.set_version(GtkLumiera::get_app_version());
   //dialog.set_version(AppState::get("version"));
-  dialog.set_copyright(GtkLumiera::AppCopyright);
-  dialog.set_website(GtkLumiera::AppWebsite);
-  dialog.set_authors(StringArrayHandle(GtkLumiera::AppAuthors,
-    GtkLumiera::AppAuthorCount, OWNERSHIP_NONE));
+  dialog.set_copyright(GtkLumiera::get_app_copyright());
+  dialog.set_website(GtkLumiera::get_app_website());
+  dialog.set_authors(GtkLumiera::get_app_authors());
 
   dialog.set_transient_for(workspaceWindow);
   
