@@ -191,66 +191,108 @@ TimelineLayoutHelper::drag_to_point(const Gdk::Point &point)
           continue;
         }
       
-      // Get the rectangle and the next rectangle
+      // Lookup the tracks
       const shared_ptr<model::Track> model_track(*iterator);
       REQUIRE(model_track);
       const weak_ptr<timeline::Track> timeline_track =
         lookup_timeline_track(model_track);
+        
+      // Calculate coordinates
       const Gdk::Rectangle &rect = headerBoxes[timeline_track];
       const int half_height = rect.get_height() / 2;
       const int y = rect.get_y();
       const int y_mid = y + half_height;
-      const int full_width = TimelineWidget::HeaderWidth;
+      const int full_width = rect.get_x() + rect.get_width();
       const int x_mid = rect.get_x() + rect.get_width() / 2;
       
-      // Is our track being dragged before this header?
-      if(pt_in_rect(dragPoint,
-          Gdk::Rectangle(0, y, full_width, half_height)))
-        {
-          draggingTrackIter = layoutTree.move_before(
-            iterator, draggingTrackIter);
-          break;
-        }
+      // Do hit test
+      if(attempt_drop_upper(iterator, dragPoint,
+        y, full_width, half_height))
+        break;
       
-      if(model_track->can_host_children() &&
-        model_track->get_child_tracks().empty())
-        {
-          // Is our track being dragged after this header?
-          if(pt_in_rect(dragPoint,
-            Gdk::Rectangle(0, y_mid, x_mid, half_height)))
-          {
-            draggingTrackIter = layoutTree.move_after(
-              iterator, draggingTrackIter);
-            break;
-          }
-          else if(pt_in_rect(dragPoint,
-            Gdk::Rectangle(x_mid, y_mid,
-              full_width - x_mid, half_height)))
-          {
-            // Insert a place-holder in the tree
-            const TrackTree::pre_order_iterator placeholder =
-              layoutTree.append_child(
-              iterator, shared_ptr<model::Track>());
-              
-            // Replace it with the relocated branch
-            draggingTrackIter = layoutTree.move_ontop(
-              placeholder, draggingTrackIter);
-            break;
-          }
-        }
-      else
-        {
-          if(pt_in_rect(dragPoint,
-            Gdk::Rectangle(0, y_mid, full_width, half_height)))
-          {
-            draggingTrackIter = layoutTree.move_after(
-              iterator, draggingTrackIter);
-            break;
-          }
-        }
+      if(attempt_drop_lower(iterator, dragPoint,
+        x_mid, full_width, y_mid, half_height))
+        break;
     }
     
   update_layout();
+}
+
+bool
+TimelineLayoutHelper::attempt_drop_upper(
+  TrackTree::pre_order_iterator target, const Gdk::Point &point,
+  const int y, const int full_width, const int half_height)
+{
+  if(pt_in_rect(point, Gdk::Rectangle(0, y, full_width, half_height)))
+    {
+      draggingTrackIter = layoutTree.move_before(
+        target, draggingTrackIter);
+      return true;
+    }
+  return false;
+}
+
+
+bool
+TimelineLayoutHelper::attempt_drop_lower(
+  TrackTree::pre_order_iterator target, const Gdk::Point &point,
+  const int x_mid, const int full_width, const int y_mid,
+  const int half_height)
+{
+  const shared_ptr<model::Track> model_track(*target);
+  REQUIRE(model_track);
+  
+  if(!pt_in_rect(point, Gdk::Rectangle(0, y_mid,
+    full_width, half_height)))
+    return false;
+  
+  if(model_track->can_host_children())
+    {
+      if(model_track->get_child_tracks().empty())
+        {
+          // Is our track being dragged after this header?
+          if(dragPoint.get_x() < x_mid)
+            {
+              draggingTrackIter = layoutTree.move_after(
+                target, draggingTrackIter);
+            }
+          else
+            {
+              if(draggingTrackIter.node->parent != target.node)
+                {
+                  // Insert a place-holder in the tree
+                  const TrackTree::pre_order_iterator placeholder =
+                    layoutTree.prepend_child(target);
+                    
+                  // Replace it with the relocated branch
+                  draggingTrackIter = layoutTree.move_ontop(
+                    placeholder, draggingTrackIter);
+                }  
+            }
+        }
+      else
+        {
+          if(draggingTrackIter.node->parent != target.node)
+            {
+              // Insert a place-holder in the tree
+              const TrackTree::pre_order_iterator placeholder =
+                layoutTree.append_child(target);
+                
+              // Replace it with the relocated branch
+              draggingTrackIter = layoutTree.move_ontop(
+                placeholder, draggingTrackIter);
+            }
+        }
+    }
+  else
+    {
+      // When this track cannot be a parent, the dragging track is
+      // simply dropped after
+      draggingTrackIter = layoutTree.move_after(
+        target, draggingTrackIter);
+    }
+    
+  return true;
 }
 
 int
