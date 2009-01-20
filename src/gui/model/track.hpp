@@ -45,6 +45,8 @@ public:
   
   void set_name(const std::string &name);
   
+  virtual bool can_host_children() const;
+  
   virtual bool remove_child_track(const boost::shared_ptr<Track> track);
   
   std::string print_branch();

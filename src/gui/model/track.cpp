@@ -52,7 +52,13 @@ Track::set_name(const std::string &name)
 }
 
 bool
-Track::remove_child_track(const boost::shared_ptr<Track> track)
+Track::can_host_children() const
+{
+  return false;
+}
+
+bool
+Track::remove_child_track(const boost::shared_ptr<Track> /*track*/)
 {
   return false;
 }

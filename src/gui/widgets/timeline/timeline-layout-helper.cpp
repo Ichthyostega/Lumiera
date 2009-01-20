@@ -33,6 +33,7 @@ using namespace std;
 using namespace boost;
 using namespace lumiera;
 using namespace util;
+using namespace gui::util;
 
 namespace gui {
 namespace widgets {
@@ -178,23 +179,78 @@ TimelineLayoutHelper::drag_to_point(const Gdk::Point &point)
   
   // Search the headers
   TrackTree::pre_order_iterator iterator;
-  for(iterator = ++layoutTree.begin(); // ++ so we miss out the root sequence
+  
+  for(iterator = ++layoutTree.begin();
     iterator != layoutTree.end();
     iterator++)
-    {
-      // Hit test the rectangle      
-      const weak_ptr<timeline::Track> track = 
-        lookup_timeline_track(*iterator);
-      
-      if(util::pt_in_rect(dragPoint, headerBoxes[track]))
+    { 
+      // Skip the dragging branch
+      if(iterator == draggingTrackIter)
         {
-          // Relocate the header
-          draggingTrackIter = layoutTree.move_after(
+          iterator.skip_children();
+          continue;
+        }
+      
+      // Get the rectangle and the next rectangle
+      const shared_ptr<model::Track> model_track(*iterator);
+      REQUIRE(model_track);
+      const weak_ptr<timeline::Track> timeline_track =
+        lookup_timeline_track(model_track);
+      const Gdk::Rectangle &rect = headerBoxes[timeline_track];
+      const int half_height = rect.get_height() / 2;
+      const int y = rect.get_y();
+      const int y_mid = y + half_height;
+      const int full_width = TimelineWidget::HeaderWidth;
+      const int x_mid = rect.get_x() + rect.get_width() / 2;
+      
+      // Is our track being dragged before this header?
+      if(pt_in_rect(dragPoint,
+          Gdk::Rectangle(0, y, full_width, half_height)))
+        {
+          draggingTrackIter = layoutTree.move_before(
             iterator, draggingTrackIter);
-          update_layout();
-          return;
+          break;
+        }
+      
+      if(model_track->can_host_children() &&
+        model_track->get_child_tracks().empty())
+        {
+          // Is our track being dragged after this header?
+          if(pt_in_rect(dragPoint,
+            Gdk::Rectangle(0, y_mid, x_mid, half_height)))
+          {
+            draggingTrackIter = layoutTree.move_after(
+              iterator, draggingTrackIter);
+            break;
+          }
+          else if(pt_in_rect(dragPoint,
+            Gdk::Rectangle(x_mid, y_mid,
+              full_width - x_mid, half_height)))
+          {
+            // Insert a place-holder in the tree
+            const TrackTree::pre_order_iterator placeholder =
+              layoutTree.append_child(
+              iterator, shared_ptr<model::Track>());
+              
+            // Replace it with the relocated branch
+            draggingTrackIter = layoutTree.move_ontop(
+              placeholder, draggingTrackIter);
+            break;
+          }
+        }
+      else
+        {
+          if(pt_in_rect(dragPoint,
+            Gdk::Rectangle(0, y_mid, full_width, half_height)))
+          {
+            draggingTrackIter = layoutTree.move_after(
+              iterator, draggingTrackIter);
+            break;
+          }
         }
     }
+    
+  update_layout();
 }
 
 int
