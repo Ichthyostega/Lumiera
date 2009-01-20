@@ -892,7 +892,7 @@ iter tree<T, tree_node_allocator>::prepend_child(iter position)
       position.node->last_child=tmp;
       }
    tmp->next_sibling=position.node->first_child;
-   position.node->prev_child=tmp;
+   position.node->first_child=tmp;
    tmp->prev_sibling=0;
    return tmp;
    }
