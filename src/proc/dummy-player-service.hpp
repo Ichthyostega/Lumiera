@@ -44,11 +44,25 @@
 #include "common/instancehandle.hpp"
 #include "lib/singleton-ref.hpp"
 
+#include <string>
 
 
 namespace proc {
   
+  using std::string;
+  using lumiera::Subsys;
   
+  
+  class ProcessImpl
+    : public DummyPlayer::Process
+    {
+      void        pause(bool doPlay);
+      void* const getFrame();
+      
+    public:
+      ProcessImpl() {}
+    };
+   
   
   /******************************************************
    * Actual implementation of the GuiNotification service
@@ -75,8 +89,9 @@ namespace proc {
        *  @todo actually implement multiple independent Playback processes!
        *  @todo I am aware holding this object inline may cause a segfault at shutdown! 
        */
-      Process theProcess_;
+      ProcessImpl theProcess_;
       
+      string error_;
       Subsys::SigTerm notifyTermination_;
       
       
@@ -93,7 +108,7 @@ namespace proc {
     public:
       DummyPlayerService(Subsys::SigTerm terminationHandle);
       
-     ~DummyPlayerService() { notifyTermination_(); }
+     ~DummyPlayerService() { notifyTermination_(&error_); }
       
     };
     

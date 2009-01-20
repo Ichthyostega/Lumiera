@@ -77,8 +77,8 @@ namespace proc {
        * @todo solve the lifecycle and ownership! 
        */
       class Process
-        : public LumieraPlayProcess,
-          boost::noncopyable
+        : public lumiera_playprocess
+        , boost::noncopyable
         {
         public:
           virtual void        pause(bool) =0;
