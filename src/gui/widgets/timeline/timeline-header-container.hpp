@@ -184,6 +184,8 @@ private:
     boost::shared_ptr<model::Track> model_track);
     
   void begin_drag();
+  
+  void end_drag();
     
   /**
    * Recusively raises all the header widget windows in a branch to the 

@@ -179,12 +179,7 @@ bool TimelineHeaderContainer::on_button_press_event (
 bool TimelineHeaderContainer::on_button_release_event (
   GdkEventButton* event)
 {
-  TimelineLayoutHelper &layout = timelineWidget.layoutHelper;
-  
-  // Has the user been dragging?
-  if(layout.get_dragging_track())
-    layout.end_dragging_track();
-
+  end_drag();
   return Container::on_button_release_event(event);    
 }
 
@@ -409,6 +404,24 @@ TimelineHeaderContainer::begin_drag()
   // Raise all the header widgets so they float above the widgets not
   // being dragged
   raise_recursive(layout.get_dragging_track_iter());
+  
+  // Set the cursor to a hand
+  REQUIRE(gdkWindow);
+  gdkWindow->set_cursor(Gdk::Cursor(Gdk::HAND1));
+}
+
+void
+TimelineHeaderContainer::end_drag()
+{
+  TimelineLayoutHelper &layout = timelineWidget.layoutHelper;
+  
+  // Has the user been dragging?
+  if(layout.get_dragging_track())
+    layout.end_dragging_track();
+    
+  // Reset the arrow as a cursor
+  REQUIRE(gdkWindow);
+  gdkWindow->set_cursor(Gdk::Cursor(Gdk::ARROW));
 }
 
 void
