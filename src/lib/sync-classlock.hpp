@@ -41,22 +41,22 @@
 
 namespace lib {
   
-  namespace { // implementation details
+  namespace nifty { // implementation details
     
     template<class X>
-    struct NiftyHolder 
+    struct Holder 
       {
         static uint accessed_;
         static char content_[sizeof(X)];
         
-        NiftyHolder() 
+        Holder() 
           {
             if (!accessed_)
               new(content_) X();
             ++accessed_; 
           }
         
-       ~NiftyHolder() 
+       ~Holder() 
           {
             --accessed_; 
             if (0==accessed_)
@@ -73,12 +73,12 @@ namespace lib {
       };
     
     template<class X>
-    uint NiftyHolder<X>::accessed_;
+    uint Holder<X>::accessed_;
     
     template<class X>
-    char NiftyHolder<X>::content_[sizeof(X)];
+    char Holder<X>::content_[sizeof(X)];
     
-  } // (End) implementation details
+  } // (End) nifty implementation details
   
   
   
@@ -100,14 +100,14 @@ namespace lib {
       Monitor&
       getPerClassMonitor()
         {
-          static NiftyHolder<Monitor> __used_here;
+          static nifty::Holder<Monitor> __used_here;
           return __used_here.get();
         }
       
     public:
       ClassLock() : Lock (getPerClassMonitor()) {}
       
-      uint use_count() { return NiftyHolder<Monitor>::accessed_; }
+      uint use_count() { return nifty::Holder<Monitor>::accessed_; }
     };
   
   
