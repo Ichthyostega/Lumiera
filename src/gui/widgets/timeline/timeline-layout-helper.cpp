@@ -42,6 +42,7 @@ namespace timeline {
 TimelineLayoutHelper::TimelineLayoutHelper(TimelineWidget &owner) :
   timelineWidget(owner),
   totalHeight(0),
+  dragBranchHeight(0),
   animating(false)
 {
 }
@@ -146,6 +147,7 @@ TimelineLayoutHelper::begin_dragging_track(
   const shared_ptr<model::Track> model_track =
     draggingTrack->get_model_track();
   draggingTrackIter = iterator_from_track(model_track);
+  dragBranchHeight = measure_branch_height(draggingTrackIter);
     
   return draggingTrack;
 }
@@ -206,11 +208,10 @@ TimelineLayoutHelper::drag_to_point(const Gdk::Point &point)
       const int x_mid = rect.get_x() + rect.get_width() / 2;
       
       // Do hit test
-      if(attempt_drop_upper(iterator, dragPoint,
-        y, full_width, half_height))
+      if(attempt_drop_upper(iterator, y, full_width, half_height))
         break;
       
-      if(attempt_drop_lower(iterator, dragPoint,
+      if(attempt_drop_lower(iterator,
         x_mid, full_width, y_mid, half_height))
         break;
     }
@@ -220,9 +221,13 @@ TimelineLayoutHelper::drag_to_point(const Gdk::Point &point)
 
 bool
 TimelineLayoutHelper::attempt_drop_upper(
-  TrackTree::pre_order_iterator target, const Gdk::Point &point,
-  const int y, const int full_width, const int half_height)
-{
+  TrackTree::pre_order_iterator target, const int y,
+  const int full_width, const int half_height)
+{ 
+  const Gdk::Point point(dragPoint.get_x(),
+    dragPoint.get_y() - dragStartOffset.get_y() +
+    dragBranchHeight);
+
   if(pt_in_rect(point, Gdk::Rectangle(0, y, full_width, half_height)))
     {
       draggingTrackIter = layoutTree.move_before(
@@ -232,16 +237,18 @@ TimelineLayoutHelper::attempt_drop_upper(
   return false;
 }
 
-
 bool
 TimelineLayoutHelper::attempt_drop_lower(
-  TrackTree::pre_order_iterator target, const Gdk::Point &point,
+  TrackTree::pre_order_iterator target,
   const int x_mid, const int full_width, const int y_mid,
   const int half_height)
 {
   const shared_ptr<model::Track> model_track(*target);
   REQUIRE(model_track);
   
+   const Gdk::Point point(dragPoint.get_x(),
+    dragPoint.get_y() - dragStartOffset.get_y());
+
   if(!pt_in_rect(point, Gdk::Rectangle(0, y_mid,
     full_width, half_height)))
     return false;
@@ -322,6 +329,31 @@ TimelineLayoutHelper::iterator_from_track(
     }
     
   return iter;
+}
+
+int
+TimelineLayoutHelper::measure_branch_height(
+  TrackTree::iterator_base parent_iterator)
+{
+  shared_ptr<timeline::Track> parent_track =
+    lookup_timeline_track(*parent_iterator);
+  
+  int branch_height = parent_track->get_height() +
+    TimelineWidget::TrackPadding;
+  
+  TrackTree::sibling_iterator iterator;
+  for(iterator = layoutTree.begin(parent_iterator);
+    iterator != layoutTree.end(parent_iterator);
+    iterator++)
+    {           
+      shared_ptr<timeline::Track> child_track =
+        lookup_timeline_track(*iterator);
+      
+      if(child_track->get_expanded())
+        branch_height += measure_branch_height(iterator);
+    }
+    
+  return branch_height;
 }
 
 void

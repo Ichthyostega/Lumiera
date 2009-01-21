@@ -157,6 +157,8 @@ public:
    **/
   TrackTree::pre_order_iterator iterator_from_track(
     boost::shared_ptr<model::Track> model_track);
+    
+  int measure_branch_height(TrackTree::iterator_base parent_iterator);
   
 protected:
   
@@ -221,11 +223,11 @@ protected:
   bool on_animation_tick();
 
 bool
-attempt_drop_upper(TrackTree::pre_order_iterator target, const Gdk::Point &point, const int y, const int full_width, const int half_height);
+attempt_drop_upper(TrackTree::pre_order_iterator target, const int y, const int full_width, const int half_height);
 
 
 bool
-attempt_drop_lower(TrackTree::pre_order_iterator target, const Gdk::Point &point, const int x_mid, const int full_width, const int y_mid, const int half_height);
+attempt_drop_lower(TrackTree::pre_order_iterator target, const int x_mid, const int full_width, const int y_mid, const int half_height);
   
 protected:
 
@@ -263,6 +265,8 @@ protected:
   Gdk::Point dragStartOffset;
   
   Gdk::Point dragPoint;
+  
+  int dragBranchHeight;
   
   /**
    * The connection to the animation timer.
