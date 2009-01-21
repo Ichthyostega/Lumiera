@@ -87,27 +87,37 @@ namespace lib {
    * to the parameter type as a whole, not an individual instance.
    * After creating an instance, every other access specifying the same
    * type is blocked.
-   * @warn beware of recursion when using a nonrecursive Mutex
+   * @note the Lock is recursive, because several instances within the same
+   *       thread may want to acquire it at the same time without deadlock.
+   * @note there is a design sloppiness, as two instantiations of the
+   *       ClassLock template with differing CONF count as different type.
+   *       Actually using two different configurations within for a single
+   *       class X should be detected and flagged as error, but actually
+   *       just two non-shared lock instances get created silently. Beware! 
    * @see Sync::Lock the usual simple instance-bound variant
    */
-  template<class X, class CONF = NonrecursiveLock_NoWait>
+  template<class X, class CONF = RecursiveLock_NoWait>
   class ClassLock 
     : public Sync<CONF>::Lock
     {
       typedef typename Sync<CONF>::Lock Lock;
       typedef typename sync::Monitor<CONF> Monitor;
       
+      struct PerClassMonitor : Monitor {};
+      
       Monitor&
       getPerClassMonitor()
         {
-          static nifty::Holder<Monitor> __used_here;
+          static nifty::Holder<PerClassMonitor> __used_here;
+          ASSERT (1==use_count(), "static init broken");
+          
           return __used_here.get();
         }
       
     public:
       ClassLock() : Lock (getPerClassMonitor()) {}
       
-      uint use_count() { return nifty::Holder<Monitor>::accessed_; }
+      uint use_count() { return nifty::Holder<PerClassMonitor>::accessed_; }
     };
   
   

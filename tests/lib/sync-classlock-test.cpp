@@ -34,22 +34,25 @@ using test::Test;
 
 namespace lib {
   namespace test {
-  
-    namespace { // private test classes and data...
     
+    namespace { // private test classes and data...
+      
       const uint NUM_INSTANCES = 20;   ///< number of probe instances to create
       
       
-      /** 
-       * instances of this probe class will be created statically.
-       * They utilise the class-based locking within ctor and dtor 
+      /**
+       * Several instances of this probe class will be created.
+       * Each of them acquires the shared lock; but anyway, just
+       * by defining this class, the embedded Monitor got created.
        */
       struct Probe
         {
-          Probe() { ClassLock<Probe> ctor_lock; }
-         ~Probe() { ClassLock<Probe> dtor_lock; }
+          ClassLock<Probe> shared_lock_;
+          
+          Probe() {}
+         ~Probe() {}
         };
-  
+      
       
     } // (End) test classes and data....
     
@@ -76,17 +79,21 @@ namespace lib {
       {
         
         virtual void
-        run (Arg) 
+        run (Arg)
           {
-            static Probe objs[NUM_INSTANCES];
+            {
+              Probe objs[NUM_INSTANCES];
+              
+              ASSERT (1 == objs[0].shared_lock_.use_count());
+            }
             
             ClassLock<Probe> get_class_lock;
-            ASSERT ( 1 ==  get_class_lock.use_count()); // ClassLock<Probe> got created exactly once
-          }
+            ASSERT ( 1 ==  get_class_lock.use_count()); // embedded PerClassMonitor<Probe> got created exactly once
+          }                                            //  and stays alive until static dtors are called....
         
       };
     
-      
+    
     
     /** Register this test class... */
     LAUNCHER (SyncClasslock_test, "unit common");
