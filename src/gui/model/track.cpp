@@ -75,8 +75,8 @@ Track::print_branch()
 string
 Track::print_branch_recursive(const unsigned int indentation)
 {
-  Glib::ustring str;
-
+  string str;
+  
   for(unsigned int i = 0; i < indentation; i++)
     str += "  ";
   str += print_track();
