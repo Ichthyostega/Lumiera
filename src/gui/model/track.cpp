@@ -72,6 +72,25 @@ Track::print_branch()
   return print_branch_recursive(0);
 }
 
+shared_ptr<Track>
+Track::find_parent(shared_ptr<Track> root, shared_ptr<Track> child)
+{ 
+  REQUIRE(root != NULL);
+  REQUIRE(child != NULL);
+  const list< shared_ptr<Track> > children = root->get_child_tracks();
+  BOOST_FOREACH(shared_ptr<Track> track, children)
+    {
+      if(track == child)
+        return root;
+    
+      shared_ptr<Track> result = find_parent(track, child);
+      if(result)
+        return result;
+    }
+  
+  return shared_ptr<Track>();
+}
+
 string
 Track::print_branch_recursive(const unsigned int indentation)
 {

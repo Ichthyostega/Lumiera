@@ -53,7 +53,9 @@ public:
   
   virtual std::string print_track() = 0;
   
-  
+  static boost::shared_ptr<Track>
+    find_parent(boost::shared_ptr<Track> root,
+      boost::shared_ptr<Track> child);
   
 protected:
   std::string print_branch_recursive(const unsigned int indentation);

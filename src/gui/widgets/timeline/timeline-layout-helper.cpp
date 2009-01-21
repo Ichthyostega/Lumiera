@@ -150,13 +150,18 @@ TimelineLayoutHelper::begin_dragging_track(
     draggingTrack->get_model_track();
   draggingTrackIter = iterator_from_track(model_track);
   dragBranchHeight = measure_branch_height(draggingTrackIter);
+  
+  draggingDrop.relation = None;
     
   return draggingTrack;
 }
 
 void
-TimelineLayoutHelper::end_dragging_track()
+TimelineLayoutHelper::end_dragging_track(bool apply)
 {
+  if(apply)
+    apply_drop_to_model_tree(draggingDrop);
+  
   draggingTrack.reset();
   clone_tree_from_sequence();
   update_layout();
@@ -177,6 +182,8 @@ TimelineLayoutHelper::get_dragging_track_iter() const
 void
 TimelineLayoutHelper::drag_to_point(const Gdk::Point &point)
 {
+  optional<Drop> drop;
+  
   // Apply the scroll offset
   const Gdk::Point last_point(dragPoint);
   dragPoint = Gdk::Point(point.get_x(),
@@ -221,34 +228,42 @@ TimelineLayoutHelper::drag_to_point(const Gdk::Point &point)
       const int full_width = rect.get_x() + rect.get_width();
       const int x_mid = rect.get_x() + rect.get_width() / 2;
       
-      // Do hit test
-      if(attempt_drop_upper(iterator, test_point, y,
-        full_width, half_height))
-        break;
+      // Do hit test      
+      drop = attempt_drop_upper(iterator, test_point, y,
+        full_width, half_height);
+      if(drop) break;
       
-      if(attempt_drop_lower(iterator, test_point,
-        x_mid, full_width, y_mid, half_height))
-        break;
+      drop = attempt_drop_lower(iterator, test_point,
+        x_mid, full_width, y_mid, half_height);
+      if(drop) break;
     }
-    
+  
+  // Did we get a drop point?
+  if(drop)
+    {
+      apply_drop_to_layout_tree(*drop);
+      draggingDrop = *drop;
+    }
+  
   update_layout();
 }
 
-bool
+optional<TimelineLayoutHelper::Drop>
 TimelineLayoutHelper::attempt_drop_upper(
   TrackTree::pre_order_iterator target, const Gdk::Point &point,
   const int y, const int full_width, const int half_height)
 {
   if(pt_in_rect(point, Gdk::Rectangle(0, y, full_width, half_height)))
     {
-      draggingTrackIter = layoutTree.move_before(
-        target, draggingTrackIter);
-      return true;
+      Drop drop;
+      drop.target = target;
+      drop.relation = Before;
+      return drop;
     }
-  return false;
+  return optional<Drop>();
 }
 
-bool
+optional<TimelineLayoutHelper::Drop>
 TimelineLayoutHelper::attempt_drop_lower(
   TrackTree::pre_order_iterator target, const Gdk::Point &point,
   const int x_mid, const int full_width, const int y_mid,
@@ -259,7 +274,9 @@ TimelineLayoutHelper::attempt_drop_lower(
 
   if(!pt_in_rect(point, Gdk::Rectangle(0, y_mid,
     full_width, half_height)))
-    return false;
+    return optional<Drop>();
+  
+  Drop drop = {target, None};
   
   if(model_track->can_host_children())
     {
@@ -267,47 +284,135 @@ TimelineLayoutHelper::attempt_drop_lower(
         {
           // Is our track being dragged after this header?
           if(dragPoint.get_x() < x_mid)
-            {
-              draggingTrackIter = layoutTree.move_after(
-                target, draggingTrackIter);
-            }
+            drop.relation = After;
           else
-            {
-              if(draggingTrackIter.node->parent != target.node)
-                {
-                  // Insert a place-holder in the tree
-                  const TrackTree::pre_order_iterator placeholder =
-                    layoutTree.prepend_child(target);
-                    
-                  // Replace it with the relocated branch
-                  draggingTrackIter = layoutTree.move_ontop(
-                    placeholder, draggingTrackIter);
-                }  
-            }
+            drop.relation = FirstChild;
         }
       else
-        {
-          if(draggingTrackIter.node->parent != target.node)
-            {
-              // Insert a place-holder in the tree
-              const TrackTree::pre_order_iterator placeholder =
-                layoutTree.append_child(target);
-                
-              // Replace it with the relocated branch
-              draggingTrackIter = layoutTree.move_ontop(
-                placeholder, draggingTrackIter);
-            }
-        }
+        drop.relation = LastChild;
     }
   else
     {
       // When this track cannot be a parent, the dragging track is
-      // simply dropped after
-      draggingTrackIter = layoutTree.move_after(
-        target, draggingTrackIter);
+      // simply dropped after        
+      drop.relation = After;
     }
     
-  return true;
+  return drop;
+}
+
+void
+TimelineLayoutHelper::apply_drop_to_layout_tree(
+  const TimelineLayoutHelper::Drop &drop)
+{
+  switch(drop.relation)
+    {
+    case None:
+      break;
+  
+    case Before:
+      draggingTrackIter = layoutTree.move_before(
+        drop.target, draggingTrackIter);
+      break;
+      
+    case After:
+      draggingTrackIter = layoutTree.move_after(
+        drop.target, draggingTrackIter);
+      break;
+      
+    case FirstChild:
+      if(draggingTrackIter.node->parent != drop.target.node)
+        {
+          draggingTrackIter = layoutTree.move_ontop(
+            layoutTree.prepend_child(drop.target), draggingTrackIter);
+        }
+      break;
+      
+    case LastChild:
+      if(draggingTrackIter.node->parent != drop.target.node)
+        {
+          draggingTrackIter = layoutTree.move_ontop(
+            layoutTree.append_child(drop.target), draggingTrackIter);
+        }
+      break;
+      
+    default:
+      ASSERT(0);  // Unexpected value of relation
+      break;
+    }
+}
+
+void
+TimelineLayoutHelper::apply_drop_to_model_tree(
+  const TimelineLayoutHelper::Drop &drop)
+{ 
+  if(drop.relation == None)
+    return;
+    
+  // Freeze the timeline widget - it must be done manually later
+  timelineWidget.freeze_update_tracks();
+  
+  // Get the tracks
+  shared_ptr<model::Track> &dragging_track = *draggingTrackIter;
+  REQUIRE(dragging_track);
+  REQUIRE(dragging_track != timelineWidget.sequence);
+  
+  shared_ptr<model::Track> &target_track = *drop.target;
+  REQUIRE(target_track);
+  REQUIRE(target_track != timelineWidget.sequence);
+  
+  // Detach the track from the old parent
+  shared_ptr<model::ParentTrack> old_parent =
+    dynamic_pointer_cast<model::ParentTrack, model::Track>(
+      model::Track::find_parent(
+        timelineWidget.sequence, dragging_track));
+  REQUIRE(old_parent);  // The track must have a parent
+  old_parent->get_child_track_list().remove(dragging_track);
+  
+  if(drop.relation == Before || drop.relation == After)
+    {
+      // Find the new parent track
+      shared_ptr<model::ParentTrack> new_parent =
+        dynamic_pointer_cast<model::ParentTrack, model::Track>(
+          model::Track::find_parent(
+            timelineWidget.sequence, target_track));
+      REQUIRE(new_parent);  // The track must have a parent
+      
+      // Find the destination point
+      observable_list< shared_ptr<model::Track> > &dest =
+        new_parent->get_child_track_list();
+      list< shared_ptr<model::Track> >::iterator iter;
+      for(iter = dest.begin(); iter != dest.end(); iter++)
+        {
+          if(*iter == target_track)
+            break;
+        }
+      REQUIRE(iter != dest.end());  // The target must be
+                                    // in the destination
+      
+      // We have to jump on 1 if we want to insert after
+      if(drop.relation == After)
+        iter++;
+        
+      // Insert at this point
+      dest.insert(iter, dragging_track);
+    }
+  else if(drop.relation == FirstChild || drop.relation == LastChild)
+    { 
+      shared_ptr<model::ParentTrack> new_parent =
+        dynamic_pointer_cast<model::ParentTrack, model::Track>(
+          target_track);
+      REQUIRE(new_parent);  // The track must have a parent
+      
+      if(drop.relation == FirstChild)
+        new_parent->get_child_track_list().push_front(dragging_track);
+      else if(drop.relation == LastChild)
+        new_parent->get_child_track_list().push_back(dragging_track);
+    }
+  else ASSERT(0); // Unexpected value of relation
+  
+  // Freeze the timeline widget - we will do it manually
+  timelineWidget.freeze_update_tracks();
 }
 
 int

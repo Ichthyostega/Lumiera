@@ -411,13 +411,13 @@ TimelineHeaderContainer::begin_drag()
 }
 
 void
-TimelineHeaderContainer::end_drag()
+TimelineHeaderContainer::end_drag(bool apply)
 {
   TimelineLayoutHelper &layout = timelineWidget.layoutHelper;
   
   // Has the user been dragging?
   if(layout.get_dragging_track())
-    layout.end_dragging_track();
+    layout.end_dragging_track(apply);
     
   // Reset the arrow as a cursor
   REQUIRE(gdkWindow);

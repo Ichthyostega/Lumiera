@@ -185,7 +185,7 @@ private:
     
   void begin_drag();
   
-  void end_drag();
+  void end_drag(bool apply = true);
     
   /**
    * Recusively raises all the header widget windows in a branch to the 

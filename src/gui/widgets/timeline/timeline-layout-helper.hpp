@@ -130,7 +130,7 @@ public:
   boost::shared_ptr<timeline::Track>
     begin_dragging_track(const Gdk::Point &mouse_point);
   
-  void end_dragging_track();
+  void end_dragging_track(bool apply);
   
   boost::shared_ptr<timeline::Track> get_dragging_track() const;
   
@@ -159,7 +159,23 @@ public:
     boost::shared_ptr<model::Track> model_track);
     
   int measure_branch_height(TrackTree::iterator_base parent_iterator);
+
+protected:
+  enum TreeRelation
+  {
+    None,
+    Before,
+    After,
+    FirstChild,
+    LastChild
+  };
   
+  struct Drop
+  {
+    TrackTree::pre_order_iterator target;
+    TreeRelation relation;
+  };
+
 protected:
   
   /**
@@ -221,16 +237,19 @@ protected:
    * The animation timer tick callback.
    **/
   bool on_animation_tick();
-
-bool
+ 
+boost::optional<TimelineLayoutHelper::Drop>
 attempt_drop_upper(TrackTree::pre_order_iterator target, const Gdk::Point &point, const int y, const int full_width, const int half_height);
 
 
-bool
+boost::optional<TimelineLayoutHelper::Drop>
 attempt_drop_lower(TrackTree::pre_order_iterator target, const Gdk::Point &point, const int x_mid, const int full_width, const int y_mid, const int half_height);
-  
-protected:
 
+  void apply_drop_to_layout_tree(const Drop &drop);
+
+  void apply_drop_to_model_tree(const Drop &drop);
+
+protected:
   /**
    * The owner timeline widget as provided to the constructor.
    **/
@@ -267,6 +286,8 @@ protected:
   Gdk::Point dragPoint;
   
   int dragBranchHeight;
+  
+  Drop draggingDrop;
   
   /**
    * The connection to the animation timer.
