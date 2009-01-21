@@ -23,30 +23,33 @@
 #include "track.hpp"
 #include <boost/foreach.hpp>
 
+using namespace boost;
+using namespace std;
+
 namespace gui {
 namespace model {
   
-const std::list< boost::shared_ptr<Track> > Track::NoChildren;
+const list< shared_ptr<Track> > Track::NoChildren;
 
 Track::Track()
 {
 
 }
 
-std::list< boost::shared_ptr<Track> >
+list< shared_ptr<Track> >
 Track::get_child_tracks() const
 {
   return Track::NoChildren;
 }
 
-const std::string
+const string
 Track::get_name() const
 {
   return name;
 }
 
 void
-Track::set_name(const std::string &name)
+Track::set_name(const string &name)
 {
   this->name = name;
 }
@@ -58,18 +61,18 @@ Track::can_host_children() const
 }
 
 bool
-Track::remove_child_track(const boost::shared_ptr<Track> /*track*/)
+Track::remove_child_track(const shared_ptr<Track> /*track*/)
 {
   return false;
 }
 
-std::string
+string
 Track::print_branch()
 {
   return print_branch_recursive(0);
 }
 
-std::string
+string
 Track::print_branch_recursive(const unsigned int indentation)
 {
   Glib::ustring str;
@@ -79,7 +82,7 @@ Track::print_branch_recursive(const unsigned int indentation)
   str += print_track();
   str += "\n";
   
-  BOOST_FOREACH(boost::shared_ptr<Track> track, get_child_tracks())
+  BOOST_FOREACH(shared_ptr<Track> track, get_child_tracks())
     {
       REQUIRE(track);
       str += track->print_branch_recursive(indentation + 1);
