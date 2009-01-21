@@ -138,11 +138,13 @@ TimelineLayoutHelper::begin_dragging_track(
   if(!draggingTrack)
     return shared_ptr<timeline::Track>();
     
+  dragPoint = Gdk::Point(mouse_point.get_x(),
+    mouse_point.get_y() + timelineWidget.get_y_scroll_offset());
+    
   const Gdk::Rectangle &rect = headerBoxes[draggingTrack];
   dragStartOffset = Gdk::Point(
-    mouse_point.get_x() - rect.get_x(),
-    mouse_point.get_y() - rect.get_y() +
-      timelineWidget.get_y_scroll_offset());
+    dragPoint.get_x() - rect.get_x(),
+    dragPoint.get_y() - rect.get_y());
   
   const shared_ptr<model::Track> model_track =
     draggingTrack->get_model_track();
@@ -176,8 +178,20 @@ void
 TimelineLayoutHelper::drag_to_point(const Gdk::Point &point)
 {
   // Apply the scroll offset
+  const Gdk::Point last_point(dragPoint);
   dragPoint = Gdk::Point(point.get_x(),
     point.get_y() + timelineWidget.get_y_scroll_offset());
+  
+  // Get a test-point
+  // We probe on the bottom edge of the dragging branch if the track is
+  // being dragged downward, and on the top edge if it's being dragged
+  // upward.
+  Gdk::Point test_point(dragPoint.get_x(),
+    dragPoint.get_y() - dragStartOffset.get_y());
+  if(last_point.get_y() > dragPoint.get_y())
+    test_point.set_y(test_point.get_y());
+  else
+    test_point.set_y(test_point.get_y() + dragBranchHeight);
   
   // Search the headers
   TrackTree::pre_order_iterator iterator;
@@ -208,10 +222,11 @@ TimelineLayoutHelper::drag_to_point(const Gdk::Point &point)
       const int x_mid = rect.get_x() + rect.get_width() / 2;
       
       // Do hit test
-      if(attempt_drop_upper(iterator, y, full_width, half_height))
+      if(attempt_drop_upper(iterator, test_point, y,
+        full_width, half_height))
         break;
       
-      if(attempt_drop_lower(iterator,
+      if(attempt_drop_lower(iterator, test_point,
         x_mid, full_width, y_mid, half_height))
         break;
     }
@@ -221,13 +236,9 @@ TimelineLayoutHelper::drag_to_point(const Gdk::Point &point)
 
 bool
 TimelineLayoutHelper::attempt_drop_upper(
-  TrackTree::pre_order_iterator target, const int y,
-  const int full_width, const int half_height)
-{ 
-  const Gdk::Point point(dragPoint.get_x(),
-    dragPoint.get_y() - dragStartOffset.get_y() +
-    dragBranchHeight);
-
+  TrackTree::pre_order_iterator target, const Gdk::Point &point,
+  const int y, const int full_width, const int half_height)
+{
   if(pt_in_rect(point, Gdk::Rectangle(0, y, full_width, half_height)))
     {
       draggingTrackIter = layoutTree.move_before(
@@ -239,15 +250,12 @@ TimelineLayoutHelper::attempt_drop_upper(
 
 bool
 TimelineLayoutHelper::attempt_drop_lower(
-  TrackTree::pre_order_iterator target,
+  TrackTree::pre_order_iterator target, const Gdk::Point &point,
   const int x_mid, const int full_width, const int y_mid,
   const int half_height)
 {
   const shared_ptr<model::Track> model_track(*target);
   REQUIRE(model_track);
-  
-   const Gdk::Point point(dragPoint.get_x(),
-    dragPoint.get_y() - dragStartOffset.get_y());
 
   if(!pt_in_rect(point, Gdk::Rectangle(0, y_mid,
     full_width, half_height)))
