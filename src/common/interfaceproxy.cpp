@@ -163,6 +163,11 @@ namespace lumiera {
         //----Proxy-Implementation-of-DummyPlayer--------
         typedef proc::DummyPlayer::Process Process;
         
+        /** @note as an optimisation we hand out a direct reference
+         *  to the implementing process object. While this ref could
+         *  still be passed as handle to the C Language interface, using
+         *  it directly within the client (=GUI) retains only on level
+         *  of indirection, irrespective which interface is used. */
         Process& start()                           
           { 
             Process* pP = static_cast<Process*> (_i_.startPlay());

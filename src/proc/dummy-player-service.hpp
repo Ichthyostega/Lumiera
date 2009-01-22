@@ -59,8 +59,20 @@ namespace proc {
       void        pause(bool doPlay);
       void* const getFrame();
       
+      uint fps_;
+      bool play_; 
+      
     public:
-      ProcessImpl() {}
+      ProcessImpl() : fps_(0), play_(false) {}
+      
+      /* Implementation-level API to be used By DummyPlayerService */
+      
+      /** activate a playback process 
+       *  with given specification */
+      void setRate (uint fps);
+      
+      bool isActive () { return fps_ != 0; }
+      bool isPlaying() { return play_; }
     };
    
   

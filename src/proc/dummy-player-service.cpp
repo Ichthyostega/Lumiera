@@ -247,7 +247,7 @@ namespace proc {
     , implInstance_(this,_instance)
     , serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_DummyPlayer, 0, lumieraorg_DummyPlayerFacade))
   {
-    INFO (operate, "GuiNotification Facade opened.");
+    INFO (operate, "DummyPlayer Facade opened.");
   }
   
   
@@ -260,7 +260,8 @@ namespace proc {
     return theDescriptor();
   }
   
-  DummyPlayer::~DummyPlayer()      { }   ///< emit the vtable here into this translation unit within liblumieraproc.so ...
+  // emit the vtable here into this translation unit within liblumieraproc.so ...
+  DummyPlayer::~DummyPlayer()      { }
   DummyPlayer::Process::~Process() { }
   
   
@@ -268,7 +269,22 @@ namespace proc {
   DummyPlayer::Process& 
   DummyPlayerService::start()
     {
-      UNIMPLEMENTED ("initiate a new playback process");
+      REQUIRE (!theProcess_.isActive());
+      theProcess_.setRate(25);
+      
+      return theProcess_;
+    }
+  
+  
+  
+  void
+  ProcessImpl::setRate (uint fps)
+    {
+      REQUIRE (fps==0 || fps_==0 );
+      REQUIRE (fps==0 || !play_  );
+      
+      fps_ = fps;
+      play_ = (fps != 0);
     }
   
   
@@ -276,7 +292,8 @@ namespace proc {
   void
   ProcessImpl::pause(bool doPlay)
     {
-      UNIMPLEMENTED ("pause playback");
+      REQUIRE (isActive());
+      play_ = doPlay;
     }
   
   
@@ -284,6 +301,8 @@ namespace proc {
   void* const 
   ProcessImpl::getFrame()
     {
+      REQUIRE (isActive());
+      
       UNIMPLEMENTED ("actually deliver a frame");
     }
 
