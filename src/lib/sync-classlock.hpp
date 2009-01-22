@@ -41,22 +41,22 @@
 
 namespace lib {
   
-  namespace { // implementation details
+  namespace nifty { // implementation details
     
     template<class X>
-    struct NiftyHolder 
+    struct Holder 
       {
         static uint accessed_;
         static char content_[sizeof(X)];
         
-        NiftyHolder() 
+        Holder() 
           {
             if (!accessed_)
               new(content_) X();
             ++accessed_; 
           }
         
-       ~NiftyHolder() 
+       ~Holder() 
           {
             --accessed_; 
             if (0==accessed_)
@@ -73,12 +73,12 @@ namespace lib {
       };
     
     template<class X>
-    uint NiftyHolder<X>::accessed_;
+    uint Holder<X>::accessed_;
     
     template<class X>
-    char NiftyHolder<X>::content_[sizeof(X)];
+    char Holder<X>::content_[sizeof(X)];
     
-  } // (End) implementation details
+  } // (End) nifty implementation details
   
   
   
@@ -87,27 +87,37 @@ namespace lib {
    * to the parameter type as a whole, not an individual instance.
    * After creating an instance, every other access specifying the same
    * type is blocked.
-   * @warn beware of recursion when using a nonrecursive Mutex
+   * @note the Lock is recursive, because several instances within the same
+   *       thread may want to acquire it at the same time without deadlock.
+   * @note there is a design sloppiness, as two instantiations of the
+   *       ClassLock template with differing CONF count as different type.
+   *       Actually using two different configurations within for a single
+   *       class X should be detected and flagged as error, but actually
+   *       just two non-shared lock instances get created silently. Beware! 
    * @see Sync::Lock the usual simple instance-bound variant
    */
-  template<class X, class CONF = NonrecursiveLock_NoWait>
+  template<class X, class CONF = RecursiveLock_NoWait>
   class ClassLock 
     : public Sync<CONF>::Lock
     {
       typedef typename Sync<CONF>::Lock Lock;
       typedef typename sync::Monitor<CONF> Monitor;
       
+      struct PerClassMonitor : Monitor {};
+      
       Monitor&
       getPerClassMonitor()
         {
-          static NiftyHolder<Monitor> __used_here;
+          static nifty::Holder<PerClassMonitor> __used_here;
+          ASSERT (1==use_count(), "static init broken");
+          
           return __used_here.get();
         }
       
     public:
       ClassLock() : Lock (getPerClassMonitor()) {}
       
-      uint use_count() { return NiftyHolder<Monitor>::accessed_; }
+      uint use_count() { return nifty::Holder<PerClassMonitor>::accessed_; }
     };
   
   

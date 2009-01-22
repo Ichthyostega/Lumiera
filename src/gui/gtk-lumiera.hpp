@@ -73,38 +73,30 @@ public:
   
   static Glib::ustring get_home_data_path();
 
-
-public:
-  /* ----- Constants ----- */
   /**
-   *  The name of the application 
-   */
-  static const gchar* AppTitle;
-
-  /**
-   *  The version number of the application 
-   */
-  static const gchar* AppVersion;
-
-  /**
-   *  The copyright of the application
-   */
-  static const gchar* AppCopyright;
-
-  /**
-   *  The website of the application
-   */
-  static const gchar* AppWebsite;
-
-  /**
-   *  An alphabetical list of the application's authors
-   */
-  static const gchar* AppAuthors[];
-  
-  /**
-   *  The number of authors in AppAuthors
+   * Returns the name of the application 
    **/
-  static const int AppAuthorCount;
+  static const Glib::ustring get_app_title();
+
+  /**
+   * Returns the version number of the application 
+   **/
+  static const Glib::ustring get_app_version();
+
+  /**
+   * Returns the copyright of the application
+   **/
+  static const Glib::ustring get_app_copyright();
+
+  /**
+   * Returns the website of the application
+   **/
+  static const Glib::ustring get_app_website();
+
+  /**
+   * Returns tn alphabetical list of the application's authors
+   **/
+  static const std::vector<Glib::ustring> get_app_authors();
 };
 
 /**

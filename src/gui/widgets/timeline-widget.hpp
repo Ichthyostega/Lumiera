@@ -171,6 +171,10 @@ private:
    **/
   void update_tracks();
   
+  void freeze_update_tracks();
+  
+  void thaw_update_tracks();
+  
   /**
    * Ensures timeline UI tracks have been created for every model track
    * present in sequence.
@@ -297,6 +301,8 @@ protected:
   sigc::signal<void> playbackPeriodDragReleasedSignal;
   sigc::signal<void, boost::shared_ptr<timeline::Track> >
     hoveringTrackChangedSignal;
+    
+  bool update_tracks_frozen;
    
   /* ===== Constants ===== */
 public:

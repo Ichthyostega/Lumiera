@@ -33,6 +33,7 @@ using namespace std;
 using namespace boost;
 using namespace lumiera;
 using namespace util;
+using namespace gui::util;
 
 namespace gui {
 namespace widgets {
@@ -41,6 +42,7 @@ namespace timeline {
 TimelineLayoutHelper::TimelineLayoutHelper(TimelineWidget &owner) :
   timelineWidget(owner),
   totalHeight(0),
+  dragBranchHeight(0),
   animating(false)
 {
 }
@@ -136,22 +138,30 @@ TimelineLayoutHelper::begin_dragging_track(
   if(!draggingTrack)
     return shared_ptr<timeline::Track>();
     
+  dragPoint = Gdk::Point(mouse_point.get_x(),
+    mouse_point.get_y() + timelineWidget.get_y_scroll_offset());
+    
   const Gdk::Rectangle &rect = headerBoxes[draggingTrack];
   dragStartOffset = Gdk::Point(
-    mouse_point.get_x() - rect.get_x(),
-    mouse_point.get_y() - rect.get_y() +
-      timelineWidget.get_y_scroll_offset());
+    dragPoint.get_x() - rect.get_x(),
+    dragPoint.get_y() - rect.get_y());
   
   const shared_ptr<model::Track> model_track =
     draggingTrack->get_model_track();
   draggingTrackIter = iterator_from_track(model_track);
+  dragBranchHeight = measure_branch_height(draggingTrackIter);
+  
+  draggingDrop.relation = None;
     
   return draggingTrack;
 }
 
 void
-TimelineLayoutHelper::end_dragging_track()
+TimelineLayoutHelper::end_dragging_track(bool apply)
 {
+  if(apply)
+    apply_drop_to_model_tree(draggingDrop);
+  
   draggingTrack.reset();
   clone_tree_from_sequence();
   update_layout();
@@ -163,32 +173,246 @@ TimelineLayoutHelper::get_dragging_track() const
   return draggingTrack;
 }
 
+TimelineLayoutHelper::TrackTree::pre_order_iterator
+TimelineLayoutHelper::get_dragging_track_iter() const
+{
+  return draggingTrackIter;
+}
+
 void
 TimelineLayoutHelper::drag_to_point(const Gdk::Point &point)
 {
+  optional<Drop> drop;
+  
   // Apply the scroll offset
+  const Gdk::Point last_point(dragPoint);
   dragPoint = Gdk::Point(point.get_x(),
     point.get_y() + timelineWidget.get_y_scroll_offset());
   
+  // Get a test-point
+  // We probe on the bottom edge of the dragging branch if the track is
+  // being dragged downward, and on the top edge if it's being dragged
+  // upward.
+  Gdk::Point test_point(dragPoint.get_x(),
+    dragPoint.get_y() - dragStartOffset.get_y());
+  if(last_point.get_y() > dragPoint.get_y())
+    test_point.set_y(test_point.get_y());
+  else
+    test_point.set_y(test_point.get_y() + dragBranchHeight);
+  
   // Search the headers
   TrackTree::pre_order_iterator iterator;
-  for(iterator = ++layoutTree.begin(); // ++ so we miss out the root sequence
+  
+  for(iterator = ++layoutTree.begin();
     iterator != layoutTree.end();
     iterator++)
-    {
-      // Hit test the rectangle      
-      const weak_ptr<timeline::Track> track = 
-        lookup_timeline_track(*iterator);
-      
-      if(util::pt_in_rect(dragPoint, headerBoxes[track]))
+    { 
+      // Skip the dragging branch
+      if(iterator == draggingTrackIter)
         {
-          // Relocate the header
-          draggingTrackIter = layoutTree.move_after(
-            iterator, draggingTrackIter);
-          update_layout();
-          return;
+          iterator.skip_children();
+          continue;
         }
+      
+      // Lookup the tracks
+      const shared_ptr<model::Track> model_track(*iterator);
+      REQUIRE(model_track);
+      const weak_ptr<timeline::Track> timeline_track =
+        lookup_timeline_track(model_track);
+        
+      // Calculate coordinates
+      const Gdk::Rectangle &rect = headerBoxes[timeline_track];
+      const int half_height = rect.get_height() / 2;
+      const int y = rect.get_y();
+      const int y_mid = y + half_height;
+      const int full_width = rect.get_x() + rect.get_width();
+      const int x_mid = rect.get_x() + rect.get_width() / 2;
+      
+      // Do hit test      
+      drop = attempt_drop_upper(iterator, test_point, y,
+        full_width, half_height);
+      if(drop) break;
+      
+      drop = attempt_drop_lower(iterator, test_point,
+        x_mid, full_width, y_mid, half_height);
+      if(drop) break;
     }
+  
+  // Did we get a drop point?
+  if(drop)
+    {
+      apply_drop_to_layout_tree(*drop);
+      draggingDrop = *drop;
+    }
+  
+  update_layout();
+}
+
+optional<TimelineLayoutHelper::Drop>
+TimelineLayoutHelper::attempt_drop_upper(
+  TrackTree::pre_order_iterator target, const Gdk::Point &point,
+  const int y, const int full_width, const int half_height)
+{
+  if(pt_in_rect(point, Gdk::Rectangle(0, y, full_width, half_height)))
+    {
+      Drop drop;
+      drop.target = target;
+      drop.relation = Before;
+      return drop;
+    }
+  return optional<Drop>();
+}
+
+optional<TimelineLayoutHelper::Drop>
+TimelineLayoutHelper::attempt_drop_lower(
+  TrackTree::pre_order_iterator target, const Gdk::Point &point,
+  const int x_mid, const int full_width, const int y_mid,
+  const int half_height)
+{
+  const shared_ptr<model::Track> model_track(*target);
+  REQUIRE(model_track);
+
+  if(!pt_in_rect(point, Gdk::Rectangle(0, y_mid,
+    full_width, half_height)))
+    return optional<Drop>();
+  
+  Drop drop = {target, None};
+  
+  if(model_track->can_host_children())
+    {
+      if(model_track->get_child_tracks().empty())
+        {
+          // Is our track being dragged after this header?
+          if(dragPoint.get_x() < x_mid)
+            drop.relation = After;
+          else
+            drop.relation = FirstChild;
+        }
+      else
+        drop.relation = LastChild;
+    }
+  else
+    {
+      // When this track cannot be a parent, the dragging track is
+      // simply dropped after        
+      drop.relation = After;
+    }
+    
+  return drop;
+}
+
+void
+TimelineLayoutHelper::apply_drop_to_layout_tree(
+  const TimelineLayoutHelper::Drop &drop)
+{
+  switch(drop.relation)
+    {
+    case None:
+      break;
+  
+    case Before:
+      draggingTrackIter = layoutTree.move_before(
+        drop.target, draggingTrackIter);
+      break;
+      
+    case After:
+      draggingTrackIter = layoutTree.move_after(
+        drop.target, draggingTrackIter);
+      break;
+      
+    case FirstChild:
+      if(draggingTrackIter.node->parent != drop.target.node)
+        {
+          draggingTrackIter = layoutTree.move_ontop(
+            layoutTree.prepend_child(drop.target), draggingTrackIter);
+        }
+      break;
+      
+    case LastChild:
+      if(draggingTrackIter.node->parent != drop.target.node)
+        {
+          draggingTrackIter = layoutTree.move_ontop(
+            layoutTree.append_child(drop.target), draggingTrackIter);
+        }
+      break;
+      
+    default:
+      ASSERT(0);  // Unexpected value of relation
+      break;
+    }
+}
+
+void
+TimelineLayoutHelper::apply_drop_to_model_tree(
+  const TimelineLayoutHelper::Drop &drop)
+{ 
+  if(drop.relation == None)
+    return;
+    
+  // Freeze the timeline widget - it must be done manually later
+  timelineWidget.freeze_update_tracks();
+  
+  // Get the tracks
+  shared_ptr<model::Track> &dragging_track = *draggingTrackIter;
+  REQUIRE(dragging_track);
+  REQUIRE(dragging_track != timelineWidget.sequence);
+  
+  shared_ptr<model::Track> &target_track = *drop.target;
+  REQUIRE(target_track);
+  REQUIRE(target_track != timelineWidget.sequence);
+  
+  // Detach the track from the old parent
+  shared_ptr<model::ParentTrack> old_parent =
+    dynamic_pointer_cast<model::ParentTrack, model::Track>(
+      model::Track::find_parent(
+        timelineWidget.sequence, dragging_track));
+  REQUIRE(old_parent);  // The track must have a parent
+  old_parent->get_child_track_list().remove(dragging_track);
+  
+  if(drop.relation == Before || drop.relation == After)
+    {
+      // Find the new parent track
+      shared_ptr<model::ParentTrack> new_parent =
+        dynamic_pointer_cast<model::ParentTrack, model::Track>(
+          model::Track::find_parent(
+            timelineWidget.sequence, target_track));
+      REQUIRE(new_parent);  // The track must have a parent
+      
+      // Find the destination point
+      observable_list< shared_ptr<model::Track> > &dest =
+        new_parent->get_child_track_list();
+      list< shared_ptr<model::Track> >::iterator iter;
+      for(iter = dest.begin(); iter != dest.end(); iter++)
+        {
+          if(*iter == target_track)
+            break;
+        }
+      REQUIRE(iter != dest.end());  // The target must be
+                                    // in the destination
+      
+      // We have to jump on 1 if we want to insert after
+      if(drop.relation == After)
+        iter++;
+        
+      // Insert at this point
+      dest.insert(iter, dragging_track);
+    }
+  else if(drop.relation == FirstChild || drop.relation == LastChild)
+    { 
+      shared_ptr<model::ParentTrack> new_parent =
+        dynamic_pointer_cast<model::ParentTrack, model::Track>(
+          target_track);
+      REQUIRE(new_parent);  // The track must have a parent
+      
+      if(drop.relation == FirstChild)
+        new_parent->get_child_track_list().push_front(dragging_track);
+      else if(drop.relation == LastChild)
+        new_parent->get_child_track_list().push_back(dragging_track);
+    }
+  else ASSERT(0); // Unexpected value of relation
+  
+  // Freeze the timeline widget - we will do it manually
+  timelineWidget.freeze_update_tracks();
 }
 
 int
@@ -218,6 +442,31 @@ TimelineLayoutHelper::iterator_from_track(
     }
     
   return iter;
+}
+
+int
+TimelineLayoutHelper::measure_branch_height(
+  TrackTree::iterator_base parent_iterator)
+{
+  shared_ptr<timeline::Track> parent_track =
+    lookup_timeline_track(*parent_iterator);
+  
+  int branch_height = parent_track->get_height() +
+    TimelineWidget::TrackPadding;
+  
+  TrackTree::sibling_iterator iterator;
+  for(iterator = layoutTree.begin(parent_iterator);
+    iterator != layoutTree.end(parent_iterator);
+    iterator++)
+    {           
+      shared_ptr<timeline::Track> child_track =
+        lookup_timeline_track(*iterator);
+      
+      if(child_track->get_expanded())
+        branch_height += measure_branch_height(iterator);
+    }
+    
+  return branch_height;
 }
 
 void

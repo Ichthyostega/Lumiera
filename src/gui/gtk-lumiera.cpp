@@ -45,7 +45,7 @@ using namespace gui;
 using namespace gui::workspace;
 using namespace gui::model;
 using namespace gui::controller;
-
+using namespace std;
 
 GtkLumiera the_application;
 
@@ -61,7 +61,7 @@ GtkLumiera::main(int argc, char *argv[])
 
   Main kit(argc, argv);
   
-  Glib::set_application_name(AppTitle);
+  Glib::set_application_name(get_app_title());
 
   Project project;
   Controller controller(project);
@@ -84,29 +84,51 @@ GtkLumiera::get_home_data_path()
   return ustring::compose("%1/.%2", path, app_name);
 }
 
+const Glib::ustring
+GtkLumiera::get_app_title()
+{
+  return "Lumiera";
+}
+
+const Glib::ustring
+GtkLumiera::get_app_version()
+{
+  return "0.1-dev";
+}
+
+const Glib::ustring GtkLumiera::get_app_copyright()
+{
+  return _("© 2008 The Lumiera Team");
+}
+
+const Glib::ustring GtkLumiera::get_app_website()
+{
+  return "www.lumiera.org";
+}
+
+const std::vector<Glib::ustring>
+GtkLumiera::get_app_authors()
+{
+  const gchar* app_authors[] = {
+    "Joel Holdsworth",
+    "Christian Thaeter",
+    "Hermann Vosseler",
+    "<Other Authors Here>"};
+  
+  const int count = sizeof(app_authors) / sizeof(gchar*);
+  std::vector<Glib::ustring> list(count);
+  for(int i = 0; i < count; i++)
+    list[i] = app_authors[i];
+  return list;
+}
+
 GtkLumiera&
 application()
 {
   return the_application;  
 }
 
-/* ===== Constants ===== */
-
-const gchar* GtkLumiera::AppTitle = "Lumiera";
-const gchar* GtkLumiera::AppVersion = _("0.1-dev");
-const gchar* GtkLumiera::AppCopyright = 
-  _("© 2008 The Lumiera Team");
-const gchar* GtkLumiera::AppWebsite = "www.lumiera.org";
-const gchar* GtkLumiera::AppAuthors[] = {
-  "Joel Holdsworth",
-  "Christian Thaeter",
-  "Hermann Vosseler",
-  "<Other Authors Here>"};
-const int GtkLumiera::AppAuthorCount = 4;
-
 }   // namespace gui
-
-
 
 /**
  * Run the Lumiera GTK GUI as standalone application without backend.

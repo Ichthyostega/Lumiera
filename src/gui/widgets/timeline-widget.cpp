@@ -54,7 +54,8 @@ TimelineWidget::TimelineWidget(
   horizontalAdjustment(0, 0, 0),
   verticalAdjustment(0, 0, 0),
   horizontalScroll(horizontalAdjustment),
-  verticalScroll(verticalAdjustment)
+  verticalScroll(verticalAdjustment),
+  update_tracks_frozen(false)
 {
   REQUIRE(sequence);
   
@@ -288,6 +289,9 @@ TimelineWidget::on_add_track_command()
 void
 TimelineWidget::update_tracks()
 { 
+  if(update_tracks_frozen)
+    return;
+  
   REQUIRE(sequence);
   
   // Remove any tracks which are no longer present in the model
@@ -299,6 +303,18 @@ TimelineWidget::update_tracks()
   // Update the layout helper
   layoutHelper.clone_tree_from_sequence();
   layoutHelper.update_layout();
+}
+
+void
+TimelineWidget::freeze_update_tracks()
+{
+  update_tracks_frozen = true;
+}
+  
+void
+TimelineWidget::thaw_update_tracks()
+{
+  update_tracks_frozen = false;
 }
 
 void

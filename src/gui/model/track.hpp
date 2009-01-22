@@ -45,13 +45,17 @@ public:
   
   void set_name(const std::string &name);
   
+  virtual bool can_host_children() const;
+  
   virtual bool remove_child_track(const boost::shared_ptr<Track> track);
   
   std::string print_branch();
   
   virtual std::string print_track() = 0;
   
-  
+  static boost::shared_ptr<Track>
+    find_parent(boost::shared_ptr<Track> root,
+      boost::shared_ptr<Track> child);
   
 protected:
   std::string print_branch_recursive(const unsigned int indentation);
