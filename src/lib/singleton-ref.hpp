@@ -78,7 +78,7 @@ namespace lib {
           }
         
         
-        typedef void* _ThisType::*unspecified_bool_type;
+        typedef TY* _ThisType::*unspecified_bool_type;
         
         /** implicit conversion to "bool" */
         operator unspecified_bool_type()  const // never throws

@@ -259,7 +259,33 @@ namespace proc {
   {
     return theDescriptor();
   }
-
+  
+  DummyPlayer::~DummyPlayer()      { }   ///< emit the vtable here into this translation unit within liblumieraproc.so ...
+  DummyPlayer::Process::~Process() { }
+  
+  
+  
+  DummyPlayer::Process& 
+  DummyPlayerService::start()
+    {
+      UNIMPLEMENTED ("initiate a new playback process");
+    }
+  
+  
+  
+  void
+  ProcessImpl::pause(bool doPlay)
+    {
+      UNIMPLEMENTED ("pause playback");
+    }
+  
+  
+  
+  void* const 
+  ProcessImpl::getFrame()
+    {
+      UNIMPLEMENTED ("actually deliver a frame");
+    }
 
 
 } // namespace proc
