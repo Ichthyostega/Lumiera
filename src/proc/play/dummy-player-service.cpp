@@ -258,7 +258,7 @@ namespace proc  {
     DummyPlayer::Process& 
     DummyPlayerService::start()
       {
-        REQUIRE (!theProcess_.isActive());
+        // REQUIRE (!theProcess_.isActive());    //////////////TODO: reactivate this check when we have really independent processes which can be stopped!
         theProcess_.setRate(25);
         
         return theProcess_;
@@ -269,7 +269,7 @@ namespace proc  {
     void
     ProcessImpl::setRate (uint fps)
       {
-        REQUIRE (fps==0 || fps_==0 );
+        // REQUIRE (fps==0 || fps_==0 );    //////////////TODO: reactivate this check when we have really independent processes which can be stopped!
         REQUIRE (fps==0 || !play_  );
         
         fps_ = fps;
@@ -282,10 +282,10 @@ namespace proc  {
     
     
     void
-    ProcessImpl::pause(bool doPlay)
+    ProcessImpl::pause(bool doPause)
       {
         REQUIRE (isActive());
-        play_ = doPlay;
+        play_ = !doPause;
       }
     
     

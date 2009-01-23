@@ -64,7 +64,7 @@ private:
 
   void start_playback_thread();
 
-  void quit_playback_thread();
+  void end_playback_thread();
   
   void playback_thread();
 

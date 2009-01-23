@@ -28,6 +28,7 @@ namespace gui {
 namespace controller { 
 
 PlaybackController::PlaybackController() :
+  thread(0),
   finish_playback_thread(false),
   playing(false),
   playHandle(0)
@@ -36,9 +37,7 @@ PlaybackController::PlaybackController() :
 
 PlaybackController::~PlaybackController()
 {
-  quit_playback_thread();
-  if (thread)
-    thread->join();
+  end_playback_thread();
 }
 
 void
@@ -47,10 +46,15 @@ PlaybackController::play()
   Lock sync(this);
   try
     {
-      playHandle = & (proc::DummyPlayer::facade().start());
-      start_playback_thread();
-      playing = true;
-      
+      if (playing && thread && playHandle) playHandle->pause(false);
+      else
+        {
+          playHandle = & (proc::DummyPlayer::facade().start());
+          if (thread)
+            end_playback_thread();
+          start_playback_thread();
+          playing = true;
+        }
     }
   catch (lumiera::error::State& err)
     {
@@ -74,6 +78,8 @@ PlaybackController::stop()
 {
   Lock sync(this);
   playing = false;
+  end_playback_thread();
+  playHandle = 0;
   // TODO: stop player somehow?
 }
 
@@ -88,15 +94,19 @@ void
 PlaybackController::start_playback_thread()
 {
   dispatcher.connect(sigc::mem_fun(this, &PlaybackController::on_frame));
+  finish_playback_thread = false;
   thread = Glib::Thread::create (sigc::mem_fun(
     this, &PlaybackController::playback_thread), true);
 }
 
 void
-PlaybackController::quit_playback_thread()
+PlaybackController::end_playback_thread()
 {
   Lock sync(this);
   finish_playback_thread = true;
+  if (thread)
+    thread->join();
+  thread = 0;
 }
 
 void
@@ -120,8 +130,7 @@ PlaybackController::playback_thread()
       if(is_playing())
         pull_frame();
       
-      ////////////////////////////////TODO: usleep
-      Glib::Thread::yield();
+      usleep(40000); // ca 25 frames pre second
     }
 }
 

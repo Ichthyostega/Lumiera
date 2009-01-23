@@ -60,7 +60,7 @@ namespace proc {
     class ProcessImpl
       : public DummyPlayer::Process
       {
-        void        pause(bool doPlay);
+        void        pause(bool doPause);
         void* const getFrame();
         
         uint fps_;
