@@ -36,9 +36,7 @@ PlaybackController::PlaybackController() :
 
 PlaybackController::~PlaybackController()
 {
-  mutex.lock();
-  finish_playback_thread = true;
-  mutex.unlock();
+  quit_playback_thread();
   if (thread)
     thread->join();
 }
@@ -46,7 +44,7 @@ PlaybackController::~PlaybackController()
 void
 PlaybackController::play()
 {
-  Glib::Mutex::Lock lock(mutex);
+  Lock sync(this);
   try
     {
       playHandle = & (proc::DummyPlayer::facade().start());
@@ -65,7 +63,7 @@ PlaybackController::play()
 void
 PlaybackController::pause()
 {
-  Glib::Mutex::Lock lock(mutex);
+  Lock sync(this);
   playing = false;
   if (playHandle)
     playHandle->pause(true);
@@ -74,7 +72,7 @@ PlaybackController::pause()
 void
 PlaybackController::stop()
 {
-  Glib::Mutex::Lock lock(mutex);
+  Lock sync(this);
   playing = false;
   // TODO: stop player somehow?
 }
@@ -82,7 +80,7 @@ PlaybackController::stop()
 bool
 PlaybackController::is_playing()
 {
-  Glib::Mutex::Lock lock(mutex);
+  Lock sync(this);
   return playing;
 }
 
@@ -92,6 +90,13 @@ PlaybackController::start_playback_thread()
   dispatcher.connect(sigc::mem_fun(this, &PlaybackController::on_frame));
   thread = Glib::Thread::create (sigc::mem_fun(
     this, &PlaybackController::playback_thread), true);
+}
+
+void
+PlaybackController::quit_playback_thread()
+{
+  Lock sync(this);
+  finish_playback_thread = true;
 }
 
 void
@@ -107,7 +112,7 @@ PlaybackController::playback_thread()
   for(;;)
     {
       {
-        Glib::Mutex::Lock lock(mutex);
+        Lock sync(this);
         if(finish_playback_thread)
           return;
       }

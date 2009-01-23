@@ -27,16 +27,22 @@
 #define PLAYBACK_CONTROLLER_HPP
 
 #include "include/dummy-player-facade.h"
+#include "lib/sync.hpp"
 
 #include <sigc++/sigc++.h>
 #include <glibmm.h>
 #include <boost/noncopyable.hpp>
 
 namespace gui {
-namespace controller { 
+namespace controller {
+
+using lib::Sync;
+using lib::NonrecursiveLock_NoWait;
+
 
 class PlaybackController
-  : boost::noncopyable
+  : boost::noncopyable,
+    public Sync<NonrecursiveLock_NoWait>
 {
 public:
 
@@ -58,6 +64,8 @@ private:
 
   void start_playback_thread();
 
+  void quit_playback_thread();
+  
   void playback_thread();
 
   void pull_frame();
@@ -67,8 +75,6 @@ private:
 private:
 
   Glib::Thread *thread;
-  
-  Glib::StaticMutex mutex;
   
   Glib::Dispatcher dispatcher;
   
