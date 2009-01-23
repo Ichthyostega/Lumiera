@@ -43,6 +43,7 @@
 #include "common/instancehandle.hpp"
 #include "lib/singleton-ref.hpp"
 
+#include <boost/scoped_ptr.hpp>
 #include <string>
 
 
@@ -53,6 +54,9 @@ namespace proc {
     using lumiera::Subsys;
     
     
+    class DummyImageGenerator;
+    
+    
     class ProcessImpl
       : public DummyPlayer::Process
       {
@@ -60,10 +64,13 @@ namespace proc {
         void* const getFrame();
         
         uint fps_;
-        bool play_; 
+        bool play_;
+        
+        boost::scoped_ptr<DummyImageGenerator> imageGen_;
+        
         
       public:
-        ProcessImpl() : fps_(0), play_(false) {}
+        ProcessImpl() : fps_(0), play_(false), imageGen_(0) {}
         
         /* Implementation-level API to be used By DummyPlayerService */
         

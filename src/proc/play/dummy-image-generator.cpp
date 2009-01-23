@@ -154,7 +154,14 @@ namespace proc {
       return outBuff;
       
     }
-  
+    
+    
+    void * const
+    DummyImageGenerator::current()
+    {
+      if (!current_) return outFrame_A_;
+      else           return outFrame_B_;
+    }
   
   
   

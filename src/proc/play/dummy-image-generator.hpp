@@ -69,6 +69,10 @@ namespace proc {
          *  @return the buffer containing the new frame
          */
         void * const next();
+        
+        /** just re-return a pointer to the current frame
+         *  without generating any new image data */
+        void * const current();
       
         
       private:

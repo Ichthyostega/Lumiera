@@ -23,16 +23,20 @@
  ** This file contains the definition of the playback controller object
  */
 
-#include <sigc++/sigc++.h>
-#include <glibmm.h>
-
 #ifndef PLAYBACK_CONTROLLER_HPP
 #define PLAYBACK_CONTROLLER_HPP
+
+#include "include/dummy-player-facade.h"
+
+#include <sigc++/sigc++.h>
+#include <glibmm.h>
+#include <boost/noncopyable.hpp>
 
 namespace gui {
 namespace controller { 
 
 class PlaybackController
+  : boost::noncopyable
 {
 public:
 
@@ -72,7 +76,9 @@ private:
   
   volatile bool playing;
   
-  unsigned char buffer[320 * 240 * 4];
+  proc::DummyPlayer::Process *playHandle;
+  
+  unsigned char * currentBuffer;
   
   sigc::signal<void, void*> frame_signal;
 };

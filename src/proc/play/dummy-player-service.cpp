@@ -22,6 +22,7 @@
 
 
 #include "proc/play/dummy-player-service.hpp"
+#include "proc/play/dummy-image-generator.hpp"
 #include "lib/singleton.hpp"
 
 extern "C" {
@@ -273,6 +274,9 @@ namespace proc  {
         
         fps_ = fps;
         play_ = (fps != 0);
+        
+        if (play_)
+          imageGen_.reset(new DummyImageGenerator(fps));
       }
     
     
@@ -290,8 +294,12 @@ namespace proc  {
     ProcessImpl::getFrame()
       {
         REQUIRE (isActive());
+        ASSERT (imageGen_);
         
-        UNIMPLEMENTED ("actually deliver a frame");
+        if (play_)
+          return imageGen_->next();
+        else
+          return imageGen_->current();
       }
     
     
