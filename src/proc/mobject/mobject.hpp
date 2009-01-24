@@ -48,7 +48,7 @@ namespace mobject
   {
   using lumiera::P;
   
-  NOBUG_DECLARE_FLAG (mobjectmem);
+  //NOBUG_DECLARE_FLAG (mobjectmem);
   
   
   namespace session
@@ -100,3 +100,10 @@ namespace mobject
 
 } // namespace mobject
 #endif
+/*
+// Local Variables:
+// mode: C++
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

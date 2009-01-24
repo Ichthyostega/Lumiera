@@ -136,11 +136,11 @@ namespace asset {
             }
           catch (lumiera::Error& EX)
             {
-              WARN (operate, "Problems while clearing Asset registry: %s", EX.what());
+              WARN (progress, "Problems while clearing Asset registry: %s", EX.what());
             }
           catch (...)
             {
-              ERROR (operate, "Serious trouble while clearing Asset registry.");
+              ERROR (progress, "Serious trouble while clearing Asset registry.");
         }   }
       
       

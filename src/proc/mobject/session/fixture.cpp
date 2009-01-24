@@ -22,7 +22,7 @@
 
 
 #include "proc/mobject/session/fixture.hpp"
-#include "include/nobugcfg.h"
+#include "common/logging.h"
 
 namespace mobject
   {
@@ -53,3 +53,11 @@ namespace mobject
   } // namespace mobject::session
 
 } // namespace mobject
+
+/*
+// Local Variables:
+// mode: C++
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/
