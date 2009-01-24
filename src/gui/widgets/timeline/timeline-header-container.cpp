@@ -421,10 +421,13 @@ void
 TimelineHeaderContainer::end_drag(bool apply)
 {
   TimelineLayoutHelper &layout = timelineWidget.layoutHelper;
-  
+   
   // Has the user been dragging?
   if(layout.is_dragging_track())
     layout.end_dragging_track(apply);
+  
+  // End the scroll slide
+  end_scroll_slide();
     
   // Reset the arrow as a cursor
   REQUIRE(gdkWindow);
