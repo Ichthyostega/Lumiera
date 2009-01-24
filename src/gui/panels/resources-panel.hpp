@@ -31,7 +31,7 @@
 namespace gui {
 namespace panels {
 
-class AssetsPanel : public Panel
+class ResourcesPanel : public Panel
 {
 public:
   
@@ -39,7 +39,7 @@ public:
    * Contructor.
    * @param workspace_window The window that owns this panel.
    **/
-  AssetsPanel(workspace::WorkspaceWindow &workspace_window);
+  ResourcesPanel(workspace::WorkspaceWindow &workspace_window);
 
 protected:
   Gtk::Label placeholder;

@@ -34,7 +34,7 @@
 
 #include "actions.hpp"
 
-#include "../panels/assets-panel.hpp"
+#include "../panels/resources-panel.hpp"
 #include "../panels/viewer-panel.hpp"
 #include "../panels/timeline-panel.hpp"
 
@@ -94,7 +94,7 @@ private:
 
   /* ===== Panels ===== */
 private:  
-  AssetsPanel *assetsPanel;
+  ResourcesPanel *resourcesPanel;
   ViewerPanel *viewerPanel;      
   TimelinePanel *timelinePanel;
        

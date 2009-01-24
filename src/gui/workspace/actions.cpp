@@ -107,13 +107,13 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
 void
 Actions::update_action_state()
 {
-  REQUIRE(workspaceWindow.assetsPanel != NULL);
+  REQUIRE(workspaceWindow.resourcesPanel != NULL);
   REQUIRE(workspaceWindow.timelinePanel != NULL);
   REQUIRE(workspaceWindow.viewerPanel != NULL); 
   
   is_updating_action_state = true;
   assetsPanelAction->set_active(
-    workspaceWindow.assetsPanel->is_shown());
+    workspaceWindow.resourcesPanel->is_shown());
   timelinePanelAction->set_active(
     workspaceWindow.timelinePanel->is_shown());
   viewerPanelAction->set_active(
@@ -163,7 +163,8 @@ void
 Actions::on_menu_view_assets()
 {
   if(!is_updating_action_state)
-    workspaceWindow.assetsPanel->show(assetsPanelAction->get_active());
+    workspaceWindow.resourcesPanel->show(
+      assetsPanelAction->get_active());
 }
 
 void

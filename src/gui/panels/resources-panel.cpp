@@ -21,14 +21,14 @@
 * *****************************************************/
 
 #include "../gtk-lumiera.hpp"
-#include "assets-panel.hpp"
+#include "resources-panel.hpp"
 
 namespace gui {
 namespace panels {
 
-AssetsPanel::AssetsPanel(workspace::WorkspaceWindow &workspace_window) :
-  Panel(workspace_window, "assets", _("Assets"), "panel_assets"),
-  placeholder("Assets/Media")
+ResourcesPanel::ResourcesPanel(workspace::WorkspaceWindow &workspace_window) :
+  Panel(workspace_window, "resources", _("Resources"), "panel_resources"),
+  placeholder("Resources")
   {
     pack_start(placeholder);
   }
