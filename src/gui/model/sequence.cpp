@@ -22,6 +22,10 @@
 
 #include "sequence.hpp"
 
+// TEST CODE
+#include "group-track.hpp"
+#include "clip-track.hpp"
+
 using namespace boost;
 
 namespace gui {

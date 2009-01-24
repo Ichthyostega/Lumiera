@@ -29,10 +29,6 @@
 
 #include "parent-track.hpp"
 
-// TEST CODE
-#include "group-track.hpp"
-#include "clip-track.hpp"
-
 namespace gui {
 namespace model {
   
