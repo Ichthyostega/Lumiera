@@ -19,6 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "common/logging.h"
 #include "lib/llist.h"
 #include "lib/mutex.h"
 #include "lib/safeclib.h"
@@ -27,7 +28,7 @@
 
 #include <unistd.h>
 
-NOBUG_DEFINE_FLAG (resourcecollector); /* TODO: make this a hierachy, derrive from PARENT (library) ? */
+//NOBUG_DEFINE_FLAG (resourcecollector); /* TODO: make this a hierachy, derrive from PARENT (library) ? */
 
 llist lumiera_resourcecollector_registry[LUMIERA_RESOURCE_END];
 lumiera_mutex lumiera_resourcecollector_lock;
@@ -44,13 +45,13 @@ struct lumiera_resourcehandler_struct
 static void
 lumiera_resourcecollector_init_ (void)
 {
-  NOBUG_INIT_FLAG (resourcecollector);
-  TRACE (resourcecollector);
+  //NOBUG_INIT_FLAG (resourcecollector);
+  TRACE (resourcecollector_dbg);
 
   for (int i = 0; i < LUMIERA_RESOURCE_END; ++i)
     llist_init (&lumiera_resourcecollector_registry[i]);
 
-  lumiera_mutex_init (&lumiera_resourcecollector_lock, "resourcecollector", &NOBUG_FLAG(resourcecollector));
+  lumiera_mutex_init (&lumiera_resourcecollector_lock, "resourcecollector", &NOBUG_FLAG(mutex_dbg));
 }
 
 
@@ -58,25 +59,25 @@ lumiera_resourcecollector_init_ (void)
 void
 lumiera_resourcecollector_destroy (void)
 {
-  TRACE (resourcecollector);
+  TRACE (resourcecollector_dbg);
 
   for (int i = 0; i < LUMIERA_RESOURCE_END; ++i)
     LLIST_WHILE_HEAD (&lumiera_resourcecollector_registry[i], head)
       lumiera_resourcehandler_unregister ((LumieraResourcehandler)head);
 
-  lumiera_mutex_destroy (&lumiera_resourcecollector_lock, &NOBUG_FLAG(resourcecollector));
+  lumiera_mutex_destroy (&lumiera_resourcecollector_lock, &NOBUG_FLAG(mutex_dbg));
 }
 
 
 int
 lumiera_resourcecollector_run (enum lumiera_resource which, enum lumiera_resource_try* iteration, void* context)
 {
-  TRACE (resourcecollector);
+  TRACE (resourcecollector_dbg);
 
   if (lumiera_resourcecollector_once == PTHREAD_ONCE_INIT)
     pthread_once (&lumiera_resourcecollector_once, lumiera_resourcecollector_init_);
 
-  LUMIERA_MUTEX_SECTION (resourcecollector, &lumiera_resourcecollector_lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_resourcecollector_lock)
     {
       for (enum lumiera_resource_try progress = LUMIERA_RESOURCE_NONE; progress < *iteration; ++*iteration)
         {
@@ -99,7 +100,7 @@ lumiera_resourcecollector_run (enum lumiera_resource which, enum lumiera_resourc
             }
           else
             {
-              ERROR (resourcecollector, "PANIC, Not enough resources %d", which);
+              ALERT (resourcecollector, "PANIC, Not enough resources %d", which);
               for (int i = 0; i < LUMIERA_RESOURCE_END; ++i)
                 LLIST_FOREACH (&lumiera_resourcecollector_registry[i], node)
                   {
@@ -122,7 +123,7 @@ lumiera_resourcecollector_register_handler (enum lumiera_resource resource, lumi
   if (lumiera_resourcecollector_once == PTHREAD_ONCE_INIT)
     pthread_once (&lumiera_resourcecollector_once, lumiera_resourcecollector_init_);
 
-  TRACE (resourcecollector);
+  TRACE (resourcecollector_dbg);
 
   LumieraResourcehandler self = lumiera_malloc (sizeof (*self));
 
@@ -130,7 +131,7 @@ lumiera_resourcecollector_register_handler (enum lumiera_resource resource, lumi
   self->handler = handler;
   self->data = data;
 
-  LUMIERA_MUTEX_SECTION (resourcecollector, &lumiera_resourcecollector_lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_resourcecollector_lock)
     {
       llist_insert_tail (&lumiera_resourcecollector_registry[resource], &self->node);
     }
@@ -142,11 +143,11 @@ lumiera_resourcecollector_register_handler (enum lumiera_resource resource, lumi
 void
 lumiera_resourcehandler_unregister (LumieraResourcehandler self)
 {
-  TRACE (resourcecollector);
+  TRACE (resourcecollector_dbg);
 
   if (self)
     {
-      LUMIERA_MUTEX_SECTION (resourcecollector, &lumiera_resourcecollector_lock)
+      LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_resourcecollector_lock)
         {
           llist_unlink (&self->node);
           self->handler (LUMIERA_RESOURCE_UNREGISTER, self->data, NULL);
@@ -160,10 +161,10 @@ lumiera_resourcehandler_unregister (LumieraResourcehandler self)
 LumieraResourcehandler
 lumiera_resourcecollector_handler_find (enum lumiera_resource resource, lumiera_resource_handler_fn handler, void* data)
 {
-  TRACE (resourcecollector);
+  TRACE (resourcecollector_dbg);
   LumieraResourcehandler self = NULL;
 
-  LUMIERA_MUTEX_SECTION (resourcecollector, &lumiera_resourcecollector_lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_resourcecollector_lock)
     {
       LLIST_FOREACH (&lumiera_resourcecollector_registry[resource], node)
         {

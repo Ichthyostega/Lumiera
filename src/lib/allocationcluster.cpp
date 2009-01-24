@@ -189,11 +189,11 @@ namespace lib {
       }
     catch (lumiera::Error & ex)
       {
-        WARN (operate, "Exception while closing AllocationCluster: %s",ex.what());
+        WARN (progress, "Exception while closing AllocationCluster: %s", ex.what());
       }
     catch (...)
       {
-        ERROR (NOBUG_ON, "Unexpected fatal Exception while closing AllocationCluster.");
+        ALERT (progress, "Unexpected fatal Exception while closing AllocationCluster.");
         lumiera::error::lumiera_unexpectedException(); // terminate
       }
   }
@@ -243,3 +243,11 @@ namespace lib {
   
   
 } // namespace lib
+
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

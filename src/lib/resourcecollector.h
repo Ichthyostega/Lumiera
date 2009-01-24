@@ -23,7 +23,7 @@
 
 #include <nobug.h>
 
-NOBUG_DECLARE_FLAG (resourcecollector);
+//NOBUG_DECLARE_FLAG (resourcecollector);
 
 /**
  * Resources known to the resource collector
