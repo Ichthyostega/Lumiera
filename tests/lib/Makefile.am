@@ -64,6 +64,7 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/sync-locking-test.cpp			\
 	$(testlib_srcdir)/sync-waiting-test.cpp			\
 	$(testlib_srcdir)/thread-wrapper-test.cpp		\
+	$(testlib_srcdir)/thread-wrapper-join-test.cpp		\
 	$(testlib_srcdir)/test/cmdlinewrappertest.cpp		\
 	$(testlib_srcdir)/test/testoptiontest.cpp		\
 	$(testlib_srcdir)/vectortransfertest.cpp		\

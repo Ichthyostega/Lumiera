@@ -30,6 +30,7 @@
 #include "backend/enginefacade.hpp"
 #include "backend/netnodefacade.hpp"
 #include "backend/scriptrunnerfacade.hpp"
+#include "include/dummy-player-facade.h"
 #include "proc/facade.hpp"
 #include "gui/guifacade.hpp"
 
@@ -42,6 +43,7 @@ namespace {
   Subsys& engine  = backend::EngineFacade::getDescriptor();
   Subsys& netNode = backend::NetNodeFacade::getDescriptor();
   Subsys& script  = backend::ScriptRunnerFacade::getDescriptor();
+  Subsys& player  = proc::DummyPlayer::getDescriptor();
   Subsys& builder = proc::Facade::getBuilderDescriptor();
   Subsys& session = proc::Facade::getSessionDescriptor();
   Subsys& lumigui = gui::GuiFacade::getDescriptor();
@@ -66,6 +68,7 @@ main (int argc, const char* argv[])
       netNode.depends (engine);
 //    lumigui.depends (session);   //////TODO commented out in order to be able to start up a dummy GuiStarterPlugin
 //    lumigui.depends (engine);
+      lumigui.depends (player);
       script.depends (session);
       script.depends (engine);
       

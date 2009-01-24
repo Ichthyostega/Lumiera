@@ -122,6 +122,18 @@ liblumiproccontrol_la_SOURCES =					\
 	$(liblumiproccontrol_la_srcdir)/stypemanager.cpp
 
 
+liblumiprocplay_la_srcdir = $(top_srcdir)/src/proc/play
+noinst_LTLIBRARIES += liblumiprocplay.la
+
+liblumiprocplay_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
+liblumiprocplay_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
+
+liblumiprocplay_la_SOURCES =					\
+	$(liblumiprocplay_la_srcdir)/dummy-player-service.cpp	\
+	$(liblumiprocplay_la_srcdir)/dummy-image-generator.cpp
+	
+
+
 liblumiprocmobjectsession_la_srcdir = $(top_srcdir)/src/proc/mobject/session
 noinst_LTLIBRARIES += liblumiprocmobjectsession.la
 
@@ -193,6 +205,8 @@ noinst_HEADERS +=							\
 	$(liblumiproc_la_srcdir)/mobject/builderfacade.hpp		\
 	$(liblumiproc_la_srcdir)/control/pathmanager.hpp		\
 	$(liblumiproc_la_srcdir)/control/renderstate.hpp		\
+	$(liblumiproc_la_srcdir)/play/dummy-player-service.cpp		\
+	$(liblumiproc_la_srcdir)/play/dummy-image-generator.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/interpolator.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/parameter.hpp			\
 	$(liblumiproc_la_srcdir)/mobject/paramprovider.hpp		\
@@ -243,5 +257,6 @@ liblumieraproc_la_LIBADD =			\
 	liblumiprocmobject.la			\
 	liblumiprocmobjectbuilder.la		\
 	liblumiproccontrol.la			\
+	liblumiprocplay.la			\
 	liblumiprocmobjectsession.la
 

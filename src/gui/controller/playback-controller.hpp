@@ -23,16 +23,26 @@
  ** This file contains the definition of the playback controller object
  */
 
-#include <sigc++/sigc++.h>
-#include <glibmm.h>
-
 #ifndef PLAYBACK_CONTROLLER_HPP
 #define PLAYBACK_CONTROLLER_HPP
 
+#include "include/dummy-player-facade.h"
+#include "lib/sync.hpp"
+
+#include <sigc++/sigc++.h>
+#include <glibmm.h>
+#include <boost/noncopyable.hpp>
+
 namespace gui {
-namespace controller { 
+namespace controller {
+
+using lib::Sync;
+using lib::RecursiveLock_NoWait;
+
 
 class PlaybackController
+  : boost::noncopyable,
+    public Sync<RecursiveLock_NoWait>
 {
 public:
 
@@ -54,6 +64,8 @@ private:
 
   void start_playback_thread();
 
+  void end_playback_thread();
+  
   void playback_thread();
 
   void pull_frame();
@@ -64,15 +76,15 @@ private:
 
   Glib::Thread *thread;
   
-  Glib::StaticMutex mutex;
-  
   Glib::Dispatcher dispatcher;
   
   volatile bool finish_playback_thread;
   
   volatile bool playing;
   
-  unsigned char buffer[320 * 240 * 4];
+  proc::DummyPlayer::Process *playHandle;
+  
+  unsigned char * currentBuffer;
   
   sigc::signal<void, void*> frame_signal;
 };

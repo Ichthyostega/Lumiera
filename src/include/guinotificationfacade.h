@@ -85,7 +85,7 @@ extern "C" {
   
 #include "common/interface.h"
 
-LUMIERA_INTERFACE_DECLARE (lumieraorg_GuiNotification, 1,
+LUMIERA_INTERFACE_DECLARE (lumieraorg_GuiNotification, 0,
                            LUMIERA_INTERFACE_SLOT (void, displayInfo,        (const char*)),
                            LUMIERA_INTERFACE_SLOT (void, triggerGuiShutdown, (const char*)),
 );

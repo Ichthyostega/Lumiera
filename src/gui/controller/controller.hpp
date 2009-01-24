@@ -23,10 +23,11 @@
  ** This file contains the definition of the controller object
  */
 
-#include "playback-controller.hpp"
-
 #ifndef CONTROLLER_HPP
 #define CONTROLLER_HPP
+
+#include "playback-controller.hpp"
+
 
 namespace gui {
 

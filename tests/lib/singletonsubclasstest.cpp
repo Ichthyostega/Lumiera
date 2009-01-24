@@ -121,6 +121,7 @@ namespace lumiera
                  << string (t1)   << "\n";
             
 #ifdef DEBUG
+            /////////////////////////////////////////////////////////////////////////////////////////////TODO: better way of detecting debug builds
             verify_error_detection ();
 #endif
           } 

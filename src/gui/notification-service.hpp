@@ -73,7 +73,7 @@ namespace gui {
       
       /* === Interface Lifecycle === */
       
-      typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 1)
+      typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
                                      , GuiNotification
                                      > ServiceInstanceHandle;
       

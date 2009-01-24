@@ -83,15 +83,19 @@ namespace lumiera {
   /* declare flags used throughout the code base */
   NOBUG_DECLARE_FLAG (all);
   NOBUG_DECLARE_FLAG (lumiera_all);
+  NOBUG_DECLARE_FLAG (lib_all);
   NOBUG_DECLARE_FLAG (lumiera);        ///< master log, informative console output
   NOBUG_DECLARE_FLAG (operate);        ///< logging channel reporting what the application does
   NOBUG_DECLARE_FLAG (render);         ///< logging channel focusing on the render engine's workings
   NOBUG_DECLARE_FLAG (config);         ///< logging channel covering application and session configuration
   NOBUG_DECLARE_FLAG (memory);         ///< logging channel covering memory management issues
-  NOBUG_DECLARE_FLAG (sync);           ///< especially for tracing synchronisation
   NOBUG_DECLARE_FLAG (test);
 
 
+  /* further flags which don't fit into any specific translation unit */
+  NOBUG_DECLARE_FLAG (sync);           ///< especially for tracing synchronisation
+  
+  
 #endif /*NOBUGCFG_H    ======= (End) Part 1: DECLARATIONS ======== */
 
 
@@ -105,15 +109,18 @@ namespace lumiera {
   /* flags used throughout the code base... */
   NOBUG_CPP_DEFINE_FLAG              (all);
   NOBUG_CPP_DEFINE_FLAG_PARENT       (lumiera_all, all);
+  NOBUG_CPP_DEFINE_FLAG_PARENT       (lib_all,     all);
+  
   NOBUG_CPP_DEFINE_FLAG_PARENT       (lumiera,     lumiera_all);
   NOBUG_CPP_DEFINE_FLAG_PARENT       (config,      lumiera);
   NOBUG_CPP_DEFINE_FLAG_PARENT       (operate,     lumiera);
   NOBUG_CPP_DEFINE_FLAG_PARENT_LIMIT (render,      lumiera,    LOG_WARNING);
   NOBUG_CPP_DEFINE_FLAG_PARENT_LIMIT (memory,      lumiera,    LOG_WARNING);
-  NOBUG_CPP_DEFINE_FLAG_PARENT_LIMIT (sync,        memory,     LOG_WARNING);
   NOBUG_CPP_DEFINE_FLAG_PARENT_LIMIT (test,        all,        LOG_ERR);
 
 
+  NOBUG_CPP_DEFINE_FLAG_PARENT_LIMIT (sync,        lib_all,    LOG_WARNING);
+  
 
 
 #endif /*NOBUG_INIT_DEFS_ ==== (End) Part 2: DEFINITIONS ========= */

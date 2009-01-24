@@ -40,6 +40,17 @@ namespace gui {
 
 
 
+#include "include/dummy-player-facade.h"
+
+namespace proc {
+  
+  /** storage for the DummyPlayer facade proxy factory... */
+  lumiera::facade::Accessor<DummyPlayer> DummyPlayer::facade;
+
+} // namespace gui
+
+
+
 
 namespace lumiera {
   namespace facade {
@@ -107,7 +118,9 @@ namespace lumiera {
     
     
   
-    typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 1)
+    /* ==================== GuiNotification =================================== */
+    
+    typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
                           , gui::GuiNotification
                           > Handle_GuiNotification;
     
@@ -127,10 +140,53 @@ namespace lumiera {
       };
     
     
-    
-    
     template  void openProxy<Handle_GuiNotification>  (Handle_GuiNotification const&);
     template  void closeProxy<Handle_GuiNotification> (void);
+    
+    
+    
+    
+    
+    
+  
+    /* ==================== DummyPlayer ======================================= */
+    
+    typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)
+                                     , proc::DummyPlayer
+                                     > Handle_DummyPlayer;
+    
+    
+    template<>
+    class Proxy<Handle_DummyPlayer>
+      : public Holder<Handle_DummyPlayer>
+      {
+        //----Proxy-Implementation-of-DummyPlayer--------
+        typedef proc::DummyPlayer::Process Process;
+        
+        /** @note as an optimisation we hand out a direct reference
+         *  to the implementing process object. While this ref could
+         *  still be passed as handle to the C Language interface, using
+         *  it directly within the client (=GUI) retains only on level
+         *  of indirection, irrespective which interface is used. */
+        Process& start()                           
+          { 
+            Process* pP = static_cast<Process*> (_i_.startPlay());
+            
+            if (!pP || lumiera_error_peek())
+              throw lumiera::error::State("failed to start DummyPlayer", lumiera_error());
+            
+            return *pP;
+          }
+        
+        
+        
+      public:
+        Proxy (IHandle const& iha) : THolder(iha) {} 
+      };
+    
+    
+    template  void openProxy<Handle_DummyPlayer>  (Handle_DummyPlayer const&);
+    template  void closeProxy<Handle_DummyPlayer> (void);
     
     
   } // namespace facade
