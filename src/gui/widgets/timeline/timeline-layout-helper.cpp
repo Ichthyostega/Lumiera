@@ -386,7 +386,7 @@ TimelineLayoutHelper::layout_headers_recursive(
       // Do collapse animation as necessary
       if(is_track_animating)
       {                     
-        // Calculate the height of te area which will be
+        // Calculate the height of the area which will be
         // shown as expanded
         const float a = timeline_track->get_expand_animation_state();
         child_branch_height *= a * a;
