@@ -27,6 +27,7 @@
 #include "../timeline-widget.hpp"
 #include "../../window-manager.hpp"
 #include "../../dialogs/name-chooser.hpp"
+#include "common/logging.h"
 
 using namespace boost;
 using namespace Gtk;
@@ -209,7 +210,8 @@ Track::get_expander_style() const
         return EXPANDER_SEMI_COLLAPSED;
     }
     
-  ERROR(gui, "Track::get_expander_style() final return reached");  
+  NOBUG_ERROR(gui, "Track::get_expander_style() final return reached");
+
   return EXPANDER_COLLAPSED;   // This should never happen
 }
 

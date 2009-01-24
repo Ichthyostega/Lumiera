@@ -43,7 +43,7 @@ extern "C" {
 #include <gavl/gavltime.h>
 }
 
-NOBUG_DECLARE_FLAG(gui);
+//NOBUG_DECLARE_FLAG(gui);
 
 #ifdef ENABLE_NLS
 #  include <libintl.h>

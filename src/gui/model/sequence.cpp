@@ -21,6 +21,7 @@
 * *****************************************************/
 
 #include "sequence.hpp"
+#include "common/logging.h"
 
 // TEST CODE
 #include "group-track.hpp"

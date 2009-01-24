@@ -23,7 +23,7 @@
 
 #include "gui/notification-service.hpp"
 #include "lib/singleton.hpp"
-#include "include/nobugcfg.h"
+#include "common/logging.h"
 #include "lib/util.hpp"
 
 extern "C" {
@@ -44,7 +44,7 @@ namespace gui {
   void 
   NotificationService::displayInfo (string const& text)
   {
-    INFO (operate, "@GUI: display '%s' as notification message.", cStr(text));
+    INFO (gui, "@GUI: display '%s' as notification message.", cStr(text));
     ////////////////////////TODO actually push the information to the GUI
   }
   
@@ -52,7 +52,7 @@ namespace gui {
   void
   NotificationService::triggerGuiShutdown (string const& cause)
   {
-    NOTICE (operate, "@GUI: shutdown triggered with explanation '%s'....", cStr(cause));
+    NOTICE (gui, "@GUI: shutdown triggered with explanation '%s'....", cStr(cause));
     TODO ("actually request a shutdown from the GUI");
   }
   
@@ -173,7 +173,7 @@ namespace gui {
     : implInstance_(this,_instance),
       serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_GuiNotification, 1,lumieraorg_GuiNotificationFacade))
   {
-    INFO (operate, "GuiNotification Facade opened.");
+    INFO (gui, "GuiNotification Facade opened.");
   }
   
   

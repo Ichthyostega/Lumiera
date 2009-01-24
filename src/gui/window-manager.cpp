@@ -21,6 +21,7 @@
 * *****************************************************/
 
 #include "window-manager.hpp"
+#include "common/logging.h"
 
 using namespace Gtk;
 using namespace Glib;
@@ -41,7 +42,8 @@ WindowManager::set_theme(Glib::ustring path)
 {
   if(access(path.c_str(), R_OK))
     {
-      ERROR(gui, "WindowManger: Unable to load rc file \"%s\"",
+      // gdk defines 'ERROR' need to prefix it with 'NOBUG_' here
+      NOBUG_ERROR(gui, "WindowManger: Unable to load rc file \"%s\"",
         path.c_str());
       return false;        
     }
