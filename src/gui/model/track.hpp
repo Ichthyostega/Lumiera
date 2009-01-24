@@ -71,11 +71,13 @@ public:
   virtual bool can_host_children() const;
   
   /**
-   * Tries to remove a given child track from the list.
+   * Tries to remove a given track from amongst the descendants of this
+   * track.
    * @param The model track to try and remove.
    * @return Returns true if the track was successfully removed.
    **/
-  virtual bool remove_child_track(const boost::shared_ptr<Track> track);
+  virtual bool remove_descendant_track(
+    const boost::shared_ptr<Track> track);
   
   /**
    * A debugging helper function that prints this track, and all it's

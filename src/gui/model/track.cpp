@@ -62,7 +62,7 @@ Track::can_host_children() const
 }
 
 bool
-Track::remove_child_track(const shared_ptr<Track> /*track*/)
+Track::remove_descendant_track(const shared_ptr<Track> /*track*/)
 {
   return false;
 }

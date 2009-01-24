@@ -47,8 +47,14 @@ public:
     get_child_track_list();
     
   bool can_host_children() const;
-    
-  bool remove_child_track(const boost::shared_ptr<Track> track);
+  
+  /**
+   * Tries to remove a given track from amongst the descendants of this
+   * track.
+   * @param The model track to try and remove.
+   * @return Returns true if the track was successfully removed.
+   **/
+  bool remove_descendant_track(const boost::shared_ptr<Track> track);
 
 protected:
   lumiera::observable_list< boost::shared_ptr<Track> > tracks;

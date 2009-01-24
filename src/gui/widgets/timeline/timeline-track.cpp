@@ -251,7 +251,7 @@ Track::on_remove_track()
   REQUIRE(model_track);
   REQUIRE(timelineWidget.sequence);
   
-  timelineWidget.sequence->remove_child_track(model_track);
+  timelineWidget.sequence->remove_descendant_track(model_track);
 }
 
 }   // namespace timeline
