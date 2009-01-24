@@ -21,6 +21,7 @@
 * *****************************************************/
 
 
+#include "common/logging.h"
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
@@ -38,7 +39,7 @@ using std::tr1::static_pointer_cast; //TODO only temporarily;
 namespace asset {
   namespace test {
     
-    using mobject::NOBUG_FLAG(mobjectmem);
+          //using mobject::NOBUG_FLAG(mobject_mem);
     
     
     
@@ -68,8 +69,8 @@ TODO ("implement Processing Pattern!!!");
             ASSERT (cm->ident.org == mm->ident.org);
             ASSERT (dependencyCheck (cm,mm));
 
-            TRACE (assetmem,   "leaving MakeClip_test::run()");
-            TRACE (mobjectmem, "leaving MakeClip_test::run()");
+            TRACE (asset_mem,   "leaving MakeClip_test::run()");
+            TRACE (mobject_mem, "leaving MakeClip_test::run()");
           }
         
         

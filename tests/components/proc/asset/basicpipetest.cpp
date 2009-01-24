@@ -21,6 +21,7 @@
 * *****************************************************/
 
 
+#include "common/logging.h"
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
@@ -200,7 +201,7 @@ namespace asset
             ASSERT (pipe3x != pipe2x);                 // ..we got a new default pipe for "pattern(another)" too!
             
             
-            TRACE (assetmem, "leaving BasicPipe_test::dependProcPatt()");
+            TRACE (asset_mem, "leaving BasicPipe_test::dependProcPatt()");
             // expect now pipe2x and pattern2 to be destroyed...
           }
       };

@@ -21,6 +21,7 @@
 * *****************************************************/
 
 
+#include "common/logging.h"
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
@@ -55,7 +56,7 @@ namespace asset
             
             if (!isnil (arg))
               dumpAssetManager();
-            TRACE (assetmem, "leaving IdentityOfAssets_test::run()");
+            TRACE (asset_mem, "leaving IdentityOfAssets_test::run()");
           } 
         
         
@@ -91,7 +92,7 @@ namespace asset
             ASSERT (mm2->getFilename() == "testfile2.mov");
             
             
-            TRACE (assetmem, "leaving test method scope");
+            TRACE (asset_mem, "leaving test method scope");
           }
         
       };
