@@ -21,16 +21,12 @@
 
 */
 
-#define LOGGING_C
-
-/*
-  logging.h defines the flags here, thats all
- */
-#include "logging.h"
+#define LUMIERA_LOGGING_CXX
+#include "include/logging.h"
 
 /*
 // Local Variables:
-// mode: C
+// mode: C++
 // c-file-style: "gnu"
 // indent-tabs-mode: nil
 // End:

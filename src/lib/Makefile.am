@@ -37,7 +37,6 @@ liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/allocationcluster.cpp		\
 	$(liblumiera_la_srcdir)/lumitime.cpp			\
 	$(liblumiera_la_srcdir)/lifecycle.cpp			\
-	$(liblumiera_la_srcdir)/nobugcfg.cpp			\
 	$(liblumiera_la_srcdir)/util.cpp			\
 	$(liblumiera_la_srcdir)/visitor.cpp			\
 	$(liblumiera_la_srcdir)/query.cpp			\
