@@ -38,7 +38,9 @@ namespace model {
  * ParentTrack is the abstract base class of all tracks that can parent
  * children.
  **/
-class ParentTrack : public Track
+class ParentTrack :
+  public Track,
+  public boost::enable_shared_from_this<ParentTrack>
 {
 protected:
   /**
@@ -74,6 +76,9 @@ public:
    * @return Returns true if the track was successfully removed.
    **/
   bool remove_descendant_track(const boost::shared_ptr<Track> track);
+  
+  boost::shared_ptr<ParentTrack>
+    find_descendant_track_parent(boost::shared_ptr<Track> child);
 
 protected:
   /**

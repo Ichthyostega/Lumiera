@@ -23,6 +23,8 @@
 #include "parent-track.hpp"
 #include <boost/foreach.hpp>
 
+using namespace boost;
+
 namespace gui {
 namespace model {
 
@@ -68,6 +70,25 @@ ParentTrack::remove_descendant_track(const boost::shared_ptr<Track> track)
     }
     
   return false;
+}
+
+boost::shared_ptr<ParentTrack>
+ParentTrack::find_descendant_track_parent(
+  boost::shared_ptr<Track> child)
+{ 
+  REQUIRE(child != NULL);
+  BOOST_FOREACH(shared_ptr<Track> track, tracks)
+    {
+      if(track == child)
+        return shared_from_this();
+    
+      shared_ptr<ParentTrack> result =
+        track->find_descendant_track_parent(child);
+      if(result)
+        return result;
+    }
+  
+  return shared_ptr<ParentTrack>();
 }
 
 }   // namespace model

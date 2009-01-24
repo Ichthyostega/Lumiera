@@ -73,29 +73,10 @@ Track::print_branch()
   return print_branch_recursive(0);
 }
 
-shared_ptr<ParentTrack>
-Track::find_parent(shared_ptr<ParentTrack> root, shared_ptr<Track> child)
+boost::shared_ptr<ParentTrack>
+Track::find_descendant_track_parent(
+  boost::shared_ptr<Track> /*child*/)
 { 
-  REQUIRE(root != NULL);
-  REQUIRE(child != NULL);
-  const list< shared_ptr<Track> > children = root->get_child_tracks();
-  BOOST_FOREACH(shared_ptr<Track> track, children)
-    {
-      if(track == child)
-        return root;
-    
-      shared_ptr<ParentTrack> parent_track = 
-        dynamic_pointer_cast<model::ParentTrack, model::Track>(
-          track);
-      if(parent_track)
-        {
-          shared_ptr<ParentTrack> result = find_parent(
-            parent_track, child);
-          if(result)
-            return result;
-        }
-    }
-  
   return shared_ptr<ParentTrack>();
 }
 
