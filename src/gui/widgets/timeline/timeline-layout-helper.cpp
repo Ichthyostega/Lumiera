@@ -182,7 +182,7 @@ TimelineLayoutHelper::get_dragging_track_iter() const
 void
 TimelineLayoutHelper::drag_to_point(const Gdk::Point &point)
 {
-  optional<Drop> drop;
+  Drop drop;
   
   // Apply the scroll offset
   const Gdk::Point last_point(dragPoint);
@@ -209,95 +209,79 @@ TimelineLayoutHelper::drag_to_point(const Gdk::Point &point)
     { 
       // Skip the dragging branch
       if(iterator == draggingTrackIter)
+        iterator.skip_children();
+      else
         {
-          iterator.skip_children();
-          continue;
+          // Do hit test       
+          drop = attempt_drop(iterator, test_point);
+          if(drop.relation != None)
+            break;
         }
-      
-      // Lookup the tracks
-      const shared_ptr<model::Track> model_track(*iterator);
-      REQUIRE(model_track);
-      const weak_ptr<timeline::Track> timeline_track =
-        lookup_timeline_track(model_track);
-        
-      // Calculate coordinates
-      const Gdk::Rectangle &rect = headerBoxes[timeline_track];
-      const int half_height = rect.get_height() / 2;
-      const int y = rect.get_y();
-      const int y_mid = y + half_height;
-      const int full_width = rect.get_x() + rect.get_width();
-      const int x_mid = rect.get_x() + rect.get_width() / 2;
-      
-      // Do hit test      
-      drop = attempt_drop_upper(iterator, test_point, y,
-        full_width, half_height);
-      if(drop) break;
-      
-      drop = attempt_drop_lower(iterator, test_point,
-        x_mid, full_width, y_mid, half_height);
-      if(drop) break;
     }
   
   // Did we get a drop point?
-  if(drop)
+  if(drop.relation != None)
     {
-      apply_drop_to_layout_tree(*drop);
-      draggingDrop = *drop;
+      apply_drop_to_layout_tree(drop);
+      draggingDrop = drop;
     }
   
   update_layout();
 }
 
-optional<TimelineLayoutHelper::Drop>
-TimelineLayoutHelper::attempt_drop_upper(
-  TrackTree::pre_order_iterator target, const Gdk::Point &point,
-  const int y, const int full_width, const int half_height)
+TimelineLayoutHelper::Drop
+TimelineLayoutHelper::attempt_drop(TrackTree::pre_order_iterator target,
+  const Gdk::Point &point)
 {
-  if(pt_in_rect(point, Gdk::Rectangle(0, y, full_width, half_height)))
-    {
-      Drop drop;
-      drop.target = target;
-      drop.relation = Before;
-      return drop;
-    }
-  return optional<Drop>();
-}
-
-optional<TimelineLayoutHelper::Drop>
-TimelineLayoutHelper::attempt_drop_lower(
-  TrackTree::pre_order_iterator target, const Gdk::Point &point,
-  const int x_mid, const int full_width, const int y_mid,
-  const int half_height)
-{
+  // Lookup the tracks
   const shared_ptr<model::Track> model_track(*target);
   REQUIRE(model_track);
-
-  if(!pt_in_rect(point, Gdk::Rectangle(0, y_mid,
-    full_width, half_height)))
-    return optional<Drop>();
+  const weak_ptr<timeline::Track> timeline_track =
+    lookup_timeline_track(model_track);
+    
+  // Calculate coordinates
+  const Gdk::Rectangle &rect = headerBoxes[timeline_track];
+  const int half_height = rect.get_height() / 2;
+  const int y = rect.get_y();
+  const int y_mid = y + half_height;
+  const int full_width = rect.get_x() + rect.get_width();
+  const int x_mid = rect.get_x() + rect.get_width() / 2;
   
+  // Initialize the drop
+  // By specifying relation = None, the default return value will signal
+  // no drop-point was foind at point
   Drop drop = {target, None};
-  
-  if(model_track->can_host_children())
+
+  if(pt_in_rect(point, Gdk::Rectangle(0, y, full_width, half_height)))
     {
-      if(model_track->get_child_tracks().empty())
+      // We're hovering over the upper half of the header
+      drop.relation = Before;
+    }
+  else if(pt_in_rect(point, Gdk::Rectangle(0, y_mid,
+    full_width, half_height)))
+    {
+      // We're hovering over the lower half of the header
+      if(model_track->can_host_children())
         {
-          // Is our track being dragged after this header?
-          if(dragPoint.get_x() < x_mid)
-            drop.relation = After;
+          if(model_track->get_child_tracks().empty())
+            {
+              // Is our track being dragged after this header?
+              if(dragPoint.get_x() < x_mid)
+                drop.relation = After;
+              else
+                drop.relation = FirstChild;
+            }
           else
-            drop.relation = FirstChild;
+            drop.relation = LastChild;
         }
       else
-        drop.relation = LastChild;
+        {
+          // When this track cannot be a parent, the dragging track is
+          // simply dropped after        
+          drop.relation = After;
+        }
     }
-  else
-    {
-      // When this track cannot be a parent, the dragging track is
-      // simply dropped after        
-      drop.relation = After;
-    }
-    
+  
   return drop;
 }
 

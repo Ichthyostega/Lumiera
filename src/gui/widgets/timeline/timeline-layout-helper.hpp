@@ -238,12 +238,9 @@ protected:
    **/
   bool on_animation_tick();
  
-boost::optional<TimelineLayoutHelper::Drop>
-attempt_drop_upper(TrackTree::pre_order_iterator target, const Gdk::Point &point, const int y, const int full_width, const int half_height);
-
-
-boost::optional<TimelineLayoutHelper::Drop>
-attempt_drop_lower(TrackTree::pre_order_iterator target, const Gdk::Point &point, const int x_mid, const int full_width, const int y_mid, const int half_height);
+  TimelineLayoutHelper::Drop
+  attempt_drop(TrackTree::pre_order_iterator target,
+    const Gdk::Point &point);
 
   void apply_drop_to_layout_tree(const Drop &drop);
 
