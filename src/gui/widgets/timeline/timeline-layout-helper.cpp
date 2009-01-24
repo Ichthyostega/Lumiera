@@ -185,6 +185,7 @@ TimelineLayoutHelper::get_dragging_track_iter() const
 void
 TimelineLayoutHelper::drag_to_point(const Gdk::Point &mouse_point)
 {
+  
   DropPoint drop;
   drop.relation = None;
   
@@ -207,22 +208,60 @@ TimelineLayoutHelper::drag_to_point(const Gdk::Point &mouse_point)
   else
     test_point.set_y(test_point.get_y() + dragBranchHeight);
   
-  // Search the headers
   TrackTree::pre_order_iterator iterator;
+  TrackTree::pre_order_iterator begin = ++layoutTree.begin();
   
-  for(iterator = ++layoutTree.begin();
-    iterator != layoutTree.end();
-    iterator++)
-    { 
-      // Skip the dragging branch
-      if(iterator == draggingTrackIter)
-        iterator.skip_children();
-      else
+  if(test_point.get_y() < 0)
+    {
+      // Find the first header that's not being dragged
+      for(iterator = begin;
+        iterator != layoutTree.end();
+        iterator++)
         {
-          // Do hit test       
-          drop = attempt_drop(iterator, test_point);
-          if(drop.relation != None)
-            break;
+          if(iterator == draggingTrackIter)
+            iterator.skip_children();
+          else
+            {
+              drop.relation = Before;
+              drop.target = iterator;
+              break;
+            }
+        }
+    }
+  else if(test_point.get_y() > totalHeight)
+    {
+      // Find the last header that's not being dragged
+      for(iterator = --layoutTree.end();
+        iterator != begin;
+        iterator--)
+        {
+          if(iterator.is_descendant_of(draggingTrackIter))
+            iterator.skip_children();
+          else
+            {
+              drop.relation = After;
+              drop.target = iterator;
+              break;
+            }
+        }
+    }
+  else
+    {
+      // Search the headers
+      for(iterator = ++layoutTree.begin();
+        iterator != layoutTree.end();
+        iterator++)
+        { 
+          // Skip the dragging branch
+          if(iterator == draggingTrackIter)
+            iterator.skip_children();
+          else
+            {
+              // Do hit test       
+              drop = attempt_drop(iterator, test_point);
+              if(drop.relation != None)
+                break;
+            }
         }
     }
   
@@ -236,6 +275,8 @@ TimelineLayoutHelper::drag_to_point(const Gdk::Point &mouse_point)
       apply_drop_to_layout_tree(drop);
       dropPoint = drop;
       
+      // Expand the branch if the user is hovering to add the track
+      // as a child
       if((drop.relation == FirstChild || drop.relation == LastChild) &&
         !target_timeline_track->get_expanded())
           target_timeline_track->expand_collapse(Track::Expand);

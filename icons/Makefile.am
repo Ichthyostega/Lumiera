@@ -40,7 +40,7 @@ dist_pkgdata_DATA +=															\
 	$(16x16)/track-enabled.png													\
 	$(16x16)/track-locked.png													\
 	$(16x16)/track-unlocked.png													\
-	$(16x16)/panel-assets.png $(22x22)/panel-assets.png $(32x32)/panel-assets.png							\
+	$(16x16)/panel-resources.png $(22x22)/panel-resources.png $(32x32)/panel-resources.png						\
 	$(16x16)/panel-timeline.png													\
 	$(16x16)/panel-viewer.png $(22x22)/panel-viewer.png $(32x32)/panel-viewer.png
 
@@ -75,12 +75,12 @@ $(16x16)/track-unlocked.png : $(svgdir)/track-unlocked.svg $(top_builddir)/rsvg-
 
 # Panels
 
-$(16x16)/panel-assets.png:
-	cp $(16x16pre)/panel-assets.png $(16x16)
-$(22x22)/panel-assets.png:
-	cp $(22x22pre)/panel-assets.png $(22x22)
-$(32x32)/panel-assets.png:
-	cp $(32x32pre)/panel-assets.png $(32x32)
+$(16x16)/panel-resources.png:
+	cp $(16x16pre)/panel-resources.png $(16x16)
+$(22x22)/panel-resources.png:
+	cp $(22x22pre)/panel-resources.png $(22x22)
+$(32x32)/panel-resources.png:
+	cp $(32x32pre)/panel-resources.png $(32x32)
 
 $(16x16)/panel-timeline.png:
 	cp $(16x16pre)/panel-timeline.png $(16x16)

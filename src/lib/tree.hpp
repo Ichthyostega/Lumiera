@@ -139,6 +139,9 @@ class tree {
             void         skip_children();
             /// Number of children of the node pointed to by the iterator.
             unsigned int number_of_children() const;
+            /// Determines if the node pointed to by the iterator is a descendant of
+            /// another node pointed to by another iterator 
+            bool         is_descendant_of(iterator_base parent) const;
 
             sibling_iterator begin() const;
             sibling_iterator end() const;
@@ -1999,6 +2002,17 @@ unsigned int tree<T, tree_node_allocator>::iterator_base::number_of_children() c
       pos=pos->next_sibling;
       }
    return ret;
+   }
+  
+template <class T, class tree_node_allocator>
+bool tree<T, tree_node_allocator>::iterator_base::is_descendant_of(iterator_base parent) const
+   {
+     const tree_node *node = this->node;
+     while(node != NULL) {
+        if(node == parent.node) return true;
+        node = node->parent;
+        }
+    return false;
    }
 
 

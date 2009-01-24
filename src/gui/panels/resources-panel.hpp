@@ -1,5 +1,5 @@
 /*
-  assets-panel.cpp  -  Implementation of the assets panel
+  assets-panel.hpp  -  Definition of the assets panel            
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -18,20 +18,39 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
+/** @file assets-panel.hpp
+ ** This file contains the definition of the assets panel
+ */
 
-#include "../gtk-lumiera.hpp"
-#include "assets-panel.hpp"
+#ifndef ASSETS_PANEL_HPP
+#define ASSETS_PANEL_HPP
+
+#include "panel.hpp"
 
 namespace gui {
 namespace panels {
 
-AssetsPanel::AssetsPanel(workspace::WorkspaceWindow &workspace_window) :
-  Panel(workspace_window, "assets", _("Assets"), "panel_assets"),
-  placeholder("Assets/Media")
-  {
-    pack_start(placeholder);
-  }
+class ResourcesPanel : public Panel
+{
+public:
+  
+  /**
+   * Contructor.
+   * @param workspace_window The window that owns this panel.
+   **/
+  ResourcesPanel(workspace::WorkspaceWindow &workspace_window);
+
+protected:
+  Gtk::Notebook notebook;
+  
+  Gtk::IconView media;
+  Gtk::IconView clips;
+  Gtk::IconView effects;
+  Gtk::IconView transitions;
+};
 
 }   // namespace panels
 }   // namespace gui
+
+#endif // ASSETS_PANEL_HPP

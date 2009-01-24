@@ -50,7 +50,7 @@ WorkspaceWindow::WorkspaceWindow(Project &source_project,
   actions(*this)
 {    
   layout = NULL;
-  assetsPanel = NULL;
+  resourcesPanel = NULL;
   viewerPanel = NULL;
   timelinePanel = NULL;
 
@@ -62,8 +62,8 @@ WorkspaceWindow::~WorkspaceWindow()
   REQUIRE(layout != NULL);
   g_object_unref(layout);
   
-  REQUIRE(assetsPanel != NULL);
-  assetsPanel->unreference();
+  REQUIRE(resourcesPanel != NULL);
+  resourcesPanel->unreference();
   REQUIRE(viewerPanel != NULL);
   viewerPanel->unreference();
   REQUIRE(timelinePanel != NULL);
@@ -160,8 +160,8 @@ WorkspaceWindow::create_ui()
   baseContainer.pack_start(*toolbar, Gtk::PACK_SHRINK);
   
   //----- Create the Panels -----//
-  assetsPanel = new AssetsPanel(*this);
-  ENSURE(assetsPanel != NULL);
+  resourcesPanel = new ResourcesPanel(*this);
+  ENSURE(resourcesPanel != NULL);
   viewerPanel = new ViewerPanel(*this);
   ENSURE(viewerPanel != NULL);
   timelinePanel = new TimelinePanel(*this);
@@ -179,7 +179,7 @@ WorkspaceWindow::create_ui()
   baseContainer.pack_start(dockContainer, PACK_EXPAND_WIDGET);
 
   gdl_dock_add_item ((GdlDock*)dock->gobj(),
-    assetsPanel->get_dock_item(), GDL_DOCK_LEFT);
+    resourcesPanel->get_dock_item(), GDL_DOCK_LEFT);
   gdl_dock_add_item ((GdlDock*)dock->gobj(),
     viewerPanel->get_dock_item(), GDL_DOCK_RIGHT);
   gdl_dock_add_item ((GdlDock*)dock->gobj(),
@@ -187,9 +187,9 @@ WorkspaceWindow::create_ui()
 
   // Manually dock and move around some of the items
   gdl_dock_item_dock_to (timelinePanel->get_dock_item(),
-    assetsPanel->get_dock_item(), GDL_DOCK_BOTTOM, -1);
+    resourcesPanel->get_dock_item(), GDL_DOCK_BOTTOM, -1);
   gdl_dock_item_dock_to (viewerPanel->get_dock_item(),
-    assetsPanel->get_dock_item(), GDL_DOCK_RIGHT, -1);
+    resourcesPanel->get_dock_item(), GDL_DOCK_RIGHT, -1);
   
   gchar ph1[] = "ph1";
   gdl_dock_placeholder_new (ph1, (GdlDockObject*)dock->gobj(),
