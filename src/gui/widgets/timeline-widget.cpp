@@ -449,6 +449,7 @@ TimelineWidget::on_layout_changed()
   
   headerContainer->on_layout_changed();
   body->queue_draw();
+  update_scroll();
 }
 
 void
