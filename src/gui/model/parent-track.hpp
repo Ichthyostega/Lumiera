@@ -34,18 +34,37 @@
 namespace gui {
 namespace model {
 
+/**
+ * ParentTrack is the abstract base class of all tracks that can parent
+ * children.
+ **/
 class ParentTrack : public Track
 {
 protected:
+  /**
+   * Constructor
+   **/
   ParentTrack();
 
-public:  
+public: 
+
+  /**
+   * Gets a read-only reference to the the list of child tracks.
+   **/
   const std::list< boost::shared_ptr<Track> >&
     get_child_tracks() const;
 
+  /**
+   * Gets read-write access to the list of child tracks.
+   **/
   lumiera::observable_list< boost::shared_ptr<Track> >&
     get_child_track_list();
-    
+
+  /**
+   * Returns true if this track can own any child tracks.
+   * @return Returns true because all classed derrived from ParentTrack
+   * can.
+   **/
   bool can_host_children() const;
   
   /**
@@ -57,6 +76,9 @@ public:
   bool remove_descendant_track(const boost::shared_ptr<Track> track);
 
 protected:
+  /**
+   * The internal list of child tracks of this paremt.
+   **/
   lumiera::observable_list< boost::shared_ptr<Track> > tracks;
 };
 

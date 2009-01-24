@@ -35,8 +35,8 @@ namespace model {
 class ParentTrack;
 
 /**
- * The model representation of a track. This is the base class for all
- * types of track that are implemented.
+ * The model representation of a track. This is the abstract base class
+ * for all types of track that are implemented.
  **/
 class Track
 {
