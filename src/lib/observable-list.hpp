@@ -267,11 +267,9 @@ public:
   /* ===== Conversions ===== */
   
   /**
-   * Returns a copy of this observable_list converted to an STL list
-   * object.
-   * @return Returns a copy of the STL list.
+   * Returns a read only reference to the list.
    **/
-  std::list<T, Allocator> to_list() const
+  const std::list<T, Allocator>& get_list() const
     {
       return list;
     }

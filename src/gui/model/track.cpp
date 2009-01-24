@@ -37,7 +37,7 @@ Track::Track()
 
 }
 
-list< shared_ptr<Track> >
+const std::list< boost::shared_ptr<Track> >&
 Track::get_child_tracks() const
 {
   return Track::NoChildren;

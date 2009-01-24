@@ -40,7 +40,7 @@ protected:
   ParentTrack();
 
 public:  
-  std::list< boost::shared_ptr<Track> >
+  const std::list< boost::shared_ptr<Track> >&
     get_child_tracks() const;
 
   lumiera::observable_list< boost::shared_ptr<Track> >&

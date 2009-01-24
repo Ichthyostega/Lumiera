@@ -51,7 +51,7 @@ public:
   /**
    * Gets the list of child tracks.
    **/
-  virtual std::list< boost::shared_ptr<Track> >
+  virtual const std::list< boost::shared_ptr<Track> >&
     get_child_tracks() const;
   
   /**

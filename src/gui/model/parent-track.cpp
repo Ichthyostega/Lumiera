@@ -30,10 +30,10 @@ ParentTrack::ParentTrack()
 {
 }
 
-std::list< boost::shared_ptr<Track> >
+const std::list< boost::shared_ptr<Track> >&
 ParentTrack::get_child_tracks() const
 {
-  return tracks.to_list();
+  return tracks.get_list();
 }
 
 lumiera::observable_list< boost::shared_ptr<Track> >&
