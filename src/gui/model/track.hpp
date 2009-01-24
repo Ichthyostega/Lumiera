@@ -69,16 +69,7 @@ public:
    * Returns true if this track can own any child tracks.
    **/
   virtual bool can_host_children() const;
-  
-  /**
-   * Tries to remove a given track from amongst the descendants of this
-   * track.
-   * @param The model track to try and remove.
-   * @return Returns true if the track was successfully removed.
-   **/
-  virtual bool remove_descendant_track(
-    const boost::shared_ptr<Track> track);
-    
+      
   /**
    * A utility function that attempts to find the parent of a track by
    * searching through the tree from this track downward.

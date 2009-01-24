@@ -51,22 +51,17 @@ ParentTrack::can_host_children() const
 }
 
 bool
-ParentTrack::remove_descendant_track(const boost::shared_ptr<Track> track)
+ParentTrack::remove_descendant_track(
+  const boost::shared_ptr<Track> track)
 {
   REQUIRE(track);
   
-  BOOST_FOREACH(const boost::shared_ptr<Track> child_track, tracks)
+  boost::shared_ptr<ParentTrack> parent = 
+    find_descendant_track_parent(track);
+  if(parent)
     {
-      REQUIRE(child_track);
-      
-      if(track.get() == child_track.get())
-        {
-          tracks.remove(track);
-          return true;
-        }
-        
-      if(child_track->remove_descendant_track(track))
-        return true;
+      parent->tracks.remove(track);
+      return true;
     }
     
   return false;

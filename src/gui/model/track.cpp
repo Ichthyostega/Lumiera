@@ -61,12 +61,6 @@ Track::can_host_children() const
   return false;
 }
 
-bool
-Track::remove_descendant_track(const shared_ptr<Track> /*track*/)
-{
-  return false;
-}
-
 string
 Track::print_branch()
 {
