@@ -127,16 +127,40 @@ public:
    **/
   boost::shared_ptr<timeline::Track> track_from_y(int y);
   
+  /**
+   * Begins to drag the track under mouse_point, if there is one.
+   * @param mouse_point The mouse point to begin dragging from, measured
+   * in pixels from the top left of the header container widget.
+   **/
   boost::shared_ptr<timeline::Track>
     begin_dragging_track(const Gdk::Point &mouse_point);
   
+  /**
+   * Drops the dragging track.
+   * @param apply true if the model tree should be modified.
+   **/
   void end_dragging_track(bool apply);
-  
+
+  /**
+   * Returns true if a track is being dragged.
+   **/
   bool is_dragging_track() const;
   
+  /**
+   * Gets the iterator of the layout tree node that is being dragged.
+   **/ 
   TrackTree::pre_order_iterator get_dragging_track_iter() const;
   
-  void drag_to_point(const Gdk::Point &point);
+  /**
+   * Drags the dragging branch to a new mouse point.
+   * @param mouse_point The mouse point to drag the dragging track to.
+   * This point is in pixels relative to the top left of the header
+   * container.
+   * @remarks drag_to_point may only be called after
+   * begin_dragging_track and before end_dragging_point have been
+   * called.
+   **/
+  void drag_to_point(const Gdk::Point &mouse_point);
   
   /**
    * Returns the total height in pixels of the layout tree.
@@ -146,6 +170,9 @@ public:
    **/
   int get_total_height() const;
   
+  /**
+   * Returns true if the layout is currently animating.
+   **/
   bool is_animating() const;
 
   /**
@@ -157,22 +184,65 @@ public:
    **/
   TrackTree::pre_order_iterator iterator_from_track(
     boost::shared_ptr<model::Track> model_track);
-    
+  
+  /**
+   * A function that recursively calculates the visible height of a
+   * branch taking into account branches that are expanded or collapsed.
+   * @param parent_iterator The parent of the branch to measure. This
+   * node and all the child nodes will be included in the measurement.
+   * @return Returns the height of the branch in pixels.
+   **/
   int measure_branch_height(TrackTree::iterator_base parent_iterator);
 
 protected:
+
+  /**
+   * An enum to specify the relationship between a tree node, and
+   * another node which is going to be inserted adjacent.
+   **/
   enum TreeRelation
   {
+    /**
+     * No relation
+     **/
     None,
+    
+    /**
+     * The node will be inserted immediately before this one.
+     **/
     Before,
+    
+    /**
+     * The node will be inserted immediately after this one.
+     **/
     After,
+    
+    /**
+     * The node will be inserted as the first child of this one.
+     **/
     FirstChild,
+    
+    /**
+     * The node will be inserted as the last child of this one.
+     **/
     LastChild
   };
   
-  struct Drop
+  /**
+   * A structure used to specify where a track will be dropped when
+   * dragging ends.
+   **/
+  struct DropPoint
   {
+    /**
+     * Specifies the target node onto which the dragging track will be
+     * dropped.
+     **/
     TrackTree::pre_order_iterator target;
+    
+    /**
+     * The where to drop the dragging track in relation to target.
+     **/
     TreeRelation relation;
   };
 
@@ -237,14 +307,34 @@ protected:
    * The animation timer tick callback.
    **/
   bool on_animation_tick();
- 
-  TimelineLayoutHelper::Drop
+
+  /**
+   * Attempts to find a drop point on the target node at point.
+   * @param[in] target The iterator of the target node on which to make
+   * the attempt.
+   * @param[in] point The point on which do to the test.
+   * @remarks This function hit-tests a header looking to see if the
+   * point is hovering over it, and if it is, it works out what part of
+   * the header, and therefore what drop location the user us gesturally
+   * pointing to.
+   **/
+  TimelineLayoutHelper::DropPoint
   attempt_drop(TrackTree::pre_order_iterator target,
     const Gdk::Point &point);
 
-  void apply_drop_to_layout_tree(const Drop &drop);
+  /**
+   * Drops the dragging track to a new location in the layout tree as
+   * specified by drop.
+   * @param[in] drop The point in the tree to drop onto.
+   **/
+  void apply_drop_to_layout_tree(const DropPoint &drop);
 
-  void apply_drop_to_model_tree(const Drop &drop);
+  /**
+   * Drops the dragging track to a new location in the model tree as
+   * specified by drop.
+   * @param[in] drop The point in the tree to drop onto.
+   **/
+  void apply_drop_to_model_tree(const DropPoint &drop);
 
 protected:
   /**
@@ -274,15 +364,39 @@ protected:
    **/
   int totalHeight;
   
+  /**
+   * The iterator of the layoutTree node that is presently being
+   * dragged.
+   * @remarks draggingTrackIter.node is set to NULL when no drag is
+   * taking place.
+   **/
   TrackTree::pre_order_iterator draggingTrackIter;
-    
+  
+  /**
+   * The offset of the mouse relative to the top-left corner of the
+   * dragging track.
+   **/
   Gdk::Point dragStartOffset;
   
+  /**
+   * The coordinates of the dragging mouse in pixels, measured from the
+   * top left of the whole layout.
+   * @remarks This value is changed by begin_dragging_track and
+   * drag_to_point
+   **/
   Gdk::Point dragPoint;
   
+  /**
+   * The total height of the dragging branch in pixels.
+   * @remarks This value is updated by begin_dragging_track
+   **/
   int dragBranchHeight;
   
-  Drop draggingDrop;
+  /**
+   * The tree point the the user is currently hovering on.
+   * @remarks This value is updated by drag_to_point.
+   **/
+  DropPoint dropPoint;
   
   /**
    * The connection to the animation timer.
