@@ -24,7 +24,7 @@
 
 #include "render.hpp"
 #include "dialog.hpp"
-#include "common/logging.h"
+#include "include/logging.h"
 
 using namespace Gtk;
 

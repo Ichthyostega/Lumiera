@@ -28,7 +28,7 @@
 #include "proc/asset/pipe.hpp"
 
 
-#include "common/logging.h"
+#include "include/logging.h"
 #include "lib/util.hpp"
 
 using util::isnil;

@@ -20,7 +20,7 @@
 */
 
 //TODO: Support library includes//
-#include "common/logging.h"
+#include "include/logging.h"
 #include "lib/safeclib.h"
 #include "common/config.h"
 

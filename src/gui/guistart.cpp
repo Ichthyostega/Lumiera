@@ -48,7 +48,7 @@
 #include <locale>               // need to include this to prevent errors when libintl.h defines textdomain (because gtk-lumiera removes the def when ENABLE_NLS isn't defined)
 
 #include "gui/gtk-lumiera.hpp"  // need to include this before nobugcfg.h, because types.h from GTK tries to shaddow the ERROR macro from windows, which kills nobug's ERROR macro
-// TODO not needed? #include "common/logging.h"
+// TODO not needed? #include "include/logging.h"
 #include "lib/error.hpp"
 #include "gui/guifacade.hpp"
 #include "gui/notification-service.hpp"

@@ -27,7 +27,7 @@
 #include "../timeline-widget.hpp"
 #include "../../window-manager.hpp"
 #include "../../dialogs/name-chooser.hpp"
-#include "common/logging.h"
+#include "include/logging.h"
 
 using namespace boost;
 using namespace Gtk;

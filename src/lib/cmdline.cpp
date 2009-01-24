@@ -24,7 +24,7 @@
 
 #include "lib/cmdline.hpp"
 #include "lib/util.hpp"
-#include "common/logging.h"
+#include "include/logging.h"
 
 #include <boost/regex.hpp>
 #include <boost/algorithm/string/split.hpp>

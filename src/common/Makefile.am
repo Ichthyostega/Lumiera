@@ -43,8 +43,7 @@ liblumieracommon_la_SOURCES =						\
 	$(liblumieracommon_la_srcdir)/appstate.cpp			\
 	$(liblumieracommon_la_srcdir)/option.cpp			\
 	$(liblumieracommon_la_srcdir)/subsys.cpp			\
-	$(liblumieracommon_la_srcdir)/interfaceproxy.cpp		\
-	$(liblumieracommon_la_srcdir)/logging.cpp
+	$(liblumieracommon_la_srcdir)/interfaceproxy.cpp
 
 
 noinst_HEADERS +=							\

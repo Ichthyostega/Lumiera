@@ -28,7 +28,7 @@
 #include "pre.hpp"
 
 
-#include "common/logging.h"
+#include "include/logging.h"
 
 #include "lib/test/suite.hpp"
 #include "lib/util.hpp"

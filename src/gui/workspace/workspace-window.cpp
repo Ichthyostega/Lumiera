@@ -34,7 +34,7 @@
 
 #include "../gtk-lumiera.hpp"
 #include "workspace-window.hpp"
-#include "common/logging.h"
+#include "include/logging.h"
 
 using namespace Gtk;
 using namespace gui::model;

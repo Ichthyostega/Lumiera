@@ -27,7 +27,7 @@
 #include <gdk/gdkx.h>
 
 #include "xvdisplayer.hpp"
-#include "common/logging.h"
+#include "include/logging.h"
 
 namespace gui {
 namespace output {

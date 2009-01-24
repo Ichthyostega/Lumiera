@@ -24,7 +24,7 @@
 #include "common/configrules.hpp"
 #include "common/query/fake-configrules.hpp"
 //#include "lib/util.hpp"
-#include "common/logging.h"
+#include "include/logging.h"
 
 
 

@@ -25,7 +25,7 @@
 #define LUMIERA_ERROR_HPP_
 
 #include <string>
-#include "common/logging.h"
+#include "include/logging.h"
 #include "include/lifecycle.h"
 #include "lib/error.h"
 

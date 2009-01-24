@@ -67,7 +67,7 @@
 #ifndef LIB_SYNC_H
 #define LIB_SYNC_H
 
-#include "common/logging.h"
+#include "include/logging.h"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 

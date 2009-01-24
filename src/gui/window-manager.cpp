@@ -21,7 +21,7 @@
 * *****************************************************/
 
 #include "window-manager.hpp"
-#include "common/logging.h"
+#include "include/logging.h"
 
 using namespace Gtk;
 using namespace Glib;

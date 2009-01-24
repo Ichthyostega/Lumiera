@@ -25,7 +25,7 @@
 #define LIB_THREADWRAPPER_H
 
 
-#include "common/logging.h"
+#include "include/logging.h"
 #include "lib/sync.hpp"
 
 extern "C" {

@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "common/logging.h"
+#include "include/logging.h"
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 

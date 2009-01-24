@@ -24,7 +24,7 @@
 #include "proc/assetmanager.hpp"
 #include "proc/asset/meta.hpp"
 #include "lib/util.hpp"
-#include "common/logging.h"
+#include "include/logging.h"
 
 
 namespace asset

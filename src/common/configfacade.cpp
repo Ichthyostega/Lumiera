@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "common/logging.h"
+#include "include/logging.h"
 #include "include/lifecycle.h"
 #include "include/configfacade.hpp"
 

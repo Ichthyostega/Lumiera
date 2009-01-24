@@ -24,7 +24,7 @@
 #ifndef MOBJECT_BUILDER_COMMON_H
 #define MOBJECT_BUILDER_COMMON_H
 
-#include "common/logging.h"
+#include "include/logging.h"
 
 
 namespace mobject {

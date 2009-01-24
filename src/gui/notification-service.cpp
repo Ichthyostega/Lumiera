@@ -23,7 +23,7 @@
 
 #include "gui/notification-service.hpp"
 #include "lib/singleton.hpp"
-#include "common/logging.h"
+#include "include/logging.h"
 #include "lib/util.hpp"
 
 extern "C" {

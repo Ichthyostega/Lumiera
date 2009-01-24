@@ -43,7 +43,8 @@ liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/streamtype.cpp			\
 	$(liblumiera_la_srcdir)/test/testoption.cpp 		\
 	$(liblumiera_la_srcdir)/test/suite.cpp 			\
-	$(liblumiera_la_srcdir)/cmdline.cpp
+	$(liblumiera_la_srcdir)/cmdline.cpp			\
+	$(liblumiera_la_srcdir)/logging.cpp
 
 noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/error.h				\

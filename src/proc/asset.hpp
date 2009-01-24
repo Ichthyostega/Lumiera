@@ -56,7 +56,7 @@
 
 
 #include "proc/asset/category.hpp"
-#include "common/logging.h"
+#include "include/logging.h"
 #include "lib/error.hpp"
 #include "lib/p.hpp"
 

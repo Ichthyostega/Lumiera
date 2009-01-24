@@ -22,7 +22,7 @@
 */
 
 
-#include "common/logging.h"
+#include "include/logging.h"
 #include "lib/error.hpp"
 #include "common/appstate.hpp"
 #include "common/option.hpp"

@@ -34,7 +34,7 @@
  **
  ** This header can thus be assumed to be effectively global. It should contain
  ** only declarations of global relevance, as any change causes the whole project
- ** to be rebuilt. All flags defined here are automatic initialised.
+ ** to be rebuilt. All flags defined here are initialised automatically.
  **
  ** We use the 'NOBUG_DECLARATIONS_ONLY' magic to generate declarations and
  ** definitions only out of this header.

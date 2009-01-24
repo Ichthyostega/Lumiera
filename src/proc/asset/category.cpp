@@ -23,7 +23,7 @@
 
 #include "proc/asset/category.hpp"
 #include "lib/util.hpp"
-#include "common/logging.h"
+#include "include/logging.h"
 
 #include <boost/algorithm/string.hpp>
 

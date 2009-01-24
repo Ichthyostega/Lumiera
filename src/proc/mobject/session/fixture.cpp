@@ -22,7 +22,7 @@
 
 
 #include "proc/mobject/session/fixture.hpp"
-#include "common/logging.h"
+#include "include/logging.h"
 
 namespace mobject
   {

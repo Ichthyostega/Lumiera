@@ -37,7 +37,7 @@ This code is heavily inspired by
 
 #include "lib/singletonpolicies.hpp"  // several Policies usable together with SingletonFactory
 
-#include "common/logging.h"
+#include "include/logging.h"
 #include "lib/util.hpp"
 #include "lib/sync-classlock.hpp"
 
