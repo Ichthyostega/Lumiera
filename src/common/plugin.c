@@ -19,7 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-
+#include "common/logging.h"
 #include "lib/safeclib.h"
 #include "lib/psplay.h"
 #include "lib/mutex.h"
@@ -193,7 +193,7 @@ int
 lumiera_plugin_discover (LumieraPlugin (*callback_load)(const char* plugin),
                          int (*callback_register) (LumieraPlugin))
 {
-  TRACE (plugin);
+  TRACE (pluginloader_dbg);
   REQUIRE (callback_load);
   REQUIRE (callback_register);
 
@@ -212,7 +212,7 @@ lumiera_plugin_discover (LumieraPlugin (*callback_load)(const char* plugin),
   while ((path = lumiera_config_wordlist_get_nth ("plugin.path", i, ":")))
     {
       path = lumiera_tmpbuf_snprintf (SIZE_MAX,"%s/%s", path, exts_globs);
-      TRACE (plugin, "globbing path '%s'", path);
+      TRACE (pluginloader_dbg, "globbing path '%s'", path);
       int ret = glob (path, flags, NULL, &globs);
       if (ret == GLOB_NOSPACE)
         LUMIERA_DIE (NO_MEMORY);
@@ -222,13 +222,13 @@ lumiera_plugin_discover (LumieraPlugin (*callback_load)(const char* plugin),
     }
 
   if (globs.gl_pathc)
-    LUMIERA_RECMUTEX_SECTION (plugin, &lumiera_interface_mutex)
+    LUMIERA_RECMUTEX_SECTION (mutex_sync, &lumiera_interface_mutex)
       {
         for (char** itr = globs.gl_pathv; *itr; ++itr)
           {
             if (!psplay_find (lumiera_pluginregistry, *itr, 100))
               {
-                TRACE (plugin, "found new plugin '%s'", *itr);
+                TRACE (pluginloader, "found new plugin '%s'", *itr);
                 callback_register (callback_load (*itr));
               }
           }
@@ -243,7 +243,7 @@ lumiera_plugin_discover (LumieraPlugin (*callback_load)(const char* plugin),
 LumieraPlugin
 lumiera_plugin_load (const char* plugin)
 {
-  TRACE (plugin);
+  TRACE (pluginloader_dbg);
 
   /* dispatch on ext, call the registered function */
   const char* ext = strrchr (plugin, '.');
@@ -262,11 +262,11 @@ lumiera_plugin_load (const char* plugin)
 int
 lumiera_plugin_register (LumieraPlugin plugin)
 {
-  TRACE (plugin);
+  TRACE (pluginloader_dbg);
   if (!plugin)
     return 1;
 
-  LUMIERA_RECMUTEX_SECTION (plugin, &lumiera_interface_mutex)
+  LUMIERA_RECMUTEX_SECTION (mutex_sync, &lumiera_interface_mutex)
     {
       if (psplay_insert (lumiera_pluginregistry, &plugin->node, 100))
         {
@@ -276,20 +276,20 @@ lumiera_plugin_register (LumieraPlugin plugin)
                 {
                 case 0:
                   {
-                    TRACE (plugin, "registering %s", plugin->name);
+                    TRACE (pluginloader, "registering %s", plugin->name);
                     LUMIERA_INTERFACE_HANDLE(lumieraorg__plugin, 0) handle =
                       LUMIERA_INTERFACE_CAST(lumieraorg__plugin, 0) plugin->plugin;
                     lumiera_interfaceregistry_bulkregister_interfaces (handle->plugin_interfaces (), plugin);
                   }
                   break;
                 default:
-                  LUMIERA_ERROR_SET (plugin, PLUGIN_VERSION, plugin->name);
+                  LUMIERA_ERROR_SET (pluginloader, PLUGIN_VERSION, plugin->name);
                 }
             }
         }
       else
         {
-          LUMIERA_ERROR_SET_CRITICAL (plugin, PLUGIN_REGISTER, plugin->name);
+          LUMIERA_ERROR_SET_CRITICAL (pluginloader, PLUGIN_REGISTER, plugin->name);
         }
     }
   return !!lumiera_error_peek();
@@ -299,7 +299,7 @@ lumiera_plugin_register (LumieraPlugin plugin)
 unsigned
 lumiera_plugin_unload (LumieraPlugin self)
 {
-  TRACE (plugin);
+  TRACE (pluginloader_dbg);
 
   if (!self)
     return 0;
@@ -315,7 +315,7 @@ lumiera_plugin_unload (LumieraPlugin self)
     {
       if (!strcmp (itr->ext, ext))
         {
-          LUMIERA_RECMUTEX_SECTION (plugin, &lumiera_interface_mutex)
+          LUMIERA_RECMUTEX_SECTION (mutex_sync, &lumiera_interface_mutex)
             {
               if (psplay_remove (lumiera_pluginregistry, &self->node))
                 {
@@ -343,7 +343,7 @@ lumiera_plugin_lookup (const char* name)
   LumieraPlugin ret = NULL;
 
   if (name)
-    LUMIERA_RECMUTEX_SECTION (plugin, &lumiera_interface_mutex)
+    LUMIERA_RECMUTEX_SECTION (mutex_sync, &lumiera_interface_mutex)
       ret = (LumieraPlugin) psplay_find (lumiera_pluginregistry, name, 100);
 
   return ret;
@@ -374,7 +374,7 @@ static char* init_exts_globs ()
       ++itr;
     }
   exts_globs[exts_sz-2] = '}';
-  TRACE (plugin, "initialized extension glob to '%s'", exts_globs);
+  TRACE (pluginloader_dbg, "initialized extension glob to '%s'", exts_globs);
   return exts_globs;
 }
 

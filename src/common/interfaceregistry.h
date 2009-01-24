@@ -37,9 +37,9 @@
  * by their name and major version.
  */
 
-NOBUG_DECLARE_FLAG (interface_all);
-NOBUG_DECLARE_FLAG (interfaceregistry);
-NOBUG_DECLARE_FLAG (interface);
+//NOBUG_DECLARE_FLAG (interface_all);
+//NOBUG_DECLARE_FLAG (interfaceregistry);
+//NOBUG_DECLARE_FLAG (interface);
 
 extern PSplay lumiera_interfaceregistry;
 extern lumiera_mutex lumiera_interface_mutex;

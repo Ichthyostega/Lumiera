@@ -22,7 +22,7 @@
 */
 
 #define LUMIERA_LOGGING_CXX
-#include "include/logging.h"
+#include "common/logging.h"
 
 /*
 // Local Variables:

@@ -31,17 +31,17 @@ struct lumiera_config_struct;
 
 
 /* master config subsystem debug flag */
-NOBUG_DECLARE_FLAG (config_all);
+//NOBUG_DECLARE_FLAG (config_all);
 /* config subsystem internals */
-NOBUG_DECLARE_FLAG (configsys);
+//NOBUG_DECLARE_FLAG (configsys);
 /* high level typed interface operations */
-NOBUG_DECLARE_FLAG (config_typed);
+//NOBUG_DECLARE_FLAG (config_typed);
 /* file operations */
-NOBUG_DECLARE_FLAG (config_file);
+//NOBUG_DECLARE_FLAG (config_file);
 /* single config items */
-NOBUG_DECLARE_FLAG (config_item);
+//NOBUG_DECLARE_FLAG (config_item);
 /* lookup config keys */
-NOBUG_DECLARE_FLAG (config_lookup);
+//NOBUG_DECLARE_FLAG (config_lookup);
 
 
 LUMIERA_ERROR_DECLARE (CONFIG_SYNTAX);

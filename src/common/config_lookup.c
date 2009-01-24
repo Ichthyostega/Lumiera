@@ -18,6 +18,8 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
+
+#include "common/logging.h"
 #include "lib/safeclib.h"
 
 #include "common/config_lookup.h"
@@ -48,7 +50,7 @@ key_fn (const PSplaynode node);
 LumieraConfigLookup
 lumiera_config_lookup_init (LumieraConfigLookup self)
 {
-  TRACE (config_lookup);
+  TRACE (configlookup_dbg);
   psplay_init (&self->tree, cmp_fn, key_fn, delete_fn);
   return self;
 }
@@ -57,7 +59,7 @@ lumiera_config_lookup_init (LumieraConfigLookup self)
 LumieraConfigLookup
 lumiera_config_lookup_destroy (LumieraConfigLookup self)
 {
-  TRACE (config_lookup);
+  TRACE (configlookup_dbg);
   if (self)
     psplay_destroy (&self->tree);
   return self;
@@ -67,7 +69,7 @@ lumiera_config_lookup_destroy (LumieraConfigLookup self)
 LumieraConfigLookupentry
 lumiera_config_lookup_insert (LumieraConfigLookup self, LumieraConfigitem item)
 {
-  TRACE (config_lookup, "%s", item->line);
+  TRACE (configlookup_dbg, "%s", item->line);
   REQUIRE (self);
   REQUIRE (item);
   REQUIRE (item->key);
@@ -88,7 +90,7 @@ lumiera_config_lookup_insert (LumieraConfigLookup self, LumieraConfigitem item)
 LumieraConfigLookupentry
 lumiera_config_lookup_insert_default (LumieraConfigLookup self, LumieraConfigitem item)
 {
-  TRACE (config_lookup, "%s", item->line);
+  TRACE (configlookup_dbg, "%s", item->line);
   REQUIRE (self);
   REQUIRE (item);
   REQUIRE (item->key);
@@ -108,7 +110,7 @@ lumiera_config_lookup_insert_default (LumieraConfigLookup self, LumieraConfigite
 LumieraConfigitem
 lumiera_config_lookup_remove (LumieraConfigLookup self, LumieraConfigitem item)
 {
-  TRACE (config_lookup, "%s", item->line);
+  TRACE (configlookup_dbg, "%s", item->line);
   REQUIRE (!llist_is_empty (&item->lookup), "item is not in a lookup");
 
   if (llist_is_single (&item->lookup))
@@ -131,7 +133,7 @@ lumiera_config_lookup_remove (LumieraConfigLookup self, LumieraConfigitem item)
 LumieraConfigLookupentry
 lumiera_config_lookup_find (LumieraConfigLookup self, const char* key)
 {
-  TRACE (config_lookup, "%s", key);
+  TRACE (configlookup_dbg, "%s", key);
   return (LumieraConfigLookupentry)psplay_find (&self->tree, key, 100);
 }
 
@@ -139,7 +141,7 @@ lumiera_config_lookup_find (LumieraConfigLookup self, const char* key)
 LumieraConfigitem
 lumiera_config_lookup_item_find (LumieraConfigLookup self, const char* key)
 {
-  TRACE (config_lookup, "%s", key);
+  TRACE (configlookup_dbg, "%s", key);
 
   LumieraConfigLookupentry entry =
     lumiera_config_lookup_find (self, key);
@@ -154,7 +156,7 @@ lumiera_config_lookup_item_find (LumieraConfigLookup self, const char* key)
 LumieraConfigitem
 lumiera_config_lookup_item_tail_find (LumieraConfigLookup self, const char* key)
 {
-  TRACE (config_lookup, "%s", key);
+  TRACE (configlookup_dbg, "%s", key);
 
   LumieraConfigLookupentry entry =
     lumiera_config_lookup_find (self, key);
@@ -174,7 +176,7 @@ lumiera_config_lookup_item_tail_find (LumieraConfigLookup self, const char* key)
 LumieraConfigLookupentry
 lumiera_config_lookupentry_init (LumieraConfigLookupentry self, const char* key)
 {
-  TRACE (config_lookup, "%s", key);
+  TRACE (configlookup_dbg, "%s", key);
   if (self)
     {
       psplaynode_init (&self->node);
@@ -195,7 +197,7 @@ lumiera_config_lookupentry_new (const char* key)
 LumieraConfigLookupentry
 lumiera_config_lookupentry_destroy (LumieraConfigLookupentry self)
 {
-  TRACE (config_lookup);
+  TRACE (configlookup_dbg);
   if (self)
     {
       REQUIRE (llist_is_empty (&self->configitems), "lookup node still in use");

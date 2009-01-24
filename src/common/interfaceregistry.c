@@ -19,6 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "common/logging.h"
 #include "lib/mutex.h"
 #include "lib/error.h"
 #include "lib/psplay.h"
@@ -39,10 +40,10 @@
  * by their name and major version.
  */
 
-NOBUG_DEFINE_FLAG_PARENT (interface_all, lumiera_all);
-NOBUG_DEFINE_FLAG_PARENT (plugin, interface_all);
-NOBUG_DEFINE_FLAG_PARENT (interfaceregistry, interface_all);
-NOBUG_DEFINE_FLAG_PARENT (interface, interface_all);
+//NOBUG_DEFINE_FLAG_PARENT (interface_all, lumiera_all);
+//NOBUG_DEFINE_FLAG_PARENT (plugin, interface_all);
+//NOBUG_DEFINE_FLAG_PARENT (interfaceregistry, interface_all);
+//NOBUG_DEFINE_FLAG_PARENT (interface, interface_all);
 
 PSplay lumiera_interfaceregistry;
 PSplay lumiera_pluginregistry;
@@ -91,12 +92,12 @@ lumiera_interfacenode_delete (LumieraInterfacenode self)
 void
 lumiera_interfaceregistry_init (void)
 {
-  NOBUG_INIT_FLAG (interface_all);
-  NOBUG_INIT_FLAG (interfaceregistry);
-  NOBUG_INIT_FLAG (interface);
-  NOBUG_INIT_FLAG (plugin);
+  //NOBUG_INIT_FLAG (interface_all);
+  //NOBUG_INIT_FLAG (interfaceregistry);
+  //NOBUG_INIT_FLAG (interface);
+  //NOBUG_INIT_FLAG (plugin);
 
-  TRACE (interfaceregistry);
+  TRACE (interfaceregistry_dbg);
   REQUIRE (!lumiera_interfaceregistry);
   REQUIRE (!lumiera_pluginregistry);
 
@@ -117,7 +118,7 @@ lumiera_interfaceregistry_init (void)
 void
 lumiera_interfaceregistry_destroy (void)
 {
-  TRACE (interfaceregistry);
+  TRACE (interfaceregistry_dbg);
 
   lumiera_interface_destroy ();
 
@@ -125,7 +126,7 @@ lumiera_interfaceregistry_destroy (void)
     psplay_delete (lumiera_pluginregistry);
   lumiera_pluginregistry = NULL;
 
-  lumiera_mutex_destroy (&lumiera_interface_mutex, &NOBUG_FLAG(interfaceregistry));
+  lumiera_mutex_destroy (&lumiera_interface_mutex, &NOBUG_FLAG(mutex_dbg));
 
   REQUIRE (!psplay_nelements (lumiera_interfaceregistry), "some interfaces still registered at shutdown");
 
@@ -138,10 +139,10 @@ lumiera_interfaceregistry_destroy (void)
 void
 lumiera_interfaceregistry_register_interface (LumieraInterface self, LumieraPlugin plugin)
 {
-  TRACE (interfaceregistry);
+  TRACE (interfaceregistry_dbg);
   REQUIRE (self);
 
-  LUMIERA_RECMUTEX_SECTION (interfaceregistry, &lumiera_interface_mutex)
+  LUMIERA_RECMUTEX_SECTION (mutex_sync, &lumiera_interface_mutex)
     {
       TRACE (interfaceregistry, "interface %s, version %d, instance %s", self->interface, self->version, self->name);
       psplay_insert (lumiera_interfaceregistry, &lumiera_interfacenode_new (self, plugin)->node, 100);
@@ -152,10 +153,10 @@ lumiera_interfaceregistry_register_interface (LumieraInterface self, LumieraPlug
 void
 lumiera_interfaceregistry_bulkregister_interfaces (LumieraInterface* self, LumieraPlugin plugin)
 {
-  TRACE (interfaceregistry);
+  TRACE (interfaceregistry_dbg);
   REQUIRE (self);
 
-  LUMIERA_RECMUTEX_SECTION (interfaceregistry, &lumiera_interface_mutex)
+  LUMIERA_RECMUTEX_SECTION (mutex_sync, &lumiera_interface_mutex)
     {
       while (*self)
         {
@@ -170,11 +171,12 @@ lumiera_interfaceregistry_bulkregister_interfaces (LumieraInterface* self, Lumie
 void
 lumiera_interfaceregistry_remove_interface (LumieraInterface self)
 {
-  TRACE (interfaceregistry);
+  TRACE (interfaceregistry_dbg);
   REQUIRE (self);
 
-  LUMIERA_RECMUTEX_SECTION (interfaceregistry, &lumiera_interface_mutex)
+  LUMIERA_RECMUTEX_SECTION (mutex_sync, &lumiera_interface_mutex)
     {
+      TRACE (interfaceregistry, "interface %s, version %d, instance %s", self->interface, self->version, self->name);
       LumieraInterfacenode node = (LumieraInterfacenode) psplay_find (lumiera_interfaceregistry, self, 0);
       REQUIRE (node->refcnt == 0, "but is %d", node->refcnt);
 
@@ -186,10 +188,10 @@ lumiera_interfaceregistry_remove_interface (LumieraInterface self)
 void
 lumiera_interfaceregistry_bulkremove_interfaces (LumieraInterface* self)
 {
-  TRACE (interfaceregistry);
+  TRACE (interfaceregistry_dbg);
   REQUIRE (self);
 
-  LUMIERA_RECMUTEX_SECTION (interfaceregistry, &lumiera_interface_mutex)
+  LUMIERA_RECMUTEX_SECTION (mutex_sync, &lumiera_interface_mutex)
     {
       while (*self)
         {
@@ -209,7 +211,7 @@ lumiera_interfaceregistry_bulkremove_interfaces (LumieraInterface* self)
 LumieraInterfacenode
 lumiera_interfaceregistry_interfacenode_find (const char* interface, unsigned version, const char* name)
 {
-  TRACE (interfaceregistry);
+  TRACE (interfaceregistry_dbg);
   struct lumiera_interface_struct cmp;
   cmp.interface = interface;
   cmp.version = version;
@@ -217,7 +219,7 @@ lumiera_interfaceregistry_interfacenode_find (const char* interface, unsigned ve
 
   LumieraInterfacenode ret = NULL;
 
-  LUMIERA_RECMUTEX_SECTION (interfaceregistry, &lumiera_interface_mutex)
+  LUMIERA_RECMUTEX_SECTION (mutex_sync, &lumiera_interface_mutex)
     {
       ret = (LumieraInterfacenode)psplay_find (lumiera_interfaceregistry, &cmp, 100);
     }

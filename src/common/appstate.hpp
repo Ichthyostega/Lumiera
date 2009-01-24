@@ -28,7 +28,7 @@
  **
  ** @see LifecycleHook
  ** @see main.cpp
- ** @see nobugcfg.h
+ ** @see logging.h
  */
 
 

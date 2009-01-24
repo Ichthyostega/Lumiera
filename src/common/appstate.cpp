@@ -49,7 +49,7 @@ namespace lumiera {
     log_and_clear_unexpected_errorstate ()
     {
       if (const char * errorstate = lumiera_error ())
-        ERROR (NOBUG_ON, "*** Unexpected error: %s\n     Triggering emergency exit.", errorstate);
+        ALERT (common, "*** Unexpected error: %s\n     Triggering emergency exit.", errorstate);
     }
     
     void
@@ -108,7 +108,7 @@ namespace lumiera {
   void
   AppState::init (Option& options)
   {
-    TRACE (lumiera, "initialising application core...");
+    TRACE (common, "initialising application core...");
     
     lumiera_interfaceregistry_init ();
     _THROW_IF
@@ -126,7 +126,7 @@ namespace lumiera {
     
     
     subsystems_.reset (new SubsystemRunner (options));
-    TRACE (lumiera, "Lumiera core started successfully.");
+    TRACE (common, "Lumiera core started successfully.");
   }
   
   
@@ -134,8 +134,8 @@ namespace lumiera {
   void
   AppState::maybeStart (lumiera::Subsys& subsys)
   {
-    TRACE (lumiera, "maybe startup %s...?", cStr(subsys));
-    ASSERT (subsystems_);
+    TRACE (common, "maybe startup %s...?", cStr(subsys));
+    REQUIRE (subsystems_);
     subsystems_->maybeRun (subsys);
   }
   
@@ -165,11 +165,11 @@ namespace lumiera {
         subsystems_.reset(0);
       }
     
-    NOTICE (lumiera, "Shutting down Lumiera...");
+    NOTICE (common, "Shutting down Lumiera...");
     
     if (emergency_)
       {
-        ERROR (operate, "Triggering emergency exit...");
+        ALERT (common, "Triggering emergency exit...");
         LifecycleHook::trigger (ON_EMERGENCY);
         return CLEAN_EMERGENCY_EXIT;
       }
@@ -186,9 +186,9 @@ namespace lumiera {
   AppState::abort (lumiera::Error& problem)
   {
     
-    INFO (operate, "Address of Config Facade = %x", &lumiera::Config::instance());   //////////TODO: a temp hack to force configfacade.cpp to be linked into lumiera exe. 
+    INFO (common, "Address of Config Facade = %x", &lumiera::Config::instance());   //////////TODO: a temp hack to force configfacade.cpp to be linked into lumiera exe. 
     
-    ERROR (operate, "Aborting Lumiera after unhandled error: %s", cStr(problem.what()));
+    ERROR (common, "Aborting Lumiera after unhandled error: %s", cStr(problem.what()));
     
     log_and_clear_unexpected_errorstate();
     
@@ -239,7 +239,7 @@ namespace lumiera {
       if (core_up_)
         try
         {
-          TRACE (lumiera, "shutting down basic application layer...");
+          TRACE (common, "shutting down basic application layer...");
           lumiera_config_interface_destroy ();
           lumiera_interfaceregistry_destroy ();
         }

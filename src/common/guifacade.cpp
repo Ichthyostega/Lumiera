@@ -94,7 +94,7 @@ namespace gui {
           {
             if (opts.isHeadless() || 0 < opts.getPort())
               {
-                INFO (lumiera, "*not* starting the GUI...");
+                INFO (guifacade, "*not* starting the GUI...");
                 return false;
               }
             else
@@ -135,8 +135,8 @@ namespace gui {
             Lock guard (this);
             if (!facade)
               {
-                WARN (operate, "Termination signal invoked, but GUI is currently closed. "
-                               "Probably this is due to some broken startup logic and should be fixed.");
+                WARN (guifacade, "Termination signal invoked, but GUI is currently closed. "
+                                 "Probably this is due to some broken startup logic and should be fixed.");
               }
             else
               facade.reset (0);
@@ -152,12 +152,13 @@ namespace gui {
         
         ~GuiSubsysDescriptor()
           {
+            FIXME ("ichthyo: when you want to ignore errors, then you have to error_get() them to clear the error state");
             if (facade)
               {
-                WARN (operate, "GUI subsystem terminates, but GuiFacade isn't properly closed. "
+                WARN (guifacade, "GUI subsystem terminates, but GuiFacade isn't properly closed. "
                                "Closing it forcedly; this indicates broken startup logic and should be fixed.");
                 try { facade.reset (0); }
-                catch(...) { WARN_IF (lumiera_error_peek(), operate, "Ignoring error: %s", lumiera_error()); }
+                catch(...) { WARN_IF (lumiera_error_peek(), guifacade, "Ignoring error: %s", lumiera_error()); }
               }
           }
       };
@@ -188,3 +189,11 @@ namespace gui {
 
 
 } // namespace gui
+
+/*
+// Local Variables:
+// mode: C++
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

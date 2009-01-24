@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "include/nobugcfg.h"
+#include "common/logging.h"
 #include "include/lifecycle.h"
 #include "include/configfacade.hpp"
 
@@ -54,7 +54,7 @@ namespace lumiera {
     void 
     pull_up_ConfigSystem () 
     {
-      TRACE (lumiera, "booting up config system");
+      TRACE (common, "booting up config system");
       Config::instance();
     }
     
@@ -80,7 +80,7 @@ namespace lumiera {
   Config::~Config()
   {
     lumiera_config_destroy();
-    TRACE (lumiera, "config system closed.");
+    TRACE (common, "config system closed.");
   }
   
   
