@@ -2007,9 +2007,9 @@ unsigned int tree<T, tree_node_allocator>::iterator_base::number_of_children() c
 template <class T, class tree_node_allocator>
 bool tree<T, tree_node_allocator>::iterator_base::is_descendant_of(iterator_base parent) const
    {
-     tree_node node = this->node;
+     const tree_node *node = this->node;
      while(node != NULL) {
-        if(node == parent->node) return true;
+        if(node == parent.node) return true;
         node = node->parent;
         }
     return false;
