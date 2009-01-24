@@ -235,7 +235,7 @@ TimelineLayoutHelper::drag_to_point(const Gdk::Point &mouse_point)
       apply_drop_to_layout_tree(drop);
       dropPoint = drop;
       
-      if((drop.relation == FirstChild || drop.relation == LastChild)&&
+      if((drop.relation == FirstChild || drop.relation == LastChild) &&
         !target_timeline_track->get_expanded())
         {
           target_timeline_track->expand_collapse(Track::Expand);
