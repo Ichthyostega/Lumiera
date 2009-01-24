@@ -186,6 +186,7 @@ void
 TimelineLayoutHelper::drag_to_point(const Gdk::Point &mouse_point)
 {
   DropPoint drop;
+  drop.relation = None;
   
   // begin_dragging_track must have been called before
   REQUIRE(is_dragging_track());
@@ -479,7 +480,7 @@ TimelineLayoutHelper::attempt_drop(TrackTree::pre_order_iterator target,
   
   // Initialize the drop
   // By specifying relation = None, the default return value will signal
-  // no drop-point was foind at point
+  // no drop-point was found at point
   DropPoint drop = {target, None};
 
   if(pt_in_rect(point, Gdk::Rectangle(0, y, full_width, half_height)))
