@@ -208,7 +208,7 @@ TimelineHeaderWidget::on_button_release_event (GdkEventButton* event)
   TimelineLayoutHelper &layout = track.timelineWidget.layoutHelper;
   
   // Did the user release the button on an expander?
-  if(clickedExpander)
+  if(clickedExpander && !layout.is_dragging_track())
     {
       // Yes? The toggle the expanding
       track.expand_collapse(track.get_expanded() ?
