@@ -201,14 +201,14 @@ bool TimelineHeaderContainer::on_motion_notify_event (
   
   // Are we beginning to drag a header?
   if((event->state & GDK_BUTTON1_MASK) && hoveringTrack &&
-    !layout.get_dragging_track())
+    !layout.is_dragging_track())
     {
       begin_drag();      
       return result;
     }
     
   // Are we currently dragging?
-  if(layout.get_dragging_track())
+  if(layout.is_dragging_track())
     {
       // Forward the message to the layout manager
       layout.drag_to_point(mousePoint);
@@ -346,9 +346,6 @@ TimelineHeaderContainer::layout_headers()
     timelineWidget.layoutHelper;
   const TimelineLayoutHelper::TrackTree &layout_tree =
     layout_helper.get_layout_tree();
-    
-  shared_ptr<timeline::Track> dragging_track =
-    layout_helper.get_dragging_track();
   
   TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
   for(iterator = ++layout_tree.begin(); // ++ so that we skip the sequence root
@@ -416,7 +413,7 @@ TimelineHeaderContainer::end_drag(bool apply)
   TimelineLayoutHelper &layout = timelineWidget.layoutHelper;
   
   // Has the user been dragging?
-  if(layout.get_dragging_track())
+  if(layout.is_dragging_track())
     layout.end_dragging_track(apply);
     
   // Reset the arrow as a cursor

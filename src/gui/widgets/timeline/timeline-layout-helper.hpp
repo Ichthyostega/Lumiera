@@ -132,7 +132,7 @@ public:
   
   void end_dragging_track(bool apply);
   
-  boost::shared_ptr<timeline::Track> get_dragging_track() const;
+  bool is_dragging_track() const;
   
   TrackTree::pre_order_iterator get_dragging_track_iter() const;
   
@@ -275,9 +275,7 @@ protected:
   int totalHeight;
   
   TrackTree::pre_order_iterator draggingTrackIter;
-  
-  boost::shared_ptr<timeline::Track> draggingTrack;
-  
+    
   Gdk::Point dragStartOffset;
   
   Gdk::Point dragPoint;
