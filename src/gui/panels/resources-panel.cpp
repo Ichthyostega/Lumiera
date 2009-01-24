@@ -27,11 +27,16 @@ namespace gui {
 namespace panels {
 
 ResourcesPanel::ResourcesPanel(workspace::WorkspaceWindow &workspace_window) :
-  Panel(workspace_window, "resources", _("Resources"), "panel_resources"),
-  placeholder("Resources")
-  {
-    pack_start(placeholder);
-  }
+  Panel(workspace_window, "resources", _("Resources"), "panel_resources")
+{
+  
+  notebook.append_page(media, _("Media"));
+  notebook.append_page(clips, _("Clips"));
+  notebook.append_page(effects, _("Effects"));
+  notebook.append_page(transitions, _("Transitions"));
+
+  pack_start(notebook);
+}
 
 }   // namespace panels
 }   // namespace gui

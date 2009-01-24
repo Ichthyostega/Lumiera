@@ -42,7 +42,12 @@ public:
   ResourcesPanel(workspace::WorkspaceWindow &workspace_window);
 
 protected:
-  Gtk::Label placeholder;
+  Gtk::Notebook notebook;
+  
+  Gtk::IconView media;
+  Gtk::IconView clips;
+  Gtk::IconView effects;
+  Gtk::IconView transitions;
 };
 
 }   // namespace panels
