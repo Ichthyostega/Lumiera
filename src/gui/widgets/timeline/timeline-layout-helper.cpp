@@ -228,8 +228,19 @@ TimelineLayoutHelper::drag_to_point(const Gdk::Point &mouse_point)
   // Did we get a drop point?
   if(drop.relation != None)
     {
+      REQUIRE(*drop.target);
+      shared_ptr<timeline::Track> target_timeline_track =
+        lookup_timeline_track(*drop.target);
+      
       apply_drop_to_layout_tree(drop);
       dropPoint = drop;
+      
+      if((drop.relation == FirstChild || drop.relation == LastChild)&&
+        !target_timeline_track->get_expanded())
+        {
+          target_timeline_track->expand_collapse(Track::Expand);
+          
+        }
     }
   
   update_layout();

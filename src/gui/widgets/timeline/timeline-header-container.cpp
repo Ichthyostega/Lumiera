@@ -342,6 +342,8 @@ TimelineHeaderContainer::layout_headers()
   if(!gdkWindow)
     return;
     
+  bool headers_shown = false;
+    
   TimelineLayoutHelper &layout_helper =
     timelineWidget.layoutHelper;
   const TimelineLayoutHelper::TrackTree &layout_tree =
@@ -368,12 +370,20 @@ TimelineHeaderContainer::layout_headers()
           // Apply the allocation to the header
           widget.size_allocate (*header_rect);
           if(!widget.is_visible())
-            widget.show();
+            {
+              widget.show();
+              headers_shown = true;
+            }
         }
       else // No header rect, so the track must be hidden
         if(widget.is_visible())
           widget.hide();
     }
+    
+  // If headers have been shown while we're dragging, the dragging
+  // branch headers have to be brought back to the top again
+  if(headers_shown && layout_helper.is_dragging_track())
+    raise_recursive(layout_helper.get_dragging_track_iter());
   
   // Repaint the background of our parenting
   queue_draw();
