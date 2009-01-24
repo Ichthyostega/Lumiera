@@ -500,7 +500,7 @@ TimelineLayoutHelper::attempt_drop(TrackTree::pre_order_iterator target,
                 drop.relation = FirstChild;
             }
           else
-            drop.relation = LastChild;
+            drop.relation = FirstChild;
         }
       else
         {
