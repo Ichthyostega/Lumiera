@@ -31,6 +31,8 @@
 
 namespace gui {
 namespace model {
+  
+class ParentTrack;
 
 /**
  * The model representation of a track. This is the base class for all
@@ -89,10 +91,18 @@ public:
    **/
   virtual std::string print_track() = 0;
   
-protected:
+public:
   
-  static boost::shared_ptr<Track>
-    find_parent(boost::shared_ptr<Track> root,
+  /**
+   * A utility function that attempts to find the parent of a track by
+   * searching through the tree from a root downward.
+   * @param root The root track to begin searching down from.
+   * @param child The child track to find the parent of.
+   * @return Returns the parent track if one was found, or an empty
+   * shared_ptr if none was found.
+   **/
+  static boost::shared_ptr<ParentTrack>
+    find_parent(boost::shared_ptr<ParentTrack> root,
       boost::shared_ptr<Track> child);
   
 protected:

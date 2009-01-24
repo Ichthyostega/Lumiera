@@ -563,9 +563,8 @@ TimelineLayoutHelper::apply_drop_to_model_tree(
   
   // Detach the track from the old parent
   shared_ptr<model::ParentTrack> old_parent =
-    dynamic_pointer_cast<model::ParentTrack, model::Track>(
       model::Track::find_parent(
-        timelineWidget.sequence, dragging_track));
+        timelineWidget.sequence, dragging_track);
   REQUIRE(old_parent);  // The track must have a parent
   old_parent->get_child_track_list().remove(dragging_track);
   
@@ -573,9 +572,8 @@ TimelineLayoutHelper::apply_drop_to_model_tree(
     {
       // Find the new parent track
       shared_ptr<model::ParentTrack> new_parent =
-        dynamic_pointer_cast<model::ParentTrack, model::Track>(
-          model::Track::find_parent(
-            timelineWidget.sequence, target_track));
+        model::Track::find_parent(
+          timelineWidget.sequence, target_track);
       REQUIRE(new_parent);  // The track must have a parent
       
       // Find the destination point

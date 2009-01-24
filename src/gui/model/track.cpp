@@ -21,6 +21,7 @@
 * *****************************************************/
 
 #include "track.hpp"
+#include "parent-track.hpp"
 #include <boost/foreach.hpp>
 
 using namespace boost;
@@ -72,8 +73,8 @@ Track::print_branch()
   return print_branch_recursive(0);
 }
 
-shared_ptr<Track>
-Track::find_parent(shared_ptr<Track> root, shared_ptr<Track> child)
+shared_ptr<ParentTrack>
+Track::find_parent(shared_ptr<ParentTrack> root, shared_ptr<Track> child)
 { 
   REQUIRE(root != NULL);
   REQUIRE(child != NULL);
@@ -83,12 +84,19 @@ Track::find_parent(shared_ptr<Track> root, shared_ptr<Track> child)
       if(track == child)
         return root;
     
-      shared_ptr<Track> result = find_parent(track, child);
-      if(result)
-        return result;
+      shared_ptr<ParentTrack> parent_track = 
+        dynamic_pointer_cast<model::ParentTrack, model::Track>(
+          track);
+      if(parent_track)
+        {
+          shared_ptr<ParentTrack> result = find_parent(
+            parent_track, child);
+          if(result)
+            return result;
+        }
     }
   
-  return shared_ptr<Track>();
+  return shared_ptr<ParentTrack>();
 }
 
 string
