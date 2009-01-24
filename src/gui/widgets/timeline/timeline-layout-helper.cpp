@@ -274,18 +274,21 @@ TimelineLayoutHelper::measure_branch_height(
   int branch_height = parent_track->get_height() +
     TimelineWidget::TrackPadding;
   
-  TrackTree::sibling_iterator iterator;
-  for(iterator = layoutTree.begin(parent_iterator);
-    iterator != layoutTree.end(parent_iterator);
-    iterator++)
-    {           
-      shared_ptr<timeline::Track> child_track =
-        lookup_timeline_track(*iterator);
-      
-      if(child_track->get_expanded())
-        branch_height += measure_branch_height(iterator);
+  // Add the heights of child tracks if this parent is expanded
+  if(parent_track->get_expanded())
+    {
+      TrackTree::sibling_iterator iterator;
+      for(iterator = layoutTree.begin(parent_iterator);
+        iterator != layoutTree.end(parent_iterator);
+        iterator++)
+        {           
+          shared_ptr<timeline::Track> child_track =
+            lookup_timeline_track(*iterator);
+          
+          branch_height += measure_branch_height(iterator);
+        }
     }
-    
+  
   return branch_height;
 }
 
