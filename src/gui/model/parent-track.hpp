@@ -77,6 +77,13 @@ public:
    **/
   bool remove_descendant_track(const boost::shared_ptr<Track> track);
   
+  /**
+   * A utility function that attempts to find the parent of a track by
+   * searching through the tree from this track downward.
+   * @param child The child track to find the parent of.
+   * @return Returns the parent track if one was found, or an empty
+   * shared_ptr if none was found.
+   **/
   boost::shared_ptr<ParentTrack>
     find_descendant_track_parent(boost::shared_ptr<Track> child);
 
