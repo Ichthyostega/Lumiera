@@ -25,7 +25,7 @@
 #define LIB_THREADWRAPPER_H
 
 
-#include "include/nobugcfg.h"
+#include "common/logging.h"
 #include "lib/sync.hpp"
 
 extern "C" {
@@ -74,7 +74,7 @@ namespace lib {
       static void
       run (void* arg)
         { 
-          ASSERT (arg);
+          REQUIRE (arg);
           Thread* startingWrapper = reinterpret_cast<Thread*>(arg);
           Operation _doIt_(startingWrapper->operation_);
           {
@@ -88,7 +88,7 @@ namespace lib {
       
       
     public:
-      Thread (Literal& purpose, Operation const& operation, struct nobug_flag *logging_flag = &NOBUG_FLAG(operate))
+      Thread (Literal& purpose, Operation const& operation, struct nobug_flag *logging_flag = &NOBUG_FLAG(thread))
         : started_(false),
           operation_(operation)
         {

@@ -19,6 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "common/logging.h"
 #include "lib/mutex.h"
 #include "lib/safeclib.h"
 
@@ -36,14 +37,14 @@
 LumieraMMapings
 lumiera_mmapings_init (LumieraMMapings self, LumieraFile file, size_t chunksize)
 {
-  TRACE (mmapings);
+  TRACE (mmapings_dbg);
   REQUIRE (!file->descriptor->mmapings);
 
   llist_init (&self->mmaps);
   self->descriptor = file->descriptor;
   self->chunksize = chunksize;
 
-  lumiera_mutex_init (&self->lock, "mmapings", &NOBUG_FLAG(mmapings));
+  lumiera_mutex_init (&self->lock, "mmapings", &NOBUG_FLAG(mutex_dbg));
 
   return self;
 }
@@ -52,7 +53,7 @@ lumiera_mmapings_init (LumieraMMapings self, LumieraFile file, size_t chunksize)
 LumieraMMapings
 lumiera_mmapings_destroy (LumieraMMapings self)
 {
-  TRACE (mmapings);
+  TRACE (mmapings_dbg);
   if (!self)
     return NULL;
 
@@ -62,7 +63,7 @@ lumiera_mmapings_destroy (LumieraMMapings self)
       lumiera_mmap_delete (mmap);
     }
 
-  lumiera_mutex_destroy (&self->lock, &NOBUG_FLAG(mmapings));
+  lumiera_mutex_destroy (&self->lock, &NOBUG_FLAG(mutex_dbg));
 
   return self;
 }
@@ -71,6 +72,7 @@ lumiera_mmapings_destroy (LumieraMMapings self)
 LumieraMMapings
 lumiera_mmapings_new (LumieraFile file, size_t chunksize)
 {
+  TRACE (mmapings_dbg);
   LumieraMMapings self = lumiera_malloc (sizeof (*self));
   return lumiera_mmapings_init (self, file, chunksize);
 }
@@ -79,7 +81,7 @@ lumiera_mmapings_new (LumieraFile file, size_t chunksize)
 void
 lumiera_mmapings_delete (LumieraMMapings self)
 {
-  TRACE (mmapings);
+  TRACE (mmapings_dbg);
   free (lumiera_mmapings_destroy (self));
 }
 
@@ -87,11 +89,11 @@ lumiera_mmapings_delete (LumieraMMapings self)
 LumieraMMap
 lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, LList acquirer, off_t start, size_t size)
 {
-  TRACE (mmapings);
+  TRACE (mmapings_dbg);
 
   LumieraMMap ret = NULL;
 
-  LUMIERA_MUTEX_SECTION (mmapings, &self->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
     {
       REQUIRE (llist_is_empty (acquirer));
 
@@ -119,7 +121,7 @@ lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, LList acq
       else
         {
           /* create new mmap */
-          TRACE (mmapings, "mmap not found, creating", mmap);
+          TRACE (mmapings_dbg, "mmap not found, creating", mmap);
           ret = lumiera_mmap_new (file, start, size);
 
           llist_insert_head (&self->mmaps, &ret->searchnode);
@@ -137,13 +139,14 @@ lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, LList acq
 void
 lumiera_mmapings_release_mmap (LumieraMMapings self, LList acquirer, LumieraMMap map)
 {
-  TRACE (mmapings);
-  LUMIERA_MUTEX_SECTION (mmapings, &self->lock)
+  TRACE (mmapings_dbg);
+
+  LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
     {
       llist_unlink (acquirer);
       if (llist_is_empty (&map->cachenode))
         {
-          TRACE (mmapings, "checkin");
+          TRACE (mmapcache_dbg, "checkin");
           lumiera_mmapcache_checkin (lumiera_mcache, map);
         }
     }

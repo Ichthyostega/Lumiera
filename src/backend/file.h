@@ -27,7 +27,7 @@
 #include "lib/llist.h"
 #include "lib/error.h"
 
-NOBUG_DECLARE_FLAG (file);
+//NOBUG_DECLARE_FLAG (file);
 
 LUMIERA_ERROR_DECLARE(FILE_CHANGED);
 LUMIERA_ERROR_DECLARE(FILE_NOCHUNKSIZE);

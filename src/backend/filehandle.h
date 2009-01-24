@@ -29,7 +29,7 @@ typedef lumiera_filehandle* LumieraFilehandle;
 
 #include "backend/filedescriptor.h"
 
-NOBUG_DECLARE_FLAG (filehandle);
+//NOBUG_DECLARE_FLAG (filehandle);
 
 /**
  * @file

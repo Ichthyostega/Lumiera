@@ -36,7 +36,7 @@ typedef lumiera_mmap* LumieraMMap;
 #include <nobug.h>
 #include <sys/mman.h>
 
-NOBUG_DECLARE_FLAG (mmap);
+//NOBUG_DECLARE_FLAG (mmap);
 
 
 /**

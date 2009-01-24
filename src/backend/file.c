@@ -19,6 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "common/logging.h"
 #include "lib/mutex.h"
 #include "lib/safeclib.h"
 
@@ -28,7 +29,7 @@
 #include <limits.h>
 #include <unistd.h>
 
-NOBUG_DEFINE_FLAG_PARENT (file, file_all);
+//NOBUG_DEFINE_FLAG_PARENT (file, file_all);
 
 LUMIERA_ERROR_DEFINE (FILE_CHANGED, "File changed unexpected");
 LUMIERA_ERROR_DEFINE (FILE_NOCHUNKSIZE, "Chunksize not set");
@@ -37,7 +38,7 @@ LUMIERA_ERROR_DEFINE (FILE_NOCHUNKSIZE, "Chunksize not set");
 LumieraFile
 lumiera_file_init (LumieraFile self, const char* name, int flags)
 {
-  TRACE (file);
+  TRACE (file_dbg);
 
   if (self)
     {
@@ -55,7 +56,7 @@ lumiera_file_init (LumieraFile self, const char* name, int flags)
 LumieraFile
 lumiera_file_destroy (LumieraFile self)
 {
-  TRACE (file);
+  TRACE (file_dbg);
 
   lumiera_filedescriptor_release (self->descriptor, self->name, &self->node);
   lumiera_free (self->name);
@@ -66,7 +67,9 @@ lumiera_file_destroy (LumieraFile self)
 LumieraFile
 lumiera_file_new (const char* name, int flags)
 {
-  TRACE (file);
+  TRACE (file_dbg);
+  TRACE (file, "opening file '%s' with flags '%x'", name, flags);
+
   LumieraFile self = lumiera_malloc (sizeof (lumiera_file));
   if (!lumiera_file_init (self, name, flags))
     {
@@ -80,7 +83,8 @@ lumiera_file_new (const char* name, int flags)
 void
 lumiera_file_delete (LumieraFile self)
 {
-  TRACE (file);
+  TRACE (file_dbg);
+  TRACE (file, "close file '%s'", self->name);
   lumiera_free (lumiera_file_destroy (self));
 }
 
@@ -88,7 +92,7 @@ lumiera_file_delete (LumieraFile self)
 int
 lumiera_file_handle_acquire (LumieraFile self)
 {
-  TRACE (file);
+  TRACE (file_dbg);
   REQUIRE (self);
   REQUIRE (self->descriptor);
   REQUIRE (lumiera_fhcache);
@@ -100,7 +104,7 @@ lumiera_file_handle_acquire (LumieraFile self)
 void
 lumiera_file_handle_release (LumieraFile self)
 {
-  TRACE (file);
+  TRACE (file_dbg);
   REQUIRE (self);
   REQUIRE (self->descriptor);
   REQUIRE (lumiera_fhcache);
