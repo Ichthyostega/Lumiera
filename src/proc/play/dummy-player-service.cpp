@@ -270,7 +270,7 @@ namespace proc  {
     ProcessImpl::setRate (uint fps)
       {
         // REQUIRE (fps==0 || fps_==0 );    //////////////TODO: reactivate this check when we have really independent processes which can be stopped!
-        REQUIRE (fps==0 || !play_  );
+        // REQUIRE (fps==0 || !play_  );    //////////////TODO: reactivate this check when we have really independent processes which can be stopped!
         
         fps_ = fps;
         play_ = (fps != 0);

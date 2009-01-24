@@ -37,12 +37,12 @@ namespace gui {
 namespace controller {
 
 using lib::Sync;
-using lib::NonrecursiveLock_NoWait;
+using lib::RecursiveLock_NoWait;
 
 
 class PlaybackController
   : boost::noncopyable,
-    public Sync<NonrecursiveLock_NoWait>
+    public Sync<RecursiveLock_NoWait>
 {
 public:
 

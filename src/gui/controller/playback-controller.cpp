@@ -43,25 +43,29 @@ PlaybackController::~PlaybackController()
 void
 PlaybackController::play()
 {
-  Lock sync(this);
-  try
+  if (playing && thread && playHandle)
     {
-      if (playing && thread && playHandle) playHandle->pause(false);
-      else
-        {
-          playHandle = & (proc::DummyPlayer::facade().start());
-          if (thread)
-            end_playback_thread();
-          start_playback_thread();
-          playing = true;
-        }
+      playHandle->pause(false);
+      return;
     }
-  catch (lumiera::error::State& err)
-    {
-      WARN (operate, "failed to start playback: %s" ,err.what());
-      lumiera_error();
-      playing = false;
-    }
+  if (thread)
+    end_playback_thread();
+  
+  {
+    Lock sync(this);
+    try
+      {
+        playHandle = & (proc::DummyPlayer::facade().start());
+        start_playback_thread();
+        playing = true;
+      }
+    catch (lumiera::error::State& err)
+      {
+        WARN (operate, "failed to start playback: %s" ,err.what());
+        lumiera_error();
+        playing = false;
+      }
+  }
 }
 
 void
@@ -76,11 +80,13 @@ PlaybackController::pause()
 void
 PlaybackController::stop()
 {
-  Lock sync(this);
-  playing = false;
+  {
+    Lock sync(this);
+    playing = false;
+    playHandle = 0;
+    // TODO: stop player somehow?
+  }
   end_playback_thread();
-  playHandle = 0;
-  // TODO: stop player somehow?
 }
 
 bool
@@ -102,11 +108,15 @@ PlaybackController::start_playback_thread()
 void
 PlaybackController::end_playback_thread()
 {
-  Lock sync(this);
-  finish_playback_thread = true;
+  {
+    Lock sync(this);
+    finish_playback_thread = true;
+    playing = false;
+  }
   if (thread)
     thread->join();
   thread = 0;
+  finish_playback_thread = false;
 }
 
 void
