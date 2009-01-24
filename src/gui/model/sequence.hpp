@@ -34,15 +34,24 @@ namespace model {
   
 class Track;
 
+/**
+ * A class representation of a sequence.
+ * @remarks Sequence objects are also the roots of track trees.
+ **/
 class Sequence : public ParentTrack
 {
 public:
+  /**
+   * Constructor
+   **/
   Sequence();
   
+  /**
+   * Produces a human readable debug string representation of this
+   * track.
+   * @return Returns the human readable string.
+   **/
   std::string print_track();
-
-private:
-
 };
 
 }   // namespace model
