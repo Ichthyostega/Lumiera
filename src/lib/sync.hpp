@@ -102,21 +102,21 @@ namespace lib {
          //------------------Resource-Tracking------
          void __may_block() { TODO ("Record we may block on mutex"); }
          void __enter()     { TODO ("Record we successfully acquired the mutex"); }
-         void __leave()     { TODO ("Record we are releasing the mutex"); }
+         void __left()     { TODO ("Record we are released the mutex"); }
         };
       
       
       struct Wrapped_LumieraRecMutex
-        : public lumiera_mutex
+        : public lumiera_recmutex
         {
         protected:
           Wrapped_LumieraRecMutex() { lumiera_recmutex_init (this, "Obj.Monitor RecMutex", &NOBUG_FLAG(sync)); }
-         ~Wrapped_LumieraRecMutex() { lumiera_mutex_destroy (this, &NOBUG_FLAG(sync)); }
+         ~Wrapped_LumieraRecMutex() { lumiera_recmutex_destroy (this, &NOBUG_FLAG(sync)); }
          
          //------------------Resource-Tracking------
          void __may_block() { TODO ("Record we may block on mutex"); }
          void __enter()     { TODO ("Record we successfully acquired the mutex"); }
-         void __leave()     { TODO ("Record we are releasing the mutex"); }
+         void __left()     { TODO ("Record we are released the mutex"); }
         };
       
       
@@ -130,7 +130,7 @@ namespace lib {
          //------------------Resource-Tracking------
          void __may_block() { TODO ("Record we may block on mutex"); }
          void __enter()     { TODO ("Record we successfully acquired the mutex"); }
-         void __leave()     { TODO ("Record we are releasing the mutex"); }
+         void __left()     { TODO ("Record we are released the mutex"); }
         };
       
       
@@ -144,7 +144,7 @@ namespace lib {
          //------------------Resource-Tracking------
          void __may_block() { TODO ("Record we may block on mutex"); }
          void __enter()     { TODO ("Record we successfully acquired the mutex"); }
-         void __leave()     { TODO ("Record we are releasing the mutex"); }
+         void __left()     { TODO ("Record we are released the mutex"); }
         };
       
       
@@ -156,10 +156,10 @@ namespace lib {
         : protected MTX
         {
         protected:
-          using MTX::mutex;
+          //using MTX::mutex;
           using MTX::__may_block;
           using MTX::__enter;
-          using MTX::__leave;
+          using MTX::__left;
           
          ~Mutex () { }
           Mutex () { }
@@ -171,19 +171,22 @@ namespace lib {
             acquire()
               {
                 __may_block();
-                
-                if (pthread_mutex_lock (&mutex))
-                  throw lumiera::error::State("Mutex acquire failed.");  ///////TODO capture the error-code
-                
+
+                FIXME ("For to make C typesafe we have now mutex and recmutex member gnah :P -- cehteh");
+                // well .. specialization on the mutex type shall solve it ...
+                //if (pthread_mutex_lock (&mutex))
+                //  throw lumiera::error::State("Mutex acquire failed.");  ///////TODO capture the error-code
+
                 __enter();
               }
             
             void
             release()
-              { 
-                __leave();
-                
-                pthread_mutex_unlock (&mutex);
+              {
+                FIXME ("For to make C typesafe we have now mutex and recmutex member gnah :P -- cehteh");
+                //pthread_mutex_unlock (&mutex);
+
+                __left();
               }
             
         };
@@ -436,3 +439,10 @@ namespace lib {
   
 } // namespace lumiera
 #endif
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

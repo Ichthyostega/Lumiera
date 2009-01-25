@@ -47,7 +47,7 @@
 
 PSplay lumiera_interfaceregistry;
 PSplay lumiera_pluginregistry;
-lumiera_mutex lumiera_interface_mutex;
+lumiera_recmutex lumiera_interface_mutex;
 
 static int
 lumiera_interface_cmp_fn (const void* keya, const void* keyb);
@@ -126,7 +126,7 @@ lumiera_interfaceregistry_destroy (void)
     psplay_delete (lumiera_pluginregistry);
   lumiera_pluginregistry = NULL;
 
-  lumiera_mutex_destroy (&lumiera_interface_mutex, &NOBUG_FLAG(mutex_dbg));
+  lumiera_recmutex_destroy (&lumiera_interface_mutex, &NOBUG_FLAG(mutex_dbg));
 
   REQUIRE (!psplay_nelements (lumiera_interfaceregistry), "some interfaces still registered at shutdown");
 

@@ -11,6 +11,10 @@ TEST "mutex not unlocked asserts" mutexforgotunlock <<END
 return: 134
 END
 
+TEST "mutex explicitly unlocked" mutexexplicitunlock <<END
+return: 0
+END
+
 
 TEST "nested mutex section" nestedmutexsection <<END
 out: outer mutex locked section
@@ -25,8 +29,8 @@ END
 
 
 TEST "recursive mutex section" recursivemutexsection <<END
-out: mutex locked once
-out: mutex locked twice
+out: recmutex locked once
+out: recmutex locked twice
 END
 
 

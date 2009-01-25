@@ -63,6 +63,22 @@ TEST ("mutexforgotunlock")
 }
 
 
+TEST ("mutexexplicitunlock")
+{
+  lumiera_mutex m;
+  lumiera_mutex_init (&m, "mutexforgotunlock", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
+    {
+      ECHO("mutex locked section");
+      LUMIERA_MUTEX_SECTION_UNLOCK;
+      break;
+    }
+
+  lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
+}
+
+
 TEST ("nestedmutexsection")
 {
   lumiera_mutex m;
@@ -107,24 +123,28 @@ TEST ("chainedmutexsection")
   lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
 }
 
+
+
 TEST ("recursivemutexsection")
 {
-  lumiera_mutex m;
-  lumiera_recmutex_init (&m, "m_mutexsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_recmutex m;
+  lumiera_recmutex_init (&m, "m_recmutexsection", &NOBUG_FLAG(NOBUG_ON));
 
 
-  LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
+  LUMIERA_RECMUTEX_SECTION (NOBUG_ON, &m)
     {
-      printf ("mutex locked once\n");
+      printf ("recmutex locked once\n");
 
-      LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
+      LUMIERA_RECMUTEX_SECTION (NOBUG_ON, &m)
         {
-          printf ("mutex locked twice\n");
+          printf ("recmutex locked twice\n");
         }
     }
 
- lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
+ lumiera_recmutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
 }
+
+
 
 TEST ("rwlocksection")
 {

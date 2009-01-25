@@ -25,6 +25,7 @@ liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/error.c				\
 	$(liblumiera_la_srcdir)/exception.cpp 			\
 	$(liblumiera_la_srcdir)/mutex.c				\
+	$(liblumiera_la_srcdir)/recmutex.c			\
 	$(liblumiera_la_srcdir)/rwlock.c			\
 	$(liblumiera_la_srcdir)/condition.c			\
 	$(liblumiera_la_srcdir)/reccondition.c			\
