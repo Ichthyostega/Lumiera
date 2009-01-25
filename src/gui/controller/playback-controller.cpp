@@ -61,7 +61,7 @@ PlaybackController::play()
       }
     catch (lumiera::error::State& err)
       {
-        WARN (operate, "failed to start playback: %s" ,err.what());
+        WARN (gui, "failed to start playback: %s" ,err.what());
         lumiera_error();
         playing = false;
       }

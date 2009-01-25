@@ -249,7 +249,7 @@ namespace proc  {
       , implInstance_(this,_instance)
       , serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_DummyPlayer, 0, lumieraorg_DummyPlayerFacade))
     {
-      INFO (operate, "DummyPlayer Facade opened.");
+      INFO (progress, "DummyPlayer Facade opened.");
     }
     
     
