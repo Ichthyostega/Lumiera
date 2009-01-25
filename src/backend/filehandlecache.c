@@ -19,12 +19,13 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "include/logging.h"
 #include "lib/safeclib.h"
 
 #include "backend/file.h"
 #include "backend/filehandlecache.h"
 
-NOBUG_DEFINE_FLAG_PARENT (filehandlecache, file_all);
+//NOBUG_DEFINE_FLAG_PARENT (filehandlecache, file_all);
 
 /* errors */
 
@@ -39,12 +40,12 @@ lumiera_filehandlecache_new (int max_entries)
 {
   REQUIRE (!lumiera_fhcache, "Filehandlecache already initialized");
 
-  NOBUG_INIT_FLAG (filehandlecache);
+  //NOBUG_INIT_FLAG (filehandlecache);
   lumiera_fhcache = lumiera_malloc (sizeof (lumiera_filehandlecache));
   lumiera_mrucache_init (&lumiera_fhcache->cache, lumiera_filehandle_destroy_node);
   lumiera_fhcache->available = max_entries;
   lumiera_fhcache->checked_out = 0;
-  lumiera_mutex_init (&lumiera_fhcache->lock, "filehandlecache", &NOBUG_FLAG (filehandlecache));
+  lumiera_mutex_init (&lumiera_fhcache->lock, "filehandlecache", &NOBUG_FLAG (mutex_dbg));
 }
 
 
@@ -55,7 +56,7 @@ lumiera_filehandlecache_delete (void)
     {
       REQUIRE (!lumiera_fhcache->checked_out, "Filehandles in use at shutdown");
       lumiera_mrucache_destroy (&lumiera_fhcache->cache);
-      lumiera_mutex_destroy (&lumiera_fhcache->lock, &NOBUG_FLAG (filehandlecache));
+      lumiera_mutex_destroy (&lumiera_fhcache->lock, &NOBUG_FLAG (mutex_dbg));
       lumiera_free (lumiera_fhcache);
       lumiera_fhcache = NULL;
     }
@@ -65,10 +66,10 @@ lumiera_filehandlecache_delete (void)
 LumieraFilehandle
 lumiera_filehandlecache_handle_acquire (LumieraFilehandlecache self, LumieraFiledescriptor desc)
 {
-  TRACE (filehandlecache);
+  TRACE (filehandlecache_dbg);
   LumieraFilehandle ret = NULL;
 
-  LUMIERA_MUTEX_SECTION (filehandlecache, &self->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
   {
     if (self->available <= 0 && self->cache.cached)
       {
@@ -82,11 +83,11 @@ lumiera_filehandlecache_handle_acquire (LumieraFilehandlecache self, LumieraFile
     else
       {
         /* allocate new filehandle if we are below the limit or no cached handles are available (overallocating) */
-        NOTICE (filehandlecache, "overallocating filehandle");
+        NOTICE (file, "overallocating filehandle");
         ret = lumiera_filehandle_new (desc);
         TODO ("use resourcecollector here");
         if (!ret)
-          LUMIERA_ERROR_SET_ALERT (filehandlecache, FILEHANDLECACHE_NOHANDLE, lumiera_filedescriptor_name (desc));
+          LUMIERA_ERROR_SET_ALERT (file, FILEHANDLECACHE_NOHANDLE, lumiera_filedescriptor_name (desc));
         else
           --self->available;
       }
@@ -106,7 +107,7 @@ lumiera_filehandlecache_checkout (LumieraFilehandlecache self, LumieraFilehandle
   if (!handle->use_cnt)
     {
       /* lock cache and checkout */
-      LUMIERA_MUTEX_SECTION (filehandlecache, &self->lock)
+      LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
         {
           lumiera_mrucache_checkout (&self->cache, &handle->cachenode);
         }
@@ -129,7 +130,7 @@ lumiera_filehandlecache_checkin (LumieraFilehandlecache self, LumieraFilehandle 
   if (!--handle->use_cnt)
     {
       /* lock cache and checin */
-      LUMIERA_MUTEX_SECTION (filehandlecache, &self->lock)
+      LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
         {
           --self->checked_out;
           lumiera_mrucache_checkin (&self->cache, &handle->cachenode);

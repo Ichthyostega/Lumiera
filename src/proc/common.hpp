@@ -46,7 +46,7 @@
 #include "lib/util.hpp"
 #include "lib/lumitime.hpp"
 #include "include/symbol.hpp"
-#include "lib/error.hpp"   ///< pulls in NoBug via nobugcfg.h
+#include "lib/error.hpp"   ///< pulls in NoBug via loggging.h
 
 
 /**

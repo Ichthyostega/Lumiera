@@ -21,6 +21,7 @@
 * *****************************************************/
 
 
+#include "include/logging.h"
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
@@ -56,7 +57,7 @@ namespace asset
             
             if (!isnil (arg))
               dumpAssetManager();
-            TRACE (assetmem, "leaving CreateAsset_test::run()");
+            TRACE (asset_mem, "leaving CreateAsset_test::run()");
           }
         
         

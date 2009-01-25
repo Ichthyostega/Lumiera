@@ -31,7 +31,7 @@
 #include "proc/asset/structfactoryimpl.hpp"
 
 #include "lib/util.hpp"
-#include "include/nobugcfg.h"
+#include "include/logging.h"
 
 #include <boost/format.hpp>
 

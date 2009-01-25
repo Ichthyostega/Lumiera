@@ -69,7 +69,7 @@ namespace mobject {
           }
         catch (...)
           {
-            ERROR (operate, "Unrecoverable Failure while creating the empty default session.");
+            ERROR (progress, "Unrecoverable Failure while creating the empty default session.");
             throw lumiera::error::Fatal ( "Failure while creating the basic session object. System halted." 
                                         , LUMIERA_ERROR_CREATE_SESSION );
           }

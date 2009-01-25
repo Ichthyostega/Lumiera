@@ -30,7 +30,7 @@
 #include <sstream>
 #include <boost/algorithm/string.hpp>
 
-#include "include/nobugcfg.h"
+#include "include/logging.h"
 #include "lib/cmdline.hpp"
 #include "lib/test/suite.hpp"
 #include "lib/test/run.hpp"

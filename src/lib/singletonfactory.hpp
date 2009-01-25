@@ -37,11 +37,9 @@ This code is heavily inspired by
 
 #include "lib/singletonpolicies.hpp"  // several Policies usable together with SingletonFactory
 
-#include "include/nobugcfg.h"
+#include "include/logging.h"
 #include "lib/util.hpp"
 #include "lib/sync-classlock.hpp"
-
-
 
 namespace lumiera {
   
@@ -72,6 +70,7 @@ namespace lumiera {
       
       static PType pInstance_;
       static bool isDead_;
+
       
     public:
       /** Interface to be used by SingletonFactory's clients.
@@ -83,7 +82,12 @@ namespace lumiera {
         {
           if (!pInstance_)
             {
+              NOBUG_INIT;
+              FIXME ("NoBug wasnt even basically initialized here, the old ON_BASIC_INIT did not initialize it in proper order"
+                     " so I explicitly init it here (calling init multiple times does not harm) --cehteh"
+                     " nb maybe as exception we can use an explicit mutex here since pthread mutexes can be statically initialized");
               ThreadLock guard  SIDEEFFECT;
+
               if (!pInstance_)
                 {
                   if (isDead_)
@@ -144,3 +148,10 @@ namespace lumiera {
   
 } // namespace lumiera
 #endif
+/*
+// Local Variables:
+// mode: C++
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

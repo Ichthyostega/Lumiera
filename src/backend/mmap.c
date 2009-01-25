@@ -19,6 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "include/logging.h"
 #include "lib/safeclib.h"
 
 #include "backend/mmap.h"
@@ -34,8 +35,8 @@
  *
  */
 
-NOBUG_DEFINE_FLAG_PARENT (mmap_all, backend);
-NOBUG_DEFINE_FLAG_PARENT (mmap, mmap_all);
+//NOBUG_DEFINE_FLAG_PARENT (mmap_all, backend);
+//NOBUG_DEFINE_FLAG_PARENT (mmap, mmap_all);
 
 
 LUMIERA_ERROR_DEFINE (MMAP_NWRITE, "Backing file not writable");
@@ -51,7 +52,7 @@ LUMIERA_ERROR_DEFINE (MMAP_SPACE, "Address space exhausted");
 LumieraMMap
 lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
 {
-  TRACE (mmap);
+  TRACE (mmap_dbg);
 
   REQUIRE (self);
   REQUIRE (file);
@@ -80,7 +81,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
   LumieraFiledescriptor descriptor = file->descriptor;
 
   int fd = lumiera_file_handle_acquire (file);
-  TRACE (mmap, "got fd %d", fd);
+  TRACE (mmap_dbg, "got fd %d", fd);
   if (fd == -1)
     goto efile;
 
@@ -128,7 +129,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
       switch (strategy++)
         {
         case FIRST_TRY:
-          TRACE (mmap, "FIRST_TRY");
+          TRACE (mmap_dbg, "FIRST_TRY");
           /* align begin and end to chunk boundaries */
           begin = start & ~(chunksize-1);
           length = ((start+size+chunksize-1) & ~(chunksize-1)) - begin;
@@ -159,17 +160,17 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
           break;
 
         case DROP_FROM_CACHE:
-          TRACE (mmap, "drop a mapping from cache");
+          TRACE (mmap_dbg, "drop a mapping from cache");
           UNIMPLEMENTED ("mmap cache drop");
           break;
 
         case REDUCE_WINDOW:
-          NOTICE (mmap, "mmaping window reduced to NN MB");
+          NOTICE (mmap_dbg, "mmaping window reduced to NN MB");
           UNIMPLEMENTED ("mmap window reduce");
           break;
 
         case REDUCE_IN_USE:
-          NOTICE (mmap, "reduce mmapings in use");
+          NOTICE (mmap_dbg, "reduce mmapings in use");
           UNIMPLEMENTED ("mmapings in use reduce");
           break;
 
@@ -185,7 +186,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
                    fd,
                    begin);
 
-      INFO_IF (addr==(void*)-1, mmap, "mmap failed %s", strerror (errno));
+      INFO_IF (addr==(void*)-1, mmap_dbg, "mmap failed %s", strerror (errno));
       ENSURE (errno == 0 || errno == ENOMEM, "unexpected mmap error %s", strerror (errno));
     }
 
@@ -213,7 +214,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
 LumieraMMap
 lumiera_mmap_new (LumieraFile file, off_t start, size_t size)
 {
-  TRACE (mmap);
+  TRACE (mmap_dbg);
 
   LumieraMMap self = lumiera_mmapcache_mmap_acquire (lumiera_mcache);
 
@@ -230,7 +231,7 @@ lumiera_mmap_new (LumieraFile file, off_t start, size_t size)
 void
 lumiera_mmap_delete (LumieraMMap self)
 {
-  TRACE (mmap);
+  TRACE (mmap_dbg);
   if (self)
     {
       lumiera_mmapcache_forget (lumiera_mcache, self);
@@ -238,7 +239,7 @@ lumiera_mmap_delete (LumieraMMap self)
       /* The matching mappings->lock must be hold or being irrelevant (mappings destructor) here, we can't asset this from here, good luck */
       llist_unlink (&self->searchnode);
 
-      TRACE (mmap, "unmap at %p with size %zd", self->address, self->size);
+      TRACE (mmap_dbg, "unmap at %p with size %zd", self->address, self->size);
       munmap (self->address, self->size);
       lumiera_free (self->refmap);
       lumiera_free (self);
@@ -249,7 +250,7 @@ lumiera_mmap_delete (LumieraMMap self)
 void*
 lumiera_mmap_destroy_node (LList node)
 {
-  TRACE (mmap);
+  TRACE (mmap_dbg);
   REQUIRE (llist_is_empty (node));
   LumieraMMap self = (LumieraMMap)node;
 

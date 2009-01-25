@@ -29,6 +29,7 @@
 
 #include "timeline-arrow-tool.hpp"
 #include "timeline-ibeam-tool.hpp"
+#include "include/logging.h"
 
 using namespace Gtk;
 using namespace std;

@@ -23,7 +23,7 @@
 
 #include <nobug.h>
 
-NOBUG_DECLARE_FLAG (backend);
+//NOBUG_DECLARE_FLAG (backend);
 
 extern size_t lumiera_backend_pagesize;
 

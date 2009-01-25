@@ -34,6 +34,7 @@
 
 #include "../gtk-lumiera.hpp"
 #include "workspace-window.hpp"
+#include "include/logging.h"
 
 using namespace Gtk;
 using namespace gui::model;
@@ -142,7 +143,7 @@ WorkspaceWindow::create_ui()
     }
   catch(const Glib::Error& ex)
     {
-      ERROR(gui, "Building menus failed: %s", ex.what().data());
+      NOBUG_ERROR(gui, "Building menus failed: %s", ex.what().data());
       return;
     }
 

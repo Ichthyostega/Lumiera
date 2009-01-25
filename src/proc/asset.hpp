@@ -56,7 +56,7 @@
 
 
 #include "proc/asset/category.hpp"
-#include "include/nobugcfg.h"
+#include "include/logging.h"
 #include "lib/error.hpp"
 #include "lib/p.hpp"
 
@@ -84,7 +84,7 @@ namespace asset {
 
   using lumiera::P;
   
-  NOBUG_DECLARE_FLAG (assetmem);
+  //NOBUG_DECLARE_FLAG (assetmem);
   
   
   /** 
@@ -360,3 +360,10 @@ namespace proc_interface
 }
 
 #endif
+/*
+// Local Variables:
+// mode: C++
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

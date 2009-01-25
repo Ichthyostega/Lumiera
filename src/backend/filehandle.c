@@ -19,6 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "include/logging.h"
 #include "lib/llist.h"
 #include "lib/safeclib.h"
 
@@ -31,7 +32,7 @@
 LumieraFilehandle
 lumiera_filehandle_init (LumieraFilehandle self, LumieraFiledescriptor desc)
 {
-  TRACE (filehandle, "%p", self);
+  TRACE (filehandle_dbg, "%p", self);
   if (self)
     {
       llist_init (&self->cachenode);
@@ -54,7 +55,7 @@ lumiera_filehandle_new (LumieraFiledescriptor desc)
 void*
 lumiera_filehandle_destroy_node (LList node)
 {
-  TRACE (filehandle);
+  TRACE (filehandle_dbg);
   REQUIRE (llist_is_empty (node));
   LumieraFilehandle self = (LumieraFilehandle)node;
   REQUIRE (self->use_cnt == 0);
@@ -76,7 +77,7 @@ lumiera_filehandle_get (LumieraFilehandle self)
 int
 lumiera_filehandle_handle (LumieraFilehandle self)
 {
-  TRACE (filehandle);
+  TRACE (filehandle_dbg);
 
   int fd = -1;
   if (self->fd == -1)
@@ -85,7 +86,7 @@ lumiera_filehandle_handle (LumieraFilehandle self)
       if (fd == -1)
         {
           FIXME ("Handle EMFILE etc with the resourcecollector");
-          LUMIERA_ERROR_SET_CRITICAL (filehandle, ERRNO, lumiera_filedescriptor_name (self->descriptor));
+          LUMIERA_ERROR_SET_CRITICAL (file, ERRNO, lumiera_filedescriptor_name (self->descriptor));
         }
       else
         {
@@ -94,14 +95,14 @@ lumiera_filehandle_handle (LumieraFilehandle self)
             {
               close (fd);
               fd = -1;
-              LUMIERA_ERROR_SET_CRITICAL (filehandle, ERRNO, lumiera_filedescriptor_name (self->descriptor));
+              LUMIERA_ERROR_SET_CRITICAL (file, ERRNO, lumiera_filedescriptor_name (self->descriptor));
             }
           else if (!lumiera_filedescriptor_samestat (self->descriptor, &st))
             {
               close (fd);
               fd = -1;
               /* Woops this is not the file we expected to use */
-              LUMIERA_ERROR_SET_CRITICAL (filehandle, FILE_CHANGED, lumiera_filedescriptor_name (self->descriptor));
+              LUMIERA_ERROR_SET_CRITICAL (file, FILE_CHANGED, lumiera_filedescriptor_name (self->descriptor));
             }
         }
       self->fd = fd;

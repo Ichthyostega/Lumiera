@@ -25,7 +25,7 @@
 #define LUMIERA_ERROR_HPP_
 
 #include <string>
-#include "include/nobugcfg.h"
+#include "include/logging.h"
 #include "include/lifecycle.h"
 #include "lib/error.h"
 
@@ -165,6 +165,7 @@ namespace lumiera {
  * if NoBug is used, redefine some macros 
  * to rather throw Lumiera Errors instead of aborting
  */
+#if 0 /*This will not work, nobug aborts are hard and may hold some locks, we discussed that before -- cehteh */
 #ifdef NOBUG_ABORT
 #undef NOBUG_ABORT
 #define LUMIERA_NOBUG_LOCATION \
@@ -172,6 +173,6 @@ namespace lumiera {
 #define NOBUG_ABORT \
   lumiera::error::assertion_terminate (LUMIERA_NOBUG_LOCATION);
 #endif
-
+#endif
 
 #endif // LUMIERA_ERROR_HPP_

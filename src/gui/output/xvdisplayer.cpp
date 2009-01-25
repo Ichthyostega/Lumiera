@@ -27,6 +27,7 @@
 #include <gdk/gdkx.h>
 
 #include "xvdisplayer.hpp"
+#include "include/logging.h"
 
 namespace gui {
 namespace output {
@@ -126,13 +127,13 @@ XvDisplayer::XvDisplayer( Gtk::Widget *drawing_area, int width, int height ) :
                     {
                       Atom val_atom = XInternAtom( display, xvattr[k].name, False );
                       if ( XvSetPortAttribute( display, grabbedPort, val_atom, 1 ) != Success )
-                        ERROR(gui, "Couldn't set Xv attribute %s\n", xvattr[k].name);
+                        NOBUG_ERROR(gui, "Couldn't set Xv attribute %s\n", xvattr[k].name);
                     }
                   else if (  strcmp( xvattr[k].name, "XV_COLORKEY") == 0 )
                     {
                       Atom val_atom = XInternAtom( display, xvattr[k].name, False );
                       if ( XvSetPortAttribute( display, grabbedPort, val_atom, 0x010102 ) != Success )
-                        ERROR(gui, "Couldn't set Xv attribute %s\n", xvattr[k].name);
+                        NOBUG_ERROR(gui, "Couldn't set Xv attribute %s\n", xvattr[k].name);
                     }
                 }
             }
@@ -173,7 +174,7 @@ XvDisplayer::XvDisplayer( Gtk::Widget *drawing_area, int width, int height ) :
 
 XvDisplayer::~XvDisplayer()
 {
-  ERROR(gui, "Destroying XV Displayer");
+  NOBUG_ERROR(gui, "Destroying XV Displayer");
 
   if ( gotPort )
     {

@@ -19,6 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "include/logging.h"
 #include "lib/safeclib.h"
 
 #include "backend/mmapcache.h"
@@ -28,7 +29,7 @@
  *
  */
 
-NOBUG_DEFINE_FLAG_PARENT (mmapcache, mmap_all);
+//NOBUG_DEFINE_FLAG_PARENT (mmapcache, mmap_all);
 
 LumieraMMapcache lumiera_mcache = NULL;
 
@@ -36,7 +37,7 @@ LumieraMMapcache lumiera_mcache = NULL;
 void
 lumiera_mmapcache_new (size_t limit)
 {
-  TRACE (mmapcache);
+  TRACE (mmapcache_dbg);
   lumiera_mcache = lumiera_malloc (sizeof (*lumiera_mcache));
 
   lumiera_mrucache_init (&lumiera_mcache->cache, lumiera_mmap_destroy_node);
@@ -45,19 +46,19 @@ lumiera_mmapcache_new (size_t limit)
   lumiera_mcache->total = 0;
   lumiera_mcache->cached = 0;
 
-  lumiera_mutex_init (&lumiera_mcache->lock, "mmapcache", &NOBUG_FLAG (mmapcache));
+  lumiera_mutex_init (&lumiera_mcache->lock, "mmapcache", &NOBUG_FLAG (mutex_dbg));
 }
 
 
 void
 lumiera_mmapcache_delete (void)
 {
-  TRACE (mmapcache);
+  TRACE (mmapcache_dbg);
   if (lumiera_mcache)
     {
       REQUIRE (lumiera_mcache->total == lumiera_mcache->cached, "MMaps still checked out at shutdown");
       lumiera_mrucache_destroy (&lumiera_mcache->cache);
-      lumiera_mutex_destroy (&lumiera_mcache->lock, &NOBUG_FLAG (mmapcache));
+      lumiera_mutex_destroy (&lumiera_mcache->lock, &NOBUG_FLAG (mutex_dbg));
       free (lumiera_mcache);
       lumiera_mcache = NULL;
     }
@@ -67,10 +68,10 @@ lumiera_mmapcache_delete (void)
 void*
 lumiera_mmapcache_mmap_acquire (LumieraMMapcache self)
 {
-  TRACE (mmapcache);
+  TRACE (mmapcache_dbg);
   void* map = NULL;
 
-  LUMIERA_MUTEX_SECTION (mmapcache, &self->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
     {
       map = lumiera_mrucache_pop (&self->cache);
     }
@@ -78,11 +79,11 @@ lumiera_mmapcache_mmap_acquire (LumieraMMapcache self)
   if (!map)
     {
       map = lumiera_malloc (sizeof (*self));
-      TRACE (mmapcache, "allocated new mmap");
+      TRACE (mmapcache_dbg, "allocated new mmap");
     }
   else
     {
-      TRACE (mmapcache, "poped mmap from cache");
+      TRACE (mmapcache_dbg, "poped mmap from cache");
     }
 
   return map;
@@ -92,8 +93,8 @@ lumiera_mmapcache_mmap_acquire (LumieraMMapcache self)
 void
 lumiera_mmapcache_announce (LumieraMMapcache self, LumieraMMap map)
 {
-  TRACE (mmapcache);
-  LUMIERA_MUTEX_SECTION (mmapcache, &self->lock)
+  TRACE (mmapcache_dbg);
+  LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
     {
       self->total += map->size;
     }
@@ -103,8 +104,8 @@ lumiera_mmapcache_announce (LumieraMMapcache self, LumieraMMap map)
 void
 lumiera_mmapcache_forget (LumieraMMapcache self, LumieraMMap map)
 {
-  TRACE (mmapcache);
-  LUMIERA_MUTEX_SECTION (mmapcache, &self->lock)
+  TRACE (mmapcache_dbg);
+  LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
     {
       if (!llist_is_empty (&map->cachenode))
         {
@@ -120,7 +121,7 @@ lumiera_mmapcache_forget (LumieraMMapcache self, LumieraMMap map)
 int
 lumiera_mmapcache_age (LumieraMMapcache self)
 {
-  TRACE (mmapcache);
+  TRACE (mmapcache_dbg);
   int ret = 0;
 
   LUMIERA_MUTEX_SECTION (mmapcache, &self->lock)
@@ -135,9 +136,9 @@ lumiera_mmapcache_age (LumieraMMapcache self)
 LumieraMMap
 lumiera_mmapcache_checkout (LumieraMMapcache self, LumieraMMap handle)
 {
-  TRACE (mmapcache);
+  TRACE (mmapcache_dbg);
 
-  LUMIERA_MUTEX_SECTION (mmapcache, &self->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
     {
       TODO ("cached stats");
       lumiera_mrucache_checkout (&self->cache, &handle->cachenode);
@@ -151,9 +152,9 @@ lumiera_mmapcache_checkout (LumieraMMapcache self, LumieraMMap handle)
 void
 lumiera_mmapcache_checkin (LumieraMMapcache self, LumieraMMap handle)
 {
-  TRACE (mmapcache);
+  TRACE (mmapcache_dbg);
 
-  LUMIERA_MUTEX_SECTION (mmapcache, &self->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
     {
       TODO ("cached stats");
       --handle->refcnt;

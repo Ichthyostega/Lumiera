@@ -41,7 +41,7 @@
 #define LUMIERA_INSTANCEHANDLE_H
 
 
-#include "include/nobugcfg.h"
+#include "include/logging.h"
 #include "lib/error.hpp"
 #include "include/interfaceproxy.hpp"
 

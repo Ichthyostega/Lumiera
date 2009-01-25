@@ -22,7 +22,7 @@
 */
 
 
-#include "include/nobugcfg.h"
+#include "include/logging.h"
 #include "lib/error.hpp"
 #include "common/appstate.hpp"
 #include "common/option.hpp"
@@ -54,7 +54,7 @@ namespace {
 int
 main (int argc, const char* argv[])
 {
-  NOTICE (lumiera, "*** Lumiera NLE for Linux ***");
+  NOTICE (main, "*** Lumiera NLE for Linux ***");
   
   AppState& application = AppState::instance();
   try

@@ -19,6 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "include/logging.h"
 #include "lib/error.h"
 #include "lib/safeclib.h"
 
@@ -92,7 +93,7 @@ lumiera_config_wordlist_replace (const char* key, const char* value, const char*
   if (!value)
     return NULL;
 
-  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_global_config->lock)
     {
       if (lumiera_config_get (key, &wordlist))
         {
@@ -143,7 +144,7 @@ lumiera_config_wordlist_add (const char* key, const char* value, const char* del
 
   if (value && *value)
     {
-      LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
+      LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_global_config->lock)
         {
           if (lumiera_config_get (key, &wordlist))
             {

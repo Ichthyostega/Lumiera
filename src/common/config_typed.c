@@ -20,6 +20,7 @@
 */
 
 //TODO: Support library includes//
+#include "include/logging.h"
 #include "lib/safeclib.h"
 
 
@@ -42,7 +43,7 @@ const char*
 lumiera_config_link_get (const char* key, const char** value)
 {
   (void) key; (void) value;
-  TRACE (config_typed);
+  TRACE (configtyped_dbg);
   UNIMPLEMENTED();
   return 0;
 }
@@ -51,7 +52,7 @@ LumieraConfigitem
 lumiera_config_link_set (const char* key, const char** value)
 {
   (void) key; (void) value;
-  TRACE (config_typed);
+  TRACE (configtyped_dbg);
   UNIMPLEMENTED();
   return 0;
 }
@@ -64,11 +65,11 @@ lumiera_config_link_set (const char* key, const char** value)
 const char*
 lumiera_config_number_get (const char* key, long long* value)
 {
-  TRACE (config_typed);
+  TRACE (configtyped_dbg);
 
   const char* raw_value = NULL;
 
-  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_global_config->lock)
     {
       if (lumiera_config_get (key, &raw_value))
         {
@@ -77,12 +78,12 @@ lumiera_config_number_get (const char* key, long long* value)
               /* got it, scan it */
               if (sscanf (raw_value, "%Li", value) != 1)
                 {
-                  LUMIERA_ERROR_SET (config_typed, CONFIG_SYNTAX_VALUE, lumiera_tmpbuf_snprintf (5000, "key '%s', value '%s'", key, raw_value));
+                  LUMIERA_ERROR_SET (config, CONFIG_SYNTAX_VALUE, lumiera_tmpbuf_snprintf (5000, "key '%s', value '%s'", key, raw_value));
                   raw_value = NULL;
                 }
             }
           else
-            LUMIERA_ERROR_SET_WARNING (configsys, CONFIG_NO_ENTRY, key);
+            LUMIERA_ERROR_SET_WARNING (config, CONFIG_NO_ENTRY, key);
         }
     }
 
@@ -92,11 +93,11 @@ lumiera_config_number_get (const char* key, long long* value)
 LumieraConfigitem
 lumiera_config_number_set (const char* key, long long* value)
 {
-  TRACE (config_typed);
+  TRACE (configtyped_dbg);
 
   LumieraConfigitem item = NULL;
 
-  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_global_config->lock)
     {
       const char* fmt = "= %lld"; TODO ("use the config system (config.format*...) to deduce the desired format for this key");
       item = lumiera_config_set (key, lumiera_tmpbuf_snprintf (SIZE_MAX, fmt, *value));
@@ -114,7 +115,7 @@ const char*
 lumiera_config_real_get (const char* key, long double* value)
 {
   (void) key; (void) value;
-  TRACE (config_typed);
+  TRACE (configtyped_dbg);
   UNIMPLEMENTED();
   return 0;
 }
@@ -123,7 +124,7 @@ LumieraConfigitem
 lumiera_config_real_set (const char* key, long double* value)
 {
   (void) key; (void) value;
-  TRACE (config_typed);
+  TRACE (configtyped_dbg);
   UNIMPLEMENTED();
   return 0;
 }
@@ -176,7 +177,7 @@ scan_string (const char* in)
         }
       else
         /* quotes doesnt match */
-        LUMIERA_ERROR_SET (config_typed, CONFIG_SYNTAX_VALUE, "unmatched quotes");
+        LUMIERA_ERROR_SET (config, CONFIG_SYNTAX_VALUE, "unmatched quotes");
     }
   else
     {
@@ -195,11 +196,11 @@ scan_string (const char* in)
 const char*
 lumiera_config_string_get (const char* key, const char** value)
 {
-  TRACE (config_typed);
+  TRACE (configtyped_dbg);
 
   const char* raw_value = *value = NULL;
 
-  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_global_config->lock)
     {
       if (lumiera_config_get (key, &raw_value))
         {
@@ -208,7 +209,7 @@ lumiera_config_string_get (const char* key, const char** value)
               *value = scan_string (raw_value);
             }
           else
-            LUMIERA_ERROR_SET_WARNING (configsys, CONFIG_NO_ENTRY, key);
+            LUMIERA_ERROR_SET_WARNING (config, CONFIG_NO_ENTRY, key);
         }
     }
 
@@ -218,11 +219,11 @@ lumiera_config_string_get (const char* key, const char** value)
 LumieraConfigitem
 lumiera_config_string_set (const char* key, const char** value)
 {
-  TRACE (config_typed);
+  TRACE (configtyped_dbg);
 
   LumieraConfigitem item = NULL;
 
-  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_global_config->lock)
     {
       const char* fmt = "= %s"; TODO ("use the config system (config.format*...) to deduce the desired format for this key");
       item = lumiera_config_set (key, lumiera_tmpbuf_snprintf (SIZE_MAX, fmt, *value));
@@ -240,11 +241,11 @@ lumiera_config_string_set (const char* key, const char** value)
 const char*
 lumiera_config_wordlist_get (const char* key, const char** value)
 {
-  TRACE (config_typed, "KEY %s", key);
+  TRACE (configtyped_dbg, "KEY %s", key);
 
   const char* raw_value = *value = NULL;
 
-  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_global_config->lock)
     {
       if (lumiera_config_get (key, &raw_value))
         {
@@ -253,7 +254,7 @@ lumiera_config_wordlist_get (const char* key, const char** value)
               *value = raw_value;
             }
           else
-            LUMIERA_ERROR_SET_WARNING (configsys, CONFIG_NO_ENTRY, key);
+            LUMIERA_ERROR_SET_WARNING (config, CONFIG_NO_ENTRY, key);
 
           TODO ("remove the ERROR_SET because config_get sets it already? also in all other getters in this file");
         }
@@ -266,11 +267,11 @@ lumiera_config_wordlist_get (const char* key, const char** value)
 LumieraConfigitem
 lumiera_config_wordlist_set (const char* key, const char** value)
 {
-  TRACE (config_typed);
+  TRACE (configtyped_dbg);
 
   LumieraConfigitem item = NULL;
 
-  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_global_config->lock)
     {
       const char* fmt = "= %s"; TODO ("use the config system (config.format*...) to deduce the desired format for this key");
       item = lumiera_config_set (key, lumiera_tmpbuf_snprintf (SIZE_MAX, fmt, *value));
@@ -309,11 +310,11 @@ scan_word (const char* in)
 const char*
 lumiera_config_word_get (const char* key, const char** value)
 {
-  TRACE (config_typed, "KEY %s", key);
+  TRACE (configtyped_dbg, "KEY %s", key);
 
   const char* raw_value = *value = NULL;
 
-  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_global_config->lock)
     {
       if (lumiera_config_get (key, &raw_value))
         {
@@ -322,7 +323,7 @@ lumiera_config_word_get (const char* key, const char** value)
               *value = scan_word (raw_value);
             }
           else
-            LUMIERA_ERROR_SET_WARNING (configsys, CONFIG_NO_ENTRY, key);
+            LUMIERA_ERROR_SET_WARNING (config, CONFIG_NO_ENTRY, key);
         }
     }
 
@@ -332,11 +333,11 @@ lumiera_config_word_get (const char* key, const char** value)
 LumieraConfigitem
 lumiera_config_word_set (const char* key, const char** value)
 {
-  TRACE (config_typed);
+  TRACE (configtyped_dbg);
 
   LumieraConfigitem item = NULL;
 
-  LUMIERA_MUTEX_SECTION (config_typed, &lumiera_global_config->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_global_config->lock)
     {
       const char* fmt = "= %s"; TODO ("use the config system (config.format*...) to deduce the desired format for this key");
       item = lumiera_config_set (key, lumiera_tmpbuf_snprintf (SIZE_MAX, fmt, scan_word (*value)));
@@ -354,7 +355,7 @@ const char*
 lumiera_config_bool_get (const char* key, int* value)
 {
   (void) key; (void) value;
-  TRACE (config_typed);
+  TRACE (configtyped_dbg);
   UNIMPLEMENTED();
   return 0;
 }
@@ -364,7 +365,7 @@ LumieraConfigitem
 lumiera_config_bool_set (const char* key, int* value)
 {
   (void) key; (void) value;
-  TRACE (config_typed);
+  TRACE (configtyped_dbg);
   UNIMPLEMENTED();
   return 0;
 }

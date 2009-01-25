@@ -19,6 +19,8 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "include/logging.h"
+
 #include "lib/mutex.h"
 #include "lib/safeclib.h"
 
@@ -54,7 +56,7 @@ lumiera_interface_open (const char* interface, unsigned version, size_t minminor
   TRACE (interface, "%s", name);
   WARN_IF (version == 0, interface, "opening experimental interface: %s_%d_%s", interface, version, name);
 
-  LUMIERA_RECMUTEX_SECTION (interfaceregistry, &lumiera_interface_mutex)
+  LUMIERA_RECMUTEX_SECTION (mutex_sync, &lumiera_interface_mutex)
     {
       self = lumiera_interfaceregistry_interfacenode_find (interface, version, name);
 
@@ -84,7 +86,7 @@ static void
 push_dependency (LumieraInterfacenode parent, LumieraInterfacenode child)
 {
   /* push a dependency on the dependency array, allcoate or resize it on demand */
-  TRACE (interface, "%s %s", parent->interface->name, child->interface->name);
+  TRACE (interface_dbg, "%s %s", parent->interface->name, child->interface->name);
 
   /* no dependencies recorded yet, alloc a first block for 4 pointers */
   if (!parent->deps_size)
@@ -119,16 +121,16 @@ depwalk (LumieraInterfacenode self, LumieraInterfacenode* stack)
   /* increment refcount for all non-cyclic dependencies recursively */
   if (self->deps)
     {
-      TRACE (interface, "%s %d", self->interface->name, self->refcnt);
+      TRACE (interface_dbg, "%s %d", self->interface->name, self->refcnt);
       for (LumieraInterfacenode* dep = self->deps; *dep; ++dep)
         {
-          TRACE (interface, "loop %s", (*dep)->interface->name);
+          TRACE (interface_dbg, "loop %s", (*dep)->interface->name);
           int cycle = 0;
           for (LumieraInterfacenode itr = *stack; itr; itr = itr->lnk)
             {
               if (itr == *dep)
                 {
-                  TRACE (interface, "CYCLE");
+                  TRACE (interface_dbg, "CYCLE");
                   cycle = 1;
                   break;
                 }
@@ -165,9 +167,9 @@ lumiera_interface_open_interfacenode (LumieraInterfacenode self)
 
   if (self)
     {
-      TRACE (interface, "%s %d (%s)", self->interface->name, self->refcnt, stack?stack->interface->name:"");
+      TRACE (interface_dbg, "%s %d (%s)", self->interface->name, self->refcnt, stack?stack->interface->name:"");
 
-      LUMIERA_RECMUTEX_SECTION (interfaceregistry, &lumiera_interface_mutex)
+      LUMIERA_RECMUTEX_SECTION (mutex_sync, &lumiera_interface_mutex)
         {
           /* discover cycles, cycles don't refcount! */
           int cycle = 0;
@@ -176,7 +178,7 @@ lumiera_interface_open_interfacenode (LumieraInterfacenode self)
             {
               if (itr == self)
                 {
-                  TRACE (interface, "CYCLE");
+                  TRACE (interface_dbg, "CYCLE");
                   cycle = 1;
                   break;
                 }
@@ -201,7 +203,7 @@ lumiera_interface_open_interfacenode (LumieraInterfacenode self)
                   /* first opening, run acquire, recursive opening shall record its dependencies here */
                   if (self->interface->acquire)
                     {
-                      TRACE (interface, "Acquire %s", self->interface->name);
+                      TRACE (interface_dbg, "Acquire %s", self->interface->name);
                       collect_dependencies = self->deps?0:1;
                       self->interface = self->interface->acquire (self->interface, lumiera_interface_interface);
                     }
@@ -227,7 +229,7 @@ lumiera_interface_open_interfacenode (LumieraInterfacenode self)
 void
 lumiera_interface_close (LumieraInterface self)
 {
-  TRACE (interface);
+  TRACE (interface_dbg);
 
   LUMIERA_RECMUTEX_SECTION (interfaceregistry, &lumiera_interface_mutex)
     {
@@ -265,7 +267,7 @@ lumiera_interfacenode_close (LumieraInterfacenode self)
     {
       if (itr == self)
         {
-          TRACE (interface, "CYCLE");
+          TRACE (interface_dbg, "CYCLE");
           cycle = 1;
           break;
         }
@@ -280,7 +282,7 @@ lumiera_interfacenode_close (LumieraInterfacenode self)
         {
           if (self->interface->release)
             {
-              TRACE (interface, "Release %s", self->interface->name);
+              TRACE (interface_dbg, "Release %s", self->interface->name);
               self->interface->release (self->interface);
             }
         }
@@ -288,7 +290,7 @@ lumiera_interfacenode_close (LumieraInterfacenode self)
         {
           if (self->deps)
             {
-              TRACE (interface, "Recurse %s %d", self->interface->name, self->refcnt);
+              TRACE (interface_dbg, "Recurse %s %d", self->interface->name, self->refcnt);
 
               for (LumieraInterfacenode* dep = self->deps; *dep; ++dep)
                 lumiera_interfacenode_close (*dep);

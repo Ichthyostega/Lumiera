@@ -24,17 +24,25 @@
 #ifndef MOBJECT_BUILDER_COMMON_H
 #define MOBJECT_BUILDER_COMMON_H
 
-#include "include/nobugcfg.h"
+#include "include/logging.h"
 
 
 namespace mobject {
   namespace builder {
     
     
-    NOBUG_DECLARE_FLAG (buildermem);
+    // TODO NOBUG_DECLARE_FLAG (builder_mem);
     
     
   } // namespace builder
 
 } // namespace mobject
 #endif
+
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

@@ -20,6 +20,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "include/logging.h"
 #include "lib/llist.h"
 #include "lib/safeclib.h"
 
@@ -51,7 +52,7 @@ static LumieraConfigitem parse_configentry (LumieraConfigitem self, char* itr);
 LumieraConfigitem
 lumiera_configitem_init (LumieraConfigitem self)
 {
-  TRACE (config_item);
+  TRACE (configitem_dbg);
   REQUIRE (self);
 
   llist_init (&self->link);
@@ -74,7 +75,7 @@ lumiera_configitem_init (LumieraConfigitem self)
 LumieraConfigitem
 lumiera_configitem_destroy (LumieraConfigitem self, LumieraConfigLookup lookup)
 {
-  TRACE (config_item);
+  TRACE (configitem_dbg);
 
   if (self)
     {
@@ -100,7 +101,7 @@ lumiera_configitem_destroy (LumieraConfigitem self, LumieraConfigLookup lookup)
 LumieraConfigitem
 lumiera_configitem_new (const char* line)
 {
-  TRACE (config_item, "%s", line);
+  TRACE (configitem_dbg, "%s", line);
 
   lumiera_configitem tmp;
   lumiera_configitem_init (&tmp);
@@ -118,7 +119,7 @@ lumiera_configitem_new (const char* line)
 void
 lumiera_configitem_delete (LumieraConfigitem self, LumieraConfigLookup lookup)
 {
-  TRACE (config_item);
+  TRACE (configitem_dbg);
   lumiera_free (lumiera_configitem_destroy (self, lookup));
 }
 
@@ -139,7 +140,7 @@ lumiera_configitem_set_value (LumieraConfigitem self, const char* delim_value)
 LumieraConfigitem
 lumiera_configitem_move (LumieraConfigitem self, LumieraConfigitem source)
 {
-  TRACE (config_item);
+  TRACE (configitem_dbg);
   REQUIRE (self);
   REQUIRE (source);
 
@@ -169,7 +170,7 @@ lumiera_configitem_move (LumieraConfigitem self, LumieraConfigitem source)
 LumieraConfigitem
 lumiera_configitem_parse (LumieraConfigitem self, const char* line)
 {
-  TRACE (config_item);
+  TRACE (configitem_dbg);
 
   lumiera_free (self->line);
   self->line = lumiera_strndup (line, SIZE_MAX);
@@ -250,7 +251,7 @@ parse_directive (LumieraConfigitem self, char* itr)
           self->key = NULL;
           self->key_size = 0;
 
-          LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX, self->line);
+          LUMIERA_ERROR_SET (config, CONFIG_SYNTAX, self->line);
         }
     }
   else
@@ -260,7 +261,7 @@ parse_directive (LumieraConfigitem self, char* itr)
       self->key = NULL;
       self->key_size = 0;
 
-      LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX, self->line);
+      LUMIERA_ERROR_SET (config, CONFIG_SYNTAX, self->line);
     }
   return self;
 }
@@ -317,7 +318,7 @@ parse_section (LumieraConfigitem self, char* itr)
           self->key = NULL;
           self->key_size = 0;
 
-          LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX, self->line);
+          LUMIERA_ERROR_SET (config, CONFIG_SYNTAX, self->line);
         }
     }
   else
@@ -329,7 +330,7 @@ parse_section (LumieraConfigitem self, char* itr)
       self->key = NULL;
       self->key_size = 0;
 
-      LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX, self->line);
+      LUMIERA_ERROR_SET (config, CONFIG_SYNTAX, self->line);
     }
 
   return self;
@@ -368,7 +369,7 @@ parse_configentry (LumieraConfigitem self, char* itr)
       self->key = NULL;
       self->key_size = 0;
 
-      LUMIERA_ERROR_SET (config_item, CONFIG_SYNTAX, self->line);
+      LUMIERA_ERROR_SET (config, CONFIG_SYNTAX, self->line);
     }
 
   return self;

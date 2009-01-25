@@ -21,6 +21,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include "include/logging.h"
 #include "lib/psplay.h"
 
 #include <stdio.h>
@@ -28,7 +29,7 @@
 #include <stdlib.h>
 #include <nobug.h>
 
-NOBUG_DEFINE_FLAG (psplay);
+//NOBUG_DEFINE_FLAG (psplay);
 
 #ifndef PSPLAY_TRAIL_DEPTH
 #define PSPLAY_TRAIL_DEPTH 128
@@ -68,8 +69,8 @@ static inline uint32_t psplay_fast_prng ()
 PSplay
 psplay_init (PSplay self, psplay_cmp_fn cmp, psplay_key_fn key, psplay_delete_fn del)
 {
-  NOBUG_INIT_FLAG (psplay);
-  TRACE (psplay);
+  //NOBUG_INIT_FLAG (psplay);
+  TRACE (psplay_dbg);
   REQUIRE (cmp);
   REQUIRE (key);
 
@@ -103,7 +104,7 @@ psplay_new (psplay_cmp_fn cmp, psplay_key_fn key, psplay_delete_fn del)
 PSplay
 psplay_destroy (PSplay self)
 {
-  TRACE (psplay);
+  TRACE (psplay_dbg);
   if (self) while (self->tree)
     {
       PSplaynode n = psplay_remove (self, self->tree);
@@ -159,7 +160,7 @@ trailidx (unsigned n)
 static inline void
 psplay_splay (PSplay self, struct psplaytrail* trail, unsigned splayfactor)
 {
-  TRACE (psplay, "%p %u", self, splayfactor);
+  TRACE (psplay_dbg, "%p %u", self, splayfactor);
 
   if (trail->dir < 0) trail->dir = - trail->dir;
 
@@ -170,17 +171,17 @@ psplay_splay (PSplay self, struct psplaytrail* trail, unsigned splayfactor)
       PSplaynode grandparent = *trail->trail [trailidx (depth-2)];
 
       unsigned r = PSPLAY_FORMULA;
-      TRACE (psplay, "r is %u", r);
+      TRACE (psplay_dbg, "r is %u", r);
 
       if (parent == grandparent->left)
         {
-          TRACE (psplay, "ZIG..");
+          TRACE (psplay_dbg, "ZIG..");
           if (node == parent->left)
             {
-              TRACE (psplay, "..ZIG");
+              TRACE (psplay_dbg, "..ZIG");
               if (r < PSPLAY_PROB_ZIGZIG)
                 {
-                  TRACE (psplay, "BREAK");
+                  TRACE (psplay_dbg, "BREAK");
                   return;
                 }
 
@@ -192,10 +193,10 @@ psplay_splay (PSplay self, struct psplaytrail* trail, unsigned splayfactor)
             }
           else
             {
-              TRACE (psplay, "..ZAG");
+              TRACE (psplay_dbg, "..ZAG");
               if (r < PSPLAY_PROB_ZIGZAG)
                 {
-                  TRACE (psplay, "BREAK");
+                  TRACE (psplay_dbg, "BREAK");
                   return;
                 }
 
@@ -208,13 +209,13 @@ psplay_splay (PSplay self, struct psplaytrail* trail, unsigned splayfactor)
         }
       else
         {
-          TRACE (psplay, "ZAG..");
+          TRACE (psplay_dbg, "ZAG..");
           if (node == parent->left)
             {
-              TRACE (psplay, "..ZIG");
+              TRACE (psplay_dbg, "..ZIG");
               if (r < PSPLAY_PROB_ZIGZAG)
                 {
-                  TRACE (psplay, "BREAK");
+                  TRACE (psplay_dbg, "BREAK");
                   return;
                 }
 
@@ -226,10 +227,10 @@ psplay_splay (PSplay self, struct psplaytrail* trail, unsigned splayfactor)
             }
           else
             {
-              TRACE (psplay, "..ZAG");
+              TRACE (psplay_dbg, "..ZAG");
               if (r < PSPLAY_PROB_ZIGZIG)
                 {
-                  TRACE (psplay, "BREAK");
+                  TRACE (psplay_dbg, "BREAK");
                   return;
                 }
 
@@ -248,7 +249,7 @@ psplay_splay (PSplay self, struct psplaytrail* trail, unsigned splayfactor)
 PSplaynode
 psplay_insert (PSplay self, PSplaynode node, int splayfactor)
 {
-  TRACE (psplay);
+  TRACE (psplay_dbg);
   PSplaynode n = self->tree;
   struct psplaytrail trail;
 
@@ -301,7 +302,7 @@ psplay_insert (PSplay self, PSplaynode node, int splayfactor)
 PSplaynode
 psplay_find (PSplay self, const void* key, int splayfactor)
 {
-  TRACE (psplay);
+  TRACE (psplay_dbg);
   PSplaynode node = self->tree;
   struct psplaytrail trail;
   trail.dir = 0;
@@ -341,7 +342,7 @@ psplay_find (PSplay self, const void* key, int splayfactor)
 PSplaynode
 psplay_remove (PSplay self, PSplaynode node)
 {
-  TRACE (psplay);
+  TRACE (psplay_dbg);
   if (!node) return NULL;
 
   PSplaynode* r = self->found_parent;
@@ -350,7 +351,7 @@ psplay_remove (PSplay self, PSplaynode node)
     {
       if (!psplay_find (self, self->key (node), 0))
         {
-          WARN (psplay, "node %p is not in splay tree %p", node, self);
+          WARN (psplay_dbg, "node %p is not in splay tree %p", node, self);
           return NULL;
         }
       r = self->found_parent;

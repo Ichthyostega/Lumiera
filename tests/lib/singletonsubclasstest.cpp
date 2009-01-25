@@ -119,11 +119,13 @@ namespace lumiera
             cout << "calling a non-static method on the Singleton-" 
                  << t1.identify() << "\n"
                  << string (t1)   << "\n";
-            
-#ifdef DEBUG
-            /////////////////////////////////////////////////////////////////////////////////////////////TODO: better way of detecting debug builds
-            verify_error_detection ();
-#endif
+  
+///////////////////////////////////////////////////////////////////////////////TODO: find a way to configure NoBug to throw in case of assertion            
+///////////////////////////////////////////////////////////////////////////////TODO: just for the proc tests. Also find a better way to configure
+///////////////////////////////////////////////////////////////////////////////TODO: the non-release check. Then re-enable these checks...            
+//#ifdef DEBUG
+//            verify_error_detection ();
+//#endif
           } 
         
         
