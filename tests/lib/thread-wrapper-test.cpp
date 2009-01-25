@@ -98,7 +98,7 @@ namespace lib {
             sum = checksum = 0;
             TestThread instances[NUM_THREADS]    SIDEEFFECT;
             
-            sleep (1); /////////////////TODO better method of waiting for the threads to terminate..... 
+            usleep (200000);  // pause 200ms for the threads to terminate..... 
             
             ASSERT (0 < sum);
             ASSERT (sum==checksum);

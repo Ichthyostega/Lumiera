@@ -62,7 +62,7 @@ namespace lib {
         void
         theAction (int secretValue)   ///< to be run in a new thread...
           {
-            sleep(1);
+            usleep (100000);           // pause 100ms prior to modifying
             aValue_ =  secretValue+42;
           }
         
