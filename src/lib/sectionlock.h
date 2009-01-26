@@ -62,13 +62,12 @@ lumiera_sectionlock_ensureunlocked (LumieraSectionlock self)
  * @param sectionname name used for the sectionlock instance
  * @param ... some extra code to execute
  */
-#define LUMIERA_SECTION_UNLOCK_(section, ...)                   \
+#define LUMIERA_SECTION_UNLOCK_(section)                        \
   do if ((section)->lock)                                       \
     {                                                           \
       if ((section)->unlock((section)->lock))                   \
         LUMIERA_DIE (LOCK_RELEASE);                             \
       (section)->lock = NULL;                                   \
-      __VA_ARGS__;                                              \
       NOBUG_RESOURCE_LEAVE_RAW((section)->flag, (section)->rh); \
     } while (0)
 

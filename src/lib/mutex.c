@@ -58,7 +58,7 @@ lumiera_mutex_destroy (LumieraMutex self, struct nobug_flag* flag)
 
 int lumiera_mutex_unlock_cb (void* mutex)
 {
-  return pthread_mutex_unlock ((pthread_mutex_t*) mutex);
+  return pthread_mutex_unlock (&((LumieraMutex)mutex)->mutex);
 }
 
 /*
