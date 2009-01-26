@@ -70,10 +70,10 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
   // View Menu
   actionGroup->add(Action::create("ViewMenu", _("_View")));
   
-  assetsPanelAction = ToggleAction::create("ViewAssets",
-    Gtk::StockID("panel_assets"));
+  assetsPanelAction = ToggleAction::create("ViewResources",
+    Gtk::StockID("panel_resources"));
   assetsPanelAction->signal_toggled().connect(
-    sigc::mem_fun(*this, &Actions::on_menu_view_assets));
+    sigc::mem_fun(*this, &Actions::on_menu_view_resources));
   actionGroup->add(assetsPanelAction);
   
   timelinePanelAction = ToggleAction::create("ViewTimeline",
@@ -160,7 +160,7 @@ Actions::on_menu_edit_preferences()
 /* ===== View Menu Event Handlers ===== */
 
 void
-Actions::on_menu_view_assets()
+Actions::on_menu_view_resources()
 {
   if(!is_updating_action_state)
     workspaceWindow.resourcesPanel->show(

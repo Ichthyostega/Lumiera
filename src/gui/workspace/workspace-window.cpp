@@ -117,7 +117,7 @@ WorkspaceWindow::create_ui()
       "      <menuitem action='EditPreferences'/>"
       "    </menu>"
       "    <menu action='ViewMenu'>"
-      "      <menuitem action='ViewAssets'/>"
+      "      <menuitem action='ViewResources'/>"
       "      <menuitem action='ViewTimeline'/>"
       "      <menuitem action='ViewViewer'/>"
       "    </menu>"
