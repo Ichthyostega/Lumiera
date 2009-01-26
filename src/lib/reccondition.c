@@ -64,7 +64,7 @@ lumiera_reccondition_destroy (LumieraReccondition self, struct nobug_flag* flag)
       NOBUG_RESOURCE_FORGET_RAW (flag,  self->rh);
 
       if (pthread_mutex_destroy (&self->mutex))
-        LUMIERA_DIE (MUTEX_DESTROY);
+        LUMIERA_DIE (LOCK_DESTROY);
 
       if (pthread_cond_destroy (&self->cond))
         LUMIERA_DIE (CONDITION_DESTROY);
