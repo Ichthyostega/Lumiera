@@ -63,7 +63,7 @@ lumiera_rwlock_destroy (LumieraRWLock self, struct nobug_flag* flag)
 
 int lumiera_rwlock_unlock_cb (void* rwlock)
 {
-  return pthread_rwlock_unlock ((pthread_rwlock_t*) rwlock);
+  return pthread_rwlock_unlock (&((LumieraRWLock)rwlock)->rwlock);
 }
 
 /*
