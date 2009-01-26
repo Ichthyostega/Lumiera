@@ -48,7 +48,8 @@
            NOBUG_IF_ALPHA(lumiera_lock_section_.flag = &NOBUG_FLAG(nobugflag);)                 \
            RESOURCE_ENTER (nobugflag, (mtx)->rh, "acquire mutex", &lumiera_lock_section_,       \
                            NOBUG_RESOURCE_WAITING, lumiera_lock_section_.rh);                   \
-           if (pthread_mutex_lock (lumiera_lock_section_.lock)) LUMIERA_DIE (LOCK_ACQUIRE);     \
+           if (pthread_mutex_lock ((pthread_mutex_t*)lumiera_lock_section_.lock))               \
+             LUMIERA_DIE (LOCK_ACQUIRE);                                                        \
            RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_EXCLUSIVE, lumiera_lock_section_.rh);      \
          });                                                                                    \
          lumiera_lock_section_.lock;                                                            \
@@ -76,7 +77,8 @@
            NOBUG_IF_ALPHA(lumiera_lock_section_.flag = &NOBUG_FLAG(nobugflag);)                 \
            RESOURCE_ENTER (nobugflag, (mtx)->rh, "acquire mutex", &lumiera_lock_section_,       \
                            NOBUG_RESOURCE_WAITING, lumiera_lock_section_.rh);                   \
-           if (pthread_mutex_lock (lumiera_lock_section_.lock)) LUMIERA_DIE (LOCK_ACQUIRE);     \
+           if (pthread_mutex_lock ((pthread_mutex_t*)lumiera_lock_section_.lock))               \
+             LUMIERA_DIE (LOCK_ACQUIRE);                                                        \
            RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_EXCLUSIVE, lumiera_lock_section_.rh);      \
            LUMIERA_SECTION_UNLOCK_(lumiera_lock_section_old_);                                  \
          });                                                                                    \
@@ -104,7 +106,8 @@
            NOBUG_IF_ALPHA(lumiera_lock_section_.flag = &NOBUG_FLAG(nobugflag);)                 \
            RESOURCE_ENTER (nobugflag, (mtx)->rh, "acquire recmutex", &lumiera_lock_section_,    \
                            NOBUG_RESOURCE_WAITING, lumiera_lock_section_.rh);                   \
-           if (pthread_mutex_lock (lumiera_lock_section_.lock)) LUMIERA_DIE (LOCK_ACQUIRE);     \
+           if (pthread_mutex_lock ((pthread_mutex_t*)lumiera_lock_section_.lock))               \
+             LUMIERA_DIE (LOCK_ACQUIRE);                                                        \
            RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_RECURSIVE, lumiera_lock_section_.rh);      \
          });                                                                                    \
          lumiera_lock_section_.lock;                                                            \
@@ -124,7 +127,8 @@
            NOBUG_IF_ALPHA(lumiera_lock_section_.flag = &NOBUG_FLAG(nobugflag);)                 \
            RESOURCE_ENTER (nobugflag, (mtx)->rh, "acquire recmutex", &lumiera_lock_section_,    \
                            NOBUG_RESOURCE_WAITING, lumiera_lock_section_.rh);                   \
-           if (pthread_mutex_lock (lumiera_lock_section_.lock)) LUMIERA_DIE (LOCK_ACQUIRE);     \
+           if (pthread_mutex_lock ((pthread_mutex_t*)lumiera_lock_section_.lock))               \
+             LUMIERA_DIE (LOCK_ACQUIRE);                                                        \
            RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_recursive, lumiera_lock_section_.rh);      \
            LUMIERA_SECTION_UNLOCK_(lumiera_lock_section_old_)                                   \
          });                                                                                    \
