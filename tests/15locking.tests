@@ -45,6 +45,15 @@ return: 134
 END
 
 
+PLANNED "rwlock readlock in writelock asserts" rwlockdeadlockwr <<END
+return: 134
+END
+
+PLANNED "rwlock writelock in readlock asserts" rwlockdeadlockrw <<END
+return: 134
+END
+
+
 TEST "condition not unlocked asserts" conditionforgotunlock <<END
 return: 134
 END

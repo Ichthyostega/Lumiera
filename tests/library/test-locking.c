@@ -164,6 +164,7 @@ TEST ("rwlocksection")
   lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON));
 }
 
+
 TEST ("rwlockforgotunlock")
 {
   lumiera_rwlock rwlock;
@@ -172,6 +173,44 @@ TEST ("rwlockforgotunlock")
   LUMIERA_RDLOCK_SECTION (NOBUG_ON, &rwlock)
     {
       break;    // LOCK_SECTIONS must not be left by a jump
+    }
+
+  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON));
+}
+
+
+
+TEST ("rwdeadlockwr")
+{
+  lumiera_rwlock rwlock;
+  lumiera_rwlock_init (&rwlock, "rwsection", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_WRLOCK_SECTION (NOBUG_ON, &rwlock)
+    {
+      printf ("write locked section 1\n");
+      LUMIERA_RDLOCK_SECTION (NOBUG_ON, &rwlock)
+        {
+          printf ("read locked section 2\n");
+        }
+    }
+
+  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON));
+}
+
+
+
+TEST ("rwdeadlockrw")
+{
+  lumiera_rwlock rwlock;
+  lumiera_rwlock_init (&rwlock, "rwsection", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_RDLOCK_SECTION (NOBUG_ON, &rwlock)
+    {
+      printf ("read locked section 1\n");
+      LUMIERA_WRLOCK_SECTION (NOBUG_ON, &rwlock)
+        {
+          printf ("write locked section 2\n");
+        }
     }
 
   lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON));
