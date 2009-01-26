@@ -36,6 +36,7 @@
 #ifndef LIB_SYNC_CLASSLOCK_H
 #define LIB_SYNC_CLASSLOCK_H
 
+#include "lib/nobug-init.hpp"
 #include "lib/sync.hpp"
 
 

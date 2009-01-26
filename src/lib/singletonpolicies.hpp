@@ -34,6 +34,7 @@ This code is heavily inspired by
 #ifndef LUMIERA_SINGLETONPOLICIES_H
 #define LUMIERA_SINGLETONPOLICIES_H
 
+#include "lib/nobug-init.hpp"
 #include "lib/error.hpp"
 
 #include <vector>
