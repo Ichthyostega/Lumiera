@@ -73,6 +73,7 @@
        lumiera_lock_section_.lock;)                                                             \
     for (                                                                                       \
          ({                                                                                     \
+           REQUIRE (lumiera_lock_section_old_->lock, "section prematurely unlocked");            \
            lumiera_lock_section_.lock = &(mtx)->mutex;                                          \
            NOBUG_IF_ALPHA(lumiera_lock_section_.flag = &NOBUG_FLAG(nobugflag);)                 \
            RESOURCE_ENTER (nobugflag, (mtx)->rh, "acquire mutex", &lumiera_lock_section_,       \
@@ -123,6 +124,7 @@
        lumiera_lock_section_.lock;)                                                             \
     for (                                                                                       \
          ({                                                                                     \
+           REQUIRE (lumiera_lock_section_old_->lock, "section prematurely unlocked");           \
            lumiera_lock_section_.lock = &(mtx)->recmutex;                                       \
            NOBUG_IF_ALPHA(lumiera_lock_section_.flag = &NOBUG_FLAG(nobugflag);)                 \
            RESOURCE_ENTER (nobugflag, (mtx)->rh, "acquire recmutex", &lumiera_lock_section_,    \
