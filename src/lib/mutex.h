@@ -131,7 +131,7 @@
                            NOBUG_RESOURCE_WAITING, lumiera_lock_section_.rh);                   \
            if (pthread_mutex_lock (&(mtx)->recmutex))                                           \
              LUMIERA_DIE (LOCK_ACQUIRE);                                                        \
-           RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_recursive, lumiera_lock_section_.rh);      \
+           RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_RECURSIVE, lumiera_lock_section_.rh);      \
            LUMIERA_SECTION_UNLOCK_(lumiera_lock_section_old_)                                   \
          });                                                                                    \
          lumiera_lock_section_.lock;                                                            \
