@@ -2,7 +2,7 @@
   reccondition.c  -  condition variable, w/ recursive mutex
 
   Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
+    2008, 2009,         Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -19,7 +19,6 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "lib/condition.h"
 #include "lib/reccondition.h"
 
 /**
@@ -48,7 +47,7 @@ lumiera_reccondition_init (LumieraReccondition self, const char* purpose, struct
         pthread_once (&recursive_mutexattr_once, recursive_mutexattr_init);
 
       pthread_cond_init (&self->cond, NULL);
-      pthread_mutex_init (&self->mutex, &recursive_mutexattr);
+      pthread_mutex_init (&self->reccndmutex, &recursive_mutexattr);
       NOBUG_RESOURCE_HANDLE_INIT (self->rh);
       NOBUG_RESOURCE_ANNOUNCE_RAW (flag, "reccond_var", purpose, self, self->rh);
     }
@@ -63,15 +62,19 @@ lumiera_reccondition_destroy (LumieraReccondition self, struct nobug_flag* flag)
     {
       NOBUG_RESOURCE_FORGET_RAW (flag,  self->rh);
 
-      if (pthread_mutex_destroy (&self->mutex))
+      if (pthread_mutex_destroy (&self->reccndmutex))
         LUMIERA_DIE (LOCK_DESTROY);
 
       if (pthread_cond_destroy (&self->cond))
-        LUMIERA_DIE (CONDITION_DESTROY);
+        LUMIERA_DIE (LOCK_DESTROY);
     }
   return self;
 }
 
 
 
+int lumiera_reccondition_unlock_cb (void* cond)
+{
+  return pthread_mutex_unlock (&((LumieraReccondition)cond)->reccndmutex);
+}
 

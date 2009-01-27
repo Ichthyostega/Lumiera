@@ -2,7 +2,7 @@
   condition.c  -  condition variable
 
   Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
+    2008, 2009          Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -26,8 +26,6 @@
  * Condition variables
  */
 
-LUMIERA_ERROR_DEFINE (CONDITION_DESTROY, "condition destroy failed");
-
 
 LumieraCondition
 lumiera_condition_init (LumieraCondition self, const char* purpose, struct nobug_flag* flag)
@@ -35,7 +33,7 @@ lumiera_condition_init (LumieraCondition self, const char* purpose, struct nobug
   if (self)
     {
       pthread_cond_init (&self->cond, NULL);
-      pthread_mutex_init (&self->mutex, NULL);
+      pthread_mutex_init (&self->cndmutex, NULL);
       NOBUG_RESOURCE_HANDLE_INIT (self->rh);
       NOBUG_RESOURCE_ANNOUNCE_RAW (flag, "cond_var", purpose, self, self->rh);
     }
@@ -50,15 +48,21 @@ lumiera_condition_destroy (LumieraCondition self, struct nobug_flag* flag)
     {
       NOBUG_RESOURCE_FORGET_RAW (flag,  self->rh);
 
-      if (pthread_mutex_destroy (&self->mutex))
-        LUMIERA_DIE (MUTEX_DESTROY);
+      if (pthread_mutex_destroy (&self->cndmutex))
+        LUMIERA_DIE (LOCK_DESTROY);
 
       if (pthread_cond_destroy (&self->cond))
-        LUMIERA_DIE (CONDITION_DESTROY);
+        LUMIERA_DIE (LOCK_DESTROY);
     }
   return self;
 }
 
+
+
+int lumiera_condition_unlock_cb (void* cond)
+{
+  return pthread_mutex_unlock (&((LumieraCondition)cond)->cndmutex);
+}
 
 
 

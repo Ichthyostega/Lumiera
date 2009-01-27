@@ -70,3 +70,19 @@ PLANNED "condition broadcasting" <<END
 END
 
 
+TEST "reccondition not unlocked asserts" recconditionforgotunlock <<END
+return: 134
+END
+
+TEST "reccondition section" recconditionsection <<END
+out: reccondition locked section 1
+out: reccondition locked section 2
+END
+
+PLANNED "reccondition signaling" <<END
+END
+
+PLANNED "reccondition broadcasting" <<END
+END
+
+

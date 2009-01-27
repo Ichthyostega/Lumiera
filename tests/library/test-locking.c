@@ -219,6 +219,22 @@ TEST ("rwdeadlockrw")
 }
 
 
+TEST ("conditionops (compiletest only)")
+{
+  lumiera_condition cond;
+  lumiera_condition_init (&cond, "conditionsection", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_CONDITION_SECTION (NOBUG_ON, &cond)
+    {
+      LUMIERA_CONDITION_WAIT(1);
+      LUMIERA_CONDITION_SIGNAL;
+      LUMIERA_CONDITION_BROADCAST;
+    }
+
+  lumiera_condition_destroy (&cond, &NOBUG_FLAG(NOBUG_ON));
+}
+
+
 TEST ("conditionsection")
 {
   lumiera_condition cond;
@@ -250,5 +266,56 @@ TEST ("conditionforgotunlock")
 
   lumiera_condition_destroy (&cond, &NOBUG_FLAG(NOBUG_ON));
 }
+
+
+
+TEST ("recconditionops (compiletest only)")
+{
+  lumiera_reccondition reccond;
+  lumiera_reccondition_init (&reccond, "recconditionsection", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &reccond)
+    {
+      LUMIERA_RECCONDITION_WAIT(1);
+      LUMIERA_RECCONDITION_SIGNAL;
+      LUMIERA_RECCONDITION_BROADCAST;
+    }
+
+  lumiera_reccondition_destroy (&reccond, &NOBUG_FLAG(NOBUG_ON));
+}
+
+
+TEST ("recconditionsection")
+{
+  lumiera_reccondition reccond;
+  lumiera_reccondition_init (&reccond, "recconditionsection", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &reccond)
+    {
+      printf ("reccondition locked section 1\n");
+    }
+
+  LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &reccond)
+    {
+      printf ("reccondition locked section 2\n");
+    }
+
+  lumiera_reccondition_destroy (&reccond, &NOBUG_FLAG(NOBUG_ON));
+}
+
+
+TEST ("recconditionforgotunlock")
+{
+  lumiera_reccondition reccond;
+  lumiera_reccondition_init (&reccond, "recconditionforgotunlock", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &reccond)
+    {
+      break;    // RECCONDITION_SECTIONS must not be left by a jump
+    }
+
+  lumiera_reccondition_destroy (&reccond, &NOBUG_FLAG(NOBUG_ON));
+}
+
 
 TESTS_END
