@@ -21,7 +21,9 @@
 
 #include "tests/test.h"
 #include "lib/mutex.h"
+#include "lib/recmutex.h"
 #include "lib/condition.h"
+#include "lib/reccondition.h"
 #include "lib/rwlock.h"
 
 #include <stdio.h>

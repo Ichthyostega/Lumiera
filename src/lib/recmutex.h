@@ -1,5 +1,5 @@
 /*
-  mutex.h  -  mutal exclusion locking
+  recmutex.h  -  recursive mutal exclusion locking
 
   Copyright (C)         Lumiera.org
     2008, 2009,         Christian Thaeter <ct@pipapo.org>
@@ -19,8 +19,8 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#ifndef LUMIERA_MUTEX_H
-#define LUMIERA_MUTEX_H
+#ifndef LUMIERA_RECMUTEX_H
+#define LUMIERA_RECMUTEX_H
 
 #include "lib/error.h"
 #include "lib/sectionlock.h"
@@ -33,11 +33,10 @@
  * Mutual exclusion locking, header.
  */
 
-
 /**
- * Mutual exclusive section.
+ * Recursive Mutual exclusive section.
  */
-#define LUMIERA_MUTEX_SECTION(nobugflag, mtx)                                                   \
+#define LUMIERA_RECMUTEX_SECTION(nobugflag, mtx)                                                \
   for (lumiera_sectionlock NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked)                    \
          lumiera_lock_section_ = {                                                              \
          (void*)1, lumiera_mutex_unlock_cb NOBUG_ALPHA_COMMA_NULL NOBUG_ALPHA_COMMA_NULL};      \
@@ -46,11 +45,11 @@
          ({                                                                                     \
            lumiera_lock_section_.lock = (mtx);                                                  \
            NOBUG_IF_ALPHA(lumiera_lock_section_.flag = &NOBUG_FLAG(nobugflag);)                 \
-           RESOURCE_ENTER (nobugflag, (mtx)->rh, "acquire mutex", &lumiera_lock_section_,       \
+           RESOURCE_ENTER (nobugflag, (mtx)->rh, "acquire recmutex", &lumiera_lock_section_,    \
                            NOBUG_RESOURCE_WAITING, lumiera_lock_section_.rh);                   \
-           if (pthread_mutex_lock (&(mtx)->mutex))                                              \
+           if (pthread_mutex_lock (&(mtx)->recmutex))                                           \
              LUMIERA_DIE (LOCK_ACQUIRE);                                                        \
-           RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_EXCLUSIVE, lumiera_lock_section_.rh);      \
+           RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_RECURSIVE, lumiera_lock_section_.rh);      \
          });                                                                                    \
          lumiera_lock_section_.lock;                                                            \
          ({                                                                                     \
@@ -58,15 +57,7 @@
          }))
 
 
-/**
- * Mutual exclusion chainbuilder section.
- * Usage: LUMIERA_MUTEX_SECTION(a){LUMIERA_MUTEX_SECTION_CHAIN(b){run();}}
- *     calls lock(a); lock(b); unlock(a); run(); unlock(b);
- * This macro should only be used inside LUMIERA_MUTEX_SECTION and should be
- * called on the correct mutexes, period.
- */
-
-#define LUMIERA_MUTEX_SECTION_CHAIN(nobugflag, mtx)                                             \
+#define LUMIERA_RECMUTEX_SECTION_CHAIN(nobugflag, mtx)                                          \
   for (lumiera_sectionlock *lumiera_lock_section_old_ = &lumiera_lock_section_,                 \
          NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked) lumiera_lock_section_ = {            \
          (void*)1, lumiera_mutex_unlock_cb NOBUG_ALPHA_COMMA_NULL NOBUG_ALPHA_COMMA_NULL};      \
@@ -74,14 +65,14 @@
     for (                                                                                       \
          ({                                                                                     \
            REQUIRE (lumiera_lock_section_old_->lock, "section prematurely unlocked");           \
-           lumiera_lock_section_.lock = mtx;                                                    \
+           lumiera_lock_section_.lock = (mtx);                                                  \
            NOBUG_IF_ALPHA(lumiera_lock_section_.flag = &NOBUG_FLAG(nobugflag);)                 \
-           RESOURCE_ENTER (nobugflag, (mtx)->rh, "acquire mutex", &lumiera_lock_section_,       \
+           RESOURCE_ENTER (nobugflag, (mtx)->rh, "acquire recmutex", &lumiera_lock_section_,    \
                            NOBUG_RESOURCE_WAITING, lumiera_lock_section_.rh);                   \
-           if (pthread_mutex_lock (&(mtx)->mutex))                                              \
+           if (pthread_mutex_lock (&(mtx)->recmutex))                                           \
              LUMIERA_DIE (LOCK_ACQUIRE);                                                        \
-           RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_EXCLUSIVE, lumiera_lock_section_.rh);      \
-           LUMIERA_SECTION_UNLOCK_(lumiera_lock_section_old_);                                  \
+           RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_RECURSIVE, lumiera_lock_section_.rh);      \
+           LUMIERA_SECTION_UNLOCK_(lumiera_lock_section_old_)                                   \
          });                                                                                    \
          lumiera_lock_section_.lock;                                                            \
          ({                                                                                     \
@@ -89,40 +80,39 @@
          }))
 
 
-#define LUMIERA_MUTEX_SECTION_UNLOCK            \
+#define LUMIERA_RECMUTEX_SECTION_UNLOCK            \
   LUMIERA_SECTION_UNLOCK_(&lumiera_lock_section_)
+
 
 
 /**
  * Mutex.
  *
  */
-struct lumiera_mutex_struct
+struct lumiera_recmutex_struct
 {
-  pthread_mutex_t mutex;
+  pthread_mutex_t recmutex;
   RESOURCE_HANDLE (rh);
 };
-typedef struct lumiera_mutex_struct lumiera_mutex;
-typedef lumiera_mutex* LumieraMutex;
-
+typedef struct lumiera_recmutex_struct lumiera_recmutex;
+typedef lumiera_recmutex* LumieraRecmutex;
 
 /**
- * Initialize a mutex variable
- * This initializes a 'fast' default mutex which must not be locked recursively from one thread.
+ * Initialize a recursive mutex variable
+ * Initializes a 'recursive' mutex which might be locked by the same thread multiple times.
  * @param self is a pointer to the mutex to be initialized
  * @return self as given
  */
-LumieraMutex
-lumiera_mutex_init (LumieraMutex self, const char* purpose, struct nobug_flag* flag);
+LumieraRecmutex
+lumiera_recmutex_init (LumieraRecmutex self, const char* purpose, struct nobug_flag* flag);
 
 /**
- * Destroy a mutex variable
+ * Destroy a recursive mutex variable
  * @param self is a pointer to the mutex to be destroyed
  * @return self as given
  */
-LumieraMutex
-lumiera_mutex_destroy (LumieraMutex self, struct nobug_flag* flag);
-
+LumieraRecmutex
+lumiera_recmutex_destroy (LumieraRecmutex self, struct nobug_flag* flag);
 
 /**
  * Callback for unlocking mutexes.

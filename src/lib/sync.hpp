@@ -73,6 +73,7 @@
 
 extern "C" {
 #include "lib/mutex.h"
+#include "lib/recmutex.h"
 #include "lib/condition.h"
 #include "lib/reccondition.h"
 }
