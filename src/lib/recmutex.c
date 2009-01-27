@@ -37,8 +37,8 @@ static void recmutexattr_init()
 }
 
 
-LumieraRecMutex
-lumiera_recmutex_init (LumieraRecMutex self, const char* purpose, struct nobug_flag* flag)
+LumieraRecmutex
+lumiera_recmutex_init (LumieraRecmutex self, const char* purpose, struct nobug_flag* flag)
 {
   if (self)
     {
@@ -52,8 +52,8 @@ lumiera_recmutex_init (LumieraRecMutex self, const char* purpose, struct nobug_f
   return self;
 }
 
-LumieraRecMutex
-lumiera_recmutex_destroy (LumieraRecMutex self, struct nobug_flag* flag)
+LumieraRecmutex
+lumiera_recmutex_destroy (LumieraRecmutex self, struct nobug_flag* flag)
 {
   if (self)
     {

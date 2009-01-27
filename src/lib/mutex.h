@@ -163,7 +163,7 @@ struct lumiera_recmutex_struct
   RESOURCE_HANDLE (rh);
 };
 typedef struct lumiera_recmutex_struct lumiera_recmutex;
-typedef lumiera_recmutex* LumieraRecMutex;
+typedef lumiera_recmutex* LumieraRecmutex;
 
 
 /**
@@ -191,16 +191,16 @@ lumiera_mutex_destroy (LumieraMutex self, struct nobug_flag* flag);
  * @param self is a pointer to the mutex to be initialized
  * @return self as given
  */
-LumieraRecMutex
-lumiera_recmutex_init (LumieraRecMutex self, const char* purpose, struct nobug_flag* flag);
+LumieraRecmutex
+lumiera_recmutex_init (LumieraRecmutex self, const char* purpose, struct nobug_flag* flag);
 
 /**
  * Destroy a recursive mutex variable
  * @param self is a pointer to the mutex to be destroyed
  * @return self as given
  */
-LumieraRecMutex
-lumiera_recmutex_destroy (LumieraRecMutex self, struct nobug_flag* flag);
+LumieraRecmutex
+lumiera_recmutex_destroy (LumieraRecmutex self, struct nobug_flag* flag);
 
 /**
  * Callback for unlocking mutexes.
