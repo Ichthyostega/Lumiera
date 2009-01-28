@@ -22,7 +22,7 @@
 #include "include/logging.h"
 #include "lib/safeclib.h"
 #include "lib/psplay.h"
-#include "lib/mutex.h"
+#include "lib/recmutex.h"
 #include "lib/error.h"
 
 #include "common/interfaceregistry.h"

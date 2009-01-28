@@ -21,7 +21,7 @@
 
 #include "include/logging.h"
 
-#include "lib/mutex.h"
+#include "lib/recmutex.h"
 #include "lib/safeclib.h"
 
 #include "common/plugin.h"

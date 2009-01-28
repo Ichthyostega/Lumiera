@@ -22,6 +22,7 @@
 #define LUMIERA_INTERFACEREGISTRY_H
 
 #include "lib/mutex.h"
+#include "lib/recmutex.h"
 #include "lib/psplay.h"
 
 #include "common/interface.h"

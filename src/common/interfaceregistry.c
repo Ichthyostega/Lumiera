@@ -20,7 +20,6 @@
 */
 
 #include "include/logging.h"
-#include "lib/mutex.h"
 #include "lib/error.h"
 #include "lib/psplay.h"
 #include "lib/safeclib.h"
