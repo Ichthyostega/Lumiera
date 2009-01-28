@@ -30,8 +30,7 @@ namespace controller {
 PlaybackController::PlaybackController() :
   thread(0),
   finish_playback_thread(false),
-  playing(false),
-  playHandle(0)
+  playing(false)
 { }
 
 
@@ -45,7 +44,7 @@ PlaybackController::play()
 {
   if (playing && thread && playHandle)
     {
-      playHandle->pause(false);
+      playHandle.play(true);
       return;
     }
   if (thread)
@@ -55,7 +54,7 @@ PlaybackController::play()
     Lock sync(this);
     try
       {
-        playHandle = & (proc::DummyPlayer::facade().start());
+        playHandle =  proc::play::DummyPlayer::facade().start();
         start_playback_thread();
         playing = true;
       }
@@ -74,7 +73,7 @@ PlaybackController::pause()
   Lock sync(this);
   playing = false;
   if (playHandle)
-    playHandle->pause(true);
+    playHandle.play(false);
 }
 
 void
@@ -83,7 +82,7 @@ PlaybackController::stop()
   {
     Lock sync(this);
     playing = false;
-    playHandle = 0;
+    playHandle.close();
     // TODO: stop player somehow?
   }
   end_playback_thread();
@@ -151,7 +150,7 @@ PlaybackController::pull_frame()
   REQUIRE (is_playing());
   REQUIRE (playHandle);
   
-  unsigned char * newBuffer = reinterpret_cast<unsigned char*> (playHandle->getFrame());
+  unsigned char * newBuffer = reinterpret_cast<unsigned char*> (playHandle.getFrame());
   
   if (newBuffer != currentBuffer)
     {

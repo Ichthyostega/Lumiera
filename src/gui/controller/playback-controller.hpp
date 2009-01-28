@@ -82,7 +82,7 @@ private:
   
   volatile bool playing;
   
-  proc::DummyPlayer::Process *playHandle;
+  proc::play::DummyPlayer::Process playHandle;
   
   unsigned char * currentBuffer;
   

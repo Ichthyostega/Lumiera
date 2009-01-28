@@ -27,7 +27,7 @@
  ** within the lower layers.
  ** 
  ** This service is the implementation of a layer separation facade interface. Clients should use
- ** gui::GuiNotification#facade to access this service. This header defines the interface used
+ ** proc::play::DummyPlayer#facade to access this service. This header defines the interface used
  ** to \em provide this service, not to access it.
  **
  ** @see gui::GuiFacade
@@ -43,6 +43,7 @@
 #include "common/instancehandle.hpp"
 #include "lib/singleton-ref.hpp"
 
+#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <string>
 
@@ -57,12 +58,17 @@ namespace proc {
     class DummyImageGenerator;
     
     
+    /********************************************************************
+     * Actual implementation of a single (dummy) playback process.
+     * The DummyPlayerService (see below) maintains a collection of such
+     * actively running playback processes, while the client code gets 
+     * DummyPlayer::Process handles to track any ongoing use. Users of
+     * the plain C interface get a direct bare pointer to the respective
+     * ProcessImpl instance and have to manage the lifecycle manually.
+     */
     class ProcessImpl
-      : public DummyPlayer::Process
+      : public lumiera_playprocess
       {
-        void        pause(bool doPause);
-        void* const getFrame();
-        
         uint fps_;
         bool play_;
         
@@ -70,7 +76,8 @@ namespace proc {
         
         
       public:
-        ProcessImpl() : fps_(0), play_(false), imageGen_(0) {}
+        ProcessImpl() ;
+        ~ProcessImpl();
         
         /* Implementation-level API to be used By DummyPlayerService */
         
@@ -80,39 +87,30 @@ namespace proc {
         
         bool isActive () { return fps_ != 0; }
         bool isPlaying() { return play_; }
+        
+        void  doPlay(bool yes);
+        void* const getFrame();
+        
+        DummyPlayer::Process createHandle();
+        static void terminate(ProcessImpl* process);
       };
-     
+    
+    
     
     /******************************************************
-     * Actual implementation of the GuiNotification service
-     * within the Lumiera GTK GUI. Creating an instance of
-     * this class automatically registers the interface
-     * with the Lumiera Interface/Plugin system and creates
+     * Actual implementation of the DummyPlayer service.
+     * Creating an instance of this class automatically
+     * registers the interface lumieraorg_DummyPlayer with
+     * the Lumiera Interface/Plugin system and creates
      * a forwarding proxy within the application core to
      * route calls through this interface.
-     * 
-     * @todo the ctor of this class should take references
-     *       to any internal service providers within the
-     *       GUI which are needed to implement the service. 
      */
     class DummyPlayerService
-      : public DummyPlayer
+      : boost::noncopyable
       {
-        
-        /* === Implementation of the Facade Interface === */
-        
-        Process& start();
-        
-        
-        /** for now we use an single inline Process...
-         *  @todo actually implement multiple independent Playback processes!
-         *  @todo I am aware holding this object inline may cause a segfault at shutdown! 
-         */
-        ProcessImpl theProcess_;
         
         string error_;
         Subsys::SigTerm notifyTermination_;
-        
         
         
         /* === Interface Lifecycle === */
@@ -121,13 +119,21 @@ namespace proc {
                                        , DummyPlayer
                                        > ServiceInstanceHandle;
         
-        lib::SingletonRef<DummyPlayer> implInstance_;
+        lib::SingletonRef<DummyPlayerService> implInstance_;
         ServiceInstanceHandle serviceInstance_;
         
       public:
         DummyPlayerService(Subsys::SigTerm terminationHandle);
         
        ~DummyPlayerService() { notifyTermination_(&error_); }
+        
+        
+        
+        /** conceptually, this serves as implementation
+         *  of the DummyPlayer#start() function. But because
+         *  this function sits \em behind the interface, it
+         *  just returns an impl pointer.  */
+        ProcessImpl* start();
         
       };
     

@@ -40,14 +40,15 @@ namespace gui {
 
 
 
-#include "include/dummy-player-facade.h"
+#include "proc/play/dummy-player-service.hpp"
 
 namespace proc {
+  namespace play {
   
   /** storage for the DummyPlayer facade proxy factory... */
   lumiera::facade::Accessor<DummyPlayer> DummyPlayer::facade;
-
-} // namespace gui
+  
+} }
 
 
 
@@ -152,7 +153,7 @@ namespace lumiera {
     /* ==================== DummyPlayer ======================================= */
     
     typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)
-                                     , proc::DummyPlayer
+                                     , proc::play::DummyPlayer
                                      > Handle_DummyPlayer;
     
     
@@ -161,21 +162,24 @@ namespace lumiera {
       : public Holder<Handle_DummyPlayer>
       {
         //----Proxy-Implementation-of-DummyPlayer--------
-        typedef proc::DummyPlayer::Process Process;
+        typedef proc::play::DummyPlayer::Process Process;
+        typedef proc::play::ProcessImpl ProcessImpl;
         
         /** @note as an optimisation we hand out a direct reference
          *  to the implementing process object. While this ref could
          *  still be passed as handle to the C Language interface, using
-         *  it directly within the client (=GUI) retains only on level
-         *  of indirection, irrespective which interface is used. */
-        Process& start()                           
+         *  it directly within the client (=GUI) bypasses the C interface
+         *  and thus leaves us only with one level of indirection,
+         *  irrespective if using the C or C++ interface.
+         */
+        Process start()                           
           { 
-            Process* pP = static_cast<Process*> (_i_.startPlay());
+            ProcessImpl* pP = static_cast<ProcessImpl*> (_i_.startPlay());
             
-            if (!pP || lumiera_error_peek())
+            if (!pP)
               throw lumiera::error::State("failed to start DummyPlayer", lumiera_error());
             
-            return *pP;
+            return pP->createHandle();
           }
         
         

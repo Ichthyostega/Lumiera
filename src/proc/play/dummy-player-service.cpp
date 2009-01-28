@@ -30,6 +30,7 @@ extern "C" {
 }
 
 #include <string>
+#include <memory>
 #include <boost/scoped_ptr.hpp>
 
 
@@ -38,6 +39,7 @@ namespace proc  {
   
     using std::string;
     using lumiera::Subsys;
+    using std::auto_ptr;
     using boost::scoped_ptr;
     
     
@@ -167,11 +169,11 @@ namespace proc  {
       
       
       using lumiera::facade::LUMIERA_ERROR_FACADE_LIFECYCLE;
-      typedef lib::SingletonRef<DummyPlayer>::Accessor InstanceRef;
+      typedef lib::SingletonRef<DummyPlayerService>::Accessor InstanceRef;
       
       InstanceRef _instance; ///< a backdoor for the C Language impl to access the actual DummyPlayer implementation...
       
-      typedef DummyPlayer::Process* ProcP;
+      typedef ProcessImpl* ProcP;
       
       
       LUMIERA_INTERFACE_INSTANCE (lumieraorg_DummyPlayer, 0
@@ -188,10 +190,10 @@ namespace proc  {
                                                                      return 0;
                                                                    }
                                                                  
-                                                                 return static_cast<LumieraPlayProcess> (& (_instance->start())); 
+                                                                 return static_cast<LumieraPlayProcess> (_instance->start()); 
                                                                }
                                                             )
-                                 , LUMIERA_INTERFACE_INLINE (pausePlay, "\275\157\316\220\210\053\226\134\057\016\273\265\240\053\112\307",
+                                 , LUMIERA_INTERFACE_INLINE (togglePlay, "\275\157\316\220\210\053\226\134\057\016\273\265\240\053\112\307",
                                                              void, (LumieraPlayProcess handle, bool doPlay),
                                                                { 
                                                                  if (!_instance)
@@ -203,7 +205,7 @@ namespace proc  {
                                                                  REQUIRE (handle);
                                                                  ProcP proc = static_cast<ProcP> (handle);
                                                                  
-                                                                 proc->pause(doPlay);
+                                                                 proc->doPlay(doPlay);
                                                                }
                                                             )
                                  , LUMIERA_INTERFACE_INLINE (terminate, "\005\265\115\021\076\143\010\215\373\252\370\174\235\136\340\004",
@@ -218,7 +220,7 @@ namespace proc  {
                                                                  REQUIRE (handle);
                                                                  ProcP proc = static_cast<ProcP> (handle);
                                                                  
-                                                                 UNIMPLEMENTED ("terminate a running playback process");
+                                                                 ProcessImpl::terminate (proc);
                                                                }
                                                             )
                                  , LUMIERA_INTERFACE_INLINE (getFrame, "\230\130\101\300\047\065\170\052\226\164\026\112\150\166\074\134",
@@ -255,22 +257,67 @@ namespace proc  {
     
     
     
-    DummyPlayer::Process& 
+    /** @par implementation note
+     *  A new process (implementation) is created, configured
+     *  and started here. This may include spawning a thread or
+     *  allocating a timer. The newly created process is self-contained
+     *  and will be just handed out, without caring for its lifecycle.
+     *  If client code accesses this function via the plain C interface,
+     *  the client is responsible for terminating this process, whereas
+     *  when using the C++ interface, you'll get a Handle object which
+     *  manages the lifecycle automatically.
+     */
+    ProcessImpl*
     DummyPlayerService::start()
       {
-        // REQUIRE (!theProcess_.isActive());    //////////////TODO: reactivate this check when we have really independent processes which can be stopped!
-        theProcess_.setRate(25);
+        auto_ptr<ProcessImpl> newProcess (new ProcessImpl);
+
+        REQUIRE (!newProcess->isActive());
+        newProcess->setRate(25);
         
-        return theProcess_;
+        return newProcess.release();
       }
+    
+    
+    /* === Forwarding functions on the Process handle === */
+    
+    void DummyPlayer::Process::play(bool yes)    { impl().doPlay(yes);       }
+    void* const DummyPlayer::Process::getFrame() { return impl().getFrame(); }
+    
+    
+    
+    
+    
+    /* === Process Implementation === */
+    
+    
+    ProcessImpl::ProcessImpl() : fps_(0), play_(false), imageGen_(0) {}
+    ProcessImpl::~ProcessImpl() {}
+    
+    
+    DummyPlayer::Process
+    ProcessImpl::createHandle()
+    {
+      DummyPlayer::Process handle;
+      handle.activate(this, &terminate);
+      return handle;
+    }
+    
+    
+    void
+    ProcessImpl::terminate (ProcessImpl* process)
+    {
+      if (process)
+        delete process;
+    }
     
     
     
     void
     ProcessImpl::setRate (uint fps)
       {
-        // REQUIRE (fps==0 || fps_==0 );    //////////////TODO: reactivate this check when we have really independent processes which can be stopped!
-        // REQUIRE (fps==0 || !play_  );    //////////////TODO: reactivate this check when we have really independent processes which can be stopped!
+        REQUIRE (fps==0 || fps_==0 );
+        REQUIRE (fps==0 || !play_  );
         
         fps_ = fps;
         play_ = (fps != 0);
@@ -282,10 +329,10 @@ namespace proc  {
     
     
     void
-    ProcessImpl::pause(bool doPause)
+    ProcessImpl::doPlay(bool yes)
       {
         REQUIRE (isActive());
-        play_ = !doPause;
+        play_ = yes;
       }
     
     
@@ -304,22 +351,21 @@ namespace proc  {
     
     
     
+  
+  
+  
+    /** @internal intended for use by main(). */
+    lumiera::Subsys&
+    DummyPlayer::getDescriptor()
+    {
+      return play::theDescriptor();
+    }
+    
+    // emit the vtable here into this translation unit within liblumieraproc.so ...
+    DummyPlayer::~DummyPlayer()      { }
+  
+  
+  
   } // namespace play
-  
-  
-  
-  /** @internal intended for use by main(). */
-  lumiera::Subsys&
-  DummyPlayer::getDescriptor()
-  {
-    return play::theDescriptor();
-  }
-  
-  // emit the vtable here into this translation unit within liblumieraproc.so ...
-  DummyPlayer::~DummyPlayer()      { }
-  DummyPlayer::Process::~Process() { }
-  
-  
-  
   
 } // namespace proc

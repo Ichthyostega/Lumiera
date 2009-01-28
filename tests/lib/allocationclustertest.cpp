@@ -183,7 +183,7 @@ namespace lib {
             // shows that the returned references actually
             // point at the objects we created. Just use them
             // and let them go. When clu goes out of scope,
-            // all created objects dtors will be invoked.
+            // all created object's dtors will be invoked.
           }
         
         
