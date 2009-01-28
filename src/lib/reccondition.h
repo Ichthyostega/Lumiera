@@ -44,7 +44,7 @@
 #define LUMIERA_RECCONDITION_SECTION(nobugflag, cnd)                                                    \
   for (lumiera_sectionlock NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked)                            \
          lumiera_reccond_section_ = {                                                                   \
-         (void*)1, lumiera_condition_unlock_cb NOBUG_ALPHA_COMMA_NULL NOBUG_ALPHA_COMMA_NULL};          \
+         (void*)1, lumiera_reccondition_unlock_cb NOBUG_ALPHA_COMMA_NULL NOBUG_ALPHA_COMMA_NULL};       \
        lumiera_reccond_section_.lock;)                                                                  \
     for (                                                                                               \
          ({                                                                                             \
@@ -99,8 +99,8 @@
   do {                                                                                                                  \
     REQUIRE (lumiera_reccond_section_.lock, "Condition recmutex not locked");                                           \
     NOBUG_RESOURCE_STATE_RAW (lumiera_reccond_section_.flag, NOBUG_RESOURCE_WAITING, lumiera_reccond_section_.rh);      \
-    pthread_cond_wait (&((LumieraCondition)lumiera_reccond_section_.lock)->cond,                                        \
-                       &((LumieraCondition)lumiera_reccond_section_.lock)->cndmutex);                                   \
+    pthread_cond_wait (&((LumieraReccondition)lumiera_reccond_section_.lock)->cond,                                     \
+                       &((LumieraReccondition)lumiera_reccond_section_.lock)->reccndmutex);                             \
     NOBUG_RESOURCE_STATE_RAW (lumiera_reccond_section_.flag, NOBUG_RESOURCE_RECURSIVE, lumiera_reccond_section_.rh);    \
   } while (!(expr))
 
@@ -114,7 +114,7 @@
   do {                                                                                                  \
     REQUIRE (lumiera_reccond_section_.lock, "Condition recmutex not locked");                           \
     TRACE(NOBUG_FLAG_RAW(lumiera_reccond_section_.flag), "Signal %p", &lumiera_reccond_section_);       \
-    pthread_cond_signal (&((LumieraCondition)lumiera_reccond_section_.lock)->cond);                     \
+    pthread_cond_signal (&((LumieraReccondition)lumiera_reccond_section_.lock)->cond);                  \
   } while (0)
 
 
@@ -127,7 +127,7 @@
   do {                                                                                                  \
     REQUIRE (lumiera_reccond_section_.lock, "Condition recmutex not locked");                           \
     TRACE(NOBUG_FLAG_RAW(lumiera_reccond_section_.flag), "Broadcast %p", &lumiera_reccond_section_);    \
-    pthread_cond_broadcast (&((LumieraCondition)lumiera_reccond_section_.lock)->cond);                  \
+    pthread_cond_broadcast (&((LumieraReccondition)lumiera_reccond_section_.lock)->cond);               \
   } while (0)
 
 
