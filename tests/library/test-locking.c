@@ -254,6 +254,7 @@ TEST ("conditionsection")
 }
 
 
+
 TEST ("conditionforgotunlock")
 {
   lumiera_condition cond;

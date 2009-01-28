@@ -23,7 +23,7 @@
 #define LUMIERA_THREADS_H
 
 //TODO: Support library includes//
-#include "lib/condition.h"
+#include "lib/reccondition.h"
 
 
 //TODO: Forward declarations//
@@ -96,7 +96,7 @@ LumieraThread
 lumiera_thread_run (enum lumiera_thread_class kind,
                     void (*start_routine)(void *),
                     void * arg,
-                    LumieraCondition finished,
+                    LumieraReccondition finished,
                     const char* purpose,
                     struct nobug_flag* flag);
 
