@@ -67,7 +67,8 @@ namespace proc {
      * ProcessImpl instance and have to manage the lifecycle manually.
      */
     class ProcessImpl
-      : public lumiera_playprocess
+      : public lumiera_playprocess,
+        boost::noncopyable
       {
         uint fps_;
         bool play_;
@@ -77,7 +78,6 @@ namespace proc {
         
       public:
         ProcessImpl() ;
-        ~ProcessImpl();
         
         /* Implementation-level API to be used By DummyPlayerService */
         

@@ -87,10 +87,22 @@ namespace lib {
       template<class Y> explicit Handle (weak_ptr<Y> const& wr)  : smPtr_(wr)         { }
       template<class Y> explicit Handle (std::auto_ptr<Y> & ar)  : smPtr_(ar)         { }
       
-      Handle& operator= (Handle const& r)                          { smPtr_ = r.smPtr_; return *this; }  
+                        Handle& operator=(Handle const& r)         { smPtr_ = r.smPtr_; return *this; }
       template<class Y> Handle& operator=(shared_ptr<Y> const& sr) { smPtr_ = sr;       return *this; }
       template<class Y> Handle& operator=(std::auto_ptr<Y> & ar)   { smPtr_ = ar;       return *this; }
       
+      
+      /** Activation of the handle by the managing service.
+       *  @param impl the implementation object this handle is tied to
+       *  @param whenDead functor to be invoked when reaching end-of-life 
+       */
+      template<typename DEL>
+      Handle&
+      activate (IMP* impl, DEL whenDead)
+        {
+          smPtr_.reset (impl, whenDead);
+          return *this;
+        }
       
       /** deactivate this handle, so it isn't tied any longer
        *  to the associated implementation or service object.
@@ -106,24 +118,11 @@ namespace lib {
       /** implicit conversion to "bool" */ 
       operator __unspecified_bool_type()  const { return  &Handle::smPtr_; } // never throws
       bool operator! ()                   const { return !bool(smPtr_); }   // dito
-
+      
       
       
       
     protected:
-      
-      /** Activation of the handle by the managing service.
-       * @param impl the implementation object this handle is tied to
-       * @param whenDead functor to be invoked when reaching end-of-life 
-       */
-      template<typename DEL>
-      Handle&
-      activate (IMP* impl, DEL whenDead)
-        {
-          smPtr_.reset (impl, whenDead);
-          return *this;
-        }
-      
       IMP& 
       impl()
         {

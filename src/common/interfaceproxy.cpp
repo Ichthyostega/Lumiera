@@ -28,31 +28,6 @@
 
 using util::cStr;
 
-
-#include "include/guinotificationfacade.h"
-
-namespace gui {
-  
-  /** storage for the facade proxy factory used by client code to invoke through the interface */
-  lumiera::facade::Accessor<GuiNotification> GuiNotification::facade;
-
-} // namespace gui
-
-
-
-#include "proc/play/dummy-player-service.hpp"
-
-namespace proc {
-  namespace play {
-  
-  /** storage for the DummyPlayer facade proxy factory... */
-  lumiera::facade::Accessor<DummyPlayer> DummyPlayer::facade;
-  
-} }
-
-
-
-
 namespace lumiera {
   namespace facade {
   
@@ -117,10 +92,30 @@ namespace lumiera {
         Proxy<IHA>::close();
       }
     
-    
+   } // namespace facade
+  
+} // namespace lumiera
+   
+
+
+
   
     /* ==================== GuiNotification =================================== */
     
+#include "include/guinotificationfacade.h"
+
+namespace gui {
+  
+  /** storage for the facade proxy factory used by client code to invoke through the interface */
+  lumiera::facade::Accessor<GuiNotification> GuiNotification::facade;
+
+} // namespace gui
+
+
+
+namespace lumiera {
+  namespace facade {
+
     typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
                           , gui::GuiNotification
                           > Handle_GuiNotification;
@@ -144,7 +139,10 @@ namespace lumiera {
     template  void openProxy<Handle_GuiNotification>  (Handle_GuiNotification const&);
     template  void closeProxy<Handle_GuiNotification> (void);
     
-    
+   } // namespace facade
+  
+} // namespace lumiera
+   
     
     
     
@@ -152,6 +150,20 @@ namespace lumiera {
   
     /* ==================== DummyPlayer ======================================= */
     
+#include "proc/play/dummy-player-service.hpp"
+
+namespace proc {
+  namespace play {
+  
+  /** storage for the DummyPlayer facade proxy factory... */
+  lumiera::facade::Accessor<DummyPlayer> DummyPlayer::facade;
+  
+} }
+
+
+namespace lumiera {
+  namespace facade {
+
     typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)
                                      , proc::play::DummyPlayer
                                      > Handle_DummyPlayer;

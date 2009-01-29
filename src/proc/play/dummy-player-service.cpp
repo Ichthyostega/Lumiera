@@ -291,8 +291,9 @@ namespace proc  {
     /* === Process Implementation === */
     
     
-    ProcessImpl::ProcessImpl() : fps_(0), play_(false), imageGen_(0) {}
-    ProcessImpl::~ProcessImpl() {}
+    ProcessImpl::ProcessImpl()
+      : fps_(0), play_(false), imageGen_(0)
+      { }
     
     
     DummyPlayer::Process

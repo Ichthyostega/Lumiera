@@ -86,8 +86,6 @@ namespace proc {
         class Process
           : public lib::Handle<ProcessImpl>
           {
-            friend class ProcessImpl; 
-                  
           public:
             void        play(bool);
             void* const getFrame();
