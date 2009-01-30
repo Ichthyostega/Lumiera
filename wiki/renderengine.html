@@ -1375,16 +1375,29 @@ Thus, the Proc-Layer exposes (one or several) facade interfaces for the GUI to u
 
 </pre>
 </div>
-<div title="GuiIntegration" modifier="Ichthyostega" created="200812050532" tags="overview" changecount="1">
-<pre>Considering how to interface to and integrate with the GUI Layer. Running the GUI is //optional,// but it requires to be [[started up|GuiStart]], installing the necessary LayerSeparationInterfaces.</pre>
+<div title="GuiIntegration" modifier="Ichthyostega" modified="200901300207" created="200812050532" tags="overview" changecount="2">
+<pre>Considering how to interface to and integrate with the GUI Layer. Running the GUI is //optional,// but it requires to be [[started up|GuiStart]], installing the necessary LayerSeparationInterfaces. As an example how to integrate the GUI with the lower layers, in 1/2009 we created an PlayerDummy, which &quot;pulls&quot; dummy frames from the (not yet existing) engine and displays them within an XV viewer widget.
+</pre>
 </div>
-<div title="GuiStart" modifier="Ichthyostega" modified="200812060214" created="200812050525" tags="GuiIntegration" changecount="4">
+<div title="GuiStart" modifier="Ichthyostega" modified="200901300205" created="200812050525" tags="GuiIntegration" changecount="8">
 <pre>Starting up the GUI is optional and is considered part of the Application start/stop and lifecycle.
 * main and AppState activate the lifecyle methods on the ~GuiSubsysDescriptor
-* loading a GuiStarterPlugin creates an instance of the notification interface within the InterfaceSystem
-* its implementation (within GuiStarterPlugin) is linked against the GuiNotificationFacade, i.e. the actual implementation. This link is hard wired.
-* the process of loading this GuiStarterPlugin creates an interface ref on the calling side, which is made available through the usual singleton factory embedded within the GuiNotificationFacade interface. {{red{TODO current solution doesn't handle shutdown correctly}}}
-* activating this singleton factory yields the (single) instance of the forwarding proxy, which calls through this interface ref.
+* loading a GuiStarterPlugin actually
+** loads the GUI (shared lib)
+** creates instances of all the GUI services available through LayerSeparationInterfaces
+*** GuiNotificationFacade
+*** DisplayFacade
+** Finally, the ~GTK-main() is invoked.
+
+!public services
+The GUI provides a small number of public services, callable through LayerSeparationInterfaces. Besides that, the main purpose of the GUI of course is user interaction. Effectively the behaviour of the whole system is driven by GUI events to a large extent. These events are executed within the event handling thread (~GTK-main-Thread) and may in turn invoke services of the lower layers, again through the respective LayerSeparationInterfaces.
+But the question of special interest here is how the //public services// of the GUI are implemented and made accessible for the lower Layers. Layer isolation is an issue here. If implemented in a rigorous manner, no facility within one layer may invoke implementation code of another layer directly. In practice, this tends to put quite some additional burden on the implementer, without and obvious benefit. Thus we decided to lower the barrier somewhat: while we still require that all service invoking calls are written against an public LayerSeparationInterface, actually the GUI (shared lib) is //linked// against the respective shared libs of the lower layers, thus especially enabling the exchange of iterators, closures and functor objects.
+
+Note that we retain strict isolation in the other direction: no part of the lower layers is allowed to call directly into the GUI. Thus it's especially interesting how access to some GUI public service from the lower layers works in detail.
+* when the GUI plugin starts, instances of the Services implementing those public service interfaces are created.
+* these service objects in turn hold an ~InstanceHandle, which cares to register and open the corresponding C Language Interface
+* additionally this InstanceHandle is configured such as to create an &quot;facade proxy&quot; object, which is implemented within liblumieracommon.so
+Now, when invoking an operation on some public interface, the code in the lower layers actually executes an implementation of this operation //on the facade proxy,// which in turn forwards the call through the CL interface into the GUI, where it is actually implemented by the corresponding service object instance.
 </pre>
 </div>
 <div title="HighLevelModel" modifier="Ichthyostega" modified="200808160329" created="200808152311" tags="spec design discuss" changecount="32">
@@ -1801,11 +1814,11 @@ From experiences with other middle scale projects, I prefer having the test code
 [img[Example: Interfaces/Namespaces of the ~Session-Subsystems|uml/fig130053.png]]
 </pre>
 </div>
-<div title="LayerSeparationInterfaces" modifier="Ichthyostega" modified="200812060633" created="200812050619" tags="def" changecount="2">
+<div title="LayerSeparationInterfaces" modifier="Ichthyostega" modified="200901300233" created="200812050619" tags="def" changecount="3">
 <pre>Lumiera uses a 3-layered architecture. Separation between layers is crucial. Any communication between the layers regarding the normal operation of the application should //at least be initiated// through ''Layer abstraction interfaces''. This is a low-impact version of layering, because, aside from this triggering, direct cooperation of parts within the single Lumiera process is allowed, under the condition that is is implemented using additional abstractions (interfaces with implementation level granularity). We stick to the policy of //disallowing direct coupling of implementations located in different layers.//
 
 To implement such a structure, each layer separation interface actually is comprised of several parts:
-* an CLI interface to be installed into the InterfaceSystem
+* an C Language Interface (&quot;CL Interface&quot;) to be installed into the InterfaceSystem
 * a facade interface defining the respective abstractions in terms of the implementation language (C or C++)
 * a implementation object on the service proiding side which is directly addressed by the implementation instantiated within the InterfaceSystem
 * a proxy object on the client side, which usually is given inline alongside with the CLI interface definition.
@@ -2782,6 +2795,16 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;task&gt;&gt;sort and group the assembled list of [[wiring requests|WiringRequest]] by pipes
 
 &lt;&lt;tasksum end&gt;&gt;
+</pre>
+</div>
+<div title="PlayerDummy" modifier="Ichthyostega" modified="200901300225" created="200901300209" tags="GuiIntegration" changecount="5">
+<pre>Joelholdsworth and Ichthyo created this player mockup in 1/2009 to find out about the implementation details regarding integration and colaboration between the layers. There is no working render engine yet, thus we use a ~DummyImageGenerator for creating faked yuv frames to display. Within the GUI, there is a ~PlaybackController hooked up with the transport controls on the timeline pane.
+# first everything was contained within ~PlaybackController, which spawns a thread for periodically creating those dummy frames
+# then, a ~PlayerService was factored out, now implemented within Proc-Layer (probably to be relocated into the backend for the final version). A new LayerSeparationInterface called ''~DummyPlayer'' was created and set up as a [[Subsystem]] within main().
+# the next step was to support multiple playback processes going on in parallel. Now, the ~PlaybackController holds an smart-handle to the ~PlayProcess currently generating output for this viewer, and invokes the transport control functions and the pull frame call on this handle.
+# then, also the tick generation (and thus the handling of the thread which pulls the frames) was factored out and pushed down into the mentioned ~PlayProcess. For this to work, the ~PlaybackController now makes a display slot available on the public GUI DisplayFacade interface.
+
+[img[Overview to the dummy player operation|draw/PlayerArch1.png]]
 </pre>
 </div>
 <div title="Playlist" modifier="Ichthyostega" modified="200706250727" created="200706220456" tags="def" changecount="3">
