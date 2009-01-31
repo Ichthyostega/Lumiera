@@ -70,6 +70,7 @@ using std::string;
 using lib::Thread;
 using std::tr1::bind;
 using lumiera::Subsys;
+using lumiera::error::LUMIERA_ERROR_STATE;
 using gui::LUMIERA_INTERFACE_INAME(lumieraorg_Gui, 1);
 
 
@@ -77,7 +78,7 @@ namespace gui {
   
   namespace { // implementation details
     
-    /** 
+    /******************************************************************************
      * Implement the necessary steps for actually making the Lumiera Gui available.
      * Open the business interface(s) and start up the GTK GUI main event loop.
      */
@@ -133,10 +134,22 @@ namespace gui {
   } // (End) impl details
   
   
-  void
+  
+  
+  bool
   kickOff (Subsys::SigTerm& terminationHandle)
   {
-    Thread ("GUI-Main", bind (&runGUI, terminationHandle));
+    try
+      {
+        Thread ("GUI-Main", bind (&runGUI, terminationHandle));
+        return true; // if we reach this line...
+      }
+    catch(...)
+      {
+        if (!lumiera_error_peek())
+          LUMIERA_ERROR_SET (gui, STATE, "unexpected error when starting the GUI thread");
+        return false;
+      }
   }
 
 } // namespace gui
@@ -226,9 +239,9 @@ extern "C" { /* ================== define an lumieraorg_Gui instance ===========
                                           , NULL  /* on open  */
                                           , NULL  /* on close */
                                           , LUMIERA_INTERFACE_INLINE (kickOff, "\255\142\006\244\057\170\152\312\301\372\220\323\230\026\200\065",
-                                                                      void, (void* termSig),
+                                                                      bool, (void* termSig),
                                                                         { 
-                                                                          gui::kickOff (*reinterpret_cast<Subsys::SigTerm *> (termSig));
+                                                                          return gui::kickOff (*reinterpret_cast<Subsys::SigTerm *> (termSig));
                                                                         }
                                                                      )
                                           )

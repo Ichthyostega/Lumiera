@@ -1,8 +1,8 @@
 /*
-  controller.hpp  -  Declaration of the controller object
+  NoBugInit  -  pull up NoBug automagically in static initialisation 
  
   Copyright (C)         Lumiera.org
-    2009,               Joel Holdsworth <joel@airwebreathe.org.uk>
+    2009,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -18,40 +18,26 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
-/** @file controller/controller.hpp
- ** This file contains the definition of the controller object
- */
-
-#ifndef CONTROLLER_HPP
-#define CONTROLLER_HPP
-
-#include "playback-controller.hpp"
+* *****************************************************/
 
 
-namespace gui {
+#include "lib/nobug-init.hpp"
 
-namespace model {
-class Project;
-} // namespace model
+
+
+namespace lumiera {
   
-namespace controller { 
+  void 
+  initialise_NoBug () 
+  {
+    NOBUG_INIT;
 
-class Controller
-{
-public:
-  Controller(model::Project &model_project);
+////////////////////////////////////////////////////////////////////////TODO: a better way to detect Alpha/beta builds
+#ifdef DEBUG
+    static uint callCount = 0;
+    ASSERT ( 0 == callCount++ );
+#endif
+  }
 
-  PlaybackController& get_playback_controller();
-
-private:
-  model::Project &project;
-  
-  PlaybackController playback;
-};
-
-}   // namespace controller
-}   // namespace gui
-
-#endif // CONTROLLER_HPP
+}
 

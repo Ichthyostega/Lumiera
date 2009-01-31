@@ -37,6 +37,7 @@ This code is heavily inspired by
 
 #include "lib/singletonpolicies.hpp"  // several Policies usable together with SingletonFactory
 
+#include "lib/nobug-init.hpp"
 #include "include/logging.h"
 #include "lib/util.hpp"
 #include "lib/sync-classlock.hpp"
@@ -82,10 +83,6 @@ namespace lumiera {
         {
           if (!pInstance_)
             {
-              NOBUG_INIT;
-              FIXME ("NoBug wasnt even basically initialized here, the old ON_BASIC_INIT did not initialize it in proper order"
-                     " so I explicitly init it here (calling init multiple times does not harm) --cehteh"
-                     " nb maybe as exception we can use an explicit mutex here since pthread mutexes can be statically initialized");
               ThreadLock guard  SIDEEFFECT;
 
               if (!pInstance_)

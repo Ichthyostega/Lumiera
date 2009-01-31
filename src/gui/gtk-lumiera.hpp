@@ -28,6 +28,7 @@
 #ifndef GTK_LUMIERA_HPP
 #define GTK_LUMIERA_HPP
 
+#include <locale>
 #include <gtkmm.h>
 #include <nobug.h>               // need to include this after gtkmm.h, because types.h from GTK tries to shaddow the ERROR macro from windows, which kills NoBug's ERROR macro
 #include <vector>

@@ -37,6 +37,7 @@ liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/allocationcluster.cpp		\
 	$(liblumiera_la_srcdir)/lumitime.cpp			\
 	$(liblumiera_la_srcdir)/lifecycle.cpp			\
+	$(liblumiera_la_srcdir)/nobug-init.cpp			\
 	$(liblumiera_la_srcdir)/util.cpp			\
 	$(liblumiera_la_srcdir)/visitor.cpp			\
 	$(liblumiera_la_srcdir)/query.cpp			\
@@ -64,6 +65,7 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/scopedholdertransfer.hpp	\
 	$(liblumiera_la_srcdir)/scopedholder.hpp		\
 	$(liblumiera_la_srcdir)/lifecycleregistry.hpp		\
+	$(liblumiera_la_srcdir)/nobug-init.hpp			\
 	$(liblumiera_la_srcdir)/factory.hpp			\
 	$(liblumiera_la_srcdir)/frameid.hpp			\
 	$(liblumiera_la_srcdir)/singleton.hpp			\

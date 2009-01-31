@@ -1,5 +1,5 @@
 /*
-  timeline-track.cpp  -  Implementation of the timeline track object
+  playback-controller.cpp  -  Implementation of the playback controller object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,52 +20,78 @@
  
 * *****************************************************/
 
-#include "playback-controller.hpp"
-#include "../gtk-lumiera.hpp"
+#include "gui/controller/playback-controller.hpp"
+#include "lib/error.hpp"
+#include <nobug.h>
 
 namespace gui {
 namespace controller { 
 
 PlaybackController::PlaybackController() :
+  thread(0),
   finish_playback_thread(false),
   playing(false)
-{
-  start_playback_thread();
-}
+{ }
+
 
 PlaybackController::~PlaybackController()
 {
-  mutex.lock();
-  finish_playback_thread = true;
-  mutex.unlock();
-  thread->join();
+  end_playback_thread();
 }
 
 void
 PlaybackController::play()
 {
-  Glib::Mutex::Lock lock(mutex);
-  playing = true;
+  if (playing && thread && playHandle)
+    {
+      playHandle.play(true);
+      return;
+    }
+  if (thread)
+    end_playback_thread();
+  
+  {
+    Lock sync(this);
+    try
+      {
+        playHandle =  proc::play::DummyPlayer::facade().start();
+        start_playback_thread();
+        playing = true;
+      }
+    catch (lumiera::error::State& err)
+      {
+        WARN (gui, "failed to start playback: %s" ,err.what());
+        lumiera_error();
+        playing = false;
+      }
+  }
 }
 
 void
 PlaybackController::pause()
 {
-  Glib::Mutex::Lock lock(mutex);
+  Lock sync(this);
   playing = false;
+  if (playHandle)
+    playHandle.play(false);
 }
 
 void
 PlaybackController::stop()
 {
-  Glib::Mutex::Lock lock(mutex);
-  playing = false;
+  {
+    Lock sync(this);
+    playing = false;
+    playHandle.close();
+    // TODO: stop player somehow?
+  }
+  end_playback_thread();
 }
 
 bool
 PlaybackController::is_playing()
 {
-  Glib::Mutex::Lock lock(mutex);
+  Lock sync(this);
   return playing;
 }
 
@@ -73,8 +99,23 @@ void
 PlaybackController::start_playback_thread()
 {
   dispatcher.connect(sigc::mem_fun(this, &PlaybackController::on_frame));
+  finish_playback_thread = false;
   thread = Glib::Thread::create (sigc::mem_fun(
     this, &PlaybackController::playback_thread), true);
+}
+
+void
+PlaybackController::end_playback_thread()
+{
+  {
+    Lock sync(this);
+    finish_playback_thread = true;
+    playing = false;
+  }
+  if (thread)
+    thread->join();
+  thread = 0;
+  finish_playback_thread = false;
 }
 
 void
@@ -90,115 +131,43 @@ PlaybackController::playback_thread()
   for(;;)
     {
       {
-        Glib::Mutex::Lock lock(mutex);
+        Lock sync(this);
         if(finish_playback_thread)
           return;
       }
       
       if(is_playing())
         pull_frame();
-        
-      Glib::Thread::yield();
+      
+      usleep(40000); // ca 25 frames pre second
     }
 }
 
-typedef unsigned char byte;
-
-inline int
-clamp(const int &val, const int &maxval, const int &minval)
-{
-  if(val > maxval) return maxval;
-  if(val < minval) return minval;
-  return val;
-}
-
-inline void
-rgb_to_yuv(int r, int g, int b, byte &y, byte &u, byte &v)
-{
-  // This code isn't great, but it does the job
-  y = (byte)clamp((299 * r + 587 * g + 114 * b) / 1000, 235, 16);
-  v = (byte)clamp((500 * r - 419 * g - 81 * b) / 1000 + 127, 255, 0);
-  u = (byte)clamp((-169 * r - 331 * g + 500 * b) / 1000 + 127, 255, 0);
-}
-
-void rgb_buffer_to_yuy2(unsigned char *in, unsigned char *out)
-{
-  for(int i = 0; i < 320*240*2; i+=4)
-    {
-      byte y0, u0, v0;
-      const byte r0 = *(in++);
-      const byte g0 = *(in++);
-      const byte b0 = *(in++);
-      rgb_to_yuv(r0, g0, b0, y0, u0, v0);
-      
-      byte y1, u1, v1;
-      const byte r1 = *(in++);
-      const byte g1 = *(in++);
-      const byte b1 = *(in++);
-      rgb_to_yuv(r1, g1, b1, y1, u1, v1);
-      
-      out[i] = y0;
-      out[i + 1] = u0;
-      out[i + 2] = y1;
-      out[i + 3] = v0;
-    }
-}
 
 void
 PlaybackController::pull_frame()
 {
-  static int frame = 0;
-  unsigned char in[320 * 240 * 3];
+  REQUIRE (is_playing());
+  REQUIRE (playHandle);
   
-  frame--;
+  unsigned char * newBuffer = reinterpret_cast<unsigned char*> (playHandle.getFrame());
   
-  if(frame <= 0)
-    frame = 200;
-  
-  if(frame > 150)
-  {
-    for(int i = 0; i < 320*240*3; i+=3)
-      {
-        byte value = (byte)rand();
-        in[i] = value;
-        in[i+1] = value;
-        in[i+2] = value;
-      }
-  }
-  else
-  {  
-    unsigned char row[320 * 3];
-    
-    for(int x = 0; x < 320; x++)
-      {
-        byte &r = row[x*3];
-        byte &g = row[x*3+1];
-        byte &b = row[x*3+2];
-        
-        if(x < 1*320/7) r = 0xC0, g = 0xC0, b = 0xC0;
-        else if(x < 2*320/7) r = 0xC0, g = 0xC0, b = 0x00;
-        else if(x < 3*320/7) r = 0x00, g = 0xC0, b = 0xC0;
-        else if(x < 4*320/7) r = 0x00, g = 0xC0, b = 0x00;
-        else if(x < 5*320/7) r = 0xC0, g = 0x00, b = 0xC0;
-        else if(x < 6*320/7) r = 0xC0, g = 0x00, b = 0x00;
-        else r = 0x00, g = 0x00, b = 0xC0;
-      }
-    
-    for(int y = 0; y < 240; y++)
+  if (newBuffer != currentBuffer)
     {
-      memcpy(in + y*320*3, row, sizeof(row));
+      currentBuffer = newBuffer; 
+      dispatcher.emit();
     }
-  }
-  
-  rgb_buffer_to_yuy2(in, buffer);
-
-  dispatcher.emit();
+  else
+    {
+      TRACE (render, "frame dropped?");
+    }
 }
+
 
 void
 PlaybackController::on_frame()
 {
-  frame_signal.emit(buffer);
+  frame_signal.emit(currentBuffer);
 }
 
 }   // namespace controller
