@@ -30,10 +30,10 @@ using util::cStr;
 
 namespace lumiera {
   namespace facade {
-  
-  
+    
+    
     LUMIERA_ERROR_DEFINE (FACADE_LIFECYCLE, "facade interface currently not accessible");  
-
+    
     
     template<class IHA>
     class Holder;
@@ -95,11 +95,11 @@ namespace lumiera {
    } // namespace facade
   
 } // namespace lumiera
-   
 
 
 
-  
+
+
     /* ==================== GuiNotification =================================== */
     
 #include "include/guinotification-facade.h"
@@ -115,7 +115,7 @@ namespace gui {
 
 namespace lumiera {
   namespace facade {
-
+    
     typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
                           , gui::GuiNotification
                           > Handle_GuiNotification;
@@ -132,7 +132,7 @@ namespace lumiera {
         
         
       public:
-        Proxy (IHandle const& iha) : THolder(iha) {} 
+        Proxy (IHandle const& iha) : THolder(iha) {}
       };
     
     
@@ -142,12 +142,59 @@ namespace lumiera {
    } // namespace facade
   
 } // namespace lumiera
-   
+
+
+
+
+
+    /* ==================== gui::Display ====================================== */
     
-    
-    
-    
+#include "include/display-facade.h"
+
+namespace lumiera {
   
+  /** storage for the facade proxy factory used by client code to invoke through the interface */
+  lumiera::facade::Accessor<Display> Display::facade;
+  
+} // namespace lumiera
+
+
+
+namespace lumiera {
+  namespace facade {
+    
+    typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_Display, 0)
+                          , lumiera::Display
+                          > Handle_Display;
+    
+    
+    template<>
+    class Proxy<Handle_Display>
+      : public Holder<Handle_Display>
+      {
+        //----Proxy-Implementation-of-lumiera::Display--------
+        
+        void displayInfo (string const& text)           { _i_.displayInfo (cStr(text)); }
+        void triggerGuiShutdown (string const& cause)   { _i_.triggerGuiShutdown (cStr(cause)); }
+        
+        
+      public:
+        Proxy (IHandle const& iha) : THolder(iha) {} 
+      };
+    
+    
+    template  void openProxy<Handle_Display>  (Handle_Display const&);
+    template  void closeProxy<Handle_Display> (void);
+    
+   } // namespace facade
+  
+} // namespace lumiera
+
+
+
+
+
+
     /* ==================== DummyPlayer ======================================= */
     
 #include "proc/play/dummy-player-service.hpp"
@@ -163,7 +210,7 @@ namespace proc {
 
 namespace lumiera {
   namespace facade {
-
+    
     typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)
                                      , proc::play::DummyPlayer
                                      > Handle_DummyPlayer;
@@ -184,8 +231,8 @@ namespace lumiera {
          *  and thus leaves us only with one level of indirection,
          *  irrespective if using the C or C++ interface.
          */
-        Process start()                           
-          { 
+        Process start()
+          {
             ProcessImpl* pP = static_cast<ProcessImpl*> (_i_.startPlay());
             
             if (!pP)
@@ -197,7 +244,7 @@ namespace lumiera {
         
         
       public:
-        Proxy (IHandle const& iha) : THolder(iha) {} 
+        Proxy (IHandle const& iha) : THolder(iha) {}
       };
     
     

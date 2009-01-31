@@ -98,6 +98,8 @@ namespace lumiera {
   class Display
     {
     public:
+      /** get an implementation instance of this service */
+      static lumiera::facade::Accessor<Display> facade;
       
       
       /**

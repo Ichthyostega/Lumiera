@@ -177,7 +177,7 @@ namespace proc  {
       
       
       LUMIERA_INTERFACE_INSTANCE (lumieraorg_DummyPlayer, 0
-                                 ,lumieraorg_DummyPlayerFacade
+                                 ,lumieraorg_DummyPlayerService
                                  , LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_DummyPlayerFacade_descriptor)
                                  , NULL /* on  open  */
                                  , NULL /* on  close */
@@ -249,7 +249,7 @@ namespace proc  {
       : error_("")
       , notifyTermination_(terminationHandle)
       , implInstance_(this,_instance)
-      , serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_DummyPlayer, 0, lumieraorg_DummyPlayerFacade))
+      , serviceInstance_( LUMIERA_INTERFACE_REF (lumieraorg_DummyPlayer, 0, lumieraorg_DummyPlayerService))
     {
       INFO (progress, "DummyPlayer Facade opened.");
     }
