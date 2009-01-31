@@ -25,6 +25,9 @@
 
 using namespace Gtk;
 using namespace Glib;
+using namespace boost;
+using namespace std;
+using namespace gui::workspace;
 
 namespace gui {
   
@@ -35,6 +38,22 @@ WindowManager::WindowManager()
 {
   register_app_icon_sizes();  
   register_stock_items();
+}
+
+void
+WindowManager::new_window(gui::model::Project &source_project,
+  gui::controller::Controller &source_controller)
+{ 
+  shared_ptr<WorkspaceWindow> window(
+    new WorkspaceWindow(source_project, source_controller));
+  REQUIRE(window);
+  
+  window->signal_delete_event().connect(sigc::mem_fun(
+    this, &WindowManager::on_window_closed));
+  
+  windowList.push_back(window);
+  
+  window->show();
 }
 
 bool
@@ -53,7 +72,38 @@ WindowManager::set_theme(Glib::ustring path)
 
   return true;
 }
+
+bool
+WindowManager::on_window_closed(GdkEventAny*)
+{    
+  list< shared_ptr<WorkspaceWindow> >::iterator iterator = 
+    windowList.begin();
+  while(iterator != windowList.end())
+    {
+      shared_ptr<WorkspaceWindow> window(*iterator);
+      REQUIRE(window);
+
+      if(!window->get_frame())
+        {
+          // This window has been closed
+          iterator = windowList.erase(iterator);
+        }
+      else
+        iterator++;
+    }
     
+  if(windowList.empty())
+    {
+      // All windows have been closed - we should exit
+      Main *main = Main::instance();
+      REQUIRE(main);
+      main->quit();
+    }
+      
+  // Unless this is false, the window won't close
+  return false;
+}
+
 GdkColor
 WindowManager::read_style_colour_property(
   Gtk::Widget &widget, const gchar *property_name,

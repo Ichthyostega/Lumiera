@@ -25,12 +25,21 @@
  ** @see gtk-lumiera.hpp
  */
 
+#include "gtk-lumiera.hpp"
+#include "workspace/workspace-window.hpp"
+
 #ifndef WINDOW_MANAGER_HPP
 #define WINDOW_MANAGER_HPP
 
-#include "gtk-lumiera.hpp"
-
 namespace gui {
+
+namespace model {
+  class Project;
+} // model
+
+namespace controller {
+  class Controller;
+} // model
 
 /**
  * The centralised manager of all lumiera-gui's windows.
@@ -42,6 +51,15 @@ public:
    * Default constructor
    **/
   WindowManager();
+  
+  /**
+   * Creates a new window connected to a specified project and
+   * controller
+   * @param source_project The project to connect the window to.
+   * @param source_controller The controller to connect the window to.
+   **/
+  void new_window(gui::model::Project &source_project,
+    gui::controller::Controller &source_controller);
 
   /**
    * Sets the theme of the lumiera-gui's.
@@ -49,7 +67,8 @@ public:
    * will be found.
    **/
   bool set_theme(Glib::ustring path);
-  
+
+public:
   /**
    * A utility function which reads a colour style from the GTK Style.
    * @param widget The widget to load the style out of.
@@ -62,6 +81,13 @@ public:
   static GdkColor read_style_colour_property(
     Gtk::Widget &widget, const gchar *property_name,
     guint16 red, guint16 green, guint16 blue);
+
+private:
+
+  /**
+   * An event handler for when a window has been closed.
+   **/
+  bool on_window_closed(GdkEventAny*);
     
 private:
 
@@ -141,6 +167,10 @@ private:
    **/
   static bool add_stock_icon_from_path(Glib::ustring path,
     Gtk::IconSet &icon_set, Gtk::IconSize size, bool wildcard);
+    
+private:
+  
+  std::list< boost::shared_ptr<workspace::WorkspaceWindow> > windowList;
     
 public:
 

@@ -68,11 +68,9 @@ GtkLumiera::main(int argc, char *argv[])
   WindowManager window_manager;
 
   window_manager.set_theme("lumiera_ui.rc");
+  window_manager.new_window(project, controller);
 
-  WorkspaceWindow main_window(project, controller);
-
-  kit.run(main_window);
-  
+  kit.run();
 }
 
 
