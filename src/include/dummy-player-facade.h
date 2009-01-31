@@ -24,6 +24,7 @@
 #ifndef PROC_INTERFACE_DUMMYPLAYER_H
 #define PROC_INTERFACE_DUMMYPLAYER_H
 
+#include "include/display-facade.h"
 
 
 struct lumiera_playprocess_struct { };
