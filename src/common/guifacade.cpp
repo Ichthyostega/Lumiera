@@ -22,7 +22,7 @@
 
 
 #include "gui/guifacade.hpp"
-#include "include/guinotificationfacade.h"
+#include "include/guinotification-facade.h"
 #include "lib/sync.hpp"
 #include "lib/error.hpp"
 #include "lib/singleton.hpp"

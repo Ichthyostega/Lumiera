@@ -20,6 +20,19 @@
  
 */
 
+/** @file display-facade.hpp
+ ** Major public Interface of the Lumiera GUI. While generally speaking, the GUI
+ ** controls the application and thus acts on its own, it exposes some services
+ ** to the lower layers. Especially the lumiera::Display interface serves to
+ ** hand over calculated frames to the GUI for displaying them in a viewer.
+ ** It's a first draft as of 1/2009, probably it can be factored out into
+ ** a more general display service in future.
+ **
+ ** @see gui::GuiFacade
+ ** @see dummy-player-facade.h
+ ** 
+ */
+
 
 #ifndef GUI_INTERFACE_DISPLAY_H
 #define GUI_INTERFACE_DISPLAY_H
@@ -115,7 +128,9 @@ extern "C" {
 #include "common/interface.h"
 
 LUMIERA_INTERFACE_DECLARE (lumieraorg_Display, 0
-                          , LUMIERA_INTERFACE_SLOT (void,               put,(LumieraDisplaySlot, LumieraDisplayFrame, bool))
+                          , LUMIERA_INTERFACE_SLOT (void, allocate,(LumieraDisplaySlot)                     )
+                          , LUMIERA_INTERFACE_SLOT (void,  release,(LumieraDisplaySlot)                     )
+                          , LUMIERA_INTERFACE_SLOT (void,      put,(LumieraDisplaySlot, LumieraDisplayFrame))
 );
 
 

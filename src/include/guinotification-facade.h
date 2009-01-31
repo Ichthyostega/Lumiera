@@ -20,8 +20,8 @@
  
 */
 
-/** @file guinotificationfacade.hpp
- ** Main public Interface of the Lumiera GUI. While generally speaking, the GUI
+/** @file guinotification-facade.hpp
+ ** Major public Interface of the Lumiera GUI. While generally speaking, the GUI
  ** controls the application and thus acts on its own, it exposes some services
  ** usable by scripts or the two lower layers. The main purpose of these services
  ** is to push informations and status updates into the GUI.

@@ -102,7 +102,7 @@ namespace lumiera {
   
     /* ==================== GuiNotification =================================== */
     
-#include "include/guinotificationfacade.h"
+#include "include/guinotification-facade.h"
 
 namespace gui {
   

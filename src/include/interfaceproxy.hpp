@@ -69,7 +69,7 @@
  ** @see plugin.h
  ** @see lumiera::Subsys
  ** @see guinotification.h usage example (facade interface)
- ** @see guinotificationfacade.cpp corresponding implementation within the GUI
+ ** @see guinotification-facade.cpp corresponding implementation within the GUI
  */
 
 
