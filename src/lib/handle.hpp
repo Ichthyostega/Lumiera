@@ -68,27 +68,28 @@ namespace lib {
    */
   template<class IMP>
   class Handle 
-    : protected std::tr1::shared_ptr<IMP>
     {
+    protected:
+      std::tr1::shared_ptr<IMP> smPtr_;
+      
     public:
-      typedef std::tr1::shared_ptr<IMP> SmP;
       
       /** by default create an Null handle.
        *  Typically this is followed by activating
        *  the handle by the managing service.
        */
       Handle ( )
-      : SmP()
+      : smPtr_()
       { }
       
-                                 Handle (Handle const& r)        : SmP(r)  {}
-      template<class Y>          Handle (shared_ptr<Y> const& r) : SmP(r)  {}
-      template<class Y> explicit Handle (weak_ptr<Y> const& wr)  : SmP(wr) {}
-      template<class Y> explicit Handle (std::auto_ptr<Y> & ar)  : SmP(ar) {}
+                                 Handle (Handle const& r)        : smPtr_(r.smPtr_)   { }
+      template<class Y>          Handle (shared_ptr<Y> const& r) : smPtr_(r)          { }
+      template<class Y> explicit Handle (weak_ptr<Y> const& wr)  : smPtr_(wr)         { }
+      template<class Y> explicit Handle (std::auto_ptr<Y> & ar)  : smPtr_(ar)         { }
       
-      Handle& operator= (Handle const& r)                          { SmP::operator= (r);  return *this; }  
-      template<class Y> Handle& operator=(shared_ptr<Y> const& sr) { SmP::operator= (sr); return *this; }
-      template<class Y> Handle& operator=(std::auto_ptr<Y> & ar)   { SmP::operator= (ar); return *this; }
+      Handle& operator= (Handle const& r)                          { smPtr_ = r.smPtr_; return *this; }  
+      template<class Y> Handle& operator=(shared_ptr<Y> const& sr) { smPtr_ = sr;       return *this; }
+      template<class Y> Handle& operator=(std::auto_ptr<Y> & ar)   { smPtr_ = ar;       return *this; }
       
       
       /** deactivate this handle, so it isn't tied any longer
@@ -97,14 +98,14 @@ namespace lib {
        *  went out of scope, the associated implementation
        *  reaches end-of-life.
        */
-      void close ()  { SmP::reset(); }
+      void close ()  { smPtr_.reset(); }
       
       
-      typedef IMP* SmP::*__unspecified_bool_type;
+      typedef std::tr1::shared_ptr<IMP> Handle::*__unspecified_bool_type;
       
       /** implicit conversion to "bool" */ 
-      operator __unspecified_bool_type()  const { return *this; } // never throws
-      bool operator! ()                   const { return !SmP::get(); }  // dito
+      operator __unspecified_bool_type()  const { return  &Handle::smPtr_; } // never throws
+      bool operator! ()                   const { return !bool(smPtr_); }   // dito
 
       
       
@@ -119,15 +120,15 @@ namespace lib {
       Handle&
       activate (IMP* impl, DEL whenDead)
         {
-          SmP::reset (impl, whenDead);
+          smPtr_.reset (impl, whenDead);
           return *this;
         }
       
       IMP& 
       impl()
         {
-          REQUIRE (SmP::get(), "Lifecycle-Error");
-          return *(SmP::get());
+          REQUIRE (smPtr_.get(), "Lifecycle-Error");
+          return *(smPtr_.get());
         }
     };
   
