@@ -69,6 +69,9 @@ public:
   bool set_theme(Glib::ustring path);
 
 public:
+
+  static WindowManager* instance();
+
   /**
    * A utility function which reads a colour style from the GTK Style.
    * @param widget The widget to load the style out of.
@@ -87,7 +90,7 @@ private:
   /**
    * An event handler for when a window has been closed.
    **/
-  bool on_window_closed(GdkEventAny*);
+  bool on_window_closed(GdkEventAny* event);
     
 private:
 

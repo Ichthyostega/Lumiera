@@ -73,17 +73,31 @@ WindowManager::set_theme(Glib::ustring path)
   return true;
 }
 
+WindowManager*
+WindowManager::instance()
+{
+  // Initialized during first access
+  static WindowManager manager;
+  return &manager;
+}
+
 bool
-WindowManager::on_window_closed(GdkEventAny*)
-{    
+WindowManager::on_window_closed(GdkEventAny* event)
+{ 
+  REQUIRE(event);
+  REQUIRE(event->window);
+     
   list< shared_ptr<WorkspaceWindow> >::iterator iterator = 
     windowList.begin();
+  
   while(iterator != windowList.end())
     {
-      shared_ptr<WorkspaceWindow> window(*iterator);
-      REQUIRE(window);
+      shared_ptr<WorkspaceWindow> workspace_window(*iterator);
+      REQUIRE(workspace_window);
 
-      if(!window->get_frame())
+      RefPtr<Gdk::Window> window = workspace_window->get_window();
+      REQUIRE(window);
+      if(window->gobj() == event->window)
         {
           // This window has been closed
           iterator = windowList.erase(iterator);

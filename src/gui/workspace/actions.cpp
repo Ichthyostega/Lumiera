@@ -23,6 +23,8 @@
 #include "actions.hpp"
 #include "workspace-window.hpp"
 
+#include "../window-manager.hpp"
+
 #include "../dialogs/render.hpp"
 #include "../dialogs/preferences-dialog.hpp"
 #include "../dialogs/name-chooser.hpp"
@@ -188,7 +190,8 @@ Actions::on_menu_view_viewer()
 void
 Actions::on_menu_view_new_window()
 {
-  g_message("New Window");
+  WindowManager::instance()->new_window(workspaceWindow.project,
+    workspaceWindow.controller); 
 }
 
 /* ===== Sequence Menu Event Handlers ===== */
