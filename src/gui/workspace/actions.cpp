@@ -88,6 +88,10 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
     sigc::mem_fun(*this, &Actions::on_menu_view_viewer));
   actionGroup->add(viewerPanelAction);
   
+  actionGroup->add(Action::create("ViewNewWindow",
+    Gtk::StockID("new_window")),
+    sigc::mem_fun(*this, &Actions::on_menu_view_new_window));
+  
   // Sequence Menu
   actionGroup->add(Action::create("SequenceMenu", _("_Sequence")));
   actionGroup->add(Action::create("SequenceAdd", _("_Add...")),
@@ -179,6 +183,12 @@ Actions::on_menu_view_viewer()
 {
   if(!is_updating_action_state)
     workspaceWindow.viewerPanel->show(viewerPanelAction->get_active());
+}
+
+void
+Actions::on_menu_view_new_window()
+{
+  g_message("New Window");
 }
 
 /* ===== Sequence Menu Event Handlers ===== */

@@ -120,6 +120,8 @@ WorkspaceWindow::create_ui()
       "      <menuitem action='ViewResources'/>"
       "      <menuitem action='ViewTimeline'/>"
       "      <menuitem action='ViewViewer'/>"
+      "      <separator/>"
+      "      <menuitem action='ViewNewWindow'/>"
       "    </menu>"
       "    <menu action='SequenceMenu'>"
       "      <menuitem action='SequenceAdd'/>"

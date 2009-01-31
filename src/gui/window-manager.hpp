@@ -103,9 +103,21 @@ private:
    **/
   static bool add_stock_icon(Gtk::IconSet &icon_set,
     const Glib::ustring& icon_name, Gtk::IconSize size, bool wildcard);
+
+  /**
+   * Loads an icon from a the icon theme
+   * @param icon_set The icon set to add the icon to.
+   * @param icon_name The name of the icon to load.
+   * @param size The size of the icon to load.
+   * @param wildcard This value is set to true if this icon is
+   * wildcarded.
+   * @return Returns true if the icon was loaded successfully.
+   **/
+  static bool add_theme_icon_source(Gtk::IconSet &icon_set,
+    const Glib::ustring& icon_name, Gtk::IconSize size, bool wildcard);
   
   /**
-   * Loads an icon from a specific path and adds it to an icon set.
+   * Loads an icon from a non theme set.
    * @param icon_set The icon set to add the icon to.
    * @param base_dir The root icons directory to load from.
    * @param icon_name The file name of the icon to load.
@@ -114,9 +126,21 @@ private:
    * wildcarded.
    * @return Returns true if the icon was loaded successfully.
    **/
-  static bool add_stock_icon_source(Gtk::IconSet &icon_set,
+  static bool add_non_theme_icon_source(Gtk::IconSet &icon_set,
     const Glib::ustring& base_dir, const Glib::ustring& icon_name,
     Gtk::IconSize size, bool wildcard);
+
+  /**
+   * Loads an icon from a specific path and adds it to an icon set.
+   * @param path The path to load from.
+   * @param icon_set The icon set to add the icon to.
+   * @param size The size of the icon to load.
+   * @param wildcard This value is set to true if this icon is
+   * wildcarded.
+   * @return Returns true if the icon was loaded successfully.
+   **/
+  static bool add_stock_icon_from_path(Glib::ustring path,
+    Gtk::IconSet &icon_set, Gtk::IconSize size, bool wildcard);
     
 public:
 

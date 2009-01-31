@@ -93,6 +93,8 @@ WindowManager::register_stock_items()
   add_stock_icon_set(factory, "panel-timeline", "panel_timeline", _("_Timeline"));
   add_stock_icon_set(factory, "panel-viewer", "panel_viewer", _("_Viewer"));
   
+  add_stock_icon_set(factory, "window-new", "new_window", _("New _Window"));
+  
   add_stock_icon_set(factory, "tool-arrow", "tool_arrow", _("_Arrow"));
   add_stock_icon_set(factory, "tool-i-beam", "tool_i_beam", _("_I-Beam"));
   
@@ -144,14 +146,19 @@ WindowManager::add_stock_icon_set(
 bool
 WindowManager::add_stock_icon(Gtk::IconSet &icon_set,
   const Glib::ustring& icon_name, Gtk::IconSize size, bool wildcard)
-{
+{ 
+  // Try the icon theme  
+  if(add_theme_icon_source(icon_set, icon_name, size, wildcard))
+    return true;
+    
   // Try the ~/.lumiera/icons folder
-  if(add_stock_icon_source(icon_set, ustring::compose("%1/%2",
+  if(add_non_theme_icon_source(icon_set, ustring::compose("%1/%2",
     GtkLumiera::get_home_data_path(), ustring("icons")),
     icon_name, size, wildcard))
     return true;
   
-  if(add_stock_icon_source(
+  // Try the local directory
+  if(add_non_theme_icon_source(
     icon_set, get_current_dir(), icon_name, size, wildcard))
     return true;
     
@@ -159,38 +166,68 @@ WindowManager::add_stock_icon(Gtk::IconSet &icon_set,
 }
 
 bool
-WindowManager::add_stock_icon_source(Gtk::IconSet &icon_set,
-  const Glib::ustring& base_dir, const Glib::ustring& icon_name,
-  Gtk::IconSize size, bool wildcard)
+WindowManager::add_theme_icon_source(Gtk::IconSet &icon_set,
+  const Glib::ustring& icon_name, Gtk::IconSize size, bool wildcard)
 {
-  ustring path;
-  Gtk::IconSource source;
-  
+  // Get the size
   int width = 0, height = 0;
   if(!IconSize::lookup(size, width, height))
     return false;
+  REQUIRE(width > 0);
+  
+  // Try to load the icon
+  RefPtr<Gtk::IconTheme> theme = Gtk::IconTheme::get_default();
+  REQUIRE(theme);
+  const IconInfo info = theme->lookup_icon(icon_name, width,
+    (IconLookupFlags)0);
+  if(info)
+    {
+      const ustring path(info.get_filename());
+      if(add_stock_icon_from_path(path, icon_set, size, wildcard))
+        return true;
+    }
+    
+  return false;
+}
+
+bool
+WindowManager::add_non_theme_icon_source(Gtk::IconSet &icon_set,
+  const Glib::ustring& base_dir, const Glib::ustring& icon_name,
+  Gtk::IconSize size, bool wildcard)
+{
+  // Get the size
+  int width = 0, height = 0;
+  if(!IconSize::lookup(size, width, height))
+    return false;
+  REQUIRE(width > 0);
+  
+  // Try to load the icon
+  const ustring path(ustring::compose("%1/%2x%3/%4.png",
+    base_dir, width, height, icon_name)); 
+  return add_stock_icon_from_path(path, icon_set, size, wildcard);
+}
+
+bool
+WindowManager::add_stock_icon_from_path(Glib::ustring path,
+  Gtk::IconSet &icon_set, Gtk::IconSize size, bool wildcard)
+{
+  Gtk::IconSource source;
   
   try
-    {  
-      ustring path = ustring::compose("%1/%2x%3/%4.png",
-        base_dir, width, height, icon_name);
-        
-      INFO(gui, "Attempting to load icon: %s", path.c_str());
-      
+    {      
       // This throws an exception if the file is not found:
       source.set_pixbuf(Gdk::Pixbuf::create_from_file(path));
     }
   catch(const Glib::Exception& ex)
     {
-      INFO(gui, "Failed to load icon: %s", path.c_str());
       return false;
     }
-
+  
   source.set_size(size);
   source.set_size_wildcarded(wildcard);
 
   icon_set.add_source(source);
-
+  
   return true;
 }
 
