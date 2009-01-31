@@ -26,7 +26,7 @@
  */
 
 #include "gtk-lumiera.hpp"
-#include "workspace/workspace-window.hpp"
+//#include "workspace/workspace-window.hpp"
 
 #ifndef WINDOW_MANAGER_HPP
 #define WINDOW_MANAGER_HPP
@@ -41,6 +41,10 @@ namespace controller {
   class Controller;
 } // model
 
+namespace workspace {
+  class WorkspaceWindow;
+}
+
 /**
  * The centralised manager of all lumiera-gui's windows.
  **/
@@ -48,9 +52,9 @@ class WindowManager : private boost::noncopyable
 {
 public:
   /**
-   * Default constructor
+   * Initializes the window manager object
    **/
-  WindowManager();
+  void init();
   
   /**
    * Creates a new window connected to a specified project and
@@ -67,10 +71,6 @@ public:
    * will be found.
    **/
   bool set_theme(Glib::ustring path);
-
-public:
-
-  static WindowManager* instance();
 
   /**
    * A utility function which reads a colour style from the GTK Style.

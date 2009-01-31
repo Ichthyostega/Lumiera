@@ -66,14 +66,18 @@ GtkLumiera::main(int argc, char *argv[])
   Project project;
   Controller controller(project);
 
-  WindowManager *manager = WindowManager::instance();
-  REQUIRE(manager);
-  manager->set_theme("lumiera_ui.rc");
-  manager->new_window(project, controller);
+  windowManager.init();
+  windowManager.set_theme("lumiera_ui.rc");
+  windowManager.new_window(project, controller);
 
   kit.run();
 }
 
+WindowManager&
+GtkLumiera::get_window_manager()
+{
+  return windowManager;
+}
 
 Glib::ustring
 GtkLumiera::get_home_data_path()

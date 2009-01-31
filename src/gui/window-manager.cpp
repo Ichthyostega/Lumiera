@@ -22,6 +22,7 @@
 
 #include "window-manager.hpp"
 #include "include/logging.h"
+#include "workspace/workspace-window.hpp"
 
 using namespace Gtk;
 using namespace Glib;
@@ -34,7 +35,8 @@ namespace gui {
 IconSize WindowManager::GiantIconSize = ICON_SIZE_INVALID;
 IconSize WindowManager::MenuIconSize = ICON_SIZE_INVALID;
 
-WindowManager::WindowManager()
+void
+WindowManager::init()
 {
   register_app_icon_sizes();  
   register_stock_items();
@@ -71,14 +73,6 @@ WindowManager::set_theme(Glib::ustring path)
   gtk_rc_reset_styles (gtk_settings_get_default());
 
   return true;
-}
-
-WindowManager*
-WindowManager::instance()
-{
-  // Initialized during first access
-  static WindowManager manager;
-  return &manager;
 }
 
 bool

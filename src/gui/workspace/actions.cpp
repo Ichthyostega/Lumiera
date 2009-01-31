@@ -190,7 +190,7 @@ Actions::on_menu_view_viewer()
 void
 Actions::on_menu_view_new_window()
 {
-  WindowManager::instance()->new_window(workspaceWindow.project,
+  application().get_window_manager().new_window(workspaceWindow.project,
     workspaceWindow.controller); 
 }
 
