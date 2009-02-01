@@ -93,10 +93,10 @@ def setupBasicEnvironment():
     appendVal(env,'DEBUG',    'CCFLAGS',   val=' -ggdb')
     
     # setup search path for Lumiera plugins
-    appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR\\"'
-                                   ,'LUMIERA_PLUGIN_PATH=\\"$DESTDIR/lib/lumiera\\"') 
-    appendCppDefine(env,'PKGDATADIR','LUMIERA_CONFIG_PATH=\\"$PKGLIBDIR\\"'
-                                    ,'LUMIERA_CONFIG_PATH=\\"$DESTDIR/share/lumiera\\"') 
+    appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR/:./.libs\\"'
+                                   ,'LUMIERA_PLUGIN_PATH=\\"$DESTDIR/lib/lumiera/:./.libs\\"') 
+    appendCppDefine(env,'PKGDATADIR','LUMIERA_CONFIG_PATH=\\"$PKGLIBDIR/:.\\"'
+                                    ,'LUMIERA_CONFIG_PATH=\\"$DESTDIR/share/lumiera/:.\\"') 
     
     prepareOptionsHelp(opts,env)
     opts.Save(OPTIONSCACHEFILE, env)

@@ -66,9 +66,10 @@ private:
 
   void on_menu_edit_preferences();
 
-  void on_menu_view_assets();
+  void on_menu_view_resources();
   void on_menu_view_timeline();
   void on_menu_view_viewer();
+  void on_menu_view_new_window();
   
   void on_menu_sequence_add();
   

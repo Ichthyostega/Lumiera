@@ -40,6 +40,8 @@
 #include <boost/enable_shared_from_this.hpp>
 #include "lib/util.hpp"
 
+#include "window-manager.hpp"
+
 extern "C" {
 #include <gavl/gavltime.h>
 }
@@ -73,6 +75,8 @@ class GtkLumiera : private boost::noncopyable
 public:
   void main(int argc, char *argv[]);
   
+  WindowManager& get_window_manager();
+  
   static Glib::ustring get_home_data_path();
 
   /**
@@ -99,6 +103,12 @@ public:
    * Returns tn alphabetical list of the application's authors
    **/
   static const std::vector<Glib::ustring> get_app_authors();
+  
+protected:
+  /**
+   * The application window manager object
+   **/
+  WindowManager windowManager;
 };
 
 /**

@@ -79,7 +79,17 @@ public:
    **/
   virtual boost::shared_ptr<ParentTrack>
     find_descendant_track_parent(boost::shared_ptr<Track> child);
-  
+
+public:
+
+  /**
+   * A signal which fires when the name changes.
+   * @return Returns the signal. The signal sends the new name for the
+   * track.
+   **/
+  sigc::signal<void, std::string> signal_name_changed() const;
+
+public:
   /**
    * A debugging helper function that prints this track, and all it's
    * child tracks in a human-readable form.
@@ -109,6 +119,11 @@ private:
    * The name of this track.
    **/
   std::string name;
+  
+  /**
+   * A signal which fires when the name changes.
+   **/
+  sigc::signal<void, std::string> nameChangedSignal;
 
 protected:
   /**

@@ -22,19 +22,40 @@
 
 #include "window-manager.hpp"
 #include "include/logging.h"
+#include "workspace/workspace-window.hpp"
 
 using namespace Gtk;
 using namespace Glib;
+using namespace boost;
+using namespace std;
+using namespace gui::workspace;
 
 namespace gui {
   
 IconSize WindowManager::GiantIconSize = ICON_SIZE_INVALID;
 IconSize WindowManager::MenuIconSize = ICON_SIZE_INVALID;
 
-WindowManager::WindowManager()
+void
+WindowManager::init()
 {
   register_app_icon_sizes();  
   register_stock_items();
+}
+
+void
+WindowManager::new_window(gui::model::Project &source_project,
+  gui::controller::Controller &source_controller)
+{ 
+  shared_ptr<WorkspaceWindow> window(
+    new WorkspaceWindow(source_project, source_controller));
+  REQUIRE(window);
+  
+  window->signal_delete_event().connect(sigc::mem_fun(
+    this, &WindowManager::on_window_closed));
+  
+  windowList.push_back(window);
+  
+  window->show();
 }
 
 bool
@@ -53,7 +74,44 @@ WindowManager::set_theme(Glib::ustring path)
 
   return true;
 }
+
+bool
+WindowManager::on_window_closed(GdkEventAny* event)
+{ 
+  REQUIRE(event);
+  REQUIRE(event->window);
+     
+  list< shared_ptr<WorkspaceWindow> >::iterator iterator = 
+    windowList.begin();
+  
+  while(iterator != windowList.end())
+    {
+      shared_ptr<WorkspaceWindow> workspace_window(*iterator);
+      REQUIRE(workspace_window);
+
+      RefPtr<Gdk::Window> window = workspace_window->get_window();
+      REQUIRE(window);
+      if(window->gobj() == event->window)
+        {
+          // This window has been closed
+          iterator = windowList.erase(iterator);
+        }
+      else
+        iterator++;
+    }
     
+  if(windowList.empty())
+    {
+      // All windows have been closed - we should exit
+      Main *main = Main::instance();
+      REQUIRE(main);
+      main->quit();
+    }
+      
+  // Unless this is false, the window won't close
+  return false;
+}
+
 GdkColor
 WindowManager::read_style_colour_property(
   Gtk::Widget &widget, const gchar *property_name,
@@ -92,6 +150,8 @@ WindowManager::register_stock_items()
   add_stock_icon_set(factory, "panel-resources", "panel_resources", _("_Resources"));
   add_stock_icon_set(factory, "panel-timeline", "panel_timeline", _("_Timeline"));
   add_stock_icon_set(factory, "panel-viewer", "panel_viewer", _("_Viewer"));
+  
+  add_stock_icon_set(factory, "window-new", "new_window", _("New _Window"));
   
   add_stock_icon_set(factory, "tool-arrow", "tool_arrow", _("_Arrow"));
   add_stock_icon_set(factory, "tool-i-beam", "tool_i_beam", _("_I-Beam"));
@@ -144,14 +204,19 @@ WindowManager::add_stock_icon_set(
 bool
 WindowManager::add_stock_icon(Gtk::IconSet &icon_set,
   const Glib::ustring& icon_name, Gtk::IconSize size, bool wildcard)
-{
+{ 
+  // Try the icon theme  
+  if(add_theme_icon_source(icon_set, icon_name, size, wildcard))
+    return true;
+    
   // Try the ~/.lumiera/icons folder
-  if(add_stock_icon_source(icon_set, ustring::compose("%1/%2",
+  if(add_non_theme_icon_source(icon_set, ustring::compose("%1/%2",
     GtkLumiera::get_home_data_path(), ustring("icons")),
     icon_name, size, wildcard))
     return true;
   
-  if(add_stock_icon_source(
+  // Try the local directory
+  if(add_non_theme_icon_source(
     icon_set, get_current_dir(), icon_name, size, wildcard))
     return true;
     
@@ -159,38 +224,70 @@ WindowManager::add_stock_icon(Gtk::IconSet &icon_set,
 }
 
 bool
-WindowManager::add_stock_icon_source(Gtk::IconSet &icon_set,
-  const Glib::ustring& base_dir, const Glib::ustring& icon_name,
-  Gtk::IconSize size, bool wildcard)
+WindowManager::add_theme_icon_source(Gtk::IconSet &icon_set,
+  const Glib::ustring& icon_name, Gtk::IconSize size, bool wildcard)
 {
-  ustring path;
-  Gtk::IconSource source;
-  
+  // Get the size
   int width = 0, height = 0;
   if(!IconSize::lookup(size, width, height))
     return false;
+  REQUIRE(width > 0);
+  
+  // Try to load the icon
+  RefPtr<Gtk::IconTheme> theme = Gtk::IconTheme::get_default();
+  REQUIRE(theme);
+  
+  TODO ("find out how IconInfo could be made const. For example, GTKmm 2.10.10 is missing the const on operator bool() in iconinfo.h");
+  IconInfo info = theme->lookup_icon(icon_name, width,
+    (IconLookupFlags)0);
+  if(info)
+    {
+      const ustring path(info.get_filename());
+      if(add_stock_icon_from_path(path, icon_set, size, wildcard))
+        return true;
+    }
+    
+  return false;
+}
+
+bool
+WindowManager::add_non_theme_icon_source(Gtk::IconSet &icon_set,
+  const Glib::ustring& base_dir, const Glib::ustring& icon_name,
+  Gtk::IconSize size, bool wildcard)
+{
+  // Get the size
+  int width = 0, height = 0;
+  if(!IconSize::lookup(size, width, height))
+    return false;
+  REQUIRE(width > 0);
+  
+  // Try to load the icon
+  const ustring path(ustring::compose("%1/%2x%3/%4.png",
+    base_dir, width, height, icon_name)); 
+  return add_stock_icon_from_path(path, icon_set, size, wildcard);
+}
+
+bool
+WindowManager::add_stock_icon_from_path(Glib::ustring path,
+  Gtk::IconSet &icon_set, Gtk::IconSize size, bool wildcard)
+{
+  Gtk::IconSource source;
   
   try
-    {  
-      ustring path = ustring::compose("%1/%2x%3/%4.png",
-        base_dir, width, height, icon_name);
-        
-      INFO(gui, "Attempting to load icon: %s", path.c_str());
-      
+    {      
       // This throws an exception if the file is not found:
       source.set_pixbuf(Gdk::Pixbuf::create_from_file(path));
     }
   catch(const Glib::Exception& ex)
     {
-      INFO(gui, "Failed to load icon: %s", path.c_str());
       return false;
     }
-
+  
   source.set_size(size);
   source.set_size_wildcarded(wildcard);
 
   icon_set.add_source(source);
-
+  
   return true;
 }
 

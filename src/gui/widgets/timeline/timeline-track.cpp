@@ -89,6 +89,11 @@ Track::Track(TimelineWidget &timeline_widget,
     mem_fun(timelineWidget, &TimelineWidget::on_add_track_command) ) );
   context_list.push_back( Menu_Helpers::MenuElem(_("_Remove Track"),
     mem_fun(this, &Track::on_remove_track) ) );
+    
+  // Connect to the model
+  model_track->signal_name_changed().connect(sigc::mem_fun(this,
+    &Track::on_name_changed));
+    
 }
 
 Gtk::Widget&
@@ -241,10 +246,13 @@ Track::on_set_name()
     _("Set Track Name"), model_track->get_name());
     
   if(dialog.run() == RESPONSE_OK)
-    {
-      model_track->set_name(dialog.get_name());
-      update_name();
-    }
+    model_track->set_name(dialog.get_name());
+}
+
+void
+Track::on_name_changed(std::string)
+{
+  update_name();
 }
 
 void

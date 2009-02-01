@@ -23,6 +23,8 @@
 #include "actions.hpp"
 #include "workspace-window.hpp"
 
+#include "../window-manager.hpp"
+
 #include "../dialogs/render.hpp"
 #include "../dialogs/preferences-dialog.hpp"
 #include "../dialogs/name-chooser.hpp"
@@ -70,10 +72,10 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
   // View Menu
   actionGroup->add(Action::create("ViewMenu", _("_View")));
   
-  assetsPanelAction = ToggleAction::create("ViewAssets",
-    Gtk::StockID("panel_assets"));
+  assetsPanelAction = ToggleAction::create("ViewResources",
+    Gtk::StockID("panel_resources"));
   assetsPanelAction->signal_toggled().connect(
-    sigc::mem_fun(*this, &Actions::on_menu_view_assets));
+    sigc::mem_fun(*this, &Actions::on_menu_view_resources));
   actionGroup->add(assetsPanelAction);
   
   timelinePanelAction = ToggleAction::create("ViewTimeline",
@@ -87,6 +89,10 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
   viewerPanelAction->signal_toggled().connect(
     sigc::mem_fun(*this, &Actions::on_menu_view_viewer));
   actionGroup->add(viewerPanelAction);
+  
+  actionGroup->add(Action::create("ViewNewWindow",
+    Gtk::StockID("new_window")),
+    sigc::mem_fun(*this, &Actions::on_menu_view_new_window));
   
   // Sequence Menu
   actionGroup->add(Action::create("SequenceMenu", _("_Sequence")));
@@ -160,7 +166,7 @@ Actions::on_menu_edit_preferences()
 /* ===== View Menu Event Handlers ===== */
 
 void
-Actions::on_menu_view_assets()
+Actions::on_menu_view_resources()
 {
   if(!is_updating_action_state)
     workspaceWindow.resourcesPanel->show(
@@ -179,6 +185,13 @@ Actions::on_menu_view_viewer()
 {
   if(!is_updating_action_state)
     workspaceWindow.viewerPanel->show(viewerPanelAction->get_active());
+}
+
+void
+Actions::on_menu_view_new_window()
+{
+  application().get_window_manager().new_window(workspaceWindow.project,
+    workspaceWindow.controller); 
 }
 
 /* ===== Sequence Menu Event Handlers ===== */

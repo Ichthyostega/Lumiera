@@ -25,12 +25,25 @@
  ** @see gtk-lumiera.hpp
  */
 
+#include "gtk-lumiera.hpp"
+//#include "workspace/workspace-window.hpp"
+
 #ifndef WINDOW_MANAGER_HPP
 #define WINDOW_MANAGER_HPP
 
-#include "gtk-lumiera.hpp"
-
 namespace gui {
+
+namespace model {
+  class Project;
+} // model
+
+namespace controller {
+  class Controller;
+} // model
+
+namespace workspace {
+  class WorkspaceWindow;
+}
 
 /**
  * The centralised manager of all lumiera-gui's windows.
@@ -39,9 +52,18 @@ class WindowManager : private boost::noncopyable
 {
 public:
   /**
-   * Default constructor
+   * Initializes the window manager object
    **/
-  WindowManager();
+  void init();
+  
+  /**
+   * Creates a new window connected to a specified project and
+   * controller
+   * @param source_project The project to connect the window to.
+   * @param source_controller The controller to connect the window to.
+   **/
+  void new_window(gui::model::Project &source_project,
+    gui::controller::Controller &source_controller);
 
   /**
    * Sets the theme of the lumiera-gui's.
@@ -49,7 +71,7 @@ public:
    * will be found.
    **/
   bool set_theme(Glib::ustring path);
-  
+
   /**
    * A utility function which reads a colour style from the GTK Style.
    * @param widget The widget to load the style out of.
@@ -62,6 +84,13 @@ public:
   static GdkColor read_style_colour_property(
     Gtk::Widget &widget, const gchar *property_name,
     guint16 red, guint16 green, guint16 blue);
+
+private:
+
+  /**
+   * An event handler for when a window has been closed.
+   **/
+  bool on_window_closed(GdkEventAny* event);
     
 private:
 
@@ -103,9 +132,21 @@ private:
    **/
   static bool add_stock_icon(Gtk::IconSet &icon_set,
     const Glib::ustring& icon_name, Gtk::IconSize size, bool wildcard);
+
+  /**
+   * Loads an icon from a the icon theme
+   * @param icon_set The icon set to add the icon to.
+   * @param icon_name The name of the icon to load.
+   * @param size The size of the icon to load.
+   * @param wildcard This value is set to true if this icon is
+   * wildcarded.
+   * @return Returns true if the icon was loaded successfully.
+   **/
+  static bool add_theme_icon_source(Gtk::IconSet &icon_set,
+    const Glib::ustring& icon_name, Gtk::IconSize size, bool wildcard);
   
   /**
-   * Loads an icon from a specific path and adds it to an icon set.
+   * Loads an icon from a non theme set.
    * @param icon_set The icon set to add the icon to.
    * @param base_dir The root icons directory to load from.
    * @param icon_name The file name of the icon to load.
@@ -114,9 +155,25 @@ private:
    * wildcarded.
    * @return Returns true if the icon was loaded successfully.
    **/
-  static bool add_stock_icon_source(Gtk::IconSet &icon_set,
+  static bool add_non_theme_icon_source(Gtk::IconSet &icon_set,
     const Glib::ustring& base_dir, const Glib::ustring& icon_name,
     Gtk::IconSize size, bool wildcard);
+
+  /**
+   * Loads an icon from a specific path and adds it to an icon set.
+   * @param path The path to load from.
+   * @param icon_set The icon set to add the icon to.
+   * @param size The size of the icon to load.
+   * @param wildcard This value is set to true if this icon is
+   * wildcarded.
+   * @return Returns true if the icon was loaded successfully.
+   **/
+  static bool add_stock_icon_from_path(Glib::ustring path,
+    Gtk::IconSet &icon_set, Gtk::IconSize size, bool wildcard);
+    
+private:
+  
+  std::list< boost::shared_ptr<workspace::WorkspaceWindow> > windowList;
     
 public:
 

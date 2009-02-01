@@ -53,6 +53,7 @@ void
 Track::set_name(const string &name)
 {
   this->name = name;
+  nameChangedSignal.emit(name);
 }
 
 bool
@@ -72,6 +73,12 @@ Track::find_descendant_track_parent(
   boost::shared_ptr<Track> /*child*/)
 { 
   return shared_ptr<ParentTrack>();
+}
+
+sigc::signal<void, std::string>
+Track::signal_name_changed() const
+{
+  return nameChangedSignal;
 }
 
 string

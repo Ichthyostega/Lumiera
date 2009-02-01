@@ -135,6 +135,11 @@ private:
 
   //----- Event Handlers -----//
   void on_set_name();
+  
+  /**
+   * Event handler for when the track name changes
+   **/
+  void on_name_changed(std::string);
 
   void on_remove_track();
   
