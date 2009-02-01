@@ -2797,14 +2797,25 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlayerDummy" modifier="Ichthyostega" modified="200901300225" created="200901300209" tags="GuiIntegration" changecount="5">
+<div title="PlayerDummy" modifier="Ichthyostega" modified="200902010257" created="200901300209" tags="GuiIntegration dynamic" changecount="9">
 <pre>Joelholdsworth and Ichthyo created this player mockup in 1/2009 to find out about the implementation details regarding integration and colaboration between the layers. There is no working render engine yet, thus we use a ~DummyImageGenerator for creating faked yuv frames to display. Within the GUI, there is a ~PlaybackController hooked up with the transport controls on the timeline pane.
 # first everything was contained within ~PlaybackController, which spawns a thread for periodically creating those dummy frames
 # then, a ~PlayerService was factored out, now implemented within Proc-Layer (probably to be relocated into the backend for the final version). A new LayerSeparationInterface called ''~DummyPlayer'' was created and set up as a [[Subsystem]] within main().
 # the next step was to support multiple playback processes going on in parallel. Now, the ~PlaybackController holds an smart-handle to the ~PlayProcess currently generating output for this viewer, and invokes the transport control functions and the pull frame call on this handle.
 # then, also the tick generation (and thus the handling of the thread which pulls the frames) was factored out and pushed down into the mentioned ~PlayProcess. For this to work, the ~PlaybackController now makes a display slot available on the public GUI DisplayFacade interface.
-
 [img[Overview to the dummy player operation|draw/PlayerArch1.png]]
+
+!when playing...
+As a prerequisite, a viewer has to be prepared within the GUI. A XV video display widget is wired up to a sigc++ signal slot, using the Glib::Dispatcher to forward calls from the play process thread to the GTK main event loop thread. When doing so, additionally a Displayer slot is created with the DisplayService.
+
+When starting playback, the slot handle created by these preparations is used to create a ~PlayProcess on the ~DummyPlayer interface. Actually
+* a ~PlayProcessImpl object is created down within the player implementation
+* this uses the slot handle to actually allocate the display slot via the Display facade
+* moreover, it aquires an TickService instance, which is still trotteling (not calling the periodic callback)
+* on the &quot;upper&quot; side of the ~DummyPlayer facade, an lib::Handle object is created to track and manage this ~PlayProcesImpl instance
+The handle is returned to the ~PlaybackController within the GUI, which uses this handle for all further interactions with the Player. The handle is ref counting and has value semantics, so it can be stored away, passed as parameter and so on. All such handles corresponding to one ~PlayProcess form a family; when the last goes out of scope, the ~PlayProcess terminates and deallocates any resources. Conceptually, this corresponds to pushing the &quot;stop&quot; button. Handles can be deliberately disconnected by calling {{{handle.close()}}} &amp;mdash; this has the same effect as deleting a handle (when all are closed or deleted the process ends).
+
+All the other play control operations are simply forwarded via the handle and the ~PlayProcessImpl. For example, &quot;pause&quot; corresponds to setting the tick frequency to 0 (thus temporarily discontinuing the tick callbacks). When allocating the display slot in the course of creating the ~PlayProcessImpl, the latter only accesses the Display facade. It can't access the display or viewer directly, because the GUI lives within an plugin; lower layers can't call directly into GUI functions. Thus, within the Display facade a functor (proxy) is created to represent the output sink. This (proxy) Displayer can be used within the implementation of the perodic callback function. As usual, the implementation of the (proxy) Displayer can be inlined and doesn't create an indirection at runtime. Thus, each frame output call has to pass though two indirections: the function pointer in the Display facade interface, and the Glib::Dispatcher.
 </pre>
 </div>
 <div title="Playlist" modifier="Ichthyostega" modified="200706250727" created="200706220456" tags="def" changecount="3">
