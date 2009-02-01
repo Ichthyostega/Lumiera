@@ -27,7 +27,6 @@
 #define PLAYBACK_CONTROLLER_HPP
 
 #include "include/dummy-player-facade.h"
-#include "lib/sync.hpp"
 
 #include <sigc++/sigc++.h>
 #include <glibmm.h>
@@ -36,19 +35,14 @@
 namespace gui {
 namespace controller {
 
-using lib::Sync;
-using lib::RecursiveLock_NoWait;
 
 
 class PlaybackController
   : boost::noncopyable,
-    public Sync<RecursiveLock_NoWait>
 {
 public:
 
   PlaybackController();
-  
-  ~PlaybackController();
 
   void play();
   
@@ -61,26 +55,15 @@ public:
   void attach_viewer(const sigc::slot<void, void*>& on_frame);
   
 private:
-
-  void start_playback_thread();
-
-  void end_playback_thread();
-  
-  void playback_thread();
-
-  void pull_frame();
   
   void on_frame();
   
+  
 private:
 
-  Glib::Thread *thread;
+  volatile bool playing;
   
   Glib::Dispatcher dispatcher;
-  
-  volatile bool finish_playback_thread;
-  
-  volatile bool playing;
   
   proc::play::DummyPlayer::Process playHandle;
   

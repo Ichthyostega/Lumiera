@@ -28,34 +28,22 @@ namespace gui {
 namespace controller { 
 
 PlaybackController::PlaybackController() :
-  thread(0),
-  finish_playback_thread(false),
   playing(false)
 { }
 
 
-PlaybackController::~PlaybackController()
-{
-  end_playback_thread();
-}
-
 void
 PlaybackController::play()
 {
-  if (playing && thread && playHandle)
+  if (playHandle)
     {
       playHandle.play(true);
-      return;
+      playing = true;
     }
-  if (thread)
-    end_playback_thread();
-  
-  {
-    Lock sync(this);
+  else
     try
       {
         playHandle =  proc::play::DummyPlayer::facade().start();
-        start_playback_thread();
         playing = true;
       }
     catch (lumiera::error::State& err)
@@ -64,59 +52,31 @@ PlaybackController::play()
         lumiera_error();
         playing = false;
       }
-  }
 }
 
 void
 PlaybackController::pause()
 {
-  Lock sync(this);
-  playing = false;
   if (playHandle)
     playHandle.play(false);
+  playing = false;
 }
 
 void
 PlaybackController::stop()
 {
-  {
-    Lock sync(this);
-    playing = false;
-    playHandle.close();
-    // TODO: stop player somehow?
-  }
-  end_playback_thread();
+  playHandle.close();
+  playing = false;
 }
 
 bool
 PlaybackController::is_playing()
 {
-  Lock sync(this);
   return playing;
 }
 
-void
-PlaybackController::start_playback_thread()
-{
-  dispatcher.connect(sigc::mem_fun(this, &PlaybackController::on_frame));
-  finish_playback_thread = false;
-  thread = Glib::Thread::create (sigc::mem_fun(
-    this, &PlaybackController::playback_thread), true);
-}
+//dispatcher.connect(sigc::mem_fun(this, &PlaybackController::on_frame));
 
-void
-PlaybackController::end_playback_thread()
-{
-  {
-    Lock sync(this);
-    finish_playback_thread = true;
-    playing = false;
-  }
-  if (thread)
-    thread->join();
-  thread = 0;
-  finish_playback_thread = false;
-}
 
 void
 PlaybackController::attach_viewer(
@@ -125,25 +85,8 @@ PlaybackController::attach_viewer(
   frame_signal.connect(on_frame);
 }
 
-void
-PlaybackController::playback_thread()
-{  
-  for(;;)
-    {
-      {
-        Lock sync(this);
-        if(finish_playback_thread)
-          return;
-      }
-      
-      if(is_playing())
-        pull_frame();
-      
-      usleep(40000); // ca 25 frames pre second
-    }
-}
 
-
+/*
 void
 PlaybackController::pull_frame()
 {
@@ -162,6 +105,7 @@ PlaybackController::pull_frame()
       TRACE (render, "frame dropped?");
     }
 }
+*/
 
 
 void
