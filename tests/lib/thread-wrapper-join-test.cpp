@@ -35,15 +35,15 @@ using test::Test;
 
 
 
-namespace lib {
-  namespace test {
+namespace backend {
+  namespace test  {
   
     /**************************************************************************
      * @test use the Lumiera backend to create some new threads, additionally
      *       passing an condition variable for waiting on thread termination. 
      *       Actually this is implemented as creating and passing a JoinHandle.
      * 
-     * @see lib::Thread
+     * @see backend::Thread
      * @see threads.h
      */
     class ThreadWrapperJoin_test : public Test
@@ -62,7 +62,7 @@ namespace lib {
         void
         theAction (int secretValue)   ///< to be run in a new thread...
           {
-            usleep (100000);           // pause 100ms prior to modifying
+            usleep (100000);          // pause 100ms prior to modifying
             aValue_ =  secretValue+42;
           }
         
@@ -138,4 +138,4 @@ namespace lib {
     
   } // namespace test
 
-} // namespace lib
+} // namespace backend

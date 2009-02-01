@@ -36,7 +36,7 @@ extern "C" {
 #include <boost/noncopyable.hpp>
 
 
-namespace lib {
+namespace backend {
   
   using std::tr1::bind;
   using std::tr1::function;
@@ -226,5 +226,5 @@ namespace lib {
   
   
   
- } // namespace lib
+ } // namespace backend
 #endif

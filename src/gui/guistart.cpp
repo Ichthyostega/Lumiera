@@ -67,7 +67,7 @@ extern "C" {
 
 
 using std::string;
-using lib::Thread;
+using backend::Thread;
 using std::tr1::bind;
 using lumiera::Subsys;
 using lumiera::error::LUMIERA_ERROR_STATE;

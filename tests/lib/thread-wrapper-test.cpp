@@ -34,8 +34,8 @@ using test::Test;
 
 
 
-namespace lib {
-  namespace test {
+namespace backend {
+  namespace test  {
   
     namespace { // private test classes and data...
       
@@ -86,7 +86,7 @@ namespace lib {
      *       lumiera::Thread wrapper for binding to an arbitrary operation
      *       and passing the appropriate context.
      * 
-     * @see lib::Thread
+     * @see backend::Thread
      * @see threads.h
      */
     class ThreadWrapper_test : public Test
@@ -116,4 +116,4 @@ namespace lib {
     
   } // namespace test
 
-} // namespace lib
+} // namespace backend
