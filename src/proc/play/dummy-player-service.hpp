@@ -56,6 +56,7 @@ namespace proc {
     
     
     class DummyImageGenerator;
+    class TickService;
     
     
     /********************************************************************
@@ -74,6 +75,7 @@ namespace proc {
         bool play_;
         
         boost::scoped_ptr<DummyImageGenerator> imageGen_;
+        boost::scoped_ptr<TickService>         tick_;
         
         
       public:

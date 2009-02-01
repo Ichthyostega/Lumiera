@@ -23,6 +23,7 @@
 
 #include "proc/play/dummy-player-service.hpp"
 #include "proc/play/dummy-image-generator.hpp"
+#include "proc/play/tick-service.hpp"
 #include "lib/singleton.hpp"
 
 extern "C" {
@@ -31,7 +32,9 @@ extern "C" {
 
 #include <string>
 #include <memory>
+#include <tr1/functional>
 #include <boost/scoped_ptr.hpp>
+
 
 
 namespace proc  {
@@ -41,6 +44,7 @@ namespace proc  {
     using lumiera::Subsys;
     using std::auto_ptr;
     using boost::scoped_ptr;
+    using std::tr1::bind;
     
     
     namespace { // hidden local details of the service implementation....
@@ -292,7 +296,7 @@ namespace proc  {
     
     
     ProcessImpl::ProcessImpl()
-      : fps_(0), play_(false), imageGen_(0)
+      : fps_(0), play_(false), imageGen_(0), tick_(new TickService (bind (ProcessImpl::doFrame, this)))
       { }
     
     
@@ -319,12 +323,16 @@ namespace proc  {
       {
         REQUIRE (fps==0 || fps_==0 );
         REQUIRE (fps==0 || !play_  );
+        REQUIRE (tick_)
         
         fps_ = fps;
         play_ = (fps != 0);
         
         if (play_)
           imageGen_.reset(new DummyImageGenerator(fps));
+        
+        // callbacks with given frequency, starting now
+        tick_->activate(fps); 
       }
     
     
@@ -333,6 +341,7 @@ namespace proc  {
     ProcessImpl::doPlay(bool yes)
       {
         REQUIRE (isActive());
+        tick_->activate (yes? fps_:0);
         play_ = yes;
       }
     
