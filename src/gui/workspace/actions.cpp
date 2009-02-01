@@ -213,7 +213,7 @@ Actions::on_menu_track_add()
   g_message("Hello");
 }
 
-/* ===== View Menu Event Handlers ===== */
+/* ===== Help Menu Event Handlers ===== */
 
 void
 Actions::on_menu_help_about()
