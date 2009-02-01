@@ -236,7 +236,9 @@ WindowManager::add_theme_icon_source(Gtk::IconSet &icon_set,
   // Try to load the icon
   RefPtr<Gtk::IconTheme> theme = Gtk::IconTheme::get_default();
   REQUIRE(theme);
-  const IconInfo info = theme->lookup_icon(icon_name, width,
+  
+  TODO ("find out how IconInfo could be made const. For example, GTKmm 2.10.10 is missing the const on operator bool() in iconinfo.h");
+  IconInfo info = theme->lookup_icon(icon_name, width,
     (IconLookupFlags)0);
   if(info)
     {
