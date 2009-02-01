@@ -246,17 +246,13 @@ Track::on_set_name()
     _("Set Track Name"), model_track->get_name());
     
   if(dialog.run() == RESPONSE_OK)
-    {
-      model_track->set_name(dialog.get_name());
-      update_name();
-    }
+    model_track->set_name(dialog.get_name());
 }
 
 void
-Track::on_name_changed(std::string new_name)
+Track::on_name_changed(std::string)
 {
-  if(new_name != titleMenuButton.get_label())
-    update_name();
+  update_name();
 }
 
 void
