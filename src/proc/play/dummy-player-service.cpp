@@ -296,7 +296,10 @@ namespace proc  {
     
     
     ProcessImpl::ProcessImpl()
-      : fps_(0), play_(false), imageGen_(0), tick_(new TickService (bind (ProcessImpl::doFrame, this)))
+      : fps_(0)
+      , play_(false)
+      , imageGen_(0)
+      , tick_(new TickService (bind (ProcessImpl::doFrame, this)))
       { }
     
     

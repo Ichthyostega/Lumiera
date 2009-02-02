@@ -47,11 +47,7 @@ struct lumiera_displaySlot_struct
 typedef struct lumiera_displaySlot_struct LumieraDisplaySlot;  ///< value semantics
 
 
-struct lumiera_displayFrame_struct 
-  { 
-    void* const buff_;
-  };
-typedef struct lumiera_displayFrame_struct LumieraDisplayFrame;
+typedef unsigned char * LumieraDisplayFrame;
 
 
 
@@ -105,15 +101,15 @@ namespace lumiera {
       /**
        * Functor for pushing frames to the display
        */
-      typedef function<void(Frame*)> Displayer;
+      typedef function<void(LumieraDisplayFrame)> Sink;
       
       
       /** allocate an already existing display/viewer for output
        *  @return a functor representing the frame sink */
-      virtual Displayer getHandle(LumieraDisplaySlot)   =0;
+      virtual Sink getHandle(LumieraDisplaySlot)   =0;
       
       
-      virtual ~DummyPlayer();
+      virtual ~Display();
     };
   
     

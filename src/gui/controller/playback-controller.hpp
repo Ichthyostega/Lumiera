@@ -27,8 +27,8 @@
 #define PLAYBACK_CONTROLLER_HPP
 
 #include "include/dummy-player-facade.h"
+#include "include/display-facade.h"
 
-#include <sigc++/sigc++.h>
 #include <glibmm.h>
 #include <boost/noncopyable.hpp>
 
@@ -63,13 +63,10 @@ private:
 
   volatile bool playing;
   
-  Glib::Dispatcher dispatcher;
-  
   proc::play::DummyPlayer::Process playHandle;
   
-  unsigned char * currentBuffer;
+  LumieraDisplaySlot viewerHandle_;
   
-  sigc::signal<void, void*> frame_signal;
 };
 
 }   // namespace controller

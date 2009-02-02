@@ -43,36 +43,59 @@
 #include "common/instancehandle.hpp"
 #include "lib/singleton-ref.hpp"
 
+#include <sigc++/sigc++.h>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <string>
+#include <vector>
 
 
 namespace gui {
-
+  
   using std::string;
+  using std::vector;
+  using boost::scoped_ptr;
   using lumiera::Display;
+  using Glib::Dispatcher;
   
   
-//  class DummyImageGenerator;
+  typedef sigc::slot<void, void*> FrameDestination;
+  typedef sigc::signal<void, void*> FrameSignal;
+  
   
   
   /********************************************************************
    * Actual implementation of a single displayer slot. Internally,
-   * it is connected* via the Glib::Dispatcher to output frames 
-   * to a viewer widget executing within the GTK event thread.
+   * it is connected via the Glib::Dispatcher for outputting frames 
+   * to a viewer widget, which executes within the GTK event thread.
+   * @note must be created from the GTK event thread.
    */
   class DisplayerSlot
-    : public Display::Displayer,
-      boost::noncopyable
+    : boost::noncopyable
     {
+      Dispatcher dispatcher_;
+      FrameSignal hasFrame_;
+      
+      LumieraDisplayFrame currBuffer_;
+      
       
     public:
-      DisplayerSlot() ;
+      DisplayerSlot (FrameDestination const&) ;
       
       /* Implementation-level API to be used by DisplayService */
       
+      /** receive a frame to be displayed */
+      inline void put (LumieraDisplayFrame);
+      
+      
+    private:
+      /** internal: activated via Dispatcher
+       *  and running in GTK main thread */ 
+      void displayCurrentFrame();
+      
     };
+  
+  typedef vector<scoped_ptr<DisplayerSlot> > DisplayerTab;
   
   
   
@@ -95,6 +118,7 @@ namespace gui {
     {
       
       string error_;
+      DisplayerTab slots_;
       
       
       /* === Interface Lifecycle === */
@@ -106,18 +130,33 @@ namespace gui {
       lib::SingletonRef<DisplayService> implInstance_;
       ServiceInstanceHandle serviceInstance_;
       
+      
     public:
       DisplayService();
       
      ~DummyPlayerService() { }  ///TODO
       
       
-      
-      /** allocate and lock the given display slot  */
-      Display::Displayer getHandle(LumieraDisplaySlot)   =0;
+      LumieraDisplaySlot setUp (FrameDestination const&);
       
     };
   
+  
+  
+  
+  void
+  DisplayerSlot::put(LumieraDisplayFrame newFrame)
+  {
+    if (newFrame != currBuffer_)
+      {
+        currBuffer_ = newFrame;
+        dispatcher_.emit();
+      }
+    else
+      {
+        TRACE (render, "frame dropped?");
+      }
+  }
   
   
   

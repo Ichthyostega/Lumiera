@@ -234,12 +234,22 @@ namespace gui {
   
   
   
-  /* === Process Implementation === */
+  /* === DisplayerSlot Implementation === */
   
   
-  ProcessImpl::ProcessImpl()
-    : fps_(0), play_(false), imageGen_(0)
-    { }
+  DisplayerSlot::DisplayerSlot (FrameDestination const& outputDestination)
+    : currBuffer_(0)
+  { 
+    hasFrame_.connect (outputDestination);
+    dispatcher_.connect (sigc::mem_fun (this, &DisplayerSlot::displayCurrentFrame));
+  }
+  
+  
+  void
+  DisplayerSlot::displayCurrentFrame()
+  {
+    hasFrame_.emit (currentBuffer_);
+  }
   
   
   DummyPlayer::Process

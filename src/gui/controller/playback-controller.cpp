@@ -20,12 +20,17 @@
  
 * *****************************************************/
 
+
 #include "gui/controller/playback-controller.hpp"
+#include "gui/display-service.hpp"
 #include "lib/error.hpp"
+
 #include <nobug.h>
 
 namespace gui {
 namespace controller { 
+
+
 
 PlaybackController::PlaybackController() :
   playing(false)
@@ -75,44 +80,17 @@ PlaybackController::is_playing()
   return playing;
 }
 
-//dispatcher.connect(sigc::mem_fun(this, &PlaybackController::on_frame));
 
 
 void
-PlaybackController::attach_viewer(
-  const sigc::slot<void, void*>& on_frame)
+PlaybackController::attach_viewer (FrameDestination const& outputDestination)
 {
-  frame_signal.connect(on_frame);
-}
-
-
-/*
-void
-PlaybackController::pull_frame()
-{
-  REQUIRE (is_playing());
-  REQUIRE (playHandle);
+  /////////////////////TODO: unsolved problem: how to access the display-service from /within/ the GUI??
+  DisplayService& displayService = do_something_magic(); 
   
-  unsigned char * newBuffer = reinterpret_cast<unsigned char*> (playHandle.getFrame());
-  
-  if (newBuffer != currentBuffer)
-    {
-      currentBuffer = newBuffer; 
-      dispatcher.emit();
-    }
-  else
-    {
-      TRACE (render, "frame dropped?");
-    }
+  viewerHandle_ = displayService.setUp (outputDestination);
 }
-*/
 
-
-void
-PlaybackController::on_frame()
-{
-  frame_signal.emit(currentBuffer);
-}
 
 }   // namespace controller
 }   // namespace gui
