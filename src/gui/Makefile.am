@@ -18,36 +18,6 @@
 lumigui_srcdir = $(top_srcdir)/src/gui
 
 #
-# lumigui is the standalone gui mockup, will be removed later
-#
-bin_PROGRAMS += lumigui
-
-lumigui_CPPFLAGS = $(AM_CPPFLAGS)					\
-	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"	\
-	-DPACKAGE_SRC_DIR=\""$(srcdir)"\"				\
-	-DPACKAGE_DATA_DIR=\""$(datadir)"\"				\
-	$(LUMIERA_GUI_CFLAGS)
-
-lumigui_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
-lumigui_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
-
-lumigui_LDADD =					\
-	liblumieracommon.la			\
-	liblumierabackend.la			\
-	liblumieraproc.la			\
-	liblumiera.la				\
-	libgui.la				\
-	$(LUMIERA_GUI_LIBS)			\
-	$(NOBUGMT_LUMIERA_LIBS)			\
-	-lboost_program_options-mt		\
-	-lboost_regex-mt
-
-lumigui_SOURCES =				\
-	$(lumigui_srcdir)/gtk-lumiera.cpp	\
-	$(lumigui_srcdir)/gtk-lumiera.hpp
-
-
-#
 # themes, locales and other supplemental data
 #
 dist_pkgdata_DATA += lumiera_ui.rc
@@ -64,7 +34,13 @@ pkglib_LTLIBRARIES += gtk_gui.la
 
 gtk_gui_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
 gtk_gui_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
-gtk_gui_la_CPPFLAGS = $(AM_CPPFLAGS) $(LUMIERA_GUI_CFLAGS) -DLUMIERA_PLUGIN -I$(top_srcdir)/src/
+gtk_gui_la_CPPFLAGS = $(AM_CPPFLAGS)					\
+	$(LUMIERA_GUI_CFLAGS)						\
+	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"	\
+	-DPACKAGE_SRC_DIR=\""$(srcdir)"\"				\
+	-DPACKAGE_DATA_DIR=\""$(datadir)"\"				\
+	-DLUMIERA_PLUGIN -I$(top_srcdir)/src/				\
+	$(LUMIERA_GUI_CFLAGS)
 gtk_gui_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/null -shrext .lum
 
 gtk_gui_la_LIBADD =		\
@@ -72,29 +48,13 @@ gtk_gui_la_LIBADD =		\
 	liblumierabackend.la	\
 	liblumieraproc.la	\
 	liblumiera.la		\
-	libgui.la		\
 	$(LUMIERA_GUI_LIBS)	\
 	$(NOBUGMT_LUMIERA_LIBS)
 
-gtk_gui_la_SOURCES =		\
-	$(lumigui_srcdir)/guistart.cpp
-
-
-#
-# libgui is a convenience library used by lumigui and the gtk_gui module
-#
-noinst_LTLIBRARIES += libgui.la
-
-libgui_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
-libgui_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
-
-libgui_la_CPPFLAGS = $(AM_CPPFLAGS)					\
-	-DPACKAGE_LOCALE_DIR=\""$(prefix)/$(DATADIRNAME)/locale"\"	\
-	-DPACKAGE_SRC_DIR=\""$(srcdir)"\"				\
-	-DPACKAGE_DATA_DIR=\""$(datadir)"\"				\
-	$(LUMIERA_GUI_CFLAGS)
-
-libgui_la_SOURCES =							\
+gtk_gui_la_SOURCES =							\
+	$(lumigui_srcdir)/guistart.cpp					\
+	$(lumigui_srcdir)/gtk-lumiera.cpp				\
+	$(lumigui_srcdir)/gtk-lumiera.hpp				\
 	$(lumigui_srcdir)/notification-service.cpp			\
 	$(lumigui_srcdir)/window-manager.cpp				\
 	$(lumigui_srcdir)/window-manager.hpp				\
@@ -176,13 +136,8 @@ libgui_la_SOURCES =							\
 	$(lumigui_srcdir)/util/rectangle.cpp				\
 	$(lumigui_srcdir)/util/rectangle.hpp
 
-libgui_la_LIBADD =		\
-	liblumieracommon.la	\
-	liblumierabackend.la	\
-	liblumieraproc.la	\
-	liblumiera.la		\
-	$(LUMIERA_GUI_LIBS)	\
-	$(NOBUGMT_LUMIERA_LIBS)
+
+
 
 
 
