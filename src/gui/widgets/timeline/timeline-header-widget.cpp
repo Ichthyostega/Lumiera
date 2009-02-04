@@ -74,7 +74,11 @@ TimelineHeaderWidget::on_realize()
   attributes.width = allocation.get_width();
   attributes.height = allocation.get_height();
 
-  attributes.event_mask = get_events () | Gdk::EXPOSURE_MASK; 
+  attributes.event_mask = get_events () |
+    Gdk::EXPOSURE_MASK |
+    Gdk::POINTER_MOTION_MASK |
+    Gdk::BUTTON_PRESS_MASK |
+    Gdk::BUTTON_RELEASE_MASK; 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.wclass = GDK_INPUT_OUTPUT;
 
@@ -89,12 +93,6 @@ TimelineHeaderWidget::on_realize()
 
   // Make the widget receive expose events
   gdkWindow->set_user_data(gobj());
-  
-  // Make the widget sensitive to mouse events
-  add_events(
-    Gdk::POINTER_MOTION_MASK |
-    Gdk::BUTTON_PRESS_MASK |
-    Gdk::BUTTON_RELEASE_MASK);
 }
 
 void
