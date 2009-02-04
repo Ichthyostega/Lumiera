@@ -19,8 +19,8 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file timeline-widget.hpp
- ** This file contains the definition of timeline widget
+/** @file menu-button.hpp
+ ** This file contains the definition of menu button widget
  */
 
 #ifndef MENU_BUTTON_HPP
