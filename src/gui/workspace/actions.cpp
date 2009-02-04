@@ -153,7 +153,9 @@ Actions::on_menu_file_render()
 void
 Actions::on_menu_file_quit()
 {
-  workspaceWindow.hide(); // Closes the main window to stop the Gtk::Main::run().
+  Main *main = Main::instance();
+  REQUIRE(main);
+  main->quit();
 }
 
 /* ===== Edit Menu Event Handlers ===== */
