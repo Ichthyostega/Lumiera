@@ -252,12 +252,12 @@ namespace gui {
   }
   
   
-  DummyPlayer::Process
-  ProcessImpl::createHandle()
+  LumieraDisplaySlot
+  DisplayService::setUp (FrameDestination const& outputDestination)
   {
-    DummyPlayer::Process handle;
-    handle.activate(this, &terminate);
-    return handle;
+    ptr_vector& slots (_instance->slots_);
+    slots.push_back (new DisplayerSlot (outputDestination));
+    return &slots.back();
   }
   
   

@@ -52,7 +52,7 @@ public:
   
   bool is_playing();
 
-  void attach_viewer(const sigc::slot<void, void*>& on_frame);
+  void use_display (LumieraDisplaySlot display);
   
 private:
   

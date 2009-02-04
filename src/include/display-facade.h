@@ -43,8 +43,8 @@ struct lumiera_displaySlot_struct
   {
     unsigned int index_;
   };
-
-typedef struct lumiera_displaySlot_struct LumieraDisplaySlot;  ///< value semantics
+typedef struct lumiera_displaySlot_struct lumiera_displaySlot;
+typedef lumiera_displaySlot* LumieraDisplaySlot;
 
 
 typedef unsigned char * LumieraDisplayFrame;

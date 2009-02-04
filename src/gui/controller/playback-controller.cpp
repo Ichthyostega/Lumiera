@@ -33,7 +33,8 @@ namespace controller {
 
 
 PlaybackController::PlaybackController() :
-  playing(false)
+  playing(false),
+  viewerHandle_(0)
 { }
 
 
@@ -45,10 +46,10 @@ PlaybackController::play()
       playHandle.play(true);
       playing = true;
     }
-  else
+  else if (viewerHandle_)
     try
       {
-        playHandle =  proc::play::DummyPlayer::facade().start();
+        playHandle =  proc::play::DummyPlayer::facade().start (viewerHandle_);
         playing = true;
       }
     catch (lumiera::error::State& err)
@@ -83,12 +84,9 @@ PlaybackController::is_playing()
 
 
 void
-PlaybackController::attach_viewer (FrameDestination const& outputDestination)
+PlaybackController::use_display (LumieraDisplaySlot display)
 {
-  /////////////////////TODO: unsolved problem: how to access the display-service from /within/ the GUI??
-  DisplayService& displayService = do_something_magic(); 
-  
-  viewerHandle_ = displayService.setUp (outputDestination);
+  viewerHandle_ = display;
 }
 
 

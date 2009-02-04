@@ -45,7 +45,8 @@
 
 #include <sigc++/sigc++.h>
 #include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
+//#include <boost/scoped_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include <string>
 #include <vector>
 
@@ -54,7 +55,7 @@ namespace gui {
   
   using std::string;
   using std::vector;
-  using boost::scoped_ptr;
+  using boost::ptr_vector;
   using lumiera::Display;
   using Glib::Dispatcher;
   
@@ -71,7 +72,8 @@ namespace gui {
    * @note must be created from the GTK event thread.
    */
   class DisplayerSlot
-    : boost::noncopyable
+    : public lumiera_displaySlot,
+      boost::noncopyable
     {
       Dispatcher dispatcher_;
       FrameSignal hasFrame_;
@@ -95,7 +97,7 @@ namespace gui {
       
     };
   
-  typedef vector<scoped_ptr<DisplayerSlot> > DisplayerTab;
+  typedef ptr_vector<DisplayerSlot> DisplayerTab;
   
   
   
@@ -137,7 +139,10 @@ namespace gui {
      ~DummyPlayerService() { }  ///TODO
       
       
-      LumieraDisplaySlot setUp (FrameDestination const&);
+      /** open a new display, sending frames to the given output destination
+       *  @return handle for this slot, can be used to start a play process.
+       *          NULL handle in case of any error. */
+      static LumieraDisplaySlot setUp (FrameDestination const&);
       
     };
   

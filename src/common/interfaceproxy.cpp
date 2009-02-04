@@ -174,8 +174,7 @@ namespace lumiera {
       {
         //----Proxy-Implementation-of-lumiera::Display--------
         
-        void displayInfo (string const& text)           { _i_.displayInfo (cStr(text)); }
-        void triggerGuiShutdown (string const& cause)   { _i_.triggerGuiShutdown (cStr(cause)); }
+        Sink getHandle (LumieraDisplaySlot display)     { return Sink (display); }
         
         
       public:
@@ -231,9 +230,9 @@ namespace lumiera {
          *  and thus leaves us only with one level of indirection,
          *  irrespective if using the C or C++ interface.
          */
-        Process start()
+        Process start(LumieraDisplaySlot viewerHandle)
           {
-            ProcessImpl* pP = static_cast<ProcessImpl*> (_i_.startPlay());
+            ProcessImpl* pP = static_cast<ProcessImpl*> (_i_.startPlay (viewerHandle));
             
             if (!pP)
               throw lumiera::error::State("failed to start DummyPlayer", lumiera_error());

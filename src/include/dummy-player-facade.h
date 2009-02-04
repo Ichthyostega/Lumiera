@@ -96,7 +96,7 @@ namespace proc {
         
         //////////////////TODO: define some dummy negotiation about size and framerate....
         
-        virtual Process start()   =0;
+        virtual Process start(LumieraDisplaySlot viewerHandle)   =0;
         
         virtual ~DummyPlayer();
       };
@@ -116,7 +116,7 @@ extern "C" {
 #include "common/interface.h"
 
 LUMIERA_INTERFACE_DECLARE (lumieraorg_DummyPlayer, 0
-                          , LUMIERA_INTERFACE_SLOT (LumieraPlayProcess, startPlay, (void)                    )
+                          , LUMIERA_INTERFACE_SLOT (LumieraPlayProcess, startPlay, (LumieraDisplaySlot)      )
                           , LUMIERA_INTERFACE_SLOT (void,               togglePlay,(LumieraPlayProcess, bool))
                           , LUMIERA_INTERFACE_SLOT (void,               terminate, (LumieraPlayProcess)      )
                           , LUMIERA_INTERFACE_SLOT (void *,             getFrame,  (LumieraPlayProcess)      )

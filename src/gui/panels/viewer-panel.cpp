@@ -27,6 +27,8 @@
 #include "../controller/controller.hpp"
 #include "../controller/playback-controller.hpp"
 
+#include "gui/display-service.hpp"
+
 using namespace Gtk;
 using namespace gui::widgets;
 using namespace gui::controller;
@@ -42,8 +44,9 @@ ViewerPanel::ViewerPanel(workspace::WorkspaceWindow &workspace_window) :
   
   PlaybackController &playback =
     workspace_window.get_controller().get_playback_controller();
-    
-  playback.attach_viewer(sigc::mem_fun(this, &ViewerPanel::on_frame));
+  
+  FrameDestination outputDestination (sigc::mem_fun(this, &ViewerPanel::on_frame));
+  playback.use_display (DisplayService::setUp (outputDestination));
 }
 
 void

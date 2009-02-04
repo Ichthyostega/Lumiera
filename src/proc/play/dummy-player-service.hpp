@@ -135,7 +135,7 @@ namespace proc {
          *  of the DummyPlayer#start() function. But because
          *  this function sits \em behind the interface, it
          *  just returns an impl pointer.  */
-        ProcessImpl* start();
+        ProcessImpl* start (LumieraDisplaySlot viewerHandle);
         
       };
     

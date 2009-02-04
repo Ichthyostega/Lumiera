@@ -186,7 +186,7 @@ namespace proc  {
                                  , NULL /* on  open  */
                                  , NULL /* on  close */
                                  , LUMIERA_INTERFACE_INLINE (startPlay, "\143\323\102\155\051\006\235\004\037\310\354\121\176\142\342\210",
-                                                             LumieraPlayProcess, (void),
+                                                             LumieraPlayProcess, (LumieraDisplaySlot viewerHandle),
                                                                { 
                                                                  if (!_instance)
                                                                    { 
@@ -194,7 +194,7 @@ namespace proc  {
                                                                      return 0;
                                                                    }
                                                                  
-                                                                 return static_cast<LumieraPlayProcess> (_instance->start()); 
+                                                                 return static_cast<LumieraPlayProcess> (_instance->start(viewerHandle)); 
                                                                }
                                                             )
                                  , LUMIERA_INTERFACE_INLINE (togglePlay, "\275\157\316\220\210\053\226\134\057\016\273\265\240\053\112\307",
@@ -272,7 +272,7 @@ namespace proc  {
      *  manages the lifecycle automatically.
      */
     ProcessImpl*
-    DummyPlayerService::start()
+    DummyPlayerService::start (LumieraDisplaySlot viewerHandle)
       {
         auto_ptr<ProcessImpl> newProcess (new ProcessImpl);
 
