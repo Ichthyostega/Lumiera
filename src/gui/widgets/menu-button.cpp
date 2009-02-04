@@ -1,5 +1,5 @@
 /*
-  timeline-widget.cpp  -  Implementation of the menu button widget
+  menu-button.cpp  -  Implementation of the menu button widget
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
