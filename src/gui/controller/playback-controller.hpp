@@ -38,7 +38,7 @@ namespace controller {
 
 
 class PlaybackController
-  : boost::noncopyable,
+  : boost::noncopyable
 {
 public:
 

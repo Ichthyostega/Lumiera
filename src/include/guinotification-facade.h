@@ -70,6 +70,7 @@ namespace gui {
        *         reason causing this shutdown      */
       virtual void triggerGuiShutdown (string const& cause)  =0;
       
+      
     protected:
       virtual ~GuiNotification() {}
     };

@@ -89,8 +89,6 @@ namespace proc {
           {
           public:
             void        play(bool);
-            void* const getFrame();
-            
           };
         
         
@@ -98,6 +96,8 @@ namespace proc {
         
         virtual Process start(LumieraDisplaySlot viewerHandle)   =0;
         
+        
+      protected:
         virtual ~DummyPlayer();
       };
     
@@ -119,7 +119,6 @@ LUMIERA_INTERFACE_DECLARE (lumieraorg_DummyPlayer, 0
                           , LUMIERA_INTERFACE_SLOT (LumieraPlayProcess, startPlay, (LumieraDisplaySlot)      )
                           , LUMIERA_INTERFACE_SLOT (void,               togglePlay,(LumieraPlayProcess, bool))
                           , LUMIERA_INTERFACE_SLOT (void,               terminate, (LumieraPlayProcess)      )
-                          , LUMIERA_INTERFACE_SLOT (void *,             getFrame,  (LumieraPlayProcess)      )
 );
 
 

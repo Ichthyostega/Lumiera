@@ -106,7 +106,8 @@ namespace lumiera {
 
 namespace gui {
   
-  /** storage for the facade proxy factory used by client code to invoke through the interface */
+  /** storage for the facade proxy factory
+   *  used by client code to invoke through the interface */
   lumiera::facade::Accessor<GuiNotification> GuiNotification::facade;
 
 } // namespace gui
@@ -118,12 +119,12 @@ namespace lumiera {
     
     typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
                           , gui::GuiNotification
-                          > Handle_GuiNotification;
+                          > IHandle_GuiNotification;
     
     
     template<>
-    class Proxy<Handle_GuiNotification>
-      : public Holder<Handle_GuiNotification>
+    class Proxy<IHandle_GuiNotification>
+      : public Holder<IHandle_GuiNotification>
       {
         //----Proxy-Implementation-of-GuiNotification--------
         
@@ -136,8 +137,8 @@ namespace lumiera {
       };
     
     
-    template  void openProxy<Handle_GuiNotification>  (Handle_GuiNotification const&);
-    template  void closeProxy<Handle_GuiNotification> (void);
+    template  void openProxy<IHandle_GuiNotification>  (IHandle_GuiNotification const&);
+    template  void closeProxy<IHandle_GuiNotification> (void);
     
    } // namespace facade
   
@@ -212,12 +213,12 @@ namespace lumiera {
     
     typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)
                                      , proc::play::DummyPlayer
-                                     > Handle_DummyPlayer;
+                                     > IHandle_DummyPlayer;
     
     
     template<>
-    class Proxy<Handle_DummyPlayer>
-      : public Holder<Handle_DummyPlayer>
+    class Proxy<IHandle_DummyPlayer>
+      : public Holder<IHandle_DummyPlayer>
       {
         //----Proxy-Implementation-of-DummyPlayer--------
         typedef proc::play::DummyPlayer::Process Process;
@@ -247,8 +248,8 @@ namespace lumiera {
       };
     
     
-    template  void openProxy<Handle_DummyPlayer>  (Handle_DummyPlayer const&);
-    template  void closeProxy<Handle_DummyPlayer> (void);
+    template  void openProxy<IHandle_DummyPlayer>  (IHandle_DummyPlayer const&);
+    template  void closeProxy<IHandle_DummyPlayer> (void);
     
     
   } // namespace facade

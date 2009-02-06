@@ -177,7 +177,7 @@ namespace lumiera {
     : private boost::noncopyable
     { 
       LumieraInterface desc_;
-      I* instance_;
+      I*                instance_;
       facade::Link<I,FA> facadeLink_;
       
       typedef InstanceHandle<I,FA> _ThisType;

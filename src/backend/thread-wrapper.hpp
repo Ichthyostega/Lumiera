@@ -41,6 +41,8 @@ namespace backend {
   using std::tr1::bind;
   using std::tr1::function;
   using lumiera::Literal;
+  using lib::Sync;
+  using lib::NonrecursiveLock_Waitable;
   
   typedef struct nobug_flag* NoBugFlag;
   

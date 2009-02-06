@@ -82,10 +82,10 @@ namespace lib {
       : smPtr_()
       { }
       
-                                 Handle (Handle const& r)        : smPtr_(r.smPtr_)   { }
-      template<class Y>          Handle (shared_ptr<Y> const& r) : smPtr_(r)          { }
-      template<class Y> explicit Handle (weak_ptr<Y> const& wr)  : smPtr_(wr)         { }
-      template<class Y> explicit Handle (std::auto_ptr<Y> & ar)  : smPtr_(ar)         { }
+                                 Handle (Handle const& r)          : smPtr_(r.smPtr_)   { }
+      template<class Y> explicit Handle (shared_ptr<Y> const& r)   : smPtr_(r)          { }
+      template<class Y> explicit Handle (weak_ptr<Y> const& wr)    : smPtr_(wr)         { }
+      template<class Y> explicit Handle (std::auto_ptr<Y> & ar)    : smPtr_(ar)         { }
       
                         Handle& operator=(Handle const& r)         { smPtr_ = r.smPtr_; return *this; }
       template<class Y> Handle& operator=(shared_ptr<Y> const& sr) { smPtr_ = sr;       return *this; }
