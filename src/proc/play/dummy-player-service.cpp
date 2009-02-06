@@ -227,18 +227,6 @@ namespace proc  {
                                                                  ProcessImpl::terminate (proc);
                                                                }
                                                             )
-                                 , LUMIERA_INTERFACE_INLINE (getFrame, "\230\130\101\300\047\065\170\052\226\164\026\112\150\166\074\134",
-                                                             void *, (LumieraPlayProcess handle),
-                                                               { 
-                                                                 //skipping full checks for performance reasons
-                                                                 REQUIRE (_instance && !lumiera_error_peek());
-                                                                 
-                                                                 REQUIRE (handle);
-                                                                 ProcP proc = static_cast<ProcP> (handle);
-                                                                 
-                                                                 return const_cast<void*> (proc->getFrame());
-                                                               }
-                                                            )
                                  );
       
       
@@ -283,10 +271,9 @@ namespace proc  {
       }
     
     
-    /* === Forwarding functions on the Process handle === */
+    /* === Forwarding function(s) on the Process handle === */
     
     void DummyPlayer::Process::play(bool yes)    { impl().doPlay(yes);       }
-    void* const DummyPlayer::Process::getFrame() { return impl().getFrame(); }
     
     
     
@@ -299,7 +286,7 @@ namespace proc  {
       : fps_(0)
       , play_(false)
       , imageGen_(0)
-      , tick_(new TickService (bind (ProcessImpl::doFrame, this)))
+      , tick_(new TickService (bind (&ProcessImpl::doFrame, this)))
       { }
     
     
@@ -326,7 +313,7 @@ namespace proc  {
       {
         REQUIRE (fps==0 || fps_==0 );
         REQUIRE (fps==0 || !play_  );
-        REQUIRE (tick_)
+        REQUIRE (tick_);
         
         fps_ = fps;
         play_ = (fps != 0);
@@ -350,16 +337,19 @@ namespace proc  {
     
     
     
-    void* const 
-    ProcessImpl::getFrame()
+    void 
+    ProcessImpl::doFrame()
       {
         REQUIRE (isActive());
         ASSERT (imageGen_);
-        
+
+        /////////////////////////////////////////TODO rewrite impl; now actively pushing up the frame!
+/*
         if (play_)
           return imageGen_->next();
         else
           return imageGen_->current();
+*/
       }
     
     

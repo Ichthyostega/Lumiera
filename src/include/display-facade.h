@@ -39,15 +39,15 @@
 
 
 
+typedef unsigned char * LumieraDisplayFrame;
+
+
 struct lumiera_displaySlot_struct 
   {
-    unsigned int index_;
+    void (*put_)(lumiera_displaySlot_struct*, LumieraDisplayFrame);
   };
 typedef struct lumiera_displaySlot_struct lumiera_displaySlot;
 typedef lumiera_displaySlot* LumieraDisplaySlot;
-
-
-typedef unsigned char * LumieraDisplayFrame;
 
 
 
@@ -55,16 +55,14 @@ typedef unsigned char * LumieraDisplayFrame;
 #ifdef __cplusplus  /* ============== C++ Interface ================= */
 
 #include "include/interfaceproxy.hpp"
+#include "lib/handle.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <tr1/functional>
 
 
 
 namespace lumiera {
   
-  using std::tr1::function;
-
   
 //  class ProcessImpl;
   
@@ -83,10 +81,11 @@ namespace lumiera {
    * have to carry out these steps manually and also have to care
    * for cleaning up and deallocating the slot).
    * 
-   * @note This is a first draft version of a rather important 
-   *       interface. The current version as of 1/2009 just serves
-   *       a mockup player implementation. You can expect this interface
-   *       to change considerably if we get at devising the real player.
+   * @note This is a first draft version of a rather important interface.
+   *       The current version as of 1/2009 just serves a mockup player
+   *       implementation. You can expect this interface to change
+   *       considerably if we get at devising the real player.
+   * 
    * @see dummy-player-facade.hpp
    * @see gui::PlaybackController 
    * 
@@ -99,9 +98,23 @@ namespace lumiera {
       
       
       /**
-       * Functor for pushing frames to the display
+       * Functor for pushing frames to the display.
+       * While one client is holding such a Sink handle,
+       * the corresponding DisplayerSlot is locked for 
+       * exclusive use by this client.
        */
-      typedef function<void(LumieraDisplayFrame)> Sink;
+      class Sink
+        : public lib::Handle<lumiera_displaySlot>
+        {
+          
+        public:
+          inline void
+          operator() (LumieraDisplayFrame frame)
+            {
+              impl().put_ (&impl(),frame);
+            }
+        };
+      
       
       
       /** allocate an already existing display/viewer for output
@@ -109,6 +122,7 @@ namespace lumiera {
       virtual Sink getHandle(LumieraDisplaySlot)   =0;
       
       
+    protected:
       virtual ~Display();
     };
   

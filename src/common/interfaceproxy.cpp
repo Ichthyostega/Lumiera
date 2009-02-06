@@ -154,8 +154,12 @@ namespace lumiera {
 
 namespace lumiera {
   
-  /** storage for the facade proxy factory used by client code to invoke through the interface */
+  /** storage for the facade proxy factory
+   *  used by client code to invoke through the interface */
   lumiera::facade::Accessor<Display> Display::facade;
+  
+  /// emit the vtable here into this translation unit within liblumieracommon.so...
+  Display::~Display()      { }
   
 } // namespace lumiera
 
@@ -166,16 +170,26 @@ namespace lumiera {
     
     typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_Display, 0)
                           , lumiera::Display
-                          > Handle_Display;
+                          > IHandle_Display;
     
     
     template<>
-    class Proxy<Handle_Display>
-      : public Holder<Handle_Display>
+    class Proxy<IHandle_Display>
+      : public Holder<IHandle_Display>
       {
         //----Proxy-Implementation-of-lumiera::Display--------
         
-        Sink getHandle (LumieraDisplaySlot display)     { return Sink (display); }
+        Display::Sink
+        getHandle (LumieraDisplaySlot display)
+          {
+            _i_.allocate (display);
+            Sink sinkHandle;
+            sinkHandle.activate (display, _i_.release);
+            if (lumiera_error_peek() || !sinkHandle)
+              throw lumiera::error::State("failed to allocate output DisplayerSlot",
+                                          lumiera_error());
+            return sinkHandle; 
+          }
         
         
       public:
@@ -183,8 +197,8 @@ namespace lumiera {
       };
     
     
-    template  void openProxy<Handle_Display>  (Handle_Display const&);
-    template  void closeProxy<Handle_Display> (void);
+    template  void openProxy<IHandle_Display>  (IHandle_Display const&);
+    template  void closeProxy<IHandle_Display> (void);
     
    } // namespace facade
   

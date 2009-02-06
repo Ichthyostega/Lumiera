@@ -91,10 +91,12 @@ namespace proc {
         bool isPlaying() { return play_; }
         
         void  doPlay(bool yes);
-        void* const getFrame();
         
         DummyPlayer::Process createHandle();
         static void terminate(ProcessImpl* process);
+        
+      private:
+        void doFrame (); ///< periodically invoked while playing
       };
     
     

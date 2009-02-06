@@ -41,11 +41,15 @@
 
 #include "backend/thread-wrapper.hpp"
 
+#include <tr1/functional>
 #include <limits>
 
 
 namespace proc {
   namespace play {
+
+    using std::tr1::function;
+    
     
     
     /************************************************************
@@ -62,7 +66,7 @@ namespace proc {
         static const uint POLL_TIMEOUT = 1000;
         
       public:
-        TickService (Tick& callback)
+        TickService (Tick callback)
           : Thread("Tick generator (dummy)",
                    bind (&TickService::timerLoop, this, callback))
           { }

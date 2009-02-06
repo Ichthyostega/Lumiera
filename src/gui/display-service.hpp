@@ -43,6 +43,7 @@
 #include "common/instancehandle.hpp"
 #include "lib/singleton-ref.hpp"
 
+#include <glibmm.h>
 #include <sigc++/sigc++.h>
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
@@ -135,14 +136,25 @@ namespace gui {
       
     public:
       DisplayService();
-      
-     ~DummyPlayerService() { }  ///TODO
+     ~DisplayService() { }
       
       
       /** open a new display, sending frames to the given output destination
        *  @return handle for this slot, can be used to start a play process.
        *          NULL handle in case of any error. */
       static LumieraDisplaySlot setUp (FrameDestination const&);
+      
+      
+      /** prepare and the given slot for output
+       *  @param doAllocate allocate when true, else release it
+       *  @throw lumiera::error::Logic when already in use */ 
+      void allocate (LumieraDisplaySlot, bool doAllocate);
+      
+      
+      /** resolve the given display slot handle to yield a ref
+       *  to an actual implementation object. In order to be resolvable,
+       *  the DisplayerSlot needs to be locked (=allocated) for output use. */
+      DisplayerSlot& resolve (LumieraDisplaySlot);
       
     };
   

@@ -48,31 +48,31 @@ namespace gui {
     LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0
                                ,lumieraorg_DisplayFacade_descriptor
                                , NULL, NULL, NULL
-                               , LUMIERA_INTERFACE_INLINE (name, LUIDGEN,
+                               , LUMIERA_INTERFACE_INLINE (name, "\323\343\324\023\064\216\120\201\073\056\366\020\110\263\060\023",
                                                            const char*, (LumieraInterface ifa),
                                                              { (void)ifa;  return "Display"; }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (brief, LUIDGEN,
+                               , LUMIERA_INTERFACE_INLINE (brief, "\305\026\070\133\033\357\014\202\203\270\174\072\341\256\226\235",
                                                            const char*, (LumieraInterface ifa),
                                                              { (void)ifa;  return "UI Interface: service for outputting frames to a viewer or display"; }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (homepage, LUIDGEN,
+                               , LUMIERA_INTERFACE_INLINE (homepage, "\170\104\246\175\123\144\332\312\315\263\071\170\164\213\024\275",
                                                            const char*, (LumieraInterface ifa),
                                                              { (void)ifa;  return "http://www.lumiera.org/develompent.html" ;}
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (version, LUIDGEN,
+                               , LUMIERA_INTERFACE_INLINE (version, "\265\343\045\346\110\241\276\111\217\120\155\246\230\341\344\124",
                                                            const char*, (LumieraInterface ifa),
                                                              { (void)ifa;  return "0.1~pre"; }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (author, LUIDGEN,
+                               , LUMIERA_INTERFACE_INLINE (author, "\302\027\122\045\301\166\046\236\257\253\144\035\105\166\070\103",
                                                            const char*, (LumieraInterface ifa),
                                                              { (void)ifa;  return "Hermann Vosseler"; }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (email, LUIDGEN,
+                               , LUMIERA_INTERFACE_INLINE (email, "\074\013\020\161\075\135\302\265\260\000\301\147\116\355\035\261",
                                                            const char*, (LumieraInterface ifa),
                                                              { (void)ifa;  return "Ichthyostega@web.de"; }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (copyright, LUIDGEN,
+                               , LUMIERA_INTERFACE_INLINE (copyright, "\037\232\153\100\114\103\074\342\164\132\370\210\372\164\115\275",
                                                            const char*, (LumieraInterface ifa),
                                                              {
                                                                (void)ifa;
@@ -81,7 +81,7 @@ namespace gui {
                                                                  "  2009               Hermann Vosseler <Ichthyostega@web.de>";
                                                              }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (license, LUIDGEN,
+                               , LUMIERA_INTERFACE_INLINE (license, "\026\243\334\056\125\245\315\311\155\375\262\344\007\076\341\254",
                                                            const char*, (LumieraInterface ifa),
                                                              {
                                                                (void)ifa;
@@ -101,11 +101,11 @@ namespace gui {
                                                                  "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA";
                                                              }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (state, LUIDGEN,
+                               , LUMIERA_INTERFACE_INLINE (state, "\243\302\332\160\060\272\155\334\212\256\303\141\160\063\164\154",
                                                            int, (LumieraInterface ifa),
                                                              {(void)ifa;  return LUMIERA_INTERFACE_EXPERIMENTAL; }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (versioncmp, LUIDGEN,
+                               , LUMIERA_INTERFACE_INLINE (versioncmp, "\363\125\123\060\231\147\053\017\131\341\105\157\231\273\334\136",
                                                            int, (const char* a, const char* b),
                                                              {return 0;}  ////////////////////////////////////////////TODO define version ordering
                                                           )
@@ -120,7 +120,6 @@ namespace gui {
     
     InstanceRef _instance; ///< a backdoor for the C Language impl to access the actual DummyPlayer implementation...
     
-    typedef ProcessImpl* ProcP;   ///////////////TODO
     
     
     LUMIERA_INTERFACE_INSTANCE (lumieraorg_Display, 0
@@ -128,20 +127,8 @@ namespace gui {
                                , LUMIERA_INTERFACE_REF(lumieraorg_interfacedescriptor, 0, lumieraorg_DisplayFacade_descriptor)
                                , NULL /* on  open  */
                                , NULL /* on  close */
-                               , LUMIERA_INTERFACE_INLINE (startPlay, LUIDGEN,
-                                                           LumieraPlayProcess, (void),
-                                                             { 
-                                                               if (!_instance)
-                                                                 { 
-                                                                   lumiera_error_set(LUMIERA_ERROR_FACADE_LIFECYCLE, 0);
-                                                                   return 0;
-                                                                 }
-                                                               
-                                                               return static_cast<LumieraPlayProcess> (_instance->start()); 
-                                                             }
-                                                          )
-                               , LUMIERA_INTERFACE_INLINE (togglePlay, LUIDGEN,
-                                                           void, (LumieraPlayProcess handle, bool doPlay),
+                               , LUMIERA_INTERFACE_INLINE (allocate, "\177\221\146\253\255\161\160\137\015\005\263\362\307\022\243\365",
+                                                           void, (LumieraDisplaySlot slotHandle),
                                                              { 
                                                                if (!_instance)
                                                                  { 
@@ -149,14 +136,16 @@ namespace gui {
                                                                    return;
                                                                  }
                                                                
-                                                               REQUIRE (handle);
-                                                               ProcP proc = static_cast<ProcP> (handle);
-                                                               
-                                                               proc->doPlay(doPlay);
+                                                               REQUIRE (slotHandle);
+                                                               try
+                                                                 {
+                                                                 _instance->allocate (slotHandle,true); 
+                                                                 }
+                                                               catch (lumiera::Error&){ /* error state remains set */ }
                                                              }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (terminate, LUIDGEN,
-                                                           void, (LumieraPlayProcess handle),
+                               , LUMIERA_INTERFACE_INLINE (release, "\166\374\106\313\011\142\115\161\111\110\376\016\346\115\240\364",
+                                                           void, (LumieraDisplaySlot slotHandle),
                                                              { 
                                                                if (!_instance)
                                                                  { 
@@ -164,22 +153,19 @@ namespace gui {
                                                                    return;
                                                                  }
                                                                
-                                                               REQUIRE (handle);
-                                                               ProcP proc = static_cast<ProcP> (handle);
-                                                               
-                                                               ProcessImpl::terminate (proc);
+                                                               REQUIRE (slotHandle);
+                                                               _instance->allocate (slotHandle,false);
                                                              }
                                                           )
-                               , LUMIERA_INTERFACE_INLINE (getFrame, LUIDGEN,
-                                                           void *, (LumieraPlayProcess handle),
+                               , LUMIERA_INTERFACE_INLINE (put, "\340\062\234\227\152\131\370\272\146\207\224\015\361\070\252\135",
+                                                           void, (LumieraDisplaySlot slotHandle, LumieraDisplayFrame frame),
                                                              { 
                                                                //skipping full checks for performance reasons
                                                                REQUIRE (_instance && !lumiera_error_peek());
                                                                
-                                                               REQUIRE (handle);
-                                                               ProcP proc = static_cast<ProcP> (handle);
-                                                               
-                                                               return const_cast<void*> (proc->getFrame());
+                                                               REQUIRE (slotHandle);
+                                                               DisplayerSlot& slot = _instance->resolve (slotHandle);
+                                                               slot.put (frame);
                                                              }
                                                           )
                                );
@@ -202,33 +188,45 @@ namespace gui {
   
   
   
-  
-  /** @par implementation note
-   *  A new process (implementation) is created, configured
-   *  and started here. This may include spawning a thread or
-   *  allocating a timer. The newly created process is self-contained
-   *  and will be just handed out, without caring for its lifecycle.
-   *  If client code accesses this function via the plain C interface,
-   *  the client is responsible for terminating this process, whereas
-   *  when using the C++ interface, you'll get a Handle object which
-   *  manages the lifecycle automatically.
-   */
-  ProcessImpl*
-  DisplayService::start()
-    {
-      auto_ptr<ProcessImpl> newProcess (new ProcessImpl);
-
-      REQUIRE (!newProcess->isActive());
-      newProcess->setRate(25);
-      
-      return newProcess.release();
-    }
+  LumieraDisplaySlot
+  DisplayService::setUp (FrameDestination const& outputDestination)
+  {
+    DisplayerTab& slots (_instance->slots_);
+    slots.push_back (new DisplayerSlot (outputDestination));
+    return &slots.back();
+  }
   
   
-  /* === Forwarding functions on the Process handle === */
   
-  void DummyPlayer::Process::play(bool yes)    { impl().doPlay(yes);       }
-  void* const DummyPlayer::Process::getFrame() { return impl().getFrame(); }
+  void
+  DisplayService::allocate (LumieraDisplaySlot handle, bool doAllocate)
+  {
+    REQUIRE (handle);
+    if (doAllocate)
+      {
+        if (handle->put_)
+          throw lumiera::error::Logic("slot already allocated for output");
+        else
+          // Mark the handle as "allocated" and ready for output: 
+          // Place the function pointer from the C interface into the handle struct.
+          // calling it will invoke the implementing instance's "put" function
+          // (see the LUMIERA_INTERFACE_INLINE above in this file!)
+          handle->put_ = serviceInstance_.get().put;
+      }
+    else
+      handle->put_ = 0;
+  }
+  
+  
+  
+  DisplayerSlot& 
+  DisplayService::resolve (LumieraDisplaySlot handle)
+  {
+    REQUIRE (handle);
+    REQUIRE (handle->put_, "accessing a DisplayerSlot, which hasn't been locked for output");
+    
+    return *static_cast<DisplayerSlot*> (handle);
+  }
   
   
   
@@ -240,6 +238,7 @@ namespace gui {
   DisplayerSlot::DisplayerSlot (FrameDestination const& outputDestination)
     : currBuffer_(0)
   { 
+    put_ = 0; // mark as not allocated
     hasFrame_.connect (outputDestination);
     dispatcher_.connect (sigc::mem_fun (this, &DisplayerSlot::displayCurrentFrame));
   }
@@ -248,73 +247,8 @@ namespace gui {
   void
   DisplayerSlot::displayCurrentFrame()
   {
-    hasFrame_.emit (currentBuffer_);
+    hasFrame_.emit (currBuffer_);
   }
   
   
-  LumieraDisplaySlot
-  DisplayService::setUp (FrameDestination const& outputDestination)
-  {
-    ptr_vector& slots (_instance->slots_);
-    slots.push_back (new DisplayerSlot (outputDestination));
-    return &slots.back();
-  }
-  
-  
-  void
-  ProcessImpl::terminate (ProcessImpl* process)
-  {
-    if (process)
-      delete process;
-  }
-  
-  
-  
-  void
-  ProcessImpl::setRate (uint fps)
-    {
-      REQUIRE (fps==0 || fps_==0 );
-      REQUIRE (fps==0 || !play_  );
-      
-      fps_ = fps;
-      play_ = (fps != 0);
-      
-      if (play_)
-        imageGen_.reset(new DummyImageGenerator(fps));
-    }
-  
-  
-  
-  void
-  ProcessImpl::doPlay(bool yes)
-    {
-      REQUIRE (isActive());
-      play_ = yes;
-    }
-  
-  
-  
-  void* const 
-  ProcessImpl::getFrame()
-    {
-      REQUIRE (isActive());
-      ASSERT (imageGen_);
-      
-      if (play_)
-        return imageGen_->next();
-      else
-        return imageGen_->current();
-    }
-  
-  
-  
-
-
-
-  
-  // emit the vtable here into this translation unit within liblumieraproc.so ...
-  DummyPlayer::~DummyPlayer()      { }
-
-
-
 } // namespace proc
