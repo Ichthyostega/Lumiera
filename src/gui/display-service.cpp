@@ -192,8 +192,7 @@ namespace gui {
   DisplayService::setUp (FrameDestination const& outputDestination)
   {
     DisplayerTab& slots (_instance->slots_);
-    slots.push_back (new DisplayerSlot (outputDestination));
-    return &slots.back();
+    return &slots.manage (new DisplayerSlot (outputDestination));
   }
   
   

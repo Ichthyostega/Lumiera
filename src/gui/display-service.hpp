@@ -42,12 +42,11 @@
 #include "include/display-facade.h"
 #include "common/instancehandle.hpp"
 #include "lib/singleton-ref.hpp"
+#include "lib/scoped-ptrvect.hpp"
 
 #include <glibmm.h>
 #include <sigc++/sigc++.h>
 #include <boost/noncopyable.hpp>
-//#include <boost/scoped_ptr.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
 #include <string>
 #include <vector>
 
@@ -56,7 +55,6 @@ namespace gui {
   
   using std::string;
   using std::vector;
-  using boost::ptr_vector;
   using lumiera::Display;
   using Glib::Dispatcher;
   
@@ -98,7 +96,7 @@ namespace gui {
       
     };
   
-  typedef ptr_vector<DisplayerSlot> DisplayerTab;
+  typedef lib::ScopedPtrVect<DisplayerSlot> DisplayerTab;
   
   
   
