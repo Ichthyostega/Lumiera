@@ -414,7 +414,7 @@ TimelineHeaderContainer::begin_drag()
   
   // Set the cursor to a hand
   REQUIRE(gdkWindow);
-  gdkWindow->set_cursor(Gdk::Cursor(Gdk::HAND1));
+  gdkWindow->set_cursor(Gdk::Cursor(Gdk::FLEUR));
 }
 
 void
@@ -431,7 +431,7 @@ TimelineHeaderContainer::end_drag(bool apply)
     
   // Reset the arrow as a cursor
   REQUIRE(gdkWindow);
-  gdkWindow->set_cursor(Gdk::Cursor(Gdk::ARROW));
+  gdkWindow->set_cursor(Gdk::Cursor(Gdk::LEFT_PTR));
 }
 
 void

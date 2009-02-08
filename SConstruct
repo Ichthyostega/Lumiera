@@ -342,13 +342,6 @@ def defineBuildTargets(env, artifacts):
     envPlu.Append(CPPDEFINES='LUMIERA_PLUGIN')
     artifacts['plugins'] = [] # currently none 
     
-    
-    # the Lumiera GTK GUI
-    envGtk = env.Clone()
-    envGtk.mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','librsvg-2.0','xv','xext','sm'])
-    envGtk.Append(CPPDEFINES='LUMIERA_PLUGIN', LIBS=core)
-    objgui  = srcSubtree(envGtk,'$SRCDIR/gui')
-    
     # render and install Icons
     vector_icon_dir      = env.subst('$ICONDIR/svg')
     prerendered_icon_dir = env.subst('$ICONDIR/prerendered')
@@ -356,13 +349,18 @@ def defineBuildTargets(env, artifacts):
                            + [env.IconCopy(f)   for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
                            )
     
-    guimodule = envGtk.LoadableModule('$LIBDIR/gtk_gui', objgui, SHLIBPREFIX='', SHLIBSUFFIX='.lum')
-    artifacts['lumigui'] = ( guimodule
-                           + envGtk.Program('$BINDIR/lumigui', objgui )
-                           + env.Install('$BINDIR', env.Glob('$SRCDIR/gui/*.rc'))
-                           + artifacts['icons']
-                           )
+    # the Lumiera GTK GUI
+    envGtk = env.Clone()
+    envGtk.mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','librsvg-2.0','xv','xext','sm'])
+    envGtk.Append(CPPDEFINES='LUMIERA_PLUGIN', LIBS=core)
     
+    objgui  = srcSubtree(envGtk,'$SRCDIR/gui')
+    guimodule = envGtk.LoadableModule('$LIBDIR/gtk_gui', objgui, SHLIBPREFIX='', SHLIBSUFFIX='.lum')
+    artifacts['gui'] = ( guimodule
+                       + env.Install('$BINDIR', env.Glob('$SRCDIR/gui/*.rc'))
+                       + artifacts['icons']
+                       )
+
     # call subdir SConscript(s) for independent components
     SConscript(dirs=[SRCDIR+'/tool'], exports='env envGtk artifacts core')
     SConscript(dirs=[TESTDIR],        exports='env envPlu artifacts core')
@@ -377,7 +375,7 @@ def definePostBuildTargets(env, artifacts):
     il = env.Alias('install-lib', '$DESTDIR/lib')
     env.Alias('install', [ib, il])
     
-    build = env.Alias('build', artifacts['lumiera']+artifacts['lumigui']+artifacts['plugins']+artifacts['tools'])
+    build = env.Alias('build', artifacts['lumiera']+artifacts['gui']+artifacts['plugins']+artifacts['tools'])
     allbu = env.Alias('allbuild', build+artifacts['testsuite'])
     env.Default('build')
     # additional files to be cleaned when cleaning 'build'
@@ -418,6 +416,7 @@ artifacts = {}
 # Each entry actually is a SCons-Node list.
 # Passing these entries to other builders defines dependencies.
 # 'lumiera'     : the App
+# 'gui'         : the GTK UI (plugin)
 # 'plugins'     : plugin shared lib
 # 'tools'       : small tool applications (e.g mpegtoc)
 # 'src,tar'     : source tree as tarball (without doc)

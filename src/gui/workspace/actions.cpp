@@ -90,10 +90,6 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
     sigc::mem_fun(*this, &Actions::on_menu_view_viewer));
   actionGroup->add(viewerPanelAction);
   
-  actionGroup->add(Action::create("ViewNewWindow",
-    Gtk::StockID("new_window")),
-    sigc::mem_fun(*this, &Actions::on_menu_view_new_window));
-  
   // Sequence Menu
   actionGroup->add(Action::create("SequenceMenu", _("_Sequence")));
   actionGroup->add(Action::create("SequenceAdd", _("_Add...")),
@@ -103,6 +99,12 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
   actionGroup->add(Action::create("TrackMenu", _("_Track")));
   actionGroup->add(Action::create("TrackAdd", _("_Add...")),
     sigc::mem_fun(*this, &Actions::on_menu_track_add));
+
+  // Window Menu
+  actionGroup->add(Action::create("WindowMenu", _("_Window")));
+  actionGroup->add(Action::create("WindowNewWindow",
+    Gtk::StockID("new_window")),
+    sigc::mem_fun(*this, &Actions::on_menu_window_new_window));
 
   // Help Menu
   actionGroup->add(Action::create("HelpMenu", _("_Help")) );
@@ -151,7 +153,9 @@ Actions::on_menu_file_render()
 void
 Actions::on_menu_file_quit()
 {
-  workspaceWindow.hide(); // Closes the main window to stop the Gtk::Main::run().
+  Main *main = Main::instance();
+  REQUIRE(main);
+  main->quit();
 }
 
 /* ===== Edit Menu Event Handlers ===== */
@@ -187,13 +191,6 @@ Actions::on_menu_view_viewer()
     workspaceWindow.viewerPanel->show(viewerPanelAction->get_active());
 }
 
-void
-Actions::on_menu_view_new_window()
-{
-  application().get_window_manager().new_window(workspaceWindow.project,
-    workspaceWindow.controller); 
-}
-
 /* ===== Sequence Menu Event Handlers ===== */
 
 void
@@ -213,7 +210,16 @@ Actions::on_menu_track_add()
   g_message("Hello");
 }
 
-/* ===== View Menu Event Handlers ===== */
+/* ===== Window Menu Event Handlers ===== */
+
+void
+Actions::on_menu_window_new_window()
+{
+  application().get_window_manager().new_window(workspaceWindow.project,
+    workspaceWindow.controller); 
+}
+
+/* ===== Help Menu Event Handlers ===== */
 
 void
 Actions::on_menu_help_about()

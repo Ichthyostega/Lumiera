@@ -132,14 +132,3 @@ application()
 }
 
 }   // namespace gui
-
-/**
- * Run the Lumiera GTK GUI as standalone application without backend.
- */
-int
-main (int argc, char *argv[])
-{
-  NOBUG_INIT;
-  gui::application().main(argc, argv);
-  return 0;
-}

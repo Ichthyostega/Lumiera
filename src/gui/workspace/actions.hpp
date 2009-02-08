@@ -69,11 +69,12 @@ private:
   void on_menu_view_resources();
   void on_menu_view_timeline();
   void on_menu_view_viewer();
-  void on_menu_view_new_window();
   
   void on_menu_sequence_add();
   
   void on_menu_track_add();
+
+  void on_menu_window_new_window();
 
   void on_menu_help_about();
   
