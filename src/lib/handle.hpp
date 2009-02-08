@@ -70,7 +70,9 @@ namespace lib {
   class Handle 
     {
     protected:
-      std::tr1::shared_ptr<IMP> smPtr_;
+      typedef std::tr1::shared_ptr<IMP> SmPtr;
+      
+      SmPtr smPtr_;
       
     public:
       
@@ -113,11 +115,11 @@ namespace lib {
       void close ()  { smPtr_.reset(); }
       
       
-      typedef std::tr1::shared_ptr<IMP> Handle::*__unspecified_bool_type;
+      typedef SmPtr Handle::*__unspecified_bool_type;
       
       /** implicit conversion to "bool" */ 
-      operator __unspecified_bool_type()  const { return  &Handle::smPtr_; } // never throws
-      bool operator! ()                   const { return !bool(smPtr_); }   // dito
+      operator __unspecified_bool_type()  const { return  smPtr_? &Handle::smPtr_ : 0; }  // never throws
+      bool operator! ()                   const { return !bool(smPtr_); }                //  ditto
       
       
       

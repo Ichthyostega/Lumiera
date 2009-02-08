@@ -63,7 +63,7 @@ namespace proc {
       public:
         DummyImageGenerator(uint fps);
         
-        ~DummyImageGenerator() { }
+       ~DummyImageGenerator() { }
       
         /** generate the next frame and 
          *  occupy the alternate buffer.

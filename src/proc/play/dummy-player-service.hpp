@@ -83,6 +83,7 @@ namespace proc {
         
       public:
         ProcessImpl(LumieraDisplaySlot) ;
+       ~ProcessImpl() ;
         
         /* Implementation-level API to be used By DummyPlayerService */
         

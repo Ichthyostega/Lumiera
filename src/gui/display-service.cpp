@@ -243,6 +243,12 @@ namespace gui {
   }
   
   
+  DisplayerSlot::~DisplayerSlot() 
+  {
+    TRACE (gui_dbg, "Displayer Slot closing...");
+  }
+  
+  
   void
   DisplayerSlot::displayCurrentFrame()
   {

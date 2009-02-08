@@ -69,13 +69,17 @@ namespace proc {
         TickService (Tick callback)
           : Thread("Tick generator (dummy)",
                    bind (&TickService::timerLoop, this, callback))
-          { }
+          { 
+            INFO (proc, "TickService started.");
+          }
         
        ~TickService ()
           {
             uint curr_tick = timespan_;
             timespan_ = 0;
-            usleep (curr_tick); ////TODO actually should wait for timer thread termination
+            usleep (2*curr_tick); ////TODO actually should wait for timer thread termination
+            
+            INFO (proc, "TickService shutdown.");
           }
         
         
@@ -106,7 +110,10 @@ namespace proc {
                   periodicFun();
                 
                 usleep (timespan_);
-          }   }
+              }
+            TRACE (proc_dbg, "Tick Thread timer loop exiting..."); 
+          }
+  
       };
     
     

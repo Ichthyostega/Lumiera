@@ -291,12 +291,9 @@ namespace proc  {
       { }
     
     
-    DummyPlayer::Process
-    ProcessImpl::createHandle()
+    ProcessImpl::~ProcessImpl()
     {
-      DummyPlayer::Process handle;
-      handle.activate(this, &terminate);
-      return handle;
+      INFO (proc_dbg, "Playback process halted...");
     }
     
     
@@ -305,6 +302,16 @@ namespace proc  {
     {
       if (process)
         delete process;
+    }
+    
+    
+    
+    DummyPlayer::Process
+    ProcessImpl::createHandle()
+    {
+      DummyPlayer::Process handle;
+      handle.activate(this, &terminate);
+      return handle;
     }
     
     

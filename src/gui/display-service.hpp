@@ -82,6 +82,7 @@ namespace gui {
       
     public:
       DisplayerSlot (FrameDestination const&) ;
+     ~DisplayerSlot () ;
       
       /* Implementation-level API to be used by DisplayService */
       
@@ -134,7 +135,10 @@ namespace gui {
       
     public:
       DisplayService();
-     ~DisplayService() { }
+     ~DisplayService() {
+                      INFO (proc_dbg, "Display service dying...");
+
+     }
       
       
       /** open a new display, sending frames to the given output destination
