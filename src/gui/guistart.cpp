@@ -52,6 +52,7 @@
 #include "lib/error.hpp"
 #include "gui/guifacade.hpp"
 #include "gui/notification-service.hpp"
+#include "gui/display-service.hpp"
 #include "common/subsys.hpp"
 #include "backend/thread-wrapper.hpp"
 #include "lib/singleton.hpp"
@@ -87,10 +88,12 @@ namespace gui {
         string error_;
         Subsys::SigTerm& reportOnTermination_;
         NotificationService activateNotificationService_;
+        DisplayService activateDisplayService_;
         
         GuiLifecycle (Subsys::SigTerm& terminationHandler)
           : reportOnTermination_(terminationHandler)
-          , activateNotificationService_()             // opens the GuiNotification facade interface 
+          , activateNotificationService_()             // opens the GuiNotification facade interface
+          , activateDisplayService_()                  // opens the gui::Display facade interface
           { }
         
        ~GuiLifecycle ()
