@@ -3,14 +3,17 @@
 ## SConscript  -  SCons buildscript for tool subdirectory (called by SConstruct)
 ##
 
-Import('env','envGtk','artifacts','core')
+Import('env','artifacts','core')
 
 support_lib = artifacts['support']
 
-luidgen = env.Program('#$BINDIR/luidgen', 'luidgen.c',            LIBS=support_lib)       ## for rendering SVG icons (uses librsvg)
+envSvg = env.Clone()
+envSvg.mergeConf(['librsvg-2.0'])
+envSvg.Append(LIBS=support_lib)
 
-rsvg    = envGtk.Program('#$BINDIR/rsvg-convert','rsvg-convert.c')
 
+luidgen =    env.Program('#$BINDIR/luidgen', 'luidgen.c', LIBS=support_lib) ## for generating Lumiera-UIDs
+rsvg    = envSvg.Program('#$BINDIR/rsvg-convert','rsvg-convert.c')          ## for rendering SVG icons (uses librsvg) 
 
 # build additional test and administrative tools....
 artifacts['tools'] = [ env.Program('#$BINDIR/hello-world','hello.c')      #### hello world (checks C build)      

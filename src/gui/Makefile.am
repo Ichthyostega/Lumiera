@@ -1,5 +1,5 @@
-#  Copyright (C)		 Lumiera.org
-#	2007,			   Joel Holdsworth <joel@airwebreathe.org.uk>
+#  Copyright (C)         Lumiera.org
+#    2007,               Joel Holdsworth <joel@airwebreathe.org.uk>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -44,9 +44,9 @@ gtk_gui_la_CPPFLAGS = $(AM_CPPFLAGS)					\
 gtk_gui_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/null -shrext .lum
 
 gtk_gui_la_LIBADD =		\
-	liblumieracommon.la	\
-	liblumierabackend.la	\
 	liblumieraproc.la	\
+	liblumierabackend.la	\
+	liblumieracommon.la	\
 	liblumiera.la		\
 	$(LUMIERA_GUI_LIBS)	\
 	$(NOBUGMT_LUMIERA_LIBS)

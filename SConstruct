@@ -351,7 +351,7 @@ def defineBuildTargets(env, artifacts):
     
     # the Lumiera GTK GUI
     envGtk = env.Clone()
-    envGtk.mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','librsvg-2.0','xv','xext','sm'])
+    envGtk.mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','xv','xext','sm'])
     envGtk.Append(CPPDEFINES='LUMIERA_PLUGIN', LIBS=core)
     
     objgui  = srcSubtree(envGtk,'$SRCDIR/gui')
@@ -362,7 +362,7 @@ def defineBuildTargets(env, artifacts):
                        )
 
     # call subdir SConscript(s) for independent components
-    SConscript(dirs=[SRCDIR+'/tool'], exports='env envGtk artifacts core')
+    SConscript(dirs=[SRCDIR+'/tool'], exports='env        artifacts core')
     SConscript(dirs=[TESTDIR],        exports='env envPlu artifacts core')
 
 

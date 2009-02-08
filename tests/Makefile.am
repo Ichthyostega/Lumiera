@@ -22,42 +22,52 @@ tests_srcdir = $(top_srcdir)/tests
 check_PROGRAMS += test-error
 test_error_SOURCES = $(tests_srcdir)/library/test-error.c
 test_error_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-test_error_LDADD = liblumiera.la $(NOBUGMT_LUMIERA_LIBS)     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
+test_error_LDADD = $(NOBUGMT_LUMIERA_LIBS)                                  liblumiera.la -lboost_program_options-mt -lboost_regex-mt
 
 check_PROGRAMS += test-locking
 test_locking_SOURCES = $(tests_srcdir)/library/test-locking.c
 test_locking_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-test_locking_LDADD = liblumiera.la  $(NOBUGMT_LUMIERA_LIBS)     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
+test_locking_LDADD = $(NOBUGMT_LUMIERA_LIBS)                                liblumiera.la -lboost_program_options-mt -lboost_regex-mt
 
 check_PROGRAMS += test-llist
 test_llist_SOURCES = $(tests_srcdir)/library/test-llist.c
 test_llist_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-test_llist_LDADD = liblumiera.la $(NOBUGMT_LUMIERA_LIBS)     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
+test_llist_LDADD = $(NOBUGMT_LUMIERA_LIBS)                                  liblumiera.la -lboost_program_options-mt -lboost_regex-mt
 
 check_PROGRAMS += test-psplay
 test_psplay_SOURCES = $(tests_srcdir)/library/test-psplay.c
 test_psplay_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
-test_psplay_LDADD = liblumiera.la $(NOBUGMT_LUMIERA_LIBS)     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
+test_psplay_LDADD = $(NOBUGMT_LUMIERA_LIBS)                                 liblumiera.la -lboost_program_options-mt -lboost_regex-mt
 
 check_PROGRAMS += test-safeclib
 test_safeclib_SOURCES = $(tests_srcdir)/library/test-safeclib.c
 test_safeclib_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-test_safeclib_LDADD = liblumiera.la $(NOBUGMT_LUMIERA_LIBS)     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
+test_safeclib_LDADD = $(NOBUGMT_LUMIERA_LIBS)                               liblumiera.la -lboost_program_options-mt -lboost_regex-mt
 
 check_PROGRAMS += test-luid
 test_luid_SOURCES = $(tests_srcdir)/library/test-luid.c
 test_luid_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-test_luid_LDADD = liblumiera.la $(NOBUGMT_LUMIERA_LIBS)     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
+test_luid_LDADD = $(NOBUGMT_LUMIERA_LIBS)                                   liblumiera.la -lboost_program_options-mt -lboost_regex-mt
 
 check_PROGRAMS += test-filedescriptors
 test_filedescriptors_SOURCES = $(tests_srcdir)/backend/test-filedescriptors.c
 test_filedescriptors_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-test_filedescriptors_LDADD = liblumierabackend.la liblumiera.la $(NOBUGMT_LUMIERA_LIBS)     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
+test_filedescriptors_LDADD = $(NOBUGMT_LUMIERA_LIBS)   liblumierabackend.la liblumieracommon.la liblumieraproc.la -ldl liblumiera.la -lboost_program_options-mt -lboost_regex-mt
 
 check_PROGRAMS += test-filehandles
 test_filehandles_SOURCES = $(tests_srcdir)/backend/test-filehandles.c
 test_filehandles_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-test_filehandles_LDADD = liblumierabackend.la liblumiera.la $(NOBUGMT_LUMIERA_LIBS)     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
+test_filehandles_LDADD = $(NOBUGMT_LUMIERA_LIBS)       liblumierabackend.la liblumieracommon.la liblumieraproc.la -ldl liblumiera.la -lboost_program_options-mt -lboost_regex-mt
+
+check_PROGRAMS += test-filemmap
+test_filemmap_SOURCES = $(tests_srcdir)/backend/test-filemmap.c
+test_filemmap_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_filemmap_LDADD = $(NOBUGMT_LUMIERA_LIBS)          liblumierabackend.la liblumieracommon.la liblumieraproc.la -ldl liblumiera.la -lboost_program_options-mt -lboost_regex-mt
+
+check_PROGRAMS += test-resourcecollector
+test_resourcecollector_SOURCES = $(tests_srcdir)/library/test-resourcecollector.c
+test_resourcecollector_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_resourcecollector_LDADD = $(NOBUGMT_LUMIERA_LIBS) liblumierabackend.la liblumieracommon.la liblumieraproc.la -ldl liblumiera.la -lboost_program_options-mt -lboost_regex-mt
 
 
 check_PROGRAMS += test-config
@@ -65,6 +75,7 @@ test_config_SOURCES = $(tests_srcdir)/common/test-config.c
 test_config_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
 test_config_LDADD =				\
 	liblumieraproc.la			\
+	liblumierabackend.la			\
 	liblumieracommon.la			\
 	liblumiera.la				\
 	$(LUMIERA_PLUGIN_LIBS)			\
@@ -83,16 +94,15 @@ examplepluginc_la_LDFLAGS = -module -avoid-version -no-undefined -rpath /dev/nul
 check_PROGRAMS += test-interfaces
 test_interfaces_SOURCES = $(tests_srcdir)/common/test-interfaces.c
 test_interfaces_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-test_interfaces_LDADD = liblumiera.la $(LUMIERA_PLUGIN_LIBS) $(NOBUGMT_LUMIERA_LIBS)      liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
-
-check_PROGRAMS += test-filemmap
-test_filemmap_SOURCES = $(tests_srcdir)/backend/test-filemmap.c
-test_filemmap_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
-test_filemmap_LDADD = liblumierabackend.la liblumiera.la -lnobugmt -lpthread -ldl -lm     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
-
-check_PROGRAMS += test-resourcecollector
-test_resourcecollector_SOURCES = $(tests_srcdir)/library/test-resourcecollector.c
-test_resourcecollector_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
-test_resourcecollector_LDADD = liblumierabackend.la liblumiera.la -lnobugmt -lpthread -ldl -lm     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
+test_interfaces_LDADD = 			\
+	liblumieraproc.la			\
+	liblumierabackend.la			\
+	liblumieracommon.la			\
+	liblumiera.la				\
+	$(LUMIERA_PLUGIN_LIBS)			\
+	$(NOBUGMT_LUMIERA_LIBS)			\
+	-ldl					\
+	-lboost_program_options-mt		\
+	-lboost_regex-mt
 
 TESTS = $(tests_srcdir)/test.sh
