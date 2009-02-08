@@ -25,9 +25,9 @@
  ** Working with collections of objects, especially in conjunction with
  ** polymorphism, can be challenging when we are bound to care for lifecycle
  ** and ownership for the contained classes. There are several solutions,
- ** including the boost::ptr_container library, the use of shared_ptr
- ** or even a garbage collector. Sometimes the circumstances rather call
- ** for a very simple or lightweight solution though.
+ ** including the boost::ptr_container library or lib::ScopedPtrVect, the
+ ** use of shared_ptr  or even a garbage collector. Sometimes circumstances
+ ** rather call for a very simple or lightweight solution though.
  ** 
  ** ScopedPtrHolder is a simple extension to boost::scoped_ptr, enabling
  ** to use it within STL containers if we stick to a specific protocol.
@@ -49,6 +49,7 @@
  ** @see scopedholdertest.cpp
  ** @see scopedholdertransfer.hpp use in std::vector
  ** @see AllocationCluster usage example
+ ** @see scoped-ptrvect.hpp simple pointer-holding collection
  */
 
 
