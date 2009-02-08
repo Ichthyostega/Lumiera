@@ -89,7 +89,7 @@ namespace proc {
     { }
     
     
-    void * const
+    const LumieraDisplayFrame
     DummyImageGenerator::next()
     {
       
@@ -137,7 +137,7 @@ namespace proc {
         }
       
       // select output buffer to return
-      unsigned char * outBuff;
+      LumieraDisplayFrame outBuff;
       
       if (!current_)
         {
@@ -156,7 +156,7 @@ namespace proc {
     }
     
     
-    void * const
+    const LumieraDisplayFrame
     DummyImageGenerator::current()
     {
       if (!current_) return outFrame_A_;

@@ -262,7 +262,7 @@ namespace proc  {
     ProcessImpl*
     DummyPlayerService::start (LumieraDisplaySlot viewerHandle)
       {
-        auto_ptr<ProcessImpl> newProcess (new ProcessImpl);
+        auto_ptr<ProcessImpl> newProcess (new ProcessImpl (viewerHandle));
 
         REQUIRE (!newProcess->isActive());
         newProcess->setRate(25);
@@ -282,9 +282,10 @@ namespace proc  {
     /* === Process Implementation === */
     
     
-    ProcessImpl::ProcessImpl()
+    ProcessImpl::ProcessImpl(LumieraDisplaySlot viewerHandle)
       : fps_(0)
       , play_(false)
+      , display_(Display::facade().getHandle (viewerHandle))
       , imageGen_(0)
       , tick_(new TickService (bind (&ProcessImpl::doFrame, this)))
       { }
@@ -343,13 +344,10 @@ namespace proc  {
         REQUIRE (isActive());
         ASSERT (imageGen_);
 
-        /////////////////////////////////////////TODO rewrite impl; now actively pushing up the frame!
-/*
         if (play_)
-          return imageGen_->next();
+          display_(imageGen_->next());
         else
-          return imageGen_->current();
-*/
+          display_(imageGen_->current());
       }
     
     

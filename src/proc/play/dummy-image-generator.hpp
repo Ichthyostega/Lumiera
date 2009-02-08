@@ -40,6 +40,7 @@
 
 
 #include "lib/error.hpp"
+#include "include/display-facade.h"
 
 
 namespace proc {
@@ -68,11 +69,11 @@ namespace proc {
          *  occupy the alternate buffer.
          *  @return the buffer containing the new frame
          */
-        void * const next();
+        const LumieraDisplayFrame next();
         
         /** just re-return a pointer to the current frame
          *  without generating any new image data */
-        void * const current();
+        const LumieraDisplayFrame current();
       
         
       private:

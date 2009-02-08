@@ -40,6 +40,7 @@
 
 
 #include "include/dummy-player-facade.h"
+#include "include/display-facade.h"
 #include "common/instancehandle.hpp"
 #include "lib/singleton-ref.hpp"
 
@@ -53,6 +54,7 @@ namespace proc {
   
     using std::string;
     using lumiera::Subsys;
+    using lumiera::Display;
     
     
     class DummyImageGenerator;
@@ -74,12 +76,13 @@ namespace proc {
         uint fps_;
         bool play_;
         
+        Display::Sink                          display_;
         boost::scoped_ptr<DummyImageGenerator> imageGen_;
         boost::scoped_ptr<TickService>         tick_;
         
         
       public:
-        ProcessImpl() ;
+        ProcessImpl(LumieraDisplaySlot) ;
         
         /* Implementation-level API to be used By DummyPlayerService */
         
