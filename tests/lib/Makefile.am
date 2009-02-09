@@ -54,6 +54,7 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/sanitizedidentifiertest.cpp		\
 	$(testlib_srcdir)/scopedholdertest.cpp			\
 	$(testlib_srcdir)/scopedholdertransfertest.cpp		\
+	$(testlib_srcdir)/scoped-ptrvect-test.cpp		\
 	$(testlib_srcdir)/singletonsubclasstest.cpp		\
 	$(testlib_srcdir)/singletontest.cpp			\
 	$(testlib_srcdir)/singletontestmocktest.cpp		\
