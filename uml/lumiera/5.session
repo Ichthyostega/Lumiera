@@ -2,8 +2,10 @@ window_sizes 1302 1004 270 1022 854 71
 diagrams
   classdiagram_ref 128133 // Session structure
     853 742 100 4 120 0
-  active  classdiagram_ref 132741 // TimelineSequences
+  classdiagram_ref 132741 // TimelineSequences
     585 732 100 4 0 0
+  active  classdiagram_ref 132869 // Layer Separation Interface
+    373 417 100 4 0 0
 end
 show_stereotypes
 selected 
@@ -38,6 +40,7 @@ open
   class_ref 144517 // Strategy
   class_ref 144005 // BuffTable
   class_ref 144261 // Invocation
+  classview_ref 129541 // InterfaceSystem
   classview_ref 129285 // StreamType
   classview_ref 128773 // error
   class_ref 140165 // Visitable
