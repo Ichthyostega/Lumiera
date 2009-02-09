@@ -1,5 +1,5 @@
 /*
-  GUINOTIFICATIONFACADE.hpp  -  access point for pushing informations into the GUI
+  GUINOTIFICATION-FACADE.h  -  access point for pushing informations into the GUI
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,7 +20,7 @@
  
 */
 
-/** @file guinotification-facade.hpp
+/** @file guinotification-facade.h
  ** Major public Interface of the Lumiera GUI. While generally speaking, the GUI
  ** controls the application and thus acts on its own, it exposes some services
  ** usable by scripts or the two lower layers. The main purpose of these services
@@ -33,6 +33,7 @@
 
 #ifndef GUI_GUINOTIFICATION_H
 #define GUI_GUINOTIFICATION_H
+
 
 
 #ifdef __cplusplus  /* ============== C++ Interface ================= */

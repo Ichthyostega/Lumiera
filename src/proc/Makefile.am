@@ -24,7 +24,7 @@ noinst_LTLIBRARIES += liblumiproc.la
 liblumiproc_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
 liblumiproc_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
-liblumiproc_la_SOURCES =							\
+liblumiproc_la_SOURCES =						\
 	$(liblumiproc_la_srcdir)/controllerfacade.cpp			\
 	$(liblumiproc_la_srcdir)/facade.cpp				\
 	$(liblumiproc_la_srcdir)/state.cpp				\
@@ -205,7 +205,7 @@ noinst_HEADERS +=							\
 	$(liblumiproc_la_srcdir)/mobject/builderfacade.hpp		\
 	$(liblumiproc_la_srcdir)/control/pathmanager.hpp		\
 	$(liblumiproc_la_srcdir)/control/renderstate.hpp		\
-	$(liblumiproc_la_srcdir)/play/dummy-player-service.cpp		\
+	$(liblumiproc_la_srcdir)/play/tick-service.hpp			\
 	$(liblumiproc_la_srcdir)/play/dummy-image-generator.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/interpolator.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/parameter.hpp			\

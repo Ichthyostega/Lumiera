@@ -228,7 +228,7 @@ namespace gui {
   
   
   DisplayerSlot::DisplayerSlot (FrameDestination const& outputDestination)
-    : currBuffer_(0)
+  : currBuffer_(0)
   { 
     put_ = 0; // mark as not allocated
     hasFrame_.connect (outputDestination);

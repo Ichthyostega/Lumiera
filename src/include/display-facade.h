@@ -1,5 +1,5 @@
 /*
-  DISPLAY-FACADE.hpp  -  accessing a display for outputting frames
+  DISPLAY-FACADE.h  -  accessing a display for outputting frames
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,7 +20,7 @@
  
 */
 
-/** @file display-facade.hpp
+/** @file display-facade.h
  ** Major public Interface of the Lumiera GUI. While, generally speaking, the GUI
  ** controls the application and thus acts on its own, it exposes some services
  ** to the lower layers. Especially the lumiera::Display interface serves to
@@ -37,17 +37,8 @@
 #ifndef GUI_INTERFACE_DISPLAY_H
 #define GUI_INTERFACE_DISPLAY_H
 
+#include "include/display-handles.h"
 
-
-typedef unsigned char * LumieraDisplayFrame;
-
-
-struct lumiera_displaySlot_struct 
-  {
-    void (*put_)(lumiera_displaySlot_struct*, LumieraDisplayFrame);
-  };
-typedef struct lumiera_displaySlot_struct lumiera_displaySlot;
-typedef lumiera_displaySlot* LumieraDisplaySlot;
 
 
 

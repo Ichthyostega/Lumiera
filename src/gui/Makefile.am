@@ -56,6 +56,7 @@ gtk_gui_la_SOURCES =							\
 	$(lumigui_srcdir)/gtk-lumiera.cpp				\
 	$(lumigui_srcdir)/gtk-lumiera.hpp				\
 	$(lumigui_srcdir)/notification-service.cpp			\
+	$(lumigui_srcdir)/display-service.cpp				\
 	$(lumigui_srcdir)/window-manager.cpp				\
 	$(lumigui_srcdir)/window-manager.hpp				\
 	$(lumigui_srcdir)/workspace/actions.cpp				\

@@ -1,5 +1,5 @@
 /*
-  DUMMY-PLAYER-FACADE.hpp  -  access point to a dummy test player
+  DUMMY-PLAYER-FACADE.h  -  access point to a dummy test player
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -25,12 +25,7 @@
 #define PROC_INTERFACE_DUMMYPLAYER_H
 
 #include "include/display-facade.h"
-
-
-struct lumiera_playprocess_struct { };
-typedef struct lumiera_playprocess_struct lumiera_playprocess;
-typedef lumiera_playprocess* LumieraPlayProcess;
-
+#include "include/display-handles.h"
 
 
 
