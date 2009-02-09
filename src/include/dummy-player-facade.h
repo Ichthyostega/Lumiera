@@ -44,15 +44,18 @@ typedef lumiera_playprocess* LumieraPlayProcess;
 
 
 
-namespace proc {
+namespace proc   {
   namespace play {
     
-    
     class ProcessImpl;
+} }
+
+
+namespace lumiera {
     
     
     /******************************************************************
-     * Interface Proc-Layer (or maybe the backend?): 
+     * Experimental Interface Proc-Layer (or maybe the backend?): 
      * Global access point for starting a dummy playback, generating
      * some test image data for the GUI to display in a viewer window.
      * 
@@ -85,7 +88,7 @@ namespace proc {
          * @see dummy-player-service.cpp implementation
          */
         class Process
-          : public lib::Handle<ProcessImpl>
+          : public lib::Handle<proc::play::ProcessImpl>
           {
           public:
             void        play(bool);
@@ -102,10 +105,8 @@ namespace proc {
       };
     
     
+} // namespace lumiera
 
-  } // namespace play
-  
-} // namespace proc
 
 
 

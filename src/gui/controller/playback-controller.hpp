@@ -63,7 +63,7 @@ private:
 
   volatile bool playing;
   
-  proc::play::DummyPlayer::Process playHandle;
+  lumiera::DummyPlayer::Process playHandle;
   
   LumieraDisplaySlot viewerHandle_;
   

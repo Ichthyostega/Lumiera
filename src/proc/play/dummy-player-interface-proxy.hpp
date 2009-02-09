@@ -41,16 +41,15 @@
     
 #include "proc/play/dummy-player-service.hpp"
 
-namespace proc {
-  namespace play {
+namespace lumiera {
   
   /** storage for the DummyPlayer facade proxy factory... */
   lumiera::facade::Accessor<DummyPlayer> DummyPlayer::facade;
   
-} }
-
-
-namespace lumiera {
+  
+  
+  
+  
   namespace facade {
     
     typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)

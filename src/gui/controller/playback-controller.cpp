@@ -49,7 +49,7 @@ PlaybackController::play()
   else if (viewerHandle_)
     try
       {
-        playHandle =  proc::play::DummyPlayer::facade().start (viewerHandle_);
+        playHandle =  lumiera::DummyPlayer::facade().start (viewerHandle_);
         playing = true;
       }
     catch (lumiera::error::State& err)

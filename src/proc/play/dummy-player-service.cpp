@@ -94,7 +94,7 @@ namespace proc  {
             }
         };
       
-      lumiera::Singleton<DummyPlayerSubsysDescriptor> theDescriptor;
+      lumiera::Singleton<DummyPlayerSubsysDescriptor> theDummyPlayerDescriptor;
       
       
       
@@ -271,10 +271,6 @@ namespace proc  {
       }
     
     
-    /* === Forwarding function(s) on the Process handle === */
-    
-    void DummyPlayer::Process::play(bool yes)    { impl().doPlay(yes);       }
-    
     
     
     
@@ -356,24 +352,34 @@ namespace proc  {
         else
           display_(imageGen_->current());
       }
-    
-    
-    
-  
-  
-  
-    /** @internal intended for use by main(). */
-    lumiera::Subsys&
-    DummyPlayer::getDescriptor()
-    {
-      return play::theDescriptor();
-    }
-    
-    // emit the vtable here into this translation unit within liblumieraproc.so ...
-    DummyPlayer::~DummyPlayer()      { }
   
   
   
   } // namespace play
   
 } // namespace proc
+
+
+
+
+
+namespace lumiera { /* === Forwarding function(s) on the Process handle === */
+  
+  void DummyPlayer::Process::play(bool yes)  { impl().doPlay(yes); }
+  
+  
+  
+  
+  
+  /** @internal intended for use by main(). */
+  lumiera::Subsys&
+  DummyPlayer::getDescriptor()
+  {
+    return proc::play::theDummyPlayerDescriptor();
+  }
+  
+  // emit the vtable here into this translation unit within liblumieraproc.so ...
+  DummyPlayer::~DummyPlayer()      { }
+  
+  
+} // namespace lumiera

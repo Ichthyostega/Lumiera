@@ -43,7 +43,7 @@ namespace {
   Subsys& engine  = backend::EngineFacade::getDescriptor();
   Subsys& netNode = backend::NetNodeFacade::getDescriptor();
   Subsys& script  = backend::ScriptRunnerFacade::getDescriptor();
-  Subsys& player  = proc::play::DummyPlayer::getDescriptor();
+  Subsys& player  = lumiera::DummyPlayer::getDescriptor();
   Subsys& builder = proc::Facade::getBuilderDescriptor();
   Subsys& session = proc::Facade::getSessionDescriptor();
   Subsys& lumigui = gui::GuiFacade::getDescriptor();

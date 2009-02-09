@@ -55,6 +55,7 @@ namespace proc {
     using std::string;
     using lumiera::Subsys;
     using lumiera::Display;
+    using lumiera::DummyPlayer;
     
     
     class DummyImageGenerator;
