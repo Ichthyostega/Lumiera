@@ -100,172 +100,25 @@ namespace lumiera {
 
 
 
-    /* ==================== GuiNotification =================================== */
+
+    /* ===================================================================== */
+    /*    including explicit Proxy-Definitions for all facade interfaces     */
+    /* ===================================================================== */
+
+
+
+    /* ==================== GuiNotification ================================ */
     
-#include "include/guinotification-facade.h"
-
-namespace gui {
-  
-  /** storage for the facade proxy factory
-   *  used by client code to invoke through the interface */
-  lumiera::facade::Accessor<GuiNotification> GuiNotification::facade;
-
-} // namespace gui
+#include "gui/notification-interface-proxy.hpp"
 
 
-
-namespace lumiera {
-  namespace facade {
+    /* ==================== gui::Display =================================== */
     
-    typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_GuiNotification, 0)
-                          , gui::GuiNotification
-                          > IHandle_GuiNotification;
-    
-    
-    template<>
-    class Proxy<IHandle_GuiNotification>
-      : public Holder<IHandle_GuiNotification>
-      {
-        //----Proxy-Implementation-of-GuiNotification--------
-        
-        void displayInfo (string const& text)           { _i_.displayInfo (cStr(text)); }
-        void triggerGuiShutdown (string const& cause)   { _i_.triggerGuiShutdown (cStr(cause)); }
-        
-        
-      public:
-        Proxy (IHandle const& iha) : THolder(iha) {}
-      };
-    
-    
-    template  void openProxy<IHandle_GuiNotification>  (IHandle_GuiNotification const&);
-    template  void closeProxy<IHandle_GuiNotification> (void);
-    
-   } // namespace facade
-  
-} // namespace lumiera
+#include "gui/display-interface-proxy.hpp"
 
 
-
-
-
-    /* ==================== gui::Display ====================================== */
+    /* ==================== DummyPlayer ==================================== */
     
-#include "include/display-facade.h"
-
-namespace lumiera {
-  
-  /** storage for the facade proxy factory
-   *  used by client code to invoke through the interface */
-  lumiera::facade::Accessor<Display> Display::facade;
-  
-  /// emit the vtable here into this translation unit within liblumieracommon.so...
-  Display::~Display()      { }
-  
-} // namespace lumiera
+#include "proc/play/dummy-player-interface-proxy.hpp"
 
 
-
-namespace lumiera {
-  namespace facade {
-    
-    typedef InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_Display, 0)
-                          , lumiera::Display
-                          > IHandle_Display;
-    
-    
-    template<>
-    class Proxy<IHandle_Display>
-      : public Holder<IHandle_Display>
-      {
-        //----Proxy-Implementation-of-lumiera::Display--------
-        
-        Display::Sink
-        getHandle (LumieraDisplaySlot display)
-          {
-            _i_.allocate (display);
-            Sink sinkHandle;
-            sinkHandle.activate (display, _i_.release);
-            if (lumiera_error_peek() || !sinkHandle)
-              throw lumiera::error::State("failed to allocate output DisplayerSlot",
-                                          lumiera_error());
-            return sinkHandle; 
-          }
-        
-        
-      public:
-        Proxy (IHandle const& iha) : THolder(iha) {} 
-      };
-    
-    
-    template  void openProxy<IHandle_Display>  (IHandle_Display const&);
-    template  void closeProxy<IHandle_Display> (void);
-    
-   } // namespace facade
-  
-} // namespace lumiera
-
-
-
-
-
-
-    /* ==================== DummyPlayer ======================================= */
-    
-#include "proc/play/dummy-player-service.hpp"
-
-namespace proc {
-  namespace play {
-  
-  /** storage for the DummyPlayer facade proxy factory... */
-  lumiera::facade::Accessor<DummyPlayer> DummyPlayer::facade;
-  
-} }
-
-
-namespace lumiera {
-  namespace facade {
-    
-    typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)
-                                     , proc::play::DummyPlayer
-                                     > IHandle_DummyPlayer;
-    
-    
-    template<>
-    class Proxy<IHandle_DummyPlayer>
-      : public Holder<IHandle_DummyPlayer>
-      {
-        //----Proxy-Implementation-of-DummyPlayer--------
-        typedef proc::play::DummyPlayer::Process Process;
-        typedef proc::play::ProcessImpl ProcessImpl;
-        
-        /** @note as an optimisation we hand out a direct reference
-         *  to the implementing process object. While this ref could
-         *  still be passed as handle to the C Language interface, using
-         *  it directly within the client (=GUI) bypasses the C interface
-         *  and thus leaves us only with one level of indirection,
-         *  irrespective if using the C or C++ interface.
-         */
-        Process start(LumieraDisplaySlot viewerHandle)
-          {
-            ProcessImpl* pP = static_cast<ProcessImpl*> (_i_.startPlay (viewerHandle));
-            
-            if (!pP)
-              throw lumiera::error::State("failed to start DummyPlayer", lumiera_error());
-            
-            return pP->createHandle();
-          }
-        
-        
-        
-      public:
-        Proxy (IHandle const& iha) : THolder(iha) {}
-      };
-    
-    
-    template  void openProxy<IHandle_DummyPlayer>  (IHandle_DummyPlayer const&);
-    template  void closeProxy<IHandle_DummyPlayer> (void);
-    
-    
-  } // namespace facade
-  
-} // namespace lumiera
