@@ -21,7 +21,7 @@
 */
 
 /** @file display-facade.hpp
- ** Major public Interface of the Lumiera GUI. While generally speaking, the GUI
+ ** Major public Interface of the Lumiera GUI. While, generally speaking, the GUI
  ** controls the application and thus acts on its own, it exposes some services
  ** to the lower layers. Especially the lumiera::Display interface serves to
  ** hand over calculated frames to the GUI for displaying them in a viewer.
@@ -62,9 +62,6 @@ typedef lumiera_displaySlot* LumieraDisplaySlot;
 
 
 namespace lumiera {
-  
-  
-//  class ProcessImpl;
   
   
   /******************************************************************
@@ -108,6 +105,9 @@ namespace lumiera {
         {
           
         public:
+          /** push a frame up to the display, calling
+           *  through the CL Interface.
+           *  @see DisplayService::allocate */
           inline void
           operator() (LumieraDisplayFrame frame)
             {
@@ -126,8 +126,8 @@ namespace lumiera {
       virtual ~Display();
     };
   
-    
-
+  
+  
   
 } // namespace lumiera
 

@@ -20,18 +20,20 @@
  
 */
 
-/** @file notification-service.hpp
- ** A public service provided by the GUI, implementing the gui::GuiNotification facade interface.
- ** The purpose of this service is to push state update and notification of events from the lower
- ** layers into the Lumiera GUI. Typically, this happens asynchronously and triggered by events
- ** within the lower layers.
+/** @file dummy-player-service.hpp
+ ** A public service provided by the Proc-Layer, implementing a dummy/mockup playback process.
+ ** This is a design sketch; Lumiera isn't able to generate rendered output as of 2/2009. The
+ ** idea is, that for each ongoing calculation process, there is a ProcessImpl instance holding
+ ** the necessary handles and allocations and providing an uniform API to the client side.
+ ** Especially, this ProcessImpl holds a TickService, which generates periodic callbacks, and
+ ** it uses an output handle (functor) to push the generated frames up.
  ** 
  ** This service is the implementation of a layer separation facade interface. Clients should use
  ** proc::play::DummyPlayer#facade to access this service. This header defines the interface used
  ** to \em provide this service, not to access it.
  **
- ** @see gui::GuiFacade
- ** @see guifacade.cpp starting this service 
+ ** @see lumiera::DummyPlayer
+ ** @see gui::PlaybackController usage example 
  */
 
 
@@ -86,9 +88,10 @@ namespace proc {
         ProcessImpl(LumieraDisplaySlot) ;
        ~ProcessImpl() ;
         
-        /* Implementation-level API to be used By DummyPlayerService */
         
-        /** activate a playback process 
+        /* Implementation-level API */
+        
+        /** activate a playback process
          *  with given specification */
         void setRate (uint fps);
         
@@ -96,6 +99,9 @@ namespace proc {
         bool isPlaying() { return play_; }
         
         void  doPlay(bool yes);
+        
+        
+        /* Lifecycle */
         
         DummyPlayer::Process createHandle();
         static void terminate(ProcessImpl* process);

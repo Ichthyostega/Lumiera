@@ -21,17 +21,24 @@
 */
 
 /** @file display-service.hpp
- ** A public service provided by the GUI, implementing the gui::GuiNotification facade interface.
- ** The purpose of this service is to push state update and notification of events from the lower
- ** layers into the Lumiera GUI. Typically, this happens asynchronously and triggered by events
- ** within the lower layers.
+ ** A public service provided by the GUI, implementing the lumiera::Display facade interface.
+ ** It serves two purposes: 
+ ** - It maintains a collection of DisplayerSlot objects, which are the actual connection points
+ **   and allow to receive frames and dispatch them to the GTK main event loop thread.
+ **   Conceptually, creating such a slot means providing a possible display for output.
+ ** - It provides the actual implementation of the Display facade interface, i.e. the function
+ **   which is to invoked periodically by the playback processes to dispose a new frame into
+ **   the display.
  ** 
- ** This service is the implementation of a layer separation facade interface. Clients should use
- ** proc::play::DummyPlayer#facade to access this service. This header defines the interface used
- ** to \em provide this service, not to access it.
+ ** This service is the implementation of a layer separation facade interface. This header defines
+ ** the interface used to \em provide this service, not to access it. Clients get a specific
+ ** LumieraDisplaySlot passed as parameter when initiating a playback process from the GUI. Using
+ ** this LumieraDisplaySlot handle, clients should then use  lumiera::DummyPlayer#facade to access
+ ** an implementation instance of this service in order to push actual frames up.
  **
- ** @see gui::GuiFacade
- ** @see guifacade.cpp starting this service 
+ ** @see lumiera::Display
+ ** @see lumiera::DummyPlayer
+ ** @see gui::PlaybackController usage example 
  */
 
 

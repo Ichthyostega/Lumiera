@@ -79,11 +79,13 @@ namespace lumiera {
         /**
          * Continuous playback process, which has been started with a specific
          * output size, format and framerate. It is a handle to a calculation process,
-         * which is about to produce a stream of frames to be retrieved by calling
-         * the #getFrame function on this handle.
+         * which is about to produce a stream of frames and push them to the viewer widget,
+         * specified by a LumieraDisplaySlot when starting this process.
          * 
          * The Lifecycle of the referred playback process is managed automatically
-         * through this handle (by ref count).
+         * through this handle (by ref count). Client code is supposed to use the
+         * API on this handle to control the playback mode.
+         * 
          * @see handle.hpp 
          * @see dummy-player-service.cpp implementation
          */
@@ -91,12 +93,13 @@ namespace lumiera {
           : public lib::Handle<proc::play::ProcessImpl>
           {
           public:
-            void        play(bool);
+            void play(bool); ///< play/pause toggle
           };
         
         
         //////////////////TODO: define some dummy negotiation about size and framerate....
         
+        /** create a new playback process outputting to the given viewer/display */
         virtual Process start(LumieraDisplaySlot viewerHandle)   =0;
         
         

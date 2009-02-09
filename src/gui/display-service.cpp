@@ -22,28 +22,21 @@
 
 
 #include "gui/display-service.hpp"
-//#include "lib/singleton.hpp"
 
 extern "C" {
 #include "common/interfacedescriptor.h"
 }
 
-#include <string>
-//#include <memory>
-//#include <boost/scoped_ptr.hpp>
-
 
 namespace gui {
   
-  using std::string;
-//    using boost::scoped_ptr;
   
   
   namespace { // hidden local details of the service implementation....
     
     
     
-    /* ================== define an lumieraorg_GuiNotification instance ======================= */
+    /* ================== define an lumieraorg_Display instance ======================= */
     
     LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0
                                ,lumieraorg_DisplayFacade_descriptor
@@ -118,7 +111,7 @@ namespace gui {
     using lumiera::facade::LUMIERA_ERROR_FACADE_LIFECYCLE;
     typedef lib::SingletonRef<DisplayService>::Accessor InstanceRef;
     
-    InstanceRef _instance; ///< a backdoor for the C Language impl to access the actual DummyPlayer implementation...
+    InstanceRef _instance; ///< a backdoor for the C Language impl to access the actual DisplayService implementation...
     
     
     

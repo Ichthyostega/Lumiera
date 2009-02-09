@@ -79,17 +79,14 @@ namespace proc  {
           void
           triggerShutdown ()  throw()
             {
-              TODO ("implement waiting for any playback processes to terminate gracefully");
-              //..... but this would require us to use a separate thread, so I skip it for now.
-              //      Probably it's better design to manage the processes in a separate thread anyway...
-              
               thePlayer_.reset(0);
+              // note: shutdown of the DummyPlayerService instance may block
+             //        for a short period, until termination of all tick services
             }
           
           bool 
           checkRunningState ()  throw()
             {
-              //note: not locking here...
               return (thePlayer_);
             }
         };
@@ -100,7 +97,7 @@ namespace proc  {
       
       
       
-      /* ================== define an lumieraorg_GuiNotification instance ======================= */
+      /* ================== define an lumieraorg_DummyPlayer instance ======================= */
       
       LUMIERA_INTERFACE_INSTANCE (lumieraorg_interfacedescriptor, 0
                                  ,lumieraorg_DummyPlayerFacade_descriptor
@@ -294,7 +291,7 @@ namespace proc  {
     
     
     void
-    ProcessImpl::terminate (ProcessImpl* process)
+    ProcessImpl::terminate (ProcessImpl* process)  ///< deleter function for lib::Handle
     {
       if (process)
         delete process;
@@ -306,7 +303,7 @@ namespace proc  {
     ProcessImpl::createHandle()
     {
       DummyPlayer::Process handle;
-      handle.activate(this, &terminate);
+      handle.activate(this, &terminate);  // note the deleter function...
       return handle;
     }
     
