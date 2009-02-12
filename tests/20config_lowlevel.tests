@@ -55,10 +55,10 @@ out: item->line = '	 #comment bla'
 END
 
 TEST "check content of configitem with section" configitem_simple_content_check $'[ key.foo suffix.bar ] ' << END
-out: item->line = '[ key.foo suffix.bar ] '
+out: item->line = '\[ key\.foo suffix.bar \] '
 out: item->key_size = '7'
-out: item->key = 'key.foo suffix.bar ] '
-out: item->delim = ' suffix.bar ] '
+out: item->key = 'key.foo suffix.bar \] '
+out: item->delim = ' suffix.bar \] '
 END
 
 TEST "check content of configitem with directive (without argument)" configitem_simple_content_check $'\t @directive  ' << END

@@ -2,7 +2,7 @@ TESTING "testing plugins" ./test-interfaces
 
 
 TEST "discovering plugins, missing path" plugin_discover <<END
-out: found plugin: (null)
+out: found plugin: \(null\)
 return: 0
 END
 
@@ -10,12 +10,12 @@ export LUMIERA_PLUGIN_PATH=.libs
 export LUMIERA_CONFIG_PATH=./
 
 TEST "discovering plugins" plugin_discover <<END
-out: found plugin: .libs/examplepluginc.lum
+out: found plugin: \.libs/examplepluginc.lum
 return: 0
 END
 
 TEST "plugin unloading" plugin_unload <<END
-out: plugin unload: (nil)
+out: plugin unload: \(nil\)
 return: 0
 END
 
@@ -28,8 +28,8 @@ return: 0
 END
 
 TEST "C plugin test, nested" plugin_examplepluginc_nested <<END
-out: config path is: ./
-out: plugin path is: .libs
+out: config path is: \./
+out: plugin path is: \.libs
 out: Hallo Welt!
 out: Hello World!
 out: Bye World!

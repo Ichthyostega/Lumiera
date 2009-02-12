@@ -19,7 +19,7 @@ END
 
 
 TEST "chained mutex section" chainedmutexsection <<END
-out: outer mutex locked section
+out: ^outer mutex locked section
 out: inner but not outer mutex locked section
 END
 
