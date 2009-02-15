@@ -79,16 +79,18 @@ int that is increased with each revision of this International Standard.
 /*
  * Type of a llist node.
  */
+#ifndef LLIST_DEFINED
+#define LLIST_DEFINED
 struct llist_struct
 {
   struct llist_struct *next;
   struct llist_struct *prev;
 };
+#endif
 typedef struct llist_struct llist;
 typedef llist * LList;
 typedef const llist * const_LList;
 typedef llist ** LList_ref;
-
 
 /**
  * Macro to instantiate a local llist.
@@ -533,11 +535,11 @@ LLIST_FUNC (LList llist_get_nth_stop (LList self, int n, const_LList stop),
 
 /**
  * Sort a list.
+ * recursive mergesort, needs much extra stackspace (crappy implementation yet) but it reasonable fast
  * @param self list to be sorted
  * @param cmp function takeing 2 LLists
- * simple recursive mergesort
  */
-typedef int (*llist_cmpfn)(LList a, LList b);
+typedef int (*llist_cmpfn)(const_LList a, const_LList b);
 
 LLIST_FUNC (LList llist_sort (LList self, llist_cmpfn cmp),
             llist left;
@@ -563,6 +565,71 @@ LLIST_FUNC (LList llist_sort (LList self, llist_cmpfn cmp),
               }
             return self;
 )
+
+
+/**
+ * Find a element in list.
+ * searches the list for a element.
+ * Does not change the list order.
+ * @param self list to be searched
+ * @param templ template for the element being searched
+ * @param cmp function taking 2 LLists
+ * @return pointer to the found LList element or NULL if nothing foound
+ */
+LLIST_FUNC (LList llist_find (const_LList self, const_LList templ, llist_cmpfn cmp),
+            LLIST_FOREACH(self, node)
+            {
+              if (!cmp (node, templ))
+                return node;
+            }
+            return NULL;
+)
+
+
+/**
+ * Find a element in a unsorted list.
+ * searches the list until it finds the searched element and moves it then to the head.
+ * Useful if the order of the list is not required and few elements are frequently searched.
+ * @param self list to be searched
+ * @param templ template for the element being searched
+ * @param cmp function taking 2 LLists
+ * @return pointer to the found LList element (head) or NULL if nothing foound
+ */
+LLIST_FUNC (LList llist_ufind (LList self, const_LList templ, llist_cmpfn cmp),
+            LLIST_FOREACH(self, node)
+            {
+              if (!cmp (node, templ))
+                {
+                  llist_insert_next (self, node);
+                  return node;
+                }
+            }
+            return NULL;
+)
+
+
+/**
+ * Find a element in a sorted list.
+ * searches the list until it find the searched element, exits searching when found an element
+ * biggier than the searched one.
+ * @param self list to be searched
+ * @param templ template for the element being searched
+ * @param cmp function takeing 2 LLists
+ * @return pointer to the found LList element or NULL if nothing foound
+ */
+LLIST_FUNC (LList llist_sfind (const_LList self, const_LList templ, llist_cmpfn cmp),
+            LLIST_FOREACH(self, node)
+            {
+              int c = cmp (node, templ);
+              if (!c)
+                return node;
+              else if (c>0)
+                break;
+            }
+            return NULL;
+)
+
+
 
 #endif /* LLIST_H */
 /*
