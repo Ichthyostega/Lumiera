@@ -44,7 +44,7 @@
 
 /* just some declarations */
 extern PSplay lumiera_pluginregistry;
-static char* init_exts_globs ();
+static char* init_exts_globs (void);
 
 /* TODO default plugin path should be set by the build system */
 
@@ -202,7 +202,7 @@ lumiera_plugin_discover (LumieraPlugin (*callback_load)(const char* plugin),
   /* construct glob trail {.so,.c,.foo} ... */
   static char* exts_globs = NULL;
   if (!exts_globs)
-    exts_globs = init_exts_globs (&exts_globs);
+    exts_globs = init_exts_globs ();
 
   const char* path;
   unsigned i = 0;
@@ -350,7 +350,7 @@ lumiera_plugin_lookup (const char* name)
 }
 
 
-static char* init_exts_globs ()
+static char* init_exts_globs (void)
 {
   char* exts_globs;
   size_t exts_sz = 3; /* * { } \0 less one comma */
