@@ -22,6 +22,7 @@
 
 #include "panel.hpp"
 #include "../gtk-lumiera.hpp"
+#include <libgdl-1.0/gdl/gdl-dock-item-grip.h>
 
 namespace gui {
 namespace panels {
@@ -29,6 +30,7 @@ namespace panels {
 Panel::Panel(workspace::WorkspaceWindow &workspace_window,
   const gchar *name, const gchar *long_name,
   GdlDockItemBehavior behavior) :
+  bar(long_name),
   workspace(workspace_window)
 {
   REQUIRE(name != NULL);
@@ -44,6 +46,7 @@ Panel::Panel(workspace::WorkspaceWindow &workspace_window,
 Panel::Panel(workspace::WorkspaceWindow &workspace_window,
   const gchar *name, const gchar *long_name, const gchar *stock_id,
   GdlDockItemBehavior behavior) :
+  bar(long_name, stock_id),
   workspace(workspace_window)
 {
   REQUIRE(name != NULL);
@@ -90,9 +93,13 @@ void
 Panel::internal_setup()
 {
   REQUIRE(dock_item != NULL);
-  REQUIRE(gobj() != NULL); 
+  REQUIRE(gobj() != NULL);
   
-  gdl_dock_item_hide_grip(dock_item);
+  //pack_start(bar);
+  GdlDockItemGrip *grip = GDL_DOCK_ITEM_GRIP(
+    gdl_dock_item_get_grip(dock_item));
+  gdl_dock_item_grip_set_label(grip, ((Widget&)bar).gobj());
+    
   gtk_container_add ((GtkContainer*)dock_item, (GtkWidget*)gobj());  
   gtk_widget_show ((GtkWidget*)dock_item);
 }

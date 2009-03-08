@@ -27,6 +27,8 @@
 using namespace Gtk;
 using namespace sigc;
 
+const int CaptionPadding = 4;
+
 namespace gui {
 namespace widgets {
   
@@ -40,15 +42,24 @@ MenuButton::MenuButton() :
   setup_button();
 }
 
-MenuButton::MenuButton(const Gtk::StockID& stock_id) :
-  Button(stock_id),
+MenuButton::MenuButton(const StockID& stock_id) :
+  Button(),
+  image(stock_id, ICON_SIZE_MENU),
+  caption(),
   arrow(arrowType, shadowType)
 {
+  StockItem stock_item;
+  REQUIRE(StockItem::lookup(stock_id, stock_item));
+  caption.set_text_with_mnemonic(stock_item.get_label());
+
+  hBox.pack_start(image);
+
   setup_button();
 }  
 
 MenuButton::MenuButton(const Glib::ustring& label, bool mnemonic) :
-  Button(label, mnemonic),
+  Button(),
+  caption(label),
   arrow(arrowType, shadowType)
 {
   setup_button();
@@ -71,8 +82,12 @@ void
 MenuButton::setup_button()
 {
   arrow.set(ARROW_DOWN, SHADOW_NONE);
-  set_image_position(POS_RIGHT);
-  set_image(arrow);
+  
+  hBox.pack_start(caption, PACK_EXPAND_WIDGET, CaptionPadding);
+  hBox.pack_start(arrow);
+
+  add(hBox);
+  show_all();
 }
 
 void

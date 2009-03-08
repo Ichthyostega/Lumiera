@@ -30,6 +30,8 @@
 #include "../gtk-lumiera.hpp"
 #include <libgdl-1.0/gdl/gdl-dock-item.h>
 
+#include "../widgets/panel-bar.hpp"
+
 namespace gui {
 
 namespace workspace {
@@ -102,6 +104,8 @@ protected:
   workspace::WorkspaceWindow &workspace;
 
   GdlDockItem* dock_item;
+  
+  widgets::PanelBar bar;
 };
 
 }   // namespace panels

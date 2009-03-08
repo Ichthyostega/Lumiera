@@ -104,6 +104,12 @@ private:
 
 private:
 
+  Gtk::HBox hBox;
+  
+  Gtk::Image image;
+  
+  Gtk::Label caption;
+
   /**
    * The internal menu object which is the popup menu of this widget.
    **/
