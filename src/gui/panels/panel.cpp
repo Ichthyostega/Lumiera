@@ -30,8 +30,8 @@ namespace panels {
 Panel::Panel(workspace::WorkspaceWindow &workspace_window,
   const gchar *name, const gchar *long_name,
   GdlDockItemBehavior behavior) :
-  bar(long_name),
-  workspace(workspace_window)
+  workspace(workspace_window),
+  panelBar(long_name)
 {
   REQUIRE(name != NULL);
   REQUIRE(long_name != NULL);
@@ -46,8 +46,8 @@ Panel::Panel(workspace::WorkspaceWindow &workspace_window,
 Panel::Panel(workspace::WorkspaceWindow &workspace_window,
   const gchar *name, const gchar *long_name, const gchar *stock_id,
   GdlDockItemBehavior behavior) :
-  bar(long_name, stock_id),
-  workspace(workspace_window)
+  workspace(workspace_window),
+  panelBar(long_name, stock_id)
 {
   REQUIRE(name != NULL);
   REQUIRE(long_name != NULL);
@@ -95,10 +95,9 @@ Panel::internal_setup()
   REQUIRE(dock_item != NULL);
   REQUIRE(gobj() != NULL);
   
-  //pack_start(bar);
   GdlDockItemGrip *grip = GDL_DOCK_ITEM_GRIP(
     gdl_dock_item_get_grip(dock_item));
-  gdl_dock_item_grip_set_label(grip, ((Widget&)bar).gobj());
+  gdl_dock_item_grip_set_label(grip, ((Widget&)panelBar).gobj());
     
   gtk_container_add ((GtkContainer*)dock_item, (GtkWidget*)gobj());  
   gtk_widget_show ((GtkWidget*)dock_item);

@@ -104,8 +104,21 @@ TimelinePanel::TimelinePanel(workspace::WorkspaceWindow
   
   toolbar.set_toolbar_style(TOOLBAR_ICONS);
   
+/*#if 0
+  toolbar.set_icon_size(WindowManager::MenuIconSize);
+#else
+  TODO("This code soon be removed when we drop Etch compatibility");
+  
+  // Temporary bodge for etch compatibility - will be removed soon
+  gtk_toolbar_set_icon_size (toolbar.gobj(),
+    (GtkIconSize)(int)WindowManager::MenuIconSize);
+#endif*/
+  
+  toolbar.show_all();
+  panelBar.pack_start(toolbar, PACK_EXPAND_WIDGET);
+  
   // Add the toolbar
-  pack_start(toolbar, PACK_SHRINK);
+  //pack_start(toolbar, PACK_SHRINK);
   pack_start(notebook, PACK_EXPAND_WIDGET);
   
   // Set the initial UI state

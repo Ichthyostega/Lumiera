@@ -103,7 +103,7 @@ private:
   //----- Data -----//
 
   // Widgets
-  Gtk::Toolbar toolbar;
+  ButtonBar toolbar;
   Gtk::HBox toolStrip;
   
   // Body Widgets

@@ -105,7 +105,7 @@ protected:
 
   GdlDockItem* dock_item;
   
-  widgets::PanelBar bar;
+  widgets::PanelBar panelBar;
 };
 
 }   // namespace panels

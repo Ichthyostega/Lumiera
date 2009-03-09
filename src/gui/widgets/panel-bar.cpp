@@ -32,10 +32,8 @@ namespace widgets {
   
 PanelBar::PanelBar(const gchar *name) :
   HBox(),
-  panelButton(Glib::ustring("Hello"/*name*/)),
-  test(name)
+  panelButton(Glib::ustring(name))
 {
-  
   internal_setup();
   
     // Make the widget sensitive to mouse events
@@ -47,8 +45,7 @@ PanelBar::PanelBar(const gchar *name) :
 
 PanelBar::PanelBar(const gchar *name, const gchar *stock_id) :
   HBox(),
-  panelButton(Gtk::StockID(stock_id)),
-  test(name)
+  panelButton(Gtk::StockID(stock_id))
 {
   internal_setup();
 }
@@ -60,9 +57,6 @@ PanelBar::internal_setup()
   panelButton.unset_flags(CAN_FOCUS);
   panelButton.show();
   pack_start(panelButton, PACK_SHRINK);
-  test.show();
-  pack_start(test, PACK_EXPAND_WIDGET);
-
 }
 
 /*bool PanelBar::on_button_press_event (GdkEventButton* event)

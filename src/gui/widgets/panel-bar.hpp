@@ -42,7 +42,6 @@ public:
   PanelBar(const gchar *name, const gchar *stock_id);
 
   MenuButton panelButton;
-  Gtk::Label test;
   
   //virtual bool 	on_button_press_event (GdkEventButton* event);
   
