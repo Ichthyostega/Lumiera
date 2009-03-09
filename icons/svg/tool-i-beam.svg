@@ -19,6 +19,13 @@
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <defs
      id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 50 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="150 : 50 : 1"
+       inkscape:persp3d-origin="75 : 33.333333 : 1"
+       id="perspective27" />
     <linearGradient
        inkscape:collect="always"
        id="linearGradient8773">
@@ -75,9 +82,9 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6568543"
-     inkscape:cx="72.876232"
-     inkscape:cy="57.176223"
+     inkscape:zoom="32"
+     inkscape:cx="116.37321"
+     inkscape:cy="19.994775"
      inkscape:document-units="px"
      inkscape:current-layer="layer3"
      showgrid="true"
@@ -175,7 +182,7 @@
     <path
        sodipodi:nodetypes="cssccccssscccsssccccssscccs"
        id="path7977"
-       d="M 130.5,77.5 C 129.99037,77.5 129.5,78 129.5,78.5 C 129.5,79 130,79.5 130.5,79.5 L 130.5,79.5 C 131,79.5 131.5,80 131.5,80.5 L 131.5,87.5 C 131.5,88 131,88.5 130.5,88.5 L 130.5,88.5 C 130,88.5 129.5,89 129.5,89.5 C 129.5,90 130,90.5 130.5,90.5 L 131.5,90.5 C 132,90.5 132.5,90 132.5,89.5 C 132.5,90 133,90.5 133.5,90.5 L 134.5,90.5 C 135,90.5 135.5,90 135.5,89.5 C 135.5,89 135,88.5 134.5,88.5 L 134.5,88.5 C 134,88.5 133.5,88 133.5,87.5 L 133.5,80.5 C 133.5,80 134,79.5 134.5,79.5 L 134.5,79.5 C 135,79.5 135.5,79 135.5,78.5 C 135.5,78 135,77.5 134.5,77.5 L 133.5,77.5 C 133,77.5 132.5,78 132.5,78.5 C 132.5,78 132,77.5 131.5,77.5 L 130.5,77.5 z"
+       d="M 129.5,77.5 C 128.99037,77.5 128.5,78 128.5,78.5 C 128.5,79 129,79.5 129.5,79.5 L 129.5,79.5 C 130,79.5 130.5,80 130.5,80.5 L 130.5,87.5 C 130.5,88 130,88.5 129.5,88.5 L 129.5,88.5 C 129,88.5 128.5,89 128.5,89.5 C 128.5,90 129,90.5 129.5,90.5 L 130.5,90.5 C 131,90.5 131.5,90 131.5,89.5 C 131.5,90 132,90.5 132.5,90.5 L 133.5,90.5 C 134,90.5 134.5,90 134.5,89.5 C 134.5,89 134,88.5 133.5,88.5 L 133.5,88.5 C 133,88.5 132.5,88 132.5,87.5 L 132.5,80.5 C 132.5,80 133,79.5 133.5,79.5 L 133.5,79.5 C 134,79.5 134.5,79 134.5,78.5 C 134.5,78 134,77.5 133.5,77.5 L 132.5,77.5 C 132,77.5 131.5,78 131.5,78.5 C 131.5,78 131,77.5 130.5,77.5 L 129.5,77.5 z"
        style="fill:#eeeeec;fill-rule:evenodd;stroke:#555753;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
        sodipodi:type="arc"
