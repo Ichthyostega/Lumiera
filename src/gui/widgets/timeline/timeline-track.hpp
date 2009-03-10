@@ -26,6 +26,7 @@
 #include "../../gtk-lumiera.hpp"
 #include "../../model/track.hpp"
 #include "../menu-button.hpp"
+#include "../button-bar.hpp"
 #include "timeline-header-container.hpp"
 #include "timeline-header-widget.hpp"
 
@@ -192,7 +193,7 @@ private:
   Gtk::ToolButton lockButton;
   
   Gtk::Entry titleBox;
-  Gtk::Toolbar buttonBar;
+  ButtonBar buttonBar;
   
   Gtk::Menu contextMenu;
   

@@ -78,6 +78,8 @@ gtk_gui_la_SOURCES =							\
 	$(lumigui_srcdir)/panels/viewer-panel.hpp			\
 	$(lumigui_srcdir)/panels/resources-panel.cpp			\
 	$(lumigui_srcdir)/panels/resources-panel.hpp			\
+	$(lumigui_srcdir)/widgets/button-bar.cpp			\
+	$(lumigui_srcdir)/widgets/button-bar.hpp			\
 	$(lumigui_srcdir)/widgets/menu-button.cpp			\
 	$(lumigui_srcdir)/widgets/menu-button.hpp			\
 	$(lumigui_srcdir)/widgets/video-display-widget.cpp		\

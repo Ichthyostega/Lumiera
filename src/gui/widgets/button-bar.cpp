@@ -1,0 +1,55 @@
+/*
+  button-bar.cpp  -  Implementation of the button bar widget
+ 
+  Copyright (C)         Lumiera.org
+    2009,               Joel Holdsworth <joel@airwebreathe.org.uk>
+ 
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of the
+  License, or (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ 
+* *****************************************************/
+
+#include "button-bar.hpp"
+
+#include <nobug.h>
+
+using namespace Gtk;
+using namespace sigc;
+
+namespace gui {
+namespace widgets {
+
+ButtonBar::ButtonBar() :
+  exposeEvent(NULL)
+{
+}
+
+bool
+ButtonBar::on_expose_event(GdkEventExpose* event)
+{
+  exposeEvent = event;
+  foreach(sigc::mem_fun(this, &ButtonBar::expose_each));
+  exposeEvent = NULL;
+  return false;
+}
+
+void
+ButtonBar::expose_each(Gtk::Widget& widget)
+{
+  REQUIRE(exposeEvent);
+  propagate_expose(widget, exposeEvent);
+}
+
+} // widgets
+} // gui
