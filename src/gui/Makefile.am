@@ -82,6 +82,8 @@ gtk_gui_la_SOURCES =							\
 	$(lumigui_srcdir)/widgets/button-bar.hpp			\
 	$(lumigui_srcdir)/widgets/menu-button.cpp			\
 	$(lumigui_srcdir)/widgets/menu-button.hpp			\
+	$(lumigui_srcdir)/widgets/mini-button.cpp			\
+	$(lumigui_srcdir)/widgets/mini-button.hpp			\
 	$(lumigui_srcdir)/widgets/video-display-widget.cpp		\
 	$(lumigui_srcdir)/widgets/video-display-widget.hpp		\
 	$(lumigui_srcdir)/widgets/timeline-widget.cpp			\

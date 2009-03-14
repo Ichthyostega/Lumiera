@@ -1,5 +1,5 @@
 /*
-  button-bar.hpp  -  Declaration of the button bar widget
+  mini-button.hpp  -  Declaration of the mini button widget
  
   Copyright (C)         Lumiera.org
     2009,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,34 +19,41 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file button-bar.hpp
- ** This file contains the definition of the button bar widget
+/** @file mini-button.hpp
+ ** This file contains the definition of mini button widget
  */
 
-#ifndef BUTTON_BAR_HPP
-#define BUTTON_BAR_HPP
+#ifndef MINI_BUTTON_HPP
+#define MINI_BUTTON_HPP
 
-#include "mini-button.hpp"
+#include <gtkmm.h>
 
 namespace gui {
 namespace widgets {
 
 /**
- * A modified toolbar widget for use in dialogs.
+ * A ToolButton-like widget
  **/
-class ButtonBar : public Gtk::HBox
+class MiniButton : public Gtk::Button
 {
 public:
+
   /**
-   * Constructor
+   * Creates a new Button containing the image and text from a stock
+   * item. 
+   * @remarks Stock ids have identifiers like Gtk::Stock::OK and
+   * Gtk::Stock::APPLY.
    **/
-  ButtonBar();
+  MiniButton(const Gtk::StockID& stock_id,
+    const Gtk::IconSize icon_size);
   
-  void append(MiniButton& button);
+private:
+  
+  Gtk::Image image;
 };
 
 } // gui
 } // widgets
 
-#endif // BUTTON_BAR_HPP
+#endif // MINI_BUTTON_HPP
 

@@ -30,25 +30,14 @@ using namespace sigc;
 namespace gui {
 namespace widgets {
 
-ButtonBar::ButtonBar() :
-  exposeEvent(NULL)
+ButtonBar::ButtonBar()
 {
-}
-
-bool
-ButtonBar::on_expose_event(GdkEventExpose* event)
-{
-  exposeEvent = event;
-  foreach(sigc::mem_fun(this, &ButtonBar::expose_each));
-  exposeEvent = NULL;
-  return false;
 }
 
 void
-ButtonBar::expose_each(Gtk::Widget& widget)
+ButtonBar::append(MiniButton& button)
 {
-  REQUIRE(exposeEvent);
-  propagate_expose(widget, exposeEvent);
+  pack_start(button, PACK_SHRINK);
 }
 
 } // widgets

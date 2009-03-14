@@ -46,29 +46,21 @@ Track::Track(TimelineWidget &timeline_widget,
   expanded(true),
   expandDirection(None),
   headerWidget(*this),
-  enableButton(Gtk::StockID("track_enabled")),
-  lockButton(Gtk::StockID("track_unlocked"))
+  enableButton(Gtk::StockID("track_enabled"), WindowManager::MenuIconSize),
+  lockButton(Gtk::StockID("track_unlocked"), WindowManager::MenuIconSize)
 {
   REQUIRE(model_track);
   
   titleMenuButton.set_relief(RELIEF_HALF);
   titleMenuButton.unset_flags(CAN_FOCUS);
   
+  buttonBar.set_icon_size(WindowManager::MenuIconSize);
+  
   buttonBar.append(enableButton);
   buttonBar.append(lockButton);
-  
-  buttonBar.set_toolbar_style(TOOLBAR_ICONS);
-  
-#if 0
-  buttonBar.set_icon_size(WindowManager::MenuIconSize);
-#else
-  TODO("This code soon be removed when we drop Etch compatibility");
-  
-  // Temporary bodge for etch compatibility - will be removed soon
-  gtk_toolbar_set_icon_size (buttonBar.gobj(),
-    (GtkIconSize)(int)WindowManager::MenuIconSize);
-#endif
-  
+    
+  //buttonBar.set_toolbar_style(TOOLBAR_ICONS);
+    
   headerWidget.set_child_widget(headerBox);
 
   headerBox.pack_start(titleMenuButton, PACK_SHRINK);
