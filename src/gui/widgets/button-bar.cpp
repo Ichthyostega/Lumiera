@@ -35,9 +35,9 @@ ButtonBar::ButtonBar()
 }
 
 void
-ButtonBar::append(SeparatorToolItem &seperator)
+ButtonBar::append(Widget &widget)
 {
-  pack_start(seperator, PACK_SHRINK);
+  pack_start(widget, Gtk::PACK_SHRINK);
 }
 
 } // widgets

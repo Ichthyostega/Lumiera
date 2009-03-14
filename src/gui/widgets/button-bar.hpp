@@ -43,13 +43,10 @@ public:
   ButtonBar();
   
   /**
-   * Append a button to the button bar.
-   * @param button The button to append.
+   * Append a widget to the button bar.
+   * @param widget The button to append.
    **/
-  template<class T> void append(MiniWrapper<T>& button)
-  {
-    pack_start(button, Gtk::PACK_SHRINK);
-  }
+  void append(Widget &widget);
 
   /**
    * Append a button to the button bar, and connect a click event.
@@ -62,12 +59,6 @@ public:
     button.signal_clicked().connect(clicked_slot);
     append(button);
   }
-      
-  /**
-   * Append a sererator item.
-   * @param seperator The seperator to append.
-   **/
-  void append(Gtk::SeparatorToolItem &seperator);
 };
 
 } // gui
