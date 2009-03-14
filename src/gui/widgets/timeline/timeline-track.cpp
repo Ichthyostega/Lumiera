@@ -53,14 +53,10 @@ Track::Track(TimelineWidget &timeline_widget,
   
   titleMenuButton.set_relief(RELIEF_HALF);
   titleMenuButton.unset_flags(CAN_FOCUS);
-  
-  buttonBar.set_icon_size(WindowManager::MenuIconSize);
-  
+    
   buttonBar.append(enableButton);
   buttonBar.append(lockButton);
-    
-  //buttonBar.set_toolbar_style(TOOLBAR_ICONS);
-    
+  
   headerWidget.set_child_widget(headerBox);
 
   headerBox.pack_start(titleMenuButton, PACK_SHRINK);

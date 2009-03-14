@@ -45,7 +45,7 @@ public:
    * Gtk::Stock::APPLY.
    **/
   MiniButton(const Gtk::StockID& stock_id,
-    const Gtk::IconSize icon_size);
+    const Gtk::IconSize icon_size = Gtk::ICON_SIZE_LARGE_TOOLBAR);
   
 private:
   
