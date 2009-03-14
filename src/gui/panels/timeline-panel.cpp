@@ -79,7 +79,7 @@ TimelinePanel::TimelinePanel(workspace::WorkspaceWindow
   // Setup the toolbar
   timeIndicatorButton.set_label_widget(timeIndicator);
   
-  toolbar.append(timeIndicatorButton);
+  //toolbar.append(timeIndicatorButton);
   
   toolbar.append(previousButton);
   toolbar.append(rewindButton);
@@ -102,23 +102,10 @@ TimelinePanel::TimelinePanel(workspace::WorkspaceWindow
   toolbar.append(zoomIn, mem_fun(this, &TimelinePanel::on_zoom_in));
   toolbar.append(zoomOut, mem_fun(this, &TimelinePanel::on_zoom_out));
   
-  toolbar.set_toolbar_style(TOOLBAR_ICONS);
-  
-/*#if 0
-  toolbar.set_icon_size(WindowManager::MenuIconSize);
-#else
-  TODO("This code soon be removed when we drop Etch compatibility");
-  
-  // Temporary bodge for etch compatibility - will be removed soon
-  gtk_toolbar_set_icon_size (toolbar.gobj(),
-    (GtkIconSize)(int)WindowManager::MenuIconSize);
-#endif*/
-  
   toolbar.show_all();
   panelBar.pack_start(toolbar, PACK_EXPAND_WIDGET);
   
-  // Add the toolbar
-  //pack_start(toolbar, PACK_SHRINK);
+  // Add the notebook
   pack_start(notebook, PACK_EXPAND_WIDGET);
   
   // Set the initial UI state

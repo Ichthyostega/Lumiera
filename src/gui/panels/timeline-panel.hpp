@@ -116,20 +116,20 @@ private:
   Gtk::Label timeIndicator;
   Gtk::ToolButton timeIndicatorButton;
   
-  Gtk::ToolButton previousButton;
-  Gtk::ToolButton rewindButton;
-  Gtk::ToolButton playPauseButton;
-  Gtk::ToolButton stopButton;
-  Gtk::ToolButton forwardButton;
-  Gtk::ToolButton nextButton;
+  MiniButton previousButton;
+  MiniButton rewindButton;
+  MiniButton playPauseButton;
+  MiniButton stopButton;
+  MiniButton forwardButton;
+  MiniButton nextButton;
     
-  Gtk::ToggleToolButton arrowTool;
-  Gtk::ToggleToolButton iBeamTool;
+  MiniToggleButton arrowTool;
+  MiniToggleButton iBeamTool;
   
   Gtk::SeparatorToolItem seperator1;
   
-  Gtk::ToolButton zoomIn;
-  Gtk::ToolButton zoomOut;
+  MiniButton zoomIn;
+  MiniButton zoomOut;
   
   Gtk::SeparatorToolItem seperator2;
     
