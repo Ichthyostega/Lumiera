@@ -49,6 +49,7 @@ TimelinePanel::TimelinePanel(workspace::WorkspaceWindow
     &workspace_window) :
   Panel(workspace_window, "timeline", _("Timeline"), "panel_timeline"),
   timeIndicator(),
+  timeIndicatorButton(),
   previousButton(Stock::MEDIA_PREVIOUS),
   rewindButton(Stock::MEDIA_REWIND),
   playPauseButton(Stock::MEDIA_PLAY),
@@ -77,9 +78,11 @@ TimelinePanel::TimelinePanel(workspace::WorkspaceWindow
   notebook.popup_enable();
 
   // Setup the toolbar
-  timeIndicatorButton.set_label_widget(timeIndicator);
+  timeIndicatorButton.add(timeIndicator);
+  timeIndicatorButton.set_relief(Gtk::RELIEF_NONE);
+  timeIndicatorButton.set_focus_on_click(false);
   
-  //toolbar.append(timeIndicatorButton);
+  toolbar.append(timeIndicatorButton);
   
   toolbar.append(previousButton);
   toolbar.append(rewindButton);

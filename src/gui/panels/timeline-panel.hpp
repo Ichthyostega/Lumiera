@@ -112,9 +112,8 @@ private:
     notebook_pages;
   
   // Toolbar Widgets
-  
   Gtk::Label timeIndicator;
-  Gtk::ToolButton timeIndicatorButton;
+  Gtk::Button timeIndicatorButton;
   
   MiniButton previousButton;
   MiniButton rewindButton;
