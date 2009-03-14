@@ -40,5 +40,11 @@ ButtonBar::append(MiniButton& button)
   pack_start(button, PACK_SHRINK);
 }
 
+void
+ButtonBar::append(SeparatorToolItem &seperator)
+{
+  pack_start(seperator, PACK_SHRINK);
+}
+
 } // widgets
 } // gui

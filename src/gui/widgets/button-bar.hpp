@@ -43,6 +43,8 @@ public:
   ButtonBar();
   
   void append(MiniButton& button);
+  
+  void append(Gtk::SeparatorToolItem &seperator);
 };
 
 } // gui
