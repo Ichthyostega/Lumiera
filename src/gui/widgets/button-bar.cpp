@@ -41,6 +41,14 @@ ButtonBar::append(MiniButton& button)
 }
 
 void
+ButtonBar::append(MiniButton& button,
+  const sigc::slot<void>& clicked_slot)
+{
+  button.signal_clicked().connect(clicked_slot);
+  append(button);
+}
+
+void
 ButtonBar::append(SeparatorToolItem &seperator)
 {
   pack_start(seperator, PACK_SHRINK);

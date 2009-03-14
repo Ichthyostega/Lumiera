@@ -44,6 +44,9 @@ public:
   
   void append(MiniButton& button);
   
+  void append(MiniButton& button,
+    const sigc::slot<void>& clicked_slot);
+  
   void append(Gtk::SeparatorToolItem &seperator);
 };
 
