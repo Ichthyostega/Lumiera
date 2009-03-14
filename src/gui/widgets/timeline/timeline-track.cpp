@@ -52,6 +52,7 @@ Track::Track(TimelineWidget &timeline_widget,
   REQUIRE(model_track);
   
   titleMenuButton.set_relief(RELIEF_HALF);
+  titleMenuButton.unset_flags(CAN_FOCUS);
   
   buttonBar.append(enableButton);
   buttonBar.append(lockButton);
