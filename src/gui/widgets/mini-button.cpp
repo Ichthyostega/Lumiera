@@ -37,7 +37,14 @@ MiniButton::MiniButton(const StockID& stock_id,
   add(image);
   set_relief(RELIEF_NONE);
   set_focus_on_click(false);
-}  
+}
+
+void
+MiniButton::set_stock_id(const StockID& stock_id,
+  const IconSize icon_size)
+{
+  image.set(stock_id, icon_size);
+}
 
 } // widgets
 } // gui
