@@ -104,22 +104,32 @@ private:
 
 private:
 
+  /**
+   * The hBox for the layout of image, caption and arrow.
+   **/
   Gtk::HBox hBox;
   
+  /**
+   * The image that will optionally display an icon.
+   **/
   Gtk::Image image;
   
-  Gtk::Label caption;
-
   /**
-   * The internal menu object which is the popup menu of this widget.
+   * The caption text label to show on the button.
    **/
-  Gtk::Menu menu;
+  Gtk::Label caption;
   
   /**
    * The arrow widget that will be displayed to hint the user that this
    * button is a drop-down.
    **/
   Gtk::Arrow arrow;
+
+  /**
+   * The internal menu object which is the popup menu of this widget.
+   **/
+  Gtk::Menu menu;
+
 };
 
 } // gui
