@@ -29,23 +29,10 @@ using namespace sigc;
 
 namespace gui {
 namespace widgets {
-  
-PanelBar::PanelBar(const gchar *name) :
-  HBox(),
-  panelButton(Glib::ustring(name))
-{
-  internal_setup();
-  
-    // Make the widget sensitive to mouse events
-  /*add_events(
-    Gdk::POINTER_MOTION_MASK |
-    Gdk::BUTTON_PRESS_MASK |
-    Gdk::BUTTON_RELEASE_MASK);*/
-}
 
-PanelBar::PanelBar(const gchar *name, const gchar *stock_id) :
+PanelBar::PanelBar(const gchar *stock_id) :
   HBox(),
-  panelButton(Gtk::StockID(stock_id))
+  panelButton(StockID(stock_id))
 {
   internal_setup();
 }
@@ -59,10 +46,5 @@ PanelBar::internal_setup()
   pack_start(panelButton, PACK_SHRINK);
 }
 
-/*bool PanelBar::on_button_press_event (GdkEventButton* event)
-{
-  g_message("Hello");
-  return EventBox::on_button_press_event(event);
-}*/
 } // widgets
 } // gui

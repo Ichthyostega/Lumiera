@@ -32,22 +32,34 @@
 namespace gui {
 namespace widgets {
 
-
+/**
+ * A container widget for widgets to be displayed on GDL panels grips.
+ **/
 class PanelBar : public Gtk::HBox
 {
 public:
 
-  PanelBar(const gchar *name);
-
-  PanelBar(const gchar *name, const gchar *stock_id);
-
-  MenuButton panelButton;
-  
-  //virtual bool 	on_button_press_event (GdkEventButton* event);
+  /**
+   * Constructor - creates a PanelBar with a given stock_id.
+   * @param stock_id The stock id with a name and an icon for this
+   * panel.
+   **/
+  PanelBar(const gchar *stock_id);
   
 private:
   
+  /**
+   * A helper function to do the internal setup of the widget.
+   **/
   void internal_setup();
+  
+private:
+
+  /**
+   * The panel menu drop-down button widget, that will be displayed in
+   * the corner of the bar.
+   **/
+  MenuButton panelButton;
 };
 
 } // gui
