@@ -21,11 +21,15 @@
 * *****************************************************/
 
 #include "panel-bar.hpp"
+#include "../util/rectangle.hpp"
 
 #include <nobug.h>
 
 using namespace Gtk;
+using namespace Glib;
 using namespace sigc;
+
+const int DragHandleSize = 10;
 
 namespace gui {
 namespace widgets {
@@ -38,6 +42,43 @@ PanelBar::PanelBar(const gchar *stock_id) :
   panelButton.unset_flags(CAN_FOCUS);
   panelButton.show();
   pack_start(panelButton, PACK_SHRINK);
+}
+
+bool
+PanelBar::on_expose_event(GdkEventExpose* event)
+{
+  HBox::on_expose_event(event);
+  
+  RefPtr<const Style> style = get_style();
+  REQUIRE(style);
+  
+  const Allocation allocation(get_allocation());
+  const Gdk::Rectangle rect(
+    allocation.get_x() - DragHandleSize, allocation.get_y(),
+    DragHandleSize, allocation.get_height());
+    
+  style->paint_handle(get_window(), STATE_NORMAL, SHADOW_NONE,
+    rect, *this, "handlebox",  rect.get_x(), rect.get_y(),
+    rect.get_width(), rect.get_height(), ORIENTATION_VERTICAL);
+  
+  return true;
+}
+
+void
+PanelBar::on_size_allocate(Gtk::Allocation& allocation)
+{
+  allocation.set_x(allocation.get_x() + DragHandleSize);
+  HBox::on_size_allocate(allocation);
+}
+  
+void
+PanelBar::on_size_request(Gtk::Requisition* requisition)
+{
+  REQUIRE(requisition);
+    
+  HBox::on_size_request(requisition);
+  
+  requisition->width += DragHandleSize;
 }
 
 } // widgets
