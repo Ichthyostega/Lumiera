@@ -34,12 +34,6 @@ PanelBar::PanelBar(const gchar *stock_id) :
   HBox(),
   panelButton(StockID(stock_id))
 {
-  internal_setup();
-}
-
-void
-PanelBar::internal_setup()
-{
   panelButton.set_relief(RELIEF_NONE);
   panelButton.unset_flags(CAN_FOCUS);
   panelButton.show();

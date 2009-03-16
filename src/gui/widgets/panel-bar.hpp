@@ -45,14 +45,7 @@ public:
    * panel.
    **/
   PanelBar(const gchar *stock_id);
-  
-private:
-  
-  /**
-   * A helper function to do the internal setup of the widget.
-   **/
-  void internal_setup();
-  
+    
 private:
 
   /**
