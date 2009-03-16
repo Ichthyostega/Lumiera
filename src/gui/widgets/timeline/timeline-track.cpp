@@ -20,9 +20,6 @@
  
 * *****************************************************/
 
-// !!! This header must soon be removed when we drop Etch compatibility
-#include <gtk/gtktoolbar.h>
-
 #include "timeline-track.hpp"
 #include "../timeline-widget.hpp"
 #include "../../window-manager.hpp"
