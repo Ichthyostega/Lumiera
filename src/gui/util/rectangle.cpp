@@ -22,6 +22,9 @@
 * *****************************************************/
 
 #include "rectangle.hpp"
+#include <algorithm>
+
+using namespace std;
 
 namespace gui {
 namespace util {
@@ -33,6 +36,18 @@ pt_in_rect(const Gdk::Point &point, const Gdk::Rectangle &rect)
     point.get_x() < rect.get_x() + rect.get_width() &&
     point.get_y() >= rect.get_y() &&
     point.get_y() < rect.get_y() + rect.get_height());
+}
+
+bool
+rects_overlap(const Gdk::Rectangle &a, const Gdk::Rectangle &b)
+{ 
+  return (
+    max(a.get_x(), b.get_x()) <
+    min(a.get_x() + a.get_width(), b.get_x() + b.get_width())
+    &&
+    max(a.get_y(), b.get_y()) <
+    min(a.get_y() + a.get_height(), b.get_y() + b.get_height())
+    );
 }
 
 }   // namespace util

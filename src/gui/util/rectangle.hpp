@@ -42,6 +42,13 @@ namespace util {
  **/
 bool pt_in_rect(const Gdk::Point &point, const Gdk::Rectangle &rect);
 
+/**
+ * Tests whether two rectangles overlap.
+ * @param a The first rectangle.
+ * @param b The second rectangle.
+ **/
+bool rects_overlap(const Gdk::Rectangle &a, const Gdk::Rectangle &b);
+
 }   // util
 }   // gui
 

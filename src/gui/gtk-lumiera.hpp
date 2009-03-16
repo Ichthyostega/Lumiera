@@ -148,6 +148,11 @@ namespace widgets {}
  */
 namespace workspace {}
 
+/**
+ * The namespace of utility functions and classes.
+ */
+namespace util {}
+
 }   // namespace gui
 
 #endif // GTK_LUMIERA_HPP
