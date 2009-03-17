@@ -45,24 +45,7 @@ public:
    * panel.
    **/
   PanelBar(const gchar *stock_id);
-  
-private:
-
-  /**
-   * An override to intercept expose events.
-   **/
-  bool on_expose_event(GdkEventExpose* event);
-
-  /**
-   * An override to intercept size allocate events.
-   **/
-  void 	on_size_allocate(Gtk::Allocation& allocation);
-  
-  /**
-   * An override to intercept size request events.
-   **/
-  void 	on_size_request(Gtk::Requisition* requisition);
-    
+      
 private:
 
   /**

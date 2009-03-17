@@ -97,6 +97,7 @@ Panel::internal_setup()
   
   GdlDockItemGrip *grip = GDL_DOCK_ITEM_GRIP(
     gdl_dock_item_get_grip(dock_item));
+  gdl_dock_item_grip_show_handle(grip);
   gdl_dock_item_grip_set_label(grip, ((Widget&)panelBar).gobj());
     
   gtk_container_add ((GtkContainer*)dock_item, (GtkWidget*)gobj());  
