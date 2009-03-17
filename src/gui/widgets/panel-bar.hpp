@@ -45,7 +45,19 @@ public:
    * panel.
    **/
   PanelBar(const gchar *stock_id);
-      
+
+private:
+  
+  /**
+   * An override to intercept realize events.
+   **/
+  void on_realize();
+
+  /**
+   * An override to intercept size allocate events.
+   **/
+  void on_size_allocate(Gtk::Allocation& allocation);
+  
 private:
 
   /**
@@ -53,6 +65,13 @@ private:
    * the corner of the bar.
    **/
   MenuButton panelButton;
+  
+  /**
+   * The bar window.
+   * @remarks This window is used only to set the cursor as an arrow for
+   * any child widgets.
+   **/
+  Glib::RefPtr<Gdk::Window> window;
 };
 
 } // gui

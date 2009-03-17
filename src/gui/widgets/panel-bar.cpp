@@ -24,12 +24,12 @@
 #include "../util/rectangle.hpp"
 
 #include <nobug.h>
+#include <algorithm>
 
 using namespace Gtk;
 using namespace Glib;
 using namespace sigc;
-
-const int DragHandleSize = 10;
+using namespace std;
 
 namespace gui {
 namespace widgets {
@@ -42,6 +42,58 @@ PanelBar::PanelBar(const gchar *stock_id) :
   panelButton.unset_flags(CAN_FOCUS);
   panelButton.show();
   pack_start(panelButton, PACK_SHRINK);
+}
+
+void
+PanelBar::on_realize()
+{
+  set_flags(Gtk::NO_WINDOW);
+  
+  // Call base class:
+  Gtk::Container::on_realize();
+  
+  // Create the GdkWindow:
+  GdkWindowAttr attributes;
+  memset(&attributes, 0, sizeof(attributes));
+
+  const Allocation allocation(get_allocation());
+
+  // Set initial position and size of the Gdk::Window:
+  attributes.x = allocation.get_x();
+  attributes.y = allocation.get_y();
+  attributes.width = allocation.get_width();
+  attributes.height = allocation.get_height();
+
+  attributes.event_mask = GDK_ALL_EVENTS_MASK; 
+  attributes.window_type = GDK_WINDOW_CHILD;
+  attributes.wclass = GDK_INPUT_OUTPUT;
+
+  window = Gdk::Window::create(get_window(), &attributes,
+          GDK_WA_X | GDK_WA_Y);
+  
+  window->set_user_data(gobj());
+  window->set_cursor(Gdk::Cursor(Gdk::LEFT_PTR));
+  
+  set_window(window);
+  unset_flags(Gtk::NO_WINDOW);
+  
+  unset_bg(STATE_NORMAL);
+}
+
+void
+PanelBar::on_size_allocate(Gtk::Allocation& allocation)
+{
+  if(window)
+    {
+      const Requisition requisition(get_requisition());
+      const int width = max(min(requisition.width,
+        allocation.get_width()), 0);
+      window->move_resize(allocation.get_x(), allocation.get_y(),
+        width, allocation.get_height());
+    }
+  
+  allocation.set_x(0);
+  HBox::on_size_allocate(allocation);
 }
 
 } // widgets
