@@ -30,6 +30,11 @@
 #include "menu-button.hpp"
 
 namespace gui {
+
+namespace panels {
+class Panel; 
+}
+  
 namespace widgets {
 
 /**
@@ -41,10 +46,15 @@ public:
 
   /**
    * Constructor - creates a PanelBar with a given stock_id.
+   * @param owner_panel The panel that is the parent of this panel bar.
    * @param stock_id The stock id with a name and an icon for this
    * panel.
    **/
-  PanelBar(const gchar *stock_id);
+  PanelBar(panels::Panel &owner_panel, const gchar *stock_id);
+  
+private:
+
+  void setup_panel_button();
 
 private:
   
@@ -59,6 +69,12 @@ private:
   void on_size_allocate(Gtk::Allocation& allocation);
   
 private:
+
+  void on_hide();
+
+private:
+
+  panels::Panel &panel;
 
   /**
    * The panel menu drop-down button widget, that will be displayed in

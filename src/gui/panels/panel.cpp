@@ -31,7 +31,7 @@ Panel::Panel(workspace::WorkspaceWindow &workspace_window,
   const gchar *name, const gchar *long_name,
   GdlDockItemBehavior behavior) :
   workspace(workspace_window),
-  panelBar(long_name)
+  panelBar(*this, long_name)
 {
   REQUIRE(name != NULL);
   REQUIRE(long_name != NULL);
@@ -47,7 +47,7 @@ Panel::Panel(workspace::WorkspaceWindow &workspace_window,
   const gchar *name, const gchar *long_name, const gchar *stock_id,
   GdlDockItemBehavior behavior) :
   workspace(workspace_window),
-  panelBar(stock_id)
+  panelBar(*this, stock_id)
 {
   REQUIRE(name != NULL);
   REQUIRE(long_name != NULL);

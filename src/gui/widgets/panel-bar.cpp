@@ -21,6 +21,7 @@
 * *****************************************************/
 
 #include "panel-bar.hpp"
+#include "../panels/panel.hpp"
 #include "../util/rectangle.hpp"
 
 #include <nobug.h>
@@ -34,14 +35,27 @@ using namespace std;
 namespace gui {
 namespace widgets {
 
-PanelBar::PanelBar(const gchar *stock_id) :
+PanelBar::PanelBar(panels::Panel &owner_panel, const gchar *stock_id) :
   HBox(),
+  panel(owner_panel),
   panelButton(StockID(stock_id))
-{
+{  
   panelButton.set_relief(RELIEF_NONE);
   panelButton.unset_flags(CAN_FOCUS);
   panelButton.show();
   pack_start(panelButton, PACK_SHRINK);
+  
+  setup_panel_button();
+}
+
+void
+PanelBar::setup_panel_button()
+{
+  Menu& menu = panelButton.get_menu();
+  Menu::MenuList& list = menu.items();
+
+  list.push_back( Menu_Helpers::MenuElem(_("_Hide"),
+    mem_fun(*this, &PanelBar::on_hide) ) );
 }
 
 void
@@ -94,6 +108,12 @@ PanelBar::on_size_allocate(Gtk::Allocation& allocation)
   
   allocation.set_x(0);
   HBox::on_size_allocate(allocation);
+}
+
+void
+PanelBar::on_hide()
+{
+  panel.show(false);
 }
 
 } // widgets
