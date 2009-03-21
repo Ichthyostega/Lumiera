@@ -76,6 +76,10 @@ TimelinePanel::TimelinePanel(workspace::WorkspaceWindow
   notebook.signal_switch_page().connect(
     mem_fun(this, &TimelinePanel::on_page_switched));
   notebook.popup_enable();
+  
+  // Setup the sequence chooser;  
+  sequenceChooser.show_all();
+  panelBar.pack_start(sequenceChooser, PACK_EXPAND_WIDGET);
 
   // Setup the toolbar
   timeIndicatorButton.add(timeIndicator);
@@ -104,15 +108,16 @@ TimelinePanel::TimelinePanel(workspace::WorkspaceWindow
   
   toolbar.append(zoomIn, mem_fun(this, &TimelinePanel::on_zoom_in));
   toolbar.append(zoomOut, mem_fun(this, &TimelinePanel::on_zoom_out));
-  
+   
   toolbar.show_all();
-  panelBar.pack_start(toolbar, PACK_EXPAND_WIDGET);
-  
+  panelBar.pack_start(toolbar, PACK_SHRINK);
+   
   // Add the notebook
   pack_start(notebook, PACK_EXPAND_WIDGET);
   
   // Set the initial UI state
   update_notebook();
+  update_sequence_chooser();
   update_tool_buttons();
   update_zoom_buttons();
   show_time(0);
@@ -215,6 +220,19 @@ void
 TimelinePanel::on_sequence_list_changed()
 {
   update_notebook();
+  update_sequence_chooser();
+}
+
+void
+TimelinePanel::update_sequence_chooser()
+{
+  sequenceChooser.clear_items();
+  
+  BOOST_FOREACH( shared_ptr< model::Sequence > sequence,
+    workspace.get_project().get_sequences() )
+    {
+      sequenceChooser.append_text(sequence->get_name());
+    }
 }
 
 void

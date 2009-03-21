@@ -80,6 +80,8 @@ private:
   
 private:
 
+  void update_sequence_chooser();
+
   void update_notebook();
 
   void update_playback_buttons();
@@ -102,9 +104,9 @@ private:
 
   //----- Data -----//
 
-  // Widgets
+  // Grip Widgets
   ButtonBar toolbar;
-  Gtk::HBox toolStrip;
+  Gtk::ComboBoxText sequenceChooser;
   
   // Body Widgets
   Gtk::Notebook notebook;
