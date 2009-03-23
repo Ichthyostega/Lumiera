@@ -41,23 +41,20 @@ const double TimelineWidget::ZoomIncrement = 1.25;
 const int64_t TimelineWidget::MaxScale = 30000000;
 
 TimelineWidget::TimelineWidget(
-  shared_ptr<model::Sequence> source_sequence) :
+  boost::shared_ptr<timeline::TimelineState> source_state) :
   Table(2, 2),
-  sequence(source_sequence),
   layoutHelper(*this),
-  viewWindow(this, 0, 1),
-  selectionStart(0),
-  selectionEnd(0),
-  playbackPeriodStart(0),
-  playbackPeriodEnd(0),
-  playbackPoint(GAVL_TIME_UNDEFINED),
+  headerContainer(NULL),
+  body(NULL),
+  ruler(NULL),
   horizontalAdjustment(0, 0, 0),
   verticalAdjustment(0, 0, 0),
   horizontalScroll(horizontalAdjustment),
   verticalScroll(verticalAdjustment),
-  update_tracks_frozen(false)
+  update_tracks_frozen(true)
 {
-  REQUIRE(sequence);
+  set_state(source_state);
+  thaw_update_tracks();
   
   body = new TimelineBody(*this);
   ENSURE(body != NULL);
@@ -65,19 +62,14 @@ TimelineWidget::TimelineWidget(
   ENSURE(headerContainer != NULL);
   ruler = new TimelineRuler(*this);
   ENSURE(ruler != NULL);
-
+    
   horizontalAdjustment.signal_value_changed().connect( sigc::mem_fun(
     this, &TimelineWidget::on_scroll) );
   verticalAdjustment.signal_value_changed().connect( sigc::mem_fun(
     this, &TimelineWidget::on_scroll) );
   body->signal_motion_notify_event().connect( sigc::mem_fun(
     this, &TimelineWidget::on_motion_in_body_notify_event) );
-  viewWindow.changed_signal().connect( sigc::mem_fun(
-    this, &TimelineWidget::on_view_window_changed) );
-  
-  viewWindow.set_time_scale(GAVL_TIME_SCALE / 200);
-  set_selection(2000000, 4000000);
-  
+    
   update_tracks();
   
   attach(*body, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
@@ -87,10 +79,6 @@ TimelineWidget::TimelineWidget(
   attach(verticalScroll, 2, 3, 1, 2, SHRINK, FILL|EXPAND);
   
   set_tool(timeline::Arrow);
-  
-  // Receive notifications of changes to the tracks
-  sequence->get_child_track_list().signal_changed().connect(
-    sigc::mem_fun( this, &TimelineWidget::on_track_list_changed ) );
 }
 
 TimelineWidget::~TimelineWidget()
@@ -111,99 +99,41 @@ TimelineWidget::~TimelineWidget()
 
 /* ===== Data Access ===== */
 
-TimelineViewWindow&
-TimelineWidget::get_view_window()
+boost::shared_ptr<timeline::TimelineState>
+TimelineWidget::get_state()
 {
-  return viewWindow;
-}
-
-gavl_time_t
-TimelineWidget::get_selection_start() const
-{
-  return selectionStart;
-}
-
-gavl_time_t
-TimelineWidget::get_selection_end() const
-{
-  return selectionEnd;
+  ENSURE(state);
+  return state;
 }
 
 void
-TimelineWidget::set_selection(gavl_time_t start, gavl_time_t end,
-  bool reset_playback_period)
+TimelineWidget::set_state(shared_ptr<timeline::TimelineState> new_state)
 {
-  REQUIRE(ruler != NULL);
-  REQUIRE(body != NULL);
-    
-  if(start < end)
-    {
-      selectionStart = start;
-      selectionEnd = end;
-    }
-  else
-    {
-      // The selection is back-to-front, flip it round
-      selectionStart = end;
-      selectionEnd = start;
-    }
-    
-  if(reset_playback_period)
-    {
-      playbackPeriodStart = selectionStart;
-      playbackPeriodEnd = selectionEnd;
-    }
+  state = new_state;
+  REQUIRE(state);
 
-  ruler->queue_draw();
-  body->queue_draw();
-}
+  // Hook up event handlers
+  state->get_view_window().changed_signal().connect( sigc::mem_fun(
+    this, &TimelineWidget::on_view_window_changed) );
+  state->get_sequence()->get_child_track_list().signal_changed().
+    connect(sigc::mem_fun(
+      this, &TimelineWidget::on_track_list_changed ) );
+  
+  state->selection_changed_signal().connect(mem_fun(*this,
+    &TimelineWidget::on_body_changed));
+  state->playback_changed_signal().connect(mem_fun(*this,
+    &TimelineWidget::on_body_changed));
 
-gavl_time_t
-TimelineWidget::get_playback_period_start() const
-{
-  return playbackPeriodStart;
-}
-  
-gavl_time_t
-TimelineWidget::get_playback_period_end() const
-{
-  return playbackPeriodEnd;
-}
-  
-void
-TimelineWidget::set_playback_period(gavl_time_t start, gavl_time_t end)
-{
-  REQUIRE(ruler != NULL);
-  REQUIRE(body != NULL);
-  
-  if(start < end)
-    {
-      playbackPeriodStart = start;
-      playbackPeriodEnd = end;
-    }
-  else
-    {
-      // The period is back-to-front, flip it round
-      playbackPeriodStart = end;
-      playbackPeriodEnd = start;
-    }
-
-  ruler->queue_draw();
-  body->queue_draw();
+  update_tracks();
 }
 
 void
-TimelineWidget::set_playback_point(gavl_time_t point)
+TimelineWidget::zoom_view(int zoom_size)
 {
-  playbackPoint = point;
-  ruler->queue_draw();
-  body->queue_draw();
-}
-
-gavl_time_t
-TimelineWidget::get_playback_point() const
-{
-  return playbackPoint;
+  REQUIRE(state);
+  
+  const int view_width = body->get_allocation().get_width();
+  state->get_view_window().zoom_view(view_width / 2, zoom_size);
 }
 
 ToolType
@@ -251,7 +181,9 @@ TimelineWidget::hovering_track_changed_signal() const
 void
 TimelineWidget::on_scroll()
 {
-  viewWindow.set_time_offset(horizontalAdjustment.get_value());
+  REQUIRE(state);
+  state->get_view_window().set_time_offset(
+    horizontalAdjustment.get_value());
 }
   
 void
@@ -266,21 +198,30 @@ void
 TimelineWidget::on_view_window_changed()
 {
   REQUIRE(ruler != NULL);
+  REQUIRE(state);
    
+  timeline::TimelineViewWindow &window = state->get_view_window();
   const int view_width = body->get_allocation().get_width();
+  
   horizontalAdjustment.set_page_size(
-    viewWindow.get_time_scale() * view_width);
-  horizontalAdjustment.set_value(
-    viewWindow.get_time_offset());
+    window.get_time_scale() * view_width);
+  horizontalAdjustment.set_value(window.get_time_offset());
+}
+
+void
+TimelineWidget::on_body_changed()
+{
+  REQUIRE(ruler != NULL);
+  REQUIRE(body != NULL);
+  ruler->queue_draw();
+  body->queue_draw();
 }
 
 void
 TimelineWidget::on_add_track_command()
-{
-  REQUIRE(sequence);
-  
+{  
   // # TEST CODE
-  sequence->get_child_track_list().push_back(
+  sequence()->get_child_track_list().push_back(
     shared_ptr<model::Track>(new model::ClipTrack()));
 }
 
@@ -291,8 +232,6 @@ TimelineWidget::update_tracks()
 { 
   if(update_tracks_frozen)
     return;
-  
-  REQUIRE(sequence);
   
   // Remove any tracks which are no longer present in the model
   remove_orphaned_tracks();
@@ -320,12 +259,8 @@ TimelineWidget::thaw_update_tracks()
 void
 TimelineWidget::create_timeline_tracks()
 {
-  REQUIRE(sequence);
-  REQUIRE(headerContainer != NULL);
-  REQUIRE(body != NULL);
-  
   BOOST_FOREACH(shared_ptr<model::Track> child,
-    sequence->get_child_tracks())
+    sequence()->get_child_tracks())
     create_timeline_tracks_from_branch(child);
     
   // Update the header container
@@ -375,18 +310,14 @@ TimelineWidget::create_timeline_track_from_model_track(
 
 void
 TimelineWidget::remove_orphaned_tracks()
-{
-  REQUIRE(sequence);
-  REQUIRE(headerContainer != NULL);
-  REQUIRE(body != NULL);
-  
+{  
   std::map<boost::shared_ptr<model::Track>,
     boost::shared_ptr<timeline::Track> >
     orphan_track_map(trackMap);
   
   // Remove all tracks which are still present in the sequence
   BOOST_FOREACH(shared_ptr<model::Track> child,
-    sequence->get_child_tracks())
+    sequence()->get_child_tracks())
     search_orphaned_tracks_in_branch(child, orphan_track_map);
   
   // orphan_track_map now contains all the orphaned tracks
@@ -422,9 +353,9 @@ shared_ptr<timeline::Track>
 TimelineWidget::lookup_timeline_track(
   shared_ptr<model::Track> model_track) const
 {
-  REQUIRE(sequence);  
   REQUIRE(model_track);
-  REQUIRE(model_track != sequence); // The sequence isn't really a track
+  REQUIRE(model_track != sequence()); // The sequence isn't
+                                      // really a track
 
   std::map<shared_ptr<model::Track>, shared_ptr<timeline::Track> >::
     const_iterator iterator = trackMap.find(model_track);
@@ -458,6 +389,9 @@ TimelineWidget::update_scroll()
   REQUIRE(body != NULL);
   const Allocation body_allocation = body->get_allocation();
   
+  REQUIRE(state);
+  timeline::TimelineViewWindow &window = state->get_view_window();
+  
   //----- Horizontal Scroll ------//
   
   // TEST CODE
@@ -466,7 +400,7 @@ TimelineWidget::update_scroll()
   
   // Set the page size
   horizontalAdjustment.set_page_size(
-    viewWindow.get_time_scale() * body_allocation.get_width());
+    window.get_time_scale() * body_allocation.get_width());
   
   //----- Vertical Scroll -----//
   
@@ -512,9 +446,21 @@ TimelineWidget::on_motion_in_body_notify_event(GdkEventMotion *event)
 {
   REQUIRE(event != NULL);
   ruler->set_mouse_chevron_offset(event->x);
-  mouseHoverSignal.emit(viewWindow.x_to_time(event->x));
+  
+  REQUIRE(state);
+  timeline::TimelineViewWindow &window = state->get_view_window();
+  mouseHoverSignal.emit(window.x_to_time(event->x));
   
   return true;
+}
+
+boost::shared_ptr<model::Sequence>
+TimelineWidget::sequence() const
+{
+  REQUIRE(state);
+  boost::shared_ptr<model::Sequence> sequence = state->get_sequence();
+  ENSURE(sequence);
+  return sequence;
 }
 
 void

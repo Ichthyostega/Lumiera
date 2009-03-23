@@ -160,7 +160,7 @@ TimelinePanel::on_zoom_in()
   TimelineWidget *const  widget = get_current_page();
   REQUIRE(widget != NULL);
   
-  widget->get_view_window().zoom_view(ZoomToolSteps);
+  widget->zoom_view(ZoomToolSteps);
   update_zoom_buttons();
 }
 
@@ -170,7 +170,7 @@ TimelinePanel::on_zoom_out()
   TimelineWidget *const  widget = get_current_page();
   REQUIRE(widget != NULL);
   
-  widget->get_view_window().zoom_view(-ZoomToolSteps);
+  widget->zoom_view(-ZoomToolSteps);
   update_zoom_buttons();
 }
 
@@ -200,8 +200,9 @@ TimelinePanel::on_playback_period_drag_released()
   
   TimelineWidget *const  widget = get_current_page();
   REQUIRE(widget != NULL);
-  
-  widget->set_playback_point(widget->get_playback_period_start());
+    
+  widget->get_state()->set_playback_point(
+    widget->get_state()->get_playback_period_start());
   //----- END TEST CODE
   
   play();
@@ -235,8 +236,10 @@ TimelinePanel::update_notebook()
       else
         {
           // This is a new sequence, add it in
+          shared_ptr< timeline::TimelineState > state(
+            new timeline::TimelineState(sequence));
           shared_ptr< TimelineWidget > widget(
-            new TimelineWidget(sequence));
+            new TimelineWidget(state));
           notebook_pages[sequence.get()] = widget;
           notebook.append_page(*widget.get(), sequence->get_name());
           notebook.set_tab_reorderable(*widget.get());
@@ -272,9 +275,11 @@ TimelinePanel::update_zoom_buttons()
   
   if(widget != NULL)
     {
-      zoomIn.set_sensitive(widget->get_view_window().get_time_scale()
-        != 1);
-      zoomOut.set_sensitive(widget->get_view_window().get_time_scale()
+      timeline::TimelineViewWindow &viewWindow = 
+        widget->get_state()->get_view_window();
+      
+      zoomIn.set_sensitive(viewWindow.get_time_scale() != 1);
+      zoomOut.set_sensitive(viewWindow.get_time_scale()
         != TimelineWidget::MaxScale);
     }
 }

@@ -26,7 +26,7 @@
 #ifndef TIMELINE_WIDGET_HPP
 #define TIMELINE_WIDGET_HPP
 
-#include "timeline/timeline-view-window.hpp"
+#include "timeline/timeline-state.hpp"
 #include "timeline/timeline-header-container.hpp"
 #include "timeline/timeline-body.hpp"
 #include "timeline/timeline-ruler.hpp"
@@ -58,7 +58,8 @@ public:
   /**
    * Constructor
    */
-  TimelineWidget(boost::shared_ptr<model::Sequence> source_sequence);
+  TimelineWidget(
+    boost::shared_ptr<timeline::TimelineState> source_state);
 
   /**
    * Destructor
@@ -68,62 +69,17 @@ public:
   /* ===== Data Access ===== */
 public:
 
+  boost::shared_ptr<timeline::TimelineState> get_state();
+  
+  void set_state(boost::shared_ptr<timeline::TimelineState> new_state);
+
   /**
-   * Gets a reference to the timeline view window object.
-   * @return Returns the timeline view window object.
+   * Zooms the view in or out as by a number of steps while keeping a 
+   * given point on the timeline still.
+   * @param zoom_size The number of steps to zoom by. The scale factor
+   * is 1.25^(-zoom_size).
    **/
-  timeline::TimelineViewWindow& get_view_window();
-  
-  /**
-   * Gets the time at which the selection begins.
-   */
-  gavl_time_t get_selection_start() const;
-  
-  /**
-   * Gets the time at which the selection begins.
-   */
-  gavl_time_t get_selection_end() const;
-  
-  /**
-   * Sets the period of the selection.
-   * @param start The start time.
-   * @param end The end time.
-   * @param reset_playback_period Specifies whether to set the playback
-   * period to the same as this new selection.
-   */
-  void set_selection(gavl_time_t start, gavl_time_t end,
-    bool reset_playback_period = true);
-  
-  /**
-   * Gets the time at which the playback period begins.
-   */
-  gavl_time_t get_playback_period_start() const;
-  
-  /**
-   * Gets the time at which the playback period ends.
-   */
-  gavl_time_t get_playback_period_end() const;
-  
-  /**
-   * Sets the playback period.
-   * @param start The start time.
-   * @param end The end time.
-   */
-  void set_playback_period(gavl_time_t start, gavl_time_t end);
-  
-  /**
-   * Sets the time which is currenty being played back.
-   * @param point The time index being played. This value may be
-   * GAVL_TIME_UNDEFINED, if there is no playback point.
-   */
-  void set_playback_point(gavl_time_t point);
-  
-  /**
-   * Gets the current playback point.
-   * @return The time index of the playback point. This value may be
-   * GAVL_TIME_UNDEFINED, if there is no playback point.
-   */
-  gavl_time_t get_playback_point() const;
+  void zoom_view(int zoom_size);
   
   /**
    * Gets the type of the tool currently active.
@@ -154,6 +110,8 @@ protected:
   void on_size_allocate(Gtk::Allocation& allocation);
   
   void on_view_window_changed();
+  
+  void on_body_changed();
   
   void on_add_track_command();
   
@@ -242,7 +200,15 @@ private:
     
   void on_playback_period_drag_released();
   
-  bool on_motion_in_body_notify_event(GdkEventMotion *event);  
+  bool on_motion_in_body_notify_event(GdkEventMotion *event); 
+  
+  // ----- Helper Functions ----- //
+  
+  /**
+   * Helper to get the sequence object from the state.
+   * @return Returns a shared pointer to the sequence.
+   **/  
+  boost::shared_ptr<model::Sequence> sequence() const;
   
   // ----- Other Functions ----- //
   
@@ -251,16 +217,10 @@ private:
 
 protected:
 
+  boost::shared_ptr<timeline::TimelineState> state;
+
   // Model Data
-  
-  /**
-   * A pointer to the sequence object which this timeline_widget will
-   * represent.
-   * @remarks This pointer is set by the constructor and is constant, so
-   * will not change in value during the lifetime of the class.
-   **/
-  const boost::shared_ptr<model::Sequence> sequence;
-  
+   
   /**
    * The trackMap maps model tracks to timeline widget tracks which are
    * responsible for the UI representation of a track.
@@ -272,20 +232,10 @@ protected:
     boost::shared_ptr<timeline::Track> >
     trackMap;
     
+  boost::shared_ptr<timeline::Track> hoveringTrack;
+    
   // Helper Classes
   timeline::TimelineLayoutHelper layoutHelper;
-
-  // View State
-  timeline::TimelineViewWindow viewWindow;
-  
-  // Selection State
-  gavl_time_t selectionStart;
-  gavl_time_t selectionEnd;
-  gavl_time_t playbackPeriodStart;
-  gavl_time_t playbackPeriodEnd;
-  gavl_time_t playbackPoint;
-  
-  boost::shared_ptr<timeline::Track> hoveringTrack;
 
   // Child Widgets
   timeline::TimelineHeaderContainer *headerContainer;
@@ -319,16 +269,11 @@ protected:
   static const int HeaderIndentWidth;
   static const double ZoomIncrement;
 
-  friend class timeline::TimelineViewWindow;
   friend class timeline::TimelineBody;
   friend class timeline::TimelineHeaderContainer;
   friend class timeline::TimelineHeaderWidget;
   friend class timeline::TimelineLayoutHelper;
   friend class timeline::TimelineRuler;
-  friend class timeline::Tool;
-  friend class timeline::ArrowTool;
-  friend class timeline::IBeamTool;
-  friend class timeline::Track;
   friend class timeline::GroupTrack;
 };
 

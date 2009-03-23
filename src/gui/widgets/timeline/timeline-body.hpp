@@ -42,6 +42,7 @@ class TimelineWidget;
 namespace timeline {
 
 class Track;
+class TimelineViewWindow;
 
 /**
  * Implementation of the timeline body subwidget. This widget is
@@ -140,6 +141,11 @@ private:
   int get_vertical_offset() const;
   
   void set_vertical_offset(int offset);
+  
+  /**
+   * A helper function to get the view window
+   **/
+  TimelineViewWindow& view_window() const;
    
   /**
    * Registers all the styles that this class will respond to.

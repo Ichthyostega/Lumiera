@@ -47,12 +47,10 @@ public:
  
   /**
    * Constructor
-   * @param owner A pointer to the owner timeline widget.
    * @param offset The initial view offset.
    * @param scale The initial scale.
    **/
-  TimelineViewWindow(TimelineWidget const *owner, 
-    gavl_time_t offset, int64_t scale);
+  TimelineViewWindow(gavl_time_t offset, int64_t scale);
     
   /**
    * Gets the time offset. This is the time value displaid at the
@@ -80,15 +78,7 @@ public:
    * zero
    */
   void set_time_scale(int64_t time_scale);
-  
-  /**
-   * Zooms the view in or out as by a number of steps while keeping
-   * centre of the view still.
-   * @param zoom_size The number of steps to zoom by. The scale factor
-   * is 1.25^(-zoom_size).
-   **/
-  void zoom_view(int zoom_size);
-  
+    
   /**
    * Zooms the view in or out as by a number of steps while keeping a 
    * given point on the timeline still.
@@ -102,7 +92,7 @@ public:
    * @param shift_size The size of the shift in 1/256ths of the view
    * width.
    **/
-  void shift_view(int shift_size);
+  void shift_view(int view_width, int shift_size);
   
   /**
    * Converts time values to x coordinates in pixels.
@@ -130,7 +120,6 @@ private:
   int64_t timeScale;
   
   sigc::signal<void> changedSignal;
-  TimelineWidget const *timelineWidget;
 };
 
 }   // namespace timeline

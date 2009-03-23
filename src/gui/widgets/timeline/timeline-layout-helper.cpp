@@ -52,7 +52,7 @@ TimelineLayoutHelper::TimelineLayoutHelper(TimelineWidget &owner) :
 void
 TimelineLayoutHelper::clone_tree_from_sequence()
 {
-  const shared_ptr<model::Sequence> &sequence = timelineWidget.sequence;
+  const shared_ptr<model::Sequence> sequence = get_sequence();
   REQUIRE(sequence);
   
   layoutTree.clear();
@@ -598,7 +598,9 @@ TimelineLayoutHelper::apply_drop_to_layout_tree(
 void
 TimelineLayoutHelper::apply_drop_to_model_tree(
   const TimelineLayoutHelper::DropPoint &drop)
-{ 
+{
+  const shared_ptr<model::Sequence> sequence = get_sequence();
+  
   if(drop.relation == None)
     return;
     
@@ -608,16 +610,15 @@ TimelineLayoutHelper::apply_drop_to_model_tree(
   // Get the tracks
   shared_ptr<model::Track> &dragging_track = *draggingTrackIter;
   REQUIRE(dragging_track);
-  REQUIRE(dragging_track != timelineWidget.sequence);
+  REQUIRE(dragging_track != sequence);
   
   shared_ptr<model::Track> &target_track = *drop.target;
   REQUIRE(target_track);
-  REQUIRE(target_track != timelineWidget.sequence);
+  REQUIRE(target_track != sequence);
   
   // Detach the track from the old parent
   shared_ptr<model::ParentTrack> old_parent =
-      timelineWidget.sequence->find_descendant_track_parent(
-        dragging_track);
+     sequence->find_descendant_track_parent(dragging_track);
   REQUIRE(old_parent);  // The track must have a parent
   old_parent->get_child_track_list().remove(dragging_track);
   
@@ -625,8 +626,7 @@ TimelineLayoutHelper::apply_drop_to_model_tree(
     {
       // Find the new parent track
       shared_ptr<model::ParentTrack> new_parent =
-        timelineWidget.sequence->find_descendant_track_parent(
-          target_track);
+        sequence->find_descendant_track_parent(target_track);
       REQUIRE(new_parent);  // The track must have a parent
       
       // Find the destination point
@@ -664,6 +664,16 @@ TimelineLayoutHelper::apply_drop_to_model_tree(
   
   // Freeze the timeline widget - we will do it manually
   timelineWidget.freeze_update_tracks();
+}
+
+boost::shared_ptr<model::Sequence>
+TimelineLayoutHelper::get_sequence() const
+{
+  REQUIRE(timelineWidget.state);
+  shared_ptr<model::Sequence> sequence(
+    timelineWidget.state->get_sequence());
+  ENSURE(sequence);
+  return sequence;
 }
 
 }   // namespace timeline

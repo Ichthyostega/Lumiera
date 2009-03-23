@@ -100,6 +100,8 @@ gtk_gui_la_SOURCES =							\
 	$(lumigui_srcdir)/widgets/timeline/timeline-arrow-tool.hpp	\
 	$(lumigui_srcdir)/widgets/timeline/timeline-ibeam-tool.cpp	\
 	$(lumigui_srcdir)/widgets/timeline/timeline-ibeam-tool.hpp	\
+	$(lumigui_srcdir)/widgets/timeline/timeline-state.cpp		\
+	$(lumigui_srcdir)/widgets/timeline/timeline-state.hpp		\
 	$(lumigui_srcdir)/widgets/timeline/timeline-track.cpp		\
 	$(lumigui_srcdir)/widgets/timeline/timeline-track.hpp		\
 	$(lumigui_srcdir)/widgets/timeline/timeline-clip-track.cpp	\

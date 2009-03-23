@@ -37,6 +37,8 @@ class TimelineWidget;
 namespace timeline {
   
 class TimelineBody;
+class TimelineState;
+class TimelineViewWindow;
 
 /**
  * Specifies the types of different timeline tool classes.
@@ -127,6 +129,16 @@ protected:
    * body.
    */
   Gdk::Rectangle get_body_rectangle() const;
+  
+  /**
+   * A helper function to get the state
+   **/
+  boost::shared_ptr<TimelineState> get_state() const;
+  
+  /**
+   * A helper function to get the view window
+   **/
+  TimelineViewWindow& view_window() const;
 
 protected:
   TimelineBody &timelineBody;

@@ -24,6 +24,7 @@
 #include "../timeline-widget.hpp"
 
 using namespace Gdk;
+using namespace boost;
 
 namespace gui {
 namespace widgets {
@@ -83,6 +84,21 @@ Gdk::Rectangle
 Tool::get_body_rectangle() const
 {
   return timelineBody.get_allocation();
+}
+
+shared_ptr<TimelineState>
+Tool::get_state() const
+{
+  TimelineWidget &timeline_widget = get_timeline_widget();
+  shared_ptr<TimelineState> state = timeline_widget.get_state();
+  REQUIRE(state);
+  return state;
+}
+
+TimelineViewWindow&
+Tool::view_window() const
+{
+  return get_state()->get_view_window();
 }
 
 }   // namespace timeline

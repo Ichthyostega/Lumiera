@@ -33,6 +33,7 @@ extern "C" {
 using namespace Gtk;
 using namespace Cairo;
 using namespace std;
+using namespace boost;
 using namespace gui;
 using namespace gui::widgets;
 using namespace gui::widgets::timeline;
@@ -63,7 +64,7 @@ TimelineRuler::TimelineRuler(
   timelineWidget(timeline_widget)
 {  
   // Connect event handlers
-  timelineWidget.get_view_window().changed_signal().connect(
+  view_window().changed_signal().connect(
     sigc::mem_fun(this, &TimelineRuler::on_update_view) );
   
   // Install style properties
@@ -154,8 +155,7 @@ TimelineRuler::on_button_press_event(GdkEventButton* event)
   
   if(event->button == 1)
   {
-    pinnedDragTime =
-      timelineWidget.get_view_window().x_to_time(event->x);
+    pinnedDragTime = view_window().x_to_time(event->x);
     isDragging = true;
   }
   
@@ -211,12 +211,14 @@ TimelineRuler::on_size_allocate(Gtk::Allocation& allocation)
 void
 TimelineRuler::set_leading_x(const int x)
 {
-  const gavl_time_t time =
-    timelineWidget.get_view_window().x_to_time(x);
+  shared_ptr<TimelineState> state = timelineWidget.get_state();
+  REQUIRE(state);
+  
+  const gavl_time_t time = view_window().x_to_time(x);
   if(time > pinnedDragTime)
-    timelineWidget.set_playback_period(pinnedDragTime, time);
+    state->set_playback_period(pinnedDragTime, time);
   else
-    timelineWidget.set_playback_period(time, pinnedDragTime);
+    state->set_playback_period(time, pinnedDragTime);
 }
 
 void
@@ -227,7 +229,7 @@ TimelineRuler::draw_ruler(Cairo::RefPtr<Cairo::Context> cr,
   REQUIRE(ruler_rect.get_width() > 0);
   REQUIRE(ruler_rect.get_height() > 0);
   
-  const TimelineViewWindow &window = timelineWidget.get_view_window();
+  const TimelineViewWindow &window = view_window();
   const gavl_time_t left_offset = window.get_time_offset();
   const int64_t time_scale = window.get_time_scale();
   
@@ -329,13 +331,15 @@ TimelineRuler::draw_selection(Cairo::RefPtr<Cairo::Context> cr,
   REQUIRE(ruler_rect.get_width() > 0);
   REQUIRE(ruler_rect.get_height() > 0);
   
-  const TimelineViewWindow &window = timelineWidget.get_view_window();
+  shared_ptr<TimelineState> state = timelineWidget.get_state();
+  REQUIRE(state);
+  const TimelineViewWindow &window = state->get_view_window();
 
   Glib::RefPtr<Style> style = get_style();
   Gdk::Cairo::set_source_color(cr, style->get_fg(STATE_NORMAL));
   
   // Draw the selection start chevron
-  const int a = window.time_to_x(timelineWidget.selectionStart) + 1;
+  const int a = window.time_to_x(state->get_selection_start()) + 1;
   if(a >= 0 && a < ruler_rect.get_width())
     {
       cr->move_to(a, ruler_rect.get_height());
@@ -345,7 +349,7 @@ TimelineRuler::draw_selection(Cairo::RefPtr<Cairo::Context> cr,
     }
   
   // Draw the selection end chevron
-  const int b = window.time_to_x(timelineWidget.selectionEnd);
+  const int b = window.time_to_x(state->get_selection_end());
   if(b >= 0 && b < ruler_rect.get_width())
     {
       cr->move_to(b, ruler_rect.get_height());
@@ -363,16 +367,18 @@ TimelineRuler::draw_playback_period(Cairo::RefPtr<Cairo::Context> cr,
   REQUIRE(ruler_rect.get_width() > 0);
   REQUIRE(ruler_rect.get_height() > 0);
   
-  const TimelineViewWindow &window = timelineWidget.get_view_window();
+  shared_ptr<TimelineState> state = timelineWidget.get_state();
+  REQUIRE(state);
+  const TimelineViewWindow &window = state->get_view_window();
   
   // Calculate coordinates
   const float halfSize = playbackPeriodArrowSize / 2;
   
   const float a = window.time_to_x(
-    timelineWidget.playbackPeriodStart) + 1 + 0.5f;
+    state->get_playback_period_start()) + 1 + 0.5f;
   const float b = a + halfSize;
   const float d = window.time_to_x(
-    timelineWidget.playbackPeriodEnd) + 0.5f;
+    state->get_playback_period_end()) + 0.5f;
   const float c = d - halfSize;
   
   const float e = ruler_rect.get_height() - playbackPeriodArrowSize
@@ -437,10 +443,14 @@ TimelineRuler::draw_playback_point(Cairo::RefPtr<Cairo::Context> cr,
   REQUIRE(ruler_rect.get_width() > 0);
   REQUIRE(ruler_rect.get_height() > 0);
   
-  const gavl_time_t point = timelineWidget.get_playback_point();
+  shared_ptr<TimelineState> state = timelineWidget.get_state();
+  REQUIRE(state);
+  const TimelineViewWindow &window = state->get_view_window();
+  
+  const gavl_time_t point = state->get_playback_point();
   if(point == (gavl_time_t)GAVL_TIME_UNDEFINED)
     return;
-  const int x = timelineWidget.get_view_window().time_to_x(point);
+  const int x = window.time_to_x(point);
     
   cr->move_to(x + 0.5, ruler_rect.get_height());
   cr->rel_line_to(0, -playbackPointSize);
@@ -466,8 +476,7 @@ TimelineRuler::calculate_major_spacing() const
 {
   unsigned int i;
   
-  const int64_t time_scale =
-    timelineWidget.get_view_window().get_time_scale();
+  const int64_t time_scale = view_window().get_time_scale();
   const gavl_time_t major_spacings[] = {
       GAVL_TIME_SCALE / 1000,    
       GAVL_TIME_SCALE / 400,
@@ -502,6 +511,14 @@ TimelineRuler::calculate_major_spacing() const
     }
 
   return major_spacings[i];
+}
+
+TimelineViewWindow&
+TimelineRuler::view_window() const
+{
+  shared_ptr<TimelineState> state = timelineWidget.get_state();
+  REQUIRE(state);
+  return state->get_view_window();
 }
 
 void

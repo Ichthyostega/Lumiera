@@ -49,8 +49,8 @@ TimelineBody::TimelineBody(TimelineWidget &timeline_widget) :
     selectionAlpha(0.5),
     timelineWidget(timeline_widget)
 {      
-  // Connect up some events  
-  timelineWidget.get_view_window().changed_signal().connect(
+  // Connect up some events
+  view_window().changed_signal().connect(
     sigc::mem_fun(this, &TimelineBody::on_update_view) );
   
   // Install style properties
@@ -153,7 +153,8 @@ TimelineBody::on_scroll_event (GdkEventScroll* event)
 {
   REQUIRE(event != NULL);
   
-  TimelineViewWindow &window = timelineWidget.get_view_window();
+  TimelineViewWindow &window = view_window();
+  const Allocation allocation = get_allocation();
   
   if(event->state & GDK_CONTROL_MASK)
   {
@@ -179,12 +180,12 @@ TimelineBody::on_scroll_event (GdkEventScroll* event)
     {
     case GDK_SCROLL_UP:
       // User scrolled up. Shift 1/16th left
-      window.shift_view(-16);
+      window.shift_view(allocation.get_width(), -16);
       break;
       
     case GDK_SCROLL_DOWN:
       // User scrolled down. Shift 1/16th right
-      window.shift_view(16);
+      window.shift_view(allocation.get_width(), 16);
       break;
     
     default:
@@ -240,7 +241,7 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
     {
     case Shift:
       {
-        TimelineViewWindow &window = timelineWidget.get_view_window();
+        TimelineViewWindow &window = view_window();
         
         const int64_t scale = window.get_time_scale();
         gavl_time_t offset = beginShiftTimeOffset +
@@ -273,7 +274,6 @@ void
 TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
 {
   REQUIRE(cr);
-  REQUIRE(timelineWidget.sequence);
   
   // Prepare
   TimelineLayoutHelper &layout_helper = timelineWidget.layoutHelper;
@@ -324,7 +324,7 @@ TimelineBody::draw_track(Cairo::RefPtr<Cairo::Context> cr,
     
   const int height = timeline_track->get_height();
   REQUIRE(height >= 0);
-
+  
   // Draw the track background
   cr->rectangle(0, 0, view_width, height);
   GdkColor colour = backgroundColour;   // Needed to preserve const qualifier
@@ -333,7 +333,8 @@ TimelineBody::draw_track(Cairo::RefPtr<Cairo::Context> cr,
 
   // Render the track
   cr->save();
-  timeline_track->draw_track(cr, &timelineWidget.get_view_window());
+  TimelineViewWindow &window = view_window();
+  timeline_track->draw_track(cr, &window);
   cr->restore();
 }
 
@@ -345,11 +346,12 @@ TimelineBody::draw_selection(Cairo::RefPtr<Cairo::Context> cr)
   // Prepare
   const Allocation allocation = get_allocation();
   
-  const TimelineViewWindow &window = timelineWidget.get_view_window();
-  const int start_x = window.time_to_x(
-    timelineWidget.get_selection_start());
-  const int end_x = window.time_to_x(
-    timelineWidget.get_selection_end());
+  shared_ptr<TimelineState> state = timelineWidget.get_state();
+  REQUIRE(state);
+  
+  const TimelineViewWindow &window = state->get_view_window();
+  const int start_x = window.time_to_x(state->get_selection_start());
+  const int end_x = window.time_to_x(state->get_selection_end());
   
   // Draw the cover
   if(end_x > 0 && start_x < allocation.get_width())
@@ -390,13 +392,17 @@ TimelineBody::draw_playback_point(Cairo::RefPtr<Cairo::Context> cr)
   REQUIRE(cr);
   
   // Prepare
-  const Allocation allocation = get_allocation();
   
-  const gavl_time_t point = timelineWidget.get_playback_point();
+  shared_ptr<TimelineState> state = timelineWidget.get_state();
+  REQUIRE(state);
+  
+  const Allocation allocation = get_allocation();
+    
+  const gavl_time_t point = state->get_playback_point();
   if(point == (gavl_time_t)GAVL_TIME_UNDEFINED)
     return;
   
-  const int x = timelineWidget.get_view_window().time_to_x(point);
+  const int x = view_window().time_to_x(point);
     
   // Set source
   gdk_cairo_set_source_color(cr->cobj(), &playbackPointColour);
@@ -415,8 +421,7 @@ void
 TimelineBody::begin_shift_drag()
 {
   dragType = Shift;
-  beginShiftTimeOffset =
-    timelineWidget.get_view_window().get_time_offset();
+  beginShiftTimeOffset = view_window().get_time_offset();
   beginShiftVerticalOffset = get_vertical_offset();
 }
 
@@ -430,6 +435,14 @@ void
 TimelineBody::set_vertical_offset(int offset)
 {
   timelineWidget.verticalAdjustment.set_value(offset);
+}
+
+TimelineViewWindow&
+TimelineBody::view_window() const
+{
+  shared_ptr<TimelineState> state = timelineWidget.get_state();
+  REQUIRE(state);
+  return state->get_view_window();
 }
 
 void

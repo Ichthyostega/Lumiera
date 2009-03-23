@@ -86,8 +86,8 @@ Track::Track(TimelineWidget &timeline_widget,
   
   // Setup the context menu
   Menu::MenuList& context_list = contextMenu.items();
-  context_list.push_back( Menu_Helpers::MenuElem(_("_Add Track"),
-    mem_fun(timelineWidget, &TimelineWidget::on_add_track_command) ) );
+  //context_list.push_back( Menu_Helpers::MenuElem(_("_Add Track"),
+  //  mem_fun(timelineWidget, &TimelineWidget::on_add_track_command) ) );
   context_list.push_back( Menu_Helpers::MenuElem(_("_Remove Track"),
     mem_fun(this, &Track::on_remove_track) ) );
     
@@ -260,9 +260,10 @@ void
 Track::on_remove_track()
 {
   REQUIRE(model_track);
-  REQUIRE(timelineWidget.sequence);
+  boost::shared_ptr<TimelineState> state = timelineWidget.get_state();
+  REQUIRE(state);
   
-  timelineWidget.sequence->remove_descendant_track(model_track);
+  state->get_sequence()->remove_descendant_track(model_track);
 }
 
 }   // namespace timeline

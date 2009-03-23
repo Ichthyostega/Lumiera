@@ -34,6 +34,7 @@ namespace gui {
 
 namespace model {
 class Track;
+class Sequence;
 }
   
 namespace widgets {
@@ -335,6 +336,12 @@ protected:
    * @param[in] drop The point in the tree to drop onto.
    **/
   void apply_drop_to_model_tree(const DropPoint &drop);
+  
+  /**
+   * Helper to get the sequence object from the state.
+   * @return Returns a shared pointer to the sequence.
+   **/  
+  boost::shared_ptr<model::Sequence> get_sequence() const;
 
 protected:
   /**

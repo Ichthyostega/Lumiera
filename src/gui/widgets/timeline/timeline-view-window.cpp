@@ -26,18 +26,15 @@
 using namespace Gtk;
 using namespace gui::widgets;
 
-
 namespace gui {
 namespace widgets {
 namespace timeline {
 
 TimelineViewWindow::TimelineViewWindow(
-  TimelineWidget const *owner, gavl_time_t offset, int64_t scale) :
+  gavl_time_t offset, int64_t scale) :
   timeOffset(offset),
-  timeScale(scale),
-  timelineWidget(owner)
+  timeScale(scale)
 {
-  REQUIRE(timelineWidget != NULL);
 }
 
 gavl_time_t
@@ -67,16 +64,6 @@ TimelineViewWindow::set_time_scale(int64_t scale)
 }
 
 void
-TimelineViewWindow::zoom_view(int zoom_size)
-{
-  REQUIRE(timelineWidget != NULL);
-  REQUIRE(timelineWidget->body != NULL);
-  
-  const Allocation allocation = timelineWidget->body->get_allocation();
-  zoom_view(allocation.get_width() / 2, zoom_size);
-}
-
-void
 TimelineViewWindow::zoom_view(int point, int zoom_size)
 { 
   int64_t new_time_scale = (double)timeScale * pow(1.25, -zoom_size);
@@ -101,14 +88,8 @@ TimelineViewWindow::zoom_view(int point, int zoom_size)
 }
 
 void
-TimelineViewWindow::shift_view(int shift_size)
+TimelineViewWindow::shift_view(int view_width, int shift_size)
 {
-  REQUIRE(timelineWidget != NULL);
-  REQUIRE(timelineWidget->body != NULL);
-  
-  const int view_width =
-    timelineWidget->body->get_allocation().get_width();
-  
   set_time_offset(get_time_offset() +
     shift_size * timeScale * view_width / 256);
 }
