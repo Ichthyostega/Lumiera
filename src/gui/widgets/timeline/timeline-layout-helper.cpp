@@ -662,8 +662,8 @@ TimelineLayoutHelper::apply_drop_to_model_tree(
     }
   else ASSERT(0); // Unexpected value of relation
   
-  // Freeze the timeline widget - we will do it manually
-  timelineWidget.freeze_update_tracks();
+  // Thaw the timeline widget
+  timelineWidget.thaw_update_tracks();
 }
 
 boost::shared_ptr<model::Sequence>
