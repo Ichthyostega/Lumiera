@@ -59,6 +59,8 @@ Track::Track(TimelineWidget &timeline_widget,
   headerBox.pack_start(titleMenuButton, PACK_SHRINK);
   headerBox.pack_start(buttonBar, PACK_SHRINK);
   
+  headerWidget.show_all();
+  
   // Setup the title menu button
   Menu::MenuList& title_list = titleMenuButton.get_menu().items();
   title_list.push_back( Menu_Helpers::MenuElem(_("_Name..."),
