@@ -245,7 +245,6 @@ TimelinePanel::update_sequence_chooser()
   
   shared_ptr<timeline::TimelineState> state =
     timelineWidget->get_state();
-  REQUIRE(state);    
   
   BOOST_FOREACH( shared_ptr< model::Sequence > sequence,
     workspace.get_project().get_sequences() )
@@ -255,9 +254,13 @@ TimelinePanel::update_sequence_chooser()
       row[sequenceChooserColumns.sequenceColumn] = sequence;
       row[sequenceChooserColumns.nameColumn] = sequence->get_name();
       
-      if(state->get_sequence() == sequence)
+      if(state && state->get_sequence() == sequence)
         sequenceChooser.set_active(iter);
     }
+    
+  // If there's no active sequence, then unselect
+  if(!state)
+    sequenceChooser.set_active(-1);
     
   // Unblock the event handler
   sequenceChooserChangedConnection.unblock();
@@ -287,12 +290,17 @@ TimelinePanel::update_zoom_buttons()
 {
   REQUIRE(timelineWidget);
 
-  timeline::TimelineViewWindow &viewWindow = 
-    timelineWidget->get_state()->get_view_window();
-  
-  zoomIn.set_sensitive(viewWindow.get_time_scale() != 1);
-  zoomOut.set_sensitive(viewWindow.get_time_scale()
-    != TimelineWidget::MaxScale);
+  const shared_ptr<timeline::TimelineState> state =
+    timelineWidget->get_state();
+  if(state)
+    {
+      timeline::TimelineViewWindow &viewWindow = 
+        state->get_view_window();
+      
+      zoomIn.set_sensitive(viewWindow.get_time_scale() != 1);
+      zoomOut.set_sensitive(viewWindow.get_time_scale()
+        != TimelineWidget::MaxScale);
+    }
 }
 
 void

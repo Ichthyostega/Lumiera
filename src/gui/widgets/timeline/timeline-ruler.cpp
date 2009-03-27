@@ -62,11 +62,14 @@ TimelineRuler::TimelineRuler(
   playbackPeriodArrowSize(10),
   playbackPeriodArrowStemSize(3),
   timelineWidget(timeline_widget)
-{  
-  // Connect event handlers
-  view_window().changed_signal().connect(
-    sigc::mem_fun(this, &TimelineRuler::on_update_view) );
-  
+{
+  if(timelineWidget.get_state())
+    {
+      // Connect event handlers
+      view_window().changed_signal().connect(
+        sigc::mem_fun(this, &TimelineRuler::on_update_view) );
+    }
+
   // Install style properties
   register_styles();
 }
@@ -109,41 +112,44 @@ TimelineRuler::on_expose_event(GdkEventExpose* event)
   Glib::RefPtr<Gdk::Window> window = get_window();
   if(!window)
     return false;
-    
-  // Prepare to render via cairo      
-  const Allocation allocation = get_allocation();
-
-  Cairo::RefPtr<Context> cr = window->create_cairo_context();
-  REQUIRE(cr);
-
-  // Draw the ruler
-  if(!rulerImage)
+  
+  if(timelineWidget.get_state())
     {
-      // We have no cached rendering - it must be redrawn
-      // but do we need ro allocate a new image?
-      if(!rulerImage ||
-        rulerImage->get_width() != allocation.get_width() ||
-        rulerImage->get_height() != allocation.get_height())
-        rulerImage = ImageSurface::create(FORMAT_RGB24,
-          allocation.get_width(), allocation.get_height());
+      // Prepare to render via cairo      
+      const Allocation allocation = get_allocation();
+
+      Cairo::RefPtr<Context> cr = window->create_cairo_context();
+      REQUIRE(cr);
+
+      // Draw the ruler
+      if(!rulerImage)
+        {
+          // We have no cached rendering - it must be redrawn
+          // but do we need ro allocate a new image?
+          if(!rulerImage ||
+            rulerImage->get_width() != allocation.get_width() ||
+            rulerImage->get_height() != allocation.get_height())
+            rulerImage = ImageSurface::create(FORMAT_RGB24,
+              allocation.get_width(), allocation.get_height());
+              
+          ENSURE(rulerImage);
+            
+          Cairo::RefPtr<Context> image_cairo = Context::create(rulerImage);
+          ENSURE(image_cairo);
           
-      ENSURE(rulerImage);
-        
-      Cairo::RefPtr<Context> image_cairo = Context::create(rulerImage);
-      ENSURE(image_cairo);
+          draw_ruler(image_cairo, allocation);
+        }
       
-      draw_ruler(image_cairo, allocation);
+      // Draw the cached ruler image
+      cr->set_source(rulerImage, 0, 0);
+      cr->paint();
+      
+      // Draw the overlays
+      draw_mouse_chevron(cr, allocation);
+      draw_selection(cr, allocation);
+      draw_playback_period(cr, allocation);
+      draw_playback_point(cr, allocation);
     }
-  
-  // Draw the cached ruler image
-  cr->set_source(rulerImage, 0, 0);
-  cr->paint();
-  
-  // Draw the overlays
-  draw_mouse_chevron(cr, allocation);
-  draw_selection(cr, allocation);
-  draw_playback_period(cr, allocation);
-  draw_playback_point(cr, allocation);
 
   return true;
 }
@@ -153,11 +159,14 @@ TimelineRuler::on_button_press_event(GdkEventButton* event)
 {
   REQUIRE(event != NULL);
   
-  if(event->button == 1)
-  {
-    pinnedDragTime = view_window().x_to_time(event->x);
-    isDragging = true;
-  }
+  if(timelineWidget.get_state())
+    {
+      if(event->button == 1)
+      {
+        pinnedDragTime = view_window().x_to_time(event->x);
+        isDragging = true;
+      }
+    }
   
   return true;
 }
@@ -212,13 +221,15 @@ void
 TimelineRuler::set_leading_x(const int x)
 {
   shared_ptr<TimelineState> state = timelineWidget.get_state();
-  REQUIRE(state);
   
-  const gavl_time_t time = view_window().x_to_time(x);
-  if(time > pinnedDragTime)
-    state->set_playback_period(pinnedDragTime, time);
-  else
-    state->set_playback_period(time, pinnedDragTime);
+  if(state)
+    {
+      const gavl_time_t time = view_window().x_to_time(x);
+      if(time > pinnedDragTime)
+        state->set_playback_period(pinnedDragTime, time);
+      else
+        state->set_playback_period(time, pinnedDragTime);
+   }
 }
 
 void

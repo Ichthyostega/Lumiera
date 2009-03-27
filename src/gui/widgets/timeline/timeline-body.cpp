@@ -137,16 +137,19 @@ TimelineBody::on_expose_event(GdkEventExpose* event)
   // Makes sure the widget styles have been loaded
   read_styles();
   
-  // Prepare to render via cairo
-  const Allocation allocation = get_allocation();
-  Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
+  if(timelineWidget.get_state())
+    {
+      // Prepare to render via cairo
+      const Allocation allocation = get_allocation();
+      Cairo::RefPtr<Cairo::Context> cr = window->create_cairo_context();
 
-  REQUIRE(cr);
-  
-  //----- Draw the view -----//
-  draw_tracks(cr);
-  draw_selection(cr);
-  draw_playback_point(cr);
+      REQUIRE(cr);
+      
+      //----- Draw the view -----//
+      draw_tracks(cr);
+      draw_selection(cr);
+      draw_playback_point(cr);
+    }
   
   return true;
 }
@@ -156,45 +159,48 @@ TimelineBody::on_scroll_event (GdkEventScroll* event)
 {
   REQUIRE(event != NULL);
   
-  TimelineViewWindow &window = view_window();
-  const Allocation allocation = get_allocation();
-  
-  if(event->state & GDK_CONTROL_MASK)
-  {
-    switch(event->direction)
+  if(timelineWidget.get_state())
     {
-    case GDK_SCROLL_UP:
-      // User scrolled up. Zoom in
-      window.zoom_view(event->x, 1);
-      break;
+      TimelineViewWindow &window = view_window();
+      const Allocation allocation = get_allocation();
       
-    case GDK_SCROLL_DOWN:
-      // User scrolled down. Zoom out
-      window.zoom_view(event->x, -1);
-      break;
-      
-    default:
-      break;
+      if(event->state & GDK_CONTROL_MASK)
+        {
+          switch(event->direction)
+            {
+            case GDK_SCROLL_UP:
+              // User scrolled up. Zoom in
+              window.zoom_view(event->x, 1);
+              break;
+              
+            case GDK_SCROLL_DOWN:
+              // User scrolled down. Zoom out
+              window.zoom_view(event->x, -1);
+              break;
+              
+            default:
+              break;
+            }
+        }
+      else
+        {
+          switch(event->direction)
+            {
+            case GDK_SCROLL_UP:
+              // User scrolled up. Shift 1/16th left
+              window.shift_view(allocation.get_width(), -16);
+              break;
+              
+            case GDK_SCROLL_DOWN:
+              // User scrolled down. Shift 1/16th right
+              window.shift_view(allocation.get_width(), 16);
+              break;
+            
+            default:
+              break;
+            }
+        }
     }
-  }
-  else
-  {
-    switch(event->direction)
-    {
-    case GDK_SCROLL_UP:
-      // User scrolled up. Shift 1/16th left
-      window.shift_view(allocation.get_width(), -16);
-      break;
-      
-    case GDK_SCROLL_DOWN:
-      // User scrolled down. Shift 1/16th right
-      window.shift_view(allocation.get_width(), 16);
-      break;
-    
-    default:
-      break;
-    }
-  }
   
   return true;
 }
@@ -239,35 +245,38 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
 {
   REQUIRE(event != NULL);
   
-  // Handle a middle-mouse drag if one is occuring
-  switch(dragType)
+  if(timelineWidget.get_state())
     {
-    case Shift:
-      {
-        TimelineViewWindow &window = view_window();
-        
-        const int64_t scale = window.get_time_scale();
-        gavl_time_t offset = beginShiftTimeOffset +
-          (int64_t)(mouseDownX - event->x) * scale;
-        window.set_time_offset(offset);
-        
-        set_vertical_offset((int)(mouseDownY - event->y) +
-          beginShiftVerticalOffset);
-        break;
-      }
+      // Handle a middle-mouse drag if one is occuring
+      switch(dragType)
+        {
+        case Shift:
+          {
+            TimelineViewWindow &window = view_window();
+            
+            const int64_t scale = window.get_time_scale();
+            gavl_time_t offset = beginShiftTimeOffset +
+              (int64_t)(mouseDownX - event->x) * scale;
+            window.set_time_offset(offset);
+            
+            set_vertical_offset((int)(mouseDownY - event->y) +
+              beginShiftVerticalOffset);
+            break;
+          }
+          
+        default:
+          break;
+        }
       
-    default:
-      break;
+      // Forward the event to the tool
+      tool->on_motion_notify_event(event);
+      
+      // See if the track that we're hovering over has changed
+      shared_ptr<timeline::Track> new_hovering_track(
+        timelineWidget.layoutHelper.track_from_y(event->y));
+      if(timelineWidget.get_hovering_track() != new_hovering_track)
+          timelineWidget.set_hovering_track(new_hovering_track);
     }
-  
-  // Forward the event to the tool
-  tool->on_motion_notify_event(event);
-  
-  // See if the track that we're hovering over has changed
-  shared_ptr<timeline::Track> new_hovering_track(
-    timelineWidget.layoutHelper.track_from_y(event->y));
-  if(timelineWidget.get_hovering_track() != new_hovering_track)
-      timelineWidget.set_hovering_track(new_hovering_track);
   
   // false so that the message is passed up to the owner TimelineWidget
   return false;
@@ -276,9 +285,12 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
 void
 TimelineBody::on_state_changed()
 {
-  // Connect up some events
-  view_window().changed_signal().connect(
-    sigc::mem_fun(this, &TimelineBody::on_update_view) );
+  if(timelineWidget.get_state())
+    {
+      // Connect up some events
+      view_window().changed_signal().connect(
+        sigc::mem_fun(this, &TimelineBody::on_update_view) );
+    }
     
   // Redraw
   queue_draw();
@@ -299,6 +311,9 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
   Cairo::Matrix view_matrix;
   cr->get_matrix(view_matrix);
   
+  // If the tree's empty that means there's no sequence root
+  REQUIRE(!layout_tree.empty());
+    
   // Iterate drawing each track
   TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
   for(iterator = ++layout_tree.begin(); // ++ so we skip the sequence root
@@ -408,35 +423,39 @@ TimelineBody::draw_playback_point(Cairo::RefPtr<Cairo::Context> cr)
   // Prepare
   
   shared_ptr<TimelineState> state = timelineWidget.get_state();
-  REQUIRE(state);
-  
-  const Allocation allocation = get_allocation();
-    
-  const gavl_time_t point = state->get_playback_point();
-  if(point == (gavl_time_t)GAVL_TIME_UNDEFINED)
-    return;
-  
-  const int x = view_window().time_to_x(point);
-    
-  // Set source
-  gdk_cairo_set_source_color(cr->cobj(), &playbackPointColour);
-  cr->set_line_width(1);
-    
-  // Draw
-  if(x >= 0 && x < allocation.get_width())
+  if(state)
     {
-      cr->move_to(x + 0.5, 0);
-      cr->line_to(x + 0.5, allocation.get_height());
-      cr->stroke();
+      const Allocation allocation = get_allocation();
+        
+      const gavl_time_t point = state->get_playback_point();
+      if(point == (gavl_time_t)GAVL_TIME_UNDEFINED)
+        return;
+      
+      const int x = view_window().time_to_x(point);
+        
+      // Set source
+      gdk_cairo_set_source_color(cr->cobj(), &playbackPointColour);
+      cr->set_line_width(1);
+        
+      // Draw
+      if(x >= 0 && x < allocation.get_width())
+        {
+          cr->move_to(x + 0.5, 0);
+          cr->line_to(x + 0.5, allocation.get_height());
+          cr->stroke();
+        }
     }
 }
 
 void
 TimelineBody::begin_shift_drag()
 {
-  dragType = Shift;
-  beginShiftTimeOffset = view_window().get_time_offset();
-  beginShiftVerticalOffset = get_vertical_offset();
+  if(timelineWidget.get_state())
+    {
+      dragType = Shift;
+      beginShiftTimeOffset = view_window().get_time_offset();
+      beginShiftVerticalOffset = get_vertical_offset();
+    }
 }
 
 int

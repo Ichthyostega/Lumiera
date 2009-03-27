@@ -241,16 +241,20 @@ TimelineHeaderContainer::on_size_request (Requisition* requisition)
     
   const TimelineLayoutHelper::TrackTree &layout_tree =
     timelineWidget.layoutHelper.get_layout_tree();
-    
-  TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
-  for(iterator = ++layout_tree.begin(); // ++ so that we skip the sequence root
-    iterator != layout_tree.end();
-    iterator++)
+  
+  // Send a size request to all the children
+  if(!layout_tree.empty())
     {
-      Widget &widget =
-        lookup_timeline_track(*iterator)->get_header_widget();
-      if(widget.is_visible())
-        widget.size_request();
+      TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
+      for(iterator = ++layout_tree.begin(); // ++ so that we skip the sequence root
+        iterator != layout_tree.end();
+        iterator++)
+        {
+          Widget &widget =
+            lookup_timeline_track(*iterator)->get_header_widget();
+          if(widget.is_visible())
+            widget.size_request();
+        }
     }
     
   // Initialize the output parameter:
@@ -348,45 +352,48 @@ TimelineHeaderContainer::layout_headers()
     timelineWidget.layoutHelper;
   const TimelineLayoutHelper::TrackTree &layout_tree =
     layout_helper.get_layout_tree();
-  
-  TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
-  for(iterator = ++layout_tree.begin(); // ++ so that we skip the sequence root
-    iterator != layout_tree.end();
-    iterator++)
-    {      
-      const shared_ptr<timeline::Track> timeline_track =
-        lookup_timeline_track(*iterator);
-      
-      Widget &widget = timeline_track->get_header_widget();
-      
-      optional<Gdk::Rectangle> header_rect =
-        layout_helper.get_track_header_rect(timeline_track);
-      
-      if(header_rect)
-        {
-          REQUIRE(header_rect->get_width() >= 0);
-          REQUIRE(header_rect->get_height() >= 0);
-          
-          // Apply the allocation to the header
-          widget.size_allocate (*header_rect);
-          if(!widget.is_visible())
-            {
-              widget.show();
-              headers_shown = true;
-            }
-        }
-      else // No header rect, so the track must be hidden
-        if(widget.is_visible())
-          widget.hide();
-    }
     
-  // If headers have been shown while we're dragging, the dragging
-  // branch headers have to be brought back to the top again
-  if(headers_shown && layout_helper.is_dragging_track())
-    raise_recursive(layout_helper.get_dragging_track_iter());
-  
-  // Repaint the background of our parenting
-  queue_draw();
+  if(!layout_tree.empty())
+    {
+      TimelineLayoutHelper::TrackTree::pre_order_iterator iterator;
+      for(iterator = ++layout_tree.begin(); // ++ so that we skip the sequence root
+        iterator != layout_tree.end();
+        iterator++)
+        {      
+          const shared_ptr<timeline::Track> timeline_track =
+            lookup_timeline_track(*iterator);
+          
+          Widget &widget = timeline_track->get_header_widget();
+          
+          optional<Gdk::Rectangle> header_rect =
+            layout_helper.get_track_header_rect(timeline_track);
+          
+          if(header_rect)
+            {
+              REQUIRE(header_rect->get_width() >= 0);
+              REQUIRE(header_rect->get_height() >= 0);
+              
+              // Apply the allocation to the header
+              widget.size_allocate (*header_rect);
+              if(!widget.is_visible())
+                {
+                  widget.show();
+                  headers_shown = true;
+                }
+            }
+          else // No header rect, so the track must be hidden
+            if(widget.is_visible())
+              widget.hide();
+        }
+        
+      // If headers have been shown while we're dragging, the dragging
+      // branch headers have to be brought back to the top again
+      if(headers_shown && layout_helper.is_dragging_track())
+        raise_recursive(layout_helper.get_dragging_track_iter());
+      
+      // Repaint the background of our parenting
+      queue_draw();
+    }
 }
 
 shared_ptr<timeline::Track>
