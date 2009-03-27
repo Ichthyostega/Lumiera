@@ -37,6 +37,7 @@ using namespace Gtk;
 using namespace sigc;
 using namespace std;
 using namespace boost;
+using namespace util;
 using namespace gui::widgets;
 using namespace gui::model;
 
@@ -62,24 +63,23 @@ TimelinePanel::TimelinePanel(workspace::WorkspaceWindow
   zoomOut(Stock::ZOOM_OUT),
   updatingToolbar(false),
   currentTool(timeline::IBeam)
-{  
-  //timelineWidget.mouse_hover_signal().connect(
-  //  mem_fun(this, &TimelinePanel::on_mouse_hover));
-  //timelineWidget.playback_period_drag_released_signal().connect(
-  //  mem_fun(this, &TimelinePanel::on_playback_period_drag_released));
-  
+{
   // Hook up notifications
   workspace.get_project().get_sequences().signal_changed().connect(
     mem_fun(this, &TimelinePanel::on_sequence_list_changed));
   
-  // Setup the notebook  
-  notebook.signal_switch_page().connect(
-    mem_fun(this, &TimelinePanel::on_page_switched));
-  notebook.popup_enable();
+  // Setup the sequence chooser
+  sequenceChooserModel = Gtk::ListStore::create(sequenceChooserColumns);
+  ENSURE(sequenceChooserModel);
   
-  // Setup the sequence chooser;  
+  sequenceChooser.set_model(sequenceChooserModel);
+  sequenceChooser.pack_start(sequenceChooserColumns.nameColumn);
   sequenceChooser.show_all();
-  panelBar.pack_start(sequenceChooser, PACK_EXPAND_WIDGET);
+  
+  sequenceChooserChangedConnection = sequenceChooser.signal_changed().
+    connect( sigc::mem_fun(*this, &TimelinePanel::on_sequence_chosen) );
+  
+  panelBar.pack_start(sequenceChooser, PACK_SHRINK);
 
   // Setup the toolbar
   timeIndicatorButton.add(timeIndicator);
@@ -112,11 +112,13 @@ TimelinePanel::TimelinePanel(workspace::WorkspaceWindow
   toolbar.show_all();
   panelBar.pack_start(toolbar, PACK_SHRINK);
    
-  // Add the notebook
-  pack_start(notebook, PACK_EXPAND_WIDGET);
+  // Setup the timeline widget
+  shared_ptr<Sequence> sequence
+    = *workspace.get_project().get_sequences().begin();  
+  timelineWidget.reset(new TimelineWidget(load_state(sequence)));
+  pack_start(*timelineWidget, PACK_EXPAND_WIDGET);
   
   // Set the initial UI state
-  update_notebook();
   update_sequence_chooser();
   update_tool_buttons();
   update_zoom_buttons();
@@ -165,32 +167,16 @@ TimelinePanel::on_ibeam_tool()
 void
 TimelinePanel::on_zoom_in()
 {
-  TimelineWidget *const  widget = get_current_page();
-  REQUIRE(widget != NULL);
-  
-  widget->zoom_view(ZoomToolSteps);
+  REQUIRE(timelineWidget);
+  timelineWidget->zoom_view(ZoomToolSteps);
   update_zoom_buttons();
 }
 
 void
 TimelinePanel::on_zoom_out()
 {
-  TimelineWidget *const  widget = get_current_page();
-  REQUIRE(widget != NULL);
-  
-  widget->zoom_view(-ZoomToolSteps);
-  update_zoom_buttons();
-}
-
-void
-TimelinePanel::on_page_switched(GtkNotebookPage*, guint)
-{
-  // The page has changed. Update the UI for this new page
-  
-  // Set the tool in the new page to be the same as the tool in the last
-  // page
-  set_tool(currentTool); 
-
+  REQUIRE(timelineWidget);
+  timelineWidget->zoom_view(-ZoomToolSteps);
   update_zoom_buttons();
 }
 
@@ -206,11 +192,10 @@ TimelinePanel::on_playback_period_drag_released()
   //----- TEST CODE - this needs to set the playback point via the
   // real backend
   
-  TimelineWidget *const  widget = get_current_page();
-  REQUIRE(widget != NULL);
+  REQUIRE(timelineWidget);
     
-  widget->get_state()->set_playback_point(
-    widget->get_state()->get_playback_period_start());
+  timelineWidget->get_state()->set_playback_point(
+    timelineWidget->get_state()->get_playback_period_start());
   //----- END TEST CODE
   
   play();
@@ -219,55 +204,63 @@ TimelinePanel::on_playback_period_drag_released()
 void
 TimelinePanel::on_sequence_list_changed()
 {
-  update_notebook();
   update_sequence_chooser();
+}
+
+void
+TimelinePanel::on_sequence_chosen()
+{
+  REQUIRE(timelineWidget);
+  
+  Gtk::TreeIter iter = sequenceChooser.get_active();
+  if(iter)
+    {
+      weak_ptr<Sequence> sequence_ptr = 
+        (*iter)[sequenceChooserColumns.sequenceColumn];
+      shared_ptr<Sequence> sequence(sequence_ptr.lock());
+      if(sequence)
+        {
+          shared_ptr<timeline::TimelineState> old_state(
+            timelineWidget->get_state());
+          REQUIRE(old_state);
+            
+          if(sequence != old_state->get_sequence())
+            timelineWidget->set_state(load_state(sequence));
+        }
+    }
+    
+  update_zoom_buttons();
 }
 
 void
 TimelinePanel::update_sequence_chooser()
 {
-  sequenceChooser.clear_items();
+  REQUIRE(sequenceChooserModel);
+
+  // Block the event handler
+  sequenceChooserChangedConnection.block();
+
+  // Repopulate the sequence chooser
+  sequenceChooserModel->clear();
+  
+  shared_ptr<timeline::TimelineState> state =
+    timelineWidget->get_state();
+  REQUIRE(state);    
   
   BOOST_FOREACH( shared_ptr< model::Sequence > sequence,
     workspace.get_project().get_sequences() )
     {
-      sequenceChooser.append_text(sequence->get_name());
-    }
-}
-
-void
-TimelinePanel::update_notebook()
-{
-  std::map<const model::Sequence*, shared_ptr<TimelineWidget> >
-    old_pages;
-  old_pages.swap(notebook_pages);
-
-  BOOST_FOREACH( shared_ptr< model::Sequence > sequence,
-    workspace.get_project().get_sequences() )
-    {
-      std::map<const model::Sequence*, shared_ptr<TimelineWidget> >::
-        iterator iterator = old_pages.find(sequence.get());
-      if(iterator != old_pages.end())
-        {
-          // This sequence has not been changed
-          // leave it in the new list
-          notebook_pages[iterator->first] = iterator->second;
-          old_pages.erase(iterator->first);
-        }
-      else
-        {
-          // This is a new sequence, add it in
-          shared_ptr< timeline::TimelineState > state(
-            new timeline::TimelineState(sequence));
-          shared_ptr< TimelineWidget > widget(
-            new TimelineWidget(state));
-          notebook_pages[sequence.get()] = widget;
-          notebook.append_page(*widget.get(), sequence->get_name());
-          notebook.set_tab_reorderable(*widget.get());
-        }
+      Gtk::TreeIter iter = sequenceChooserModel->append();
+      Gtk::TreeModel::Row row = *iter;
+      row[sequenceChooserColumns.sequenceColumn] = sequence;
+      row[sequenceChooserColumns.nameColumn] = sequence->get_name();
+      
+      if(state->get_sequence() == sequence)
+        sequenceChooser.set_active(iter);
     }
     
-  notebook.show_all_children();
+  // Unblock the event handler
+  sequenceChooserChangedConnection.unblock();
 }
 
 void
@@ -292,17 +285,14 @@ TimelinePanel::update_tool_buttons()
 void
 TimelinePanel::update_zoom_buttons()
 {
-  TimelineWidget *const widget = get_current_page();
+  REQUIRE(timelineWidget);
+
+  timeline::TimelineViewWindow &viewWindow = 
+    timelineWidget->get_state()->get_view_window();
   
-  if(widget != NULL)
-    {
-      timeline::TimelineViewWindow &viewWindow = 
-        widget->get_state()->get_view_window();
-      
-      zoomIn.set_sensitive(viewWindow.get_time_scale() != 1);
-      zoomOut.set_sensitive(viewWindow.get_time_scale()
-        != TimelineWidget::MaxScale);
-    }
+  zoomIn.set_sensitive(viewWindow.get_time_scale() != 1);
+  zoomOut.set_sensitive(viewWindow.get_time_scale()
+    != TimelineWidget::MaxScale);
 }
 
 void
@@ -327,32 +317,19 @@ TimelinePanel::is_playing() const
 void
 TimelinePanel::set_tool(timeline::ToolType tool)
 {
+  REQUIRE(timelineWidget);
+  
   if(updatingToolbar) return;
   
-  TimelineWidget *const widget = get_current_page();
-  if(widget != NULL)
-    {
-      currentTool = tool;
-      widget->set_tool(tool);
-      update_tool_buttons();
-    }
+  currentTool = tool;
+  timelineWidget->set_tool(tool);
+  update_tool_buttons();
 }
 
 void
 TimelinePanel::show_time(gavl_time_t time)
 {
   timeIndicator.set_text(lumiera_tmpbuf_print_time(time));
-}
-
-TimelineWidget*
-TimelinePanel::get_current_page()
-{
-  Notebook::PageList::iterator page_iterator = notebook.get_current();
-  if(!page_iterator) return NULL;  
-  
-  Widget* const widget = (*page_iterator).get_child();
-  REQUIRE(widget != NULL);
-  return (TimelineWidget*)widget;
 }
 
 bool
@@ -372,6 +349,19 @@ TimelinePanel::on_frame()
     on_stop();*/
     
   return true;
+}
+
+shared_ptr<timeline::TimelineState>
+TimelinePanel::load_state(weak_ptr<Sequence> sequence)
+{
+  if(contains(timelineStates, sequence))
+    return timelineStates[sequence];
+  
+  shared_ptr<Sequence> shared_sequence = sequence.lock();
+  if(shared_sequence)
+    return shared_ptr< timeline::TimelineState >(
+      new timeline::TimelineState(shared_sequence));
+  return shared_ptr< timeline::TimelineState >();
 }
 
 }   // namespace panels

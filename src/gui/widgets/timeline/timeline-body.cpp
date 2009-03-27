@@ -50,11 +50,14 @@ TimelineBody::TimelineBody(TimelineWidget &timeline_widget) :
     timelineWidget(timeline_widget)
 {      
   // Connect up some events
-  view_window().changed_signal().connect(
-    sigc::mem_fun(this, &TimelineBody::on_update_view) );
+  timeline_widget.state_changed_signal().connect(
+    sigc::mem_fun(this, &TimelineBody::on_state_changed) );
   
   // Install style properties
   register_styles();
+  
+  // Reset the state
+  on_state_changed();
 }
 
 TimelineBody::~TimelineBody()
@@ -268,6 +271,17 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
   
   // false so that the message is passed up to the owner TimelineWidget
   return false;
+}
+
+void
+TimelineBody::on_state_changed()
+{
+  // Connect up some events
+  view_window().changed_signal().connect(
+    sigc::mem_fun(this, &TimelineBody::on_update_view) );
+    
+  // Redraw
+  queue_draw();
 }
 
 void

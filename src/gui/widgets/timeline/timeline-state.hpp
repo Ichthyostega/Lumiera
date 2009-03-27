@@ -37,14 +37,28 @@ class Sequence;
 namespace widgets { 
 namespace timeline {
 
+/**
+ * TimelineState is a container for the state data for TimelineWidget.
+ * @remarks TimelineState s can be swapped out so that TimelineWidget
+ * can flip between different views.
+ **/
 class TimelineState
 {
 public:
 
+  /**
+   * Constructor
+   * @param source_sequence The sequence on which the TimelineWidget
+   * will operate when this TimelineState is attached.
+   **/
   TimelineState(boost::shared_ptr<model::Sequence> source_sequence);
   
 public:
 
+  /**
+   * Gets the sequence that is attached to this timeline state object.
+   * @return Returns a shared_ptr to the sequence object.
+   **/
   boost::shared_ptr<model::Sequence> get_sequence() const;
 
   /**
@@ -104,9 +118,15 @@ public:
    */
   gavl_time_t get_playback_point() const;
   
-
+  /**
+   * A signal to notify when the selected period has changed.
+   **/
   sigc::signal<void> selection_changed_signal() const; 
   
+  /**
+   * A signal to notify when the playback point or playback periods have
+   * changed.
+   **/
   sigc::signal<void> playback_changed_signal() const; 
   
 private:
@@ -120,17 +140,49 @@ private:
   boost::shared_ptr<model::Sequence> sequence;
   
   // View State
+  /**
+   * The ViewWindow for the TimelineWidget display with.
+   **/
   timeline::TimelineViewWindow viewWindow;
   
   // Selection State
+  
+  /**
+   * The start time of the selection period.
+   **/
   gavl_time_t selectionStart;
+  
+  /**
+   * The end time of the selection period.
+   **/
   gavl_time_t selectionEnd;
+  
+  /**
+   * The start time of the playback period.
+   **/
   gavl_time_t playbackPeriodStart;
+  
+  /**
+   * The end time of the playback period.
+   **/
   gavl_time_t playbackPeriodEnd;
+  
+  /**
+   * The time of the playback point.
+   **/
   gavl_time_t playbackPoint;
   
   // Signals
+  
+  /**
+   * A signal to notify when the selected period has changed.
+   **/
   sigc::signal<void> selectionChangedSignal;
+  
+  /**
+   * A signal to notify when the playback point or playback periods have
+   * changed.
+   **/
   sigc::signal<void> playbackChangedSignal;
 };
 

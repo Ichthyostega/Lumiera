@@ -109,8 +109,14 @@ TimelineWidget::get_state()
 void
 TimelineWidget::set_state(shared_ptr<timeline::TimelineState> new_state)
 {
+  if(!new_state)
+    return;
+  
   state = new_state;
   REQUIRE(state);
+  
+  // Clear the track tree
+  trackMap.clear();
 
   // Hook up event handlers
   state->get_view_window().changed_signal().connect( sigc::mem_fun(
@@ -125,6 +131,9 @@ TimelineWidget::set_state(shared_ptr<timeline::TimelineState> new_state)
     &TimelineWidget::on_body_changed));
 
   update_tracks();
+  
+  // Send the state changed signal
+  stateChangedSignal.emit();
 }
 
 void
@@ -174,6 +183,11 @@ sigc::signal<void, shared_ptr<timeline::Track> >
 TimelineWidget::hovering_track_changed_signal() const
 {
   return hoveringTrackChangedSignal;
+}
+sigc::signal<void>
+TimelineWidget::state_changed_signal() const
+{
+  return stateChangedSignal;
 }
 
 /* ===== Events ===== */

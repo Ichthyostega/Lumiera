@@ -32,7 +32,7 @@
 using namespace gui::widgets;
 
 namespace gui {
-  
+
 namespace model {
 class Sequence;
 }
@@ -70,20 +70,25 @@ private:
   void on_zoom_out();
   
   void on_time_pressed();
-  
-  void on_page_switched(GtkNotebookPage*, guint);
-  
+    
   void on_mouse_hover(gavl_time_t time);
   void on_playback_period_drag_released();
   
+  /**
+   * An event handler for when the list of sequences changes.
+   **/
   void on_sequence_list_changed();
+  
+  /**
+   * An event handler for when a new sequence is chosen in the
+   * sequenceChooser.
+   **/
+  void on_sequence_chosen();
   
 private:
 
   void update_sequence_chooser();
-
-  void update_notebook();
-
+  
   void update_playback_buttons();
   void update_tool_buttons();
   void update_zoom_buttons();
@@ -97,8 +102,36 @@ private:
   void set_tool(gui::widgets::timeline::ToolType tool);
   
   void show_time(gavl_time_t time);
+    
+  boost::shared_ptr<widgets::timeline::TimelineState> load_state(
+    boost::weak_ptr<model::Sequence> sequence);
   
-  TimelineWidget* get_current_page();
+private:
+
+  /**
+   * The definition of the sequence chooser combo box columns
+   **/
+  class SequenceChooserColumns : public Gtk::TreeModel::ColumnRecord
+  {
+  public:
+    /**
+     * Constructor
+     **/
+    SequenceChooserColumns()
+      { add(nameColumn); add(sequenceColumn);  }
+
+    /**
+     * An invisible column which will be used to identify the sequence
+     * of a row.
+     **/
+    Gtk::TreeModelColumn< boost::weak_ptr<model::Sequence> >
+      sequenceColumn;
+      
+    /**
+     * The column to use as the label for the combo box widget items.
+     **/
+    Gtk::TreeModelColumn< Glib::ustring > nameColumn;
+  };
 
 private:
 
@@ -106,12 +139,19 @@ private:
 
   // Grip Widgets
   ButtonBar toolbar;
-  Gtk::ComboBoxText sequenceChooser;
+  
+  // Sequence Chooser
+  SequenceChooserColumns sequenceChooserColumns;
+  Glib::RefPtr<Gtk::ListStore> sequenceChooserModel;
+  Gtk::ComboBox sequenceChooser;
+  sigc::connection sequenceChooserChangedConnection;
   
   // Body Widgets
-  Gtk::Notebook notebook;
-  std::map< const model::Sequence*, boost::shared_ptr<TimelineWidget> >
-    notebook_pages;
+  boost::scoped_ptr<TimelineWidget> timelineWidget;
+  
+  std::map< boost::weak_ptr<model::Sequence>,
+    boost::shared_ptr<widgets::timeline::TimelineState> >
+    timelineStates;
   
   // Toolbar Widgets
   Gtk::Label timeIndicator;

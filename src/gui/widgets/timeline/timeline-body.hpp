@@ -75,7 +75,7 @@ public:
    * @param tool_type The type of tool to set.
    */
   void set_tool(ToolType tool_type);
-
+  
   /* ===== Events ===== */
 protected:
 
@@ -110,6 +110,12 @@ protected:
    * The event handler for mouse move events.
    */
   bool on_motion_notify_event(GdkEventMotion *event);
+  
+  /**
+   * The event handler for when the TimelineWidget's state object is
+   * replaced.
+   **/
+  void on_state_changed();
   
   /* ===== Internals ===== */
 private:

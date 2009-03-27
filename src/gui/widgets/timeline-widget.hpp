@@ -57,6 +57,8 @@ class TimelineWidget : public Gtk::Table
 public:
   /**
    * Constructor
+   * @param source_state The state that will be used as the data source
+   * for this timeline widget.
    */
   TimelineWidget(
     boost::shared_ptr<timeline::TimelineState> source_state);
@@ -69,8 +71,17 @@ public:
   /* ===== Data Access ===== */
 public:
 
+  /**
+   * Gets a pointer to the current state object.
+   * @return The state object that the timeline widget is currently
+   * working with.
+   **/
   boost::shared_ptr<timeline::TimelineState> get_state();
   
+  /**
+   * Replaces the current TimelineState object with another.
+   * @param new_state The new state to swap in.
+   **/
   void set_state(boost::shared_ptr<timeline::TimelineState> new_state);
 
   /**
@@ -101,6 +112,8 @@ public:
   
   sigc::signal<void, boost::shared_ptr<timeline::Track> >
     hovering_track_changed_signal() const;
+    
+  sigc::signal<void> state_changed_signal() const;
   
   /* ===== Events ===== */
 protected:
@@ -217,6 +230,10 @@ private:
 
 protected:
 
+  /**
+   * The state that will be used as the data source for this timeline
+   * widget.
+   **/
   boost::shared_ptr<timeline::TimelineState> state;
 
   // Model Data
@@ -251,6 +268,7 @@ protected:
   sigc::signal<void> playbackPeriodDragReleasedSignal;
   sigc::signal<void, boost::shared_ptr<timeline::Track> >
     hoveringTrackChangedSignal;
+  sigc::signal<void> stateChangedSignal;
     
   bool update_tracks_frozen;
    
