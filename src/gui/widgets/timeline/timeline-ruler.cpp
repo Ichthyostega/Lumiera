@@ -63,12 +63,9 @@ TimelineRuler::TimelineRuler(
   playbackPeriodArrowStemSize(3),
   timelineWidget(timeline_widget)
 {
-  if(timelineWidget.get_state())
-    {
-      // Connect event handlers
-      view_window().changed_signal().connect(
-        sigc::mem_fun(this, &TimelineRuler::on_update_view) );
-    }
+  // Connect up some events
+  timeline_widget.state_changed_signal().connect(
+    sigc::mem_fun(this, &TimelineRuler::on_state_changed) );
 
   // Install style properties
   register_styles();
@@ -215,6 +212,20 @@ TimelineRuler::on_size_allocate(Gtk::Allocation& allocation)
 {
   Widget::on_size_allocate(allocation);
   rulerImage.clear(); // The widget has changed size - redraw
+}
+
+void
+TimelineRuler::on_state_changed()
+{
+  if(timelineWidget.get_state())
+    {
+      // Connect up some events
+      view_window().changed_signal().connect(
+        sigc::mem_fun(this, &TimelineRuler::on_update_view) );
+    }
+    
+  // Redraw
+  on_update_view();
 }
 
 void

@@ -106,6 +106,12 @@ private:
    */
   void on_size_allocate(Gtk::Allocation& allocation);
   
+  /**
+   * The event handler for when the TimelineWidget's state object is
+   * replaced.
+   **/
+  void on_state_changed();
+  
 private:
   /* ===== Internal Methods ===== */
 
