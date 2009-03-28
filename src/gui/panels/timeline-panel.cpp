@@ -367,8 +367,13 @@ TimelinePanel::load_state(weak_ptr<Sequence> sequence)
   
   shared_ptr<Sequence> shared_sequence = sequence.lock();
   if(shared_sequence)
-    return shared_ptr< timeline::TimelineState >(
-      new timeline::TimelineState(shared_sequence));
+    {
+      shared_ptr<timeline::TimelineState> new_state(
+        new timeline::TimelineState(shared_sequence));
+      timelineStates[sequence] = new_state;
+      return new_state;
+    }
+  
   return shared_ptr< timeline::TimelineState >();
 }
 
