@@ -39,7 +39,9 @@ PanelBar::PanelBar(panels::Panel &owner_panel, const gchar *stock_id) :
   HBox(),
   panel(owner_panel),
   panelButton(StockID(stock_id))
-{  
+{
+  set_border_width(1);
+  
   panelButton.set_relief(RELIEF_NONE);
   panelButton.unset_flags(CAN_FOCUS);
   panelButton.show();
