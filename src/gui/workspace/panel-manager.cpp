@@ -144,14 +144,6 @@ PanelManager::create_panels()
   panels.push_back(timelinePanel);
   panels.push_back(viewerPanel);
   panels.push_back(resourcesPanel);
-  
-  const int panelDescriptionCount = 
-    sizeof(panelDescriptionList) / 
-    sizeof(PanelDescription);
-  for(int i = 0; i < panelDescriptionCount; i++)
-    {
-      g_message("%s", panelDescriptionList[i].get_title());
-    }
 }
 
 shared_ptr<panels::Panel> 
