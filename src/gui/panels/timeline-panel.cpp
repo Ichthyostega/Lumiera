@@ -48,7 +48,7 @@ const int TimelinePanel::ZoomToolSteps = 2; // 2 seems comfortable
 
 TimelinePanel::TimelinePanel(workspace::WorkspaceWindow
     &workspace_window) :
-  Panel(workspace_window, "timeline", get_title(), "panel_timeline"),
+  Panel(workspace_window, "timeline", get_title(), get_stock_id()),
   timeIndicator(),
   timeIndicatorButton(),
   previousButton(Stock::MEDIA_PREVIOUS),
@@ -134,6 +134,12 @@ const char*
 TimelinePanel::get_title()
 {
   return _("Timeline");
+}
+
+const gchar*
+TimelinePanel::get_stock_id()
+{
+  return "panel_timeline";
 }
 
 void

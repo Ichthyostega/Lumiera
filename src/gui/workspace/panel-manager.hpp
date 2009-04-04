@@ -75,6 +75,20 @@ public:
    * @remarks Note that this must not be called before setup_dock.
    **/
   GdlDockBar* get_dock_bar() const;
+  
+public:
+
+  /**
+   * Gets the number of panel descriptions.
+   **/
+  static int get_panel_description_count();
+
+  /**
+   * Gets a panel description.
+   * @param index The index of the panel to retrieve.
+   * @return Returns the stock id of a panel at this index.
+   **/
+  static const gchar* get_panel_stock_id(int index);
 
 private:
 
@@ -139,14 +153,17 @@ private:
        * @param class_name The name of the Panel class
        * @param title The localized title that will be shown on the
        * panel.
+       * @param stock_id The Stock ID for this type of panel.
        * @param create_panel_proc A pointer to a function that will
        * instantiate the panel object.
        **/
       PanelDescription(const char* class_name, const char *title,
+        const gchar *stock_id,
         boost::shared_ptr<panels::Panel> (*const create_panel_proc)(
           WorkspaceWindow&)) :
         className(class_name),
         titleName(title),
+        stockID(stock_id),
         createPanelProc(create_panel_proc)
         {
           REQUIRE(className);
@@ -171,6 +188,15 @@ private:
           ENSURE(titleName);
           return titleName;
         }
+        
+      /**
+       * Returns the Stock ID for this type of panel.
+       **/
+      const gchar* get_stock_id() const
+        {
+          ENSURE(stockID);
+          return stockID;
+        }
     
       /**
        * Creates an instance of this panel.
@@ -186,12 +212,17 @@ private:
       /**
        * A pointer to the string name of class.
        **/
-      const char* className;
+      const char* const className;
       
       /**
        * The localized title that will be shown on the panel.
        **/
-      const char* titleName;
+      const char* const titleName;
+      
+      /**
+       * The Stock ID for this type of panel.
+       **/
+      const gchar* const stockID;
       
       /**
        * A pointer to a function that will instantiate the panel object.
@@ -213,7 +244,7 @@ private:
        **/
       Panel() :
         PanelDescription(typeid(P).name(), P::get_title(),
-          Panel::create_panel)
+          P::get_stock_id(), Panel::create_panel)
         {}
       
     private:

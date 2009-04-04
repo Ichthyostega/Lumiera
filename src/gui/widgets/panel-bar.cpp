@@ -21,6 +21,7 @@
 * *****************************************************/
 
 #include "panel-bar.hpp"
+#include "../workspace/panel-manager.hpp"
 #include "../panels/panel.hpp"
 #include "../util/rectangle.hpp"
 
@@ -31,6 +32,7 @@ using namespace Gtk;
 using namespace Glib;
 using namespace sigc;
 using namespace std;
+using namespace gui::workspace;
 
 namespace gui {
 namespace widgets {
@@ -55,7 +57,18 @@ PanelBar::setup_panel_button()
 {
   Menu& menu = panelButton.get_menu();
   Menu::MenuList& list = menu.items();
+  
+  // Add items for each type of panel
+  for(int i = 0; i < PanelManager::get_panel_description_count(); i++)
+    {
+      list.push_back( Menu_Helpers::StockMenuElem(
+        StockID(PanelManager::get_panel_stock_id(i)),
+        bind(mem_fun(*this, &PanelBar::on_panel_type), i) ));
+    }
 
+  list.push_back( Menu_Helpers::SeparatorElem() );
+
+  // Add extra commands
   list.push_back( Menu_Helpers::MenuElem(_("_Hide"),
     mem_fun(*this, &PanelBar::on_hide) ) );
 }
@@ -110,6 +123,12 @@ PanelBar::on_size_allocate(Gtk::Allocation& allocation)
   
   allocation.set_x(0);
   HBox::on_size_allocate(allocation);
+}
+
+void
+PanelBar::on_panel_type(int type_index)
+{
+  g_message("on_panel_type %d", type_index);
 }
 
 void

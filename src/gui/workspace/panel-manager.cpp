@@ -111,6 +111,19 @@ PanelManager::get_dock_bar() const
   return dockBar;
 }
 
+int
+PanelManager::get_panel_description_count()
+{
+  return sizeof(panelDescriptionList) / sizeof(PanelDescription);
+}
+
+const gchar*
+PanelManager::get_panel_stock_id(int index)
+{
+  REQUIRE(index >= 0 && index < get_panel_description_count());
+  return panelDescriptionList[index].get_stock_id();
+}
+
 void
 PanelManager::create_panels()
 {
@@ -144,11 +157,8 @@ PanelManager::create_panels()
 shared_ptr<panels::Panel> 
 PanelManager::create_panel_by_name(const char* class_name)
 {
-  const int panelDescriptionCount = 
-    sizeof(panelDescriptionList) / 
-    sizeof(PanelDescription);
-  
-  for(int i = 0; i < panelDescriptionCount; i++)
+  const int count = get_panel_description_count();
+  for(int i = 0; i < count; i++)
     {
       if(strstr(panelDescriptionList[i].get_class_name(), class_name))
         return shared_ptr<panels::Panel>(panelDescriptionList[i].create(

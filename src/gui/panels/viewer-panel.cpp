@@ -37,7 +37,7 @@ namespace gui {
 namespace panels {
 
 ViewerPanel::ViewerPanel(workspace::WorkspaceWindow &workspace_window) :
-  Panel(workspace_window, "viewer", get_title(), "panel_viewer")
+  Panel(workspace_window, "viewer", get_title(), get_stock_id())
 {    
   //----- Pack in the Widgets -----//
   pack_start(display, PACK_EXPAND_WIDGET);
@@ -53,6 +53,12 @@ const char*
 ViewerPanel::get_title()
 {
   return _("Viewer");
+}
+
+const gchar*
+ViewerPanel::get_stock_id()
+{
+  return "panel_viewer";
 }
 
 void

@@ -47,6 +47,12 @@ public:
    **/
   static const char* get_title();
 
+  /**
+   * Get the stock id for this type panel.
+   * @return Returns a pointer to the string stock id of the panel.
+   **/
+  static const gchar* get_stock_id();
+
 protected:
   Gtk::Notebook notebook;
   

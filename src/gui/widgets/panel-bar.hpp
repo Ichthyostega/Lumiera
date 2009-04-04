@@ -70,6 +70,8 @@ private:
   
 private:
 
+  void on_panel_type(int type_index);
+
   void on_hide();
 
 private:

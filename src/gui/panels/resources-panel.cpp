@@ -27,9 +27,8 @@ namespace gui {
 namespace panels {
 
 ResourcesPanel::ResourcesPanel(workspace::WorkspaceWindow &workspace_window) :
-  Panel(workspace_window, "resources", get_title(), "panel_resources")
+  Panel(workspace_window, "resources", get_title(), get_stock_id())
 {
-  
   notebook.append_page(media, _("Media"));
   notebook.append_page(clips, _("Clips"));
   notebook.append_page(effects, _("Effects"));
@@ -42,6 +41,12 @@ const char*
 ResourcesPanel::get_title()
 {
   return _("Resources");
+}
+
+const gchar*
+ResourcesPanel::get_stock_id()
+{
+  return "panel_resources";
 }
 
 }   // namespace panels
