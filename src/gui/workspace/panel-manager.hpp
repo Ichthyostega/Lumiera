@@ -76,6 +76,9 @@ public:
    **/
   GdlDockBar* get_dock_bar() const;
   
+  void switch_panel(panels::Panel &old_panel,
+    int new_panel_description_index);
+
 public:
 
   /**

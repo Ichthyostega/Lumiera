@@ -69,6 +69,12 @@ WorkspaceWindow::get_controller()
   return controller;
 }
 
+PanelManager&
+WorkspaceWindow::get_panel_manager()
+{
+  return panelManager;
+}
+
 void
 WorkspaceWindow::create_ui()
 {    

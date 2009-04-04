@@ -111,6 +111,37 @@ PanelManager::get_dock_bar() const
   return dockBar;
 }
 
+void PanelManager::switch_panel(panels::Panel &old_panel,
+  int new_panel_description_index)
+{
+  REQUIRE(new_panel_description_index >= 0 &&
+    new_panel_description_index < get_panel_description_count());
+  
+  shared_ptr<panels::Panel> new_panel(
+    panelDescriptionList[new_panel_description_index].create(
+          workspaceWindow));
+          
+  new_panel->show_all();
+          
+  panels.push_back(new_panel);
+  
+  gdl_dock_object_dock (GDL_DOCK_OBJECT(old_panel.get_dock_item()),
+    GDL_DOCK_OBJECT(new_panel->get_dock_item()),                              
+    GDL_DOCK_CENTER, NULL);
+
+  gdl_dock_object_unbind(GDL_DOCK_OBJECT(old_panel.get_dock_item()));
+  
+  list< boost::shared_ptr<panels::Panel> >::iterator i;
+  for(i = panels.begin(); i != panels.end(); i++)
+    {
+      if((*i).get() == &old_panel)
+        {
+          panels.erase(i);
+          break;
+        }
+    }
+}
+
 int
 PanelManager::get_panel_description_count()
 {

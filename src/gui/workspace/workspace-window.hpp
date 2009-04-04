@@ -66,6 +66,8 @@ public:
   gui::model::Project& get_project();
   
   gui::controller::Controller& get_controller();
+  
+  PanelManager& get_panel_manager();
 
 private:
   void create_ui();

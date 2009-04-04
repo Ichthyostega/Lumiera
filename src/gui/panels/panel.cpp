@@ -89,6 +89,12 @@ Panel::is_shown() const
   return GTK_WIDGET_VISIBLE((GtkWidget*)dock_item);
 }
 
+workspace::WorkspaceWindow& 
+Panel::get_workspace_window()
+{
+  return workspace;
+}
+
 void
 Panel::internal_setup()
 {

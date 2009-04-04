@@ -90,6 +90,11 @@ public:
    *  Returns true if the panel is currently visible.
    */
   bool is_shown() const;
+  
+  /**
+   *  Returns a reference to the owner workspace window object.
+   **/
+  workspace::WorkspaceWindow& get_workspace_window();
 
 private:
   /**
