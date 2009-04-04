@@ -115,7 +115,7 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
 void
 Actions::update_action_state()
 {
-  REQUIRE(workspaceWindow.resourcesPanel != NULL);
+  /*REQUIRE(workspaceWindow.resourcesPanel != NULL);
   REQUIRE(workspaceWindow.timelinePanel != NULL);
   REQUIRE(workspaceWindow.viewerPanel != NULL); 
   
@@ -126,7 +126,7 @@ Actions::update_action_state()
     workspaceWindow.timelinePanel->is_shown());
   viewerPanelAction->set_active(
     workspaceWindow.viewerPanel->is_shown());
-  is_updating_action_state = false;
+  is_updating_action_state = false;*/
 }
 
 /* ===== File Menu Event Handlers ===== */
@@ -172,23 +172,23 @@ Actions::on_menu_edit_preferences()
 void
 Actions::on_menu_view_resources()
 {
-  if(!is_updating_action_state)
-    workspaceWindow.resourcesPanel->show(
-      assetsPanelAction->get_active());
+  //if(!is_updating_action_state)
+  //  workspaceWindow.resourcesPanel->show(
+  //    assetsPanelAction->get_active());
 }
 
 void
 Actions::on_menu_view_timeline()
 {
-  if(!is_updating_action_state)
-    workspaceWindow.timelinePanel->show(timelinePanelAction->get_active());
+  //if(!is_updating_action_state)
+  //  workspaceWindow.timelinePanel->show(timelinePanelAction->get_active());
 }
 
 void
 Actions::on_menu_view_viewer()
 {
-  if(!is_updating_action_state)
-    workspaceWindow.viewerPanel->show(viewerPanelAction->get_active());
+  //if(!is_updating_action_state)
+  //  workspaceWindow.viewerPanel->show(viewerPanelAction->get_active());
 }
 
 /* ===== Sequence Menu Event Handlers ===== */

@@ -56,6 +56,12 @@ public:
    * Destructor 
    **/
   ~TimelinePanel();
+  
+  /**
+   * Get the title of the panel.
+   * @return Returns a pointer to the string title of the panel.
+   **/
+  static const char* get_title();
 
 private:
   //----- Event Handlers -----//

@@ -61,6 +61,8 @@ gtk_gui_la_SOURCES =							\
 	$(lumigui_srcdir)/window-manager.hpp				\
 	$(lumigui_srcdir)/workspace/actions.cpp				\
 	$(lumigui_srcdir)/workspace/actions.hpp				\
+	$(lumigui_srcdir)/workspace/panel-manager.cpp			\
+	$(lumigui_srcdir)/workspace/panel-manager.hpp			\
 	$(lumigui_srcdir)/workspace/workspace-window.cpp		\
 	$(lumigui_srcdir)/workspace/workspace-window.hpp		\
 	$(lumigui_srcdir)/dialogs/dialog.hpp				\

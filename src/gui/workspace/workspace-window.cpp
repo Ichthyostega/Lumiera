@@ -47,27 +47,14 @@ WorkspaceWindow::WorkspaceWindow(Project &source_project,
   gui::controller::Controller &source_controller) :
   project(source_project),
   controller(source_controller),
+  panelManager(*this),
   actions(*this)
 {    
-  layout = NULL;
-  resourcesPanel = NULL;
-  viewerPanel = NULL;
-  timelinePanel = NULL;
-
   create_ui();
 }
 
 WorkspaceWindow::~WorkspaceWindow()
 {
-  REQUIRE(layout != NULL);
-  g_object_unref(layout);
-  
-  REQUIRE(resourcesPanel != NULL);
-  resourcesPanel->unreference();
-  REQUIRE(viewerPanel != NULL);
-  viewerPanel->unreference();
-  REQUIRE(timelinePanel != NULL);
-  timelinePanel->unreference();
 }
 
 Project&
@@ -162,50 +149,16 @@ WorkspaceWindow::create_ui()
   toolbar->set_toolbar_style(TOOLBAR_ICONS);
   baseContainer.pack_start(*toolbar, Gtk::PACK_SHRINK);
   
-  //----- Create the Panels -----//
-  resourcesPanel = new ResourcesPanel(*this);
-  ENSURE(resourcesPanel != NULL);
-  viewerPanel = new ViewerPanel(*this);
-  ENSURE(viewerPanel != NULL);
-  timelinePanel = new TimelinePanel(*this);
-  ENSURE(timelinePanel != NULL);
-
-  //----- Create the Dock -----//
-  dock = Glib::wrap(gdl_dock_new());
+  //----- Create the Docks -----//
+  panelManager.setup_dock();
   
-  layout = gdl_dock_layout_new((GdlDock*)dock->gobj());
+  GdlDock const *dock = panelManager.get_dock();
   
-  dockbar = Glib::wrap(gdl_dock_bar_new ((GdlDock*)dock->gobj()));
-
-  dockContainer.pack_start(*dockbar, PACK_SHRINK);
-  dockContainer.pack_end(*dock, PACK_EXPAND_WIDGET);
+  gtk_box_pack_start(GTK_BOX(dockContainer.gobj()),
+    GTK_WIDGET(panelManager.get_dock_bar()), FALSE, FALSE, 0);
+  gtk_box_pack_start(GTK_BOX(dockContainer.gobj()),
+    GTK_WIDGET(dock), TRUE, TRUE, 0);
   baseContainer.pack_start(dockContainer, PACK_EXPAND_WIDGET);
-
-  gdl_dock_add_item ((GdlDock*)dock->gobj(),
-    resourcesPanel->get_dock_item(), GDL_DOCK_LEFT);
-  gdl_dock_add_item ((GdlDock*)dock->gobj(),
-    viewerPanel->get_dock_item(), GDL_DOCK_RIGHT);
-  gdl_dock_add_item ((GdlDock*)dock->gobj(),
-    timelinePanel->get_dock_item(), GDL_DOCK_BOTTOM);
-
-  // Manually dock and move around some of the items
-  gdl_dock_item_dock_to (timelinePanel->get_dock_item(),
-    resourcesPanel->get_dock_item(), GDL_DOCK_BOTTOM, -1);
-  gdl_dock_item_dock_to (viewerPanel->get_dock_item(),
-    resourcesPanel->get_dock_item(), GDL_DOCK_RIGHT, -1);
-  
-  gchar ph1[] = "ph1";
-  gdl_dock_placeholder_new (ph1, (GdlDockObject*)dock->gobj(),
-    GDL_DOCK_TOP, FALSE);
-  gchar ph2[] = "ph2";
-  gdl_dock_placeholder_new (ph2, (GdlDockObject*)dock->gobj(),
-    GDL_DOCK_BOTTOM, FALSE);
-  gchar ph3[] = "ph3";
-  gdl_dock_placeholder_new (ph3, (GdlDockObject*)dock->gobj(),
-    GDL_DOCK_LEFT, FALSE);
-  gchar ph4[] = "ph4";
-  gdl_dock_placeholder_new (ph4, (GdlDockObject*)dock->gobj(),
-    GDL_DOCK_RIGHT, FALSE);
     
   //----- Create the status bar -----//
   statusBar.set_has_resize_grip();

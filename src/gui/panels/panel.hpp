@@ -69,12 +69,12 @@ protected:
     const gchar *name, const gchar *long_name, const gchar *stock_id,
     GdlDockItemBehavior behavior = GDL_DOCK_ITEM_BEH_NORMAL);
 
+public:
   /**
    * Destructor
    **/
   ~Panel();
 
-public:
   /**
    *  Returns a pointer to the underlying GdlDockItem structure
    */

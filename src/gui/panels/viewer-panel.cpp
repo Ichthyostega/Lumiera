@@ -37,7 +37,7 @@ namespace gui {
 namespace panels {
 
 ViewerPanel::ViewerPanel(workspace::WorkspaceWindow &workspace_window) :
-  Panel(workspace_window, "viewer", _("Viewer"), "panel_viewer")
+  Panel(workspace_window, "viewer", get_title(), "panel_viewer")
 {    
   //----- Pack in the Widgets -----//
   pack_start(display, PACK_EXPAND_WIDGET);
@@ -47,6 +47,12 @@ ViewerPanel::ViewerPanel(workspace::WorkspaceWindow &workspace_window) :
   
   FrameDestination outputDestination (sigc::mem_fun(this, &ViewerPanel::on_frame));
   playback.use_display (DisplayService::setUp (outputDestination));
+}
+
+const char*
+ViewerPanel::get_title()
+{
+  return _("Viewer");
 }
 
 void

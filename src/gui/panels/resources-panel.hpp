@@ -40,6 +40,12 @@ public:
    * @param workspace_window The window that owns this panel.
    **/
   ResourcesPanel(workspace::WorkspaceWindow &workspace_window);
+  
+  /**
+   * Get the title of the panel.
+   * @return Returns a pointer to the string title of the panel.
+   **/
+  static const char* get_title();
 
 protected:
   Gtk::Notebook notebook;

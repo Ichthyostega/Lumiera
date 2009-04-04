@@ -46,6 +46,12 @@ public:
    **/
   ViewerPanel(workspace::WorkspaceWindow &owner_window);
   
+  /**
+   * Get the title of the panel.
+   * @return Returns a pointer to the string title of the panel.
+   **/
+  static const char* get_title();
+  
 protected:
 
   void on_frame(void *buffer);

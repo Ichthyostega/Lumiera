@@ -30,9 +30,9 @@
 #define WORKSPACE_WINDOW_HPP
 
 #include <gtkmm.h>
-#include <libgdl-1.0/gdl/gdl-dock-layout.h>
 
 #include "actions.hpp"
+#include "panel-manager.hpp"
 
 #include "../panels/resources-panel.hpp"
 #include "../panels/viewer-panel.hpp"
@@ -84,19 +84,10 @@ private:
   Gtk::VBox baseContainer;
   Gtk::HBox dockContainer;
   
-  //----- Dock Frame -----//
-  Gtk::Widget *dock;
-  Gtk::Widget *dockbar;
-  GdlDockLayout *layout;
+  PanelManager panelManager;
   
   //----- Status Bar -----//
   Gtk::Statusbar statusBar;
-
-  /* ===== Panels ===== */
-private:  
-  ResourcesPanel *resourcesPanel;
-  ViewerPanel *viewerPanel;      
-  TimelinePanel *timelinePanel;
        
   /* ===== Helpers ===== */
 private:
