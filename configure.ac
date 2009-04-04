@@ -145,7 +145,7 @@ PKG_CHECK_MODULES(LUMIERA_GUI, [
     gtkmm-2.4 >= 2.14
     cairomm-1.0 >= 0.6.0
     librsvg-2.0 >= 2.18.1
-    gdl-1.0 >= 0.6.1
+    gdl-1.0 >= 2.27.1
     gavl >= 0.2.5
     gthread-2.0 >= 2.12.4])
 
