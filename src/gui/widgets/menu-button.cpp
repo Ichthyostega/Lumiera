@@ -36,14 +36,14 @@ const ArrowType arrowType = ARROW_DOWN;
 const ShadowType shadowType = SHADOW_NONE;
   
 MenuButton::MenuButton() :
-  Button(),
+  ToggleButton(),
   arrow(arrowType, shadowType)
 {
   setup_button();
 }
 
 MenuButton::MenuButton(const StockID& stock_id) :
-  Button(),
+  ToggleButton(),
   image(stock_id, ICON_SIZE_MENU),
   caption(),
   arrow(arrowType, shadowType)
@@ -58,8 +58,8 @@ MenuButton::MenuButton(const StockID& stock_id) :
 }  
 
 MenuButton::MenuButton(const Glib::ustring& label, bool mnemonic) :
-  Button(),
-  caption(label),
+  ToggleButton(),
+  caption(label, mnemonic),
   arrow(arrowType, shadowType)
 {
   setup_button();
@@ -76,11 +76,15 @@ MenuButton::popup()
 {
   menu.popup( mem_fun(this, &MenuButton::on_menu_position),
     0, gtk_get_current_event_time());
+  set_active();
 }
 
 void
 MenuButton::setup_button()
 {
+  menu.signal_deactivate().connect(mem_fun(
+    this, &MenuButton::on_menu_deactivated));
+  
   arrow.set(ARROW_DOWN, SHADOW_NONE);
   
   hBox.pack_start(caption, PACK_EXPAND_WIDGET, CaptionPadding);
@@ -94,6 +98,12 @@ void
 MenuButton::on_pressed()
 {
   popup();
+}
+
+void
+MenuButton::on_menu_deactivated()
+{
+  set_active(false);
 }
 
 void

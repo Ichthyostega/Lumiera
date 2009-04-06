@@ -34,7 +34,7 @@ namespace widgets {
 /**
  * A button that display a menu when clicked on.
  **/
-class MenuButton : public Gtk::Button
+class MenuButton : public Gtk::ToggleButton
 {
 public:
 
@@ -86,7 +86,12 @@ protected:
   /**
    * An event handler for when the button is pressed.
    **/
-  virtual void on_pressed();
+  void on_pressed();
+  
+  /**
+   * An event handler for when the menu is closed.
+   **/
+  void on_menu_deactivated();
 
 private:
 
