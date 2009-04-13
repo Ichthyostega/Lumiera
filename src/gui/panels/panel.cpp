@@ -31,56 +31,19 @@ using namespace Gtk;
 namespace gui {
 namespace panels {
 
-/*Panel::Panel(workspace::WorkspaceWindow &workspace_window,
-  const gchar *name, const gchar *long_name,
-  GdlDockItemBehavior behavior) :
-  workspace(workspace_window),
-  panelBar(*this, long_name)
-{
-  REQUIRE(name != NULL);
-  REQUIRE(long_name != NULL);
-  
-  dock_item = (GdlDockItem*)gdl_dock_item_new (
-    name, long_name, behavior);
-  internal_setup();
-  
-  ENSURE(dock_item != NULL);
-}
-
-Panel::Panel(workspace::WorkspaceWindow &workspace_window,
-  const gchar *name, const gchar *long_name, const gchar *stock_id,
-  GdlDockItemBehavior behavior) :
-  workspace(workspace_window),
-  panelBar(*this, stock_id)
-{
-  REQUIRE(name != NULL);
-  REQUIRE(long_name != NULL);
-  REQUIRE(stock_id != NULL);
-  
-  dock_item = (GdlDockItem*)gdl_dock_item_new_with_stock (
-    name, long_name, stock_id, behavior);
-  g_object_ref(dock_item);
-  internal_setup();
-  
-  ENSURE(dock_item != NULL);
-}*/
-
 Panel::Panel(workspace::PanelManager &panel_manager,
-    GdlDockItem *dock_item, const gchar *stock_id) :
+    GdlDockItem *dock_item, const gchar* long_name,
+    const gchar *stock_id) :
   panelManager(panel_manager),
   dockItem(dock_item),
   panelBar(*this, stock_id)
 {
   REQUIRE(dockItem);
   g_object_ref(dockItem);
-  
-  // Set the dock item title
-  StockItem stock_item;
-  REQUIRE(StockItem::lookup(Gtk::StockID(stock_id), stock_item));
-  
+    
   Glib::Value<std::string> val;
   val.init(val.value_type());
-  val.set(stock_item.get_label());
+  val.set(long_name);
   g_object_set_property (G_OBJECT (dockItem), "long-name", val.gobj());
   
   // Set the grip handle

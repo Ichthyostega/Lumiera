@@ -38,7 +38,7 @@ namespace panels {
 
 ViewerPanel::ViewerPanel(workspace::PanelManager &panel_manager,
     GdlDockItem *dock_item) :
-  Panel(panel_manager, dock_item, get_stock_id())
+  Panel(panel_manager, dock_item, get_title(), get_stock_id())
 {    
   //----- Pack in the Widgets -----//
   pack_start(display, PACK_EXPAND_WIDGET);

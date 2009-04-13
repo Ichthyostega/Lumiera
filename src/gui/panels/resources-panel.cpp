@@ -28,7 +28,7 @@ namespace panels {
 
 ResourcesPanel::ResourcesPanel(workspace::PanelManager &panel_manager,
     GdlDockItem *dock_item) :
-  Panel(panel_manager, dock_item, get_stock_id())
+  Panel(panel_manager, dock_item, get_title(), get_stock_id())
 {
   notebook.append_page(media, _("Media"));
   notebook.append_page(clips, _("Clips"));
