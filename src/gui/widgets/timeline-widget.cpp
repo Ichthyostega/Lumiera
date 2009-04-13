@@ -82,18 +82,20 @@ TimelineWidget::TimelineWidget(
 
 TimelineWidget::~TimelineWidget()
 {
+  trackMap.clear();
+   
   // Destroy child widgets
   REQUIRE(body != NULL);
   if(body != NULL)
-    body->unreference();
-    
+    delete body;
+  
   REQUIRE(headerContainer != NULL);
   if(headerContainer != NULL)
-    headerContainer->unreference();
+    delete headerContainer;
     
   REQUIRE(ruler != NULL);
   if(ruler != NULL)
-    ruler->unreference();
+    delete ruler;
 }
 
 /* ===== Data Access ===== */
