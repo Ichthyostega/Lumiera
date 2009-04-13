@@ -67,7 +67,7 @@ protected:
   /**
    * The video display widget, which will display the video.
    **/
-  gui::widgets::VideoDisplayWidget display;
+  widgets::VideoDisplayWidget display;
 };
 
 }   // namespace panels

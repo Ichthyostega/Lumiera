@@ -128,9 +128,7 @@ PanelBar::on_size_allocate(Gtk::Allocation& allocation)
 
 void
 PanelBar::on_panel_type(int type_index)
-{
-  g_message("on_panel_type %d", type_index);
-  
+{  
   workspace::PanelManager &manager = panel.get_workspace_window().
     get_panel_manager();
   manager.switch_panel(panel, type_index);
