@@ -35,7 +35,7 @@
 namespace gui {
 
 namespace workspace {
-class WorkspaceWindow;  
+class PanelManager;  
 }
 
 namespace panels {
@@ -53,9 +53,9 @@ protected:
    * @param long_name The name to display on the caption
    * @param behavior The GDL behaviour of this item
    */
-  Panel(workspace::WorkspaceWindow &workspace_window,
-    const gchar *name, const gchar *long_name,
-    GdlDockItemBehavior behavior = GDL_DOCK_ITEM_BEH_NORMAL);
+  //Panel(workspace::WorkspaceWindow &workspace_window,
+  //  const gchar *name, const gchar *long_name,
+  //  GdlDockItemBehavior behavior = GDL_DOCK_ITEM_BEH_NORMAL);
 
   /**
    * Constructs a panel object with a stock item for a caption
@@ -65,9 +65,18 @@ protected:
    * @param stock_id The id of the stock item to display on the caption
    * @param behavior The GDL behaviour of this item
    */
-  Panel(workspace::WorkspaceWindow &owner_window,
-    const gchar *name, const gchar *long_name, const gchar *stock_id,
-    GdlDockItemBehavior behavior = GDL_DOCK_ITEM_BEH_NORMAL);
+  //Panel(workspace::WorkspaceWindow &owner_window,
+  //  const gchar *name, const gchar *long_name, const gchar *stock_id,
+  //  GdlDockItemBehavior behavior = GDL_DOCK_ITEM_BEH_NORMAL);
+  
+  /**
+   * Contructor.
+   * @param panel_manager The owner panel manager widget.
+   * @param dock_item The GdlDockItem that will host this panel.
+   * @param stock_id The stock_id of this panel.
+   **/
+  Panel(workspace::PanelManager &panel_manager,
+    GdlDockItem *dock_item, const gchar *stock_id);
 
 public:
   /**
@@ -93,24 +102,43 @@ public:
   bool is_shown() const;
   
   /**
+   * Returns a reference to the owner panel manager object.
+   **/
+  workspace::PanelManager& get_panel_manager();
+  
+protected:
+
+  /**
    * Returns a reference to the owner workspace window object.
    **/
   workspace::WorkspaceWindow& get_workspace_window();
 
-private:
   /**
-   * @internal Used by both constructors
-   * The internal constructor for this class, whose purpose
-   * is to set up the internal container widgets.
-   */
-  void internal_setup();
+   * Returns a reference to the project 
+   **/
+  model::Project& get_project();
+  
+  /**
+   * Returns a reference to the controller
+   **/
+  controller::Controller& get_controller();
 
 protected:
 
-  workspace::WorkspaceWindow &workspace;
+  /**
+   * The owner panel manager object.
+   **/
+  workspace::PanelManager &panelManager;
 
-  GdlDockItem* dock_item;
+  /**
+   * The owner dock item widget that will host the widgets in this
+   * panel.
+   **/
+  GdlDockItem* dockItem;
   
+  /**
+   * The panel bar to attach to the panel grip.
+   **/
   widgets::PanelBar panelBar;
 };
 

@@ -26,8 +26,9 @@
 namespace gui {
 namespace panels {
 
-ResourcesPanel::ResourcesPanel(workspace::WorkspaceWindow &workspace_window) :
-  Panel(workspace_window, "resources", get_title(), get_stock_id())
+ResourcesPanel::ResourcesPanel(workspace::PanelManager &panel_manager,
+    GdlDockItem *dock_item) :
+  Panel(panel_manager, dock_item, get_stock_id())
 {
   notebook.append_page(media, _("Media"));
   notebook.append_page(clips, _("Clips"));

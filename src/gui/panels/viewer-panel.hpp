@@ -42,9 +42,11 @@ class ViewerPanel : public Panel
 public:
   /**
    * Contructor.
-   * @param workspace_window The window that owns this panel.
+   * @param panel_manager The owner panel manager widget.
+   * @param dock_item The GdlDockItem that will host this panel.
    **/
-  ViewerPanel(workspace::WorkspaceWindow &owner_window);
+  ViewerPanel(workspace::PanelManager &panel_manager,
+    GdlDockItem *dock_item);
   
   /**
    * Get the title of the panel.

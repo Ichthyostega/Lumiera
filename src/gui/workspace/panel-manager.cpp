@@ -40,6 +40,8 @@ const PanelManager::PanelDescription
   PanelManager::Panel<ViewerPanel>(),
   PanelManager::Panel<ResourcesPanel>()
   };
+  
+unsigned short PanelManager::panelID = 0;
 
 PanelManager::PanelManager(WorkspaceWindow &workspace_window) :
   workspaceWindow(workspace_window),
@@ -111,26 +113,23 @@ PanelManager::get_dock_bar() const
   return dockBar;
 }
 
+WorkspaceWindow&
+PanelManager::get_workspace_window()
+{
+  return workspaceWindow;
+}
+
 void PanelManager::switch_panel(panels::Panel &old_panel,
   int new_panel_description_index)
 {
   REQUIRE(new_panel_description_index >= 0 &&
     new_panel_description_index < get_panel_description_count());
   
-  shared_ptr<panels::Panel> new_panel(
-    panelDescriptionList[new_panel_description_index].create(
-          workspaceWindow));
-          
-  new_panel->show_all();
-          
-  panels.push_back(new_panel);
+  // Get the dock item
+  GdlDockItem *dock_item = old_panel.get_dock_item();
+  g_object_ref(dock_item);
   
-  gdl_dock_object_dock (GDL_DOCK_OBJECT(old_panel.get_dock_item()),
-    GDL_DOCK_OBJECT(new_panel->get_dock_item()),                              
-    GDL_DOCK_CENTER, NULL);
-
-  gdl_dock_object_unbind(GDL_DOCK_OBJECT(old_panel.get_dock_item()));
-  
+  // Release the old panel
   list< boost::shared_ptr<panels::Panel> >::iterator i;
   for(i = panels.begin(); i != panels.end(); i++)
     {
@@ -140,6 +139,16 @@ void PanelManager::switch_panel(panels::Panel &old_panel,
           break;
         }
     }
+  
+  // Create the new panel
+  shared_ptr<panels::Panel> new_panel(
+    panelDescriptionList[new_panel_description_index].create(
+      *this, dock_item));
+  g_object_unref(dock_item);
+          
+  new_panel->show_all();
+          
+  panels.push_back(new_panel);
 }
 
 int
@@ -159,11 +168,11 @@ void
 PanelManager::create_panels()
 {
   shared_ptr<panels::Panel> resourcesPanel(
-    (panels::Panel*)new ResourcesPanel(workspaceWindow));
+    create_panel_by_name("ResourcesPanel"));
   shared_ptr<panels::Panel> viewerPanel(
-    (panels::Panel*)new ViewerPanel(workspaceWindow));
+    create_panel_by_name("ViewerPanel"));
   shared_ptr<panels::Panel> timelinePanel(
-    (panels::Panel*)new TimelinePanel(workspaceWindow));
+    create_panel_by_name("TimelinePanel"));
     
   gdl_dock_add_item(dock,
     resourcesPanel->get_dock_item(), GDL_DOCK_LEFT);
@@ -179,13 +188,24 @@ PanelManager::create_panels()
 
 shared_ptr<panels::Panel> 
 PanelManager::create_panel_by_name(const char* class_name)
-{
+{ 
   const int count = get_panel_description_count();
   for(int i = 0; i < count; i++)
     {
       if(strstr(panelDescriptionList[i].get_class_name(), class_name))
-        return shared_ptr<panels::Panel>(panelDescriptionList[i].create(
-          workspaceWindow));
+        {
+          // Make a unique name for the panel
+          char name[5];
+          snprintf(name, sizeof(name), "%X", panelID++);
+          
+          // Create a dock item
+          GdlDockItem *dock_item = GDL_DOCK_ITEM(
+            gdl_dock_item_new(name, "", GDL_DOCK_ITEM_BEH_NORMAL));
+          
+          // Create the panel object
+          return shared_ptr<panels::Panel>(
+            panelDescriptionList[i].create(*this, dock_item));
+        }
     }
     
   ERROR(gui, "Unable to create a panel with class name %s", class_name);

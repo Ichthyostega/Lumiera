@@ -34,12 +34,13 @@ namespace panels {
 class ResourcesPanel : public Panel
 {
 public:
-  
   /**
    * Contructor.
-   * @param workspace_window The window that owns this panel.
+   * @param panel_manager The owner panel manager widget.
+   * @param dock_item The GdlDockItem that will host this panel.
    **/
-  ResourcesPanel(workspace::WorkspaceWindow &workspace_window);
+  ResourcesPanel(workspace::PanelManager &panel_manager,
+    GdlDockItem *dock_item);
   
   /**
    * Get the title of the panel.

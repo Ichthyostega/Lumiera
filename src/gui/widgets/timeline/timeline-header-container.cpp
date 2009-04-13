@@ -290,7 +290,10 @@ TimelineHeaderContainer::forall_vfunc(gboolean /* include_internals */,
   BOOST_FOREACH( pair, timelineWidget.trackMap )
     {
       REQUIRE(pair.second);
-      callback(pair.second->get_header_widget().gobj(), callback_data);
+      GtkWidget *widget = pair.second->get_header_widget().gobj();
+      
+      REQUIRE(widget);
+      callback(widget, callback_data);
     }
 }
 

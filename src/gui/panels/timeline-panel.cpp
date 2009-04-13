@@ -46,9 +46,9 @@ namespace panels {
   
 const int TimelinePanel::ZoomToolSteps = 2; // 2 seems comfortable
 
-TimelinePanel::TimelinePanel(workspace::WorkspaceWindow
-    &workspace_window) :
-  Panel(workspace_window, "timeline", get_title(), get_stock_id()),
+TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
+    GdlDockItem *dock_item) :
+  Panel(panel_manager, dock_item, get_stock_id()),
   timeIndicator(),
   timeIndicatorButton(),
   previousButton(Stock::MEDIA_PREVIOUS),
@@ -65,8 +65,8 @@ TimelinePanel::TimelinePanel(workspace::WorkspaceWindow
   currentTool(timeline::IBeam)
 {
   // Hook up notifications
-  workspace.get_project().get_sequences().signal_changed().connect(
-    mem_fun(this, &TimelinePanel::on_sequence_list_changed));
+  get_project().get_sequences().signal_changed().connect(mem_fun(this,
+      &TimelinePanel::on_sequence_list_changed));
   
   // Setup the sequence chooser
   sequenceChooserModel = Gtk::ListStore::create(sequenceChooserColumns);
@@ -114,7 +114,7 @@ TimelinePanel::TimelinePanel(workspace::WorkspaceWindow
    
   // Setup the timeline widget
   shared_ptr<Sequence> sequence
-    = *workspace.get_project().get_sequences().begin();  
+    = *get_project().get_sequences().begin();  
   timelineWidget.reset(new TimelineWidget(load_state(sequence)));
   pack_start(*timelineWidget, PACK_EXPAND_WIDGET);
   
@@ -160,7 +160,7 @@ TimelinePanel::on_play_pause()
 void
 TimelinePanel::on_stop()
 {
-  workspace.get_controller().get_playback_controller().stop();  
+  get_controller().get_playback_controller().stop();  
   update_playback_buttons();
 }
 
@@ -259,7 +259,7 @@ TimelinePanel::update_sequence_chooser()
     timelineWidget->get_state();
   
   BOOST_FOREACH( shared_ptr< model::Sequence > sequence,
-    workspace.get_project().get_sequences() )
+    get_project().get_sequences() )
     {
       Gtk::TreeIter iter = sequenceChooserModel->append();
       Gtk::TreeModel::Row row = *iter;
@@ -318,20 +318,19 @@ TimelinePanel::update_zoom_buttons()
 void
 TimelinePanel::play()
 {   
-  workspace.get_controller().get_playback_controller().play();
+  get_controller().get_playback_controller().play();
 }
 
 void
 TimelinePanel::pause()
 {
-  workspace.get_controller().get_playback_controller().pause();
+  get_controller().get_playback_controller().pause();
 }
 
 bool
-TimelinePanel::is_playing() const
+TimelinePanel::is_playing()
 {
-  return workspace.get_controller().get_playback_controller().
-    is_playing();
+  return get_controller().get_playback_controller().is_playing();
 }
 
 void

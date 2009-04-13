@@ -36,14 +36,15 @@ using namespace gui::controller;
 namespace gui {
 namespace panels {
 
-ViewerPanel::ViewerPanel(workspace::WorkspaceWindow &workspace_window) :
-  Panel(workspace_window, "viewer", get_title(), get_stock_id())
+ViewerPanel::ViewerPanel(workspace::PanelManager &panel_manager,
+    GdlDockItem *dock_item) :
+  Panel(panel_manager, dock_item, get_stock_id())
 {    
   //----- Pack in the Widgets -----//
   pack_start(display, PACK_EXPAND_WIDGET);
   
   PlaybackController &playback =
-    workspace_window.get_controller().get_playback_controller();
+    get_controller().get_playback_controller();
   
   FrameDestination outputDestination (sigc::mem_fun(this, &ViewerPanel::on_frame));
   playback.use_display (DisplayService::setUp (outputDestination));

@@ -22,12 +22,16 @@
 
 #include "panel.hpp"
 #include "../gtk-lumiera.hpp"
+#include "../workspace/panel-manager.hpp"
+#include "../workspace/workspace-window.hpp"
 #include <libgdl-1.0/gdl/gdl-dock-item-grip.h>
+
+using namespace Gtk;
 
 namespace gui {
 namespace panels {
 
-Panel::Panel(workspace::WorkspaceWindow &workspace_window,
+/*Panel::Panel(workspace::WorkspaceWindow &workspace_window,
   const gchar *name, const gchar *long_name,
   GdlDockItemBehavior behavior) :
   workspace(workspace_window),
@@ -59,55 +63,88 @@ Panel::Panel(workspace::WorkspaceWindow &workspace_window,
   internal_setup();
   
   ENSURE(dock_item != NULL);
+}*/
+
+Panel::Panel(workspace::PanelManager &panel_manager,
+    GdlDockItem *dock_item, const gchar *stock_id) :
+  panelManager(panel_manager),
+  dockItem(dock_item),
+  panelBar(*this, stock_id)
+{
+  REQUIRE(dockItem);
+  g_object_ref(dockItem);
+  
+  // Set the dock item title
+  StockItem stock_item;
+  REQUIRE(StockItem::lookup(Gtk::StockID(stock_id), stock_item));
+  
+  Glib::Value<std::string> val;
+  val.init(val.value_type());
+  val.set(stock_item.get_label());
+  g_object_set_property (G_OBJECT (dockItem), "long-name", val.gobj());
+  
+  // Set the grip handle
+  GdlDockItemGrip *grip = GDL_DOCK_ITEM_GRIP(
+    gdl_dock_item_get_grip(dockItem));
+  gdl_dock_item_grip_show_handle(grip);
+  gdl_dock_item_grip_set_label(grip, ((Widget&)panelBar).gobj());
+    
+  // Set up the panel body
+  gtk_container_add ((GtkContainer*)dockItem, (GtkWidget*)gobj());
+  
+  gtk_widget_show ((GtkWidget*)dockItem);
 }
 
 Panel::~Panel()
 {
-  REQUIRE(dock_item != NULL);
-  g_object_unref(dock_item);
-  dock_item = NULL;
+  REQUIRE(dockItem != NULL);
+  g_object_unref(dockItem);
+  dockItem = NULL;
 }
 
 GdlDockItem*
 Panel::get_dock_item() const
 {
-  return dock_item;
+  return dockItem;
 }
 
 void
 Panel::show(bool show)
 {
-  REQUIRE(dock_item != NULL);
-  if(show) gdl_dock_item_show_item (dock_item);
-  else gdl_dock_item_hide_item (dock_item);
+  REQUIRE(dockItem != NULL);
+  if(show) gdl_dock_item_show_item (dockItem);
+  else gdl_dock_item_hide_item (dockItem);
 }
 
 bool
 Panel::is_shown() const
 {
-  REQUIRE(dock_item != NULL);
-  return GTK_WIDGET_VISIBLE((GtkWidget*)dock_item);
+  REQUIRE(dockItem != NULL);
+  return GTK_WIDGET_VISIBLE((GtkWidget*)dockItem);
+}
+
+workspace::PanelManager&
+Panel::get_panel_manager()
+{
+  return panelManager;
 }
 
 workspace::WorkspaceWindow& 
 Panel::get_workspace_window()
 {
-  return workspace;
+  return panelManager.get_workspace_window();
 }
 
-void
-Panel::internal_setup()
+model::Project&
+Panel::get_project()
 {
-  REQUIRE(dock_item != NULL);
-  REQUIRE(gobj() != NULL);
-  
-  GdlDockItemGrip *grip = GDL_DOCK_ITEM_GRIP(
-    gdl_dock_item_get_grip(dock_item));
-  gdl_dock_item_grip_show_handle(grip);
-  gdl_dock_item_grip_set_label(grip, ((Widget&)panelBar).gobj());
-    
-  gtk_container_add ((GtkContainer*)dock_item, (GtkWidget*)gobj());  
-  gtk_widget_show ((GtkWidget*)dock_item);
+  return panelManager.get_workspace_window().get_project();
+}
+
+controller::Controller&
+Panel::get_controller()
+{
+  return panelManager.get_workspace_window().get_controller();
 }
 
 }   // namespace panels

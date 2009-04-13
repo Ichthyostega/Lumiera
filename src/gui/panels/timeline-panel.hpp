@@ -47,10 +47,12 @@ class TimelinePanel : public Panel
 {
 public:
   /**
-   * Constructor
-   * @param workspace_window The window that owns this panel.
-   */
-  TimelinePanel(workspace::WorkspaceWindow &workspace_window);
+   * Contructor.
+   * @param panel_manager The owner panel manager widget.
+   * @param dock_item The GdlDockItem that will host this panel.
+   **/
+  TimelinePanel(workspace::PanelManager &panel_manager,
+    GdlDockItem *dock_item);
 
   /**
    * Destructor 
@@ -109,7 +111,7 @@ private:
   
   void pause();
   
-  bool is_playing() const;
+  bool is_playing();
   
   void set_tool(gui::widgets::timeline::ToolType tool);
   

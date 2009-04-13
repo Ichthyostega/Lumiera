@@ -76,6 +76,11 @@ public:
    **/
   GdlDockBar* get_dock_bar() const;
   
+  /**
+   * Returns a reference to the owner workspace window.
+   **/
+  WorkspaceWindow& get_workspace_window();
+  
   void switch_panel(panels::Panel &old_panel,
     int new_panel_description_index);
 
@@ -142,6 +147,11 @@ private:
    * The list of created panels.
    **/
   std::list< boost::shared_ptr<panels::Panel> > panels;
+  
+  /**
+   * An accumulator for the panel id.
+   **/
+  static unsigned short panelID;
 
 private:
   
@@ -150,6 +160,11 @@ private:
    **/
   class PanelDescription
     {
+    protected:
+    
+      typedef boost::shared_ptr<panels::Panel> (*const CreatePanelProc)(
+        PanelManager&, GdlDockItem*);
+    
     protected:
       /**
        * Constructor
@@ -161,9 +176,7 @@ private:
        * instantiate the panel object.
        **/
       PanelDescription(const char* class_name, const char *title,
-        const gchar *stock_id,
-        boost::shared_ptr<panels::Panel> (*const create_panel_proc)(
-          WorkspaceWindow&)) :
+        const gchar *stock_id, CreatePanelProc create_panel_proc) :
         className(class_name),
         titleName(title),
         stockID(stock_id),
@@ -203,12 +216,15 @@ private:
     
       /**
        * Creates an instance of this panel.
+       * @param panel_manager The owner panel manager.
+       * @param dock_item The GdlDockItem that will host this panel.
+       * @return Returns a shared pointer to the panel object.
        **/
       boost::shared_ptr<panels::Panel> create(
-        WorkspaceWindow& owner_window) const
+        PanelManager &panel_manager, GdlDockItem* dock_item) const
         {
           REQUIRE(createPanelProc);
-          return createPanelProc(owner_window);
+          return createPanelProc(panel_manager, dock_item);
         }
       
     private:
@@ -230,8 +246,7 @@ private:
       /**
        * A pointer to a function that will instantiate the panel object.
        **/
-      boost::shared_ptr<panels::Panel> (*const createPanelProc)(
-        WorkspaceWindow&);
+      CreatePanelProc createPanelProc;
     };
   
   /**
@@ -253,14 +268,15 @@ private:
     private:
       /**
        * A helper function that will create a panel of type P
-       * @param workspace_window The owner workspace window.
+       * @param panel_manager The owner panel manager.
+       * @param dock_item The GdlDockItem that will host this panel.
        * @return Returns a shared pointer to the panel object.
        **/
       static boost::shared_ptr<panels::Panel> create_panel(
-        WorkspaceWindow &workspace_window)
+        PanelManager &panel_manager, GdlDockItem* dock_item)
           {
             return boost::shared_ptr<panels::Panel>(
-              new P(workspace_window));
+              new P(panel_manager, dock_item));
           }
     };
   
