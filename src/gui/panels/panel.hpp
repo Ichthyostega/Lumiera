@@ -82,6 +82,18 @@ public:
   bool is_shown() const;
   
   /**
+   * Locks or unlocks the panel.
+   * @param show A value of true will lock the panel, false will unlock
+   * it.
+   **/
+  void lock(bool show = true);
+  
+  /**
+   * Returns true if the panel is currently locked.
+   **/
+  bool is_locked() const;
+  
+  /**
    * Returns a reference to the owner panel manager object.
    **/
   workspace::PanelManager& get_panel_manager();

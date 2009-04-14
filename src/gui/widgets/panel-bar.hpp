@@ -82,6 +82,11 @@ private:
    * An event handler for when the "Hide" menu item is clicked
    **/
   void on_hide();
+  
+  /**
+   * Event handler for when the "Lock" menu item is clicked
+   **/
+  void on_lock();
 
 private:
 
@@ -95,6 +100,13 @@ private:
    * the corner of the bar.
    **/
   MenuButton panelButton;
+  
+  /**
+   * A pointer to the lock menu item.
+   * @remarks This value will remain NULL until after setup_panel_button
+   * has been called.
+   **/
+  Gtk::CheckMenuItem *lockItem;
   
   /**
    * The bar window.

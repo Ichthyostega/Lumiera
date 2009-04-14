@@ -41,7 +41,8 @@ namespace widgets {
 PanelBar::PanelBar(panels::Panel &owner_panel, const gchar *stock_id) :
   HBox(),
   panel(owner_panel),
-  panelButton(StockID(stock_id))
+  panelButton(StockID(stock_id)),
+  lockItem(NULL)
 {
   set_border_width(1);
   
@@ -56,6 +57,8 @@ PanelBar::PanelBar(panels::Panel &owner_panel, const gchar *stock_id) :
 void
 PanelBar::setup_panel_button()
 {
+  REQUIRE(lockItem == NULL);
+  
   Menu& menu = panelButton.get_menu();
   Menu::MenuList& list = menu.items();
   
@@ -72,6 +75,12 @@ PanelBar::setup_panel_button()
   // Add extra commands
   list.push_back( Menu_Helpers::MenuElem(_("_Hide"),
     mem_fun(*this, &PanelBar::on_hide) ) );
+
+  list.push_back( Menu_Helpers::CheckMenuElem(_("_Lock"),
+    mem_fun(*this, &PanelBar::on_lock) ) );
+  lockItem = dynamic_cast<CheckMenuItem*>(&list.back());
+  ENSURE(lockItem);
+  lockItem->set_active(panel.is_locked());
 }
 
 void
@@ -136,6 +145,15 @@ void
 PanelBar::on_hide()
 {
   panel.show(false);
+}
+
+void
+PanelBar::on_lock()
+{
+  REQUIRE(lockItem);
+  const bool lock = !panel.is_locked();
+  panel.lock(lock);
+  lockItem->set_active(lock);
 }
 
 } // widgets

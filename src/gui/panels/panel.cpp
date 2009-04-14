@@ -80,10 +80,18 @@ Panel::show(bool show)
 }
 
 bool
-Panel::is_shown() const
+Panel::is_locked() const
 {
   REQUIRE(dockItem != NULL);
-  return GTK_WIDGET_VISIBLE((GtkWidget*)dockItem);
+  return !GDL_DOCK_ITEM_NOT_LOCKED(dockItem);
+}
+
+void
+Panel::lock(bool lock)
+{
+  REQUIRE(dockItem != NULL);
+  if(lock) gdl_dock_item_lock (dockItem);
+  else gdl_dock_item_unlock (dockItem);
 }
 
 workspace::PanelManager&
