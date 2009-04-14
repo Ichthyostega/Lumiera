@@ -54,6 +54,9 @@ public:
   
 private:
 
+  /**
+   * Sets up panelButton, populating it with menu items.
+   **/
   void setup_panel_button();
 
 private:
@@ -70,12 +73,21 @@ private:
   
 private:
 
+  /**
+   * An event handler for when a panel type is chosen.
+   **/
   void on_panel_type(int type_index);
 
+  /**
+   * An event handler for when the "Hide" menu item is clicked
+   **/
   void on_hide();
 
 private:
 
+  /**
+   * A reference to the owner panel object.
+   **/
   panels::Panel &panel;
 
   /**
