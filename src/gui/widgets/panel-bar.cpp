@@ -150,10 +150,20 @@ PanelBar::on_hide()
 void
 PanelBar::on_lock()
 {
+  static bool is_locking = false;
+ 
   REQUIRE(lockItem);
-  const bool lock = !panel.is_locked();
-  panel.lock(lock);
-  lockItem->set_active(lock);
+  
+  if(!is_locking)
+    {
+      is_locking = true;
+      
+      const bool lock = !panel.is_locked();
+      panel.lock(lock);
+      lockItem->set_active(lock);
+      
+      is_locking = false;
+    }
 }
 
 } // widgets
