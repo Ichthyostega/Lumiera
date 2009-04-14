@@ -64,6 +64,11 @@ public:
 public:
   Track(TimelineWidget &timeline_widget,
     boost::shared_ptr<model::Track> track);
+   
+  /**
+   * Destructor
+   **/
+  ~Track();
   
   Gtk::Widget& get_header_widget();
   

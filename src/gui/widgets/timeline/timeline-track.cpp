@@ -84,6 +84,11 @@ Track::Track(TimelineWidget &timeline_widget,
     
 }
 
+Track::~Track()
+{
+  headerWidget.remove(headerBox);
+}
+
 Gtk::Widget&
 Track::get_header_widget()
 {

@@ -53,11 +53,11 @@ TimelineWidget::TimelineWidget(
   verticalScroll(verticalAdjustment),
   update_tracks_frozen(false)
 {
-  body = new TimelineBody(*this);
+  body = manage(new TimelineBody(*this));
   ENSURE(body != NULL);
-  headerContainer = new TimelineHeaderContainer(*this);
+  headerContainer = manage(new TimelineHeaderContainer(*this));
   ENSURE(headerContainer != NULL);
-  ruler = new TimelineRuler(*this);
+  ruler = manage(new TimelineRuler(*this));
   ENSURE(ruler != NULL);
     
   horizontalAdjustment.signal_value_changed().connect( sigc::mem_fun(
@@ -82,20 +82,10 @@ TimelineWidget::TimelineWidget(
 
 TimelineWidget::~TimelineWidget()
 {
-  trackMap.clear();
-   
-  // Destroy child widgets
-  REQUIRE(body != NULL);
-  if(body != NULL)
-    delete body;
+  REQUIRE(headerContainer);
+  headerContainer->clear_headers();
   
-  REQUIRE(headerContainer != NULL);
-  if(headerContainer != NULL)
-    delete headerContainer;
-    
-  REQUIRE(ruler != NULL);
-  if(ruler != NULL)
-    delete ruler;
+  trackMap.clear();
 }
 
 /* ===== Data Access ===== */

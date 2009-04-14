@@ -48,7 +48,7 @@ public:
    * widget
    **/
   TimelineHeaderWidget(timeline::Track &timeline_track);
-
+  
   void set_child_widget(Widget& child);
 
 private:

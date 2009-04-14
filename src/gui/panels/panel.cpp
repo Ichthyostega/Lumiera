@@ -61,6 +61,14 @@ Panel::Panel(workspace::PanelManager &panel_manager,
 Panel::~Panel()
 {
   REQUIRE(dockItem != NULL);
+
+  // Detach the panel bar
+  GdlDockItemGrip *grip = GDL_DOCK_ITEM_GRIP(
+    gdl_dock_item_get_grip(dockItem));
+  gtk_container_remove (GTK_CONTAINER(grip),
+    ((Widget&)panelBar).gobj());
+
+  // Unref the dock item
   g_object_unref(dockItem);
   dockItem = NULL;
 }

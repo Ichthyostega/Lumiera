@@ -70,6 +70,8 @@ public:
    * the backend.
    */
   void update_headers();
+  
+  void clear_headers();
 
   /* ===== Overrides ===== */
 private:
@@ -125,7 +127,7 @@ private:
    * An event handler that is called when a widget is removed from the
    * container.
    **/             
-  void on_remove(Widget*);
+  void on_remove(Widget* widget);
 
   /* ===== Events ===== */      
 private:

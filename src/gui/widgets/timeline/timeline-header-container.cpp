@@ -86,6 +86,20 @@ TimelineHeaderContainer::update_headers()
       ENSURE(widget.get_parent() == this);
     }
 }
+
+void
+TimelineHeaderContainer::clear_headers()
+{
+  // Unparent all the headers
+  pair<shared_ptr<model::Track>, shared_ptr<timeline::Track> > pair; 
+  BOOST_FOREACH( pair, timelineWidget.trackMap )
+    {
+      REQUIRE(pair.second);
+      Widget &widget = pair.second->get_header_widget();
+      if(widget.get_parent() != NULL)  // Is the header unparented?
+        widget.unparent();
+    }
+}
   
 void
 TimelineHeaderContainer::on_realize()
@@ -298,9 +312,19 @@ TimelineHeaderContainer::forall_vfunc(gboolean /* include_internals */,
 }
 
 void
-TimelineHeaderContainer::on_remove(Widget*)
+TimelineHeaderContainer::on_remove(Widget* widget)
 {
-  // Do nothing - this is just to keep Gtk::Container happy
+  REQUIRE(widget);
+  
+  // Ensure headers are parented correctly
+  pair<shared_ptr<model::Track>, shared_ptr<timeline::Track> > pair; 
+  BOOST_FOREACH( pair, timelineWidget.trackMap )
+    {
+      REQUIRE(pair.second);
+      Widget &this_widget = pair.second->get_header_widget();
+      if(&this_widget == widget)
+        this_widget.unparent();
+    }
 }
 
 void
