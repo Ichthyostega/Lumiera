@@ -89,6 +89,12 @@ private:
    * Event handler for when the "Lock" menu item is clicked
    **/
   void on_lock();
+  
+  /**
+   * Event handler for when the split panel menu item is clicked
+   * @param split_direction The direction to split in.
+   **/
+  void on_split_panel(Gtk::Orientation split_direction);
 
 private:
 

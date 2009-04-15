@@ -29,6 +29,7 @@
 #define PANEL_MANAGER_HPP
 
 #include <libgdl-1.0/gdl/gdl.h>
+#include <typeinfo>
 
 #include "../panels/panel.hpp"
 
@@ -90,6 +91,14 @@ public:
    **/
   void switch_panel(panels::Panel &old_panel,
     int new_panel_description_index);
+  
+  /**
+   * Splits a panel into two panels of the same type.
+   * @param panel The panel to split.
+   * @param split_direction The direction to split the panel in.
+   **/
+  void split_panel(panels::Panel &panel,
+    Gtk::Orientation split_direction);
 
 public:
 
@@ -111,13 +120,38 @@ private:
    * Creates the standard panel layout.
    **/
   void create_panels();
+  
+  /**
+   * Find the index of a panel description given the class name.
+   * @param class_name The name of the object class to search for.
+   * @return Returns the index of the panel description found, or -1
+   * if no description was found for this type.
+   **/
+  int find_panel_description(const char* class_name) const;
+  
+  /**
+   * Creates a panel by description index.
+   * @param index The index of the description to instantiate.
+   * @return Returns a pointer to the new instantiated panel object.
+   **/
+  boost::shared_ptr<panels::Panel> create_panel_by_index(
+    const int index);
 
   /**
    * Creates a panel by class name.
    * @param class_name The name of the object class to create.
+   * @return Returns a pointer to the new instantiated panel object.
    **/
   boost::shared_ptr<panels::Panel> create_panel_by_name(
     const char* class_name);
+
+  /**
+   * Gets the type of a given panel.
+   * @param panel The Panel to get the type of
+   * @return Returns the index of the panel description found, or -1
+   * if no description was found for this type.
+   **/
+  int get_panel_type(panels::Panel *panel) const;
 
 private:
   
@@ -175,32 +209,39 @@ private:
     protected:
       /**
        * Constructor
-       * @param class_name The name of the Panel class
+       * @param classInfo The typeid of the Panel class
        * @param title The localized title that will be shown on the
        * panel.
        * @param stock_id The Stock ID for this type of panel.
        * @param create_panel_proc A pointer to a function that will
        * instantiate the panel object.
        **/
-      PanelDescription(const char* class_name, const char *title,
-        const gchar *stock_id, CreatePanelProc create_panel_proc) :
-        className(class_name),
+      PanelDescription(const std::type_info &class_info,
+        const char *title, const gchar *stock_id,
+        CreatePanelProc create_panel_proc) :
+        classInfo(class_info),
         titleName(title),
         stockID(stock_id),
         createPanelProc(create_panel_proc)
         {
-          REQUIRE(className);
           REQUIRE(titleName);
         }
         
     public:
       /**
-       * Returns a pointer to the string name of class.
+       * Returns a reference to the typeid of the class.
+       **/
+      const std::type_info& get_class_info() const
+        {
+          return classInfo;
+        }
+    
+      /**
+       * Returns a pointer to the string name of the class.
        **/
       const char* get_class_name() const
         {
-          ENSURE(className);
-          return className;
+          return classInfo.name();
         }
       
       /**
@@ -236,9 +277,9 @@ private:
       
     private:
       /**
-       * A pointer to the string name of class.
-       **/
-      const char* const className;
+       * A reference to the typeid of this class
+       **/     
+      const std::type_info &classInfo;
       
       /**
        * The localized title that will be shown on the panel.
@@ -268,7 +309,7 @@ private:
        * Constructor
        **/
       Panel() :
-        PanelDescription(typeid(P).name(), P::get_title(),
+        PanelDescription(typeid(P), P::get_title(),
           P::get_stock_id(), Panel::create_panel)
         {}
       

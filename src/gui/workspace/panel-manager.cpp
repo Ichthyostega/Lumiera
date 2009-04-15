@@ -30,6 +30,7 @@
 
 using namespace boost;
 using namespace std;
+using namespace Gtk;
 
 namespace gui {
 namespace workspace {
@@ -146,9 +147,38 @@ void PanelManager::switch_panel(panels::Panel &old_panel,
       *this, dock_item));
   g_object_unref(dock_item);
           
-  new_panel->show_all();
-          
   panels.push_back(new_panel);
+}
+
+void
+PanelManager::split_panel(panels::Panel &panel,
+  Gtk::Orientation split_direction)
+{
+  // Create the new panel
+  const int index = get_panel_type(&panel);
+  shared_ptr<panels::Panel> new_panel = create_panel_by_index(index);
+  
+  // Add it to the list  
+  panels.push_back(new_panel);
+  
+  // Dock the panel
+  GdlDockPlacement placement = GDL_DOCK_NONE;
+  switch(split_direction)
+    {
+    case ORIENTATION_HORIZONTAL:
+      placement = GDL_DOCK_RIGHT;
+      break;
+    case ORIENTATION_VERTICAL:
+      placement = GDL_DOCK_BOTTOM;
+      break;
+    default:
+      ERROR(gui, "Unrecognisized split_direction: %d", split_direction);
+      return;
+      break;
+    }
+    
+  gdl_dock_object_dock(GDL_DOCK_OBJECT(panel.get_dock_item()),
+    GDL_DOCK_OBJECT(new_panel->get_dock_item()), placement, NULL);
 }
 
 int
@@ -186,30 +216,68 @@ PanelManager::create_panels()
   panels.push_back(resourcesPanel);
 }
 
-shared_ptr<panels::Panel> 
-PanelManager::create_panel_by_name(const char* class_name)
-{ 
+int
+PanelManager::find_panel_description(const char* class_name) const
+{
+  REQUIRE(class_name);
+  
   const int count = get_panel_description_count();
   for(int i = 0; i < count; i++)
     {
       if(strstr(panelDescriptionList[i].get_class_name(), class_name))
-        {
-          // Make a unique name for the panel
-          char name[5];
-          snprintf(name, sizeof(name), "%X", panelID++);
-          
-          // Create a dock item
-          GdlDockItem *dock_item = GDL_DOCK_ITEM(
-            gdl_dock_item_new(name, "", GDL_DOCK_ITEM_BEH_NORMAL));
-          
-          // Create the panel object
-          return shared_ptr<panels::Panel>(
-            panelDescriptionList[i].create(*this, dock_item));
-        }
+        return i;
     }
     
-  ERROR(gui, "Unable to create a panel with class name %s", class_name);
-  return shared_ptr<panels::Panel>();
+  ERROR(gui, "Unable to find a description with class name %s",
+    class_name);
+  return -1;
+}
+
+shared_ptr<panels::Panel>
+PanelManager::create_panel_by_index(const int index)
+{
+  REQUIRE(index >= 0 && index < get_panel_description_count());
+
+  // Make a unique name for the panel
+  char name[5];
+  snprintf(name, sizeof(name), "%X", panelID++);
+  
+  // Create a dock item
+  GdlDockItem *dock_item = GDL_DOCK_ITEM(
+    gdl_dock_item_new(name, "", GDL_DOCK_ITEM_BEH_NORMAL));
+
+  // Create the panel object
+  shared_ptr<panels::Panel> panel(
+    panelDescriptionList[index].create(*this, dock_item));
+  ENSURE(panel);
+  panel->show_all();
+  
+  return panel;    
+}
+
+shared_ptr<panels::Panel> 
+PanelManager::create_panel_by_name(const char* class_name)
+{ 
+  REQUIRE(class_name);
+  const int index = find_panel_description(class_name);  
+  return create_panel_by_index(index);
+}
+
+int
+PanelManager::get_panel_type(panels::Panel *panel) const
+{
+  REQUIRE(panel);
+  
+  const type_info &info = typeid(*panel); 
+  const int count = get_panel_description_count();
+  for(int i = 0; i < count; i++)
+    {
+      if(info == panelDescriptionList[i].get_class_info())
+        return i;
+    }
+  
+  ERROR(gui, "Unable to find a description with with this class type");
+  return -1;
 }
 
 }   // namespace workspace

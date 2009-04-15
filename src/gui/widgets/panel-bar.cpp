@@ -81,6 +81,13 @@ PanelBar::setup_panel_button()
   lockItem = dynamic_cast<CheckMenuItem*>(&list.back());
   ENSURE(lockItem);
   lockItem->set_active(panel.is_locked());
+  
+  list.push_back( Menu_Helpers::MenuElem(_("Split _Horizontal"),
+    bind(mem_fun(*this, &PanelBar::on_split_panel),
+      ORIENTATION_HORIZONTAL) ) );
+  list.push_back( Menu_Helpers::MenuElem(_("Split _Vertical"),
+    bind(mem_fun(*this, &PanelBar::on_split_panel),
+      ORIENTATION_VERTICAL) ) );
 }
 
 void
@@ -164,6 +171,12 @@ PanelBar::on_lock()
       
       is_locking = false;
     }
+}
+
+void
+PanelBar::on_split_panel(Gtk::Orientation split_direction)
+{
+  panel.get_panel_manager().split_panel(panel, split_direction);
 }
 
 } // widgets
