@@ -123,6 +123,20 @@ PanelManager::get_workspace_window()
 void
 PanelManager::show_panel(const int description_index)
 {
+  // Try and find the panel and present it if possible
+  list< boost::shared_ptr<panels::Panel> >::iterator i;
+  for(i = panels.begin(); i != panels.end(); i++)
+    {
+      const shared_ptr<panels::Panel> panel = *i;
+      if(get_panel_type(panel.get()) == description_index)
+        {
+          GdlDockItem *dock_item = panel->get_dock_item();
+          ENSURE(dock_item);
+          gdl_dock_object_present(GDL_DOCK_OBJECT(dock_item), NULL);
+          return;
+        }
+    }
+  
   // Create the new panel
   shared_ptr<panels::Panel> new_panel =
     create_panel_by_index(description_index);
