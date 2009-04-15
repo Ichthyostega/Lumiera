@@ -130,6 +130,8 @@ PanelManager::show_panel(const int description_index)
       const shared_ptr<panels::Panel> panel = *i;
       if(get_panel_type(panel.get()) == description_index)
         {
+          panel->show();
+          
           GdlDockItem *dock_item = panel->get_dock_item();
           ENSURE(dock_item);
           gdl_dock_object_present(GDL_DOCK_OBJECT(dock_item), NULL);
@@ -140,9 +142,6 @@ PanelManager::show_panel(const int description_index)
   // Create the new panel
   shared_ptr<panels::Panel> new_panel =
     create_panel_by_index(description_index);
-  
-  // Add it to the list  
-  panels.push_back(new_panel);
   
   // Dock the item
   gdl_dock_add_item(dock, new_panel->get_dock_item(),
@@ -174,8 +173,6 @@ void PanelManager::switch_panel(panels::Panel &old_panel,
   shared_ptr<panels::Panel> new_panel(
     panelDescriptionList[description_index].create(*this, dock_item));
   g_object_unref(dock_item);
-          
-  panels.push_back(new_panel);
 }
 
 void
@@ -185,9 +182,6 @@ PanelManager::split_panel(panels::Panel &panel,
   // Create the new panel
   const int index = get_panel_type(&panel);
   shared_ptr<panels::Panel> new_panel = create_panel_by_index(index);
-  
-  // Add it to the list  
-  panels.push_back(new_panel);
   
   // Dock the panel
   GdlDockPlacement placement = GDL_DOCK_NONE;
@@ -245,10 +239,6 @@ PanelManager::create_panels()
     timelinePanel->get_dock_item(), GDL_DOCK_BOTTOM);
   gdl_dock_add_item(dock,
     viewerPanel->get_dock_item(), GDL_DOCK_RIGHT);
-
-  panels.push_back(timelinePanel);
-  panels.push_back(viewerPanel);
-  panels.push_back(resourcesPanel);
 }
 
 int
@@ -287,6 +277,13 @@ PanelManager::create_panel_by_index(const int index)
   ENSURE(panel);
   panel->show_all();
   
+  // Connect event handlers
+  panel->signal_hide_panel().connect(bind(
+    mem_fun(*this, &PanelManager::on_panel_shown), panel));
+  
+  // Add the panel to the list
+  panels.push_back(panel);
+  
   return panel;    
 }
 
@@ -313,6 +310,30 @@ PanelManager::get_panel_type(panels::Panel *panel) const
   
   ERROR(gui, "Unable to find a description with with this class type");
   return -1;
+}
+
+void
+PanelManager::on_panel_shown(boost::weak_ptr<panels::Panel> panel_ptr)
+{  
+  if(panel_ptr.expired())
+    return;
+    
+  shared_ptr<panels::Panel> panel(panel_ptr);
+  REQUIRE(panel);
+  
+  if(panel->is_shown() || panel->is_iconified())
+    return;
+  
+  // Release the panel
+  list< boost::shared_ptr<panels::Panel> >::iterator i;
+  for(i = panels.begin(); i != panels.end(); i++)
+    {
+      if((*i) == panel)
+        {
+          panels.erase(i);
+          break;
+        }
+    }
 }
 
 }   // namespace workspace

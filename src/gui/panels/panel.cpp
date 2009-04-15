@@ -36,6 +36,7 @@ Panel::Panel(workspace::PanelManager &panel_manager,
     const gchar *stock_id) :
   panelManager(panel_manager),
   dockItem(dock_item),
+  hide_panel_handler_id(0),
   panelBar(*this, stock_id)
 {
   REQUIRE(dockItem);
@@ -56,6 +57,10 @@ Panel::Panel(workspace::PanelManager &panel_manager,
   gtk_container_add ((GtkContainer*)dockItem, (GtkWidget*)gobj());
   
   gtk_widget_show ((GtkWidget*)dockItem);
+  
+  // Connect the signals
+	hide_panel_handler_id = g_signal_connect (GTK_OBJECT(dockItem),
+	  "hide",	G_CALLBACK(on_item_hidden), this);
 }
 
 Panel::~Panel()
@@ -67,6 +72,10 @@ Panel::~Panel()
     gdl_dock_item_get_grip(dockItem));
   gtk_container_remove (GTK_CONTAINER(grip),
     ((Widget&)panelBar).gobj());
+    
+  // Detach the signals
+  g_signal_handler_disconnect(
+    GTK_OBJECT(dockItem), hide_panel_handler_id);
 
   // Unref the dock item
   g_object_unref(dockItem);
@@ -88,10 +97,24 @@ Panel::show(bool show)
 }
 
 bool
-Panel::is_locked() const
+Panel::is_shown() const
 {
   REQUIRE(dockItem != NULL);
-  return !GDL_DOCK_ITEM_NOT_LOCKED(dockItem);
+  return GTK_WIDGET_VISIBLE((GtkWidget*)dockItem);
+}
+
+void
+Panel::iconify()
+{
+  REQUIRE(dockItem != NULL);
+  gdl_dock_item_iconify_item(dockItem);
+}
+
+bool
+Panel::is_iconified() const
+{
+  REQUIRE(dockItem != NULL);
+  return GDL_DOCK_ITEM_ICONIFIED(dockItem);
 }
 
 void
@@ -100,6 +123,13 @@ Panel::lock(bool lock)
   REQUIRE(dockItem != NULL);
   if(lock) gdl_dock_item_lock (dockItem);
   else gdl_dock_item_unlock (dockItem);
+}
+
+bool
+Panel::is_locked() const
+{
+  REQUIRE(dockItem != NULL);
+  return !GDL_DOCK_ITEM_NOT_LOCKED(dockItem);
 }
 
 workspace::PanelManager&
@@ -124,6 +154,19 @@ controller::Controller&
 Panel::get_controller()
 {
   return panelManager.get_workspace_window().get_controller();
+}
+
+sigc::signal<void>&
+Panel::signal_hide_panel()
+{
+  return hidePanelSignal;
+}
+
+void
+Panel::on_item_hidden(GdlDockItem*, Panel *panel)
+{
+  REQUIRE(panel);
+  panel->hidePanelSignal();
 }
 
 }   // namespace panels

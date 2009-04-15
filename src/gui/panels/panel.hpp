@@ -82,6 +82,16 @@ public:
   bool is_shown() const;
   
   /**
+   * Iconifys the panel.
+   **/
+  void iconify();
+  
+  /**
+   * Returns true if the panel is currently iconified.
+   **/
+  bool is_iconified() const;
+  
+  /**
    * Locks or unlocks the panel.
    * @param show A value of true will lock the panel, false will unlock
    * it.
@@ -97,6 +107,13 @@ public:
    * Returns a reference to the owner panel manager object.
    **/
   workspace::PanelManager& get_panel_manager();
+  
+public:
+
+  /**
+   * A signal that fires when the dock item is hidden.
+   **/
+  sigc::signal<void>& signal_hide_panel();
   
 protected:
 
@@ -114,6 +131,14 @@ protected:
    * Returns a reference to the controller
    **/
   controller::Controller& get_controller();
+  
+private:
+
+  /**
+   * An event handler for when dockItem is hidden.
+   * @param func_data A pointer to the panel that owns dock_item
+   **/
+  static void on_item_hidden(GdlDockItem*, Panel *panel);
 
 protected:
 
@@ -127,6 +152,16 @@ protected:
    * panel.
    **/
   GdlDockItem* dockItem;
+  
+  /**
+   * A signal that fires when the dock item is hidden.
+   **/
+  sigc::signal<void> hidePanelSignal;
+
+  /**
+   * The id of the hide panel handler.
+   **/  
+  gulong hide_panel_handler_id;
   
   /**
    * The panel bar to attach to the panel grip.

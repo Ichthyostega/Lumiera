@@ -165,6 +165,14 @@ private:
    * if no description was found for this type.
    **/
   int get_panel_type(panels::Panel *panel) const;
+  
+private:
+  
+  /**
+   * An event handler for when the panel is shown or hidden.
+   * @param panel_ptr A weak pointer to the panel that was hidden.
+   **/
+  void on_panel_shown(boost::weak_ptr<panels::Panel> panel_ptr);
 
 private:
   
