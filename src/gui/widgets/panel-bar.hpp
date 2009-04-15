@@ -75,6 +75,8 @@ private:
 
   /**
    * An event handler for when a panel type is chosen.
+   * @param type_index The index of the panel description that will be
+   * instantiated.
    **/
   void on_panel_type(int type_index);
 

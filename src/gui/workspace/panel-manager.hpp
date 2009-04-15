@@ -81,6 +81,13 @@ public:
    **/
   WorkspaceWindow& get_workspace_window();
   
+  /**
+   * Switches a panel from one type to another, without touching the
+   * underlying GdlDockItem.
+   * @param old_panel The panel which will be transofrmed to a new type.
+   * @param new_panel_description_index The index of the panel
+   * description that will be instantiated.
+   **/
   void switch_panel(panels::Panel &old_panel,
     int new_panel_description_index);
 
