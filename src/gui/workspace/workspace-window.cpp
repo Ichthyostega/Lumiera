@@ -37,6 +37,7 @@
 #include "include/logging.h"
 
 using namespace Gtk;
+using namespace Glib;
 using namespace gui::model;
 using namespace gui::controller;
 
@@ -87,61 +88,8 @@ WorkspaceWindow::create_ui()
   add(baseContainer);
 
   uiManager = Gtk::UIManager::create();
-  uiManager->insert_action_group(actions.actionGroup);
-
+  actions.populate_main_actions(uiManager);
   add_accel_group(uiManager->get_accel_group());
-
-  //Layout the actions in a menubar and toolbar:
-  Glib::ustring ui_info = 
-      "<ui>"
-      "  <menubar name='MenuBar'>"
-      "    <menu action='FileMenu'>"
-      "      <menuitem action='FileNewProject'/>"
-      "      <menuitem action='FileOpenProject'/>"
-      "      <separator/>"
-      "      <menuitem action='FileRender'/>"
-      "      <separator/>"
-      "      <menuitem action='FileQuit'/>"
-      "    </menu>"
-      "    <menu action='EditMenu'>"
-      "      <menuitem action='EditCopy'/>"
-      "      <menuitem action='EditPaste'/>"
-      "      <separator/>"
-      "      <menuitem action='EditPreferences'/>"
-      "    </menu>"
-      "    <menu action='ViewMenu'>"
-      "      <menuitem action='ViewResources'/>"
-      "      <menuitem action='ViewTimeline'/>"
-      "      <menuitem action='ViewViewer'/>"
-      "    </menu>"
-      "    <menu action='SequenceMenu'>"
-      "      <menuitem action='SequenceAdd'/>"
-      "    </menu>"
-      "    <menu action='TrackMenu'>"
-      "      <menuitem action='TrackAdd'/>"
-      "    </menu>"
-      "    <menu action='WindowMenu'>"
-      "      <menuitem action='WindowNewWindow'/>"
-      "    </menu>"
-      "    <menu action='HelpMenu'>"
-      "      <menuitem action='HelpAbout'/>"
-      "    </menu>"
-      "  </menubar>"
-      "  <toolbar  name='ToolBar'>"
-      "    <toolitem action='FileNewProject'/>"
-      "    <toolitem action='FileOpenProject'/>"
-      "  </toolbar>"
-      "</ui>";
-
-  try
-    {
-      uiManager->add_ui_from_string(ui_info);
-    }
-  catch(const Glib::Error& ex)
-    {
-      NOBUG_ERROR(gui, "Building menus failed: %s", ex.what().data());
-      return;
-    }
 
   //----- Set up the Menu Bar -----//
   Gtk::Widget* menu_bar = uiManager->get_widget("/MenuBar");
@@ -172,6 +120,7 @@ WorkspaceWindow::create_ui()
  
   show_all_children();
 }
+  
 
 }   // namespace workspace
 }   // namespace gui

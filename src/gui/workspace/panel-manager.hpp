@@ -83,6 +83,12 @@ public:
   WorkspaceWindow& get_workspace_window();
   
   /**
+   * Shows a panel given a description index.
+   * @param description_index The index of the panel type to show.
+   **/  
+  void show_panel(const int description_index);
+  
+  /**
    * Switches a panel from one type to another, without touching the
    * underlying GdlDockItem.
    * @param old_panel The panel which will be transofrmed to a new type.
@@ -108,11 +114,18 @@ public:
   static int get_panel_description_count();
 
   /**
-   * Gets a panel description.
+   * Gets a panel description's stock id.
    * @param index The index of the panel to retrieve.
    * @return Returns the stock id of a panel at this index.
    **/
   static const gchar* get_panel_stock_id(const int index);
+  
+  /**
+   * Gets a panel description's title.
+   * @param index The index of the panel to retrieve.
+   * @return Returns the title of a panel at this index.
+   **/
+  static const char* get_panel_title(int index);
 
 private:
 

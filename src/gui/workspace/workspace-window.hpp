@@ -97,8 +97,6 @@ private:
    * The instantiation of the actions helper class, which
    * registers and handles user action events */
   Actions actions;
-
-  friend class Actions;
 };
 
 }   // namespace workspace

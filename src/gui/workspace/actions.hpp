@@ -42,11 +42,29 @@ class WorkspaceWindow;
 */
 class Actions
 {
-private:	
+public:
+  /**
+   * Constructor
+   * @param workspace_window The owner workspace window.
+   **/
   Actions(WorkspaceWindow &workspace_window);
+  
+  /**
+   * Populates a uiManager with the main set of actions.
+   * @param uiManager A pointer to the uiManager to populate.
+   **/
+  void populate_main_actions(Glib::RefPtr<Gtk::UIManager> uiManager);
 
   /* ===== Internals ===== */
 private:
+
+  /**
+   * Populates a uiManager with actions for the Show Panel menu.
+   * @param uiManager A pointer to the uiManager to populate.
+   **/
+  void populate_show_panel_actions(
+    Glib::RefPtr<Gtk::UIManager> uiManager);
+
   /**
    * Updates the state of the menu/toolbar actions
    * to reflect the current state of the workspace */
@@ -75,6 +93,7 @@ private:
   void on_menu_track_add();
 
   void on_menu_window_new_window();
+  void on_menu_show_panel(int panel_index);
 
   void on_menu_help_about();
   
@@ -93,8 +112,6 @@ private:
   /* ===== Internals ===== */
 private:
   bool is_updating_action_state;
-  
-  friend class WorkspaceWindow;
 };
 
 }   // namespace workspace

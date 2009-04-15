@@ -120,6 +120,21 @@ PanelManager::get_workspace_window()
   return workspaceWindow;
 }
 
+void
+PanelManager::show_panel(const int description_index)
+{
+  // Create the new panel
+  shared_ptr<panels::Panel> new_panel =
+    create_panel_by_index(description_index);
+  
+  // Add it to the list  
+  panels.push_back(new_panel);
+  
+  // Dock the item
+  gdl_dock_add_item(dock, new_panel->get_dock_item(),
+    GDL_DOCK_FLOATING);
+}
+
 void PanelManager::switch_panel(panels::Panel &old_panel,
   const int description_index)
 {
@@ -191,6 +206,13 @@ PanelManager::get_panel_stock_id(int index)
 {
   REQUIRE(index >= 0 && index < get_panel_description_count());
   return panelDescriptionList[index].get_stock_id();
+}
+
+const char*
+PanelManager::get_panel_title(int index)
+{
+  REQUIRE(index >= 0 && index < get_panel_description_count());
+  return panelDescriptionList[index].get_title();
 }
 
 void

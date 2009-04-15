@@ -31,6 +31,8 @@
 
 #include "../model/project.hpp"
 
+#include "include/logging.h"
+
 using namespace Gtk;
 using namespace Glib;
 using namespace sigc;
@@ -44,72 +46,161 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
   is_updating_action_state(false)
 {
   workspace_window.signal_show ().connect_notify(mem_fun(this, &Actions::update_action_state));
+}
 
+void
+Actions::populate_main_actions(RefPtr<Gtk::UIManager> uiManager)
+{
+  REQUIRE(uiManager);
+  
   //----- Create the Action Group -----//
   actionGroup = ActionGroup::create();
   
   // File menu
   actionGroup->add(Action::create("FileMenu", _("_File")));
   actionGroup->add(Action::create("FileNewProject", Stock::NEW, _("_New Project...")),
-    sigc::mem_fun(*this, &Actions::on_menu_file_new_project));
+    mem_fun(*this, &Actions::on_menu_file_new_project));
   actionGroup->add(Action::create("FileOpenProject", Stock::OPEN, _("_Open Project...")),
-    sigc::mem_fun(*this, &Actions::on_menu_file_open_project));
+    mem_fun(*this, &Actions::on_menu_file_open_project));
   actionGroup->add(Action::create("FileRender", _("_Render...")),
-    Gtk::AccelKey("<shift>R"),
-    sigc::mem_fun(*this, &Actions::on_menu_file_render));
+    AccelKey("<shift>R"),
+    mem_fun(*this, &Actions::on_menu_file_render));
   actionGroup->add(Action::create("FileQuit", Stock::QUIT),
-    sigc::mem_fun(*this, &Actions::on_menu_file_quit));
+    mem_fun(*this, &Actions::on_menu_file_quit));
 
   // Edit menu
   actionGroup->add(Action::create("EditMenu", _("_Edit")));
   actionGroup->add(Action::create("EditCopy", Stock::COPY),
-    sigc::mem_fun(*this, &Actions::on_menu_others));
+    mem_fun(*this, &Actions::on_menu_others));
   actionGroup->add(Action::create("EditPaste", Stock::PASTE),
-    sigc::mem_fun(*this, &Actions::on_menu_others));
+    mem_fun(*this, &Actions::on_menu_others));
   actionGroup->add(Action::create("EditPreferences", Stock::PREFERENCES),
-    sigc::mem_fun(*this, &Actions::on_menu_edit_preferences));
+    mem_fun(*this, &Actions::on_menu_edit_preferences));
 
   // View Menu
   actionGroup->add(Action::create("ViewMenu", _("_View")));
   
   assetsPanelAction = ToggleAction::create("ViewResources",
-    Gtk::StockID("panel_resources"));
+    StockID("panel_resources"));
   assetsPanelAction->signal_toggled().connect(
-    sigc::mem_fun(*this, &Actions::on_menu_view_resources));
+    mem_fun(*this, &Actions::on_menu_view_resources));
   actionGroup->add(assetsPanelAction);
   
   timelinePanelAction = ToggleAction::create("ViewTimeline",
-    Gtk::StockID("panel_timeline"));
+    StockID("panel_timeline"));
   timelinePanelAction->signal_toggled().connect(
-    sigc::mem_fun(*this, &Actions::on_menu_view_timeline));
+    mem_fun(*this, &Actions::on_menu_view_timeline));
   actionGroup->add(timelinePanelAction);
 
   viewerPanelAction = ToggleAction::create("ViewViewer",
-    Gtk::StockID("panel_viewer"));
+    StockID("panel_viewer"));
   viewerPanelAction->signal_toggled().connect(
-    sigc::mem_fun(*this, &Actions::on_menu_view_viewer));
+    mem_fun(*this, &Actions::on_menu_view_viewer));
   actionGroup->add(viewerPanelAction);
   
   // Sequence Menu
   actionGroup->add(Action::create("SequenceMenu", _("_Sequence")));
   actionGroup->add(Action::create("SequenceAdd", _("_Add...")),
-    sigc::mem_fun(*this, &Actions::on_menu_sequence_add));
+    mem_fun(*this, &Actions::on_menu_sequence_add));
     
   // Track Menu
   actionGroup->add(Action::create("TrackMenu", _("_Track")));
   actionGroup->add(Action::create("TrackAdd", _("_Add...")),
-    sigc::mem_fun(*this, &Actions::on_menu_track_add));
+    mem_fun(*this, &Actions::on_menu_track_add));
 
   // Window Menu
   actionGroup->add(Action::create("WindowMenu", _("_Window")));
   actionGroup->add(Action::create("WindowNewWindow",
-    Gtk::StockID("new_window")),
-    sigc::mem_fun(*this, &Actions::on_menu_window_new_window));
+    StockID("new_window")),
+    mem_fun(*this, &Actions::on_menu_window_new_window));
+  actionGroup->add(Action::create("WindowShowPanel", _("_Show Panel")));
 
   // Help Menu
   actionGroup->add(Action::create("HelpMenu", _("_Help")) );
   actionGroup->add(Action::create("HelpAbout", Stock::ABOUT),
-  sigc::mem_fun(*this, &Actions::on_menu_help_about) );
+    mem_fun(*this, &Actions::on_menu_help_about) );
+  
+  uiManager->insert_action_group(actionGroup);
+  
+  //----- Create the UI layout -----//
+  Glib::ustring ui_info = 
+      "<ui>"
+      "  <menubar name='MenuBar'>"
+      "    <menu action='FileMenu'>"
+      "      <menuitem action='FileNewProject'/>"
+      "      <menuitem action='FileOpenProject'/>"
+      "      <separator/>"
+      "      <menuitem action='FileRender'/>"
+      "      <separator/>"
+      "      <menuitem action='FileQuit'/>"
+      "    </menu>"
+      "    <menu action='EditMenu'>"
+      "      <menuitem action='EditCopy'/>"
+      "      <menuitem action='EditPaste'/>"
+      "      <separator/>"
+      "      <menuitem action='EditPreferences'/>"
+      "    </menu>"
+      "    <menu action='ViewMenu'>"
+      "      <menuitem action='ViewResources'/>"
+      "      <menuitem action='ViewTimeline'/>"
+      "      <menuitem action='ViewViewer'/>"
+      "    </menu>"
+      "    <menu action='SequenceMenu'>"
+      "      <menuitem action='SequenceAdd'/>"
+      "    </menu>"
+      "    <menu action='TrackMenu'>"
+      "      <menuitem action='TrackAdd'/>"
+      "    </menu>"
+      "    <menu action='WindowMenu'>"
+      "      <menuitem action='WindowNewWindow'/>"
+      "      <menu action='WindowShowPanel'/>"
+      "    </menu>"
+      "    <menu action='HelpMenu'>"
+      "      <menuitem action='HelpAbout'/>"
+      "    </menu>"
+      "  </menubar>"
+      "  <toolbar  name='ToolBar'>"
+      "    <toolitem action='FileNewProject'/>"
+      "    <toolitem action='FileOpenProject'/>"
+      "  </toolbar>"
+      "</ui>";
+
+  try
+    {
+      uiManager->add_ui_from_string(ui_info);
+    }
+  catch(const Glib::Error& ex)
+    {
+      ERROR(gui, "Building menus failed: %s", ex.what().data());
+      return;
+    }
+    
+  //----- Add Extra Actions -----//
+  populate_show_panel_actions(uiManager);
+}
+
+void
+Actions::populate_show_panel_actions(RefPtr<Gtk::UIManager> uiManager)
+{  
+  const int count = PanelManager::get_panel_description_count();
+  
+  RefPtr<Gtk::ActionGroup> actionGroup = ActionGroup::create();
+  for(int i = 0; i < count; i++)
+    {
+      const gchar *stock_id = PanelManager::get_panel_stock_id(i);
+      const ustring name = ustring::compose("Panel%1", i);
+      actionGroup->add(Action::create(name, StockID(stock_id)),
+        bind(mem_fun(*this, &Actions::on_menu_show_panel), i));
+    }
+    
+  uiManager->insert_action_group(actionGroup);
+  
+  for(int i = 0; i < count; i++)
+    {
+      const ustring name = ustring::compose("Panel%1", i);
+      uiManager->add_ui(uiManager->new_merge_id(),
+        "/MenuBar/WindowMenu/WindowShowPanel", name, name);
+    }
 }
 
 void
@@ -215,8 +306,15 @@ Actions::on_menu_track_add()
 void
 Actions::on_menu_window_new_window()
 {
-  application().get_window_manager().new_window(workspaceWindow.project,
-    workspaceWindow.controller); 
+  application().get_window_manager().new_window(
+    workspaceWindow.get_project(),
+    workspaceWindow.get_controller()); 
+}
+
+void
+Actions::on_menu_show_panel(int panel_index)
+{
+  workspaceWindow.get_panel_manager().show_panel(panel_index);
 }
 
 /* ===== Help Menu Event Handlers ===== */
