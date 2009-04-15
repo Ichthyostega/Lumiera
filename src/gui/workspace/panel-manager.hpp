@@ -86,11 +86,11 @@ public:
    * Switches a panel from one type to another, without touching the
    * underlying GdlDockItem.
    * @param old_panel The panel which will be transofrmed to a new type.
-   * @param new_panel_description_index The index of the panel
-   * description that will be instantiated.
+   * @param description_index The index of the panel description that
+   * will be instantiated.
    **/
   void switch_panel(panels::Panel &old_panel,
-    int new_panel_description_index);
+    const int description_index);
   
   /**
    * Splits a panel into two panels of the same type.
@@ -112,7 +112,7 @@ public:
    * @param index The index of the panel to retrieve.
    * @return Returns the stock id of a panel at this index.
    **/
-  static const gchar* get_panel_stock_id(int index);
+  static const gchar* get_panel_stock_id(const int index);
 
 private:
 

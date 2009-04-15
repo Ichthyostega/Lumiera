@@ -121,10 +121,10 @@ PanelManager::get_workspace_window()
 }
 
 void PanelManager::switch_panel(panels::Panel &old_panel,
-  int new_panel_description_index)
+  const int description_index)
 {
-  REQUIRE(new_panel_description_index >= 0 &&
-    new_panel_description_index < get_panel_description_count());
+  REQUIRE(description_index >= 0 &&
+    description_index < get_panel_description_count());
   
   // Get the dock item
   GdlDockItem *dock_item = old_panel.get_dock_item();
@@ -143,8 +143,7 @@ void PanelManager::switch_panel(panels::Panel &old_panel,
   
   // Create the new panel
   shared_ptr<panels::Panel> new_panel(
-    panelDescriptionList[new_panel_description_index].create(
-      *this, dock_item));
+    panelDescriptionList[description_index].create(*this, dock_item));
   g_object_unref(dock_item);
           
   panels.push_back(new_panel);
