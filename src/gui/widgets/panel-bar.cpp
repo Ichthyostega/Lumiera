@@ -229,13 +229,14 @@ PanelBar::on_size_allocate(Gtk::Allocation& allocation)
       if(get_direction() != TEXT_DIR_RTL)
         {
           window->move_resize(allocation.get_x(), allocation.get_y(),
-            total_width, allocation.get_height());
+            total_width + border_width * 2, allocation.get_height());
         }
       else
         {
           window->move_resize(
             allocation.get_x() + allocation.get_width() - total_width,
-            allocation.get_y(), total_width, allocation.get_height());
+            allocation.get_y(),
+            total_width + border_width * 2, allocation.get_height());
         }
     }
 }
