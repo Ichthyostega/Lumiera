@@ -147,16 +147,23 @@ private:
    * @param index The index of the description to instantiate.
    * @return Returns a pointer to the new instantiated panel object.
    **/
-  boost::shared_ptr<panels::Panel> create_panel_by_index(
-    const int index);
+  panels::Panel* create_panel_by_index(const int index);
+  
+  /**
+   * Creates a panel by description index with a given GdlDockItem
+   * @param index The index of the description to instantiate.
+   * @param dock_item The GdlDockItem to attach this panel to
+   * @return Returns a pointer to the new instantiated panel object.
+   **/
+  panels::Panel* create_panel_by_index(
+    const int index, GdlDockItem *dock_item);
 
   /**
    * Creates a panel by class name.
    * @param class_name The name of the object class to create.
    * @return Returns a pointer to the new instantiated panel object.
    **/
-  boost::shared_ptr<panels::Panel> create_panel_by_name(
-    const char* class_name);
+  panels::Panel* create_panel_by_name(const char* class_name);
 
   /**
    * Gets the type of a given panel.
@@ -164,15 +171,26 @@ private:
    * @return Returns the index of the panel description found, or -1
    * if no description was found for this type.
    **/
-  int get_panel_type(panels::Panel *panel) const;
+  int get_panel_type(panels::Panel* const panel) const;
+  
+  /**
+   * Removes a panel from the panel list and deletes it.
+   * @param panel The panel to remove and delete.
+   **/
+  void remove_panel(panels::Panel* const panel);
+  
+  /**
+   * Removes all panels from the panel list and deletes them.
+   **/
+  void clear_panels();
   
 private:
   
   /**
    * An event handler for when the panel is shown or hidden.
-   * @param panel_ptr A weak pointer to the panel that was hidden.
+   * @param panel A pointer to the panel that was hidden.
    **/
-  void on_panel_shown(boost::weak_ptr<panels::Panel> panel_ptr);
+  void on_panel_shown(panels::Panel *panel);
 
 private:
   
@@ -208,7 +226,7 @@ private:
   /**
    * The list of created panels.
    **/
-  std::list< boost::shared_ptr<panels::Panel> > panels;
+  std::list< panels::Panel* > panels;
   
   /**
    * An accumulator for the panel id.
@@ -224,7 +242,7 @@ private:
     {
     protected:
     
-      typedef boost::shared_ptr<panels::Panel> (*const CreatePanelProc)(
+      typedef panels::Panel* (*const CreatePanelProc)(
         PanelManager&, GdlDockItem*);
     
     protected:
@@ -287,9 +305,9 @@ private:
        * Creates an instance of this panel.
        * @param panel_manager The owner panel manager.
        * @param dock_item The GdlDockItem that will host this panel.
-       * @return Returns a shared pointer to the panel object.
+       * @return Returns a pointer to the panel object.
        **/
-      boost::shared_ptr<panels::Panel> create(
+      panels::Panel* create(
         PanelManager &panel_manager, GdlDockItem* dock_item) const
         {
           REQUIRE(createPanelProc);
@@ -339,13 +357,12 @@ private:
        * A helper function that will create a panel of type P
        * @param panel_manager The owner panel manager.
        * @param dock_item The GdlDockItem that will host this panel.
-       * @return Returns a shared pointer to the panel object.
+       * @return Returns a pointer to the panel object.
        **/
-      static boost::shared_ptr<panels::Panel> create_panel(
+      static panels::Panel* create_panel(
         PanelManager &panel_manager, GdlDockItem* dock_item)
           {
-            return boost::shared_ptr<panels::Panel>(
-              new P(panel_manager, dock_item));
+            return new P(panel_manager, dock_item);
           }
     };
   

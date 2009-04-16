@@ -67,6 +67,8 @@ PanelManager::~PanelManager()
   for(int i = 0; i < 4; i++)
     if(dockPlaceholders[i])
       g_object_unref(dockPlaceholders[i]);
+      
+  clear_panels();
 }
 
 void
@@ -124,11 +126,11 @@ void
 PanelManager::show_panel(const int description_index)
 {
   // Try and find the panel and present it if possible
-  list< boost::shared_ptr<panels::Panel> >::iterator i;
+  list< panels::Panel* >::iterator i;
   for(i = panels.begin(); i != panels.end(); i++)
     {
-      const shared_ptr<panels::Panel> panel = *i;
-      if(get_panel_type(panel.get()) == description_index)
+      panels::Panel* const panel = *i;
+      if(get_panel_type(panel) == description_index)
         {
           panel->show();
           
@@ -140,8 +142,7 @@ PanelManager::show_panel(const int description_index)
     }
   
   // Create the new panel
-  shared_ptr<panels::Panel> new_panel =
-    create_panel_by_index(description_index);
+  panels::Panel *new_panel = create_panel_by_index(description_index);
   
   // Dock the item
   gdl_dock_add_item(dock, new_panel->get_dock_item(),
@@ -157,21 +158,12 @@ void PanelManager::switch_panel(panels::Panel &old_panel,
   // Get the dock item
   GdlDockItem *dock_item = old_panel.get_dock_item();
   g_object_ref(dock_item);
-  
+   
   // Release the old panel
-  list< boost::shared_ptr<panels::Panel> >::iterator i;
-  for(i = panels.begin(); i != panels.end(); i++)
-    {
-      if((*i).get() == &old_panel)
-        {
-          panels.erase(i);
-          break;
-        }
-    }
+  remove_panel(&old_panel);
   
   // Create the new panel
-  shared_ptr<panels::Panel> new_panel(
-    panelDescriptionList[description_index].create(*this, dock_item));
+  create_panel_by_index(description_index, dock_item);
   g_object_unref(dock_item);
 }
 
@@ -181,7 +173,7 @@ PanelManager::split_panel(panels::Panel &panel,
 {
   // Create the new panel
   const int index = get_panel_type(&panel);
-  shared_ptr<panels::Panel> new_panel = create_panel_by_index(index);
+  panels::Panel *new_panel = create_panel_by_index(index);
   
   // Dock the panel
   GdlDockPlacement placement = GDL_DOCK_NONE;
@@ -226,12 +218,12 @@ PanelManager::get_panel_title(int index)
 void
 PanelManager::create_panels()
 {
-  shared_ptr<panels::Panel> resourcesPanel(
-    create_panel_by_name("ResourcesPanel"));
-  shared_ptr<panels::Panel> viewerPanel(
-    create_panel_by_name("ViewerPanel"));
-  shared_ptr<panels::Panel> timelinePanel(
-    create_panel_by_name("TimelinePanel"));
+  panels::Panel* resourcesPanel =
+    create_panel_by_name("ResourcesPanel");
+  panels::Panel* viewerPanel = 
+    create_panel_by_name("ViewerPanel");
+  panels::Panel* timelinePanel = 
+    create_panel_by_name("TimelinePanel");
     
   gdl_dock_add_item(dock,
     resourcesPanel->get_dock_item(), GDL_DOCK_LEFT);
@@ -258,7 +250,7 @@ PanelManager::find_panel_description(const char* class_name) const
   return -1;
 }
 
-shared_ptr<panels::Panel>
+panels::Panel*
 PanelManager::create_panel_by_index(const int index)
 {
   REQUIRE(index >= 0 && index < get_panel_description_count());
@@ -270,10 +262,17 @@ PanelManager::create_panel_by_index(const int index)
   // Create a dock item
   GdlDockItem *dock_item = GDL_DOCK_ITEM(
     gdl_dock_item_new(name, "", GDL_DOCK_ITEM_BEH_NORMAL));
+    
+  return create_panel_by_index(index, dock_item);
+}
 
+panels::Panel*
+PanelManager::create_panel_by_index(
+  const int index, GdlDockItem *dock_item)
+{
   // Create the panel object
-  shared_ptr<panels::Panel> panel(
-    panelDescriptionList[index].create(*this, dock_item));
+  panels::Panel *panel = 
+    panelDescriptionList[index].create(*this, dock_item);
   ENSURE(panel);
   panel->show_all();
   
@@ -287,7 +286,7 @@ PanelManager::create_panel_by_index(const int index)
   return panel;    
 }
 
-shared_ptr<panels::Panel> 
+panels::Panel*
 PanelManager::create_panel_by_name(const char* class_name)
 { 
   REQUIRE(class_name);
@@ -296,7 +295,7 @@ PanelManager::create_panel_by_name(const char* class_name)
 }
 
 int
-PanelManager::get_panel_type(panels::Panel *panel) const
+PanelManager::get_panel_type(panels::Panel* const panel) const
 {
   REQUIRE(panel);
   
@@ -313,27 +312,40 @@ PanelManager::get_panel_type(panels::Panel *panel) const
 }
 
 void
-PanelManager::on_panel_shown(boost::weak_ptr<panels::Panel> panel_ptr)
+PanelManager::remove_panel(panels::Panel* const panel)
+{
+  REQUIRE(panel);
+  
+  list< panels::Panel* >::iterator i;
+  for(i = panels.begin(); i != panels.end(); i++)
+    {
+      if(*i == panel)
+        {
+          delete panel;
+          panels.erase(i);
+          break;
+        }
+    }
+}
+
+void
+PanelManager::clear_panels()
+{
+  list< panels::Panel* >::iterator i;
+  for(i = panels.begin(); i != panels.end(); i++)
+    delete *i;
+  panels.clear();
+}
+
+void
+PanelManager::on_panel_shown(panels::Panel *panel)
 {  
-  if(panel_ptr.expired())
-    return;
-    
-  shared_ptr<panels::Panel> panel(panel_ptr);
   REQUIRE(panel);
   
   if(panel->is_shown() || panel->is_iconified())
     return;
   
-  // Release the panel
-  list< boost::shared_ptr<panels::Panel> >::iterator i;
-  for(i = panels.begin(); i != panels.end(); i++)
-    {
-      if((*i) == panel)
-        {
-          panels.erase(i);
-          break;
-        }
-    }
+  remove_panel(panel);
 }
 
 }   // namespace workspace
