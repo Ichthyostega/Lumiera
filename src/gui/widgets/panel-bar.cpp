@@ -146,6 +146,10 @@ PanelBar::on_size_request(Gtk::Requisition* requisition)
       requisition->height = max(requisition->height,
         child_requisition.height);
     }
+    
+  const int border_width = get_border_width();
+  requisition->width += border_width * 2;
+  requisition->height += border_width * 2 ;
   
   ENSURE(requisition->width >= 0);
   ENSURE(requisition->height >= 0);
@@ -159,6 +163,8 @@ PanelBar::on_size_allocate(Gtk::Allocation& allocation)
     Requisition requisition;
     Widget *widget;
   };
+  
+  const int border_width = get_border_width();
     
   // Use the offered allocation for this container
   set_allocation(allocation);
@@ -192,10 +198,10 @@ PanelBar::on_size_allocate(Gtk::Allocation& allocation)
       RequestResult &result = requestResults[index];
       
       Gtk::Allocation child_allocation(
-          offset,
-          (allocation.get_height() - result.requisition.height) / 2,
-          min(result.requisition.width, allocation.get_width() - offset),
-          result.requisition.height);
+        offset + border_width,
+        (allocation.get_height() - result.requisition.height) / 2,
+        min(result.requisition.width, allocation.get_width() - offset),
+        result.requisition.height);
                
       offset += result.requisition.width;
       
