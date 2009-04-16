@@ -169,9 +169,10 @@ PanelBar::on_size_allocate(Gtk::Allocation& allocation)
      
       const Requisition child_requisition = widget->size_request();
       const Gtk::Allocation child_allocation(
-          offset, 0,
+          offset,
+          (allocation.get_height() - child_requisition.height) / 2,
           min(child_requisition.width, allocation.get_width() - offset),
-          allocation.get_height());
+          child_requisition.height);
                
       offset += child_requisition.width;
       
