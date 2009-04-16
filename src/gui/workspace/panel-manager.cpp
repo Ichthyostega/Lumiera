@@ -132,7 +132,8 @@ PanelManager::show_panel(const int description_index)
       panels::Panel* const panel = *i;
       if(get_panel_type(panel) == description_index)
         {
-          panel->show();
+          if(!panel->is_shown())
+            panel->show();
           
           GdlDockItem *dock_item = panel->get_dock_item();
           ENSURE(dock_item);
