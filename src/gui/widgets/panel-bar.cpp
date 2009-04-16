@@ -172,10 +172,16 @@ PanelBar::on_size_allocate(Gtk::Allocation& allocation)
           offset, 0,
           min(child_requisition.width, allocation.get_width() - offset),
           allocation.get_height());
-          
+               
       offset += child_requisition.width;
       
-      widget->size_allocate(child_allocation);
+      if(child_allocation.get_width() <= 0)
+        widget->set_child_visible(false);
+      else
+        {
+          widget->size_allocate(child_allocation);        
+          widget->set_child_visible(true);
+        }
     }
   
   // Resize the window
