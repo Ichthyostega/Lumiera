@@ -34,7 +34,7 @@ namespace widgets {
 /**
  * A modified toolbar widget for use in dialogs.
  **/
-class ButtonBar : public Gtk::HBox
+class ButtonBar : public Gtk::Box
 {
 public:
   /**
@@ -59,6 +59,23 @@ public:
     button.signal_clicked().connect(clicked_slot);
     append(button);
   }
+  
+private:
+  /* ===== Overrides ===== */
+
+  /**
+   * An event handler that is called to offer an allocation to this
+   * widget.
+   * @param requisition The area offered for this widget.
+   */
+  void on_size_request(Gtk::Requisition* requisition);
+  
+  /**
+   * An event handler that is called to notify this widget to allocate
+   * a given area for itself.
+   * @param allocation The area to allocate for this widget.
+   */
+  void on_size_allocate(Gtk::Allocation& allocation);
 };
 
 } // gui

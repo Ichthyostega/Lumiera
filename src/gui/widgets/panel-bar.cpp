@@ -39,7 +39,7 @@ namespace gui {
 namespace widgets {
 
 PanelBar::PanelBar(panels::Panel &owner_panel, const gchar *stock_id) :
-  HBox(),
+  Box(),
   panel(owner_panel),
   panelButton(StockID(stock_id)),
   lockItem(NULL)
@@ -127,19 +127,65 @@ PanelBar::on_realize()
 }
 
 void
+PanelBar::on_size_request(Gtk::Requisition* requisition)
+{
+  REQUIRE(requisition);
+    
+  requisition->width = 0;
+  requisition->height = 0;
+  
+  Box::BoxList &list = children();
+  Box::BoxList::const_iterator i;
+  for(i = list.begin(); i != list.end(); i++)
+    {
+      Widget *widget = (*i).get_widget();
+      REQUIRE(widget);
+      
+      Requisition child_requisition = widget->size_request();
+      requisition->width += child_requisition.width;
+      requisition->height = max(requisition->height,
+        child_requisition.height);
+    }
+  
+  ENSURE(requisition->width >= 0);
+  ENSURE(requisition->height >= 0);
+}
+
+void
 PanelBar::on_size_allocate(Gtk::Allocation& allocation)
 {
+  // Use the offered allocation for this container
+  set_allocation(allocation);
+  
+  // Lay out the child widgets
+  int offset = 0;
+  Box::BoxList &list = children();
+  Box::BoxList::const_iterator i;
+  
+  for(i = list.begin(); i != list.end(); i++)
+    {
+      Widget *widget = (*i).get_widget();
+      REQUIRE(widget);
+     
+      const Requisition child_requisition = widget->size_request();
+      const Gtk::Allocation child_allocation(
+          offset, 0,
+          min(child_requisition.width, allocation.get_width() - offset),
+          allocation.get_height());
+          
+      offset += child_requisition.width;
+      
+      widget->size_allocate(child_allocation);
+    }
+  
+  // Resize the window
+  int width = allocation.get_width();
   if(window)
     {
-      const Requisition requisition(get_requisition());
-      const int width = max(min(requisition.width,
-        allocation.get_width()), 0);
+      width = max(min(allocation.get_width(), offset), 0);
       window->move_resize(allocation.get_x(), allocation.get_y(),
         width, allocation.get_height());
     }
-  
-  allocation.set_x(0);
-  HBox::on_size_allocate(allocation);
 }
 
 void
