@@ -154,44 +154,83 @@ PanelBar::on_size_request(Gtk::Requisition* requisition)
 void
 PanelBar::on_size_allocate(Gtk::Allocation& allocation)
 {
+  struct RequestResult
+  {
+    Requisition requisition;
+    Widget *widget;
+  };
+    
   // Use the offered allocation for this container
   set_allocation(allocation);
   
-  // Lay out the child widgets
-  int offset = 0;
+  // Requisition each widget
+  int index = 0;
+  int total_width = 0;
   Box::BoxList &list = children();
   Box::BoxList::const_iterator i;
   
+  const int child_count = list.size();
+  RequestResult *requestResults = new RequestResult[child_count];
+  REQUIRE(requestResults);
+
   for(i = list.begin(); i != list.end(); i++)
     {
       Widget *widget = (*i).get_widget();
       REQUIRE(widget);
-     
-      const Requisition child_requisition = widget->size_request();
-      const Gtk::Allocation child_allocation(
+      
+      RequestResult result = {widget->size_request(), widget};
+      total_width += result.requisition.width;
+      requestResults[index++] = result;
+    }
+
+  total_width = max(min(allocation.get_width(), total_width), 0);
+
+  // Lay out the child widgets
+  int offset = 0;
+  for(index = 0; index < child_count; index++)
+    {     
+      RequestResult &result = requestResults[index];
+      
+      Gtk::Allocation child_allocation(
           offset,
-          (allocation.get_height() - child_requisition.height) / 2,
-          min(child_requisition.width, allocation.get_width() - offset),
-          child_requisition.height);
+          (allocation.get_height() - result.requisition.height) / 2,
+          min(result.requisition.width, allocation.get_width() - offset),
+          result.requisition.height);
                
-      offset += child_requisition.width;
+      offset += result.requisition.width;
+      
+      if(get_direction() == TEXT_DIR_RTL)
+        {
+          child_allocation.set_x(total_width - 
+            child_allocation.get_x() - child_allocation.get_width());
+        }
       
       if(child_allocation.get_width() <= 0)
-        widget->set_child_visible(false);
+        result.widget->set_child_visible(false);
       else
         {
-          widget->size_allocate(child_allocation);        
-          widget->set_child_visible(true);
+          result.widget->size_allocate(child_allocation);        
+          result.widget->set_child_visible(true);
         }
     }
   
+  // Tidy up
+  delete[] requestResults;
+  
   // Resize the window
-  int width = allocation.get_width();
   if(window)
-    {
-      width = max(min(allocation.get_width(), offset), 0);
-      window->move_resize(allocation.get_x(), allocation.get_y(),
-        width, allocation.get_height());
+    {     
+      if(get_direction() != TEXT_DIR_RTL)
+        {
+          window->move_resize(allocation.get_x(), allocation.get_y(),
+            total_width, allocation.get_height());
+        }
+      else
+        {
+          window->move_resize(
+            allocation.get_x() + allocation.get_width() - total_width,
+            allocation.get_y(), total_width, allocation.get_height());
+        }
     }
 }
 

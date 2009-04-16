@@ -85,13 +85,20 @@ ButtonBar::on_size_allocate(Gtk::Allocation& allocation)
       REQUIRE(widget);
      
       const Requisition child_requisition = widget->size_request();
-      const Gtk::Allocation child_allocation(
+      Gtk::Allocation child_allocation(
           allocation.get_x() + offset,
           allocation.get_y(),
           child_requisition.width,
           allocation.get_height());
           
       offset += child_requisition.width;
+      
+      if(get_direction() == TEXT_DIR_RTL)
+        {
+          child_allocation.set_x(
+            2*allocation.get_x() + allocation.get_width() - 
+            child_allocation.get_x() - child_allocation.get_width());
+        }
       
       if(offset > allocation.get_width())
         widget->set_child_visible(false);

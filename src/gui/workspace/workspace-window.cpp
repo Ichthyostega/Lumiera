@@ -78,7 +78,10 @@ WorkspaceWindow::get_panel_manager()
 
 void
 WorkspaceWindow::create_ui()
-{    
+{
+  // RTL Test Code
+  //set_default_direction (TEXT_DIR_RTL);
+   
   //----- Configure the Window -----//
   set_title(GtkLumiera::get_app_title());
   set_default_size(1024, 768);
