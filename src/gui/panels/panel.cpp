@@ -54,9 +54,9 @@ Panel::Panel(workspace::PanelManager &panel_manager,
   gdl_dock_item_grip_set_label(grip, ((Widget&)panelBar).gobj());
     
   // Set up the panel body
-  gtk_container_add ((GtkContainer*)dockItem, (GtkWidget*)gobj());
+  gtk_container_add (GTK_CONTAINER(dockItem), GTK_WIDGET(gobj()));
   
-  gtk_widget_show ((GtkWidget*)dockItem);
+  gtk_widget_show (GTK_WIDGET(dockItem));
   
   // Connect the signals
 	hide_panel_handler_id = g_signal_connect (GTK_OBJECT(dockItem),
@@ -72,6 +72,8 @@ Panel::~Panel()
     gdl_dock_item_get_grip(dockItem));
   gtk_container_remove (GTK_CONTAINER(grip),
     ((Widget&)panelBar).gobj());
+    
+  gtk_container_remove (GTK_CONTAINER(dockItem), GTK_WIDGET(gobj()));
     
   // Detach the signals
   g_signal_handler_disconnect(
