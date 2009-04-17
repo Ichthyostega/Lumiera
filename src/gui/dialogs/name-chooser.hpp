@@ -1,5 +1,5 @@
 /*
-  sequence-ane.hpp  -  Definition of the sequence name dialog
+  name-chooser.cpp  -  Definition of the name chooser dialog object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,12 +20,12 @@
  
 */
 /** @file sequence-name.hpp
- ** This file contains the definition of the sequence name dialog
+ ** This file contains the definition of the name chooser dialog
  **
  */
 
-#ifndef SEQUENCE_NAME_H
-#define SEQUENCE_NAME_H
+#ifndef NAME_CHOOSER_H
+#define NAME_CHOOSER_H
 
 #include "../gtk-lumiera.hpp"
 
@@ -65,4 +65,4 @@ private:
 }   // namespace dialogs
 }   // namespace gui
 
-#endif // SEQUENCE_NAME_H
+#endif // NAME_CHOOSER_H

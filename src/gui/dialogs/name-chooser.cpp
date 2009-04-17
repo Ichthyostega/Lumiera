@@ -1,5 +1,5 @@
 /*
-  render.cpp  -  Definition of the main workspace window object
+  name-chooser.cpp  -  Definition of the name chooser dialog object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
