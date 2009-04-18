@@ -62,6 +62,10 @@ Actions::populate_main_actions(RefPtr<Gtk::UIManager> uiManager)
     mem_fun(*this, &Actions::on_menu_file_new_project));
   actionGroup->add(Action::create("FileOpenProject", Stock::OPEN, _("_Open Project...")),
     mem_fun(*this, &Actions::on_menu_file_open_project));
+  actionGroup->add(Action::create("FileSaveProject", Stock::SAVE, _("_Save Project")),
+    mem_fun(*this, &Actions::on_menu_others));
+  actionGroup->add(Action::create("FileSaveProjectAs", Stock::SAVE_AS, _("_Save Project As...")),
+    mem_fun(*this, &Actions::on_menu_others));
   actionGroup->add(Action::create("FileRender", _("_Render...")),
     AccelKey("<shift>R"),
     mem_fun(*this, &Actions::on_menu_file_render));
@@ -70,6 +74,12 @@ Actions::populate_main_actions(RefPtr<Gtk::UIManager> uiManager)
 
   // Edit menu
   actionGroup->add(Action::create("EditMenu", _("_Edit")));
+  actionGroup->add(Action::create("EditUndo", Stock::UNDO),
+    mem_fun(*this, &Actions::on_menu_others));
+  actionGroup->add(Action::create("EditRedo", Stock::REDO),
+    mem_fun(*this, &Actions::on_menu_others));
+  actionGroup->add(Action::create("EditCut", Stock::CUT),
+    mem_fun(*this, &Actions::on_menu_others));
   actionGroup->add(Action::create("EditCopy", Stock::COPY),
     mem_fun(*this, &Actions::on_menu_others));
   actionGroup->add(Action::create("EditPaste", Stock::PASTE),
@@ -129,12 +139,18 @@ Actions::populate_main_actions(RefPtr<Gtk::UIManager> uiManager)
       "    <menu action='FileMenu'>"
       "      <menuitem action='FileNewProject'/>"
       "      <menuitem action='FileOpenProject'/>"
+      "      <menuitem action='FileSaveProject'/>"
+      "      <menuitem action='FileSaveProjectAs'/>"
       "      <separator/>"
       "      <menuitem action='FileRender'/>"
       "      <separator/>"
       "      <menuitem action='FileQuit'/>"
       "    </menu>"
       "    <menu action='EditMenu'>"
+      "      <menuitem action='EditUndo'/>"
+      "      <menuitem action='EditRedo'/>"
+      "      <separator/>"
+      "      <menuitem action='EditCut'/>"
       "      <menuitem action='EditCopy'/>"
       "      <menuitem action='EditPaste'/>"
       "      <separator/>"
@@ -162,6 +178,14 @@ Actions::populate_main_actions(RefPtr<Gtk::UIManager> uiManager)
       "  <toolbar  name='ToolBar'>"
       "    <toolitem action='FileNewProject'/>"
       "    <toolitem action='FileOpenProject'/>"
+      "    <toolitem action='FileSaveProject'/>"
+      "    <separator/>"
+      "    <toolitem action='EditUndo'/>"
+      "    <toolitem action='EditRedo'/>"
+      "    <separator/>"
+      "    <toolitem action='EditCut'/>"
+      "    <toolitem action='EditCopy'/>"
+      "    <toolitem action='EditPaste'/>"
       "  </toolbar>"
       "</ui>";
 
