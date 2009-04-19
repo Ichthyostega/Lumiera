@@ -780,7 +780,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BuildDependenceis" modifier="Ichthyostega" modified="200902160555" created="200708120103" tags="organization buildsys" changecount="20">
+<div title="BuildDependenceis" modifier="Ichthyostega" modified="200904192357" created="200708120103" tags="organization buildsys" changecount="22">
 <pre>for __Building__
 * gcc (4.1), glibc6 (2.3), libstdc++6 (4.1)
 * [[build system|BuildSystem]] dependencies: SCons (0.96.90), Python (2.4), pkg-config
@@ -797,9 +797,8 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 * for the GUI: gtkmm-2.4 gdl-1.0 libglibmm-2.4 cairomm-1.0 xv
 ** libgtkmm-2.4-dev (&gt;=2.8)
 ** libcairomm-1.0-dev (&gt;=0.6.0)
-** libgdl-1-dev (&gt;=0.6.1)
+** libgdl-lum-dev or libgdl-1-dev (&gt;=2.27.1)
 *** libglade2-dev (&gt;=2.6)
-*** libbonoboui2-dev (&gt;=2.14.0)
 *** libxml2-dev (&gt;=2.6)
 ** libglibmm-2.4-dev (&gt;=2.16), requiring glib2.0 (&gt;=2.16) and gthread-2.0 (&gt;=2.12.4)
 ** libxv-dev (&gt;=1.0.2)
@@ -808,6 +807,9 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 //usually, newer versions are OK//
 
 boost 1.35 works too.
+
+We use the GNOME Docking Library (GDL) within the Lumiera GTK GUI. As we actively participate in GDL development, we depend on a much more recent version, than most distos provide. We maintain a custom debian package (and source tree of GDL) which builds a {{{libgdl-lum.so}}}, in order to avoid side effects on other software. You may grab the tree including the Debian source package structure from [[our git|http://git.lumiera.org/gitweb?p=gdl-package;a=shortlog;h=refs/heads/debLumiera]] and create a binary Debian (or Ubuntu) package. For non-Debian systems, you may use the same build tree just in the standard way (configure, make, make install) to install into {{{/usr/local/lib/libgdl-lum.so}}}. Alternatively you may of course always just use a recent snapshot of GDL and build and install it as usual &amp;mdash; but doing so may cause other software on your system to use this bleeding edge version of GDL too.
+
 
 for __Running__</pre>
 </div>
