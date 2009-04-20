@@ -24,7 +24,7 @@
 #include "../gtk-lumiera.hpp"
 #include "../workspace/panel-manager.hpp"
 #include "../workspace/workspace-window.hpp"
-#include <libgdl-1.0/gdl/gdl-dock-item-grip.h>
+#include <gdl/gdl-dock-item-grip.h>
 
 using namespace Gtk;
 

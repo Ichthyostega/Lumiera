@@ -747,7 +747,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BuildDependencies" modifier="Ichthyostega" modified="200902160555" created="200803261326" changecount="17">
+<div title="BuildDependencies" modifier="Ichthyostega" modified="200904192357" created="200803261326" changecount="18">
 <pre>! Programming Languages
 * C
 ** a C99 compatible compiler, some GCC extensions are used, most are optional.
@@ -785,18 +785,18 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 * for the GUI: gtkmm-2.4 gdl-1.0 libglibmm-2.4 cairomm-1.0 xv
 ** libgtkmm-2.4-dev (&gt;=2.8)
 ** libcairomm-1.0-dev (&gt;=0.6.0)
-** libgdl-1-dev (&gt;=0.6.1)
+** libgdl-lum-dev or libgdl-1-dev (&gt;=2.27.1)
 *** libglade2-dev (&gt;=2.6)
-*** libbonoboui2-dev (&gt;=2.14.0)
 *** libxml2-dev (&gt;=2.6)
 ** libglibmm-2.4-dev (&gt;=2.16), requiring glib2.0 (&gt;=2.16) and gthread-2.0 (&gt;=2.12.4)
 ** libxv-dev ~~(1.0.2 is known to work)~~
 * for rendering the icons: librsvg-2.0 
 ** librsvg2-dev (&gt;= 2.18)
-//usually, newer versions are OK//
-
 
 //usually, newer versions are OK//
+
+! Special Library requirements
+We use the GNOME Docking Library (GDL) within the Lumiera GTK GUI. As we actively participate in GDL development, we depend on a much more recent version, than most distos provide. We maintain a custom debian package (and source tree of GDL) which builds a {{{libgdl-lum.so}}}, in order to avoid side effects on other software. You may grab the tree including the Debian source package structure from [[our git|http://git.lumiera.org/gitweb?p=gdl-package;a=shortlog;h=refs/heads/debLumiera]] and create a binary Debian (or Ubuntu) package. For non-Debian systems, you may use the same build tree just in the standard way (configure, make, make install) to install into {{{/usr/local/lib/libgdl-lum.so}}}. Alternatively you may of course always just use a recent snapshot of GDL and build and install it as usual &amp;mdash; but doing so may cause other software on your system to use this bleeding edge version of GDL too.
 
 </pre>
 </div>

@@ -63,7 +63,7 @@ class LumieraEnvironment(Environment):
         return self
     
     
-    def addLibInfo (self, libID, minVersion=0):
+    def addLibInfo (self, libID, minVersion=0, alias=None):
         """ use pkg-config to create an Environment describing the lib.
             Don't add this defs to the current Environment, rather store
             them in the libInfo Dictionary. 
@@ -73,8 +73,10 @@ class LumieraEnvironment(Environment):
             print "Problems configuring the Library %s (>= %s)" % (libID,minVersion)
             return False
         
-        self.libInfo[libID] = libInfo = LumieraEnvironment() 
+        self.libInfo[libID] = libInfo = LumieraEnvironment()
         libInfo.ParseConfig ('pkg-config --cflags --libs '+ libID )
+        if alias:
+            self.libInfo[alias] = libInfo
         return libInfo
     
     def Glob (self, pattern):
@@ -107,9 +109,9 @@ class LumieraConfigContext(ConfigBase):
     def __init__(self, *args,**kw):
         ConfigBase.__init__(self,*args,**kw)
     
-    def CheckPkgConfig (self, libID, minVersion=0):
+    def CheckPkgConfig (self, libID, minVersion=0, alias=None):
         print "Checking for library configuration: %s " % libID
         # self.Message(self,"Checking for library configuration: %s " % libID)
-        return self.env.addLibInfo (libID, minVersion)
+        return self.env.addLibInfo (libID, minVersion, alias)
 
 

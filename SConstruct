@@ -263,8 +263,12 @@ def configurePlatform(env):
     if not conf.CheckPkgConfig('cairomm-1.0', 0.6):
         problems.append('Unable to configure Cairo--, exiting.')
     
-    if not conf.CheckPkgConfig('gdl-1.0', '0.6.1'):
-        problems.append('Unable to configure the GNOME DevTool Library.')
+    verGDL = '2.27.1'
+    if not conf.CheckPkgConfig('gdl-lum', verGDL, alias='gdl'):
+        print 'Custom package "gdl-lum" not found. Trying official GDL release >=%s...' % verGDL
+        if not conf.CheckPkgConfig('gdl-1.0', verGDL, alias='gdl'):
+            problems.append('GNOME Docking Library not found. We either need a very recent GDL '
+                            'version (>=%s), or the custom package "gdl-lum".' % verGDL)
     
     if not conf.CheckPkgConfig('librsvg-2.0', '2.18.1'):
         problems.append('Need rsvg Library for rendering icons.')
@@ -351,7 +355,7 @@ def defineBuildTargets(env, artifacts):
     
     # the Lumiera GTK GUI
     envGtk = env.Clone()
-    envGtk.mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','xv','xext','sm'])
+    envGtk.mergeConf(['gtkmm-2.4','cairomm-1.0','gdl','xv','xext','sm'])
     envGtk.Append(CPPDEFINES='LUMIERA_PLUGIN', LIBS=core)
     
     objgui  = srcSubtree(envGtk,'$SRCDIR/gui')
