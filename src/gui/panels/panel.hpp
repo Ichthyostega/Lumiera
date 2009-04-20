@@ -28,7 +28,7 @@
 #define PANEL_HPP
 
 #include "../gtk-lumiera.hpp"
-#include <libgdl-1.0/gdl/gdl-dock-item.h>
+#include <gdl/gdl-dock-item.h>
 
 #include "../widgets/panel-bar.hpp"
 

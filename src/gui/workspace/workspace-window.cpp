@@ -26,11 +26,11 @@
 #  include <libintl.h>
 #endif
 
-#include <libgdl-1.0/gdl/gdl-tools.h>
-#include <libgdl-1.0/gdl/gdl-dock.h>
-#include <libgdl-1.0/gdl/gdl-dock-item.h>
-#include <libgdl-1.0/gdl/gdl-dock-placeholder.h>
-#include <libgdl-1.0/gdl/gdl-dock-bar.h>
+#include <gdl/gdl-tools.h>
+#include <gdl/gdl-dock.h>
+#include <gdl/gdl-dock-bar.h>
+#include <gdl/gdl-dock-item.h>
+#include <gdl/gdl-dock-placeholder.h>
 
 #include "../gtk-lumiera.hpp"
 #include "workspace-window.hpp"

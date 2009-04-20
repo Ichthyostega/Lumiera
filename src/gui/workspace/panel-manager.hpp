@@ -28,7 +28,7 @@
 #ifndef PANEL_MANAGER_HPP
 #define PANEL_MANAGER_HPP
 
-#include <libgdl-1.0/gdl/gdl.h>
+#include <gdl/gdl.h>
 #include <typeinfo>
 
 #include "../panels/panel.hpp"
