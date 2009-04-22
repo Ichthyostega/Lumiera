@@ -145,9 +145,14 @@ PKG_CHECK_MODULES(LUMIERA_GUI, [
     gtkmm-2.4 >= 2.14
     cairomm-1.0 >= 0.6.0
     librsvg-2.0 >= 2.18.1
-    gdl-1.0 >= 2.27.1
     gavl >= 0.2.5
     gthread-2.0 >= 2.12.4])
+
+# Check for gdl-1.0 with a gdl-lum fallback
+PKG_CHECK_MODULES(GDL, gdl-1.0 >= 2.27.1, ,
+    [PKG_CHECK_MODULES(GDL, gdl-lum >= 2.27.1) ])
+LUMIERA_GUI_CFLAGS="$LUMIERA_GUI_CFLAGS $GDL_CFLAGS"
+LUMIERA_GUI_LIBS="$LUMIERA_GUI_LIBS $GDL_LIBS"
 
 # END Gtk Dependancies
 
@@ -177,9 +182,8 @@ AC_CHECK_LIB(Xv, XvQueryAdaptors, [LUMIERA_GUI_LIBS="$LUMIERA_GUI_LIBS -lXv"],
 
 AC_SUBST(LUMIERA_COMMON_LIBS)
 AC_SUBST(LUMIERA_PLUGIN_LIBS)
-AC_SUBST(LUMIERA_GUI_CFLAGS)
 AC_SUBST(LUMIERA_GUI_LIBS)
-
+AC_SUBST(LUMIERA_GUI_CFLAGS)
 
 ############## Nobug Dependancies
 PKG_CHECK_MODULES(NOBUG_LUMIERA, [nobug >= 0.3rc1],
