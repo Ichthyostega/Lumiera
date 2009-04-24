@@ -142,7 +142,7 @@ PKG_CHECK_MODULES(LUMIERA_COMMON_LIBS, [sigc++-2.0 >= 2.0.17])
 
 PKG_CHECK_MODULES(LUMIERA_GUI, [
     gtk+-2.0 >= 2.8
-    gtkmm-2.4 >= 2.14
+    gtkmm-2.4 >= 2.12
     cairomm-1.0 >= 0.6.0
     librsvg-2.0 >= 2.18.1
     gavl >= 0.2.5
