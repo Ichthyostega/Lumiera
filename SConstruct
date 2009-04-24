@@ -93,10 +93,10 @@ def setupBasicEnvironment():
     appendVal(env,'DEBUG',    'CCFLAGS',   val=' -ggdb')
     
     # setup search path for Lumiera plugins
-    appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR\\"'
-                                   ,'LUMIERA_PLUGIN_PATH=\\"$DESTDIR/lib/lumiera\\"') 
-    appendCppDefine(env,'PKGDATADIR','LUMIERA_CONFIG_PATH=\\"$PKGLIBDIR\\"'
-                                    ,'LUMIERA_CONFIG_PATH=\\"$DESTDIR/share/lumiera\\"') 
+    appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR/:./.libs\\"'
+                                   ,'LUMIERA_PLUGIN_PATH=\\"$DESTDIR/lib/lumiera/:./.libs\\"') 
+    appendCppDefine(env,'PKGDATADIR','LUMIERA_CONFIG_PATH=\\"$PKGLIBDIR/:.\\"'
+                                    ,'LUMIERA_CONFIG_PATH=\\"$DESTDIR/share/lumiera/:.\\"') 
     
     prepareOptionsHelp(opts,env)
     opts.Save(OPTIONSCACHEFILE, env)
@@ -257,14 +257,18 @@ def configurePlatform(env):
     if not conf.CheckPkgConfig('glibmm-2.4', '2.16'):
         problems.append('Unable to configure Lib glib--, exiting.')
     
-    if not conf.CheckPkgConfig('gthread-2.0', '2.16'):
+    if not conf.CheckPkgConfig('gthread-2.0', '2.12.4'):
         problems.append('Need gthread support lib for glib-- based thread handling.')
     
     if not conf.CheckPkgConfig('cairomm-1.0', 0.6):
         problems.append('Unable to configure Cairo--, exiting.')
     
-    if not conf.CheckPkgConfig('gdl-1.0', '0.6.1'):
-        problems.append('Unable to configure the GNOME DevTool Library.')
+    verGDL = '2.27.1'
+    if not conf.CheckPkgConfig('gdl-lum', verGDL, alias='gdl'):
+        print 'Custom package "gdl-lum" not found. Trying official GDL release >=%s...' % verGDL
+        if not conf.CheckPkgConfig('gdl-1.0', verGDL, alias='gdl'):
+            problems.append('GNOME Docking Library not found. We either need a very recent GDL '
+                            'version (>=%s), or the custom package "gdl-lum".' % verGDL)
     
     if not conf.CheckPkgConfig('librsvg-2.0', '2.18.1'):
         problems.append('Need rsvg Library for rendering icons.')
@@ -340,13 +344,6 @@ def defineBuildTargets(env, artifacts):
     envPlu.Append(CPPDEFINES='LUMIERA_PLUGIN')
     artifacts['plugins'] = [] # currently none 
     
-    
-    # the Lumiera GTK GUI
-    envGtk = env.Clone()
-    envGtk.mergeConf(['gtkmm-2.4','cairomm-1.0','gdl-1.0','librsvg-2.0','xv','xext','sm'])
-    envGtk.Append(CPPDEFINES='LUMIERA_PLUGIN', LIBS=core)
-    objgui  = srcSubtree(envGtk,'$SRCDIR/gui')
-    
     # render and install Icons
     vector_icon_dir      = env.subst('$ICONDIR/svg')
     prerendered_icon_dir = env.subst('$ICONDIR/prerendered')
@@ -354,15 +351,20 @@ def defineBuildTargets(env, artifacts):
                            + [env.IconCopy(f)   for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
                            )
     
-    guimodule = envGtk.LoadableModule('$LIBDIR/gtk_gui', objgui, SHLIBPREFIX='', SHLIBSUFFIX='.lum')
-    artifacts['lumigui'] = ( guimodule
-                           + envGtk.Program('$BINDIR/lumigui', objgui )
-                           + env.Install('$BINDIR', env.Glob('$SRCDIR/gui/*.rc'))
-                           + artifacts['icons']
-                           )
+    # the Lumiera GTK GUI
+    envGtk = env.Clone()
+    envGtk.mergeConf(['gtkmm-2.4','cairomm-1.0','gdl','xv','xext','sm'])
+    envGtk.Append(CPPDEFINES='LUMIERA_PLUGIN', LIBS=core)
     
+    objgui  = srcSubtree(envGtk,'$SRCDIR/gui')
+    guimodule = envGtk.LoadableModule('$LIBDIR/gtk_gui', objgui, SHLIBPREFIX='', SHLIBSUFFIX='.lum')
+    artifacts['gui'] = ( guimodule
+                       + env.Install('$BINDIR', env.Glob('$SRCDIR/gui/*.rc'))
+                       + artifacts['icons']
+                       )
+
     # call subdir SConscript(s) for independent components
-    SConscript(dirs=[SRCDIR+'/tool'], exports='env envGtk artifacts core')
+    SConscript(dirs=[SRCDIR+'/tool'], exports='env        artifacts core')
     SConscript(dirs=[TESTDIR],        exports='env envPlu artifacts core')
 
 
@@ -375,7 +377,7 @@ def definePostBuildTargets(env, artifacts):
     il = env.Alias('install-lib', '$DESTDIR/lib')
     env.Alias('install', [ib, il])
     
-    build = env.Alias('build', artifacts['lumiera']+artifacts['lumigui']+artifacts['plugins']+artifacts['tools'])
+    build = env.Alias('build', artifacts['lumiera']+artifacts['gui']+artifacts['plugins']+artifacts['tools'])
     allbu = env.Alias('allbuild', build+artifacts['testsuite'])
     env.Default('build')
     # additional files to be cleaned when cleaning 'build'
@@ -416,6 +418,7 @@ artifacts = {}
 # Each entry actually is a SCons-Node list.
 # Passing these entries to other builders defines dependencies.
 # 'lumiera'     : the App
+# 'gui'         : the GTK UI (plugin)
 # 'plugins'     : plugin shared lib
 # 'tools'       : small tool applications (e.g mpegtoc)
 # 'src,tar'     : source tree as tarball (without doc)

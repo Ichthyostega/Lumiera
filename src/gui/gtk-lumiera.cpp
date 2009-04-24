@@ -54,6 +54,7 @@ namespace gui {
 void
 GtkLumiera::main(int argc, char *argv[])
 {
+  Glib::thread_init();
 
   Main kit(argc, argv);
   

@@ -19,6 +19,13 @@
    inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <defs
      id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 50 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="150 : 50 : 1"
+       inkscape:persp3d-origin="75 : 33.333333 : 1"
+       id="perspective59" />
     <linearGradient
        inkscape:collect="always"
        id="linearGradient10554">
@@ -185,7 +192,7 @@
        xlink:href="#linearGradient10554"
        id="linearGradient7986"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.7041896,0,0,0.7041896,-40.406443,-220.43015)"
+       gradientTransform="matrix(0.7041896,0,0,0.7041896,-41.406433,-220.43017)"
        x1="240.9062"
        y1="425.18195"
        x2="248.28683"
@@ -195,7 +202,7 @@
        xlink:href="#linearGradient124"
        id="radialGradient7989"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.5869533,0,0,0.8448423,-51.871574,-221.82034)"
+       gradientTransform="matrix(0.5869533,0,0,0.8448423,-52.871564,-221.82036)"
        cx="307.7507"
        cy="361.47824"
        fx="307.7507"
@@ -206,7 +213,7 @@
        xlink:href="#linearGradient124"
        id="linearGradient7992"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.559542,1.292457,-0.3231142,0.1398855,-51.871571,-221.82034)"
+       gradientTransform="matrix(0.559542,1.292457,-0.3231142,0.1398855,-52.871561,-221.82036)"
        x1="253.75711"
        y1="-129.52815"
        x2="252.00447"
@@ -222,9 +229,9 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="5.6568545"
-     inkscape:cx="67.786397"
-     inkscape:cy="10.056284"
+     inkscape:zoom="22.627418"
+     inkscape:cx="121.33645"
+     inkscape:cy="16.380045"
      inkscape:document-units="px"
      inkscape:current-layer="layer3"
      showgrid="true"
@@ -294,22 +301,22 @@
        sodipodi:nodetypes="ccccc" />
     <path
        id="path14451"
-       d="M 128.49999,77.500022 L 128.49999,88.500022 L 131.49999,86.500022 L 133.49999,90.500022 L 135.49999,89.500022 L 133.49999,85.500022 L 136.49999,85.500022 L 128.49999,77.500022 z"
+       d="M 127.5,77.5 L 127.5,88.5 L 130.5,86.5 L 132.5,90.5 L 134.5,89.5 L 132.5,85.5 L 135.5,85.5 L 127.5,77.5 z"
        style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#555753;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        sodipodi:nodetypes="cccccccc" />
     <path
        style="fill:url(#linearGradient7992);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.24999988;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1"
-       d="M 132.00799,83.448274 L 133.59102,84.965162 L 133.0687,85.76811 L 134.8336,89.279979 L 133.71007,89.835652 L 132.00919,86.369947 L 131.22922,86.090464 L 131.04078,83.859018 L 132.00799,83.448274 z"
+       d="M 131.008,83.448252 L 132.59103,84.96514 L 132.06871,85.768088 L 133.83361,89.279957 L 132.71008,89.83563 L 131.0092,86.369925 L 130.22923,86.090442 L 130.04079,83.858996 L 131.008,83.448252 z"
        id="path14453"
        sodipodi:nodetypes="ccccccccc" />
     <path
        sodipodi:nodetypes="ccccc"
        id="path14455"
-       d="M 135.29013,84.99752 L 132.85569,84.999865 L 129.00416,87.559739 L 129.00329,78.735163 L 135.29013,84.99752 z"
+       d="M 134.29014,84.997498 L 131.8557,84.999843 L 128.00417,87.559717 L 128.0033,78.735141 L 134.29014,84.997498 z"
        style="fill:url(#radialGradient7989);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1" />
     <path
        style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:url(#linearGradient7986);stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;display:inline"
-       d="M 134.09791,84.503528 L 132.63635,84.542245 L 129.51177,86.639535 L 129.50564,79.893544 L 134.09791,84.503528 z"
+       d="M 133.09792,84.503506 L 131.63636,84.542223 L 128.51178,86.639513 L 128.50565,79.893522 L 133.09792,84.503506 z"
        id="path14457"
        sodipodi:nodetypes="ccccc" />
     <g
@@ -372,7 +379,8 @@
        inkscape:groupmode="layer"
        id="layer4"
        inkscape:label="plate#1"
-       style="display:none">
+       style="display:none"
+       sodipodi:insensitive="true">
       <rect
          y="69"
          x="97"
