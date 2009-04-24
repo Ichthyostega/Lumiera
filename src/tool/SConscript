@@ -8,7 +8,7 @@ Import('env','artifacts','core')
 support_lib = artifacts['support']
 
 envSvg = env.Clone()
-envSvg.mergeConf(['librsvg-2.0'])
+envSvg.mergeConf(['librsvg-2.0','gthread-2.0'])
 envSvg.Append(LIBS=support_lib)
 
 
@@ -19,7 +19,7 @@ rsvg    = envSvg.Program('#$BINDIR/rsvg-convert','rsvg-convert.c')          ## f
 # build additional test and administrative tools....
 artifacts['tools'] = [ env.Program('#$BINDIR/hello-world','hello.c')      #### hello world (checks C build)      
                      + env.Program('#$BINDIR/try', 'try.cpp')             #### to try out some feature...
-                     + luidgen
+#                    + luidgen
                      + vgsuppr
                      + rsvg
                      ]
