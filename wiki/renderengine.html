@@ -1394,9 +1394,10 @@ Thus, the Proc-Layer exposes (one or several) facade interfaces for the GUI to u
 <pre>special LayerSeparationInterface which serves the main purpose to load the GuiStarterPlugin, thus bringing up the Lumiera GTK UI at application start.
 </pre>
 </div>
-<div title="GuiIntegration" modifier="Ichthyostega" modified="200901300207" created="200812050532" tags="overview" changecount="2">
+<div title="GuiIntegration" modifier="Ichthyostega" modified="200904242106" created="200812050532" tags="overview" changecount="3">
 <pre>Considering how to interface to and integrate with the GUI Layer. Running the GUI is //optional,// but it requires to be [[started up|GuiStart]], installing the necessary LayerSeparationInterfaces. As an example how to integrate the GUI with the lower layers, in 1/2009 we created an PlayerDummy, which &quot;pulls&quot; dummy frames from the (not yet existing) engine and displays them within an XV viewer widget.
-</pre>
+
+Probably the most important aspect regarding the GUI integration is how to get [[access to and operate on the Session|SessionInterface]]. More specifically, this includes [[referring to individual objects|MObjectRef]].</pre>
 </div>
 <div title="GuiNotificationFacade" modifier="Ichthyostega" created="200902080659" tags="spec" changecount="1">
 <pre>LayerSeparationInterface provided by the GUI.
@@ -1916,6 +1917,18 @@ The general idea is, that each facade interface actually provides access to a sp
 * the media object has a duration
 * it is allways //placed// in some manner, i.e. it is allways accessed via a [[Placement]]
 * {{red{and what else?}}}
+</pre>
+</div>
+<div title="MObjectRef" modifier="Ichthyostega" modified="200904242128" created="200904242107" tags="SessionLogic GuiIntegration design draft discuss" changecount="5">
+<pre>''The Problem of referring to an [[MObject]]'' stems from the object //as a concept// encompassing a wider scope then just the current implementation instance. If the object was just a runtime entity in memory, we could use a simple (language) reference or pointer. Actually, this isn't sufficient, as the object reference will pass LayerSeparationInterfaces, will be handed over to code not written in the same implementation language, will be included in an ''UNDO'' record for the UndoManager, and thus will need to be serialized and stored permanently within the SessionStorage.
+
+{{red{WIP}}}
+
+!Two models
+* simple table index. Consequently will need a garbage collection to deal with deleted objects. This model has two flavours
+** using an generation id to tag the index handle, keep an translation table on each gc, mapping old indices to new ones and throw an exception when encountering an outdated handle
+** keep track of all index handles to rewrite them on gc
+* handles are refcounting smart pointers. This solution is C++ specific, albeit more elegant and minimalistic. As all important interfaces should be accessible via C bindings, we'd need to use a replacement mechanism on the LayerSeparationInterfaces, which could be mapped to or handled by an C++ smart-ptr.
 </pre>
 </div>
 <div title="MObjects" modifier="Ichthyostega" modified="200810180118" created="200706190636" tags="overview" changecount="10">
@@ -3401,6 +3414,12 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 * a ''current EDL'', which can be switched and accessed {{red{TODO not sure if I keep this design...}}}
 * a collection of ''global Pipes''
 * the ''Fixture'' with a possibility to [[(re)build it|PlanningBuildFixture]]</pre>
+</div>
+<div title="SessionInterface" modifier="Ichthyostega" modified="200904242109" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="2">
+<pre>{{red{WIP}}}</pre>
+</div>
+<div title="SessionLogic" modifier="Ichthyostega" modified="200904242111" created="200904242110" tags="overview" changecount="2">
+<pre>!Design and handling of the Session</pre>
 </div>
 <div title="SessionOverview" modifier="Ichthyostega" modified="200811011805" created="200709272105" tags="design" changecount="29">
 <pre>&lt;&lt;&lt;
@@ -4974,7 +4993,7 @@ Matters are quite different for the placement of a Track within the tree of trac
 * obviously, one wants the __edit function__ used to create such an overlapping placement&amp;nbsp; also to create an [[transition|TransitionsHandling]] between the overlapping objects. Meaning this edit function will automatically create an transition processor object and provide it with a placement such as to attach it to the region of overlap.
 </pre>
 </div>
-<div title="TrackPipeEDL" modifier="Ichthyostega" modified="200801062328" created="200711300405" tags="design discuss def decision Builder" changecount="26">
+<div title="TrackPipeEDL" modifier="Ichthyostega" modified="200904242058" created="200711300405" tags="design discuss def decision Builder" changecount="27">
 <pre>''towards a definition of »Track«''. We don't want to tie ourself to some naive and overly simplistic definition, just because it is convenient. For classical (analogue) media, tracks are physical entities dictated by the nature of the process by which the media works. Especially, Tape machines have read/writing heads, which creates fixed tracks to which to route the signals. This is a practical geometric necessity. For digital media, there is no such necessity. We are bound primarily by the editor's habits of working.
 
 !!!Assessment of Properties
@@ -4982,7 +5001,7 @@ Media are used as Clips (contiguous chunks), they are a compound of several elem
 * a media stream may be sent to one of several possible output destinations (image or sound, subgroup busses, MIDI instruments)
 * for any given output destination there may be variations in the //way of connecting// (overlay mode and layer, pan position, MIDI channel)
 * besides, we often just want to stash away some clip without using it, e.g. as an alternative or for later referral
-This is to say we have //several degrees of freedom// within this organisational grid. It's not because some sound is located on this track that he will be sent to a given output, but the clip is located on this track //and// is connected to that output //and// &amp;mdash; supposed we have full-periphonic surround sound &amp;mdash; it is located 60° to the right and 30°. Combined with the (always contiguous) temporal dimension, this discrete grid is thus extruded to form something like discrete Tracks.
+This is to say we have //several degrees of freedom// within this organisational grid. Just because some sound is located on this track doesn't mean he will be sent to a given output, rather the clip is located on this track //and// is connected to that output //and// &amp;mdash; supposed we have full-periphonic surround sound &amp;mdash; it is located 60° to the right and with 30° elevation. Combined with the (always contiguous) temporal dimension, this discrete grid is thus extruded to form something like discrete Tracks.
 
 !!!do we really need Tracks?
 Starting with the assumption &quot;everything is just connected processing nodes&quot;, Tracks may seem superfluous. The problem with this approach is: it doesn't scale well. While it is fine to be able to connect clips and effects as we see fit (indeed, we want to build such a system), it is clearly not feasible to wire every clip manually to the output ports or add a panner effect to each and every audio sample. Because while editing, most of the time things are done in a fairly regular and systematic manner. Preferably we use the tracks as //preconfigured group setup// and just //place media onto them;// any such [[Placement]] can do the necessary wiring semi-automatic (rule-based).
