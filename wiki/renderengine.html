@@ -1466,7 +1466,7 @@ Besides routing to a global pipe, wiring plugs can also connect to the source po
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200902080723" created="200708080322" tags="overview" changecount="31">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200904252305" created="200708080322" tags="overview" changecount="33">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1488,6 +1488,7 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * the relation of [[Project, Timelines and Sequences|TimelineSequences]]
 * how to [[start the GUI|GuiStart]] and how to [[communicate|GuiCommunication]]
 * build the first LayerSeparationInterfaces
+* decide on SessionInterface and create [[Session datastructure layout|SessionDataMem]]
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200711210542" created="200711210531" tags="discuss draft" changecount="7">
@@ -1919,16 +1920,18 @@ The general idea is, that each facade interface actually provides access to a sp
 * {{red{and what else?}}}
 </pre>
 </div>
-<div title="MObjectRef" modifier="Ichthyostega" modified="200904242128" created="200904242107" tags="SessionLogic GuiIntegration design draft discuss" changecount="5">
+<div title="MObjectRef" modifier="Ichthyostega" modified="200904252227" created="200904242107" tags="SessionLogic GuiIntegration design draft discuss" changecount="7">
 <pre>''The Problem of referring to an [[MObject]]'' stems from the object //as a concept// encompassing a wider scope then just the current implementation instance. If the object was just a runtime entity in memory, we could use a simple (language) reference or pointer. Actually, this isn't sufficient, as the object reference will pass LayerSeparationInterfaces, will be handed over to code not written in the same implementation language, will be included in an ''UNDO'' record for the UndoManager, and thus will need to be serialized and stored permanently within the SessionStorage.
 
 {{red{WIP}}}
 
 !Two models
-* simple table index. Consequently will need a garbage collection to deal with deleted objects. This model has two flavours
-** using an generation id to tag the index handle, keep an translation table on each gc, mapping old indices to new ones and throw an exception when encountering an outdated handle
+For the implementation of the object references, as linked to the memory management in general, there seem to be the following approaches
+* the handle is a simple table index. Consequently will need a garbage collection to deal with deleted objects. This model has several flavours
+** using an generation ID to tag the index handle, keep an translation table on each gc, mapping old indices to new ones and raise an error when encountering an outdated handle
+** use a specific datastructure which allows the handles to remain valid in case of cleanup/reorganisation. (Hashtable or similar)
 ** keep track of all index handles to rewrite them on gc
-* handles are refcounting smart pointers. This solution is C++ specific, albeit more elegant and minimalistic. As all important interfaces should be accessible via C bindings, we'd need to use a replacement mechanism on the LayerSeparationInterfaces, which could be mapped to or handled by an C++ smart-ptr.
+* handles are refcounting smart pointers. This solution is C++ specific, albeit more elegant and minimalistic. As all important interfaces should be accessible via C bindings, we'd need to use a replacement mechanism on the LayerSeparationInterfaces, which could be mapped to or handled by an C++ smart-ptr. (We did similar for the PlayerDummy design study)
 </pre>
 </div>
 <div title="MObjects" modifier="Ichthyostega" modified="200810180118" created="200706190636" tags="overview" changecount="10">
@@ -2872,6 +2875,38 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
+<div title="PlanningSessionInMem" modifier="Ichthyostega" modified="200904252308" created="200904252258" tags="impl SessionLogic draft" changecount="2">
+<pre>//This page is a scrapbook for working out the implementation of the [[Session Datastructure in Memory|SessionDataMem]]//
+This is a difficult untertaking, because there are several dependencies (most of which aren't fully designed yet as of 5/09)
+* the GUI uses an adapted version of the HighLevelModel; these datastructures are intended to be backed by the Session
+* of course, the structure of the HighLevelModel itself creates constraints on the session's data handling
+* the persistent SessionStorage depends on the requirements of the session in memory
+* the (currently as of 1/09 just half-way designed) [[Builder]] relies heavily on the data within the session.
+
+!!!requirements
+* can discover and ennumerate the structure
+* can ennumerate the contents (objects) of a specific scope
+* provide [[references|MObjectRef]] on these query/discovery operations
+
+!!!invariants
+* memory management consistency
+* support ongoing render processes
+* {{red{TODO: hrmpf}}}
+
+&lt;&lt;tasksum start&gt;&gt;
+&lt;&lt;taskadder below&gt;&gt;
+&lt;&lt;task &gt;&gt; define the general structure of operations
+&lt;&lt;task &gt;&gt; specify the editing operations
+
+!Interface
+&lt;&lt;task&gt;&gt;evaluate models for the [[reference problem|MObjectRef]]
+
+!Datastructure
+&lt;&lt;task&gt;&gt;investigate the best granularity for object collections
+
+&lt;&lt;tasksum end&gt;&gt;
+</pre>
+</div>
 <div title="PlayerDummy" modifier="Ichthyostega" modified="200902090408" created="200901300209" tags="GuiIntegration dynamic" changecount="16">
 <pre>__Joelholdsworth__ and __Ichthyo__ created this player mockup in 1/2009 to find out about the implementation details regarding integration and colaboration between the layers. There is no working render engine yet, thus we use a ~DummyImageGenerator for creating faked yuv frames to display. Within the GUI, there is a ~PlaybackController hooked up with the transport controls on the timeline pane.
 # first everything was contained within ~PlaybackController, which spawns a thread for periodically creating those dummy frames
@@ -3405,7 +3440,7 @@ Rendering can be seen as a passive service available to the Backend, which remai
 <div title="STypeManager" modifier="Ichthyostega" created="200809220230" changecount="1">
 <pre>A facility allowing the Proc-Layer to work with abstracted [[media stream types|StreamType]], linking (abstract or opaque) [[type tags|StreamTypeDescriptor]] to an [[library|MediaImplLib]], which provides functionality for acutally dealing with data of this media stream type. Thus, the stream type manager is a kind of registry of all the external libraries which can be bridged and accessed by Lumiera (for working with media data, that is). The most basic set of libraries is instelled here automatically at application start, most notably the [[GAVL]] library for working with uncompressed video and audio data. //Later on, when plugins will introduce further external libraries, these need to be registered here too.//</pre>
 </div>
-<div title="Session" modifier="Ichthyostega" modified="200712100526" created="200712100525" tags="def" changecount="3">
+<div title="Session" modifier="Ichthyostega" modified="200904252215" created="200712100525" tags="def SessionLogic" changecount="4">
 <pre>The Session contains all informations, state and objects to be edited by the User. From a users view, the Session is synonymous to the //current Project//. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]]. &amp;rarr; [[Session design overview|SessionOverview]]
 
 !Session structure
@@ -3415,11 +3450,21 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 * a collection of ''global Pipes''
 * the ''Fixture'' with a possibility to [[(re)build it|PlanningBuildFixture]]</pre>
 </div>
+<div title="SessionDataMem" modifier="Ichthyostega" created="200904252303" tags="impl design SessionLogic draft" changecount="1">
+<pre>The Layout of the Session datastructure in memory is bound by several dependencies: GUI, HighLevelModel, SessionStorage, [[Builder]].
+Currently as of 5/09, this is an ongoing [[implementation and planning effort|PlanningSessionInMem]]</pre>
+</div>
 <div title="SessionInterface" modifier="Ichthyostega" modified="200904242109" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="2">
 <pre>{{red{WIP}}}</pre>
 </div>
-<div title="SessionLogic" modifier="Ichthyostega" modified="200904242111" created="200904242110" tags="overview" changecount="2">
-<pre>!Design and handling of the Session</pre>
+<div title="SessionLogic" modifier="Ichthyostega" modified="200904252317" created="200904242110" tags="overview" changecount="10">
+<pre>The Session contains all informations, state and objects to be edited by the User (&amp;rarr;[[def|Session]]).
+As such, the SessionInterface is the main entrance point to Proc-Layer functionality, both for the primary EditingOperations and for playback/rendering processes.
+
+Currently (as of 5/09), Ichthyo is [[targeting|PlanningSessionInMem]] a first preliminary implementation of the [[Session in Memory|SessionDataMem]]
+
+!Design and handling of Objects within the Session
+Objects are attached and manipulated by [[placements|Placement]]; thus the organisation of these placements is part of the session data layout. They behave like //instances// of a given object, and at the same time define the &quot;non-substancial&quot; properties of the object, like its positions and relations. [[References|MObjectRef]] to these placement entries are handed out as parameters, both down to the [[Builder]] and from there to the render proceeses within the engine, but also to external parts within the GUI and in plugins.</pre>
 </div>
 <div title="SessionOverview" modifier="Ichthyostega" modified="200811011805" created="200709272105" tags="design" changecount="29">
 <pre>&lt;&lt;&lt;
