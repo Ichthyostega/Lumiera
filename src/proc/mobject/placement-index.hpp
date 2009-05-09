@@ -21,17 +21,17 @@
 */
 
 
-/** @file placement-ref.hpp 
+/** @file placement-index.hpp 
  **
- ** @see Placement
- ** @see PlacementRef_test
+ ** @see PlacementRef
+ ** @see PlacementIndex_test
  **
  */
 
 
 
-#ifndef MOBJECT_PLACEMENT__REF_H
-#define MOBJECT_PLACEMENT__REF_H
+#ifndef MOBJECT_PLACEMENT_INDEX_H
+#define MOBJECT_PLACEMENT_INDEX_H
 
 //#include "pre.hpp"
 //#include "proc/mobject/session/locatingpin.hpp"
@@ -48,7 +48,7 @@ namespace mobject {
   
   /**
    */
-  class PlacementRef
+  class PlacementIndex
     {
     };
   

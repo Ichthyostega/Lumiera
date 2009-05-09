@@ -27,10 +27,10 @@
  ** and the target type (type we need within the usage context). 
  ** When instantiating AcessCasted<TAR>, we get a template static function
  ** \c AcessCasted<TAR>::access<SRC>(SRC& elm), but the actual implementation
- ** is choosed using boost::type_traits. If no viable implementatino can be
+ ** is chosen using boost::type_traits. If no viable implementation can be
  ** selected, \c EmptyVal<TAR>::create() is invoked instead, which by default
  ** creates a NULL value or similar by using the no-argument ctor of the
- ** type TAR. Alternatively, you may define an specialisation fo EmptyVal,
+ ** type TAR. Alternatively, you may define an specialisation of EmptyVal,
  ** e.g. throwing an exception instead of creating a NULL value. 
  ** 
  ** @see lumiera::WrapperPtr usage example to access a variant record

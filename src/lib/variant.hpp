@@ -24,7 +24,7 @@
 /** @file variant.hpp
  ** This file defines a simple alternative to boost::variant.
  ** It pulls in fewer headers and has a shorter code path, but also
- ** doesn't deal with alignement issues and is <b>not threadsafe</b>. 
+ ** doesn't deal with alignment issues and is <b>not threadsafe</b>. 
  ** 
  ** Values can be stored using \c operator= . In order to access the value
  ** stored in lumiera::Variant, you additionally need to define a "functor" 
@@ -58,7 +58,7 @@ namespace lumiera {
     
     /**
      * internal helper used to build a variant storage wrapper.
-     * Parametrized with a collection of types, it provides functionality
+     * Parametrised with a collection of types, it provides functionality
      * to copy a value of one of these types into an internal buffer, while
      * remembering which of these types was used to place this copy.
      * The value can be later on extracted using a visitation like mechanism,
@@ -214,10 +214,10 @@ namespace lumiera {
    * This utility class is similar to boost::variant and indeed was implemented
    * (5/08) in an effort to replace the latter in a draft solution for the problem
    * of typesafe access to the correct wrapper class from within some builder tool.
-   * Well -- after finisihng this "exercise" I must admit that it is not really
+   * Well -- after finishing this "exercise" I must admit that it is not really
    * much more simple than what boost::variant does internally. At least we are
    * pulling in fewer headers and the actual code path is shorter compared with
-   * boost::variant, at the price of beeing not so generic, not caring for
+   * boost::variant, at the price of being not so generic, not caring for
    * alignment issues within the buffer and being <b>not threadsafe</b>
    * 
    * @param TYPES   collection of possible types to be stored in this variant object
@@ -234,8 +234,8 @@ namespace lumiera {
       typedef typename Holder::Deleter Deleter;
       
       
-      /** storage: buffer holding either and "empty" marker,
-       *  or one of the configured pointer to wrapper types */ 
+      /** storage: buffer holding either an "empty" marker,
+       *  or an instance of one of the configured payload types */ 
       typename Holder::Storage holder_;
       
       

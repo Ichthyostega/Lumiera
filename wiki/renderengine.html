@@ -2800,15 +2800,34 @@ Placements have //value semantics,// i.e. we don't stress the identity of a plac
 
 </pre>
 </div>
-<div title="PlacementIndex" modifier="Ichthyostega" created="200905090053" tags="SessionLogic spec impl draft" changecount="1">
+<div title="PlacementIndex" modifier="Ichthyostega" modified="200905091529" created="200905090053" tags="SessionLogic spec impl draft" changecount="3">
 <pre>An implementation facility used to keep track of individual Placements and their relations.
 Especially, the [[Session]] maintains such an index, allowing to use the (opaque) PlacementRef tags for referring to a specific &quot;instance&quot; of an MObject, //placed// in a unique way into the current session. And, moreover, this index allows for one placement referring to another placement, so to implement a //relative// placement mode. Because there is an index behind the scenes, it is possible to actually access such a referral in the reverse direction, which is necessary for implementing the desired placement behaviour (if an object instance used as anchor is moved, all objects placed relatively to it have to move accordingly, which necessiates finding those other objects).
 
+!questions {{red{WIP}}}
+What implementation approach to take for the index. This of course largely depends on the usage pattern, which in turn is not-yet existant. To start with, we need a preliminary implementation!
+
+Using a ''flat hashtable'' would allow to access a Placement denoted by ID in O(1). This way we could get the Placement, but nothing more. So, additionally we'd have to set up an data record holding additional information:
+* the scope containing this placement
+* especially the path &quot;up&quot; from this scope, which is used for resolving any queries
+* relations to other placements
+
+Alternatively, we could try to use a ''structure based index''. Following this idea, we could try to avoid the mntioned description record by folding any of the contained informations into the surrounding datastructure:
+* the scope would be obvious from the index, resp. from the path used to resolve this index
+* any other informations, especially the relations, would be folded into the placement
+* this way, the &quot;index&quot; could be reduced to being the session datastructure itself.
+
 </pre>
 </div>
-<div title="PlacementRef" modifier="Ichthyostega" created="200905090032" tags="def spec draft" changecount="1">
+<div title="PlacementRef" modifier="Ichthyostega" modified="200905091516" created="200905090032" tags="def spec draft" changecount="2">
 <pre>A generic reference mechanism for Placements, as added to the current session.
-While this reference itself is not tied to the actual memory layout (meaning it's //not// a disguised pointer), the implementation relies on a [[placement index facility|PlacementIndex]] for tracking and retrieving the actual Placement implementation object.</pre>
+While this reference itself is not tied to the actual memory layout (meaning it's //not// a disguised pointer), the implementation relies on a [[placement index facility|PlacementIndex]] for tracking and retrieving the actual Placement implementation object.
+
+!questions {{red{WIP}}}
+Currently (5/09) ichthyo is in doubt what implementation to use best. It is clear that the PlacementRef needs to incorporate as the only actual data in memory, so it can be downcasted to a POD and passed as such via LayerSeparationInterfaces. And, of course, this ID tag should be the one used by PlacementIndex for organising the Placement index entries, thus enabling the PlacementRef to be passed immediately to the underlying index for resolution. Thus, the design decision boils down to the question how to implement the ID tag.
+* a flat random hash, e.g. using a {{{LUID}}}?
+* a structure based index, which also denotes the position in the (tree like) datastructure (Sequences within the session)?
+</pre>
 </div>
 <div title="PlanningBuildFixture" modifier="Ichthyostega" modified="200801061937" created="200712100445" tags="impl Builder draft" changecount="11">
 <pre>//This page is a scrapbook for working out the implementation of how to (re)build the [[Fixture]]//

@@ -43,13 +43,21 @@
 namespace mobject {
 
 //  using std::tr1::shared_ptr;
-
+  
   
   
   /**
    */
   class PlacementRef
     {
+      /**
+       * 
+       */
+      class ID
+        {
+        };
+      
+      
     };
   
   

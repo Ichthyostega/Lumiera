@@ -188,8 +188,8 @@ namespace lumiera
     
     /*******************************************************************
      * testing the more advanced Factory variants and possibilities.
-     * We use several customized Factory subclasses supporting custom
-     * allocation, placement allocation, private construcors and
+     * We use several customised Factory subclasses supporting custom
+     * allocation, placement allocation, private constructors and
      * the PIpmpl design pattern. All creating smart pointers.
      */
     class Factory_special_test : public Test
