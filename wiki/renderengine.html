@@ -1920,10 +1920,17 @@ The general idea is, that each facade interface actually provides access to a sp
 * {{red{and what else?}}}
 </pre>
 </div>
-<div title="MObjectRef" modifier="Ichthyostega" modified="200905010010" created="200904242107" tags="SessionLogic GuiIntegration design draft discuss" changecount="10">
+<div title="MObjectRef" modifier="Ichthyostega" modified="200905090026" created="200904242107" tags="SessionLogic GuiIntegration design draft discuss" changecount="16">
 <pre>''The Problem of referring to an [[MObject]]'' stems from the object //as a concept// encompassing a wider scope then just the current implementation instance. If the object was just a runtime entity in memory, we could use a simple (language) reference or pointer. Actually, this isn't sufficient, as the object reference will pass LayerSeparationInterfaces, will be handed over to code not written in the same implementation language, will be included in an ''UNDO'' record for the UndoManager, and thus will need to be serialized and stored permanently within the SessionStorage.
+Moreover [[MObject instances|MObject]] have a 2-level structure: the core object holds just the properties in a strict sense, i.e. the properties which the object //owns.// Any properties due to putting the object into a specific context, i.e. all relation properties are represented as [[Placement]] of the object. Thus, a reference to a specific ~MObject //instance,// actually denotes a specific Placement of this object into the Session.
 
-{{red{WIP}}}
+!Requirements
+* just the reference allone is sufficient to access the placement //and//&amp;nbsp; the core object.
+* the reference needs to be valid even after internal restructuring in the object store.
+* there must be a way to pass these references through serialisation/deserialisation
+* we need a plain-C representation of the reference, which ideally should be incorporated into the complete implementation
+* references should either be integrated into memory management, or at least it should be possible to detect dangling references
+* it should be possible to make handling of the references completely transparent, if the implementation language supports doing so.
 
 !Two models
 For the implementation of the object references, as linked to the memory management in general, there seem to be the following approaches
@@ -1935,6 +1942,11 @@ For the implementation of the object references, as linked to the memory managem
 
 Obviously, the second approach has quite some appeal &amp;mdash; but, in order to use it, we'd have to mitigate its drawbacks: it bears the danger of creating a second separate code path for C language based clients, presumably receiving lesser care, maintenance and stress testing. The mentioned solution worked out earlier this year for the player mockup (1/2009) tries at least partially to integrate the C functionality, as the actual implementation is derived from the C struct used as handle, thus allowing to use the same pointers for both kinds of interface, and in turn by doing the de-allocation by a call through the C dtor function, which is installed as deleter function with the boost::smart_ptr used as base class of the handle. Conceptually, the interface on this handle is related to the actual implementation refered to by the handle (handle == smart_ptr) as if the latter was a subclass of the former. But on the level of the implementation, there is no inheritance relation between the handle and the referent, and especially this allows to define the handle's interface in terms of abstract interface types usable on the client side, while the referent's interface operates on the types of the service implementation. Thus, the drawback of using a C language interface is turned into the advantage of completely separating implementation and client.
 
+!Implementation concept
+Presumably, none of the both models is usable as-is; rather we try to reconstruct the viable properties of both, starting out with the more elegant second model. Thus, basically the ''reference is a smart-ptr'' referring to the core object. Additionally, it incorporates a ''systematic ID denoting the location of the placement''. This ID without the smart-ptr part is used for the C-implementation, making the full handle implementation a shortcut for an access sequence, which first querries the placement from the Session, followed by dereferencing the placement to get at the core object. Thus, the implementation builds upon another abstraction, the &amp;rarr; PlacementRef, which in turn assumes for an index within the implementation of the [[session datastructure|SessionDataMem]] to track and retrieve the actual Placement.
+
+
+{{red{WIP}}}
 </pre>
 </div>
 <div title="MObjects" modifier="Ichthyostega" modified="200810180118" created="200706190636" tags="overview" changecount="10">
@@ -2739,12 +2751,16 @@ there is not much you can do directly with a pipe asset. It is an point of refer
 Pipes are integrated with the [[management of defaults|DefaultsManagement]]. For example, any pipe uses implicitly some [[processing pattern|ProcPatt]] &amp;mdash; it may default to the empty pattern. This feature enables to apply some standard wiring to the pipes (e.g a fader for audio, similar to the classic mixing consoles). This //is // a global property of the pipe, but &amp;mdash; contrary to the stream type &amp;mdash; this pattern may be switched
 </pre>
 </div>
-<div title="Placement" modifier="Ichthyostega" modified="200805260156" created="200706220306" tags="def" changecount="8">
+<div title="Placement" modifier="Ichthyostega" modified="200905090045" created="200706220306" tags="def" changecount="9">
 <pre>A Placement represents a //relation:// it is always linked to a //Subject// (this being a [[Media Object|MObject]]) and has the meaning to //place// this Subject in some manner, either relatively to other Media Objects, or by some Constraint or simply absolute at (time, output). The latter case is especially important for the build process and thus represented by a special [[Sub-Interface ExplicitPlacement|ExplicitPlacement]]. Besides this simple cases, Placements can also express more specific kinds of &quot;locating&quot; an object, like placing a sound source at a pan position or placing a video clip at a given layer (above or below another video clip)
 
 So basically placements represent a query interface: you can allways ask the placement to find out about the position of the related object in terms of (time, output), and &amp;mdash; depending on the specific object and situation &amp;mdash; also about these additional [[placement derived dimensions|PlacementDerivedDimension]] like sound pan or layer order or similar things which also fit into the general concept of &quot;placing&quot; an object.
 
-The fact of being placed in the [[Session|SessionOverview]]/[[EDL]]is constitutive for all sorts of [[MObject]]s, without Placement they make no sense. Thus &amp;mdash; technically &amp;mdash; Placements act as ''smart pointers''. Of course, there are several kinds of Placements and they are templated on the type of MObject they are refering to. Placements can be //aggregated// to increasingly constrain the resulting &quot;location&quot; of the refered ~MObject. See &amp;rarr; [[handling of Placements|PlacementHandling]] for more details</pre>
+The fact of being placed in the [[Session|SessionOverview]]/[[EDL]]is constitutive for all sorts of [[MObject]]s, without Placement they make no sense. Thus &amp;mdash; technically &amp;mdash; Placements act as ''smart pointers''. Of course, there are several kinds of Placements and they are templated on the type of MObject they are refering to. Placements can be //aggregated// to increasingly constrain the resulting &quot;location&quot; of the refered ~MObject. See &amp;rarr; [[handling of Placements|PlacementHandling]] for more details
+
+!Placements as instance
+Effectively, the placement of a given MObject into the Session acts as setting up an concrete instance of this object. This way, placements exhibit a dual nature. When viewed on themselves, like any reference or smart-pointer they behave like values. But, by adding a placement to the session, we again create a unique distinguishable entity with reference semantics: there could be multiple placements of the same object but with varying placement properties. Such a placement-bound-into-the-session is denoted by an generic placement-ID or (as we call it) &amp;rarr; PlacementRef; behind the scenes there is a PlacementIndex keeping track of those &quot;instances&quot; &amp;mdash; allowing us to hand out the PlacementRef (which is just an opaque id) to client code outside the Proc-Layer and generally use it as an shorthand, behaving as if it was an MObject instance
+</pre>
 </div>
 <div title="PlacementDerivedDimension" modifier="Ichthyostega" modified="200805260223" created="200805260219" tags="def spec" changecount="3">
 <pre>For any [[media object|MObject]] within the session, we can allways at least query the time (reference/start) point and the output destination from the [[Placement]], by which the object is being handled. But the simple act of placing an object in some way, can &amp;mdash; depending on the context &amp;mdash; create additional degrees of freedom. To list some important examples:
@@ -2783,6 +2799,16 @@ Placements have //value semantics,// i.e. we don't stress the identity of a plac
 *# then either we had to do everything by a visitor (which gets the concrete subtype dynamically), or we'd end up switching on type.
 
 </pre>
+</div>
+<div title="PlacementIndex" modifier="Ichthyostega" created="200905090053" tags="SessionLogic spec impl draft" changecount="1">
+<pre>An implementation facility used to keep track of individual Placements and their relations.
+Especially, the [[Session]] maintains such an index, allowing to use the (opaque) PlacementRef tags for referring to a specific &quot;instance&quot; of an MObject, //placed// in a unique way into the current session. And, moreover, this index allows for one placement referring to another placement, so to implement a //relative// placement mode. Because there is an index behind the scenes, it is possible to actually access such a referral in the reverse direction, which is necessary for implementing the desired placement behaviour (if an object instance used as anchor is moved, all objects placed relatively to it have to move accordingly, which necessiates finding those other objects).
+
+</pre>
+</div>
+<div title="PlacementRef" modifier="Ichthyostega" created="200905090032" tags="def spec draft" changecount="1">
+<pre>A generic reference mechanism for Placements, as added to the current session.
+While this reference itself is not tied to the actual memory layout (meaning it's //not// a disguised pointer), the implementation relies on a [[placement index facility|PlacementIndex]] for tracking and retrieving the actual Placement implementation object.</pre>
 </div>
 <div title="PlanningBuildFixture" modifier="Ichthyostega" modified="200801061937" created="200712100445" tags="impl Builder draft" changecount="11">
 <pre>//This page is a scrapbook for working out the implementation of how to (re)build the [[Fixture]]//
@@ -3453,9 +3479,11 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 * a collection of ''global Pipes''
 * the ''Fixture'' with a possibility to [[(re)build it|PlanningBuildFixture]]</pre>
 </div>
-<div title="SessionDataMem" modifier="Ichthyostega" created="200904252303" tags="impl design SessionLogic draft" changecount="1">
+<div title="SessionDataMem" modifier="Ichthyostega" modified="200905082325" created="200904252303" tags="impl design SessionLogic draft" changecount="2">
 <pre>The Layout of the Session datastructure in memory is bound by several dependencies: GUI, HighLevelModel, SessionStorage, [[Builder]].
-Currently as of 5/09, this is an ongoing [[implementation and planning effort|PlanningSessionInMem]]</pre>
+Currently as of 5/09, this is an ongoing [[implementation and planning effort|PlanningSessionInMem]]
+
+{{red{TODO...}}}</pre>
 </div>
 <div title="SessionInterface" modifier="Ichthyostega" modified="200904242109" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="2">
 <pre>{{red{WIP}}}</pre>

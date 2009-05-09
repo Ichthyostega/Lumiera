@@ -1,5 +1,5 @@
 /*
-  P.hpp  -  customized shared_ptr with ordering and type relationships
+  P.hpp  -  customised shared_ptr with ordering and type relationships
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,19 +21,19 @@
 */
 
 /** @file p.hpp
- ** customized refcounting smart pointer.
+ ** Customised refcounting smart pointer.
  ** Template derived from std::tr1::shared_ptr adding total ordering and 
  ** type relationships implemented by forwarding to the pointees. In all other
  ** respects, it should behave exactly as shared_ptr and is able to cooperate
  ** and share ownership with other shared_ptr instantiations.
  ** 
  ** By default different instantiations of shared_ptr are completely unrelated types,
- ** even if using inherintance related type parameters for instantiation: a shared_ptr<Media>
+ ** even if using inheritance related type parameters for instantiation: a shared_ptr<Media>
  ** isn't some kind-of shared_ptr<Asset> -- we need to do an explicit static_ptr_cast. Another
  ** common problem is the definition of equality and ordering relations for shared_ptr: 
  ** equality is based on the equality of the managed pointers, while ordering is built upon
  ** the ref count. While generally this may be a good compromise, in our case it hinders treating
- ** the smart ptrs within the application almost as if they were the objects themselfs and proved
+ ** the smart ptrs within the application almost as if they were the objects themselves and proved
  ** an obstacle for writing generic helper functions.
  **
  ** the P template resolves these problems by implementing the ordering operators in terms of

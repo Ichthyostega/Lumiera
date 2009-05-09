@@ -36,7 +36,7 @@
  **
  ** Besides being a handle, Placements define the logical position where some MObject is
  ** supposed to be located within the EDL or Fixture. The way in which this placing happens
- ** is controlled and parametrized by a collection (chain) of LocatingPin objects. By adding
+ ** is controlled and parametrised by a collection (chain) of LocatingPin objects. By adding
  ** to this chain, the position of the MObject is increasingly constrained. The simplest
  ** case of such constraining is to add a FixedLocation, thus placing the MObject at one
  ** absolute position (time, track).
@@ -44,7 +44,7 @@
  ** Placements are templated on the type of the actual MObject they refer to, so, sometimes
  ** we rather use a Placement<Clip> to be able to use the more specific methods of the
  ** session::Clip interface. But <i>please note the following detail:</i> this type
- ** labeling and downcasting is the <i>only</i> difference between these subclasses, 
+ ** labelling and downcasting is the <i>only</i> difference between these subclasses, 
  ** besides that, they can be replaced literally by one another (slicing is accepted).
  **
  ** @see ExplicitPlacement
@@ -64,14 +64,14 @@
 #include <tr1/memory>
 
 
-namespace mobject
-  {
+namespace mobject {
+  
   namespace session{ class MObjectFactory; }
-
+  
   class ExplicitPlacement;
   
   using std::tr1::shared_ptr;
-
+  
   
   
   /**
@@ -88,8 +88,8 @@ namespace mobject
       typedef lumiera::Time Time;
       typedef asset::shared_ptr<asset::Pipe> Pipe;
       
-
-
+      
+      
     public:
       /** smart pointer: accessing the MObject, 
        *  which is subject to placement.
@@ -107,7 +107,7 @@ namespace mobject
       
       virtual ~Placement() {};
       
-
+      
       
       /** interface for defining the kind of placement
        *  to employ, and for controling any additional

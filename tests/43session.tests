@@ -29,6 +29,14 @@ PLANNED "PlacementBasic_test" PlacementBasic_test <<END
 END
 
 
+PLANNED "PlacementIndex_test" PlacementIndex_test <<END
+END
+
+
+PLANNED "PlacementRef_test" PlacementRef_test <<END
+END
+
+
 PLANNED "RebuildFixture_test" RebuildFixture_test <<END
 END
 
