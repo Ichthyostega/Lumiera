@@ -534,14 +534,25 @@ LLIST_FUNC (LList llist_get_nth_stop (LList self, int n, const_LList stop),
 
 
 /**
+ * The comparsion function function type.
+ * certain sort and find functions depend on a user supplied coparsion function
+ * @param a first operand for the comparsion
+ * @param b second operand for the comparsion
+ * @param extra user supplied data which passed through
+ * @return shall return a value less than zero, zero, biggier than zero when
+ *         a is less than, equal to, biggier than b
+ */
+typedef int (*llist_cmpfn)(const_LList a, const_LList b, void* extra);
+
+
+/**
  * Sort a list.
  * recursive mergesort, needs much extra stackspace (crappy implementation yet) but it reasonable fast
  * @param self list to be sorted
- * @param cmp function takeing 2 LLists
+ * @param cmp function for comparing 2 nodes
+ * @param extra generic data passed to the cmp function
  */
-typedef int (*llist_cmpfn)(const_LList a, const_LList b);
-
-LLIST_FUNC (LList llist_sort (LList self, llist_cmpfn cmp),
+LLIST_FUNC (LList llist_sort (LList self, llist_cmpfn cmp, void* extra),
             llist left;
             llist right;
             llist_init (&left);
@@ -552,11 +563,11 @@ LLIST_FUNC (LList llist_sort (LList self, llist_cmpfn cmp),
                 LLIST_WHILE_HEAD (self, head)
                   llist_insert_prev (++n & 1 ? &left : &right, head);
 
-                llist_sort (&left, cmp);
-                llist_sort (&right, cmp);
+                llist_sort (&left, cmp, extra);
+                llist_sort (&right, cmp, extra);
 
                 while (!llist_is_empty (&left) && !llist_is_empty (&right))
-                  llist_insert_prev (self, cmp (left.next, right.next) < 0 ? left.next : right.next);
+                  llist_insert_prev (self, cmp (left.next, right.next, extra) < 0 ? left.next : right.next);
 
                 if (!llist_is_empty (&left))
                   llist_insertlist_prev (self, &left);
@@ -573,13 +584,13 @@ LLIST_FUNC (LList llist_sort (LList self, llist_cmpfn cmp),
  * Does not change the list order.
  * @param self list to be searched
  * @param templ template for the element being searched
- * @param cmp function taking 2 LLists
- * @return pointer to the found LList element or NULL if nothing foound
+ * @param cmp function for comparing 2 nodes
+ * @return pointer to the found LList element or NULL if nothing found
  */
-LLIST_FUNC (LList llist_find (const_LList self, const_LList templ, llist_cmpfn cmp),
+LLIST_FUNC (LList llist_find (const_LList self, const_LList templ, llist_cmpfn cmp, void* extra),
             LLIST_FOREACH(self, node)
             {
-              if (!cmp (node, templ))
+              if (!cmp (node, templ, extra))
                 return node;
             }
             return NULL;
@@ -592,15 +603,16 @@ LLIST_FUNC (LList llist_find (const_LList self, const_LList templ, llist_cmpfn c
  * Useful if the order of the list is not required and few elements are frequently searched.
  * @param self list to be searched
  * @param templ template for the element being searched
- * @param cmp function taking 2 LLists
- * @return pointer to the found LList element (head) or NULL if nothing foound
+ * @param cmp function for comparing 2 nodes
+ * @return pointer to the found LList element (head) or NULL if nothing found
  */
-LLIST_FUNC (LList llist_ufind (LList self, const_LList templ, llist_cmpfn cmp),
+LLIST_FUNC (LList llist_ufind (LList self, const_LList templ, llist_cmpfn cmp, void* extra),
             LLIST_FOREACH(self, node)
             {
-              if (!cmp (node, templ))
+              if (!cmp (node, templ, extra))
                 {
-                  llist_insert_next (self, node);
+                  if (llist_next(self) != node)
+                    llist_insert_next (self, node);
                   return node;
                 }
             }
@@ -614,13 +626,13 @@ LLIST_FUNC (LList llist_ufind (LList self, const_LList templ, llist_cmpfn cmp),
  * biggier than the searched one.
  * @param self list to be searched
  * @param templ template for the element being searched
- * @param cmp function takeing 2 LLists
+ * @param cmp function for comparing 2 nodes
  * @return pointer to the found LList element or NULL if nothing foound
  */
-LLIST_FUNC (LList llist_sfind (const_LList self, const_LList templ, llist_cmpfn cmp),
+LLIST_FUNC (LList llist_sfind (const_LList self, const_LList templ, llist_cmpfn cmp, void* extra),
             LLIST_FOREACH(self, node)
             {
-              int c = cmp (node, templ);
+              int c = cmp (node, templ, extra);
               if (!c)
                 return node;
               else if (c>0)
