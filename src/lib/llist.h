@@ -193,8 +193,8 @@ typedef llist ** LList_ref;
  * before any other operation on them is called.
  * @param self node to be initialized
  */
-LLIST_FUNC (void llist_init (LList self),
-            self->next = self->prev = self;
+LLIST_FUNC (LList llist_init (LList self),
+            return self->next = self->prev = self;
 );
 
 /**
