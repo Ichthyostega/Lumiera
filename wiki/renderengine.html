@@ -2800,7 +2800,7 @@ Placements have //value semantics,// i.e. we don't stress the identity of a plac
 
 </pre>
 </div>
-<div title="PlacementIndex" modifier="Ichthyostega" modified="200905091529" created="200905090053" tags="SessionLogic spec impl draft" changecount="3">
+<div title="PlacementIndex" modifier="Ichthyostega" modified="200905110126" created="200905090053" tags="SessionLogic spec impl draft" changecount="6">
 <pre>An implementation facility used to keep track of individual Placements and their relations.
 Especially, the [[Session]] maintains such an index, allowing to use the (opaque) PlacementRef tags for referring to a specific &quot;instance&quot; of an MObject, //placed// in a unique way into the current session. And, moreover, this index allows for one placement referring to another placement, so to implement a //relative// placement mode. Because there is an index behind the scenes, it is possible to actually access such a referral in the reverse direction, which is necessary for implementing the desired placement behaviour (if an object instance used as anchor is moved, all objects placed relatively to it have to move accordingly, which necessiates finding those other objects).
 
@@ -2817,6 +2817,19 @@ Alternatively, we could try to use a ''structure based index''. Following this i
 * any other informations, especially the relations, would be folded into the placement
 * this way, the &quot;index&quot; could be reduced to being the session datastructure itself.
 
+
+!supported operations {{red{WIP}}}
+The placement index is utilized by editing operations, by executing the build process and besides these core operations it allows resolving PlacementRef objects (which possibly may have crossed layer boundaries). From these use cases we derive the following main operations to support:
+* find the actual [[Placement]] object for a given ID
+* find the scope a given placement resides in. More specifically, find the placement defining this scope
+* find (any/all) other placements referring to a given placement
+* add a new placement to a scope given as parameter
+* remove a placement from index
+
+//does a placement need to know it's own ID?// Obviously, there needs to be a way to find out the ID for a given placement, especially in the following situations:
+* for most of the operations above, when querying some additional informations from index for a given placement
+* to create a PlacementRef (this is a variant of the &quot;shared ptr from this&quot;-problem)
+On second sight, this problem seems to be quite nasty, because either we have to keep a second indext table for the reversed lookup (memory address -&gt; ID), or have to tie the placement by a backlink when adding it to the index/session datastructure, or (at least) it forces us to store a copy of the ID //within// the placement itself. The last possibility seems to create the least impact; but implementing it this way effectively gears the implementation towards a hashtable based approach.
 </pre>
 </div>
 <div title="PlacementRef" modifier="Ichthyostega" modified="200905091516" created="200905090032" tags="def spec draft" changecount="2">
