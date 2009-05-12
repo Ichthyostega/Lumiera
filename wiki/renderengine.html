@@ -579,7 +579,7 @@ For every Asset we generate a __Ident tuple__ and a long ID (hash) derived from 
 <div title="AssetManager" modifier="Ichthyostega" created="200709200300" changecount="1">
 <pre>The Asset Manager provides an Interface to some internal Database holding all Assets in the current Session and System state. It may be a real Database at some point (and for the moment it's a Hashtable). Each [[Asset]] is registered automatically with the Asset Manager; it can be queried either by it's //identification tuple// or by it's unique ID.</pre>
 </div>
-<div title="AttachedPlacementProblem" modifier="Ichthyostega" modified="200808140050" created="200801111305" tags="impl draft dynamic" changecount="13">
+<div title="AttachedPlacementProblem" modifier="Ichthyostega" modified="200905120332" created="200801111305" tags="SessionLogic impl draft dynamic" changecount="14">
 <pre>Placing an MObject relatively to another object such that it should be handled as //attached//&amp;nbsp; to the latter results in several design and implementation challenges. Actually, such an attachment creates a cluster of objects. The typical use case is that of an effect attached to a clip or processing pipe.
 * attachment is not a globally fixed relation between objects, rather, it typically exists only for some limited time span (e.g. the duration of the basic clip the effect is attached to)
 * the order of attachment is important and the attached placement may create a fork in the signal flow, so we need a way for specifying reproducibly how the resulting wiring should be
@@ -2800,7 +2800,7 @@ Placements have //value semantics,// i.e. we don't stress the identity of a plac
 
 </pre>
 </div>
-<div title="PlacementIndex" modifier="Ichthyostega" modified="200905110126" created="200905090053" tags="SessionLogic spec impl draft" changecount="6">
+<div title="PlacementIndex" modifier="Ichthyostega" modified="200905120331" created="200905090053" tags="SessionLogic spec impl draft" changecount="8">
 <pre>An implementation facility used to keep track of individual Placements and their relations.
 Especially, the [[Session]] maintains such an index, allowing to use the (opaque) PlacementRef tags for referring to a specific &quot;instance&quot; of an MObject, //placed// in a unique way into the current session. And, moreover, this index allows for one placement referring to another placement, so to implement a //relative// placement mode. Because there is an index behind the scenes, it is possible to actually access such a referral in the reverse direction, which is necessary for implementing the desired placement behaviour (if an object instance used as anchor is moved, all objects placed relatively to it have to move accordingly, which necessiates finding those other objects).
 
@@ -2821,7 +2821,7 @@ Alternatively, we could try to use a ''structure based index''. Following this i
 !supported operations {{red{WIP}}}
 The placement index is utilized by editing operations, by executing the build process and besides these core operations it allows resolving PlacementRef objects (which possibly may have crossed layer boundaries). From these use cases we derive the following main operations to support:
 * find the actual [[Placement]] object for a given ID
-* find the scope a given placement resides in. More specifically, find the placement defining this scope
+* find the //scope//&amp;nbsp; a given placement resides in. More specifically, find the [[placement defining this scope|PlacementScope]]
 * find (any/all) other placements referring to a given placement
 * add a new placement to a scope given as parameter
 * remove a placement from index
@@ -2840,6 +2840,23 @@ While this reference itself is not tied to the actual memory layout (meaning it'
 Currently (5/09) ichthyo is in doubt what implementation to use best. It is clear that the PlacementRef needs to incorporate as the only actual data in memory, so it can be downcasted to a POD and passed as such via LayerSeparationInterfaces. And, of course, this ID tag should be the one used by PlacementIndex for organising the Placement index entries, thus enabling the PlacementRef to be passed immediately to the underlying index for resolution. Thus, the design decision boils down to the question how to implement the ID tag.
 * a flat random hash, e.g. using a {{{LUID}}}?
 * a structure based index, which also denotes the position in the (tree like) datastructure (Sequences within the session)?
+</pre>
+</div>
+<div title="PlacementScope" modifier="Ichthyostega" modified="200905120348" created="200905120304" tags="SessionLogic spec draft" changecount="4">
+<pre>MObjects are attached into the [[Session]] by adding a [[Placement]]. Because this especially includes the case of //grouping or container objects,// e.g. tracks or [[meta-clips|VirtualClip]], any placement may optionally define and root a scope, and every placement is at least contained in one encompassing scope &amp;mdash; of course with the exception of the absolute top level, which can be thought off as being contained in a scope of handling rules.
+
+Thus, while the [[sequences (former called EDL)|EDL]] act as generic container holding a pile of placments, actually there is a more fine grained structure based on the nesting of the tracks, which especially in Lumiera's HighLevelModel belong to the sequence (they aren't a property of the top level timeline as one might expect). Building upon these observations, we actually require each addition of a placement to specify a scope. The implementation of this tie-to-scope is provided by the same mechanism as utilized for relative placements, i.e. an directional placement relation.
+
+!Kinds of scopes
+There is only a limited number of situations constituting a scope
+* conceptually, the very top level is a scope of general rules (but it is hard-wired, not implemented as placement) {{red{really?}}}
+* similarily, the link binding a [[Sequence|EDL]] into either a (top-level) timeline or as virtual media into a VirtualClip is rather special.
+* each sequence has at least one (manadtory) top-level placement holding its root track
+* tracks may contain nested sub tracks.
+* clips and (track-level) effects likewise are associated with an enclosing track.
+* an important special case of relative placement is when an object is [[attached|AttachedPlacementProblem]] to another leading object, like e.g. an effect modifying a clip
+
+In any case, adding a placement to a scope is to be implemented such as to ensure the presence of a suitable LocatingPin, serving to tie the placement into the scope. This LocatingPin in turn will manage a relation to the scope-defining placement, and by doing so, it will insert the relation information into the [[index|PlacementIndex]]. The remaining problem for the implementation is to find a suitable factory function to set up the mentioned pin.
 </pre>
 </div>
 <div title="PlanningBuildFixture" modifier="Ichthyostega" modified="200801061937" created="200712100445" tags="impl Builder draft" changecount="11">
