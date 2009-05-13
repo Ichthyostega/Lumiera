@@ -335,7 +335,7 @@ namespace asset {
       : boost::is_base_of<Asset, A>      {}; 
     
     
-    /** convienient for debugging */
+    /** convenient for debugging */
     inline string str (const PcAsset& a) 
     {
       if (a)

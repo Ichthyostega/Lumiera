@@ -36,13 +36,16 @@
 //#include "pre.hpp"
 //#include "proc/mobject/session/locatingpin.hpp"
 //#include "proc/asset/pipe.hpp"
+#include "proc/mobject/placement-ref.hpp"
 
 //#include <tr1/memory>
+#include <vector>
 
 
 namespace mobject {
 
 //  using std::tr1::shared_ptr;
+  using std::vector;
 
   
   
@@ -50,8 +53,33 @@ namespace mobject {
    */
   class PlacementIndex
     {
+      public:
+        typedef Placement<MObject> PlacementMO;
+        typedef PlacementRef PRef;
+        typedef PRef::ID ID;
+        
+        PlacementMO& find (ID)  const;
+        
+        template<class MO>
+        Placement<MO>& find (PRef::IDp<MO>)  const;
+        
+        PlacementMO& getScope (PlacementMO&)  const;
+        PlacementMO& getScope (ID)            const;
+        
+        vector<PRef> getReferrers (ID)        const;
+        
+        
+        /** diagnostic: number of indexed entries */
+        size_t size()  const;
+        
+        
+        /* == mutating operations == */
+        
+        ID   insert (PlacementMO& newObj, PlacementMO& targetScope);
+        bool remove (PlacementMO&);
+        bool remove (ID);
     };
-  
+  ////////////////TODO currently just fleshing  out the API; probably have to splitt off an impl.class
   
   
   
