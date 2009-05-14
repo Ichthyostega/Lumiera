@@ -139,7 +139,6 @@ mpool_destroy (MPool self)
 
 
 
-
 MPool
 mpool_cluster_alloc_ (MPool self)
 {
@@ -165,7 +164,6 @@ mpool_cluster_alloc_ (MPool self)
 
   /* we insert the cluster at head because its likely be used next */
   llist_insert_head (&self->clusters, llist_init (&cluster->node));
-
   self->elements_free += self->elements_per_cluster;
 
   return self;
@@ -187,6 +185,7 @@ cmp_cluster_contains_element (const_LList cluster, const_LList element, void* se
 
   return 0;
 }
+
 
 static inline MPoolcluster
 element_cluster_get (MPool self, void* element)
@@ -218,25 +217,25 @@ uintptr_nearestbit (uintptr_t v, unsigned n)
 }
 
 
-
 static inline void*
 alloc_near (MPoolcluster cluster, MPool self, void* locality)
 {
+  TRACE (mpool_dbg, "locality %p", locality);
   void* begin_of_elements =
     (void*)cluster +
     sizeof (*cluster) +                                                 /* header */
     MPOOL_BITMAP_SIZE (((MPool)self)->elements_per_cluster);            /* bitmap */
 
+  uintptr_t index = (locality - begin_of_elements) / self->elem_size;
+
 #if UINTPTR_MAX > 4294967295U   /* 64 bit */
-  lldiv_t div = lldiv((locality - begin_of_elements) / self->elem_size, sizeof(uintptr_t)*CHAR_BIT);
+  lldiv_t div = lldiv(index, sizeof(uintptr_t)*CHAR_BIT);
 #else                           /* 32 bit */
-  ldiv_t div = ldiv((locality - begin_of_elements) / self->elem_size, sizeof(uintptr_t)*CHAR_BIT);
+  ldiv_t div = ldiv(index, sizeof(uintptr_t)*CHAR_BIT);
 #endif
 
   uintptr_t* bitmap = (uintptr_t*)&cluster->data;
   unsigned r = ~0U;
-
-  TRACE (mpool_dbg, "cluster %p: bitmap %p %p: elements %p: index %d", cluster, bitmap, bitmap[div.quot], begin_of_elements, div.quot);
 
   /* the bitmap word at locality */
   if (bitmap[div.quot] < UINTPTR_MAX)
@@ -250,7 +249,7 @@ alloc_near (MPoolcluster cluster, MPool self, void* locality)
       r = uintptr_nearestbit (~bitmap[div.quot], sizeof(uintptr_t)*CHAR_BIT-1);
     }
 
-  if (r != ~0U)
+  if (r != ~0U && (div.quot*sizeof(uintptr_t)*CHAR_BIT+r) < self->elements_per_cluster)
     {
       void* ret = begin_of_elements + ((uintptr_t)(div.quot*sizeof(uintptr_t)*CHAR_BIT+r)*self->elem_size);
       return ret;
@@ -267,10 +266,12 @@ bitmap_set_element (MPoolcluster cluster, MPool self, void* element)
     sizeof (*cluster) +                                                 /* header */
     MPOOL_BITMAP_SIZE (((MPool)self)->elements_per_cluster);            /* bitmap */
 
+  uintptr_t index = (element - begin_of_elements) / self->elem_size;
+
 #if UINTPTR_MAX > 4294967295U   /* 64 bit */
-  lldiv_t div = lldiv((element - begin_of_elements) / self->elem_size, sizeof(uintptr_t)*CHAR_BIT);
+  lldiv_t div = lldiv(index, sizeof(uintptr_t)*CHAR_BIT);
 #else                           /* 32 bit */
-  ldiv_t div = ldiv((element - begin_of_elements) / self->elem_size, sizeof(uintptr_t)*CHAR_BIT);
+  ldiv_t div = ldiv(index, sizeof(uintptr_t)*CHAR_BIT);
 #endif
 
   uintptr_t* bitmap = (uintptr_t*)&cluster->data;
@@ -288,24 +289,26 @@ bitmap_clear_element (MPoolcluster cluster, MPool self, void* element)
     sizeof (*cluster) +                                                 /* header */
     MPOOL_BITMAP_SIZE (((MPool)self)->elements_per_cluster);            /* bitmap */
 
+  uintptr_t index = (element - begin_of_elements) / self->elem_size;
+
 #if UINTPTR_MAX > 4294967295U   /* 64 bit */
-  lldiv_t div = lldiv((element - begin_of_elements) / self->elem_size, sizeof(uintptr_t)*CHAR_BIT);
+  lldiv_t div = lldiv(index, sizeof(uintptr_t)*CHAR_BIT);
 #else                           /* 32 bit */
-  ldiv_t div = ldiv((element - begin_of_elements) / self->elem_size, sizeof(uintptr_t)*CHAR_BIT);
+  ldiv_t div = ldiv(index, sizeof(uintptr_t)*CHAR_BIT);
 #endif
 
   uintptr_t* bitmap = (uintptr_t*)&cluster->data;
   bitmap[div.quot] &= ~((uintptr_t)1<<div.rem);
 
-  TRACE (mpool_dbg, "clear bit %d, index %d, of %p is %p", div.rem, div.quot, element, bitmap[div.quot]);
+  TRACE (mpool_dbg, "cleared bit %d, index %d, of %p is %p", div.rem, div.quot, element, bitmap[div.quot]);
 }
-
-
 
 
 void*
 mpool_alloc (MPool self)
 {
+  TRACE (mpool_dbg);
+
   if (!self->elements_free)
     {
       if (mpool_cluster_alloc_ (self))
@@ -335,11 +338,10 @@ mpool_alloc (MPool self)
 
   if (ret)
     {
-      llist_unlink_fast_ ((LList)ret);
       bitmap_set_element (element_cluster_get (self, ret), self, ret);
+      llist_unlink_fast_ ((LList)ret);
     }
 
-  TRACE (mpool_dbg, "%p", ret);
   self->locality = ret;
   --self->elements_free;
 
@@ -347,11 +349,6 @@ mpool_alloc (MPool self)
 }
 
 
-
-
-/*
-  put a element back on the pool
-*/
 static inline MPoolnode
 find_near (MPoolcluster cluster, MPool self, void* element)
 {
@@ -371,8 +368,6 @@ find_near (MPoolcluster cluster, MPool self, void* element)
   uintptr_t* bitmap = (uintptr_t*)&cluster->data;
   unsigned r = ~0U;
 
-  TRACE (mpool_dbg, "cluster %p: bitmap %p %p: elements %p: index %d", cluster, bitmap, bitmap[div.quot], begin_of_elements, div.quot);
-
   /* the bitmap word at locality */
   if (bitmap[div.quot] < UINTPTR_MAX)
     {
@@ -391,11 +386,12 @@ find_near (MPoolcluster cluster, MPool self, void* element)
       r = uintptr_nearestbit (~bitmap[div.quot], sizeof(uintptr_t)*CHAR_BIT-1);
     }
 
-  if (r != ~0U)
+  if (r != ~0U && (div.quot*sizeof(uintptr_t)*CHAR_BIT+r) < self->elements_per_cluster)
     return begin_of_elements + ((uintptr_t)(div.quot*sizeof(uintptr_t)*CHAR_BIT+r)*self->elem_size);
 
   return NULL;
 }
+
 
 void
 mpool_free (MPool self, void* element)
@@ -405,15 +401,14 @@ mpool_free (MPool self, void* element)
       TRACE (mpool_dbg, "mpool %p: element %p", self, element);
 
       MPoolcluster cluster = element_cluster_get (self,element);
+      MPoolnode near = find_near (cluster, self, element);
 
       bitmap_clear_element (cluster, self, element);
       llist_init (&((MPoolnode)element)->node);
 
-      MPoolnode near = find_near (cluster, self, element);
-      TRACE (mpool_dbg, "near %p", near);
-
       if (near)
         {
+          TRACE (mpool_dbg, "found near %p", near);
           if (near < (MPoolnode)element)
             llist_insert_next (&near->node, &((MPoolnode)element)->node);
           else
@@ -421,8 +416,6 @@ mpool_free (MPool self, void* element)
         }
       else
         llist_insert_tail (&self->freelist, &((MPoolnode)element)->node);
-
-      bitmap_clear_element (cluster, self, element);
 
       ++self->elements_free;
     }
@@ -446,7 +439,6 @@ mpool_reserve (MPool self, unsigned nelements)
 
   return self;
 }
-
 
 
 void
@@ -485,3 +477,10 @@ nobug_mpool_dump (const_MPool self,
 }
 
 
+/*
+//      Local Variables:
+//      mode: C
+//      c-file-style: "gnu"
+//      indent-tabs-mode: nil
+//      End:
+*/
