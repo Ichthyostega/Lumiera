@@ -58,6 +58,11 @@ struct mpoolnode_struct
   llist node;
 };
 
+
+MPool
+mpool_cluster_alloc_ (MPool self);
+
+
 #define MPOOL_BITMAP_SIZE(elements_per_cluster)                 \
   (((elements_per_cluster) + sizeof(uintptr_t)*CHAR_BIT - 1)    \
   / (sizeof(uintptr_t) * CHAR_BIT) * sizeof (uintptr_t))
@@ -452,12 +457,6 @@ mpool_free (MPool self, void* element)
     }
 }
 
-
-unsigned
-mpool_available (MPool self)
-{
-  return self->elements_free;
-}
 
 
 MPool

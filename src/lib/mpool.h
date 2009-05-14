@@ -29,12 +29,10 @@
 //mpool ------------
 //mpool
 //mpool This memory pools are implemented as clusters of fixed sized elements. New clusters
-//mpool are allocated on demand or manually preallocated with a `reserve()` operation. The pool
-//mpool can be optimized by a `optimize()` operation which sorts the freelist by the addresses of
-//mpool free elements and optionally moves elements (when a move function is provided) to lower
-//mpool to fill up holes and improve cache locality.
-//mpool Clusters can be reclaimed with a `collect()` operation. Optimization and Collection are
-//mpool optional and are never automatically called.
+//mpool are allocated on demand or manually preallocated with a `reserve()` operation.
+//mpool Some efforts are taken to ensure (cache) locality of the provided memory.
+//mpool All functions are reentrant but not threadsafe, if this is desired it is advised to
+//mpool care for proper locking elsewhere.
 //mpool
 */
 
@@ -63,12 +61,7 @@ typedef void (*mpool_destroy_fn)(void* self);
 //mpool  typedef mpool* MPool
 //mpool  typedef const mpool* const_MPool
 //mpool
-//mpool This structure should be considered opaque except for the documented members
-//mpool which may be read.
-//mpool
-//mpool  `unsigned mpool.elements_free`::
-//mpool         number of free elements in the pool
-//mpool
+//mpool This structure should be considered opaque.
 */
 typedef struct mpool_struct mpool;
 typedef mpool* MPool;
@@ -88,10 +81,12 @@ struct mpool_struct
 
 
 /*
-//index.mpool_init xref:mpool_init[mpool_init]:: initialize a new memory pool
+//index.mpool_init xref:mpool_init[mpool_init()]:: initialize a new memory pool
 //mpool [[mpool_init]]
 //mpool .mpool_init
-//mpool Memory pools must be initialized before being used.
+//mpool Initialize a memory pool, memory pools must be initialized before being used. One can supply
+//mpool an optional destructor function for elements, this will be used to destroy elements which are still
+//mpool in the pool when it gets destroyed itself. The destructor is _NOT_ called when elemented are freed.
 //mpool
 //mpool  MPool mpool_init (MPool self, size_t elem_size, unsigned elements_per_cluster, mpool_move_fn mv, mpool_destroy_fn dtor)
 //mpool
@@ -112,12 +107,14 @@ mpool_init (MPool self, size_t elem_size, unsigned elements_per_cluster, mpool_d
 
 
 /*
-//index.mpool_destroy xref:mpool_destroy[mpool_destroy]:: destroy a memory pool
+//index.mpool_destroy xref:mpool_destroy[mpool_destroy()]:: destroy a memory pool
 //mpool [[mpool_destroy]]
 //mpool .mpool_destroy
 //mpool A memory pool is not used anymore it should be destroyed. This frees all memory allocated with it.
 //mpool When a destructor was provided at construction time, then this destructor is used on all non free elements
-//mpool before before the memory is freed. If no destructor was given then the memory is just freed.
+//mpool before before the clusters are freed. If no destructor was given then the clusters are just freed.
+//mpool The destroyed memory pool behaves as if it was freshly initialized and can be used again, this is some kindof
+//mpool exceptional behaviour.
 //mpool
 //mpool  MPool mpool_destroy (MPool self)
 //mpool
@@ -133,43 +130,101 @@ mpool_destroy (MPool self);
 
 
 /*
-  query how much free elements are available
+//index.mpool_available xref:mpool_available[mpool_available()]:: query number of free elements
+//mpool [[mpool_available]]
+//mpool .mpool_available
+//mpool One can check how much elements are available without a new cluster allocation in a memory pool.
+//mpool
+//mpool  unsigned mpool_available (MPool self)
+//mpool
+//mpool  `self`::
+//mpool         pointer to the memory pool to be queried
+//mpool  return::
+//mpool         number of available elements
+//mpool
 */
-unsigned
-mpool_available (MPool self);
+static inline unsigned
+mpool_available (MPool self)
+{
+  return self->elements_free;
+}
 
 
 /*
-  resize the pool that at least nelements become available without cluster reallocations
+//index.mpool_reserve xref:mpool_reserve[mpool_reserve()]:: preallocate elements
+//mpool [[mpool_reserve]]
+//mpool .mpool_reserve
+//mpool Resize the pool that at least nelements become available without cluster reallocations
+//mpool
+//mpool  unsigned mpool_reserve (MPool self, unsigned nelements)
+//mpool
+//mpool  `self`::
+//mpool         pointer to the memory pool
+//mpool  `nelements`::
+//mpool         minimum number of elements to preallocate
+//mpool  return::
+//mpool         self on success or NULL on error
+//mpool
 */
 MPool
 mpool_reserve (MPool self, unsigned nelements);
 
 
 /*
-  allocate and initialize a new cluster (internal)
-*/
-MPool
-mpool_cluster_alloc_ (MPool self);
-
-
-/*
-  alloc one element from the pool
+//index.mpool_alloc xref:mpool_alloc[mpool_alloc()]:: allocate one element
+//mpool [[mpool_alloc]]
+//mpool .mpool_alloc
+//mpool Allocates on element from a mpool. To improve cache locality allocations
+//mpool are grouped close together to recent allocations.
+//mpool
+//mpool  void* mpool_alloc (MPool self)
+//mpool
+//mpool  `self`::
+//mpool         pointer to the memory pool
+//mpool  return::
+//mpool         pointer to the allocated memory on success or NULL on error
+//mpool         will never fail when enough space was preallocated
+//mpool
 */
 void*
 mpool_alloc (MPool self);
 
-/*
-  alloc one element from the pool
 
-  should be near 'near'
+/*
+//index.mpool_alloc_near xref:mpool_alloc_near[mpool_alloc_near()]:: allocate one element, w/ locality
+//mpool [[mpool_alloc_near]]
+//mpool .mpool_alloc_near
+//mpool Allocates on element from a mpool. To improve cache locality the allocation
+//mpool tries to get an element close to another.
+//mpool
+//mpool  void* mpool_alloc_near (MPool self, void* near)
+//mpool
+//mpool  `self`::
+//mpool         pointer to the memory pool
+//mpool  `near`::
+//mpool         reference to another element which should be close to the returned element (hint only)
+//mpool  return::
+//mpool         pointer to the allocated memory on success or NULL on error
+//mpool         will never fail when enough space was preallocated
+//mpool
 */
 void*
 mpool_alloc_near (MPool self, void* near);
 
 
 /*
-  put a element back on the pool
+//index.mpool_free xref:mpool_free[mpool_free()]:: free one element
+//mpool [[mpool_free]]
+//mpool .mpool_free
+//mpool Frees the given element and puts it back into the pool for furhter allocations.
+//mpool
+//mpool  void mpool_free (MPool self, void* element)
+//mpool
+//mpool  `self`::
+//mpool         pointer to the memory pool
+//mpool  `element`::
+//mpool         element to be freed
+//mpool
 */
 void
 mpool_free (MPool self, void* element);
@@ -182,3 +237,11 @@ nobug_mpool_dump (const_MPool self,
                   const char* file,
                   const int line,
                   const char* func);
+
+/*
+//      Local Variables:
+//      mode: C
+//      c-file-style: "gnu"
+//      indent-tabs-mode: nil
+//      End:
+*/
