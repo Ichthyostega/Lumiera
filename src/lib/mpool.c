@@ -26,6 +26,14 @@
 
 #include "mpool.h"
 
+
+
+#if UINTPTR_MAX > 4294967295U   /* 64 bit */
+#define MPOOL_DIV_SHIFT 6
+#else                           /* 32 bit */
+#define MPOOL_DIV_SHIFT 5
+#endif
+
 /*
   Cluster and node structures are private
 */
@@ -99,10 +107,11 @@ bitmap_bit_get_nth (MPoolcluster cluster, unsigned index)
 {
   TRACE (mpool_dbg, "cluster %p: index %u", cluster, index);
 
-  ldiv_t div = ldiv(index, sizeof(uintptr_t)*CHAR_BIT);
+  uintptr_t quot = index>>MPOOL_DIV_SHIFT;
+  uintptr_t rem = index & ~((~0ULL)<<MPOOL_DIV_SHIFT);
   uintptr_t* bitmap = (uintptr_t*)&cluster->data;
 
-  return bitmap[div.quot] & ((uintptr_t)1<<div.rem);
+  return bitmap[quot] & ((uintptr_t)1<<rem);
 }
 
 
@@ -221,31 +230,27 @@ alloc_near (MPoolcluster cluster, MPool self, void* locality)
     MPOOL_BITMAP_SIZE (((MPool)self)->elements_per_cluster);            /* bitmap */
 
   uintptr_t index = (locality - begin_of_elements) / self->elem_size;
-
-#if UINTPTR_MAX > 4294967295U   /* 64 bit */
-  lldiv_t div = lldiv(index, sizeof(uintptr_t)*CHAR_BIT);
-#else                           /* 32 bit */
-  ldiv_t div = ldiv(index, sizeof(uintptr_t)*CHAR_BIT);
-#endif
+  uintptr_t quot = index>>MPOOL_DIV_SHIFT;
+  uintptr_t rem = index & ~((~0ULL)<<MPOOL_DIV_SHIFT);
 
   uintptr_t* bitmap = (uintptr_t*)&cluster->data;
   unsigned r = ~0U;
 
   /* the bitmap word at locality */
-  if (bitmap[div.quot] < UINTPTR_MAX)
+  if (bitmap[quot] < UINTPTR_MAX)
     {
-      r = uintptr_nearestbit (~bitmap[div.quot], div.rem);
+      r = uintptr_nearestbit (~bitmap[quot], rem);
     }
   /* the bitmap word before locality, this gives a slight bias towards the begin, keeping the pool compact */
-  else if (div.quot && bitmap[div.quot-1] < UINTPTR_MAX)
+  else if (quot && bitmap[quot-1] < UINTPTR_MAX)
     {
-      --div.quot;
-      r = uintptr_nearestbit (~bitmap[div.quot], sizeof(uintptr_t)*CHAR_BIT-1);
+      --quot;
+      r = uintptr_nearestbit (~bitmap[quot], sizeof(uintptr_t)*CHAR_BIT-1);
     }
 
-  if (r != ~0U && (div.quot*sizeof(uintptr_t)*CHAR_BIT+r) < self->elements_per_cluster)
+  if (r != ~0U && (quot*sizeof(uintptr_t)*CHAR_BIT+r) < self->elements_per_cluster)
     {
-      void* ret = begin_of_elements + ((uintptr_t)(div.quot*sizeof(uintptr_t)*CHAR_BIT+r)*self->elem_size);
+      void* ret = begin_of_elements + ((uintptr_t)(quot*sizeof(uintptr_t)*CHAR_BIT+r)*self->elem_size);
       return ret;
     }
   return NULL;
@@ -261,17 +266,13 @@ bitmap_set_element (MPoolcluster cluster, MPool self, void* element)
     MPOOL_BITMAP_SIZE (((MPool)self)->elements_per_cluster);            /* bitmap */
 
   uintptr_t index = (element - begin_of_elements) / self->elem_size;
-
-#if UINTPTR_MAX > 4294967295U   /* 64 bit */
-  lldiv_t div = lldiv(index, sizeof(uintptr_t)*CHAR_BIT);
-#else                           /* 32 bit */
-  ldiv_t div = ldiv(index, sizeof(uintptr_t)*CHAR_BIT);
-#endif
+  uintptr_t quot = index>>MPOOL_DIV_SHIFT;
+  uintptr_t rem = index & ~((~0ULL)<<MPOOL_DIV_SHIFT);
 
   uintptr_t* bitmap = (uintptr_t*)&cluster->data;
-  bitmap[div.quot] |= ((uintptr_t)1<<div.rem);
+  bitmap[quot] |= ((uintptr_t)1<<rem);
 
-  TRACE (mpool_dbg, "set bit %d, index %d, of %p is %p", div.rem, div.quot, element, bitmap[div.quot]);
+  TRACE (mpool_dbg, "set bit %d, index %d, of %p is %p", rem, quot, element, bitmap[quot]);
 }
 
 
@@ -284,17 +285,13 @@ bitmap_clear_element (MPoolcluster cluster, MPool self, void* element)
     MPOOL_BITMAP_SIZE (((MPool)self)->elements_per_cluster);            /* bitmap */
 
   uintptr_t index = (element - begin_of_elements) / self->elem_size;
-
-#if UINTPTR_MAX > 4294967295U   /* 64 bit */
-  lldiv_t div = lldiv(index, sizeof(uintptr_t)*CHAR_BIT);
-#else                           /* 32 bit */
-  ldiv_t div = ldiv(index, sizeof(uintptr_t)*CHAR_BIT);
-#endif
+  uintptr_t quot = index>>MPOOL_DIV_SHIFT;
+  uintptr_t rem = index & ~((~0ULL)<<MPOOL_DIV_SHIFT);
 
   uintptr_t* bitmap = (uintptr_t*)&cluster->data;
-  bitmap[div.quot] &= ~((uintptr_t)1<<div.rem);
+  bitmap[quot] &= ~((uintptr_t)1<<rem);
 
-  TRACE (mpool_dbg, "cleared bit %d, index %d, of %p is %p", div.rem, div.quot, element, bitmap[div.quot]);
+  TRACE (mpool_dbg, "cleared bit %d, index %d, of %p is %p", rem, quot, element, bitmap[quot]);
 }
 
 
@@ -352,36 +349,32 @@ find_near (MPoolcluster cluster, MPool self, void* element)
     MPOOL_BITMAP_SIZE (((MPool)self)->elements_per_cluster);            /* bitmap */
 
   uintptr_t index = (element - begin_of_elements) / self->elem_size;
-
-#if UINTPTR_MAX > 4294967295U   /* 64 bit */
-  lldiv_t div = lldiv (index, sizeof(uintptr_t)*CHAR_BIT);
-#else                           /* 32 bit */
-  ldiv_t div = ldiv (index, sizeof(uintptr_t)*CHAR_BIT);
-#endif
+  uintptr_t quot = index>>MPOOL_DIV_SHIFT;
+  uintptr_t rem = index & ~((~0ULL)<<MPOOL_DIV_SHIFT);
 
   uintptr_t* bitmap = (uintptr_t*)&cluster->data;
   unsigned r = ~0U;
 
   /* the bitmap word at locality */
-  if (bitmap[div.quot] < UINTPTR_MAX)
+  if (bitmap[quot] < UINTPTR_MAX)
     {
-      r = uintptr_nearestbit (~bitmap[div.quot], div.rem);
+      r = uintptr_nearestbit (~bitmap[quot], rem);
     }
   /* the bitmap word after element, we assume that elements after the searched element are more likely be free */
-  else if (index < self->elements_per_cluster && bitmap[div.quot+1] < UINTPTR_MAX)
+  else if (index < self->elements_per_cluster && bitmap[quot+1] < UINTPTR_MAX)
     {
-      ++div.quot;
-      r = uintptr_nearestbit (~bitmap[div.quot], 0);
+      ++quot;
+      r = uintptr_nearestbit (~bitmap[quot], 0);
     }
   /* finally the bitmap word before element */
-  else if (index > 0 && bitmap[div.quot-1] < UINTPTR_MAX)
+  else if (index > 0 && bitmap[quot-1] < UINTPTR_MAX)
     {
-      --div.quot;
-      r = uintptr_nearestbit (~bitmap[div.quot], sizeof(uintptr_t)*CHAR_BIT-1);
+      --quot;
+      r = uintptr_nearestbit (~bitmap[quot], sizeof(uintptr_t)*CHAR_BIT-1);
     }
 
-  if (r != ~0U && (div.quot*sizeof(uintptr_t)*CHAR_BIT+r) < self->elements_per_cluster)
-    return begin_of_elements + ((uintptr_t)(div.quot*sizeof(uintptr_t)*CHAR_BIT+r)*self->elem_size);
+  if (r != ~0U && (quot*sizeof(uintptr_t)*CHAR_BIT+r) < self->elements_per_cluster)
+    return begin_of_elements + ((uintptr_t)(quot*sizeof(uintptr_t)*CHAR_BIT+r)*self->elem_size);
 
   return NULL;
 }
