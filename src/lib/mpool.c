@@ -21,7 +21,6 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdint.h>
 #include <stdbool.h>
 #include <limits.h>
 
@@ -51,6 +50,9 @@ struct mpoolnode_struct
   llist node;
 };
 
+#define MPOOL_BITMAP_SIZE(elements_per_cluster)                 \
+  (((elements_per_cluster) + sizeof(uintptr_t)*CHAR_BIT - 1)    \
+  / (sizeof(uintptr_t) * CHAR_BIT) * sizeof (uintptr_t))
 
 MPool
 mpool_init (MPool self, size_t elem_size, unsigned elements_per_cluster, mpool_destroy_fn dtor)
@@ -69,6 +71,10 @@ mpool_init (MPool self, size_t elem_size, unsigned elements_per_cluster, mpool_d
 
       self->elements_per_cluster = elements_per_cluster;
 
+      self->cluster_size = sizeof (mpoolcluster) +              /* header */
+        MPOOL_BITMAP_SIZE (self->elements_per_cluster) +        /* bitmap */
+        self->elem_size * self->elements_per_cluster;           /* elements */
+
       self->elements_free = 0;
       self->destroy = dtor;
       self->locality = NULL;
@@ -76,11 +82,6 @@ mpool_init (MPool self, size_t elem_size, unsigned elements_per_cluster, mpool_d
 
   return self;
 }
-
-
-#define MPOOL_BITMAP_SIZE(elements_per_cluster)                 \
-  (((elements_per_cluster) + sizeof(uintptr_t)*CHAR_BIT - 1)    \
-  / (sizeof(uintptr_t) * CHAR_BIT) * sizeof (uintptr_t))
 
 
 static inline void*
@@ -142,10 +143,7 @@ mpool_destroy (MPool self)
 MPool
 mpool_cluster_alloc_ (MPool self)
 {
-  MPoolcluster cluster = malloc (sizeof (*cluster) +                                    /* header */
-                                 MPOOL_BITMAP_SIZE (self->elements_per_cluster) +       /* bitmap */
-                                 self->elem_size * self->elements_per_cluster);         /* elements */
-
+  MPoolcluster cluster = malloc (self->cluster_size);
   TRACE (mpool_dbg, "%p", cluster);
 
   if (!cluster)
@@ -171,16 +169,12 @@ mpool_cluster_alloc_ (MPool self)
 
 
 static int
-cmp_cluster_contains_element (const_LList cluster, const_LList element, void* self)
+cmp_cluster_contains_element (const_LList cluster, const_LList element, void* cluster_size)
 {
   if (element < cluster)
     return -1;
 
-  if ((void*)element >
-      (void*)cluster +
-      sizeof (*cluster) +                                               /* header */
-      MPOOL_BITMAP_SIZE (((MPool)self)->elements_per_cluster) +         /* bitmap */
-      ((MPool)self)->elem_size * ((MPool)self)->elements_per_cluster)   /* elements */
+  if ((void*)element > (void*)cluster + (uintptr_t)cluster_size)
     return 1;
 
   return 0;
@@ -190,7 +184,7 @@ cmp_cluster_contains_element (const_LList cluster, const_LList element, void* se
 static inline MPoolcluster
 element_cluster_get (MPool self, void* element)
 {
-  return (MPoolcluster) llist_ufind (&self->clusters, (const_LList) element, cmp_cluster_contains_element, self);
+  return (MPoolcluster) llist_ufind (&self->clusters, (const_LList) element, cmp_cluster_contains_element, (void*)self->cluster_size);
 }
 
 

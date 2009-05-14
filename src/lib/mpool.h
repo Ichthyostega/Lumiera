@@ -19,6 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+#include <stdint.h>
 #include <nobug.h>
 #include "lib/llist.h"
 #include "include/logging.h"
@@ -79,6 +80,7 @@ struct mpool_struct
   llist clusters;
   size_t elem_size;
   unsigned elements_per_cluster;
+  uintptr_t cluster_size;
   unsigned elements_free;               /* a counter of free elements is the price we pay to support a reserve() operation */
   void* locality;
   mpool_destroy_fn destroy;
