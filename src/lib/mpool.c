@@ -1,5 +1,5 @@
 /*
-    mpool.h - memory pool for constant sized objects
+    mpool.c - memory pool for constant sized objects
 
   Copyright (C)         Lumiera.org
     2009,               Christian Thaeter <ct@pipapo.org>
@@ -334,6 +334,50 @@ mpool_alloc (MPool self)
     }
 
   self->locality = ret;
+  --self->elements_free;
+
+  return ret;
+}
+
+
+void*
+mpool_alloc_near (MPool self, void* near)
+{
+  TRACE (mpool_dbg);
+
+  if (!self->elements_free)
+    {
+      if (mpool_cluster_alloc_ (self))
+        {
+          near = NULL; /* supress alloc_near() */
+        }
+      else
+        {
+          ERROR (mpool_dbg, "allocation failure");
+          return NULL;
+        }
+    }
+
+  void* ret = NULL;
+
+  if (near)
+    {
+      ret = alloc_near (element_cluster_get (self, near), self, near);
+      TRACE_IF (ret, mpool_dbg, "near allocation %p", ret);
+    }
+
+  if (!ret)
+    {
+      ret = llist_head (&self->freelist);
+      TRACE_IF (ret, mpool_dbg, "far allocation %p", ret);
+    }
+
+  if (ret)
+    {
+      bitmap_set_element (element_cluster_get (self, ret), self, ret);
+      llist_unlink_fast_ ((LList)ret);
+    }
+
   --self->elements_free;
 
   return ret;

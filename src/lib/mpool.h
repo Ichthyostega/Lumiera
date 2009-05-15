@@ -156,7 +156,16 @@ mpool_cluster_alloc_ (MPool self);
 /*
   alloc one element from the pool
 */
-void* mpool_alloc (MPool self);
+void*
+mpool_alloc (MPool self);
+
+/*
+  alloc one element from the pool
+
+  should be near 'near'
+*/
+void*
+mpool_alloc_near (MPool self, void* near);
 
 
 /*
