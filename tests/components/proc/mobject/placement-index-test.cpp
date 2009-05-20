@@ -25,8 +25,9 @@
 //#include "proc/asset/media.hpp"
 //#include "proc/mobject/session.hpp"
 //#include "proc/mobject/session/edl.hpp"
-//#include "proc/mobject/session/testclip.hpp"
+#include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/placement.hpp"
+#include "proc/mobject/placement-index.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
 //#include "lib/util.hpp"
 
@@ -41,10 +42,10 @@ using std::string;
 
 
 namespace mobject {
-namespace session {
 namespace test    {
       
   using asset::VIDEO;
+  using session::test::TestClip;
   
   
   
@@ -58,12 +59,36 @@ namespace test    {
    */
   class PlacementIndex_test : public Test
     {
+      typedef shared_ptr<PlacementIndex> PIdx;
       
       virtual void
       run (Arg) 
         {
+          PIdx index (createPlacementIndex());
+          ASSERT (index);
+          
           /////////////////////////////////TODO
-        } 
+          checkSimpleInsert (index);
+        }
+      
+      void
+      checkSimpleInsert (PIdx index)
+        {
+          PMO clip = TestClip::create();
+//        PMO& root = index->getRoot();
+          
+          ASSERT (0 == index->size());
+//        ASSERT (!index->contains (clip));
+          
+//        index->insert (clip, root);
+          ASSERT (1 == index->size());
+//        ASSERT ( index->contains (clip));
+          
+//        index->remove(clip);
+          ASSERT (0 == index->size());
+//        ASSERT (!index->contains (clip));
+//        ASSERT ( index->contains (root));
+        }
     };
   
   
@@ -71,4 +96,4 @@ namespace test    {
   LAUNCHER (PlacementIndex_test, "unit session");
       
       
-}}} // namespace mobject::session::test
+}} // namespace mobject::test

@@ -44,8 +44,7 @@
 
 
 
-namespace asset
-  {
+namespace asset {
   
   class Clip;
   class Media;

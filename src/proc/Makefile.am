@@ -93,6 +93,7 @@ liblumiprocmobject_la_SOURCES =					\
 	$(liblumiprocmobject_la_srcdir)/mobject.cpp		\
 	$(liblumiprocmobject_la_srcdir)/parameter.cpp		\
 	$(liblumiprocmobject_la_srcdir)/paramprovider.cpp	\
+	$(liblumiprocmobject_la_srcdir)/placement-index.cpp	\
 	$(liblumiprocmobject_la_srcdir)/placement.cpp
 
 

@@ -50,6 +50,7 @@ namespace mobject {
    */
   class PlacementRef
     {
+    public:
       /**
        * 
        */
