@@ -79,7 +79,7 @@ namespace mobject {
         bool remove (PlacementMO&);
         bool remove (ID);
     };
-  ////////////////TODO currently just fleshing  out the API; probably have to splitt off an impl.class
+  ////////////////TODO currently just fleshing  out the API; probably have to split off an impl.class
   
   
   

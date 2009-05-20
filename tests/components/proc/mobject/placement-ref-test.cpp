@@ -57,8 +57,6 @@ namespace test    {
    */
   class PlacementRef_test : public Test
     {
-      typedef shared_ptr<asset::Media> PM;
-      typedef shared_ptr<asset::Clip> PCA;
       
       virtual void
       run (Arg) 

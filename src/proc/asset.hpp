@@ -216,11 +216,11 @@ namespace asset {
        */
       set<string> groups;
 
-      /** user visible Name-ID. To be localized. */
+      /** user visible Name-ID. To be localised. */
       const string shortDesc;
 
       /** user visible qualification of the thing, unit or concept represented by this asset.
-       *  perferably "in one line". To be localized.  */
+       *  preferably "in one line". To be localised.  */
       const string longDesc;
       
       vector<PAsset> parents;
@@ -232,7 +232,7 @@ namespace asset {
       
     protected:
       /** Asset is a Interface class; usually, objects of 
-       *  concrete subclasses are created via specialized Factories.
+       *  concrete subclasses are created via specialised Factories.
        *  Calling this base ctor causes registration with AssetManager.
        */
       Asset (const Ident& idi);
@@ -240,11 +240,11 @@ namespace asset {
       
       /** release all links to other Asset objects held internally.
        *  The lifecycle of Asset objects is managed by smart pointers
-       *  and the Asset manager. Calling \c release() breaks interconnectons
+       *  and the Asset manager. Calling \c release() breaks interconnections
        *  to other Assets in the central Object network comprising the session.
-       *  It is up to the AssetManager to asure the notification of any other
+       *  It is up to the AssetManager to assure the notification of any other
        *  components that may need to release references to the Asset object
-       *  beeing removed. The rationale is, after releasing all interlinkings,
+       *  being removed. The rationale is, after releasing all interlinking,
        *  when the AssetManager removes its DB entry for this asset, the
        *  smart pointer goes out of scope and triggers cleanup.
        */
@@ -255,7 +255,7 @@ namespace asset {
       virtual void unlink (IDA target);
       
       /** establish a connection between this and the given parent asset,
-       *  denoting we are in some way dependant on the parent. */
+       *  denoting we are in some way dependent on the parent. */
       void defineDependency (PAsset parent);
       void defineDependency (Asset& parent); 
       
@@ -280,7 +280,7 @@ namespace asset {
        */
       const vector<PAsset>& getDependant ()  const { return dependants; }
       
-      /** weather this asset is swithced on and consequently 
+      /** weather this asset is switched on and consequently 
        *  included in the fixture and participates in rendering
        */
       bool isActive ()  const;
@@ -303,7 +303,7 @@ namespace asset {
     
     /** ordering of Assets is based on the ordering
      *  of Ident tuples, which are supposed to be unique.
-     *  By using our customized lumiera::P as smart ptr,
+     *  By using our customised lumiera::P as smart ptr,
      *  comparison on P<Asset> ptrs will be automatically
      *  forwarded to the Asset comparison operators.
      *  @note version info is irrelevant */
