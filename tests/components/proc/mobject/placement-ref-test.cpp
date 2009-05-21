@@ -27,6 +27,7 @@
 //#include "proc/mobject/session/edl.hpp"
 //#include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/placement.hpp"
+#include "proc/mobject/placement-ref.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
 //#include "lib/util.hpp"
 
@@ -46,6 +47,12 @@ namespace test    {
       
   using asset::VIDEO;
   
+  /** @todo WIP a generic hash-index, maybe also usable for assets */
+  HaID<TestBB> hahaBB1;
+  
+  TestBA bab;
+  HaID<TestBA> hahaBA1 (bab);
+  ///////////////////////////////TODO (Experimentation)
   
   
   /***************************************************************************

@@ -45,6 +45,45 @@ namespace mobject {
 //  using std::tr1::shared_ptr;
   
   
+  /** @todo WIP a generic hash-index, maybe also usable for assets */
+  struct LuidH 
+    {
+      long dummy_;
+    };
+  
+  template<typename T>
+  struct HaID;
+  
+  struct TestA 
+    {
+      LuidH id_;
+      HaID<TestA> const& getID()  const;
+    };
+  struct TestBA : TestA {};
+  struct TestBB : TestA {};
+  
+  template<>
+  struct HaID<TestA> : LuidH
+    {
+      HaID ()                 : LuidH () {}
+      HaID (TestA const& ref) : LuidH (ref.getID()) {}
+    };
+  
+  template<typename T>
+  struct HaID : HaID<TestA>
+    {
+      HaID ()             : HaID<TestA> ()    {}
+      HaID (T const& ref) : HaID<TestA> (ref) {}
+    };
+  
+  inline 
+  HaID<TestA> const&
+  TestA::getID()  const
+  {
+    return *(static_cast<const HaID<TestA>*> (&id_)); 
+  }
+  
+  
   
   /**
    */
