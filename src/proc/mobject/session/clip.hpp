@@ -47,7 +47,7 @@ namespace mobject
      * sequence of media data loaded as Asset into the current Session.
      * As such, it is a virtual (non destructive) cut or edit of the 
      * source material and can be placed into the EDL to be rendered
-     * into the ouput. The actual media type of a clip will be derived
+     * into the output. The actual media type of a clip will be derived
      * at runtime by resolving this reference to the underlying Asset.
      * 
      * @todo define how to denote Time positions /lengths. This is tricky,

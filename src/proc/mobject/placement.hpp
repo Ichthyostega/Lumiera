@@ -110,7 +110,7 @@ namespace mobject {
       
       
       /** interface for defining the kind of placement
-       *  to employ, and for controling any additional
+       *  to employ, and for controlling any additional
        *  constraints and properties. 
        */
       session::LocatingPin chain;

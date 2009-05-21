@@ -75,19 +75,19 @@ namespace test    {
       checkSimpleInsert (PIdx index)
         {
           PMO clip = TestClip::create();
-//        PMO& root = index->getRoot();
+          PMO& root = index->getRoot();
           
           ASSERT (0 == index->size());
-//        ASSERT (!index->contains (clip));
+          ASSERT (!index->contains (clip));
           
 //        index->insert (clip, root);
           ASSERT (1 == index->size());
-//        ASSERT ( index->contains (clip));
+          ASSERT ( index->contains (clip));
           
 //        index->remove(clip);
           ASSERT (0 == index->size());
-//        ASSERT (!index->contains (clip));
-//        ASSERT ( index->contains (root));
+          ASSERT (!index->contains (clip));
+          ASSERT ( index->contains (root));
         }
     };
   

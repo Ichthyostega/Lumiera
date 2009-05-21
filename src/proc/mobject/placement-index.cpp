@@ -60,12 +60,28 @@ namespace mobject {
   /** */
   
   
+  PlacementIndex::PlacementMO&
+  PlacementIndex::getRoot()  const
+  {
+    UNIMPLEMENTED ("managing the implicit root context within a scope hierarchy");
+  }
+  
+  
   size_t
   PlacementIndex::size()  const
   {
     return pTab_->size() - 1;
   }
-
+  
+  
+  bool
+  PlacementIndex::contains (PlacementMO&)  const
+  {
+    UNIMPLEMENTED ("containment test: is the given Placement known within this index");
+    return false;
+  }
+  
+  
   
   
   /** @internal factory function for creating a placement index for tests.
