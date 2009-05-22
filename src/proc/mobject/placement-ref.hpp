@@ -51,38 +51,49 @@ namespace mobject {
       long dummy_;
     };
   
-  template<typename T>
+  template<typename T, class BA>
   struct HaID;
   
-  struct TestA 
+  template<class BA>
+  struct HaIndexed
     {
       LuidH id_;
-      HaID<TestA> const& getID()  const;
+      HaID<BA,BA> const& getID()  const;
+    };
+  
+  template<class BA>
+  struct HaID<BA,BA> : LuidH
+    {
+      HaID ()              : LuidH () {}
+      HaID (BA const& ref) : LuidH (ref.getID()) {}
+    };
+  
+  template<typename T, class BA>
+  struct HaID : HaID<BA,BA>
+    {
+      HaID ()             : HaID<BA,BA> ()    {}
+      HaID (T const& ref) : HaID<BA,BA> (ref) {}
+    };
+  
+  template<class BA>
+  inline HaID<BA,BA> const&
+  HaIndexed<BA>::getID()  const
+  {
+    return *(static_cast<const HaID<BA,BA>*> (&id_));
+  }
+
+  
+  struct Base
+    {
+      int ii_;
+    };
+  
+  struct TestA : Base, HaIndexed<TestA>
+    {
     };
   struct TestBA : TestA {};
   struct TestBB : TestA {};
-  
-  template<>
-  struct HaID<TestA> : LuidH
-    {
-      HaID ()                 : LuidH () {}
-      HaID (TestA const& ref) : LuidH (ref.getID()) {}
-    };
-  
-  template<typename T>
-  struct HaID : HaID<TestA>
-    {
-      HaID ()             : HaID<TestA> ()    {}
-      HaID (T const& ref) : HaID<TestA> (ref) {}
-    };
-  
-  inline 
-  HaID<TestA> const&
-  TestA::getID()  const
-  {
-    return *(static_cast<const HaID<TestA>*> (&id_)); 
-  }
-  
+
   
   
   /**

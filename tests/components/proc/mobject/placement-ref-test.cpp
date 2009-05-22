@@ -48,10 +48,10 @@ namespace test    {
   using asset::VIDEO;
   
   /** @todo WIP a generic hash-index, maybe also usable for assets */
-  HaID<TestBB> hahaBB1;
+  HaID<TestBB,TestA> hahaBB1;
   
   TestBA bab;
-  HaID<TestBA> hahaBA1 (bab);
+  HaID<TestBA,TestA> hahaBA1 (bab);
   ///////////////////////////////TODO (Experimentation)
   
   
