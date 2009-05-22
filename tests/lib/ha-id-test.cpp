@@ -22,33 +22,34 @@
 
 
 #include "lib/test/run.hpp"
-//#include "proc/asset/media.hpp"
-//#include "proc/mobject/session.hpp"
-//#include "proc/mobject/session/edl.hpp"
-//#include "proc/mobject/session/testclip.hpp"
+
 #include "lib/ha-id.hpp"
-//#include "proc/mobject/explicitplacement.hpp"
-//#include "lib/util.hpp"
 
-//#include <boost/format.hpp>
-//#include <iostream>
+#include <boost/format.hpp>
+#include <iostream>
 
-//using boost::format;
-//using lumiera::Time;
-//using util::contains;
-using std::string;
-//using std::cout;
+using boost::format;
+//using std::string;
+using std::cout;
 
 
 namespace lib {
 namespace test{
-      
-  /** @todo WIP a generic hash-index, maybe also usable for assets */
-  HaID<TestBB,TestA> hahaBB1;
   
-  TestBA bab;
-  HaID<TestBA,TestA> hahaBA1 (bab);
-  ///////////////////////////////TODO (Experimentation)
+  /* ==  a hierarchy of test-dummy objects to use the HaID == */
+  
+  struct Base
+    {
+      int ii_;
+    };
+  
+  struct TestA : Base, HaIndexed<TestA>
+    {
+    };
+  struct TestBA : TestA {};
+  struct TestBB : TestA {};
+  
+  
   
   
   /***************************************************************************
@@ -61,7 +62,21 @@ namespace test{
       virtual void
       run (Arg) 
         {
+          format fmt ("sizeof( %s ) = %d\n");
+          
           /////////////////////////////////TODO
+          HaID<TestBB,TestA> hahaBB1;
+          
+          TestBA bab;
+          bab.resetID(hahaBB1);
+          
+          HaID<TestBA,TestA> hahaBA1 (bab);
+          
+          cout << fmt % "TestBA"     % sizeof(bab);
+          cout << fmt % "ID<TestBA>" % sizeof(hahaBA1);
+          cout << fmt % "ID<TestBB>" % sizeof(hahaBB1);
+          
+          ASSERT (hahaBA1.dummy_ == hahaBB1.dummy_);
         } 
     };
   

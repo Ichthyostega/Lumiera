@@ -215,6 +215,11 @@ out: dtor ~TargetObj(12) successful
 END
 
 
+PLANNED "HaID_test" HaID_test <<END
+return: 0
+END
+
+
 TEST "LifeCycle_test" LifeCycle_test  <<END
 return: 0
 END
