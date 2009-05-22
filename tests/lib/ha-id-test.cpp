@@ -1,5 +1,5 @@
 /*
-  PlacementRef(Test)  -  generic reference to a Placement within the Session
+  HaID(Test)  -  proof-of-concept test for a hash based and typed ID
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -26,8 +26,7 @@
 //#include "proc/mobject/session.hpp"
 //#include "proc/mobject/session/edl.hpp"
 //#include "proc/mobject/session/testclip.hpp"
-#include "proc/mobject/placement.hpp"
-#include "proc/mobject/placement-ref.hpp"
+#include "lib/ha-id.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
 //#include "lib/util.hpp"
 
@@ -41,32 +40,34 @@ using std::string;
 //using std::cout;
 
 
-namespace mobject {
-namespace session {
-namespace test    {
+namespace lib {
+namespace test{
+      
+  /** @todo WIP a generic hash-index, maybe also usable for assets */
+  HaID<TestBB,TestA> hahaBB1;
   
+  TestBA bab;
+  HaID<TestBA,TestA> hahaBA1 (bab);
+  ///////////////////////////////TODO (Experimentation)
   
   
   /***************************************************************************
-   * @test properties and behaviour of the reference-mechanism for Placements.
-   * @see  mobject::Placement
-   * @see  mobject::MObject#create
-   * @see  mobject::Placement#addPlacement
-   * @see  mobject::Placement#resolve
+   * @test proof-of-concept test for a generic hash based and typed ID struct.
+   * @see  lib::HaID
    */
-  class PlacementRef_test : public Test
+  class HaID_test : public Test
     {
       
       virtual void
       run (Arg) 
         {
           /////////////////////////////////TODO
-        }
+        } 
     };
   
   
   /** Register this test class... */
-  LAUNCHER (PlacementRef_test, "unit session");
-  
-  
-}}} // namespace mobject::session::test
+  LAUNCHER (HaID_test, "unit common");
+      
+      
+}} // namespace lib::test

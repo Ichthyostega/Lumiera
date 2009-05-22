@@ -1,5 +1,5 @@
 /*
-  PLACEMENT-REF.hpp  -  generic reference to an individual placement added to the session
+  HA-ID.hpp  -  generic hash based and hierarchically typed ID
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,17 +21,17 @@
 */
 
 
-/** @file placement-ref.hpp 
+/** @file ha-id.hpp 
  **
- ** @see Placement
- ** @see PlacementRef_test
+ ** @see HaID_test
+ ** @see Placement usage example
  **
  */
 
 
 
-#ifndef MOBJECT_PLACEMENT__REF_H
-#define MOBJECT_PLACEMENT__REF_H
+#ifndef LIB_HA_ID_H
+#define LIB_HA_ID_H
 
 //#include "pre.hpp"
 //#include "proc/mobject/session/locatingpin.hpp"
@@ -40,9 +40,60 @@
 //#include <tr1/memory>
 
 
-namespace mobject {
+namespace lib {
 
 //  using std::tr1::shared_ptr;
+  
+  
+  /** @todo WIP a generic hash-index, maybe also usable for assets */
+  struct LuidH 
+    {
+      long dummy_;
+    };
+  
+  template<typename T, class BA>
+  struct HaID;
+  
+  template<class BA>
+  struct HaIndexed
+    {
+      LuidH id_;
+      HaID<BA,BA> const& getID()  const;
+    };
+  
+  template<class BA>
+  struct HaID<BA,BA> : LuidH
+    {
+      HaID ()              : LuidH () {}
+      HaID (BA const& ref) : LuidH (ref.getID()) {}
+    };
+  
+  template<typename T, class BA>
+  struct HaID : HaID<BA,BA>
+    {
+      HaID ()             : HaID<BA,BA> ()    {}
+      HaID (T const& ref) : HaID<BA,BA> (ref) {}
+    };
+  
+  template<class BA>
+  inline HaID<BA,BA> const&
+  HaIndexed<BA>::getID()  const
+  {
+    return *(static_cast<const HaID<BA,BA>*> (&id_));
+  }
+
+  
+  struct Base
+    {
+      int ii_;
+    };
+  
+  struct TestA : Base, HaIndexed<TestA>
+    {
+    };
+  struct TestBA : TestA {};
+  struct TestBB : TestA {};
+
   
   
   /**
@@ -68,5 +119,8 @@ namespace mobject {
   
   
   
-} // namespace mobject
+  
+
+
+} // namespace lib
 #endif
