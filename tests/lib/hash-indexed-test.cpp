@@ -1,5 +1,5 @@
 /*
-  HaID(Test)  -  proof-of-concept test for a hash based and typed ID
+  HashIndexed(Test)  -  proof-of-concept test for a hash based and typed ID
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -23,12 +23,12 @@
 
 #include "lib/test/run.hpp"
 
-#include "lib/ha-id.hpp"
+#include "lib/hash-indexed.hpp"
 
-#include <boost/format.hpp>
+//#include <boost/format.hpp>
 #include <iostream>
 
-using boost::format;
+//using boost::format;
 //using std::string;
 using std::cout;
 
@@ -40,49 +40,56 @@ namespace test{
   
   struct Base
     {
-      int ii_;
+      long ii_;
     };
   
-  struct TestA : Base, HashIndexed<TestA>
+  struct TestB : Base, HashIndexed<TestB,LuidH>
     {
+      TestB () {}
+      TestB (ID const& refID) : HashIndexed<TestB,LuidH>(refID) {}
     };
-  struct TestBA : TestA {};
-  struct TestBB : TestA {};
+  struct TestDA : TestB {};
+  struct TestDB : TestB {};
   
   
   
   
   /***************************************************************************
    * @test proof-of-concept test for a generic hash based and typed ID struct.
-   * @see  lib::HaID
+   * @see  lib::HashIndexed::Id
    */
-  class HaID_test : public Test
+  class HashIndexed_test : public Test
     {
       
       virtual void
       run (Arg) 
         {
-          format fmt ("sizeof( %s ) = %d\n");
+          TestB::Id<TestDA> idDA;
           
-          /////////////////////////////////TODO
-          TestA::Id<TestBB> idBB1;
+          TestB bb (idDA);
           
-          TestBA bab;
-          bab.resetID (idBB1);
+          TestB::Id<TestDB> idDB1 ;
+          TestB::Id<TestDB> idDB2 (idDB1);
           
-          TestA::Id<TestBA> idBA1 (bab);
+          ASSERT (sizeof (idDB1)     == sizeof (idDA) );
+          ASSERT (sizeof (TestB::ID) == sizeof (LuidH));
+          ASSERT (sizeof (TestDA)    == sizeof (LuidH) + sizeof (Base));
           
-          cout << fmt % "TestBA"     % sizeof(bab);
-          cout << fmt % "Id<TestBA>" % sizeof(idBA1);
-          cout << fmt % "Id<TestBB>" % sizeof(idBB1);
+          ASSERT (idDA.dummy_  == bb.getID().dummy_);
+          ASSERT (idDB1.dummy_ == idDB2.dummy_);
           
-          ASSERT (idBA1.dummy_ == idBB1.dummy_);
+          TestDA d1;
+          TestDA d2;
+          ASSERT (d1.getID().dummy_ != d2.getID().dummy_);
+          
+          d2 = d1;
+          ASSERT (d1.getID().dummy_ == d2.getID().dummy_);
         } 
     };
   
   
   /** Register this test class... */
-  LAUNCHER (HaID_test, "unit common");
+  LAUNCHER (HashIndexed_test, "unit common");
       
       
 }} // namespace lib::test

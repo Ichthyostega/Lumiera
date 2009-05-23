@@ -215,7 +215,7 @@ out: dtor ~TargetObj(12) successful
 END
 
 
-PLANNED "HaID_test" HaID_test <<END
+PLANNED "HashIndexed_test" HashIndexed_test <<END
 return: 0
 END
 

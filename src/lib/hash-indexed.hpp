@@ -1,5 +1,5 @@
 /*
-  HA-ID.hpp  -  generic hash based and hierarchically typed ID
+  HASH-INDEXED.hpp  -  generic hash based and typed ID
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 */
 
 
-/** @file ha-id.hpp
+/** @file hash-indexed.hpp
  ** A template for generating hash based ID tags carrying compile-time type info.
  ** While the actual storage is assumed to be based on a POD, the type info is crucial
  ** to circumvent the problems with an "object" base class. Frequently, the need to
@@ -37,9 +37,9 @@
  ** - based on a configurable storage/implementation of the actual hash or index code.
  ** - tied to a specific hierarchy of objects (template parameter "BA")
  ** - providing an additional template parameter to pass the desired type info
- ** - establishing an type hierarchy relation between ID template instances, such that
- **   the IDs typed to the derived/specialised objects can stand-in for the generic
- **   ID typed to the base class.
+ ** - establishing an type hierarchy relation between ID related to the base class
+ **   and the IDs denoting specific subclasses, such that the latter can stand-in
+ **   for the generic ID.
  ** - providing a Mixin, which allows any hierarchy to use this facility without 
  **   much code duplication.
  **
@@ -50,8 +50,8 @@
 
 
 
-#ifndef LIB_HA_ID_H
-#define LIB_HA_ID_H
+#ifndef LIB_HASH_INDEXED_H
+#define LIB_HASH_INDEXED_H
 
 //#include "lib/util.hpp"
 
@@ -73,22 +73,29 @@ namespace lib {
     };
   
   
-  template<class BA>
+  /************************************************************
+   * A Mixin to add a private ID type to the target class,
+   * together with storage to hold an instance of this ID,
+   * getter and setter, and a templated version of the ID type
+   * which can be used to pass on specific subclass type info.
+   */
+  template<class BA, class IMP>
   struct HashIndexed
     {
-      /** 
-       * Generic hash based and hierarchically typed ID
-       * @todo WIP maybe also usable for assets?
+      
+      /**
+       * generic hash based ID, corresponding to the base class BA
        */
-      template<typename T>
-      struct Id;
-
-      struct ID : LuidH
+      struct ID : IMP
         {
-          ID ()              : LuidH () {}
-          ID (BA const& ref) : LuidH (ref.getID()) {}
+          ID ()              : IMP ()            {}
+          ID (BA const& ref) : IMP (ref.getID()) {}
+          ID (IMP const& ir) : IMP (ir)          {}
         };
       
+      /** 
+       * Hash based ID, typed to a specific subclass of BA
+       */
       template<typename T>
       struct Id : ID
         {
@@ -96,18 +103,21 @@ namespace lib {
           Id (T const& ref) : ID (ref) {}
         };
       
-      ID const& getID()  const
+      ID const&
+      getID ()  const
         { 
           return id_; 
         }
-      void resetID(HashIndexed const& ref)
+      
+      void
+      assignID (HashIndexed const& ref)
         { 
           this->id_ = ref.getID();
         }
-      void resetID(ID const& ref) ///< @todo this mutator should be removed in the final version to keep the actual hash opaque
-        { 
-          this->id_.dummy_ = ref.dummy_;
-        }
+      
+    protected:
+      HashIndexed ()                : id_()     {}
+      HashIndexed (IMP const& iref) : id_(iref) {}
       
     private:
       ID id_;

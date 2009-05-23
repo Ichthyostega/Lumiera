@@ -42,7 +42,7 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/exceptionerrortest.cpp		\
 	$(testlib_srcdir)/factoryspecialtest.cpp		\
 	$(testlib_srcdir)/factorytest.cpp			\
-	$(testlib_srcdir)/ha-id-test.cpp			\
+	$(testlib_srcdir)/hash-indexed-test.cpp			\
 	$(testlib_srcdir)/helloworldtest.cpp			\
 	$(testlib_srcdir)/lifecycletest.cpp			\
 	$(testlib_srcdir)/mainsuite.cpp				\
