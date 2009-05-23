@@ -70,6 +70,9 @@ namespace lib {
       long dummy_;
       
       LuidH() : dummy_(rand()) {}
+          
+      bool operator== (LuidH const& o)  const { return dummy_ == o.dummy_; }
+      bool operator!= (LuidH const& o)  const { return dummy_ != o.dummy_; }
     };
   
   

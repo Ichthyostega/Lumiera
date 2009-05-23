@@ -36,14 +36,14 @@ using std::cout;
 namespace lib {
 namespace test{
   
-  /* ==  a hierarchy of test-dummy objects to use the HaID == */
+  /* ==  a hierarchy of test-dummy objects to use the HashIndexed::ID == */
   
   struct Base
     {
       long ii_;
     };
   
-  struct TestB : Base, HashIndexed<TestB,LuidH>
+  struct TestB : Base, HashIndexed<TestB,LuidH> ///< Base class to mix in the hash ID facility
     {
       TestB () {}
       TestB (ID const& refID) : HashIndexed<TestB,LuidH>(refID) {}
@@ -75,15 +75,15 @@ namespace test{
           ASSERT (sizeof (TestB::ID) == sizeof (LuidH));
           ASSERT (sizeof (TestDA)    == sizeof (LuidH) + sizeof (Base));
           
-          ASSERT (idDA.dummy_  == bb.getID().dummy_);
-          ASSERT (idDB1.dummy_ == idDB2.dummy_);
+          ASSERT (idDA  == bb.getID() );
+          ASSERT (idDB1 == idDB2 );            // equality handled by the hash impl (here LuidH)
           
           TestDA d1;
           TestDA d2;
-          ASSERT (d1.getID().dummy_ != d2.getID().dummy_);
+          ASSERT (d1.getID() != d2.getID());   // should be different because LUIDs are random
           
-          d2 = d1;
-          ASSERT (d1.getID().dummy_ == d2.getID().dummy_);
+          d2 = d1; 
+          ASSERT (d1.getID() == d2.getID());   // default assignment operator works as expected
         } 
     };
   
