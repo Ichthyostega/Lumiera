@@ -43,7 +43,7 @@ namespace test{
       int ii_;
     };
   
-  struct TestA : Base, HaIndexed<TestA>
+  struct TestA : Base, HashIndexed<TestA>
     {
     };
   struct TestBA : TestA {};
@@ -65,18 +65,18 @@ namespace test{
           format fmt ("sizeof( %s ) = %d\n");
           
           /////////////////////////////////TODO
-          HaID<TestBB,TestA> hahaBB1;
+          TestA::Id<TestBB> idBB1;
           
           TestBA bab;
-          bab.resetID(hahaBB1);
+          bab.resetID (idBB1);
           
-          HaID<TestBA,TestA> hahaBA1 (bab);
+          TestA::Id<TestBA> idBA1 (bab);
           
           cout << fmt % "TestBA"     % sizeof(bab);
-          cout << fmt % "ID<TestBA>" % sizeof(hahaBA1);
-          cout << fmt % "ID<TestBB>" % sizeof(hahaBB1);
+          cout << fmt % "Id<TestBA>" % sizeof(idBA1);
+          cout << fmt % "Id<TestBB>" % sizeof(idBB1);
           
-          ASSERT (hahaBA1.dummy_ == hahaBB1.dummy_);
+          ASSERT (idBA1.dummy_ == idBB1.dummy_);
         } 
     };
   

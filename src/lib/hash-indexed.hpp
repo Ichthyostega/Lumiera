@@ -43,7 +43,7 @@
  ** - providing a Mixin, which allows any hierarchy to use this facility without 
  **   much code duplication.
  **
- ** @see HaID_test
+ ** @see HashIndexed_test
  ** @see Placement usage example
  **
  */
@@ -72,46 +72,47 @@ namespace lib {
       LuidH() : dummy_(rand()) {}
     };
   
-  /** 
-   * Generic hash based and hierarchically typed ID
-   * @todo WIP maybe also usable for assets?
-   */
-  template<typename T, class BA>
-  struct HaID;
   
   template<class BA>
-  struct HaIndexed
+  struct HashIndexed
     {
-      typedef HaID<BA,BA> RootID;
-      RootID id_;
+      /** 
+       * Generic hash based and hierarchically typed ID
+       * @todo WIP maybe also usable for assets?
+       */
+      template<typename T>
+      struct Id;
+
+      struct ID : LuidH
+        {
+          ID ()              : LuidH () {}
+          ID (BA const& ref) : LuidH (ref.getID()) {}
+        };
       
-      RootID const& getID()  const
+      template<typename T>
+      struct Id : ID
+        {
+          Id ()             : ID ()    {}
+          Id (T const& ref) : ID (ref) {}
+        };
+      
+      ID const& getID()  const
         { 
           return id_; 
         }
-      void resetID(HaIndexed const& ref)
+      void resetID(HashIndexed const& ref)
         { 
           this->id_ = ref.getID();
         }
-      void resetID(RootID const& ref) ///< @todo this mutator should be removed in the final version to keep the actual hash opaque
+      void resetID(ID const& ref) ///< @todo this mutator should be removed in the final version to keep the actual hash opaque
         { 
           this->id_.dummy_ = ref.dummy_;
         }
+      
+    private:
+      ID id_;
     };
   
-  template<class BA>
-  struct HaID<BA,BA> : LuidH
-    {
-      HaID ()              : LuidH () {}
-      HaID (BA const& ref) : LuidH (ref.getID()) {}
-    };
-  
-  template<typename T, class BA>
-  struct HaID : HaID<BA,BA>
-    {
-      HaID ()             : HaID<BA,BA> ()    {}
-      HaID (T const& ref) : HaID<BA,BA> (ref) {}
-    };
   
   
   
