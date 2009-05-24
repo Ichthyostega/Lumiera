@@ -1930,9 +1930,9 @@ The general idea is, that each facade interface actually provides access to a sp
 
 &amp;rarr; overview [[MObject class hierarchy|MObjects]]</pre>
 </div>
-<div title="MObjectRef" modifier="Ichthyostega" modified="200905090026" created="200904242107" tags="SessionLogic GuiIntegration design draft discuss" changecount="16">
+<div title="MObjectRef" modifier="Ichthyostega" modified="200905241554" created="200904242107" tags="SessionLogic GuiIntegration design draft discuss" changecount="18">
 <pre>''The Problem of referring to an [[MObject]]'' stems from the object //as a concept// encompassing a wider scope then just the current implementation instance. If the object was just a runtime entity in memory, we could use a simple (language) reference or pointer. Actually, this isn't sufficient, as the object reference will pass LayerSeparationInterfaces, will be handed over to code not written in the same implementation language, will be included in an ''UNDO'' record for the UndoManager, and thus will need to be serialized and stored permanently within the SessionStorage.
-Moreover [[MObject instances|MObject]] have a 2-level structure: the core object holds just the properties in a strict sense, i.e. the properties which the object //owns.// Any properties due to putting the object into a specific context, i.e. all relation properties are represented as [[Placement]] of the object. Thus, a reference to a specific ~MObject //instance,// actually denotes a specific Placement of this object into the Session.
+Moreover [[MObject instances|MObject]] have a 2-level structure: the core object holds just the properties in a strict sense, i.e. the properties which the object //owns.// Any properties due to putting the object into a specific context, i.e. all relation properties are represented as [[Placement]] of the object. Thus, when viewed from the client side, a reference to a specific ~MObject //instance,// actually denotes a //specific//&amp;nbsp; Placement of this object into the Session.
 
 !Requirements
 * just the reference allone is sufficient to access the placement //and//&amp;nbsp; the core object.
@@ -2810,26 +2810,26 @@ Placements have //value semantics,// i.e. we don't stress the identity of a plac
 
 </pre>
 </div>
-<div title="PlacementIndex" modifier="Ichthyostega" modified="200905232251" created="200905090053" tags="SessionLogic spec impl draft" changecount="11">
+<div title="PlacementIndex" modifier="Ichthyostega" modified="200905241504" created="200905090053" tags="SessionLogic spec impl draft" changecount="15">
 <pre>An implementation facility used to keep track of individual Placements and their relations.
-Especially, the [[Session]] maintains such an index, allowing to use the (opaque) PlacementRef tags for referring to a specific &quot;instance&quot; of an MObject, //placed// in a unique way into the current session. And, moreover, this index allows for one placement referring to another placement, so to implement a //relative// placement mode. Because there is an index behind the scenes, it is possible to actually access such a referral in the reverse direction, which is necessary for implementing the desired placement behaviour (if an object instance used as anchor is moved, all objects placed relatively to it have to move accordingly, which necessiates finding those other objects).
+Especially, the [[Session]] maintains such an index, allowing to use the (opaque) PlacementRef tags for referring to a specific &quot;instance&quot; of an MObject, //placed// in a unique way into the current session. And, moreover, this index allows for one placement referring to another placement, so to implement a //relative// placement mode. Because there is an index behind the scenes, it is possible to actually access such a referral in the reverse direction, which is necessary for implementing the desired placement behaviour (if an object instance used as anchor is moved, all objects placed relatively to it have to move accordingly, which necessitates finding those other objects).
 
 !questions {{red{WIP}}}
-What implementation approach to take for the index. This of course largely depends on the usage pattern, which in turn is not-yet existant. To start with, we need a preliminary implementation!
+What implementation approach to take for the index. This of course largely depends on the usage pattern, which in turn is not-yet existent. To start with, we need a preliminary implementation!
 
 Using a ''flat hashtable'' would allow to access a Placement denoted by ID in O(1). This way we could get the Placement, but nothing more. So, additionally we'd have to set up an data record holding additional information:
 * the [[scope|PlacementScope]] containing this placement
 * especially the path &quot;up&quot; from this scope, which is used for resolving any queries
 * relations to other placements
 
-Alternatively, we could try to use a ''structure based index''. Following this idea, we could try to avoid the mentioned description record by folding any of the contained informations into the surrounding datastructure:
+Alternatively, we could try to use a ''structure based index''. Following this idea, we could try to avoid the mentioned description record by folding any of the contained informations into the surrounding data structure:
 * the scope would be obvious from the index, resp. from the path used to resolve this index
 * any other informations, especially the relations, would be folded into the placement
-* this way, the &quot;index&quot; could be reduced to being the session datastructure itself.
+* this way, the &quot;index&quot; could be reduced to being the session data structure itself.
 
 
 !supported operations
-The placement index is utilized by editing operations, by executing the build process and besides these core operations it allows resolving PlacementRef objects (which possibly may have crossed layer boundaries). From these use cases we derive the following main operations to support:
+The placement index is utilized by editing operations, by executing the build process. Besides these core operations it allows for resolving PlacementRef objects. This latter functionality is used by all kinds of relative placements and for dealing with them while building, but it is also used to resolve [[object reference tags|MObjectRef]], which possibly may have been handed out via an external API or may have crossed layer boundaries. From these use cases we derive the following main operations to support:
 * find the actual [[Placement]] object for a given ID
 * find the //scope//&amp;nbsp; a given placement resides in. More specifically, find the [[placement defining this scope|PlacementScope]]
 * find (any/all) other placements referring to a given placement
@@ -2839,18 +2839,23 @@ The placement index is utilized by editing operations, by executing the build pr
 //does a placement need to know it's own ID?// &amp;nbsp; Obviously, there needs to be a way to find out the ID for a given placement, especially in the following situations:
 * for most of the operations above, when querying some additional informations from index for a given placement
 * to create a PlacementRef (this is a variant of the &quot;shared ptr from this&quot;-problem)
-On second sight, this problem seems to be quite nasty, because either we have to keep a second index table for the reversed lookup (memory address -&gt; ID), or have to tie the placement by a backlink when adding it to the index/session datastructure, or (at least) it forces us to store a copy of the ID //within// the placement itself. The last possibility seems to create the least impact; but implementing it this way effectively gears the implementation towards a hashtable based approach.
+On second sight, this problem seems to be quite nasty, because either we have to keep a second index table for the reversed lookup (memory address -&gt; ID), or have to tie the placement by a back-link when adding it to the index/session data structure, or (at least) it forces us to store a copy of the ID //within// the placement itself. The last possibility seems to create the least impact; but implementing it this way effectively gears the implementation towards a hashtable based approach.
 
 !implementation {{red{WIP}}}
 Consequently, we incorporate a random hash (implemented as {{{LUID}}}) into the individual placement, this way creating an distinguishable //placement identity,// which is retained on copying of the placement. The actual ID tag is complemented by a compile time type (template parameter), thus allowing to pass on additional context information through API calls.
 </pre>
 </div>
-<div title="PlacementRef" modifier="Ichthyostega" modified="200905232242" created="200905090032" tags="def spec draft" changecount="4">
+<div title="PlacementRef" modifier="Ichthyostega" modified="200905241641" created="200905090032" tags="def spec draft" changecount="7">
 <pre>A generic reference mechanism for Placements, as added to the current session.
-While this reference itself is not tied to the actual memory layout (meaning it's //not// a disguised pointer), the implementation relies on a [[placement index facility|PlacementIndex]] for tracking and retrieving the actual Placement implementation object. As a plus, this approach allows to //reverse// the relation denoted by such a reference, inasmuch it is possible to retrieve all other placements referring to a given target placement.
+While this reference itself is not tied to the actual memory layout (meaning it's //not// a disguised pointer), the implementation relies on a [[placement index facility|PlacementIndex]] for tracking and retrieving the actual Placement implementation object. As a plus, this approach allows to //reverse// the relation denoted by such a reference, inasmuch it is possible to retrieve all other placements referring to a given target placement. But for an (external) user, this link to an index implementation is kept transparent and implicit.
 
 !implementation {{red{WIP}}}
 From the usage context it is clear that the PlacementRef needs to incorporate a simple ID as the only actual data in memory, so it can be downcasted to a POD and passed as such via LayerSeparationInterfaces. And, of course, this ID tag should be the one used by PlacementIndex for organising the Placement index entries, thus enabling the PlacementRef to be passed immediately to the underlying index for resolution. Thus, this design decision is interconnected with the implementation technique used for the index (&amp;rarr; PlacementIndex). From the requirement of the ID tag to be contained in a fixed sized storage, and also from the expected kinds of queries Ichthyo (5/09) choose to incorporate a {{{LUID}}} as a random hash immediately into the placement and build the ID tag on top of it.
+
+!using placement references
+Placement references can be created directly from a given placement, or just from an {{{Placement::ID}}} tag. Creation can fail, because the validity of the reference is checked. From this point onward, the referred ~MObject is kept alive by the reference &amp;mdash; but note, this doesn't extend to the placement, which still may be modified or removed within the session without further notice. {{red{TODO investigate synchronisation guarantees or a locking mechanism}}} Thus, client code should never store direct references to the latter.
+
+Placement references have value semantics, i.e. they don't have an identity and can be copied feely. Dereferencing yields a direct (language) ref to the MObject, while the placement can be accessed by a separate function {{{getPlacement()}}}. Moreover, the PlacementRef instance provides a direct API to some of the most common query functions you could imagine to call on both the object and the placement (i.e. to find out about the start time, length, ....)
 </pre>
 </div>
 <div title="PlacementScope" modifier="Ichthyostega" modified="200905210132" created="200905120304" tags="SessionLogic spec draft" changecount="5">

@@ -30,7 +30,7 @@
 #include "proc/common.hpp"
 #include "proc/mobject/builder/buildertool.hpp"
 #include "proc/mobject/placement.hpp"
-#include "proc/asset.hpp"                 // TODO finally not needed?
+#include "proc/asset.hpp"                    //TODO finally not needed?
 
 #include <boost/noncopyable.hpp>
 #include <boost/operators.hpp>
@@ -39,24 +39,23 @@
 
 using std::list;
 
-#include "proc/assetmanager.hpp"                
-using proc_interface::IDA;                // TODO finally not needed?
+#include "proc/assetmanager.hpp"
+using proc_interface::IDA;                   //TODO finally not needed?
 //using proc_interface::PAsset;              //TODO: only temporarily
 using proc_interface::AssetManager;
 
-namespace mobject
-  {
+namespace mobject {
+  
   using lumiera::P;
   
   //NOBUG_DECLARE_FLAG (mobjectmem);
   
   
-  namespace session
-    {
+  namespace session {
     class MObjectFactory;
-    }
-
-
+  }
+  
+  
   /**
    * MObject is the interface class for all "Media Objects".
    * All the contents and elements that can be placed and 
@@ -70,7 +69,7 @@ namespace mobject
     {
     protected:
       typedef lumiera::Time Time;
-
+      
       // TODO: how to represent time intervals best?
       Time length;
       
@@ -89,13 +88,12 @@ namespace mobject
       virtual Time& getLength() =0; ///< @todo how to deal with the time/length field??
       
       virtual bool operator== (const MObject& oo)  const =0;
-
+      
     };
-
   
-    
+  
+  
   typedef Placement<MObject> PMO;
-
 
 
 } // namespace mobject

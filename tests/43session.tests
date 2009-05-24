@@ -29,6 +29,10 @@ PLANNED "PlacementBasic_test" PlacementBasic_test <<END
 END
 
 
+PLANNED "PlacementHierarchy_test" PlacementHierarchy_test <<END
+END
+
+
 PLANNED "PlacementIndex_test" PlacementIndex_test <<END
 END
 
