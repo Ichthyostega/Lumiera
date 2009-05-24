@@ -25,12 +25,7 @@
 
 #include "lib/hash-indexed.hpp"
 
-//#include <boost/format.hpp>
-#include <iostream>
-
-//using boost::format;
-//using std::string;
-using std::cout;
+#include <tr1/unordered_map>
 
 
 namespace lib {
@@ -38,15 +33,20 @@ namespace test{
   
   /* ==  a hierarchy of test-dummy objects to use the HashIndexed::ID == */
   
-  struct Base
+  struct DummyAncestor
     {
-      long ii_;
+      long xyz_;
     };
   
-  struct TestB : Base, HashIndexed<TestB,LuidH> ///< Base class to mix in the hash ID facility
+  struct TestB;                                  ///< Base class to mix in the hash ID facility
+  typedef HashIndexed<TestB, hash::LuidH> Mixin; ///< actual configuration of the mixin
+  
+  struct TestB : DummyAncestor, Mixin
     {
       TestB () {}
-      TestB (ID const& refID) : HashIndexed<TestB,LuidH>(refID) {}
+      TestB (ID const& refID) : Mixin (refID) {}
+      
+      bool operator== (TestB const& o)  const { return this->getID() == o.getID(); }
     };
   struct TestDA : TestB {};
   struct TestDB : TestB {};
@@ -56,13 +56,33 @@ namespace test{
   
   /***************************************************************************
    * @test proof-of-concept test for a generic hash based and typed ID struct.
-   * @see  lib::HashIndexed::Id
+   *       - check the various ctors 
+   *       - check default assignment works properly
+   *       - check assumptions about memory layout
+   *       - check equality comparison
+   *       - extract LUID and then cast LUID back into ID
+   *       - use the embedded hash ID (LUID) as hashtable key
+   *       
+   * @see lib::HashIndexed::Id
+   * @see mobject::Placement real world usage example 
    */
   class HashIndexed_test : public Test
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
+        {
+          checkBasicProperties();
+          checkLUID_passing();
+          
+          //            ---key-type-------+-value-+-hash-function--- 
+          buildHashtable<TestB::Id<TestDB>, TestDB, TestB::UseHashID> ();
+          buildHashtable<TestDB,            TestDB, TestB::UseEmbeddedHash>();
+        }
+      
+      
+      void
+      checkBasicProperties ()
         {
           TestB::Id<TestDA> idDA;
           
@@ -72,8 +92,8 @@ namespace test{
           TestB::Id<TestDB> idDB2 (idDB1);
           
           ASSERT (sizeof (idDB1)     == sizeof (idDA) );
-          ASSERT (sizeof (TestB::ID) == sizeof (LuidH));
-          ASSERT (sizeof (TestDA)    == sizeof (LuidH) + sizeof (Base));
+          ASSERT (sizeof (TestB::ID) == sizeof (hash::LuidH));
+          ASSERT (sizeof (TestDA)    == sizeof (hash::LuidH) + sizeof (DummyAncestor));
           
           ASSERT (idDA  == bb.getID() );
           ASSERT (idDB1 == idDB2 );            // equality handled by the hash impl (here LuidH)
@@ -84,12 +104,58 @@ namespace test{
           
           d2 = d1; 
           ASSERT (d1.getID() == d2.getID());   // default assignment operator works as expected
-        } 
+        }
+      
+      
+      void
+      checkLUID_passing ()
+        {
+          TestB::Id<TestDA> idOrig;
+          
+          lumiera_uid plainLUID;
+          lumiera_uid_copy (&plainLUID, idOrig.get());
+          
+          // now, maybe after passing it through a Layer barrier...
+          TestB::ID const& idCopy = reinterpret_cast<TestB::ID & > (plainLUID);
+          
+          ASSERT (idOrig == idCopy);
+        }
+      
+      
+      template<class KEY, class VAL, class HashFunc>
+      void
+      buildHashtable ()
+        {
+          typedef std::tr1::unordered_map<KEY, VAL, HashFunc> Hashtable;
+          
+          Hashtable tab;
+          
+          VAL o1;  KEY key1 (o1);
+          VAL o2;  KEY key2 (o2);
+          VAL o3;  KEY key3 (o3);
+          
+          tab[key1] = o1;                             // store copy into hashtable
+          tab[key2] = o2;
+          tab[key3] = o3;
+          
+          ASSERT (&o1 != &tab[key1]);                 // indeed a copy...
+          ASSERT (&o2 != &tab[key2]);
+          ASSERT (&o3 != &tab[key3]);
+          
+          ASSERT (o1.getID() == tab[key1].getID());   // but "equal" by ID
+          ASSERT (o2.getID() == tab[key2].getID());
+          ASSERT (o3.getID() == tab[key3].getID());
+          
+          ASSERT (o1.getID() != tab[key2].getID());
+          ASSERT (o1.getID() != tab[key3].getID());
+          ASSERT (o2.getID() != tab[key3].getID());
+        }
+      
     };
   
   
   /** Register this test class... */
   LAUNCHER (HashIndexed_test, "unit common");
-      
-      
+  
+  
 }} // namespace lib::test

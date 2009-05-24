@@ -30,7 +30,7 @@
  ** be managed within this collection. Typically this results in this common base class
  ** being almost worthless as an API or interface, causing lots of type casts when using
  ** such a common object management facility. Passing additional context or API information
- ** on a metaprogramming level through the management interface helps avoiding these 
+ ** on a metaprogramming level through the management interface helps avoiding these
  ** shortcomings. 
  ** 
  ** Here we build an ID facility with the following properties:
@@ -41,7 +41,7 @@
  **   and the IDs denoting specific subclasses, such that the latter can stand-in
  **   for the generic ID.
  ** - providing a Mixin, which allows any hierarchy to use this facility without 
- **   much code duplication.
+ **   much code duplication, including an adapter for tr1::unordered_map
  **
  ** @see HashIndexed_test
  ** @see Placement usage example
@@ -53,34 +53,78 @@
 #ifndef LIB_HASH_INDEXED_H
 #define LIB_HASH_INDEXED_H
 
-//#include "lib/util.hpp"
-
-//#include <tr1/memory>
-#include <cstdlib>
+extern "C" {
+#include "lib/luid.h"
+}
+#include <functional>
 
 
 namespace lib {
-
-//  using std::tr1::shared_ptr;
-  using std::rand;
   
+  /** Hash implementations usable for the HashIndexed mixin
+   *  as well as key within tr1::unordered_map */
+  namespace hash {
+    
+    /** 
+     * simple Hash implementation
+     * directly incorporating the hash value.
+     */
+    class Plain
+      {
+        const size_t hash_;
+        
+      public:
+        Plain (size_t val)
+          : hash_(val)
+          { }
+        
+        template<typename TY>
+        Plain (TY const& something)
+          : hash_(hash_value (something))  // ADL
+          { }
+        
+        operator size_t()  const { return hash_; }
+      };
+    
+    /**
+     * Hash implementation based on a lumiera unique object id (LUID)
+     * When invoking the default ctor, a new LUID is generated
+     */
+    class LuidH 
+      {
+        lumiera_uid luid_;
+        
+      public:
+        LuidH ()
+          {
+            lumiera_uid_gen (&luid_);
+            ENSURE (0 < lumiera_uid_hash(&luid_));
+          }
+        
+        typedef lumiera_uid* LUID;
+        
+        operator size_t ()                const { return lumiera_uid_hash ((LUID)&luid_); }
+        bool operator== (LuidH const& o)  const { return lumiera_uid_eq ((LUID)&luid_, (LUID)&o.luid_); }
+        bool operator!= (LuidH const& o)  const { return !operator== (o); }
+        
+        /** for passing to C APIs */
+        LUID get() { return &luid_; }
+      };
+    
+    
+    /* === for use within unordered_map === */
+    size_t hash_value (Plain const& plainHash)  { return plainHash; }
+    size_t hash_value (LuidH const& luid_Hash)  { return luid_Hash; }
+    
+  } // namespace "hash"
   
-  struct LuidH 
-    {
-      long dummy_;
-      
-      LuidH() : dummy_(rand()) {}
-          
-      bool operator== (LuidH const& o)  const { return dummy_ == o.dummy_; }
-      bool operator!= (LuidH const& o)  const { return dummy_ != o.dummy_; }
-    };
   
   
   /************************************************************
    * A Mixin to add a private ID type to the target class,
    * together with storage to hold an instance of this ID,
    * getter and setter, and a templated version of the ID type
-   * which can be used to pass on specific subclass type info.
+   * which can be used to pass specific subclass type info.
    */
   template<class BA, class IMP>
   struct HashIndexed
@@ -105,6 +149,22 @@ namespace lib {
           Id ()             : ID ()    {}
           Id (T const& ref) : ID (ref) {}
         };
+      
+      
+      /** enables use of BA objects as keys within tr1::unordered_map */
+      struct UseEmbeddedHash
+        : public std::unary_function<BA, size_t>
+        {
+          size_t operator() (BA const& obj)  const { return obj.getID(); }
+        };
+      
+      /** trivial hash functor using the ID as hash */
+      struct UseHashID
+        : public std::unary_function<ID, size_t>
+        {
+          size_t operator() (ID const& id)  const { return id; }
+        };
+      
       
       ID const&
       getID ()  const

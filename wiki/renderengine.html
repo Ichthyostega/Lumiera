@@ -758,9 +758,9 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BindingMO" modifier="Ichthyostega" modified="200905210149" created="200905210144" tags="def design discuss SessionLogic" changecount="2">
+<div title="BindingMO" modifier="Ichthyostega" modified="200905222252" created="200905210144" tags="def design discuss SessionLogic" changecount="4">
 <pre>Sometimes, two entities within the [[Session]] are deliberately associated, and this association has to carry some specific mappings between properties or facilities within the entities to be linked together. When this connection isn't just the [[Placement]] of an object, and isn't just a logical or structural relationship either &amp;mdash; then we create an explicit Binding object to be stored into the session.
-* Connecting a [[Sequence|EDL]] gets connected to a certain [[Timeline]] also establishes a mapping between the possible media stream channels produced by the sequence and the real output slots found within the timeline.
+* When connecting a [[Sequence|EDL]] to a certain [[Timeline]], we also establish a mapping between the possible media stream channels produced by the sequence and the real output slots found within the timeline.
 * similarly, using a sequence within a [[meta-clip|VirtualClip]] requires to remember such a mapping.
 * another example is the root [[scope|PlacementScope]], which (conceptually) is a link between the definition part of the Session and the graph of MObjects, which are the session's contents.
 
@@ -2810,7 +2810,7 @@ Placements have //value semantics,// i.e. we don't stress the identity of a plac
 
 </pre>
 </div>
-<div title="PlacementIndex" modifier="Ichthyostega" modified="200905192358" created="200905090053" tags="SessionLogic spec impl draft" changecount="10">
+<div title="PlacementIndex" modifier="Ichthyostega" modified="200905232251" created="200905090053" tags="SessionLogic spec impl draft" changecount="11">
 <pre>An implementation facility used to keep track of individual Placements and their relations.
 Especially, the [[Session]] maintains such an index, allowing to use the (opaque) PlacementRef tags for referring to a specific &quot;instance&quot; of an MObject, //placed// in a unique way into the current session. And, moreover, this index allows for one placement referring to another placement, so to implement a //relative// placement mode. Because there is an index behind the scenes, it is possible to actually access such a referral in the reverse direction, which is necessary for implementing the desired placement behaviour (if an object instance used as anchor is moved, all objects placed relatively to it have to move accordingly, which necessiates finding those other objects).
 
@@ -2828,7 +2828,7 @@ Alternatively, we could try to use a ''structure based index''. Following this i
 * this way, the &quot;index&quot; could be reduced to being the session datastructure itself.
 
 
-!supported operations {{red{WIP}}}
+!supported operations
 The placement index is utilized by editing operations, by executing the build process and besides these core operations it allows resolving PlacementRef objects (which possibly may have crossed layer boundaries). From these use cases we derive the following main operations to support:
 * find the actual [[Placement]] object for a given ID
 * find the //scope//&amp;nbsp; a given placement resides in. More specifically, find the [[placement defining this scope|PlacementScope]]
@@ -2836,20 +2836,21 @@ The placement index is utilized by editing operations, by executing the build pr
 * add a new placement to a scope given as parameter
 * remove a placement from index
 
-//does a placement need to know it's own ID?// Obviously, there needs to be a way to find out the ID for a given placement, especially in the following situations:
+//does a placement need to know it's own ID?// &amp;nbsp; Obviously, there needs to be a way to find out the ID for a given placement, especially in the following situations:
 * for most of the operations above, when querying some additional informations from index for a given placement
 * to create a PlacementRef (this is a variant of the &quot;shared ptr from this&quot;-problem)
-On second sight, this problem seems to be quite nasty, because either we have to keep a second indext table for the reversed lookup (memory address -&gt; ID), or have to tie the placement by a backlink when adding it to the index/session datastructure, or (at least) it forces us to store a copy of the ID //within// the placement itself. The last possibility seems to create the least impact; but implementing it this way effectively gears the implementation towards a hashtable based approach.
+On second sight, this problem seems to be quite nasty, because either we have to keep a second index table for the reversed lookup (memory address -&gt; ID), or have to tie the placement by a backlink when adding it to the index/session datastructure, or (at least) it forces us to store a copy of the ID //within// the placement itself. The last possibility seems to create the least impact; but implementing it this way effectively gears the implementation towards a hashtable based approach.
+
+!implementation {{red{WIP}}}
+Consequently, we incorporate a random hash (implemented as {{{LUID}}}) into the individual placement, this way creating an distinguishable //placement identity,// which is retained on copying of the placement. The actual ID tag is complemented by a compile time type (template parameter), thus allowing to pass on additional context information through API calls.
 </pre>
 </div>
-<div title="PlacementRef" modifier="Ichthyostega" modified="200905192350" created="200905090032" tags="def spec draft" changecount="3">
+<div title="PlacementRef" modifier="Ichthyostega" modified="200905232242" created="200905090032" tags="def spec draft" changecount="4">
 <pre>A generic reference mechanism for Placements, as added to the current session.
-While this reference itself is not tied to the actual memory layout (meaning it's //not// a disguised pointer), the implementation relies on a [[placement index facility|PlacementIndex]] for tracking and retrieving the actual Placement implementation object.
+While this reference itself is not tied to the actual memory layout (meaning it's //not// a disguised pointer), the implementation relies on a [[placement index facility|PlacementIndex]] for tracking and retrieving the actual Placement implementation object. As a plus, this approach allows to //reverse// the relation denoted by such a reference, inasmuch it is possible to retrieve all other placements referring to a given target placement.
 
-!questions {{red{WIP}}}
-Currently (5/09) ichthyo is in doubt what implementation to use best. It is clear that the PlacementRef needs to incorporate a simple ID as the only actual data in memory, so it can be downcasted to a POD and passed as such via LayerSeparationInterfaces. And, of course, this ID tag should be the one used by PlacementIndex for organising the Placement index entries, thus enabling the PlacementRef to be passed immediately to the underlying index for resolution. Thus, the design decision boils down to the question how to implement the ID tag.
-* a flat random hash, e.g. using a {{{LUID}}}?
-* a structure based index, which also denotes the position in the (tree like) datastructure (Sequences within the session)?
+!implementation {{red{WIP}}}
+From the usage context it is clear that the PlacementRef needs to incorporate a simple ID as the only actual data in memory, so it can be downcasted to a POD and passed as such via LayerSeparationInterfaces. And, of course, this ID tag should be the one used by PlacementIndex for organising the Placement index entries, thus enabling the PlacementRef to be passed immediately to the underlying index for resolution. Thus, this design decision is interconnected with the implementation technique used for the index (&amp;rarr; PlacementIndex). From the requirement of the ID tag to be contained in a fixed sized storage, and also from the expected kinds of queries Ichthyo (5/09) choose to incorporate a {{{LUID}}} as a random hash immediately into the placement and build the ID tag on top of it.
 </pre>
 </div>
 <div title="PlacementScope" modifier="Ichthyostega" modified="200905210132" created="200905120304" tags="SessionLogic spec draft" changecount="5">
@@ -3547,14 +3548,14 @@ Currently as of 5/09, this is an ongoing [[implementation and planning effort|Pl
 <div title="SessionInterface" modifier="Ichthyostega" modified="200904242109" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="2">
 <pre>{{red{WIP}}}</pre>
 </div>
-<div title="SessionLogic" modifier="Ichthyostega" modified="200904252317" created="200904242110" tags="overview" changecount="10">
+<div title="SessionLogic" modifier="Ichthyostega" modified="200905232229" created="200904242110" tags="overview" changecount="11">
 <pre>The Session contains all informations, state and objects to be edited by the User (&amp;rarr;[[def|Session]]).
 As such, the SessionInterface is the main entrance point to Proc-Layer functionality, both for the primary EditingOperations and for playback/rendering processes.
 
 Currently (as of 5/09), Ichthyo is [[targeting|PlanningSessionInMem]] a first preliminary implementation of the [[Session in Memory|SessionDataMem]]
 
 !Design and handling of Objects within the Session
-Objects are attached and manipulated by [[placements|Placement]]; thus the organisation of these placements is part of the session data layout. They behave like //instances// of a given object, and at the same time define the &quot;non-substancial&quot; properties of the object, like its positions and relations. [[References|MObjectRef]] to these placement entries are handed out as parameters, both down to the [[Builder]] and from there to the render proceeses within the engine, but also to external parts within the GUI and in plugins.</pre>
+Objects are attached and manipulated by [[placements|Placement]]; thus the organisation of these placements is part of the session data layout. Effectively, such a placement within the session behaves like an //instances// of a given object, and at the same time it defines the &quot;non-substantial&quot; properties of the object, e.g. its positions and relations. [[References|MObjectRef]] to these placement entries are handed out as parameters, both down to the [[Builder]] and from there to the render processes within the engine, but also to external parts within the GUI and in plugins. The actual implementation of these object references is built on top of the PlacementRef tags, thus relying on the PlacementIndex the session maintains to keep track of all placements and their relations.</pre>
 </div>
 <div title="SessionOverview" modifier="Ichthyostega" modified="200811011805" created="200709272105" tags="design" changecount="29">
 <pre>&lt;&lt;&lt;
