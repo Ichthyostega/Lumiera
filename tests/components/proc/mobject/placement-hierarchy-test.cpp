@@ -29,11 +29,12 @@
 //#include "proc/mobject/placement.hpp"
 //#include "proc/mobject/placement-ref.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 #include <boost/format.hpp>
 #include <tr1/memory>
 #include <iostream>
+#include <cstdlib>
 
 using std::tr1::shared_ptr;
 using boost::format;
@@ -41,6 +42,7 @@ using boost::format;
 //using util::contains;
 using std::string;
 using std::cout;
+using std::rand;
 
 
 namespace mobject {
@@ -48,26 +50,118 @@ namespace session {
 namespace test    {
   
   
+  /**
+   * a dummy version of the MObject hierarchy,
+   * used to experiment with the Placement template structure
+   */
+  struct MOj;
   
-  template<class TY, class B>
-  struct Pla;
-  
-  struct MOj { };
-  struct Sub1 : MOj { };
+
+  template<class TY, class B =MOj>
+  class Pla;
   
   template<>
-  struct Pla<MOj,MOj>
-    :  shared_ptr<MOj>
+  class Pla<MOj,MOj>
+    : protected shared_ptr<MOj>
     {
+    protected:
+      typedef shared_ptr<MOj> Base;
+      typedef void (*Deleter)(MOj*);
+      
+      Pla (MOj & subject, Deleter killer) 
+        : Base (&subject, killer) {};
+        
+      friend class MOjFac;
+      
+    public:
+      virtual MOj * 
+      operator-> ()  const 
+        { 
+          ENSURE (*this); 
+          return Base::operator-> (); 
+        }      
+      
+      size_t use_count()  const { return Base::use_count(); }
+      
+      virtual ~Pla() {};
       
     };
   
   template<class TY, class B>
-  struct Pla
-    : Pla<MOj, MOj>
+  class Pla
+    : public Pla<B>
     {
+    protected:
+      typedef Pla<B> _Par;
+      typedef typename _Par::Base Base;
+      typedef typename _Par::Deleter Deleter;
+      
+      Pla (TY & mo, Deleter killer)
+        : _Par (mo, killer)
+        { };
+        
+      friend class MOjFac;
+      
+    public:
+      virtual TY*
+      operator-> ()  const
+        {
+          ENSURE (INSTANCEOF (TY, this->get()));
+          return static_cast<TY*>
+            (Base::operator-> ());
+        }
+    };
+  
+  
+  class MOjFac;
+    
+  struct MOj 
+    {
+      static MOjFac create;
+      
+      int id_;
+      
+      MOj() : id_(rand() % 1000) {}
+      virtual ~MOj() {}
+      
+      void show() { cout << "ID=" << id_ << "\n"; }
+    };
+  struct Sub1 : MOj { };
+  struct Sub2 : MOj 
+    {
+      void specialAPI() { cout << "specialAPI()\n";}
+    };
+  struct Sub3 : Sub2
+    { 
       
     };
+  
+  
+  
+  class MOjFac
+    {
+      static void deleterFunc (MOj* o) { delete o; }
+      
+    public:
+      
+      template<class MO>
+      Pla<MO>
+      special ()
+        {
+          return Pla<MO> (*new MO, &deleterFunc);
+        }
+      
+      typedef Pla<Sub3,Sub2> Pla3;
+      
+      Pla3
+      specialSub3 ()
+        {
+          return Pla3 (*new Sub3, &deleterFunc);
+        }
+    };
+  
+  MOjFac MOj::create;
+  
   
   
   /*******************************************************************************
@@ -84,11 +178,24 @@ namespace test    {
       virtual void
       run (Arg) 
         {
-          Pla<Sub1,MOj> pSub1;
+          Pla<Sub1> pSub1    = MOj::create.special<Sub1>();
+          Pla<Sub2> pSub2    = MOj::create.special<Sub2>();
+          Pla<Sub2> pSub3    = MOj::create.specialSub3();
+          
+          Pla<MOj>  pSubM (pSub3);
           
           /////////////////////////////////TODO
           format fmt ("sizeof( %s ) = %d\n");
-          cout << fmt % "Pla<Sub1>"     % sizeof(pSub1);
+          cout << fmt % "Pla<Sub1>"   % sizeof(pSub1);
+          cout << fmt % "Pla<Sub2>"   % sizeof(pSub2);
+          cout << fmt % "Pla<Sub3>"   % sizeof(pSub3);
+          
+          pSub1->show();
+          pSub2->show();
+          pSub3->show();
+          pSubM->show();
+          pSub3->specialAPI();
+          
           cout << "Hurgha!\n";
         }
     };
