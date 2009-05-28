@@ -29,6 +29,7 @@
 //#include "proc/mobject/placement.hpp"
 //#include "proc/mobject/placement-ref.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
+#include "lib/hash-indexed.hpp"
 #include "lib/util.hpp"
 
 #include <boost/format.hpp>
@@ -38,8 +39,10 @@
 
 using std::tr1::shared_ptr;
 using boost::format;
+using boost::str;
 //using lumiera::Time;
 //using util::contains;
+using lib::HashIndexed;
 using std::string;
 using std::cout;
 using std::rand;
@@ -55,14 +58,14 @@ namespace test    {
    * used to experiment with the Placement template structure
    */
   struct MOj;
-  
 
   template<class TY, class B =MOj>
   class Pla;
   
   template<>
   class Pla<MOj,MOj>
-    : protected shared_ptr<MOj>
+    : protected shared_ptr<MOj>,
+      public HashIndexed<Pla<MOj>, lib::hash::LuidH>     //////TODO: really need to be inherited publicly?
     {
     protected:
       typedef shared_ptr<MOj> Base;
@@ -113,6 +116,15 @@ namespace test    {
     };
   
   
+  string
+  format_PlacementID (Pla<MOj> const& pla)
+  {
+    static format fmt ("pID(%x)");
+    
+    size_t hashVal = pla.getID();
+    return str(fmt % hashVal);
+  }
+    
   class MOjFac;
     
   struct MOj 
@@ -195,6 +207,11 @@ namespace test    {
           pSub3->show();
           pSubM->show();
           pSub3->specialAPI();
+          
+          cout << format_PlacementID(pSub1) << "\n";
+          cout << format_PlacementID(pSub2) << "\n";
+          cout << format_PlacementID(pSub3) << "\n";
+          cout << format_PlacementID(pSubM) << "\n";
           
           cout << "Hurgha!\n";
         }
