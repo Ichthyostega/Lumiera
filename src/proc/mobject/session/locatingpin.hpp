@@ -31,6 +31,11 @@
  ** RelativeLocation#resolve(LocatingSolution&) etc. If this is to be extended,
  ** we'll need a real spatial discrete constraint solver (and this probably will be
  ** some library implementation, because the problem is anything but trivial).
+ ** 
+ ** @todo this can be considered a preliminary sketch without being backed
+ **       by actual functionality. Just enough to be able to drive the design of
+ **       other parts ahead. See esp. Trac #100, which contains an idea for a
+ **       refactoring. 
  **
  */
 
@@ -53,21 +58,28 @@ using boost::scoped_ptr;
 
 namespace asset { class Pipe; }
 
-namespace mobject
-  {
+namespace mobject {
+  
   class MObject;
-  template<class MO> class Placement;
-  typedef Placement<MObject> PMO;
 
-  namespace session
-    {
+///////////////////////////////////////////TODO: all those dependencies are just a plain mess right now.  
+//  
+//template<class MO, class B=MObject> 
+//class Placement ;
+//typedef Placement<MObject> PMO;
+
+  class PlacementRef;    ///TODO: as of 5/09 the idea is to phase out direct dependency on the placement class and recast those dependencies in terms of PlacementRef
+
+
+  namespace session {
+    
     class FixedLocation;
     class RelativeLocation;
     
     
     
     /**
-     * Positioning specification, possibliy chained
+     * Positioning specification, possibly chained
      * to further specifications. The base class LocatingPin
      * is a "no-op" specification which doesn't constrain the
      * possible locations and thus can be embedded into pristine
@@ -84,7 +96,7 @@ namespace mobject
         typedef lumiera::Time Time;
         typedef Time* Track; //TODO dummy declaration; we don't use Tracks as first-class entity any longer
         typedef std::tr1::shared_ptr<asset::Pipe> Pipe;
-        typedef std::pair<Time,Pipe> SolutionData;  //TODO (ichthyo consideres better passing of solution by subclass)
+        typedef std::pair<Time,Pipe> SolutionData;  //TODO (ichthyo considers better passing of solution by subclass)
         struct LocatingSolution;
       
         /** next additional Pin, if any */
@@ -104,7 +116,7 @@ namespace mobject
         /* Factory functions for adding LocatingPins */
         
         FixedLocation&    operator() (Time start, Track track=0);
-        RelativeLocation& operator() (PMO refObj, Time offset=0);
+        RelativeLocation& operator() (PlacementRef& refObj, Time offset=0);
         
         LocatingPin (const LocatingPin&);
         LocatingPin& operator= (const LocatingPin&);
@@ -117,7 +129,7 @@ namespace mobject
 //TODO (for working out the buildable interface; ctor should be protected)
 protected:
   
-        friend class Placement<MObject>;
+//        friend class Placement<MObject>;
         
         /** 
          * @internal helper for the (preliminary)
@@ -125,7 +137,7 @@ protected:
          * @todo we can't sensibly reason about tracks, 
          * because at the moment (10/07) we lack a track implementation...
          * @todo shouldn't we use a range-restriction LocatingPin (subclass)
-         * to represent the to-be-found solution? (ichthyo: siehe Trac #100)
+         * to represent the to-be-found solution? (ichthyo: see Trac #100)
          */  
         struct LocatingSolution
           {

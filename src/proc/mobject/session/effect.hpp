@@ -32,26 +32,19 @@
 using std::string;
 
 
-namespace mobject
-  {
-  namespace session
+namespace mobject {
+namespace session {
+  
+  
+  class Effect : public AbstractMO
     {
-
-
-    class Effect : public AbstractMO
-      {
-      protected:
-        /** Identifier of the Plugin to be used */
-        string plugID;
-
-      };
-    
-    
-     
-  } // namespace mobject::session
-
-  /** Placement<Effect> defined to be subclass of Placement<MObject> */
-  DEFINE_SPECIALIZED_PLACEMENT (session::Effect, MObject);
-    
-} // namespace mobject
+    protected:
+      /** Identifier of the Plugin to be used */
+      string plugID;
+      
+    };
+  
+  
+  
+}} // namespace mobject::session
 #endif

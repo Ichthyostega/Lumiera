@@ -113,8 +113,8 @@ namespace lib {
     
     
     /* === for use within unordered_map === */
-    size_t hash_value (Plain const& plainHash)  { return plainHash; }
-    size_t hash_value (LuidH const& luid_Hash)  { return luid_Hash; }
+    inline size_t hash_value (Plain const& plainHash)  { return plainHash; }
+    inline size_t hash_value (LuidH const& luid_Hash)  { return luid_Hash; }
     
   } // namespace "hash"
   

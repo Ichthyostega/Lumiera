@@ -188,7 +188,7 @@ namespace mobject
     
     
     RelativeLocation& 
-    LocatingPin::operator() (PMO refObj, Time offset)
+    LocatingPin::operator() (PlacementRef& refObj, Time offset)
     {
       return static_cast<RelativeLocation&> 
                 (addChain (new RelativeLocation (refObj, offset)));

@@ -116,6 +116,11 @@ namespace mobject {
           {
             currentWrapper_ = ptr_toWrappedTarget;
           }
+        template<class TAR>
+        void rememberWrapper (Placement<TAR>* ptr_toWrappedTarget)
+          {
+            currentWrapper_ = ptr_toWrappedTarget;
+          }
         
         void forgetWrapper ()
           {
@@ -153,7 +158,7 @@ namespace mobject {
     
     
     /** 
-     * declare the concrete types a BuilderTool may recievee and treat.
+     * declare the concrete types a BuilderTool may receive and treat.
      * @note it is recommended to use ApplicableBuilderTargetTypes
      */
     template

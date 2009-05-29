@@ -33,10 +33,9 @@ namespace asset
     class Clip;
   }
 
-namespace mobject
-  {
-  namespace session
-    {
+namespace mobject {
+namespace session {
+    
     using asset::Media;
     typedef P<Media> PMedia;
     typedef P<asset::Clip> PClipAsset;
@@ -57,7 +56,7 @@ namespace mobject
     class Clip : public AbstractMO
       {
       protected:
-        /** startpos in source */
+        /** start position in source */
         Time start_;
 
         /** @todo using a mere ref here is against the scheme and only 
@@ -93,14 +92,8 @@ namespace mobject
       };
       
     typedef Placement<Clip> PClipMO;
-
-
-
-  } // namespace mobject::session
-  
-  /** Placement<Clip> defined to be subclass of Placement<MObject> */
-  DEFINE_SPECIALIZED_PLACEMENT (session::Clip, MObject);
     
-
-} // namespace mobject
+    
+    
+}} // namespace mobject::session
 #endif

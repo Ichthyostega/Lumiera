@@ -24,6 +24,7 @@
 #ifndef MOBJECT_SESSION_RELATIVELOCATION_H
 #define MOBJECT_SESSION_RELATIVELOCATION_H
 
+#include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/session/locatingpin.hpp"
 
 
@@ -35,10 +36,16 @@ namespace mobject
     {
 
 
-
+    /**
+     * @todo just a design sketch, nothing finished yet.
+     *       possibly to be reworked or phased out completely.
+     *       See Trac #100
+     */
     class RelativeLocation : public LocatingPin
       {
-        const PMO & anchor_;  ////////////TODO: ooooops, this is a nasty design problem!!!
+//        const PMO & anchor_;  ////////////TODO: ooooops, this is a nasty design problem!!!
+        
+        const PlacementRef anchor_;
         
       public:
 
@@ -51,7 +58,7 @@ namespace mobject
         };
 
       protected:
-        RelativeLocation (const PMO& a, Time ofs) : anchor_(a), offset_(ofs) { }
+        RelativeLocation (PlacementRef const& a, Time ofs) : anchor_(a), offset_(ofs) { }
         friend class LocatingPin;
 
         /** the kind of relation denoted by this Placement */

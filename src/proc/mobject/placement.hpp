@@ -25,8 +25,8 @@
  ** Placements are at the very core of all editing operations,
  ** because they act as handles to access the media objects to be manipulated. 
  ** Moreover, Placements are the actual content of the EDL(s) and Fixture and thus
- ** are small objects with value semantics. Many editing tasks include locating some
- ** Placement in the EDL or directly take a ref to a Placement.
+ ** are small handle like objects. Many editing tasks include locating some Placement
+ ** within the Session or directly take a ref to a Placement.
  ** 
  ** Placements are <b>refcounting smart pointers</b>: By acting on the Placement object,
  ** we can change parameters of the way the media object is placed (e.g. adjust an offset), 
@@ -40,6 +40,17 @@
  ** to this chain, the position of the MObject is increasingly constrained. The simplest
  ** case of such constraining is to add a FixedLocation, thus placing the MObject at one
  ** absolute position (time, track).
+ ** 
+ ** Together, this yields semantics somewhere in between value semantics and reference semantics.
+ ** As any smart-ptr, placements are copyable, any such copies being considered equivalent. \em But,
+ ** when added to the Session, a placement acts as if it was an \em instance of the object it
+ ** points at, with the purpose to bind this instance into the Session with specific placement
+ ** properties. Thus, such a placement-within-session \em is an distinguishable entity, because
+ ** the settings on the contained LocatingPin chain \em do constitute the relation properties
+ ** of the MObject "placed" by this placement. To support this rather ref-like semantics, any
+ ** placement has an embedded ID (identity), and the Session won't allow to add a clone copy
+ ** of an placement with the same identity. Moreover, it is possible to create a smart-ptr
+ ** like PlacementRef to denote a specific placement found within the current Session.
  ** 
  ** Placements are templated on the type of the actual MObject they refer to, so, sometimes
  ** we rather use a Placement<Clip> to be able to use the more specific methods of the
@@ -58,8 +69,10 @@
 #define MOBJECT_PLACEMENT_H
 
 #include "pre.hpp"
+#include "lib/hash-indexed.hpp"
 #include "proc/mobject/session/locatingpin.hpp"
-#include "proc/asset/pipe.hpp"
+
+#include "proc/asset/pipe.hpp"   /////TODO: get rid of this (Trac #109)
 
 #include <tr1/memory>
 
@@ -68,25 +81,49 @@ namespace mobject {
   
   namespace session{ class MObjectFactory; }
   
+  class MObject;
   class ExplicitPlacement;
   
   using std::tr1::shared_ptr;
+  using lib::HashIndexed;
   
   
   
   /**
    * A refcounting Handle to an MObject of type MO,
-   * used to constrain or explicitly specify the
-   * location where the MObject is supposed to
-   * be within the Session/EDL
+   * used to constrain or explicitly specify the  location
+   * where the MObject is supposed to be within the Session/EDL.
+   * Placements are copyable (like values), but may be distinguished
+   * by their identity (reference semantics), which is based on an
+   * \link lib::HashIndexed hash-ID \endlink.
+   * 
+   * Placements are defined to form a hierarchy, thereby mirroring
+   * the relations between their referents to some degree. This allows
+   * for building APIs targeted at specific kinds of MObjects, and 
+   * at the same time allows a specific placement to stand-in when
+   * just a unspecific Placement<MObject> is required.  
+   * 
+   * @param MO the (compile time) type of the referent
+   * @param B  immediate base class of this placement
    */
-  template<class MO>
-  class Placement : protected shared_ptr<MO>
+  template<class MO, class B =MObject>
+  class Placement ;
+  
+  
+  /** 
+   * this specialisation forms the root of all placements
+   * and defines all of Placement's actual functionality.
+   */
+  template<>
+  class Placement<MObject,MObject>
+    : protected shared_ptr<MObject>,
+      public HashIndexed<Placement<MObject>, lib::hash::LuidH>     //////TODO: really need to be inherited publicly?
     {
     protected:
-      typedef shared_ptr<MO> Base;
+      typedef shared_ptr<MObject> _SmartPtr;
+      typedef void (*Deleter)(MObject*);
       typedef lumiera::Time Time;
-      typedef asset::shared_ptr<asset::Pipe> Pipe;
+      typedef asset::shared_ptr<asset::Pipe> Pipe;   ////TODO: get rid of this
       
       
       
@@ -95,15 +132,15 @@ namespace mobject {
        *  which is subject to placement.
        *  @note we don't provide operator*
        */
-      virtual MO * 
+      virtual MObject * 
       operator-> ()  const 
         { 
           ENSURE (*this); 
-          return Base::operator-> (); 
+          return _SmartPtr::operator-> (); 
         }      
       
       operator string()   const ;
-      size_t use_count()  const { return Base::use_count(); }
+      size_t use_count()  const { return _SmartPtr::use_count(); }
       
       virtual ~Placement() {};
       
@@ -123,44 +160,55 @@ namespace mobject {
       
       
     protected:
-      Placement (MO & subject, void (*moKiller)(MO*)) 
-        : shared_ptr<MO> (&subject, moKiller) {};
+      Placement (MObject & subject, Deleter killer) 
+        : _SmartPtr (&subject, killer) {};
         
       friend class session::MObjectFactory;
     };
   
   
-  
-  
-  
-  /* === defining specialisations to be subclasses === */
-
-#define DEFINE_SPECIALIZED_PLACEMENT(SUBCLASS, BASE)  \
-  template<>                                           \
-  class Placement<SUBCLASS> : public Placement<BASE>    \
-    {                                                    \
-    protected:                                            \
-      Placement (SUBCLASS & m, void (*moKiller)(MObject*)) \
-        : Placement<BASE>::Placement (m, moKiller)         \
-        { };                                               \
-      friend class session::MObjectFactory;                \
-                                                           \
-    public:                                                \
-      virtual SUBCLASS*                                    \
-      operator-> ()  const                                 \
-        {                                                  \
-          ENSURE (INSTANCEOF (SUBCLASS, this->get()));     \
-          return static_cast<SUBCLASS*>                    \
-            (shared_ptr<MObject>::operator-> ());          \
-        }                                                  \
+  /**
+   * any specific placements are supposed to be derived
+   * from Placement<MObject>, or an intermediary interface,
+   * in case the second template parameter is used.
+   * @note please refrain from adding additional functionality
+   *       to these subclasses. Especially, don't add any fields
+   *       to the subclass, as Placements are treated like values
+   *       at times, and thus slicing will happen, which in this
+   *       special case is acceptable.
+   */
+  template<class MO, class B>
+  class Placement
+    : public Placement<B>
+    {
+    protected:
+      typedef Placement<B> _Parent;
+      typedef typename _Parent::Deleter Deleter;
+      typedef typename _Parent::_SmartPtr _SmartPtr;
+      
+      
+      Placement (MO & mo, Deleter killer)
+        : _Parent (mo, killer)
+        { };
+      friend class session::MObjectFactory;
+      
+    public:
+      virtual MO*
+      operator-> ()  const
+        {
+          ENSURE (INSTANCEOF (MO, this->get()));
+          return static_cast<MO*>
+            (_SmartPtr::operator-> ());
+        }
     };
   
-  /* a note to the maintainer: please don't add any fields or methods to
-   * these subclasses which aren't also present in Placement<MObject>!
-   * Placements are frequently treated like values and thus slicing
-   * will happen, which in this special case is acceptable.
-   */
   
+  string
+  format_PlacementID (Placement<MObject> const&) ;
+  
+  
+  /** @todo cleanup uses of ref-to-placement. See Trac #115 */
+  typedef Placement<MObject> PMO; 
 
 
 } // namespace mobject
