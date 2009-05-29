@@ -2969,7 +2969,7 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlanningSessionInMem" modifier="Ichthyostega" modified="200904252308" created="200904252258" tags="impl SessionLogic draft" changecount="2">
+<div title="PlanningSessionInMem" modifier="Ichthyostega" modified="200905291920" created="200904252258" tags="impl SessionLogic draft" changecount="16">
 <pre>//This page is a scrapbook for working out the implementation of the [[Session Datastructure in Memory|SessionDataMem]]//
 This is a difficult untertaking, because there are several dependencies (most of which aren't fully designed yet as of 5/09)
 * the GUI uses an adapted version of the HighLevelModel; these datastructures are intended to be backed by the Session
@@ -2980,7 +2980,7 @@ This is a difficult untertaking, because there are several dependencies (most of
 !!!requirements
 * can discover and ennumerate the structure
 * can ennumerate the contents (objects) of a specific scope
-* provide [[references|MObjectRef]] on these query/discovery operations
+* provide [[references|MObjectRef]] as result of these query/discovery operations
 
 !!!invariants
 * memory management consistency
@@ -2994,9 +2994,15 @@ This is a difficult untertaking, because there are several dependencies (most of
 
 !Interface
 &lt;&lt;task&gt;&gt;evaluate models for the [[reference problem|MObjectRef]]
+&lt;&lt;task 2 3 3&gt;&gt; implement an hash-ID to be incorporated into placements
+&lt;&lt;task 1 1 0&gt;&gt; implement PlacementRef
+&lt;&lt;task 2 2 0&gt;&gt; implement MObjectRef
 
 !Datastructure
 &lt;&lt;task&gt;&gt;investigate the best granularity for object collections
+&lt;&lt;task &gt;&gt; define a record to be used within the index
+&lt;&lt;task &gt;&gt; implement basic index operations
+&lt;&lt;task 1&gt;&gt; implement adding a placement relation
 
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
@@ -3090,7 +3096,7 @@ Besides, they provide an important __inward interface__ for the [[ProcNode]]s, w
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200812050522" created="200706190056" tags="overview" changecount="15">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200905291850" created="200706190056" tags="overview" changecount="18">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
 &lt;&lt;&lt;
 ''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the foundations and main structures in C++
@@ -3099,12 +3105,13 @@ Besides, they provide an important __inward interface__ for the [[ProcNode]]s, w
 * made a first draft of how to wire and operate procesing nodes (&amp;rarr;[[more|RenderMechanics]])
 * working out the relation of [[Project, Timelines and Sequences|TimelineSequences]]
 * first attempts to [[integrate with the GUI|GuiIntegration]]
+* first outline of the [[session implementation|PlanningSessionInMem]]
 &lt;&lt;&lt;
 
 !Summary
 We have several kinds of &quot;things&quot; organized as [[assets|Asset]] in the AssetManager, like media, clips, effects, codecs, configuration templates. Within the context of the [[EDL]], we can use these as [[&quot;Media Objects&quot;|MObjects]] &amp;mdash; especially, we can [[place|Placement]] them in various kinds within the EDL and relative to one another. Basically, this is the [[editing work|EditingOperations]] done by the user.
 
-Now, from any given configuration within the EDL, we create sort or a frozen- and tied-down snapshot, here called [[&quot;Fixture&quot;|Fixture]], containing all currently active ~MObjects, broken down to elementary parts and made explicit if necessary. This Fixture acts as a isolation layer towards the Render Engine. We will hand it over to the  [[Builder]], which in turn will transform it into a network of connected [[render nodes|ProcNode]]. This network //is// the [[Render Engine|OverviewRenderEngine]].
+Now, from any given configuration within the EDL, we create sort or a frozen- and tied-down snapshot, here called [[&quot;Fixture&quot;|Fixture]], containing all currently active ~MObjects, broken down to elementary parts and made explicit if necessary. This Fixture acts as a isolation layer towards the Render Engine. We will hand it over to the  [[Builder]], which in turn will transform it into a network of connected [[render nodes|ProcNode]]. This network //implements//&amp;nbsp; the [[Render Engine|OverviewRenderEngine]].
 
 The system is ''open'' inasmuch every part mirrors the structure of corresponding parts in adjacent subsystems, and the transformation of any given structure from one subsystem (e.g. Asset) to another (e.g. Render Engine) is done with minimal &quot;magic&quot;. So the whole system should be able to handle completely new structures mostly by adding new configurations and components, without much need of rewriting basic workings.
 

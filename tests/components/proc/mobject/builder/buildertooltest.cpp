@@ -113,8 +113,8 @@ namespace test    {
               BuilderTool& tool = t1;
                                 
               Placement<Clip> clip = asset::Media::create("test-1", asset::VIDEO)->createClip();
-              TestPlacement<MObject> test1(*new TestSubMO1);
-              TestPlacement<MObject> test2(*new TestSubMO2);
+              TestPlacement<> test1(*new TestSubMO1);
+              TestPlacement<> test2(*new TestSubMO2);
               
               
               cout << "apply (tool, clip);\n";

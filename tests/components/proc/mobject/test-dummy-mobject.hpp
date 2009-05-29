@@ -43,12 +43,17 @@
 #include "proc/mobject/builder/buildertool.hpp"
 #include "proc/mobject/session/abstractmo.hpp"
 #include "proc/mobject/placement.hpp"
+#include "include/symbol.hpp"
 #include "lib/util.hpp"
 
+#include <boost/format.hpp>
 #include <iostream>
+#include <cstdlib>
 
+using boost::format;
 using util::cStr;
 using std::string;
+using std::rand;
 using std::cout;
 
 
@@ -56,6 +61,7 @@ using std::cout;
 namespace mobject {
 namespace test    {
   
+  using lumiera::Symbol;
   using builder::BuilderTool;
   
   
@@ -65,41 +71,86 @@ namespace test    {
    */
   class DummyMO : public session::AbstractMO
     {
+      int id_;
+      
     public:
-      DummyMO() { };
+      DummyMO() : id_(rand() % 1000) {}
+      DummyMO(int i) : id_(i) {}
       
       DEFINE_PROCESSABLE_BY (BuilderTool);
       
-      virtual bool isValid()  const        { return true;}
+      virtual bool isValid()    const      { return true;}
+      virtual operator string() const      { return display("DummyMO"); }
       static void killDummy (MObject* dum) { delete (DummyMO*)dum; }
+      
+    protected:
+      string
+      display(Symbol name)  const
+        {
+          static format fmt("%s(ID=%4d)");
+          return boost::str(fmt % name % this->id_);
+        }
     };
   
   /** 
    * Subclass-1 is \em not defined "processible",
    * thus will always be handled as DummyMO...
    */
-  class TestSubMO1 : public DummyMO 
-    { };
+  struct TestSubMO1 : DummyMO 
+    {
+      virtual operator string() const      { return display("TestSubMO1"); }
+    };
   
   /** 
    * Subclass-2 \em is defined "processible", 
    * but we omit the necessary "applicable" definition in TestTool,
    * resulting in an invocation of the error (catch-all) function...
    */
-  class TestSubMO2 : public DummyMO 
+  struct TestSubMO2 : DummyMO 
     { 
       DEFINE_PROCESSABLE_BY (BuilderTool);
+
+      virtual operator string() const      { return display("TestSubMO2"); }
     };
   
+  struct TestSubMO21 : TestSubMO2 
+    {
+      virtual operator string() const      { return display("TestSubMO21"); }
+      void specialAPI()                    { cout << "specialAPI()\n";}
+    };
+
   
-  template<class MO>
-  class TestPlacement : public Placement<MO>
+  
+  template<class DMO=DummyMO, class B=DummyMO>
+  class TestPlacement ;
+  
+  template<>
+  class TestPlacement<> : public Placement<DummyMO>
     {
     public:
-      TestPlacement(DummyMO& testObject) 
-        : Placement<MO>::Placement(testObject, &DummyMO::killDummy)
+      TestPlacement(DummyMO& dummyObj) 
+        : Placement<DummyMO>::Placement(dummyObj, &DummyMO::killDummy)
         { }
     };
+  
+  template<class DMO, class B>
+  class TestPlacement : public TestPlacement<B>
+    {
+    public:
+      TestPlacement(DMO& dummyObj) 
+        : TestPlacement<B>(dummyObj)
+        { }
+      
+      virtual DMO*
+      operator-> ()  const
+        {
+          ENSURE (INSTANCEOF (DMO, this->get()));
+          return static_cast<DMO*>
+            (Placement<MObject>::_SmartPtr::operator-> ());
+        }
+    };
+  
+  template class TestPlacement<TestSubMO21,TestSubMO2>;
   
   
   

@@ -116,8 +116,8 @@ namespace mobject {
           {
             currentWrapper_ = ptr_toWrappedTarget;
           }
-        template<class TAR>
-        void rememberWrapper (Placement<TAR>* ptr_toWrappedTarget)
+        template<template<class,class> class Placement, class TAR, class B>
+        void rememberWrapper (Placement<TAR,B>* ptr_toWrappedTarget)
           {
             currentWrapper_ = ptr_toWrappedTarget;
           }
