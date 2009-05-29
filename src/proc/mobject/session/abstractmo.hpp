@@ -28,34 +28,30 @@
 
 
 
-namespace mobject
-  {
-  namespace session
+namespace mobject {
+namespace session {
+  
+  
+  /**
+   *  abstract base class of all MObjects for providing common services.
+   *  @todo seems that we don't need this intermediate class...
+   */
+  class AbstractMO : public MObject
     {
-
-
-    /**
-     *  abstract base class of all MObjects for providing common services.
-     *  @todo seems that we don't need this intermediate class...
-     */
-    class AbstractMO : public MObject
-      {
-        
-      public:
-        
-        /* some dummy implementations used to make the code compile... */
-        
-        virtual Time& getLength() { return length; }
-        
-        DEFINE_PROCESSABLE_BY (builder::BuilderTool);
-
-        virtual bool operator== (const MObject& oo)  const;
-
-     };
-
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
+      
+    public:
+      
+      /* some dummy implementations used to make the code compile... */
+      
+      virtual Time& getLength() { return length; }
+      
+      DEFINE_PROCESSABLE_BY (builder::BuilderTool);
+      
+      virtual bool operator== (const MObject& oo)  const;
+      
+    };
+  
+  
+  
+}} // namespace mobject::session
 #endif
