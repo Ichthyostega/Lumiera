@@ -1,5 +1,5 @@
 /*
-  Time  -  unified representation of a time point, including conversion functions
+  Time  -  convenience wrapper for working with gavl_time in C++
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -25,13 +25,11 @@
 #include <limits>
 
 
-namespace lumiera
-  {
+namespace lumiera {
 
-   // TODO: dummy values; should be adjusted when switching to the real time implementation provided by the backend
   
-   const Time Time::MAX = +std::numeric_limits<long>::max();
-   const Time Time::MIN = -std::numeric_limits<long>::max();
+   const Time Time::MAX ( +std::numeric_limits<int64_t>::max() );
+   const Time Time::MIN ( -std::numeric_limits<int64_t>::max() );
 
 
 } // namespace lumiera

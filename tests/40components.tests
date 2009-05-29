@@ -361,6 +361,11 @@ return: 0
 END
 
 
+TEST "Time Wrapper" TimeWrapper_test <<END
+return: 0
+END
+
+
 TEST "TestOption_test" TestOption_test <<END
 out: Testing invocation with cmdline: ...
 out: --> Testgroup=ALL
