@@ -4064,7 +4064,7 @@ h1,h2,h3,h4,h5,h6 {
 <div title="TabTimeline" modifier="Ichthyostega" modified="200806030148" created="200706191949" changecount="4">
 <pre>&lt;&lt;timeline better:true maxDays:55 maxEntries:45&gt;&gt;</pre>
 </div>
-<div title="TaskMacroPlugin" modifier="Ichthyostega" created="200712100248" tags="systemConfig excludeMissing" changecount="2">
+<div title="TaskMacroPlugin" modifier="Ichthyostega" modified="200905291912" created="200712100248" tags="systemConfig excludeMissing" changecount="3">
 <pre>/***
 |Name|TaskMacroPlugin|
 |Author|&lt;&lt;extension TaskMacroPlugin author&gt;&gt;|
@@ -4228,7 +4228,7 @@ function wrapEventHandler( otherHandler ) {
 !Task Macro
 Usage:
 &gt; {{{&lt;&lt;task orig cur spent&gt;&gt;description}}}
-All of orig, cur, and spent are optional numbers of hours.  The description goes through the end of the line, and is wikified.
+All of orig, cur, and spent are optional numbers of days.  The description goes through the end of the line, and is wikified.
 ***/
 //{{{
 config.macros.task = {
@@ -4248,15 +4248,15 @@ config.macros.task = {
 		descClickTip:	&quot; -- Double-click to edit task description&quot;,
 		statusClickTip:	&quot; -- Double-click to mark task complete&quot;,
 		statusDoneTip:	&quot; -- Double-click to adjust the time spent, to revive the task&quot;,
-		origTip:	&quot;Original estimate in hours&quot;,
-		curTip:		&quot;Current estimate in hours&quot;,
-		curTip2:	&quot;Estimate in hours&quot;, // For when orig == cur
+		origTip:	&quot;Original estimate in days&quot;,
+		curTip:		&quot;Current estimate in days&quot;,
+		curTip2:	&quot;Estimate in days&quot;, // For when orig == cur
 		clickTip:	&quot; -- Click to adjust&quot;,
-		spentTip:	&quot;Hours spent on this task&quot;,
-		remTip:		&quot;Hours remaining&quot;,
-		curPrompt:	&quot;Estimate this task in hours, or adjust the current estimate by starting with + or -.\n\nYou may optionally also set or adjust the time spent by putting a second number after the first.&quot;,
-		spentPrompt:	&quot;Enter the number of hours you've spent on this task, or adjust the current number by starting with + or -.\n\nYou may optionally also set or adjust the time remaining by putting a second number after the first.&quot;,
-		remPrompt:	&quot;Enter the number of hours it will take to finish this task, or adjust the current estimate by starting with + or -.\n\nYou may optionally also set or adjust the time spent by putting a second number after the first.&quot;,
+		spentTip:	&quot;Days spent on this task&quot;,
+		remTip:		&quot;Days remaining&quot;,
+		curPrompt:	&quot;Estimate this task in days, or adjust the current estimate by starting with + or -.\n\nYou may optionally also set or adjust the time spent by putting a second number after the first.&quot;,
+		spentPrompt:	&quot;Enter the number of days you've spent on this task, or adjust the current number by starting with + or -.\n\nYou may optionally also set or adjust the time remaining by putting a second number after the first.&quot;,
+		remPrompt:	&quot;Enter the number of days it will take to finish this task, or adjust the current estimate by starting with + or -.\n\nYou may optionally also set or adjust the time spent by putting a second number after the first.&quot;,
 		numbersOnly:	&quot;Enter numbers only, please&quot;,
 		notCurrent:	&quot;The tiddler has been modified since it was displayed, please redisplay it before doing this.&quot;
 	},
@@ -4535,15 +4535,15 @@ config.macros.tasksum = {
 		mustMatch:	&quot;&lt;&lt;%0 end&gt;&gt; must match a preceding &lt;&lt;%0 start&gt;&gt;&quot;,
 		defIntro:	&quot;Task summary:&quot;,
 		nascentSum:	&quot;''%0 not estimated''&quot;,
-		doneSum:	&quot;%0 complete (in %1 hours)&quot;,
-		liveSum:	&quot;%0 ongoing (%1 hours so far, ''%2 hours remaining'')&quot;,
+		doneSum:	&quot;%0 complete (in %1 days)&quot;,
+		liveSum:	&quot;%0 ongoing (%1 days so far, ''%2 days remaining'')&quot;,
 		overSum:	&quot;Total overestimate: %0%.&quot;,
 		underSum:	&quot;Total underestimate: %0%.&quot;,
 		descPattern:	&quot;%0 %1. %2&quot;,
-                origTip:	&quot;Total original estimates in hours&quot;,
-		curTip:		&quot;Total current estimates in hours&quot;,
-		spentTip:	&quot;Total hours spent on tasks&quot;,
-		remTip:		&quot;Total hours remaining&quot;
+                origTip:	&quot;Total original estimates in days&quot;,
+		curTip:		&quot;Total current estimates in days&quot;,
+		spentTip:	&quot;Total days spent on tasks&quot;,
+		remTip:		&quot;Total days remaining&quot;
 	},
 
 	// The macro handler
@@ -4685,7 +4685,7 @@ config.macros.taskadder = {
 	lingo: {
 		unrecParam:	&quot;&lt;&lt;%0&gt;&gt; doesn't recognize '%1' as a parameter&quot;,
 		descTip:	&quot;Describe a new task&quot;,
-		curTip:		&quot;Estimate how long in hours the task will take&quot;,
+		curTip:		&quot;Estimate how much days the task will take&quot;,
 		buttonText:	&quot;add task&quot;,
 		buttonTip:	&quot;Add a new task with the description and estimate as entered&quot;,
 		notCurrent:	&quot;The tiddler has been modified since it was displayed, please redisplay it before adding a task this way.&quot;,
