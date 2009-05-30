@@ -16,6 +16,7 @@ scripts/*
 configure
 config.log
 aclocal.m4
+autom4te.cache
 semantic.cache
 wiki/backups/*
 doc/devel/draw/*.png

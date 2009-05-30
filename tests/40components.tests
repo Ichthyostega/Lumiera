@@ -366,6 +366,12 @@ return: 0
 END
 
 
+TEST "Test support functions" TestHelper_test <<END
+out: Displaying types and sizes....
+out: --> Testgroup=ALL
+END
+
+
 TEST "TestOption_test" TestOption_test <<END
 out: Testing invocation with cmdline: ...
 out: --> Testgroup=ALL
