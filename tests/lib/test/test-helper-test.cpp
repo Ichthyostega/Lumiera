@@ -76,7 +76,7 @@ namespace test{
           ASSERT (2 == sizeof (rmpf2));
           ASSERT (3 == sizeof (rmpf3));
           
-          cout << showSizeof(42,"theUniverse")     << endl;
+          cout << showSizeof((size_t)42,"theUniverse")     << endl;
           cout << showSizeof<char>("just a char")  << endl;
           cout << showSizeof(murpf)  << endl;
           cout << showSizeof(rmpf1)  << endl;

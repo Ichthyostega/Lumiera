@@ -368,7 +368,13 @@ END
 
 TEST "Test support functions" TestHelper_test <<END
 out: Displaying types and sizes....
-out: --> Testgroup=ALL
+out: sizeof..theUniverse.+ =  42
+out: sizeof..just a char.+ =   1
+out: sizeof.+lib.+test.+test.+Murpf.+ =   1
+out: sizeof.+lib.+test.+test.+Wrmrmpft.+Murpf.+ =   1
+out: sizeof.+lib.+test.+test.+Wrmrmpft.+ =   2
+out: sizeof.+lib.+test.+test.+Wrmrmpft.+ =   3
+out: sizeof.+lib.+test.+test.+Wrmrmpft.+Murpf.+ =   1
 END
 
 

@@ -23,12 +23,11 @@
 
 #include "lib/test/test-helper.hpp"
 
-//#include "lib/error.hpp"
 #include <boost/format.hpp>
-#include <typeinfo>
 
 using boost::format;
 using boost::str;
+
 
 namespace lib {
 namespace test{
