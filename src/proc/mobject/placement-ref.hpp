@@ -53,14 +53,6 @@ namespace mobject {
       /**
        * 
        */
-      class ID
-        {
-        };
-      
-      template<class MO>
-      class IDp : public ID
-        {
-        };
       
       
     };

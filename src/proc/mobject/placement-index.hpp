@@ -63,12 +63,12 @@ namespace mobject {
     public:
       typedef Placement<MObject> PlacementMO;
       typedef PlacementRef PRef;
-      typedef PRef::ID ID;
+      typedef PlacementMO::ID ID;
       
       PlacementMO& find (ID)  const;
       
       template<class MO>
-      Placement<MO>& find (PRef::IDp<MO>)  const;
+      Placement<MO>& find (PlacementMO::Id<MO>)  const;
       
       PlacementMO& getScope (PlacementMO&)  const;
       PlacementMO& getScope (ID)            const;
