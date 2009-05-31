@@ -33,10 +33,8 @@ using util::isnil;
 
 
 
-namespace asset
-  {
-  namespace test
-    {
+namespace asset{
+namespace test {
     
     
     
@@ -59,7 +57,7 @@ namespace asset
         
         typedef TestAsset<Asset> TA;
         typedef TA::PA PTestA;
-
+        
         
         /** @test check operation of basic asset dependency support
          */
@@ -149,12 +147,12 @@ namespace asset
             a2->enable(true);
             ASSERT (a1->isActive());
             ASSERT (a2->isActive());
-
+            
             a3->enable(false);
             ASSERT (a1->isActive());
             ASSERT (a2->isActive());
             ASSERT (!a3->isActive());  // no dependency...
-
+            
             a1->enable(false);
             a3->enable();
             ASSERT (!a1->isActive());
@@ -210,6 +208,4 @@ namespace asset
     
     
     
-  } // namespace test
-
-} // namespace asset
+}} // namespace asset::test

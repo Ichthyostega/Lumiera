@@ -132,7 +132,7 @@ namespace mobject {
        *  which is subject to placement.
        *  @note we don't provide operator*
        */
-      virtual MObject * 
+      MObject * 
       operator-> ()  const 
         { 
           ENSURE (*this); 
@@ -193,7 +193,7 @@ namespace mobject {
       friend class session::MObjectFactory;
       
     public:
-      virtual MO*
+      MO*
       operator-> ()  const
         {
           ENSURE (INSTANCEOF (MO, this->get()));

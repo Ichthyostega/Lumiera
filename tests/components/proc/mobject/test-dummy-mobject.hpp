@@ -116,7 +116,7 @@ namespace test    {
   struct TestSubMO21 : TestSubMO2 
     {
       virtual operator string() const      { return display("TestSubMO21"); }
-      void specialAPI()                    { cout << "specialAPI()\n";}
+      virtual void specialAPI() const      { cout << "specialAPI()\n";}
     };
 
   
@@ -141,7 +141,7 @@ namespace test    {
         : TestPlacement<B>(dummyObj)
         { }
       
-      virtual DMO*
+      DMO *
       operator-> ()  const
         {
           ENSURE (INSTANCEOF (DMO, this->get()));

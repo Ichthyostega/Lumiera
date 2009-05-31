@@ -121,7 +121,7 @@ namespace asset
             ASSERT (c1 == c2);
             
             PPipe pipe3 = Pipe::query ("pipe("+pID2+")");
-//////////////////////////////////////////////////////////////TODO: er macht eine Neue, anstatt die Bestehende zu finden            
+//////////////////////////////////////////////////////////////TODO: that's broken; creating a new one instead to find the existing one, as it should be            
             ASSERT (pipe3 == pipe2);
           }
         

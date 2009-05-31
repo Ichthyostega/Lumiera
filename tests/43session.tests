@@ -29,7 +29,19 @@ PLANNED "PlacementBasic_test" PlacementBasic_test <<END
 END
 
 
-PLANNED "PlacementHierarchy_test" PlacementHierarchy_test <<END
+TEST "hierarchical placement types" PlacementHierarchy_test <<END
+out: sizeof\( \w+ \) =  \d{2}
+out: Placement.+mobject.+test.+TestSubMO1.+. use-cnt=1 .*
+out: Placement.+mobject.+test.+TestSubMO2.+. use-cnt=1 .*
+out: Placement.+mobject.+test.+TestSubMO21.+ use-cnt=2 .*
+out: Placement.+mobject.+test.+TestSubMO21.+ use-cnt=2 .*
+out: Placement.+mobject.+session.+Clip.+.... use-cnt=2 .*
+out: TestSubMO1\(ID= \d{3}\)
+out: TestSubMO2\(ID= \d{3}\)
+out: TestSubMO21\(ID= \d{3}\)
+out: specialAPI()
+out: specialAPI()
+out: pID\(\w{16}\)
 END
 
 

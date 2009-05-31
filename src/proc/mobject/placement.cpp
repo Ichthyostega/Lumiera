@@ -26,6 +26,7 @@
 #include "proc/mobject/mobject.hpp"
 
 #include <boost/format.hpp>
+#include <typeinfo>
 
 using boost::format;
 using boost::str;

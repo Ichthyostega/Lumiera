@@ -579,7 +579,7 @@ For every Asset we generate a __Ident tuple__ and a long ID (hash) derived from 
 <div title="AssetManager" modifier="Ichthyostega" created="200709200300" changecount="1">
 <pre>The Asset Manager provides an Interface to some internal Database holding all Assets in the current Session and System state. It may be a real Database at some point (and for the moment it's a Hashtable). Each [[Asset]] is registered automatically with the Asset Manager; it can be queried either by it's //identification tuple// or by it's unique ID.</pre>
 </div>
-<div title="AttachedPlacementProblem" modifier="Ichthyostega" modified="200905120332" created="200801111305" tags="SessionLogic impl draft dynamic" changecount="14">
+<div title="AttachedPlacementProblem" modifier="Ichthyostega" modified="200905292133" created="200801111305" tags="SessionLogic impl draft dynamic" changecount="15">
 <pre>Placing an MObject relatively to another object such that it should be handled as //attached//&amp;nbsp; to the latter results in several design and implementation challenges. Actually, such an attachment creates a cluster of objects. The typical use case is that of an effect attached to a clip or processing pipe.
 * attachment is not a globally fixed relation between objects, rather, it typically exists only for some limited time span (e.g. the duration of the basic clip the effect is attached to)
 * the order of attachment is important and the attached placement may create a fork in the signal flow, so we need a way for specifying reproducibly how the resulting wiring should be
@@ -592,7 +592,7 @@ The first step towards an solution is to isolate the problem; obviously we don't
 
 !!Implementation notes
 Attachment is managed within the participating placements, mostly by special [[locating pins|LocatingPin]]. Attachment doesn't necessarily nail down an attached object to a specific position, rather the behaviour depends on the type of the object and the locating pins actually involved, especially on their order and priority. For example, if an {{{Placement&lt;Effect&gt;}}} doesn't contain any locating pin defining a temporal position, then the attachment will result in the placement inheriting the temporal placement of the //attachment head// (i.e. the clip this effect has been attached to). But, if on the contrary the effect in question //does// have an additional locating pin, for example relative to another object or even to a fixed time position, this one will &quot;win&quot; and determine the start position of the effect &amp;mdash; it may even move the effect out of the time interval covered by the clip, in which case the attachment has no effect on the clip's processing pipe.
-The attachment relation is hierarchical and has a clearly defined //active// and //passive// side: The attachment head is the parent node in a tree, but plays the role of the passive partner, to which the child nodes attach. But note, this does not mean we are limited to a single attachment head. Actually, each placement has a list of locating pins and thus can attach to several other placements. For example, a transition attaches to at least two local pipes (clips).
+The attachment relation is hierarchical and has a clearly defined //active// and //passive// side: The attachment head is the parent node in a tree, but plays the role of the passive partner, to which the child nodes attach. But note, this does not mean we are limited to a single attachment head. Actually, each placement has a list of locating pins and thus can attach to several other placements. For example, a transition attaches to at least two local pipes (clips). {{red{TODO: unresolved design problem; seems to contradict the PlacementScope}}}
 
 !!!!Relation to memory management
 Attachment on itself does //not// keep an object alive. Rather, it's a direct reference and has to be taken into account when deleting an object. On the other hand, processing nodes in the render engine never depend on placements &amp;mdsash; they always refer directly to the MObject instance or even the underlying asset. In the case of MObject instances, the pointer from within the engine will //share ownership// with the placement (remember: both are derived from {{{boost::shared_ptr}}}).
@@ -2969,7 +2969,7 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlanningSessionInMem" modifier="Ichthyostega" modified="200905291920" created="200904252258" tags="impl SessionLogic draft" changecount="16">
+<div title="PlanningSessionInMem" modifier="Ichthyostega" modified="200905310301" created="200904252258" tags="impl SessionLogic draft" changecount="19">
 <pre>//This page is a scrapbook for working out the implementation of the [[Session Datastructure in Memory|SessionDataMem]]//
 This is a difficult untertaking, because there are several dependencies (most of which aren't fully designed yet as of 5/09)
 * the GUI uses an adapted version of the HighLevelModel; these datastructures are intended to be backed by the Session
@@ -2993,8 +2993,9 @@ This is a difficult untertaking, because there are several dependencies (most of
 &lt;&lt;task &gt;&gt; specify the editing operations
 
 !Interface
-&lt;&lt;task&gt;&gt;evaluate models for the [[reference problem|MObjectRef]]
-&lt;&lt;task 2 3 3&gt;&gt; implement an hash-ID to be incorporated into placements
+&lt;&lt;task 1 1 1&gt;&gt; evaluate models for the [[reference problem|MObjectRef]]
+&lt;&lt;task 2 3 3&gt;&gt; implement an hash-ID
+&lt;&lt;task 1 2 2&gt;&gt; incorporate this ID into class Placement
 &lt;&lt;task 1 1 0&gt;&gt; implement PlacementRef
 &lt;&lt;task 2 2 0&gt;&gt; implement MObjectRef
 

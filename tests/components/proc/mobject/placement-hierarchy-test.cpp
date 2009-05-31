@@ -1,5 +1,5 @@
 /*
-  PlacementHierarchy(Test)  -  concept draft how to deal with the MObject hierarchy in Placements
+  PlacementHierarchy(Test)  -  cooperating hierarchical placement types
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,47 +22,40 @@
 
 
 #include "lib/test/run.hpp"
-//#include "proc/asset/media.hpp"
-//#include "proc/mobject/session.hpp"
-//#include "proc/mobject/session/edl.hpp"
-//#include "proc/mobject/session/testclip.hpp"
-//#include "proc/mobject/placement.hpp"
-//#include "proc/mobject/placement-ref.hpp"
-//#include "proc/mobject/explicitplacement.hpp"
+#include "lib/test/test-helper.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
-#include "lib/hash-indexed.hpp"
+#include "proc/mobject/session/clip.hpp"
+#include "proc/mobject/placement.hpp"
+#include "proc/asset/media.hpp"
 #include "lib/util.hpp"
 
-#include <boost/format.hpp>
 #include <tr1/memory>
 #include <iostream>
-#include <cstdlib>
+
+using lib::HashIndexed;
 
 using std::tr1::shared_ptr;
-using boost::format;
-using boost::str;
-//using lumiera::Time;
-//using util::contains;
-using lib::HashIndexed;
 using std::string;
 using std::cout;
-using std::rand;
+using std::endl;
 
 
 namespace mobject {
 namespace session {
 namespace test    {
   
+  using session::Clip;
+  using lib::test::showSizeof;
   using namespace mobject::test;
   
   
-  /*******************************************************************************
-   * @test Currently (5/09) this is a concept draft separate of any existing types.
-   *       The intention is to rework the Placement implementation based on the
-   *       outcomes of this experiment. When doing so, this test could later on
-   *       serve to document and cover the corresponding Placement properties.
+  /***************************************************************************************
+   * @test creating placements specifically typed, forming an hierarchy of placement types
+   *       which loosely mirrors the hierarchy of the pointee types. Assignments between
+   *       placement of differing type, while still sharing ownership.
    * @see  mobject::Placement
    * @see  mobject::MObject#create
+   * @see  lib::hash::HashIndexed
    */
   class PlacementHierarchy_test : public Test
     {
@@ -70,32 +63,99 @@ namespace test    {
       virtual void
       run (Arg) 
         {
-          TestPlacement<TestSubMO1>  pSub1(*new TestSubMO1);
-          TestPlacement<TestSubMO2>  pSub2(*new TestSubMO2);
-          TestPlacement<TestSubMO21> pSub3(*new TestSubMO21);
+          typedef Placement<MObject>                    PMObj;
+          typedef TestPlacement<>                       PDummy;
+          typedef TestPlacement<TestSubMO1>             PSub1;
+          typedef TestPlacement<TestSubMO2>             PSub2;
+          typedef TestPlacement<TestSubMO21,TestSubMO2> PSub21;
           
-          TestPlacement<DummyMO>     pSubM (pSub3);
+          PSub1  pSub1(*new TestSubMO1);
+          PSub2  pSub2(*new TestSubMO2);
+          PSub21 pSub3(*new TestSubMO21);
           
-          /////////////////////////////////TODO
-          format fmt ("sizeof( %s ) = %d\n");
-          cout << fmt % "Pla<Sub1>"   % sizeof(pSub1);
-          cout << fmt % "Pla<Sub2>"   % sizeof(pSub2);
-          cout << fmt % "Pla<Sub3>"   % sizeof(pSub3);
+          PDummy pSubM (pSub3);
           
-          cout << string(pSub1) << "\n";
-          cout << string(pSub2) << "\n";
-          cout << string(pSubM) << "\n";
-          cout << pSub1->operator string() << "\n";
-          cout << pSub2->operator string() << "\n";
-          cout << pSubM->operator string() << "\n";
+          PMObj  pClip = asset::Media::create("test-1", asset::VIDEO)->createClip();
+          
+          ASSERT (INSTANCEOF (Placement<MObject>, &pSub1));
+          ASSERT (INSTANCEOF (Placement<MObject>, &pSub2));
+          ASSERT (INSTANCEOF (Placement<MObject>, &pSub3));
+          ASSERT (INSTANCEOF (Placement<MObject>, &pSubM));
+          
+          ASSERT (INSTANCEOF (Placement<DummyMO>, &pSub1));
+          ASSERT (INSTANCEOF (Placement<DummyMO>, &pSub2));
+          ASSERT (INSTANCEOF (Placement<DummyMO>, &pSub3));
+          
+          ASSERT (INSTANCEOF (TestPlacement<DummyMO>, &pSub1));
+          ASSERT (INSTANCEOF (TestPlacement<DummyMO>, &pSub2));
+          ASSERT (INSTANCEOF (TestPlacement<DummyMO>, &pSub3));
+          
+          ASSERT ( INSTANCEOF (TestPlacement<TestSubMO2>,  &pSub3));
+          
+          // the following won't succeed...
+//        ASSERT (INSTANCEOF (TestPlacement<TestSubMO21>, &pSub2)); // parent not instance of subclass
+//        ASSERT (INSTANCEOF (TestPlacement<TestSubMO2>,  &pSub1)); // separate branch in the hierarchy
+          
+          cout << showSizeof(pSub1) << endl;
+          cout << showSizeof(pSub2) << endl;
+          cout << showSizeof(pSub3) << endl;
+          cout << showSizeof(pSubM) << endl;
+          cout << showSizeof(pClip) << endl;
+          
+          ASSERT (sizeof(pSub1) == sizeof(pSub3));
+          ASSERT (sizeof(pClip) == sizeof(pSub3));
+          
+          cout << string(pSub1) << endl;
+          cout << string(pSub2) << endl;
+          cout << string(pSub3) << endl;
+          cout << string(pSubM) << endl;
+          cout << string(pClip) << endl;
+          cout << pSub1->operator string() << endl;
+          cout << pSub2->operator string() << endl;
+          cout << pSubM->operator string() << endl;
+          
           pSub3->specialAPI();
           
-          cout << format_PlacementID(pSub1) << "\n";
-          cout << format_PlacementID(pSub2) << "\n";
-          cout << format_PlacementID(pSub3) << "\n";
-          cout << format_PlacementID(pSubM) << "\n";
+          ASSERT (2 == pSubM.use_count());
+          ASSERT (2 == pSub3.use_count());
+          pClip = pSubM;                      // slicing and shared ownership
+          ASSERT (3 == pSubM.use_count());
+          ASSERT (3 == pSub3.use_count());
+          ASSERT (3 == pClip.use_count());
           
-          cout << "Hurgha!\n";
+          
+          // now do a brute-force re-interpretation
+          // note this is still protected by an ASSERT on the operator->()
+          PSub21& hijacked = reinterpret_cast<PSub21&> (pClip);
+          
+          hijacked->specialAPI();
+          ASSERT (3 == hijacked.use_count());
+          ASSERT (hijacked.getID() == pSub3.getID());
+          
+          cout << format_PlacementID(pSub1) << endl;
+          cout << format_PlacementID(pSub2) << endl;
+          cout << format_PlacementID(pSub3) << endl;
+          cout << format_PlacementID(pSubM) << endl;
+          cout << format_PlacementID(pClip) << endl;
+          
+          pClip = pSub1;
+          ASSERT (2 == pSubM.use_count());
+          ASSERT (2 == pSub3.use_count());
+          
+          ASSERT (2 == pClip.use_count());
+          ASSERT (2 == pSub1.use_count());
+          
+///////////////////////////////////////////////////////////////////////////////TODO: find a way to configure NoBug to throw in case of assertion
+///////////////////////////////////////////////////////////////////////////////TODO: configure NoBug specifically for the testsuite
+//        try
+//          {
+//            hijacked->specialAPI();
+//            NOTREACHED;
+//          }
+//        catch (...)
+//          {
+//            ASSERT (lumiera_error () == error::LUMIERA_ERROR_ASSERTION);
+//          }
         }
     };
   
