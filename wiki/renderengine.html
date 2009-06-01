@@ -579,7 +579,7 @@ For every Asset we generate a __Ident tuple__ and a long ID (hash) derived from 
 <div title="AssetManager" modifier="Ichthyostega" created="200709200300" changecount="1">
 <pre>The Asset Manager provides an Interface to some internal Database holding all Assets in the current Session and System state. It may be a real Database at some point (and for the moment it's a Hashtable). Each [[Asset]] is registered automatically with the Asset Manager; it can be queried either by it's //identification tuple// or by it's unique ID.</pre>
 </div>
-<div title="AttachedPlacementProblem" modifier="Ichthyostega" modified="200905292133" created="200801111305" tags="SessionLogic impl draft dynamic" changecount="15">
+<div title="AttachedPlacementProblem" modifier="Ichthyostega" modified="200905310342" created="200801111305" tags="SessionLogic impl draft dynamic" changecount="17">
 <pre>Placing an MObject relatively to another object such that it should be handled as //attached//&amp;nbsp; to the latter results in several design and implementation challenges. Actually, such an attachment creates a cluster of objects. The typical use case is that of an effect attached to a clip or processing pipe.
 * attachment is not a globally fixed relation between objects, rather, it typically exists only for some limited time span (e.g. the duration of the basic clip the effect is attached to)
 * the order of attachment is important and the attached placement may create a fork in the signal flow, so we need a way for specifying reproducibly how the resulting wiring should be
@@ -595,7 +595,7 @@ Attachment is managed within the participating placements, mostly by special [[l
 The attachment relation is hierarchical and has a clearly defined //active// and //passive// side: The attachment head is the parent node in a tree, but plays the role of the passive partner, to which the child nodes attach. But note, this does not mean we are limited to a single attachment head. Actually, each placement has a list of locating pins and thus can attach to several other placements. For example, a transition attaches to at least two local pipes (clips). {{red{TODO: unresolved design problem; seems to contradict the PlacementScope}}}
 
 !!!!Relation to memory management
-Attachment on itself does //not// keep an object alive. Rather, it's a direct reference and has to be taken into account when deleting an object. On the other hand, processing nodes in the render engine never depend on placements &amp;mdsash; they always refer directly to the MObject instance or even the underlying asset. In the case of MObject instances, the pointer from within the engine will //share ownership// with the placement (remember: both are derived from {{{boost::shared_ptr}}}).
+Attachment on itself does //not// keep an object alive. Rather, it's implemented by an opaque ID entry (&amp;rarr; PlacementRef), which can be resolved by the PlacementIndex. The existence of attachments should be taken into account when deleting an object, preferably removing any dangling attachments to prevent an exception to be thrown later on. On the other hand, contrary to the elements of the HighLevelModel, processing nodes in the render engine never depend on placements &amp;mdash; they always refer directly to the MObject instance or even the underlying asset. In the case of MObject instances, the pointer from within the engine will //share ownership// with the placement (remember: both are derived from {{{boost::shared_ptr}}}).
 </pre>
 </div>
 <div title="Automation" modifier="Ichthyostega" modified="200708100315" created="200706250751" tags="def" changecount="5">
@@ -1930,7 +1930,7 @@ The general idea is, that each facade interface actually provides access to a sp
 
 &amp;rarr; overview [[MObject class hierarchy|MObjects]]</pre>
 </div>
-<div title="MObjectRef" modifier="Ichthyostega" modified="200905241554" created="200904242107" tags="SessionLogic GuiIntegration design draft discuss" changecount="18">
+<div title="MObjectRef" modifier="Ichthyostega" modified="200905310321" created="200904242107" tags="SessionLogic GuiIntegration design draft discuss" changecount="19">
 <pre>''The Problem of referring to an [[MObject]]'' stems from the object //as a concept// encompassing a wider scope then just the current implementation instance. If the object was just a runtime entity in memory, we could use a simple (language) reference or pointer. Actually, this isn't sufficient, as the object reference will pass LayerSeparationInterfaces, will be handed over to code not written in the same implementation language, will be included in an ''UNDO'' record for the UndoManager, and thus will need to be serialized and stored permanently within the SessionStorage.
 Moreover [[MObject instances|MObject]] have a 2-level structure: the core object holds just the properties in a strict sense, i.e. the properties which the object //owns.// Any properties due to putting the object into a specific context, i.e. all relation properties are represented as [[Placement]] of the object. Thus, when viewed from the client side, a reference to a specific ~MObject //instance,// actually denotes a //specific//&amp;nbsp; Placement of this object into the Session.
 
@@ -1955,6 +1955,11 @@ Obviously, the second approach has quite some appeal &amp;mdash; but, in order t
 !Implementation concept
 Presumably, none of the both models is usable as-is; rather we try to reconstruct the viable properties of both, starting out with the more elegant second model. Thus, basically the ''reference is a smart-ptr'' referring to the core object. Additionally, it incorporates a ''systematic ID denoting the location of the placement''. This ID without the smart-ptr part is used for the C-implementation, making the full handle implementation a shortcut for an access sequence, which first querries the placement from the Session, followed by dereferencing the placement to get at the core object. Thus, the implementation builds upon another abstraction, the &amp;rarr; PlacementRef, which in turn assumes for an index within the implementation of the [[session datastructure|SessionDataMem]] to track and retrieve the actual Placement.
 
+
+!using ~MObject references
+~MObject references can be created directly from a given placement, or just from an {{{Placement::ID}}} tag. Creation can fail, because the validity of the reference is checked. In this respect, they behave exactly like PlacementRef, and indeed are just implemented on top of the latter. From this point onward, the referred ~MObject is kept alive by the reference &amp;mdash; but note, this doesn't extend to the placement, which still may be modified or removed within the session without further notice. {{red{TODO investigate synchronisation guarantees or a locking mechanism}}} Thus, client code should never store direct references to the placement.
+
+~MObject references have value semantics, i.e. they don't have an identity and can be copied feely. Dereferencing yields a direct (language) ref to the MObject, while the placement can be accessed by a separate function {{{getPlacement()}}}. Moreover, the MObjectRef instance provides a direct API to some of the most common query functions you could imagine to call on both the object and the placement (i.e. to find out about the start time, length, ....)
 
 {{red{WIP}}}
 </pre>
@@ -2845,7 +2850,7 @@ On second sight, this problem seems to be quite nasty, because either we have to
 Consequently, we incorporate a random hash (implemented as {{{LUID}}}) into the individual placement, this way creating an distinguishable //placement identity,// which is retained on copying of the placement. The actual ID tag is complemented by a compile time type (template parameter), thus allowing to pass on additional context information through API calls.
 </pre>
 </div>
-<div title="PlacementRef" modifier="Ichthyostega" modified="200905241641" created="200905090032" tags="def spec draft" changecount="7">
+<div title="PlacementRef" modifier="Ichthyostega" modified="200905310325" created="200905090032" tags="def spec draft" changecount="8">
 <pre>A generic reference mechanism for Placements, as added to the current session.
 While this reference itself is not tied to the actual memory layout (meaning it's //not// a disguised pointer), the implementation relies on a [[placement index facility|PlacementIndex]] for tracking and retrieving the actual Placement implementation object. As a plus, this approach allows to //reverse// the relation denoted by such a reference, inasmuch it is possible to retrieve all other placements referring to a given target placement. But for an (external) user, this link to an index implementation is kept transparent and implicit.
 
@@ -2853,9 +2858,7 @@ While this reference itself is not tied to the actual memory layout (meaning it'
 From the usage context it is clear that the PlacementRef needs to incorporate a simple ID as the only actual data in memory, so it can be downcasted to a POD and passed as such via LayerSeparationInterfaces. And, of course, this ID tag should be the one used by PlacementIndex for organising the Placement index entries, thus enabling the PlacementRef to be passed immediately to the underlying index for resolution. Thus, this design decision is interconnected with the implementation technique used for the index (&amp;rarr; PlacementIndex). From the requirement of the ID tag to be contained in a fixed sized storage, and also from the expected kinds of queries Ichthyo (5/09) choose to incorporate a {{{LUID}}} as a random hash immediately into the placement and build the ID tag on top of it.
 
 !using placement references
-Placement references can be created directly from a given placement, or just from an {{{Placement::ID}}} tag. Creation can fail, because the validity of the reference is checked. From this point onward, the referred ~MObject is kept alive by the reference &amp;mdash; but note, this doesn't extend to the placement, which still may be modified or removed within the session without further notice. {{red{TODO investigate synchronisation guarantees or a locking mechanism}}} Thus, client code should never store direct references to the latter.
-
-Placement references have value semantics, i.e. they don't have an identity and can be copied feely. Dereferencing yields a direct (language) ref to the MObject, while the placement can be accessed by a separate function {{{getPlacement()}}}. Moreover, the PlacementRef instance provides a direct API to some of the most common query functions you could imagine to call on both the object and the placement (i.e. to find out about the start time, length, ....)
+Placement references can be created directly from a given placement, or just from an {{{Placement::ID}}} tag. Creation and dereferencing can fail, because the validity of the reference is checked with the index. Placement references have value semantics. Dereferencing searches the denoted Placement via index, yielding a direct (language) ref. {{red{WIP}}}
 </pre>
 </div>
 <div title="PlacementScope" modifier="Ichthyostega" modified="200905210132" created="200905120304" tags="SessionLogic spec draft" changecount="5">
