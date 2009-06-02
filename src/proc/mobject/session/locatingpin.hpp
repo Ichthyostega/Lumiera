@@ -68,6 +68,7 @@ namespace mobject {
 //class Placement ;
 //typedef Placement<MObject> PMO;
 
+  template<class MO =MObject>
   class PlacementRef;    ///TODO: as of 5/09 the idea is to phase out direct dependency on the placement class and recast those dependencies in terms of PlacementRef
 
 
@@ -116,7 +117,7 @@ namespace mobject {
         /* Factory functions for adding LocatingPins */
         
         FixedLocation&    operator() (Time start, Track track=0);
-        RelativeLocation& operator() (PlacementRef& refObj, Time offset=Time(0));   //////////TODO: warning, just a dummy placeholder for now!!
+        RelativeLocation& operator() (PlacementRef<>& refObj, Time offset=Time(0));   //////////TODO: warning, just a dummy placeholder for now!!
         
         LocatingPin (const LocatingPin&);
         LocatingPin& operator= (const LocatingPin&);

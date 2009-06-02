@@ -25,7 +25,11 @@ PLANNED "DeleteClip_test" DeleteClip_test <<END
 END
 
 
-PLANNED "PlacementBasic_test" PlacementBasic_test <<END
+PLANNED "external MObject references" MObjectRef_test <<END
+END
+
+
+PLANNED "basic placement properties" PlacementBasic_test <<END
 END
 
 

@@ -30,8 +30,8 @@
 
 
 
-#ifndef MOBJECT_PLACEMENT__REF_H
-#define MOBJECT_PLACEMENT__REF_H
+#ifndef MOBJECT_PLACEMENT_REF_H
+#define MOBJECT_PLACEMENT_REF_H
 
 //#include "pre.hpp"
 //#include "proc/mobject/session/locatingpin.hpp"
@@ -45,8 +45,11 @@ namespace mobject {
 //  using std::tr1::shared_ptr;
   
   
+  class MObject;
+  
   /**
    */
+  template<class MO =MObject>
   class PlacementRef
     {
     public:

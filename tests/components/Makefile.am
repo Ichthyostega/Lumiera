@@ -52,6 +52,7 @@ test_components_SOURCES =							\
 	$(testcomponents_srcdir)/proc/mobject/builder/buildertooltest.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/builder/buildsegmenttest.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/controller/rendersegmenttest.cpp	\
+	$(testcomponents_srcdir)/proc/mobject/mobject-ref-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/placement-basic-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/placement-hierarchy-test.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/placement-index-test.cpp		\

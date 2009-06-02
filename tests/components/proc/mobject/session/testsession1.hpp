@@ -38,40 +38,36 @@ using std::string;
 using std::cout;
 
 
-namespace mobject
-  {
-  namespace session
+namespace mobject {
+namespace session {
+  
+  /**
+   * Create a Test Session configuration usable for various Tests.
+   * This Session holds two Clips and corresponds to "Example1"
+   * in the UML design. All changes are done to the (global)
+   * current session.
+   */
+  inline void 
+  buildTestsession1 ()
     {
-    
-    /**
-     * Create a Test Session configuration usable for various Tests.
-     * This Session holds two Clips and corresponds to "Example1"
-     * in the UML design. All changes are done to the (global)
-     * current session.
-     */
-    inline void 
-    buildTestseesion1 ()
-      {
-        UNIMPLEMENTED ("Test-Session 1");
-      };
-    
-      
-    /**
-     * Analyze the current (gloal) Session to verify the
-     * configuration of "Test-Session 1"
-     */
-    inline bool 
-    checkTestsession1 ()
-      {
-        UNIMPLEMENTED ("Test-Session 1");
-        return false;
-      };
-    
-
-    const string SESSION1_CLIP("TODO: some sensible way to refer to a clip");
-    
-    
-  } // namespace session
-
-} // namespace mobject
+      UNIMPLEMENTED ("Test-Session 1");
+    };
+  
+  
+  /**
+   * Analyse the current (global) Session to verify the
+   * configuration of "Test-Session 1"
+   */
+  inline bool 
+  checkTestsession1 ()
+    {
+      UNIMPLEMENTED ("Test-Session 1");
+      return false;
+    };
+  
+  
+  const string SESSION1_CLIP("TODO: some sensible way to refer to a clip");
+  
+  
+}} // namespace mobject::session
 #endif

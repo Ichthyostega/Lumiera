@@ -50,6 +50,7 @@ namespace mobject {
   using boost::scoped_ptr;
   using std::vector;
 
+  class MObject;
   
   
   /**
@@ -62,13 +63,15 @@ namespace mobject {
       
     public:
       typedef Placement<MObject> PlacementMO;
-      typedef PlacementRef PRef;
+      typedef PlacementRef<MObject> PRef;
       typedef PlacementMO::ID ID;
       
       PlacementMO& find (ID)  const;
       
       template<class MO>
-      Placement<MO>& find (PlacementMO::Id<MO>)  const;
+      Placement<MO>&  find (PlacementMO::Id<MO>)  const;
+      template<class MO>
+      Placement<MO>&  find (PlacementRef<MO>)     const;
       
       PlacementMO& getScope (PlacementMO&)  const;
       PlacementMO& getScope (ID)            const;
