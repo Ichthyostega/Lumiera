@@ -115,6 +115,31 @@ namespace test    {
           ASSERT (ref1 == refX);
           ASSERT (ref2 != refX);
           
+          // re-assignment with a new placement
+          refX = p2;
+          ASSERT (refX == ref2);
+          ASSERT (&*refX == &p2);
+          refX = p1.getID();
+          ASSERT (refX == ref1);
+          ASSERT (refX != ref2);
+          ASSERT (&*refX == &p1);
+          
+          LumieraUid luid2 (p2.getID().get());
+          refX = luid2;                            // assignment works even based on a plain LUID
+          ref2 = ref1;                             
+          ref1 = refX;                             // dynamic type check when downcasting  
+          ASSERT (&p1 == &*ref2);
+          ASSERT (&p2 == &*ref1);
+          refX = ref2;
+          ref2 = ref1;
+          ref1 = refX;
+          ASSERT (&p1 == &*ref1);
+          ASSERT (&p1 == &*refX);
+          ASSERT (&p2 == &*ref2);
+          ASSERT (ref1 != ref2);
+          ASSERT (ref1 == refX);
+          ASSERT (ref2 != refX);
+          
           // resolution is indeed "live", we see changes to the referred placement
           ASSERT (refX.resolve().time == 0);
           p1 = p2;
