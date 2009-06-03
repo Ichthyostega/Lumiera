@@ -60,6 +60,12 @@ lumiera_rwlock_destroy (LumieraRWLock self, struct nobug_flag* flag)
   return self;
 }
 
+
+int lumiera_rwlock_unlock_cb (void* rwlock)
+{
+  return pthread_rwlock_unlock (&((LumieraRWLock)rwlock)->rwlock);
+}
+
 /*
 // Local Variables:
 // mode: C

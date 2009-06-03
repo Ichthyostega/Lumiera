@@ -1,5 +1,5 @@
 #  Copyright (C)         Lumiera.org
-#    2007,               Christian Thaeter <ct@pipapo.org>
+#    2007, 2008, 2009    Christian Thaeter <ct@pipapo.org>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -25,6 +25,7 @@ liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/error.c				\
 	$(liblumiera_la_srcdir)/exception.cpp 			\
 	$(liblumiera_la_srcdir)/mutex.c				\
+	$(liblumiera_la_srcdir)/recmutex.c			\
 	$(liblumiera_la_srcdir)/rwlock.c			\
 	$(liblumiera_la_srcdir)/condition.c			\
 	$(liblumiera_la_srcdir)/reccondition.c			\
@@ -51,6 +52,7 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/error.h				\
 	$(liblumiera_la_srcdir)/error.hpp			\
 	$(liblumiera_la_srcdir)/mutex.h				\
+	$(liblumiera_la_srcdir)/recmutex.h			\
 	$(liblumiera_la_srcdir)/rwlock.h			\
 	$(liblumiera_la_srcdir)/condition.h			\
 	$(liblumiera_la_srcdir)/reccondition.h			\

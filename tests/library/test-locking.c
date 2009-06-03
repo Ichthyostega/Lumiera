@@ -21,7 +21,9 @@
 
 #include "tests/test.h"
 #include "lib/mutex.h"
+#include "lib/recmutex.h"
 #include "lib/condition.h"
+#include "lib/reccondition.h"
 #include "lib/rwlock.h"
 
 #include <stdio.h>
@@ -57,6 +59,22 @@ TEST ("mutexforgotunlock")
   LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
     {
       break;    // MUTEX_SECTIONS must not be left by a jump
+    }
+
+  lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
+}
+
+
+TEST ("mutexexplicitunlock")
+{
+  lumiera_mutex m;
+  lumiera_mutex_init (&m, "mutexforgotunlock", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
+    {
+      ECHO("mutex locked section");
+      LUMIERA_MUTEX_SECTION_UNLOCK;
+      break;
     }
 
   lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
@@ -107,24 +125,28 @@ TEST ("chainedmutexsection")
   lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
 }
 
+
+
 TEST ("recursivemutexsection")
 {
-  lumiera_mutex m;
-  lumiera_recmutex_init (&m, "m_mutexsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_recmutex m;
+  lumiera_recmutex_init (&m, "m_recmutexsection", &NOBUG_FLAG(NOBUG_ON));
 
 
-  LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
+  LUMIERA_RECMUTEX_SECTION (NOBUG_ON, &m)
     {
-      printf ("mutex locked once\n");
+      printf ("recmutex locked once\n");
 
-      LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
+      LUMIERA_RECMUTEX_SECTION (NOBUG_ON, &m)
         {
-          printf ("mutex locked twice\n");
+          printf ("recmutex locked twice\n");
         }
     }
 
- lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
+ lumiera_recmutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
 }
+
+
 
 TEST ("rwlocksection")
 {
@@ -144,6 +166,7 @@ TEST ("rwlocksection")
   lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON));
 }
 
+
 TEST ("rwlockforgotunlock")
 {
   lumiera_rwlock rwlock;
@@ -155,6 +178,60 @@ TEST ("rwlockforgotunlock")
     }
 
   lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON));
+}
+
+
+
+TEST ("rwdeadlockwr")
+{
+  lumiera_rwlock rwlock;
+  lumiera_rwlock_init (&rwlock, "rwsection", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_WRLOCK_SECTION (NOBUG_ON, &rwlock)
+    {
+      printf ("write locked section 1\n");
+      LUMIERA_RDLOCK_SECTION (NOBUG_ON, &rwlock)
+        {
+          printf ("read locked section 2\n");
+        }
+    }
+
+  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON));
+}
+
+
+
+TEST ("rwdeadlockrw")
+{
+  lumiera_rwlock rwlock;
+  lumiera_rwlock_init (&rwlock, "rwsection", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_RDLOCK_SECTION (NOBUG_ON, &rwlock)
+    {
+      printf ("read locked section 1\n");
+      LUMIERA_WRLOCK_SECTION (NOBUG_ON, &rwlock)
+        {
+          printf ("write locked section 2\n");
+        }
+    }
+
+  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON));
+}
+
+
+TEST ("conditionops (compiletest only)")
+{
+  lumiera_condition cond;
+  lumiera_condition_init (&cond, "conditionsection", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_CONDITION_SECTION (NOBUG_ON, &cond)
+    {
+      LUMIERA_CONDITION_WAIT(1);
+      LUMIERA_CONDITION_SIGNAL;
+      LUMIERA_CONDITION_BROADCAST;
+    }
+
+  lumiera_condition_destroy (&cond, &NOBUG_FLAG(NOBUG_ON));
 }
 
 
@@ -177,6 +254,7 @@ TEST ("conditionsection")
 }
 
 
+
 TEST ("conditionforgotunlock")
 {
   lumiera_condition cond;
@@ -189,5 +267,56 @@ TEST ("conditionforgotunlock")
 
   lumiera_condition_destroy (&cond, &NOBUG_FLAG(NOBUG_ON));
 }
+
+
+
+TEST ("recconditionops (compiletest only)")
+{
+  lumiera_reccondition reccond;
+  lumiera_reccondition_init (&reccond, "recconditionsection", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &reccond)
+    {
+      LUMIERA_RECCONDITION_WAIT(1);
+      LUMIERA_RECCONDITION_SIGNAL;
+      LUMIERA_RECCONDITION_BROADCAST;
+    }
+
+  lumiera_reccondition_destroy (&reccond, &NOBUG_FLAG(NOBUG_ON));
+}
+
+
+TEST ("recconditionsection")
+{
+  lumiera_reccondition reccond;
+  lumiera_reccondition_init (&reccond, "recconditionsection", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &reccond)
+    {
+      printf ("reccondition locked section 1\n");
+    }
+
+  LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &reccond)
+    {
+      printf ("reccondition locked section 2\n");
+    }
+
+  lumiera_reccondition_destroy (&reccond, &NOBUG_FLAG(NOBUG_ON));
+}
+
+
+TEST ("recconditionforgotunlock")
+{
+  lumiera_reccondition reccond;
+  lumiera_reccondition_init (&reccond, "recconditionforgotunlock", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &reccond)
+    {
+      break;    // RECCONDITION_SECTIONS must not be left by a jump
+    }
+
+  lumiera_reccondition_destroy (&reccond, &NOBUG_FLAG(NOBUG_ON));
+}
+
 
 TESTS_END

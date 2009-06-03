@@ -109,4 +109,10 @@ test_interfaces_LDADD = 			\
 	-lboost_program_options-mt		\
 	-lboost_regex-mt
 
+check_PROGRAMS += test-threads
+test_threads_SOURCES = $(tests_srcdir)/backend/test-threads.c
+test_threads_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_threads_CFLAGS = $(AM_CFLAGS) $(PTHREAD_CFLAGS)
+test_threads_LDADD = liblumierabackend.la liblumiera.la -lnobugmt -lpthread -ldl -lm     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
+
 TESTS = $(tests_srcdir)/test.sh
