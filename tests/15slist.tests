@@ -1,0 +1,46 @@
+TESTING "Single Linked Lists" ./test-slist
+
+TEST "initialization and predicates" basic <<END
+out: 1
+out: 0
+out: 1
+out: 0
+out: 1
+out: 0
+out: 1
+out: 0
+END
+
+TEST "insert/delete nodes" insert_delete <<END
+out: 1
+out: 0
+out: 1
+out: 0
+out: 1
+END
+
+TEST "moving across a list" movement <<END
+out: 1
+END
+
+TEST "enumerates elements of a list" enumerations <<END
+out: A B C D .
+out: ---
+out: B C .
+out: ---
+out: A B C D .
+out: 1
+END
+
+TEST "get length and n-th element of a list" count <<END
+out: 3
+out: 1
+END
+
+TEST "sorts a list" sort <<END
+return: 0
+END
+
+TEST "finds element inside a list" search <<END
+out: 1
+END

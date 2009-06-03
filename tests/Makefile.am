@@ -69,6 +69,10 @@ test_resourcecollector_SOURCES = $(tests_srcdir)/library/test-resourcecollector.
 test_resourcecollector_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
 test_resourcecollector_LDADD = $(NOBUGMT_LUMIERA_LIBS) liblumierabackend.la liblumieracommon.la liblumieraproc.la -ldl liblumiera.la -lboost_program_options-mt -lboost_regex-mt
 
+check_PROGRAMS += test-slist
+test_slist_SOURCES = $(tests_srcdir)/library/test-slist.c
+test_slist_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
+test_slist_LDADD = $(NOBUGMT_LUMIERA_LIBS)                                  liblumiera.la -lboost_program_options-mt -lboost_regex-mt
 
 check_PROGRAMS += test-config
 test_config_SOURCES = $(tests_srcdir)/common/test-config.c
