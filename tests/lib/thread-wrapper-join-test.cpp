@@ -109,6 +109,7 @@ namespace backend {
             
 #ifdef DEBUG
             /////////////////////////////////////////////////////////////////////////////////////////////TODO: better way of detecting debug builds
+#if false   /////////////////////////////////////////////////////////////////////////////////////////////TODO: re-enable assertions to throw, and make this configurable
             try
               {
                 Thread("test Thread joining-3",
@@ -120,6 +121,7 @@ namespace backend {
               {
                 ASSERT (lumiera_error() == lumiera::error::LUMIERA_ERROR_ASSERTION);
               }
+#endif
 #endif            
             
             // note: the waitingHandle goes out of scope here,

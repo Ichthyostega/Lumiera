@@ -91,8 +91,8 @@ namespace proc {
         void activate (uint fps)
           {
             REQUIRE (  0==fps 
-                    ||    1000000/fps < std::numeric_limits<uint>::max() 
-                       && 1000000/fps > POLL_TIMEOUT);
+                    ||(   1000000/fps < std::numeric_limits<uint>::max() 
+                       && 1000000/fps > POLL_TIMEOUT));
             if (fps)
               timespan_ = 1000000/fps; // microseconds per tick
             else
