@@ -343,7 +343,7 @@ namespace lib {
           void setTimeout(ulong relative) {timeout_.setOffset(relative);}
           bool isTimedWait()              {return (timeout_);}
           
-          LumieraCondition accessCond()   {return static_cast<LumieraCondition> (this);}
+          LumieraReccondition accessCond(){return static_cast<LumieraReccondition> (this);}
         };
      
       typedef Mutex<Wrapped_LumieraExcMutex> NonrecursiveLock_NoWait;

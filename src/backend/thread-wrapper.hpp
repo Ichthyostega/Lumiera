@@ -42,6 +42,7 @@ namespace backend {
   using std::tr1::function;
   using lumiera::Literal;
   using lib::Sync;
+  using lib::RecursiveLock_Waitable;
   using lib::NonrecursiveLock_Waitable;
   
   typedef struct nobug_flag* NoBugFlag;
@@ -65,17 +66,17 @@ namespace backend {
    *       details of the thread handling and didn't implement the waiting feature. 
    */
   class JoinHandle
-    : public Sync<NonrecursiveLock_Waitable>
-    , Sync<NonrecursiveLock_Waitable>::Lock
+    : public Sync<RecursiveLock_Waitable>
+    , Sync<RecursiveLock_Waitable>::Lock
     {
-      typedef Sync<NonrecursiveLock_Waitable> SyncBase;
+      typedef Sync<RecursiveLock_Waitable> SyncBase;
       
       bool isWaiting_;
       volatile bool armed_;
       
       friend class Thread;
       
-      LumieraCondition
+      LumieraReccondition
       accessLockedCondition()
         {
           ASSERT (!armed_, "Lifecycle error, JoinHandle used for several threads.");
@@ -171,7 +172,7 @@ namespace backend {
       
       
       void
-      start_thread (lumiera_thread_class kind, Literal& purpose, NoBugFlag logging_flag, LumieraCondition joinCond=0)
+      start_thread (lumiera_thread_class kind, Literal& purpose, NoBugFlag logging_flag, LumieraReccondition joinCond=0)
         {
           Lock sync(this);
           LumieraThread res = 
