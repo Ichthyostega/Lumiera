@@ -93,7 +93,7 @@
 /**
  * Wait for a condition.
  * Must be used inside a RECCONDITION_SECTION.
- * @param expr Conditon which must become true, else the condition variable goes back into sleep
+ * @param expr Condition which must become true, else the condition variable goes back into sleep
  */
 #define LUMIERA_RECCONDITION_WAIT(expr)                                                                                 \
   do {                                                                                                                  \

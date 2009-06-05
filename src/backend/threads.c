@@ -59,6 +59,9 @@ static void* pthread_runner (void* thread)
 
   starter->fn (starter->arg);
 
+  if (!starter->finished)
+    return NULL; // no condition var provided for signalling thread termination
+  
   LUMIERA_RECCONDITION_SECTION(cond_sync, starter->finished)
     LUMIERA_RECCONDITION_BROADCAST;
 
