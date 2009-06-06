@@ -105,12 +105,11 @@ namespace mobject {
   } // (End) implementation detail
   
   
-  /** @internal factory function for creating a placement index for tests.  */
-  PIdx
-  create_PlacementIndex ()
-  {
-    return PIdx (new PlacementIndex());
-  }
+  /** @internal Factory for creating a new placement index.
+   *            For use by the Session and for unit tests.  
+   */
+  PlacementIndex::Factory PlacementIndex::create;
+  
   
   PIdx const&
   reset_PlachementIndex(PIdx const& alternativeIndex)

@@ -38,7 +38,7 @@ namespace session {
       focusEDL_(0),
       edls(1),
       fixture(new Fixture),
-      pIdx_(*create_PlacementIndex())
+      pIdx_(PlacementIndex::create())
     {
     }
   

@@ -36,10 +36,12 @@
 //#include "pre.hpp"
 //#include "proc/mobject/session/locatingpin.hpp"
 //#include "proc/asset/pipe.hpp"
+#include "lib/factory.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
 
 #include <tr1/memory>
+#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <vector>
 
@@ -56,6 +58,7 @@ namespace mobject {
   /**
    */
   class PlacementIndex
+    : boost::noncopyable
     {
       class Table;
       
@@ -65,6 +68,7 @@ namespace mobject {
       typedef Placement<MObject> PlacementMO;
       typedef PlacementRef<MObject> PRef;
       typedef PlacementMO::ID ID;
+      
       
       PlacementMO& find (ID)  const;
       
@@ -93,16 +97,19 @@ namespace mobject {
       ID   insert (PlacementMO& newObj, PlacementMO& targetScope);
       bool remove (PlacementMO&);
       bool remove (ID);
+      
+      
+      typedef lumiera::factory::RefcountFac<PlacementIndex> Factory;
+      
+      static Factory create;
+      
+    protected:
+      PlacementIndex() ;
+      friend class Factory;
     };
   ////////////////TODO currently just fleshing  out the API; probably have to split off an impl.class; but for now a PImpl is sufficient...
   
   
-  
-  /** preliminary helper for creating a placement index (instance).
-   *  @todo integrate this into the session and provide an extra factory for tests?
-   */
-  shared_ptr<PlacementIndex>
-  create_PlacementIndex() ;
   
   /** @internal there is an implicit PlacementIndex available on a global scale,
    *            by default implemented within the current session. This function allows
@@ -117,7 +124,7 @@ namespace mobject {
   /** @internal access point for PlacementRef to the implicit global PlacementIndex */
   Placement<MObject> &
   fetch_PlachementIndex(Placement<MObject>::ID const&) ;
-
-
+  
+  
 } // namespace mobject
 #endif

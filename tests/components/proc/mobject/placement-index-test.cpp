@@ -64,7 +64,7 @@ namespace test    {
       virtual void
       run (Arg) 
         {
-          PIdx index (create_PlacementIndex());
+          PIdx index (PlacementIndex::create());
           ASSERT (index);
           
           /////////////////////////////////TODO

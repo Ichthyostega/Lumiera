@@ -65,7 +65,7 @@ namespace test    {
           
           // Prepare an (test)Index backing the PlacementRefs
           typedef shared_ptr<PlacementIndex> PIdx;
-          PIdx index (create_PlacementIndex());
+          PIdx index (PlacementIndex::create());
           PMO& root = index->getRoot();
           reset_PlacementIndex(index);
           
