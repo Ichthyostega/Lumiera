@@ -159,8 +159,8 @@ liblumiprocmobjectsession_la_SOURCES =					\
 	$(liblumiprocmobjectsession_la_srcdir)/segment.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/simpleclip.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/plug.cpp			\
-	$(liblumiprocmobjectsession_la_srcdir)/sessionimpl.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/sessmanagerimpl.cpp	\
+	$(liblumiprocmobjectsession_la_srcdir)/session-impl.cpp		\
+	$(liblumiprocmobjectsession_la_srcdir)/sess-manager-impl.cpp	\
 	$(liblumiprocmobjectsession_la_srcdir)/edl.cpp			\
 	$(liblumiprocmobjectsession_la_srcdir)/session.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/track.cpp		\

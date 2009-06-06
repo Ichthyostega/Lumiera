@@ -99,10 +99,24 @@ namespace mobject {
   
   
   /** preliminary helper for creating a placement index (instance).
-   *  @todo integrate this into the session and provide an extra factory for tests
+   *  @todo integrate this into the session and provide an extra factory for tests?
    */
   shared_ptr<PlacementIndex>
-  createPlacementIndex() ;
+  create_PlacementIndex() ;
+  
+  /** @internal there is an implicit PlacementIndex available on a global scale,
+   *            by default implemented within the current session. This function allows
+   *            to re-define this implicit index temporarily, e.g. for unit tests. */
+  shared_ptr<PlacementIndex> const&
+  reset_PlachementIndex(shared_ptr<PlacementIndex> const&) ;
+  
+  /** @internal restore the implicit PlacementIndex to its default implementation (=the session) */
+  shared_ptr<PlacementIndex> const&
+  reset_PlachementIndex() ;
+  
+  /** @internal access point for PlacementRef to the implicit global PlacementIndex */
+  Placement<MObject> &
+  fetch_PlachementIndex(Placement<MObject>::ID const&) ;
 
 
 } // namespace mobject

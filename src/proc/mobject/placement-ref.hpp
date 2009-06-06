@@ -48,6 +48,11 @@ namespace mobject {
   
   class MObject;
   
+  // see placement-index.cpp 
+  Placement<MObject> &
+  fetch_PlachementIndex(Placement<MObject>::ID const&) ;
+  
+  
   /**
    */
   template<class MO =MObject>
@@ -154,6 +159,15 @@ namespace mobject {
         {
           REQUIRE (luid);
           return reinterpret_cast<_Id const&> (*luid);
+        }
+      
+      static PlacementMO&
+      access (_Id placementID)
+        {
+          Placement<MObject> & pla (fetch_PlachementIndex (placementID));  // may throw
+          REQUIRE (pla);
+          ASSERT (pla.isCompatible<MO>());
+          return static_cast<PlacementMO&> (pla);
         }
     };
   

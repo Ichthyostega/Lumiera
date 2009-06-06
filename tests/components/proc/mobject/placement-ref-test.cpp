@@ -65,9 +65,9 @@ namespace test    {
           
           // Prepare an (test)Index backing the PlacementRefs
           typedef shared_ptr<PlacementIndex> PIdx;
-          PIdx index (createPlacementIndex());
+          PIdx index (create_PlacementIndex());
           PMO& root = index->getRoot();
-          reset_PlacementRef(index);
+          reset_PlacementIndex(index);
           
           index->insert (p1, root);
           index->insert (p2, root);
@@ -176,7 +176,7 @@ namespace test    {
 
           //consistency check; then reset PlacementRef index to default
           ASSERT (0 == index->size());
-          reset_PlacementRef();
+          reset_PlacementIndex();
         }
     };
   
