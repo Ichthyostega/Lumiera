@@ -80,11 +80,12 @@ namespace mobject {
       
       
       /** retrieve the logical root scope */
-      PlacementMO& getRoot()        const;
+      PlacementMO& getRoot()                const;
       
       /** diagnostic: number of indexed entries */
-      size_t size()                 const;
-      bool contains (PlacementMO&)  const;
+      size_t size()                         const;
+      bool contains (PlacementMO const&)    const;
+      bool contains (ID const&)             const;
       
       
       /* == mutating operations == */

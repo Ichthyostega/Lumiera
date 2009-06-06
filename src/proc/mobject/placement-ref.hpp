@@ -36,6 +36,7 @@
 //#include "pre.hpp"
 //#include "proc/mobject/session/locatingpin.hpp"
 //#include "proc/asset/pipe.hpp"
+#include "proc/mobject/placement.hpp"
 
 //#include <tr1/memory>
 
@@ -52,12 +53,108 @@ namespace mobject {
   template<class MO =MObject>
   class PlacementRef
     {
+      typedef Placement<MO>      PlacementMO;
+      typedef Placement<MObject>::ID     _ID;         ////TODO: superfluous...
+      typedef Placement<MObject>::Id<MO> _Id;
+      
+      _Id id_;
+      
     public:
       /**
-       * 
+       * Creating a PlacementRef from a compatible reference source.
+       * Any source allowing to infer a \em compatible mobject::Placement
+       * is accepted. Here, compatibility is decided based on the run time
+       * type of the pointee, in comparison to the template parameter Y.
+       * In any case, for this ctor to succeed, the provided ref or ID 
+       * needs to be resolvable to a placement by the implicit PlacementIndex
+       * facility used by all PlacementRef instances (typically the Session).
+       * @note there is no default ctor, a reference source is mandatory.
+       * @param refID reference resolvable to a placement via Index, especially
+       *              - an existing Placement
+       *              - just an Placement::ID
+       *              - a plain LUID
+       * @throw error::Invalid on incompatible run time type of the resolved ID  
        */
+      template<class Y>
+      explicit
+      PlacementRef (Y const& refID)
+        : id_(recast (refID))
+        { 
+          validate(id_); 
+        }
+      
+      PlacementRef (PlacementRef const& r)    ///< copy ctor
+        : id_(r.id_)
+        { 
+          validate(id_); 
+        }
+      
+      template<class X>
+      PlacementRef (PlacementRef<X> const& r) ///< extended copy ctor, when type X is assignable to MO
+        : id_(r.id_)
+        {
+          validate(id_); 
+        }
       
       
+      PlacementRef&
+      operator= (PlacementRef const& r)
+        {
+          validate(r.id_);
+          id_ = r.id_;
+          return *this;
+        }
+      
+      template<class X>
+      PlacementRef&
+      operator= (PlacementRef<X> const& r)
+        {
+          validate(r.id_);
+          id_ = r.id_;
+          return *this;
+        }
+      
+      template<class Y>
+      PlacementRef&
+      operator= (Y const& refID)
+        {
+          validate (recast (refID));
+          id_ = recast (refID);
+          return *this;
+        }
+      
+      
+      /* == forwarding smart-ptr operations == */
+      
+      PlacementMO& operator*()  const { return access(id_); } ///< dereferencing fetches referred Placement from Index
+      
+      MO* operator->()          const { return access(id_); } ///< provide access to pointee API by smart-ptr chaining 
+      
+      operator string()         const { return access(id_).operator string(); }
+      size_t use_count()        const { return access(id_).use_count(); }
+      
+      ////////////////TODO more operations to come....
+      
+    private:
+      static void
+      validate (_Id rId)
+        {
+          if (!access(rId).isCompatible<MO>())
+            throw error::Invalid(LUMIERA_ERROR_INVALID_PLACEMENTREF);
+        }
+      
+      static _Id const&
+      recast (_ID const& someID)
+        {
+          return static_cast<_Id const&> (someID);
+        }
+      
+      static _Id const&
+      recast (const LumieraUid luid)
+        {
+          REQUIRE (luid);
+          return reinterpret_cast<_Id const&> (*luid);
+        }
     };
   
   
