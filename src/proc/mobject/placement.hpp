@@ -137,7 +137,18 @@ namespace mobject {
         { 
           ENSURE (*this); 
           return _SmartPtr::operator-> (); 
-        }      
+        }
+      
+      /** run time diagnostics: is the pointee
+       *  of this placement compatible to the given type?
+       */
+      template<class Y>
+      bool
+      isCompatible ()  const
+        {
+          return 0 != dynamic_cast<const Y*> (get());
+        }
+      
       
       operator string()   const ;
       size_t use_count()  const { return _SmartPtr::use_count(); }

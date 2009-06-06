@@ -156,6 +156,14 @@ namespace test    {
 //          {
 //            ASSERT (lumiera_error () == error::LUMIERA_ERROR_ASSERTION);
 //          }
+          
+          // runtime type diagnostics based on pointee RTTI
+          ASSERT ( pSub2.isCompatible<MObject>());
+          ASSERT ( pSub2.isCompatible<DummyMO>());
+          ASSERT ( pSub2.isCompatible<TestSubMO2>());
+          ASSERT (!pSub2.isCompatible<TestSubMO21>());
+          ASSERT (!pSub2.isCompatible<TestSubMO1>());
+          ASSERT (!pSub2.isCompatible<Clip>());
         }
     };
   
