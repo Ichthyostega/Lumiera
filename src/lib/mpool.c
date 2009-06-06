@@ -30,8 +30,10 @@
 
 #if UINTPTR_MAX > 4294967295U   /* 64 bit */
 #define MPOOL_DIV_SHIFT 6
+#define MPOOL_C(c) c ## ULL
 #else                           /* 32 bit */
 #define MPOOL_DIV_SHIFT 5
+#define MPOOL_C(c) c ## UL
 #endif
 
 /*
@@ -113,7 +115,7 @@ bitmap_bit_get_nth (MPoolcluster cluster, unsigned index)
   TRACE (mpool_dbg, "cluster %p: index %u", cluster, index);
 
   uintptr_t quot = index>>MPOOL_DIV_SHIFT;
-  uintptr_t rem = index & ~((~0ULL)<<MPOOL_DIV_SHIFT);
+  uintptr_t rem = index & ~((~MPOOL_C(0))<<MPOOL_DIV_SHIFT);
   uintptr_t* bitmap = (uintptr_t*)&cluster->data;
 
   return bitmap[quot] & ((uintptr_t)1<<rem);
@@ -206,7 +208,7 @@ static inline unsigned
 uintptr_nearestbit (uintptr_t v, unsigned n)
 {
   unsigned r = 0;
-  uintptr_t mask = 1ULL<<n;
+  uintptr_t mask = MPOOL_C(1)<<n;
 
   while (1)
     {
@@ -217,7 +219,7 @@ uintptr_nearestbit (uintptr_t v, unsigned n)
           else
             return n+r;
         }
-      if (mask == ~0ULL)
+      if (mask == ~MPOOL_C(0))
         return ~0U;
       ++r;
       mask |= ((mask<<1)|(mask>>1));
@@ -236,7 +238,7 @@ alloc_near (MPoolcluster cluster, MPool self, void* locality)
 
   uintptr_t index = (locality - begin_of_elements) / self->elem_size;
   uintptr_t quot = index>>MPOOL_DIV_SHIFT;
-  uintptr_t rem = index & ~((~0ULL)<<MPOOL_DIV_SHIFT);
+  uintptr_t rem = index & ~((~MPOOL_C(0))<<MPOOL_DIV_SHIFT);
 
   uintptr_t* bitmap = (uintptr_t*)&cluster->data;
   unsigned r = ~0U;
@@ -272,7 +274,7 @@ bitmap_set_element (MPoolcluster cluster, MPool self, void* element)
 
   uintptr_t index = (element - begin_of_elements) / self->elem_size;
   uintptr_t quot = index>>MPOOL_DIV_SHIFT;
-  uintptr_t rem = index & ~((~0ULL)<<MPOOL_DIV_SHIFT);
+  uintptr_t rem = index & ~((~MPOOL_C(0))<<MPOOL_DIV_SHIFT);
 
   uintptr_t* bitmap = (uintptr_t*)&cluster->data;
   bitmap[quot] |= ((uintptr_t)1<<rem);
@@ -291,7 +293,7 @@ bitmap_clear_element (MPoolcluster cluster, MPool self, void* element)
 
   uintptr_t index = (element - begin_of_elements) / self->elem_size;
   uintptr_t quot = index>>MPOOL_DIV_SHIFT;
-  uintptr_t rem = index & ~((~0ULL)<<MPOOL_DIV_SHIFT);
+  uintptr_t rem = index & ~((~MPOOL_C(0))<<MPOOL_DIV_SHIFT);
 
   uintptr_t* bitmap = (uintptr_t*)&cluster->data;
   bitmap[quot] &= ~((uintptr_t)1<<rem);
@@ -399,7 +401,7 @@ find_near (MPoolcluster cluster, MPool self, void* element)
 
   uintptr_t index = (element - begin_of_elements) / self->elem_size;
   uintptr_t quot = index>>MPOOL_DIV_SHIFT;
-  uintptr_t rem = index & ~((~0ULL)<<MPOOL_DIV_SHIFT);
+  uintptr_t rem = index & ~((~MPOOL_C(0))<<MPOOL_DIV_SHIFT);
 
   uintptr_t* bitmap = (uintptr_t*)&cluster->data;
   unsigned r = ~0U;
