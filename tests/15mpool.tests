@@ -3,44 +3,36 @@ TESTING "Memory pool tests" ./test-mpool
 TEST "init/destroy" basic <<END
 err: initialized
 err: allocated
+err: DUMP
 err: freed
+err: DUMP
 err: destroyed
 return: 0
 END
 
 
 TEST "auto destruction" destroy <<END
-return: !0
+return: 0
 END
 
 
 TEST "cluster allocation" clusters <<END
-return: !0
+return: 0
 END
 
 
-TEST "random usage" random <<END
-return: !0
+PLANNED "random usage" random <<END
+return: 0
 END
 
 
-TEST "stats" statscheck <<END
-return: !0
-END
-
-
-TEST "optimizer" optimize <<END
-return: !0
-END
-
-
-TEST "collector" collect <<END
-return: !0
+PLANNED "stats" statscheck <<END
+return: 0
 END
 
 
 TEST "reserve" reserve <<END
-return: !0
+return: 0
 END
 
 

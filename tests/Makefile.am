@@ -37,7 +37,8 @@ test_llist_LDADD = $(NOBUGMT_LUMIERA_LIBS)                                  libl
 check_PROGRAMS += test-mpool
 test_mpool_SOURCES = $(tests_srcdir)/library/test-mpool.c
 test_mpool_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-test_mpool_LDADD = liblumiera.la $(NOBUGMT_LUMIERA_LIBS)     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
+test_mpool_LDADD = $(NOBUGMT_LUMIERA_LIBS) \
+	liblumiera.la liblumieracommon.la liblumierabackend.la liblumieraproc.la -lboost_program_options-mt -lboost_regex-mt -ldl
 
 check_PROGRAMS += test-psplay
 test_psplay_SOURCES = $(tests_srcdir)/library/test-psplay.c
