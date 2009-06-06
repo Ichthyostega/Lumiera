@@ -46,6 +46,7 @@
 
 //#include <tr1/memory>
 
+///////////////////////////////////////////TODO: define an C-API representation here, make the header multilingual!
 
 namespace mobject {
   
