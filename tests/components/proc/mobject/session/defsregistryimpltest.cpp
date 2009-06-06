@@ -110,8 +110,8 @@ namespace mobject {
           
           
           // fabricating Objects wrapped into smart-ptrs
-          lumiera::factory::RefcountPtr<Dummy<13> > oFac;
-          lumiera::factory::RefcountPtr<Dummy<23> > pFac;
+          lumiera::factory::RefcountFac<Dummy<13> > oFac;
+          lumiera::factory::RefcountFac<Dummy<23> > pFac;
           
           O o1, o2, o3;
           Q13 q1, q2, q3, q4, q5;

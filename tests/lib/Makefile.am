@@ -40,7 +40,7 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/appconfigtest.cpp			\
 	$(testlib_srcdir)/customsharedptrtest.cpp		\
 	$(testlib_srcdir)/exceptionerrortest.cpp		\
-	$(testlib_srcdir)/factoryspecialtest.cpp		\
+	$(testlib_srcdir)/factory-special-test.cpp		\
 	$(testlib_srcdir)/factorytest.cpp			\
 	$(testlib_srcdir)/hash-indexed-test.cpp			\
 	$(testlib_srcdir)/helloworldtest.cpp			\

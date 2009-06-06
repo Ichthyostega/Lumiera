@@ -1232,7 +1232,7 @@ To make the intended use of the classes more clear, consider the following two e
 <pre>A special kind (subclass) of [[Placement]]. As such it is always linked to a //Subject//, i.e. a MObject. In addition to the properties of a (unspecific) Placement, the ExplicitPlacement specifies a absolute time and track position for locating the Subject
 </pre>
 </div>
-<div title="Factories" modifier="Ichthyostega" modified="200808110218" created="200708100401" tags="impl discuss excludeMissing" changecount="21">
+<div title="Factories" modifier="Ichthyostega" modified="200906060436" created="200708100401" tags="impl discuss excludeMissing" changecount="23">
 <pre>We use Factories
 * for centralizing [[memory management|MemoryManagement]]
 * to support polymorphism (of course...)
@@ -1261,7 +1261,7 @@ For this reason I make Factory a Functor, so it can be incorporated as a member 
       int wow_;
 
     public:
-      typedef lumiera::factory::RefcountPtr&lt;Product&gt; Factory;
+      typedef lumiera::factory::RefcntFactory&lt;Product&gt; Factory;
       static Factory create;
       
       Product() : wow_(42) {} ;
@@ -1282,7 +1282,8 @@ Some further details
 * thus, when Functor or any derived class issues a new XX(), our custom Allocator gains control
 * the Functor-behaviour relies on a custom {{{operator()}}} which can be overridden in derived classes to take various parameter lists.
 * additionally, such a Factory class derived from Functor can do specific magic and e.g. create some subclass
-* and, as the created smart-pointer is a template parameter, such a custom Functor can create all sorts of Proxies, wrappers and the like
+* and, as the created smart-pointer is a template template parameter, such a custom Functor can create all sorts of Proxies, wrappers and the like
+* a special case of this factory use is the [[Singleton]] factory, which is used a lot within the Proy-Layer code
 </pre>
 </div>
 <div title="Fixture" modifier="Ichthyostega" modified="200712100439" created="200706220324" tags="def" changecount="4">
@@ -1500,13 +1501,15 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * decide on SessionInterface and create [[Session datastructure layout|SessionDataMem]]
 </pre>
 </div>
-<div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200711210542" created="200711210531" tags="discuss draft" changecount="7">
+<div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200906060443" created="200711210531" tags="discuss draft" changecount="12">
 <pre>!Observations, Ideas, Proposals
 ''this page is a scrapbook for collecting ideas'' &amp;mdash; please don't take anything noted here too literal. While writing code, I observe that I (ichthyo) follow certain informal guidelines, some of which I'd like to note down because they could evolve into general style guidelines for the proc layer code.
-* avoid doing anything non-local during the startup phase or shutdown phase of the application. consequently, allways prefer using an explicit lumiera::Singleton&lt;T&gt; over using an static instance directly, thus yielding better control when the ctor and dtor will be invoked.
-* write error handling code only if the error situation can be actually //handled// at this place. Otherwise, be prepared for exceptions just passing by and thus handle any resources by &quot;resource acquisition is initialisation&quot;. Remember: error handling defeats decoupling and encapsulation
+* avoid doing anything non-local during the startup phase or shutdown phase of the application. consequently, always prefer using an explicit lumiera::Singleton&lt;T&gt; over using an static instance directly, thus yielding better control when the ctor and dtor will be invoked.
+* write error handling code only if the error situation can be actually //handled// at this place. Otherwise, be prepared for exceptions just passing by and thus handle any resources by &quot;resource acquisition is initialisation&quot; (RAII). Remember: error handling defeats decoupling and encapsulation
 * (almost) never {{{delete}}} an object directly, use {{{new}}} only when some smart pointer is at hand.
-* when user/client code is inteded to create objects, make the ctor protected and provide a factory member called {{{create}}} instead, returning a smart pointer
+* when user/client code is intended to create objects, make the ctor protected and provide a factory member called {{{create}}} instead, returning a smart pointer
+* similarly, when we need just one instance of a given service, make the ctor protected and provide a factory member called {{{instance}}}, to be implemented by the lumiera::[[Singleton]] factory.
+* whenever possible, prefer this (lazy initialised [[Singleton]]) approach and avoid static initialisation magic
 * avoid asuming anything that can't be enforced by types, interfaces or signatures; this means: be prepared for open possibilities
 * prefer {{{const}}} and initialisation code over assignment and active changes (inspired by functional programming)
 </pre>
