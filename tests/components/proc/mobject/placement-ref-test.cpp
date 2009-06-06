@@ -61,7 +61,7 @@ namespace test    {
           
           PSub p1(*new TestSubMO21);
           PSub p2(*new TestSubMO21);
-          p2.chain(Time(2));
+          p2.chain(Time(2));         // define start time of Placement-2 to be at t=2
           
           // Prepare an (test)Index backing the PlacementRefs
           typedef shared_ptr<PlacementIndex> PIdx;
