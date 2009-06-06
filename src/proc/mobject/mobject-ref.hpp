@@ -65,8 +65,6 @@ namespace mobject {
     {
       PlacementRef<MO> pRef_;
       
-      /** deleter function used to detach when refcount goes to zero */
-      static void whenDead (MObject*);
       
     public:
       
@@ -80,19 +78,22 @@ namespace mobject {
       
       Placement<MO>& getPlacement();
       
+      
       /* === Lifecycle === */
       
       /** activate an MObject reference, based on an existing placement,
        *  which needs to be contained (added to) the session. After checking
-       *  the validity of the placement, this MObjectRef shared ownership
+       *  the validity of the placement, this MObjectRef shares ownership
        *  of the referred MObject with the denoted placement.
+       *  @note STRONG exception safety guarantee
        *  @see #close() for detaching this MObjectRef
        */
       MORef&
       activate (Placement<MO> const& placement)
         {
-          pRef_ = placement;
-          smPtr_.reset (placement, &whenDead);
+          ASSERT (placement);
+          pRef_ = placement;           // STRONG exception safe
+          smPtr_.swap (placement);     // never throws
           return *this;
         }
       
@@ -110,9 +111,13 @@ namespace mobject {
       MORef&
       activate (REF const& pRefID)
         {
-          pRef_ = pRefID;
-          smPtr_.reset (*pRef_, &whenDead);
-          return *this;
+          if (pRefID != pRef_)
+            {
+              PlacementRef<MO> newRef (pRefID);
+              ASSERT (newRef);
+              return activate (*newRef); // STRONG exception safe
+            }
+          else return *this;
         }
       
     };
