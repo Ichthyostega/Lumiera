@@ -1,6 +1,6 @@
 format 40
 "Builder" // ProcessingLayer::MObject::Builder
-  revision 17
+  revision 18
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -171,7 +171,7 @@ format 40
       end
     end
 
-    classdiagram 129285 "Builder Entities"
+    classdiagram 129285 "Builder Tool (Visitor)"
       draw_all_relations default hide_attributes default hide_operations default show_members_full_definition yes show_members_visibility default show_members_stereotype default show_parameter_dir no show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
       size A4
     end
@@ -204,6 +204,15 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 	
 	
 	comment "Main Operation of the Builder: create a render engine for a given part of the timeline"
+      end
+
+      classrelation 162565 // <unidirectional association>
+	relation 157701 --->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 162565 // <unidirectional association>
+	  b multiplicity "" parent class_ref 131077 // Assembler
       end
     end
 
@@ -240,6 +249,52 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 	    classrelation_ref 137221 // <dependency>
 	  b multiplicity "" parent class_ref 134149 // BuilderTool
       end
+
+      classrelation 161797 // <unidirectional association>
+	relation 157189 --->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 161797 // <unidirectional association>
+	  b multiplicity "" parent class_ref 134277 // SegmentationTool
+      end
+
+      classrelation 161925 // <unidirectional association>
+	relation 157317 --->
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 161925 // <unidirectional association>
+	  b multiplicity "" parent class_ref 134405 // NodeCreatorTool
+      end
+
+      classrelation 162053 // <association>
+	relation 157445 ----
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 162053 // <association>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 162181 // <association>
+      end
+
+      classrelation 162437 // <association>
+	relation_ref 157573 // <association>
+      end
+
+      classrelation 162949 // <association>
+	relation 158085 ----
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 162949 // <association>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 163077 // <association>
+      end
     end
 
     class 130821 "ConManager"
@@ -269,6 +324,10 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 	
 	comment "TODO"
       end
+
+      classrelation 162181 // <association>
+	relation_ref 157445 // <association>
+      end
     end
 
     class 131077 "Assembler"
@@ -296,6 +355,18 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 "
 	
 	
+      end
+
+      classrelation 162309 // <association>
+	relation 157573 ----
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 162309 // <association>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 162437 // <association>
       end
     end
 
@@ -553,6 +624,16 @@ ${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${static
 	    classrelation_ref 146821 // <generalisation>
 	  b multiplicity "" parent class_ref 140293 // Applicable
       end
+
+      classrelation 163461 // <unidirectional association>
+	relation 158341 --->
+	  stereotype "create"
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 163461 // <unidirectional association>
+	  b multiplicity "" parent class_ref 146565 // Segmentation
+      end
     end
 
     class 134405 "NodeCreatorTool"
@@ -643,7 +724,7 @@ ${class}::${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
       end
 
       attribute 129797 "proc"
-	protected type class_ref 131461 // Processor
+	protected type class_ref 131461 // RenderGraph
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
@@ -658,6 +739,21 @@ ${class}::${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
 	    classrelation_ref 146949 // <generalisation>
 	  b multiplicity "" parent class_ref 140293 // Applicable
       end
+
+      classrelation 162693 // <unidirectional association>
+	relation 157829 --->
+	  stereotype "create"
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 162693 // <unidirectional association>
+	  b multiplicity "" parent class_ref 131461 // RenderGraph
+      end
+    end
+
+    classdiagram 132868 "Builder Entities"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      size A4
     end
   end
 end

@@ -1,6 +1,6 @@
 format 40
 "MObject" // ProcessingLayer::MObject
-  revision 33
+  revision 34
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -436,6 +436,49 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 	  b multiplicity "" parent class_ref 128389 // Track
 	  association_type class_ref 128645 // Placement
       end
+
+      classrelation 163077 // <association>
+	relation_ref 158085 // <association>
+      end
+
+      classrelation 163333 // <association>
+	relation_ref 158213 // <association>
+      end
+    end
+
+    class 146565 "Segmentation"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 162821 // <directional aggregation by value>
+	relation 157957 *-->
+	  stereotype "list"
+	  a role_name "" multiplicity "1..*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 162821 // <directional aggregation by value>
+	  b multiplicity "" parent class_ref 135173 // Segment
+      end
+
+      classrelation 163205 // <association>
+	relation 158213 ----
+	  stereotype "partitioning"
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 163205 // <association>
+	  b role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 163333 // <association>
+      end
     end
 
     class 135173 "Segment"
@@ -475,6 +518,16 @@ ${inlines}
 "
 	    classrelation_ref 138885 // elements (<directional aggregation>)
 	  b multiplicity "" parent class_ref 129797 // ExplicitPlacement
+      end
+
+      classrelation 163589 // <unidirectional association>
+	relation 158469 --->
+	  stereotype "correspondance"
+	  a role_name "" multiplicity "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 163589 // <unidirectional association>
+	  b multiplicity "" parent class_ref 131461 // RenderGraph
       end
     end
 

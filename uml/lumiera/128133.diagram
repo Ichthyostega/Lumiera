@@ -173,7 +173,7 @@ relationcanvas 135685 relation_ref 130949 // <generalisation>
   no_multiplicity_a no_multiplicity_b
 relationcanvas 135941 relation_ref 131077 // <directional aggregation by value>
   from ref 128261 z 1999 stereotype "<<list>>" xyz 371 893 3000 to ref 135813
-  role_a_pos 365 849 3000 no_role_b
+  role_a_pos 374 844 3000 no_role_b
   multiplicity_a_pos 451 877 3000 no_multiplicity_b
 relationcanvas 136069 relation_ref 131205 // <unidirectional association>
   from ref 135813 z 1999 to point 433 897

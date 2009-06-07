@@ -1,6 +1,6 @@
 format 40
 "RenderEngine" // ProcessingLayer::RenderEngine
-  revision 17
+  revision 18
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -126,7 +126,7 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
 "
 	    classrelation_ref 132485 // renderSegments (<directional aggregation by value>)
-	  b multiplicity "1" parent class_ref 131461 // Processor
+	  b multiplicity "1" parent class_ref 131461 // RenderGraph
       end
 
       classrelation 136197 // <generalisation>
@@ -134,11 +134,11 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 136197 // <generalisation>
-	  b multiplicity "" parent class_ref 131461 // Processor
+	  b multiplicity "" parent class_ref 131461 // RenderGraph
       end
     end
 
-    class 131461 "Processor"
+    class 131461 "RenderGraph"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -149,13 +149,13 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 132613 // output (<unidirectional association>)
+      classrelation 132613 // pipes (<unidirectional association>)
 	relation 131973 --->
-	  stereotype "has_a"
-	  a role_name "output" multiplicity "1" protected
+	  stereotype "list"
+	  a role_name "pipes" multiplicity "1..*" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
-	    classrelation_ref 132613 // output (<unidirectional association>)
+	    classrelation_ref 132613 // pipes (<unidirectional association>)
 	  b multiplicity "" parent class_ref 131589 // ExitNode
       end
 
@@ -533,7 +533,6 @@ ${inlines}
 	    classrelation_ref 152453 // <generalisation>
 	  b multiplicity "" parent class_ref 132741 // State
       end
-
     end
 
     class 142597 "StateAdapter"
