@@ -528,7 +528,7 @@ Even if the low-level memory manager(s) may use raw storage, we require that the
 &amp;rarr; see MemoryManagement
 </pre>
 </div>
-<div title="Asset" modifier="Ichthyostega" modified="200801061942" created="200708100337" tags="def classes" changecount="15">
+<div title="Asset" modifier="Ichthyostega" modified="200906071813" created="200708100337" tags="def classes img" changecount="16">
 <pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the EDL is the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with each Session. Besides, there is a collection of basic Assets always available by default.
 
 The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situation is similar. Assets thus serve two quite distinct purposes. One is to load, list, group search and browse them, and to provide an entry point to create new or get at existing MObjects in the EDL, while the other purpose is to provide attribute and property informations to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
@@ -598,7 +598,7 @@ The attachment relation is hierarchical and has a clearly defined //active// and
 Attachment on itself does //not// keep an object alive. Rather, it's implemented by an opaque ID entry (&amp;rarr; PlacementRef), which can be resolved by the PlacementIndex. The existence of attachments should be taken into account when deleting an object, preferably removing any dangling attachments to prevent an exception to be thrown later on. On the other hand, contrary to the elements of the HighLevelModel, processing nodes in the render engine never depend on placements &amp;mdash; they always refer directly to the MObject instance or even the underlying asset. In the case of MObject instances, the pointer from within the engine will //share ownership// with the placement (remember: both are derived from {{{boost::shared_ptr}}}).
 </pre>
 </div>
-<div title="Automation" modifier="Ichthyostega" modified="200708100315" created="200706250751" tags="def" changecount="5">
+<div title="Automation" modifier="Ichthyostega" modified="200906071813" created="200706250751" tags="def img" changecount="6">
 <pre>Automation is treated as a function over time. It is always tied to a specific Parameter (which can thus be variable over the course of the timeline). All details //how// this function is defined are completely abstracted away. The Parameter uses a ParamProvider to get the value for a given Time (point). Typically, this will use linear or bezier interpolation over a set of keyframes internally. Parameters can be configured to have different value ranges and distribution types (on-off, stepped, continuous, bounded)
 
 [img[how to implement Automation|uml/fig129669.png]]
@@ -767,7 +767,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 On the implementation side, we use a special kind of MObject, acting as an anchor and providing an unique identity. Like any ~MObject, actually a placement establishes the connection and the scope, and typically constitutes a nested scope (e.g. the scope of all objects //within// the sequence to be bound into a timeline)
 </pre>
 </div>
-<div title="BuildProcess" modifier="Ichthyostega" modified="200805300042" created="200706190658" tags="dynamic Builder" changecount="29">
+<div title="BuildProcess" modifier="Ichthyostega" modified="200906071813" created="200706190658" tags="dynamic Builder img" changecount="30">
 <pre>All decisions on //how // the RenderProcess has to be carried out are concentrated in this rather complicated Builder Subsystem. The benefit of this approach is, besides decoupling of subsystems, to keep the actual performance-intensive video processing code as simple and transparent as possible. The price, in terms of increased complexity &amp;mdash; to pay in the Builder &amp;mdash; can be handled by making the Build Process generic to a large degree. Using a Design By Contract approach we can decompose the various decisions into small decision modules without having to trace the actual workings of the Build Process as a whole.
 
 [&gt;img[Outline of the Build Process|uml/fig129413.png]]
@@ -894,7 +894,7 @@ Any wiring (outside the chain of effects within a pipe) is always done from exit
 @@clear(right):display(block):@@
 </pre>
 </div>
-<div title="BuilderStructures" modifier="Ichthyostega" modified="200805210227" created="200706250734" tags="overview design Builder" changecount="21">
+<div title="BuilderStructures" modifier="Ichthyostega" modified="200906071812" created="200706250734" tags="overview design Builder img" changecount="22">
 <pre>* the MObjects implement //Buildable//
 * each Buildable can &quot;receive&quot; a Tool object and apply it
 * the different Tool objects are iterated/mapped onto the list of MObjects in the [[Timeline]]
@@ -1193,7 +1193,7 @@ Basically, each elementary operation has to record the informations necessary to
 {{red{to be defined in more detail later...}}}
 </pre>
 </div>
-<div title="Example1" modifier="Ichthyostega" modified="200806291628" created="200706220239" tags="example" changecount="4">
+<div title="Example1" modifier="Ichthyostega" modified="200906071812" created="200706220239" tags="example img" changecount="5">
 <pre>The &amp;raquo;Timeline&amp;laquo; is a sequence of ~MObjects -- here clips -- together with an ExplicitPlacement, locating each clip at a given time and track. (Note: I simplified the time format and wrote frame numbers to make it more clear)
 [img[Example1: Objects in the EDL/Fixture|uml/fig128773.png]]
 
@@ -1203,7 +1203,7 @@ After beeing processed by the Builder, we get the following Render Engine config
 [img[Example1: generated Render Engine|uml/fig129029.png]]
 </pre>
 </div>
-<div title="Example2" modifier="Ichthyostega" modified="200806291627" created="200706220251" tags="example" changecount="3">
+<div title="Example2" modifier="Ichthyostega" modified="200906071812" created="200706220251" tags="example img" changecount="4">
 <pre>{{red{TODO: seemingly this example is slightly outdated, as the implementation of placements is now indirect via LocatingPin objects}}}
 This Example showes the //high level// EDL as well. This needs to be transformed into a Fixture by some facility still to be designed. Basically, each [[Placement]] needs to be queried for this to get the corresponding ExplicitPlacement. The difficult part is to handle possible Placement constraints, e.g. one clip can't be placed at a timespan covered by another clip on the same track. In the current Cinelerra2, all of this is done directly by the GUI actions.
 
@@ -1439,7 +1439,7 @@ Now, when invoking an operation on some public interface, the code in the lower 
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="HighLevelModel" modifier="Ichthyostega" modified="200808160329" created="200808152311" tags="spec design discuss" changecount="32">
+<div title="HighLevelModel" modifier="Ichthyostega" modified="200906071811" created="200808152311" tags="spec design discuss img" changecount="33">
 <pre>While the low-level model holds the data used for carrying out the actual media data processing (=rendering), the high-level model is what the user works upon when performing edit operations through the GUI (or script driven in &amp;raquo;headless mode&amp;laquo;). Its building blocks and combination rules determine largely what structures can be created within the [[Session]].
 On the whole, it is a collection of [[media objects|MObjects]] stuck together and arranged by [[placements|Placement]].
 
@@ -1856,7 +1856,7 @@ From experiences with other middle scale projects, I prefer having the test code
 
 </pre>
 </div>
-<div title="InterfacesSession" modifier="Ichthyostega" modified="200708081535" created="200708080639" changecount="7">
+<div title="InterfacesSession" modifier="Ichthyostega" modified="200906071811" created="200708080639" tags="img" changecount="8">
 <pre>* Subdir src/proc contains Interface within namespace proc_interface
 * Subdir src/proc/mobject contains commonly used entities (namespace mobject)
 ** nested namespace controller
@@ -1967,7 +1967,7 @@ Presumably, none of the both models is usable as-is; rather we try to reconstruc
 {{red{WIP}}}
 </pre>
 </div>
-<div title="MObjects" modifier="Ichthyostega" modified="200905130116" created="200706190636" tags="overview" changecount="15">
+<div title="MObjects" modifier="Ichthyostega" modified="200906071811" created="200706190636" tags="overview img" changecount="17">
 <pre>The ~MObjects Subsystem contains everything related to the [[EDL]] and the various Media Objects placed within. It is complemented by the Asset Management (see &amp;rarr; [[Asset]]). Examples for [[MObjects |MObject]](&amp;rarr; def) being:
 * audio/video clips
 * effects and plugins
@@ -2024,7 +2024,7 @@ __10/2008__: the allocation mechanism can surely be improved later, but for now 
 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;loading &lt;b&gt;Proc-Layer&lt;/b&gt; devel doku&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
 </div>
-<div title="MediaAsset" modifier="Ichthyostega" modified="200806030152" created="200709021530" tags="def classes" changecount="7">
+<div title="MediaAsset" modifier="Ichthyostega" modified="200906071810" created="200709021530" tags="def classes img" changecount="8">
 <pre>The Interface asset::Media is a //key abstraction// It ties together several concepts and enables to deal with them on the interfaces in a uniform manner. Besides, as every Asset kind it belongs rather to the bookkeeping view: an asset::Media holds the specific properties and parametrisation of the media source it stands for. Regarding the __inward interface__ &amp;mdash; as used from within the [[EDL]] or the [[Render Nodes|ProcNode]], it is irrelevant if any given asset::Media object stands for a complete media source, just a clip taken from this source or if a placeholder version of the real media source is used instead.
 [img[Asset Classess|uml/fig130437.png]]
 
@@ -2173,7 +2173,7 @@ The operation point is provided by the current BuilderMould and used by the [[pr
 This is possible because the operation point has been provided (by the mould) with informations about the media stream type to be wired, which, together with information accessible at the the [[render node interface|ProcNode]] and from the [[referred processing assets|ProcAsset]], with the help of the [[connection manager|ConManager]] allows to figure out what's possible and how to do the desired connections.
 </pre>
 </div>
-<div title="Overview" modifier="Ichthyostega" modified="200804130018" created="200706190300" tags="overview" changecount="12">
+<div title="Overview" modifier="Ichthyostega" modified="200906071810" created="200706190300" tags="overview img" changecount="13">
 <pre>The Lumiera Processing Layer is comprised of various subsystems and can be separated into a low-level and a high-level part. At the low-level end is the [[Render Engine|OverviewRenderEngine]] which basically is a network of render nodes cooperating closely with the Backend Layer in order to carry out the actual playback and media transforming calculations. Whereas on the high-level side we find several different [[Media Objects|MObjects]] that can be placed into the [[EDL]], edited and manipulated. This is complemented by the [[Asset Management|Asset]], which is the &quot;bookkeeping view&quot; of all the different &quot;things&quot; within each [[Session|SessionOverview]].
 
 There is rather strong separation between these two levels, and &amp;mdash; &lt;br/&gt;correspondingly you'll encounter the data held within the Processing Layer organized in two different views, the ''high-level-model'' and the ''low-level-model''
@@ -2183,7 +2183,7 @@ There is rather strong separation between these two levels, and &amp;mdash; &lt;
 [img[Block Diagram|uml/fig128005.png]]
 </pre>
 </div>
-<div title="OverviewRenderEngine" modifier="Ichthyostega" modified="200806010250" created="200706190647" tags="Rendering overview" changecount="19">
+<div title="OverviewRenderEngine" modifier="Ichthyostega" modified="200906071810" created="200706190647" tags="Rendering overview img" changecount="20">
 <pre>Render Engine, [[Builder]] and [[Controller]] are closely related Subsystems. Actually, the [[Builder]] //creates// a newly configured Render Engine //for every// RenderProcess. Before doing so, it queries from the Session (or, to be more precise, from the [[Fixture]] within the current Session) all necessary Media Object Placement information. The [[Builder]] then derives from this information the actual assembly of [[Processing Nodes|ProcNode]] comprising the Render Engine. Thus:
  * the source of the build process is a sequence of absolute (explicit) [[Placements|Placement]] called the [[Playlist]]
  * the [[build process|BuildProcess]] is driven, configured and controlled by the [[Controller]] subsystem component. It encompasses the actual playback configuration and State of the System.
@@ -3017,7 +3017,7 @@ This is a difficult untertaking, because there are several dependencies (most of
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlayerDummy" modifier="Ichthyostega" modified="200902090408" created="200901300209" tags="GuiIntegration dynamic" changecount="16">
+<div title="PlayerDummy" modifier="Ichthyostega" modified="200906071810" created="200901300209" tags="GuiIntegration dynamic img" changecount="17">
 <pre>__Joelholdsworth__ and __Ichthyo__ created this player mockup in 1/2009 to find out about the implementation details regarding integration and colaboration between the layers. There is no working render engine yet, thus we use a ~DummyImageGenerator for creating faked yuv frames to display. Within the GUI, there is a ~PlaybackController hooked up with the transport controls on the timeline pane.
 # first everything was contained within ~PlaybackController, which spawns a thread for periodically creating those dummy frames
 # then, a ~PlayerService was factored out, now implemented within Proc-Layer (probably to be relocated into the backend for the final version). A new LayerSeparationInterface called ''~DummyPlayer'' was created and set up as a [[Subsystem]] within main().
@@ -3089,7 +3089,7 @@ We need to work out guidelines for dealing with operations going on simultaneous
 
 While the Backend is responsible for Data access and management and for carrying out the computation intensive media opteratons, the middle Layer or ~Proc-Layer contains [[assets|Asset]] and [[Session]], i.e. the user-visible data model and provides configuration and behaviour for these entities. Besides, he is responsible for [[building and configuring|Builder]] the [[render engine|RenderEngine]] based on the current Session state.</pre>
 </div>
-<div title="ProcAsset" modifier="Ichthyostega" created="200709221343" tags="def classes" changecount="1">
+<div title="ProcAsset" modifier="Ichthyostega" modified="200906071810" created="200709221343" tags="def classes img" changecount="2">
 <pre>All Assets of kind asset::Proc represent //processing algorithms// in the bookkeeping view. They enable loading, browsing and maybe even parametrizing all the Effects, Plugins and Codecs available for use within the Lumiera Session.
 
 Besides, they provide an important __inward interface__ for the [[ProcNode]]s, which will use these asset entries to dispatch the actual processing call when rendering. 
@@ -3438,7 +3438,7 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 &amp;rarr; OverviewRenderEngine
 </pre>
 </div>
-<div title="RenderEntities" modifier="Ichthyostega" modified="200806010249" created="200706190715" tags="Rendering classes" changecount="9">
+<div title="RenderEntities" modifier="Ichthyostega" modified="200906071810" created="200706190715" tags="Rendering classes img" changecount="10">
 <pre>The [[Render Engine|Rendering]] only carries out the low-level and performance critical tasks. All configuration and decision concerns are to be handled by [[Builder]] and [[Controller]]. While the actual connection of the Render Nodes can be highly complex, basically each Segment of the Timeline with uniform characteristics is handled by one Processor, which is a graph of [[Processing Nodes|ProcNode]] discharging into a ExitNode. The Render Engine Components as such are //stateless// themselves; for the actual calculations they are combined with a StateProxy object generated by and connected internally to the [[Controller]], while at the same time holding the Data Buffers (Frames) for the actual calculations.
 
 [img[Entities comprising the Render Engine|uml/fig128389.png]]
@@ -3480,7 +3480,7 @@ We //do employ//&amp;nbsp; some virtual calls for the buffer management in order
 @@clear(right):display(block):@@
 </pre>
 </div>
-<div title="RenderMechanics" modifier="Ichthyostega" modified="200806280029" created="200806030230" tags="Rendering impl dynamic" changecount="27">
+<div title="RenderMechanics" modifier="Ichthyostega" modified="200906071809" created="200806030230" tags="Rendering impl dynamic img" changecount="28">
 <pre>While the render process, with respect to the dependencies, the builder and the processing function is sufficiently characterized by referring to the ''pull principle'' and by defining a [[protocol|NodeOperationProtocol]] each node has to adhere to &amp;mdash; for actually get it coded we have to care for some important details, especially //how to manage the buffers.// It may well be that the length of the code path necessary to invoke the individual processing functions is finally not so important, compared with the time spent at the inner pixel loop within these functions. But my guess is (as of 5/08), that the overall number of data moving and copying operations //will be//&amp;nbsp; of importance.
 
 !requirements
@@ -3894,7 +3894,7 @@ Instead, we should try to just connect the various subsystems via Interfaces and
 * to shield the rendering code of all complexities of thread communication and synchronization, we use the StateProxy
 </pre>
 </div>
-<div title="StructAsset" modifier="Ichthyostega" modified="200801101402" created="200709221353" tags="def classes" changecount="8">
+<div title="StructAsset" modifier="Ichthyostega" modified="200906071813" created="200709221353" tags="def classes img" changecount="9">
 <pre>Structural Assets are intended mainly for internal use, but the user should be able to see and query them. They are not &quot;loaded&quot; or &quot;created&quot; direcly, rather they //leap into existance // by creating or extending some other structures in the EDL/Session, hence the name. Some of the structural Asset parametrisation can be modified to control of some aspects of the Proc Layer's (default) behaviour.
 * [[Processing Patterns|ProcPatt]] encode information how to set up some parts of the render network to be created automatically: for example, when building a clip, we use the processing pattern how to decode and preprocess the actual media data.
 * [[Tracks|Track]] are one of the dimensions used for organizing the EDL. They serve as an Anchor to attach parametrisation of output pipe, overlay mode etc. By [[placing|Placement]] to a track, some media object inherits placement properties from this track.
