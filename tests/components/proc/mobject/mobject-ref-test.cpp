@@ -208,7 +208,46 @@ namespace test    {
       void
       checkTypeHandling (LumieraUid luid)
         {
+          MObjectRef rMObj;
+          MORef<Clip> rClip;
+          MORef<TestSubMO1> rSub1;
           
+          ASSERT (0 == rMObj.use_count());
+          ASSERT (0 == rClip.use_count());
+          ASSERT (0 == rSub1.use_count());
+          
+          rMObj.activate(luid);
+          ASSERT (3 == rMObj.use_count());
+          ASSERT (0 == rClip.use_count());
+          ASSERT (0 == rSub1.use_count());
+          
+          rClip.activate(rMObj);              // attach on existing MObjectRef
+          ASSERT (4 == rMObj.use_count());
+          ASSERT (4 == rClip.use_count());
+          ASSERT (0 == rSub1.use_count());
+          
+          // impossible, because Clip isn't a subclass of TestSubMO1:
+          VERIFY_ERROR (INVALID_PLACEMENTREF, rSub1.activate(luid) );
+          VERIFY_ERROR (INVALID_PLACEMENTREF, rSub1 = rMObj        );
+          
+          ASSERT (rMObj->isValid());
+          ASSERT (rClip->isValid());
+          ASSERT (rMObj.getPlacement().getID() == rClip.getPlacement().getID());
+          
+          // doesn't compile, because the function isn't on MObject API:
+          // rMObj->getMedia();
+          
+          // can assign, because the actual type is relevant:
+          rClip.close();
+          ASSERT (3 == rMObj.use_count());
+          ASSERT (0 == rClip.use_count());
+          
+          rClip = rMObj;
+          ASSERT (4 == rMObj.use_count());
+          ASSERT (4 == rClip.use_count());
+          
+          cout << rClip << endl;
+          cout << rClip->getMedia()->ident << endl;
         }
     };
   
