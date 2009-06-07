@@ -1,38 +1,38 @@
-format 40
+format 58
 "ConfigQuery" // CommonLib::ConfigQuery
-  revision 2
+  revision 3
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
-  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
   //use case diagram settings
-  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
   //collaboration diagram settings
-  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
   //object diagram settings
-   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
   //component diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
-  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
   //deployment diagram settings
   package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
-  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
   //state diagram settings
   package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
-  show_activities default region_horizontally default drawing_language default
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
   //activity diagram settings
   package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
-  show_infonote default drawing_language default
+  show_infonote default drawing_language default show_stereotype_properties default
   
   componentview 128261 "Query System overview"
     //component diagram settings
     package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
-    draw_component_as_icon default show_component_req_prov default show_component_rea default
+    draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
     componentdiagram 131589 "components"
       package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
-      draw_component_as_icon default show_component_req_prov default show_component_rea default
+      draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
       size A4
     end
 
@@ -52,23 +52,22 @@ format 40
 
   classview 129157 "query"
     //class diagram settings
-    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
     //collaboration diagram settings
-    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
     //object diagram settings
-     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
     //sequence diagram settings
-    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
     //state diagram settings
     package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
-    show_activities default region_horizontally default drawing_language default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
     //class settings
     //activity diagram settings
     package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
-    show_infonote default drawing_language default
-    
+    show_infonote default drawing_language default show_stereotype_properties default
     classdiagram 131461 "Rules access"
-      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
       size A4
     end
 
@@ -85,6 +84,8 @@ ${inlines}
       java_decl "${comment}${@}${visibility}interface ${name}${extends} {
 ${members}}
 "
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
 ${members}};
 "
@@ -96,16 +97,16 @@ ${members}};
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 148357 // <generalisation>
-	  b multiplicity "" parent class_ref 140677 // QueryHandler
+	  b parent class_ref 140677 // QueryHandler
       end
 
       classrelation 148485 // <association>
 	relation 146309 ----
-	  a role_name "" multiplicity "" protected
+	  a role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 148485 // <association>
-	  b role_name "" multiplicity "" protected
+	  b role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 148613 // <association>
@@ -113,11 +114,11 @@ ${members}};
 
       classrelation 148741 // <association>
 	relation 146437 ----
-	  a role_name "" multiplicity "" protected
+	  a role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 148741 // <association>
-	  b role_name "" multiplicity "" protected
+	  b role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 148869 // <association>
@@ -137,6 +138,8 @@ ${inlines}
       java_decl "${comment}${@}${visibility}interface ${name}${extends} {
 ${members}}
 "
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
 ${members}};
 "
@@ -165,6 +168,8 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 "
 	
 	
+	
+	
       end
     end
 
@@ -181,6 +186,8 @@ ${inlines}
       java_decl "${comment}${@}${visibility}interface ${name}${extends} {
 ${members}}
 "
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
 ${members}};
 "
@@ -193,6 +200,8 @@ ${members}};
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
 	
 	
+	
+	
       end
 
       operation 135173 "make"
@@ -200,6 +209,8 @@ ${members}};
 	nparams 1
 	  param in name "capabilities" explicit_type "Pred"
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	
+	
 	
 	
       end
@@ -213,6 +224,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -221,7 +234,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 148997 // <realization>
-	  b multiplicity "" parent class_ref 140549 // ConfigRules
+	  b parent class_ref 140549 // ConfigRules
       end
     end
 
@@ -233,6 +246,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -241,7 +256,7 @@ ${inlines}
 	  a default
 	    cpp default "#include in header"
 	    classrelation_ref 150405 // <dependency>
-	  b multiplicity "" parent class_ref 140805 // TypeHandler
+	  b parent class_ref 140805 // TypeHandler
       end
     end
 
@@ -256,6 +271,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -264,16 +281,16 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 149125 // <generalisation>
-	  b multiplicity "" parent class_ref 140933 // ResolverBase
+	  b parent class_ref 140933 // ResolverBase
       end
 
       classrelation 149253 // <association>
 	relation 146821 ----
-	  a role_name "" multiplicity "" protected
+	  a role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 149253 // <association>
-	  b role_name "" multiplicity "" protected
+	  b role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 149381 // <association>
@@ -285,11 +302,11 @@ ${inlines}
 
       classrelation 149509 // <association>
 	relation 146949 ----
-	  a role_name "" multiplicity "" protected
+	  a role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 149509 // <association>
-	  b role_name "" multiplicity "" protected
+	  b role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 149637 // <association>
@@ -314,33 +331,35 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 "
 	
 	
+	
+	
       end
 
       classrelation 149765 // <unidirectional association>
 	relation 147077 --->
-	  a role_name "" multiplicity "" protected
+	  a role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 149765 // <unidirectional association>
-	  b multiplicity "" parent class_ref 141061 // YAP_Prolog
+	  b parent class_ref 141061 // YAP_Prolog
       end
 
       classrelation 150149 // <unidirectional association>
 	relation 147461 --->
-	  a role_name "" multiplicity "" protected
+	  a role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 150149 // <unidirectional association>
-	  b multiplicity "" parent class_ref 141061 // YAP_Prolog
+	  b parent class_ref 141061 // YAP_Prolog
       end
 
       classrelation 150277 // <unidirectional association>
 	relation 147589 --->
-	  a role_name "" multiplicity "" protected
+	  a role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 150277 // <unidirectional association>
-	  b multiplicity "" parent class_ref 141061 // YAP_Prolog
+	  b parent class_ref 141061 // YAP_Prolog
       end
     end
 
@@ -355,16 +374,18 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
       classrelation 149893 // <unidirectional association>
 	relation 147205 --->
-	  a role_name "" multiplicity "" protected
+	  a role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 149893 // <unidirectional association>
-	  b multiplicity "" parent class_ref 138117 // Pipe
+	  b parent class_ref 138117 // Pipe
       end
 
       classrelation 150021 // <realization>
@@ -372,7 +393,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 150021 // <realization>
-	  b multiplicity "" parent class_ref 140805 // TypeHandler
+	  b parent class_ref 140805 // TypeHandler
       end
     end
 
@@ -384,6 +405,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -392,16 +415,16 @@ ${inlines}
 	  a default
 	    cpp default "#include in header"
 	    classrelation_ref 150533 // <dependency>
-	  b multiplicity "" parent class_ref 140549 // ConfigRules
+	  b parent class_ref 140549 // ConfigRules
       end
 
       classrelation 150661 // <association>
 	relation 147973 ----
-	  a role_name "" multiplicity "" protected
+	  a role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 150661 // <association>
-	  b role_name "" multiplicity "" protected
+	  b role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 150789 // <association>
@@ -416,6 +439,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -427,38 +452,56 @@ ${inlines}
 
   usecaseview 128389 "query use"
     //use case diagram settings
-    package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+    package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
     //sequence diagram settings
-    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
     //collaboration diagram settings
-    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
     //object diagram settings
-     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
     usecasediagram 131717 "when to query"
-      package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
       size A4
     end
 
     usecase 128517 "create specific object"
       //use case diagram settings
-      package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
       //sequence diagram settings
-      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
       //collaboration diagram settings
-      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
       //object diagram settings
-       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
     end
 
     usecase 128645 "use \"default\" object"
       //use case diagram settings
-      package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
       //sequence diagram settings
-      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
       //collaboration diagram settings
-      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
       //object diagram settings
-       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
       simplerelation 129541
 	---|>
 	  on usecase_ref 128517 // create specific object
@@ -467,24 +510,36 @@ ${inlines}
 
     usecase 128773 "load object from session"
       //use case diagram settings
-      package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
       //sequence diagram settings
-      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
       //collaboration diagram settings
-      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
       //object diagram settings
-       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
     end
 
     usecase 128901 "add new object to session"
       //use case diagram settings
-      package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
       //sequence diagram settings
-      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
       //collaboration diagram settings
-      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
       //object diagram settings
-       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
     end
 
     class 141701 "User"
@@ -495,6 +550,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -508,6 +565,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -515,28 +574,40 @@ ${inlines}
 
     usecase 129029 "ConfigQuery"
       //use case diagram settings
-      package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
       //sequence diagram settings
-      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
       //collaboration diagram settings
-      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
       //object diagram settings
-       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
     end
 
     usecase 129157 "need sub object"
       //use case diagram settings
-      package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+      package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
       //sequence diagram settings
-      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+      show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
       //collaboration diagram settings
-      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
       //object diagram settings
-       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      //state diagram settings
+      package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+      show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+      //activity diagram settings
+      package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+      show_infonote default drawing_language default show_stereotype_properties default
     end
 
     collaborationdiagram 131845 "\"default\" object"
-      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
       size A4
     end
 

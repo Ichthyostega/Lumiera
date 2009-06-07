@@ -1,63 +1,63 @@
-format 40
+format 58
 
-fragment 128005 "seq"
-  xyzwh 176 409 1994 282 93
+fragment 128005 "effective timeline"
+  xyzwh 172 397 1994 282 93
 end
 classinstancecanvas 128133 classinstance_ref 128901 // audio1
   xyz 71 275 2000
-  end
+end
 classinstancecanvas 128389 classinstance_ref 129029 // 
   xyz 223 423 2000
-  end
+end
 classinstancecanvas 128645 classinstance_ref 129157 // video1
   xyz 72 330 2000
-  end
+end
 classinstancecanvas 128773 classinstance_ref 129285 // 
-  xyz 66 445 2000
-  end
+  xyz 63 440 2000
+end
 classinstancecanvas 128901 classinstance_ref 129413 // vid_A
-  xyz 239 573 2000
-  end
+  xyz 242 558 2000
+end
 fragment 129029 "seq"
   xyzwh 63 237 1994 94 155
 end
 classinstancecanvas 130309 classinstance_ref 129541 // 
-  xyz 69 79 2000
-  end
+  xyz 63 79 2000
+end
 classinstancecanvas 131333 classinstance_ref 129669 // refPoint
   xyz 224 70 2000
-  end
+end
 classinstancecanvas 131461 classinstance_ref 129797 // 
   xyz 230 158 2000
-  end
+end
 classinstancecanvas 131717 classinstance_ref 129925 // vid_A
   xyz 386 71 2000
-  end
+end
 classinstancecanvas 131845 classinstance_ref 130053 // 
   xyz 361 195 2000
-  end
+end
 classinstancecanvas 132229 classinstance_ref 130181 // 
   xyz 562 71 2000
-  end
+end
 classinstancecanvas 132357 classinstance_ref 130309 // 
-  xyz 551 197 2000
-  end
+  xyz 551 195 2000
+end
 fragment 132869 "seq"
   xyzwh 172 46 1994 494 102
 end
 classinstancecanvas 132997 classinstance_ref 130437 // 
-  xyz 352 573 2000
-  end
+  xyz 354 558 2000
+end
 classinstancecanvas 133125 classinstance_ref 130565 // 
   xyz 345 423 2000
-  end
+end
 note 135941 "actually the same object"
   xyzwh 635 341 2004 148 41
 textcanvas 136197 "Video Clip anchored at a Label, with an attached HUE effect starting 3 frames after begin"
-  xyzwh 524 565 2000 175 87
+  xyzwh 526 555 2000 176 51
 objectlinkcanvas 129413 norel
   geometry HVr
-  from ref 128389 z 1999 to point 269 341
+  from ref 128389 z 1999 to point 269 338
   line 129541 z 1999 to ref 128645
   no_role_a no_role_b
 objectlinkcanvas 129797 norel
@@ -68,48 +68,48 @@ objectlinkcanvas 129925 norel
   no_role_a no_role_b
 objectlinkcanvas 130053 norel
   geometry HV
-  from ref 128773 z 1999 to point 108 456
+  from ref 128773 z 1999 to point 105 448
   line 130181 z 1999 to ref 128645
   no_role_a no_role_b
 objectlinkcanvas 131205 norel
   geometry HVr
-  from ref 128645 z 1999 to point 108 90
+  from ref 128645 z 1999 to point 105 87
   line 81 z 1999 to ref 130309
   no_role_a no_role_b
 objectlinkcanvas 131589 norel
   from ref 131461 z 1999 to ref 131333
   no_role_a no_role_b
-objectlinkcanvas 131973 rel relation_ref 128645 // <association>
+objectlinkcanvas 131973 norel
   from ref 131717 z 1999 to ref 131845
-  role_a_pos 428 170 3000 role_b_pos 428 150 3000
+  no_role_a no_role_b
 objectlinkcanvas 132101 rel relation_ref 129925 // <unidirectional association>
   from ref 131845 z 1999 to ref 131333
-  role_a_pos 304 104 3000 no_role_b
-objectlinkcanvas 132485 rel relation_ref 128645 // <association>
+  role_a_pos 302 105 3000 no_role_b
+objectlinkcanvas 132485 norel
   from ref 132229 z 1999 to ref 132357
-  role_a_pos 613 172 3000 role_b_pos 613 150 3000
+  no_role_a no_role_b
 objectlinkcanvas 132613 rel relation_ref 129925 // <unidirectional association>
   from ref 132357 z 1999 to ref 131717
-  role_a_pos 460 109 3000 no_role_b
+  role_a_pos 455 104 3000 no_role_b
 objectlinkcanvas 132741 norel
   geometry HV
-  from ref 130309 z 1999 to point 261 90
+  from ref 130309 z 1999 to point 260 87
   line 81 z 1999 to ref 131333
   no_role_a no_role_b
 objectlinkcanvas 133253 norel
   geometry HVr
-  from ref 133125 z 1999 to point 391 341
+  from ref 133125 z 1999 to point 391 338
   line 81 z 1999 to ref 128645
   no_role_a no_role_b
 objectlinkcanvas 133381 norel
   geometry VH
-  from ref 133125 z 1999 to point 391 606
+  from ref 133125 z 1999 to point 391 583
   line 81 z 1999 to ref 132997
   no_role_a no_role_b
-objectlinkcanvas 135685 rel relation_ref 128645 // <association>
-  from ref 132997 z 1999 to point 600 432
+objectlinkcanvas 135685 norel
+  from ref 132997 z 1999 to point 597 445
   line 135813 z 1999 to ref 132357
-  role_a_pos 612 276 3000 role_b_pos 443 540 3000
+  no_role_a no_role_b
 line 134149 -_-_
   from ref 131717 z 1993 to ref 132869
 line 134277 -_-_
@@ -120,4 +120,5 @@ line 134661 -_-_
   from ref 132229 z 1999 to point 707 55
   line 134917 z 1999 to point 707 464
   line 134789 z 1999 to ref 132997
+preferred_whz 817 684 1
 end

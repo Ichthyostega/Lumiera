@@ -1,50 +1,49 @@
-format 40
+format 58
 "Builder" // ProcessingLayer::MObject::Builder
-  revision 18
+  revision 19
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
-  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
   //use case diagram settings
-  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
   //collaboration diagram settings
-  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
   //object diagram settings
-   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
   //component diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
-  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
   //deployment diagram settings
   package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
-  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
   //state diagram settings
   package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
-  show_activities default region_horizontally default drawing_language default
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
   //activity diagram settings
   package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
-  show_infonote default drawing_language default
+  show_infonote default drawing_language default show_stereotype_properties default
   
   classview 128261 "Builder Workings"
     //class diagram settings
-    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
     //collaboration diagram settings
-    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
     //object diagram settings
-     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
     //sequence diagram settings
-    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
     //state diagram settings
     package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
-    show_activities default region_horizontally default drawing_language default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
     //class settings
     //activity diagram settings
     package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
-    show_infonote default drawing_language default
-    
+    show_infonote default drawing_language default show_stereotype_properties default
     collaborationdiagram 128517 "build process"
-      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+      show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
       comment "This figure shows the process of building and starting a RenderEngine"
       size A4
     end
@@ -52,7 +51,7 @@ format 40
     activity 128005 "building the Engine"
       activitydiagram 129413 "build flow"
 	package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations no shadow default
-	show_infonote default drawing_language default
+	show_infonote default drawing_language default show_stereotype_properties default
 	size A4
       end
 
@@ -172,7 +171,7 @@ format 40
     end
 
     classdiagram 129285 "Builder Tool (Visitor)"
-      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition yes show_members_visibility default show_members_stereotype default show_parameter_dir no show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition yes show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir no show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
       size A4
     end
 
@@ -184,6 +183,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
 ${members}};
 "
@@ -203,16 +204,9 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 "
 	
 	
+	
+	
 	comment "Main Operation of the Builder: create a render engine for a given part of the timeline"
-      end
-
-      classrelation 162565 // <unidirectional association>
-	relation 157701 --->
-	  a role_name "" multiplicity "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 162565 // <unidirectional association>
-	  b multiplicity "" parent class_ref 131077 // Assembler
       end
     end
 
@@ -224,6 +218,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -240,6 +236,8 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 "
 	
 	
+	
+	
       end
 
       classrelation 137221 // <dependency>
@@ -247,53 +245,7 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 	  a package
 	    cpp default "#include in source"
 	    classrelation_ref 137221 // <dependency>
-	  b multiplicity "" parent class_ref 134149 // BuilderTool
-      end
-
-      classrelation 161797 // <unidirectional association>
-	relation 157189 --->
-	  a role_name "" multiplicity "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 161797 // <unidirectional association>
-	  b multiplicity "" parent class_ref 134277 // SegmentationTool
-      end
-
-      classrelation 161925 // <unidirectional association>
-	relation 157317 --->
-	  a role_name "" multiplicity "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 161925 // <unidirectional association>
-	  b multiplicity "" parent class_ref 134405 // NodeCreatorTool
-      end
-
-      classrelation 162053 // <association>
-	relation 157445 ----
-	  a role_name "" multiplicity "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 162053 // <association>
-	  b role_name "" multiplicity "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 162181 // <association>
-      end
-
-      classrelation 162437 // <association>
-	relation_ref 157573 // <association>
-      end
-
-      classrelation 162949 // <association>
-	relation 158085 ----
-	  a role_name "" multiplicity "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 162949 // <association>
-	  b role_name "" multiplicity "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 163077 // <association>
+	  b parent class_ref 134149 // BuilderTool
       end
     end
 
@@ -305,6 +257,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -322,11 +276,9 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 "
 	
 	
+	
+	
 	comment "TODO"
-      end
-
-      classrelation 162181 // <association>
-	relation_ref 157445 // <association>
       end
     end
 
@@ -338,6 +290,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -355,18 +309,8 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 "
 	
 	
-      end
-
-      classrelation 162309 // <association>
-	relation 157573 ----
-	  a role_name "" multiplicity "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 162309 // <association>
-	  b role_name "" multiplicity "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 162437 // <association>
+	
+	
       end
     end
 
@@ -380,6 +324,8 @@ ${inlines}
       java_decl "${comment}${@}${visibility}interface ${name}${extends} {
 ${members}}
 "
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
 ${members}};
 "
@@ -388,7 +334,7 @@ ${members}};
       classrelation 135941 // currFrame (<unidirectional association>)
 	relation 134533 --->
 	  stereotype "vector"
-	  a role_name "currFrame" multiplicity "" protected
+	  a role_name "currFrame" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
 "
 	    classrelation_ref 135941 // currFrame (<unidirectional association>)
@@ -408,6 +354,8 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 "
 	
 	
+	
+	
       end
 
       operation 135941 "allocateBuffer"
@@ -421,6 +369,8 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 }
 
 "
+	
+	
 	
 	
       end
@@ -438,6 +388,8 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 "
 	
 	
+	
+	
       end
 
       operation 136325 "isCalculated"
@@ -453,6 +405,8 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 "
 	
 	
+	
+	
       end
     end
 
@@ -466,6 +420,8 @@ ${inlines}
       java_decl "${comment}${@}${visibility}interface ${name}${extends} {
 ${members}}
 "
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
 ${members}};
 "
@@ -478,6 +434,8 @@ ${members}};
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
 	
 	
+	
+	
       end
 
       classrelation 146437 // <generalisation>
@@ -485,7 +443,7 @@ ${members}};
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 146437 // <generalisation>
-	  b multiplicity "" parent class_ref 140165 // Visitable
+	  b parent class_ref 140165 // Visitable
       end
     end
 
@@ -502,6 +460,8 @@ ${inlines}
       java_decl "${comment}${@}${visibility}interface ${name}${extends} {
 ${members}}
 "
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
 ${members}};
 "
@@ -515,6 +475,8 @@ ${members}};
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
 	
 	
+	
+	
 	comment "This operation is to be overloaded for the specific MObject subclasses to be treated."
       end
 
@@ -523,7 +485,7 @@ ${members}};
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 146565 // <generalisation>
-	  b multiplicity "" parent class_ref 140037 // Tool
+	  b parent class_ref 140037 // Tool
       end
 
       classrelation 146693 // <generalisation>
@@ -531,7 +493,7 @@ ${members}};
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 146693 // <generalisation>
-	  b multiplicity "" parent class_ref 140293 // Applicable
+	  b parent class_ref 140293 // Applicable
       end
     end
 
@@ -546,6 +508,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -555,7 +519,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 137605 // <realization>
-	  b multiplicity "" parent class_ref 134149 // BuilderTool
+	  b parent class_ref 134149 // BuilderTool
       end
 
       operation 129925 "treat"
@@ -570,6 +534,8 @@ ${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${static
 }
 
 "
+	
+	
 	
 	
       end
@@ -588,6 +554,8 @@ ${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${static
 "
 	
 	
+	
+	
       end
 
       operation 130053 "treat"
@@ -604,17 +572,19 @@ ${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${static
 "
 	
 	
+	
+	
       end
 
-      classrelation 139013 // segments (<directional aggregation by value>)
+      classrelation 139013 // segments (<directional composition>)
 	relation 137221 *-->
 	  stereotype "list"
 	  a role_name "segments" multiplicity "*" protected
 	    comment "the partitioning of the Timeline to be created by this tool."
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
 "
-	    classrelation_ref 139013 // segments (<directional aggregation by value>)
-	  b multiplicity "" parent class_ref 135173 // Segment
+	    classrelation_ref 139013 // segments (<directional composition>)
+	  b parent class_ref 135173 // Segment
       end
 
       classrelation 146821 // <generalisation>
@@ -622,17 +592,17 @@ ${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${static
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 146821 // <generalisation>
-	  b multiplicity "" parent class_ref 140293 // Applicable
+	  b parent class_ref 140293 // Applicable
       end
 
       classrelation 163461 // <unidirectional association>
 	relation 158341 --->
 	  stereotype "create"
-	  a role_name "" multiplicity "" protected
+	  a role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 163461 // <unidirectional association>
-	  b multiplicity "" parent class_ref 146565 // Segmentation
+	  b parent class_ref 147333 // Segmentation
       end
     end
 
@@ -647,6 +617,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -656,7 +628,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 137733 // <realization>
-	  b multiplicity "" parent class_ref 134149 // BuilderTool
+	  b parent class_ref 134149 // BuilderTool
       end
 
       operation 130309 "treat"
@@ -671,6 +643,8 @@ ${class}::${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
 }
 
 "
+	
+	
 	
 	
       end
@@ -689,6 +663,8 @@ ${class}::${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
 "
 	
 	
+	
+	
       end
 
       operation 130565 "treat"
@@ -703,6 +679,8 @@ ${class}::${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
 }
 
 "
+	
+	
 	
 	
       end
@@ -721,6 +699,8 @@ ${class}::${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
 "
 	
 	
+	
+	
       end
 
       attribute 129797 "proc"
@@ -728,6 +708,8 @@ ${class}::${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
+	php_decl ""
+	python_decl ""
 	idl_decl ""
 	comment "holds the Processor (Render Engine Element) to be built by the current build step"
       end
@@ -737,22 +719,12 @@ ${class}::${name} ${(}${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 146949 // <generalisation>
-	  b multiplicity "" parent class_ref 140293 // Applicable
-      end
-
-      classrelation 162693 // <unidirectional association>
-	relation 157829 --->
-	  stereotype "create"
-	  a role_name "" multiplicity "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 162693 // <unidirectional association>
-	  b multiplicity "" parent class_ref 131461 // RenderGraph
+	  b parent class_ref 140293 // Applicable
       end
     end
 
     classdiagram 132868 "Builder Entities"
-      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
       size A4
     end
   end
