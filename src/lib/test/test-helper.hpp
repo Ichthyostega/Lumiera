@@ -69,7 +69,7 @@ namespace test{
   
   
   /** for printing sizeof().
-   *  prints the given size and name litterally, without any further magic */
+   *  prints the given size and name literally, without any further magic */
   string
   showSizeof (size_t siz, Symbol name);
   
@@ -98,4 +98,27 @@ namespace test{
   
   
 }} // namespace lib::test
+
+
+
+
+/* === test helper macros === */
+
+/**
+ * Macro to verify a statement indeed raises an exception.
+ * If no exception is thrown, the #NOTREACHED macro will trigger
+ * an assertion failure. In case of an exception, the #lumiera_error
+ * state is checked, cleared and verified.
+ */
+#define VERIFY_ERROR(ERROR_ID, ERRONEOUS_STATEMENT) \
+          try                             \
+            {                             \
+              ERRONEOUS_STATEMENT ;       \
+              NOTREACHED;                 \
+            }                             \
+          catch (...)                     \
+            {                             \
+              ASSERT (lumiera_error () == LUMIERA_ERROR_##ERROR_ID ); \
+            }
+
 #endif

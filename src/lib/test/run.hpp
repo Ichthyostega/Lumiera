@@ -90,7 +90,7 @@ namespace test
     
 } // namespace test
 
-// make them global for convienience 
+// make them global for convenience 
 using ::test::Arg;
 using ::test::Test;
 using ::test::Launch;

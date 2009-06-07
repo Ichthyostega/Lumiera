@@ -201,24 +201,8 @@ namespace test    {
           ASSERT (2 == p1.use_count());
           ASSERT (2 == p2.use_count());
           
-          try
-            {
-              rMO.getPlacement();
-              NOTREACHED;
-            }
-          catch (...)
-            {
-              ASSERT (lumiera_error () == error::LUMIERA_ERROR_INVALID_PLACEMENTREF);
-            }
-          try
-            {
-              rMO->getMedia();
-              NOTREACHED
-            }
-          catch (...)
-            {
-              ASSERT (lumiera_error () == LUMIERA_ERROR_INVALID_MOBJECTREF);
-            }
+          VERIFY_ERROR (INVALID_PLACEMENTREF, rMO.getPlacement() );
+          VERIFY_ERROR (INVALID_MOBJECTREF,   rMO->getMedia()    );
         }
       
       void

@@ -47,6 +47,7 @@ namespace test    {
   using session::Clip;
   using lib::test::showSizeof;
   using namespace mobject::test;
+  using error::LUMIERA_ERROR_ASSERTION;
   
   
   /***************************************************************************************
@@ -147,15 +148,9 @@ namespace test    {
           
 ///////////////////////////////////////////////////////////////////////////////TODO: find a way to configure NoBug to throw in case of assertion
 ///////////////////////////////////////////////////////////////////////////////TODO: configure NoBug specifically for the testsuite
-//        try
-//          {
-//            hijacked->specialAPI();
-//            NOTREACHED;
-//          }
-//        catch (...)
-//          {
-//            ASSERT (lumiera_error () == error::LUMIERA_ERROR_ASSERTION);
-//          }
+#ifdef false
+          VERIFY_ERROR (ASSERTION, hijacked->specialAPI() );
+#endif
           
           // runtime type diagnostics based on pointee RTTI
           ASSERT ( pSub2.isCompatible<MObject>());

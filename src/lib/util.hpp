@@ -244,7 +244,7 @@ namespace util {
  *        and we probably will enforce this design rule in future. */
 #define INSTANCEOF(CLASS, EXPR) (dynamic_cast<const CLASS*> (EXPR))
 
-/** the inevitalbe MAX macro, sometimes still necessary in template code */
+/** the inevitable MAX macro, sometimes still necessary in template code */
 #ifndef MAX   // this is present to make this definition play nice with GLib
 #define MAX(A,B) ((A < B) ?  (B) : (A))
 #endif
