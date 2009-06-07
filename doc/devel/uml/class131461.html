@@ -4,25 +4,26 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-<title>Class Processor</title>
+<title>Class RenderGraph</title>
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
 <body bgcolor="#ffffff">
 
-<div class = "title">Class Processor</div>
+<div class = "title">Class RenderGraph</div>
 <p></p>
 
 <!-- ============================================================= -->
 
 <a name="refclass131461"></a>
-<p>Declaration :</p><ul><li>C++ : class Processor </li></ul><p>Directly inherited by : <a href="class131333.html#refclass131333"><b>RenderEngine</b></a> </p>
-<p>Artifact : <a href="index.html#refartifact132101"><b>processor</b></a></p><div class="sub">
+<p>Declaration :</p><ul><li>C++ : class RenderGraph </li></ul><p>Directly inherited by : <a href="class131333.html#refclass131333"><b>RenderEngine</b></a> </p>
+<p>Artifact : <a href="index.html#refartifact132101"><b>rendergraph</b></a></p><div class="sub">
 <a name="refrelation132613"></a>
-<table><tr><td><div class="element">Relation <b>output (&lt;unidirectional association&gt;)</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : # output : <a href="class131589.html#refclass131589"><b>ExitNode</b></a>, multiplicity : 1</li><li>C++ : protected: <a href="class131589.html#refclass131589"><b>ExitNode</b></a> * output</li></ul><a name="refattribute129413"></a>
+<table><tr><td><div class="element">Relation <b>pipes (&lt;unidirectional association&gt;)</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : # pipes : <a href="class131589.html#refclass131589"><b>ExitNode</b></a>, multiplicity : 1..*</li><li>C++ : protected: <a href="class131589.html#refclass131589"><b>ExitNode</b></a> * pipes</li></ul><p>Stereotype: list</p>
+<a name="refattribute129413"></a>
 <table><tr><td><div class="element">Attribut <b>start</b></div></td></tr></table>
-<p>Declaration :</p><ul><li>Uml : # start : <a href="class134917.html#refclass134917"><b>Time</b></a></li><li>C++ : protected: <a href="class134917.html#refclass134917"><b>Time</b></a> start</li></ul><p>begin of the timerange covered by this processor<br /></p><a name="refattribute129541"></a>
+<p>begin of the timerange covered by this processor<br /></p><p>Declaration :</p><ul><li>Uml : # start : <a href="class134917.html#refclass134917"><b>Time</b></a></li><li>C++ : protected: <a href="class134917.html#refclass134917"><b>Time</b></a> start</li></ul><a name="refattribute129541"></a>
 <table><tr><td><div class="element">Attribut <b>end</b></div></td></tr></table>
-<p>Declaration :</p><ul><li>Uml : # end : <a href="class134917.html#refclass134917"><b>Time</b></a></li><li>C++ : protected: <a href="class134917.html#refclass134917"><b>Time</b></a> end</li></ul><p>end of the timerange (excl)<br /></p></div>
+<p>end of the timerange (excl)<br /></p><p>Declaration :</p><ul><li>Uml : # end : <a href="class134917.html#refclass134917"><b>Time</b></a></li><li>C++ : protected: <a href="class134917.html#refclass134917"><b>Time</b></a> end</li></ul></div>
 </body>
 </html>

@@ -18,8 +18,9 @@
 <a name="refclass128309"></a>
 <p>Declaration :</p><ul><li>C++ : class FileHandleCache </li></ul><div class="sub">
 <a name="refrelation128737"></a>
-<table><tr><td><div class="element">Relation <b>handles (&lt;directional aggregation by value&gt;)</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : # handles : <a href="class128693.html#refclass128693"><b>FileHandle</b></a>, multiplicity : *</li><li>C++ : protected: list&lt;<a href="class128693.html#refclass128693"><b>FileHandle</b></a>&gt; handles</li></ul><a name="refattribute128225"></a>
+<table><tr><td><div class="element">Relation <b>handles (&lt;directional composition&gt;)</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : # handles : <a href="class128693.html#refclass128693"><b>FileHandle</b></a>, multiplicity : *</li><li>C++ : protected: list&lt;<a href="class128693.html#refclass128693"><b>FileHandle</b></a>&gt; handles</li></ul><p>Stereotype: list</p>
+<a name="refattribute128225"></a>
 <table><tr><td><div class="element">Attribut <b>handles_available</b></div></td></tr></table>
-<p>Declaration :</p><ul><li>Uml : - handles_available : int</li><li>C++ : private: int handles_available</li></ul><p>initialized to the maximum number of filehandles the backend may use for mapped files. When no handles are available, the handle which is last in the handles list is closed and (re-)used.<br />Else this number is decremented for each new filehandle used and incremented for any one explicitly freed.<br /></p></div>
+<p>initialized to the maximum number of filehandles the backend may use for mapped files. When no handles are available, the handle which is last in the handles list is closed and (re-)used.<br />Else this number is decremented for each new filehandle used and incremented for any one explicitly freed.<br /></p><p>Declaration :</p><ul><li>Uml : - handles_available : int</li><li>C++ : private: int handles_available</li></ul></div>
 </body>
 </html>
