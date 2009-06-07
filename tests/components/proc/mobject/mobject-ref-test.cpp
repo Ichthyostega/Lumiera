@@ -31,6 +31,7 @@
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
+#include "lib/test/test-helper.hpp"
 
 #include <iostream>
 
@@ -113,6 +114,9 @@ namespace test    {
           ///////////////////////////////////////////TODO: check the C-API representation here
           checkBuildMObjectRef (ref1, &pClip1);
           checkBuildMObjectRef (ref2, &pClip2);
+          
+          checkLifecycle (rP1,rP2);
+          checkTypeHandling (luid);
           // -----Tests------------------
           
           // verify clean state
@@ -145,7 +149,7 @@ namespace test    {
           ASSERT (rMO->isValid());
           
           // access the Placement-API
-          ASSERT (2 == rMO.use_count());    // we are referring, not creating a new Placement
+          ASSERT (3 == rMO.use_count());    // now rMO shares ownership with the Placement
           ASSERT (0 < rMO.getStartTime());  // (internally, this resolves to an ExplicitPlacement)
           ASSERT ( rMO.isCompatible<MObject>());
           ASSERT ( rMO.isCompatible<Clip>());
@@ -155,14 +159,72 @@ namespace test    {
           // re-link to the Placement (note we get the Clip API!)
           Placement<Clip> & refP = rMO.getPlacement();
           ASSERT (refP);
-          ASSERT (2 == refP.use_count());
+          ASSERT (3 == refP.use_count());
           ASSERT (&refP == placementAdr);   // actually denotes the address of the original Placement in the "session"
           cout << string(refP) << endl;
-
+          
           ExplicitPlacement exPla = refP.resolve();
           ASSERT (exPla.time == start);     // recovered Placement resolves to the same time as provided by the proxied API
-          ASSERT (3 == refP.use_count());   // but now we've indeed created an additional owner (exPla)
+          ASSERT (4 == refP.use_count());   // but now we've indeed created an additional owner (exPla)
+          ASSERT (4 == rMO.use_count());
+        }
+      
+      void
+      checkLifecylce (PMObj const& p1, PMObj const& p1)
+        {
+          ASSERT (2 == p1.use_count());
+          ASSERT (2 == p2.use_count());
+          
+          MORef<Clip> rMO;
+          ASSERT (!rMO);
+          ASSERT (0 == rMO.use_count());
+          
+          rMO.activate(p1);
+          ASSERT (rMO);
+          ASSERT (rMO->getMedia()->getFilename() == "test-1");
           ASSERT (3 == rMO.use_count());
+          ASSERT (3 == p1.use_count());
+          ASSERT (2 == p2.use_count());
+          
+          rMO.activate(p2);
+          ASSERT (rMO);
+          ASSERT (rMO->getMedia()->getFilename() == "test-2");
+          ASSERT (3 == rMO.use_count());
+          ASSERT (2 == p1.use_count());
+          ASSERT (3 == p2.use_count());
+          
+          rMO.activate(p2);
+          ASSERT (3 == rMO.use_count());
+          
+          rMO.close();
+          ASSERT (!rMO);
+          ASSERT (2 == p1.use_count());
+          ASSERT (2 == p2.use_count());
+          
+          try
+            {
+              rMO.getPlacement();
+              NOTREACHED;
+            }
+          catch (...)
+            {
+              ASSERT (lumiera_error () == error::LUMIERA_ERROR_INVALID_PLACEMENTREF);
+            }
+          try
+            {
+              rMO->getMedia();
+              NOTREACHED
+            }
+          catch (...)
+            {
+              ASSERT (lumiera_error () == LUMIERA_ERROR_INVALID_MOBJECTREF);
+            }
+        }
+      
+      void
+      checkTypeHandling (LumieraUid luid)
+        {
+          
         }
     };
   
