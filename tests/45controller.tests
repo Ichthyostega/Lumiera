@@ -3,4 +3,8 @@ TESTING "Component Test Suite: Proc-Layer controller" ./test-components --group=
 
 
 
+PLANNED "CommandBasic_test" CommandBasic_test <<END
+END
+
+
 #
