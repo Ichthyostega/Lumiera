@@ -120,6 +120,9 @@ liblumiproccontrol_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
 liblumiproccontrol_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 liblumiproccontrol_la_SOURCES =					\
+	$(liblumiproccontrol_la_srcdir)/command.cpp		\
+	$(liblumiproccontrol_la_srcdir)/handling-pattern.cpp	\
+	$(liblumiproccontrol_la_srcdir)/proc-dispatcher.cpp	\
 	$(liblumiproccontrol_la_srcdir)/pathmanager.cpp		\
 	$(liblumiproccontrol_la_srcdir)/stypemanager.cpp
 
