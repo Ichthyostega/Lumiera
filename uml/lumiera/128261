@@ -1,6 +1,6 @@
 format 58
 "MObject" // ProcessingLayer::MObject
-  revision 35
+  revision 36
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -1431,21 +1431,6 @@ ${inlines}
 	    classrelation_ref 146053 // next (<unidirectional association>)
 	  b parent class_ref 139909 // LocatingPin
       end
-    end
-
-    class 141957 "ProcDispatcher"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl ""
-      php_decl ""
-      python_2_2 python_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
     end
   end
 

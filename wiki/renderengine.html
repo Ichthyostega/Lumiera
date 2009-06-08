@@ -951,6 +951,34 @@ TertiaryMid: #99a
 TertiaryDark: #667
 Error: #f88</pre>
 </div>
+<div title="Command" modifier="Ichthyostega" modified="200906072100" created="200906072020" tags="def SessionLogic draft" changecount="5">
+<pre>Within Proc-Layer, a Command is the abstract representation of a single operation or a compound of operations mutating the HighLevelModel.
+Thus, each command is a ''Functor'' and a ''Closure'' ([[command pattern|http://en.wikipedia.org/wiki/Command_pattern]]), allowing commands to be treated uniformly, enqueued in a [[dispatcher|ProcDispatcher]], logged to the SessionStorage and registered with the UndoManager.
+
+&amp;rarr; see CommandHandling</pre>
+</div>
+<div title="CommandHandling" modifier="Ichthyostega" modified="200906080146" created="200906072048" tags="SessionLogic spec draft decision design img" changecount="17">
+<pre>Organising any ''mutating'' operations executable by the user (via GUI) by means of the [[command pattern|http://en.wikipedia.org/wiki/Command_pattern]] can be considered //state of the art//&amp;nbsp; today. First of all, it allows to discern the specific implementation operations to be called on one or several objects within the HighLevelModel from the operation requested by the user, the latter being rather a concept. A command can be labeled clearly, executed under controlled circumstances, allowing transactional behaviour.
+
+
+!Defining commands
+[&gt;img[Structure of Commands|uml/fig134021.png]] Basically, a command could contain arbitrary operations, but we'll assume that it causes a well defined mutation within the HighLevelModel, which can be ''undone''. Thus, when defining a command, we need to specify not only a function doing the mutation, but also another function which might be called later to reverse the effect of the action. Besides, the action operates on a number of ''target'' objects and additionally may require a set of ''parameter'' values. These are to be stored explicitly within the command object, thus creating a ''closure'' &amp;mdash; the operation //must not//&amp;nbsp; rely on other hidden parameters (maybe with the exception of very generic singleton system services?).
+
+Theoretically, defining the &quot;undo&quot; operation might utilise two different approaches:
+* specifying an //inverse operation,// known to cancel out the effect of the command operation
+* capturing a //state memento,// which can be played back to restore the state found prior to executing the command.
+
+while obviously the first solution is much simpler to implement on behalf of the command framework, the second solution has distinct advantages, especially in the context of an editing application: there might be rounding or calculation errors, the inverse might be difficult to define correctly, the effect of the operation might depend on circumstances, be random, or might even trigger a resolution operation to yield the final result. Thus the decision is within Lumiera to //favour state capturing// &amp;mdash; but in a modified, semi-manual and not completely exclusive way.
+
+!Undo state
+While the usual implementation might automatically capture the whole model (resulting in a lot of data to be stored and some uncertainty about the scope of the model to be captured), in Lumiera we rely instead on the client code to provide a ''capture function'' and a ''playback function'' alongside with the actual operation. To help with this task, we provide a set of standard handlers for common situations. This way, operations might capture very specific information, might provide an &quot;intelligent undo&quot; to restore a given semantic instead of just a fixed value &amp;mdash; and moreover the client code is free actually to employ the &quot;inverse operation&quot; model in special cases where it just makes more sense.
+
+!Handling of commands
+A command may be defined completely from scratch, or it might just instantiate a CommandPrototype with specific targets and parameters. The command could then be serialised and later be recovered and re-bound with the parameters, but usually it will be handed over to the ProcDispatcher, pending execution. When ''invoking'', the handling sequence is to [[log the command|SessionStorage]], then call the ''undo capture function'', followed from calling the actual ''operation function''. After success, the logging and [[undo registration|UndoManager]] is completed. In any case, finally the ''result signal'' (a functor previously stored within the command) is emitted.
+
+By design, commands are single-serving value objects; executing an operation repeatedly requires creating a collection of command objects, one for each invocation.
+</pre>
+</div>
 <div title="ConManager" modifier="Ichthyostega" modified="200810060300" created="200806050208" tags="def Builder" changecount="4">
 <pre>The Connection Manager is a service for wiring connections and for querying information and deriving decisions regarding various aspects of data streams and the possibility of connections. The purpose of the Connection Manager is to isolate the [[Builder]], which is client of this information and decision services, from the often convoluted details of type information and organizing a connection.
 
@@ -2978,7 +3006,7 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlanningSessionInMem" modifier="Ichthyostega" modified="200905310301" created="200904252258" tags="impl SessionLogic draft" changecount="19">
+<div title="PlanningSessionInMem" modifier="Ichthyostega" modified="200906071927" created="200904252258" tags="impl SessionLogic draft" changecount="24">
 <pre>//This page is a scrapbook for working out the implementation of the [[Session Datastructure in Memory|SessionDataMem]]//
 This is a difficult untertaking, because there are several dependencies (most of which aren't fully designed yet as of 5/09)
 * the GUI uses an adapted version of the HighLevelModel; these datastructures are intended to be backed by the Session
@@ -2998,6 +3026,8 @@ This is a difficult untertaking, because there are several dependencies (most of
 
 &lt;&lt;tasksum start&gt;&gt;
 &lt;&lt;taskadder below&gt;&gt;
+&lt;&lt;task &gt;&gt; implement a system for defining parameters and targets
+&lt;&lt;task &gt;&gt; implement a system for generating operations
 &lt;&lt;task &gt;&gt; define the general structure of operations
 &lt;&lt;task &gt;&gt; specify the editing operations
 
@@ -3005,6 +3035,8 @@ This is a difficult untertaking, because there are several dependencies (most of
 &lt;&lt;task 1 1 1&gt;&gt; evaluate models for the [[reference problem|MObjectRef]]
 &lt;&lt;task 2 3 3&gt;&gt; implement an hash-ID
 &lt;&lt;task 1 2 2&gt;&gt; incorporate this ID into class Placement
+&lt;&lt;task 2 2&gt;&gt; define PlacementRef and MObjectRef behaviour
+&lt;&lt;task 1 0&gt;&gt; wire up [[Session]] interface as a LayerSeparationInterface
 &lt;&lt;task 1 1 0&gt;&gt; implement PlacementRef
 &lt;&lt;task 2 2 0&gt;&gt; implement MObjectRef
 
@@ -3567,17 +3599,31 @@ Currently as of 5/09, this is an ongoing [[implementation and planning effort|Pl
 
 {{red{TODO...}}}</pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" modified="200904242109" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="2">
-<pre>{{red{WIP}}}</pre>
+<div title="SessionInterface" modifier="Ichthyostega" modified="200906071959" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="7">
+<pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
+* the API of the session class
+* the accompanying management interface (SessionManager API)
+* an LayerSeparationInterfaces allowing to access these interfaces from outside the Proc-Layer
+* the primary public ~APIs exposed on the objects to be queried and retrieved via the session class API
+** Sequence
+** Placement
+** Clip
+** Track
+** Effect
+** Automation
+* the [[command|CommandHandling]] interface, including the [[undo|UndoManager]] facility
+
+{{red{WIP}}}</pre>
 </div>
-<div title="SessionLogic" modifier="Ichthyostega" modified="200905232229" created="200904242110" tags="overview" changecount="11">
+<div title="SessionLogic" modifier="Ichthyostega" modified="200906072005" created="200904242110" tags="overview" changecount="13">
 <pre>The Session contains all informations, state and objects to be edited by the User (&amp;rarr;[[def|Session]]).
 As such, the SessionInterface is the main entrance point to Proc-Layer functionality, both for the primary EditingOperations and for playback/rendering processes.
 
 Currently (as of 5/09), Ichthyo is [[targeting|PlanningSessionInMem]] a first preliminary implementation of the [[Session in Memory|SessionDataMem]]
 
 !Design and handling of Objects within the Session
-Objects are attached and manipulated by [[placements|Placement]]; thus the organisation of these placements is part of the session data layout. Effectively, such a placement within the session behaves like an //instances// of a given object, and at the same time it defines the &quot;non-substantial&quot; properties of the object, e.g. its positions and relations. [[References|MObjectRef]] to these placement entries are handed out as parameters, both down to the [[Builder]] and from there to the render processes within the engine, but also to external parts within the GUI and in plugins. The actual implementation of these object references is built on top of the PlacementRef tags, thus relying on the PlacementIndex the session maintains to keep track of all placements and their relations.</pre>
+Objects are attached and manipulated by [[placements|Placement]]; thus the organisation of these placements is part of the session data layout. Effectively, such a placement within the session behaves like an //instances// of a given object, and at the same time it defines the &quot;non-substantial&quot; properties of the object, e.g. its positions and relations. [[References|MObjectRef]] to these placement entries are handed out as parameters, both down to the [[Builder]] and from there to the render processes within the engine, but also to external parts within the GUI and in plugins. The actual implementation of these object references is built on top of the PlacementRef tags, thus relying on the PlacementIndex the session maintains to keep track of all placements and their relations. While &amp;mdash; using these references &amp;mdash; an external client can access the objects and structures within the session, any actual ''mutations'' should be done based on the CommandHandling: a single operation of a sequence of operations is defined as [[Command]], to be [[dispatched as mutation operation|ProcDispatcher]]. Following this policy ensures integration with the SessionStorage and provides (unlimited) [[UNDO|UndoManager]].
+</pre>
 </div>
 <div title="SessionOverview" modifier="Ichthyostega" modified="200811011805" created="200709272105" tags="design" changecount="29">
 <pre>&lt;&lt;&lt;
@@ -5232,13 +5278,13 @@ A good starting point for understanding our library implementation of the visito
 ** when creating a new &quot;~Visitable-and-Tool&quot; hierarchy, the user should derive (or typedef) and parametrize the {{{Visitable}}}, {{{Tool}}} and {{{Applicable}}} templates, typically into a new namespace. An example can be seen in {{{proc/mobject/builder/buildertool.hpp}}}
 </pre>
 </div>
-<div title="VisitorUse" modifier="Ichthyostega" modified="200801041025" created="200711280302" tags="impl discuss" changecount="16">
+<div title="VisitorUse" modifier="Ichthyostega" modified="200906072024" created="200711280302" tags="impl discuss" changecount="17">
 <pre>Using the ''Visitor Design Pattern'' is somewhat controversial, mainly because this pattern is rather complicated, requires certain circumstances to be usefull, and &amp;mdash; especially when used in the original form described by Gamma et al &amp;mdash; puts quite some burden on the implementor. Contrary to some patterns commonly used today (like e.g. singleton or factory), visitor is by no way a popular pattern. Ichthyo thinks that until now it's potential stregths remain still to be discovered, due to obvious and well known weaknesses. This problems can be ameliorated a good deal by using template based library implementation techniques along the lines of the [[Loki library|http://loki-lib.sourceforge.net/]].
 &amp;rarr; [[implementation deatails|VisitingToolImpl]]
 
 !why bothering with visitor?
 In the Lumiera Proc layer, Ichthyo uses the visitor pattern to overcome another notorious problem when dealing with more complex class hierarchies: either, the //interface// (root class) is so unspecific to be almost useless, or, in spite of having a useful contract, this contract will effectively be broken by some subclasses (&quot;problem of elliptical circles&quot;). Initially, when designing the classes, the problems aren't there (obviously, because they could be taken as design flaws). But then, under the pressure of real features, new types are added later on, which //need to be in this hierarchy// and at the same time //need to have this and that special behaviour// and here we go ...
-Visitor helps us to circumvent this trap: the basic operations can be written against the top level interface, such, that they include visiting some object collection internally. Now, on a case-by-case base, local operations can utilize some sub interface or the given concrete type's public interface. So visitor helps to encapsulate cooperating specific technical details within some concrete visiting tool implementation, while forcing them to be implemented against some interface or sub-interface of the target objects.
+Visitor helps us to circumvent this trap: the basic operations can be written against the top level interface, such as to include visiting some object collection internally. Now, on a case-by-case base, local operations can utilise a more specific sub interface or the given concrete type's public interface. So visitor helps to encapsulate specific technical details of cooperating objects within the concrete visiting tool implementation, while still forcing them to be implemented against some interface or sub-interface of the target objects.
 
 !!well suited for using visitors
 generally speaking, visitors are preferable when the underlying element type hierarchy is rather stable, but new operations are to be added frequently.
