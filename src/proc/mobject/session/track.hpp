@@ -83,6 +83,7 @@ namespace session {
   
   /** Placement<Track> defined to be subclass of Placement<Meta> */
   template class Placement<session::Track, session::Meta>;
+  typedef Placement<session::Track, session::Meta> PTrack;
   
 } // namespace mobject
 #endif

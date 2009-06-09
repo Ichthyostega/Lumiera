@@ -61,17 +61,19 @@ namespace asset { class Pipe; }
 namespace mobject {
   
   class MObject;
-
+  
 ///////////////////////////////////////////TODO: all those dependencies are just a plain mess right now.  
 //  
 //template<class MO, class B=MObject> 
 //class Placement ;
 //typedef Placement<MObject> PMO;
-
-  template<class MO =MObject>
+  
+  template<class MO>
   class PlacementRef;    ///TODO: as of 5/09 the idea is to phase out direct dependency on the placement class and recast those dependencies in terms of PlacementRef
-
-
+  
+  typedef PlacementRef<MObject> PlaRef;
+  
+  
   namespace session {
     
     class FixedLocation;
@@ -117,7 +119,7 @@ namespace mobject {
         /* Factory functions for adding LocatingPins */
         
         FixedLocation&    operator() (Time start, Track track=0);
-        RelativeLocation& operator() (PlacementRef<>& refObj, Time offset=Time(0));   //////////TODO: warning, just a dummy placeholder for now!!
+        RelativeLocation& operator() (PlacementRef<MObject>& refObj, Time offset=Time(0));   //////////TODO: warning, just a dummy placeholder for now!!
         
         LocatingPin (const LocatingPin&);
         LocatingPin& operator= (const LocatingPin&);

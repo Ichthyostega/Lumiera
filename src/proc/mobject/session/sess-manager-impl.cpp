@@ -145,8 +145,8 @@ namespace session {
   }
   
   
-  shared_ptr<PlacementIndex>
-  getCurrentIndex ()
+  shared_ptr<PlacementIndex>&
+  SessManagerImpl::getCurrentIndex ()
   {
     return static_cast<SessManagerImpl&> (Session::current).pImpl_->pIdx_;
   }

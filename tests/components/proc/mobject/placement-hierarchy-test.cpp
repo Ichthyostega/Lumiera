@@ -27,6 +27,7 @@
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/asset/media.hpp"
+#include "lib/error.hpp"
 #include "lib/util.hpp"
 
 #include <tr1/memory>
@@ -47,7 +48,7 @@ namespace test    {
   using session::Clip;
   using lib::test::showSizeof;
   using namespace mobject::test;
-  using error::LUMIERA_ERROR_ASSERTION;
+  using lumiera::error::LUMIERA_ERROR_ASSERTION;
   
   
   /***************************************************************************************

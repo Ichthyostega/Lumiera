@@ -51,6 +51,16 @@ namespace test    {
   namespace command1 {
   
     ////////////////////////////////////////////TODO braindump
+/*  
+    bind: opFunc(a,b,c) -> op(void)
+    
+    curry(opFunc) (a) (b) (c)
+    
+    pAppl(func, x) ->  func2 (b, c)
+    
+    return bind( recursion(), param)
+     
+*/  
     ////////////////////////////////////////////TODO braindump
   
   }
@@ -72,7 +82,6 @@ namespace test    {
    */
   class CommandBasic_test : public Test
     {
-      typedef shared_ptr<PlacementIndex> PIdx;
       
       virtual void
       run (Arg) 

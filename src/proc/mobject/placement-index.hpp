@@ -36,6 +36,7 @@
 //#include "pre.hpp"
 //#include "proc/mobject/session/locatingpin.hpp"
 //#include "proc/asset/pipe.hpp"
+#include "lib/util.hpp"
 #include "lib/factory.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
@@ -47,11 +48,12 @@
 
 
 namespace mobject {
-
+  
+  using lumiera::factory::RefcountFac;
   using std::tr1::shared_ptr;
   using boost::scoped_ptr;
   using std::vector;
-
+  
   class MObject;
   
   
@@ -67,7 +69,7 @@ namespace mobject {
     public:
       typedef Placement<MObject> PlacementMO;
       typedef PlacementRef<MObject> PRef;
-      typedef PlacementMO::ID ID;
+      typedef PlacementMO::ID const& ID;
       
       
       PlacementMO& find (ID)  const;
@@ -75,21 +77,21 @@ namespace mobject {
       template<class MO>
       Placement<MO>&  find (PlacementMO::Id<MO>)  const;
       template<class MO>
-      Placement<MO>&  find (PlacementRef<MO>)     const;
+      Placement<MO>&  find (PlacementRef<MO> const&)  const;
       
-      PlacementMO& getScope (PlacementMO&)  const;
-      PlacementMO& getScope (ID)            const;
+      PlacementMO& getScope (PlacementMO const&)  const;
+      PlacementMO& getScope (ID)                  const;
       
-      vector<PRef> getReferrers (ID)        const;
+      vector<PRef> getReferrers (ID)              const;
       
       
       /** retrieve the logical root scope */
-      PlacementMO& getRoot()                const;
+      PlacementMO& getRoot()                      const;
       
       /** diagnostic: number of indexed entries */
-      size_t size()                         const;
-      bool contains (PlacementMO const&)    const;
-      bool contains (ID const&)             const;
+      size_t size()                               const;
+      bool contains (PlacementMO const&)          const;
+      bool contains (ID)                          const;
       
       
       /* == mutating operations == */
@@ -99,13 +101,16 @@ namespace mobject {
       bool remove (ID);
       
       
-      typedef lumiera::factory::RefcountFac<PlacementIndex> Factory;
+      typedef RefcountFac<PlacementIndex> Factory;
       
       static Factory create;
       
+      ~PlacementIndex();
+      
     protected:
       PlacementIndex() ;
-      friend class Factory;
+      
+      friend class lumiera::factory::Factory<PlacementIndex, lumiera::factory::Wrapper<PlacementIndex, shared_ptr<PlacementIndex> > >;
     };
   ////////////////TODO currently just fleshing  out the API; probably have to split off an impl.class; but for now a PImpl is sufficient...
   
@@ -114,16 +119,59 @@ namespace mobject {
   /** @internal there is an implicit PlacementIndex available on a global scale,
    *            by default implemented within the current session. This function allows
    *            to re-define this implicit index temporarily, e.g. for unit tests. */
-  shared_ptr<PlacementIndex> const&
-  reset_PlachementIndex(shared_ptr<PlacementIndex> const&) ;
+  void
+  reset_PlacementIndex(shared_ptr<PlacementIndex> const&) ;
   
   /** @internal restore the implicit PlacementIndex to its default implementation (=the session) */
-  shared_ptr<PlacementIndex> const&
-  reset_PlachementIndex() ;
+  void
+  reset_PlacementIndex() ;
   
   /** @internal access point for PlacementRef to the implicit global PlacementIndex */
   Placement<MObject> &
-  fetch_PlachementIndex(Placement<MObject>::ID const&) ;
+  fetch_PlacementIndex(Placement<MObject>::ID const&) ;
+  
+  
+  
+  
+  /* === forwarding implementations of the templated API === */
+  
+  template<class MO>
+  inline Placement<MO>&
+  PlacementIndex::find (PlacementMO::Id<MO> id)  const
+  {
+    PlacementMO& result (find (id));
+    REQUIRE (INSTANCEOF (MO, &result) );
+    return static_cast<Placement<MO>&> (result);
+  }
+  
+    
+  template<class MO>
+  inline Placement<MO>&
+  PlacementIndex::find (PlacementRef<MO> const& pRef)  const
+  {
+    PlacementMO::Id<MO> id (pRef);
+    return find (id);
+  }
+  
+  
+  inline Placement<MObject>&
+  PlacementIndex::getScope (PlacementMO const& p)  const
+  {
+    return getScope(p.getID()); 
+  }
+  
+  inline bool
+  PlacementIndex::contains (PlacementMO const& p)  const
+  {
+    return contains (p.getID());
+  }
+  
+  inline bool
+  PlacementIndex::remove (PlacementMO& p)
+  {
+    return remove (p.getID());
+  }
+  
   
   
 } // namespace mobject

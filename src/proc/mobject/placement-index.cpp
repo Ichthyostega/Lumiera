@@ -65,6 +65,18 @@ namespace mobject {
   typedef PlacementIndex::ID ID;
   
   
+  /** @internal Factory for creating a new placement index.
+   *            For use by the Session and for unit tests.  
+   */
+  PlacementIndex::Factory PlacementIndex::create;
+  
+  PlacementIndex::PlacementIndex()
+    : pTab_()
+    { }
+  
+  PlacementIndex::~PlacementIndex() { }
+ 
+
   PlacementMO&
   PlacementIndex::getRoot()  const
   {
@@ -80,10 +92,46 @@ namespace mobject {
   
   
   bool
-  PlacementIndex::contains (PlacementMO&)  const
+  PlacementIndex::contains (ID id)  const
   {
     UNIMPLEMENTED ("containment test: is the given Placement known within this index");
     return false;
+  }
+  
+  
+  PlacementMO&
+  PlacementIndex::find (ID)  const
+  {
+    UNIMPLEMENTED ("main operation of PlacmentIndex: lookup a Placement by ID");
+  }
+    
+  
+  
+  PlacementMO&
+  PlacementIndex::getScope (ID)  const
+  {
+    UNIMPLEMENTED ("Secondary core operation of PlacmentIndex: find the 'parent' Placement by using the Placement relation index");
+  }
+  
+  
+  vector<PRef>
+  PlacementIndex::getReferrers (ID)  const
+  {
+    UNIMPLEMENTED ("query the Placement relation index and retrieve all other placements bound to this one by a placement-relation");
+  }
+  
+  
+  ID
+  PlacementIndex::insert (PlacementMO& newObj, PlacementMO& targetScope)
+  {
+    UNIMPLEMENTED ("store a new information record into PlacmentIndex: ID -> (ref-to-Placement, parent-Placement)");
+  }
+  
+  
+  bool
+  PlacementIndex::remove (ID)
+  {
+    UNIMPLEMENTED ("remove a information record from PlacementIndex, and also deregister any placement-relations bound to it");
   }
   
   
@@ -91,7 +139,7 @@ namespace mobject {
   
   namespace { // implementation detail: default global placement index access
     
-    PIdx globalIndex (0);
+    PIdx globalIndex;
     
     PIdx const&
     getGlobalIndex()
@@ -105,23 +153,20 @@ namespace mobject {
   } // (End) implementation detail
   
   
-  /** @internal Factory for creating a new placement index.
-   *            For use by the Session and for unit tests.  
-   */
-  PlacementIndex::Factory PlacementIndex::create;
   
   
-  PIdx const&
-  reset_PlachementIndex(PIdx const& alternativeIndex)
+  
+  void
+  reset_PlacementIndex (PIdx const& alternativeIndex)
   {
     globalIndex = alternativeIndex;
   }
   
   /** @internal restore the implicit PlacementIndex to its default implementation (=the session) */
-  PIdx const&
-  reset_PlachementIndex()
+  void
+  reset_PlacementIndex()
   {
-    globalIndex.reset(0);
+    globalIndex.reset();
   }
   
   /** by default, this reaches for the PlacementIndex maintained within
@@ -129,11 +174,17 @@ namespace mobject {
    *  PlacementIndex may have been \link #reset_PlacementIndex installed \endlink 
    */
   Placement<MObject> &
-  fetch_PlachementIndex(Placement<MObject>::ID const& pID)
+  fetch_PlacementIndex (Placement<MObject>::ID const& pID)
   {
     return getGlobalIndex()->find (pID);
   }
-
+  
+  /** @internal used by PlacementRef to implement a self-check */
+  bool
+  checkContains_PlacementIndex (Placement<MObject>::ID const& pID)
+  {
+    return getGlobalIndex()->contains (pID);
+  }
 
 
 } // namespace mobject

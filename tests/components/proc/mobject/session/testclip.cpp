@@ -28,65 +28,59 @@
 #include "proc/asset/clip.hpp"
 #include "lib/singleton.hpp"
 
-namespace mobject
-  {
-  namespace session
-    {
-    namespace test
-      {
-      typedef shared_ptr<asset::Media> PM;
-      typedef backend_interface::MediaAccessFacade MAF;
-      using backend_interface::test::MediaAccessMock;
-      using asset::VIDEO;
-
-      
-      
-      asset::Media & 
-      createTestMedia ()
-      {
-        // install Mock-Interface to Lumiera backend
-        MAF::instance.injectSubclass (new MediaAccessMock);
-        PM media = asset::Media::create("test-2", VIDEO); // query magic filename
-        MAF::instance.injectSubclass (0); // remove Mock-Interface
-        
-        return *media;
-      }
-      
-      asset::Clip & 
-      createTestClipAsset (asset::Media& media)
-      {
-        return *(asset::Media::create(media)); 
-      }
-      
-    
-      struct Testbed
-        {
-          asset::Media & media_;
-          asset::Clip & clipA_;
-          
-          Testbed() 
-            : media_ (createTestMedia()),
-              clipA_ (createTestClipAsset(media_))
-            { }
-        };
-          
-      lumiera::Singleton<Testbed> testbed_1; // invoke ctor when creating first TestClip... 
-
-      
-      
-      
-
-      TestClip::TestClip ()
-        : Clip(testbed_1().clipA_,
-               testbed_1().media_)
-      {
-        ASSERT (isValid());
-      }
-      
-
-
-    } // namespace test
+namespace mobject {
+namespace session {
+namespace test    {
   
-  } // namespace session
-
-} // namespace mobject
+  typedef shared_ptr<asset::Media> PM;
+  typedef backend_interface::MediaAccessFacade MAF;
+  using backend_interface::test::MediaAccessMock;
+  using asset::VIDEO;
+  
+  
+  
+  asset::Media & 
+  createTestMedia ()
+  {
+    // install Mock-Interface to Lumiera backend
+    MAF::instance.injectSubclass (new MediaAccessMock);
+    PM media = asset::Media::create("test-2", VIDEO); // query magic filename
+    MAF::instance.injectSubclass (0); // remove Mock-Interface
+    
+    return *media;
+  }
+  
+  asset::Clip & 
+  createTestClipAsset (asset::Media& media)
+  {
+    return *(asset::Media::create(media));
+  }
+  
+  
+  struct Testbed
+    {
+      asset::Media & media_;
+      asset::Clip & clipA_;
+      
+      Testbed() 
+        : media_ (createTestMedia()),
+          clipA_ (createTestClipAsset(media_))
+        { }
+    };
+      
+  lumiera::Singleton<Testbed> testbed_1; // invoke ctor when creating first TestClip...
+  
+  
+  
+  
+  
+  TestClip::TestClip ()
+    : Clip(testbed_1().clipA_,
+           testbed_1().media_)
+  {
+    ASSERT (isValid());
+  }
+  
+  
+  
+}}} // namespace mobject::session::test

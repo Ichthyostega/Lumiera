@@ -33,111 +33,109 @@ using std::string;
 using std::cout;
 
 
-namespace mobject
-  {
-  namespace session
-    {
-    namespace test
-      {
-      
-      
-      /*******************************************************************************
-       * Check the session management operations provided by mobject::session::Seesion
-       * This includes accessing the current Session (somewhat a singleton).
-       * @todo load a Mock session
-       * @todo create a session and save (serialize) it
-       * @todo load a real test session
-       */
-      class SessionManager_test : public Test
-        {
-          virtual void
-          run (Arg arg) 
-            {
-              getCurrentSession ();
-              clearSession();
-              loadMockSession();
-              
-              clearSession();
-              buildTestseesion1();
-              string serialized;
-              saveSession (serialized);
-              loadSession (serialized);
-              ASSERT (checkTestsession1());
-            } 
-          
-          /** @test accessing the current (global) session 
-           */
-          void
-          getCurrentSession ()
-            {
-              PSess sess = Session::current;
-              ASSERT (sess->isValid());
-            }
-          
-          /** @test clear current session contents 
-           *        without resetting global session config.
-           * @todo  implement all session content, implement 
-           *        mobject and asset deletion operations.
-           */
-          void
-          clearSession ()
-            {
-              UNIMPLEMENTED ("clear objects in current session");
-              Session::current.clear();
-            }
-          
-          /** @test reset global session config and start with
-           *        a pristine default session. 
-           * @todo  define the "global session config", implement session default ctor
-           */
-          void
-          resetSession ()
-            {
-              UNIMPLEMENTED ("construct a pristine session");
-              Session::current.reset();
-            }
-          
-          /** @test use a mock session serializer to load 
-           *        a preconfigured test session. Verify
-           *        objects are wired correctly.
-           *  @todo implement rebuilding session, implement mock session serializer 
-           */
-          void
-          loadMockSession ()
-            {
-              UNIMPLEMENTED ("rebuild session using a mock serializer");
-            }
-          
-          /** @test load serialized session using the
-           *        real session serializer implementation.
-           * @param src string with serialized session data
-           * @todo  implement real session serializer 
-           */
-          void
-          loadSession (const string& src)
-            {
-              UNIMPLEMENTED ("loding real sesion");
-            }
-          
-          /** @test serialize (save) the current session
-           * @param dest string recieving the generated serialized stream
-           * @todo  implement real session serializer
-           */
-          void
-          saveSession (string& dest)
-            {
-              UNIMPLEMENTED ("serialize current session");
-            }
-        };
-      
-      
-      /** Register this test class... */
-      LAUNCHER (SessionManager_test, "function session");
-      
-      
-      
-    } // namespace test
+namespace mobject {
+namespace session {
+namespace test    {
   
-  } // namespace session
-
-} // namespace mobject
+  
+  /*******************************************************************************
+   * Check the session management operations provided by mobject::session::Session
+   * This includes accessing the current Session (somewhat a singleton).
+   * @todo load a Mock session
+   * @todo create a session and save (serialise) it
+   * @todo load a real test session
+   */
+  class SessionManager_test : public Test
+    {
+      virtual void
+      run (Arg arg) 
+        {
+          getCurrentSession ();
+          clearSession();
+          loadMockSession();
+          
+          clearSession();
+          buildTestsession1();
+          string serialized;
+          saveSession (serialized);
+          loadSession (serialized);
+          ASSERT (checkTestsession1());
+        } 
+      
+      
+      /** @test accessing the current (global) session */
+      void
+      getCurrentSession ()
+        {
+          PSess sess = Session::current;
+          ASSERT (sess->isValid());
+        }
+      
+      
+      /** @test clear current session contents 
+       *        without resetting global session config.
+       * @todo  implement all session content, implement
+       *        mobject and asset deletion operations.
+       */
+      void
+      clearSession ()
+        {
+          UNIMPLEMENTED ("clear objects in current session");
+          Session::current.clear();
+        }
+      
+      
+      /** @test reset global session config and start with
+       *        a pristine default session. 
+       * @todo  define the "global session config", implement session default ctor
+       */
+      void
+      resetSession ()
+        {
+          UNIMPLEMENTED ("construct a pristine session");
+          Session::current.reset();
+        }
+      
+      
+      /** @test use a mock session serialiser to load 
+       *        a preconfigured test session. Verify
+       *        objects are wired correctly.
+       *  @todo implement rebuilding session, implement mock session serialiser
+       */
+      void
+      loadMockSession ()
+        {
+          UNIMPLEMENTED ("rebuild session using a mock serialiser");
+        }
+      
+      
+      /** @test load serialised session using the
+       *        real session serialiser implementation.
+       * @param src string with serialised session data
+       * @todo  implement real session serialiser 
+       */
+      void
+      loadSession (const string& src)
+        {
+          UNIMPLEMENTED ("loading real session");
+        }
+      
+      
+      /** @test serialise (save) the current session
+       * @param dest string receiving the generated serialised stream
+       * @todo  implement real session serialiser
+       */
+      void
+      saveSession (string& dest)
+        {
+          UNIMPLEMENTED ("Serialise current session");
+        }
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (SessionManager_test, "function session");
+  
+  
+  
+}}} // namespace mobject::session::test

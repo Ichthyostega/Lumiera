@@ -25,6 +25,7 @@
 #include "lib/lumitime.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
+#include "proc/mobject/placement-index.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
 
@@ -33,6 +34,7 @@
 using lumiera::Time;
 using std::string;
 using std::cout;
+using std::endl;
 
 
 namespace mobject {
@@ -40,7 +42,17 @@ namespace session {
 namespace test    {
   
   using namespace mobject::test;
-
+  typedef TestPlacement<TestSubMO21> PSub;
+  
+  
+  template<class A, class B>
+  inline bool
+  isSameObject (A const& a, B const& b)
+  {
+    return static_cast<const void*> (&a)
+        == static_cast<const void*> (&b);
+  }
+  
   
   /***************************************************************************
    * @test properties and behaviour of the reference-mechanism for Placements.
@@ -57,8 +69,6 @@ namespace test    {
       virtual void
       run (Arg) 
         {
-          typedef TestPlacement<TestSubMO21> PSub;
-          
           PSub p1(*new TestSubMO21);
           PSub p2(*new TestSubMO21);
           p2.chain(Time(2));         // define start time of Placement-2 to be at t=2
@@ -73,7 +83,7 @@ namespace test    {
           index->insert (p2, root);
           ASSERT (2 == index->size());
           
-          Placement::Id<TestSubMO21> id2 = p2.getID();
+          PlacementMO::Id<TestSubMO21> id2 = p2.recastID<TestSubMO21>();
           ASSERT (id2);
           ASSERT (id2 != p1.getID());
           
@@ -90,9 +100,9 @@ namespace test    {
           ASSERT (ref2 == refX);
           
           // indeed a "reference": resolves to the same memory location
-          ASSERT (&p1 == &*ref1);
-          ASSERT (&p2 == &*ref2);
-          ASSERT (&p2 == &*refX);
+          ASSERT (isSameObject (p1, *ref1));
+          ASSERT (isSameObject (p2, *ref2));
+          ASSERT (isSameObject (p2, *refX));
 
           cout << string(*ref1) << endl;
           cout << string(*ref2) << endl;
@@ -106,7 +116,7 @@ namespace test    {
           ASSERT (exPla.time == 2);                // indeed get back the time we set on p2 above
           ASSERT (2 == ref2.use_count());          // exPla shares ownership with p2
           
-          ASSERT (indey->contains(ref1));          // ref can stand-in for a placement-ID 
+          ASSERT (index->contains(ref1));          // ref can stand-in for a placement-ID 
           ASSERT (sizeof(id2) == sizeof(ref2));    // (and is actually implemented based on an ID)
           
           // assignment on placement refs
@@ -118,24 +128,24 @@ namespace test    {
           // re-assignment with a new placement
           refX = p2;
           ASSERT (refX == ref2);
-          ASSERT (&*refX == &p2);
+          ASSERT (isSameObject (*refX, p2));
           refX = p1.getID();
           ASSERT (refX == ref1);
           ASSERT (refX != ref2);
-          ASSERT (&*refX == &p1);
+          ASSERT (isSameObject (*refX, p1));
           
           LumieraUid luid2 (p2.getID().get());
           refX = luid2;                            // assignment works even based on a plain LUID
           ref2 = ref1;                             
           ref1 = refX;                             // dynamic type check when downcasting  
-          ASSERT (&p1 == &*ref2);
-          ASSERT (&p2 == &*ref1);
+          ASSERT (isSameObject (p1, *ref2));
+          ASSERT (isSameObject (p2, *ref1));
           refX = ref2;
           ref2 = ref1;
           ref1 = refX;
-          ASSERT (&p1 == &*ref1);
-          ASSERT (&p1 == &*refX);
-          ASSERT (&p2 == &*ref2);
+          ASSERT (isSameObject (p1, *ref1));
+          ASSERT (isSameObject (p1, *refX));
+          ASSERT (isSameObject (p2, *ref2));
           ASSERT (ref1 != ref2);
           ASSERT (ref1 == refX);
           ASSERT (ref2 != refX);

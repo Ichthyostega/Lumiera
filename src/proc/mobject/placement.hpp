@@ -120,6 +120,7 @@ namespace mobject {
       public HashIndexed<Placement<MObject>, lib::hash::LuidH>     //////TODO: really need to be inherited publicly?
     {
     protected:
+      typedef HashIndexed<Placement<MObject>, lib::hash::LuidH> HashInd;
       typedef shared_ptr<MObject> _SmartPtr;
       typedef void (*Deleter)(MObject*);
       typedef lumiera::Time Time;
@@ -146,12 +147,14 @@ namespace mobject {
       bool
       isCompatible ()  const
         {
-          return 0 != dynamic_cast<const Y*> (get());
+          return 0 != dynamic_cast<Y*> (get());
         }
       
       
       operator string()   const ;
       size_t use_count()  const { return _SmartPtr::use_count(); }
+      bool   isValid()    const { return _SmartPtr::use_count(); }
+      
       
       virtual ~Placement() {};
       
@@ -168,6 +171,7 @@ namespace mobject {
        *  provide the resulting (explicit) placement.
        */
       virtual ExplicitPlacement resolve ()  const; 
+                               //////////////////////////TODO could resolve() return a reference?  Otherwise placement-ref.hpp needs to include ExplicitPlacement 
       
       
     protected:
@@ -194,6 +198,7 @@ namespace mobject {
     {
     protected:
       typedef Placement<B> _Parent;
+      typedef typename _Parent::template Id<MO> const& _ID;
       typedef typename _Parent::Deleter Deleter;
       typedef typename _Parent::_SmartPtr _SmartPtr;
       
@@ -211,6 +216,13 @@ namespace mobject {
           return static_cast<MO*>
             (_SmartPtr::operator-> ());
         }
+      
+      _ID
+      getID ()  const  ///< @note overrides HashIndexed::getID to pass specific type information,
+        { 
+          return _Parent::template recastID<MO>();
+        }
+      
     };
   
   
@@ -219,6 +231,7 @@ namespace mobject {
   
   
   /** @todo cleanup uses of ref-to-placement. See Trac #115 */
+  typedef Placement<MObject> PlacementMO; 
   typedef Placement<MObject> PMO; 
 
 

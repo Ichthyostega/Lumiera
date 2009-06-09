@@ -64,8 +64,11 @@ namespace mobject {
   class MORef
     : public lib::Handle<MO>
     {
-      PlacementRef<MO> pRef_;
+      typedef lib::Handle<MO> _Par;
       
+      PlacementRef<MO> pRef_; ////////////////////////////////////////////////////////////////////TODO: how to create an "inactive" PlacementRef???
+      
+      using _Par::smPtr_;
       
     public:
       
@@ -74,7 +77,7 @@ namespace mobject {
         {
           REQUIRE (smPtr_.get(), "Lifecycle-Error");
           ENSURE (INSTANCEOF (MO, smPtr_.get()));
-          return smPtr_::operator-> ();
+          return smPtr_.operator-> ();
         }
       
       Placement<MO>& getPlacement();

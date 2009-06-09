@@ -108,7 +108,7 @@ namespace lib {
         bool operator!= (LuidH const& o)  const { return !operator== (o); }
         
         /** for passing to C APIs */
-        LUID get() { return &luid_; }
+        LUID get()                        const { return (LUID)&luid_; }
       };
     
     
@@ -170,6 +170,15 @@ namespace lib {
       getID ()  const
         { 
           return id_; 
+        }
+      
+      /** redefining of the specific type info of the Id is allowed,
+       *  as all share the same implementation */
+      template<typename T>
+      Id<T> const&
+      recastID ()  const
+        {
+          return reinterpret_cast<Id<T> const&> (getID());
         }
       
       void

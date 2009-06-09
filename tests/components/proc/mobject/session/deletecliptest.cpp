@@ -43,56 +43,51 @@ using proc_interface::IDA;
 using std::tr1::dynamic_pointer_cast;        /// TODO only temp
 
 
-namespace mobject
-  {
-  namespace session
+namespace mobject {
+namespace session {
+namespace test    {
+  
+  
+  
+  
+  /*******************************************************************
+   * @test removing a test clip from the EDL.
+   * @see  mobject::session::Clip
+   * @see  mobject::session::EDL
+   */
+  class DeleteClip_test : public Test
     {
-    namespace test
-      {
-      
-      
-      
-      
-      /*******************************************************************
-       * @test removing a test clip from the EDL.
-       * @see  mobject::session::Clip
-       * @see  mobject::session::EDL
-       */
-      class DeleteClip_test : public Test
+      virtual void
+      run (Arg) 
         {
-          virtual void
-          run (Arg) 
-            {
-              buildTestseesion1();
-              PSess sess = Session::current;
-              AssetManager& aMang = AssetManager::instance();
-              
-              UNIMPLEMENTED("typesafe searching for MObjects in the EDL");
+          buildTestsession1();
+          PSess sess = Session::current;
+          AssetManager& aMang = AssetManager::instance();
+          
+          UNIMPLEMENTED("typesafe searching for MObjects in the EDL");
+          
+          
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////TODO: work out how to search within EDL!!
+                
+          PClipMO clipPlacement = sess->currEDL().find(SESSION1_CLIP); 
+                                                              // global Var asigned in buildTestsession1()
+          PMedia media = clipPlacement->getMedia();
+          IDA clipAID = media->getID();
+          ASSERT (clipPlacement);
+          
+          sess->remove (clipPlacement);
+          
+          ASSERT (!sess->currEDL().find(SESSION1_CLIP));            // EDL forgot the Clip/Placement
+          ASSERT (!aMang.known (clipAID));                          // corresponding Clip Asset has disappeared
+          ASSERT (!clipPlacement->getMedia());                      // internal cross-links removed
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////TODO: work out how to search within EDL!!
+        }
+    };
   
-///////TODO: work out how to search within EDL!!
-//              
-//              PClipMO clipPlacement = sess->currEDL().find(SESSION1_CLIP); 
-//                                                              // global Var asigned in buildTestsession1()
-//              PMedia media = clipPlacement->getMedia();
-//              IDA clipAID = media->getID();
-//              ASSERT (clipPlacement);
-//              
-//              sess->remove (clipPlacement);
-//              
-//              ASSERT (!sess->currEDL().find(SESSION1_CLIP));            // EDL forgot the Clip/Placement
-//              ASSERT (!aMang.known (clipAID));                          // corresponding Clip Asset has disappeared 
-//              ASSERT (!clipPlacement->getMedia());                      // internal cross-links removed
-            } 
-        };
-      
-      
-      /** Register this test class... */
-      LAUNCHER (DeleteClip_test, "function session");
-      
-      
-      
-    } // namespace test
   
-  } // namespace session
-
-} // namespace mobject
+  /** Register this test class... */
+  LAUNCHER (DeleteClip_test, "function session");
+  
+  
+  
+}}} // namespace mobject::session::test

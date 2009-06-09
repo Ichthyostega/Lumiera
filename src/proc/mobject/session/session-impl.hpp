@@ -110,7 +110,7 @@ namespace session {
       /* ==== proc layer internal API ==== */
       
       /** @internal access point for PlacementIndex and PlacementRef */
-      static shared_ptr<PlacementIndex> getCurrentIndex () ;  
+      static shared_ptr<PlacementIndex>& getCurrentIndex () ;  
       
     };
   
