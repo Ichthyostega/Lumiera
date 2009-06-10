@@ -26,16 +26,21 @@
 //#include "proc/mobject/session.hpp"
 //#include "proc/mobject/session/edl.hpp"
 //#include "proc/mobject/session/testclip.hpp"
+//#include "proc/mobject/test-dummy-mobject.hpp"
+#include "lib/p.hpp"
 //#include "proc/mobject/placement.hpp"
 //#include "proc/mobject/placement-index.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
 #include "proc/control/command-def.hpp"
 //#include "lib/util.hpp"
 
+#include <tr1/functional>
 //#include <boost/format.hpp>
 //#include <iostream>
 #include <string>
 
+//using std::tr1::bind;
+using std::tr1::function;
 //using boost::format;
 //using lumiera::Time;
 //using util::contains;
@@ -47,10 +52,71 @@ namespace control {
 namespace test    {
 
 //  using session::test::TestClip;
+  using lib::P;
 
-  namespace command1 {
+  ////////////////////////////////////////////TODO braindump
   
-    ////////////////////////////////////////////TODO braindump
+  template<typename SIG, typename MEM>
+  struct BuildUndoCapturing_Signature;
+  
+  template<typename ARG, typename MEM>
+  struct BuildUndoCapturing_Signature<function(ARG), MEM>
+    {
+      typedef function<MEM(ARG)> type;
+    };
+  
+  template<typename SIG, typename MEM>
+  struct BuildUndoOperation_Signature
+    {
+      typedef function<void(ExtendedArgs)> type;
+    };
+  
+  class CommDef
+    {
+      Symbol id_;
+      
+      template<typename SIG, typename MEM>
+      struct UndoDefinition
+        {
+          UndoDefinition
+          undoOperation (typename BuildUndoOperation_Signature<SIG,MEM>::type how_to_Undo)
+            {
+              
+            }
+          
+        };
+      
+      template<typename SIG>
+      struct BasicDefinition
+        {
+          template<typename MEM>
+          UndoDefinition<SIG,MEM>
+          captureUndo (typename BuildUndoCapturing_Signature<function<SIG>,MEM>::type how_to_capture_UndoState)
+            {
+              
+            }
+          
+        };
+      
+    public:
+      CommDef (Symbol cmdID)
+        : id_(cmdID)
+        { }
+      
+      template<typename SIG>
+      BasicDefinition<SIG>
+      operation (function<SIG> operation_to_define)
+        {
+          
+        }
+    };
+  
+  
+  
+  
+  /////////////////////////////
+  /////////////////////////////
+
 /*  
     bind: opFunc(a,b,c) -> op(void)
     
@@ -61,10 +127,28 @@ namespace test    {
     return bind( recursion(), param)
      
 */  
-    ////////////////////////////////////////////TODO braindump
+  namespace command1 {
+    void
+    command1_do (P<long> dummyObj, int randVal)
+    {
+      *dummyObj += randVal;
+    }
+    
+    long
+    command1_cap (P<long> dummyObj, int)
+    {
+      return *dummyObj;
+    }
+    
+    void
+    command1_undo (P<long> dummyObj, int, long oldVal)
+    {
+      *dummyObj = oldVal;
+    }
   
   }
   
+  ////////////////////////////////////////////TODO braindump
   
   
   /***************************************************************************
@@ -87,6 +171,17 @@ namespace test    {
       run (Arg) 
         {
           /////////////////////////////////TODO
+        }
+      
+      void
+      defineCommands ()
+        {
+          CommDef ("test.command1")
+              .operation (command1_do)
+              .captureUndo (command1_cap)
+              .undoOperation (command1_undo)
+              .bind (obj, randVal)
+              ;
         }
       
       void

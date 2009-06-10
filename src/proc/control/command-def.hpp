@@ -68,8 +68,12 @@ namespace control {
    */
   class CommandDef
     {
+      Symbol id_;
       
     public:
+      CommandDef (Symbol cmdID)
+        : id_(cmdID)
+        { }
       
     };
   ////////////////TODO currently just fleshing  out the API....
