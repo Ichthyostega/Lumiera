@@ -59,10 +59,8 @@ This code is heavily inspired by
 
 
 
-namespace lumiera
-  {
-  namespace typelist
-    {
+namespace lumiera {
+namespace typelist{
     
     class NullType 
       { 
@@ -120,7 +118,5 @@ namespace lumiera
     typedef Node<NullType,NullType> NodeNull;
     
     
-  } // namespace typelist
-
-} // namespace lumiera
+}} // namespace lumiera::typelist
 #endif

@@ -48,6 +48,7 @@
 #define CONTROL_COMMAND_H
 
 //#include "pre.hpp"
+#include "include/symbol.hpp"
 #include "proc/control/command.hpp"
 #include "proc/control/mutation.hpp"
 #include "proc/control/command-closure.hpp"
@@ -59,7 +60,7 @@
 
 namespace control {
   
-//  using lumiera::Symbol;
+  using lumiera::Symbol;
 //  using std::tr1::shared_ptr;
   
   

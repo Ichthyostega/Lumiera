@@ -32,44 +32,230 @@
 //#include "proc/mobject/placement-index.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
 #include "proc/control/command-def.hpp"
+#include "lib/lumitime.hpp"
 //#include "lib/util.hpp"
+
+#include "lib/meta/typelist.hpp"
+#include "lib/meta/typelistutil.hpp"
 
 #include <tr1/functional>
 //#include <boost/format.hpp>
 //#include <iostream>
 #include <string>
 
-//using std::tr1::bind;
+using std::tr1::bind;
+//using std::tr1::placeholders::_1;
+//using std::tr1::placeholders::_2;
 using std::tr1::function;
 //using boost::format;
-//using lumiera::Time;
+using lumiera::Time;
 //using util::contains;
 using std::string;
 //using std::cout;
 
 
+namespace lumiera {
+namespace typelist{
+
+
+  ////////////////////////////////////////////TODO braindump
+  
+  template< typename SIG>
+  struct FunctionSignature;
+  
+  template< typename RET>
+  struct FunctionSignature< function<RET(void)> >
+  {
+    typedef RET Ret;
+    typedef Types<> Args;
+  };
+  
+  template< typename RET
+          , typename A1
+          >
+  struct FunctionSignature< function<RET(A1)> >
+  {
+    typedef RET Ret;
+    typedef Types<A1> Args;
+  };
+  
+  template< typename RET
+          , typename A1
+          , typename A2
+          >
+  struct FunctionSignature< function<RET(A1,A2)> >
+  {
+    typedef RET Ret;
+    typedef Types<A1,A2> Args;
+  };
+  
+  template< typename RET
+          , typename A1
+          , typename A2
+          , typename A3
+          >
+  struct FunctionSignature< function<RET(A1,A2,A3)> >
+  {
+    typedef RET Ret;
+    typedef Types<A1,A2,A3> Args;
+  };
+  
+  template< typename RET
+          , typename A1
+          , typename A2
+          , typename A3
+          , typename A4
+          >
+  struct FunctionSignature< function<RET(A1,A2,A3,A4)> >
+  {
+    typedef RET Ret;
+    typedef Types<A1,A2,A3,A4> Args;
+  };
+  
+  template< typename RET
+          , typename A1
+          , typename A2
+          , typename A3
+          , typename A4
+          , typename A5
+          >
+  struct FunctionSignature< function<RET(A1,A2,A3,A4,A5)> >
+  {
+    typedef RET Ret;
+    typedef Types<A1,A2,A3,A4,A5> Args;
+  };
+  
+  
+  template<typename RET, typename LI>
+  struct FunctionTypedef;
+  
+  template< typename RET>
+  struct FunctionTypedef<RET, Types<> >
+  {
+    typedef function<RET(void)> Func;
+    typedef          RET Sig();
+  };
+  
+  template< typename RET
+          , typename A1
+          >
+  struct FunctionTypedef<RET, Types<A1> >
+  {
+    typedef function<RET(A1)> Func;
+    typedef          RET Sig(A1);
+  };
+  
+  template< typename RET
+          , typename A1
+          , typename A2
+          >
+  struct FunctionTypedef<RET, Types<A1,A2> >
+  {
+    typedef function<RET(A1,A2)> Func;
+    typedef          RET Sig(A1,A2);
+  };
+  
+  template< typename RET
+          , typename A1
+          , typename A2
+          , typename A3
+          >
+  struct FunctionTypedef<RET, Types<A1,A2,A3> >
+  {
+    typedef function<RET(A1,A2,A3)> Func;
+    typedef          RET Sig(A1,A2,A3);
+  };
+  
+  template< typename RET
+          , typename A1
+          , typename A2
+          , typename A3
+          , typename A4
+          >
+  struct FunctionTypedef<RET, Types<A1,A2,A3,A4> >
+  {
+    typedef function<RET(A1,A2,A3,A4)> Func;
+    typedef          RET Sig(A1,A2,A3,A4);
+  };
+  
+  template< typename RET
+          , typename A1
+          , typename A2
+          , typename A3
+          , typename A4
+          , typename A5
+          >
+  struct FunctionTypedef<RET, Types<A1,A2,A3,A4,A5> >
+  {
+    typedef function<RET(A1,A2,A3,A4,A5)> Func;
+    typedef          RET Sig(A1,A2,A3,A4,A5);
+  };
+  
+  
+  
+  
+  template<class T, class TYPES>
+  struct Prepend;
+  
+  template< typename A1
+          , typename A2
+          , typename A3
+          , typename A4
+          , typename A5
+          , typename IGN
+          >
+  struct Prepend<A1, Types<A2,A3,A4,A5,IGN> >
+  {
+    typedef Types<A1,A2,A3,A4,A5> Tuple;
+  };
+
+  template<class LI>
+  struct Tuple;
+
+  template<>
+  struct Tuple<NullType>
+    {
+      typedef Types<> Type;
+    };
+  
+  template<class TY, class TYPES>
+  struct Tuple<Node<TY,TYPES> >
+    {
+      typedef typename Prepend<TY, typename Tuple<TYPES>::Type >::Tuple Type;
+    };
+  
+  
+  
+}} // namespace lumiera::typelist
+  
 namespace control {
 namespace test    {
 
 //  using session::test::TestClip;
-  using lib::P;
-
-  ////////////////////////////////////////////TODO braindump
+  using lumiera::P;
+  
+  using lumiera::typelist::FunctionSignature;
+  using lumiera::typelist::FunctionTypedef;
+  
+  using lumiera::typelist::Tuple;
+  using lumiera::typelist::Append;
   
   template<typename SIG, typename MEM>
-  struct BuildUndoCapturing_Signature;
-  
-  template<typename ARG, typename MEM>
-  struct BuildUndoCapturing_Signature<function(ARG), MEM>
+  struct BuildUndoCapturing_Signature
     {
-      typedef function<MEM(ARG)> type;
+      typedef typename FunctionSignature< function<SIG> >::Args Args;
+      typedef typename FunctionTypedef<MEM,Args>::Sig           type;
     };
   
   template<typename SIG, typename MEM>
   struct BuildUndoOperation_Signature
     {
-      typedef function<void(ExtendedArgs)> type;
+      typedef typename FunctionSignature< function<SIG> >::Args::List Args;
+      typedef typename Append<Args, MEM>::List                        ExtendedArglist;
+      typedef typename Tuple<ExtendedArglist>::Type                   ExtendedArgs;
+      typedef typename FunctionTypedef<void, ExtendedArgs>::Sig       type;
     };
+  
   
   class CommDef
     {
@@ -78,9 +264,12 @@ namespace test    {
       template<typename SIG, typename MEM>
       struct UndoDefinition
         {
+          typedef typename BuildUndoOperation_Signature<SIG,MEM>::type UndoSig; 
+          
           UndoDefinition
-          undoOperation (typename BuildUndoOperation_Signature<SIG,MEM>::type how_to_Undo)
+          undoOperation (UndoSig& how_to_Undo)
             {
+              function<UndoSig> opera3 (how_to_Undo);
               
             }
           
@@ -91,8 +280,11 @@ namespace test    {
         {
           template<typename MEM>
           UndoDefinition<SIG,MEM>
-          captureUndo (typename BuildUndoCapturing_Signature<function<SIG>,MEM>::type how_to_capture_UndoState)
+          captureUndo (typename BuildUndoCapturing_Signature<SIG,MEM>::type& how_to_capture_UndoState)
             {
+              typedef typename BuildUndoCapturing_Signature<SIG,MEM>::type UndoCapSig;
+              
+              function<UndoCapSig> opera2 (how_to_capture_UndoState);
               
             }
           
@@ -105,9 +297,9 @@ namespace test    {
       
       template<typename SIG>
       BasicDefinition<SIG>
-      operation (function<SIG> operation_to_define)
+      operation (SIG& operation_to_define)
         {
-          
+          function<SIG> opera1 (operation_to_define);
         }
     };
   
@@ -129,19 +321,19 @@ namespace test    {
 */  
   namespace command1 {
     void
-    command1_do (P<long> dummyObj, int randVal)
+    operate (P<Time> dummyObj, int randVal)
     {
-      *dummyObj += randVal;
+      *dummyObj += Time(randVal);
     }
     
-    long
-    command1_cap (P<long> dummyObj, int)
+    Time
+    capture (P<Time> dummyObj, int)
     {
       return *dummyObj;
     }
     
     void
-    command1_undo (P<long> dummyObj, int, long oldVal)
+    undoIt (P<Time> dummyObj, int, Time oldVal)
     {
       *dummyObj = oldVal;
     }
@@ -177,10 +369,10 @@ namespace test    {
       defineCommands ()
         {
           CommDef ("test.command1")
-              .operation (command1_do)
-              .captureUndo (command1_cap)
-              .undoOperation (command1_undo)
-              .bind (obj, randVal)
+              .operation (command1::operate)
+              .captureUndo<Time> (command1::capture)                 /////////////////TODO: can we get rid of the type hint? (i.e. derive the type <Time> automatically?)
+              .undoOperation (command1::undoIt)
+//              .bind (obj, randVal)
               ;
         }
       
