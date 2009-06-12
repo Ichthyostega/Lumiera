@@ -225,6 +225,31 @@ namespace typelist{
     };
   
   
+  template<class TYPES>
+  struct SplitLast;
+  
+  template<>
+  struct SplitLast<NullType>
+    {
+      typedef NullType Type;
+      typedef NullType Prefix;
+    };
+  
+  template<class TY>
+  struct SplitLast<Node<TY,NullType> >
+    {
+      typedef TY Type;
+      typedef NullType Prefix;
+    };
+  
+  template<class TY, class TYPES>
+  struct SplitLast<Node<TY,TYPES> >
+    {
+      typedef typename SplitLast<TYPES>::Type Type;
+      typedef typename Append<TY, typename SplitLast<TYPES>::Prefix>::List Prefix;
+    };
+
+  
   
 }} // namespace lumiera::typelist
   
@@ -239,21 +264,56 @@ namespace test    {
   
   using lumiera::typelist::Tuple;
   using lumiera::typelist::Append;
+  using lumiera::typelist::SplitLast;
   
-  template<typename SIG, typename MEM>
-  struct BuildUndoCapturing_Signature
+  
+  /** 
+   * Type analysis helper template. 
+   * Used for dissecting a given type signature to derive
+   * the related basic operation signature, the signature of a possible Undo-function
+   * and the signature necessary for capturing undo information. The implementation
+   * relies on re-binding an embedded type defining template, based on the actual
+   * case, as identified by the structure of the given parameter signature.
+   */
+  template<typename SIG>
+  struct UndoSignature
     {
+    private:
       typedef typename FunctionSignature< function<SIG> >::Args Args;
-      typedef typename FunctionTypedef<MEM,Args>::Sig           type;
-    };
-  
-  template<typename SIG, typename MEM>
-  struct BuildUndoOperation_Signature
-    {
-      typedef typename FunctionSignature< function<SIG> >::Args::List Args;
-      typedef typename Append<Args, MEM>::List                        ExtendedArglist;
-      typedef typename Tuple<ExtendedArglist>::Type                   ExtendedArgs;
-      typedef typename FunctionTypedef<void, ExtendedArgs>::Sig       type;
+      typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
+      
+      /** Case1: defining the Undo-Capture function */
+      template<typename RET, typename ARG>
+      struct Case
+        {
+          typedef RET Memento;
+          typedef typename Append<ARG, Memento>::List ExtendedArglist;
+          typedef typename Tuple<ExtendedArglist>::Type ExtendedArgs;
+          
+          typedef typename FunctionTypedef<void, ARG>::Sig           OperateSig;
+          typedef typename FunctionTypedef<Ret,ARG>::Sig             CaptureSig;
+          typedef typename FunctionTypedef<void, ExtendedArgs>::Sig  UndoOp_Sig;
+        };
+      /** Case2: defining the actual Undo function */
+      template<typename ARG>
+      struct Case<void,ARG>
+        {
+          typedef typename ARG::List Args;
+          
+          typedef typename SplitLast<Args>::Type Memento;
+          typedef typename SplitLast<Args>::Prefix OperationArglist;
+          typedef typename Tuple<OperationArglist>::Type OperationArgs;
+          
+          typedef typename FunctionTypedef<void, OperationArgs>::Sig OperateSig;
+          typedef typename FunctionTypedef<Ret,OperationArgs>::Sig   CaptureSig;
+          typedef typename FunctionTypedef<void, ARG>::Sig           UndoOp_Sig;
+        };
+      
+    public:
+      typedef typename Case<Ret,Args>::CaptureSig CaptureSig;
+      typedef typename Case<Ret,Args>::UndoOp_Sig UndoOp_Sig;
+      typedef typename Case<Ret,Args>::OperateSig OperateSig;
+      typedef typename Case<Ret,Args>::Memento    Memento;
     };
   
   
@@ -264,25 +324,35 @@ namespace test    {
       template<typename SIG, typename MEM>
       struct UndoDefinition
         {
-          typedef typename BuildUndoOperation_Signature<SIG,MEM>::type UndoSig; 
           
+          template<typename SIG2>
           UndoDefinition
-          undoOperation (UndoSig& how_to_Undo)
+          undoOperation (SIG2& how_to_Undo)
             {
+              typedef typename UndoSignature<SIG2>::UndoOp_Sig UndoSig;
+              
               function<UndoSig> opera3 (how_to_Undo);
               
             }
           
         };
       
+      /** type re-binding helper: create a suitable UndoDefinition type,
+       *  based on the UndoSignature template instance given as parameter */
+      template<typename U_SIG>
+      struct BuildUndoDefType
+        {
+          typedef UndoDefinition<typename U_SIG::OperateSig, typename U_SIG::Memento> Type;
+        };
+      
       template<typename SIG>
       struct BasicDefinition
         {
-          template<typename MEM>
-          UndoDefinition<SIG,MEM>
-          captureUndo (typename BuildUndoCapturing_Signature<SIG,MEM>::type& how_to_capture_UndoState)
+          template<typename SIG2>
+          typename BuildUndoDefType<UndoSignature<SIG2> >::Type
+          captureUndo (SIG2& how_to_capture_UndoState)
             {
-              typedef typename BuildUndoCapturing_Signature<SIG,MEM>::type UndoCapSig;
+              typedef typename UndoSignature<SIG2>::CaptureSig UndoCapSig;
               
               function<UndoCapSig> opera2 (how_to_capture_UndoState);
               
@@ -370,7 +440,7 @@ namespace test    {
         {
           CommDef ("test.command1")
               .operation (command1::operate)
-              .captureUndo<Time> (command1::capture)                 /////////////////TODO: can we get rid of the type hint? (i.e. derive the type <Time> automatically?)
+              .captureUndo (command1::capture)
               .undoOperation (command1::undoIt)
 //              .bind (obj, randVal)
               ;
