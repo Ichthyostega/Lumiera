@@ -319,8 +319,29 @@ namespace test    {
       typedef typename Case<Ret,Args>::OperateSig OperateSig;
       typedef typename Case<Ret,Args>::Memento    Memento;
     };
+
   
   
+  
+  
+  /**
+   * Helper class used solely for \em defining a Command-Object.
+   * This technique is known as "fluent API", see http://en.wikipedia.org/wiki/Fluent_interface
+   * The basic idea is for the user to create a disposable instance of this definition helper,
+   * only for calling a chain of definition functions, which internally build the actual Command object.
+   * Finally, the created Command object will be stored into a registry or handed over to the
+   * ProcDispatcher. To give an example:
+   * \code
+   *    CommandDefinition ("test.command1")
+   *           .operation (command1::operate)          // provide the function to be executed as command
+   *           .captureUndo (command1::capture)        // provide the function capturing Undo state
+   *           .undoOperation (command1::undoIt)       // provide the function which might undo the comand
+   *           .bind (obj, randVal)                    // bind to the actual command parameters
+   *           .executeSync();                         // convenience call, forwarding the Command to dispatch.
+   * \endcode
+   * 
+   * @todo of course, this needs to be extracted into command-definition.hpp 
+   */
   class CommDef
     {
       Symbol id_;
