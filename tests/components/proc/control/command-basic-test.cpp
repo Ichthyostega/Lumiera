@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 //#include "proc/asset/media.hpp"
 //#include "proc/mobject/session.hpp"
 //#include "proc/mobject/session/edl.hpp"
@@ -40,7 +41,7 @@
 
 #include <tr1/functional>
 //#include <boost/format.hpp>
-//#include <iostream>
+#include <iostream>
 #include <string>
 
 using std::tr1::bind;
@@ -51,7 +52,8 @@ using std::tr1::function;
 using lumiera::Time;
 //using util::contains;
 using std::string;
-//using std::cout;
+using std::cout;
+using std::endl;
 
 
 namespace lumiera {
@@ -256,6 +258,8 @@ namespace typelist{
 namespace control {
 namespace test    {
 
+  using lib::test::showSizeof;
+
 //  using session::test::TestClip;
   using lumiera::P;
   
@@ -324,15 +328,25 @@ namespace test    {
       template<typename SIG, typename MEM>
       struct UndoDefinition
         {
+          typedef typename FunctionSignature< function<SIG> >::Args BasicArgs;
+          typedef typename FunctionTypedef<MEM,BasicArgs>::Sig      UndoCaptureSig;
+          
+          UndoDefinition (function<UndoCaptureSig>& undoCapOperation)
+            {
+              cout << showSizeof(undoCapOperation) << endl;
+              UNIMPLEMENTED ("re-fetch command definition and augment it with Functor for capturing Undo information");
+            }
           
           template<typename SIG2>
-          UndoDefinition
+          UndoDefinition&
           undoOperation (SIG2& how_to_Undo)
             {
               typedef typename UndoSignature<SIG2>::UndoOp_Sig UndoSig;
               
               function<UndoSig> opera3 (how_to_Undo);
               
+              UNIMPLEMENTED ("store actual Undo-Functor into the command definition held by the enclosing UndoDefinition instance");
+              return *this;
             }
           
         };
@@ -348,14 +362,22 @@ namespace test    {
       template<typename SIG>
       struct BasicDefinition
         {
+          BasicDefinition(function<SIG>& operation)
+            {
+              cout << showSizeof(operation) << endl;
+              UNIMPLEMENTED ("create new command object an store the operation functor");
+            }
+          
+          
           template<typename SIG2>
           typename BuildUndoDefType<UndoSignature<SIG2> >::Type
           captureUndo (SIG2& how_to_capture_UndoState)
             {
               typedef typename UndoSignature<SIG2>::CaptureSig UndoCapSig;
+              typedef typename BuildUndoDefType<UndoSignature<SIG2> >::Type SpecificUndoDefinition;
               
               function<UndoCapSig> opera2 (how_to_capture_UndoState);
-              
+              return SpecificUndoDefinition (opera2);
             }
           
         };
@@ -370,6 +392,7 @@ namespace test    {
       operation (SIG& operation_to_define)
         {
           function<SIG> opera1 (operation_to_define);
+          return BasicDefinition<SIG>(opera1);
         }
     };
   
@@ -378,6 +401,9 @@ namespace test    {
   
   /////////////////////////////
   /////////////////////////////
+  
+  //////////////////////////// start of the actual Test....
+  
 
 /*  
     bind: opFunc(a,b,c) -> op(void)
