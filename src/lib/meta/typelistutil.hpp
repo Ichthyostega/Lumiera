@@ -86,7 +86,7 @@ namespace lumiera {
     template<class T, class TAIL>
     struct CondNode<true, T, TAIL>         { typedef Node<T,TAIL>  Next; };
     
-    /** filter away those types which don't fulfill a predicate metafunction */
+    /** filter away those types which don't fulfil a predicate metafunction */
     template< class TYPES 
             , template<class> class _P_    ///< a template providing a boolean member \c ::value
             >

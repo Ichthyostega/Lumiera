@@ -196,6 +196,7 @@ namespace typelist{
   
   
   
+  /////////////////////////very basic facility: Typed tuples
   
   template<class T, class TYPES>
   struct Prepend;
@@ -212,21 +213,97 @@ namespace typelist{
     typedef Types<A1,A2,A3,A4,A5> Tuple;
   };
 
-  template<class LI>
+  template<class TYPES>
   struct Tuple;
 
   template<>
   struct Tuple<NullType>
     {
-      typedef Types<> Type;
+      typedef NullType HeadType;
+      typedef Types<>  TailType;
+      typedef Types<>  Type;
+      
+      typedef NullType ArgList_;
+      typedef Tuple<Type> ThisTuple;
+      typedef Tuple<NullType> Tail;
     };
   
   template<class TY, class TYPES>
   struct Tuple<Node<TY,TYPES> >
+    : Tuple<TYPES>
     {
-      typedef typename Prepend<TY, typename Tuple<TYPES>::Type >::Tuple Type;
+      typedef TY                               HeadType;
+      typedef typename Tuple<TYPES>::Type      TailType;
+      typedef typename Prepend<TY,Tail>::Tuple Type;
+      
+      typedef typename Node<TY,TYPES> ArgList_;
+      typedef Tuple<Type> ThisTuple;
+      typedef Tuple<TYPES> Tail;
+      
+      Tuple ( TY a1 =TY()
+            , Tail tail =Tail()
+            )
+        : Tuple<TYPES> (tail.getHead(), tail.getTail()),
+          val_(a1)
+        { }
+      
+      TY  & getHead() { return val_; }
+      Tail& getTail() { return static_cast<Tail&> (*this); }
+      
+    private:
+      T1 val_;
     };
   
+  template< typename T1
+          , typename T2 =NullType
+          , typename T3 =NullType
+          , typename T4 =NullType
+          , typename T5 =NullType
+          >
+  struct Tuple<Types<T1,T2,T3,T4,T5> >
+    : Tuple<typename Types<T1,T2,T3,T4,T5>::List>
+    {
+      typedef T1                          HeadType;
+      typedef Types<T2,T3,T4,T5,NullType> TailType;
+      typedef Types<T1,T2,T3,T4,T5>       Type;
+      
+      typedef typename Type::List ArgList_;
+      typedef Tuple<Type> ThisTuple;
+      typedef Tuple<TailType> Tail;
+      
+      Tuple ( T1 a1 =T1()
+            , T2 a2 =T2()
+            , T3 a3 =T3()
+            , T4 a4 =T4()
+            , T5 a5 =T5()
+            )
+        : Tuple<ArgList_>(a1,makeTuple(a2,a3,a4,a5))
+        { }
+      
+      using ArgList_::getHead;
+      using ArgList_::getTail;
+      
+      template<uint i> struct Shifted   { typedef typename Tail::Shifted<i-1>::Type Tuple; };
+      template<>       struct Shifted<0>{ typedef ThisTuple Tuple; };
+      
+      template<uint i>
+      typename Shifted<i>::Tuple&
+      getShifted ()
+        {
+          typedef typename Shifted<i>::Tuple TailI;
+          return static_cast<TailI&> (*this);
+        }
+      
+      template<uint i>
+      typename Shifted<i>::Tuple::HeadType&
+      getAt ()
+        {
+          return getShifted<i>().getHead();
+        }
+    };
+  
+  
+  ///////////////////////// additional typelist manipulators
   
   template<class TYPES>
   struct SplitLast;
@@ -327,41 +404,6 @@ namespace test    {
   
   
   
-  template< class T1
-          , class T2 =NullType
-          , class T3 =NullType
-          , class T4 =NullType
-          , class T5 =NullType
-          >
-  class Tup
-    : Tup<T2,T3,T4,T5,NullType>
-    {
-      typedef Tup<T2,T3,T4,T5,NullType> Par_;
-      
-      T1 v1_;
-      
-    public:
-      Tup ( T1 a1=T1()
-          , T2 a2=T2()
-          , T3 a3=T3()
-          , T4 a4=T4()
-          , T5 a5=T5()
-          )
-        : Par_(a2,a3,a4,a5),
-          v1_(a1)
-        { }
-      
-      T1   getHead() { return v1_; }
-      Par_ getTail() { return static_cast<Par_&>(*this); }
-      
-      typedef Types<T1,T2,T3,T4,T5> ArgTypes;
-    };
-  
-  template<>
-  class Tup<NullType,NullType,NullType,NullType,NullType>
-    {
-      typedef Types<> ArgTypes;
-    };
 
   
   class Closure
