@@ -38,6 +38,7 @@
 
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelistutil.hpp"
+#include "lib/meta/generator.hpp"
 
 #include <tr1/functional>
 //#include <boost/format.hpp>
@@ -266,10 +267,13 @@ namespace test    {
   using lumiera::typelist::FunctionSignature;
   using lumiera::typelist::FunctionTypedef;
   
+  using lumiera::typelist::Types;
+  using lumiera::typelist::NullType;
   using lumiera::typelist::Tuple;
   using lumiera::typelist::Append;
   using lumiera::typelist::SplitLast;
   
+  using lumiera::typelist::InstantiateChained;
   
   /** 
    * Type analysis helper template. 
@@ -323,6 +327,79 @@ namespace test    {
   
   
   
+  template< class T1
+          , class T2 =NullType
+          , class T3 =NullType
+          , class T4 =NullType
+          , class T5 =NullType
+          >
+  class Tup
+    : Tup<T2,T3,T4,T5,NullType>
+    {
+      typedef Tup<T2,T3,T4,T5,NullType> Par_;
+      
+      T1 v1_;
+      
+    public:
+      Tup ( T1 a1=T1()
+          , T2 a2=T2()
+          , T3 a3=T3()
+          , T4 a4=T4()
+          , T5 a5=T5()
+          )
+        : Par_(a2,a3,a4,a5),
+          v1_(a1)
+        { }
+      
+      T1   getHead() { return v1_; }
+      Par_ getTail() { return static_cast<Par_&>(*this); }
+      
+      typedef Types<T1,T2,T3,T4,T5> ArgTypes;
+    };
+  
+  template<>
+  class Tup<NullType,NullType,NullType,NullType,NullType>
+    {
+      typedef Types<> ArgTypes;
+    };
+
+  
+  class Closure
+    {
+      
+    };
+  
+  template<typename TY, class B>
+  struct CloseParam
+    : B
+    {
+      TY par_;
+      
+      template<typename TUP>
+      CloseParam (TUP& arg)
+        : B (arg.getTail()),
+          par_(arg.getHead())
+        { }
+    };
+  
+  template<typename TYPES>
+  struct Close
+    : InstantiateChained<typename TYPES::List, CloseParam, Closure>
+    {
+      
+    };
+  
+  struct ClosureBuilder
+    {
+      template<typename TUP>
+      Closure*
+      bind (TUP args)
+        {
+          return new Close<typename TUP::ArgTypes> (args);
+        }
+    };
+  
+  
   
   /**
    * Helper class used solely for \em defining a Command-Object.
@@ -335,7 +412,7 @@ namespace test    {
    *    CommandDefinition ("test.command1")
    *           .operation (command1::operate)          // provide the function to be executed as command
    *           .captureUndo (command1::capture)        // provide the function capturing Undo state
-   *           .undoOperation (command1::undoIt)       // provide the function which might undo the comand
+   *           .undoOperation (command1::undoIt)       // provide the function which might undo the command
    *           .bind (obj, randVal)                    // bind to the actual command parameters
    *           .executeSync();                         // convenience call, forwarding the Command to dispatch.
    * \endcode

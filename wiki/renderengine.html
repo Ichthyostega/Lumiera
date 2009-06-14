@@ -951,13 +951,45 @@ TertiaryMid: #99a
 TertiaryDark: #667
 Error: #f88</pre>
 </div>
-<div title="Command" modifier="Ichthyostega" modified="200906072100" created="200906072020" tags="def SessionLogic draft" changecount="5">
+<div title="Command" modifier="Ichthyostega" modified="200906140108" created="200906072020" tags="def SessionLogic draft" changecount="6">
 <pre>Within Proc-Layer, a Command is the abstract representation of a single operation or a compound of operations mutating the HighLevelModel.
 Thus, each command is a ''Functor'' and a ''Closure'' ([[command pattern|http://en.wikipedia.org/wiki/Command_pattern]]), allowing commands to be treated uniformly, enqueued in a [[dispatcher|ProcDispatcher]], logged to the SessionStorage and registered with the UndoManager.
 
-&amp;rarr; see CommandHandling</pre>
+Commands are //defined// using a [[fluent API|http://en.wikipedia.org/wiki/Fluent_interface]], just by providing apropriate functions. Additionally, the Closure necessary for executing a command is built by binding to a set of concrete parameters. After reaching this point, the state of the internal representation could be serialised by plain-C function calls, which is important for integration with the SessionStorage.
+
+&amp;rarr; see CommandDefinition
+&amp;rarr; see CommandHandling
+</pre>
 </div>
-<div title="CommandHandling" modifier="Ichthyostega" modified="200906080316" created="200906072048" tags="SessionLogic spec draft decision design img" changecount="21">
+<div title="CommandDefinition" modifier="Ichthyostega" modified="200906140147" created="200906140124" tags="SessionLogic spec draft decision design img" changecount="9">
+<pre>Commands can be identified and accessed //by name// &amp;mdash; consequently there needs to be an internal command registry, including a link to the actual implementing function, thus allowing to re-establish the connection between command and implementing functions when de-serialising a persisted command. To create a command, we need to provide the following informations
+* operation function actually implementing the command
+* function to [[undo|UndoManager]] the effect of the command
+* function to capture state to be used by UNDO.
+* a set of actual parameters to bind into these functions (closure).
+
+!Command definition object
+The process of creating a command by providing these building blocks is governed by a ~CommandDef helper object. According to the [[fluent definition style|http://en.wikipedia.org/wiki/Fluent_interface]], the user is expected to invoke a chain of definition functions, finally leading to the internal registration of the completed command object, which then might be dispatched or persisted. For example
+{{{
+CommandDefinition (&quot;test.command1&quot;)
+     .operation (command1::operate)          // provide the function to be executed as command
+     .captureUndo (command1::capture)        // provide the function capturing Undo state
+     .undoOperation (command1::undoIt)       // provide the function which might undo the command
+     .bind (obj, val1,val2)                  // bind to the actual command parameters (stores command internally)
+     .executeSync();                         // convenience call, forwarding the Command to dispatch.
+}}}
+
+!Operation parameters
+While generally there is //no limitation// on the number and type of parameters, the set of implementing functions and the {{{bind(...)}}} call are required to match. Inconsistencies will be detected by the compiler. In addition to taking the //same parameters as the command operation,// the {{{captureUndo()}}} function is required to return (by value) a //memento//&amp;nbsp; type, which, in case of invoking the {{{undo()}}}-function, will be provided as additional parameter. To summarise:
+|!Function|&gt;|!ret(params)|
+| operation| void |(P1,..PN)|
+| captureUndo| MEM |(P1,..PN)|
+| undoOperation| void |(P1,..PN,MEM)|
+| bind| void |(P1,..PN)|
+Usually, parameters should be passed //by value// &amp;mdash; with the exception of target object(s), which are typically bound as MObjectRef, causing them to be resolved at commad execution time (late binding).
+</pre>
+</div>
+<div title="CommandHandling" modifier="Ichthyostega" modified="200906140100" created="200906072048" tags="SessionLogic spec draft decision design img" changecount="23">
 <pre>Organising any ''mutating'' operations executable by the user (via GUI) by means of the [[command pattern|http://en.wikipedia.org/wiki/Command_pattern]] can be considered //state of the art//&amp;nbsp; today. First of all, it allows to discern the specific implementation operations to be called on one or several objects within the HighLevelModel from the operation requested by the user, the latter being rather a concept. A command can be labeled clearly, executed under controlled circumstances, allowing transactional behaviour.
 
 
@@ -970,10 +1002,10 @@ Theoretically, defining the &quot;undo&quot; operation might utilise two differe
 While obviously the first solution is much simpler to implement on behalf of the command framework, the second solution has distinct advantages, especially in the context of an editing application: there might be rounding or calculation errors, the inverse might be difficult to define correctly, the effect of the operation might depend on circumstances, be random, or might even trigger a resolution operation to yield the final result. Thus the decision is within Lumiera Proc-Layer to //favour state capturing// &amp;mdash; but in a modified, semi-manual and not completely exclusive way.
 
 !Undo state
-While the usual implementation might automatically capture the whole model (resulting in a lot of data to be stored and some uncertainty about the scope of the model to be captured), in Lumiera we rely instead on the client code to provide a ''capture function'' and a ''playback function'' alongside with the actual operation. To help with this task, we provide a set of standard handlers for common situations. This way, operations might capture very specific information, might provide an &quot;intelligent undo&quot; to restore a given semantic instead of just a fixed value &amp;mdash; and moreover the client code is free actually to employ the &quot;inverse operation&quot; model in special cases where it just makes more sense than capturing state.
+While the usual »Memento« implementation might automatically capture the whole model (resulting in a lot of data to be stored and some uncertainty about the scope of the model to be captured), in Lumiera we rely instead on the client code to provide a ''capture function''&amp;nbsp;and a ''playback function'' alongside with the actual operation. To help with this task, we provide a set of standard handlers for common situations. This way, operations might capture very specific information, might provide an &quot;intelligent undo&quot; to restore a given semantic instead of just a fixed value &amp;mdash; and moreover the client code is free actually to employ the &quot;inverse operation&quot; model in special cases where it just makes more sense than capturing state.
 
 !Handling of commands
-A command may be defined completely from scratch, or it might just instantiate a CommandPrototype with specific targets and parameters. The command could then be serialised and later be recovered and re-bound with the parameters, but usually it will be handed over to the ProcDispatcher, pending execution. When ''invoking'', the handling sequence is to [[log the command|SessionStorage]], then call the ''undo capture function'', followed from calling the actual ''operation function''. After success, the logging and [[undo registration|UndoManager]] is completed. In any case, finally the ''result signal'' (a functor previously stored within the command) is emitted.
+A command may be [[defined|CommandDefinition]] completely from scratch, or it might just instantiate a CommandPrototype with specific targets and parameters. The command could then be serialised and later be recovered and re-bound with the parameters, but usually it will be handed over to the ProcDispatcher, pending execution. When ''invoking'', the handling sequence is to [[log the command|SessionStorage]], then call the ''undo capture function'', followed from calling the actual ''operation function''. After success, the logging and [[undo registration|UndoManager]] is completed. In any case, finally the ''result signal'' (a functor previously stored within the command) is emitted.
 
 By design, commands are single-serving value objects; executing an operation repeatedly requires creating a collection of command objects, one for each invocation.
 </pre>
@@ -3621,7 +3653,7 @@ As such, the SessionInterface is the main entrance point to Proc-Layer functiona
 Currently (as of 5/09), Ichthyo is [[targeting|PlanningSessionInMem]] a first preliminary implementation of the [[Session in Memory|SessionDataMem]]
 
 !Design and handling of Objects within the Session
-Objects are attached and manipulated by [[placements|Placement]]; thus the organisation of these placements is part of the session data layout. Effectively, such a placement within the session behaves like an //instances// of a given object, and at the same time it defines the &quot;non-substantial&quot; properties of the object, e.g. its positions and relations. [[References|MObjectRef]] to these placement entries are handed out as parameters, both down to the [[Builder]] and from there to the render processes within the engine, but also to external parts within the GUI and in plugins. The actual implementation of these object references is built on top of the PlacementRef tags, thus relying on the PlacementIndex the session maintains to keep track of all placements and their relations. While &amp;mdash; using these references &amp;mdash; an external client can access the objects and structures within the session, any actual ''mutations'' should be done based on the CommandHandling: a single operation of a sequence of operations is defined as [[Command]], to be [[dispatched as mutation operation|ProcDispatcher]]. Following this policy ensures integration with the SessionStorage and provides (unlimited) [[UNDO|UndoManager]].
+Objects are attached and manipulated by [[placements|Placement]]; thus the organisation of these placements is part of the session data layout. Effectively, such a placement within the session behaves like an //instances// of a given object, and at the same time it defines the &quot;non-substantial&quot; properties of the object, e.g. its positions and relations. [[References|MObjectRef]] to these placement entries are handed out as parameters, both down to the [[Builder]] and from there to the render processes within the engine, but also to external parts within the GUI and in plugins. The actual implementation of these object references is built on top of the PlacementRef tags, thus relying on the PlacementIndex the session maintains to keep track of all placements and their relations. While &amp;mdash; using these references &amp;mdash; an external client can access the objects and structures within the session, any actual ''mutations'' should be done based on the CommandHandling: a single operation of a sequence of operations is defined as [[Command]], to be [[dispatched as mutation operation|ProcDispatcher]]. Following this policy ensures integration with the&amp;nbsp;SessionStorage and provides (unlimited) [[UNDO|UndoManager]].
 </pre>
 </div>
 <div title="SessionOverview" modifier="Ichthyostega" modified="200811011805" created="200709272105" tags="design" changecount="29">
