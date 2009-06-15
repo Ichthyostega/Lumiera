@@ -226,19 +226,27 @@ namespace typelist{
       typedef NullType ArgList_;
       typedef Tuple<Type> ThisTuple;
       typedef Tuple<NullType> Tail;
+      enum { SIZE = 0 };
+      
+      NullType getHead() { return NullType(); }
+      Tail&    getTail() { return *this;      }
+      
+      Tuple (HeadType const&, Tail const&) { }
+      Tuple ()                             { }
     };
   
   template<class TY, class TYPES>
   struct Tuple<Node<TY,TYPES> >
     : Tuple<TYPES>
     {
-      typedef TY                               HeadType;
-      typedef typename Tuple<TYPES>::Type      TailType;
-      typedef typename Prepend<TY,Tail>::Tuple Type;
+      typedef TY                                   HeadType;
+      typedef typename Tuple<TYPES>::Type          TailType;
+      typedef typename Prepend<TY,TailType>::Tuple Type;
       
-      typedef typename Node<TY,TYPES> ArgList_;
+      typedef Node<TY,TYPES> ArgList_;
       typedef Tuple<Type> ThisTuple;
       typedef Tuple<TYPES> Tail;
+      enum { SIZE = count<ArgList_>::value };
       
       Tuple ( TY a1 =TY()
             , Tail tail =Tail()
@@ -251,14 +259,28 @@ namespace typelist{
       Tail& getTail() { return static_cast<Tail&> (*this); }
       
     private:
-      T1 val_;
+      TY val_;
     };
   
+  ////TODO move in sub-scope
+  template<class TUP,uint i>
+  struct Shifted
+    {
+      typedef typename TUP::Tail Tail;
+      typedef typename Shifted<Tail,i-1>::TupleType TupleType;
+    };
+  template<class TUP>
+  struct Shifted<TUP,0>
+    { 
+      typedef Tuple<typename TUP::ArgList_> TupleType;
+    };
+      
+  
   template< typename T1
-          , typename T2 =NullType
-          , typename T3 =NullType
-          , typename T4 =NullType
-          , typename T5 =NullType
+          , typename T2
+          , typename T3
+          , typename T4
+          , typename T5
           >
   struct Tuple<Types<T1,T2,T3,T4,T5> >
     : Tuple<typename Types<T1,T2,T3,T4,T5>::List>
@@ -270,6 +292,7 @@ namespace typelist{
       typedef typename Type::List ArgList_;
       typedef Tuple<Type> ThisTuple;
       typedef Tuple<TailType> Tail;
+      enum { SIZE = count<ArgList_>::value };
       
       Tuple ( T1 a1 =T1()
             , T2 a2 =T2()
@@ -277,28 +300,32 @@ namespace typelist{
             , T4 a4 =T4()
             , T5 a5 =T5()
             )
-        : Tuple<ArgList_>(a1,makeTuple(a2,a3,a4,a5))
+        : Tuple<ArgList_>(a1, Tuple<TailType>(a2,a3,a4,a5))
         { }
       
-      using ArgList_::getHead;
-      using ArgList_::getTail;
-      
-      template<uint i> struct Shifted   { typedef typename Tail::Shifted<i-1>::Type Tuple; };
-      template<>       struct Shifted<0>{ typedef ThisTuple Tuple; };
+      using Tuple<ArgList_>::getHead;
+      using Tuple<ArgList_>::getTail;
       
       template<uint i>
-      typename Shifted<i>::Tuple&
+      typename Shifted<ThisTuple,i>::TupleType&
       getShifted ()
         {
-          typedef typename Shifted<i>::Tuple TailI;
-          return static_cast<TailI&> (*this);
+          typedef typename Shifted<ThisTuple,i>::TupleType Tail_I;
+          return static_cast<Tail_I&> (*this);
         }
       
       template<uint i>
-      typename Shifted<i>::Tuple::HeadType&
+      typename Shifted<ThisTuple,i>::TupleType::HeadType&
       getAt ()
         {
           return getShifted<i>().getHead();
+        }
+      
+      NullType&
+      getNull()
+        {
+          static NullType nix;
+          return nix; 
         }
     };
   
@@ -323,27 +350,28 @@ namespace typelist{
    */
   template
     < typename TYPES
-    , template<class TY,class B, TY B::*getter()> class _X_
-    , class BASE =Tuple<TYPES> 
+    , template<class,class,uint> class _X_
+    , class BASE =Tuple<TYPES>
+    , uint i = 0
     >
   class BuildTupleAccessor
     {
-      typedef typename Tuple<TYPES> Tuple;
-      typedef typename Tuple::TailType Tail;
-      typedef typename Tuple::HeadType Head;
-      typedef Head Tuple::*getElm();
-      typedef BuildTupleAccessor<Tail, _X_> NextBuilder;
+      typedef Tuple<TYPES> ArgTuple;
+      typedef typename ArgTuple::HeadType Head;
+      typedef typename ArgTuple::TailType Tail;
+//    typedef Head ArgTuple::*getElm();
+      typedef BuildTupleAccessor<Tail,_X_,BASE, i+1> NextBuilder;
       typedef typename NextBuilder::Accessor NextAccessor;
       
-      Tuple<TYPES>& argData_;
+      ArgTuple& argData_;
       
     public:
       
       /** type of the product created by this template.
        *  Will be a subclass of BASE */
-      typedef _X_<Head, NextAccessor, &Tuple::getHead, > Accessor;
+      typedef _X_<Head, NextAccessor, i> Accessor;
       
-      BuildTupleAccessor (Tuple<TYPES>& tup)
+      BuildTupleAccessor (ArgTuple& tup)
         : argData_(tup)
         { }
       
@@ -353,12 +381,13 @@ namespace typelist{
 
   template
     < class BASE
-    , template<class,class> class _X_
+    , template<class,class,uint> class _X_
+    , uint i
     >
-  class BuildTupleAccessor<Tuple<Types<> >, _X_>
+  class BuildTupleAccessor<Types<>, _X_, BASE, i>
     {
-      typedef typename Tuple<Types<> > Tuple;
-      typedef NullType Tuple::*getElm();
+      typedef Tuple<Types<> > ArgTuple;
+//    typedef NullType BASE::*getElm();
       
     public:
       typedef _X_<NullType, BASE, 0> Accessor;
@@ -378,14 +407,14 @@ namespace typelist{
           static RET
           invoke (FUN f, TUP & arg)
             {
-              return f (arg.getAt<1>()); 
+              return f (arg.template getAt<1>()); 
             }
           
           template<class FUN, typename RET, class TUP>
           static RET
           bind (FUN f, TUP & arg)
             {
-              return std::tr1::bind (f, arg.getAt<1>()); 
+              return std::tr1::bind (f, arg.template getAt<1>()); 
             }
         };
       
@@ -396,8 +425,8 @@ namespace typelist{
           static RET
           invoke (FUN f, TUP & arg)
             {
-              return f ( arg.getAt<1>()
-                       , arg.getAt<2>()
+              return f ( arg.template getAt<1>()
+                       , arg.template getAt<2>()
                        ); 
             }
           
@@ -405,8 +434,8 @@ namespace typelist{
           static RET
           bind (FUN f, TUP & arg)
             {
-              return std::tr1::bind (f, arg.getAt<1>() 
-                                      , arg.getAt<2>()
+              return std::tr1::bind (f, arg.template getAt<1>() 
+                                      , arg.template getAt<2>()
                                      );
             }
         };
@@ -418,9 +447,8 @@ namespace typelist{
       typedef typename FunctionSignature< function<SIG> >::Args Args;
       typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
       
-      enum { ARG_CNT = count<Args::List>::value };
+      enum { ARG_CNT = count<typename Args::List>::value };
       
-      using tuple::Apply;
       
       /** storing a ref to the parameter tuple */
       Tuple<Args>& params_;
@@ -430,11 +458,11 @@ namespace typelist{
         : params_(args)
         { }
       
-      function<SIG>  bind (SIG& f)                 { return Apply<ARG_CNT>::bind (f, params_); }
-      function<SIG>  bind (function<SIG> const& f) { return Apply<ARG_CNT>::bind (f, params_); }
+      function<SIG>  bind (SIG& f)                 { return tuple::Apply<ARG_CNT>::bind (f, params_); }
+      function<SIG>  bind (function<SIG> const& f) { return tuple::Apply<ARG_CNT>::bind (f, params_); }
       
-      Ret      operator() (SIG& f)                 { return Apply<ARG_CNT>::invoke (f, params_); }
-      Ret      operator() (function<SIG> const& f) { return Apply<ARG_CNT>::invoke (f, params_); }
+      Ret      operator() (SIG& f)                 { return tuple::Apply<ARG_CNT>::invoke (f, params_); }
+      Ret      operator() (function<SIG> const& f) { return tuple::Apply<ARG_CNT>::invoke (f, params_); }
     };
   
   
@@ -584,15 +612,25 @@ namespace test    {
     };
   
   
-  template<typename TY, class BASE, TY BASE::*getElm()>
+  template<typename TY, class BASE, uint idx>
   struct ParamAccessor
+    : BASE
     {
-      
+      template<class TUP>
+      ParamAccessor(TUP& tuple)
+        : BASE(tuple)
+        { 
+           cout << showSizeof(tuple.template getAt<idx>()) << endl;
+        }
     };
   template<class BASE>
   struct ParamAccessor<NullType, BASE, 0>
+    : BASE
     {
-      
+      template<class TUP>
+      ParamAccessor(TUP& tuple)
+        : BASE(tuple)
+        { }
     };
   
   template<typename SIG>
@@ -602,13 +640,14 @@ namespace test    {
       typedef typename FunctionSignature< function<SIG> >::Args Args;
 //    typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
       
-      typedef Tuple<Arg> ArgTuple;
+      typedef Tuple<Args> ArgTuple;
       
       typedef BuildTupleAccessor<Args,ParamAccessor> BuildAccessor;
       typedef typename BuildAccessor::Accessor ParamStorageTuple;
       
       ParamStorageTuple params_;
       
+    public:
       Closure (ArgTuple& args)
         : params_(BuildAccessor(args))
         { }
@@ -660,6 +699,24 @@ namespace test    {
               function<UndoSig> opera3 (how_to_Undo);
               
               UNIMPLEMENTED ("store actual Undo-Functor into the command definition held by the enclosing UndoDefinition instance");
+              return *this;
+            }
+          
+          template
+            < typename T1
+            , typename T2
+            >
+          UndoDefinition&    ///////TODO return here the completed Command
+          bind ( T1& p1
+               , T2& p2
+               )
+            {
+              typedef Types<T1,T2> ArgTypes;
+              Tuple<ArgTypes> params(p1,p2);
+              Closure<SIG> clo (params);
+              
+              cout << showSizeof(clo) << endl;
+              UNIMPLEMENTED ("complete Command definition by closing all functions");
               return *this;
             }
           
@@ -773,16 +830,21 @@ namespace test    {
       run (Arg) 
         {
           /////////////////////////////////TODO
+          defineCommands();
+          checkExecution();
         }
       
       void
       defineCommands ()
         {
+          P<Time> obj (new Time(5));
+          int randVal ((rand() % 10) - 5);
+          
           CommDef ("test.command1")
               .operation (command1::operate)
               .captureUndo (command1::capture)
               .undoOperation (command1::undoIt)
-//              .bind (obj, randVal)
+              .bind (obj, randVal)
               ;
         }
       
