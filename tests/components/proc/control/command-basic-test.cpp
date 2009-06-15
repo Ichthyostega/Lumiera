@@ -303,6 +303,177 @@ namespace typelist{
     };
   
   
+  /**
+   * Decorating a tuple type with auxiliary data access operations.
+   * This helper template builds up a subclass of the given BASE type
+   * (which is assumed to be a Tuple or at least need to be copy constructible
+   * from \c Tuple<TYPES> ). The purpose is to use the Tuple as storage, but
+   * to add a layer of access functions, which in turn might rely on the exact
+   * type of the individual elements within the Tuple. To achieve this, for each
+   * type within the Tuple, the BASE type is decorated with an instance of the
+   * template passed in as template template parameter _X_. Each of these
+   * decorating instances is provided with a member pointer to access "his"
+   * specific element within the underlying tuple.
+   * 
+   * The decorating template _X_ need to take its own base class as template
+   * parameter. Typically, operations on _X_ will be defined in a recursive fashion,
+   * calling down into this templated base class. To support this, an instantiation
+   * of _X_ with the 0 member ptr is generated for detecting recursion end
+   * (built as innermost decorator, i.e. immediate subclass of BASE) 
+   */
+  template
+    < typename TYPES
+    , template<class TY,class B, TY B::*getter()> class _X_
+    , class BASE =Tuple<TYPES> 
+    >
+  class BuildTupleAccessor
+    {
+      typedef typename Tuple<TYPES> Tuple;
+      typedef typename Tuple::TailType Tail;
+      typedef typename Tuple::HeadType Head;
+      typedef Head Tuple::*getElm();
+      typedef BuildTupleAccessor<Tail, _X_> NextBuilder;
+      typedef typename NextBuilder::Accessor NextAccessor;
+      
+      Tuple<TYPES>& argData_;
+      
+    public:
+      
+      /** type of the product created by this template.
+       *  Will be a subclass of BASE */
+      typedef _X_<Head, NextAccessor, &Tuple::getHead, > Accessor;
+      
+      BuildTupleAccessor (Tuple<TYPES>& tup)
+        : argData_(tup)
+        { }
+      
+      operator Accessor() { return Accessor(argData_); }
+      
+    };
+
+  template
+    < class BASE
+    , template<class,class> class _X_
+    >
+  class BuildTupleAccessor<Tuple<Types<> >, _X_>
+    {
+      typedef typename Tuple<Types<> > Tuple;
+      typedef NullType Tuple::*getElm();
+      
+    public:
+      typedef _X_<NullType, BASE, 0> Accessor;
+    };
+  
+  
+  ///////////////////////// creating functional closures
+  
+  namespace tuple {
+      template<uint n>
+      struct Apply;
+      
+      template<>       
+      struct Apply<1>
+        {
+          template<class FUN, typename RET, class TUP>
+          static RET
+          invoke (FUN f, TUP & arg)
+            {
+              return f (arg.getAt<1>()); 
+            }
+          
+          template<class FUN, typename RET, class TUP>
+          static RET
+          bind (FUN f, TUP & arg)
+            {
+              return std::tr1::bind (f, arg.getAt<1>()); 
+            }
+        };
+      
+      template<>       
+      struct Apply<2>
+        {
+          template<class FUN, typename RET, class TUP>
+          static RET
+          invoke (FUN f, TUP & arg)
+            {
+              return f ( arg.getAt<1>()
+                       , arg.getAt<2>()
+                       ); 
+            }
+          
+          template<class FUN, typename RET, class TUP>
+          static RET
+          bind (FUN f, TUP & arg)
+            {
+              return std::tr1::bind (f, arg.getAt<1>() 
+                                      , arg.getAt<2>()
+                                     );
+            }
+        };
+  } // (END) sub-namespace 
+  
+  template<typename SIG>
+  class TupleApplicator
+    {
+      typedef typename FunctionSignature< function<SIG> >::Args Args;
+      typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
+      
+      enum { ARG_CNT = count<Args::List>::value };
+      
+      using tuple::Apply;
+      
+      /** storing a ref to the parameter tuple */
+      Tuple<Args>& params_;
+      
+    public:
+      TupleApplicator (Tuple<Args>& args)
+        : params_(args)
+        { }
+      
+      function<SIG>  bind (SIG& f)                 { return Apply<ARG_CNT>::bind (f, params_); }
+      function<SIG>  bind (function<SIG> const& f) { return Apply<ARG_CNT>::bind (f, params_); }
+      
+      Ret      operator() (SIG& f)                 { return Apply<ARG_CNT>::invoke (f, params_); }
+      Ret      operator() (function<SIG> const& f) { return Apply<ARG_CNT>::invoke (f, params_); }
+    };
+  
+  
+  /**
+   * Closing a function over its arguments.
+   * This is a small usage example or spin-off,
+   * having almost the same effect than invoking tr1::bind.
+   * The notable difference is that the function arguments for
+   * creating the closure are passed in as one compound tuple.
+   */
+  template<typename SIG>
+  class FunctionClosure
+    {
+      typedef typename FunctionSignature< function<SIG> >::Args Args;
+      typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
+      
+      function<Ret(void)> closure_;
+      
+    public:
+      FunctionClosure (SIG& f, Tuple<Args>& arg)
+        : closure_(TupleApplicator<SIG>(arg).bind(f))
+        { }
+      FunctionClosure (function<SIG> const& f, Tuple<Args>& arg)
+        : closure_(TupleApplicator<SIG>(arg).bind(f))
+        { }
+      
+      Ret operator() () { return closure_(); }
+    };
+  
+  
+/*
+  template<typename TYPES>
+  struct BuildClosure
+    : InstantiateWithIndex<TYPES, Accessor, I>
+    {
+      
+    };
+*/
+  
   ///////////////////////// additional typelist manipulators
   
   template<class TYPES>
@@ -350,7 +521,7 @@ namespace test    {
   using lumiera::typelist::Append;
   using lumiera::typelist::SplitLast;
   
-  using lumiera::typelist::InstantiateChained;
+  using lumiera::typelist::BuildTupleAccessor;
   
   /** 
    * Type analysis helper template. 
@@ -400,46 +571,49 @@ namespace test    {
       typedef typename Case<Ret,Args>::OperateSig OperateSig;
       typedef typename Case<Ret,Args>::Memento    Memento;
     };
-
   
   
   
-
   
-  class Closure
+  
+  /** Interface */
+  class CmdClosure
+    {
+    public:
+      virtual ~CmdClosure() {}
+    };
+  
+  
+  template<typename TY, class BASE, TY BASE::*getElm()>
+  struct ParamAccessor
+    {
+      
+    };
+  template<class BASE>
+  struct ParamAccessor<NullType, BASE, 0>
     {
       
     };
   
-  template<typename TY, class B>
-  struct CloseParam
-    : B
+  template<typename SIG>
+  class Closure
+    : public CmdClosure
     {
-      TY par_;
+      typedef typename FunctionSignature< function<SIG> >::Args Args;
+//    typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
       
-      template<typename TUP>
-      CloseParam (TUP& arg)
-        : B (arg.getTail()),
-          par_(arg.getHead())
+      typedef Tuple<Arg> ArgTuple;
+      
+      typedef BuildTupleAccessor<Args,ParamAccessor> BuildAccessor;
+      typedef typename BuildAccessor::Accessor ParamStorageTuple;
+      
+      ParamStorageTuple params_;
+      
+      Closure (ArgTuple& args)
+        : params_(BuildAccessor(args))
         { }
     };
   
-  template<typename TYPES>
-  struct Close
-    : InstantiateChained<typename TYPES::List, CloseParam, Closure>
-    {
-      
-    };
-  
-  struct ClosureBuilder
-    {
-      template<typename TUP>
-      Closure*
-      bind (TUP args)
-        {
-          return new Close<typename TUP::ArgTypes> (args);
-        }
-    };
   
   
   

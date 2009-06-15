@@ -156,7 +156,7 @@ namespace typelist{
       < class TYPES                           // List of Types
       , template<class,class,uint> class _X_ //  your-template-goes-here
       , class BASE = NullType               //   Base class at end of chain
-      , uint i = 0                         //    incremented on each instantiaton
+      , uint i = 0                         //    incremented on each instantiation
       >
     class InstantiateWithIndex;
     
