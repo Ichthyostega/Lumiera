@@ -47,175 +47,140 @@
 #define LUMIERA_META_TUPLE_H
 
 #include "lib/meta/typelist.hpp"
-#include "lib/meta/generator.hpp"
 #include "lib/meta/typelistutil.hpp"
-
-#include <tr1/functional>
 
 
 
 namespace lumiera {
 namespace typelist{
 
-  using std::tr1::bind;
-  //using std::tr1::placeholders::_1;
-  //using std::tr1::placeholders::_2;
-  using std::tr1::function;
 
-
-  template< typename SIG>
-  struct FunctionSignature;
   
-  template< typename RET>
-  struct FunctionSignature< function<RET(void)> >
-  {
-    typedef RET Ret;
-    typedef Types<> Args;
-  };
-  
-  template< typename RET
-          , typename A1
-          >
-  struct FunctionSignature< function<RET(A1)> >
-  {
-    typedef RET Ret;
-    typedef Types<A1> Args;
-  };
-  
-  template< typename RET
-          , typename A1
-          , typename A2
-          >
-  struct FunctionSignature< function<RET(A1,A2)> >
-  {
-    typedef RET Ret;
-    typedef Types<A1,A2> Args;
-  };
-  
-  template< typename RET
-          , typename A1
-          , typename A2
-          , typename A3
-          >
-  struct FunctionSignature< function<RET(A1,A2,A3)> >
-  {
-    typedef RET Ret;
-    typedef Types<A1,A2,A3> Args;
-  };
-  
-  template< typename RET
-          , typename A1
-          , typename A2
-          , typename A3
-          , typename A4
-          >
-  struct FunctionSignature< function<RET(A1,A2,A3,A4)> >
-  {
-    typedef RET Ret;
-    typedef Types<A1,A2,A3,A4> Args;
-  };
-  
-  template< typename RET
-          , typename A1
-          , typename A2
-          , typename A3
-          , typename A4
-          , typename A5
-          >
-  struct FunctionSignature< function<RET(A1,A2,A3,A4,A5)> >
-  {
-    typedef RET Ret;
-    typedef Types<A1,A2,A3,A4,A5> Args;
-  };
-  
-  
-  template<typename RET, typename LI>
-  struct FunctionTypedef;
-  
-  template< typename RET>
-  struct FunctionTypedef<RET, Types<> >
-  {
-    typedef function<RET(void)> Func;
-    typedef          RET Sig();
-  };
-  
-  template< typename RET
-          , typename A1
-          >
-  struct FunctionTypedef<RET, Types<A1> >
-  {
-    typedef function<RET(A1)> Func;
-    typedef          RET Sig(A1);
-  };
-  
-  template< typename RET
-          , typename A1
-          , typename A2
-          >
-  struct FunctionTypedef<RET, Types<A1,A2> >
-  {
-    typedef function<RET(A1,A2)> Func;
-    typedef          RET Sig(A1,A2);
-  };
-  
-  template< typename RET
-          , typename A1
-          , typename A2
-          , typename A3
-          >
-  struct FunctionTypedef<RET, Types<A1,A2,A3> >
-  {
-    typedef function<RET(A1,A2,A3)> Func;
-    typedef          RET Sig(A1,A2,A3);
-  };
-  
-  template< typename RET
-          , typename A1
-          , typename A2
-          , typename A3
-          , typename A4
-          >
-  struct FunctionTypedef<RET, Types<A1,A2,A3,A4> >
-  {
-    typedef function<RET(A1,A2,A3,A4)> Func;
-    typedef          RET Sig(A1,A2,A3,A4);
-  };
-  
-  template< typename RET
-          , typename A1
-          , typename A2
-          , typename A3
-          , typename A4
-          , typename A5
-          >
-  struct FunctionTypedef<RET, Types<A1,A2,A3,A4,A5> >
-  {
-    typedef function<RET(A1,A2,A3,A4,A5)> Func;
-    typedef          RET Sig(A1,A2,A3,A4,A5);
-  };
-  
-  
-  
-  /////////////////////////very basic facility: Typed tuples
-  
+  /** 
+   * Helper: prepend a type to an existing type sequence,
+   * thus shifting all elements within the sequence 
+   * to the right, eventually dropping the last element
+   */
   template<class T, class TYPES>
   struct Prepend;
   
-  template< typename A1
-          , typename A2
-          , typename A3
-          , typename A4
-          , typename A5
+  template< typename T01
+          , typename T02
+          , typename T03
+          , typename T04
+          , typename T05
+          , typename T06
+          , typename T07
+          , typename T08
+          , typename T09
+          , typename T10
+          , typename T11
+          , typename T12
+          , typename T13
+          , typename T14
+          , typename T15
+          , typename T16
+          , typename T17
+          , typename T18
+          , typename T19
+          , typename T20
           , typename IGN
           >
-  struct Prepend<A1, Types<A2,A3,A4,A5,IGN> >
+  struct Prepend<T01, Types<     T02,T03,T04,T05
+                           , T06,T07,T08,T09,T10
+                           , T11,T12,T13,T14,T15
+                           , T16,T17,T18,T19,T20
+                           , IGN
+                           > >
   {
-    typedef Types<A1,A2,A3,A4,A5> Tuple;
+    typedef Types< T01,T02,T03,T04,T05
+                 , T06,T07,T08,T09,T10
+                 , T11,T12,T13,T14,T15
+                 , T16,T17,T18,T19,T20 > Tuple;
   };
+  
+  
+  
+  
+  /** Helper: separate parts of a type sequence */
+  template<class TYPES>
+  struct Split;
+  
+  template< typename T01
+          , typename T02
+          , typename T03
+          , typename T04
+          , typename T05
+          , typename T06
+          , typename T07
+          , typename T08
+          , typename T09
+          , typename T10
+          , typename T11
+          , typename T12
+          , typename T13
+          , typename T14
+          , typename T15
+          , typename T16
+          , typename T17
+          , typename T18
+          , typename T19
+          , typename T20
+          >
+  struct Split<Types< T01,T02,T03,T04,T05
+                    , T06,T07,T08,T09,T10
+                    , T11,T12,T13,T14,T15
+                    , T16,T17,T18,T19,T20
+                    > >
+  {
+    typedef        T01                   Head;
+    typedef Types< T01                 > First;
+    typedef Types< T01,T02,T03,T04,T05
+                 , T06,T07,T08,T09,T10
+                 , T11,T12,T13,T14,T15
+                 , T16,T17,T18,T19     > Prefix;
+    typedef Types<     T02,T03,T04,T05
+                 , T06,T07,T08,T09,T10
+                 , T11,T12,T13,T14,T15
+                 , T16,T17,T18,T19,T20 > Tail;
+    typedef Types<                 T20 > Last;
+    typedef                        T20   End;
+  };
+  
+  
+  
+  
+  /**
+   * Helper: generate a type sequence left shifted 
+   * by i steps, filling in NullType at the end
+   */  
+  template<class TYPES, uint i=1>
+  class Shifted
+    {
+      typedef typename Split<TYPES>::Tail Tail;
+    public:
+      typedef typename Shifted<Tail,i-1>::Types Types;
+      typedef typename Split<Types>::Head       Head;
+    };
+  
+  template<class TYPES>
+  struct Shifted<TYPES,0>
+    { 
+      typedef TYPES Types;
+      typedef typename Types::List::Head Head;
+    };
 
+  
+  /** 
+   * simple generic Tuple datatype.
+   * Usable both for metaprogramming and as a generic record.
+   * The types within this tuple can either be specified
+   * as Type sequence or as typelist
+   */
   template<class TYPES>
   struct Tuple;
-
+  
+  
   template<>
   struct Tuple<NullType>
     {
@@ -223,10 +188,10 @@ namespace typelist{
       typedef Types<>  TailType;
       typedef Types<>  Type;
       
-      typedef NullType ArgList_;
-      typedef Tuple<Type> ThisTuple;
+      typedef NullType        ArgList;
+      typedef Tuple<Type>     ThisTuple;
       typedef Tuple<NullType> Tail;
-      enum { SIZE = 0 };
+      enum  { SIZE = 0 };
       
       NullType getHead() { return NullType(); }
       Tail&    getTail() { return *this;      }
@@ -234,6 +199,7 @@ namespace typelist{
       Tuple (HeadType const&, Tail const&) { }
       Tuple ()                             { }
     };
+  
   
   template<class TY, class TYPES>
   struct Tuple<Node<TY,TYPES> >
@@ -243,12 +209,12 @@ namespace typelist{
       typedef typename Tuple<TYPES>::Type          TailType;
       typedef typename Prepend<TY,TailType>::Tuple Type;
       
-      typedef Node<TY,TYPES> ArgList_;
-      typedef Tuple<Type> ThisTuple;
-      typedef Tuple<TYPES> Tail;
-      enum { SIZE = count<ArgList_>::value };
+      typedef Node<TY,TYPES> ArgList;
+      typedef Tuple<Type>    ThisTuple;
+      typedef Tuple<TYPES>   Tail;
+      enum  { SIZE = count<ArgList>::value };
       
-      Tuple ( TY a1 =TY()
+      Tuple ( TY   a1   =TY()
             , Tail tail =Tail()
             )
         : Tuple<TYPES> (tail.getHead(), tail.getTail()),
@@ -262,73 +228,188 @@ namespace typelist{
       TY val_;
     };
   
-  ////TODO move in sub-scope
-  template<class TUP,uint i>
-  struct Shifted
-    {
-      typedef typename TUP::Tail Tail;
-      typedef typename Shifted<Tail,i-1>::TupleType TupleType;
-    };
-  template<class TUP>
-  struct Shifted<TUP,0>
-    { 
-      typedef Tuple<typename TUP::ArgList_> TupleType;
-    };
-      
   
   template< typename T1
           , typename T2
           , typename T3
           , typename T4
           , typename T5
+          , typename T6
+          , typename T7
+          , typename T8
+          , typename T9
           >
-  struct Tuple<Types<T1,T2,T3,T4,T5> >
-    : Tuple<typename Types<T1,T2,T3,T4,T5>::List>
+  struct Tuple<Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> >
+    : Tuple<typename Types<T1,T2,T3,T4,T5,T6,T7,T8,T9>::List>
     {
-      typedef T1                          HeadType;
-      typedef Types<T2,T3,T4,T5,NullType> TailType;
-      typedef Types<T1,T2,T3,T4,T5>       Type;
+      typedef       T1                                HeadType;
+      typedef Types<T2,T3,T4,T5,T6,T7,T8,T9,NullType> TailType;
+      typedef Types<T1,T2,T3,T4,T5,T6,T7,T8,T9>       Type;
       
-      typedef typename Type::List ArgList_;
-      typedef Tuple<Type> ThisTuple;
-      typedef Tuple<TailType> Tail;
-      enum { SIZE = count<ArgList_>::value };
+      typedef typename Type::List ArgList;
+      typedef Tuple<Type>         ThisTuple;
+      typedef Tuple<TailType>     Tail;
+      enum  { SIZE = count<ArgList>::value };
       
       Tuple ( T1 a1 =T1()
             , T2 a2 =T2()
             , T3 a3 =T3()
             , T4 a4 =T4()
             , T5 a5 =T5()
+            , T6 a6 =T6()
+            , T7 a7 =T7()
+            , T8 a8 =T8()
+            , T9 a9 =T9()
             )
-        : Tuple<ArgList_>(a1, Tuple<TailType>(a2,a3,a4,a5))
+        : Tuple<ArgList>(a1, Tuple<TailType>(a2,a3,a4,a5,a6,a7,a8,a9))
         { }
       
-      using Tuple<ArgList_>::getHead;
-      using Tuple<ArgList_>::getTail;
+      using Tuple<ArgList>::getHead;
+      using Tuple<ArgList>::getTail;
       
       template<uint i>
-      typename Shifted<ThisTuple,i>::TupleType&
+      class ShiftedTuple
+        { 
+          typedef typename Tuple::Type                OurType_;
+          typedef typename Shifted<OurType_,i>::Types ShiftedTypes_;
+        public:
+          typedef Tuple<typename ShiftedTypes_::List> Type;
+        };
+      
+      template<uint i>
+      typename ShiftedTuple<i>::Type&
       getShifted ()
         {
-          typedef typename Shifted<ThisTuple,i>::TupleType Tail_I;
+          typedef typename ShiftedTuple<i>::Type Tail_I;
           return static_cast<Tail_I&> (*this);
         }
       
       template<uint i>
-      typename Shifted<ThisTuple,i>::TupleType::HeadType&
+      typename Shifted<Type,i>::Head&
       getAt ()
         {
           return getShifted<i>().getHead();
         }
-      
-      NullType&
-      getNull()
-        {
-          static NullType nix;
-          return nix; 
-        }
     };
   
+  
+  
+  namespace tuple { // some convenience access functions
+  
+    template<uint n, class TUP> 
+    typename TUP::template ShiftedTuple<n>::Type::Head&
+    element (TUP& tup)
+    {
+      return tup.template getAt<n>();
+    }
+    
+    
+    
+    Tuple<Types<> >
+    makeNullTuple ()
+    {
+      return Tuple<Types<> > ();
+    }
+    
+    
+    template< typename T1
+            >
+    Tuple<Types<T1> >
+    make ( T1 a1 =T1()
+         )
+    {
+      return Tuple<Types<T1> > (a1);
+    }
+    
+    
+    template< typename T1
+            , typename T2
+            >
+    Tuple<Types<T1,T2> >
+    make ( T1 a1 =T1()
+         , T2 a2 =T2()
+         )
+    {
+      return Tuple<Types<T1,T2> > (a1,a2);
+    }
+    
+    
+    template< typename T1
+            , typename T2
+            , typename T3
+            >
+    Tuple<Types<T1,T2,T3> >
+    make ( T1 a1 =T1()
+         , T2 a2 =T2()
+         , T3 a3 =T3()
+         )
+    {
+      return Tuple<Types<T1,T2,T3> > (a1,a2,a3);
+    }
+    
+    
+    template< typename T1
+            , typename T2
+            , typename T3
+            , typename T4
+            >
+    Tuple<Types<T1,T2,T3,T4> >
+    make ( T1 a1 =T1()
+         , T2 a2 =T2()
+         , T3 a3 =T3()
+         , T4 a4 =T4()
+         )
+    {
+      return Tuple<Types<T1,T2,T3,T4> > (a1,a2,a3,a4);
+    }
+    
+    
+    template< typename T1
+            , typename T2
+            , typename T3
+            , typename T4
+            , typename T5
+            >
+    Tuple<Types<T1,T2,T3,T4,T5> >
+    make ( T1 a1 =T1()
+         , T2 a2 =T2()
+         , T3 a3 =T3()
+         , T4 a4 =T4()
+         , T5 a5 =T5()
+         )
+    {
+      return Tuple<Types<T1,T2,T3,T4,T5> > (a1,a2,a3,a4,a5);
+    }
+    
+    
+    template< typename T1
+            , typename T2
+            , typename T3
+            , typename T4
+            , typename T5
+            , typename T6
+            , typename T7
+            , typename T8
+            , typename T9
+            >
+    Tuple<Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> >
+    make ( T1 a1 =T1()
+         , T2 a2 =T2()
+         , T3 a3 =T3()
+         , T4 a4 =T4()
+         , T5 a5 =T5()
+         , T6 a6 =T6()
+         , T7 a7 =T7()
+         , T8 a8 =T8()
+         , T9 a9 =T9()
+         )
+    {
+      return Tuple<Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> > (a1,a2,a3,a4,a5,a6,a7,a8,a9);
+    }
+    
+  }
+      
+
   
   /**
    * Decorating a tuple type with auxiliary data access operations.
@@ -349,18 +430,17 @@ namespace typelist{
    * (built as innermost decorator, i.e. immediate subclass of BASE) 
    */
   template
-    < typename TYPES
-    , template<class,class,uint> class _X_
-    , class BASE =Tuple<TYPES>
-    , uint i = 0
+    < typename TYPES                                ///< Type sequence to use within the Accessor (usually the Tuple Types)
+    , template<class,class,class, uint> class _X_   ///< user provided template<Type, Base, TupleType, arg-No>
+    , class TUP =Tuple<TYPES>                       ///< the tuple type to build on
+    , uint i = 0                                    ///< tuple element index counter
     >
   class BuildTupleAccessor
     {
       typedef Tuple<TYPES> ArgTuple;
       typedef typename ArgTuple::HeadType Head;
       typedef typename ArgTuple::TailType Tail;
-//    typedef Head ArgTuple::*getElm();
-      typedef BuildTupleAccessor<Tail,_X_,BASE, i+1> NextBuilder;
+      typedef BuildTupleAccessor<Tail,_X_,TUP, i+1> NextBuilder;
       typedef typename NextBuilder::Accessor NextAccessor;
       
       ArgTuple& argData_;
@@ -368,29 +448,35 @@ namespace typelist{
     public:
       
       /** type of the product created by this template.
-       *  Will be a subclass of BASE */
-      typedef _X_<Head, NextAccessor, i> Accessor;
+       *  Will be a subclass of TUP */
+      typedef _X_< Head            // the type to use for this accessor
+                 , NextAccessor    // the base type to inherit from
+                 , TUP             // the tuple type we build upon
+                 , i               // current element index
+                 >    Accessor;
+      
       
       BuildTupleAccessor (ArgTuple& tup)
         : argData_(tup)
         { }
       
+      /** used to get the product of this builder template... */
       operator Accessor() { return Accessor(argData_); }
       
     };
-
+  
+  
   template
-    < class BASE
-    , template<class,class,uint> class _X_
+    < template<class,class,class, uint> class _X_
+    , class TUP
     , uint i
     >
-  class BuildTupleAccessor<Types<>, _X_, BASE, i>
+  class BuildTupleAccessor<Types<>, _X_, TUP, i>
     {
       typedef Tuple<Types<> > ArgTuple;
-//    typedef NullType BASE::*getElm();
       
     public:
-      typedef _X_<NullType, BASE, 0> Accessor;
+      typedef _X_<NullType, TUP, TUP, 0> Accessor;
     };
   
   

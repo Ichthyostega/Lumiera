@@ -40,6 +40,9 @@
 #include "lib/meta/typelistutil.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/meta/function.hpp"
+#include "lib/meta/function-closure.hpp"
+#include "lib/meta/tuple.hpp"
+
 
 #include <tr1/functional>
 //#include <boost/format.hpp>
@@ -111,7 +114,7 @@ namespace test    {
           typedef typename ARG::List Args;
           
           typedef typename SplitLast<Args>::Type Memento;
-          typedef typename SplitLast<Args>::Prefix OperationArglist;
+          typedef typename SplitLast<Args>::List OperationArglist;
           typedef typename Tuple<OperationArglist>::Type OperationArgs;
           
           typedef typename FunctionTypedef<void, OperationArgs>::Sig OperateSig;
@@ -138,33 +141,42 @@ namespace test    {
     };
   
   
-  template<typename TY, class BASE, uint idx>
+  template
+    < typename TY
+    , class BASE
+    , class TUP
+    , uint idx
+    >
   struct ParamAccessor
     : BASE
     {
-      template<class TUP>
       ParamAccessor(TUP& tuple)
         : BASE(tuple)
         { 
            cout << showSizeof(tuple.template getAt<idx>()) << endl;
         }
+      
+      ////////////////////TODO the real access operations (e.g. for serialising) go here
     };
-  template<class BASE>
-  struct ParamAccessor<NullType, BASE, 0>
-    : BASE
+    
+  template<class TUP>
+  struct ParamAccessor<NullType, TUP, TUP, 0>
+    : TUP
     {
-      template<class TUP>
       ParamAccessor(TUP& tuple)
-        : BASE(tuple)
+        : TUP(tuple)
         { }
+      
+      ////////////////////TODO the recursion-end of the access operations goes here
     };
+  
+  
   
   template<typename SIG>
   class Closure
     : public CmdClosure
     {
       typedef typename FunctionSignature< function<SIG> >::Args Args;
-//    typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
       
       typedef Tuple<Args> ArgTuple;
       

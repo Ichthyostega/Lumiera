@@ -29,7 +29,7 @@
 #include "lib/meta/typelist.hpp"
 
 namespace lumiera {
-  namespace typelist {
+namespace typelist {
     
     
     /**
@@ -131,6 +131,27 @@ namespace lumiera {
     
     
     
+    
+    /** access the last list element */
+    template<class TYPES>
+    struct SplitLast;
+    
+    template<>
+    struct SplitLast<NullType>             { typedef NullType Type;
+                                             typedef NullType List; };
+    template<class TY>
+    struct SplitLast<Node<TY,NullType> >   { typedef TY       Type;
+                                             typedef NullType List; };
+    
+    template<class TY, class TYPES>
+    struct SplitLast<Node<TY,TYPES> >      { typedef typename SplitLast<TYPES>::Type Type;
+                                             typedef typename Append< TY,
+                                                                      typename SplitLast<TYPES>::List
+                                                                    >::List 
+                                                                    List; };
+    
+    
+    
     /** 
      * prefix each of the elements,
      * yielding a list-of lists-of-types
@@ -207,7 +228,5 @@ namespace lumiera {
     
     
     
-  } // namespace typelist
-  
-} // namespace lumiera
+}} // namespace lumiera::typelist
 #endif
