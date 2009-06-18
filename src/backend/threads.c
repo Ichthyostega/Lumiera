@@ -56,13 +56,14 @@ static void* pthread_runner (void* thread)
   pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, NULL);
 
   struct lumiera_thread_mockup* starter = (struct lumiera_thread_mockup*) thread;
+  LumieraReccondition thread_end_notification = starter->finished;
 
   starter->fn (starter->arg);
 
-  if (!starter->finished)
-    return NULL; // no condition var provided for signalling thread termination
-  
-  LUMIERA_RECCONDITION_SECTION(cond_sync, starter->finished)
+  if (!thread_end_notification)
+    return NULL; // no signalling of thread termination desired
+
+  LUMIERA_RECCONDITION_SECTION(cond_sync, thread_end_notification)
     LUMIERA_RECCONDITION_BROADCAST;
 
   return NULL;
