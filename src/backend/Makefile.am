@@ -19,7 +19,7 @@ liblumierabackend_la_srcdir = $(top_srcdir)/src/backend
 lib_LTLIBRARIES += liblumierabackend.la
 
 liblumierabackend_la_CPPFLAGS = $(AM_CPPFLAGS)
-liblumierabackend_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror 
+liblumierabackend_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
 liblumierabackend_la_LIBADD = liblumiera.la
 
 liblumierabackend_la_SOURCES =					\
@@ -29,10 +29,10 @@ liblumierabackend_la_SOURCES =					\
 	$(liblumierabackend_la_srcdir)/file.c			\
 	$(liblumierabackend_la_srcdir)/filehandle.c		\
 	$(liblumierabackend_la_srcdir)/filedescriptor.c		\
+	$(liblumierabackend_la_srcdir)/filehandlecache.c	\
 	$(liblumierabackend_la_srcdir)/mmap.c			\
 	$(liblumierabackend_la_srcdir)/mmapings.c		\
 	$(liblumierabackend_la_srcdir)/mmapcache.c		\
-	$(liblumierabackend_la_srcdir)/filehandlecache.c	\
 	$(liblumierabackend_la_srcdir)/enginefacade.cpp		\
 	$(liblumierabackend_la_srcdir)/scriptrunnerfacade.cpp	\
 	$(liblumierabackend_la_srcdir)/netnodefacade.cpp

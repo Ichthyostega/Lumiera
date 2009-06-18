@@ -21,6 +21,7 @@
 
 //TODO: Support library includes//
 
+#include "include/logging.h"
 
 //TODO: Lumiera header includes//
 #include "threads.h"
@@ -41,8 +42,33 @@
 
 //code goes here//
 
-/* really dumb mutex, to make the mockup little less brittle */
-static pthread_mutex_t threads_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+struct lumiera_thread_mockup
+{
+  void (*fn)(void*);
+  void* arg;
+  LumieraReccondition finished;
+};
+
+
+static void* pthread_runner (void* thread)
+{
+  pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, NULL);
+
+  struct lumiera_thread_mockup* starter = (struct lumiera_thread_mockup*) thread;
+  LumieraReccondition thread_end_notification = starter->finished;
+
+  starter->fn (starter->arg);
+
+  if (!thread_end_notification)
+    return NULL; // no signalling of thread termination desired
+
+  LUMIERA_RECCONDITION_SECTION(cond_sync, thread_end_notification)
+    LUMIERA_RECCONDITION_BROADCAST;
+
+  return NULL;
+}
+
 
 static pthread_once_t attr_once = PTHREAD_ONCE_INIT;
 static pthread_attr_t attrs;
@@ -51,41 +77,21 @@ static void thread_attr_init (void)
 {
   pthread_attr_init (&attrs);
   pthread_attr_setdetachstate (&attrs, PTHREAD_CREATE_DETACHED);
-  pthread_attr_setdetachstate (&attrs, PTHREAD_CREATE_DETACHED);
+  //cancel ...
 }
 
-struct lumiera_thread_mockup
-{
-  void (*fn)(void*);
-  void* arg;
-};
-
-
-static void* pthread_runner (void* thread)
-{
-  struct lumiera_thread_mockup* starter = (struct lumiera_thread_mockup*) thread;
-  (void) starter;
-  pthread_mutex_lock (&threads_mutex);
-  pthread_mutex_unlock (&threads_mutex);
-  starter->fn (starter->arg);
-  return NULL;
-}
-
-
+ 
 LumieraThread
 lumiera_thread_run (enum lumiera_thread_class kind,
                     void (*start_routine)(void *),
                     void * arg,
-                    LumieraCondition finished,
+                    LumieraReccondition finished,
                     const char* purpose,
                     struct nobug_flag* flag)
 {
   (void) kind;
-  (void) finished;
   (void) purpose;
   (void) flag;
-
-  REQUIRE (!finished, "Condition variable for finish notification not yet implemented");
 
   if (attr_once == PTHREAD_ONCE_INIT)
     pthread_once (&attr_once, thread_attr_init);
@@ -94,13 +100,10 @@ lumiera_thread_run (enum lumiera_thread_class kind,
 
   thread.fn = start_routine;
   thread.arg = arg;
-
-  pthread_mutex_lock (&threads_mutex);
+  thread.finished = finished;
 
   pthread_t dummy;
   int error = pthread_create (&dummy, &attrs, pthread_runner, &thread);
-
-  pthread_mutex_unlock (&threads_mutex);
 
   if (error) return 0;        /////TODO temporary addition by Ichthyo; probably we'll set lumiera_error?
   return (LumieraThread) 1;

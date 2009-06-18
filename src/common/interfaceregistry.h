@@ -22,6 +22,7 @@
 #define LUMIERA_INTERFACEREGISTRY_H
 
 #include "lib/mutex.h"
+#include "lib/recmutex.h"
 #include "lib/psplay.h"
 
 #include "common/interface.h"
@@ -42,7 +43,7 @@
 //NOBUG_DECLARE_FLAG (interface);
 
 extern PSplay lumiera_interfaceregistry;
-extern lumiera_mutex lumiera_interface_mutex;
+extern lumiera_recmutex lumiera_interface_mutex;
 
 
 /**
@@ -74,8 +75,6 @@ struct lumiera_interfacenode_struct
   /** NULL terminated table of all dependencies (interfaces opened on initialization) */
   LumieraInterfacenode* deps;
 };
-
-extern lumiera_mutex lumiera_interface_mutex;
 
 
 /**

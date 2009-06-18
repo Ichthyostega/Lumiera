@@ -57,7 +57,8 @@ namespace proc {
      * with adjustable frequency. Quick'n dirty implementation!
      */
     class TickService
-      : backend::Thread
+      : backend::JoinHandle,
+        backend::Thread
       {
         typedef function<void(void)> Tick;
         volatile uint timespan_;
@@ -68,16 +69,18 @@ namespace proc {
       public:
         TickService (Tick callback)
           : Thread("Tick generator (dummy)",
-                   bind (&TickService::timerLoop, this, callback))
+                   bind (&TickService::timerLoop, this, callback),
+                   (backend::JoinHandle&)*this 
+                  )
           { 
             INFO (proc, "TickService started.");
           }
         
        ~TickService ()
           {
-            uint curr_tick = timespan_;
             timespan_ = 0;
-            usleep (2*curr_tick); ////TODO actually should wait for timer thread termination
+            this->join();
+            usleep (200000);    // additional delay allowing GTK to dispatch the last output
             
             INFO (proc, "TickService shutdown.");
           }
@@ -91,8 +94,8 @@ namespace proc {
         void activate (uint fps)
           {
             REQUIRE (  0==fps 
-                    ||    1000000/fps < std::numeric_limits<uint>::max() 
-                       && 1000000/fps > POLL_TIMEOUT);
+                    ||(   1000000/fps < std::numeric_limits<uint>::max() 
+                       && 1000000/fps > POLL_TIMEOUT));
             if (fps)
               timespan_ = 1000000/fps; // microseconds per tick
             else

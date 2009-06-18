@@ -11,6 +11,10 @@ TEST "mutex not unlocked asserts" mutexforgotunlock <<END
 return: 134
 END
 
+TEST "mutex explicitly unlocked" mutexexplicitunlock <<END
+return: 0
+END
+
 
 TEST "nested mutex section" nestedmutexsection <<END
 out: outer mutex locked section
@@ -19,14 +23,14 @@ END
 
 
 TEST "chained mutex section" chainedmutexsection <<END
-out: outer mutex locked section
+out: ^outer mutex locked section
 out: inner but not outer mutex locked section
 END
 
 
 TEST "recursive mutex section" recursivemutexsection <<END
-out: mutex locked once
-out: mutex locked twice
+out: recmutex locked once
+out: recmutex locked twice
 END
 
 
@@ -37,6 +41,15 @@ END
 
 
 TEST "rwlock not unlocked asserts" rwlockforgotunlock <<END
+return: 134
+END
+
+
+PLANNED "rwlock readlock in writelock asserts" rwlockdeadlockwr <<END
+return: 134
+END
+
+PLANNED "rwlock writelock in readlock asserts" rwlockdeadlockrw <<END
 return: 134
 END
 
@@ -54,6 +67,22 @@ PLANNED "condition signaling" <<END
 END
 
 PLANNED "condition broadcasting" <<END
+END
+
+
+TEST "reccondition not unlocked asserts" recconditionforgotunlock <<END
+return: 134
+END
+
+TEST "reccondition section" recconditionsection <<END
+out: reccondition locked section 1
+out: reccondition locked section 2
+END
+
+PLANNED "reccondition signaling" <<END
+END
+
+PLANNED "reccondition broadcasting" <<END
 END
 
 

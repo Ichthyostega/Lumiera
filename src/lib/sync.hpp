@@ -73,6 +73,7 @@
 
 extern "C" {
 #include "lib/mutex.h"
+#include "lib/recmutex.h"
 #include "lib/condition.h"
 #include "lib/reccondition.h"
 }
@@ -98,25 +99,29 @@ namespace lib {
         protected:
           Wrapped_LumieraExcMutex() { lumiera_mutex_init    (this, "Obj.Monitor ExclMutex", &NOBUG_FLAG(sync)); }
          ~Wrapped_LumieraExcMutex() { lumiera_mutex_destroy (this, &NOBUG_FLAG(sync)); }
-         
+          
+          pthread_mutex_t* mutex()  { return &(lumiera_mutex::mutex); }
+          
          //------------------Resource-Tracking------
          void __may_block() { TODO ("Record we may block on mutex"); }
          void __enter()     { TODO ("Record we successfully acquired the mutex"); }
-         void __leave()     { TODO ("Record we are releasing the mutex"); }
+         void __left()      { TODO ("Record we released the mutex"); }
         };
       
       
       struct Wrapped_LumieraRecMutex
-        : public lumiera_mutex
+        : public lumiera_recmutex
         {
         protected:
           Wrapped_LumieraRecMutex() { lumiera_recmutex_init (this, "Obj.Monitor RecMutex", &NOBUG_FLAG(sync)); }
-         ~Wrapped_LumieraRecMutex() { lumiera_mutex_destroy (this, &NOBUG_FLAG(sync)); }
-         
+         ~Wrapped_LumieraRecMutex() { lumiera_recmutex_destroy (this, &NOBUG_FLAG(sync)); }
+          
+          pthread_mutex_t* mutex()  { return &recmutex; }
+          
          //------------------Resource-Tracking------
          void __may_block() { TODO ("Record we may block on mutex"); }
          void __enter()     { TODO ("Record we successfully acquired the mutex"); }
-         void __leave()     { TODO ("Record we are releasing the mutex"); }
+         void __left()      { TODO ("Record we are released the mutex"); }
         };
       
       
@@ -126,11 +131,14 @@ namespace lib {
         protected:
           Wrapped_LumieraExcCond() { lumiera_condition_init    (this, "Obj.Monitor ExclCondition", &NOBUG_FLAG(sync) ); }
          ~Wrapped_LumieraExcCond() { lumiera_condition_destroy (this, &NOBUG_FLAG(sync) ); }
-         
+          
+          pthread_mutex_t* mutex() { return &cndmutex; }
+          pthread_cond_t*  condv() { return &cond;     }
+          
          //------------------Resource-Tracking------
          void __may_block() { TODO ("Record we may block on mutex"); }
          void __enter()     { TODO ("Record we successfully acquired the mutex"); }
-         void __leave()     { TODO ("Record we are releasing the mutex"); }
+         void __left()      { TODO ("Record we released the mutex"); }
         };
       
       
@@ -140,11 +148,14 @@ namespace lib {
         protected:
           Wrapped_LumieraRecCond() { lumiera_reccondition_init    (this, "Obj.Monitor RecCondition", &NOBUG_FLAG(sync) ); } ////////TODO
          ~Wrapped_LumieraRecCond() { lumiera_reccondition_destroy (this, &NOBUG_FLAG(sync) ); }
-         
+          
+          pthread_mutex_t* mutex() { return &reccndmutex; }
+          pthread_cond_t*  condv() { return &cond;        }
+          
          //------------------Resource-Tracking------
          void __may_block() { TODO ("Record we may block on mutex"); }
          void __enter()     { TODO ("Record we successfully acquired the mutex"); }
-         void __leave()     { TODO ("Record we are releasing the mutex"); }
+         void __left()     { TODO ("Record we released the mutex"); }
         };
       
       
@@ -159,7 +170,7 @@ namespace lib {
           using MTX::mutex;
           using MTX::__may_block;
           using MTX::__enter;
-          using MTX::__leave;
+          using MTX::__left;
           
          ~Mutex () { }
           Mutex () { }
@@ -172,7 +183,7 @@ namespace lib {
               {
                 __may_block();
                 
-                if (pthread_mutex_lock (&mutex))
+                if (pthread_mutex_lock (mutex()))
                   throw lumiera::error::State("Mutex acquire failed.");  ///////TODO capture the error-code
                 
                 __enter();
@@ -181,9 +192,9 @@ namespace lib {
             void
             release()
               { 
-                __leave();
+                pthread_mutex_unlock (mutex());
                 
-                pthread_mutex_unlock (&mutex);
+                __left();
               }
             
         };
@@ -197,7 +208,7 @@ namespace lib {
         : public Mutex<CDX>
         {
         protected:
-          using CDX::cond;
+          using CDX::condv;
           using CDX::mutex;
           
         public:
@@ -205,9 +216,9 @@ namespace lib {
           signal (bool wakeAll=false)
             {
               if (wakeAll)
-                  pthread_cond_broadcast (&cond);
+                  pthread_cond_broadcast (condv());
               else
-                  pthread_cond_signal (&cond);
+                  pthread_cond_signal (condv());
             }
           
           
@@ -218,9 +229,9 @@ namespace lib {
               int err=0;
               while (!predicate() && !err)
                 if (waitEndTime)
-                  err = pthread_cond_timedwait (&cond, &mutex, &waitEndTime);
+                  err = pthread_cond_timedwait (condv(), mutex(), &waitEndTime);
                 else
-                  err = pthread_cond_wait (&cond, &mutex);
+                  err = pthread_cond_wait (condv(), mutex());
               
               if (!err)           return true;
               if (ETIMEDOUT==err) return false;
@@ -332,7 +343,7 @@ namespace lib {
           void setTimeout(ulong relative) {timeout_.setOffset(relative);}
           bool isTimedWait()              {return (timeout_);}
           
-          LumieraCondition accessCond()   {return static_cast<LumieraCondition> (this);}
+          LumieraReccondition accessCond(){return static_cast<LumieraReccondition> (this);}
         };
      
       typedef Mutex<Wrapped_LumieraExcMutex> NonrecursiveLock_NoWait;
@@ -436,3 +447,10 @@ namespace lib {
   
 } // namespace lumiera
 #endif
+/*
+// Local Variables:
+// mode: C++
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

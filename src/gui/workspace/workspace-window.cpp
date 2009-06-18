@@ -56,6 +56,7 @@ WorkspaceWindow::WorkspaceWindow(Project &source_project,
 
 WorkspaceWindow::~WorkspaceWindow()
 {
+  INFO (gui_dbg, "closing workspace window...");
 }
 
 Project&

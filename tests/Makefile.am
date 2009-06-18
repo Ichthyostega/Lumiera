@@ -34,6 +34,12 @@ test_llist_SOURCES = $(tests_srcdir)/library/test-llist.c
 test_llist_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 test_llist_LDADD = $(NOBUGMT_LUMIERA_LIBS)                                  liblumiera.la -lboost_program_options-mt -lboost_regex-mt
 
+check_PROGRAMS += test-mpool
+test_mpool_SOURCES = $(tests_srcdir)/library/test-mpool.c
+test_mpool_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
+test_mpool_LDADD = $(NOBUGMT_LUMIERA_LIBS) \
+	liblumiera.la liblumieracommon.la liblumierabackend.la liblumieraproc.la -lboost_program_options-mt -lboost_regex-mt -ldl
+
 check_PROGRAMS += test-psplay
 test_psplay_SOURCES = $(tests_srcdir)/library/test-psplay.c
 test_psplay_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
@@ -69,6 +75,10 @@ test_resourcecollector_SOURCES = $(tests_srcdir)/library/test-resourcecollector.
 test_resourcecollector_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
 test_resourcecollector_LDADD = $(NOBUGMT_LUMIERA_LIBS) liblumierabackend.la liblumieracommon.la liblumieraproc.la -ldl liblumiera.la -lboost_program_options-mt -lboost_regex-mt
 
+check_PROGRAMS += test-slist
+test_slist_SOURCES = $(tests_srcdir)/library/test-slist.c
+test_slist_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
+test_slist_LDADD = $(NOBUGMT_LUMIERA_LIBS)                                  liblumiera.la -lboost_program_options-mt -lboost_regex-mt
 
 check_PROGRAMS += test-config
 test_config_SOURCES = $(tests_srcdir)/common/test-config.c
@@ -104,5 +114,11 @@ test_interfaces_LDADD = 			\
 	-ldl					\
 	-lboost_program_options-mt		\
 	-lboost_regex-mt
+
+check_PROGRAMS += test-threads
+test_threads_SOURCES = $(tests_srcdir)/backend/test-threads.c
+test_threads_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_threads_CFLAGS = $(AM_CFLAGS) $(PTHREAD_CFLAGS)
+test_threads_LDADD = liblumierabackend.la liblumiera.la -lnobugmt -lpthread -ldl -lm     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
 
 TESTS = $(tests_srcdir)/test.sh
