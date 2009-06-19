@@ -21,17 +21,17 @@
 * *****************************************************/
 
 
-/** @file typelistmaniptest.cpp
+/** @file typelist-manip-test.cpp
  ** \par checking the correct working of simple list manipulation metafunctions
  **
- ** The semi-automatic assembly of processing node invocation code utilizes some
+ ** The semi-automatic assembly of processing node invocation code utilises some
  ** metaprogramming magic built upon simple list manipulation. As template metaprogramming
  ** is kind-of functional programming, most of this is done by recursion.
  ** To check the correct working, this test uses some constant-wrapper types and a debugging
  ** template which will print these constant numbers, thus allowing to verify in the output
  ** if various lists of such constant-wrapper types were manipulated as expected.
  **
- ** @see typelisttest.cpp
+ ** @see typelist-test.cpp
  ** @see typelistutil.hpp
  ** @see nodewiringconfig.hpp real world usage example
  **
@@ -41,7 +41,7 @@
 #include "lib/test/run.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/meta/typelistutil.hpp"
-#include "meta/typelistdiagnostics.hpp"
+#include "meta/typelist-diagnostics.hpp"
 #include "lib/util.hpp"
 
 #include <boost/format.hpp>
@@ -53,8 +53,8 @@ using std::cout;
 
 
 namespace lumiera {
-  namespace typelist {
-    namespace test {
+namespace typelist{
+namespace test {
       
       
       namespace { // test data
@@ -69,7 +69,7 @@ namespace lumiera {
                      , Num<6>
                      , Num<7>
                      >::List List2;
-         
+        
         
         template<class X> struct CountDown          { typedef NullType List; };
         template<>        struct CountDown<Num<0> > { typedef Node<Num<0>, NullType> List; };
@@ -91,7 +91,7 @@ namespace lumiera {
        *       - append lists, single elements and NullType
        *         in various combinations
        *       - filtering out some types from a typelist by
-       *         using a "predicate template" (metafuction)
+       *         using a "predicate template" (metafunction)
        *       - building combinations and permutations
        */
       class TypeListManipl_test : public Test
@@ -224,7 +224,7 @@ namespace lumiera {
               typedef CombineFlags<List1::List> OnOff;
               DISPLAY (OnOff);
             }
-
+          
           
         };
       
@@ -234,8 +234,4 @@ namespace lumiera {
       
       
       
-    } // namespace test
-    
-  } // namespace typelist
-
-} // namespace lumiera
+}}} // namespace lumiera::typelist::test

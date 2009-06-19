@@ -46,10 +46,12 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/helloworldtest.cpp			\
 	$(testlib_srcdir)/lifecycletest.cpp			\
 	$(testlib_srcdir)/mainsuite.cpp				\
-	$(testlib_srcdir)/meta/typelisttest.cpp         	\
-	$(testlib_srcdir)/meta/typelistmaniptest.cpp    	\
-	$(testlib_srcdir)/meta/generatortest.cpp        	\
-	$(testlib_srcdir)/meta/configflagstest.cpp      	\
+	$(testlib_srcdir)/meta/typelist-test.cpp         	\
+	$(testlib_srcdir)/meta/typelist-manip-test.cpp    	\
+	$(testlib_srcdir)/meta/function-closure-test.cpp   	\
+	$(testlib_srcdir)/meta/function-erasure-test.cpp   	\
+	$(testlib_srcdir)/meta/generator-test.cpp        	\
+	$(testlib_srcdir)/meta/config-flags-test.cpp      	\
 	$(testlib_srcdir)/query/queryutilstest.cpp		\
 	$(testlib_srcdir)/removefromsettest.cpp			\
 	$(testlib_srcdir)/sanitizedidentifiertest.cpp		\

@@ -30,12 +30,9 @@ using std::string;
 using std::cout;
 
 
-namespace lumiera
-  {
-  namespace typelist
-    {
-    namespace test
-      {
+namespace lumiera {
+namespace typelist{
+namespace test {
       
       template<int I>
       struct Block    
@@ -46,7 +43,7 @@ namespace lumiera
         { 
           Zero()  { cout << "- The End -"; }
         };
-
+      
       
       typedef Types< Block<1>
                    , Block<2>
@@ -94,8 +91,4 @@ namespace lumiera
       
       
       
-    } // namespace test
-    
-  } // namespace typelist
-
-} // namespace lumiera
+}}} // namespace lumiera::typelist::test

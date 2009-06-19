@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file generatortest.cpp
+/** @file generator-test.cpp
  ** \par what are we doing here??
  **
  ** the following test composes both an interface and the corresponding implementation
@@ -30,7 +30,7 @@
  ** in the list. (remember: normally the number and signature of all virtual functions
  ** need to be absolutely fixed in the class definition)
  **
- ** @see typelisttest.cpp
+ ** @see typelist-test.cpp
  ** @see generator.hpp
  ** @see lumiera::query::ConfigRules  a real world usage example
  **
@@ -47,12 +47,9 @@ using std::string;
 using std::cout;
 
 
-namespace lumiera
-  {
-  namespace typelist
-    {
-    namespace test
-      {
+namespace lumiera {
+namespace typelist{
+namespace test {
       
       /** template for generating lots of different test types */
       template<int I>
@@ -89,7 +86,7 @@ namespace lumiera
           virtual ~DoIt() { cout << "dtor DoIt<"<< X::name << " >\n";}
         public:
           void eat (X& x) { cout << x.talk() << "\n";}
-          using BASE::eat; // prevent shaddowing
+          using BASE::eat; // prevent shadowing
         };
       
       typedef Types< Block<1>
@@ -148,8 +145,4 @@ namespace lumiera
       
       
       
-    } // namespace test
-    
-  } // namespace typelist
-
-} // namespace lumiera
+}}} // namespace lumiera::typelist::test

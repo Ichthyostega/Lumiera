@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file configflagstest.cpp
+/** @file config-flags-test.cpp
  ** \par build a type representing a single configuration defined by a set of flags
  **
  ** The semi-automatic assembly of processing node invocation code utilises some
@@ -42,7 +42,7 @@
 #include "lib/meta/generator.hpp"
 #include "lib/meta/typelistutil.hpp"
 #include "lib/meta/configflags.hpp"
-#include "meta/typelistdiagnostics.hpp"
+#include "meta/typelist-diagnostics.hpp"
 #include "proc/engine/nodewiringconfig.hpp"
 #include "lib/util.hpp"
 
@@ -55,8 +55,8 @@ using std::cout;
 
 
 namespace lumiera {
-  namespace typelist {
-    namespace test {
+namespace typelist{
+namespace test {
       
       
       namespace { // internal definitions
@@ -332,8 +332,4 @@ namespace lumiera {
       
       
       
-    } // namespace test
-    
-  } // namespace typelist
-
-} // namespace lumiera
+}}} // namespace lumiera::typelist::test
