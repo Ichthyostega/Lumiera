@@ -36,7 +36,7 @@
 
 //#include "pre.hpp"
 #include "include/symbol.hpp"
-#include "proc/control/mutation.hpp"
+#include "proc/control/command-mutation.hpp"
 #include "proc/control/command-closure.hpp"
 
 //#include <tr1/memory>

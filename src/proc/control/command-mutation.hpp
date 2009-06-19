@@ -1,5 +1,5 @@
 /*
-  MUTATION.hpp  -  a functor encapsulating the actual operation of a proc-Command
+  COMMAND-MUTATION.hpp  -  functor encapsulating the actual operation of proc-Command
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,8 @@
 */
 
 
-/** @file mutation.hpp
- ** The core of a proc-Layer command: functor containing the actual operation to be executed.
+/** @file command-mutation.hpp
+ ** The core of a Proc-Layer command: functor containing the actual operation to be executed.
  ** //TODO
  **  
  ** @see Command
