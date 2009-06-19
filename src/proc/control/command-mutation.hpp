@@ -32,13 +32,18 @@
 
 
 
-#ifndef CONTROL_MUTATION_H
-#define CONTROL_MUTATION_H
+#ifndef CONTROL_COMMAND_MUTATION_H
+#define CONTROL_COMMAND_MUTATION_H
 
 //#include "pre.hpp"
 #include "lib/error.hpp"
+#include "proc/control/command-closure.hpp"
 
 //#include <tr1/memory>
+#include <boost/scoped_ptr.hpp>
+#include <tr1/functional>
+#include <iostream>
+#include <string>
 
 
 
@@ -46,6 +51,10 @@ namespace control {
   
 //  using lumiera::Symbol;
 //  using std::tr1::shared_ptr;
+  using boost::scoped_ptr;
+  using std::tr1::function;
+  using std::ostream;
+  using std::string;
   
   
   /**
@@ -53,6 +62,7 @@ namespace control {
    */
   class Mutation
     {
+      PClo clo_;
       
     public:
       template<typename SIG>
@@ -63,11 +73,14 @@ namespace control {
       
       virtual ~Mutation() {}
       
+      
       virtual Mutation&
       close (CmdClosure const& closure)
         {
           UNIMPLEMENTED ("accept and store a parameter closure");
+          return *this;
         }
+      
       
       void
       operator() ()
@@ -77,7 +90,7 @@ namespace control {
       
       
       /* == diagnostics == */
-      typedef pClo Mutation::*_unspecified_bool_type;
+      typedef PClo Mutation::*_unspecified_bool_type;
       
       /** implicit conversion to "bool" */ 
       operator _unspecified_bool_type()  const { return  isValid()? &Mutation::clo_ : 0; }  // never throws
@@ -85,12 +98,12 @@ namespace control {
       
       operator string()  const
         { 
-          return isValid()? string (*clo) : "Mutation(state missing)";
+          return isValid()? string (*clo_) : "Mutation(state missing)";
         }
       
     protected:
       virtual bool
-      isValid () 
+      isValid ()   const
         {
           UNIMPLEMENTED ("mutation lifecycle");
         }
@@ -108,13 +121,29 @@ namespace control {
   class UndoMutation
     : public Mutation
     {
+      scoped_ptr<CmdClosure> memento_;
       
     public:
-      template<typename SIG>
-      UndoMutation (function<SIG> const& func)
+      template<typename SIG_undo, typename SIG_cap>
+      UndoMutation (function<SIG_undo> const& undoFunc, function<SIG_cap> const& captureFunc)
+        : Mutation(undoFunc)
         {
           UNIMPLEMENTED ("build a undo Mutation functor object");
         }
+      
+      UndoMutation (UndoMutation const& o)
+        : Mutation(*this),
+          memento_(o.memento_->clone().get())
+        { }
+      
+      UndoMutation&
+      operator= (UndoMutation const& o)
+        {
+          Mutation::operator= (o);
+          memento_.reset(o.memento_->clone().get());
+          return *this;
+        }
+      
       
       Mutation&
       captureState ()
@@ -132,6 +161,9 @@ namespace control {
   ////////////////TODO currently just fleshing  out the API....
   
   
+  LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Mutation functor not yet usable, because arguments aren't bound
+  LUMIERA_ERROR_DECLARE (MISSING_MEMENTO);   ///<  Undo functor not yet usable, because no undo state has been captured
+    
   
   
 } // namespace control

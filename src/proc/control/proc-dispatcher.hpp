@@ -45,7 +45,7 @@
 
 namespace control {
   
-  using lumiera::Symbol;
+//  using lumiera::Symbol;
 //  using std::tr1::shared_ptr;
   
   

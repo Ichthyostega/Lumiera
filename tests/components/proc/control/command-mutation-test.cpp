@@ -33,19 +33,20 @@
 //#include "proc/mobject/placement-index.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
 #include "proc/control/command-mutation.hpp"
+#include "lib/meta/typelist.hpp"
 #include "lib/meta/tuple.hpp"
 //#include "lib/lumitime.hpp"
 //#include "lib/util.hpp"
 
-//#include <tr1/functional>
+#include <tr1/functional>
 //#include <boost/format.hpp>
 #include <iostream>
 #include <string>
 
-//using std::tr1::bind;
+using std::tr1::bind;
 //using std::tr1::placeholders::_1;
 //using std::tr1::placeholders::_2;
-//using std::tr1::function;
+using std::tr1::function;
 //using boost::format;
 //using lumiera::Time;
 //using util::contains;
@@ -61,8 +62,10 @@ namespace test    {
 
 //  using session::test::TestClip;
 //  using lumiera::P;
+  using namespace lumiera::typelist;
   using lumiera::typelist::Tuple;
-  using control::CommandClosure;
+  
+  using control::CmdClosure;
   
   
   
@@ -70,22 +73,19 @@ namespace test    {
   
   
   namespace {
+  
+    int testVal;  ///< used to verify the effect of testFunc
+  
     void
-    operate (P<Time> dummyObj, int randVal)
+    testFunc (int val)
     {
-      *dummyObj += Time(randVal);
+      testVal += val;
     }
     
-    Time
-    capture (P<Time> dummyObj, int)
+    int
+    capture ()
     {
-      return *dummyObj;
-    }
-    
-    void
-    undoIt (P<Time> dummyObj, int, Time oldVal)
-    {
-      *dummyObj = oldVal;
+      return testVal;
     }
   
   }
@@ -122,14 +122,14 @@ namespace test    {
       void
       checkMutation ()
         {
-          function<void(int)> funky (bind (&testFunc));
+          function<void(int)> funky  = bind (testFunc, _1);
           
           Mutation functor (funky);
           ASSERT (!functor);
           VERIFY_ERROR (UNBOUND_ARGUMENTS, functor() );
           
-          Tuple<int> param = tuple::make(23);
-          Closure close_over (param);
+          Tuple<Types<int> > param = tuple::make(23);
+          Closure<void(int)> close_over (param);
           
           CmdClosure& clo (close_over);
           functor.close(clo);
@@ -156,15 +156,15 @@ namespace test    {
       void
       checkUndoMutation ()
         {
-          function<void(int)> undo_func (bind (&testFunc));
-          function<int(void)> cap_func  (bind (&capture));
+          function<void(int)> undo_func  = bind (&testFunc,_1);
+          function<int(void)> cap_func   = bind (&capture    );
           
           UndoMutation undoFunctor (undo_func,cap_func);
           ASSERT (!undoFunctor);
           VERIFY_ERROR (UNBOUND_ARGUMENTS, undoFunctor() );
           
-          Tuple<> param;
-          Closure clo (param);
+          Tuple<Types<> > param;
+          Closure<void()> clo (param);
           
           undoFunctor.close(clo);
           ASSERT (!undoFunctor);

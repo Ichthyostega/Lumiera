@@ -36,25 +36,142 @@
 #define CONTROL_COMMAND_CLOSURE_H
 
 //#include "pre.hpp"
+#include "lib/meta/typelist.hpp"
+#include "lib/meta/function.hpp"
+#include "lib/meta/function-closure.hpp"
+#include "lib/meta/tuple.hpp"
 
-//#include <tr1/memory>
+#include <tr1/memory>
+#include <tr1/functional>
+#include <iostream> 
+#include <string>
 
+
+#include "lib/test/test-helper.hpp"  /////////////////TODO remove this
+using lib::test::showSizeof;
+
+using std::cout;    //////////////////////////////////TODO remove this
+using std::endl;
 
 
 namespace control {
   
 //  using lumiera::Symbol;
 //  using std::tr1::shared_ptr;
+  using std::string;
+  using std::ostream;
+  using std::tr1::function;
+  using lumiera::typelist::FunctionSignature;
+  using lumiera::typelist::Tuple;
+  using lumiera::typelist::BuildTupleAccessor;
+  
+  using lumiera::typelist::NullType;
+  
+  class CmdClosure;
+  typedef std::tr1::shared_ptr<CmdClosure> PClo;  ///< smart-ptr type used for handling concrete closures
   
   
-  /**
-   * @todo Type-comment
-   */
-  class CommandClosure
+  /** Interface */
+  class CmdClosure
     {
+    public:
+      virtual ~CmdClosure() {}
+      
+      virtual PClo clone()  const =0;
+      
+      virtual operator string()  const =0;
+      
+    };
+
+  
+  
+  inline ostream& operator<< (ostream& os, const CmdClosure& clo) { return os << string(clo); }
+  
+  
+  template
+    < typename TY
+    , class BASE
+    , class TUP
+    , uint idx
+    >
+  class ParamAccessor
+    : public BASE
+    {
+      TY& element() { return BASE::template getAt<idx>(); }
       
     public:
+        
+      ParamAccessor(TUP const& tuple)
+        : BASE(tuple)
+        { 
+          cout << showSizeof(element()) << endl;   //////////TODO remove this test code
+        }
       
+      string
+      dump (string const& prefix = "(")  const
+        {
+          return BASE::dump (prefix+element());
+        }
+      
+      
+      ////////////////////TODO the real access operations (e.g. for serialising) go here
+    };
+    
+  template<class TUP>
+  class ParamAccessor<NullType, TUP, TUP, 0>
+    : public TUP
+    {
+    public:
+      ParamAccessor(TUP const& tuple)
+        : TUP(tuple)
+        { }
+      
+      ////////////////////TODO the recursion-end of the access operations goes here
+      
+    protected:
+      string
+      dump (string const& prefix)  const
+        { 
+          return prefix+")";
+        }
+      
+    };
+  
+  
+  
+  template<typename SIG>
+  class Closure
+    : public CmdClosure
+    {
+      typedef typename FunctionSignature< function<SIG> >::Args Args;
+      
+      typedef Tuple<Args> ArgTuple;
+      
+      typedef BuildTupleAccessor<Args,ParamAccessor> BuildAccessor;
+      typedef typename BuildAccessor::Accessor ParamStorageTuple;
+      
+      ParamStorageTuple params_;
+      
+    public:
+      Closure (ArgTuple const& args)
+        : params_(BuildAccessor(args))
+        { }
+      
+      
+      /** create a clone copy of this concrete closure,
+       *  hidden behind the generic CmdClosure interface
+       *  and owned by a shared_ptr PClo.
+       */
+      PClo
+      clone()  const
+        {
+          return PClo (new Closure (this->params_));
+        }
+      
+      operator string()  const
+        {
+          UNIMPLEMENTED ("how to do a string conversion on the variable argument tuple??");
+        }
     };
   ////////////////TODO currently just fleshing  out the API....
   

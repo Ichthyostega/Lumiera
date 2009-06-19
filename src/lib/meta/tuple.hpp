@@ -305,16 +305,17 @@ namespace typelist{
     
     
     
-    Tuple<Types<> >
+    inline
+    Tuple< Types<> >
     makeNullTuple ()
     {
       return Tuple<Types<> > ();
     }
     
     
-    template< typename T1
-            >
-    Tuple<Types<T1> >
+    template<typename T1>
+    inline
+    Tuple< Types<T1> >
     make ( T1 a1 =T1()
          )
     {
@@ -325,7 +326,8 @@ namespace typelist{
     template< typename T1
             , typename T2
             >
-    Tuple<Types<T1,T2> >
+    inline
+    Tuple< Types<T1,T2> >
     make ( T1 a1 =T1()
          , T2 a2 =T2()
          )
@@ -338,7 +340,8 @@ namespace typelist{
             , typename T2
             , typename T3
             >
-    Tuple<Types<T1,T2,T3> >
+    inline
+    Tuple< Types<T1,T2,T3> >
     make ( T1 a1 =T1()
          , T2 a2 =T2()
          , T3 a3 =T3()
@@ -353,7 +356,8 @@ namespace typelist{
             , typename T3
             , typename T4
             >
-    Tuple<Types<T1,T2,T3,T4> >
+    inline
+    Tuple< Types<T1,T2,T3,T4> >
     make ( T1 a1 =T1()
          , T2 a2 =T2()
          , T3 a3 =T3()
@@ -370,7 +374,8 @@ namespace typelist{
             , typename T4
             , typename T5
             >
-    Tuple<Types<T1,T2,T3,T4,T5> >
+    inline
+    Tuple< Types<T1,T2,T3,T4,T5> >
     make ( T1 a1 =T1()
          , T2 a2 =T2()
          , T3 a3 =T3()
@@ -392,7 +397,8 @@ namespace typelist{
             , typename T8
             , typename T9
             >
-    Tuple<Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> >
+    inline
+    Tuple< Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> >
     make ( T1 a1 =T1()
          , T2 a2 =T2()
          , T3 a3 =T3()
@@ -443,7 +449,7 @@ namespace typelist{
       typedef BuildTupleAccessor<Tail,_X_,TUP, i+1> NextBuilder;
       typedef typename NextBuilder::Accessor NextAccessor;
       
-      ArgTuple& argData_;
+      ArgTuple const& argData_;
       
     public:
       
@@ -456,7 +462,7 @@ namespace typelist{
                  >    Accessor;
       
       
-      BuildTupleAccessor (ArgTuple& tup)
+      BuildTupleAccessor (ArgTuple const& tup)
         : argData_(tup)
         { }
       
@@ -474,9 +480,18 @@ namespace typelist{
   class BuildTupleAccessor<Types<>, _X_, TUP, i>
     {
       typedef Tuple<Types<> > ArgTuple;
+      ArgTuple const& argData_;
       
     public:
       typedef _X_<NullType, TUP, TUP, 0> Accessor;
+      
+      BuildTupleAccessor (ArgTuple const& tup)
+        : argData_(tup)
+        { }
+      
+      /** used to get the product of this builder template... */
+      operator Accessor() { return Accessor(argData_); }
+      
     };
   
   

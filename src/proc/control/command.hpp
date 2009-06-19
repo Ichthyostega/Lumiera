@@ -58,6 +58,12 @@ namespace control {
     {
       
     public:
+      static Command& get (Symbol cmdID);
+      
+      virtual ~Command() {};
+      
+      virtual void operator() ()   =0;
+      virtual void undo ()         =0;         
       
     };
   ////////////////TODO currently just fleshing  out the API....
