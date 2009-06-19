@@ -34,16 +34,14 @@ END
 
 
 TEST "hierarchical placement types" PlacementHierarchy_test <<END
-out: sizeof\( \w+ \) =  \d{2}
+out: sizeof\( .+ \) =  [0-9]{2}
 out: Placement.+mobject.+test.+TestSubMO1.+. use-cnt=1 .*
 out: Placement.+mobject.+test.+TestSubMO2.+. use-cnt=1 .*
 out: Placement.+mobject.+test.+TestSubMO21.+ use-cnt=2 .*
-out: Placement.+mobject.+test.+TestSubMO21.+ use-cnt=2 .*
 out: Placement.+mobject.+session.+Clip.+.... use-cnt=2 .*
-out: TestSubMO1\(ID= \d{3}\)
-out: TestSubMO2\(ID= \d{3}\)
-out: TestSubMO21\(ID= \d{3}\)
-out: specialAPI()
+out: TestSubMO1\(ID= [0-9]{3}\)
+out: TestSubMO2\(ID= [0-9]{3}\)
+out: TestSubMO21\(ID= [0-9]{3}\)
 out: specialAPI()
 out: pID\(\w{16}\)
 END
