@@ -44,8 +44,8 @@
 
 
 
-#ifndef CONTROL_COMMAND_H
-#define CONTROL_COMMAND_H
+#ifndef CONTROL_COMMAND_DEF_H
+#define CONTROL_COMMAND_DEF_H
 
 //#include "pre.hpp"
 #include "include/symbol.hpp"

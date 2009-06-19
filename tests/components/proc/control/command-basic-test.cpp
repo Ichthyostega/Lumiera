@@ -80,6 +80,10 @@ namespace test    {
   
   using lumiera::typelist::BuildTupleAccessor;
   
+  
+  ////////////////////////////////////////////TODO braindump
+  
+  
   /** 
    * Type analysis helper template. 
    * Used for dissecting a given type signature to derive
@@ -313,17 +317,8 @@ namespace test    {
   
   //////////////////////////// start of the actual Test....
   
-
-/*  
-    bind: opFunc(a,b,c) -> op(void)
-    
-    curry(opFunc) (a) (b) (c)
-    
-    pAppl(func, x) ->  func2 (b, c)
-    
-    return bind( recursion(), param)
-     
-*/  
+  
+  
   namespace command1 {
     void
     operate (P<Time> dummyObj, int randVal)
@@ -345,7 +340,6 @@ namespace test    {
   
   }
   
-  ////////////////////////////////////////////TODO braindump
   
   
   /***************************************************************************
@@ -367,28 +361,27 @@ namespace test    {
       virtual void
       run (Arg) 
         {
-          /////////////////////////////////TODO
-          defineCommands();
-          checkExecution();
-        }
-      
-      void
-      defineCommands ()
-        {
           P<Time> obj (new Time(5));
           int randVal ((rand() % 10) - 5);
           
-          CommDef ("test.command1")
+          CommandDef ("test.command1")
               .operation (command1::operate)
               .captureUndo (command1::capture)
               .undoOperation (command1::undoIt)
               .bind (obj, randVal)
               ;
-        }
-      
-      void
-      checkExecution ()
-        {
+          
+          
+          Command ourCmd = Command::get("test.command1");
+          
+          // invoke the command
+          ASSERT (obj == Time(5));
+          ourCmd();
+          ASSERT (obj == Time(5) + Time(randVal));
+          
+          // undo the effect of the command
+          ourCmd.undo();
+          ASSERT (obj == Time(5));
         }
     };
   

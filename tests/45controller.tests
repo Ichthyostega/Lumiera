@@ -7,4 +7,5 @@ PLANNED "CommandBasic_test" CommandBasic_test <<END
 END
 
 
-#
+PLANNED "CommandMutation_test" CommandMutation_test <<END
+END
