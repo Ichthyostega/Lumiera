@@ -116,7 +116,7 @@ bitmap_bit_get_nth (MPoolcluster cluster, unsigned index)
 
   uintptr_t quot = index>>MPOOL_DIV_SHIFT;
   uintptr_t rem = index & ~((~MPOOL_C(0))<<MPOOL_DIV_SHIFT);
-  uintptr_t* bitmap = (uintptr_t*)&cluster->data;
+  uintptr_t* bitmap = (uintptr_t*)cluster->data;
 
   return bitmap[quot] & ((uintptr_t)1<<rem);
 }
@@ -166,7 +166,7 @@ mpool_cluster_alloc_ (MPool self)
     return NULL;
 
   /* clear the bitmap */
-  memset (&cluster->data, 0, MPOOL_BITMAP_SIZE (self->elements_per_cluster));
+  memset (cluster->data, 0, MPOOL_BITMAP_SIZE (self->elements_per_cluster));
 
   /* initialize freelist */
   for (unsigned i = 0; i < self->elements_per_cluster; ++i)
@@ -240,7 +240,7 @@ alloc_near (MPoolcluster cluster, MPool self, void* locality)
   uintptr_t quot = index>>MPOOL_DIV_SHIFT;
   uintptr_t rem = index & ~((~MPOOL_C(0))<<MPOOL_DIV_SHIFT);
 
-  uintptr_t* bitmap = (uintptr_t*)&cluster->data;
+  uintptr_t* bitmap = (uintptr_t*)cluster->data;
   unsigned r = ~0U;
 
   /* the bitmap word at locality */
@@ -276,7 +276,7 @@ bitmap_set_element (MPoolcluster cluster, MPool self, void* element)
   uintptr_t quot = index>>MPOOL_DIV_SHIFT;
   uintptr_t rem = index & ~((~MPOOL_C(0))<<MPOOL_DIV_SHIFT);
 
-  uintptr_t* bitmap = (uintptr_t*)&cluster->data;
+  uintptr_t* bitmap = (uintptr_t*)cluster->data;
   bitmap[quot] |= ((uintptr_t)1<<rem);
 
   TRACE (mpool_dbg, "set bit %d, index %d, of %p is %p", rem, quot, element, bitmap[quot]);
@@ -295,7 +295,7 @@ bitmap_clear_element (MPoolcluster cluster, MPool self, void* element)
   uintptr_t quot = index>>MPOOL_DIV_SHIFT;
   uintptr_t rem = index & ~((~MPOOL_C(0))<<MPOOL_DIV_SHIFT);
 
-  uintptr_t* bitmap = (uintptr_t*)&cluster->data;
+  uintptr_t* bitmap = (uintptr_t*)cluster->data;
   bitmap[quot] &= ~((uintptr_t)1<<rem);
 
   TRACE (mpool_dbg, "cleared bit %d, index %d, of %p is %p", rem, quot, element, bitmap[quot]);
@@ -403,7 +403,7 @@ find_near (MPoolcluster cluster, MPool self, void* element)
   uintptr_t quot = index>>MPOOL_DIV_SHIFT;
   uintptr_t rem = index & ~((~MPOOL_C(0))<<MPOOL_DIV_SHIFT);
 
-  uintptr_t* bitmap = (uintptr_t*)&cluster->data;
+  uintptr_t* bitmap = (uintptr_t*)cluster->data;
   unsigned r = ~0U;
 
   /* the bitmap word at locality */
