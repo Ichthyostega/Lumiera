@@ -65,19 +65,38 @@ namespace typelist{
     struct Apply;
     
     
+    template<>                                            //__________________________________
+    struct Apply<0>                                      ///< Apply function without Arguments
+      {
+        template<typename RET, class FUN, class TUP>
+        static RET
+        invoke (FUN& f, TUP&)
+          {
+            return f ();
+          }
+        
+        template<typename RET, class FUN, class TUP>
+        static RET
+        bind (FUN& f, TUP&)
+          {
+            return std::tr1::bind (f);
+          }
+      };
+    
+    
     template<>                                            //_________________________________
     struct Apply<1>                                      ///< Apply function with 1 Argument
       {
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        invoke (FUN f, TUP & arg)
+        invoke (FUN& f, TUP & arg)
           {
             return f (element<1>(arg));
           }
         
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        bind (FUN f, TUP & arg)
+        bind (FUN& f, TUP & arg)
           {
             return std::tr1::bind (f, element<1>(arg));
           }
@@ -87,18 +106,18 @@ namespace typelist{
     template<>                                            //_________________________________
     struct Apply<2>                                      ///< Apply function with 2 Arguments
       {
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        invoke (FUN f, TUP & arg)
+        invoke (FUN& f, TUP & arg)
           {
             return f ( element<1>(arg)
                      , element<2>(arg)
                      ); 
           }
         
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        bind (FUN f, TUP & arg)
+        bind (FUN& f, TUP & arg)
           {
             return std::tr1::bind (f, element<1>(arg)
                                     , element<2>(arg)
@@ -110,9 +129,9 @@ namespace typelist{
     template<>                                            //_________________________________
     struct Apply<3>                                      ///< Apply function with 3 Arguments
       {
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        invoke (FUN f, TUP & arg)
+        invoke (FUN& f, TUP & arg)
           {
             return f ( element<1>(arg)
                      , element<2>(arg)
@@ -120,9 +139,9 @@ namespace typelist{
                      ); 
           }
         
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        bind (FUN f, TUP & arg)
+        bind (FUN& f, TUP & arg)
           {
             return std::tr1::bind (f, element<1>(arg)
                                     , element<2>(arg)
@@ -135,9 +154,9 @@ namespace typelist{
     template<>                                            //_________________________________
     struct Apply<4>                                      ///< Apply function with 4 Arguments
       {
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        invoke (FUN f, TUP & arg)
+        invoke (FUN& f, TUP & arg)
           {
             return f ( element<1>(arg)
                      , element<2>(arg)
@@ -146,9 +165,9 @@ namespace typelist{
                      ); 
           }
         
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        bind (FUN f, TUP & arg)
+        bind (FUN& f, TUP & arg)
           {
             return std::tr1::bind (f, element<1>(arg)
                                     , element<2>(arg)
@@ -162,9 +181,9 @@ namespace typelist{
     template<>                                            //_________________________________
     struct Apply<5>                                      ///< Apply function with 5 Arguments
       {
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        invoke (FUN f, TUP & arg)
+        invoke (FUN& f, TUP & arg)
           {
             return f ( element<1>(arg)
                      , element<2>(arg)
@@ -174,9 +193,9 @@ namespace typelist{
                      ); 
           }
         
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        bind (FUN f, TUP & arg)
+        bind (FUN& f, TUP & arg)
           {
             return std::tr1::bind (f, element<1>(arg)
                                     , element<2>(arg)
@@ -191,9 +210,9 @@ namespace typelist{
     template<>                                            //_________________________________
     struct Apply<6>                                      ///< Apply function with 6 Arguments
       {
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        invoke (FUN f, TUP & arg)
+        invoke (FUN& f, TUP & arg)
           {
             return f ( element<1>(arg)
                      , element<2>(arg)
@@ -204,9 +223,9 @@ namespace typelist{
                      ); 
           }
         
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        bind (FUN f, TUP & arg)
+        bind (FUN& f, TUP & arg)
           {
             return std::tr1::bind (f, element<1>(arg)
                                     , element<2>(arg)
@@ -222,9 +241,9 @@ namespace typelist{
     template<>                                            //_________________________________
     struct Apply<7>                                      ///< Apply function with 7 Arguments
       {
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        invoke (FUN f, TUP & arg)
+        invoke (FUN& f, TUP & arg)
           {
             return f ( element<1>(arg)
                      , element<2>(arg)
@@ -236,9 +255,9 @@ namespace typelist{
                      ); 
           }
         
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        bind (FUN f, TUP & arg)
+        bind (FUN& f, TUP & arg)
           {
             return std::tr1::bind (f, element<1>(arg)
                                     , element<2>(arg)
@@ -255,9 +274,9 @@ namespace typelist{
     template<>                                            //_________________________________
     struct Apply<8>                                      ///< Apply function with 8 Arguments
       {
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        invoke (FUN f, TUP & arg)
+        invoke (FUN& f, TUP & arg)
           {
             return f ( element<1>(arg)
                      , element<2>(arg)
@@ -270,9 +289,9 @@ namespace typelist{
                      ); 
           }
         
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        bind (FUN f, TUP & arg)
+        bind (FUN& f, TUP & arg)
           {
             return std::tr1::bind (f, element<1>(arg)
                                     , element<2>(arg)
@@ -290,9 +309,9 @@ namespace typelist{
     template<>                                            //_________________________________
     struct Apply<9>                                      ///< Apply function with 9 Arguments
       {
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        invoke (FUN f, TUP & arg)
+        invoke (FUN& f, TUP & arg)
           {
             return f ( element<1>(arg)
                      , element<2>(arg)
@@ -306,9 +325,9 @@ namespace typelist{
                      ); 
           }
         
-        template<class FUN, typename RET, class TUP>
+        template<typename RET, class FUN, class TUP>
         static RET
-        bind (FUN f, TUP & arg)
+        bind (FUN& f, TUP & arg)
           {
             return std::tr1::bind (f, element<1>(arg)
                                     , element<2>(arg)
@@ -336,6 +355,8 @@ namespace typelist{
       typedef typename FunctionSignature< function<SIG> >::Args Args;
       typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
       
+      typedef function<Ret()> BoundFunc;
+      
       enum { ARG_CNT = count<typename Args::List>::value };
       
       
@@ -347,11 +368,11 @@ namespace typelist{
         : params_(args)
         { }
       
-      function<SIG>  bind (SIG& f)                 { return func::Apply<ARG_CNT>::bind (f, params_); }
-      function<SIG>  bind (function<SIG> const& f) { return func::Apply<ARG_CNT>::bind (f, params_); }
+      BoundFunc bind (SIG& f)           { return func::Apply<ARG_CNT>::template bind<BoundFunc> (f, params_); }
+      BoundFunc bind (function<SIG>& f) { return func::Apply<ARG_CNT>::template bind<BoundFunc> (f, params_); }
       
-      Ret      operator() (SIG& f)                 { return func::Apply<ARG_CNT>::invoke (f, params_); }
-      Ret      operator() (function<SIG> const& f) { return func::Apply<ARG_CNT>::invoke (f, params_); }
+      Ret operator() (SIG& f)           { return func::Apply<ARG_CNT>::template invoke<BoundFunc> (f, params_); }
+      Ret operator() (function<SIG>& f) { return func::Apply<ARG_CNT>::template invoke<BoundFunc> (f, params_); }
     };
   
   
