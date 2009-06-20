@@ -40,8 +40,8 @@
 #include "lib/meta/generator.hpp"
 #include "lib/meta/util.hpp"
 
-#include <boost/format.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <boost/format.hpp>
 
 
 

@@ -38,7 +38,7 @@
 #include "lib/meta/typelist.hpp"   ////////////TODO really?
 #include "lib/meta/tuple.hpp"
 #include "meta/typelist-diagnostics.hpp"
-#include "lib/util.hpp"
+#include "meta/tuple-diagnostics.hpp"
 
 #include <boost/utility/enable_if.hpp>
 #include <boost/format.hpp>
@@ -46,10 +46,6 @@
 
 using ::test::Test;
   
-using boost::enable_if;
-using boost::format;
-using boost::str;
-using util::unConst;
 using std::string;
 using std::cout;
 using std::endl;
@@ -59,10 +55,9 @@ namespace lumiera {
 namespace typelist{
 namespace test {
       
-  
+      
       
       namespace { // test data
-        
         
         
         typedef Types< Num<1>
@@ -77,109 +72,6 @@ namespace test {
         
         
       } // (End) test data
-  
-  
-  namespace { // Diagnostics
-    
-    
-    
-    template<int i>
-    string
-    showTupElement(Num<i> o) 
-    {
-      static format   constElm("(%i)");
-      static format changedElm("{%i}");
-      
-      return str ( (o.o_==i? constElm:changedElm) % int(o.o_));
-    }
-    
-    template<typename T>
-    string
-    showTupElement(T x)
-    {
-      return string(x);
-    }
-    
-    
-    /**
-     * Helper template which acts as an "accessor".
-     * Using the BuildTupleAccessor, we create a linear chain
-     * of such TupleElementDisplayers as subclass of a given tuple type.
-     * Here this technique is just used for dumping the tuples data fields,
-     * but e.g. the control::Closure uses the same principle for manipulating
-     * the individual datafields of an function argument tuple.  
-     */
-    template
-      < typename TY
-      , class BASE
-      , class TUP
-      , uint idx
-      >
-    class TupleElementDisplayer
-      : public BASE
-      {
-        TY      & element()        { return BASE::template getAt<idx>(); }
-        TY const& element()  const { return unConst(this)->template getAt<idx>(); }
-        
-      public:
-        TupleElementDisplayer(TUP const& tuple) : BASE(tuple) {}
-        
-        string
-        dump (string const& prefix = "(")  const
-          {
-            return BASE::dump (prefix+showTupElement(element())+",");
-          }
-      };
-    
-    template<class TUP>
-    class TupleElementDisplayer<NullType, TUP, TUP, 0>
-      : public TUP
-      {
-      public:
-        TupleElementDisplayer(TUP const& tuple) : TUP(tuple) {}
-        
-        
-      protected:
-        
-        string
-        dump (string const& prefix)  const
-          { 
-            if (1 < prefix.length())
-              // removing the trailing comma
-              return prefix.substr (0, prefix.length()-1) +")";
-            else
-              return prefix+")";
-          }
-      };
-    
-  } // (END) Diagnostics Helper
-  
-  
-  
-  /* ===== printing Tuple types and contents ===== */ 
-    
-  template<typename TYPES>
-  string
-  showDump (Tuple<TYPES> const& tuple)
-  {
-    typedef BuildTupleAccessor<TYPES,TupleElementDisplayer> BuildAccessor;
-    typedef typename BuildAccessor::Accessor Displayer;
-    
-    return " Tup" + Displayer(tuple).dump();
-  }
-  
-  template<typename TUP>
-  typename enable_if< is_Tuple<TUP>,
-    string          >::type
-  showType ()
-  {
-    typedef InstantiateChained<typename TUP::ArgList, Printer, NullP>  DumpPrinter;
-    return "TYPES-<>"
-         + DumpPrinter::print();
-  }
-  
-  // see the macros DISPLAY and DUMPVAL defined in typelist-diagnostics.hpp
-  
   
   
   
@@ -214,10 +106,12 @@ namespace test {
           DISPLAY (L2);
           DISPLAY (L3);
           
-          typedef Tuple<Types3> Tup3;
+          typedef Tuple<Types1> Tup1;
+          Tup1 tup1x (Num<1>(11));
           
-          DISPLAY (Tup3);
-          DUMPVAL (Tup3());
+          DISPLAY (Tup1);     // prints the type
+          DUMPVAL (Tup1());   // prints the contents
+          DUMPVAL (tup1x);
         }
     };
   
