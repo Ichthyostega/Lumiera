@@ -39,6 +39,7 @@
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
+#include "lib/meta/function-erasure.hpp"
 #include "lib/meta/tuple.hpp"
 
 #include <tr1/memory>
@@ -64,8 +65,19 @@ namespace control {
   using lumiera::typelist::FunctionSignature;
   using lumiera::typelist::Tuple;
   using lumiera::typelist::BuildTupleAccessor;
+  using lumiera::typelist::TupleApplicator;
+  using lumiera::typelist::FunErasure;
+  using lumiera::typelist::StoreFunction;
   
   using lumiera::typelist::NullType;
+    
+  
+  /** 
+   * A neutral container internally holding 
+   * the functor used to implement the Command
+   */
+  typedef FunErasure<StoreFunction> CmdFunctor;
+  
   
   class CmdClosure;
   typedef std::tr1::shared_ptr<CmdClosure> PClo;  ///< smart-ptr type used for handling concrete closures
@@ -81,6 +93,7 @@ namespace control {
       
       virtual operator string()  const =0;
       
+      virtual CmdFunctor bindArguments (CmdFunctor&) =0;
     };
   
   
@@ -156,6 +169,32 @@ namespace control {
       Closure (ArgTuple const& args)
         : params_(BuildAccessor(args))
         { }
+      
+      
+      /** Core operation: use the embedded argument tuple
+       *  to close a given functor over its arguments.
+       *  @param unboundFunctor an function object, whose
+       *         function arguments are required to match 
+       *         the types of the embedded ParamStorageTuple
+       *  @return new functor object containing the function<void()>,
+       *         which is created by binding all arguments of the
+       *         input functor.
+       *  @note  ASSERTION failure if the function signature 
+       *         doesn't match the argument types tuple.
+       *  @note  when finally invoked, the functor, which is
+       *         bound here to the argument tuple, might actually
+       *         \em modify the param values. Thus this function
+       *         can't be const.
+       */
+      CmdFunctor
+      bindArguments (CmdFunctor& unboundFunctor)
+        {
+          function<SIG> unboundF (unboundFunctor.getFun<SIG>());
+          TupleApplicator<SIG> appli (params_);
+                
+          function<void()> boundFunctor = appli.bind (unboundF);
+          return CmdFunctor (boundFunctor);
+        }
       
       
       /** create a clone copy of this concrete closure,

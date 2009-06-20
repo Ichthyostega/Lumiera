@@ -38,7 +38,6 @@
 //#include "pre.hpp"
 #include "lib/error.hpp"
 #include "proc/control/command-closure.hpp"
-#include "lib/meta/function-erasure.hpp"
 
 //#include <tr1/memory>
 #include <boost/scoped_ptr.hpp>
@@ -50,21 +49,12 @@
 
 namespace control {
   
-  using lumiera::typelist::FunErasure;
-  using lumiera::typelist::StoreFunction;
 //  using lumiera::Symbol;
 //  using std::tr1::shared_ptr;
   using boost::scoped_ptr;
   using std::tr1::function;
   using std::ostream;
   using std::string;
-  
-  
-  /** 
-   * A neutral container internally holding 
-   * the functor used to implement the Command
-   */
-  typedef FunErasure<StoreFunction> CmdFunctor;
   
   
   /**
