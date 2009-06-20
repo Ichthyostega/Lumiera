@@ -190,6 +190,16 @@ namespace util {
   }
   
   
+  /** shortcut to save some typing when having to define
+   *  const and non-const variants of member functions
+   */
+  template<class OBJ>
+  OBJ*
+  unConst (const OBJ* o)
+  {
+    return const_cast<OBJ*> (o);
+  }
+  
   
   
   /** produce an identifier based on the given string.

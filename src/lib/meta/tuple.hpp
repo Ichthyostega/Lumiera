@@ -294,6 +294,33 @@ namespace typelist{
     };
   
   
+  template<>
+  struct Tuple<Types<> >
+    : Tuple<NullType>
+    {
+      enum  { SIZE = 0 };
+      typedef Tuple<NullType> TupleNull;
+      
+      Tuple ( NullType =NullType()
+            , NullType =NullType()
+            , NullType =NullType()
+            , NullType =NullType()
+            , NullType =NullType()
+            , NullType =NullType()
+            , NullType =NullType()
+            , NullType =NullType()
+            , NullType =NullType()
+            )
+        { } ///< end recursion of chained ctor calls
+      
+      
+      template<uint> struct ShiftedTuple       { typedef TupleNull Type; };
+      
+      template<uint> TupleNull&  getShifted () { return static_cast<TupleNull&> (*this); }
+      template<uint> NullType&        getAt () { return getHead(); }
+    };
+  
+  
   
   namespace tuple { // some convenience access functions
   

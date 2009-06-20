@@ -41,6 +41,7 @@
 #include "lib/meta/function-closure.hpp"
 #include "lib/meta/function-erasure.hpp"
 #include "lib/meta/tuple.hpp"
+#include "lib/util.hpp"
 
 #include <tr1/memory>
 #include <tr1/functional>
@@ -59,6 +60,7 @@ namespace control {
   
 //  using lumiera::Symbol;
 //  using std::tr1::shared_ptr;
+  using util::unConst;
   using std::string;
   using std::ostream;
   using std::tr1::function;
@@ -110,7 +112,8 @@ namespace control {
   class ParamAccessor
     : public BASE
     {
-      TY& element() { return BASE::template getAt<idx>(); }
+      TY      & element()        { return          BASE::template getAt<idx>(); }
+      TY const& element()  const { return unConst(this)->template getAt<idx>(); }
       
     public:
         
@@ -123,7 +126,7 @@ namespace control {
       string
       dump (string const& prefix = "(")  const
         {
-          return BASE::dump (prefix+element());
+          return BASE::dump (prefix+element()+",");
         }
       
       
@@ -145,7 +148,11 @@ namespace control {
       string
       dump (string const& prefix)  const
         { 
-          return prefix+")";
+          if (1 < prefix.length())
+            // remove trailing comma...
+            return prefix.substr (0, prefix.length()-1) +")";
+          else
+            return prefix+")";
         }
       
     };
