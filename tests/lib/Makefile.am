@@ -48,6 +48,7 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/mainsuite.cpp				\
 	$(testlib_srcdir)/meta/typelist-test.cpp         	\
 	$(testlib_srcdir)/meta/typelist-manip-test.cpp    	\
+	$(testlib_srcdir)/meta/type-tuple-test.cpp    		\
 	$(testlib_srcdir)/meta/function-closure-test.cpp   	\
 	$(testlib_srcdir)/meta/function-erasure-test.cpp   	\
 	$(testlib_srcdir)/meta/generator-test.cpp        	\

@@ -42,7 +42,7 @@
 #include "lib/meta/generator.hpp"
 #include "lib/meta/typelistutil.hpp"
 #include "meta/typelist-diagnostics.hpp"
-#include "lib/util.hpp"
+//#include "lib/util.hpp"
 
 #include <boost/format.hpp>
 #include <iostream>
@@ -71,11 +71,7 @@ namespace test {
                      >::List List2;
         
         
-        template<class X> struct CountDown          { typedef NullType List; };
-        template<>        struct CountDown<Num<0> > { typedef Node<Num<0>, NullType> List; };
-        template<int I>   struct CountDown<Num<I> > { typedef Node<Num<I>, typename CountDown<Num<I-1> >::List> List; };
-        
-        
+        // see also the CountDown template in typelist-diagnostics.hpp...
         
       } // (End) test data
       
@@ -96,7 +92,8 @@ namespace test {
        */
       class TypeListManipl_test : public Test
         {
-          virtual void run(Arg arg) 
+          virtual void
+          run (Arg) 
             {
               check_diagnostics ();
               check_apply  ();
@@ -108,7 +105,8 @@ namespace test {
             }
           
           
-          void check_diagnostics ()
+          void
+          check_diagnostics ()
             {
               // Explanation: the DISPLAY macro expands as follows....
               typedef InstantiateChained<List1::List, Printer, NullP >  Contents_List1;
@@ -123,7 +121,8 @@ namespace test {
             }
           
           
-          void check_append ()
+          void
+          check_append ()
             {
               typedef Append<NullType, NullType> Append1;
               DISPLAY (Append1);
@@ -156,7 +155,8 @@ namespace test {
           template<class X> struct AddConst2          { typedef X        Type; };
           template<int I>   struct AddConst2<Num<I> > { typedef Num<I+2> Type; };
           
-          void check_apply ()
+          void
+          check_apply ()
             {
               typedef Apply<List1, AddConst2> Added2;
               DISPLAY (Added2);
@@ -166,14 +166,16 @@ namespace test {
           template<class X> struct IsEven          { enum {value = false };        };
           template<int I>   struct IsEven<Num<I> > { enum {value = (0 == I % 2) }; };
           
-          void check_filter ()
+          void
+          check_filter ()
             {
               typedef Filter<Append<List1,List2>::List, IsEven > FilterEven; 
               DISPLAY (FilterEven);
             }
           
           
-          void check_prefix ()
+          void
+          check_prefix ()
             {
               typedef PrefixAll<Num<11>,Num<22> > Prefix1;
               DISPLAY (Prefix1);
@@ -196,7 +198,8 @@ namespace test {
             }
           
           
-          void check_distribute()
+          void
+          check_distribute()
             {
               typedef Distribute<Num<11>, List1> Dist1;
               DISPLAY (Dist1);
@@ -213,7 +216,8 @@ namespace test {
             }
           
           
-          void check_combine()
+          void
+          check_combine()
             {
               typedef CountDown<Num<11> > Down;
               DISPLAY (Down);

@@ -36,6 +36,7 @@
  ** might come in handy. 
  ** 
  ** @see control::CommandDef usage example
+ ** @see tuple-test.cpp
  ** @see typelist.hpp
  ** @see function.hpp
  ** @see generator.hpp
