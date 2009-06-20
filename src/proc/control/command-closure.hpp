@@ -192,8 +192,9 @@ namespace control {
           function<SIG> unboundF (unboundFunctor.getFun<SIG>());
           TupleApplicator<SIG> appli (params_);
                 
-          function<void()> boundFunctor = appli.bind (unboundF);
-          return CmdFunctor (boundFunctor);
+//          function<void()> boundFunctor = appli.bind (unboundF); ///////TODO: deactivated temporarily 
+          function<void()> boundFun;
+          return CmdFunctor (boundFun);
         }
       
       

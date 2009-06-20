@@ -48,14 +48,25 @@ using boost::format;
 namespace lumiera {
 namespace typelist{
   
+  /** dummy interface / baseclass for diagnostics */
+  struct Numz
+    {
+      char o_;
+      Numz (char x =0) : o_(x) { }
+    };
+
+
   /** constant-wrapper type for debugging purposes,
    *  usable for generating lists of distinguishable types
    */
   template<int I>
-  struct Num
+  struct Num : Numz
     {
       enum{ VAL=I };
+      
+      Num (char x = char(I)) : Numz(x) { }
     };
+  
   
   
   /* some forwards used by config-flags-test.cpp */

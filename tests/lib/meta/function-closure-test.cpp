@@ -32,8 +32,10 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/meta/typelist.hpp"   ////////////TODO really?
 #include "lib/meta/function-closure.hpp"
 #include "meta/dummy-functions.hpp"
+#include "meta/typelist-diagnostics.hpp"
 //#include "lib/util.hpp"
 
 //#include <boost/format.hpp>
@@ -47,20 +49,77 @@ using std::cout;
 namespace lumiera {
 namespace typelist{
 namespace test {
-  
-  
-  
-  
+      
+      
+      namespace { // test data
+        
+        
+        
+        typedef Types< Num<1>
+                     , Num<2>
+                     , Num<3>
+                     >::List List1;
+        typedef Types< Num<5>
+                     , Num<6>
+                     , Num<7>
+                     >::List List2;
+        
+        
+        /** special test fun 
+         *  accepting the terrific Num types */
+        template<char i,char ii, char iii>
+        int
+        getNumberz (Num<i> one, Num<ii> two, Num<iii> three)
+          {
+            return one.o_ + two.o_ + three.o_;
+          }
+        
+      } // (End) test data
+      
+      
+      
+      
+      
+      
   /*************************************************************************
-   * @test //////////////////////////////////////////
-   *       - building combinations and permutations
+   * @test building a function closure for a given functor
+   *       and arguments passed in as tuple
+   *       //////////////////////////////////////////TODO
+   *       - building
    */
   class FunctionClosure_test : public Test
     {
       virtual void
       run (Arg) 
         {
+          check_diagnostics ();
+          check_append ();
+          
           UNIMPLEMENTED ("verify function closure utils");
+        }
+      
+      
+      /** verify the test input data
+       *  @see TypeListManipl_test#check_diagnostics()
+       *       for an explanation of the DISPLAY macro
+       */
+      void
+      check_diagnostics ()
+        {
+          DISPLAY (List1);
+          DISPLAY (List2);
+          ;
+          ASSERT (6 == (getNumberz<1,2,3> (Num<1>(), Num<2>(), Num<3>())));
+          ASSERT (6 == (getNumberz<1,1,1> (Num<1>(), Num<1>(2), Num<1>(3))));
+        }
+      
+      
+      void
+      check_append ()
+        {
+          /////////////////////////////////////////////TODO      
+          typedef Append<Num<111>,List2>     Append7;
+          DISPLAY (Append7);
         }
     };
   
