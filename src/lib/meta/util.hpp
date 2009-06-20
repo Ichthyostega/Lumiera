@@ -70,6 +70,24 @@ namespace lumiera {
       };
     
     
+    /** Trait template for detecting a typelist type.
+     *  For example, this allows to write specialisations with the help of
+     *  boost::enable_if
+     */
+    template<typename TY>
+    class is_Typelist
+      {
+        template<class X>
+        static Yes_t check(typename X::List *);
+        template<class>
+        static No_t  check(...);
+        
+      public: 
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
+      };
+    
+    
+    
   } // namespace typelist
   
 } // namespace lumiera

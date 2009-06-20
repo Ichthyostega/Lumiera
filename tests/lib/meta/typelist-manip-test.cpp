@@ -108,7 +108,7 @@ namespace test {
           void
           check_diagnostics ()
             {
-              // Explanation: the DISPLAY macro expands as follows....
+              // Explanation: the DISPLAY macro results in the following definition....
               typedef InstantiateChained<List1::List, Printer, NullP >  Contents_List1;
               cout << "List1" << "\t:" << Contents_List1::print() << "\n";
               

@@ -49,6 +49,7 @@
 
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelistutil.hpp"
+#include "lib/meta/util.hpp"
 
 
 
@@ -443,6 +444,17 @@ namespace typelist{
     
   }
       
+    
+  /** Trait template for detecting a type tuple */
+  template<typename TUP>
+  class is_Tuple
+    {
+      template<class X>  struct Check             { typedef No_t It;  };
+      template<class TY> struct Check<Tuple<TY> > { typedef Yes_t It; };
+      
+    public: 
+      static const bool value = (sizeof(Yes_t)==sizeof(typename Check<TUP>::It));
+    };
 
   
   /**

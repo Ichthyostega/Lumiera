@@ -38,11 +38,16 @@
 
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/generator.hpp"
+#include "lib/meta/util.hpp"
 
 #include <boost/format.hpp>
+#include <boost/utility/enable_if.hpp>
+
+
 
 using std::string;
 using boost::format;
+using boost::enable_if;
 
 
 namespace lumiera {
@@ -54,8 +59,8 @@ namespace typelist{
       char o_;
       Numz (char x =0) : o_(x) { }
     };
-
-
+  
+  
   /** constant-wrapper type for debugging purposes,
    *  usable for generating lists of distinguishable types
    */
@@ -80,11 +85,12 @@ namespace typelist{
   struct Config;
   
   
-        
+  
   /** helper for generating test lists */      
   template<class X> struct CountDown          { typedef NullType List; };
   template<>        struct CountDown<Num<0> > { typedef Node<Num<0>, NullType> List; };
   template<int I>   struct CountDown<Num<I> > { typedef Node<Num<I>, typename CountDown<Num<I-1> >::List> List; };
+  
   
   
   
@@ -165,15 +171,31 @@ namespace typelist{
         };
       
       
-#define DIAGNOSE(LIST) \
-        typedef InstantiateChained<LIST::List, Printer, NullP>  Contents_##LIST;
-                     
-#define DISPLAY(NAME)  \
-        DIAGNOSE(NAME); cout << STRINGIFY(NAME) << "\t:" << Contents_##NAME::print() << "\n";
-      
-      
-      
     } // (End) internal defs
+    
+    
+    
+    /* ===== printing types and contents ===== */ 
+    
+    template<typename TYPES>
+    typename enable_if< is_Typelist<TYPES>,
+      string          >::type
+    showType ()
+    {
+      typedef InstantiateChained<typename TYPES::List, Printer, NullP>  DumpPrinter;
+      return DumpPrinter::print();
+    }
+    
+    //  Note: we define overloads of this function for other types, especially Tuples
+    
+    
+#define DISPLAY(NAME)  \
+        cout << STRINGIFY(NAME) << "\t:" << showType<NAME>() << "\n";
+    
+#define DUMPVAL(NAME)  \
+        cout << STRINGIFY(NAME) << "\t:" << showDump (NAME) << "\n";
+    
+    
     
     
     
