@@ -23,11 +23,15 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/error.hpp"
 
 #include <iostream>
 
 using std::cout;
 using std::endl;
+using lumiera::Error;
+using lumiera::LUMIERA_ERROR_EXCEPTION;
+using lumiera::error::LUMIERA_ERROR_ASSERTION;
 
 
 namespace lib {
@@ -43,6 +47,10 @@ namespace test{
   struct Murpf { };
   
   
+  void doThrow() { throw Error("because I feel like it"); }
+  int dontThrow() { return 2+2; }
+  
+  
   /*************************************************
    * verifies the proper working of helper functions
    * frequently used within the Lumiera testsuite.
@@ -54,6 +62,7 @@ namespace test{
       run (Arg)
         {
           checkTypeDisplay();
+          checkThrowChecker();
         }
       
       
@@ -88,10 +97,27 @@ namespace test{
           cout << showSizeof(p1)  << endl;
           cout << showSizeof(p2)  << endl;
         }
+      
+      
+      /** @test check the VERIFY_ERROR macro, 
+       *        which ensures a given error is raised.
+       */
+      void
+      checkThrowChecker()
+        {
+          // verify the exception is indeed raised
+          VERIFY_ERROR (EXCEPTION, doThrow() );
+          
+#if false ////////////////////////////////////////////////////////TODO: restore throwing ASSERT
+          // and when actually no exception is raised, this is an ASSERTION failure
+          VERIFY_ERROR (ASSERTION, VERIFY_ERROR (EXCEPTION, dontThrow() ));
+#endif    ////////////////////////////////////////////////////////
+        }
+      
     };
   
-    LAUNCHER (TestHelper_test, "unit common");    
-    
-    
+  LAUNCHER (TestHelper_test, "unit common");
+  
+  
 }}} // namespace lib::test::test
 
