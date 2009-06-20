@@ -61,17 +61,25 @@
 
 namespace lumiera {
 namespace typelist{
-
+  
   using std::tr1::function;
   
   
   
-  /**
+  /******************************************************
    * Generic wrapper carrying a function object
    * while hiding the actual function signature
+   * - create it using a function ref or pointer
+   * - the StoreFunction-policy also allows 
+   *   creation based on an existing function object
+   * - re-access the functor or function ref
+   *   using the templated \c getFun()
+   *   
+   * @param FH policy to control the implementation.
+   *        In most cases, you should use "StoreFunction"  
    * @note not statically typesafe. Depending on
-   *       the actual embedded container type,
-   *       it \em might be run-time typesafe.
+   *       the specified policy, it \em might be
+   *       run-time typesafe.
    */
   template<class FH>
   struct FunErasure
@@ -82,7 +90,10 @@ namespace typelist{
         : FH(functor)
         { }
     };
+  
     
+  /* ====== Policy classes ====== */
+  
   /** 
    * Policy for FunErasure: store an embedded tr1::function
    * Using this policy allows to store arbitrary complex functor objects
@@ -104,6 +115,7 @@ namespace typelist{
       struct FunctionHolder : Holder
         {
           typedef function<SIG> Functor;
+          
           FunctionHolder (Functor const& fun)
             {
               REQUIRE (SIZE >= sizeof(Functor));
@@ -146,10 +158,10 @@ namespace typelist{
     };
   
   
-  /** 
+  /**
    * Policy for FunErasure: store a bare function pointer.
    * Using this policy allows to store a conventional function ptr,
-   * while still being able to re-access it later with run-time typecheck.
+   * while still being able to re-access it later with run-time type check.
    * The price to pay is vtable access. 
    */
   class StoreFunPtr
@@ -173,7 +185,7 @@ namespace typelist{
           SIG&
           get()
             {
-              return *reinterpret_cast<SIG*> (&fP_);
+              return *reinterpret_cast<SIG*> (fP_);
             }
         };
       
@@ -202,7 +214,7 @@ namespace typelist{
     };
   
   
-  /** 
+  /**
    * Policy for FunErasure: store an unchecked bare function pointer.
    * Using this policy allows to store a conventional function ptr,
    * and to retrieve it without overhead, but also without safety.
@@ -227,7 +239,7 @@ namespace typelist{
       SIG&
       getFun ()
         {
-          return *reinterpret_cast<SIG*> (&funP_);
+          return *reinterpret_cast<SIG*> (funP_);
         }
     };
   

@@ -218,7 +218,7 @@ return: 0
 END
 
 
-PLANNED "FunctionErasure_test" FunctionErasure_test <<END
+TEST "FunctionErasure_test" FunctionErasure_test <<END
 return: 0
 END
 
