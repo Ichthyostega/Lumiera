@@ -21,20 +21,13 @@
 * *****************************************************/
 
 
-/** @file function-erasure-test.cpp
- ** bla
- **
- ** @see control::FunErasure
- ** @see command-mutation.hpp real world usage example
- **
- */
-
-
 #include "lib/test/run.hpp"
 #include "lib/meta/function-erasure.hpp"
-#include "lib/util.hpp"
+#include "meta/dummy-functions.hpp"
+//#include "lib/util.hpp"
 
 //#include <boost/format.hpp>
+#include <tr1/functional>
 #include <iostream>
 
 using ::test::Test;
@@ -46,38 +39,164 @@ namespace lumiera {
 namespace typelist{
 namespace test {
   
+  using std::tr1::function;
+  using std::tr1::bind;
+
   
-  namespace { // test data
-    
-  } // (End) test data
-  
-  
-  
-  
-  
+  typedef FunErasure<StoreFunction> Efun;
+  typedef FunErasure<StoreFunPtr>   Efp;
+  typedef FunErasure<StoreUncheckedFunPtr> Evoid;
   
   /*************************************************************************
-   * @test //////////////////////////////////////////
-   *       - building combinations and permutations
+   * @test Create specifically typed functor objects and then wrap them
+   *       into common holder objects, thereby discarding the specific
+   *       signature type information. Later on, the concrete functor
+   *       can be re-accessed, given the exact and specific type.
+   *
+   * @see control::FunErasure
+   * @see command-mutation.hpp real world usage example
    */
   class FunctionErasure_test : public Test
     {
-      virtual void run(Arg arg) 
+      virtual void
+      run (Arg) 
         {
-          check_distribute();
-          check_combine();
-        }
-      
-      
-      void check_distribute()
-        {
-        }
-      
-      
-      void check_combine()
-        {
+          function<void(int,char)> bindFunc = bind (testFunc,_1,_2);
+          function<void(int,char)> pAplFunc = bind (testFunc,_1,'x');
+          function<void(int,char)> memFunc  = bind (&FunctionErasure_test::testMemberFunction,this, _1);
+          
+          function<int(void)> getterFunc  = &returnIt;
+          
+          check_FunctorContainer( Efun (testFunc)
+                                , Efun (bindFunc)
+                                , Efun (pAplFunc)
+                                , Efun (memFunc)
+                                , Efun (getterFunc)
+                                );
+          
+          check_FunctPtrHolder(Efp(testFunc)
+                               ,Efp(&testFunc)
+                               , Efp(returnIt));
+          
+          check_VoidPtrHolder(Evoid(testFunc)
+                              ,Evoid(&testFunc)
+                              , Evoid(returnIt));
         }
 
+      void
+      testMemberFunction (char c)
+        {
+          return testFunc('a'-'A', c);
+        }
+      
+      
+      void
+      check_FunctorContainer (Efun f1, Efun f2, Efun f3, Efun f4, Efun f5)
+        {
+          typedef void (Sig1) (int,char);
+          typedef void (Sig2) (int);
+          typedef void (Sig3) (char);
+          typedef int  (Sig4) ();
+          
+          _sum_ = 0;
+          f1.getFun<Sig1>() (-11,'M');
+          ASSERT (_sum_ == 'M'-11);
+          
+          _sum_ = 0;
+          f2.getFun<Sig1>() (-22,'M');
+          ASSERT (_sum_ == 'M'-22);
+          
+          _sum_ = 0;
+          f3.getFun<Sig2>() (-33);
+          ASSERT (_sum_ == 'x'-22);
+          
+          _sum_ = 0;
+          f4.getFun<Sig3>() ('U');
+          ASSERT (_sum_ == 'u');
+          
+          ASSERT ( 'u' == f5.getFun<Sig4>() () );
+          
+#if false ////////////////////////////////////////////////////////TODO: restore throwing ASSERT
+          VERIFY_ERROR (ASSERTION, f1.getFun<Sig2>() );
+          VERIFY_ERROR (ASSERTION, f1.getFun<Sig3>() );
+          VERIFY_ERROR (ASSERTION, f1.getFun<Sig4>() );
+
+          VERIFY_ERROR (ASSERTION, f2.getFun<Sig2>() );
+          VERIFY_ERROR (ASSERTION, f3.getFun<Sig3>() );
+          VERIFY_ERROR (ASSERTION, f2.getFun<Sig4>() );
+
+          VERIFY_ERROR (ASSERTION, f3.getFun<Sig1>() );
+          VERIFY_ERROR (ASSERTION, f3.getFun<Sig3>() );
+          VERIFY_ERROR (ASSERTION, f3.getFun<Sig4>() );
+
+          VERIFY_ERROR (ASSERTION, f4.getFun<Sig1>() );
+          VERIFY_ERROR (ASSERTION, f4.getFun<Sig2>() );
+          VERIFY_ERROR (ASSERTION, f4.getFun<Sig4>() );
+
+          VERIFY_ERROR (ASSERTION, f5.getFun<Sig1>() );
+          VERIFY_ERROR (ASSERTION, f5.getFun<Sig2>() );
+          VERIFY_ERROR (ASSERTION, f5.getFun<Sig3>() );
+#endif        
+        }
+      
+      
+      void
+      check_FunctPtrHolder (Efp f1, Efp f2, Efp f3)
+        {
+          typedef void (*FP)(int,char);
+          typedef void (&FR)(int,char);
+          
+          FP fun1 = &f1.getFun<void(int,char)>();
+          FP fun2 = &f2.getFun<void(int,char)>();
+          FR fun2r = f2.getFun<void(int,char)>();
+          
+          _sum_ = 0;
+          (*fun1) (10, 'a');
+          ASSERT (_sum_ == 10+'a');
+          
+          (*fun2) (20, 'b');
+          ASSERT (_sum_ == 10+'a'+20+'b');
+          
+          fun2r (30, 'c');
+          ASSERT (_sum_ == 10+'a'+20+'b'+30+'c');
+          
+          ASSERT (_sum_ == (f3.getFun<int(void)>()) () );
+          
+#if false ////////////////////////////////////////////////////////TODO: restore throwing ASSERT
+          VERIFY_ERROR (ASSERTION, f1.getFun<int(int)>() );
+#endif        
+
+        }
+      
+      
+      void
+      check_VoidPtrHolder (Evoid f1, Evoid f2, Evoid f3)
+        {
+          typedef void (*FP)(int,char);
+          typedef void (&FR)(int,char);
+          
+          FP fun1 = &f1.getFun<void(int,char)>();
+          FP fun2 = &f2.getFun<void(int,char)>();
+          FR fun2r = f2.getFun<void(int,char)>();
+          
+          _sum_ = 0;
+          (*fun1) (10, 'a');
+          ASSERT (_sum_ == 10+'a');
+          
+          (*fun2) (20, 'b');
+          ASSERT (_sum_ == 10+'a'+20+'b');
+          
+          fun2r (30, 'c');
+          ASSERT (_sum_ == 10+'a'+20+'b'+30+'c');
+          
+          ASSERT (_sum_ == (f3.getFun<int(void)>()) () );
+          
+          FP bad_fun = &f3.getFun<void(int,char)>();
+          ASSERT ((void*)bad_fun == &returnIt);
+          
+          (*bad_fun) (11, 'x'); // SEGV
+        }
+      
       
     };
   

@@ -213,6 +213,16 @@ out: dtor ~TargetObj\(12\) successful
 END
 
 
+PLANNED "FunctionClosure_test" FunctionClosure_test <<END
+return: 0
+END
+
+
+PLANNED "FunctionErasure_test" FunctionErasure_test <<END
+return: 0
+END
+
+
 TEST "HashIndexed_test" HashIndexed_test <<END
 return: 0
 END

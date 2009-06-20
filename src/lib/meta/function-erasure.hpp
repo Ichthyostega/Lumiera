@@ -22,14 +22,30 @@
 
 
 /** @file function-erasure.hpp
- ** Partial function application and building a complete function closure.
- ** This is a small addendum to (and thin wrapper for) tr1/functional, supporting
- ** the case when a function should be closed over (all) arguments, where especially
- ** the parameter values to close on are provided as a tuple. 
+ ** When working with generic function objects and function pointers typed to
+ ** arbitrary signatures, often there is the necessity to hold onto such a functor
+ ** while hiding the actual signature behind an common interface ("type erasure").
+ ** The usual solution based on subclassing has the downside of requiring separate
+ ** storage for the concrete functor object, which might become problematic when
+ ** dealing with lots of functor objects. 
  ** 
- ** @see control::CommandDef usage example
- ** @see function.hpp
- ** @see tuple.hpp
+ ** Especially when dealing with tr1::function objects, all of the type differences
+ ** are actually encoded into 3 internal pointers, thus yielding the same size for
+ ** all various types of functors. Building on this observation, we can create an
+ ** common container object to store the varying functors inline, while hiding the
+ ** actual signature.
+ ** 
+ ** There remains the problem of re-accessing the concrete functor later on. As
+ ** C++ has only rudimental introspection capabilities, we can only rely on the
+ ** usage context to provide the correct function signature; only when using a
+ ** virtual function for the re-access, we can perform at least a runtime-check.
+ ** 
+ ** Thus there are various flavours for actually implementing this idea, and the
+ ** picking a suitable implementation depends largely on the context. Thus we
+ ** provide a common and expect the client code to pick an implementation policy.
+ ** 
+ ** @see control::Mutation usage example
+ ** @see function-erasure-test.cpp
  ** 
  */
 
@@ -37,23 +53,15 @@
 #ifndef LUMIERA_META_FUNCTION_ERASURE_H
 #define LUMIERA_META_FUNCTION_ERASURE_H
 
-#include "lib/meta/typelist.hpp"   /////////////TODO
-#include "lib/meta/generator.hpp"  /////////////TODO
-#include "lib/meta/function.hpp"
-#include "lib/meta/tuple.hpp"
+#include "lib/util.hpp"
+#include "lib/error.hpp"
 
 #include <tr1/functional>
-
-#include "lib/util.hpp" ////////////////////////TODO
-#include "lib/error.hpp"
 
 
 namespace lumiera {
 namespace typelist{
 
-  using std::tr1::bind;
-  //using std::tr1::placeholders::_1;
-  //using std::tr1::placeholders::_2;
   using std::tr1::function;
   
   
@@ -96,19 +104,19 @@ namespace typelist{
       struct FunctionHolder : Holder
         {
           typedef function<SIG> Functor;
-          FunctionHolder (SIG& fun)
+          FunctionHolder (Functor const& fun)
             {
               REQUIRE (SIZE >= sizeof(Functor));
               new(&storage_) Functor (fun);
             }
           ~FunctionHolder()
             {
-              get()->~Functor();
+              get().~Functor();
             }
           Functor&
           get()
             {
-              return static_cast<Functor*> (&storage_);
+              return *reinterpret_cast<Functor*> (&storage_);
             }
         };
       
@@ -119,6 +127,11 @@ namespace typelist{
     public:
       template<typename SIG>
       StoreFunction (SIG& fun)
+        {
+          new(&holder_) FunctionHolder<SIG> (function<SIG>(fun));
+        }
+      template<typename SIG>
+      StoreFunction (function<SIG> const& fun)
         {
           new(&holder_) FunctionHolder<SIG> (fun);
         }
@@ -144,7 +157,7 @@ namespace typelist{
       /** Helper: type erasure */
       struct Holder
         {
-          void *fun_;
+          void *fP_;
           virtual ~Holder() {}
         };
       
@@ -152,14 +165,15 @@ namespace typelist{
       template<typename SIG>
       struct FunctionHolder : Holder
         {
-          FunctionHolder (SIG& fun)
+          FunctionHolder (SIG *fun)
             {
-              fun_ = &fun;
+              REQUIRE (fun);
+              fP_ = reinterpret_cast<void*> (fun);
             }
           SIG&
           get()
             {
-              return reinterpret_cast<SIG*> (&fun_);
+              return *reinterpret_cast<SIG*> (&fP_);
             }
         };
       
@@ -170,11 +184,16 @@ namespace typelist{
       template<typename SIG>
       StoreFunPtr (SIG& fun)
         {
+          new(&holder_) FunctionHolder<SIG> (&fun);
+        }
+      template<typename SIG>
+      StoreFunPtr (SIG *fun)
+        {
           new(&holder_) FunctionHolder<SIG> (fun);
         }
       
       template<typename SIG>
-      function<SIG>&
+      SIG&
       getFun ()
         {
           REQUIRE (INSTANCEOF (FunctionHolder<SIG>, &holder_));
@@ -190,20 +209,25 @@ namespace typelist{
    */
   class StoreUncheckedFunPtr
     {
-      void *fun_;
+      void *funP_;
       
     public:
       template<typename SIG>
       StoreUncheckedFunPtr (SIG& fun)
         {
-          fun_ = &fun;
+          funP_ = reinterpret_cast<void*> (&fun);
+        }
+      template<typename SIG>
+      StoreUncheckedFunPtr (SIG *fun)
+        {
+          funP_ = reinterpret_cast<void*> (fun);
         }
       
       template<typename SIG>
       SIG&
       getFun ()
         {
-          return reinterpret_cast<SIG*> (&fun_);
+          return *reinterpret_cast<SIG*> (&funP_);
         }
     };
   

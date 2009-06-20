@@ -22,7 +22,8 @@
 
 
 /** @file function-closure-test.cpp
- ** bla
+ ** 
+ ** @todo define function-closure-test
  **
  ** @see function-closure.hpp
  ** @see control::CmdClosure real world usage example
@@ -32,7 +33,8 @@
 
 #include "lib/test/run.hpp"
 #include "lib/meta/function-closure.hpp"
-#include "lib/util.hpp"
+#include "meta/dummy-functions.hpp"
+//#include "lib/util.hpp"
 
 //#include <boost/format.hpp>
 #include <iostream>
@@ -47,13 +49,6 @@ namespace typelist{
 namespace test {
   
   
-  namespace { // test data
-    
-  } // (End) test data
-  
-  
-  
-  
   
   
   /*************************************************************************
@@ -62,23 +57,11 @@ namespace test {
    */
   class FunctionClosure_test : public Test
     {
-      virtual void run(Arg arg) 
+      virtual void
+      run (Arg) 
         {
-          check_distribute();
-          check_combine();
+          UNIMPLEMENTED ("verify function closure utils");
         }
-      
-      
-      void check_distribute()
-        {
-        }
-      
-      
-      void check_combine()
-        {
-        }
-
-      
     };
   
   
