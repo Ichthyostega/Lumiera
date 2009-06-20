@@ -74,7 +74,7 @@ namespace test    {
   
   namespace {
   
-    int testVal;  ///< used to verify the effect of testFunc
+    int testVal=0;  ///< used to verify the effect of testFunc
   
     void
     testFunc (int val)

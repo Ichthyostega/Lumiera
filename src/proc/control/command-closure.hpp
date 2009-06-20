@@ -82,10 +82,10 @@ namespace control {
       virtual operator string()  const =0;
       
     };
-
   
   
   inline ostream& operator<< (ostream& os, const CmdClosure& clo) { return os << string(clo); }
+  
   
   
   template

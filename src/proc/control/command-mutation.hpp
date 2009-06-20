@@ -38,6 +38,7 @@
 //#include "pre.hpp"
 #include "lib/error.hpp"
 #include "proc/control/command-closure.hpp"
+#include "lib/meta/function-erasure.hpp"
 
 //#include <tr1/memory>
 #include <boost/scoped_ptr.hpp>
@@ -49,6 +50,8 @@
 
 namespace control {
   
+  using lumiera::typelist::FunErasure;
+  using lumiera::typelist::StoreFunction;
 //  using lumiera::Symbol;
 //  using std::tr1::shared_ptr;
   using boost::scoped_ptr;
@@ -57,19 +60,26 @@ namespace control {
   using std::string;
   
   
+  /** 
+   * A neutral container internally holding 
+   * the functor used to implement the Command
+   */
+  typedef FunErasure<StoreFunction> CmdFunctor;
+  
+  
   /**
    * @todo Type-comment
    */
   class Mutation
     {
+      CmdFunctor func_;
       PClo clo_;
       
     public:
       template<typename SIG>
       Mutation (function<SIG> const& func)
-        {
-          UNIMPLEMENTED ("build a Mutation functor object, thereby erasing the concrete function signature type");
-        }
+        : func_(func)
+        { }
       
       virtual ~Mutation() {}
       
@@ -121,25 +131,28 @@ namespace control {
   class UndoMutation
     : public Mutation
     {
+      CmdFunctor         captureFunc_;
       scoped_ptr<CmdClosure> memento_;
       
     public:
       template<typename SIG_undo, typename SIG_cap>
-      UndoMutation (function<SIG_undo> const& undoFunc, function<SIG_cap> const& captureFunc)
-        : Mutation(undoFunc)
-        {
-          UNIMPLEMENTED ("build a undo Mutation functor object");
-        }
+      UndoMutation (function<SIG_undo> const& undoFunc,
+                    function<SIG_cap> const& captureFunc)
+        : Mutation (undoFunc)
+        , captureFunc_(captureFunc)
+        { }
       
       UndoMutation (UndoMutation const& o)
-        : Mutation(*this),
-          memento_(o.memento_->clone().get())
+        : Mutation (*this)
+        , captureFunc_(o.captureFunc_)
+        , memento_(o.memento_->clone().get())
         { }
       
       UndoMutation&
       operator= (UndoMutation const& o)
         {
           Mutation::operator= (o);
+          captureFunc_ = o.captureFunc_;
           memento_.reset(o.memento_->clone().get());
           return *this;
         }
