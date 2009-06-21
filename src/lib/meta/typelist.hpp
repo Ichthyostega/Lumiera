@@ -62,7 +62,7 @@ This code is heavily inspired by
 namespace lumiera {
 namespace typelist{
     
-    class NullType 
+    struct NullType 
       { 
         typedef NullType List;
       };

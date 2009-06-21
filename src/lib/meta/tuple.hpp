@@ -191,7 +191,8 @@ namespace typelist{
       typedef Types<>  Type;
       
       typedef NullType        ArgList;
-      typedef Tuple<Type>     ThisTuple;
+      typedef Tuple<Type>     TupleType;
+      typedef Tuple<NullType> ThisType;
       typedef Tuple<NullType> Tail;
       enum  { SIZE = 0 };
       
@@ -200,6 +201,16 @@ namespace typelist{
       
       Tuple (HeadType const&, Tail const&) { }
       Tuple ()                             { }
+      
+      template<uint> struct ShiftedTuple { typedef Tail Type;};
+      template<uint> Tail& getShifted () { return *this;     }
+      template<uint> NullType&  getAt () { return getHead(); }
+      
+      TupleType& 
+      tupleCast ()
+        {
+          return reinterpret_cast<TupleType&> (*this);
+        }
     };
   
   
@@ -212,19 +223,51 @@ namespace typelist{
       typedef typename Prepend<TY,TailType>::Tuple Type;
       
       typedef Node<TY,TYPES> ArgList;
-      typedef Tuple<Type>    ThisTuple;
+      typedef Tuple<Type>    TupleType;
+      typedef Tuple<ArgList> ThisType;
       typedef Tuple<TYPES>   Tail;
       enum  { SIZE = count<ArgList>::value };
       
       Tuple ( TY   a1   =TY()
             , Tail tail =Tail()
             )
-        : Tuple<TYPES> (tail.getHead(), tail.getTail()),
+        : Tail (tail.getHead(), tail.getTail()),
           val_(a1)
         { }
       
       TY  & getHead() { return val_; }
       Tail& getTail() { return static_cast<Tail&> (*this); }
+      
+      
+      template<uint i>
+      class ShiftedTuple
+        { 
+          typedef typename Tuple::Type                OurType_;
+          typedef typename Shifted<OurType_,i>::Type  ShiftedTypes_;
+        public:
+          typedef Tuple<typename ShiftedTypes_::List> Type;
+        };
+      
+      template<uint i>
+      typename ShiftedTuple<i>::Type&
+      getShifted ()
+        {
+          typedef typename ShiftedTuple<i>::Type Tail_I;
+          return static_cast<Tail_I&> (*this);
+        }
+      
+      TupleType& 
+      tupleCast () ///< note makes this List-style Tuple appear as plain-flat Tuple
+        {
+          return reinterpret_cast<TupleType&> (*this);
+        }
+      
+      template<uint i>
+      typename Shifted<Type,i>::Head&
+      getAt ()
+        {
+          return getShifted<i>().getHead();
+        }
       
     private:
       TY val_;
@@ -249,7 +292,8 @@ namespace typelist{
       typedef Types<T1,T2,T3,T4,T5,T6,T7,T8,T9>       Type;
       
       typedef typename Type::List ArgList;
-      typedef Tuple<Type>         ThisTuple;
+      typedef Tuple<Type>         TupleType;
+      typedef Tuple<Type>         ThisType;
       typedef Tuple<TailType>     Tail;
       enum  { SIZE = count<ArgList>::value };
       
@@ -274,30 +318,10 @@ namespace typelist{
         { }
       
       using Tuple<ArgList>::getHead;
-      using Tuple<ArgList>::getTail;
       
-      template<uint i>
-      class ShiftedTuple
-        { 
-          typedef typename Tuple::Type                OurType_;
-          typedef typename Shifted<OurType_,i>::Type  ShiftedTypes_;
-        public:
-          typedef Tuple<typename ShiftedTypes_::List> Type;
-        };
-      
-      template<uint i>
-      typename ShiftedTuple<i>::Type&
-      getShifted ()
+      Tail& getTail() ///< note makes the Tail appear as plain-flat shifted tuple
         {
-          typedef typename ShiftedTuple<i>::Type Tail_I;
-          return static_cast<Tail_I&> (*this);
-        }
-      
-      template<uint i>
-      typename Shifted<Type,i>::Head&
-      getAt ()
-        {
-          return getShifted<i>().getHead();
+          return Tuple<ArgList>::getTail().tupleCast();
         }
     };
   
@@ -307,7 +331,10 @@ namespace typelist{
     : Tuple<NullType>
     {
       enum  { SIZE = 0 };
-      typedef Tuple<NullType> TupleNull;
+      typedef Tuple<NullType> TupNilList;
+      typedef Tuple<Types<> > ThisType;
+      typedef ThisType        Tail;
+      
       
       Tuple ( NullType =NullType()
             , NullType =NullType()
@@ -323,14 +350,8 @@ namespace typelist{
       
       /** shortcut: allow copy construction from a tuple
        *  which is rather defined by a list type */
-      Tuple (Tuple<NullType> const&)
+      Tuple (TupNilList const&)
         { }
-      
-      
-      template<uint> struct ShiftedTuple       { typedef TupleNull Type; };
-      
-      template<uint> TupleNull&  getShifted () { return static_cast<TupleNull&> (*this); }
-      template<uint> NullType&        getAt () { return getHead(); }
     };
   
   
@@ -342,12 +363,14 @@ namespace typelist{
     { 
       typedef typename Shifted<TYPES,i>::Type Type;
       typedef typename Shifted<TYPES,i>::Head Head;
+      typedef Tuple<Type>                     TupleType;
     };
   template<class TYPES>
   struct Shifted<Tuple<TYPES>, 0>
     { 
       typedef typename Tuple<TYPES>::Type     Type;
       typedef typename Tuple<TYPES>::HeadType Head;
+      typedef Tuple<Type>                     TupleType;
     };
   
   

@@ -133,7 +133,7 @@ namespace test {
           typedef Types1::List L1;  // starting from an existing Typelist...
           
           typedef Tuple<L1> T_L1;           // ListType based tuple type
-          typedef Tuple<L1>::ThisTuple T1;  // corresponding plain tuple type
+          typedef Tuple<L1>::TupleType T1;  // corresponding plain tuple type
           typedef Tuple<L1>::Type Type1;    // extract the underlying type sequence
           
           DISPLAY (Type1);
@@ -156,7 +156,7 @@ namespace test {
       void
       check_sub_tuple_types()
         {
-          cout << "\t:\n\t: ---Head-and-Tail---\n";
+          cout << "\t:\n\t: ---Sub-Tuple-Types----\n";
           
           typedef Append<Types2::List, Types1::List>::List L2;
           
@@ -167,12 +167,44 @@ namespace test {
           DISPLAY (Head);
           DISPLAY (Tail);
           
-          typedef T_L2::ThisTuple T2;
+          typedef T_L2::TupleType T2;
           typedef Types<T2::HeadType> Head2;
           typedef T2::TailType Tail2;
           DISPLAY (T2);
           DISPLAY (Head2);
           DISPLAY (Tail2);
+          
+          typedef Tuple<Types<> > NulT;
+          typedef Tuple<NullType> NulL;
+          
+          DISPLAY (T2::Type);
+          DISPLAY (T2::TailType);
+          DISPLAY (T2::TupleType);
+          DISPLAY (T2::ThisType);
+          DISPLAY (T2::Tail);
+          DISPLAY (T2::ArgList);
+          
+          DISPLAY (T_L2::Type);
+          DISPLAY (T_L2::TailType);
+          DISPLAY (T_L2::TupleType);
+          DISPLAY (T_L2::ThisType);
+          DISPLAY (T_L2::Tail);
+          DISPLAY (T_L2::ArgList);
+          
+          DISPLAY (NulT::Type);
+          DISPLAY (NulT::TailType);
+          DISPLAY (NulT::TupleType);
+          DISPLAY (NulT::ThisType);
+          DISPLAY (NulT::Tail);
+          DISPLAY (NulT::ArgList);
+          
+          DISPLAY (NulL::Type);
+          DISPLAY (NulL::TailType);
+          DISPLAY (NulL::TupleType);
+          DISPLAY (NulL::ThisType);
+          DISPLAY (NulL::Tail);
+          DISPLAY (NulL::ArgList);
+          
         }
       
       
@@ -209,32 +241,52 @@ namespace test {
       void
       check_tuple_creation()
         {
-          Tuple<Types1> tup11 (Num<1>() );                      
-          Tuple<Types1> tup12 (Num<1>(11), Num<3>() );
+          cout << "\t:\n\t: ---creating-Tuples---\n";
+          
+          Tuple<Types1> tup1  ;                      
+          Tuple<Types1> tup11 (Num<1>(11) );                      
+          Tuple<Types1> tup12 (Num<1>(),   Num<3>(33) );
           Tuple<Types1> tup13 (Num<1>(11), Num<3>(33), Num<5>() );
+          DUMPVAL (tup1);
           DUMPVAL (tup11);
           DUMPVAL (tup12);
           DUMPVAL (tup13);
           
-          Tuple<Types<int,int,Num<11> > > tup2 = tuple::make(41,42, Num<11>(43));
-          DISPLAY (tup2::ThisType);
+          typedef Tuple<Types<int,int,Num<11> > > Tup2;
+          Tup2 tup2 = tuple::make(41,42, Num<11>(43));
+          DISPLAY (Tup2);
           DUMPVAL (tup2);
           
-          tup2::TailType tup22 = tup2.getTail();
-          DISPLAY (tup22);
+          typedef Tup2::Tail Tup22;
+          Tup22 tup22 = tup2.getTail();
+          DISPLAY (Tup22);
           DUMPVAL (tup22);
           
-          tup22::TailType tup222 = tup22.getTail();
-          DISPLAY (tup222);
+          typedef Tup2::Tail::Tail Tup222;
+          Tup222 tup222 = tup22.getTail();
+          DISPLAY (Tup222);
           DUMPVAL (tup222);
           
-          Tuple<NullType> nullT = tuple::makeNullTuple();
+          typedef Tuple<Types<> > T0T;
+          typedef Tuple<NullType> T0L;
+          T0T nullT = tuple::makeNullTuple();
+          T0L nullL = tuple::makeNullTuple();
+          T0T nulTcpy (nullL);
+          T0T& nulTref (nullL.tupleCast());
+          DISPLAY (T0T);
+          DISPLAY (T0L);
+          DUMPVAL (nullT);
+          DUMPVAL (nullL);
+          DUMPVAL (nulTcpy);
+          DUMPVAL (nulTref);
         }
       
       
       void
       check_tuple_copy()
         {
+          cout << "\t:\n\t: ---copy-operations---\n";
+          
           Tuple<Types1> tup1 (Num<1>(11), Num<3>(33), Num<5>() );
           
           Tuple<Types1> tup11 (tup1);
@@ -255,33 +307,45 @@ namespace test {
       void
       check_value_access()
         {
+          cout << "\t:\n\t: ---value-access---\n";
+          
           typedef Append<Types2::List, Types2::List>::List T2424;
-          Tuple<T2424> tupX;
-          DISPLAY (tupX);
+          typedef Tuple<T2424> TupX;
+          TupX tupX;
+          DISPLAY (TupX);
           DUMPVAL (tupX);
           
           Tuple<Types2> tu2;
           DUMPVAL (tu2);
-          tuple::element<1>(tu2).o_ = 55;
-          tu2.getHead() = Num<2>(55);
+          tuple::element<1>(tu2).o_ = 5;
+          tu2.getHead() = Num<2> (tu2.getAt<1>().o_);
           DUMPVAL (tu2);
+
 
           tupX.getShifted<2>() = tu2;
           DUMPVAL (tupX);
           
-          typedef Shifted<tupX::ThisTuple,2> T4;
+          typedef Shifted<TupX::TupleType,2>::TupleType T4;
           T4 t4 (tupX.getShifted<2>());
+          DISPLAY (T4);
           DUMPVAL (t4);
           
-          DISPLAY (tupX::Type)
-          DISPLAY (tupX::TailType)
-          DISPLAY (tupX::ThisTuple)
+          DISPLAY (TupX::Type)
+          DISPLAY (TupX::TailType)
+          DISPLAY (TupX::ThisType)
+          DISPLAY (TupX::TupleType)
           
-          typedef tupX::ThisTuple T2424T;
-          DISPLAY (T2424T::Type)
-          DISPLAY (T2424T::TailType)
-          DISPLAY (T2424T::ThisTuple)
+          typedef TupX::TupleType TupT;
+          DISPLAY (TupT::Type)
+          DISPLAY (TupT::TailType)
+          DISPLAY (TupT::ThisType)
+          DISPLAY (TupT::TupleType)
           
+          TupT tupXcopy (tupX);
+          DUMPVAL (tupXcopy);
+          
+          TupT& tupXcast (tupX.tupleCast());
+          DUMPVAL (tupXcast);
         }
 
     };
