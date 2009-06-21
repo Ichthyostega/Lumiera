@@ -133,6 +133,13 @@ namespace typelist{
           static string print () { return str( fmt % uint(Fl) % BASE::print()); }
         };
       
+      template<class BASE>
+      struct Printer<int, BASE>  ///< display the presence of a plain int in the typelist
+        : BASE
+        {
+          static string print () { return str( fmt % 'i' % BASE::print()); }
+        };
+      
       
       
       /** call the debug-print for a typelist

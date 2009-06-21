@@ -40,6 +40,7 @@
 #include "lib/meta/tuple.hpp"
 
 #include <boost/utility/enable_if.hpp>
+#include <boost/lexical_cast.hpp>
 #include <boost/format.hpp>
 #include <string>
 
@@ -47,6 +48,7 @@ using std::string;
 using boost::str;
 using boost::format;
 using boost::enable_if;
+using boost::lexical_cast;
 using util::unConst;
 
 
@@ -67,6 +69,12 @@ namespace test    {
       static format changedElm("{%i}");
       
       return str ( (o.o_==i? constElm:changedElm) % int(o.o_));
+    }
+    
+    string
+    showTupElement(int i)
+    {
+      return lexical_cast<string>(i);
     }
     
     template<typename T>
@@ -135,7 +143,8 @@ namespace test    {
   /* ===== printing Tuple types and contents ===== */ 
     
   template<typename TYPES>
-  string
+  typename enable_if< is_TuplePlain<Tuple<TYPES> >,
+    string          >::type
   showDump (Tuple<TYPES> const& tuple)
   {
     typedef BuildTupleAccessor<TYPES,TupleElementDisplayer> BuildAccessor;
@@ -144,13 +153,37 @@ namespace test    {
     return "...Tuple" + Displayer(tuple).dump();
   }
   
+  template<typename TYPES>
+  typename enable_if< is_TupleListType<Tuple<TYPES> >,
+    string          >::type
+  showDump (Tuple<TYPES> const& tuple)
+  {
+    typedef typename Tuple<TYPES>::Type TypeSeq;
+    Tuple<TypeSeq> plainTuple (tuple);
+    
+    typedef BuildTupleAccessor<TypeSeq, TupleElementDisplayer> BuildAccessor;
+    typedef typename BuildAccessor::Accessor Displayer;
+    
+    return "...Tuple" + Displayer(plainTuple).dump();
+  }
+  
   template<typename TUP>
-  typename enable_if< is_Tuple<TUP>,
+  typename enable_if< is_TuplePlain<TUP>,
     string          >::type
   showType ()
   {
     typedef InstantiateChained<typename TUP::ArgList, Printer, NullP>  DumpPrinter;
     return "TYPES-<>"
+         + DumpPrinter::print();
+  }
+  
+  template<typename TUP>
+  typename enable_if< is_TupleListType<TUP>,
+    string          >::type
+  showType ()
+  {
+    typedef InstantiateChained<typename TUP::ArgList, Printer, NullP>  DumpPrinter;
+    return "TYPES-[]"
          + DumpPrinter::print();
   }
   

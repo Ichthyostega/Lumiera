@@ -253,6 +253,7 @@ namespace typelist{
       typedef Tuple<TailType>     Tail;
       enum  { SIZE = count<ArgList>::value };
       
+      /** standard ctor: create from values */
       Tuple ( T1 a1 =T1()
             , T2 a2 =T2()
             , T3 a3 =T3()
@@ -264,6 +265,12 @@ namespace typelist{
             , T9 a9 =T9()
             )
         : Tuple<ArgList>(a1, Tuple<TailType>(a2,a3,a4,a5,a6,a7,a8,a9))
+        { }
+      
+      /** shortcut: allow copy construction from a tuple
+       *  which is rather defined by a list type */
+      Tuple (Tuple<ArgList> const& listTuple)
+        : Tuple<ArgList> (listTuple)
         { }
       
       using Tuple<ArgList>::getHead;
@@ -454,6 +461,64 @@ namespace typelist{
       
     public: 
       static const bool value = (sizeof(Yes_t)==sizeof(typename Check<TUP>::It));
+    };
+  
+  /** Trait template detecting especially tuples
+   *  built directly on top of a Typelist */
+  template<typename TUP>
+  class is_TupleListType
+    {
+      template<class X>          
+      struct Check
+        {
+          enum{ result = sizeof(No_t)};
+        };
+      
+      template<class N>
+      struct Check<Tuple<N> >
+      {
+        template<class H, class T>
+        Yes_t static check(Node<H,T>*);
+        Yes_t static check(NullType*);
+        No_t  static check(...);
+        
+        enum{ result = sizeof(check( (N*)0)) };
+      };
+      
+    public: 
+      static const bool value = (sizeof(Yes_t)== Check<TUP>::result);
+    };
+  
+  /** Trait template to discern plain tuples and list-type tuples */
+  template<typename TUP>
+  struct is_TuplePlain
+    {
+      static const bool value =     is_Tuple<TUP>::value
+                                && !is_TupleListType<TUP>::value;
+    };
+  
+  /** Trait template detecting an empty tuple type */
+  template<typename TUP>
+  class is_NullTuple
+    {
+      template<class X>          
+      struct Check
+        {
+          enum{ result = sizeof(No_t)};
+        };
+      
+      template<class TY>
+      struct Check<Tuple<TY> >
+      {
+        Yes_t check(Types<>*);
+        Yes_t check(NullType*);
+        No_t  check(...);
+        
+        enum{ result = sizeof(check( (TY*)0)) };
+      };
+      
+    public: 
+      static const bool value = (sizeof(Yes_t)== Check<TUP>::result);
     };
 
   

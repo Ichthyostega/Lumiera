@@ -77,8 +77,17 @@ namespace test {
   
   
   /*************************************************************************
-   * @test //////////////////////////////////////////
-   *       - building combinations and permutations
+   * @test Cover various aspects of the type tuple. 
+   *       Check the metaprogramming behaviour... 
+   *       - build a tuple type from an existing typelist
+   *       - create sub tuple types and types with shifted parameters
+   *       Additionally, check the behaviour when creating tuple instances
+   *       at runtime. Effectively, these are simple record types, which are
+   *       synthesised by recursion over the related typelist.
+   *       - create tuples from a list of values
+   *       - copy and copy construct
+   *       - access the "head" and access values by numeric index
+   *       - create a tuple with shifted values 
    */
   class TypeTuple_test : public Test
     {
@@ -86,8 +95,12 @@ namespace test {
       run (Arg) 
         {
           check_diagnostics();
-          
-          UNIMPLEMENTED ("verify type tuples");
+          check_tuple_from_Typelist();
+          check_sub_tuple_types();
+          check_shiftedTuple();
+          check_tuple_creation();
+          check_tuple_copy();
+          check_value_access();
         }
       
       
@@ -113,6 +126,71 @@ namespace test {
           DUMPVAL (Tup1());   // prints the contents
           DUMPVAL (tup1x);
         }
+      
+      
+      void
+      check_tuple_from_Typelist()
+        {
+          typedef Types1::List L1;  // starting from an existing Typelist...
+          
+          typedef Tuple<L1> T_L1;           // ListType based tuple type
+          typedef Tuple<L1>::ThisTuple T1;  // corresponding plain tuple type
+          typedef Tuple<L1>::Type Type1;    // extract the underlying type sequence
+          
+          DISPLAY (Type1);
+          DISPLAY (T_L1);
+          DISPLAY (T1);
+          
+          T_L1 tup1 (Num<1>(8));            // both flavours can be created at runtime
+          T1   tup2 (Num<1>(9));            // (and we provide an explicit value for the 1st element)
+          DUMPVAL (tup1);
+          DUMPVAL (tup2);
+          
+          typedef Tuple<Node<int, L1> > Prepend;
+          DISPLAY (Prepend);                // another ListType based tuple created by prepending
+          
+          Prepend prepend (22, tup2);       // but note: the ListType based tuple has an "(head,tail)" style ctor
+          DUMPVAL (prepend);                // ... and in construction, tup2 has been copied and coerced to ListType style
+        }
+      
+      
+      void
+      check_sub_tuple_types()
+        {
+          UNIMPLEMENTED ("verify head and tail type");
+        }
+      
+      
+      void
+      check_shiftedTuple()
+        {
+          UNIMPLEMENTED ("verify shifted type tuple");
+        }
+      
+      
+      void
+      check_tuple_creation()
+        {
+          UNIMPLEMENTED ("verify tuple creation");
+          
+        }
+      
+      
+      void
+      check_tuple_copy()
+        {
+          UNIMPLEMENTED ("verify tuple copying and assignment");
+          
+        }
+      
+      
+      void
+      check_value_access()
+        {
+          UNIMPLEMENTED ("verify tuple value access");
+          
+        }
+
     };
   
   
