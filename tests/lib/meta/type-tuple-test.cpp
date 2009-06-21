@@ -157,14 +157,53 @@ namespace test {
       void
       check_sub_tuple_types()
         {
-          UNIMPLEMENTED ("verify head and tail type");
+          cout << "\t:\n\t: ---Head-and-Tail---\n";
+          
+          typedef Append<Types2::List, Types1::List>::List L2;
+          
+          typedef Tuple<L2> T_L2;
+          typedef Types<T_L2::HeadType> Head;
+          typedef T_L2::TailType Tail;
+          DISPLAY (T_L2);
+          DISPLAY (Head);
+          DISPLAY (Tail);
+          
+          typedef T_L2::ThisTuple T2;
+          typedef Types<T2::HeadType> Head2;
+          typedef T2::TailType Tail2;
+          DISPLAY (T2);
+          DISPLAY (Head2);
+          DISPLAY (Tail2);
         }
       
       
       void
       check_shiftedTuple()
         {
-          UNIMPLEMENTED ("verify shifted type tuple");
+          cout << "\t:\n\t: ---Shifted-Tuple---\n";
+          
+          typedef Append<Types2::List, Types3::List>::List L3;
+          typedef Tuple<L3>::Type Ty3;
+          typedef Tuple<Ty3>      T3;
+          
+          typedef Shifted<Ty3,0>::Type Ty_0;  DISPLAY (Ty_0);
+          typedef Shifted<Ty3,1>::Type Ty_1;  DISPLAY (Ty_1);
+          typedef Shifted<Ty3,2>::Type Ty_2;  DISPLAY (Ty_2);
+          typedef Shifted<Ty3,3>::Type Ty_3;  DISPLAY (Ty_3);
+          typedef Shifted<Ty3,4>::Type Ty_4;  DISPLAY (Ty_4);
+          
+          typedef T3::ShiftedTuple<0>::Type T_0; DISPLAY (T_0);
+          typedef T3::ShiftedTuple<1>::Type T_1; DISPLAY (T_1);
+          typedef T3::ShiftedTuple<2>::Type T_2; DISPLAY (T_2);
+          typedef T3::ShiftedTuple<3>::Type T_3; DISPLAY (T_3);
+          typedef T3::ShiftedTuple<4>::Type T_4; DISPLAY (T_4);
+          
+          T3 tu3;                                DUMPVAL (tu3);
+          T_0 tu3_0 = tu3.getShifted<0>();       DUMPVAL (tu3_0);
+          T_1 tu3_1 = tu3.getShifted<1>();       DUMPVAL (tu3_1);
+          T_2 tu3_2 = tu3.getShifted<2>();       DUMPVAL (tu3_2);
+          T_3 tu3_3 = tu3.getShifted<3>();       DUMPVAL (tu3_3);
+          T_4 tu3_4 = tu3.getShifted<4>();       DUMPVAL (tu3_4);
         }
       
       

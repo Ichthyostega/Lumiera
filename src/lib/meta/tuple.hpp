@@ -161,15 +161,15 @@ namespace typelist{
     {
       typedef typename Split<TYPES>::Tail Tail;
     public:
-      typedef typename Shifted<Tail,i-1>::Types Types;
-      typedef typename Split<Types>::Head       Head;
+      typedef typename Shifted<Tail,i-1>::Type Type;
+      typedef typename Split<Type>::Head       Head;
     };
   
   template<class TYPES>
   struct Shifted<TYPES,0>
     { 
-      typedef TYPES Types;
-      typedef typename Types::List::Head Head;
+      typedef TYPES                      Type;
+      typedef typename Split<Type>::Head Head;
     };
 
   
@@ -280,7 +280,7 @@ namespace typelist{
       class ShiftedTuple
         { 
           typedef typename Tuple::Type                OurType_;
-          typedef typename Shifted<OurType_,i>::Types ShiftedTypes_;
+          typedef typename Shifted<OurType_,i>::Type  ShiftedTypes_;
         public:
           typedef Tuple<typename ShiftedTypes_::List> Type;
         };
@@ -321,6 +321,11 @@ namespace typelist{
             )
         { } ///< end recursion of chained ctor calls
       
+      /** shortcut: allow copy construction from a tuple
+       *  which is rather defined by a list type */
+      Tuple (Tuple<NullType> const&)
+        { }
+      
       
       template<uint> struct ShiftedTuple       { typedef TupleNull Type; };
       
@@ -330,10 +335,27 @@ namespace typelist{
   
   
   
+  
+  /** specialisation to shift plain tuple types */
+  template<class TYPES, uint i>
+  struct Shifted<Tuple<TYPES>,i>
+    { 
+      typedef typename Shifted<TYPES,i>::Type Type;
+      typedef typename Shifted<TYPES,i>::Head Head;
+    };
+  template<class TYPES>
+  struct Shifted<Tuple<TYPES>, 0>
+    { 
+      typedef typename Tuple<TYPES>::Type     Type;
+      typedef typename Tuple<TYPES>::HeadType Head;
+    };
+  
+  
+  
   namespace tuple { // some convenience access functions
   
     template<uint n, class TUP> 
-    typename TUP::template ShiftedTuple<n>::Type::Head&
+    typename Shifted<TUP,n>::Head&
     element (TUP& tup)
     {
       return tup.template getAt<n>();

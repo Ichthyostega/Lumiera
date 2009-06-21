@@ -213,7 +213,19 @@ out: dtor ~TargetObj\(12\) successful
 END
 
 
-PLANNED "FunctionClosure_test" FunctionClosure_test <<END
+TEST "FunctionClosure_test" FunctionClosure_test <<END
+out: List1	:-<1>-<2>-<3>-
+out: List2	:-<5>-<6>-<7>-
+out: Args	:-<5>-<9>-
+out: NewArgs	:-<1>-<5>-<9>-
+out: 	:$
+out: 	: ---Apply---
+out: tup0	:...Tuple\(\)
+out: tup1	:...Tuple\(11\)
+out: tup2	:...Tuple\(11,12\)
+out: tup3	:...Tuple\(11,12,13\)
+out: 	:$
+out: 	: ---Bind----
 return: 0
 END
 

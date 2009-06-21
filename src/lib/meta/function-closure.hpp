@@ -56,7 +56,27 @@ namespace typelist{
     
     using tuple::element;
     
-    /** 
+    template<typename SIG>
+    struct _Fun
+      {
+        typedef typename FunctionSignature<function<SIG> >::Ret Ret;
+        typedef typename FunctionSignature<function<SIG> >::Args Args;
+      };
+    template<typename SIG>
+    struct _Fun<function<SIG> >
+      {
+        typedef typename FunctionSignature<function<SIG> >::Ret Ret;
+        typedef typename FunctionSignature<function<SIG> >::Args Args;
+      };
+    
+    template<typename FUN>
+    struct is_Functor                 { static const bool value = false; };
+    template<typename SIG>
+    struct is_Functor<function<SIG> > { static const bool value = true;  };
+    
+    
+    
+    /**
      * this Helper with repetitive specialisations for up to nine arguments
      * is used either to apply a function to arguments given as a tuple, or
      * to create the actual closure (functor) over all function arguments. 
@@ -91,14 +111,14 @@ namespace typelist{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f (element<1>(arg));
+            return f (element<0>(arg));
           }
         
         template<typename RET, class FUN, class TUP>
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<1>(arg));
+            return std::tr1::bind (f, element<0>(arg));
           }
       };
     
@@ -110,17 +130,17 @@ namespace typelist{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f ( element<1>(arg)
-                     , element<2>(arg)
-                     ); 
+            return f ( element<0>(arg)
+                     , element<1>(arg)
+                     );
           }
         
         template<typename RET, class FUN, class TUP>
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<1>(arg)
-                                    , element<2>(arg)
+            return std::tr1::bind (f, element<0>(arg)
+                                    , element<1>(arg)
                                    );
           }
       };
@@ -133,19 +153,19 @@ namespace typelist{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f ( element<1>(arg)
+            return f ( element<0>(arg)
+                     , element<1>(arg)
                      , element<2>(arg)
-                     , element<3>(arg)
-                     ); 
+                     );
           }
         
         template<typename RET, class FUN, class TUP>
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<1>(arg)
+            return std::tr1::bind (f, element<0>(arg)
+                                    , element<1>(arg)
                                     , element<2>(arg)
-                                    , element<3>(arg)
                                    );
           }
       };
@@ -158,21 +178,21 @@ namespace typelist{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f ( element<1>(arg)
+            return f ( element<0>(arg)
+                     , element<1>(arg)
                      , element<2>(arg)
                      , element<3>(arg)
-                     , element<4>(arg)
-                     ); 
+                     );
           }
         
         template<typename RET, class FUN, class TUP>
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<1>(arg)
+            return std::tr1::bind (f, element<0>(arg)
+                                    , element<1>(arg)
                                     , element<2>(arg)
                                     , element<3>(arg)
-                                    , element<4>(arg)
                                    );
           }
       };
@@ -185,23 +205,23 @@ namespace typelist{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f ( element<1>(arg)
+            return f ( element<0>(arg)
+                     , element<1>(arg)
                      , element<2>(arg)
                      , element<3>(arg)
                      , element<4>(arg)
-                     , element<5>(arg)
-                     ); 
+                     );
           }
         
         template<typename RET, class FUN, class TUP>
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<1>(arg)
+            return std::tr1::bind (f, element<0>(arg)
+                                    , element<1>(arg)
                                     , element<2>(arg)
                                     , element<3>(arg)
                                     , element<4>(arg)
-                                    , element<5>(arg)
                                    );
           }
       };
@@ -214,25 +234,25 @@ namespace typelist{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f ( element<1>(arg)
+            return f ( element<0>(arg)
+                     , element<1>(arg)
                      , element<2>(arg)
                      , element<3>(arg)
                      , element<4>(arg)
                      , element<5>(arg)
-                     , element<6>(arg)
-                     ); 
+                     );
           }
         
         template<typename RET, class FUN, class TUP>
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<1>(arg)
+            return std::tr1::bind (f, element<0>(arg)
+                                    , element<1>(arg)
                                     , element<2>(arg)
                                     , element<3>(arg)
                                     , element<4>(arg)
                                     , element<5>(arg)
-                                    , element<6>(arg)
                                    );
           }
       };
@@ -245,27 +265,27 @@ namespace typelist{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f ( element<1>(arg)
+            return f ( element<0>(arg)
+                     , element<1>(arg)
                      , element<2>(arg)
                      , element<3>(arg)
                      , element<4>(arg)
                      , element<5>(arg)
                      , element<6>(arg)
-                     , element<7>(arg)
-                     ); 
+                     );
           }
         
         template<typename RET, class FUN, class TUP>
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<1>(arg)
+            return std::tr1::bind (f, element<0>(arg)
+                                    , element<1>(arg)
                                     , element<2>(arg)
                                     , element<3>(arg)
                                     , element<4>(arg)
                                     , element<5>(arg)
                                     , element<6>(arg)
-                                    , element<7>(arg)
                                    );
           }
       };
@@ -278,29 +298,29 @@ namespace typelist{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f ( element<1>(arg)
+            return f ( element<0>(arg)
+                     , element<1>(arg)
                      , element<2>(arg)
                      , element<3>(arg)
                      , element<4>(arg)
                      , element<5>(arg)
                      , element<6>(arg)
                      , element<7>(arg)
-                     , element<8>(arg)
-                     ); 
+                     );
           }
         
         template<typename RET, class FUN, class TUP>
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<1>(arg)
+            return std::tr1::bind (f, element<0>(arg)
+                                    , element<1>(arg)
                                     , element<2>(arg)
                                     , element<3>(arg)
                                     , element<4>(arg)
                                     , element<5>(arg)
                                     , element<6>(arg)
                                     , element<7>(arg)
-                                    , element<8>(arg)
                                    );
           }
       };
@@ -313,7 +333,8 @@ namespace typelist{
         static RET
         invoke (FUN& f, TUP & arg)
           {
-            return f ( element<1>(arg)
+            return f ( element<0>(arg)
+                     , element<1>(arg)
                      , element<2>(arg)
                      , element<3>(arg)
                      , element<4>(arg)
@@ -321,15 +342,15 @@ namespace typelist{
                      , element<6>(arg)
                      , element<7>(arg)
                      , element<8>(arg)
-                     , element<9>(arg)
-                     ); 
+                     );
           }
         
         template<typename RET, class FUN, class TUP>
         static RET
         bind (FUN& f, TUP & arg)
           {
-            return std::tr1::bind (f, element<1>(arg)
+            return std::tr1::bind (f, element<0>(arg)
+                                    , element<1>(arg)
                                     , element<2>(arg)
                                     , element<3>(arg)
                                     , element<4>(arg)
@@ -337,7 +358,6 @@ namespace typelist{
                                     , element<6>(arg)
                                     , element<7>(arg)
                                     , element<8>(arg)
-                                    , element<9>(arg)
                                    );
           }
       };
@@ -348,6 +368,7 @@ namespace typelist{
   
   /**
    * Closure-creating template.
+   * @note taking functor objects \em and parameters per reference
    */
   template<typename SIG>
   class TupleApplicator
@@ -368,11 +389,11 @@ namespace typelist{
         : params_(args)
         { }
       
-      BoundFunc bind (SIG& f)           { return func::Apply<ARG_CNT>::template bind<BoundFunc> (f, params_); }
-      BoundFunc bind (function<SIG>& f) { return func::Apply<ARG_CNT>::template bind<BoundFunc> (f, params_); }
+      BoundFunc bind (SIG& f)                 { return func::Apply<ARG_CNT>::template bind<BoundFunc> (f, params_); }
+      BoundFunc bind (function<SIG> const& f) { return func::Apply<ARG_CNT>::template bind<BoundFunc> (f, params_); }
       
-      Ret operator() (SIG& f)           { return func::Apply<ARG_CNT>::template invoke<BoundFunc> (f, params_); }
-      Ret operator() (function<SIG>& f) { return func::Apply<ARG_CNT>::template invoke<BoundFunc> (f, params_); }
+      Ret operator() (SIG& f)                 { return func::Apply<ARG_CNT>::template invoke<Ret> (f, params_); }
+      Ret operator() (function<SIG>& f)       { return func::Apply<ARG_CNT>::template invoke<Ret> (f, params_); }
     };
   
   
@@ -386,8 +407,8 @@ namespace typelist{
   template<typename SIG>
   class FunctionClosure
     {
-      typedef typename FunctionSignature< function<SIG> >::Args Args;
-      typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
+      typedef typename func::_Fun<SIG>::Args Args;
+      typedef typename func::_Fun<SIG>::Ret  Ret;
       
       function<Ret(void)> closure_;
       
@@ -404,6 +425,65 @@ namespace typelist{
       typedef Ret  result_type;  ///< for STL use
       typedef void argument_type;
     };
+  
+  
+  
+  namespace func { // ...some convenience shortcuts
+    
+    template<typename RET, typename ARG>
+    struct _Sig
+      {
+        typedef typename FunctionTypedef<RET, ARG>::Sig Type;
+        typedef TupleApplicator<Type> Applicator;
+      };
+    
+    template<typename SIG, typename ARG>
+    struct _Clo
+      {
+        typedef typename _Fun<SIG>::Ret Ret;
+        typedef typename _Sig<Ret,ARG>::Type Signature;
+        typedef FunctionClosure<Signature> Type;
+      };
+    
+    
+    /** build a TupleApplicator, which embodies the given
+     *  argument tuple and can be used to apply various
+     *  functions to them.
+     */
+    template<typename ARG>
+    typename _Sig<void, ARG>::Applicator
+    tupleApplicator (Tuple<ARG>& args)
+    {
+      typedef typename _Sig<void,ARG>::Type Signature;
+      return TupleApplicator<Signature> (args);
+    }
+    
+    
+    /** apply the given function to the argument tuple */
+    template<typename SIG, typename ARG>
+    typename _Fun<SIG>::Ret
+    apply (SIG& f, Tuple<ARG>& args)
+    {
+      typedef typename _Fun<SIG>::Ret Ret;                //
+      typedef typename _Sig<Ret,ARG>::Type Signature;    // Note: deliberately re-building the Signature Type
+      return TupleApplicator<Signature> (args) (f);     //        in order to get better error messages here
+    }
+    
+    /** close the given function over all arguments,
+     *  using the values from the argument tuple.
+     *  @return a closure object, which can be 
+     *          invoked later to yield the
+     *          function result. */
+    template<typename SIG, typename ARG>
+    typename _Clo<SIG,ARG>::Type
+    closure (SIG& f, Tuple<ARG>& args)
+    {
+      typedef typename _Fun<SIG>::Ret Ret;
+      typedef typename _Sig<Ret,ARG>::Type Signature;
+      typedef typename _Clo<SIG,ARG>::Type Closure;
+      return Closure (f,args);
+    }
+  }
   
   
   

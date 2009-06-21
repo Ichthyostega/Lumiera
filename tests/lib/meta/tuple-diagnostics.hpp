@@ -109,7 +109,7 @@ namespace test    {
         TupleElementDisplayer(TUP const& tuple) : BASE(tuple) {}
         
         string
-        dump (string const& prefix = "(")  const
+        dump (string const& prefix ="(")  const
           {
             return BASE::dump (prefix+showTupElement(element())+",");
           }
@@ -122,11 +122,8 @@ namespace test    {
       public:
         TupleElementDisplayer(TUP const& tuple) : TUP(tuple) {}
         
-        
-      protected:
-        
         string
-        dump (string const& prefix)  const
+        dump (string const& prefix ="(")  const
           { 
             if (1 < prefix.length())
               // removing the trailing comma

@@ -144,9 +144,8 @@ namespace control {
       
       ////////////////////TODO the recursion-end of the access operations goes here
       
-    protected:
       string
-      dump (string const& prefix)  const
+      dump (string const& prefix ="(")  const
         { 
           if (1 < prefix.length())
             // remove trailing comma...
