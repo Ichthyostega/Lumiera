@@ -32,7 +32,10 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/meta/typelist.hpp"   ////////////TODO really?
+#include "lib/test/test-helper.hpp"
+#include "lib/meta/typelist.hpp"
+#include "lib/meta/typelistutil.hpp"
+#include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "meta/dummy-functions.hpp"
 #include "meta/typelist-diagnostics.hpp"
@@ -42,9 +45,13 @@
 //#include <boost/format.hpp>
 #include <iostream>
 
+using lib::test::showSizeof;
+using lib::test::showType;
+
 using ::test::Test;
 using std::string;
 using std::cout;
+using std::endl;
 
 
 namespace lumiera {
@@ -85,8 +92,12 @@ namespace test {
   /*************************************************************************
    * @test building a function closure for a given functor
    *       and arguments passed in as tuple
-   *       //////////////////////////////////////////TODO
-   *       - building
+   *       - accessing signatures as typelists
+   *       - apply free function to tuple
+   *       - apply functor to tuple 
+   *       - bind free function to tuple
+   *       - bind functor to tuple
+   *       - build a simple "tuple closure"
    */
   class FunctionClosure_test : public Test
     {
@@ -94,9 +105,12 @@ namespace test {
       run (Arg) 
         {
           check_diagnostics ();
-          check_append ();
-          
-          UNIMPLEMENTED ("verify function closure utils");
+          check_signatureTypeManip ();
+          check_applyFree ();
+          check_applyFunc ();
+          check_bindFree  ();
+          check_bindFunc  ();
+          build_closure ();
         }
       
       
@@ -116,11 +130,56 @@ namespace test {
       
       
       void
-      check_append ()
+      check_signatureTypeManip ()
         {
-          /////////////////////////////////////////////TODO      
-          typedef Append<Num<111>,List2>     Append7;
-          DISPLAY (Append7);
+          typedef int someFunc(Num<5>,Num<9>);
+          typedef FunctionSignature<function<someFunc> >::Ret RetType;  // should be int
+          typedef FunctionSignature<function<someFunc> >::Args Args;
+          DISPLAY (Args);
+          
+          typedef Prepend<Num<1>, Args>::Tuple NewArgs;             // manipulate the argument type(s)
+          DISPLAY (NewArgs);
+          
+          typedef FunctionTypedef<RetType,NewArgs>::Sig NewSig;  // re-build a new function signature
+          
+          NewSig& fun =  getNumberz<1,5,9>;                    //...which is compatible to an existing real function signature!
+          
+          ASSERT (1+5+9 == fun(Num<1>(), Num<5>(), Num<9>()));
+        }
+      
+      
+      void
+      check_applyFree ()
+        {
+          UNIMPLEMENTED ("verify apply free function to tuple");
+        }
+      
+      
+      void
+      check_applyFunc ()
+        {
+          UNIMPLEMENTED ("verify apply functor to tuple");
+        }
+      
+      
+      void
+      check_bindFree ()
+        {
+          UNIMPLEMENTED ("verify bind free function to tuple");
+        }
+      
+      
+      void
+      check_bindFunc ()
+        {
+          UNIMPLEMENTED ("verify bind functor to tuple");
+        }
+      
+      
+      void
+      build_closure ()
+        {
+          UNIMPLEMENTED ("build a simple tuple closure");
         }
     };
   
