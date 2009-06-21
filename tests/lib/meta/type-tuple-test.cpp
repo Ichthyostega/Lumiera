@@ -24,7 +24,6 @@
 /** @file type-tuple-test.cpp
  ** Interconnection of typelists, type tuples and simple record
  ** data types build on top of them.  
- ** @todo define function-closure-test
  **
  ** @see lumiera::typelist::Tuple
  ** @see tuple.hpp
@@ -210,23 +209,78 @@ namespace test {
       void
       check_tuple_creation()
         {
-          UNIMPLEMENTED ("verify tuple creation");
+          Tuple<Types1> tup11 (Num<1>() );                      
+          Tuple<Types1> tup12 (Num<1>(11), Num<3>() );
+          Tuple<Types1> tup13 (Num<1>(11), Num<3>(33), Num<5>() );
+          DUMPVAL (tup11);
+          DUMPVAL (tup12);
+          DUMPVAL (tup13);
           
+          Tuple<Types<int,int,Num<11> > > tup2 = tuple::make(41,42, Num<11>(43));
+          DISPLAY (tup2::ThisType);
+          DUMPVAL (tup2);
+          
+          tup2::TailType tup22 = tup2.getTail();
+          DISPLAY (tup22);
+          DUMPVAL (tup22);
+          
+          tup22::TailType tup222 = tup22.getTail();
+          DISPLAY (tup222);
+          DUMPVAL (tup222);
+          
+          Tuple<NullType> nullT = tuple::makeNullTuple();
         }
       
       
       void
       check_tuple_copy()
         {
-          UNIMPLEMENTED ("verify tuple copying and assignment");
+          Tuple<Types1> tup1 (Num<1>(11), Num<3>(33), Num<5>() );
           
+          Tuple<Types1> tup11 (tup1);
+          tup11.getAt<2>().o_ = 44;
+          DUMPVAL (tup1);
+          DUMPVAL (tup11);
+          
+          tup1 = tup11;
+          DUMPVAL (tup1);
+          
+          Tuple<Types1::List> tupL = tup11.getShifted<0>();
+          Tuple<Types1> tup1L (tupL);
+          DUMPVAL (tupL);
+          DUMPVAL (tup1L);
         }
       
       
       void
       check_value_access()
         {
-          UNIMPLEMENTED ("verify tuple value access");
+          typedef Append<Types2::List, Types2::List>::List T2424;
+          Tuple<T2424> tupX;
+          DISPLAY (tupX);
+          DUMPVAL (tupX);
+          
+          Tuple<Types2> tu2;
+          DUMPVAL (tu2);
+          tuple::element<1>(tu2).o_ = 55;
+          tu2.getHead() = Num<2>(55);
+          DUMPVAL (tu2);
+
+          tupX.getShifted<2>() = tu2;
+          DUMPVAL (tupX);
+          
+          typedef Shifted<tupX::ThisTuple,2> T4;
+          T4 t4 (tupX.getShifted<2>());
+          DUMPVAL (t4);
+          
+          DISPLAY (tupX::Type)
+          DISPLAY (tupX::TailType)
+          DISPLAY (tupX::ThisTuple)
+          
+          typedef tupX::ThisTuple T2424T;
+          DISPLAY (T2424T::Type)
+          DISPLAY (T2424T::TailType)
+          DISPLAY (T2424T::ThisTuple)
           
         }
 
