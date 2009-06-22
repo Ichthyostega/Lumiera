@@ -562,7 +562,114 @@ return: 0
 END
 
 
-PLANNED "TypeTuple_test" TypeTuple_test <<END
+TEST "TypeTuple_test" TypeTuple_test <<END
+out: L1	:-<1>-<3>-<5>-
+out: L2	:-<2>-<4>-
+out: L3	:-<7>-
+out: Tup1	:TYPES-<>-<1>-<3>-<5>-
+out: Tup1\(\)	:...Tuple\(\(1\),\(3\),\(5\)\)
+out: tup1x	:...Tuple\(\{11\},\(3\),\(5\)\)
+out: Type1	:-<1>-<3>-<5>-
+out: T_L1	:TYPES-\[\]-<1>-<3>-<5>-
+out: T1	:TYPES-<>-<1>-<3>-<5>-
+out: tup1	:...Tuple\(\{8\},\(3\),\(5\)\)
+out: tup2	:...Tuple\(\{9\},\(3\),\(5\)\)
+out: Prepend	:TYPES-\[\]-<i>-<1>-<3>-<5>-
+out: prepend	:...Tuple\(22,\{9\},\(3\),\(5\)\)
+out: 	:$
+out: 	: ---Sub-Tuple-Types----
+out: T_L2	:TYPES-\[\]-<2>-<4>-<1>-<3>-<5>-
+out: Head	:-<2>-
+out: Tail	:-<4>-<1>-<3>-<5>-
+out: T2	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
+out: Head2	:-<2>-
+out: Tail2	:-<4>-<1>-<3>-<5>-
+out: T2::Type	:-<2>-<4>-<1>-<3>-<5>-
+out: T2::TailType	:-<4>-<1>-<3>-<5>-
+out: T2::TupleType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
+out: T2::ThisType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
+out: T2::Tail	:TYPES-<>-<4>-<1>-<3>-<5>-
+out: T2::ArgList	:-<2>-<4>-<1>-<3>-<5>-
+out: T_L2::Type	:-<2>-<4>-<1>-<3>-<5>-
+out: T_L2::TailType	:-<4>-<1>-<3>-<5>-
+out: T_L2::TupleType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
+out: T_L2::ThisType	:TYPES-\[\]-<2>-<4>-<1>-<3>-<5>-
+out: T_L2::Tail	:TYPES-\[\]-<4>-<1>-<3>-<5>-
+out: T_L2::ArgList	:-<2>-<4>-<1>-<3>-<5>-
+out: NulT::Type	:-
+out: NulT::TailType	:-
+out: NulT::TupleType	:TYPES-<>-
+out: NulT::ThisType	:TYPES-<>-
+out: NulT::Tail	:TYPES-<>-
+out: NulT::ArgList	:-
+out: NulL::Type	:-
+out: NulL::TailType	:-
+out: NulL::TupleType	:TYPES-<>-
+out: NulL::ThisType	:TYPES-\[\]-
+out: NulL::Tail	:TYPES-\[\]-
+out: NulL::ArgList	:-
+out: 	:$
+out: 	: ---Shifted-Tuple---
+out: Ty_0	:-<2>-<4>-<7>-
+out: Ty_1	:-<4>-<7>-
+out: Ty_2	:-<7>-
+out: Ty_3	:-
+out: Ty_4	:-
+out: T_0	:TYPES-\[\]-<2>-<4>-<7>-
+out: T_1	:TYPES-\[\]-<4>-<7>-
+out: T_2	:TYPES-\[\]-<7>-
+out: T_3	:TYPES-\[\]-
+out: T_4	:TYPES-\[\]-
+out: tu3	:...Tuple\(\(2\),\(4\),\(7\)\)
+out: tu3_0	:...Tuple\(\(2\),\(4\),\(7\)\)
+out: tu3_1	:...Tuple\(\(4\),\(7\)\)
+out: tu3_2	:...Tuple\(\(7\)\)
+out: tu3_3	:...Tuple\(\)
+out: tu3_4	:...Tuple\(\)
+out: 	:$
+out: 	: ---creating-Tuples---
+out: tup1	:...Tuple\(\(1\),\(3\),\(5\)\)
+out: tup11	:...Tuple\(\{11\},\(3\),\(5\)\)
+out: tup12	:...Tuple\(\(1\),\{33\},\(5\)\)
+out: tup13	:...Tuple\(\{11\},\{33\},\(5\)\)
+out: Tup2	:TYPES-<>-<i>-<i>-<11>-
+out: tup2	:...Tuple\(41,42,\{43\}\)
+out: Tup22	:TYPES-<>-<i>-<11>-
+out: tup22	:...Tuple\(42,\{43\}\)
+out: Tup222	:TYPES-<>-<11>-
+out: tup222	:...Tuple\(\{43\}\)
+out: T0T	:TYPES-<>-
+out: T0L	:TYPES-\[\]-
+out: nullT	:...Tuple\(\)
+out: nullL	:...Tuple\(\)
+out: nulTcpy	:...Tuple\(\)
+out: nulTref	:...Tuple\(\)
+out: 	:$
+out: 	: ---copy-operations---
+out: tup1	:...Tuple\(\{11\},\{33\},\(5\)\)
+out: tup11	:...Tuple\(\{11\},\{33\},\{44\}\)
+out: tup1	:...Tuple\(\{11\},\{33\},\{44\}\)
+out: tupL	:...Tuple\(\{11\},\{33\},\{44\}\)
+out: tup1L	:...Tuple\(\{11\},\{33\},\{44\}\)
+out: 	:$
+out: 	: ---value-access---
+out: TupX	:TYPES-\[\]-<2>-<4>-<2>-<4>-
+out: tupX	:...Tuple\(\(2\),\(4\),\(2\),\(4\)\)
+out: tu2	:...Tuple\(\(2\),\(4\)\)
+out: tu2	:...Tuple\(\{5\},\{5\}\)
+out: tupX	:...Tuple\(\(2\),\(4\),\{5\},\{5\}\)
+out: T4	:TYPES-<>-<2>-<4>-
+out: t4	:...Tuple\(\{5\},\{5\}\)
+out: TupX::Type	:-<2>-<4>-<2>-<4>-
+out: TupX::TailType	:-<4>-<2>-<4>-
+out: TupX::ThisType	:TYPES-\[\]-<2>-<4>-<2>-<4>-
+out: TupX::TupleType	:TYPES-<>-<2>-<4>-<2>-<4>-
+out: TupT::Type	:-<2>-<4>-<2>-<4>-
+out: TupT::TailType	:-<4>-<2>-<4>-
+out: TupT::ThisType	:TYPES-<>-<2>-<4>-<2>-<4>-
+out: TupT::TupleType	:TYPES-<>-<2>-<4>-<2>-<4>-
+out: tupXcopy	:...Tuple\(\(2\),\(4\),\{5\},\{5\}\)
+out: tupXcast	:...Tuple\(\(2\),\(4\),\{5\},\{5\}\)
 return: 0
 END
 

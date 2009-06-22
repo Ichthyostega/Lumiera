@@ -22,13 +22,13 @@
 
 
 /** @file tuple.hpp
- ** Metaprogramming with tuples-of-types and a very simple Tuple datatype.
+ ** Metaprogramming with tuples-of-types and a simple Tuple (record) datatype.
  ** The metaprogramming part of this header complements typelist.hpp and allows
  ** to re-build a new tuple-of-types from an existing typelist. Such a finite
- ** tuple of types can at times be more handy than a typelist, especially when
- ** capturing specific types to use as template parameter. 
+ ** sequence or tuple of types can at times be more handy than a typelist,
+ ** especially when capturing specific types to use as template parameter.
  ** 
- ** Additionally, this header augments the Tuple template into a very simple Tuple
+ ** Additionally, this header augments the Tuple template into a simple Tuple
  ** (run time) datatype. This isn't meant as competing with std::tr1::tuple, which is
  ** much more capable, but also has the downside of pulling in a lot of other headers.
  ** But when all we need is to define a generic typed record of N data elements and
@@ -55,8 +55,8 @@
 
 namespace lumiera {
 namespace typelist{
-
-
+  
+  
   
   /** 
    * Helper: prepend a type to an existing type sequence,
@@ -99,6 +99,8 @@ namespace typelist{
                  , T06,T07,T08,T09,T10
                  , T11,T12,T13,T14,T15
                  , T16,T17,T18,T19,T20 > Tuple;
+    
+    typedef typename Tuple::List         List;
   };
   
   
@@ -171,13 +173,23 @@ namespace typelist{
       typedef TYPES                      Type;
       typedef typename Split<Type>::Head Head;
     };
-
+  
   
   /** 
    * simple generic Tuple datatype.
    * Usable both for metaprogramming and as a generic record.
    * The types within this tuple can either be specified
-   * as Type sequence or as typelist
+   * as Type sequence or as typelist. Default and canonical
+   * is the type-sequence based tuple form \c Tuple<Types<T1,T2,...>>
+   * The secondary from of specifying a tuple is based on a typelist
+   * (and this form is used actually to implement the storage, while
+   * the plain-flat (type sequence based) form acts as interface.
+   * 
+   * Irrespective of the flavour actually used, you can always
+   * - get the canonical TupleType (sequence based)
+   * - get the types of head and tail, and a list version of the types
+   * - access the head element and the tail tuple
+   * - access the Nth element and a shifted-b-N sub (tail) tuple
    */
   template<class TYPES>
   struct Tuple;
@@ -247,6 +259,7 @@ namespace typelist{
         public:
           typedef Tuple<typename ShiftedTypes_::List> Type;
         };
+      
       
       template<uint i>
       typename ShiftedTuple<i>::Type&
@@ -375,6 +388,8 @@ namespace typelist{
   
   
   
+  /* ====== Helpers for working with Tuples ========= */
+  
   namespace tuple { // some convenience access functions
   
     template<uint n, class TUP> 
@@ -494,9 +509,10 @@ namespace typelist{
       return Tuple<Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> > (a1,a2,a3,a4,a5,a6,a7,a8,a9);
     }
     
-  }
-      
-    
+  } // (END) access / tuple building helper functions (namespace tuple)
+  
+  
+  
   /** Trait template for detecting a type tuple */
   template<typename TUP>
   class is_Tuple
@@ -504,7 +520,7 @@ namespace typelist{
       template<class X>  struct Check             { typedef No_t It;  };
       template<class TY> struct Check<Tuple<TY> > { typedef Yes_t It; };
       
-    public: 
+    public:
       static const bool value = (sizeof(Yes_t)==sizeof(typename Check<TUP>::It));
     };
   
@@ -513,7 +529,7 @@ namespace typelist{
   template<typename TUP>
   class is_TupleListType
     {
-      template<class X>          
+      template<class X>
       struct Check
         {
           enum{ result = sizeof(No_t)};
@@ -546,7 +562,7 @@ namespace typelist{
   template<typename TUP>
   class is_NullTuple
     {
-      template<class X>          
+      template<class X>
       struct Check
         {
           enum{ result = sizeof(No_t)};
@@ -555,9 +571,9 @@ namespace typelist{
       template<class TY>
       struct Check<Tuple<TY> >
       {
-        Yes_t check(Types<>*);
-        Yes_t check(NullType*);
-        No_t  check(...);
+        Yes_t static check(Types<>*);
+        Yes_t static check(NullType*);
+        No_t  static check(...);
         
         enum{ result = sizeof(check( (TY*)0)) };
       };
@@ -565,7 +581,7 @@ namespace typelist{
     public: 
       static const bool value = (sizeof(Yes_t)== Check<TUP>::result);
     };
-
+  
   
   /**
    * Decorating a tuple type with auxiliary data access operations.
@@ -576,13 +592,13 @@ namespace typelist{
    * type of the individual elements within the Tuple. To achieve this, for each
    * type within the Tuple, the BASE type is decorated with an instance of the
    * template passed in as template template parameter _X_. Each of these
-   * decorating instances is provided with a member pointer to access "his"
+   * decorating instances is provided with a index allowing to access "his"
    * specific element within the underlying tuple.
    * 
    * The decorating template _X_ need to take its own base class as template
    * parameter. Typically, operations on _X_ will be defined in a recursive fashion,
    * calling down into this templated base class. To support this, an instantiation
-   * of _X_ with the 0 member ptr is generated for detecting recursion end
+   * of _X_ with the empty type sequence is generated for detecting recursion end
    * (built as innermost decorator, i.e. immediate subclass of BASE) 
    */
   template
@@ -645,7 +661,7 @@ namespace typelist{
     };
   
   
-
+  
   
   
 }} // namespace lumiera::typelist

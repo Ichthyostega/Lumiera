@@ -22,8 +22,8 @@
 
 
 /** @file type-tuple-test.cpp
- ** Interconnection of typelists, type tuples and simple record
- ** data types build on top of them.  
+ ** Interplay of typelists, type tuples and simple record
+ ** data types build on top of them.
  **
  ** @see lumiera::typelist::Tuple
  ** @see tuple.hpp
@@ -34,18 +34,13 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/meta/typelist.hpp"   ////////////TODO really?
 #include "lib/meta/tuple.hpp"
 #include "meta/typelist-diagnostics.hpp"
 #include "meta/tuple-diagnostics.hpp"
 
-#include <boost/utility/enable_if.hpp>
-#include <boost/format.hpp>
 #include <iostream>
 
 using ::test::Test;
-  
-using std::string;
 using std::cout;
 using std::endl;
 
@@ -81,9 +76,10 @@ namespace test {
    *       - build a tuple type from an existing typelist
    *       - create sub tuple types and types with shifted parameters
    *       Additionally, check the behaviour when creating tuple instances
-   *       at runtime. Effectively, these are simple record types, which are
-   *       synthesised by recursion over the related typelist.
-   *       - create tuples from a list of values
+   *       at runtime. Effectively, these are simple record types, which
+   *       are synthesised by recursion over the related typelist.
+   *       - diagnostics through TupleAccessor retrieving stored values
+   *       - creating tuples by direct function call, providing values
    *       - copy and copy construct
    *       - access the "head" and access values by numeric index
    *       - create a tuple with shifted values 
@@ -130,7 +126,7 @@ namespace test {
       void
       check_tuple_from_Typelist()
         {
-          typedef Types1::List L1;  // starting from an existing Typelist...
+          typedef Types1::List L1; // starting from an existing Typelist...
           
           typedef Tuple<L1> T_L1;           // ListType based tuple type
           typedef Tuple<L1>::TupleType T1;  // corresponding plain tuple type
@@ -150,6 +146,40 @@ namespace test {
           
           Prepend prepend (22, tup2);       // but note: the ListType based tuple has an "(head,tail)" style ctor
           DUMPVAL (prepend);                // ... and in construction, tup2 has been copied and coerced to ListType style
+          
+          typedef Tuple<Types<> > NulT;     // plain-flat empty Tuple
+          typedef Tuple<NullType> NulL;     // list-style empty Tuple
+          
+          ASSERT (            is_Tuple<T1>::value);
+          ASSERT (       is_TuplePlain<T1>::value);
+          ASSERT (!   is_TupleListType<T1>::value);
+          ASSERT (!       is_NullTuple<T1>::value);
+          
+          ASSERT (          is_Tuple<T_L1>::value);
+          ASSERT (!    is_TuplePlain<T_L1>::value);
+          ASSERT (  is_TupleListType<T_L1>::value);
+          ASSERT (!     is_NullTuple<T_L1>::value);
+          
+          ASSERT (          is_Tuple<NulT>::value);
+          ASSERT (     is_TuplePlain<NulT>::value);
+          ASSERT (! is_TupleListType<NulT>::value);
+          ASSERT (      is_NullTuple<NulT>::value);
+          
+          ASSERT (          is_Tuple<NulL>::value);
+          ASSERT (!    is_TuplePlain<NulL>::value);
+          ASSERT (  is_TupleListType<NulL>::value);
+          ASSERT (      is_NullTuple<NulL>::value);
+          
+          ASSERT (!        is_Tuple<Type1>::value);
+          ASSERT (!   is_TuplePlain<Type1>::value);
+          ASSERT (!is_TupleListType<Type1>::value);
+          ASSERT (!    is_NullTuple<Type1>::value);
+          
+          ASSERT (!        is_Tuple<Types1::List>::value);
+          ASSERT (!   is_TuplePlain<Types1::List>::value);
+          ASSERT (!is_TupleListType<Types1::List>::value);
+          ASSERT (!    is_NullTuple<Types1::List>::value);
+          
         }
       
       
@@ -160,36 +190,36 @@ namespace test {
           
           typedef Append<Types2::List, Types1::List>::List L2;
           
-          typedef Tuple<L2> T_L2;
+          typedef Tuple<L2> T_L2;              // list-style Tuple
           typedef Types<T_L2::HeadType> Head;
           typedef T_L2::TailType Tail;
           DISPLAY (T_L2);
           DISPLAY (Head);
           DISPLAY (Tail);
           
-          typedef T_L2::TupleType T2;
+          typedef T_L2::TupleType T2;          // plain-flat Tuple
           typedef Types<T2::HeadType> Head2;
           typedef T2::TailType Tail2;
           DISPLAY (T2);
           DISPLAY (Head2);
           DISPLAY (Tail2);
           
-          typedef Tuple<Types<> > NulT;
-          typedef Tuple<NullType> NulL;
+          typedef Tuple<Types<> > NulT;        // plain-flat empty Tuple
+          typedef Tuple<NullType> NulL;        // list-style empty Tuple
           
-          DISPLAY (T2::Type);
-          DISPLAY (T2::TailType);
-          DISPLAY (T2::TupleType);
+          DISPLAY (T2::Type);                  // irrespective of the flavour,
+          DISPLAY (T2::TailType);              // a basic set of typedefs is 
+          DISPLAY (T2::TupleType);             // always available
           DISPLAY (T2::ThisType);
           DISPLAY (T2::Tail);
           DISPLAY (T2::ArgList);
           
-          DISPLAY (T_L2::Type);
-          DISPLAY (T_L2::TailType);
-          DISPLAY (T_L2::TupleType);
-          DISPLAY (T_L2::ThisType);
-          DISPLAY (T_L2::Tail);
-          DISPLAY (T_L2::ArgList);
+          DISPLAY (T_L2::Type);                // the element types as type sequence
+          DISPLAY (T_L2::TailType);            // the element types of the "tail" tuple
+          DISPLAY (T_L2::TupleType);           // corresponding plain-flat tuple type
+          DISPLAY (T_L2::ThisType);            // "type_of(this)"
+          DISPLAY (T_L2::Tail);                // tail tuple
+          DISPLAY (T_L2::ArgList);             // typelist comprised of the element types
           
           DISPLAY (NulT::Type);
           DISPLAY (NulT::TailType);
@@ -243,8 +273,8 @@ namespace test {
         {
           cout << "\t:\n\t: ---creating-Tuples---\n";
           
-          Tuple<Types1> tup1  ;                      
-          Tuple<Types1> tup11 (Num<1>(11) );                      
+          Tuple<Types1> tup1  ;
+          Tuple<Types1> tup11 (Num<1>(11) );
           Tuple<Types1> tup12 (Num<1>(),   Num<3>(33) );
           Tuple<Types1> tup13 (Num<1>(11), Num<3>(33), Num<5>() );
           DUMPVAL (tup1);
@@ -253,7 +283,7 @@ namespace test {
           DUMPVAL (tup13);
           
           typedef Tuple<Types<int,int,Num<11> > > Tup2;
-          Tup2 tup2 = tuple::make(41,42, Num<11>(43));
+          Tup2 tup2 = tuple::make(41,42, Num<11>(43));   // build tuple from given values
           DISPLAY (Tup2);
           DUMPVAL (tup2);
           
@@ -298,7 +328,7 @@ namespace test {
           DUMPVAL (tup1);
           
           Tuple<Types1::List> tupL = tup11.getShifted<0>();
-          Tuple<Types1> tup1L (tupL);
+          Tuple<Types1> tup1L (tupL);      // create plain tuple from list-style tuple
           DUMPVAL (tupL);
           DUMPVAL (tup1L);
         }
@@ -320,8 +350,8 @@ namespace test {
           tuple::element<1>(tu2).o_ = 5;
           tu2.getHead() = Num<2> (tu2.getAt<1>().o_);
           DUMPVAL (tu2);
-
-
+          
+          
           tupX.getShifted<2>() = tu2;
           DUMPVAL (tupX);
           
@@ -344,10 +374,10 @@ namespace test {
           TupT tupXcopy (tupX);
           DUMPVAL (tupXcopy);
           
-          TupT& tupXcast (tupX.tupleCast());
+          TupT& tupXcast (tupX.tupleCast());   // (down)cast list-style to plain tuple
           DUMPVAL (tupXcast);
         }
-
+      
     };
   
   
