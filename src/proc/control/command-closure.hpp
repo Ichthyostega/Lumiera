@@ -195,12 +195,8 @@ namespace control {
       CmdFunctor
       bindArguments (CmdFunctor& unboundFunctor)
         {
-          function<SIG> unboundF (unboundFunctor.getFun<SIG>());
-          TupleApplicator<SIG> appli (params_);
-                
-//          function<void()> boundFunctor = appli.bind (unboundF); ///////TODO: deactivated temporarily 
-          function<void()> boundFun;
-          return CmdFunctor (boundFun);
+          return CmdFunctor (TupleApplicator<SIG> (params_)
+                               .bind ( unboundFunctor.getFun<SIG>()) );
         }
       
       
