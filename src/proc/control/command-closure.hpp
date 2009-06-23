@@ -82,7 +82,7 @@ namespace control {
   
   
   class CmdClosure;
-  typedef std::tr1::shared_ptr<CmdClosure> PClo;  ///< smart-ptr type used for handling concrete closures
+  typedef std::tr1::shared_ptr<CmdClosure> PClosure;  ///< smart-ptr type used for handling concrete closures
   
   
   /** Interface */
@@ -91,7 +91,7 @@ namespace control {
     public:
       virtual ~CmdClosure() {}
       
-      virtual PClo clone()  const =0;
+      virtual PClosure clone()  const =0;
       
       virtual operator string()  const =0;
       
@@ -204,10 +204,10 @@ namespace control {
        *  hidden behind the generic CmdClosure interface
        *  and owned by a shared_ptr PClo.
        */
-      PClo
+      PClosure
       clone()  const
         {
-          return PClo (new Closure (this->params_));
+          return PClosure (new Closure (this->params_));
         }
       
       operator string()  const
@@ -215,6 +215,23 @@ namespace control {
           UNIMPLEMENTED ("how to do a string conversion on the variable argument tuple??");
         }
     };
+    
+    
+  /**
+   *  Special kind of Closure, which \em decorates an existing Closure
+   *  and provides a captured state memento as additional parameter on invocation.
+   *  
+   *  @todo concept isn't clear yet. Multiple MementoClosurese are to decorate a single Closure;
+   *        they have to match and extract the concrete type of the Closure and the provided Memento,
+   *        but the latter needs to be erased immediately. Basically, MementoClosure must be able
+   *        to stand-in for an simple parameter closure. 
+   */
+  class MementoClosure
+    : public CmdClosure
+    {
+      
+    };
+    
   ////////////////TODO currently just fleshing  out the API....
   
   

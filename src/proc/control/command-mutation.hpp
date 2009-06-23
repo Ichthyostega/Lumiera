@@ -63,21 +63,25 @@ namespace control {
   class Mutation
     {
       CmdFunctor func_;
-      PClo clo_;
+      Closure* clo_;
       
     public:
       template<typename SIG>
       Mutation (function<SIG> const& func)
-        : func_(func)
+        : func_(func),
+          clo_(0)
         { }
       
       virtual ~Mutation() {}
       
       
       virtual Mutation&
-      close (CmdClosure const& closure)
+      close (Closure& cmdClosure)
         {
-          UNIMPLEMENTED ("accept and store a parameter closure");
+          REQUIRE (!clo_, "Lifecycle error: already closed over the arguments");
+          REQUIRE (func_, "Param error: not bound to a valid function");
+          func_ = cmdClosure->bindArguments(func_);
+          clo_ = &cmdClosure;
           return *this;
         }
       
@@ -85,12 +89,15 @@ namespace control {
       void
       operator() ()
         {
-          UNIMPLEMENTED ("invoke the Mutation functor");
+          if (!clo_)
+            throw lumiera::error::State ("Lifecycle error: function arguments not yet provided",
+                                         LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+          invoke (func_);
         }
       
       
       /* == diagnostics == */
-      typedef PClo Mutation::*_unspecified_bool_type;
+      typedef PClosure Mutation::*_unspecified_bool_type;
       
       /** implicit conversion to "bool" */ 
       operator _unspecified_bool_type()  const { return  isValid()? &Mutation::clo_ : 0; }  // never throws
@@ -105,7 +112,20 @@ namespace control {
       virtual bool
       isValid ()   const
         {
-          UNIMPLEMENTED ("mutation lifecycle");
+          return func_ && clo_;
+        }
+      
+      void
+      invoke (CmdFunctor & closedFunction)
+        {
+          closedFunction.getFun<void()>() ();
+        }
+      
+      CmdClosure&
+      getClosure() ///< Interface for subclasses to access the bound parameters
+        {
+          REQUIRE (clo_, "Lifecycle error: function arguments not yet bound");
+          return *clo_;
         }
     };
   
@@ -151,14 +171,32 @@ namespace control {
       Mutation&
       captureState ()
         {
-          UNIMPLEMENTED ("invoke the state capturing Functor");
+          if (!Mutation::isValid())
+            throw lumiera::error::State ("need to bind function arguments prior to capturing undo state",
+                                         LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+          
+          if (!memento_)   // on first invocation we have to close the capture function
+            captureFunc_ = Mutation::getClosure().bindArguments(func_);
+
+          memento_.reset (new MementoClosure (Mutation::getClosure(), invoke(captureFunc_) ))   //////TODO verify exception safety!
+          
+          UNIMPLEMENTED ("how to make the inherited operator() use the extended Parameters (including the memento)???");
+          return *this;
         }
       
       CmdClosure&
       getMemento()
         {
-          UNIMPLEMENTED ("return the closure serving as memento");
+          return *memento_;
         }
+      
+    private:
+      virtual bool
+      isValid ()   const
+        {
+          return Mutation::isValid() && captureFunc_ && memento_;
+        }
+      
       
     };
   ////////////////TODO currently just fleshing  out the API....
