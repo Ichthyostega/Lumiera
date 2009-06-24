@@ -168,6 +168,24 @@ namespace control {
         }
       
       
+      virtual Mutation&
+      close (Closure& cmdClosure)
+        {
+          REQUIRE (!memento_,    "Lifecycle error: already closed over the arguments");
+          REQUIRE (captureFunc_, "Param error: not bound to a valid function");
+          
+          // create a special state closure, which can later on store the captured undo state (memento)
+          scoped_ptr<CmdClosure> stateClosure (new MementoClosure (captureFunc_));
+          CmdFunctor closedCaptureFunc = stateClosure->bindArguments(captureFunc_);
+          
+          // the undoFunc (within parent class) will retrieve an argument tuple extended by the memento
+          Mutation::close (stateClosure->decorate (cmdClosure));
+          
+          captureFunc_ = closedCaptureFunc;
+          memento_.swap(stateClosure);
+          return *this;
+        }
+      
       Mutation&
       captureState ()
         {
@@ -175,18 +193,14 @@ namespace control {
             throw lumiera::error::State ("need to bind function arguments prior to capturing undo state",
                                          LUMIERA_ERROR_UNBOUND_ARGUMENTS);
           
-          if (!memento_)   // on first invocation we have to close the capture function
-            captureFunc_ = Mutation::getClosure().bindArguments(func_);
-
-          memento_.reset (new MementoClosure (Mutation::getClosure(), invoke(captureFunc_) ))   //////TODO verify exception safety!
-          
-          UNIMPLEMENTED ("how to make the inherited operator() use the extended Parameters (including the memento)???");
+          invoke(captureFunc_);
           return *this;
         }
       
       CmdClosure&
       getMemento()
         {
+          ASSERT (memento_, "Lifecycle error: need to close first");
           return *memento_;
         }
       

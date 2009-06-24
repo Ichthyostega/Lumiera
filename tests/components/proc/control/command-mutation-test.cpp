@@ -41,6 +41,7 @@
 #include <tr1/functional>
 //#include <boost/format.hpp>
 #include <iostream>
+#include <cstdlib>
 #include <string>
 
 using std::tr1::bind;
@@ -51,6 +52,7 @@ using std::tr1::function;
 //using lumiera::Time;
 //using util::contains;
 using std::string;
+using std::rand;
 using std::cout;
 using std::endl;
 
@@ -135,6 +137,8 @@ namespace test    {
           functor.close(clo);
           ASSERT (functor);
           
+          cout << "param values: " << clo << endl;
+          
           testVal = 0;
           functor();
           ASSERT (testVal == 23);
@@ -201,6 +205,50 @@ namespace test    {
           testVal = 0;
           clonedFunc();
           ASSERT (testVal == 42);
+        }
+      
+      
+      void
+      checkStateCapturingClosure ()
+        {
+          function<void(int)> undo_func  = bind (&testFunc,_1);
+          function<int(void)> cap_func   = bind (&capture    );
+          
+          MementoClosure memClo (cap_func);
+          CmdFunctor closed_cap_func = memClo.bindArguments (cap_func);
+          Tuple<Types<> > param;
+          Closure<void()> clo (param);
+          cout << "plain param values: " << clo << endl;
+          
+          Closure<void(int)> extendedClo = memClo.decorate (clo);
+          cout << "params including memento storage: " << extendedClo << endl;
+          
+          CmdFunctor closed_undo_func = extendedClo.bindArguments (undo_func);
+          
+          VERIFY_ERROR (MISSING_MEMENTO, closed_undo_func() );     // invalid, because no state was captured
+          
+          int rr (rand() %100);
+          
+          testVal = rr;
+          closed_cap_func();      // invoke state capturing 
+          
+          cout << "params including memento: " << memClo << endl;
+          cout << "captured memento state  : " << extendedClo << endl;
+          
+          testVal = -10;          // meanwhile "somehow" mutate the state
+          
+          closed_undo_func();     // invoking the undo() feeds back the memento
+          ASSERT (rr == testVal); // which is then restored into the state
+          
+          // this cycle can be repeated with different state values
+          rr = (rand() %100);
+          testVal = rr;
+          closed_cap_func();      // capture new state
+          cout << "params including memento: " << memClo << endl;
+                                //   ....note the changed memento!
+          testVal = -20;
+          closed_undo_func();
+          ASSERT (rr == testVal);
         }
     };
   
