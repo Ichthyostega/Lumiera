@@ -38,6 +38,7 @@
 //#include "pre.hpp"
 #include "lib/error.hpp"
 #include "proc/control/command-closure.hpp"
+#include "proc/control/memento-closure.hpp"
 
 //#include <tr1/memory>
 #include <boost/scoped_ptr.hpp>
@@ -57,13 +58,17 @@ namespace control {
   using std::string;
   
   
+  LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Mutation functor not yet usable, because arguments aren't bound
+  LUMIERA_ERROR_DECLARE (MISSING_MEMENTO);   ///<  Undo functor not yet usable, because no undo state has been captured
+  
+  
   /**
    * @todo Type-comment
    */
   class Mutation
     {
       CmdFunctor func_;
-      Closure* clo_;
+      CmdClosure* clo_;
       
     public:
       template<typename SIG>
@@ -76,11 +81,11 @@ namespace control {
       
       
       virtual Mutation&
-      close (Closure& cmdClosure)
+      close (CmdClosure& cmdClosure)
         {
           REQUIRE (!clo_, "Lifecycle error: already closed over the arguments");
           REQUIRE (func_, "Param error: not bound to a valid function");
-          func_ = cmdClosure->bindArguments(func_);
+          func_ = cmdClosure.bindArguments(func_);
           clo_ = &cmdClosure;
           return *this;
         }
@@ -97,7 +102,7 @@ namespace control {
       
       
       /* == diagnostics == */
-      typedef PClosure Mutation::*_unspecified_bool_type;
+      typedef CmdClosure* Mutation::*_unspecified_bool_type;
       
       /** implicit conversion to "bool" */ 
       operator _unspecified_bool_type()  const { return  isValid()? &Mutation::clo_ : 0; }  // never throws
@@ -169,7 +174,7 @@ namespace control {
       
       
       virtual Mutation&
-      close (Closure& cmdClosure)
+      close (CmdClosure& cmdClosure)
         {
           REQUIRE (!memento_,    "Lifecycle error: already closed over the arguments");
           REQUIRE (captureFunc_, "Param error: not bound to a valid function");
@@ -215,9 +220,6 @@ namespace control {
     };
   ////////////////TODO currently just fleshing  out the API....
   
-  
-  LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Mutation functor not yet usable, because arguments aren't bound
-  LUMIERA_ERROR_DECLARE (MISSING_MEMENTO);   ///<  Undo functor not yet usable, because no undo state has been captured
     
   
   

@@ -49,6 +49,7 @@ test_components_SOURCES =							\
 	$(testcomponents_srcdir)/proc/asset/testasset.cpp			\
 	$(testcomponents_srcdir)/proc/control/command-basic-test.cpp		\
 	$(testcomponents_srcdir)/proc/control/command-mutation-test.cpp		\
+	$(testcomponents_srcdir)/proc/control/memento-closure-test.cpp		\
 	$(testcomponents_srcdir)/proc/engine/bufftabletest.cpp			\
 	$(testcomponents_srcdir)/proc/engine/sourcenodetest.cpp         	\
 	$(testcomponents_srcdir)/proc/mobject/builder/buildertooltest.cpp	\

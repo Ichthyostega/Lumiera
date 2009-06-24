@@ -9,3 +9,7 @@ END
 
 PLANNED "CommandMutation_test" CommandMutation_test <<END
 END
+
+
+PLANNED "MementoClosure_test" MementoClosure_test <<END
+END

@@ -217,21 +217,6 @@ namespace control {
     };
     
     
-  /**
-   *  Special kind of Closure, which \em decorates an existing Closure
-   *  and provides a captured state memento as additional parameter on invocation.
-   *  
-   *  @todo concept isn't clear yet. Multiple MementoClosurese are to decorate a single Closure;
-   *        they have to match and extract the concrete type of the Closure and the provided Memento,
-   *        but the latter needs to be erased immediately. Basically, MementoClosure must be able
-   *        to stand-in for an simple parameter closure. 
-   */
-  class MementoClosure
-    : public CmdClosure
-    {
-      
-    };
-    
   ////////////////TODO currently just fleshing  out the API....
   
   
