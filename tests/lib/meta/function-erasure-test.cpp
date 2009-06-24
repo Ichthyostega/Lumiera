@@ -76,6 +76,10 @@ namespace test {
           
           check_FunctPtrHolder(Efp(testFunc),Efp(&testFunc), Efp(returnIt));
           check_VoidPtrHolder(Evoid(testFunc),Evoid(&testFunc),Evoid(returnIt));
+          
+          detect_unboundFunctor(Efun(testFunc), Efun(getterFunc), Efun(membFunc));
+          detect_unboundFunctor(Efp(testFunc),Efp(&testFunc), Efp(returnIt));
+          detect_unboundFunctor(Evoid(testFunc),Evoid(&testFunc),Evoid(returnIt));
         }
       
       void
@@ -193,6 +197,21 @@ namespace test {
           
         //(*bad_fun) (11, 'x');  // The compiler would accept this line!
         }                       //  likely to result in heap corruption or SEGV
+      
+      
+      template<class HOL>
+      void
+      detect_unboundFunctor(HOL h1, HOL h2, HOL h3)
+        {
+          // fabricate an unbound functor...
+          function<long(int,char)> emptyFunc;
+          HOL emptyHolder (emptyFunc);
+          ASSERT (!emptyHolder);
+          ASSERT ( h1 );
+          ASSERT ( h2 );
+          ASSERT ( h3 );
+        }
+
     };
   
   

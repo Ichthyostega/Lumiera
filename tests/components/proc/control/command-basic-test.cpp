@@ -44,6 +44,7 @@
 #include <tr1/functional>
 //#include <boost/format.hpp>
 #include <iostream>
+#include <cstdlib>
 #include <string>
 
 using std::tr1::bind;
@@ -54,6 +55,7 @@ using std::tr1::function;
 using lumiera::Time;
 //using util::contains;
 using std::string;
+using std::rand;
 using std::cout;
 using std::endl;
 
