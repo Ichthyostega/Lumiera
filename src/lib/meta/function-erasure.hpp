@@ -99,19 +99,18 @@ namespace typelist{
     {
       typedef bool (T::*ValidityCheck)()  const;
       typedef ValidityCheck _unspecified_bool_type;
-      ValidityCheck isValid;
-      
-      BoolCheckable() : isValid (&T::isValid) {}
       
       /** implicit conversion to "bool" */ 
       operator _unspecified_bool_type()  const   ///< never throws
         {
+          ValidityCheck isValid (&T::isValid);
           T const& obj = static_cast<T const&> (*this);
           return  (obj.*isValid)()? isValid : 0;
         }
       
       bool operator! ()  const ///< never throws
         {
+          ValidityCheck isValid (&T::isValid);
           T const& obj = static_cast<T const&> (*this);
           return !(obj.*isValid)();
         }

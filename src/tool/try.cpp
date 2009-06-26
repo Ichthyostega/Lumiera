@@ -49,7 +49,7 @@ using boost::format;
       bool
       isValid()  const
         {
-          return true;
+          return val_ % 2;
         }
       
     };
@@ -61,16 +61,20 @@ main (int, char**) //(int argc, char* argv[])
   {
     
     NOBUG_INIT;
-   
-    TestIt1 testrosteron (22);
     
-    bool boo = testrosteron;
+    for (int i=0; i<10; ++i)
+      {
+        TestIt1 testrosteron (i);
+        
+        if (testrosteron)
+          cout << "doIt \n";
+        if (!testrosteron)
+          cout << i << "\n";
+      }
+    cout << "size=" << sizeof(TestIt1) <<"\n";
+    
     
     cout <<  "\n.gulp.\n";
-    
-    if (boo)
-      cout << "size=" << sizeof(TestIt1) <<"\n";
-    
     
     return 0;
   }
