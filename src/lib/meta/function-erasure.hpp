@@ -93,7 +93,24 @@ namespace typelist{
   
     
   /* ====== Policy classes ====== */
-  
+
+  template<class T>
+  struct BoolCheckable
+    {
+      typedef bool (T::*ValidityCheck)()  const;
+      typedef ValidityCheck _unspecified_bool_type;
+      ValidityCheck isValid;
+      
+      BoolCheckable() : isValid (&T::isValid) {}
+      
+      /** implicit conversion to "bool" */ 
+      operator _unspecified_bool_type()  const { T const& obj = *this;
+                                                 return  (obj.*isValid)()? isValid : 0; }  // never throws
+      bool operator! ()                  const { T const& obj = *this;
+                                                 return !(obj.*isValid)(); }                       //  ditto
+      
+    };
+    
   /** 
    * Policy for FunErasure: store an embedded tr1::function
    * Using this policy allows to store arbitrary complex functor objects
@@ -101,6 +118,7 @@ namespace typelist{
    * The price to pay is vtable access and heap storage of function arguments. 
    */
   class StoreFunction
+//    : public BoolCheckable<StoreFunction>
     {
       /** Helper: type erasure */
       struct Holder
@@ -154,6 +172,12 @@ namespace typelist{
         {
           REQUIRE (INSTANCEOF (FunctionHolder<SIG>, &holder_));
           return static_cast<FunctionHolder<SIG>&> (holder_).get();
+        }
+      
+      bool
+      isValid()  const
+        {
+          return reinterpret_cast<void*> (holder_.storage_[0]);
         }
     };
   
