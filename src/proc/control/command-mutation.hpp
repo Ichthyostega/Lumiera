@@ -84,7 +84,7 @@ namespace control {
       close (CmdClosure& cmdClosure)
         {
           REQUIRE (!clo_, "Lifecycle error: already closed over the arguments");
-//          REQUIRE (func_, "Param error: not bound to a valid function");
+          REQUIRE (func_, "Param error: not bound to a valid function");
           func_ = cmdClosure.bindArguments(func_);
           clo_ = &cmdClosure;
           return *this;
@@ -117,7 +117,7 @@ namespace control {
       virtual bool
       isValid ()   const
         {
-//          return func_ && clo_;
+          return func_ && clo_;
         }
       
       void
@@ -177,7 +177,7 @@ namespace control {
       close (CmdClosure& cmdClosure)
         {
           REQUIRE (!memento_,    "Lifecycle error: already closed over the arguments");
-//          REQUIRE (captureFunc_, "Param error: not bound to a valid function");
+          REQUIRE (captureFunc_, "Param error: not bound to a valid function");
           
           // create a special state closure, which can later on store the captured undo state (memento)
           scoped_ptr<CmdClosure> stateClosure (new MementoClosure (captureFunc_));
@@ -213,7 +213,7 @@ namespace control {
       virtual bool
       isValid ()   const
         {
-//          return Mutation::isValid() && captureFunc_ && memento_;
+          return Mutation::isValid() && captureFunc_ && memento_;
         }
       
       

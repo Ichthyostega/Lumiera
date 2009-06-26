@@ -55,6 +55,7 @@
 
 #include "lib/util.hpp"
 #include "lib/error.hpp"
+#include "lib/bool-checkable.hpp"
 
 #include <tr1/functional>
 
@@ -76,7 +77,7 @@ namespace typelist{
    *   using the templated \c getFun()
    *   
    * @param FH policy to control the implementation.
-   *        In most cases, you should use "StoreFunction"  
+   *        In most cases, you should use "StoreFunction"
    * @note not statically typesafe. Depending on
    *       the specified policy, it \em might be
    *       run-time typesafe.
@@ -91,40 +92,19 @@ namespace typelist{
         { }
     };
   
-    
+  
   /* ====== Policy classes ====== */
-
-  template<class T>
-  struct BoolCheckable
-    {
-      typedef bool (T::*ValidityCheck)()  const;
-      typedef ValidityCheck _unspecified_bool_type;
-      
-      /** implicit conversion to "bool" */ 
-      operator _unspecified_bool_type()  const   ///< never throws
-        {
-          ValidityCheck isValid (&T::isValid);
-          T const& obj = static_cast<T const&> (*this);
-          return  (obj.*isValid)()? isValid : 0;
-        }
-      
-      bool operator! ()  const ///< never throws
-        {
-          ValidityCheck isValid (&T::isValid);
-          T const& obj = static_cast<T const&> (*this);
-          return !(obj.*isValid)();
-        }
-      
-    };
-    
+  
   /** 
    * Policy for FunErasure: store an embedded tr1::function
    * Using this policy allows to store arbitrary complex functor objects
    * embedded within a neutral container and retrieving them later type-safe.
-   * The price to pay is vtable access and heap storage of function arguments. 
+   * The price to pay is vtable access and heap storage of function arguments.
+   * 
+   * @note the bool conversion and #isValid are highly implementation dependent
    */
   class StoreFunction
-//    : public BoolCheckable<StoreFunction>
+    : public lib::BoolCheckable<StoreFunction>
     {
       /** Helper: type erasure */
       struct Holder
@@ -181,7 +161,7 @@ namespace typelist{
         }
       
       bool
-      isValid()  const
+      isValid()  const   ///< @note implementation dependent!!
         {
           return reinterpret_cast<void*> (holder_.storage_[0]);
         }
@@ -195,6 +175,7 @@ namespace typelist{
    * The price to pay is vtable access. 
    */
   class StoreFunPtr
+    : public lib::BoolCheckable<StoreFunPtr>
     {
       /** Helper: type erasure */
       struct Holder
@@ -241,6 +222,13 @@ namespace typelist{
           REQUIRE (INSTANCEOF (FunctionHolder<SIG>, &holder_));
           return static_cast<FunctionHolder<SIG>&> (holder_).get();
         }
+      
+      
+      bool
+      isValid()  const
+        {
+          return holder_.fP_;
+        }
     };
   
   
@@ -250,6 +238,7 @@ namespace typelist{
    * and to retrieve it without overhead, but also without safety.
    */
   class StoreUncheckedFunPtr
+    : public lib::BoolCheckable<StoreUncheckedFunPtr>
     {
       void *funP_;
       
@@ -270,6 +259,13 @@ namespace typelist{
       getFun ()
         {
           return *reinterpret_cast<SIG*> (funP_);
+        }
+      
+      
+      bool
+      isValid()  const
+        {
+          return funP_;
         }
     };
   

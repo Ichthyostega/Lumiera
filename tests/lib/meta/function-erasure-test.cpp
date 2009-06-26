@@ -212,10 +212,10 @@ namespace test {
           
           typedef typename BuildEmptyHolder<HOL>::Type EmptyHolder;
           EmptyHolder emptyHolder;
-//          ASSERT (!emptyHolder);
-//          ASSERT ( h1 );
-//          ASSERT ( h2 );
-//          ASSERT ( h3 );
+          ASSERT (!emptyHolder);
+          ASSERT ( h1 );
+          ASSERT ( h2 );
+          ASSERT ( h3 );
         }
       
 
