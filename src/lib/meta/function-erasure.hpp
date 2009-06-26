@@ -104,10 +104,17 @@ namespace typelist{
       BoolCheckable() : isValid (&T::isValid) {}
       
       /** implicit conversion to "bool" */ 
-      operator _unspecified_bool_type()  const { T const& obj = *this;
-                                                 return  (obj.*isValid)()? isValid : 0; }  // never throws
-      bool operator! ()                  const { T const& obj = *this;
-                                                 return !(obj.*isValid)(); }                       //  ditto
+      operator _unspecified_bool_type()  const   ///< never throws
+        {
+          T const& obj = static_cast<T const&> (*this);
+          return  (obj.*isValid)()? isValid : 0;
+        }
+      
+      bool operator! ()  const ///< never throws
+        {
+          T const& obj = static_cast<T const&> (*this);
+          return !(obj.*isValid)();
+        }
       
     };
     

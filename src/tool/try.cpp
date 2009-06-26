@@ -57,18 +57,19 @@ using boost::format;
   
   
 int 
-main (int argc, char* argv[])
+main (int, char**) //(int argc, char* argv[])
   {
     
     NOBUG_INIT;
    
     TestIt1 testrosteron (22);
     
-    bool boo = true; //testrosteron;
-    if (!boo)
-      return -1;
+    bool boo = testrosteron;
     
     cout <<  "\n.gulp.\n";
+    
+    if (boo)
+      cout << "size=" << sizeof(TestIt1) <<"\n";
     
     
     return 0;
