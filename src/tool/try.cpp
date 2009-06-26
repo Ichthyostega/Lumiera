@@ -17,7 +17,7 @@
 
 #include <nobug.h>
 //#include "include/nobugcfg.h"
-#include "lib/meta/function-erasure.hpp"
+#include "lib/bool-checkable.hpp"
 
 #include <iostream>
 //#include <typeinfo>
@@ -37,7 +37,7 @@ using boost::format;
   }
   
   struct TestIt1
-    : lumiera::typelist::BoolCheckable<TestIt1>
+    : lib::BoolCheckable<TestIt1>
     {
       
       int val_;

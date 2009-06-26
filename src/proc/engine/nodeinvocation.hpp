@@ -96,7 +96,7 @@ namespace engine {
       
       virtual BuffHandle fetch (FrameID const& fID)     { return current_.fetch (fID); }
       
-      // note: allocateBuffer()  is choosen specifically based on the actual node wiring
+      // note: allocateBuffer()  is chosen specifically based on the actual node wiring
       
     };
   
@@ -110,7 +110,7 @@ namespace engine {
    * which form the actual invocation sequence. The various operations in this sequence
    * access the context via the references in this struct, while also using the inherited
    * public State interface. The object instance actually used as Invocation is created
-   * on the stack and parametrized according to the necessities of the invocation sequence
+   * on the stack and parametrised according to the necessities of the invocation sequence
    * actually configured. Initially, this real instance is configured without BuffTable,
    * because the invocation may be short-circuited due to Cache hit. Otherwise, when
    * the invocation sequence actually prepares to call the process function of this

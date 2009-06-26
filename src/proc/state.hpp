@@ -50,7 +50,7 @@ namespace engine {
        *  Intended as a performance shortcut to avoid calling
        *  up through a chain of virtual functions when deep down
        *  in chained ProcNode::pull() calls. This allows derived
-       *  classes to proxy the state inteface.
+       *  classes to proxy the state interface.
        */ 
       virtual State& getCurrentImplementation () =0;
       
@@ -62,7 +62,7 @@ namespace engine {
        *  on the State implementation; it could be a temporary, located in
        *  the cache, used for feeding calculated frames over a network, etc.
        *  @return a BuffHandle encapsulating the information necessary to get
-       *          at the actual buffer adress and for releasing the buffer.
+       *          at the actual buffer address and for releasing the buffer.
        */
       virtual BuffHandle allocateBuffer (BufferDescriptor const&)  =0;
       
@@ -79,7 +79,7 @@ namespace engine {
       /** try to fetch an existing buffer containing the denoted frame from
        *  a cache or similar backing system (e.g. peer over the network).
        *  @return either a handle to a readonly buffer, or a null handle
-       *  @note the client is resposible for not modifying the provided data
+       *  @note the client is responsible for not modifying the provided data
        */
       virtual BuffHandle fetch (FrameID const&)  =0;
       

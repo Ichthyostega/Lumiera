@@ -2,18 +2,39 @@ TESTING "Component Test Suite: common and basic components" ./test-lib --group=c
 
 
 
-TEST "Hello test" HelloWorld_test 3 <<END
+TEST "Hello test world" HelloWorld_test 3 <<END
 out: ^This is how the world ends\.\.\.$
 return: 0
 END
 
 
-TEST "AllocationCluster_test" AllocationCluster_test <<END
+TEST "Allocation Cluster" AllocationCluster_test <<END
 return: 0
 END
 
 
-PLANNED "Appconfig_test" Appconfig_test <<END
+PLANNED "basic application state" Appconfig_test <<END
+return: 0
+END
+
+
+TEST "implicit conversion to bool" BoolCheckable_test <<END
+out: 1
+out: 2
+out: doIt
+out: 4
+out: 5
+out: doIt
+out: 7
+out: 8
+out: doIt
+out: 10
+out: 11
+out: doIt
+out: 13
+out: 14
+out: doIt
+out: sizeof.+lib.+test.+ExampleCustomType123.+ =   [248]
 return: 0
 END
 

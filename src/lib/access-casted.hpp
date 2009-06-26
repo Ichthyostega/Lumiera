@@ -1,5 +1,5 @@
 /*
-  ACCESSCASTED.hpp  -  util template to access a value using conversion or cast as appropriate
+  ACCESS-CASTED.hpp  -  util template to access a value using conversion or cast as appropriate
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,13 +21,13 @@
 */
 
 
-/** @file accesscasted.hpp
- ** Helper for accessing a value employing either conversion or downcast
+/** @file access-casted.hpp
+ ** Helper for accessing a value, employing either conversion or downcast,
  ** depending on the relation of the source type (type of the original value)
  ** and the target type (type we need within the usage context). 
  ** When instantiating AcessCasted<TAR>, we get a template static function
  ** \c AcessCasted<TAR>::access<SRC>(SRC& elm), but the actual implementation
- ** is chosen using boost::type_traits. If no viable implementation can be
+ ** is chosen using boost::type_traits. If no sensible implementation can be
  ** selected, \c EmptyVal<TAR>::create() is invoked instead, which by default
  ** creates a NULL value or similar by using the no-argument ctor of the
  ** type TAR. Alternatively, you may define an specialisation of EmptyVal,
@@ -38,8 +38,8 @@
  */
 
 
-#ifndef UTIL_ACCESSCASTED_H
-#define UTIL_ACCESSCASTED_H
+#ifndef UTIL_ACCESS_CASTED_H
+#define UTIL_ACCESS_CASTED_H
 
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
@@ -143,23 +143,23 @@ namespace util {
       
       template<typename ELM>
       static  typename enable_if< use_dynamic_downcast<ELM&,TAR>, TAR>::type
-      access (ELM& elem) 
-        { 
-          return dynamic_cast<TAR> (elem); 
+      access (ELM& elem)
+        {
+          return dynamic_cast<TAR> (elem);
         }
       
       template<typename ELM>
       static  typename enable_if< use_static_downcast<ELM&,TAR>, TAR>::type
-      access (ELM& elem) 
-        { 
-          return static_cast<TAR> (elem); 
+      access (ELM& elem)
+        {
+          return static_cast<TAR> (elem);
         }
       
       template<typename ELM>
       static  typename enable_if< use_conversion<ELM&,TAR>, TAR>::type
-      access (ELM& elem) 
-        { 
-          return elem; 
+      access (ELM& elem)
+        {
+          return elem;
         }
     };
   
