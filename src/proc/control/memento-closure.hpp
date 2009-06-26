@@ -87,18 +87,30 @@ namespace control {
    *        to stand-in for an simple parameter closure. 
    */
   class MementoClosure
-    : public CmdClosure   ///////////TODO hierarachy?
+    : public CmdClosure   ///////////TODO hierararchy?
     {
     public:
       
-      virtual PClosure clone()  const =0;
+      virtual PClosure clone()  const
+        {
+          return PClosure (new MementoClosure (*this));
+        }
+
+      virtual operator string()  const
+        {
+          return "TODO";
+        }
       
-      virtual operator string()  const =0;
-      
-      virtual CmdFunctor bindArguments (CmdFunctor&) =0;
+      virtual CmdFunctor bindArguments (CmdFunctor&)
+        {
+          UNIMPLEMENTED ("binding operation");
+        }
       
       
       ////////////TODO how to give access to the following dedicated API?
+      MementoClosure (CmdFunctor&);
+      
+      
       CmdClosure& decorate (CmdClosure& core) 
         {
           return *this; // TODO would be nice, but probably won't be thus simple ;-) 

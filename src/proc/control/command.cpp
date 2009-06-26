@@ -50,6 +50,13 @@ namespace control {
   {
     UNIMPLEMENTED ("fetch an existing command from the internal cmd registry");
   }
+  
+  
+  MementoClosure::MementoClosure (CmdFunctor&)
+  {
+    
+  }
+  
 
   
   
