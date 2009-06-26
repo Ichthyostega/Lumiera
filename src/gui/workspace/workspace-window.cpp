@@ -99,14 +99,7 @@ WorkspaceWindow::create_ui()
   Gtk::Widget* menu_bar = uiManager->get_widget("/MenuBar");
   REQUIRE(menu_bar != NULL);
   baseContainer.pack_start(*menu_bar, Gtk::PACK_SHRINK);
-  
-  //----- Set up the Tool Bar -----//
-  Gtk::Toolbar* toolbar = dynamic_cast<Gtk::Toolbar*>(
-    uiManager->get_widget("/ToolBar"));
-  REQUIRE(toolbar != NULL);
-  toolbar->set_toolbar_style(TOOLBAR_ICONS);
-  baseContainer.pack_start(*toolbar, Gtk::PACK_SHRINK);
-  
+
   //----- Create the Docks -----//
   panelManager.setup_dock();
   
