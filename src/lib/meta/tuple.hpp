@@ -214,9 +214,12 @@ namespace typelist{
       Tuple (HeadType const&, Tail const&) { }
       Tuple ()                             { }
       
-      template<uint> struct ShiftedTuple { typedef Tail Type;};
-      template<uint> Tail& getShifted () { return *this;     }
-      template<uint> NullType&  getAt () { return getHead(); }
+      template<uint> struct ShiftedTuple   { typedef Tail Type;};
+      template<uint> Tail& getShifted ()   { return *this;     }
+      template<uint> NullType&  getAt ()   { return getHead(); }
+      
+      const NullType getHead_const() const { return NullType();}
+      const Tail&    getTail_const() const { return *this;     }
       
       TupleType& 
       tupleCast ()
@@ -249,6 +252,9 @@ namespace typelist{
       
       TY  & getHead() { return val_; }
       Tail& getTail() { return static_cast<Tail&> (*this); }
+      
+      TY   const& getHead_const() const { return val_; }
+      Tail const& getTail_const() const { return static_cast<const Tail&> (*this); }
       
       
       template<uint i>
@@ -508,6 +514,126 @@ namespace typelist{
     {
       return Tuple<Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> > (a1,a2,a3,a4,a5,a6,a7,a8,a9);
     }
+    
+    
+    
+    /** 
+     * Helper to construct a new tuple, partially using provided argument values.
+     * Arguments are expected as a tuple, which is assumed to be a sub-tuple of
+     * the target type to be created. The start index of this sub-tuple may be
+     * provided as additional parameter, otherwise it is assumed to be zero, 
+     * (i.e. the sub tuple starting left aligned). Any further arguments
+     * of the target type, which aren't covered by the argument tuple,
+     * are default initialised. 
+     * @param TYPES type sequence or type list denoting the target tuple type
+     * @param ARGS  type sequence of type list denoting the argument tuple type
+     * @param pos   start index of the ARGS sequence within the TYPES sequence
+     * 
+     * @note call the embedded #create function to invoke
+     * @note when types or positions disagree, argument tuple will be ignored
+     * @see TypeTuple_test#check_build_from_subTuple
+     */
+    template<typename TYPES, typename ARGS, uint pos=0>
+    struct BuildTuple
+      {
+        typedef typename Tuple<TYPES>::TupleType ThisTuple;
+        typedef typename Tuple<TYPES>::ArgList TypeList;
+        typedef typename Tuple<ARGS>::ArgList ArgTypeList;
+        
+        /**
+         * @param the argument values, contained in a list or flat- tuple
+         *          of the type denoted by ARGS
+         * @return a plain-flat Tuple<TYPES> instance, initialised with
+         *          the values found within arg
+         */
+        static ThisTuple
+        create (Tuple<ArgTypeList> const& arg)
+          {
+            return BuildTuple<TypeList,ArgTypeList,pos>
+                    ::create(arg)
+                      .tupleCast();
+          }
+      };
+    
+    template<typename TYPES, typename ARGS, uint pos>
+    struct BuildTuple<Tuple<TYPES>, Tuple<ARGS>, pos>  ///< tuples allowed instead of plain type sequences/lists
+      : BuildTuple<TYPES,ARGS,pos>
+      { };
+    
+    
+    template< typename T
+            , typename TS
+            , typename A
+            , typename AS
+            , uint pos
+            >
+    struct BuildTuple<Node<T,TS>, Node<A,AS>, pos>     ///< case: recursion \em before start of arg tuple
+      {
+        typedef Tuple<Node<T,TS> > ThisTuple;
+        typedef Tuple<Node<A,AS> > ThisArg;
+        
+        static ThisTuple
+        create (ThisArg const& arg)
+          {
+            return ThisTuple( T()
+                            , BuildTuple<TS, Node<A,AS>, pos-1>::create(arg)
+                            );
+          }
+      };
+    
+    
+    template< typename A
+            , typename TS
+            , typename AS
+            >
+    struct BuildTuple<Node<A,TS>, Node<A,AS>, 0>       ///< case: start of argument tuple detected
+      {
+        typedef Tuple<Node<A,TS> > ThisTuple;
+        typedef Tuple<Node<A,AS> > ThisArg;
+        
+        static ThisTuple
+        create (ThisArg const& arg)
+          {
+            return ThisTuple( arg.getHead_const()
+                            , BuildTuple<TS, AS, 0>::create (arg.getTail_const())
+                            );
+          }
+      };
+    
+    
+    template< typename ARGS
+            , uint i
+            >
+    struct BuildTuple<NullType, ARGS, i>               ///< case: hit end of target typelist
+      {
+        typedef Tuple<NullType> ThisTuple;
+        typedef Tuple<ARGS>     ThisArg;
+        
+        static ThisTuple
+        create (ThisArg const&)
+          {
+            return ThisTuple();
+          }
+      };
+    
+    
+    template< typename T
+            , typename TS
+            , uint i
+            >
+    struct BuildTuple<Node<T,TS>, NullType, i>         ///< case: hit end of argument tuple
+      {
+        typedef Tuple<Node<T,TS> > ThisTuple;
+        typedef Tuple<NullType>    ThisArg;
+        
+        static ThisTuple
+        create (ThisArg const&)
+          {
+            return ThisTuple();
+          }
+      };
+    
+    
     
   } // (END) access / tuple building helper functions (namespace tuple)
   

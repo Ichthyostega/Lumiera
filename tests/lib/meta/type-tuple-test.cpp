@@ -80,6 +80,7 @@ namespace test {
    *       are synthesised by recursion over the related typelist.
    *       - diagnostics through TupleAccessor retrieving stored values
    *       - creating tuples by direct function call, providing values
+   *       - creating tuples partially from an existing sub-argument tuple
    *       - copy and copy construct
    *       - access the "head" and access values by numeric index
    *       - create a tuple with shifted values 
@@ -94,6 +95,7 @@ namespace test {
           check_sub_tuple_types();
           check_shiftedTuple();
           check_tuple_creation();
+          check_build_from_subTuple();
           check_tuple_copy();
           check_value_access();
         }
@@ -309,6 +311,73 @@ namespace test {
           DUMPVAL (nullL);
           DUMPVAL (nulTcpy);
           DUMPVAL (nulTref);
+        }
+      
+      
+      void
+      check_build_from_subTuple()
+        {
+          cout << "\t:\n\t: ---build-from-sub-Tuples---\n";
+          
+          typedef Append<Types1::List, Types3::List>::List TL;
+          typedef Tuple<TL>::Type                          TT;
+          typedef Tuple<TL> T1357L;
+          typedef Tuple<TT> T1357T;
+          DISPLAY (T1357L);
+          DISPLAY (T1357T);
+          
+          typedef Tuple<Types1::List> T135L;
+          typedef Tuple<Types<Num<5>,Num<7> > > T57T;
+          typedef Tuple<Types<Num<3>,Num<5> > > T35T;
+          DISPLAY (T135L);
+          DISPLAY (T57T);
+          DISPLAY (T35T);
+          
+          T135L sub135;
+          T57T sub57;
+          T35T sub35 (Num<3>(8),Num<5>(8));
+          
+          DUMPVAL (sub135);
+          T1357T   b_135  = tuple::BuildTuple<T1357T,T135L>::create(sub135);
+          DUMPVAL (b_135);
+                   b_135  = tuple::BuildTuple<T1357L,T135L>::create(sub135);
+          DUMPVAL (b_135);
+                   b_135  = tuple::BuildTuple<TL,Types1>::create(sub135);
+          DUMPVAL (b_135);
+                   b_135  = tuple::BuildTuple<TT,Types1::List>::create(sub135);
+          DUMPVAL (b_135);                              // all variations of type specification lead to the same result
+          
+          DUMPVAL (sub57);
+          T1357T   b_57   = tuple::BuildTuple<T1357T,T57T,2>::create(sub57);
+          DUMPVAL (b_57);
+          
+          DUMPVAL (sub35);
+          T1357T   b_35   = tuple::BuildTuple<T1357T,T35T,1>::create(sub35);
+          DUMPVAL (b_35);
+          
+                   b_35   = tuple::BuildTuple<T1357T,T35T,2>::create(sub35);
+          DUMPVAL (b_35);                               // note: wrong start position, argument tuple ignored completely
+                   b_35   = tuple::BuildTuple<T1357T,T35T,4>::create(sub35);
+          DUMPVAL (b_35);
+          
+          // use an argument tuple beyond the last argument of the target tuple... 
+          typedef  Tuple<Types<Num<7>,Num<8> > >  T78T;
+          T78T     sub78 (Num<7>(77),Num<8>(88));
+          DUMPVAL (sub78);
+          T1357T   b_78   = tuple::BuildTuple<T1357T,T78T,3>::create(sub78);
+          DUMPVAL (b_78);                              // note: superfluous arguments ignored
+          
+          typedef Tuple<Types<> > NulT;
+          NulT     nult;
+          T1357T   b_nul  = tuple::BuildTuple<T1357T,NulT,1>::create(nult);
+          DUMPVAL (b_nul);
+                   b_nul  = tuple::BuildTuple<T1357T,NulT,4>::create(nult);
+          DUMPVAL (b_nul);
+          
+          NulT     b_nul2 = tuple::BuildTuple<NulT,T78T>::create(sub78);
+          DUMPVAL (b_nul2)
+                   b_nul2 = tuple::BuildTuple<NulT,T78T,1>::create(sub78);
+          DUMPVAL (b_nul2)
         }
       
       

@@ -666,6 +666,24 @@ out: nullL	:...Tuple\(\)
 out: nulTcpy	:...Tuple\(\)
 out: nulTref	:...Tuple\(\)
 out: 	:$
+out: 	: ---build-from-sub-Tuples---
+out: T1357L	:TYPES-\[\]-<1>-<3>-<5>-<7>-
+out: T1357T	:TYPES-<>-<1>-<3>-<5>-<7>-
+out: T135L	:TYPES-\[\]-<1>-<3>-<5>-
+out: T57T	:TYPES-<>-<5>-<7>-
+out: T35T	:TYPES-<>-<3>-<5>-
+out: sub135	:...Tuple\(\(1\),\(3\),\(5\)\)
+out: b_135	:...Tuple\(\(1\),\(3\),\(5\),\(7\)\)
+out: sub57	:...Tuple\(\(5\),\(7\)\)
+out: b_57	:...Tuple\(\(1\),\(3\),\(5\),\(7\)\)
+out: sub35	:...Tuple\(\{8\},\{8\}\)
+out: b_35	:...Tuple\(\(1\),\{8\},\{8\},\(7\)\)
+out: b_35	:...Tuple\(\(1\),\(3\),\(5\),\(7\)\)
+out: sub78	:...Tuple\(\{77\},\{88\}\)
+out: b_78	:...Tuple\(\(1\),\(3\),\(5\),\{77\}\)
+out: b_nul	:...Tuple\(\(1\),\(3\),\(5\),\(7\)\)
+out: b_nul2	:...Tuple\(\)
+out: 	:$
 out: 	: ---copy-operations---
 out: tup1	:...Tuple\(\{11\},\{33\},\(5\)\)
 out: tup11	:...Tuple\(\{11\},\{33\},\{44\}\)
