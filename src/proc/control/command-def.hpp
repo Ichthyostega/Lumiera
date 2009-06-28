@@ -50,6 +50,7 @@
 //#include "pre.hpp"
 #include "include/symbol.hpp"
 #include "proc/control/command.hpp"
+#include "proc/control/command-signature.hpp"
 #include "proc/control/command-mutation.hpp"
 #include "proc/control/command-closure.hpp"
 #include "lib/meta/function.hpp"
@@ -74,65 +75,6 @@ namespace control {
   using lumiera::typelist::Types;
 //using lumiera::typelist::NullType;
   using lumiera::typelist::Tuple;
-  using lumiera::typelist::Append;
-  using lumiera::typelist::SplitLast;
-  
-  
-  
-  
-  /** 
-   * Type analysis helper template. 
-   * Used for dissecting a given type signature to derive
-   * the related basic operation signature, the signature of a possible Undo-function
-   * and the signature necessary for capturing undo information. The implementation
-   * relies on re-binding an embedded type defining template, based on the actual
-   * case, as identified by the structure of the given parameter signature.
-   */
-  template<typename SIG>
-  struct UndoSignature
-    {
-    private:
-      typedef typename FunctionSignature< function<SIG> >::Args Args;
-      typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
-      
-      /** Case1: defining the Undo-Capture function */
-      template<typename RET, typename ARG>
-      struct Case
-        {
-          typedef RET Memento;
-          typedef typename Append<ARG, Memento>::List ExtendedArglist;
-          typedef typename Tuple<ExtendedArglist>::Type ExtendedArgs;
-          
-          typedef typename FunctionTypedef<void, ARG>::Sig           OperateSig;
-          typedef typename FunctionTypedef<Ret,ARG>::Sig             CaptureSig;
-          typedef typename FunctionTypedef<void, ExtendedArgs>::Sig  UndoOp_Sig;
-        };
-      /** Case2: defining the actual Undo function */
-      template<typename ARG>
-      struct Case<void,ARG>
-        {
-          typedef typename ARG::List Args;
-          
-          typedef typename SplitLast<Args>::Type Memento;
-          typedef typename SplitLast<Args>::List OperationArglist;
-          typedef typename Tuple<OperationArglist>::Type OperationArgs;
-          
-          typedef typename FunctionTypedef<void, OperationArgs>::Sig OperateSig;
-          typedef typename FunctionTypedef<Ret,OperationArgs>::Sig   CaptureSig;
-          typedef typename FunctionTypedef<void, ARG>::Sig           UndoOp_Sig;
-        };
-      
-    public:
-      typedef typename Case<Ret,Args>::CaptureSig CaptureSig;
-      typedef typename Case<Ret,Args>::UndoOp_Sig UndoOp_Sig;
-      typedef typename Case<Ret,Args>::OperateSig OperateSig;
-      typedef typename Case<Ret,Args>::Memento    Memento;
-    };
-  
-  
-  
-  
-  
   
   
   

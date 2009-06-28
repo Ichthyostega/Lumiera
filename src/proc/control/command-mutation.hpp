@@ -38,7 +38,7 @@
 //#include "pre.hpp"
 #include "lib/error.hpp"
 #include "proc/control/command-closure.hpp"
-#include "proc/control/memento-closure.hpp"
+#include "proc/control/memento-tie.hpp"
 
 //#include <tr1/memory>
 #include <boost/scoped_ptr.hpp>
@@ -135,7 +135,7 @@ namespace control {
     };
   
   
-  inline ostream& operator<< (ostream& os, const Mutation& muta) { return os << string(muta); }
+  inline ostream& operator<< (ostream& os, Mutation const& muta) { return os << string(muta); }
   
   
   
@@ -146,17 +146,17 @@ namespace control {
   class UndoMutation
     : public Mutation
     {
-      CmdFunctor         captureFunc_;
-      scoped_ptr<CmdClosure> memento_;
+      Mutation memento_;
       
     public:
       template<typename SIG_undo, typename SIG_cap>
       UndoMutation (function<SIG_undo> const& undoFunc,
                     function<SIG_cap> const& captureFunc)
         : Mutation (undoFunc)
-        , captureFunc_(captureFunc)
+        , memento_(captureFunc)
         { }
-      
+
+#if false /////////////////////////////////////////////////TODO: remove after refactoring
       UndoMutation (UndoMutation const& o)
         : Mutation (*this)
         , captureFunc_(o.captureFunc_)
@@ -180,16 +180,17 @@ namespace control {
           REQUIRE (captureFunc_, "Param error: not bound to a valid function");
           
           // create a special state closure, which can later on store the captured undo state (memento)
-          scoped_ptr<CmdClosure> stateClosure (new MementoClosure (captureFunc_));
-          CmdFunctor closedCaptureFunc = stateClosure->bindArguments(captureFunc_);
+          scoped_ptr<MementoClosure> stateClosure (new MementoClosure (captureFunc_));
+          CmdFunctor closedCaptureFunc = cmdClosure.bindArguments(captureFunc_);
           
           // the undoFunc (within parent class) will retrieve an argument tuple extended by the memento
-//          Mutation::close (stateClosure->decorate (cmdClosure));
+          Mutation::close (stateClosure->decorate (cmdClosure));
           
           captureFunc_ = closedCaptureFunc;
-          memento_.swap(stateClosure);
+//          memento_.swap(stateClosure);
           return *this;
         }
+#endif      
       
       Mutation&
       captureState ()
@@ -198,7 +199,7 @@ namespace control {
             throw lumiera::error::State ("need to bind function arguments prior to capturing undo state",
                                          LUMIERA_ERROR_UNBOUND_ARGUMENTS);
           
-          invoke(captureFunc_);
+          memento_();
           return *this;
         }
       
@@ -206,14 +207,14 @@ namespace control {
       getMemento()
         {
           ASSERT (memento_, "Lifecycle error: need to close first");
-          return *memento_;
+//          return *memento_;
         }
       
     private:
       virtual bool
       isValid ()   const
         {
-          return Mutation::isValid() && captureFunc_ && memento_;
+//          return Mutation::isValid() && captureFunc_ && memento_;
         }
       
       

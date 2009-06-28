@@ -7,9 +7,13 @@ PLANNED "CommandBasic_test" CommandBasic_test <<END
 END
 
 
+PLANNED "CommandArgument_test" CommandArgument_test <<END
+END
+
+
 PLANNED "CommandMutation_test" CommandMutation_test <<END
 END
 
 
-PLANNED "MementoClosure_test" MementoClosure_test <<END
+PLANNED "MementoTie_test" MementoTie_test <<END
 END

@@ -1,5 +1,5 @@
 /*
-  MementoClosure(Test)  -  check the mechanism for capturing and providing undo-state
+  MementoTie(Test)  -  check the mechanism for capturing and providing undo-state
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -32,7 +32,7 @@
 //#include "proc/mobject/placement.hpp"
 //#include "proc/mobject/placement-index.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
-#include "proc/control/memento-closure.hpp"
+#include "proc/control/memento-tie.hpp"
 //#include "lib/meta/typelist.hpp"
 #include "lib/meta/tuple.hpp"
 //#include "lib/lumitime.hpp"
@@ -103,7 +103,7 @@ namespace test    {
    * @see  control::UndoMutation
    * @see  command-mutation-test.hpp
    */
-  class MementoClosure_test : public Test
+  class MementoTie_test : public Test
     {
       
       virtual void
@@ -169,7 +169,7 @@ namespace test    {
   
   
   /** Register this test class... */
-  LAUNCHER (MementoClosure_test, "unit controller");
+  LAUNCHER (MementoTie_test, "unit controller");
       
       
 }} // namespace control::test
