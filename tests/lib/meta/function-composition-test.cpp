@@ -163,223 +163,129 @@ namespace test {
         {
           DISPLAY (List1);
           DISPLAY (List2);
-          ;
-          ASSERT (6 == (getNumberz<1,2,3> (Num<1>(), Num<2>(), Num<3>())));
-          ASSERT (6 == (getNumberz<1,1,1> (Num<1>(), Num<1>(2), Num<1>(3))));
+          
+          ASSERT (6 == (fun1<1,2,3> (_1_, _2_, _3_)).o_ );
+          ASSERT (6 == (fun1<1,1,1> (Num<1>(3), Num<1>(2), Num<1>(1))).o_ );
+          
+          ASSERT ( 1 == fun2 (fun1<1> (_1_)) );
+          ASSERT ( 3 == fun2 (fun1<1,2> (_1_, _2_)) );
+          ASSERT ( 6 == fun2 (fun1<1,2,3> (_1_, _2_, _3_)) );
+          ASSERT (10 == fun2 (fun1<1,2,3,4> (_1_, _2_, _3_, _4_)) );
+          ASSERT (15 == fun2 (fun1<1,2,3,4,5> (_1_, _2_, _3_, _4_, _5_)) );
+          
+          ASSERT ( 9 == fun2 (fun1<2,3,4> (_2_, _3_, _4_)) );
+          ASSERT (18 == fun2 (fun1<5,6,7> (_5_, _6_, _7_)) );
+          ASSERT (24 == fun2 (fun1<9,8,7> (_9_, _8_, _7_)) );
         }
       
       
       void
-      check_signatureTypeManip ()
+      check_partialApplication ()
         {
-          typedef int someFunc(Num<5>,Num<9>);
-          typedef FunctionSignature<function<someFunc> >::Ret RetType;  // should be int
-          typedef FunctionSignature<function<someFunc> >::Args Args;
-          DISPLAY (Args);
+          // Because the code of the partial function application is very technical,
+          // the following might serve as explanation what actually happens....
+          // (and actually it's a leftover from initial debugging)
           
-          typedef Prepend<Num<1>, Args>::Tuple NewArgs;             // manipulate the argument type(s)
-          DISPLAY (NewArgs);
+          typedef Num<1> Sig123(Num<1>, Num<2>, Num<3>);             // signature of the original function
           
-          typedef FunctionTypedef<RetType,NewArgs>::Sig NewSig;  // re-build a new function signature
+          typedef Num<1> Sig23(Num<2>, Num<3>);                      // signature after having closed over the first argument
+          typedef function<Sig23> F23;                               // and a tr1::function object to hold such a function
           
-          NewSig& fun =  getNumberz<1,5,9>;                    //...which is compatible to an existing real function signature!
+          Sig123& f =fun1<1,2,3>;                                    // the actual input: a reference to the bare function
           
-          ASSERT (1+5+9 == fun(Num<1>(), Num<5>(), Num<9>()));
+          
+          // Version1: do a direct argument binding----------------- //
+          
+          typedef std::tr1::_Placeholder<1> PH1;                     // tr1::function argument placeholders
+          typedef std::tr1::_Placeholder<2> PH2;
+          
+          PH1 ph1;                                                   // these empty structs are used to mark the arguments to be kept "open"
+          PH2 ph2;
+          Num<1> num18 (18);                                         // ...and this value is for closing the first function argument
+          
+          F23 fun_23 = std::tr1::bind (f, num18                      // do the actual binding (i.e. close the first argument with a constant value)
+                                        , ph1
+                                        , ph2
+                                      );
+          
+          int res = 0;
+          res = fun_23 (_2_,_3_).o_;                                 // and invoke the resulting functor ("closure"), providing the remaining arguments
+          ASSERT (23 == res);
+          
+          
+          
+          // Version2: extract the binding arguments from a tuple--- //
+          
+          typedef Tuple<Types<Num<1>, PH1, PH2> > PartialArg;        // Tuple type to hold the binding values. Note the placeholder types
+          PartialArg arg(num18);                                     // Value for partial application (the placeholders are default constructed)
+          
+          fun_23 = std::tr1::bind (f, tuple::element<0>(arg)         // now extract the values to bind from this tuple
+                                    , tuple::element<1>(arg)
+                                    , tuple::element<2>(arg)
+                                  );
+          res = 0;
+          res = fun_23 (_2_,_3_).o_;                                 // and invoke the resulting functor....
+          ASSERT (23 == res);
+          
+          
+          
+          
+          // Version3: let the PApply-template do the work for us--- //
+          
+          typedef Types<Num<1> > ArgTypes;                           // now package just the argument(s) to be applied into a tuple
+          Tuple<ArgTypes> args_to_bind (Num<1>(18));
+          
+          fun_23 = PApply<Sig123, ArgTypes>::bindFront (f , args_to_bind);
+                                                                     // "bindFront" will close the parameters starting from left....
+          res = 0;
+          res = fun_23 (_2_,_3_).o_;                                 // invoke the resulting functor...
+          ASSERT (23 == res);
+          
+          
+          
+          
+          
+          
+          // Version4: as you'd typically do it in real life-------- //
+          
+          fun_23 = func::applyFirst (f, Num<1>(18));                 // use the convenience function API to close over a single value
+          
+          res = 0;
+          res = fun_23 (_2_,_3_).o_;                                 // invoke the resulting functor...
+          ASSERT (23 == res);
+          
+          
+          
+          // what follows is the real unit test...
+          function<Sig123> func123 (f);
+          fun_23 = func::applyFirst (func123, Num<1>(19));
+          res = fun_23 (_2_,_3_).o_;
+          ASSERT (24 == res);
+#if false                                                //////////////TODO silly bug in the Split template!
+          typedef function<Num<1>(Num<1>, Num<2>)> F12;
+          F12 fun_12 = func::applyLast(f, Num<3>(20));
+          res = fun_12 (_1_,_2_).o_;
+          ASSERT (23 == res);
+          
+          fun_12 = func::applyLast(func123, Num<3>(21));
+          res = fun_12 (_1_,_2_).o_;
+          ASSERT (24 == res);
+#endif          
         }
+      
       
       
       void
-      check_applyFree ()
+      check_functionalComposition ()
         {
-          cout << "\t:\n\t: ---Apply---\n";
-          
-          Tuple<Types<> >            tup0 ;
-          Tuple<Types<int> >         tup1 (11);
-          Tuple<Types<int,int> >     tup2 (11,12);
-          Tuple<Types<int,int,int> > tup3 (11,12,13);
-          DUMPVAL (tup0);
-          DUMPVAL (tup1);
-          DUMPVAL (tup2);
-          DUMPVAL (tup3);
-          
-          ASSERT (-1       == func::Apply<0>::invoke<int> (fun0, tup0) );
-          ASSERT (11       == func::Apply<1>::invoke<int> (fun1, tup1) );
-          ASSERT (11+12    == func::Apply<2>::invoke<int> (fun2, tup2) );
-          ASSERT (11+12+13 == func::Apply<3>::invoke<int> (fun3, tup3) );
-          
-          ASSERT (-1       == TupleApplicator<int()>            (tup0) (fun0) );
-          ASSERT (11       == TupleApplicator<int(int)>         (tup1) (fun1) );
-          ASSERT (11+12    == TupleApplicator<int(int,int)>     (tup2) (fun2) );
-          ASSERT (11+12+13 == TupleApplicator<int(int,int,int)> (tup3) (fun3) );
-          
-          ASSERT (-1       == func::apply(fun0, tup0) );
-          ASSERT (11       == func::apply(fun1, tup1) );
-          ASSERT (11+12    == func::apply(fun2, tup2) );
-          ASSERT (11+12+13 == func::apply(fun3, tup3) );
-        
+//          ASSERT (1+5+9 == fun(Num<1>(), Num<5>(), Num<9>()));
         }
       
-      
-      void
-      check_applyFunc ()
-        {
-          Tuple<Types<> >            tup0 ;
-          Tuple<Types<int> >         tup1 (11);
-          Tuple<Types<int,int> >     tup2 (11,12);
-          Tuple<Types<int,int,int> > tup3 (11,12,13);
-          function<int()>            functor0 (fun0);
-          function<int(int)>         functor1 (fun1);
-          function<int(int,int)>     functor2 (fun2);
-          function<int(int,int,int)> functor3 (fun3);
-          
-          ASSERT (-1       == func::Apply<0>::invoke<int> (functor0, tup0) );
-          ASSERT (11       == func::Apply<1>::invoke<int> (functor1, tup1) );
-          ASSERT (11+12    == func::Apply<2>::invoke<int> (functor2, tup2) );
-          ASSERT (11+12+13 == func::Apply<3>::invoke<int> (functor3, tup3) );
-          
-          ASSERT (-1       == TupleApplicator<int()>            (tup0) (functor0) );
-          ASSERT (11       == TupleApplicator<int(int)>         (tup1) (functor1) );
-          ASSERT (11+12    == TupleApplicator<int(int,int)>     (tup2) (functor2) );
-          ASSERT (11+12+13 == TupleApplicator<int(int,int,int)> (tup3) (functor3) );
-          
-          ASSERT (-1       == func::apply(functor0, tup0) );
-          ASSERT (11       == func::apply(functor1, tup1) );
-          ASSERT (11+12    == func::apply(functor2, tup2) );
-          ASSERT (11+12+13 == func::apply(functor3, tup3) );
-          
-        }
-      
-      
-      void
-      check_bindFree ()
-        {
-          cout << "\t:\n\t: ---Bind----\n";
-          
-          Tuple<Types<> >            tup0 ;
-          Tuple<Types<int> >         tup1 (11);
-          Tuple<Types<int,int> >     tup2 (11,12);
-          Tuple<Types<int,int,int> > tup3 (11,12,13);
-          
-          typedef function<int()> BoundFun;
-          
-          BoundFun functor0 = func::Apply<0>::bind<BoundFun> (fun0, tup0);
-          BoundFun functor1 = func::Apply<1>::bind<BoundFun> (fun1, tup1);
-          BoundFun functor2 = func::Apply<2>::bind<BoundFun> (fun2, tup3);
-          BoundFun functor3 = func::Apply<3>::bind<BoundFun> (fun3, tup3);
-          
-          ASSERT (-1       == functor0() );
-          ASSERT (11       == functor1() );
-          ASSERT (11+12    == functor2() );
-          ASSERT (11+12+13 == functor3() );
-          
-          functor0 = TupleApplicator<int()>            (tup0).bind (fun0);
-          functor1 = TupleApplicator<int(int)>         (tup1).bind (fun1);
-          functor2 = TupleApplicator<int(int,int)>     (tup2).bind (fun2);
-          functor3 = TupleApplicator<int(int,int,int)> (tup3).bind (fun3);
-          
-          ASSERT (-1       == functor0() );
-          ASSERT (11       == functor1() );
-          ASSERT (11+12    == functor2() );
-          ASSERT (11+12+13 == functor3() );
-          
-        }
-      
-      
-      void
-      check_bindFunc ()
-        {
-          Tuple<Types<> >            tup0 ;
-          Tuple<Types<int> >         tup1 (11);
-          Tuple<Types<int,int> >     tup2 (11,12);
-          Tuple<Types<int,int,int> > tup3 (11,12,13);
-          function<int()>            unbound_functor0 (fun0);
-          function<int(int)>         unbound_functor1 (fun1);
-          function<int(int,int)>     unbound_functor2 (fun2);
-          function<int(int,int,int)> unbound_functor3 (fun3);
-          
-          typedef function<int()> BoundFun;
-          
-          BoundFun functor0 = func::Apply<0>::bind<BoundFun> (unbound_functor0, tup0);
-          BoundFun functor1 = func::Apply<1>::bind<BoundFun> (unbound_functor1, tup1);
-          BoundFun functor2 = func::Apply<2>::bind<BoundFun> (unbound_functor2, tup3);
-          BoundFun functor3 = func::Apply<3>::bind<BoundFun> (unbound_functor3, tup3);
-          
-          ASSERT (-1       == functor0() );
-          ASSERT (11       == functor1() );
-          ASSERT (11+12    == functor2() );
-          ASSERT (11+12+13 == functor3() );
-          
-          functor0 = TupleApplicator<int()>            (tup0).bind (unbound_functor0);
-          functor1 = TupleApplicator<int(int)>         (tup1).bind (unbound_functor1);
-          functor2 = TupleApplicator<int(int,int)>     (tup2).bind (unbound_functor2);
-          functor3 = TupleApplicator<int(int,int,int)> (tup3).bind (unbound_functor3);
-          
-          ASSERT (-1       == functor0() );
-          ASSERT (11       == functor1() );
-          ASSERT (11+12    == functor2() );
-          ASSERT (11+12+13 == functor3() );
-          
-        }
-      
-      
-      void
-      build_closure ()
-        {
-          Tuple<Types<> >            tup0 ;
-          Tuple<Types<int> >         tup1 (11);
-          Tuple<Types<int,int> >     tup2 (11,12);
-          Tuple<Types<int,int,int> > tup3 (11,12,13);
-          
-          FunctionClosure<int()>            clo0 (fun0,tup0);
-          FunctionClosure<int(int)>         clo1 (fun1,tup1);
-          FunctionClosure<int(int,int)>     clo2 (fun2,tup2);
-          FunctionClosure<int(int,int,int)> clo3 (fun3,tup3);
-          
-          ASSERT (-1       == clo0() );
-          ASSERT (11       == clo1() );
-          ASSERT (11+12    == clo2() );
-          ASSERT (11+12+13 == clo3() );
-          
-          function<int()>            unbound_functor0 (fun0);
-          function<int(int)>         unbound_functor1 (fun1);
-          function<int(int,int)>     unbound_functor2 (fun2);
-          function<int(int,int,int)> unbound_functor3 (fun3);
-          
-          clo0 = FunctionClosure<int()>            (unbound_functor0,tup0);
-          clo1 = FunctionClosure<int(int)>         (unbound_functor1,tup1);
-          clo2 = FunctionClosure<int(int,int)>     (unbound_functor2,tup2);
-          clo3 = FunctionClosure<int(int,int,int)> (unbound_functor3,tup3);
-          
-          ASSERT (-1       == clo0() );
-          ASSERT (11       == clo1() );
-          ASSERT (11+12    == clo2() );
-          ASSERT (11+12+13 == clo3() );
-          
-          ASSERT (-1       == func::closure(fun0,tup0) () );
-          ASSERT (11       == func::closure(fun1,tup1) () );
-          ASSERT (11+12    == func::closure(fun2,tup2) () );
-          ASSERT (11+12+13 == func::closure(fun3,tup3) () );
-          
-          ASSERT (-1       == func::closure(unbound_functor0,tup0) () );
-          ASSERT (11       == func::closure(unbound_functor1,tup1) () );
-          ASSERT (11+12    == func::closure(unbound_functor2,tup2) () );
-          ASSERT (11+12+13 == func::closure(unbound_functor3,tup3) () );
-          
-          
-          // finally combine all techniques....
-          typedef Tuple<List2>::Type NumberzArg;
-          typedef FunctionTypedef<int,NumberzArg>::Sig NumberzSig;
-          Tuple<NumberzArg> numberzTup (Num<5>(22), Num<6>(33), Num<7>(44));
-          
-          FunctionClosure<NumberzSig> numClo (getNumberz<5,6,7>, numberzTup );
-          
-          ASSERT (22+33+44 == numClo() );
-        }
     };
   
   
   /** Register this test class... */
-  LAUNCHER (FunctionClosure_test, "unit common");
+  LAUNCHER (FunctionComposition_test, "unit common");
   
   
   

@@ -362,6 +362,43 @@ namespace typelist{
           }
       };
     
+    
+    /* ===== Helpers for partial function application ===== */
+    
+    using std::tr1::_Placeholder;     // what is the "official" way to import them?
+    
+    template<typename TYPES, uint i=0>
+    class PlaceholderTuple
+      {
+//        typedef typename Tuple<TYPES>::HeadType HeadType;
+//        typedef typename Tuple<TYPES>::ArgList  TypeList;
+//        typedef typename Tuple<TYPES>::Tail::ArgList TailList;
+        typedef typename Tuple<TYPES>::Type     TypeSeq;
+        typedef typename Tuple<TYPES>::TailType TailSeq;
+        
+        typedef typename PlaceholderTuple<TailSeq, i+1>::PlaceholderSeq  TailPlaceholderSeq;
+        
+      public:
+        typedef typename Prepend<_Placeholder<i>, TailPlaceholderSeq>::Tuple PlaceholderSeq;
+        typedef Tuple<PlaceholderSeq> Type;
+        
+      };
+    
+    template<uint i>
+    struct PlaceholderTuple<Types<>, i> : PlaceholderTuple<NullType, i> {};
+    
+    template<uint i>
+    struct PlaceholderTuple<NullType, i>
+      {
+        typedef Types<> PlaceholderSeq;
+        typedef Tuple<Types<> > Type;
+      };
+    
+    
+    
+    
+    
+    
   } // (END) impl-namespace (func)
   
   
@@ -398,6 +435,103 @@ namespace typelist{
   
   
   /**
+   * Partial function application
+   * Takes a function and a value tuple,
+   * using the latter to close function arguments 
+   * either from the front (left) or aligned to the end
+   * of the function argument list. Result is a "reduced" function,
+   * expecting only the remaining "un-closed" arguments at invocation.  
+   */
+  template<typename SIG, typename VAL>
+  class PApply
+    {
+      typedef typename func::_Fun<SIG>::Args Args;
+      typedef typename func::_Fun<SIG>::Ret  Ret;
+      
+      enum { ARG_CNT = count<typename Args::List>::value
+           , VAL_CNT = count<typename VAL::List>::value
+           , ROFFSET = (VAL_CNT < ARG_CNT)? ARG_CNT-VAL_CNT : 0
+           };
+      
+      typedef typename func::PlaceholderTuple<Args>::PlaceholderSeq::List Placeholders;
+      typedef typename Args::List ArgsList;
+      typedef typename VAL::List ValList;
+      
+      typedef typename Splice<Placeholders, ValList>::List           LeftReplaced;
+      typedef typename Splice<Placeholders, ValList, ROFFSET>::List  RightReplaced;
+      
+      typedef typename Splice<ArgsList, ValList>::Back           LeftReduced;
+      typedef typename Splice<ArgsList, ValList, ROFFSET>::Front RightReduced;
+      
+      typedef Tuple<LeftReplaced>  TupleL;
+      typedef Tuple<RightReplaced> TupleR;
+      
+      typedef typename Tuple<LeftReduced>::Type  ArgsL;
+      typedef typename Tuple<RightReduced>::Type ArgsR;
+      
+      typedef tuple::BuildTuple<LeftReplaced, ValList>           BuildL;
+      typedef tuple::BuildTuple<RightReplaced, ValList, ROFFSET> BuildR;
+      
+      
+    public:
+      typedef function<typename FunctionTypedef<Ret,ArgsL>::Sig> LeftReducedFunc;
+      typedef function<typename FunctionTypedef<Ret,ArgsR>::Sig> RightReducedFunc;
+      
+      
+      /** Contains the argument values, starting from left.
+       *  Any remaining positions are occupied by binding placeholders */
+      struct LeftReplacedArgs
+        : TupleL
+        {
+          LeftReplacedArgs (Tuple<VAL> const& arg)
+            : TupleL ( BuildL::create(arg))
+            { }
+        };
+      
+      /** Contains the argument values, aligned to the end of the function argument list.
+       *  Any remaining positions before are occupied by binding placeholders */
+      struct RightReplacedArgs
+        : TupleR
+        {
+          RightReplacedArgs (Tuple<VAL> const& arg)
+            : TupleR ( BuildR::create(arg))
+            { }
+        };
+        
+      /** do a partial function application, closing the first arguments
+       *  f(a,b,c)->res  +  (a,b)  yields  f(c)->res
+       *  
+       *  @param f   function, function pointer or functor
+       *  @param arg value tuple, used to close function arguments starting from left
+       *  @return new function object, holding copies of the values and using them at the
+       *          closed arguments; on invocation, only the remaining arguments need to be supplied.
+       */
+      static LeftReducedFunc
+      bindFront (SIG& f, Tuple<VAL> const& arg)
+        {
+          LeftReplacedArgs params (arg);
+          return func::Apply<ARG_CNT>::template bind<LeftReducedFunc> (f, params.tupleCast());
+        }
+      
+      /** do a partial function application, closing the last arguments
+       *  f(a,b,c)->res  +  (b,c)  yields  f(a)->res
+       *  
+       *  @param f   function, function pointer or functor
+       *  @param arg value tuple, used to close function arguments starting from right
+       *  @return new function object, holding copies of the values and using them at the
+       *          closed arguments; on invocation, only the remaining arguments need to be supplied.
+       */
+      static RightReducedFunc
+      bindBack (SIG& f, Tuple<VAL> const& arg)
+        {
+          RightReplacedArgs params (arg);
+          return func::Apply<ARG_CNT>::template bind<RightReducedFunc> (f, params.tupleCast());
+        }
+    };
+  
+  
+  
+  /**
    * Closing a function over its arguments.
    * This is a small usage example or spin-off,
    * having almost the same effect than invoking tr1::bind.
@@ -430,6 +564,9 @@ namespace typelist{
   
   namespace func { // ...some convenience shortcuts
     
+    
+    // helpers for specifying types in function declarations....
+  
     template<typename RET, typename ARG>
     struct _Sig
       {
@@ -445,6 +582,32 @@ namespace typelist{
         typedef FunctionClosure<Signature> Type;
       };
     
+    template<typename SIG>
+    struct _PapS
+      {
+        typedef typename _Fun<SIG>::Ret Ret;
+        typedef typename _Fun<SIG>::Args Args;
+        typedef typename Split<Args>::Head Arg;
+        typedef typename Split<Args>::Tail Rest;
+        typedef typename _Sig<Ret,Rest>::Type Signature;
+        typedef function<Signature> Function;
+      };
+    
+    template<typename SIG>
+    struct _PapE
+      {
+        typedef typename _Fun<SIG>::Ret Ret;
+        typedef typename _Fun<SIG>::Args Args;
+        typedef typename Split<Args>::End Arg;
+        typedef typename Split<Args>::Prefix Rest;
+        typedef typename _Sig<Ret,Rest>::Type Signature;
+        typedef function<Signature> Function;
+      };
+    
+    
+    
+    
+    /*  ========== function-style interface =============  */
     
     /** build a TupleApplicator, which embodies the given
      *  argument tuple and can be used to apply various
@@ -483,7 +646,33 @@ namespace typelist{
       typedef typename _Clo<SIG,ARG>::Type Closure;
       return Closure (f,args);
     }
-  }
+    
+    
+    /** close the given function over the first argument */
+    template<typename SIG, typename ARG>
+    typename _PapS<SIG>::Function
+    applyFirst (SIG& f, ARG arg)
+    {
+      typedef typename _PapS<SIG>::Arg ArgType;
+      typedef Types<ArgType>           ArgTypeSeq;
+      typedef Tuple<ArgTypeSeq>        ArgTuple;
+      ArgTuple val(arg);
+      return PApply<SIG,ArgTypeSeq>::bindFront (f, val);
+    }
+    
+    /** close the given function over the last argument */
+    template<typename SIG, typename ARG>
+    typename _PapE<SIG>::Function
+    applyLast (SIG& f, ARG arg)
+    {
+      typedef typename _PapE<SIG>::Arg ArgType;
+      typedef Types<ArgType>           ArgTypeSeq;
+      typedef Tuple<ArgTypeSeq>        ArgTuple;
+      ArgTuple val(arg);
+      return PApply<SIG,ArgTypeSeq>::bindBack (f, val);
+    }
+    
+  } // (END) namespace func
   
   
   
