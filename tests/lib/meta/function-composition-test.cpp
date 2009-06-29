@@ -1,5 +1,5 @@
 /*
-  FunctionClosure(Test)  -  appending, mixing and filtering typelists
+  FunctionComposition(Test)  -  functional composition and partial application
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,29 +21,12 @@
 * *****************************************************/
 
 
-/** @file function-closure-test.cpp
- ** Testing a combination of tr1::function objects and metaprogramming.
- ** Argument types will be extracted and represented as typelist, so they
- ** can be manipulated at compile time. This test uses some functions with
- ** and systematically applies or binds them to corresponding data tuples.
- ** Moreover, closure objects will be constructed in various flavours,
- ** combining a function object and a set of parameters.
- ** 
- ** @see function-closure.hpp
- ** @see control::CmdClosure real world usage example
- **
- */
-
-
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/meta/typelist.hpp"
-#include "lib/meta/typelistutil.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
-#include "meta/dummy-functions.hpp"
 #include "meta/typelist-diagnostics.hpp"
-#include "meta/tuple-diagnostics.hpp"
 
 #include <iostream>
 
@@ -56,13 +39,16 @@ using std::endl;
 namespace lumiera {
 namespace typelist{
 namespace test {
-      
-      
-      namespace { // test data
+  
+  using func::applyFirst;
+  using func::applyLast;
+  
+  
+      namespace { // test functions
         
         
         
-        typedef Types< Num<1>
+        typedef Types< Num<1>  ////////////////////////TODO kill kill kill
                      , Num<2>
                      , Num<3>
                      >::List List1;
@@ -71,51 +57,100 @@ namespace test {
                      , Num<7>
                      >::List List2;
         
+        Num<1> _1_;                     
+        Num<2> _2_;                     
+        Num<3> _3_;                     
+        Num<4> _4_;                     
+        Num<5> _5_;                     
+        Num<6> _6_;                     
+        Num<7> _7_;                     
+        Num<8> _8_;                     
+        Num<9> _9_;                     
         
-        /** special test fun 
-         *  accepting the terrific Num types */
-        template<char i,char ii, char iii>
-        int
-        getNumberz (Num<i> one, Num<ii> two, Num<iii> three)
+        /** "Function-1" will be used at the front side, accepting a tuple of values */
+        template<char i>
+        Num<i> 
+        fun1 ( Num<i>   val1
+             )
           {
-            return one.o_ + two.o_ + three.o_;
+            return val1;
+          }
+        
+        template<char i, char ii>
+        Num<i> 
+        fun1 ( Num<i>   val1
+             , Num<ii>  val2
+             )
+          {
+            val1.o_ += val2.o_;
+            return val1;
+          }
+        
+        template<char i, char ii, char iii>
+        Num<i> 
+        fun1 ( Num<i>   val1
+             , Num<ii>  val2
+             , Num<iii> val3
+             )
+          {
+            val1.o_ += val2.o_ + val3.o_;
+            return val1;
+          }
+        
+        template<char i, char ii, char iii, char iv>
+        Num<i> 
+        fun1 ( Num<i>   val1
+             , Num<ii>  val2
+             , Num<iii> val3
+             , Num<iv>  val4
+             )
+          {
+            val1.o_ += val2.o_ + val3.o_ + val4.o_;
+            return val1;
+          }
+        
+        template<char i, char ii, char iii, char iv, char v>
+        Num<i> 
+        fun1 ( Num<i>   val1
+             , Num<ii>  val2
+             , Num<iii> val3
+             , Num<iv>  val4
+             , Num<v>   val5
+             )
+          {
+            val1.o_ += val2.o_ + val3.o_ + val4.o_ + val5.o_;
+            return val1;
           }
         
         
-        int fun0 ()                       { return -1;       }
-        int fun1 (int i1)                 { return i1;       }
-        int fun2 (int i1, int i2)         { return i1+i2;    }
-        int fun3 (int i1, int i2, int i3) { return i1+i2+i3; }
+        /** "Function-2" can be chained behind fun1 */
+        template<class II>
+        int
+        fun2 (II val)
+          {
+            return val.o_;
+          }
         
       } // (End) test data
-      
-      
-      
-      
-      
-      
-  /*************************************************************************
-   * @test building a function closure for a given function or functor,
-   *       while arguments are passed in as tuple
-   *       - accessing signatures as typelists
-   *       - apply free function to tuple
-   *       - apply functor to tuple 
-   *       - bind free function to tuple
-   *       - bind functor to tuple
-   *       - build a simple "tuple closure"
+  
+  
+  
+  
+  
+  
+  /******************************************************************************
+   * @test this test covers some extensions and variations on function closures:
+   *       - partial application of a function, returning a binder
+   *       - chaining of two functions with suitable arguemnts ("composition")
    */
-  class FunctionClosure_test : public Test
+  class FunctionComposition_test : public Test
     {
       virtual void
       run (Arg) 
         {
           check_diagnostics ();
-          check_signatureTypeManip ();
-          check_applyFree ();
-          check_applyFunc ();
-          check_bindFree  ();
-          check_bindFunc  ();
-          build_closure ();
+          check_partialApplication ();
+          check_functionalComposition ();
         }
       
       

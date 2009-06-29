@@ -41,7 +41,6 @@
 #include "lib/meta/typelistutil.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
-#include "meta/dummy-functions.hpp"
 #include "meta/typelist-diagnostics.hpp"
 #include "meta/tuple-diagnostics.hpp"
 

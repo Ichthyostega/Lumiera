@@ -234,7 +234,7 @@ out: dtor ~TargetObj\(12\) successful
 END
 
 
-TEST "FunctionClosure_test" FunctionClosure_test <<END
+TEST "closing function over its arguments" FunctionClosure_test <<END
 out: List1	:-<1>-<2>-<3>-
 out: List2	:-<5>-<6>-<7>-
 out: Args	:-<5>-<9>-
@@ -251,7 +251,12 @@ return: 0
 END
 
 
-TEST "FunctionErasure_test" FunctionErasure_test <<END
+TEST "functional composition" FunctionComposition_test <<END
+return: 0
+END
+
+
+TEST "function type erasure" FunctionErasure_test <<END
 return: 0
 END
 
@@ -509,6 +514,14 @@ out: Overl10	:-<1>-<1>-<2>-
 out: Overl11	:-<1>-<2>-<3>-
 out: Overl12	:-<1>-<2>-<3>-
 out: Overl13	:-<1>-<2>-<3>-
+out: Front1	:-
+out: Front2	:-<1>-
+out: Front3	:-<1>-<2>-<3>-
+out: Back1	:-<2>-<3>-
+out: Back2	:-<3>-
+out: Back3	:-
+out: Front4	:-<1>-
+out: Back4	:-<2>-<3>-
 out: FilterEven	:-<2>-<6>-
 out: Prefix1	:
 out: 	\+---<11>-<22>-\+-

@@ -82,14 +82,9 @@ namespace test    {
   
   
   /***************************************************************************
-   * Verify the behaviour of the type erased closure, which is used
-   * by Proc-Layer commands to implement the capturing and later
-   * re-invocation of a function.
+   * @test storing and retrieving command arguments of various types.
    *       
-   * @see  control::Command
-   * @see  control::CommandDef
-   * @see  control::Mutation
-   * @see  control::UndoMutation
+   * @see  control::CommandArgumentHolder
    * @see  command-basic-test.hpp
    */
   class CommandArgument_test : public Test
