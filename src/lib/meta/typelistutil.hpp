@@ -154,24 +154,36 @@ namespace typelist {
     
     /** 
      * splice a typelist like an overlay
-     * into an base typelist, starting at given index
+     * into an base typelist, starting at given index.
+     * @return either the combined (spliced) List, or
+     *         the Front/Back part before or after the Overlay
+     * @note using a NullType as OVERLAY allows to extract
+     *         an arbitrary Front/Back part of the list
      */
     template<class BASE, class OVERLAY, uint i=0>
-    struct Overlay;
+    struct Splice;
     
     template<class B, class BS,
-             class O, class OS, uint i>
-    struct Overlay<Node<B,BS>,Node<O,OS>,i>{ typedef Node<B, typename Overlay<BS, Node<O,OS>,i-1>::List>  List; };
+             class OVERLAY, uint i>
+    struct Splice<Node<B,BS>, OVERLAY, i>  { typedef Node<B, typename Splice<BS, OVERLAY, i-1>::List>  List;
+                                             typedef Node<B, typename Splice<BS, OVERLAY, i-1>::Front> Front;
+                                             typedef         typename Splice<BS, OVERLAY, i-1>::Back   Back; };
     
     template<class B, class BS,
              class O, class OS >
-    struct Overlay<Node<B,BS>,Node<O,OS>,0>{ typedef Node<O, typename Overlay<BS,OS, 0>::List>            List; };
+    struct Splice<Node<B,BS>,Node<O,OS>,0> { typedef Node<O, typename Splice<BS,OS, 0>::List>          List;
+                                             typedef NullType                                          Front; 
+                                             typedef         typename Splice<BS,OS, 0>::Back           Back; };
     
-    template<class B, class BS, uint i>
-    struct Overlay<Node<B,BS>, NullType, i>{ typedef Node<B,BS> List; };
+    template<class B, class BS>
+    struct Splice<Node<B,BS>, NullType, 0> { typedef Node<B, BS> List; 
+                                             typedef NullType    Front;
+                                             typedef Node<B, BS> Back; };
     
     template<class XX, uint i>
-    struct Overlay<NullType, XX, i>        { typedef NullType   List; };
+    struct Splice<NullType, XX, i>         { typedef NullType    List;
+                                             typedef NullType    Front;
+                                             typedef NullType    Back; };
     
     
     

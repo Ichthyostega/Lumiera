@@ -98,7 +98,7 @@ namespace test {
               check_diagnostics ();
               check_apply  ();
               check_append ();
-              check_overlay();
+              check_splice ();
               check_filter ();
               check_prefix ();
               check_distribute();
@@ -155,50 +155,72 @@ namespace test {
           
           
           void
-          check_overlay ()
+          check_splice ()
             {
               typedef Types<Num<9>,Num<8> >::List OLi;
               // will "paste" the list OLi "on top" of another Typelist...
               
-              typedef Overlay<NullType, NullType> Overl01;
+              typedef Splice<NullType, NullType> Overl01;
               DISPLAY (Overl01);
               
-              typedef Overlay<NullType, OLi>      Overl02;
+              typedef Splice<NullType, OLi>      Overl02;
               DISPLAY (Overl02);
               
-              typedef Overlay<NullType, OLi, 5>   Overl03;
+              typedef Splice<NullType, OLi, 5>   Overl03;
               DISPLAY (Overl03);
               
-              typedef Overlay<List1, OLi>         Overl04;
+              typedef Splice<List1, OLi>         Overl04;
               DISPLAY (Overl04);
               
-              typedef Overlay<List1, OLi, 1>      Overl05;
+              typedef Splice<List1, OLi, 1>      Overl05;
               DISPLAY (Overl05);
               
-              typedef Overlay<List1, OLi, 2>      Overl06;
+              typedef Splice<List1, OLi, 2>      Overl06;
               DISPLAY (Overl06);
               
-              typedef Overlay<List1, OLi, 3>      Overl07;
+              typedef Splice<List1, OLi, 3>      Overl07;
               DISPLAY (Overl07);
               
-              typedef Overlay<List1, OLi, 5>      Overl08;
+              typedef Splice<List1, OLi, 5>      Overl08;
               DISPLAY (Overl08);
               
-              typedef Overlay<List1, List1>       Overl09;
+              typedef Splice<List1, List1>       Overl09;
               DISPLAY (Overl09);
               
-              typedef Overlay<List1, List1, 1>    Overl10;
+              typedef Splice<List1, List1, 1>    Overl10;
               DISPLAY (Overl10);
               
-              typedef Overlay<List1, NullType>    Overl11;
+              typedef Splice<List1, NullType>    Overl11;
               DISPLAY (Overl11);
               
-              typedef Overlay<List1, NullType, 1> Overl12;
+              typedef Splice<List1, NullType, 1> Overl12;
               DISPLAY (Overl12);
               
-              typedef Overlay<List1, NullType, 5> Overl13;
+              typedef Splice<List1, NullType, 5> Overl13;
               DISPLAY (Overl13);
+              
+              
+              typedef Types<Num<99> >::List OLi2;
+              typedef Splice<List1, OLi2, 0>::Front Front1;
+              typedef Splice<List1, OLi2, 1>::Front Front2;
+              typedef Splice<List1, OLi2, 5>::Front Front3;
+              DISPLAY (Front1);
+              DISPLAY (Front2);
+              DISPLAY (Front3);
+              typedef Splice<List1, OLi2, 0>::Back  Back1;
+              typedef Splice<List1, OLi2, 1>::Back  Back2;
+              typedef Splice<List1, OLi2, 5>::Back  Back3;
+              DISPLAY (Back1);
+              DISPLAY (Back2);
+              DISPLAY (Back3);
+              
+              // Note: with a Null-Overlay, this can be used to extract arbitrary sublists:
+              typedef Splice<List1, NullType, 1>::Front Front4;
+              typedef Splice<List1, NullType, 1>::Back  Back4;
+              DISPLAY (Front4);
+              DISPLAY (Back4);
             }
+          
           
           template<class X> struct AddConst2          { typedef X        Type; };
           template<int I>   struct AddConst2<Num<I> > { typedef Num<I+2> Type; };
