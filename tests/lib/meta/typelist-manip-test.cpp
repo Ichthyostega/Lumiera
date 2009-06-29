@@ -98,6 +98,7 @@ namespace test {
               check_diagnostics ();
               check_apply  ();
               check_append ();
+              check_overlay();
               check_filter ();
               check_prefix ();
               check_distribute();
@@ -150,6 +151,53 @@ namespace test {
               
               typedef Append<List1,List2>        Append9;
               DISPLAY (Append9);
+            }
+          
+          
+          void
+          check_overlay ()
+            {
+              typedef Types<Num<9>,Num<8> >::List OLi;
+              // will "paste" the list OLi "on top" of another Typelist...
+              
+              typedef Overlay<NullType, NullType> Overl01;
+              DISPLAY (Overl01);
+              
+              typedef Overlay<NullType, OLi>      Overl02;
+              DISPLAY (Overl02);
+              
+              typedef Overlay<NullType, OLi, 5>   Overl03;
+              DISPLAY (Overl03);
+              
+              typedef Overlay<List1, OLi>         Overl04;
+              DISPLAY (Overl04);
+              
+              typedef Overlay<List1, OLi, 1>      Overl05;
+              DISPLAY (Overl05);
+              
+              typedef Overlay<List1, OLi, 2>      Overl06;
+              DISPLAY (Overl06);
+              
+              typedef Overlay<List1, OLi, 3>      Overl07;
+              DISPLAY (Overl07);
+              
+              typedef Overlay<List1, OLi, 5>      Overl08;
+              DISPLAY (Overl08);
+              
+              typedef Overlay<List1, List1>       Overl09;
+              DISPLAY (Overl09);
+              
+              typedef Overlay<List1, List1, 1>    Overl10;
+              DISPLAY (Overl10);
+              
+              typedef Overlay<List1, NullType>    Overl11;
+              DISPLAY (Overl11);
+              
+              typedef Overlay<List1, NullType, 1> Overl12;
+              DISPLAY (Overl12);
+              
+              typedef Overlay<List1, NullType, 5> Overl13;
+              DISPLAY (Overl13);
             }
           
           template<class X> struct AddConst2          { typedef X        Type; };

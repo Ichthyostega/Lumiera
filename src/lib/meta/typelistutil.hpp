@@ -153,6 +153,30 @@ namespace typelist {
     
     
     /** 
+     * splice a typelist like an overlay
+     * into an base typelist, starting at given index
+     */
+    template<class BASE, class OVERLAY, uint i=0>
+    struct Overlay;
+    
+    template<class B, class BS,
+             class O, class OS, uint i>
+    struct Overlay<Node<B,BS>,Node<O,OS>,i>{ typedef Node<B, typename Overlay<BS, Node<O,OS>,i-1>::List>  List; };
+    
+    template<class B, class BS,
+             class O, class OS >
+    struct Overlay<Node<B,BS>,Node<O,OS>,0>{ typedef Node<O, typename Overlay<BS,OS, 0>::List>            List; };
+    
+    template<class B, class BS, uint i>
+    struct Overlay<Node<B,BS>, NullType, i>{ typedef Node<B,BS> List; };
+    
+    template<class XX, uint i>
+    struct Overlay<NullType, XX, i>        { typedef NullType   List; };
+    
+    
+    
+    
+    /** 
      * prefix each of the elements,
      * yielding a list-of lists-of-types
      */
