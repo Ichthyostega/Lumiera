@@ -41,7 +41,6 @@
 #include "lib/meta/typeseq-util.hpp"
 #include "lib/meta/typelist-util.hpp"
 #include "meta/typelist-diagnostics.hpp"
-//#include "lib/util.hpp"
 
 #include <boost/format.hpp>
 #include <iostream>
@@ -105,8 +104,9 @@ namespace test    {
           DISPLAY (LL);
           
           typedef Types<LL>::Seq Seq;
+          typedef Seq::List SeqList;
           DISPLAY (Seq);
-          DISPLAY (Seq::List);
+          DISPLAY (SeqList);
           
           typedef Types<NodeNull>::Seq NulS;
           DISPLAY (NulS);
@@ -141,8 +141,16 @@ namespace test    {
           typedef Shifted<Seq,2>::Type Seq_2;  DISPLAY (Seq_2);
           typedef Shifted<Seq,3>::Type Seq_3;  DISPLAY (Seq_3);
           typedef Shifted<Seq,4>::Type Seq_4;  DISPLAY (Seq_4);
+          typedef Shifted<Seq,5>::Type Seq_5;  DISPLAY (Seq_5);
+          typedef Shifted<Seq,6>::Type Seq_6;  DISPLAY (Seq_6);
           
+          typedef Types<Shifted<Seq,0>::Head> Head_0; DISPLAY (Head_0);
+          typedef Types<Shifted<Seq,1>::Head> Head_1; DISPLAY (Head_1);
           typedef Types<Shifted<Seq,2>::Head> Head_2; DISPLAY (Head_2);
+          typedef Types<Shifted<Seq,3>::Head> Head_3; DISPLAY (Head_3);
+          typedef Types<Shifted<Seq,4>::Head> Head_4; DISPLAY (Head_4);
+          typedef Types<Shifted<Seq,5>::Head> Head_5; DISPLAY (Head_5);
+          typedef Types<Shifted<Seq,6>::Head> Head_6; DISPLAY (Head_6);
         }
       
       

@@ -42,7 +42,6 @@
 #include "lib/meta/generator.hpp"
 #include "lib/meta/typelist-util.hpp"
 #include "meta/typelist-diagnostics.hpp"
-//#include "lib/util.hpp"
 
 #include <boost/format.hpp>
 #include <iostream>
@@ -98,11 +97,11 @@ namespace test {
             {
               check_diagnostics ();
               check_apply  ();
+              check_filter ();
               check_append ();
               check_splice ();
               check_s_last ();
               check_dissect();
-              check_filter ();
               check_prefix ();
               check_distribute();
               check_combine();
@@ -244,7 +243,7 @@ namespace test {
               
               typedef SplitLast<NullType>::Type Nil;
               typedef SplitLast<NullType>::List NList;
-
+              
               DISPLAY (NList);
               DISPLAY (Types<Nil>);
             }

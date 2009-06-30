@@ -488,10 +488,11 @@ return: 0
 END
 
 
-TEST "TypeListManipl_test" TypeListManipl_test <<END
+TEST "typelist manipulation" TypeListManipl_test <<END
 out: List1	:-<1>-<2>-<3>-
 out: List2	:-<5>-<6>-<7>-
 out: Added2	:-<3>-<4>-<5>-
+out: FilterEven	:-<2>-<6>-
 out: Append1	:-
 out: Append2	:-<11>-<22>-
 out: Append3	:-<111>-
@@ -522,7 +523,19 @@ out: Back2	:-<3>-
 out: Back3	:-
 out: Front4	:-<1>-
 out: Back4	:-<2>-<3>-
-out: FilterEven	:-<2>-<6>-
+out: Prefix	:-<1>-<2>-
+out: ElmL	:-<3>-
+out: NPrefix	:-
+out: Types<Elm1>	:-<3>-
+out: NList	:-
+out: Types<Nil>	:-
+out: LL	:-<1>-<2>-<3>-<5>-<6>-<7>-
+out: List	:-<1>-<2>-<3>-<5>-<6>-<7>-
+out: First	:-<1>-
+out: Tail	:-<2>-<3>-<5>-<6>-<7>-
+out: Prefix	:-<1>-<2>-<3>-<5>-<6>-
+out: Last	:-<7>-
+out: HeadEnd	:-<1>-<7>-
 out: Prefix1	:
 out: 	\+---<11>-<22>-\+-
 out: Prefix2	:
@@ -605,6 +618,40 @@ out: 	\+---<2>-<3>-<·>-\+
 out: 	\+---<2>-<·>-\+
 out: 	\+---<3>-<·>-\+
 out: 	\+---<·>-\+-
+return: 0
+END
+
+
+TEST "type sequence manipulation" TypeSeqManipl_test <<END
+out: LL	:-<1>-<2>-<3>-<7>-<8>-<9>-
+out: Seq	:-<1>-<2>-<3>-<7>-<8>-<9>-
+out: SeqList	:-<1>-<2>-<3>-<7>-<8>-<9>-
+out: NulS	:-
+out: Prepend1	:-<5>-<1>-<2>-<3>-
+out: Prepend2	:-<·>-<1>-<2>-<3>-
+out: Prepend3	:-<5>-
+out: Prepend4	:-
+out: Seq_0	:-<7>-<8>-<9>-<1>-<2>-<3>-
+out: Seq_1	:-<8>-<9>-<1>-<2>-<3>-
+out: Seq_2	:-<9>-<1>-<2>-<3>-
+out: Seq_3	:-<1>-<2>-<3>-
+out: Seq_4	:-<2>-<3>-
+out: Seq_5	:-<3>-
+out: Seq_6	:-
+out: Head_0	:-<7>-
+out: Head_1	:-<8>-
+out: Head_2	:-<9>-
+out: Head_3	:-<1>-
+out: Head_4	:-<2>-
+out: Head_5	:-<3>-
+out: Head_6	:-
+out: Seq	:-<1>-<2>-<3>-<7>-<8>-<9>-
+out: List	:-<1>-<2>-<3>-<7>-<8>-<9>-
+out: First	:-<1>-
+out: Tail	:-<2>-<3>-<7>-<8>-<9>-
+out: Prefix	:-<1>-<2>-<3>-<7>-<8>-
+out: Last	:-<9>-
+out: HeadEnd	:-<1>-<9>-
 return: 0
 END
 

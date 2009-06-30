@@ -172,11 +172,11 @@ namespace typelist{
     template<class B, class BS,
              class O, class OS >
     struct Splice<Node<B,BS>,Node<O,OS>,0> { typedef Node<O, typename Splice<BS,OS, 0>::List>          List;
-                                             typedef NullType                                          Front; 
+                                             typedef NullType                                          Front;
                                              typedef         typename Splice<BS,OS, 0>::Back           Back; };
     
     template<class B, class BS>
-    struct Splice<Node<B,BS>, NullType, 0> { typedef Node<B, BS> List; 
+    struct Splice<Node<B,BS>, NullType, 0> { typedef Node<B, BS> List;
                                              typedef NullType    Front;
                                              typedef Node<B, BS> Back; };
     
@@ -188,19 +188,23 @@ namespace typelist{
     
     
     
+    /**
+     * Allows to access various parts of a given typelist:
+     * Start and End, Prefix and Tail..
+     */
     template<class TYPES>
     struct Dissect;
     
     template<class T, class TYPES>
     struct Dissect<Node<T,TYPES> >
       {
-        typedef Node<T,TYPES>                  List;
-        typedef T                              Head;
-        typedef Node<T,NullType>               First;
-        typedef TYPES                          Tail;
-        typedef typename SplitLast<List>::List Prefix;
-        typedef typename SplitLast<List>::Type End;
-        typedef Node<End,NullType>             Last;
+        typedef Node<T,TYPES>                  List;  ///< the complete list
+        typedef T                              Head;  ///< first element
+        typedef Node<T,NullType>               First; ///< a list containing the first element
+        typedef TYPES                          Tail;  ///< remainder of the list starting with the second elm.
+        typedef typename SplitLast<List>::List Prefix;///< all of the list, up to but extcluding the last element
+        typedef typename SplitLast<List>::Type End;   ///< the last element
+        typedef Node<End,NullType>             Last;  ///< a list containing the last element
       };
     
     template<>
