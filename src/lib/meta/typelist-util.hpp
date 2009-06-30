@@ -1,5 +1,5 @@
 /*
-  TYPELISTUTIL.hpp  -  Utils for working with lists-of-types
+  TYPELIST-UTIL.hpp  -  Utils for working with lists-of-types
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,15 +21,15 @@
 */
 
 
-#ifndef LUMIERA_META_TYPELISTUTIL_H
-#define LUMIERA_META_TYPELISTUTIL_H
+#ifndef LUMIERA_META_TYPELIST_UTIL_H
+#define LUMIERA_META_TYPELIST_UTIL_H
 
 
   
 #include "lib/meta/typelist.hpp"
 
 namespace lumiera {
-namespace typelist {
+namespace typelist{
     
     
     /**
@@ -184,6 +184,36 @@ namespace typelist {
     struct Splice<NullType, XX, i>         { typedef NullType    List;
                                              typedef NullType    Front;
                                              typedef NullType    Back; };
+    
+    
+    
+    
+    template<class TYPES>
+    struct Dissect;
+    
+    template<class T, class TYPES>
+    struct Dissect<Node<T,TYPES> >
+      {
+        typedef Node<T,TYPES>                  List;
+        typedef T                              Head;
+        typedef Node<T,NullType>               First;
+        typedef TYPES                          Tail;
+        typedef typename SplitLast<List>::List Prefix;
+        typedef typename SplitLast<List>::Type End;
+        typedef Node<End,NullType>             Last;
+      };
+    
+    template<>
+    struct Dissect<NullType>
+      {
+        typedef NullType                       List;
+        typedef NullType                       Head;
+        typedef NullType                       First;
+        typedef NullType                       Tail;
+        typedef NullType                       Prefix;
+        typedef NullType                       End;
+        typedef NullType                       Last;
+      };
     
     
     

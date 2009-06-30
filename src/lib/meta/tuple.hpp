@@ -24,9 +24,9 @@
 /** @file tuple.hpp
  ** Metaprogramming with tuples-of-types and a simple Tuple (record) datatype.
  ** The metaprogramming part of this header complements typelist.hpp and allows
- ** to re-build a new tuple-of-types from an existing typelist. Such a finite
- ** sequence or tuple of types can at times be more handy than a typelist,
- ** especially when capturing specific types to use as template parameter.
+ ** some additional manipulations on type sequences. Such a finite sequence or
+ ** tuple of types can at times be more handy than a typelist, especially when
+ ** capturing specific types to use as template parameter.
  ** 
  ** Additionally, this header augments the Tuple template into a simple Tuple
  ** (run time) datatype. This isn't meant as competing with std::tr1::tuple, which is
@@ -48,7 +48,8 @@
 #define LUMIERA_META_TUPLE_H
 
 #include "lib/meta/typelist.hpp"
-#include "lib/meta/typelistutil.hpp"
+#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/typeseq-util.hpp"
 #include "lib/meta/util.hpp"
 
 
@@ -56,123 +57,6 @@
 namespace lumiera {
 namespace typelist{
   
-  
-  
-  /** 
-   * Helper: prepend a type to an existing type sequence,
-   * thus shifting all elements within the sequence 
-   * to the right, eventually dropping the last element
-   */
-  template<class T, class TYPES>
-  struct Prepend;
-  
-  template< typename T01
-          , typename T02
-          , typename T03
-          , typename T04
-          , typename T05
-          , typename T06
-          , typename T07
-          , typename T08
-          , typename T09
-          , typename T10
-          , typename T11
-          , typename T12
-          , typename T13
-          , typename T14
-          , typename T15
-          , typename T16
-          , typename T17
-          , typename T18
-          , typename T19
-          , typename T20
-          , typename IGN
-          >
-  struct Prepend<T01, Types<     T02,T03,T04,T05
-                           , T06,T07,T08,T09,T10
-                           , T11,T12,T13,T14,T15
-                           , T16,T17,T18,T19,T20
-                           , IGN
-                           > >
-  {
-    typedef Types< T01,T02,T03,T04,T05
-                 , T06,T07,T08,T09,T10
-                 , T11,T12,T13,T14,T15
-                 , T16,T17,T18,T19,T20 > Tuple;
-    
-    typedef typename Tuple::List         List;
-  };
-  
-  
-  
-  
-  /** Helper: separate parts of a type sequence */
-  template<class TYPES>
-  struct Split;
-  
-  template< typename T01
-          , typename T02
-          , typename T03
-          , typename T04
-          , typename T05
-          , typename T06
-          , typename T07
-          , typename T08
-          , typename T09
-          , typename T10
-          , typename T11
-          , typename T12
-          , typename T13
-          , typename T14
-          , typename T15
-          , typename T16
-          , typename T17
-          , typename T18
-          , typename T19
-          , typename T20
-          >
-  struct Split<Types< T01,T02,T03,T04,T05
-                    , T06,T07,T08,T09,T10
-                    , T11,T12,T13,T14,T15
-                    , T16,T17,T18,T19,T20
-                    > >
-  {
-    typedef        T01                   Head;
-    typedef Types< T01                 > First;
-    typedef Types< T01,T02,T03,T04,T05
-                 , T06,T07,T08,T09,T10
-                 , T11,T12,T13,T14,T15
-                 , T16,T17,T18,T19     > Prefix;
-    typedef Types<     T02,T03,T04,T05
-                 , T06,T07,T08,T09,T10
-                 , T11,T12,T13,T14,T15
-                 , T16,T17,T18,T19,T20 > Tail;
-    typedef Types<                 T20 > Last;
-    typedef                        T20   End;
-  };
-  
-  
-  
-  
-  /**
-   * Helper: generate a type sequence left shifted 
-   * by i steps, filling in NullType at the end
-   */  
-  template<class TYPES, uint i=1>
-  class Shifted
-    {
-      typedef typename Split<TYPES>::Tail Tail;
-    public:
-      typedef typename Shifted<Tail,i-1>::Type Type;
-      typedef typename Split<Type>::Head       Head;
-    };
-  
-  template<class TYPES>
-  struct Shifted<TYPES,0>
-    { 
-      typedef TYPES                      Type;
-      typedef typename Split<Type>::Head Head;
-    };
   
   
   /** 
@@ -233,9 +117,9 @@ namespace typelist{
   struct Tuple<Node<TY,TYPES> >
     : Tuple<TYPES>
     {
-      typedef TY                                   HeadType;
-      typedef typename Tuple<TYPES>::Type          TailType;
-      typedef typename Prepend<TY,TailType>::Tuple Type;
+      typedef TY                                 HeadType;
+      typedef typename Tuple<TYPES>::Type        TailType;
+      typedef typename Prepend<TY,TailType>::Seq Type;
       
       typedef Node<TY,TYPES> ArgList;
       typedef Tuple<Type>    TupleType;

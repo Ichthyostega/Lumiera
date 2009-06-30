@@ -38,7 +38,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/meta/typelist.hpp"
-#include "lib/meta/typelistutil.hpp"
+#include "lib/meta/typelist-util.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "meta/typelist-diagnostics.hpp"
@@ -141,7 +141,7 @@ namespace test {
           typedef FunctionSignature<function<someFunc> >::Args Args;
           DISPLAY (Args);
           
-          typedef Prepend<Num<1>, Args>::Tuple NewArgs;             // manipulate the argument type(s)
+          typedef Prepend<Num<1>, Args>::Seq NewArgs;               // manipulate the argument type(s)
           DISPLAY (NewArgs);
           
           typedef FunctionTypedef<RetType,NewArgs>::Sig NewSig;  // re-build a new function signature

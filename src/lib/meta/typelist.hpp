@@ -112,6 +112,7 @@ namespace typelist{
     struct Types<>
       {
         typedef NullType List;
+        typedef Types<>  Seq;
       };
     
     

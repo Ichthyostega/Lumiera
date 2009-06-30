@@ -379,7 +379,7 @@ namespace typelist{
         typedef typename PlaceholderTuple<TailSeq, i+1>::PlaceholderSeq  TailPlaceholderSeq;
         
       public:
-        typedef typename Prepend<_Placeholder<i>, TailPlaceholderSeq>::Tuple PlaceholderSeq;
+        typedef typename Prepend<_Placeholder<i>, TailPlaceholderSeq>::Seq PlaceholderSeq;
         typedef Tuple<PlaceholderSeq> Type;
         
       };

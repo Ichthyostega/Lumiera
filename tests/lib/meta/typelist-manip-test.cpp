@@ -32,7 +32,7 @@
  ** if various lists of such constant-wrapper types were manipulated as expected.
  **
  ** @see typelist-test.cpp
- ** @see typelistutil.hpp
+ ** @see typelist-util.hpp
  ** @see nodewiringconfig.hpp real world usage example
  **
  */
@@ -40,7 +40,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/meta/generator.hpp"
-#include "lib/meta/typelistutil.hpp"
+#include "lib/meta/typelist-util.hpp"
 #include "meta/typelist-diagnostics.hpp"
 //#include "lib/util.hpp"
 
