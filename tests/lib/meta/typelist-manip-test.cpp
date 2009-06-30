@@ -86,6 +86,7 @@ namespace test {
        *         print them for debugging purpose.
        *       - append lists, single elements and NullType
        *         in various combinations
+       *       - manipulations like splice, get end, dissect
        *       - filtering out some types from a typelist by
        *         using a "predicate template" (metafunction)
        *       - building combinations and permutations
@@ -99,6 +100,8 @@ namespace test {
               check_apply  ();
               check_append ();
               check_splice ();
+              check_s_last ();
+              check_dissect();
               check_filter ();
               check_prefix ();
               check_distribute();
@@ -220,6 +223,52 @@ namespace test {
               DISPLAY (Front4);
               DISPLAY (Back4);
             }
+          
+          
+          void
+          check_s_last()
+            {
+              typedef SplitLast<List1>::Type Elm;
+              typedef SplitLast<List1>::List Prefix;
+              
+              typedef Types<Elm>::List ElmL;
+              
+              DISPLAY (Prefix);
+              DISPLAY (ElmL);
+              
+              typedef SplitLast<ElmL>::Type Elm1;
+              typedef SplitLast<ElmL>::List NPrefix;
+              
+              DISPLAY (NPrefix);
+              DISPLAY (Types<Elm1>);
+              
+              typedef SplitLast<NullType>::Type Nil;
+              typedef SplitLast<NullType>::List NList;
+
+              DISPLAY (NList);
+              DISPLAY (Types<Nil>);
+            }
+          
+          
+          void
+          check_dissect()
+            {
+              typedef Append<List1,List2>::List LL;
+              DISPLAY (LL);
+              
+              typedef Dissect<LL>::List   List;     DISPLAY(List); 
+              typedef Dissect<LL>::First  First;    DISPLAY(First); 
+              typedef Dissect<LL>::Tail   Tail;     DISPLAY(Tail);
+              typedef Dissect<LL>::Prefix Prefix;   DISPLAY(Prefix);
+              typedef Dissect<LL>::Last   Last;     DISPLAY(Last);
+              
+              typedef Dissect<LL>::Head   Head;
+              typedef Dissect<LL>::End    End;
+              
+              typedef Types<Head,End>  HeadEnd;     DISPLAY(HeadEnd);
+            }
+          
+          
           
           
           template<class X> struct AddConst2          { typedef X        Type; };
