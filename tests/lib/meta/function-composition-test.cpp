@@ -285,6 +285,23 @@ namespace test {
           ASSERT (    7+6+5 == (func::applyFirst(    fun13<7,6,5>, _7_)         (_6_,_5_)).o_);
           ASSERT (      6+5 == (func::applyFirst(      fun12<6,5>, _6_)             (_5_)).o_);
           ASSERT (        5 == (func::applyFirst(        fun11<5>, _5_)               ( )).o_);
+          
+          
+          
+          // Finally a more convoluted example
+          // covering the general case of partial function closure:
+          typedef Num<5> Sig54321(Num<5>, Num<4>, Num<3>, Num<2>, Num<1>);   // Signature of the 5-argument function
+          typedef Num<5> Sig54   (Num<5>, Num<4>);                           // ...closing the last 3 arguments should yield this 2-argument function
+          typedef Types<Num<3>,Num<2>,Num<1> > Args2Close;                   // Tuple type to hold the 3 argument values used for the closure
+          
+          // Close the trailing 3 arguments of the 5-argument function...
+          function<Sig54> fun_54 = PApply<Sig54321, Args2Close>::bindBack(fun15<5,4,3,2,1>, 
+                                                                          tuple::make(_3_,_2_,_1_)
+                                                                         );
+          
+          // apply the remaining argument values
+          Num<5> resN5 = fun_54 (_5_,_4_);
+          ASSERT (5+4+3+2+1 == resN5.o_);
         }
       
       
@@ -292,7 +309,24 @@ namespace test {
       void
       check_functionalComposition ()
         {
-//          ASSERT (1+5+9 == fun(Num<1>(), Num<5>(), Num<9>()));
+          typedef Num<1> Sig12(Num<1>,Num<2>);
+          typedef int SigF21(Num<1>);
+          
+          Sig12  &f1 = fun12<1,2>;
+          SigF21 &f2 = fun2<Num<1> >;
+          
+          typedef function<int(Num<1>,Num<2>)> Chained;
+          
+          Chained funCh = func::chained (f1, f2 ); 
+          ASSERT (1+2       == funCh (_1_,_2_) );
+          
+#if false          
+          ASSERT (1         == func::chain(fun11<1>        , fun2) (_1_)                 );
+          ASSERT (1+2       == func::chain(fun12<1,2>      , fun2<Num<1> > ) (_1_,_2_)             );
+          ASSERT (1+2+3     == func::chain(fun13<1,2,3>    , fun2) (_1_,_2_,_3_)         );
+          ASSERT (1+2+3+4   == func::chain(fun14<1,2,3,4>  , fun2) (_1_,_2_,_3_,_4_)     );
+          ASSERT (1+2+3+4+5 == func::chain(fun15<1,2,3,4,5>, fun2) (_1_,_2_,_3_,_4_,_5_) );
+#endif          
         }
       
     };

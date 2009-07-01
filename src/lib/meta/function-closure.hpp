@@ -562,6 +562,54 @@ namespace typelist{
         }
     };
   
+    
+  
+  
+  /**
+   * Functional composition. Create a functor, which
+   * on invocation will execute two functions chained,
+   * i.e. fed the result of invoking the first function
+   * as argument into the second function.  
+   */
+  template<typename SIG1, typename RET>
+  class FunctionComposition
+    {
+      typedef typename func::_Fun<SIG1>::Args Args;
+      typedef typename func::_Fun<SIG1>::Ret  Ret1;
+      
+      typedef Types<Ret1> ArgsF2;
+      typedef typename FunctionTypedef<RET, ArgsF2>::Sig SigF2;
+      
+      typedef typename FunctionTypedef<RET, Args>::Sig ChainedSig;
+      typedef function<ChainedSig> ChainedFunc;
+      
+      typedef typename func::PlaceholderTuple<Args>::PlaceholderSeq PlaceholderSeq;
+      typedef Tuple<PlaceholderSeq> Placeholders;
+      
+      enum { ARG_CNT = count<typename Args::List>::value };
+      
+      struct ComposedFunc
+        : ChainedFunc
+        {
+          template<class TUP>
+          ComposedFunc (SIG1& f1, SigF2& f2, TUP& args)
+            : ChainedFunc (std::tr1::bind (f2 ,
+                                           func::Apply<ARG_CNT>::template bind<function<SIG1> > (f1, args)
+                                          ))
+            { }
+        };
+      
+    public:
+      static ChainedFunc
+      chain (SIG1& f1, SigF2& f2)
+        {
+          Placeholders args;
+          return ComposedFunc (f1,f2,args);
+        }
+      
+    };
+
+  
   
   
   /**
@@ -613,6 +661,15 @@ namespace typelist{
         typedef typename _Fun<SIG>::Ret Ret;
         typedef typename _Sig<Ret,ARG>::Type Signature;
         typedef FunctionClosure<Signature> Type;
+      };
+    
+    template<typename SIG1, typename SIG2>
+    struct _Chain
+      {
+        typedef typename func::_Fun<SIG1>::Args Args;
+        typedef typename func::_Fun<SIG2>::Ret  Ret;
+        typedef typename FunctionTypedef<Ret, Args>::Sig Chained;
+        typedef function<Chained> Function;
       };
     
     template<typename SIG>
@@ -703,6 +760,16 @@ namespace typelist{
       typedef Tuple<ArgTypeSeq>        ArgTuple;
       ArgTuple val(arg);
       return PApply<SIG,ArgTypeSeq>::bindBack (f, val);
+    }
+    
+    
+    /** build a functor chaining the given functions */
+    template<typename SIG1, typename SIG2>
+    typename _Chain<SIG1,SIG2>::Function
+    chained (SIG1& f1, SIG2& f2)
+    {
+      typedef typename _Chain<SIG1,SIG2>::Ret Ret;
+      return FunctionComposition<SIG1,Ret>::chain (f1, f2);
     }
     
   } // (END) namespace func
