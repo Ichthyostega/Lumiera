@@ -70,17 +70,17 @@ namespace test {
         /** "Function-1" will be used at the front side, accepting a tuple of values */
         template<char i>
         Num<i> 
-        fun1 ( Num<i>   val1
-             )
+        fun11 ( Num<i>   val1
+              )
           {
             return val1;
           }
         
         template<char i, char ii>
         Num<i> 
-        fun1 ( Num<i>   val1
-             , Num<ii>  val2
-             )
+        fun12 ( Num<i>   val1
+              , Num<ii>  val2
+              )
           {
             val1.o_ += val2.o_;
             return val1;
@@ -88,10 +88,10 @@ namespace test {
         
         template<char i, char ii, char iii>
         Num<i> 
-        fun1 ( Num<i>   val1
-             , Num<ii>  val2
-             , Num<iii> val3
-             )
+        fun13 ( Num<i>   val1
+              , Num<ii>  val2
+              , Num<iii> val3
+              )
           {
             val1.o_ += val2.o_ + val3.o_;
             return val1;
@@ -99,11 +99,11 @@ namespace test {
         
         template<char i, char ii, char iii, char iv>
         Num<i> 
-        fun1 ( Num<i>   val1
-             , Num<ii>  val2
-             , Num<iii> val3
-             , Num<iv>  val4
-             )
+        fun14 ( Num<i>   val1
+              , Num<ii>  val2
+              , Num<iii> val3
+              , Num<iv>  val4
+              )
           {
             val1.o_ += val2.o_ + val3.o_ + val4.o_;
             return val1;
@@ -111,12 +111,12 @@ namespace test {
         
         template<char i, char ii, char iii, char iv, char v>
         Num<i> 
-        fun1 ( Num<i>   val1
-             , Num<ii>  val2
-             , Num<iii> val3
-             , Num<iv>  val4
-             , Num<v>   val5
-             )
+        fun15 ( Num<i>   val1
+              , Num<ii>  val2
+              , Num<iii> val3
+              , Num<iv>  val4
+              , Num<v>   val5
+              )
           {
             val1.o_ += val2.o_ + val3.o_ + val4.o_ + val5.o_;
             return val1;
@@ -141,7 +141,7 @@ namespace test {
   /******************************************************************************
    * @test this test covers some extensions and variations on function closures:
    *       - partial application of a function, returning a binder
-   *       - chaining of two functions with suitable arguemnts ("composition")
+   *       - chaining of two functions with suitable arguments ("composition")
    */
   class FunctionComposition_test : public Test
     {
@@ -161,21 +161,18 @@ namespace test {
       void
       check_diagnostics ()
         {
-          DISPLAY (List1);
-          DISPLAY (List2);
+          ASSERT (6 == (fun13<1,2,3> (_1_, _2_, _3_)).o_ );
+          ASSERT (6 == (fun13<1,1,1> (Num<1>(3), Num<1>(2), Num<1>(1))).o_ );
           
-          ASSERT (6 == (fun1<1,2,3> (_1_, _2_, _3_)).o_ );
-          ASSERT (6 == (fun1<1,1,1> (Num<1>(3), Num<1>(2), Num<1>(1))).o_ );
+          ASSERT ( 1 == fun2 (fun11<1> (_1_)) );
+          ASSERT ( 3 == fun2 (fun12<1,2> (_1_, _2_)) );
+          ASSERT ( 6 == fun2 (fun13<1,2,3> (_1_, _2_, _3_)) );
+          ASSERT (10 == fun2 (fun14<1,2,3,4> (_1_, _2_, _3_, _4_)) );
+          ASSERT (15 == fun2 (fun15<1,2,3,4,5> (_1_, _2_, _3_, _4_, _5_)) );
           
-          ASSERT ( 1 == fun2 (fun1<1> (_1_)) );
-          ASSERT ( 3 == fun2 (fun1<1,2> (_1_, _2_)) );
-          ASSERT ( 6 == fun2 (fun1<1,2,3> (_1_, _2_, _3_)) );
-          ASSERT (10 == fun2 (fun1<1,2,3,4> (_1_, _2_, _3_, _4_)) );
-          ASSERT (15 == fun2 (fun1<1,2,3,4,5> (_1_, _2_, _3_, _4_, _5_)) );
-          
-          ASSERT ( 9 == fun2 (fun1<2,3,4> (_2_, _3_, _4_)) );
-          ASSERT (18 == fun2 (fun1<5,6,7> (_5_, _6_, _7_)) );
-          ASSERT (24 == fun2 (fun1<9,8,7> (_9_, _8_, _7_)) );
+          ASSERT ( 9 == fun2 (fun13<2,3,4> (_2_, _3_, _4_)) );
+          ASSERT (18 == fun2 (fun13<5,6,7> (_5_, _6_, _7_)) );
+          ASSERT (24 == fun2 (fun13<9,8,7> (_9_, _8_, _7_)) );
         }
       
       
@@ -191,7 +188,7 @@ namespace test {
           typedef Num<1> Sig23(Num<2>, Num<3>);                      // signature after having closed over the first argument
           typedef function<Sig23> F23;                               // and a tr1::function object to hold such a function
           
-          Sig123& f =fun1<1,2,3>;                                    // the actual input: a reference to the bare function
+          Sig123& f =fun13<1,2,3>;                                   // the actual input: a reference to the bare function
           
           
           // Version1: do a direct argument binding----------------- //
@@ -257,20 +254,37 @@ namespace test {
           
           
           // what follows is the real unit test...
-          function<Sig123> func123 (f);
+          function<Sig123> func123 (f);                              // alternatively do it with an tr1::function object
           fun_23 = func::applyFirst (func123, Num<1>(19));
           res = fun_23 (_2_,_3_).o_;
           ASSERT (24 == res);
           
           typedef function<Num<1>(Num<1>, Num<2>)> F12;
-          F12 fun_12 = func::applyLast(f, Num<3>(20));
+          F12 fun_12 = func::applyLast(f, Num<3>(20));               // close the *last* argument of a function
           res = fun_12 (_1_,_2_).o_;
           ASSERT (23 == res);
           
-          fun_12 = func::applyLast(func123, Num<3>(21));
+          fun_12 = func::applyLast(func123, Num<3>(21));             // alternatively use a function object
           res = fun_12 (_1_,_2_).o_;
           ASSERT (24 == res);
           
+          Sig123 *fP = &f;                                           // a function pointer works too 
+          fun_12 = func::applyLast( fP, Num<3>(22));
+          res = fun_12 (_1_,_2_).o_;
+          ASSERT (25 == res);
+                                                                     // cover more cases....
+          
+          ASSERT (1         == (func::applyLast (fun11<1>        , _1_) ( )              ).o_);
+          ASSERT (1+3       == (func::applyLast (fun12<1,3>      , _3_) (_1_)            ).o_);
+          ASSERT (1+3+5     == (func::applyLast (fun13<1,3,5>    , _5_) (_1_,_3_)        ).o_);
+          ASSERT (1+3+5+7   == (func::applyLast (fun14<1,3,5,7>  , _7_) (_1_,_3_,_5_)    ).o_);
+          ASSERT (1+3+5+7+9 == (func::applyLast (fun15<1,3,5,7,9>, _9_) (_1_,_3_,_5_,_7_)).o_);
+          
+          ASSERT (9+8+7+6+5 == (func::applyFirst(fun15<9,8,7,6,5>, _9_) (_8_,_7_,_6_,_5_)).o_);
+          ASSERT (  8+7+6+5 == (func::applyFirst(  fun14<8,7,6,5>, _8_)     (_7_,_6_,_5_)).o_);
+          ASSERT (    7+6+5 == (func::applyFirst(    fun13<7,6,5>, _7_)         (_6_,_5_)).o_);
+          ASSERT (      6+5 == (func::applyFirst(      fun12<6,5>, _6_)             (_5_)).o_);
+          ASSERT (        5 == (func::applyFirst(        fun11<5>, _5_)               ( )).o_);
         }
       
       

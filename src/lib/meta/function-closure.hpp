@@ -72,6 +72,12 @@ namespace typelist{
         typedef typename FunctionSignature<function<SIG> >::Args Args;
       };
     template<typename SIG>
+    struct _Fun<SIG*>
+      {
+        typedef typename FunctionSignature<function<SIG> >::Ret Ret;
+        typedef typename FunctionSignature<function<SIG> >::Args Args;
+      };
+    template<typename SIG>
     struct _Fun<function<SIG> >
       {
         typedef typename FunctionSignature<function<SIG> >::Ret Ret;
