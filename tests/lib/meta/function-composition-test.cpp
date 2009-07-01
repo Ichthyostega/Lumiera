@@ -261,7 +261,7 @@ namespace test {
           fun_23 = func::applyFirst (func123, Num<1>(19));
           res = fun_23 (_2_,_3_).o_;
           ASSERT (24 == res);
-#if false                                                //////////////TODO silly bug in the Split template!
+          
           typedef function<Num<1>(Num<1>, Num<2>)> F12;
           F12 fun_12 = func::applyLast(f, Num<3>(20));
           res = fun_12 (_1_,_2_).o_;
@@ -270,7 +270,7 @@ namespace test {
           fun_12 = func::applyLast(func123, Num<3>(21));
           res = fun_12 (_1_,_2_).o_;
           ASSERT (24 == res);
-#endif          
+          
         }
       
       

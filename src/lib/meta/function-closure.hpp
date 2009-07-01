@@ -24,8 +24,17 @@
 /** @file function-closure.hpp
  ** Partial function application and building a complete function closure.
  ** This is a small addendum to (and thin wrapper for) tr1/functional, supporting
- ** the case when a function should be closed over (all) arguments, where especially
- ** the parameter values to close on are provided as a tuple. 
+ ** the case when a function should be closed over (partially or all) arguments,
+ ** where especially the parameter values to close on are provided as a tuple. 
+ ** 
+ ** Because we have to deal with arbitrary functions and arbitrary parameter types,
+ ** we need a lot of repetitive code to "catch" functions from zero to nine arguments.
+ ** At the bottom of this header, you'll find a function-style interface, which
+ ** wraps up all these technicalities.
+ ** 
+ ** @todo the implementation is able to handle partial application with N arguments,
+ **       but currently we need just one argument, thus only this case was wrapped
+ **       up into a convenient functions func::applyFirst and func::applyLast  
  ** 
  ** @see control::CommandDef usage example
  ** @see function.hpp
@@ -363,23 +372,29 @@ namespace typelist{
       };
     
     
+    
+    
+    
     /* ===== Helpers for partial function application ===== */
     
     using std::tr1::_Placeholder;     // what is the "official" way to import them?
     
+    
+    /**
+     *  Build a sequence of tr1 function argument placeholder types.
+     *  For each of the elements of the provided reference sequence,
+     *  a Placeholder is added, numbers counting up starting with 1 (!)
+     */
     template<typename TYPES, uint i=0>
     class PlaceholderTuple
       {
-//        typedef typename Tuple<TYPES>::HeadType HeadType;
-//        typedef typename Tuple<TYPES>::ArgList  TypeList;
-//        typedef typename Tuple<TYPES>::Tail::ArgList TailList;
         typedef typename Tuple<TYPES>::Type     TypeSeq;
         typedef typename Tuple<TYPES>::TailType TailSeq;
         
         typedef typename PlaceholderTuple<TailSeq, i+1>::PlaceholderSeq  TailPlaceholderSeq;
         
       public:
-        typedef typename Prepend<_Placeholder<i>, TailPlaceholderSeq>::Seq PlaceholderSeq;
+        typedef typename Prepend<_Placeholder<i+1>, TailPlaceholderSeq>::Seq PlaceholderSeq;
         typedef Tuple<PlaceholderSeq> Type;
         
       };
@@ -397,11 +412,11 @@ namespace typelist{
     
     
     
-    
-    
   } // (END) impl-namespace (func)
   
   
+  
+  /* ======= core operations: closures and partial application ========= */
   
   /**
    * Closure-creating template.
@@ -434,6 +449,7 @@ namespace typelist{
     };
   
   
+  
   /**
    * Partial function application
    * Takes a function and a value tuple,
@@ -447,21 +463,27 @@ namespace typelist{
     {
       typedef typename func::_Fun<SIG>::Args Args;
       typedef typename func::_Fun<SIG>::Ret  Ret;
-      
-      enum { ARG_CNT = count<typename Args::List>::value
-           , VAL_CNT = count<typename VAL::List>::value
-           , ROFFSET = (VAL_CNT < ARG_CNT)? ARG_CNT-VAL_CNT : 0
-           };
-      
-      typedef typename func::PlaceholderTuple<Args>::PlaceholderSeq::List Placeholders;
       typedef typename Args::List ArgsList;
       typedef typename VAL::List ValList;
       
-      typedef typename Splice<Placeholders, ValList>::List           LeftReplaced;
-      typedef typename Splice<Placeholders, ValList, ROFFSET>::List  RightReplaced;
+      enum { ARG_CNT = count<ArgsList>::value
+           , VAL_CNT = count<ValList> ::value
+           , ROFFSET = (VAL_CNT < ARG_CNT)? ARG_CNT-VAL_CNT : 0
+           };
       
+      
+      // create list of the *remaining* arguments, after applying the ValList
       typedef typename Splice<ArgsList, ValList>::Back           LeftReduced;
       typedef typename Splice<ArgsList, ValList, ROFFSET>::Front RightReduced;
+      
+      // build a list, where each of the *remaining* arguments is replaced by a placeholder marker
+      typedef typename func::PlaceholderTuple<LeftReduced>::PlaceholderSeq::List  LeftPlaceholders;
+      typedef typename func::PlaceholderTuple<RightReduced>::PlaceholderSeq::List RightPlaceholders;
+      
+      // ... and splice these placeholders on top of the original argument type list,
+      // thus retaining the types to be closed, but setting a placeholder for each remaining argument
+      typedef typename Splice<ArgsList, LeftPlaceholders, VAL_CNT>::List LeftReplaced;
+      typedef typename Splice<ArgsList, RightPlaceholders, 0     >::List RightReplaced;
       
       typedef Tuple<LeftReplaced>  TupleL;
       typedef Tuple<RightReplaced> TupleR;
@@ -469,6 +491,10 @@ namespace typelist{
       typedef typename Tuple<LeftReduced>::Type  ArgsL;
       typedef typename Tuple<RightReduced>::Type ArgsR;
       
+      // create a "builder" helper, which accepts exactly the value tuple elements
+      // and puts them at the right location, while default-constructing the remaining
+      // (=placeholder)-arguments. Using this builder helper, we can finally set up
+      // the argument tuples (Left/RightReplacedArgs) used for the tr1::bind call
       typedef tuple::BuildTuple<LeftReplaced, ValList>           BuildL;
       typedef tuple::BuildTuple<RightReplaced, ValList, ROFFSET> BuildR;
       
@@ -497,7 +523,8 @@ namespace typelist{
             : TupleR ( BuildR::create(arg))
             { }
         };
-        
+      
+      
       /** do a partial function application, closing the first arguments
        *  f(a,b,c)->res  +  (a,b)  yields  f(c)->res
        *  
