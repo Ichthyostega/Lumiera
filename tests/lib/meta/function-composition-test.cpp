@@ -68,7 +68,7 @@ namespace test {
         Num<9> _9_;                     
         
         /** "Function-1" will be used at the front side, accepting a tuple of values */
-        template<char i>
+        template<uint i>
         Num<i> 
         fun11 ( Num<i>   val1
               )
@@ -76,7 +76,7 @@ namespace test {
             return val1;
           }
         
-        template<char i, char ii>
+        template<uint i, uint ii>
         Num<i> 
         fun12 ( Num<i>   val1
               , Num<ii>  val2
@@ -86,7 +86,7 @@ namespace test {
             return val1;
           }
         
-        template<char i, char ii, char iii>
+        template<uint i, uint ii, uint iii>
         Num<i> 
         fun13 ( Num<i>   val1
               , Num<ii>  val2
@@ -97,7 +97,7 @@ namespace test {
             return val1;
           }
         
-        template<char i, char ii, char iii, char iv>
+        template<uint i, uint ii, uint iii, uint iv>
         Num<i> 
         fun14 ( Num<i>   val1
               , Num<ii>  val2
@@ -109,7 +109,7 @@ namespace test {
             return val1;
           }
         
-        template<char i, char ii, char iii, char iv, char v>
+        template<uint i, uint ii, uint iii, uint iv, uint v>
         Num<i> 
         fun15 ( Num<i>   val1
               , Num<ii>  val2
@@ -306,27 +306,29 @@ namespace test {
       
       
       
+      
       void
       check_functionalComposition ()
         {
+          typedef int Sig2(Num<1>);
+          typedef Num<1> Sig11(Num<1>);
           typedef Num<1> Sig12(Num<1>,Num<2>);
-          typedef int SigF21(Num<1>);
+          typedef Num<1> Sig13(Num<1>,Num<2>,Num<3>);
+          typedef Num<1> Sig14(Num<1>,Num<2>,Num<3>,Num<4>);
+          typedef Num<1> Sig15(Num<1>,Num<2>,Num<3>,Num<4>,Num<5>);
           
-          Sig12  &f1 = fun12<1,2>;
-          SigF21 &f2 = fun2<Num<1> >;
+          Sig2 & ff = fun2< Num<1> >;
+          Sig11& f1 = fun11<1>;
+          Sig12& f2 = fun12<1,2>;
+          Sig13& f3 = fun13<1,2,3>;
+          Sig14& f4 = fun14<1,2,3,4>;
+          Sig15& f5 = fun15<1,2,3,4,5>;
           
-          typedef function<int(Num<1>,Num<2>)> Chained;
-          
-          Chained funCh = func::chained (f1, f2 ); 
-          ASSERT (1+2       == funCh (_1_,_2_) );
-          
-#if false          
-          ASSERT (1         == func::chain(fun11<1>        , fun2) (_1_)                 );
-          ASSERT (1+2       == func::chain(fun12<1,2>      , fun2<Num<1> > ) (_1_,_2_)             );
-          ASSERT (1+2+3     == func::chain(fun13<1,2,3>    , fun2) (_1_,_2_,_3_)         );
-          ASSERT (1+2+3+4   == func::chain(fun14<1,2,3,4>  , fun2) (_1_,_2_,_3_,_4_)     );
-          ASSERT (1+2+3+4+5 == func::chain(fun15<1,2,3,4,5>, fun2) (_1_,_2_,_3_,_4_,_5_) );
-#endif          
+          ASSERT (1         == func::chained(f1, ff) (_1_)                 );
+          ASSERT (1+2       == func::chained(f2, ff) (_1_,_2_)             );
+          ASSERT (1+2+3     == func::chained(f3, ff) (_1_,_2_,_3_)         );
+          ASSERT (1+2+3+4   == func::chained(f4, ff) (_1_,_2_,_3_,_4_)     );
+          ASSERT (1+2+3+4+5 == func::chained(f5, ff) (_1_,_2_,_3_,_4_,_5_) );
         }
       
     };

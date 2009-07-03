@@ -57,7 +57,9 @@ namespace lumiera {
 namespace typelist{
 
   using std::tr1::function;
-  using std::tr1::bind;
+//using std::tr1::bind;
+//using std::tr1::placeholders::_1;
+
   
   
   
@@ -381,6 +383,7 @@ namespace typelist{
     
     
     
+    
     /* ===== Helpers for partial function application ===== */
     
     using std::tr1::_Placeholder;     // what is the "official" way to import them?
@@ -564,6 +567,82 @@ namespace typelist{
   
     
   
+  namespace _cmp {
+    using std::tr1::bind;
+    using std::tr1::placeholders::_1;
+    using std::tr1::placeholders::_2;
+    using std::tr1::placeholders::_3;
+    using std::tr1::placeholders::_4;
+    using std::tr1::placeholders::_5;
+    using std::tr1::placeholders::_6;
+    using std::tr1::placeholders::_7;
+    using std::tr1::placeholders::_8;
+    using std::tr1::placeholders::_9;
+    
+    template<typename RES, typename F1, typename F2, uint n>
+    struct BuildComposed;
+    
+    template<typename RES, typename F1, typename F2>
+    struct BuildComposed<RES,F1,F2, 0 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct BuildComposed<RES,F1,F2, 1 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct BuildComposed<RES,F1,F2, 2 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct BuildComposed<RES,F1,F2, 3 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct BuildComposed<RES,F1,F2, 4 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct BuildComposed<RES,F1,F2, 5 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct BuildComposed<RES,F1,F2, 6 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5,_6)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct BuildComposed<RES,F1,F2, 7 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5,_6,_7)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct BuildComposed<RES,F1,F2, 8 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5,_6,_7,_8)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct BuildComposed<RES,F1,F2, 9 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5,_6,_7,_8,_9)); }
+      };
+  
+  }
   
   /**
    * Functional composition. Create a functor, which
@@ -579,32 +658,17 @@ namespace typelist{
       
       typedef Types<Ret1> ArgsF2;
       typedef typename FunctionTypedef<RET, ArgsF2>::Sig SigF2;
-      
       typedef typename FunctionTypedef<RET, Args>::Sig ChainedSig;
-      typedef function<ChainedSig> ChainedFunc;
       
-      typedef typename func::PlaceholderTuple<Args>::PlaceholderSeq PlaceholderSeq;
-      typedef Tuple<PlaceholderSeq> Placeholders;
       
       enum { ARG_CNT = count<typename Args::List>::value };
       
-      struct ComposedFunc
-        : ChainedFunc
-        {
-          template<class TUP>
-          ComposedFunc (SIG1& f1, SigF2& f2, TUP& args)
-            : ChainedFunc (std::tr1::bind (f2 ,
-                                           func::Apply<ARG_CNT>::template bind<function<SIG1> > (f1, args)
-                                          ))
-            { }
-        };
       
     public:
-      static ChainedFunc
+      static function<ChainedSig>
       chain (SIG1& f1, SigF2& f2)
         {
-          Placeholders args;
-          return ComposedFunc (f1,f2,args);
+          return _cmp::BuildComposed<ChainedSig,SIG1,SigF2, ARG_CNT>::func (f1,f2);
         }
       
     };
