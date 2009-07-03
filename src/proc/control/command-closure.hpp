@@ -67,7 +67,7 @@ namespace control {
   using lumiera::typelist::FunctionSignature;
   using lumiera::typelist::Tuple;
   using lumiera::typelist::BuildTupleAccessor;
-  using lumiera::typelist::TupleApplicator;
+  using lumiera::typelist::func::TupleApplicator;
   using lumiera::typelist::FunErasure;
   using lumiera::typelist::StoreFunction;
   

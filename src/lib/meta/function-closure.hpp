@@ -25,7 +25,8 @@
  ** Partial function application and building a complete function closure.
  ** This is a small addendum to (and thin wrapper for) tr1/functional, supporting
  ** the case when a function should be closed over (partially or all) arguments,
- ** where especially the parameter values to close on are provided as a tuple. 
+ ** where especially the parameter values to close on are provided as a tuple.
+ ** Additionally, we allow for composing (chaining) of two functions.
  ** 
  ** Because we have to deal with arbitrary functions and arbitrary parameter types,
  ** we need a lot of repetitive code to "catch" functions from zero to nine arguments.
@@ -55,15 +56,14 @@
 
 namespace lumiera {
 namespace typelist{
-
+namespace func    {
+  
   using std::tr1::function;
-//using std::tr1::bind;
-//using std::tr1::placeholders::_1;
-
   
   
   
-  namespace func { ///< helpers for binding and applying a function to an argument tuple 
+  
+  namespace { // helpers for binding and applying a function to an argument tuple
     
     using tuple::element;
     
@@ -96,7 +96,7 @@ namespace typelist{
     /**
      * this Helper with repetitive specialisations for up to nine arguments
      * is used either to apply a function to arguments given as a tuple, or
-     * to create the actual closure (functor) over all function arguments. 
+     * to create the actual closure (functor) over all function arguments.
      */
     template<uint n>
     struct Apply;
@@ -419,9 +419,7 @@ namespace typelist{
       };
     
     
-    
-    
-  } // (END) impl-namespace (func)
+  } // (END) impl-namespace
   
   
   
@@ -450,229 +448,12 @@ namespace typelist{
         : params_(args)
         { }
       
-      BoundFunc bind (SIG& f)                 { return func::Apply<ARG_CNT>::template bind<BoundFunc> (f, params_); }
-      BoundFunc bind (function<SIG> const& f) { return func::Apply<ARG_CNT>::template bind<BoundFunc> (f, params_); }
+      BoundFunc bind (SIG& f)                 { return Apply<ARG_CNT>::template bind<BoundFunc> (f, params_); }
+      BoundFunc bind (function<SIG> const& f) { return Apply<ARG_CNT>::template bind<BoundFunc> (f, params_); }
       
-      Ret operator() (SIG& f)                 { return func::Apply<ARG_CNT>::template invoke<Ret> (f, params_); }
-      Ret operator() (function<SIG>& f)       { return func::Apply<ARG_CNT>::template invoke<Ret> (f, params_); }
+      Ret operator() (SIG& f)                 { return Apply<ARG_CNT>::template invoke<Ret> (f, params_); }
+      Ret operator() (function<SIG>& f)       { return Apply<ARG_CNT>::template invoke<Ret> (f, params_); }
     };
-  
-  
-  
-  /**
-   * Partial function application
-   * Takes a function and a value tuple,
-   * using the latter to close function arguments 
-   * either from the front (left) or aligned to the end
-   * of the function argument list. Result is a "reduced" function,
-   * expecting only the remaining "un-closed" arguments at invocation.  
-   */
-  template<typename SIG, typename VAL>
-  class PApply
-    {
-      typedef typename func::_Fun<SIG>::Args Args;
-      typedef typename func::_Fun<SIG>::Ret  Ret;
-      typedef typename Args::List ArgsList;
-      typedef typename VAL::List ValList;
-      
-      enum { ARG_CNT = count<ArgsList>::value
-           , VAL_CNT = count<ValList> ::value
-           , ROFFSET = (VAL_CNT < ARG_CNT)? ARG_CNT-VAL_CNT : 0
-           };
-      
-      
-      // create list of the *remaining* arguments, after applying the ValList
-      typedef typename Splice<ArgsList, ValList>::Back           LeftReduced;
-      typedef typename Splice<ArgsList, ValList, ROFFSET>::Front RightReduced;
-      
-      // build a list, where each of the *remaining* arguments is replaced by a placeholder marker
-      typedef typename func::PlaceholderTuple<LeftReduced>::PlaceholderSeq::List  LeftPlaceholders;
-      typedef typename func::PlaceholderTuple<RightReduced>::PlaceholderSeq::List RightPlaceholders;
-      
-      // ... and splice these placeholders on top of the original argument type list,
-      // thus retaining the types to be closed, but setting a placeholder for each remaining argument
-      typedef typename Splice<ArgsList, LeftPlaceholders, VAL_CNT>::List LeftReplaced;
-      typedef typename Splice<ArgsList, RightPlaceholders, 0     >::List RightReplaced;
-      
-      typedef Tuple<LeftReplaced>  TupleL;
-      typedef Tuple<RightReplaced> TupleR;
-      
-      typedef typename Tuple<LeftReduced>::Type  ArgsL;
-      typedef typename Tuple<RightReduced>::Type ArgsR;
-      
-      // create a "builder" helper, which accepts exactly the value tuple elements
-      // and puts them at the right location, while default-constructing the remaining
-      // (=placeholder)-arguments. Using this builder helper, we can finally set up
-      // the argument tuples (Left/RightReplacedArgs) used for the tr1::bind call
-      typedef tuple::BuildTuple<LeftReplaced, ValList>           BuildL;
-      typedef tuple::BuildTuple<RightReplaced, ValList, ROFFSET> BuildR;
-      
-      
-    public:
-      typedef function<typename FunctionTypedef<Ret,ArgsL>::Sig> LeftReducedFunc;
-      typedef function<typename FunctionTypedef<Ret,ArgsR>::Sig> RightReducedFunc;
-      
-      
-      /** Contains the argument values, starting from left.
-       *  Any remaining positions are occupied by binding placeholders */
-      struct LeftReplacedArgs
-        : TupleL
-        {
-          LeftReplacedArgs (Tuple<VAL> const& arg)
-            : TupleL ( BuildL::create(arg))
-            { }
-        };
-      
-      /** Contains the argument values, aligned to the end of the function argument list.
-       *  Any remaining positions before are occupied by binding placeholders */
-      struct RightReplacedArgs
-        : TupleR
-        {
-          RightReplacedArgs (Tuple<VAL> const& arg)
-            : TupleR ( BuildR::create(arg))
-            { }
-        };
-      
-      
-      /** do a partial function application, closing the first arguments
-       *  f(a,b,c)->res  +  (a,b)  yields  f(c)->res
-       *  
-       *  @param f   function, function pointer or functor
-       *  @param arg value tuple, used to close function arguments starting from left
-       *  @return new function object, holding copies of the values and using them at the
-       *          closed arguments; on invocation, only the remaining arguments need to be supplied.
-       */
-      static LeftReducedFunc
-      bindFront (SIG& f, Tuple<VAL> const& arg)
-        {
-          LeftReplacedArgs params (arg);
-          return func::Apply<ARG_CNT>::template bind<LeftReducedFunc> (f, params.tupleCast());
-        }
-      
-      /** do a partial function application, closing the last arguments
-       *  f(a,b,c)->res  +  (b,c)  yields  f(a)->res
-       *  
-       *  @param f   function, function pointer or functor
-       *  @param arg value tuple, used to close function arguments starting from right
-       *  @return new function object, holding copies of the values and using them at the
-       *          closed arguments; on invocation, only the remaining arguments need to be supplied.
-       */
-      static RightReducedFunc
-      bindBack (SIG& f, Tuple<VAL> const& arg)
-        {
-          RightReplacedArgs params (arg);
-          return func::Apply<ARG_CNT>::template bind<RightReducedFunc> (f, params.tupleCast());
-        }
-    };
-  
-    
-  
-  namespace _cmp {
-    using std::tr1::bind;
-    using std::tr1::placeholders::_1;
-    using std::tr1::placeholders::_2;
-    using std::tr1::placeholders::_3;
-    using std::tr1::placeholders::_4;
-    using std::tr1::placeholders::_5;
-    using std::tr1::placeholders::_6;
-    using std::tr1::placeholders::_7;
-    using std::tr1::placeholders::_8;
-    using std::tr1::placeholders::_9;
-    
-    template<typename RES, typename F1, typename F2, uint n>
-    struct BuildComposed;
-    
-    template<typename RES, typename F1, typename F2>
-    struct BuildComposed<RES,F1,F2, 0 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct BuildComposed<RES,F1,F2, 1 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct BuildComposed<RES,F1,F2, 2 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct BuildComposed<RES,F1,F2, 3 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct BuildComposed<RES,F1,F2, 4 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct BuildComposed<RES,F1,F2, 5 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct BuildComposed<RES,F1,F2, 6 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5,_6)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct BuildComposed<RES,F1,F2, 7 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5,_6,_7)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct BuildComposed<RES,F1,F2, 8 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5,_6,_7,_8)); }
-      };
-    
-    template<typename RES, typename F1, typename F2>
-    struct BuildComposed<RES,F1,F2, 9 >
-      {
-        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5,_6,_7,_8,_9)); }
-      };
-  
-  }
-  
-  /**
-   * Functional composition. Create a functor, which
-   * on invocation will execute two functions chained,
-   * i.e. fed the result of invoking the first function
-   * as argument into the second function.  
-   */
-  template<typename SIG1, typename RET>
-  class FunctionComposition
-    {
-      typedef typename func::_Fun<SIG1>::Args Args;
-      typedef typename func::_Fun<SIG1>::Ret  Ret1;
-      
-      typedef Types<Ret1> ArgsF2;
-      typedef typename FunctionTypedef<RET, ArgsF2>::Sig SigF2;
-      typedef typename FunctionTypedef<RET, Args>::Sig ChainedSig;
-      
-      
-      enum { ARG_CNT = count<typename Args::List>::value };
-      
-      
-    public:
-      static function<ChainedSig>
-      chain (SIG1& f1, SigF2& f2)
-        {
-          return _cmp::BuildComposed<ChainedSig,SIG1,SigF2, ARG_CNT>::func (f1,f2);
-        }
-      
-    };
-
   
   
   
@@ -707,11 +488,212 @@ namespace typelist{
   
   
   
-  namespace func { // ...some convenience shortcuts
-    
-    
-    // helpers for specifying types in function declarations....
   
+  /**
+   * Partial function application
+   * Takes a function and a value tuple,
+   * using the latter to close function arguments 
+   * either from the front (left) or aligned to the end
+   * of the function argument list. Result is a "reduced" function,
+   * expecting only the remaining "un-closed" arguments at invocation.
+   */
+  template<typename SIG, typename VAL>
+  class PApply
+    {
+      typedef typename _Fun<SIG>::Args Args;
+      typedef typename _Fun<SIG>::Ret  Ret;
+      typedef typename Args::List ArgsList;
+      typedef typename VAL::List ValList;
+      
+      enum { ARG_CNT = count<ArgsList>::value
+           , VAL_CNT = count<ValList> ::value
+           , ROFFSET = (VAL_CNT < ARG_CNT)? ARG_CNT-VAL_CNT : 0
+           };
+      
+      
+      // create list of the *remaining* arguments, after applying the ValList
+      typedef typename Splice<ArgsList, ValList>::Back           LeftReduced;
+      typedef typename Splice<ArgsList, ValList, ROFFSET>::Front RightReduced;
+      
+      // build a list, where each of the *remaining* arguments is replaced by a placeholder marker
+      typedef typename func::PlaceholderTuple<LeftReduced>::PlaceholderSeq::List  LeftPlaceholders;
+      typedef typename func::PlaceholderTuple<RightReduced>::PlaceholderSeq::List RightPlaceholders;
+      
+      // ... and splice these placeholders on top of the original argument type list,
+      // thus retaining the types to be closed, but setting a placeholder for each remaining argument
+      typedef typename Splice<ArgsList, LeftPlaceholders, VAL_CNT>::List LeftReplaced;
+      typedef typename Splice<ArgsList, RightPlaceholders, 0     >::List RightReplaced;
+      
+      typedef typename Tuple<LeftReduced>::Type  ArgsL;
+      typedef typename Tuple<RightReduced>::Type ArgsR;
+      
+      // create a "builder" helper, which accepts exactly the value tuple elements
+      // and puts them at the right location, while default-constructing the remaining
+      // (=placeholder)-arguments. Using this builder helper, we can finally set up
+      // the argument tuples (Left/RightReplacedArgs) used for the tr1::bind call
+      typedef tuple::BuildTuple<LeftReplaced, ValList>           BuildL;
+      typedef tuple::BuildTuple<RightReplaced, ValList, ROFFSET> BuildR;
+      
+      /** Contains the argument values, starting from left.
+       *  Any remaining positions are occupied by binding placeholders */
+      typedef typename Tuple<LeftReplaced>::TupleType  LeftReplacedArgs;
+      
+      /** Contains the argument values, aligned to the end of the function argument list.
+       *  Any remaining positions before are occupied by binding placeholders */
+      typedef typename Tuple<RightReplaced>::TupleType RightReplacedArgs;
+      
+      
+    public:
+      typedef function<typename FunctionTypedef<Ret,ArgsL>::Sig> LeftReducedFunc;
+      typedef function<typename FunctionTypedef<Ret,ArgsR>::Sig> RightReducedFunc;
+      
+      
+      /** do a partial function application, closing the first arguments
+       *  f(a,b,c)->res  +  (a,b)  yields  f(c)->res
+       *  
+       *  @param f   function, function pointer or functor
+       *  @param arg value tuple, used to close function arguments starting from left
+       *  @return new function object, holding copies of the values and using them at the
+       *          closed arguments; on invocation, only the remaining arguments need to be supplied.
+       */
+      static LeftReducedFunc
+      bindFront (SIG& f, Tuple<VAL> const& arg)
+        {
+          LeftReplacedArgs params (BuildL::create(arg));
+          return func::Apply<ARG_CNT>::template bind<LeftReducedFunc> (f, params);
+        }
+      
+      /** do a partial function application, closing the last arguments
+       *  f(a,b,c)->res  +  (b,c)  yields  f(a)->res
+       *  
+       *  @param f   function, function pointer or functor
+       *  @param arg value tuple, used to close function arguments starting from right
+       *  @return new function object, holding copies of the values and using them at the
+       *          closed arguments; on invocation, only the remaining arguments need to be supplied.
+       */
+      static RightReducedFunc
+      bindBack (SIG& f, Tuple<VAL> const& arg)
+        {
+          RightReplacedArgs params (BuildR::create(arg));
+          return func::Apply<ARG_CNT>::template bind<RightReducedFunc> (f, params);
+        }
+    };
+  
+  
+  
+  
+  
+  
+  
+  namespace _composed { // repetitive impl.code for function composition
+    using std::tr1::bind;
+    using std::tr1::placeholders::_1;
+    using std::tr1::placeholders::_2;
+    using std::tr1::placeholders::_3;
+    using std::tr1::placeholders::_4;
+    using std::tr1::placeholders::_5;
+    using std::tr1::placeholders::_6;
+    using std::tr1::placeholders::_7;
+    using std::tr1::placeholders::_8;
+    using std::tr1::placeholders::_9;
+    
+    template<typename RES, typename F1, typename F2, uint n>
+    struct Build;
+    
+    template<typename RES, typename F1, typename F2>
+    struct Build<RES,F1,F2, 0 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct Build<RES,F1,F2, 1 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct Build<RES,F1,F2, 2 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct Build<RES,F1,F2, 3 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct Build<RES,F1,F2, 4 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct Build<RES,F1,F2, 5 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct Build<RES,F1,F2, 6 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5,_6)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct Build<RES,F1,F2, 7 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5,_6,_7)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct Build<RES,F1,F2, 8 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5,_6,_7,_8)); }
+      };
+    
+    template<typename RES, typename F1, typename F2>
+    struct Build<RES,F1,F2, 9 >
+      {
+        static function<RES> func(F1& f1, F2& f2) { return bind (f2, bind (f1,_1,_2,_3,_4,_5,_6,_7,_8,_9)); }
+      };
+  } // (End) impl namespace (_composed)
+  
+  
+  
+  /**
+   * Functional composition. Create a functor, which
+   * on invocation will execute two functions chained,
+   * i.e. fed the result of invoking the first function
+   * as argument into the second function.  
+   */
+  template<typename SIG1, typename RET>
+  class FunctionComposition
+    {
+      typedef typename func::_Fun<SIG1>::Args Args;
+      typedef typename func::_Fun<SIG1>::Ret  Ret1;
+      
+      typedef Types<Ret1> ArgsF2;
+      typedef typename FunctionTypedef<RET, ArgsF2>::Sig SigF2;
+      typedef typename FunctionTypedef<RET, Args>::Sig ChainedSig;
+      
+      enum { ARG_CNT = count<typename Args::List>::value };
+      
+      
+    public:
+      static function<ChainedSig>
+      chain (SIG1& f1, SigF2& f2)
+        {
+          return _composed::Build<ChainedSig,SIG1,SigF2, ARG_CNT>::func (f1,f2);
+        }
+    };
+  
+  
+  
+  namespace { // ...helpers for specifying types in function declarations....
+    
     template<typename RET, typename ARG>
     struct _Sig
       {
@@ -730,8 +712,8 @@ namespace typelist{
     template<typename SIG1, typename SIG2>
     struct _Chain
       {
-        typedef typename func::_Fun<SIG1>::Args Args;
-        typedef typename func::_Fun<SIG2>::Ret  Ret;
+        typedef typename _Fun<SIG1>::Args Args;
+        typedef typename _Fun<SIG2>::Ret  Ret;
         typedef typename FunctionTypedef<Ret, Args>::Sig Chained;
         typedef function<Chained> Function;
       };
@@ -758,87 +740,87 @@ namespace typelist{
         typedef function<Signature> Function;
       };
     
-    
-    
-    
-    /*  ========== function-style interface =============  */
-    
-    /** build a TupleApplicator, which embodies the given
-     *  argument tuple and can be used to apply various
-     *  functions to them.
-     */
-    template<typename ARG>
-    typename _Sig<void, ARG>::Applicator
-    tupleApplicator (Tuple<ARG>& args)
-    {
-      typedef typename _Sig<void,ARG>::Type Signature;
-      return TupleApplicator<Signature> (args);
-    }
-    
-    
-    /** apply the given function to the argument tuple */
-    template<typename SIG, typename ARG>
-    typename _Fun<SIG>::Ret
-    apply (SIG& f, Tuple<ARG>& args)
-    {
-      typedef typename _Fun<SIG>::Ret Ret;                //
-      typedef typename _Sig<Ret,ARG>::Type Signature;    // Note: deliberately re-building the Signature Type
-      return TupleApplicator<Signature> (args) (f);     //        in order to get better error messages here
-    }
-    
-    /** close the given function over all arguments,
-     *  using the values from the argument tuple.
-     *  @return a closure object, which can be 
-     *          invoked later to yield the
-     *          function result. */
-    template<typename SIG, typename ARG>
-    typename _Clo<SIG,ARG>::Type
-    closure (SIG& f, Tuple<ARG>& args)
-    {
-      typedef typename _Fun<SIG>::Ret Ret;
-      typedef typename _Sig<Ret,ARG>::Type Signature;
-      typedef typename _Clo<SIG,ARG>::Type Closure;
-      return Closure (f,args);
-    }
-    
-    
-    /** close the given function over the first argument */
-    template<typename SIG, typename ARG>
-    typename _PapS<SIG>::Function
-    applyFirst (SIG& f, ARG arg)
-    {
-      typedef typename _PapS<SIG>::Arg ArgType;
-      typedef Types<ArgType>           ArgTypeSeq;
-      typedef Tuple<ArgTypeSeq>        ArgTuple;
-      ArgTuple val(arg);
-      return PApply<SIG,ArgTypeSeq>::bindFront (f, val);
-    }
-    
-    /** close the given function over the last argument */
-    template<typename SIG, typename ARG>
-    typename _PapE<SIG>::Function
-    applyLast (SIG& f, ARG arg)
-    {
-      typedef typename _PapE<SIG>::Arg ArgType;
-      typedef Types<ArgType>           ArgTypeSeq;
-      typedef Tuple<ArgTypeSeq>        ArgTuple;
-      ArgTuple val(arg);
-      return PApply<SIG,ArgTypeSeq>::bindBack (f, val);
-    }
-    
-    
-    /** build a functor chaining the given functions */
-    template<typename SIG1, typename SIG2>
-    typename _Chain<SIG1,SIG2>::Function
-    chained (SIG1& f1, SIG2& f2)
-    {
-      typedef typename _Chain<SIG1,SIG2>::Ret Ret;
-      return FunctionComposition<SIG1,Ret>::chain (f1, f2);
-    }
-    
-  } // (END) namespace func
+  } // (End) argument type shortcuts
   
   
   
-}} // namespace lumiera::typelist
+  
+  /*  ========== function-style interface =============  */
+  
+  /** build a TupleApplicator, which embodies the given
+   *  argument tuple and can be used to apply various
+   *  functions to them.
+   */
+  template<typename ARG>
+  typename _Sig<void, ARG>::Applicator
+  tupleApplicator (Tuple<ARG>& args)
+  {
+    typedef typename _Sig<void,ARG>::Type Signature;
+    return TupleApplicator<Signature> (args);
+  }
+  
+  
+  /** apply the given function to the argument tuple */
+  template<typename SIG, typename ARG>
+  typename _Fun<SIG>::Ret
+  apply (SIG& f, Tuple<ARG>& args)
+  {
+    typedef typename _Fun<SIG>::Ret Ret;                //
+    typedef typename _Sig<Ret,ARG>::Type Signature;    // Note: deliberately re-building the Signature Type
+    return TupleApplicator<Signature> (args) (f);     //        in order to get better error messages here
+  }
+  
+  /** close the given function over all arguments,
+   *  using the values from the argument tuple.
+   *  @return a closure object, which can be 
+   *          invoked later to yield the
+   *          function result. */
+  template<typename SIG, typename ARG>
+  typename _Clo<SIG,ARG>::Type
+  closure (SIG& f, Tuple<ARG>& args)
+  {
+    typedef typename _Fun<SIG>::Ret Ret;
+    typedef typename _Sig<Ret,ARG>::Type Signature;
+    typedef typename _Clo<SIG,ARG>::Type Closure;
+    return Closure (f,args);
+  }
+  
+  
+  /** close the given function over the first argument */
+  template<typename SIG, typename ARG>
+  typename _PapS<SIG>::Function
+  applyFirst (SIG& f, ARG arg)
+  {
+    typedef typename _PapS<SIG>::Arg ArgType;
+    typedef Types<ArgType>           ArgTypeSeq;
+    typedef Tuple<ArgTypeSeq>        ArgTuple;
+    ArgTuple val(arg);
+    return PApply<SIG,ArgTypeSeq>::bindFront (f, val);
+  }
+  
+  /** close the given function over the last argument */
+  template<typename SIG, typename ARG>
+  typename _PapE<SIG>::Function
+  applyLast (SIG& f, ARG arg)
+  {
+    typedef typename _PapE<SIG>::Arg ArgType;
+    typedef Types<ArgType>           ArgTypeSeq;
+    typedef Tuple<ArgTypeSeq>        ArgTuple;
+    ArgTuple val(arg);
+    return PApply<SIG,ArgTypeSeq>::bindBack (f, val);
+  }
+  
+  
+  /** build a functor chaining the given functions */
+  template<typename SIG1, typename SIG2>
+  typename _Chain<SIG1,SIG2>::Function
+  chained (SIG1& f1, SIG2& f2)
+  {
+    typedef typename _Chain<SIG1,SIG2>::Ret Ret;
+    return FunctionComposition<SIG1,Ret>::chain (f1, f2);
+  }
+  
+  
+  
+}}} // namespace lumiera::typelist::func
 #endif

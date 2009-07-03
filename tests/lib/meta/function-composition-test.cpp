@@ -28,34 +28,18 @@
 #include "lib/meta/function-closure.hpp"
 #include "meta/typelist-diagnostics.hpp"
 
-#include <iostream>
-
-using ::test::Test;
-using std::string;
-using std::cout;
-using std::endl;
-
 
 namespace lumiera {
 namespace typelist{
-namespace test {
+namespace test    {
   
+  using ::test::Test;
   using func::applyFirst;
   using func::applyLast;
+  using func::PApply;
   
   
       namespace { // test functions
-        
-        
-        
-        typedef Types< Num<1>  ////////////////////////TODO kill kill kill
-                     , Num<2>
-                     , Num<3>
-                     >::List List1;
-        typedef Types< Num<5>
-                     , Num<6>
-                     , Num<7>
-                     >::List List2;
         
         Num<1> _1_;                     
         Num<2> _2_;                     

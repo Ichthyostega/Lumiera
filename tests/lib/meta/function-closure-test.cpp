@@ -54,7 +54,7 @@ using std::endl;
 
 namespace lumiera {
 namespace typelist{
-namespace test {
+namespace test    {
       
       
       namespace { // test data
@@ -87,12 +87,17 @@ namespace test {
         int fun3 (int i1, int i2, int i3) { return i1+i2+i3; }
         
       } // (End) test data
-      
-      
-      
-      
-      
-      
+  
+  
+  
+  
+  using func::Apply;
+  using func::TupleApplicator;
+  using func::FunctionClosure;
+  using func::closure;
+  using func::apply;
+  
+  
   /*************************************************************************
    * @test building a function closure for a given function or functor,
    *       while arguments are passed in as tuple
@@ -166,20 +171,20 @@ namespace test {
           DUMPVAL (tup2);
           DUMPVAL (tup3);
           
-          ASSERT (-1       == func::Apply<0>::invoke<int> (fun0, tup0) );
-          ASSERT (11       == func::Apply<1>::invoke<int> (fun1, tup1) );
-          ASSERT (11+12    == func::Apply<2>::invoke<int> (fun2, tup2) );
-          ASSERT (11+12+13 == func::Apply<3>::invoke<int> (fun3, tup3) );
+          ASSERT (-1       == Apply<0>::invoke<int> (fun0, tup0) );
+          ASSERT (11       == Apply<1>::invoke<int> (fun1, tup1) );
+          ASSERT (11+12    == Apply<2>::invoke<int> (fun2, tup2) );
+          ASSERT (11+12+13 == Apply<3>::invoke<int> (fun3, tup3) );
           
           ASSERT (-1       == TupleApplicator<int()>            (tup0) (fun0) );
           ASSERT (11       == TupleApplicator<int(int)>         (tup1) (fun1) );
           ASSERT (11+12    == TupleApplicator<int(int,int)>     (tup2) (fun2) );
           ASSERT (11+12+13 == TupleApplicator<int(int,int,int)> (tup3) (fun3) );
           
-          ASSERT (-1       == func::apply(fun0, tup0) );
-          ASSERT (11       == func::apply(fun1, tup1) );
-          ASSERT (11+12    == func::apply(fun2, tup2) );
-          ASSERT (11+12+13 == func::apply(fun3, tup3) );
+          ASSERT (-1       == apply(fun0, tup0) );
+          ASSERT (11       == apply(fun1, tup1) );
+          ASSERT (11+12    == apply(fun2, tup2) );
+          ASSERT (11+12+13 == apply(fun3, tup3) );
         
         }
       
@@ -196,20 +201,20 @@ namespace test {
           function<int(int,int)>     functor2 (fun2);
           function<int(int,int,int)> functor3 (fun3);
           
-          ASSERT (-1       == func::Apply<0>::invoke<int> (functor0, tup0) );
-          ASSERT (11       == func::Apply<1>::invoke<int> (functor1, tup1) );
-          ASSERT (11+12    == func::Apply<2>::invoke<int> (functor2, tup2) );
-          ASSERT (11+12+13 == func::Apply<3>::invoke<int> (functor3, tup3) );
+          ASSERT (-1       == Apply<0>::invoke<int> (functor0, tup0) );
+          ASSERT (11       == Apply<1>::invoke<int> (functor1, tup1) );
+          ASSERT (11+12    == Apply<2>::invoke<int> (functor2, tup2) );
+          ASSERT (11+12+13 == Apply<3>::invoke<int> (functor3, tup3) );
           
           ASSERT (-1       == TupleApplicator<int()>            (tup0) (functor0) );
           ASSERT (11       == TupleApplicator<int(int)>         (tup1) (functor1) );
           ASSERT (11+12    == TupleApplicator<int(int,int)>     (tup2) (functor2) );
           ASSERT (11+12+13 == TupleApplicator<int(int,int,int)> (tup3) (functor3) );
           
-          ASSERT (-1       == func::apply(functor0, tup0) );
-          ASSERT (11       == func::apply(functor1, tup1) );
-          ASSERT (11+12    == func::apply(functor2, tup2) );
-          ASSERT (11+12+13 == func::apply(functor3, tup3) );
+          ASSERT (-1       == apply(functor0, tup0) );
+          ASSERT (11       == apply(functor1, tup1) );
+          ASSERT (11+12    == apply(functor2, tup2) );
+          ASSERT (11+12+13 == apply(functor3, tup3) );
           
         }
       
@@ -226,10 +231,10 @@ namespace test {
           
           typedef function<int()> BoundFun;
           
-          BoundFun functor0 = func::Apply<0>::bind<BoundFun> (fun0, tup0);
-          BoundFun functor1 = func::Apply<1>::bind<BoundFun> (fun1, tup1);
-          BoundFun functor2 = func::Apply<2>::bind<BoundFun> (fun2, tup3);
-          BoundFun functor3 = func::Apply<3>::bind<BoundFun> (fun3, tup3);
+          BoundFun functor0 = Apply<0>::bind<BoundFun> (fun0, tup0);
+          BoundFun functor1 = Apply<1>::bind<BoundFun> (fun1, tup1);
+          BoundFun functor2 = Apply<2>::bind<BoundFun> (fun2, tup3);
+          BoundFun functor3 = Apply<3>::bind<BoundFun> (fun3, tup3);
           
           ASSERT (-1       == functor0() );
           ASSERT (11       == functor1() );
@@ -263,10 +268,10 @@ namespace test {
           
           typedef function<int()> BoundFun;
           
-          BoundFun functor0 = func::Apply<0>::bind<BoundFun> (unbound_functor0, tup0);
-          BoundFun functor1 = func::Apply<1>::bind<BoundFun> (unbound_functor1, tup1);
-          BoundFun functor2 = func::Apply<2>::bind<BoundFun> (unbound_functor2, tup3);
-          BoundFun functor3 = func::Apply<3>::bind<BoundFun> (unbound_functor3, tup3);
+          BoundFun functor0 = Apply<0>::bind<BoundFun> (unbound_functor0, tup0);
+          BoundFun functor1 = Apply<1>::bind<BoundFun> (unbound_functor1, tup1);
+          BoundFun functor2 = Apply<2>::bind<BoundFun> (unbound_functor2, tup3);
+          BoundFun functor3 = Apply<3>::bind<BoundFun> (unbound_functor3, tup3);
           
           ASSERT (-1       == functor0() );
           ASSERT (11       == functor1() );
@@ -319,15 +324,15 @@ namespace test {
           ASSERT (11+12    == clo2() );
           ASSERT (11+12+13 == clo3() );
           
-          ASSERT (-1       == func::closure(fun0,tup0) () );
-          ASSERT (11       == func::closure(fun1,tup1) () );
-          ASSERT (11+12    == func::closure(fun2,tup2) () );
-          ASSERT (11+12+13 == func::closure(fun3,tup3) () );
+          ASSERT (-1       == closure(fun0,tup0) () );
+          ASSERT (11       == closure(fun1,tup1) () );
+          ASSERT (11+12    == closure(fun2,tup2) () );
+          ASSERT (11+12+13 == closure(fun3,tup3) () );
           
-          ASSERT (-1       == func::closure(unbound_functor0,tup0) () );
-          ASSERT (11       == func::closure(unbound_functor1,tup1) () );
-          ASSERT (11+12    == func::closure(unbound_functor2,tup2) () );
-          ASSERT (11+12+13 == func::closure(unbound_functor3,tup3) () );
+          ASSERT (-1       == closure(unbound_functor0,tup0) () );
+          ASSERT (11       == closure(unbound_functor1,tup1) () );
+          ASSERT (11+12    == closure(unbound_functor2,tup2) () );
+          ASSERT (11+12+13 == closure(unbound_functor3,tup3) () );
           
           
           // finally combine all techniques....

@@ -234,7 +234,7 @@ out: dtor ~TargetObj\(12\) successful
 END
 
 
-TEST "closing function over its arguments" FunctionClosure_test <<END
+TEST "functional closure" FunctionClosure_test <<END
 out: List1	:-<1>-<2>-<3>-
 out: List2	:-<5>-<6>-<7>-
 out: Args	:-<5>-<9>-
