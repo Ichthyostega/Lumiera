@@ -1,5 +1,5 @@
 /*
-  SCOPEDHOLDER.hpp  -  general purpose wrapper for dealing with ownership problems 
+  SCOPED-HOLDER.hpp  -  general purpose wrapper for dealing with ownership problems 
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,7 +20,7 @@
  
 */
 
-/** @file scopedholder.hpp
+/** @file scoped-holder.hpp
  ** Some wrappers for coping with ownership problems.
  ** Working with collections of objects, especially in conjunction with
  ** polymorphism, can be challenging when we are bound to care for lifecycle
@@ -46,7 +46,7 @@
  ** holder instances. This is the purpose of the \c transfer_control
  ** friend function.  
  ** 
- ** @see scopedholdertest.cpp
+ ** @see scoped-holder-test.cpp
  ** @see scopedholdertransfer.hpp use in std::vector
  ** @see AllocationCluster usage example
  ** @see scoped-ptrvect.hpp simple pointer-holding collection
@@ -246,7 +246,7 @@ namespace lib {
           }
       }
     };
-
+  
   
   
   

@@ -25,7 +25,7 @@
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
-#include "lib/scopedholder.hpp"
+#include "lib/scoped-holder.hpp"
 #include "lib/scopedholdertransfer.hpp"
 #include "testdummy.hpp"
 

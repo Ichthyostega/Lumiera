@@ -35,7 +35,7 @@
  ** - TODO: retro-fit with refarray interface (--> builder branch)
  ** 
  ** @see scoped-ptrvect-test.cpp
- ** @see scopedholder.hpp
+ ** @see scoped-holder.hpp
  ** @see gui::DisplayService usage example
  */
 
