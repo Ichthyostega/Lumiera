@@ -64,6 +64,7 @@ namespace lumiera {
 namespace typelist{
   
   using std::tr1::function;
+  using util::unConst;
   
   
   
@@ -100,8 +101,6 @@ namespace typelist{
    * Using this policy allows to store arbitrary complex functor objects
    * embedded within a neutral container and retrieving them later type-safe.
    * The price to pay is vtable access and heap storage of function arguments.
-   * 
-   * @note the bool conversion and #isValid are highly implementation dependent
    */
   class StoreFunction
     : public lib::BoolCheckable<StoreFunction>
@@ -112,6 +111,7 @@ namespace typelist{
           enum { SIZE = sizeof(function<void(void)>) };
           char storage_[SIZE];
           virtual ~Holder() {}
+          virtual bool isValid()  const { return false; }
         };
       
       /** embedding the concrete functor object */
@@ -128,6 +128,12 @@ namespace typelist{
           ~FunctionHolder()
             {
               get().~Functor();
+            }
+          bool
+          isValid()  const
+            {
+              const Functor& func (unConst(this)->get());
+              return bool(func);
             }
           Functor&
           get()
@@ -161,9 +167,9 @@ namespace typelist{
         }
       
       bool
-      isValid()  const   ///< @note implementation dependent!!
+      isValid()  const
         {
-          return reinterpret_cast<void*> (holder_.storage_[0]);
+          return holder_.isValid();
         }
     };
   

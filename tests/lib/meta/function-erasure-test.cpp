@@ -47,9 +47,9 @@ namespace test {
   typedef FunErasure<StoreUncheckedFunPtr> Evoid;
   
   template<class HOL>
-  struct BuildEmptyHolder       { typedef long (*Type)(int,char); };
+  struct BuildEmptyFunctor       { typedef long (*Type)(int,char); };
   template<>
-  struct BuildEmptyHolder<Efun> { typedef function<long(int,char)> Type; };
+  struct BuildEmptyFunctor<Efun> { typedef function<long(int,char)> Type; };
   
   
   /***********************************************************************
@@ -210,8 +210,9 @@ namespace test {
         {
           // fabricate an unbound functor...
           
-          typedef typename BuildEmptyHolder<HOL>::Type EmptyHolder;
-          EmptyHolder emptyHolder;
+          typedef typename BuildEmptyFunctor<HOL>::Type NoFunc;
+          NoFunc noFunction;
+          HOL emptyHolder (noFunction);
           ASSERT (!emptyHolder);
           ASSERT ( h1 );
           ASSERT ( h2 );
