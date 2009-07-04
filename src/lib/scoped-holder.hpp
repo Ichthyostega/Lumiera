@@ -53,8 +53,8 @@
  */
 
 
-#ifndef LIB_SCOPEDHOLDER_H
-#define LIB_SCOPEDHOLDER_H
+#ifndef LIB_SCOPED_HOLDER_H
+#define LIB_SCOPED_HOLDER_H
 
 #include <boost/scoped_ptr.hpp>
 

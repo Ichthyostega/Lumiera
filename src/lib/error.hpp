@@ -121,6 +121,9 @@ namespace lumiera {
     LUMIERA_ERROR_DECLARE (EXTERNAL );    ///< failure in external service the application relies on
     LUMIERA_ERROR_DECLARE (ASSERTION);    ///< assertion failure
     
+    /* generic error situations */
+    LUMIERA_ERROR_DECLARE (WRONG_TYPE);   ///< runtime type mismatch 
+    
 /** Macro for creating derived exception classes properly 
  *  integrated into Lumiera's exception hierarchy. Using
  *  this macro assures that the new class will get the full

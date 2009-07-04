@@ -64,6 +64,9 @@ namespace lumiera {
     LUMIERA_ERROR_DEFINE (EXTERNAL , "failure in external service"); 
     LUMIERA_ERROR_DEFINE (ASSERTION, "assertion failure");
 
+    /* some further generic error situations */
+    LUMIERA_ERROR_DEFINE (WRONG_TYPE, "runtime type mismatch"); 
+    
   } // namespace error
   
   LUMIERA_ERROR_DEFINE (EXCEPTION, "generic Lumiera exception"); 
