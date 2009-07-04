@@ -28,9 +28,11 @@
 #include "proc/mobject/placement-index.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
+#include "lib/util.hpp"
 
 #include <iostream>
 
+using util::isSameObject;
 using lumiera::Time;
 using std::string;
 using std::cout;
@@ -43,15 +45,6 @@ namespace test    {
   
   using namespace mobject::test;
   typedef TestPlacement<TestSubMO21> PSub;
-  
-  
-  template<class A, class B>
-  inline bool
-  isSameObject (A const& a, B const& b)
-  {
-    return static_cast<const void*> (&a)
-        == static_cast<const void*> (&b);
-  }
   
   
   /***************************************************************************

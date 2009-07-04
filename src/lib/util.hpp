@@ -201,6 +201,19 @@ namespace util {
   }
   
   
+  /** compare plain object identity,
+   *  bypassing any custom comparison operators.
+   */
+  template<class A, class B>
+  inline bool
+  isSameObject (A const& a, B const& b)
+  {
+    return static_cast<const void*> (&a)
+        == static_cast<const void*> (&b);
+  }
+  
+  
+  
   
   /** produce an identifier based on the given string.
    *  remove non-standard-chars, reduce sequences of punctuation 
