@@ -40,13 +40,14 @@ namespace test{
   using util::isnil;
   using util::for_each;
   using util::isSameObject;
+  using lumiera::error::LUMIERA_ERROR_ASSERTION;
   
   using std::vector;
   using std::cout;
   using std::endl;
   
   namespace { // test dummy hierarchy
-             //  Note: no vtable and common storage
+             //  Note: common storage but no vtable 
     
     long _checksum = 0;
     
@@ -55,10 +56,12 @@ namespace test{
       {
         uint id_;
         
-        Base(uint i=0) : id_(i) { _checksum +=id_; }
+        Base(uint i=0)      : id_(i)     { _checksum +=id_; }
+        Base(Base const& o) : id_(o.id_) { _checksum +=id_; }
         
         uint getIt() { return id_; }
       };
+    
     
     template<uint ii>
     struct DD : Base
@@ -72,7 +75,7 @@ namespace test{
       : DD<7>
       , BoolCheckable<Special>
       {
-        uint myVal_;
+        ulong myVal_;
         
         Special (uint val)
           : myVal_(val)
@@ -85,6 +88,12 @@ namespace test{
           }
       };
           
+      
+      /** maximum additional storage maybe wasted
+       *  due to alignment of the contained object
+       *  within OpaqueHolder's buffer
+       */
+      const size_t ALLIGNMENT = sizeof(size_t);
     
   }
   
@@ -97,6 +106,11 @@ namespace test{
    *  @test use the OpaqueHolder inline buffer to handle a family of classes
    *        through a common interface, without being forced to use heap storage
    *        or a custom allocator.
+   *        
+   *  @todo this test doesn't cover automatic conversions and conversions using
+   *        RTTI from the target objects, while OpaqueHolder.tempate get() would
+   *        allow for such conversions. This is similar to Ticket #141, and actually
+   *        based on the same code as variant.hpp (access-casted.hpp)
    */
   class OpaqueHolder_test : public Test
     {
@@ -149,17 +163,17 @@ namespace test{
           typedef DD<5> D5;
           D3 d3 (oo.get<D3>() );
           ASSERT (3 == oo->getIt());
-          ASSERT (isSameObject (d3, *oo));
+          ASSERT (!isSameObject (d3, *oo));
           VERIFY_ERROR (WRONG_TYPE, oo.get<D5>() );
           
-          oo = D5();
+          oo = D5();        // direct assignment of target into Buffer
           ASSERT (oo);
           ASSERT (5 == oo->getIt());
           VERIFY_ERROR (WRONG_TYPE, oo.get<D3>() );
           
           D5 &rd5 (oo.get<D5>());
           ASSERT (isSameObject (rd5, *oo));
-
+          
           // verify that self-assignment is properly detected...
           oo = oo;
           ASSERT (oo);
@@ -179,22 +193,37 @@ namespace test{
           ASSERT (!o1);
           
           Opaque o2 (d3);
-          ASSERT (!isSameObject (d3, *oo));
-          ASSERT (3 == oo->getIt());
+          ASSERT (!isSameObject (d3, *o2));
+          ASSERT (3 == o2->getIt());
           
-          ASSERT (sizeof(Opaque) == sizeof(Base) + sizeof(void*));
+          ASSERT (sizeof(Opaque) <= sizeof(Base) + sizeof(void*) + ALLIGNMENT);
         }
       
       
+      /** @test OpaqueHolder with additional storage for subclass.
+       *        When a subclass requires more storage than the base class or
+       *        Interface, we need to create a custom OpaqueHolder, specifying the
+       *        actually necessary storage. Such a custom OpaqueHolder behaves exactly
+       *        like the standard variant, but there is protection against accidentally
+       *        using a standard variant to hold an instance of the larger subclass.
+       *        
+       *  @test Moreover, if the concrete class has a custom operator bool(), it
+       *        will be invoked automatically from OpaqueHolder's operator bool()
+       * 
+       */ 
       void
       checkSpecialSubclass ()
         {
-          // define a "special" OpaqueHolder with enough storage to hold a Special 
           typedef OpaqueHolder<Base, sizeof(Special)> SpecialOpaque;
+          
+          cout << showSizeof<Base>() << endl;
+          cout << showSizeof<Special>() << endl;
+          cout << showSizeof<Opaque>() << endl;
+          cout << showSizeof<SpecialOpaque>() << endl;
           
           ASSERT (sizeof(Special) > sizeof(Base));
           ASSERT (sizeof(SpecialOpaque) > sizeof(Opaque));
-          ASSERT (sizeof(SpecialOpaque) == sizeof(Special) + sizeof(void*));
+          ASSERT (sizeof(SpecialOpaque) <= sizeof(Special) + sizeof(void*) + ALLIGNMENT);
           
           Special s1 (6);
           Special s2 (3);
@@ -215,8 +244,8 @@ namespace test{
           ASSERT (!isnil(ospe2));
           
           ASSERT (7 == ospe1->getIt());
-          ASSERT (5 == ospe1.get<Special>().myVal_);
-          ASSERT (6 == ospe2.get<Special>().myVal_);
+          ASSERT (6 == ospe1.get<Special>().myVal_);
+          ASSERT (3 == ospe2.get<Special>().myVal_);
           
           ospe1 = DD<5>();            // but can be reassigned like any normal Opaque
           ASSERT (ospe1);

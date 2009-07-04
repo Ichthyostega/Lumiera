@@ -55,12 +55,40 @@
 
 #include "lib/error.hpp"
 #include "lib/bool-checkable.hpp"
-
+#include "lib/access-casted.hpp"
+#include "lib/util.hpp"
 
 
 namespace lib {
   
   using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
+  using util::isSameObject;
+  using util::AccessCasted;
+  using util::unConst;
+  
+  
+  namespace { // implementation helpers...
+    
+    using boost::disable_if;
+    using boost::is_convertible;
+    
+    bool
+    validitySelfCheck (bool boolConvertible)
+      {
+        return boolConvertible;
+      }
+    
+    template<typename X>
+        typename disable_if< is_convertible<X,bool>, 
+    bool >::type
+    validitySelfCheck (X const&)
+      {
+        return true; // just pass if this type doesn't provide a validity check...
+      }
+    
+  }
+  
+  
   
   
   /**
@@ -70,10 +98,14 @@ namespace lib {
    * may be created empty, which can be checked by a bool test.
    * The whole compound is copyable if and only if the contained object
    * is copyable.
+   * 
+   * For using OpaqueHolder, several \b assumptions need to be fulfilled
+   * - any instance placed into OpaqueHolder is below the specified maximum size
+   * - the caller cares for thread safety. No concurrent get calls while in mutation!
    */
   template
-    < class BA
-    , size_t siz = sizeof(BA) 
+    < class BA                   ///< the nominal Base/Interface class for a family of types
+    , size_t siz = sizeof(BA)    ///< maximum storage required for the targets to be held inline
     >
   class OpaqueHolder
     : public BoolCheckable<OpaqueHolder<BA,siz> >
@@ -83,6 +115,8 @@ namespace lib {
       struct Buffer
         {
           char content_[siz];
+          void* ptr() { return &content_; }
+          
           virtual ~Buffer() {}
           virtual bool isValid()  const { return false; }
           virtual bool empty()    const { return true; }
@@ -92,13 +126,26 @@ namespace lib {
             {
               new(targetStorage) Buffer();
             }
+          
+          virtual BA&
+          get()  const
+            {
+              throw lumiera::error::Logic ("get() called on empty Buffer");
+            }
         };
       
       
-      /** concrete subclass managing a specific kind of contained object */
+      /** concrete subclass managing a specific kind of contained object.
+       *  @note invariant: content_ always contains a valid SUB object */
       template<typename SUB>
       struct Buff : Buffer
         {
+          SUB&
+          get()  const  ///< core operation: target is contained within the inline buffer
+            {
+              return *reinterpret_cast<SUB*> (unConst(this)->ptr());
+            }
+          
           ~Buff()
             {
               get().~SUB();
@@ -108,16 +155,16 @@ namespace lib {
           Buff (SUB const& obj)
             {
               REQUIRE (siz >= sizeof(SUB));
-              new(&content_) SUB (obj);
+              new(Buffer::ptr()) SUB (obj);
             }
           
           Buff (Buff const& oBuff)
             {
-              new(&content_) SUB (oBuff.get());
+              new(Buffer::ptr()) SUB (oBuff.get());
             }
       
           Buff&
-          operator= (Buff const& ref)
+          operator= (Buff const& ref) ///< not used currently 
             {
               if (&ref != this)
                 get() = ref.get();
@@ -140,12 +187,7 @@ namespace lib {
           bool
           isValid()  const
             {
-              UNIMPLEMENTED ("maybe forward bool check to contained object...");
-            }
-          SUB&
-          get()  const
-            {
-              return *reinterpret_cast<SUB*> (&content_);
+              return validitySelfCheck (get());
             }
         };
       
@@ -153,88 +195,175 @@ namespace lib {
       enum{ BUFFSIZE = sizeof(Buffer) };
       
       /** embedded buffer actually holding the concrete Buff object,
-       *  which in turn holds and manages the target object */
+       *  which in turn holds and manages the target object.
+       *  @note Invariant: always contains a valid Buffer subclass */
       char storage_[BUFFSIZE];
       
       
       
-      typedef OpaqueHolder<BA,siz> _ThisType;   /////TODO needed?
       
       Buffer&
       buff()
         {
           return *reinterpret_cast<Buffer*> (&storage_);
         }
+      const Buffer&
+      buff()  const
+        {
+          return *reinterpret_cast<const Buffer *> (&storage_);
+        }
       
+      void killBuffer()                          
+        { 
+          buff().~Buffer();
+        }
+      
+      void make_emptyBuff()
+        {
+          new(&storage_) Buffer();
+        }
+      
+      template<class SUB>
+      void place_inBuff (SUB const& obj)
+        {
+          new(&storage_) Buff<SUB> (obj);
+        }
+      
+      void clone_inBuff (OpaqueHolder const& ref)
+        {
+          ref.buff().clone (storage_);
+        }
+    
       
     public:
+      ~OpaqueHolder()
+        {
+          killBuffer();
+        }
+      
+      void
+      clear ()
+        {
+          killBuffer();
+          make_emptyBuff();
+        }
+      
+      
       OpaqueHolder()
         { 
-          new(&storage_) Buffer();
+          make_emptyBuff();
         }
       
       template<class SUB>
       OpaqueHolder(SUB const& obj)
         { 
-          new(&storage_) Buff<SUB> (obj);
+          place_inBuff (obj);
         }
-      
-      ~OpaqueHolder() { clear(); }
-      
-      
-      void
-      clear ()
-        {
-          buff().~Holder();
-          //////////////////////TODO sufficient?
-        }
-      
       
       OpaqueHolder (OpaqueHolder const& ref)
         {
-          ref.clone (storage_);
+          clone_inBuff (ref);
         }
       
       OpaqueHolder&
       operator= (OpaqueHolder const& ref)
         {
-          UNIMPLEMENTED ("copy operation");
+          if (!isSameObject (*this, ref))
+            {
+              killBuffer();
+              try
+                {
+                  clone_inBuff (ref);
+                }
+              catch (...)
+                {
+                  make_emptyBuff();
+                  throw;
+                }
+            }
           return *this;
         }
-        
+      
+      template<class SUB>
+      OpaqueHolder&
+      operator= (SUB const& newContent)
+        {
+          if (  !empty() 
+             && !isSameObject (buff().get(), newContent)
+             )
+            {
+              killBuffer();
+              try
+                {
+                  place_inBuff (newContent);
+                }
+              catch (...)
+                {
+                  make_emptyBuff();
+                  throw;
+                }
+            }
+          return *this;
+        }
+      
+      
+      /* === smart-ptr style access === */
       
       BA&
-      operator* ()  const  // never throws
+      operator* ()  const
         {
           ASSERT (!empty());
-          return (BA&) content_;
+          return buff().get();
         }
       
       BA* 
-      operator-> ()  const // never throws
+      operator-> ()  const
         {
           ASSERT (!empty());
-          return (BA*) &content_;
+          return &(buff().get());
         }
       
       template<class SUB>
       SUB& get()  const
         {
-          UNIMPLEMENTED ("downcast to concrete type");
-//          return (SUB*) &content_; 
+          typedef const Buffer* Iface;
+          typedef const Buff<SUB> * Actual;
+          Iface interface = &buff();
+          Actual actual = dynamic_cast<Actual> (interface);
+          if (actual)
+            return actual->get();
+          
+          // second try: maybe we can perform a
+          // dynamic upcast or direct conversion on the
+          // concrete target object. But we need to exclude a
+          // brute force static cast (which might slice or reinterpret)
+          if (!util::use_static_downcast<BA*,SUB*>::value)
+            {
+              BA*  asBase  = &(buff().get());
+              SUB* content = AccessCasted<SUB*>::access (asBase);
+              if (content) 
+                return *content;
+            }
+          
+          throw lumiera::error::Logic ("Attempt to access OpaqueHolder's contents "
+                                       "specifying incompatible target type"
+                                      , LUMIERA_ERROR_WRONG_TYPE
+                                      );
         }
       
-      bool empty() const
+      
+      bool
+      empty() const
         {
-          UNIMPLEMENTED ("check for empty container");
+          return buff().empty();
         }
       
-      bool isValid() const
+      
+      bool
+      isValid() const
         {
-          UNIMPLEMENTED ("empty check and forward to contained object");
+          return buff().isValid();
         }
-      
-      
     };
   
   

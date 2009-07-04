@@ -195,14 +195,14 @@ namespace lib {
         
       
       TY&
-      operator* ()  const  // never throws
+      operator* ()  const
         {
           ASSERT (created_);
           return (TY&) content_;
         }
       
       TY* 
-      operator-> ()  const // never throws
+      operator-> ()  const
         {
           ASSERT (created_);
           return (TY*) &content_;
