@@ -91,6 +91,8 @@ namespace test{
   typedef OpaqueHolder<Base> Opaque;
   typedef vector<Opaque> TestList;
   
+  
+  
   /**********************************************************************************
    *  @test use the OpaqueHolder inline buffer to handle a family of classes
    *        through a common interface, without being forced to use heap storage
@@ -154,6 +156,20 @@ namespace test{
           ASSERT (oo);
           ASSERT (5 == oo->getIt());
           VERIFY_ERROR (WRONG_TYPE, oo.get<D3>() );
+          
+          D5 &rd5 (oo.get<D5>());
+          ASSERT (isSameObject (rd5, *oo));
+
+          // verify that self-assignment is properly detected...
+          oo = oo;
+          ASSERT (oo);
+          ASSERT (isSameObject (rd5, *oo));
+          oo = oo.get<D5>();
+          ASSERT (isSameObject (rd5, *oo));
+          ASSERT (oo);
+          oo = *oo;
+          ASSERT (isSameObject (rd5, *oo));
+          ASSERT (oo);
           
           oo.clear();
           ASSERT (!oo);
