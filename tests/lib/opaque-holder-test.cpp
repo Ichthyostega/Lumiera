@@ -67,8 +67,8 @@ namespace test{
     struct DD : Base
       {
         DD() : Base(ii)       { }
-       ~DD() { _checksum -= ii; }
-      };
+       ~DD() { _checksum -= ii; }  // doing the decrement here
+      };                          //  verifies the correct dtor is called
     
     
     struct Special
@@ -82,7 +82,7 @@ namespace test{
           { }
         
         bool
-        isValid ()  const
+        isValid ()  const ///< custom boolean "validity" check
           {
             return myVal_ % 2;
           }
@@ -138,7 +138,7 @@ namespace test{
           list.push_back (DD<5>());
           list.push_back (DD<7>());
           return list;
-        }
+        } //note: copy
       
       
       static void

@@ -272,6 +272,11 @@ END
 
 
 TEST "inline type erasure" OpaqueHolder_test  <<END
+out: 1
+out: 3
+out: 5
+out: 7
+out: sizeof\( .+ \) = .*[12468]{1,2}
 return: 0
 END
 

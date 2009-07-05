@@ -35,7 +35,7 @@
  ** interface, the inner container keeps track of the actual type by means
  ** of a vtable. OpaqueHolder can be empty; but re-accessing the concrete
  ** object requires knowledge of the actual type, similar to boost::any
- ** (but the latter uses heap storage). 
+ ** (but contrary to OpaqueHolder the latter uses heap storage). 
  ** 
  ** Using this approach is bound to specific stipulations regarding the
  ** properties of the contained object and the kind of access needed.
@@ -63,7 +63,6 @@ namespace lib {
   
   using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   using util::isSameObject;
-  using util::AccessCasted;
   using util::unConst;
   
   
@@ -202,6 +201,9 @@ namespace lib {
       
       
       
+      
+      /* === internal interface for managing the storage === */
+      
       Buffer&
       buff()
         {
@@ -212,6 +214,7 @@ namespace lib {
         {
           return *reinterpret_cast<const Buffer *> (&storage_);
         }
+      
       
       void killBuffer()                          
         { 
@@ -233,7 +236,8 @@ namespace lib {
         {
           ref.buff().clone (storage_);
         }
-    
+      
+      
       
     public:
       ~OpaqueHolder()
@@ -334,13 +338,13 @@ namespace lib {
             return actual->get();
           
           // second try: maybe we can perform a
-          // dynamic upcast or direct conversion on the
-          // concrete target object. But we need to exclude a
+          // dynamic downcast or direct conversion to the
+          // actual target type. But we need to exclude a
           // brute force static cast (which might slice or reinterpret)
           if (!util::use_static_downcast<BA*,SUB*>::value)
             {
               BA*  asBase  = &(buff().get());
-              SUB* content = AccessCasted<SUB*>::access (asBase);
+              SUB* content = util::AccessCasted<SUB*>::access (asBase);
               if (content) 
                 return *content;
             }
