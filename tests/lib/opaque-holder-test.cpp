@@ -50,14 +50,15 @@ namespace test{
              //  Note: common storage but no vtable 
     
     long _checksum = 0;
+    uint _create_count = 0;
     
     
     struct Base   
       {
         uint id_;
         
-        Base(uint i=0)      : id_(i)     { _checksum +=id_; }
-        Base(Base const& o) : id_(o.id_) { _checksum +=id_; }
+        Base(uint i=0)      : id_(i)     { _checksum +=id_; ++_create_count; }
+        Base(Base const& o) : id_(o.id_) { _checksum +=id_; ++_create_count; }
         
         uint getIt() { return id_; }
       };
@@ -119,6 +120,7 @@ namespace test{
       run (Arg)
         {
           _checksum = 0;
+          _create_count = 0;
           {
             TestList objs = createDummies ();
             for_each (objs, reAccess);
@@ -171,18 +173,34 @@ namespace test{
           ASSERT (5 == oo->getIt());
           VERIFY_ERROR (WRONG_TYPE, oo.get<D3>() );
           
-          D5 &rd5 (oo.get<D5>());
+          D5 &rd5 (oo.get<D5>());   // can get a direct reference to contained object 
           ASSERT (isSameObject (rd5, *oo));
           
+          ASSERT (!isnil(oo));
+          oo = objs[3];     // copy construction also works on non-empty object
+          ASSERT (7 == oo->getIt());
+          
+          ASSERT (7 == rd5.getIt()); // WARNING: direct ref has been messed up through the backdoor!
+          ASSERT (isSameObject (rd5, *oo));
+
+          uint cnt_before = _create_count;
+          
+          oo.clear();
+          ASSERT (!oo);
+          oo = D5();        // direct assignment also works on empty object
+          ASSERT (oo);
+          ASSERT (5 == oo->getIt());
+          ASSERT (_create_count == 2 + cnt_before); // one within buff and one for the anonymous temporary D5()
+          
           // verify that self-assignment is properly detected...
+          cnt_before = _create_count;
           oo = oo;
           ASSERT (oo);
-          ASSERT (isSameObject (rd5, *oo));
+          ASSERT (_create_count == cnt_before);
           oo = oo.get<D5>();
-          ASSERT (isSameObject (rd5, *oo));
-          ASSERT (oo);
+          ASSERT (_create_count == cnt_before);
           oo = *oo;
-          ASSERT (isSameObject (rd5, *oo));
+          ASSERT (_create_count == cnt_before);
           ASSERT (oo);
           
           oo.clear();

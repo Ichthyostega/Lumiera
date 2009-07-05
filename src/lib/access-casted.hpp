@@ -142,21 +142,24 @@ namespace util {
       using NullAccessor<TAR>::access;
       
       template<typename ELM>
-      static  typename enable_if< use_dynamic_downcast<ELM&,TAR>, TAR>::type
+      static  typename enable_if< use_dynamic_downcast<ELM&,TAR>,
+      TAR     >::type
       access (ELM& elem)
         {
           return dynamic_cast<TAR> (elem);
         }
       
       template<typename ELM>
-      static  typename enable_if< use_static_downcast<ELM&,TAR>, TAR>::type
+      static  typename enable_if< use_static_downcast<ELM&,TAR>,
+      TAR     >::type
       access (ELM& elem)
         {
           return static_cast<TAR> (elem);
         }
       
       template<typename ELM>
-      static  typename enable_if< use_conversion<ELM&,TAR>, TAR>::type
+      static  typename enable_if< use_conversion<ELM&,TAR>,
+      TAR     >::type
       access (ELM& elem)
         {
           return elem;

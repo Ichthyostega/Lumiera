@@ -98,10 +98,9 @@ namespace typelist{
   /* ====== Policy classes ====== */
   
   typedef function<void(void)> FunVoid;
-  typedef lib::OpaqueHolder< FunVoid
-                           , sizeof(FunVoid)                      // same size for all function objects 
-                           , lib::OpaqueHolder_useBruteForceCast  // no common base class!
-                           > FunHolder;
+  typedef lib::InPlaceAnyHolder< sizeof(FunVoid)                       // same size for all function objects 
+                               , lib::InPlaceAnyHolder_unrelatedTypes  // no common base class!
+                               > FunHolder;
   
   /**
    * Policy for FunErasure: store an embedded tr1::function

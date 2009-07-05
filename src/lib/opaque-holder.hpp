@@ -96,15 +96,41 @@ namespace lib {
    * the actual Buff-subclasses will define overrides
    * with covariant return types.
    */
-  template<class STO>
-  class OpaqueHolder_useCommonBase
-    : public STO
+  template<class BA>
+  struct InPlaceAnyHolder_useCommonBase
     {
-      typedef typename STO::BaseType Base;
+      typedef BA Base;
       
-    public:
-      /** @note a virtual get() function to be overridden */
-      virtual Base&  get()  const =0;  
+      template<class SUB>
+      static Base*
+      convert2base (SUB& obj)
+        {
+          SUB* oPtr = &obj;
+          BA* asBase = util::AccessCasted<BA*>::access (oPtr);
+          if (asBase) 
+            return asBase;
+          
+          throw lumiera::error::Logic ("Unable to convert concrete object to Base interface"
+                                      , LUMIERA_ERROR_WRONG_TYPE
+                                      );
+        }
+      
+      template<class SUB>
+      static SUB*
+      access (Base* asBase)
+        {
+          // Because we don't know anything about the involved types,
+          // we need to exclude a brute force static cast
+          // (which might slice or reinterpret or even cause SEGV)
+          if (!util::use_static_downcast<Base*,SUB*>::value)
+            {
+              SUB* content = util::AccessCasted<SUB*>::access (asBase);
+              return content;
+              // might be NULL
+            }
+          else
+            return 0;
+        }
     };
   
   /**
@@ -121,14 +147,32 @@ namespace lib {
    *       the contents of the buffer this way through
    *       a brute force reinterpret_cast.
    */
-  template<class STO>
-  class OpaqueHolder_useBruteForceCast
-    : public STO
+  struct InPlaceAnyHolder_unrelatedTypes
     {
+      typedef void Base;
       
+      template<class SUB>
+      static void*
+      convert2base (SUB& obj)
+        {
+          return static_cast<void*> (&obj);
+        }
+      
+      template<class SUB>
+      static SUB*
+      access (Base*)
+        {
+          return 0;
+        }
     };
   
-  
+
+/////////////////////////////TODO
+/////////////////////////////: separieren in einen InPlaceAnyHolder
+/////////////////////////////: und als dessen Kind den OpaqueHolder
+/////////////////////////////: AccessPolicy unter die konkrete Buff-Klasse einschieben
+/////////////////////////////: EmptyBuffer als abgeleitet.
+    
   
   
   /**
@@ -144,58 +188,71 @@ namespace lib {
    * - the caller cares for thread safety. No concurrent get calls while in mutation!
    */
   template
-    < class BA                   ///< the nominal Base/Interface class for a family of types
-    , size_t siz = sizeof(BA)    ///< maximum storage required for the targets to be held inline
-    , template<class STO> class AccessPolicy = OpaqueHolder_useCommonBase
-                                 ///< how to access the contents via a common interface?
+    < size_t siz           ///< maximum storage required for the targets to be held inline
+    , class AccessPolicy = InPlaceAnyHolder_unrelatedTypes
+                           ///< how to access the contents via a common interface?
     >
-  class OpaqueHolder
-    : public BoolCheckable<OpaqueHolder<BA,siz> >
+  class InPlaceAnyHolder
+    : public BoolCheckable<InPlaceAnyHolder<siz, AccessPolicy> >
     {
+      typedef typename AccessPolicy::Base * BaseP;
       
-      /** Storage buffer holding the target object inline */
-      struct Storage
+      /** Inner capsule managing the contained object (interface) */
+      struct Buffer
         {
           char content_[siz];
           void* ptr() { return &content_; }
           
-          typedef BA BaseType;
+          virtual ~Buffer() {}
+          virtual bool isValid()  const =0;
+          virtual bool empty()    const =0;
+          virtual BaseP getBase() const =0;
           
-          virtual ~Storage() {}
+          virtual void   clone (void* targetStorage)  const =0;
         };
       
-      /** Inner capsule managing the contained object (interface) */
-      struct Buffer
-        : AccessPolicy<Storage>
+      template<typename TY>
+      struct AbstractBuff : Buffer
         {
-          BA&
-          get()  const
+          TY&
+          get()  const  ///< core operation: target is contained within the inline buffer
             {
-              return *reinterpret_cast<BA*> (unConst(this)->ptr());
+              return *reinterpret_cast<TY*> (unConst(this)->ptr());
+            }
+          
+          BaseP
+          getBase()  const
+            {
+              return AccessPolicy::convert2base (get());
+            }
+          
+        };
+      
+      struct EmptyBuff : Buffer
+        {
+          virtual bool isValid()  const { return false; }
+          virtual bool empty()    const { return true; }
+          
+          BaseP
+          getBase()  const
+            {
+              throw lumiera::error::Invalid("accessing empty holder");
             }
           
           virtual void
           clone (void* targetStorage)  const
             {
-              new(targetStorage) Buffer();
+              new(targetStorage) EmptyBuff();
             }
           
-          virtual bool isValid()  const { return false; }
-          virtual bool empty()    const { return true; }
         };
       
       
       /** concrete subclass managing a specific kind of contained object.
        *  @note invariant: content_ always contains a valid SUB object */
       template<typename SUB>
-      struct Buff : Buffer
+      struct Buff : AbstractBuff<SUB>
         {
-          SUB&
-          get()  const  ///< core operation: target is contained within the inline buffer
-            {
-              return *reinterpret_cast<SUB*> (unConst(this)->ptr());
-            }
-          
           ~Buff()
             {
               get().~SUB();
@@ -254,7 +311,7 @@ namespace lib {
       
       
       /* === internal interface for managing the storage === */
-      
+    protected:
       Buffer&
       buff()
         {
@@ -274,7 +331,7 @@ namespace lib {
       
       void make_emptyBuff()
         {
-          new(&storage_) Buffer();
+          new(&storage_) EmptyBuff();
         }
       
       template<class SUB>
@@ -283,7 +340,7 @@ namespace lib {
           new(&storage_) Buff<SUB> (obj);
         }
       
-      void clone_inBuff (OpaqueHolder const& ref)
+      void clone_inBuff (InPlaceAnyHolder const& ref)
         {
           ref.buff().clone (storage_);
         }
@@ -291,7 +348,7 @@ namespace lib {
       
       
     public:
-      ~OpaqueHolder()
+      ~InPlaceAnyHolder()
         {
           killBuffer();
         }
@@ -304,24 +361,24 @@ namespace lib {
         }
       
       
-      OpaqueHolder()
+      InPlaceAnyHolder()
         { 
           make_emptyBuff();
         }
       
       template<class SUB>
-      OpaqueHolder(SUB const& obj)
+      InPlaceAnyHolder(SUB const& obj)
         { 
           place_inBuff (obj);
         }
       
-      OpaqueHolder (OpaqueHolder const& ref)
+      InPlaceAnyHolder (InPlaceAnyHolder const& ref)
         {
           clone_inBuff (ref);
         }
       
-      OpaqueHolder&
-      operator= (OpaqueHolder const& ref)
+      InPlaceAnyHolder&
+      operator= (InPlaceAnyHolder const& ref)
         {
           if (!isSameObject (*this, ref))
             {
@@ -340,11 +397,11 @@ namespace lib {
         }
       
       template<class SUB>
-      OpaqueHolder&
+      InPlaceAnyHolder&
       operator= (SUB const& newContent)
         {
-          if (  !empty() 
-             && !isSameObject (buff().get(), newContent)
+          if (  empty() 
+             || !isSameObject (*buff().getBase(), newContent)
              )
             {
               killBuffer();
@@ -362,21 +419,8 @@ namespace lib {
         }
       
       
-      /* === smart-ptr style access === */
       
-      BA&
-      operator* ()  const
-        {
-          ASSERT (!empty());
-          return buff().get();
-        }
-      
-      BA* 
-      operator-> ()  const
-        {
-          ASSERT (!empty());
-          return &(buff().get());
-        }
+      /* === re-accessing the concrete contained object === */
       
       template<class SUB>
       SUB& get()  const
@@ -388,17 +432,13 @@ namespace lib {
           if (actual)
             return actual->get();
           
-          // second try: maybe we can perform a
-          // dynamic downcast or direct conversion to the
-          // actual target type. But we need to exclude a
-          // brute force static cast (which might slice or reinterpret)
-          if (!util::use_static_downcast<BA*,SUB*>::value)
-            {
-              BA*  asBase  = &(buff().get());
-              SUB* content = util::AccessCasted<SUB*>::access (asBase);
-              if (content) 
-                return *content;
-            }
+          // second try: maybe we can perform a dynamic downcast
+          // or direct conversion to the actual target type.
+          BaseP asBase = buff().getBase(); 
+          ASSERT (asBase);
+          SUB* content = AccessPolicy::template access<SUB> (asBase);
+          if (content) 
+            return *content;
           
           throw lumiera::error::Logic ("Attempt to access OpaqueHolder's contents "
                                        "specifying incompatible target type"
@@ -420,6 +460,79 @@ namespace lib {
           return buff().isValid();
         }
     };
+  
+  
+  
+  /**
+   * Inline buffer holding and owning an object while concealing the
+   * concrete type. Access to the contained object is similar to a
+   * smart-pointer, but the object isn't heap allocated. OpaqueHolder
+   * may be created empty, which can be checked by a bool test.
+   * The whole compound is copyable if and only if the contained object
+   * is copyable.
+   *
+   * \par using OpaqueHolder
+   * OpaqueHolder instances are copyable value objects. They are created
+   * either empty, by copy from an existing OpaqueHolder, or by directly
+   * specifying the concrete object to embed. This target object will be
+   * \em copy-constructed into the internal buffer. Additionally, you
+   * may assign a new value, which causes the old value object to be
+   * destroyed and a new one to be copy-constructed into the buffer.
+   * Later on, the embedded value might be accessed
+   * - using the smart-ptr-like access through the common base interface BA
+   * - when knowing the exact type to access, the templated #get might be an option
+   * - the empty state of the container and a \c isValid() on the target may be checked
+   * - a combination of both is available as a \c bool check on the OpaqueHolder instance.
+   *  
+   * For using OpaqueHolder, several \b assumptions need to be fulfilled
+   * - any instance placed into OpaqueHolder is below the specified maximum size
+   * - the caller cares for thread safety. No concurrent get calls while in mutation!
+   */
+  template
+    < class BA                   ///< the nominal Base/Interface class for a family of types
+    , size_t siz = sizeof(BA)    ///< maximum storage required for the targets to be held inline
+    >
+  class OpaqueHolder
+    : public InPlaceAnyHolder<siz, InPlaceAnyHolder_useCommonBase<BA> >
+    {
+      typedef InPlaceAnyHolder<siz, InPlaceAnyHolder_useCommonBase<BA> > InPlaceHolder;
+      
+    public:
+      OpaqueHolder() : InPlaceHolder() {}
+      
+      template<class SUB>
+      OpaqueHolder(SUB const& obj) : InPlaceHolder(obj) {}
+      
+      template<class SUB>
+      OpaqueHolder&
+      operator= (SUB const& newContent)
+        {
+          static_cast<InPlaceHolder&>(*this) = newContent;
+          return *this;
+        }
+      
+      // note: using standard copy operations 
+      
+      
+      
+      /* === smart-ptr style access === */
+      
+      BA&
+      operator* ()  const
+        {
+          ASSERT (!InPlaceHolder::empty());
+          return *InPlaceHolder::buff().getBase();
+        }
+      
+      BA* 
+      operator-> ()  const
+        {
+          ASSERT (!InPlaceHolder::empty());
+          return InPlaceHolder::buff().getBase();
+        }
+      
+    };
+  
   
   
   
