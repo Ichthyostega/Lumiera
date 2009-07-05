@@ -56,6 +56,7 @@
 #include "lib/util.hpp"
 #include "lib/error.hpp"
 #include "lib/bool-checkable.hpp"
+#include "lib/opaque-holder.hpp"
 
 #include <tr1/functional>
 
@@ -96,80 +97,38 @@ namespace typelist{
   
   /* ====== Policy classes ====== */
   
-  /** 
+  typedef function<void(void)> FunVoid;
+  typedef lib::OpaqueHolder< FunVoid
+                           , sizeof(FunVoid)                      // same size for all function objects 
+                           , lib::OpaqueHolder_useBruteForceCast  // no common base class!
+                           > FunHolder;
+  
+  /**
    * Policy for FunErasure: store an embedded tr1::function
    * Using this policy allows to store arbitrary complex functor objects
    * embedded within a neutral container and retrieving them later type-safe.
    * The price to pay is vtable access and heap storage of function arguments.
    */
   class StoreFunction
-    : public lib::BoolCheckable<StoreFunction>
+    : public FunHolder
     {
-      /** Helper: type erasure */
-      struct Holder
-        {
-          enum { SIZE = sizeof(function<void(void)>) };
-          char storage_[SIZE];
-          virtual ~Holder() {}
-          virtual bool isValid()  const { return false; }
-        };
-      
-      /** embedding the concrete functor object */
-      template<typename SIG>
-      struct FunctionHolder : Holder
-        {
-          typedef function<SIG> Functor;
-          
-          FunctionHolder (Functor const& fun)
-            {
-              REQUIRE (SIZE >= sizeof(Functor));
-              new(&storage_) Functor (fun);
-            }
-          ~FunctionHolder()
-            {
-              get().~Functor();
-            }
-          bool
-          isValid()  const
-            {
-              const Functor& func (unConst(this)->get());
-              return bool(func);
-            }
-          Functor&
-          get()
-            {
-              return *reinterpret_cast<Functor*> (&storage_);
-            }
-        };
-      
-      /** embedded buffer actually holding
-       *  the concrete Functor object */
-      Holder holder_;
       
     public:
       template<typename SIG>
       StoreFunction (SIG& fun)
-        {
-          new(&holder_) FunctionHolder<SIG> (function<SIG>(fun));
-        }
+        : FunHolder(function<SIG>(fun))
+        { }
+      
       template<typename SIG>
       StoreFunction (function<SIG> const& fun)
-        {
-          new(&holder_) FunctionHolder<SIG> (fun);
-        }
+        : FunHolder(fun)
+        { }
       
       template<typename SIG>
       function<SIG>&
       getFun ()
         {
-          REQUIRE (INSTANCEOF (FunctionHolder<SIG>, &holder_));
-          return static_cast<FunctionHolder<SIG>&> (holder_).get();
-        }
-      
-      bool
-      isValid()  const
-        {
-          return holder_.isValid();
+          return get<function<SIG> >();
         }
     };
   

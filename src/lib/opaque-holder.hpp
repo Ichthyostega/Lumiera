@@ -87,6 +87,47 @@ namespace lib {
     
   }
   
+  /* ==== Policy classes for OpaqueHolder ==== */
+  
+  /**
+   * Standard policy for accessing the contents via 
+   * a common base class interface. Using this policy
+   * causes a virtual get() function to be used, where
+   * the actual Buff-subclasses will define overrides
+   * with covariant return types.
+   */
+  template<class STO>
+  class OpaqueHolder_useCommonBase
+    : public STO
+    {
+      typedef typename STO::BaseType Base;
+      
+    public:
+      /** @note a virtual get() function to be overridden */
+      virtual Base&  get()  const =0;  
+    };
+  
+  /**
+   * Alternative policy for accessing the contents via
+   * a common interface; use this policy if the intention is
+   * to use OpaqueHolder with a family of similar classes, 
+   * \em without requiring all of them to be derived from
+   * a common base class. (E.g. tr1::function objects).
+   * In this case, the BA template  parameter of OpaqueHolder
+   * can be considered just a nominal placeholder. 
+   * @note using this policy renders the smart-ptr style
+   *       access largely useless and might even cause
+   *       segmentation errors, when trying to access
+   *       the contents of the buffer this way through
+   *       a brute force reinterpret_cast.
+   */
+  template<class STO>
+  class OpaqueHolder_useBruteForceCast
+    : public STO
+    {
+      
+    };
+  
   
   
   
@@ -105,20 +146,33 @@ namespace lib {
   template
     < class BA                   ///< the nominal Base/Interface class for a family of types
     , size_t siz = sizeof(BA)    ///< maximum storage required for the targets to be held inline
+    , template<class STO> class AccessPolicy = OpaqueHolder_useCommonBase
+                                 ///< how to access the contents via a common interface?
     >
   class OpaqueHolder
     : public BoolCheckable<OpaqueHolder<BA,siz> >
     {
       
-      /** Inner capsule managing the contained object (interface) */
-      struct Buffer
+      /** Storage buffer holding the target object inline */
+      struct Storage
         {
           char content_[siz];
           void* ptr() { return &content_; }
           
-          virtual ~Buffer() {}
-          virtual bool isValid()  const { return false; }
-          virtual bool empty()    const { return true; }
+          typedef BA BaseType;
+          
+          virtual ~Storage() {}
+        };
+      
+      /** Inner capsule managing the contained object (interface) */
+      struct Buffer
+        : AccessPolicy<Storage>
+        {
+          BA&
+          get()  const
+            {
+              return *reinterpret_cast<BA*> (unConst(this)->ptr());
+            }
           
           virtual void
           clone (void* targetStorage)  const
@@ -126,11 +180,8 @@ namespace lib {
               new(targetStorage) Buffer();
             }
           
-          virtual BA&
-          get()  const
-            {
-              throw lumiera::error::Logic ("get() called on empty Buffer");
-            }
+          virtual bool isValid()  const { return false; }
+          virtual bool empty()    const { return true; }
         };
       
       
@@ -171,22 +222,22 @@ namespace lib {
             }
           
           
-          void
+          virtual void
           clone (void* targetStorage)  const
             {
               new(targetStorage) Buff(this->get());
             }
           
-          bool
+          virtual bool
           empty()  const
             {
               return false;
             }
           
-          bool
+          virtual bool
           isValid()  const
             {
-              return validitySelfCheck (get());
+              return validitySelfCheck (this->get());
             }
         };
       
