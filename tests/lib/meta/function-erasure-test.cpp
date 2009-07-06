@@ -211,15 +211,16 @@ namespace test {
           // fabricate an unbound functor...
           
           typedef typename BuildEmptyFunctor<HOL>::Type NoFunc;
-          NoFunc noFunction;
+          NoFunc noFunction = NoFunc();
           HOL emptyHolder (noFunction);
           ASSERT (!emptyHolder);
+          
           ASSERT ( h1 );
           ASSERT ( h2 );
           ASSERT ( h3 );
         }
       
-
+      
     };
   
   

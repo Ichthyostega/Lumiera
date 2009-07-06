@@ -40,6 +40,7 @@ namespace test{
   using util::isnil;
   using util::for_each;
   using util::isSameObject;
+  using lumiera::error::LUMIERA_ERROR_INVALID;
   using lumiera::error::LUMIERA_ERROR_ASSERTION;
   
   using std::vector;
@@ -88,13 +89,13 @@ namespace test{
             return myVal_ % 2;
           }
       };
-          
-      
-      /** maximum additional storage maybe wasted
-       *  due to alignment of the contained object
-       *  within OpaqueHolder's buffer
-       */
-      const size_t ALLIGNMENT = sizeof(size_t);
+    
+    
+    /** maximum additional storage maybe wasted
+     *  due to alignment of the contained object
+     *  within OpaqueHolder's buffer
+     */
+    const size_t ALLIGNMENT = sizeof(size_t);
     
   }
   
@@ -104,14 +105,14 @@ namespace test{
   
   
   /**********************************************************************************
-   *  @test use the OpaqueHolder inline buffer to handle a family of classes
+   *  @test use the OpaqueHolder inline buffer to handle objects of a family of types
    *        through a common interface, without being forced to use heap storage
    *        or a custom allocator.
-   *        
-   *  @todo this test doesn't cover automatic conversions and conversions using
-   *        RTTI from the target objects, while OpaqueHolder.tempate get() would
-   *        allow for such conversions. This is similar to Ticket #141, and actually
-   *        based on the same code as variant.hpp (access-casted.hpp)
+   *
+   *  @todo this test doesn't cover automatic conversions and conversions using RTTI
+   *        from the target objects, while \code OpaqueHolder.template get() \endcode
+   *        would allow for such conversions. This is similar to Ticket #141, and
+   *        actually based on the same code as variant.hpp (access-casted.hpp)
    */
   class OpaqueHolder_test : public Test
     {
@@ -150,6 +151,9 @@ namespace test{
         }
       
       
+      /** @test cover the basic situations of object handling,
+       *        especially copy operations and re-assignments
+       */
       void
       checkHandling (TestList& objs)
         {
@@ -164,25 +168,28 @@ namespace test{
           typedef DD<3> D3;
           typedef DD<5> D5;
           D3 d3 (oo.get<D3>() );
-          ASSERT (3 == oo->getIt());
+          ASSERT (3 == oo->getIt());    // re-access through Base interface
           ASSERT (!isSameObject (d3, *oo));
           VERIFY_ERROR (WRONG_TYPE, oo.get<D5>() );
           
-          oo = D5();        // direct assignment of target into Buffer
+          // direct assignment of target into Buffer
+          oo = D5();
           ASSERT (oo);
           ASSERT (5 == oo->getIt());
           VERIFY_ERROR (WRONG_TYPE, oo.get<D3>() );
           
-          D5 &rd5 (oo.get<D5>());   // can get a direct reference to contained object 
+          // can get a direct reference to contained object
+          D5 &rd5 (oo.get<D5>()); 
           ASSERT (isSameObject (rd5, *oo));
           
           ASSERT (!isnil(oo));
           oo = objs[3];     // copy construction also works on non-empty object
           ASSERT (7 == oo->getIt());
           
-          ASSERT (7 == rd5.getIt()); // WARNING: direct ref has been messed up through the backdoor!
+          // WARNING: direct ref has been messed up through the backdoor!
+          ASSERT (7 == rd5.getIt());
           ASSERT (isSameObject (rd5, *oo));
-
+          
           uint cnt_before = _create_count;
           
           oo.clear();
@@ -190,7 +197,9 @@ namespace test{
           oo = D5();        // direct assignment also works on empty object
           ASSERT (oo);
           ASSERT (5 == oo->getIt());
-          ASSERT (_create_count == 2 + cnt_before); // one within buff and one for the anonymous temporary D5()
+          ASSERT (_create_count == 2 + cnt_before);
+          // one within buff and one for the anonymous temporary D5()
+          
           
           // verify that self-assignment is properly detected...
           cnt_before = _create_count;
@@ -206,6 +215,11 @@ namespace test{
           oo.clear();
           ASSERT (!oo);
           ASSERT (isnil(oo));
+          VERIFY_ERROR (INVALID, oo.get<D5>() );
+#if false ////////////////////////////////////////////////////////TODO: restore throwing ASSERT
+          VERIFY_ERROR (ASSERTION, oo->getIt() );
+#endif////////////////////////////////////////////////////////////
+          // can't access empty holder...
           
           Opaque o1 (oo);
           ASSERT (!o1);

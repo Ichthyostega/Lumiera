@@ -29,11 +29,21 @@
  ** an inline buffer holding an object of the concrete subclass. Typically,
  ** this situation arises when dealing with functor objects.
  ** 
- ** This template helps building custom objects and wrappers based on this
- ** pattern: it provides an buffer for the target objects and controls access
- ** through a two-layer capsule; while the outer container exposes a neutral
- ** interface, the inner container keeps track of the actual type by means
- ** of a vtable. OpaqueHolder can be empty; but re-accessing the concrete
+ ** These templates help with building custom objects and wrappers based on
+ ** this pattern: InPlaceAnyHolder provides an buffer for the target objects
+ ** and controls access through a two-layer capsule; while the outer container
+ ** exposes a neutral interface, the inner container keeps track of the actual
+ ** type by means of a vtable. OpaqueHolder is built on top of InPlaceAnyHolder
+ ** additionally to support a "common base interface" and re-access of the
+ ** embedded object through this interface. For this to work, all of the 
+ ** stored types need to be derived from this common base interface.
+ ** OpaqueHolder then may be even used like a smart-ptr, exposing this
+ ** base interface. To the contrary, InPlaceAnyHolder has lesser requirements
+ ** on the types to be stored within. It can be configured with policy classes
+ ** to control the re-access; when using InPlaceAnyHolder_unrelatedTypes
+ ** the individual types to be stored need not be related in any way, but
+ ** of course this rules out anything beyond re-accessing the embedded object
+ ** by knowing it's exact type. Generally speaking, re-accessing the concrete
  ** object requires knowledge of the actual type, similar to boost::any
  ** (but contrary to OpaqueHolder the latter uses heap storage). 
  ** 
@@ -87,14 +97,15 @@ namespace lib {
     
   }
   
-  /* ==== Policy classes for OpaqueHolder ==== */
+  
+  
+  /* ==== Policy classes controlling re-Access ==== */
   
   /**
    * Standard policy for accessing the contents via 
    * a common base class interface. Using this policy
-   * causes a virtual get() function to be used, where
-   * the actual Buff-subclasses will define overrides
-   * with covariant return types.
+   * causes static or dynamic casts or direct conversion
+   * to be employed as appropriate.
    */
   template<class BA>
   struct InPlaceAnyHolder_useCommonBase
@@ -134,18 +145,15 @@ namespace lib {
     };
   
   /**
-   * Alternative policy for accessing the contents via
+   * Alternative policy for accessing the contents without
    * a common interface; use this policy if the intention is
    * to use OpaqueHolder with a family of similar classes, 
    * \em without requiring all of them to be derived from
    * a common base class. (E.g. tr1::function objects).
-   * In this case, the BA template  parameter of OpaqueHolder
-   * can be considered just a nominal placeholder. 
-   * @note using this policy renders the smart-ptr style
-   *       access largely useless and might even cause
-   *       segmentation errors, when trying to access
-   *       the contents of the buffer this way through
-   *       a brute force reinterpret_cast.
+   * In this case, the "Base" type will be defined to void*
+   * As a consequence, we loose all type information and
+   * no conversions are possible on re-access. You need
+   * to know the \em exact type to get back at the object.
    */
   struct InPlaceAnyHolder_unrelatedTypes
     {
@@ -166,26 +174,28 @@ namespace lib {
         }
     };
   
-
-/////////////////////////////TODO
-/////////////////////////////: separieren in einen InPlaceAnyHolder
-/////////////////////////////: und als dessen Kind den OpaqueHolder
-/////////////////////////////: AccessPolicy unter die konkrete Buff-Klasse einschieben
-/////////////////////////////: EmptyBuffer als abgeleitet.
-    
+  
+  
+  
+  
   
   
   /**
    * Inline buffer holding and owning an object while concealing the
-   * concrete type. Access to the contained object is similar to a
-   * smart-pointer, but the object isn't heap allocated. OpaqueHolder
-   * may be created empty, which can be checked by a bool test.
-   * The whole compound is copyable if and only if the contained object
-   * is copyable.
+   * concrete type. The object is given either as ctor parameter or
+   * by direct assignment; it is copy-constructed into the buffer.
+   * It is necessary to specify the required buffer storage space
+   * as a template parameter. InPlaceAnyHolder may be created empty
+   * or cleared afterwards, and this #empty() state may be detected
+   * at runtime. In a similar vein, when the stored object has a
+   * \c bool validity check, this can be accessed though #isValid().
+   * Moreover \code !empty() && isValid() \endcode may be tested
+   * as by \bool conversion of the Holder object. The whole compound
+   * is copyable if and only if the contained object is copyable.
    * 
-   * For using OpaqueHolder, several \b assumptions need to be fulfilled
-   * - any instance placed into OpaqueHolder is below the specified maximum size
-   * - the caller cares for thread safety. No concurrent get calls while in mutation!
+   * @note assertion failure when trying to place an instance not
+   *       fitting into given size.
+   * @note \em not threadsafe!
    */
   template
     < size_t siz           ///< maximum storage required for the targets to be held inline
@@ -204,30 +214,14 @@ namespace lib {
           void* ptr() { return &content_; }
           
           virtual ~Buffer() {}
-          virtual bool isValid()  const =0;
-          virtual bool empty()    const =0;
-          virtual BaseP getBase() const =0;
+          virtual bool  isValid()  const =0;
+          virtual bool  empty()    const =0;
+          virtual BaseP getBase()  const =0;
           
-          virtual void   clone (void* targetStorage)  const =0;
+          virtual void  clone (void* targetStorage)  const =0;
         };
       
-      template<typename TY>
-      struct AbstractBuff : Buffer
-        {
-          TY&
-          get()  const  ///< core operation: target is contained within the inline buffer
-            {
-              return *reinterpret_cast<TY*> (unConst(this)->ptr());
-            }
-          
-          BaseP
-          getBase()  const
-            {
-              return AccessPolicy::convert2base (get());
-            }
-          
-        };
-      
+      /** special case: no stored object */
       struct EmptyBuff : Buffer
         {
           virtual bool isValid()  const { return false; }
@@ -244,15 +238,20 @@ namespace lib {
             {
               new(targetStorage) EmptyBuff();
             }
-          
         };
       
       
       /** concrete subclass managing a specific kind of contained object.
-       *  @note invariant: content_ always contains a valid SUB object */
+       *  @note invariant: #content_ always contains a valid SUB object */
       template<typename SUB>
-      struct Buff : AbstractBuff<SUB>
+      struct Buff : Buffer
         {
+          SUB&
+          get()  const  ///< core operation: target is contained within the inline buffer
+            {
+              return *reinterpret_cast<SUB*> (unConst(this)->ptr());
+            }
+          
           ~Buff()
             {
               get().~SUB();
@@ -269,20 +268,27 @@ namespace lib {
             {
               new(Buffer::ptr()) SUB (oBuff.get());
             }
-      
+          
           Buff&
-          operator= (Buff const& ref) ///< not used currently 
+          operator= (Buff const& ref) ///< currently not used
             {
               if (&ref != this)
                 get() = ref.get();
               return *this;
             }
           
+          /* == virtual access functions == */
           
           virtual void
           clone (void* targetStorage)  const
             {
-              new(targetStorage) Buff(this->get());
+              new(targetStorage) Buff(get());
+            }
+          
+          virtual BaseP
+          getBase()  const
+            {
+              return AccessPolicy::convert2base (get());
             }
           
           virtual bool
@@ -299,6 +305,7 @@ namespace lib {
         };
       
       
+      
       enum{ BUFFSIZE = sizeof(Buffer) };
       
       /** embedded buffer actually holding the concrete Buff object,
@@ -310,8 +317,9 @@ namespace lib {
       
       
       
-      /* === internal interface for managing the storage === */
-    protected:
+      
+    protected: /* === internal interface for managing the storage === */
+      
       Buffer&
       buff()
         {
@@ -324,23 +332,27 @@ namespace lib {
         }
       
       
-      void killBuffer()                          
-        { 
+      void
+      killBuffer()                          
+        {
           buff().~Buffer();
         }
       
-      void make_emptyBuff()
+      void
+      make_emptyBuff()
         {
           new(&storage_) EmptyBuff();
         }
       
       template<class SUB>
-      void place_inBuff (SUB const& obj)
+      void
+      place_inBuff (SUB const& obj)
         {
           new(&storage_) Buff<SUB> (obj);
         }
       
-      void clone_inBuff (InPlaceAnyHolder const& ref)
+      void
+      clone_inBuff (InPlaceAnyHolder const& ref)
         {
           ref.buff().clone (storage_);
         }
@@ -348,6 +360,7 @@ namespace lib {
       
       
     public:
+      
       ~InPlaceAnyHolder()
         {
           killBuffer();
@@ -420,8 +433,21 @@ namespace lib {
       
       
       
-      /* === re-accessing the concrete contained object === */
-      
+      /** re-accessing the concrete contained object.
+       *  When the specified type is exactly the same
+       *  as used when storing the object, we can directly
+       *  re-access the buffer. Otherwise, a conversion might
+       *  be possible going through the Base type, depending
+       *  on the actual types involved and the AccessPolicy.
+       *  But, as we don't "know" the actual type of the object
+       *  in storage, a \em static upcast to any type \em between
+       *  the concrete object type and the base type has to be
+       *  ruled out for safety reasons. When the contained object
+       *  has RTTI, a \em dynamic cast can be performed in this
+       *  situation. You might consider using visitor.hpp instead
+       *  if this imposes a serious limitation.
+       *  @throws lumiera::error::Logic when conversion/access fails
+       */
       template<class SUB>
       SUB& get()  const
         {
@@ -463,13 +489,16 @@ namespace lib {
   
   
   
+  
+  
+  
   /**
    * Inline buffer holding and owning an object while concealing the
    * concrete type. Access to the contained object is similar to a
    * smart-pointer, but the object isn't heap allocated. OpaqueHolder
    * may be created empty, which can be checked by a bool test.
-   * The whole compound is copyable if and only if the contained object
-   * is copyable.
+   * The whole compound is copyable if and only if the contained
+   * object is copyable.
    *
    * \par using OpaqueHolder
    * OpaqueHolder instances are copyable value objects. They are created

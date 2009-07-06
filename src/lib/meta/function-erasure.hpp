@@ -101,7 +101,11 @@ namespace typelist{
   typedef lib::InPlaceAnyHolder< sizeof(FunVoid)                       // same size for all function objects 
                                , lib::InPlaceAnyHolder_unrelatedTypes  // no common base class!
                                > FunHolder;
+  typedef lib::InPlaceAnyHolder< sizeof(void*) 
+                               , lib::InPlaceAnyHolder_unrelatedTypes
+                               > FunPtrHolder;
   
+                               
   /**
    * Policy for FunErasure: store an embedded tr1::function
    * Using this policy allows to store arbitrary complex functor objects
@@ -111,7 +115,6 @@ namespace typelist{
   class StoreFunction
     : public FunHolder
     {
-      
     public:
       template<typename SIG>
       StoreFunction (SIG& fun)
@@ -139,59 +142,26 @@ namespace typelist{
    * The price to pay is vtable access. 
    */
   class StoreFunPtr
-    : public lib::BoolCheckable<StoreFunPtr>
+    : public FunPtrHolder
     {
-      /** Helper: type erasure */
-      struct Holder
-        {
-          void *fP_;
-          virtual ~Holder() {}
-        };
-      
-      /** storing and retrieving concrete function ptr */
-      template<typename SIG>
-      struct FunctionHolder : Holder
-        {
-          FunctionHolder (SIG *fun)
-            {
-              REQUIRE (fun);
-              fP_ = reinterpret_cast<void*> (fun);
-            }
-          SIG&
-          get()
-            {
-              return *reinterpret_cast<SIG*> (fP_);
-            }
-        };
-      
-      /** embedded container holding the pointer */
-      Holder holder_;
-      
     public:
       template<typename SIG>
       StoreFunPtr (SIG& fun)
-        {
-          new(&holder_) FunctionHolder<SIG> (&fun);
-        }
+        : FunPtrHolder(&fun)
+        { }
+      
       template<typename SIG>
       StoreFunPtr (SIG *fun)
-        {
-          new(&holder_) FunctionHolder<SIG> (fun);
-        }
+        : FunPtrHolder(fun)
+        { }
       
       template<typename SIG>
       SIG&
       getFun ()
         {
-          REQUIRE (INSTANCEOF (FunctionHolder<SIG>, &holder_));
-          return static_cast<FunctionHolder<SIG>&> (holder_).get();
-        }
-      
-      
-      bool
-      isValid()  const
-        {
-          return holder_.fP_;
+          SIG *fun = get<SIG*>();
+          REQUIRE (fun);
+          return *fun;
         }
     };
   
