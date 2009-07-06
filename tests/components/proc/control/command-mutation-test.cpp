@@ -33,6 +33,7 @@
 //#include "proc/mobject/placement-index.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
 #include "proc/control/command-mutation.hpp"
+#include "proc/control/memento-tie.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/tuple.hpp"
 //#include "lib/lumitime.hpp"
@@ -113,6 +114,7 @@ namespace test    {
         {
           checkMutation();
           checkUndoMutation();
+          checkStateCapturingMechanism();
         }
       
       
@@ -152,10 +154,15 @@ namespace test    {
        *        "undo" function; thus its parameter has now the meaning of an
        *        captured state value. Consequently this time the \em operation
        *        which is to be undone would have the signature \c void(void) .
-       *        To carry out the test, we first have to trigger the state
-       *        capturing mechanism; after that, invoking the UndoMutation
-       *        will call the testFunc with the previously captured state.
-       *  @note Mutation and UndoMutation are value objects.
+       *        Obviously this is a rather silly "undo" function, but it is
+       *        easy to check in a unit test. To carry out this test, we first
+       *        have to trigger the state capturing mechanism; after that,
+       *        invoking the UndoMutation will call the testFunc with the
+       *        previously captured state.
+       *  @note Mutation and UndoMutation are value objects, but they refer
+       *        to a common command state, which for this test is modelled
+       *        by local variables and which for the real commands is 
+       *        contained in a CommandArgumentHolder
        */
       void
       checkUndoMutation ()
@@ -163,7 +170,8 @@ namespace test    {
           function<void(int)> undo_func  = bind (&testFunc,_1);
           function<int(void)> cap_func   = bind (&capture    );
           
-          UndoMutation undoFunctor (undo_func,cap_func);
+          MementoTie mementoHolder (undo_func,cap_func);
+          UndoMutation undoFunctor (mementoHolder);
           ASSERT (!undoFunctor);
           VERIFY_ERROR (UNBOUND_ARGUMENTS, undoFunctor() );
           
@@ -173,15 +181,14 @@ namespace test    {
           undoFunctor.close(clo);
           ASSERT (!undoFunctor);
           VERIFY_ERROR (MISSING_MEMENTO, undoFunctor() );
-          VERIFY_ERROR (MISSING_MEMENTO, undoFunctor.getMemento() );
+          VERIFY_ERROR (MISSING_MEMENTO, mementoHoder.getState() );
           
           testVal = 11;
           undoFunctor.captureState();
           ASSERT (undoFunctor);
           ASSERT (testVal == 11);
           
-          CmdClosure& mem = undoFunctor.getMemento();
-          cout << showSizeof(mem) << endl;
+          int mem = mementoHolder.getState();
           cout << "saved state: " << mem << endl;
           
           undoFunctor();
@@ -189,19 +196,20 @@ namespace test    {
           undoFunctor();
           ASSERT (testVal == 11 + 11 + 11);
           undoFunctor.captureState();
+          ASSERT (33 == mementoHolder.getState());
           undoFunctor();
           ASSERT (testVal == 33 + 33);
           testVal = 9;
           undoFunctor();
           ASSERT (testVal == 42);
           
-          UndoMutation clonedFunc (undoFunctor);
-          ASSERT (&undoFunctor.getMemento() != &clonedFunc.getMemento());
+          UndoMutation clonedFunc (undoFunctor);    // refers to the same state
+          ASSERT (clonedFunc);
           
+          ASSERT (33 == mementoHolder.getState());
           clonedFunc.captureState();
-          testVal = 0;
-          undoFunctor();
-          ASSERT (testVal == 33);
+          ASSERT (42 == mementoHolder.getState());  // and captures into the same storage
+          
           testVal = 0;
           clonedFunc();
           ASSERT (testVal == 42);
@@ -209,48 +217,38 @@ namespace test    {
       
       
       void
-      checkStateCapturingClosure ()
+      checkStateCapturingMechanism ()
         {
           function<void(int)> undo_func  = bind (&testFunc,_1);
           function<int(void)> cap_func   = bind (&capture    );
 
-#if false ////////////////////////////////////////////////////////////////////TODO: doesn't compile, lots of undefined stuff          
-          MementoClosure memClo (cap_func);
-          CmdFunctor closed_cap_func = memClo.bindArguments (cap_func);
-          Tuple<Types<> > param;
-          Closure<void()> clo (param);
-          cout << "plain param values: " << clo << endl;
+          MementoTie mementoHolder (undo_func,cap_func);
           
-          Closure<void(int)> extendedClo = memClo.decorate (clo);
-          cout << "params including memento storage: " << extendedClo << endl;
+          function<void()> bound_undo_func = mementoHolder.tieUndoFunc();
+          function<void()> bound_cap_func  = mementoHolder.tieCaptureFunc();
           
-          CmdFunctor closed_undo_func = extendedClo.bindArguments (undo_func);
-          
-          VERIFY_ERROR (MISSING_MEMENTO, closed_undo_func() );     // invalid, because no state was captured
+          VERIFY_ERROR (MISSING_MEMENTO, bound_undo_func() );
+          VERIFY_ERROR (MISSING_MEMENTO, mementoHoder.getState() );
           
           int rr (rand() %100);
-          
           testVal = rr;
-          closed_cap_func();      // invoke state capturing 
+          bound_cap_func();       // invoke state capturing 
           
-          cout << "params including memento: " << memClo << endl;
-          cout << "captured memento state  : " << extendedClo << endl;
+          ASSERT (rr == mementoHolder.getState());
           
           testVal = -10;          // meanwhile "somehow" mutate the state
-          
-          closed_undo_func();     // invoking the undo() feeds back the memento
-          ASSERT (rr == testVal); // which is then restored into the state
+          bound_undo_func();      // invoking the undo() feeds back the memento
+          ASSERT (rr-10 == testVal);
           
           // this cycle can be repeated with different state values
           rr = (rand() %100);
           testVal = rr;
-          closed_cap_func();      // capture new state
-          cout << "params including memento: " << memClo << endl;
-                                //   ....note the changed memento!
+          bound_cap_func();       // capture new state
+          ASSERT (rr == mementoHolder.getState());
+          
           testVal = -20;
-          closed_undo_func();
-          ASSERT (rr == testVal);
-#endif          
+          bound_undo_func();
+          ASSERT (rr-20 == testVal);
         }
     };
   
