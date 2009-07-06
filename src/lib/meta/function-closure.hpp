@@ -692,6 +692,46 @@ namespace func    {
   
   
   
+  /**
+   * Bind a specific argument to an arbitrary value.
+   * Especially, this "value" might be another binder.
+   */
+  template<typename SIG, typename X, uint n>
+  class BindToArgument
+    {
+      typedef typename _Fun<SIG>::Args Args;
+      typedef typename _Fun<SIG>::Ret  Ret;
+      typedef typename Args::List ArgsList;
+      typedef typename Types<X>::List ValList;
+      
+      enum { ARG_CNT = count<ArgsList>::value };
+
+      typedef typename Splice<ArgsList, ValList, n>::Front RemainingFront;
+      typedef typename Splice<ArgsList, ValList, n>::Back  RemainingBack;
+      typedef typename func::PlaceholderTuple<RemainingFront>::PlaceholderSeq::List PlaceholdersBefore;
+      typedef typename func::PlaceholderTuple<RemainingBack,n>::PlaceholderSeq::List PlaceholdersBehind;
+      typedef typename Append<typename Append<PlaceholdersBefore,ValList>::List
+                             ,PlaceholdersBehind
+                             >::List                               PreparedArgs;
+      typedef typename Append<RemainingFront, RemainingBack>::List ReducedArgs;
+      
+      typedef tuple::BuildTuple<PreparedArgs, ValList, n> BuildPreparedArgs;
+      typedef typename Tuple<LeftReplaced>::TupleType  PreparedArgTuple;
+      
+      
+    public:
+      typedef function<typename FunctionTypedef<Ret,ReducedArgs>::Sig> ReducedFunc;
+      
+      static ReducedFunc
+      reduced (SIG& f, Tuple<ValList> const& val)
+        {
+          PreparedArgTuple params (BuildPreparedArgs::create(val));
+          return func::Apply<ARG_CNT>::template bind<ReducedFunc> (f, params);
+        }
+    };
+  
+  
+  
   namespace { // ...helpers for specifying types in function declarations....
     
     template<typename RET, typename ARG>
@@ -798,16 +838,18 @@ namespace func    {
     return PApply<SIG,ArgTypeSeq>::bindFront (f, val);
   }
   
-  /** close the given function over the last argument */
-  template<typename SIG, typename ARG>
+  
+  /** bind the last function argument to an arbitrary term,
+   *  which especially might be a (nested) binder... */
+  template<typename SIG, typename TERM>
   typename _PapE<SIG>::Function
-  applyLast (SIG& f, ARG arg)
+  bindLast (SIG& f, TERM arg)
   {
-    typedef typename _PapE<SIG>::Arg ArgType;
-    typedef Types<ArgType>           ArgTypeSeq;
-    typedef Tuple<ArgTypeSeq>        ArgTuple;
-    ArgTuple val(arg);
-    return PApply<SIG,ArgTypeSeq>::bindBack (f, val);
+    typedef Types<TERM>     ArgTypeSeq;
+    typedef Tuple<ArgTypeSeq> ArgTuple;
+    ArgTuple argT(arg);
+    const int LAST_POS = count<typename _Fun<SIG>::Args>::value;
+    return BindToArgument<SIG,TERM,LAST_POS>::reduced (f, argT);
   }
   
   

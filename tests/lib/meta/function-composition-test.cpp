@@ -135,6 +135,7 @@ namespace test    {
           check_diagnostics ();
           check_partialApplication ();
           check_functionalComposition ();
+          check_bindToArbitraryParameter ();
         }
       
       
@@ -313,6 +314,40 @@ namespace test    {
           ASSERT (1+2+3     == func::chained(f3, ff) (_1_,_2_,_3_)         );
           ASSERT (1+2+3+4   == func::chained(f4, ff) (_1_,_2_,_3_,_4_)     );
           ASSERT (1+2+3+4+5 == func::chained(f5, ff) (_1_,_2_,_3_,_4_,_5_) );
+        }
+      
+      
+      
+      void
+      check_bindToArbitraryParameter ()
+        {
+          typedef Num<1> Sig15(Num<1>,Num<2>,Num<3>,Num<4>,Num<5>);
+          typedef Num<1> SigR1(       Num<2>,Num<3>,Num<4>,Num<5>);
+          typedef Num<1> SigR2(Num<1>,       Num<3>,Num<4>,Num<5>);
+          typedef Num<1> SigR3(Num<1>,Num<2>,       Num<4>,Num<5>);
+          typedef Num<1> SigR4(Num<1>,Num<2>,Num<3>,       Num<5>);
+          typedef Num<1> SigR5(Num<1>,Num<2>,Num<3>,Num<4>       );
+
+          typedef Num<5> SigI5(Num<5>);
+          
+          Sig15& f = fun15<1,2,3,4,5>;
+          SigI5& f5 = fun11<5>;
+          Tuple<Types<char> > argT(55);
+          
+          SigR1& f_red1 = BindToArgument<Sig15,char,0>::reduced (f, argT);
+          SigR2& f_red2 = BindToArgument<Sig15,char,1>::reduced (f, argT);
+          SigR3& f_red3 = BindToArgument<Sig15,char,2>::reduced (f, argT);
+          SigR4& f_red4 = BindToArgument<Sig15,char,3>::reduced (f, argT);
+          SigR5& f_red5 = BindToArgument<Sig15,char,4>::reduced (f, argT);
+          
+          ASSERT (55+2+3+4+5 == f_red1 (    _2_,_3_,_4_,_5_) );
+          ASSERT (1+55+3+4+5 == f_red1 (_1_,    _3_,_4_,_5_) );
+          ASSERT (1+2+55+4+5 == f_red1 (_1_,_2_,    _4_,_5_) );
+          ASSERT (1+2+3+55+5 == f_red1 (_1_,_2_,_3_,    _5_) );
+          ASSERT (1+2+3+4+55 == f_red1 (_1_,_2_,_3_,_4_    ) );
+          
+          SigR5& f_2bind = bindLast (f, bind(f5, Num<5>(99)));
+          ASSERT (1+2+3+4+99 == f_2bind (_1_,_2_,_3_,_4_   ) );
         }
       
     };
