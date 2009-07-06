@@ -28,7 +28,6 @@
  ** the "undo capture function" and the actual "undo function", by retrieving the
  ** memento data or memento object from the former and feeding it to the latter
  ** as an additional parameter, when the undo operation is invoked.
- ** //TODO
  **  
  ** @see CmdClosure
  ** @see UndoMutation
@@ -44,7 +43,7 @@
 //#include "pre.hpp"
 //#include "lib/meta/typelist.hpp"  ////////////////TODO include these??
 //#include "lib/meta/function.hpp"
-//#include "lib/meta/function-closure.hpp"
+#include "lib/meta/function-closure.hpp"
 //#include "lib/meta/function-erasure.hpp"
 //#include "lib/meta/tuple.hpp"
 #include "proc/control/command-signature.hpp"
@@ -52,7 +51,7 @@
 #include "lib/util.hpp"
 
 //#include <tr1/memory>
-//#include <tr1/functional>
+#include <tr1/functional>
 //#include <iostream> 
 //#include <string>
 
@@ -70,6 +69,7 @@ namespace control {
 //  using std::tr1::shared_ptr;
 //  using util::unConst;
   using std::string;
+  using lumiera::typelist::func::bindLast;
 //  using std::ostream;
 //  using std::tr1::function;
 //  using lumiera::typelist::FunctionSignature;
@@ -85,10 +85,10 @@ namespace control {
   
   /**
    *  Binding together state capturing and execution of the undo operation.
-   *  MementoTie itself is passive container object with a very specific type,
+   *  MementoTie itself is a passive container object with a very specific type,
    *  depending on the type of the operation arguments and the type of the memento.
    *  It is to be allocated within the ArgumentHolder of the command, thereby wrapping
-   *  or decorating the undo and capture function, setting up  the necessary bindings and
+   *  or decorating the undo and capture function, setting up the necessary bindings and
    *  closures, allowing them to cooperate behind the scenes to carry out the UNDO functionality.
    *  Through a reference to the MementoTie, the UndoMutation functor gets access to the prepared
    *  functions, storing them into generic containers (type erasure) for later invocation. 
@@ -109,20 +109,15 @@ namespace control {
       /** storage holding the captured state for undo */
       MEM memento_;
       
-      function<SIG> undo_;
-      function<SIG> capture_;
+      bool isCaptured_;
       
+      function<SIG_undo> undo_;
+      function<SIG_cap> capture_;
       
-      function<SIG>
-      buildFun()
+      void capture (MEM const& mementoVal)
         {
-//          PlaceholderTuple<SIG> tup;
-//          return tupleApplicator(tup).bind(origFun);
-        }
-      
-      void capture ()
-        {
-          memento_ = capture();
+          memento_ = mementoVal;
+          isCaptured_ = true;
         }
       
     public:
@@ -133,11 +128,58 @@ namespace control {
        */
       MementoTie (function<SIG_undo> const& undoFunc,
                   function<SIG_cap> const& captureFunc)
+        : memento_()
+        , isCaptured_(false)
+        , undo_(undoFunc)
+        , capture_(captureFunc)
         { }
       
+      
+      /** bind the undo function to the internal memento store within this object.
+       *  @return a functor, which, when invoked with the remaining arguments, will
+       *        automatically call #getState() to retrieve the current memento value.
+       *  @note similar to #getState(), the returned functor will throw
+       *        when the state capturing wasn't yet invoked
+       */
+      function<SIG>
+      tieUndoFunc()
+        {
+          using std::tr1::bind;
+          
+          return bindLast( undo_
+                         , bind (&MementoTie::getState, this)
+                         );
+        }
+      
+      /** bind the capturing function to the internal memento store within this object.
+       *  @return a functor, which on invocation will automatically store the return value
+       *        of the capturing function (= the current memento value) into the field
+       *        #memento_ within this object 
+       */
+      function<SIG>
+      tieCaptureFunc()
+        {
+          using std::tr1::placeholders::_1;
+          
+          function<void(MEM)> doCaptureMemento = bind (&MementoTie::capture, this, _1);
+          
+          return chained(capture_, doCaptureMemento);
+        }
+      
+      
+      /** get the currently captured memento state value
+       *  @throw when the capturing function wasn't yet invoked
+       */
+      MEM&
+      getState ()
+        {
+          if (!isCaptured_)
+            throw lumiera::error::State ("need to invoke memento state capturing beforehand",
+                                         LUMIERA_ERROR_MISSING_MEMENTO);
+          return memento_;
+        }
+      
     };
-    
-  ////////////////TODO currently just fleshing  out the API....
   
   
   

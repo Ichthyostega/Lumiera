@@ -37,6 +37,7 @@
 
 //#include "pre.hpp"
 #include "lib/error.hpp"
+#include "lib/bool-checkable.hpp"
 #include "proc/control/command-closure.hpp"
 #include "proc/control/memento-tie.hpp"
 
@@ -66,6 +67,7 @@ namespace control {
    * @todo Type-comment
    */
   class Mutation
+    : public lib::BoolCheckable<Mutation>
     {
       CmdFunctor func_;
       CmdClosure* clo_;
@@ -101,36 +103,23 @@ namespace control {
         }
       
       
-      /* == diagnostics == */
-      typedef CmdClosure* Mutation::*_unspecified_bool_type;
-      
-      /** implicit conversion to "bool" */ 
-      operator _unspecified_bool_type()  const { return  isValid()? &Mutation::clo_ : 0; }  // never throws
-      bool operator! ()                  const { return !isValid(); }                      //  ditto
-      
+      /** diagnostics */
       operator string()  const
         { 
           return isValid()? string (*clo_) : "Mutation(state missing)";
         }
       
-    protected:
       virtual bool
       isValid ()   const
         {
           return func_ && clo_;
         }
       
+    protected:
       void
       invoke (CmdFunctor & closedFunction)
         {
           closedFunction.getFun<void()>() ();
-        }
-      
-      CmdClosure&
-      getClosure() ///< Interface for subclasses to access the bound parameters
-        {
-          REQUIRE (clo_, "Lifecycle error: function arguments not yet bound");
-          return *clo_;
         }
     };
   
@@ -146,51 +135,24 @@ namespace control {
   class UndoMutation
     : public Mutation
     {
-      Mutation memento_;
+      Mutation captureMemento_;
       
     public:
-      template<typename SIG_undo, typename SIG_cap>
-      UndoMutation (function<SIG_undo> const& undoFunc,
-                    function<SIG_cap> const& captureFunc)
-        : Mutation (undoFunc)
-        , memento_(captureFunc)
+      template<typename TIE>
+      UndoMutation (TIE & mementoHolder)
+        : Mutation (mementoHolder.tieUndoFunc())
+        , captureMemento_(mementoHolder.tieCaptureFunc())
         { }
-
-#if false /////////////////////////////////////////////////TODO: remove after refactoring
-      UndoMutation (UndoMutation const& o)
-        : Mutation (*this)
-        , captureFunc_(o.captureFunc_)
-        , memento_(o.memento_->clone().get())
-        { }
-      
-      UndoMutation&
-      operator= (UndoMutation const& o)
-        {
-          Mutation::operator= (o);
-          captureFunc_ = o.captureFunc_;
-          memento_.reset(o.memento_->clone().get());
-          return *this;
-        }
       
       
       virtual Mutation&
       close (CmdClosure& cmdClosure)
         {
-          REQUIRE (!memento_,    "Lifecycle error: already closed over the arguments");
-          REQUIRE (captureFunc_, "Param error: not bound to a valid function");
-          
-          // create a special state closure, which can later on store the captured undo state (memento)
-          scoped_ptr<MementoClosure> stateClosure (new MementoClosure (captureFunc_));
-          CmdFunctor closedCaptureFunc = cmdClosure.bindArguments(captureFunc_);
-          
-          // the undoFunc (within parent class) will retrieve an argument tuple extended by the memento
-          Mutation::close (stateClosure->decorate (cmdClosure));
-          
-          captureFunc_ = closedCaptureFunc;
-//          memento_.swap(stateClosure);
+          Mutation::close(cmdClosure);
+          captureMemento_.close(cmdClosure);
           return *this;
         }
-#endif      
+      
       
       Mutation&
       captureState ()
@@ -199,22 +161,16 @@ namespace control {
             throw lumiera::error::State ("need to bind function arguments prior to capturing undo state",
                                          LUMIERA_ERROR_UNBOUND_ARGUMENTS);
           
-          memento_();
+          captureMemento_();
           return *this;
         }
       
-      CmdClosure&
-      getMemento()
-        {
-          ASSERT (memento_, "Lifecycle error: need to close first");
-//          return *memento_;
-        }
       
     private:
       virtual bool
       isValid ()   const
         {
-//          return Mutation::isValid() && captureFunc_ && memento_;
+          return Mutation::isValid() && memento_;
         }
       
       
