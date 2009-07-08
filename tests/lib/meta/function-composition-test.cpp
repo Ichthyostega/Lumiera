@@ -36,7 +36,9 @@ namespace test    {
   using ::test::Test;
   using func::applyFirst;
   using func::applyLast;
+  using func::bindLast;
   using func::PApply;
+  using func::BindToArgument;
   
   
       namespace { // test functions
@@ -322,32 +324,35 @@ namespace test    {
       check_bindToArbitraryParameter ()
         {
           typedef Num<1> Sig15(Num<1>,Num<2>,Num<3>,Num<4>,Num<5>);
+          
           typedef Num<1> SigR1(       Num<2>,Num<3>,Num<4>,Num<5>);
           typedef Num<1> SigR2(Num<1>,       Num<3>,Num<4>,Num<5>);
           typedef Num<1> SigR3(Num<1>,Num<2>,       Num<4>,Num<5>);
           typedef Num<1> SigR4(Num<1>,Num<2>,Num<3>,       Num<5>);
           typedef Num<1> SigR5(Num<1>,Num<2>,Num<3>,Num<4>       );
 
-          typedef Num<5> SigI5(Num<5>);
+          typedef Num<5> SigA5(Num<5>);
           
           Sig15& f = fun15<1,2,3,4,5>;
-          SigI5& f5 = fun11<5>;
+          SigA5& f5 = fun11<5>;
           Tuple<Types<char> > argT(55);
           
-          SigR1& f_red1 = BindToArgument<Sig15,char,0>::reduced (f, argT);
-          SigR2& f_red2 = BindToArgument<Sig15,char,1>::reduced (f, argT);
-          SigR3& f_red3 = BindToArgument<Sig15,char,2>::reduced (f, argT);
-          SigR4& f_red4 = BindToArgument<Sig15,char,3>::reduced (f, argT);
-          SigR5& f_red5 = BindToArgument<Sig15,char,4>::reduced (f, argT);
+          function<SigR1> f_bound_1 = BindToArgument<Sig15,char,0>::reduced (f, argT);
+          function<SigR2> f_bound_2 = BindToArgument<Sig15,char,1>::reduced (f, argT);
+          function<SigR3> f_bound_3 = BindToArgument<Sig15,char,2>::reduced (f, argT);
+          function<SigR4> f_bound_4 = BindToArgument<Sig15,char,3>::reduced (f, argT);
+          function<SigR5> f_bound_5 = BindToArgument<Sig15,char,4>::reduced (f, argT);
           
-          ASSERT (55+2+3+4+5 == f_red1 (    _2_,_3_,_4_,_5_) );
-          ASSERT (1+55+3+4+5 == f_red1 (_1_,    _3_,_4_,_5_) );
-          ASSERT (1+2+55+4+5 == f_red1 (_1_,_2_,    _4_,_5_) );
-          ASSERT (1+2+3+55+5 == f_red1 (_1_,_2_,_3_,    _5_) );
-          ASSERT (1+2+3+4+55 == f_red1 (_1_,_2_,_3_,_4_    ) );
+          ASSERT (55+2+3+4+5 == f_bound_1 (    _2_,_3_,_4_,_5_) );
+          ASSERT (1+55+3+4+5 == f_bound_2 (_1_,    _3_,_4_,_5_) );
+          ASSERT (1+2+55+4+5 == f_bound_3 (_1_,_2_,    _4_,_5_) );
+          ASSERT (1+2+3+55+5 == f_bound_4 (_1_,_2_,_3_,    _5_) );
+          ASSERT (1+2+3+4+55 == f_bound_5 (_1_,_2_,_3_,_4_    ) );
           
-          SigR5& f_2bind = bindLast (f, bind(f5, Num<5>(99)));
-          ASSERT (1+2+3+4+99 == f_2bind (_1_,_2_,_3_,_4_   ) );
+          using std::tr1::bind;
+          
+          f_bound_5 = bindLast (f, bind(f5, Num<5>(99)));
+          ASSERT (1+2+3+4+99 == f_bound_5 (_1_,_2_,_3_,_4_   ) );
         }
       
     };

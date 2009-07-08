@@ -70,6 +70,7 @@ namespace control {
 //  using util::unConst;
   using std::string;
   using lumiera::typelist::func::bindLast;
+  using lumiera::typelist::func::chained;
 //  using std::ostream;
 //  using std::tr1::function;
 //  using lumiera::typelist::FunctionSignature;
@@ -81,6 +82,7 @@ namespace control {
   
 //  using lumiera::typelist::NullType;
     
+  LUMIERA_ERROR_DECLARE (MISSING_MEMENTO);  ///<  Undo functor not yet usable, because no undo state has been captured
   
   
   /**

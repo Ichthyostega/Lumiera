@@ -60,7 +60,6 @@ namespace control {
   
   
   LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Mutation functor not yet usable, because arguments aren't bound
-  LUMIERA_ERROR_DECLARE (MISSING_MEMENTO);   ///<  Undo functor not yet usable, because no undo state has been captured
   
   
   /**
@@ -138,11 +137,16 @@ namespace control {
       Mutation captureMemento_;
       
     public:
-      template<typename TIE>
-      UndoMutation (TIE & mementoHolder)
+      template<typename SIG, typename MEM>
+      UndoMutation (MementoTie<SIG,MEM> & mementoHolder)
         : Mutation (mementoHolder.tieUndoFunc())
         , captureMemento_(mementoHolder.tieCaptureFunc())
         { }
+      
+//      UndoMutation (UndoMutation const& o)
+//        : Mutation(o)
+//        , captureMemento_(o.captureMemento_)
+//        { }
       
       
       virtual Mutation&
@@ -170,7 +174,7 @@ namespace control {
       virtual bool
       isValid ()   const
         {
-          return Mutation::isValid() && memento_;
+          return Mutation::isValid() && captureMemento_;
         }
       
       

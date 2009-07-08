@@ -58,6 +58,7 @@ namespace typelist{
     {
       char o_;
       Numz (char x =0) : o_(x) { }
+      operator char ()  const { return o_; }
     };
   
   

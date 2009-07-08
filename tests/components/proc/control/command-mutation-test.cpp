@@ -114,7 +114,6 @@ namespace test    {
         {
           checkMutation();
           checkUndoMutation();
-          checkStateCapturingMechanism();
         }
       
       
@@ -170,7 +169,9 @@ namespace test    {
           function<void(int)> undo_func  = bind (&testFunc,_1);
           function<int(void)> cap_func   = bind (&capture    );
           
-          MementoTie mementoHolder (undo_func,cap_func);
+          typedef MementoTie<void(),int> MemHolder;
+          
+          MemHolder mementoHolder (undo_func,cap_func);
           UndoMutation undoFunctor (mementoHolder);
           ASSERT (!undoFunctor);
           VERIFY_ERROR (UNBOUND_ARGUMENTS, undoFunctor() );
@@ -181,7 +182,7 @@ namespace test    {
           undoFunctor.close(clo);
           ASSERT (!undoFunctor);
           VERIFY_ERROR (MISSING_MEMENTO, undoFunctor() );
-          VERIFY_ERROR (MISSING_MEMENTO, mementoHoder.getState() );
+          VERIFY_ERROR (MISSING_MEMENTO, mementoHolder.getState() );
           
           testVal = 11;
           undoFunctor.captureState();
@@ -216,40 +217,6 @@ namespace test    {
         }
       
       
-      void
-      checkStateCapturingMechanism ()
-        {
-          function<void(int)> undo_func  = bind (&testFunc,_1);
-          function<int(void)> cap_func   = bind (&capture    );
-
-          MementoTie mementoHolder (undo_func,cap_func);
-          
-          function<void()> bound_undo_func = mementoHolder.tieUndoFunc();
-          function<void()> bound_cap_func  = mementoHolder.tieCaptureFunc();
-          
-          VERIFY_ERROR (MISSING_MEMENTO, bound_undo_func() );
-          VERIFY_ERROR (MISSING_MEMENTO, mementoHoder.getState() );
-          
-          int rr (rand() %100);
-          testVal = rr;
-          bound_cap_func();       // invoke state capturing 
-          
-          ASSERT (rr == mementoHolder.getState());
-          
-          testVal = -10;          // meanwhile "somehow" mutate the state
-          bound_undo_func();      // invoking the undo() feeds back the memento
-          ASSERT (rr-10 == testVal);
-          
-          // this cycle can be repeated with different state values
-          rr = (rand() %100);
-          testVal = rr;
-          bound_cap_func();       // capture new state
-          ASSERT (rr == mementoHolder.getState());
-          
-          testVal = -20;
-          bound_undo_func();
-          ASSERT (rr-20 == testVal);
-        }
     };
   
   

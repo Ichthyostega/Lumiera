@@ -710,17 +710,19 @@ namespace func    {
       typedef typename Splice<ArgsList, ValList, n>::Back  RemainingBack;
       typedef typename func::PlaceholderTuple<RemainingFront>::PlaceholderSeq::List PlaceholdersBefore;
       typedef typename func::PlaceholderTuple<RemainingBack,n>::PlaceholderSeq::List PlaceholdersBehind;
-      typedef typename Append<typename Append<PlaceholdersBefore,ValList>::List
-                             ,PlaceholdersBehind
-                             >::List                               PreparedArgs;
+      typedef typename Append< typename Append< PlaceholdersBefore
+                                              , ValList >::List
+                             , PlaceholdersBehind >::List          PreparedArgs;
       typedef typename Append<RemainingFront, RemainingBack>::List ReducedArgs;
       
       typedef tuple::BuildTuple<PreparedArgs, ValList, n> BuildPreparedArgs;
-      typedef typename Tuple<LeftReplaced>::TupleType  PreparedArgTuple;
+      typedef typename Tuple<PreparedArgs>::TupleType  PreparedArgTuple;
+      typedef typename Types<ReducedArgs>::Seq RemainingArgs;
       
+      typedef typename FunctionTypedef<Ret,RemainingArgs>::Sig ReducedSig;
       
     public:
-      typedef function<typename FunctionTypedef<Ret,ReducedArgs>::Sig> ReducedFunc;
+      typedef function<ReducedSig> ReducedFunc;
       
       static ReducedFunc
       reduced (SIG& f, Tuple<ValList> const& val)
@@ -838,6 +840,18 @@ namespace func    {
     return PApply<SIG,ArgTypeSeq>::bindFront (f, val);
   }
   
+  /** close the given function over the last argument */
+  template<typename SIG, typename ARG>
+  typename _PapE<SIG>::Function
+  applyLast (SIG& f, ARG arg)
+  {
+    typedef typename _PapE<SIG>::Arg ArgType;
+    typedef Types<ArgType>           ArgTypeSeq;
+    typedef Tuple<ArgTypeSeq>        ArgTuple;
+    ArgTuple val(arg);
+    return PApply<SIG,ArgTypeSeq>::bindBack (f, val);
+  }
+  
   
   /** bind the last function argument to an arbitrary term,
    *  which especially might be a (nested) binder... */
@@ -848,7 +862,7 @@ namespace func    {
     typedef Types<TERM>     ArgTypeSeq;
     typedef Tuple<ArgTypeSeq> ArgTuple;
     ArgTuple argT(arg);
-    const int LAST_POS = count<typename _Fun<SIG>::Args>::value;
+    enum { LAST_POS = count<typename _Fun<SIG>::Args::List>::value };
     return BindToArgument<SIG,TERM,LAST_POS>::reduced (f, argT);
   }
   
