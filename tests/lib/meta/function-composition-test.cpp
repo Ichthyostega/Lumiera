@@ -317,6 +317,13 @@ namespace test    {
           ASSERT (1+2+3     == func::chained(f3, ff) (_1_,_2_,_3_)         );
           ASSERT (1+2+3+4   == func::chained(f4, ff) (_1_,_2_,_3_,_4_)     );
           ASSERT (1+2+3+4+5 == func::chained(f5, ff) (_1_,_2_,_3_,_4_,_5_) );
+          
+          
+          function<Sig15> f5_fun = f5;     // also works with function objects...
+          function<Sig2>  ff_fun = ff;
+          ASSERT (1+2+3+4+5 == func::chained(f5_fun, ff    ) (_1_,_2_,_3_,_4_,_5_) );
+          ASSERT (1+2+3+4+5 == func::chained(f5,     ff_fun) (_1_,_2_,_3_,_4_,_5_) );
+          ASSERT (1+2+3+4+5 == func::chained(f5_fun, ff_fun) (_1_,_2_,_3_,_4_,_5_) );
         }
       
       
