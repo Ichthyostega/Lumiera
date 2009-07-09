@@ -51,7 +51,8 @@
 #include "lib/meta/function.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
-#include "lib/meta/tuple.hpp"
+#include "lib/meta/typeseq-util.hpp"
+//#include "lib/meta/tuple.hpp"
 
 //#include <tr1/memory>
 #include <tr1/functional>
@@ -69,7 +70,7 @@ namespace control {
   using lumiera::typelist::FunctionTypedef;
   using lumiera::typelist::Types;
 //using lumiera::typelist::NullType;
-  using lumiera::typelist::Tuple;
+//using lumiera::typelist::Tuple;
   using lumiera::typelist::Append;
   using lumiera::typelist::SplitLast;
   
@@ -86,8 +87,9 @@ namespace control {
     {
       typedef typename FunctionSignature< function<SIG> >::Args Args;
       
-      typedef typename Append<Args, MEM>::List ExtendedArglist;
-      typedef typename Tuple<ExtendedArglist>::Type ExtendedArgs;
+      typedef typename Args::List ArgList;
+      typedef typename Append<ArgList, MEM>::List ExtendedArglist;
+      typedef typename Types<ExtendedArglist>::Seq ExtendedArgs;
       
     public:
       typedef typename FunctionTypedef<void, Args>::Sig          OperateSig;
@@ -119,7 +121,7 @@ namespace control {
         {
           typedef RET Memento;
           typedef typename Append<ARG, Memento>::List ExtendedArglist;
-          typedef typename Tuple<ExtendedArglist>::Type ExtendedArgs;
+          typedef typename Types<ExtendedArglist>::Seq ExtendedArgs;
           
           typedef typename FunctionTypedef<void, ARG>::Sig           OperateSig;
           typedef typename FunctionTypedef<Ret,ARG>::Sig             CaptureSig;
@@ -133,7 +135,7 @@ namespace control {
           
           typedef typename SplitLast<Args>::Type Memento;
           typedef typename SplitLast<Args>::List OperationArglist;
-          typedef typename Tuple<OperationArglist>::Type OperationArgs;
+          typedef typename Types<OperationArglist>::Seq OperationArgs;
           
           typedef typename FunctionTypedef<void, OperationArgs>::Sig OperateSig;
           typedef typename FunctionTypedef<Ret,OperationArgs>::Sig   CaptureSig;
