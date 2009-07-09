@@ -15,5 +15,6 @@ PLANNED "CommandMutation_test" CommandMutation_test <<END
 END
 
 
-PLANNED "MementoTie_test" MementoTie_test <<END
+Test "MementoTie_test" MementoTie_test <<END
+return: 0
 END

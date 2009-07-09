@@ -57,7 +57,9 @@
 
 namespace lib {
   
-  
+  namespace imp {
+    struct Dummy {};
+  }
   
   
   /*
@@ -89,8 +91,11 @@ namespace lib {
    * @todo list some usage examples here
    * @see bool-checkable-test.cpp 
    */
-  template<class T>
+  template< class T                 ///< the target type implementing \c isValid()
+          , class PAR = imp::Dummy ///<  optional parent for inheritance chain
+          >
   struct BoolCheckable
+    : PAR
     {
       typedef bool (T::*ValidityCheck)()  const;
       typedef ValidityCheck _unspecified_bool_type;

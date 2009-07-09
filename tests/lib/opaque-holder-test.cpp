@@ -95,7 +95,7 @@ namespace test{
      *  due to alignment of the contained object
      *  within OpaqueHolder's buffer
      */
-    const size_t ALLIGNMENT = sizeof(size_t);
+    const size_t _ALIGN_ = sizeof(size_t);
     
   }
   
@@ -228,7 +228,7 @@ namespace test{
           ASSERT (!isSameObject (d3, *o2));
           ASSERT (3 == o2->getIt());
           
-          ASSERT (sizeof(Opaque) <= sizeof(Base) + sizeof(void*) + ALLIGNMENT);
+          ASSERT (sizeof(Opaque) <= sizeof(Base) + sizeof(void*) + _ALIGN_);
         }
       
       
@@ -255,7 +255,7 @@ namespace test{
           
           ASSERT (sizeof(Special) > sizeof(Base));
           ASSERT (sizeof(SpecialOpaque) > sizeof(Opaque));
-          ASSERT (sizeof(SpecialOpaque) <= sizeof(Special) + sizeof(void*) + ALLIGNMENT);
+          ASSERT (sizeof(SpecialOpaque) <= sizeof(Special) + sizeof(void*) + _ALIGN_);
           
           Special s1 (6);
           Special s2 (3);

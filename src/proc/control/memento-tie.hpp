@@ -40,47 +40,19 @@
 #ifndef CONTROL_MEMENTO_TIE_H
 #define CONTROL_MEMENTO_TIE_H
 
-//#include "pre.hpp"
-//#include "lib/meta/typelist.hpp"  ////////////////TODO include these??
-//#include "lib/meta/function.hpp"
+#include "lib/bool-checkable.hpp"
 #include "lib/meta/function-closure.hpp"
-//#include "lib/meta/function-erasure.hpp"
-//#include "lib/meta/tuple.hpp"
 #include "proc/control/command-signature.hpp"
-#include "proc/control/command-closure.hpp" ////////TODO really??
 #include "lib/util.hpp"
 
-//#include <tr1/memory>
 #include <tr1/functional>
-//#include <iostream> 
-//#include <string>
-
-
-#include "lib/test/test-helper.hpp"  /////////////////TODO remove this
-using lib::test::showSizeof;
-
-using std::cout;    //////////////////////////////////TODO remove this
-using std::endl;
 
 
 namespace control {
   
-//  using lumiera::Symbol;
-//  using std::tr1::shared_ptr;
-//  using util::unConst;
-  using std::string;
+  using std::tr1::ref;
   using lumiera::typelist::func::bindLast;
   using lumiera::typelist::func::chained;
-//  using std::ostream;
-//  using std::tr1::function;
-//  using lumiera::typelist::FunctionSignature;
-//  using lumiera::typelist::Tuple;
-//  using lumiera::typelist::BuildTupleAccessor;
-//  using lumiera::typelist::TupleApplicator;
-//  using lumiera::typelist::FunErasure;
-//  using lumiera::typelist::StoreFunction;
-  
-//  using lumiera::typelist::NullType;
     
   LUMIERA_ERROR_DECLARE (MISSING_MEMENTO);  ///<  Undo functor not yet usable, because no undo state has been captured
   
@@ -90,39 +62,74 @@ namespace control {
    *  MementoTie itself is a passive container object with a very specific type,
    *  depending on the type of the operation arguments and the type of the memento.
    *  It is to be allocated within the ArgumentHolder of the command, thereby wrapping
-   *  or decorating the undo and capture function, setting up the necessary bindings and
-   *  closures, allowing them to cooperate behind the scenes to carry out the UNDO functionality.
-   *  Through a reference to the MementoTie, the UndoMutation functor gets access to the prepared
-   *  functions, storing them into generic containers (type erasure) for later invocation. 
+   *  the undo and capture function, setting up the necessary bindings and closures for
+   *  allowing them to cooperate behind the scenes to carry out the UNDO functionality.
+   *  On construction, the UndoMutation functor retrieves the wired up functions,
+   *  storing them into generic containers (type erasure) for later invocation. 
    *  
    *  More specifically, the \c captureFunction, which is expected to run immediately prior
    *  to the actual command operation, returns a \b memento value object (of unspecific type),
    *  which needs to be stored within the MementoTie. On UNDO, the undo-operation functor needs
    *  to be provided with a reference to this stored memento value through an additional
    *  parameter (which by convention is always the last argument of the undo function).
-   *  
    */
   template<typename SIG, typename MEM>
   class MementoTie
+    : public lib::BoolCheckable<MementoTie<SIG,MEM> >
     {
       typedef typename CommandSignature<SIG,MEM>::CaptureSig SIG_cap;
       typedef typename CommandSignature<SIG,MEM>::UndoOp_Sig SIG_undo;
       
-      /** storage holding the captured state for undo */
-      MEM memento_;
+      MEM memento_; ///< storage holding the captured state for undo
       
       bool isCaptured_;
       
       function<SIG_undo> undo_;
       function<SIG_cap> capture_;
       
+      
+      /* == internal functionality binding the functions to the memento == */
+      
+      /** to be chained behind the capture function */
       void capture (MEM const& mementoVal)
         {
           memento_ = mementoVal;
           isCaptured_ = true;
         }
       
+      /** partially closed undo function:
+       *  on invocation, receive the current memento value
+       *  and feed it to the wrapped undo function. Additionally
+       *  provides a \c bool() conversion to check if any memento
+       *  state has yet been captured.  
+       */
+      struct WiredUndoFunc
+        : function<SIG> 
+        , lib::BoolCheckable<WiredUndoFunc>
+        {
+          
+          WiredUndoFunc (MementoTie& thisTie)
+            : function<SIG> (
+                bindLast( thisTie.undo_   // getState() bound to last argument of undo(...)
+                        , bind (&MementoTie::getState, ref(thisTie))
+                        )   )
+            , mementoHolder_(thisTie)
+            { }
+          
+          bool
+          isValid () const
+            {
+              return function<SIG>::operator bool()
+                  && bool(mementoHolder_);
+            }
+          
+        private:
+          MementoTie & mementoHolder_;
+        };
+      
+      
     public:
+      
       /** creates an execution context tying together the provided functions.
        *  Bound copies of these functors may be pulled from the MementoTie,
        *  in order to build the closures (with the concrete operation arguments)
@@ -143,14 +150,10 @@ namespace control {
        *  @note similar to #getState(), the returned functor will throw
        *        when the state capturing wasn't yet invoked
        */
-      function<SIG>
+      WiredUndoFunc
       tieUndoFunc()
         {
-          using std::tr1::bind;
-          
-          return bindLast( undo_
-                         , bind (&MementoTie::getState, this)
-                         );
+          return WiredUndoFunc(*this);
         }
       
       /** bind the capturing function to the internal memento store within this object.
@@ -163,13 +166,13 @@ namespace control {
         {
           using std::tr1::placeholders::_1;
           
-          function<void(MEM)> doCaptureMemento = bind (&MementoTie::capture, this, _1);
+          function<void(MEM)> doCaptureMemento = bind (&MementoTie::capture, this, _1 );
           
           return chained(capture_, doCaptureMemento);
         }
       
       
-      /** get the currently captured memento state value
+      /** access the currently captured memento state value
        *  @throw when the capturing function wasn't yet invoked
        */
       MEM&
@@ -181,6 +184,16 @@ namespace control {
           return memento_;
         }
       
+      
+      /** conversion to bool() yields true
+       *  if all functions are usable and 
+       *  memento state has been captured
+       */
+      bool
+      isValid ()  const
+        {
+          return undo_ && capture_ && isCaptured_;
+        }
     };
   
   

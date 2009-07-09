@@ -23,80 +23,52 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "proc/asset/media.hpp"
-//#include "proc/mobject/session.hpp"
-//#include "proc/mobject/session/edl.hpp"
-//#include "proc/mobject/session/testclip.hpp"
-//#include "proc/mobject/test-dummy-mobject.hpp"
-//#include "lib/p.hpp"
-//#include "proc/mobject/placement.hpp"
-//#include "proc/mobject/placement-index.hpp"
-//#include "proc/mobject/explicitplacement.hpp"
 #include "proc/control/memento-tie.hpp"
-//#include "lib/meta/typelist.hpp"
-//#include "lib/meta/tuple.hpp"
-//#include "lib/lumitime.hpp"
-//#include "lib/util.hpp"
 
 #include <tr1/functional>
-//#include <boost/format.hpp>
-#include <iostream>
 #include <cstdlib>
-#include <string>
 
-using std::tr1::bind;
-//using std::tr1::placeholders::_1;
-//using std::tr1::placeholders::_2;
 using std::tr1::function;
-//using boost::format;
-//using lumiera::Time;
-//using util::contains;
-using std::string;
+using std::tr1::bind;
 using std::rand;
-using std::cout;
-using std::endl;
 
 
 namespace control {
 namespace test    {
-
-  using lib::test::showSizeof;
-
-//  using session::test::TestClip;
-//  using lumiera::P;
-  using namespace lumiera::typelist;
-  using lumiera::typelist::Tuple;
-  
-  using control::CmdClosure;
   
   
   
   
-  
-  
-  namespace {                                                     /////////////////TODO: use a more interesting function here.....
-  
-    int testVal=0;  ///< used to verify the effect of testFunc
-  
+  namespace {
+    
+    int testVal=0;                   ///< used to verify the effect of testFunc
+    
     void
-    testFunc (int val)
+    undo (short param, int memento)  ///< simulates "Undo" of the command operation
     {
-      testVal += val;
+      testVal += param-memento;
     }
     
     int
-    capture ()
+    capture (short param)            ///< simulates capturing the undo state
     {
-      return testVal;
+      return testVal+param;
     }
-  
+    
+    
+    /** maximum additional storage maybe wasted due
+     *  to alignment of the memento value within MementoTie
+     */
+    const size_t ALIGNMENT = sizeof(size_t);
   }
   
   
   
-  /***************************************************************************
-   * Verify the state capturing mechanism (memento), which is used
-   * to implement the Undo() functionality for Proc-Layer commands
+  /*****************************************************************************************
+   * @test Verify the state capturing mechanism (memento), which is used to implement
+   * the Undo() functionality for Proc-Layer commands. Bind an undo function and a state
+   * capturing function and wire up both to store and retrieve a memento value. 
+   * Verify that after closing the functions, actually state is captured by each invocation.
    *       
    * @see  control::Command
    * @see  control::CmdClosure
@@ -113,55 +85,52 @@ namespace test    {
         }
       
       
-      /** @test check the functionality used to implement UndoMutation:
-       *        bind an undo function and a state capturing function
-       *        and use the latter to define the special CmdClosure
-       *        with the ability hold the memento and bind it into
-       *        the relevant parameter of the undo function.
-       *        Verify that, after closing the functions, actually
-       *        state is captured by each invocation.
-       */
       void
       checkStateCapturingMechanism ()
         {
-          function<void(int)> undo_func  = bind (&testFunc,_1);
-          function<int(void)> cap_func   = bind (&capture    );
+          typedef void OpSIG(short); // assumed signature of the Command "Operation"
           
-          typedef MementoTie<void(),int> MemHolder;
-
+          function<void(short,int)> undo_func  = undo;
+          function< int(short)>     cap_func   = capture;
+          
+          typedef MementoTie<OpSIG,int> MemHolder;
           MemHolder mementoHolder (undo_func,cap_func);
           
-          function<void()> bound_undo_func = mementoHolder.tieUndoFunc();
-          function<void()> bound_cap_func  = mementoHolder.tieCaptureFunc();
+          ASSERT (sizeof(MemHolder) <= sizeof(int)                   // storage for the memento
+                                     + 2 * sizeof(function<void()>)  // storage for the 2 undecorated functors
+                                     + ALIGNMENT);
           
-          VERIFY_ERROR (MISSING_MEMENTO, bound_undo_func() );
+          function<OpSIG> bound_undo_func = mementoHolder.tieUndoFunc();
+          function<OpSIG> bound_cap_func  = mementoHolder.tieCaptureFunc();
+          
+          VERIFY_ERROR (MISSING_MEMENTO, bound_undo_func(123) );
           VERIFY_ERROR (MISSING_MEMENTO, mementoHolder.getState() );
           
-          int rr (rand() %100);
-          testVal = rr;
-          bound_cap_func();       // invoke state capturing 
+          short rr (rand() %100);
+          testVal = 0;
+          bound_cap_func(rr);     // invoke state capturing 
           
           ASSERT (rr == mementoHolder.getState());
           
-          testVal = -10;          // meanwhile "somehow" mutate the state
-          bound_undo_func();      // invoking the undo() feeds back the memento
-          ASSERT (rr-10 == testVal);
+          testVal = 10;           // meanwhile "somehow" mutate the state
+          bound_undo_func(0);     // invoking the undo() feeds back the memento
+          ASSERT (testVal == 10-rr);
           
           // this cycle can be repeated with different state values
           rr = (rand() %100);
           testVal = rr;
-          bound_cap_func();       // capture new state
-          ASSERT (rr == mementoHolder.getState());
+          bound_cap_func(5);      // capture new state
+          ASSERT (5+rr == mementoHolder.getState());
           
           testVal = -20;
-          bound_undo_func();
-          ASSERT (rr-20 == testVal);
+          bound_undo_func(3*rr);
+          ASSERT (testVal == -20 + 3*rr - (5+rr));
         }
     };
   
   
   /** Register this test class... */
   LAUNCHER (MementoTie_test, "unit controller");
-      
-      
+  
+  
 }} // namespace control::test
