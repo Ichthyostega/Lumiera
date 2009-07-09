@@ -126,7 +126,8 @@ namespace test    {
   
   /******************************************************************************
    * @test this test covers some extensions and variations on function closures:
-   *       - partial application of a function, returning a binder
+   *       - partial application of a function, returning a partial closure
+   *       - variation: binding a arbitrary term, might even be a nested binder
    *       - chaining of two functions with suitable arguments ("composition")
    */
   class FunctionComposition_test : public Test
@@ -330,7 +331,7 @@ namespace test    {
           typedef Num<1> SigR3(Num<1>,Num<2>,       Num<4>,Num<5>);
           typedef Num<1> SigR4(Num<1>,Num<2>,Num<3>,       Num<5>);
           typedef Num<1> SigR5(Num<1>,Num<2>,Num<3>,Num<4>       );
-
+          
           typedef Num<5> SigA5(Num<5>);
           
           Sig15& f = fun15<1,2,3,4,5>;
@@ -349,10 +350,26 @@ namespace test    {
           ASSERT (1+2+3+55+5 == f_bound_4 (_1_,_2_,_3_,    _5_) );
           ASSERT (1+2+3+4+55 == f_bound_5 (_1_,_2_,_3_,_4_    ) );
           
+          
+          // degenerate case: specify wrong argument position (behind end of argument list)
+          // causes the argument to be simply ignored and no binding to happen
+          function<Sig15> f_bound_X = BindToArgument<Sig15,char,5>::reduced (f, argT);
+          ASSERT (1+2+3+4+5  == f_bound_X (_1_,_2_,_3_,_4_,_5_) );
+          
+          
+          /* check the convenient function-style API */
+          
           using std::tr1::bind;
           
           f_bound_5 = bindLast (f, bind(f5, Num<5>(99)));
           ASSERT (1+2+3+4+99 == f_bound_5 (_1_,_2_,_3_,_4_   ) );
+          
+          f_bound_5 = bindLast (f, bind(&f5, Num<5>(99)));        // can bind function pointer
+          ASSERT (1+2+3+4+99 == f_bound_5 (_1_,_2_,_3_,_4_   ) );
+          
+          function<Sig15> asFunctor(f);
+          f_bound_5 = bindLast (asFunctor, bind(f5, Num<5>(88))); // use functor instead of direct ref
+          ASSERT (1+2+3+4+88 == f_bound_5 (_1_,_2_,_3_,_4_   ) );
         }
       
     };

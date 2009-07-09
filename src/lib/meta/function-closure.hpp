@@ -669,11 +669,11 @@ namespace func    {
    * i.e. fed the result of invoking the first function
    * as argument into the second function.  
    */
-  template<typename SIG1, typename RET>
+  template<typename F1, typename RET>
   class FunctionComposition
     {
-      typedef typename func::_Fun<SIG1>::Args Args;
-      typedef typename func::_Fun<SIG1>::Ret  Ret1;
+      typedef typename func::_Fun<F1>::Args Args;
+      typedef typename func::_Fun<F1>::Ret  Ret1;
       
       typedef Types<Ret1> ArgsF2;
       typedef typename FunctionTypedef<RET, ArgsF2>::Sig SigF2;
@@ -684,9 +684,14 @@ namespace func    {
       
     public:
       static function<ChainedSig>
-      chain (SIG1& f1, SigF2& f2)
+      chain (F1& f1, SigF2& f2)
         {
-          return _composed::Build<ChainedSig,SIG1,SigF2, ARG_CNT>::func (f1,f2);
+          return _composed::Build<ChainedSig,F1,SigF2, ARG_CNT>::func (f1,f2);
+        }
+      static function<ChainedSig>
+      chain (F1& f1, function<SigF2>& f2)
+        {
+          return _composed::Build<ChainedSig,F1,function<SigF2>, ARG_CNT>::func (f1,f2);
         }
     };
   
@@ -857,12 +862,12 @@ namespace func    {
    *  which especially might be a (nested) binder... */
   template<typename SIG, typename TERM>
   typename _PapE<SIG>::Function
-  bindLast (SIG& f, TERM arg)
+  bindLast (SIG& f, TERM const& arg)
   {
     typedef Types<TERM>     ArgTypeSeq;
     typedef Tuple<ArgTypeSeq> ArgTuple;
     ArgTuple argT(arg);
-    enum { LAST_POS = count<typename _Fun<SIG>::Args::List>::value };
+    enum { LAST_POS = -1 + count<typename _Fun<SIG>::Args::List>::value };
     return BindToArgument<SIG,TERM,LAST_POS>::reduced (f, argT);
   }
   
