@@ -88,8 +88,8 @@ namespace lib {
    * \c isValid() function, the conversion operator returns either a
    * bound or unbound member pointer. 
    * 
-   * @todo list some usage examples here
-   * @see bool-checkable-test.cpp 
+   * @see bool-checkable-test.cpp
+   * @see control::Mutation usage example 
    */
   template< class T                 ///< the target type implementing \c isValid()
           , class PAR = imp::Dummy ///<  optional parent for inheritance chain

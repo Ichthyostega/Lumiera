@@ -22,11 +22,32 @@
 
 
 /** @file command-mutation.hpp
- ** The core of a Proc-Layer command: functor containing the actual operation to be executed.
- ** //TODO
- **  
+ ** Core of a Proc-Layer command: functor containing the actual operation to be executed.
+ ** Each command holds two of these functors: one representing the actual operation
+ ** and one to undo the effect of this operation. The latter involves the capturing
+ ** and storing of a "memento" value behind the scenes. But towards Command, the
+ ** Mutation acts as interface to conceal these details, as well as the actual
+ ** type and parameters of the functions to be invoked. Thus, Mutation's
+ ** public interface just consists of a function call operator \c void() .
+ ** 
+ ** \par Lifecycle
+ ** Mutation objects are to be created based on a concrete function object, which then
+ ** gets embedded into a type erasure container, thus disposing the specific type information.
+ ** Moreover, building on this lib::OpaqueHolder yields a fixed size storage for Mutation objects,
+ ** allowing them to be embedded immediately within the Command instance.
+ ** 
+ ** Later on, any command needs to be made ready for execution by binding it to a specific
+ ** execution environment, which especially includes the target objects to be mutated by the
+ ** command. This procedure includes "closing" the Mutation (and UNDO) functor(s) with the
+ ** actual function arguments. These arguments are stored embedded within an ArgumentHolder,
+ ** which thereby acts as closure. Besides, the ArgumentHolder also has to accommodate for
+ ** storage holding the captured UNDO state (memento). Thus, internally the ArgumentHolder
+ ** has to keep track of the actual types, thus allowing to re-construct the concrete
+ ** function signature when closing the Mutation.
+ ** 
  ** @see Command
  ** @see ProcDispatcher
+ ** @see MementoTie binding memento state
  **
  */
 
@@ -41,9 +62,6 @@
 #include "proc/control/command-closure.hpp"
 #include "proc/control/memento-tie.hpp"
 
-//#include <tr1/memory>
-#include <boost/scoped_ptr.hpp>
-#include <tr1/functional>
 #include <iostream>
 #include <string>
 
@@ -51,10 +69,6 @@
 
 namespace control {
   
-//  using lumiera::Symbol;
-//  using std::tr1::shared_ptr;
-  using boost::scoped_ptr;
-  using std::tr1::function;
   using std::ostream;
   using std::string;
   
@@ -63,7 +77,13 @@ namespace control {
   
   
   /**
-   * @todo Type-comment
+   * Unspecific command functor for implementing Proc-Layer Command.
+   * To be created from an tr1::function object, which later on
+   * can be \link #close closed \endlink with a set of actual 
+   * function arguments. The concrete type of the function
+   * and the arguments is concealed (erased) on the interface,
+   * while the unclosed/closed - state of the functor can be
+   * checked by bool() conversion.
    */
   class Mutation
     : public lib::BoolCheckable<Mutation>
@@ -105,7 +125,8 @@ namespace control {
       /** diagnostics */
       operator string()  const
         { 
-          return isValid()? string (*clo_) : "Mutation(state missing)";
+          return isValid()? "Mutation("+string (*clo_)+")"
+                          : "Mutation(untied)";
         }
       
       virtual bool
@@ -114,7 +135,8 @@ namespace control {
           return func_ && clo_;
         }
       
-    protected:
+      
+    private:
       void
       invoke (CmdFunctor & closedFunction)
         {
@@ -128,8 +150,21 @@ namespace control {
   
   
   
+  
+  
+  
+  
   /**
-   * @todo Type-comment
+   * Specialised version of the command Mutation functor,
+   * used to implement the UNDO functionality. The operation
+   * executed when invoking this functor is the UNDO operation
+   * of the respective command; additionally we need another
+   * functor to capture the state to be restored on UNDO.
+   * Both functors are wired up internally to cooperate
+   * and store the state (memento), which is implemented
+   * by the specifically typed MementoTie object passed
+   * in on construction. All these specific details
+   * are concealed on the interface
    */
   class UndoMutation
     : public Mutation
@@ -142,11 +177,6 @@ namespace control {
         : Mutation (mementoHolder.tieUndoFunc())
         , captureMemento_(mementoHolder.tieCaptureFunc())
         { }
-      
-//      UndoMutation (UndoMutation const& o)
-//        : Mutation(o)
-//        , captureMemento_(o.captureMemento_)
-//        { }
       
       
       virtual Mutation&
@@ -172,16 +202,13 @@ namespace control {
       
     private:
       virtual bool
-      isValid ()   const
+      isValid ()  const
         {
           return Mutation::isValid() && captureMemento_;
         }
       
       
     };
-  ////////////////TODO currently just fleshing  out the API....
-  
-    
   
   
 } // namespace control

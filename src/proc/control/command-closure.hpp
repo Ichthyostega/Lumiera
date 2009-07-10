@@ -45,7 +45,8 @@
 
 #include <tr1/memory>
 #include <tr1/functional>
-#include <iostream> 
+#include <iostream>
+#include <sstream>
 #include <string>
 
 
@@ -119,14 +120,12 @@ namespace control {
         
       ParamAccessor(TUP const& tuple)
         : BASE(tuple)
-        { 
-          cout << showSizeof(element()) << endl;   //////////TODO remove this test code
-        }
+        { }
       
-      string
-      dump (string const& prefix = "(")  const
+      ostream&
+      dump (ostream& output)  const
         {
-          return BASE::dump (prefix+element()+",");
+          return BASE::dump (output << element() << ',');
         }
       
       
@@ -144,14 +143,10 @@ namespace control {
       
       ////////////////////TODO the recursion-end of the access operations goes here
       
-      string
-      dump (string const& prefix ="(")  const
+      ostream&
+      dump (ostream& output)  const
         { 
-          if (1 < prefix.length())
-            // remove trailing comma...
-            return prefix.substr (0, prefix.length()-1) +")";
-          else
-            return prefix+")";
+          return output;
         }
       
     };
@@ -212,7 +207,15 @@ namespace control {
       
       operator string()  const
         {
-          UNIMPLEMENTED ("how to do a string conversion on the variable argument tuple??");
+          std::ostringstream buff;
+          params_.dump (buff << "Closure(" );
+          
+          string dumped (buff.str());
+          if (1 < dumped.length())
+            // remove trailing comma...
+            return dumped.substr (0, dumped.length()-1) +")";
+          else
+            return dumped+")";
         }
     };
     

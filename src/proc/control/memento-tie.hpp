@@ -50,7 +50,6 @@
 
 namespace control {
   
-  using std::tr1::ref;
   using lumiera::typelist::func::bindLast;
   using lumiera::typelist::func::chained;
     

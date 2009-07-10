@@ -381,7 +381,7 @@ namespace lib {
       
       template<class SUB>
       InPlaceAnyHolder(SUB const& obj)
-        { 
+        {
           place_inBuff (obj);
         }
       

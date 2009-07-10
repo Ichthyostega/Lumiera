@@ -22,36 +22,17 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
-//#include "proc/asset/media.hpp"
-//#include "proc/mobject/session.hpp"
-//#include "proc/mobject/session/edl.hpp"
-//#include "proc/mobject/session/testclip.hpp"
-//#include "proc/mobject/test-dummy-mobject.hpp"
-//#include "lib/p.hpp"
-//#include "proc/mobject/placement.hpp"
-//#include "proc/mobject/placement-index.hpp"
-//#include "proc/mobject/explicitplacement.hpp"
 #include "proc/control/command-mutation.hpp"
 #include "proc/control/memento-tie.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/tuple.hpp"
-//#include "lib/lumitime.hpp"
-//#include "lib/util.hpp"
 
 #include <tr1/functional>
-//#include <boost/format.hpp>
 #include <iostream>
 #include <cstdlib>
 #include <string>
 
-using std::tr1::bind;
-//using std::tr1::placeholders::_1;
-//using std::tr1::placeholders::_2;
 using std::tr1::function;
-//using boost::format;
-//using lumiera::Time;
-//using util::contains;
 using std::string;
 using std::rand;
 using std::cout;
@@ -60,25 +41,15 @@ using std::endl;
 
 namespace control {
 namespace test    {
-
-  using lib::test::showSizeof;
-
-//  using session::test::TestClip;
-//  using lumiera::P;
-  using namespace lumiera::typelist;
-  using lumiera::typelist::Tuple;
   
+  using namespace lumiera::typelist;
   using control::CmdClosure;
   
   
-  
-  
-  
-  
-  namespace {
-  
+  namespace { /* ======= test functions to bind ========= */
+    
     int testVal=0;  ///< used to verify the effect of testFunc
-  
+    
     void
     testFunc (int val)
     {
@@ -114,6 +85,7 @@ namespace test    {
         {
           checkMutation();
           checkUndoMutation();
+          checkStateCapturingMechanism();
         }
       
       
@@ -125,11 +97,12 @@ namespace test    {
       void
       checkMutation ()
         {
-          function<void(int)> funky  = bind (testFunc, _1);
+          function<void(int)> funky  = testFunc;
           
           Mutation functor (funky);
           ASSERT (!functor);
           VERIFY_ERROR (UNBOUND_ARGUMENTS, functor() );
+          cout << functor << endl;
           
           Tuple<Types<int> > param = tuple::make(23);
           Closure<void(int)> close_over (param);
@@ -139,6 +112,7 @@ namespace test    {
           ASSERT (functor);
           
           cout << "param values: " << clo << endl;
+          cout << functor << endl;
           
           testVal = 0;
           functor();
@@ -154,8 +128,8 @@ namespace test    {
        *        captured state value. Consequently this time the \em operation
        *        which is to be undone would have the signature \c void(void) .
        *        Obviously this is a rather silly "undo" function, but it is
-       *        easy to check in a unit test. To carry out this test, we first
-       *        have to trigger the state capturing mechanism; after that,
+       *        easy to check for unit testing. To carry out this test, we
+       *        first have to trigger the state capturing mechanism; after that,
        *        invoking the UndoMutation will call the testFunc with the
        *        previously captured state.
        *  @note Mutation and UndoMutation are value objects, but they refer
@@ -166,27 +140,29 @@ namespace test    {
       void
       checkUndoMutation ()
         {
-          function<void(int)> undo_func  = bind (&testFunc,_1);
-          function<int(void)> cap_func   = bind (&capture    );
+          function<void(int)> undo_func  = testFunc;
+          function<int(void)> cap_func   = capture;
           
           typedef MementoTie<void(),int> MemHolder;
           
           MemHolder mementoHolder (undo_func,cap_func);
           UndoMutation undoFunctor (mementoHolder);
           ASSERT (!undoFunctor);
+          ASSERT (!mementoHolder);
           VERIFY_ERROR (UNBOUND_ARGUMENTS, undoFunctor() );
           
           Tuple<Types<> > param;
           Closure<void()> clo (param);
           
           undoFunctor.close(clo);
-          ASSERT (!undoFunctor);
+          ASSERT ( undoFunctor);
+          ASSERT (!mementoHolder);
           VERIFY_ERROR (MISSING_MEMENTO, undoFunctor() );
           VERIFY_ERROR (MISSING_MEMENTO, mementoHolder.getState() );
           
           testVal = 11;
           undoFunctor.captureState();
-          ASSERT (undoFunctor);
+          ASSERT (mementoHolder);
           ASSERT (testVal == 11);
           
           int mem = mementoHolder.getState();
@@ -217,11 +193,33 @@ namespace test    {
         }
       
       
+      /** @test check the undo memento capturing mechanism in isolation 
+       *  @see memento-tie-test.cpp more in-depth coverage */
+      void
+      checkStateCapturingMechanism ()
+        {
+          typedef MementoTie<void(),int> MemHolder;
+          
+          MemHolder mementoHolder (testFunc, capture);
+          
+          function<void()> bound_undo_func = mementoHolder.tieUndoFunc();
+          function<void()> bound_cap_func  = mementoHolder.tieCaptureFunc();
+          
+          
+          int rr (rand() % 100);
+          testVal = rr;
+          bound_cap_func();       // invoke state capturing 
+          ASSERT (rr == mementoHolder.getState());
+          
+          testVal = 10;        // meanwhile "somehow" mutate the state
+          bound_undo_func();  // invoking the undo() feeds back the memento
+          ASSERT (testVal == 10+rr);
+        }
     };
   
   
   /** Register this test class... */
   LAUNCHER (CommandMutation_test, "unit controller");
-      
-      
+  
+  
 }} // namespace control::test
