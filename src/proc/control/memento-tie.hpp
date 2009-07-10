@@ -88,44 +88,12 @@ namespace control {
       function<SIG_cap> capture_;
       
       
-      /* == internal functionality binding the functions to the memento == */
-      
       /** to be chained behind the capture function */
       void capture (MEM const& mementoVal)
         {
           memento_ = mementoVal;
           isCaptured_ = true;
         }
-      
-      /** partially closed undo function:
-       *  on invocation, receive the current memento value
-       *  and feed it to the wrapped undo function. Additionally
-       *  provides a \c bool() conversion to check if any memento
-       *  state has yet been captured.  
-       */
-      struct WiredUndoFunc
-        : function<SIG> 
-        , lib::BoolCheckable<WiredUndoFunc>
-        {
-          
-          WiredUndoFunc (MementoTie& thisTie)
-            : function<SIG> (
-                bindLast( thisTie.undo_   // getState() bound to last argument of undo(...)
-                        , bind (&MementoTie::getState, ref(thisTie))
-                        )   )
-            , mementoHolder_(thisTie)
-            { }
-          
-          bool
-          isValid () const
-            {
-              return function<SIG>::operator bool()
-                  && bool(mementoHolder_);
-            }
-          
-        private:
-          MementoTie & mementoHolder_;
-        };
       
       
     public:
@@ -150,10 +118,14 @@ namespace control {
        *  @note similar to #getState(), the returned functor will throw
        *        when the state capturing wasn't yet invoked
        */
-      WiredUndoFunc
+      function<SIG> 
       tieUndoFunc()
         {
-          return WiredUndoFunc(*this);
+          using std::tr1::bind;
+          
+          return bindLast( undo_           // getState() bound to last argument of undo(...)
+                         , bind (&MementoTie::getState, this)
+                         ); 
         }
       
       /** bind the capturing function to the internal memento store within this object.
