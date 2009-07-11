@@ -69,7 +69,8 @@ namespace lumiera {
       
       explicit Time (gavl_time_t val=0) : t_(val) {}
       
-      operator gavl_time_t () { return t_; }
+      operator gavl_time_t ()  const { return t_; }
+      operator string()  const;
       
       
       // Supporting additive

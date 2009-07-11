@@ -22,14 +22,28 @@
 
 
 #include "lib/lumitime.hpp"
+extern "C" {
+#include "lib/time.h"
+}
+
 #include <limits>
+#include <string>
+
+using std::string;
 
 
 namespace lumiera {
-
   
-   const Time Time::MAX ( +std::numeric_limits<int64_t>::max() );
-   const Time Time::MIN ( -std::numeric_limits<int64_t>::max() );
-
-
+  
+  const Time Time::MAX ( +std::numeric_limits<int64_t>::max() );
+  const Time Time::MIN ( -std::numeric_limits<int64_t>::max() );
+  
+  
+  Time::operator string()  const
+  {
+    return string (lumiera_tmpbuf_print_time (t_));
+  }
+  
+  
+  
 } // namespace lumiera

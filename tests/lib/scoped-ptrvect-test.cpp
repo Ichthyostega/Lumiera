@@ -28,82 +28,74 @@
 #include "lib/scoped-ptrvect.hpp"
 #include "testdummy.hpp"
 
-#include <iostream>
-//#include <map>
-
 
 namespace lib {
-  namespace test {
-    
-    using ::Test;
-    using util::isnil;
-    
-//    using std::map;
-    using std::cout;
+namespace test{
+  
+  using ::Test;
+  using util::isnil;
+  
+  typedef ScopedPtrVect<Dummy> VectD;
+  
+  
+  /********************************************************************
+   *  @test ScopedPtrVect manages the lifecycle of a number of objects.
+   */
+  class ScopedPtrVect_test : public Test
+    {
       
-    typedef ScopedPtrVect<Dummy> VectD;
-    
-    
-    /********************************************************************
-     *  @test ScopedPtrVect manages the lifecycle of a number of objects.
-     */
-    class ScopedPtrVect_test : public Test
-      {
-        
-        virtual void 
-        run (Arg)
+      virtual void
+      run (Arg)
+        {
+          simpleUsage();
+//        iterating();
+//        detaching();
+        }
+      
+      
+      
+      void
+      simpleUsage()
+        {
+          ASSERT (0==checksum);
           {
-            simpleUsage();
-//            iterating();
-//            detaching();            
-          }
-        
-        
-        
-        void
-        simpleUsage()
-          {
+            VectD holder;
+            ASSERT (isnil (holder));
             ASSERT (0==checksum);
-            {
-              VectD holder;
-              ASSERT (isnil (holder));
-              ASSERT (0==checksum);
-              
-              Dummy* ptr = new Dummy();
-              Dummy& ref = holder.manage (ptr);
-              ASSERT (!isnil (holder));
-              ASSERT (0!=checksum);
-              ASSERT (&ref==ptr);
-              
-              holder.manage (new Dummy);
-              holder.manage (new Dummy);
-              ASSERT (3 == holder.size());
-
-              holder.clear();
-              ASSERT (0==checksum);
-              ASSERT (isnil (holder));
-              
-              holder.manage (new Dummy);
-              holder.manage (new Dummy);
-              holder.manage (new Dummy);
-              holder.manage (new Dummy);
-              holder.manage (new Dummy);
-              holder.manage (new Dummy);
-              holder.manage (new Dummy);
-              holder.manage (new Dummy);
-              holder.manage (new Dummy);
-              ASSERT (9 == holder.size());
-              ASSERT (0!=checksum);
-            }
+            
+            Dummy* ptr = new Dummy();
+            Dummy& ref = holder.manage (ptr);
+            ASSERT (!isnil (holder));
+            ASSERT (0!=checksum);
+            ASSERT (&ref==ptr);
+            
+            holder.manage (new Dummy);
+            holder.manage (new Dummy);
+            ASSERT (3 == holder.size());
+            
+            holder.clear();
             ASSERT (0==checksum);
+            ASSERT (isnil (holder));
+            
+            holder.manage (new Dummy);
+            holder.manage (new Dummy);
+            holder.manage (new Dummy);
+            holder.manage (new Dummy);
+            holder.manage (new Dummy);
+            holder.manage (new Dummy);
+            holder.manage (new Dummy);
+            holder.manage (new Dummy);
+            holder.manage (new Dummy);
+            ASSERT (9 == holder.size());
+            ASSERT (0!=checksum);
           }
-        
-      };
-    
-    LAUNCHER (ScopedPtrVect_test, "unit common");
-    
-    
-  }// namespace test
-
-} // namespace lib
+          ASSERT (0==checksum);
+        }
+      
+    };
+  
+  LAUNCHER (ScopedPtrVect_test, "unit common");
+  
+  
+}} // namespace lib::test
 

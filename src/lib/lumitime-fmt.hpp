@@ -1,8 +1,8 @@
 /*
-  LUMITIME.hpp  -  convenience wrapper for working with gavl_time in C++
+  LUMITIME-FMT.hpp  -  output and formatting of time(code) values
  
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2009,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,71 +21,47 @@
 */
 
 
-#ifndef LUMIERA_LUMITIME_H
-#define LUMIERA_LUMITIME_H
+/** @file lumitime-fmt.hpp
+ ** Extension to the lumiera::Time wrapper, adding output and specific
+ ** time formats. For now (7/09) this header serves the purpose to add
+ ** the (not so lightweight) includes necessary for formatting. For later
+ ** the intention is to have "format aware" time values (as a subclass),
+ ** carrying the additional information about current framerate and
+ ** other time-format preferences
+ ** 
+ ** @todo this should be a mixed C/C++ header and really add the handling
+ **       of multiple timecode-formats :-P
+ **  
+ ** @see time.h
+ ** @see lumitime.hpp
+ **
+ */
 
-#include <boost/operators.hpp>
+
+
+
+
+#ifndef LUMIERA_LUMITIME_FMT_H
+#define LUMIERA_LUMITIME_FMT_H
+
+#include "lib/lumitime.hpp"
 
 extern "C" {
-#include <gavl/gavltime.h>
+#include "lib/time.h"
 }
+
+#include <iostream>
 
 namespace lumiera {
 
 
-  /**
-   * C++ convenience wrapper representing a time value, which could denote
-   * a temporal position (time point) relative to an (implicit) timeline zero
-   * point, or it could represent a time interval.
-   * 
-   * This wrapper is deliberately kept rather limited as not to be completely
-   * interchangeable with and integral type. The rationale is that time values
-   * should be kept separate and tagged as time values. The following is supported:
-   * - conversions from / to gavl_time_t (which is effectively a int64_t)
-   * - additions and subtractions of time values
-   * - multiplication with an integral factor
-   * - comparisons between time values and gavl_time_t values
-   * 
-   * @todo consider the possible extensions
-   *       - parsing and pretty printing
-   *       - quantising of floating point values
-   *       - conversion to boost::rational
-   *       - define a Framerate type
-   * 
-   * @note this is currently (10/08) an experimental implementation to ease
-   *       the time handling within C++ code. It is advisable not to use it
-   *       on external interfaces (use gavl_time_t there please).
-   */
-  class Time 
-    : boost::additive<Time,
-      boost::totally_ordered<Time,
-      boost::totally_ordered<Time, gavl_time_t> > >
+  /** writes time value, formatted as HH:MM:SS:mmm
+   *  @see lumiera_tmpbuf_print_time  */
+  inline std::ostream&
+  operator<< (ostream& os, Time const& t)
     {
-      gavl_time_t t_;
-      
-    public:
-      static const Time MAX ; 
-      static const Time MIN ;
-      
-      explicit Time (gavl_time_t val=0) : t_(val) {}
-      
-      operator gavl_time_t () { return t_; }
-      
-      
-      // Supporting additive
-      Time& operator+= (Time const& tx)  { t_ += tx.t_; return *this; }
-      Time& operator-= (Time const& tx)  { t_ -= tx.t_; return *this; }
-      
-      // Supporting multiplication with integral factor
-      Time& operator*= (int64_t fact)    { t_ *= fact;  return *this; }
-       
-      // Supporting totally_ordered
-      friend bool operator<  (Time const& t1, Time const& t2)  { return t1.t_ <  t2.t_; }
-      friend bool operator<  (Time const& t1, gavl_time_t t2)  { return t1.t_ <  t2   ; }
-      friend bool operator>  (Time const& t1, gavl_time_t t2)  { return t1.t_ >  t2   ; }
-      friend bool operator== (Time const& t1, Time const& t2)  { return t1.t_ == t2.t_; }
-      friend bool operator== (Time const& t1, gavl_time_t t2)  { return t1.t_ == t2   ; }
-    };
+      return os << lumiera_tmpbuf_print_time(t);
+    }
   
   
   
