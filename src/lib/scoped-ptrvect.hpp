@@ -135,6 +135,25 @@ namespace lib {
         }
       
       
+      /* === Element access and iteration === */
+      
+      T&
+      operator[] (size_type i)
+        {
+          return *get(i);
+        }
+      
+      typedef PtrDerefIter<reference,       _Vec> iterator;
+      typedef PtrDerefIter<const_reference, _Vec> const_iterator;
+      
+      iterator       begin()        { return       iterator (_Vec::begin()); }
+      const_iterator begin()  const { return const_iterator (_Vec::begin()); }
+      iterator       end()          { return       iterator (); }
+      const_iterator end()    const { return const_iterator (); }
+      
+      
+      
+      
       /* ====== proxied vector functions ==================== */
       
       size_type  size ()      const  { return _Vec::size();     }
@@ -144,7 +163,7 @@ namespace lib {
       
       
     private:
-      /** currently not used as of 2/2009 */
+      /** internal element access, including null check */
       T* get(size_type i)
         {
           T* p (_Vec::at (i));
