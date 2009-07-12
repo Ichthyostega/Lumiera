@@ -1,5 +1,5 @@
 /*
-  IterAdaptor(Test)  -  building simple iterators for a given container
+  IterAdapter(Test)  -  building various custom iterators for a given container
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -26,7 +26,7 @@
 #include "lib/util.hpp"
 
 //#include "lib/scoped-ptrvect.hpp"
-#include "lib/iter-adaptor.hpp"
+#include "lib/iter-adapter.hpp"
 //#include "testdummy.hpp"
 #include <vector>
 #include <iostream>
@@ -72,10 +72,7 @@ namespace test{
             for_each (numberz_, killIt);
           }
        
-        typedef int *  value_type;
-        typedef int ** pointer;
-        typedef int *& reference;
-       
+        
         typedef IterAdapter<_Vec::iterator,       TestContainer> iterator;
         typedef IterAdapter<_Vec::const_iterator, TestContainer> const_iterator;
         typedef PtrDerefIter<iterator      > ref_iterator;
@@ -122,7 +119,7 @@ namespace test{
    *        "lumiera forward iterator"
    * @todo see Ticket #182
    */
-  class IterAdaptor_test : public Test
+  class IterAdapter_test : public Test
     {
       
       virtual void
@@ -199,6 +196,13 @@ namespace test{
               ASSERT ((*iter) == i);
             }
           
+          TestContainer::ref_iterator rI (elms.begin_ref());
+          
+          ASSERT (0 == *rI );
+          ASSERT (0 == *rI++);
+          ASSERT (1 == *rI  );
+          ASSERT (2 == *++rI);
+          
           ASSERT (TestContainer::iterator() == elms.end());
           ASSERT (!(TestContainer::iterator()));
           ASSERT (!(elms.end()));
@@ -211,7 +215,7 @@ namespace test{
       
     };
   
-  LAUNCHER (IterAdaptor_test, "unit common");
+  LAUNCHER (IterAdapter_test, "unit common");
   
   
 }} // namespace lib::test

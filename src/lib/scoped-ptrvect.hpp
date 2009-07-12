@@ -45,7 +45,7 @@
 
 
 #include "include/logging.h"
-#include "lib/iter-adaptor.hpp"
+#include "lib/iter-adapter.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 

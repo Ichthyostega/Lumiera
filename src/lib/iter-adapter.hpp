@@ -20,7 +20,7 @@
  
 */
 
-/** @file iter-adaptor.hpp
+/** @file iter-adapter.hpp
  ** Helper template(s) for creating <b>lumiera forward iterators</b>.
  ** This denotes a concept similar to STL's  "forward iterator", with
  ** the addition of an bool check to detect iteration end. The latter
@@ -61,13 +61,15 @@ namespace lib {
   
   
   /**
-   * simple ptr-to-object based implementation of the lumiera forward iterator concept.
-   * Basically such an PtrIter behaves like the similar concept from STL, but
-   * - it is not just a disguised pointer (meaning, its more expensive)
+   * Adapter for building an implementation of the lumiera forward iterator concept.
+   * The "current position" is represented as an opaque element (usually an nested iterator),
+   * with callbacks to the controlling container instance for managing this position. 
+   * Basically such an IterAdapter behaves like the similar concept from STL, but
+   * - it is not just a disguised pointer (meaning, it's more expensive)
    * - it checks validity on every operation and may throw
    * - it has a distinct back-link to the source container
    * - the source container needs to implement iterStart() and iterInc()
-   * - we need friendship to and from the container class 
+   * - we need friendship to access the callbacks on the container 
    * - the end-of-iteration can be detected by bool check
    * 
    * @see scoped-ptrvect.hpp usage example

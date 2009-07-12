@@ -46,7 +46,7 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/hash-indexed-test.cpp			\
 	$(testlib_srcdir)/helloworldtest.cpp			\
 	$(testlib_srcdir)/lifecycletest.cpp			\
-	$(testlib_srcdir)/iter-adaptor-test.cpp			\
+	$(testlib_srcdir)/iter-adapter-test.cpp			\
 	$(testlib_srcdir)/mainsuite.cpp				\
 	$(testlib_srcdir)/meta/typelist-test.cpp         	\
 	$(testlib_srcdir)/meta/typelist-manip-test.cpp    	\
