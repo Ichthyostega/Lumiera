@@ -77,14 +77,14 @@ namespace mobject {
               // TODO: how to handle insufficiently determinated Placement? Throw?
               FixedLocation & fixloc = pc.chain(Time(1)); // TODO: the track??
               ExplicitPlacement expla = pc.resolve();
-              ASSERT (expla.time == 1);
+              ASSERT (expla.time == Time(1));
               ASSERT (!expla.chain.isOverdetermined());
               //ASSERT (*expla == *pc);  ////////////////////////TODO: define equality on placements (Trac #119)
               
               // now overconstraining with another Placement
               pc.chain(Time(2));
               ExplicitPlacement expla2 = pc.resolve();
-              ASSERT (expla2.time == 2); // the latest addition wins
+              ASSERT (expla2.time == Time(2)); // the latest addition wins
               ASSERT (expla2.chain.isOverdetermined()); 
             } 
         };

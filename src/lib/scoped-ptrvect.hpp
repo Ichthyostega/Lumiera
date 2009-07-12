@@ -45,6 +45,7 @@
 
 
 #include "include/logging.h"
+#include "lib/iter-adaptor.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
@@ -101,25 +102,25 @@ namespace lib {
       T&
       manage (T* obj)
         {
-          if (obj)
-            try 
-              {
-                push_back (obj);
-                return *obj;
-              }
-            catch(...)
-              {
-                delete obj;
-                throw;
-        }     }
+          REQUIRE (obj);
+          try 
+            {
+              push_back (obj);
+              return *obj;
+            }
+          catch(...)
+            {
+              delete obj;
+              throw;
+        }   }
       
       
       void
       clear()
         { 
           typedef typename _Vec::iterator VIter;
-          VIter e = this->end();
-          for (VIter i = this->begin(); i!=e; ++i)
+          VIter e = _Vec::end();
+          for (VIter i = _Vec::begin(); i!=e; ++i)
             {
               if (*i)
                 try
@@ -143,8 +144,8 @@ namespace lib {
           return *get(i);
         }
       
-      typedef PtrDerefIter<reference,       _Vec> iterator;
-      typedef PtrDerefIter<const_reference, _Vec> const_iterator;
+      typedef PtrDerefIter<typename _Vec::iterator> iterator;
+      typedef PtrDerefIter<typename _Vec::const_iterator> const_iterator;
       
       iterator       begin()        { return       iterator (_Vec::begin()); }
       const_iterator begin()  const { return const_iterator (_Vec::begin()); }

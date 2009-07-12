@@ -123,6 +123,8 @@ namespace lumiera {
     
     /* generic error situations */
     LUMIERA_ERROR_DECLARE (WRONG_TYPE);   ///< runtime type mismatch 
+    LUMIERA_ERROR_DECLARE (ITER_EXHAUST); ///< end of sequence reached 
+
     
 /** Macro for creating derived exception classes properly 
  *  integrated into Lumiera's exception hierarchy. Using

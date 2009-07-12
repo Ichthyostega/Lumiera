@@ -66,6 +66,7 @@ namespace lumiera {
 
     /* some further generic error situations */
     LUMIERA_ERROR_DEFINE (WRONG_TYPE, "runtime type mismatch"); 
+    LUMIERA_ERROR_DEFINE (ITER_EXHAUST, "end of sequence reached"); 
     
   } // namespace error
   

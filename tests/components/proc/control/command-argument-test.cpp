@@ -42,7 +42,7 @@
 //#include <tr1/functional>
 #include <boost/format.hpp>
 #include <iostream>
-#include <strstream>
+#include <sstream>
 //#include <cstdlib>
 #include <string>
 
@@ -58,7 +58,7 @@ using lumiera::Time;
 using std::string;
 //using std::rand;
 using std::ostream;
-using std::ostrstream;
+using std::ostringstream;
 using std::cout;
 using std::endl;
 
@@ -67,6 +67,7 @@ namespace control {
 namespace test    {
   
   using lib::test::showSizeof;
+  using lib::test::randTime;
   
 //  using session::test::TestClip;
 //  using lumiera::P;
@@ -82,7 +83,7 @@ namespace test    {
   
   namespace { // test helpers
     
-    ostrstream protocol;     ///< used to verify the test function calls
+    ostringstream protocol;     ///< used to verify the test function calls
     
     
     template<typename TY>
@@ -103,7 +104,7 @@ namespace test    {
           }
        
        TY&
-       operator* () const
+       operator* ()
          {
            return element_;
          }
@@ -111,7 +112,7 @@ namespace test    {
        friend ostream&
        operator<< (ostream& out, const Tracker& tra)
          {
-           return out << element_;
+           return out << tra.element_;
          }
       };
     
@@ -128,13 +129,13 @@ namespace test    {
       }
     
     Tracker<string>
-    captureState (Tracker<Time> time, Tracker<string> str, int rand)
+    captureState (Tracker<Time>, Tracker<string>, int)
       {
         return protocol.str();
       }
     
     void
-    undoIt (Tracker<Time> time, Tracker<string> str, int rand, Tracker<string> memento)
+    undoIt (Tracker<Time> time, Tracker<string>, int, Tracker<string> memento)
       {
         protocol << "undoIt(time="<<time<<")---state-was-:"<< *memento;
       }
@@ -154,12 +155,6 @@ namespace test    {
         cout << "would be serialised....." << clo;
         
         // serialise, then de-serialise into a new instance and compare both
-      }
-    
-    Time
-    randTime ()
-      {
-        UNIMPLEMENTED ("create a random but not insane Time value");
       }
     
     
@@ -183,6 +178,7 @@ namespace test    {
       virtual void
       run (Arg) 
         {
+#if false ////////////////////////////////////////////////////////////////////////////TODO.....          
           ArgTuples testTuples;
           Tracker<Time>::instanceCnt = 0;
           Tracker<string>::instanceCnt = 0;
@@ -323,6 +319,7 @@ namespace test    {
           
           bound_undoFun();
           cout << protocol.str() << endl;
+#endif ////////////////////////////////////////////////////////////////////////////TODO.....          
         }
     };
   

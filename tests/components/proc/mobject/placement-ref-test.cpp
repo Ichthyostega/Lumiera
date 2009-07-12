@@ -106,7 +106,7 @@ namespace test    {
           ASSERT (1 == ref1.use_count());
           ASSERT (1 == ref2.use_count());
           ExplicitPlacement exPla = refX.resolve();
-          ASSERT (exPla.time == 2);                // indeed get back the time we set on p2 above
+          ASSERT (exPla.time == Time(2));          // indeed get back the time we set on p2 above
           ASSERT (2 == ref2.use_count());          // exPla shares ownership with p2
           
           ASSERT (index->contains(ref1));          // ref can stand-in for a placement-ID 
@@ -144,9 +144,9 @@ namespace test    {
           ASSERT (ref2 != refX);
           
           // resolution is indeed "live", we see changes to the referred placement
-          ASSERT (refX.resolve().time == 0);
+          ASSERT (refX.resolve().time == Time(0));
           p1 = p2;
-          ASSERT (refX.resolve().time == 2);       // now we get the time tie we originally set on p2
+          ASSERT (refX.resolve().time == Time(2)); // now we get the time tie we originally set on p2
           ASSERT (3 == ref2.use_count());          // p1, p2 and exPla share ownership
 
           // actually, the assignment has invalidated ref1, because of the changed ID

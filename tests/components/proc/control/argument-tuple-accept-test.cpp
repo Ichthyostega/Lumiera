@@ -23,45 +23,14 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "proc/asset/media.hpp"
-//#include "proc/mobject/session.hpp"
-//#include "proc/mobject/session/edl.hpp"
-//#include "proc/mobject/session/testclip.hpp"
-//#include "proc/mobject/test-dummy-mobject.hpp"
-//#include "lib/p.hpp"
-//#include "proc/mobject/placement.hpp"
-//#include "proc/mobject/placement-index.hpp"
-//#include "proc/mobject/explicitplacement.hpp"
 #include "proc/control/argument-tuple-accept.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/tuple.hpp"
-
-//#include "lib/scoped-ptrvect.hpp"
-//#include "lib/lumitime-fmt.hpp"
-//#include "lib/meta/typelist.hpp"
-//#include "lib/meta/tuple.hpp"
-//#include "lib/util.hpp"
+#include "lib/lumitime-fmt.hpp"
 
 #include <tr1/functional>
-//#include <boost/format.hpp>
 #include <iostream>
-//#include <strstream>
-//#include <cstdlib>
-//#include <string>
 
-//using std::tr1::bind;
-//using std::tr1::placeholders::_1;
-//using std::tr1::placeholders::_2;
-using std::tr1::function;
-//using util::isnil;
-//using util::and_all;
-//using boost::format;
-//using lumiera::Time;
-//using util::contains;
-//using std::string;
-//using std::rand;
-//using std::ostream;
-//using std::ostrstream;
 using std::cout;
 using std::endl;
 
@@ -70,15 +39,12 @@ namespace control {
 namespace test    {
   
   using lib::test::showSizeof;
+  using lib::test::randTime;
   
+  using lumiera::Time;
+  using std::tr1::function;
   using lumiera::typelist::FunctionSignature;
   using lumiera::typelist::Tuple;
-//  using session::test::TestClip;
-//  using lumiera::P;
-//  using namespace lumiera::typelist;
-//  using lumiera::typelist::Tuple;
-  
-//  using control::CmdClosure;
   
   
   
@@ -98,23 +64,20 @@ namespace test    {
     template<typename SIG>
     class TestClass
       : public ArgumentTupleAccept< SIG                     // to derive the desired signature
-                                  , TestClass               // the target class providing the implementation
+                                  , TestClass<SIG>          // the target class providing the implementation
                                   , typename Tup<SIG>::Ty   // base class to inherit from
                                   >
       {
+        typedef typename Tup<SIG>::Ty ATuple;
+        
+      public:
+        
         void
-        bind (typename Tup<SIG>::Ty const& tuple)
+        bindArg (ATuple const& tuple)
           {
-            *this = tuple;
+            static_cast<ATuple&> (*this) = tuple;
           }
       };
-    
-    
-    Time
-    randTime ()
-      {
-        UNIMPLEMENTED ("create a random but not insane Time value");
-      }
     
     
   } // test-helper implementation
@@ -123,11 +86,10 @@ namespace test    {
   
   
   
-  typedef lib::ScopedPtrVect<CmdClosure> ArgTuples;
   
-  /***************************************************************
-   * @test Build test object, which accepts a bind(...) call with 
-   *       specifically typed arguments.
+  /*************************************************************
+   * @test Build a test object, which accepts a bind(...) call
+   *       with specifically typed arguments.
    *       
    * @see  control::CommandArgumentHolder
    */
@@ -144,10 +106,10 @@ namespace test    {
           testTime.bind(randTime(),23);
           
           cout << showSizeof(testVoid) << endl;
-          cout << showSizeof(testITim) << endl;
+          cout << showSizeof(testTime) << endl;
           
-          cout << testITim.getHead() << endl;
-          ASSERT (23 == testITim.getTail().getHead());
+          cout << testTime.getHead() << endl;
+          ASSERT (23 == testTime.getTail().getHead());
         }
       
     };

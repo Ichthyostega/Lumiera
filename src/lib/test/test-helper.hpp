@@ -26,9 +26,11 @@
 
 
 #include "include/symbol.hpp"
+#include "lib/lumitime.hpp"
 
 #include <typeinfo>
 #include <string>
+#include <cstdlib>
 
 
 
@@ -36,7 +38,9 @@ namespace lib {
 namespace test{
   
   using lumiera::Symbol;
+  using lumiera::Time;
   using std::string;
+  using std::rand;
   
   
   
@@ -48,7 +52,7 @@ namespace test{
    *          type identification as implemented by the compiler.
    */
   template<typename T>
-  const char*
+  inline const char*
   showType (T const& obj, Symbol name=0)
   {
     return name? name : typeid(obj).name();
@@ -61,7 +65,7 @@ namespace test{
    *          type identification as implemented by the compiler.
    */
   template<typename T>
-  const char*
+  inline const char*
   showType (Symbol name=0)
   {
     return name? name : typeid(T).name();
@@ -75,25 +79,35 @@ namespace test{
   
   /** for printing sizeof(), trying to figure out the type name automatically */
   template<typename T>
-  string
+  inline string
   showSizeof(Symbol name=0)
   {
     return showSizeof (sizeof (T), showType<T> (name));
   }
   
   template<typename T>
-  string
+  inline string
   showSizeof(T const& obj, Symbol name=0)
   {
     return showSizeof (sizeof (obj), showType (obj,name));
   }
   
   template<typename T>
-  string
+  inline string
   showSizeof(T *obj, Symbol name=0)
   {
     return obj? showSizeof (*obj, name)
               : showSizeof<T> (name);
+  }
+  
+  
+  
+    
+  /** create a random but not insane Time value */    
+  inline Time
+  randTime ()
+  {
+    return Time (500 * (rand() % 2), (rand() % 600));
   }
   
   

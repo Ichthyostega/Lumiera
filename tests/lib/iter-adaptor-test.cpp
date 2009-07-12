@@ -26,14 +26,93 @@
 #include "lib/util.hpp"
 
 //#include "lib/scoped-ptrvect.hpp"
+#include "lib/iter-adaptor.hpp"
 //#include "testdummy.hpp"
+#include <vector>
+#include <iostream>
+#include <boost/lexical_cast.hpp>
+
 
 
 namespace lib {
 namespace test{
   
   using ::Test;
-  using util::isnil;
+//  using util::isnil;
+  using boost::lexical_cast;
+  using util::for_each;
+  using std::vector;
+  using std::cout;
+  using std::endl;
+  
+  
+  namespace {
+  
+    uint NUM_ELMS = 10;
+  
+  
+    class TestContainer
+      {
+        typedef vector<int *> _Vec;
+        
+        _Vec numberz_;
+        
+        static void killIt (int *it) { delete it; }
+        
+      public:
+        TestContainer (uint count)
+          : numberz_(count)
+          {
+            for (uint i=0; i<count; ++i)
+              numberz_[i] = new int(i);
+          }
+        
+       ~TestContainer ()
+          {
+            for_each (numberz_, killIt);
+          }
+       
+        typedef int *  value_type;
+        typedef int ** pointer;
+        typedef int *& reference;
+       
+        typedef IterAdapter<_Vec::iterator,       TestContainer> iterator;
+        typedef IterAdapter<_Vec::const_iterator, TestContainer> const_iterator;
+        typedef PtrDerefIter<iterator      > ref_iterator;
+        typedef PtrDerefIter<const_iterator> const_ref_iter;
+       
+       
+        iterator       begin ()           { return iterator (this, numberz_.begin()); }
+        const_iterator begin ()     const { return const_iterator (this, numberz_.begin()); }
+        ref_iterator   begin_ref ()       { return ref_iterator (begin()); }
+        const_ref_iter begin_ref () const { return const_ref_iter (begin()); }
+       
+        iterator       end ()             { return iterator(); }
+        const_iterator end ()       const { return const_iterator(); }
+
+      protected:
+        
+        friend class IterAdapter<_Vec::iterator,      TestContainer>;
+        friend class IterAdapter<_Vec::const_iterator,TestContainer>;
+        
+        
+        template<class ITER>
+        static void
+        iterNext (const TestContainer* src, ITER& pos)
+          {
+            if (iterValid(src,pos))
+              ++pos;
+          }
+        
+        template<class ITER>
+        static bool
+        iterValid (const TestContainer* src, ITER& pos)
+          {
+            REQUIRE (src);
+            return pos != src->numberz_.end();
+          }
+      };
+  }
   
   
   
@@ -47,20 +126,88 @@ namespace test{
     {
       
       virtual void
-      run (Arg)
+      run (Arg arg)
         {
-          UNIMPLEMENTED ("build a simple lumiera forward iterator");
-          simpleUsage();
-//        iterating();
-//        detaching();
+          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);          
+          
+          TestContainer testElms (NUM_ELMS);
+          simpleUsage (testElms);
+          iterTypeVariations (testElms);
         }
       
+      
+      static void showIt (int* elm) { cout << "::" << *elm; }
       
       
       void
-      simpleUsage()
+      simpleUsage (TestContainer& elms)
         {
+          for_each (elms, showIt);
+          cout << endl;
         }
+      
+      
+      void
+      iterTypeVariations (TestContainer& elms)
+        {
+          TestContainer const& const_elms (elms);
+          
+          int i = 0;
+          for (TestContainer::iterator iter = elms.begin();
+               iter; ++iter, ++i
+              )
+            {
+              ASSERT (iter);
+              ASSERT (iter != elms.end());
+              ASSERT (**iter == i);
+              --(**iter);
+              ASSERT (**iter == i-1);
+            }
+          
+          i = 0;
+          for (TestContainer::const_iterator iter = const_elms.begin();
+               iter; ++iter, ++i
+              )
+            {
+              ASSERT (iter);
+//            ASSERT (iter != elms.end());                  ////////////////////////////TODO: implement comparison
+              ASSERT (**iter == i-1);
+              
+              // note: the previous run indeed modified
+              // the element within the container.
+              
+              // --(**iter);   // doesn't compile, because it's const
+            }
+          
+          i = 0;
+          for (TestContainer::ref_iterator iter = elms.begin_ref();
+               iter; ++iter, ++i
+              )
+            {
+              ASSERT (iter);
+              ASSERT ((*iter) == i-1);
+              ++(*iter);
+              ASSERT ((*iter) == i);
+            }
+          
+          i = 0;
+          for (TestContainer::const_ref_iter iter = const_elms.begin_ref();
+               iter; ++iter, ++i
+              )
+            {
+              ASSERT (iter);
+              ASSERT ((*iter) == i);
+            }
+          
+          ASSERT (TestContainer::iterator() == elms.end());
+          ASSERT (!(TestContainer::iterator()));
+          ASSERT (!(elms.end()));
+//        ASSERT (isnil (elms.end()));                  ////////////////////////////TODO: implement empty test
+          
+          ASSERT (elms.begin());
+//        ASSERT (!isnil (elms.begin()));                  ////////////////////////////TODO: implement empty test
+        }
+
       
     };
   

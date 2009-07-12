@@ -43,32 +43,172 @@
 
 
 //#include "include/logging.h"
-//#include "lib/error.hpp"
+#include "lib/error.hpp"
+#include "lib/bool-checkable.hpp"
 //#include "lib/util.hpp"
 
 //#include <vector>
 //#include <boost/noncopyable.hpp>
+#include <boost/type_traits/remove_pointer.hpp>
+
 
 
 namespace lib {
   
 //  using util::for_each;
+  using boost::remove_pointer;
   
   
   
   /**
+   * simple ptr-to-object based implementation of the lumiera forward iterator concept.
+   * Basically such an PtrIter behaves like the similar concept from STL, but
+   * - it is not just a disguised pointer (meaning, its more expensive)
+   * - it checks validity on every operation and may throw
+   * - it has a distinct back-link to the source container
+   * - the source container needs to implement iterStart() and iterInc()
+   * - we need friendship to and from the container class 
+   * - the end-of-iteration can be detected by bool check
+   * 
+   * @see scoped-ptrvect.hpp usage example
+   * @see iter-adaptor-test.cpp
    */
-  template<class T, class CON>
-  class PtrIter
+  template<class POS, class CON>
+  class IterAdapter
+    : public lib::BoolCheckable<IterAdapter<POS,CON> >
     {
+      const CON* source_;
+      POS pos_;
+      
+      /////////////////////////////////////////////////////////////////////////TODO: implement empty test      
+      /////////////////////////////////////////////////////////////////////////TODO: implement comparisons      
+      
+    public:
+      typedef typename POS::pointer pointer;                 //////////////////TODO: do we really need all those typedefs???
+      typedef typename POS::reference reference;
+      typedef typename POS::value_type value_type;
+      
+      IterAdapter (const CON* src, const POS& startpos)
+        : source_(src)
+        , pos_(startpos)
+        { }
+      
+      IterAdapter ()
+        : source_(0)
+        , pos_(0)
+        { }
+      
+      
+      /* === lumiera forward iterator concept === */
+      
+      reference
+      operator*() const
+        {
+          _maybe_throw();
+          return *pos_;
+        }
+
+      pointer
+      operator->() const
+        {
+          _maybe_throw();
+          return pos_;
+        }
+
+      IterAdapter&
+      operator++()
+        {
+          _maybe_throw();
+          CON::iterNext (source_,pos_);
+          return *this;
+        }
+
+      IterAdapter
+      operator++(int)
+        {
+          _maybe_throw();
+          IterAdapter oldPos(*this);
+          CON::iterNext (source_,pos_);
+          return oldPos;
+        }
+      
+      bool
+      isValid ()  const
+        {
+          return (source_ && CON::iterValid(source_,pos_));
+        }
+      
+    private:
+      
+      void
+      _maybe_throw()  const
+        {
+          if (!isValid())
+            throw lumiera::error::Invalid ("Can't iterate further", 
+                  lumiera::error::LUMIERA_ERROR_ITER_EXHAUST);
+        }
     };
   
   
-  /**
+    
+    
+    
+  
+  /** wrapper for an existing Iterator type,
+   *  automatically dereferencing the former's output.
+   *  For this to work, the "source" iterator is expected
+   *  to be declared on \em pointers rather than on values.
+   *  @note bool checkable if and only if source is...
    */
-  template<class T, class CON>
+  template<class IT>
   class PtrDerefIter
+    : public lib::BoolCheckable<PtrDerefIter<IT> >
     {
+      IT i_;
+      
+    public:
+      typedef typename IT::value_type pointer;
+      typedef typename remove_pointer<pointer>::type & reference; 
+      
+      
+      PtrDerefIter (IT srcIter)
+        : i_(srcIter)
+        { }
+      
+      
+      /* === lumiera forward iterator concept === */
+      
+      reference
+      operator*() const
+        {
+          return *(*i_);
+        }
+
+      pointer
+      operator->() const
+        {
+          return *i_;
+        }
+
+      PtrDerefIter&
+      operator++()
+        {
+          ++i_;
+          return *this;
+        }
+
+      PtrDerefIter
+      operator++(int)
+        {
+          return PtrDerefIter (i_++);
+        }
+      
+      bool
+      isValid ()  const
+        {
+          return bool(i_);
+        }
+      
     };
   
   
