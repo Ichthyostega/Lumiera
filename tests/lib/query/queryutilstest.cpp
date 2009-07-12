@@ -66,10 +66,10 @@ namespace lumiera {
           virtual void
           run (Arg arg) 
             {
-              if (isnil(arg))  arg = Cmdline ("Query normalizeID extractID removeTerm countPraed");
+              if (isnil(arg))  arg = Cmdline ("Query normaliseID extractID removeTerm countPraed");
               
               if (contains (arg, "Query"      ))   check_Query ();
-              if (contains (arg, "normalizeID"))   check_normalizeID ();
+              if (contains (arg, "normaliseID"))   check_normaliseID ();
               if (contains (arg, "extractID"  ))   check_extractID ();
               if (contains (arg, "removeTerm" ))   check_removeTerm ();
               if (contains (arg, "countPraed" ))   check_countPraed ();
@@ -88,7 +88,7 @@ namespace lumiera {
           
           /** @test sanitising and normalising various tokens */
           void
-          check_normalizeID ()
+          check_normaliseID ()
             {
               Cmdline tokens ("a A AA dufte 1a _1 A_A BÄH");
               tokens.push_back ("");
@@ -97,7 +97,7 @@ namespace lumiera {
               
               cout << "..original : " << tokens << " :\n";
               
-              for_each (tokens, bind ( &normalizeID, _1 ));
+              for_each (tokens, bind ( &normaliseID, _1 ));
               
               cout << "normalised : " << tokens << " :\n";
             }

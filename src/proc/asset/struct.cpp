@@ -38,7 +38,7 @@
 using boost::format;
 
 using lumiera::Symbol;
-using lumiera::query::normalizeID;
+using lumiera::query::normaliseID;
 using lumiera::query::QueryHandler;
 using lumiera::ConfigRules;
 
@@ -120,8 +120,8 @@ namespace asset
   P<Pipe> 
   StructFactory::operator() (string pipeID, string streamID)
   {
-    normalizeID (pipeID);
-    normalizeID (streamID);
+    normaliseID (pipeID);
+    normaliseID (streamID);
     static format descriptor("pipe(%s), stream(%s).");
     Pipe* pP = impl_->fabricate (Query<Pipe> (descriptor % pipeID % streamID));
     return AssetManager::instance().wrap (*pP);

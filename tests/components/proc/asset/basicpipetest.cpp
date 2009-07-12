@@ -49,7 +49,7 @@ namespace asset
     {
     using mobject::Session;
     using lumiera::Query;
-    using lumiera::query::normalizeID;
+    using lumiera::query::normaliseID;
     
     
     
@@ -81,7 +81,7 @@ namespace asset
         void createExplicit (string pID, string sID)
           { 
             string pID_sane (pID);
-            normalizeID (pID_sane);
+            normaliseID (pID_sane);
             ASSERT (pID_sane != pID);
             
             PPipe thePipe = asset::Struct::create (pID,sID);
@@ -106,7 +106,7 @@ namespace asset
         
         void create_or_ref(string pID)
           { 
-            normalizeID (pID);
+            normaliseID (pID);
             
             PPipe pipe1 = Pipe::query ("pipe("+pID+")");
             ASSERT (pipe1);

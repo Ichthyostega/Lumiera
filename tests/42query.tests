@@ -2,27 +2,27 @@ TESTING "Proc Layer config rules Test Suite" ./test-lib --group=query
 
 
 
-TEST "QueryUtils_test" QueryUtils_test  Query  <<END
+TEST "simple query" QueryUtils_test  Query  <<END
 out: N7lumiera5query4test5ThingE: I am writing a test sentence.
 END
 
 
-TEST "QueryUtils_test" QueryUtils_test  normalizeID  <<END
+TEST "normalise ID" QueryUtils_test  normaliseID  <<END
 out: ..original : a A AA dufte 1a _1 A_A BÄH    White  space  §&Ω%€GΩ%€ar  Ω  baäääääge!!!!!  : 
 out: normalised : a a aA dufte o1a o_1 a_A bH o white_space gar_bage :
 END
 
 
-TEST "QueryUtils_test" QueryUtils_test  extractID  <<END
+TEST "extract ID" QueryUtils_test  extractID  <<END
 return: 0
 END
 
 
-TEST "QueryUtils_test" QueryUtils_test  removeTerm  <<END
+TEST "remove term from query" QueryUtils_test  removeTerm  <<END
 return: 0
 END
 
 
-TEST "QueryUtils_test" QueryUtils_test  countPraed  <<END
+TEST "count predicates in query" QueryUtils_test  countPraed  <<END
 return: 0
 END
