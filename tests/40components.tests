@@ -423,6 +423,7 @@ END
 
 
 TEST "Time Wrapper" TimeWrapper_test <<END
+out: ..:..:..\....
 return: 0
 END
 

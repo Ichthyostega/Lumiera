@@ -25,12 +25,18 @@
 
 #include "lib/util.hpp"
 #include <boost/lexical_cast.hpp>
+#include <iostream>
+#include <cstdlib>
 
 using boost::lexical_cast;
 using util::isnil;
+using std::rand;
+using std::cout;
+using std::endl;
 
 
 #include "lib/lumitime.hpp"
+#include "lib/lumitime-fmt.hpp"
 
 
 
@@ -52,6 +58,7 @@ namespace lumiera {
             
             checkBasics (ref);
             checkComparisons (ref);
+            checkComponentAccess();
           } 
         
         
@@ -116,6 +123,45 @@ namespace lumiera {
             ASSERT (!(val <  gat) );
             ASSERT (!(val >  gat) );
           }
+        
+        
+        void
+        checkComponentAccess()
+          {
+            int millis = rand() % 1000;
+            int secs   = rand() % 60;
+            int mins   = rand() % 60;
+            int hours  = rand() % 100;
+            
+            Time time(millis,secs,mins,hours);
+            ASSERT (millis == time.getMillis());
+            ASSERT (secs   == time.getSecs());
+            ASSERT (mins   == time.getMins());
+            ASSERT (hours  == time.getHours());
+            cout << time << endl;
+            
+            Time t2(2008,0);
+            cout << t2 << endl;
+            ASSERT ( 8 == t2.getMillis());
+            ASSERT ( 2 == t2.getSecs());
+            ASSERT ( 0 == t2.getMins());
+            ASSERT ( 0 == t2.getHours());
+            
+            Time t3(2008,88);
+            cout << t3 << endl;
+            ASSERT ( 8 == t3.getMillis());
+            ASSERT (30 == t3.getSecs());
+            ASSERT ( 1 == t3.getMins());
+            ASSERT ( 0 == t3.getHours());
+            
+            Time t4(2008,118,58);
+            cout << t4 << endl;
+            ASSERT ( 8 == t4.getMillis());
+            ASSERT ( 0 == t4.getSecs());
+            ASSERT ( 0 == t4.getMins());
+            ASSERT ( 1 == t4.getHours());
+          }
+
       };
     
     

@@ -58,7 +58,7 @@ namespace lumiera {
   /** writes time value, formatted as HH:MM:SS:mmm
    *  @see lumiera_tmpbuf_print_time  */
   inline std::ostream&
-  operator<< (ostream& os, Time const& t)
+  operator<< (std::ostream& os, Time const& t)
     {
       return os << lumiera_tmpbuf_print_time(t);
     }

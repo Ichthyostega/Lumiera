@@ -34,5 +34,12 @@
 char*
 lumiera_tmpbuf_print_time (gavl_time_t time);
 
+
+/**
+ * Builds a time value by summing up the given components.
+ */
+gavl_time_t
+lumiera_build_time (long millis, uint secs, uint mins, uint hours);
+
 #endif
 

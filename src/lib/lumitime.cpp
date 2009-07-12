@@ -39,6 +39,44 @@ namespace lumiera {
   const Time Time::MIN ( -std::numeric_limits<int64_t>::max() );
   
   
+      
+  Time::Time ( long millis
+             , uint secs 
+             , uint mins
+             , uint hours
+             )
+    : t_(lumiera_build_time (millis,secs,mins,hours))
+  { }
+  
+  
+  int
+  Time::getMillis() const
+  {
+    return (t_ / (GAVL_TIME_SCALE / 1000)) % 1000; 
+  }
+  
+  
+  int
+  Time::getSecs()   const
+  {
+    return (t_ / (GAVL_TIME_SCALE / 1  )) % 60; 
+  }
+  
+  
+  int
+  Time::getMins()   const
+  {
+    return (t_ / (60 * GAVL_TIME_SCALE)) % 60; 
+  }
+  
+  
+  int
+  Time::getHours()  const
+  {
+    return (t_ / (60L * 60 * GAVL_TIME_SCALE)); 
+  }
+  
+  
   Time::operator string()  const
   {
     return string (lumiera_tmpbuf_print_time (t_));
