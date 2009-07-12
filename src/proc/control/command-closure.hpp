@@ -36,6 +36,7 @@
 #define CONTROL_COMMAND_CLOSURE_H
 
 //#include "pre.hpp"
+#include "lib/bool-checkable.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
@@ -73,7 +74,11 @@ namespace control {
   using lumiera::typelist::StoreFunction;
   
   using lumiera::typelist::NullType;
-    
+  
+  
+  
+  LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Command functor not yet usable, because arguments aren't bound
+  
   
   /** 
    * A neutral container internally holding 
@@ -82,19 +87,17 @@ namespace control {
   typedef FunErasure<StoreFunction> CmdFunctor;
   
   
-  class CmdClosure;
-  typedef std::tr1::shared_ptr<CmdClosure> PClosure;  ///< smart-ptr type used for handling concrete closures
-  
   
   /** Interface */
   class CmdClosure
+    : public lib::BoolCheckable<CmdClosure>
     {
     public:
       virtual ~CmdClosure() {}
       
-      virtual PClosure clone()  const =0;
+      virtual operator string() const =0;
       
-      virtual operator string()  const =0;
+      virtual bool isValid ()   const { return true; }
       
       virtual CmdFunctor bindArguments (CmdFunctor&) =0;
     };
@@ -159,7 +162,6 @@ namespace control {
     {
       typedef typename FunctionSignature< function<SIG> >::Args Args;
       
-      typedef Tuple<Args> ArgTuple;
       
       typedef BuildTupleAccessor<Args,ParamAccessor> BuildAccessor;
       typedef typename BuildAccessor::Accessor ParamStorageTuple;
@@ -167,6 +169,8 @@ namespace control {
       ParamStorageTuple params_;
       
     public:
+      typedef Tuple<Args> ArgTuple;
+      
       Closure (ArgTuple const& args)
         : params_(BuildAccessor(args))
         { }
@@ -195,15 +199,6 @@ namespace control {
         }
       
       
-      /** create a clone copy of this concrete closure,
-       *  hidden behind the generic CmdClosure interface
-       *  and owned by a shared_ptr PClo.
-       */
-      PClosure
-      clone()  const
-        {
-          return PClosure (new Closure (this->params_));
-        }
       
       operator string()  const
         {

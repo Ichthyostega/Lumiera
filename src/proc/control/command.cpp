@@ -39,7 +39,7 @@
 
 namespace control {
   
-  LUMIERA_ERROR_DEFINE (UNBOUND_ARGUMENTS, "Mutation functor not yet usable, because arguments aren't bound");
+  LUMIERA_ERROR_DEFINE (UNBOUND_ARGUMENTS, "Command mutation functor not yet usable, because arguments aren't bound");
   LUMIERA_ERROR_DEFINE (MISSING_MEMENTO, "Undo functor not yet usable, because no undo state has been captured");
   
 

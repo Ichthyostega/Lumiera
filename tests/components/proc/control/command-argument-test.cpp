@@ -311,6 +311,7 @@ namespace test    {
           bound_undoFun();
           cout << protocol.str() << endl;
           
+          // Commands can serve as prototype to be copied....
           Args argsCopy (args);
           bound_captFun();
           protocol.seekp(0);

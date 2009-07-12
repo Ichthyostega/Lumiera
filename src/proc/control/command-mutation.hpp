@@ -73,7 +73,6 @@ namespace control {
   using std::string;
   
   
-  LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Mutation functor not yet usable, because arguments aren't bound
   
   
   /**
