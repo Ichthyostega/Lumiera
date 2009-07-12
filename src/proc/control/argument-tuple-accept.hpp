@@ -42,6 +42,8 @@
 //#include "pre.hpp"
 //#include "lib/error.hpp"
 #include "lib/meta/typelist.hpp"
+#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/function.hpp"
 #include "lib/meta/tuple.hpp"
 
 //#include <tr1/memory>
@@ -61,19 +63,115 @@ namespace control {
 //  using std::ostream;
 //  using std::string;
   
-  namespace { // ......................
+  namespace bind_arg {
     
+    using namespace lumiera::typelist;
+    
+    template< class TAR, class BA
+            , typename TYPES
+            >
+    struct AcceptArgs ;
+    
+    
+    /* specialisations for 0...9 Arguments.... */
+    
+    template< class TAR, class BA
+            >                                                                        //____________________________________
+    struct AcceptArgs<TAR,BA, Types<> >                                             ///< Accept dummy binding (0 Arguments)
+      : BA
+      {
+        void
+        bind ()
+          {
+            static_cast<TAR*> (this) -> bind (tuple::makeNullTuple() );
+          }
+      };
+    
+    
+    template< class TAR, class BA
+            , typename T1
+            >                                                                        //_______________________________
+    struct AcceptArgs<TAR,BA, Types<T1> >                                           ///< Accept binding for 1 Argument
+      : BA
+      {
+        void
+        bind (T1 a1)
+          {
+            static_cast<TAR*> (this) -> bind (tuple::make (a1));
+          }
+      };
+    
+    
+    template< class TAR, class BA
+            , typename T1
+            , typename T2
+            >                                                                        //________________________________
+    struct AcceptArgs<TAR,BA, Types<T1,T2> >                                        ///< Accept binding for 2 Arguments
+      : BA
+      {
+        void
+        bind (T1 a1, T2 a2)
+          {
+            static_cast<TAR*> (this) -> bind (tuple::make (a1,a2));
+          }
+      };
+    
+    
+    template< class TAR, class BA
+            , typename T1
+            , typename T2
+            , typename T3
+            >                                                                        //________________________________
+    struct AcceptArgs<TAR,BA, Types<T1,T2,T3> >                                     ///< Accept binding for 3 Arguments
+      : BA
+      {
+        void
+        bind (T1 a1, T2 a2, T3 a3)
+          {
+            static_cast<TAR*> (this) -> bind (tuple::make (a1,a2,a3));
+          }
+      };
+    
+    
+    template< class TAR, class BA
+            , typename T1
+            , typename T2
+            , typename T3
+            , typename T4
+            >                                                                        //________________________________
+    struct AcceptArgs<TAR,BA, Types<T1,T2,T3,T4> >                                  ///< Accept binding for 4 Arguments
+      : BA
+      {
+        void
+        bind (T1 a1, T2 a2, T3 a3, T4 a4)
+          {
+            static_cast<TAR*> (this) -> bind (tuple::make (a1,a2,a3,a4));
+          }
+      };
+    
+    
+    
+    template<typename SIG>
+    struct _Type
+      {
+        typedef typename FunctionSignature< function<SIG> >::Args Args;
+        enum { ARG_CNT = count<typename Args::List>::value };
+        typedef Tuple<Args> ArgTuple;
+      };
   
   } // (END) impl details
   
   
   
   
-  /**
+  /** Helper: mix in a \c bind(...) function
+   *  @param SIG function signature to mimic (regarding the arguments; return type will be void)
+   *  @param TAR the target class providing a function \c bind(Tuple<Types<T1...> >)
+   *  @param BASE the base class for inheritance chaining
    */
-  template<typename SIG, class TAR, class BA>
+  template<typename SIG, class TAR, class BASE>
   class ArgumentTupleAccept
-    : BA
+    : bind_arg::AcceptArgs<TAR,BASE, typename _Type<SIG>::Args>
     {
     };
   
