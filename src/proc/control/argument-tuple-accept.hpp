@@ -22,11 +22,11 @@
 
 
 /** @file argument-tuple-accept.hpp
- ** This template allows to mix in a \c bind(...) function.
- ** Thereby, the correct number and types of arguments is derived
- ** according to the function signature given as template parameter.
- ** This helper template is used for the ArgumentHolder and generally
- ** for binding arguments for Proc-Layer commands.
+ ** The ArgumentTupleAccept template allows to mix in a \c bind(...) function.
+ ** Thereby, the correct number and types of arguments is derived according to
+ ** the function signature given as template parameter. This helper template is
+ ** used for the ArgumentHolder and generally for binding the arguments when
+ ** defining Proc-Layer commands.
  ** 
  ** @see CommandDef
  ** @see ArgumentHolder
@@ -39,34 +39,22 @@
 #ifndef CONTROL_ARGUMENT_TUPLE_ACCEPT_H
 #define CONTROL_ARGUMENT_TUPLE_ACCEPT_H
 
-//#include "pre.hpp"
-//#include "lib/error.hpp"
 #include "lib/meta/typelist.hpp"
-#include "lib/meta/typelist-util.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/tuple.hpp"
-
-//#include <tr1/memory>
-//#include <boost/scoped_ptr.hpp>
-//#include <tr1/functional>
-//#include <iostream>
-//#include <string>
 
 
 
 namespace control {
   
-//  using lumiera::Symbol;
-//  using std::tr1::shared_ptr;
-//  using boost::scoped_ptr;
-//  using std::tr1::function;
-//  using std::ostream;
-//  using std::string;
   
-  namespace bind_arg {
+  namespace bind_arg { // internals....
     
     using namespace lumiera::typelist;
     
+    
+    /** @internal mix in a \c bind() function
+     */
     template< class TAR, class BA
             , typename TYPES
             >
@@ -83,7 +71,7 @@ namespace control {
         void
         bind ()
           {
-            static_cast<TAR*> (this) -> bind (tuple::makeNullTuple() );
+            static_cast<TAR*> (this) -> bindArg (tuple::makeNullTuple() );
           }
       };
     
@@ -97,7 +85,7 @@ namespace control {
         void
         bind (T1 a1)
           {
-            static_cast<TAR*> (this) -> bind (tuple::make (a1));
+            static_cast<TAR*> (this) -> bindArg (tuple::make (a1));
           }
       };
     
@@ -112,7 +100,7 @@ namespace control {
         void
         bind (T1 a1, T2 a2)
           {
-            static_cast<TAR*> (this) -> bind (tuple::make (a1,a2));
+            static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2));
           }
       };
     
@@ -128,7 +116,7 @@ namespace control {
         void
         bind (T1 a1, T2 a2, T3 a3)
           {
-            static_cast<TAR*> (this) -> bind (tuple::make (a1,a2,a3));
+            static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3));
           }
       };
     
@@ -145,7 +133,7 @@ namespace control {
         void
         bind (T1 a1, T2 a2, T3 a3, T4 a4)
           {
-            static_cast<TAR*> (this) -> bind (tuple::make (a1,a2,a3,a4));
+            static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4));
           }
       };
     
@@ -155,7 +143,6 @@ namespace control {
     struct _Type
       {
         typedef typename FunctionSignature< function<SIG> >::Args Args;
-        enum { ARG_CNT = count<typename Args::List>::value };
         typedef Tuple<Args> ArgTuple;
       };
   
@@ -164,18 +151,18 @@ namespace control {
   
   
   
-  /** Helper: mix in a \c bind(...) function
-   *  @param SIG function signature to mimic (regarding the arguments; return type will be void)
-   *  @param TAR the target class providing a function \c bind(Tuple<Types<T1...> >)
+  /** Helper Template for Proc-Layer control::Command : mix in a \c bind(...) function
+   *  @param SIG  function signature to mimic (regarding the arguments; return type will be void)
+   *  @param TAR  the target class providing a function \c bindArg(Tuple<Types<T1...> >)
    *  @param BASE the base class for inheritance chaining
    */
   template<typename SIG, class TAR, class BASE>
   class ArgumentTupleAccept
-    : bind_arg::AcceptArgs<TAR,BASE, typename _Type<SIG>::Args>
+    : public bind_arg::AcceptArgs<TAR,BASE, typename bind_arg::_Type<SIG>::Args>
     {
     };
   
-    
+  
   
   
 } // namespace control

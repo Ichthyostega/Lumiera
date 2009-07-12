@@ -46,6 +46,7 @@
 //#include "pre.hpp"
 //#include "lib/error.hpp"
 #include "proc/control/command-closure.hpp"
+#include "proc/control/memento-tie.hpp"
 
 //#include <tr1/memory>
 //#include <boost/scoped_ptr.hpp>
@@ -89,7 +90,7 @@ namespace control {
         typedef typename CommandSignature<SIG,MEM>::UndoOp_Sig SIG_undo;
     
         UntiedMemento()
-          : MementoTie<SIG,MEM> (function<SIG_undo>, function<SIG_cap>)
+          : MementoTie<SIG,MEM> (function<SIG_undo>(), function<SIG_cap>() )
           { }
       };
   
@@ -99,9 +100,14 @@ namespace control {
   
   
   /**
-  /* Specifically typed CmdClosure, which serves for 
+   * Specifically typed CmdClosure, which serves for 
    * actually allocating storage to hold the command arguments
    * and the undo state (memento) for Proc-Layer commands.
+   * Both the contained components within ArgumentHolder 
+   * can be in \em empty state; there is no distinct
+   * lifecycle limitations. ArgumentHolder is part
+   * of Proc-Layer command's implementation
+   * and should not be used standalone. 
    */
   template<typename SIG, typename MEM>
   class ArgumentHolder
@@ -148,16 +154,13 @@ namespace control {
        *  whereas the undo functions will be wired by #tie
        */
       ArgumentHolder ()
-        : arguments_(MissingArguments<SIG>)
-        , memento_(UntiedMemento<SIG,MEM>)
+        : arguments_(MissingArguments<SIG>() )
+        , memento_(UntiedMemento<SIG,MEM>() )
         { }
       
       /** has undo state capturing been invoked? */
-      bool
-      canUndo ()
-        {
-          return bool(memento_);
-        }
+      bool canUndo () { return bool(memento_); }
+      bool empty ()   { return !arguments_; }
       
       
       /** store a new argument tuple within this ArgumentHolder,
