@@ -25,12 +25,11 @@
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
-//#include "lib/scoped-ptrvect.hpp"
 #include "lib/iter-adapter.hpp"
-//#include "testdummy.hpp"
-#include <vector>
-#include <iostream>
+
 #include <boost/lexical_cast.hpp>
+#include <iostream>
+#include <vector>
 
 
 
@@ -38,9 +37,9 @@ namespace lib {
 namespace test{
   
   using ::Test;
-//  using util::isnil;
   using boost::lexical_cast;
   using util::for_each;
+  using util::isnil;
   using std::vector;
   using std::cout;
   using std::endl;
@@ -75,38 +74,57 @@ namespace test{
         
         typedef IterAdapter<_Vec::iterator,       TestContainer> iterator;
         typedef IterAdapter<_Vec::const_iterator, TestContainer> const_iterator;
-        typedef PtrDerefIter<iterator      > ref_iterator;
-        typedef PtrDerefIter<const_iterator> const_ref_iter;
+        typedef PtrDerefIter<iterator      >                     ref_iterator;
+        typedef PtrDerefIter<const_iterator>                     const_ref_iter;
        
        
-        iterator       begin ()           { return iterator (this, numberz_.begin()); }
+        iterator       begin ()           { return iterator       (this, numberz_.begin()); }
         const_iterator begin ()     const { return const_iterator (this, numberz_.begin()); }
-        ref_iterator   begin_ref ()       { return ref_iterator (begin()); }
+        ref_iterator   begin_ref ()       { return ref_iterator   (begin()); }
         const_ref_iter begin_ref () const { return const_ref_iter (begin()); }
        
-        iterator       end ()             { return iterator(); }
+        iterator       end ()             { return iterator();       }
         const_iterator end ()       const { return const_iterator(); }
-
-      protected:
+        
+        
+      protected: /* ==== API for the IterAdapter ==== */
         
         friend class IterAdapter<_Vec::iterator,      TestContainer>;
         friend class IterAdapter<_Vec::const_iterator,TestContainer>;
         
         
+        /** Implementation of Iteration-logic: pull next element.
+         *  Implicitly this includes a test for iteration end.  
+         */
         template<class ITER>
         static void
         iterNext (const TestContainer* src, ITER& pos)
           {
             if (iterValid(src,pos))
               ++pos;
+            iterValid(src,pos);
           }
         
+        /** Implementation of Iteration-logic: detect iteration end.
+         *  @note the problem here is that this implementation chooses
+         *        to use two representations of "bottom" (end, invalid).
+         *        The reason is, we want the default-constructed IterAdapter
+         *        also be the "bottom" value. Thus, when we detect the
+         *        iteration end by internal logic (\c numberz_.end() ), we
+         *        immediately transform this into the official "bottom"
+         */
         template<class ITER>
         static bool
         iterValid (const TestContainer* src, ITER& pos)
           {
             REQUIRE (src);
-            return pos != src->numberz_.end();
+            if ((pos != ITER(0)) && (pos != src->numberz_.end()))
+              return true;
+            else
+              {
+                pos = ITER(0);
+                return false;
+              }
           }
       };
   }
@@ -125,7 +143,7 @@ namespace test{
       virtual void
       run (Arg arg)
         {
-          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);          
+          if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);
           
           TestContainer testElms (NUM_ELMS);
           simpleUsage (testElms);
@@ -167,13 +185,13 @@ namespace test{
               )
             {
               ASSERT (iter);
-//            ASSERT (iter != elms.end());                  ////////////////////////////TODO: implement comparison
+              ASSERT (iter != elms.end());
               ASSERT (**iter == i-1);
               
               // note: the previous run indeed modified
               // the element within the container.
               
-              // --(**iter);   // doesn't compile, because it's const
+              // --(**iter);   // doesn't compile, because it's const   ///////////////////////////////////TODO: duh! it *does* compile. why?
             }
           
           i = 0;
@@ -206,12 +224,12 @@ namespace test{
           ASSERT (TestContainer::iterator() == elms.end());
           ASSERT (!(TestContainer::iterator()));
           ASSERT (!(elms.end()));
-//        ASSERT (isnil (elms.end()));                  ////////////////////////////TODO: implement empty test
+          ASSERT (isnil (elms.end()));
           
           ASSERT (elms.begin());
-//        ASSERT (!isnil (elms.begin()));                  ////////////////////////////TODO: implement empty test
+          ASSERT (!isnil (elms.begin()));
         }
-
+      
       
     };
   

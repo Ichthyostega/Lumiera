@@ -42,20 +42,15 @@
 #define LIB_ITER_ADAPTOR_H
 
 
-//#include "include/logging.h"
 #include "lib/error.hpp"
 #include "lib/bool-checkable.hpp"
-//#include "lib/util.hpp"
 
-//#include <vector>
-//#include <boost/noncopyable.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
 
 
 
 namespace lib {
   
-//  using util::for_each;
   using boost::remove_pointer;
   
   
@@ -80,20 +75,19 @@ namespace lib {
     : public lib::BoolCheckable<IterAdapter<POS,CON> >
     {
       const CON* source_;
-      POS pos_;
-      
-      /////////////////////////////////////////////////////////////////////////TODO: implement empty test      
-      /////////////////////////////////////////////////////////////////////////TODO: implement comparisons      
+      mutable POS pos_;
       
     public:
-      typedef typename POS::pointer pointer;                 //////////////////TODO: do we really need all those typedefs???
+      typedef typename POS::pointer pointer;
       typedef typename POS::reference reference;
       typedef typename POS::value_type value_type;
       
       IterAdapter (const CON* src, const POS& startpos)
         : source_(src)
         , pos_(startpos)
-        { }
+        { 
+          CON::iterValid(source_,pos_);
+        }
       
       IterAdapter ()
         : source_(0)
@@ -109,14 +103,14 @@ namespace lib {
           _maybe_throw();
           return *pos_;
         }
-
+      
       pointer
       operator->() const
         {
           _maybe_throw();
           return pos_;
         }
-
+      
       IterAdapter&
       operator++()
         {
@@ -124,7 +118,7 @@ namespace lib {
           CON::iterNext (source_,pos_);
           return *this;
         }
-
+      
       IterAdapter
       operator++(int)
         {
@@ -140,24 +134,43 @@ namespace lib {
           return (source_ && CON::iterValid(source_,pos_));
         }
       
+      bool
+      empty ()    const
+        {
+          return !isValid();
+        }
+      
+      
     private:
       
       void
       _maybe_throw()  const
         {
           if (!isValid())
-            throw lumiera::error::Invalid ("Can't iterate further", 
+            throw lumiera::error::Invalid ("Can't iterate further",
                   lumiera::error::LUMIERA_ERROR_ITER_EXHAUST);
         }
+      
+      /// comparison is allowed to access impl iterator
+      template<class P1, class P2, class CX>
+      friend bool operator== (IterAdapter<P1,CX> const&, IterAdapter<P2,CX> const&);
     };
   
   
-    
-    
-    
+  /// Supporting equality comparisons...
+  template<class P1, class P2, class CON>
+  bool operator== (IterAdapter<P1,CON> const& il, IterAdapter<P2,CON> const& ir)  { return il.pos_ == ir.pos_; }
+  
+  template<class P1, class P2, class CON>
+  bool operator!= (IterAdapter<P1,CON> const& il, IterAdapter<P2,CON> const& ir)  { return !(il == ir); }
+  
+  
+  
+  
+  
   
   /** wrapper for an existing Iterator type,
-   *  automatically dereferencing the former's output.
+   *  automatically dereferencing the output of the former.
    *  For this to work, the "source" iterator is expected
    *  to be declared on \em pointers rather than on values.
    *  @note bool checkable if and only if source is...
@@ -170,7 +183,8 @@ namespace lib {
       
     public:
       typedef typename IT::value_type pointer;
-      typedef typename remove_pointer<pointer>::type & reference; 
+      typedef typename remove_pointer<pointer>::type value_type;
+      typedef value_type& reference; 
       
       
       PtrDerefIter (IT srcIter)
@@ -185,20 +199,20 @@ namespace lib {
         {
           return *(*i_);
         }
-
+      
       pointer
       operator->() const
         {
           return *i_;
         }
-
+      
       PtrDerefIter&
       operator++()
         {
           ++i_;
           return *this;
         }
-
+      
       PtrDerefIter
       operator++(int)
         {
@@ -211,9 +225,25 @@ namespace lib {
           return bool(i_);
         }
       
+      bool
+      empty ()    const
+        {
+          return !isValid();
+        }
+      
+      
+      /// comparison operator is allowed to access the underlying impl iterator
+      template<class I1, class I2>
+      friend bool operator== (PtrDerefIter<I1> const&, PtrDerefIter<I2> const&);
     };
   
   
+  /// Supporting equality comparisons...
+  template<class I1, class I2>
+  bool operator== (PtrDerefIter<I1> const& il, PtrDerefIter<I2> const& ir)  { return il.i_ == ir.i_; }
+    
+  template<class I1, class I2>
+  bool operator!= (PtrDerefIter<I1> const& il, PtrDerefIter<I2> const& ir)  { return !(il == ir); }
   
   
 } // namespace lib
