@@ -49,7 +49,14 @@ namespace test{
   
     uint NUM_ELMS = 10;
   
-  
+    /** 
+     * Example of a more elaborate custom container exposing an iteration API.
+     * While the demo implementation here is based on pointers within a vector,
+     * we hand out a IterAdapter, which will call back when used by the client,
+     * thus allowing us to control the iteration process. Moreover, we provide
+     * a variant of this iterator, which automatically dereferences the pointers,
+     * thus yielding direct references for the client code to use.
+     */
     class TestContainer
       {
         typedef vector<int *> _Vec;
@@ -57,6 +64,7 @@ namespace test{
         _Vec numberz_;
         
         static void killIt (int *it) { delete it; }
+        
         
       public:
         TestContainer (uint count)
@@ -70,19 +78,21 @@ namespace test{
           {
             for_each (numberz_, killIt);
           }
-       
+        
+        
+        /* ==== Exposing Iterator interface(s) for the clients ====== */
         
         typedef IterAdapter<_Vec::iterator,       TestContainer> iterator;
         typedef IterAdapter<_Vec::const_iterator, TestContainer> const_iterator;
         typedef PtrDerefIter<iterator      >                     ref_iterator;
         typedef PtrDerefIter<const_iterator>                     const_ref_iter;
-       
-       
+        
+        
         iterator       begin ()           { return iterator       (this, numberz_.begin()); }
         const_iterator begin ()     const { return const_iterator (this, numberz_.begin()); }
         ref_iterator   begin_ref ()       { return ref_iterator   (begin()); }
         const_ref_iter begin_ref () const { return const_ref_iter (begin()); }
-       
+        
         iterator       end ()             { return iterator();       }
         const_iterator end ()       const { return const_iterator(); }
         
@@ -93,16 +103,12 @@ namespace test{
         friend class IterAdapter<_Vec::const_iterator,TestContainer>;
         
         
-        /** Implementation of Iteration-logic: pull next element.
-         *  Implicitly this includes a test for iteration end.  
-         */
+        /** Implementation of Iteration-logic: pull next element. */
         template<class ITER>
         static void
-        iterNext (const TestContainer* src, ITER& pos)
+        iterNext (const TestContainer*, ITER& pos)
           {
-            if (iterValid(src,pos))
-              ++pos;
-            iterValid(src,pos);
+            ++pos;
           }
         
         /** Implementation of Iteration-logic: detect iteration end.
@@ -115,7 +121,7 @@ namespace test{
          */
         template<class ITER>
         static bool
-        iterValid (const TestContainer* src, ITER& pos)
+        hasNext (const TestContainer* src, ITER& pos)
           {
             REQUIRE (src);
             if ((pos != ITER(0)) && (pos != src->numberz_.end()))
@@ -124,17 +130,22 @@ namespace test{
               {
                 pos = ITER(0);
                 return false;
-              }
-          }
+          }   }
       };
-  }
+    
+  } // (END) impl test dummy container
   
   
   
-  /********************************************************************
-   *  @test create an iterator element for a given container and
-   *        verify its behaviour in accordance to the concept
-   *        "lumiera forward iterator"
+  
+  
+  
+  
+  /*********************************************************************
+   *  @test set up example implementations based on the iterator-adapter
+   *        templates and verify the behaviour in accordance to the
+   *        concept "lumiera forward iterator"
+   *        
    * @todo see Ticket #182
    */
   class IterAdapter_test : public Test
@@ -145,15 +156,44 @@ namespace test{
         {
           if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);
           
+          wrapIterRange ();
+          
           TestContainer testElms (NUM_ELMS);
           simpleUsage (testElms);
           iterTypeVariations (testElms);
+          verifyComparisons (testElms);
         }
       
       
-      static void showIt (int* elm) { cout << "::" << *elm; }
+      /** @test usage scenario, where we allow the client to
+       *        access a range of elements given by STL iterators,
+       *        without any specific iteration behaviour.
+       */
+      void
+      wrapIterRange ()
+        {
+          vector<int> iVec (NUM_ELMS);
+          for (uint i=0; i < NUM_ELMS; ++i)
+            iVec[i] = i;
+          
+          typedef vector<int>::iterator I;
+          typedef RangeIter<I> Range;
+          
+          Range range (iVec.begin(), iVec.end());
+          ASSERT (!isnil (range) || !NUM_ELMS);
+          
+          // now for example the client could....
+          while ( range )
+            cout << "::" << *range++;
+          
+          cout << endl;
+          ASSERT (isnil (range));
+          ASSERT (range == Range());
+        }
       
       
+      
+      /** @test use the IterAdapter as if it was a STL iterator */
       void
       simpleUsage (TestContainer& elms)
         {
@@ -161,7 +201,12 @@ namespace test{
           cout << endl;
         }
       
+      static void showIt (int* elm) { cout << "::" << *elm; }
       
+      
+      
+      /** @test verify the const and dereferencing variants,
+       *        which can be created based on IterAdapter */
       void
       iterTypeVariations (TestContainer& elms)
         {
@@ -191,7 +236,7 @@ namespace test{
               // note: the previous run indeed modified
               // the element within the container.
               
-              // --(**iter);   // doesn't compile, because it's const   ///////////////////////////////////TODO: duh! it *does* compile. why?
+            // ++(*iter);   // doesn't compile, because it yields a "* const"
             }
           
           i = 0;
@@ -212,14 +257,36 @@ namespace test{
             {
               ASSERT (iter);
               ASSERT ((*iter) == i);
+              
+             // *iter = i+1;   ///////////TODO this should be const, but it isn't
             }
-          
+        }
+      
+      
+      
+      /** @test iterator comparison, predicates and operators */
+      void
+      verifyComparisons (TestContainer& elms)
+        {
           TestContainer::ref_iterator rI (elms.begin_ref());
           
           ASSERT (0 == *rI );
           ASSERT (0 == *rI++);
           ASSERT (1 == *rI  );
           ASSERT (2 == *++rI);
+          
+          TestContainer const& const_elms (elms);
+          TestContainer::const_ref_iter rI2 (const_elms.begin_ref());
+          
+          ASSERT (rI2 != rI);
+          ASSERT (rI2 == elms.begin_ref());
+          ASSERT (rI2 == const_elms.begin_ref());
+          
+          ++++rI2;
+          
+          ASSERT (rI2 == rI);
+          ASSERT (rI2 != ++rI);
+          ASSERT (!isnil (rI2));
           
           ASSERT (TestContainer::iterator() == elms.end());
           ASSERT (!(TestContainer::iterator()));
