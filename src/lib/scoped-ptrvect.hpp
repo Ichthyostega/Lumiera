@@ -25,13 +25,14 @@
  ** build and own a number of objects, including lifecycle management. 
  ** For example, a service provider may need to maintain a number of individual
  ** process handles. The solution here is deliberately kept simple, it is
- ** similar to using a stl container with shared_ptr(s), but behaves rather
+ ** similar to using a STL container with shared_ptr(s), but behaves rather
  ** like boost::scoped_ptr. It provides the same basic functionality as
  ** boost::ptr_vector, but doesn't require us to depend on boost-serialisation.
  ** 
  ** Some details to note:
  ** - contained objects accessed by reference, never NULL.
- ** - TODO: iterators, detaching of objects...
+ ** - the exposed iterator automatically dereferences
+ ** - TODO: detaching of objects...
  ** - TODO: retro-fit with refarray interface (--> builder branch)
  ** 
  ** @see scoped-ptrvect-test.cpp
@@ -70,6 +71,12 @@ namespace lib {
       boost::noncopyable
     {
       typedef std::vector<T*> _Vec;
+      typedef typename _Vec::iterator VIter;
+      typedef typename _Vec::const_iterator VcIter;
+      
+      typedef RangeIter<VIter> RIter;
+      typedef RangeIter<VcIter> RcIter;
+      
       
     public:
       typedef size_t   size_type;
@@ -118,7 +125,6 @@ namespace lib {
       void
       clear()
         { 
-          typedef typename _Vec::iterator VIter;
           VIter e = _Vec::end();
           for (VIter i = _Vec::begin(); i!=e; ++i)
             {
@@ -144,11 +150,11 @@ namespace lib {
           return *get(i);
         }
       
-      typedef PtrDerefIter<typename _Vec::iterator> iterator;
-      typedef PtrDerefIter<typename _Vec::const_iterator> const_iterator;
+      typedef PtrDerefIter<RIter> iterator;
+      typedef PtrDerefIter<RcIter> const_iterator;
       
-      iterator       begin()        { return       iterator (_Vec::begin()); }
-      const_iterator begin()  const { return const_iterator (_Vec::begin()); }
+      iterator       begin()        { return       iterator (allPtrs()); }
+      const_iterator begin()  const { return const_iterator (allPtrs()); }
       iterator       end()          { return       iterator (); }
       const_iterator end()    const { return const_iterator (); }
       
@@ -164,14 +170,22 @@ namespace lib {
       
       
     private:
-      /** internal element access, including null check */
-      T* get(size_type i)
+      /** @internal element access, including null check */
+      T*
+      get (size_type i)
         {
           T* p (_Vec::at (i));
           if (!p)
             throw lumiera::error::Invalid("no valid object at this index");
           else
             return p;
+        }
+      
+      /** @internal access sequence of all managed pointers */
+      RIter
+      allPtrs ()
+        {
+          return RIter (_Vec::begin(), _Vec::end());
         }
     };
   

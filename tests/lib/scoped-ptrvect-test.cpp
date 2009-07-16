@@ -40,6 +40,7 @@ namespace test{
   
   /********************************************************************
    *  @test ScopedPtrVect manages the lifecycle of a number of objects.
+   *  @todo cover the const iterator and implement detaching of objects
    */
   class ScopedPtrVect_test : public Test
     {
@@ -48,7 +49,7 @@ namespace test{
       run (Arg)
         {
           simpleUsage();
-//        iterating();
+          iterating();
 //        detaching();
         }
       
@@ -88,6 +89,28 @@ namespace test{
             holder.manage (new Dummy);
             ASSERT (9 == holder.size());
             ASSERT (0!=checksum);
+          }
+          ASSERT (0==checksum);
+        }
+      
+      
+      void
+      iterating()
+        {
+          ASSERT (0==checksum);
+          {
+            VectD holder;
+            for (int i=0; i<16; ++i)
+              holder.manage(new Dummy(i));
+            
+            int check=0;
+            VectD::iterator ii = holder.begin();
+            while (ii)
+              {
+                ASSERT (check == ii->getVal());
+                ++check;
+                ++ii;
+              }
           }
           ASSERT (0==checksum);
         }

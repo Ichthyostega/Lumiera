@@ -41,20 +41,19 @@ namespace test{
       public:
         Dummy ()
           : val_(1 + (rand() % 100000000))
-          {
-            checksum += val_;
-            if (throw_in_ctor)
-              throw val_;
-          }
+          { init(); }
+        
+        Dummy (int v)
+          : val_(v)
+          { init(); }
         
         ~Dummy()
           {
             checksum -= val_;
           }
         
-        long add (int i)  { return val_+i; }
+        long add (int i)    { return val_+i; }
         
-      protected:
         int getVal()  const { return val_; }
         
         void
@@ -63,6 +62,16 @@ namespace test{
             checksum += newVal - val_;
             val_ = newVal;
           }
+        
+      private:
+        void
+        init()
+          {
+            checksum += val_;
+            if (throw_in_ctor)
+              throw val_;
+          }
+
       };
       
   }  // anonymous test dummy
