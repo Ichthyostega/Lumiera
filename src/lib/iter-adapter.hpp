@@ -77,10 +77,43 @@
 #include "lib/error.hpp"
 #include "lib/bool-checkable.hpp"
 
+#include <boost/type_traits/remove_const.hpp>
+
 
 
 namespace lib {
   
+  
+  namespace {
+    /** 
+     * Helper for creating nested typedefs
+     * within the iterator adaptor, similar to what the STL does.
+     */
+    template<typename TY>
+    struct IterTraits
+      {
+        typedef typename TY::pointer pointer;
+        typedef typename TY::reference reference;
+        typedef typename TY::value_type value_type;
+      };
+    
+    template<typename TY>
+    struct IterTraits<TY *>
+      {
+        typedef TY value_type;
+        typedef TY& reference;
+        typedef TY* pointer;
+      };
+    
+    template<typename TY>
+    struct IterTraits<const TY *>
+      {
+        typedef TY value_type;
+        typedef const TY& reference;
+        typedef const TY* pointer;
+      };
+    
+  }
   
   
   /**
@@ -107,9 +140,9 @@ namespace lib {
       mutable POS pos_;
       
     public:
-      typedef typename POS::pointer pointer;
-      typedef typename POS::reference reference;
-      typedef typename POS::value_type value_type;
+      typedef typename IterTraits<POS>::pointer pointer;
+      typedef typename IterTraits<POS>::reference reference;
+      typedef typename IterTraits<POS>::value_type value_type;
       
       IterAdapter (const CON* src, const POS& startpos)
         : source_(src)
@@ -243,9 +276,9 @@ namespace lib {
       IT e_;
       
     public:
-      typedef typename IT::pointer pointer;
-      typedef typename IT::reference reference;
-      typedef typename IT::value_type value_type;
+      typedef typename IterTraits<IT>::pointer pointer;
+      typedef typename IterTraits<IT>::reference reference;
+      typedef typename IterTraits<IT>::value_type value_type;
       
       RangeIter (IT const& start, IT const& end)
         : p_(start)
@@ -287,6 +320,7 @@ namespace lib {
       RangeIter&
       operator++()
         {
+          _maybe_throw();
           ++p_;
           return *this;
         }
@@ -294,6 +328,7 @@ namespace lib {
       RangeIter
       operator++(int)
         {
+          _maybe_throw();
           return RangeIter (p_++,e_);
         }
       
@@ -362,6 +397,42 @@ namespace lib {
   
   
   /** 
+   * Helper for type rewritings:
+   * get the element type for an iterator like entity
+   */
+  template<class TY>
+  struct IterType;
+  
+  template<template<class,class> class Iter, class TY, class CON>
+  struct IterType<Iter<TY,CON> >
+    {
+      typedef CON Container;
+      typedef TY  ElemType;
+      
+      typedef typename RemovePtr<TY>::Type ValueType;
+      
+      template<class T2>
+      struct SimilarIter
+        {
+          typedef Iter<T2,CON> Type;
+        };
+    };
+  
+  template<class IT>
+  struct IterType<RangeIter<IT> >
+    : IterType<IT>
+    {
+      template<class T2>
+      struct SimilarIter  ///< rebind to rewritten Iterator wrapped into RangeIter
+        {
+          typedef typename IterType<IT>::template SimilarIter<T2>::Type WrappedIter;
+          typedef RangeIter<WrappedIter> Type;
+        };
+    };
+  
+  
+  
+  /** 
    * wrapper for an existing Iterator type,
    * automatically dereferencing the output of the former.
    * For this to work, the "source" iterator is expected
@@ -372,25 +443,55 @@ namespace lib {
   class PtrDerefIter
     : public lib::BoolCheckable<PtrDerefIter<IT> >
     {
-      IT i_;
+      IT i_;  ///< nested source iterator
+      
       
     public:
-      typedef typename IT::value_type pointer;
+      typedef typename IT::value_type           pointer;
       typedef typename RemovePtr<pointer>::Type value_type;
-      typedef value_type& reference; 
+      typedef value_type&                       reference; 
+      
+      // the purpose of the following typedefs is to ease building a correct "const iterator"
+      
+      typedef typename boost::remove_const<value_type>::type ValueTypeBase; // value_type without const
+      
+      typedef typename IterType<IT>::template SimilarIter<      ValueTypeBase* * >::Type WrappedIterType;
+      typedef typename IterType<IT>::template SimilarIter<const ValueTypeBase* * >::Type WrappedConstIterType;
+      
+      typedef PtrDerefIter<WrappedIterType>      IterType;
+      typedef PtrDerefIter<WrappedConstIterType> ConstIterType;
       
       
+      
+      /** PtrDerefIter is always created 
+       *  by wrapping an existing iterator.
+       */
       PtrDerefIter (IT srcIter)
         : i_(srcIter)
         { }
       
       
-      /** allow copy initialisation also
-       *  when the base iter types are convertible */
-      template<class I2>
-      PtrDerefIter (I2 const& oIter)
-        : i_(reinterpret_cast<IT const&> (oIter.getBase()))  /////////////////////////////TODO: properly guard this dangerous conversion by a traits template; the idea is to allow this conversion only for the initialisation of a "const iterator" from its sister type
+      /** allow copy initialisation also when
+       *  the wrapped iterator is based on some variation of a pointer.
+       *  Especially, this includes initialisation of the "const variant"
+       *  from the "normal variant" of PtrDerefIter. Actually, we need to convert
+       *  in this case by brute force, because indeed (const TY *)* is not assignable
+       *  from (TY *)* -- just we know that our intention is to dereference both levels
+       *  of pointers, and then the resulting conversion is correct.
+       *  @note in case IT == WrappedIterType, this is just a redefinition of the
+       *        default copy ctor. In all other cases, this is an <i>additional
+       *        ctor besides the default copy ctor</i> */
+      PtrDerefIter (PtrDerefIter<WrappedIterType> const& oIter)
+        : i_(reinterpret_cast<IT const&> (oIter.getBase()))
         { }
+      
+      PtrDerefIter&
+      operator= (PtrDerefIter<WrappedIterType> const& ref)
+        {
+          i_ = reinterpret_cast<IT const&> (ref.getBase());
+        }
+      
+      
       
       
       /* === lumiera forward iterator concept === */
@@ -449,29 +550,6 @@ namespace lib {
   template<class I1, class I2>
   bool operator!= (PtrDerefIter<I1> const& il, PtrDerefIter<I2> const& ir)  { return !(il == ir); }
   
-  
-  
-  /** 
-   * Helper for type rewritings:
-   * get the element type for an iterator like entity
-   */
-  template<class TY>
-  struct IterType;
-  
-  template<template<class,class> class Iter, class TY, class CON>
-  struct IterType<Iter<TY,CON> >
-    {
-      typedef CON Container;
-      typedef TY  ElemType;
-      
-      typedef typename RemovePtr<TY>::Type Type;
-      
-      template<class T2>
-      struct SimilarIter
-        {
-          typedef Iter<T2,CON> Type;
-        };
-    };
   
 } // namespace lib
 #endif

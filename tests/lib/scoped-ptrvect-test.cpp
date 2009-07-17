@@ -23,31 +23,27 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 
 #include "lib/scoped-ptrvect.hpp"
 #include "testdummy.hpp"
 
-//////////////////////////////////////////////TODO test code
-#include "lib/test/test-helper.hpp"
-using lib::test::showSizeof;
-#include <iostream>
-using std::cout;
-using std::endl;
-//////////////////////////////////////////////TODO test code
 
 namespace lib {
 namespace test{
   
   using ::Test;
   using util::isnil;
+  using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
+  
   
   typedef ScopedPtrVect<Dummy> VectD;
   
   
   /********************************************************************
    *  @test ScopedPtrVect manages the lifecycle of a number of objects.
-   *  @todo cover the const iterator and implement detaching of objects
+   *  @todo implement detaching of objects
    */
   class ScopedPtrVect_test : public Test
     {
@@ -118,12 +114,10 @@ namespace test{
                 ++check;
                 ++ii;
               }
+            
+            
+            // Test the const iterator
             check = 0;
-            
-///////////////////////////////////////////////////////////////////TODO test code
-            cout << showSizeof<VectD::Tupe> () << endl;
-///////////////////////////////////////////////////////////////////TODO test code
-            
             VectD::const_iterator cii = holder.begin();
             while (cii)
               {
@@ -131,6 +125,20 @@ namespace test{
                 ++check;
                 ++cii;
               }
+            
+            
+            // Verify correct behaviour of iteration end
+            ASSERT (! (holder.end()));
+            ASSERT (isnil (holder.end()));
+            
+            VERIFY_ERROR (ITER_EXHAUST, *holder.end() );
+            VERIFY_ERROR (ITER_EXHAUST, ++holder.end() );
+            
+            ASSERT (ii == holder.end());
+            ASSERT (cii == holder.end());
+            VERIFY_ERROR (ITER_EXHAUST, ++ii );
+            VERIFY_ERROR (ITER_EXHAUST, ++cii );
+            
           }
           ASSERT (0==checksum);
         }

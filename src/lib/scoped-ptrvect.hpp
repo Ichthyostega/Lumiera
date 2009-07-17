@@ -48,7 +48,6 @@
 #include "include/logging.h"
 #include "lib/iter-adapter.hpp"
 #include "lib/error.hpp"
-#include "lib/util.hpp"
 
 #include <vector>
 #include <boost/noncopyable.hpp>
@@ -56,14 +55,13 @@
 
 namespace lib {
   
-  using util::for_each;
-  
   
   
   /**
-   * Simple vector based collection of pointers, noncopyable and managing
-   * lifecycle of the pointed-to objects. Implemented by a vector of
-   * bare pointers (private inheritance)
+   * Simple vector based collection of pointers,
+   * managing lifecycle of the pointed-to objects.
+   * Implemented as a non-copyable object, based on a
+   * vector of bare pointers (private inheritance)
    */
   template<class T>
   class ScopedPtrVect
@@ -72,11 +70,12 @@ namespace lib {
     {
       typedef std::vector<T*> _Vec;
       typedef typename _Vec::iterator VIter;
-//      typedef typename _Vec::const_iterator VcIter;
-      typedef typename IterType<VIter>::template SimilarIter<const T**>::Type VcIter;
       
       typedef RangeIter<VIter> RIter;
-      typedef RangeIter<VcIter> RcIter;
+      typedef PtrDerefIter<RIter> IterType;
+      
+      typedef typename IterType::ConstIterType ConstIterType;
+      typedef typename IterType::WrappedConstIterType RcIter;
       
       
     public:
@@ -84,8 +83,6 @@ namespace lib {
       typedef T &      reference;
       typedef T const& const_reference;
       
-      typedef typename IterType<VIter>::Type Tupe;
-            
       
       
       ScopedPtrVect ()
@@ -154,8 +151,8 @@ namespace lib {
           return *get(i);
         }
       
-      typedef PtrDerefIter<RIter> iterator;
-      typedef PtrDerefIter<RcIter> const_iterator;
+      typedef IterType      iterator;
+      typedef ConstIterType const_iterator;
       
       iterator       begin()        { return       iterator (allPtrs()); }
       const_iterator begin()  const { return const_iterator (allPtrs()); }
