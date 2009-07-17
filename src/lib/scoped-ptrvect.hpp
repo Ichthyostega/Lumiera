@@ -72,7 +72,8 @@ namespace lib {
     {
       typedef std::vector<T*> _Vec;
       typedef typename _Vec::iterator VIter;
-      typedef typename _Vec::const_iterator VcIter;
+//      typedef typename _Vec::const_iterator VcIter;
+      typedef typename IterType<VIter>::template SimilarIter<const T**>::Type VcIter;
       
       typedef RangeIter<VIter> RIter;
       typedef RangeIter<VcIter> RcIter;
@@ -82,6 +83,9 @@ namespace lib {
       typedef size_t   size_type;
       typedef T &      reference;
       typedef T const& const_reference;
+      
+      typedef typename IterType<VIter>::Type Tupe;
+            
       
       
       ScopedPtrVect ()
@@ -155,8 +159,8 @@ namespace lib {
       
       iterator       begin()        { return       iterator (allPtrs()); }
       const_iterator begin()  const { return const_iterator (allPtrs()); }
-      iterator       end()          { return       iterator (); }
-      const_iterator end()    const { return const_iterator (); }
+      iterator       end()          { return       iterator ( RIter() ); }
+      const_iterator end()    const { return const_iterator (RcIter() ); }
       
       
       

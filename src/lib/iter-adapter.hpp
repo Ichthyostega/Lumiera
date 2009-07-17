@@ -258,6 +258,16 @@ namespace lib {
         { }
       
       
+      /** allow copy,
+       *  when the underlying iterators
+       *  are compatible or convertible */
+      template<class I2>
+      RangeIter (I2 const& oIter)
+        : p_(oIter.getPos())
+        , e_(oIter.getEnd())
+        { }
+      
+      
       /* === lumiera forward iterator concept === */
       
       reference
@@ -299,6 +309,12 @@ namespace lib {
           return !isValid();
         }
       
+      
+      /** access wrapped STL iterator */
+      const IT&  getPos()  const { return p_; }
+      const IT&  getEnd()  const { return e_; }
+      
+      
     private:
       
       void
@@ -308,18 +324,13 @@ namespace lib {
             throw lumiera::error::Invalid ("Can't iterate further",
                   lumiera::error::LUMIERA_ERROR_ITER_EXHAUST);
         }
-      
-      
-      /// comparison operator is allowed to access the underlying impl iterator
-      template<class I1, class I2>
-      friend bool operator== (RangeIter<I1> const&, RangeIter<I2> const&);
     };
   
   
   
   /// Supporting equality comparisons...
   template<class I1, class I2>
-  bool operator== (RangeIter<I1> const& il, RangeIter<I2> const& ir)  { return (!il && !ir) || (il.p_ == ir.p_); }
+  bool operator== (RangeIter<I1> const& il, RangeIter<I2> const& ir)  { return (!il && !ir) || (il.getPos() == ir.getPos()); }
     
   template<class I1, class I2>
   bool operator!= (RangeIter<I1> const& il, RangeIter<I2> const& ir)  { return !(il == ir); }
@@ -374,6 +385,14 @@ namespace lib {
         { }
       
       
+      /** allow copy initialisation also
+       *  when the base iter types are convertible */
+      template<class I2>
+      PtrDerefIter (I2 const& oIter)
+        : i_(reinterpret_cast<IT const&> (oIter.getBase()))  /////////////////////////////TODO: properly guard this dangerous conversion by a traits template; the idea is to allow this conversion only for the initialisation of a "const iterator" from its sister type
+        { }
+      
+      
       /* === lumiera forward iterator concept === */
       
       reference
@@ -414,19 +433,45 @@ namespace lib {
         }
       
       
-      /// comparison operator is allowed to access the underlying impl iterator
-      template<class I1, class I2>
-      friend bool operator== (PtrDerefIter<I1> const&, PtrDerefIter<I2> const&);
+      /** access the wrapped implementation iterator */
+      IT const&
+      getBase()  const
+        {
+          return i_;
+        }
     };
   
   
   /// Supporting equality comparisons...
   template<class I1, class I2>
-  bool operator== (PtrDerefIter<I1> const& il, PtrDerefIter<I2> const& ir)  { return il.i_ == ir.i_; }
+  bool operator== (PtrDerefIter<I1> const& il, PtrDerefIter<I2> const& ir)  { return il.getBase() == ir.getBase(); }
     
   template<class I1, class I2>
   bool operator!= (PtrDerefIter<I1> const& il, PtrDerefIter<I2> const& ir)  { return !(il == ir); }
   
+  
+  
+  /** 
+   * Helper for type rewritings:
+   * get the element type for an iterator like entity
+   */
+  template<class TY>
+  struct IterType;
+  
+  template<template<class,class> class Iter, class TY, class CON>
+  struct IterType<Iter<TY,CON> >
+    {
+      typedef CON Container;
+      typedef TY  ElemType;
+      
+      typedef typename RemovePtr<TY>::Type Type;
+      
+      template<class T2>
+      struct SimilarIter
+        {
+          typedef Iter<T2,CON> Type;
+        };
+    };
   
 } // namespace lib
 #endif

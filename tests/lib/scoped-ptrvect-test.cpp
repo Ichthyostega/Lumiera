@@ -28,6 +28,13 @@
 #include "lib/scoped-ptrvect.hpp"
 #include "testdummy.hpp"
 
+//////////////////////////////////////////////TODO test code
+#include "lib/test/test-helper.hpp"
+using lib::test::showSizeof;
+#include <iostream>
+using std::cout;
+using std::endl;
+//////////////////////////////////////////////TODO test code
 
 namespace lib {
 namespace test{
@@ -110,6 +117,19 @@ namespace test{
                 ASSERT (check == ii->getVal());
                 ++check;
                 ++ii;
+              }
+            check = 0;
+            
+///////////////////////////////////////////////////////////////////TODO test code
+            cout << showSizeof<VectD::Tupe> () << endl;
+///////////////////////////////////////////////////////////////////TODO test code
+            
+            VectD::const_iterator cii = holder.begin();
+            while (cii)
+              {
+                ASSERT (check == cii->getVal());
+                ++check;
+                ++cii;
               }
           }
           ASSERT (0==checksum);
