@@ -628,12 +628,13 @@ namespace lib {
           destroy();                         \
           try                                 \
             {                                  \
-              return *new(&buf_) _CTOR_CALL_;   \
-            }                                    \
-          catch (...)                             \
-            {                                      \
-              placeDefault();                       \
-              throw;                                 \
+              REQUIRE (siz >= sizeof(TY));      \
+              return *new(&buf_) _CTOR_CALL_;    \
+            }                                     \
+          catch (...)                              \
+            {                                       \
+              placeDefault();                        \
+              throw;                                  \
             }
       
       
