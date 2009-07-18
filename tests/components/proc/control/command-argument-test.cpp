@@ -51,7 +51,8 @@
 //using std::tr1::placeholders::_2;
 //using std::tr1::function;
 using util::isnil;
-using util::and_all;
+//using util::and_all;
+using util::for_each;
 using boost::format;
 using lumiera::Time;
 //using util::contains;
@@ -178,46 +179,60 @@ namespace test    {
       virtual void
       run (Arg) 
         {
-#if false ////////////////////////////////////////////////////////////////////////////TODO.....          
           ArgTuples testTuples;
           Tracker<Time>::instanceCnt = 0;
           Tracker<string>::instanceCnt = 0;
           
-          createArgTuples (testTuples);
-          checkArgumentComparison ();
-          serialiseArgTuples (testTuples);
+          createTuples (testTuples);
+//        checkArgumentComparison ();
+//        serialiseArgTuples (testTuples);
           
-          simulateCmdLifecycle();
+//        simulateCmdLifecycle();
           
           ASSERT (0 == Tracker<Time>::instanceCnt);
           ASSERT (0 == Tracker<string>::instanceCnt);
         }
       
+      typedef struct{ int i[5]; } Sint5;
+          
       
       /** @test create various argument tuples and re-access their contents */
       void
       createTuples (ArgTuples& tup)
         {
-          tup.manage (new ArgumentHolder<void()>);
-          tup.manage (new ArgumentHolder<void(int)>);
-          tup.manage (new ArgumentHolder<void(int,Time)>);
-          tup.manage (new ArgumentHolder<void(int,Time), Time>);
-          tup.manage (new ArgumentHolder<void(int,Time), int[5]>);
+          typedef ArgumentHolder<void(),         bool>  A1;
+          typedef ArgumentHolder<void(int),      void*> A2;
+          typedef ArgumentHolder<void(int,Time), int>   A3;
+          typedef ArgumentHolder<void(int,Time), Time>  A4;
+          typedef ArgumentHolder<void(int,Time), Sint5> A5;
           
-          ASSERT (and_all (tup, isnil));
+          A1* arg1 = new A1(); tup.manage (arg1);
+          A2* arg2 = new A2(); tup.manage (arg2);
+          A3* arg3 = new A3(); tup.manage (arg3);
+          A4* arg4 = new A4(); tup.manage (arg4);
+          A5* arg5 = new A5(); tup.manage (arg5);
+          
+          ASSERT (isnil (*arg1));
+          ASSERT (isnil (*arg2));
+          ASSERT (isnil (*arg3));
+          ASSERT (isnil (*arg4));
+          ASSERT (isnil (*arg5));
           
           for_each (tup, showIt);
           
-          tup[1].bind (rand() % 20);
-          tup[2].bind (rand() % 20, randTime());
-          tup[3].bind (rand() % 20, randTime());
-          tup[4].bind (rand() % 20, randTime());
+          arg2->bind (rand() % 20);
+          arg3->bind (rand() % 20, randTime());
+          arg4->bind (rand() % 20, randTime());
+          arg5->bind (rand() % 20, randTime());
           
-          tup[1].memento() = 42;
-          tup[4].memento()[3] = 513;
+          arg3->memento() = 42;
+          arg5->memento().i[3] = 513;
+          
+          for_each (tup, showIt);
         }
       
       
+#if false ////////////////////////////////////////////////////////////////////////////TODO.....          
       /** @test serialise and de-serialise each tuple and check validity
        *  @todo unimplemented, waiting on Serialiser
        */
@@ -319,8 +334,8 @@ namespace test    {
           
           bound_undoFun();
           cout << protocol.str() << endl;
-#endif ////////////////////////////////////////////////////////////////////////////TODO.....          
         }
+#endif ////////////////////////////////////////////////////////////////////////////TODO.....          
     };
   
   

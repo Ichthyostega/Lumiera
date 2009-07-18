@@ -97,7 +97,7 @@ namespace control {
       
       virtual operator string() const =0;
       
-      virtual bool isValid ()   const { return true; }
+      virtual bool isValid ()   const =0;
       
       virtual CmdFunctor bindArguments (CmdFunctor&) =0;
     };
@@ -212,6 +212,9 @@ namespace control {
           else
             return dumped+")";
         }
+      
+      
+      bool isValid ()  const { return true; }
     };
     
     

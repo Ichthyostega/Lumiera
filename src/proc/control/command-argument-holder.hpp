@@ -45,6 +45,7 @@
 
 //#include "pre.hpp"
 //#include "lib/error.hpp"
+#include "proc/control/argument-tuple-accept.hpp"
 #include "proc/control/command-closure.hpp"
 #include "proc/control/memento-tie.hpp"
 
@@ -104,14 +105,17 @@ namespace control {
    * actually allocating storage to hold the command arguments
    * and the undo state (memento) for Proc-Layer commands.
    * Both the contained components within ArgumentHolder 
-   * can be in \em empty state; there is no distinct
+   * can be in \em empty state; there are no distinct
    * lifecycle limitations. ArgumentHolder is part
    * of Proc-Layer command's implementation
    * and should not be used standalone. 
    */
   template<typename SIG, typename MEM>
   class ArgumentHolder
-    : public CmdClosure
+    : public ArgumentTupleAccept< SIG                      // to derive the desired bind(..) signature
+                                , ArgumentHolder<SIG,MEM>  // target class providing the implementation
+                                , CmdClosure               // base class to inherit from
+                                >    
     {
       Closure<SIG> arguments_;
       MementoTie<SIG,MEM> memento_;
@@ -141,8 +145,8 @@ namespace control {
       virtual operator string()  const
         {
           return "Command-State{ arguments="
-               + arguments_? arguments_ : "unbound"
-               + memento_  ? ", <memento> }" : "<no undo> }"
+               + (arguments_? string(arguments_) : "unbound")
+               + (memento_  ?    ", <memento> }" : "<no undo> }")
                ;
         }
       
@@ -159,14 +163,14 @@ namespace control {
         { }
       
       /** has undo state capturing been invoked? */
-      bool canUndo () { return bool(memento_); }
-      bool empty ()   { return !arguments_; }
+      bool canUndo () const { return bool(memento_); }
+      bool empty ()   const { return !arguments_; }
       
       
       /** store a new argument tuple within this ArgumentHolder,
        *  discarding and previously stored arguments */
       void
-      bind (ArgTuple argTup)
+      bindArg (ArgTuple argTup)
         {
           this->arguments_ = Closure<SIG> (argTup);
         }
@@ -183,6 +187,15 @@ namespace control {
            function<SIG_cap> const& captureFunc)
         {
           return this->memento_ = MementoTie<SIG,MEM> (undoFunc,captureFunc);
+        }
+      
+      
+      /** direct "backdoor" access to stored memento value.
+       *  @note you might access a placeholder when called prior to \c tie(..) */
+      MEM&
+      memento ()
+        {
+          return memento_.getState();
         }
       
     };
