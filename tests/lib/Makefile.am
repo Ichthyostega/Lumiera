@@ -60,6 +60,7 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/query/queryutilstest.cpp		\
 	$(testlib_srcdir)/removefromsettest.cpp			\
 	$(testlib_srcdir)/sanitizedidentifiertest.cpp		\
+	$(testlib_srcdir)/opaque-unchecked-buffer-test.cpp	\
 	$(testlib_srcdir)/opaque-holder-test.cpp		\
 	$(testlib_srcdir)/scoped-holder-test.cpp		\
 	$(testlib_srcdir)/scopedholdertransfertest.cpp		\

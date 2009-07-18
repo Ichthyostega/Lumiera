@@ -52,6 +52,7 @@
 //#include <tr1/memory>
 //#include <boost/scoped_ptr.hpp>
 //#include <tr1/functional>
+#include <boost/noncopyable.hpp>
 #include <iostream>
 #include <string>
 
@@ -64,6 +65,7 @@ namespace control {
 //  using boost::scoped_ptr;
 //  using std::tr1::function;
 //  using std::ostream;
+  using boost::noncopyable;
   using std::string;
   
   namespace { // empty state marker objects for ArgumentHolder
@@ -115,7 +117,8 @@ namespace control {
     : public ArgumentTupleAccept< SIG                      // to derive the desired bind(..) signature
                                 , ArgumentHolder<SIG,MEM>  // target class providing the implementation
                                 , CmdClosure               // base class to inherit from
-                                >    
+                                > 
+    , noncopyable
     {
       Closure<SIG> arguments_;
       MementoTie<SIG,MEM> memento_;

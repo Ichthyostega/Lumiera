@@ -1,5 +1,5 @@
 /*
-  OpaqueHolder(Test)  -  check the inline type erasure helper
+  OpaqueUncheckedBuffer(Test)  -  passive inline buffer test
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -27,68 +27,90 @@
 #include "lib/util.hpp"
 
 #include "lib/opaque-holder.hpp"
-#include "lib/bool-checkable.hpp"
 
+#include <boost/noncopyable.hpp>
 #include <iostream>
-#include <vector>
-
+#include <cstring>
 
 namespace lib {
 namespace test{
   
   using ::Test;
-  using util::isnil;
-  using util::for_each;
-  using util::isSameObject;
-  using lumiera::error::LUMIERA_ERROR_INVALID;
-  using lumiera::error::LUMIERA_ERROR_ASSERTION;
+  using util::min;
+  using lumiera::error::LUMIERA_ERROR_FATAL;
   
-  using std::vector;
+  using boost::noncopyable;
+  using std::strlen;
   using std::cout;
   using std::endl;
   
+  
+  
   namespace { // test dummy hierarchy
-             //  Note: common storage but no vtable 
+             //  Note: vtable (and virtual dtor), but varying storage requirements 
     
     long _checksum = 0;
     uint _create_count = 0;
     
     
-    struct Base   
+    struct Base
+      : noncopyable
       {
         uint id_;
+          
+        Base(uint i) : id_(i)     { ++_create_count; _checksum += id_; }
         
-        Base(uint i=0)      : id_(i)     { _checksum +=id_; ++_create_count; }
-        Base(Base const& o) : id_(o.id_) { _checksum +=id_; ++_create_count; }
+        virtual ~Base()           { }
         
-        uint getIt() { return id_; }
+        virtual void confess()  =0;
       };
     
     
     template<uint ii>
     struct DD : Base
       {
-        DD() : Base(ii)       { }
-       ~DD() { _checksum -= ii; }  // doing the decrement here
-      };                          //  verifies the correct dtor is called
-    
-    
-    struct Special
-      : DD<7>
-      , BoolCheckable<Special>
-      {
-        ulong myVal_;
+        char buff_[ii+1];
+      
+       ~DD() { _checksum -= ii; }  // verify the correct dtor is called...
+       
+        DD(Symbol sym = 0)
+          : Base(ii)
+          {
+            memset (&buff_, '*', ii);
+            if (sym)
+              memcpy (&buff_, sym, min (ii, strlen (sym)));
+            buff_[ii] = 0;
+          }
         
-        Special (uint val)
-          : myVal_(val)
+        void
+        confess ()
+          {
+            cout << "DD<" << ii << ">: " << buff_ << endl;
+          }
+      };  
+    
+    
+    struct D42Sub
+      : DD<42>
+      {
+        D42Sub (string s1, string s2)
+          : DD<42> ((s1+' '+s2).c_str())
           { }
         
-        bool
-        isValid ()  const ///< custom boolean "validity" check
+        void
+        confess ()
           {
-            return myVal_ % 2;
+            cout << "I'm special, " << buff_ << endl;
           }
       };
+    
+    
+    struct Killer
+      : DD<23>
+      {
+        Killer () { throw lumiera::error::Fatal ("crisscross"); }
+      };
+    
     
     
     /** maximum additional storage maybe wasted
@@ -99,22 +121,14 @@ namespace test{
     
   }
   
-  typedef OpaqueHolder<Base> Opaque;
-  typedef vector<Opaque> TestList;
-  
   
   
   /**********************************************************************************
-   *  @test use the OpaqueHolder inline buffer to handle objects of a family of types
-   *        through a common interface, without being forced to use heap storage
-   *        or a custom allocator.
-   *
-   *  @todo this test doesn't cover automatic conversions and conversions using RTTI
-   *        from the target objects, while \code OpaqueHolder.template get() \endcode
-   *        would allow for such conversions. This is similar to Ticket #141, and
-   *        actually based on the same code as variant.hpp (access-casted.hpp)
+   *  @test use an inline buffer to place objects of a subclass, without any checks.
+   *        InPlaceBuffer only provides minimal service, to be covered here, 
+   *        including automatic dtor invocation and smart-ptr style access.
    */
-  class OpaqueHolder_test : public Test
+  class OpaqueUncheckedBuffer_test : public Test
     {
       
       virtual void
@@ -123,179 +137,36 @@ namespace test{
           _checksum = 0;
           _create_count = 0;
           {
-            TestList objs = createDummies ();
-            for_each (objs, reAccess);
-            checkHandling (objs);
-            checkSpecialSubclass ();
+            typedef InPlaceBuffer<Base, sizeof(DD<42>), DD<0> > Buffer;
+            
+            Buffer buff;
+            ASSERT (sizeof(buff) <= sizeof(DD<42>) + _ALIGN_);
+            ASSERT (1 == _create_count);
+            ASSERT (0 == _checksum);
+            buff->confess();          // one default object of type DD<0> has been created
+            
+            buff.create<DD<5> > ();
+            buff->confess();
+            
+            buff.create<DD<9> > ("I'm fine");
+            buff->confess();
+            
+            VERIFY_ERROR( FATAL, buff.create<Killer> () );
+            
+            ASSERT(0 == buff->id_);   // default object was created, due to exception...
+            
+            buff.create<D42Sub> ("what the f**","is going on here?");
+            buff->confess();
+            
+            ASSERT (6 == _create_count);
+            ASSERT (42 == _checksum); // No.42 is alive
           }
-          ASSERT (0 == _checksum); // all dead
-        }
-      
-      
-      TestList
-      createDummies ()
-        {
-          TestList list;
-          list.push_back (DD<1>());
-          list.push_back (DD<3>());
-          list.push_back (DD<5>());
-          list.push_back (DD<7>());
-          return list;
-        } //note: copy
-      
-      
-      static void
-      reAccess (Opaque& elm)
-        {
-          cout << elm->getIt() << endl;
-        }
-      
-      
-      /** @test cover the basic situations of object handling,
-       *        especially copy operations and re-assignments
-       */
-      void
-      checkHandling (TestList& objs)
-        {
-          Opaque oo;
-          ASSERT (!oo);
-          ASSERT (isnil(oo));
-          
-          oo = objs[1];
-          ASSERT (oo);
-          ASSERT (!isnil(oo));
-          
-          typedef DD<3> D3;
-          typedef DD<5> D5;
-          D3 d3 (oo.get<D3>() );
-          ASSERT (3 == oo->getIt());    // re-access through Base interface
-          ASSERT (!isSameObject (d3, *oo));
-          VERIFY_ERROR (WRONG_TYPE, oo.get<D5>() );
-          
-          // direct assignment of target into Buffer
-          oo = D5();
-          ASSERT (oo);
-          ASSERT (5 == oo->getIt());
-          VERIFY_ERROR (WRONG_TYPE, oo.get<D3>() );
-          
-          // can get a direct reference to contained object
-          D5 &rd5 (oo.get<D5>()); 
-          ASSERT (isSameObject (rd5, *oo));
-          
-          ASSERT (!isnil(oo));
-          oo = objs[3];     // copy construction also works on non-empty object
-          ASSERT (7 == oo->getIt());
-          
-          // WARNING: direct ref has been messed up through the backdoor!
-          ASSERT (7 == rd5.getIt());
-          ASSERT (isSameObject (rd5, *oo));
-          
-          uint cnt_before = _create_count;
-          
-          oo.clear();
-          ASSERT (!oo);
-          oo = D5();        // direct assignment also works on empty object
-          ASSERT (oo);
-          ASSERT (5 == oo->getIt());
-          ASSERT (_create_count == 2 + cnt_before);
-          // one within buff and one for the anonymous temporary D5()
-          
-          
-          // verify that self-assignment is properly detected...
-          cnt_before = _create_count;
-          oo = oo;
-          ASSERT (oo);
-          ASSERT (_create_count == cnt_before);
-          oo = oo.get<D5>();
-          ASSERT (_create_count == cnt_before);
-          oo = *oo;
-          ASSERT (_create_count == cnt_before);
-          ASSERT (oo);
-          
-          oo.clear();
-          ASSERT (!oo);
-          ASSERT (isnil(oo));
-          VERIFY_ERROR (INVALID, oo.get<D5>() );
-#if false ////////////////////////////////////////////////////////TODO: restore throwing ASSERT
-          VERIFY_ERROR (ASSERTION, oo->getIt() );
-#endif////////////////////////////////////////////////////////////
-          // can't access empty holder...
-          
-          Opaque o1 (oo);
-          ASSERT (!o1);
-          
-          Opaque o2 (d3);
-          ASSERT (!isSameObject (d3, *o2));
-          ASSERT (3 == o2->getIt());
-          
-          ASSERT (sizeof(Opaque) <= sizeof(Base) + sizeof(void*) + _ALIGN_);
-        }
-      
-      
-      /** @test OpaqueHolder with additional storage for subclass.
-       *        When a subclass requires more storage than the base class or
-       *        Interface, we need to create a custom OpaqueHolder, specifying the
-       *        actually necessary storage. Such a custom OpaqueHolder behaves exactly
-       *        like the standard variant, but there is protection against accidentally
-       *        using a standard variant to hold an instance of the larger subclass.
-       *        
-       *  @test Moreover, if the concrete class has a custom operator bool(), it
-       *        will be invoked automatically from OpaqueHolder's operator bool()
-       * 
-       */ 
-      void
-      checkSpecialSubclass ()
-        {
-          typedef OpaqueHolder<Base, sizeof(Special)> SpecialOpaque;
-          
-          cout << showSizeof<Base>() << endl;
-          cout << showSizeof<Special>() << endl;
-          cout << showSizeof<Opaque>() << endl;
-          cout << showSizeof<SpecialOpaque>() << endl;
-          
-          ASSERT (sizeof(Special) > sizeof(Base));
-          ASSERT (sizeof(SpecialOpaque) > sizeof(Opaque));
-          ASSERT (sizeof(SpecialOpaque) <= sizeof(Special) + sizeof(void*) + _ALIGN_);
-          
-          Special s1 (6);
-          Special s2 (3);
-          ASSERT (!s1);               // even value
-          ASSERT (s2);                // odd value
-          ASSERT (7 == s1.getIt());   // indeed subclass of DD<7>
-          ASSERT (7 == s2.getIt());
-          
-          SpecialOpaque ospe0;
-          SpecialOpaque ospe1 (s1);
-          SpecialOpaque ospe2 (s2);
-          
-          ASSERT (!ospe0);            // note: bool test (isValid)
-          ASSERT (!ospe1);            // also forwarded to contained object (myVal_==6 is even)
-          ASSERT ( ospe2);
-          ASSERT ( isnil(ospe0));     // while isnil just checks the empty state
-          ASSERT (!isnil(ospe1));
-          ASSERT (!isnil(ospe2));
-          
-          ASSERT (7 == ospe1->getIt());
-          ASSERT (6 == ospe1.get<Special>().myVal_);
-          ASSERT (3 == ospe2.get<Special>().myVal_);
-          
-          ospe1 = DD<5>();            // but can be reassigned like any normal Opaque
-          ASSERT (ospe1);
-          ASSERT (5 == ospe1->getIt());
-          VERIFY_ERROR (WRONG_TYPE, ospe1.get<Special>() );
-          
-          Opaque normal = DD<5>();
-          ASSERT (normal);
-          ASSERT (5 == normal->getIt());
-#if false ////////////////////////////////////////////////////////TODO: restore throwing ASSERT
-          // Assertion protects against SEGV
-          VERIFY_ERROR (ASSERTION, normal = s1 );
-#endif////////////////////////////////////////////////////////////
+          ASSERT (0 == _checksum);  // all dead
         }
     };
   
   
-  LAUNCHER (OpaqueHolder_test, "unit common");
+  LAUNCHER (OpaqueUncheckedBuffer_test, "unit common");
   
   
 }} // namespace lib::test

@@ -43,6 +43,20 @@ namespace util {
     return (n==0)? 0 :((n<0)? -1:+1 );
   }
   
+  template <class N1, class N2>
+  inline N1
+  min (N1 n1, N2 n2)
+  {
+    return n2 < n1? N1(n2) : n1;
+  }
+  
+  template <class N1, class N2>
+  inline N1
+  max (N1 n1, N2 n2)
+  {
+    return n1 < n2? N1(n2) : n1;
+  }
+  
   
   /** a family of util functions providing a "no value whatsoever" test.
       Works on strings and all STL containers, includes NULL test for pointers */
@@ -237,7 +251,7 @@ namespace util {
   
   
   
-  /** convienience shortcut: conversion to c-String via string.
+  /** convenience shortcut: conversion to c-String via string.
    *  usable for printf with objects providing to-string conversion.
    */
   inline const char* 

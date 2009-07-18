@@ -68,6 +68,8 @@
 #include "lib/access-casted.hpp"
 #include "lib/util.hpp"
 
+#include <boost/noncopyable.hpp>
+
 
 namespace lib {
   
@@ -540,7 +542,7 @@ namespace lib {
           return *this;
         }
       
-      // note: using standard copy operations 
+      // note: using standard copy operations
       
       
       
@@ -562,6 +564,170 @@ namespace lib {
       
     };
   
+  
+  
+  
+  
+  
+  /**
+   * Variation of the concept realised by OpaqueHolder, but implemented here
+   * with reduced security and lesser overhead. InPlaceBuffer is just a chunk of
+   * storage, which can be accessed through a common base class interface and
+   * allows to place new objects there. It has no way to keep track of the
+   * actual object living currently in the buffer. Thus, using InPlaceBuffer
+   * requires the placed class(es) themselves to maintain their lifecycle,
+   * and especially it is mandatory for the base class to provide a 
+   * virtual dtor. On the other hand, just the (alignment rounded)
+   * storage for the object(s) placed into the buffer is required.
+   */
+  template
+    < class BA                   ///< the nominal Base/Interface class for a family of types
+    , size_t siz = sizeof(BA)    ///< maximum storage required for the targets to be held inline
+    , class DEFAULT = BA         ///< the default instance to place initially
+    >
+  class InPlaceBuffer
+    : boost::noncopyable
+    {
+      
+      mutable char buf_[siz];
+      
+      
+      BA&
+      getObj()  const
+        {
+          return reinterpret_cast<BA&> (buf_);
+        }
+      
+      void
+      placeDefault()
+        {
+          new(&buf_) DEFAULT();
+        }
+      
+      void
+      destroy()
+        {
+          getObj().~BA();
+        }
+      
+      
+    public:
+      InPlaceBuffer ()
+        {
+          placeDefault();
+        }
+      
+     ~InPlaceBuffer ()
+        {
+          destroy();
+        }
+      
+      
+      /** Abbreviation for placement new */ 
+#define LIB_InPlaceBuffer_CTOR(_CTOR_CALL_) \
+          destroy();                         \
+          try                                 \
+            {                                  \
+              return *new(&buf_) _CTOR_CALL_;   \
+            }                                    \
+          catch (...)                             \
+            {                                      \
+              placeDefault();                       \
+              throw;                                 \
+            }
+      
+      
+      template<class TY>
+      TY&
+      create ()
+        {
+          LIB_InPlaceBuffer_CTOR ( TY() )
+        }
+      
+      
+      template<class TY, typename A1>
+      TY&                                               //___________________________________________
+      create (A1& a1)                                  ///< place object of type TY, using 1-arg ctor
+        {
+          LIB_InPlaceBuffer_CTOR ( TY(a1) )
+        }
+      
+      
+      template< class TY
+              , typename A1
+              , typename A2
+              >
+      TY&                                               //___________________________________________
+      create (A1& a1, A2& a2)                          ///< place object of type TY, using 2-arg ctor
+        {
+          LIB_InPlaceBuffer_CTOR ( TY(a1,a2) )
+        }
+      
+      
+      template< class TY
+              , typename A1
+              , typename A2
+              , typename A3
+              >
+      TY&                                               //___________________________________________
+      create (A1& a1, A2& a2, A3& a3)                  ///< place object of type TY, using 3-arg ctor
+        {
+          LIB_InPlaceBuffer_CTOR ( TY(a1,a2,a3) )
+        }
+      
+      
+      template< class TY
+              , typename A1
+              , typename A2
+              , typename A3
+              , typename A4
+              >
+      TY&                                               //___________________________________________
+      create (A1& a1, A2& a2, A3& a3, A4& a4)          ///< place object of type TY, using 4-arg ctor
+        {
+          LIB_InPlaceBuffer_CTOR ( TY(a1,a2,a3,a4) )
+        }
+      
+      
+      template< class TY
+              , typename A1
+              , typename A2
+              , typename A3
+              , typename A4
+              , typename A5
+              >
+      TY&                                               //___________________________________________
+      create (A1& a1, A2& a2, A3& a3, A4& a4, A5& a5)  ///< place object of type TY, using 5-arg ctor
+        {
+          LIB_InPlaceBuffer_CTOR ( TY(a1,a2,a3,a4,a5) )
+        }
+      
+      
+      
+      /* === smart-ptr style access === */
+      
+      BA&
+      operator* ()  const
+        {
+          return getObj();
+        }
+      
+      BA* 
+      operator-> ()  const
+        {
+          return &getObj();
+        }
+      
+      
+      template<class SUB>
+      static SUB*
+      access ()
+        {
+          BA * asBase = &getObj();
+          SUB* content = util::AccessCasted<SUB*>::access (asBase);
+          return content;
+        }     // NOTE: might be null.
+    };
   
   
   
