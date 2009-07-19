@@ -163,7 +163,7 @@ namespace control {
         {
           return "Command-State{ arguments="
                + (*arguments_? string(*arguments_) : "unbound")
-               + (*memento_  ?     ", <memento> }" : "·noUNDO·}")
+               + ", "+string(*memento_)+"}"
                ;
         }
       
@@ -200,21 +200,12 @@ namespace control {
        *  @note any bound undo/capture functions based on the previously held MementoTie
        *        are silently invalidated; using them will likely cause memory corruption! */
       MementoTie<SIG,MEM>&
-      tiesi (function<SIG_undo> const& undoFunc,
+      tie (function<SIG_undo> const& undoFunc,
            function<SIG_cap> const& captureFunc)
         {
           return memento_.template create<MemHolder> (undoFunc,captureFunc);
         }
-
-      /** @may be called directly referencing an function */
-      MementoTie<SIG,MEM>&
-      tie (SIG_undo& undoFunc, SIG_cap& captureFunc)
-        {
-          return tiesi ( function<SIG_undo>(undoFunc)
-                     , function<SIG_cap>(captureFunc)
-                     );
-        }
-           
+      
       
       
       /** direct "backdoor" access to stored memento value.

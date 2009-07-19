@@ -43,9 +43,11 @@
 #include "lib/bool-checkable.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "proc/control/command-signature.hpp"
+#include "lib/format.hpp"
 #include "lib/util.hpp"
 
 #include <tr1/functional>
+#include <string>
 
 
 namespace control {
@@ -165,6 +167,21 @@ namespace control {
         {
           return undo_ && capture_ && isCaptured_;
         }
+      
+      
+      operator std::string()  const
+        {
+          if (!undo_ || !capture_)
+            return "·noUNDO·";
+          
+          if (!isCaptured_)
+            return "<mem:missing>";
+          
+          return "<" 
+               + util::str(memento_, "mem: ", "·memento·") 
+               + ">";
+        }
+      
     };
   
   

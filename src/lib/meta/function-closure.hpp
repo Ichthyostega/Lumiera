@@ -587,6 +587,7 @@ namespace func    {
   
   namespace _composed { // repetitive impl.code for function composition
     using std::tr1::bind;
+    using std::tr1::function;
     using std::tr1::placeholders::_1;
     using std::tr1::placeholders::_2;
     using std::tr1::placeholders::_3;

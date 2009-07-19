@@ -43,7 +43,7 @@
 #include <boost/format.hpp>
 #include <iostream>
 #include <sstream>
-//#include <cstdlib>
+#include <cstdlib>
 #include <string>
 
 //using std::tr1::bind;
@@ -57,7 +57,7 @@ using boost::format;
 using lumiera::Time;
 //using util::contains;
 using std::string;
-//using std::rand;
+using std::rand;
 using std::ostream;
 using std::ostringstream;
 using std::cout;
@@ -93,16 +93,9 @@ namespace test    {
         TY element_;
         static int instanceCnt;
         
-        Tracker (TY init = TY())
-          : element_(init)
-          {
-            ++instanceCnt;
-          }
-        
-       ~Tracker()
-          {
-            --instanceCnt; 
-          }
+        Tracker (TY init = TY())     : element_(init)         { ++instanceCnt; }
+        Tracker (Tracker const& otr) : element_(otr.element_) { ++instanceCnt; }
+       ~Tracker()                                             { --instanceCnt; }
        
        TY&
        operator* ()
@@ -115,6 +108,8 @@ namespace test    {
          {
            return out << tra.element_;
          }
+       
+       operator string()  const { return element_; }
       };
     
     template<typename TY>
@@ -130,9 +125,9 @@ namespace test    {
       }
     
     Tracker<string>
-    captureState (Tracker<Time>, Tracker<string>, int)
+    captureState (Tracker<Time>, Tracker<string> xstr, int)
       {
-        return protocol.str();
+        return protocol.str() + *xstr;
       }
     
     void
@@ -153,7 +148,7 @@ namespace test    {
     checkSerialisation (CmdClosure& clo)
       {
         TODO ("implement serialisation/de-serialisation-Check");
-        cout << "would be serialised....." << clo;
+        cout << "would be serialised....." << clo << endl;
         
         // serialise, then de-serialise into a new instance and compare both
       }
@@ -185,7 +180,8 @@ namespace test    {
           
           createTuples (testTuples);
 //        checkArgumentComparison ();
-//        serialiseArgTuples (testTuples);
+          serialiseArgTuples (testTuples);
+          testTuples.clear();
           
 //        simulateCmdLifecycle();
           
@@ -193,6 +189,8 @@ namespace test    {
           ASSERT (0 == Tracker<string>::instanceCnt);
         }
       
+      typedef Tracker<Time> TTime;
+      typedef Tracker<string> Tstr;
       typedef struct{ int i[5]; } Sint5;
           
       
@@ -203,8 +201,10 @@ namespace test    {
           typedef ArgumentHolder<void(),         bool>  A1;
           typedef ArgumentHolder<void(int),      void*> A2;
           typedef ArgumentHolder<void(int,Time), int>   A3;
-          typedef ArgumentHolder<void(int,Time), Time>  A4;
-          typedef ArgumentHolder<void(int,Time), Sint5> A5;
+          typedef ArgumentHolder<void(int,Time), Sint5> A4;
+          
+          typedef ArgumentHolder<void(TTime,Tstr,int), Tstr>  A5;
+          
           
           A1* arg1 = new A1(); tup.manage (arg1);
           A2* arg2 = new A2(); tup.manage (arg2);
@@ -220,19 +220,28 @@ namespace test    {
           
           for_each (tup, showIt);
           
-          arg2->bind (rand() % 20);
-          arg3->bind (rand() % 20, randTime());
-          arg4->bind (rand() % 20, randTime());
-          arg5->bind (rand() % 20, randTime());
+          arg1->bind ();
+          arg2->bind (rand() % 10);
+          arg3->bind (rand() % 10, randTime());
+          arg4->bind (rand() % 10, randTime());
           
-          arg3->memento() = 42;
-          arg5->memento().i[3] = 513;
+          arg5->bind (TTime (randTime()), Tstr("glorious"), rand() % 25);
+          
+          ASSERT (!arg5->canUndo());
+          
+          arg5->tie(undoIt, captureState)
+                .tieCaptureFunc()                         // bind capturing function to memento storage,
+                  (TTime(), Tstr("destruction"), 11);    //  then invoke the bound capturing mechanism 
+          
+          ASSERT (arg5->canUndo());
+          ASSERT (*arg5->memento() == "destruction");
+          
+          VERIFY_ERROR(MISSING_MEMENTO, arg4->memento().i[3] = 513 );
           
           for_each (tup, showIt);
         }
       
       
-#if false ////////////////////////////////////////////////////////////////////////////TODO.....          
       /** @test serialise and de-serialise each tuple and check validity
        *  @todo unimplemented, waiting on Serialiser
        */
@@ -243,6 +252,7 @@ namespace test    {
         }
       
       
+#if false ////////////////////////////////////////////////////////////////////////////TODO.....          
       /** @test verify the comparison operators */
       void
       checkArgumentComparison ()
