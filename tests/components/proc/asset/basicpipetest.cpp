@@ -30,7 +30,7 @@
 #include "lib/query.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
-#include "proc/asset/assetdiagnostics.hpp"
+#include "proc/asset/asset-diagnostics.hpp"
 
 #include <boost/format.hpp>
 #include <iostream>

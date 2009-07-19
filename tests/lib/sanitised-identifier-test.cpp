@@ -30,38 +30,34 @@ using std::cout;
 
 
 
-namespace util
-  {
-  namespace test
-    {
-    
+namespace util {
+namespace test {
   
-    class SanitizedIdentifier_test : public Test
-      {
-        virtual void run (Arg)
-          {
-            print_clean ("Word");
-            print_clean ("a Sentence");
-            print_clean ("trailing Withespace\n       \t");
-            print_clean ("with    a  \t lot\n  of Whitespace");
-            print_clean ("with\"much (punctuation)[]!");
-            print_clean ("§&Ω%€  leading garbage");
-            print_clean ("mixed    Ω   garbage");
-            print_clean ("Bääääh!!");
-            print_clean ("§&Ω%€");
-          }
-        
-        /** @test print the original and the sanitized string */
-        void print_clean (const string org)
+  
+  class SanitizedIdentifier_test : public Test
+    {
+      virtual void run (Arg)
         {
-          cout << "'" << org << "' --> '" << sanitize(org) << "'\n";
+          print_clean ("Word");
+          print_clean ("a Sentence");
+          print_clean ("trailing Withespace\n       \t");
+          print_clean ("with    a  \t lot\n  of Whitespace");
+          print_clean ("with\"much (punctuation)[]!");
+          print_clean ("§&Ω%€  leading garbage");
+          print_clean ("mixed    Ω   garbage");
+          print_clean ("Bääääh!!");
+          print_clean ("§&Ω%€");
         }
-      };
-    
-      LAUNCHER (SanitizedIdentifier_test, "unit common");
-
       
-  } // namespace test
-    
-} // namespace util
+      /** @test print the original and the sanitised string */
+      void print_clean (const string org)
+      {
+        cout << "'" << org << "' --> '" << sanitise(org) << "'\n";
+      }
+    };
+  
+  LAUNCHER (SanitizedIdentifier_test, "unit common");
+  
+  
+}} // namespace util::test
 

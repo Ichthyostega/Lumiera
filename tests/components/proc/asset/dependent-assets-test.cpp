@@ -23,7 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "proc/asset/testasset.hpp"
-#include "proc/asset/assetdiagnostics.hpp"
+#include "proc/asset/asset-diagnostics.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
 #include "lib/util.hpp"

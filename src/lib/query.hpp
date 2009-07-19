@@ -66,7 +66,7 @@ namespace lumiera {
     {
     
     /** ensure standard format for a given id string.
-     *  Trim, sanitize and ensure the first letter is lower case.
+     *  Trim, sanitise and ensure the first letter is lower case.
      *  @note modifies the given string ref in place
      */
     void normaliseID (string& id);

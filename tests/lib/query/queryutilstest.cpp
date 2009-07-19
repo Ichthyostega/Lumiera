@@ -28,7 +28,7 @@
 #include "lib/query.hpp"
 #include "query/querydiagnostics.hpp"
 
-#include <boost/bind.hpp>
+#include <tr1/functional>
 #include <iostream>
 #include <cstdlib>
 
@@ -38,7 +38,8 @@ using util::isnil;
 using util::contains;
 using util::for_each;
 
-using boost::bind;
+using std::tr1::placeholders::_1;
+using std::tr1::bind;
 using std::string;
 using std::cout;
 

@@ -74,7 +74,7 @@ namespace lumiera {
       
       
       /** @note only one copy of each distinct callback remembered */ 
-      bool enroll (const string label, Hook toCall)
+      bool enrol (const string label, Hook toCall)
         {
           return table_[label]
                         .insert(toCall)

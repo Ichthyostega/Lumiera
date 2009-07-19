@@ -28,11 +28,11 @@
 #include "lib/util.hpp"
 
 //#include <boost/format.hpp>
-#include <boost/bind.hpp>
+#include <tr1/functional>
 #include <iostream>
 
 //using boost::format;
-using boost::bind;
+using std::tr1::bind;
 using util::contains; 
 using util::for_each; 
 using std::string;

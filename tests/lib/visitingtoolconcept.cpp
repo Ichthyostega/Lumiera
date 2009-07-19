@@ -235,7 +235,7 @@ namespace lumiera
         
         template<class TOOLImpl>
         inline void 
-        enroll(TOOLImpl* typeref)
+        enrol(TOOLImpl* typeref)
           {
             Tag<TOOL>& index = Tag<TOOL>::get (typeref);
             if (is_known (index))
@@ -272,7 +272,7 @@ namespace lumiera
         Applicable ()
           {
             TOOLImpl* typeref = 0;
-            Dispatcher<TAR,ToolBase>::instance().enroll (typeref);
+            Dispatcher<TAR,ToolBase>::instance().enrol (typeref);
           }
         
         virtual ~Applicable () {}

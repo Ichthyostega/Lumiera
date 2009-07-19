@@ -46,7 +46,7 @@ namespace lumiera {
   void
   LifecycleHook::add (Symbol eventLabel, Callback callbackFun)
   {
-    bool isNew = LifecycleRegistry::instance().enroll (eventLabel,callbackFun);
+    bool isNew = LifecycleRegistry::instance().enrol (eventLabel,callbackFun);
     
     if (isNew && !strcmp(ON_BASIC_INIT, eventLabel))
       callbackFun();  // when this code executes,

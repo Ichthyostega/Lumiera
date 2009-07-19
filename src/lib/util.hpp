@@ -245,8 +245,9 @@ namespace util {
    "mixed    Ω   garbage"             --> 'mixed_garbage'
    "Bääääh!!"                         --> 'Bh'
 \endverbatim
+   * @see sanitised-identifier-test.cpp
    */
-  string sanitize (const string& org);
+  string sanitise (const string& org);
   
   
   

@@ -27,15 +27,13 @@
 #include "lib/sync.hpp"
 #include "lib/util.hpp"
 
-#include <boost/function.hpp>
-
+#include <tr1/functional>
 #include <boost/format.hpp>
-#include <boost/bind.hpp>
 
 using std::tr1::static_pointer_cast;
-using boost::function;
+using std::tr1::function;
+using std::tr1::placeholders::_1;
 using boost::format;
-using boost::bind;
 using util::for_each;
 
 using lumiera::Singleton;

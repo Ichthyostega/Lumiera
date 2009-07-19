@@ -59,14 +59,14 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/meta/config-flags-test.cpp      	\
 	$(testlib_srcdir)/query/queryutilstest.cpp		\
 	$(testlib_srcdir)/removefromsettest.cpp			\
-	$(testlib_srcdir)/sanitizedidentifiertest.cpp		\
+	$(testlib_srcdir)/sanitised-identifier-test.cpp		\
 	$(testlib_srcdir)/opaque-unchecked-buffer-test.cpp	\
 	$(testlib_srcdir)/opaque-holder-test.cpp		\
 	$(testlib_srcdir)/scoped-holder-test.cpp		\
 	$(testlib_srcdir)/scopedholdertransfertest.cpp		\
 	$(testlib_srcdir)/scoped-ptrvect-test.cpp		\
-	$(testlib_srcdir)/singletonsubclasstest.cpp		\
-	$(testlib_srcdir)/singletontest.cpp			\
+	$(testlib_srcdir)/singleton-subclass-test.cpp		\
+	$(testlib_srcdir)/singleton-test.cpp			\
 	$(testlib_srcdir)/singletontestmocktest.cpp		\
 	$(testlib_srcdir)/streamtypebasicstest.cpp		\
 	$(testlib_srcdir)/streamtypelifecycletest.cpp		\

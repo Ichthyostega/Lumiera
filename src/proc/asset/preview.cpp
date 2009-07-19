@@ -37,7 +37,7 @@ namespace asset
       const Asset::Ident
       createProxyIdent (const Asset::Ident& mediaref)
         {
-          string name (mediaref.name + "-proxy");  // TODO something sensible here; append number, sanitize etc.
+          string name (mediaref.name + "-proxy");  // TODO something sensible here; append number, sanitise etc.
           Category category (mediaref.category);
           TODO ("put it in another subfolder within the same category??");
           return Asset::Ident (name, category, 

@@ -28,7 +28,7 @@
 #include "proc/assetmanager.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/mobject/session/clip.hpp"
-#include "proc/asset/assetdiagnostics.hpp"
+#include "proc/asset/asset-diagnostics.hpp"
 
 using util::contains;
 using util::isnil;

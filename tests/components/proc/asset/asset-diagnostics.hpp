@@ -1,5 +1,5 @@
 /*
-  ASSETDIAGNOSTICS.hpp  -  collection of test and debug helpers
+  ASSET-DIAGNOSTICS.hpp  -  collection of test and debug helpers
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,8 +20,8 @@
  
 */
 
-/** @file assetdiagnostics.hpp
- ** Small helper and diagnosic functions related to Asset and AssetManager
+/** @file asset-diagnostics.hpp
+ ** Small helper and diagnostic functions related to Asset and AssetManager
  ** 
  ** @see assetmanager.hpp
  ** @see CreateAsset_test
@@ -29,21 +29,22 @@
  */
 
 
-#ifndef ASSET_ASSETDIAGNOSTICS_H
-#define ASSET_ASSETDIAGNOSTICS_H
+#ifndef ASSET_ASSET_DIAGNOSTICS_H
+#define ASSET_ASSET_DIAGNOSTICS_H
 
 
 #include "proc/assetmanager.hpp"
 #include "lib/util.hpp"
 
 #include <boost/format.hpp>
-#include <boost/bind.hpp>
+#include <tr1/functional>
 #include <iostream>
 
 using util::contains;
 using util::for_each;
+using std::tr1::placeholders::_1;
+using std::tr1::bind;
 using boost::format;
-using boost::bind;
 using std::string;
 using std::cout;
 

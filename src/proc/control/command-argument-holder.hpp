@@ -48,6 +48,7 @@
 #include "proc/control/argument-tuple-accept.hpp"
 #include "proc/control/command-closure.hpp"
 #include "proc/control/memento-tie.hpp"
+#include "lib/opaque-holder.hpp"
 
 //#include <tr1/memory>
 //#include <boost/scoped_ptr.hpp>
@@ -67,6 +68,8 @@ namespace control {
 //  using std::ostream;
   using boost::noncopyable;
   using std::string;
+  using lib::InPlaceBuffer;
+  
   
   namespace { // empty state marker objects for ArgumentHolder
     
@@ -118,38 +121,49 @@ namespace control {
                                 , ArgumentHolder<SIG,MEM>  // target class providing the implementation
                                 , CmdClosure               // base class to inherit from
                                 > 
-    , noncopyable
+    , private noncopyable
     {
-      Closure<SIG> arguments_;
-      MementoTie<SIG,MEM> memento_;
       
-      typedef typename Closure<SIG>::ArgTuple ArgTuple;
+      typedef Closure<SIG>        ArgHolder;
+      typedef MementoTie<SIG,MEM> MemHolder;
+      
+      typedef InPlaceBuffer<ArgHolder, sizeof(ArgHolder), MissingArguments<SIG> > ArgumentBuff;
+      typedef InPlaceBuffer<MemHolder, sizeof(MemHolder), UntiedMemento<SIG,MEM> > MementoBuff;
+      
+      typedef typename ArgHolder::ArgTuple ArgTuple;
       
       
-      /* === proxied CmdClosure interface === */
+      /* ====== in-place storage buffers ====== */
+      
+      ArgumentBuff arguments_;
+      MementoBuff  memento_;
+      
+      
+      
+      /* ==== proxied CmdClosure interface ==== */
       
       virtual bool isValid ()  const
         {
-          return bool(arguments_);
+          return arguments_->isValid();
         }
       
       
       virtual CmdFunctor bindArguments (CmdFunctor& func)
         {
-          if (!arguments_)
+          if (!isValid())
             throw lumiera::error::State ("Lifecycle error: can't bind functor, "
                                          "command arguments not yet provided",
                                          LUMIERA_ERROR_UNBOUND_ARGUMENTS);
           
-          return arguments_.bindArguments(func);
+          return arguments_->bindArguments(func);
         }
       
       
       virtual operator string()  const
         {
           return "Command-State{ arguments="
-               + (arguments_? string(arguments_) : "unbound")
-               + (memento_  ?    ", <memento> }" : "<no undo> }")
+               + (*arguments_? string(*arguments_) : "unbound")
+               + (*memento_  ?     ", <memento> }" : "·noUNDO·}")
                ;
         }
       
@@ -161,13 +175,13 @@ namespace control {
        *  whereas the undo functions will be wired by #tie
        */
       ArgumentHolder ()
-        : arguments_(MissingArguments<SIG>() )
-        , memento_(UntiedMemento<SIG,MEM>() )
+        : arguments_()
+        , memento_()
         { }
       
       /** has undo state capturing been invoked? */
-      bool canUndo () const { return bool(memento_); }
-      bool empty ()   const { return !arguments_; }
+      bool canUndo () const { return memento_->isValid();   }
+      bool empty ()   const { return !arguments_->isValid(); }
       
       
       /** store a new argument tuple within this ArgumentHolder,
@@ -175,7 +189,7 @@ namespace control {
       void
       bindArg (ArgTuple argTup)
         {
-          this->arguments_ = Closure<SIG> (argTup);
+          arguments_.template create<ArgHolder> (argTup);
         }
       
       
@@ -186,11 +200,21 @@ namespace control {
        *  @note any bound undo/capture functions based on the previously held MementoTie
        *        are silently invalidated; using them will likely cause memory corruption! */
       MementoTie<SIG,MEM>&
-      tie (function<SIG_undo> const& undoFunc,
+      tiesi (function<SIG_undo> const& undoFunc,
            function<SIG_cap> const& captureFunc)
         {
-          return this->memento_ = MementoTie<SIG,MEM> (undoFunc,captureFunc);
+          return memento_.template create<MemHolder> (undoFunc,captureFunc);
         }
+
+      /** @may be called directly referencing an function */
+      MementoTie<SIG,MEM>&
+      tie (SIG_undo& undoFunc, SIG_cap& captureFunc)
+        {
+          return tiesi ( function<SIG_undo>(undoFunc)
+                     , function<SIG_cap>(captureFunc)
+                     );
+        }
+           
       
       
       /** direct "backdoor" access to stored memento value.
@@ -198,7 +222,7 @@ namespace control {
       MEM&
       memento ()
         {
-          return memento_.getState();
+          return memento_->getState();
         }
       
     };

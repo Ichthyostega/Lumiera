@@ -41,7 +41,6 @@ liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/lifecycle.cpp			\
 	$(liblumiera_la_srcdir)/nobug-init.cpp			\
 	$(liblumiera_la_srcdir)/util.cpp			\
-	$(liblumiera_la_srcdir)/visitor.cpp			\
 	$(liblumiera_la_srcdir)/query.cpp			\
 	$(liblumiera_la_srcdir)/streamtype.cpp			\
 	$(liblumiera_la_srcdir)/test/testoption.cpp 		\

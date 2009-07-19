@@ -1,5 +1,5 @@
 /*
-  VISITOR.hpp  -  Acyclic Visitor library
+  VISITOR-POLICIES.hpp  -  Acyclic Visitor library
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 */
 
 
-/** @file visitorpolicies.hpp
+/** @file visitor-policies.hpp
  ** Policies usable for configuring the lumiera::visitor::Tool for different kinds of error handling. 
  ** @see buildertool.hpp for another flavour (calling an catch-all-function there)
  **
@@ -29,49 +29,46 @@
 
 
 
-#ifndef LUMIERA_VISITORPOLICIES_H
-#define LUMIERA_VISITORPOLICIES_H
+#ifndef LUMIERA_VISITOR_POLICIES_H
+#define LUMIERA_VISITOR_POLICIES_H
 
 #include "lib/error.hpp"
 
 
-namespace lumiera
-  {
-  namespace visitor
+namespace lumiera {
+namespace visitor {
+  
+  /** 
+   * Policy returning just the default return value in case
+   * of encountering an unknown Visitor (typically caused by
+   * adding a new class to the visitable hierarchy)
+   */
+  template<class RET>
+  struct UseDefault
     {
-    /** 
-     * Policy returning just the default return value in case
-     * of encountering an unknown Visitor (typically caused by
-     * adding a new class to the visitable hierarchy)
-     */
-    template<class RET>
-    struct UseDefault
-      {
-        template<class TAR>
-        RET 
-        onUnknown (TAR&)
-          {
-            return RET();
-          }
-      };
-      
-    /** 
-     * Policy to throw when encountering an unknown visiting tool
-     */
-    template<class RET>
-    struct ThrowException
-      {
-        template<class TAR>
-        RET 
-        onUnknown (TAR&)
-          {
-            throw lumiera::error::Config("unable to decide what tool operation to call");
-          }
-      };
-      
-      
-    
-  } // namespace visitor
-
-} // namespace lumiera
+      template<class TAR>
+      RET 
+      onUnknown (TAR&)
+        {
+          return RET();
+        }
+    };
+  
+  /** 
+   * Policy to throw when encountering an unknown visiting tool
+   */
+  template<class RET>
+  struct ThrowException
+    {
+      template<class TAR>
+      RET 
+      onUnknown (TAR&)
+        {
+          throw lumiera::error::Config("unable to decide what tool operation to call");
+        }
+    };
+  
+  
+  
+}} // namespace lumiera::visitor
 #endif

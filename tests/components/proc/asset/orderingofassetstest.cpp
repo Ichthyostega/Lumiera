@@ -28,7 +28,7 @@
 #include "proc/asset/media.hpp"
 #include "proc/asset/proc.hpp"
 
-#include "proc/asset/assetdiagnostics.hpp"
+#include "proc/asset/asset-diagnostics.hpp"
 
 using util::isnil;
 using std::string;
