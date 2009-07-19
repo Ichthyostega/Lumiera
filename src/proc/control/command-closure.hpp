@@ -44,7 +44,7 @@
 #include "lib/meta/tuple.hpp"
 #include "lib/util.hpp"
 
-#include <tr1/memory>
+//#include <tr1/memory>
 #include <tr1/functional>
 #include <iostream>
 #include <sstream>
@@ -62,18 +62,19 @@ namespace control {
   
 //  using lumiera::Symbol;
 //  using std::tr1::shared_ptr;
-  using util::unConst;
-  using std::string;
-  using std::ostream;
-  using std::tr1::function;
   using lumiera::typelist::FunctionSignature;
   using lumiera::typelist::Tuple;
   using lumiera::typelist::BuildTupleAccessor;
   using lumiera::typelist::func::TupleApplicator;
   using lumiera::typelist::FunErasure;
   using lumiera::typelist::StoreFunction;
-  
   using lumiera::typelist::NullType;
+
+  using util::unConst;
+
+  using std::tr1::function;
+  using std::ostream;
+  using std::string;
   
   
   
@@ -125,18 +126,27 @@ namespace control {
         : BASE(tuple)
         { }
       
+      
+      ////////////////////TODO the real access operations (e.g. for serialising) go here
+      
+      
       ostream&
       dump (ostream& output)  const
         {
           return BASE::dump (output << element() << ',');
         }
       
-      
-      ////////////////////TODO the real access operations (e.g. for serialising) go here
+      friend bool
+      compare (ParamAccessor const& p1, ParamAccessor const& p2)
+        {
+          return (p1.element() == p2.element())
+              && compare ( static_cast<BASE>(p1)
+                         , static_cast<BASE>(p2) );
+        }
     };
     
   template<class TUP>
-  class ParamAccessor<NullType, TUP, TUP, 0>
+  class ParamAccessor<NullType, TUP, TUP, 0>   ///< used for recursion end of implementation functions
     : public TUP
     {
     public:
@@ -152,6 +162,11 @@ namespace control {
           return output;
         }
       
+      friend bool
+      compare (ParamAccessor const&, ParamAccessor const&)
+        {
+          return true;;
+        }
     };
   
   
@@ -215,6 +230,11 @@ namespace control {
       
       
       bool isValid ()  const { return true; }
+      
+      
+      /// Supporting equality comparisons...
+      friend bool operator== (Closure const& c1, Closure const& c2)  { return compare (c1.params_, c2.params_); }
+      friend bool operator!= (Closure const& c1, Closure const& c2)  { return ! (c1 == c2); }
     };
     
     

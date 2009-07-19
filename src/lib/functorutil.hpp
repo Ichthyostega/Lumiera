@@ -83,6 +83,32 @@ namespace util { ////////////TODO: refactor it. But probably not directly into n
   }
   
   
+  /** temporary workaround: tr1/functional should define
+   *  public comparison operators for functor objects, but
+   *  in the implementation provided by boost 1.34 it doesn't.
+   *  To get at least \em some comparison capability, we do a
+   *  brute force comparison of the functors internal data */
+  template<typename SIG>
+  bool
+  rawComparison (function<SIG> const& f1,
+                 function<SIG> const& f2)
+  {
+    typedef char C8c[sizeof(f1)];  
+    
+    return reinterpret_cast<C8c const&> (f1)
+        == reinterpret_cast<C8c const&> (f2);   
+  }
+  
+  
+  template<typename SIG1, typename SIG2>
+  bool
+  rawComparison (function<SIG1> const&,
+                 function<SIG2> const&)
+  {
+    return false;
+  }
+  
+  
 } // namespace util
 
 #endif /*UTIL_HPP_*/

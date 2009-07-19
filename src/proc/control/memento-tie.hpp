@@ -43,15 +43,18 @@
 #include "lib/bool-checkable.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "proc/control/command-signature.hpp"
+#include "lib/functorutil.hpp"
 #include "lib/format.hpp"
 #include "lib/util.hpp"
 
+#include <boost/operators.hpp>
 #include <tr1/functional>
 #include <string>
 
 
 namespace control {
   
+  using boost::equality_comparable;
   using lumiera::typelist::func::bindLast;
   using lumiera::typelist::func::chained;
     
@@ -76,7 +79,9 @@ namespace control {
    */
   template<typename SIG, typename MEM>
   class MementoTie
-    : public lib::BoolCheckable<MementoTie<SIG,MEM> >
+    : public lib::BoolCheckable<MementoTie<SIG,MEM>,
+             equality_comparable<MementoTie<SIG,MEM> 
+                               > >
     {
       typedef typename CommandSignature<SIG,MEM>::CaptureSig SIG_cap;
       typedef typename CommandSignature<SIG,MEM>::UndoOp_Sig SIG_undo;
@@ -182,6 +187,17 @@ namespace control {
                + ">";
         }
       
+      
+      /// Supporting equality comparisons...
+      friend bool
+      operator== (MementoTie const& m1, MementoTie const& m2)
+        {
+          return util::rawComparison(m1.undo_,   m2.undo_    )
+              && util::rawComparison(m1.capture_,m2.capture_ )
+              && (m1.isCaptured_  == m2.isCaptured_)
+              && (!m1.isCaptured_ 
+                  || (m1.memento_ == m2.memento_));
+        }
     };
   
   

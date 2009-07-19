@@ -82,18 +82,21 @@ namespace test    {
       run (Arg) 
         {
           checkStateCapturingMechanism();
+          verifyComparisons();
         }
+      
+      
+      /// assumed signature of the Command "Operation"
+      typedef void OpSIG(short);
+      typedef MementoTie<OpSIG,int> MemHolder;
       
       
       void
       checkStateCapturingMechanism ()
         {
-          typedef void OpSIG(short); // assumed signature of the Command "Operation"
-          
           function<void(short,int)> undo_func  = undo;
           function< int(short)>     cap_func   = capture;
           
-          typedef MementoTie<OpSIG,int> MemHolder;
           MemHolder mementoHolder (undo_func,cap_func);
           
           ASSERT (sizeof(MemHolder) <= sizeof(int)                   // storage for the memento
@@ -125,6 +128,50 @@ namespace test    {
           testVal = -20;
           bound_undo_func(3*rr);
           ASSERT (testVal == -20 + 3*rr - (5+rr));
+        }
+      
+      
+      void
+      verifyComparisons()
+        {
+          function<void(short,int)> u1_fun;             // deliberately unbound
+          function<void(short,int)> u2_fun  = undo;
+          function< int(short)>     c1_fun;
+          function< int(short)>     c2_fun  = capture;
+          
+          MemHolder m11 (u1_fun, c1_fun);
+          MemHolder m12 (u1_fun, c2_fun);
+          MemHolder m21 (u2_fun, c1_fun);
+          MemHolder m22 (u2_fun, c2_fun);
+          
+          ASSERT (!m11 && !m12 && !m21 && !m22);
+          ASSERT ( (m11 == m11));
+          ASSERT (!(m11 != m11));
+          
+          ASSERT (m11 != m12);
+          ASSERT (m11 != m21);
+          ASSERT (m11 != m22);
+          ASSERT (m12 != m11);
+          ASSERT (m12 != m21);
+          ASSERT (m12 != m22);
+          ASSERT (m21 != m11);
+          ASSERT (m21 != m12);
+          ASSERT (m21 != m22);
+          ASSERT (m22 != m11);
+          ASSERT (m22 != m12);
+          ASSERT (m22 != m21);
+         
+          MemHolder m22x (m22); // clone copy
+          ASSERT (!m22x);
+          ASSERT (m22 == m22x);
+          
+          testVal = 0;
+          m22x.tieCaptureFunc() (1 + (rand() % 9)); // produce a random memento value != 0
+          ASSERT (0 < m22x.getState());
+          
+          ASSERT (m22 != m22x);
+          m22.tieCaptureFunc() (0); // now get the same value into the memento within m22
+          ASSERT (m22 == m22x);
         }
     };
   

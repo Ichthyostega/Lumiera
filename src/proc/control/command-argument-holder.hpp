@@ -216,8 +216,23 @@ namespace control {
           return memento_->getState();
         }
       
+      /// Supporting equality comparisons...
+      friend bool
+      operator== (ArgumentHolder const& a1, ArgumentHolder const& a2)
+        {
+          return (a1.arguments_->isValid() == a2.arguments_->isValid())
+              && (*a1.arguments_ == *a2.arguments_)
+              && (a1.memento_->isValid() == a2.memento_->isValid())
+              && (*a1.memento_ == *a2.memento_)
+               ;
+        }
+      
+      friend bool
+      operator!= (ArgumentHolder const& a1, ArgumentHolder const& a2)
+        {
+          return ! (a1 == a2);
+        }
     };
-  
     
   
   

@@ -179,7 +179,7 @@ namespace test    {
           Tracker<string>::instanceCnt = 0;
           
           createTuples (testTuples);
-//        checkArgumentComparison ();
+          checkArgumentComparison ();
           serialiseArgTuples (testTuples);
           testTuples.clear();
           
@@ -252,18 +252,17 @@ namespace test    {
         }
       
       
-#if false ////////////////////////////////////////////////////////////////////////////TODO.....          
       /** @test verify the comparison operators */
       void
       checkArgumentComparison ()
         {
-          ArgumentHolder<void()> one, two;
+          ArgumentHolder<void(), int> one, two;
           ASSERT (one == two);
           
           one.memento() = 5;
           ASSERT (one != two);
           
-          ArgumentHolder<void(int,int)> three, four;
+          ArgumentHolder<void(int,int), int> three, four;
           ASSERT (three == four);
           three.bind (1,2);
           ASSERT (three != four);
@@ -287,6 +286,7 @@ namespace test    {
         }
       
       
+#if false ////////////////////////////////////////////////////////////////////////////TODO.....          
       /** @test simulate a complete command lifecycle with regards to
        *  the storage handling of the command parameters and state memento.
        */
