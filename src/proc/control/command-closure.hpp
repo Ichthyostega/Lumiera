@@ -100,7 +100,7 @@ namespace control {
       
       virtual bool isValid ()   const =0;
       
-      virtual CmdFunctor bindArguments (CmdFunctor&) =0;
+      virtual CmdFunctor bindArguments (CmdFunctor const&) =0;
     };
   
   
@@ -207,7 +207,7 @@ namespace control {
        *         can't be const.
        */
       CmdFunctor
-      bindArguments (CmdFunctor& unboundFunctor)
+      bindArguments (CmdFunctor const& unboundFunctor)
         {
           return CmdFunctor (TupleApplicator<SIG> (params_)
                                .bind ( unboundFunctor.getFun<SIG>()) );
@@ -221,7 +221,7 @@ namespace control {
           params_.dump (buff << "Closure(" );
           
           string dumped (buff.str());
-          if (1 < dumped.length())
+          if (8 < dumped.length())
             // remove trailing comma...
             return dumped.substr (0, dumped.length()-1) +")";
           else

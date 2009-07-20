@@ -26,11 +26,9 @@
 //#include "lib/util.hpp"
 #include "lib/functor-util.hpp"
 
-//#include <boost/lexical_cast.hpp>
 #include <tr1/functional>
 #include <iostream>
 
-//using boost::lexical_cast;
 //using util::isnil;
 //using std::string;
 using std::cout;
@@ -91,7 +89,7 @@ namespace test {
           
           f1 = f2;
           ASSERT ( rawComparison(f1, f2));
-
+          
           ASSERT (!rawComparison(f0, Fvi()));   // note: can't detect they are equivalent
           ASSERT (!rawComparison(f0, Fiv()));
           

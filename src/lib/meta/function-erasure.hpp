@@ -128,7 +128,7 @@ namespace typelist{
       
       template<typename SIG>
       function<SIG>&
-      getFun ()
+      getFun ()  const
         {
           return get<function<SIG> >();
         }
@@ -157,7 +157,7 @@ namespace typelist{
       
       template<typename SIG>
       SIG&
-      getFun ()
+      getFun ()  const
         {
           SIG *fun = get<SIG*>();
           REQUIRE (fun);

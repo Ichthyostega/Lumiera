@@ -22,18 +22,17 @@
 
 
 /** @file command-argument-holder.hpp
- ** A simple container record holding the actual command arguments. 
+ ** A passive container record holding the actual command arguments & UNDO state. 
  ** While all command objects themselves have a common type (type erasure),
- ** the actual argument tuple and the state memento for undo can't. Especially,
+ ** the actual argument tuple and the state memento for UNDO can't. Especially,
  ** the size of arguments and memento will depend on their respective types.
  ** Thus, to manage somehow the storage of this data, we create a common holder,
- ** to be managed by a custom allocator.
+ ** which can than be managed by a custom allocator / object pool.
  ** 
- ** @todo doing just plain heap allocation for now :-P
- **  
  ** @see Command
- ** @see UndoMutation
- ** @see MementoTie
+ ** @see CmdClosure    storage of command arguments
+ ** @see MementoTie    wiring of UNDO functions & memento
+ ** @see UndoMutation  execution of UNDO
  ** @see command-argument-test.cpp
  **
  */
@@ -43,20 +42,17 @@
 #ifndef CONTROL_COMMAND_ARGUMENT_HOLDER_H
 #define CONTROL_COMMAND_ARGUMENT_HOLDER_H
 
-//#include "pre.hpp"
 #include "proc/control/argument-tuple-accept.hpp"
 #include "proc/control/command-closure.hpp"
 #include "proc/control/memento-tie.hpp"
 #include "lib/opaque-holder.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <string>
 
 
 
 namespace control {
   
-  using boost::noncopyable;
   using lib::InPlaceBuffer;
   using std::string;
   
@@ -96,14 +92,14 @@ namespace control {
   
   
   /**
-   * Specifically typed CmdClosure, which serves for 
+   * Specifically typed CmdClosure, which serves for
    * actually allocating storage to hold the command arguments
-   * and the undo state (memento) for Proc-Layer commands.
-   * Both the contained components within ArgumentHolder 
+   * and the UNDO state (memento) for Proc-Layer commands.
+   * Both the contained components within ArgumentHolder
    * can be in \em empty state; there are no distinct
    * lifecycle limitations. ArgumentHolder is part
    * of Proc-Layer command's implementation
-   * and should not be used standalone. 
+   * and should not be used standalone.
    */
   template<typename SIG, typename MEM>
   class ArgumentHolder
@@ -111,8 +107,10 @@ namespace control {
                                 , ArgumentHolder<SIG,MEM>  // target class providing the implementation
                                 , CmdClosure               // base class to inherit from
                                 > 
-    , private noncopyable
     {
+      /** copy construction allowed(but no assignment)*/
+      ArgumentHolder& operator= (ArgumentHolder const&);
+      
       
       typedef Closure<SIG>        ArgHolder;
       typedef MementoTie<SIG,MEM> MemHolder;
@@ -132,13 +130,14 @@ namespace control {
       
       /* ==== proxied CmdClosure interface ==== */
       
+    public:
       virtual bool isValid ()  const
         {
           return arguments_->isValid();
         }
       
       
-      virtual CmdFunctor bindArguments (CmdFunctor& func)
+      virtual CmdFunctor bindArguments (CmdFunctor const& func)
         {
           if (!isValid())
             throw lumiera::error::State ("Lifecycle error: can't bind functor, "
@@ -158,7 +157,7 @@ namespace control {
         }
       
       
-    public:
+      
       /** per default, all data within ArgumentHolder
        *  is set up in \em empty state. Later on, the
        *  command arguments are to be provided by #bind ,
@@ -168,6 +167,16 @@ namespace control {
         : arguments_()
         , memento_()
         { }
+      
+      /** copy construction allowed(but no assignment) */
+      ArgumentHolder (ArgumentHolder const& oAh)
+        : arguments_()
+        , memento_()
+        {
+          arguments_.template create<ArgHolder> (*oAh.arguments_);
+          memento_.template  create<MemHolder> (*oAh.memento_);
+        }
+      
       
       /** has undo state capturing been invoked? */
       bool canUndo () const { return memento_->isValid();   }

@@ -44,6 +44,7 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/factory-special-test.cpp		\
 	$(testlib_srcdir)/factorytest.cpp			\
 	$(testlib_srcdir)/format-helper-test.cpp		\
+	$(testlib_srcdir)/functor-util-test.cpp			\
 	$(testlib_srcdir)/hash-indexed-test.cpp			\
 	$(testlib_srcdir)/helloworldtest.cpp			\
 	$(testlib_srcdir)/lifecycletest.cpp			\

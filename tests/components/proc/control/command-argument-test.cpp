@@ -23,43 +23,25 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "proc/asset/media.hpp"
-//#include "proc/mobject/session.hpp"
-//#include "proc/mobject/session/edl.hpp"
-//#include "proc/mobject/session/testclip.hpp"
-//#include "proc/mobject/test-dummy-mobject.hpp"
-//#include "lib/p.hpp"
-//#include "proc/mobject/placement.hpp"
-//#include "proc/mobject/placement-index.hpp"
-//#include "proc/mobject/explicitplacement.hpp"
 #include "proc/control/command-argument-holder.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/lumitime-fmt.hpp"
-//#include "lib/meta/typelist.hpp"
-//#include "lib/meta/tuple.hpp"
 #include "lib/util.hpp"
 
-//#include <tr1/functional>
 #include <boost/format.hpp>
 #include <iostream>
 #include <sstream>
 #include <cstdlib>
 #include <string>
 
-//using std::tr1::bind;
-//using std::tr1::placeholders::_1;
-//using std::tr1::placeholders::_2;
-//using std::tr1::function;
 using util::isnil;
-//using util::and_all;
 using util::for_each;
-using boost::format;
 using lumiera::Time;
-//using util::contains;
+using boost::format;
 using std::string;
-using std::rand;
 using std::ostream;
 using std::ostringstream;
+using std::rand;
 using std::cout;
 using std::endl;
 
@@ -69,13 +51,6 @@ namespace test    {
   
   using lib::test::showSizeof;
   using lib::test::randTime;
-  
-//  using session::test::TestClip;
-//  using lumiera::P;
-//  using namespace lumiera::typelist;
-//  using lumiera::typelist::Tuple;
-  
-//  using control::CmdClosure;
   
   
   
@@ -87,6 +62,10 @@ namespace test    {
     ostringstream protocol;     ///< used to verify the test function calls
     
     
+    /** 
+     * watching the instance creation
+     * of some parameter values 
+     */
     template<typename TY>
     struct Tracker
       {
@@ -116,26 +95,32 @@ namespace test    {
     int Tracker<TY>::instanceCnt (0);
     
     
+    /* === functions to implement test-"operation" & UNDO === */
     
     void
     doIt (Tracker<Time> time, Tracker<string> str, int rand)
       {
         static format fmt ("doIt( Time=%s \"%s\" rand=%2d )");
+        cout << "invoke operation..." << endl;
         protocol << fmt % *time % *str % rand;
       }
     
     Tracker<string>
     captureState (Tracker<Time>, Tracker<string> xstr, int)
       {
+        cout << "capture state..." << endl;
         return protocol.str() + *xstr;
       }
     
     void
     undoIt (Tracker<Time> time, Tracker<string>, int, Tracker<string> memento)
       {
-        protocol << "undoIt(time="<<time<<")---state-was-:"<< *memento;
+        cout << "undo... memento=" << memento << endl;
+        protocol << "undoIt(time="<<time<<")----memento-:"<< *memento;
       }
     
+    
+    ///  another dummy-UNDO function
     void dummyU (int,int,int) { }
     int  dummyC (int u,int o) { return u + rand() % (o-u+1); }
     
@@ -163,11 +148,12 @@ namespace test    {
   
   
   
+  
   typedef lib::ScopedPtrVect<CmdClosure> ArgTuples;
   
   /***************************************************************************
    * @test Check storage handling of the command parameters and state memento.
-   *       
+   * 
    * @see  control::CommandArgumentHolder
    * @see  command-basic-test.hpp
    */
@@ -186,16 +172,20 @@ namespace test    {
           serialiseArgTuples (testTuples);
           testTuples.clear();
           
-//        simulateCmdLifecycle();
+          simulateCmdLifecycle();
           
+          // verify all dtors properly called... 
           ASSERT (0 == Tracker<Time>::instanceCnt);
           ASSERT (0 == Tracker<string>::instanceCnt);
         }
       
+      
       typedef Tracker<Time> TTime;
       typedef Tracker<string> Tstr;
       typedef struct{ int i[5]; } Sint5;
-          
+      
+      
+      
       
       /** @test create various argument tuples and re-access their contents */
       void
@@ -234,7 +224,7 @@ namespace test    {
           
           arg5->tie(undoIt, captureState)
                 .tieCaptureFunc()                         // bind capturing function to memento storage,
-                  (TTime(), Tstr("destruction"), 11);    //  then invoke the bound capturing mechanism 
+                  (TTime(), Tstr("destruction"), 11);    //  then invoke the bound capturing mechanism
           
           ASSERT (arg5->canUndo());
           ASSERT (*arg5->memento() == "destruction");
@@ -245,6 +235,7 @@ namespace test    {
         }
       
       
+      
       /** @test serialise and de-serialise each tuple and check validity
        *  @todo unimplemented, waiting on Serialiser
        */
@@ -253,6 +244,7 @@ namespace test    {
         {
           for_each (tup, checkSerialisation);
         }
+      
       
       
       /** @test verify the comparison operators */
@@ -298,37 +290,43 @@ namespace test    {
         }
       
       
-#if false ////////////////////////////////////////////////////////////////////////////TODO.....          
-      /** @test simulate a complete command lifecycle with regards to
-       *  the storage handling of the command parameters and state memento.
+      
+      /** @test simulate a complete command lifecycle with regards to the
+       *        storage handling of the command parameters and state memento.
        */
       void
       simulateCmdLifecycle()
         {
           typedef void SIG_do(Tracker<Time>, Tracker<string>, int);
-          typedef ArgumentHolder<SIG_do, Tracker<string> > Args;
-          typedef MementoTie<SIG_do, Tracker<string> > MemHolder;
+          typedef ArgumentHolder<SIG_do, Tracker<string> >   Args;
+          typedef MementoTie<SIG_do, Tracker<string> >  MemHolder;
           
           Args args;
           ASSERT (isnil (args));
           cout << showSizeof(args) << endl;
           
-          args.bind (randTime(), "Lumiera rocks". rand() % 100);
+          // store a set of parameter values, later to be used on invocation
+          args.bind (TTime(randTime()), Tstr("Lumiera rocks"), rand() % 100);
           ASSERT (!isnil (args));
           cout << args << endl;
           
           ASSERT (!args.canUndo());
-          ASSERT (isnil (args.memento()));
+          VERIFY_ERROR(MISSING_MEMENTO,  args.memento() );
+          
           MemHolder& memHolder = args.tie(undoIt,captureState);
           ASSERT (!memHolder);   // no stored memento.... 
+          ASSERT (!args.canUndo());
           
           function<SIG_do> doItFun = doIt;
           function<SIG_do> undoFun = memHolder.tieUndoFunc();
           function<SIG_do> captFun = memHolder.tieCaptureFunc();
           
-          CmdFunctor bound_doItFun = args.bindArguments (CmdFunctor(doItFun));
-          CmdFunctor bound_undoFun = args.bindArguments (CmdFunctor(undoFun));
-          CmdFunctor bound_captFun = args.bindArguments (CmdFunctor(captFun));
+          typedef function<void()> OpFun;
+          
+          // now close all the functions with the stored parameter values... 
+          OpFun bound_doItFun = args.bindArguments (CmdFunctor(doItFun)).getFun<void()>();
+          OpFun bound_undoFun = args.bindArguments (CmdFunctor(undoFun)).getFun<void()>();
+          OpFun bound_captFun = args.bindArguments (CmdFunctor(captFun)).getFun<void()>();
           
           protocol.seekp(0);
           protocol << "START...";
@@ -336,8 +334,9 @@ namespace test    {
           bound_captFun();
           cout << "captured state: " << args.memento() << endl;
           ASSERT (memHolder);
-          ASSERT (!isnil (args.memento()));
+          ASSERT (!isnil (*args.memento()));
           ASSERT (args.canUndo());
+          cout << args << endl;
           
           bound_doItFun();
           cout << protocol.str() << endl;
@@ -350,14 +349,14 @@ namespace test    {
           protocol.seekp(0);
           protocol << "RESET...";
           
-          args.bind (123456, "unbelievable", rand() %100);
-          cout << "original: " << args << endl;
-          cout << "copied  : " << argsCopy << endl;
+          args.bind (TTime(Time(123456)), Tstr("unbelievable"), rand() %100);
+          cout << "modified: " << args     << endl;
+          cout << "copied  : " << argsCopy << endl;    // holds still the old params & memento
           
           bound_undoFun();
           cout << protocol.str() << endl;
         }
-#endif ////////////////////////////////////////////////////////////////////////////TODO.....          
+      
     };
   
   
