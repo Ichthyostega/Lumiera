@@ -136,6 +136,9 @@ namespace test    {
         protocol << "undoIt(time="<<time<<")---state-was-:"<< *memento;
       }
     
+    void dummyU (int,int,int) { }
+    int  dummyC (int u,int o) { return u + rand() % (o-u+1); }
+    
     
     
     void
@@ -256,33 +259,42 @@ namespace test    {
       void
       checkArgumentComparison ()
         {
-          ArgumentHolder<void(), int> one, two;
-          ASSERT (one == two);
+          ArgumentHolder<void(int,int), int> one, two;
+          ASSERT (one == two);               // empty, identically typed argument holders -->equal
           
-          one.memento() = 5;
+          one.tie(dummyU,dummyC)
+              .tieCaptureFunc()(1,9);
+          ASSERT (one != two);               // now one contains captured UNDO state
+          
+          two.tie(dummyU,dummyC)
+              .tieCaptureFunc()(1,9);
+          two.memento() = one.memento();     // put the same UNDO state in both
+          ASSERT (one == two);               // ...makes them equal again 
+          
+          one.bind (1,2);                    // verify argument tuple comparison
           ASSERT (one != two);
+          ASSERT (two != one);
+          ASSERT (!isnil (one));
+          ASSERT ( isnil (two));
           
-          ArgumentHolder<void(int,int), int> three, four;
-          ASSERT (three == four);
-          three.bind (1,2);
-          ASSERT (three != four);
-          ASSERT (four != three);
-          ASSERT (!isnil (three));
-          ASSERT ( isnil (four));
-
-          four.bind (3,4);
-          ASSERT (!isnil (four));
-          ASSERT (three != four);
-          ASSERT (four != three);
+          two.bind (3,4);
+          ASSERT (!isnil (two));
+          ASSERT (one != two);
+          ASSERT (two != one);
           
-          three.bind (3,4);
-          ASSERT (!isnil (three));
-          ASSERT (three == four);
-          ASSERT (four == three);
-          four.memento() = 12345;
-          ASSERT (!isnil (four));
-          ASSERT (three != four);
-          ASSERT (four != three);
+          one.bind (1,4);
+          ASSERT (!isnil (one));
+          ASSERT (one != two);
+          ASSERT (two != one);
+          
+          one.bind (3,4);
+          ASSERT (!isnil (one));
+          ASSERT (one == two);
+          ASSERT (two == one);
+          two.memento() = 12345;
+          ASSERT (!isnil (two));
+          ASSERT (one != two);
+          ASSERT (two != one);
         }
       
       

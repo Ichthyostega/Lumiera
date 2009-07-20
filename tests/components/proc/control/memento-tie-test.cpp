@@ -163,14 +163,14 @@ namespace test    {
          
           MemHolder m22x (m22); // clone copy
           ASSERT (!m22x);
-          ASSERT (m22 == m22x);
+          ASSERT (m22 == m22x); // same functions, no state --> equal
           
           testVal = 0;
-          m22x.tieCaptureFunc() (1 + (rand() % 9)); // produce a random memento value != 0
+          m22x.tieCaptureFunc() (1 + (rand() % 9));   // produce a random memento value != 0
           ASSERT (0 < m22x.getState());
           
           ASSERT (m22 != m22x);
-          m22.tieCaptureFunc() (0); // now get the same value into the memento within m22
+          m22.tieCaptureFunc() (m22x.getState()); // get the same value into the memento within m22
           ASSERT (m22 == m22x);
         }
     };

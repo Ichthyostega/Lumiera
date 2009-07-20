@@ -44,31 +44,21 @@
 #define CONTROL_COMMAND_ARGUMENT_HOLDER_H
 
 //#include "pre.hpp"
-//#include "lib/error.hpp"
 #include "proc/control/argument-tuple-accept.hpp"
 #include "proc/control/command-closure.hpp"
 #include "proc/control/memento-tie.hpp"
 #include "lib/opaque-holder.hpp"
 
-//#include <tr1/memory>
-//#include <boost/scoped_ptr.hpp>
-//#include <tr1/functional>
 #include <boost/noncopyable.hpp>
-#include <iostream>
 #include <string>
 
 
 
 namespace control {
   
-//  using lumiera::Symbol;
-//  using std::tr1::shared_ptr;
-//  using boost::scoped_ptr;
-//  using std::tr1::function;
-//  using std::ostream;
   using boost::noncopyable;
-  using std::string;
   using lib::InPlaceBuffer;
+  using std::string;
   
   
   namespace { // empty state marker objects for ArgumentHolder
@@ -94,7 +84,7 @@ namespace control {
       {
         typedef typename CommandSignature<SIG,MEM>::CaptureSig SIG_cap;
         typedef typename CommandSignature<SIG,MEM>::UndoOp_Sig SIG_undo;
-    
+        
         UntiedMemento()
           : MementoTie<SIG,MEM> (function<SIG_undo>(), function<SIG_cap>() )
           { }
@@ -209,7 +199,8 @@ namespace control {
       
       
       /** direct "backdoor" access to stored memento value.
-       *  @note you might access a placeholder when called prior to \c tie(..) */
+       *  @throw LUMIERA_ERROR_MISSING_MEMENTO when invoked
+       *         prior to \c tie(..) and capturing any state */
       MEM&
       memento ()
         {
