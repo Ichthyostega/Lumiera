@@ -43,7 +43,7 @@
 #include "lib/bool-checkable.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "proc/control/command-signature.hpp"
-#include "lib/functorutil.hpp"
+#include "lib/functor-util.hpp"
 #include "lib/format.hpp"
 #include "lib/util.hpp"
 
