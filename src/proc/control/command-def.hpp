@@ -159,7 +159,7 @@ namespace control {
           BasicDefinition(function<SIG>& operation)
             {
               cout << showSizeof(operation) << endl;
-              UNIMPLEMENTED ("create new command object an store the operation functor");
+              UNIMPLEMENTED ("create new command object and store the operation functor");
             }
           
           

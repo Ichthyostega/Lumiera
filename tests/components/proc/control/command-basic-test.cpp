@@ -137,6 +137,7 @@ namespace test    {
           
           
           Command& ourCmd = Command::get("test.command1");
+          ////////////////////////////////////////////////////////////////////TODO: isn't this unlogical? Do I want a *definition* or an *instance* ??
           
           // invoke the command
           ASSERT (*obj == Time(5));

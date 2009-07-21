@@ -25,11 +25,13 @@
  ** //TODO 
  ** 
  ** @see command.hpp
+ ** @see command-registry.hpp
  **
  */
 
 
 #include "proc/control/command.hpp"
+#include "proc/control/command-registry.hpp"
 //#include "proc/mobject/mobject-ref.hpp"
 //#include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/placement.hpp"
