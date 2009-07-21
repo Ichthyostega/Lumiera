@@ -1,6 +1,6 @@
 format 58
 "Control" // ProcessingLayer::Control
-  revision 8
+  revision 9
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -452,25 +452,6 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 172549 // targets (<directional composition>)
-	relation 162565 *-->
-	  stereotype "list"
-	  a role_name "targets" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
-"
-	    classrelation_ref 172549 // targets (<directional composition>)
-	  b multiplicity "*" parent class_ref 149637 // Target
-      end
-
-      classrelation 172677 // params (<directional composition>)
-	relation 162693 *-->
-	  stereotype "list"
-	  a role_name "params" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
-"
-	    classrelation_ref 172677 // params (<directional composition>)
-	  b multiplicity "*" parent class_ref 134533 // Parameter
-      end
     end
 
     class 149125 "DoSync"
@@ -561,8 +542,11 @@ ${inlines}
       end
     end
 
-    class 149637 "Target"
+    class 149637 "ParamAccessor"
       visibility package 
+      nformals 1
+      formal name "TY" type "class" explicit_default_value ""
+        explicit_extends ""
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
 ${members}  };
@@ -589,6 +573,248 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
+    end
+
+    class 150789 "Closure"
+      visibility package 
+      nformals 1
+      formal name "SIG" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 174853 // <generalisation>
+	relation 164869 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 174853 // <generalisation>
+	  b parent class_ref 148997 // CmdClosure
+      end
+
+      classrelation 175109 // params (<directional composition>)
+	relation 165125 *-->
+	  stereotype "tuple"
+	  a role_name "params" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 175109 // params (<directional composition>)
+	  b multiplicity "*" parent class_ref 149637 // ParamAccessor
+      end
+    end
+
+    class 150917 "ArgumentHolder"
+      visibility package 
+      nformals 1
+      formal name "SIG" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 175237 // <generalisation>
+	relation 165253 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 175237 // <generalisation>
+	  b parent class_ref 148997 // CmdClosure
+      end
+
+      classrelation 175493 // arguments (<unidirectional association>)
+	relation 165509 --->
+	  stereotype "manages"
+	  a role_name "arguments" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 175493 // arguments (<unidirectional association>)
+	  b multiplicity "1" parent class_ref 150789 // Closure
+      end
+    end
+
+    state 128005 "Lifecycle"
+      stereotype "machine"
+      statediagram 135173 "Command lifecycle"
+	package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition yes draw_all_relations default shadow default
+	show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+	size A4
+      end
+
+      pseudostate 128005 entry_point "ID"
+	transition 128901 "<transition>"
+	  on stateaction_ref 128005
+	  external 
+	end
+      end
+
+      stateaction 128005
+	uml "fetch def"
+	comment "try to fetch existing definition"
+	transition 128773 "<transition>"
+	  on pseudostate_ref 128133 // choice
+	  external 
+	end
+      end
+
+      state 128133 "scratch"
+	transition 128261 "<transition>"
+	  on stateaction_ref 128133
+	  external 
+	end
+      end
+
+      stateaction 128133
+	uml "def DO"
+	transition 128389 "<transition>"
+	  on pseudostate_ref 128261 // fork
+	  external 
+	end
+
+	transition 129029 "<transition>"
+	  on stateaction_ref 128261
+	  external 
+	end
+
+	transition 129157 "<transition>"
+	  on stateaction_ref 128517
+	  external 
+	end
+      end
+
+      stateaction 128261
+	uml "def CAP"
+	transition 129285 "<transition>"
+	  on stateaction_ref 128389
+	  external 
+	end
+      end
+
+      stateaction 128389
+	uml "def UNDO"
+	transition 129541 "<transition>"
+	  on state_ref 128261 // CmdDef
+	  external 
+	end
+      end
+
+      stateaction 128517
+	uml "def UNDO"
+	transition 129413 "<transition>"
+	  on stateaction_ref 128645
+	  external 
+	end
+      end
+
+      stateaction 128645
+	uml "def CAP"
+	transition 129669 "<transition>"
+	  on state_ref 128261 // CmdDef
+	  external 
+	end
+      end
+
+      state 128261 "CmdDef"
+	transition 129797 "<transition>"
+	  on stateaction_ref 128773
+	  external 
+	end
+      end
+
+      stateaction 128773
+	uml "bind"
+	transition 129925 "<transition>"
+	  on state_ref 128389 // Command
+	  external 
+	end
+      end
+
+      state 128389 "Command"
+	transition 130053 "<transition>"
+	  on stateaction_ref 129029
+	  external 
+	end
+      end
+
+      stateaction 129029
+	stereotype "send-signal"
+	uml "exec pattern"
+	transition 130181 "<transition>"
+	  on state_ref 128517 // undo-able
+	  external 
+	end
+      end
+
+      state 128517 "undo-able"
+	transition 130309 "<transition>"
+	  on pseudostate_ref 128517 // exit_point
+	  external 
+	end
+
+	transition 130437 "<transition>"
+	  on stateaction_ref 129157
+	  external 
+	end
+
+	transition 130693 "<transition>"
+	  on stateaction_ref 129029
+	  external 
+	end
+      end
+
+      pseudostate 128133 choice 
+	stereotype "try"
+	transition 128005 "<transition>"
+	  on state_ref 128133 // scratch
+	    uml_expr "not found"
+	  external 
+	end
+
+	transition 128133 "<transition>"
+	  on state_ref 128261 // CmdDef
+	    uml_expr "found"
+	  external 
+	end
+      end
+
+      pseudostate 128261 fork 
+	transition 128517 "<transition>"
+	  on stateaction_ref 128261
+	  external 
+	end
+
+	transition 128645 "<transition>"
+	  on stateaction_ref 128517
+	  external 
+	end
+      end
+
+      pseudostate 128389 fork 
+      end
+
+      pseudostate 128517 exit_point "done"
+      end
+
+      stateaction 129157
+	stereotype "send-signal"
+	uml "undo"
+	transition 130565 "<transition>"
+	  on state_ref 128517 // undo-able
+	  external 
+	end
+      end
     end
   end
 end

@@ -1,16 +1,23 @@
 window_sizes 1302 1004 270 1022 856 71
+diagrams
+  active  classdiagram_ref 134021 // Command structure
+    575 622 100 4 0 0
+  statediagram_ref 135173 // Command lifecycle
+    349 682 100 4 0 0
+end
 show_stereotypes
 selected 
   package_ref 129 // lumiera
 open
-  componentview_ref 128005 // Architecture
   classview_ref 129413 // Project Entities
   
   package_ref 128645 // codegen
   
   package_ref 128133 // Asset
-  
-  package_ref 129029 // Control
+  classview_ref 128389 // Controller Workings
+  class_ref 148997 // CmdClosure
+  class_ref 150789 // Closure
+  pseudostate_ref 128133 // choice
   
   package_ref 128261 // MObject
   classview_ref 128133 // Engine Workings

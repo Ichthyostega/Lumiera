@@ -951,7 +951,7 @@ TertiaryMid: #99a
 TertiaryDark: #667
 Error: #f88</pre>
 </div>
-<div title="Command" modifier="Ichthyostega" modified="200906140108" created="200906072020" tags="def SessionLogic draft" changecount="6">
+<div title="Command" modifier="Ichthyostega" modified="200907210134" created="200906072020" tags="def SessionLogic draft" changecount="7">
 <pre>Within Proc-Layer, a Command is the abstract representation of a single operation or a compound of operations mutating the HighLevelModel.
 Thus, each command is a ''Functor'' and a ''Closure'' ([[command pattern|http://en.wikipedia.org/wiki/Command_pattern]]), allowing commands to be treated uniformly, enqueued in a [[dispatcher|ProcDispatcher]], logged to the SessionStorage and registered with the UndoManager.
 
@@ -959,6 +959,7 @@ Commands are //defined// using a [[fluent API|http://en.wikipedia.org/wiki/Fluen
 
 &amp;rarr; see CommandDefinition
 &amp;rarr; see CommandHandling
+&amp;rarr; see CommandLifecycle
 </pre>
 </div>
 <div title="CommandDefinition" modifier="Ichthyostega" modified="200906140147" created="200906140124" tags="SessionLogic spec draft decision design img" changecount="9">
@@ -989,7 +990,7 @@ While generally there is //no limitation// on the number and type of parameters,
 Usually, parameters should be passed //by value// &amp;mdash; with the exception of target object(s), which are typically bound as MObjectRef, causing them to be resolved at commad execution time (late binding).
 </pre>
 </div>
-<div title="CommandHandling" modifier="Ichthyostega" modified="200906140100" created="200906072048" tags="SessionLogic spec draft decision design img" changecount="23">
+<div title="CommandHandling" modifier="Ichthyostega" modified="200907210134" created="200906072048" tags="SessionLogic spec draft decision design img" changecount="24">
 <pre>Organising any ''mutating'' operations executable by the user (via GUI) by means of the [[command pattern|http://en.wikipedia.org/wiki/Command_pattern]] can be considered //state of the art//&amp;nbsp; today. First of all, it allows to discern the specific implementation operations to be called on one or several objects within the HighLevelModel from the operation requested by the user, the latter being rather a concept. A command can be labeled clearly, executed under controlled circumstances, allowing transactional behaviour.
 
 
@@ -1005,9 +1006,22 @@ While obviously the first solution is much simpler to implement on behalf of the
 While the usual »Memento« implementation might automatically capture the whole model (resulting in a lot of data to be stored and some uncertainty about the scope of the model to be captured), in Lumiera we rely instead on the client code to provide a ''capture function''&amp;nbsp;and a ''playback function'' alongside with the actual operation. To help with this task, we provide a set of standard handlers for common situations. This way, operations might capture very specific information, might provide an &quot;intelligent undo&quot; to restore a given semantic instead of just a fixed value &amp;mdash; and moreover the client code is free actually to employ the &quot;inverse operation&quot; model in special cases where it just makes more sense than capturing state.
 
 !Handling of commands
-A command may be [[defined|CommandDefinition]] completely from scratch, or it might just instantiate a CommandPrototype with specific targets and parameters. The command could then be serialised and later be recovered and re-bound with the parameters, but usually it will be handed over to the ProcDispatcher, pending execution. When ''invoking'', the handling sequence is to [[log the command|SessionStorage]], then call the ''undo capture function'', followed from calling the actual ''operation function''. After success, the logging and [[undo registration|UndoManager]] is completed. In any case, finally the ''result signal'' (a functor previously stored within the command) is emitted.
+A command may be [[defined|CommandDefinition]] completely from scratch, or it might just serve as a CommandPrototype with specific targets and parameters. The command could then be serialised and later be recovered and re-bound with the parameters, but usually it will be handed over to the ProcDispatcher, pending execution. When ''invoking'', the handling sequence is to [[log the command|SessionStorage]], then call the ''undo capture function'', followed from calling the actual ''operation function''. After success, the logging and [[undo registration|UndoManager]] is completed. In any case, finally the ''result signal'' (a functor previously stored within the command) is emitted.
 
-By design, commands are single-serving value objects; executing an operation repeatedly requires creating a collection of command objects, one for each invocation.
+By design, commands are single-serving value objects; executing an operation repeatedly requires creating a collection of command objects, one for each invocation. While nothing prevents you from invoking the command operation functor several times, each invocation will overwrite the undo state captrued by the previous invocation. Thus, each command instance should bes seen as the promise (or later the trace) of a single operation execution. In a similar vein, the undo capturing should be defined as to be self sufficient, so that invoking just the undo functor of a single command performes any necessary steps to restore the situation found before invoking the corresponding mutation functor &amp;mdash; of course only //with respect to the topic covered by this command.// So, while commands provide a lot of flexibility and allow to do a multitude of things, certainly there is an intended CommandLifecycle.
+</pre>
+</div>
+<div title="CommandLifecycle" modifier="Ichthyostega" modified="200907210211" created="200907210135" tags="SessionLogic spec draft design img" changecount="5">
+<pre>[&lt;img[Structure of Commands|uml/fig135173.png]]
+While generally the command framework was designed to be flexible and allow a lot of different use cases, execution paths and to serve various goals, there is an ''intended lifecycle'' &amp;mdash; commands are expected to go through several distinct states.
+
+The handling of a command starts out with a ''command ID'' provided by the client code. Command IDs are unique (human readable) identifiers and should be organised in a hierarchical fashion. When provided with an ID, the CommandRegistry tries to fetch an existing command definition. In case this fails, we enter the [[command definition stage|CommandDefinition]], which includes specifying functions to implement the operation, state capturing and UNDO. When all these informations are available, the entity is called a ''command definition''. It is comparable to a //class// or //meta object.//
+
+By ''binding'' to specific operation arguments, the definition is //armed// and becomes a real ''command''. This is similar to creating an instance from a class
+
+A command is operated or executed by passing it to an ''execution pattern'' &amp;mdash; there is a multitude of possible execution patterns to choose from, depending on the situation. 
+{{red{WIP}}}
+When a command has been executed (and maybe undone), it's best to leave it alone, because the UndoManager might hold a reference. At any time, c ''clone of the command'' could be created, maybe bound with different arguments and treated separately from the original command.
 </pre>
 </div>
 <div title="ConManager" modifier="Ichthyostega" modified="200810060300" created="200806050208" tags="def Builder" changecount="4">
