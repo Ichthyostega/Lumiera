@@ -514,7 +514,7 @@ ColorPalette
 
 SiteUrl</pre>
 </div>
-<div title="AllocationCluster" modifier="Ichthyostega" modified="200810200127" created="200810180031" tags="def" changecount="9">
+<div title="AllocationCluster" modifier="Ichthyostega" modified="200810200127" created="200810180031" tags="def img" changecount="9">
 <pre>Memory management facility for the low-level model (render nodes network). The model is organised into temporal segments, which are considered to be structurally constant and uniform. The objects within each segment are strongly interconnected, and thus each segment is being built in a single build process and is replaced or released as a whole. __~AllocationCluster__ implements memory management to support this usage pattern. He owns a number of object families of various types.[&gt;img[draw/AllocationCluster.png]]
 * [[processing nodes|ProcNode]] &amp;mdash; probably with several subclasses (?)
 * [[wiring descriptors|WiringDescriptor]]
@@ -607,7 +607,7 @@ Attachment on itself does //not// keep an object alive. Rather, it's implemented
 <div title="AutomationData" modifier="Ichthyostega" created="200805300105" tags="def automation" changecount="2">
 <pre>While generally automation is treated as a function over time, defining and providing such a function requires some //Automation Data.// The actual layout and meaning of this data is deemed an implementation detail of the [[parameter provider|ParamProvider]] used, but nevertheless an automation data set has object characteristics within the [[EDL (high-level-model)|EDL]], allowing it to be attached, moved and [[placed|Placement]] by the user.</pre>
 </div>
-<div title="BasicBuildingOperations" modifier="Ichthyostega" modified="200805210230" created="200712040334" tags="design dynamic Builder" changecount="24">
+<div title="BasicBuildingOperations" modifier="Ichthyostega" modified="200805210230" created="200712040334" tags="design dynamic Builder img" changecount="24">
 <pre>Starting out from the concepts of Objects, Placement to Tracks, render Pipes and connection properties (&amp;rarr; see [[here|TrackPipeEDL]]) within the EDL, we can identify the elementary operations occuring within the Builder. Overall, the Builder is organized as application of //visiting tools// to a collection of objects, so finally we have to consider some object kind appearing in the working function of the given builder tool, which holds at this moment some //context//. The job now is to organize this context such as to create a predictable build process from this //event driven// approach.
 &amp;rarr;see also: BuilderPrimitives for the elementary situations used to cary out the building operations
 
@@ -758,7 +758,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BindingMO" modifier="Ichthyostega" modified="200905222252" created="200905210144" tags="def design discuss SessionLogic" changecount="4">
+<div title="BindingMO" modifier="Ichthyostega" modified="200907220310" created="200905210144" tags="def design discuss SessionLogic" changecount="5">
 <pre>Sometimes, two entities within the [[Session]] are deliberately associated, and this association has to carry some specific mappings between properties or facilities within the entities to be linked together. When this connection isn't just the [[Placement]] of an object, and isn't just a logical or structural relationship either &amp;mdash; then we create an explicit Binding object to be stored into the session.
 * When connecting a [[Sequence|EDL]] to a certain [[Timeline]], we also establish a mapping between the possible media stream channels produced by the sequence and the real output slots found within the timeline.
 * similarly, using a sequence within a [[meta-clip|VirtualClip]] requires to remember such a mapping.
@@ -844,7 +844,7 @@ The working pattern of this builder mechanics can be described as triggering, en
 In all those cases, the active part is provided by [[processing patterns|ProcPatt]] &amp;mdash; sort of micro programs executed within the context of a given mould: the processing pattern defines the steps to take (in the standard/basic case this is just &quot;attach&quot;), while the mould holds and provides the location where these steps will operate. Actually, this location is represented as a OperationPoint, provided by the mould and abstracting the details of making multi-channel connections.
 </pre>
 </div>
-<div title="BuilderPrimitives" modifier="Ichthyostega" modified="200805260332" created="200805210327" tags="impl spec Builder" changecount="25">
+<div title="BuilderPrimitives" modifier="Ichthyostega" modified="200805260332" created="200805210327" tags="impl spec Builder img" changecount="25">
 <pre>While assembling and building up the render engines node network, a small number of primitive building situations is encountered repeatedly. The BuilderToolKit provides a &quot;[[mould|BuilderMould]]&quot; for each of these situations, typically involving parametrisation and the application of a [[processing pattern|ProcPatt]].
 
 The ''Lifecycle'' of such a mould starts out by arming it with the object references involved into the next building step. After conducting this building step, the resulting render nodes can be found &amp;mdash; depending on the situation &amp;mdash; attached either to the same mould, or to another kind of mould, but in any case ready to be included in the next building step. Thus, //effectively//&amp;nbsp; the moulds are //used to handle the nodes being built,// due to the fact that the low-level model (nodes to be built) and the high-level model (objects directing what is to be built) are //never connected directly.//
@@ -951,7 +951,7 @@ TertiaryMid: #99a
 TertiaryDark: #667
 Error: #f88</pre>
 </div>
-<div title="Command" modifier="Ichthyostega" modified="200907210134" created="200906072020" tags="def SessionLogic draft" changecount="7">
+<div title="Command" modifier="Ichthyostega" modified="200907212316" created="200906072020" tags="def SessionLogic draft" changecount="8">
 <pre>Within Proc-Layer, a Command is the abstract representation of a single operation or a compound of operations mutating the HighLevelModel.
 Thus, each command is a ''Functor'' and a ''Closure'' ([[command pattern|http://en.wikipedia.org/wiki/Command_pattern]]), allowing commands to be treated uniformly, enqueued in a [[dispatcher|ProcDispatcher]], logged to the SessionStorage and registered with the UndoManager.
 
@@ -960,9 +960,10 @@ Commands are //defined// using a [[fluent API|http://en.wikipedia.org/wiki/Fluen
 &amp;rarr; see CommandDefinition
 &amp;rarr; see CommandHandling
 &amp;rarr; see CommandLifecycle
+&amp;rarr; see CommandUsage
 </pre>
 </div>
-<div title="CommandDefinition" modifier="Ichthyostega" modified="200906140147" created="200906140124" tags="SessionLogic spec draft decision design img" changecount="9">
+<div title="CommandDefinition" modifier="Ichthyostega" modified="200907220310" created="200906140124" tags="SessionLogic spec draft decision design" changecount="10">
 <pre>Commands can be identified and accessed //by name// &amp;mdash; consequently there needs to be an internal command registry, including a link to the actual implementing function, thus allowing to re-establish the connection between command and implementing functions when de-serialising a persisted command. To create a command, we need to provide the following informations
 * operation function actually implementing the command
 * function to [[undo|UndoManager]] the effect of the command
@@ -990,7 +991,7 @@ While generally there is //no limitation// on the number and type of parameters,
 Usually, parameters should be passed //by value// &amp;mdash; with the exception of target object(s), which are typically bound as MObjectRef, causing them to be resolved at commad execution time (late binding).
 </pre>
 </div>
-<div title="CommandHandling" modifier="Ichthyostega" modified="200907210134" created="200906072048" tags="SessionLogic spec draft decision design img" changecount="24">
+<div title="CommandHandling" modifier="Ichthyostega" modified="200907212323" created="200906072048" tags="SessionLogic spec draft decision design img" changecount="26">
 <pre>Organising any ''mutating'' operations executable by the user (via GUI) by means of the [[command pattern|http://en.wikipedia.org/wiki/Command_pattern]] can be considered //state of the art//&amp;nbsp; today. First of all, it allows to discern the specific implementation operations to be called on one or several objects within the HighLevelModel from the operation requested by the user, the latter being rather a concept. A command can be labeled clearly, executed under controlled circumstances, allowing transactional behaviour.
 
 
@@ -1009,7 +1010,7 @@ While the usual »Memento« implementation might automatically capture the whole
 A command may be [[defined|CommandDefinition]] completely from scratch, or it might just serve as a CommandPrototype with specific targets and parameters. The command could then be serialised and later be recovered and re-bound with the parameters, but usually it will be handed over to the ProcDispatcher, pending execution. When ''invoking'', the handling sequence is to [[log the command|SessionStorage]], then call the ''undo capture function'', followed from calling the actual ''operation function''. After success, the logging and [[undo registration|UndoManager]] is completed. In any case, finally the ''result signal'' (a functor previously stored within the command) is emitted.
 
 By design, commands are single-serving value objects; executing an operation repeatedly requires creating a collection of command objects, one for each invocation. While nothing prevents you from invoking the command operation functor several times, each invocation will overwrite the undo state captrued by the previous invocation. Thus, each command instance should bes seen as the promise (or later the trace) of a single operation execution. In a similar vein, the undo capturing should be defined as to be self sufficient, so that invoking just the undo functor of a single command performes any necessary steps to restore the situation found before invoking the corresponding mutation functor &amp;mdash; of course only //with respect to the topic covered by this command.// So, while commands provide a lot of flexibility and allow to do a multitude of things, certainly there is an intended CommandLifecycle.
-</pre>
+&amp;rarr; more on possible [[command usage scenarios|CommandUsage]]</pre>
 </div>
 <div title="CommandLifecycle" modifier="Ichthyostega" modified="200907210211" created="200907210135" tags="SessionLogic spec draft design img" changecount="5">
 <pre>[&lt;img[Structure of Commands|uml/fig135173.png]]
@@ -1022,6 +1023,42 @@ By ''binding'' to specific operation arguments, the definition is //armed// and 
 A command is operated or executed by passing it to an ''execution pattern'' &amp;mdash; there is a multitude of possible execution patterns to choose from, depending on the situation. 
 {{red{WIP}}}
 When a command has been executed (and maybe undone), it's best to leave it alone, because the UndoManager might hold a reference. At any time, c ''clone of the command'' could be created, maybe bound with different arguments and treated separately from the original command.
+</pre>
+</div>
+<div title="CommandUsage" modifier="Ichthyostega" modified="200907220300" created="200907212338" tags="SessionLogic draft dynamic" changecount="3">
+<pre>//for now (7/09) I'll use this page to collect ideas how commands might be used...//
+
+* use a command for getting a log entry and an unto possibility automatically
+* might define, bind and then execute a command at once
+* might define it and bind it to a standard set of parameters, to be used as a prototype later.
+* might just create the definition, leaving the argument binding to the actual call site
+* execute it and check the success/failure result
+* just enqueue it, without caring for successful execution
+* place it into a command sequence bundle
+* repeat the execution
+
+!!!a command definition....
+* can be created from scratch, by ID
+* can be re-accessed, by ID
+* can be modified, which doesn't change any commands already created/derived from the previous version
+* usually will be the starting point for creating an actual command by //binding//
+
+!!!a command instance....
+* normally emerges from a definition by binding arguments
+* the first such binding will create a named command registration
+* but subsequent accesses by ID or new bindings create an anonymous clone
+* which then in turn might be registered explicitly with a new ID
+* anonymous command instances are managed by referral and ref-counting
+
+!!!an execution pattern....
+* can only be defined in code by a class definition, not at runtime
+* subclasses the !HandlingPattern interface, which automatically creates an registration.
+* a singleton instance is created on demand, triggered by referring the pattern's ID
+* is conceptually //stateless// &amp;mdash; of course there can be common configuration values
+* is always invoked providing a concrete command instance to execute
+* is configured into the command instance, to implement the command's invocation
+* returns a duck-typed //result// object
+
 </pre>
 </div>
 <div title="ConManager" modifier="Ichthyostega" modified="200810060300" created="200806050208" tags="def Builder" changecount="4">
@@ -1044,7 +1081,7 @@ Connecting data streams of differing type involves a StreamConversion. Mostly, t
 &amp;rarr; [[accessing and integrating configuration queries|ConfigQueryIntegration]]
 </pre>
 </div>
-<div title="ConfigQueryIntegration" modifier="Ichthyostega" modified="200804110350" created="200804070247" tags="overview draft impl" changecount="17">
+<div title="ConfigQueryIntegration" modifier="Ichthyostega" modified="200804110350" created="200804070247" tags="overview draft impl img" changecount="17">
 <pre>* planning to embed a YAP Prolog engine
 * currently just integrated by a table driven mock
 * the baseline is a bit more clear by now (4/08)
@@ -1945,7 +1982,7 @@ From experiences with other middle scale projects, I prefer having the test code
 &amp;rarr; [[overfiew and technical details|LayerSeparationInterfaces]]
 </pre>
 </div>
-<div title="LayerSeparationInterfaces" modifier="Ichthyostega" modified="200902090419" created="200812050619" tags="overview spec" changecount="22">
+<div title="LayerSeparationInterfaces" modifier="Ichthyostega" modified="200902090419" created="200812050619" tags="overview spec img" changecount="22">
 <pre>Lumiera uses a 3-layered architecture. Separation between layers is crucial. Any communication between the layers regarding the normal operation of the application should //at least be initiated// through ''Layer abstraction interfaces'' (Facade Interfaces). This is a low-impact version of layering, because, aside from this triggering, direct cooperation of parts within the single Lumiera process is allowed, under the condition that is is implemented using additional abstractions (interfaces with implementation level granularity). We stick to the policy of //disallowing direct coupling of implementations located in different layers.//
 
 [&gt;img[Anatomy of a Layer Separation Interface|uml/fig132869.png]]
@@ -2153,7 +2190,7 @@ For the case here in question this seems to be the ''resource allocation is cons
 And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
-<div title="MultichannelMedia" modifier="Ichthyostega" modified="200710212326" created="200709200255" tags="design" changecount="6">
+<div title="MultichannelMedia" modifier="Ichthyostega" modified="200710212326" created="200709200255" tags="design img" changecount="6">
 <pre>Based on practical experiences, Ichthyo tends to consider Multichannel Media as the base case, while counting media files providing just one single media stream as exotic corner cases. This may seem counter intuitive at first sight; you should think of  it as an attempt to avoid right from start some of the common shortcomings found in many video editors, especially
 * having to deal with keeping a &quot;link&quot; between audio and video clips
 * silly limitations on the supported audio setups (e.g. &quot;sound is mono, stereo or Dolby-5.1&quot;)
@@ -3051,7 +3088,7 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlanningSessionInMem" modifier="Ichthyostega" modified="200906071927" created="200904252258" tags="impl SessionLogic draft" changecount="24">
+<div title="PlanningSessionInMem" modifier="Ichthyostega" modified="200907212231" created="200904252258" tags="impl SessionLogic draft" changecount="33">
 <pre>//This page is a scrapbook for working out the implementation of the [[Session Datastructure in Memory|SessionDataMem]]//
 This is a difficult untertaking, because there are several dependencies (most of which aren't fully designed yet as of 5/09)
 * the GUI uses an adapted version of the HighLevelModel; these datastructures are intended to be backed by the Session
@@ -3071,9 +3108,12 @@ This is a difficult untertaking, because there are several dependencies (most of
 
 &lt;&lt;tasksum start&gt;&gt;
 &lt;&lt;taskadder below&gt;&gt;
-&lt;&lt;task &gt;&gt; implement a system for defining parameters and targets
+&lt;&lt;task 3 3 3&gt;&gt; how to deal with UNDO
+&lt;&lt;task 2 2 2&gt;&gt; how to deal with CommandDefinition
+&lt;&lt;task &gt;&gt; outline the CommandLifecycle
+&lt;&lt;task 5 15 15&gt;&gt; implement a system for defining parameters and targets
 &lt;&lt;task &gt;&gt; implement a system for generating operations
-&lt;&lt;task &gt;&gt; define the general structure of operations
+&lt;&lt;task 2 2 1&gt;&gt; define the general structure of operations
 &lt;&lt;task &gt;&gt; specify the editing operations
 
 !Interface
@@ -3183,14 +3223,13 @@ Besides, they provide an important __inward interface__ for the [[ProcNode]]s, w
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200905291850" created="200706190056" tags="overview" changecount="18">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200907212232" created="200706190056" tags="overview" changecount="19">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
 &lt;&lt;&lt;
 ''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the foundations and main structures in C++
 * basic [[AssetManager]] working
 * [[Builder]] implementation is on the way (&amp;rarr;[[more|BuilderPrimitives]])
 * made a first draft of how to wire and operate procesing nodes (&amp;rarr;[[more|RenderMechanics]])
-* working out the relation of [[Project, Timelines and Sequences|TimelineSequences]]
 * first attempts to [[integrate with the GUI|GuiIntegration]]
 * first outline of the [[session implementation|PlanningSessionInMem]]
 &lt;&lt;&lt;
@@ -3490,7 +3529,7 @@ config.macros.rssFeedUpdate = {
 //}}}
 </pre>
 </div>
-<div title="RelationClipAsset" modifier="Ichthyostega" modified="200710212327" created="200710191541" tags="design decision" changecount="7">
+<div title="RelationClipAsset" modifier="Ichthyostega" modified="200710212327" created="200710191541" tags="design decision img" changecount="7">
 <pre>What is the Role of the asset::Clip and how exactly are Assets and (Clip)-MObjects related?
 
 First of all: ~MObjects are the dynamic/editing/manipulation view, while Assets are the static/bookkeeping/searching/information view of the same entities. Thus, the asset::Clip contains the general configuration, the ref to the media and descriptive properties, while all parameters being &quot;manipulated&quot; belong to the session::Clip (MObject). Besides that, the practical purpose of asset::Clip is that you can save and remember some selection as a Clip (Asset), maybe even attach some informations or markup to it, and later be able to (re)create a editable representation in the Session (the GUI could implement this by allowing to drag from the asset::Clip GUI representation to the timeline window)
@@ -3521,7 +3560,7 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 [img[Entities comprising the Render Engine|uml/fig128389.png]]
 </pre>
 </div>
-<div title="RenderImplDetails" modifier="Ichthyostega" modified="200807132338" created="200806220211" tags="Rendering impl" changecount="20">
+<div title="RenderImplDetails" modifier="Ichthyostega" modified="200807132338" created="200806220211" tags="Rendering impl img" changecount="20">
 <pre>Below are some notes regarding details of the actual implementation of the render process and processing node operation. In the description of the [[render node operation protocol|NodeOperationProtocol]] and the [[mechanics of the render process|RenderMechanics]], these details were left out deliberately.
 
 !Layered structure of State
@@ -3670,7 +3709,7 @@ Currently (as of 5/09), Ichthyo is [[targeting|PlanningSessionInMem]] a first pr
 Objects are attached and manipulated by [[placements|Placement]]; thus the organisation of these placements is part of the session data layout. Effectively, such a placement within the session behaves like an //instances// of a given object, and at the same time it defines the &quot;non-substantial&quot; properties of the object, e.g. its positions and relations. [[References|MObjectRef]] to these placement entries are handed out as parameters, both down to the [[Builder]] and from there to the render processes within the engine, but also to external parts within the GUI and in plugins. The actual implementation of these object references is built on top of the PlacementRef tags, thus relying on the PlacementIndex the session maintains to keep track of all placements and their relations. While &amp;mdash; using these references &amp;mdash; an external client can access the objects and structures within the session, any actual ''mutations'' should be done based on the CommandHandling: a single operation of a sequence of operations is defined as [[Command]], to be [[dispatched as mutation operation|ProcDispatcher]]. Following this policy ensures integration with the&amp;nbsp;SessionStorage and provides (unlimited) [[UNDO|UndoManager]].
 </pre>
 </div>
-<div title="SessionOverview" modifier="Ichthyostega" modified="200811011805" created="200709272105" tags="design" changecount="29">
+<div title="SessionOverview" modifier="Ichthyostega" modified="200811011805" created="200709272105" tags="design img" changecount="29">
 <pre>&lt;&lt;&lt;
 {{red{WARNING: Naming is currently being discussed (11/08)}}}
 * [[EDL]] probably will be called ''Sequence'' (or maybe ''Arrangement'')
@@ -3972,7 +4011,7 @@ When deciding if a connection can be made, we can build up the type information 
 My Idea was to use [[type implementation constraints|StreamTypeImplConstraint]] for this, which are a special kind of ~ImplType
 </pre>
 </div>
-<div title="StrongSeparation" modifier="MichaelPloujnikov" modified="200706271504" created="200706220452" tags="design" changecount="5">
+<div title="StrongSeparation" modifier="Ichthyostega" modified="200907220311" created="200706220452" tags="design" changecount="6">
 <pre>This design lays great emphasis on separating all those components and subsystems, which are considered not to have a //natural link// of their underlying concepts. This often means putting some additional constraints on the implementation, so basically we need to rely on the actual implementation to live up to this goal. In many cases it may seem to be more natural to &quot;just access the necessary information&quot;. But on the long run this coupling of not-directly related components makes the whole codebase monolithic and introduces lots of //accidental complexity.//
 
 Instead, we should try to just connect the various subsystems via Interfaces and &amp;mdash; instead of just using some information, rather use some service to be located on an Interface to query other components for this information. The best approach of course is always to avoid the dependency altogether.
@@ -5181,7 +5220,7 @@ Within the Project, there may be ''multiple timelines'', to be viewed and render
 ''Note'': in early drafts of the design (2007) there was an entity called &quot;Timeline&quot; within the [[Fixture]]. This entity seems superfluous and has been dropped. It never got any relevance in existing code and at most was used in some code comments.
 </pre>
 </div>
-<div title="TimelineSequences" modifier="Ichthyostega" modified="200811022211" created="200811011836" tags="design draft discuss" changecount="14">
+<div title="TimelineSequences" modifier="Ichthyostega" modified="200811022211" created="200811011836" tags="design draft discuss img" changecount="14">
 <pre>There is a three-level hierarchy: [[Project|Session]], [[Timeline]], [[Sequence|EDL]]. Each project can contain ''multiple timelines'', to be viewed and rendered independently. But, being the top-level entities, these timelines may not be combined further. You can always just render (or view) one specific timeline. Each of those timelines refers to a Sequence, which is a bunch of [[media objects|MObject]] placed to a tree of [[tracks|Track]]. Of course it is possible to use ~Sub-EDLs (Sub-sequences) within the top-level sequence within a timeline to organize a movie into several scenes or chapters. 
 
 [&gt;img[Relation of Timelines, Sequences and MObjects within the Project|uml/fig132741.png]]
