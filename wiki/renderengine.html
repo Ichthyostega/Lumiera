@@ -1025,10 +1025,10 @@ A command is operated or executed by passing it to an ''execution pattern'' &amp
 When a command has been executed (and maybe undone), it's best to leave it alone, because the UndoManager might hold a reference. At any time, c ''clone of the command'' could be created, maybe bound with different arguments and treated separately from the original command.
 </pre>
 </div>
-<div title="CommandUsage" modifier="Ichthyostega" modified="200907220300" created="200907212338" tags="SessionLogic draft dynamic" changecount="3">
+<div title="CommandUsage" modifier="Ichthyostega" modified="200907230031" created="200907212338" tags="SessionLogic draft dynamic" changecount="4">
 <pre>//for now (7/09) I'll use this page to collect ideas how commands might be used...//
 
-* use a command for getting a log entry and an unto possibility automatically
+* use a command for getting a log entry and an undo possibility automatically
 * might define, bind and then execute a command at once
 * might define it and bind it to a standard set of parameters, to be used as a prototype later.
 * might just create the definition, leaving the argument binding to the actual call site
