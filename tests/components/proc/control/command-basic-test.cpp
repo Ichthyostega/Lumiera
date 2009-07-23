@@ -83,7 +83,8 @@ namespace test    {
   
   
   
-  namespace command1 {
+  namespace  {
+  
     void
     operate (P<Time> dummyObj, int randVal)
     {
@@ -129,9 +130,9 @@ namespace test    {
           int randVal ((rand() % 10) - 5);
           
           CommandDef ("test.command1")
-              .operation (command1::operate)
-              .captureUndo (command1::capture)
-              .undoOperation (command1::undoIt)
+              .operation (operate)
+              .captureUndo (capture)
+              .undoOperation (undoIt)
               .bind (obj, randVal)
               ;
           

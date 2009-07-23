@@ -77,6 +77,93 @@ namespace control {
   using lumiera::typelist::Tuple;
   
   
+  namespace stage { ///< helpers for the building up a command definition
+    
+    
+    
+    template<typename SIG, typename MEM>
+    struct UndoDefinition
+      {
+        typedef typename FunctionSignature< function<SIG> >::Args BasicArgs;
+        typedef typename FunctionTypedef<MEM,BasicArgs>::Sig      UndoCaptureSig;
+        
+        UndoDefinition (function<UndoCaptureSig>& undoCapOperation)
+          {
+            cout << showSizeof(undoCapOperation) << endl;
+            UNIMPLEMENTED ("re-fetch command definition and augment it with Functor for capturing Undo information");
+          }
+        
+        template<typename SIG2>
+        UndoDefinition&
+        undoOperation (SIG2& how_to_Undo)
+          {
+            typedef typename UndoSignature<SIG2>::UndoOp_Sig UndoSig;
+            
+            function<UndoSig> opera3 (how_to_Undo);
+            
+            UNIMPLEMENTED ("store actual Undo-Functor into the command definition held by the enclosing UndoDefinition instance");
+            return *this;
+          }
+        
+        template
+          < typename T1
+          , typename T2
+          >
+        UndoDefinition&    ///////TODO return here the completed Command
+        bind ( T1& p1
+             , T2& p2
+             )
+          {
+            typedef Types<T1,T2> ArgTypes;
+            Tuple<ArgTypes> params(p1,p2);
+            Closure<SIG> clo (params);
+            
+            cout << showSizeof(clo) << endl;
+            UNIMPLEMENTED ("complete Command definition by closing all functions");
+            return *this;
+          }
+        
+      };
+    
+    
+    
+    
+    /** type re-binding helper: create a suitable UndoDefinition type,
+     *  based on the UndoSignature template instance given as parameter */
+    template<typename U_SIG>
+    struct BuildUndoDefType
+      {
+        typedef UndoDefinition<typename U_SIG::OperateSig, typename U_SIG::Memento> Type;
+      };
+    
+    
+    
+    
+  
+  
+    template<typename SIG>
+    struct BasicDefinition
+      {
+        BasicDefinition(function<SIG>& operation)
+          {
+            cout << showSizeof(operation) << endl;
+            UNIMPLEMENTED ("create new command object and store the operation functor");
+          }
+        
+        
+        template<typename SIG2>
+        typename BuildUndoDefType<UndoSignature<SIG2> >::Type
+        captureUndo (SIG2& how_to_capture_UndoState)
+          {
+            typedef typename UndoSignature<SIG2>::CaptureSig UndoCapSig;
+            typedef typename BuildUndoDefType<UndoSignature<SIG2> >::Type SpecificUndoDefinition;
+            
+            function<UndoCapSig> opera2 (how_to_capture_UndoState);
+            return SpecificUndoDefinition (opera2);
+          }
+      };
+    
+  } // (END) namespace stage (definition process)
   
   
   /**
@@ -95,86 +182,11 @@ namespace control {
    *           .executeSync();                         // convenience call, forwarding the Command to dispatch.
    * \endcode
    * 
-   * @todo of course, this needs to be extracted into command-definition.hpp 
    */
   class CommandDef
     {
       Symbol id_;
       
-      template<typename SIG, typename MEM>
-      struct UndoDefinition
-        {
-          typedef typename FunctionSignature< function<SIG> >::Args BasicArgs;
-          typedef typename FunctionTypedef<MEM,BasicArgs>::Sig      UndoCaptureSig;
-          
-          UndoDefinition (function<UndoCaptureSig>& undoCapOperation)
-            {
-              cout << showSizeof(undoCapOperation) << endl;
-              UNIMPLEMENTED ("re-fetch command definition and augment it with Functor for capturing Undo information");
-            }
-          
-          template<typename SIG2>
-          UndoDefinition&
-          undoOperation (SIG2& how_to_Undo)
-            {
-              typedef typename UndoSignature<SIG2>::UndoOp_Sig UndoSig;
-              
-              function<UndoSig> opera3 (how_to_Undo);
-              
-              UNIMPLEMENTED ("store actual Undo-Functor into the command definition held by the enclosing UndoDefinition instance");
-              return *this;
-            }
-          
-          template
-            < typename T1
-            , typename T2
-            >
-          UndoDefinition&    ///////TODO return here the completed Command
-          bind ( T1& p1
-               , T2& p2
-               )
-            {
-              typedef Types<T1,T2> ArgTypes;
-              Tuple<ArgTypes> params(p1,p2);
-              Closure<SIG> clo (params);
-              
-              cout << showSizeof(clo) << endl;
-              UNIMPLEMENTED ("complete Command definition by closing all functions");
-              return *this;
-            }
-          
-        };
-      
-      /** type re-binding helper: create a suitable UndoDefinition type,
-       *  based on the UndoSignature template instance given as parameter */
-      template<typename U_SIG>
-      struct BuildUndoDefType
-        {
-          typedef UndoDefinition<typename U_SIG::OperateSig, typename U_SIG::Memento> Type;
-        };
-      
-      template<typename SIG>
-      struct BasicDefinition
-        {
-          BasicDefinition(function<SIG>& operation)
-            {
-              cout << showSizeof(operation) << endl;
-              UNIMPLEMENTED ("create new command object and store the operation functor");
-            }
-          
-          
-          template<typename SIG2>
-          typename BuildUndoDefType<UndoSignature<SIG2> >::Type
-          captureUndo (SIG2& how_to_capture_UndoState)
-            {
-              typedef typename UndoSignature<SIG2>::CaptureSig UndoCapSig;
-              typedef typename BuildUndoDefType<UndoSignature<SIG2> >::Type SpecificUndoDefinition;
-              
-              function<UndoCapSig> opera2 (how_to_capture_UndoState);
-              return SpecificUndoDefinition (opera2);
-            }
-          
-        };
       
     public:
       CommandDef (Symbol cmdID)
@@ -182,11 +194,11 @@ namespace control {
         { }
       
       template<typename SIG>
-      BasicDefinition<SIG>
+      stage::BasicDefinition<SIG>
       operation (SIG& operation_to_define)
         {
           function<SIG> opera1 (operation_to_define);
-          return BasicDefinition<SIG>(opera1);
+          return stage::BasicDefinition<SIG>(opera1);
         }
     };
   
