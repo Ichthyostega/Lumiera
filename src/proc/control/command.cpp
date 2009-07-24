@@ -31,7 +31,9 @@
 
 
 #include "proc/control/command.hpp"
+#include "proc/control/command-def.hpp"
 #include "proc/control/command-registry.hpp"
+#include "proc/control/handling-pattern.hpp"
 //#include "proc/mobject/mobject-ref.hpp"
 //#include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/placement.hpp"
@@ -46,12 +48,101 @@ namespace control {
   
 
 
+  Command::~Command() { }
+  
+
   /** */
   Command& 
   Command::get (Symbol cmdID)
   {
     UNIMPLEMENTED ("fetch an existing command from the internal cmd registry");
   }
+  
+  
+  bool
+  Command::remove (Symbol cmdID)
+  {
+    UNIMPLEMENTED ("de-register a single command instance");
+  }
+  
+  
+  bool
+  Command::undef (Symbol cmdID)
+  {
+    UNIMPLEMENTED ("completely drop a command definition, together with all dependent instances");
+  }
+  
+  
+  
+  size_t
+  Command::definition_count()
+  {
+    UNIMPLEMENTED ("return number of command definitions currently in the registry");
+  }
+  
+  
+  
+  size_t
+  Command::instance_count()
+  {
+    UNIMPLEMENTED ("return number individual command instances currently in the registry");
+  }
+  
+  
+  
+  bool
+  CommandDef::isValid()  const
+  {
+    UNIMPLEMENTED ("command *definition* validity self check");
+  }
+  
+  
+  
+  bool
+  Command::isValid()  const
+  {
+    UNIMPLEMENTED ("command validity self check");
+  }
+  
+  
+  
+  bool
+  Command::canExec()  const
+  {
+    UNIMPLEMENTED ("state check: sufficiently defined to be invoked");
+  }
+  
+  
+  
+  bool
+  Command::canUndo()  const
+  {
+    UNIMPLEMENTED ("state check: has undo state been captured?");
+  }
+
+  
+  
+  
+  void
+  Command::undo ()
+  {
+    exec (getDefaultHandlingPattern().howtoUNDO());
+  }
+  
+  
+  void
+  Command::exec (HandlingPattern const& execPattern)
+  {
+    execPattern.invoke (*this);
+  }
+  
+  
+  HandlingPattern const&
+  Command::getDefaultHandlingPattern()  const
+  {
+    UNIMPLEMENTED ("manage the default command handling pattern");
+  }
+
   
 
   

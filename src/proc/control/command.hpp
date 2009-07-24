@@ -38,6 +38,7 @@
 #include "include/symbol.hpp"
 #include "proc/control/command-mutation.hpp"
 #include "proc/control/command-closure.hpp"
+#include "lib/bool-checkable.hpp"
 
 //#include <tr1/memory>
 
@@ -51,24 +52,57 @@ namespace control {
 //  using std::tr1::shared_ptr;
   
   
+  class HandlingPattern;
+  
+  
   /**
    * @todo Type-comment
    */
   class Command
+    : public lib::BoolCheckable<Command>
     {
       
     public:
+      /* === command registry === */
       static Command& get (Symbol cmdID);
+      static bool  remove (Symbol cmdID); 
+      static bool   undef (Symbol cmdID); 
       
-      virtual ~Command() {};
       
-      virtual void operator() ()   =0;
-      virtual void undo ()         =0;         
       
+     ~Command();
+      
+      void operator() () ;
+      void undo () ;
+      
+      
+      /** core operation: invoke the command
+       *  @param execPattern describes the individual steps
+       *         necessary to get this command invoked properly
+       */
+      void exec (HandlingPattern const& execPattern);
+      
+      HandlingPattern const& getDefaultHandlingPattern()  const;
+      
+      
+      /* === diagnostics === */
+      
+      static size_t definition_count();
+      static size_t instance_count();
+      
+      bool isValid()  const;
+      bool canExec()  const;
+      bool canUndo()  const;
     };
   ////////////////TODO currently just fleshing  out the API....
   
-  
+
+  inline void
+  Command::operator() ()
+  {
+    exec (getDefaultHandlingPattern());
+  }
+
   
   
 } // namespace control

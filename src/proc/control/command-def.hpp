@@ -57,6 +57,7 @@
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/tuple.hpp"
+#include "lib/bool-checkable.hpp"
 
 //#include <tr1/memory>
 #include <tr1/functional>
@@ -184,6 +185,7 @@ namespace control {
    * 
    */
   class CommandDef
+    : public lib::BoolCheckable<CommandDef>
     {
       Symbol id_;
       
@@ -200,6 +202,9 @@ namespace control {
           function<SIG> opera1 (operation_to_define);
           return stage::BasicDefinition<SIG>(opera1);
         }
+      
+      
+      bool isValid()  const;
     };
   
   ////////////////TODO currently just fleshing  out the API....

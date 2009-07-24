@@ -58,6 +58,12 @@ namespace control {
       
     public:
       
+      virtual ~HandlingPattern() {}
+      
+      virtual void invoke (Command& command)  const  =0;
+      
+      virtual HandlingPattern const& howtoUNDO()  const  =0;
+      
     };
   ////////////////TODO currently just fleshing  out the API....
   

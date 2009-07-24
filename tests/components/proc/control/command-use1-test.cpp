@@ -88,7 +88,7 @@ namespace test    {
       virtual void
       run (Arg) 
         {
-          command1::checksum_ = 0;
+          command1::check_ = 0;
           uint cnt_defs = Command::definition_count();
           uint cnt_inst = Command::instance_count();
           
@@ -116,7 +116,7 @@ namespace test    {
               .execSync()
               ;
           
-          ASSERT (randVal == checksum_);
+          ASSERT (randVal == command1::check_);
           
           Command::get("test.command1.1").undo();
           ASSERT ( 0 == command1::check_);
@@ -250,10 +250,10 @@ namespace test    {
       void
       undef()
         {
-          ASSERT (CommandDef ("test.command1.1"))
-          ASSERT (CommandDef ("test.command1.2"))
-          ASSERT (CommandDef ("test.command1.3"))
-          ASSERT (CommandDef ("test.command1.4"))
+          ASSERT (CommandDef ("test.command1.1"));
+          ASSERT (CommandDef ("test.command1.2"));
+          ASSERT (CommandDef ("test.command1.3"));
+          ASSERT (CommandDef ("test.command1.4"));
           
           ASSERT (Command::get("test.command1.1"));
           ASSERT (Command::get("test.command1.2"));
