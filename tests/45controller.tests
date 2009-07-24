@@ -54,3 +54,18 @@ END
 TEST "Memento wiring and storage" MementoTie_test <<END
 return: 0
 END
+
+
+PLANNED "Command usage aspects I"  CommandUse1_test <<END
+return: 0
+END
+
+
+PLANNED "Command usage aspects II" CommandUse2_test <<END
+return: 0
+END
+
+
+PLANNED "Command usage aspects III" CommandUse3_test <<END
+return: 0
+END

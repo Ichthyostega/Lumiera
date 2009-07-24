@@ -50,6 +50,9 @@ test_components_SOURCES =							\
 	$(testcomponents_srcdir)/proc/control/command-basic-test.cpp		\
 	$(testcomponents_srcdir)/proc/control/command-argument-test.cpp		\
 	$(testcomponents_srcdir)/proc/control/command-mutation-test.cpp		\
+	$(testcomponents_srcdir)/proc/control/command-use1-test.cpp		\
+	$(testcomponents_srcdir)/proc/control/command-use2-test.cpp		\
+	$(testcomponents_srcdir)/proc/control/command-use3-test.cpp		\
 	$(testcomponents_srcdir)/proc/control/argument-tuple-accept-test.cpp	\
 	$(testcomponents_srcdir)/proc/control/memento-tie-test.cpp		\
 	$(testcomponents_srcdir)/proc/engine/bufftabletest.cpp			\

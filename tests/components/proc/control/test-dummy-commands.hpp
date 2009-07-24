@@ -61,42 +61,88 @@
 //#include <string>
 
 //using boost::format;
+
 //using lumiera::Time;
 //using util::contains;
 //using std::string;
 //using std::rand;
 //using std::cout;
 //using std::endl;
+#include <tr1/functional>
+#include <sstream>
+#include <string>
 
 
 namespace control {
 namespace test    {
 
 //  using lib::test::showSizeof;
+  using std::ostringstream;
+  using std::tr1::function;
+  using std::string;
 
   
   
   
   namespace command1 { ///< test command just adding a given value
     
-    long checksum_ = 0;
+    long check_ = 0;
       
     void
     operate (int someVal)
     {
-      checksum_ += someVal;
+      check_ += someVal;
     }
     
     long
     capture (int)
     {
-      return checksum_;
+      return check_;
     }
     
     void
     undoIt (int, long oldVal)
     {
-      checksum_ = oldVal;
+      check_ = oldVal;
+    }
+  
+  }
+  
+  
+  
+  
+  
+  namespace command2 { ///< test command writing to protocol and possibly throwing
+    
+    using lumiera::error::External;
+    
+    
+    ostringstream check_;
+      
+    
+    typedef function<string()> FunS;
+    
+    void
+    operate (FunS func, bool fail)
+    {
+      if (fail) throw External("simulated exception");
+      
+      check_ << func();
+    }
+    
+    string
+    capture (FunS, bool)
+    {
+      return check_.str();
+    }
+    
+    void
+    undoIt (FunS, bool fail, string previousProtocol)
+    {
+      if (fail) throw External("simulated exception in UNDO");
+      
+      check_.seekp(0);
+      check_ << previousProtocol << "|UNDO|";
     }
   
   }

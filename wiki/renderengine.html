@@ -1012,20 +1012,20 @@ A command may be [[defined|CommandDefinition]] completely from scratch, or it mi
 By design, commands are single-serving value objects; executing an operation repeatedly requires creating a collection of command objects, one for each invocation. While nothing prevents you from invoking the command operation functor several times, each invocation will overwrite the undo state captrued by the previous invocation. Thus, each command instance should bes seen as the promise (or later the trace) of a single operation execution. In a similar vein, the undo capturing should be defined as to be self sufficient, so that invoking just the undo functor of a single command performes any necessary steps to restore the situation found before invoking the corresponding mutation functor &amp;mdash; of course only //with respect to the topic covered by this command.// So, while commands provide a lot of flexibility and allow to do a multitude of things, certainly there is an intended CommandLifecycle.
 &amp;rarr; more on possible [[command usage scenarios|CommandUsage]]</pre>
 </div>
-<div title="CommandLifecycle" modifier="Ichthyostega" modified="200907210211" created="200907210135" tags="SessionLogic spec draft design img" changecount="5">
+<div title="CommandLifecycle" modifier="Ichthyostega" modified="200907240010" created="200907210135" tags="SessionLogic spec draft design img" changecount="10">
 <pre>[&lt;img[Structure of Commands|uml/fig135173.png]]
 While generally the command framework was designed to be flexible and allow a lot of different use cases, execution paths and to serve various goals, there is an ''intended lifecycle'' &amp;mdash; commands are expected to go through several distinct states.
 
-The handling of a command starts out with a ''command ID'' provided by the client code. Command IDs are unique (human readable) identifiers and should be organised in a hierarchical fashion. When provided with an ID, the CommandRegistry tries to fetch an existing command definition. In case this fails, we enter the [[command definition stage|CommandDefinition]], which includes specifying functions to implement the operation, state capturing and UNDO. When all these informations are available, the entity is called a ''command definition''. It is comparable to a //class// or //meta object.//
+The handling of a command starts out with a ''command ID'' provided by the client code. Command IDs are unique (human readable) identifiers and should be organised in a hierarchical fashion. When provided with an ID, the CommandRegistry tries to fetch an existing command definition. In case this fails, we enter the [[command definition stage|CommandDefinition]], which includes specifying functions to implement the operation, state capturing and UNDO. When all these informations are available, the entity is called a ''command definition''. Conceptually, it is comparable to a //class// or //meta object.//
 
-By ''binding'' to specific operation arguments, the definition is //armed// and becomes a real ''command''. This is similar to creating an instance from a class
+By ''binding'' to specific operation arguments, the definition is //armed up//&amp;nbsp; and becomes a real ''command''. This is similar to creating an instance from a class. Behind the scenes, storage is allocated to hold the argument values and any state captured to create the ability to UNDO the command's effect later on.
 
 A command is operated or executed by passing it to an ''execution pattern'' &amp;mdash; there is a multitude of possible execution patterns to choose from, depending on the situation. 
 {{red{WIP}}}
-When a command has been executed (and maybe undone), it's best to leave it alone, because the UndoManager might hold a reference. At any time, c ''clone of the command'' could be created, maybe bound with different arguments and treated separately from the original command.
+When a command has been executed (and maybe undone), it's best to leave it alone, because the UndoManager might hold a reference. Anyway, a ''clone of the command'' could be created, maybe bound with different arguments and treated separately from the original command.
 </pre>
 </div>
-<div title="CommandUsage" modifier="Ichthyostega" modified="200907230031" created="200907212338" tags="SessionLogic draft dynamic" changecount="4">
+<div title="CommandUsage" modifier="Ichthyostega" modified="200907232209" created="200907212338" tags="SessionLogic draft dynamic" changecount="5">
 <pre>//for now (7/09) I'll use this page to collect ideas how commands might be used...//
 
 * use a command for getting a log entry and an undo possibility automatically
@@ -1052,7 +1052,7 @@ When a command has been executed (and maybe undone), it's best to leave it alone
 
 !!!an execution pattern....
 * can only be defined in code by a class definition, not at runtime
-* subclasses the !HandlingPattern interface, which automatically creates an registration.
+* subclasses the ~HandlingPattern interface, which automatically creates an registration.
 * a singleton instance is created on demand, triggered by referring the pattern's ID
 * is conceptually //stateless// &amp;mdash; of course there can be common configuration values
 * is always invoked providing a concrete command instance to execute
