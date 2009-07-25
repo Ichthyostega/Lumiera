@@ -115,7 +115,7 @@ namespace util {
   /** shortcut for string value containment test */
   template <typename T>
   inline bool 
-  contains (std::string& str, const T& val)
+  contains (std::string const& str, const T& val)
   {
     return str.find (val) != std::string::npos;
   }
@@ -124,7 +124,7 @@ namespace util {
    *  in any sequential container */
   template <typename SEQ>
   inline bool 
-  contains (SEQ& cont, typename SEQ::const_reference val)
+  contains (SEQ const& cont, typename SEQ::const_reference val)
   {
     typename SEQ::const_iterator begin = cont.begin();
     typename SEQ::const_iterator end   = cont.end();
