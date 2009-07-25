@@ -379,6 +379,75 @@ namespace typelist{
             , typename T4
             , typename T5
             , typename T6
+            >
+    inline
+    Tuple< Types<T1,T2,T3,T4,T5,T6> >
+    make ( T1 a1 =T1()
+         , T2 a2 =T2()
+         , T3 a3 =T3()
+         , T4 a4 =T4()
+         , T5 a5 =T5()
+         , T6 a6 =T6()
+         )
+    {
+      return Tuple<Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> > (a1,a2,a3,a4,a5,a6);
+    }
+    
+    
+    template< typename T1
+            , typename T2
+            , typename T3
+            , typename T4
+            , typename T5
+            , typename T6
+            , typename T7
+            >
+    inline
+    Tuple< Types<T1,T2,T3,T4,T5,T6,T7> >
+    make ( T1 a1 =T1()
+         , T2 a2 =T2()
+         , T3 a3 =T3()
+         , T4 a4 =T4()
+         , T5 a5 =T5()
+         , T6 a6 =T6()
+         , T7 a7 =T7()
+         )
+    {
+      return Tuple<Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> > (a1,a2,a3,a4,a5,a6,a7);
+    }
+    
+    
+    template< typename T1
+            , typename T2
+            , typename T3
+            , typename T4
+            , typename T5
+            , typename T6
+            , typename T7
+            , typename T8
+            >
+    inline
+    Tuple< Types<T1,T2,T3,T4,T5,T6,T7,T8> >
+    make ( T1 a1 =T1()
+         , T2 a2 =T2()
+         , T3 a3 =T3()
+         , T4 a4 =T4()
+         , T5 a5 =T5()
+         , T6 a6 =T6()
+         , T7 a7 =T7()
+         , T8 a8 =T8()
+         )
+    {
+      return Tuple<Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> > (a1,a2,a3,a4,a5,a6,a7,a8);
+    }
+    
+    
+    template< typename T1
+            , typename T2
+            , typename T3
+            , typename T4
+            , typename T5
+            , typename T6
             , typename T7
             , typename T8
             , typename T9
