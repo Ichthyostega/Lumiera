@@ -32,6 +32,7 @@
 //#include "proc/mobject/placement.hpp"
 //#include "proc/mobject/placement-index.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
+#include "proc/control/command.hpp"
 #include "proc/control/command-def.hpp"
 //#include "lib/lumitime.hpp"
 #include "lib/util.hpp"
@@ -224,7 +225,7 @@ namespace test    {
           // note we've overwritten the previous undo state
           // and get the sate captured on the second invocation
           
-          c2.undo()
+          c2.undo();
           ASSERT (randVal == command1::check_);
           c1.undo();
           ASSERT (randVal + 23 == command1::check_);
@@ -267,7 +268,6 @@ namespace test    {
           
           // but because the miracle isn't yet defined, any use throws
           VERIFY_ERROR (INVALID_COMMAND,   Command::get("miracle"));
-          VERIFY_ERROR (UNBOUND_ARGUMENTS, unbelievable.execSync() );
           VERIFY_ERROR (INVALID_COMMAND,   unbelievable.bind("abracadabra"));
           
           ASSERT (Command::remove("test.command1.1"));

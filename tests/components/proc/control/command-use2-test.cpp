@@ -32,7 +32,9 @@
 //#include "proc/mobject/placement.hpp"
 //#include "proc/mobject/placement-index.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
+#include "proc/control/command.hpp"
 #include "proc/control/command-def.hpp"
+#include "proc/control/handling-pattern.hpp"
 //#include "lib/lumitime.hpp"
 #include "lib/util.hpp"
 
@@ -41,6 +43,7 @@
 #include <tr1/functional>
 #include <boost/ref.hpp>
 #include <boost/format.hpp>
+#include <boost/lexical_cast.hpp>
 //#include <iostream>
 //#include <cstdlib>
 #include <string>
@@ -62,6 +65,7 @@ namespace test    {
   //using std::endl;
 //  using lib::test::showSizeof;
 //  using util::isSameObject;
+  using boost::lexical_cast;
   using util::contains;
   using boost::ref;
 
@@ -73,6 +77,20 @@ namespace test    {
   using lumiera::error::LUMIERA_ERROR_EXTERNAL;
   
   
+  /** diagnostics: checks if the given value has been written
+   *  to the test protocol (string stream) of command2 
+   *  Explanation: command2 accepts a function, invokes
+   *  it and writes the result to the protocol stream. 
+   */
+  template<typename TY>
+  inline bool
+  protocolled (TY val2check)
+    {
+      return contains ( command2::check_.str()
+                      , lexical_cast<string> (val2check)
+                      );
+    }
+      
   
   
   
@@ -95,7 +113,7 @@ namespace test    {
           return str (fmt % randVal_);
         }
       
-      bool blowUp_ = false;
+      bool blowUp_;
       
       
       virtual void
@@ -114,8 +132,8 @@ namespace test    {
               .undoOperation (command2::undoIt)
               .bind (randFun, ref(blowUp_));
           
-              // note: blowUp_ is bound via reference_wrapper,
-              //       so we can pull the trigger to provoke an exception
+           //note : blowUp_ is bound via reference_wrapper,
+          //        thus we can provoke an exception at will.
           blowUp_ = false;
           
           
@@ -136,18 +154,18 @@ namespace test    {
         {
           Command com = Command::get("test.command2");
           
-          ASSERT (!contains (command2::check_, "invoked"));
+          ASSERT (!protocolled("invoked"));
           
           bool res = com();
           
           ASSERT (res);
-          ASSERT (contains (command2::check_, "invoked"));
-          ASSERT (contains (command2::check_, randVal_));
+          ASSERT (protocolled("invoked"));
+          ASSERT (protocolled(randVal_));
           
           res = com.undo();
           ASSERT (res);        // UNDO invoked successfully
-          ASSERT (!contains (command2::check_, randVal_));
-          ASSERT (contains (command2::check_, "UNDO"));
+          ASSERT (!protocolled(randVal_));
+          ASSERT (protocolled("UNDO"));
           
           blowUp_ = true;
           string current = command2::check_.str();
@@ -174,7 +192,7 @@ namespace test    {
           
           blowUp_ = false;
           com.exec(HandlingPattern::THROW_SYNC);
-          ASSERT (contains (command2::check_, randVal_));
+          ASSERT (protocolled(randVal_));
           
           blowUp_ = true;
           string current = command2::check_.str();
@@ -193,10 +211,10 @@ namespace test    {
           blowUp_ = false;
           com2();
           ASSERT (command2::check_.str() > current);
-          ASSERT (contains (command2::check_, randVal_));
+          ASSERT (protocolled(randVal_));
           
           com2.undo();
-          ASSERT (!contains (command2::check_, randVal_));
+          ASSERT (!protocolled(randVal_));
         }
     };
   

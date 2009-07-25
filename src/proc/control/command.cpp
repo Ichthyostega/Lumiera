@@ -43,8 +43,10 @@
 
 namespace control {
   
+  LUMIERA_ERROR_DEFINE (INVALID_COMMAND,   "Unknown or insufficiently defined command");
+  LUMIERA_ERROR_DEFINE (INVALID_ARGUMENTS, "Arguments provided for binding doesn't match stored command function parameters");
   LUMIERA_ERROR_DEFINE (UNBOUND_ARGUMENTS, "Command mutation functor not yet usable, because arguments aren't bound");
-  LUMIERA_ERROR_DEFINE (MISSING_MEMENTO, "Undo functor not yet usable, because no undo state has been captured");
+  LUMIERA_ERROR_DEFINE (MISSING_MEMENTO,   "Undo functor not yet usable, because no undo state has been captured");
   
 
 
@@ -142,6 +144,15 @@ namespace control {
   {
     UNIMPLEMENTED ("manage the default command handling pattern");
   }
+  
+  
+  template<typename TYPES>
+  void
+  Command::bindArg (Tuple<TYPES> const& args)
+  {
+    UNIMPLEMENTED ("create an argument-binding, with runtime type check");
+  }
+
 
   
 

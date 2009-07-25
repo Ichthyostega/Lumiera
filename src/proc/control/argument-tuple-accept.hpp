@@ -22,7 +22,7 @@
 
 
 /** @file argument-tuple-accept.hpp
- ** The ArgumentTupleAccept template allows to mix in a \c bind(...) function.
+ ** The AcceptArgumentTuple template allows to mix in a \c bind(...) function.
  ** Thereby, the correct number and types of arguments is derived according to
  ** the function signature given as template parameter. This helper template is
  ** used for the ArgumentHolder and generally for binding the arguments when
@@ -257,7 +257,7 @@ namespace control {
    *  @param BASE the base class for inheritance chaining
    */
   template<typename SIG, class TAR, class BASE>
-  class ArgumentTupleAccept
+  class AcceptArgumentTuple
     : public bind_arg::AcceptArgs<TAR,BASE, typename bind_arg::_Type<SIG>::Args>
     {
     };

@@ -390,7 +390,7 @@ namespace typelist{
          , T6 a6 =T6()
          )
     {
-      return Tuple<Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> > (a1,a2,a3,a4,a5,a6);
+      return Tuple<Types<T1,T2,T3,T4,T5,T6> > (a1,a2,a3,a4,a5,a6);
     }
     
     
@@ -413,7 +413,7 @@ namespace typelist{
          , T7 a7 =T7()
          )
     {
-      return Tuple<Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> > (a1,a2,a3,a4,a5,a6,a7);
+      return Tuple<Types<T1,T2,T3,T4,T5,T6,T7> > (a1,a2,a3,a4,a5,a6,a7);
     }
     
     
@@ -438,7 +438,7 @@ namespace typelist{
          , T8 a8 =T8()
          )
     {
-      return Tuple<Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> > (a1,a2,a3,a4,a5,a6,a7,a8);
+      return Tuple<Types<T1,T2,T3,T4,T5,T6,T7,T8> > (a1,a2,a3,a4,a5,a6,a7,a8);
     }
     
     

@@ -1,5 +1,5 @@
 /*
-  ArgumentTupleAccept(Test)  -  verify synthesising a bind(...) function
+  AcceptArgumentTuple(Test)  -  verify synthesising a bind(...) function
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -63,7 +63,7 @@ namespace test    {
     
     template<typename SIG>
     class TestClass
-      : public ArgumentTupleAccept< SIG                     // to derive the desired signature
+      : public AcceptArgumentTuple< SIG                     // to derive the desired signature
                                   , TestClass<SIG>          // the target class providing the implementation
                                   , typename Tup<SIG>::Ty   // base class to inherit from
                                   >
@@ -93,7 +93,7 @@ namespace test    {
    *       
    * @see  control::CommandArgumentHolder
    */
-  class ArgumentTupleAccept_test : public Test
+  class AcceptArgumentTuple_test : public Test
     {
       
       virtual void
@@ -117,7 +117,7 @@ namespace test    {
   
   
   /** Register this test class... */
-  LAUNCHER (ArgumentTupleAccept_test, "unit controller");
+  LAUNCHER (AcceptArgumentTuple_test, "unit controller");
   
   
 }} // namespace control::test

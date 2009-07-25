@@ -34,8 +34,9 @@
 #ifndef CONTROL_COMMAND_H
 #define CONTROL_COMMAND_H
 
-//#include "pre.hpp"
+#include "pre.hpp"
 #include "include/symbol.hpp"
+#include "proc/control/command-binding.hpp"
 #include "proc/control/command-mutation.hpp"
 #include "proc/control/command-closure.hpp"
 #include "lib/bool-checkable.hpp"
@@ -51,6 +52,11 @@ namespace control {
   using lumiera::Symbol;
 //  using std::tr1::shared_ptr;
   
+  LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Command functor not yet usable, because arguments aren't bound
+  LUMIERA_ERROR_DECLARE (INVALID_COMMAND);    ///< Unknown or insufficiently defined command
+  LUMIERA_ERROR_DECLARE (INVALID_ARGUMENTS);  ///< Arguments provided for binding doesn't match stored command function parameters
+
+  
   
   class HandlingPattern;
   
@@ -59,7 +65,8 @@ namespace control {
    * @todo Type-comment
    */
   class Command
-    : public lib::BoolCheckable<Command>
+    : public com::ArgumentBinder<Command
+           , lib::BoolCheckable<Command> >
     {
       
     public:
@@ -83,6 +90,10 @@ namespace control {
       void exec (HandlingPattern const& execPattern);
       
       HandlingPattern const& getDefaultHandlingPattern()  const;
+      
+      
+      template<typename TYPES>
+      void bindArg (Tuple<TYPES> const&);
       
       
       /* === diagnostics === */

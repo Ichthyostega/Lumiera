@@ -43,7 +43,7 @@ out: saved state: 11
 END
 
 
-TEST "build argument accepting function" ArgumentTupleAccept_test <<END
+TEST "build argument accepting function" AcceptArgumentTuple_test <<END
 out: sizeof\( .+control.+TestClass.+ \) =   1
 out: sizeof\( .+control.+TestClass.+lumiera.Time.+ \) =  ( 8)|(16)
 out: 00:..:..\.000
