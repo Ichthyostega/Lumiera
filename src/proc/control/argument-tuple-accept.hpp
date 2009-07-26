@@ -55,7 +55,7 @@ namespace control {
     
     /** @internal mix in a \c bind() function
      */
-    template< class TAR, class BA
+    template< class TAR, class BA, class RET
             , typename TYPES
             >
     struct AcceptArgs ;
@@ -63,100 +63,100 @@ namespace control {
     
     /* specialisations for 0...9 Arguments.... */
     
-    template< class TAR, class BA
+    template< class TAR, class BA, class RET
             >                                                                        //____________________________________
-    struct AcceptArgs<TAR,BA, Types<> >                                             ///< Accept dummy binding (0 Arguments)
+    struct AcceptArgs<TAR,BA,RET, Types<> >                                         ///< Accept dummy binding (0 Arguments)
       : BA
       {
-        void
+        RET
         bind ()
           {
-            static_cast<TAR*> (this) -> bindArg (tuple::makeNullTuple() );
+            return static_cast<TAR*> (this) -> bindArg (tuple::makeNullTuple() );
           }
       };
     
     
-    template< class TAR, class BA
+    template< class TAR, class BA, class RET
             , typename T1
             >                                                                        //_______________________________
-    struct AcceptArgs<TAR,BA, Types<T1> >                                           ///< Accept binding for 1 Argument
+    struct AcceptArgs<TAR,BA,RET, Types<T1> >                                       ///< Accept binding for 1 Argument
       : BA
       {
-        void
+        RET
         bind (T1 a1)
           {
-            static_cast<TAR*> (this) -> bindArg (tuple::make (a1));
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1));
           }
       };
     
     
-    template< class TAR, class BA
+    template< class TAR, class BA, class RET
             , typename T1
             , typename T2
             >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA, Types<T1,T2> >                                        ///< Accept binding for 2 Arguments
+    struct AcceptArgs<TAR,BA,RET, Types<T1,T2> >                                    ///< Accept binding for 2 Arguments
       : BA
       {
-        void
+        RET
         bind (T1 a1, T2 a2)
           {
-            static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2));
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2));
           }
       };
     
     
-    template< class TAR, class BA
+    template< class TAR, class BA, class RET
             , typename T1
             , typename T2
             , typename T3
             >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA, Types<T1,T2,T3> >                                     ///< Accept binding for 3 Arguments
+    struct AcceptArgs<TAR,BA,RET, Types<T1,T2,T3> >                                 ///< Accept binding for 3 Arguments
       : BA
       {
-        void
+        RET
         bind (T1 a1, T2 a2, T3 a3)
           {
-            static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3));
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3));
           }
       };
     
     
-    template< class TAR, class BA
+    template< class TAR, class BA, class RET
             , typename T1
             , typename T2
             , typename T3
             , typename T4
             >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA, Types<T1,T2,T3,T4> >                                  ///< Accept binding for 4 Arguments
+    struct AcceptArgs<TAR,BA,RET, Types<T1,T2,T3,T4> >                              ///< Accept binding for 4 Arguments
       : BA
       {
-        void
+        RET
         bind (T1 a1, T2 a2, T3 a3, T4 a4)
           {
-            static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4));
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4));
           }
       };
     
     
-    template< class TAR, class BA
+    template< class TAR, class BA, class RET
             , typename T1
             , typename T2
             , typename T3
             , typename T4
             , typename T5
             >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA, Types<T1,T2,T3,T4,T5> >                               ///< Accept binding for 5 Arguments
+    struct AcceptArgs<TAR,BA,RET, Types<T1,T2,T3,T4,T5> >                           ///< Accept binding for 5 Arguments
       : BA
       {
-        void
+        RET
         bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5)
           {
-            static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5));
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5));
           }
       };
     
     
-    template< class TAR, class BA
+    template< class TAR, class BA, class RET
             , typename T1
             , typename T2
             , typename T3
@@ -164,18 +164,18 @@ namespace control {
             , typename T5
             , typename T6
             >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA, Types<T1,T2,T3,T4,T5,T6> >                            ///< Accept binding for 6 Arguments
+    struct AcceptArgs<TAR,BA,RET, Types<T1,T2,T3,T4,T5,T6> >                        ///< Accept binding for 6 Arguments
       : BA
       {
-        void
+        RET
         bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6)
           {
-            static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6));
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6));
           }
       };
     
     
-    template< class TAR, class BA
+    template< class TAR, class BA, class RET
             , typename T1
             , typename T2
             , typename T3
@@ -184,18 +184,18 @@ namespace control {
             , typename T6
             , typename T7
             >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA, Types<T1,T2,T3,T4,T5,T6,T7> >                         ///< Accept binding for 7 Arguments
+    struct AcceptArgs<TAR,BA,RET, Types<T1,T2,T3,T4,T5,T6,T7> >                     ///< Accept binding for 7 Arguments
       : BA
       {
-        void
+        RET
         bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7)
           {
-            static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7));
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7));
           }
       };
     
     
-    template< class TAR, class BA
+    template< class TAR, class BA, class RET
             , typename T1
             , typename T2
             , typename T3
@@ -205,18 +205,18 @@ namespace control {
             , typename T7
             , typename T8
             >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA, Types<T1,T2,T3,T4,T5,T6,T7,T8> >                      ///< Accept binding for 8 Arguments
+    struct AcceptArgs<TAR,BA,RET, Types<T1,T2,T3,T4,T5,T6,T7,T8> >                  ///< Accept binding for 8 Arguments
       : BA
       {
-        void
+        RET
         bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8)
           {
-            static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7,a8));
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7,a8));
           }
       };
     
     
-    template< class TAR, class BA
+    template< class TAR, class BA, class RET
             , typename T1
             , typename T2
             , typename T3
@@ -227,13 +227,13 @@ namespace control {
             , typename T8
             , typename T9
             >                                                                        //________________________________
-    struct AcceptArgs<TAR,BA, Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> >                   ///< Accept binding for 9 Arguments
+    struct AcceptArgs<TAR,BA,RET, Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> >               ///< Accept binding for 9 Arguments
       : BA
       {
-        void
+        RET
         bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9)
           {
-            static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7,a8,a9));
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7,a8,a9));
           }
       };
     
@@ -243,25 +243,40 @@ namespace control {
     struct _Type
       {
         typedef typename FunctionSignature< function<SIG> >::Args Args;
+        typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
         typedef Tuple<Args> ArgTuple;
       };
   
+    struct Dummy {}; 
+    
+    
   } // (END) impl details
   
   
   
   
   /** Helper Template for Proc-Layer control::Command : mix in a \c bind(...) function
-   *  @param SIG  function signature to mimic (regarding the arguments; return type will be void)
+   *  @param SIG  function signature to mimic (regarding the arguments and return type)
    *  @param TAR  the target class providing a function \c bindArg(Tuple<Types<T1...> >)
    *  @param BASE the base class for inheritance chaining
    */
-  template<typename SIG, class TAR, class BASE>
+  template<typename SIG, class TAR, class BASE =bind_arg::Dummy>
   class AcceptArgumentTuple
-    : public bind_arg::AcceptArgs<TAR,BASE, typename bind_arg::_Type<SIG>::Args>
+    : public bind_arg::AcceptArgs<TAR,BASE, typename bind_arg::_Type<SIG>::Ret
+                                          , typename bind_arg::_Type<SIG>::Args>   
     {
     };
   
+    
+  /** Variation of AcceptArgumentTuple, allowing to control the return type 
+   *  of the generated \c bind(...) functions independently from SIG
+   */
+  template<typename RET, typename SIG, class TAR, class BASE =bind_arg::Dummy>
+  class AcceptArgumentTupleRet
+    : public bind_arg::AcceptArgs<TAR,BASE, RET
+                                          , typename bind_arg::_Type<SIG>::Args>
+    {
+    };
   
   
   
