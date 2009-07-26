@@ -267,8 +267,7 @@ namespace test    {
           ASSERT (!unbelievable);
           
           // but because the miracle isn't yet defined, any use throws
-          VERIFY_ERROR (INVALID_COMMAND,   Command::get("miracle"));
-          VERIFY_ERROR (INVALID_COMMAND,   unbelievable.bind("abracadabra"));
+          VERIFY_ERROR (INVALID_COMMAND, Command::get("miracle"));
           
           ASSERT (Command::remove("test.command1.1"));
           ASSERT (Command::remove("test.command1.2"));

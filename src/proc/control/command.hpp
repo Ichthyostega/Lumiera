@@ -58,6 +58,7 @@ namespace control {
 
   
   
+  class CommandDef;
   class HandlingPattern;
   
   
@@ -73,8 +74,9 @@ namespace control {
       /* === command registry === */
       static Command& get (Symbol cmdID);
       static bool  remove (Symbol cmdID); 
-      static bool   undef (Symbol cmdID); 
+      static bool   undef (Symbol cmdID);
       
+      CommandDef storeDef (Symbol newCmdID);
       
       
      ~Command();
@@ -88,6 +90,8 @@ namespace control {
        *         necessary to get this command invoked properly
        */
       void exec (HandlingPattern const& execPattern);
+      
+      void execSync ();
       
       HandlingPattern const& getDefaultHandlingPattern()  const;
       
@@ -104,6 +108,12 @@ namespace control {
       bool isValid()  const;
       bool canExec()  const;
       bool canUndo()  const;
+      
+    protected:
+     static Command& fetchDef (Symbol cmdID);
+     
+     friend class CommandDef;
+
     };
   ////////////////TODO currently just fleshing  out the API....
   

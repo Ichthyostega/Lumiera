@@ -53,6 +53,7 @@
 #include "proc/control/command-signature.hpp"
 #include "proc/control/command-mutation.hpp"
 #include "proc/control/command-closure.hpp"
+#include "proc/control/argument-tuple-accept.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
@@ -74,7 +75,7 @@ namespace control {
   using lumiera::typelist::FunctionSignature;
   using lumiera::typelist::FunctionTypedef;
   using lumiera::typelist::Types;
-//using lumiera::typelist::NullType;
+  using lumiera::typelist::NullType;
   using lumiera::typelist::Tuple;
   
   
@@ -84,11 +85,17 @@ namespace control {
     
     template<typename SIG, typename MEM>
     struct UndoDefinition
+      : AcceptArgumentTupleRet< Command&, SIG               // Return type and Argument Signature of the \c bind(..) function
+                              , UndoDefinition<SIG,MEM>    //  target type (this class) providing the implementation \c bindArg(Tuple<..>) 
+                              >
       {
         typedef typename FunctionSignature< function<SIG> >::Args BasicArgs;
         typedef typename FunctionTypedef<MEM,BasicArgs>::Sig      UndoCaptureSig;
         
-        UndoDefinition (function<UndoCaptureSig>& undoCapOperation)
+        Command& prototype_;
+        
+        UndoDefinition (Command& underConstruction, function<UndoCaptureSig>& undoCapOperation)
+          : prototype_(underConstruction)
           {
             cout << showSizeof(undoCapOperation) << endl;
             UNIMPLEMENTED ("re-fetch command definition and augment it with Functor for capturing Undo information");
@@ -106,22 +113,15 @@ namespace control {
             return *this;
           }
         
-        template
-          < typename T1
-          , typename T2
-          >
-        UndoDefinition&    ///////TODO return here the completed Command
-        bind ( T1& p1
-             , T2& p2
-             )
+        
+        Command&
+        bindArg (Tuple<BasicArgs> const& params)
           {
-            typedef Types<T1,T2> ArgTypes;
-            Tuple<ArgTypes> params(p1,p2);
             Closure<SIG> clo (params);
             
             cout << showSizeof(clo) << endl;
             UNIMPLEMENTED ("complete Command definition by closing all functions");
-            return *this;
+            return prototype_;
           }
         
       };
@@ -145,7 +145,10 @@ namespace control {
     template<typename SIG>
     struct BasicDefinition
       {
-        BasicDefinition(function<SIG>& operation)
+        Command& prototype_;
+        
+        BasicDefinition(Command& underConstruction, function<SIG>& operation)
+          : prototype_(underConstruction)
           {
             cout << showSizeof(operation) << endl;
             UNIMPLEMENTED ("create new command object and store the operation functor");
@@ -160,7 +163,7 @@ namespace control {
             typedef typename BuildUndoDefType<UndoSignature<SIG2> >::Type SpecificUndoDefinition;
             
             function<UndoCapSig> opera2 (how_to_capture_UndoState);
-            return SpecificUndoDefinition (opera2);
+            return SpecificUndoDefinition (prototype_, opera2);
           }
       };
     
@@ -188,11 +191,12 @@ namespace control {
     : public lib::BoolCheckable<CommandDef>
     {
       Symbol id_;
-      
+      Command& prototype_;
       
     public:
       CommandDef (Symbol cmdID)
         : id_(cmdID)
+        , prototype_(Command::fetchDef(cmdID))
         { }
       
       template<typename SIG>
@@ -200,7 +204,7 @@ namespace control {
       operation (SIG& operation_to_define)
         {
           function<SIG> opera1 (operation_to_define);
-          return stage::BasicDefinition<SIG>(opera1);
+          return stage::BasicDefinition<SIG>(prototype_, opera1);
         }
       
       

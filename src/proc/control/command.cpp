@@ -61,6 +61,20 @@ namespace control {
   }
   
   
+  Command&
+  Command::fetchDef (Symbol cmdID)
+  {
+    UNIMPLEMENTED ("fetch an command prototype from the registry, create if necessary");
+  }
+  
+  
+  CommandDef
+  Command::storeDef (Symbol newCmdID)
+  {
+    UNIMPLEMENTED ("create a new definition & prototype based on this command");
+  }
+  
+  
   bool
   Command::remove (Symbol cmdID)
   {
@@ -136,6 +150,13 @@ namespace control {
   Command::exec (HandlingPattern const& execPattern)
   {
     execPattern.invoke (*this);
+  }
+  
+  
+  void
+  Command::execSync ()
+  {
+    exec (HandlingPattern::get(HandlingPattern::SYNC_THROW));
   }
   
   

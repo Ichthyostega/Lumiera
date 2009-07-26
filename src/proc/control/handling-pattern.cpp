@@ -33,6 +33,11 @@
 namespace control {
   
   /** */
+  HandlingPattern const&
+  HandlingPattern::get (ID id)
+  {
+    UNIMPLEMENTED ("Factory for handling patterns");
+  }
   
   
   ///////////////////////////////////////////////////////////////////////TODO: is this implementation file actually required??

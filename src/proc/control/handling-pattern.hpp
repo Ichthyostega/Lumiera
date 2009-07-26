@@ -35,6 +35,7 @@
 #define CONTROL_HANDLING_PATTERN_H
 
 //#include "pre.hpp"
+#include "lib/error.hpp"
 //#include "include/symbol.hpp"
 
 //#include <tr1/memory>
@@ -57,6 +58,15 @@ namespace control {
     {
       
     public:
+      
+      enum ID
+        { SYNC
+        , SYNC_THROW
+        , ASYNC
+        };
+      
+      static HandlingPattern const& get (ID id);
+      
       
       virtual ~HandlingPattern() {}
       

@@ -191,17 +191,17 @@ namespace test    {
           Command com = Command::get("test.command2");
           
           blowUp_ = false;
-          com.exec(HandlingPattern::THROW_SYNC);
+          com.exec(HandlingPattern::SYNC_THROW);
           ASSERT (protocolled(randVal_));
           
           blowUp_ = true;
           string current = command2::check_.str();
-          VERIFY_ERROR( EXTERNAL, com.exec(HandlingPattern::THROW_SYNC) );
+          VERIFY_ERROR( EXTERNAL, com.exec(HandlingPattern::get(SYNC_THROW)) );
           ASSERT (command2::check_.str() == current);
           
           // we can achieve the same effect,
           // after changing the default HandlingPatern for this command instance
-          com.setHandlingPattern(HandlingPattern::THROW_SYNC);
+          com.setHandlingPattern(HandlingPattern::SYNC_THROW);
           com.storeDef ("test.command2.1");
           
           Command com2 = Command::get("test.command2.1");
