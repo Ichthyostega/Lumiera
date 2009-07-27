@@ -40,6 +40,7 @@
 #include "proc/control/command-mutation.hpp"
 #include "proc/control/command-closure.hpp"
 #include "lib/bool-checkable.hpp"
+#include "lib/handle.hpp"
 
 //#include <tr1/memory>
 
@@ -68,6 +69,7 @@ namespace control {
   class Command
     : public com::ArgumentBinder<Command
            , lib::BoolCheckable<Command> >
+    ////////////////////////////////////////////////////////////////TODO: inherit from lib/handle
     {
       
     public:

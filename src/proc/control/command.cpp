@@ -2,7 +2,7 @@
   Command  -  Key abstraction for proc/edit operations and UNDO management
  
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2009,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
