@@ -48,9 +48,16 @@ namespace control {
   LUMIERA_ERROR_DEFINE (UNBOUND_ARGUMENTS, "Command mutation functor not yet usable, because arguments aren't bound");
   LUMIERA_ERROR_DEFINE (MISSING_MEMENTO,   "Undo functor not yet usable, because no undo state has been captured");
   
-
+  
 
   Command::~Command() { }
+  
+  
+  /** @internal to be invoked by #fetchDef */
+  Command::Command (CommandImpl* pImpl)
+  {
+    Handle::activate (pImpl, CommandRegistry::killCommandImpl);
+  }
   
 
   /** */
@@ -64,7 +71,14 @@ namespace control {
   Command&
   Command::fetchDef (Symbol cmdID)
   {
-    UNIMPLEMENTED ("fetch an command prototype from the registry, create if necessary");
+    Command* cmd = CommandRegistry::queryIndex (cmdID);
+    if (cmd)
+      ////////////////////////////////////////////////////////////////////////TODO: race
+      return *cmd;
+    
+    Command newDefinition (CommandRegistry::newCommandImpl());
+    
+    return CommandRegistry::track (cmdID, newDefinition);
   }
   
   

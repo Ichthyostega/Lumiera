@@ -47,6 +47,20 @@ namespace control {
   
 
   /** */
+  template<typename TYPES>
+  void
+  CommandImpl::bindArg (Tuple<TYPES> const&)
+  {
+    UNIMPLEMENTED ("actually bind arguments, maybe create ArgumentHolder");
+  }
+  
+  
+  void
+  CommandImpl::exec (HandlingPattern const& execPattern)
+  {
+    UNIMPLEMENTED ("actually invoke the command");
+  }
+
   
 
   

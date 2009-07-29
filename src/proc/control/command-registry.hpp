@@ -39,6 +39,8 @@
 
 //#include "pre.hpp"
 #include "lib/error.hpp"
+#include "lib/singleton.hpp"
+#include "lib/sync.hpp"
 //#include "lib/bool-checkable.hpp"
 //#include "proc/control/command-closure.hpp"
 //#include "proc/control/memento-tie.hpp"
@@ -60,14 +62,67 @@ namespace control {
    * TODO type comment
    */
   class CommandRegistry
+    : lib::Sync<>
     {
       
     public:
+      static lumiera::Singleton<CommandRegistry> instance;
+      
+      
+      /** register a command (Frontend) under the given ID
+       *  @return either the new command, or an already existing
+       *          command registerd under the given ID*/ 
+      static Command&
+      track (Symbol cmdID, Command& commandHandle)
+        {
+          return instance().putIndex (cmdID, commandHandle);
+        }
+      
+      
+      /** set up a new command implementation frame */
+      static CommandImpl*
+      newCommandImpl ()
+        {
+          return instance().createImpl();
+        }
+      
+      
+      /** discard an command implementation frame */
+      static void
+      killCommandImpl (CommandImpl* entry)
+        {
+                                  ///////////////////////////////////////////////TODO: clean behaviour while in App shutdown (Ticket #196)
+          instance().removeImpl(entry);
+        }
+      
+      
+    private:
+      CommandImpl*
+      createImpl ()
+        {
+          Lock sync(this);
+          UNIMPLEMENTED ("set up a new impl instance located within the instance table");
+        }
+      
+      void
+      removeImpl (CommandImpl* entry)
+        {
+          UNIMPLEMENTED ("remove entry from instance table");
+        }
+      
+      Command&
+      putIndex (Symbol cmdID, Command& commandHandle)
+        {
+          Lock sync(this);
+          UNIMPLEMENTED ("place a commandHandle into the command index, or return the command already registered there");
+        }
     };
   
   
 //  inline ostream& operator<< (ostream& os, Mutation const& muta) { return os << string(muta); }
   
+  /** storage for the singleton factory used to access CommandRegistry */
+  lumiera::Singleton<CommandRegistry> CommandRegistry::instance;
   
   
 } // namespace control

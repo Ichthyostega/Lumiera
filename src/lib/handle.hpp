@@ -44,7 +44,7 @@
 #define LIB_HANDLE_H
 
 #include "lib/nobug-init.hpp"
-#include "lib/sync.hpp"
+#include "lib/bool-checkable.hpp"
 
 #include <tr1/memory>
 
@@ -61,13 +61,14 @@ namespace lib {
    * and managing its lifecycle. Usually such a handle is created by
    * an service interface and \link #activate activated \endlink by
    * setting up the link to some internal implementation object.
-   * This setup can only be done by a friend or derived class,
+   * This setup can only be done by a friend or derived class,       //////////////////////////TODO: that was the intention. Why didn't this work out as expected?
    * while client code is free to copy and store handle objects.
    * Finally, any handle can be closed, thereby decrementing
    * the use count.
    */
   template<class IMP>
   class Handle 
+    : public lib::BoolCheckable<Handle<IMP> >
     {
     protected:
       typedef std::tr1::shared_ptr<IMP> SmPtr;
@@ -115,11 +116,8 @@ namespace lib {
       void close ()  { smPtr_.reset(); }
       
       
-      typedef SmPtr Handle::*__unspecified_bool_type;
-      
-      /** implicit conversion to "bool" */ 
-      operator __unspecified_bool_type()  const { return  smPtr_? &Handle::smPtr_ : 0; }  // never throws
-      bool operator! ()                   const { return !bool(smPtr_); }                //  ditto
+      /** implicit conversion to bool (BoolCheckable) */
+      bool isValid()  const { return bool(smPtr_);}
       
       
       

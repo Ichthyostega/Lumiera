@@ -67,9 +67,10 @@ namespace control {
    * @todo Type-comment
    */
   class Command
-    : public com::ArgumentBinder<Command
-           , lib::BoolCheckable<Command> >
-    ////////////////////////////////////////////////////////////////TODO: inherit from lib/handle
+    : public com::ArgumentBinder<Command    // accepts arbitrary bind(..) calls (with runtime check)
+           , lib::BoolCheckable<Command    //  implicit conversion to bool for status check
+           , lib::Handle<CommandImpl>     //   actually implemented as ref counting Handle
+           > >
     {
       
     public:
@@ -112,10 +113,21 @@ namespace control {
       bool canUndo()  const;
       
     protected:
-     static Command& fetchDef (Symbol cmdID);
+      static Command& fetchDef (Symbol cmdID);
+      
+      friend class CommandDef;
+      
+      
+    private:
+    /** Commands can only be created through the framework
+     *  (by setting up an CommandDef), thus ensuring there's
+     *  always a corresponding CommandImpl within the registry.
+     *  @note the copy operations are public though
+     *  @see Command#fetchDef
+     *  @see CommandDef 
+     */
+    Command (CommandImpl* pImpl);
      
-     friend class CommandDef;
-
     };
   ////////////////TODO currently just fleshing  out the API....
   

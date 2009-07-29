@@ -191,7 +191,7 @@ namespace control {
     : public lib::BoolCheckable<CommandDef>
     {
       Symbol id_;
-      Command& prototype_;
+      Command prototype_;
       
     public:
       CommandDef (Symbol cmdID)
