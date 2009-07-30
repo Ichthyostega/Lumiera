@@ -30,6 +30,7 @@
  */
 
 
+#include "lib/error.hpp"
 #include "proc/control/command.hpp"
 #include "proc/control/command-def.hpp"
 #include "proc/control/command-registry.hpp"
@@ -39,7 +40,11 @@
 //#include "proc/mobject/placement.hpp"
 
 //#include <boost/format.hpp>
+#include <string>
+
+using std::string;
 //using boost::str;
+
 
 namespace control {
   
@@ -61,24 +66,29 @@ namespace control {
   
 
   /** */
-  Command& 
+  Command 
   Command::get (Symbol cmdID)
   {
-    UNIMPLEMENTED ("fetch an existing command from the internal cmd registry");
+    Command cmd = CommandRegistry::instance().queryIndex (cmdID);
+    if (!cmd)
+      throw lumiera::error::Invalid("Command definition not found", LUMIERA_ERROR_INVALID_COMMAND);
+      
+    return cmd;
   }
   
   
   Command
   Command::fetchDef (Symbol cmdID)
   {
-    Command cmd = CommandRegistry::queryIndex (cmdID);
+    CommandRegistry& registry = CommandRegistry::instance();
+    Command cmd = registry.queryIndex (cmdID);
     if (cmd)
       return cmd;
     
-    Command newDefinition (CommandRegistry::newCommandImpl());
+    Command newDefinition (registry.newCommandImpl());
     
-    return CommandRegistry::track (cmdID, newDefinition);
-  }                      // return new or currently registered cmd...
+    return registry.track (cmdID, newDefinition);
+  }              // return new or currently registered cmd...
   
   
   CommandDef

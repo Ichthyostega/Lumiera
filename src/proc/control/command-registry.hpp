@@ -73,20 +73,26 @@ namespace control {
       /** register a command (Frontend) under the given ID
        *  @return either the new command, or an already existing
        *          command registered under the given ID*/ 
-      static Command
+      Command
       track (Symbol cmdID, Command const& commandHandle)
         {
-          return instance().putIndex (cmdID, commandHandle);
+          Lock sync(this);
+          UNIMPLEMENTED ("place a commandHandle into the command index, or return the command already registered there");
         }
       
       
       /** query the command index by ID
        *  @return the registered command,
        *          or an "invalid" token */
-      static Command
+      Command
       queryIndex (Symbol cmdID)
         {
-          return instance().fetchIndex (cmdID);
+          Lock sync(this);
+          UNIMPLEMENTED ("retrieve the command registered under the given ID, maybe return a »empty« command");
+          // if index.contains(cmdID)
+          //   return index[cmdID]
+          // else
+          return Command();
         }
       
       
@@ -94,7 +100,8 @@ namespace control {
       static CommandImpl*
       newCommandImpl ()
         {
-          return instance().createImpl();
+          Lock sync(this);
+          UNIMPLEMENTED ("set up a new impl instance located within the instance table");
         }
       
       
@@ -111,8 +118,7 @@ namespace control {
       CommandImpl*
       createImpl ()
         {
-          Lock sync(this);
-          UNIMPLEMENTED ("set up a new impl instance located within the instance table");
+          ///////////////////////////////TODO: still necessary?
         }
       
       void
@@ -121,23 +127,6 @@ namespace control {
           UNIMPLEMENTED ("remove entry from instance table");
         }
       
-      Command
-      putIndex (Symbol cmdID, Command const& commandHandle)
-        {
-          Lock sync(this);
-          UNIMPLEMENTED ("place a commandHandle into the command index, or return the command already registered there");
-        }
-      
-      Command
-      fetchIndex (Symbol cmdID)
-        {
-          Lock sync(this);
-          UNIMPLEMENTED ("retrieve the command registered under the given ID, maybe return a »empty« command");
-          // if index.contains(cmdID)
-          //   return index[cmdID]
-          // else
-          return Command();
-        }
     };
   
   
