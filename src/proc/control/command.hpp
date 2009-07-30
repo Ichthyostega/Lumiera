@@ -81,7 +81,7 @@ namespace control {
       
       CommandDef storeDef (Symbol newCmdID);
       
-      
+      Command() { } ///< undefined command
      ~Command();
       
       void operator() () ;

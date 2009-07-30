@@ -42,7 +42,8 @@
 #include "lib/singleton.hpp"
 #include "lib/sync.hpp"
 //#include "lib/bool-checkable.hpp"
-//#include "proc/control/command-closure.hpp"
+
+#include "proc/control/command.hpp"
 //#include "proc/control/memento-tie.hpp"
 
 //#include <iostream>
@@ -71,11 +72,21 @@ namespace control {
       
       /** register a command (Frontend) under the given ID
        *  @return either the new command, or an already existing
-       *          command registerd under the given ID*/ 
-      static Command&
-      track (Symbol cmdID, Command& commandHandle)
+       *          command registered under the given ID*/ 
+      static Command
+      track (Symbol cmdID, Command const& commandHandle)
         {
           return instance().putIndex (cmdID, commandHandle);
+        }
+      
+      
+      /** query the command index by ID
+       *  @return the registered command,
+       *          or an "invalid" token */
+      static Command
+      queryIndex (Symbol cmdID)
+        {
+          return instance().fetchIndex (cmdID);
         }
       
       
@@ -110,11 +121,22 @@ namespace control {
           UNIMPLEMENTED ("remove entry from instance table");
         }
       
-      Command&
-      putIndex (Symbol cmdID, Command& commandHandle)
+      Command
+      putIndex (Symbol cmdID, Command const& commandHandle)
         {
           Lock sync(this);
           UNIMPLEMENTED ("place a commandHandle into the command index, or return the command already registered there");
+        }
+      
+      Command
+      fetchIndex (Symbol cmdID)
+        {
+          Lock sync(this);
+          UNIMPLEMENTED ("retrieve the command registered under the given ID, maybe return a »empty« command");
+          // if index.contains(cmdID)
+          //   return index[cmdID]
+          // else
+          return Command();
         }
     };
   

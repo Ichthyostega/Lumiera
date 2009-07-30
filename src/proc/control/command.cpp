@@ -68,18 +68,17 @@ namespace control {
   }
   
   
-  Command&
+  Command
   Command::fetchDef (Symbol cmdID)
   {
-    Command* cmd = CommandRegistry::queryIndex (cmdID);
+    Command cmd = CommandRegistry::queryIndex (cmdID);
     if (cmd)
-      ////////////////////////////////////////////////////////////////////////TODO: race
-      return *cmd;
+      return cmd;
     
     Command newDefinition (CommandRegistry::newCommandImpl());
     
     return CommandRegistry::track (cmdID, newDefinition);
-  }
+  }                      // return new or currently registered cmd...
   
   
   CommandDef
