@@ -43,6 +43,7 @@
 #include "lib/handle.hpp"
 
 //#include <tr1/memory>
+#include <string>
 
 ///////////////////////////////////////////TODO: define an C-API representation here, make the header multilingual!
 
@@ -50,11 +51,13 @@
 
 namespace control {
   
+  using std::string;
   using lumiera::Symbol;
 //  using std::tr1::shared_ptr;
   
   LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Command functor not yet usable, because arguments aren't bound
   LUMIERA_ERROR_DECLARE (INVALID_COMMAND);    ///< Unknown or insufficiently defined command
+  LUMIERA_ERROR_DECLARE (DUPLICATE_COMMAND);  ///< Attempt to redefine an already existing command definition
   LUMIERA_ERROR_DECLARE (INVALID_ARGUMENTS);  ///< Arguments provided for binding doesn't match stored command function parameters
 
   
@@ -76,9 +79,9 @@ namespace control {
       
     public:
       /* === command registry === */
-      static Command& get (Symbol cmdID);
-      static bool  remove (Symbol cmdID); 
-      static bool   undef (Symbol cmdID);
+      static Command get (Symbol cmdID);
+      static bool remove (Symbol cmdID); 
+      static bool  undef (Symbol cmdID);
       
       CommandDef storeDef (Symbol newCmdID);
       
@@ -100,6 +103,11 @@ namespace control {
       HandlingPattern const& getDefaultHandlingPattern()  const;
       
       
+      
+      /* === command lifecycle === */
+      
+      Command& activate (CommandImpl&);
+      
       template<typename TYPES>
       void bindArg (Tuple<TYPES> const&);
       
@@ -113,24 +121,17 @@ namespace control {
       bool canExec()  const;
       bool canUndo()  const;
       
+      operator string() const;
       friend bool operator== (Command const&, Command const&);
       
       
     protected:
-      static Command& fetchDef (Symbol cmdID);
+      static Command fetchDef (Symbol cmdID);
       
       friend class CommandDef;
       
       
     private:
-    /** Commands can only be created through the framework
-     *  (by setting up an CommandDef), thus ensuring there's
-     *  always a corresponding CommandImpl within the registry.
-     *  @note the copy operations are public though
-     *  @see Command#fetchDef
-     *  @see CommandDef 
-     */
-    Command (CommandImpl* pImpl);
      
     };
   ////////////////TODO currently just fleshing  out the API....

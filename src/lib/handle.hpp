@@ -98,6 +98,7 @@ namespace lib {
       /** Activation of the handle by the managing service.
        *  @param impl the implementation object this handle is tied to
        *  @param whenDead functor to be invoked when reaching end-of-life 
+       *  @throw std::bad_alloc, in which case \c whenDead(impl) is invoked
        */
       template<typename DEL>
       Handle&

@@ -48,8 +48,10 @@
 #define CONTROL_COMMAND_DEF_H
 
 //#include "pre.hpp"
+#include "lib/error.hpp"
 #include "include/symbol.hpp"
 #include "proc/control/command.hpp"
+#include "proc/control/command-registry.hpp"
 #include "proc/control/command-signature.hpp"
 #include "proc/control/command-mutation.hpp"
 #include "proc/control/command-closure.hpp"
@@ -89,27 +91,47 @@ namespace control {
                               , UndoDefinition<SIG,MEM>    //  target type (this class) providing the implementation \c bindArg(Tuple<..>) 
                               >
       {
-        typedef typename FunctionSignature< function<SIG> >::Args BasicArgs;
-        typedef typename FunctionTypedef<MEM,BasicArgs>::Sig      UndoCaptureSig;
+        typedef CommandSignature<SIG,MEM> CmdType;
+        typedef typename CmdType::OperateSig CommandOperationSig;
+        typedef typename CmdType::UndoOp_Sig UndoOperationSig;
+        typedef typename CmdType::CaptureSig UndoCaptureSig;
+        
+        typedef function<CommandOperationSig> OperFunc;
+        typedef function<UndoOperationSig>    UndoFunc;
+        typedef function<UndoCaptureSig>      CaptFunc;
         
         Command& prototype_;
+        OperFunc operFunctor_;
+        UndoFunc undoFunctor_;
+        CaptFunc captFunctor_;
         
-        UndoDefinition (Command& underConstruction, function<UndoCaptureSig>& undoCapOperation)
+        
+        UndoDefinition (Command& underConstruction, 
+                        OperFunc& commandOperation,
+                        CaptFunc& undoCapOperation)
           : prototype_(underConstruction)
+          , operFunctor_(commandOperation)
+          , captFunctor_(undoCapOperation)
+          , undoFunctor_()
           {
             cout << showSizeof(undoCapOperation) << endl;
-            UNIMPLEMENTED ("re-fetch command definition and augment it with Functor for capturing Undo information");
           }
         
-        template<typename SIG2>
+        
         UndoDefinition&
-        undoOperation (SIG2& how_to_Undo)
+        undoOperation (UndoOperationSig& how_to_Undo)
           {
-            typedef typename UndoSignature<SIG2>::UndoOp_Sig UndoSig;
+            undoFunctor_ = UndoFunc (how_to_Undo);
+            REQUIRE (operFunctor_);
+            REQUIRE (undoFunctor_);
+            REQUIRE (captFunctor_);
             
-            function<UndoSig> opera3 (how_to_Undo);
-            
-            UNIMPLEMENTED ("store actual Undo-Functor into the command definition held by the enclosing UndoDefinition instance");
+            CommandRegistry& registry = CommandRegistry::instance();
+            CommandImpl& completedDef = registry.newCommandImpl(operFunctor_
+                                                               ,undoFunctor_
+                                                               ,captFunctor_);
+            prototype_.activate(completedDef);
+            ENSURE (prototype_);
             return *this;
           }
         
@@ -146,13 +168,12 @@ namespace control {
     struct BasicDefinition
       {
         Command& prototype_;
+        function<SIG>& operation_;
         
         BasicDefinition(Command& underConstruction, function<SIG>& operation)
           : prototype_(underConstruction)
-          {
-            cout << showSizeof(operation) << endl;
-            UNIMPLEMENTED ("create new command object and store the operation functor");
-          }
+          , operation_(operation)
+          { }
         
         
         template<typename SIG2>
@@ -162,8 +183,8 @@ namespace control {
             typedef typename UndoSignature<SIG2>::CaptureSig UndoCapSig;
             typedef typename BuildUndoDefType<UndoSignature<SIG2> >::Type SpecificUndoDefinition;
             
-            function<UndoCapSig> opera2 (how_to_capture_UndoState);
-            return SpecificUndoDefinition (prototype_, opera2);
+            function<UndoCapSig> captureOperation (how_to_capture_UndoState);
+            return SpecificUndoDefinition (prototype_, operation_, captureOperation);
           }
       };
     

@@ -30,7 +30,9 @@
  */
 
 
+#include "lib/util.hpp"
 #include "lib/error.hpp"
+#include "include/logging.h"
 #include "proc/control/command.hpp"
 #include "proc/control/command-def.hpp"
 #include "proc/control/command-registry.hpp"
@@ -39,16 +41,22 @@
 //#include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/placement.hpp"
 
-//#include <boost/format.hpp>
+#include <boost/format.hpp>
+#include <sstream>
 #include <string>
 
+using namespace lumiera;
+using std::ostringstream;
 using std::string;
-//using boost::str;
+using boost::format;
+using boost::str;
+using util::cStr;
 
 
 namespace control {
   
   LUMIERA_ERROR_DEFINE (INVALID_COMMAND,   "Unknown or insufficiently defined command");
+  LUMIERA_ERROR_DEFINE (DUPLICATE_COMMAND, "Attempt to redefine an already existing command definition");
   LUMIERA_ERROR_DEFINE (INVALID_ARGUMENTS, "Arguments provided for binding doesn't match stored command function parameters");
   LUMIERA_ERROR_DEFINE (UNBOUND_ARGUMENTS, "Command mutation functor not yet usable, because arguments aren't bound");
   LUMIERA_ERROR_DEFINE (MISSING_MEMENTO,   "Undo functor not yet usable, because no undo state has been captured");
@@ -58,20 +66,15 @@ namespace control {
   Command::~Command() { }
   
   
-  /** @internal to be invoked by #fetchDef */
-  Command::Command (CommandImpl* pImpl)
-  {
-    Handle::activate (pImpl, CommandRegistry::killCommandImpl);
-  }
-  
 
   /** */
   Command 
   Command::get (Symbol cmdID)
   {
     Command cmd = CommandRegistry::instance().queryIndex (cmdID);
+    static format fmt("Command definition \"%s\" not found");
     if (!cmd)
-      throw lumiera::error::Invalid("Command definition not found", LUMIERA_ERROR_INVALID_COMMAND);
+      throw error::Invalid(str(fmt % cmdID), LUMIERA_ERROR_INVALID_COMMAND);
       
     return cmd;
   }
@@ -85,10 +88,30 @@ namespace control {
     if (cmd)
       return cmd;
     
-    Command newDefinition (registry.newCommandImpl());
+    // create an empty definition, later to be activated
+    Command newDefinition;
     
     return registry.track (cmdID, newDefinition);
   }              // return new or currently registered cmd...
+  
+  
+  /** @internal to be invoked by CommandDef
+   *  @throw std::bad_alloc, in which case
+   *         CommandRegistry::killCommandImpl is invoked */
+  Command&
+  Command::activate (CommandImpl& implFrame)
+  {
+    static format fmt_err("Command \"%s\" already defined");
+    static format fmt_ok("Command \"%s\" defined OK");
+    
+    if (this->isValid())
+      throw error::Logic (str(fmt_err % *this), LUMIERA_ERROR_DUPLICATE_COMMAND);
+          
+    _Handle::activate (&implFrame, CommandRegistry::killCommandImpl);
+            
+    INFO (command, cStr(fmt_ok % *this));
+    return *this;
+  }
   
   
   CommandDef
@@ -174,6 +197,34 @@ namespace control {
   {
     return isValid()
         && impl().canUndo();
+  }
+  
+  
+  
+  /** diagnostics: shows the commandID, if any,
+   *  and the degree of definition of this command */
+  Command::operator string() const
+  {
+    ostringstream repr;
+    repr << "Command";
+    ////////////////////////////////////////////////////////////////////TODO do we need no-throw guarantee here?
+    Symbol id = CommandRegistry::instance().findCommand (*this);
+    if (id)
+      repr << "(\""<<id<<"\") ";
+    else 
+      repr << "(_xxx_) ";
+    if (!isValid())
+      repr << "NIL";
+    else
+      if (canUndo())
+        repr << "{undo}";
+      else
+        if (canExec())
+          repr << "{exec}";
+        else
+            repr << "{def}";
+    
+    return repr.str();
   }
 
   

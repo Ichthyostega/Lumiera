@@ -120,8 +120,8 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (    mmap,                      backend);       
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    thread,                    backend);       //starting/stopping threads
 /** progress log for the proc layer */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   proc,                       progress);
-/** progress log for the render subsystem of proc */
-NOBUG_CPP_DEFINE_FLAG_PARENT    (    render,                    proc);          //ichthyo: did you want this as global channel or as progress child?
+/** progress log for proc-layer command dispatch */
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    command,                   proc);
 /** progress log for the gui */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   gui,                        progress);
 /** progress log for the support lib */
@@ -130,7 +130,7 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (    resourcecollector,         library);
 /** progress log for the common lib */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   common,                     progress);
 /** progress log, config subsystem */
-NOBUG_CPP_DEFINE_FLAG_PARENT    (    config,                    common);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    config,                    common);        //TODO: here seems to be a name clash with the global "config" channel
 NOBUG_CPP_DEFINE_FLAG_PARENT    (     configfiles,              config);        //reading, writing, lookup configfiles
 NOBUG_CPP_DEFINE_FLAG_PARENT    (     configtyped,              config);        //values queried, errors
 /** progress log, interfaces */
@@ -142,6 +142,8 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (    subsystem,                 common);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    pluginloader,              common);        //plugins loaded/unloaded/errors
 /** progress log, external plugins*/
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   plugins,                    progress);
+/** base channel flag to track overall working of the render engine */
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    render,                    logging);
 /** base flag for software testing */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  test,                        logging);
 /** base flag for syncronization logging */

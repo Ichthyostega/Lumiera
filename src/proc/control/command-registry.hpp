@@ -96,18 +96,29 @@ namespace control {
         }
       
       
+      /** search the command index for a definition
+       *  @param cmdInstance using the definition to look up
+       *  @return the ID used to register this definition 
+       *          or \c NULL in case of an "anonymous" command */
+      Symbol
+      findDefinition (Command const& cmdInstance)
+        {
+          UNIMPLEMENTED ("try to find a registration in the index for a given command instance");
+        }
+      
+      
       size_t
       index_size()
-      {
-        UNIMPLEMENTED ("number of defs in the index");
-      }
+        {
+          UNIMPLEMENTED ("number of defs in the index");
+        }
       
       
       size_t
       instance_count()
-      {
-        UNIMPLEMENTED ("number of active command impl instances");
-      }
+        {
+          UNIMPLEMENTED ("number of active command impl instances");
+        }
       
       
       /** set up a new command implementation frame */

@@ -58,6 +58,7 @@ namespace test    {
 
 //  using lib::test::showSizeof;
   using util::isSameObject;
+  using util::contains;
 
 //  using session::test::TestClip;
 //  using lumiera::P;
@@ -97,6 +98,7 @@ namespace test    {
           standardUse();
           definePrototype();
           usePrototype();
+          preventDuplicates();
           undef();
           
           ASSERT (0 == command1::check_);
@@ -138,7 +140,9 @@ namespace test    {
           ASSERT (!Command::get("test.command1.2"));
           
           Command com = Command::get("test.command1.2");
-          ASSERT (!com);
+          ASSERT (contains (str(com), "test.command1.2"));
+          ASSERT (contains (str(com), "{def}"));
+          ASSERT (!com);                                                      ////////////////////TODO: mismatch: shall bool() < canExec() ????
           ASSERT (!com.canUndo());
           VERIFY_ERROR (UNBOUND_ARGUMENTS, com() );
           
@@ -249,6 +253,20 @@ namespace test    {
       
       
       void
+      preventDuplicates()
+        {
+          ASSERT (CommandDef ("test.command1.1"));
+          VERIFY_ERROR (DUPLICATE_COMMAND, CommandDef ("test.command1.1").operation (command1::operate) );    
+          ASSERT (CommandDef ("test.command1.2"));
+          VERIFY_ERROR (DUPLICATE_COMMAND, CommandDef ("test.command1.2").operation (command1::operate) );    
+          ASSERT (CommandDef ("test.command1.3"));
+          VERIFY_ERROR (DUPLICATE_COMMAND, CommandDef ("test.command1.3").operation (command1::operate) );    
+          ASSERT (CommandDef ("test.command1.4"));
+          VERIFY_ERROR (DUPLICATE_COMMAND, CommandDef ("test.command1.4").operation (command1::operate) );    
+        }
+      
+      
+      void
       undef()
         {
           ASSERT (CommandDef ("test.command1.1"));
@@ -266,8 +284,15 @@ namespace test    {
           CommandDef unbelievable ("miracle");
           ASSERT (!unbelievable);
           
+          Command miracle;
           // but because the miracle isn't yet defined, any use throws
-          VERIFY_ERROR (INVALID_COMMAND, Command::get("miracle"));
+          VERIFY_ERROR (INVALID_COMMAND, miracle.bind("abracadabra"));
+          VERIFY_ERROR (INVALID_COMMAND, miracle.execSync());
+          VERIFY_ERROR (INVALID_COMMAND, miracle.undo());
+          VERIFY_ERROR (INVALID_COMMAND, miracle());
+          ASSERT (!miracle.canExec());
+          ASSERT (!miracle.canUndo());
+          ASSERT (!miracle);
           
           ASSERT (Command::remove("test.command1.1"));
           ASSERT (Command::remove("test.command1.2"));
