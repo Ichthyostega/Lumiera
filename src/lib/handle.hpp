@@ -125,7 +125,7 @@ namespace lib {
       
     protected:
       IMP& 
-      impl()
+      impl()  const
         {
           REQUIRE (smPtr_.get(), "Lifecycle-Error");
           return *(smPtr_.get());

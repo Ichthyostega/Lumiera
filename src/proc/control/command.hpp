@@ -63,6 +63,7 @@ namespace control {
   
   
   class CommandDef;
+  class CommandImpl;
   class HandlingPattern;
   
   
@@ -71,9 +72,8 @@ namespace control {
    */
   class Command
     : public com::ArgumentBinder<Command    // accepts arbitrary bind(..) calls (with runtime check)
-           , lib::BoolCheckable<Command    //  implicit conversion to bool for status check
-           , lib::Handle<CommandImpl>     //   actually implemented as ref counting Handle
-           > >
+           , lib::Handle<CommandImpl>      //  actually implemented as ref counting Handle
+           >
     {
       typedef lib::Handle<CommandImpl> _Handle;
       
@@ -117,7 +117,6 @@ namespace control {
       static size_t definition_count();
       static size_t instance_count();
       
-      bool isValid()  const;
       bool canExec()  const;
       bool canUndo()  const;
       
@@ -144,14 +143,14 @@ namespace control {
   }
   
   
-  bool
+  inline bool
   operator== (Command const& c1, Command const& c2)
     {
       return (!c1 && !c2)
-          || ( c1 &&  c2  && c1.impl() == c2.impl()); 
+          || ( c1 &&  c2  && (&c1.impl() == &c2.impl())); 
     }
   
-  bool
+  inline bool
   operator!= (Command const& c1, Command const& c2)
     {
       return ! (c1 == c2); 

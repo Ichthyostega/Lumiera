@@ -63,9 +63,8 @@ namespace control {
    */
   class CommandImpl
     : public lib::BoolCheckable<CommandImpl
-           , boost::equality_comparable<CommandImpl
            , boost::noncopyable
-           > >
+           >
     {
       Mutation do_;
       UndoMutation undo_;
@@ -109,12 +108,6 @@ namespace control {
         }
       
       
-      /** @note strict instance equality */
-      bool
-      operator== (CommandImpl const& oi)
-        {
-          return (this == &oi); 
-        }
       
       
     protected:

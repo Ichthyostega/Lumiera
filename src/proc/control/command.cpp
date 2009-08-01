@@ -35,6 +35,7 @@
 #include "include/logging.h"
 #include "proc/control/command.hpp"
 #include "proc/control/command-def.hpp"
+#include "proc/control/command-impl.hpp"
 #include "proc/control/command-registry.hpp"
 #include "proc/control/handling-pattern.hpp"
 //#include "proc/mobject/mobject-ref.hpp"
@@ -101,15 +102,14 @@ namespace control {
   Command&
   Command::activate (CommandImpl& implFrame)
   {
-    static format fmt_err("Command \"%s\" already defined");
-    static format fmt_ok("Command \"%s\" defined OK");
+    static format fmt("Command \"%s\" already defined");
     
     if (this->isValid())
-      throw error::Logic (str(fmt_err % *this), LUMIERA_ERROR_DUPLICATE_COMMAND);
+      throw error::Logic (str (fmt % *this), LUMIERA_ERROR_DUPLICATE_COMMAND);
           
     _Handle::activate (&implFrame, CommandRegistry::killCommandImpl);
             
-    INFO (command, cStr(fmt_ok % *this));
+    INFO (command, "Command \"%s\" defined OK", cStr(*this));
     return *this;
   }
   
@@ -175,15 +175,6 @@ namespace control {
   
   
   bool
-  Command::isValid()  const
-  {
-    return _Handle::isValid()
-        && impl().isValid();
-  }
-  
-  
-  
-  bool
   Command::canExec()  const
   {
     return isValid()
@@ -208,7 +199,7 @@ namespace control {
     ostringstream repr;
     repr << "Command";
     ////////////////////////////////////////////////////////////////////TODO do we need no-throw guarantee here?
-    Symbol id = CommandRegistry::instance().findCommand (*this);
+    Symbol id = CommandRegistry::instance().findDefinition (*this);
     if (id)
       repr << "(\""<<id<<"\") ";
     else 

@@ -63,7 +63,7 @@ namespace control {
    * TODO type comment
    */
   class CommandRegistry
-    : lib::Sync<>
+    : public lib::Sync<>
     {
       
     public:
@@ -100,7 +100,7 @@ namespace control {
        *  @param cmdInstance using the definition to look up
        *  @return the ID used to register this definition 
        *          or \c NULL in case of an "anonymous" command */
-      Symbol
+      const char*
       findDefinition (Command const& cmdInstance)
         {
           UNIMPLEMENTED ("try to find a registration in the index for a given command instance");
@@ -122,8 +122,14 @@ namespace control {
       
       
       /** set up a new command implementation frame */
-      static CommandImpl*
-      newCommandImpl ()
+      template< typename SIG_OPER    ///< signature of the command operation
+              , typename SIG_UNDO    ///< signature to undo the command
+              , typename SIG_CAPT    ///< signature for capturing undo state
+              >
+      CommandImpl&
+      newCommandImpl (function<SIG_OPER>& operFunctor_
+                     ,function<SIG_UNDO>& undoFunctor_
+                     ,function<SIG_CAPT>& captFunctor_)
         {
           Lock sync(this);
           UNIMPLEMENTED ("set up a new impl instance located within the instance table");

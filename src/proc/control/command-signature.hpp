@@ -95,6 +95,7 @@ namespace control {
       typedef typename FunctionTypedef<void, Args>::Sig          OperateSig;
       typedef typename FunctionTypedef<MEM, Args>::Sig           CaptureSig;
       typedef typename FunctionTypedef<void, ExtendedArgs>::Sig  UndoOp_Sig;
+      typedef Args                                               CmdArgs;
       typedef MEM                                                Memento;
     };
   

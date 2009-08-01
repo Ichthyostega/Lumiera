@@ -35,6 +35,7 @@
 #include "proc/control/command.hpp"
 #include "proc/control/command-def.hpp"
 //#include "lib/lumitime.hpp"
+#include "lib/format.hpp"
 #include "lib/util.hpp"
 
 #include "proc/control/test-dummy-commands.hpp"
@@ -59,6 +60,7 @@ namespace test    {
 //  using lib::test::showSizeof;
   using util::isSameObject;
   using util::contains;
+  using util::str;
 
 //  using session::test::TestClip;
 //  using lumiera::P;

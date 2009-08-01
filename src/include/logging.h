@@ -130,9 +130,9 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (    resourcecollector,         library);
 /** progress log for the common lib */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   common,                     progress);
 /** progress log, config subsystem */
-NOBUG_CPP_DEFINE_FLAG_PARENT    (    config,                    common);        //TODO: here seems to be a name clash with the global "config" channel
-NOBUG_CPP_DEFINE_FLAG_PARENT    (     configfiles,              config);        //reading, writing, lookup configfiles
-NOBUG_CPP_DEFINE_FLAG_PARENT    (     configtyped,              config);        //values queried, errors
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    configsys,                 common);        //TODO: here seems to be an ambiguity weather "config" should denote the global config channel or the config-loder internals
+NOBUG_CPP_DEFINE_FLAG_PARENT    (     configfiles,              configsys);     //reading, writing, lookup configfiles
+NOBUG_CPP_DEFINE_FLAG_PARENT    (     configtyped,              configsys);     //values queried, errors
 /** progress log, interfaces */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    interface,                 common);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (     interfaceregistry,        common);        //interfaces which get registered/removed
@@ -143,7 +143,9 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (    pluginloader,              common);        
 /** progress log, external plugins*/
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   plugins,                    progress);
 /** base channel flag to track overall working of the render engine */
-NOBUG_CPP_DEFINE_FLAG_PARENT    (    render,                    logging);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (  render,                      logging);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (  config,                      logging);       //TODO: here seems to be an ambiguity weather "config" should denote the global config channel or the config-loder internals
+
 /** base flag for software testing */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  test,                        logging);
 /** base flag for syncronization logging */

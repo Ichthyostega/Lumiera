@@ -95,6 +95,7 @@ namespace control {
         typedef typename CmdType::OperateSig CommandOperationSig;
         typedef typename CmdType::UndoOp_Sig UndoOperationSig;
         typedef typename CmdType::CaptureSig UndoCaptureSig;
+        typedef typename CmdType::CmdArgs    CmdArgs;
         
         typedef function<CommandOperationSig> OperFunc;
         typedef function<UndoOperationSig>    UndoFunc;
@@ -102,8 +103,8 @@ namespace control {
         
         Command& prototype_;
         OperFunc operFunctor_;
-        UndoFunc undoFunctor_;
         CaptFunc captFunctor_;
+        UndoFunc undoFunctor_;
         
         
         UndoDefinition (Command& underConstruction, 
@@ -137,7 +138,7 @@ namespace control {
         
         
         Command&
-        bindArg (Tuple<BasicArgs> const& params)
+        bindArg (Tuple<CmdArgs> const& params)
           {
             Closure<SIG> clo (params);
             
