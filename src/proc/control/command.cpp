@@ -113,26 +113,40 @@ namespace control {
   
   
   
+  /** @return the number of command \em definitions currently registered */
   size_t
   Command::definition_count()
   {
-    UNIMPLEMENTED ("return number of command definitions currently in the registry");
+    return CommandRegistry::instance().index_size();
   }
   
   
   
+  /** @return number distinguishable registered command \em instances */
   size_t
   Command::instance_count()
   {
-    UNIMPLEMENTED ("return number individual command instances currently in the registry");
+    return CommandRegistry::instance().instance_count();
   }
   
   
   
+  /** is this a valid command definition frame? especially
+   *  - the prototype command is initialised properly
+   *  - there is a command definition registered for our command ID
+   *  - and the registered command uses the same underlying command impl
+   *    record than our prototype
+   */
   bool
   CommandDef::isValid()  const
   {
-    UNIMPLEMENTED ("command *definition* validity self check");
+    if (prototype_)
+      {
+        Command cmd = CommandRegistry::instance().queryIndex (this->id_);
+        return cmd.isValid()
+            && (prototype_ == cmd);
+      }
+    return false;
   }
   
   
@@ -140,7 +154,8 @@ namespace control {
   bool
   Command::isValid()  const
   {
-    UNIMPLEMENTED ("command validity self check");
+    return _Handle::isValid()
+        && impl().isValid();
   }
   
   
@@ -148,7 +163,8 @@ namespace control {
   bool
   Command::canExec()  const
   {
-    UNIMPLEMENTED ("state check: sufficiently defined to be invoked");
+    return isValid()
+        && impl().canExec();
   }
   
   
@@ -156,7 +172,8 @@ namespace control {
   bool
   Command::canUndo()  const
   {
-    UNIMPLEMENTED ("state check: has undo state been captured?");
+    return isValid()
+        && impl().canUndo();
   }
 
   

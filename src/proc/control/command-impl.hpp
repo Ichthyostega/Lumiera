@@ -43,6 +43,11 @@
 #define CONTROL_COMMAND_IMPL_H
 
 #include "proc/control/command.hpp"
+#include "proc/control/command-mutation.hpp"
+#include "lib/bool-checkable.hpp"
+
+#include <boost/noncopyable.hpp>
+#include <boost/operators.hpp>
 
 //#include <tr1/memory>
 
@@ -57,7 +62,13 @@ namespace control {
    * @todo Type-comment
    */
   class CommandImpl
+    : public lib::BoolCheckable<CommandImpl
+           , boost::equality_comparable<CommandImpl
+           , boost::noncopyable
+           > >
     {
+      Mutation do_;
+      UndoMutation undo_;
       
     public:
       /* === command registry === */
@@ -79,9 +90,32 @@ namespace control {
       
       /* === diagnostics === */
       
-      bool isValid()  const;
-      bool canExec()  const;
-      bool canUndo()  const;
+      bool
+      isValid()  const
+        {
+          UNIMPLEMENTED ("command validity self check");
+        }
+      
+      bool
+      canExec()  const
+        {
+          UNIMPLEMENTED ("state check: sufficiently defined to be invoked");
+        }
+      
+      bool
+      canUndo()  const
+        {
+          UNIMPLEMENTED ("state check: has undo state been captured?");
+        }
+      
+      
+      /** @note strict instance equality */
+      bool
+      operator== (CommandImpl const& oi)
+        {
+          return (this == &oi); 
+        }
+      
       
     protected:
 //     static Command& fetchDef (Symbol cmdID);

@@ -88,12 +88,26 @@ namespace control {
       queryIndex (Symbol cmdID)
         {
           Lock sync(this);
-          UNIMPLEMENTED ("retrieve the command registered under the given ID, maybe return a »empty« command");
+          UNIMPLEMENTED ("retrieve the command registered under the given ID, maybe return an »empty« command");
           // if index.contains(cmdID)
           //   return index[cmdID]
           // else
           return Command();
         }
+      
+      
+      size_t
+      index_size()
+      {
+        UNIMPLEMENTED ("number of defs in the index");
+      }
+      
+      
+      size_t
+      instance_count()
+      {
+        UNIMPLEMENTED ("number of active command impl instances");
+      }
       
       
       /** set up a new command implementation frame */

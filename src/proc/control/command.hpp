@@ -72,6 +72,7 @@ namespace control {
            , lib::Handle<CommandImpl>     //   actually implemented as ref counting Handle
            > >
     {
+      typedef lib::Handle<CommandImpl> _Handle;
       
     public:
       /* === command registry === */
@@ -112,6 +113,9 @@ namespace control {
       bool canExec()  const;
       bool canUndo()  const;
       
+      friend bool operator== (Command const&, Command const&);
+      
+      
     protected:
       static Command& fetchDef (Symbol cmdID);
       
@@ -137,6 +141,21 @@ namespace control {
   {
     exec (getDefaultHandlingPattern());
   }
+  
+  
+  bool
+  operator== (Command const& c1, Command const& c2)
+    {
+      return (!c1 && !c2)
+          || ( c1 &&  c2  && c1.impl() == c2.impl()); 
+    }
+  
+  bool
+  operator!= (Command const& c1, Command const& c2)
+    {
+      return ! (c1 == c2); 
+    }
+  
 
   
   
