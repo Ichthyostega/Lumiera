@@ -50,7 +50,7 @@ namespace lumiera {
     {
     public:
       Error (string description="", const char* id=LUMIERA_ERROR_EXCEPTION) throw();
-      Error (std::exception& cause,
+      Error (std::exception const& cause,
              string description="", const char* id=LUMIERA_ERROR_EXCEPTION) throw();
       
       Error (const Error&) throw();
@@ -87,7 +87,7 @@ namespace lumiera {
       mutable string what_;  ///< buffer for generating the detailed description on demand
       const string cause_;   ///< description of first exception encountered in the chain
 
-      static const string extractCauseMsg (const std::exception&)  throw();
+      static const string extractCauseMsg (std::exception const&)  throw();
     };
   
     

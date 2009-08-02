@@ -196,7 +196,9 @@ namespace test    {
           
           blowUp_ = true;
           string current = command2::check_.str();
-          VERIFY_ERROR( EXTERNAL, com.exec(HandlingPattern::get(SYNC_THROW)) );
+          HandlingPattern const& doThrow = HandlingPattern::get(HandlingPattern::SYNC_THROW);
+          
+          VERIFY_ERROR( EXTERNAL, com.exec (doThrow) );
           ASSERT (command2::check_.str() == current);
           
           // we can achieve the same effect,

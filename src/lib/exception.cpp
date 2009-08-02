@@ -87,7 +87,7 @@ namespace lumiera {
   }
   
   
-  Error::Error (std::exception& cause, 
+  Error::Error (std::exception const& cause, 
                 string description, const char* id) throw()
     : std::exception (),
       id_ (error::default_or_given (id)),

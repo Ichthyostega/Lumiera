@@ -39,6 +39,7 @@
 #include "proc/control/command-binding.hpp"
 #include "proc/control/command-mutation.hpp"
 #include "proc/control/command-closure.hpp"
+#include "proc/control/handling-pattern.hpp"
 #include "lib/bool-checkable.hpp"
 #include "lib/handle.hpp"
 
@@ -64,7 +65,6 @@ namespace control {
   
   class CommandDef;
   class CommandImpl;
-  class HandlingPattern;
   
   
   /**
@@ -97,10 +97,16 @@ namespace control {
        *         necessary to get this command invoked properly
        */
       void exec (HandlingPattern const& execPattern);
+      void exec (HandlingPattern::ID);
       
       void execSync ();
       
-      HandlingPattern const& getDefaultHandlingPattern()  const;
+      /** @return ID of the execution pattern used by operator() */
+      HandlingPattern::ID getDefaultHandlingPattern()  const;
+      
+      /** define a handling pattern to be used by default
+       *  @return ID of the currently defined default pattern */
+      HandlingPattern::ID setHandlingPattern (HandlingPattern::ID);
       
       
       

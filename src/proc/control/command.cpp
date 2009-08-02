@@ -224,14 +224,23 @@ namespace control {
   void
   Command::undo ()
   {
-    exec (getDefaultHandlingPattern().howtoUNDO());
+    HandlingPattern const& defaultPattern
+      = HandlingPattern::get (getDefaultHandlingPattern()); 
+    exec (defaultPattern.howtoUNDO());
   }
   
   
   void
   Command::exec (HandlingPattern const& execPattern)
   {
-    execPattern.invoke (*this);
+    execPattern (*this);
+  }
+  
+  
+  void
+  Command::exec (HandlingPattern::ID pattID)
+  {
+    HandlingPattern::get(pattID) (*this);
   }
   
   
@@ -242,10 +251,17 @@ namespace control {
   }
   
   
-  HandlingPattern const&
+  HandlingPattern::ID
   Command::getDefaultHandlingPattern()  const
   {
     UNIMPLEMENTED ("manage the default command handling pattern");
+  }
+  
+  
+  HandlingPattern::ID
+  Command::setHandlingPattern (HandlingPattern::ID pattID)
+  {
+    UNIMPLEMENTED ("manage handling patterns in general");
   }
   
   

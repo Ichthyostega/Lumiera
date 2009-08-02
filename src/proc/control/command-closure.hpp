@@ -42,6 +42,7 @@
 #include "lib/meta/function-closure.hpp"
 #include "lib/meta/function-erasure.hpp"
 #include "lib/meta/tuple.hpp"
+#include "lib/format.hpp"
 #include "lib/util.hpp"
 
 //#include <tr1/memory>
@@ -133,7 +134,7 @@ namespace control {
       ostream&
       dump (ostream& output)  const
         {
-          return BASE::dump (output << element() << ',');
+          return BASE::dump (output << util::str (element()) << ',');
         }
       
       friend bool

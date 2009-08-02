@@ -28,8 +28,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4142136"
-     inkscape:cx="410.87417"
-     inkscape:cy="293.93224"
+     inkscape:cx="420.65266"
+     inkscape:cy="293.18784"
      inkscape:document-units="px"
      inkscape:current-layer="svg2"
      inkscape:window-width="1668"
@@ -68,7 +68,7 @@
     <pattern
        inkscape:stockid="Stripes 1:2"
        id="Strips1_2"
-       patternTransform="matrix(0.8406114,0.5442428,-0.5442428,0.8406114,685.45306,294.40072)"
+       patternTransform="matrix(0.8406114,0.5442428,-0.5442428,0.8406114,675.45306,294.09066)"
        height="1"
        width="3"
        patternUnits="userSpaceOnUse"
@@ -315,26 +315,26 @@
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      xml:space="preserve"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#008080;fill-opacity:1;fill-rule:evenodd;stroke:#008080;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-     x="174.71809"
-     y="79.693436"
+     x="164.71809"
+     y="79.383377"
      id="text3457"
      sodipodi:linespacing="100%"><tspan
        sodipodi:role="line"
        id="tspan3459"
-       x="174.71809"
-       y="79.693436">GUI</tspan></text>
+       x="164.71809"
+       y="79.383377">GUI</tspan></text>
   <text
      inkscape:export-ydpi="90"
      inkscape:export-xdpi="90"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      sodipodi:linespacing="100%"
      id="text3461"
-     y="206.22331"
-     x="244.52675"
+     y="205.91325"
+     x="234.52675"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#008080;fill-opacity:1;fill-rule:evenodd;stroke:#008080;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
      xml:space="preserve"><tspan
-       y="206.22331"
-       x="244.52675"
+       y="205.91325"
+       x="234.52675"
        id="tspan3463"
        sodipodi:role="line">Proc-Layer</tspan></text>
   <text
@@ -464,7 +464,7 @@
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      sodipodi:nodetypes="cc"
      style="fill:#55cbb9;fill-opacity:1;fill-rule:evenodd;stroke:#55cbb9;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#ArrowHIV1end);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 349.96486,307.3103 L 467.21486,169.8103"
+     d="M 339.96486,307.00024 L 457.21486,169.50024"
      id="path2257" />
   <text
      inkscape:export-ydpi="90"
@@ -500,25 +500,25 @@
      inkscape:export-ydpi="90"
      inkscape:export-xdpi="90"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
-     y="300.8103"
-     x="289.46484"
+     y="300.50024"
+     x="279.46484"
      height="52.158669"
      width="77.698021"
      id="rect2235"
-     style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+     style="opacity:1;fill:#f7fceb;fill-opacity:0.71532843999999995;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;color:#000000" />
   <text
      inkscape:export-ydpi="90"
      inkscape:export-xdpi="90"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      sodipodi:linespacing="100%"
      id="text2237"
-     y="312.3103"
-     x="293.96484"
+     y="312.00024"
+     x="283.96484"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
      xml:space="preserve"><tspan
        style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
-       y="312.3103"
-       x="293.96484"
+       y="312.00024"
+       x="283.96484"
        id="tspan2239"
        sodipodi:role="line">Command</tspan></text>
   <path
@@ -537,29 +537,29 @@
      id="rect2244"
      width="107.71078"
      height="19.752098"
-     x="269.46484"
-     y="240.8103" />
+     x="259.46484"
+     y="240.50024" />
   <text
      inkscape:export-ydpi="90"
      inkscape:export-xdpi="90"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      xml:space="preserve"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-     x="273.96484"
-     y="252.8103"
+     x="263.96484"
+     y="252.50024"
      id="text2246"
      sodipodi:linespacing="100%"><tspan
        id="tspan2541"
        sodipodi:role="line"
-       x="273.96484"
-       y="252.8103"
+       x="263.96484"
+       y="252.50024"
        style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans">Handle&lt;CommandImpl&gt;</tspan></text>
   <path
      inkscape:export-ydpi="90"
      inkscape:export-xdpi="90"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#4f4f4f;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;marker-start:url(#TriangleInL);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 319.46486,270.8103 L 319.46486,300.8103"
+     d="M 309.46486,270.50024 L 309.46486,300.50024"
      id="path2250"
      sodipodi:nodetypes="cc" />
   <text
@@ -683,32 +683,32 @@
      id="rect2288"
      width="406.09683"
      height="180.84619"
-     x="336.36804"
-     y="31.810305" />
+     x="326.36804"
+     y="31.500246" />
   <rect
      inkscape:export-ydpi="90"
      inkscape:export-xdpi="90"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
-     style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     style="opacity:1;fill:#f7fceb;fill-opacity:0.71532843999999995;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;color:#000000"
      id="rect2290"
      width="70.181519"
      height="20"
-     x="470.0473"
-     y="130.3103" />
+     x="460.0473"
+     y="130.00024" />
   <text
      inkscape:export-ydpi="90"
      inkscape:export-xdpi="90"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      xml:space="preserve"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-     x="474.64636"
-     y="140.3103"
+     x="464.64636"
+     y="140.00024"
      id="text2292"
      sodipodi:linespacing="100%"><tspan
        id="tspan2294"
        style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
-       y="140.3103"
-       x="474.64636"
+       y="140.00024"
+       x="464.64636"
        sodipodi:role="line">CommandImpl</tspan></text>
   <text
      inkscape:export-ydpi="90"
@@ -716,47 +716,47 @@
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      xml:space="preserve"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-     x="346.86804"
-     y="47.877869"
+     x="336.86804"
+     y="47.56781"
      id="text2296"
      sodipodi:linespacing="100%"><tspan
-       y="47.877869"
-       x="346.86804"
+       y="47.56781"
+       x="336.86804"
        id="tspan2298"
        sodipodi:role="line">CommandRegistry</tspan></text>
   <rect
      inkscape:export-ydpi="90"
      inkscape:export-xdpi="90"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
-     y="110.3103"
-     x="469.96484"
+     y="110.00024"
+     x="459.96484"
      height="20"
      width="70.181519"
      id="rect2300"
-     style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+     style="opacity:1;fill:#f7fceb;fill-opacity:0.71532843999999995;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;color:#000000" />
   <rect
      inkscape:export-ydpi="90"
      inkscape:export-xdpi="90"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
-     y="150.3103"
-     x="469.96484"
+     y="150.00024"
+     x="459.96484"
      height="20"
      width="70.181519"
      id="rect2302"
-     style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+     style="opacity:1;fill:#f7fceb;fill-opacity:0.71532843999999995;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;color:#000000" />
   <text
      inkscape:export-ydpi="90"
      inkscape:export-xdpi="90"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      sodipodi:linespacing="100%"
      id="text2306"
-     y="120.3103"
-     x="474.64636"
+     y="120.00024"
+     x="464.64636"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
      xml:space="preserve"><tspan
        sodipodi:role="line"
-       x="474.64636"
-       y="120.3103"
+       x="464.64636"
+       y="120.00024"
        style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
        id="tspan2308">CommandImpl</tspan></text>
   <text
@@ -765,14 +765,14 @@
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      xml:space="preserve"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-     x="474.64636"
-     y="160.3103"
+     x="464.64636"
+     y="160.00024"
      id="text2310"
      sodipodi:linespacing="100%"><tspan
        id="tspan2312"
        style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
-       y="160.3103"
-       x="474.64636"
+       y="160.00024"
+       x="464.64636"
        sodipodi:role="line">CommandImpl</tspan></text>
   <text
      inkscape:export-ydpi="90"
@@ -780,13 +780,13 @@
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      xml:space="preserve"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-     x="353.36804"
-     y="84.810303"
+     x="343.36804"
+     y="84.500244"
      id="text2318"
      sodipodi:linespacing="100%"><tspan
        style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
-       y="84.810303"
-       x="353.36804"
+       y="84.500244"
+       x="343.36804"
        id="tspan2320"
        sodipodi:role="line">xxx(...)</tspan></text>
   <path
@@ -829,14 +829,14 @@
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      sodipodi:linespacing="100%"
      id="text5310"
-     y="95.242737"
-     x="353.36804"
+     y="94.932678"
+     x="343.36804"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
      xml:space="preserve"><tspan
        sodipodi:role="line"
        id="tspan5312"
-       x="353.36804"
-       y="95.242737"
+       x="343.36804"
+       y="94.932678"
        style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans">sss()</tspan></text>
   <text
      inkscape:export-ydpi="90"
@@ -844,13 +844,13 @@
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      xml:space="preserve"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-     x="353.36804"
-     y="64.81031"
+     x="343.36804"
+     y="64.500252"
      id="text5314"
      sodipodi:linespacing="100%"><tspan
        style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
-       y="64.81031"
-       x="353.36804"
+       y="64.500252"
+       x="343.36804"
        sodipodi:role="line"
        id="tspan2741">Command::get(&quot;name&quot;)</tspan></text>
   <text
@@ -976,7 +976,7 @@
      style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1"
      sodipodi:nodetypes="csc" />
   <g
-     transform="translate(29.464859,-167.1897)"
+     transform="translate(19.464859,-167.49976)"
      inkscape:export-ydpi="90"
      inkscape:export-xdpi="90"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
@@ -1060,13 +1060,13 @@
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      sodipodi:linespacing="100%"
      id="text2325"
-     y="333.05249"
-     x="319.46484"
+     y="332.74243"
+     x="309.46484"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
      xml:space="preserve"><tspan
        style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
-       y="333.05249"
-       x="319.46484"
+       y="332.74243"
+       x="309.46484"
        id="tspan2327"
        sodipodi:role="line">exec(..)</tspan></text>
   <text
@@ -1110,8 +1110,8 @@
   <text
      xml:space="preserve"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-     x="319.46484"
-     y="343.3103"
+     x="309.46484"
+     y="343.00024"
      id="text2545"
      sodipodi:linespacing="100%"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
@@ -1119,8 +1119,8 @@
      inkscape:export-ydpi="90"><tspan
        sodipodi:role="line"
        id="tspan2547"
-       x="319.46484"
-       y="343.3103"
+       x="309.46484"
+       y="343.00024"
        style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans">undo(..)</tspan></text>
   <text
      inkscape:export-ydpi="90"
@@ -1128,13 +1128,13 @@
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      sodipodi:linespacing="100%"
      id="text2549"
-     y="322.8103"
-     x="319.46484"
+     y="322.50024"
+     x="309.46484"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
      xml:space="preserve"><tspan
        style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
-       y="322.8103"
-       x="319.46484"
+       y="322.50024"
+       x="309.46484"
        id="tspan2551"
        sodipodi:role="line">bind(..)</tspan></text>
   <rect
@@ -1142,16 +1142,16 @@
      id="rect2573"
      width="50.037743"
      height="79.987656"
-     x="379.96484"
-     y="110.3103"
+     x="369.96484"
+     y="110.00024"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      inkscape:export-xdpi="90"
      inkscape:export-ydpi="90" />
   <text
      xml:space="preserve"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-     x="383.14636"
-     y="120.3103"
+     x="373.14636"
+     y="120.00024"
      id="text2575"
      sodipodi:linespacing="100%"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
@@ -1159,14 +1159,14 @@
      inkscape:export-ydpi="90"><tspan
        id="tspan2577"
        style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
-       y="120.3103"
-       x="383.14636"
+       y="120.00024"
+       x="373.14636"
        sodipodi:role="line">Index</tspan></text>
   <g
      transform="translate(-54.67118,-41.893236)"
      id="g2589">
     <rect
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000012;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="opacity:1;fill:#f7fceb;fill-opacity:0.71532843999999995;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;color:#000000"
        id="rect4200"
        width="99.876717"
        height="49.91003"
@@ -1193,7 +1193,8 @@
   </g>
   <g
      transform="translate(-34.67118,-72.393233)"
-     id="g2594">
+     id="g2594"
+     style="fill:#eeffda;fill-opacity:0.71532845">
     <rect
        inkscape:export-ydpi="90"
        inkscape:export-xdpi="90"
@@ -1203,10 +1204,10 @@
        height="49.91003"
        width="99.876717"
        id="rect2596"
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000012;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+       style="opacity:1;fill:#f7fceb;fill-opacity:0.71532845;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
     <text
        xml:space="preserve"
-       style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+       style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#eeffda;fill-opacity:0.71532845;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
        x="136.9032"
        y="395.06757"
        id="text2598"
@@ -1215,19 +1216,19 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          id="tspan2600"
-         style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+         style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans;fill:#eeffda;fill-opacity:0.71532845"
          y="395.06757"
          x="136.9032"
          sodipodi:role="line">undo def</tspan></text>
   </g>
   <g
-     transform="translate(-8.2568512,-162.75726)"
+     transform="translate(-18.256851,-163.06732)"
      id="g2610">
     <rect
        inkscape:export-ydpi="90"
        inkscape:export-xdpi="90"
        inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="opacity:1;fill:#f7fceb;fill-opacity:0.71532843999999995;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;color:#000000"
        id="rect2604"
        width="44.681519"
        height="11.5"
@@ -1250,7 +1251,7 @@
          id="tspan2608">Command</tspan></text>
   </g>
   <g
-     transform="translate(-8.2568512,-148.75726)"
+     transform="translate(-18.256851,-149.06732)"
      id="g2615">
     <rect
        y="294.06757"
@@ -1258,7 +1259,7 @@
        height="11.5"
        width="44.681519"
        id="rect2617"
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="opacity:1;fill:#f7fceb;fill-opacity:0.71532843999999995;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;color:#000000"
        inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
@@ -1279,7 +1280,7 @@
          sodipodi:role="line">Command</tspan></text>
   </g>
   <g
-     transform="translate(-8.2568512,-120.75726)"
+     transform="translate(-18.256851,-121.06732)"
      id="g2631">
     <rect
        y="294.06757"
@@ -1287,7 +1288,7 @@
        height="11.5"
        width="44.681519"
        id="rect2633"
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="opacity:1;fill:#f7fceb;fill-opacity:0.71532843999999995;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;color:#000000"
        inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
@@ -1309,7 +1310,7 @@
   </g>
   <path
      id="path2639"
-     d="M 423.96486,154.8103 L 463.46486,160.8103"
+     d="M 413.96486,154.50024 L 453.46486,160.50024"
      style="fill:#55cbb9;fill-opacity:1;fill-rule:evenodd;stroke:#55cbb9;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#ArrowHIV1end);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
      sodipodi:nodetypes="cc"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
@@ -1317,7 +1318,7 @@
      inkscape:export-ydpi="90" />
   <g
      id="g2665"
-     transform="translate(-3.5140952e-2,-159.6897)">
+     transform="translate(-10.035141,-159.99976)">
     <rect
        inkscape:export-ydpi="90"
        inkscape:export-xdpi="90"
@@ -1327,7 +1328,7 @@
        height="20"
        width="70.181519"
        id="rect2647"
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+       style="opacity:1;fill:#f7fceb;fill-opacity:0.71532843999999995;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;color:#000000" />
     <text
        inkscape:export-ydpi="90"
        inkscape:export-xdpi="90"
@@ -1345,10 +1346,10 @@
          id="tspan2655">ArgumentHolder</tspan></text>
   </g>
   <g
-     transform="translate(-3.5140952e-2,-139.6897)"
+     transform="translate(-10.035141,-139.99976)"
      id="g2670">
     <rect
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="opacity:1;fill:#f7fceb;fill-opacity:0.71532843999999995;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;color:#000000"
        id="rect2672"
        width="70.181519"
        height="20"
@@ -1375,7 +1376,7 @@
   </g>
   <g
      id="g2678"
-     transform="translate(-3.5140952e-2,-119.50726)">
+     transform="translate(-10.035141,-119.81732)">
     <rect
        inkscape:export-ydpi="90"
        inkscape:export-xdpi="90"
@@ -1385,7 +1386,7 @@
        height="20"
        width="70.181519"
        id="rect2680"
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+       style="opacity:1;fill:#f7fceb;fill-opacity:0.71532843999999995;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;color:#000000" />
     <text
        inkscape:export-ydpi="90"
        inkscape:export-xdpi="90"
@@ -1419,7 +1420,7 @@
        sodipodi:role="line">getHandle(slot)</tspan></text>
   <g
      id="g16601"
-     transform="translate(70.675549,-274.241)">
+     transform="translate(60.675549,-274.55106)">
     <g
        id="g16603"
        style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate">
@@ -1446,100 +1447,61 @@
        style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
   </g>
   <rect
-     style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     style="opacity:1;fill:#f7fceb;fill-opacity:0.71532843999999995;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;color:#000000"
      id="rect16814"
      width="70.181519"
      height="20"
-     x="469.96484"
-     y="170.3103"
+     x="459.96484"
+     y="170.00024"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      inkscape:export-xdpi="90"
      inkscape:export-ydpi="90" />
   <text
      sodipodi:linespacing="100%"
      id="text16816"
-     y="180.3103"
-     x="474.64636"
+     y="180.00024"
+     x="464.64636"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
      xml:space="preserve"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      inkscape:export-xdpi="90"
      inkscape:export-ydpi="90"><tspan
        sodipodi:role="line"
-       x="474.64636"
-       y="180.3103"
+       x="464.64636"
+       y="180.00024"
        style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
        id="tspan16818">CommandImpl</tspan></text>
   <rect
-     style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     style="opacity:1;fill:#f7fceb;fill-opacity:0.71532843999999995;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:1.50000024000000010;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;color:#000000"
      id="rect2686"
      width="199.98341"
      height="60.001945"
-     x="539.96484"
-     y="240.31027"
+     x="529.96484"
+     y="240.00021"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      inkscape:export-xdpi="90"
      inkscape:export-ydpi="90" />
   <text
      xml:space="preserve"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-     x="545.72223"
-     y="254.7019"
+     x="535.72223"
+     y="254.39185"
      id="text2688"
      sodipodi:linespacing="100%"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      inkscape:export-xdpi="90"
      inkscape:export-ydpi="90"><tspan
-       y="254.7019"
-       x="545.72223"
+       y="254.39185"
+       x="535.72223"
        id="tspan2690"
        sodipodi:role="line">Command Impl</tspan></text>
-  <g
-     transform="translate(180.49403,-294.241)"
-     id="g16820">
-    <g
-       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       id="g16822">
-      <path
-         sodipodi:nodetypes="ccccc"
-         d="M 399.47083,444.5513 L 469.47083,444.5513 L 609.47083,464.5513 L 499.47083,464.5513 L 399.47083,444.5513 z"
-         id="path16824" />
-      <path
-         sodipodi:nodetypes="ccccc"
-         d="M 469.47083,444.5513 L 469.47083,464.5513 L 609.47083,494.5513 L 609.47083,464.5513 L 469.47083,444.5513 z"
-         id="path16826" />
-      <path
-         sodipodi:nodetypes="ccccc"
-         d="M 469.47083,464.5513 L 399.47083,464.5513 L 499.47083,494.5513 L 609.47083,494.5513 L 469.47083,464.5513 z"
-         id="path16828" />
-      <path
-         sodipodi:nodetypes="ccccc"
-         d="M 399.47083,464.5513 L 399.47083,444.5513 L 499.97083,465.07898 L 499.47083,494.5513 L 399.47083,464.5513 z"
-         id="path16830" />
-    </g>
-    <path
-       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       d="M 399.47083,444.5513 L 469.47083,444.5513 L 469.47083,464.5513 L 399.47083,464.5513 L 399.47083,444.5513 z"
-       id="path16832"
-       sodipodi:nodetypes="ccccc" />
-  </g>
-  <rect
-     inkscape:export-ydpi="90"
-     inkscape:export-xdpi="90"
-     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
-     y="170.6593"
-     x="679.96484"
-     height="29.556213"
-     width="110.03513"
-     id="rect16834"
-     style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:1.50000024;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
   <path
      inkscape:export-ydpi="90"
      inkscape:export-xdpi="90"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      sodipodi:nodetypes="cc"
      style="fill:#55cbb9;fill-opacity:1;fill-rule:evenodd;stroke:#55cbb9;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#ArrowHIV1end);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-     d="M 535.96486,160.3103 L 575.96486,142.3103"
+     d="M 525.96486,160.00024 L 565.96486,142.00024"
      id="path2590" />
   <flowRoot
      xml:space="preserve"
@@ -1563,7 +1525,7 @@
        id="flowPara2643" /><flowPara
        id="flowPara2645" /></flowRoot>  <g
      id="g2647"
-     transform="translate(158.62035,-32.368916)">
+     transform="translate(148.62035,-32.678975)">
     <rect
        inkscape:export-ydpi="90"
        inkscape:export-xdpi="90"
@@ -1616,8 +1578,8 @@
          sodipodi:role="line">undo functor</tspan></text>
   </g>
   <rect
-     y="269.47681"
-     x="628.24512"
+     y="269.16675"
+     x="618.24512"
      height="11.5"
      width="34.074917"
      id="rect2666"
@@ -1628,8 +1590,8 @@
   <text
      xml:space="preserve"
      style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-     x="629.92664"
-     y="277.47681"
+     x="619.92664"
+     y="277.16675"
      id="text2668"
      sodipodi:linespacing="100%"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
@@ -1637,153 +1599,100 @@
      inkscape:export-ydpi="90"><tspan
        id="tspan2670"
        style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
-       y="277.47681"
-       x="629.92664"
+       y="277.16675"
+       x="619.92664"
        sodipodi:role="line">closure</tspan></text>
-  <g
-     id="g2680"
-     transform="translate(316.6378,-119.75726)">
-    <rect
-       y="294.06757"
-       x="389.72168"
-       height="11.5"
-       width="17.605364"
-       id="rect2674"
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <text
-       xml:space="preserve"
-       style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-       x="391.4032"
-       y="302.06757"
-       id="text2676"
-       sodipodi:linespacing="100%"
-       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"><tspan
-         id="tspan2678"
-         style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
-         y="302.06757"
-         x="391.4032"
-         sodipodi:role="line">arg</tspan></text>
-  </g>
-  <g
-     transform="translate(337.10734,-119.75726)"
-     id="g2685">
-    <rect
-       inkscape:export-ydpi="90"
-       inkscape:export-xdpi="90"
-       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       id="rect2687"
-       width="17.605364"
-       height="11.5"
-       x="389.72168"
-       y="294.06757" />
-    <text
-       inkscape:export-ydpi="90"
-       inkscape:export-xdpi="90"
-       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
-       sodipodi:linespacing="100%"
-       id="text2689"
-       y="302.06757"
-       x="391.4032"
-       style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-       xml:space="preserve"><tspan
-         sodipodi:role="line"
-         x="391.4032"
-         y="302.06757"
-         style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
-         id="tspan2691">arg</tspan></text>
-  </g>
-  <g
-     id="g2693"
-     transform="translate(357.10734,-119.75726)">
-    <rect
-       y="294.06757"
-       x="389.72168"
-       height="11.5"
-       width="17.605364"
-       id="rect2695"
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <text
-       xml:space="preserve"
-       style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-       x="391.4032"
-       y="302.06757"
-       id="text2697"
-       sodipodi:linespacing="100%"
-       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90"><tspan
-         id="tspan2699"
-         style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
-         y="302.06757"
-         x="391.4032"
-         sodipodi:role="line">arg</tspan></text>
-  </g>
-  <g
-     transform="translate(377.08311,-119.75726)"
-     id="g2701">
-    <rect
-       inkscape:export-ydpi="90"
-       inkscape:export-xdpi="90"
-       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
-       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-       id="rect2703"
-       width="17.605364"
-       height="11.5"
-       x="389.72168"
-       y="294.06757" />
-    <text
-       inkscape:export-ydpi="90"
-       inkscape:export-xdpi="90"
-       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
-       sodipodi:linespacing="100%"
-       id="text2705"
-       y="302.06757"
-       x="391.4032"
-       style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-       xml:space="preserve"><tspan
-         sodipodi:role="line"
-         x="391.4032"
-         y="302.06757"
-         style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
-         id="tspan2707">arg</tspan></text>
-  </g>
   <rect
-     y="190.48422"
-     x="709.96484"
-     height="7.665247"
-     width="44.223175"
-     id="rect2711"
-     style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     id="rect2745"
+     width="130.09683"
+     height="60.31007"
+     x="599.90314"
+     y="349.68994"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      inkscape:export-xdpi="90"
      inkscape:export-ydpi="90" />
   <text
      xml:space="preserve"
-     style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-     x="712.84399"
-     y="196.3103"
-     id="text2713"
+     style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+     x="603.40314"
+     y="401.68994"
+     id="text2747"
      sodipodi:linespacing="100%"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      inkscape:export-xdpi="90"
      inkscape:export-ydpi="90"><tspan
-       id="tspan2715"
+       y="401.68994"
+       x="603.40314"
+       id="tspan2749"
+       sodipodi:role="line">ProcDispatcher</tspan></text>
+  <rect
+     style="opacity:0.5;fill:url(#Strips1_2);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     id="rect2759"
+     width="47.311901"
+     height="90.143509"
+     x="678.38611"
+     y="289.66446"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <text
+     inkscape:export-ydpi="90"
+     inkscape:export-xdpi="90"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
+     sodipodi:linespacing="100%"
+     id="text5120"
+     y="313.22919"
+     x="683.56622"
+     style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+     xml:space="preserve"><tspan
+       sodipodi:role="line"
+       x="683.56622"
+       y="313.22919"
        style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
-       y="196.3103"
-       x="712.84399"
-       sodipodi:role="line">memento</tspan></text>
+       id="tspan5122">Handling</tspan><tspan
+       sodipodi:role="line"
+       x="683.56622"
+       y="321.22919"
+       style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+       id="tspan5129">Pattern</tspan></text>
+  <g
+     transform="translate(170.49403,-294.55106)"
+     id="g16820">
+    <g
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="g16822">
+      <path
+         sodipodi:nodetypes="ccccc"
+         d="M 399.47083,444.5513 L 469.47083,444.5513 L 609.47083,464.5513 L 499.47083,464.5513 L 399.47083,444.5513 z"
+         id="path16824" />
+      <path
+         sodipodi:nodetypes="ccccc"
+         d="M 469.47083,444.5513 L 469.47083,464.5513 L 609.47083,494.5513 L 609.47083,464.5513 L 469.47083,444.5513 z"
+         id="path16826" />
+      <path
+         sodipodi:nodetypes="ccccc"
+         d="M 469.47083,464.5513 L 399.47083,464.5513 L 499.47083,494.5513 L 609.47083,494.5513 L 469.47083,464.5513 z"
+         id="path16828" />
+      <path
+         sodipodi:nodetypes="ccccc"
+         d="M 399.47083,464.5513 L 399.47083,444.5513 L 499.97083,465.07898 L 499.47083,494.5513 L 399.47083,464.5513 z"
+         id="path16830" />
+    </g>
+  </g>
+  <rect
+     inkscape:export-ydpi="90"
+     inkscape:export-xdpi="90"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
+     y="170.34924"
+     x="669.96484"
+     height="29.556213"
+     width="110.03513"
+     id="rect16834"
+     style="opacity:1;fill:#f7fceb;fill-opacity:0.71532845;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:1.50000024000000010;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
   <path
      style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1"
-     d="M 624.69635,289.35729 L 678.27961,289.35729 L 728.68457,221.69775 C 746.28171,201.94355 685.65518,207.38 697.77225,201.06082 L 709.84027,194.08163"
+     d="M 614.69635,289.04723 L 668.27961,289.04723 L 718.68457,221.38769 C 736.28171,201.63349 675.65518,207.06994 687.77225,200.75076 L 699.84027,193.77157"
      id="path2739"
      sodipodi:nodetypes="ccccz"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
@@ -1795,60 +1704,150 @@
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      sodipodi:nodetypes="ccccc"
      id="path5326"
-     d="M 666.41565,276.27581 L 671.91565,276.27581 L 712.42112,225.23328 C 730.01826,205.12552 674.34148,211.62265 683.27656,203.18215 L 702.41565,183.82859"
+     d="M 656.41565,275.96575 L 661.91565,275.96575 L 702.42112,224.92322 C 720.01826,204.81546 664.34148,211.31259 673.27656,202.87209 L 692.41565,183.51853"
      style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Mend);stroke-opacity:1" />
   <rect
-     style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-     id="rect2745"
-     width="130.09683"
-     height="60.31007"
-     x="609.90314"
-     y="350"
+     y="190.17416"
+     x="699.96484"
+     height="7.665247"
+     width="44.223175"
+     id="rect2711"
+     style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      inkscape:export-xdpi="90"
      inkscape:export-ydpi="90" />
   <text
      xml:space="preserve"
-     style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-     x="613.40314"
-     y="402"
-     id="text2747"
+     style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+     x="702.84399"
+     y="196.00024"
+     id="text2713"
      sodipodi:linespacing="100%"
      inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
      inkscape:export-xdpi="90"
      inkscape:export-ydpi="90"><tspan
-       y="402"
-       x="613.40314"
-       id="tspan2749"
-       sodipodi:role="line">ProcDispatcher</tspan></text>
-  <rect
-     style="opacity:0.5;fill:url(#Strips1_2);fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994000000003;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
-     id="rect2759"
-     width="47.311901"
-     height="90.143509"
-     x="688.38611"
-     y="289.97452"
-     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
-     inkscape:export-xdpi="90"
-     inkscape:export-ydpi="90" />
-  <text
-     inkscape:export-ydpi="90"
-     inkscape:export-xdpi="90"
-     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
-     sodipodi:linespacing="100%"
-     id="text5120"
-     y="313.53925"
-     x="693.56622"
-     style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-     xml:space="preserve"><tspan
-       sodipodi:role="line"
-       x="693.56622"
-       y="313.53925"
+       id="tspan2715"
        style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
-       id="tspan5122">Handling</tspan><tspan
-       sodipodi:role="line"
-       x="693.56622"
-       y="321.53925"
-       style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
-       id="tspan5129">Pattern</tspan></text>
+       y="196.00024"
+       x="702.84399"
+       sodipodi:role="line">memento</tspan></text>
+  <g
+     id="g3428">
+    <g
+       transform="translate(306.6378,-120.06732)"
+       id="g2680">
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
+         style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect2674"
+         width="17.605364"
+         height="11.5"
+         x="389.72168"
+         y="294.06757" />
+      <text
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
+         sodipodi:linespacing="100%"
+         id="text2676"
+         y="302.06757"
+         x="391.4032"
+         style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           sodipodi:role="line"
+           x="391.4032"
+           y="302.06757"
+           style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+           id="tspan2678">arg</tspan></text>
+    </g>
+    <g
+       id="g2685"
+       transform="translate(327.10734,-120.06732)">
+      <rect
+         y="294.06757"
+         x="389.72168"
+         height="11.5"
+         width="17.605364"
+         id="rect2687"
+         style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <text
+         xml:space="preserve"
+         style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+         x="391.4032"
+         y="302.06757"
+         id="text2689"
+         sodipodi:linespacing="100%"
+         inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90"><tspan
+           id="tspan2691"
+           style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+           y="302.06757"
+           x="391.4032"
+           sodipodi:role="line">arg</tspan></text>
+    </g>
+    <g
+       transform="translate(347.10734,-120.06732)"
+       id="g2693">
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
+         style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         id="rect2695"
+         width="17.605364"
+         height="11.5"
+         x="389.72168"
+         y="294.06757" />
+      <text
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
+         sodipodi:linespacing="100%"
+         id="text2697"
+         y="302.06757"
+         x="391.4032"
+         style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           sodipodi:role="line"
+           x="391.4032"
+           y="302.06757"
+           style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+           id="tspan2699">arg</tspan></text>
+    </g>
+    <g
+       id="g2701"
+       transform="translate(367.08311,-120.06732)">
+      <rect
+         y="294.06757"
+         x="389.72168"
+         height="11.5"
+         width="17.605364"
+         id="rect2703"
+         style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+         inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <text
+         xml:space="preserve"
+         style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+         x="391.4032"
+         y="302.06757"
+         id="text2705"
+         sodipodi:linespacing="100%"
+         inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90"><tspan
+           id="tspan2707"
+           style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+           y="302.06757"
+           x="391.4032"
+           sodipodi:role="line">arg</tspan></text>
+    </g>
+  </g>
 </svg>

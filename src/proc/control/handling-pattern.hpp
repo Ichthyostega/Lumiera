@@ -36,20 +36,42 @@
 
 //#include "pre.hpp"
 #include "lib/error.hpp"
+#include "lib/bool-checkable.hpp"
 //#include "include/symbol.hpp"
 
 //#include <tr1/memory>
+#include <string>
 
 
 
 namespace control {
   
+  using std::string;
 //  using lumiera::Symbol;
 //  using std::tr1::shared_ptr;
   
   
   class Command;
   
+  
+  /**
+   * @todo Type-comment
+   */
+  class ExecResult
+    : public lib::BoolCheckable<ExecResult>
+    {
+      const string log_;
+      
+    public:
+      bool isValid() const;
+      void maybeThrow() const;
+      
+    protected:
+      ExecResult () { }                   ///< default: command executed successfully
+      ExecResult (lumiera::Error const&); ///< this result marks a failed execution
+      
+      friend class HandlingPattern;
+    };
   
   /**
    * @todo Type-comment
@@ -70,9 +92,22 @@ namespace control {
       
       virtual ~HandlingPattern() {}
       
-      virtual void invoke (Command& command)  const  =0;
+      /** main functionality: invoke a command, detect errors.
+       *  @return ExecResult object, which might later be used to 
+       *          detect errors on execution */
+      ExecResult operator() (Command& command)  const;
       
-      virtual HandlingPattern const& howtoUNDO()  const  =0;
+      /** @return HandlingPatter describing how the UNDO operation is to be performed */
+      HandlingPattern const& howtoUNDO()  const;
+      
+      
+      
+    protected:
+      
+      virtual void perform (Command& command)  const  =0;
+      
+      virtual HandlingPattern const& defineUNDO()  const  =0;
+      
       
     };
   ////////////////TODO currently just fleshing  out the API....

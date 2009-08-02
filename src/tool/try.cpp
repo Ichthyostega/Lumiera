@@ -16,6 +16,8 @@
 
 
 #include <nobug.h>
+#define LUMIERA_LOGGING_CXX
+#include "include/logging.h"
 //#include "include/nobugcfg.h"
 #include "lib/bool-checkable.hpp"
 
@@ -23,6 +25,7 @@
 //#include <typeinfo>
 #include <boost/format.hpp>
 #include <cstdlib>
+#include <cstdio>
 
 
 using std::rand;
@@ -73,6 +76,8 @@ main (int, char**) //(int argc, char* argv[])
       }
     cout << "size=" << sizeof(TestIt1) <<"\n";
     
+    char* horror = 0;
+    ERROR (all, "note: %s is a horrible thing", horror);
     
     cout <<  "\n.gulp.\n";
     

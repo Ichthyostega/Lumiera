@@ -23,12 +23,24 @@
 
 
 #include "proc/control/handling-pattern.hpp"
+#include "proc/control/command.hpp"
+
+#include "include/symbol.hpp"
+#include "include/logging.h"
+#include "lib/util.hpp"
 //#include "proc/mobject/mobject-ref.hpp"
 //#include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/placement.hpp"
 
-//#include <boost/format.hpp>
-//using boost::str;
+#include <boost/format.hpp>
+
+
+using boost::str;
+using boost::format;
+using namespace lumiera;
+using util::cStr;
+using util::isnil;
+
 
 namespace control {
   
@@ -39,8 +51,87 @@ namespace control {
     UNIMPLEMENTED ("Factory for handling patterns");
   }
   
+
+  /** @note: does error handling, but delegates the actual
+   *         execution to the protected (subclass) member */
+  ExecResult
+  HandlingPattern::operator() (Command& command)  const
+  {
+    TRACE (proc_dbg, "invoking %s...", cStr(command));
+    static format err_pre ("Error state detected, %s *NOT* invoked.");
+    static format err_post ("Error state after %s invocation.");
+    static format err_fatal ("Execution of %s raised unknown error.");
+    try
+      {
+        Symbol errID_pre = lumiera_error();
+        if (errID_pre)
+          return ExecResult (error::Logic (str (err_pre % command), errID_pre));
+        
+        // Execute the command
+        perform (command);
+        
+        Symbol errID = lumiera_error();
+        if (errID)
+          return ExecResult (error::State (str (err_post % command),errID));
+        else
+          return ExecResult();
+      }
+    
+    
+    catch (lumiera::Error& problem)
+      {
+        Symbol errID = lumiera_error();
+        WARN (command, "Invocation of %s failed: %s", cStr(command), problem.what());
+        TRACE (proc_dbg, "Error flag was: %s", errID);
+        return ExecResult (problem);
+      }
+    catch (std::exception& library_problem)
+      {
+        Symbol errID = lumiera_error();
+        WARN (command, "Invocation of %s failed: %s", cStr(command), library_problem.what());
+        TRACE (proc_dbg, "Error flag was: %s", errID);
+        return ExecResult (error::External (library_problem));
+      }
+    catch (...)
+      {
+        Symbol errID = lumiera_error();
+        ERROR (command, "Invocation of %s failed with unknown exception; error flag is: %s", cStr(command), errID);
+        throw error::Fatal (str (err_fatal % command), errID);
+      }
+  }
   
-  ///////////////////////////////////////////////////////////////////////TODO: is this implementation file actually required??
   
+  HandlingPattern const&
+  HandlingPattern::howtoUNDO()  const
+  {
+    return defineUNDO();
+  }
+  
+  
+  
+  /* ====== execution result state object ======= */
+  
+  
+  /** @note we just grab an retain the error message.
+   *  @todo rather keep the exception object around. */
+  ExecResult::ExecResult (lumiera::Error const& problem)
+    : log_(problem.what())
+  { }
+  
+  
+  bool
+  ExecResult::isValid() const
+  {
+    return isnil(log_);
+  }
+  
+  
+  void
+  ExecResult::maybeThrow() const
+  {
+    if (!isnil (log_))
+      throw error::Logic ("Command execution failed: "+log_);
+  }
+      
   
 } // namespace control
