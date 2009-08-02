@@ -88,18 +88,18 @@ namespace control {
       Command() { } ///< undefined command
      ~Command();
       
-      void operator() () ;
-      void undo () ;
+      ExecResult operator() () ;
+      ExecResult undo () ;
       
       
       /** core operation: invoke the command
        *  @param execPattern describes the individual steps
        *         necessary to get this command invoked properly
        */
-      void exec (HandlingPattern const& execPattern);
-      void exec (HandlingPattern::ID);
+      ExecResult exec (HandlingPattern const& execPattern);
+      ExecResult exec (HandlingPattern::ID);
       
-      void execSync ();
+      ExecResult execSync ();
       
       /** @return ID of the execution pattern used by operator() */
       HandlingPattern::ID getDefaultHandlingPattern()  const;
@@ -115,7 +115,7 @@ namespace control {
       Command& activate (CommandImpl&);
       
       template<typename TYPES>
-      void bindArg (Tuple<TYPES> const&);
+      Command& bindArg (Tuple<TYPES> const&);
       
       
       /* === diagnostics === */
@@ -142,10 +142,10 @@ namespace control {
   ////////////////TODO currently just fleshing  out the API....
   
 
-  inline void
+  inline ExecResult
   Command::operator() ()
   {
-    exec (getDefaultHandlingPattern());
+    return exec (getDefaultHandlingPattern());
   }
   
   

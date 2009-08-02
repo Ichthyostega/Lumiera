@@ -103,10 +103,10 @@ namespace control {
    */
   template<typename SIG, typename MEM>
   class ArgumentHolder
-    : public AcceptArgumentTuple< SIG                      // to derive the desired bind(..) signature
-                                , ArgumentHolder<SIG,MEM>  // target class providing the implementation
-                                , CmdClosure               // base class to inherit from
-                                > 
+    : public AcceptArgumentBinding< SIG                      // to derive the desired bind(..) signature
+                                  , ArgumentHolder<SIG,MEM>  // target class providing the implementation
+                                  , CmdClosure               // base class to inherit from
+                                  > 
     {
       /** copy construction allowed(but no assignment)*/
       ArgumentHolder& operator= (ArgumentHolder const&);

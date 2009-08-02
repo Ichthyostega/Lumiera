@@ -80,28 +80,28 @@ namespace com { ///< Proc-Layer command implementation details
      *  if the number and type of arguments of the stored operation function
      *  within the command matches the given argument pattern
      */
-    void
+    TAR&
     bind ()
       {
-        static_cast<TAR*> (this) -> bindArg (tuple::makeNullTuple());
+        return static_cast<TAR*> (this) -> bindArg (tuple::makeNullTuple());
       }
     
     
     template<typename T1>
-    void                                                                                  //________________________________
+    TAR&                                                                                  //________________________________
     bind (T1 a1)                                                                         ///< Accept binding with 1 Argument
       {
-        static_cast<TAR*> (this) -> bindArg (tuple::make (a1));
+        return static_cast<TAR*> (this) -> bindArg (tuple::make (a1));
       }
     
     
     template< typename T1
             , typename T2
             >
-    void                                                                                  //________________________________
+    TAR&                                                                                  //________________________________
     bind (T1 a1, T2 a2)                                                                  ///< Accept binding for 2 Arguments
       {
-        static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2));
+        return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2));
       }
     
     
@@ -109,10 +109,10 @@ namespace com { ///< Proc-Layer command implementation details
             , typename T2
             , typename T3
             >
-    void                                                                                  //________________________________
+    TAR&                                                                                  //________________________________
     bind (T1 a1, T2 a2, T3 a3)                                                           ///< Accept binding for 3 Arguments
       {
-        static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3));
+        return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3));
       }
     
     
@@ -121,10 +121,10 @@ namespace com { ///< Proc-Layer command implementation details
             , typename T3
             , typename T4
             >
-    void                                                                                  //________________________________
+    TAR&                                                                                  //________________________________
     bind (T1 a1, T2 a2, T3 a3, T4 a4)                                                    ///< Accept binding for 4 Arguments
       {
-        static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4));
+        return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4));
       }
     
     
@@ -134,10 +134,10 @@ namespace com { ///< Proc-Layer command implementation details
             , typename T4
             , typename T5
             >
-    void                                                                                  //________________________________
+    TAR&                                                                                  //________________________________
     bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5)                                             ///< Accept binding for 5 Arguments
       {
-        static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5));
+        return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5));
       }
     
     
@@ -148,10 +148,10 @@ namespace com { ///< Proc-Layer command implementation details
             , typename T5
             , typename T6
             >
-    void                                                                                  //________________________________
+    TAR&                                                                                  //________________________________
     bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6)                                      ///< Accept binding for 6 Arguments
       {
-        static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6));
+        return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6));
       }
     
     
@@ -163,10 +163,10 @@ namespace com { ///< Proc-Layer command implementation details
             , typename T6
             , typename T7
             >
-    void                                                                                  //________________________________
+    TAR&                                                                                  //________________________________
     bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7)                               ///< Accept binding for 7 Arguments
       {
-        static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7));
+        return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7));
       }
     
     
@@ -179,10 +179,10 @@ namespace com { ///< Proc-Layer command implementation details
             , typename T7
             , typename T8
             >
-    void                                                                                  //________________________________
+    TAR&                                                                                  //________________________________
     bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8)                        ///< Accept binding for 8 Arguments
       {
-        static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7,a8));
+        return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7,a8));
       }
     
     
@@ -196,10 +196,10 @@ namespace com { ///< Proc-Layer command implementation details
             , typename T8
             , typename T9
             >
-    void                                                                                  //________________________________
+    TAR&                                                                                  //________________________________
     bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9)                 ///< Accept binding for 9 Arguments
       {
-        static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7,a8,a9));
+        return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7,a8,a9));
       }
     
     };
@@ -209,5 +209,5 @@ namespace com { ///< Proc-Layer command implementation details
 
   
   
-}} // namespace control
+}} // namespace control::com
 #endif

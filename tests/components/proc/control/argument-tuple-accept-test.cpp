@@ -57,22 +57,24 @@ namespace test    {
     struct Tup
       {
         typedef typename FunctionSignature< function<SIG> >::Args Args;
+        typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
         typedef Tuple<Args> Ty;
       };
     
     
     template<typename SIG>
     class TestClass
-      : public AcceptArgumentTuple< SIG                     // to derive the desired signature
-                                  , TestClass<SIG>          // the target class providing the implementation
-                                  , typename Tup<SIG>::Ty   // base class to inherit from
-                                  >
+      : public AcceptArgumentBinding< SIG                     // to derive the desired signature
+                                    , TestClass<SIG>          // the target class providing the implementation
+                                    , typename Tup<SIG>::Ty   // base class to inherit from
+                                    >
       {
         typedef typename Tup<SIG>::Ty ATuple;
+        typedef typename Tup<SIG>::Ret RetType;
         
       public:
         
-        void
+        RetType
         bindArg (ATuple const& tuple)
           {
             static_cast<ATuple&> (*this) = tuple;

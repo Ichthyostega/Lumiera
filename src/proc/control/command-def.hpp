@@ -87,9 +87,9 @@ namespace control {
     
     template<typename SIG, typename MEM>
     struct UndoDefinition
-      : AcceptArgumentTupleRet< Command&, SIG               // Return type and Argument Signature of the \c bind(..) function
-                              , UndoDefinition<SIG,MEM>    //  target type (this class) providing the implementation \c bindArg(Tuple<..>) 
-                              >
+      : AcceptArgumentBindingRet< Command&, SIG               // Return type and Argument Signature of the \c bind(..) function
+                                , UndoDefinition<SIG,MEM>    //  target type (this class) providing the implementation \c bindArg(Tuple<..>) 
+                                >
       {
         typedef CommandSignature<SIG,MEM> CmdType;
         typedef typename CmdType::OperateSig CommandOperationSig;
