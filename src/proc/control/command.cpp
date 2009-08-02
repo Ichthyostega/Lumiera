@@ -63,6 +63,11 @@ namespace control {
   LUMIERA_ERROR_DEFINE (MISSING_MEMENTO,   "Undo functor not yet usable, because no undo state has been captured");
   
   
+  
+  /** storage for the singleton factory used to access CommandRegistry */
+  lumiera::Singleton<CommandRegistry> CommandRegistry::instance;
+  
+  
 
   Command::~Command() { }
   
@@ -78,6 +83,19 @@ namespace control {
       throw error::Invalid(str(fmt % cmdID), LUMIERA_ERROR_INVALID_COMMAND);
       
     return cmd;
+  }
+  
+  
+  /** @todo this is a "nice-to-have"; it would allow to call a function as a command,
+   *        almost as if it was a normal function. But this function needs to be defined
+   *        as a command previously, together with a suitable UNDO function. Moreover
+   *        this would probably require to build an additional index; 
+   *        thus this feature is unimplemented for the time being.
+   */
+  Command
+  Command::get (FuncPtr funcP)
+  {
+    UNIMPLEMENTED ("find a command definition which was based on the given function (ptr)");
   }
   
   
@@ -221,33 +239,34 @@ namespace control {
   
   
   
-  void
+  ExecResult
   Command::undo ()
   {
     HandlingPattern const& defaultPattern
       = HandlingPattern::get (getDefaultHandlingPattern()); 
-    exec (defaultPattern.howtoUNDO());
+    
+    return exec (defaultPattern.howtoUNDO());
   }
   
   
-  void
+  ExecResult
   Command::exec (HandlingPattern const& execPattern)
   {
-    execPattern (*this);
+    return execPattern (*this);
   }
   
   
-  void
+  ExecResult
   Command::exec (HandlingPattern::ID pattID)
   {
-    HandlingPattern::get(pattID) (*this);
+    return HandlingPattern::get(pattID) (*this);
   }
   
   
-  void
+  ExecResult
   Command::execSync ()
   {
-    exec (HandlingPattern::get(HandlingPattern::SYNC_THROW));
+    return exec (HandlingPattern::get(HandlingPattern::SYNC_THROW));
   }
   
   
@@ -263,17 +282,6 @@ namespace control {
   {
     UNIMPLEMENTED ("manage handling patterns in general");
   }
-  
-  
-  template<typename TYPES>
-  void
-  Command::bindArg (Tuple<TYPES> const& args)
-  {
-    UNIMPLEMENTED ("create an argument-binding, with runtime type check");
-  }
-
-
-  
 
   
   

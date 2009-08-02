@@ -100,7 +100,7 @@ namespace test    {
               .captureUndo (command1::capture)
               .undoOperation (command1::undoIt);
 
-          UNIMPLEMENTED ("more elaborate command handling patterns")
+          UNIMPLEMENTED ("more elaborate command handling patterns");
           ////////////////////////////////////////////////////////////////////////////////TODO: devise tests for async, repeated and compound sequences
           
           ASSERT (cnt_inst == Command::instance_count());

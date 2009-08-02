@@ -32,7 +32,7 @@
 //#include "proc/mobject/placement.hpp"
 //#include "proc/mobject/placement-index.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
-#include "proc/control/command.hpp"
+#include "proc/control/command-invocation.hpp"
 #include "proc/control/command-def.hpp"
 //#include "lib/lumitime.hpp"
 #include "lib/format.hpp"
@@ -157,11 +157,11 @@ namespace test    {
           ASSERT ( 0 == command1::check_);
 
           // the following shortcut does the same:
-          Command::invoke ("test.command1.2", 1234);
+          invoke ("test.command1.2") (1234);
           ASSERT ( 1234 == command1::check_);
           
           // another shortcut, with static type check:
-          invoke (command1::operate, 5678);
+          invoke (command1::operate) (5678);
           ASSERT ( 1234+5678 == command1::check_);
           
           com.undo();
@@ -282,6 +282,7 @@ namespace test    {
           ASSERT (Command::get("test.command1.4"));
           
           VERIFY_ERROR (INVALID_COMMAND, Command::get("miracle"));
+          VERIFY_ERROR (INVALID_COMMAND, invoke ("miracle") (1,2,3));
           
           CommandDef unbelievable ("miracle");
           ASSERT (!unbelievable);

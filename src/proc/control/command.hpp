@@ -62,6 +62,8 @@ namespace control {
   LUMIERA_ERROR_DECLARE (INVALID_ARGUMENTS);  ///< Arguments provided for binding doesn't match stored command function parameters
 
   
+
+  typedef void* FuncPtr;
   
   class CommandDef;
   class CommandImpl;
@@ -80,6 +82,7 @@ namespace control {
     public:
       /* === command registry === */
       static Command get (Symbol cmdID);
+      static Command get (FuncPtr func);
       static bool remove (Symbol cmdID); 
       static bool  undef (Symbol cmdID);
       
@@ -147,6 +150,16 @@ namespace control {
   {
     return exec (getDefaultHandlingPattern());
   }
+  
+  
+  template<typename TYPES>
+  inline Command&
+  Command::bindArg (Tuple<TYPES> const&)
+    {
+      UNIMPLEMENTED("delegate argument binding to command-impl");
+      return *this;
+    }
+  
   
   
   inline bool

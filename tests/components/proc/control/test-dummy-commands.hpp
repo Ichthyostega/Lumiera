@@ -86,21 +86,21 @@ namespace test    {
   
   namespace command1 { ///< test command just adding a given value
     
-    long check_ = 0;
+    static long check_ = 0;
       
-    void
+    inline void
     operate (int someVal)
     {
       check_ += someVal;
     }
     
-    long
+    inline long
     capture (int)
     {
       return check_;
     }
     
-    void
+    inline void
     undoIt (int, long oldVal)
     {
       check_ = oldVal;
@@ -117,12 +117,12 @@ namespace test    {
     using lumiera::error::External;
     
     
-    ostringstream check_;
+    static ostringstream check_;
       
     
     typedef function<string()> FunS;
     
-    void
+    inline void
     operate (FunS func, bool fail)
     {
       if (fail) throw External("simulated exception");
@@ -130,13 +130,13 @@ namespace test    {
       check_ << func();
     }
     
-    string
+    inline string
     capture (FunS, bool)
     {
       return check_.str();
     }
     
-    void
+    inline void
     undoIt (FunS, bool fail, string previousProtocol)
     {
       if (fail) throw External("simulated exception in UNDO");

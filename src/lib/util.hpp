@@ -107,7 +107,7 @@ namespace util {
   /** shortcut for set value containment test */
   template <typename T>
   inline bool 
-  contains (std::set<T>& set, const T& val)
+  contains (std::set<T>& set, T const& val)
   {
     return set.end() != set.find (val);
   }
@@ -247,7 +247,7 @@ namespace util {
 \endverbatim
    * @see sanitised-identifier-test.cpp
    */
-  string sanitise (const string& org);
+  string sanitise (string const& org);
   
   
   
@@ -256,7 +256,7 @@ namespace util {
    *  usable for printf with objects providing to-string conversion.
    */
   inline const char* 
-  cStr (const string& org)
+  cStr (string const& org)
   {
     return org.c_str();
   }

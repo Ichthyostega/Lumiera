@@ -161,11 +161,5 @@ namespace control {
     };
   
   
-//  inline ostream& operator<< (ostream& os, Mutation const& muta) { return os << string(muta); }
-  
-  /** storage for the singleton factory used to access CommandRegistry */
-  lumiera::Singleton<CommandRegistry> CommandRegistry::instance;
-  
-  
 } // namespace control
 #endif
