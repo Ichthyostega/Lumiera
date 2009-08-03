@@ -44,17 +44,20 @@
 
 #include "proc/control/command.hpp"
 #include "proc/control/command-mutation.hpp"
+#include "proc/control/command-argument-holder.hpp"
 #include "lib/bool-checkable.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <boost/operators.hpp>
 
-//#include <tr1/memory>
-
+#include <tr1/memory>
+#include <tr1/functional>
 
 
 namespace control {
   
+  using std::tr1::function;
+  using std::tr1::shared_ptr;
 
   
   
@@ -69,8 +72,40 @@ namespace control {
       Mutation do_;
       UndoMutation undo_;
       
+      shared_ptr<CmdClosure> pClo_;
+      
+      
+      template<typename ARG>
+      struct _Type
+        {
+          typedef typename ARG::SIG_op SIG_op;
+          typedef typename ARG::SIG_cap SIG_cap;
+          typedef typename ARG::SIG_undo SIG_undo;
+          
+          typedef function<SIG_op> Func_op;
+          typedef function<SIG_cap> Func_cap;
+          typedef function<SIG_undo> Func_undo;
+        };
+#define _TY(_ID_) typename _Type<ARG>::_ID_
+      
     public:
-      /* === command registry === */
+      /** build a new implementation frame, and do the initial wiring.
+       *  On the interface the specific type is discarded afterwards.
+       *  This information is still kept though, as encoded into the vtable
+       *  of the embedded FunErasure objects holding the command operation
+       *  and undo functors, and the vtable of the embedded CmdClosure */
+      template<typename ARG>
+      CommandImpl (shared_ptr<ARG> pArgHolder
+                  ,_TY (Func_op) const& operFunctor
+                  ,_TY (Func_cap) const& captFunctor
+                  ,_TY (Func_undo) const& undoFunctor
+                  )
+        : do_(operFunctor)
+        , undo_(pArgHolder->tie (undoFunctor, captFunctor))
+        , pClo_(pArgHolder)
+        { }
+      
+#undef _TY      
       
       
      ~CommandImpl();
@@ -84,7 +119,11 @@ namespace control {
       
       
       template<typename TYPES>
-      void bindArg (Tuple<TYPES> const&);
+      void bindArg (Tuple<TYPES> const&)
+        {
+          UNIMPLEMENTED ("actually bind arguments, maybe create ArgumentHolder");
+        }
+            
       
       
       /* === diagnostics === */

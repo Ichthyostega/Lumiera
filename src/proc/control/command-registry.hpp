@@ -41,20 +41,26 @@
 #include "lib/error.hpp"
 #include "lib/singleton.hpp"
 #include "lib/sync.hpp"
+#include "lib/format.hpp"
+#include "include/logging.h"
 //#include "lib/bool-checkable.hpp"
 
 #include "proc/control/command.hpp"
+#include "proc/control/command-signature.hpp"
+#include "proc/control/command-argument-holder.hpp"
 //#include "proc/control/memento-tie.hpp"
 
+#include <tr1/memory>
 //#include <iostream>
-//#include <string>
+#include <string>
 
 
 
 namespace control {
   
+  using std::tr1::shared_ptr;
 //  using std::ostream;
-//  using std::string;
+  using std::string;
   
   
   
@@ -121,41 +127,90 @@ namespace control {
         }
       
       
-      /** set up a new command implementation frame */
+      /** set up a new command implementation frame
+       *  @return pointer to a newly created CommandImpl, allocated 
+       *          through the registry. The caller is responsible for
+       *          deallocating this frame by calling #killCommandImpl 
+       */
       template< typename SIG_OPER    ///< signature of the command operation
-              , typename SIG_UNDO    ///< signature to undo the command
               , typename SIG_CAPT    ///< signature for capturing undo state
+              , typename SIG_UNDO    ///< signature to undo the command
               >
-      CommandImpl&
-      newCommandImpl (function<SIG_OPER>& operFunctor_
-                     ,function<SIG_UNDO>& undoFunctor_
-                     ,function<SIG_CAPT>& captFunctor_)
+      CommandImpl*
+      newCommandImpl (function<SIG_OPER>& operFunctor
+                     ,function<SIG_CAPT>& captFunctor
+                     ,function<SIG_UNDO>& undoFunctor)
         {
           Lock sync(this);
-          UNIMPLEMENTED ("set up a new impl instance located within the instance table");
-        }
+          
+          // derive the storage type necessary
+          // to hold the command arguments and UNDO memento
+          typedef typename UndoSignature<SIG_CAPT>::Memento Mem;
+          typedef ArgumentHolder<SIG_OPER,Mem> Arguments;
+          
+          shared_ptr<Arguments> pArg ( new (allocateSlot<Arguments>()) Arguments()
+                                     , &kill<Arguments>
+                                     );
+          void* implStorage = 0;
+          try
+            {
+              implStorage = allocateSlot<CommandImpl>();
+              ASSERT (implStorage);
+              
+              return new(implStorage) CommandImpl (pArg, operFunctor,captFunctor,undoFunctor);
+            }
+          catch(...)
+            {
+              if (implStorage)
+                releaseSlot<CommandImpl> (implStorage);
+              throw;
+        }   }
       
       
-      /** discard an command implementation frame */
+      /** delete the command implementation and free the corresponding allocation */
+      static void killCommandImpl (CommandImpl* entry) { kill(entry); }
+      
+      
+      template<class IMP>
       static void
-      killCommandImpl (CommandImpl* entry)
+      kill (IMP* entry)
         {
                                   ///////////////////////////////////////////////TODO: clean behaviour while in App shutdown (Ticket #196)
-          instance().removeImpl(entry);
+          instance().destroyImpl(entry);
         }
       
       
     private:
-      CommandImpl*
-      createImpl ()
+      template<class IMP>
+      void*
+      allocateSlot ()
         {
-          ///////////////////////////////TODO: still necessary?
+          TODO ("redirect to the corresponding pool allocator");
         }
       
+      template<class IMP>
       void
-      removeImpl (CommandImpl* entry)
+      releaseSlot (void* entry)
         {
-          UNIMPLEMENTED ("remove entry from instance table");
+          TODO ("redirect to the corresponding pool allocator");
+        }
+      
+      
+      template<class IMP>
+      void
+      destroyImpl (IMP* entry)
+        {
+          if (!entry) return;
+          try
+            {
+              entry->~IMP();
+            }
+          catch(...)
+            {
+              WARN (command_dbg, "dtor of %s failed: %s", util::tyStr(entry).c_str()
+                                                        , lumiera_error() );
+            }
+          releaseSlot<IMP> (entry);
         }
       
     };

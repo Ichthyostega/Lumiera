@@ -115,7 +115,7 @@ namespace control {
       
       /* === command lifecycle === */
       
-      Command& activate (CommandImpl&);
+      Command& activate (CommandImpl*);
       
       template<typename TYPES>
       Command& bindArg (Tuple<TYPES> const&);

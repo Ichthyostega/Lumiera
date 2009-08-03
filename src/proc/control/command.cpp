@@ -118,14 +118,15 @@ namespace control {
    *  @throw std::bad_alloc, in which case
    *         CommandRegistry::killCommandImpl is invoked */
   Command&
-  Command::activate (CommandImpl& implFrame)
+  Command::activate (CommandImpl* implFrame)
   {
     static format fmt("Command \"%s\" already defined");
+    REQUIRE (implFrame);
     
     if (this->isValid())
       throw error::Logic (str (fmt % *this), LUMIERA_ERROR_DUPLICATE_COMMAND);
           
-    _Handle::activate (&implFrame, CommandRegistry::killCommandImpl);
+    _Handle::activate (implFrame, CommandRegistry::killCommandImpl);
             
     INFO (command, "Command \"%s\" defined OK", cStr(*this));
     return *this;

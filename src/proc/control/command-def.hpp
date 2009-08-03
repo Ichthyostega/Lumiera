@@ -51,6 +51,7 @@
 #include "lib/error.hpp"
 #include "include/symbol.hpp"
 #include "proc/control/command.hpp"
+#include "proc/control/command-impl.hpp"                   /////TODO: any chance to get rid of this import here??
 #include "proc/control/command-registry.hpp"
 #include "proc/control/command-signature.hpp"
 #include "proc/control/command-mutation.hpp"
@@ -128,9 +129,9 @@ namespace control {
             REQUIRE (captFunctor_);
             
             CommandRegistry& registry = CommandRegistry::instance();
-            CommandImpl& completedDef = registry.newCommandImpl(operFunctor_
-                                                               ,undoFunctor_
-                                                               ,captFunctor_);
+            CommandImpl* completedDef = registry.newCommandImpl(operFunctor_
+                                                               ,captFunctor_
+                                                               ,undoFunctor_);
             prototype_.activate(completedDef);
             ENSURE (prototype_);
             return *this;

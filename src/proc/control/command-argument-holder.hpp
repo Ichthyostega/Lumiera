@@ -192,6 +192,7 @@ namespace control {
         }
       
       
+      typedef typename CommandSignature<SIG,MEM>::OperateSig SIG_op;
       typedef typename CommandSignature<SIG,MEM>::CaptureSig SIG_cap;
       typedef typename CommandSignature<SIG,MEM>::UndoOp_Sig SIG_undo;
       
