@@ -81,14 +81,28 @@ namespace util {
       , Symbol prefix=""      ///< prefix to prepend in case conversion is possible
       , Symbol fallback =0   /// < replacement text to show if string conversion fails
       )
-    {
-      if (can_ToString<TY>::value)
-        return string(prefix) + invoke_2string<TY>(val);
-      
-      else
-        return fallback? fallback
-                       : string("«")+typeid(val).name()+"»";
-    }
+  {
+    if (can_ToString<TY>::value)
+      return string(prefix) + invoke_2string<TY>(val);
+    
+    else
+      return fallback? fallback
+                     : tyStr(val);
+  }
+  
+  
+  /** @return a string denoting the type. */
+  template<typename TY>
+  inline string
+  tyStr (const TY* =0)
+  {
+    return string("«")+typeid(TY).name()+"»";
+  }
+  
+  template<typename TY>
+  inline string
+  tyStr (TY const& ref)
+  { return tyStr(&ref); }
   
   
 } // namespace util
