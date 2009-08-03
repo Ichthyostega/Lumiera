@@ -430,14 +430,38 @@ namespace control {
         typedef typename FunctionSignature< function<SIG> >::Args Args;
         typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
         typedef Tuple<Args> ArgTuple;
+        typedef SIG Sig;
+      };
+    
+    template<typename TYPES>
+    struct _Type<Tuple<TYPES> >
+      {
+        typedef TYPES Args;
+        typedef void  Ret;
+        typedef Tuple<TYPES> ArgTuple;
+        typedef typename FunctionTypedef<void, TYPES>::Sig Sig;
       };
   
     struct Dummy {}; 
     
     
-  } // (END) impl details
+  } // (END) impl details (bind_arg)
   
   
+  
+  
+  /** Helper Template for building a Functor or function-like class:
+   *  Mix in a function call operator, which mimics the specified signature SIG .
+   *  This template is to be used as a base class to inherit the target type TAR from;
+   *  this target type is assumed to provide a function \bindArg(Tuple<TYPES..>) --
+   *  where \c TYPES... is the sequence of types found in the provided Signature SIG.
+   */
+  template<typename SIG, class TAR, class BASE =bind_arg::Dummy>
+  class AcceptArgumentTuple
+    : public bind_arg::AcceptArgs<TAR,BASE, typename bind_arg::_Type<SIG>::Ret
+                                          , typename bind_arg::_Type<SIG>::Args>
+    {
+    };
   
   
   /** Helper Template for Proc-Layer control::Command : mix in a \c bind(...) function
@@ -464,17 +488,57 @@ namespace control {
     };
   
   
-  /** This variation of AcceptArgumentBindingRet mixes in a function call operator
-   *  according to the specified signature SIG
+  
+  /** 
+   * Adapter interface for invoking an argument binding (e.g. as defined through
+   * AcceptArgumentBinding) \em without the need to disclose the concrete type
+   * actually accepting the bind call. This is an application of the "type erasure"
+   * pattern; in order to use it
+   *  - the concrete type accepting the \bind(..) call need to have a vtable,
+   *    so it can be re-discovered by dynamic_cast
+   *  - moreover, the concrete type must inherit from
+   *  - at the call site, only a reference to the adapter interface is exposed.
    */
-  template<typename SIG, class TAR, class BASE =bind_arg::Dummy>
-  class AcceptArgumentTuple
-    : public bind_arg::AcceptArgs<TAR,BASE, typename bind_arg::_Type<SIG>::Ret
-                                          , typename bind_arg::_Type<SIG>::Args>
+  class ArgumentReceiver;
+  
+  template<typename SIG>
+  class TypedArgumentReceiver;
+  
+  
+  class ArgumentReceiver
     {
+    public:
+      virtual ~ArgumentReceiver() {}
+     
+      template<typename TUP>
+      void
+      bindArg (TUP const& args)
+        {
+          typedef typename bind_arg::_Type<TUP>::Sig Sig;
+          typedef TypedArgumentReceiver<Sig> Receiver;
+          
+          Receiver* dest = dynamic_cast<Receiver*> (this);
+          if (!dest)
+            throw lumiera::error::Invalid("Wrong type or number of arguments");
+          
+          dest->bindArg(args);
+        }
     };
   
   
+  template<typename SIG>
+  class TypedArgumentReceiver
+    : public ArgumentReceiver
+    {
+      typedef typename bind_arg::_Type<SIG>::Args ArgTypes;
+      
+      virtual void bindArg (lumiera::typelist::Tuple<ArgTypes> const&) =0;
+    };
+  
+    
+    
+
+
   
 } // namespace control
 #endif
