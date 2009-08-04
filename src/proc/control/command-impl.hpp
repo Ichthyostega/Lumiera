@@ -118,10 +118,9 @@ namespace control {
       void exec (HandlingPattern const& execPattern);
       
       
-      template<typename TYPES>
-      void bindArg (Tuple<TYPES> const&)
+      void setArguments (Arguments& args)
         {
-          UNIMPLEMENTED ("actually bind arguments, maybe create ArgumentHolder");
+          pClo_->bindArguments(args);
         }
             
       

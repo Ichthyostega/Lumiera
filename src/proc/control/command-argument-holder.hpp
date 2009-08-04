@@ -137,14 +137,24 @@ namespace control {
         }
       
       
-      virtual CmdFunctor bindArguments (CmdFunctor const& func)
+      /** assign a new parameter tuple to this */
+      virtual void bindArguments (Arguments& args)
+      {
+        if (!arguments_->isValid())
+          bindArg(args.get<ArgTuple>());
+        else
+          arguments_->bindArguments(args);
+      }
+      
+      
+      virtual CmdFunctor closeArguments (CmdFunctor const& func)
         {
           if (!isValid())
             throw lumiera::error::State ("Lifecycle error: can't bind functor, "
                                          "command arguments not yet provided",
                                          LUMIERA_ERROR_UNBOUND_ARGUMENTS);
           
-          return arguments_->bindArguments(func);
+          return arguments_->closeArguments(func);
         }
       
       
@@ -186,7 +196,7 @@ namespace control {
       /** store a new argument tuple within this ArgumentHolder,
        *  discarding and previously stored arguments */
       void
-      bindArg (ArgTuple argTup)
+      bindArg (ArgTuple const& argTup)
         {
           arguments_.template create<ArgHolder> (argTup);
         }

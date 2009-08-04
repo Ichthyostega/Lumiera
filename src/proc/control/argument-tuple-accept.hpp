@@ -492,47 +492,40 @@ namespace control {
   /** 
    * Adapter interface for invoking an argument binding (e.g. as defined through
    * AcceptArgumentBinding) \em without the need to disclose the concrete type
-   * actually accepting the bind call. This is an application of the "type erasure"
-   * pattern; in order to use it
-   *  - the concrete type accepting the \bind(..) call need to have a vtable,
-   *    so it can be re-discovered by dynamic_cast
-   *  - moreover, the concrete type must inherit from
-   *  - at the call site, only a reference to the adapter interface is exposed.
+   * actually accepting the bind call. This is an application of "type erasure"
    */
-  class ArgumentReceiver;
+  struct Arguments;
   
-  template<typename SIG>
-  class TypedArgumentReceiver;
+  template<typename TUP>
+  struct TypedArguments;
   
   
-  class ArgumentReceiver
+  struct Arguments
     {
-    public:
-      virtual ~ArgumentReceiver() {}
+      virtual ~Arguments() {}
      
       template<typename TUP>
-      void
-      bindArg (TUP const& args)
+      TUP const&
+      get ()
         {
-          typedef typename bind_arg::_Type<TUP>::Sig Sig;
-          typedef TypedArgumentReceiver<Sig> Receiver;
-          
-          Receiver* dest = dynamic_cast<Receiver*> (this);
+          TypedArguments<TUP>* dest = dynamic_cast<TypedArguments<TUP>*> (this);
           if (!dest)
             throw lumiera::error::Invalid("Wrong type or number of arguments");
           
-          dest->bindArg(args);
+          return dest->args_;
         }
     };
   
   
-  template<typename SIG>
-  class TypedArgumentReceiver
-    : public ArgumentReceiver
+  template<typename TUP>
+  struct TypedArguments
+    : Arguments
     {
-      typedef typename bind_arg::_Type<SIG>::Args ArgTypes;
+      TUP const& args_;
       
-      virtual void bindArg (lumiera::typelist::Tuple<ArgTypes> const&) =0;
+      TypedArguments (TUP const& a)
+        : args_(a)
+        { }
     };
   
     

@@ -44,6 +44,7 @@
 #include "lib/meta/tuple.hpp"
 #include "lib/format.hpp"
 #include "lib/util.hpp"
+#include "proc/control/argument-tuple-accept.hpp"  ////TODO better factor out struct TypedArguments
 
 //#include <tr1/memory>
 #include <tr1/functional>
@@ -192,6 +193,14 @@ namespace control {
       Closure (ArgTuple const& args)
         : params_(BuildAccessor(args))
         { }
+      
+      
+      /** assign a new parameter tuple to this */
+      void
+      bindArguments (Arguments& args)
+      {
+        params_ = args.get<ArgTuple>();
+      }
       
       
       /** Core operation: use the embedded argument tuple

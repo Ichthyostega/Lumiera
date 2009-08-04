@@ -133,6 +133,16 @@ namespace control {
   }
   
   
+  /** @internal pass a new argument tuple to the
+   *  CommandImpl without exposing implementation.
+   */
+  void
+  Command::setArguments (Arguments& args)
+  {
+    _Handle::impl().setArguments(args);
+  }
+  
+  
   CommandDef
   Command::storeDef (Symbol newCmdID)
   {

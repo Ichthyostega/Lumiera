@@ -37,7 +37,7 @@
 #include "pre.hpp"
 #include "include/symbol.hpp"
 #include "proc/control/command-binding.hpp"
-#include "proc/control/command-mutation.hpp"
+#include "proc/control/command-mutation.hpp"         /////TODO: do we need to expose this here?
 #include "proc/control/command-closure.hpp"
 #include "proc/control/handling-pattern.hpp"
 #include "lib/bool-checkable.hpp"
@@ -140,7 +140,7 @@ namespace control {
       
       
     private:
-     
+      void setArguments (Arguments&);
     };
   ////////////////TODO currently just fleshing  out the API....
   
@@ -154,9 +154,10 @@ namespace control {
   
   template<typename TYPES>
   inline Command&
-  Command::bindArg (Tuple<TYPES> const&)
+  Command::bindArg (Tuple<TYPES> const& tuple)
     {
-      UNIMPLEMENTED("delegate argument binding to command-impl");
+      TypedArguments<Tuple<TYPES> > args(tuple);
+      this->setArguments (args);
       return *this;
     }
   
