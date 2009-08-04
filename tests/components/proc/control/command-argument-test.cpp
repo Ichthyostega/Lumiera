@@ -324,9 +324,9 @@ namespace test    {
           typedef function<void()> OpFun;
           
           // now close all the functions with the stored parameter values... 
-          OpFun bound_doItFun = args.bindArguments (CmdFunctor(doItFun)).getFun<void()>();
-          OpFun bound_undoFun = args.bindArguments (CmdFunctor(undoFun)).getFun<void()>();
-          OpFun bound_captFun = args.bindArguments (CmdFunctor(captFun)).getFun<void()>();
+          OpFun bound_doItFun = args.closeArguments (CmdFunctor(doItFun)).getFun<void()>();
+          OpFun bound_undoFun = args.closeArguments (CmdFunctor(undoFun)).getFun<void()>();
+          OpFun bound_captFun = args.closeArguments (CmdFunctor(captFun)).getFun<void()>();
           
           protocol.seekp(0);
           protocol << "START...";

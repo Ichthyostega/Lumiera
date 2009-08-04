@@ -101,7 +101,9 @@ namespace control {
       
       virtual bool isValid ()   const =0;
       
-      virtual CmdFunctor bindArguments (CmdFunctor const&) =0;
+      virtual void bindArguments (Arguments&) =0;
+      
+      virtual CmdFunctor closeArguments (CmdFunctor const&) =0;
     };
   
   
@@ -208,7 +210,7 @@ namespace control {
        *         can't be const.
        */
       CmdFunctor
-      bindArguments (CmdFunctor const& unboundFunctor)
+      closeArguments (CmdFunctor const& unboundFunctor)
         {
           return CmdFunctor (TupleApplicator<SIG> (params_)
                                .bind ( unboundFunctor.getFun<SIG>()) );

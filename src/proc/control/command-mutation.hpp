@@ -105,7 +105,7 @@ namespace control {
         {
           REQUIRE (!clo_, "Lifecycle error: already closed over the arguments");
           REQUIRE (func_, "Param error: not bound to a valid function");
-          func_ = cmdClosure.bindArguments(func_);
+          func_ = cmdClosure.closeArguments(func_);
           clo_ = &cmdClosure;
           return *this;
         }
