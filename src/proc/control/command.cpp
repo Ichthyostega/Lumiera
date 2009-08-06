@@ -143,10 +143,18 @@ namespace control {
   }
   
   
-  CommandDef
+  Command
   Command::storeDef (Symbol newCmdID)
   {
-    UNIMPLEMENTED ("create a new definition & prototype based on this command");
+    static format fmt("Unable to store %s as new command. ID \"%s\" is already in use");
+    if (registry.queryIndex (newCmdID))
+      throw error::Logic (str (fmt % *this % newCmdID), LUMIERA_ERROR_DUPLICATE_COMMAND);
+    
+    Command cloneDefinition;
+    CommandRegistry& registry = CommandRegistry::instance();
+    cloneDefinition.activate (registry.createCloneImpl(impl()));
+    
+    return registry.track (newCmdID, cloneDefinition);
   }
   
   

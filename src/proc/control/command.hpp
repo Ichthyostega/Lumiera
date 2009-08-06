@@ -86,7 +86,7 @@ namespace control {
       static bool remove (Symbol cmdID); 
       static bool  undef (Symbol cmdID);
       
-      CommandDef storeDef (Symbol newCmdID);
+      Command storeDef (Symbol newCmdID);
       
       Command() { } ///< undefined command
      ~Command();

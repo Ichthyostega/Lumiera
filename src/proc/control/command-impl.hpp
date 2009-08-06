@@ -111,6 +111,17 @@ namespace control {
      ~CommandImpl();
       
       
+      /** cloning service for the CommandRegistry:
+       *  effectively this is a placement-copy ctor,
+       *  requiring a sufficient amount of storage for
+       *  holding the clone to be already allocated  */
+      CommandImpl (CommandImpl const& orig, void* paramStorage)
+        : do_(orig.do_)
+        , undo_(orig.undo_)
+        , pClo_(orig.pClo_->createClone(paramStorage))   ///////////////////TODO should pass in a callback/interface for allocations instead  
+        { }
+     
+      
       /** core operation: invoke the command
        *  @param execPattern describes the individual steps
        *         necessary to get this command invoked properly

@@ -171,6 +171,21 @@ namespace control {
       static void killCommandImpl (CommandImpl* entry) { kill(entry); }
       
       
+      /** create an allocation for holding a clone of the given CommandImpl data.
+       *  @todo this is a tricky and problematic operation, as the CommandImpl
+       *        erases the specific type information pertaining the ArgumentHolder.
+       *        But this specific type information is vital for determining the
+       *        exact allocation size for the clone ArgumentHolder.
+       */
+      CommandImpl*
+      createCloneImpl (CommandImpl const& reference)
+        {
+          UNIMPLEMENTED ("allocate clone, solve the re-discovery problem");
+        }
+      
+      
+      
+      
       template<class IMP>
       static void
       kill (IMP* entry)
