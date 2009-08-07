@@ -186,47 +186,10 @@ namespace control {
       
       
       
-      template<class IMP>
-      static void
-      kill (IMP* entry)
-        {
-                                  ///////////////////////////////////////////////TODO: clean behaviour while in App shutdown (Ticket #196)
-          instance().destroyImpl(entry);
-        }
+      ///////////////////TODO solve the problem how to re-access the instance from within the deletor
       
       
     private:
-      template<class IMP>
-      void*
-      allocateSlot ()
-        {
-          TODO ("redirect to the corresponding pool allocator");
-        }
-      
-      template<class IMP>
-      void
-      releaseSlot (void* entry)
-        {
-          TODO ("redirect to the corresponding pool allocator");
-        }
-      
-      
-      template<class IMP>
-      void
-      destroyImpl (IMP* entry)
-        {
-          if (!entry) return;
-          try
-            {
-              entry->~IMP();
-            }
-          catch(...)
-            {
-              WARN (command_dbg, "dtor of %s failed: %s", util::tyStr(entry).c_str()
-                                                        , lumiera_error() );
-            }
-          releaseSlot<IMP> (entry);
-        }
       
     };
   
