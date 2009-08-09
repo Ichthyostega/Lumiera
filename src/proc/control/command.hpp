@@ -84,7 +84,6 @@ namespace control {
       static Command get (Symbol cmdID);
       static Command get (FuncPtr func);
       static bool remove (Symbol cmdID); 
-      static bool  undef (Symbol cmdID);
       
       Command storeDef (Symbol newCmdID);
       

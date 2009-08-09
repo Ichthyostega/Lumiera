@@ -141,8 +141,8 @@ namespace test    {
           check_ThrowOnError();
           
           
-          Command::undef ("test.command2");
-          Command::undef ("test.command2.1");
+          Command::remove ("test.command2");
+          Command::remove ("test.command2.1");
           ASSERT (cnt_defs == Command::definition_count());
           ASSERT (cnt_inst == Command::instance_count());
         }

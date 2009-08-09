@@ -238,14 +238,14 @@ namespace test    {
           
           // use the current sate of c2 as Prototype for new command definition
           c2.storeDef ("test.command1.4");
-          Command c3 = Command::get("test.command1.4");
-          ASSERT (c3);
-          ASSERT (!c3.canUndo());
-          c3();
+          Command c4 = Command::get("test.command1.4");
+          ASSERT (c4);
+          ASSERT (!c4.canUndo());
+          c4();
           ASSERT (randVal + 2*23 == command1::check_);
           
-          c3.bind(-command1::check_);
-          c3();
+          c4.bind(-command1::check_);
+          c4();
           ASSERT (0 == command1::check_);
           c2();
           ASSERT (23 == command1::check_);
@@ -297,34 +297,27 @@ namespace test    {
           ASSERT (!miracle.canUndo());
           ASSERT (!miracle);
           
+          Command c4 (Command::get("test.command1.4"));
+          
           ASSERT (Command::remove("test.command1.1"));
           ASSERT (Command::remove("test.command1.2"));
           ASSERT (Command::remove("test.command1.3"));
+          ASSERT (Command::remove("test.command1.4"));
           
           ASSERT (!Command::remove("miracle")); // there is no such thing...
-          
-          // note, we didn't remove the *definitions*
-          // thus we're free to create new instances...
-          Command xxx = Command::get("test.command1.1");
-          VERIFY_ERROR (UNBOUND_ARGUMENTS, xxx() );
-          
-          // but this one is still there (we didn't remove it)
-          ASSERT (Command::get("test.command1.4"));
-          
-          // now kill the definitions too...
-          ASSERT (Command::undef ("test.command1.1"));
-          ASSERT (Command::undef ("test.command1.2"));
-          ASSERT (Command::undef ("test.command1.3"));
-          ASSERT (Command::undef ("test.command1.4"));
-          ASSERT (Command::undef ("miracle"));
 
           VERIFY_ERROR (INVALID_COMMAND,   Command::get("test.command1.1"));
           VERIFY_ERROR (INVALID_COMMAND,   Command::get("test.command1.2"));
           VERIFY_ERROR (INVALID_COMMAND,   Command::get("test.command1.3"));
+          VERIFY_ERROR (INVALID_COMMAND,   Command::get("test.command1.4"));
           VERIFY_ERROR (INVALID_COMMAND,   Command::get("miracle"));
           
-          // note: removing the definition automatically killed the remaining instance:
-          VERIFY_ERROR (INVALID_COMMAND,   Command::get("test.command1.4"));
+          
+          // note, removed the registered definitions,
+          // but existing instances remain valid...
+          // thus we're free to create new instances...
+          ASSERT (c4.isValid());
+          ASSERT (c4.canExec());
         }
     };
   

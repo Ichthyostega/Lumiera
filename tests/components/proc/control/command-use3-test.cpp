@@ -105,7 +105,7 @@ namespace test    {
           
           ASSERT (cnt_inst == Command::instance_count());
           
-          Command::undef ("test.command1.1");
+          Command::remove ("test.command1.1");
           ASSERT (cnt_defs == Command::definition_count());
         }
       

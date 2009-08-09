@@ -89,6 +89,18 @@ namespace control {
         }
       
       
+      /** remove the given command registration. 
+       *  @return \c true if actually removed an entry
+       *  @note existing command instances remain valid;
+       *        storage will be freed at zero use-count */
+      bool
+      remove (Symbol cmdID)
+        {
+          Lock sync(this);
+          UNIMPLEMENTED ("de-register a command definition.");
+        }
+      
+      
       /** query the command index by ID
        *  @return the registered command,
        *          or an "invalid" token */

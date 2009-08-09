@@ -162,14 +162,7 @@ namespace control {
   bool
   Command::remove (Symbol cmdID)
   {
-    UNIMPLEMENTED ("de-register a single command instance");
-  }
-  
-  
-  bool
-  Command::undef (Symbol cmdID)
-  {
-    UNIMPLEMENTED ("completely drop a command definition, together with all dependent instances");
+    return CommandRegistry::instance().remove (cmdID); 
   }
   
   

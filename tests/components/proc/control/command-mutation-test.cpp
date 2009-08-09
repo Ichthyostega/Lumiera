@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "proc/control/command-mutation.hpp"
 #include "proc/control/memento-tie.hpp"
 #include "lib/meta/typelist.hpp"
