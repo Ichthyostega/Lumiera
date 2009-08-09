@@ -30,48 +30,48 @@
 
 
 
-namespace lumiera {
-  namespace test  {
-    
-    uint basicInit (0);
-    uint customCallback (0);
-    
-    void basicInitHook () { ++basicInit; }
-    void myCallback() { ++customCallback; }
-
-    Symbol MY_DEADLY_EVENT = "dial M for murder";
-    
-    
-    namespace // register them to be invoked by lifecycle event id 
-      {
-      LifecycleHook _schedule1 (ON_BASIC_INIT, &basicInitHook);         
-      LifecycleHook _schedule2 (MY_DEADLY_EVENT, &myCallback);   
-    }
-    
-    
-    /** @test the global lifecycle hooks got registered,
-     *        the ON_BASIC_INIT hook has been already called,
-     *        while our custom callback can be trigged at our will
-     */
-    class LifeCycle_test : public Test
-      {
-        virtual void 
-        run (Arg)
-          {
-            ASSERT (basicInit, "the basic-init callback hasn't been invoked automatically");
-            ASSERT (1 == basicInit, "the basic-init callback has been invoked more than once");
-            
-            ASSERT (!customCallback);
-            LifecycleHook::trigger  (MY_DEADLY_EVENT);
-            ASSERT ( 1 == customCallback);
-          }
-        
-      };
-    
-      LAUNCHER (LifeCycle_test, "function common");
-
+namespace lumiera{
+namespace test   {
+  
+  uint basicInit (0);
+  uint customCallback (0);
+  
+  void basicInitHook () { ++basicInit; }
+  void myCallback() { ++customCallback; }
+  
+  Symbol MY_DEADLY_EVENT = "dial M for murder";
+  
+  
+  namespace // register them to be invoked by lifecycle event id
+    {
+    LifecycleHook _schedule1 (ON_BASIC_INIT, &basicInitHook);
+    LifecycleHook _schedule2 (MY_DEADLY_EVENT, &myCallback);
+  }
+  
+  
+  /** @test the global lifecycle hooks got registered,
+   *        the ON_BASIC_INIT hook has been already called,
+   *        while our custom callback can be triggered at our will
+   */
+  class LifeCycle_test : public Test
+    {
+      virtual void 
+      run (Arg)
+        {
+          ASSERT (basicInit, "the basic-init callback hasn't been invoked automatically");
+          ASSERT (1 == basicInit, "the basic-init callback has been invoked more than once");
+          
+          ASSERT (!customCallback);
+          LifecycleHook::trigger  (MY_DEADLY_EVENT);
+          ASSERT ( 1 == customCallback);
+        }
       
-  } // namespace test
-    
-} // namespace util
+    };
+  
+  LAUNCHER (LifeCycle_test, "function common");
+  
+  
+  
+  
+}} // namespace util::test
 

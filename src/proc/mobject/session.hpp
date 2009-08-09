@@ -98,6 +98,11 @@ namespace mobject {
     };
   
   
+  extern Symbol ON_SESSION_START;  ///< triggered before loading any content into a newly created session
+  extern Symbol ON_SESSION_INIT;   ///< triggered when initialising a new session, after adding content
+  extern Symbol ON_SESSION_END;    ///< triggered before discarding an existing session
+  
+  
   namespace session {
 
     /**
