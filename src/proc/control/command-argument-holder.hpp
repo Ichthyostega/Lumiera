@@ -42,6 +42,7 @@
 #ifndef CONTROL_COMMAND_ARGUMENT_HOLDER_H
 #define CONTROL_COMMAND_ARGUMENT_HOLDER_H
 
+#include "proc/control/typed-allocation-manager.hpp"
 #include "proc/control/argument-tuple-accept.hpp"
 #include "proc/control/command-closure.hpp"
 #include "proc/control/memento-tie.hpp"
@@ -185,6 +186,13 @@ namespace control {
         {
           arguments_.template create<ArgHolder> (*oAh.arguments_);
           memento_.template  create<MemHolder> (*oAh.memento_);
+        }
+      
+      /** create a clone copy, without disclosing the exact type */
+      PClo
+      createClone (TypedAllocationManager& storageManager)
+        {
+          return storageManager.create<ArgumentHolder> (*this);
         }
       
       

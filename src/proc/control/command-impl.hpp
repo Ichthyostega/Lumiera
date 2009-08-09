@@ -45,6 +45,7 @@
 #include "proc/control/command.hpp"
 #include "proc/control/command-mutation.hpp"
 #include "proc/control/command-argument-holder.hpp"
+#include "proc/control/typed-allocation-manager.hpp"
 #include "lib/bool-checkable.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -112,13 +113,14 @@ namespace control {
       
       
       /** cloning service for the CommandRegistry:
-       *  effectively this is a placement-copy ctor,
-       *  requiring a sufficient amount of storage for
-       *  holding the clone to be already allocated  */
-      CommandImpl (CommandImpl const& orig, void* paramStorage)
+       *  effectively this is a copy ctor, but as we rely
+       *  on a argument holder (without knowing the exact type),
+       *  we need to delegate the cloning of the arguments down
+       *  while providing a means of allocating storage for the clone */
+      CommandImpl (CommandImpl const& orig, TypedAllocationManager& storageManager)
         : do_(orig.do_)
         , undo_(orig.undo_)
-        , pClo_(orig.pClo_->createClone(paramStorage))   ///////////////////TODO should pass in a callback/interface for allocations instead  
+        , pClo_(orig.pClo_->createClone(storageManager))  
         { }
      
       

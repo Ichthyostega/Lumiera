@@ -45,8 +45,9 @@
 #include "lib/format.hpp"
 #include "lib/util.hpp"
 #include "proc/control/argument-tuple-accept.hpp"  ////TODO better factor out struct TypedArguments
+#include "proc/control/typed-allocation-manager.hpp"
 
-//#include <tr1/memory>
+#include <tr1/memory>
 #include <tr1/functional>
 #include <iostream>
 #include <sstream>
@@ -89,6 +90,9 @@ namespace control {
    */
   typedef FunErasure<StoreFunction> CmdFunctor;
   
+  class CmdClosure;
+  typedef std::tr1::shared_ptr<CmdClosure> PClo;
+  
   
   
   /** Interface */
@@ -105,6 +109,8 @@ namespace control {
       virtual void bindArguments (Arguments&) =0;
       
       virtual CmdFunctor closeArguments (CmdFunctor const&) =0;
+      
+      virtual PClo createClone (TypedAllocationManager&) =0;
     };
   
   
@@ -194,6 +200,12 @@ namespace control {
         : params_(BuildAccessor(args))
         { }
       
+      /** create a clone copy of this, without disclosing the exact type */
+      PClo
+      createClone (TypedAllocationManager& storageManager)
+        {
+          return storageManager.create<Closure> (*this);
+        }
       
       /** assign a new parameter tuple to this */
       void

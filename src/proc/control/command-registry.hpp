@@ -159,15 +159,17 @@ namespace control {
       
       
       /** create an allocation for holding a clone of the given CommandImpl data.
-       *  @todo this is a tricky and problematic operation, as the CommandImpl
-       *        erases the specific type information pertaining the ArgumentHolder.
-       *        But this specific type information is vital for determining the
-       *        exact allocation size for the clone ArgumentHolder.
+       *  This is a tricky operation, as the CommandImpl after construction erases the
+       *  specific type information pertaining the ArgumentHolder. But this specific
+       *  type information is vital for determining the exact allocation size for
+       *  the clone ArgumentHolder. The only solution is to delegate the cloning
+       *  of the arguments down into the ArgumentHolder, passing a reference
+       *  to the memory manager (=this object) for allocating the clone. 
        */
       shared_ptr<CommandImpl>
       createCloneImpl (CommandImpl const& reference)
         {
-          UNIMPLEMENTED ("allocate clone, solve the re-discovery problem");
+          return this->create<CommandImpl> (reference, *this);
         }
       
       
