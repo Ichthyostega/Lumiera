@@ -22,8 +22,9 @@
 
 
 
-#include "proc/control/handling-pattern.hpp"
 #include "proc/control/command.hpp"
+#include "proc/control/handling-pattern.hpp"
+#include "proc/control/handling-patterns.hpp"
 
 #include "include/symbol.hpp"
 #include "include/logging.h"
@@ -48,7 +49,9 @@ namespace control {
   HandlingPattern const&
   HandlingPattern::get (ID id)
   {
-    UNIMPLEMENTED ("Factory for handling patterns");
+    REQUIRE ((0 <= id) && (id < NUM_IDS));
+    
+    return getPatternInstance(id); 
   }
   
 

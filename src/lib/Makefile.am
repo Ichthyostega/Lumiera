@@ -83,7 +83,7 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/p.hpp				\
 	$(liblumiera_la_srcdir)/query.hpp			\
 	$(liblumiera_la_srcdir)/singletonfactory.hpp		\
-	$(liblumiera_la_srcdir)/singletonsubclass.hpp		\
+	$(liblumiera_la_srcdir)/singleton-subclass.hpp		\
 	$(liblumiera_la_srcdir)/meta/typelist.hpp		\
 	$(liblumiera_la_srcdir)/meta/configflags.hpp		\
 	$(liblumiera_la_srcdir)/meta/generator.hpp		\

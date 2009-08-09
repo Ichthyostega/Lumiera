@@ -46,12 +46,7 @@ namespace control {
   CommandImpl::~CommandImpl() { }
   
 
-  /** */
-  void
-  CommandImpl::exec (HandlingPattern const& execPattern)
-  {
-    UNIMPLEMENTED ("actually invoke the command");
-  }
+  /////////////////////////////////////////TODO: is this impl file actually necessary??
 
   
 

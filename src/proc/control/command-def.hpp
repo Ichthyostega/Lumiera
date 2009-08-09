@@ -86,11 +86,40 @@ namespace control {
     
     
     
+    template<typename SIG>
+    struct CompletedDefinition
+      : AcceptArgumentBindingRet< Command&, SIG               // Return type and Argument Signature of the \c bind(..) function
+                                , CompletedDefinition<SIG>   //  target type (this class) providing the implementation \c bindArg(Tuple<..>) 
+                                >
+      {
+        Command& prototype_;
+        
+        typedef typename FunctionSignature< function<SIG> >::Args CmdArgs;
+        
+        CompletedDefinition (Command& definedCommand)
+          : prototype_(definedCommand)
+          {
+                    
+          }
+        
+        typedef HandlingPattern::ID PattID;
+        
+        PattID getDefaultHandlingPattern()  const { return prototype_.getDefaultHandlingPattern();}
+        PattID setHandlingPattern (PattID newID)  { return prototype_.setHandlingPattern(newID); }
+        
+        Command&
+        bindArg (Tuple<CmdArgs> const& params)
+          {
+            return prototype_.bindArg(params);
+          }
+      };
+    
+    
+    
+    
+    
     template<typename SIG, typename MEM>
     struct UndoDefinition
-      : AcceptArgumentBindingRet< Command&, SIG               // Return type and Argument Signature of the \c bind(..) function
-                                , UndoDefinition<SIG,MEM>    //  target type (this class) providing the implementation \c bindArg(Tuple<..>) 
-                                >
       {
         typedef CommandSignature<SIG,MEM> CmdType;
         typedef typename CmdType::OperateSig CommandOperationSig;
@@ -120,7 +149,7 @@ namespace control {
           }
         
         
-        UndoDefinition&
+        CompletedDefinition<SIG>
         undoOperation (UndoOperationSig& how_to_Undo)
           {
             undoFunctor_ = UndoFunc (how_to_Undo);
@@ -135,20 +164,8 @@ namespace control {
                                                                ,undoFunctor_);
             prototype_.activate(completedDef);
             ENSURE (prototype_);
-            return *this;
+            return CompletedDefinition<SIG> (prototype_);
           }
-        
-        
-        Command&
-        bindArg (Tuple<CmdArgs> const& params)
-          {
-            Closure<SIG> clo (params);
-            
-            cout << showSizeof(clo) << endl;
-            UNIMPLEMENTED ("complete Command definition by closing all functions");
-            return prototype_;
-          }
-        
       };
     
     

@@ -142,9 +142,11 @@ namespace control {
     private:
       void setArguments (Arguments&);
     };
-  ////////////////TODO currently just fleshing  out the API....
   
-
+  
+  
+  
+  
   inline ExecResult
   Command::operator() ()
   {

@@ -1025,7 +1025,7 @@ A command is operated or executed by passing it to an ''execution pattern'' &amp
 When a command has been executed (and maybe undone), it's best to leave it alone, because the UndoManager might hold a reference. Anyway, a ''clone of the command'' could be created, maybe bound with different arguments and treated separately from the original command.
 </pre>
 </div>
-<div title="CommandUsage" modifier="Ichthyostega" modified="200908011235" created="200907212338" tags="SessionLogic draft dynamic" changecount="7">
+<div title="CommandUsage" modifier="Ichthyostega" modified="200908091509" created="200907212338" tags="SessionLogic draft dynamic" changecount="8">
 <pre>//for now (7/09) I'll use this page to collect ideas how commands might be used...//
 
 * use a command for getting a log entry and an undo possibility automatically
@@ -1053,7 +1053,7 @@ When a command has been executed (and maybe undone), it's best to leave it alone
 
 !!!an execution pattern....
 * can only be defined in code by a class definition, not at runtime
-* subclasses the ~HandlingPattern interface, which automatically creates an registration.
+* subclasses the ~HandlingPattern interface and uses an predefined ID (enum).
 * a singleton instance is created on demand, triggered by referring the pattern's ID
 * is conceptually //stateless// &amp;mdash; of course there can be common configuration values
 * is always invoked providing a concrete command instance to execute

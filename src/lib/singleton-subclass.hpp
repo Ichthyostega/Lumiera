@@ -1,5 +1,5 @@
 /*
-  SINGLETONSUBCLASS.hpp  -  variant of the singleton (factory) creating a subclass
+  SINGLETON-SUBCLASS.hpp  -  variant of the singleton (factory) creating a subclass
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,7 +20,7 @@
  
 */
 
-/** @file singletonsubclass.hpp
+/** @file singleton-subclass.hpp
  ** Specialised SingletonFactory creating subclasses of the nominal type.
  ** The rationale is to be able to defer the decision what type to create
  ** down to the point where the singleton factory is actually created.
@@ -35,8 +35,8 @@
  */
 
 
-#ifndef LUMIERA_SINGLETONSUBCLASS_H
-#define LUMIERA_SINGLETONSUBCLASS_H
+#ifndef LUMIERA_SINGLETON_SUBCLASS_H
+#define LUMIERA_SINGLETON_SUBCLASS_H
 
 
 #include "lib/singleton.hpp"

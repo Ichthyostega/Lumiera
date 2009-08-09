@@ -85,7 +85,12 @@ namespace control {
         { SYNC
         , SYNC_THROW
         , ASYNC
+        
+        , NUM_IDS
         };
+      
+      static ID defaultID() { return SYNC; }
+      
       
       static HandlingPattern const& get (ID id);
       

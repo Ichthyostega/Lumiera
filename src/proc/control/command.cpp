@@ -293,14 +293,14 @@ namespace control {
   HandlingPattern::ID
   Command::getDefaultHandlingPattern()  const
   {
-    UNIMPLEMENTED ("manage the default command handling pattern");
+    return impl().getDefaultHandlingPattern();
   }
   
   
   HandlingPattern::ID
   Command::setHandlingPattern (HandlingPattern::ID pattID)
   {
-    UNIMPLEMENTED ("manage handling patterns in general");
+    return impl().setHandlingPattern(pattID);
   }
 
   

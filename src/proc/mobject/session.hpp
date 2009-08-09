@@ -36,6 +36,7 @@
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/defsmanager.hpp"
 #include "lib/singleton.hpp"
+#include "include/symbol.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <tr1/memory>
@@ -98,9 +99,9 @@ namespace mobject {
     };
   
   
-  extern Symbol ON_SESSION_START;  ///< triggered before loading any content into a newly created session
-  extern Symbol ON_SESSION_INIT;   ///< triggered when initialising a new session, after adding content
-  extern Symbol ON_SESSION_END;    ///< triggered before discarding an existing session
+  extern lumiera::Symbol ON_SESSION_START;  ///< triggered before loading any content into a newly created session
+  extern lumiera::Symbol ON_SESSION_INIT;   ///< triggered when initialising a new session, after adding content
+  extern lumiera::Symbol ON_SESSION_END;    ///< triggered before discarding an existing session
   
   
   namespace session {

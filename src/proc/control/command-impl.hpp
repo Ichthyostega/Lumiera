@@ -75,6 +75,8 @@ namespace control {
       
       shared_ptr<CmdClosure> pClo_;
       
+      HandlingPattern::ID defaultPatt_;
+      
       
       template<typename ARG>
       struct _Type
@@ -104,9 +106,10 @@ namespace control {
         : do_(operFunctor)
         , undo_(pArgHolder->tie (undoFunctor, captFunctor))
         , pClo_(pArgHolder)
+        , defaultPatt_(HandlingPattern::defaultID())
         { }
       
-#undef _TY      
+#undef _TY
       
       
      ~CommandImpl();
@@ -120,22 +123,36 @@ namespace control {
       CommandImpl (CommandImpl const& orig, TypedAllocationManager& storageManager)
         : do_(orig.do_)
         , undo_(orig.undo_)
-        , pClo_(orig.pClo_->createClone(storageManager))  
+        , pClo_(orig.pClo_->createClone(storageManager))
+        , defaultPatt_(orig.defaultPatt_)
         { }
-     
-      
-      /** core operation: invoke the command
-       *  @param execPattern describes the individual steps
-       *         necessary to get this command invoked properly
-       */
-      void exec (HandlingPattern const& execPattern);
       
       
-      void setArguments (Arguments& args)
+      void
+      setArguments (Arguments& args)
         {
           pClo_->bindArguments(args);
         }
-            
+      
+      
+      typedef HandlingPattern::ID PattID;
+      
+      PattID
+      getDefaultHandlingPattern()  const
+        {
+          return defaultPatt_;
+        }
+      
+      /** define a handling pattern to be used by default
+       *  @return ID of the currently defined default pattern */
+      PattID
+      setHandlingPattern (PattID newID)
+        {
+          PattID currID = defaultPatt_;
+          defaultPatt_ = newID;
+          return currID;
+        }
+      
       
       
       /* === diagnostics === */
