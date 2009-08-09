@@ -73,7 +73,7 @@
 //#include "lib/bool-checkable.hpp"
 
 
-//#include <tr1/memory>
+#include <tr1/memory>
 //#include <iostream>
 //#include <string>
 
@@ -81,7 +81,7 @@
 
 namespace control {
   
-//  using std::tr1::shared_ptr;
+  using std::tr1::shared_ptr;
 //  using std::ostream;
 //  using std::string;
   
@@ -102,47 +102,166 @@ namespace control {
       
       
       
+      /* ======= managing the created objects ============= */
       
+      /** opaque link to the manager, to be used by handles and
+       *  smart-ptrs to trigger preconfigured destruction.  */
       template<class XOX>
-      struct Slot
+      class Killer
         {
-          typedef void DelFun(XOX*);
+          _TheManager* manager_;
           
-          void*   const storage;
-          DelFun* const killer;
+        public:
+          void
+          operator() (XOX* victim)
+            {
+              REQUIRE (manager_);
+                                  ///////////////////////////////////////////////TODO: clean behaviour while in App shutdown (Ticket #196)
+              manager_->destroyElement (victim);
+            }
           
         protected:
-          Slot(void* sto, DelFun* kil)
-            : storage(sto)
-            , killer(kil)
+          Killer(_TheManager* m)
+            : manager_(m)
             { }
-          
-          friend class _TheManager;
         };
       
-      
-      /** static entry point to be used by
-       *  handles and smart pointers to trigger
-       *  preconfigured destruction */
+      /** a token representing a newly opened slot
+       *  capable for holding an object of type XOX .
+       *  The receiver is responsible for
+       *  - either calling releaseSlot
+       *  - or building a smart-ptr / handle wired to
+       *    the \link #getDeleter deleter function \endlink
+       */
       template<class XOX>
-      static void
-      kill (XOX* entry)
+      struct Slot
+        : private Killer<XOX>
         {
-                                  ///////////////////////////////////////////////TODO: clean behaviour while in App shutdown (Ticket #196)
-          instance().destroyElement(entry);
+          /** pointer to the allocated storage
+           *  with \c sizeof(XOX) bytes */
+          void* const storage_;
+          
+          /** build a refcounting smart-ptr,
+           *  complete with back-link to the manager
+           *  for de-allocation */
+          shared_ptr<XOX>
+          build (XOX* toTrack)
+            {
+              return shared_ptr<XOX> (toTrack, getDeleter());
+            }
+          
+          Killer<XOX> const&
+          getDeleter()
+            {
+              return *this;
+            }
+          
+        protected:
+          Slot(_TheManager* don, void* mem)
+            : Killer<XOX>(don)
+            , storage_(mem)
+            { }
+          
+          friend class TypedAllocationManager;
+        };
+      
+        
+      
+      
+      /* ==== build objects with managed allocation ==== */
+      
+#define _EXCEPTION_SAFE_INVOKE(_CTOR_)                    \
+                                                           \
+          Slot<XX> slot = allocateSlot<XX>();               \
+          try                                                \
+            {                                                 \
+              return slot.build (new(slot.storage_) _CTOR_ );  \
+            }                                                  \
+          catch(...)                                           \
+            {                                                  \
+              releaseSlot<XX>(slot.storage_);                  \
+              throw;                                           \
+            }
+      
+      template< class XX>
+      shared_ptr<XX>                                                                   //_____________________
+      create ()                                                                       ///< invoke default ctor
+        {
+          _EXCEPTION_SAFE_INVOKE ( XX() )
         }
-      ///////////////////TODO solve the problem how to re-access the instance from within the deletor
       
       
+      template< class XX, typename P1>
+      shared_ptr<XX>                                                                   //___________________
+      create (P1& p1)                                                                 ///< invoke 1-arg ctor
+        {
+          _EXCEPTION_SAFE_INVOKE ( XX (p1) )
+        }
       
-    protected:
+      
+      template< class XX
+              , typename P1
+              , typename P2
+              >
+      shared_ptr<XX>                                                                   //___________________
+      create (P1& p1, P2& p2)                                                         ///< invoke 2-arg ctor
+        {
+          _EXCEPTION_SAFE_INVOKE ( XX (p1,p2) )
+        }
+      
+      
+      template< class XX
+              , typename P1
+              , typename P2
+              , typename P3
+              >
+      shared_ptr<XX>                                                                   //___________________
+      create (P1& p1, P2& p2, P3& p3)                                                 ///< invoke 3-arg ctor
+        {
+          _EXCEPTION_SAFE_INVOKE ( XX (p1,p2,p3) )
+        }
+      
+      
+      template< class XX
+              , typename P1
+              , typename P2
+              , typename P3
+              , typename P4
+              >
+      shared_ptr<XX>                                                                   //___________________
+      create (P1& p1, P2& p2, P3& p3, P4& p4)                                         ///< invoke 4-arg ctor
+        {
+          _EXCEPTION_SAFE_INVOKE ( XX (p1,p2,p3,p4) )
+        }
+      
+      
+      template< class XX
+              , typename P1
+              , typename P2
+              , typename P3
+              , typename P4
+              , typename P5
+              >
+      shared_ptr<XX>                                                                   //___________________
+      create (P1& p1, P2& p2, P3& p3, P4& p4, P5& p5)                                 ///< invoke 5-arg ctor
+        {
+          _EXCEPTION_SAFE_INVOKE ( XX (p1,p2,p3,p4,p5) )
+        }
+      
+#undef _EXCEPTION_SAFE_INVOKE
+
+    
+    
+      
+    protected: /* ======= Managed Allocation Implementation ========== */
+      
       template<class XX>
       Slot<XX>
       allocateSlot ()
         {
           UNIMPLEMENTED ("redirect to the corresponding pool allocator");
           void* space = 0;
-          return Slot<XX> (space, &kill<XX>);
+          return Slot<XX> (this, space);
         }
       
       template<class XX>
@@ -160,7 +279,7 @@ namespace control {
           if (!entry) return;
           try
             {
-              entry->~IMP();
+              entry->~XX();
             }
           catch(...)
             {
