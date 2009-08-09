@@ -23,6 +23,17 @@
 
 /** @file command-closure.hpp
  ** A closure enabling self-contained execution of commands within the ProcDispatcher.
+ ** After defining a proc-layer command, at some point the function arguments
+ ** of the contained operation are "closed" by storing concrete argument values.
+ ** These values will later on be fed to the operation when the command is invoked.
+ ** 
+ ** Most of the command machinery accesses this function closure through the interface
+ ** CmdClosure, while, when defining a command, subclasses typed to the specific
+ ** function arguments are created. Especially, there is an ArgumentHolder template,
+ ** which is used to define the storage for the concrete arguments. This ArgumentHolder
+ ** internally contains an Closure<SIG> instance (where SIG is the signature of the
+ ** actual command operation function), which implements the invocation of the
+ ** operation function with the stored argument tuple.
  ** //TODO
  **  
  ** @see Command
@@ -44,7 +55,7 @@
 #include "lib/meta/tuple.hpp"
 #include "lib/format.hpp"
 #include "lib/util.hpp"
-#include "proc/control/argument-tuple-accept.hpp"  ////TODO better factor out struct TypedArguments
+#include "proc/control/argument-erasure.hpp"
 #include "proc/control/typed-allocation-manager.hpp"
 
 #include <tr1/memory>
@@ -54,17 +65,10 @@
 #include <string>
 
 
-#include "lib/test/test-helper.hpp"  /////////////////TODO remove this
-using lib::test::showSizeof;
-
-using std::cout;    //////////////////////////////////TODO remove this
-using std::endl;
 
 
 namespace control {
   
-//  using lumiera::Symbol;
-//  using std::tr1::shared_ptr;
   using lumiera::typelist::FunctionSignature;
   using lumiera::typelist::Tuple;
   using lumiera::typelist::BuildTupleAccessor;
@@ -72,9 +76,8 @@ namespace control {
   using lumiera::typelist::FunErasure;
   using lumiera::typelist::StoreFunction;
   using lumiera::typelist::NullType;
-
+  
   using util::unConst;
-
   using std::tr1::function;
   using std::ostream;
   using std::string;
@@ -118,6 +121,7 @@ namespace control {
   
   
   
+  /** Helper for accessing an individual function parameter */
   template
     < typename TY
     , class BASE
@@ -260,9 +264,7 @@ namespace control {
       friend bool operator== (Closure const& c1, Closure const& c2)  { return compare (c1.params_, c2.params_); }
       friend bool operator!= (Closure const& c1, Closure const& c2)  { return ! (c1 == c2); }
     };
-    
-    
-  ////////////////TODO currently just fleshing  out the API....
+  
   
   
   

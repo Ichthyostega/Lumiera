@@ -80,7 +80,7 @@ namespace control {
       
       /** register a command (Frontend) under the given ID
        *  @return either the new command, or an already existing
-       *          command registered under the given ID*/ 
+       *          command registered under the given ID  */ 
       Command
       track (Symbol cmdID, Command const& commandHandle)
         {

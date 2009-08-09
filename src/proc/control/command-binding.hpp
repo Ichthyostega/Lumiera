@@ -43,12 +43,8 @@
 #ifndef CONTROL_COMMAND_BINDING_H
 #define CONTROL_COMMAND_BINDING_H
 
-//#include "pre.hpp"
-//#include "include/symbol.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/tuple.hpp"
-
-//#include <tr1/memory>
 
 
 
@@ -56,8 +52,6 @@
 namespace control {
 namespace com { ///< Proc-Layer command implementation details
   
-//  using lumiera::Symbol;
-//  using std::tr1::shared_ptr;
   using namespace lumiera::typelist;
   
   
@@ -65,7 +59,12 @@ namespace com { ///< Proc-Layer command implementation details
   
   
   /**
-   * @todo Type-comment
+   * Building block for commands, allowing to mix in
+   * a set of \c bind(...) function for up to nine arbitrary arguments.
+   * All these functions will package the argument values into a Tuple
+   * (record) and forward the call to a \c bindArg(Tuple<TYPES...>) function
+   * on the target class. The latter function is asumed to perform a 
+   * run-time check to detect calls with invalid signature.
    */
   template<class TAR, class BA>
   class ArgumentBinder
@@ -203,10 +202,8 @@ namespace com { ///< Proc-Layer command implementation details
       }
     
     };
-  ////////////////TODO currently just fleshing  out the API....
   
-
-
+  
   
   
 }} // namespace control::com

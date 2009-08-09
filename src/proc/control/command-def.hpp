@@ -28,7 +28,7 @@
  ** \em defining the concrete operations to be encapsulated into a command. To
  ** create a command, you need to provide three functors (for the actual operation,
  ** the undo operation and for capturing undo state prior to invoking the operation).
- ** Besides, you provide a \em binding, thus creating a closue out of these three
+ ** Besides, you provide a \em binding, thus creating a closure out of these three
  ** function objects and a set of actual parameters. This closure effectively is 
  ** the command, which in a last step can be either dispatched, stored or 
  ** invoked immediately.
@@ -49,6 +49,7 @@
 
 //#include "pre.hpp"
 #include "lib/error.hpp"
+#include "include/logging.h"
 #include "include/symbol.hpp"
 #include "proc/control/command.hpp"
 #include "proc/control/command-impl.hpp"                   /////TODO: any chance to get rid of this import here??
@@ -57,11 +58,12 @@
 #include "proc/control/command-mutation.hpp"
 #include "proc/control/command-closure.hpp"
 #include "proc/control/argument-tuple-accept.hpp"
+#include "lib/bool-checkable.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/tuple.hpp"
-#include "lib/bool-checkable.hpp"
+#include "lib/util.hpp"
 
 #include <tr1/memory>
 #include <tr1/functional>
@@ -71,9 +73,10 @@
 
 namespace control {
   
-  using lumiera::Symbol;
   using std::tr1::shared_ptr;
   using std::tr1::function;
+  using lumiera::Symbol;
+  using util::cStr;
   
   using lumiera::typelist::FunctionSignature;
   using lumiera::typelist::FunctionTypedef;
@@ -82,7 +85,7 @@ namespace control {
   using lumiera::typelist::Tuple;
   
   
-  namespace stage { ///< helpers for the building up a command definition
+  namespace stage { ///< helpers for building up a command definition
     
     
     
@@ -99,7 +102,7 @@ namespace control {
         CompletedDefinition (Command& definedCommand)
           : prototype_(definedCommand)
           {
-                    
+            TRACE (command_dbg, "Completed definition of %s.", cStr(prototype_));
           }
         
         typedef HandlingPattern::ID PattID;
@@ -144,9 +147,7 @@ namespace control {
           , operFunctor_(commandOperation)
           , captFunctor_(undoCapOperation)
           , undoFunctor_()
-          {
-            cout << showSizeof(undoCapOperation) << endl;
-          }
+          { }
         
         
         CompletedDefinition<SIG>
@@ -182,8 +183,8 @@ namespace control {
     
     
     
-  
-  
+    
+    
     template<typename SIG>
     struct BasicDefinition
       {
@@ -238,7 +239,9 @@ namespace control {
       CommandDef (Symbol cmdID)
         : id_(cmdID)
         , prototype_(Command::fetchDef(cmdID))
-        { }
+        {
+          TRACE (command_dbg, "starting CommandDef('%s')...", cmdID);
+        }
       
       template<typename SIG>
       stage::BasicDefinition<SIG>
@@ -252,7 +255,6 @@ namespace control {
       bool isValid()  const;
     };
   
-  ////////////////TODO currently just fleshing  out the API....
   
   
   

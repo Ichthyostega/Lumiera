@@ -22,7 +22,7 @@
 
 
 /** @file command-mutation.hpp
- ** Core of a Proc-Layer command: functor containing the actual operation to be executed.
+ ** Core of a Proc-Layer command: functor containing the operation to be executed.
  ** Each command holds two of these functors: one representing the actual operation
  ** and one to undo the effect of this operation. The latter involves the capturing
  ** and storing of a "memento" value behind the scenes. But towards Command, the
@@ -34,7 +34,7 @@
  ** Mutation objects are to be created based on a concrete function object, which then
  ** gets embedded into a type erasure container, thus disposing the specific type information.
  ** Moreover, building on this lib::OpaqueHolder yields a fixed size storage for Mutation objects,
- ** allowing them to be embedded immediately within the Command instance.
+ ** allowing them to be embedded immediately within the CommandImpl frame.
  ** 
  ** Later on, any command needs to be made ready for execution by binding it to a specific
  ** execution environment, which especially includes the target objects to be mutated by the

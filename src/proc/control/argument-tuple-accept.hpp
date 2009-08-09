@@ -489,49 +489,8 @@ namespace control {
   
   
   
-  /** 
-   * Adapter interface for invoking an argument binding (e.g. as defined through
-   * AcceptArgumentBinding) \em without the need to disclose the concrete type
-   * actually accepting the bind call. This is an application of "type erasure"
-   */
-  struct Arguments;
-  
-  template<typename TUP>
-  struct TypedArguments;
   
   
-  struct Arguments
-    {
-      virtual ~Arguments() {}
-     
-      template<typename TUP>
-      TUP const&
-      get ()
-        {
-          TypedArguments<TUP>* dest = dynamic_cast<TypedArguments<TUP>*> (this);
-          if (!dest)
-            throw lumiera::error::Invalid("Wrong type or number of arguments");
-          
-          return dest->args_;
-        }
-    };
-  
-  
-  template<typename TUP>
-  struct TypedArguments
-    : Arguments
-    {
-      TUP const& args_;
-      
-      TypedArguments (TUP const& a)
-        : args_(a)
-        { }
-    };
-  
-    
-    
-
-
   
 } // namespace control
 #endif

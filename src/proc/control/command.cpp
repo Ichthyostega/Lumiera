@@ -22,7 +22,16 @@
 
 
 /** @file command.cpp 
- ** //TODO 
+ ** Implementation of the command frontend. 
+ ** Within this file, the implementation level of the command frontend
+ ** is linked to the implementation of the command registry. Client code
+ ** is shielded from those implementation classes and need only include
+ ** command.hpp
+ ** 
+ ** More specifically, the actual number and type of arguments and the
+ ** concrete functions implementing the command operation are known only
+ ** at the time of the command definition; this detailed type information
+ ** is erased afterwards, allowing client code to use a simple frontend.
  ** 
  ** @see command.hpp
  ** @see command-registry.hpp
@@ -38,9 +47,6 @@
 #include "proc/control/command-impl.hpp"
 #include "proc/control/command-registry.hpp"
 #include "proc/control/handling-pattern.hpp"
-//#include "proc/mobject/mobject-ref.hpp"
-//#include "proc/mobject/mobject.hpp"
-//#include "proc/mobject/placement.hpp"
 
 #include <boost/format.hpp>
 #include <sstream>
@@ -68,11 +74,11 @@ namespace control {
   lumiera::Singleton<CommandRegistry> CommandRegistry::instance;
   
   
-
+  
   Command::~Command() { }
   
   
-
+  
   /** */
   Command 
   Command::get (Symbol cmdID)
@@ -248,7 +254,7 @@ namespace control {
     
     return repr.str();
   }
-
+  
   
   
   
@@ -295,7 +301,7 @@ namespace control {
   {
     return impl().setHandlingPattern(pattID);
   }
-
+  
   
   
   

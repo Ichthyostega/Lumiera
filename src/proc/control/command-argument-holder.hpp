@@ -22,7 +22,7 @@
 
 
 /** @file command-argument-holder.hpp
- ** A passive container record holding the actual command arguments & UNDO state. 
+ ** A passive container record holding the actual command arguments & UNDO state.
  ** While all command objects themselves have a common type (type erasure),
  ** the actual argument tuple and the state memento for UNDO can't. Especially,
  ** the size of arguments and memento will depend on their respective types.

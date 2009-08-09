@@ -22,8 +22,26 @@
 
 
 /** @file command.hpp
- ** //TODO 
- **
+ ** Proc-Layer command frontend.
+ ** A \b command is a functor, which can be invoked according to a pre-defined HandlingPattern.
+ ** Most notably, command invocation can be scheduled and logged with the serialiser, and the effect
+ ** of any command invocation can be \em undone later on by invoking the "undo operation" defined
+ ** alongside with the command's operation. The command operation is defined through a C/C++ function
+ ** and may receive an arbitrary number and type of arguments. After setting up such a CommandDef ,
+ ** it can be referred for use through a symbolic ID. Before being able to invoke the command, concrete
+ ** function arguments need to be provided (this is called "binding" or "closing the function arguments").
+ ** These function arguments are stored within the command definition and remain opaque to the client code
+ ** actually invoking the command. Behind the scenes, there is a CommandRegistry, holding an index of the
+ ** registered commands and managing the storage for command definitions and arguments. The actual 
+ ** Command object used by client code is a small, copyable and ref-counting handle to this 
+ ** stored definition backend.
+ ** 
+ ** //TODO maybe summarise how UNDO works?  
+ ** 
+ ** @see command-def.hpp
+ ** @see command-use1-test.cpp
+ ** @see command-use2-test.cpp
+ ** @see command-use3-test.cpp
  ** @see ProcDispatcher
  ** @see Session
  **
@@ -35,15 +53,15 @@
 #define CONTROL_COMMAND_H
 
 #include "pre.hpp"
+#include "lib/error.hpp"
 #include "include/symbol.hpp"
 #include "proc/control/command-binding.hpp"
-#include "proc/control/command-mutation.hpp"         /////TODO: do we need to expose this here?
-#include "proc/control/command-closure.hpp"
+#include "proc/control/argument-erasure.hpp"
 #include "proc/control/handling-pattern.hpp"
 #include "lib/bool-checkable.hpp"
+#include "lib/meta/tuple.hpp"
 #include "lib/handle.hpp"
 
-//#include <tr1/memory>
 #include <string>
 
 ///////////////////////////////////////////TODO: define an C-API representation here, make the header multilingual!
@@ -55,14 +73,16 @@ namespace control {
   using std::string;
   using lumiera::Symbol;
   using std::tr1::shared_ptr;
+  using lumiera::typelist::Tuple;
+  
   
   LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Command functor not yet usable, because arguments aren't bound
   LUMIERA_ERROR_DECLARE (INVALID_COMMAND);    ///< Unknown or insufficiently defined command
   LUMIERA_ERROR_DECLARE (DUPLICATE_COMMAND);  ///< Attempt to redefine an already existing command definition
   LUMIERA_ERROR_DECLARE (INVALID_ARGUMENTS);  ///< Arguments provided for binding doesn't match stored command function parameters
-
   
-
+  
+  
   typedef void* FuncPtr;
   
   class CommandDef;
@@ -70,12 +90,23 @@ namespace control {
   
   
   /**
-   * @todo Type-comment
+   *  Handle object representing a single Command instance to be used by client code.
+   *  Commands are accessed \link #get through a symbolic ID \endlink; there need to be
+   *  a CommandDef somewhere to specify the actual operation and to define, how the
+   *  effect of the command can be undone. Moreover, the command's definition 
+   *  refers to a HandlingPattern, which describes how the command is actually
+   *  to be executed (the default is to schedule it within the ProcDispatcher)
+   *  
+   *  Client code usually just
+   *  - creates a command instance by referring to a command ID
+   *  - maybe binds to concrete arguments (e.g. a target object)
+   *  - triggers command execution through operator()
+   *  - maybe checks the return value for errors
    */
   class Command
     : public com::ArgumentBinder<Command    // accepts arbitrary bind(..) calls (with runtime check)
            , lib::Handle<CommandImpl>      //  actually implemented as ref counting Handle
-           >
+           >                              //
     {
       typedef lib::Handle<CommandImpl> _Handle;
       
@@ -177,7 +208,7 @@ namespace control {
       return ! (c1 == c2); 
     }
   
-
+  
   
   
 } // namespace control

@@ -146,7 +146,7 @@ namespace control {
     
     /** access the singleton instance for a given ID */
     HandlingPattern const&
-    getPatternInstance (HandlingPattern::ID id)
+    getPatternInstance (size_t id)
     {
       REQUIRE (id < patternTable.size());
       return patternTable[id] ();
