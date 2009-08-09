@@ -132,6 +132,11 @@ namespace control {
       setArguments (Arguments& args)
         {
           pClo_->bindArguments(args);
+          
+          TODO ("this will break when re-binding to new arguments");
+          
+          do_  .close(*pClo_);
+          undo_.close(*pClo_);
         }
       
       

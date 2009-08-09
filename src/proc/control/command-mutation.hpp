@@ -103,6 +103,7 @@ namespace control {
       virtual Mutation&
       close (CmdClosure& cmdClosure)
         {
+          ///////////////////////////////////////////////////////////////////////////////TODO we need a better approach; this breaks when re-binding
           REQUIRE (!clo_, "Lifecycle error: already closed over the arguments");
           REQUIRE (func_, "Param error: not bound to a valid function");
           func_ = cmdClosure.closeArguments(func_);
