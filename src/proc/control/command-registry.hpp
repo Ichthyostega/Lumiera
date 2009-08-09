@@ -48,6 +48,7 @@
 #include "proc/control/command.hpp"
 #include "proc/control/command-signature.hpp"
 #include "proc/control/command-argument-holder.hpp"
+#include "proc/control/typed-allocation-manager.hpp"
 //#include "proc/control/memento-tie.hpp"
 
 #include <tr1/memory>
@@ -70,6 +71,7 @@ namespace control {
    */
   class CommandRegistry
     : public lib::Sync<>
+    , protected TypedAllocationManager
     {
       
     public:
@@ -136,7 +138,7 @@ namespace control {
               , typename SIG_CAPT    ///< signature for capturing undo state
               , typename SIG_UNDO    ///< signature to undo the command
               >
-      CommandImpl*
+      shared_ptr<CommandImpl>
       newCommandImpl (function<SIG_OPER>& operFunctor
                      ,function<SIG_CAPT>& captFunctor
                      ,function<SIG_UNDO>& undoFunctor)
@@ -148,27 +150,12 @@ namespace control {
           typedef typename UndoSignature<SIG_CAPT>::Memento Mem;
           typedef ArgumentHolder<SIG_OPER,Mem> Arguments;
           
-          shared_ptr<Arguments> pArg ( new (allocateSlot<Arguments>()) Arguments()
-                                     , &kill<Arguments>
-                                     );
-          void* implStorage = 0;
-          try
-            {
-              implStorage = allocateSlot<CommandImpl>();
-              ASSERT (implStorage);
-              
-              return new(implStorage) CommandImpl (pArg, operFunctor,captFunctor,undoFunctor);
-            }
-          catch(...)
-            {
-              if (implStorage)
-                releaseSlot<CommandImpl> (implStorage);
-              throw;
-        }   }
+          shared_ptr<Arguments> pArg (this->create<Arguments>());
+          
+          return this->create<CommandImpl> (pArg, operFunctor,captFunctor,undoFunctor);
+        }
       
       
-      /** delete the command implementation and free the corresponding allocation */
-      static void killCommandImpl (CommandImpl* entry) { kill(entry); }
       
       
       /** create an allocation for holding a clone of the given CommandImpl data.
@@ -177,19 +164,13 @@ namespace control {
        *        But this specific type information is vital for determining the
        *        exact allocation size for the clone ArgumentHolder.
        */
-      CommandImpl*
+      shared_ptr<CommandImpl>
       createCloneImpl (CommandImpl const& reference)
         {
           UNIMPLEMENTED ("allocate clone, solve the re-discovery problem");
         }
       
       
-      
-      
-      ///////////////////TODO solve the problem how to re-access the instance from within the deletor
-      
-      
-    private:
       
     };
   

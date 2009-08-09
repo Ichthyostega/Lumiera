@@ -63,7 +63,7 @@
 #include "lib/meta/tuple.hpp"
 #include "lib/bool-checkable.hpp"
 
-//#include <tr1/memory>
+#include <tr1/memory>
 #include <tr1/functional>
 
 
@@ -72,7 +72,7 @@
 namespace control {
   
   using lumiera::Symbol;
-//  using std::tr1::shared_ptr;
+  using std::tr1::shared_ptr;
   using std::tr1::function;
   
   using lumiera::typelist::FunctionSignature;
@@ -128,8 +128,9 @@ namespace control {
             REQUIRE (undoFunctor_);
             REQUIRE (captFunctor_);
             
+            typedef shared_ptr<CommandImpl> ImplInstance;
             CommandRegistry& registry = CommandRegistry::instance();
-            CommandImpl* completedDef = registry.newCommandImpl(operFunctor_
+            ImplInstance completedDef = registry.newCommandImpl(operFunctor_
                                                                ,captFunctor_
                                                                ,undoFunctor_);
             prototype_.activate(completedDef);

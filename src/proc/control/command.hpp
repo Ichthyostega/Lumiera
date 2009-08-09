@@ -54,7 +54,7 @@ namespace control {
   
   using std::string;
   using lumiera::Symbol;
-//  using std::tr1::shared_ptr;
+  using std::tr1::shared_ptr;
   
   LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Command functor not yet usable, because arguments aren't bound
   LUMIERA_ERROR_DECLARE (INVALID_COMMAND);    ///< Unknown or insufficiently defined command
@@ -115,7 +115,7 @@ namespace control {
       
       /* === command lifecycle === */
       
-      Command& activate (CommandImpl*);
+      Command& activate (shared_ptr<CommandImpl> const&);
       
       template<typename TYPES>
       Command& bindArg (Tuple<TYPES> const&);
