@@ -108,6 +108,15 @@ namespace lib {
           return *this;
         }
       
+      /** another way of activating a handle by sharing ownership
+       *  with an existing smart-ptr */
+      Handle&
+      activate(shared_ptr<IMP> const& impl)
+        {
+          smPtr_ = impl;
+          return *this;
+        }
+      
       /** deactivate this handle, so it isn't tied any longer
        *  to the associated implementation or service object.
        *  When all handles have either been deactivated or
