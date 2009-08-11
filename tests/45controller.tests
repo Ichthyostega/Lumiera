@@ -56,6 +56,11 @@ return: 0
 END
 
 
+PLANNED "Command index and allocation" CommandRegistry_test <<END
+return: 0
+END
+
+
 PLANNED "Command usage aspects I"  CommandUse1_test <<END
 return: 0
 END

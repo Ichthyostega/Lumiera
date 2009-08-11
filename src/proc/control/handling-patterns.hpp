@@ -163,7 +163,7 @@ namespace control {
     
     
     /** access the singleton instance for a given ID */
-    HandlingPattern const&
+    inline HandlingPattern const&
     getPatternInstance (size_t id)
     {
       REQUIRE (id < patternTable.size());
