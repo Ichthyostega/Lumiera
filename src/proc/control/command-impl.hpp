@@ -163,31 +163,30 @@ namespace control {
       /* === diagnostics === */
       
       bool
-      isValid()  const
+      isValid()  const    ///< validity self-check: is basically usable.
         {
-          UNIMPLEMENTED ("command validity self check");
+          return bool(pClo_) 
+              && HandlingPattern::get(defaultPatt_).isValid();
         }
       
       bool
-      canExec()  const
+      canExec()  const    ///< state check: sufficiently defined to be invoked 
         {
-          UNIMPLEMENTED ("state check: sufficiently defined to be invoked");
+          return isValid()
+              && *pClo_ && do_;
         }
       
       bool
-      canUndo()  const
+      canUndo()  const    ///< state check: has undo state been captured? 
         {
-          UNIMPLEMENTED ("state check: has undo state been captured?");
+          return isValid() && undo_;
         }
       
       
       
       
     protected:
-//     static Command& fetchDef (Symbol cmdID);
-     
-//     friend class CommandDef;
-
+      
     };
   ////////////////TODO currently just fleshing  out the API....
   

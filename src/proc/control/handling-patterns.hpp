@@ -85,6 +85,12 @@ namespace control {
           {
             UNIMPLEMENTED ("yield a handling pattern suitable for UNDOing a command, according to this pattern");
           }
+        
+        bool
+        isValid()  const
+          {
+            UNIMPLEMENTED ("is this pattern currently able to handle commands?");
+          }
       };
     
     
@@ -107,6 +113,12 @@ namespace control {
           {
             UNIMPLEMENTED ("yield a handling pattern suitable for UNDOing a command, according to this pattern");
           }
+        
+        bool
+        isValid()  const
+          {
+            UNIMPLEMENTED ("is this pattern currently able to handle commands?");
+          }
       };
     
     
@@ -128,6 +140,12 @@ namespace control {
         defineUNDO()  const
           {
             UNIMPLEMENTED ("yield a handling pattern suitable for UNDOing a command, according to this pattern");
+          }
+        
+        bool
+        isValid()  const
+          {
+            UNIMPLEMENTED ("is this pattern currently able to handle commands?");
           }
       };
     

@@ -77,6 +77,7 @@ namespace control {
    * @todo Type-comment
    */
   class HandlingPattern
+    : public lib::BoolCheckable<HandlingPattern>
     {
       
     public:
@@ -106,12 +107,14 @@ namespace control {
       HandlingPattern const& howtoUNDO()  const;
       
       
+      virtual bool isValid()  const  =0;
       
     protected:
       
       virtual void perform (Command& command)  const  =0;
       
       virtual HandlingPattern const& defineUNDO()  const  =0;
+      
       
       
     };
