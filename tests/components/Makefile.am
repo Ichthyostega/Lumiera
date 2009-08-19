@@ -80,7 +80,7 @@ test_components_SOURCES =							\
 noinst_HEADERS +=							\
 	$(testcomponents_srcdir)/backend/mediaaccessmock.hpp		\
 	$(testcomponents_srcdir)/proc/asset/testclipasset.hpp		\
-	$(testcomponents_srcdir)/proc/asset/assetdiagnostics.hpp	\
+	$(testcomponents_srcdir)/proc/asset/asset-diagnostics.hpp	\
 	$(testcomponents_srcdir)/proc/asset/testasset.hpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/testclip.hpp	\
 	$(testcomponents_srcdir)/proc/mobject/session/testsession1.hpp
