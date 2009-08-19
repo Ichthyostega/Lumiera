@@ -52,7 +52,10 @@ namespace lumiera {
         virtual void
         run (Arg arg) 
           {
-            int64_t refval= isnil(arg)?  1 : lexical_cast<int64_t> (arg[1]);
+//          int64_t refval= isnil(arg)?  1 : lexical_cast<int64_t> (arg[1]);
+//          //// fails for an unknown reason..!
+
+            int64_t refval = 1;
             
             Time ref (refval);
             

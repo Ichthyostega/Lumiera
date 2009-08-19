@@ -7,7 +7,7 @@ PLANNED "CommandBasic_test" CommandBasic_test <<END
 END
 
 
-TEST "Argument & Memento handling" CommandArgument_test <<END
+PLANNED "Argument & Memento handling" CommandArgument_test <<END
 out: Command-State. arguments=unbound, ·noUNDO·.
 out: capture state...
 out: Command-State. arguments=Closure\(\), ·noUNDO·.
@@ -35,7 +35,7 @@ out: RESET...undoIt\(time=00:..:....00\)----memento-:START...doIt\( Time=00:..:.
 END
 
 
-TEST "Command functor and UNDO functor" CommandMutation_test <<END
+PLANNED "Command functor and UNDO functor" CommandMutation_test <<END
 out: Mutation\(untied\)
 out: param values: Closure\(23\)
 out: Mutation\(Closure\(23\)\)
