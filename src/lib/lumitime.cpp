@@ -73,7 +73,7 @@ namespace lumiera {
   int
   Time::getHours()  const
   {
-    return (t_ / (60L * 60 * GAVL_TIME_SCALE)); 
+    return (t_ / (gavl_time_t(60) * 60 * GAVL_TIME_SCALE)); 
   }
   
   
