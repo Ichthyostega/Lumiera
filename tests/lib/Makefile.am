@@ -76,7 +76,7 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/sync-classlock-test.cpp		\
 	$(testlib_srcdir)/sync-locking-test.cpp			\
 	$(testlib_srcdir)/sync-waiting-test.cpp			\
-	$(testlib_srcdir)/timewrappertest.cpp			\
+	$(testlib_srcdir)/time-wrapper-test.cpp			\
 	$(testlib_srcdir)/thread-wrapper-test.cpp		\
 	$(testlib_srcdir)/thread-wrapper-join-test.cpp		\
 	$(testlib_srcdir)/test/cmdlinewrappertest.cpp		\
