@@ -39,6 +39,7 @@
 #include <string>
 #include <cstring>
 #include <typeinfo>
+#include <boost/lexical_cast.hpp>
 #include <boost/utility/enable_if.hpp>
 
 
@@ -46,6 +47,7 @@
 namespace util {
   
   using lumiera::typelist::can_ToString;
+  using lumiera::typelist::can_lexical2string;
   using lumiera::Symbol;
   using boost::enable_if;
   using boost::disable_if;
@@ -70,11 +72,36 @@ namespace util {
     {
       return "";
     }
+    
+    
+    
+    template<typename X>
+    inline string
+    invoke_indirect2string (     typename enable_if< can_lexical2string<X>,
+                            X >::type const& val)
+    {
+      try        { return boost::lexical_cast<string> (val); }
+      catch(...) { return ""; }
+    }
+    
+    template<typename X>
+    inline string
+    invoke_indirect2string (     typename disable_if< can_lexical2string<X>,
+                            X >::type const&)
+    {
+      return "";
+    }
   }
   
   
   
-  /** try to get an object converted to string */
+  /** try to get an object converted to string.
+   *  An custom/standard conversion to string is used,
+   *  if applicable; otherwise, some standard types can be
+   *  converted by a lexical_cast (based on operator<< ).
+   *  Otherwise, either the fallback string is used, or just
+   *  a string denoting the (mangled) type.
+   */
   template<typename TY>
   inline string
   str ( TY const& val
@@ -86,8 +113,17 @@ namespace util {
       return string(prefix) + invoke_2string<TY>(val);
     
     else
-      return fallback? fallback
-                     : tyStr(val);
+      {
+        if (can_lexical2string<TY>::value)
+          {
+            string res (invoke_indirect2string<TY> (val));
+            if ("" != res)
+              return string(prefix) + res;
+          }
+      
+        return fallback? fallback
+                       : tyStr(val);
+      }
   }
   
   

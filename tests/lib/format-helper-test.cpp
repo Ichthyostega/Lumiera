@@ -75,6 +75,10 @@ namespace test {
           
           cout << str (chatterer) << endl;
           cout << str (chatterer, "he says: ", "<no comment>") << endl;
+          
+          cout << str (false, "the truth: ") << endl;
+          cout << str (12.34e55, "just a number: ") << endl;
+          cout << str (short(12)) << str (345L) << str ('X') << endl;
         }
       
       

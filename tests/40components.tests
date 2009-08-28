@@ -240,6 +240,9 @@ out: «..util.test.Reticent.»
 out: <no comment>
 out: ^hey Joe!
 out: ^he says: hey Joe!
+out: ^the truth: 0
+out: ^just a number: 1.234e\+56
+out: ^12345X
 return: 0
 END
 
