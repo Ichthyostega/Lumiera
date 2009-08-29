@@ -142,9 +142,9 @@ namespace control {
       
       
       /** set up a new command implementation frame
-       *  @return pointer to a newly created CommandImpl, allocated 
-       *          through the registry. The caller is responsible for
-       *          deallocating this frame by calling #killCommandImpl 
+       *  @return shared-ptr owning a newly created CommandImpl, allocated 
+       *          through the registry and wired internally to invoke 
+       *          TypedAllocationManager#destroyElement for cleanup. 
        */
       template< typename SIG_OPER    ///< signature of the command operation
               , typename SIG_CAPT    ///< signature for capturing undo state

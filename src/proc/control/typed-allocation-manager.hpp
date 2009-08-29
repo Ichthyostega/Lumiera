@@ -54,6 +54,9 @@
  ** there is a facility allowing to create ref-counting handles and smart-pointers,
  ** which are internally tied to this memory manager through a deleter function.
  ** 
+ ** @todo using a quick-n-dirty heap allocation implementation for now (8/09),
+ **       but should write a custom allocator based on cehteh's mpool!
+ ** 
  ** @see CommandRegistry
  ** @see AllocationCluster (another custom allocation scheme, which could be united)
  **
@@ -66,30 +69,35 @@
 
 //#include "pre.hpp"
 #include "lib/error.hpp"
-//#include "lib/singleton.hpp"
-//#include "lib/sync.hpp"
 #include "lib/format.hpp"
 #include "include/logging.h"
-//#include "lib/bool-checkable.hpp"
 
 
 #include <tr1/memory>
-//#include <iostream>
-//#include <string>
 
 
 
 namespace control {
   
   using std::tr1::shared_ptr;
-//  using std::ostream;
-//  using std::string;
   
   
   
   
   /**
-   * TODO type comment
+   * Foundation for a custom allocation manager,
+   * tracking the created objects by smart-ptrs.
+   * The public interface provides forwarding functions
+   * to invoke the ctor of the objects to be created, thereby
+   * placing them into the storage maintained by a low-level
+   * allocator or pooled storage manager. The created smart-ptr
+   * owns the new object and is wired internally to #releaseSlot.
+   * Subclasses may also directly allocate and de-allocate 
+   * such a (typed) storage slot.
+   * 
+   * @todo currently (as of 8/09) the low-level pooled allocator
+   *       isn't implemented; instead we do just heap allocations.
+   *       see Ticket 231
    */
   class TypedAllocationManager
     {
@@ -259,8 +267,8 @@ namespace control {
       Slot<XX>
       allocateSlot ()
         {
-          UNIMPLEMENTED ("redirect to the corresponding pool allocator");
-          void* space = 0;
+          TODO ("redirect to the corresponding pool allocator");
+          void* space = new char[sizeof(XX)];
           return Slot<XX> (this, space);
         }
       
@@ -268,7 +276,9 @@ namespace control {
       void
       releaseSlot (void* entry)
         {
-          UNIMPLEMENTED ("redirect to the corresponding pool allocator");
+          TODO ("redirect to the corresponding pool allocator");
+          typedef char Storage[sizeof(XX)];
+          delete[] reinterpret_cast<Storage*> (entry);
         }
       
       
