@@ -77,7 +77,7 @@
 
 
 
-namespace control {
+namespace control { ////////////////////////////////////////////////////////////TODO: should go into namespace lib
   
   using std::tr1::shared_ptr;
   
@@ -106,7 +106,7 @@ namespace control {
     public:
 
       /** this is an ABC */
-      virtual ~TypedAllocationManager() {}
+      virtual ~TypedAllocationManager() {}   ////////////////////////////////////TODO: seems superfluous? We don't have any extension points (and this is a good thing!)
       
       
       

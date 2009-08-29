@@ -82,6 +82,7 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/test/cmdlinewrappertest.cpp		\
 	$(testlib_srcdir)/test/testoptiontest.cpp		\
 	$(testlib_srcdir)/test/test-helper-test.cpp		\
+	$(testlib_srcdir)/typed-allocation-manager-test.cpp	\
 	$(testlib_srcdir)/vectortransfertest.cpp		\
 	$(testlib_srcdir)/visitingtoolconcept.cpp		\
 	$(testlib_srcdir)/visitingtoolextendedtest.cpp		\
