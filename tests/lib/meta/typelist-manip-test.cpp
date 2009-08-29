@@ -33,7 +33,7 @@
  **
  ** @see typelist-test.cpp
  ** @see typelist-util.hpp
- ** @see nodewiringconfig.hpp real world usage example
+ ** @see nodewiring-config.hpp real world usage example
  **
  */
 

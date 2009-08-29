@@ -22,73 +22,73 @@
 
 
 #include "proc/mobject/builder/toolfactory.hpp"
-#include "common/util.hpp"
+#include "lib/util.hpp"
 
 //#include <boost/ptr_container/ptr_vector.hpp>
 
 namespace mobject {
-  namespace builder {
-
-    using util::isnil;
-    
-    
-    struct BuildProcessState
-      {
-        
-        session::Fixture & fixedTimeline_;
-        std::auto_ptr<engine::RenderGraph> procSegment_;
-        
-        boost::scoped_ptr<SegementationTool> segmentation_;
-        boost::scoped_ptr<NodeCreatorTool> fabrication_;
-        
-        
-        BuildProcessState (session::Fixture& theTimeline)
-          : fixedTimeline_(theTimeline),
-            procSegment_(new engine::RenderGraph())
-          { }
-        
-      };
-
-    ToolFactory::ToolFactory (session::Fixture& theTimeline)
-      : state_(new BuildProcessState (theTimeline))
+namespace builder {
+  
+  using util::isnil;
+  using std::auto_ptr;
+  using boost::scoped_ptr;
+  
+  
+  struct BuildProcessState
     {
-      ENSURE (state_->fixedTimeline_.isValid());
-      ENSURE (state_->procSegment_);
-    }
-    
-    
-    SegmentationTool &
-    ToolFactory::configureSegmentation ()
-    {
-      REQUIRE (state_->fixedTimeline_.isValid());
-      REQUIRE (state_->procSegment_);
       
-      state->segmentation_.reset (new SegmentationTool (state->fixedTimeline_));
-      return *(state->segmentation_);
-    }
-    
-    
-    NodeCreatorTool &
-    ToolFactory::configureFabrication () //////////////////////TODO: should iterate in some way!
-    {
-      REQUIRE (state_->procSegment_);
-      REQUIRE (!isnil (*(state_>segmentation)));
+      session::Fixture & fixedTimeline_;
+      auto_ptr<engine::RenderGraph> procSegment_;
       
-      state->fabrication_.reset (new NodeCreatorTool(*this));
-      return *(state->fabrication_);
-    }
+      scoped_ptr<SegementationTool> segmentation_;
+      scoped_ptr<NodeCreatorTool> fabrication_;
+      
+      
+      BuildProcessState (session::Fixture& theTimeline)
+        : fixedTimeline_(theTimeline),
+          procSegment_(new engine::RenderGraph())
+        { }
+      
+    };
+  
+  ToolFactory::ToolFactory (session::Fixture& theTimeline)
+    : state_(new BuildProcessState (theTimeline))
+  {
+    ENSURE (state_->fixedTimeline_.isValid());
+    ENSURE (state_->procSegment_);
+  }
+  
+  
+  SegmentationTool &
+  ToolFactory::configureSegmentation ()
+  {
+    REQUIRE (state_->fixedTimeline_.isValid());
+    REQUIRE (state_->procSegment_);
     
+    state->segmentation_.reset (new SegmentationTool (state->fixedTimeline_));
+    return *(state->segmentation_);
+  }
+  
+  
+  NodeCreatorTool &
+  ToolFactory::configureFabrication () //////////////////////TODO: should iterate in some way!
+  {
+    REQUIRE (state_->procSegment_);
+    REQUIRE (!isnil (*(state_>segmentation)));
     
-    std::auto_ptr<engine::RenderGraph>
-    ToolFactory::getProduct ()
-    {
-      state_->segmentation_.reset(0);
-      state_->fabrication_.reset(0);
-      return state_->procSegment_;
-    }
-
-
-
-  } // namespace mobject::builder
-
-} // namespace mobject
+    state->fabrication_.reset (new NodeCreatorTool(*this));
+    return *(state->fabrication_);
+  }
+  
+  
+  auto_ptr<engine::RenderGraph>
+  ToolFactory::getProduct ()
+  {
+    state_->segmentation_.reset(0);
+    state_->fabrication_.reset(0);
+    return state_->procSegment_;
+  }
+  
+  
+  
+}} // namespace mobject::builder

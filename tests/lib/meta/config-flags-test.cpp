@@ -32,7 +32,7 @@
  **
  ** @see configflags.hpp
  ** @see typelistmanip.hpp
- ** @see nodewiringconfig.hpp real world usage example
+ ** @see nodewiring-config.hpp real world usage example
  **
  */
 
@@ -43,7 +43,7 @@
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/configflags.hpp"
 #include "meta/typelist-diagnostics.hpp"
-#include "proc/engine/nodewiringconfig.hpp"
+#include "proc/engine/nodewiring-config.hpp"
 #include "lib/util.hpp"
 
 #include <boost/format.hpp>

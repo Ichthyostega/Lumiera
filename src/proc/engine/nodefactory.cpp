@@ -57,9 +57,9 @@ namespace engine {
       return *newNode;
       
       /*
-       * Problems to be solved:
-       * - write a generic allocator, which later on can be augmented to do block wise bulk allocation
-       * - the allocator needs to keep track of the objects; actually he owns the objects
+       * Problems to be solved:                                                                        /////////////TODO: see Ticket #247
+       * - write a generic allocator, which later on can be augmented to do block wise bulk allocation /////////////DONE: AllocationCluster
+       * - the allocator needs to keep track of the objects; actually he owns the objects              /////////////DONE
        * - we need to access the wiring descriptor of the predecessor nodes. Which means, the code
        *   must be in the body of NodeFactory (because the latter is friend of ProcNode and can access the wiring descriptor)
        * - btw reconsider if this level of protection is necessary, or if the const WiringDescriptor cant be just on the public interface of ProcNode

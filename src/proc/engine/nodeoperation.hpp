@@ -41,14 +41,14 @@
  ** of elementary operations invoking each other (\c NEXT::step(invocation) ). Notably, all those possible
  ** configurations are pre-built while compiling (it's a small number below 32 configuration instance).
  ** To be able to select the Strategy for each configuration, we need a Factory (ConfigSelector defined in
- ** nodewiringconfig.hpp). which is actually instantiated and used in nodewiring.cpp, which is the object
+ ** nodewiring-config.hpp). which is actually instantiated and used in nodewiring.cpp, which is the object
  ** file holding all those instantiations. 
  **
  ** @see engine::ProcNode
  ** @see engine::Invocation
  ** @see engine::State
  ** @see engine::NodeFactory
- ** @see nodewiringconfig.hpp
+ ** @see nodewiring-config.hpp
  ** @see nodewiring.hpp interface for building/wiring the nodes
  **
  */

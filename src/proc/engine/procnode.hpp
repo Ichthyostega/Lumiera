@@ -31,7 +31,7 @@
  **
  ** By using the builder interface, concrete node and wiring descriptor classes are created,
  ** based on some templates. These concrete classes form the "glue" to tie the node network
- ** together and contain much of the operation beahviour in a hard wired fashion.
+ ** together and contain much of the operation behaviour in a hard wired fashion.
  **
  ** @see nodefactory.hpp
  ** @see operationpoint.hpp
@@ -130,16 +130,16 @@ namespace engine {
     public:
       
       /** Engine Core operation: render and pull output from this node.
-       *  On return, currentProcess will hold onto output buffer(s) 
+       *  On return, currentProcess will hold onto output buffer(s)
        *  containing the calculated result frames. In case this node
-       *  calculates a multichannel output, only one channel can be 
+       *  calculates a multichannel output, only one channel can be
        *  retrieved by such a \c pull() call, but you can expect data
        *  of the other channels to be processed and fed to cache.
        *  @param currentProcess the current processing state for 
        *         managing buffers and accessing current parameter values
        *  @param requestedOutputNr the output channel requested
        *         (in case this node delivers more than one output channel)
-       *  @return handle to the buffer containing the calculated result. 
+       *  @return handle to the buffer containing the calculated result.
        */
       BuffHandle
       pull (State& currentProcess, uint requestedOutputNr=0)  const

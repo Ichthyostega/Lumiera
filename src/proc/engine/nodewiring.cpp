@@ -24,7 +24,7 @@
 #include "proc/engine/procnode.hpp"
 #include "proc/engine/nodewiring.hpp"
 #include "proc/engine/nodeoperation.hpp"
-#include "proc/engine/nodewiringconfig.hpp"
+#include "proc/engine/nodewiring-config.hpp"
 
 #include "lib/meta/typelist-util.hpp"
 

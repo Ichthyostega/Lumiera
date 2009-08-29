@@ -31,44 +31,43 @@
 #include "proc/engine/rendergraph.hpp"
 
 #include <boost/scoped_ptr.hpp>
+#include <memory>
 
 
 
 namespace mobject {
-  namespace builder {
-
-    struct BuildProcessState;
-    
-
-    /**
-     * provides the builder with the necessary, preconfigured tools.
-     * Dedicated to a single build process, it holds the internal state
-     * of this process and thus serves to coordinate and link together all
-     * the individual parts fabricated by using the various tools. 
-     */
-    class ToolFactory
-      {
-        boost::scoped_ptr<BuildProcessState> state_;
-        
-      public:
-        /** prepare a builder tool kit for dealing with the given Fixture,
-         *  which is a snapshot of some timeline made explicit. */
-        ToolFactory (session::Fixture&);
-        
-        /** prepare a tool for properly segmenting the Fixture */
-        SegmentationTool &  configureSegmentation ();
-        
-        /** prepare a tool for building the render engine (graph) for a single segment */
-        NodeCreatorTool &   configureFabrication ();
-        
-        /** receive the finished product of the build process; effectively
-         *  releases any other builder tool object */
-        std::auto_ptr<engine::RenderGraph> getProduct ();
-      };
-
-
-
-  } // namespace mobject::builder
-
-} // namespace mobject
+namespace builder {
+  
+  struct BuildProcessState;
+  
+  
+  /**
+   * provides the builder with the necessary, preconfigured tools.
+   * Dedicated to a single build process, it holds the internal state
+   * of this process and thus serves to coordinate and link together all
+   * the individual parts fabricated by using the various tools.
+   */
+  class ToolFactory
+    {
+      boost::scoped_ptr<BuildProcessState> state_;
+      
+    public:
+      /** prepare a builder tool kit for dealing with the given Fixture,
+       *  which is a snapshot of some timeline made explicit. */
+      ToolFactory (session::Fixture&);
+      
+      /** prepare a tool for properly segmenting the Fixture */
+      SegmentationTool &  configureSegmentation ();
+      
+      /** prepare a tool for building the render engine (graph) for a single segment */
+      NodeCreatorTool &   configureFabrication ();
+      
+      /** receive the finished product of the build process; effectively
+       *  releases any other builder tool object */
+      std::auto_ptr<engine::RenderGraph> getProduct ();
+    };
+  
+  
+  
+}} // namespace mobject::builder
 #endif
