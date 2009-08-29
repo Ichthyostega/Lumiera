@@ -33,41 +33,39 @@
 
 
 namespace mobject {
-  namespace builder {
-
-    using std::vector;
-    using std::string;
-    
-    struct RefPoint;
-
-    /**
-     * A point in the render node network under construction.
-     * By means of this unspecific reference, a ProcPatt is able
-     * to deal with this location and to execute a single elementary
-     * building operation denoted by a BuildInstruct at this point.
-     * Usually, the actual point is retrieved from a Mould
-     */
-    class OperationPoint
-      {
-        boost::scoped_ptr<RefPoint> refPoint_;
-        
-      public:
-        /** create node(s) corresponding to the given Processor-Asset
-         *  and wire them as a successor to this OperationPoint; then
-         *  move this point to refer to the resulting new exit node(s)
-         */
-        void attach (asset::PProc const&);
-        
-        /** connect the output this OperationPoint refers such as to
-         *  connect or combine with the input of the already existing
-         *  nodes accessible via the target OperationPoint. 
-         */
-        void join (OperationPoint& target);
-      };
-
-
-
-  } // namespace mobject::builder
-
-} // namespace mobject
+namespace builder {
+  
+  using std::vector;
+  using std::string;
+  
+  struct RefPoint;
+  
+  /**
+   * A point in the render node network under construction.
+   * By means of this unspecific reference, a ProcPatt is able
+   * to deal with this location and to execute a single elementary
+   * building operation denoted by a BuildInstruct at this point.
+   * Usually, the actual point is retrieved from a Mould
+   */
+  class OperationPoint
+    {
+      boost::scoped_ptr<RefPoint> refPoint_;
+      
+    public:
+      /** create node(s) corresponding to the given Processor-Asset
+       *  and wire them as a successor to this OperationPoint; then
+       *  move this point to refer to the resulting new exit node(s)
+       */
+      void attach (asset::PProc const&);
+      
+      /** connect the output this OperationPoint refers such as to
+       *  connect or combine with the input of the already existing
+       *  nodes accessible via the target OperationPoint.
+       */
+      void join (OperationPoint& target);
+    };
+  
+  
+  
+}} // namespace mobject::builder
 #endif

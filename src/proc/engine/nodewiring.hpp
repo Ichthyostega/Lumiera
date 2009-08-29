@@ -108,7 +108,7 @@ namespace engine {
       
     public:
       WiringDescriptor&
-      operator() (WiringInstaller& setup, bool cache);
+      operator() (WiringInstaller& setup, bool cache);  //////////////////TODO: of course this will accept *all* the relevant flags (not only "cache")
     };
   
   

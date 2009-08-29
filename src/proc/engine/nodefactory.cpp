@@ -23,6 +23,7 @@
 
 #include "proc/engine/nodefactory.hpp"
 #include "proc/mobject/session/effect.hpp"
+#include "lib/allocationcluster.hpp"
 
 #include "proc/engine/nodewiring.hpp"
 
@@ -30,7 +31,7 @@ namespace engine {
   
   namespace { // Details of node fabrication
 
-    class Alloc {}; ///////////////TODO
+    using lib::AllocationCluster;
     
     template<class NODE>
     NODE &
@@ -47,12 +48,12 @@ namespace engine {
       
       WiringFactory* wFac;
       
-      Alloc allocator;
+      AllocationCluster allocator;
       bool doCache = (2 == 2); // find out Cache should be used for this node
       
       WiringDescriptor & wDesc = (*wFac)(setup,doCache);
       
-      NODE *newNode = new(allocator()) NODE (wDesc);   // actually this line needs to be atomic
+      NODE* newNode = allocator.create<NODE> (wDesc);
       
       return *newNode;
       

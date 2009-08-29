@@ -30,16 +30,14 @@
 
 
 namespace mobject {
-  namespace session {
+namespace session {
   
-    class Clip;
-    class Effect;
-    typedef Placement<Effect> PEffect;
-    // TODO: class Transition;
-
-  } // namespace mobject::session
-
-} // namespace mobject
+  class Clip;
+  class Effect;
+  typedef Placement<Effect> PEffect;
+  // TODO: class Transition;
+  
+}} // namespace mobject::session
 
 
 namespace engine {

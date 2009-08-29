@@ -25,6 +25,7 @@
 #include "proc/engine/nodewiring.hpp"
 #include "proc/engine/nodeoperation.hpp"
 #include "proc/engine/nodewiring-config.hpp"
+#include "lib/allocationcluster.hpp"
 
 #include "lib/meta/typelist-util.hpp"
 
@@ -39,6 +40,8 @@ namespace engine {
     using lumiera::typelist::Instantiation;
     using lumiera::typelist::Apply;
     using lumiera::typelist::Filter;
+    
+    using lib::AllocationCluster;
     
     
     typedef Flags<CACHING,PROCESS,INPLACE>::Tuple AllFlags;
@@ -56,16 +59,15 @@ namespace engine {
     
     // internal details: setting up a factory for each required configuration
     
-    class Alloc {}; ///////////////TODO
     
     
     template<class CONF>
     class WiringDescriptorFactory
       {
-        Alloc& alloc_;
+        AllocationCluster& alloc_;
         
       public:
-        WiringDescriptorFactory(Alloc& a) 
+        WiringDescriptorFactory(AllocationCluster& a) 
         : alloc_(a) {}
         
         WiringDescriptor&
@@ -79,6 +81,7 @@ namespace engine {
             
             typedef NodeWiring<InvocationStateType> Product;
             
+            ///////////////////////////////////////////////////////////////////////////////TODO: how to get the WiringInstaller here????
             Product * dummy (0);
             return *dummy;
           }
@@ -88,7 +91,7 @@ namespace engine {
     
     typedef ConfigSelector< WiringDescriptorFactory  ///< Factory template to instantiate 
                           , FunctionType            ///<  function signature of the Factory
-                          , Alloc&                 ///<   allocator fed to all factories
+                          , AllocationCluster&     ///<   allocator fed to all factories
                           > WiringSelector;
     
     
@@ -122,6 +125,9 @@ namespace engine {
   WiringFactory::operator() (WiringInstaller& setup, bool cache)
   {
     UNIMPLEMENTED ("build the actual wiring descriptor based on given operation options");
+
+            ///////////////////////////////////////////////////////////////////////////////TODO: how to get the WiringInstaller into the factory????
+    
     
 //    Bits config (FlagInfo<Config>::CODE);
 //    return pImpl_->selector[config]();

@@ -24,73 +24,71 @@
 #include "proc/mobject/builder/operationpoint.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/engine/nodefactory.hpp"
-#include "common/streamtype.hpp"
+#include "lib/streamtype.hpp"
 //#include "common/util.hpp"
 
 //#include <boost/ptr_container/ptr_vector.hpp>
 
 namespace mobject {
-  namespace builder {
-
-//    using util::isnil;
-    using engine::NodeFactory;
-    
-    using engine::PNode;
-    using lumiera::StreamType;
-    
-    
-    struct RefPoint
-      {
-        NodeFactory& alloc_;
-        
-        vector<PNode> sources_;
-        const StreamType * sType_;  //////TODO: maybe use the ChannelDescriptor??
-        
-        
-        /** just continue connecion chaining */
-        RefPoint (RefPoint const& pred)
-          : alloc_(pred.alloc_),
-            sources_(pred.sources_),
-            sType_(pred.sType_)
-          { }
-        
-        /** initiate a connection chain at a real source */
-        RefPoint (NodeFactory& nFactory, asset::Media srcMe)
-          : alloc_(nFactory),
-            sources_(establishMediaChannels (srcMe)),
-            sType_(0)
-          {
-            deriveSourceStreamType ();
-          }
-      };
-
-    
-    
-    OperationPoint::OperationPoint (NodeFactory& nFact,, asset::Media const& srcMe)
-      : refPoint_(new RefPoint (nFact, srcMetheTimeline))
-    { }
-    
-    
-    OperationPoint::OperationPoint (RefPoint const& sourcePoint)
-      : refPoint_(new RefPoint (sourcePoint))
-    { }
-    
-    
-    void
-    OperationPoint::attach (asset::PProc const& mediaProc)
+namespace builder {
+  
+//  using util::isnil;
+  using engine::NodeFactory;
+  
+  using engine::PNode;
+  using lumiera::StreamType;
+  
+  
+  struct RefPoint
     {
-      UNIMPLEMENTED ("Actually-really-finally create a node corresponding to this processing asset");
-    }
-    
-    
-    void
-    OperationPoint::join (OperationPoint& target)
-    {
-      UNIMPLEMENTED ("Actually-really-finally do a mixing output connection");
-    }
-
-
-
-  } // namespace mobject::builder
-
-} // namespace mobject
+      NodeFactory& alloc_;
+      
+      vector<PNode> sources_;
+      const StreamType * sType_;  //////TODO: maybe use the ChannelDescriptor??
+      
+      
+      /** just continue connection chaining */
+      RefPoint (RefPoint const& pred)
+        : alloc_(pred.alloc_),
+          sources_(pred.sources_),
+          sType_(pred.sType_)
+        { }
+      
+      /** initiate a connection chain at a real source */
+      RefPoint (NodeFactory& nFactory, asset::Media srcMedia)
+        : alloc_(nFactory),
+          sources_(establishMediaChannels (srcMedia)),
+          sType_(0)
+        {
+          deriveSourceStreamType ();
+        }
+    };
+  
+  
+  
+  OperationPoint::OperationPoint (NodeFactory& nFact,, asset::Media const& srcMedia)
+    : refPoint_(new RefPoint (nFact, srcMedia))
+  { }
+  
+  
+  OperationPoint::OperationPoint (RefPoint const& sourcePoint)
+    : refPoint_(new RefPoint (sourcePoint))
+  { }
+  
+  
+  void
+  OperationPoint::attach (asset::PProc const& mediaProc)
+  {
+    UNIMPLEMENTED ("Actually-really-finally create a node corresponding to this processing asset");
+  }
+  
+  
+  void
+  OperationPoint::join (OperationPoint& target)
+  {
+    UNIMPLEMENTED ("Actually-really-finally do a mixing output connection");
+  }
+  
+  
+  
+}} // namespace mobject::builder
