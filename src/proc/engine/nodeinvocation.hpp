@@ -1,5 +1,5 @@
 /*
-  NODEINVOCATION.hpp  -  Organize the invocation state within a single pull() call
+  NODEINVOCATION.hpp  -  Organise the invocation state within a single pull() call
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>

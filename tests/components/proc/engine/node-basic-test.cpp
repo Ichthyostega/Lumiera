@@ -24,19 +24,44 @@
 #include "lib/test/run.hpp"
 //#include "lib/factory.hpp"
 //#include "lib/util.hpp"
+#include "proc/engine/nodefactory.hpp"
+#include "proc/engine/nodewiring.hpp"
+#include "proc/engine/render-invocation.hpp"
+#include "proc/mobject/session/effect.hpp"
+#include "lib/allocationcluster.hpp"
 
 //#include <boost/format.hpp>
-#include <iostream>
+//#include <iostream>
 
 //using boost::format;
-using std::string;
-using std::cout;
+//using std::string;
+//using std::cout;
 
 
 namespace engine{
 namespace test  {
   
+  using lib::AllocationCluster;
+  using mobject::session::PEffect;
   
+  
+  namespace { // Test fixture
+    
+    /**
+     * Mock State/Invocation object.
+     * Used as a replacement for the real RenderInvocation,
+     * so the test can verify that calculations are actually
+     * happening in correct order.
+     */
+    class TestContext
+      : public RenderInvocation
+      {
+        
+        //////////////TODO: facility to verify the right access operations get called
+        
+      };
+  
+  }
   
   
   /*******************************************************************
@@ -47,6 +72,20 @@ namespace test  {
       virtual void run(Arg) 
         {
           UNIMPLEMENTED ("build a simple render node and then activate it");
+          
+          AllocationCluster alloc;
+          NodeFactory nodeFab(alloc);
+          
+          PEffect pEffect;  /////////////////TODO how to get an simple Effect MObject for Tests???
+          WiringSituation setup;
+          
+          ProcNode* pNode = nodeFab (pEffect, setup);
+          ASSERT (pNode);
+          
+          TestContext simulatedInvocation;
+          pNode->pull(simulatedInvocation, 0);
+          
+          // ASSERT we got calculated data in the result buffer
         } 
     };
   
