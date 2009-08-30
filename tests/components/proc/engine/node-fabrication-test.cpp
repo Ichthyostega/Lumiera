@@ -1,8 +1,8 @@
 /*
-  SourceNode(Test)  -  unit test of the source reading render node
+  NodeFabrication(Test)  -  building render nodes
  
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2009,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -33,31 +33,27 @@ using std::string;
 using std::cout;
 
 
-namespace engine
-  {
-  namespace test
+namespace engine{
+namespace test  {
+  
+  
+  
+  
+  /*******************************************************************
+   * @test creating and wiring various kinds of render nodes.
+   */
+  class NodeFabrication_test : public Test
     {
-    
-    
-    
-    
-    /*******************************************************************
-     * @test the source reading render node.
-     */
-    class SourceNode_test : public Test
-      {
-        virtual void run(Arg) 
-          {
-            UNIMPLEMENTED ("render node pulling source data from backend");
-          } 
-      };
-    
-    
-    /** Register this test class... */
-    LAUNCHER (SourceNode_test, "unit engine");
-    
-    
-    
-  } // namespace test
-
-} // namespace engine
+      virtual void run(Arg) 
+        {
+          UNIMPLEMENTED ("build and wire some render nodes");
+        } 
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (NodeFabrication_test, "unit engine");
+  
+  
+  
+}} // namespace engine::test

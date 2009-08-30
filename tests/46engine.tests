@@ -7,5 +7,17 @@ return: 0
 END
 
 
-PLANNED "SourceNode_test" SourceNode_test <<END
+PLANNED "Proc Node basics" NodeBasic_test <<END
+END
+
+
+PLANNED "Proc Node fabrication" NodeFabrication_test <<END
+END
+
+
+PLANNED "Proc Node operation modes" NodeOperation_test <<END
+END
+
+
+PLANNED "source reading Node" NodeSource_test <<END
 END
