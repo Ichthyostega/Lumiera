@@ -26,7 +26,7 @@
  ** and enables to pull a result frames from the nodes. Especially, the aspect of
  ** buffer management and cache query is covered here. Each node has been preconfigured by
  ** the builder with a WiringDescriptor and a concrete type of a StateAdapter, including
- ** a specific Configuration, because the node can be built to 
+ ** a specific Configuration, because the node can be built to
  ** - participate in the Caching or ignore the cache
  ** - actually process a result or just pull frames from a source
  ** - employ in-Place calculations or use separate in/out buffers
@@ -42,15 +42,15 @@
  ** configurations are pre-built while compiling (it's a small number below 32 configuration instance).
  ** To be able to select the Strategy for each configuration, we need a Factory (ConfigSelector defined in
  ** nodewiring-config.hpp). which is actually instantiated and used in nodewiring.cpp, which is the object
- ** file holding all those instantiations. 
- **
+ ** file holding all those instantiations.
+ ** 
  ** @see engine::ProcNode
  ** @see engine::Invocation
  ** @see engine::State
  ** @see engine::NodeFactory
  ** @see nodewiring-config.hpp
  ** @see nodewiring.hpp interface for building/wiring the nodes
- **
+ ** 
  */
 
 #ifndef ENGINE_NODEOPERATION_H
@@ -71,249 +71,249 @@
 
 
 namespace engine {
-  namespace config {
-    
-    
-    /**
-     * Base class of all concrete invocation sequences.
-     * Could contain a collection of functions used to build up the invocation sequence.
-     * Currently contains just a marker used to detect the existence of an concrete
-     * definition/specialisation for a given specific configuration.
-     */
-    class OperationBase
-      {
-        typedef lumiera::Yes_t is_defined;
-        
-        
-      };
-    
-    
-    template<class NEXT>
-    struct QueryCache : NEXT
-      {
-        BuffHandle
-        step (Invocation& ivo)
-          {
-            BuffHandle fetched = ivo.fetch (ivo.genFrameID());
-            if (fetched)
-              return fetched;
-            else
-              return NEXT::step (ivo);
-          }
-      };
-    
-    
-    template<class NEXT>
-    struct AllocBufferTable : NEXT
-      {
-        BuffHandle
-        step (Invocation& ivo)
-          {
-            BuffTableChunk buffTab (ivo.wiring, ivo.getBuffTableStorage());
-            ivo.setBuffTab(&buffTab);
-            ASSERT (ivo.buffTab);
-            ASSERT (ivo.buffTab_isConsistent());
-            
-            return NEXT::step (ivo);
-          }
-      };
-    
-    
-    template<class NEXT>
-    struct PullInput : NEXT
-      {
-        BuffHandle
-        step (Invocation& ivo)
-          {
-            BuffHandle        *   inH = ivo.buffTab->inHandle;
-            BuffHandle::PBuff *inBuff = ivo.buffTab->inBuff;
-            
-            for (uint i = 0; i < ivo.nrI(); ++i )
-              {
-                inBuff[i] =
-                  *(inH[i] = this->pullPredecessor(ivo,i)); // invoke predecessor
-                // now Input #i is ready...
-              }
-            return NEXT::step (ivo);
-          }
-      };
-    
-    
-    template<class NEXT>
-    struct ReadSource : NEXT
-      {
-        BuffHandle
-        step (Invocation& ivo)
-          {
-            BuffHandle           *inH  = ivo.buffTab->inHandle;
-            BuffHandle           *outH = ivo.buffTab->outHandle;
-            BuffHandle::PBuff *inBuff  = ivo.buffTab->inBuff;
-            BuffHandle::PBuff *outBuff = ivo.buffTab->outBuff;
-            
-            ASSERT (ivo.nrO() == ivo.nrI() );
-            
-            for (uint i = 0; i < ivo.nrI(); ++i )
-              {
-                inBuff[i] = outBuff[i] =
-                  *(inH[i] = outH[i] = this->getSource(ivo,i));
-                // now Input #i is ready...
-              }
-            return NEXT::step (ivo);
-          }
-      };
-    
-    
-    template<class NEXT>
-    struct AllocOutput : NEXT
-      {
-        BuffHandle 
-        step (Invocation& ivo)
-          {
-            ASSERT (ivo.buffTab);
-            ASSERT (ivo.nrO() < ivo.buffTabSize());
-            BuffHandle           *outH = ivo.buffTab->outHandle;
-            BuffHandle::PBuff *outBuff = ivo.buffTab->outBuff;
-            
-            for (uint i = 0; i < ivo.nrO(); ++i )
-              {
-                outBuff[i] =
-                   *(outH[i] = ivo.allocateBuffer (ivo.wiring.out[i].bufferType));
-                // now Output buffer for channel #i is available...
-              }
-            return NEXT::step (ivo);
-          }
-      };
-    
-    
-    template<class NEXT>
-    struct ProcessData : NEXT
-      {
-        BuffHandle 
-        step (Invocation& ivo)
-          {
-            ASSERT (ivo.buffTab);
-            ASSERT (ivo.buffTab_isConsistent());
-            ASSERT (this->validateBuffers(ivo));
-            
-             // Invoke our own process() function,
-            //  providing the array of outBuffer+inBuffer ptrs
-            ivo.wiring.procFunction (ivo.buffTab->outBuff);
-            
-            return NEXT::step (ivo);
-          }
-      };
-    
-    template<class NEXT>
-    struct FeedCache : NEXT
-      {
-        BuffHandle 
-        step (Invocation& ivo)
-          {
-            for (uint i = 0; i < ivo.nrO(); ++i )
-              {
-                // declare all Outputs as finished
-                ivo.is_calculated(ivo.buffTab->outHandle[i]);
-              }
-            
-            return NEXT::step (ivo);
-          }
-      };
-    
-    template<class NEXT>
-    struct ReleaseBuffers : NEXT                     /////////////////TODO: couldn't this be done automatically by BuffTab's dtor??
-      {                                             /////////////////       this would require BuffHandle to be a smart ref....
-        BuffHandle 
-        step (Invocation& ivo)
-          {
-            // all buffers besides the required Output no longer needed
-            this->releaseBuffers(ivo.buffTab->outHandle, 
-                                 ivo.buffTabSize(), 
-                                 ivo.outNr);
-            
-            return ivo.buffTab->outHandle[ivo.outNr];
-          }
-      };
-    
-    
-    
-    
-    
-    /* =============================================================== */
-    /* === declare the possible Assembly of these elementary steps === */
-    
-    enum Cases
-      { 
-        CACHING = 1,
-        PROCESS,
-        INPLACE,
-        
-        NOT_SET   = 0,
-        NUM_Cases = INPLACE
-      };
-    
-    
-    
-    template<char CACHE_Fl=0, char INPLACE_Fl=0>
-    struct SelectBuffProvider;
-    
-    template<> struct SelectBuffProvider<CACHING>         { typedef AllocBufferFromCache  Type; };
-    template<> struct SelectBuffProvider<NOT_SET,INPLACE> { typedef AllocBufferFromParent Type; };
-    template<> struct SelectBuffProvider<CACHING,INPLACE> { typedef AllocBufferFromCache  Type; };
-    template<> struct SelectBuffProvider<>                { typedef AllocBufferFromParent Type; };
+namespace config {
   
-    
-    template<class Config>
-    struct Strategy ;
   
-    using lumiera::typelist::Config;
-    
-    template<char INPLACE>
-    struct Strategy< Config<CACHING,PROCESS,INPLACE> >
-      : QueryCache<
-         AllocBufferTable<
-          PullInput<
-           AllocOutput<
-            ProcessData<
-             FeedCache<
-              ReleaseBuffers< 
-               OperationBase > > > > > > >
-      { };
-    
-    template<char INPLACE>
-    struct Strategy< Config<PROCESS,INPLACE> >
-      : AllocBufferTable<
-         PullInput<
-          AllocOutput<
-           ProcessData<
+  /**
+   * Base class of all concrete invocation sequences.
+   * Could contain a collection of functions used to build up the invocation sequence.
+   * Currently contains just a marker used to detect the existence of an concrete
+   * definition/specialisation for a given specific configuration.
+   */
+  class OperationBase
+    {
+      typedef lumiera::Yes_t is_defined;
+      
+      
+    };
+  
+  
+  template<class NEXT>
+  struct QueryCache : NEXT
+    {
+      BuffHandle
+      step (Invocation& ivo)
+        {
+          BuffHandle fetched = ivo.fetch (ivo.genFrameID());
+          if (fetched)
+            return fetched;
+          else
+            return NEXT::step (ivo);
+        }
+    };
+  
+  
+  template<class NEXT>
+  struct AllocBufferTable : NEXT
+    {
+      BuffHandle
+      step (Invocation& ivo)
+        {
+          BuffTableChunk buffTab (ivo.wiring, ivo.getBuffTableStorage());
+          ivo.setBuffTab(&buffTab);
+          ASSERT (ivo.buffTab);
+          ASSERT (ivo.buffTab_isConsistent());
+          
+          return NEXT::step (ivo);
+        }
+    };
+  
+  
+  template<class NEXT>
+  struct PullInput : NEXT
+    {
+      BuffHandle
+      step (Invocation& ivo)
+        {
+          BuffHandle        *   inH = ivo.buffTab->inHandle;
+          BuffHandle::PBuff *inBuff = ivo.buffTab->inBuff;
+          
+          for (uint i = 0; i < ivo.nrI(); ++i )
+            {
+              inBuff[i] =
+                *(inH[i] = this->pullPredecessor(ivo,i)); // invoke predecessor
+              // now Input #i is ready...
+            }
+          return NEXT::step (ivo);
+        }
+    };
+  
+  
+  template<class NEXT>
+  struct ReadSource : NEXT
+    {
+      BuffHandle
+      step (Invocation& ivo)
+        {
+          BuffHandle           *inH  = ivo.buffTab->inHandle;
+          BuffHandle           *outH = ivo.buffTab->outHandle;
+          BuffHandle::PBuff *inBuff  = ivo.buffTab->inBuff;
+          BuffHandle::PBuff *outBuff = ivo.buffTab->outBuff;
+          
+          ASSERT (ivo.nrO() == ivo.nrI() );
+          
+          for (uint i = 0; i < ivo.nrI(); ++i )
+            {
+              inBuff[i] = outBuff[i] =
+                *(inH[i] = outH[i] = this->getSource(ivo,i));
+              // now Input #i is ready...
+            }
+          return NEXT::step (ivo);
+        }
+    };
+  
+  
+  template<class NEXT>
+  struct AllocOutput : NEXT
+    {
+      BuffHandle 
+      step (Invocation& ivo)
+        {
+          ASSERT (ivo.buffTab);
+          ASSERT (ivo.nrO() < ivo.buffTabSize());
+          BuffHandle           *outH = ivo.buffTab->outHandle;
+          BuffHandle::PBuff *outBuff = ivo.buffTab->outBuff;
+          
+          for (uint i = 0; i < ivo.nrO(); ++i )
+            {
+              outBuff[i] =
+                 *(outH[i] = ivo.allocateBuffer (ivo.wiring.out[i].bufferType));
+              // now Output buffer for channel #i is available...
+            }
+          return NEXT::step (ivo);
+        }
+    };
+  
+  
+  template<class NEXT>
+  struct ProcessData : NEXT
+    {
+      BuffHandle 
+      step (Invocation& ivo)
+        {
+          ASSERT (ivo.buffTab);
+          ASSERT (ivo.buffTab_isConsistent());
+          ASSERT (this->validateBuffers(ivo));
+          
+           // Invoke our own process() function,
+          //  providing the array of outBuffer+inBuffer ptrs
+          ivo.wiring.procFunction (ivo.buffTab->outBuff);
+          
+          return NEXT::step (ivo);
+        }
+    };
+  
+  template<class NEXT>
+  struct FeedCache : NEXT
+    {
+      BuffHandle 
+      step (Invocation& ivo)
+        {
+          for (uint i = 0; i < ivo.nrO(); ++i )
+            {
+              // declare all Outputs as finished
+              ivo.is_calculated(ivo.buffTab->outHandle[i]);
+            }
+          
+          return NEXT::step (ivo);
+        }
+    };
+  
+  template<class NEXT>
+  struct ReleaseBuffers : NEXT                     /////////////////TODO: couldn't this be done automatically by BuffTab's dtor??
+    {                                             /////////////////       this would require BuffHandle to be a smart ref....
+      BuffHandle 
+      step (Invocation& ivo)
+        {
+          // all buffers besides the required Output no longer needed
+          this->releaseBuffers(ivo.buffTab->outHandle,
+                               ivo.buffTabSize(),
+                               ivo.outNr);
+          
+          return ivo.buffTab->outHandle[ivo.outNr];
+        }
+    };
+  
+  
+  
+  
+  
+  /* =============================================================== */
+  /* === declare the possible Assembly of these elementary steps === */
+  
+  enum Cases
+    { 
+      CACHING = 1,
+      PROCESS,
+      INPLACE,
+      
+      NOT_SET   = 0,
+      NUM_Cases = INPLACE
+    };
+  
+  
+  
+  template< char CACHE_Fl   =NOT_SET
+          , char INPLACE_Fl =NOT_SET
+          >
+  struct SelectBuffProvider;
+  
+  template<> struct SelectBuffProvider<CACHING>         { typedef AllocBufferFromCache  Type; };
+  template<> struct SelectBuffProvider<NOT_SET,INPLACE> { typedef AllocBufferFromParent Type; };
+  template<> struct SelectBuffProvider<CACHING,INPLACE> { typedef AllocBufferFromCache  Type; };
+  template<> struct SelectBuffProvider<>                { typedef AllocBufferFromParent Type; };
+  
+  
+  template<class Config>
+  struct Strategy ;
+  
+  using lumiera::typelist::Config;
+  
+  template<char INPLACE>
+  struct Strategy< Config<CACHING,PROCESS,INPLACE> >
+    : QueryCache<
+       AllocBufferTable<
+        PullInput<
+         AllocOutput<
+          ProcessData<
+           FeedCache<
             ReleaseBuffers< 
-             OperationBase > > > > >
-      { };
-    
-    template<>
-    struct Strategy< Config<> >
-      : AllocBufferTable<
-         ReadSource<
+             OperationBase > > > > > > >
+    { };
+  
+  template<char INPLACE>
+  struct Strategy< Config<PROCESS,INPLACE> >
+    : AllocBufferTable<
+       PullInput<
+        AllocOutput<
+         ProcessData<
           ReleaseBuffers< 
-           OperationBase > > >  
-      { };
-    
-    template<>
-    struct Strategy< Config<INPLACE> > : Strategy< Config<> >  { };
-    
-    template<>
-    struct Strategy< Config<CACHING> >
-      : AllocBufferTable<
-         ReadSource<
-          AllocOutput<
-           ProcessData<                       // wiring_.processFunction is supposed to do just buffer copying here 
-            ReleaseBuffers< 
-             OperationBase > > > > >  
-      { };
-    
-    
-    
-    
-  } // namespace config
+           OperationBase > > > > >
+    { };
   
-} // namespace engine
+  template<>
+  struct Strategy< Config<> >
+    : AllocBufferTable<
+       ReadSource<
+        ReleaseBuffers< 
+         OperationBase > > >  
+    { };
+  
+  template<>
+  struct Strategy< Config<INPLACE> > : Strategy< Config<> >  { };
+  
+  template<>
+  struct Strategy< Config<CACHING> >
+    : AllocBufferTable<
+       ReadSource<
+        AllocOutput<
+         ProcessData<                       // wiring_.processFunction is supposed to do just buffer copying here 
+          ReleaseBuffers< 
+           OperationBase > > > > >  
+    { };
+  
+  
+  
+  
+}} // namespace engine::config
 #endif

@@ -117,7 +117,7 @@ namespace config {
         {
           FactoryHolder(PAR p) 
             : FAC(p),
-              FacFunction( static_cast<FAC&>(*this))
+              FacFunction (static_cast<FAC&> (*this))
             { }  
         };
       
@@ -127,7 +127,9 @@ namespace config {
       
       ConfigTable possibleConfig_; ///< Table of factories
       
-      /** Helper: a visitor usable with FlagInfo */
+      
+      /** Helper: a visitor usable with FlagInfo.
+       *  Used to create a factory for each config */
       struct FactoryTableBuilder
         {
           PAR ctor_param_;
@@ -152,6 +154,7 @@ namespace config {
           
           void done()  {}
         };
+      
       
     public:
       template<class CONFS>

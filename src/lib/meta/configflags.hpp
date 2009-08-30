@@ -31,12 +31,12 @@
  ** to generate, filter and process those configurations. The final goal is to
  ** automatically generate a factory which is able to deliver objects
  ** configured according to the situation encoded in the flags.
- **
+ ** 
  ** @note currently there is an inherent limitation to configurations defined by
  ** a maximum of 5 independent flags. While it is easy to increase this limit,
  ** you should consider that the final goal is to generate template instantiations,
  ** which would lead to more and more code bloat with growing number of possible
- ** combination.
+ ** combinations.
  ** 
  ** @see proc::engine::config::Strategy usage example
  ** @see proc::engine::config::ConfigSelector 
@@ -53,153 +53,151 @@
 
 
 namespace lumiera {
-  namespace typelist {
-    
-    const size_t CONFIG_FLAGS_MAX = 5;
-
-    
-    template<char bit> struct Flag    { typedef Flag     ID; };
-    template<>         struct Flag<0> { typedef NullType ID; };
-    
-    
-    template< char f1=0
-            , char f2=0
-            , char f3=0
-            , char f4=0
-            , char f5=0
-            >
-    struct Flags        
-      { 
-        typedef typename Types< typename Flag<f1>::ID
-                              , typename Flag<f2>::ID
-                              , typename Flag<f3>::ID
-                              , typename Flag<f4>::ID
-                              , typename Flag<f5>::ID
-                              >::List       
-                              Tuple;
-        typedef Tuple List;
-      };
-    
-    
-    template< char f1=0
-            , char f2=0
-            , char f3=0
-            , char f4=0
-            , char f5=0
-            >
-    struct Config      ///< distinct type representing a configuration
-      { 
-        typedef typename Flags<f1,f2,f3,f4,f5>::Tuple  Flags;
-        typedef Flags List;
-      };
-    
-    
-    
-    template<char Fl, class CONF> 
-    struct ConfigSetFlag;       ///< set (prepend) the Flag to the given config
-    
-    template< char Fl
-            , char f1
-            , char f2
-            , char f3
-            , char f4
-            , char IGN
-            >
-    struct ConfigSetFlag<Fl, Config<f1,f2,f3,f4,IGN> >
-      {
-        typedef typelist::Config<Fl,f1,f2,f3,f4> Config;
-      };
-    
-    
-    
-    /** build a configuration type from a list-of-flags */
-    template<class FLAGS, class CONF=typelist::Config<> >
-    struct BuildConfigFromFlags
-      {
-        typedef CONF Config;
-        typedef Config Type;
-      };
-    template<char Fl, class FLAGS, class CONF>
-    struct BuildConfigFromFlags< Node<Flag<Fl>,FLAGS>, CONF>
-      { 
-        typedef typename ConfigSetFlag< Fl
-                                      , typename BuildConfigFromFlags<FLAGS,CONF>::Config
-                                      >::Config Config;
-        typedef Config Type;
-      };
-    
-    /** create a configuration type for the given list-of-flags */
-    template<class FLAGS>
-    struct DefineConfigByFlags : BuildConfigFromFlags<FLAGS> { };    
-    
-    
-    namespace {
-      /** helper comparing enum values and chars (flags) */
-      template<char ii, char jj>
-      struct maxC
-      {
-        enum{ VAL = ii < jj? jj : ii };
-      };
-    }
-    
-    
-    /** 
-     * Helper for calculating values and for
-     * invoking runtime code based on a given FlagTuple.
-     * Can also be used on a Typelist of several Configs.
-     * The latter case is typically used to invoke an operation
-     * while enumerating all Flag-Configurations defined in Code.
-     * An example would be to build (at runtime) an dispatcher table.
-     * Explanation: For the Case covering a List of Configs, we provide
-     * a templated visitation function, which can accept a functor object
-     * to be invoked on each Configuration. 
-     */
-    template<class FLAGS>
-    struct FlagInfo;
-    
-    template<char ff, class FLAGS>
-    struct FlagInfo<Node<Flag<ff>, FLAGS> >
-      {
-        enum{ BITS = maxC< ff,  FlagInfo<FLAGS>::BITS> ::VAL
-            , CODE =  (1<<ff) | FlagInfo<FLAGS>::CODE
-            }; 
-      };
-    
-    template<>
-    struct FlagInfo<NullType>
-      {
-        enum{ BITS = 0
-            , CODE = 0
-            };
-        
-        template<class FUNC>
-        static typename FUNC::Ret
-        accept (FUNC& functor)
-          {
-            return functor.done();
-          }
-      };
-    
-    template<class CONF, class TAIL>
-    struct FlagInfo<Node<CONF, TAIL> >
-      {
-        typedef typename CONF::Flags ThisFlags;
-        enum{ 
-              BITS = maxC< FlagInfo<ThisFlags>::BITS, FlagInfo<TAIL>::BITS > ::VAL
-            };
-        
-        template<class FUNC>
-        static typename FUNC::Ret
-        accept (FUNC& functor)
-          {
-            functor.template visit<CONF>(FlagInfo<ThisFlags>::CODE);
-            return FlagInfo<TAIL>::accept (functor);
-          }
-      };
-    
-    
-    
-  } // namespace typelist
+namespace typelist{
   
-} // namespace lumiera
+  const size_t CONFIG_FLAGS_MAX = 5;
+  
+  
+  template<char bit> struct Flag    { typedef Flag     ID; };
+  template<>         struct Flag<0> { typedef NullType ID; };
+  
+  
+  template< char f1=0
+          , char f2=0
+          , char f3=0
+          , char f4=0
+          , char f5=0
+          >
+  struct Flags
+    { 
+      typedef typename Types< typename Flag<f1>::ID
+                            , typename Flag<f2>::ID
+                            , typename Flag<f3>::ID
+                            , typename Flag<f4>::ID
+                            , typename Flag<f5>::ID
+                            >::List
+                            Tuple;
+      typedef Tuple List;
+    };
+  
+  
+  template< char f1=0
+          , char f2=0
+          , char f3=0
+          , char f4=0
+          , char f5=0
+          >
+  struct Config      ///< distinct type representing a configuration
+    { 
+      typedef typename Flags<f1,f2,f3,f4,f5>::Tuple  Flags;
+      typedef Flags List;
+    };
+  
+  
+  
+  template<char Fl, class CONF> 
+  struct ConfigSetFlag;       ///< set (prepend) the Flag to the given config
+  
+  template< char Fl
+          , char f1
+          , char f2
+          , char f3
+          , char f4
+          , char IGN
+          >
+  struct ConfigSetFlag<Fl, Config<f1,f2,f3,f4,IGN> >
+    {
+      typedef typelist::Config<Fl,f1,f2,f3,f4> Config;
+    };
+  
+  
+  
+  /** build a configuration type from a list-of-flags */
+  template<class FLAGS, class CONF=typelist::Config<> >
+  struct BuildConfigFromFlags
+    {
+      typedef CONF Config;
+      typedef Config Type;
+    };
+  template<char Fl, class FLAGS, class CONF>
+  struct BuildConfigFromFlags< Node<Flag<Fl>,FLAGS>, CONF>
+    { 
+      typedef typename ConfigSetFlag< Fl
+                                    , typename BuildConfigFromFlags<FLAGS,CONF>::Config
+                                    >::Config Config;
+      typedef Config Type;
+    };
+  
+  /** create a configuration type for the given list-of-flags */
+  template<class FLAGS>
+  struct DefineConfigByFlags : BuildConfigFromFlags<FLAGS> { };
+  
+  
+  namespace {
+    /** helper comparing enum values and chars (flags) */
+    template<char ii, char jj>
+    struct maxC
+    {
+      enum{ VAL = ii < jj? jj : ii };
+    };
+  }
+  
+  
+  /**
+   * Helper for calculating values and for
+   * invoking runtime code based on a given FlagTuple.
+   * Can also be used on a Typelist of several Configs.
+   * The latter case is typically used to invoke an operation
+   * while enumerating all Flag-Configurations defined in Code.
+   * An example would be to build (at runtime) an dispatcher table.
+   * Explanation: For the Case covering a List of Configs, we provide
+   * a templated visitation function, which can accept a functor object
+   * to be invoked on each Configuration.
+   */
+  template<class FLAGS>
+  struct FlagInfo;
+  
+  template<char ff, class FLAGS>
+  struct FlagInfo<Node<Flag<ff>, FLAGS> >
+    {
+      enum{ BITS = maxC< ff,  FlagInfo<FLAGS>::BITS> ::VAL
+          , CODE =  (1<<ff) | FlagInfo<FLAGS>::CODE
+          }; 
+    };
+  
+  template<>
+  struct FlagInfo<NullType>
+    {
+      enum{ BITS = 0
+          , CODE = 0
+          };
+      
+      template<class FUNC>
+      static typename FUNC::Ret
+      accept (FUNC& functor)
+        {
+          return functor.done();
+        }
+    };
+  
+  template<class CONF, class TAIL>
+  struct FlagInfo<Node<CONF, TAIL> >
+    {
+      typedef typename CONF::Flags ThisFlags;
+      enum{ 
+            BITS = maxC< FlagInfo<ThisFlags>::BITS, FlagInfo<TAIL>::BITS > ::VAL
+          };
+      
+      template<class FUNC>
+      static typename FUNC::Ret
+      accept (FUNC& functor)
+        {
+          functor.template visit<CONF>(FlagInfo<ThisFlags>::CODE);
+          return FlagInfo<TAIL>::accept (functor);
+        }
+    };
+  
+  
+  
+}} // namespace lumiera::typelist
 #endif

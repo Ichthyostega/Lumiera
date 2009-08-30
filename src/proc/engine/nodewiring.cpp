@@ -61,6 +61,10 @@ namespace engine {
     
     
     
+    /**
+     * Fabricating a WiringDescriptor
+     * tailored for a specific node wiring situation.
+     */
     template<class CONF>
     class WiringDescriptorFactory
       {
@@ -138,3 +142,4 @@ namespace engine {
   
   
 } // namespace engine
+    /** preconfigured table of all possible factories */

@@ -230,7 +230,8 @@ namespace test {
           
             struct TestVisitor
               {
-                string result;
+                string result;  ///< metafunction result
+                
                 TestVisitor() : result ("TestVisitor application:\n") {}
                 
                 /* === visitation interface === */
@@ -319,7 +320,7 @@ namespace test {
               catch (lumiera::error::Invalid& err)
                 {
                   cout << err.what() << "\n";
-                  lumiera_error (); // reset errorflag
+                  lumiera_error (); // reset error flag
                 }
             }
           
