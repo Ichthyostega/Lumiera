@@ -34,6 +34,7 @@
 using namespace Gtk;
 using namespace std;
 using namespace boost;
+using namespace lumiera;
 
 namespace gui {
 namespace widgets {
@@ -255,8 +256,8 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
             TimelineViewWindow &window = view_window();
             
             const int64_t scale = window.get_time_scale();
-            gavl_time_t offset = beginShiftTimeOffset +
-              (int64_t)(mouseDownX - event->x) * scale;
+            Time offset(beginShiftTimeOffset +
+              (int64_t)(mouseDownX - event->x) * scale);
             window.set_time_offset(offset);
             
             set_vertical_offset((int)(mouseDownY - event->y) +

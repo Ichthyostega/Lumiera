@@ -164,7 +164,7 @@ private:
    * the mouse, the other is pinned. pinnedDragTime specifies the time
    * of that point.
    */
-  gavl_time_t pinnedDragTime;
+  lumiera::Time pinnedDragTime;
   
   /**
    * This connection is used to represent the timer which causes scroll

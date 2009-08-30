@@ -50,19 +50,19 @@ public:
    * @param offset The initial view offset.
    * @param scale The initial scale.
    **/
-  TimelineViewWindow(gavl_time_t offset, int64_t scale);
+  TimelineViewWindow(lumiera::Time offset, int64_t scale);
     
   /**
    * Gets the time offset. This is the time value displaid at the
    * left-hand edge of the timeline body area.
    */
-  gavl_time_t get_time_offset() const;
+  lumiera::Time get_time_offset() const;
 
   /**
    * Sets the time offset. This is the time value displaid at the
    * left-hand edge of the timeline body area.
    */
-  void set_time_offset(gavl_time_t time_offset);
+  void set_time_offset(lumiera::Time time_offset);
   
   /**
    * Gets the time scale value.
@@ -108,7 +108,7 @@ public:
    * the timeline body) to convert.
    * @return Returns the time at the coordinate.
    **/
-  gavl_time_t x_to_time(int x) const;
+  lumiera::Time x_to_time(int x) const;
   
   /**
    * A signal to indicate that the scale or offset have been changed.
@@ -116,7 +116,7 @@ public:
   sigc::signal<void> changed_signal() const; 
 
 private:
-  gavl_time_t timeOffset;
+  lumiera::Time timeOffset;
   int64_t timeScale;
   
   sigc::signal<void> changedSignal;

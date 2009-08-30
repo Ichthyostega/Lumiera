@@ -37,6 +37,7 @@ using namespace boost;
 using namespace gui;
 using namespace gui::widgets;
 using namespace gui::widgets::timeline;
+using namespace lumiera;
 
 namespace gui {
 namespace widgets {
@@ -235,7 +236,7 @@ TimelineRuler::set_leading_x(const int x)
   
   if(state)
     {
-      const gavl_time_t time = view_window().x_to_time(x);
+      const Time time = view_window().x_to_time(x);
       if(time > pinnedDragTime)
         state->set_playback_period(pinnedDragTime, time);
       else

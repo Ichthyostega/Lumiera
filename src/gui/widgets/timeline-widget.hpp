@@ -106,7 +106,7 @@ public:
   
 public:
   /* ===== Signals ===== */
-  sigc::signal<void, gavl_time_t> mouse_hover_signal() const;
+  sigc::signal<void, lumiera::Time> mouse_hover_signal() const;
   
   sigc::signal<void> playback_period_drag_released_signal() const;
   
@@ -264,7 +264,7 @@ protected:
   Gtk::VScrollbar verticalScroll;
   
   // Signals
-  sigc::signal<void, gavl_time_t> mouseHoverSignal;
+  sigc::signal<void, lumiera::Time> mouseHoverSignal;
   sigc::signal<void> playbackPeriodDragReleasedSignal;
   sigc::signal<void, boost::shared_ptr<timeline::Track> >
     hoveringTrackChangedSignal;
@@ -277,7 +277,7 @@ public:
   /**
    * The maximum scale for timeline display.
    * @remarks At MaxScale, every pixel on the timeline is equivalent
-   * to 30000000 gavl_time_t increments.
+   * to 30000000 lumiera::Time increments.
    */ 
   static const int64_t MaxScale;
   

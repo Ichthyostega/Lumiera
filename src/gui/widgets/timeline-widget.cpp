@@ -30,6 +30,7 @@ using namespace std;
 using namespace boost;
 using namespace util;
 using namespace gui::widgets::timeline;
+using namespace lumiera;
 
 namespace gui {
 namespace widgets {
@@ -157,7 +158,7 @@ TimelineWidget::get_hovering_track() const
 
 /* ===== Signals ===== */
 
-sigc::signal<void, gavl_time_t>
+sigc::signal<void, lumiera::Time>
 TimelineWidget::mouse_hover_signal() const
 {
   return mouseHoverSignal;
@@ -187,7 +188,7 @@ TimelineWidget::on_scroll()
 {
   if(state)
     state->get_view_window().set_time_offset(
-      horizontalAdjustment.get_value());
+      Time((gavl_time_t)horizontalAdjustment.get_value()));
 }
   
 void
