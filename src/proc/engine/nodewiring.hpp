@@ -26,6 +26,7 @@
 
 
 #include "proc/engine/procnode.hpp"
+#include "lib/allocationcluster.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -51,7 +52,7 @@ namespace engine {
    * and then used to initialise the wiring descriptor, which
    * in turn allows us to setup the ProcNode.  
    */
-  class WiringInstaller : boost::noncopyable
+  class WiringSituation : boost::noncopyable
     {
     public:
       RefArray<ChannelDescriptor>& makeOutDescriptor() ;
@@ -77,7 +78,7 @@ namespace engine {
     : public WiringDescriptor
     {
       
-      NodeWiring(WiringInstaller& setup)
+      NodeWiring(WiringSituation& setup)
         : WiringDescriptor(setup.makeOutDescriptor(), 
                            setup.makeInDescriptor(),
                            setup.resolveProcessingFunction(),
@@ -104,11 +105,14 @@ namespace engine {
     
   class WiringFactory
     {
+      lib::AllocationCluster& alloc_;
       boost::scoped_ptr<config::WiringFactoryImpl> pImpl_;
       
     public:
+      WiringFactory (lib::AllocationCluster& a);
+      
       WiringDescriptor&
-      operator() (WiringInstaller& setup, bool cache);  //////////////////TODO: of course this will accept *all* the relevant flags (not only "cache")
+      operator() (WiringSituation& setup, bool cache);  //////////////////TODO: of course this will accept *all* the relevant flags (not only "cache")
     };
   
   

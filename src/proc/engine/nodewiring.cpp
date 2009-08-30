@@ -25,7 +25,6 @@
 #include "proc/engine/nodewiring.hpp"
 #include "proc/engine/nodeoperation.hpp"
 #include "proc/engine/nodewiring-config.hpp"
-#include "lib/allocationcluster.hpp"
 
 #include "lib/meta/typelist-util.hpp"
 
@@ -56,6 +55,12 @@ namespace engine {
     typedef Filter<AllConfigs::List, Instantiation<Strategy>::Test> PossibleConfigs;
     
     
+    #define PICK_FLAG(_FLAG_) config::FlagInfo<CONF>::CODE & (_FLAG_)
+    
+    template<class CONF>
+    struct UseBufferProvider
+      : config::SelectBuffProvider< PICK_FLAG (CACHING), PICK_FLAG (INPLACE) >
+      { };
     
     // internal details: setting up a factory for each required configuration
     
@@ -70,31 +75,32 @@ namespace engine {
       {
         AllocationCluster& alloc_;
         
+        /* ==== pick actual wiring code ==== */
+        typedef Strategy<CONF> Strategy;
+        typedef typename UseBufferProvider<CONF>::Type BuffProvider;
+        typedef ActualInvocationProcess<Strategy, BuffProvider> InvocationStateType;
+        
+        // the concrete implementation of the glue code...
+        typedef NodeWiring<InvocationStateType> ActualWiring;
+        
+        
       public:
         WiringDescriptorFactory(AllocationCluster& a) 
         : alloc_(a) {}
         
         WiringDescriptor&
-        operator() ()  
+        operator() (WiringSituation const& intendedWiring)  
           { 
-            /////////////////////////////////////////////TODO
-            
-            typedef config::Strategy<CONF> Strategy;
-            typedef typename config::SelectBuffProvider<>::Type BuffProvider; ////////////////////////TODO: how to extract the required flags from CONF??
-            typedef ActualInvocationProcess<Strategy, BuffProvider> InvocationStateType;
-            
-            typedef NodeWiring<InvocationStateType> Product;
-            
-            ///////////////////////////////////////////////////////////////////////////////TODO: how to get the WiringInstaller here????
-            Product * dummy (0);
-            return *dummy;
+            return alloc_.create<ActualWiring> (intendedWiring);
           }
       };
     
-    typedef WiringDescriptor& (FunctionType)(void);
+    /** invocation signature of the factories */
+    typedef WiringDescriptor& (FunctionType)(WiringSituation const&);
     
+    /** preconfigured table of all possible factories */
     typedef ConfigSelector< WiringDescriptorFactory  ///< Factory template to instantiate 
-                          , FunctionType            ///<  function signature of the Factory
+                          , FunctionType            ///<  function signature of the Factories
                           , AllocationCluster&     ///<   allocator fed to all factories
                           > WiringSelector;
     
@@ -111,8 +117,19 @@ namespace engine {
   } // (END) internals (namespace config)
   
   
-  /////////////////////////////TODO: define the ctor
   
+  
+  /** As the WiringFactory (an all the embedded factories
+   *  for the specific wiring situations) use the AllocationCluster
+   *  of the current build process, we need to create a new instance
+   *  for each newly built segment of the low-level model.
+   */
+  WiringFactory::WiringFactory (lib::AllocationCluster& a)
+    : alloc_(a),
+      pImpl_(new config::WiringFactoryImpl (alloc_))
+    { }
+      
+
   
   /** create and configure a concrete wiring descriptor to tie
    *  a ProcNode to its predecessor nodes. This includes selecting
@@ -126,11 +143,11 @@ namespace engine {
    *  the new processing node to be wired up.  
    */
   WiringDescriptor&
-  WiringFactory::operator() (WiringInstaller& setup, bool cache)
+  WiringFactory::operator() (WiringSituation& setup, bool cache)
   {
     UNIMPLEMENTED ("build the actual wiring descriptor based on given operation options");
 
-            ///////////////////////////////////////////////////////////////////////////////TODO: how to get the WiringInstaller into the factory????
+            ///////////////////////////////////////////////////////////////////////////////TODO: how to get the WiringSituation into the factory????
     
     
 //    Bits config (FlagInfo<Config>::CODE);
@@ -142,4 +159,3 @@ namespace engine {
   
   
 } // namespace engine
-    /** preconfigured table of all possible factories */

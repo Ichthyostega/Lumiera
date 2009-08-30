@@ -42,7 +42,7 @@ namespace engine {
       
       ProcNode * predecessor1, predecessor2;
       
-      WiringInstaller setup;
+      WiringSituation setup;
       setup.defineInput (4, predecessor1, 2);
       setup.defineInput (2, predecessor2);
       
