@@ -1,48 +1,27 @@
-window_sizes 1302 1004 270 1022 854 71
+window_sizes 1302 1004 270 1022 856 71
 diagrams
-  classdiagram_ref 128133 // Session structure
-    853 742 100 4 120 0
-  classdiagram_ref 132741 // TimelineSequences
-    585 732 100 4 0 0
-  active  classdiagram_ref 132869 // Layer Separation Interface
-    373 417 100 4 0 0
+  active  classdiagram_ref 134021 // Command structure
+    575 622 100 4 0 0
+  statediagram_ref 135173 // Command lifecycle
+    349 682 100 4 0 0
 end
 show_stereotypes
 selected 
   package_ref 129 // lumiera
 open
-  class_ref 145925 // PlayControl
-  deploymentview_ref 128261 // gen
-  deploymentview_ref 129157 // gen
+  classview_ref 129413 // Project Entities
   
-  package_ref 130181 // mobject
+  package_ref 128645 // codegen
+  
+  package_ref 128133 // Asset
   classview_ref 128389 // Controller Workings
-  class_ref 139653 // Session
-  class_ref 128005 // SessionImpl
-  class_ref 145541 // Timeline
-  class_ref 145797 // TimelineView
-  class_ref 128133 // Seq
-  class_ref 128389 // Track
-  class_ref 128901 // Clip
-  class_ref 129029 // Effect
+  class_ref 148997 // CmdClosure
+  class_ref 150789 // Closure
+  pseudostate_ref 128133 // choice
   
-  package_ref 128901 // Builder
-  class_ref 131717 // ProcNode
-  class_ref 142469 // StateProxy
-  class_ref 142597 // StateAdapter
-  class_ref 142725 // WiringDescriptor
-  class_ref 143365 // NodeWiring
-  class_ref 143621 // QueryCache
-  class_ref 143749 // PullInput
-  class_ref 143877 // ReadSource
-  class_ref 144389 // ProcessData
-  class_ref 144645 // FeedCache
-  class_ref 144517 // Strategy
-  class_ref 144005 // BuffTable
-  class_ref 144261 // Invocation
+  package_ref 128261 // MObject
+  classview_ref 128133 // Engine Workings
   classview_ref 129541 // InterfaceSystem
   classview_ref 129285 // StreamType
-  classview_ref 128773 // error
-  class_ref 140165 // Visitable
 end
 end

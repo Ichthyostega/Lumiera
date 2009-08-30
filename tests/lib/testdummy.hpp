@@ -26,48 +26,55 @@
 
 
 namespace lib {
-  namespace test {
+namespace test{
     
-    namespace { // yet another test dummy
-      
-      long checksum = 0;
-      bool throw_in_ctor = false;
-      
-      class Dummy 
-        : boost::noncopyable
-        {
-          int val_;
-          
-        public:
-          Dummy ()
-            : val_(1 + (rand() % 100000000))
-            {
-              checksum += val_;
-              if (throw_in_ctor)
-                throw val_;
-            }
-          
-          ~Dummy()
-            {
-              checksum -= val_;
-            }
-          
-          long add (int i)  { return val_+i; }
-          
-        protected:
-          int getVal()  const { return val_; }
-          
-          void
-          setVal (int newVal)
-            {
-              checksum += newVal - val_;
-              val_ = newVal;
-            }
-        };
+  namespace { // yet another test dummy
+    
+    long checksum = 0;
+    bool throw_in_ctor = false;
+    
+    class Dummy 
+      : boost::noncopyable
+      {
+        int val_;
         
-    }// anonymous test dummy 
-    
-  }// namespace test
+      public:
+        Dummy ()
+          : val_(1 + (rand() % 100000000))
+          { init(); }
+        
+        Dummy (int v)
+          : val_(v)
+          { init(); }
+        
+        ~Dummy()
+          {
+            checksum -= val_;
+          }
+        
+        long add (int i)    { return val_+i; }
+        
+        int getVal()  const { return val_; }
+        
+        void
+        setVal (int newVal)
+          {
+            checksum += newVal - val_;
+            val_ = newVal;
+          }
+        
+      private:
+        void
+        init()
+          {
+            checksum += val_;
+            if (throw_in_ctor)
+              throw val_;
+          }
 
-} // namespace lib
+      };
+      
+  }  // anonymous test dummy
+  
+}} // namespace lib::test
 

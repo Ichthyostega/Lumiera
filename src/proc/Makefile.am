@@ -91,8 +91,10 @@ liblumiprocmobject_la_SOURCES =					\
 	$(liblumiprocmobject_la_srcdir)/builderfacade.cpp	\
 	$(liblumiprocmobject_la_srcdir)/interpolator.cpp	\
 	$(liblumiprocmobject_la_srcdir)/mobject.cpp		\
+	$(liblumiprocmobject_la_srcdir)/mobject-ref.cpp		\
 	$(liblumiprocmobject_la_srcdir)/parameter.cpp		\
 	$(liblumiprocmobject_la_srcdir)/paramprovider.cpp	\
+	$(liblumiprocmobject_la_srcdir)/placement-index.cpp	\
 	$(liblumiprocmobject_la_srcdir)/placement.cpp
 
 
@@ -118,6 +120,10 @@ liblumiproccontrol_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
 liblumiproccontrol_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
 liblumiproccontrol_la_SOURCES =					\
+	$(liblumiproccontrol_la_srcdir)/command.cpp		\
+	$(liblumiproccontrol_la_srcdir)/command-impl.cpp	\
+	$(liblumiproccontrol_la_srcdir)/handling-pattern.cpp	\
+	$(liblumiproccontrol_la_srcdir)/proc-dispatcher.cpp	\
 	$(liblumiproccontrol_la_srcdir)/pathmanager.cpp		\
 	$(liblumiproccontrol_la_srcdir)/stypemanager.cpp
 
@@ -144,6 +150,7 @@ liblumiprocmobjectsession_la_SOURCES =					\
 	$(liblumiprocmobjectsession_la_srcdir)/abstractmo.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/allocation.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/auto.cpp			\
+	$(liblumiprocmobjectsession_la_srcdir)/binding.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/clip.cpp			\
 	$(liblumiprocmobjectsession_la_srcdir)/compoundclip.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/constraint.cpp		\
@@ -156,8 +163,8 @@ liblumiprocmobjectsession_la_SOURCES =					\
 	$(liblumiprocmobjectsession_la_srcdir)/segment.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/simpleclip.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/plug.cpp			\
-	$(liblumiprocmobjectsession_la_srcdir)/sessionimpl.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/sessmanagerimpl.cpp	\
+	$(liblumiprocmobjectsession_la_srcdir)/session-impl.cpp		\
+	$(liblumiprocmobjectsession_la_srcdir)/sess-manager-impl.cpp	\
 	$(liblumiprocmobjectsession_la_srcdir)/edl.cpp			\
 	$(liblumiprocmobjectsession_la_srcdir)/session.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/track.cpp		\
@@ -231,7 +238,6 @@ noinst_HEADERS +=							\
 	$(liblumiproc_la_srcdir)/mobject/session/fixture.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/session/locatingpin.hpp	\
 	$(liblumiproc_la_srcdir)/mobject/session/plug.hpp		\
-	$(liblumiproc_la_srcdir)/mobject/session/sessionimpl.hpp	\
 	$(liblumiproc_la_srcdir)/mobject/session/defsregistry.hpp	\
 	$(liblumiproc_la_srcdir)/mobject/explicitplacement.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/mobject.hpp			\

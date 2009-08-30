@@ -59,12 +59,10 @@ This code is heavily inspired by
 
 
 
-namespace lumiera
-  {
-  namespace typelist
-    {
+namespace lumiera {
+namespace typelist{
     
-    class NullType 
+    struct NullType 
       { 
         typedef NullType List;
       };
@@ -114,13 +112,12 @@ namespace lumiera
     struct Types<>
       {
         typedef NullType List;
+        typedef Types<>  Seq;
       };
     
     
     typedef Node<NullType,NullType> NodeNull;
     
     
-  } // namespace typelist
-
-} // namespace lumiera
+}} // namespace lumiera::typelist
 #endif

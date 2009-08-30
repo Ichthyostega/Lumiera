@@ -43,6 +43,20 @@ namespace util {
     return (n==0)? 0 :((n<0)? -1:+1 );
   }
   
+  template <class N1, class N2>
+  inline N1
+  min (N1 n1, N2 n2)
+  {
+    return n2 < n1? N1(n2) : n1;
+  }
+  
+  template <class N1, class N2>
+  inline N1
+  max (N1 n1, N2 n2)
+  {
+    return n1 < n2? N1(n2) : n1;
+  }
+  
   
   /** a family of util functions providing a "no value whatsoever" test.
       Works on strings and all STL containers, includes NULL test for pointers */
@@ -93,7 +107,7 @@ namespace util {
   /** shortcut for set value containment test */
   template <typename T>
   inline bool 
-  contains (std::set<T>& set, const T& val)
+  contains (std::set<T>& set, T const& val)
   {
     return set.end() != set.find (val);
   }
@@ -101,7 +115,7 @@ namespace util {
   /** shortcut for string value containment test */
   template <typename T>
   inline bool 
-  contains (std::string& str, const T& val)
+  contains (std::string const& str, const T& val)
   {
     return str.find (val) != std::string::npos;
   }
@@ -110,7 +124,7 @@ namespace util {
    *  in any sequential container */
   template <typename SEQ>
   inline bool 
-  contains (SEQ& cont, typename SEQ::const_reference val)
+  contains (SEQ const& cont, typename SEQ::const_reference val)
   {
     typename SEQ::const_iterator begin = cont.begin();
     typename SEQ::const_iterator end   = cont.end();
@@ -190,6 +204,29 @@ namespace util {
   }
   
   
+  /** shortcut to save some typing when having to define
+   *  const and non-const variants of member functions
+   */
+  template<class OBJ>
+  OBJ*
+  unConst (const OBJ* o)
+  {
+    return const_cast<OBJ*> (o);
+  }
+  
+  
+  /** compare plain object identity,
+   *  bypassing any custom comparison operators.
+   */
+  template<class A, class B>
+  inline bool
+  isSameObject (A const& a, B const& b)
+  {
+    return static_cast<const void*> (&a)
+        == static_cast<const void*> (&b);
+  }
+  
+  
   
   
   /** produce an identifier based on the given string.
@@ -208,17 +245,18 @@ namespace util {
    "mixed    Ω   garbage"             --> 'mixed_garbage'
    "Bääääh!!"                         --> 'Bh'
 \endverbatim
+   * @see sanitised-identifier-test.cpp
    */
-  string sanitize (const string& org);
+  string sanitise (string const& org);
   
   
   
   
-  /** convienience shortcut: conversion to c-String via string.
+  /** convenience shortcut: conversion to c-String via string.
    *  usable for printf with objects providing to-string conversion.
    */
   inline const char* 
-  cStr (const string& org)
+  cStr (string const& org)
   {
     return org.c_str();
   }
@@ -244,7 +282,7 @@ namespace util {
  *        and we probably will enforce this design rule in future. */
 #define INSTANCEOF(CLASS, EXPR) (dynamic_cast<const CLASS*> (EXPR))
 
-/** the inevitalbe MAX macro, sometimes still necessary in template code */
+/** the inevitable MAX macro, sometimes still necessary in template code */
 #ifndef MAX   // this is present to make this definition play nice with GLib
 #define MAX(A,B) ((A < B) ?  (B) : (A))
 #endif

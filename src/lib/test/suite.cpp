@@ -39,30 +39,30 @@
 
 
 
-namespace test
-  {
+namespace test {
+  
   using std::map;
   using std::vector;
   using std::auto_ptr;
   using std::tr1::shared_ptr;
   using boost::algorithm::trim;
-
+  
   using util::isnil;
   using util::contains;
   
   typedef map<string, Launcher*> TestMap;
   typedef shared_ptr<TestMap>  PTestMap;
   typedef map<string,PTestMap> GroupMap;
-
+  
   
   
   /** helper to collect and manage the test cases.
    *  Every testcase class should create a Launch instance
-   *  which causes a call to Suite::enroll(), so we can add a
+   *  which causes a call to Suite::enrol(), so we can add a
    *  pointer to this Launcher into a map indexed by the
    *  provided testIDs and groupIDs.
    *  This enables us to build a Suite instance for any 
-   *  requested group and then instantiiate and invoke
+   *  requested group and then instantiate and invoke
    *  individual testcases accordingly.
    */ 
   class Registry
@@ -93,16 +93,16 @@ namespace test
   
   
   /** register the given test-launcher, so it can be later accessed
-   *  either as a member of one of the specified groups, or direcly
+   *  either as a member of one of the specified groups, or directly
    *  by its testID. Any test is automatically added to the groupID
    *  #ALLGROUP
    *  @param test the Launcher object used to run this test
-   *  @param testID unique ID to refere to this test (will be used as std::map key)
+   *  @param testID unique ID to refer to this test (will be used as std::map key)
    *  @param groups List of group-IDs selected by whitespace
    * 
    */
   void 
-  Suite::enroll (Launcher* test, string testID, string groups)
+  Suite::enrol (Launcher* test, string testID, string groups)
   {
     REQUIRE( test );
     REQUIRE( !isnil(testID) );
@@ -112,7 +112,7 @@ namespace test
     while (ss >> group )
       testcases.add2group(test, testID, group);
     
-    // Magic: allways add any testcas to groupID="ALL"
+    // Magic: always add any testcase to groupID="ALL"
     testcases.add2group(test,testID, ALLGROUP);
   }
   
@@ -122,7 +122,7 @@ namespace test
   
   
   /** create a suite comprised of all the testcases 
-   *  previously @link #enroll() registered @endlink with this
+   *  previously @link #enrol() registered @endlink with this
    *  this group. 
    *  @see #run() running tests in a Suite 
    */
@@ -138,14 +138,14 @@ namespace test
   }
     
 #define VALID(test,testID) \
-  ASSERT ((test), "NULL testcase laucher for test '%s' found in testsuite '%s'", groupID_.c_str(),testID.c_str());
+  ASSERT ((test), "NULL testcase launcher for test '%s' found in testsuite '%s'", groupID_.c_str(),testID.c_str());
   
   
   /** run all testcases contained in this Suite.
    *  The first argument in the commandline, if present, 
    *  will select one single testcase with a matching ID.
    *  In case of invoking a single testcase, the given cmdline
-   *  will be forwarded to the testcase, after removind the
+   *  will be forwarded to the testcase, after removing the
    *  testcaseID from cmdline[0]. Otherwise, every testcase 
    *  in this suite is invoked with a empty cmdline vector.
    *  @param cmdline ref to the vector of commandline tokens  
@@ -173,7 +173,7 @@ namespace test
       }   }
     
     // no test-ID was specified.
-    // instantiiate all tests cases and execute them.
+    // Instantiate all tests cases and execute them.
     for ( TestMap::iterator i=tests->begin(); i!=tests->end(); ++i )
       {
         std::cout << "\n  ----------"<< i->first<< "----------\n";
@@ -184,7 +184,7 @@ namespace test
   }
   
   
-  /** print to stdout an ennumeration of all testcases in this suite,
+  /** print to stdout an enumeration of all testcases in this suite,
    *  in a format suitable for use with Cehteh's ./test.sh 
    */
   void
@@ -195,7 +195,7 @@ namespace test
     ASSERT (tests);
     
     std::cout << "TESTING \"Component Test Suite: " << groupID_ << "\" ./test-components\n\n";
-
+    
     for ( TestMap::iterator i=tests->begin(); i!=tests->end(); ++i )
       {
         string key (i->first);
@@ -214,7 +214,7 @@ namespace test
         std::cout << "END\n";
       }
   }
-
-
-
+  
+  
+  
 } // namespace test

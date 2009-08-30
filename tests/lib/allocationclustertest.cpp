@@ -26,7 +26,7 @@
 #include "lib/util.hpp"
 
 #include "lib/allocationcluster.hpp"
-#include "lib/scopedholder.hpp"
+#include "lib/scoped-holder.hpp"
 
 #include <vector>
 #include <limits>

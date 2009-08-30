@@ -50,7 +50,7 @@ namespace lumiera {
     {
     public:
       Error (string description="", const char* id=LUMIERA_ERROR_EXCEPTION) throw();
-      Error (std::exception& cause,
+      Error (std::exception const& cause,
              string description="", const char* id=LUMIERA_ERROR_EXCEPTION) throw();
       
       Error (const Error&) throw();
@@ -87,7 +87,7 @@ namespace lumiera {
       mutable string what_;  ///< buffer for generating the detailed description on demand
       const string cause_;   ///< description of first exception encountered in the chain
 
-      static const string extractCauseMsg (const std::exception&)  throw();
+      static const string extractCauseMsg (std::exception const&)  throw();
     };
   
     
@@ -120,6 +120,11 @@ namespace lumiera {
     LUMIERA_ERROR_DECLARE (INVALID  );    ///< invalid input or parameters encountered
     LUMIERA_ERROR_DECLARE (EXTERNAL );    ///< failure in external service the application relies on
     LUMIERA_ERROR_DECLARE (ASSERTION);    ///< assertion failure
+    
+    /* generic error situations */
+    LUMIERA_ERROR_DECLARE (WRONG_TYPE);   ///< runtime type mismatch 
+    LUMIERA_ERROR_DECLARE (ITER_EXHAUST); ///< end of sequence reached 
+
     
 /** Macro for creating derived exception classes properly 
  *  integrated into Lumiera's exception hierarchy. Using

@@ -53,3 +53,16 @@ lumiera_tmpbuf_print_time (gavl_time_t time)
   return buffer;
 }
 
+
+gavl_time_t
+lumiera_build_time (long millis, uint secs, uint mins, uint hours)
+{
+  gavl_time_t time = millis
+                   + 1000 * secs
+                   + 1000 * 60 * mins
+                   + 1000 * 60 * 60 * hours;
+  time *= GAVL_TIME_SCALE / 1000;
+  return time;
+}
+
+

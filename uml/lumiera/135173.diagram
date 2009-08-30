@@ -1,0 +1,161 @@
+format 58
+
+pseudostatecanvas 128005 pseudostate_ref 128005 // entry_point
+   xyz 180 12 3005 label_xy 184 31
+end
+stateactioncanvas 128133 stateaction_ref 128005
+  xyzwh 225 41 2000 53 26
+end
+statecanvas 128261 state_ref 128133 // scratch
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 74 82 2000 57 33
+end
+stateactioncanvas 128389 stateaction_ref 128133
+  xyzwh 80 133 2000 44 26
+end
+stateactioncanvas 128517 stateaction_ref 128261
+  xyzwh 53 175 2000 50 26
+end
+stateactioncanvas 128645 stateaction_ref 128389
+  xyzwh 49 213 2000 58 26
+end
+stateactioncanvas 128773 stateaction_ref 128517
+  xyzwh 110 175 2000 58 26
+end
+stateactioncanvas 128901 stateaction_ref 128645
+  xyzwh 114 213 2000 50 26
+end
+statecanvas 129029 state_ref 128261 // CmdDef
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 73 276 2000 59 33
+end
+stateactioncanvas 129157 stateaction_ref 128773
+  xyzwh 112 337 2000 32 26
+end
+statecanvas 129413 state_ref 128389 // Command
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 127 388 2000 69 33
+end
+stateactioncanvas 129541 stateaction_ref 129029
+  xyzwh 160 445 2000 84 30
+end
+statecanvas 129669 state_ref 128517 // undo-able
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  xyzwh 162 501 2000 81 36
+end
+pseudostatecanvas 129797 pseudostate_ref 128133 // choice
+   xyz 238 81 2000
+end
+pseudostatecanvas 132997 pseudostate_ref 128517 // exit_point
+   xyz 288 510 3005 label_xy 286 529
+end
+stateactioncanvas 133125 stateaction_ref 129157
+  xyzwh 161 565 2000 85 30
+end
+transitioncanvas 129925 transition_ref 128005 // <transition>
+  
+  from ref 129797 z 1999 label "/ not found" xyz 155 100 1999 to ref 128261
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130053 transition_ref 128133 // <transition>
+  geometry HVr
+  
+  from ref 129797 z 1999 label "/ found" xyz 215 129 1999 to point 248 290
+  line 130309 z 1999 to ref 129029
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 130437 transition_ref 128261 // <transition>
+  
+  from ref 128261 z 1999 to ref 128389
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131205 transition_ref 128773 // <transition>
+  
+  from ref 128133 z 1999 to ref 129797
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131589 transition_ref 128901 // <transition>
+  geometry HV
+  
+  from ref 128005 z 1999 to point 249 19
+  line 134661 z 1999 to ref 128133
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131717 transition_ref 129029 // <transition>
+  
+  from ref 128389 z 1999 to ref 128517
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131845 transition_ref 129157 // <transition>
+  
+  from ref 128389 z 1999 to ref 128773
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 131973 transition_ref 129285 // <transition>
+  
+  from ref 128517 z 1999 to ref 128645
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 132101 transition_ref 129413 // <transition>
+  
+  from ref 128773 z 1999 to ref 128901
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 132229 transition_ref 129541 // <transition>
+  
+  from ref 128645 z 1999 to ref 129029
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 132357 transition_ref 129669 // <transition>
+  
+  from ref 128901 z 1999 to ref 129029
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 132485 transition_ref 129797 // <transition>
+  
+  from ref 129029 z 1999 to ref 129157
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 132613 transition_ref 129925 // <transition>
+  
+  from ref 129157 z 1999 to ref 129413
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 132741 transition_ref 130053 // <transition>
+  
+  from ref 129413 z 1999 to ref 129541
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 132869 transition_ref 130181 // <transition>
+  
+  from ref 129541 z 1999 to ref 129669
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 133253 transition_ref 130309 // <transition>
+  
+  from ref 129669 z 1999 to ref 132997
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 133381 transition_ref 130437 // <transition>
+  
+  from ref 129669 z 1999 to ref 133125
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 133509 transition_ref 130565 // <transition>
+  decenter_end 702
+  
+  from ref 133125 z 1999 to point 138 576
+  line 133765 z 1999 to point 138 540
+  line 133637 z 1999 to ref 129669
+  write_horizontally default show_definition default drawing_language default
+end
+transitioncanvas 133893 transition_ref 130693 // <transition>
+  decenter_begin 324
+  
+  from ref 129669 z 1999 to point 137 496
+  line 134149 z 1999 to point 137 456
+  line 134533 z 1999 to ref 129541
+  write_horizontally default show_definition default drawing_language default
+end
+preferred_whz 349 682 1
+end

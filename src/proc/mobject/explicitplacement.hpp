@@ -28,8 +28,7 @@
 
 
 
-namespace mobject
-  {
+namespace mobject {
   
   
   
@@ -63,11 +62,11 @@ namespace mobject
       
       
     protected:
-      /*  @todo ichthyo considers a much more elegant implementation utilizing a subclass 
+      /*  @todo ichthyo considers a much more elegant implementation utilising a subclass 
        *        of FixedLocation, which would serve as Placement::LocatingSolution, and
        *        would be used as LocatingPin::chain subobject as well, so that it could
-       *        be initialized directly here in the ExplicitPlacement ctor. 
-       *        (ichthyo: siehe Trac #100)
+       *        be initialised directly here in the ExplicitPlacement ctor. 
+       *        (ichthyo: see Trac #100)
        */
       ExplicitPlacement (const Placement<MObject>& base, const SolutionData found)
         : Placement<MObject>(base),

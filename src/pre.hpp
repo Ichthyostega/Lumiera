@@ -41,9 +41,8 @@
 #include <vector>
 #include <map>
 #include <tr1/memory>
-#include <boost/function.hpp>
+#include <tr1/functional>
 #include <boost/format.hpp>
-#include <boost/bind.hpp>
 
 #include "proc/common.hpp"
 

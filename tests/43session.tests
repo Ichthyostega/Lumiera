@@ -25,7 +25,33 @@ PLANNED "DeleteClip_test" DeleteClip_test <<END
 END
 
 
-PLANNED "PlacementBasic_test" PlacementBasic_test <<END
+PLANNED "external MObject references" MObjectRef_test <<END
+END
+
+
+PLANNED "basic placement properties" PlacementBasic_test <<END
+END
+
+
+TEST "hierarchical placement types" PlacementHierarchy_test <<END
+out: sizeof\( .+ \) =  [0-9]{2}
+out: Placement.+mobject.+test.+TestSubMO1.+. use-cnt=1 .*
+out: Placement.+mobject.+test.+TestSubMO2.+. use-cnt=1 .*
+out: Placement.+mobject.+test.+TestSubMO21.+ use-cnt=2 .*
+out: Placement.+mobject.+session.+Clip.+.... use-cnt=2 .*
+out: TestSubMO1\(ID= [0-9]{3}\)
+out: TestSubMO2\(ID= [0-9]{3}\)
+out: TestSubMO21\(ID= [0-9]{3}\)
+out: specialAPI()
+out: pID\(\w{8,16}\)
+END
+
+
+PLANNED "PlacementIndex_test" PlacementIndex_test <<END
+END
+
+
+PLANNED "PlacementRef_test" PlacementRef_test <<END
 END
 
 

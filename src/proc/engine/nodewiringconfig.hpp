@@ -21,7 +21,7 @@
 */
 
 /** @file nodewiringconfig.hpp
- ** Sometimes we need to coose a different implementation for dealing with
+ ** Sometimes we need to choose a different implementation for dealing with
  ** some special cases. While for simple cases, just testing a flag or using a
  ** switch statement will do the job, matters get more difficult when we have to
  ** employ a completely different execution path for each of the different cases,
@@ -29,14 +29,14 @@
  ** \par
  ** In the Lumiera render engine, right on the critical path, we need some glue code
  ** for invoking the predecessor nodes when pulling a given processing node. The actual
- ** sequence is quite dependant on the specific situation each node is wired up, regarding
+ ** sequence is quite dependent on the specific situation each node is wired up, regarding
  ** buffer allocation, cache querying and the possible support for GPU processing and 
  ** render farms. The solution is to define specialisations of a Strategy template
  ** using the specific configuration as template argument. Based on these, we can 
  ** create a collection of factories, which in turn will build the internal wiring
  ** for the individual ProcNode instances in accordance to the situation determined
  ** for this node, expressed as a set of flags. As a net result, each node has an 
- ** indivudual configuration (as opposed to creating a lot of hand-written individual
+ ** individual configuration (as opposed to creating a lot of hand-written individual
  ** ProcNode subclasses), but parts of this configuration assembly is done already at
  ** compile time, allowing for additional checks by typing and for possible optimisation.
  ** 
@@ -54,7 +54,7 @@
 #include "lib/util.hpp"
 #include "lib/meta/configflags.hpp"
 
-#include <boost/function.hpp>
+#include <tr1/functional>
 #include <bitset>
 #include <map>
 
@@ -95,9 +95,9 @@ namespace engine {
      * configuration. The intention is to to drive this selection by
      * the use of template metaprogramming for extracting all
      * currently defined StateProxy object configurations.
-     * @todo as the facories live only within the enclosed table (map)
+     * @todo as the factories live only within the enclosed table (map)
      *       we could allocate them in-place. Unfortunately this is 
-     *       non-trivial, because the stl containers employ
+     *       non-trivial, because the STL containers employ
      *       value semantics and thus do a copy even on insert.
      *       Thus, for now we use a shared_ptr to hold the factory
      *       heap allocated.
@@ -108,7 +108,7 @@ namespace engine {
             >
     class ConfigSelector
       {
-        typedef boost::function<FUNC> FacFunction;
+        typedef std::tr1::function<FUNC> FacFunction;
         
         template<class FAC>
         struct FactoryHolder 

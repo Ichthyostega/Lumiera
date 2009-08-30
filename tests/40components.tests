@@ -2,18 +2,39 @@ TESTING "Component Test Suite: common and basic components" ./test-lib --group=c
 
 
 
-TEST "Hello test" HelloWorld_test 3 <<END
+TEST "Hello test world" HelloWorld_test 3 <<END
 out: ^This is how the world ends\.\.\.$
 return: 0
 END
 
 
-TEST "AllocationCluster_test" AllocationCluster_test <<END
+TEST "Allocation Cluster" AllocationCluster_test <<END
 return: 0
 END
 
 
-PLANNED "Appconfig_test" Appconfig_test <<END
+PLANNED "basic application state" Appconfig_test <<END
+return: 0
+END
+
+
+TEST "implicit conversion to bool" BoolCheckable_test <<END
+out: 1
+out: 2
+out: doIt
+out: 4
+out: 5
+out: doIt
+out: 7
+out: 8
+out: doIt
+out: 10
+out: 11
+out: doIt
+out: 13
+out: 14
+out: doIt
+out: sizeof.+lib.+test.+ExampleCustomType123.+ =   [248]
 return: 0
 END
 
@@ -213,8 +234,77 @@ out: dtor ~TargetObj\(12\) successful
 END
 
 
+TEST "formatting/diagnostics helpers" FormatHelper_test <<END
+out: Displaying some types....
+out: «..util.test.Reticent.»
+out: <no comment>
+out: ^hey Joe!
+out: ^he says: hey Joe!
+out: ^the truth: 0
+out: ^just a number: 1.234.*e\+56
+out: ^12345X
+return: 0
+END
+
+
+TEST "functional closure" FunctionClosure_test <<END
+out: List1	:-<1>-<2>-<3>-
+out: List2	:-<5>-<6>-<7>-
+out: Args	:-<5>-<9>-
+out: NewArgs	:-<1>-<5>-<9>-
+out: 	:$
+out: 	: ---Apply---
+out: tup0	:...Tuple\(\)
+out: tup1	:...Tuple\(11\)
+out: tup2	:...Tuple\(11,12\)
+out: tup3	:...Tuple\(11,12,13\)
+out: 	:$
+out: 	: ---Bind----
+return: 0
+END
+
+
+TEST "functional composition" FunctionComposition_test <<END
+return: 0
+END
+
+
+TEST "function type erasure" FunctionErasure_test <<END
+return: 0
+END
+
+
+TEST "HashIndexed_test" HashIndexed_test <<END
+return: 0
+END
+
+
 TEST "LifeCycle_test" LifeCycle_test  <<END
 return: 0
+END
+
+
+TEST "inline type erasure" OpaqueHolder_test  <<END
+out: 1
+out: 3
+out: 5
+out: 7
+out: sizeof\( .+ \) = .*[12468]{1,2}
+return: 0
+END
+
+
+TEST "inline unchecked buffer" OpaqueUncheckedBuffer_test  <<END
+out: DD<0>: 
+out: DD<5>: \*\*\*\*\*
+out: DD<9>: I'm fine\*
+out: I'm special, what the f\*\* is going on here\?\*\*\*\*\*\*\*\*\*\*\*\*
+return: 0
+END
+
+
+TEST "Lumiera Iterator Concept" IterAdapter_test 20 <<END
+out: ::0::1::2::3::4::5::6::7::8::9::10::11::12::13::14::15::16::17::18::19
 END
 
 
@@ -355,8 +445,20 @@ return: 0
 END
 
 
-TEST "Time Wrapper" TimeWrapper_test <<END
+TEST "Time Wrapper" TimeWrapper_test  <<END
+out: ..:..:..\....
 return: 0
+END
+
+
+TEST "Test support functions" TestHelper_test <<END
+out: Displaying types and sizes....
+out: sizeof..theUniverse.+ =  42
+out: sizeof..just a char.+ =   1
+out: sizeof.+lib.+test.+test.+Murpf.+ =   1
+out: sizeof.+lib.+test.+test.+Wrmrmpft.+ =   2
+out: sizeof.+lib.+test.+test.+Wrmrmpft.+ =   3
+out: sizeof.+lib.+test.+test.+Wrmrmpft.+Murpf.+ =   1
 END
 
 
@@ -424,10 +526,11 @@ return: 0
 END
 
 
-TEST "TypeListManipl_test" TypeListManipl_test <<END
+TEST "typelist manipulation" TypeListManipl_test <<END
 out: List1	:-<1>-<2>-<3>-
 out: List2	:-<5>-<6>-<7>-
 out: Added2	:-<3>-<4>-<5>-
+out: FilterEven	:-<2>-<6>-
 out: Append1	:-
 out: Append2	:-<11>-<22>-
 out: Append3	:-<111>-
@@ -437,7 +540,40 @@ out: Append6	:-<5>-<6>-<7>-
 out: Append7	:-<111>-<5>-<6>-<7>-
 out: Append8	:-<1>-<2>-<3>-<222>-
 out: Append9	:-<1>-<2>-<3>-<5>-<6>-<7>-
-out: FilterEven	:-<2>-<6>-
+out: Overl01	:-
+out: Overl02	:-
+out: Overl03	:-
+out: Overl04	:-<9>-<8>-<3>-
+out: Overl05	:-<1>-<9>-<8>-
+out: Overl06	:-<1>-<2>-<9>-
+out: Overl07	:-<1>-<2>-<3>-
+out: Overl08	:-<1>-<2>-<3>-
+out: Overl09	:-<1>-<2>-<3>-
+out: Overl10	:-<1>-<1>-<2>-
+out: Overl11	:-<1>-<2>-<3>-
+out: Overl12	:-<1>-<2>-<3>-
+out: Overl13	:-<1>-<2>-<3>-
+out: Front1	:-
+out: Front2	:-<1>-
+out: Front3	:-<1>-<2>-<3>-
+out: Back1	:-<2>-<3>-
+out: Back2	:-<3>-
+out: Back3	:-
+out: Front4	:-<1>-
+out: Back4	:-<2>-<3>-
+out: Prefix	:-<1>-<2>-
+out: ElmL	:-<3>-
+out: NPrefix	:-
+out: Types<Elm1>	:-<3>-
+out: NList	:-
+out: Types<Nil>	:-
+out: LL	:-<1>-<2>-<3>-<5>-<6>-<7>-
+out: List	:-<1>-<2>-<3>-<5>-<6>-<7>-
+out: First	:-<1>-
+out: Tail	:-<2>-<3>-<5>-<6>-<7>-
+out: Prefix	:-<1>-<2>-<3>-<5>-<6>-
+out: Last	:-<7>-
+out: HeadEnd	:-<1>-<7>-
 out: Prefix1	:
 out: 	\+---<11>-<22>-\+-
 out: Prefix2	:
@@ -520,6 +656,170 @@ out: 	\+---<2>-<3>-<·>-\+
 out: 	\+---<2>-<·>-\+
 out: 	\+---<3>-<·>-\+
 out: 	\+---<·>-\+-
+return: 0
+END
+
+
+TEST "type sequence manipulation" TypeSeqManipl_test <<END
+out: LL	:-<1>-<2>-<3>-<7>-<8>-<9>-
+out: Seq	:-<1>-<2>-<3>-<7>-<8>-<9>-
+out: SeqList	:-<1>-<2>-<3>-<7>-<8>-<9>-
+out: NulS	:-
+out: Prepend1	:-<5>-<1>-<2>-<3>-
+out: Prepend2	:-<·>-<1>-<2>-<3>-
+out: Prepend3	:-<5>-
+out: Prepend4	:-
+out: Seq_0	:-<7>-<8>-<9>-<1>-<2>-<3>-
+out: Seq_1	:-<8>-<9>-<1>-<2>-<3>-
+out: Seq_2	:-<9>-<1>-<2>-<3>-
+out: Seq_3	:-<1>-<2>-<3>-
+out: Seq_4	:-<2>-<3>-
+out: Seq_5	:-<3>-
+out: Seq_6	:-
+out: Head_0	:-<7>-
+out: Head_1	:-<8>-
+out: Head_2	:-<9>-
+out: Head_3	:-<1>-
+out: Head_4	:-<2>-
+out: Head_5	:-<3>-
+out: Head_6	:-
+out: Seq	:-<1>-<2>-<3>-<7>-<8>-<9>-
+out: List	:-<1>-<2>-<3>-<7>-<8>-<9>-
+out: First	:-<1>-
+out: Tail	:-<2>-<3>-<7>-<8>-<9>-
+out: Prefix	:-<1>-<2>-<3>-<7>-<8>-
+out: Last	:-<9>-
+out: HeadEnd	:-<1>-<9>-
+return: 0
+END
+
+
+TEST "TypeTuple_test" TypeTuple_test <<END
+out: L1	:-<1>-<3>-<5>-
+out: L2	:-<2>-<4>-
+out: L3	:-<7>-
+out: Tup1	:TYPES-<>-<1>-<3>-<5>-
+out: Tup1\(\)	:...Tuple\(\(1\),\(3\),\(5\)\)
+out: tup1x	:...Tuple\(\{11\},\(3\),\(5\)\)
+out: Type1	:-<1>-<3>-<5>-
+out: T_L1	:TYPES-\[\]-<1>-<3>-<5>-
+out: T1	:TYPES-<>-<1>-<3>-<5>-
+out: tup1	:...Tuple\(\{8\},\(3\),\(5\)\)
+out: tup2	:...Tuple\(\{9\},\(3\),\(5\)\)
+out: Prepend	:TYPES-\[\]-<i>-<1>-<3>-<5>-
+out: prepend	:...Tuple\(22,\{9\},\(3\),\(5\)\)
+out: 	:$
+out: 	: ---Sub-Tuple-Types----
+out: T_L2	:TYPES-\[\]-<2>-<4>-<1>-<3>-<5>-
+out: Head	:-<2>-
+out: Tail	:-<4>-<1>-<3>-<5>-
+out: T2	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
+out: Head2	:-<2>-
+out: Tail2	:-<4>-<1>-<3>-<5>-
+out: T2::Type	:-<2>-<4>-<1>-<3>-<5>-
+out: T2::TailType	:-<4>-<1>-<3>-<5>-
+out: T2::TupleType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
+out: T2::ThisType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
+out: T2::Tail	:TYPES-<>-<4>-<1>-<3>-<5>-
+out: T2::ArgList	:-<2>-<4>-<1>-<3>-<5>-
+out: T_L2::Type	:-<2>-<4>-<1>-<3>-<5>-
+out: T_L2::TailType	:-<4>-<1>-<3>-<5>-
+out: T_L2::TupleType	:TYPES-<>-<2>-<4>-<1>-<3>-<5>-
+out: T_L2::ThisType	:TYPES-\[\]-<2>-<4>-<1>-<3>-<5>-
+out: T_L2::Tail	:TYPES-\[\]-<4>-<1>-<3>-<5>-
+out: T_L2::ArgList	:-<2>-<4>-<1>-<3>-<5>-
+out: NulT::Type	:-
+out: NulT::TailType	:-
+out: NulT::TupleType	:TYPES-<>-
+out: NulT::ThisType	:TYPES-<>-
+out: NulT::Tail	:TYPES-<>-
+out: NulT::ArgList	:-
+out: NulL::Type	:-
+out: NulL::TailType	:-
+out: NulL::TupleType	:TYPES-<>-
+out: NulL::ThisType	:TYPES-\[\]-
+out: NulL::Tail	:TYPES-\[\]-
+out: NulL::ArgList	:-
+out: 	:$
+out: 	: ---Shifted-Tuple---
+out: Ty_0	:-<2>-<4>-<7>-
+out: Ty_1	:-<4>-<7>-
+out: Ty_2	:-<7>-
+out: Ty_3	:-
+out: Ty_4	:-
+out: T_0	:TYPES-\[\]-<2>-<4>-<7>-
+out: T_1	:TYPES-\[\]-<4>-<7>-
+out: T_2	:TYPES-\[\]-<7>-
+out: T_3	:TYPES-\[\]-
+out: T_4	:TYPES-\[\]-
+out: tu3	:...Tuple\(\(2\),\(4\),\(7\)\)
+out: tu3_0	:...Tuple\(\(2\),\(4\),\(7\)\)
+out: tu3_1	:...Tuple\(\(4\),\(7\)\)
+out: tu3_2	:...Tuple\(\(7\)\)
+out: tu3_3	:...Tuple\(\)
+out: tu3_4	:...Tuple\(\)
+out: 	:$
+out: 	: ---creating-Tuples---
+out: tup1	:...Tuple\(\(1\),\(3\),\(5\)\)
+out: tup11	:...Tuple\(\{11\},\(3\),\(5\)\)
+out: tup12	:...Tuple\(\(1\),\{33\},\(5\)\)
+out: tup13	:...Tuple\(\{11\},\{33\},\(5\)\)
+out: Tup2	:TYPES-<>-<i>-<i>-<11>-
+out: tup2	:...Tuple\(41,42,\{43\}\)
+out: Tup22	:TYPES-<>-<i>-<11>-
+out: tup22	:...Tuple\(42,\{43\}\)
+out: Tup222	:TYPES-<>-<11>-
+out: tup222	:...Tuple\(\{43\}\)
+out: T0T	:TYPES-<>-
+out: T0L	:TYPES-\[\]-
+out: nullT	:...Tuple\(\)
+out: nullL	:...Tuple\(\)
+out: nulTcpy	:...Tuple\(\)
+out: nulTref	:...Tuple\(\)
+out: 	:$
+out: 	: ---build-from-sub-Tuples---
+out: T1357L	:TYPES-\[\]-<1>-<3>-<5>-<7>-
+out: T1357T	:TYPES-<>-<1>-<3>-<5>-<7>-
+out: T135L	:TYPES-\[\]-<1>-<3>-<5>-
+out: T57T	:TYPES-<>-<5>-<7>-
+out: T35T	:TYPES-<>-<3>-<5>-
+out: sub135	:...Tuple\(\(1\),\(3\),\(5\)\)
+out: b_135	:...Tuple\(\(1\),\(3\),\(5\),\(7\)\)
+out: sub57	:...Tuple\(\(5\),\(7\)\)
+out: b_57	:...Tuple\(\(1\),\(3\),\(5\),\(7\)\)
+out: sub35	:...Tuple\(\{8\},\{8\}\)
+out: b_35	:...Tuple\(\(1\),\{8\},\{8\},\(7\)\)
+out: b_35	:...Tuple\(\(1\),\(3\),\(5\),\(7\)\)
+out: sub78	:...Tuple\(\{77\},\{88\}\)
+out: b_78	:...Tuple\(\(1\),\(3\),\(5\),\{77\}\)
+out: b_nul	:...Tuple\(\(1\),\(3\),\(5\),\(7\)\)
+out: b_nul2	:...Tuple\(\)
+out: 	:$
+out: 	: ---copy-operations---
+out: tup1	:...Tuple\(\{11\},\{33\},\(5\)\)
+out: tup11	:...Tuple\(\{11\},\{33\},\{44\}\)
+out: tup1	:...Tuple\(\{11\},\{33\},\{44\}\)
+out: tupL	:...Tuple\(\{11\},\{33\},\{44\}\)
+out: tup1L	:...Tuple\(\{11\},\{33\},\{44\}\)
+out: 	:$
+out: 	: ---value-access---
+out: TupX	:TYPES-\[\]-<2>-<4>-<2>-<4>-
+out: tupX	:...Tuple\(\(2\),\(4\),\(2\),\(4\)\)
+out: tu2	:...Tuple\(\(2\),\(4\)\)
+out: tu2	:...Tuple\(\{5\},\{5\}\)
+out: tupX	:...Tuple\(\(2\),\(4\),\{5\},\{5\}\)
+out: T4	:TYPES-<>-<2>-<4>-
+out: t4	:...Tuple\(\{5\},\{5\}\)
+out: TupX::Type	:-<2>-<4>-<2>-<4>-
+out: TupX::TailType	:-<4>-<2>-<4>-
+out: TupX::ThisType	:TYPES-\[\]-<2>-<4>-<2>-<4>-
+out: TupX::TupleType	:TYPES-<>-<2>-<4>-<2>-<4>-
+out: TupT::Type	:-<2>-<4>-<2>-<4>-
+out: TupT::TailType	:-<4>-<2>-<4>-
+out: TupT::ThisType	:TYPES-<>-<2>-<4>-<2>-<4>-
+out: TupT::TupleType	:TYPES-<>-<2>-<4>-<2>-<4>-
+out: tupXcopy	:...Tuple\(\(2\),\(4\),\{5\},\{5\}\)
+out: tupXcast	:...Tuple\(\(2\),\(4\),\{5\},\{5\}\)
 return: 0
 END
 

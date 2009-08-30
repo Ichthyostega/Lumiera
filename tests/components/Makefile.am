@@ -47,12 +47,25 @@ test_components_SOURCES =							\
 	$(testcomponents_srcdir)/proc/asset/makecliptest.cpp			\
 	$(testcomponents_srcdir)/proc/asset/orderingofassetstest.cpp		\
 	$(testcomponents_srcdir)/proc/asset/testasset.cpp			\
+	$(testcomponents_srcdir)/proc/control/command-basic-test.cpp		\
+	$(testcomponents_srcdir)/proc/control/command-argument-test.cpp		\
+	$(testcomponents_srcdir)/proc/control/command-mutation-test.cpp		\
+	$(testcomponents_srcdir)/proc/control/command-use1-test.cpp		\
+	$(testcomponents_srcdir)/proc/control/command-use2-test.cpp		\
+	$(testcomponents_srcdir)/proc/control/command-use3-test.cpp		\
+	$(testcomponents_srcdir)/proc/control/command-registry-test.cpp		\
+	$(testcomponents_srcdir)/proc/control/argument-tuple-accept-test.cpp	\
+	$(testcomponents_srcdir)/proc/control/memento-tie-test.cpp		\
 	$(testcomponents_srcdir)/proc/engine/bufftabletest.cpp			\
 	$(testcomponents_srcdir)/proc/engine/sourcenodetest.cpp         	\
 	$(testcomponents_srcdir)/proc/mobject/builder/buildertooltest.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/builder/buildsegmenttest.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/controller/rendersegmenttest.cpp	\
-	$(testcomponents_srcdir)/proc/mobject/placementbasictest.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/mobject-ref-test.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/placement-basic-test.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/placement-hierarchy-test.cpp	\
+	$(testcomponents_srcdir)/proc/mobject/placement-index-test.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/placement-ref-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/addcliptest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/deletecliptest.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/session/rebuildfixturetest.cpp	\
@@ -67,7 +80,7 @@ test_components_SOURCES =							\
 noinst_HEADERS +=							\
 	$(testcomponents_srcdir)/backend/mediaaccessmock.hpp		\
 	$(testcomponents_srcdir)/proc/asset/testclipasset.hpp		\
-	$(testcomponents_srcdir)/proc/asset/assetdiagnostics.hpp	\
+	$(testcomponents_srcdir)/proc/asset/asset-diagnostics.hpp	\
 	$(testcomponents_srcdir)/proc/asset/testasset.hpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/testclip.hpp	\
 	$(testcomponents_srcdir)/proc/mobject/session/testsession1.hpp

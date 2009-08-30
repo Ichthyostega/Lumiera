@@ -35,7 +35,7 @@ namespace lib {
   
   
   /**
-   * Addendum to scopedholder.hpp for transferring the lifecycle
+   * Addendum to scoped-holder.hpp for transferring the lifecycle
    * management to another instance. Using these wrappers within
    * STL vector and similar containers may result in the need to
    * do a re-allocation in response to a request to grow.

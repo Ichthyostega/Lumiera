@@ -1,0 +1,161 @@
+/*
+  HashIndexed(Test)  -  proof-of-concept test for a hash based and typed ID
+ 
+  Copyright (C)         Lumiera.org
+    2009,               Hermann Vosseler <Ichthyostega@web.de>
+ 
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of the
+  License, or (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ 
+* *****************************************************/
+
+
+#include "lib/test/run.hpp"
+
+#include "lib/hash-indexed.hpp"
+
+#include <tr1/unordered_map>
+
+
+namespace lib {
+namespace test{
+  
+  /* ==  a hierarchy of test-dummy objects to use the HashIndexed::ID == */
+  
+  struct DummyAncestor
+    {
+      long xyz_;
+    };
+  
+  struct TestB;                                  ///< Base class to mix in the hash ID facility
+  typedef HashIndexed<TestB, hash::LuidH> Mixin; ///< actual configuration of the mixin
+  
+  struct TestB : DummyAncestor, Mixin
+    {
+      TestB () {}
+      TestB (ID const& refID) : Mixin (refID) {}
+      
+      bool operator== (TestB const& o)  const { return this->getID() == o.getID(); }
+    };
+  struct TestDA : TestB {};
+  struct TestDB : TestB {};
+  
+  
+  
+  
+  /***************************************************************************
+   * @test proof-of-concept test for a generic hash based and typed ID struct.
+   *       - check the various ctors 
+   *       - check default assignment works properly
+   *       - check assumptions about memory layout
+   *       - check equality comparison
+   *       - extract LUID and then cast LUID back into ID
+   *       - use the embedded hash ID (LUID) as hashtable key
+   *       
+   * @see lib::HashIndexed::Id
+   * @see mobject::Placement real world usage example 
+   */
+  class HashIndexed_test : public Test
+    {
+      
+      virtual void
+      run (Arg)
+        {
+          checkBasicProperties();
+          checkLUID_passing();
+          
+          //            ---key-type-------+-value-+-hash-function--- 
+          buildHashtable<TestB::Id<TestDB>, TestDB, TestB::UseHashID> ();
+          buildHashtable<TestDB,            TestDB, TestB::UseEmbeddedHash>();
+        }
+      
+      
+      void
+      checkBasicProperties ()
+        {
+          TestB::Id<TestDA> idDA;
+          
+          TestB bb (idDA);
+          
+          TestB::Id<TestDB> idDB1 ;
+          TestB::Id<TestDB> idDB2 (idDB1);
+          
+          ASSERT (sizeof (idDB1)     == sizeof (idDA) );
+          ASSERT (sizeof (TestB::ID) == sizeof (hash::LuidH));
+          ASSERT (sizeof (TestDA)    == sizeof (hash::LuidH) + sizeof (DummyAncestor));
+          
+          ASSERT (idDA  == bb.getID() );
+          ASSERT (idDB1 == idDB2 );            // equality handled by the hash impl (here LuidH)
+          
+          TestDA d1;
+          TestDA d2;
+          ASSERT (d1.getID() != d2.getID());   // should be different because LUIDs are random
+          
+          d2 = d1; 
+          ASSERT (d1.getID() == d2.getID());   // default assignment operator works as expected
+        }
+      
+      
+      void
+      checkLUID_passing ()
+        {
+          TestB::Id<TestDA> idOrig;
+          
+          lumiera_uid plainLUID;
+          lumiera_uid_copy (&plainLUID, idOrig.get());
+          
+          // now, maybe after passing it through a Layer barrier...
+          TestB::ID const& idCopy = reinterpret_cast<TestB::ID & > (plainLUID);
+          
+          ASSERT (idOrig == idCopy);
+        }
+      
+      
+      template<class KEY, class VAL, class HashFunc>
+      void
+      buildHashtable ()
+        {
+          typedef std::tr1::unordered_map<KEY, VAL, HashFunc> Hashtable;
+          
+          Hashtable tab;
+          
+          VAL o1;  KEY key1 (o1);
+          VAL o2;  KEY key2 (o2);
+          VAL o3;  KEY key3 (o3);
+          
+          tab[key1] = o1;                             // store copy into hashtable
+          tab[key2] = o2;
+          tab[key3] = o3;
+          
+          ASSERT (&o1 != &tab[key1]);                 // indeed a copy...
+          ASSERT (&o2 != &tab[key2]);
+          ASSERT (&o3 != &tab[key3]);
+          
+          ASSERT (o1.getID() == tab[key1].getID());   // but "equal" by ID
+          ASSERT (o2.getID() == tab[key2].getID());
+          ASSERT (o3.getID() == tab[key3].getID());
+          
+          ASSERT (o1.getID() != tab[key2].getID());
+          ASSERT (o1.getID() != tab[key3].getID());
+          ASSERT (o2.getID() != tab[key3].getID());
+        }
+      
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (HashIndexed_test, "unit common");
+  
+  
+}} // namespace lib::test

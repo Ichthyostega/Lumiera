@@ -31,14 +31,14 @@ namespace lumiera
 
 
   /**
-   * Identification tuple for addressing frames unambiguosly.
+   * Identification tuple for addressing frames unambiguously.
    * 
    * @todo currently (7/08) this is a dummy implementation to find out
    *       what interface the Proc layer needs. Probably the backend will
    *       later on define what is actually needed; this header should then
    *       be replaced by a combined C/C++ header
    */
-  class FrameID : boost::totally_ordered<FrameID>
+  class FrameID : boost::totally_ordered<FrameID>  ////////////TODO it seems we don't need total ordering, only comparison. Clarify this!
     {
       long dummy;
     public:

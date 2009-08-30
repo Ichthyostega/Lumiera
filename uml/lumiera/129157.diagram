@@ -1,109 +1,109 @@
-format 40
+format 58
 
 classinstancecanvas 128005 classinstance_ref 132485 // 
   xyz 85 80 2000
-  end
+end
 note 128261 "render state proxy passed on"
   xyzwh 139 319 2000 104 53
 classinstancecanvas 128389 classinstance_ref 132613 // devnull
-  xyz 610 558 2000
-  end
+  xyz 616 558 2000
+end
 classinstancecanvas 128517 classinstance_ref 132741 // video
-  xyz 610 329 2000
-  end
+  xyz 615 329 2000
+end
 classinstancecanvas 128645 classinstance_ref 132869 // input
-  xyz 488 497 2000
-  end
+  xyz 493 497 2000
+end
 classinstancecanvas 128773 classinstance_ref 132997 // video1
   xyz 602 172 2000
-  end
+end
 classinstancecanvas 128901 classinstance_ref 133125 // ouput
-  xyz 485 386 2000
-  end
+  xyz 491 386 2000
+end
 fragment 129029 "seq"
   xyzwh 254 147 1994 477 111
 end
 classinstancecanvas 129157 classinstance_ref 133253 // HUE
-  xyz 477 444 2000
-  end
+  xyz 481 444 2000
+end
 classinstancecanvas 129669 classinstance_ref 133509 // 
   xyz 151 399 2000
-  end
+end
 classinstancecanvas 129797 classinstance_ref 133637 // video1
   xyz 478 172 2000
-  end
+end
 classinstancecanvas 129925 classinstance_ref 133765 // video
-  xyz 485 329 2000
-  end
+  xyz 491 329 2000
+end
 classinstancecanvas 132229 classinstance_ref 133893 // HUE
-  xyz 600 444 2000
-  end
+  xyz 605 444 2000
+end
 classinstancecanvas 132997 classinstance_ref 134021 // vid_a
   xyz 387 602 2000
-  end
+end
 classinstancecanvas 133125 classinstance_ref 134149 // input
-  xyz 299 498 2000
-  end
+  xyz 304 497 2000
+end
 classinstancecanvas 133253 classinstance_ref 134277 // video1
   xyz 289 172 2000
-  end
+end
 classinstancecanvas 133381 classinstance_ref 134405 // ouput
-  xyz 296 386 2000
-  end
+  xyz 302 386 2000
+end
 classinstancecanvas 133509 classinstance_ref 134533 // video
-  xyz 296 329 2000
-  end
+  xyz 302 329 2000
+end
 note 134661 "Note: because the Engine Components are stateless, various calculation patterns are possible, including all sorts of parallelism "
   xyzwh 569 45 2000 240 75
 textcanvas 134789 "Video Clip from 2 to 7, with an attached HUE effect starting 3 frames after begin and overlapping by 1 frame beyond the end"
-  xyzwh 145 553 2000 175 87
+  xyzwh 152 523 2000 140 75
 classinstancecanvas 134917 classinstance_ref 137093 // vid1
-  xyz 410 291 3005
-  end
+  xyz 411 292 3005
+end
 objectlinkcanvas 130053 rel relation_ref 135429 // <unidirectional association>
   from ref 129925 z 1999 to ref 128901
-  role_a_pos 537 361 3000 no_role_b
+  role_a_pos 542 368 3000 no_role_b
 objectlinkcanvas 130437 rel relation_ref 135429 // <unidirectional association>
   from ref 129157 z 1999 to ref 128645
-  role_a_pos 539 472 3000 no_role_b
+  role_a_pos 542 479 3000 no_role_b
 objectlinkcanvas 130565 rel relation_ref 131973 // <unidirectional association>
-  from ref 128773 z 1999 stereotype "<<has_a>>" xyz 656 263 3000 to ref 128517
-  role_a_pos 661 304 3000 no_role_b
+  from ref 128773 z 1999 stereotype "<<list>>" xyz 661 260 3000 to ref 128517
+  role_a_pos 666 311 3000 no_role_b
 objectlinkcanvas 135045 rel relation_ref 135429 // <unidirectional association>
   from ref 128645 z 1999 to ref 132997
-  role_a_pos 446 567 3000 no_role_b
-objectlinkcanvas 135173 rel relation_ref 131845 // <directional aggregation by value>
+  role_a_pos 456 581 3000 no_role_b
+objectlinkcanvas 135173 rel relation_ref 131845 // <directional composition>
   geometry VH
-  from ref 128005 z 1999 stereotype "<<list>>" xyz 127 141 3000 to point 123 205
+  from ref 128005 z 1999 stereotype "<<list>>" xyz 128 137 3000 to point 124 197
   line 136965 z 1999 to ref 133253
-  role_a_pos 152 186 3000 no_role_b
+  role_a_pos 174 184 3000 no_role_b
 objectlinkcanvas 135301 rel relation_ref 135429 // <unidirectional association>
   from ref 128901 z 1999 to ref 129157
-  role_a_pos 538 419 3000 no_role_b
+  role_a_pos 542 426 3000 no_role_b
 objectlinkcanvas 135429 rel relation_ref 131973 // <unidirectional association>
-  from ref 133253 z 1999 stereotype "<<has_a>>" xyz 282 261 3000 to ref 133509
-  role_a_pos 348 304 3000 no_role_b
+  from ref 133253 z 1999 stereotype "<<list>>" xyz 300 260 3000 to ref 133509
+  role_a_pos 353 311 3000 no_role_b
 objectlinkcanvas 135557 rel relation_ref 135429 // <unidirectional association>
   from ref 128517 z 1999 to ref 132229
-  role_a_pos 662 419 3000 no_role_b
+  role_a_pos 666 426 3000 no_role_b
 objectlinkcanvas 135685 rel relation_ref 135429 // <unidirectional association>
   from ref 133125 z 1999 to ref 132997
-  role_a_pos 416 577 3000 no_role_b
+  role_a_pos 359 582 3000 no_role_b
 objectlinkcanvas 135813 rel relation_ref 135429 // <unidirectional association>
   from ref 132229 z 1999 to ref 128389
-  role_a_pos 662 533 3000 no_role_b
+  role_a_pos 666 540 3000 no_role_b
 objectlinkcanvas 135941 rel relation_ref 131973 // <unidirectional association>
-  from ref 129797 z 1999 stereotype "<<has_a>>" xyz 529 262 3000 to ref 129925
-  role_a_pos 537 304 3000 no_role_b
+  from ref 129797 z 1999 stereotype "<<list>>" xyz 535 260 3000 to ref 129925
+  role_a_pos 542 311 3000 no_role_b
 objectlinkcanvas 136069 rel relation_ref 135429 // <unidirectional association>
   from ref 133509 z 1999 to ref 133381
-  role_a_pos 348 361 3000 no_role_b
+  role_a_pos 353 368 3000 no_role_b
 objectlinkcanvas 136197 rel relation_ref 135429 // <unidirectional association>
   from ref 133381 z 1999 to ref 133125
-  role_a_pos 349 473 3000 no_role_b
+  role_a_pos 353 479 3000 no_role_b
 objectlinkcanvas 136325 norel
   geometry VHr
-  from ref 134917 z 1999 to point 174 302
+  from ref 134917 z 1999 to point 174 300
   line 136453 z 1999 to ref 129669
   no_role_a no_role_b
 line 136581 -_-_

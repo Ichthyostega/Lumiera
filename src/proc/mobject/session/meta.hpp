@@ -28,29 +28,22 @@
 
 
 
-namespace mobject
-  {
-  namespace session
+namespace mobject {
+namespace session {
+
+
+  /**
+   * Meta-MObject doesn't represent real Media Content,
+   * but rather all sorts of Processing Instructions
+   * and other metadata, which can be placed and
+   * attached within the EDL/Session.
+   */
+  class Meta : public AbstractMO
     {
-
-
-    /**
-     * Meta-MObject doesn't represent real Media Content,
-     * but rather all sorts of Processing Instructions
-     * and other metadata, which can be placed and
-     * attached within the EDL/Session.
-     */
-    class Meta : public AbstractMO
-      {
-        ///////////
-      };
-
-
-
-  } // namespace mobject::session
+      ///////////
+    };
   
-  /** Placement<Meta> defined to be subclass of Placement<MObject> */
-  DEFINE_SPECIALIZED_PLACEMENT (session::Meta, MObject);
-
-} // namespace mobject
+  
+  
+}} // namespace mobject::session
 #endif

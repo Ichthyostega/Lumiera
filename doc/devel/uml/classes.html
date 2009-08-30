@@ -21,6 +21,7 @@
 <tr bgcolor=#f0f0f0><td><a href="class129541.html#refclass129541" target = "projectFrame"><b>Allocation</b></a></td><td></td><td>a directive to place a MObject in a specific way</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class135429.html#refclass135429" target = "projectFrame"><b>Appconfig</b></a></td><td>singleton</td><td>Singleton to hold inevitable global flags and constants and for performing erarly (static) global initialization tasks.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class140293.html#refclass140293" target = "projectFrame"><b>Applicable</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class150917.html#refclass150917" target = "projectFrame"><b>ArgumentHolder</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class131077.html#refclass131077" target = "projectFrame"><b>Assembler</b></a></td><td></td><td>This is the actual building facility: provided the correct tools and associations, it serves to build and connect the individual ProcNode objects</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class136453.html#refclass136453" target = "projectFrame"><b>Asset</b></a></td><td>interface</td><td>Superinterface describing especially the bookeeping properties of Assets</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class136581.html#refclass136581" target = "projectFrame"><b>AssetManager</b></a></td><td>boundary</td><td>Facade for the Asset subsystem</td></tr>
@@ -38,8 +39,11 @@
 <tr bgcolor=#f0f0f0><td><a href="class137221.html#refclass137221" target = "projectFrame"><b>Category</b></a></td><td></td><td>tree like classification of Assets</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class137349.html#refclass137349" target = "projectFrame"><b>Clip</b></a></td><td></td><td>bookkeeping (asset) view of a media clip.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class128901.html#refclass128901" target = "projectFrame"><b>Clip</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class150789.html#refclass150789" target = "projectFrame"><b>Closure</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class148997.html#refclass148997" target = "projectFrame"><b>CmdClosure</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class137861.html#refclass137861" target = "projectFrame"><b>Codec</b></a></td><td></td><td>description of some media data decoder or encoder facility</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class135045.html#refclass135045" target = "projectFrame"><b>CodecAdapter</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class148485.html#refclass148485" target = "projectFrame"><b>Command</b></a></td><td>interface</td><td>Key abstraction for all proc/edit operations and UNDO management</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class138629.html#refclass138629" target = "projectFrame"><b>CompoundClip</b></a></td><td></td><td>Clip MObject which is actually a compound of several elementary clips,<br />e.g. the several streams found within multichannels media.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class138501.html#refclass138501" target = "projectFrame"><b>CompoundMedia</b></a></td><td></td><td>compound of several elementary media tracks,<br />e.g. the individual media streams found in one media file</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class128266.html#refclass128266" target = "projectFrame"><b>Condition</b></a></td><td></td><td>I provided a reworked Condition class in my Cinelerra2 repository</td></tr>
@@ -52,8 +56,10 @@
 <tr bgcolor=#f0f0f0><td><a href="class138373.html#refclass138373" target = "projectFrame"><b>DB</b></a></td><td></td><td>Implementation of the registry holding all Asset instances known to the Asset Manager subsystem. As of 8/2007 implemented by a hashtable.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class141445.html#refclass141445" target = "projectFrame"><b>DefaultsManager</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class141573.html#refclass141573" target = "projectFrame"><b>DefaultsRegistry</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class149253.html#refclass149253" target = "projectFrame"><b>DoAsync</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class139141.html#refclass139141" target = "projectFrame"><b>DoAttach</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class139269.html#refclass139269" target = "projectFrame"><b>DoRecurse</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class149125.html#refclass149125" target = "projectFrame"><b>DoSync</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class137733.html#refclass137733" target = "projectFrame"><b>Effect</b></a></td><td></td><td>Effect or media processing component</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class129029.html#refclass129029" target = "projectFrame"><b>Effect</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class135557.html#refclass135557" target = "projectFrame"><b>Error</b></a></td><td></td><td></td></tr>
@@ -77,6 +83,7 @@
 <tr bgcolor=#f0f0f0><td><a href="class128949.html#refclass128949" target = "projectFrame"><b>FrameDescriptor</b></a></td><td>interface</td><td>A FrameDescriptor implements the higher level interfaces for frames. Further refinements are made by subclassing and policy classes</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class128225.html#refclass128225" target = "projectFrame"><b>FrameReference</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class133637.html#refclass133637" target = "projectFrame"><b>GLBuf</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class148613.html#refclass148613" target = "projectFrame"><b>HandlingPattern</b></a></td><td>interface</td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class145029.html#refclass145029" target = "projectFrame"><b>ImplFacade</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class147205.html#refclass147205" target = "projectFrame"><b>InstanceHandle</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class134789.html#refclass134789" target = "projectFrame"><b>Interpolator</b></a></td><td></td><td>Provides the implementation for getting the acutal value of a time varying or automated effect/plugin parameter</td></tr>
@@ -97,10 +104,12 @@
 <tr bgcolor=#f0f0f0><td><a href="class129157.html#refclass129157" target = "projectFrame"><b>Meta</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class128517.html#refclass128517" target = "projectFrame"><b>MObject</b></a></td><td>interface</td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class146053.html#refclass146053" target = "projectFrame"><b>Monitor</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class148741.html#refclass148741" target = "projectFrame"><b>Mutation</b></a></td><td>func</td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class128394.html#refclass128394" target = "projectFrame"><b>Mutex</b></a></td><td></td><td>I provided a reworked Mutex class in my Cinelerra2 repository</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class134405.html#refclass134405" target = "projectFrame"><b>NodeCreatorTool</b></a></td><td></td><td>This Tool implementation plays the central role in the buld process: given a MObject from Session, it is able to attach ProcNodes to the render engine under construction such as to reflect the properties of the MObject in the actual render.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class143365.html#refclass143365" target = "projectFrame"><b>NodeWiring</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class143493.html#refclass143493" target = "projectFrame"><b>OperationBase</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class149637.html#refclass149637" target = "projectFrame"><b>ParamAccessor</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class134533.html#refclass134533" target = "projectFrame"><b>Parameter</b></a></td><td></td><td>Descriptor and access object for a plugin parameter. Parameters may be provided with values from the session, and this values may be automated.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class134661.html#refclass134661" target = "projectFrame"><b>ParamProvider</b></a></td><td>interface</td><td>A facility to get the actual value of a plugin/effect parameter</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class130437.html#refclass130437" target = "projectFrame"><b>PathManager</b></a></td><td></td><td>While building a render engine, this Strategy class decides on the actual render strategy in accordance to the current controller settings (system state)</td></tr>
@@ -113,9 +122,8 @@
 <tr bgcolor=#f0f0f0><td><a href="class129077.html#refclass129077" target = "projectFrame"><b>Prefetch</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class137605.html#refclass137605" target = "projectFrame"><b>Preview</b></a></td><td></td><td>alternative version of the media data, probably with lower resolution</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class136837.html#refclass136837" target = "projectFrame"><b>Proc</b></a></td><td></td><td>key abstraction: data processing asset</td></tr>
-<tr bgcolor=#f0f0f0><td><a href="class141957.html#refclass141957" target = "projectFrame"><b>ProcDispatcher</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class141957.html#refclass141957" target = "projectFrame"><b>ProcDispatcher</b></a></td><td>control</td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class144389.html#refclass144389" target = "projectFrame"><b>ProcessData</b></a></td><td></td><td></td></tr>
-<tr bgcolor=#f0f0f0><td><a href="class131461.html#refclass131461" target = "projectFrame"><b>Processor</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class131717.html#refclass131717" target = "projectFrame"><b>ProcNode</b></a></td><td>interface</td><td>Key abstraction of the Render Engine: A Data processing Node</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class138757.html#refclass138757" target = "projectFrame"><b>ProcPatt</b></a></td><td></td><td>special type of structural Asset representing information how to build some part of the render engine's processing nodes network.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class145669.html#refclass145669" target = "projectFrame"><b>Project</b></a></td><td></td><td></td></tr>
@@ -127,14 +135,17 @@
 <tr bgcolor=#f0f0f0><td><a href="class140677.html#refclass140677" target = "projectFrame"><b>QueryHandler</b></a></td><td>interface</td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class141189.html#refclass141189" target = "projectFrame"><b>QueryHandlerImpl</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class143877.html#refclass143877" target = "projectFrame"><b>ReadSource</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class149509.html#refclass149509" target = "projectFrame"><b>RedoLast</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class129413.html#refclass129413" target = "projectFrame"><b>RelativeLocation</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class133893.html#refclass133893" target = "projectFrame"><b>RelType</b></a></td><td>enum</td><td>the possible kinds of RelativePlacements</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class131333.html#refclass131333" target = "projectFrame"><b>RenderEngine</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class131461.html#refclass131461" target = "projectFrame"><b>RenderGraph</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class130949.html#refclass130949" target = "projectFrame"><b>RenderState</b></a></td><td></td><td>Encapsulates the logic used to get a "current render process" in accordance to the currentyl applicable controller settings. The provided StateProxy serves to hold any mutalbe state used in the render process, so the rest of the render engine can be stateless.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class146181.html#refclass146181" target = "projectFrame"><b>RenderTask</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class140933.html#refclass140933" target = "projectFrame"><b>ResolverBase</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class129205.html#refclass129205" target = "projectFrame"><b>Scheduler</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class135173.html#refclass135173" target = "projectFrame"><b>Segment</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class147333.html#refclass147333" target = "projectFrame"><b>Segmentation</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class134277.html#refclass134277" target = "projectFrame"><b>SegmentationTool</b></a></td><td></td><td>Tool implementation for deriving a partitioning of the current timeline such, that each segement has a constant configuration. "Constant" means here, that any remaining changes over time can be represented by automation solely, without the need to change the node connections.</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class128133.html#refclass128133" target = "projectFrame"><b>Seq</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class146309.html#refclass146309" target = "projectFrame"><b>Sequence</b></a></td><td></td><td></td></tr>
@@ -167,6 +178,8 @@
 <tr bgcolor=#f0f0f0><td><a href="class131845.html#refclass131845" target = "projectFrame"><b>Trafo</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class140805.html#refclass140805" target = "projectFrame"><b>TypeHandler</b></a></td><td>interface</td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class141317.html#refclass141317" target = "projectFrame"><b>TypeHandler&lt;Pipe&gt;</b></a></td><td></td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class148869.html#refclass148869" target = "projectFrame"><b>UndoMutation</b></a></td><td>func</td><td></td></tr>
+<tr bgcolor=#f0f0f0><td><a href="class149381.html#refclass149381" target = "projectFrame"><b>UndoSync</b></a></td><td></td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class137477.html#refclass137477" target = "projectFrame"><b>Unknown</b></a></td><td></td><td>placeholder for unknown or unavailable media source</td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class141701.html#refclass141701" target = "projectFrame"><b>User</b></a></td><td>actor</td><td></td></tr>
 <tr bgcolor=#f0f0f0><td><a href="class133509.html#refclass133509" target = "projectFrame"><b>VFrame</b></a></td><td></td><td></td></tr>

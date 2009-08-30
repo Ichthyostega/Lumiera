@@ -39,24 +39,36 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/allocationclustertest.cpp		\
 	$(testlib_srcdir)/appconfigtest.cpp			\
 	$(testlib_srcdir)/customsharedptrtest.cpp		\
+	$(testlib_srcdir)/bool-checkable-test.cpp		\
 	$(testlib_srcdir)/exceptionerrortest.cpp		\
-	$(testlib_srcdir)/factoryspecialtest.cpp		\
+	$(testlib_srcdir)/factory-special-test.cpp		\
 	$(testlib_srcdir)/factorytest.cpp			\
+	$(testlib_srcdir)/format-helper-test.cpp		\
+	$(testlib_srcdir)/functor-util-test.cpp			\
+	$(testlib_srcdir)/hash-indexed-test.cpp			\
 	$(testlib_srcdir)/helloworldtest.cpp			\
 	$(testlib_srcdir)/lifecycletest.cpp			\
+	$(testlib_srcdir)/iter-adapter-test.cpp			\
 	$(testlib_srcdir)/mainsuite.cpp				\
-	$(testlib_srcdir)/meta/typelisttest.cpp         	\
-	$(testlib_srcdir)/meta/typelistmaniptest.cpp    	\
-	$(testlib_srcdir)/meta/generatortest.cpp        	\
-	$(testlib_srcdir)/meta/configflagstest.cpp      	\
+	$(testlib_srcdir)/meta/typelist-test.cpp         	\
+	$(testlib_srcdir)/meta/typelist-manip-test.cpp    	\
+	$(testlib_srcdir)/meta/typeseq-manip-test.cpp    	\
+	$(testlib_srcdir)/meta/type-tuple-test.cpp    		\
+	$(testlib_srcdir)/meta/function-composition-test.cpp   	\
+	$(testlib_srcdir)/meta/function-closure-test.cpp   	\
+	$(testlib_srcdir)/meta/function-erasure-test.cpp   	\
+	$(testlib_srcdir)/meta/generator-test.cpp        	\
+	$(testlib_srcdir)/meta/config-flags-test.cpp      	\
 	$(testlib_srcdir)/query/queryutilstest.cpp		\
 	$(testlib_srcdir)/removefromsettest.cpp			\
-	$(testlib_srcdir)/sanitizedidentifiertest.cpp		\
-	$(testlib_srcdir)/scopedholdertest.cpp			\
+	$(testlib_srcdir)/sanitised-identifier-test.cpp		\
+	$(testlib_srcdir)/opaque-unchecked-buffer-test.cpp	\
+	$(testlib_srcdir)/opaque-holder-test.cpp		\
+	$(testlib_srcdir)/scoped-holder-test.cpp		\
 	$(testlib_srcdir)/scopedholdertransfertest.cpp		\
 	$(testlib_srcdir)/scoped-ptrvect-test.cpp		\
-	$(testlib_srcdir)/singletonsubclasstest.cpp		\
-	$(testlib_srcdir)/singletontest.cpp			\
+	$(testlib_srcdir)/singleton-subclass-test.cpp		\
+	$(testlib_srcdir)/singleton-test.cpp			\
 	$(testlib_srcdir)/singletontestmocktest.cpp		\
 	$(testlib_srcdir)/streamtypebasicstest.cpp		\
 	$(testlib_srcdir)/streamtypelifecycletest.cpp		\
@@ -64,10 +76,12 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/sync-classlock-test.cpp		\
 	$(testlib_srcdir)/sync-locking-test.cpp			\
 	$(testlib_srcdir)/sync-waiting-test.cpp			\
+	$(testlib_srcdir)/time-wrapper-test.cpp			\
 	$(testlib_srcdir)/thread-wrapper-test.cpp		\
 	$(testlib_srcdir)/thread-wrapper-join-test.cpp		\
 	$(testlib_srcdir)/test/cmdlinewrappertest.cpp		\
 	$(testlib_srcdir)/test/testoptiontest.cpp		\
+	$(testlib_srcdir)/test/test-helper-test.cpp		\
 	$(testlib_srcdir)/vectortransfertest.cpp		\
 	$(testlib_srcdir)/visitingtoolconcept.cpp		\
 	$(testlib_srcdir)/visitingtoolextendedtest.cpp		\

@@ -28,6 +28,7 @@
 #include "proc/asset/category.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/mobject/session/clip.hpp"
+#include "proc/mobject/test-dummy-mobject.hpp"
 #include "lib/util.hpp"
 
 #include <iostream>
@@ -39,62 +40,20 @@ using std::cout;
 
 
 namespace mobject {
-  namespace builder {
-    namespace test {
+namespace builder {
+namespace test    {
       
       using session::Clip;
       using session::AbstractMO;
+      using namespace mobject::test;
       
-      
-      
-      /** 
-       *  Test MObject subclass, which, contrary to any real MObject,
-       *  can be created directly without involving MObjectFactory.
-       */
-      class TestMO : public AbstractMO
-        {
-        public:
-          TestMO() { };
-          
-          DEFINE_PROCESSABLE_BY (BuilderTool);
-          
-          virtual bool isValid()  const        { return true;}
-          static void killDummy (MObject* dum) { delete (TestMO*)dum; }
-        };
-      
-      /** 
-       * Subclass-1 is \em not defined "processible",
-       * thus will always be handled as TestMO...
-       */
-      class TestSubMO1 : public TestMO 
-        { };
-      
-      /** 
-       * Subclass-2 \em is defined "processible", 
-       * but we omit the necessary "applicable" definition in TestTool,
-       * resulting in an invocation of the error (catch-all) function...
-       */
-      class TestSubMO2 : public TestMO 
-        { 
-          DEFINE_PROCESSABLE_BY (BuilderTool);
-        };
-      
-      
-      template<class MO>
-      class TestPlacement : public Placement<MO>
-        {
-        public:
-          TestPlacement(TestMO& testObject) 
-            : Placement<MO>::Placement(testObject, &TestMO::killDummy)
-            { }
-        };
       
       
       /**
        * BuilderTool implementation for checking the invocation of the correct
        * \c treat() function and for accessing the original Placement from 
        * within this invocation. It is declared to be applicable to Clip
-       * and TestMO objects (wrapped into any acceptable shared-ptr).
+       * and DummyMO objects (wrapped into any acceptable shared-ptr).
        * Intentionally, we omit to declare it applicable to TestSubMO2 instances.
        * In reality this would be a case of misconfiguration, because TestSubMO2
        * is defined to be processable and consequently has an \apply() function,
@@ -102,7 +61,7 @@ namespace mobject {
        * so it will call the \c onUnknown(Buildable&) instead
        */
       class TestTool 
-        : public Applicable<TestTool, Types<Clip, TestMO>::List>
+        : public Applicable<TestTool, Types<Clip, DummyMO>::List>
         {
         public:
           string log_;
@@ -154,10 +113,10 @@ namespace mobject {
               BuilderTool& tool = t1;
                                 
               Placement<Clip> clip = asset::Media::create("test-1", asset::VIDEO)->createClip();
-              TestPlacement<MObject> test1(*new TestSubMO1);
-              TestPlacement<MObject> test2(*new TestSubMO2);
+              TestPlacement<> test1(*new TestSubMO1);
+              TestPlacement<> test2(*new TestSubMO2);
               
-
+              
               cout << "apply (tool, clip);\n";
               apply (tool, clip);
               INFO (test, "got Wrapper = %s", t1.log_.c_str());
@@ -181,8 +140,4 @@ namespace mobject {
       
       
       
-    } // namespace test
-    
-  } // namespace builder
-  
-} // namespace mobject
+}}} // namespace mobject::builder::test

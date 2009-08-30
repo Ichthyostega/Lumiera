@@ -3,4 +3,74 @@ TESTING "Component Test Suite: Proc-Layer controller" ./test-components --group=
 
 
 
-#
+PLANNED "CommandBasic_test" CommandBasic_test <<END
+END
+
+
+TEST "Argument & Memento handling" CommandArgument_test <<END
+out: Command-State. arguments=unbound, ·noUNDO·.
+out: capture state...
+out: Command-State. arguments=Closure\(\), ·noUNDO·.
+out: Command-State. arguments=Closure\(.\), ·noUNDO·.
+out: Command-State. arguments=Closure\(.,00:..:....00\), ·noUNDO·.
+out: Command-State. arguments=Closure\(00:..:....00,glorious,..\), <mem: destruction>.
+out: would be serialised.....Command-State. arguments=Closure\(\), ·noUNDO·.
+out: would be serialised.....Command-State. arguments=Closure\(.\), ·noUNDO·.
+out: would be serialised.....Command-State. arguments=Closure\(.,00:..:....00\), ·noUNDO·.
+out: would be serialised.....Command-State. arguments=Closure\(00:..:....00,glorious,..\), <mem: destruction>.
+out: sizeof\( .+control1.ArgumentHolder.+ \) = .+
+out: Command-State. arguments=Closure\(00:..:....00,Lumiera rocks,..\), ·noUNDO·.
+out: capture state...
+out: captured state: START...Lumiera rocks
+out: Command-State. arguments=Closure\(00:..:....00,Lumiera rocks,..\), <mem: START...Lumiera rocks>.
+out: invoke operation...
+out: START...doIt\( Time=00:..:....00 "Lumiera rocks" rand=.. \)
+out: undo... memento=START...Lumiera rocks
+out: START...doIt\( Time=00:..:....00 "Lumiera rocks" rand=.. \)undoIt\(time=00:..:....00\)----memento-:START...Lumiera rocks
+out: capture state...
+out: modified: Command-State. arguments=Closure\(00:00:00.123,unbelievable,..\), <mem: START...doIt\( Time=00:..:....00 "Lumiera rocks" rand=.. \)undoIt\(time=00:..:....00\)----memento-:START...Lumiera rocksLumiera rocks>.
+out: copied  : Command-State. arguments=Closure\(00:..:....00,Lumiera rocks,..\), <mem: START...Lumiera rocks>.
+out: undo... memento=START...doIt\( Time=00:..:....00 "Lumiera rocks" rand=.. \)undoIt\(time=00:..:....00\)----memento-:START...Lumiera rocksLumiera rocks
+out: RESET...undoIt\(time=00:..:....00\)----memento-:START...doIt\( Time=00:..:....00 "Lumiera rocks" rand=.. \)undoIt\(time=00:..:....00\)----memento-:START...Lumiera rocksLumiera rocks
+END
+
+
+TEST "Command functor and UNDO functor" CommandMutation_test <<END
+out: Mutation\(untied\)
+out: param values: Closure\(23\)
+out: Mutation\(Closure\(23\)\)
+out: saved state: 11
+END
+
+
+TEST "build argument accepting function" AcceptArgumentTuple_test <<END
+out: sizeof\( .+control.+TestClass.+ \) =   1
+out: sizeof\( .+control.+TestClass.+lumiera.Time.+ \) =  (12)|(16)
+out: 00:..:..\.000
+return: 0
+END
+
+
+TEST "Memento wiring and storage" MementoTie_test <<END
+return: 0
+END
+
+
+PLANNED "Command index and allocation" CommandRegistry_test <<END
+return: 0
+END
+
+
+PLANNED "Command usage aspects I"  CommandUse1_test <<END
+return: 0
+END
+
+
+PLANNED "Command usage aspects II" CommandUse2_test <<END
+return: 0
+END
+
+
+PLANNED "Command usage aspects III" CommandUse3_test <<END
+return: 0
+END

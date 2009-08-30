@@ -1,65 +1,64 @@
-format 40
+format 58
 "Asset" // ProcessingLayer::Asset
-  revision 18
+  revision 19
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
-  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
   //use case diagram settings
-  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
   //sequence diagram settings
-  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
   //collaboration diagram settings
-  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
   //object diagram settings
-   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
   //component diagram settings
   package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
-  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
   //deployment diagram settings
   package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
-  draw_component_as_icon default show_component_req_prov default show_component_rea default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
   //state diagram settings
   package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
-  show_activities default region_horizontally default drawing_language default
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
   //activity diagram settings
   package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
-  show_infonote default drawing_language default
+  show_infonote default drawing_language default show_stereotype_properties default
   
   classview 128901 "Assets"
     //class diagram settings
-    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
     //collaboration diagram settings
-    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
     //object diagram settings
-     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
     //sequence diagram settings
-    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
     //state diagram settings
     package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
-    show_activities default region_horizontally default drawing_language default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
     //class settings
     //activity diagram settings
     package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
-    show_infonote default drawing_language default
-    
+    show_infonote default drawing_language default show_stereotype_properties default
     classdiagram 130309 "Asset Kinds"
-      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
       size A4
     end
 
     classdiagram 130437 "Media-Asset Relations"
-      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
       size A4
     end
 
     classdiagram 131077 "Proc-Asset Relations"
-      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
       size A4
     end
 
     classdiagram 131205 "Struct-Asset Relations"
-      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default
+      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
       size A4
     end
 
@@ -73,6 +72,8 @@ ${inlines}
       java_decl "${comment}${@}${visibility}interface ${name}${extends} {
 ${members}}
 "
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
 ${members}};
 "
@@ -85,6 +86,8 @@ ${members}};
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
+	php_decl ""
+	python_decl ""
 	idl_decl ""
 	comment "Asset primary key."
       end
@@ -94,6 +97,8 @@ ${members}};
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
+	php_decl ""
+	python_decl ""
 	idl_decl ""
 	comment "element ID, comprehensible but sanitized. The tuple (category, name, org) is unique."
       end
@@ -115,6 +120,8 @@ ${members}};
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
+	php_decl ""
+	python_decl ""
 	idl_decl ""
 	comment "origin or authorship id. Can be a project abbreviation, a package id or just the authors nickname or UID. This allows for the compnent name to be more generic (e.g. \"blur\"). Default for all assets provided by the core Lumiera codebase is \"lumi\"."
       end
@@ -125,6 +132,8 @@ ${members}};
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
+	php_decl ""
+	python_decl ""
 	idl_decl ""
 	comment "version number of the thing or concept represented by this asset. Of each unique tuple (name, category, org) there will be only one version in the whole system. Version 0 is reserved for internal purposes. Versions are considered to be ordered, and any higher version is supposed to be fully backwards compatible to all previous versions."
       end
@@ -134,6 +143,8 @@ ${members}};
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
+	php_decl ""
+	python_decl ""
 	idl_decl ""
 	comment "additional classification, selections or departments this asset belongs to. Groups are optional, non-exclusive and may be overlapping."
       end
@@ -143,6 +154,8 @@ ${members}};
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
+	php_decl ""
+	python_decl ""
 	idl_decl ""
 	comment "user visible Name-ID. To be localized."
       end
@@ -152,6 +165,8 @@ ${members}};
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
+	php_decl ""
+	python_decl ""
 	idl_decl ""
 	comment "user visible qualification of the thing, unit or concept represented by this asset. perferably \"in one line\". To be localized."
       end
@@ -167,6 +182,8 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 }
 
 "
+	
+	
 	
 	
 	comment "List of entities this asset depends on or requires to be functional. May be empty. The head of this list can be considered the primary prerequisite"
@@ -185,6 +202,8 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 "
 	
 	
+	
+	
 	comment "All the other assets requiring this asset to be functional. For example, all the clips depending on a given media file. May be empty. The dependency relation is transitive."
       end
 
@@ -199,6 +218,8 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 }
 
 "
+	
+	
 	
 	
 	comment "weather this asset is swithced on and consequently included in the fixture and participates in rendering"
@@ -220,6 +241,8 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 "
 	
 	
+	
+	
 	comment "change the enabled status of this asset. Note the corresponding #isActive predicate may depend on the enablement status of parent assets as well"
       end
     end
@@ -232,6 +255,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
 ${members}};
 "
@@ -250,6 +275,8 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 }
 
 "
+	
+	
 	
 	
       end
@@ -272,6 +299,8 @@ ${class}::${name} ${(}${t0} & ${p0}${)}${const}${volatile} ${throw}${staticnl}
 "
 	
 	
+	
+	
 	comment "find and return corresponging object"
       end
 
@@ -287,6 +316,8 @@ ${class}::${name} ${(}${t0} ${p0}${)}${const}${volatile} ${throw}${staticnl}
 }
 
 "
+	
+	
 	
 	
 	comment "@return true if the given id is registered in the internal asset DB"
@@ -307,6 +338,8 @@ ${class}::${name} ${(}${t0} ${p0}${)}${const}${volatile} ${throw}${staticnl}
 }
 
 "
+	
+	
 	
 	
 	comment "remove the given asset <i>together with all its dependants</i> from the internal DB"
@@ -331,6 +364,8 @@ ${class}::${name} ${(}${t0} & ${p0}, ${t1} & ${p1}, ${t2} & ${p2}, ${t3}& ${p3}$
 "
 	
 	
+	
+	
 	comment "registers an asset object in the internal DB, providing its unique key"
       end
 
@@ -353,6 +388,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -362,7 +399,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 139909 // <realization>
-	  b multiplicity "" parent class_ref 136453 // Asset
+	  b parent class_ref 136453 // Asset
       end
 
       operation 133253 "createClip"
@@ -376,6 +413,8 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 }
 
 "
+	
+	
 	
 	
 	comment "create a (possibly compound) Clip refering to this media, ready to be added to the EDL."
@@ -394,6 +433,8 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 "
 	
 	
+	
+	
 	comment "@return descriptor how to build a render pipeline corresponding to this media"
       end
 
@@ -402,7 +443,7 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 	  a default
 	    cpp default "#include in header"
 	    classrelation_ref 143237 // <dependency>
-	  b multiplicity "" parent class_ref 138757 // ProcPatt
+	  b parent class_ref 138757 // ProcPatt
       end
     end
 
@@ -414,6 +455,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -435,7 +478,7 @@ ${inlines}
 	  a default
 	    cpp default "#include in header"
 	    classrelation_ref 144261 // <dependency>
-	  b multiplicity "" parent class_ref 139525 // MediaAccessFacade
+	  b parent class_ref 139525 // MediaAccessFacade
       end
     end
 
@@ -447,6 +490,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -457,7 +502,7 @@ e.g. the individual media streams found in one media file"
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 142213 // <generalisation>
-	  b multiplicity "" parent class_ref 136709 // Media
+	  b parent class_ref 136709 // Media
       end
 
       classrelation 142341 // tracks (<directional aggregation>)
@@ -480,6 +525,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -489,7 +536,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 140037 // <realization>
-	  b multiplicity "" parent class_ref 136453 // Asset
+	  b parent class_ref 136453 // Asset
       end
     end
 
@@ -501,6 +548,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -510,7 +559,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 140165 // <realization>
-	  b multiplicity "" parent class_ref 136453 // Asset
+	  b parent class_ref 136453 // Asset
       end
     end
 
@@ -522,6 +571,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -531,7 +582,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 140293 // <realization>
-	  b multiplicity "" parent class_ref 136453 // Asset
+	  b parent class_ref 136453 // Asset
       end
     end
 
@@ -543,6 +594,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -557,6 +610,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -566,7 +621,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 140549 // <generalisation>
-	  b multiplicity "" parent class_ref 136709 // Media
+	  b parent class_ref 136709 // Media
       end
 
       classrelation 141957 // source (<unidirectional association>)
@@ -589,6 +644,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -598,7 +655,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 146181 // <generalisation>
-	  b multiplicity "" parent class_ref 136709 // Media
+	  b parent class_ref 136709 // Media
       end
     end
 
@@ -610,6 +667,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -619,7 +678,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 146309 // <generalisation>
-	  b multiplicity "" parent class_ref 137477 // Unknown
+	  b parent class_ref 137477 // Unknown
       end
     end
 
@@ -631,6 +690,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -640,7 +701,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 141061 // <generalisation>
-	  b multiplicity "" parent class_ref 136837 // Proc
+	  b parent class_ref 136837 // Proc
       end
     end
 
@@ -652,6 +713,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -661,7 +724,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 141189 // <generalisation>
-	  b multiplicity "" parent class_ref 136837 // Proc
+	  b parent class_ref 136837 // Proc
       end
     end
 
@@ -673,6 +736,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -682,7 +747,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 141317 // <generalisation>
-	  b multiplicity "" parent class_ref 136965 // Struct
+	  b parent class_ref 136965 // Struct
       end
     end
 
@@ -694,6 +759,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -703,7 +770,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 141445 // <generalisation>
-	  b multiplicity "" parent class_ref 136965 // Struct
+	  b parent class_ref 136965 // Struct
       end
 
       classrelation 148101 // <dependency>
@@ -711,7 +778,7 @@ ${inlines}
 	  a default
 	    cpp default "#include in header"
 	    classrelation_ref 148101 // <dependency>
-	  b multiplicity "" parent class_ref 138757 // ProcPatt
+	  b parent class_ref 138757 // ProcPatt
       end
 
       classrelation 148229 // wiringTemplate (<unidirectional association>)
@@ -720,7 +787,7 @@ ${inlines}
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 148229 // wiringTemplate (<unidirectional association>)
-	  b multiplicity "" parent class_ref 138757 // ProcPatt
+	  b parent class_ref 138757 // ProcPatt
       end
     end
 
@@ -732,6 +799,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -741,16 +810,16 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 143109 // <generalisation>
-	  b multiplicity "" parent class_ref 136965 // Struct
+	  b parent class_ref 136965 // Struct
       end
 
-      classrelation 143621 // instructions (<directional aggregation by value>)
+      classrelation 143621 // instructions (<directional composition>)
 	relation 141701 *-->
 	  stereotype "vector"
 	  a role_name "instructions" multiplicity "1..*" const_relation protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
 "
-	    classrelation_ref 143621 // instructions (<directional aggregation by value>)
+	    classrelation_ref 143621 // instructions (<directional composition>)
 	  b multiplicity "1" parent class_ref 139013 // BuildInstruct
       end
     end
@@ -763,6 +832,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -772,7 +843,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 141573 // <generalisation>
-	  b multiplicity "" parent class_ref 137093 // Meta
+	  b parent class_ref 137093 // Meta
       end
     end
 
@@ -784,6 +855,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -798,6 +871,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -812,6 +887,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -820,7 +897,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 143749 // <generalisation>
-	  b multiplicity "" parent class_ref 139013 // BuildInstruct
+	  b parent class_ref 139013 // BuildInstruct
       end
 
       classrelation 144133 // nodes (<directional aggregation>)
@@ -830,7 +907,7 @@ ${inlines}
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 144133 // nodes (<directional aggregation>)
-	  b multiplicity "" parent class_ref 136837 // Proc
+	  b parent class_ref 136837 // Proc
       end
 
       attribute 131461 "point"
@@ -838,6 +915,8 @@ ${inlines}
 	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
 	java_decl ""
+	php_decl ""
+	python_decl ""
 	idl_decl ""
 	comment "identifying the point where the nodes should be attached"
       end
@@ -851,6 +930,8 @@ ${members}  };
 ${inlines}
 "
       java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
       idl_decl ""
       explicit_switch_type ""
       
@@ -859,7 +940,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 143877 // <generalisation>
-	  b multiplicity "" parent class_ref 139013 // BuildInstruct
+	  b parent class_ref 139013 // BuildInstruct
       end
 
       classrelation 144005 // subPattern (<unidirectional association>)

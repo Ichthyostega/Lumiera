@@ -24,8 +24,8 @@
 #include "lib/util.hpp"
 
 #include <boost/algorithm/string.hpp>
-#include <boost/function.hpp>
-#include <boost/bind.hpp>
+#include <tr1/functional>
+#include <boost/bind.hpp>          // we need operator! for bind-expressions
 
 using boost::algorithm::trim_right_copy_if;
 using boost::algorithm::is_any_of;
@@ -33,19 +33,20 @@ using boost::algorithm::is_alnum;
 using boost::algorithm::is_space;
 
 
-namespace util
-  {
+namespace util {
 
-  typedef boost::function<bool(string::value_type)> ChPredicate;
-  ChPredicate operator! (ChPredicate p) { return ! boost::bind(p,_1); }
+  using std::tr1::function;
+  
+  typedef function<bool(string::value_type)> ChPredicate;
+  ChPredicate operator! (ChPredicate p) { return ! bind(p,_1); }
 
-  // character classes used for sanitizing a string
+  // character classes used for sanitising a string
   ChPredicate isValid (is_alnum() || is_any_of("-_.:+$'()@"));           ///< characters to be retained
   ChPredicate isPunct (is_space() || is_any_of(",;#*~´`?\\=/&%![]{}")); ///<  punctuation to be replaced by '_'
 
   
   string
-  sanitize (const string& org)
+  sanitise (const string& org)
   {
     string res (trim_right_copy_if(org, !isValid ));
     string::iterator       j = res.begin();

@@ -36,21 +36,21 @@
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/defsmanager.hpp"
 #include "lib/singleton.hpp"
+#include "include/symbol.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <tr1/memory>
 
 
 
-namespace mobject
-  {
-  namespace session 
-    { 
+namespace mobject {
+  
+  namespace session { 
     class SessManager;
     class EDL; 
     class Fixture;
     typedef std::tr1::shared_ptr<Fixture> PFix;
-    }
+  }
   
   typedef session::SessManager& PSess;  ///< acts as a "PImpl" smart ptr
 
@@ -69,7 +69,7 @@ namespace mobject
    * the Session is similar to a Singleton instance.
    * 
    * @note Any client should be aware that the Session can be closed, 
-   *       replaced and loaded. The only way to accees the Session is
+   *       replaced and loaded. The only way to access the Session is
    *       via a "PImpl" smart pointer session::PSess (which indeed is
    *       a reference to the SessManager and is accessible as the static
    *       field Session::current). You will never be able to get a direct
@@ -99,8 +99,12 @@ namespace mobject
     };
   
   
-  namespace session
-    {
+  extern lumiera::Symbol ON_SESSION_START;  ///< triggered before loading any content into a newly created session
+  extern lumiera::Symbol ON_SESSION_INIT;   ///< triggered when initialising a new session, after adding content
+  extern lumiera::Symbol ON_SESSION_END;    ///< triggered before discarding an existing session
+  
+  
+  namespace session {
 
     /**
      * creation, access and Session lifecycle Interface.
@@ -122,13 +126,13 @@ namespace mobject
         virtual void reset () =0;
         
         /** replace the current session by a new
-         *  session loaded from serialized state.
+         *  session loaded from serialised state.
          */
         virtual void load () =0;
 
-        /** create a complete, serialized representation
+        /** create a complete, serialised representation
          *  of the current session config and contents.
-         *  @todo how to serialize, prameters, return value?
+         *  @todo how to serialise, parameters, return value?
          */
         virtual void save () =0;
         

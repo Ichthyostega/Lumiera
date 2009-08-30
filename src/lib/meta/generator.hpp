@@ -57,15 +57,13 @@ This code is heavily inspired by
 
 
 
-namespace lumiera
-  {
-  namespace typelist
-    {
+namespace lumiera {
+namespace typelist{
     
     /** 
      * Apply a template to a collection of types. 
      * The resulting class ends up inheriting from an instantiation
-     * of the template for each of the types in the list. The iheritance
+     * of the template for each of the types in the list. The inheritance
      * graph is built in a "mixin" (multiple inheritance) style. 
      */
     template
@@ -107,8 +105,8 @@ namespace lumiera
      * Needs the help of the user provided Template, which now has
      * to take a second parameter and use this as Base class. 
      * The resulting class ends up (single) inheriting from an 
-     * instantiation of the templace for each of the types, while
-     * overrideing/implementing the provided base class.
+     * instantiation of the template for each of the types, while
+     * overriding/implementing the provided base class.
      */
     template
       < class TYPES                      // List of Types 
@@ -158,7 +156,7 @@ namespace lumiera
       < class TYPES                           // List of Types
       , template<class,class,uint> class _X_ //  your-template-goes-here
       , class BASE = NullType               //   Base class at end of chain
-      , uint i = 0                         //    incremented on each instantiaton
+      , uint i = 0                         //    incremented on each instantiation
       >
     class InstantiateWithIndex;
     
@@ -196,7 +194,5 @@ namespace lumiera
       };
     
     
-  } // namespace typelist
-
-} // namespace lumiera
+}} // namespace lumiera::typelist
 #endif

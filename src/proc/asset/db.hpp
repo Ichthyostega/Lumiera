@@ -48,7 +48,7 @@ namespace asset {
   /* ===== hash implementations ===== */
   
   size_t 
-  hash_value (const Asset::Ident& idi)
+  hash_value (Asset::Ident const& idi)
   {
     size_t hash = 0;
     boost::hash_combine(hash, idi.org);
@@ -58,23 +58,23 @@ namespace asset {
   }
   
   size_t
-  hash_value (const Asset& asset)
+  hash_value (Asset const& asset)
   {
     return asset.getID();
   }
   
   
-  /** 
-   * trivial hash functor.
+  /**
+   * trivial hash functor
    * returns any hash value unmodified.
-   * For building a hashtable with keys 
+   * For building a hashtable with keys
    * already containing valid hash values.
    */
-  struct IdentityHash 
+  struct IdentityHash
     : public std::unary_function<size_t, size_t>
     {
       size_t 
-      operator() (size_t val) const   { return val; }
+      operator() (size_t val)  const { return val; }
     };
   
   typedef std::tr1::unordered_map<size_t, PAsset, IdentityHash> IdHashtable;

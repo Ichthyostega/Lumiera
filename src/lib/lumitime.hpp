@@ -25,6 +25,7 @@
 #define LUMIERA_LUMITIME_H
 
 #include <boost/operators.hpp>
+#include <string>
 
 extern "C" {
 #include <gavl/gavltime.h>
@@ -67,10 +68,26 @@ namespace lumiera {
       static const Time MAX ; 
       static const Time MIN ;
       
-      explicit Time (gavl_time_t val=0) : t_(val) {}
+      explicit 
+      Time (gavl_time_t val=0)
+        : t_(val)
+        { }
       
-      operator gavl_time_t () { return t_; }
+      Time ( long millis
+           , uint secs 
+           , uint mins =0
+           , uint hours=0
+           );
       
+      // component access
+      int getMillis () const; 
+      int getSecs   () const; 
+      int getMins   () const; 
+      int getHours  () const; 
+      
+      
+      operator std::string ()  const;
+      operator gavl_time_t ()  const { return t_; }
       
       // Supporting additive
       Time& operator+= (Time const& tx)  { t_ += tx.t_; return *this; }

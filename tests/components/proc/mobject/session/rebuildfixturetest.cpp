@@ -28,73 +28,66 @@
 #include "lib/util.hpp"
 
 //#include <boost/format.hpp>
-#include <boost/bind.hpp>
+#include <tr1/functional>
 #include <iostream>
 
 //using boost::format;
-using boost::bind;
+using std::tr1::bind;
 using util::contains; 
 using util::for_each; 
 using std::string;
 using std::cout;
 
 
-namespace mobject
-  {
-  namespace session
-    {
-    namespace test
-      {
-      
-      
-      
-      
-      /*******************************************************************
-       * @test (re)building the ExplicitPlacement objects from the objects
-       *       placed into the Session/EDL.
-       * @see  mobject::session::Fixture
-       * @see  mobject::ExplicitPlacement
-       */
-      class RebuildFixture_test : public Test
-        {
-          virtual void
-          run (Arg arg) 
-            {
-              PSess sess = Session::current;
-              sess.clear();
-              buildTestseesion1();
-              ASSERT (sess->isValid());
-              sess->rebuildFixture();
-              TODO ("check the fixture has been touched. e.g. by hash.");
-              TODO ("query all Placements of all Clips (via AssetManager). Verify explicit plac contained in Fixture.");
-
-              UNIMPLEMENTED ("iterate over fixture");
-// TODO              
-//            for_each (sess->getFixture(), 
-//                      bind (&check_is_from_EDL, _1, sess.getEDL()));
-              
-              TODO ("can we check the other direction, from EDL to Fixture??");
-            } 
-          
-          static void 
-          check_is_from_EDL (PMO explicitPlacement, EDL& edl)
-            {
-              
-////TODO do we still support this? can it be replaced by a directly checking predicate on ExplicitPlacement??
-              
-//              PMO originalPlacement = explicitPlacement->subject->getPlacement();
-//              ASSERT (edl.contains(originalPlacement));
-            }
-        };
-      
-      
-      /** Register this test class... */
-      LAUNCHER (RebuildFixture_test, "unit session");
-      
-      
-      
-    } // namespace test
+namespace mobject {
+namespace session {
+namespace test    {
   
-  } // namespace session
-
-} // namespace mobject
+  
+  
+  
+  /*******************************************************************
+   * @test (re)building the ExplicitPlacement objects from the objects
+   *       placed into the Session/EDL.
+   * @see  mobject::session::Fixture
+   * @see  mobject::ExplicitPlacement
+   */
+  class RebuildFixture_test : public Test
+    {
+      virtual void
+      run (Arg arg)
+        {
+          PSess sess = Session::current;
+          sess.clear();
+          buildTestsession1();
+          ASSERT (sess->isValid());
+          sess->rebuildFixture();
+          TODO ("check the fixture has been touched. e.g. by hash.");
+          TODO ("query all Placements of all Clips (via AssetManager). Verify explicit plac contained in Fixture.");
+          
+          UNIMPLEMENTED ("iterate over fixture");
+// TODO              
+//        for_each (sess->getFixture(), 
+//                  bind (&check_is_from_EDL, _1, sess.getEDL()));
+          
+          TODO ("can we check the other direction, from EDL to Fixture??");
+        }
+      
+      static void 
+      check_is_from_EDL (PMO explicitPlacement, EDL& edl)
+        {
+          
+////TODO do we still support this? can it be replaced by a directly checking predicate on ExplicitPlacement??
+          
+//        PMO originalPlacement = explicitPlacement->subject->getPlacement();
+//        ASSERT (edl.contains(originalPlacement));
+        }
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (RebuildFixture_test, "unit session");
+  
+  
+  
+}}} // namespace mobject::session::test

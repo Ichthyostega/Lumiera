@@ -41,10 +41,10 @@ liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/lifecycle.cpp			\
 	$(liblumiera_la_srcdir)/nobug-init.cpp			\
 	$(liblumiera_la_srcdir)/util.cpp			\
-	$(liblumiera_la_srcdir)/visitor.cpp			\
 	$(liblumiera_la_srcdir)/query.cpp			\
 	$(liblumiera_la_srcdir)/streamtype.cpp			\
 	$(liblumiera_la_srcdir)/test/testoption.cpp 		\
+	$(liblumiera_la_srcdir)/test/test-helper.cpp 		\
 	$(liblumiera_la_srcdir)/test/suite.cpp 			\
 	$(liblumiera_la_srcdir)/cmdline.cpp			\
 	$(liblumiera_la_srcdir)/logging.cpp
@@ -66,8 +66,7 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/resourcecollector.h		\
 	$(liblumiera_la_srcdir)/ppmpl.h				\
 	$(liblumiera_la_srcdir)/allocationcluster.hpp		\
-	$(liblumiera_la_srcdir)/scopedholdertransfer.hpp	\
-	$(liblumiera_la_srcdir)/scopedholder.hpp		\
+	$(liblumiera_la_srcdir)/scoped-holder.hpp		\
 	$(liblumiera_la_srcdir)/lifecycleregistry.hpp		\
 	$(liblumiera_la_srcdir)/nobug-init.hpp			\
 	$(liblumiera_la_srcdir)/factory.hpp			\
@@ -77,17 +76,17 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/singletonpreconfigure.hpp	\
 	$(liblumiera_la_srcdir)/lumitime.hpp			\
 	$(liblumiera_la_srcdir)/visitor.hpp			\
-	$(liblumiera_la_srcdir)/visitordispatcher.hpp		\
-	$(liblumiera_la_srcdir)/visitorpolicies.hpp		\
+	$(liblumiera_la_srcdir)/visitor-dispatcher.hpp		\
+	$(liblumiera_la_srcdir)/visitor-policies.hpp		\
 	$(liblumiera_la_srcdir)/sync.hpp			\
 	$(liblumiera_la_srcdir)/p.hpp				\
 	$(liblumiera_la_srcdir)/query.hpp			\
 	$(liblumiera_la_srcdir)/singletonfactory.hpp		\
-	$(liblumiera_la_srcdir)/singletonsubclass.hpp		\
+	$(liblumiera_la_srcdir)/singleton-subclass.hpp		\
 	$(liblumiera_la_srcdir)/meta/typelist.hpp		\
 	$(liblumiera_la_srcdir)/meta/configflags.hpp		\
 	$(liblumiera_la_srcdir)/meta/generator.hpp		\
-	$(liblumiera_la_srcdir)/meta/typelistutil.hpp		\
+	$(liblumiera_la_srcdir)/meta/typelist-util.hpp		\
 	$(liblumiera_la_srcdir)/util.hpp			\
 	$(liblumiera_la_srcdir)/observable-list.hpp		\
 	$(liblumiera_la_srcdir)/sync.hpp			\
@@ -96,5 +95,6 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/test/mockinjector.hpp		\
 	$(liblumiera_la_srcdir)/test/suite.hpp			\
 	$(liblumiera_la_srcdir)/test/testoption.hpp		\
+	$(liblumiera_la_srcdir)/test/test-helper.hpp		\
 	$(liblumiera_la_srcdir)/test/run.hpp
 

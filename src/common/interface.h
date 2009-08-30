@@ -169,7 +169,9 @@ LUMIERA_INTERFACE_TYPE(name, version)                   \
  * @param name name of this slot
  * @param params parentized list of parameters for the function
  */
-#define PPMPL_FOREACH_LUMIERA_INTERFACE_SLOT(ret, name, params)  ret (*name) params; lumiera_uid name##_uid;
+#define PPMPL_FOREACH_LUMIERA_INTERFACE_SLOT(ret, name, params)  \
+        ret (*name) params; \
+                             lumiera_uid name##_uid;
 
 
 /*

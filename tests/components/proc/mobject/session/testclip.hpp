@@ -36,54 +36,49 @@ using std::tr1::shared_ptr;
 using std::string;
 
 
-namespace mobject
-  {
-  namespace session
-    {
-    namespace test
-      {
-      class TestPlacement;
-       
-      /**
-       * Sample or Test Clip for checking
-       * various EDL, session and builder operations.
-       * @todo make this usable as Mock object to record invoked operations.
-       * 
-       */
-      class TestClip   : public mobject::session::Clip
-        {
-          
-          TestClip ();
-          static void deleter (MObject* mo) { delete (TestClip*)mo; }
-
-          friend class TestPlacement;  
-          
-        public:
-          static Placement<Clip> create () ;
-        };
-
-        
-      class TestPlacement : public Placement<Clip>
-        {
-          
-        public:
-          TestPlacement (TestClip & subject)
-            : Placement<Clip> (subject, &TestClip::deleter)
-            { }
-        };
-
-        
-      inline Placement<Clip>
-      TestClip::create()
-      { 
-        return TestPlacement (*new TestClip); 
-      }
-    
-    
-    
-    } // namespace test
+namespace mobject {
+namespace session {
+namespace test    {
   
-  } // namespace session
-
-} // namespace mobject
+  
+  class TestPlacement;
+  
+  /**
+   * Sample or Test Clip for checking
+   * various EDL, session and builder operations.
+   * @todo make this usable as Mock object to record invoked operations.
+   * 
+   */
+  class TestClip   : public mobject::session::Clip
+    {
+      
+      TestClip ();
+      static void deleter (MObject* mo) { delete (TestClip*)mo; }
+      
+      friend class TestPlacement;
+      
+    public:
+      static Placement<Clip> create () ;
+    };
+  
+  
+  class TestPlacement : public Placement<Clip>
+    {
+      
+    public:
+      TestPlacement (TestClip & subject)
+        : Placement<Clip> (subject, &TestClip::deleter)
+        { }
+    };
+  
+  
+  inline Placement<Clip>
+  TestClip::create()
+  {
+    return TestPlacement (*new TestClip);
+  }
+  
+  
+  
+}}} // namespace mobject::session::test
 #endif

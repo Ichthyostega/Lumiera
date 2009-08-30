@@ -42,7 +42,7 @@ namespace test
   
   /**
    * Enables running a collection of tests.
-   * An internal registration service #enroll() is provided
+   * An internal registration service #enrol() is provided
    * for the individual Test - inscances to be recognized as 
    * testcases. The groupID passed to the constructor selects
    * all testcases declared as belonging to this Group.
@@ -55,7 +55,7 @@ namespace test
       Suite (string groupID);
       void run (Arg cmdline);
       void describe ();
-      static void enroll (Launcher *test, string testID, string groups);
+      static void enrol (Launcher *test, string testID, string groups);
       
       static const string ALLGROUP;
     };

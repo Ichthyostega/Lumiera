@@ -26,62 +26,56 @@
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
 
-namespace mobject
+namespace mobject {
+namespace session {
+
+  /** new clip-MO linked with the given asset::Clip.
+   *  Initially, this clip will cover the whole source media length.
+   */
+  Clip::Clip (const asset::Clip& clipDef, const Media& mediaDef)
+    : start_(0),
+      mediaDef_(mediaDef),
+      clipDef_(clipDef)
   {
-  namespace session
-    {
+    setupLength();
+  }
+  
+  
+  
+  /** implementing the common MObject self test.
+   *  Length definition is consitent, underlying
+   *  media def is accessible etc. */
+  bool
+  Clip::isValid ()  const
+  {
+    TODO ("check consistency of clip length def, implies accessing the underlying media def");
+    return length > Time(0);
+  }
+  
+  
+  void 
+  Clip::setupLength()
+  {
+    TODO ("really calculate the length of a clip and set length field");
+    this->length = mediaDef_.getLength();
+  }
+  
+  
+  PMedia 
+  Clip::getMedia ()  const                        
+  { 
+    return asset::AssetManager::wrap (mediaDef_);
+  }
+  
+  
+  PClipAsset
+  Clip::findClipAsset ()  const
+  {
+    return asset::AssetManager::wrap (clipDef_);
+  }
+  
+  
+  
+  
+}} // namespace mobject::session
 
-    /** new clip-MO linked with the given asset::Clip.
-     *  Initially, this clip will cover the whole source media length. 
-     */
-    Clip::Clip (const asset::Clip& clipDef, const Media& mediaDef)
-      : start_(0),
-        mediaDef_(mediaDef),
-        clipDef_(clipDef)
-    {
-      setupLength();
-    }
-    
-    
-    
-    /** implementing the common MObject self test.
-     *  Length definition is consitent, underlying 
-     *  media def is accessible etc. */
-    bool
-    Clip::isValid ()  const
-    {
-      TODO ("check consistency of clip length def, implies accessing the underlying media def");
-      return length > Time(0);
-    }
-    
-    
-    void 
-    Clip::setupLength()
-    {
-      TODO ("really calculate the length of a clip and set length field");
-      this->length = mediaDef_.getLength();
-    }
-    
-    
-    PMedia 
-    Clip::getMedia ()  const                        
-    { 
-      return asset::AssetManager::wrap (mediaDef_);
-    }
-    
-    
-    PClipAsset
-    Clip::findClipAsset ()  const
-    {
-      return asset::AssetManager::wrap (clipDef_);
-    }
-
-
-
-
-
-
-
-  } // namespace mobject::session
-
-} // namespace mobject

@@ -60,7 +60,7 @@ namespace asset
                                     );
   }
   
-  LUMIERA_ERROR_DEFINE (ORIG_NOT_FOUND, "Media refered by placeholder not found");
+  LUMIERA_ERROR_DEFINE (ORIG_NOT_FOUND, "Media referred by placeholder not found");
 
   
   

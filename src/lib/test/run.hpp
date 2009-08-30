@@ -84,13 +84,13 @@ namespace test
   class Launch : public Launcher
     {
     public:
-      Launch (string testID, string groups)  { Suite::enroll (this,testID,groups); };
+      Launch (string testID, string groups)  { Suite::enrol (this,testID,groups); };
       virtual auto_ptr<Test> operator() ()   { return auto_ptr<Test> (new TEST ); };
     };   
     
 } // namespace test
 
-// make them global for convienience 
+// make them global for convenience 
 using ::test::Arg;
 using ::test::Test;
 using ::test::Launch;

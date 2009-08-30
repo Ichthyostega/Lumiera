@@ -85,6 +85,7 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (   mmapings_dbg,               backend_dbg);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   threads_dbg,                backend_dbg);
 /** base of debug logging for the proc layer */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  proc_dbg,                    debugging);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (   command_dbg,                proc_dbg);
 /** base of debug logging for the gui */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  gui_dbg,                     debugging);
 /** base if debug logging for the support library */
@@ -120,8 +121,8 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (    mmap,                      backend);       
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    thread,                    backend);       //starting/stopping threads
 /** progress log for the proc layer */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   proc,                       progress);
-/** progress log for the render subsystem of proc */
-NOBUG_CPP_DEFINE_FLAG_PARENT    (    render,                    proc);          //ichthyo: did you want this as global channel or as progress child?
+/** progress log for proc-layer command dispatch */
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    command,                   proc);
 /** progress log for the gui */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   gui,                        progress);
 /** progress log for the support lib */
@@ -130,9 +131,9 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (    resourcecollector,         library);
 /** progress log for the common lib */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   common,                     progress);
 /** progress log, config subsystem */
-NOBUG_CPP_DEFINE_FLAG_PARENT    (    config,                    common);
-NOBUG_CPP_DEFINE_FLAG_PARENT    (     configfiles,              config);        //reading, writing, lookup configfiles
-NOBUG_CPP_DEFINE_FLAG_PARENT    (     configtyped,              config);        //values queried, errors
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    configsys,                 common);        //TODO: here seems to be an ambiguity weather "config" should denote the global config channel or the config-loder internals
+NOBUG_CPP_DEFINE_FLAG_PARENT    (     configfiles,              configsys);     //reading, writing, lookup configfiles
+NOBUG_CPP_DEFINE_FLAG_PARENT    (     configtyped,              configsys);     //values queried, errors
 /** progress log, interfaces */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    interface,                 common);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (     interfaceregistry,        common);        //interfaces which get registered/removed
@@ -142,6 +143,10 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (    subsystem,                 common);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    pluginloader,              common);        //plugins loaded/unloaded/errors
 /** progress log, external plugins*/
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   plugins,                    progress);
+/** base channel flag to track overall working of the render engine */
+NOBUG_CPP_DEFINE_FLAG_PARENT    (  render,                      logging);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (  config,                      logging);       //TODO: here seems to be an ambiguity weather "config" should denote the global config channel or the config-loder internals
+
 /** base flag for software testing */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  test,                        logging);
 /** base flag for syncronization logging */

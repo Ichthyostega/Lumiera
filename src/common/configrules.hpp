@@ -49,7 +49,7 @@
 #include "lib/p.hpp"
 #include "lib/query.hpp"
 #include "lib/meta/generator.hpp"
-#include "lib/singletonsubclass.hpp"
+#include "lib/singleton-subclass.hpp"
 
 //TODO: is it sensible to bring in the types explicitly here? (it's not necessary, but may be convenient...)
 #include "proc/mobject/session/track.hpp"

@@ -47,7 +47,7 @@ namespace asset
     {
     using mobject::Session;
     using lumiera::Query;
-    using lumiera::query::normalizeID;
+    using lumiera::query::normaliseID;
     
     using lumiera::ConfigRules;               ////TODO just temp
     using lumiera::query::QueryHandler;      ////TODO just temp
@@ -82,8 +82,8 @@ namespace asset
             string pipeID   = isnil(arg)?  "Black Hole" : arg[1];
             string streamID = 2>arg.size()? "teststream" : arg[2] ;
             
-            normalizeID (pipeID);
-            normalizeID (streamID);
+            normaliseID (pipeID);
+            normaliseID (streamID);
             
             retrieveSimpleDefault (pipeID);
             retrieveConstrainedDefault (pipeID, streamID);

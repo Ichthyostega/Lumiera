@@ -25,14 +25,14 @@
 #include "proc/assetmanager.hpp"
 #include "lib/util.hpp"
 
-#include <boost/function.hpp>
 #include <boost/format.hpp>
-#include <boost/bind.hpp>
+#include <tr1/functional>
 
 
-using boost::bind;
+using std::tr1::function;
+using std::tr1::placeholders::_1;
+using std::tr1::bind;
 using boost::format;
-using boost::function;
 using util::contains;
 using util::removeall;
 using util::for_each;
@@ -44,13 +44,13 @@ namespace asset {
   
   using ::NOBUG_FLAG(memory);
   NOBUG_CPP_DEFINE_FLAG_PARENT(assetmem,  memory);
-
-
+  
+  
   Asset::Ident::Ident(const string& n, const Category& cat, const string& o, const uint ver) 
-    :   name(util::sanitize (n)), 
+    :   name(util::sanitise (n)), 
         category(cat), org(o), version(ver)
   { }
-
+  
   
   /** Asset is a Interface class; usually, objects of 
    *  concrete subclasses are created via specialized Factories
@@ -147,7 +147,7 @@ namespace asset {
   void 
   Asset::unlink ()
   {
-    function<void(PAsset&)> forget_me = bind(&Asset::unregister, this,_1);
+    function<void(PAsset&)> forget_me = bind(&Asset::unregister, this, _1);
     
     for_each (parents, forget_me);
     dependants.clear();

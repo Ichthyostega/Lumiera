@@ -46,7 +46,7 @@ namespace asset {
     using mobject::Session;
     using lumiera::Symbol;
     using lumiera::Query;
-    using lumiera::query::normalizeID;
+    using lumiera::query::normaliseID;
     
     using lumiera::ConfigRules;
     using lumiera::query::QueryHandler;

@@ -41,7 +41,7 @@ namespace asset
       const Asset::Ident
       createClipIdent (const Media& mediaref)
         {
-          string name (mediaref.ident.name + "-clip");  // TODO something sensible here; append number, sanitize etc.
+          string name (mediaref.ident.name + "-clip");  // TODO something sensible here; append number, sanitise etc.
           Category category (mediaref.ident.category);
           category.setPath(CLIP_SUBFOLDER);
           return Asset::Ident (name, category, 

@@ -16,10 +16,11 @@
 <!-- ============================================================= -->
 
 <a name="refclass131333"></a>
-<p>Declaration :</p><ul><li>C++ : class RenderEngine : public <a href="class131461.html#refclass131461"><b>Processor</b></a> </li></ul><p>Artifact : <a href="index.html#refartifact131973"><b>renderengine</b></a></p><div class="sub">
+<p>Declaration :</p><ul><li>C++ : class RenderEngine : public <a href="class131461.html#refclass131461"><b>RenderGraph</b></a> </li></ul><p>Artifact : <a href="index.html#refartifact131973"><b>renderengine</b></a></p><div class="sub">
 <a name="refoperation129413"></a>
-<table><tr><td><div class="element">Operation <b>play</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + play() : void</li><li>C++ : public: void play () </li></ul><p>TODO: will probably be handled differently (see Cehteh)<br /></p><a name="refrelation132485"></a>
-<table><tr><td><div class="element">Relation <b>renderSegments (&lt;directional aggregation by value&gt;)</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : - renderSegments : <a href="class131461.html#refclass131461"><b>Processor</b></a>, multiplicity : 0..*</li><li>C++ : private: list&lt;<a href="class131461.html#refclass131461"><b>Processor</b></a>&gt; renderSegments</li></ul></div>
+<table><tr><td><div class="element">Operation <b>play</b></div></td></tr></table><p>TODO: will probably be handled differently (see Cehteh)<br /></p><p>Declaration :</p><ul><li>Uml : + play() : void</li><li>C++ : public: void play () </li></ul><a name="refrelation132485"></a>
+<table><tr><td><div class="element">Relation <b>renderSegments (&lt;directional composition&gt;)</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : - renderSegments : <a href="class131461.html#refclass131461"><b>RenderGraph</b></a>, multiplicity : 0..*</li><li>C++ : private: list&lt;<a href="class131461.html#refclass131461"><b>RenderGraph</b></a>&gt; renderSegments</li></ul><p>Stereotype: list</p>
+</div>
 <p>All public operations : <a href="class131333.html#refoperation129413"><b>play</b></a> </p>
 </body>
 </html>

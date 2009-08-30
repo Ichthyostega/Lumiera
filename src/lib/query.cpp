@@ -52,9 +52,9 @@ namespace lumiera {
     
     
     void
-    normalizeID (string& id)
+    normaliseID (string& id)
     {
-      id = util::sanitize(id);
+      id = util::sanitise(id);
       if (isnil(id) || !is_alpha (id[0]))
         id.insert(0, "o");
       

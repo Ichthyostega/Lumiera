@@ -44,8 +44,7 @@
 
 
 
-namespace asset
-  {
+namespace asset {
   
   class Clip;
   class Media;
@@ -138,7 +137,7 @@ namespace asset
   
   
   /** 
-   * Factory specialized for creating Media Asset objects.
+   * Factory specialised for creating Media Asset objects.
    */ 
   class MediaFactory : public lumiera::Factory<asset::Media>
     {
@@ -149,7 +148,7 @@ namespace asset
       PType operator() (const string& file, const Category& cat);
       PType operator() (const string& file, asset::Kind);
       
-      PType operator() (Asset::Ident& key, const char* file);  ///< convienience overload using C-String
+      PType operator() (Asset::Ident& key, const char* file);  ///< convenience overload using C-String
       PType operator() (const char* file, const Category& cat);
       PType operator() (const char* file, asset::Kind);
       

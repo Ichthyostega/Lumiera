@@ -26,7 +26,7 @@
 #include "lib/sync.hpp"
 #include "lib/error.hpp"
 #include "lib/singleton.hpp"
-#include "lib/functorutil.hpp"
+#include "lib/functor-util.hpp"
 #include "common/instancehandle.hpp"
 
 #include <boost/scoped_ptr.hpp>

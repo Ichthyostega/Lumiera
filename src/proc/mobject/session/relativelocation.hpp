@@ -24,55 +24,58 @@
 #ifndef MOBJECT_SESSION_RELATIVELOCATION_H
 #define MOBJECT_SESSION_RELATIVELOCATION_H
 
+#include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/session/locatingpin.hpp"
 
 
 
 
-namespace mobject
-  {
-  namespace session
+namespace mobject {
+namespace session {
+  
+  
+  /**
+   * @todo just a design sketch, nothing finished yet.
+   *       possibly to be reworked or phased out completely.
+   *       See Trac #100
+   */
+  class RelativeLocation : public LocatingPin
     {
-
-
-
-    class RelativeLocation : public LocatingPin
-      {
-        const PMO & anchor_;  ////////////TODO: ooooops, this is a nasty design problem!!!
-        
-      public:
-
-        /**
-         * the possible kinds of RelativePlacements
-         */
-        enum RelType
-        { SAMETIME    /**< place subject at the same time as the anchor  */
-        , ATTACH      /**< attach subject to anchor (e.g. an effect to a clip) */
-        };
-
-      protected:
-        RelativeLocation (const PMO& a, Time ofs) : anchor_(a), offset_(ofs) { }
-        friend class LocatingPin;
-
-        /** the kind of relation denoted by this Placement */
-        RelType relType;
-
-        /** Offset the actual position by this (time) value relative to the anchor point. */
-        Time offset_;
-        //TODO: suitable representation?
-        
-        
-        virtual void intersect (LocatingSolution&)  const;
-        
-        
-      public:
-        virtual RelativeLocation* clone ()  const;
-
+//        const PMO & anchor_;  ////////////TODO: ooooops, this is a nasty design problem!!!
+      
+      const PlaRef anchor_;
+      
+    public:
+      
+      /**
+       * the possible kinds of RelativePlacements
+       */
+      enum RelType
+      { SAMETIME    /**< place subject at the same time as the anchor  */
+      , ATTACH      /**< attach subject to anchor (e.g. an effect to a clip) */
       };
-
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
+      
+    protected:
+      RelativeLocation (PlaRef const& a, Time ofs) : anchor_(a), offset_(ofs) { }
+      friend class LocatingPin;
+      
+      /** the kind of relation denoted by this Placement */
+      RelType relType;
+      
+      /** Offset the actual position by this (time) value relative to the anchor point. */
+      Time offset_;
+      //TODO: suitable representation?
+      
+      
+      virtual void intersect (LocatingSolution&)  const;
+      
+      
+    public:
+      virtual RelativeLocation* clone ()  const;
+      
+    };
+  
+  
+  
+}} // namespace mobject::session
 #endif

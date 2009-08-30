@@ -27,7 +27,7 @@
 
 
 #include "lib/variant.hpp"
-#include "lib/accesscasted.hpp"
+#include "lib/access-casted.hpp"
 
 #include "lib/meta/typelist.hpp"
 #include "proc/mobject/placement.hpp"
@@ -51,9 +51,9 @@ namespace lumiera {
    * with the possible hierarchy-base classes used within this application.
    * Thus, when passing in an arbitrary smart-ptr, the best fitting smart-ptr
    * type pointing to the corresponding base class is selected for internal storage.
-   * Later on, stored values can be retrieved either utilitzing static or dynamic casts;
-   * error reporting is similar to the bahaviour of dynamic_cast<T>: when retrieving
-   * a pointer, in case of mismatch NULL is returned.
+   * Later on, stored values can be retrieved either utilising static or dynamic casts;
+   * error reporting is similar to the behaviour of dynamic_cast<T>: when retrieving
+   * a pointer, NULL is returned in case of mismatch.
    */
   typedef lumiera::Variant<WrapperTypes, util::AccessCasted> WrapperPtr;
   

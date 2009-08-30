@@ -20,9 +20,10 @@
 <p>Artifact : <a href="index.html#refartifact135813"><b>error</b></a>, Component(s) : <a href="index.html#refcomponent129925"><b>CommonLib</b></a></p><div class="sub">
 <a name="refoperation131845"></a>
 <table><tr><td><div class="element">Operation <b>what</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + what() : const char*</li><li>C++ : public: virtual const char* what () const </li></ul><a name="refoperation131973"></a>
-<table><tr><td><div class="element">Operation <b>rootCause</b></div></td></tr></table><p>Declaration :</p><ul><li>Uml : + rootCause() : std::exception</li><li>C++ : public: std::exception rootCause () </li></ul><p>If this exception was caused by a chain of further exceptions,<br />return the first one registered in this throw sequence.<br />This works only, if every exceptions thrown as a consequence<br />of another exception is propperly constructed by passing<br />the original exception to the constructor<br /></p><a name="refattribute130309"></a>
+<table><tr><td><div class="element">Operation <b>rootCause</b></div></td></tr></table><p>If this exception was caused by a chain of further exceptions,<br />return the first one registered in this throw sequence.<br />This works only, if every exceptions thrown as a consequence<br />of another exception is propperly constructed by passing<br />the original exception to the constructor<br /></p><p>Declaration :</p><ul><li>Uml : + rootCause() : std::exception</li><li>C++ : public: std::exception rootCause () </li></ul><a name="refattribute130309"></a>
 <table><tr><td><div class="element">Attribut <b>cause</b></div></td></tr></table>
-<p>Declaration :</p><ul><li>Uml : - cause : <a href="class136325.html#refclass136325"><b>std::exception</b></a></li><li>C++ : private: <a href="class136325.html#refclass136325"><b>std::exception</b></a> cause</li></ul><p>a copy of the first exception encountered in this exception chain<br /></p></div>
+<p>a copy of the first exception encountered in this exception chain<br /></p><p>Declaration :</p><ul><li>Uml : - cause : <a href="class136325.html#refclass136325"><b>std::exception</b></a></li><li>C++ : private: <a href="class136325.html#refclass136325"><b>std::exception</b></a> cause</li></ul><p>Stereotype: auto_ptr</p>
+</div>
 <p>All public operations : <a href="class135557.html#refoperation131973"><b>rootCause</b></a> , <a href="class135557.html#refoperation131845"><b>what</b></a> , <a href="class136325.html#refoperation131717"><b>what</b></a> </p>
 </body>
 </html>

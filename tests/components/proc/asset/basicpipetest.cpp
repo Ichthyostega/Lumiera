@@ -30,7 +30,7 @@
 #include "lib/query.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
-#include "proc/asset/assetdiagnostics.hpp"
+#include "proc/asset/asset-diagnostics.hpp"
 
 #include <boost/format.hpp>
 #include <iostream>
@@ -49,7 +49,7 @@ namespace asset
     {
     using mobject::Session;
     using lumiera::Query;
-    using lumiera::query::normalizeID;
+    using lumiera::query::normaliseID;
     
     
     
@@ -81,7 +81,7 @@ namespace asset
         void createExplicit (string pID, string sID)
           { 
             string pID_sane (pID);
-            normalizeID (pID_sane);
+            normaliseID (pID_sane);
             ASSERT (pID_sane != pID);
             
             PPipe thePipe = asset::Struct::create (pID,sID);
@@ -106,7 +106,7 @@ namespace asset
         
         void create_or_ref(string pID)
           { 
-            normalizeID (pID);
+            normaliseID (pID);
             
             PPipe pipe1 = Pipe::query ("pipe("+pID+")");
             ASSERT (pipe1);
@@ -121,7 +121,7 @@ namespace asset
             ASSERT (c1 == c2);
             
             PPipe pipe3 = Pipe::query ("pipe("+pID2+")");
-//////////////////////////////////////////////////////////////TODO: er macht eine Neue, anstatt die Bestehende zu finden            
+//////////////////////////////////////////////////////////////TODO: that's broken; creating a new one instead to find the existing one, as it should be            
             ASSERT (pipe3 == pipe2);
           }
         

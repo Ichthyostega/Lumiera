@@ -17,6 +17,12 @@ Documentation</title>
 <!-- ============================================================= -->
 
 <a name="refpackage129"></a>
+<p>Properties:<ul>
+<li>:<br /><div class="sub"></div></p></li>
+<li>CopyrightClaim:<br /><div class="sub"><br />  Copyright (C)         Lumiera.org<br />    2008,               Hermann Vosseler &lt;Ichthyostega@web.de&gt;<br /><br /></div></p></li>
+<li>GPLHeader:<br /><div class="sub">  This program is free software; you can redistribute it and/or<br />  modify it under the terms of the GNU General Public License as<br />  published by the Free Software Foundation; either version 2 of the<br />  License, or (at your option) any later version.<br /><br />  This program is distributed in the hope that it will be useful,<br />  but WITHOUT ANY WARRANTY; without even the implied warranty of<br />  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the<br />  GNU General Public License for more details.<br /><br />  You should have received a copy of the GNU General Public License<br />  along with this program; if not, write to the Free Software<br />  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.<br /></div></p></li>
+<li>html dir:<br /><div class="sub">/mnt/Lager/heim/devel/lumi/doc/devel/uml/</div></p></li>
+</ul></p>
 <a name="refpackage128005"></a>
 <h1 class ="package">1 Package design</h1>
 <p>All things concering the big picture.<br />Not a real code package, rather a container for design drafts, specifications, decisions.<br /></p><div class="sub">
@@ -32,26 +38,32 @@ Documentation</title>
 <p>provided classes : <a href="class135557.html#refclass135557"><b>Error</b></a>, <a href="class134917.html#refclass134917"><b>Time</b></a></p>
 <a name="refcomponent128005"></a>
 <table><tr><td><div class="element">Component <b>Builder</b></div></td></tr></table>
+<p>Stereotype: subsystem</p>
 <p>provided classes : <a href="class132741.html#refclass132741"><b>State</b></a></p>
 <p>required classes : <a href="class128261.html#refclass128261"><b>Fixture</b></a>, <a href="class128005.html#refclass128005"><b>SessionImpl</b></a></p>
 <a name="refcomponent128133"></a>
 <table><tr><td><div class="element">Component <b>Session</b></div></td></tr></table>
+<p>Stereotype: subsystem</p>
 <p>provided classes : <a href="class128133.html#refclass128133"><b>Seq</b></a>, <a href="class128261.html#refclass128261"><b>Fixture</b></a>, <a href="class128517.html#refclass128517"><b>MObject</b></a>, <a href="class134661.html#refclass134661"><b>ParamProvider</b></a>, <a href="class128005.html#refclass128005"><b>SessionImpl</b></a></p>
 <div class="sub">
 <a name="refcomponent128389"></a>
 <table><tr><td><div class="element">Component <b>EDL</b></div></td></tr></table>
+<p>Stereotype: entity</p>
 <p>nested in <a href="index.html#refcomponent128133"><b>Session</b></a></p>
 <a name="refcomponent128517"></a>
 <table><tr><td><div class="element">Component <b>Fixture</b></div></td></tr></table>
+<p>Stereotype: entity</p>
 <p>nested in <a href="index.html#refcomponent128133"><b>Session</b></a></p>
 </div>
 <a name="refcomponent128261"></a>
 <table><tr><td><div class="element">Component <b>Controller</b></div></td></tr></table>
-<p>Depends on <a href="index.html#refcomponent128005"><b>Builder</b></a></p><p>provided classes : <a href="class130565.html#refclass130565"><b>BuilderFacade</b></a></p>
+<p>Depends on <a href="index.html#refcomponent128005"><b>Builder</b></a></p><p>Stereotype: subsystem</p>
+<p>provided classes : <a href="class130565.html#refclass130565"><b>BuilderFacade</b></a></p>
 <div class="sub">
 </div>
 <a name="refcomponent128645"></a>
 <table><tr><td><div class="element">Component <b>AssetManagement</b></div></td></tr></table>
+<p>Stereotype: subsystem</p>
 <a name="refcomponent128773"></a>
 <table><tr><td><div class="element">Component <b>Dispatcher</b></div></td></tr></table>
 <p>provided classes : <a href="class141957.html#refclass141957"><b>ProcDispatcher</b></a></p>
@@ -61,6 +73,7 @@ Documentation</title>
 <div class="sub">
 <a name="refcomponent130053"></a>
 <table><tr><td><div class="element">Component <b>ProcNode</b></div></td></tr></table>
+<p>Stereotype: entity</p>
 <p>nested in <a href="index.html#refcomponent128901"><b>Engine</b></a></p>
 <p>provided classes : <a href="class134533.html#refclass134533"><b>Parameter</b></a></p>
 <p>required classes : <a href="class134661.html#refclass134661"><b>ParamProvider</b></a></p>
@@ -76,9 +89,11 @@ Documentation</title>
 <p>provided classes : <a href="class130437.html#refclass130437"><b>PathManager</b></a></p>
 <a name="refcomponent130181"></a>
 <table><tr><td><div class="element">Component <b>MediaFactory</b></div></td></tr></table>
+<p>Stereotype: component</p>
 <p>required classes : <a href="class139525.html#refclass139525"><b>MediaAccessFacade</b></a></p>
 <a name="refcomponent130309"></a>
 <table><tr><td><div class="element">Component <b>AssetDB</b></div></td></tr></table>
+<p>Stereotype: service</p>
 <a name="refcomponent131077"></a>
 <table><tr><td><div class="element">Component <b>client code</b></div></td></tr></table>
 <p>required classes : <a href="class141957.html#refclass141957"><b>ProcDispatcher</b></a></p>
@@ -108,12 +123,14 @@ Documentation</title>
 <p>required classes : <a href="class130565.html#refclass130565"><b>BuilderFacade</b></a>, <a href="class130437.html#refclass130437"><b>PathManager</b></a></p>
 <a name="refcomponent129797"></a>
 <table><tr><td><div class="element">Component <b>ConManager</b></div></td></tr></table>
+<p>Stereotype: component</p>
 <p>required classes : <a href="class134661.html#refclass134661"><b>ParamProvider</b></a></p>
 <a name="refcomponent diagram130693"></a>
 <p align="center"><img src="fig130693.png" alt="" /></p>
  <p align="center"><b>backend-components</b></p><p><br /></p><p><br /></p>
 <a name="refcomponent130437"></a>
 <table><tr><td><div class="element">Component <b>Media Access</b></div></td></tr></table>
+<p>Stereotype: service</p>
 <p>provided classes : <a href="class139525.html#refclass139525"><b>MediaAccessFacade</b></a></p>
 </div>
 <a name="refpackage128645"></a>
@@ -128,18 +145,21 @@ Documentation</title>
  <p align="center"><b>Source Overview</b></p><p><br /></p><p><br /></p>
 <a name="refartifact128005"></a>
 <table><tr><td><div class="element">Artifact <b>Lumiera</b></div></td></tr></table>
-<p>Depends on <a href="index.html#refpackage129413"><b>common</b></a></p><p>Depends on <a href="index.html#refpackage129797"><b>gui</b></a></p><p>Depends on <a href="index.html#refpackage129669"><b>proc</b></a></p><p>Depends on <a href="index.html#refpackage129541"><b>backend</b></a></p><p>the main executable to be built<br /></p>
-<p><i>executable</i> associated with : <a href="index.html#refartifact131589"><b>controllerfacade</b></a>, <a href="index.html#refartifact132101"><b>processor</b></a>, <a href="index.html#refartifact133125"><b>pluginadapter</b></a>, <a href="index.html#refartifact129541"><b>effect</b></a>, <a href="index.html#refartifact131205"><b>buildertool</b></a>, <a href="index.html#refartifact131333"><b>segmentationtool</b></a>, <a href="index.html#refartifact133893"><b>aframe</b></a>, <a href="index.html#refartifact130821"><b>assembler</b></a>, <a href="index.html#refartifact132485"><b>trafo</b></a>, <a href="index.html#refartifact129157"><b>explicitplacement</b></a>, <a href="index.html#refartifact130309"><b>auto</b></a>, <a href="index.html#refartifact133637"><b>glrender</b></a>, <a href="index.html#refartifact132613"><b>link</b></a>, <a href="index.html#refartifact134405"><b>parameter</b></a>, <a href="index.html#refartifact131973"><b>renderengine</b></a>, <a href="index.html#refartifact130053"><b>allocation</b></a>, <a href="index.html#refartifact134021"><b>vframe</b></a>, <a href="index.html#refartifact130565"><b>toolfactory</b></a>, <a href="index.html#refartifact133381"><b>arender</b></a>, <a href="index.html#refartifact131845"><b>renderstate</b></a>, <a href="index.html#refartifact130181"><b>label</b></a>, <a href="index.html#refartifact134149"><b>glbuf</b></a>, <a href="index.html#refartifact132357"><b>procnode</b></a>, <a href="index.html#refartifact130949"><b>stateproxy</b></a>, <a href="index.html#refartifact132741"><b>hub</b></a>, <a href="index.html#refartifact131077"><b>buildable</b></a>, <a href="index.html#refartifact129285"><b>abstractmo</b></a>, <a href="index.html#refartifact131461"><b>nodecreatertool</b></a>, <a href="index.html#refartifact132869"><b>projector</b></a>, <a href="index.html#refartifact134661"><b>interpolator</b></a>, <a href="index.html#refartifact128645"><b>edl</b></a>, <a href="index.html#refartifact128773"><b>fixture</b></a>, <a href="index.html#refartifact133253"><b>glpipe</b></a>, <a href="index.html#refartifact133509"><b>vrender</b></a>, <a href="index.html#refartifact132229"><b>exitnode</b></a>, <a href="index.html#refartifact131717"><b>pathmanager</b></a>, <a href="index.html#refartifact128901"><b>track</b></a>, <a href="index.html#refartifact134533"><b>paramprovider</b></a>, <a href="index.html#refartifact132997"><b>mask</b></a>, <a href="index.html#refartifact128133"><b>main</b></a>, <a href="index.html#refartifact130693"><b>conmanager</b></a>, <a href="index.html#refartifact129413"><b>clip</b></a>, <a href="index.html#refartifact129669"><b>meta</b></a>, <a href="index.html#refartifact129797"><b>fixedlocation</b></a>, <a href="index.html#refartifact129925"><b>relativelocation</b></a>, <a href="index.html#refartifact128261"><b>mobject</b></a>, <a href="index.html#refartifact134277"><b>source</b></a>, <a href="index.html#refartifact133765"><b>frame</b></a>, <a href="index.html#refartifact129029"><b>placement</b></a>, <a href="index.html#refartifact128517"><b>sessionimpl</b></a>, <a href="index.html#refartifact130437"><b>builderfacade</b></a></p>
+<p>the main executable to be built<br /></p>
+<p>Depends on <a href="index.html#refpackage129413"><b>common</b></a></p><p>Depends on <a href="index.html#refpackage129797"><b>gui</b></a></p><p>Depends on <a href="index.html#refpackage129669"><b>proc</b></a></p><p>Depends on <a href="index.html#refpackage129541"><b>backend</b></a></p><p>Stereotype: executable</p>
+<p><i>executable</i> associated with : <a href="index.html#refartifact130053"><b>allocation</b></a>, <a href="index.html#refartifact134021"><b>vframe</b></a>, <a href="index.html#refartifact130565"><b>toolfactory</b></a>, <a href="index.html#refartifact132741"><b>hub</b></a>, <a href="index.html#refartifact131077"><b>buildable</b></a>, <a href="index.html#refartifact129285"><b>abstractmo</b></a>, <a href="index.html#refartifact132229"><b>exitnode</b></a>, <a href="index.html#refartifact131717"><b>pathmanager</b></a>, <a href="index.html#refartifact128901"><b>track</b></a>, <a href="index.html#refartifact129669"><b>meta</b></a>, <a href="index.html#refartifact129797"><b>fixedlocation</b></a>, <a href="index.html#refartifact129925"><b>relativelocation</b></a>, <a href="index.html#refartifact131589"><b>controllerfacade</b></a>, <a href="index.html#refartifact132101"><b>rendergraph</b></a>, <a href="index.html#refartifact133125"><b>pluginadapter</b></a>, <a href="index.html#refartifact129157"><b>explicitplacement</b></a>, <a href="index.html#refartifact130309"><b>auto</b></a>, <a href="index.html#refartifact133637"><b>glrender</b></a>, <a href="index.html#refartifact133381"><b>arender</b></a>, <a href="index.html#refartifact131845"><b>renderstate</b></a>, <a href="index.html#refartifact130181"><b>label</b></a>, <a href="index.html#refartifact131461"><b>nodecreatertool</b></a>, <a href="index.html#refartifact132869"><b>projector</b></a>, <a href="index.html#refartifact134661"><b>interpolator</b></a>, <a href="index.html#refartifact134533"><b>paramprovider</b></a>, <a href="index.html#refartifact132997"><b>mask</b></a>, <a href="index.html#refartifact128261"><b>mobject</b></a>, <a href="index.html#refartifact134277"><b>source</b></a>, <a href="index.html#refartifact133765"><b>frame</b></a>, <a href="index.html#refartifact129541"><b>effect</b></a>, <a href="index.html#refartifact131205"><b>buildertool</b></a>, <a href="index.html#refartifact131333"><b>segmentationtool</b></a>, <a href="index.html#refartifact132613"><b>link</b></a>, <a href="index.html#refartifact134405"><b>parameter</b></a>, <a href="index.html#refartifact131973"><b>renderengine</b></a>, <a href="index.html#refartifact134149"><b>glbuf</b></a>, <a href="index.html#refartifact132357"><b>procnode</b></a>, <a href="index.html#refartifact130949"><b>stateproxy</b></a>, <a href="index.html#refartifact128645"><b>edl</b></a>, <a href="index.html#refartifact128773"><b>fixture</b></a>, <a href="index.html#refartifact133253"><b>glpipe</b></a>, <a href="index.html#refartifact128133"><b>main</b></a>, <a href="index.html#refartifact130693"><b>conmanager</b></a>, <a href="index.html#refartifact129413"><b>clip</b></a>, <a href="index.html#refartifact133509"><b>vrender</b></a>, <a href="index.html#refartifact129029"><b>placement</b></a>, <a href="index.html#refartifact128517"><b>sessionimpl</b></a>, <a href="index.html#refartifact130437"><b>builderfacade</b></a>, <a href="index.html#refartifact133893"><b>aframe</b></a>, <a href="index.html#refartifact130821"><b>assembler</b></a>, <a href="index.html#refartifact132485"><b>trafo</b></a></p>
 <a name="refartifact128133"></a>
 <table><tr><td><div class="element">Artifact <b>main</b></div></td></tr></table>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i></p>
 </div>
 <a name="refpackage129413"></a>
 <h3 class ="package">1.4.2 Package common</h3>
-<p></p><ul>
+<p>sourcecode package<br /><br />Common library and helper classes<br /></p><p></p><ul>
 <li>C++ namespace : lumiera</li>
 </ul>
-<p>sourcecode package<br /><br />Common library and helper classes<br /></p><p>Diagram : <a href="index.html#refdeployment diagram129797"><b>Source Overview</b></a></p>
+<p>Diagram : <a href="index.html#refdeployment diagram129797"><b>Source Overview</b></a></p>
+<p>Stereotype: src</p>
 <div class="sub">
 <a name="refdeployment view128261"></a>
 <h4 class ="view">1.4.2.1 Deployment View gen</h4>
@@ -148,55 +168,63 @@ Documentation</title>
 <a name="refartifact139141"></a>
 <table><tr><td><div class="element">Artifact <b>visitor</b></div></td></tr></table>
 <p>Acyclic Visitor library<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class140165.html#refclass140165"><b>Visitable</b></a>, <a href="class140037.html#refclass140037"><b>Tool</b></a>, <a href="class140293.html#refclass140293"><b>Applicable</b></a></p>
 <a name="refartifact135813"></a>
 <table><tr><td><div class="element">Artifact <b>error</b></div></td></tr></table>
 <p>Lumiera Exception Interface<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class135557.html#refclass135557"><b>Error</b></a>, <a href="class135685.html#refclass135685"><b>Logic</b></a>, <a href="class135813.html#refclass135813"><b>Config</b></a>, <a href="class135941.html#refclass135941"><b>State</b></a>, <a href="class136069.html#refclass136069"><b>Invalid</b></a>, <a href="class136197.html#refclass136197"><b>External</b></a></p>
 <a name="refartifact135173"></a>
 <table><tr><td><div class="element">Artifact <b>appconfig</b></div></td></tr></table>
 <p>for global initialization and configuration <br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class135429.html#refclass135429"><b>Appconfig</b></a></p>
 <a name="refartifact134789"></a>
 <table><tr><td><div class="element">Artifact <b>time</b></div></td></tr></table>
 <p>unified representation of a time point, including conversion functions<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class134917.html#refclass134917"><b>Time</b></a></p>
 <a name="refartifact139653"></a>
 <table><tr><td><div class="element">Artifact <b>streamtype</b></div></td></tr></table>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class144773.html#refclass144773"><b>StreamType</b></a>, <a href="class144901.html#refclass144901"><b>Prototype</b></a>, <a href="class145029.html#refclass145029"><b>ImplFacade</b></a></p>
 </div>
 <a name="refpackage130821"></a>
 <h4 class ="package">1.4.2.2 Package error</h4>
-<p></p><ul>
+<p>Namespace for Exception Kinds<br /></p><p></p><ul>
 <li>C++ namespace : lumiera::error</li>
 </ul>
-<p>Namespace for Exception Kinds<br /></p><a name="refpackage130949"></a>
+<a name="refpackage130949"></a>
 <h4 class ="package">1.4.2.3 Package visitor</h4>
-<p></p><ul>
+<p>sub-namespace for visitor library implementation<br /></p><p></p><ul>
 <li>C++ namespace : lumiera::visitor</li>
 </ul>
-<p>sub-namespace for visitor library implementation<br /></p></div>
+</div>
 <a name="refpackage129541"></a>
 <h3 class ="package">1.4.3 Package backend</h3>
-<p></p><ul>
+<p>sourcecode package<br /><br />Data backend classes here...<br /></p><p></p><ul>
 <li>C++ namespace : backend_interface</li>
 </ul>
-<p>sourcecode package<br /><br />Data backend classes here...<br /></p><div class="sub">
+<p>Stereotype: src</p>
+<div class="sub">
 <a name="refdeployment view128389"></a>
 <h4 class ="view">1.4.3.1 Deployment View gen</h4>
 <div class="sub">
 <a name="refartifact138629"></a>
 <table><tr><td><div class="element">Artifact <b>mediaaccessfacade</b></div></td></tr></table>
 <p>functions for querying media file and channels.<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class139525.html#refclass139525"><b>MediaAccessFacade</b></a></p>
 </div>
 </div>
 <a name="refpackage129669"></a>
 <h3 class ="package">1.4.4 Package proc</h3>
-<p></p><ul>
+<p>sourcecode package<br /><br />All classes belonging to the (middle) processing layer<br /></p><p></p><ul>
 <li>C++ namespace : proc_interface</li>
 </ul>
-<p>sourcecode package<br /><br />All classes belonging to the (middle) processing layer<br /></p><div class="sub">
+<p>Stereotype: src</p>
+<div class="sub">
 <a name="refdeployment view128517"></a>
 <h4 class ="view">1.4.4.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
@@ -204,30 +232,36 @@ Documentation</title>
 <a name="refartifact136197"></a>
 <table><tr><td><div class="element">Artifact <b>assetmanager</b></div></td></tr></table>
 <p>Facade for the Asset subsystem<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class136581.html#refclass136581"><b>AssetManager</b></a></p>
 <a name="refartifact136069"></a>
 <table><tr><td><div class="element">Artifact <b>asset</b></div></td></tr></table>
 <p>Superinterface: bookeeping view of "things" present in the session<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class136453.html#refclass136453"><b>Asset</b></a></p>
 <a name="refartifact130949"></a>
 <table><tr><td><div class="element">Artifact <b>stateproxy</b></div></td></tr></table>
 <p>Key Interface representing a render process and encapsulating state<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class132741.html#refclass132741"><b>State</b></a></p>
 <a name="refartifact131589"></a>
 <table><tr><td><div class="element">Artifact <b>controllerfacade</b></div></td></tr></table>
 <p>Facade and service access point for the Proc Layer Controller<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class130309.html#refclass130309"><b>ControllerFacade</b></a></p>
 <a name="refartifact133765"></a>
 <table><tr><td><div class="element">Artifact <b>frame</b></div></td></tr></table>
 <p>Key Abstraction: render process and buffer holding frame data.<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class133253.html#refclass133253"><b>Frame</b></a></p>
 </div>
 <a name="refpackage130053"></a>
 <h4 class ="package">1.4.4.2 Package asset</h4>
-<p></p><ul>
+<p>sourcecode package<br /><br />Asset Management<br /></p><p></p><ul>
 <li>C++ namespace : asset</li>
 </ul>
-<p>sourcecode package<br /><br />Asset Management<br /></p><div class="sub">
+<p>Stereotype: src</p>
+<div class="sub">
 <a name="refdeployment view128645"></a>
 <h4 class ="view">1.4.4.2.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
@@ -235,79 +269,97 @@ Documentation</title>
 <a name="refartifact137733"></a>
 <table><tr><td><div class="element">Artifact <b>dataset</b></div></td></tr></table>
 <p>meta asset describing a collection of control data<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class138245.html#refclass138245"><b>Dataset</b></a></p>
 <a name="refartifact135941"></a>
 <table><tr><td><div class="element">Artifact <b>category</b></div></td></tr></table>
 <p>tree like classification of Assets<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class137221.html#refclass137221"><b>Category</b></a></p>
 <a name="refartifact136453"></a>
 <table><tr><td><div class="element">Artifact <b>media</b></div></td></tr></table>
 <p>key abstraction: media-like assets<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class136709.html#refclass136709"><b>Media</b></a>, <a href="class139397.html#refclass139397"><b>MediaFactory</b></a></p>
 <a name="refartifact136581"></a>
 <table><tr><td><div class="element">Artifact <b>proc</b></div></td></tr></table>
 <p>key abstraction: media-like assets<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class136837.html#refclass136837"><b>Proc</b></a></p>
 <a name="refartifact136709"></a>
 <table><tr><td><div class="element">Artifact <b>struct</b></div></td></tr></table>
 <p>key abstraction: structural asset<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class136965.html#refclass136965"><b>Struct</b></a></p>
 <a name="refartifact136837"></a>
 <table><tr><td><div class="element">Artifact <b>meta</b></div></td></tr></table>
 <p>key abstraction: metadata and organisational asset<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class137093.html#refclass137093"><b>Meta</b></a></p>
 <a name="refartifact136325"></a>
 <table><tr><td><div class="element">Artifact <b>clip</b></div></td></tr></table>
 <p>bookkeeping (asset) view of a media clip.<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class137349.html#refclass137349"><b>Clip</b></a></p>
 <a name="refartifact138245"></a>
 <table><tr><td><div class="element">Artifact <b>compoundmedia</b></div></td></tr></table>
 <p>a special clip as a compound of several elementary media tracks,<br />e.g. the individual media streams found in one media file<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class138501.html#refclass138501"><b>CompoundMedia</b></a></p>
 <a name="refartifact136965"></a>
 <table><tr><td><div class="element">Artifact <b>preview</b></div></td></tr></table>
 <p>alternative version of the media data, probably with lower resolution<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class137605.html#refclass137605"><b>Preview</b></a></p>
 <a name="refartifact137093"></a>
 <table><tr><td><div class="element">Artifact <b>unknown</b></div></td></tr></table>
 <p>placeholder for unknown or unavailable media source<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class137477.html#refclass137477"><b>Unknown</b></a></p>
 <a name="refartifact137221"></a>
 <table><tr><td><div class="element">Artifact <b>effect</b></div></td></tr></table>
 <p>Effect or media processing component<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class137733.html#refclass137733"><b>Effect</b></a></p>
 <a name="refartifact137349"></a>
 <table><tr><td><div class="element">Artifact <b>codec</b></div></td></tr></table>
 <p>description of some media data decoder or encoder facility<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class137861.html#refclass137861"><b>Codec</b></a></p>
 <a name="refartifact137605"></a>
 <table><tr><td><div class="element">Artifact <b>pipe</b></div></td></tr></table>
 <p>structural asset corresponding to some port generating media output<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class138117.html#refclass138117"><b>Pipe</b></a></p>
 <a name="refartifact137477"></a>
 <table><tr><td><div class="element">Artifact <b>track</b></div></td></tr></table>
 <p>structural asset holding the configuration of a track in the EDL<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class137989.html#refclass137989"><b>Track</b></a></p>
 <a name="refartifact137989"></a>
 <table><tr><td><div class="element">Artifact <b>procpatt</b></div></td></tr></table>
 <p>template for building some render processing network<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class138757.html#refclass138757"><b>ProcPatt</b></a></p>
 <a name="refartifact138117"></a>
 <table><tr><td><div class="element">Artifact <b>buildinstruct</b></div></td></tr></table>
 <p>Instructions for building some configuration of render nodes.<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class139013.html#refclass139013"><b>BuildInstruct</b></a>, <a href="class139269.html#refclass139269"><b>DoRecurse</b></a>, <a href="class139141.html#refclass139141"><b>DoAttach</b></a></p>
 <a name="refartifact137861"></a>
 <table><tr><td><div class="element">Artifact <b>db</b></div></td></tr></table>
 <p>registry holding known Asset instances.<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class138373.html#refclass138373"><b>DB</b></a></p>
 </div>
 </div>
 <a name="refpackage130693"></a>
 <h4 class ="package">1.4.4.3 Package control</h4>
-<p></p><ul>
+<p>sourcecode package<br /><br />The Processing and Render Controller,<br />and the Proc-Layer dispatcher<br /></p><p></p><ul>
 <li>C++ namespace : control</li>
 </ul>
-<p>sourcecode package<br /><br />The Processing and Render Controller,<br />and the Proc-Layer dispatcher<br /></p><div class="sub">
+<p>Stereotype: src</p>
+<div class="sub">
 <a name="refdeployment view129157"></a>
 <h4 class ="view">1.4.4.3.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
@@ -315,22 +367,26 @@ Documentation</title>
 <a name="refartifact131717"></a>
 <table><tr><td><div class="element">Artifact <b>pathmanager</b></div></td></tr></table>
 <p>Manager for deciding the actual render strategy<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class130437.html#refclass130437"><b>PathManager</b></a></p>
 <a name="refartifact131845"></a>
 <table><tr><td><div class="element">Artifact <b>renderstate</b></div></td></tr></table>
 <p>renderengine state manager<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class130949.html#refclass130949"><b>RenderState</b></a></p>
 <a name="refartifact139781"></a>
 <table><tr><td><div class="element">Artifact <b>stypemanager</b></div></td></tr></table>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class145413.html#refclass145413"><b>STypeManager</b></a></p>
 </div>
 </div>
 <a name="refpackage130181"></a>
 <h4 class ="package">1.4.4.4 Package mobject</h4>
-<p></p><ul>
+<p>sourcecode package<br /><br />MObject Subsystem<br />including the Session (EDL), Builder and Processing Controller<br /></p><p></p><ul>
 <li>C++ namespace : mobject</li>
 </ul>
-<p>sourcecode package<br /><br />MObject Subsystem<br />including the Session (EDL), Builder and Processing Controller<br /></p><div class="sub">
+<p>Stereotype: src</p>
+<div class="sub">
 <a name="refdeployment view128773"></a>
 <h4 class ="view">1.4.4.4.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
@@ -338,46 +394,56 @@ Documentation</title>
 <a name="refartifact138757"></a>
 <table><tr><td><div class="element">Artifact <b>session</b></div></td></tr></table>
 <p>Interface: the session edited by the user<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class139653.html#refclass139653"><b>Session</b></a></p>
 <a name="refartifact128261"></a>
 <table><tr><td><div class="element">Artifact <b>mobject</b></div></td></tr></table>
 <p>Key Abstraction: A Media Object in the Session<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class128517.html#refclass128517"><b>MObject</b></a></p>
 <a name="refartifact129029"></a>
 <table><tr><td><div class="element">Artifact <b>placement</b></div></td></tr></table>
 <p>Key Abstraction: a way to place and locate a Media Object<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class128645.html#refclass128645"><b>Placement</b></a></p>
 <a name="refartifact129157"></a>
 <table><tr><td><div class="element">Artifact <b>explicitplacement</b></div></td></tr></table>
 <p>special Placement yielding an absolute location (Time,Track)-location for a MObject<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class129797.html#refclass129797"><b>ExplicitPlacement</b></a></p>
 <a name="refartifact130437"></a>
 <table><tr><td><div class="element">Artifact <b>builderfacade</b></div></td></tr></table>
 <p>Facade and service access point for the Builder Subsystem<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class130565.html#refclass130565"><b>BuilderFacade</b></a></p>
 <a name="refartifact131077"></a>
 <table><tr><td><div class="element">Artifact <b>buildable</b></div></td></tr></table>
 <p>marker interface denoting any MObject able to be treated by Tools<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class134021.html#refclass134021"><b>Buildable</b></a></p>
 <a name="refartifact134405"></a>
 <table><tr><td><div class="element">Artifact <b>parameter</b></div></td></tr></table>
 <p>representation of an automatable effect/plugin parameter<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class134533.html#refclass134533"><b>Parameter</b></a></p>
 <a name="refartifact134533"></a>
 <table><tr><td><div class="element">Artifact <b>paramprovider</b></div></td></tr></table>
 <p>interface denoting a source for actual Parameter values<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class134661.html#refclass134661"><b>ParamProvider</b></a></p>
 <a name="refartifact134661"></a>
 <table><tr><td><div class="element">Artifact <b>interpolator</b></div></td></tr></table>
 <p>denotes a facility to get (continuously interpolated) parameter values<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class134789.html#refclass134789"><b>Interpolator</b></a></p>
 </div>
 <a name="refpackage130437"></a>
 <h4 class ="package">1.4.4.4.2 Package session</h4>
-<p></p><ul>
+<p>sourcecode package<br /><br />Everything concerning the EDL and Session, within the MObject Subsystem<br /></p><p></p><ul>
 <li>C++ namespace : mobject::session</li>
 </ul>
-<p>sourcecode package<br /><br />Everything concerning the EDL and Session, within the MObject Subsystem<br /></p><div class="sub">
+<p>Stereotype: src</p>
+<div class="sub">
 <a name="refdeployment view128901"></a>
 <h4 class ="view">1.4.4.4.2.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
@@ -385,93 +451,115 @@ Documentation</title>
 <a name="refartifact128517"></a>
 <table><tr><td><div class="element">Artifact <b>sessionimpl</b></div></td></tr></table>
 <p>holds the complete session data to be edited by the user<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class128005.html#refclass128005"><b>SessionImpl</b></a></p>
 <a name="refartifact138885"></a>
 <table><tr><td><div class="element">Artifact <b>sessmanager</b></div></td></tr></table>
 <p>global session access and lifecycle<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class139781.html#refclass139781"><b>SessManager</b></a></p>
 <a name="refartifact128645"></a>
 <table><tr><td><div class="element">Artifact <b>edl</b></div></td></tr></table>
 <p>the (high level) Edit Decision List within the current Session<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class128133.html#refclass128133"><b>Seq</b></a></p>
 <a name="refartifact128773"></a>
 <table><tr><td><div class="element">Artifact <b>fixture</b></div></td></tr></table>
 <p>the (low level) representation of the EDL with concrete placement data<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class128261.html#refclass128261"><b>Fixture</b></a></p>
 <a name="refartifact135045"></a>
 <table><tr><td><div class="element">Artifact <b>segment</b></div></td></tr></table>
 <p>Segment of the Timeline.<br />Used at the moment (7/07) for partitioning the timeline/fixture into segments<br />to be rendered by a specialized render node network for each, without the need<br />to change any connections within a given segment. <br />Note this concept may be superfluos alltogether; is a draft and the real<br />use still needs to be worked out...<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class135173.html#refclass135173"><b>Segment</b></a></p>
 <a name="refartifact128901"></a>
 <table><tr><td><div class="element">Artifact <b>track</b></div></td></tr></table>
 <p>A grouping device within the EDL. The corresponding Placement<br />by which this Track object is refered defines fallback placing<br />properties to be used by all objects placed on this track in<br />case they don't specify more concrete placements.<br />Typically, tracks are used do make default Port connections,<br />define a layer or pan for sound and for for disabling groups<br />of clips. Note tracks are grouped in a tree like fashion.<br /><br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class128389.html#refclass128389"><b>Track</b></a></p>
 <a name="refartifact129285"></a>
 <table><tr><td><div class="element">Artifact <b>abstractmo</b></div></td></tr></table>
 <p>abstract base class for all Media Objects<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class128773.html#refclass128773"><b>AbstractMO</b></a></p>
 <a name="refartifact129413"></a>
 <table><tr><td><div class="element">Artifact <b>clip</b></div></td></tr></table>
 <p>a Media Clip<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class128901.html#refclass128901"><b>Clip</b></a></p>
 <a name="refartifact138373"></a>
 <table><tr><td><div class="element">Artifact <b>simpleclip</b></div></td></tr></table>
 <p>Elementary clip (single media stream only)<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class138885.html#refclass138885"><b>SimpleClip</b></a></p>
 <a name="refartifact138501"></a>
 <table><tr><td><div class="element">Artifact <b>compoundclip</b></div></td></tr></table>
 <p>compound of several clips (multichannel)<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class138629.html#refclass138629"><b>CompoundClip</b></a></p>
 <a name="refartifact129541"></a>
 <table><tr><td><div class="element">Artifact <b>effect</b></div></td></tr></table>
 <p>EDL representation of a pluggable and automatable effect.<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class129029.html#refclass129029"><b>Effect</b></a></p>
 <a name="refartifact129669"></a>
 <table><tr><td><div class="element">Artifact <b>meta</b></div></td></tr></table>
 <p>abstract base class of all MObjects representing meta data or processing instructions<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class129157.html#refclass129157"><b>Meta</b></a></p>
 <a name="refartifact139013"></a>
 <table><tr><td><div class="element">Artifact <b>locatingpin</b></div></td></tr></table>
 <p>Chaining and constraining the Placement of a Media Object<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class139909.html#refclass139909"><b>LocatingPin</b></a></p>
 <a name="refartifact129797"></a>
 <table><tr><td><div class="element">Artifact <b>fixedlocation</b></div></td></tr></table>
 <p>implements fixed placement of a MObject<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class129285.html#refclass129285"><b>FixedLocation</b></a></p>
 <a name="refartifact129925"></a>
 <table><tr><td><div class="element">Artifact <b>relativelocation</b></div></td></tr></table>
 <p>Placement implemnetaion providing various ways of attaching a MObject to another one<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class129413.html#refclass129413"><b>RelativeLocation</b></a></p>
 <a name="refartifact130053"></a>
 <table><tr><td><div class="element">Artifact <b>allocation</b></div></td></tr></table>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class129541.html#refclass129541"><b>Allocation</b></a></p>
 <a name="refartifact139397"></a>
 <table><tr><td><div class="element">Artifact <b>constraint</b></div></td></tr></table>
 <p>LocatingPin representing an directive by the user that<br />must not be violated<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class130181.html#refclass130181"><b>Constraint</b></a></p>
 <a name="refartifact139269"></a>
 <table><tr><td><div class="element">Artifact <b>wish</b></div></td></tr></table>
 <p>LocatingPin representing a low-priority directive by the user,<br />to be fulfilled only if possible (and after satisfying the<br />more important LocatingPins)<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class130053.html#refclass130053"><b>Wish</b></a></p>
 <a name="refartifact139525"></a>
 <table><tr><td><div class="element">Artifact <b>plug</b></div></td></tr></table>
 <p>LocatingPin for requesting connection to some Port<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class140421.html#refclass140421"><b>Plug</b></a></p>
 <a name="refartifact130181"></a>
 <table><tr><td><div class="element">Artifact <b>label</b></div></td></tr></table>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class129669.html#refclass129669"><b>Label</b></a></p>
 <a name="refartifact130309"></a>
 <table><tr><td><div class="element">Artifact <b>auto</b></div></td></tr></table>
 <p>Media Object holding automation data<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class129925.html#refclass129925"><b>Auto</b></a></p>
 </div>
 </div>
 <a name="refpackage130565"></a>
 <h4 class ="package">1.4.4.4.3 Package builder</h4>
-<p></p><ul>
+<p>sourcecode package<br /><br />The Builder creating the Render Engine,<br />located within the MObject Subsystem<br /></p><p></p><ul>
 <li>C++ namespace : mobject::builder</li>
 </ul>
-<p>sourcecode package<br /><br />The Builder creating the Render Engine,<br />located within the MObject Subsystem<br /></p><div class="sub">
+<p>Stereotype: src</p>
+<div class="sub">
 <a name="refdeployment view129029"></a>
 <h4 class ="view">1.4.4.4.3.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
@@ -479,36 +567,43 @@ Documentation</title>
 <a name="refartifact130565"></a>
 <table><tr><td><div class="element">Artifact <b>toolfactory</b></div></td></tr></table>
 <p>supply of Tool implementations for the Builder<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class130693.html#refclass130693"><b>ToolFactory</b></a></p>
 <a name="refartifact130693"></a>
 <table><tr><td><div class="element">Artifact <b>conmanager</b></div></td></tr></table>
 <p>manages the creation of additional ProcNode connections for the Renderengine<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class130821.html#refclass130821"><b>ConManager</b></a></p>
 <a name="refartifact130821"></a>
 <table><tr><td><div class="element">Artifact <b>assembler</b></div></td></tr></table>
 <p>building facility (implementation of the build process)<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class131077.html#refclass131077"><b>Assembler</b></a></p>
 <a name="refartifact131205"></a>
 <table><tr><td><div class="element">Artifact <b>buildertool</b></div></td></tr></table>
 <p>Interface, any tool for processing MObjects<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class134149.html#refclass134149"><b>BuilderTool</b></a></p>
 <a name="refartifact131333"></a>
 <table><tr><td><div class="element">Artifact <b>segmentationtool</b></div></td></tr></table>
 <p>Tool for creating a partitioning of the current timeline<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class134277.html#refclass134277"><b>SegmentationTool</b></a></p>
 <a name="refartifact131461"></a>
 <table><tr><td><div class="element">Artifact <b>nodecreatertool</b></div></td></tr></table>
 <p>central Tool implementing the Renderengine building<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class134405.html#refclass134405"><b>NodeCreatorTool</b></a></p>
 </div>
 </div>
 </div>
 <a name="refpackage130309"></a>
 <h4 class ="package">1.4.4.5 Package engine</h4>
-<p></p><ul>
+<p>sourcecode package<br /><br />The Core Render Engine<br /></p><p></p><ul>
 <li>C++ namespace : engine</li>
 </ul>
-<p>sourcecode package<br /><br />The Core Render Engine<br /></p><div class="sub">
+<p>Stereotype: src</p>
+<div class="sub">
 <a name="refdeployment view129285"></a>
 <h4 class ="view">1.4.4.5.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
@@ -516,95 +611,116 @@ Documentation</title>
 <a name="refartifact131973"></a>
 <table><tr><td><div class="element">Artifact <b>renderengine</b></div></td></tr></table>
 <p>a complete network of processing nodes usable for rendering<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class131333.html#refclass131333"><b>RenderEngine</b></a></p>
 <a name="refartifact132101"></a>
-<table><tr><td><div class="element">Artifact <b>processor</b></div></td></tr></table>
+<table><tr><td><div class="element">Artifact <b>rendergraph</b></div></td></tr></table>
 <p>a single render pipeline for one segment of the timeline<br /></p>
-<p>Artifact <i>source</i> associated with : <a href="class131461.html#refclass131461"><b>Processor</b></a></p>
+<p>Stereotype: source</p>
+<p>Artifact <i>source</i> associated with : <a href="class131461.html#refclass131461"><b>RenderGraph</b></a></p>
 <a name="refartifact132229"></a>
 <table><tr><td><div class="element">Artifact <b>exitnode</b></div></td></tr></table>
 <p>special Processing Node providing "pullable" output<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class131589.html#refclass131589"><b>ExitNode</b></a></p>
 <a name="refartifact132357"></a>
 <table><tr><td><div class="element">Artifact <b>procnode</b></div></td></tr></table>
 <p>Key abstraction of the Render Engine: a Processing Node<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class131717.html#refclass131717"><b>ProcNode</b></a></p>
 <a name="refartifact132485"></a>
 <table><tr><td><div class="element">Artifact <b>trafo</b></div></td></tr></table>
 <p>transforming processing Node <br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class131845.html#refclass131845"><b>Trafo</b></a></p>
 <a name="refartifact132613"></a>
 <table><tr><td><div class="element">Artifact <b>link</b></div></td></tr></table>
 <p>forwarding, adapting or connecting ProcNode<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class131973.html#refclass131973"><b>Link</b></a></p>
 <a name="refartifact132741"></a>
 <table><tr><td><div class="element">Artifact <b>hub</b></div></td></tr></table>
 <p>special ProcNode used to build data distributing connections<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i></p>
 <a name="refartifact132869"></a>
 <table><tr><td><div class="element">Artifact <b>projector</b></div></td></tr></table>
 <p>video ProcNode for scaling and translating image data<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class132229.html#refclass132229"><b>Projector</b></a></p>
 <a name="refartifact132997"></a>
 <table><tr><td><div class="element">Artifact <b>mask</b></div></td></tr></table>
 <p>Video ProcNode for masking regions of the image (automatable)<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class132357.html#refclass132357"><b>Mask</b></a></p>
 <a name="refartifact133125"></a>
 <table><tr><td><div class="element">Artifact <b>pluginadapter</b></div></td></tr></table>
 <p>Adapter for integrating various Effect processors in the render pipeline<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class132485.html#refclass132485"><b>PluginAdapter</b></a></p>
 <a name="refartifact134917"></a>
 <table><tr><td><div class="element">Artifact <b>codecadapter</b></div></td></tr></table>
 <p>Processing Node for (de)coding media data<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class135045.html#refclass135045"><b>CodecAdapter</b></a></p>
 <a name="refartifact133253"></a>
 <table><tr><td><div class="element">Artifact <b>glpipe</b></div></td></tr></table>
 <p>specialized connection element for handling OpenGL implementation details<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i></p>
 <a name="refartifact133381"></a>
 <table><tr><td><div class="element">Artifact <b>arender</b></div></td></tr></table>
 <p>Representation of a Audio Render process<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i></p>
 <a name="refartifact133509"></a>
 <table><tr><td><div class="element">Artifact <b>vrender</b></div></td></tr></table>
 <p>Representation of a Video render process<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i></p>
 <a name="refartifact133637"></a>
 <table><tr><td><div class="element">Artifact <b>glrender</b></div></td></tr></table>
 <p>Representation of a OpenGL accellerated Video render process<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i></p>
 <a name="refartifact133893"></a>
 <table><tr><td><div class="element">Artifact <b>aframe</b></div></td></tr></table>
 <p>a buffer and render process holding a Audio frame<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class133381.html#refclass133381"><b>AFrame</b></a></p>
 <a name="refartifact134021"></a>
 <table><tr><td><div class="element">Artifact <b>vframe</b></div></td></tr></table>
 <p>a buffer and render process holding a Video frame<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class133509.html#refclass133509"><b>VFrame</b></a></p>
 <a name="refartifact134149"></a>
 <table><tr><td><div class="element">Artifact <b>glbuf</b></div></td></tr></table>
 <p>a buffer and render process holding a Video frame for OpenGL rendering<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class133637.html#refclass133637"><b>GLBuf</b></a></p>
 <a name="refartifact134277"></a>
 <table><tr><td><div class="element">Artifact <b>source</b></div></td></tr></table>
 <p>Representation of a Media source<br /></p>
+<p>Stereotype: source</p>
 <p>Artifact <i>source</i> associated with : <a href="class133765.html#refclass133765"><b>Source</b></a></p>
 </div>
 </div>
 </div>
 <a name="refpackage129797"></a>
 <h3 class ="package">1.4.5 Package gui</h3>
-<p></p><ul>
+<p>sourcecode package<br /><br />User Interface classes go here<br /></p><p></p><ul>
 <li>C++ namespace : gui</li>
 </ul>
-<p>sourcecode package<br /><br />User Interface classes go here<br /></p><div class="sub">
+<p>Stereotype: src</p>
+<div class="sub">
 <a name="refdeployment view129413"></a>
 <h4 class ="view">1.4.5.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
 </div>
 <a name="refpackage129925"></a>
 <h3 class ="package">1.4.6 Package tool</h3>
-<p>sourcecode package<br /><br />Tools and Utilities <br />(separate from the main cinelrra binary)<br /></p><div class="sub">
+<p>sourcecode package<br /><br />Tools and Utilities <br />(separate from the main cinelrra binary)<br /></p><p>Stereotype: src</p>
+<div class="sub">
 <a name="refdeployment view129541"></a>
 <h4 class ="view">1.4.6.1 Deployment View gen</h4>
 <p>defines source files to be generated by BOUML<br /></p>
@@ -658,7 +774,7 @@ Documentation</title>
 </div>
 <a name="refpackage129029"></a>
 <h2 class ="package">2.2 Package Control</h2>
-<div class="sub">
+<p>Command handling, Proc-Layer dispatcher, controller and administrative facilities<br /></p><div class="sub">
 <a name="refclass view128389"></a>
 <h3 class ="view">2.2.1 Class View Controller Workings</h3>
 <div class="sub">
@@ -713,6 +829,122 @@ reuse exiting Engine</pre></li></ul><p>Selection :</p><ul></ul><p>Transformation
 <table><tr><td><div class="element">Class <b><a href="class130949.html#refclass130949"><b>RenderState</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class145413.html#refclass145413"><b>STypeManager</b></a></b></div></td></tr></table>
 </div>
+<a name="refclass view130693"></a>
+<h3 class ="view">2.2.2 Class View Command Handling</h3>
+<div class="sub">
+<a name="refclass diagram134021"></a>
+<p align="center"><img src="fig134021.png" alt="" /></p>
+ <p align="center"><b>Command structure</b></p><p><br /></p><p><br /></p>
+<table><tr><td><div class="element">Class <b><a href="class148485.html#refclass148485"><b>Command</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class148613.html#refclass148613"><b>HandlingPattern</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class148741.html#refclass148741"><b>Mutation</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class148869.html#refclass148869"><b>UndoMutation</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class148997.html#refclass148997"><b>CmdClosure</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class149125.html#refclass149125"><b>DoSync</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class149253.html#refclass149253"><b>DoAsync</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class149381.html#refclass149381"><b>UndoSync</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class149509.html#refclass149509"><b>RedoLast</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class149637.html#refclass149637"><b>ParamAccessor</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class141957.html#refclass141957"><b>ProcDispatcher</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class150789.html#refclass150789"><b>Closure</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class150917.html#refclass150917"><b>ArgumentHolder</b></a></b></div></td></tr></table>
+<a name="refstate machine128005"></a>
+<h4 class ="state">2.2.2.1 StateMachine Lifecycle</h4>
+<p>Entry Behavior :</p><ul></ul><p>Exit Behavior :</p><ul></ul><p>Do activity :</p><ul></ul><p>Stereotype: machine</p>
+<div class="sub">
+<a name="refstate diagram135173"></a>
+<p align="center"><img src="fig135173.png" alt="" /></p>
+ <p align="center"><b>Command lifecycle</b></p><p><br /></p><p><br /></p>
+<a name="refentry point pseudo state128005"></a>
+<a name="refentry point pseudo state128005"></a>
+<table><tr><td><div class="element">Entry point pseudo state <b>ID</b></div></td></tr></table>
+<p>Defined in <a href="index.html#refstate machine128005"><b>Lifecycle</b></a></p><div class="sub">
+<table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refentry point pseudo state128005"><b>ID</b></a> To <a href="index.html#refstate action128005"><b>state action</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul></div>
+<a name="refstate action128005"></a>
+<table><tr><td><div class="element">State action <b></b></div></td></tr></table>
+<p>try to fetch existing definition<br /></p>
+<p>Defined in <a href="index.html#refstate machine128005"><b>Lifecycle</b></a></p><p>Expression :</p><ul><li>OCL : <pre>
+fetch def</pre></li></ul><div class="sub">
+<table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refstate action128005"><b>state action</b></a> To <a href="index.html#refchoice pseudo state128133"><b>choice pseudo state</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul></div>
+<a name="refstate128133"></a>
+<h4 class ="state">2.2.2.1.1 State scratch</h4>
+<p>Entry Behavior :</p><ul></ul><p>Exit Behavior :</p><ul></ul><p>Do activity :</p><ul></ul><div class="sub">
+<table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refstate128133"><b>scratch</b></a> To <a href="index.html#refstate action128133"><b>state action</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul></div>
+<a name="refstate action128133"></a>
+<table><tr><td><div class="element">State action <b></b></div></td></tr></table>
+<p>Defined in <a href="index.html#refstate machine128005"><b>Lifecycle</b></a></p><p>Expression :</p><ul><li>OCL : <pre>
+def DO</pre></li></ul><div class="sub">
+<table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refstate action128133"><b>state action</b></a> To <a href="index.html#reffork pseudo state128261"><b>fork pseudo state</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul><table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refstate action128133"><b>state action</b></a> To <a href="index.html#refstate action128261"><b>state action</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul><table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refstate action128133"><b>state action</b></a> To <a href="index.html#refstate action128517"><b>state action</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul></div>
+<a name="refstate action128261"></a>
+<table><tr><td><div class="element">State action <b></b></div></td></tr></table>
+<p>Defined in <a href="index.html#refstate machine128005"><b>Lifecycle</b></a></p><p>Expression :</p><ul><li>OCL : <pre>
+def CAP</pre></li></ul><div class="sub">
+<table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refstate action128261"><b>state action</b></a> To <a href="index.html#refstate action128389"><b>state action</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul></div>
+<a name="refstate action128389"></a>
+<table><tr><td><div class="element">State action <b></b></div></td></tr></table>
+<p>Defined in <a href="index.html#refstate machine128005"><b>Lifecycle</b></a></p><p>Expression :</p><ul><li>OCL : <pre>
+def UNDO</pre></li></ul><div class="sub">
+<table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refstate action128389"><b>state action</b></a> To <a href="index.html#refstate128261"><b>CmdDef</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul></div>
+<a name="refstate action128517"></a>
+<table><tr><td><div class="element">State action <b></b></div></td></tr></table>
+<p>Defined in <a href="index.html#refstate machine128005"><b>Lifecycle</b></a></p><p>Expression :</p><ul><li>OCL : <pre>
+def UNDO</pre></li></ul><div class="sub">
+<table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refstate action128517"><b>state action</b></a> To <a href="index.html#refstate action128645"><b>state action</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul></div>
+<a name="refstate action128645"></a>
+<table><tr><td><div class="element">State action <b></b></div></td></tr></table>
+<p>Defined in <a href="index.html#refstate machine128005"><b>Lifecycle</b></a></p><p>Expression :</p><ul><li>OCL : <pre>
+def CAP</pre></li></ul><div class="sub">
+<table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refstate action128645"><b>state action</b></a> To <a href="index.html#refstate128261"><b>CmdDef</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul></div>
+<a name="refstate128261"></a>
+<h4 class ="state">2.2.2.1.2 State CmdDef</h4>
+<p>Entry Behavior :</p><ul></ul><p>Exit Behavior :</p><ul></ul><p>Do activity :</p><ul></ul><div class="sub">
+<table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refstate128261"><b>CmdDef</b></a> To <a href="index.html#refstate action128773"><b>state action</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul></div>
+<a name="refstate action128773"></a>
+<table><tr><td><div class="element">State action <b></b></div></td></tr></table>
+<p>Defined in <a href="index.html#refstate machine128005"><b>Lifecycle</b></a></p><p>Expression :</p><ul><li>OCL : <pre>
+bind</pre></li></ul><div class="sub">
+<table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refstate action128773"><b>state action</b></a> To <a href="index.html#refstate128389"><b>Command</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul></div>
+<a name="refstate128389"></a>
+<h4 class ="state">2.2.2.1.3 State Command</h4>
+<p>Entry Behavior :</p><ul></ul><p>Exit Behavior :</p><ul></ul><p>Do activity :</p><ul></ul><div class="sub">
+<table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refstate128389"><b>Command</b></a> To <a href="index.html#refstate action129029"><b>state action</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul></div>
+<a name="refstate action129029"></a>
+<table><tr><td><div class="element">State action send-signal <b></b></div></td></tr></table>
+<p>Stereotype: send-signal</p>
+<p>Defined in <a href="index.html#refstate machine128005"><b>Lifecycle</b></a></p><p>Expression :</p><ul><li>OCL : <pre>
+exec pattern</pre></li></ul><div class="sub">
+<table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refstate action129029"><b>state action</b></a> To <a href="index.html#refstate128517"><b>undo-able</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul></div>
+<a name="refstate128517"></a>
+<h4 class ="state">2.2.2.1.4 State undo-able</h4>
+<p>Entry Behavior :</p><ul></ul><p>Exit Behavior :</p><ul></ul><p>Do activity :</p><ul></ul><div class="sub">
+<table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refstate128517"><b>undo-able</b></a> To <a href="index.html#refexit point pseudo state128517"><b>done</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul><table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refstate128517"><b>undo-able</b></a> To <a href="index.html#refstate action129157"><b>state action</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul><table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refstate128517"><b>undo-able</b></a> To <a href="index.html#refstate action129029"><b>state action</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul></div>
+<a name="refchoice pseudo state128133"></a>
+<a name="refchoice pseudo state128133"></a>
+<table><tr><td><div class="element">Choice pseudo state <b></b></div></td></tr></table>
+<p>Stereotype: try</p>
+<p>Defined in <a href="index.html#refstate machine128005"><b>Lifecycle</b></a></p><div class="sub">
+<table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refchoice pseudo state128133"><b>choice pseudo state</b></a> To <a href="index.html#refstate128133"><b>scratch</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul><li>OCL : <pre>
+not found</pre></li></ul><table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refchoice pseudo state128133"><b>choice pseudo state</b></a> To <a href="index.html#refstate128261"><b>CmdDef</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul><li>OCL : <pre>
+found</pre></li></ul></div>
+<a name="reffork pseudo state128261"></a>
+<a name="reffork pseudo state128261"></a>
+<table><tr><td><div class="element">Fork pseudo state <b></b></div></td></tr></table>
+<p>Defined in <a href="index.html#refstate machine128005"><b>Lifecycle</b></a></p><div class="sub">
+<table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#reffork pseudo state128261"><b>fork pseudo state</b></a> To <a href="index.html#refstate action128261"><b>state action</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul><table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#reffork pseudo state128261"><b>fork pseudo state</b></a> To <a href="index.html#refstate action128517"><b>state action</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul></div>
+<a name="reffork pseudo state128389"></a>
+<a name="reffork pseudo state128389"></a>
+<table><tr><td><div class="element">Fork pseudo state <b></b></div></td></tr></table>
+<p>Defined in <a href="index.html#refstate machine128005"><b>Lifecycle</b></a></p><a name="refexit point pseudo state128517"></a>
+<a name="refexit point pseudo state128517"></a>
+<table><tr><td><div class="element">Exit point pseudo state <b>done</b></div></td></tr></table>
+<p>Defined in <a href="index.html#refstate machine128005"><b>Lifecycle</b></a></p><a name="refstate action129157"></a>
+<table><tr><td><div class="element">State action send-signal <b></b></div></td></tr></table>
+<p>Stereotype: send-signal</p>
+<p>Defined in <a href="index.html#refstate machine128005"><b>Lifecycle</b></a></p><p>Expression :</p><ul><li>OCL : <pre>
+undo</pre></li></ul><div class="sub">
+<table><tr><td><div class="element">Transition  <b>&lt;transition&gt;</div></td></tr></table><p>From <a href="index.html#refstate action129157"><b>state action</b></a> To <a href="index.html#refstate128517"><b>undo-able</b></a></p><p>Trigger :</p><ul></ul><p>Guard :</p><ul></ul><p>Activity :</p><ul></ul></div>
+</div>
+</div>
 </div>
 <a name="refpackage128261"></a>
 <h2 class ="package">2.3 Package MObject</h2>
@@ -730,6 +962,7 @@ reuse exiting Engine</pre></li></ul><p>Selection :</p><ul></ul><p>Transformation
 <table><tr><td><div class="element">Class <b><a href="class145797.html#refclass145797"><b>TimelineView</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class128133.html#refclass128133"><b>Seq</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class128261.html#refclass128261"><b>Fixture</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class147333.html#refclass147333"><b>Segmentation</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class135173.html#refclass135173"><b>Segment</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class128389.html#refclass128389"><b>Track</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class128517.html#refclass128517"><b>MObject</b></a></b></div></td></tr></table>
@@ -753,7 +986,6 @@ reuse exiting Engine</pre></li></ul><p>Selection :</p><ul></ul><p>Transformation
 <table><tr><td><div class="element">Class <b><a href="class134661.html#refclass134661"><b>ParamProvider</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class134789.html#refclass134789"><b>Interpolator</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class139909.html#refclass139909"><b>LocatingPin</b></a></b></div></td></tr></table>
-<table><tr><td><div class="element">Class <b><a href="class141957.html#refclass141957"><b>ProcDispatcher</b></a></b></div></td></tr></table>
 </div>
 <a name="refpackage128901"></a>
 <h3 class ="package">2.3.2 Package Builder</h3>
@@ -838,7 +1070,7 @@ reuse exiting Engine</pre></li></ul><p>Selection :</p><ul></ul><p>Transformation
 <p>Defined in <a href="index.html#refactivity128005"><b>building the Engine</b></a></p></div>
 <a name="refclass diagram129285"></a>
 <p align="center"><img src="fig129285.png" alt="" /></p>
- <p align="center"><b>Builder Entities</b></p><p><br /></p><p><br /></p>
+ <p align="center"><b>Builder Tool (Visitor)</b></p><p><br /></p><p><br /></p>
 <table><tr><td><div class="element">Class <b><a href="class130565.html#refclass130565"><b>BuilderFacade</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class130693.html#refclass130693"><b>ToolFactory</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class130821.html#refclass130821"><b>ConManager</b></a></b></div></td></tr></table>
@@ -848,6 +1080,9 @@ reuse exiting Engine</pre></li></ul><p>Selection :</p><ul></ul><p>Transformation
 <table><tr><td><div class="element">Class <b><a href="class134149.html#refclass134149"><b>BuilderTool</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class134277.html#refclass134277"><b>SegmentationTool</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class134405.html#refclass134405"><b>NodeCreatorTool</b></a></b></div></td></tr></table>
+<a name="refclass diagram132868"></a>
+<p align="center"><img src="fig132868.png" alt="" /></p>
+ <p align="center"><b>Builder Entities</b></p><p><br /></p><p><br /></p>
 </div>
 </div>
 <a name="refuse case view128261"></a>
@@ -878,11 +1113,11 @@ reuse exiting Engine</pre></li></ul><p>Selection :</p><ul></ul><p>Transformation
 <p align="center"><img src="fig128261.png" alt="" /></p>
  <p align="center"><b>Overview Render Engine</b></p><p><br /></p><p><br /></p>
 <a name="refnode128005"></a>
-<table><tr><td><div class="element">Node <b>timeline</b></div></td></tr></table>
+<table><tr><td><div class="element">Node <b>effective timeline (Fixture)</b></div></td></tr></table>
 <a name="refnode128261"></a>
 <table><tr><td><div class="element">Node <b>playlist</b></div></td></tr></table>
 <a name="refnode128389"></a>
-<table><tr><td><div class="element">Node <b>proc</b></div></td></tr></table>
+<table><tr><td><div class="element">Node <b>graph</b></div></td></tr></table>
 <a name="refnode128517"></a>
 <table><tr><td><div class="element">Node <b>pnode</b></div></td></tr></table>
 <a name="refnode128645"></a>
@@ -906,7 +1141,7 @@ reuse exiting Engine</pre></li></ul><p>Selection :</p><ul></ul><p>Transformation
 <p align="center"><img src="fig132357.png" alt="" /></p>
  <p align="center"><b>StateAdapter composition</b></p><p><br /></p><p><br /></p>
 <table><tr><td><div class="element">Class <b><a href="class131333.html#refclass131333"><b>RenderEngine</b></a></b></div></td></tr></table>
-<table><tr><td><div class="element">Class <b><a href="class131461.html#refclass131461"><b>Processor</b></a></b></div></td></tr></table>
+<table><tr><td><div class="element">Class <b><a href="class131461.html#refclass131461"><b>RenderGraph</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class131589.html#refclass131589"><b>ExitNode</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class131717.html#refclass131717"><b>ProcNode</b></a></b></div></td></tr></table>
 <table><tr><td><div class="element">Class <b><a href="class131845.html#refclass131845"><b>Trafo</b></a></b></div></td></tr></table>
@@ -1015,17 +1250,17 @@ reuse exiting Engine</pre></li></ul><p>Selection :</p><ul></ul><p>Transformation
 <table><tr><td><div class="element">Class instance  <b></div></td></tr></table><p>type :<a href="class131333.html#refclass131333"><b>RenderEngine</b></a></p><p>relations :<ul>
 <li><a href="class131333.html#refrelation132485"><b>renderSegments</b></a> = <a href="index.html#refclass instance130949"><b>video1</b></a></li>
 </ul></p><a name="refclass instance130821"></a>
-<table><tr><td><div class="element">Class instance  <b>audio1</div></td></tr></table><p>type :<a href="class131461.html#refclass131461"><b>Processor</b></a></p><p>attributes :<ul>
+<table><tr><td><div class="element">Class instance  <b>audio1</div></td></tr></table><p>type :<a href="class131461.html#refclass131461"><b>RenderGraph</b></a></p><p>attributes :<ul>
 <li><a href="class131461.html#refattribute129541"><b>end</b></a> = 7/25</li>
 <li><a href="class131461.html#refattribute129413"><b>start</b></a> = 2/25</li>
 </ul></p><p>relations :<ul>
-<li><a href="class131461.html#refrelation132613"><b>output</b></a> = <a href="index.html#refclass instance131205"><b>audio</b></a></li>
+<li><a href="class131461.html#refrelation132613"><b>pipes</b></a> = <a href="index.html#refclass instance131205"><b>audio</b></a></li>
 </ul></p><a name="refclass instance130949"></a>
-<table><tr><td><div class="element">Class instance  <b>video1</div></td></tr></table><p>type :<a href="class131461.html#refclass131461"><b>Processor</b></a></p><p>attributes :<ul>
+<table><tr><td><div class="element">Class instance  <b>video1</div></td></tr></table><p>type :<a href="class131461.html#refclass131461"><b>RenderGraph</b></a></p><p>attributes :<ul>
 <li><a href="class131461.html#refattribute129541"><b>end</b></a> = 7/25</li>
 <li><a href="class131461.html#refattribute129413"><b>start</b></a> = 2/25</li>
 </ul></p><p>relations :<ul>
-<li><a href="class131461.html#refrelation132613"><b>output</b></a> = <a href="index.html#refclass instance131077"><b>video</b></a></li>
+<li><a href="class131461.html#refrelation132613"><b>pipes</b></a> = <a href="index.html#refclass instance131077"><b>video</b></a></li>
 </ul></p><a name="refclass instance131077"></a>
 <table><tr><td><div class="element">Class instance  <b>video</div></td></tr></table><p>type :<a href="class131589.html#refclass131589"><b>ExitNode</b></a></p><p>relations :<ul>
 <li><a href="class131717.html#refrelation136965"><b>datasrc</b></a> = <a href="index.html#refclass instance131333"><b>ouput</b></a></li>
@@ -1056,11 +1291,11 @@ reuse exiting Engine</pre></li></ul><p>Selection :</p><ul></ul><p>Transformation
 <table><tr><td><div class="element">Class instance  <b>input</div></td></tr></table><p>type :<a href="class132229.html#refclass132229"><b>Projector</b></a></p><p>relations :<ul>
 <li><a href="class131717.html#refrelation136965"><b>datasrc</b></a> = <a href="index.html#refclass instance134021"><b>vid_a</b></a></li>
 </ul></p><a name="refclass instance132997"></a>
-<table><tr><td><div class="element">Class instance  <b>video1</div></td></tr></table><p>type :<a href="class131461.html#refclass131461"><b>Processor</b></a></p><p>attributes :<ul>
+<table><tr><td><div class="element">Class instance  <b>video1</div></td></tr></table><p>type :<a href="class131461.html#refclass131461"><b>RenderGraph</b></a></p><p>attributes :<ul>
 <li><a href="class131461.html#refattribute129541"><b>end</b></a> = 8/25</li>
 <li><a href="class131461.html#refattribute129413"><b>start</b></a> = 7/25</li>
 </ul></p><p>relations :<ul>
-<li><a href="class131461.html#refrelation132613"><b>output</b></a> = <a href="index.html#refclass instance132741"><b>video</b></a></li>
+<li><a href="class131461.html#refrelation132613"><b>pipes</b></a> = <a href="index.html#refclass instance132741"><b>video</b></a></li>
 </ul></p><a name="refclass instance133125"></a>
 <table><tr><td><div class="element">Class instance  <b>ouput</div></td></tr></table><p>type :<a href="class132229.html#refclass132229"><b>Projector</b></a></p><p>relations :<ul>
 <li><a href="class131717.html#refrelation136965"><b>datasrc</b></a> = <a href="index.html#refclass instance133253"><b>HUE</b></a></li>
@@ -1069,11 +1304,11 @@ reuse exiting Engine</pre></li></ul><p>Selection :</p><ul></ul><p>Transformation
 <li><a href="class131717.html#refrelation136965"><b>datasrc</b></a> = <a href="index.html#refclass instance132869"><b>input</b></a></li>
 </ul></p><a name="refclass instance133509"></a>
 <table><tr><td><div class="element">Class instance  <b></div></td></tr></table><p>type :<a href="class133509.html#refclass133509"><b>VFrame</b></a></p><a name="refclass instance133637"></a>
-<table><tr><td><div class="element">Class instance  <b>video1</div></td></tr></table><p>type :<a href="class131461.html#refclass131461"><b>Processor</b></a></p><p>attributes :<ul>
+<table><tr><td><div class="element">Class instance  <b>video1</div></td></tr></table><p>type :<a href="class131461.html#refclass131461"><b>RenderGraph</b></a></p><p>attributes :<ul>
 <li><a href="class131461.html#refattribute129541"><b>end</b></a> = 7/25</li>
 <li><a href="class131461.html#refattribute129413"><b>start</b></a> = 5/25</li>
 </ul></p><p>relations :<ul>
-<li><a href="class131461.html#refrelation132613"><b>output</b></a> = <a href="index.html#refclass instance133765"><b>video</b></a></li>
+<li><a href="class131461.html#refrelation132613"><b>pipes</b></a> = <a href="index.html#refclass instance133765"><b>video</b></a></li>
 </ul></p><a name="refclass instance133765"></a>
 <table><tr><td><div class="element">Class instance  <b>video</div></td></tr></table><p>type :<a href="class131589.html#refclass131589"><b>ExitNode</b></a></p><p>relations :<ul>
 <li><a href="class131717.html#refrelation136965"><b>datasrc</b></a> = <a href="index.html#refclass instance133125"><b>ouput</b></a></li>
@@ -1085,11 +1320,11 @@ reuse exiting Engine</pre></li></ul><p>Selection :</p><ul></ul><p>Transformation
 <table><tr><td><div class="element">Class instance  <b>input</div></td></tr></table><p>type :<a href="class132229.html#refclass132229"><b>Projector</b></a></p><p>relations :<ul>
 <li><a href="class131717.html#refrelation136965"><b>datasrc</b></a> = <a href="index.html#refclass instance134021"><b>vid_a</b></a></li>
 </ul></p><a name="refclass instance134277"></a>
-<table><tr><td><div class="element">Class instance  <b>video1</div></td></tr></table><p>type :<a href="class131461.html#refclass131461"><b>Processor</b></a></p><p>attributes :<ul>
+<table><tr><td><div class="element">Class instance  <b>video1</div></td></tr></table><p>type :<a href="class131461.html#refclass131461"><b>RenderGraph</b></a></p><p>attributes :<ul>
 <li><a href="class131461.html#refattribute129541"><b>end</b></a> = 5/25</li>
 <li><a href="class131461.html#refattribute129413"><b>start</b></a> = 2/25</li>
 </ul></p><p>relations :<ul>
-<li><a href="class131461.html#refrelation132613"><b>output</b></a> = <a href="index.html#refclass instance134533"><b>video</b></a></li>
+<li><a href="class131461.html#refrelation132613"><b>pipes</b></a> = <a href="index.html#refclass instance134533"><b>video</b></a></li>
 </ul></p><a name="refclass instance134405"></a>
 <table><tr><td><div class="element">Class instance  <b>ouput</div></td></tr></table><p>type :<a href="class132229.html#refclass132229"><b>Projector</b></a></p><p>relations :<ul>
 <li><a href="class131717.html#refrelation136965"><b>datasrc</b></a> = <a href="index.html#refclass instance134149"><b>input</b></a></li>

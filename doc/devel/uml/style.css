@@ -1,6 +1,6 @@
 div.title { font-size: 150%; background: #87ceff; text-align: center; font-weight: bold; }
 
-div.sub { margin-left : 20; }
+div.sub { margin-left : 20px; }
 div.element { background: #d3d3d3; }
 
 h1.package { background: #ffe4c4; }

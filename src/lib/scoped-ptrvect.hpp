@@ -25,17 +25,18 @@
  ** build and own a number of objects, including lifecycle management. 
  ** For example, a service provider may need to maintain a number of individual
  ** process handles. The solution here is deliberately kept simple, it is
- ** similar to using a stl container with shared_ptr(s), but behaves rather
+ ** similar to using a STL container with shared_ptr(s), but behaves rather
  ** like boost::scoped_ptr. It provides the same basic functionality as
  ** boost::ptr_vector, but doesn't require us to depend on boost-serialisation.
  ** 
  ** Some details to note:
  ** - contained objects accessed by reference, never NULL.
- ** - TODO: iterators, detaching of objects...
+ ** - the exposed iterator automatically dereferences
+ ** - TODO: detaching of objects...
  ** - TODO: retro-fit with refarray interface (--> builder branch)
  ** 
  ** @see scoped-ptrvect-test.cpp
- ** @see scopedholder.hpp
+ ** @see scoped-holder.hpp
  ** @see gui::DisplayService usage example
  */
 
@@ -45,8 +46,8 @@
 
 
 #include "include/logging.h"
+#include "lib/iter-adapter.hpp"
 #include "lib/error.hpp"
-#include "lib/util.hpp"
 
 #include <vector>
 #include <boost/noncopyable.hpp>
@@ -54,14 +55,13 @@
 
 namespace lib {
   
-  using util::for_each;
-  
   
   
   /**
-   * Simple vector based collection of pointers, noncopyable and managing
-   * lifecycle of the pointed-to objects. Implemented by a vector of
-   * bare pointers (private inheritance)
+   * Simple vector based collection of pointers,
+   * managing lifecycle of the pointed-to objects.
+   * Implemented as a non-copyable object, based on a
+   * vector of bare pointers (private inheritance)
    */
   template<class T>
   class ScopedPtrVect
@@ -69,11 +69,20 @@ namespace lib {
       boost::noncopyable
     {
       typedef std::vector<T*> _Vec;
+      typedef typename _Vec::iterator VIter;
+      
+      typedef RangeIter<VIter> RIter;
+      typedef PtrDerefIter<RIter> IterType;
+      
+      typedef typename IterType::ConstIterType ConstIterType;
+      typedef typename IterType::WrappedConstIterType RcIter;
+      
       
     public:
       typedef size_t   size_type;
       typedef T &      reference;
       typedef T const& const_reference;
+      
       
       
       ScopedPtrVect ()
@@ -101,25 +110,24 @@ namespace lib {
       T&
       manage (T* obj)
         {
-          if (obj)
-            try 
-              {
-                push_back (obj);
-                return *obj;
-              }
-            catch(...)
-              {
-                delete obj;
-                throw;
-        }     }
+          REQUIRE (obj);
+          try 
+            {
+              push_back (obj);
+              return *obj;
+            }
+          catch(...)
+            {
+              delete obj;
+              throw;
+        }   }
       
       
       void
       clear()
         { 
-          typedef typename _Vec::iterator VIter;
-          VIter e = this->end();
-          for (VIter i = this->begin(); i!=e; ++i)
+          VIter e = _Vec::end();
+          for (VIter i = _Vec::begin(); i!=e; ++i)
             {
               if (*i)
                 try
@@ -135,6 +143,25 @@ namespace lib {
         }
       
       
+      /* === Element access and iteration === */
+      
+      T&
+      operator[] (size_type i)
+        {
+          return *get(i);
+        }
+      
+      typedef IterType      iterator;
+      typedef ConstIterType const_iterator;
+      
+      iterator       begin()        { return       iterator (allPtrs()); }
+      const_iterator begin()  const { return const_iterator (allPtrs()); }
+      iterator       end()          { return       iterator ( RIter() ); }
+      const_iterator end()    const { return const_iterator (RcIter() ); }
+      
+      
+      
+      
       /* ====== proxied vector functions ==================== */
       
       size_type  size ()      const  { return _Vec::size();     }
@@ -144,14 +171,22 @@ namespace lib {
       
       
     private:
-      /** currently not used as of 2/2009 */
-      T* get(size_type i)
+      /** @internal element access, including null check */
+      T*
+      get (size_type i)
         {
           T* p (_Vec::at (i));
           if (!p)
             throw lumiera::error::Invalid("no valid object at this index");
           else
             return p;
+        }
+      
+      /** @internal access sequence of all managed pointers */
+      RIter
+      allPtrs ()
+        {
+          return RIter (_Vec::begin(), _Vec::end());
         }
     };
   

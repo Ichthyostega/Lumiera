@@ -64,6 +64,10 @@ namespace lumiera {
     LUMIERA_ERROR_DEFINE (EXTERNAL , "failure in external service"); 
     LUMIERA_ERROR_DEFINE (ASSERTION, "assertion failure");
 
+    /* some further generic error situations */
+    LUMIERA_ERROR_DEFINE (WRONG_TYPE, "runtime type mismatch"); 
+    LUMIERA_ERROR_DEFINE (ITER_EXHAUST, "end of sequence reached"); 
+    
   } // namespace error
   
   LUMIERA_ERROR_DEFINE (EXCEPTION, "generic Lumiera exception"); 
@@ -83,7 +87,7 @@ namespace lumiera {
   }
   
   
-  Error::Error (std::exception& cause, 
+  Error::Error (std::exception const& cause, 
                 string description, const char* id) throw()
     : std::exception (),
       id_ (error::default_or_given (id)),

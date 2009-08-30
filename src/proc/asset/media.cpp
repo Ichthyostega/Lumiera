@@ -50,7 +50,7 @@ namespace asset
   namespace // Implementation details
   {
     /** helper: extract a name token out of a given path/filename
-     *  @return sanitized token based on the name (minus extension),
+     *  @return sanitised token based on the name (minus extension),
      *          empty string if not the common filename pattern.
      */
     string extractName (const string& path)
@@ -59,7 +59,7 @@ namespace asset
       smatch match;
       
       if (regex_search (path, match, pathname_pattern))
-        return util::sanitize (string (match[1]));
+        return util::sanitise (string (match[1]));
       else
         return "";
     }

@@ -30,35 +30,35 @@
 
 
 
-namespace asset
-  {
+namespace asset {
+  
   using std::string;
   using std::ostream;
-
-      /** top-level distinction of different Kinds of Assets.
-       *  For convienience, this classification is slightly denormalized,
-       *  as AUDIO, and VIDEO are both asset::Media objects, EFFECT and CODEC
-       *  are asset::Proc objects, while STRUCT and META refer directly to 
-       *  the corresponding Interfaces asset::Struct and asset::Meta.
-       */
-      enum Kind
-      {
-        AUDIO,
-        VIDEO,
-        EFFECT,
-        CODEC,
-        STRUCT,
-        META
-      };
   
-  /**
+  /** 
+   * top-level distinction of different Kinds of Assets.
+   * For convenience, this classification is slightly denormalised,
+   * as AUDIO, and VIDEO are both asset::Media objects, EFFECT and CODEC
+   * are asset::Proc objects, while STRUCT and META refer directly to 
+   * the corresponding Interfaces asset::Struct and asset::Meta.
+   */
+  enum Kind
+    { AUDIO
+    , VIDEO
+    , EFFECT
+    , CODEC
+    , STRUCT
+    , META
+    };
+  
+  /*************************************
    * Tree like classification of Assets.
-   * By virtue of the Category, Assets can be organized in nested bins (folders).
+   * By virtue of the Category, Assets can be organised in nested bins (folders).
    * This includes the distinction of different kinds of Assets, like Audio, Video, Effects...
    * 
-   * @todo could be far more elaborate. could be a singleton like centralized tree, while
-   *       just holding references to Catetory nodes in the individual Asset. At the moment,
-   *       we use just the most simplistic implementation and handle Category objects 
+   * @todo could be far more elaborate. could be a singleton like centralised tree, while
+   *       just holding references to Category nodes in the individual Asset. At the moment,
+   *       we just use the most simplistic implementation and handle Category objects 
    *       using value semantics.
    */
   class Category
@@ -70,21 +70,22 @@ namespace asset
       string path_;
       
     public:
-      Category (const Kind root, string subfolder ="") 
+      Category (const Kind root, string subfolder ="")
         : kind_(root), path_(subfolder) {};
       
-      bool operator== (const Category& other) const { return kind_== other.kind_ && path_== other.path_; }
-      bool operator!= (const Category& other) const { return kind_!= other.kind_ || path_!= other.path_; }
-        
-      bool hasKind (Kind refKind)     const         { return kind_ == refKind; }
-      bool isWithin (const Category&) const;
-      void setPath (const string & newpath)         { this->path_ = newpath; }
+      bool operator== (Category const& other) const { return kind_== other.kind_ && path_== other.path_; }
+      bool operator!= (Category const& other) const { return kind_!= other.kind_ || path_!= other.path_; }
+      
+      bool hasKind  (Kind refKind)    const         { return kind_ == refKind; }
+      bool isWithin (Category const&) const;
+      void setPath  (string const& newpath)         { this->path_ = newpath; }
       
       
       operator string ()  const;
-
-        
-      friend size_t hash_value (const Category& cat)
+      
+      
+      friend size_t
+      hash_value (Category const& cat)
         {
           size_t hash = 0;
           boost::hash_combine(hash, cat.kind_);
@@ -92,7 +93,8 @@ namespace asset
           return hash;
         }
       
-      int compare (const Category& co)  const
+      int
+      compare (Category const& co)  const
         {
           int res = int(kind_) - int(co.kind_);
           if (0 != res) 
@@ -100,12 +102,12 @@ namespace asset
           else
             return path_.compare (co.path_);
         }
-
+      
     };
-    
-   inline ostream& operator<< (ostream& os, const Category& cago) { return os << string(cago); }
-
-   
-    
+  
+  inline ostream& operator<< (ostream& os, const Category& cago) { return os << string(cago); }
+  
+  
+  
 } // namespace asset
 #endif

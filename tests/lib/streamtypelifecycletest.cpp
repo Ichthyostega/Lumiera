@@ -50,7 +50,7 @@ namespace lumiera {
         UNIMPLEMENTED ("setup basic dummy-type-info"); 
       }
     
-    namespace // enroll this basic setup to be triggered when the type system is reset 
+    namespace // enrol this basic setup to be triggered when the type system is reset 
       {
         LifecycleHook _schedule_at_reset (ON_STREAMTYPES_RESET, &setup_basicDummyTypeInfo);         
       }
