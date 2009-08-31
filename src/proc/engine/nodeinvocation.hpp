@@ -88,7 +88,7 @@ namespace engine {
       
       
       
-    public: /* === proxying the State interface === */
+    private: /* === proxying the State interface === */
       
       virtual void releaseBuffer (BuffHandle& bh)       { current_.releaseBuffer (bh); }
       
@@ -176,7 +176,7 @@ namespace engine {
           : Invocation(sta, w, outCh) {}
         
         virtual BuffHandle
-        allocateBuffer (BufferDescriptor const& bd) { return parent_.allocateBuffer(bd); }
+        allocateBuffer (BufferDescriptor const& bd) { return parent_.allocateBuffer(bd); }          ////////////TODO: actually implement the "allocate from parent" logic!
       };
     
     struct AllocBufferFromCache   ///< using the global current State, which will delegate to Cache

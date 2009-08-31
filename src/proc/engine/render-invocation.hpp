@@ -58,19 +58,24 @@ namespace engine {
       RenderInvocation()
         { }
       
-      virtual State& getCurrentImplementation () { return current_; }
       
       
+    private: /* === top-level implementation of the State interface === */
       
-    public: /* === proxying the State interface === */
+      BuffHandle allocateBuffer (BufferDescriptor const&);
       
-//      virtual void releaseBuffer (BuffHandle& bh)       { current_.releaseBuffer (bh); }
+      void releaseBuffer (BuffHandle& bh);
       
-//      virtual void is_calculated (BuffHandle const& bh) { current_.is_calculated (bh); }
+      BuffHandle fetch (FrameID const& fID);
       
-//      virtual BuffHandle fetch (FrameID const& fID)     { return current_.fetch (fID); }
+      void is_calculated (BuffHandle const& bh);
       
-      // note: allocateBuffer()  is chosen specifically based on the actual node wiring
+      FrameID const& genFrameID (NodeID const&, uint chanNo);
+
+      BuffTableStorage& getBuffTableStorage();
+      
+      virtual State& getCurrentImplementation () { return *this; }
+  
       
     };
   

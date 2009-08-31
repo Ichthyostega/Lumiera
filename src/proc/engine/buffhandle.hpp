@@ -68,7 +68,7 @@ namespace engine {
           return *pBuffer_;
         }
       
-    protected:
+    private:
       PBuff pBuffer_; 
       long sourceID_;
     };

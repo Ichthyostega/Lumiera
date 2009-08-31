@@ -42,6 +42,16 @@ namespace engine {
   class StateAdapter;
   class BuffTableStorage;
   
+  
+  /**
+   * Abstraction denoting the state of a currently ongoing render/calculation
+   * process, as it is tied to the supporting facilities of the backend.
+   * An State (subclass) instance is the sole connection for the render node
+   * to invoke services of the backend needed to carry out the calculations.
+   * 
+   * @see engine::RenderInvocation top-level entrance point
+   * @see nodeinvocation.hpp impl. used from \em within the nodes
+   */
   class State
     {
     public:
@@ -75,8 +85,8 @@ namespace engine {
        */
       virtual FrameID const& genFrameID (NodeID const&, uint chanNo)  =0;
       
-      /** try to fetch an existing buffer containing the denoted frame from
-       *  a cache or similar backing system (e.g. peer over the network).
+      /** try to fetch an existing buffer containing the denoted frame
+       *  from a cache or similar backing system (e.g. network peer).
        *  @return either a handle to a readonly buffer, or a null handle
        *  @note the client is responsible for not modifying the provided data
        */

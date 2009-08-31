@@ -125,7 +125,7 @@ namespace lumiera {
   
   
   /**
-   * Special case of an implementation type being only partialiy specified
+   * Special case of an implementation type being only partially specified
    * Besides requiring some aspect of the implementation type, there is the
    * promise to fill in defaults to build a complete implementation type
    * if necessary.

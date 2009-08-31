@@ -77,6 +77,7 @@ liblumiprocengine_la_SOURCES =					\
 	$(liblumiprocengine_la_srcdir)/renderengine.cpp		\
 	$(liblumiprocengine_la_srcdir)/source.cpp		\
 	$(liblumiprocengine_la_srcdir)/stateproxy.cpp		\
+	$(liblumiprocengine_la_srcdir)/render-invocation.cpp	\
 	$(liblumiprocengine_la_srcdir)/trafo.cpp
 
 
