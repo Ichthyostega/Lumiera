@@ -34,9 +34,9 @@
 #define ENGINE_RENDER_INVOCATION_H
 
 
-#include "proc/state.hpp"
-//#include "proc/engine/procnode.hpp"
-//#include "proc/engine/buffhandle.hpp"
+//#include "proc/state.hpp"
+#include "proc/engine/procnode.hpp"
+#include "proc/engine/buffhandle.hpp"
 //#include "proc/engine/bufftable.hpp"
 
 
@@ -49,33 +49,22 @@ namespace engine {
    * TODO: type comment
    */
   class RenderInvocation
-    : public State
     {
-    protected:
-//      State& parent_;
-//      State& current_;
+      ProcNode* theNode_;
       
-      RenderInvocation()
-        { }
+    public:
+      RenderInvocation (ProcNode* exitNode)
+        : theNode_(exitNode)
+        {
+          REQUIRE (theNode_);
+        }
+      
+      size_t size() { return theNode_->nrO(); }
+      
+      /** pull calculated data from the N-th node output channel */
+      BuffHandle operator[] (size_t channel);
       
       
-      
-    private: /* === top-level implementation of the State interface === */
-      
-      BuffHandle allocateBuffer (BufferDescriptor const&);
-      
-      void releaseBuffer (BuffHandle& bh);
-      
-      BuffHandle fetch (FrameID const& fID);
-      
-      void is_calculated (BuffHandle const& bh);
-      
-      FrameID const& genFrameID (NodeID const&, uint chanNo);
-
-      BuffTableStorage& getBuffTableStorage();
-      
-      virtual State& getCurrentImplementation () { return *this; }
-  
       
     };
   

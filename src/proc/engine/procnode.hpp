@@ -90,7 +90,10 @@ namespace engine {
         : out(o), in(i),
           procFunction(pFunc),
           nodeID(nID)
-        { }  
+        {
+          nrO = out.size();
+          nrI = in.size();
+        }
       
       /** the wiring-dependent part of the node operation.
        *  Includes the creation of a one-way state object on the stack
@@ -128,6 +131,9 @@ namespace engine {
       
       
     public:
+      
+      /** output channel count */
+      uint nrO() { return wiringConfig_.nrO; }
       
       /** Engine Core operation: render and pull output from this node.
        *  On return, currentProcess will hold onto output buffer(s)

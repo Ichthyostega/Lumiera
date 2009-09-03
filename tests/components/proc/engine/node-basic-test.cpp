@@ -26,7 +26,8 @@
 //#include "lib/util.hpp"
 #include "proc/engine/nodefactory.hpp"
 #include "proc/engine/nodewiring.hpp"
-#include "proc/engine/render-invocation.hpp"
+#include "proc/engine/stateproxy.hpp"
+#include "proc/engine/buffhandle.hpp"
 #include "proc/mobject/session/effect.hpp"
 #include "lib/allocationcluster.hpp"
 
@@ -54,7 +55,7 @@ namespace test  {
      * happening in correct order.
      */
     class TestContext
-      : public RenderInvocation
+      : public StateProxy
       {
         
         //////////////TODO: facility to verify the right access operations get called
@@ -83,8 +84,9 @@ namespace test  {
           ASSERT (pNode);
           
           TestContext simulatedInvocation;
-          pNode->pull(simulatedInvocation, 0);
+          BuffHandle result = pNode->pull(simulatedInvocation, 0);
           
+          ASSERT (result);
           // ASSERT we got calculated data in the result buffer
         } 
     };

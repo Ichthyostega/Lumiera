@@ -41,6 +41,7 @@
 
 #include "lib/error.hpp"
 #include "lib/streamtype.hpp"
+#include "lib/bool-checkable.hpp"
 
 
 namespace engine {
@@ -52,21 +53,35 @@ namespace engine {
    * The real buffer pointer can be retrieved by dereferencing this smart-handle class.
    */
   struct BuffHandle
+    : lib::BoolCheckable<BuffHandle>
     {
       typedef lumiera::StreamType::ImplFacade::DataBuffer Buff;
       typedef Buff* PBuff;
       
       PBuff 
-      operator->() const 
+      operator->()  const 
         { 
           return pBuffer_; 
         }
       Buff&
-      operator* () const
+      operator* ()  const
         {
           ENSURE (pBuffer_);
           return *pBuffer_;
         }
+      
+      bool
+      isValid()  const
+        {
+          return pBuffer_;
+        }
+      
+      
+      //////////////////////TODO: the whole logic how to create a BuffHandle needs to be solved in a more clever way. --> Ticket 249
+      BuffHandle()
+        : pBuffer_(0),
+          sourceID_(0)
+        { }
       
     private:
       PBuff pBuffer_; 

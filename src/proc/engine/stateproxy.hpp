@@ -35,7 +35,21 @@ namespace engine {
   class StateProxy
     : public proc_interface::State
     {
-    protected:
+      
+    private: /* === top-level implementation of the State interface === */
+      
+      BuffHandle allocateBuffer (BufferDescriptor const&);
+      
+      void releaseBuffer (BuffHandle& bh);
+      
+      BuffHandle fetch (FrameID const& fID);
+      
+      void is_calculated (BuffHandle const& bh);
+      
+      FrameID const& genFrameID (NodeID const&, uint chanNo);
+
+      BuffTableStorage& getBuffTableStorage();
+      
       virtual State& getCurrentImplementation () { return *this; }
       
     };

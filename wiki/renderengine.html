@@ -2237,12 +2237,12 @@ So, when creating a clip out of such a compound media asset, the clip has to be 
 In the most general case the render network may be just a DAG (not just a tree). Especially, multiple exit points may lead down to the same node, and following each of this possible paths the node may be at a different depth on each. This rules out a simple counter starting from the exit level, leaving us with the possibility of either employing a rather convoluted addressing scheme or using arbitrary ID numbers.{{red{...which is what we do for now}}}
 </pre>
 </div>
-<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200807072147" created="200806010251" tags="Rendering dynamic" changecount="15">
+<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200909031217" created="200806010251" tags="Rendering dynamic" changecount="16">
 <pre>The [[nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot;; each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle'', thus we find an operation {{{pull()}}} at the core of this process. There is no such thing as an &quot;engine object&quot; calling nodes iteratively or table driven, rather, the nodes themselves issue recursive calls to their predecessor(s). For this to work, we need the nodes to adhere to a specific protocol:
 # Node is pulled, with a StateProxy object as parameter (encapsulating the access to the frames or buffers)
 # Node may now access current parameter values, using the state accessible via the StateProxy
 # using it's //input-output and wiring descriptor,// the Node creates a StateAdapter wrapping the StateProxy for allocating buffers and accessing the required input
-# StateAdapter first tries to get the output frames from the Cache in the Backend. In case of failure, a {{{process()}}} call is prepared by generating {{{pull()}}} call(s) for the input
+# StateAdapter might first try to get the output frames from the Cache in the Backend. In case of failure, a {{{process()}}} call is prepared by generating {{{pull()}}} call(s) for the input
 # as late as possible, typically on return, these recursive pull-calls have allocated a buffer containing the input data.
 # when input is ready prior to the {{{process()}}} call, output buffers will be allocated, either from the cache, or (if not caching) from the &quot;parent&quot; StateAdapter up the callstack.
 # after all buffers are available, the StateAdapter issues the {{{process()}}} call back to the originating node, which now may dereference the frame pointers and do its calculations

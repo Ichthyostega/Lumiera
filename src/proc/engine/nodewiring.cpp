@@ -133,7 +133,7 @@ namespace engine {
   
   /** create and configure a concrete wiring descriptor to tie
    *  a ProcNode to its predecessor nodes. This includes selecting
-   *  the actual StateProxy type, configuring it out of some operation
+   *  the actual StateAdapter type, configuring it out of some operation
    *  control templates (policy classes). Compiling this operator function
    *  actually drives the necessary template instantiations for all cases
    *  encountered while building the node network.

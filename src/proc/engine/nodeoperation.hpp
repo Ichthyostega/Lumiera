@@ -203,6 +203,7 @@ namespace config {
         }
     };
   
+  
   template<class NEXT>
   struct FeedCache : NEXT
     {
@@ -218,6 +219,7 @@ namespace config {
           return NEXT::step (ivo);
         }
     };
+  
   
   template<class NEXT>
   struct ReleaseBuffers : NEXT                     /////////////////TODO: couldn't this be done automatically by BuffTab's dtor??

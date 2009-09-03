@@ -22,6 +22,8 @@
 
 
 #include "proc/engine/render-invocation.hpp"
+#include "proc/engine/stateproxy.hpp"
+
 
 namespace engine {
   
@@ -35,51 +37,21 @@ namespace engine {
 //  using mobject::session::Effect;
   
   
-  /** @internal */
+  /** @note this builds a one-way off invocation state context
+   *        and then forwards the call; this may or may not cause
+   *        actual calculations, depending on the cache.
+   *  @todo for real use within the engine, the pull()-call should be
+   *        dispatched through the scheduler; of course then the call semantics
+   *        would be completely different. Maybe this invocation will be test only?  
+   */
   BuffHandle
-  RenderInvocation::allocateBuffer (BufferDescriptor const&)
+  RenderInvocation::operator[] (size_t channel)
   {
-    UNIMPLEMENTED ("allocate a suitable buffer to hold a frame of the denoted type");
-  }
-  
-  
-      
-  void
-  RenderInvocation::releaseBuffer (BuffHandle& bh)
-  {
-    UNIMPLEMENTED ("free a buffer");
-  }
-  
-  
-      
-  BuffHandle
-  RenderInvocation::fetch (FrameID const& fID)
-  {
-    UNIMPLEMENTED ("fetch a buffer with input data");
-  }
-  
-  
-      
-  void
-  RenderInvocation::is_calculated (BuffHandle const& bh)
-  {
-    UNIMPLEMENTED ("declare a buffer as fully calculated and done");
-  }
-  
-  
-      
-  FrameID const&
-  RenderInvocation::genFrameID (NodeID const&, uint chanNo)
-  {
-    UNIMPLEMENTED ("derive/generate an ID to denote this specific fame+Node position in the graph");
-  }
-  
-  
-
-  BuffTableStorage&
-  RenderInvocation::getBuffTableStorage() /////////////TODO need somehow to denote the specific storage requirements
-  {
-    UNIMPLEMENTED ("allocate a chunk of storage suitable for holding the buffer pointer tables");
+    REQUIRE (theNode_);
+    REQUIRE (channel < size());
+    
+    StateProxy invocationState;
+    return theNode_->pull(invocationState, channel);
   }
   
   

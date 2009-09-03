@@ -83,10 +83,7 @@ namespace engine {
                            setup.makeInDescriptor(),
                            setup.resolveProcessingFunction(),
                            setup.createNodeID())
-        {
-          nrO = out.size();
-          nrI = in.size();
-        }
+        { }
       
       friend class WiringFactory;
       
