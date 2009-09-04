@@ -124,7 +124,7 @@ namespace test{
             try
               {
                 create_contained_object (holder);
-                NOTREACHED ;
+                NOTREACHED ();
               }
             catch (int val)
               {
@@ -160,7 +160,7 @@ namespace test{
             try
               {
                 holder2 = holder;
-                NOTREACHED ;
+                NOTREACHED ();
               }
             catch (lumiera::error::Logic&)
               {
@@ -173,7 +173,7 @@ namespace test{
             try
               {
                 holder = holder2;
-                NOTREACHED ;
+                NOTREACHED ();
               }
             catch (lumiera::error::Logic&)
               {
@@ -190,7 +190,7 @@ namespace test{
             try
               {
                 holder = holder2;
-                NOTREACHED ;
+                NOTREACHED ();
               }
             catch (lumiera::error::Logic&)
               {
@@ -203,7 +203,7 @@ namespace test{
             try
               {
                 HO holder3 (holder2);
-                NOTREACHED ;
+                NOTREACHED ();
               }
             catch (lumiera::error::Logic&)
               {

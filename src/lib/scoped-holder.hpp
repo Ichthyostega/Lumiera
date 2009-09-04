@@ -117,7 +117,7 @@ namespace lib {
       transfer_control (ScopedPtrHolder& from, ScopedPtrHolder& to)
       {
         if (!from) return;
-        TRACE (test, "transfer_control<ScopedPtrHolder>... from=%x to=%x",&from, &to);
+        TRACE (test, "transfer_control<ScopedPtrHolder>... from=%p to=%p",&from, &to);
         must_be_null (to);
         to.swap(from);
       }
@@ -229,7 +229,7 @@ namespace lib {
       transfer_control (ScopedHolder& from, ScopedHolder& to)
       {
         if (!from) return;
-        TRACE (test, "transfer_control<ScopedHolder>... from=%x to=%x",&from, &to);
+        TRACE (test, "transfer_control<ScopedHolder>... from=%p to=%p",&from, &to);
         must_be_empty (to);
         to.create();
         try

@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <inttypes.h>
 #include <limits.h>
 
 #include "mpool.h"
@@ -136,7 +137,7 @@ mpool_destroy (MPool self)
                 if (bitmap_bit_get_nth ((MPoolcluster)cluster, i))
                   {
                     void* obj = cluster_element_get ((MPoolcluster)cluster, self, i);
-                    TRACE (mpool_dbg, "dtor: cluster %p: obj %p: freelist %p", cluster, obj, self->freelist);
+                    TRACE (mpool_dbg, "dtor: cluster %p: obj %p: freelist %p", cluster, obj, &self->freelist);
                     self->destroy (obj);
                   }
               }
@@ -279,7 +280,7 @@ bitmap_set_element (MPoolcluster cluster, MPool self, void* element)
   uintptr_t* bitmap = (uintptr_t*)&cluster->data;
   bitmap[quot] |= ((uintptr_t)1<<rem);
 
-  TRACE (mpool_dbg, "set bit %d, index %d, of %p is %p", rem, quot, element, bitmap[quot]);
+  TRACE (mpool_dbg, "set bit %"PRIuPTR", index %"PRIuPTR", of %p is %"PRIuPTR, rem, quot, element, bitmap[quot]);
 }
 
 
@@ -298,7 +299,7 @@ bitmap_clear_element (MPoolcluster cluster, MPool self, void* element)
   uintptr_t* bitmap = (uintptr_t*)&cluster->data;
   bitmap[quot] &= ~((uintptr_t)1<<rem);
 
-  TRACE (mpool_dbg, "cleared bit %d, index %d, of %p is %p", rem, quot, element, bitmap[quot]);
+  TRACE (mpool_dbg, "cleared bit %"PRIuPTR", index %"PRIuPTR", of %p is %"PRIuPTR, rem, quot, element, bitmap[quot]);
 }
 
 
@@ -492,7 +493,7 @@ nobug_mpool_dump (const_MPool self,
 
       if (depth > 2)
         {
-          DUMP_LOG ("  clusters %p: ", self->clusters);
+          DUMP_LOG ("  clusters %p: ", &self->clusters);
           int i = 0;
           LLIST_FOREACH (&self->clusters, cluster)
             DUMP_LOG ("    %p: %u", cluster, ++i);
@@ -500,7 +501,7 @@ nobug_mpool_dump (const_MPool self,
 
       if (depth > 3)
         {
-          DUMP_LOG ("  freelist %p: ", self->freelist);
+          DUMP_LOG ("  freelist %p: ", &self->freelist);
           int i = 0;
           LLIST_FOREACH (&self->freelist, node)
             DUMP_LOG ("    %p: %u", node, ++i);

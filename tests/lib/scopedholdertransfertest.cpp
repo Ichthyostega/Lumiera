@@ -199,7 +199,7 @@ namespace lib {
               try
                 {
                   create_contained_object (table[3]);
-                  NOTREACHED ;
+                  NOTREACHED ();
                 }
               catch (int val)
                 {

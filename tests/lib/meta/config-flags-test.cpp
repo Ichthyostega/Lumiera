@@ -314,7 +314,7 @@ namespace test {
               try
                 {
                   INVOKE_CONFIG_SELECTOR (23);
-                  NOTREACHED ;
+                  NOTREACHED ();
                 }
               catch (lumiera::error::Invalid& err)
                 {
