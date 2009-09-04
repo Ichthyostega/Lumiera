@@ -27,39 +27,22 @@
 
 #include "proc/engine/procnode.hpp"
 #include "lib/allocationcluster.hpp"
+#include "proc/engine/nodewiring-def.hpp"
 
-#include <boost/noncopyable.hpp>
+//#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <cstddef>
+//#include <cstddef>
 
 
 
 namespace engine {
-
-
+  
+  
   class WiringFactory;
   
   namespace config { class WiringFactoryImpl; }
   
   using lib::RefArray;
-  
-  
-  /**
-   * Finding out about a concrete way of wiring up a
-   * ProcNode about to be built. Such a (temporary) setup object
-   * is used while building the low-level model. It is loaded with
-   * information concerning the intended connections to be made
-   * and then used to initialise the wiring descriptor, which
-   * in turn allows us to setup the ProcNode.  
-   */
-  class WiringSituation : boost::noncopyable
-    {
-    public:
-      RefArray<ChannelDescriptor>& makeOutDescriptor() ;
-      RefArray<InChanDescriptor>&  makeInDescriptor() ;
-      WiringDescriptor::ProcFunc*  resolveProcessingFunction() ;
-      lumiera::NodeID const&       createNodeID() ;
-    };
   
   
   
@@ -97,9 +80,9 @@ namespace engine {
         }
       
     };
-
-    
-    
+  
+  
+  
   class WiringFactory
     {
       lib::AllocationCluster& alloc_;

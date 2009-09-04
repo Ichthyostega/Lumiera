@@ -1,0 +1,114 @@
+/*
+  NODEWIRING-DEF.hpp  -  Implementation of the node network and operation control
+ 
+  Copyright (C)         Lumiera.org
+    2009,               Hermann Vosseler <Ichthyostega@web.de>
+ 
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of the
+  License, or (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ 
+*/
+
+/** @file nodewiring-def.hpp
+ ** Helper for defining the desired wiring and operation mode for a render node.
+ ** During the Builder run, the render nodes network is wired up starting from the
+ ** source (generating) nodes up to the exit nodes. As the wiring is implemented through
+ ** a const engine::WiringDescriptor, when a new node gets fabricated, all of the connections
+ ** to its predecessors need to be completely settled; similarly, any informations pertaining
+ ** the desired operation mode of this node need to be available. Thus we use this temporary
+ ** information record to assemble all these informations.
+ ** 
+ ** @see proc::engine::NodeFactory
+ ** @see nodewiring.hpp
+ ** @see node-basic-test.cpp
+ ** 
+ */
+
+
+#ifndef ENGINE_NODEWIRING_DEF_H
+#define ENGINE_NODEWIRING_DEF_H
+
+
+#include "proc/engine/procnode.hpp"
+
+#include <boost/noncopyable.hpp>
+//#include <boost/scoped_ptr.hpp>
+//#include <cstddef>
+
+
+
+namespace engine {
+  
+  
+  
+  /**
+   * Finding out about a concrete way of wiring up a
+   * ProcNode about to be built. Such a (temporary) setup object
+   * is used while building the low-level model. It is loaded with
+   * information concerning the intended connections to be made
+   * and then used to initialise the wiring descriptor, which
+   * in turn allows us to setup the ProcNode.
+   * 
+   * \par intended usage pattern
+   * The goal is to describe the constellation of a new node to be built.
+   * Thus, we start with one or several existing nodes, specifying which
+   * output should go to which input pin of the yet-to-be created new node.
+   * When intending to create a source node, a default WiringSituation
+   * should be used, without adding any connection information. 
+   */
+  class WiringSituation
+    : boost::noncopyable
+    {
+    protected:
+      RefArray<ChannelDescriptor>& makeOutDescriptor() ;
+      RefArray<InChanDescriptor>&  makeInDescriptor() ;
+      WiringDescriptor::ProcFunc*  resolveProcessingFunction() ;
+      lumiera::NodeID const&       createNodeID() ;
+      
+      friend class NodeWiring;
+      
+      
+    public: /* === API for specifying the desired wiring === */
+      
+      /** A default WiringSituation doesn't specify any connections.
+       *  It can be used as-is for building a source node, or augmented
+       *  with connection informations later on.
+       */
+      WiringSituation()
+        {
+          UNIMPLEMENTED ("representation of the intended wiring");
+        }
+      
+      
+      /** Continue the wiring by hooking directly into the output
+       *  of an existing predecessor node
+       */
+      WiringSituation (PNode predecessor)
+        {
+          UNIMPLEMENTED ("wiring representation; hook up connections 1:1");
+          REQUIRE (predecessor);
+          
+          //////////////////////////TODO: see Ticket 254
+          // for_each (predecessor->outputs(), .....   see also Ticket 183 (invoking member fun in for_each)
+          
+        }
+      
+      
+      
+    };
+  
+  
+  
+} // namespace engine
+#endif
