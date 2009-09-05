@@ -62,7 +62,7 @@ XvDisplayer::XvDisplayer( Gtk::Widget *drawing_area, int width, int height ) :
       for ( unsigned int n = 0; gotPort == false && n < count; ++n )
         {
           // Diagnostics
-          INFO(gui, "%s, %d, %d", adaptorInfo[ n ].name,
+          INFO(gui, "%s, %u, %u", adaptorInfo[ n ].name,
             adaptorInfo[ n ].base_id, adaptorInfo[ n ].num_ports - 1);
 
           for ( unsigned int port = adaptorInfo[ n ].base_id;

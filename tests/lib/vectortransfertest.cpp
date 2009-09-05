@@ -46,13 +46,13 @@ namespace lib {
         public:
           TransDummy()
             {
-              TRACE  (test, "CTOR      TransDummy() --> this=%x", this);
+              TRACE  (test, "CTOR      TransDummy() --> this=%p", this);
               setVal(0); // we use val_==0 to mark the "empty" state 
             }
           
           ~TransDummy()
             {
-              TRACE  (test, "DTOR     ~TransDummy()  this=%x", this);
+              TRACE  (test, "DTOR     ~TransDummy()  this=%p", this);
             }
           
           /* to make Dummy usable within vector, we need to provide
@@ -64,14 +64,14 @@ namespace lib {
           TransDummy (const TransDummy& o)
             : Dummy()
             {
-              TRACE  (test, "COPY-ctor TransDummy( ref=%x ) --> this=%x", &o,this);
+              TRACE  (test, "COPY-ctor TransDummy( ref=%p ) --> this=%p", &o,this);
               ASSERT (!o, "protocol violation: real copy operations inhibited");
             }
           
           TransDummy&
           operator= (TransDummy const& ref)
             {
-              TRACE  (test, "COPY      target=%x   <-- source=%x", this,&ref);
+              TRACE  (test, "COPY      target=%p   <-- source=%p", this,&ref);
               ASSERT (!(*this));
               ASSERT (!ref, "protocol violation: real copy operations inhibited");
               return *this;
@@ -81,7 +81,7 @@ namespace lib {
           setup (int x=0)
             {
               setVal (x? x : (rand() % 10000));
-              TRACE  (test, "CREATE    val=%d ---> this=%x", getVal(),this);
+              TRACE  (test, "CREATE    val=%d ---> this=%p", getVal(),this);
             }
           
           
@@ -100,7 +100,7 @@ namespace lib {
       void
       transfer_control (TransDummy& from, TransDummy& to)
       {
-        TRACE  (test, "TRANSFER  target=%x   <-- source=%x", &to,&from);
+        TRACE  (test, "TRANSFER  target=%p   <-- source=%p", &to,&from);
         ASSERT (!to, "protocol violation: target already manages another object");
         to.setVal (from.getVal());
         from.setVal(0);

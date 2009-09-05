@@ -103,10 +103,10 @@ namespace test{
             ASSERT (rawP == &(*holder));
             ASSERT (rawP->add(-5) == holder->add(-5));
             
-            TRACE (test, "holder at %x", &holder);
-            TRACE (test, "object at %x", holder.get() );
-            TRACE (test, "size(object) = %d", sizeof(*holder));
-            TRACE (test, "size(holder) = %d", sizeof(holder));
+            TRACE (test, "holder at %p", &holder);
+            TRACE (test, "object at %p", holder.get() );
+            TRACE (test, "size(object) = %u", sizeof(*holder));
+            TRACE (test, "size(holder) = %u", sizeof(holder));
           }
           ASSERT (0==checksum);
         }

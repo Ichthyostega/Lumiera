@@ -94,7 +94,7 @@ void Render::on_button_browse()
   int result = dialog.run();
   INFO(gui, "%d", result);
   if(result == RESPONSE_OK)
-    INFO(gui, "%d", "RESPONSE_OK");
+    INFO(gui, "%s", "RESPONSE_OK");
 }
 
 }   // namespace dialogs

@@ -176,7 +176,7 @@ namespace lib {
             ASSERT (&ref2);
             ASSERT (&ref3);
             ASSERT (&rX);
-            TRACE (test, "sizeof( Dummy<1234> ) = %d", sizeof(rX));
+            TRACE (test, "sizeof( Dummy<1234> ) = %u", sizeof(rX));
             
             ASSERT (123==ref2.getID());
             ASSERT (3+4+5==rX.getID());
