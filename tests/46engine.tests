@@ -2,7 +2,7 @@ TESTING "Component Test Suite: Render Engine parts" ./test-components --group=en
 
 
 
-TEST "BuffTable_test" BuffTable_test <<END
+PLANNED "BuffTable_test" BuffTable_test <<END
 return: 0
 END
 
